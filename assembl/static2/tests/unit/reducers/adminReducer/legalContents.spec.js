@@ -22,6 +22,29 @@ describe('legalContents admin reducer', () => {
     expect(legalContents(oldState, action)).toEqual(oldState);
   });
 
+  it('should handle UPDATE_TERMS_AND_CONDITIONS_ENTRY action type', () => {
+    const action = {
+      type: actionTypes.UPDATE_TERMS_AND_CONDITIONS_ENTRY,
+      locale: 'en',
+      value: 'foobar'
+    };
+    const oldState = Map({
+      _hasChanged: false,
+      legalNoticeEntries: List(),
+      termsAndConditionsEntries: List.of(Map({ localeCode: 'en', value: 'my terms and conditions' })),
+      cookiesPolicyEntries: List(),
+      privacyPolicyEntries: List()
+    });
+    const expected = Map({
+      _hasChanged: true,
+      legalNoticeEntries: List(),
+      termsAndConditionsEntries: List.of(Map({ localeCode: 'en', value: 'foobar' })),
+      cookiesPolicyEntries: List(),
+      privacyPolicyEntries: List()
+    });
+    expect(legalContents(oldState, action)).toEqual(expected);
+  });
+
   it('should handle UPDATE_LEGAL_NOTICE_ENTRY action type', () => {
     const action = {
       type: actionTypes.UPDATE_LEGAL_NOTICE_ENTRY,
@@ -41,6 +64,52 @@ describe('legalContents admin reducer', () => {
       termsAndConditionsEntries: List(),
       cookiesPolicyEntries: List(),
       privacyPolicyEntries: List()
+    });
+    expect(legalContents(oldState, action)).toEqual(expected);
+  });
+
+  it('should handle UPDATE_COOKIES_POLICY_ENTRY action type', () => {
+    const action = {
+      type: actionTypes.UPDATE_COOKIES_POLICY_ENTRY,
+      locale: 'en',
+      value: 'foobar'
+    };
+    const oldState = Map({
+      _hasChanged: false,
+      legalNoticeEntries: List(),
+      termsAndConditionsEntries: List(),
+      cookiesPolicyEntries: List.of(Map({ localeCode: 'en', value: 'my cookies policy' })),
+      privacyPolicyEntries: List()
+    });
+    const expected = Map({
+      _hasChanged: true,
+      legalNoticeEntries: List(),
+      termsAndConditionsEntries: List(),
+      cookiesPolicyEntries: List.of(Map({ localeCode: 'en', value: 'foobar' })),
+      privacyPolicyEntries: List()
+    });
+    expect(legalContents(oldState, action)).toEqual(expected);
+  });
+
+  it('should handle UPDATE_PRIVACY_POLICY_ENTRY action type', () => {
+    const action = {
+      type: actionTypes.UPDATE_PRIVACY_POLICY_ENTRY,
+      locale: 'en',
+      value: 'foobar'
+    };
+    const oldState = Map({
+      _hasChanged: false,
+      legalNoticeEntries: List(),
+      termsAndConditionsEntries: List(),
+      cookiesPolicyEntries: List(),
+      privacyPolicyEntries: List.of(Map({ localeCode: 'en', value: 'my legal notice' }))
+    });
+    const expected = Map({
+      _hasChanged: true,
+      legalNoticeEntries: List(),
+      termsAndConditionsEntries: List(),
+      cookiesPolicyEntries: List(),
+      privacyPolicyEntries: List.of(Map({ localeCode: 'en', value: 'foobar' }))
     });
     expect(legalContents(oldState, action)).toEqual(expected);
   });

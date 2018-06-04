@@ -34,11 +34,11 @@ const legalContents: LegalContentsReducer = (state = initialState, action) => {
   case UPDATE_COOKIES_POLICY_ENTRY:
     return state
       .update('cookiesPolicyEntries', updateInLangstringEntries(action.locale, fromJS(action.value)))
-      .set('_hasChanged, true');
+      .set('_hasChanged', true);
   case UPDATE_PRIVACY_POLICY_ENTRY:
     return state
       .update('privacyPolicyEntries', updateInLangstringEntries(action.locale, fromJS(action.value)))
-      .set('_hasChanged, true');
+      .set('_hasChanged', true);
   case UPDATE_LEGAL_CONTENTS:
     return Map({
       _hasChanged: false,

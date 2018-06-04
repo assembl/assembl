@@ -66,11 +66,11 @@ exports[`LegalContentsForm dumb component should render a form to edit legal not
           label="Privacy policy"
           labelAlwaysVisible={false}
           name={undefined}
-          onChange={undefined}
+          onChange={[Function]}
           required={true}
           type="rich-text"
           validationErrors={undefined}
-          value={undefined}
+          value=""
         />
         <div
           className="separator"
@@ -85,11 +85,11 @@ exports[`LegalContentsForm dumb component should render a form to edit legal not
           label="Information on cookies"
           labelAlwaysVisible={false}
           name={undefined}
-          onChange={undefined}
+          onChange={[Function]}
           required={true}
           type="rich-text"
           validationErrors={undefined}
-          value={undefined}
+          value=""
         />
       </div>
     </Row>
