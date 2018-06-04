@@ -114,6 +114,10 @@ class Administration extends React.Component {
     if (nextProps.textFields !== this.props.textFields) {
       this.putTextFieldsInStore(nextProps.textFields);
     }
+
+    if (nextProps.legalContents !== this.props.legalContents) {
+      this.putLegalContentsInStore(nextProps.legalContents);
+    }
   }
 
   putThematicsInStore(data) {
