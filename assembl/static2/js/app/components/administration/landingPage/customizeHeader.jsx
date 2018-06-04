@@ -1,14 +1,36 @@
 // @flow
 import React from 'react';
+import { connect } from 'react-redux';
 import { I18n, Translate } from 'react-redux-i18n';
 import { FormGroup } from 'react-bootstrap';
 import SectionTitle from '../../administration/sectionTitle';
 import FormControlWithLabel from '../../common/formControlWithLabel';
 import FileUploader from '../../common/fileUploader';
+import {
+  updateLandingPageHeaderTitle,
+  updateLandingPageHeaderSubtitle,
+  updateLandingPageHeaderButtonLabel,
+  updateLandingPageHeaderImage,
+  updateLandingPageHeaderLogo
+} from '../../../actions/adminActions/landingPage';
 
-type Props = { header: Object }; // TODO define the shape of the object
+type Props = {
+  header: Object,
+  handleTitleChange: Function,
+  handleSubtitleChange: Function,
+  handleButtonLabelChange: Function,
+  handleImageChange: Function,
+  handleLogoChange: Function
+};
 
-export const DumbCustomizeHeader = ({ header }: Props) => {
+const DumbCustomizeHeader = ({
+  header,
+  handleTitleChange,
+  handleSubtitleChange,
+  handleButtonLabelChange,
+  handleImageChange,
+  handleLogoChange
+}: Props) => {
   const {
     title,
     subtitle,
@@ -23,11 +45,6 @@ export const DumbCustomizeHeader = ({ header }: Props) => {
   const titlePh = I18n.t('administration.landingPage.header.titleLabel');
   const subtitlePh = I18n.t('administration.landingPage.header.subtitleLabel');
   const buttonLabelPh = I18n.t('administration.landingPage.header.buttonLabel');
-  const handleTitleChange = (): void => {};
-  const handleSubtitleChange = (): void => {};
-  const handleButtonLabelChange = (): void => {};
-  const handleHeaderImageChange = (): void => {};
-  const handleLogoImageChange = (): void => {};
   return (
     <div className="admin-box">
       <SectionTitle title={I18n.t('administration.landingPage.header.title')} annotation={I18n.t('administration.annotation')} />
@@ -46,11 +63,11 @@ export const DumbCustomizeHeader = ({ header }: Props) => {
             <FileUploader
               fileOrUrl={headerImgUrl}
               imgTitle={headerImgTitle}
-              handleChange={handleHeaderImageChange}
+              handleChange={handleImageChange}
               mimeType={headerImgMimeType}
               name="landing-page-img-header"
               isAdminUploader
-              onDeleteClick={() => {}}
+              onDeleteClick={() => handleImageChange('TO_DELETE')}
             />
             <div className="description-block">
               <Translate value="administration.landingPage.header.headerDescription" />
@@ -70,11 +87,11 @@ export const DumbCustomizeHeader = ({ header }: Props) => {
             <FileUploader
               fileOrUrl={logoImgUrl}
               imgTitle={logoImgTitle}
-              handleChange={handleLogoImageChange}
+              handleChange={handleLogoChange}
               mimeType={logoImgMimeType}
               name="landing-page-img-logo"
               isAdminUploader
-              onDeleteClick={() => {}}
+              onDeleteClick={() => handleLogoChange('TO_DELETE')}
             />
             <div className="description-block">
               <Translate value="administration.landingPage.header.logoDescription" />
@@ -86,4 +103,14 @@ export const DumbCustomizeHeader = ({ header }: Props) => {
   );
 };
 
-export default DumbCustomizeHeader;
+const mapDispatchToProps = (dispatch, { editLocale }) => ({
+  handleTitleChange: e => dispatch(updateLandingPageHeaderTitle(editLocale, e.target.value)),
+  handleSubtitleChange: value => dispatch(updateLandingPageHeaderSubtitle(editLocale, value)),
+  handleButtonLabelChange: e => dispatch(updateLandingPageHeaderButtonLabel(editLocale, e.target.value)),
+  handleImageChange: value => dispatch(updateLandingPageHeaderImage(value)),
+  handleLogoChange: value => dispatch(updateLandingPageHeaderLogo(value))
+});
+
+export { DumbCustomizeHeader };
+
+export default connect(null, mapDispatchToProps)(DumbCustomizeHeader);

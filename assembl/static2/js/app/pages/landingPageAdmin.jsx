@@ -20,7 +20,8 @@ type Props = {
   route: Route,
   router: Router,
   section: string,
-  header: Object // TODO define the shape of the object
+  editLocale: string,
+  header: Object
 };
 
 type State = {
@@ -110,7 +111,8 @@ const mapStateToProps = ({ admin: { editLocale, landingPage } }) => {
       logoImgMimeType: page.getIn(['logoImage', 'mimeType']),
       logoImgUrl: page.getIn(['logoImage', 'externalUrl']),
       logoImgTitle: page.getIn(['logoImage', 'title'])
-    }
+    },
+    editLocale: editLocale
   };
 };
 

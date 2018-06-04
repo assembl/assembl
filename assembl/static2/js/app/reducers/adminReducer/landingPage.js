@@ -2,14 +2,19 @@
 import { fromJS, List, Map } from 'immutable';
 import { combineReducers } from 'redux';
 import type ReduxAction from 'redux';
-
+import { updateInLangstringEntries } from '../../utils/i18n';
 import {
   type Action,
   MOVE_LANDING_PAGE_MODULE_DOWN,
   MOVE_LANDING_PAGE_MODULE_UP,
   TOGGLE_LANDING_PAGE_MODULE,
   UPDATE_LANDING_PAGE_MODULES,
-  UPDATE_LANDING_PAGE
+  UPDATE_LANDING_PAGE,
+  UPDATE_LANDING_PAGE_HEADER_TITLE,
+  UPDATE_LANDING_PAGE_HEADER_SUBTITLE,
+  UPDATE_LANDING_PAGE_HEADER_BUTTON_LABEL,
+  UPDATE_LANDING_PAGE_HEADER_IMAGE,
+  UPDATE_LANDING_PAGE_HEADER_LOGO
 } from '../../actions/actionTypes';
 
 type ModulesHasChangedReducer = (boolean, ReduxAction<Action>) => boolean;
@@ -104,33 +109,53 @@ type LandingPageReducer = (PageState, ReduxAction<Action>) => PageState;
 const page: LandingPageReducer = (state = initialPage, action) => {
   switch (action.type) {
   case UPDATE_LANDING_PAGE: {
-    let newState = state;
+    let headerImage = Map({
+      externalUrl: '',
+      mimeType: '',
+      title: ''
+    });
+    let logoImage = Map({
+      externalUrl: '',
+      mimeType: '',
+      title: ''
+    });
     if (action.headerImage) {
-      newState = newState
-        .setIn(['headerImage', 'externalUrl'], action.headerImage.externalUrl)
-        .setIn(['headerImage', 'mimeType'], action.headerImage.mimeType);
+      headerImage = fromJS(action.headerImage);
     }
-
     if (action.logoImage) {
-      newState = newState
-        .setIn(['logoImage', 'externalUrl'], action.logoImage.externalUrl)
-        .setIn(['logoImage', 'mimeType'], action.logoImage.mimeType);
+      logoImage = fromJS(action.logoImage);
     }
-
-    if (action.titleEntries) {
-      newState = newState.set('titleEntries', fromJS(action.titleEntries));
-    }
-
-    if (action.subtitleEntries) {
-      newState = newState.set('subtitleEntries', fromJS(action.subtitleEntries));
-    }
-
-    if (action.buttonLabelEntries) {
-      newState = newState.set('buttonLabelEntries', fromJS(action.buttonLabelEntries));
-    }
-
-    return newState.set('_hasChanged', false);
+    return Map({
+      _hasChanged: false,
+      titleEntries: fromJS(action.titleEntries),
+      subtitleEntries: fromJS(action.subtitleEntries),
+      buttonLabelEntries: fromJS(action.buttonLabelEntries),
+      headerImage: headerImage,
+      logoImage: logoImage
+    });
   }
+  case UPDATE_LANDING_PAGE_HEADER_TITLE:
+    return state
+      .update('titleEntries', updateInLangstringEntries(action.locale, fromJS(action.value)))
+      .set('_hasChanged', true);
+  case UPDATE_LANDING_PAGE_HEADER_SUBTITLE:
+    return state
+      .update('subtitleEntries', updateInLangstringEntries(action.locale, fromJS(action.value)))
+      .set('_hasChanged', true);
+  case UPDATE_LANDING_PAGE_HEADER_BUTTON_LABEL:
+    return state
+      .update('buttonLabelEntries', updateInLangstringEntries(action.locale, fromJS(action.value)))
+      .set('_hasChanged', true);
+  case UPDATE_LANDING_PAGE_HEADER_IMAGE:
+    return state
+      .setIn(['headerImage', 'externalUrl'], action.value)
+      .setIn(['headerImage', 'mimeType'], action.value.type)
+      .set('_hasChanged', true);
+  case UPDATE_LANDING_PAGE_HEADER_LOGO:
+    return state
+      .setIn(['logoImage', 'externalUrl'], action.value)
+      .setIn(['logoImage', 'mimeType'], action.value.type)
+      .set('_hasChanged', true);
   default:
     return state;
   }

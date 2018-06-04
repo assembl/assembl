@@ -81,6 +81,12 @@ export const SET_VALIDATION_ERRORS: 'SET_VALIDATION_ERRORS' = 'SET_VALIDATION_ER
 export const CANCEL_MODULE_CUSTOMIZATION: 'CANCEL_MODULE_CUSTOMIZATION' = 'CANCEL_MODULE_CUSTOMIZATION';
 export const UPDATE_VOTE_MODULE: 'UPDATE_VOTE_MODULE' = 'UPDATE_VOTE_MODULE';
 export const UPDATE_LANDING_PAGE: 'UPDATE_LANDING_PAGE' = 'UPDATE_LANDING_PAGE';
+export const UPDATE_LANDING_PAGE_HEADER_TITLE: 'UPDATE_LANDING_PAGE_HEADER_TITLE' = 'UPDATE_LANDING_PAGE_HEADER_TITLE';
+export const UPDATE_LANDING_PAGE_HEADER_SUBTITLE: 'UPDATE_LANDING_PAGE_HEADER_SUBTITLE' = 'UPDATE_LANDING_PAGE_HEADER_SUBTITLE';
+export const UPDATE_LANDING_PAGE_HEADER_BUTTON_LABEL: 'UPDATE_LANDING_PAGE_HEADER_BUTTON_LABEL' =
+  'UPDATE_LANDING_PAGE_HEADER_BUTTON_LABEL';
+export const UPDATE_LANDING_PAGE_HEADER_IMAGE: 'UPDATE_LANDING_PAGE_HEADER_IMAGE' = 'UPDATE_LANDING_PAGE_HEADER_IMAGE';
+export const UPDATE_LANDING_PAGE_HEADER_LOGO: 'UPDATE_LANDING_PAGE_HEADER_LOGO' = 'UPDATE_LANDING_PAGE_HEADER_LOGO';
 
 export type UpdateContentLocaleById = {
   type: typeof UPDATE_CONTENT_LOCALE_BY_ID,
@@ -450,9 +456,38 @@ export type LandingPage = {
   headerImage: File,
   logoImage: File
 };
+
 export type UpdateLandingPage = {
   page: LandingPage,
   type: typeof UPDATE_LANDING_PAGE
+};
+
+export type UpdateLandingPageHeaderTitle = {
+  locale: string,
+  value: string,
+  type: typeof UPDATE_LANDING_PAGE_HEADER_TITLE
+};
+
+export type UpdateLandingPageHeaderSubtitle = {
+  locale: string,
+  value: string,
+  type: typeof UPDATE_LANDING_PAGE_HEADER_SUBTITLE
+};
+
+export type UpdateLandingPageHeaderButtonLabel = {
+  locale: string,
+  value: string,
+  type: typeof UPDATE_LANDING_PAGE_HEADER_BUTTON_LABEL
+};
+
+export type UpdateLandingPageHeaderImage = {
+  value: File,
+  type: typeof UPDATE_LANDING_PAGE_HEADER_IMAGE
+};
+
+export type UpdateLandingPageHeaderLogo = {
+  value: File,
+  type: typeof UPDATE_LANDING_PAGE_HEADER_LOGO
 };
 
 export type MoveLandingPageModuleUp = {
