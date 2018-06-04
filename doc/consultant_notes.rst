@@ -31,9 +31,9 @@ First:
 * Generate the bot css by running
 
 ::
-  
+
   botBackgroundColor=whatever ./scripts/gen_chatbot_css.sh
-  
+
 The available variables are:
 
 * botBackgroundColor
@@ -42,7 +42,7 @@ The available variables are:
 * humanBackgroundColor
 * humanTextColor
 * humanTimeColor
-  
+
 Valid values are css colors. If the output is not printed to the terminal, it should be copied to your clipboard.
 
 Then:
@@ -53,7 +53,7 @@ Then:
 * Go to v1 administration of the debate, Discussion preferences section, under the extra json field, add the following key:
 
 ::
-  
+
   "chatframe": {
     "src": "your_link"
   }

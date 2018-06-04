@@ -117,9 +117,9 @@ var AttachmentModel = Base.Model.extend({
     return Backbone.Model.prototype.save.call(this, attrs, options); 
   },
   /**
-   * Update
-   * =======
+   * Save the attachment
    *
+   * *Update*
    * The architecture to load attachments + documents has now changed.
    * Documents are eagerly saved to the database upon creation.
    * The AttachmentView is responsible for the lifecycle of the document model.

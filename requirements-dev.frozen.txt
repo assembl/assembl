@@ -176,7 +176,7 @@ snowballstemmer==1.2.1    # via sphinx
 social-auth-app-pyramid==1.0.0
 social-auth-core==1.7.0
 social-auth-storage-sqlalchemy==1.1.0
-sphinx==1.4.4
+sphinx==1.5.1
 sphinxcontrib-httpdomain==1.5.0
 sphinxcontrib-zopeext==0.2.1
 splinter==0.7.6

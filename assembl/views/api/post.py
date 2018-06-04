@@ -61,8 +61,7 @@ def get_posts(request):
     Query interface on posts
     Filters have two forms:
     only_*, is for filters that cannot be reversed (ex: only_synthesis, only_orphan)
-    is_*, is for filters that can be reversed (ex:is_unread=true returns only unread
-     message, is_unread=false returns only read messages)
+    is_*, is for filters that can be reversed (ex:is_unread=true returns only unread message, is_unread=false returns only read messages)
     order: can be chronological, reverse_chronological, popularity
     root_post_id: all posts below the one specified.
     family_post_id: all posts below the one specified, and all its ancestors.

@@ -19,14 +19,14 @@ instructions for specific steps.
 Installation prerequisites
 --------------------------
 
-.. code:: sh
+.. code-block:: sh
 
     fab -c configs/develop.rc install_dovecot_vmm
     fab -c configs/develop.rc install_postfix
 
 If the postgres database is local, and that step has not been done:
 
-.. code:: sh
+.. code-block:: sh
 
     fab devenv install_postgres
 
@@ -37,16 +37,15 @@ PostgreSQL configuration
 
 Please ensure you have a the psycopg2 driver installed when you continue with the permission setup. This can be done in two different ways. The recommended way is to use the system repository, like shown below.
 
-.. code:: sh
+.. code-block:: sh
 
     sudo apt-get install python-psycopg2
 
 Another way is to use the global ``pip`` system. This is the less recommended way.
 
-.. code:: sh
+.. code-block:: sh
 
     pip install psycopg2
- 
 
 ``pg_hba.conf`` is in ``/etc/postgresql/9.5/main/``.
 
@@ -62,7 +61,7 @@ quotas.
 
 In ``dovecot.conf``, we have the line
 
-.. code:: ini
+.. code-block:: ini
 
     protocols = imap lmtp
 
@@ -81,7 +80,7 @@ Do not forget this "otherwise uncomment the following user_query":
 
 In ``/etc/dovecot/conf.d/10-auth.conf``, also put the following:
 
-.. code:: ini
+.. code-block:: ini
 
     disable_plaintext_auth = yes
     !include auth-sql.conf.ext
@@ -94,13 +93,13 @@ Postfix configuration
 
 In ``/etc/postfix/main.cf`` , add
 
-.. code:: ini
+.. code-block:: ini
 
     mydestination = localhost
 
 Also set your ssl key in those variables:
 
-.. code:: ini
+.. code-block:: ini
 
     smtpd_tls_cert_file=/path/to/fullchain.pem
     smtpd_tls_key_file=/path/to/privkey.pem
@@ -109,7 +108,7 @@ Also set your ssl key in those variables:
 
 and add the following:
 
-.. code:: ini
+.. code-block:: ini
 
     smtp_tls_CApath = /etc/ssl/certs
     smtp_tls_CAfile =  /etc/ssl/certs/ca-certificates.crt
@@ -133,7 +132,7 @@ VMM configuration
 
 Wo don't have ``install.sh``. Instead:
 
-.. code:: sh
+.. code-block:: sh
 
     cp /usr/share/doc/vmm/examples/postfix/* /etc/postfix
 
@@ -141,7 +140,7 @@ and adjust passwords (and host) by hand in those files.
 
 In ``/etc/vmm/vmm.cfg``:
 
-.. code:: diff
+.. code-block:: diff
 
     135c136
     < password_scheme = SHA512-CRYPT
@@ -155,7 +154,7 @@ In ``/etc/vmm/vmm-db.cfg``:
 
 Adjust password, host and:
 
-.. code:: ini
+.. code-block:: ini
 
     ; Database name (String)
     name = mailsys
@@ -179,7 +178,7 @@ an assembls group instead of giving permissions to each. I will assume
 that there is an ``assembls`` group and that users are members of that
 group.
 
-.. code:: sh
+.. code-block:: sh
 
     addgroup assembls
     usermod -a -G assembls assembl_user
@@ -197,7 +196,7 @@ Assembl adjustments
 
 In ``local.ini``
 
-.. code:: ini
+.. code-block:: ini
 
     assembl.admin_email = assembl@example.domain
     mail.host = localhost
@@ -216,7 +215,7 @@ Restart dovecot and postfix (``/etc/init.d/postfix restart`` and ``/etc/init.d/d
 
 to test postfix, start a ``pshell`` in assembl, and try the following with a real recipient:
 
-.. code:: python
+.. code-block:: python
 
     from pyramid_mailer import get_mailer
     from pyramid_mailer.message import Message

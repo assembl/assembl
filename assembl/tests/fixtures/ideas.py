@@ -97,9 +97,10 @@ def announcement_en_fr(request, discussion, en_locale,
 
 @pytest.fixture(scope="function")
 def subidea_1(request, discussion, root_idea, test_session):
-    """A subidea fixture with a idealink to root idea fixture -
-    root_idea
-        |-> subidea_1"""
+    """A subidea fixture with a idealink to root idea fixture::
+
+        root_idea
+            |-> subidea_1"""
 
     from assembl.models import Idea, IdeaLink, LangString
     i = Idea(title=LangString.create(u"Favor economic growth", 'en'),
@@ -121,10 +122,11 @@ def subidea_1(request, discussion, root_idea, test_session):
 
 @pytest.fixture(scope="function")
 def subidea_1_1(request, discussion, subidea_1, test_session):
-    """An Idea fixture with a idealink to subidea_1 fixture -
-    root_idea
-        |-> subidea_1
-            |-> subidea_1_1"""
+    """An Idea fixture with a idealink to subidea_1 fixture::
+
+        root_idea
+            |-> subidea_1
+                |-> subidea_1_1"""
 
     from assembl.models import Idea, IdeaLink, LangString
     i = Idea(title=LangString.create(u"Lower taxes", 'en'),
@@ -167,11 +169,12 @@ def subidea_1_2(request, discussion, subidea_1, test_session):
 
 @pytest.fixture(scope="function")
 def subidea_1_1_1(request, discussion, subidea_1_1, test_session):
-    """An Idea fixture with a idealink to subidea_1_1 fixture -
-    root_idea
-        |-> subidea_1
-            |-> subidea_1_1
-                |-> subidea_1_1_1"""
+    """An Idea fixture with a idealink to subidea_1_1 fixture::
+
+        root_idea
+            |-> subidea_1
+                |-> subidea_1_1
+                    |-> subidea_1_1_1"""
 
     from assembl.models import Idea, IdeaLink, LangString
     i = Idea(title=LangString.create(u"Lower government revenue", 'en'),
@@ -193,12 +196,13 @@ def subidea_1_1_1(request, discussion, subidea_1_1, test_session):
 
 @pytest.fixture(scope="function")
 def subidea_1_1_1_1(request, discussion, subidea_1_1_1, test_session):
-    """An Idea fixture with a idealink to subidea_1_1_1 fixture -
-    root_idea
-        |-> subidea_1
-            |-> subidea_1_1
-                |-> subidea_1_1_1
-                    |->subidea_1_1_1_1"""
+    """An Idea fixture with a idealink to subidea_1_1_1 fixture::
+
+        root_idea
+            |-> subidea_1
+                |-> subidea_1_1
+                    |-> subidea_1_1_1
+                        |->subidea_1_1_1_1"""
 
     from assembl.models import Idea, IdeaLink, LangString
     i = Idea(title=LangString.create(u"Austerity yields contraction", 'en'),
@@ -220,13 +224,14 @@ def subidea_1_1_1_1(request, discussion, subidea_1_1_1, test_session):
 
 @pytest.fixture(scope="function")
 def subidea_1_1_1_1_1(request, discussion, subidea_1_1_1_1, test_session):
-    """An Idea fixture with a idealink to subidea_1_1_1_1 fixture -
-    root_idea
-        |-> subidea_1
-            |-> subidea_1_1
-                |-> subidea_1_1_1
-                    |-> subidea_1_1_1_1
-                        |-> subidea_1_1_1_1"""
+    """An Idea fixture with a idealink to subidea_1_1_1_1 fixture::
+
+        root_idea
+            |-> subidea_1
+                |-> subidea_1_1
+                    |-> subidea_1_1_1
+                        |-> subidea_1_1_1_1
+                            |-> subidea_1_1_1_1"""
 
     from assembl.models import Idea, IdeaLink, LangString
     i = Idea(title=LangString.create(u"Job loss", 'en'),
@@ -248,14 +253,15 @@ def subidea_1_1_1_1_1(request, discussion, subidea_1_1_1_1, test_session):
 
 @pytest.fixture(scope="function")
 def subidea_1_1_1_1_2(request, discussion, subidea_1_1_1_1, test_session):
-    """An Idea fixture with a idealink to subidea_1_1_1_1 fixture -
-    root_idea
-        |-> subidea_1
-            |-> subidea_1_1
-                |-> subidea_1_1_1
-                    |-> subidea_1_1_1_1
+    """An Idea fixture with a idealink to subidea_1_1_1_1 fixture::
+
+        root_idea
+            |-> subidea_1
+                |-> subidea_1_1
+                    |-> subidea_1_1_1
                         |-> subidea_1_1_1_1
-                        |-> subidea_1_1_1_2"""
+                            |-> subidea_1_1_1_1
+                            |-> subidea_1_1_1_2"""
 
     from assembl.models import Idea, IdeaLink, LangString
     i = Idea(title=LangString.create(u"Environmental program cuts", 'en'),
@@ -277,15 +283,16 @@ def subidea_1_1_1_1_2(request, discussion, subidea_1_1_1_1, test_session):
 
 @pytest.fixture(scope="function")
 def subidea_1_1_1_1_2_1(request, discussion, subidea_1_1_1_1_2, test_session):
-    """An Idea fixture with a idealink to subidea_1_1_1_1_2 fixture -
-    root_idea
-        |-> subidea_1
-            |-> subidea_1_1
-                |-> subidea_1_1_1
-                    |-> subidea_1_1_1_1
+    """An Idea fixture with a idealink to subidea_1_1_1_1_2 fixture::
+
+        root_idea
+            |-> subidea_1
+                |-> subidea_1_1
+                    |-> subidea_1_1_1
                         |-> subidea_1_1_1_1
-                        |-> subidea_1_1_1_2
-                            |-> subidea_1_1_1_1_2_1"""
+                            |-> subidea_1_1_1_1
+                            |-> subidea_1_1_1_2
+                                |-> subidea_1_1_1_1_2_1"""
 
     from assembl.models import Idea, IdeaLink, LangString
     i = Idea(title=LangString.create(u"Bad for the environment", 'en'),
@@ -307,16 +314,17 @@ def subidea_1_1_1_1_2_1(request, discussion, subidea_1_1_1_1_2, test_session):
 
 @pytest.fixture(scope="function")
 def subidea_1_1_1_1_2_2(request, discussion, subidea_1_1_1_1_2, test_session):
-    """An Idea fixture with a idealink to subidea_1_1_1_1_2 fixture -
-    root_idea
-        |-> subidea_1
-            |-> subidea_1_1
-                |-> subidea_1_1_1
-                    |-> subidea_1_1_1_1
+    """An Idea fixture with a idealink to subidea_1_1_1_1_2 fixture::
+
+        root_idea
+            |-> subidea_1
+                |-> subidea_1_1
+                    |-> subidea_1_1_1
                         |-> subidea_1_1_1_1
-                        |-> subidea_1_1_1_2
-                            |-> subidea_1_1_1_1_2_1
-                            |-> subidea_1_1_1_1_2_2"""
+                            |-> subidea_1_1_1_1
+                            |-> subidea_1_1_1_2
+                                |-> subidea_1_1_1_1_2_1
+                                |-> subidea_1_1_1_1_2_2"""
 
     from assembl.models import Idea, IdeaLink, LangString
     i = Idea(title=LangString.create(u"Federal programs are ineffective", 'en'),
@@ -338,10 +346,11 @@ def subidea_1_1_1_1_2_2(request, discussion, subidea_1_1_1_1_2, test_session):
 
 @pytest.fixture(scope="function")
 def subidea_1_2(request, discussion, subidea_1, test_session):
-    """An Idea fixture with a idealink to subidea_1 fixture -
-    root_idea
-        |-> subidea_1
-            |-> subidea_1_2"""
+    """An Idea fixture with a idealink to subidea_1 fixture::
+
+        root_idea
+            |-> subidea_1
+                |-> subidea_1_2"""
 
     from assembl.models import Idea, IdeaLink, LangString
     i = Idea(title=LangString.create(u"Increased reseource consumption", 'en'),
@@ -363,11 +372,12 @@ def subidea_1_2(request, discussion, subidea_1, test_session):
 
 @pytest.fixture(scope="function")
 def subidea_1_2_1(request, discussion, subidea_1_2, test_session):
-    """An Idea fixture with a idealink to subidea_1 fixture -
-    root_idea
-        |-> subidea_1
-            |-> subidea_1_2
-                |-> subidea_1_2_1"""
+    """An Idea fixture with a idealink to subidea_1 fixture::
+
+        root_idea
+            |-> subidea_1
+                |-> subidea_1_2
+                    |-> subidea_1_2_1"""
 
     from assembl.models import Idea, IdeaLink, LangString
     i = Idea(title=LangString.create(u"Bad for the environment", 'en'),
