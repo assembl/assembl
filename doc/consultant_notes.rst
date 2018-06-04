@@ -3,8 +3,8 @@ Editing the v2 Announcement section
 
 This is a hack to wait for the v2 pad.
 
-Edit the announcement section using in the v1 like so
-::
+Edit the announcement section using in the v1 like so::
+
     The top text.
     !split!https://url.of.the/video!split!
     The bottom text.

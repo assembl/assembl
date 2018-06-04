@@ -38,11 +38,13 @@ PostgreSQL configuration
 Please ensure you have a the psycopg2 driver installed when you continue with the permission setup. This can be done in two different ways. The recommended way is to use the system repository, like shown below.
 
 .. code:: sh
+
     sudo apt-get install python-psycopg2
 
 Another way is to use the global ``pip`` system. This is the less recommended way.
 
 .. code:: sh
+
     pip install psycopg2
  
 
