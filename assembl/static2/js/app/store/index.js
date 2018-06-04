@@ -20,6 +20,12 @@ export default function createAppStore(initialState) {
   if (storedLocale === 'zh_CN') {
     storedLocale = 'zh-CN';
   }
+  if (storedLocale === 'fr_FR') {
+    storedLocale = 'fr';
+  }
+  if (storedLocale === 'en_GB' || storedLocale === 'en_CA') {
+    storedLocale = 'en';
+  }
   const isLocaleStored = storedLocale !== null;
   const userLocale = isLocaleStored ? storedLocale : getLocale(browserLanguage);
   syncTranslationWithStore(store);
