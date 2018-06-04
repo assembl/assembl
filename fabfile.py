@@ -740,8 +740,9 @@ def compile_javascript():
             venvcmd('./node_modules/.bin/gulp libs', chdir=False)
             venvcmd('./node_modules/.bin/gulp browserify:prod', chdir=False)
             venvcmd('./node_modules/.bin/gulp build:test', chdir=False)
-        with cd('assembl/static2'):
-            venvcmd('npm run build', chdir=False)
+        if env.wsginame != 'dev.wsgi':
+            with cd('assembl/static2'):
+                venvcmd('npm run build', chdir=False)
 
 
 @task
