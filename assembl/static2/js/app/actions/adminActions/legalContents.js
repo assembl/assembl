@@ -26,7 +26,14 @@ export const updatePrivacyPolicyEntry = (locale: string, value: string): actionT
   type: actionTypes.UPDATE_PRIVACY_POLICY_ENTRY
 });
 
-export const updateLegalContents = (value: Object): actionTypes.UpdateLegalContents => ({
+type LegalContentsValue = {
+  cookiesPolicyEntries: Array<LangStringEntryInput>,
+  privacyPolicyEntries: Array<LangStringEntryInput>,
+  legalNoticeEntries: Array<LangStringEntryInput>,
+  termsAndConditionsEntries: Array<LangStringEntryInput>
+}
+
+export const updateLegalContents = (value: LegalContentsValue): actionTypes.UpdateLegalContents => ({
   legalNoticeEntries: value.legalNoticeEntries,
   termsAndConditionsEntries: value.termsAndConditionsEntries,
   cookiesPolicyEntries: value.cookiesPolicyEntries,

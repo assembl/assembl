@@ -196,9 +196,9 @@ class Administration extends React.Component {
       termsAndConditionsEntries: filteredLegalContents.termsAndConditionsEntries
         ? convertEntriesToRawContentState(filteredLegalContents.termsAndConditionsEntries)
         : null,
-      cookiesPolicy: filteredLegalContents.cookiesPolicyEntries ?
+      cookiesPolicyEntries: filteredLegalContents.cookiesPolicyEntries ?
         convertEntriesToRawContentState(filteredLegalContents.cookiesPolicyEntries) : null,
-      privacyPolicy: filteredLegalContents.privacyPolicyEntries ?
+      privacyPolicyEntries: filteredLegalContents.privacyPolicyEntries ?
         convertEntriesToRawContentState(filteredLegalContents.privacyPolicyEntries) : null
     };
     this.props.updateLegalContents(convertedLegalContents);
