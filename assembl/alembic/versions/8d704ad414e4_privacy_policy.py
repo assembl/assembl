@@ -1,14 +1,14 @@
 """privacy_policy
 
 Revision ID: 8d704ad414e4
-Revises: ce427c9d6013
+Revises: 407441ce1b20
 Create Date: 2018-05-31 16:14:07.049883
 
 """
 
 # revision identifiers, used by Alembic.
 revision = '8d704ad414e4'
-down_revision = 'ce427c9d6013'
+down_revision = '407441ce1b20'
 
 from alembic import context, op
 import sqlalchemy as sa
