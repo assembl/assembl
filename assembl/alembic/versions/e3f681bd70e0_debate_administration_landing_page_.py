@@ -1,14 +1,14 @@
 """debate administration landing page header
 
 Revision ID: e3f681bd70e0
-Revises: ce427c9d6013
+Revises: 407441ce1b20
 Create Date: 2018-05-25 16:59:00.488718
 
 """
 
 # revision identifiers, used by Alembic.
 revision = 'e3f681bd70e0'
-down_revision = 'ce427c9d6013'
+down_revision = '407441ce1b20'
 
 from alembic import context, op
 import sqlalchemy as sa
