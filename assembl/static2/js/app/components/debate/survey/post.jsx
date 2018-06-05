@@ -20,8 +20,22 @@ import withLoadingIndicator from '../../common/withLoadingIndicator';
 import ResponsiveOverlayTrigger from '../../common/responsiveOverlayTrigger';
 import { withScreenWidth } from '../../common/screenDimensions';
 import PostBody from '../common/post/postBody';
+import hashLinkScroll from '../../../utils/hashLinkScroll';
 
 class Post extends React.Component {
+  componentDidMount() {
+    // If we have a hash in url and the post id match it, scroll to it.
+    const postId = this.props.data.post.id;
+    const { hash } = window.location;
+    if (hash !== '') {
+      const id = hash.replace('#', '').split('?')[0];
+      if (id === postId) {
+        // Wait an extra 1s to be sure that all previous posts are loaded
+        setTimeout(hashLinkScroll, 1000);
+      }
+    }
+  }
+
   handleSentiment = (event, type) => {
     const { post } = this.props.data;
     const isUserConnected = getConnectedUserId() !== null;
@@ -148,7 +162,7 @@ class Post extends React.Component {
     const { displayName, isDeleted } = post.creator;
 
     return (
-      <div className="shown box">
+      <div className="shown box" id={post.id}>
         <div className="content">
           <PostCreator name={isDeleted ? I18n.t('deletedUser') : displayName} />
           <PostBody
