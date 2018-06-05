@@ -31,7 +31,7 @@ export type VoteChoice = {|
 
 type GaugeFormProps = {
   id: string,
-  index?: number,
+  index: ?number,
   instructions: string,
   canChangeType: boolean,
   nbTicks: number,
@@ -198,7 +198,7 @@ const DumbGaugeForm = ({
 );
 
 DumbGaugeForm.defaultProps = {
-  index: undefined,
+  index: null,
   minimum: 0,
   maximum: 10
 };

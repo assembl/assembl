@@ -37,7 +37,7 @@ exports[`DumbCustomizeGaugeForm component should render a form to customize a ga
       handleNumberGaugeUncheck={[Function]}
       handleUnitChange={[Function]}
       id="my-gauge"
-      index={undefined}
+      index={null}
       instructions="The IB monitor is down, quantify the 1080p application so we can bypass the SMS hard drive!"
       isNumberGauge={true}
       maximum={10}
