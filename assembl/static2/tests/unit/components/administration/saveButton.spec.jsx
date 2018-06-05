@@ -184,7 +184,7 @@ describe('getMutationsPromises', () => {
 });
 
 describe('Save button component', () => {
-  const Component = saveButton.default;
+  const Component = saveButton.DumbSaveButton;
   const saveActionSpy = jest.fn();
   it('should render a save button', () => {
     const props = {
