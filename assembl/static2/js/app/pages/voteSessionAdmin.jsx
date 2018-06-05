@@ -198,7 +198,7 @@ const isTokenVoteModule: TestModuleType = m => m.voteType === 'token_vote_specif
 export const isTextGaugeModule: TestModuleType = m =>
   m.voteType === 'gauge_vote_specification' || (m.type === 'gauge' && !m.isNumberGauge);
 export const isNumberGaugeModule: TestModuleType = m =>
-  m.voteType === 'number_gauge_vote_specification' || ((m.type === 'gauge' && m.isNumberGauge) || false);
+  m.voteType === 'number_gauge_vote_specification' || (m.type === 'gauge' && Boolean(m.isNumberGauge));
 
 export const getProposalValidationErrors = (p: VoteProposalMap, editLocale: string): ValidationErrors => {
   const errors = {};
