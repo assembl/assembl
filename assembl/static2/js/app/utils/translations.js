@@ -464,8 +464,12 @@ const Translations = {
         language: "Éditer la langue du débat",
         sections: "Éditer les rubriques du débat",
         legalContents: "Éditer les contenus juridiques",
+        timeline: "Éditer les phases et modules",
         exportTaxonomies: "Exporter les taxonomies",
         manageProfileOptions: "Options d'inscription"
+      },
+      timelineAdmin: {
+        annotation: "Module à renseigner obligatoirement. Les champs * sont requis."
       },
       noTimeline: "Aucune timeline n'a été configurée pour ce débat.",
       survey: {
@@ -604,7 +608,8 @@ const Translations = {
       discussion: {
         "0": "Langues utilisées",
         "3": "Options d'inscription",
-        "4": "Contenus juridiques"
+        "4": "Contenus juridiques",
+        "5": "Édition des phases et modules"
       },
       languageChoice: "Sélection des langues du débat",
       ph: {
@@ -1170,8 +1175,12 @@ const Translations = {
         language: "Discussion language",
         sections: "Edit debate sections",
         legalContents: "Edit legal content",
+        timeline: "Edit the phases and modules",
         exportTaxonomies: "Export taxonomies",
         manageProfileOptions: "Registration options"
+      },
+      timelineAdmin: {
+        annotation: "This module has to be filled. * Fields are required"
       },
       noTimeline: "No timeline has been configured yet",
       survey: {
@@ -1303,7 +1312,8 @@ const Translations = {
       discussion: {
         "0": "Languages of the Discussion",
         "3": "Registration options",
-        "4": "Legal contents"
+        "4": "Legal contents",
+        "5": "Edition of the phases and modules"
       },
       languageChoice: "Select desired languages below",
       ph: {

@@ -9,6 +9,7 @@ import { type Map } from 'immutable';
 import { languagePreferencesHasChanged, updateEditLocale } from '../actions/adminActions';
 import ManageSectionsForm from '../components/administration/discussion/manageSectionsForm';
 import LegalContentsForm from '../components/administration/discussion/legalContentsForm';
+import TimelineForm from '../components/administration/discussion/timelineForm';
 import LanguageSection from '../components/administration/discussion/languageSection';
 import ManageProfileOptionsForm from '../components/administration/discussion/manageProfileOptionsForm';
 import { displayAlert } from '../utils/utilityManager';
@@ -255,6 +256,7 @@ class DiscussionAdmin extends React.Component<Props, State> {
         {section === '2' && <ManageSectionsForm {...this.props} />}
         {section === '3' && <ManageProfileOptionsForm />}
         {section === '4' && <LegalContentsForm {...this.props} />}
+        {section === '5' && <TimelineForm {...this.props} />}
       </div>
     );
   }
