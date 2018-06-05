@@ -80,9 +80,8 @@ class Footer extends React.Component {
                     </Link>
                   </div>
                 )}
-                {hasTermsAndConditions &&
-                  hasLegalNotice &&
-                  hasCookiesPolicy && <span className="small-hyphen-padding"> &mdash; </span>}
+              </div>
+              <div className="terms">
                 {hasCookiesPolicy && (
                   <div className="cookie-policy">
                     <Link to={`${get('cookiesPolicy', slug)}`}>
@@ -90,7 +89,7 @@ class Footer extends React.Component {
                     </Link>
                   </div>
                 )}
-                {hasTermsAndConditions && hasLegalNotice && <span className="small-hyphen-padding"> &mdash; </span>}
+                {hasCookiesPolicy && hasPrivacyPolicy && <span className="small-hyphen-padding"> &mdash; </span>}
                 {hasPrivacyPolicy && (
                   <div className="privacy-policy">
                     <Link to={`${get('privacyPolicy', slug)}`}>
