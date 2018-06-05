@@ -22,6 +22,8 @@ import Styleguide from './pages/styleguide';
 import NotFound from './pages/notFound';
 import TermsAndConditions from './pages/termsAndConditions';
 import LegalNotice from './pages/legalNotice';
+import PrivacyPolicy from './pages/privacyPolicy';
+import CookiesPolicy from './pages/cookiesPolicy';
 import Administration from './pages/administration';
 import UnauthorizedAdministration from './pages/unauthorizedAdministration';
 import ResourcesCenterAdmin from './pages/resourcesCenterAdmin';
@@ -111,6 +113,8 @@ export default [
         <Route path={routeForRouter('synthesis', false, { synthesisId: ':synthesisId' })} component={Synthesis} />
         <Route path={routeForRouter('resourcesCenter')} component={ResourcesCenter} />
         <Route path={routeForRouter('legalNotice')} component={LegalNotice} />
+        <Route path={routeForRouter('privacyPolicy')} component={PrivacyPolicy} />
+        <Route path={routeForRouter('cookiesPolicy')} component={CookiesPolicy} />
         <Route path={routeForRouter('terms')} component={TermsAndConditions} />
         <Route path={routeForRouter('community')} component={Community} />
         <Route path={routeForRouter('rootDebate')} />
