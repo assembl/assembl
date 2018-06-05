@@ -117,10 +117,6 @@ def get_data(content):
         return get_uid(content), data
 
     elif isinstance(content, Post):
-        # don't index proposition posts
-        if content.type == 'proposition_post':
-            return None, None
-
         data = {}
         data['_parent'] = 'user:{}'.format(content.creator_id)
         if content.parent_id is not None:
