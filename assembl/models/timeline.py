@@ -139,18 +139,22 @@ LangString.setup_ownership_load_event(TimelineEvent, ['title', 'description'])
 
 
 class DiscussionPhase(TimelineEvent):
+    """A phase of the discussion.
+    Ideally, the discussion should always be in one and only one phase,
+    so they should ideally not overlap, though this is not enforced."""
+
     __tablename__ = "discussion_phase"
+
     id = Column(Integer, ForeignKey(
         TimelineEvent.id,
         ondelete='CASCADE',
         onupdate='CASCADE'
     ), primary_key=True)
-    """A phase of the discussion.
-    Ideally, the discussion should always be in one and only one phase,
-    so they should ideally not overlap, though this is not enforced."""
+
     __mapper_args__ = {
         'polymorphic_identity': 'discussion_phase',
     }
+
     interface_v1 = Column(Boolean, server_default='false', default=False)
 
 
