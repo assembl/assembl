@@ -83,7 +83,7 @@ def populate_from_langstring_prop(content, data, propName, dataPropName=None):
 def get_data(content):
     """Return uid, dict of fields we want to index,
     return None if we don't index."""
-    from assembl.models import Idea, Post, SynthesisPost, AgentProfile, LangString
+    from assembl.models import Idea, Post, PropositionPost, SynthesisPost, AgentProfile, LangString
     if type(content) == Idea:  # only index Idea, not Thematic or Question
         data = {}
         for attr in ('creation_date', 'id', 'discussion_id'):
@@ -152,6 +152,11 @@ def get_data(content):
         data['type'] = content.type  # this is the subtype (assembl_post, email...)
 #        data['publishes_synthesis_id'] = getattr(
 #            content, 'publishes_synthesis_id', None)
+        if isinstance(content, PropositionPost):
+            data['phase_id'] = 'survey'
+        else:
+            data['phase_id'] = 'thread'
+
         if isinstance(content, SynthesisPost):
             populate_from_langstring_prop(content.publishes_synthesis,
                                           data, 'subject')

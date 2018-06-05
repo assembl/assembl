@@ -108,7 +108,7 @@ if (v1Interface) {
     case 'idea':
       ideaBase64id = btoa(`Idea:${id}`);
       return `/${slug}/debate/thread/theme/${ideaBase64id}`;
-    default:
+    default: {
       // post
       ideaId = hit._source.idea_id.length > 0 ? hit._source.idea_id[0] : null;
       if (!ideaId) {
@@ -116,7 +116,14 @@ if (v1Interface) {
       }
       ideaBase64id = btoa(`Idea:${ideaId}`);
       postBase64id = btoa(`Post:${id}`);
-      return `/${slug}/debate/thread/theme/${ideaBase64id}/#${postBase64id}`;
+      const phaseId = hit._source.phase_id || 'thread';
+      if (phaseId === 'thread') {
+        return `/${slug}/debate/thread/theme/${ideaBase64id}/#${postBase64id}`;
+      } else if (phaseId === 'survey') {
+        return `/${slug}/debate/survey/question/${ideaBase64id}/1#${postBase64id}`;
+      }
+      return undefined;
+    }
     }
   };
 }
