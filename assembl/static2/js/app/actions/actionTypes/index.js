@@ -27,7 +27,9 @@ export const MOVE_UP_SECTION: 'MOVE_UP_SECTION' = 'MOVE_UP_SECTION';
 export const MOVE_DOWN_SECTION: 'MOVE_DOWN_SECTION' = 'MOVE_DOWN_SECTION';
 export const UPDATE_LEGAL_NOTICE_ENTRY: 'UPDATE_LEGAL_NOTICE_ENTRY' = 'UPDATE_LEGAL_NOTICE_ENTRY';
 export const UPDATE_TERMS_AND_CONDITIONS_ENTRY: 'UPDATE_TERMS_AND_CONDITIONS_ENTRY' = 'UPDATE_TERMS_AND_CONDITIONS_ENTRY';
-export const UPDATE_LEGAL_NOTICE_AND_TERMS: 'UPDATE_LEGAL_NOTICE_AND_TERMS' = 'UPDATE_LEGAL_NOTICE_AND_TERMS';
+export const UPDATE_LEGAL_CONTENTS: 'UPDATE_LEGAL_CONTENTS' = 'UPDATE_LEGAL_CONTENTS';
+export const UPDATE_COOKIES_POLICY_ENTRY: 'UPDATE_COOKIES_POLICY_ENTRY' = 'UPDATE_COOKIES_POLICY_ENTRY';
+export const UPDATE_PRIVACY_POLICY_ENTRY: 'UPDATE_PRIVACY_POLICY_ENTRY' = 'UPDATE_PRIVACY_POLICY_ENTRY';
 export const UPDATE_VOTE_SESSION_PAGE: 'UPDATE_VOTE_SESSION_PAGE' = 'UPDATE_VOTE_SESSION_PAGE';
 export const UPDATE_VOTE_SESSION_PAGE_TITLE: 'UPDATE_VOTE_SESSION_PAGE_TITLE' = 'UPDATE_VOTE_SESSION_PAGE_TITLE';
 export const UPDATE_VOTE_SESSION_PAGE_SEECURRENTVOTES: 'UPDATE_VOTE_SESSION_PAGE_SEECURRENTVOTES' =
@@ -237,10 +239,24 @@ export type UpdateTermsAndConditionsEntry = {
   value: string
 };
 
-export type UpdateLegalNoticeAndTerms = {
+export type UpdateCookiesPolicyEntry = {
+  type: typeof UPDATE_COOKIES_POLICY_ENTRY,
+  locale: string,
+  value: string
+};
+
+export type UpdatePrivacyPolicyEntry = {
+  type: typeof UPDATE_PRIVACY_POLICY_ENTRY,
+  locale: string,
+  value: string
+};
+
+export type UpdateLegalContents = {
   legalNoticeEntries: Array<LangStringEntryInput>,
   termsAndConditionsEntries: Array<LangStringEntryInput>,
-  type: typeof UPDATE_LEGAL_NOTICE_AND_TERMS
+  cookiesPolicyEntries: Array<LangStringEntryInput>,
+  privacyPolicyEntries: Array<LangStringEntryInput>,
+  type: typeof UPDATE_LEGAL_CONTENTS
 };
 
 export type UpdateVoteSessionPageTitle = {
@@ -547,7 +563,7 @@ type ResourcesCenterActions =
   | UpdateResourceTitle
   | UpdateResources;
 
-type LegalNoticeAndTermsActions = UpdateLegalNoticeEntry | UpdateTermsAndConditionsEntry | UpdateLegalNoticeAndTerms;
+type LegalContentsActions = UpdateLegalNoticeEntry | UpdateTermsAndConditionsEntry | UpdateLegalContents;
 
 type SectionActions = CreateSection | DeleteSection | UpSection | DownSection;
 
@@ -595,7 +611,7 @@ export type Action =
   | UpdateContentLocaleById
   | UpdateContentLocaleByOriginalLocale
   | ResourcesCenterActions
-  | LegalNoticeAndTermsActions
+  | LegalContentsActions
   | SectionActions
   | VoteSessionActions
   | AdminActions

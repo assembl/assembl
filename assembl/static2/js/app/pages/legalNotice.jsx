@@ -6,10 +6,10 @@ import { I18n } from 'react-redux-i18n';
 
 import TextWithHeaderPage from '../components/common/textWithHeaderPage';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
-import LegalNoticeAndTerms from '../graphql/LegalNoticeAndTerms.graphql';
+import LegalContents from '../graphql/LegalContents.graphql';
 import type { State } from '../reducers/rootReducer';
 
-export const mapStateToProps: State => LegalNoticeAndTermsQueryVariables = state => ({
+export const mapStateToProps: State => LegalContentsQueryVariables = state => ({
   lang: state.i18n.locale
 });
 
@@ -18,13 +18,13 @@ type AdditionalProps = {
   headerTitle?: string
 };
 
-export type Props = AdditionalProps & LegalNoticeAndTermsQuery & QueryProps;
+export type Props = AdditionalProps & LegalContentsQuery & QueryProps;
 
-const withData: OperationComponent<LegalNoticeAndTermsQuery, LegalNoticeAndTermsQueryVariables, Props> = graphql(
-  LegalNoticeAndTerms,
+const withData: OperationComponent<LegalContentsQuery, LegalContentsQueryVariables, Props> = graphql(
+  LegalContents,
   {
     props: ({ data }) => {
-      const text = data.legalNoticeAndTerms ? data.legalNoticeAndTerms.legalNotice : '';
+      const text = data.legalContents ? data.legalContents.legalNotice : '';
       return {
         ...data,
         text: text,

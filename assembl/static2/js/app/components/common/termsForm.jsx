@@ -6,7 +6,7 @@ import { compose, graphql } from 'react-apollo';
 import get from 'lodash/get';
 import type { OperationComponent, QueryProps } from 'react-apollo';
 import { closeModal } from '../../utils/utilityManager';
-import LegalNoticeAndTerms from '../../graphql/LegalNoticeAndTerms.graphql';
+import LegalContents from '../../graphql/LegalContents.graphql';
 import withLoadingIndicator from '../../components/common/withLoadingIndicator';
 
 type TermsFormProps = {
@@ -93,18 +93,18 @@ type OutputProps = {
   text?: string
 };
 
-export type Props = OutputProps & QueryProps & LegalNoticeAndTermsQuery;
+export type Props = OutputProps & QueryProps & LegalContentsQuery;
 
 export const mapDataToProps = ({ data }: Object) => {
-  const text = get(data, 'legalNoticeAndTerms.termsAndConditions', '');
+  const text = get(data, 'legalContents.termsAndConditions', '');
   return {
     ...data,
     text: text
   };
 };
 
-const withData: OperationComponent<LegalNoticeAndTermsQuery, LegalNoticeAndTermsQueryVariables, Props> = graphql(
-  LegalNoticeAndTerms,
+const withData: OperationComponent<LegalContentsQuery, LegalContentsQueryVariables, Props> = graphql(
+  LegalContents,
   {
     props: mapDataToProps
   }

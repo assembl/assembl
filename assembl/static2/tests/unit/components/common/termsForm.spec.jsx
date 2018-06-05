@@ -86,7 +86,7 @@ les informations, notamment en ce qui concerne les impacts sociaux et environnem
   describe('mapDataToProps function', () => {
     it('should pass Terms as text prop', () => {
       const text = 'Random text';
-      const data = { legalNoticeAndTerms: { termsAndConditions: text } };
+      const data = { legalContents: { termsAndConditions: text } };
       expect(mapDataToProps({ data: data }).text).toEqual(text);
     });
   });

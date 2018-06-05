@@ -454,7 +454,7 @@ const Translations = {
         phase: "Phase %{count} - %{description}",
         language: "Éditer la langue du débat",
         sections: "Éditer les rubriques du débat",
-        legalNoticeAndTerms: "CGU & Mentions légales",
+        legalContents: "Éditer les contenus juridiques",
         exportTaxonomies: "Exporter les taxonomies",
         manageProfileOptions: "Options d'inscription"
       },
@@ -595,7 +595,7 @@ const Translations = {
       discussion: {
         "0": "Langues utilisées",
         "3": "Options d'inscription",
-        "4": "Conditions générales d'utilisation & mentions légales"
+        "4": "Contenus juridiques"
       },
       languageChoice: "Sélection des langues du débat",
       ph: {
@@ -645,10 +645,12 @@ const Translations = {
       saveThemes: "Sauvegarder",
       successThemeCreation: "Les thématiques ont été enregistrées avec succès !",
       successLanguagePreference: "Les langues du débat ont été enregistrées avec succès !",
-      legalNoticeAndTerms: {
+      legalContents: {
         legalNoticeLabel: "Mentions légales",
         termsAndConditionsLabel: "Conditions générales d'utilisation",
-        successSave: "Les CGU et mentions légales ont été enregistrées avec succès !"
+        cookiesPolicyLabel: "Information sur les cookies",
+        privacyPolicyLabel: "Politique de protection des données personnelles",
+        successSave: "Les contenus juridiques ont été enregistrés avec succès !"
       },
       landingPage: {
         manageModules: {
@@ -1134,7 +1136,7 @@ const Translations = {
         phase: "Phase %{count} - %{description}",
         language: "Discussion language",
         sections: "Edit debate sections",
-        legalNoticeAndTerms: "T&C and legal notice",
+        legalContents: "Edit legal content",
         exportTaxonomies: "Export taxonomies",
         manageProfileOptions: "Registration options"
       },
@@ -1268,7 +1270,7 @@ const Translations = {
       discussion: {
         "0": "Languages of the Discussion",
         "3": "Registration options",
-        "4": "Terms & Conditions and Legal Notice"
+        "4": "Legal contents"
       },
       languageChoice: "Select desired languages below",
       ph: {
@@ -1317,10 +1319,12 @@ const Translations = {
       saveThemes: "Save",
       successThemeCreation: "Themes have been saved with success!",
       successLanguagePreference: "Discussion language preferences have been saved with success!",
-      legalNoticeAndTerms: {
+      legalContents: {
         legalNoticeLabel: "Legal notice",
         termsAndConditionsLabel: "Terms and conditions",
-        successSave: "The T&C and legal notice have been saved with success!"
+        cookiesPolicyLabel: "Information on cookies",
+        privacyPolicyLabel: "Privacy policy",
+        successSave: "The legal contents have been saved with success!"
       },
       landingPage: {
         manageModules: {

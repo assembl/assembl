@@ -96,12 +96,16 @@ class ResourcesCenter(graphene.ObjectType):
                 return attachment.document
 
 
-class LegalNoticeAndTerms(graphene.ObjectType):
+class LegalContents(graphene.ObjectType):
 
     legal_notice = graphene.String(lang=graphene.String())
     terms_and_conditions = graphene.String(lang=graphene.String())
     legal_notice_entries = graphene.List(LangStringEntry)
     terms_and_conditions_entries = graphene.List(LangStringEntry)
+    cookies_policy = graphene.String(lang=graphene.String())
+    privacy_policy = graphene.String(lang=graphene.String())
+    cookies_policy_entries = graphene.List(LangStringEntry)
+    privacy_policy_entries = graphene.List(LangStringEntry)
 
     def resolve_legal_notice(self, args, context, info):
         """Legal notice value in given locale."""
@@ -128,6 +132,34 @@ class LegalNoticeAndTerms(graphene.ObjectType):
         discussion = models.Discussion.get(discussion_id)
         if discussion.terms_and_conditions:
             return resolve_langstring_entries(discussion, 'terms_and_conditions')
+
+        return []
+
+    def resolve_cookies_policy(self, args, context, info):
+        """Cookies policy value in given locale."""
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        return resolve_langstring(discussion.cookies_policy, args.get('lang'))
+
+    def resolve_privacy_policy_conditions(self, args, context, info):
+        """Privacy policy value in given locale."""
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        return resolve_langstring(discussion.privacy_policy, args.get('lang'))
+
+    def resolve_cookies_policy_entries(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        if discussion.cookies_policy:
+            return resolve_langstring_entries(discussion, 'cookies_policy')
+
+        return []
+
+    def resolve_privacy_policy_entries(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        if discussion.privacy_policy:
+            return resolve_langstring_entries(discussion, 'privacy_policy')
 
         return []
 
@@ -236,12 +268,14 @@ class UpdateDiscussionPreferences(graphene.Mutation):
         return UpdateDiscussionPreferences(preferences=discussion_pref)
 
 
-class UpdateLegalNoticeAndTerms(graphene.Mutation):
+class UpdateLegalContents(graphene.Mutation):
     class Input:
         legal_notice_entries = graphene.List(LangStringEntryInput)
         terms_and_conditions_entries = graphene.List(LangStringEntryInput)
+        cookies_policy_entries = graphene.List(LangStringEntryInput)
+        privacy_policy_entries = graphene.List(LangStringEntryInput)
 
-    legal_notice_and_terms = graphene.Field(lambda: LegalNoticeAndTerms)
+    legal_contents = graphene.Field(lambda: LegalContents)
 
     @staticmethod
     @abort_transaction_on_exception
@@ -281,9 +315,26 @@ class UpdateLegalNoticeAndTerms(graphene.Mutation):
             update_langstring_from_input_entries(
                 discussion, 'terms_and_conditions', terms_and_conditions_entries)
 
+            cookies_policy_entries = args.get('cookies_policy_entries')
+            if cookies_policy_entries is not None and len(cookies_policy_entries) == 0:
+                raise Exception(
+                    'Cookies policy entries needs at least one entry')
+
+            update_langstring_from_input_entries(
+                discussion, 'cookies_policy', cookies_policy_entries)
+
+            privacy_policy_entries = args.get('privacy_policy_entries')
+            if privacy_policy_entries is not None and len(privacy_policy_entries) == 0:
+                raise Exception(
+                    'Privacy policy entries need to be at least one entry'
+                )
+
+            update_langstring_from_input_entries(
+                discussion, 'privacy_policy', privacy_policy_entries)
+
         db.flush()
-        legal_notice_and_terms = LegalNoticeAndTerms()
-        return UpdateLegalNoticeAndTerms(legal_notice_and_terms=legal_notice_and_terms)
+        legal_contents = LegalContents()
+        return UpdateLegalContents(legal_contents=legal_contents)
 
 
 class VisitsAnalytics(graphene.ObjectType):

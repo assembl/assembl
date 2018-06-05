@@ -12,10 +12,10 @@ from sqlalchemy.orm import contains_eager, joinedload, subqueryload
 
 from assembl import models
 from assembl.graphql.discussion import (Discussion, DiscussionPreferences,
-                                        LegalNoticeAndTerms, LocalePreference,
+                                        LegalContents, LocalePreference,
+                                        UpdateLegalContents,
                                         ResourcesCenter,
                                         UpdateDiscussionPreferences,
-                                        UpdateLegalNoticeAndTerms,
                                         UpdateResourcesCenter, VisitsAnalytics)
 from assembl.graphql.document import UploadDocument
 from assembl.graphql.idea import (CreateIdea, CreateThematic, DeleteThematic,
@@ -85,10 +85,12 @@ class Query(graphene.ObjectType):
     resources_center = graphene.Field(lambda: ResourcesCenter)
     has_resources_center = graphene.Boolean()
     sections = graphene.List(Section)
-    legal_notice_and_terms = graphene.Field(lambda: LegalNoticeAndTerms)
+    legal_contents = graphene.Field(lambda: LegalContents)
     has_legal_notice = graphene.Boolean(lang=graphene.String(required=True))
     has_terms_and_conditions = graphene.Boolean(
         lang=graphene.String(required=True))
+    has_cookies_policy = graphene.Boolean(lang=graphene.String(required=True))
+    has_privacy_policy = graphene.Boolean(lang=graphene.String(required=True))
     visits_analytics = graphene.Field(lambda: VisitsAnalytics)
     discussion = graphene.Field(Discussion)
     landing_page_module_types = graphene.List(LandingPageModuleType)
@@ -236,9 +238,9 @@ class Query(graphene.ObjectType):
         discussion_id = context.matchdict['discussion_id']
         return query.filter(model.discussion_id == discussion_id).order_by(model.order)
 
-    def resolve_legal_notice_and_terms(self, args, context, info):
-        """Legal notice and terms and conditions entries (e.g. for admin form)."""
-        return LegalNoticeAndTerms()
+    def resolve_legal_contents(self, args, context, info):
+        """Legal notice,terms and conditions, cookies and privacy policy entries (e.g. for admin form)."""
+        return LegalContents()
 
     def resolve_has_legal_notice(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
@@ -252,6 +254,22 @@ class Query(graphene.ObjectType):
         discussion = models.Discussion.get(discussion_id)
         text = resolve_langstring(
             discussion.terms_and_conditions, args.get('lang'))
+        # if the field is empty in the admin section, it will contain html markup (u'<p></p>')
+        return text and len(text) > 10
+
+    def resolve_has_cookies_policy(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        text = resolve_langstring(
+            discussion.cookies_policy, args.get('lang'))
+        # if the field is empty in the admin section, it will contain html markup (u'<p></p>')
+        return text and len(text) > 10
+
+    def resolve_has_privacy_policy(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        text = resolve_langstring(
+            discussion.privacy_policy, args.get('lang'))
         # if the field is empty in the admin section, it will contain html markup (u'<p></p>')
         return text and len(text) > 10
 
@@ -372,7 +390,7 @@ class Mutations(graphene.ObjectType):
     create_section = CreateSection.Field()
     delete_section = DeleteSection.Field()
     update_section = UpdateSection.Field()
-    update_legal_notice_and_terms = UpdateLegalNoticeAndTerms.Field()
+    update_legal_contents = UpdateLegalContents.Field()
     update_user = UpdateUser.Field()
     DeleteUserInformation = DeleteUserInformation.Field()
     update_vote_session = UpdateVoteSession.Field()

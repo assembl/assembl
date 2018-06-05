@@ -2331,31 +2331,31 @@ mutation updateSection($id:ID!, $titleEntries: [LangStringEntryInput], $order: F
 
 def test_query_legal_notice(discussion, graphql_request, test_session):
     res = schema.execute(u"""query {
-        legalNoticeAndTerms {
+        legalContents {
             legalNotice(lang: "en")
         }
     }""", context_value=graphql_request)
     assert res.errors is None
     res_data = json.loads(json.dumps(res.data))
-    legal_notice = res_data['legalNoticeAndTerms']['legalNotice']
+    legal_notice = res_data['legalContents']['legalNotice']
     assert legal_notice == u'We need to input the optical HDD sensor!'
 
 
 def test_query_terms_and_conditions(discussion, graphql_request, test_session):
     res = schema.execute(u"""query {
-        legalNoticeAndTerms {
+        legalContents {
             termsAndConditions(lang: "en")
         }
     }""", context_value=graphql_request)
     assert res.errors is None
     res_data = json.loads(json.dumps(res.data))
-    tac = res_data['legalNoticeAndTerms']['termsAndConditions']
+    tac = res_data['legalContents']['termsAndConditions']
     assert tac == u"You can't quantify the driver without quantifying the 1080p JSON protocol!"
 
 
-def test_query_legal_notice_and_terms(discussion, graphql_request, test_session):
+def test_query_legal_contents(discussion, graphql_request, test_session):
     res = schema.execute(u"""query {
-        legalNoticeAndTerms {
+        legalContents {
             legalNoticeEntries {
                 localeCode
                 value
@@ -2368,9 +2368,9 @@ def test_query_legal_notice_and_terms(discussion, graphql_request, test_session)
     }""", context_value=graphql_request)
     assert res.errors is None
     res_data = json.loads(json.dumps(res.data))
-    legal_notice_en = res_data['legalNoticeAndTerms']['legalNoticeEntries'][0]
-    tac_en = res_data['legalNoticeAndTerms']['termsAndConditionsEntries'][0]
-    tac_fr = res_data['legalNoticeAndTerms']['termsAndConditionsEntries'][1]
+    legal_notice_en = res_data['legalContents']['legalNoticeEntries'][0]
+    tac_en = res_data['legalContents']['termsAndConditionsEntries'][0]
+    tac_fr = res_data['legalContents']['termsAndConditionsEntries'][1]
     assert legal_notice_en['value'] == u"We need to input the optical HDD sensor!"
     assert legal_notice_en['localeCode'] == u"en"
     assert tac_en['value'] == u"You can't quantify the driver without quantifying the 1080p JSON protocol!"
@@ -2379,10 +2379,10 @@ def test_query_legal_notice_and_terms(discussion, graphql_request, test_session)
     assert tac_fr['localeCode'] == u"fr"
 
 
-def test_update_legal_notice_and_terms(graphql_request, discussion):
+def test_update_legal_contents(graphql_request, discussion):
     res = schema.execute(u"""
-mutation updateLegalNoticeAndTerms {
-    updateLegalNoticeAndTerms(
+mutation updateLegalContents {
+    updateLegalContents(
         legalNoticeEntries: [
             {
                 value: "Use the digital JBOD panel, then you can override the solid state microchip!",
@@ -2396,7 +2396,7 @@ mutation updateLegalNoticeAndTerms {
             }
         ]
     ) {
-        legalNoticeAndTerms {
+        legalContents {
             legalNoticeEntries {
                 localeCode
                 value
@@ -2411,12 +2411,12 @@ mutation updateLegalNoticeAndTerms {
 """, context_value=graphql_request)
     assert res.errors is None
 
-    assert res.data['updateLegalNoticeAndTerms'] is not None
-    assert res.data['updateLegalNoticeAndTerms']['legalNoticeAndTerms'] is not None
+    assert res.data['updateLegalContents'] is not None
+    assert res.data['updateLegalContents']['legalContents'] is not None
 
-    legal_notice_and_terms = res.data['updateLegalNoticeAndTerms']['legalNoticeAndTerms']
-    legal_notice_en = legal_notice_and_terms['legalNoticeEntries'][0]
-    tac_en = legal_notice_and_terms['termsAndConditionsEntries'][0]
+    legal_contents = res.data['updateLegalContents']['legalContents']
+    legal_notice_en = legal_contents['legalNoticeEntries'][0]
+    tac_en = legal_contents['termsAndConditionsEntries'][0]
     assert legal_notice_en['localeCode'] == 'en'
     assert legal_notice_en['value'] == u"Use the digital JBOD panel, then you can override the solid state microchip!"
     assert tac_en['localeCode'] == 'en'
