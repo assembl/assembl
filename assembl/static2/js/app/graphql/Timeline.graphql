@@ -1,0 +1,13 @@
+query Timeline($lang: String!) {
+  timeline {
+    id
+    identifier
+    title(lang: $lang)
+    titleEntries {
+      localeCode
+      value
+    }
+    start
+    end
+  }
+}
