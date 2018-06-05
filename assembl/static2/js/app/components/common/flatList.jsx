@@ -2,6 +2,7 @@
 // @flow
 import * as React from 'react';
 import { I18n } from 'react-redux-i18n';
+import throttle from 'lodash/throttle';
 
 import Loader from './loader';
 import { displayAlert } from '../../utils/utilityManager';
@@ -39,13 +40,26 @@ class FlatList extends React.Component<FlatListProps> {
 
   componentDidMount() {
     window.addEventListener('scroll', this.handleScroll);
+    this.componentDidUpdate();
+  }
+
+  componentDidUpdate() {
+    const { hash } = window.location;
+    if (hash !== '') {
+      const postIds = this.props.items.edges.map(edge => edge.node.id);
+      const id = hash.replace('#', '').split('?')[0];
+      // if post id not found in current items, load another page
+      if (postIds.indexOf(id) === -1) {
+        this.onEndReached();
+      }
+    }
   }
 
   componentWillUnmount() {
     window.removeEventListener('scroll', this.handleScroll);
   }
 
-  handleScroll = () => {
+  handleScroll = throttle(() => {
     if (!this.loading) {
       const { onEndReachedThreshold } = this.props;
       // $FlowFixMe
@@ -60,9 +74,9 @@ class FlatList extends React.Component<FlatListProps> {
         this.onEndReached();
       }
     }
-  };
+  }, 100);
 
-  onEndReached = () => {
+  onEndReached = throttle(() => {
     // The fetchMore method is used to load new data and add it
     // to the original query we used to populate the list
     const { fetchMore, items, extractItems, networkStatus } = this.props;
@@ -90,7 +104,7 @@ class FlatList extends React.Component<FlatListProps> {
           this.loading = false;
         });
     }
-  };
+  }, 100);
 
   onRefresh = () => {
     const { refetch } = this.props;
