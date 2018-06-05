@@ -469,7 +469,10 @@ const Translations = {
         manageProfileOptions: "Options d'inscription"
       },
       timelineAdmin: {
-        annotation: "Module à renseigner obligatoirement. Les champs * sont requis."
+        annotation: "Module à renseigner obligatoirement. Les champs * sont requis.",
+        phaseLabel: "Titre de la phase",
+        addPhase: "Ajouter une phase supplémentaire",
+        deletePhase: "Supprimer la phase"
       },
       noTimeline: "Aucune timeline n'a été configurée pour ce débat.",
       survey: {
@@ -1180,7 +1183,10 @@ const Translations = {
         manageProfileOptions: "Registration options"
       },
       timelineAdmin: {
-        annotation: "This module has to be filled. * Fields are required"
+        annotation: "This module has to be filled. * Fields are required",
+        phaseLabel: "Phase title",
+        addPhase: "Add an additional phase",
+        deletePhase: "Delete the phase"
       },
       noTimeline: "No timeline has been configured yet",
       survey: {
