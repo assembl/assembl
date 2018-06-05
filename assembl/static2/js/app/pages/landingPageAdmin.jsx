@@ -12,6 +12,7 @@ import Navbar from '../components/administration/navbar';
 import { displayAlert } from '../utils/utilityManager';
 import SaveButton, { getMutationsPromises, runSerial } from '../components/administration/saveButton';
 import landingPagePlugin from '../utils/administration/landingPage';
+import updateDiscussionMutation from '../graphql/mutations/updateDiscussion.graphql';
 
 type Props = {
   landingPageModules: Array<Object>,
@@ -22,7 +23,9 @@ type Props = {
   section: string,
   editLocale: string,
   header: Object,
-  pageHasChanged: boolean
+  pageHasChanged: boolean,
+  page: Object,
+  updateDiscussion: Function
 };
 
 type State = {
@@ -53,10 +56,25 @@ class LandingPageAdmin extends React.Component<Props, State> {
     return null;
   };
 
+  getImageVariable = (img) => {
+    const externalUrl = img ? img.externalUrl : null;
+    if (externalUrl === 'TO_DELETE') {
+      return externalUrl;
+    }
+    return typeof externalUrl === 'object' ? externalUrl : null;
+  };
+
   saveAction = () => {
+    const {
+      landingPageModulesHasChanged,
+      landingPageModules,
+      refetchLandingPageModules,
+      pageHasChanged,
+      page,
+      updateDiscussion
+    } = this.props;
     displayAlert('success', `${I18n.t('loading.wait')}...`);
-    if (this.props.landingPageModulesHasChanged) {
-      const { landingPageModules, refetchLandingPageModules } = this.props;
+    if (landingPageModulesHasChanged) {
       const mutationsPromises = getMutationsPromises({
         items: landingPageModules,
         variablesCreator: landingPagePlugin.variablesCreator,
@@ -71,6 +89,24 @@ class LandingPageAdmin extends React.Component<Props, State> {
         })
         .catch((error) => {
           displayAlert('danger', error, false, 30000);
+        });
+    }
+
+    if (pageHasChanged) {
+      updateDiscussion({
+        variables: {
+          titleEntries: page.titleEntries,
+          subtitleEntries: page.subtitleEntries,
+          buttonLabelEntries: page.buttonLabelEntries,
+          headerImage: this.getImageVariable(page.headerImage),
+          logoImage: this.getImageVariable(page.logoImage)
+        }
+      })
+        .then(() => {
+          displayAlert('success', I18n.t('administration.landingPage.successSave'));
+        })
+        .catch((error) => {
+          displayAlert('danger', error.message);
         });
     }
   };
@@ -115,6 +151,7 @@ const mapStateToProps = ({ admin: { editLocale, landingPage } }) => {
       logoImgUrl: page.getIn(['logoImage', 'externalUrl']),
       logoImgTitle: page.getIn(['logoImage', 'title'])
     },
+    page: landingPage.page.toJS(),
     pageHasChanged: landingPage.pageHasChanged,
     editLocale: editLocale
   };
@@ -127,5 +164,8 @@ export default compose(
   }),
   graphql(landingPagePlugin.updateMutation, {
     name: landingPagePlugin.updateMutationName
+  }),
+  graphql(updateDiscussionMutation, {
+    name: 'updateDiscussion'
   })
 )(LandingPageAdmin);
