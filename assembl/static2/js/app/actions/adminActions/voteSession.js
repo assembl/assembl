@@ -293,7 +293,7 @@ export const cancelModuleCustomization = (id: string): actionTypes.CancelModuleC
 
 export const cancelAllDependenciesCustomization = (id: string) => (dispatch: Function, getState: Function) => {
   getState()
-    .admin.voteSession.modulesById.filter(voteSpec => voteSpec.get('voteSpecTemplateId') === id && voteSpec.get('isCustom'))
+    .admin.voteSession.modulesById.filter(voteSpec => voteSpec.get('voteSpecTemplateId') === id)
     .forEach((voteSpec) => {
       const voteSpecId = voteSpec.get('id');
       dispatch(cancelModuleCustomization(voteSpecId));

@@ -407,7 +407,7 @@ export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction
           .set('_hasChanged', true)
       )
       .update(action.id, updateGaugeSpecificInfo(specificInfo))
-      .deleteIn([action.id, 'instructionsEntries'])
+      .setIn([action.id, 'instructionsEntries'], template.get('instructionsEntries'))
       .deleteIn([action.id, 'choices']);
   }
   case UPDATE_VOTE_MODULE: {

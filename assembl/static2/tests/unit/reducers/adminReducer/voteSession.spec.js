@@ -1491,7 +1491,13 @@ describe('voteSession admin reducers', () => {
           isNumberGauge: false,
           id: 'customGauge',
           voteSpecTemplateId: 'template',
-          proposalId: 'proposal1'
+          proposalId: 'proposal1',
+          instructionsEntries: [
+            {
+              localeCode: 'en',
+              value: 'My template instructions'
+            }
+          ],
         },
         template: {
           _hasChanged: false,
@@ -1572,6 +1578,12 @@ describe('voteSession admin reducers', () => {
           id: 'customGauge',
           voteSpecTemplateId: 'template',
           proposalId: 'proposal1',
+          instructionsEntries: [
+            {
+              localeCode: 'en',
+              value: 'My template instructions'
+            }
+          ],
           unit: 'template unit',
           minimum: 100,
           maximum: 1000
@@ -1654,7 +1666,13 @@ describe('voteSession admin reducers', () => {
           isNumberGauge: false,
           id: 'customGauge',
           voteSpecTemplateId: 'template',
-          proposalId: 'proposal1'
+          proposalId: 'proposal1',
+          instructionsEntries: [
+            {
+              localeCode: 'en',
+              value: 'My template instructions'
+            }
+          ],
         },
         template: {
           _hasChanged: false,

@@ -234,7 +234,7 @@ describe('voteSession admin actions', () => {
       const getState = () => state;
       const dispatchMock = jest.fn();
       actual(dispatchMock, getState);
-      expect(dispatchMock.mock.calls.length).toEqual(2);
+      expect(dispatchMock.mock.calls.length).toEqual(3);
       expect(dispatchMock.mock.calls[0].length).toEqual(1);
       expect(dispatchMock.mock.calls[0][0]).toEqual({ id: 'dep1', type: 'CANCEL_MODULE_CUSTOMIZATION' });
       expect(dispatchMock.mock.calls[1][0]).toEqual({ id: 'dep2', type: 'CANCEL_MODULE_CUSTOMIZATION' });
