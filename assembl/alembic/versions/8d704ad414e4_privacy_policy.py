@@ -28,8 +28,8 @@ def upgrade(pyramid_env):
         op.add_column(
             'discussion', sa.Column('privacy_policy_id', sa.Integer(), sa.ForeignKey('langstring.id')))
 
-        sa.schema.UniqueConstraint(
-            "cookies_policy_id", "privacy_policy_id")
+        sa.schema.UniqueConstraint("cookies_policy_id")
+        sa.schema.UniqueConstraint("privacy_policy_id")
 
 
 def downgrade(pyramid_env):
