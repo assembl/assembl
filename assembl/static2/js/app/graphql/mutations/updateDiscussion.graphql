@@ -1,0 +1,38 @@
+mutation UpdateDiscussion(
+  $titleEntries: [LangStringEntryInput!]!
+  $subtitleEntries: [LangStringEntryInput!]!
+  $buttonLabelEntries: [LangStringEntryInput!]!
+  $headerImage: String
+  $logoImage: String
+) {
+  updateDiscussion(
+    titleEntries: $titleEntries
+    subtitleEntries: $subtitleEntries
+    buttonLabelEntries: $buttonLabelEntries
+    headerImage: $headerImage
+    logoImage: $logoImage
+  ) {
+    discussion {
+      titleEntries {
+        value
+        localeCode
+      }
+      subtitleEntries {
+        value
+        localeCode
+      }
+      buttonLabelEntries {
+        value
+        localeCode
+      }
+      headerImage {
+        externalUrl
+        mimeType
+      }
+      logoImage {
+        externalUrl
+        mimeType
+      }
+    }
+  }
+}

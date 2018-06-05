@@ -21,7 +21,8 @@ type Props = {
   router: Router,
   section: string,
   editLocale: string,
-  header: Object
+  header: Object,
+  pageHasChanged: boolean
 };
 
 type State = {
@@ -45,7 +46,7 @@ class LandingPageAdmin extends React.Component<Props, State> {
   }
 
   routerWillLeave = () => {
-    if (this.props.landingPageModulesHasChanged && !this.state.refetching) {
+    if (this.dataHaveChanged() && !this.state.refetching) {
       return I18n.t('administration.confirmUnsavedChanges');
     }
 
@@ -74,10 +75,12 @@ class LandingPageAdmin extends React.Component<Props, State> {
     }
   };
 
+  dataHaveChanged = (): boolean => this.props.landingPageModulesHasChanged || this.props.pageHasChanged;
+
   render() {
-    const { landingPageModulesHasChanged, section } = this.props;
+    const { section } = this.props;
     const currentStep = parseInt(section, 10);
-    const saveDisabled = !landingPageModulesHasChanged;
+    const saveDisabled = !this.dataHaveChanged();
     return (
       <div className="landing-page-admin">
         <SaveButton disabled={saveDisabled} saveAction={this.saveAction} />
@@ -112,6 +115,7 @@ const mapStateToProps = ({ admin: { editLocale, landingPage } }) => {
       logoImgUrl: page.getIn(['logoImage', 'externalUrl']),
       logoImgTitle: page.getIn(['logoImage', 'title'])
     },
+    pageHasChanged: landingPage.pageHasChanged,
     editLocale: editLocale
   };
 };

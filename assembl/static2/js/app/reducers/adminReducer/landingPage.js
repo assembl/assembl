@@ -161,18 +161,36 @@ const page: LandingPageReducer = (state = initialPage, action) => {
   }
 };
 
+type PageHasChangedReducer = (boolean, ReduxAction<Action>) => boolean;
+export const pageHasChanged: PageHasChangedReducer = (state = false, action) => {
+  switch (action.type) {
+  case UPDATE_LANDING_PAGE_HEADER_TITLE:
+  case UPDATE_LANDING_PAGE_HEADER_SUBTITLE:
+  case UPDATE_LANDING_PAGE_HEADER_BUTTON_LABEL:
+  case UPDATE_LANDING_PAGE_HEADER_IMAGE:
+  case UPDATE_LANDING_PAGE_HEADER_LOGO:
+    return true;
+  case UPDATE_LANDING_PAGE:
+    return false;
+  default:
+    return state;
+  }
+};
+
 export type LandingPageState = {
   page: PageState,
   enabledModulesInOrder: EnabledModulesInOrderState,
   modulesByIdentifier: Map<string>,
-  modulesHasChanged: boolean
+  modulesHasChanged: boolean,
+  pageHasChanged: boolean
 };
 
 const reducers = {
   page: page,
   enabledModulesInOrder: enabledModulesInOrder,
   modulesHasChanged: modulesHasChanged,
-  modulesByIdentifier: modulesByIdentifier
+  modulesByIdentifier: modulesByIdentifier,
+  pageHasChanged: pageHasChanged
 };
 
 export default combineReducers(reducers);
