@@ -3,6 +3,8 @@ query TabsCondition($lang: String!) {
   hasSyntheses
   hasLegalNotice(lang: $lang)
   hasTermsAndConditions(lang: $lang)
+  hasCookiesPolicy(lang: $lang)
+  hasPrivacyPolicy(lang: $lang)
   discussion {
     homepageUrl
   }

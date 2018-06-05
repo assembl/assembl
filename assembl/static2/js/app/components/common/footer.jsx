@@ -10,8 +10,18 @@ import withoutLoadingIndicator from '../../components/common/withoutLoadingIndic
 import TabsConditionQuery from '../../graphql/TabsConditionQuery.graphql';
 
 class Footer extends React.Component {
+  getLegalContentsLinks = () => {};
+
   render() {
-    const { assemblVersion, debateData, hasLegalNotice, hasTermsAndConditions, lang } = this.props;
+    const {
+      assemblVersion,
+      debateData,
+      hasLegalNotice,
+      hasTermsAndConditions,
+      hasCookiesPolicy,
+      hasPrivacyPolicy,
+      lang
+    } = this.props;
     const { socialMedias, footerLinks } = debateData;
     const slug = { slug: debateData.slug };
     return (
@@ -67,6 +77,24 @@ class Footer extends React.Component {
                   <div className="legal-notice">
                     <Link to={`${get('legalNotice', slug)}`}>
                       <Translate value="footer.legalNotice" />
+                    </Link>
+                  </div>
+                )}
+                {hasTermsAndConditions &&
+                  hasLegalNotice &&
+                  hasCookiesPolicy && <span className="small-hyphen-padding"> &mdash; </span>}
+                {hasCookiesPolicy && (
+                  <div className="cookie-policy">
+                    <Link to={`${get('cookiesPolicy', slug)}`}>
+                      <Translate value="footer.cookiePolicy" />
+                    </Link>
+                  </div>
+                )}
+                {hasTermsAndConditions && hasLegalNotice && <span className="small-hyphen-padding"> &mdash; </span>}
+                {hasPrivacyPolicy && (
+                  <div className="privacy-policy">
+                    <Link to={`${get('privacyPolicy', slug)}`}>
+                      <Translate value="footer.privacyPolicy" />
                     </Link>
                   </div>
                 )}
