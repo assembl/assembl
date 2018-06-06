@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Assembl\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-02-28 14:24+0100\n"
+"POT-Creation-Date: 2018-06-06 11:14+0200\n"
 "PO-Revision-Date: 2018-01-31 09:36+0000\n"
 "Last-Translator: Quentin Grimaud <quentin.grimaud@gmail.com>\n"
 "Language: pl\n"
@@ -51,19 +51,23 @@ msgstr ""
 msgid "Unknown User ${uid}"
 msgstr ""
 
-#: assembl/models/notification.py:626
+#: assembl/models/idea.py:263 assembl/static/js/app/views/ideaPanel.js:211
+msgid "Idea"
+msgstr ""
+
+#: assembl/models/notification.py:621
 msgid "A synthesis is posted"
 msgstr ""
 
-#: assembl/models/notification.py:655
+#: assembl/models/notification.py:650
 msgid "Any message is posted to the discussion"
 msgstr ""
 
-#: assembl/models/notification.py:684
+#: assembl/models/notification.py:679
 msgid "Someone directly responds to one of your messages"
 msgstr ""
 
-#: assembl/models/notification.py:1101
+#: assembl/models/notification.py:1093
 msgid "SYNTHESIS: "
 msgstr ""
 
@@ -339,6 +343,26 @@ msgstr ""
 
 #: assembl/models/preferences.py:868
 msgid "Show the banner offering to disable Piwik cookies"
+msgstr ""
+
+#: assembl/models/preferences.py:880
+msgid "Custom HTML code on the landing page"
+msgstr ""
+
+#: assembl/models/preferences.py:883
+msgid ""
+"Custom HTML code that will be integrated on the landing page of the "
+"debate, right after the <body> tag"
+msgstr ""
+
+#: assembl/models/preferences.py:893
+msgid "Custom HTML code on the user registration page"
+msgstr ""
+
+#: assembl/models/preferences.py:896
+msgid ""
+"Custom HTML code that will be integrated on the user registration page of"
+" the debate, right after the <body> tag"
 msgstr ""
 
 #: assembl/static/js/app/routeManager.js:416
@@ -1102,10 +1126,6 @@ msgstr ""
 
 #: assembl/static/js/app/views/ideaList.js:805
 msgid "You don't have the permission to do this."
-msgstr ""
-
-#: assembl/static/js/app/views/ideaPanel.js:211
-msgid "Idea"
 msgstr ""
 
 #: assembl/static/js/app/views/ideaPanel.js:214
@@ -4386,79 +4406,79 @@ msgstr ""
 msgid "No file given."
 msgstr ""
 
-#: assembl/views/api/post.py:81 assembl/views/api/post.py:625
+#: assembl/views/api/post.py:80 assembl/views/api/post.py:624
 #, python-format
 msgid "No discussion found with id=%s"
 msgstr ""
 
-#: assembl/views/api/post.py:228
+#: assembl/views/api/post.py:227
 msgid "Getting orphan posts of a specific idea isn't supported."
 msgstr ""
 
-#: assembl/views/api/post.py:298
+#: assembl/views/api/post.py:297
 msgid "Do not combine negative and positive classifiers"
 msgstr ""
 
-#: assembl/views/api/post.py:359
+#: assembl/views/api/post.py:358
 msgid "You must be logged in to view which posts are read"
 msgstr ""
 
-#: assembl/views/api/post.py:609
+#: assembl/views/api/post.py:608
 msgid "Your message is empty"
 msgstr ""
 
-#: assembl/views/api2/auth.py:343
+#: assembl/views/api2/auth.py:346
 msgid "The user does not exist"
 msgstr ""
 
-#: assembl/views/api2/auth.py:354
+#: assembl/views/api2/auth.py:357
 msgid "This email does not exist"
 msgstr ""
 
-#: assembl/views/api2/auth.py:359
+#: assembl/views/api2/auth.py:362
 msgid "Please give an identifier"
 msgstr ""
 
-#: assembl/views/api2/auth.py:364
+#: assembl/views/api2/auth.py:367
 msgid "This user has no email"
 msgstr ""
 
-#: assembl/views/api2/auth.py:367
+#: assembl/views/api2/auth.py:370
 msgid "This is not a user"
 msgstr ""
 
-#: assembl/views/api2/auth.py:388
+#: assembl/views/api2/auth.py:391
 msgid "The passwords that were entered are mismatched!"
 msgstr ""
 
-#: assembl/views/api2/auth.py:402 assembl/views/auth/views.py:964
+#: assembl/views/api2/auth.py:405 assembl/views/auth/views.py:964
 #: assembl/views/auth/views.py:1032
 msgid "This link is not valid. Do you want us to send another?"
 msgstr ""
 
-#: assembl/views/api2/auth.py:405 assembl/views/auth/views.py:967
+#: assembl/views/api2/auth.py:408 assembl/views/auth/views.py:967
 #: assembl/views/auth/views.py:1035
 msgid "This link has been used. Do you want us to send another?"
 msgstr ""
 
-#: assembl/views/api2/auth.py:440 assembl/views/auth/views.py:388
+#: assembl/views/api2/auth.py:443 assembl/views/auth/views.py:388
 msgid "Please use a name of at least 3 characters"
 msgstr ""
 
-#: assembl/views/api2/auth.py:449 assembl/views/auth/views.py:321
+#: assembl/views/api2/auth.py:452 assembl/views/auth/views.py:321
 #: assembl/views/auth/views.py:395
 msgid "This is not a valid email"
 msgstr ""
 
-#: assembl/views/api2/auth.py:457 assembl/views/auth/views.py:402
+#: assembl/views/api2/auth.py:460 assembl/views/auth/views.py:402
 msgid "We already have a user with this email."
 msgstr ""
 
-#: assembl/views/api2/auth.py:462
+#: assembl/views/api2/auth.py:465
 msgid "No email."
 msgstr ""
 
-#: assembl/views/api2/auth.py:468
+#: assembl/views/api2/auth.py:471
 msgid "We already have a user with this username."
 msgstr ""
 
@@ -4636,11 +4656,11 @@ msgid ""
 "<p>Best regards,<br />The {assembl} Team</p>"
 msgstr ""
 
-#: assembl/views/auth/views.py:1142
+#: assembl/views/auth/views.py:1145
 msgid "Request for password change"
 msgstr ""
 
-#: assembl/views/auth/views.py:1146
+#: assembl/views/auth/views.py:1149
 msgid ""
 "<p>Hello, {name}!</p>\n"
 "<p>We have received a request to change the password on your {assembl} "
@@ -4652,7 +4672,7 @@ msgid ""
 "<p>Best regards,<br />The {assembl} Team</p>\n"
 msgstr ""
 
-#: assembl/views/auth/views.py:1152
+#: assembl/views/auth/views.py:1155
 msgid ""
 "Hello, {name}!\n"
 "We have received a request to change the password on your {assembl} "
@@ -4666,7 +4686,7 @@ msgid ""
 "The {assembl} Team\n"
 msgstr ""
 
-#: assembl/views/discussion/views.py:51
+#: assembl/views/discussion/views.py:56
 #, python-format
 msgid "No discussion found for slug=%s"
 msgstr ""
