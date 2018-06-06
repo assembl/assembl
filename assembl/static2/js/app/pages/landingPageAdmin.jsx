@@ -4,7 +4,7 @@ import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { type Route, type Router } from 'react-router';
 import { I18n } from 'react-redux-i18n';
-
+import { convertEntriesToHTML } from '../utils/draftjs';
 import { getEntryValueForLocale } from '../utils/i18n';
 import ManageModules from '../components/administration/landingPage/manageModules';
 import CustomizeHeader from '../components/administration/landingPage/customizeHeader';
@@ -96,7 +96,7 @@ class LandingPageAdmin extends React.Component<Props, State> {
       updateDiscussion({
         variables: {
           titleEntries: page.titleEntries,
-          subtitleEntries: page.subtitleEntries,
+          subtitleEntries: convertEntriesToHTML(page.subtitleEntries),
           buttonLabelEntries: page.buttonLabelEntries,
           headerImage: this.getImageVariable(page.headerImage),
           logoImage: this.getImageVariable(page.logoImage)
@@ -130,6 +130,7 @@ class LandingPageAdmin extends React.Component<Props, State> {
 
 const mapStateToProps = ({ admin: { editLocale, landingPage } }) => {
   const { page } = landingPage;
+  const subtitle = getEntryValueForLocale(page.get('subtitleEntries'), editLocale, '');
   return {
     landingPageModulesHasChanged: landingPage.modulesHasChanged,
     landingPageModules: landingPage.modulesByIdentifier
@@ -142,7 +143,7 @@ const mapStateToProps = ({ admin: { editLocale, landingPage } }) => {
       .toJS(),
     header: {
       title: getEntryValueForLocale(page.get('titleEntries'), editLocale, ''),
-      subtitle: getEntryValueForLocale(page.get('subtitleEntries'), editLocale, ''),
+      subtitle: subtitle && typeof subtitle !== 'string' ? subtitle.toJS() : null,
       buttonLabel: getEntryValueForLocale(page.get('buttonLabelEntries'), editLocale, ''),
       headerImgMimeType: page.getIn(['headerImage', 'mimeType']),
       headerImgUrl: page.getIn(['headerImage', 'externalUrl']),

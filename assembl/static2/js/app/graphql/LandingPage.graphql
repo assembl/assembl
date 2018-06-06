@@ -18,10 +18,12 @@ query LandingPage($lang: String!) {
     headerImage {
       externalUrl
       mimeType
+      title
     }
     logoImage {
       externalUrl
       mimeType
+      title
     }
   }
 }

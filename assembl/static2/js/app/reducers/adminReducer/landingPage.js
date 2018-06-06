@@ -109,30 +109,24 @@ type LandingPageReducer = (PageState, ReduxAction<Action>) => PageState;
 const page: LandingPageReducer = (state = initialPage, action) => {
   switch (action.type) {
   case UPDATE_LANDING_PAGE: {
-    let headerImage = Map({
-      externalUrl: '',
-      mimeType: '',
-      title: ''
-    });
-    let logoImage = Map({
-      externalUrl: '',
-      mimeType: '',
-      title: ''
-    });
-    if (action.headerImage) {
-      headerImage = fromJS(action.headerImage);
+    let newState = state;
+    if (action.page.headerImage) {
+      newState = newState
+        .setIn(['headerImage', 'title'], action.page.headerImage.title)
+        .setIn(['headerImage', 'externalUrl'], action.page.headerImage.externalUrl)
+        .setIn(['headerImage', 'mimeType'], action.page.headerImage.mimeType);
     }
-    if (action.logoImage) {
-      logoImage = fromJS(action.logoImage);
+    if (action.page.logoImage) {
+      newState = newState
+        .setIn(['logoImage', 'title'], action.page.logoImage.title)
+        .setIn(['logoImage', 'externalUrl'], action.page.logoImage.externalUrl)
+        .setIn(['logoImage', 'mimeType'], action.page.logoImage.mimeType);
     }
-    return Map({
-      _hasChanged: false,
-      titleEntries: fromJS(action.titleEntries),
-      subtitleEntries: fromJS(action.subtitleEntries),
-      buttonLabelEntries: fromJS(action.buttonLabelEntries),
-      headerImage: headerImage,
-      logoImage: logoImage
-    });
+    newState = newState
+      .set('titleEntries', fromJS(action.page.titleEntries))
+      .set('subtitleEntries', fromJS(action.page.subtitleEntries))
+      .set('buttonLabelEntries', fromJS(action.page.buttonLabelEntries));
+    return newState.set('_hasChanged', false);
   }
   case UPDATE_LANDING_PAGE_HEADER_TITLE:
     return state

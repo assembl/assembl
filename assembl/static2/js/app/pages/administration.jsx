@@ -231,7 +231,14 @@ class Administration extends React.Component {
   }
 
   putLandingPageInStore(landingPage) {
-    this.props.updateLandingPage(landingPage);
+    const filtered = filter(LandingPageQuery, { discussion: landingPage });
+    const dataForStore = {
+      ...filtered.discussion,
+      subtitleEntries: filtered.discussion.subtitleEntries
+        ? convertEntriesToRawContentState(filtered.discussion.subtitleEntries)
+        : null
+    };
+    this.props.updateLandingPage(dataForStore);
   }
 
   render() {
