@@ -398,3 +398,15 @@ def test_graphql_delete_user_with_configurable_fields(graphql_request, participa
     assert res.errors is None
     extra_fields = test_session.query(m.ProfileField).filter(m.ProfileField.agent_profile_id == participant1_user.id).all()
     assert len(extra_fields) == 0
+
+
+def test_graphql_delete_user_with_username(graphql_request, participant1_user, test_session, participant1_username):
+    """Testing to delete the username for participant1_user"""
+    from assembl import models as m
+    username = test_session.query(m.Username).filter(m.Username.user_id == participant1_user.id).first()
+    assert username.username == "test_username"
+    res = schema.execute(DELETE_USER_INFORMATION_MUTATION, context_value=graphql_request, variable_values={
+        "id": to_global_id('AgentProfile', participant1_user.id)})
+    assert res.errors is None
+    username = test_session.query(m.Username).filter(m.Username.user_id == participant1_user.id).all()
+    assert len(username) == 0

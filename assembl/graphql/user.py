@@ -233,6 +233,9 @@ class DeleteUserInformation(graphene.Mutation):
             for p in user.old_passwords:
                 p.password_p = ""
 
+            # Deleting Username
+            username = db.query(m.Username).filter(m.Username.user_id == user.id).first()
+            db.delete(username)
             # Delete Email Accounts
             email_account_ids = db.query(m.EmailAccount.id).join(m.User).filter(m.User.id == user.id).all()
             email_account_ids = [id for (id,) in email_account_ids]
