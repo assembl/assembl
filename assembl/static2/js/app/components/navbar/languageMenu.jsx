@@ -51,7 +51,10 @@ class LanguageMenu extends React.Component<Props, State> {
 
   doChangeLanguage(key: string) {
     const { changeLanguage } = this.props;
-    const locale = key.replace('-', '_');
+    let locale = key.replace('-', '_');
+    if (locale === 'nb') {
+      locale = 'no';
+    }
     document.cookie = `_LOCALE_=${locale}; path=/`;
     changeLanguage(key);
     location.reload(true);
@@ -67,6 +70,9 @@ class LanguageMenu extends React.Component<Props, State> {
         preferencesMapByLocale['zh-CN'].name = p.name.split(' (')[0]; // shorten the name for chinese
         preferencesMapByLocale['zh-CN'].nativeName = p.nativeName.split(' (')[0];
         preferencesMapByLocale['zh-CN'].locale = 'zh-CN';
+      } else if (p.locale === 'no') {
+        preferencesMapByLocale.nb = { ...p };
+        preferencesMapByLocale.nb.locale = 'nb';
       } else {
         preferencesMapByLocale[p.locale] = { ...p };
         preferencesMapByLocale[p.locale].name = p.name.split(' (')[0]; // shorten the name for japanese, not need for hiragana
