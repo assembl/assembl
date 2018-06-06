@@ -5,8 +5,8 @@ from graphene_sqlalchemy import SQLAlchemyObjectType
 
 from assembl import models
 from assembl.auth import CrudPermissions
-from .langstring import LangStringEntry, LangStringEntryInput, resolve_langstring, resolve_langstring_entries, langstring_from_input_entries
-from .permissions_helpers import require_cls_permission
+from .langstring import LangStringEntry, LangStringEntryInput, resolve_langstring, resolve_langstring_entries, langstring_from_input_entries, update_langstring_from_input_entries
+from .permissions_helpers import require_cls_permission, require_instance_permission
 from .types import SecureObjectType
 from .utils import DateTime, abort_transaction_on_exception
 
@@ -65,3 +65,38 @@ class CreateDiscussionPhase(graphene.Mutation):
             db.flush()
 
         return CreateDiscussionPhase(discussion_phase=saobj)
+
+
+class UpdateDiscussionPhase(graphene.Mutation):
+    class Input:
+        id = graphene.ID(required=True)
+        lang = graphene.String(required=True)
+        identifier = graphene.String(required=True)
+        title_entries = graphene.List(LangStringEntryInput, required=True)
+        start = DateTime(required=True)
+        end = DateTime(required=True)
+
+    discussion_phase = graphene.Field(lambda: DiscussionPhase)
+
+    @staticmethod
+    @abort_transaction_on_exception
+    def mutate(root, args, context, info):
+        cls = models.DiscussionPhase
+        phase_id = args.get('id')
+        phase_id = int(Node.from_global_id(phase_id)[1])
+        phase = cls.get(phase_id)
+        require_instance_permission(CrudPermissions.UPDATE, phase, context)
+        with cls.default_db.no_autoflush as db:
+            title_entries = args.get('title_entries')
+            if len(title_entries) == 0:
+                raise Exception(
+                    'DiscussionPhase titleEntries needs at least one entry')
+
+            update_langstring_from_input_entries(phase, 'title', title_entries)
+            phase.identifier = args.get('identifier')
+            # SQLAlchemy wants naive datetimes
+            phase.start = args.get('start').replace(tzinfo=None)
+            phase.end = args.get('end').replace(tzinfo=None)
+            db.flush()
+
+        return UpdateDiscussionPhase(discussion_phase=phase)

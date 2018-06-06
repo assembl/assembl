@@ -1,0 +1,23 @@
+#import "../fragments/LangString.graphql"
+
+mutation updateDiscussionPhase(
+  $id: ID!
+  $lang: String!
+  $identifier: String!
+  $titleEntries: [LangStringEntryInput]!
+  $start: DateTime!
+  $end: DateTime!
+) {
+  updateDiscussionPhase(id: $id, lang: $lang, identifier: $identifier, titleEntries: $titleEntries, start: $start, end: $end) {
+    discussionPhase {
+      id
+      identifier
+      title(lang: $lang)
+      titleEntries {
+        ...langStringEntry
+      }
+      start
+      end
+    }
+  }
+}
