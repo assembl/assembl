@@ -483,7 +483,7 @@ const Translations = {
       modules: {
         survey: "Questions ouvertes",
         thread: "Fil de discussion",
-        multiColumn: "Multi-colonnes",
+        multiColumns: "Multi-colonnes",
         voteSession: "Module de vote"
       },
       noTimeline: "Aucune timeline n'a été configurée pour ce débat.",
@@ -1209,7 +1209,7 @@ const Translations = {
       modules: {
         survey: "Survey",
         thread: "Thread",
-        multiColumn: "Multi-column",
+        multiColumns: "Multi-column",
         voteSession: "Vote Session"
       },
       noTimeline: "No timeline has been configured yet",
