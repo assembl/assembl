@@ -53,4 +53,67 @@ describe('Landing page administration actions', () => {
       expect(actual).toEqual(expected);
     });
   });
+
+  describe('updateLandingPageHeaderTitle action', () => {
+    const { updateLandingPageHeaderTitle } = actions;
+    it('should return an UPDATE_LANDING_PAGE_HEADER_TITLE action type', () => {
+      const actual = updateLandingPageHeaderTitle('en', 'new value');
+      const expected = {
+        locale: 'en',
+        value: 'new value',
+        type: actionTypes.UPDATE_LANDING_PAGE_HEADER_TITLE
+      };
+      expect(actual).toEqual(expected);
+    });
+  });
+
+  describe('updateLandingPageHeaderSubtitle action', () => {
+    const { updateLandingPageHeaderSubtitle } = actions;
+    it('should return an UPDATE_LANDING_PAGE_HEADER_SUBTITLE action type', () => {
+      const actual = updateLandingPageHeaderSubtitle('en', 'new value');
+      const expected = {
+        locale: 'en',
+        value: 'new value',
+        type: actionTypes.UPDATE_LANDING_PAGE_HEADER_SUBTITLE
+      };
+      expect(actual).toEqual(expected);
+    });
+  });
+
+  describe('updateLandingPageHeaderButtonLabel action', () => {
+    const { updateLandingPageHeaderButtonLabel } = actions;
+    it('should return an UPDATE_LANDING_PAGE_HEADER_BUTTON_LABEL action type', () => {
+      const actual = updateLandingPageHeaderButtonLabel('en', 'new value');
+      const expected = {
+        locale: 'en',
+        value: 'new value',
+        type: actionTypes.UPDATE_LANDING_PAGE_HEADER_BUTTON_LABEL
+      };
+      expect(actual).toEqual(expected);
+    });
+  });
+
+  describe('updateLandingPageHeaderImage action', () => {
+    const { updateLandingPageHeaderImage } = actions;
+    it('should return an UPDATE_LANDING_PAGE_HEADER_IMAGE action type', () => {
+      const actual = updateLandingPageHeaderImage({ name: 'foo.jpg', type: 'image/jpeg' });
+      const expected = {
+        value: { name: 'foo.jpg', type: 'image/jpeg' },
+        type: actionTypes.UPDATE_LANDING_PAGE_HEADER_IMAGE
+      };
+      expect(actual).toEqual(expected);
+    });
+  });
+
+  describe('updateLandingPageHeaderLogo action', () => {
+    const { updateLandingPageHeaderLogo } = actions;
+    it('should return an UPDATE_LANDING_PAGE_HEADER_LOGO action type', () => {
+      const actual = updateLandingPageHeaderLogo({ name: 'foo.jpg', type: 'image/jpeg' });
+      const expected = {
+        value: { name: 'foo.jpg', type: 'image/jpeg' },
+        type: actionTypes.UPDATE_LANDING_PAGE_HEADER_LOGO
+      };
+      expect(actual).toEqual(expected);
+    });
+  });
 });

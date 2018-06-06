@@ -106,7 +106,7 @@ const initialPage = Map({
 });
 type PageState = Map<string, any>;
 type LandingPageReducer = (PageState, ReduxAction<Action>) => PageState;
-const page: LandingPageReducer = (state = initialPage, action) => {
+export const page: LandingPageReducer = (state = initialPage, action) => {
   switch (action.type) {
   case UPDATE_LANDING_PAGE: {
     let newState = state;
