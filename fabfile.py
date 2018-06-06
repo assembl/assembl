@@ -2252,14 +2252,14 @@ def install_translation_dependencies():
 def make_new_messages():
     """Build .po files for React based instances of Assembl"""
     with cd(env.projectpath + "/assembl/static2/"):
-        run("npm run i18n:export")
+        venvcmd('npm run i18n:export', chdir=False)
 
 
 @task
 def compile_new_messages():
     """Build the locale.json files from the corresponding po files"""
     with cd(env.projectpath + "/assembl/static2/"):
-        run("npm run i18n:import")
+        venvcmd('npm run i18n:import', chdir=False)
 
 
 @task
