@@ -4,13 +4,36 @@ import { List, Map } from 'immutable';
 
 import deepen from './deepen';
 import Translations from './translations';
+import de from '../../../translations/de.json';
+import es from '../../../translations/es.json';
+import hu from '../../../translations/hu.json';
+import it from '../../../translations/it.json';
 import ja from '../../../translations/ja.json';
-import zhCN from '../../../translations/zh_CN.json';
+import nb from '../../../translations/nb.json';
+import nl from '../../../translations/nl.json';
+import pl from '../../../translations/pl.json';
+import pt from '../../../translations/pt.json';
+import ro from '../../../translations/ro.json';
 import ru from '../../../translations/ru.json';
+import th from '../../../translations/th.json';
+import tr from '../../../translations/tr.json';
+import zhCN from '../../../translations/zh_CN.json';
 
+Translations.de = deepen(de);
+Translations.es = deepen(es);
+Translations.hu = deepen(hu);
+Translations.it = deepen(it);
 Translations.ja = deepen(ja);
-Translations['zh-CN'] = deepen(zhCN);
+Translations.nb = deepen(nb);
+Translations.nl = deepen(nl);
+Translations.pl = deepen(pl);
+Translations.pt = deepen(pt);
+Translations.ro = deepen(ro);
 Translations.ru = deepen(ru);
+Translations.ru = deepen(ru);
+Translations.th = deepen(th);
+Translations.tr = deepen(tr);
+Translations['zh-CN'] = deepen(zhCN);
 
 const fallbackLocale = 'en';
 const myHandleMissingTranslation = function (key, replacements) {
