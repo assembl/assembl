@@ -35,6 +35,10 @@ export class DumbTimelineForm extends React.Component<TimelineFormProps, Timelin
     }
   }
 
+  getPhaseNumberById = (id: string) => this.props.timeline.map(phase => phase.id).indexOf(id) + 1;
+
+  getPhaseModuleById = (id: string) => this.props.timeline.filter(phase => phase.id === id)[0].identifier;
+
   render() {
     const { editLocale, timeline } = this.props;
     const { selectedPhaseId } = this.state;
@@ -50,8 +54,6 @@ export class DumbTimelineForm extends React.Component<TimelineFormProps, Timelin
           <div className="form-container">
             <form>
               {timeline && timeline.map(({ id, title }) =>
-                // const isFirst = index === 0;
-                // const isLast = index === timeline.size - 1;
                 (
                   <div className="flex" key={`title-input-phase-${id}`}>
                     <FormControlWithLabel
@@ -62,20 +64,6 @@ export class DumbTimelineForm extends React.Component<TimelineFormProps, Timelin
                       value={title}
                       style={{ flexGrow: 1 }}
                     />
-                    {/* {!isLast ? (
-                        <OverlayTrigger placement="top" overlay={downTooltip}>
-                          <Button onClick={() => {}} className={isFirst ? 'admin-icons end-items' : 'admin-icons'}>
-                            <span className="assembl-icon-down-small grey" />
-                          </Button>
-                        </OverlayTrigger>
-                      ) : null}
-                      {!isFirst ? (
-                        <OverlayTrigger placement="top" overlay={upTooltip}>
-                          <Button onClick={() => {}} className={isLast ? 'admin-icons end-items' : 'admin-icons'}>
-                            <span className="assembl-icon-up-small grey" />
-                          </Button>
-                        </OverlayTrigger>
-                      ) : null} */}
                     <OverlayTrigger placement="top" overlay={deletePhaseTooltip}>
                       <Button onClick={() => {}} className="admin-icons">
                         <span className="assembl-icon-delete grey" />
@@ -119,6 +107,8 @@ export class DumbTimelineForm extends React.Component<TimelineFormProps, Timelin
                 key={`phase-form-${selectedPhaseId}-${editLocale}`}
                 phaseId={selectedPhaseId}
                 editLocale={editLocale}
+                phaseNumber={this.getPhaseNumberById(selectedPhaseId)}
+                phaseModule={this.getPhaseModuleById(selectedPhaseId)}
               />
             </Row>
           )}

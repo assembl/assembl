@@ -85,6 +85,8 @@ export const pickerColors = [
   '#000000'
 ];
 
+export const modulesTranslationKeys = ['survey', 'thread', 'multiColumn', 'voteSession'];
+
 export const BlockingPublicationStates = {};
 BlockingPublicationStates[PublicationStates.MODERATED_TEXT_NEVER_AVAILABLE] = PublicationStates.MODERATED_TEXT_NEVER_AVAILABLE;
 BlockingPublicationStates[PublicationStates.DELETED_BY_USER] = PublicationStates.DELETED_BY_USER;

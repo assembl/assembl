@@ -475,7 +475,16 @@ const Translations = {
         addPhase: "Ajouter une phase supplémentaire",
         deletePhase: "Supprimer la phase",
         instruction1: "Choisissez le nombre de phases qui jalonneront votre débat",
-        instruction2: "Renseignez les champs requis pour chaque phase en sélectionnant chaque onglet"
+        instruction2: "Renseignez les champs requis pour chaque phase en sélectionnant chaque onglet",
+        phaseModule: "Modalité de participation pour cette phase :",
+        thematicsTable: "Thematics table",
+        configurePhase: "Configurer Phase %{count}"
+      },
+      modules: {
+        survey: "Questions ouvertes",
+        thread: "Fil de discussion",
+        multiColumn: "Multi-colonnes",
+        voteSession: "Module de vote"
       },
       noTimeline: "Aucune timeline n'a été configurée pour ce débat.",
       survey: {
@@ -1192,7 +1201,16 @@ const Translations = {
         addPhase: "Add an additional phase",
         deletePhase: "Delete the phase",
         instruction1: "Choose the number of phases for your debate",
-        instruction2: "Fill in the required fields for each phase by selecting each tab"
+        instruction2: "Fill in the required fields for each phase by selecting each tab",
+        phaseModule: "Module for this phase:",
+        thematicsTable: "Table des thématiques",
+        configurePhase: "Configure Phase %{count}"
+      },
+      modules: {
+        survey: "Survey",
+        thread: "Thread",
+        multiColumn: "Multi-column",
+        voteSession: "Vote Session"
       },
       noTimeline: "No timeline has been configured yet",
       survey: {
