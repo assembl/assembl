@@ -313,15 +313,15 @@ class AssemblStrategy(PyramidStrategy):
             # Create the record that associated the social account with this user.
             'assembl.auth.social_auth.associate_user',
 
-            # Autosubscribe if appropriate
-            'assembl.auth.social_auth.auto_subscribe',
-
             # Populate the extra_data field in the social record with the values
             # specified by settings (and the default ones like access_token, etc).
             'social_core.pipeline.social_auth.load_extra_data',
 
             # Update the user record with any changed info from the auth service.
-            'assembl.auth.social_auth.user_details'
+            'assembl.auth.social_auth.user_details',
+
+            # Autosubscribe if appropriate
+            'assembl.auth.social_auth.auto_subscribe',
         )
 
 
