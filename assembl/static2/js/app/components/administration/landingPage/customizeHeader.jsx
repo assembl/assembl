@@ -15,7 +15,17 @@ import {
 } from '../../../actions/adminActions/landingPage';
 
 type Props = {
-  header: Object,
+  header: {
+    title: string,
+    subtitle: ?string,
+    buttonLabel: string,
+    headerImgMimeType: string,
+    headerImgUrl: string,
+    headerImgTitle: string,
+    logoImgMimeType: string,
+    logoImgUrl: string,
+    logoImgTitle: string
+  },
   handleTitleChange: Function,
   handleSubtitleChange: Function,
   handleButtonLabelChange: Function,

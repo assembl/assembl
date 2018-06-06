@@ -22,7 +22,17 @@ type Props = {
   router: Router,
   section: string,
   editLocale: string,
-  header: Object,
+  header: {
+    title: string,
+    subtitle: ?string,
+    buttonLabel: string,
+    headerImgMimeType: string,
+    headerImgUrl: string,
+    headerImgTitle: string,
+    logoImgMimeType: string,
+    logoImgUrl: string,
+    logoImgTitle: string
+  },
   pageHasChanged: boolean,
   page: Object,
   updateDiscussion: Function
