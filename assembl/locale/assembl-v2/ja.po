@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2017-12-15T13:47:31.589Z\n"
+"POT-Creation-Date: 2018-06-06T09:14:50.840Z\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Vincent Fretin <vincent.fretin@gmail.com>\n"
 "Language-Team: \n"
@@ -10,6 +10,14 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.0.4\n"
+
+#. [accountDeleted]
+#. defaultMessage is:
+#. Your account has been successfully deleted
+#: messages.json
+#, fuzzy
+msgid "accountDeleted"
+msgstr "あなたのアカウントが作成されました"
 
 #. [administration.addQuestion]
 #. defaultMessage is:
@@ -25,9 +33,17 @@ msgstr "質問を追加する"
 msgid "administration.addThematic"
 msgstr "テーマを追加する"
 
+#. [administration.anErrorOccured]
+#. defaultMessage is:
+#. An error occured during save. Please check that you filled all the required fields.
+#: messages.json
+#, fuzzy
+msgid "administration.anErrorOccured"
+msgstr "またはあなたのコンピューターからイメージをアップロードしてください"
+
 #. [administration.annotation]
 #. defaultMessage is:
-#. Module to be completed. * Fields are required.
+#. * Fields are required.
 #: messages.json
 msgid "administration.annotation"
 msgstr "完成されるモジュール。 *フィールドは必須です"
@@ -39,12 +55,103 @@ msgstr "完成されるモジュール。 *フィールドは必須です"
 msgid "administration.announcementModule"
 msgstr "告知モジュール"
 
+#. [administration.backToPreviousStep]
+#. defaultMessage is:
+#. Return to step %{number}
+#: messages.json
+#, fuzzy
+msgid "administration.backToPreviousStep"
+msgstr ""
+"*権限を受けたビデオリンク: “https://www.youtube.com/\n"
+"embed/[videoId]” と “https://player.vimeo.com/\n"
+"video/[videoId]?”のどちらですか"
+
 #. [administration.changeLanguage]
 #. defaultMessage is:
 #. Set another language
 #: messages.json
 msgid "administration.changeLanguage"
 msgstr "別の言語を設定する"
+
+#. [administration.configureVoteModules]
+#. defaultMessage is:
+#. You need to configure at least one vote module.
+#: messages.json
+#, fuzzy
+msgid "administration.configureVoteModules"
+msgstr "告知モジュール"
+
+#. [administration.configureVoteSession]
+#. defaultMessage is:
+#. You need to configure a vote session.
+#: messages.json
+#, fuzzy
+msgid "administration.configureVoteSession"
+msgstr "質問を削除する"
+
+#. [administration.confirmDeleteThematic]
+#. defaultMessage is:
+#. Are you sure you want to delete this theme?
+#: messages.json
+#, fuzzy
+msgid "administration.confirmDeleteThematic"
+msgstr "テーマを削除する"
+
+#. [administration.confirmDeleteThematicTitle]
+#. defaultMessage is:
+#. Confirm deletion
+#: messages.json
+#, fuzzy
+msgid "administration.confirmDeleteThematicTitle"
+msgstr "テーマを削除する"
+
+#. [administration.confirmSelectFieldOptionDeletion]
+#. defaultMessage is:
+#. Are you sure that you want to delete this item?
+#: messages.json
+#, fuzzy
+msgid "administration.confirmSelectFieldOptionDeletion"
+msgstr "質問を削除する"
+
+#. [administration.confirmSelectFieldOptionDeletionTitle]
+#. defaultMessage is:
+#. Delete this item
+#: messages.json
+#, fuzzy
+msgid "administration.confirmSelectFieldOptionDeletionTitle"
+msgstr "討論を編集する"
+
+#. [administration.confirmTextFieldDeletion]
+#. defaultMessage is:
+#. Are you sure that you want to delete this field?
+#: messages.json
+#, fuzzy
+msgid "administration.confirmTextFieldDeletion"
+msgstr "討論を編集する"
+
+#. [administration.confirmTextFieldDeletionTitle]
+#. defaultMessage is:
+#. Delete the field
+#: messages.json
+#, fuzzy
+msgid "administration.confirmTextFieldDeletionTitle"
+msgstr "討論を編集する"
+
+#. [administration.confirmUnsavedChanges]
+#. defaultMessage is:
+#. You have unsaved changes. Are you sure you want to leave this page?
+#: messages.json
+#, fuzzy
+msgid "administration.confirmUnsavedChanges"
+msgstr "テーマを保存"
+
+#. [administration.defineGaugeNumer]
+#. defaultMessage is:
+#. Define gauges number
+#: messages.json
+#, fuzzy
+msgid "administration.defineGaugeNumer"
+msgstr "テーマ%{index}"
 
 #. [administration.deleteQuestion]
 #. defaultMessage is:
@@ -60,6 +167,14 @@ msgstr "質問を削除する"
 msgid "administration.deleteThematic"
 msgstr "テーマを削除する"
 
+#. [administration.deleteThematicImage]
+#. defaultMessage is:
+#. Delete the image associated to this thematic
+#: messages.json
+#, fuzzy
+msgid "administration.deleteThematicImage"
+msgstr "テーマを削除する"
+
 #. [administration.discussion.0]
 #. defaultMessage is:
 #. Languages of the Discussion
@@ -69,10 +184,18 @@ msgstr "討論の言語"
 
 #. [administration.discussion.3]
 #. defaultMessage is:
-#. Terms & Conditions and Legal Notice
+#. Registration options
 #: messages.json
 #, fuzzy
 msgid "administration.discussion.3"
+msgstr "討論の言語"
+
+#. [administration.discussion.4]
+#. defaultMessage is:
+#. Legal contents
+#: messages.json
+#, fuzzy
+msgid "administration.discussion.4"
 msgstr "討論の言語"
 
 #. [administration.down]
@@ -85,10 +208,381 @@ msgstr "討論を編集する"
 
 #. [administration.edition]
 #. defaultMessage is:
-#. Edit the Discussion
+#. Edit the discussion
 #: messages.json
 msgid "administration.edition"
 msgstr "討論を編集する"
+
+#. [administration.exclusive]
+#. defaultMessage is:
+#. Exclusive
+#: messages.json
+#, fuzzy
+msgid "administration.exclusive"
+msgstr "段階 %{count} - %{description}"
+
+#. [administration.export.defaultAnnotation]
+#. defaultMessage is:
+#. You can export all of the data by clicking on the export button
+#: messages.json
+#, fuzzy
+msgid "administration.export.defaultAnnotation"
+msgstr ""
+"すべての議論データをエクスポートするには、エクスポートボタンをクリックしてく"
+"ださい"
+
+#. [administration.export.defaultSectionTitle]
+#. defaultMessage is:
+#. Export data
+#: messages.json
+#, fuzzy
+msgid "administration.export.defaultSectionTitle"
+msgstr "討論を編集する"
+
+#. [administration.export.link]
+#. defaultMessage is:
+#. Export
+#: messages.json
+#, fuzzy
+msgid "administration.export.link"
+msgstr "エクスポート"
+
+#. [administration.export.multicolumnAnnotation]
+#. defaultMessage is:
+#. You can export all the Multi Column data by clicking on the Export button
+#: messages.json
+#, fuzzy
+msgid "administration.export.multicolumnAnnotation"
+msgstr ""
+"すべての議論データをエクスポートするには、エクスポートボタンをクリックしてく"
+"ださい"
+
+#. [administration.export.noExportLanguage]
+#. defaultMessage is:
+#. Keep the messages in their original languages
+#: messages.json
+#, fuzzy
+msgid "administration.export.noExportLanguage"
+msgstr "メッセージを元の言語のままにする"
+
+#. [administration.export.surveyAnnotation]
+#. defaultMessage is:
+#. You can export all the survey module data by clicking on the Export button
+#: messages.json
+#, fuzzy
+msgid "administration.export.surveyAnnotation"
+msgstr ""
+"すべての議論データをエクスポートするには、エクスポートボタンをクリックしてく"
+"ださい"
+
+#. [administration.export.taxonomyAnnotation]
+#. defaultMessage is:
+#. You can export all of the taxonomies by clicking on the export button
+#: messages.json
+#, fuzzy
+msgid "administration.export.taxonomyAnnotation"
+msgstr ""
+"すべての議論データをエクスポートするには、エクスポートボタンをクリックしてく"
+"ださい"
+
+#. [administration.export.taxonomySectionTitle]
+#. defaultMessage is:
+#. Export taxonomy
+#: messages.json
+#, fuzzy
+msgid "administration.export.taxonomySectionTitle"
+msgstr "討論を編集する"
+
+#. [administration.export.threadAnnotation]
+#. defaultMessage is:
+#. You can export all the thread module data by clicking on the Export butotn
+#: messages.json
+#, fuzzy
+msgid "administration.export.threadAnnotation"
+msgstr ""
+"すべての議論データをエクスポートするには、エクスポートボタンをクリックしてく"
+"ださい"
+
+#. [administration.export.title]
+#. defaultMessage is:
+#. Export the debate data
+#: messages.json
+#, fuzzy
+msgid "administration.export.title"
+msgstr "議論データをエクスポートする"
+
+#. [administration.export.translateTheMessagesIn]
+#. defaultMessage is:
+#. Translate the messages in:
+#: messages.json
+#, fuzzy
+msgid "administration.export.translateTheMessagesIn"
+msgstr "メッセージを次の言語に翻訳："
+
+#. [administration.export.voteSessionAnnotation]
+#. defaultMessage is:
+#. You can export all the vote session data by clicking on the Export button
+#: messages.json
+#, fuzzy
+msgid "administration.export.voteSessionAnnotation"
+msgstr ""
+"すべての議論データをエクスポートするには、エクスポートボタンをクリックしてく"
+"ださい"
+
+#. [administration.gauge]
+#. defaultMessage is:
+#. Gauge %{number}
+#: messages.json
+#, fuzzy
+msgid "administration.gauge"
+msgstr "段階 %{count} - %{description}"
+
+#. [administration.gaugeModal.applyToAllProposalsCheckboxLabel]
+#. defaultMessage is:
+#. Apply these changes to all of the proposals
+#: messages.json
+msgid "administration.gaugeModal.applyToAllProposalsCheckboxLabel"
+msgstr ""
+
+#. [administration.gaugeModal.subTitle]
+#. defaultMessage is:
+#. You are about to modify the settings on this gauge only. If you wish to modify all of the gauges, please check the box at the end of the form.
+#: messages.json
+#, fuzzy
+msgid "administration.gaugeModal.subTitle"
+msgstr "告知モジュール"
+
+#. [administration.gaugeModal.title]
+#. defaultMessage is:
+#. Modification of the gauge's settings
+#: messages.json
+#, fuzzy
+msgid "administration.gaugeModal.title"
+msgstr "*タイトル"
+
+#. [administration.gaugeNumber]
+#. defaultMessage is:
+#. Gauge number
+#: messages.json
+#, fuzzy
+msgid "administration.gaugeNumber"
+msgstr "テーマ%{index}"
+
+#. [administration.gaugeVoteCheckbox]
+#. defaultMessage is:
+#. You can choose to have one or several gages
+#: messages.json
+#, fuzzy
+msgid "administration.gaugeVoteCheckbox"
+msgstr "下の好きな言語を選択してください"
+
+#. [administration.gaugeVoteInstructions]
+#. defaultMessage is:
+#. Instructions for the gauge vote
+#: messages.json
+#, fuzzy
+msgid "administration.gaugeVoteInstructions"
+msgstr "段階 %{count} - %{description}"
+
+#. [administration.headerTitle]
+#. defaultMessage is:
+#. Top page Header configuration
+#: messages.json
+#, fuzzy
+msgid "administration.headerTitle"
+msgstr "*タイトル"
+
+#. [administration.helpers.exclusive]
+#. defaultMessage is:
+#. You can decide wether the participant can distribute a single type of token (exclusive) or several types of token per proposal.
+#: messages.json
+#, fuzzy
+msgid "administration.helpers.exclusive"
+msgstr "質問を削除する"
+
+#. [administration.helpers.gaugeVoteInstructions]
+#. defaultMessage is:
+#. Depending on the objective of the gauge module, incite the participants to take action.
+#: messages.json
+#, fuzzy
+msgid "administration.helpers.gaugeVoteInstructions"
+msgstr "質問を削除する"
+
+#. [administration.helpers.landingPage.chatbot]
+#. defaultMessage is:
+#.  
+#: messages.json
+#, fuzzy
+msgid "administration.helpers.landingPage.chatbot"
+msgstr "ランディングページ"
+
+#. [administration.helpers.landingPage.contact]
+#. defaultMessage is:
+#.  
+#: messages.json
+#, fuzzy
+msgid "administration.helpers.landingPage.contact"
+msgstr "ランディングページ"
+
+#. [administration.helpers.landingPage.data]
+#. defaultMessage is:
+#.  
+#: messages.json
+#, fuzzy
+msgid "administration.helpers.landingPage.data"
+msgstr "ランディングページ"
+
+#. [administration.helpers.landingPage.footer]
+#. defaultMessage is:
+#.  
+#: messages.json
+#, fuzzy
+msgid "administration.helpers.landingPage.footer"
+msgstr "ランディングページ"
+
+#. [administration.helpers.landingPage.header]
+#. defaultMessage is:
+#. Top page header. It contains the consultation's title and subtitle and a button to access to the consultation.
+#: messages.json
+#, fuzzy
+msgid "administration.helpers.landingPage.header"
+msgstr "ランディングページ"
+
+#. [administration.helpers.landingPage.introduction]
+#. defaultMessage is:
+#.  
+#: messages.json
+#, fuzzy
+msgid "administration.helpers.landingPage.introduction"
+msgstr "ランディングページ"
+
+#. [administration.helpers.landingPage.news]
+#. defaultMessage is:
+#.  
+#: messages.json
+#, fuzzy
+msgid "administration.helpers.landingPage.news"
+msgstr "ランディングページ"
+
+#. [administration.helpers.landingPage.partners]
+#. defaultMessage is:
+#.  
+#: messages.json
+#, fuzzy
+msgid "administration.helpers.landingPage.partners"
+msgstr "ランディングページ"
+
+#. [administration.helpers.landingPage.timeline]
+#. defaultMessage is:
+#.  
+#: messages.json
+#, fuzzy
+msgid "administration.helpers.landingPage.timeline"
+msgstr "ランディングページ"
+
+#. [administration.helpers.landingPage.top_thematics]
+#. defaultMessage is:
+#.  
+#: messages.json
+#, fuzzy
+msgid "administration.helpers.landingPage.top_thematics"
+msgstr "ランディングページ"
+
+#. [administration.helpers.landingPage.tweets]
+#. defaultMessage is:
+#.  
+#: messages.json
+#, fuzzy
+msgid "administration.helpers.landingPage.tweets"
+msgstr "ランディングページ"
+
+#. [administration.helpers.landingPage.video]
+#. defaultMessage is:
+#.  
+#: messages.json
+#, fuzzy
+msgid "administration.helpers.landingPage.video"
+msgstr "ランディングページ"
+
+#. [administration.helpers.tokenCategoryNumber]
+#. defaultMessage is:
+#. Select the number of different token types for this vote
+#: messages.json
+#, fuzzy
+msgid "administration.helpers.tokenCategoryNumber"
+msgstr "質問ラベル"
+
+#. [administration.helpers.tokenVoteInstructions]
+#. defaultMessage is:
+#. Depending on the objective of the token module, incite the participants to take action.
+#: messages.json
+#, fuzzy
+msgid "administration.helpers.tokenVoteInstructions"
+msgstr "質問を削除する"
+
+#. [administration.helpers.voteSessionHeader]
+#. defaultMessage is:
+#. The top page header must contain an image and a title. The subtitle is optional.
+#: messages.json
+#, fuzzy
+msgid "administration.helpers.voteSessionHeader"
+msgstr "質問を削除する"
+
+#. [administration.helpers.voteSessionInstructions]
+#. defaultMessage is:
+#. The instructions section must contain a title and a description that will guide the participants for their contribution.
+#: messages.json
+#, fuzzy
+msgid "administration.helpers.voteSessionInstructions"
+msgstr "質問を削除する"
+
+#. [administration.helpers.voteSessionProposalSection]
+#. defaultMessage is:
+#. The proposals section is introduced by a title. You define the title based on the proposal content.
+#: messages.json
+#, fuzzy
+msgid "administration.helpers.voteSessionProposalSection"
+msgstr "質問を追加する"
+
+#. [administration.imageRequirements]
+#. defaultMessage is:
+#. The image must have a height of 480 px and a width of 1280px. Its size has to be under 1 MB.
+#: messages.json
+#, fuzzy
+msgid "administration.imageRequirements"
+msgstr "テーマを保存"
+
+#. [administration.instructions]
+#. defaultMessage is:
+#. Instructions section configuration
+#: messages.json
+#, fuzzy
+msgid "administration.instructions"
+msgstr "段階 %{count} - %{description}"
+
+#. [administration.landingPage.manageModules.helper]
+#. defaultMessage is:
+#. Choose the modules you want to see in the landing page and their position.
+#: messages.json
+#, fuzzy
+msgid "administration.landingPage.manageModules.helper"
+msgstr "ランディングページ"
+
+#. [administration.landingPage.manageModules.title]
+#. defaultMessage is:
+#. Manage the modules
+#: messages.json
+#, fuzzy
+msgid "administration.landingPage.manageModules.title"
+msgstr "ランディングページ"
+
+#. [administration.landingPage.successSave]
+#. defaultMessage is:
+#. The modules have been saved with success!
+#: messages.json
+#, fuzzy
+msgid "administration.landingPage.successSave"
+msgstr "リソースの保存に成功しました"
 
 #. [administration.landingpage]
 #. defaultMessage is:
@@ -104,44 +598,84 @@ msgstr "ランディングページ"
 msgid "administration.languageChoice"
 msgstr "下の好きな言語を選択してください"
 
-#. [administration.legalNoticeAndTerms.legalNoticeLabel]
+#. [administration.legalContents.cookiesPolicyLabel]
+#. defaultMessage is:
+#. Information on cookies
+#: messages.json
+#, fuzzy
+msgid "administration.legalContents.cookiesPolicyLabel"
+msgstr "タイトル"
+
+#. [administration.legalContents.legalNoticeLabel]
 #. defaultMessage is:
 #. Legal notice
 #: messages.json
 #, fuzzy
-msgid "administration.legalNoticeAndTerms.legalNoticeLabel"
+msgid "administration.legalContents.legalNoticeLabel"
 msgstr "タイトル"
 
-#. [administration.legalNoticeAndTerms.successSave]
+#. [administration.legalContents.privacyPolicyLabel]
 #. defaultMessage is:
-#. The T&C and legal notice have been saved with success!
+#. Privacy policy
 #: messages.json
 #, fuzzy
-msgid "administration.legalNoticeAndTerms.successSave"
+msgid "administration.legalContents.privacyPolicyLabel"
+msgstr "タイトル"
+
+#. [administration.legalContents.successSave]
+#. defaultMessage is:
+#. The legal contents have been saved with success!
+#: messages.json
+#, fuzzy
+msgid "administration.legalContents.successSave"
 msgstr "リソースの保存に成功しました"
 
-#. [administration.legalNoticeAndTerms.termsAndConditionsLabel]
+#. [administration.legalContents.termsAndConditionsLabel]
 #. defaultMessage is:
 #. Terms and conditions
 #: messages.json
 #, fuzzy
-msgid "administration.legalNoticeAndTerms.termsAndConditionsLabel"
+msgid "administration.legalContents.termsAndConditionsLabel"
 msgstr "ビデオ／スライド"
+
+#. [administration.maxValue]
+#. defaultMessage is:
+#. Maximum value
+#: messages.json
+#, fuzzy
+msgid "administration.maxValue"
+msgstr "段階 %{count} - %{description}"
+
+#. [administration.menu.exportTaxonomies]
+#. defaultMessage is:
+#. Export taxonomies
+#: messages.json
+#, fuzzy
+msgid "administration.menu.exportTaxonomies"
+msgstr "段階 %{count} - %{description}"
 
 #. [administration.menu.language]
 #. defaultMessage is:
-#. Discussion Language
+#. Discussion language
 #: messages.json
 msgid "administration.menu.language"
 msgstr "議論の言語"
 
-#. [administration.menu.legalNoticeAndTerms]
+#. [administration.menu.legalContents]
 #. defaultMessage is:
-#. T&C and Legal Notice
+#. Edit legal content
 #: messages.json
 #, fuzzy
-msgid "administration.menu.legalNoticeAndTerms"
+msgid "administration.menu.legalContents"
 msgstr "議論の言語"
+
+#. [administration.menu.manageProfileOptions]
+#. defaultMessage is:
+#. Registration options
+#: messages.json
+#, fuzzy
+msgid "administration.menu.manageProfileOptions"
+msgstr "段階 %{count} - %{description}"
 
 #. [administration.menu.phase]
 #. defaultMessage is:
@@ -152,10 +686,50 @@ msgstr "段階 %{count} - %{description}"
 
 #. [administration.menu.sections]
 #. defaultMessage is:
-#. Edit Debate Sections
+#. Edit debate sections
 #: messages.json
 #, fuzzy
 msgid "administration.menu.sections"
+msgstr "段階 %{count} - %{description}"
+
+#. [administration.minValue]
+#. defaultMessage is:
+#. Minimum value
+#: messages.json
+#, fuzzy
+msgid "administration.minValue"
+msgstr "段階 %{count} - %{description}"
+
+#. [administration.multiColumn.0]
+#. defaultMessage is:
+#. Export Data
+#: messages.json
+#, fuzzy
+msgid "administration.multiColumn.0"
+msgstr "討論の言語"
+
+#. [administration.nbTicks]
+#. defaultMessage is:
+#. Ticks number
+#: messages.json
+#, fuzzy
+msgid "administration.nbTicks"
+msgstr "討論を編集する"
+
+#. [administration.nbTicksHelper]
+#. defaultMessage is:
+#. Define ticks number for the gauge
+#: messages.json
+#, fuzzy
+msgid "administration.nbTicksHelper"
+msgstr "まだタイムラインが形成されていません"
+
+#. [administration.nextStep]
+#. defaultMessage is:
+#. Next step
+#: messages.json
+#, fuzzy
+msgid "administration.nextStep"
 msgstr "段階 %{count} - %{description}"
 
 #. [administration.noTimeline]
@@ -163,6 +737,22 @@ msgstr "段階 %{count} - %{description}"
 #. No timeline has been configured yet
 #: messages.json
 msgid "administration.noTimeline"
+msgstr "まだタイムラインが形成されていません"
+
+#. [administration.notExclusive]
+#. defaultMessage is:
+#. Not exclusive
+#: messages.json
+#, fuzzy
+msgid "administration.notExclusive"
+msgstr "まだタイムラインが形成されていません"
+
+#. [administration.numberValue]
+#. defaultMessage is:
+#. Number value
+#: messages.json
+#, fuzzy
+msgid "administration.numberValue"
 msgstr "まだタイムラインが形成されていません"
 
 #. [administration.ph.descriptionBottom]
@@ -179,6 +769,38 @@ msgstr "下のビデオにコメントしてください"
 msgid "administration.ph.descriptionTop"
 msgstr "上のビデオにコメントしてください"
 
+#. [administration.ph.headerSubtitle]
+#. defaultMessage is:
+#. Header subtitle
+#: messages.json
+#, fuzzy
+msgid "administration.ph.headerSubtitle"
+msgstr "*タイトル"
+
+#. [administration.ph.headerTitle]
+#. defaultMessage is:
+#. Header title
+#: messages.json
+#, fuzzy
+msgid "administration.ph.headerTitle"
+msgstr "*タイトル"
+
+#. [administration.ph.instructionsContent]
+#. defaultMessage is:
+#. Instructions content
+#: messages.json
+#, fuzzy
+msgid "administration.ph.instructionsContent"
+msgstr "下のビデオにコメントしてください"
+
+#. [administration.ph.instructionsTitle]
+#. defaultMessage is:
+#. Instructions title
+#: messages.json
+#, fuzzy
+msgid "administration.ph.instructionsTitle"
+msgstr "討論を編集する"
+
 #. [administration.ph.mediaLink]
 #. defaultMessage is:
 #. Online media link (video, picture, etc..)
@@ -193,6 +815,14 @@ msgstr "オンラインのメディアリンク"
 msgid "administration.ph.orAttachPicture"
 msgstr "またはあなたのコンピューターからイメージをアップロードしてください"
 
+#. [administration.ph.propositionSectionTitle]
+#. defaultMessage is:
+#. Section title
+#: messages.json
+#, fuzzy
+msgid "administration.ph.propositionSectionTitle"
+msgstr "討論を編集する"
+
 #. [administration.ph.quote]
 #. defaultMessage is:
 #. Quote
@@ -206,6 +836,121 @@ msgstr "引用"
 #: messages.json
 msgid "administration.ph.title"
 msgstr "*タイトル"
+
+#. [administration.previousStep]
+#. defaultMessage is:
+#. Previous step
+#: messages.json
+#, fuzzy
+msgid "administration.previousStep"
+msgstr ""
+"*権限を受けたビデオリンク: “https://www.youtube.com/\n"
+"embed/[videoId]” と “https://player.vimeo.com/\n"
+"video/[videoId]?”のどちらですか"
+
+#. [administration.profileOptions.addSelectFieldOption]
+#. defaultMessage is:
+#. Add a new item
+#: messages.json
+#, fuzzy
+msgid "administration.profileOptions.addSelectFieldOption"
+msgstr "質問を追加する"
+
+#. [administration.profileOptions.addTextField]
+#. defaultMessage is:
+#. Add a field
+#: messages.json
+#, fuzzy
+msgid "administration.profileOptions.addTextField"
+msgstr "質問を追加する"
+
+#. [administration.profileOptions.choiceSelectField]
+#. defaultMessage is:
+#. Dropdown field
+#: messages.json
+#, fuzzy
+msgid "administration.profileOptions.choiceSelectField"
+msgstr "質問を追加する"
+
+#. [administration.profileOptions.choiceTextField]
+#. defaultMessage is:
+#. Text field
+#: messages.json
+#, fuzzy
+msgid "administration.profileOptions.choiceTextField"
+msgstr "質問ラベル"
+
+#. [administration.profileOptions.createNewFieldModalBody]
+#. defaultMessage is:
+#. Select the field type you want to add to the register page:
+#: messages.json
+#, fuzzy
+msgid "administration.profileOptions.createNewFieldModalBody"
+msgstr "質問を削除する"
+
+#. [administration.profileOptions.deleteSelectFieldOption]
+#. defaultMessage is:
+#. Delete this item
+#: messages.json
+#, fuzzy
+msgid "administration.profileOptions.deleteSelectFieldOption"
+msgstr "質問を削除する"
+
+#. [administration.profileOptions.deleteTextField]
+#. defaultMessage is:
+#. Delete the field
+#: messages.json
+#, fuzzy
+msgid "administration.profileOptions.deleteTextField"
+msgstr "質問を削除する"
+
+#. [administration.profileOptions.introText]
+#. defaultMessage is:
+#. Configure the fields that you want to display in the registration form. Fill in the names and whether the fields are required or optional.
+#: messages.json
+#, fuzzy
+msgid "administration.profileOptions.introText"
+msgstr "*タイトル"
+
+#. [administration.profileOptions.successSave]
+#. defaultMessage is:
+#. The profile options has been saved with success!
+#: messages.json
+#, fuzzy
+msgid "administration.profileOptions.successSave"
+msgstr "リソースの保存に成功しました"
+
+#. [administration.profileOptions.textFieldToggleOptional]
+#. defaultMessage is:
+#. Make this field optional
+#: messages.json
+#, fuzzy
+msgid "administration.profileOptions.textFieldToggleOptional"
+msgstr "質問を削除する"
+
+#. [administration.profileOptions.textFieldToggleRequired]
+#. defaultMessage is:
+#. Make this field required
+#: messages.json
+#, fuzzy
+msgid "administration.profileOptions.textFieldToggleRequired"
+msgstr "質問ラベル"
+
+#. [administration.proposalSectionTitle]
+#. defaultMessage is:
+#. Proposal section title configuration
+#: messages.json
+#, fuzzy
+msgid "administration.proposalSectionTitle"
+msgstr "*タイトル"
+
+#. [administration.propositionSectionTitle]
+#. defaultMessage is:
+#. Proposals section title configuration
+#: messages.json
+#, fuzzy
+msgid "administration.propositionSectionTitle"
+msgstr "討論を編集する"
 
 #. [administration.question_label]
 #. defaultMessage is:
@@ -305,6 +1050,38 @@ msgstr "リソースセンター"
 msgid "administration.resourcesCenter.titleLabel"
 msgstr "タイトル"
 
+#. [administration.resultsNotVisible]
+#. defaultMessage is:
+#. No, only show the results once the vote is closed.
+#: messages.json
+#, fuzzy
+msgid "administration.resultsNotVisible"
+msgstr "リソースセンター"
+
+#. [administration.resultsVisible]
+#. defaultMessage is:
+#. Yes, even before having voted.
+#: messages.json
+#, fuzzy
+msgid "administration.resultsVisible"
+msgstr "*タイトル"
+
+#. [administration.saveFirstStep]
+#. defaultMessage is:
+#. Please return to step 1 and save the instructions first.
+#: messages.json
+#, fuzzy
+msgid "administration.saveFirstStep"
+msgstr "テーマを保存"
+
+#. [administration.saveSecondStep]
+#. defaultMessage is:
+#. Please return to step 2 and configure and save the vote modules.
+#: messages.json
+#, fuzzy
+msgid "administration.saveSecondStep"
+msgstr "テーマを保存"
+
 #. [administration.saveThemes]
 #. defaultMessage is:
 #. Save
@@ -384,6 +1161,14 @@ msgstr "*タイトル"
 msgid "administration.sections.urlPh"
 msgstr "討論を編集する"
 
+#. [administration.seeCurrentVotes]
+#. defaultMessage is:
+#. Do you want participants to see the evolution of the votes in progress?
+#: messages.json
+#, fuzzy
+msgid "administration.seeCurrentVotes"
+msgstr "テーマを保存"
+
 #. [administration.step_x_total]
 #. defaultMessage is:
 #. Section %{num} on %{total}
@@ -426,42 +1211,13 @@ msgstr "質問を設定する"
 msgid "administration.survey.2"
 msgstr "データのエクスポート"
 
-#. [administration.surveyExport.annotation]
+#. [administration.textValue]
 #. defaultMessage is:
-#. You can export all the debate data by clicking on the Export button
+#. Textual value
 #: messages.json
-msgid "administration.surveyExport.annotation"
-msgstr ""
-"すべての議論データをエクスポートするには、エクスポートボタンをクリックしてく"
-"ださい"
-
-#. [administration.surveyExport.link]
-#. defaultMessage is:
-#. Export
-#: messages.json
-msgid "administration.surveyExport.link"
-msgstr "エクスポート"
-
-#. [administration.surveyExport.noExportLanguage]
-#. defaultMessage is:
-#. Keep the messages in their original languages
-#: messages.json
-msgid "administration.surveyExport.noExportLanguage"
-msgstr "メッセージを元の言語のままにする"
-
-#. [administration.surveyExport.title]
-#. defaultMessage is:
-#. Export the debate data
-#: messages.json
-msgid "administration.surveyExport.title"
-msgstr "議論データをエクスポートする"
-
-#. [administration.surveyExport.translateTheMessagesIn]
-#. defaultMessage is:
-#. Translate the messages in:
-#: messages.json
-msgid "administration.surveyExport.translateTheMessagesIn"
-msgstr "メッセージを次の言語に翻訳："
+#, fuzzy
+msgid "administration.textValue"
+msgstr "セクション%{num}の%{total}"
 
 #. [administration.thematic]
 #. defaultMessage is:
@@ -477,6 +1233,86 @@ msgstr "テーマ"
 msgid "administration.themeNum"
 msgstr "テーマ%{index}"
 
+#. [administration.thread.0]
+#. defaultMessage is:
+#. Export Data
+#: messages.json
+#, fuzzy
+msgid "administration.thread.0"
+msgstr "テーマ"
+
+#. [administration.timeline]
+#. defaultMessage is:
+#. timeline
+#: messages.json
+#, fuzzy
+msgid "administration.timeline"
+msgstr "まだタイムラインが形成されていません"
+
+#. [administration.token]
+#. defaultMessage is:
+#. Token %{number}
+#: messages.json
+#, fuzzy
+msgid "administration.token"
+msgstr "討論を編集する"
+
+#. [administration.tokenCategoryNumber]
+#. defaultMessage is:
+#. Number of token types
+#: messages.json
+#, fuzzy
+msgid "administration.tokenCategoryNumber"
+msgstr "テーマ%{index}"
+
+#. [administration.tokenColor]
+#. defaultMessage is:
+#. Color of the token
+#: messages.json
+#, fuzzy
+msgid "administration.tokenColor"
+msgstr "討論を編集する"
+
+#. [administration.tokenNumber]
+#. defaultMessage is:
+#. Number of tokens per participant
+#: messages.json
+#, fuzzy
+msgid "administration.tokenNumber"
+msgstr "テーマ%{index}"
+
+#. [administration.tokenTitle]
+#. defaultMessage is:
+#. Token title
+#: messages.json
+#, fuzzy
+msgid "administration.tokenTitle"
+msgstr "*タイトル"
+
+#. [administration.tokenVoteCheckbox]
+#. defaultMessage is:
+#. The token vote module allows you to select propositions proportionnaly. Each participant has a certain amount of tokens et will have to spread them on the different propositions
+#: messages.json
+#, fuzzy
+msgid "administration.tokenVoteCheckbox"
+msgstr "テーマ"
+
+#. [administration.tokenVoteInstructions]
+#. defaultMessage is:
+#. Instructions for the token vote
+#: messages.json
+#, fuzzy
+msgid "administration.tokenVoteInstructions"
+msgstr "段階 %{count} - %{description}"
+
+#. [administration.unit]
+#. defaultMessage is:
+#. Unit
+#: messages.json
+#, fuzzy
+msgid "administration.unit"
+msgstr "段階 %{count} - %{description}"
+
 #. [administration.up]
 #. defaultMessage is:
 #. Up
@@ -484,6 +1320,14 @@ msgstr "テーマ%{index}"
 #, fuzzy
 msgid "administration.up"
 msgstr "段階 %{count} - %{description}"
+
+#. [administration.valueTitle]
+#. defaultMessage is:
+#. Value title
+#: messages.json
+#, fuzzy
+msgid "administration.valueTitle"
+msgstr "*タイトル"
 
 #. [administration.videoHelp]
 #. defaultMessage is:
@@ -494,6 +1338,199 @@ msgstr ""
 "*権限を受けたビデオリンク: “https://www.youtube.com/\n"
 "embed/[videoId]” と “https://player.vimeo.com/\n"
 "video/[videoId]?”のどちらですか"
+
+#. [administration.voteModulesIntroText1]
+#. defaultMessage is:
+#. You chose the vote module
+#: messages.json
+#, fuzzy
+msgid "administration.voteModulesIntroText1"
+msgstr "テクスト"
+
+#. [administration.voteModulesIntroText2]
+#. defaultMessage is:
+#. To modify your choice, modify the 
+#: messages.json
+#, fuzzy
+msgid "administration.voteModulesIntroText2"
+msgstr "テクスト"
+
+#. [administration.voteProposals.addProposal]
+#. defaultMessage is:
+#. Add a proposal
+#: messages.json
+#, fuzzy
+msgid "administration.voteProposals.addProposal"
+msgstr "セクション%{num}の%{total}"
+
+#. [administration.voteProposals.cancelCustomization]
+#. defaultMessage is:
+#. Cancel settings
+#: messages.json
+#, fuzzy
+msgid "administration.voteProposals.cancelCustomization"
+msgstr ""
+"すべての議論データをエクスポートするには、エクスポートボタンをクリックしてく"
+"ださい"
+
+#. [administration.voteProposals.customGauge]
+#. defaultMessage is:
+#. Gauge %{number} (customized for this proposal)
+#: messages.json
+#, fuzzy
+msgid "administration.voteProposals.customGauge"
+msgstr "討論を編集する"
+
+#. [administration.voteProposals.defineProposal]
+#. defaultMessage is:
+#. Define proposal %{number}
+#: messages.json
+#, fuzzy
+msgid "administration.voteProposals.defineProposal"
+msgstr "まだタイムラインが形成されていません"
+
+#. [administration.voteProposals.deleteModalBody]
+#. defaultMessage is:
+#. Are you sure you want to delete this proposal?
+#: messages.json
+#, fuzzy
+msgid "administration.voteProposals.deleteModalBody"
+msgstr "質問を削除する"
+
+#. [administration.voteProposals.deleteModalTitle]
+#. defaultMessage is:
+#. Confirm deletion
+#: messages.json
+#, fuzzy
+msgid "administration.voteProposals.deleteModalTitle"
+msgstr "討論を編集する"
+
+#. [administration.voteProposals.deleteProposal]
+#. defaultMessage is:
+#. Delete this proposal
+#: messages.json
+#, fuzzy
+msgid "administration.voteProposals.deleteProposal"
+msgstr "質問を削除する"
+
+#. [administration.voteProposals.description]
+#. defaultMessage is:
+#. Description
+#: messages.json
+#, fuzzy
+msgid "administration.voteProposals.description"
+msgstr "上のビデオにコメントしてください"
+
+#. [administration.voteProposals.gauge]
+#. defaultMessage is:
+#. Gauge %{number}
+#: messages.json
+#, fuzzy
+msgid "administration.voteProposals.gauge"
+msgstr "セクション%{num}の%{total}"
+
+#. [administration.voteProposals.gaugeSettings]
+#. defaultMessage is:
+#. Edit settings
+#: messages.json
+#, fuzzy
+msgid "administration.voteProposals.gaugeSettings"
+msgstr "質問を追加する"
+
+#. [administration.voteProposals.sectionTitle]
+#. defaultMessage is:
+#. Configure the proposals associated to the vote modules
+#: messages.json
+#, fuzzy
+msgid "administration.voteProposals.sectionTitle"
+msgstr "討論を編集する"
+
+#. [administration.voteProposals.title]
+#. defaultMessage is:
+#. Title of the proposal
+#: messages.json
+#, fuzzy
+msgid "administration.voteProposals.title"
+msgstr "*タイトル"
+
+#. [administration.voteProposals.tokenVote]
+#. defaultMessage is:
+#. Token vote
+#: messages.json
+#, fuzzy
+msgid "administration.voteProposals.tokenVote"
+msgstr "完成されるモジュール。 *フィールドは必須です"
+
+#. [administration.voteProposals.validationErrors.atLeastOneModule]
+#. defaultMessage is:
+#. You should select at least one module.
+#: messages.json
+msgid "administration.voteProposals.validationErrors.atLeastOneModule"
+msgstr ""
+
+#. [administration.voteSession.0]
+#. defaultMessage is:
+#. Page configuration
+#: messages.json
+#, fuzzy
+msgid "administration.voteSession.0"
+msgstr "討論の言語"
+
+#. [administration.voteSession.1]
+#. defaultMessage is:
+#. Configure the voting modules
+#: messages.json
+#, fuzzy
+msgid "administration.voteSession.1"
+msgstr "質問を削除する"
+
+#. [administration.voteSession.2]
+#. defaultMessage is:
+#. Configure the voting proposals
+#: messages.json
+#, fuzzy
+msgid "administration.voteSession.2"
+msgstr "質問を削除する"
+
+#. [administration.voteSession.3]
+#. defaultMessage is:
+#. Export data
+#: messages.json
+#, fuzzy
+msgid "administration.voteSession.3"
+msgstr "討論の言語"
+
+#. [administration.voteSessionHeaderLabel]
+#. defaultMessage is:
+#. Choose the header background image
+#: messages.json
+#, fuzzy
+msgid "administration.voteSessionHeaderLabel"
+msgstr "質問ラベル"
+
+#. [administration.voteSessionSuccess]
+#. defaultMessage is:
+#. The vote session is saved with success.
+#: messages.json
+#, fuzzy
+msgid "administration.voteSessionSuccess"
+msgstr "リソースの保存に成功しました"
+
+#. [administration.voteWithGauges]
+#. defaultMessage is:
+#. Gauge(s) vote
+#: messages.json
+#, fuzzy
+msgid "administration.voteWithGauges"
+msgstr "テーマを保存"
+
+#. [administration.voteWithTokens]
+#. defaultMessage is:
+#. Tokens vote
+#: messages.json
+#, fuzzy
+msgid "administration.voteWithTokens"
+msgstr "討論を編集する"
 
 #. [cancel]
 #. defaultMessage is:
@@ -614,6 +1651,22 @@ msgstr "MMMM YYYYをする"
 msgid "date.format2"
 msgstr "YYYY-MM-DD"
 
+#. [debate.agree]
+#. defaultMessage is:
+#. Agree
+#: messages.json
+#, fuzzy
+msgid "debate.agree"
+msgstr "同意しない"
+
+#. [debate.agreeCount]
+#. defaultMessage is:
+#. %{count} agree
+#: messages.json
+#, fuzzy
+msgid "debate.agreeCount"
+msgstr "同意しない"
+
 #. [debate.answer]
 #. defaultMessage is:
 #. I answer:
@@ -668,6 +1721,14 @@ msgstr "メッセージの削除"
 #. Disagree
 #: messages.json
 msgid "debate.disagree"
+msgstr "同意しない"
+
+#. [debate.disagreeCount]
+#. defaultMessage is:
+#. %{count} disagree
+#: messages.json
+#, fuzzy
+msgid "debate.disagreeCount"
 msgstr "同意しない"
 
 #. [debate.dontUnderstand]
@@ -761,12 +1822,28 @@ msgstr "%{phaseName}フェーズは開始していません。後日オープン
 msgid "debate.post"
 msgstr "投稿する"
 
+#. [debate.question.backToQuestions]
+#. defaultMessage is:
+#. Back to questions
+#: messages.json
+#, fuzzy
+msgid "debate.question.backToQuestions"
+msgstr "反応"
+
 #. [debate.remaining_x_characters]
 #. defaultMessage is:
 #. You have %{nbCharacters} characters left
 #: messages.json
 msgid "debate.remaining_x_characters"
 msgstr "残り%{nbCharacters}文字"
+
+#. [debate.share]
+#. defaultMessage is:
+#. Share
+#: messages.json
+#, fuzzy
+msgid "debate.share"
+msgstr "このメッセージを共有する"
 
 #. [debate.sharePost]
 #. defaultMessage is:
@@ -782,12 +1859,29 @@ msgstr "このメッセージを共有する"
 msgid "debate.shareSynthesis"
 msgstr "このシンセシスを共有する"
 
+#. [debate.shareThematic]
+#. defaultMessage is:
+#. Share this thematic
+#: messages.json
+#, fuzzy
+msgid "debate.shareThematic"
+msgstr "このシンセシスを共有する"
+
 #. [debate.subject]
 #. defaultMessage is:
 #. Write the title
 #: messages.json
 msgid "debate.subject"
 msgstr "タイトルを記入する"
+
+#. [debate.survey.allProposals]
+#. defaultMessage is:
+#. See all points of view
+#: messages.json
+#, fuzzy
+msgid "debate.survey.allProposals"
+msgstr ""
+"現時点ではまだコメントは投稿されていません。最初の投稿者になりませんか？"
 
 #. [debate.survey.endPhase]
 #. defaultMessage is:
@@ -844,6 +1938,22 @@ msgstr "反応："
 #. Reactions
 #: messages.json
 msgid "debate.survey.reactions"
+msgstr "反応"
+
+#. [debate.survey.reactions_0]
+#. defaultMessage is:
+#. Reaction
+#: messages.json
+#, fuzzy
+msgid "debate.survey.reactions_0"
+msgstr "反応"
+
+#. [debate.survey.reactions_1]
+#. defaultMessage is:
+#. Reaction
+#: messages.json
+#, fuzzy
+msgid "debate.survey.reactions_1"
 msgstr "反応"
 
 #. [debate.survey.submit]
@@ -1098,12 +2208,196 @@ msgstr "私はこのメッセージのみを翻訳したくありません"
 msgid "debate.toAnswer"
 msgstr "答える"
 
+#. [debate.vote]
+#. defaultMessage is:
+#. Vote
+#: messages.json
+#, fuzzy
+msgid "debate.vote"
+msgstr "投稿する"
+
+#. [debate.voteSession.currentTokenDistribution]
+#. defaultMessage is:
+#. Current distribution of tokens
+#: messages.json
+msgid "debate.voteSession.currentTokenDistribution"
+msgstr ""
+
+#. [debate.voteSession.estimate]
+#. defaultMessage is:
+#. Average estimate
+#: messages.json
+#, fuzzy
+msgid "debate.voteSession.estimate"
+msgstr "メッセージを編集します"
+
+#. [debate.voteSession.exclusiveTokens]
+#. defaultMessage is:
+#. You already voted for another category for this proposal
+#: messages.json
+msgid "debate.voteSession.exclusiveTokens"
+msgstr ""
+
+#. [debate.voteSession.isCompleted]
+#. defaultMessage is:
+#. This vote phase is closed. Thank you for your participation!
+#: messages.json
+#, fuzzy
+msgid "debate.voteSession.isCompleted"
+msgstr "このフェーズは閉じました。これ以降投票はできません"
+
+#. [debate.voteSession.noVoteSession.text]
+#. defaultMessage is:
+#. An administrator must configure the vote session
+#: messages.json
+msgid "debate.voteSession.noVoteSession.text"
+msgstr ""
+
+#. [debate.voteSession.noVoteSession.title]
+#. defaultMessage is:
+#. Vote session is not configured
+#: messages.json
+msgid "debate.voteSession.noVoteSession.title"
+msgstr ""
+
+#. [debate.voteSession.notEnoughTokens]
+#. defaultMessage is:
+#. You don't have enough tokens
+#: messages.json
+msgid "debate.voteSession.notEnoughTokens"
+msgstr ""
+
+#. [debate.voteSession.participantsCount]
+#. defaultMessage is:
+#. %{count} participants voted!
+#: messages.json
+msgid "debate.voteSession.participantsCount"
+msgstr ""
+
+#. [debate.voteSession.participantsCount_0]
+#. defaultMessage is:
+#. No participant voted yet
+#: messages.json
+msgid "debate.voteSession.participantsCount_0"
+msgstr ""
+
+#. [debate.voteSession.participantsCount_1]
+#. defaultMessage is:
+#. %{count} participant voted
+#: messages.json
+msgid "debate.voteSession.participantsCount_1"
+msgstr ""
+
+#. [debate.voteSession.postSuccess]
+#. defaultMessage is:
+#. Thank you for your participation! Your vote has been set. You can modify this vote during the entire duration of the vote session.
+#: messages.json
+#, fuzzy
+msgid "debate.voteSession.postSuccess"
+msgstr "ありがとうございます。あなたのコメントは送信されました！"
+
+#. [debate.voteSession.remainingTokens]
+#. defaultMessage is:
+#. You have %{count} tokens remaining.
+#: messages.json
+msgid "debate.voteSession.remainingTokens"
+msgstr ""
+
+#. [debate.voteSession.resetTokens]
+#. defaultMessage is:
+#. Reset my vote
+#: messages.json
+#, fuzzy
+msgid "debate.voteSession.resetTokens"
+msgstr "反応"
+
+#. [debate.voteSession.showLess]
+#. defaultMessage is:
+#. Close votes of the community
+#: messages.json
+#, fuzzy
+msgid "debate.voteSession.showLess"
+msgstr "答える"
+
+#. [debate.voteSession.showVotesInProgress]
+#. defaultMessage is:
+#. Show votes of the community
+#: messages.json
+msgid "debate.voteSession.showVotesInProgress"
+msgstr ""
+
+#. [debate.voteSession.submit]
+#. defaultMessage is:
+#. Submit vote
+#: messages.json
+#, fuzzy
+msgid "debate.voteSession.submit"
+msgstr "送信する"
+
+#. [debate.voteSession.tokenDistribution]
+#. defaultMessage is:
+#. Distribution of votes
+#: messages.json
+msgid "debate.voteSession.tokenDistribution"
+msgstr ""
+
+#. [debate.voteSession.tokenTooltip]
+#. defaultMessage is:
+#. %{count} %{name} tokens
+#: messages.json
+msgid "debate.voteSession.tokenTooltip"
+msgstr ""
+
+#. [debate.voteSession.totalVotes]
+#. defaultMessage is:
+#. %{count} votes
+#: messages.json
+#, fuzzy
+msgid "debate.voteSession.totalVotes"
+msgstr "%{current}の%{total}に対する質問"
+
+#. [debate.voteSession.valueWithUnit]
+#. defaultMessage is:
+#. %{unit}%{num}
+#: messages.json
+msgid "debate.voteSession.valueWithUnit"
+msgstr ""
+
+#. [debate.voteSession.voteResultsPlusTitle]
+#. defaultMessage is:
+#. Vote results: %{title}
+#: messages.json
+msgid "debate.voteSession.voteResultsPlusTitle"
+msgstr ""
+
+#. [debate.votes]
+#. defaultMessage is:
+#. Votes
+#: messages.json
+#, fuzzy
+msgid "debate.votes"
+msgstr "テーマ"
+
 #. [debate.whatYouNeedToKnow]
 #. defaultMessage is:
 #. What you need to know
 #: messages.json
 msgid "debate.whatYouNeedToKnow"
 msgstr "知っておくべきこと"
+
+#. [delete]
+#. defaultMessage is:
+#. Delete
+#: messages.json
+msgid "delete"
+msgstr ""
+
+#. [deletedUser]
+#. defaultMessage is:
+#. Deleted user account
+#: messages.json
+msgid "deletedUser"
+msgstr ""
 
 #. [duration.format]
 #. defaultMessage is:
@@ -1112,6 +2406,14 @@ msgstr "知っておくべきこと"
 #, fuzzy
 msgid "duration.format"
 msgstr "MMMM YYYYをする"
+
+#. [error.loading]
+#. defaultMessage is:
+#. An error occurred, please reload the page
+#: messages.json
+#, fuzzy
+msgid "error.loading"
+msgstr "申し訳ありませんが、エラーが発生しました："
 
 #. [error.reason]
 #. defaultMessage is:
@@ -1149,12 +2451,138 @@ msgstr "フォローする"
 msgid "footer.terms"
 msgstr "規約と条件"
 
+#. [harvesting.confirmDeleteExtract]
+#. defaultMessage is:
+#. Are you sure that you wish to delete this extract?
+#: messages.json
+msgid "harvesting.confirmDeleteExtract"
+msgstr ""
+
+#. [harvesting.deleteExtract]
+#. defaultMessage is:
+#. Delete the extract
+#: messages.json
+msgid "harvesting.deleteExtract"
+msgstr ""
+
+#. [harvesting.disableHarvestingMode]
+#. defaultMessage is:
+#. Disable harvesting mode
+#: messages.json
+msgid "harvesting.disableHarvestingMode"
+msgstr ""
+
+#. [harvesting.editExtract]
+#. defaultMessage is:
+#. Edit the extract
+#: messages.json
+msgid "harvesting.editExtract"
+msgstr ""
+
+#. [harvesting.enableHarvestingMode]
+#. defaultMessage is:
+#. Enable harvesting mode
+#: messages.json
+msgid "harvesting.enableHarvestingMode"
+msgstr ""
+
+#. [harvesting.harvesting]
+#. defaultMessage is:
+#. Harvesting
+#: messages.json
+msgid "harvesting.harvesting"
+msgstr ""
+
+#. [harvesting.harvestingDeleted]
+#. defaultMessage is:
+#. The extract was deleted successfully.
+#: messages.json
+msgid "harvesting.harvestingDeleted"
+msgstr ""
+
+#. [harvesting.harvestingSuccess]
+#. defaultMessage is:
+#. The extract was updated successfully.
+#: messages.json
+msgid "harvesting.harvestingSuccess"
+msgstr ""
+
+#. [harvesting.inProgress]
+#. defaultMessage is:
+#. Harvesting in progress
+#: messages.json
+msgid "harvesting.inProgress"
+msgstr ""
+
+#. [harvesting.move]
+#. defaultMessage is:
+#. Move
+#: messages.json
+msgid "harvesting.move"
+msgstr ""
+
+#. [harvesting.now]
+#. defaultMessage is:
+#. Now
+#: messages.json
+msgid "harvesting.now"
+msgstr ""
+
+#. [harvesting.nuggetExtract]
+#. defaultMessage is:
+#. Mark as nugget
+#: messages.json
+msgid "harvesting.nuggetExtract"
+msgstr ""
+
+#. [harvesting.qualifyAction]
+#. defaultMessage is:
+#. Qualify by action
+#: messages.json
+msgid "harvesting.qualifyAction"
+msgstr ""
+
+#. [harvesting.qualifyExtract]
+#. defaultMessage is:
+#. Qualify the extract
+#: messages.json
+msgid "harvesting.qualifyExtract"
+msgstr ""
+
+#. [harvesting.qualifyNature]
+#. defaultMessage is:
+#. Qualify by nature
+#: messages.json
+msgid "harvesting.qualifyNature"
+msgstr ""
+
+#. [harvesting.validateExtract]
+#. defaultMessage is:
+#. Extract validated
+#: messages.json
+msgid "harvesting.validateExtract"
+msgstr ""
+
+#. [harvesting.validated]
+#. defaultMessage is:
+#. Harvesting validated
+#: messages.json
+msgid "harvesting.validated"
+msgstr ""
+
 #. [home.accessButton]
 #. defaultMessage is:
 #. I want to participate
 #: messages.json
 msgid "home.accessButton"
 msgstr "参加を希望する"
+
+#. [home.assemblNotConfigured]
+#. defaultMessage is:
+#. Assembl has not been fully configured yet
+#: messages.json
+msgid "home.assemblNotConfigured"
+msgstr ""
 
 #. [home.chatbot]
 #. defaultMessage is:
@@ -1184,6 +2612,22 @@ msgstr "お問い合わせ"
 msgid "home.contribution"
 msgstr "コメント"
 
+#. [home.contribution_0]
+#. defaultMessage is:
+#. contribution
+#: messages.json
+#, fuzzy
+msgid "home.contribution_0"
+msgstr "コメント"
+
+#. [home.contribution_1]
+#. defaultMessage is:
+#. contribution
+#: messages.json
+#, fuzzy
+msgid "home.contribution_1"
+msgstr "コメント"
+
 #. [home.controversial]
 #. defaultMessage is:
 #. Controversial discussions
@@ -1204,6 +2648,30 @@ msgstr "%{start}から%{end}まで"
 #: messages.json
 msgid "home.longerThread"
 msgstr "より長いスレッド"
+
+#. [home.messages]
+#. defaultMessage is:
+#. messages
+#: messages.json
+#, fuzzy
+msgid "home.messages"
+msgstr "閲覧したページ"
+
+#. [home.messages_0]
+#. defaultMessage is:
+#. message
+#: messages.json
+#, fuzzy
+msgid "home.messages_0"
+msgstr "閲覧したページ"
+
+#. [home.messages_1]
+#. defaultMessage is:
+#. message
+#: messages.json
+#, fuzzy
+msgid "home.messages_1"
+msgstr "閲覧したページ"
 
 #. [home.objectivesTitle]
 #. defaultMessage is:
@@ -1227,6 +2695,46 @@ msgstr "パートナー"
 msgid "home.participant"
 msgstr "参加者"
 
+#. [home.participant_0]
+#. defaultMessage is:
+#. participant
+#: messages.json
+#, fuzzy
+msgid "home.participant_0"
+msgstr "参加者"
+
+#. [home.participant_1]
+#. defaultMessage is:
+#. participant
+#: messages.json
+#, fuzzy
+msgid "home.participant_1"
+msgstr "参加者"
+
+#. [home.participations]
+#. defaultMessage is:
+#. participations
+#: messages.json
+#, fuzzy
+msgid "home.participations"
+msgstr "参加者"
+
+#. [home.participations_0]
+#. defaultMessage is:
+#. participation
+#: messages.json
+#, fuzzy
+msgid "home.participations_0"
+msgstr "参加者"
+
+#. [home.participations_1]
+#. defaultMessage is:
+#. participation
+#: messages.json
+#, fuzzy
+msgid "home.participations_1"
+msgstr "参加者"
+
 #. [home.partners]
 #. defaultMessage is:
 #. Partners
@@ -1246,6 +2754,22 @@ msgstr "最近の議論"
 #. votes
 #: messages.json
 msgid "home.sentiments"
+msgstr "投票"
+
+#. [home.sentiments_0]
+#. defaultMessage is:
+#. vote
+#: messages.json
+#, fuzzy
+msgid "home.sentiments_0"
+msgstr "投票"
+
+#. [home.sentiments_1]
+#. defaultMessage is:
+#. vote
+#: messages.json
+#, fuzzy
+msgid "home.sentiments_1"
 msgstr "投票"
 
 #. [home.sumVisitsLength]
@@ -1641,6 +3165,13 @@ msgstr "リソース"
 msgid "navbar.syntheses"
 msgstr "シンセシス"
 
+#. [no]
+#. defaultMessage is:
+#. no
+#: messages.json
+msgid "no"
+msgstr ""
+
 #. [notFound.panelTitle]
 #. defaultMessage is:
 #. Sorry, this page doesn't exist
@@ -1650,11 +3181,40 @@ msgstr "申し訳ありません、このページは存在しません"
 
 #. [profile.changePassword]
 #. defaultMessage is:
-#. Modify
+#. Change my password
 #: messages.json
 #, fuzzy
 msgid "profile.changePassword"
 msgstr "パスワードを変更する"
+
+#. [profile.deleteMyAccount]
+#. defaultMessage is:
+#. Delete my account
+#: messages.json
+#, fuzzy
+msgid "profile.deleteMyAccount"
+msgstr "アカウントを作成する"
+
+#. [profile.deleteMyAccountConfirmation]
+#. defaultMessage is:
+#. Delete my account and my data
+#: messages.json
+msgid "profile.deleteMyAccountConfirmation"
+msgstr ""
+
+#. [profile.deleteMyAccountModal]
+#. defaultMessage is:
+#. Are you sure you want to permanently delete your account and all of your personal data? By validating, you will no longer be able to contribute to the consultation.
+#: messages.json
+msgid "profile.deleteMyAccountModal"
+msgstr ""
+
+#. [profile.deleteMyAccountText]
+#. defaultMessage is:
+#. By deleting your account, you permanently delete all of your personal data and your account. You will no longer be able to contribute to the debate without an account.
+#: messages.json
+msgid "profile.deleteMyAccountText"
+msgstr ""
 
 #. [profile.email]
 #. defaultMessage is:
@@ -1672,6 +3232,38 @@ msgstr "Assemblのプロフィールページへようこそ"
 msgid "profile.fullname"
 msgstr "フルネーム"
 
+#. [profile.memberSince]
+#. defaultMessage is:
+#. Member since %{date}
+#: messages.json
+#, fuzzy
+msgid "profile.memberSince"
+msgstr "Assemblのプロフィールページへようこそ"
+
+#. [profile.newPassword]
+#. defaultMessage is:
+#. New password
+#: messages.json
+#, fuzzy
+msgid "profile.newPassword"
+msgstr "パスワードを変更する"
+
+#. [profile.newPassword2]
+#. defaultMessage is:
+#. Retype password
+#: messages.json
+#, fuzzy
+msgid "profile.newPassword2"
+msgstr "パスワードを変更する"
+
+#. [profile.oldPassword]
+#. defaultMessage is:
+#. Current password
+#: messages.json
+#, fuzzy
+msgid "profile.oldPassword"
+msgstr "パスワード"
+
 #. [profile.panelTitle]
 #. defaultMessage is:
 #. Your account
@@ -1687,9 +3279,17 @@ msgstr "Assemblのプロフィールページへようこそ"
 msgid "profile.password"
 msgstr "パスワード"
 
+#. [profile.passwordModifiedSuccess]
+#. defaultMessage is:
+#. Your password has been changed with success
+#: messages.json
+#, fuzzy
+msgid "profile.passwordModifiedSuccess"
+msgstr "パスワード"
+
 #. [profile.personalInfos]
 #. defaultMessage is:
-#. Personal informations
+#. Personal information
 #: messages.json
 msgid "profile.personalInfos"
 msgstr ""
@@ -1707,6 +3307,41 @@ msgstr "Assemblのプロフィールページへようこそ"
 #. Your profile is updated
 #: messages.json
 msgid "profile.saveSuccess"
+msgstr ""
+
+#. [profile.updateUser.errorMessage.1]
+#. defaultMessage is:
+#. We already have a user with this username.
+#: messages.json
+msgid "profile.updateUser.errorMessage.1"
+msgstr ""
+
+#. [profile.updateUser.errorMessage.2]
+#. defaultMessage is:
+#. The entered password doesn't match your current password.
+#: messages.json
+msgid "profile.updateUser.errorMessage.2"
+msgstr ""
+
+#. [profile.updateUser.errorMessage.3]
+#. defaultMessage is:
+#. You entered two different passwords.
+#: messages.json
+msgid "profile.updateUser.errorMessage.3"
+msgstr ""
+
+#. [profile.updateUser.errorMessage.4]
+#. defaultMessage is:
+#. The new password has to be different than the current password.
+#: messages.json
+msgid "profile.updateUser.errorMessage.4"
+msgstr ""
+
+#. [profile.updateUser.errorMessage.5]
+#. defaultMessage is:
+#. The new password has to be different than the last 5 passwords you set.
+#: messages.json
+msgid "profile.updateUser.errorMessage.5"
 msgstr ""
 
 #. [profile.userName]
@@ -1741,6 +3376,14 @@ msgstr "オンラインのリソースセンター"
 #: messages.json
 msgid "resourcesCenter.download"
 msgstr "ドキュメントをダウンロードする"
+
+#. [search.Action]
+#. defaultMessage is:
+#. Action
+#: messages.json
+#, fuzzy
+msgid "search.Action"
+msgstr "すべて"
 
 #. [search.All]
 #. defaultMessage is:
@@ -1846,6 +3489,14 @@ msgstr "最近のものから"
 #: messages.json
 msgid "search.My messages"
 msgstr "私のメッセージ"
+
+#. [search.Nature]
+#. defaultMessage is:
+#. Nature
+#: messages.json
+#, fuzzy
+msgid "search.Nature"
+msgstr "参加者"
 
 #. [search.NoHits.DidYouMean]
 #. defaultMessage is:
@@ -2087,6 +3738,134 @@ msgstr "検索"
 msgid "search.synthesis"
 msgstr "シンセシス"
 
+#. [search.taxonomy_action.argument]
+#. defaultMessage is:
+#. Argument
+#: messages.json
+#, fuzzy
+msgid "search.taxonomy_action.argument"
+msgstr "次"
+
+#. [search.taxonomy_action.classify]
+#. defaultMessage is:
+#. Classify
+#: messages.json
+msgid "search.taxonomy_action.classify"
+msgstr ""
+
+#. [search.taxonomy_action.display_bright_mirror]
+#. defaultMessage is:
+#. Display Design Fiction
+#: messages.json
+msgid "search.taxonomy_action.display_bright_mirror"
+msgstr ""
+
+#. [search.taxonomy_action.display_multi_column]
+#. defaultMessage is:
+#. Display Multi-column
+#: messages.json
+msgid "search.taxonomy_action.display_multi_column"
+msgstr ""
+
+#. [search.taxonomy_action.display_open_questions]
+#. defaultMessage is:
+#. Display Open questions
+#: messages.json
+msgid "search.taxonomy_action.display_open_questions"
+msgstr ""
+
+#. [search.taxonomy_action.display_thread]
+#. defaultMessage is:
+#. Display Thread
+#: messages.json
+msgid "search.taxonomy_action.display_thread"
+msgstr ""
+
+#. [search.taxonomy_action.display_tokens]
+#. defaultMessage is:
+#. Display tokens
+#: messages.json
+msgid "search.taxonomy_action.display_tokens"
+msgstr ""
+
+#. [search.taxonomy_action.give_examples]
+#. defaultMessage is:
+#. Give examples
+#: messages.json
+msgid "search.taxonomy_action.give_examples"
+msgstr ""
+
+#. [search.taxonomy_action.make_generic]
+#. defaultMessage is:
+#. Make generic
+#: messages.json
+msgid "search.taxonomy_action.make_generic"
+msgstr ""
+
+#. [search.taxonomy_action.mix_match]
+#. defaultMessage is:
+#. Mix & match
+#: messages.json
+#, fuzzy
+msgid "search.taxonomy_action.mix_match"
+msgstr "次"
+
+#. [search.taxonomy_action.more_specific]
+#. defaultMessage is:
+#. Be more specific
+#: messages.json
+msgid "search.taxonomy_action.more_specific"
+msgstr ""
+
+#. [search.taxonomy_nature.actionable_solution]
+#. defaultMessage is:
+#. Actionable solution
+#: messages.json
+msgid "search.taxonomy_nature.actionable_solution"
+msgstr ""
+
+#. [search.taxonomy_nature.argument]
+#. defaultMessage is:
+#. Argument
+#: messages.json
+msgid "search.taxonomy_nature.argument"
+msgstr ""
+
+#. [search.taxonomy_nature.cognitive_bias]
+#. defaultMessage is:
+#. Cognitive bias
+#: messages.json
+msgid "search.taxonomy_nature.cognitive_bias"
+msgstr ""
+
+#. [search.taxonomy_nature.concept]
+#. defaultMessage is:
+#. Concept
+#: messages.json
+msgid "search.taxonomy_nature.concept"
+msgstr ""
+
+#. [search.taxonomy_nature.example]
+#. defaultMessage is:
+#. Example
+#: messages.json
+msgid "search.taxonomy_nature.example"
+msgstr ""
+
+#. [search.taxonomy_nature.issue]
+#. defaultMessage is:
+#. Issue
+#: messages.json
+msgid "search.taxonomy_nature.issue"
+msgstr ""
+
+#. [search.taxonomy_nature.knowledge]
+#. defaultMessage is:
+#. Knowledge
+#: messages.json
+msgid "search.taxonomy_nature.knowledge"
+msgstr ""
+
 #. [search.user]
 #. defaultMessage is:
 #. Participants
@@ -2108,6 +3887,14 @@ msgstr "まだシンセシスが有効ではありません"
 msgid "synthesis.seeConversation"
 msgstr "会話を見る"
 
+#. [synthesis.tableOfContents]
+#. defaultMessage is:
+#. Table of contents
+#: messages.json
+#, fuzzy
+msgid "synthesis.tableOfContents"
+msgstr "シンセシス"
+
 #. [synthesis.title]
 #. defaultMessage is:
 #. synthesis
@@ -2115,11 +3902,32 @@ msgstr "会話を見る"
 msgid "synthesis.title"
 msgstr "シンセシス"
 
+#. [termsAndConditions.accept]
+#. defaultMessage is:
+#. I accept
+#: messages.json
+msgid "termsAndConditions.accept"
+msgstr ""
+
 #. [termsAndConditions.headerTitle]
 #. defaultMessage is:
 #. Terms & Conditions
 #: messages.json
 msgid "termsAndConditions.headerTitle"
+msgstr ""
+
+#. [termsAndConditions.iAccept]
+#. defaultMessage is:
+#. I have read and I accept the 
+#: messages.json
+msgid "termsAndConditions.iAccept"
+msgstr ""
+
+#. [termsAndConditions.link]
+#. defaultMessage is:
+#. Terms & Conditions
+#: messages.json
+msgid "termsAndConditions.link"
 msgstr ""
 
 #. [unauthorizedAdministration.returnButton]
@@ -2143,8 +3951,12 @@ msgstr "アクセス権限がありません。ウェブサイトの管理者に
 msgid "validate"
 msgstr "有効にする"
 
-#~ msgid "home.viewedPages"
-#~ msgstr "閲覧したページ"
+#. [yes]
+#. defaultMessage is:
+#. yes
+#: messages.json
+msgid "yes"
+msgstr ""
 
 #~ msgid "terms.panelTitle"
 #~ msgstr "規約と条件"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-02-28 14:24+0100\n"
+"POT-Creation-Date: 2018-06-06 11:14+0200\n"
 "PO-Revision-Date: 2017-08-26 01:06+0900\n"
 "Last-Translator: \n"
 "Language: ja\n"
@@ -48,19 +48,23 @@ msgstr "${val} 文字列ではありません：${err}"
 msgid "Unknown User ${uid}"
 msgstr "不明なユーザ ${uid}"
 
-#: assembl/models/notification.py:626
+#: assembl/models/idea.py:263 assembl/static/js/app/views/ideaPanel.js:211
+msgid "Idea"
+msgstr "アイデア"
+
+#: assembl/models/notification.py:621
 msgid "A synthesis is posted"
 msgstr "シンセシスが投稿されました"
 
-#: assembl/models/notification.py:655
+#: assembl/models/notification.py:650
 msgid "Any message is posted to the discussion"
 msgstr "全てのメッセージがディスカッションに投稿されます"
 
-#: assembl/models/notification.py:684
+#: assembl/models/notification.py:679
 msgid "Someone directly responds to one of your messages"
 msgstr "誰かがあなたのメッセージに応答しています"
 
-#: assembl/models/notification.py:1101
+#: assembl/models/notification.py:1093
 msgid "SYNTHESIS: "
 msgstr "シンセシス : "
 
@@ -172,7 +176,6 @@ msgstr "投稿とアイデアの共有ボタンを表示する"
 
 #: assembl/models/preferences.py:507
 #, fuzzy
-#| msgid "Social sharing"
 msgid "Private social sharing"
 msgstr "ソーシャルシェアリング"
 
@@ -344,6 +347,26 @@ msgstr "クッキーのバナー"
 #: assembl/models/preferences.py:868
 msgid "Show the banner offering to disable Piwik cookies"
 msgstr "Piwikクッキーを無効にするためのバナーを表示する"
+
+#: assembl/models/preferences.py:880
+msgid "Custom HTML code on the landing page"
+msgstr ""
+
+#: assembl/models/preferences.py:883
+msgid ""
+"Custom HTML code that will be integrated on the landing page of the "
+"debate, right after the <body> tag"
+msgstr ""
+
+#: assembl/models/preferences.py:893
+msgid "Custom HTML code on the user registration page"
+msgstr ""
+
+#: assembl/models/preferences.py:896
+msgid ""
+"Custom HTML code that will be integrated on the user registration page of"
+" the debate, right after the <body> tag"
+msgstr ""
 
 #: assembl/static/js/app/routeManager.js:416
 msgid "Requested vote widget could not be found."
@@ -1099,10 +1122,6 @@ msgstr "アイデア表"
 #: assembl/static/js/app/views/ideaList.js:805
 msgid "You don't have the permission to do this."
 msgstr "これを行う許可がありません。"
-
-#: assembl/static/js/app/views/ideaPanel.js:211
-msgid "Idea"
-msgstr "アイデア"
 
 #: assembl/static/js/app/views/ideaPanel.js:214
 msgid ""
@@ -4373,79 +4392,79 @@ msgstr "登録解除されました"
 msgid "No file given."
 msgstr "ファイルがありません."
 
-#: assembl/views/api/post.py:81 assembl/views/api/post.py:625
+#: assembl/views/api/post.py:80 assembl/views/api/post.py:624
 #, python-format
 msgid "No discussion found with id=%s"
 msgstr "id = %sディスカッションは見つかりませんでした"
 
-#: assembl/views/api/post.py:228
+#: assembl/views/api/post.py:227
 msgid "Getting orphan posts of a specific idea isn't supported."
 msgstr "特定のアイデアの孤立した投稿を取得することはできません."
 
-#: assembl/views/api/post.py:298
+#: assembl/views/api/post.py:297
 msgid "Do not combine negative and positive classifiers"
 msgstr "あなたは否定と陽性の分類子を結合していないpostDoが読まれるのを見るためにログインしなければなりません"
 
-#: assembl/views/api/post.py:359
+#: assembl/views/api/post.py:358
 msgid "You must be logged in to view which posts are read"
 msgstr "読んだ投稿を表示するには、ログインしている必要があります"
 
-#: assembl/views/api/post.py:609
+#: assembl/views/api/post.py:608
 msgid "Your message is empty"
 msgstr "あなたのメッセージは空です"
 
-#: assembl/views/api2/auth.py:343
+#: assembl/views/api2/auth.py:346
 msgid "The user does not exist"
 msgstr "ユーザーが存在しません"
 
-#: assembl/views/api2/auth.py:354
+#: assembl/views/api2/auth.py:357
 msgid "This email does not exist"
 msgstr "このメールは存在しません"
 
-#: assembl/views/api2/auth.py:359
+#: assembl/views/api2/auth.py:362
 msgid "Please give an identifier"
 msgstr "識別子を与えてください"
 
-#: assembl/views/api2/auth.py:364
+#: assembl/views/api2/auth.py:367
 msgid "This user has no email"
 msgstr "このユーザーのメールはありません"
 
-#: assembl/views/api2/auth.py:367
+#: assembl/views/api2/auth.py:370
 msgid "This is not a user"
 msgstr "これはユーザーではありません"
 
-#: assembl/views/api2/auth.py:388
+#: assembl/views/api2/auth.py:391
 msgid "The passwords that were entered are mismatched!"
 msgstr "入力されたパスワードが一致していません"
 
-#: assembl/views/api2/auth.py:402 assembl/views/auth/views.py:964
+#: assembl/views/api2/auth.py:405 assembl/views/auth/views.py:964
 #: assembl/views/auth/views.py:1032
 msgid "This link is not valid. Do you want us to send another?"
 msgstr "このリンクは無効です。別のリンクを受信しますか？"
 
-#: assembl/views/api2/auth.py:405 assembl/views/auth/views.py:967
+#: assembl/views/api2/auth.py:408 assembl/views/auth/views.py:967
 #: assembl/views/auth/views.py:1035
 msgid "This link has been used. Do you want us to send another?"
 msgstr "このリンクは使用されています。別のリンクを受信しますか？"
 
-#: assembl/views/api2/auth.py:440 assembl/views/auth/views.py:388
+#: assembl/views/api2/auth.py:443 assembl/views/auth/views.py:388
 msgid "Please use a name of at least 3 characters"
 msgstr "3文字以上の名前を使用してください"
 
-#: assembl/views/api2/auth.py:449 assembl/views/auth/views.py:321
+#: assembl/views/api2/auth.py:452 assembl/views/auth/views.py:321
 #: assembl/views/auth/views.py:395
 msgid "This is not a valid email"
 msgstr "これは有効なメールではありません"
 
-#: assembl/views/api2/auth.py:457 assembl/views/auth/views.py:402
+#: assembl/views/api2/auth.py:460 assembl/views/auth/views.py:402
 msgid "We already have a user with this email."
 msgstr "既にこのメールアドレスを利用しているユーザーがいます。"
 
-#: assembl/views/api2/auth.py:462
+#: assembl/views/api2/auth.py:465
 msgid "No email."
 msgstr "メールはありません."
 
-#: assembl/views/api2/auth.py:468
+#: assembl/views/api2/auth.py:471
 msgid "We already have a user with this username."
 msgstr "既にこのユーザー名を持つユーザーがいます."
 
@@ -4639,11 +4658,11 @@ msgstr ""
 "<p>新しい電子メールアドレスを確認するには<a href=\"{confirm_url}\">ここをクリック</a>してください。</p>\n"
 "<p>よろしくお願いいたします。<br />{assembl}チーム</p>"
 
-#: assembl/views/auth/views.py:1142
+#: assembl/views/auth/views.py:1145
 msgid "Request for password change"
 msgstr "パスワード変更の要求"
 
-#: assembl/views/auth/views.py:1146
+#: assembl/views/auth/views.py:1149
 msgid ""
 "<p>Hello, {name}!</p>\n"
 "<p>We have received a request to change the password on your {assembl} "
@@ -4660,7 +4679,7 @@ msgstr ""
 "<p>パスワード変更の申請をしていない場合は、このメールを無視してください。</p> \n"
 "<p>よろしくお願いします。<br /> {assembl}チーム</p>\n"
 
-#: assembl/views/auth/views.py:1152
+#: assembl/views/auth/views.py:1155
 msgid ""
 "Hello, {name}!\n"
 "We have received a request to change the password on your {assembl} "
@@ -4683,7 +4702,7 @@ msgstr ""
 "宜しくお願いします、\n"
 "{assembl}チーム\n"
 
-#: assembl/views/discussion/views.py:51
+#: assembl/views/discussion/views.py:56
 #, python-format
 msgid "No discussion found for slug=%s"
 msgstr "slug=%s のディスカッションは見つかりませんでした"
