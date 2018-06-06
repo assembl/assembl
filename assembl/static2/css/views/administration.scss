@@ -572,6 +572,17 @@
       }
     }
   }
+
+  .timeline-admin {
+    .form-group {
+      flex-grow: 1;
+    }
+
+    .admin-instruction {
+      margin-left: 50px;
+      font-family: $font-family4;
+    }
+  }
 }
 
 .helper-popover {

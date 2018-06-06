@@ -472,7 +472,9 @@ const Translations = {
         annotation: "Module à renseigner obligatoirement. Les champs * sont requis.",
         phaseLabel: "Titre de la phase",
         addPhase: "Ajouter une phase supplémentaire",
-        deletePhase: "Supprimer la phase"
+        deletePhase: "Supprimer la phase",
+        instruction1: "Choisissez le nombre de phases qui jalonneront votre débat",
+        instruction2: "Renseignez les champs requis pour chaque phase en sélectionnant chaque onglet"
       },
       noTimeline: "Aucune timeline n'a été configurée pour ce débat.",
       survey: {
@@ -1186,7 +1188,9 @@ const Translations = {
         annotation: "This module has to be filled. * Fields are required",
         phaseLabel: "Phase title",
         addPhase: "Add an additional phase",
-        deletePhase: "Delete the phase"
+        deletePhase: "Delete the phase",
+        instruction1: "Choose the number of phases for your debate",
+        instruction2: "Fill in the required fields for each phase by selecting each tab"
       },
       noTimeline: "No timeline has been configured yet",
       survey: {
