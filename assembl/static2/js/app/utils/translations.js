@@ -469,6 +469,7 @@ const Translations = {
         manageProfileOptions: "Options d'inscription"
       },
       timelineAdmin: {
+        phase: "Phase %{count}",
         annotation: "Module à renseigner obligatoirement. Les champs * sont requis.",
         phaseLabel: "Titre de la phase",
         addPhase: "Ajouter une phase supplémentaire",
@@ -1185,6 +1186,7 @@ const Translations = {
         manageProfileOptions: "Registration options"
       },
       timelineAdmin: {
+        phase: "Phase %{count}",
         annotation: "This module has to be filled. * Fields are required",
         phaseLabel: "Phase title",
         addPhase: "Add an additional phase",

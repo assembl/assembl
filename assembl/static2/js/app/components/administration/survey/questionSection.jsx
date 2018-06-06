@@ -36,11 +36,11 @@ class QuestionSection extends React.Component {
             {thematics.map((thematicId, index) => {
               const thematic = thematicsById.get(thematicId);
               const thematicTitle = getEntryValueForLocale(thematic.get('titleEntries'), editLocale);
-              const linkClassName = selectedThematicId === thematicId ? 'tab-title-active ellipsis' : 'tab-title ellipsis';
+              const linkClassNames = selectedThematicId === thematicId ? 'tab-title-active ellipsis' : 'tab-title ellipsis';
               return (
                 <Col xs={12} md={Math.round(12 / thematics.length)} key={index}>
                   <a
-                    className={linkClassName}
+                    className={linkClassNames}
                     key={thematicId}
                     onClick={() => {
                       this.setState({ selectedThematicId: thematicId });
