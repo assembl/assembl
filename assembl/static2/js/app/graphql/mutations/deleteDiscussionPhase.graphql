@@ -1,0 +1,5 @@
+mutation deleteDiscussionPhase($id: ID!) {
+  deleteDiscussionPhase(id: $id) {
+    success
+  }
+}

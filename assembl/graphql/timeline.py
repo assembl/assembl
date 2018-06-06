@@ -100,3 +100,24 @@ class UpdateDiscussionPhase(graphene.Mutation):
             db.flush()
 
         return UpdateDiscussionPhase(discussion_phase=phase)
+
+
+class DeleteDiscussionPhase(graphene.Mutation):
+    class Input:
+        id = graphene.ID(required=True)
+
+    success = graphene.Boolean()
+
+    @staticmethod
+    @abort_transaction_on_exception
+    def mutate(root, args, context, info):
+        cls = models.DiscussionPhase
+        phase_id = args.get('id')
+        phase_id = int(Node.from_global_id(phase_id)[1])
+        phase = cls.get(phase_id)
+        require_instance_permission(CrudPermissions.DELETE, phase, context)
+        with cls.default_db.no_autoflush as db:
+            db.delete(phase)
+            db.flush()
+
+        return DeleteDiscussionPhase(success=True)
