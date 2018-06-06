@@ -1,0 +1,4762 @@
+﻿# Copyright (C) 2018 ORGANIZATION
+# This file is distributed under the same license as the assembl project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2018.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: assembl 2.8.9\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2018-02-28 14:24+0100\n"
+"PO-Revision-Date: 2018-05-18 16:18+0200\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.3.4\n"
+"X-Generator: Poedit 2.0.7\n"
+"Last-Translator: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"Language: th\n"
+
+#: assembl/auth/util.py:140
+msgid "Your session has expired, you need to login again"
+msgstr "เซสชั่นของคุณหมดอายุ คุณต้องเข้าสู่ระบบอีกครั้ง"
+
+#: assembl/auth/util.py:504
+msgid "The CSV file must have two columns"
+msgstr "ไฟล์ CSV ต้องมีสองคอลัมน์"
+
+#: assembl/auth/util.py:511
+#, python-format
+msgid "Not an email: <%s> at line %d"
+msgstr "ไม่ใช่อีเมล: <%s> ที่บรรทัด %d"
+
+#: assembl/auth/util.py:514
+#, python-format
+msgid "Name too short: <%s> at line %d"
+msgstr "ชื่อสั้นเกินไป: <%s> ที่บรรทัด %d"
+
+#: assembl/lib/colander.py:174
+msgid "${val} cannot be serialized: ${err}"
+msgstr "${val} ไม่สามารถซีเรียลไลซ์ได้: ${err}"
+
+#: assembl/lib/colander.py:193
+msgid "${val} is not a string: ${err}"
+msgstr "${val} ไม่ใช่สตริง: ${err}"
+
+#: assembl/models/edgesense_drupal.py:173
+msgid "Unknown User ${uid}"
+msgstr "ผู้ใช้ที่ไม่รู้จัก ${uid}"
+
+#: assembl/models/notification.py:626
+msgid "A synthesis is posted"
+msgstr "มีการโพสต์บทสังเคราะห์"
+
+#: assembl/models/notification.py:655
+msgid "Any message is posted to the discussion"
+msgstr "มีการโพสต์ข้อความในการสนทนา"
+
+#: assembl/models/notification.py:684
+msgid "Someone directly responds to one of your messages"
+msgstr "มีคนตอบข้อความใดข้อความหนึ่งของคุณโดยตรง"
+
+#: assembl/models/notification.py:1101
+msgid "SYNTHESIS: "
+msgstr "การสังเคราะห์: "
+
+#: assembl/models/preferences.py:114 assembl/models/preferences.py:548
+msgid "No special authentication"
+msgstr "ไม่มีการรับรองความถูกต้องแบบเจาะจง"
+
+#: assembl/models/preferences.py:386
+msgid "Languages used"
+msgstr "ภาษาที่ใช้"
+
+#: assembl/models/preferences.py:387
+msgid "All languages expected in the discussion"
+msgstr "ทุกภาษาที่คาดหวังในการสนทนา"
+
+#: assembl/models/preferences.py:397
+msgid "Use landing page"
+msgstr "ใช้เพจเริ่มต้น"
+
+#: assembl/models/preferences.py:398
+msgid ""
+"Are users directed to the landing page and phases at login, or diretly to "
+"the debate"
+msgstr ""
+"ผู้ใช้ถูกกำหนดให้ไปที่เพจเริ่มต้นและขั้นตอนการเข้าสู่ระบบ หรือไปยังการสนทนาโดยตรง"
+
+#: assembl/models/preferences.py:406 assembl/models/preferences.py:420
+msgid "Translation service"
+msgstr "บริการแปลภาษา"
+
+#: assembl/models/preferences.py:409
+msgid "No translation"
+msgstr "ไม่มีการแปล"
+
+#: assembl/models/preferences.py:411
+msgid "Dummy translation service (two steps)"
+msgstr "บริการแบบจำลองการแปล (สองขั้นตอน)"
+
+#: assembl/models/preferences.py:413
+msgid "Dummy translation service (one step)"
+msgstr "บริการแบบจำลองการแปล (หนึ่งขั้นตอน)"
+
+#: assembl/models/preferences.py:415
+msgid "Dummy translation service (two steps) with errors"
+msgstr "บริการแบบจำลองการแปล (สองขั้นตอน) ที่มีข้อผิดพลาด"
+
+#: assembl/models/preferences.py:417
+msgid "Dummy translation service (one step) with errors"
+msgstr "บริการแบบจำลองการแปล (หนึ่งขั้นตอน) ที่มีข้อผิดพลาด"
+
+#: assembl/models/preferences.py:419
+msgid "Google Translate"
+msgstr "การแปลของ Google"
+
+#: assembl/models/preferences.py:432
+msgid "Panel order in simple view"
+msgstr "เรียงแผงในมุมมองแบบง่าย"
+
+#: assembl/models/preferences.py:435
+msgid "Navigation, Idea, Messages"
+msgstr "การนำทาง, แนวคิด, ข้อความ"
+
+#: assembl/models/preferences.py:436
+msgid "Navigation, Messages, Idea"
+msgstr "การนำทาง, ข้อความ, แนวคิด"
+
+#: assembl/models/preferences.py:437
+msgid "Order of panels"
+msgstr "ลำดับของแผง"
+
+#: assembl/models/preferences.py:449
+msgid "Extra JSON parameters"
+msgstr "พารามิเตอร์พิเศษของ JSON"
+
+#: assembl/models/preferences.py:451
+msgid "Parameters for quick frontend settings"
+msgstr "พารามิเตอร์สำหรับการตั้งค่าฟร้อนท์เอนด์อย่างรวดเร็ว"
+
+#: assembl/models/preferences.py:460
+msgid "Terms of use URL"
+msgstr "ข้อกำหนดการใช้งาน URL"
+
+#: assembl/models/preferences.py:462
+msgid "URL of a document presenting terms of use for the discussion"
+msgstr "URL ของเอกสารที่นำเสนอข้อกำหนดการใช้งานสำหรับการสนทนา"
+
+#: assembl/models/preferences.py:471
+msgid "Video URL"
+msgstr "URL ของวิดีโอ "
+
+#: assembl/models/preferences.py:473
+msgid "URL of a video presenting the discussion"
+msgstr "URL ของวิดีโอที่นำเสนอการสนทนา"
+
+#: assembl/models/preferences.py:482
+msgid "Video description"
+msgstr "คำอธิบายวิดีโอ"
+
+#: assembl/models/preferences.py:484
+msgid "Description of the video presenting the discussion"
+msgstr "คำอธิบายของวิดีโอที่นำเสนอการสนทนา"
+
+#: assembl/models/preferences.py:493
+msgid "Social sharing"
+msgstr "การแชร์บนโซเชียลมีเดีย"
+
+#: assembl/models/preferences.py:496
+msgid "Show the share button on posts and ideas"
+msgstr "แสดงปุ่มแชร์ในโพสต์และแนวคิด"
+
+#: assembl/models/preferences.py:507
+msgid "Private social sharing"
+msgstr "การแชร์แบบส่วนตัวบนโซเชียลมีเดีย"
+
+#: assembl/models/preferences.py:509
+msgid "Publicizing or privatizing social sharing"
+msgstr "การตั้งค่าเป็นสาธารณะหรือเป็นส่วนตัวในการแชร์บนโซเชียลมีเดีย"
+
+#: assembl/models/preferences.py:518
+msgid "Extra data for CSV reports"
+msgstr "ข้อมูลเพิ่มเติมสำหรับรายงาน CSV"
+
+#: assembl/models/preferences.py:521
+msgid "data taken from social_auth's extra_data to add to CSV reports"
+msgstr "ข้อมูลที่นำมาจาก extra_data ของ social_auth เพื่อเพิ่มลงในรายงาน CSV"
+
+#: assembl/models/preferences.py:533
+msgid "Require anti-virus check"
+msgstr "ต้องตรวจสอบการป้องกันไวรัส"
+
+#: assembl/models/preferences.py:536
+msgid "Run an anti-virus on file attachments"
+msgstr "เรียกใช้โปรแกรมป้องกันไวรัสในไฟล์แนบ"
+
+#: assembl/models/preferences.py:550
+msgid "Authentication service type"
+msgstr "ประเภทบริการการรับรองความถูกต้อง"
+
+#: assembl/models/preferences.py:552
+msgid ""
+"A primary authentication server for this discussion, defined as a python-"
+"social-auth backend. Participants will be auto-logged in to that server, and "
+"discussion auto-subscription will require an account from this backend."
+msgstr ""
+"เซิร์ฟเวอร์หลักในการรับรองความถูกต้องสำหรับการสนทนานี้ถูกกำหนดไว้ในแบ็กเอนด์สำหรับ python-social-auth ผู้เข้าร่วมจะเข้าสู่ระบบโดยอัตโนมัติในเซิร์ฟเวอร์นั้น และการสมัครสมาชิกโดยอัตโนมัติในการสนทนาจะต้องมีบัญชีจากแบ็กเอนด์นี้"
+
+#: assembl/models/preferences.py:567
+msgid "Allow access to moderated text"
+msgstr "อนุญาตให้เข้าถึงข้อความที่ได้รับการกลั่นกรอง"
+
+#: assembl/models/preferences.py:570
+msgid "Are moderated posts simply hidden or made inaccessible by default?"
+msgstr "โพสต์ที่ผ่านการกลั่นกรองถูกซ่อนไว้หรือไม่สามารถเข้าถึงได้ตามค่าเริ่มต้นหรือไม่"
+
+#: assembl/models/preferences.py:583
+msgid "Idea panel opens automatically"
+msgstr "แผงแนวคิดจะเปิดขึ้นโดยอัตโนมัติ"
+
+#: assembl/models/preferences.py:586
+msgid ""
+"Does the Idea panel automatically open when an idea is clicked ? (and close "
+"when a special section is clicked)"
+msgstr ""
+"แผงแนวคิดเปิดขึ้นโดยอัตโนมัติเมื่อมีการคลิกที่แนวคิดหรือไม่ (และปิดเมื่อมีการคลิกที่ส่วนใดส่วนหนึ่ง)"
+
+#: assembl/models/preferences.py:598
+msgid "Ids of columns in column view"
+msgstr "รหัสของคอลัมน์ในมุมมองของคอลัมน์"
+
+#: assembl/models/preferences.py:600
+msgid "What are (ordered) identifiers of columns in multi-column views?"
+msgstr "ตัวบ่งชี้ (ที่เรียงลำดับ) ของคอลัมน์ในมุมมองแบบหลายคอลัมน์คืออะไร"
+
+#: assembl/models/preferences.py:613
+msgid "Default colors of columns in column view"
+msgstr "สีตามค่าเริ่มต้นของคอลัมน์ในมุมมองของคอลัมน์"
+
+#: assembl/models/preferences.py:615
+msgid "What are (default) theme colors of columns in multi-column views?"
+msgstr "สีธีม (ตามค่าเริ่มต้น) ของคอลัมน์ในมุมมองแบบหลายคอลัมน์คืออะไร"
+
+#: assembl/models/preferences.py:627
+msgid "Names of columns in column view"
+msgstr "ชื่อคอลัมน์ในมุมมองของคอลัมน์"
+
+#: assembl/models/preferences.py:629
+msgid ""
+"What are (default) names of columns in multi-column views, in each "
+"discussion language?"
+msgstr ""
+"ชื่อคอลัมน์ (ตามค่าเริ่มต้น) ในมุมมองแบบหลายคอลัมน์ ในแต่ละภาษาการสนทนาคืออะไร"
+
+#: assembl/models/preferences.py:642
+msgid "Default permissions"
+msgstr "สิทธิ์เริ่มต้น"
+
+#: assembl/models/preferences.py:645
+msgid "The basic permissions for a new discussion"
+msgstr "สิทธิ์ขั้นพื้นฐานสำหรับการสนทนาใหม่"
+
+#: assembl/models/preferences.py:727
+msgid "Require Email Domain"
+msgstr "ต้องใช้โดเมนอีเมล"
+
+#: assembl/models/preferences.py:730
+msgid ""
+"List of domain names of user email address required for self-registration. "
+"Only accounts with at least an email from those domains can self-register to "
+"this discussion. Anyone can self-register if this is empty."
+msgstr ""
+"รายชื่อโดเมนของที่อยู่อีเมลของผู้ใช้ที่จำเป็นสำหรับการลงทะเบียนด้วยตนเอง เฉพาะบัญชีที่มีอย่างน้อยหนึ่งอีเมลจากโดเมนเหล่านั้นจึงจะสามารถลงทะเบียนด้วยตนเองเพื่อการสนทนานี้ได้ ทุกคนสามารถลงทะเบียนด้วยตนเองได้หากโดเมนนี้ยังไม่มีการลงทะเบียน"
+
+#: assembl/models/preferences.py:746
+msgid "Show CI Dashboard"
+msgstr "แสดงแดชบอร์ด CI"
+
+#: assembl/models/preferences.py:749
+msgid "Show the CI Dashboard in the panel group window"
+msgstr "แสดงแดชบอร์ด CI ในหน้าต่างกลุ่มแผง"
+
+#: assembl/models/preferences.py:761
+msgid "URL of CI Dashboard"
+msgstr "URL ของแดชบอร์ด CI"
+
+#: assembl/models/preferences.py:763
+msgid "Configuration of the visualizations shown in the CI Dashboard"
+msgstr "การกำหนดค่าการจัดรูปแบบแสดงข้อมูลที่แสดงในแดชบอร์ด CI"
+
+#: assembl/models/preferences.py:781
+msgid "Catalyst Visualizations"
+msgstr "การจัดรูปแบบการแสดงข้อมูล Catalyst"
+
+#: assembl/models/preferences.py:784
+msgid "A JSON description of available Catalyst visualizations"
+msgstr "คำอธิบาย JSON เกี่ยวกับการจัดรูปแบบการแสดงข้อมูล Catalyst ที่มีอยู่"
+
+#: assembl/models/preferences.py:796
+msgid "Navigation sections"
+msgstr "ส่วนการนำทาง"
+
+#: assembl/models/preferences.py:799
+msgid ""
+"A JSON specification of Catalyst visualizations to show in the navigation "
+"section"
+msgstr ""
+"ข้อกำหนด JSON เกี่ยวกับการจัดรูปแบบการแสดงข้อมูล Catalyst เพื่อแสดงในส่วนการนำทาง"
+
+#: assembl/models/preferences.py:812
+msgid "Catalyst translations"
+msgstr "การแปลความหมาย Catalyst"
+
+#: assembl/models/preferences.py:815
+msgid ""
+"Translations applicable to Catalyst visualizations, in Jed (JSON) format"
+msgstr ""
+"การแปลที่เหมาะสมกับการจัดรูปแบบการแสดงข้อมูล Catalyst ในรูปแบบ Jed (JSON)"
+
+#: assembl/models/preferences.py:832
+msgid "Default Table of Ideas Collapsed state"
+msgstr "ค่าเริ่มต้นสถานะตารางแนวคิดที่ถูกยุบ"
+
+#: assembl/models/preferences.py:835
+msgid ""
+"Default expanded/collapsed state of each idea in the table of ideas. A user "
+"can override it by opening/closing an idea"
+msgstr ""
+"ค่าเริ่มต้นสถานะขยาย / ยุบของแต่ละแนวคิดในตารางแนวคิด ผู้ใช้สามารถแทนที่ได้โดยการเปิด / ปิดแนวคิด"
+
+#: assembl/models/preferences.py:850
+msgid "Preference data"
+msgstr "ข้อมูลการกำหนดลักษณะ"
+
+#: assembl/models/preferences.py:853
+msgid "The preference configuration; override only with care"
+msgstr "การตั้งค่าการกำหนดลักษณะ; โปรดแทนที่ด้วยความระมัดระวัง"
+
+#: assembl/models/preferences.py:865
+msgid "Cookies banner"
+msgstr "แบนเนอร์คุ้กกี้"
+
+#: assembl/models/preferences.py:868
+msgid "Show the banner offering to disable Piwik cookies"
+msgstr "แสดงแบนเนอร์ที่เสนอเพื่อปิดใช้งานคุ้กกี้ Piwik"
+
+#: assembl/static/js/app/routeManager.js:416
+msgid "Requested vote widget could not be found."
+msgstr "ไม่พบวิดเจ็ตการโหวตที่ขอ"
+
+#: assembl/static/js/app/routeManager.js:602
+msgid "You must be logged in to access this page."
+msgstr "คุณต้องเข้าสู่ระบบเพื่อเข้าใช้งานหน้านี้"
+
+#: assembl/static/js/app/routeManager.js:625
+msgid ""
+"Your level of permissions do not allow you to see the rest of this content"
+msgstr ""
+"ระดับสิทธิ์ของคุณไม่อนุญาตให้คุณดูเนื้อหาส่วนที่เหลือ"
+
+#: assembl/static/js/app/common/context.js:156
+msgid "Message titles"
+msgstr "ชื่อข้อความ"
+
+#: assembl/static/js/app/common/context.js:160
+msgid "Message previews"
+msgstr "ตัวอย่างข้อความ"
+
+#: assembl/static/js/app/common/context.js:164
+msgid "Complete messages"
+msgstr "ข้อความสมบูรณ์"
+
+#: assembl/static/js/app/common/context.js:893
+msgid "Extract"
+msgstr "เนื้อหาที่คัดลอก"
+
+#: assembl/static/js/app/common/context.js:1255
+msgid "ajax error message:"
+msgstr "ข้อความแสดงข้อผิดพลาด ajax:"
+
+#: assembl/static/js/app/models/agents.js:132
+msgid "need no additional permissions"
+msgstr "ไม่จำเป็นต้องมีสิทธิ์เพิ่มเติม"
+
+#: assembl/static/js/app/models/agents.js:147
+#, python-format
+msgid "you must first <a href='%s'>Sign in</a>"
+msgstr "คุณต้อง<a href='%s'>ลงชื่อเข้าใช้</a>ก่อน"
+
+#: assembl/static/js/app/models/agents.js:153
+msgid "you must first join this discussion"
+msgstr "คุณต้องเข้าร่วมการสนทนานี้ก่อน"
+
+#: assembl/static/js/app/models/agents.js:158
+#, python-format
+msgid "you must ask a discussion administrator for the following role: %s"
+msgid_plural ""
+"you must ask a discussion administrator for one of the following roles: %s"
+"you must ask a discussion administrator for one of the following roles: %s"
+msgstr[0] "คุณต้องขอให้ผู้ดูแลระบบการสนทนากำหนดบทบาทต่อไปนี้: %s"
+
+#: assembl/static/js/app/models/agents.js:162
+msgid "the administrator has closed this discussion to all contributions"
+msgstr "ผู้ดูแลระบบได้ปิดการสนทนานี้สำหรับทุกแนวคิด"
+
+#: assembl/static/js/app/models/agents.js:165
+msgid "you need additional permissions"
+msgstr "คุณต้องมีสิทธิ์เพิ่มเติม"
+
+#: assembl/static/js/app/models/agents.js:232
+msgid "Unknown user"
+msgstr "ผู้ใช้ที่ไม่รู้จัก "
+
+#: assembl/static/js/app/models/attachments.js:26
+msgid "Do not show anything special"
+msgstr "ไม่ต้องแสดงอะไรเป็นพิเศษ"
+
+#: assembl/static/js/app/models/attachments.js:30
+msgid "Show the following preview at the end of your message"
+msgstr "แสดงตัวอย่างต่อไปนี้เมื่อสิ้นสุดข้อความของคุณ"
+
+#: assembl/static/js/app/models/attachments.js:456
+msgid ""
+"Sorry, only an image type is supported in this upload. Please try again."
+msgstr ""
+"ขออภัย การอัพโหลดนี้รองรับเฉพาะประเภทรูปภาพเท่านั้น กรุณาลองอีกครั้ง"
+
+#: assembl/static/js/app/models/idea.js:132
+msgid "The root idea will not be in the synthesis"
+msgstr "แนวคิดเริ่มต้นจะไม่อยู่ในการสังเคราะห์"
+
+#: assembl/static/js/app/models/idea.js:149
+msgid "Add a description of this idea"
+msgstr "เพิ่มคำอธิบายของแนวคิดนี้"
+
+#: assembl/static/js/app/models/idea.js:160
+msgid "The root idea will never be in the synthesis"
+msgstr "แนวคิดเริ่มต้นจะไม่อยู่ในการสังเคราะห์เลย"
+
+#: assembl/static/js/app/models/idea.js:183
+msgid "You can add an expression for the next synthesis"
+msgstr "คุณสามารถแสดงแนวคิดเพิ่มเติมในบทสังเคราะห์ถัดไป"
+
+#: assembl/static/js/app/models/idea.js:193
+msgid "All posts"
+msgstr "โพสต์ทั้งหมด"
+
+#: assembl/static/js/app/models/idea.js:216
+#: assembl/static/js/app/views/ideaPanel.js:528
+msgid "New idea"
+msgstr "แนวคิดใหม่"
+
+#: assembl/static/js/app/models/segment.js:114
+msgid "You must be logged in to create segments"
+msgstr "คุณต้องเข้าสู่ระบบเพื่อสร้างเซ็กเมนต์"
+
+#: assembl/static/js/app/models/segment.js:125
+msgid ""
+"invalid extract: the extract must have a valid idPost (here ) or a valid uri "
+"(here )"
+msgstr ""
+"เนื้อหาที่คัดลอกไม่ถูกต้อง: เนื้อหาที่คัดลอกต้องมี idPost ที่ถูกต้อง (ขณะนี้) หรือ uri ที่ถูกต้อง (ขณะนี้)"
+
+#: assembl/static/js/app/models/segment.js:129
+msgid "invalid creationDate: "
+msgstr "creationDate ไม่ถูกต้อง: "
+
+#: assembl/static/js/app/models/segment.js:133
+msgid "invalid idIdea: "
+msgstr "idIdea ไม่ถูกต้อง: "
+
+#: assembl/static/js/app/models/segment.js:137
+msgid "invalid idCreator: "
+msgstr "idCreator ไม่ถูกต้อง: "
+
+#: assembl/static/js/app/models/sources.js:25
+msgid "Abstract content source"
+msgstr "แหล่งเนื้อหาทางวิชาการ"
+
+#: assembl/static/js/app/models/sources.js:75
+msgid "IMAP mailbox"
+msgstr "กล่องจดหมาย IMAP"
+
+#: assembl/static/js/app/models/sources.js:93
+msgid "Mailing list"
+msgstr "รายชื่อผู้รับเมล"
+
+#: assembl/static/js/app/models/sources.js:121
+msgid "Comments to a given facebook post (by URL)"
+msgstr "ข้อคิดเห็นเกี่ยวกับโพสต์ Facebook ที่ระบุ (ตาม URL)"
+
+#: assembl/static/js/app/models/sources.js:133
+msgid "Posts from a Facebook group (by URL)"
+msgstr "โพสต์จากกลุ่ม Facebook (ตาม URL)"
+
+#: assembl/static/js/app/models/sources.js:145
+msgid "Posts from a Facebook group to which you're subscribed"
+msgstr "โพสต์จากกลุ่ม Facebook ที่คุณสมัครใช้งาน"
+
+#: assembl/static/js/app/models/sources.js:157
+msgid "Posts from a Facebook page to which you're subscribed"
+msgstr "โพสต์จากเพจ Facebook ที่คุณสมัครใช้งาน"
+
+#: assembl/static/js/app/models/sources.js:169
+msgid "Posts from users on a Facebook page to which you're subscribed"
+msgstr "โพสต์จากผู้ใช้ในเพจ Facebook ที่คุณสมัครใช้งาน"
+
+#: assembl/static/js/app/models/widget.js:258
+msgid "Create a voting session on this idea"
+msgstr "สร้างเซสชั่นการโหวตสำหรับแนวคิดนี้"
+
+#: assembl/static/js/app/models/widget.js:261
+#: assembl/static/js/app/models/widget.js:273
+#: assembl/static/js/app/models/widget.js:478
+msgid "Vote"
+msgstr "โหวต"
+
+#: assembl/static/js/app/models/widget.js:263
+#: assembl/static/js/app/models/widget.js:267
+#: assembl/static/js/app/models/widget.js:480
+#: assembl/static/js/app/models/widget.js:1037
+#: assembl/static/js/app/models/widget.js:1045
+#: assembl/static/js/app/models/widget.js:1185
+msgid "Configure"
+msgstr "กำหนดค่า"
+
+#: assembl/static/js/app/models/widget.js:275
+msgid "Complete your vote"
+msgstr "โหวตให้เสร็จสมบูรณ์"
+
+#: assembl/static/js/app/models/widget.js:277
+msgid "Modify your vote"
+msgstr "แก้ไขการโหวตของคุณ"
+
+#: assembl/static/js/app/models/widget.js:280
+msgid "See the vote results"
+msgstr "ดูผลการโหวต"
+
+#: assembl/static/js/app/models/widget.js:283
+msgid "Configure this vote widget"
+msgstr "กำหนดค่าวิดเจ็ตการโหวตนี้"
+
+#: assembl/static/js/app/models/widget.js:286
+msgid "See results from the vote of "
+msgstr "ดูผลการโหวตของ"
+
+#: assembl/static/js/app/models/widget.js:289
+msgid "Vote results"
+msgstr "ผลโหวต"
+
+#: assembl/static/js/app/models/widget.js:332
+msgid "This vote widget is not fully configured"
+msgstr "วิดเจ็ตการโหวตนี้ไม่ได้รับการกำหนดค่าอย่างสมบูรณ์"
+
+#: assembl/static/js/app/models/widget.js:336
+msgid "A voting session has started."
+msgstr "เซสชั่นการโหวตได้เริ่มต้นแล้ว"
+
+#: assembl/static/js/app/models/widget.js:342
+#, python-format
+msgid "You cannot vote right now because %s."
+msgstr "คุณไม่สามารถโหวตได้ในขณะนี้เพราะ %s"
+
+#: assembl/static/js/app/models/widget.js:350
+#, python-format
+msgid "The option “%s” is being considered in a vote"
+msgstr "ตัวเลือก “%s” กำลังอยู่ระหว่างการพิจารณาโหวต"
+
+#: assembl/static/js/app/models/widget.js:353
+#, python-format
+msgid "The option “%s” was considered in a vote"
+msgstr "ตัวเลือก “%s” ได้รับการพิจารณาในการโหวต"
+
+#: assembl/static/js/app/models/widget.js:355
+msgid "A voting session is ongoing on this issue"
+msgstr "เซสชั่นการโหวตกำลังดำเนินไปอย่างต่อเนื่องในประเด็นนี้"
+
+#: assembl/static/js/app/models/widget.js:357
+msgid "A voting session has happened on this issue"
+msgstr "มีเซสชั่นการโหวตในประเด็นนี้"
+
+#: assembl/static/js/app/models/widget.js:359
+#, python-format
+msgid "“%s” is being used as a criterion in a vote"
+msgstr "“%s” กำลังถูกใช้เป็นเกณฑ์ในการโหวต"
+
+#: assembl/static/js/app/models/widget.js:361
+#, python-format
+msgid "“%s” was used as a criterion in a vote"
+msgstr "“%s” ได้ถูกใช้เป็นเกณฑ์ในการโหวต"
+
+#: assembl/static/js/app/models/widget.js:371
+#, python-format
+msgid "You have %s to vote"
+msgstr "คุณมี %s ในการโหวต"
+
+#: assembl/static/js/app/models/widget.js:438
+msgid "Create a multi-criterion voting session on this idea"
+msgstr "สร้างเซสชั่นการโหวตแบบพิจารณาหลายเกณฑ์สำหรับแนวคิดนี้"
+
+#: assembl/static/js/app/models/widget.js:474
+msgid "Create a token voting session on this idea"
+msgstr "สร้างเซสชั่นการโหวตแบบโทเค็นสำหรับแนวคิดนี้"
+
+#: assembl/static/js/app/models/widget.js:1032
+msgid "Create a creativity session on this idea"
+msgstr "สร้างเซสชั่นความคิดสร้างสรรค์เกี่ยวกับแนวคิดนี้"
+
+#: assembl/static/js/app/models/widget.js:1035
+#: assembl/static/js/app/models/widget.js:1049
+msgid "Participate"
+msgstr "มีส่วนร่วม"
+
+#: assembl/static/js/app/models/widget.js:1042
+msgid "Configure the creativity session on this idea"
+msgstr "กำหนดค่าเซสชั่นความคิดสร้างสรรค์เกี่ยวกับแนวคิดนี้"
+
+#: assembl/static/js/app/models/widget.js:1051
+msgid "Review the session"
+msgstr "ตรวจสอบเซสชั่น"
+
+#: assembl/static/js/app/models/widget.js:1080
+msgid "This widget is not fully configured"
+msgstr "วิดเจ็ตนี้ไม่ได้รับการกำหนดค่าอย่างสมบูรณ์"
+
+#: assembl/static/js/app/models/widget.js:1084
+msgid "A creativity session is ongoing."
+msgstr "เซสชั่นความคิดสร้างสรรค์กำลังดำเนินอยู่"
+
+#: assembl/static/js/app/models/widget.js:1092
+msgid "A creativity session is ongoing on this issue"
+msgstr "เซสชั่นความคิดสร้างสรรค์กำลังดำเนินไปอย่างต่อเนื่องในประเด็นนี้"
+
+#: assembl/static/js/app/models/widget.js:1094
+msgid "A creativity session has happened on this issue"
+msgstr "มีเซสชั่นความคิดสร้างสรรค์ในประเด็นนี้"
+
+#: assembl/static/js/app/models/widget.js:1098
+#, python-format
+msgid "You have %s to participate"
+msgstr "คุณมี %s ที่ต้องเข้าร่วม"
+
+#: assembl/static/js/app/models/widget.js:1174
+msgid "Create an inspiration module on this idea"
+msgstr "สร้างโมดูลแรงบันดาลใจในแนวคิดนี้"
+
+#: assembl/static/js/app/models/widget.js:1176
+msgid "Create an inspiration module on this discussion"
+msgstr "สร้างโมดูลแรงบันดาลใจในการสนทนานี้"
+
+#: assembl/static/js/app/models/widget.js:1178
+msgid "Configure the inspiration module associated to the discussion"
+msgstr "กำหนดค่าโมดูลแรงบันดาลใจที่เชื่อมโยงกับการสนทนา"
+
+#: assembl/static/js/app/models/widget.js:1180
+msgid "Configure the inspiration module associated to this idea"
+msgstr "กำหนดค่าโมดูลแรงบันดาลใจที่เชื่อมโยงกับแนวคิดนี้"
+
+#: assembl/static/js/app/models/widget.js:1183
+#: assembl/templates/views/messageList.tmpl:35
+#: assembl/templates/views/messageList.tmpl:45
+msgid "I need inspiration"
+msgstr "ฉันต้องการแรงบันดาลใจ"
+
+#: assembl/static/js/app/utils/tourManager.js:22
+#: assembl/static/js/app/utils/tourManager.js:193
+msgid "Next"
+msgstr "ถัดไป"
+
+#: assembl/static/js/app/utils/tourManager.js:23
+msgid "Back"
+msgstr "ย้อนกลับ"
+
+#: assembl/static/js/app/utils/tourManager.js:24
+msgid "Done"
+msgstr "เสร็จสิ้น"
+
+#: assembl/static/js/app/utils/tourManager.js:25
+msgid "Skip"
+msgstr "ข้าม"
+
+#: assembl/static/js/app/utils/tourManager.js:26
+#: assembl/templates/views/exportPostModal.tmpl:32
+msgid "Close"
+msgstr "ปิด"
+
+#: assembl/static/js/app/utils/tours/assemblTours.js:18
+#: assembl/templates/views/helperDebate.tmpl:3
+msgid "Welcome!"
+msgstr "ยินดีต้อนรับ!"
+
+#: assembl/static/js/app/utils/tours/assemblTours.js:20
+msgid "Thank you"
+msgstr "ขอขอบคุณ"
+
+#: assembl/static/js/app/utils/tours/assemblTours.js:22
+msgid ""
+"Welcome to this discussion. We’ve created series of hints to help you get "
+"started using Assembl."
+msgstr ""
+"ยินดีต้อนรับสู่การสนทนานี้ เราได้สร้างชุดคำแนะนำเพื่อช่วยให้คุณสามารถเริ่มใช้งาน Assembl"
+
+#: assembl/static/js/app/utils/tours/assemblTours.js:37
+msgid "Join the discussion"
+msgstr "เข้าร่วมการสนทนา"
+
+#: assembl/static/js/app/utils/tours/assemblTours.js:38
+msgid ""
+"This is the conversation panel, where the discussion takes place. You can "
+"reply to messages directly, or start a new topic by clicking ‘Start a new "
+"discussion thread’ at the bottom of the panel."
+msgstr ""
+"นี่คือแผงการสนทนาซึ่งมีการแลกเปลี่ยนความคิด คุณสามารถตอบกลับข้อความได้โดยตรงหรือเริ่มต้นหัวข้อใหม่โดยคลิก 'เริ่มกลุ่มข้อความสนทนาใหม่' ที่ด้านล่างของแผง"
+
+#: assembl/static/js/app/utils/tours/assemblTours.js:64
+msgid "Customize your view"
+msgstr "ปรับแต่งมุมมองของคุณ"
+
+#: assembl/static/js/app/utils/tours/assemblTours.js:65
+msgid ""
+"You can view the discussion in many different ways using the filters at the "
+"top."
+msgstr ""
+"คุณสามารถดูการสนทนาได้หลากหลายวิธี โดยใช้ตัวกรองที่ด้านบน"
+
+#: assembl/static/js/app/utils/tours/assemblTours.js:91
+msgid "Spot relevant quotes on each idea"
+msgstr "ดูคำพูดที่เกี่ยวข้องกับแต่ละแนวคิด"
+
+#: assembl/static/js/app/utils/tours/assemblTours.js:92
+msgid ""
+"Excerpts from messages are harvested and are organized to help you find "
+"relevant contributions on this idea."
+msgstr ""
+"ส่วนที่ตัดมาจากข้อความจะถูกรวบรวมและจัดไว้เพื่อช่วยให้คุณสามารถหาข้อมูลที่เกี่ยวข้องกับการแสดงแนวคิดนี้ได้"
+
+#: assembl/static/js/app/utils/tours/assemblTours.js:107
+msgid "Explore one of these topics"
+msgstr "เลือกดูจากหัวข้อ"
+
+#: assembl/static/js/app/utils/tours/assemblTours.js:108
+msgid ""
+"You can find the topics that are currently being discussed in this table of "
+"contents. Clicking on a topic will filter the conversation to only show "
+"messages that are related to this topic."
+msgstr ""
+"คุณสามารถหาหัวข้อที่กำลังมีการสนทนาในสารบัญนี้ การคลิกที่หัวข้อจะช่วยกรองการสนทนาเพื่อแสดงเฉพาะข้อความที่เกี่ยวข้องกับหัวข้อนี้เท่านั้น"
+
+#: assembl/static/js/app/utils/tours/assemblTours.js:119
+msgid "Catch up on what’s been said"
+msgstr "การติดตามเนื้อหาที่ได้มีการพูดคุย"
+
+#: assembl/static/js/app/utils/tours/assemblTours.js:121
+msgid ""
+"Periodically an executive summary of the discussion is created to give you a "
+"quick overview of what was said since the last executive summary"
+msgstr ""
+"มีการจัดทำข้อสรุปการสนทนาของฝ่ายบริหารเป็นระยะ เพื่อให้คุณรับทราบได้ทันทีถึงภาพรวมของสิ่งที่กล่าวไว้จากข้อสรุปครั้งล่าสุดของฝ่ายบริหาร"
+
+#: assembl/static/js/app/utils/tours/assemblTours.js:131
+msgid "DISABLED"
+msgstr "ปิดใช้งาน"
+
+#: assembl/static/js/app/utils/tours/assemblTours.js:133
+msgid ""
+"Find the different syntheses produced since the beginning of the discussion"
+msgstr ""
+"ดูบทสังเคราะห์ซึ่งเกิดขึ้นตั้งแต่เริ่มต้นการสนทนา"
+
+#: assembl/static/js/app/utils/tours/assemblTours.js:143
+msgid "Catch up on the evolution"
+msgstr "การติดตามวิวัฒนาการ"
+
+#: assembl/static/js/app/utils/tours/assemblTours.js:145
+msgid ""
+"The facilitator of the discussion has written this synthesis to help you get "
+"on board of the discussion. Enjoy reading!"
+msgstr ""
+"ผู้อำนวยความสะดวกในการสนทนาได้จัดทำบทสังเคราะห์นี้ขึ้นเพื่อช่วยให้คุณได้ร่วมเป็นส่วนหนึ่งของการสนทนา ขอให้คุณสนุกกับการอ่าน!"
+
+#: assembl/static/js/app/utils/tours/assemblTours.js:155
+msgid "Dig more on an interesting idea and post your contribution"
+msgstr "รับทราบเพิ่มเติมเกี่ยวกับแนวคิดที่น่าสนใจและโพสต์แสดงแนวคิดของคุณ"
+
+#: assembl/static/js/app/utils/tours/assemblTours.js:157
+msgid ""
+"You can click on this idea to see current discussions happening on it. You "
+"would be able to start contributing on this idea from there."
+msgstr ""
+"คุณสามารถคลิกที่แนวคิดนี้เพื่อดูการสนทนาปัจจุบันที่เกิดขึ้น และเริ่มมีส่วนร่วมในการแสดงแนวคิดนี้ได้จากที่นั่น"
+
+#: assembl/static/js/app/utils/tours/assemblTours.js:170
+msgid "Stay informed"
+msgstr "รับทราบข้อมูล"
+
+#: assembl/static/js/app/utils/tours/assemblTours.js:171
+msgid ""
+"Notifications are set to go to your email. If you aren’t receiving them, "
+"make sure to check your spam folder! You can update your notification "
+"settings here."
+msgstr ""
+"มีการตั้งค่าการแจ้งเตือนไปที่อีเมลของคุณ หากคุณไม่ได้รับอีเมลแจ้งเตือน โปรดตรวจสอบที่โฟลเดอร์สแปม! คุณสามารถอัพเดตการตั้งค่าการแจ้งเตือนได้ที่นี่"
+
+#: assembl/static/js/app/views/agent.js:87
+#, python-format
+msgid "All messages by %s"
+msgstr "ข้อความทั้งหมดโดย %s"
+
+#: assembl/static/js/app/views/announcements.js:177
+msgid "Please give a title of this announcement..."
+msgstr "โปรดระบุชื่อเรื่องของประกาศนี้..."
+
+#: assembl/static/js/app/views/announcements.js:185
+msgid "Please write the content of this announcement here..."
+msgstr "โปรดเขียนเนื้อหาของประกาศนี้ที่นี่..."
+
+#: assembl/static/js/app/views/attachments.js:138
+#, python-format
+msgid "For URL %s in the text above"
+msgstr "สำหรับ URL %s ในข้อความข้างต้น"
+
+#: assembl/static/js/app/views/attachments.js:260
+#: assembl/templates/views/langStringEntry.tmpl:12
+msgid "Remove"
+msgstr "ลบ"
+
+#: assembl/static/js/app/views/attachments.js:267
+msgid "For the uploaded file"
+msgstr "สำหรับไฟล์ที่อัพโหลด"
+
+#: assembl/static/js/app/views/attachments.js:336
+#, python-format
+msgid ""
+"We are sorry, there was an error during the upload of the file \"%s\". "
+"Please try again."
+msgstr ""
+"ขออภัย เกิดข้อผิดพลาดระหว่างการอัพโหลดไฟล์  \"%s\"โปรดลองอีกครั้ง"
+
+#: assembl/static/js/app/views/attachments.js:507
+msgid "Upload an Image to the Idea Panel"
+msgstr "อัพโหลดภาพไปยังแผงแนวคิด"
+
+#: assembl/static/js/app/views/baseMessageList.js:186
+msgid "Recently active threads"
+msgstr "กลุ่มข้อความสนทนาที่ดำเนินอยู่ล่าสุด"
+
+#: assembl/static/js/app/views/baseMessageList.js:191
+msgid "Recently started threads"
+msgstr "กลุ่มข้อความสนทนาที่เพิ่งเริ่มต้น"
+
+#: assembl/static/js/app/views/baseMessageList.js:196
+msgid "Chronological threads"
+msgstr "กลุ่มข้อความสนทนาตามลำดับเวลา"
+
+#: assembl/static/js/app/views/baseMessageList.js:201
+msgid "Chronological threads + jump to oldest unread message"
+msgstr "กลุ่มข้อความสนทนาตามลำดับเวลา + ข้ามไปยังข้อความเก่าสุดที่ยังไม่ได้อ่าน"
+
+#: assembl/static/js/app/views/baseMessageList.js:206
+#: assembl/static/js/app/views/messageColumnsPanel.js:241
+msgid "Newest messages first"
+msgstr "ข้อความใหม่ที่สุดก่อน"
+
+#: assembl/static/js/app/views/baseMessageList.js:211
+#: assembl/static/js/app/views/messageColumnsPanel.js:246
+msgid "Most popular messages first"
+msgstr "ข้อความยอดนิยมก่อน"
+
+#: assembl/static/js/app/views/baseMessageList.js:691
+msgid "No messages"
+msgstr "ไม่มีข้อความ"
+
+#: assembl/static/js/app/views/baseMessageList.js:1046
+#: assembl/static/js/app/views/messageSend.js:191
+#: assembl/templates/do_password_change.jinja2:30
+#: assembl/templates/request_password_change.jinja2:28
+msgid "Send"
+msgstr "ส่ง"
+
+#: assembl/static/js/app/views/baseMessageList.js:1047
+msgid "Subject"
+msgstr "เรื่อง"
+
+#: assembl/static/js/app/views/baseMessageList.js:1048
+msgid "Add a subject above and start a new topic here"
+msgstr "เพิ่มเรื่องด้านบนและเริ่มต้นหัวข้อใหม่ที่นี่"
+
+#: assembl/static/js/app/views/baseMessageList.js:1049
+msgid "You need to type a comment first..."
+msgstr "คุณต้องพิมพ์ข้อคิดเห็นก่อน..."
+
+#: assembl/static/js/app/views/baseMessageList.js:1050
+msgid "You need to set a subject to add a new topic..."
+msgstr "คุณต้องตั้งหัวเรื่องเพื่อเพิ่มหัวข้อใหม่..."
+
+#: assembl/static/js/app/views/baseMessageList.js:1555
+msgid "Send to clipboard"
+msgstr "ส่งไปที่คลิปบอร์ด"
+
+#: assembl/static/js/app/views/baseMessageList.js:1557
+#: assembl/static/js/app/views/confirmModal.js:32
+#: assembl/static/js/app/views/messageSend.js:190
+#: assembl/templates/styleguide/components/Dialogs.jinja2:119
+#: assembl/templates/styleguide/components/Dialogs.jinja2:146
+#: assembl/templates/views/adminPartnerEditForm.tmpl:65
+#: assembl/templates/views/adminPartnerEditForm.tmpl:71
+#: assembl/templates/views/adminPartnerForm.tmpl:63
+#: assembl/templates/views/adminPartnerForm.tmpl:69
+#: assembl/templates/views/ckeditorField.tmpl:10
+#: assembl/templates/views/create-group.tmpl:128
+#: assembl/templates/views/messageModerationOptions.tmpl:32
+#: assembl/templates/views/message_translation_question_selection.tmpl:14
+#: assembl/templates/views/showSegmentByAnnotation.tmpl:9
+msgid "Cancel"
+msgstr "ยกเลิก"
+
+#: assembl/static/js/app/views/baseMessageList.js:1561
+msgid "You can drag the segment below directly to the table of ideas"
+msgstr "คุณสามารถลากเซ็กเมนต์ด้านล่างไปยังตารางแนวคิดได้โดยตรง"
+
+#: assembl/static/js/app/views/baseMessageList.js:1562
+msgid "You can also copy-paste from the text in the zone below"
+msgstr "นอกจากนี้คุณยังสามารถคัดลอกและวางจากข้อความในโซนด้านล่าง"
+
+#: assembl/static/js/app/views/baseMessageList.js:1606
+#, python-format
+msgid ""
+"This extract was organized in the idea \" %s \" by the facilitator of the "
+"debate"
+msgstr ""
+"เนื้อหาที่คัดลอกนี้ถูกรวบรวมไว้ในแนวคิด \" %s \" โดยผู้อำนวยความสะดวกในการอภิปราย"
+
+#: assembl/static/js/app/views/baseMessageList.js:1609
+msgid "This extract is in a harvester's clipboard and hasn' been sorted yet."
+msgstr "เนื้อหาที่คัดลอกนี้อยู่ในคลิปบอร์ดของผู้รวบรวมและยังไม่ได้แยกประเภท"
+
+#: assembl/static/js/app/views/baseMessageList.js:2265
+#, python-format
+msgid "%d new message has been posted.  Click here to refresh"
+msgid_plural "%d new messages have been posted.  Click here to refresh"
+msgstr[0] "%d มีการโพสต์ข้อความใหม่แล้ว คลิกที่นี่เพื่อรีเฟรช"
+
+#: assembl/static/js/app/views/confirmModal.js:33
+#: assembl/static/js/app/views/ideaPanel.js:720
+#: assembl/static/js/app/views/ideaPanel.js:731
+#: assembl/static/js/app/views/ideaPanel.js:740
+msgid "OK"
+msgstr "ตกลง"
+
+#: assembl/static/js/app/views/contextPage.js:91
+#: assembl/static/js/app/views/navigation/synthesisInNavigation.js:146
+msgid "No synthesis of the discussion has been published yet"
+msgstr "ยังไม่มีการเผยแพร่บทสังเคราะห์ของการสนทนา"
+
+#: assembl/static/js/app/views/contextPage.js:274
+#: assembl/templates/views/navigation.tmpl:21
+msgid "Home"
+msgstr "หน้าแรก"
+
+#: assembl/static/js/app/views/documents.js:102
+#, python-format
+msgid "Sorry, we have failed to upload your file \"%s\". Please try again."
+msgstr "ขออภัยเราไม่สามารถอัพโหลดไฟล์ของคุณได้ \"%s\"โปรดลองอีกครั้ง"
+
+#: assembl/static/js/app/views/externalVisualization.js:24
+#: assembl/templates/views/create-group.tmpl:107
+msgid "CI Dashboard"
+msgstr "แดชบอร์ด CI"
+
+#: assembl/static/js/app/views/facebookViews.js:40
+msgid ""
+"The following message was posted on Assembl:\n"
+"\n"
+"\n"
+msgstr ""
+"มีการโพสต์ข้อความต่อไปนี้ใน Assembl:\n"
+"\n"
+"\n"
+
+#: assembl/static/js/app/views/facebookViews.js:42
+#, python-format
+msgid ""
+"The following message was posted by %s on Assembl:\n"
+"\n"
+"\n"
+msgstr ""
+"มีการโพสต์ข้อความต่อไปนี้โดย %s ใน Assembl:\n"
+"\n"
+"\n"
+
+#: assembl/static/js/app/views/facebookViews.js:51
+msgid ""
+"Please be aware that comments below will be imported into a discussion found "
+"at "
+msgstr ""
+"โปรดทราบว่าข้อคิดเห็นด้านล่างจะถูกนำเข้าสู่การสนทนาซึ่งพบที่"
+
+#: assembl/static/js/app/views/facebookViews.js:297
+msgid ""
+"An error occured whilst communicating with Facebook. Close the box and try "
+"again."
+msgstr ""
+"เกิดข้อผิดพลาดขณะสื่อสารกับ Facebook ปิดกล่องแล้วลองอีกครั้ง"
+
+#: assembl/static/js/app/views/facebookViews.js:432
+msgid "You did not log into facebook. Please log-in to continue."
+msgstr "คุณไม่ได้ลงชื่อเข้าใช้ Facebook โปรดเข้าสู่ระบบเพื่อดำเนินการต่อ"
+
+#: assembl/static/js/app/views/facebookViews.js:451
+msgid ""
+"There was an issue with getting your Facebook login status. Please close "
+"this box and contact your discussion administrator."
+msgstr ""
+"เกิดปัญหาเกี่ยวกับสถานะการเข้าสู่ Facebook ของคุณ โปรดปิดกล่องนี้แล้วติดต่อผู้ดูแลระบบการสนทนาของคุณ"
+
+#: assembl/static/js/app/views/facebookViews.js:546
+msgid ""
+"Great! You already have a facebook account. Below are the list of "
+"permissions we need for the exportation process."
+msgstr ""
+"คุณมีบัญชี facebook อยู่แล้ว ด้านล่างนี้คือรายการสิทธิ์ที่เราต้องการสำหรับกระบวนการส่งออก"
+
+#: assembl/static/js/app/views/facebookViews.js:547
+msgid "Click here if you agree with these permissions."
+msgstr "คลิกที่นี่ หากคุณเห็นด้วยกับสิทธิ์เหล่านี้"
+
+#: assembl/static/js/app/views/facebookViews.js:551
+msgid ""
+"It appears that your session was expired. Click below to refresh your "
+"session. As always, below are the permissions that Assembl would need to "
+"continue."
+msgstr ""
+"ดูเหมือนว่าเซสชั่นของคุณหมดอายุแล้ว คลิกด้านล่างเพื่อรีเฟรชเซสชั่นของคุณ และเช่นเคย ด้านล่างคือสิทธิ์ที่ Assembl จะต้องดำเนินการต่อ"
+
+#: assembl/static/js/app/views/facebookViews.js:552
+msgid "Click here to continue."
+msgstr "คลิกที่นี่เพื่อดำเนินการต่อ"
+
+#: assembl/static/js/app/views/facebookViews.js:556
+msgid "You must create an account. Warning: This will refresh the page"
+msgstr "คุณต้องสร้างบัญชี คำเตือน: การดำเนินการนี้จะเป็นการรีเฟรชหน้า"
+
+#: assembl/static/js/app/views/facebookViews.js:557
+msgid "Sign in using your Facebook account"
+msgstr "ลงชื่อเข้าใช้โดยใช้บัญชี Facebook ของคุณ"
+
+#: assembl/static/js/app/views/facebookViews.js:799
+msgid ""
+"Assembl is a collective intelligence tool designed to enable open, "
+"democratic discussions that lead to idea generation and innovation."
+msgstr ""
+"Assembl เป็นเครื่องมืออัจฉริยะที่มีส่วนร่วมโดยทุกคน ซึ่งออกแบบมาเพื่อเปิดกว้างในการสนทนาแบบเสมอภาค โดยนำไปสู่การสร้างสรรค์และปรับปรุงแนวคิดใหม่"
+
+#: assembl/static/js/app/views/facebookViews.js:866
+msgid "Facebook was unable to create the post. Close the box and try again."
+msgstr "Facebook ไม่สามารถสร้างโพสต์ได้ ปิดกล่องแล้วลองอีกครั้ง"
+
+#: assembl/static/js/app/views/facebookViews.js:947
+msgid ""
+"Please select between pages, groups or your wall as the final destination to "
+"complete the form."
+msgstr ""
+"โปรดเลือกระหว่างเพจ กลุ่ม หรือพื้นที่โพสต์ข้อมูลของคุณ เพื่อเป็นปลายทางสุดท้ายในการกรอกแบบฟอร์ม"
+
+#: assembl/static/js/app/views/facebookViews.js:970
+msgid ""
+"Something went wrong on Assembl whilst creating your post. Please contact "
+"the Discussion administrator for more information."
+msgstr ""
+"มีบางอย่างผิดพลาดใน Assembl ขณะสร้างโพสต์ของคุณ โปรดติดต่อผู้ดูแลระบบการสนทนาเพื่อขอข้อมูลเพิ่มเติม"
+
+#: assembl/static/js/app/views/facebookViews.js:1066
+msgid "This account does NOT have a facebook account"
+msgstr "บัญชีนี้ “ไม่” มีบัญชี facebook"
+
+#: assembl/static/js/app/views/facebookViews.js:1084
+msgid "Could not create the message source"
+msgstr "ไม่สามารถสร้างแหล่งที่มาของข้อความ"
+
+#: assembl/static/js/app/views/facebookViews.js:1088
+#: assembl/static/js/app/views/facebookViews.js:1093
+msgid "There was an error creating the message source"
+msgstr "มีข้อผิดพลาดในการสร้างแหล่งที่มาของข้อความ"
+
+#: assembl/static/js/app/views/facebookViews.js:1214
+msgid "There was an error with creating a source of type"
+msgstr "มีข้อผิดพลาดในการสร้างแหล่งที่มาของประเภท"
+
+#: assembl/static/js/app/views/facebookViews.js:1254
+msgid "Please select a destination to export to before continuing"
+msgstr "โปรดเลือกปลายทางที่จะส่งออกก่อนดำเนินการต่อ"
+
+#: assembl/static/js/app/views/facebookViews.js:1258
+msgid "Please complete facebook login"
+msgstr "กรุณากรอกข้อมูลการเข้าสู่ facebook"
+
+#: assembl/static/js/app/views/ideaClassificationOnMessage.js:152
+msgid "Go to this idea"
+msgstr "ไปที่แนวคิดนี้"
+
+#: assembl/static/js/app/views/ideaClassificationOnMessage.js:362
+msgid "This message is linked to the following idea because: "
+msgid_plural "This message is linked to the %1$d following ideas because: "
+msgstr[0] "ข้อความนี้เชื่อมโยงกับแนวคิดต่อไปนี้เนื่องจาก: "
+
+#: assembl/static/js/app/views/ideaClassificationOnMessage.js:367
+msgid "Link between this message and the idea"
+msgid_plural "Links between this message and ideas"
+msgstr[0] "เชื่อมโยงระหว่างข้อความนี้กับแนวคิด"
+
+#: assembl/static/js/app/views/ideaInSynthesis.js:167
+#, python-format
+msgid "%d message is available under this idea"
+msgid_plural "%d messages are available under this idea"
+msgstr[0] "มี%d ข้อความอยู่ภายใต้แนวคิดนี้"
+
+#: assembl/static/js/app/views/ideaList.js:260
+#: assembl/templates/views/create-group.tmpl:42
+#: assembl/templates/views/ideaList.tmpl:14
+msgid "Table of ideas"
+msgstr "ตารางแนวคิด"
+
+#: assembl/static/js/app/views/ideaList.js:805
+msgid "You don't have the permission to do this."
+msgstr "คุณไม่มีสิทธิ์ทำสิ่งนี้"
+
+#: assembl/static/js/app/views/ideaPanel.js:211
+msgid "Idea"
+msgstr "แนวคิด"
+
+#: assembl/static/js/app/views/ideaPanel.js:214
+msgid ""
+"Detailled information about the currently selected idea in the Table of ideas"
+msgstr ""
+"รายละเอียดข้อมูลเกี่ยวกับแนวคิดที่ถูกเลือกในตารางแนวคิด"
+
+#: assembl/static/js/app/views/ideaPanel.js:222
+msgid "This idea has no sub-ideas"
+msgstr "แนวคิดนี้ไม่มีแนวคิดย่อย"
+
+#: assembl/static/js/app/views/ideaPanel.js:225
+#, python-format
+msgid "This idea has %d sub-idea"
+msgid_plural "This idea has %d sub-ideas"
+msgstr[0] "แนวคิดนี้มี %d แนวคิดย่อย"
+
+#: assembl/static/js/app/views/ideaPanel.js:246
+msgid "No extract was harvested"
+msgstr "ไม่มีการรวบรวมเนื้อหาที่คัดลอก"
+
+#: assembl/static/js/app/views/ideaPanel.js:249
+msgid "No important nugget was harvested"
+msgstr "ไม่มีการรวบรวมความลับสำคัญ"
+
+#: assembl/static/js/app/views/ideaPanel.js:254
+#, python-format
+msgid "%d extract was harvested"
+msgid_plural "%d extracts were harvested"
+msgstr[0] "มีการรวบรวม%d เนื้อหาที่คัดลอก"
+
+#: assembl/static/js/app/views/ideaPanel.js:257
+#, python-format
+msgid "%d important nugget was harvested"
+msgid_plural "%d important nuggets were harvested"
+msgstr[0] "มีการรวบรวม%d ความลับสำคัญ"
+
+#: assembl/static/js/app/views/ideaPanel.js:505
+#, python-format
+msgid "%d contributor"
+msgid_plural "%d contributors"
+msgstr[0] "%d ผู้แสดงแนวคิด"
+
+#: assembl/static/js/app/views/ideaPanel.js:527
+msgid "Short expression (only a few words) of the idea in the table of ideas."
+msgstr "การแสดงแนวคิดโดยใช้เวลาสั้นๆ (เพียงไม่กี่คำ) ในตารางแนวคิด"
+
+#: assembl/static/js/app/views/ideaPanel.js:719
+msgid "You cannot delete an idea while it has sub-ideas."
+msgstr "คุณไม่สามารถลบแนวคิดนั้นได้ หากมีแนวคิดย่อยอยู่"
+
+#: assembl/static/js/app/views/ideaPanel.js:730
+msgid "You cannot delete an idea associated to extracts."
+msgstr "คุณไม่สามารถลบแนวคิดที่เชื่อมโยงกับเนื้อหาที่คัดลอก"
+
+#: assembl/static/js/app/views/ideaPanel.js:739
+msgid "You cannot delete an idea associated to comments."
+msgstr "คุณไม่สามารถลบแนวคิดที่เชื่อมโยงกับข้อคิดเห็น"
+
+#: assembl/static/js/app/views/ideaPanel.js:759
+msgid "Confirm that you want to delete this idea."
+msgstr "ยืนยันว่าคุณต้องการลบแนวคิดนี้"
+
+#: assembl/static/js/app/views/ideaPanel.js:760
+#: assembl/static/js/app/views/message.js:1650
+msgid "No"
+msgstr "ไม่ใช่"
+
+#: assembl/static/js/app/views/ideaPanel.js:761
+#: assembl/static/js/app/views/message.js:1651
+msgid "Yes"
+msgstr "ใช่"
+
+#: assembl/static/js/app/views/ideaPanel.js:936
+msgid "Confirm that you want to send all extracts back to the clipboard."
+msgstr "ยืนยันว่าคุณต้องการส่งเนื้อหาที่คัดลอกทั้งหมดกลับไปที่คลิปบอร์ด"
+
+#: assembl/static/js/app/views/ideaPanel.js:1005
+msgid "You may want to describe this idea for users here..."
+msgstr "คุณอาจต้องการอธิบายแนวคิดนี้ให้กับผู้ใช้ที่นี่..."
+
+#: assembl/static/js/app/views/message.js:133
+msgid "This message is linked to the following idea: "
+msgid_plural "This message is linked to the following ideas: "
+msgstr[0] "ข้อความนี้เชื่อมโยงกับแนวคิดต่อไปนี้: "
+
+#: assembl/static/js/app/views/message.js:137
+#, python-format
+msgid "and %d other idea</a>"
+msgid_plural "and %d other ideas</a>"
+msgstr[0] "และ %d แนวคิดอื่นๆ</a>"
+
+#: assembl/static/js/app/views/message.js:802
+msgid "Type your response here..."
+msgstr "พิมพ์คำตอบของคุณที่นี่..."
+
+#: assembl/static/js/app/views/message.js:804
+msgid "Send your reply"
+msgstr "ส่งคำตอบของคุณ"
+
+#: assembl/static/js/app/views/message.js:806
+msgid "You did not type a response yet..."
+msgstr "คุณยังไม่ได้พิมพ์คำตอบ..."
+
+#: assembl/static/js/app/views/message.js:1029
+msgid "You"
+msgstr "คุณ"
+
+#: assembl/static/js/app/views/message.js:1034
+#, python-format
+msgid "You and %d Another person"
+msgid_plural "You and %d Other persons"
+msgstr[0] "คุณและ %d คนอื่น"
+
+#: assembl/static/js/app/views/message.js:1042
+#, python-format
+msgid "%d person"
+msgid_plural "%d persons"
+msgstr[0] "%d คน"
+
+#: assembl/static/js/app/views/message.js:1632
+msgid "Message has been successfully deleted."
+msgstr "ลบข้อความเรียบร้อยแล้ว"
+
+#: assembl/static/js/app/views/message.js:1643
+msgid "Error: Message could not be deleted."
+msgstr "ข้อผิดพลาด: ไม่สามารถลบข้อความได้"
+
+#: assembl/static/js/app/views/message.js:1649
+msgid "Are you sure you want to delete this message?"
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการลบข้อความนี้"
+
+#: assembl/static/js/app/views/messageColumnsPanel.js:170
+#: assembl/static/js/app/views/messageList.js:184
+msgid "Messages"
+msgstr "ข้อความ"
+
+#: assembl/static/js/app/views/messageColumnsPanel.js:251
+msgid "Oldest messages first"
+msgstr "ข้อความเก่าที่สุดก่อน"
+
+#: assembl/static/js/app/views/messageColumnsPanel.js:388
+#, python-format
+msgid "%d message on theme “%s”"
+msgid_plural "%d messages on theme “%s”"
+msgstr[0] "%d ข้อความในธีม “%s”"
+
+#: assembl/static/js/app/views/messageColumnsPanel.js:434
+#, python-format
+msgid "Add your thoughts on theme “%s”"
+msgstr "เพิ่มความคิดของคุณในธีม “%s”"
+
+#: assembl/static/js/app/views/messageDeletedByAdmin.js:20
+msgid "This message has been deleted by an administrator."
+msgstr "ข้อความนี้ถูกลบโดยผู้ดูแลระบบ"
+
+#: assembl/static/js/app/views/messageDeletedByUser.js:38
+msgid "This message has been deleted by its author."
+msgstr "ข้อความนี้ถูกลบโดยผู้เขียน"
+
+#: assembl/static/js/app/views/messageFamily.js:121
+#, python-format
+msgid "%d more message is available in this message's full context."
+msgid_plural "%d more messages are available in this message's full context."
+msgstr[0] "%d มีข้อความเพิ่มเติมในบริบททั้งหมดของข้อความนี้"
+
+#: assembl/static/js/app/views/messageFamily.js:123
+#, python-format
+msgid ""
+"Messages available in this message's full context are from %d more author."
+msgid_plural ""
+"Messages available in this message's full context are from %d more authors."
+"Messages available in this message's full context are from %d more authors."
+msgstr[0] "ข้อความต่างๆ ในบริบททั้งหมดของข้อความนี้มาจาก %d ผู้เขียนคนอื่นๆ"
+
+#: assembl/static/js/app/views/messageFamily.js:245
+#, python-format
+msgid "Zooming on the conversation around \"%s\""
+msgstr "เคลื่อนไปที่การสนทนาใกล้เคียง \"%s\""
+
+#: assembl/static/js/app/views/messageListHeader.js:191
+msgid "Add filter"
+msgstr "เพิ่มตัวกรอง"
+
+#: assembl/static/js/app/views/messageListPostQuery.js:40
+msgid "Threaded view"
+msgstr "มุมมองแบบเธรด"
+
+#: assembl/static/js/app/views/messageListPostQuery.js:48
+msgid "Oldest first"
+msgstr "เก่าที่สุดก่อน"
+
+#: assembl/static/js/app/views/messageListPostQuery.js:55
+msgid "Newest first"
+msgstr "ใหม่ที่สุดก่อน"
+
+#: assembl/static/js/app/views/messageListPostQuery.js:62
+msgid "Popularity"
+msgstr "ความนิยม"
+
+#: assembl/static/js/app/views/messageListPostQuery.js:517
+msgid "Clear filters"
+msgstr "ล้างตัวกรอง"
+
+#: assembl/static/js/app/views/messageListPostQuery.js:537
+msgid "No query has been executed yet"
+msgstr "ไม่มีการสืบค้นข้อมูลใดๆ"
+
+#: assembl/static/js/app/views/messageListPostQuery.js:544
+msgid "There is no message to display with those filters:"
+msgstr "ไม่มีข้อความที่จะแสดงด้วยตัวกรองเหล่านี้:"
+
+#: assembl/static/js/app/views/messageListPostQuery.js:547
+msgid "There are no messages in the discussion."
+msgstr "ไม่มีข้อความในการสนทนา"
+
+#: assembl/static/js/app/views/messageListPostQuery.js:555
+msgid " (unread)"
+msgstr "(ยังไม่ได้อ่าน)"
+
+#: assembl/static/js/app/views/messageListPostQuery.js:557
+msgid " (all unread)"
+msgstr "(ยังไม่ได้อ่านทั้งหมด)"
+
+#: assembl/static/js/app/views/messageListPostQuery.js:561
+#, python-format
+msgid " (%d unread)"
+msgid_plural " (%d unread)"
+msgstr[0] "(ยังไม่ได้อ่าน %d)"
+
+#: assembl/static/js/app/views/messageListPostQuery.js:567
+#, python-format
+msgid "Found %d message%s out of %d messages that:"
+msgid_plural "Found %d messages%s out of %d messages that:"
+msgstr[0] "พบ %d ข้อความ%s จาก %d ข้อความที่:"
+
+#: assembl/static/js/app/views/messageListPostQuery.js:570
+#, python-format
+msgid "Found %d message%s out of %d messages:"
+msgid_plural "Found %d messages%s out of %d messages:"
+msgstr[0] "พบ %d ข้อความ%s จาก %d ข้อความ:"
+
+#: assembl/static/js/app/views/messageSend.js:94
+msgid "Type your message here..."
+msgstr "พิมพ์ข้อความของคุณที่นี่..."
+
+#: assembl/static/js/app/views/messageSend.js:176
+#: assembl/templates/views/messageList.tmpl:43
+msgid "Start a new discussion thread"
+msgstr "เริ่มกลุ่มข้อความสนทนาใหม่"
+
+#: assembl/static/js/app/views/messageSend.js:223
+#, python-format
+msgid "Before you can reply to this message %s"
+msgstr "ก่อนที่คุณจะสามารถตอบกลับข้อความนี้ %s"
+
+#: assembl/static/js/app/views/messageSend.js:226
+#, python-format
+msgid "Before you can post a message %s"
+msgstr "ก่อนที่คุณจะสามารถโพสต์ข้อความได้ %s"
+
+#: assembl/static/js/app/views/messageSend.js:308
+msgid "You need to set a subject before you can send your message..."
+msgstr "คุณต้องตั้งหัวเรื่องก่อนจึงจะสามารถส่งข้อความได้..."
+
+#: assembl/static/js/app/views/messageSend.js:318
+msgid "You need to type a message before you can send your message..."
+msgstr "คุณต้องพิมพ์ข้อความก่อนจึงจะสามารถส่งข้อความได้..."
+
+#: assembl/static/js/app/views/messageSend.js:326
+msgid "Sending..."
+msgstr "กำลังส่ง..."
+
+#: assembl/static/js/app/views/messageSend.js:358
+msgid "Message posted!"
+msgstr "โพสต์ข้อความแล้ว!"
+
+#: assembl/static/js/app/views/messageTranslationQuestion.js:100
+msgid "Please select a language."
+msgstr "โปรดเลือกภาษา"
+
+#: assembl/static/js/app/views/messageTranslationQuestion.js:108
+msgid "You cannot select more than one language"
+msgstr "คุณไม่สามารถเลือกได้มากกว่าหนึ่งภาษา"
+
+#: assembl/static/js/app/views/messageTranslationQuestion.js:128
+#, python-format
+msgid "Select the language you wish to translate %s to:"
+msgstr "เลือกภาษาที่คุณต้องการแปล %s เป็น:"
+
+#: assembl/static/js/app/views/messageTranslationQuestion.js:289
+#, python-format
+msgid "Translate all messages from %s to %s?"
+msgstr "แปลข้อความทั้งหมดจาก %s เป็น %sหรือไม่"
+
+#: assembl/static/js/app/views/messageTranslationQuestion.js:300
+#, python-format
+msgid "Keep %s messages untranslated?"
+msgstr "ไม่ต้อง %s แปลข้อความใช่หรือไม่"
+
+#: assembl/static/js/app/views/messageTranslationQuestion.js:305
+msgid "Yes, Thanks!"
+msgstr "ใช่ ขอบคุณ!"
+
+#: assembl/static/js/app/views/messageTranslationQuestion.js:306
+msgid "Do not translate"
+msgstr "ไม่ต้องแปล"
+
+#: assembl/static/js/app/views/messageTranslationQuestion.js:307
+msgid "Translate to another language"
+msgstr "แปลเป็นภาษาอื่น"
+
+#: assembl/static/js/app/views/postFilters.js:120
+#, python-format
+msgid "%s (%s)"
+msgid_plural "%s (%s)"
+msgstr[0] "%s (%s)"
+
+#: assembl/static/js/app/views/postFilters.js:183
+#, python-format
+msgid "%s"
+msgstr "%s"
+
+#: assembl/static/js/app/views/postFilters.js:183
+#, python-format
+msgid "NOT %s"
+msgstr "ไม่ %s"
+
+#: assembl/static/js/app/views/postFilters.js:203
+msgid "Posts with specific ids"
+msgstr "โพสต์ที่มีรหัสเฉพาะ"
+
+#: assembl/static/js/app/views/postFilters.js:207
+msgid "Only include posts that are in a range of specific ids"
+msgstr "รวมเฉพาะโพสต์ที่อยู่ในช่วงของรหัสเฉพาะ"
+
+#: assembl/static/js/app/views/postFilters.js:224
+msgid "Related to idea"
+msgstr "เกี่ยวข้องกับแนวคิด"
+
+#: assembl/static/js/app/views/postFilters.js:227
+msgid ""
+"Only include messages related to the specified idea.  The filter is "
+"recursive:  Messages related to ideas that are descendents of the idea are "
+"included."
+msgstr ""
+"รวมเฉพาะข้อความที่เกี่ยวข้องกับแนวคิดที่ระบุเท่านั้น ตัวกรองเป็นแบบเรียกใช้ซ้ำ: มีการรวมข้อความที่เกี่ยวข้องกับแนวคิดซึ่งสืบทอดมาจากแนวคิดนั้น"
+
+#: assembl/static/js/app/views/postFilters.js:245
+#, python-format
+msgid "Discuss idea %s"
+msgid_plural "Discuss ideas: %s"
+msgstr[0] "อภิปรายแนวคิด %s"
+
+#: assembl/static/js/app/views/postFilters.js:245
+#: assembl/static/js/app/views/postFilters.js:289
+#: assembl/static/js/app/views/postFilters.js:333
+#: assembl/static/js/app/views/postFilters.js:368
+#: assembl/static/js/app/views/postFilters.js:423
+#: assembl/static/js/app/views/postFilters.js:451
+msgid " AND "
+msgstr " และ"
+
+#: assembl/static/js/app/views/postFilters.js:263
+msgid "Part of thread of"
+msgstr "ส่วนหนึ่งของกลุ่มข้อความสนทนาเกี่ยวกับ"
+
+#: assembl/static/js/app/views/postFilters.js:266
+msgid "Only include messages that are in the specified post reply thread."
+msgstr "รวมเฉพาะข้อความที่อยู่ในกลุ่มข้อความตอบกลับโพสต์ที่ระบุ"
+
+#: assembl/static/js/app/views/postFilters.js:280
+#: assembl/static/js/app/views/postFilters.js:324
+#, python-format
+msgid "synthesis \"%s\""
+msgstr "บทสังเคราะห์ \"%s\""
+
+#: assembl/static/js/app/views/postFilters.js:283
+#: assembl/static/js/app/views/postFilters.js:327
+#, python-format
+msgid "message \"%s\""
+msgstr "ข้อความ \"%s\""
+
+#: assembl/static/js/app/views/postFilters.js:289
+#, python-format
+msgid "Are in the conversation that follows: %s"
+msgstr "อยู่ในการสนทนาดังต่อไปนี้: %s"
+
+#: assembl/static/js/app/views/postFilters.js:307
+msgid "Part of the context of"
+msgstr "ส่วนหนึ่งของบริบทเกี่ยวกับ"
+
+#: assembl/static/js/app/views/postFilters.js:310
+msgid ""
+"Only include messages that are in the specified post reply thread or "
+"ancestry."
+msgstr ""
+"รวมเฉพาะข้อความที่อยู่ในกลุ่มข้อความตอบกลับโพสต์ที่ระบุหรือในมูลเหตุ"
+
+#: assembl/static/js/app/views/postFilters.js:333
+#, python-format
+msgid "Are in the context of: %s"
+msgstr "อยู่ในบริบทของ: %s"
+
+#: assembl/static/js/app/views/postFilters.js:351
+msgid "Posted by"
+msgstr "โพสต์โดย"
+
+#: assembl/static/js/app/views/postFilters.js:354
+msgid "Only include messages that are posted by a specific user."
+msgstr "รวมเฉพาะข้อความที่โพสต์โดยผู้ใช้คนใดคนหนึ่ง"
+
+#: assembl/static/js/app/views/postFilters.js:363
+#: assembl/static/js/app/views/postFilters.js:418
+#, python-format
+msgid "\"%s\""
+msgstr "\"%s\""
+
+#: assembl/static/js/app/views/postFilters.js:368
+#, python-format
+msgid "Are posted by: %s"
+msgstr "โพสต์โดย: %s"
+
+#: assembl/static/js/app/views/postFilters.js:386
+msgid "Messages I posted"
+msgstr "ข้อความที่ฉันโพสต์"
+
+#: assembl/static/js/app/views/postFilters.js:389
+msgid "Only include messages that I posted."
+msgstr "รวมเฉพาะข้อความที่ฉันโพสต์เท่านั้น"
+
+#: assembl/static/js/app/views/postFilters.js:406
+msgid "Replies to"
+msgstr "ตอบกลับไปยัง"
+
+#: assembl/static/js/app/views/postFilters.js:409
+msgid "Only include messages that reply to a specific user."
+msgstr "รวมเฉพาะข้อความที่ตอบกลับไปยังผู้ใช้คนใดคนหนึ่ง"
+
+#: assembl/static/js/app/views/postFilters.js:423
+#, python-format
+msgid "Replies to: %s"
+msgstr "ตอบกลับไปยัง: %s"
+
+#: assembl/static/js/app/views/postFilters.js:441
+msgid "In column category"
+msgstr "ในคอลัมน์หมวดหมู่"
+
+#: assembl/static/js/app/views/postFilters.js:444
+msgid ""
+"Only include messages that were classified in a specific category. Use \"null"
+"\" for no category."
+msgstr ""
+"รวมเฉพาะข้อความที่จัดอยู่ในหมวดหมู่ที่เฉพาะเจาะจง ใช้ \"ค่าว่าง\" สำหรับข้อความที่ไม่มีหมวดหมู่"
+
+#: assembl/static/js/app/views/postFilters.js:451
+#, python-format
+msgid "In category: %s"
+msgstr "ในหมวดหมู่: %s"
+
+#: assembl/static/js/app/views/postFilters.js:469
+msgid "Messages that reply to me"
+msgstr "ข้อความที่ตอบกลับมายังฉัน"
+
+#: assembl/static/js/app/views/postFilters.js:472
+msgid "Only include messages that reply one of the messages I posted."
+msgstr "รวมเฉพาะข้อความที่ตอบกลับข้อความใดข้อความหนึ่งที่ฉันโพสต์ไว้"
+
+#: assembl/static/js/app/views/postFilters.js:492
+#: assembl/templates/views/orphanMessagesInIdeaList.tmpl:4
+msgid "Messages not yet associated with an idea"
+msgstr "ข้อความที่ยังไม่ได้เชื่อมโยงกับแนวคิด"
+
+#: assembl/static/js/app/views/postFilters.js:495
+msgid "Only include messages that are not found in any idea."
+msgstr "รวมเฉพาะข้อความที่ไม่พบในแนวคิดใดๆ"
+
+#: assembl/static/js/app/views/postFilters.js:515
+msgid "Synthesis messages"
+msgstr "ข้อความบทสังเคราะห์"
+
+#: assembl/static/js/app/views/postFilters.js:518
+msgid "Only include messages that represent a synthesis of the discussion."
+msgstr "รวมเฉพาะข้อความที่อธิบายบทสังเคราะห์ของการสนทนาเท่านั้น"
+
+#: assembl/static/js/app/views/postFilters.js:540
+msgid "Have unread value"
+msgstr "มีค่าที่ยังไม่ได้อ่าน"
+
+#: assembl/static/js/app/views/postFilters.js:546
+msgid "You haven't read yet"
+msgstr "คุณยังไม่ได้อ่าน"
+
+#: assembl/static/js/app/views/postFilters.js:548
+msgid "You've already read"
+msgstr "คุณได้อ่านแล้ว"
+
+#: assembl/static/js/app/views/postFilters.js:576
+msgid "Unread messages"
+msgstr "ข้อความที่ยังไม่ได้อ่าน"
+
+#: assembl/static/js/app/views/postFilters.js:579
+msgid ""
+"Only include messages you haven't read yet, or you manually marked unread."
+msgstr ""
+"รวมเฉพาะข้อความที่คุณยังไม่ได้อ่าน หรือที่คุณทำเครื่องหมายด้วยตัวเองว่ายังไม่ได้อ่าน"
+
+#: assembl/static/js/app/views/postFilters.js:599
+msgid "Read messages"
+msgstr "อ่านข้อความ"
+
+#: assembl/static/js/app/views/postFilters.js:602
+msgid "Only include messages that have previously been marked read."
+msgstr "รวมเฉพาะข้อความที่เคยทำเครื่องหมายว่าอ่านแล้ว"
+
+#: assembl/static/js/app/views/postFilters.js:642
+msgid "Messages posted after..."
+msgstr "ข้อความที่โพสต์หลัง..."
+
+#: assembl/static/js/app/views/postFilters.js:648
+msgid "Only include posts created after a given date."
+msgstr "รวมเฉพาะโพสต์ที่สร้างหลังจากวันที่ที่ระบุ"
+
+#: assembl/static/js/app/views/postFilters.js:652
+msgid ""
+"Please type a date. The filter will then show only posts which have been "
+"created after this date. Example: 2015-01-01"
+msgstr ""
+"โปรดพิมพ์วันที่ จากนั้นตัวกรองจะแสดงเฉพาะโพสต์ที่สร้างขึ้นหลังจากวันที่นี้เท่านั้น ตัวอย่าง: 2015-01-01 "
+
+#: assembl/static/js/app/views/postFilters.js:694
+msgid "Messages posted before..."
+msgstr "ข้อความที่โพสต์ก่อน..."
+
+#: assembl/static/js/app/views/postFilters.js:700
+msgid "Only include posts created before a given date."
+msgstr "รวมเฉพาะโพสต์ที่สร้างก่อนวันที่ที่ระบุ"
+
+#: assembl/static/js/app/views/postFilters.js:704
+msgid ""
+"Please type a date. The filter will then show only posts which have been "
+"created before this date. Example: 2015-01-01"
+msgstr ""
+"โปรดพิมพ์วันที่ จากนั้นตัวกรองจะแสดงเฉพาะโพสต์ที่สร้างขึ้นก่อนวันที่นี้เท่านั้น ตัวอย่าง: 2015-01-01"
+
+#: assembl/static/js/app/views/postFilters.js:744
+#, python-format
+msgid "Messages posted since the last synthesis (%s)"
+msgstr "ข้อความที่โพสต์ตั้งแต่การสังเคราะห์ล่าสุด (%s)"
+
+#: assembl/static/js/app/views/postFilters.js:748
+msgid "Only include posts created after the last synthesis."
+msgstr "รวมเฉพาะโพสต์ที่สร้างขึ้นหลังจากการสังเคราะห์ครั้งล่าสุด"
+
+#: assembl/static/js/app/views/postFilters.js:771
+msgid "Deleted messages"
+msgstr "ข้อความที่ถูกลบ"
+
+#: assembl/static/js/app/views/postFilters.js:774
+msgid ""
+"Only include messages that have been deleted (by their author or by an "
+"administrator), and their ancestors."
+msgstr ""
+"รวมเฉพาะข้อความที่ถูกลบ (โดยผู้เขียนหรือโดยผู้ดูแลระบบ) และข้อความที่สืบทอดต่อมา"
+
+#: assembl/static/js/app/views/postFilters.js:811
+msgid "Show also deleted messages"
+msgstr "แสดงข้อความที่ถูกลบด้วย"
+
+#: assembl/static/js/app/views/postFilters.js:814
+msgid ""
+"Also include messages that have been deleted (by their author or by an "
+"administrator)."
+msgstr ""
+"รวมข้อความที่ถูกลบ (โดยผู้เขียนหรือโดยผู้ดูแลระบบ) ด้วย"
+
+#: assembl/static/js/app/views/preferencesView.js:153
+msgid "Your settings were reset to default"
+msgstr "การตั้งค่าของคุณถูกรีเซ็ตเป็นค่าเริ่มต้น"
+
+#: assembl/static/js/app/views/preferencesView.js:157
+msgid "Your settings were not be reset, but could not be read back."
+msgstr "การตั้งค่าของคุณไม่ได้ถูกรีเซ็ต แต่จะไม่สามารถอ่านย้อนหลังได้"
+
+#: assembl/static/js/app/views/preferencesView.js:163
+msgid "Your settings could not be reset."
+msgstr "ไม่สามารถรีเซ็ตการตั้งค่าของคุณได้"
+
+#: assembl/static/js/app/views/preferencesView.js:349
+msgid "This is not valid JSON: "
+msgstr "นี่ไม่ใช่ JSON ที่ถูกต้อง: "
+
+#: assembl/static/js/app/views/preferencesView.js:428
+msgid "Please enter a number"
+msgstr "โปรดป้อนหมายเลข"
+
+#: assembl/static/js/app/views/preferencesView.js:527
+msgid "This does not appear to be a URL"
+msgstr "นี่ดูเหมือนว่าไม่ใช่ URL"
+
+#: assembl/static/js/app/views/preferencesView.js:546
+msgid "This does not appear to be an email"
+msgstr "นี่ดูเหมือนว่าไม่ใช่อีเมล"
+
+#: assembl/static/js/app/views/preferencesView.js:566
+msgid "This does not appear to be a domain"
+msgstr "นี่ดูเหมือนว่าไม่ใช่โดเมน"
+
+#: assembl/static/js/app/views/preferencesView.js:901
+msgid "The following settings were not saved: "
+msgstr "ไม่ได้บันทึกการตั้งค่าต่อไปนี้: "
+
+#: assembl/static/js/app/views/admin/adminDiscussion.js:96
+#: assembl/static/js/app/views/preferencesView.js:904
+#: assembl/static/js/app/views/sourceEditView.js:49
+#: assembl/static/js/app/views/user/account.js:126
+#: assembl/static/js/app/views/user/profile.js:66
+msgid "Your settings were saved!"
+msgstr "บันทึกการตั้งค่าของคุณแล้ว!"
+
+#: assembl/static/js/app/views/preferencesView.js:910
+msgid "Your settings are up-to-date."
+msgstr "การตั้งค่าของคุณเป็นข้อมูลล่าสุด"
+
+#: assembl/static/js/app/views/segmentList.js:321
+#: assembl/static/js/app/views/segmentList.js:367
+#: assembl/static/js/app/views/segmentList.js:370
+#: assembl/templates/views/create-group.tmpl:118
+msgid "Clipboard"
+msgstr "คลิปบอร์ด"
+
+#: assembl/static/js/app/views/segmentList.js:370
+msgid "empty"
+msgstr "ว่างเปล่า"
+
+#: assembl/static/js/app/views/segmentList.js:557
+msgid "Are you sure you want to empty your entire clipboard?"
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการล้างข้อมูลทั้งคลิปบอร์ด"
+
+#: assembl/static/js/app/views/admin/adminDiscussion.js:99
+#: assembl/static/js/app/views/sourceEditView.js:53
+#: assembl/static/js/app/views/user/account.js:129
+#: assembl/static/js/app/views/user/profile.js:69
+msgid "Your settings failed to update."
+msgstr "ไม่สามารถอัพเดตการตั้งค่าของคุณได้"
+
+#: assembl/static/js/app/views/statistics.js:71
+msgid "Evolution of the total number of messages"
+msgstr "วิวัฒนาการของจำนวนข้อความทั้งหมด"
+
+#: assembl/static/js/app/views/statistics.js:71
+msgid "Evolution of the number of messages posted"
+msgstr "วิวัฒนาการของจำนวนข้อความที่โพสต์"
+
+#: assembl/static/js/app/views/statistics.js:72
+#: assembl/templates/views/navigation.tmpl:28
+#: assembl/templates/views/statistics.tmpl:5
+msgid "Statistics"
+msgstr "สถิติ"
+
+#: assembl/static/js/app/views/statistics.js:377
+msgid "messages"
+msgstr "ข้อความ"
+
+#: assembl/static/js/app/views/statistics.js:612
+#: assembl/static/js/app/views/statistics.js:625
+msgid "messages, posted by"
+msgstr "ข้อความ โพสต์โดย"
+
+#: assembl/static/js/app/views/statistics.js:789
+msgid "Not enough data yet."
+msgstr "ข้อมูลยังไม่เพียงพอ"
+
+#: assembl/static/js/app/views/statistics.js:857
+msgid "last week"
+msgstr "สัปดาห์ที่ผ่านมา"
+
+#: assembl/static/js/app/views/statistics.js:860
+msgid "last 2 weeks"
+msgstr "2 สัปดาห์ที่ผ่านมา"
+
+#: assembl/static/js/app/views/statistics.js:863
+msgid "last month"
+msgstr "เดือนที่ผ่านมา"
+
+#: assembl/static/js/app/views/statistics.js:866
+msgid "last 3 months"
+msgstr "3 เดือนที่ผ่านมา"
+
+#: assembl/static/js/app/views/statistics.js:869
+msgid "last 6 months"
+msgstr "6 เดือนที่ผ่านมา"
+
+#: assembl/static/js/app/views/statistics.js:872
+msgid "last year"
+msgstr "ปีที่ผ่านมา"
+
+#: assembl/static/js/app/views/statistics.js:1027
+#, python-format
+msgid "%d participant has contributed in the %s"
+msgid_plural "%d participants have contributed in the %s"
+msgstr[0] "%d ผู้เข้าร่วมแสดงแนวคิดใน %s"
+
+#: assembl/static/js/app/views/statistics.js:1036
+#, python-format
+msgid "%d new participant started contributing in the %s"
+msgid_plural "%d new participants started contributing in the %s"
+msgstr[0] "%d ผู้เข้าร่วมใหม่เริ่มแสดงแนวคิดใน %s"
+
+#: assembl/static/js/app/views/statistics.js:1046
+#, python-format
+msgid "%d active participant had contributed before %s"
+msgid_plural "%d active participants had contributed before %s"
+msgstr[0] "%d ผู้เข้าร่วมเดิมได้แสดงแนวคิดมาก่อน %s"
+
+#: assembl/static/js/app/views/statistics.js:1059
+#, python-format
+msgid "%d participant's last contribution was prior to %s"
+msgid_plural "%d participants' last contribution was prior to %s"
+msgstr[0] "%d การแสดงแนวคิดครั้งล่าสุดของผู้เข้าร่วมเกิดขึ้นก่อน %s"
+
+#: assembl/static/js/app/views/statistics.js:1074
+#, python-format
+msgid "%d participant has contributed since the beginning of the discussion"
+msgid_plural ""
+"%d participants have contributed since the beginning of the discussion"
+"%d participants have contributed since the beginning of the discussion"
+msgstr[0] "%d ผู้เข้าร่วมได้แสดงแนวคิดตั้งแต่เริ่มต้นการสนทนา"
+
+#: assembl/static/js/app/views/statistics.js:1086
+msgid "Contributors active recently"
+msgstr "ผู้แสดงแนวคิดที่ใช้งานอยู่เมื่อเร็วๆ นี้"
+
+#: assembl/static/js/app/views/statistics.js:1090
+msgid "Contributors inactive recently"
+msgstr "ผู้แสดงแนวคิดที่ไม่ได้ใช้งานเมื่อเร็วๆ นี้"
+
+#: assembl/static/js/app/views/synthesisPanel.js:113
+#: assembl/templates/views/navigation.tmpl:3
+#: assembl/templates/views/synthesisContext.tmpl:6
+msgid "Synthesis"
+msgstr "การสังเคราะห์ "
+
+#: assembl/static/js/app/views/synthesisPanel.js:227
+msgid "A short title for the synthesis"
+msgstr "หัวข้อสั้นๆ สำหรับการสังเคราะห์"
+
+#: assembl/static/js/app/views/synthesisPanel.js:228
+msgid "New Synthesis"
+msgstr "การสังเคราะห์ใหม่"
+
+#: assembl/static/js/app/views/synthesisPanel.js:239
+msgid "You can add an introduction to your synthesis here..."
+msgstr "คุณสามารถเพิ่มบทนำในการสังเคราะห์ได้ที่นี่..."
+
+#: assembl/static/js/app/views/synthesisPanel.js:251
+msgid "You can add a conclusion to your synthesis here..."
+msgstr "คุณสามารถเพิ่มข้อสรุปในการสังเคราะห์ได้ที่นี่..."
+
+#: assembl/static/js/app/views/synthesisPanel.js:321
+msgid ""
+"Are you sure you want to publish the synthesis? You will not be able to "
+"delete it afterwards, and participants who subscribed to notifications "
+"related to the synthesis will receive a notification by email."
+msgstr ""
+"คุณแน่ใจหรือไม่ว่าต้องการเผยแพร่บทสังเคราะห์ คุณจะไม่สามารถลบข้อมูลนี้ได้ในภายหลังและผู้เข้าร่วมที่สมัครรับการแจ้งเตือนที่เกี่ยวข้องกับบทสังเคราะห์นี้จะได้รับการแจ้งเตือนทางอีเมล"
+
+#: assembl/static/js/app/views/synthesisPanel.js:344
+msgid "Synthesis has been successfully published!"
+msgstr "บทสังเคราะห์ได้รับการเผยแพร่เรียบร้อยแล้ว!"
+
+#: assembl/static/js/app/views/synthesisPanel.js:351
+msgid "Failed publishing synthesis!"
+msgstr "การเผยแพร่บทสังเคราะห์ล้มเหลว!"
+
+#: assembl/static/js/app/views/tokenVoteSession.js:264
+#, python-format
+msgid "<span class='available-tokens-number'>%d</span> remaining %s token"
+msgid_plural ""
+"<span class='available-tokens-number'>%d</span> remaining %s tokens"
+"<span class='available-tokens-number'>%d</span> remaining %s tokens"
+msgstr[0] "โทเค็น <span class='available-tokens-number'>%d</span> ที่เหลือ %s"
+
+#: assembl/static/js/app/views/tokenVoteSession.js:535
+#, python-format
+msgid "set %d tokens"
+msgstr "กำหนด %d โทเค็น"
+
+#: assembl/static/js/app/views/tokenVoteSession.js:566
+msgid "You don't have enough tokens remaining."
+msgstr "คุณไม่มีโทเค็นเหลือเพียงพอ"
+
+#: assembl/static/js/app/views/tokenVoteSession.js:950
+msgid "See Description"
+msgstr "ดูคำอธิบาย"
+
+#: assembl/static/js/app/views/tokenVoteSession.js:1037
+#, python-format
+msgid ""
+"%d token \"%s\" was voted on this idea, out of a total %d \"%s\" tokens "
+"voted "
+msgid_plural ""
+"%d tokens \"%s\" were voted on this idea, out of a total %d \"%s\" tokens "
+"%d tokens \"%s\" were voted on this idea, out of a total %d \"%s\" tokens "
+"voted"
+"voted"
+msgstr[0] "%d โทเค็น \"%s\" ได้รับการโหวตที่แนวคิดนี้ จากทั้งหมด %d \"%s\" โทเค็นที่โหวด"
+
+#: assembl/static/js/app/views/tokenVoteSession.js:1093
+msgid "Hide Description"
+msgstr "ซ่อนคำอธิบาย"
+
+#: assembl/static/js/app/views/tokenVoteSession.js:1215
+#, python-format
+msgid "Token: \"%s\""
+msgstr "โทเค็น: \"%s\""
+
+#: assembl/static/js/app/views/tokenVoteSession.js:1353
+#, python-format
+msgid ""
+"%d participant voted between %s and %s. The number of tokens available for "
+"voting per participant:"
+msgid_plural ""
+"%d participants voted between %s and %s. The number of tokens available for "
+"%d participants voted between %s and %s. The number of tokens available for "
+"voting per participant:"
+"voting per participant:"
+msgstr[0] "%d ผู้เข้าร่วมที่โหวตระหว่าง %s และ %sจำนวนโทเค็นที่สามารถโหวตได้ต่อผู้เข้าร่วม:"
+
+#: assembl/static/js/app/views/tokenVoteSession.js:1362
+#, python-format
+msgid "<strong>%d</strong> token of type \"%s\""
+msgid_plural "<strong>%d</strong> tokens of type \"%s\""
+msgstr[0] "<strong>%d</strong> โทเค็นของประเภท \"%s\""
+
+#: assembl/static/js/app/views/tokenVoteSession.js:1411
+msgid "Token Vote Results"
+msgstr "ผลการโหวตโทเค็น "
+
+#: assembl/static/js/app/views/tokenVoteSession.js:1602
+msgid "Guideline"
+msgstr "คำแนะนำ"
+
+#: assembl/static/js/app/views/tokenVoteSession.js:1603
+msgid ""
+"Split your tokens among the ideas of your choice. By default, your vote is "
+"neutral per project."
+msgstr ""
+"แบ่งโทเค็นของคุณให้กับแนวคิดต่างๆ ที่คุณเลือก ตามค่าเริ่มต้นการโหวตของคุณจะมีความเป็นกลางสำหรับแต่ละโครงการ"
+
+#: assembl/static/js/app/views/tokenVoteSession.js:1604
+msgid "Save my votes"
+msgstr "บันทึกการโหวตของฉัน"
+
+#: assembl/static/js/app/views/tokenVoteSession.js:1772
+msgid "Collective votes"
+msgstr "การโหวตเป็นกลุ่ม"
+
+#: assembl/static/js/app/views/tokenVoteSession.js:1807
+msgid "Your vote has been saved successfully."
+msgstr "บันทึกการโหวตของคุณเรียบร้อยแล้ว"
+
+#: assembl/static/js/app/views/tokenVoteSession.js:1811
+msgid "Go back to the discussion"
+msgstr "กลับไปที่การสนทนา"
+
+#: assembl/static/js/app/views/tokenVoteSession.js:1815
+msgid "Modify my vote"
+msgstr "แก้ไขการโหวตของฉัน"
+
+#: assembl/static/js/app/views/tokenVoteSession.js:1839
+#: assembl/static/js/app/views/tokenVoteSession.js:1870
+msgid "Vote confirmation"
+msgstr "ยืนยันการโหวต"
+
+#: assembl/static/js/app/views/admin/adminDiscussion.js:116
+msgid "The logo will show like this:"
+msgstr "โลโก้จะแสดงดังนี้:"
+
+#: assembl/static/js/app/views/admin/adminMessageColumns.js:100
+msgid "Columns saved"
+msgstr "คอลัมน์ที่บันทึกไว้"
+
+#: assembl/static/js/app/views/admin/adminMessageColumns.js:319
+msgid "Define columns"
+msgstr "กำหนดคอลัมน์"
+
+#: assembl/static/js/app/views/admin/adminTimelineEvents.js:247
+#: assembl/static/js/app/views/admin/adminTimelineEvents.js:257
+msgid "Invalid date and time"
+msgstr "วันที่และเวลาไม่ถูกต้อง"
+
+#: assembl/static/js/app/views/admin/generalSource.js:79
+msgid "There was a reimport error!"
+msgstr "มีข้อผิดพลาดในการนำเข้าใหม่!"
+
+#: assembl/static/js/app/views/admin/generalSource.js:82
+msgid "Reimport has begun! It can take up to 15 minutes to complete."
+msgstr "การนำเข้าใหม่ได้เริ่มแล้ว! อาจใช้เวลาถึง 15 นาทีจึงจะเสร็จสมบูรณ์"
+
+#: assembl/static/js/app/views/admin/generalSource.js:84
+msgid "Reimport failed."
+msgstr "การนำเข้าใหม่ล้มเหลว"
+
+#: assembl/static/js/app/views/admin/generalSource.js:93
+msgid "There was a reprocess error!"
+msgstr "มีข้อผิดพลาดในการประมวลผลใหม่!"
+
+#: assembl/static/js/app/views/admin/generalSource.js:96
+msgid "Reprocess has begun! It can take up to 15 minutes to complete."
+msgstr "การประมวลผลใหม่ได้เริ่มแล้ว! อาจใช้เวลาถึง 15 นาทีจึงจะเสร็จสมบูรณ์"
+
+#: assembl/static/js/app/views/admin/generalSource.js:98
+msgid "Reprocess failed"
+msgstr "การประมวลผลใหม่ล้มเหลว"
+
+#: assembl/static/js/app/views/admin/generalSource.js:117
+msgid "Import has begun!"
+msgstr "การนำเข้าได้เริ่มแล้ว!"
+
+#: assembl/static/js/app/views/groups/panelWrapper.js:186
+#: assembl/templates/views/panelWrapper.tmpl:34
+msgid "Maximize panel"
+msgstr "ขยายแผงใหญ่สุด"
+
+#: assembl/static/js/app/views/groups/panelWrapper.js:197
+#: assembl/templates/views/navigation.tmpl:5
+#: assembl/templates/views/navigation.tmpl:14
+#: assembl/templates/views/panelWrapper.tmpl:8
+msgid "Minimize panel"
+msgstr "ย่อแผงเล็กสุด"
+
+#: assembl/static/js/app/views/groups/panelWrapper.js:233
+msgid "Unlock panel"
+msgstr "ปลดล็อคแผง"
+
+#: assembl/static/js/app/views/groups/panelWrapper.js:263
+msgid ""
+"We have locked the panel for you, so its content won't change while you're "
+"writing your message. Click here to unlock"
+msgstr ""
+"เราได้ล็อคแผงไว้ให้คุณ ดังนั้นเนื้อหาในแผงจะไม่เปลี่ยนแปลงในขณะที่คุณกำลังเขียนข้อความ คลิกที่นี่เพื่อปลดล็อค"
+
+#: assembl/static/js/app/views/groups/panelWrapper.js:266
+msgid ""
+"We have unlocked the panel for you, so its content can change now that "
+"you're not writing a message anymore. Click here to lock it back"
+msgstr ""
+"เราได้ปลดล็อคแผงไว้ให้คุณ ดังนั้นเนื้อหาในแผงจะสามารถเปลี่ยนแปลงได้โดยที่คุณไม่ได้เขียนข้อความใดอีก คลิกที่นี่เพื่อล็อคกลับ"
+
+#: assembl/static/js/app/views/groups/panelWrapper.js:270
+msgid "We have locked the panel for you. Click here to unlock"
+msgstr "เราได้ล็อคแผงไว้ให้คุณ คลิกที่นี่เพื่อปลดล็อค"
+
+#: assembl/static/js/app/views/groups/panelWrapper.js:273
+msgid "We have unlocked the panel for you. Click here to lock it back"
+msgstr "เราได้ปลดล็อกแผงไว้ให้คุณ คลิกที่นี่เพื่อล็อคกลับ"
+
+#: assembl/static/js/app/views/groups/panelWrapper.js:311
+#: assembl/templates/views/panelWrapper.tmpl:14
+msgid "Lock panel"
+msgstr "ล็อคแผง"
+
+#: assembl/static/js/app/views/modals/discussionStatisticsModal.js:95
+msgid "The end date should be later than the start date"
+msgstr "วันที่สิ้นสุดต้องช้ากว่าวันที่เริ่มต้น"
+
+#: assembl/static/js/app/views/modals/discussionStatisticsModal.js:187
+#: assembl/templates/views/navBarLeft.tmpl:25
+msgid "Discussion statistics"
+msgstr "สถิติการสนทนา"
+
+#: assembl/static/js/app/views/modals/ideaInModal.js:44
+#: assembl/static/js/app/views/modals/ideaInModal.js:49
+#, python-format
+msgid "Exploring idea \"%s\""
+msgstr "สำรวจแนวคิด \"%s\""
+
+#: assembl/static/js/app/views/user/account.js:193
+msgid "Empty email"
+msgstr "อีเมลว่างเปล่า"
+
+#: assembl/static/js/app/views/user/account.js:198
+msgid "Invalid email"
+msgstr "อีเมลไม่ถูกต้อง"
+
+#: assembl/static/js/app/views/user/account.js:210
+msgid "Your settings were saved"
+msgstr "บันทึกการตั้งค่าของคุณแล้ว"
+
+#: assembl/static/js/app/views/user/account.js:216
+msgid "Your settings failed to update"
+msgstr "ไม่สามารถอัพเดตการตั้งค่าของคุณได้"
+
+#: assembl/tasks/email_discussion_creator.py:69
+msgid "Your consultation was created"
+msgstr "การประชุมหารือของคุณถูกสร้างขึ้น"
+
+#: assembl/templates/adminIndex.jinja2:3
+msgid "Administration"
+msgstr "การจัดการ"
+
+#: assembl/templates/cannot_read_discussion.jinja2:4
+msgid "You are not authorized to read this discussion."
+msgstr "คุณไม่ได้รับอนุญาตให้อ่านการสนทนานี้"
+
+#: assembl/templates/cannot_read_discussion.jinja2:5
+#, python-format
+msgid ""
+"You may <a href=\"%(logout)s\">logout</a> and login as another user with "
+"those permissions."
+msgstr ""
+"คุณสามารถ <a href=\"%(logout)s\">ออกจากระบบ</a> และเข้าสู่ระบบในฐานะผู้ใช้รายอื่นที่มีสิทธิ์ดังกล่าว"
+
+#: assembl/templates/confirm.jinja2:23
+msgid "Resend the email"
+msgstr "ส่งอีเมลอีกครั้ง"
+
+#: assembl/templates/discussion_list.jinja2:10
+msgid "Admin"
+msgstr "ผู้ดูแลระบบ"
+
+#: assembl/templates/admin/discussion_permissions.jinja2:15
+#: assembl/templates/discussion_list.jinja2:13
+msgid "Permissions"
+msgstr "สิทธิ์การใช้งาน"
+
+#: assembl/templates/admin/discussions.jinja2:86
+#: assembl/templates/discussion_list.jinja2:21
+msgid "There are no discussions on this server yet"
+msgstr "ยังไม่มีการสนทนาบนเซิร์ฟเวอร์นี้"
+
+#: assembl/templates/discussion_list.jinja2:27
+#: assembl/templates/views/navBarRight.tmpl:60
+msgid "Sign in"
+msgstr "ลงชื่อเข้าใช้"
+
+#: assembl/templates/discussion_list.jinja2:28
+msgid " to see all available discussions."
+msgstr "เพื่อดูการสนทนาทั้งหมดที่มีอยู่"
+
+#: assembl/templates/discussion_list.jinja2:36
+msgid "Create a new discussion"
+msgstr "สร้างการสนทนาใหม่"
+
+#: assembl/templates/discussion_list.jinja2:39
+msgid "Change global permissions"
+msgstr "เปลี่ยนสิทธิ์ส่วนกลาง"
+
+#: assembl/templates/discussion_list.jinja2:42
+msgid "Change global preferences"
+msgstr "เปลี่ยนการกำหนดลักษณะส่วนกลาง"
+
+#: assembl/templates/discussion_list.jinja2:45
+#: assembl/templates/views/navBarRight.tmpl:55
+msgid "Sign out"
+msgstr "ออกจากระบบ"
+
+#: assembl/templates/do_password_change.jinja2:28
+#: assembl/templates/login.jinja2:72 assembl/templates/register.jinja2:28
+#: assembl/templates/views/emailSource.tmpl:74
+msgid "Password"
+msgstr "รหัสผ่าน"
+
+#: assembl/templates/do_password_change.jinja2:29
+#: assembl/templates/profile.jinja2:56 assembl/templates/profile.jinja2:58
+#: assembl/templates/register.jinja2:29
+msgid "Repeat password"
+msgstr "ใส่รหัสผ่านซ้ำอีกครั้ง"
+
+#: assembl/templates/idea_in_synthesis.jinja2:12
+#: assembl/templates/views/ideaInSynthesis.tmpl:6
+msgid "By"
+msgstr "โดย"
+
+#: assembl/templates/idea_in_synthesis.jinja2:16
+msgid "See the conversation around this idea"
+msgstr "ดูการสนทนาโดยรอบแนวคิดนี้"
+
+#: assembl/templates/login.jinja2:30
+#, python-format
+msgid "Log in to \"%(discussion_title)s\""
+msgstr "ล็อกอินเข้าสู่ \"%(discussion_title)s\""
+
+#: assembl/templates/login.jinja2:30
+msgid "Log in to Assembl"
+msgstr "ล็อกอินเข้าสู่ Assembl"
+
+#: assembl/templates/login.jinja2:37
+msgid "Log in using one of these social networks"
+msgstr "เข้าสู่ระบบโดยใช้หนึ่งในเครือข่ายสังคมเหล่านี้"
+
+#: assembl/templates/login.jinja2:51 assembl/templates/profile.jinja2:220
+msgid "Login with "
+msgstr "เข้าสู่ระบบด้วย"
+
+#: assembl/templates/login.jinja2:65
+msgid "Already have an account?"
+msgstr "มีบัญชีแล้วหรือยัง"
+
+#: assembl/templates/login.jinja2:69
+#: assembl/templates/request_password_change.jinja2:27
+msgid "Email or username"
+msgstr "อีเมลหรือชื่อผู้ใช้"
+
+#: assembl/templates/login.jinja2:78
+msgid "Log in"
+msgstr "เข้าสู่ระบบ"
+
+#: assembl/templates/login.jinja2:80
+msgid "Forgot your password?"
+msgstr "ลืมรหัสผ่านหรือไม่"
+
+#: assembl/templates/login.jinja2:84
+msgid "No account yet?"
+msgstr "ยังไม่มีบัญชีใช่หรือไม่"
+
+#: assembl/templates/login.jinja2:87 assembl/templates/register.jinja2:30
+msgid "Sign up"
+msgstr "ลงทะเบียน"
+
+#: assembl/templates/profile.jinja2:7 assembl/templates/view_profile.jinja2:7
+#: assembl/templates/views/navBarRight.tmpl:38
+#: assembl/templates/views/userProfile.tmpl:6
+msgid "Profile"
+msgstr "โปรไฟล์"
+
+#: assembl/templates/profile.jinja2:27 assembl/templates/view_profile.jinja2:25
+#: assembl/templates/views/emailSource.tmpl:67
+#: assembl/templates/views/userAccountForm.tmpl:6
+msgid "Username"
+msgstr "ชื่อผู้ใช้"
+
+#: assembl/templates/profile.jinja2:32
+msgid "Desired username"
+msgstr "ชื่อผู้ใช้ที่ต้องการ"
+
+#: assembl/templates/profile.jinja2:38 assembl/templates/view_profile.jinja2:29
+#: assembl/templates/views/adminMessageColumn.tmpl:17
+#: assembl/templates/views/discussionStatisticsModal.tmpl:95
+#: assembl/templates/views/emailSource.tmpl:5
+msgid "Name"
+msgstr "ชื่อ"
+
+#: assembl/templates/profile.jinja2:43
+msgid "Your name"
+msgstr "ชื่อของคุณ"
+
+#: assembl/templates/profile.jinja2:49
+msgid "Change password"
+msgstr "เปลี่ยนรหัสผ่าน"
+
+#: assembl/templates/profile.jinja2:51
+msgid "New Password"
+msgstr "รหัสผ่านใหม่"
+
+#: assembl/templates/profile.jinja2:63 assembl/templates/view_profile.jinja2:36
+msgid "Emails"
+msgstr "อีเมล"
+
+#: assembl/templates/profile.jinja2:70
+msgid "Confirm and fuse accounts"
+msgstr "ยืนยันและรวมบัญชีเข้าด้วยกัน"
+
+#: assembl/templates/profile.jinja2:72
+msgid "unconfirmed"
+msgstr "ไม่มีการยืนยัน"
+
+#: assembl/templates/profile.jinja2:73
+msgid "Send confirmation message"
+msgstr "ส่งข้อความยืนยัน"
+
+#: assembl/templates/profile.jinja2:82
+msgid "Add an email account"
+msgstr "เพิ่มบัญชีอีเมล"
+
+#: assembl/templates/profile.jinja2:84 assembl/templates/register.jinja2:27
+msgid "Email"
+msgstr "อีเมล"
+
+#: assembl/templates/admin/discussion_permissions.jinja2:52
+#: assembl/templates/admin/discussion_permissions.jinja2:89
+#: assembl/templates/admin/discussion_permissions.jinja2:149
+#: assembl/templates/admin/global_permissions.jinja2:37
+#: assembl/templates/profile.jinja2:89
+#: assembl/templates/views/ckeditorField.tmpl:9
+#: assembl/templates/views/messageModerationOptions.tmpl:32
+#: assembl/templates/views/preferenceView.tmpl:14
+#: assembl/templates/views/sourceFacebook.tmpl:3
+#: assembl/templates/views/userAccount.tmpl:47
+msgid "Save"
+msgstr "บันทึก"
+
+#: assembl/templates/profile.jinja2:206
+msgid "Connect other accounts to Assembl"
+msgstr "เชื่อมต่อบัญชีอื่นๆ กับ Assembl"
+
+#: assembl/templates/react_unauthorized.jinja2:10
+#, python-format
+msgid "Unauthorized <small>Error %(error_num)s</small>"
+msgstr "<small>ข้อผิดพลาด %(error_num)s</small>ที่ไม่ได้รับอนุญาต"
+
+#: assembl/templates/react_unauthorized.jinja2:11
+msgid "The requested resource requires proper permissions."
+msgstr "ทรัพยากรที่ร้องขอต้องการสิทธิ์ที่เหมาะสม"
+
+#: assembl/templates/react_unauthorized.jinja2:12
+#, python-format
+msgid ""
+"Please <a href='%(logout)s'>logout</a> and re-login as a permissible user."
+msgstr ""
+"โปรด <a href='%(logout)s'>ออกจากระบบ</a> แล้วเข้าสู่ระบบอีกครั้งในฐานะผู้ใช้ที่ได้รับอนุญาต"
+
+#: assembl/templates/react_unauthorized.jinja2:16
+#, python-format
+msgid "Technical Contact: <a href=mailto:%(admin_email)s>%(admin_email)s</a>"
+msgstr "ติดต่อด้านเทคนิค: <a href=mailto:%(admin_email)s>%(admin_email)s</a>"
+
+#: assembl/templates/register.jinja2:12
+#, python-format
+msgid "Join \"%(discussion_title)s\""
+msgstr "เข้าร่วม \"%(discussion_title)s\""
+
+#: assembl/templates/register.jinja2:12
+msgid "Join Assembl"
+msgstr "เข้าร่วม Assembl"
+
+#: assembl/templates/register.jinja2:22
+msgid "This is a closed discussion."
+msgstr "นี่คือการสนทนาที่จำกัดเฉพาะกลุ่ม"
+
+#: assembl/templates/register.jinja2:26
+#: assembl/templates/views/userProfile.tmpl:13
+msgid "Full name"
+msgstr "ชื่อเต็ม"
+
+#: assembl/templates/register.jinja2:34
+msgid "Do you already have an account?"
+msgstr "คุณมีบัญชีแล้วหรือยัง"
+
+#: assembl/templates/register.jinja2:34
+msgid "Log in!"
+msgstr "เข้าสู่ระบบ!"
+
+#: assembl/templates/view_profile.jinja2:48
+msgid "Accounts"
+msgstr "บัญชี"
+
+#: assembl/templates/admin/discussion_permissions.jinja2:10
+msgid "Discussion "
+msgstr "การสนทนา"
+
+#: assembl/templates/admin/discussion_permissions.jinja2:11
+msgid "Role permissions:"
+msgstr "สิทธิ์ของบทบาท:"
+
+#: assembl/templates/admin/discussion_permissions.jinja2:15
+#: assembl/templates/admin/discussion_permissions.jinja2:60
+#: assembl/templates/admin/global_permissions.jinja2:8
+msgid "Roles"
+msgstr "บทบาท"
+
+#: assembl/templates/admin/discussion_permissions.jinja2:37
+msgid "delete role"
+msgstr "ลบบทบาท"
+
+#: assembl/templates/admin/discussion_permissions.jinja2:47
+msgid "Add a role"
+msgstr "เพิ่มบทบาท"
+
+#: assembl/templates/admin/discussion_permissions.jinja2:56
+msgid "User roles specific to this discussion:"
+msgstr "บทบาทผู้ใช้ที่ระบุสำหรับการสนทนานี้:"
+
+#: assembl/templates/admin/discussion_permissions.jinja2:60
+#: assembl/templates/admin/global_permissions.jinja2:8
+msgid "Users"
+msgstr "ผู้ใช้"
+
+#: assembl/templates/admin/discussion_permissions.jinja2:84
+#: assembl/templates/admin/global_permissions.jinja2:32
+msgid "Search for users"
+msgstr "ค้นหาผู้ใช้"
+
+#: assembl/templates/admin/discussion_permissions.jinja2:94
+msgid "Add users with a CSV file"
+msgstr "เพิ่มผู้ใช้ที่มีไฟล์ CSV"
+
+#: assembl/templates/admin/discussion_permissions.jinja2:95
+msgid ""
+"The CSV file must have two fields, in this order: full name, email. If it "
+"has a header, it MUST be on the first line. Imported user's email will be "
+"considered validated. Here is an example of CSV file:"
+msgstr ""
+"ไฟล์ CSV ต้องมีสองฟิลด์โดยเรียงลำดับตามนี้: ชื่อเต็ม, อีเมล หากมีส่วนหัวจะ “ต้อง” อยู่ในบรรทัดแรก อีเมลของผู้ใช้ที่นำเข้าจะถือว่าได้ตรวจสอบความถูกต้องแล้ว นี่คือตัวอย่างของไฟล์ CSV:"
+
+#: assembl/templates/admin/discussion_permissions.jinja2:99
+msgid ""
+"The invite message will not be sent to existing users, even if created on "
+"another discussion. If you do not get Assembl to \"Send an invite message\", "
+"send one yourself, explaining how to reset password."
+msgstr ""
+"ข้อความเชิญจะไม่ถูกส่งไปยังผู้ใช้ที่มีอยู่ แม้ว่าจะสร้างขึ้นในการสนทนาอื่น ถ้าคุณไม่ได้ให้ Assembl \"ส่งข้อความเชิญ\" ส่งข้อความเชิญให้ตัวเอง และอธิบายวิธีการรีเซ็ตรหัสผ่าน"
+
+#: assembl/templates/admin/discussion_permissions.jinja2:101
+msgid "Role"
+msgstr "บทบาท"
+
+#: assembl/templates/admin/discussion_permissions.jinja2:113
+msgid "CSV File"
+msgstr "ไฟล์ CSV"
+
+#: assembl/templates/admin/discussion_permissions.jinja2:117
+msgid "Send an invite message"
+msgstr "ส่งข้อความเชิญ"
+
+#: assembl/templates/admin/discussion_permissions.jinja2:120
+msgid ""
+"Note that this email will only be sent to new users. In the message, you can "
+"use the following placeholders: {name}, {confirm_url}, {discussion_topic}, "
+"{discussion_url}"
+msgstr ""
+"โปรดทราบว่าอีเมลนี้จะส่งถึงผู้ใช้ใหม่เท่านั้น ในข้อความคุณสามารถใช้ตัวยึดตำแหน่งต่อไปนี้: {name}, {confirm_url}, {discussion_topic}, {discussion_url}"
+
+#: assembl/templates/admin/discussion_permissions.jinja2:122
+msgid "Sender name:"
+msgstr "ชื่อผู้ส่ง:"
+
+#: assembl/templates/admin/discussion_permissions.jinja2:124
+msgid "Subject:"
+msgstr "เรื่อง:"
+
+#: assembl/templates/admin/discussion_permissions.jinja2:125
+#: assembl/views/auth/views.py:1011
+msgid "Welcome to {discussion_topic}."
+msgstr "ยินดีต้อนรับสู่ {discussion_topic}."
+
+#: assembl/templates/admin/discussion_permissions.jinja2:126
+msgid "Text email message:"
+msgstr "ข้อความในอีเมล:"
+
+#: assembl/templates/admin/discussion_permissions.jinja2:127
+msgid ""
+"Hello, {name}!\n"
+"You have been invited to the Assembl discussion {discussion_topic}.\n"
+"This link will allow you to set your password, after which you can log in.\n"
+"<{confirm_url}>\n"
+"\n"
+"If you did not ask to join please disregard this email.\n"
+"\n"
+"Best regards,\n"
+"The Assembl Team\n"
+msgstr ""
+"สวัสดี{name}!\n"
+"คุณได้รับเชิญให้เข้าร่วมการสนทนา Assembl {discussion_topic}\n"
+"โปรดใช้ลิงค์นี้เพื่อตั้งรหัสผ่าน จากนั้นคุณจึงสามารถเข้าสู่ระบบได้\n"
+"<{confirm_url}>\n"
+"\n"
+"หากคุณไม่ได้ขอเข้าร่วม โปรดปิด / ลบอีเมลนี้\n"
+"\n"
+"ด้วยความนับถือ\n"
+"ทีม Assembl\n"
+
+#: assembl/templates/admin/discussion_permissions.jinja2:137
+msgid "HTML email message:"
+msgstr "ข้อความอีเมล HTML:"
+
+#: assembl/templates/admin/discussion_permissions.jinja2:138
+msgid ""
+"<p>Hello, {name}!</p>\n"
+"<p>You have been invited to the Assembl discussion <a href="
+"\"{discussion_url}\">{discussion_topic}</a>.\n"
+"Please <a href=\"{confirm_url}\">click here</a> to set your password, after "
+"which you can log in.</p>\n"
+"<p>If you did not ask to join please disregard this email.</p>\n"
+"<p>Best regards,<br />The Assembl Team</p>\n"
+msgstr ""
+"<p>สวัสดี{name}!</p>\n"
+"<p>คุณได้รับเชิญให้เข้าร่วมการสนทนา Assembl <a href=\"{discussion_url}\">{discussion_topic}</a>\n"
+"โปรด<a href=\"{confirm_url}\">คลิกที่นี่</a>เพื่อตั้งรหัสผ่าน จากนั้นคุณจึงสามารถเข้าสู่ระบบได้</p>\n"
+"<p>หากคุณไม่ได้ขอเข้าร่วม โปรดปิด / ลบอีเมลนี้</p>\n"
+"<p>ด้วยความนับถือ<br />ทีม Assembl</p>\n"
+
+#: assembl/templates/admin/discussion_permissions.jinja2:145
+msgid "Re-send to people who did not log in yet (USE SPARINGLY)"
+msgstr "ส่งใหม่ให้กับผู้ที่ยังไม่ได้เข้าสู่ระบบ (ใช้เท่าที่จำเป็น)"
+
+#: assembl/templates/admin/global_permissions.jinja2:4
+#: assembl/templates/views/globalAdminNavigationMenu.tmpl:6
+msgid "Global roles"
+msgstr "บทบาทสากล"
+
+#: assembl/templates/includes/updatebrowser.jinja2:41
+msgid ""
+"Your version of <strong>{0}</strong> is outdated and may deteriorate your "
+"experience on Assembl."
+msgstr ""
+"เวอร์ชั่น <strong>{0}</strong> ของคุณล้าสมัยและอาจทำให้ประสิทธิภาพการใช้งาน Assembl ของคุณลดลง"
+
+#: assembl/templates/includes/updatebrowser.jinja2:42
+msgid "update your browser"
+msgstr "อัพเดตเบราว์เซอร์ของคุณ"
+
+#: assembl/templates/includes/updatebrowser.jinja2:43
+msgid "Thanks!"
+msgstr "ขอบคุณ!"
+
+#: assembl/templates/notifications/html_mail.jinja2:82
+#, python-format
+msgid ""
+"You are receiving this because you are subscribed to discussion "
+"%(discussionLink)s.  Specifically, you currently receive a notification when:"
+msgstr ""
+"คุณได้รับข้อความนี้เนื่องจากคุณสมัครเข้าร่วมการสนทนา %(discussionLink)sโดยเฉพาะอย่างยิ่ง คุณจะได้รับการแจ้งเตือนเมื่อ:"
+
+#: assembl/templates/notifications/html_mail_post.jinja2:62
+msgid "Reply to this message"
+msgstr "ตอบกลับข้อความนี้"
+
+#: assembl/templates/notifications/html_mail_post_synthesis.jinja2:31
+msgid "Comment on this synthesis"
+msgstr "ข้อคิดเห็นเกี่ยวกับบทสังเคราะห์นี้"
+
+#: assembl/templates/notifications/html_new_discussion.jinja2:22
+msgid ""
+"<h1>Congratulations, your <a href='{discussion_url}'>Assembl consultation</"
+"a> is ready.</h1>\n"
+"<p>You can <a href='{connection_url}'>connect here</a> to define your "
+"password.</p>\n"
+"<p>You will find <a href='{documentation_url}'>documentation here</a>.</p>\n"
+"<p>The Assembl tool enables consultations involving a great number of users "
+"(hundreds or thousands of users, public officials, etc.) in the co-design of "
+"a deliverable. If you need advice on structuring your consultation process "
+"and building skills in using Assembl, you can contact <a href='mailto:"
+"{admin_email}'>{admin_name}</a> from <a "
+"href='{admin_org_url}'>{admin_org_name}</a>.</p>"
+msgstr ""
+"<h1>ขอแสดงความยินดี <a href='{discussion_url}'> การประชุมหารือ Assembl </a> ของคุณพร้อมแล้ว</h1>\n"
+"<p>คุณสามารถ<a href='{connection_url}'>เชื่อมต่อในขณะนี้</a> เพื่อกำหนดรหัสผ่านของคุณ</p>\n"
+"<p>สามารถดู<a href='{documentation_url}'>เอกสารได้ที่นี่</a></p>\n"
+"<p>เครื่องมือ Assembl จะช่วยให้คุณสามารถปรึกษาหารือกับผู้ใช้จำนวนมาก (ผู้ใช้งานนับร้อยหรือหลายพันคน เจ้าหน้าที่ของรัฐ ฯลฯ) ในการออกแบบผลลัพธ์ร่วมกัน หากคุณต้องการคำแนะนำในการจัดโครงสร้างกระบวนการประชุมหารือและการสร้างทักษะในการใช้งาน Assembl คุณสามารถติดต่อ <a href='mailto:{admin_email}'>{admin_name}</a> ได้จาก <a href='{admin_org_url}'>{admin_org_name}</a></p>"
+
+#: assembl/templates/notifications/txt_new_discussion.jinja2:16
+msgid ""
+"Congratulations, your Assembl consultation is ready, and you can find it "
+"here:\n"
+"{discussion_url}\n"
+"You can use the following link to define your password:\n"
+"{connection_url}\n"
+"You will find documentation here:\n"
+"{documentation_url}\n"
+"\n"
+"The Assembl tool enables consultations involving a great number of users "
+"(hundreds or thousands of users, public officials, etc.) in the co-design of "
+"a deliverable. If you need advice on structuring your consultation process "
+"and building skills in using Assembl, you can contact {admin_name} at "
+"<{admin_email}>, from {admin_org_name} ({admin_org_url}) for more details."
+msgstr ""
+"ขอแสดงความยินดี การประชุมหารือ Assembl ของคุณพร้อมแล้ว และคุณสามารถดูได้ที่นี่:\n"
+"{discussion_url}\n"
+"คุณสามารถใช้ลิงค์นี้เพื่อกำหนดรหัสผ่านของคุณ:\n"
+"{connection_url}\n"
+"สามารถดูเอกสารได้ที่นี่:\n"
+"{documentation_url}\n"
+"\n"
+"เครื่องมือ Assembl จะช่วยให้คุณสามารถปรึกษาหารือกับผู้ใช้จำนวนมาก (ผู้ใช้งานนับร้อยหรือหลายพันคน เจ้าหน้าที่ของรัฐ ฯลฯ) ในการออกแบบผลลัพธ์ร่วมกัน หากคุณต้องการคำแนะนำในการจัดโครงสร้างกระบวนการประชุมหารือและการสร้างทักษะในการใช้งาน Assembl คุณสามารถติดต่อ {admin_name} ได้ที่ <{admin_email}> และจาก {admin_org_name} ({admin_org_url}) เพื่อขอข้อมูลเพิ่มเติม"
+
+#: assembl/templates/styleguide/components/Dialogs.jinja2:120
+#: assembl/templates/styleguide/components/Dialogs.jinja2:147
+#: assembl/templates/views/adminPartnerEditForm.tmpl:72
+#: assembl/templates/views/adminPartnerForm.tmpl:70
+#: assembl/templates/views/create-group.tmpl:129
+#: assembl/templates/views/message_translation_question_selection.tmpl:12
+msgid "Validate"
+msgstr "ตรวจสอบความถูกต้อง"
+
+#: assembl/templates/views/DiscussionSettingsCreateSource.tmpl:2
+msgid "Create a message source:"
+msgstr "สร้างแหล่งที่มาของข้อความ:"
+
+#: assembl/templates/views/DiscussionSettingsCreateSource.tmpl:5
+msgid "Select a message source type"
+msgstr "เลือกประเภทแหล่งที่มาของข้อความ"
+
+#: assembl/templates/views/DiscussionSettingsCreateSource.tmpl:14
+msgid "Create"
+msgstr "สร้าง"
+
+#: assembl/templates/views/about.tmpl:2
+msgid "How it works"
+msgstr "วิธีการทำ"
+
+#: assembl/templates/views/about.tmpl:5
+#, python-format
+msgid ""
+"<p>How to participate in the discussion \"%(debate_name)s\":</p>\n"
+"\t<ol>\n"
+"\t\t<li>Explore the discussions using the ideas that have already emerged</"
+"li>\n"
+"\t\t<li>Join in the conversation by replying directly to the contributions "
+"of participants</li>\n"
+"\t\t<li>Start a new topic of discussion if you wish to rejuvenate the "
+"discussion around a particular idea</li>\n"
+"\t</ol>\n"
+"\t<p>How the process works:</p>\n"
+"\t<ol>\n"
+"\t\t<li>As you contribute, Harvesters will select the key ideas from your "
+"messages – they are here to make sure your contributions get noticed</li>\n"
+"\t\t<li>Based on these ideas, they will reorganize the ideas into a table of "
+"contents of the ideas shared</li>\n"
+"\t</ol>"
+msgstr ""
+"<p>วิธีเข้าร่วมการสนทนา \"%(debate_name)s\":</p>\n"
+"\t<ol>\n"
+"\t\t<li>สำรวจการสนทนาโดยใช้แนวคิดที่ปรากฏอยู่แล้ว</li>\n"
+"\t\t<li>เข้าร่วมการสนทนาโดยตอบกลับโดยตรงไปยังผู้ที่เข้าร่วมแสดงแนวคิด</li>\n"
+"\t\t<li>เริ่มหัวข้อใหม่ หากคุณต้องการกระตุ้นการสนทนาจากแนวคิดอย่างใดอย่างหนึ่ง</li>\n"
+"\t</ol>\n"
+"\t<p>ขั้นตอนการดำเนินการ:</p>\n"
+"\t<ol>\n"
+"\t\t<li>เมื่อคุณเข้ามาแสดงแนวคิด ผู้รวบรวมจะเลือกแนวคิดหลักจากข้อความของคุณ โดยจะคอยให้ความช่วยเหลือเพื่อให้แน่ใจว่าผู้อื่นสังเกตเห็นแนวคิดของคุณ</li>\n"
+"\t\t<li>จากแนวคิดเหล่านี้ ผู้รวบรวมจะจัดระเบียบแนวคิดต่างๆ ไว้ในสารบัญแนวคิดที่มีการแชร์</li>\n"
+"\t</ol>"
+
+#: assembl/templates/views/about.tmpl:18
+msgid "Join the discussions"
+msgstr "เข้าร่วมการสนทนา"
+
+#: assembl/templates/views/about.tmpl:20
+msgid "Your opinion deserves to be heard"
+msgstr "ผู้เข้าร่วมอื่นๆ ควรได้รับทราบความคิดเห็นของคุณ"
+
+#: assembl/templates/views/about.tmpl:23
+msgid "Read the discussions"
+msgstr "อ่านบทสนทนา"
+
+#: assembl/templates/views/about.tmpl:30
+msgid "Content to be tracked!"
+msgstr "เนื้อหาที่จะติดตาม!"
+
+#: assembl/templates/views/adminDiscussion.tmpl:6
+#: assembl/templates/views/discussionAdminNavigationMenu.tmpl:3
+msgid "Edit discussion"
+msgstr "แก้ไขการสนทนา"
+
+#: assembl/templates/views/adminDiscussion.tmpl:13
+msgid "Edit discussion permissions"
+msgstr "แก้ไขสิทธิ์ในการสนทนา"
+
+#: assembl/templates/views/adminDiscussion.tmpl:20
+msgid "Discussion topic"
+msgstr "หัวข้อสนทนา"
+
+#: assembl/templates/views/adminDiscussion.tmpl:28
+msgid "Discussion slug"
+msgstr "ชื่อของการสนทนา"
+
+#: assembl/templates/views/adminDiscussion.tmpl:36
+#: assembl/templates/views/synthesisPanel.tmpl:5
+#: assembl/templates/views/synthesisPanelMessage.tmpl:4
+msgid "Introduction"
+msgstr "บทนำ"
+
+#: assembl/templates/views/adminDiscussion.tmpl:44
+msgid "Objectives"
+msgstr "วัตถุประสงค์"
+
+#: assembl/templates/views/adminDiscussion.tmpl:52
+msgid ""
+"Show a small help message when the user arrives in the Discussion section"
+msgstr ""
+"แสดงข้อความวิธีใช้เล็กๆ เมื่อผู้ใช้เข้ามาถึงส่วนการสนทนา"
+
+#: assembl/templates/views/adminDiscussion.tmpl:60
+msgid "Web analytics: Piwik id site"
+msgstr "เว็บการวิเคราะห์: ไซต์ id Piwik"
+
+#: assembl/templates/views/adminDiscussion.tmpl:68
+#, python-format
+msgid "URL of the Help page (use \"%s\" for language)"
+msgstr "URL ของหน้าวิธีใช้  (ใช้ \"%s\" สำหรับภาษา)"
+
+#: assembl/templates/views/adminDiscussion.tmpl:76
+msgid "Homepage URL (optional)"
+msgstr "URL โฮมเพจ (ไม่บังคับ)"
+
+#: assembl/templates/views/adminDiscussion.tmpl:84
+msgid "Logo URL (optional)"
+msgstr "URL ของโลโก้ (ไม่บังคับ)"
+
+#: assembl/templates/views/adminDiscussion.tmpl:95
+msgid ""
+"The logo image can have a maximum height of 40px, and a maximum width of "
+"215px. Background must be transparent. Margins must be included in the image."
+msgstr ""
+"ภาพโลโก้สามารถมีความสูงได้สูงสุด 40 พิกเซล  และความกว้างสูงสุด 215 พิกเซล พื้นหลังต้องเห็นชัด ระยะขอบต้องอยู่ในภาพ"
+
+#: assembl/templates/views/adminDiscussion.tmpl:101
+#: assembl/templates/views/emailSource.tmpl:82
+#: assembl/templates/views/userAccountForm.tmpl:42
+#: assembl/templates/views/userProfile.tmpl:74
+msgid "Save changes"
+msgstr "บันทึกการเปลี่ยนแปลง"
+
+#: assembl/templates/views/adminDiscussionSettings.tmpl:6
+#: assembl/templates/views/navBarLeft.tmpl:21
+msgid "Discussion settings"
+msgstr "การตั้งค่าการสนทนา"
+
+#: assembl/templates/views/adminDiscussionSettings.tmpl:14
+msgid "Message source successfully added"
+msgstr "เพิ่มแหล่งที่มาของข้อความเรียบร้อยแล้ว"
+
+#: assembl/templates/views/adminDiscussionSettings.tmpl:18
+msgid "Add a message source"
+msgstr "เพิ่มแหล่งที่มาของข้อความ"
+
+#: assembl/templates/views/adminDiscussionSettingsGeneralSource.tmpl:9
+msgid "Edit message source"
+msgstr "แก้ไขแหล่งที่มาของข้อความ"
+
+#: assembl/templates/views/adminDiscussionSettingsGeneralSource.tmpl:16
+msgid "Reimport"
+msgstr "นำเข้าใหม่"
+
+#: assembl/templates/views/adminDiscussionSettingsGeneralSource.tmpl:17
+msgid "Reprocess"
+msgstr "ประมวลผลใหม่"
+
+#: assembl/templates/views/adminDiscussionSettingsGeneralSourceRead.tmpl:7
+msgid "Connexion error"
+msgstr "ข้อผิดพลาดในการเชื่อมต่อ"
+
+#: assembl/templates/views/adminDiscussionSettingsGeneralSourceRead.tmpl:10
+msgid "Next connection attempt:"
+msgstr "การพยายามเชื่อมต่อครั้งถัดไป:"
+
+#: assembl/templates/views/adminDiscussionSettingsGeneralSourceRead.tmpl:14
+msgid "Manual start"
+msgstr "เริ่มต้นด้วยตนเอง"
+
+#: assembl/templates/views/adminDiscussionSettingsGeneralSourceRead.tmpl:15
+#: assembl/templates/views/message.tmpl:33
+#: assembl/templates/views/messageDeletedByUser.tmpl:25
+#: assembl/templates/views/messageListHeader.tmpl:4
+msgid "More options"
+msgstr "ตัวเลือกเพิ่มเติม"
+
+#: assembl/templates/views/adminMessageColumn.tmpl:4
+#: assembl/templates/views/adminMessageColumn.tmpl:5
+#: assembl/templates/views/adminTimelineEvent.tmpl:5
+msgid "Identifier"
+msgstr "ตัวบ่งชี้"
+
+#: assembl/templates/views/adminMessageColumn.tmpl:8
+#: assembl/templates/views/adminMessageColumn.tmpl:9
+msgid "Color"
+msgstr "สี"
+
+#: assembl/templates/views/adminMessageColumn.tmpl:13
+#: assembl/templates/views/adminTimelineEvent.tmpl:37
+msgid "Title"
+msgstr "ชื่อเรื่อง"
+
+#: assembl/templates/views/adminMessageColumn.tmpl:27
+#: assembl/templates/views/adminTimelineEvent.tmpl:51
+#: assembl/templates/views/dictPreferenceItemView.tmpl:8
+#: assembl/templates/views/listPreferenceItemView.tmpl:7
+#: assembl/templates/views/partnersInAdmin.tmpl:20
+msgid "Delete"
+msgstr "ลบ"
+
+#: assembl/templates/views/adminMessageColumns.tmpl:5
+#: assembl/templates/views/adminPartnerForm.tmpl:62
+#: assembl/templates/views/adminTimelineEvents.tmpl:20
+#: assembl/templates/views/listPreferenceView.tmpl:4
+msgid "Add"
+msgstr "เพิ่ม"
+
+#: assembl/templates/views/adminMessageColumns.tmpl:8
+msgid "Activate multi-column view"
+msgstr "เปิดใช้มุมมองแบบหลายคอลัมน์"
+
+#: assembl/templates/views/adminNotificationSubscriptions.tmpl:6
+#: assembl/templates/views/discussionAdminNavigationMenu.tmpl:12
+msgid "Edit notifications"
+msgstr "แก้ไขการแจ้งเตือน"
+
+#: assembl/templates/views/adminNotificationSubscriptions.tmpl:13
+#: assembl/templates/views/adminTimelineEvents.tmpl:13
+msgid "Your change has been saved!"
+msgstr "บันทึกการเปลี่ยนแปลงของคุณแล้ว!"
+
+#: assembl/templates/views/adminNotificationSubscriptions.tmpl:17
+msgid "Default notifications"
+msgstr "การแจ้งเตือนเริ่มต้น"
+
+#: assembl/templates/views/adminNotificationSubscriptions.tmpl:18
+msgid ""
+"These are the notifications which a user gets subscribed to when one of "
+"these conditions is matched: 1. The user clicks on the \"Join this discussion"
+"\" button. 2. The user posts his/her first message, Assembl shows a "
+"subscription pop-in, and the user accepts subscribing. 3. The discussion "
+"parameter \"Auto-subscribe users to default notifications when they register"
+"\" is active and the user confirms their account."
+msgstr ""
+"นี่คือการแจ้งเตือนซึ่งผู้ใช้จะได้รับการตอบรับในการสมัครใช้งาน เมื่อมีเงื่อนไขตรงตามข้อใดข้อหนึ่งดังต่อไปนี้: 1. ผู้ใช้คลิกที่ปุ่ม \"เข้าร่วมการสนทนานี้\" 2. ผู้ใช้โพสต์ข้อความแรก, Assembl แสดงป็อปอินการสมัครใช้งานและผู้ใช้ยอมรับการสมัคร 3. ตัวเลือกพารามิเตอร์การสนทนา \"สมัครใช้งานโดยอัตโนมัติเพื่อรับการแจ้งเตือนเริ่มต้นเมื่อผู้ใช้ลงทะเบียน\" ถูกใช้งานอยู่และผู้ใช้ยืนยันบัญชีของตน"
+
+#: assembl/templates/views/adminNotificationSubscriptions.tmpl:21
+msgid "Auto-subscribe users to default notifications"
+msgstr "สมัครใช้งานโดยอัตโนมัติเพื่อรับการแจ้งเตือนเริ่มต้น"
+
+#: assembl/templates/views/adminPartnerEditForm.tmpl:2
+msgid "edit partner"
+msgstr "แก้ไขผู้ร่วมมือ"
+
+#: assembl/templates/views/adminPartnerEditForm.tmpl:9
+#: assembl/templates/views/adminPartnerForm.tmpl:8
+msgid "Partner name"
+msgstr "ชื่อผู้ร่วมมือ"
+
+#: assembl/templates/views/adminPartnerEditForm.tmpl:13
+#: assembl/templates/views/adminPartnerForm.tmpl:12
+msgid "This field is mandatory"
+msgstr "ฟิลด์บังคับ"
+
+#: assembl/templates/views/adminPartnerEditForm.tmpl:20
+#: assembl/templates/views/adminPartnerForm.tmpl:19
+#: assembl/templates/views/adminTimelineEvent.tmpl:41
+msgid "Description"
+msgstr "คำอธิบาย"
+
+#: assembl/templates/views/adminPartnerEditForm.tmpl:23
+#: assembl/templates/views/adminPartnerForm.tmpl:22
+msgid "Share what the organisation is all about"
+msgstr "แชร์เรื่องราวเกี่ยวกับองค์กร"
+
+#: assembl/templates/views/adminPartnerEditForm.tmpl:25
+#: assembl/templates/views/adminPartnerForm.tmpl:24
+msgid "please correct the error"
+msgstr "โปรดแก้ไขข้อผิดพลาด"
+
+#: assembl/templates/views/adminPartnerEditForm.tmpl:32
+#: assembl/templates/views/adminPartnerForm.tmpl:31
+msgid "Website"
+msgstr "เว็บไซต์"
+
+#: assembl/templates/views/adminPartnerEditForm.tmpl:35
+#: assembl/templates/views/adminPartnerForm.tmpl:34
+msgid "Example : http://example.org/ or http://www.hompage.com/"
+msgstr "ตัวอย่าง : http://example.org/ หรือ http://www.hompage.com/"
+
+#: assembl/templates/views/adminPartnerEditForm.tmpl:37
+#: assembl/templates/views/adminPartnerEditForm.tmpl:49
+#: assembl/templates/views/adminPartnerForm.tmpl:36
+#: assembl/templates/views/adminPartnerForm.tmpl:48
+msgid "Invalid URL format"
+msgstr "รูปแบบ URL ไม่ถูกต้อง"
+
+#: assembl/templates/views/adminPartnerEditForm.tmpl:44
+#: assembl/templates/views/adminPartnerForm.tmpl:43
+msgid "URL of logo image"
+msgstr "URL ของภาพโลโก้"
+
+#: assembl/templates/views/adminPartnerEditForm.tmpl:47
+#: assembl/templates/views/adminPartnerForm.tmpl:46
+msgid "Example : http://example.org/logo.jpg"
+msgstr "ตัวอย่าง : http://example.org/logo.jpg"
+
+#: assembl/templates/views/adminPartnerEditForm.tmpl:56
+#: assembl/templates/views/adminPartnerForm.tmpl:55
+msgid "Is instigator of the discussion"
+msgstr "เป็นผู้เริ่มต้นการสนทนา"
+
+#: assembl/templates/views/adminPartnerEditForm.tmpl:66
+msgid "Confirm"
+msgstr "ยืนยัน"
+
+#: assembl/templates/views/adminPartnerForm.tmpl:2
+msgid "Add a new partner"
+msgstr "เพิ่มผู้ร่วมมือคนใหม่"
+
+#: assembl/templates/views/adminPartners.tmpl:7
+#: assembl/templates/views/partnerList.tmpl:6
+#: assembl/templates/views/partnerList.tmpl:10
+#: assembl/templates/views/partnerList.tmpl:12
+msgid "Partners"
+msgstr "ผู้ร่วมมือ"
+
+#: assembl/templates/views/adminPartners.tmpl:15
+msgid "Partner successfully added"
+msgstr "เพิ่มผู้ร่วมมือเรียบร้อยแล้ว"
+
+#: assembl/templates/views/adminPartners.tmpl:19
+msgid "Add partner"
+msgstr "เพิ่มผู้ร่วมมือ"
+
+#: assembl/templates/views/adminTimelineEvent.tmpl:11
+msgid "Start date (local time)"
+msgstr "วันที่เริ่มต้น (เวลาท้องถิ่น)"
+
+#: assembl/templates/views/adminTimelineEvent.tmpl:17
+msgid "End date (local time)"
+msgstr "วันที่สิ้นสุด (เวลาท้องถิ่น)"
+
+#: assembl/templates/views/adminTimelineEvent.tmpl:23
+msgid "Image URL"
+msgstr "URL รูปภาพ"
+
+#: assembl/templates/views/adminTimelineEvent.tmpl:29
+msgid "Use v1 interface"
+msgstr "ใช้ส่วนติดต่อ v1 "
+
+#: assembl/templates/views/adminTimelineEvents.tmpl:6
+#: assembl/templates/views/discussionAdminNavigationMenu.tmpl:15
+msgid "Edit timeline"
+msgstr "แก้ไขไทม์ไลน์"
+
+#: assembl/templates/views/agentAvatar.tmpl:4
+msgid "anonymous"
+msgstr "ไม่ระบุชื่อ"
+
+#: assembl/templates/views/agentName.tmpl:4
+msgid "Anonymous"
+msgstr "ไม่ระบุชื่อ"
+
+#: assembl/templates/views/ajaxError.tmpl:2
+msgid "Assembl needs to be reloaded"
+msgstr "ต้องทำการโหลด Assembl ใหม่"
+
+#: assembl/templates/views/ajaxError.tmpl:7
+msgid ""
+"Assembl has encountered a problem and needs to be refreshed. Do not worry, "
+"any messages that are in the process of being composed will not be lost."
+msgstr ""
+"Assembl ประสบปัญหาและจำเป็นต้องได้รับการรีเฟรช โปรดอย่ากังวล ข้อความใดๆ ที่อยู่ในระหว่างการเขียนจะไม่สูญหาย"
+
+#: assembl/templates/views/ajaxError.tmpl:8
+msgid "See you in a minute on Assembl!"
+msgstr "พบกันในไม่ช้านี้ที่ Assembl!"
+
+#: assembl/templates/views/ajaxError.tmpl:9
+msgid ""
+"If you are in contact with the technical team, please let them know about "
+"the following message:"
+msgstr ""
+"หากคุณติดต่อทีมช่วยเหลือด้านเทคนิค โปรดแจ้งให้พวกเขาทราบเกี่ยวกับสิ่งต่อไปนี้:"
+
+#: assembl/templates/views/ajaxError.tmpl:16
+#: assembl/templates/views/firstPost.tmpl:18
+msgid "Not now"
+msgstr "ไม่ใช่ตอนนี้"
+
+#: assembl/templates/views/ajaxError.tmpl:17
+msgid "Reload"
+msgstr "โหลดใหม่"
+
+#: assembl/templates/views/allMessagesInIdeaList.tmpl:4
+msgid "Number of posts in the entire discussion"
+msgstr "จำนวนโพสต์ตลอดการสนทนา"
+
+#: assembl/templates/views/allMessagesInIdeaList.tmpl:9
+#: assembl/templates/views/allMessagesInIdeaList.tmpl:10
+msgid "All messages"
+msgstr "ข้อความทั้งหมด"
+
+#: assembl/templates/views/allMessagesInIdeaList.tmpl:12
+msgid "Number of unread posts in the entire discussion"
+msgstr "จำนวนโพสต์ที่ยังไม่ได้อ่านตลอดการสนทนา"
+
+#: assembl/templates/views/announcementEditable.tmpl:1
+msgid "The title of this announcement"
+msgstr "ชื่อเรื่องของประกาศฉบับนี้"
+
+#: assembl/templates/views/announcementEditable.tmpl:4
+msgid ""
+"The text of this this announcement.  Will be displayed on top of the message "
+"list for this idea."
+msgstr ""
+"ข้อความของประกาศฉบับนี้จะปรากฏที่ด้านบนของรายการข้อความสำหรับแนวคิดนี้"
+
+#: assembl/templates/views/announcementEditable.tmpl:7
+msgid ""
+"If checked, this announcement will also be shown for any sub-idea that "
+"doesn't have its own announcement."
+msgstr ""
+"หากเลือกไว้ ประกาศฉบับนี้จะแสดงสำหรับแนวคิดย่อยที่ไม่มีประกาศ"
+
+#: assembl/templates/views/announcementEditable.tmpl:8
+msgid "Propagate this announcement to sub-ideas:"
+msgstr "เผยแพร่ประกาศนี้ไปยังแนวคิดย่อย:"
+
+#: assembl/templates/views/announcementEditable.tmpl:10
+msgid "Delete this announcement"
+msgstr "ลบประกาศนี้"
+
+#: assembl/templates/views/announcementListEmptyEditable.tmpl:1
+msgid "Add a new announcement to this idea"
+msgstr "เพิ่มประกาศใหม่ในแนวคิดนี้"
+
+#: assembl/templates/views/announcementMessage.tmpl:10
+#: assembl/templates/views/message.tmpl:150
+#: assembl/templates/views/message.tmpl:169
+#: assembl/templates/views/messageDeletedByUser.tmpl:53
+#: assembl/templates/views/messageDeletedByUser.tmpl:72
+#, python-format
+msgid "<time title=\"%(precise_date)s\">%(nice_date)s</time>"
+msgstr "<time title=\"%(precise_date)s\">%(nice_date)s</time>"
+
+#: assembl/templates/views/associateAccount.tmpl:24
+msgid "Validate this email"
+msgstr "ตรวจสอบความถูกต้องของอีเมลนี้"
+
+#: assembl/templates/views/associateAccounts.tmpl:4
+msgid "Associated accounts"
+msgstr "บัญชีที่เกี่ยวข้อง"
+
+#: assembl/templates/views/attachmentText.tmpl:2
+msgid "Add Cover Image"
+msgstr "เพิ่มภาพปก"
+
+#: assembl/templates/views/bookmarket.tmpl:3
+msgid "activate web annotation"
+msgstr "เปิดใช้งานคำอธิบายประกอบเว็บ"
+
+#: assembl/templates/views/bookmarket.tmpl:8
+msgid "How it works:"
+msgstr "วิธีการ:"
+
+#: assembl/templates/views/bookmarket.tmpl:10
+msgid "Drag the following button in your browser's bookmark bar."
+msgstr "ลากปุ่มต่อไปนี้ในแถบบุ๊กมาร์กของเบราเซอร์"
+
+#: assembl/templates/views/bookmarket.tmpl:12
+msgid ""
+"Drag this button to your bookmark bar to create a bookmarklet. You can then "
+"capture selections from most webpages (those that are not secured with "
+"https) by 1. Clicking on the bookmarklet and 2. Highlighting the section of "
+"text you wish to send to the discussion."
+msgstr ""
+"ลากปุ่มนี้ไปยังแถบบุ๊กมาร์กเพื่อสร้าง bookmarklet จากนั้นคุณสามารถจับภาพเฉพาะส่วนที่ต้องการจากเว็บเพจทั่วไป (ที่ไม่ได้รับการรักษาความปลอดภัยด้วย https) โดย 1. คลิกที่ bookmarklet และ 2. ไฮไลต์ส่วนของข้อความที่คุณต้องการส่งไปยังการสนทนา"
+
+#: assembl/templates/views/bookmarket.tmpl:12
+msgid "Web capture to"
+msgstr "จับภาพหน้าเว็บไปยัง"
+
+#: assembl/templates/views/bookmarket.tmpl:14
+msgid ""
+"Find extracts that will add value to the current discussion. For example, "
+"you could find extracts for:"
+msgstr ""
+"ค้นหาเนื้อหาที่คัดลอกซึ่งจะเพิ่มคุณค่าให้กับการสนทนาปัจจุบัน ตัวอย่างเช่น คุณสามารถดูเนื้อหาที่คัดลอกเพื่อ:"
+
+#: assembl/templates/views/bookmarket.tmpl:16
+msgid "Dig deeper in an existing idea"
+msgstr "เข้าใจอย่างลึกซึ้งในแนวคิดที่มีอยู่"
+
+#: assembl/templates/views/bookmarket.tmpl:17
+msgid "Bring supplementary information relative to an idea"
+msgstr "นำเสนอข้อมูลเสริมที่เกี่ยวข้องกับแนวคิด"
+
+#: assembl/templates/views/bookmarket.tmpl:18
+msgid "Find new viewpoints and arguments"
+msgstr "ค้นหามุมมองและข้อโต้แย้งใหม่ๆ"
+
+#: assembl/templates/views/bookmarket.tmpl:19
+msgid "Add an inspiring quote"
+msgstr "เพิ่มการอ้างอิงที่มีอิทธิพล"
+
+#: assembl/templates/views/bookmarket.tmpl:22
+msgid ""
+"Click on the button, where you had dragged it in your browser, to activate "
+"web annotation."
+msgstr ""
+"คลิกที่ปุ่มที่คุณลากมาไว้ในเบราเซอร์เพื่อเปิดใช้งานคำอธิบายประกอบเว็บ"
+
+#: assembl/templates/views/bookmarket.tmpl:28
+msgid "I understand"
+msgstr "ฉันเข้าใจ"
+
+#: assembl/templates/views/ckeditorField.tmpl:18
+msgid "See more"
+msgstr "เข้าใจมากขึ้น"
+
+#: assembl/templates/views/ckeditorField.tmpl:19
+msgid "See less"
+msgstr "เข้าใจเล็กน้อย"
+
+#: assembl/templates/views/cookieBanner.tmpl:2
+msgid ""
+"By using our site, you consent to cookies being used for improvement of our "
+"service?"
+msgstr ""
+"จากการใช้เว็บไซต์ของเรา คุณยอมรับคุกกี้ที่ใช้เพื่อปรับปรุงบริการ"
+
+#: assembl/templates/views/cookieBanner.tmpl:3
+msgid "Yes, I accept."
+msgstr "ใช่ ฉันยอมรับ"
+
+#: assembl/templates/views/cookieBanner.tmpl:3
+msgid "No, Thanks."
+msgstr "ไม่ ขอบคุณ"
+
+#: assembl/templates/views/create-group.tmpl:3
+msgid "Create a panel group"
+msgstr "สร้างกลุ่มแผง"
+
+#: assembl/templates/views/create-group.tmpl:8
+msgid "Choose a navigation panel:"
+msgstr "เลือกแผงการนำทาง:"
+
+#: assembl/templates/views/create-group.tmpl:18
+msgid "simpleView"
+msgstr "simpleView"
+
+#: assembl/templates/views/create-group.tmpl:30
+msgid "Create a synthesis"
+msgstr "สร้างบทสังเคราะห์"
+
+#: assembl/templates/views/create-group.tmpl:51
+msgid "Others:"
+msgstr "อื่นๆ:"
+
+#: assembl/templates/views/create-group.tmpl:61
+#: assembl/templates/views/create-group.tmpl:93
+msgid "Idea Panel"
+msgstr "แผงแนวคิด"
+
+#: assembl/templates/views/create-group.tmpl:71
+#: assembl/templates/views/create-group.tmpl:83
+#: assembl/templates/views/navigation.tmpl:11
+msgid "Discussion"
+msgstr "การสนทนา"
+
+#: assembl/templates/views/defaultNotification.tmpl:7
+msgid "Auto-subscribe users to default notifications when they register"
+msgstr "สมัครใช้งานโดยอัตโนมัติเพื่อรับการแจ้งเตือนเริ่มต้นเมื่อลงทะเบียน"
+
+#: assembl/templates/views/discussionAdminNavigationMenu.tmpl:6
+#: assembl/templates/views/userNavigationMenu.tmpl:14
+msgid "Discussion preferences"
+msgstr "การกำหนดลักษณะการสนทนา"
+
+#: assembl/templates/views/discussionAdminNavigationMenu.tmpl:9
+msgid "Server settings"
+msgstr "การตั้งค่าเซิร์ฟเวอร์"
+
+#: assembl/templates/views/discussionAdminNavigationMenu.tmpl:18
+msgid "Edit partners"
+msgstr "แก้ไขผู้ร่วมมือ"
+
+#: assembl/templates/views/discussionAdminNavigationMenu.tmpl:21
+#: assembl/templates/views/userAccountForm.tmpl:43
+#: assembl/templates/views/userNavigationMenu.tmpl:17
+#: assembl/templates/views/userProfile.tmpl:75
+msgid "Return to the discussion"
+msgstr "กลับไปที่การสนทนา"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:4
+msgid "Users visits"
+msgstr "การเยี่ยมชมของผู้ใช้"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:7
+msgid "Users' date of first visit"
+msgstr "วันที่ผู้ใช้เยี่ยมชมครั้งแรก"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:8
+msgid "Users' date of last visit"
+msgstr "วันที่ผู้ใช้เยี่ยมชมครั้งล่าสุด"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:14
+msgid "Time series analytics"
+msgstr "การวิเคราะห์ชุดข้อมูลเวลา"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:18
+msgid "Start date"
+msgstr "วันที่เริ่ม"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:22
+msgid "End date"
+msgstr "วันที่สิ้นสุด"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:26
+msgid "Interval"
+msgstr "ช่วงเวลา"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:28
+msgid "Single interval"
+msgstr "ช่วงเวลาเดียว"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:29
+msgid "One year"
+msgstr "หนึ่งปี"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:30
+msgid "One month"
+msgstr "หนึ่งเดือน"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:31
+msgid "One week"
+msgstr "หนึ่งสัปดาห์ "
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:32
+msgid "One day"
+msgstr "หนึ่งวัน"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:33
+msgid "custom"
+msgstr "กำหนดเอง"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:37
+msgid "File format"
+msgstr "รูปแบบไฟล์"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:39
+msgid "MS Excel"
+msgstr "MS Excel"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:40
+msgid "Comma-separated values"
+msgstr "ค่าที่คั่นด้วยจุลภาค"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:52
+msgid "General discussion statistics"
+msgstr "สถิติการสนทนาทั่วไป"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:53
+msgid "Get general discussion statistics"
+msgstr "ดูสถิติการสนทนาทั่วไป"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:60
+msgid "Per participant statistics"
+msgstr "สถิติผู้เข้าร่วมรายคน"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:62
+msgid "Show fields:"
+msgstr "แสดงฟิลด์:"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:65
+#: assembl/templates/views/discussionStatisticsModal.tmpl:99
+msgid "Posts"
+msgstr "โพสต์"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:66
+#: assembl/templates/views/discussionStatisticsModal.tmpl:100
+msgid "Cumulative posts"
+msgstr "โพสต์สะสม"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:67
+#: assembl/templates/views/discussionStatisticsModal.tmpl:101
+msgid "Replies received"
+msgstr "คำตอบที่ได้รับ"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:68
+#: assembl/templates/views/discussionStatisticsModal.tmpl:102
+msgid "Cumulative replies received"
+msgstr "คำตอบที่ได้รับสะสม"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:70
+#: assembl/templates/views/discussionStatisticsModal.tmpl:104
+msgid "Liking"
+msgstr "ความชอบ"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:71
+#: assembl/templates/views/discussionStatisticsModal.tmpl:105
+msgid "Cumulative liking"
+msgstr "ความชอบสะสม"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:72
+#: assembl/templates/views/discussionStatisticsModal.tmpl:106
+msgid "Liked"
+msgstr "ที่ชอบ"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:73
+#: assembl/templates/views/discussionStatisticsModal.tmpl:107
+msgid "Cumulative liked"
+msgstr "ที่ชอบสะสม"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:75
+#: assembl/templates/views/discussionStatisticsModal.tmpl:109
+msgid "Disagreeing"
+msgstr "ความไม่เห็นด้วย"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:76
+#: assembl/templates/views/discussionStatisticsModal.tmpl:110
+msgid "Cumulative disagreeing"
+msgstr "ความไม่เห็นด้วยสะสม"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:77
+#: assembl/templates/views/discussionStatisticsModal.tmpl:111
+msgid "Disagreed"
+msgstr "ที่ไม่เห็นด้วย"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:78
+#: assembl/templates/views/discussionStatisticsModal.tmpl:112
+msgid "Cumulative disagreed"
+msgstr "ที่ไม่เห็นด้วยสะสม"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:80
+msgid "misunderstanding"
+msgstr "ความเข้าใจผิด"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:81
+#: assembl/templates/views/discussionStatisticsModal.tmpl:115
+msgid "Cumulative misunderstanding"
+msgstr "ความเข้าใจผิดสะสม"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:82
+#: assembl/templates/views/discussionStatisticsModal.tmpl:116
+msgid "Misunderstood"
+msgstr "ที่เข้าใจผิด"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:83
+#: assembl/templates/views/discussionStatisticsModal.tmpl:117
+msgid "Cumulative misunderstood"
+msgstr "ที่เข้าใจผิดสะสม"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:85
+#: assembl/templates/views/discussionStatisticsModal.tmpl:119
+msgid "Requesting info"
+msgstr "การร้องขอข้อมูล"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:86
+#: assembl/templates/views/discussionStatisticsModal.tmpl:120
+msgid "Cumulative requesting info"
+msgstr "การร้องขอข้อมูลสะสม"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:87
+#: assembl/templates/views/discussionStatisticsModal.tmpl:121
+msgid "Info requested"
+msgstr "ข้อมูลที่ร้องขอ"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:88
+#: assembl/templates/views/discussionStatisticsModal.tmpl:122
+msgid "Cumulative info requested"
+msgstr "ข้อมูลที่ร้องขอสะสม"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:93
+msgid "Sorted by"
+msgstr "แยกประเภทตาม"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:97
+msgid "Domain"
+msgstr "โดเมน"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:114
+msgid "Misunderstanding"
+msgstr "ความเข้าใจผิด"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:127
+msgid "Show emails"
+msgstr "แสดงอีเมล"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:133
+msgid "Get discussion participant statistics"
+msgstr "ดูสถิติผู้เข้าร่วมการสนทนา"
+
+#: assembl/templates/views/emailSource.tmpl:13
+msgid "Admin sender"
+msgstr "ผู้ส่งที่เป็นผู้ดูแลระบบ"
+
+#: assembl/templates/views/emailSource.tmpl:16
+msgid ""
+"This field is an e-mail address, and is mandatory: it will be the value of "
+"notification emails' From field"
+msgstr ""
+"ช่องนี้เป็นที่อยู่อีเมลและจำเป็นต้องระบุ: จะเป็นค่าของอีเมลแจ้งเตือนที่ระบุ"
+
+#: assembl/templates/views/emailSource.tmpl:22
+msgid "Post email address"
+msgstr "โพสต์ที่อยู่อีเมล"
+
+#: assembl/templates/views/emailSource.tmpl:25
+msgid "For mailing lists only: Where messages are sent to the list"
+msgstr "สำหรับรายชื่อผู้รับเมลเท่านั้น: กรณีที่มีการส่งข้อความไปยังรายชื่อ"
+
+#: assembl/templates/views/emailSource.tmpl:30
+msgid "Host"
+msgstr "โฮสต์"
+
+#: assembl/templates/views/emailSource.tmpl:37
+msgid "Use SSL"
+msgstr "ใช้ SSL"
+
+#: assembl/templates/views/emailSource.tmpl:43
+msgid "True"
+msgstr "จริง"
+
+#: assembl/templates/views/emailSource.tmpl:48
+msgid "False"
+msgstr "เท็จ"
+
+#: assembl/templates/views/emailSource.tmpl:52
+msgid "Folder"
+msgstr "โฟลเดอร์"
+
+#: assembl/templates/views/emailSource.tmpl:60
+msgid "Port"
+msgstr "พอร์ต"
+
+#: assembl/templates/views/exportPostModal-fb-group.tmpl:2
+msgid "Select Group"
+msgstr "เลือกกลุ่ม"
+
+#: assembl/templates/views/exportPostModal-fb-page.tmpl:2
+msgid "Select Page"
+msgstr "เลือกเพจ"
+
+#: assembl/templates/views/exportPostModal-fb-page.tmpl:14
+msgid "Post as"
+msgstr "โพสต์แบบ"
+
+#: assembl/templates/views/exportPostModal-fb-token-error.tmpl:6
+msgid "Basic"
+msgstr "พื้นฐาน"
+
+#: assembl/templates/views/exportPostModal-fb-token-error.tmpl:6
+msgid ""
+"We will need your permission to publish the message you are exporting on "
+"your behalf,  as well as permission to read the posts back in order to "
+"import them back into Assembl."
+msgstr ""
+"เราจำเป็นต้องได้รับอนุญาตจากคุณเพื่อเผยแพร่ข้อความที่คุณส่งออกในนามของคุณ รวมถึงสิทธิ์ในการอ่านโพสต์ย้อนหลังเพื่อนำกลับเข้าสู่ Assembl"
+
+#: assembl/templates/views/exportPostModal-fb-token-error.tmpl:7
+msgid "Groups"
+msgstr "กลุ่ม"
+
+#: assembl/templates/views/exportPostModal-fb-token-error.tmpl:7
+msgid ""
+"We will need your permission to access the list of groups that you are a "
+"part of and to be able to post on them, both on your behalf, or if you are "
+"the group administrator, on behalf of the group itself. "
+msgstr ""
+"เราจำเป็นต้องได้รับอนุญาตจากคุณเพื่อเข้าถึงรายชื่อกลุ่มที่คุณเป็นสมาชิก และเพื่อสามารถโพสต์ในกลุ่มเหล่านั้นได้ทั้งในนามของคุณ และ/หรือในกรณีที่คุณเป็นผู้ดูแลกลุ่ม และในนามของกลุ่มเอง"
+
+#: assembl/templates/views/exportPostModal-fb-token-error.tmpl:8
+msgid "Pages"
+msgstr "เพจ"
+
+#: assembl/templates/views/exportPostModal-fb-token-error.tmpl:8
+msgid ""
+"We will need your permission to access the list of pages you have liked, as "
+"well as those in which you are an administrator, and to be able to post both "
+"on your behalf or, if you are the page administrator, on behalf of the page "
+"itself"
+msgstr ""
+"เราจำเป็นต้องได้รับอนุญาตจากคุณเพื่อเข้าถึงรายชื่อเพจที่คุณชื่นชอบ รวมถึงเพจที่คุณเป็นผู้ดูแล และเพื่อสามารถโพสต์ในเพจเหล่านั้นได้ทั้งในนามของคุณ และ/หรือในกรณีที่คุณเป็นผู้ดูแลเพจ และในนามของเพจเอง"
+
+#: assembl/templates/views/exportPostModal-fb.tmpl:23
+msgid "Pick where to post to"
+msgstr "เลือกตำแหน่งที่จะโพสต์"
+
+#: assembl/templates/views/exportPostModal-fb.tmpl:28
+msgid "Your Wall"
+msgstr "พื้นที่โพสต์ข้อมูลของคุณ"
+
+#: assembl/templates/views/exportPostModal-fb.tmpl:29
+msgid "Your Pages"
+msgstr "เพจของคุณ"
+
+#: assembl/templates/views/exportPostModal-fb.tmpl:30
+msgid "Your Groups"
+msgstr "กลุ่มของคุณ"
+
+#: assembl/templates/views/exportPostModal-fb.tmpl:41
+msgid "Suggested preview"
+msgstr "ตัวอย่างที่แนะนำ"
+
+#: assembl/templates/views/exportPostModal-fb.tmpl:44
+msgid "Message Header:"
+msgstr "ส่วนหัวข้อความ:"
+
+#: assembl/templates/views/exportPostModal-fb.tmpl:49
+msgid "Extra Message:"
+msgstr "ข้อความเสริม:"
+
+#: assembl/templates/views/exportPostModal-fb.tmpl:57
+msgid "Link URL:"
+msgstr "URL ของลิงค์:"
+
+#: assembl/templates/views/exportPostModal-fb.tmpl:58
+msgid "Title Override:"
+msgstr "ชื่อเรื่องที่ใช้แทน:"
+
+#: assembl/templates/views/exportPostModal-fb.tmpl:59
+msgid "Caption Override:"
+msgstr "คำอธิบายภาพที่ใช้แทน:"
+
+#: assembl/templates/views/exportPostModal-fb.tmpl:60
+msgid "Description Override:"
+msgstr "คำอธิบายที่ใช้แทน:"
+
+#: assembl/templates/views/exportPostModal.tmpl:2
+msgid "Export post by "
+msgstr "ส่งออกโพสต์โดย"
+
+#: assembl/templates/views/exportPostModal.tmpl:10
+msgid "Select your desired export location"
+msgstr "เลือกตำแหน่งที่คุณต้องการส่งออก"
+
+#: assembl/templates/views/facebookSourceForm.tmpl:7
+msgid ""
+"How many top posts and their comments would you like to import? Leave blank "
+"to import all posts"
+msgstr ""
+"คุณต้องการนำเข้าโพสต์และข้อคิดเห็นที่ดีที่สุดจำนวนกี่ข้อความ เว้นว่างไว้เพื่อนำเข้าโพสต์ทั้งหมด"
+
+#: assembl/templates/views/facebookSourceForm.tmpl:7
+msgid "Maximum number of threads"
+msgstr "จำนวนสูงสุดของกลุ่มข้อความสนทนา"
+
+#: assembl/templates/views/facebookSourceForm.tmpl:14
+msgid ""
+"When has been posted the oldest post you would like to import? Use ISO 8601 "
+"UTC. (ex: 2015-10-20T00:00:00Z ) Leave blank for no limit"
+msgstr ""
+"เมื่อโพสต์รายการเก่าสุดที่คุณต้องการนำเข้าเมื่อใด ให้ใช้ ISO 8601 UTC (เช่น 2015-10-20T00:00:00Z ) การเว้นว่างไว้หมายถึงไม่มีขีดจำกัด"
+
+#: assembl/templates/views/facebookSourceForm.tmpl:14
+msgid "Minimum date"
+msgstr "วันที่ต่ำสุด"
+
+#: assembl/templates/views/facebookSourceForm.tmpl:21
+msgid ""
+"When has been posted the newest post you would like to import? Use ISO 8601 "
+"UTC. (ex: 2015-10-20T00:00:00Z ) Leave blank for no limit"
+msgstr ""
+"เมื่อโพสต์รายการใหม่สุดที่คุณต้องการนำเข้าเมื่อใด ให้ใช้ ISO 8601 UTC (เช่น 2015-10-20T00:00:00Z ) การเว้นว่างไว้หมายถึงไม่มีขีดจำกัด"
+
+#: assembl/templates/views/facebookSourceForm.tmpl:21
+msgid "Maximum date"
+msgstr "วันที่สูงสุด"
+
+#: assembl/templates/views/firstLoginAfterAutoSubscribeToNotifications.tmpl:7
+msgid "Welcome on the discussion!"
+msgstr "ยินดีต้อนรับสู่การสนทนา!"
+
+#: assembl/templates/views/firstLoginAfterAutoSubscribeToNotifications.tmpl:8
+msgid "You will receive notifications when:"
+msgstr "คุณจะได้รับการแจ้งเตือนเมื่อ:"
+
+#: assembl/templates/views/firstLoginAfterAutoSubscribeToNotifications.tmpl:12
+#: assembl/templates/views/firstPost.tmpl:12
+#: assembl/templates/views/joinDiscussion.tmpl:12
+msgid ""
+"You can modify at anytime the type of notification you receive by clicking "
+"on the ‘Notifications’ section of your profile."
+msgstr ""
+"คุณสามารถแก้ไขประเภทของการแจ้งเตือนที่คุณได้รับได้ตลอดเวลา โดยคลิกที่ส่วน 'การแจ้งเตือน' ในโปรไฟล์ของคุณ"
+
+#: assembl/templates/views/firstLoginAfterAutoSubscribeToNotifications.tmpl:18
+#: assembl/templates/views/joinDiscussion.tmpl:18
+msgid "Edit my notifications"
+msgstr "แก้ไขการแจ้งเตือนของฉัน"
+
+#: assembl/templates/views/firstLoginAfterAutoSubscribeToNotifications.tmpl:19
+msgid "Continue to the discussion"
+msgstr "ดำเนินการสนทนาต่อ"
+
+#: assembl/templates/views/firstPost.tmpl:7
+msgid "Congratulations on making your first contribution!"
+msgstr "ขอแสดงความยินดีกับการเข้าร่วมแสดงแนวคิดครั้งแรกของคุณ!"
+
+#: assembl/templates/views/firstPost.tmpl:8
+#: assembl/templates/views/joinDiscussion.tmpl:8
+msgid ""
+"Stay informed and up to date with the evolution of the discussion and "
+"receive notifications when:"
+msgstr ""
+"รับทราบและอัพเดตเกี่ยวกับวิวัฒนาการของการสนทนาและรับการแจ้งเตือนเมื่อ:"
+
+#: assembl/templates/views/firstPost.tmpl:19
+#: assembl/templates/views/joinDiscussion.tmpl:19
+msgid "Receive notifications"
+msgstr "รับการแจ้งเตือน"
+
+#: assembl/templates/views/globalAdminNavigationMenu.tmpl:3
+msgid "Global preferences"
+msgstr "กำหนดลักษณะส่วนกลาง"
+
+#: assembl/templates/views/globalAdminNavigationMenu.tmpl:9
+msgid "Create a discussion"
+msgstr "สร้างการสนทนา"
+
+#: assembl/templates/views/helperDebate.tmpl:4
+msgid "Pick a topic and start contributing"
+msgstr "เลือกหัวข้อและเริ่มเข้าร่วมแสดงแนวคิด"
+
+#: assembl/templates/views/helperDebate.tmpl:5
+msgid ""
+"This table of contents helps you find the conversations and topics you are "
+"interested in so you don’t get overwhelmed. Topics include messages from all "
+"related sub-topics as well."
+msgstr ""
+"สารบัญนี้จะช่วยให้คุณสามารถดูการสนทนาและหัวข้อที่คุณสนใจได้ เพื่อที่คุณจะได้ไม่ต้องรับข้อมูลมากเกินไป แต่ละหัวข้อจะรวมถึงข้อความจากหัวข้อย่อยทั้งหมดที่เกี่ยวข้องด้วย"
+
+#: assembl/templates/views/helperDebate.tmpl:6
+msgid "This is a safe and respectful space. All ideas are welcome!"
+msgstr "พื้นที่นี้ปลอดภัยและให้ความเคารพต่อกัน ยินดีต้อนรับทุกแนวคิด!"
+
+#: assembl/templates/views/ideaClassification_directExtract.tmpl:3
+#, python-format
+msgid ""
+"<span class=\"harvester\">%s</span> has considered this message relevant to "
+"the idea:"
+msgstr ""
+"<span class=\"harvester\">%s</span> ได้พิจารณาว่าข้อความนี้ที่เกี่ยวข้องกับแนวคิด:"
+
+#: assembl/templates/views/ideaClassification_directExtract.tmpl:7
+#: assembl/templates/views/ideaClassification_indirectExtract.tmpl:7
+msgid "Considering this extract:"
+msgstr "พิจารณาเนื้อหาที่คัดลอกนี้:"
+
+#: assembl/templates/views/ideaClassification_directExtract.tmpl:12
+#: assembl/templates/views/ideaClassification_indirectExtract.tmpl:12
+#, python-format
+msgid "by %s"
+msgstr "โดย %s"
+
+#: assembl/templates/views/ideaClassification_directMessage.tmpl:3
+#, python-format
+msgid ""
+"<span class=\"author\">%s</span> started this new discussion thread directly "
+"on the idea:"
+msgstr ""
+"<span class=\"author\">%s</span> ได้เริ่มกลุ่มข้อความสนทนาใหม่โดยตรงที่แนวคิด:"
+
+#: assembl/templates/views/ideaClassification_indirectExtract.tmpl:3
+#, python-format
+msgid ""
+"This message is part of a thread, which <span class=\"harvester\">%s</span> "
+"considered relevant to the idea:"
+msgstr ""
+"ข้อความนี้เป็นส่วนหนึ่งของกลุ่มข้อความสนทนาซึ่ง <span class=\"harvester\">%s</span> พิจารณาว่าเกี่ยวข้องกับแนวคิด:"
+
+#: assembl/templates/views/ideaClassification_indirectMessage.tmpl:3
+#, python-format
+msgid ""
+"This message is part of a thread, started by <span class=\"author\">%s</"
+"span> on the idea:"
+msgstr ""
+"ข้อความนี้เป็นส่วนหนึ่งของกลุ่มข้อความสนทนาซึ่งเริ่มโดย <span class=\"author\">%s</span> ที่แนวคิด:"
+
+#: assembl/templates/views/ideaInIdeaList.tmpl:7
+msgid "Remove from next synthesis"
+msgstr "ลบออกจากการสังเคราะห์ถัดไป"
+
+#: assembl/templates/views/ideaInIdeaList.tmpl:7
+msgid "Add to next synthesis"
+msgstr "เพิ่มในการสังเคราะห์ถัดไป"
+
+#: assembl/templates/views/ideaInIdeaList.tmpl:45
+msgid "Number of messages related to this idea, or any of its sub-ideas"
+msgstr "จำนวนข้อความที่เกี่ยวข้องกับแนวคิดนี้หรือแนวคิดย่อย"
+
+#: assembl/templates/views/ideaInIdeaList.tmpl:50
+msgid "This idea has been created recently"
+msgstr "แนวคิดนี้เพิ่งสร้างขึ้นเมื่อเร็วๆ นี้"
+
+#: assembl/templates/views/ideaInIdeaList.tmpl:50
+msgid "new!"
+msgstr "ใหม่!"
+
+#: assembl/templates/views/ideaInIdeaList.tmpl:55
+msgid "Number of unread messages related to this idea, or any of its sub-ideas"
+msgstr "จำนวนข้อความที่ยังไม่ได้อ่านที่เกี่ยวข้องกับแนวคิดนี้หรือแนวคิดย่อย"
+
+#: assembl/templates/views/ideaInIdeaList.tmpl:59
+msgid ""
+"Number of unread messages related to this idea, or any of its sub-ideas.  "
+"Click on this number to view ONLY the new unread messages"
+msgstr ""
+"จำนวนข้อความที่ยังไม่ได้อ่านที่เกี่ยวข้องกับแนวคิดนี้หรือแนวคิดย่อย คลิกที่จำนวนนี้เพื่อดู “เฉพาะ” ข้อความใหม่ที่ยังไม่ได้อ่าน"
+
+#: assembl/templates/views/ideaInSynthesis.tmpl:14
+msgid "View conversation on this idea"
+msgstr "ดูการสนทนาของแนวคิดนี้"
+
+#: assembl/templates/views/ideaInSynthesis.tmpl:26
+msgid "View Idea in popup"
+msgstr "ดูแนวคิดในป๊อปอัพ"
+
+#: assembl/templates/views/ideaList.tmpl:18
+msgid "Add idea"
+msgstr "เพิ่มแนวคิด"
+
+#: assembl/templates/views/ideaList.tmpl:22
+msgid "Options"
+msgstr "ตัวเลือก"
+
+#: assembl/templates/views/ideaList.tmpl:24
+msgid "Decrease row height"
+msgstr "ลดความสูงของแถว"
+
+#: assembl/templates/views/ideaList.tmpl:25
+msgid "Increase row height"
+msgstr "เพิ่มความสูงของแถว"
+
+#: assembl/templates/views/ideaList.tmpl:26
+msgid "Toggle decreasing font size with depth"
+msgstr "เปลี่ยนการลดขนาดตัวอักษรที่มีความละเอียด"
+
+#: assembl/templates/views/ideaList.tmpl:27
+msgid "Expand all ideas"
+msgstr "ขยายแนวคิดทั้งหมด"
+
+#: assembl/templates/views/ideaList.tmpl:28
+msgid "Collapse all ideas"
+msgstr "ยุบแนวคิดทั้งหมด"
+
+#: assembl/templates/views/ideaList.tmpl:30
+msgid "Save the current expanded/collapsed state as default for users"
+msgstr "บันทึกสถานะขยาย / ยุบปัจจุบันเป็นค่าเริ่มต้นสำหรับผู้ใช้"
+
+#: assembl/templates/views/ideaList.tmpl:32
+msgid "Restore default expanded/collapsed state"
+msgstr "เรียกคืนสถานะขยาย / ยุบตามค่าเริ่มต้น"
+
+#: assembl/templates/views/ideaPanel.tmpl:2
+#: assembl/templates/views/message.tmpl:25
+msgid "Share"
+msgstr "แชร์"
+
+#: assembl/templates/views/ideaPanel.tmpl:12
+msgid "The name of this idea in the table of ideas"
+msgstr "ชื่อของแนวคิดนี้ในตารางแนวคิด"
+
+#: assembl/templates/views/ideaPanel.tmpl:20
+msgid "Voting session"
+msgstr "เซสชั่นการโหวต"
+
+#: assembl/templates/views/ideaPanel.tmpl:27
+msgid "What you need to know"
+msgstr "สิ่งที่คุณต้องรู้"
+
+#: assembl/templates/views/ideaPanel.tmpl:33
+msgid "Expression in next synthesis"
+msgstr "การแสดงแนวคิดในการสังเคราะห์ถัดไป"
+
+#: assembl/templates/views/ideaPanel.tmpl:36
+msgid ""
+"Expression of this idea in the next synthesis.  You may want to edit them "
+"all together in the synthesis panel rather than here."
+msgstr ""
+"การแสดงแนวคิดในการสังเคราะห์ถัดไป คุณอาจต้องการแก้ไขแนวคิดทั้งหมดพร้อมกันในแผงการสังเคราะห์มากกว่าจะดำเนินการในขณะนี้"
+
+#: assembl/templates/views/ideaPanel.tmpl:40
+msgid "Description of this idea"
+msgstr "คำอธิบายของแนวคิดนี้"
+
+#: assembl/templates/views/ideaPanel.tmpl:43
+msgid "A description of this idea"
+msgstr "คำอธิบายของแนวคิดนี้"
+
+#: assembl/templates/views/ideaPanel.tmpl:48
+msgid "Announcement for this idea"
+msgstr "ประกาศสำหรับแนวคิดนี้"
+
+#: assembl/templates/views/ideaPanel.tmpl:67
+msgid ""
+"Number of participants who contributed messages about this idea or it's sub-"
+"ideas."
+msgstr ""
+"จำนวนผู้เข้าร่วมที่เขียนข้อความเกี่ยวกับแนวคิดนี้หรือแนวคิดย่อย"
+
+#: assembl/templates/views/ideaPanel.tmpl:86
+msgid "Expressions of this idea in messages or on the web"
+msgstr "การแสดงแนวคิดนี้ในข้อความหรือบนเว็บ"
+
+#: assembl/templates/views/ideaPanel.tmpl:91
+msgid ""
+"Nuggets are important expressions of this idea in messages or on the web"
+msgstr ""
+"ความลับคือสิ่งสำคัญของการแสดงแนวคิดนี้ในข้อความหรือบนเว็บ"
+
+#: assembl/templates/views/ideaPanel.tmpl:99
+msgid ""
+"Add extracts by dragging them in this panel from the clipboard or messages"
+msgstr ""
+"เพิ่มเนื้อหาที่คัดลอกโดยลากจากคลิปบอร์ดหรือข้อความมาไว้ในแผงนี้"
+
+#: assembl/templates/views/ideaPanel.tmpl:109
+msgid ""
+"Remove all extracts from this idea.  Removed extracts will be available in "
+"your clipboard"
+msgstr ""
+"ลบเนื้อหาทั้งหมดที่คัดลอกออกจากแนวคิดนี้ เนื้อหาคัดลอกที่ถูกลบจะอยู่ในคลิปบอร์ดของคุณ"
+
+#: assembl/templates/views/ideaPanel.tmpl:109
+msgid "Remove all extracts"
+msgstr "ลบเนื้อหาทั้งหมดที่คัดลอก"
+
+#: assembl/templates/views/ideaPanel.tmpl:114
+msgid "Delete this idea completely"
+msgstr "ลบแนวคิดนี้ทั้งหมด"
+
+#: assembl/templates/views/ideaPanel.tmpl:114
+msgid "Delete idea"
+msgstr "ลบแนวคิด"
+
+#: assembl/templates/views/ideaPanel.tmpl:118
+msgid "Define a multi-column message view on this idea"
+msgstr "กำหนดมุมมองข้อความแบบหลายคอลัมน์ในแนวคิดนี้"
+
+#: assembl/templates/views/ideaPanel.tmpl:118
+msgid "Define column view"
+msgstr "กำหนดมุมมองคอลัมน์"
+
+#: assembl/templates/views/ideaPanel.tmpl:130
+msgid "No idea selected"
+msgstr "ไม่มีแนวคิดที่เลือก"
+
+#: assembl/templates/views/ideaPanel.tmpl:131
+msgid ""
+"Choose an idea in the Table of ideas to explore the discussion or close this "
+"panel as you will have open"
+msgstr ""
+"เลือกแนวคิดจากตารางแนวคิดเพื่อสำรวจการสนทนา หรือปิดแผงนี้หากคุณไม่ต้องการเปิด"
+
+#: assembl/templates/views/instigator.tmpl:6
+#: assembl/templates/views/instigator.tmpl:8
+msgid "Instigated by"
+msgstr "ส่งเสริมโดย"
+
+#: assembl/templates/views/instigator.tmpl:6
+msgid "edit instigator"
+msgstr "แก้ไขผู้ส่งเสริม"
+
+#: assembl/templates/views/introductions.tmpl:22
+msgid "Context"
+msgstr "บริบท"
+
+#: assembl/templates/views/introductions.tmpl:25
+msgid "You probably want to add a context for this discussion"
+msgstr "คุณอาจต้องการเพิ่มบริบทสำหรับการสนทนานี้"
+
+#: assembl/templates/views/introductions.tmpl:34
+msgid "Discussion objectives"
+msgstr "วัตถุประสงค์การสนทนา"
+
+#: assembl/templates/views/introductions.tmpl:38
+msgid "You probably want to add some discussion objectives"
+msgstr "คุณอาจต้องการเพิ่มวัตถุประสงค์บางอย่างในการสนทนา"
+
+#: assembl/templates/views/joinDiscussion.tmpl:7
+msgid "Keep up with the evolution of the discussion"
+msgstr "ติดตามวิวัฒนาการของการสนทนา"
+
+#: assembl/templates/views/message.tmpl:10
+#: assembl/templates/views/message.tmpl:39
+#: assembl/templates/views/messageDeletedByUser.tmpl:10
+#: assembl/templates/views/messageDeletedByUser.tmpl:31
+msgid "Mark as unread"
+msgstr "ทำเครื่องหมายว่ายังไม่ได้อ่าน"
+
+#: assembl/templates/views/message.tmpl:12
+#: assembl/templates/views/message.tmpl:41
+#: assembl/templates/views/messageDeletedByUser.tmpl:12
+#: assembl/templates/views/messageDeletedByUser.tmpl:33
+msgid "Mark as read"
+msgstr "ทำเครื่องหมายว่าอ่านแล้ว"
+
+#: assembl/templates/views/message.tmpl:20
+msgid "This link inspired the author to write this message"
+msgstr "ลิงค์นี้กระตุ้นให้ผู้เขียนเขียนข้อความนี้"
+
+#: assembl/templates/views/message.tmpl:20
+msgid "Inspiration source"
+msgstr "ที่มาของแรงบันดาลใจ"
+
+#: assembl/templates/views/message.tmpl:46
+msgid "Export Post"
+msgstr "ส่งออกโพสต์"
+
+#: assembl/templates/views/message.tmpl:57
+msgid "Show this message in its entire thread (clears all filters)"
+msgstr "แสดงข้อความนี้ในกลุ่มข้อความสนทนาทั้งหมด (ล้างตัวกรองทั้งหมด)"
+
+#: assembl/templates/views/message.tmpl:60
+msgid "Show this message in the full Newest first view (clears all filters)"
+msgstr "แสดงข้อความนี้แบบเต็มในมุมมองแรกสุด (ล้างตัวกรองทั้งหมด)"
+
+#: assembl/templates/views/message.tmpl:64
+msgid "Go back to the entire topic thread"
+msgstr "กลับไปที่หัวข้อของกลุ่มข้อความสนทนาทั้งหมด"
+
+#: assembl/templates/views/message.tmpl:66
+msgid "Show only this message and its replies"
+msgstr "แสดงเฉพาะข้อความนี้และการตอบกลับ"
+
+#: assembl/templates/views/message.tmpl:70
+#, python-format
+msgid "Show all posts by %s"
+msgstr "แสดงโพสต์ทั้งหมดโดย %s"
+
+#: assembl/templates/views/message.tmpl:74
+#: assembl/templates/views/messageDeletedByUser.tmpl:38
+msgid "Send an email to this user"
+msgstr "ส่งอีเมลไปยังผู้ใช้รายนี้"
+
+#: assembl/templates/views/message.tmpl:79
+msgid "Display translation preferences"
+msgstr "แสดงการตั้งค่าการแปล"
+
+#: assembl/templates/views/message.tmpl:84
+msgid "Show/hide extracts"
+msgstr "แสดง / ซ่อนเนื้อหาที่คัดลอก"
+
+#: assembl/templates/views/message.tmpl:88
+msgid "Moderation options"
+msgstr "ตัวเลือกการกลั่นกรอง"
+
+#: assembl/templates/views/message.tmpl:92
+msgid "Export Post in HTML"
+msgstr "ส่งออกโพสต์เป็น HTML"
+
+#: assembl/templates/views/message.tmpl:96
+msgid "Delete this message"
+msgstr "ลบข้อความนี้"
+
+#: assembl/templates/views/message.tmpl:109
+msgid "View the original message"
+msgstr "ดูข้อความต้นฉบับ"
+
+#: assembl/templates/views/message.tmpl:112
+msgid "Return to the translated message"
+msgstr "กลับไปที่ข้อความที่แปลแล้ว"
+
+#: assembl/templates/views/message.tmpl:126
+msgid "Sorry, we could not translate this message."
+msgstr "ขออภัย เราไม่สามารถแปลข้อความนี้"
+
+#: assembl/templates/views/message.tmpl:128
+msgid "Please try again later."
+msgstr "โปรดลองอีกครั้งในภายหลัง"
+
+#: assembl/templates/views/message.tmpl:131
+msgid ""
+"Sorry, we cannot translate this because we could not identify the source "
+"language."
+msgstr ""
+"ขออภัย เราไม่สามารถแปลข้อความนี้ เนื่องจากไม่สามารถระบุภาษาต้นฉบับได้"
+
+#: assembl/templates/views/message.tmpl:190
+#: assembl/templates/views/messageDeletedByUser.tmpl:92
+msgid "Read more"
+msgstr "อ่านมากขึ้น"
+
+#: assembl/templates/views/message.tmpl:199
+#: assembl/templates/views/messageDeletedByUser.tmpl:100
+msgid "Read less"
+msgstr "อ่านน้อยลง"
+
+#: assembl/templates/views/message.tmpl:203
+#: assembl/templates/views/message.tmpl:255
+msgid "Like"
+msgstr "ชอบ"
+
+#: assembl/templates/views/message.tmpl:204
+#: assembl/templates/views/message.tmpl:271
+msgid "Disagree"
+msgstr "ไม่เห็นด้วย"
+
+#: assembl/templates/views/message.tmpl:205
+#: assembl/templates/views/message.tmpl:286
+msgid "Did not get it"
+msgstr "ไม่เข้าใจ"
+
+#: assembl/templates/views/message.tmpl:206
+#: assembl/templates/views/message.tmpl:301
+msgid "More info please?"
+msgstr "กรุณาให้ข้อมูลเพิ่มเติม"
+
+#: assembl/templates/views/message.tmpl:218
+msgid "Reply"
+msgstr "ตอบกลับ"
+
+#: assembl/templates/views/messageColumn.tmpl:23
+#: assembl/templates/views/messageList.tmpl:13
+msgid "Load previous messages"
+msgstr "โหลดข้อความก่อนหน้า"
+
+#: assembl/templates/views/messageColumn.tmpl:36
+#: assembl/templates/views/messageList.tmpl:25
+msgid "Load more messages"
+msgstr "โหลดข้อความเพิ่มเติม"
+
+#: assembl/templates/views/messageColumn.tmpl:37
+#: assembl/templates/views/messageList.tmpl:26
+msgid "Load all remaining messages at once"
+msgstr "โหลดข้อความที่เหลือทั้งหมดพร้อมกัน"
+
+#: assembl/templates/views/messageFamily.tmpl:7
+msgid "View conversation"
+msgstr "ดูการสนทนา"
+
+#: assembl/templates/views/messageListHeader.tmpl:33
+msgid "Format message in a view useful for copy-pasting of printing"
+msgstr "จัดรูปแบบข้อความในมุมมองที่เป็นประโยชน์สำหรับการคัดลอกและวางในการพิมพ์"
+
+#: assembl/templates/views/messageListHeader.tmpl:33
+msgid "Print"
+msgstr "พิมพ์"
+
+#: assembl/templates/views/messageModerationOptions.tmpl:1
+msgid "Initial message content"
+msgstr "เนื้อหาข้อความเริ่มต้น"
+
+#: assembl/templates/views/messageModerationOptions.tmpl:4
+msgid "Message publication status"
+msgstr "สถานะการเผยแพร่ข้อความ"
+
+#: assembl/templates/views/messageModerationOptions.tmpl:6
+msgid "Published without moderation"
+msgstr "เผยแพร่โดยไม่ต้องกลั่นกรอง"
+
+#: assembl/templates/views/messageModerationOptions.tmpl:7
+msgid "Moderated, initial content available"
+msgstr "เนื้อหาเริ่มต้นที่กลั่นกรองพร้อมใช้งาน"
+
+#: assembl/templates/views/messageModerationOptions.tmpl:8
+msgid "Moderated, initial content not available"
+msgstr "เนื้อหาเริ่มต้นที่กลั่นกรองไม่พร้อมใช้งาน"
+
+#: assembl/templates/views/messageModerationOptions.tmpl:15
+msgid "Moderated by"
+msgstr "กลั่นกรองโดย"
+
+#: assembl/templates/views/messageModerationOptions.tmpl:21
+msgid "Moderated version of the message"
+msgstr "เวอร์ชั่นที่ได้รับการกลั่นกรองของข้อความ"
+
+#: assembl/templates/views/messageModerationOptions.tmpl:22
+#: assembl/templates/views/messageModerationOptions.tmpl:27
+msgid "Type something..."
+msgstr "พิมพ์ข้อความ..."
+
+#: assembl/templates/views/messageModerationOptions.tmpl:26
+msgid "Moderation remarks"
+msgstr "ข้อสังเกตการกลั่นกรอง"
+
+#: assembl/templates/views/messageSend.tmpl:17
+msgid "New topic subject:"
+msgstr "ชื่อหัวข้อใหม่:"
+
+#: assembl/templates/views/messageSend.tmpl:28
+msgid "Your message will be posted:"
+msgstr "ข้อความของคุณจะถูกโพสต์:"
+
+#: assembl/templates/views/messageSend.tmpl:29
+#, python-format
+msgid "Under the idea \"%s\""
+msgstr "ภายใต้แนวคิด \"%s\""
+
+#: assembl/templates/views/messageSend.tmpl:31
+#, python-format
+msgid ""
+"In the general \"%s\" conversation (a community manager will organize your "
+"contribution in the table of ideas afterwards, possibly by creating a new "
+"idea)"
+msgstr ""
+"ในการสนทนาทั่วไป \"%s\" (ผู้จัดการชุมชนจะจัดระเบียบแนวคิดของคุณไว้ในตารางแนวคิดในภายหลัง โดยอาจสร้างเป็นแนวคิดใหม่)"
+
+#: assembl/templates/views/messageSend.tmpl:33
+msgid "Your message will be posted as a child of the previous message."
+msgstr "ข้อความของคุณจะถูกโพสต์เป็นส่วนย่อยของข้อความก่อนหน้า"
+
+#: assembl/templates/views/messageSend.tmpl:35
+msgid "Your message will be posted in the general conversation."
+msgstr "ข้อความของคุณจะถูกโพสต์ในการสนทนาทั่วไป"
+
+#: assembl/templates/views/message_translation_question.tmpl:14
+msgid "Hide"
+msgstr "ซ่อน"
+
+#: assembl/templates/views/moderatedBody.tmpl:3
+msgid ""
+"This message has been moderated and the original message is not available."
+msgstr ""
+"ข้อความนี้ได้รับการกลั่นกรองและไม่มีข้อความต้นฉบับ"
+
+#: assembl/templates/views/moderatedBody.tmpl:6
+msgid "Click here to see original message"
+msgstr "คลิกที่นี่เพื่อดูข้อความต้นฉบับ"
+
+#: assembl/templates/views/navBarLeft.tmpl:7
+msgid "Connecting..."
+msgstr "กำลังเชื่อมต่อ..."
+
+#: assembl/templates/views/navBarLeft.tmpl:22
+msgid "Discussion permissions"
+msgstr "สิทธิ์ในการสนทนา"
+
+#: assembl/templates/views/navBarRight.tmpl:6
+msgid "Help"
+msgstr "วิธีใช้"
+
+#: assembl/templates/views/navBarRight.tmpl:14
+#: assembl/templates/views/navBarRight.tmpl:20
+#: assembl/templates/views/userSubscriber.tmpl:23
+msgid "Join this discussion"
+msgstr "เข้าร่วมการสนทนานี้"
+
+#: assembl/templates/views/navBarRight.tmpl:41
+#: assembl/templates/views/userNavigationMenu.tmpl:10
+#: assembl/templates/views/userNotificationSubscriptions.tmpl:6
+msgid "Notifications"
+msgstr "การแจ้งเตือน"
+
+#: assembl/templates/views/navBarRight.tmpl:46
+msgid "Add a new panel group"
+msgstr "เพิ่มกลุ่มแผงใหม่"
+
+#: assembl/templates/views/navBarRight.tmpl:48
+msgid "Switch to simple mode"
+msgstr "เปลี่ยนไปใช้โหมดธรรมดา"
+
+#: assembl/templates/views/navBarRight.tmpl:50
+msgid "Switch to full-functionality mode"
+msgstr "เปลี่ยนไปใช้โหมดการทำงานเต็มรูปแบบ"
+
+#: assembl/templates/views/navigation.tmpl:23
+msgid "About"
+msgstr "เกี่ยวกับ"
+
+#: assembl/templates/views/notificationByEmails.tmpl:5
+msgid "Receive notifications on"
+msgstr "รับการแจ้งเตือนเมื่อ"
+
+#: assembl/templates/views/orphanMessagesInIdeaList.tmpl:8
+msgid ""
+"Messages top-posted and whose thread has not yet been harvested into an idea"
+msgstr ""
+"ข้อความที่โพสต์ไว้ส่วนแรกสุด โดยที่มีกลุ่มข้อความสนทนาที่ยังไม่ได้ถูกรวบรวมไว้ในแนวคิด"
+
+#: assembl/templates/views/orphanMessagesInIdeaList.tmpl:9
+msgid "Messages yet to be organised"
+msgstr "ข้อความที่ยังไม่ได้จัดระเบียบ"
+
+#: assembl/templates/views/otherInIdeaList.tmpl:2
+msgid "Messages not in the table of ideas"
+msgstr "ข้อความที่ไม่ได้อยู่ในตารางแนวคิด"
+
+#: assembl/templates/views/panelWrapper.tmpl:16
+msgid "Fullsize"
+msgstr "ขนาดเต็ม"
+
+#: assembl/templates/views/panelWrapper.tmpl:18
+msgid "Close panel"
+msgstr "ปิดแผง"
+
+#: assembl/templates/views/partnerList.tmpl:6
+#: assembl/templates/views/partnerList.tmpl:10
+msgid "edit partners"
+msgstr "แก้ไขผู้ร่วมมือ"
+
+#: assembl/templates/views/partnersInAdmin.tmpl:9
+msgid "What is the organisation about?"
+msgstr "เป็นองค์กรเกี่ยวกับอะไร"
+
+#: assembl/templates/views/partnersInAdmin.tmpl:13
+msgid "link"
+msgstr "ลิงค์"
+
+#: assembl/templates/views/partnersInAdmin.tmpl:15
+msgid "What is their website?"
+msgstr "โปรดระบุเว็บไซต์ของพวกเขา"
+
+#: assembl/templates/views/partnersInAdmin.tmpl:19
+msgid "Edit"
+msgstr "แก้ไข"
+
+#: assembl/templates/views/partnersInAdmin.tmpl:25
+msgid "is initiator"
+msgstr "เป็นผู้ริเริ่ม"
+
+#: assembl/templates/views/partnersInAdmin.tmpl:32
+msgid "What is their logo?"
+msgstr "โลโก้ของพวกเขาคืออะไร"
+
+#: assembl/templates/views/piwikIframeModal.tmpl:3
+msgid "Set cookies"
+msgstr "ตั้งค่าคุกกี้"
+
+#: assembl/templates/views/preferenceItemView.tmpl:13
+msgid "Reset to default"
+msgstr "รีเซ็ตเป็นค่าเริ่มต้น"
+
+#: assembl/templates/views/preferenceView.tmpl:7
+msgid "Preferences"
+msgstr "การกำหนดลักษณะ"
+
+#: assembl/templates/views/segment.tmpl:8
+#, python-format
+msgid "Harvested by %(name)s %(date)s"
+msgstr "รวบรวมโดย %(name)s %(date)s"
+
+#: assembl/templates/views/segment.tmpl:11
+msgid ""
+"Click here to see the original contribution this segment is quoted from."
+msgstr ""
+"คลิกที่นี่เพื่อดูแนวคิดแรกเริ่มที่ส่วนนี้ได้ถูกอ้างอิงมา"
+
+#: assembl/templates/views/segment.tmpl:12
+msgid "Show in original context"
+msgstr "แสดงในบริบทเดิม"
+
+#: assembl/templates/views/segment.tmpl:29
+msgid "Show or hide this extract to participants"
+msgstr "แสดงหรือซ่อนเนื้อหาที่คัดลอกนี้ต่อผู้เข้าร่วม"
+
+#: assembl/templates/views/segment.tmpl:35
+#, python-format
+msgid "%(img)s"
+msgstr "%(img)s"
+
+#: assembl/templates/views/segment.tmpl:54
+#, python-format
+msgid "Posted %(nice_date)s by %(name)s"
+msgstr "โพสต์ %(nice_date)s โดย %(name)s"
+
+#: assembl/templates/views/segment.tmpl:61
+msgid "Document extracted from the web"
+msgstr "เอกสารที่คัดลอกจากเว็บ"
+
+#: assembl/templates/views/segment.tmpl:62
+msgid "Harvested from webpage"
+msgstr "รวบรวมจากเว็บเพจ"
+
+#: assembl/templates/views/segment.tmpl:64
+msgid "Unknown segment type: "
+msgstr "ประเภทเซ็กเมนต์ที่ไม่รู้จัก: "
+
+#: assembl/templates/views/segmentList.tmpl:4
+msgid "Annotation on the web"
+msgstr "คำอธิบายประกอบบนเว็บ"
+
+#: assembl/templates/views/segmentList.tmpl:5
+msgid "If you desire catching extracts out of assembl (exemple : Wikipedia),"
+msgstr "หากคุณต้องการนำเนื้อหาที่คัดลอกออกจาก assembl (ตัวอย่างเช่น : Wikipedia)"
+
+#: assembl/templates/views/segmentList.tmpl:6
+msgid "click here to activate the annotation"
+msgstr "คลิกที่นี่เพื่อเปิดใช้งานคำอธิบายประกอบ"
+
+#: assembl/templates/views/segmentList.tmpl:9
+msgid "Extracts not yet associated with an idea"
+msgstr "เนื้อหาคัดลอกที่ยังไม่ได้เชื่อมโยงกับแนวคิด"
+
+#: assembl/templates/views/segmentList.tmpl:14
+msgid "Clear"
+msgstr "ล้าง"
+
+#: assembl/templates/views/showSegmentByAnnotation.tmpl:3
+msgid ""
+"You will be redirected to another idea in connection with the nugget on "
+"which you clicked."
+msgstr ""
+"ระบบจะนำคุณไปยังแนวคิดอื่นที่เกี่ยวข้องกับความลับสำคัญที่คุณคลิก"
+
+#: assembl/templates/views/showSegmentByAnnotation.tmpl:10
+msgid "Ok"
+msgstr "ตกลง"
+
+#: assembl/templates/views/simpleLangStringEdit.tmpl:3
+msgid "Add entry"
+msgstr "เพิ่มรายการ"
+
+#: assembl/templates/views/socialProviders.tmpl:4
+msgid "Add a social account"
+msgstr "เพิ่มบัญชีเครือข่ายสังคม"
+
+#: assembl/templates/views/socialProviders.tmpl:10
+#, python-format
+msgid "Add a %s account"
+msgstr "เพิ่ม %s บัญชี"
+
+#: assembl/templates/views/statistics.tmpl:7
+msgid "Loading..."
+msgstr "กำลังโหลด..."
+
+#: assembl/templates/views/synthesisContext.tmpl:10
+msgid "Last synthesis"
+msgstr "การสังเคราะห์ล่าสุด"
+
+#: assembl/templates/views/synthesisContext.tmpl:18
+msgid "Read the synthesis"
+msgstr "อ่านบทสังเคราะห์"
+
+#: assembl/templates/views/synthesisInIdeaList.tmpl:4
+msgid "All syntheses"
+msgstr "การสังเคราะห์ทั้งหมด"
+
+#: assembl/templates/views/synthesisInIdeaList.tmpl:8
+msgid "Syntheses are summaries of the discussion published on a regular basis"
+msgstr "การสังเคราะห์ คือบทสรุปของการสนทนาที่เผยแพร่อย่างสม่ำเสมอ"
+
+#: assembl/templates/views/synthesisInIdeaList.tmpl:9
+msgid "Syntheses"
+msgstr "การสังเคราะห์"
+
+#: assembl/templates/views/synthesisPanel.tmpl:15
+#: assembl/templates/views/synthesisPanelMessage.tmpl:14
+msgid "Conclusion"
+msgstr "บทสรุป"
+
+#: assembl/templates/views/synthesisPanel.tmpl:22
+msgid "Publish"
+msgstr "เผยแพร่"
+
+#: assembl/templates/views/tokenVoteCollection.tmpl:4
+#, python-format
+msgid "Ideas (%s)"
+msgstr "แนวคิด (%s)"
+
+#: assembl/templates/views/tokenVoteCollection.tmpl:5
+msgid "Your votes"
+msgstr "คะแนนเสียงของคุณ"
+
+#: assembl/templates/views/tokenVoteResultCollectionView.tmpl:4
+msgid "Ideas"
+msgstr "แนวคิด"
+
+#: assembl/templates/views/tokenVoteResultView.tmpl:7
+msgid "Vote Summary"
+msgstr "สรุปคะแนนเสียง"
+
+#: assembl/templates/views/userAccount.tmpl:7
+msgid "Assembl account settings"
+msgstr "การตั้งค่าบัญชี Assembl"
+
+#: assembl/templates/views/userAccount.tmpl:18
+msgid "Manage associated accounts"
+msgstr "จัดการบัญชีที่เกี่ยวข้อง"
+
+#: assembl/templates/views/userAccount.tmpl:40
+msgid "Add another email"
+msgstr "เพิ่มอีเมลอื่น"
+
+#: assembl/templates/views/userAccount.tmpl:55
+msgid ""
+"Linking your account allows you to connect through social networks, and to "
+"use your profile's picture. Otherwise, you can set your profile picture with "
+"the <a href='http://en.gravatar.com/'>gravatar</a> service."
+msgstr ""
+"การเชื่อมโยงบัญชีจะช่วยให้คุณสามารถเชื่อมต่อผ่านเครือข่ายสังคมและใช้รูปภาพโปรไฟล์ของคุณได้ หรือคุณอาจตั้งค่ารูปภาพโปรไฟล์ของคุณได้ด้วยบริการของ <a href='http://en.gravatar.com/'>gravatar</a> "
+
+#: assembl/templates/views/userAccountForm.tmpl:10
+msgid "You can set a username as an alternate way to login."
+msgstr "คุณสามารถกำหนดให้ชื่อผู้ใช้เป็นอีกวิธีหนึ่งในการเข้าสู่ระบบ"
+
+#: assembl/templates/views/userAccountForm.tmpl:15
+msgid "New password"
+msgstr "รหัสผ่านใหม่"
+
+#: assembl/templates/views/userAccountForm.tmpl:20
+#: assembl/templates/views/userAccountForm.tmpl:31
+msgid "password 1 and 2 should be identical"
+msgstr "รหัสผ่าน 1 และ 2 ควรเหมือนกัน"
+
+#: assembl/templates/views/userAccountForm.tmpl:26
+msgid "Confirm password"
+msgstr "ยืนยันรหัสผ่าน"
+
+#: assembl/templates/views/userAccountForm.tmpl:37
+msgid ""
+"You can set your profile picture with the <a href='http://en.gravatar."
+"com/'>gravatar</a> service."
+msgstr ""
+"คุณสามารถตั้งค่ารูปภาพโปรไฟล์ของคุณได้ด้วยบริการของ <a href='http://en.gravatar.com/'>gravatar</a> "
+
+#: assembl/templates/views/userNavigationMenu.tmpl:3
+msgid "Modify your profile"
+msgstr "แก้ไขโปรไฟล์ของคุณ"
+
+#: assembl/templates/views/userNavigationMenu.tmpl:6
+msgid "Account settings"
+msgstr "การตั้งค่าบัญชี"
+
+#: assembl/templates/views/userNotificationSubscriptions.tmpl:15
+msgid "Notifiy me when"
+msgstr "แจ้งให้ฉันทราบเมื่อ"
+
+#: assembl/templates/views/userProfile.tmpl:16
+msgid "Real name"
+msgstr "ชื่อจริง"
+
+#: assembl/templates/views/userSubscriber.tmpl:5
+msgid "Subscription settings"
+msgstr "การตั้งค่าการสมัครใช้งาน"
+
+#: assembl/templates/views/userSubscriber.tmpl:11
+msgid "subscribed"
+msgstr "สมัครใช้งาน"
+
+#: assembl/templates/views/userSubscriber.tmpl:14
+msgid "Unsubscribe"
+msgstr "ยกเลิกการสมัครใช้งาน"
+
+#: assembl/templates/views/userSubscriber.tmpl:20
+msgid "unsubscribed"
+msgstr "ยกเลิกการสมัครใช้งานแล้ว"
+
+#: assembl/views/admin/views.py:392
+msgid "No file given."
+msgstr "ไม่มีไฟล์ที่กำหนดให้"
+
+#: assembl/views/api/post.py:81 assembl/views/api/post.py:625
+#, python-format
+msgid "No discussion found with id=%s"
+msgstr "ไม่พบการสนทนาที่มี id=%s"
+
+#: assembl/views/api/post.py:228
+msgid "Getting orphan posts of a specific idea isn't supported."
+msgstr "ไม่สนับสนุนโพสต์กำพร้าของแนวคิดที่เฉพาะเจาะจง"
+
+#: assembl/views/api/post.py:298
+msgid "Do not combine negative and positive classifiers"
+msgstr "อย่ารวมตัวจำแนกเชิงบวกและเชิงลบเข้าด้วยกัน"
+
+#: assembl/views/api/post.py:359
+msgid "You must be logged in to view which posts are read"
+msgstr "คุณต้องเข้าสู่ระบบเพื่อดูว่ามีการอ่านโพสต์ใด"
+
+#: assembl/views/api/post.py:609
+msgid "Your message is empty"
+msgstr "ข้อความของคุณว่างเปล่า"
+
+#: assembl/views/api2/auth.py:343
+msgid "The user does not exist"
+msgstr "ไม่พบผู้ใช้"
+
+#: assembl/views/api2/auth.py:354
+msgid "This email does not exist"
+msgstr "ไม่มีอีเมลนี้"
+
+#: assembl/views/api2/auth.py:359
+msgid "Please give an identifier"
+msgstr "โปรดระบุตัวบ่งชี้"
+
+#: assembl/views/api2/auth.py:364
+msgid "This user has no email"
+msgstr "ผู้ใช้รายนี้ไม่มีอีเมล"
+
+#: assembl/views/api2/auth.py:367
+msgid "This is not a user"
+msgstr "นี่ไม่ใช่ผู้ใช้"
+
+#: assembl/views/api2/auth.py:388
+msgid "The passwords that were entered are mismatched!"
+msgstr "รหัสผ่านที่ป้อนไม่ตรงกัน!"
+
+#: assembl/views/api2/auth.py:402 assembl/views/auth/views.py:964
+#: assembl/views/auth/views.py:1032
+msgid "This link is not valid. Do you want us to send another?"
+msgstr "ลิงค์นี้ไม่ถูกต้อง คุณต้องการให้เราส่งให้ใหม่หรือไม่"
+
+#: assembl/views/api2/auth.py:405 assembl/views/auth/views.py:967
+#: assembl/views/auth/views.py:1035
+msgid "This link has been used. Do you want us to send another?"
+msgstr "ลิงค์นี้ถูกนำมาใช้แล้ว คุณต้องการให้เราส่งให้ใหม่หรือไม่"
+
+#: assembl/views/api2/auth.py:440 assembl/views/auth/views.py:388
+msgid "Please use a name of at least 3 characters"
+msgstr "โปรดใช้ชื่อที่มีอย่างน้อย 3 อักขระ"
+
+#: assembl/views/api2/auth.py:449 assembl/views/auth/views.py:321
+#: assembl/views/auth/views.py:395
+msgid "This is not a valid email"
+msgstr "นี่ไม่ใช่อีเมลที่ถูกต้อง"
+
+#: assembl/views/api2/auth.py:457 assembl/views/auth/views.py:402
+msgid "We already have a user with this email."
+msgstr "เรามีผู้ใช้ที่มีอีเมลนี้อยู่แล้ว"
+
+#: assembl/views/api2/auth.py:462
+msgid "No email."
+msgstr "ไม่มีอีเมล"
+
+#: assembl/views/api2/auth.py:468
+msgid "We already have a user with this username."
+msgstr "เรามีผู้ใช้ที่มีชื่อผู้ใช้นี้อยู่แล้ว"
+
+#: assembl/views/auth/views.py:294
+#, python-format
+msgid "The username %s is already used"
+msgstr "ชื่อผู้ใช้ %s ถูกใช้แล้ว"
+
+#: assembl/views/auth/views.py:313 assembl/views/auth/views.py:1046
+msgid "The passwords are not identical"
+msgstr "รหัสผ่านไม่เหมือนกัน"
+
+#: assembl/views/auth/views.py:406
+msgid "The passwords should be identical"
+msgstr "รหัสผ่านควรเหมือนกัน"
+
+#: assembl/views/auth/views.py:462
+msgid ""
+"Your email was refused by the SMTP server.  You probably entered an email "
+"that does not exist."
+msgstr ""
+"อีเมลของคุณถูกปฏิเสธโดยเซิร์ฟเวอร์ SMTP คุณอาจป้อนอีเมลที่ไม่มีอยู่"
+
+#: assembl/views/auth/views.py:519 assembl/views/auth/views.py:844
+#: assembl/views/auth/views.py:850
+msgid "This user cannot be found"
+msgstr "ไม่พบผู้ใช้นี้"
+
+#: assembl/views/auth/views.py:537
+msgid "Invalid user and password"
+msgstr "ผู้ใช้และรหัสผ่านไม่ถูกต้อง"
+
+#: assembl/views/auth/views.py:601
+msgid "This email address is already confirmed"
+msgstr "ที่อยู่อีเมลนี้ได้รับการยืนยันแล้ว"
+
+#: assembl/views/auth/views.py:602
+msgid "You do not need to confirm this email address, it is already confirmed."
+msgstr "คุณไม่จำเป็นต้องยืนยันที่อยู่อีเมลนี้ เนื่องจากได้รับการยืนยันแล้ว"
+
+#: assembl/views/auth/views.py:610 assembl/views/auth/views.py:809
+msgid "Confirmation requested"
+msgstr "ขอการยืนยันแล้ว"
+
+#: assembl/views/auth/views.py:611 assembl/views/auth/views.py:810
+msgid ""
+"A confirmation e-mail has been sent to your account and should be in your "
+"inbox in a few minutes. It contains a confirmation link, please click on it "
+"in order to confirm your e-mail address. If you did not receive any "
+"confirmation e-mail (check your spams), click here."
+msgstr ""
+"อีเมลยืนยันได้ถูกส่งไปยังบัญชีของคุณ และควรอยู่ในกล่องจดหมายของคุณในอีกสักครู่ ในอีเมลจะมีลิงค์ยืนยัน โปรดคลิกที่ลิงค์เพื่อยืนยันที่อยู่อีเมลของคุณ หากคุณไม่ได้รับอีเมลดังกล่าว (โปรดตรวจสอบสแปม) คลิกที่นี่"
+
+#: assembl/views/auth/views.py:659 assembl/views/auth/views.py:683
+#: assembl/views/auth/views.py:705
+#, python-format
+msgid "Email <%s> already confirmed"
+msgstr "อีเมล <%s> ได้รับการยืนยันแล้ว"
+
+#: assembl/views/auth/views.py:671
+msgid "This link was not valid. We sent another."
+msgstr "ลิงค์นี้ไม่ถูกต้อง เราได้ส่งให้ใหม่แล้ว"
+
+#: assembl/views/auth/views.py:674
+msgid "This link has been used. We sent another."
+msgstr "ลิงค์นี้ถูกนำมาใช้แล้ว เราได้ส่งให้ใหม่แล้ว"
+
+#: assembl/views/auth/views.py:687
+msgid "This link is not valid. Please attempt to login to get another one."
+msgstr "ลิงค์นี้ไม่ถูกต้อง โปรดพยายามเข้าสู่ระบบเพื่อรับลิงค์อื่น"
+
+#: assembl/views/auth/views.py:726
+#, python-format
+msgid ""
+"Your email address %s has been confirmed, and you are now subscribed to "
+"discussion's default notifications."
+msgstr ""
+"ที่อยู่อีเมลของคุณ %s ได้รับการยืนยัน และขณะนี้คุณได้สมัครรับการแจ้งเตือนเริ่มต้นของการสนทนาแล้ว"
+
+#: assembl/views/auth/views.py:731
+#, python-format
+msgid "Your email address %s has been confirmed."
+msgstr "ที่อยู่อีเมลของคุณ %s ได้รับการยืนยันแล้ว"
+
+#: assembl/views/auth/views.py:756
+msgid "Login failed, try again"
+msgstr "การเข้าสู่ระบบล้มเหลว โปรดลองอีกครั้ง"
+
+#: assembl/views/auth/views.py:797
+msgid "This email is already confirmed."
+msgstr "อีเมลนี้ได้รับการยืนยันแล้ว"
+
+#: assembl/views/auth/views.py:818
+msgid "We do not know about this email."
+msgstr "เราไม่ทราบเกี่ยวกับอีเมลนี้"
+
+#: assembl/views/auth/views.py:897
+msgid "Password change requested"
+msgstr "ขอเปลี่ยนรหัสผ่านแล้ว"
+
+#: assembl/views/auth/views.py:898
+msgid ""
+"We have sent you an email with a temporary connection link. Please use that "
+"link to log in and change your password."
+msgstr ""
+"เราได้ส่งอีเมลพร้อมลิงค์การเชื่อมต่อชั่วคราวให้กับคุณ โปรดใช้ลิงค์นั้นเพื่อเข้าสู่ระบบแล้วเปลี่ยนรหัสผ่านของคุณ"
+
+#: assembl/views/auth/views.py:979
+msgid "You will enter the discussion as <b>{name}</b>."
+msgstr "คุณจะเข้าสู่การสนทนาด้วย <b>{name}</b>"
+
+#: assembl/views/auth/views.py:983
+msgid "You will enter Assembl as <b>{name}</b>."
+msgstr "คุณจะเข้าสู่ Assembl ด้วย <b>{name}</b>"
+
+#: assembl/views/auth/views.py:986
+msgid "Please choose your password for security reasons."
+msgstr "โปรดเลือกรหัสผ่านของคุณเพื่อความปลอดภัย"
+
+#: assembl/views/auth/views.py:1015
+msgid "Change your password"
+msgstr "เปลี่ยนรหัสผ่านของคุณ"
+
+#: assembl/views/auth/views.py:1054
+msgid "Password changed"
+msgstr "เปลี่ยนรหัสผ่านแล้ว"
+
+#: assembl/views/auth/views.py:1068
+msgid "email"
+msgstr "อีเมล"
+
+#: assembl/views/auth/views.py:1069
+msgid "Please confirm your {confirm_what} with {assembl}"
+msgstr "โปรดยืนยัน {confirm_what} ของคุณกับ {assembl}"
+
+#: assembl/views/auth/views.py:1071
+msgid "account"
+msgstr "บัญชี"
+
+#: assembl/views/auth/views.py:1072
+msgid ""
+"Hello, {name}, and welcome to {assembl}!\n"
+"\n"
+"Please confirm your email address and complete your registration by clicking "
+"the link below.\n"
+"<{confirm_url}>\n"
+"\n"
+"Best regards,\n"
+"The {assembl} Team"
+msgstr ""
+"สวัสดี {name}ยินดีต้อนรับสู่ {assembl}!\n"
+"\n"
+"โปรดยืนยันที่อยู่อีเมลของคุณและกรอกข้อมูลการลงทะเบียนโดยคลิกที่ลิงค์ด้านล่าง\n"
+"<{confirm_url}>\n"
+"\n"
+"ด้วยความนับถือ\n"
+"ทีม {assembl} "
+
+#: assembl/views/auth/views.py:1079
+msgid ""
+"<p>Hello, {name}, and welcome to {assembl}!</p>\n"
+"<p>Please <a href=\"{confirm_url}\">click here to confirm your email "
+"address</a>\n"
+"and complete your registration.</p>\n"
+"<p>Best regards,<br />The {assembl} Team</p>"
+msgstr ""
+"<p>สวัสดี {name}ยินดีต้อนรับสู่ {assembl}!</p>\n"
+"<p>โปรด <a href=\"{confirm_url}\">คลิกที่นี่เพื่อยืนยันที่อยู่อีเมลของคุณ</a>\n"
+"และกรอกข้อมูลการลงทะเบียน</p>\n"
+"<p>ด้วยความนับถือ<br />ทีม {assembl} </p>"
+
+#: assembl/views/auth/views.py:1084
+msgid ""
+"Hello, {name}!\n"
+"\n"
+"Please confirm your new email address <{email}> on your {assembl} account by "
+"clicking the link below.\n"
+"<{confirm_url}>\n"
+"\n"
+"Best regards,\n"
+"The {assembl} Team"
+msgstr ""
+"สวัสดี {name}!\n"
+"\n"
+"โปรดยืนยันที่อยู่อีเมลใหม่ <{email}> ใน {assembl} บัญชีของคุณ โดยคลิกที่ลิงค์ด้านล่าง\n"
+"<{confirm_url}>\n"
+"\n"
+"ด้วยความนับถือ\n"
+"ทีม {assembl} "
+
+#: assembl/views/auth/views.py:1091
+msgid ""
+"<p>Hello, {name}!</p>\n"
+"<p>Please <a href=\"{confirm_url}\">click here to confirm your new email "
+"address</a>\n"
+"on your {assembl} account.</p>\n"
+"<p>Best regards,<br />The {assembl} Team</p>"
+msgstr ""
+"<p>สวัสดี {name}!</p>\n"
+"<p>โปรด <a href=\"{confirm_url}\">คลิกที่นี่เพื่อยืนยันที่อยู่อีเมลใหม่</a>\n"
+"ใน {assembl} บัญชีของคุณ</p>\n"
+"<p>ด้วยความนับถือ<br />ทีม {assembl} </p>"
+
+#: assembl/views/auth/views.py:1142
+msgid "Request for password change"
+msgstr "ขอเปลี่ยนรหัสผ่าน"
+
+#: assembl/views/auth/views.py:1146
+msgid ""
+"<p>Hello, {name}!</p>\n"
+"<p>We have received a request to change the password on your {assembl} "
+"account.\n"
+"Please <a href=\"{confirm_url}\">click here to confirm your password change</"
+"a>.</p>\n"
+"<p>If you did not ask to reset your password please disregard this email.</"
+"p>\n"
+"<p>Best regards,<br />The {assembl} Team</p>\n"
+msgstr ""
+"<p>สวัสดี {name}!</p>\n"
+"<p>เราได้รับคำขอให้เปลี่ยนรหัสผ่านในบัญชี {assembl} ของคุณ\n"
+"โปรด <a href=\"{confirm_url}\">คลิกที่นี่เพื่อยืนยันการเปลี่ยนรหัสผ่านของคุณ</a></p>\n"
+"<p>หากคุณไม่ได้ขอให้ตั้งรหัสผ่านใหม่ โปรดปิด/ลบอีเมลนี้</p>\n"
+"<p>ขอแสดงความนับถือ<br /> ทีม {assembl} </p>\n"
+
+#: assembl/views/auth/views.py:1152
+msgid ""
+"Hello, {name}!\n"
+"We have received a request to change the password on your {assembl} "
+"account.\n"
+"To confirm your password change please click on the link below.\n"
+"<{confirm_url}>\n"
+"\n"
+"If you did not ask to reset your password please disregard this email.\n"
+"\n"
+"Best regards,\n"
+"The {assembl} Team\n"
+msgstr ""
+"สวัสดี {name}!\n"
+"เราได้รับคำขอให้เปลี่ยนรหัสผ่านในบัญชี {assembl} ของคุณ\n"
+"เพื่อยืนยันการเปลี่ยนรหัสผ่าน โปรดคลิกที่ลิงค์ด้านล่าง\n"
+"<{confirm_url}>\n"
+"\n"
+"หากคุณไม่ได้ขอให้ตั้งรหัสผ่านใหม่ โปรดปิด/ลบอีเมลนี้\n"
+"\n"
+"ขอแสดงความนับถือ\n"
+"ทีม {assembl} \n"
+
+#: assembl/views/discussion/views.py:51
+#, python-format
+msgid "No discussion found for slug=%s"
+msgstr "ไม่พบการสนทนาสำหรับ slug=%s"
