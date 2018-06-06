@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
-import { Translate, Localize } from 'react-redux-i18n';
+import { Translate } from 'react-redux-i18n';
+import LocalizeNumber from '../common/localizeNumber';
 
 type StatisticElementProps = {
   iconName: string,
@@ -46,7 +47,7 @@ const StatisticElement = ({ metricNameTranslateKey, iconName, metricValue }: Sta
       <div className={`stat-icon assembl-icon-${iconName} white`} />
       <div className="stat">
         <div className="stat-nb">
-          <Localize value={metricValue} />
+          <LocalizeNumber value={metricValue} />
         </div>
         <div className="stat-nb stat-label">
           <Translate value={metricNameTranslateKey} count={metricValue} />
