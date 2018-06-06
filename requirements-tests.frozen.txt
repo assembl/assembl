@@ -15,7 +15,7 @@
 -e git+https://github.com/assembl/pyramid_beaker.git@assembl#egg=pyramid_beaker
 alabaster==0.7.10         # via sphinx
 alembic==0.8.6
-amqp==1.4.9               # via kombu
+amqp==2.3.2               # via kombu
 anyjson==0.3.3
 appnope==0.1.0            # via ipython
 asn1crypto==0.24.0        # via cryptography
@@ -23,8 +23,8 @@ babel==2.3.4
 backports.shutil-get-terminal-size==1.0.0  # via ipython
 bcrypt==3.1.4             # via paramiko
 beautifulsoup4==4.6.0
-billiard==3.3.0.23        # via celery
-celery==3.1.23
+billiard==3.5.0.3         # via celery
+celery==4.1.1
 cffi==1.11.5              # via bcrypt, cryptography, pynacl
 chameleon==3.2            # via lingua
 characteristic==14.3.0    # via montague
@@ -78,7 +78,7 @@ isodate==0.5.4
 jdcal==1.3                # via openpyxl
 jinja2==2.8
 jsonpath-ng==1.4.3
-kombu==3.0.35
+kombu==4.2.1              # via celery
 lingua==4.9
 lxml==3.6.0
 mako==1.0.7               # via alembic
@@ -161,7 +161,7 @@ snowballstemmer==1.2.1    # via sphinx
 social-auth-app-pyramid==1.0.0
 social-auth-core==1.7.0
 social-auth-storage-sqlalchemy==1.1.0
-sphinx==1.4.4
+sphinx==1.5.1
 sphinxcontrib-httpdomain==1.5.0
 sphinxcontrib-zopeext==0.2.1
 splinter==0.7.6
@@ -180,6 +180,7 @@ urllib3==1.22             # via elasticsearch
 uwsgitop==0.9
 venusian==1.1.0           # via pyramid
 verboselogs==1.7
+vine==1.1.4               # via amqp
 waitress==1.1.0           # via webtest
 webob==1.6.1
 webtest==2.0.21

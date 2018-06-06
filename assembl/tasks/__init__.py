@@ -95,7 +95,10 @@ def config_celery_app(celery_app, settings=None):
         "CELERY_ROUTES": get_celery_routes(),
         "CELERY_TASK_SERIALIZER": 'json',
         "CELERY_ACKS_LATE": True,
-        "CELERY_STORE_ERRORS_EVEN_IF_IGNORED": True}
+        "CELERY_CACHE_BACKEND": settings.get('celery_tasks.broker', ''),
+        "CELERY_RESULT_BACKEND": settings.get('celery_tasks.broker', ''),
+        "CELERY_STORE_ERRORS_EVEN_IF_IGNORED": True,
+    }
     if settings is not None:
         config['BROKER_URL'] = settings.get(
             '%s.broker' % (celery_app.main,), None
