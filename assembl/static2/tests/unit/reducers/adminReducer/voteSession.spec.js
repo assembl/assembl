@@ -1497,7 +1497,7 @@ describe('voteSession admin reducers', () => {
               localeCode: 'en',
               value: 'My template instructions'
             }
-          ],
+          ]
         },
         template: {
           _hasChanged: false,
@@ -1672,7 +1672,7 @@ describe('voteSession admin reducers', () => {
               localeCode: 'en',
               value: 'My template instructions'
             }
-          ],
+          ]
         },
         template: {
           _hasChanged: false,
