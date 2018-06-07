@@ -560,7 +560,7 @@ var DomainPreferenceView = StringPreferenceView.extend({
     StringPreferenceView.apply(this, arguments);
   },
   // too lenient: accepts single element ("com")
-  regexp: new RegExp("^[a-zA-Z0-9][a-zA-Z0-9-_]{0,61}[a-zA-Z0-9]{0,1}\.([a-zA-Z]{1,6}|[a-zA-Z0-9-]{1,30}\.[a-zA-Z]{2,3})$"),
+  regexp: new RegExp("^([a-zA-Z0-9][a-zA-Z0-9-_]{0,61}[a-zA-Z0-9]{0,1}\.)+([a-zA-Z]{1,6}|[a-zA-Z0-9-]{1,30}\.[a-zA-Z]{2,3})$"),
   processValue: function(value) {
     if (!this.regexp.test(value)) {
         throw i18n.gettext("This does not appear to be a domain");
