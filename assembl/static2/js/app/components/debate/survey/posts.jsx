@@ -76,6 +76,7 @@ export class DumbPosts extends React.Component<PostsProps> {
         fetchMore={fetchMore}
         refetch={refetch}
         itemData={item => ({ id: item.node.id, originalLocale: item.node.originalLocale })}
+        loadPreviousMessage="debate.survey.loadRecentPosts"
       />
     );
   }
@@ -94,9 +95,16 @@ const mapDispatchToProps = dispatch => ({
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   graphql(QuestionPosts, {
-    options: props => ({
-      variables: { first: 8, after: '', id: props.questionId }
-    }),
+    options: (props) => {
+      const { hash } = window.location;
+      let id = null;
+      if (hash !== '') {
+        id = hash.replace('#', '').split('?')[0];
+      }
+      return {
+        variables: { first: 8, after: '', id: props.questionId, fromNode: id }
+      };
+    },
     props: ({ data }) => {
       if (data.loading) {
         return {

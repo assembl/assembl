@@ -1,7 +1,8 @@
 /* eslint-disable no-undef */
 // @flow
 import * as React from 'react';
-import { I18n } from 'react-redux-i18n';
+import { I18n, Translate } from 'react-redux-i18n';
+import { Button } from 'react-bootstrap';
 import throttle from 'lodash/throttle';
 
 import Loader from './loader';
@@ -22,6 +23,7 @@ type FlatListProps = {
   },
   ListItem: Function | React.ComponentType<*>,
   className?: string,
+  loadPreviousMessage?: string,
   networkStatus: number,
   onEndReachedThreshold: number,
   itemData: Function,
@@ -40,19 +42,6 @@ class FlatList extends React.Component<FlatListProps> {
 
   componentDidMount() {
     window.addEventListener('scroll', this.handleScroll);
-    this.componentDidUpdate();
-  }
-
-  componentDidUpdate() {
-    const { hash } = window.location;
-    if (hash !== '') {
-      const postIds = this.props.items.edges.map(edge => edge.node.id);
-      const id = hash.replace('#', '').split('?')[0];
-      // if post id not found in current items, load another page
-      if (postIds.indexOf(id) === -1) {
-        this.onEndReached();
-      }
-    }
   }
 
   componentWillUnmount() {
@@ -80,11 +69,14 @@ class FlatList extends React.Component<FlatListProps> {
     // The fetchMore method is used to load new data and add it
     // to the original query we used to populate the list
     const { fetchMore, items, extractItems, networkStatus } = this.props;
+    if (!items.pageInfo.hasNextPage) {
+      return;
+    }
     // If no request is in flight for this query, and no errors happened. Everything is OK.
     if (networkStatus === APOLLO_NETWORK_STATUS.ready) {
       this.loading = true;
       fetchMore({
-        variables: { after: items.pageInfo.endCursor || '' },
+        variables: { after: items.pageInfo.endCursor || '', fromNode: null },
         updateQuery: (previousResult, { fetchMoreResult }) => {
           // Don't do anything if there weren't any new items
           const previousResultEntities = extractItems(previousResult);
@@ -114,7 +106,13 @@ class FlatList extends React.Component<FlatListProps> {
   };
 
   render() {
-    const { networkStatus, items, ListItem, itemData, className } = this.props;
+    const { hash } = window.location;
+    let id;
+    if (hash !== '') {
+      id = hash.replace('#', '').split('?')[0];
+    }
+
+    const { networkStatus, items, ListItem, itemData, className, loadPreviousMessage } = this.props;
     if (
       items == null ||
       networkStatus === APOLLO_NETWORK_STATUS.loading ||
@@ -125,6 +123,17 @@ class FlatList extends React.Component<FlatListProps> {
     const entities = items.edges;
     return (
       <div className={className}>
+        {id && loadPreviousMessage ? (
+          <Button
+            className="button-dark button-submit"
+            style={{ marginBottom: '20px' }}
+            onClick={() => {
+              window.location.href = window.location.href.slice(0, window.location.href.indexOf('#'));
+            }}
+          >
+            <Translate value={loadPreviousMessage} />
+          </Button>
+        ) : null}
         {entities && entities.map((item, index) => <ListItem key={item.node.id || index} {...itemData(item)} node={item.node} />)}
         {networkStatus === APOLLO_NETWORK_STATUS.fetchMore && items.pageInfo.hasNextPage && <Loader color="black" />}
       </div>

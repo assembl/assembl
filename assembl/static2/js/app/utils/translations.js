@@ -288,6 +288,7 @@ const Translations = {
       whatYouNeedToKnow: "À retenir",
       syntheses: "Synthèses",
       survey: {
+        loadRecentPosts: "Afficher les propositions récentes",
         themesTitle: "Choisissez une thématique !",
         txtAreaPh: "Ecrivez votre proposition",
         question_x_on_total: "Question %{current} sur %{total}",
@@ -631,7 +632,8 @@ const Translations = {
         surveyAnnotation:
           "Vous pouvez exporter l'ensemble des données du module de questions ouvertes en cliquant sur le bouton Exporter",
         threadAnnotation: "Vous pouvez exporter l'ensemble des données du module de thread en cliquant sur le bouton Exporter",
-        multicolumnAnnotation: "Vous pouvez exporter l'ensmeble des données du module de multi-colonnes en cliquant sur le bouton Exporter",
+        multicolumnAnnotation:
+          "Vous pouvez exporter l'ensmeble des données du module de multi-colonnes en cliquant sur le bouton Exporter",
         voteSessionAnnotation: "Vous pouvez exporter l'ensemble des données du module de vote en cliquant sur le bouton Exporter",
         taxonomyAnnotation: "Vous pouvez exporter l'ensemble des taxonomies en cliquant sur le bouton exporter",
         link: "Exporter",
@@ -971,6 +973,7 @@ const Translations = {
       whatYouNeedToKnow: "What you need to know",
       syntheses: "Syntheses",
       survey: {
+        loadRecentPosts: "Load recent proposals",
         themesTitle: "Choose a theme!",
         txtAreaPh: "Write your point of view",
         question_x_on_total: "Question %{current} on %{total}",

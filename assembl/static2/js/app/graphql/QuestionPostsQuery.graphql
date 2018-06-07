@@ -1,8 +1,8 @@
-query QuestionPosts($id: ID!, $first: Int!, $after: String!) {
+query QuestionPosts($id: ID!, $first: Int!, $after: String!, $fromNode: ID) {
   question: node(id: $id) {
     ... on Question {
       id
-      posts(first: $first, after: $after) {
+      posts(first: $first, after: $after, fromNode: $fromNode) {
         pageInfo {
           endCursor
           hasNextPage

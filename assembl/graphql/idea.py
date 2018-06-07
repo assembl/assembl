@@ -1,8 +1,10 @@
 import os.path
 from collections import defaultdict
+from itertools import takewhile
 from random import sample as random_sample
 from random import shuffle as random_shuffle
 
+from graphql_relay.connection.arrayconnection import offset_to_cursor
 import graphene
 from graphene.relay import Node
 from graphene_sqlalchemy import SQLAlchemyConnectionField, SQLAlchemyObjectType
@@ -338,7 +340,8 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
     title_entries = graphene.List(LangStringEntry)
     posts = SQLAlchemyConnectionField(
         'assembl.graphql.post.PostConnection',  # use dotted name to avoid circular import  # noqa: E501
-        random=graphene.Boolean())
+        random=graphene.Boolean(),
+        from_node=graphene.ID())
     thematic = graphene.Field(lambda: Thematic)
     total_sentiments = graphene.Int(required=True)
 
@@ -424,6 +427,12 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
             else:
                 query = query.options(
                     models.LangString.joinedload_option(Post.body))
+
+        from_node = args.get('from_node')
+        if from_node and not args.get('after') and not args.get('before'):
+            post_id = int(Node.from_global_id(from_node)[-1])
+            node_idx = len(list(takewhile(lambda post: post[0] != post_id, query.with_entities(Post.id))))
+            args['after'] = offset_to_cursor(node_idx - 1)
 
         # pagination is done after that, no need to do it ourself
         return query
