@@ -5,6 +5,7 @@ import type ReduxAction from 'redux';
 
 import { type Action } from '../../actions/actionTypes';
 import legalContents from './legalContents';
+import timeline from './timeline';
 import resourcesCenter from './resourcesCenter';
 import sections from './adminSections';
 import voteSession from './voteSession';
@@ -236,7 +237,8 @@ const reducers = {
   voteSession: voteSession,
   legalContents: legalContents,
   landingPage: landingPage,
-  profileOptions: profileOptions
+  profileOptions: profileOptions,
+  timeline: timeline
 };
 
 export default combineReducers(reducers);

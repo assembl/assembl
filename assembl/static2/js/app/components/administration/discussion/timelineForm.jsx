@@ -1,18 +1,20 @@
 // @flow
 import React from 'react';
 import { I18n, Translate } from 'react-redux-i18n';
-import { graphql, compose } from 'react-apollo';
-import { OverlayTrigger, Button, Row, Col } from 'react-bootstrap';
+import { List } from 'immutable';
+import { OverlayTrigger, Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { addPhaseTooltip, deletePhaseTooltip } from '../../common/tooltips';
+import { addPhaseTooltip } from '../../common/tooltips';
 import SectionTitle from '../sectionTitle';
-import FormControlWithLabel from '../../common/formControlWithLabel';
-import TimelineQuery from '../../../graphql/Timeline.graphql';
 import PhaseForm from './phaseForm';
+import { createRandomId } from '../../../utils/globalFunctions';
+import { createPhase } from '../../../actions/adminActions/timeline';
+import PhaseTitleForm from './phaseTitleForm';
 
 type TimelineFormProps = {
   editLocale: string,
-  timeline: Object // TODO: specify object shape
+  phases: List<string>, // TODO: specify object shape
+  handleCreatePhase: Function
 };
 
 type TimelineFormState = {
@@ -23,26 +25,23 @@ export class DumbTimelineForm extends React.Component<TimelineFormProps, Timelin
   constructor(props: TimelineFormProps) {
     super(props);
     this.state = {
-      selectedPhaseId: props.timeline ? props.timeline[0].id : ''
+      selectedPhaseId: props.phases ? props.phases.toJS()[0] : ''
     };
   }
 
   componentWillReceiveProps(nextProps: TimelineFormProps) {
     if (!this.state.selectedPhaseId) {
       this.setState({
-        selectedPhaseId: nextProps.timeline ? nextProps.timeline[0].id : ''
+        selectedPhaseId: nextProps.phases ? nextProps.phases.toJS()[0] : ''
       });
     }
   }
 
-  getPhaseNumberById = (id: string) => this.props.timeline.map(phase => phase.id).indexOf(id) + 1;
-
-  getPhaseModuleById = (id: string) => this.props.timeline.filter(phase => phase.id === id)[0].identifier;
+  getPhaseNumberById = (id: string) => (this.props.phases.toJS().indexOf(id) + 1);
 
   render() {
-    const { editLocale, timeline } = this.props;
+    const { editLocale, phases, handleCreatePhase } = this.props;
     const { selectedPhaseId } = this.state;
-    const phaseLabel = I18n.t('administration.timelineAdmin.phaseLabel');
     return (
       <div className="admin-box timeline-admin">
         <SectionTitle
@@ -53,28 +52,13 @@ export class DumbTimelineForm extends React.Component<TimelineFormProps, Timelin
         <div className="admin-content">
           <div className="form-container">
             <form>
-              {timeline && timeline.map(({ id, title }) =>
-                (
-                  <div className="flex" key={`title-input-phase-${id}`}>
-                    <FormControlWithLabel
-                      key={`phase-${id}`}
-                      label={`${phaseLabel} ${editLocale.toUpperCase()}`}
-                      onChange={() => {}}
-                      type="text"
-                      value={title}
-                      style={{ flexGrow: 1 }}
-                    />
-                    <OverlayTrigger placement="top" overlay={deletePhaseTooltip}>
-                      <Button onClick={() => {}} className="admin-icons">
-                        <span className="assembl-icon-delete grey" />
-                      </Button>
-                    </OverlayTrigger>
-                  </div>
-                )
+              {phases && phases.map(id => (
+                <PhaseTitleForm id={id} editLocale={editLocale} key={`phase-title-form-${id}`} />
+              )
               )
               }
               <OverlayTrigger placement="top" overlay={addPhaseTooltip}>
-                <div onClick={() => {}} className="plus margin-l">
+                <div onClick={() => handleCreatePhase()} className="plus margin-l">
             +
                 </div>
               </OverlayTrigger>
@@ -84,10 +68,10 @@ export class DumbTimelineForm extends React.Component<TimelineFormProps, Timelin
         <Translate value="administration.timelineAdmin.instruction2" className="admin-instruction" />
         <div className="admin-content">
           <Row>
-            {timeline && timeline.map(({ id }, index) => {
+            {phases && phases.toJS().map((id, index) => {
               const linkClassNames = selectedPhaseId === id ? 'tab-title-active ellipsis' : 'tab-title ellipsis';
               return (
-                <Col xs={12} md={Math.round(12 / timeline.length)} key={index}>
+                <Col xs={12} md={Math.round(12 / phases.length)} key={index}>
                   <a
                     className={linkClassNames}
                     key={`phase-link-${id}`}
@@ -99,16 +83,15 @@ export class DumbTimelineForm extends React.Component<TimelineFormProps, Timelin
                   </a>
                 </Col>
               );
-            })}
+            }
+            )}
           </Row>
           {selectedPhaseId && (
             <Row>
               <PhaseForm
                 key={`phase-form-${selectedPhaseId}-${editLocale}`}
                 phaseId={selectedPhaseId}
-                editLocale={editLocale}
                 phaseNumber={this.getPhaseNumberById(selectedPhaseId)}
-                phaseModule={this.getPhaseModuleById(selectedPhaseId)}
               />
             </Row>
           )}
@@ -118,18 +101,20 @@ export class DumbTimelineForm extends React.Component<TimelineFormProps, Timelin
   }
 }
 
-const mapStateToProps = state => ({
-  editLocale: state.admin.editLocale,
-  lang: state.i18n.locale
+const mapStateToProps = (state) => {
+  const { phasesInOrder, phasesById } = state.admin.timeline;
+  return {
+    editLocale: state.admin.editLocale,
+    lang: state.i18n.locale,
+    phases: phasesInOrder.filter(id => !phasesById.get(id).get('_toDelete'))
+  };
+};
+
+const mapDispatchToProps = dispatch => ({
+  handleCreatePhase: () => {
+    const newId = createRandomId();
+    return dispatch(createPhase(newId));
+  }
 });
 
-const withData = graphql(TimelineQuery, {
-  options: ({ lang }) => ({
-    variables: { lang: lang }
-  }),
-  props: ({ data: { timeline } }) => ({
-    timeline: timeline
-  })
-});
-
-export default compose(connect(mapStateToProps), withData)(DumbTimelineForm);
+export default connect(mapStateToProps, mapDispatchToProps)(DumbTimelineForm);

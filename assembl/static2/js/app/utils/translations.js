@@ -1209,7 +1209,7 @@ const Translations = {
       modules: {
         survey: "Survey",
         thread: "Thread",
-        multiColumns: "Multi-column",
+        multiColumns: "Multi-columns",
         voteSession: "Vote Session"
       },
       noTimeline: "No timeline has been configured yet",
