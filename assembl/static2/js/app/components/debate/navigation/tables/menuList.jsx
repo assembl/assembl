@@ -63,8 +63,12 @@ class MenuList extends React.Component<MenuListProps, MenuListState> {
     if (rootItems.length === 0) return null;
     const estimatedMenuHeight = rootItems.length * menuItemHeight + menuItemMargin;
     return [
-      subMenu ? <div className="sub-menu-separator" /> : '',
-      <div className={classNames('menu-table-col', className, { 'sub-menu': subMenu })} onMouseLeave={this.onMenuleave}>
+      subMenu ? <div key="separator" className="sub-menu-separator" /> : '',
+      <div
+        key="submenu"
+        className={classNames('menu-table-col', className, { 'sub-menu': subMenu })}
+        onMouseLeave={this.onMenuleave}
+      >
         <div className="menu-table" style={{ height: `${estimatedMenuHeight}px` }}>
           <Scrollbars
             // we hide the scrollbar
