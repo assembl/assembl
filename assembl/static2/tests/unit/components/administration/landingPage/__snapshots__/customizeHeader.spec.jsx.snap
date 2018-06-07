@@ -1,0 +1,136 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ManageModules component should render a page to manage the landing page header 1`] = `
+<div
+  className="admin-box"
+>
+  <SectionTitle
+    annotation="* Fields are required."
+    title="Header"
+  />
+  <div
+    className="admin-content"
+  >
+    <div
+      className="form-container"
+    >
+      <p
+        className="admin-paragraph"
+      >
+        <Translate
+          value="administration.landingPage.header.helper"
+        />
+      </p>
+      <div
+        className="margin-l"
+      />
+      <FormControlWithLabel
+        componentClass={undefined}
+        disabled={undefined}
+        formControlProps={undefined}
+        helperText=""
+        helperUrl=""
+        id={undefined}
+        label="Debate title"
+        labelAlwaysVisible={false}
+        name={undefined}
+        onChange={[Function]}
+        required={true}
+        type="text"
+        validationErrors={undefined}
+        value="title"
+      />
+      <FormControlWithLabel
+        componentClass={undefined}
+        disabled={undefined}
+        formControlProps={undefined}
+        helperText=""
+        helperUrl=""
+        id={undefined}
+        label="Missing translation: administration.landingPage.header.subtitleLabel"
+        labelAlwaysVisible={false}
+        name={undefined}
+        onChange={[Function]}
+        required={true}
+        type="rich-text"
+        validationErrors={undefined}
+        value="subtitle"
+      />
+      <FormGroup
+        bsClass="form-group"
+      >
+        <label
+          htmlFor="landing-page-img-header"
+        >
+          <Translate
+            value="administration.landingPage.header.headerImage"
+          />
+        </label>
+        <FileUploader
+          fileOrUrl="img/headerImg.jpg"
+          filename=""
+          handleChange={[Function]}
+          imgTitle="myHeaderImage"
+          isAdminUploader={true}
+          mimeType="image/jpeg"
+          name="landing-page-img-header"
+          onDeleteClick={[Function]}
+          withPreview={true}
+        />
+        <div
+          className="description-block"
+        >
+          <Translate
+            value="administration.landingPage.header.headerDescription"
+          />
+        </div>
+      </FormGroup>
+      <FormControlWithLabel
+        componentClass={undefined}
+        disabled={undefined}
+        formControlProps={undefined}
+        helperText=""
+        helperUrl=""
+        id={undefined}
+        label="Missing translation: administration.landingPage.header.buttonLabel"
+        labelAlwaysVisible={false}
+        name={undefined}
+        onChange={[Function]}
+        required={true}
+        type="text"
+        validationErrors={undefined}
+        value="button label"
+      />
+      <FormGroup
+        bsClass="form-group"
+      >
+        <label
+          htmlFor="landing-page-img-logo"
+        >
+          <Translate
+            value="administration.landingPage.header.logoImage"
+          />
+        </label>
+        <FileUploader
+          fileOrUrl="img/logoImg.jpg"
+          filename=""
+          handleChange={[Function]}
+          imgTitle="myLogoImage"
+          isAdminUploader={true}
+          mimeType="image/jpeg"
+          name="landing-page-img-logo"
+          onDeleteClick={[Function]}
+          withPreview={true}
+        />
+        <div
+          className="description-block"
+        >
+          <Translate
+            value="administration.landingPage.header.logoDescription"
+          />
+        </div>
+      </FormGroup>
+    </div>
+  </div>
+</div>
+`;

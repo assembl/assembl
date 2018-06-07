@@ -33,7 +33,7 @@ type Props = {
   handleLogoChange: Function
 };
 
-const DumbCustomizeHeader = ({
+export const DumbCustomizeHeader = ({
   header,
   handleTitleChange,
   handleSubtitleChange,
@@ -120,7 +120,5 @@ const mapDispatchToProps = (dispatch, { editLocale }) => ({
   handleImageChange: value => dispatch(updateLandingPageHeaderImage(value)),
   handleLogoChange: value => dispatch(updateLandingPageHeaderLogo(value))
 });
-
-export { DumbCustomizeHeader };
 
 export default connect(null, mapDispatchToProps)(DumbCustomizeHeader);
