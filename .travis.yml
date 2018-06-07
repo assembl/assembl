@@ -21,8 +21,10 @@ before_install:
  # Remove mongodb repo that has an expired GPG key which gives a travis errored because
  # fabric is doing an apt-get update.
  - ls /etc/apt/sources.list.d/
- - sudo rm -f /etc/apt/sources.list.d/mongodb-3.4.list
- - sudo rm -f /etc/apt/sources.list.d/cassandra.list
+# - sudo rm -f /etc/apt/sources.list.d/mongodb-3.4.list
+# - sudo rm -f /etc/apt/sources.list.d/cassandra.list
+ - sudo rm -f /etc/apt/sources.list.d/*
+ - sudo apt-get update
  # The following line is needed, otherwise the set_file_permissions fab command yells error "Operation not permitted"
  - sudo usermod -a -G www-data $USER
  - sudo apt-get install -y fabric git openssh-server
