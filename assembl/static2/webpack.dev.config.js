@@ -56,12 +56,9 @@ module.exports = {
     },
     entry: _.extend(theme_entries(), {
         bundle: [
-            'babel-polyfill', // this is already in index.jsx but we need it to be first, otherwise it doesn't work on IE 11
-            'react-hot-loader/patch',
             './js/app/index',
         ],
         searchv1: [
-            'react-hot-loader/patch',
             './js/app/searchv1'
         ]
     }),
