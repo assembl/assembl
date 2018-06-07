@@ -47,7 +47,7 @@ exports[`ManageModules component should render a page to manage the landing page
         helperText=""
         helperUrl=""
         id={undefined}
-        label="Missing translation: administration.landingPage.header.subtitleLabel"
+        label="Debate subtitle"
         labelAlwaysVisible={false}
         name={undefined}
         onChange={[Function]}
@@ -92,7 +92,7 @@ exports[`ManageModules component should render a page to manage the landing page
         helperText=""
         helperUrl=""
         id={undefined}
-        label="Missing translation: administration.landingPage.header.buttonLabel"
+        label="Name of the referral button to the debate"
         labelAlwaysVisible={false}
         name={undefined}
         onChange={[Function]}

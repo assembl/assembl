@@ -1366,7 +1366,14 @@ const Translations = {
         header: {
           title: "Header",
           helper: "Customize appearance of the header.",
-          titleLabel: "Debate title"
+          titleLabel: "Debate title",
+          subtitleLabel: "Debate subtitle",
+          buttonLabel: "Name of the referral button to the debate",
+          headerImage: "Choose the header image",
+          logoImage: "Choose the header logo",
+          headerDescription: "The image must have a height of 450px and a width of 1280px. The weight must not exceed 1 MB.",
+          logoDescription:
+            "The logo must have a maximum height of 78px and a maximum width of 200px. The weight must not exceed 1 MB. The background must be transparent."
         },
         successSave: "The modules have been saved with success!"
       },
