@@ -429,7 +429,12 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
                     models.LangString.joinedload_option(Post.body))
 
         from_node = args.get('from_node')
-        if from_node and not args.get('after') and not args.get('before'):
+        after = args.get('after')
+        before = args.get('before')
+        # If `from_node` is specified and after/before is None or empty string,
+        # search the position of this node to set the `after` parameter
+        # which is actually `arrayconnection:position` in base64.
+        if from_node and not after and not before:
             post_id = int(Node.from_global_id(from_node)[-1])
             node_idx = len(list(takewhile(lambda post: post[0] != post_id, query.with_entities(Post.id))))
             args['after'] = offset_to_cursor(node_idx - 1)
