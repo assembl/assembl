@@ -42,6 +42,7 @@ import FilteredSortingSelector from './search/SortingSelector';
 import ProfileLine from './common/profileLine';
 import { getConnectedUserId, getDebateId, getLocale } from '../reducers/contextReducer';
 import { connectedUserIsExpert } from '../utils/permissions';
+import { get as getRoute } from '../utils/routeMap';
 
 const FRAGMENT_SIZE = 400;
 const elasticsearchLangIndexesElement = document.getElementById('elasticsearchLangIndexes');
@@ -108,7 +109,7 @@ if (v1Interface) {
     case 'idea':
       ideaBase64id = btoa(`Idea:${id}`);
       return `/${slug}/debate/thread/theme/${ideaBase64id}`;
-    default:
+    default: {
       // post
       ideaId = hit._source.idea_id.length > 0 ? hit._source.idea_id[0] : null;
       if (!ideaId) {
@@ -116,7 +117,20 @@ if (v1Interface) {
       }
       ideaBase64id = btoa(`Idea:${ideaId}`);
       postBase64id = btoa(`Post:${id}`);
-      return `/${slug}/debate/thread/theme/${ideaBase64id}/#${postBase64id}`;
+      const phaseId = hit._source.phase_id || 'thread';
+      if (phaseId === 'thread') {
+        return getRoute('post', { slug: slug, phase: phaseId, themeId: ideaBase64id, element: postBase64id });
+      } else if (phaseId === 'survey') {
+        return getRoute('questionPost', {
+          slug: slug,
+          phase: phaseId,
+          questionId: ideaBase64id,
+          questionIndex: 1,
+          element: postBase64id
+        });
+      }
+      return undefined;
+    }
     }
   };
 }

@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`FlatList component should match Posts with data snapshot 1`] = `
-<FlatList
+<withRouter(DumbFlatList)
   ListItem={[Function]}
   extractItems={[Function]}
   fetchMore={undefined}
@@ -17,6 +17,7 @@ exports[`FlatList component should match Posts with data snapshot 1`] = `
       ],
     }
   }
+  loadPreviousMessage="debate.survey.loadRecentPosts"
   networkStatus={undefined}
   onEndReachedThreshold={0.6}
   refetch={undefined}

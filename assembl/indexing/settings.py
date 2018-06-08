@@ -100,6 +100,7 @@ COMMON_POST = {
         'parent_creator_id': LONG,
     #    'publishes_synthesis_id': KEYWORD,
         'type': KEYWORD,
+        'phase_id': KEYWORD,
         'sentiment_tags': KEYWORD
         # 'sentiment_counts'
     }

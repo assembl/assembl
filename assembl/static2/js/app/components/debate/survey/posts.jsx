@@ -1,6 +1,7 @@
 /* eslint-disable  react/no-unused-prop-types */
 // @flow
 import * as React from 'react';
+import { withRouter } from 'react-router';
 import { I18n } from 'react-redux-i18n';
 import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
@@ -76,6 +77,7 @@ export class DumbPosts extends React.Component<PostsProps> {
         fetchMore={fetchMore}
         refetch={refetch}
         itemData={item => ({ id: item.node.id, originalLocale: item.node.originalLocale })}
+        loadPreviousMessage="debate.survey.loadRecentPosts"
       />
     );
   }
@@ -93,10 +95,18 @@ const mapDispatchToProps = dispatch => ({
 
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
+  withRouter,
   graphql(QuestionPosts, {
-    options: props => ({
-      variables: { first: 8, after: '', id: props.questionId }
-    }),
+    options: (props) => {
+      const { hash } = props.location;
+      let id = null;
+      if (hash !== '') {
+        id = hash.replace('#', '').split('?')[0];
+      }
+      return {
+        variables: { first: 8, after: '', id: props.questionId, fromNode: id }
+      };
+    },
     props: ({ data }) => {
       if (data.loading) {
         return {

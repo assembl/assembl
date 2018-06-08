@@ -31,6 +31,7 @@
   "terms": "${slug}/terms",
   "theme": "theme/${themeId}",
   "question": "question/${questionId}/${questionIndex}",
+  "questionPost": "${slug}/debate/${phase}/question/${questionId}/${questionIndex}/#${element}",
   "administration": "${slug}/administration",
   "unauthorizedAdministration": "${slug}/unauthorizedAdministration",
   "adminPhase": "${phase}",
