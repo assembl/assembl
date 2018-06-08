@@ -1,3 +1,5 @@
+#import "../fragments/LangString.graphql"
+
 mutation UpdateDiscussion(
   $titleEntries: [LangStringEntryInput!]!
   $subtitleEntries: [LangStringEntryInput!]!
@@ -14,16 +16,13 @@ mutation UpdateDiscussion(
   ) {
     discussion {
       titleEntries {
-        value
-        localeCode
+        ...langStringEntry
       }
       subtitleEntries {
-        value
-        localeCode
+        ...langStringEntry
       }
       buttonLabelEntries {
-        value
-        localeCode
+        ...langStringEntry
       }
       headerImage {
         externalUrl

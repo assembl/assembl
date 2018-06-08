@@ -111,16 +111,10 @@ export const page: LandingPageReducer = (state = initialPage, action) => {
   case UPDATE_LANDING_PAGE: {
     let newState = state;
     if (action.page.headerImage) {
-      newState = newState
-        .setIn(['headerImage', 'title'], action.page.headerImage.title)
-        .setIn(['headerImage', 'externalUrl'], action.page.headerImage.externalUrl)
-        .setIn(['headerImage', 'mimeType'], action.page.headerImage.mimeType);
+      newState = newState.set('headerImage', fromJS(action.page.headerImage));
     }
     if (action.page.logoImage) {
-      newState = newState
-        .setIn(['logoImage', 'title'], action.page.logoImage.title)
-        .setIn(['logoImage', 'externalUrl'], action.page.logoImage.externalUrl)
-        .setIn(['logoImage', 'mimeType'], action.page.logoImage.mimeType);
+      newState = newState.set('logoImage', fromJS(action.page.logoImage));
     }
     newState = newState
       .set('titleEntries', fromJS(action.page.titleEntries))

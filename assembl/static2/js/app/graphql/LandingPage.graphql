@@ -1,18 +1,17 @@
+#import "./fragments/LangString.graphql"
+
 query LandingPage($lang: String!) {
   discussion {
     titleEntries {
-      localeCode
-      value
+      ...langStringEntry
     }
     title(lang: $lang)
     subtitleEntries {
-      localeCode
-      value
+      ...langStringEntry
     }
     subtitle(lang: $lang)
     buttonLabelEntries {
-      localeCode
-      value
+      ...langStringEntry
     }
     buttonLabel(lang: $lang)
     headerImage {
