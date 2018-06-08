@@ -1,4 +1,6 @@
+// @flow
 import React from 'react';
+import { type ApolloClient } from 'react-apollo';
 import { Translate } from 'react-redux-i18n';
 import addSentimentMutation from '../../../graphql/mutations/addSentiment.graphql';
 import deleteSentimentMutation from '../../../graphql/mutations/deleteSentiment.graphql';
@@ -7,7 +9,31 @@ import { inviteUserToLogin, displayModal } from '../../../utils/utilityManager';
 import sentimentDefinitions from './sentimentDefinitions';
 import ResponsiveOverlayTrigger from '../../common/responsiveOverlayTrigger';
 
-const Sentiment = ({ sentimentCounts, mySentiment, sentiment, client, isSelected, postId, placement, isPhaseCompleted }) => {
+type SentimentProps = {
+  client: ApolloClient,
+  isPhaseCompleted: boolean,
+  isSelected: boolean,
+  mySentiment: ?string,
+  placement: string,
+  postId: string,
+  sentiment: Object, // TODO:
+  sentimentCounts: SentimentCountsFragment
+};
+
+const Sentiment = ({
+  sentimentCounts,
+  mySentiment,
+  sentiment,
+  client,
+  isSelected,
+  postId,
+  placement,
+  isPhaseCompleted
+}: SentimentProps) => {
+  const likeCount = sentimentCounts.like ? sentimentCounts.like : 0;
+  const disagreeCount = sentimentCounts.disagree ? sentimentCounts.disagree : 0;
+  const dontUnderstandCount = sentimentCounts.dontUnderstand ? sentimentCounts.dontUnderstand : 0;
+  const moreInfoCount = sentimentCounts.moreInfo ? sentimentCounts.moreInfo : 0;
   const sentimentComponent = (
     <div
       className={isSelected ? 'sentiment sentiment-active' : 'sentiment'}
@@ -33,10 +59,10 @@ const Sentiment = ({ sentimentCounts, mySentiment, sentiment, client, isSelected
                     post: {
                       id: postId,
                       sentimentCounts: {
-                        like: sentimentCounts.like - (mySentiment === sentiment.type ? 1 : 0),
-                        disagree: sentimentCounts.disagree - (mySentiment === sentiment.type ? 1 : 0),
-                        dontUnderstand: sentimentCounts.dontUnderstand - (mySentiment === sentiment.type ? 1 : 0),
-                        moreInfo: sentimentCounts.moreInfo - (mySentiment === sentiment.type ? 1 : 0),
+                        like: likeCount - (mySentiment === sentiment.type ? 1 : 0),
+                        disagree: disagreeCount - (mySentiment === sentiment.type ? 1 : 0),
+                        dontUnderstand: dontUnderstandCount - (mySentiment === sentiment.type ? 1 : 0),
+                        moreInfo: moreInfoCount - (mySentiment === sentiment.type ? 1 : 0),
                         __typename: 'SentimentCounts'
                       },
                       mySentiment: null,
@@ -54,22 +80,19 @@ const Sentiment = ({ sentimentCounts, mySentiment, sentiment, client, isSelected
                     post: {
                       id: postId,
                       sentimentCounts: {
-                        like:
-                            sentiment.camelType === 'like'
-                              ? sentimentCounts.like + 1
-                              : sentimentCounts.like - (mySentiment === 'LIKE' ? 1 : 0),
+                        like: sentiment.camelType === 'like' ? likeCount + 1 : likeCount - (mySentiment === 'LIKE' ? 1 : 0),
                         disagree:
                             sentiment.camelType === 'disagree'
-                              ? sentimentCounts.disagree + 1
-                              : sentimentCounts.disagree - (mySentiment === 'DISAGREE' ? 1 : 0),
+                              ? disagreeCount + 1
+                              : disagreeCount - (mySentiment === 'DISAGREE' ? 1 : 0),
                         dontUnderstand:
                             sentiment.camelType === 'dontUnderstand'
-                              ? sentimentCounts.dontUnderstand + 1
-                              : sentimentCounts.dontUnderstand - (mySentiment === 'DONT_UNDERSTAND' ? 1 : 0),
+                              ? dontUnderstandCount + 1
+                              : dontUnderstandCount - (mySentiment === 'DONT_UNDERSTAND' ? 1 : 0),
                         moreInfo:
                             sentiment.camelType === 'moreInfo'
-                              ? sentimentCounts.moreInfo + 1
-                              : sentimentCounts.moreInfo - (mySentiment === 'MORE_INFO' ? 1 : 0),
+                              ? moreInfoCount + 1
+                              : moreInfoCount - (mySentiment === 'MORE_INFO' ? 1 : 0),
                         __typename: 'SentimentCounts'
                       },
                       mySentiment: sentiment.type,
@@ -89,7 +112,16 @@ const Sentiment = ({ sentimentCounts, mySentiment, sentiment, client, isSelected
   return <ResponsiveOverlayTrigger placement={placement} tooltip={sentiment.tooltip} component={sentimentComponent} />;
 };
 
-export default ({ sentimentCounts, mySentiment, client, postId, placement, isPhaseCompleted }) => (
+type SentimentsProps = {
+  client: ApolloClient,
+  isPhaseCompleted: boolean,
+  mySentiment: ?string,
+  placement: string,
+  postId: string,
+  sentimentCounts: SentimentCountsFragment
+};
+
+export default ({ sentimentCounts, mySentiment, client, postId, placement, isPhaseCompleted }: SentimentsProps) => (
   <div className="add-sentiment">
     {sentimentDefinitions.map(sentiment => (
       <Sentiment
