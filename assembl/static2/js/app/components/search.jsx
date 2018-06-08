@@ -42,6 +42,7 @@ import FilteredSortingSelector from './search/SortingSelector';
 import ProfileLine from './common/profileLine';
 import { getConnectedUserId, getDebateId, getLocale } from '../reducers/contextReducer';
 import { connectedUserIsExpert } from '../utils/permissions';
+import { get as getRoute } from '../utils/routeMap';
 
 const FRAGMENT_SIZE = 400;
 const elasticsearchLangIndexesElement = document.getElementById('elasticsearchLangIndexes');
@@ -118,9 +119,15 @@ if (v1Interface) {
       postBase64id = btoa(`Post:${id}`);
       const phaseId = hit._source.phase_id || 'thread';
       if (phaseId === 'thread') {
-        return `/${slug}/debate/thread/theme/${ideaBase64id}/#${postBase64id}`;
+        return getRoute('post', { slug: slug, phase: phaseId, themeId: ideaBase64id, element: postBase64id });
       } else if (phaseId === 'survey') {
-        return `/${slug}/debate/survey/question/${ideaBase64id}/1#${postBase64id}`;
+        return getRoute('questionPost', {
+          slug: slug,
+          phase: phaseId,
+          questionId: ideaBase64id,
+          questionIndex: 1,
+          element: postBase64id
+        });
       }
       return undefined;
     }
