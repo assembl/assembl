@@ -5,6 +5,7 @@ import { withRouter } from 'react-router';
 import { I18n, Translate } from 'react-redux-i18n';
 import { Button } from 'react-bootstrap';
 import throttle from 'lodash/throttle';
+import { browserHistory } from '../../router';
 
 import Loader from './loader';
 import { displayAlert } from '../../utils/utilityManager';
@@ -24,7 +25,7 @@ type FlatListProps = {
   },
   ListItem: Function | React.ComponentType<*>,
   className?: string,
-  location: { hash: string },
+  location: { hash: string, pathname: string },
   loadPreviousMessage?: string,
   networkStatus: number,
   onEndReachedThreshold: number,
@@ -130,7 +131,7 @@ export class DumbFlatList extends React.Component<FlatListProps> {
             className="button-dark button-submit"
             style={{ marginBottom: '20px' }}
             onClick={() => {
-              window.location.href = window.location.href.slice(0, window.location.href.indexOf('#'));
+              browserHistory.push(this.props.location.pathname);
             }}
           >
             <Translate value={loadPreviousMessage} />
