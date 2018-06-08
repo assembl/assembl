@@ -375,7 +375,7 @@ def get_default_context(request, **kwargs):
         "private_social_sharing": private_social_sharing(),
         "get_topic": get_topic(request),
         "get_discussion_url": get_discussion_url(),
-        "get_tab_title": get_tab_title(),
+        "discussion_title": discussion_title(),
     })
 
     return base
@@ -479,15 +479,13 @@ def get_topic(request):
             return adapt_to_html_content(topic_dict.get(opengraph_locale, topic_dict[locale]))
 
 
-def get_tab_title():
+def discussion_title():
     """Returns the title to be shown in the tab"""
     from ..auth.util import get_current_discussion
     discussion = get_current_discussion()
     if discussion:
         if discussion.preferences["tab_title"]:
             return discussion.preferences["tab_title"]
-        else:
-            return "Assembl"
     else:
         return "Assembl"
 
