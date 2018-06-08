@@ -481,7 +481,7 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
             "id": "tab_title",
             "name": _("Tab title"),
             "value_type": "string",
-            "description": _("Title which appears on the tab, by defailt assembl"),
+            "description": _("Title which appears on the tab, by default assembl"),
             "allow_user_override": None,
             "modification_permission": P_ADMIN_DISC,
             "default": ""

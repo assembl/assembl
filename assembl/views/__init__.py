@@ -486,8 +486,7 @@ def discussion_title():
     if discussion:
         if discussion.preferences["tab_title"]:
             return discussion.preferences["tab_title"]
-    else:
-        return "Assembl"
+    return "Assembl"
 
 
 def get_landing_page_image():
