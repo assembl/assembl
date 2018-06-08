@@ -28,6 +28,12 @@ export type GaugeChoiceSpecificationInput = {|
 
 export type SectionTypesEnum = 'ADMINISTRATION' | 'CUSTOM' | 'DEBATE' | 'HOMEPAGE' | 'RESOURCES_CENTER' | 'SYNTHESES';
 
+export type SelectFieldOptionInput = {|
+  id?: ?string,
+  labelEntries: Array<?LangStringEntryInput>,
+  order: number
+|};
+
 export type QuestionInput = {|
   id?: ?string,
   titleEntries: Array<?LangStringEntryInput>
@@ -49,6 +55,12 @@ export type TokenCategorySpecificationInput = {|
   color: string
 |};
 
+export type FieldDataInput = {|
+  configurableFieldId: string,
+  id: string,
+  valueData: any
+|};
+
 export type AllIdeasQueryQueryVariables = {|
   lang: string,
   identifier: string
@@ -67,7 +79,8 @@ export type AllIdeasQueryQuery = {|
       externalUrl: ?string
     |},
     order: ?number,
-    parentId: ?string
+    parentId: ?string,
+    ancestors: ?Array<?string>
   |}>,
   rootIdea: ?(
     | {
@@ -147,6 +160,11 @@ export type IdeaQuery = {|
           body: ?string
         |}
       }
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
     | {}
     | {}
     | {}
@@ -247,6 +265,11 @@ export type IdeaWithPostsQuery = {|
     | {}
     | {}
     | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
     | {})
 |};
 
@@ -297,11 +320,21 @@ export type LegalContentsQuery = {|
   legalContents: ?{|
     legalNotice: ?string,
     termsAndConditions: ?string,
+    cookiesPolicy: ?string,
+    privacyPolicy: ?string,
     legalNoticeEntries: ?Array<?{|
       localeCode: string,
       value: ?string
     |}>,
     termsAndConditionsEntries: ?Array<?{|
+      localeCode: string,
+      value: ?string
+    |}>,
+    cookiesPolicyEntries: ?Array<?{|
+      localeCode: string,
+      value: ?string
+    |}>,
+    privacyPolicyEntries: ?Array<?{|
       localeCode: string,
       value: ?string
     |}>
@@ -338,6 +371,7 @@ export type PostQuery = {|
     | {
         // The ID of the object.
         id: string,
+        dbId: ?number,
         subjectEntries: ?Array<?{|
           value: ?string,
           localeCode: string
@@ -365,7 +399,8 @@ export type PostQuery = {|
           // The ID of the object.
           id: string,
           userId: number,
-          displayName: ?string
+          displayName: ?string,
+          isDeleted: ?boolean
         |},
         modificationDate: ?any,
         bodyMimeType: string,
@@ -373,8 +408,24 @@ export type PostQuery = {|
         extracts: ?Array<?{|
           // The ID of the object.
           id: string,
+          creationDate: ?any,
           important: ?boolean,
-          body: string
+          body: string,
+          extractNature: ?string,
+          extractAction: ?string,
+          textFragmentIdentifiers: ?Array<?{|
+            xpathStart: ?string,
+            xpathEnd: ?string,
+            offsetStart: ?number,
+            offsetEnd: ?number
+          |}>,
+          creator: ?{|
+            // The ID of the object.
+            id: string,
+            userId: number,
+            displayName: ?string,
+            isDeleted: ?boolean
+          |}
         |}>,
         attachments: ?Array<?{|
           id: string,
@@ -398,7 +449,60 @@ export type PostQuery = {|
     | {}
     | {}
     | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
     | {})
+|};
+
+export type ProfileFieldsQueryVariables = {|
+  lang: string
+|};
+
+export type ProfileFieldsQuery = {|
+  profileFields: ?Array<?{|
+    // The ID of the object.
+    id: string,
+    configurableField:
+      | {
+          fieldType: string,
+          // The ID of the object.
+          id: string,
+          identifier: ?string,
+          titleEntries: ?Array<?{|
+            localeCode: string,
+            value: ?string
+          |}>,
+          title: ?string,
+          order: ?number,
+          required: ?boolean
+        }
+      | {
+          // The ID of the object.
+          id: string,
+          identifier: ?string,
+          titleEntries: ?Array<?{|
+            localeCode: string,
+            value: ?string
+          |}>,
+          title: ?string,
+          order: ?number,
+          required: ?boolean,
+          options: ?Array<?{|
+            // The ID of the object.
+            id: string,
+            order: number,
+            label: ?string,
+            labelEntries: ?Array<?{|
+              localeCode: string,
+              value: ?string
+            |}>
+          |}>
+        },
+    valueData: ?any
+  |}>
 |};
 
 export type QuestionPostsQueryVariables = {|
@@ -410,6 +514,7 @@ export type QuestionPostsQueryVariables = {|
 export type QuestionPostsQuery = {|
   // The ID of the object
   question: ?(
+    | {}
     | {}
     | {}
     | {}
@@ -449,6 +554,10 @@ export type QuestionPostsQuery = {|
     | {}
     | {}
     | {}
+    | {}
+    | {}
+    | {}
+    | {}
     | {})
 |};
 
@@ -475,10 +584,14 @@ export type QuestionQuery = {|
     | {}
     | {}
     | {}
+    | {}
     | {
         title: ?string,
         // The ID of the object.
         id: string,
+        numPosts: ?number,
+        numContributors: ?number,
+        totalSentiments: number,
         thematic: ?{|
           // The ID of the object.
           id: string,
@@ -489,6 +602,10 @@ export type QuestionQuery = {|
           |}
         |}
       }
+    | {}
+    | {}
+    | {}
+    | {}
     | {}
     | {}
     | {}
@@ -790,6 +907,26 @@ export type SynthesisQueryQuery = {|
     | {
         // The ID of the object.
         id: string
+      }
+    | {
+        // The ID of the object.
+        id: string
+      }
+    | {
+        // The ID of the object.
+        id: string
+      }
+    | {
+        // The ID of the object.
+        id: string
+      }
+    | {
+        // The ID of the object.
+        id: string
+      }
+    | {
+        // The ID of the object.
+        id: string
       })
 |};
 
@@ -805,6 +942,49 @@ export type TabsConditionQuery = {|
   discussion: ?{|
     homepageUrl: ?string
   |}
+|};
+
+export type TextFieldsQueryVariables = {|
+  lang: string
+|};
+
+export type TextFieldsQuery = {|
+  textFields: ?Array<?(
+    | {
+        fieldType: string,
+        // The ID of the object.
+        id: string,
+        identifier: ?string,
+        titleEntries: ?Array<?{|
+          localeCode: string,
+          value: ?string
+        |}>,
+        title: ?string,
+        order: ?number,
+        required: ?boolean
+      }
+    | {
+        // The ID of the object.
+        id: string,
+        identifier: ?string,
+        titleEntries: ?Array<?{|
+          localeCode: string,
+          value: ?string
+        |}>,
+        title: ?string,
+        order: ?number,
+        required: ?boolean,
+        options: ?Array<?{|
+          // The ID of the object.
+          id: string,
+          order: number,
+          label: ?string,
+          labelEntries: ?Array<?{|
+            localeCode: string,
+            value: ?string
+          |}>
+        |}>
+      })>
 |};
 
 export type ThematicQueryQueryVariables = {|
@@ -829,6 +1009,7 @@ export type ThematicQueryQuery = {|
     | {}
     | {}
     | {}
+    | {}
     | {
         title: ?string,
         img: ?{|
@@ -837,6 +1018,9 @@ export type ThematicQueryQuery = {|
         |},
         // The ID of the object.
         id: string,
+        numPosts: ?number,
+        numContributors: ?number,
+        totalSentiments: number,
         video: ?{|
           title: ?string,
           descriptionTop: ?string,
@@ -865,6 +1049,10 @@ export type ThematicQueryQuery = {|
     | {}
     | {}
     | {}
+    | {}
+    | {}
+    | {}
+    | {}
     | {})
 |};
 
@@ -876,13 +1064,15 @@ export type ThematicsQueryQuery = {|
   thematics: ?Array<?{|
     // The ID of the object.
     id: string,
+    order: ?number,
     titleEntries: ?Array<?{|
       localeCode: string,
       value: ?string
     |}>,
     img: ?{|
       externalUrl: ?string,
-      mimeType: ?string
+      mimeType: ?string,
+      title: ?string
     |},
     video: ?{|
       titleEntries: ?Array<?{|
@@ -974,7 +1164,8 @@ export type VoteSessionQuery = {|
           // The ID of the object.
           id: string,
           userId: number,
-          displayName: ?string
+          displayName: ?string,
+          isDeleted: ?boolean
         |}>
       |},
       modules: Array<?(
@@ -1203,6 +1394,92 @@ export type addGaugeVoteMutation = {|
   |}
 |};
 
+export type addPostExtractMutationVariables = {|
+  contentLocale: string,
+  postId: string,
+  body: string,
+  important?: ?boolean,
+  xpathStart: string,
+  xpathEnd: string,
+  offsetStart: number,
+  offsetEnd: number
+|};
+
+export type addPostExtractMutation = {|
+  addPostExtract: ?{|
+    post: ?{|
+      // The ID of the object.
+      id: string,
+      dbId: ?number,
+      subjectEntries: ?Array<?{|
+        value: ?string,
+        localeCode: string
+      |}>,
+      bodyEntries: ?Array<?{|
+        value: ?string,
+        localeCode: string
+      |}>,
+      sentimentCounts: ?{|
+        disagree: ?number,
+        dontUnderstand: ?number,
+        like: ?number,
+        moreInfo: ?number
+      |},
+      mySentiment: ?SentimentTypes,
+      indirectIdeaContentLinks: ?Array<?{|
+        idea: ?{|
+          // The ID of the object.
+          id: string,
+          title: ?string,
+          messageViewOverride: ?string
+        |}
+      |}>,
+      creator: ?{|
+        // The ID of the object.
+        id: string,
+        userId: number,
+        displayName: ?string,
+        isDeleted: ?boolean
+      |},
+      modificationDate: ?any,
+      bodyMimeType: string,
+      publicationState: ?PublicationStates,
+      extracts: ?Array<?{|
+        // The ID of the object.
+        id: string,
+        creationDate: ?any,
+        important: ?boolean,
+        body: string,
+        extractNature: ?string,
+        extractAction: ?string,
+        textFragmentIdentifiers: ?Array<?{|
+          xpathStart: ?string,
+          xpathEnd: ?string,
+          offsetStart: ?number,
+          offsetEnd: ?number
+        |}>,
+        creator: ?{|
+          // The ID of the object.
+          id: string,
+          userId: number,
+          displayName: ?string,
+          isDeleted: ?boolean
+        |}
+      |}>,
+      attachments: ?Array<?{|
+        id: string,
+        document: ?{|
+          id: string,
+          title: ?string,
+          externalUrl: ?string,
+          mimeType: ?string,
+          avChecked: ?string
+        |}
+      |}>
+    |}
+  |}
+|};
+
 export type addSentimentMutationVariables = {|
   type: SentimentTypes,
   postId: string
@@ -1359,6 +1636,7 @@ export type createPostMutation = {|
     post: ?{|
       // The ID of the object.
       id: string,
+      dbId: ?number,
       subjectEntries: ?Array<?{|
         value: ?string,
         localeCode: string
@@ -1386,7 +1664,8 @@ export type createPostMutation = {|
         // The ID of the object.
         id: string,
         userId: number,
-        displayName: ?string
+        displayName: ?string,
+        isDeleted: ?boolean
       |},
       modificationDate: ?any,
       bodyMimeType: string,
@@ -1394,8 +1673,24 @@ export type createPostMutation = {|
       extracts: ?Array<?{|
         // The ID of the object.
         id: string,
+        creationDate: ?any,
         important: ?boolean,
-        body: string
+        body: string,
+        extractNature: ?string,
+        extractAction: ?string,
+        textFragmentIdentifiers: ?Array<?{|
+          xpathStart: ?string,
+          xpathEnd: ?string,
+          offsetStart: ?number,
+          offsetEnd: ?number
+        |}>,
+        creator: ?{|
+          // The ID of the object.
+          id: string,
+          userId: number,
+          displayName: ?string,
+          isDeleted: ?boolean
+        |}
       |}>,
       attachments: ?Array<?{|
         id: string,
@@ -1484,17 +1779,65 @@ export type createSectionMutation = {|
   |}
 |};
 
+export type createTextFieldMutationVariables = {|
+  lang?: ?string,
+  titleEntries: Array<?LangStringEntryInput>,
+  order: number,
+  required: boolean,
+  options?: ?Array<?SelectFieldOptionInput>
+|};
+
+export type createTextFieldMutation = {|
+  createTextField: ?{|
+    field: ?(
+      | {
+          titleEntries: ?Array<?{|
+            localeCode: string,
+            value: ?string
+          |}>,
+          title: ?string,
+          order: ?number,
+          required: ?boolean,
+          // The ID of the object.
+          id: string
+        }
+      | {
+          titleEntries: ?Array<?{|
+            localeCode: string,
+            value: ?string
+          |}>,
+          title: ?string,
+          order: ?number,
+          required: ?boolean,
+          // The ID of the object.
+          id: string,
+          options: ?Array<?{|
+            // The ID of the object.
+            id: string,
+            order: number,
+            label: ?string,
+            labelEntries: ?Array<?{|
+              localeCode: string,
+              value: ?string
+            |}>
+          |}>
+        })
+  |}
+|};
+
 export type createThematicMutationVariables = {|
   identifier: string,
   image?: ?string,
   titleEntries: Array<?LangStringEntryInput>,
   questions?: ?Array<?QuestionInput>,
-  video?: ?VideoInput
+  video?: ?VideoInput,
+  order?: ?number
 |};
 
 export type createThematicMutation = {|
   createThematic: ?{|
     thematic: ?{|
+      order: ?number,
       title: ?string,
       img: ?{|
         externalUrl: ?string,
@@ -1553,6 +1896,16 @@ export type createTokenVoteSpecificationMutation = {|
       |}>,
       voteSpecTemplateId: ?string
     |}
+  |}
+|};
+
+export type deleteExtractMutationVariables = {|
+  extractId: string
+|};
+
+export type deleteExtractMutation = {|
+  deleteExtract: ?{|
+    success: ?boolean
   |}
 |};
 
@@ -1652,6 +2005,16 @@ export type deleteSentimentMutation = {|
   |}
 |};
 
+export type deleteTextFieldMutationVariables = {|
+  id: string
+|};
+
+export type deleteTextFieldMutation = {|
+  deleteTextField: ?{|
+    success: ?boolean
+  |}
+|};
+
 export type deleteThematicMutationVariables = {|
   thematicId: string
 |};
@@ -1684,6 +2047,19 @@ export type deleteTokenVoteMutation = {|
   |}
 |};
 
+export type DeleteUserInformationMutationVariables = {|
+  id: string
+|};
+
+export type DeleteUserInformationMutation = {|
+  DeleteUserInformation: ?{|
+    user: ?{|
+      // The ID of the object.
+      id: string
+    |}
+  |}
+|};
+
 export type deleteVoteSpecificationMutationVariables = {|
   id: string
 |};
@@ -1704,6 +2080,42 @@ export type updateDiscussionPreferenceMutation = {|
       languages: ?Array<?{|
         locale: ?string
       |}>
+    |}
+  |}
+|};
+
+export type updateExtractMutationVariables = {|
+  extractId: string,
+  ideaId?: ?string,
+  important?: ?boolean,
+  extractNature?: ?string,
+  extractAction?: ?string,
+  body?: ?string
+|};
+
+export type updateExtractMutation = {|
+  updateExtract: ?{|
+    extract: ?{|
+      // The ID of the object.
+      id: string,
+      creationDate: ?any,
+      important: ?boolean,
+      body: string,
+      extractNature: ?string,
+      extractAction: ?string,
+      textFragmentIdentifiers: ?Array<?{|
+        xpathStart: ?string,
+        xpathEnd: ?string,
+        offsetStart: ?number,
+        offsetEnd: ?number
+      |}>,
+      creator: ?{|
+        // The ID of the object.
+        id: string,
+        userId: number,
+        displayName: ?string,
+        isDeleted: ?boolean
+      |}
     |}
   |}
 |};
@@ -1767,7 +2179,9 @@ export type updateLandingPageModuleMutation = {|
 
 export type UpdateLegalContentsMutationVariables = {|
   legalNoticeEntries: Array<?LangStringEntryInput>,
-  termsAndConditionsEntries: Array<?LangStringEntryInput>
+  termsAndConditionsEntries: Array<?LangStringEntryInput>,
+  cookiesPolicyEntries: Array<?LangStringEntryInput>,
+  privacyPolicyEntries: Array<?LangStringEntryInput>
 |};
 
 export type UpdateLegalContentsMutation = {|
@@ -1778,6 +2192,14 @@ export type UpdateLegalContentsMutation = {|
         value: ?string
       |}>,
       termsAndConditionsEntries: ?Array<?{|
+        localeCode: string,
+        value: ?string
+      |}>,
+      cookiesPolicyEntries: ?Array<?{|
+        localeCode: string,
+        value: ?string
+      |}>,
+      privacyPolicyEntries: ?Array<?{|
         localeCode: string,
         value: ?string
       |}>
@@ -1832,6 +2254,7 @@ export type updatePostMutation = {|
     post: ?{|
       // The ID of the object.
       id: string,
+      dbId: ?number,
       subjectEntries: ?Array<?{|
         value: ?string,
         localeCode: string
@@ -1859,7 +2282,8 @@ export type updatePostMutation = {|
         // The ID of the object.
         id: string,
         userId: number,
-        displayName: ?string
+        displayName: ?string,
+        isDeleted: ?boolean
       |},
       modificationDate: ?any,
       bodyMimeType: string,
@@ -1867,8 +2291,24 @@ export type updatePostMutation = {|
       extracts: ?Array<?{|
         // The ID of the object.
         id: string,
+        creationDate: ?any,
         important: ?boolean,
-        body: string
+        body: string,
+        extractNature: ?string,
+        extractAction: ?string,
+        textFragmentIdentifiers: ?Array<?{|
+          xpathStart: ?string,
+          xpathEnd: ?string,
+          offsetStart: ?number,
+          offsetEnd: ?number
+        |}>,
+        creator: ?{|
+          // The ID of the object.
+          id: string,
+          userId: number,
+          displayName: ?string,
+          isDeleted: ?boolean
+        |}
       |}>,
       attachments: ?Array<?{|
         id: string,
@@ -1881,6 +2321,57 @@ export type updatePostMutation = {|
         |}
       |}>
     |}
+  |}
+|};
+
+export type updateProfileFieldsMutationVariables = {|
+  data: Array<?FieldDataInput>,
+  lang: string
+|};
+
+export type updateProfileFieldsMutation = {|
+  updateProfileFields: ?{|
+    profileFields: ?Array<?{|
+      // The ID of the object.
+      id: string,
+      configurableField:
+        | {
+            fieldType: string,
+            // The ID of the object.
+            id: string,
+            identifier: ?string,
+            titleEntries: ?Array<?{|
+              localeCode: string,
+              value: ?string
+            |}>,
+            title: ?string,
+            order: ?number,
+            required: ?boolean
+          }
+        | {
+            // The ID of the object.
+            id: string,
+            identifier: ?string,
+            titleEntries: ?Array<?{|
+              localeCode: string,
+              value: ?string
+            |}>,
+            title: ?string,
+            order: ?number,
+            required: ?boolean,
+            options: ?Array<?{|
+              // The ID of the object.
+              id: string,
+              order: number,
+              label: ?string,
+              labelEntries: ?Array<?{|
+                localeCode: string,
+                value: ?string
+              |}>
+            |}>
+          },
+      valueData: ?any
+    |}>
   |}
 |};
 
@@ -1976,18 +2467,67 @@ export type updateSectionMutation = {|
   |}
 |};
 
+export type updateTextFieldMutationVariables = {|
+  id: string,
+  lang: string,
+  titleEntries: Array<?LangStringEntryInput>,
+  order: number,
+  required: boolean,
+  options?: ?Array<?SelectFieldOptionInput>
+|};
+
+export type updateTextFieldMutation = {|
+  updateTextField: ?{|
+    field: ?(
+      | {
+          titleEntries: ?Array<?{|
+            localeCode: string,
+            value: ?string
+          |}>,
+          title: ?string,
+          order: ?number,
+          required: ?boolean,
+          // The ID of the object.
+          id: string
+        }
+      | {
+          titleEntries: ?Array<?{|
+            localeCode: string,
+            value: ?string
+          |}>,
+          title: ?string,
+          order: ?number,
+          required: ?boolean,
+          // The ID of the object.
+          id: string,
+          options: ?Array<?{|
+            // The ID of the object.
+            id: string,
+            order: number,
+            label: ?string,
+            labelEntries: ?Array<?{|
+              localeCode: string,
+              value: ?string
+            |}>
+          |}>
+        })
+  |}
+|};
+
 export type updateThematicMutationVariables = {|
   id: string,
   identifier: string,
   image?: ?string,
   titleEntries: Array<?LangStringEntryInput>,
   questions?: ?Array<?QuestionInput>,
-  video?: ?VideoInput
+  video?: ?VideoInput,
+  order?: ?number
 |};
 
 export type updateThematicMutation = {|
   updateThematic: ?{|
     thematic: ?{|
+      order: ?number,
       title: ?string,
       img: ?{|
         externalUrl: ?string
@@ -2155,8 +2695,14 @@ export type UserQuery = {|
         displayName: ?string,
         email: ?string,
         creationDate: ?any,
-        hasPassword: ?boolean
+        hasPassword: ?boolean,
+        isDeleted: ?boolean
       }
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
     | {}
     | {}
     | {}
@@ -2294,7 +2840,8 @@ export type AgentProfileInfoFragment = {|
   // The ID of the object.
   id: string,
   userId: number,
-  displayName: ?string
+  displayName: ?string,
+  isDeleted: ?boolean
 |};
 
 export type AttachmentFragment = {|
@@ -2314,6 +2861,29 @@ export type DocumentFragment = {|
   externalUrl: ?string,
   mimeType: ?string,
   avChecked: ?string
+|};
+
+export type ExtractFragment = {|
+  // The ID of the object.
+  id: string,
+  creationDate: ?any,
+  important: ?boolean,
+  body: string,
+  extractNature: ?string,
+  extractAction: ?string,
+  textFragmentIdentifiers: ?Array<?{|
+    xpathStart: ?string,
+    xpathEnd: ?string,
+    offsetStart: ?number,
+    offsetEnd: ?number
+  |}>,
+  creator: ?{|
+    // The ID of the object.
+    id: string,
+    userId: number,
+    displayName: ?string,
+    isDeleted: ?boolean
+  |}
 |};
 
 export type IdeaContentLinkFragment = {|
@@ -2357,6 +2927,7 @@ export type langStringEntryFragment = {|
 export type PostFragment = {|
   // The ID of the object.
   id: string,
+  dbId: ?number,
   subjectEntries: ?Array<?{|
     value: ?string,
     localeCode: string
@@ -2384,7 +2955,8 @@ export type PostFragment = {|
     // The ID of the object.
     id: string,
     userId: number,
-    displayName: ?string
+    displayName: ?string,
+    isDeleted: ?boolean
   |},
   modificationDate: ?any,
   bodyMimeType: string,
@@ -2392,8 +2964,24 @@ export type PostFragment = {|
   extracts: ?Array<?{|
     // The ID of the object.
     id: string,
+    creationDate: ?any,
     important: ?boolean,
-    body: string
+    body: string,
+    extractNature: ?string,
+    extractAction: ?string,
+    textFragmentIdentifiers: ?Array<?{|
+      xpathStart: ?string,
+      xpathEnd: ?string,
+      offsetStart: ?number,
+      offsetEnd: ?number
+    |}>,
+    creator: ?{|
+      // The ID of the object.
+      id: string,
+      userId: number,
+      displayName: ?string,
+      isDeleted: ?boolean
+    |}
   |}>,
   attachments: ?Array<?{|
     id: string,
@@ -2407,11 +2995,48 @@ export type PostFragment = {|
   |}>
 |};
 
+export type selectFieldFragment = {|
+  // The ID of the object.
+  id: string,
+  identifier: ?string,
+  titleEntries: ?Array<?{|
+    localeCode: string,
+    value: ?string
+  |}>,
+  title: ?string,
+  order: ?number,
+  required: ?boolean,
+  options: ?Array<?{|
+    // The ID of the object.
+    id: string,
+    order: number,
+    label: ?string,
+    labelEntries: ?Array<?{|
+      localeCode: string,
+      value: ?string
+    |}>
+  |}>
+|};
+
 export type SentimentCountsFragment = {|
   disagree: ?number,
   dontUnderstand: ?number,
   like: ?number,
   moreInfo: ?number
+|};
+
+export type textFieldFragment = {|
+  fieldType: string,
+  // The ID of the object.
+  id: string,
+  identifier: ?string,
+  titleEntries: ?Array<?{|
+    localeCode: string,
+    value: ?string
+  |}>,
+  title: ?string,
+  order: ?number,
+  required: ?boolean
 |};
 
 export type voteSessionGlobalsFragment = {|
