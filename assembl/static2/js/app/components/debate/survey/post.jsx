@@ -225,24 +225,33 @@ class Post extends React.Component {
               <ResponsiveOverlayTrigger placement="top" tooltip={disagreeTooltip} component={disagreeComponent} />
             </div>
           )}
-          <StatisticsDoughnut
-            elements={[
-              { color: sentimentDefinitionsObject.like.color, count: post.sentimentCounts.like },
-              { color: sentimentDefinitionsObject.disagree.color, count: post.sentimentCounts.disagree }
-            ]}
-          />
-          <div className="stat-sentiment">
-            <div>
-              <div className="min-sentiment">
-                <Like size={15} />&nbsp;<span className="txt">{post.sentimentCounts.like}</span>
+          <div>
+            <StatisticsDoughnut
+              elements={[
+                { color: sentimentDefinitionsObject.like.color, count: post.sentimentCounts.like },
+                { color: sentimentDefinitionsObject.disagree.color, count: post.sentimentCounts.disagree }
+              ]}
+            />
+            <div className="stat-sentiment">
+              <div>
+                <div className="min-sentiment">
+                  <Like size={15} />&nbsp;<span className="txt">{post.sentimentCounts.like}</span>
+                </div>
               </div>
-            </div>
-            <div>
-              <div className="min-sentiment">
-                <Disagree size={15} />&nbsp;<span className="txt">{post.sentimentCounts.disagree}</span>
+              <div>
+                <div className="min-sentiment">
+                  <Disagree size={15} />&nbsp;<span className="txt">{post.sentimentCounts.disagree}</span>
+                </div>
               </div>
             </div>
           </div>
+          {screenWidth < EXTRA_SMALL_SCREEN_WIDTH && (
+            <div className="actions">
+              {userCanDeleteThisMessage ? (
+                <ResponsiveOverlayTrigger placement="top" tooltip={deleteMessageTooltip} component={deleteButton} />
+              ) : null}
+            </div>
+          )}
         </div>
         <div className="clear">&nbsp;</div>
       </div>

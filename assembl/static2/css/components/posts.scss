@@ -467,13 +467,14 @@ $deleted-post-border: 1px solid $grey1 !default;
     .statistic {
       text-align: right;
       margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
 
       .sentiments {
         border-top: 0;
         padding: 0;
         padding-top: 12px;
         margin-left: 10px;
-        float: left;
 
         .sentiment {
           margin-left: 25px;
@@ -506,6 +507,16 @@ $deleted-post-border: 1px solid $grey1 !default;
         padding: 0;
         vertical-align: middle;
         display: inline-block;
+      }
+
+      .actions {
+        margin: 0;
+        padding: 0;
+        margin-right: 10px;
+        height: 50px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
       }
     }
 
