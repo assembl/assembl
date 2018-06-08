@@ -1,4 +1,5 @@
 // @flow
+import { type moment } from 'moment';
 import * as actionTypes from '../actionTypes';
 
 export const createPhase = (id: string): actionTypes.CreatePhase => ({
@@ -28,4 +29,22 @@ export const updatePhaseIdentifier = (id: string, identifier: string): actionTyp
 export const deletePhase = (id: string): actionTypes.DeletePhase => ({
   id: id,
   type: actionTypes.DELETE_PHASE
+});
+
+export const updateStartDate = (id: string, value: moment): actionTypes.UpdateStartDate => ({
+  id: id,
+  value: value,
+  type: actionTypes.UPDATE_PHASE_START
+});
+
+export const updateEndDate = (id: string, value: moment): actionTypes.UpdateEndDate => ({
+  id: id,
+  value: value,
+  type: actionTypes.UPDATE_PHASE_END
+});
+
+export const updateIsThematicsTable = (id: string, value: boolean): actionTypes.UpdateIsThematicsTable => ({
+  id: id,
+  value: value,
+  type: actionTypes.UPDATE_IS_THEMATICS_TABLE
 });

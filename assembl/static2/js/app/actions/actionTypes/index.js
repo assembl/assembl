@@ -1,5 +1,6 @@
 /* redux action types */
 // @flow
+import { type moment } from 'moment';
 import { type AdminActions } from './admin';
 
 export const UPDATE_CONTENT_LOCALE_BY_ID: 'UPDATE_CONTENT_LOCALE_BY_ID' = 'UPDATE_CONTENT_LOCALE_BY_ID';
@@ -94,6 +95,7 @@ export const UPDATE_PHASE_TITLE: 'UPDATE_PHASE_TITLE' = 'UPDATE_PHASE_TITLE';
 export const UPDATE_PHASE_IDENTIFIER: 'UPDATE_PHASE_IDENTIFIER' = 'UPDATE_PHASE_IDENTIFIER';
 export const UPDATE_PHASE_START: 'UPDATE_PHASE_START' = 'UPDATE_PHASE_START';
 export const UPDATE_PHASE_END: 'UPDATE_PHASE_END' = 'UPDATE_PHASE_END';
+export const UPDATE_IS_THEMATICS_TABLE: 'UPDATE_IS_THEMATICS_TABLE' = 'UPDATE_IS_THEMATICS_TABLE';
 
 
 export type UpdateContentLocaleById = {
@@ -634,6 +636,21 @@ export type UpdatePhaseIdentifier = {
   type: typeof UPDATE_PHASE_IDENTIFIER
 };
 
+export type UpdateStartDate = {
+  id: string,
+  value: moment
+};
+
+export type UpdateEndDate = {
+  id: string,
+  value: moment
+};
+
+export type UpdateIsThematicsTable = {
+  id: string,
+  value: boolean
+};
+
 type BasicAction = {
   type: string
 };
@@ -657,8 +674,15 @@ type LegalContentsActions = UpdateLegalNoticeEntry | UpdateTermsAndConditionsEnt
 
 type SectionActions = CreateSection | DeleteSection | UpSection | DownSection;
 
-type TimelineActions = CreatePhase | UpdatePhases | DeletePhase | UpdatePhaseTitle | UpdatePhaseIdentifier;
-// TODO: add missing actions
+type TimelineActions =
+  | CreatePhase
+  | UpdatePhases
+  | DeletePhase
+  | UpdatePhaseTitle
+  | UpdatePhaseIdentifier
+  | UpdateStartDate
+  | UpdateEndDate
+  | UpdateIsThematicsTable;
 
 type VoteSessionActions =
   | UpdateVoteSessionPageTitle

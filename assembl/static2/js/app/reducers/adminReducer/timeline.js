@@ -1,6 +1,7 @@
 // @flow
 import type ReduxAction from 'redux';
 import { combineReducers } from 'redux';
+import moment from 'moment';
 import { List, Map, fromJS } from 'immutable';
 import { updateInLangstringEntries } from '../../utils/i18n';
 
@@ -12,7 +13,8 @@ import {
   UPDATE_PHASE_TITLE,
   UPDATE_PHASE_IDENTIFIER,
   UPDATE_PHASE_START,
-  UPDATE_PHASE_END
+  UPDATE_PHASE_END,
+  UPDATE_IS_THEMATICS_TABLE
 } from '../../actions/actionTypes';
 
 const emptyPhase = Map({
@@ -21,8 +23,9 @@ const emptyPhase = Map({
   _toDelete: false,
   identifier: '',
   titleEntries: List(),
-  start: '',
-  end: ''
+  start: moment(),
+  end: moment(),
+  isThematicsTable: false
 });
 
 type PhasesByIdState = Map<string, Map>;
@@ -37,26 +40,31 @@ export const phasesById: PhasesByIdReducer = (state: PhasesByIdState = Map(), ac
     return state.updateIn([action.id, 'titleEntries'], updateInLangstringEntries(action.locale, action.value));
   case UPDATE_PHASE_IDENTIFIER:
     return state.setIn([action.id, 'identifier'], action.value);
+  case UPDATE_PHASE_START:
+    return state.setIn([action.id, 'start'], action.value);
+  case UPDATE_PHASE_END:
+    return state.setIn([action.id, 'end'], action.value);
+  case UPDATE_IS_THEMATICS_TABLE:
+    return state.setIn([action.id, 'isThematicsTable'], action.value);
   case UPDATE_PHASES: {
     let newState = Map();
-    action.phases.forEach((phase) => {
+    action.phases.forEach(({ identifier, titleEntries, start, end, id, isThematicsTable }) => {
       const phaseInfo = Map({
         _hasChanged: false,
         _isNew: false,
         _toDelete: false,
-        identifier: phase.identifier,
-        titleEntries: fromJS(phase.titleEntries),
-        start: phase.start,
-        end: phase.end
+        identifier: identifier,
+        titleEntries: fromJS(titleEntries),
+        start: start,
+        end: end,
+        isThematicsTable: isThematicsTable
       });
 
-      newState = newState.set(phase.id, phaseInfo);
+      newState = newState.set(id, phaseInfo);
     });
 
     return newState;
   }
-  case UPDATE_PHASE_START:
-  case UPDATE_PHASE_END:
   default:
     return state;
   }

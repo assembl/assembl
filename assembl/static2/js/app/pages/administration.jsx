@@ -4,6 +4,7 @@ import { compose, graphql } from 'react-apollo';
 import { filter } from 'graphql-anywhere';
 import { Grid, Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import moment from 'moment';
 
 import { updateThematics, displayLanguageMenu } from '../actions/adminActions';
 import { updateResources, updateResourcesCenterPage } from '../actions/adminActions/resourcesCenter';
@@ -187,8 +188,12 @@ class Administration extends React.Component {
 
   putTimelinePhasesInStore(timeline) {
     const filteredPhases = filter(TimelineQuery, { timeline: timeline });
-    const phases = filteredPhases.timeline ? filteredPhases.timeline : [];
-    this.props.updatePhases(phases);
+    const phasesForStore = filteredPhases.timeline.map(phase => ({
+      ...phase,
+      start: phase.start ? moment(phase.start) : moment(),
+      end: phase.end ? moment(phase.end) : moment()
+    }));
+    this.props.updatePhases(phasesForStore);
   }
 
   putVoteModulesInStore(voteSession) {
