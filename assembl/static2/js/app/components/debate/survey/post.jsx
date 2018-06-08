@@ -1,9 +1,10 @@
 import React from 'react';
-import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
-import { compose, graphql } from 'react-apollo';
+import { compose, graphql, withApollo } from 'react-apollo';
 import { Translate, I18n } from 'react-redux-i18n';
+
 import { getConnectedUserId } from '../../../utils/globalFunctions';
+import Permissions, { connectedUserCan } from '../../../utils/permissions';
 import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
 import PostCreator from './postCreator';
 import Like from '../../svg/like';
@@ -12,7 +13,7 @@ import { inviteUserToLogin, displayAlert, displayModal } from '../../../utils/ut
 import addSentimentMutation from '../../../graphql/mutations/addSentiment.graphql';
 import deleteSentimentMutation from '../../../graphql/mutations/deleteSentiment.graphql';
 import PostQuery from '../../../graphql/PostQuery.graphql';
-import { likeTooltip, disagreeTooltip } from '../../common/tooltips';
+import { deleteMessageTooltip, likeTooltip, disagreeTooltip } from '../../common/tooltips';
 import { sentimentDefinitionsObject } from '../common/sentimentDefinitions';
 import StatisticsDoughnut from '../common/statisticsDoughnut';
 import { EXTRA_SMALL_SCREEN_WIDTH } from '../../../constants';
@@ -21,6 +22,8 @@ import ResponsiveOverlayTrigger from '../../common/responsiveOverlayTrigger';
 import { withScreenWidth } from '../../common/screenDimensions';
 import PostBody from '../common/post/postBody';
 import hashLinkScroll from '../../../utils/hashLinkScroll';
+import DeletePostButton from '../common/deletePostButton';
+import QuestionQuery from '../../../graphql/QuestionQuery.graphql';
 
 class Post extends React.Component {
   componentDidMount() {
@@ -36,7 +39,7 @@ class Post extends React.Component {
     }
   }
 
-  handleSentiment = (event, type) => {
+  handleSentiment = (event, type, refetchQueries) => {
     const { post } = this.props.data;
     const isUserConnected = getConnectedUserId() !== null;
     if (isUserConnected) {
@@ -46,9 +49,9 @@ class Post extends React.Component {
         const target = event.currentTarget;
         const isMySentiment = post.mySentiment === type;
         if (isMySentiment) {
-          this.handleDeleteSentiment(target);
+          this.handleDeleteSentiment(refetchQueries);
         } else {
-          this.handleAddSentiment(target, type);
+          this.handleAddSentiment(target, type, refetchQueries);
         }
       } else {
         const body = (
@@ -63,7 +66,7 @@ class Post extends React.Component {
     }
   };
 
-  handleAddSentiment(target, type) {
+  handleAddSentiment(target, type, refetchQueries) {
     const { id, sentimentCounts, mySentiment } = this.props.data.post;
     this.props
       .addSentiment({
@@ -87,14 +90,15 @@ class Post extends React.Component {
             },
             __typename: 'AddSentiment'
           }
-        }
+        },
+        refetchQueries: refetchQueries
       })
       .catch((error) => {
         displayAlert('danger', `${error}`);
       });
   }
 
-  handleDeleteSentiment() {
+  handleDeleteSentiment(refetchQueries) {
     const { id, sentimentCounts, mySentiment } = this.props.data.post;
     this.props
       .deleteSentiment({
@@ -115,7 +119,8 @@ class Post extends React.Component {
             },
             __typename: 'DeleteSentiment'
           }
-        }
+        },
+        refetchQueries: refetchQueries
       })
       .catch((error) => {
         displayAlert('danger', `${error}`);
@@ -124,10 +129,23 @@ class Post extends React.Component {
 
   render() {
     const { post } = this.props.data;
-    const { contentLocale, lang, screenWidth, originalLocale } = this.props;
+    if (post.publicationState.startsWith('DELETED')) {
+      return null;
+    }
+
+    const { contentLocale, lang, screenWidth, originalLocale, questionId } = this.props;
     const { debateData } = this.props.debate;
     const { bodyEntries } = post;
     const translate = contentLocale !== originalLocale;
+
+    // to update the question header when we delete the post or add/remove a sentiment
+    const updateQuestionQuery = {
+      query: QuestionQuery,
+      variables: {
+        id: questionId,
+        lang: lang
+      }
+    };
 
     let body;
     if (bodyEntries.length > 1) {
@@ -142,17 +160,18 @@ class Post extends React.Component {
       <div
         className={post.mySentiment === 'LIKE' ? 'sentiment sentiment-active' : 'sentiment'}
         onClick={(event) => {
-          this.handleSentiment(event, 'LIKE');
+          this.handleSentiment(event, 'LIKE', [updateQuestionQuery]);
         }}
       >
         <Like size={25} />
       </div>
     );
+
     const disagreeComponent = (
       <div
         className={post.mySentiment === 'DISAGREE' ? 'sentiment sentiment-active' : 'sentiment'}
         onClick={(event) => {
-          this.handleSentiment(event, 'DISAGREE');
+          this.handleSentiment(event, 'DISAGREE', [updateQuestionQuery]);
         }}
       >
         <Disagree size={25} />
@@ -160,6 +179,15 @@ class Post extends React.Component {
     );
 
     const { displayName, isDeleted } = post.creator;
+
+    const connectedUserId = getConnectedUserId();
+    const userCanDeleteThisMessage =
+      (connectedUserId === String(post.creator.userId) && connectedUserCan(Permissions.DELETE_MY_POST)) ||
+      connectedUserCan(Permissions.DELETE_POST);
+
+    const deleteButton = (
+      <DeletePostButton postId={post.id} refetchQueries={[updateQuestionQuery]} linkClassName="overflow-action" />
+    );
 
     return (
       <div className="shown box" id={post.id}>
@@ -175,12 +203,19 @@ class Post extends React.Component {
             body={body}
             bodyMimeType={post.bodyMimeType}
           />
-          <div className="sentiments">
-            <div className="sentiment-label">
-              <Translate value="debate.survey.react" />
+          <div className="post-footer">
+            <div className="sentiments">
+              <div className="sentiment-label">
+                <Translate value="debate.survey.react" />
+              </div>
+              <ResponsiveOverlayTrigger placement="top" tooltip={likeTooltip} component={likeComponent} />
+              <ResponsiveOverlayTrigger placement="top" tooltip={disagreeTooltip} component={disagreeComponent} />
             </div>
-            <ResponsiveOverlayTrigger placement="top" tooltip={likeTooltip} component={likeComponent} />
-            <ResponsiveOverlayTrigger placement="top" tooltip={disagreeTooltip} component={disagreeComponent} />
+            <div className="actions">
+              {userCanDeleteThisMessage ? (
+                <ResponsiveOverlayTrigger placement="top" tooltip={deleteMessageTooltip} component={deleteButton} />
+              ) : null}
+            </div>
           </div>
         </div>
         <div className="statistic">
@@ -215,11 +250,6 @@ class Post extends React.Component {
   }
 }
 
-Post.propTypes = {
-  addSentiment: PropTypes.func.isRequired,
-  deleteSentiment: PropTypes.func.isRequired
-};
-
 const mapStateToProps = (state, { id }) => ({
   debate: state.debate,
   contentLocale: state.contentLocale.getIn([id, 'contentLocale']),
@@ -236,5 +266,6 @@ export default compose(
     name: 'deleteSentiment'
   }),
   withLoadingIndicator(),
-  withScreenWidth
+  withScreenWidth,
+  withApollo
 )(Post);

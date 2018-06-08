@@ -1,46 +1,22 @@
-import React from 'react';
-import { Button, Popover } from 'react-bootstrap';
-import { Translate } from 'react-redux-i18n';
-import { Link } from 'react-router';
+// @flow
+// we need to import this way to be able to use React.Node type
+// (see https://shaneosullivan.wordpress.com/2018/03/22/using-react-types-with-flow/)
+import * as React from 'react';
+import { Popover } from 'react-bootstrap';
 import { editMessageTooltip, deleteMessageTooltip } from '../../common/tooltips';
 import ResponsiveOverlayTrigger from '../../common/responsiveOverlayTrigger';
-import { displayModal, closeModal } from '../../../utils/utilityManager';
-import deletePostMutation from '../../../graphql/mutations/deletePost.graphql';
+import DeletePostButton from './deletePostButton';
+import EditPostButton from './editPostButton';
 
-const confirmModal = (postId, client) => {
-  const title = <Translate value="debate.confirmDeletionTitle" />;
-  const body = <Translate value="debate.confirmDeletionBody" />;
-  const footer = [
-    <Button key="cancel" onClick={closeModal} className="button-cancel button-dark">
-      <Translate value="debate.confirmDeletionButtonCancel" />
-    </Button>,
-    <Button
-      key="delete"
-      onClick={() => {
-        client.mutate({ mutation: deletePostMutation, variables: { postId: postId } });
-        closeModal();
-      }}
-      className="button-submit button-dark"
-    >
-      <Translate value="debate.confirmDeletionButtonDelete" />
-    </Button>
-  ];
-  const includeFooter = true;
-  return displayModal(title, body, includeFooter, footer);
-};
-
-const getOverflowMenuForPost = (postId, userCanDeleteThisMessage, userCanEditThisMessage, client, handleEditClick) => {
-  const deleteButton = (
-    <Link className="overflow-menu-action" onClick={() => confirmModal(postId, client)}>
-      <span className="assembl-icon-delete" />
-    </Link>
-  );
-  const editButton = (
-    <Link className="overflow-menu-action" onClick={handleEditClick}>
-      <span className="assembl-icon-edit" />
-    </Link>
-  );
-  const overflowMenu = (
+const getOverflowMenuForPost = (
+  postId: string,
+  userCanDeleteThisMessage: boolean,
+  userCanEditThisMessage: boolean,
+  handleEditClick: Function
+): React.Node => {
+  const deleteButton = <DeletePostButton postId={postId} linkClassName="overflow-menu-action" />;
+  const editButton = <EditPostButton handleClick={handleEditClick} linkClassName="overflow-menu-action" />;
+  return (
     <Popover id="edit-delete-actions" className="overflow-menu">
       <div className="overflow-menu-container">
         {userCanDeleteThisMessage ? (
@@ -52,7 +28,6 @@ const getOverflowMenuForPost = (postId, userCanDeleteThisMessage, userCanEditThi
       </div>
     </Popover>
   );
-  return overflowMenu;
 };
 
 export default getOverflowMenuForPost;

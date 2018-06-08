@@ -85,7 +85,7 @@ class PostActions extends React.Component<Props> {
             trigger="click"
             rootClose
             placement={tooltipPlacement}
-            overlay={getOverflowMenuForPost(postId, userCanDeleteThisMessage, userCanEditThisMessage, client, handleEditClick)}
+            overlay={getOverflowMenuForPost(postId, userCanDeleteThisMessage, userCanEditThisMessage, handleEditClick)}
           >
             <div>
               {screenWidth >= MEDIUM_SCREEN_WIDTH ? (

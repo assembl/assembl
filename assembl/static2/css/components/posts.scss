@@ -15,7 +15,8 @@
   }
 }
 
-.proposals .post-body .body, .posts .post-body .body {
+.proposals .post-body .body,
+.posts .post-body .body {
   font-family: $font-family4;
   color: $post-text-color;
   line-height: 1.6em;
@@ -56,11 +57,29 @@
     padding: 20px 0 0 75px;
   }
 
-  .sentiments {
+  .post-footer {
     border-top: $navbar-border;
-    font-family: $font-family4;
     padding: 15px 0 0;
-    text-align: left;
+    display: flex;
+    justify-content: space-between;
+
+    .sentiments {
+      font-family: $font-family4;
+    }
+
+    .actions {
+      margin: 5px;
+    }
+  }
+
+  .overflow-action {
+    cursor: pointer;
+    margin: 20px 0 0;
+    color: $first-color-opacity-70;
+
+    &:hover {
+      color: $first-color;
+    }
   }
 
   .stat-sentiment {
@@ -247,7 +266,7 @@ $deleted-post-border: 1px solid $grey1 !default;
   .post-action {
     cursor: pointer;
     margin: 10px 0 0;
-    transition: all .2s ease-in-out;
+    transition: all 0.2s ease-in-out;
 
     &:hover {
       transform: scale(1.2);
@@ -423,7 +442,7 @@ $deleted-post-border: 1px solid $grey1 !default;
       padding: 20px 50px 0 73px;
     }
 
-    .sentiments {
+    .post-footer {
       margin: 25px 50px 10px 73px;
     }
 
@@ -436,7 +455,7 @@ $deleted-post-border: 1px solid $grey1 !default;
 @media screen and (max-width: 599px) {
   .proposals {
     .content {
-      .sentiments {
+      .post-footer {
         margin: 25px 20px 10px 25px;
 
         div {
@@ -582,7 +601,8 @@ $deleted-post-border: 1px solid $grey1 !default;
         border-top: 1px solid $grey1;
         padding: 18px 0 10px;
 
-        .post-action, .overflow-action {
+        .post-action,
+        .overflow-action {
           display: inline-block;
           margin: 0 10px;
         }
