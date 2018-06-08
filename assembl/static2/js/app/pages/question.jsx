@@ -109,7 +109,7 @@ export default compose(
         hasErrors: false,
         loading: false,
         title: data.question.title,
-        imgUrl: img.externalUrl,
+        imgUrl: img ? img.externalUrl : '',
         numContributors: numContributors,
         numPosts: numPosts,
         thematicTitle: title,
