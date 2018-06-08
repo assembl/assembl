@@ -90,7 +90,7 @@ exports[`Question page should match Question with data snapshot 1`] = `
                 Index/ Foo
               </span>
             </h3>
-            <Connect(Apollo(Component))
+            <Connect(withRouter(Apollo(Component)))
               questionId="FooInd"
             />
             <div

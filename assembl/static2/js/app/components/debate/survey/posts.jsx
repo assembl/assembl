@@ -1,6 +1,7 @@
 /* eslint-disable  react/no-unused-prop-types */
 // @flow
 import * as React from 'react';
+import { withRouter } from 'react-router';
 import { I18n } from 'react-redux-i18n';
 import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
@@ -94,9 +95,10 @@ const mapDispatchToProps = dispatch => ({
 
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
+  withRouter,
   graphql(QuestionPosts, {
     options: (props) => {
-      const { hash } = window.location;
+      const { hash } = props.location;
       let id = null;
       if (hash !== '') {
         id = hash.replace('#', '').split('?')[0];

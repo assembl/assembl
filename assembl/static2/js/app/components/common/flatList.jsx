@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 // @flow
 import * as React from 'react';
+import { withRouter } from 'react-router';
 import { I18n, Translate } from 'react-redux-i18n';
 import { Button } from 'react-bootstrap';
 import throttle from 'lodash/throttle';
@@ -23,6 +24,7 @@ type FlatListProps = {
   },
   ListItem: Function | React.ComponentType<*>,
   className?: string,
+  location: { hash: string },
   loadPreviousMessage?: string,
   networkStatus: number,
   onEndReachedThreshold: number,
@@ -32,7 +34,7 @@ type FlatListProps = {
   extractItems: Function
 };
 
-class FlatList extends React.Component<FlatListProps> {
+export class DumbFlatList extends React.Component<FlatListProps> {
   loading: boolean;
 
   static defaultProps = {
@@ -106,7 +108,7 @@ class FlatList extends React.Component<FlatListProps> {
   };
 
   render() {
-    const { hash } = window.location;
+    const { hash } = this.props.location;
     let id;
     if (hash !== '') {
       id = hash.replace('#', '').split('?')[0];
@@ -141,4 +143,5 @@ class FlatList extends React.Component<FlatListProps> {
   }
 }
 
+const FlatList = withRouter(DumbFlatList);
 export default FlatList;
