@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, graphql, withApollo } from 'react-apollo';
@@ -25,7 +26,21 @@ import hashLinkScroll from '../../../utils/hashLinkScroll';
 import DeletePostButton from '../common/deletePostButton';
 import QuestionQuery from '../../../graphql/QuestionQuery.graphql';
 
-class Post extends React.Component {
+type Props = {
+  addSentiment: Function,
+  contentLocale: string,
+  debate: DebateData,
+  deleteSentiment: Function,
+  data: {
+    post: PostFragment
+  },
+  lang: string,
+  originalLocale: string,
+  questionId: string,
+  screenWidth: number
+};
+
+class Post extends React.Component<Props> {
   componentDidMount() {
     // If we have a hash in url and the post id match it, scroll to it.
     const postId = this.props.data.post.id;
@@ -39,7 +54,7 @@ class Post extends React.Component {
     }
   }
 
-  handleSentiment = (event, type, refetchQueries) => {
+  handleSentiment = (event, type, refetchQueries, currentCounts: { disagree: number, like: number }) => {
     const { post } = this.props.data;
     const isUserConnected = getConnectedUserId() !== null;
     if (isUserConnected) {
@@ -49,9 +64,9 @@ class Post extends React.Component {
         const target = event.currentTarget;
         const isMySentiment = post.mySentiment === type;
         if (isMySentiment) {
-          this.handleDeleteSentiment(refetchQueries);
+          this.handleDeleteSentiment(refetchQueries, currentCounts);
         } else {
-          this.handleAddSentiment(target, type, refetchQueries);
+          this.handleAddSentiment(target, type, refetchQueries, currentCounts);
         }
       } else {
         const body = (
@@ -66,8 +81,8 @@ class Post extends React.Component {
     }
   };
 
-  handleAddSentiment(target, type, refetchQueries) {
-    const { id, sentimentCounts, mySentiment } = this.props.data.post;
+  handleAddSentiment(target, type, refetchQueries, currentCounts) {
+    const { id, mySentiment } = this.props.data.post;
     this.props
       .addSentiment({
         variables: { postId: id, type: type },
@@ -76,11 +91,11 @@ class Post extends React.Component {
             post: {
               id: id,
               sentimentCounts: {
-                like: type === 'LIKE' ? sentimentCounts.like + 1 : sentimentCounts.like - (mySentiment === 'LIKE' ? 1 : 0),
+                like: type === 'LIKE' ? currentCounts.like + 1 : currentCounts.like - (mySentiment === 'LIKE' ? 1 : 0),
                 disagree:
                   type === 'DISAGREE'
-                    ? sentimentCounts.disagree + 1
-                    : sentimentCounts.disagree - (mySentiment === 'DISAGREE' ? 1 : 0),
+                    ? currentCounts.disagree + 1
+                    : currentCounts.disagree - (mySentiment === 'DISAGREE' ? 1 : 0),
                 dontUnderstand: 0,
                 moreInfo: 0,
                 __typename: 'SentimentCounts'
@@ -98,8 +113,8 @@ class Post extends React.Component {
       });
   }
 
-  handleDeleteSentiment(refetchQueries) {
-    const { id, sentimentCounts, mySentiment } = this.props.data.post;
+  handleDeleteSentiment(refetchQueries, currentCounts) {
+    const { id, mySentiment } = this.props.data.post;
     this.props
       .deleteSentiment({
         variables: { postId: id },
@@ -108,8 +123,8 @@ class Post extends React.Component {
             post: {
               id: id,
               sentimentCounts: {
-                like: sentimentCounts.like - (mySentiment === 'LIKE' ? 1 : 0),
-                disagree: sentimentCounts.disagree - (mySentiment === 'DISAGREE' ? 1 : 0),
+                like: currentCounts.like - (mySentiment === 'LIKE' ? 1 : 0),
+                disagree: currentCounts.disagree - (mySentiment === 'DISAGREE' ? 1 : 0),
                 dontUnderstand: 0,
                 moreInfo: 0,
                 __typename: 'SentimentCounts'
@@ -129,7 +144,7 @@ class Post extends React.Component {
 
   render() {
     const { post } = this.props.data;
-    if (post.publicationState.startsWith('DELETED')) {
+    if (!post.publicationState || post.publicationState.startsWith('DELETED')) {
       return null;
     }
 
@@ -147,20 +162,28 @@ class Post extends React.Component {
       }
     };
 
-    let body;
-    if (bodyEntries.length > 1) {
-      // first entry is the translated version, example localeCode "fr-x-mtfrom-en"
-      // second entry is the original, example localeCode "en"
-      body = translate ? bodyEntries[0].value : bodyEntries[1].value;
-    } else {
-      // translation is not enabled or the message is already in the desired locale
-      body = bodyEntries[0].value;
+    let body = '';
+    if (bodyEntries) {
+      if (bodyEntries.length > 1) {
+        // first entry is the translated version, example localeCode "fr-x-mtfrom-en"
+        // second entry is the original, example localeCode "en"
+        body = translate ? bodyEntries[0] && bodyEntries[0].value : bodyEntries[1] && bodyEntries[1].value;
+      } else {
+        // translation is not enabled or the message is already in the desired locale
+        body = bodyEntries[0] ? bodyEntries[0].value : '';
+      }
     }
+
+    const sentimentCounts = post.sentimentCounts;
+    const currentCounts = {
+      like: sentimentCounts && sentimentCounts.like ? sentimentCounts.like : 0,
+      disagree: sentimentCounts && sentimentCounts.disagree ? sentimentCounts.disagree : 0
+    };
     const likeComponent = (
       <div
         className={post.mySentiment === 'LIKE' ? 'sentiment sentiment-active' : 'sentiment'}
         onClick={(event) => {
-          this.handleSentiment(event, 'LIKE', [updateQuestionQuery]);
+          this.handleSentiment(event, 'LIKE', [updateQuestionQuery], currentCounts);
         }}
       >
         <Like size={25} />
@@ -171,19 +194,23 @@ class Post extends React.Component {
       <div
         className={post.mySentiment === 'DISAGREE' ? 'sentiment sentiment-active' : 'sentiment'}
         onClick={(event) => {
-          this.handleSentiment(event, 'DISAGREE', [updateQuestionQuery]);
+          this.handleSentiment(event, 'DISAGREE', [updateQuestionQuery], currentCounts);
         }}
       >
         <Disagree size={25} />
       </div>
     );
 
-    const { displayName, isDeleted } = post.creator;
-
-    const connectedUserId = getConnectedUserId();
-    const userCanDeleteThisMessage =
-      (connectedUserId === String(post.creator.userId) && connectedUserCan(Permissions.DELETE_MY_POST)) ||
-      connectedUserCan(Permissions.DELETE_POST);
+    let creatorName = '';
+    let userCanDeleteThisMessage = false;
+    if (post.creator) {
+      const { displayName, isDeleted } = post.creator;
+      const connectedUserId = getConnectedUserId();
+      userCanDeleteThisMessage =
+        (post.creator && (connectedUserId === String(post.creator.userId) && connectedUserCan(Permissions.DELETE_MY_POST))) ||
+        connectedUserCan(Permissions.DELETE_POST);
+      creatorName = isDeleted ? I18n.t('deletedUser') : displayName;
+    }
 
     const deleteButton = (
       <DeletePostButton postId={post.id} refetchQueries={[updateQuestionQuery]} linkClassName="overflow-action" />
@@ -192,10 +219,12 @@ class Post extends React.Component {
     return (
       <div className="shown box" id={post.id}>
         <div className="content">
-          <PostCreator name={isDeleted ? I18n.t('deletedUser') : displayName} />
+          <PostCreator name={creatorName} />
           <PostBody
+            dbId={post.dbId}
             translationEnabled={debateData.translationEnabled}
             contentLocale={contentLocale}
+            extracts={post.extracts}
             id={post.id}
             lang={lang}
             translate={translate}
@@ -228,19 +257,19 @@ class Post extends React.Component {
           <div>
             <StatisticsDoughnut
               elements={[
-                { color: sentimentDefinitionsObject.like.color, count: post.sentimentCounts.like },
-                { color: sentimentDefinitionsObject.disagree.color, count: post.sentimentCounts.disagree }
+                { color: sentimentDefinitionsObject.like.color, count: currentCounts.like },
+                { color: sentimentDefinitionsObject.disagree.color, count: currentCounts.disagree }
               ]}
             />
             <div className="stat-sentiment">
               <div>
                 <div className="min-sentiment">
-                  <Like size={15} />&nbsp;<span className="txt">{post.sentimentCounts.like}</span>
+                  <Like size={15} />&nbsp;<span className="txt">{currentCounts.like}</span>
                 </div>
               </div>
               <div>
                 <div className="min-sentiment">
-                  <Disagree size={15} />&nbsp;<span className="txt">{post.sentimentCounts.disagree}</span>
+                  <Disagree size={15} />&nbsp;<span className="txt">{currentCounts.disagree}</span>
                 </div>
               </div>
             </div>

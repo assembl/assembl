@@ -12,21 +12,21 @@ import URLMetadataLoader from '../../../common/urlPreview/urlMetadataLoader';
 import { isSpecialURL } from '../../../../utils/urlPreview';
 
 type Props = {
-  body: string,
-  dbId: number,
-  extracts: Array<Extract>,
-  bodyDivRef: ?Function,
+  body: ?string,
+  dbId: ?number,
+  extracts: ?Array<?ExtractFragment>,
+  bodyDivRef?: Function, // eslint-disable-line react/require-default-props
   bodyMimeType: string,
   contentLocale: string,
   id: string,
   lang: string,
-  subject: ?React.Element<any>,
+  subject?: React.Node, // eslint-disable-line react/require-default-props
   originalLocale: string,
   translate: boolean,
   translationEnabled: boolean,
   isHarvesting: boolean,
-  handleMouseUpWhileHarvesting: ?Function,
-  measureTreeHeight: ?Function
+  handleMouseUpWhileHarvesting?: Function, // eslint-disable-line react/require-default-props
+  measureTreeHeight?: Function // eslint-disable-line react/require-default-props
 };
 
 type ExtractInPostProps = {
@@ -66,7 +66,7 @@ const Html = (props) => {
    * and return a list of react elements
   */
   // this anchor is shared with marionette code
-  const anchor = `message-body-local:Content/${dbId}`;
+  const anchor = dbId ? `message-body-local:Content/${dbId}` : '';
   let html = `<div id="${anchor}">${rawHtml}</div>`;
 
   if (extracts) {
@@ -77,22 +77,29 @@ const Html = (props) => {
       html = html.body;
     }
     extracts.forEach((extract) => {
-      const wrapper = jQuery(`<annotation id="${extract.id}"></annotation>`);
-      extract.textFragmentIdentifiers.forEach((tfi) => {
-        const range = new ARange.SerializedRange({
-          start: tfi.xpathStart,
-          startOffset: tfi.offsetStart,
-          end: tfi.xpathEnd,
-          endOffset: tfi.offsetEnd
-        });
-        try {
-          const normedRange = range.normalize(html);
-          const nodes = jQuery(normedRange.textNodes()).filter((idx, node) => !white.test(node));
-          nodes.wrap(wrapper);
-        } catch (error) {
-          console.error(error); // eslint-disable-line no-console
+      if (extract) {
+        const tfis = extract.textFragmentIdentifiers;
+        const wrapper = jQuery(`<annotation id="${extract.id}"></annotation>`);
+        if (tfis) {
+          tfis.forEach((tfi) => {
+            if (tfi && tfi.xpathStart && tfi.offsetStart && tfi.xpathEnd && tfi.offsetEnd) {
+              const range = new ARange.SerializedRange({
+                start: tfi.xpathStart,
+                startOffset: tfi.offsetStart,
+                end: tfi.xpathEnd,
+                endOffset: tfi.offsetEnd
+              });
+              try {
+                const normedRange = range.normalize(html);
+                const nodes = jQuery(normedRange.textNodes()).filter((idx, node) => !white.test(node));
+                nodes.wrap(wrapper);
+              } catch (error) {
+                console.error(error); // eslint-disable-line no-console
+              }
+            }
+          });
         }
-      });
+      }
     });
     html = html.children;
   }
@@ -171,6 +178,10 @@ const PostBody = ({
       )}
     </div>
   );
+};
+
+PostBody.defaultProps = {
+  isHarvesting: false
 };
 
 export default PostBody;
