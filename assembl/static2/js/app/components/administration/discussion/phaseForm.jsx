@@ -4,7 +4,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { connect } from 'react-redux';
 import { Translate, I18n } from 'react-redux-i18n';
-import { Radio, SplitButton, MenuItem } from 'react-bootstrap';
+import { SplitButton, MenuItem } from 'react-bootstrap';
 import { Link } from 'react-router';
 import { type moment } from 'moment';
 import { modulesTranslationKeys } from '../../../constants';
@@ -13,8 +13,7 @@ import { displayAlert } from '../../../utils/utilityManager';
 import {
   updatePhaseIdentifier,
   updateStartDate,
-  updateEndDate,
-  updateIsThematicsTable
+  updateEndDate
 } from '../../../actions/adminActions/timeline';
 
 type PhaseFormProps = {
@@ -23,12 +22,9 @@ type PhaseFormProps = {
   identifier: string,
   start: moment,
   end: moment,
-  isThematicsTable: boolean,
-  handleIdentifierChange: Function,
-  handleThematicsTableCheck: Function,
-  handleThematicsTableUncheck: Function,
   handleStartDateChange: Function,
-  handleEndDateChange: Function
+  handleEndDateChange: Function,
+  handleIdentifierChange: Function
 }
 
 export const DumbPhaseForm = ({
@@ -39,10 +35,7 @@ export const DumbPhaseForm = ({
   handleEndDateChange,
   identifier,
   start,
-  end,
-  isThematicsTable,
-  handleThematicsTableCheck,
-  handleThematicsTableUncheck
+  end
 }: PhaseFormProps) => {
   const onStartDateChange = (newStartDate) => {
     if (newStartDate.isAfter(end)) {
@@ -64,23 +57,18 @@ export const DumbPhaseForm = ({
       <DatePicker selected={end} onChange={onEndDateChange} showTimeSelect timeFormat="HH:mm" />
       <Translate value="administration.timelineAdmin.phaseModule" />
       <div className="margin-m">
-        <Radio onChange={handleThematicsTableCheck} checked={isThematicsTable}>
-          <Translate value="administration.timelineAdmin.thematicsTable" />
-        </Radio>
-        <Radio onChange={handleThematicsTableUncheck} checked={!isThematicsTable}>
-          <SplitButton
-            className="admin-dropdown"
-            id={`dropdown-${phaseId}`}
-            title={I18n.t(`administration.modules.${identifier || modulesTranslationKeys[0]}`)}
-            onSelect={handleIdentifierChange}
-          >
-            {modulesTranslationKeys.map(key => (
-              <MenuItem key={`module-${key}`} eventKey={key}>
-                {I18n.t(`administration.modules.${key}`)}
-              </MenuItem>
-            ))}
-          </SplitButton>
-        </Radio>
+        <SplitButton
+          className="admin-dropdown"
+          id={`dropdown-${phaseId}`}
+          title={I18n.t(`administration.modules.${identifier || modulesTranslationKeys[0]}`)}
+          onSelect={handleIdentifierChange}
+        >
+          {modulesTranslationKeys.map(key => (
+            <MenuItem key={`module-${key}`} eventKey={key}>
+              {I18n.t(`administration.modules.${key}`)}
+            </MenuItem>
+          ))}
+        </SplitButton>
       </div>
       <Link to="" /* TODO: add route to phase configuration page */ >
         <Translate value="administration.timelineAdmin.configurePhase" count={phaseNumber} />{' '}
@@ -95,8 +83,7 @@ const mapStateToProps = (state, { phaseId }) => {
   return {
     identifier: phase.get('identifier'),
     start: phase.get('start'),
-    end: phase.get('end'),
-    isThematicsTable: phase.get('isThematicsTable')
+    end: phase.get('end')
   };
 };
 
@@ -104,9 +91,7 @@ const mapDispatchToProps = (dispatch, { phaseId }) => ({
 
   handleIdentifierChange: eventKey => dispatch(updatePhaseIdentifier(phaseId, eventKey)),
   handleStartDateChange: date => dispatch(updateStartDate(phaseId, date)),
-  handleEndDateChange: date => dispatch(updateEndDate(phaseId, date)),
-  handleThematicsTableCheck: () => dispatch(updateIsThematicsTable(phaseId, true)),
-  handleThematicsTableUncheck: () => dispatch(updateIsThematicsTable(phaseId, false))
+  handleEndDateChange: date => dispatch(updateEndDate(phaseId, date))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(DumbPhaseForm);
