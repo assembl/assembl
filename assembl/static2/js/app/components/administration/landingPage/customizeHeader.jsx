@@ -26,6 +26,7 @@ type Props = {
     logoImgUrl: string,
     logoImgTitle: string
   },
+  editLocale: string,
   handleTitleChange: Function,
   handleSubtitleChange: Function,
   handleButtonLabelChange: Function,
@@ -39,7 +40,8 @@ export const DumbCustomizeHeader = ({
   handleSubtitleChange,
   handleButtonLabelChange,
   handleImageChange,
-  handleLogoChange
+  handleLogoChange,
+  editLocale
 }: Props) => {
   const {
     title,
@@ -65,7 +67,14 @@ export const DumbCustomizeHeader = ({
           </p>
           <div className="margin-l" />
           <FormControlWithLabel label={titlePh} onChange={handleTitleChange} required type="text" value={title} />
-          <FormControlWithLabel label={subtitlePh} onChange={handleSubtitleChange} required type="rich-text" value={subtitle} />
+          <FormControlWithLabel
+            label={subtitlePh}
+            onChange={handleSubtitleChange}
+            required
+            type="rich-text"
+            value={subtitle}
+            key={`header-${editLocale}`}
+          />
           <FormGroup>
             <label htmlFor="landing-page-img-header">
               <Translate value="administration.landingPage.header.headerImage" />
