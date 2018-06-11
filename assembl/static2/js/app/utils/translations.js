@@ -479,7 +479,9 @@ const Translations = {
         phaseModule: "Modalité de participation pour cette phase :",
         thematicsTable: "Thematics table",
         configurePhase: "Configurer Phase %{count}",
-        successSave: "La ligne de temps a été sauvegardée avec succès"
+        successSave: "La ligne de temps a été sauvegardée avec succès",
+        endIsBeforeStart: "Veuillez sélectionner une date de fin postérieure à celle de début",
+        startIsAfterEnd: "Veuillez une sélectionner une date de début ultérieure à celle de fin"
       },
       modules: {
         survey: "Questions ouvertes",
@@ -1206,7 +1208,9 @@ const Translations = {
         phaseModule: "Module for this phase:",
         thematicsTable: "Table des thématiques",
         configurePhase: "Configure Phase %{count}",
-        successSave: "The timeline has been sucessfuly saved"
+        successSave: "The timeline has been sucessfuly saved",
+        endIsBeforeStart: "Please select an end date posterior to the start",
+        startIsAfterEnd: "Please select a start ulterior to the end"
       },
       modules: {
         survey: "Survey",

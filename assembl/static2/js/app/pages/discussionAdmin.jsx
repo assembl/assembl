@@ -55,7 +55,7 @@ const createVariablesForDeleteTextFieldMutation = textField => ({ id: textField.
 
 const createVariablesForDiscussionPhaseMutation = phase => ({
   identifier: phase.identifier,
-  // isThematicsTable: phase.isThematicsTable,
+  isThematicsTable: phase.isThematicsTable,
   start: moment(phase.start, moment.ISO_8601),
   end: moment(phase.end, moment.ISO_8601),
   titleEntries: phase.titleEntries

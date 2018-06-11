@@ -8,6 +8,8 @@ import { Radio, SplitButton, MenuItem } from 'react-bootstrap';
 import { Link } from 'react-router';
 import { type moment } from 'moment';
 import { modulesTranslationKeys } from '../../../constants';
+import { displayAlert } from '../../../utils/utilityManager';
+
 import {
   updatePhaseIdentifier,
   updateStartDate,
@@ -41,35 +43,51 @@ export const DumbPhaseForm = ({
   isThematicsTable,
   handleThematicsTableCheck,
   handleThematicsTableUncheck
-}: PhaseFormProps) => (
-  <div className="phase-form">
-    <DatePicker selected={start} onChange={handleStartDateChange} showTimeSelect timeFormat="HH:mm" />
-    <DatePicker selected={end} onChange={handleEndDateChange} showTimeSelect timeFormat="HH:mm" />
-    <Translate value="administration.timelineAdmin.phaseModule" />
-    <div className="margin-m">
-      <Radio onChange={handleThematicsTableCheck} checked={isThematicsTable}>
-        <Translate value="administration.timelineAdmin.thematicsTable" />
-      </Radio>
-      <Radio onChange={handleThematicsTableUncheck} checked={!isThematicsTable}>
-        <SplitButton
-          className="admin-dropdown"
-          id={`dropdown-${phaseId}`}
-          title={I18n.t(`administration.modules.${identifier || modulesTranslationKeys[0]}`)}
-          onSelect={handleIdentifierChange}
-        >
-          {modulesTranslationKeys.map(key => (
-            <MenuItem key={`module-${key}`} eventKey={key}>
-              {I18n.t(`administration.modules.${key}`)}
-            </MenuItem>
-          ))}
-        </SplitButton>
-      </Radio>
+}: PhaseFormProps) => {
+  const onStartDateChange = (newStartDate) => {
+    if (newStartDate.isAfter(end)) {
+      displayAlert('danger', I18n.t('administration.timelineAdmin.startIsAfterEnd'));
+    } else {
+      handleStartDateChange(newStartDate);
+    }
+  };
+  const onEndDateChange = (newEndDate) => {
+    if (!newEndDate.isAfter(start)) {
+      displayAlert('danger', I18n.t('administration.timelineAdmin.endIsBeforeStart'));
+    } else {
+      handleEndDateChange(newEndDate);
+    }
+  };
+  return (
+    <div className="phase-form">
+      <DatePicker selected={start} onChange={onStartDateChange} showTimeSelect timeFormat="HH:mm" />
+      <DatePicker selected={end} onChange={onEndDateChange} showTimeSelect timeFormat="HH:mm" />
+      <Translate value="administration.timelineAdmin.phaseModule" />
+      <div className="margin-m">
+        <Radio onChange={handleThematicsTableCheck} checked={isThematicsTable}>
+          <Translate value="administration.timelineAdmin.thematicsTable" />
+        </Radio>
+        <Radio onChange={handleThematicsTableUncheck} checked={!isThematicsTable}>
+          <SplitButton
+            className="admin-dropdown"
+            id={`dropdown-${phaseId}`}
+            title={I18n.t(`administration.modules.${identifier || modulesTranslationKeys[0]}`)}
+            onSelect={handleIdentifierChange}
+          >
+            {modulesTranslationKeys.map(key => (
+              <MenuItem key={`module-${key}`} eventKey={key}>
+                {I18n.t(`administration.modules.${key}`)}
+              </MenuItem>
+            ))}
+          </SplitButton>
+        </Radio>
+      </div>
+      <Link to="" /* TODO: add route to phase configuration page */ >
+        <Translate value="administration.timelineAdmin.configurePhase" count={phaseNumber} />{' '}
+      </Link>
     </div>
-    <Link to="" /* TODO: add route to phase configuration page */ >
-      <Translate value="administration.timelineAdmin.configurePhase" count={phaseNumber} />{' '}
-    </Link>
-  </div>
-);
+  );
+};
 
 
 const mapStateToProps = (state, { phaseId }) => {
@@ -77,12 +95,13 @@ const mapStateToProps = (state, { phaseId }) => {
   return {
     identifier: phase.get('identifier'),
     start: phase.get('start'),
-    end: phase.get('end')
-    // isThematicsTable: phase.get('isThematicsTable')
+    end: phase.get('end'),
+    isThematicsTable: phase.get('isThematicsTable')
   };
 };
 
 const mapDispatchToProps = (dispatch, { phaseId }) => ({
+
   handleIdentifierChange: eventKey => dispatch(updatePhaseIdentifier(phaseId, eventKey)),
   handleStartDateChange: date => dispatch(updateStartDate(phaseId, date)),
   handleEndDateChange: date => dispatch(updateEndDate(phaseId, date)),

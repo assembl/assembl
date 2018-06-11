@@ -97,6 +97,7 @@ export const phasesHaveChanged: TimelineHasChangedReducer = (state = false, acti
   case UPDATE_PHASE_IDENTIFIER:
   case UPDATE_PHASE_START:
   case UPDATE_PHASE_END:
+  case UPDATE_IS_THEMATICS_TABLE:
     return true;
   default:
     return state;
