@@ -526,7 +526,7 @@ export const voteProposalsById = (state: Map<string, Map> = Map(), action: Redux
     return newState;
   }
   case CREATE_VOTE_PROPOSAL: {
-    const order = state.size + 1.0;
+    const order = state.map(v => v.get('order')).max() + 1.0;
     return state.set(action.id, defaultVoteProposal.set('id', action.id).set('order', order));
   }
   case DELETE_VOTE_PROPOSAL:
