@@ -516,16 +516,17 @@ class DeleteVoteSpecification(graphene.Mutation):
         vote_spec_id = args.get('id')
         vote_spec_id = int(Node.from_global_id(vote_spec_id)[1])
         vote_spec = cls.get(vote_spec_id)
-        require_instance_permission(CrudPermissions.DELETE, vote_spec, context)
+        if vote_spec:
+            require_instance_permission(CrudPermissions.DELETE, vote_spec, context)
 
-        # delete all vote specifications that have this spec as template
-        with cls.default_db.no_autoflush as db:
-            db.query(models.votes.AbstractVoteSpecification).filter(
-                models.votes.AbstractVoteSpecification.vote_spec_template_id == vote_spec.id
-            ).delete()
-            db.flush()
-            db.delete(vote_spec)
-            db.flush()
+            # delete all vote specifications that have this spec as template
+            with cls.default_db.no_autoflush as db:
+                db.query(models.votes.AbstractVoteSpecification).filter(
+                    models.votes.AbstractVoteSpecification.vote_spec_template_id == vote_spec.id
+                ).delete()
+                db.flush()
+                db.delete(vote_spec)
+                db.flush()
 
         return DeleteVoteSpecification(success=True)
 
