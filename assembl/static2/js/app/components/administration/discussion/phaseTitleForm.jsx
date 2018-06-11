@@ -2,7 +2,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { OverlayTrigger, Button } from 'react-bootstrap';
-import { I18n } from 'react-redux-i18n';
+import { I18n, Translate } from 'react-redux-i18n';
+import classnames from 'classnames';
 import { updatePhaseTitle, deletePhase } from '../../../actions/adminActions/timeline';
 import FormControlWithLabel from '../../common/formControlWithLabel';
 import { deletePhaseTooltip } from '../../common/tooltips';
@@ -13,13 +14,25 @@ type PhaseTitleFormProps = {
   title: string,
   editLocale: string,
   handleTitleChange: Function,
-  handleDeleteClick: Function
+  handleDeleteClick: Function,
+  phaseIndex: number
 }
 
-export const DumbPhaseTitleForm = ({ id, title, editLocale, handleTitleChange, handleDeleteClick }: PhaseTitleFormProps) => {
+export const DumbPhaseTitleForm = ({
+  id,
+  title,
+  editLocale,
+  handleTitleChange,
+  handleDeleteClick,
+  phaseIndex
+}: PhaseTitleFormProps) => {
   const phaseLabel = I18n.t('administration.timelineAdmin.phaseLabel');
+  const isTitleEmpty = title.length === 0;
+  const phaseSideTitleClassNames = classnames('phase-side-title', { 'phase-side-title-low': isTitleEmpty });
+  const deleteButtonClassNames = classnames('admin-icons', { 'delete-button-high': isTitleEmpty });
   return (
-    <div className="flex">
+    <div className="flex phase-title-form">
+      <Translate value="administration.timelineAdmin.phase" count={phaseIndex} className={phaseSideTitleClassNames} />
       <FormControlWithLabel
         key={`phase-${id}`}
         label={`${phaseLabel} ${editLocale.toUpperCase()}`}
@@ -28,7 +41,7 @@ export const DumbPhaseTitleForm = ({ id, title, editLocale, handleTitleChange, h
         value={title}
       />
       <OverlayTrigger placement="top" overlay={deletePhaseTooltip}>
-        <Button onClick={handleDeleteClick} className="admin-icons">
+        <Button onClick={handleDeleteClick} className={deleteButtonClassNames}>
           <span className="assembl-icon-delete grey" />
         </Button>
       </OverlayTrigger>

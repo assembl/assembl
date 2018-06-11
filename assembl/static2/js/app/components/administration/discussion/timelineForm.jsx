@@ -51,8 +51,8 @@ export class DumbTimelineForm extends React.Component<TimelineFormProps, Timelin
         <div className="admin-content">
           <div className="form-container">
             <form>
-              {phases && phases.map(id => (
-                <PhaseTitleForm id={id} editLocale={editLocale} key={`phase-title-form-${id}`} />
+              {phases && phases.map((id, index) => (
+                <PhaseTitleForm key={`phase-title-form-${id}`} id={id} editLocale={editLocale} phaseIndex={index + 1} />
               )
               )
               }

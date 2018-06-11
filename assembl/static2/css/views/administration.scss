@@ -576,11 +576,25 @@
   .timeline-admin {
     .form-group {
       flex-grow: 1;
+      margin-left: 15px;
     }
 
     .admin-instruction {
       margin-left: 50px;
       font-family: $font-family4;
+    }
+
+    .phase-side-title {
+      margin-left: -70px;
+      margin-top: 30px;
+    }
+
+    .phase-side-title-low {
+      margin-top: 6px;
+    }
+
+    .delete-button-high {
+      margin-bottom: 25px;
     }
   }
 }
