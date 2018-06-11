@@ -753,7 +753,7 @@ def get_visitors(request):
         if not getattr(st, attribute, None):
             continue
         profile_fields = db.query(m.AbstractConfigurableField, m.ProfileField).filter(m.ProfileField.discussion_id == discussion.id).join(m.ProfileField.configurable_field).filter(
-            m.ProfileField.agent_profile_id == st.agent_profile.id).filter(m.AbstractConfigurableField.identifier == "CUSTOM").filter(m.ProfileField.configurable_field_id == m.AbstractConfigurableField.id).all()
+            m.ProfileField.agent_profile_id == st.agent_profile.id).filter(m.AbstractConfigurableField.identifier == m.ConfigurableFieldIdentifiersEnum.CUSTOM.value).filter(m.ProfileField.configurable_field_id == m.AbstractConfigurableField.id).all()
 
         data = {"time": getattr(st, attribute),
                 "name": (st.agent_profile.name or '').encode("utf-8"),
