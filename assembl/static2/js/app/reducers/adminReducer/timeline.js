@@ -59,7 +59,7 @@ export const phasesById: PhasesByIdReducer = (state: PhasesByIdState = Map(), ac
         titleEntries: fromJS(titleEntries),
         start: start,
         end: end,
-        isThematicsTable: isThematicsTable,
+        isThematicsTable: isThematicsTable || false, // default to false until we have the interface to set a thematicstable
         id: id
       });
 

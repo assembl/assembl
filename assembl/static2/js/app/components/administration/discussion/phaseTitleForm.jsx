@@ -39,6 +39,7 @@ export const DumbPhaseTitleForm = ({
         onChange={handleTitleChange}
         type="text"
         value={title}
+        required
       />
       <OverlayTrigger placement="top" overlay={deletePhaseTooltip}>
         <Button onClick={handleDeleteClick} className={deleteButtonClassNames}>
