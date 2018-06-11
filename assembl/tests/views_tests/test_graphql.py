@@ -2733,7 +2733,7 @@ mutation myFirstMutation(
 
 
 def test_query_discussion_landing_page_image_fields(
-        discussion, graphql_request, test_session, simple_file, moderator_user):
+        discussion, graphql_request, graphql_registry, test_session, simple_file, moderator_user):
 
     from assembl.models.attachment import DiscussionAttachment
     from assembl.models import AttachmentPurpose
@@ -2759,18 +2759,11 @@ def test_query_discussion_landing_page_image_fields(
 
     discussion.db.flush()
 
-    res = schema.execute(u"""query {
-        discussion {
-            headerImage {
-                externalUrl
-                mimeType
-            }
-            logoImage {
-                externalUrl
-                mimeType
-            }
-        }
-    }""", context_value=graphql_request)
+    res = schema.execute(
+        graphql_registry['LandingPage'],
+        context_value=graphql_request,
+        variable_values={"lang": u"en"})
+    assert res.errors is None
     res_data = json.loads(json.dumps(res.data))
     res_discussion = res_data['discussion']
     assert res_discussion['headerImage']['mimeType'] == u'image/png'
@@ -2783,7 +2776,7 @@ def test_query_discussion_landing_page_image_fields(
     discussion.db.flush()
 
 
-def test_update_discussion_landing_page_image_fields(graphql_request, discussion):
+def test_update_discussion_landing_page_image_fields(graphql_request, graphql_registry, discussion):
     import os
     from io import BytesIO
 
@@ -2799,30 +2792,27 @@ def test_update_discussion_landing_page_image_fields(graphql_request, discussion
     graphql_request.POST['variables.logoImage'] = FieldStorage(
         u'path/to/new-img2.png', 'image/png')
 
-    res = schema.execute(u"""
-mutation updateDiscussion(
-    $headerImage:String,
-    $logoImage:String
-) {
-    updateDiscussion(
-        headerImage: $headerImage,
-        logoImage: $logoImage,
-    ) {
-        discussion {
-            headerImage {
-                externalUrl
-                title
-            }
-            logoImage {
-                externalUrl
-                title
-            }
-        }
-    }
-}
-""", context_value=graphql_request, variable_values={"headerImage": u"variables.headerImage","logoImage": u"variables.logoImage"})
-    assert res.data is not None
+    res = schema.execute(
+        graphql_registry['updateDiscussion'],
+        context_value=graphql_request,
+        variable_values={
+            "headerImage": u"variables.headerImage",
+            "logoImage": u"variables.logoImage",
+            "titleEntries": [{
+                "localeCode": "en",
+                "value": "My title"
+            }],
+            "subtitleEntries": [{
+                "localeCode": "en",
+                "value": "My subtitle"
+            }],
+            "buttonLabelEntries": [{
+                "localeCode": "en",
+                "value": "My button label"
+            }]
+        })
 
+    assert res.data is not None
     assert res.data['updateDiscussion'] is not None
     assert res.data['updateDiscussion']['discussion'] is not None
 
@@ -2830,8 +2820,12 @@ mutation updateDiscussion(
 
     assert res_discussion['headerImage'] is not None
     assert '/documents/' in res_discussion['headerImage']['externalUrl']
-    assert res_discussion['headerImage']['title'] == 'new-img.png'
+    assert res_discussion['headerImage']['mimeType'] == 'image/png'
 
     assert res_discussion['logoImage'] is not None
     assert '/documents/' in res_discussion['logoImage']['externalUrl']
-    assert res_discussion['logoImage']['title'] == 'new-img2.png'
+    assert res_discussion['logoImage']['mimeType'] == 'image/png'
+
+    assert res_discussion['titleEntries'][0]['value'] == u'My title'
+    assert res_discussion['subtitleEntries'][0]['value'] == u'My subtitle'
+    assert res_discussion['buttonLabelEntries'][0]['value'] == u'My button label'
