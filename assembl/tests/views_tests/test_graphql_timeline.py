@@ -14,6 +14,7 @@ def test_query_timeline(graphql_request, discussion_with_2_phase_interface_v2, g
     assert len(res.data['timeline']) == 2
     phase1 = res.data['timeline'][0]
     assert phase1['identifier'] == 'survey'
+    assert phase1['isThematicsTable'] is False
     assert phase1['title'] == 'phase 1'
     assert phase1['titleEntries'][0]['localeCode'] == 'en'
     assert phase1['titleEntries'][0]['value'] == 'phase 1'
@@ -21,6 +22,7 @@ def test_query_timeline(graphql_request, discussion_with_2_phase_interface_v2, g
     assert phase1['end'] == '2015-12-31T09:00:00+00:00'
     phase2 = res.data['timeline'][1]
     assert phase2['identifier'] == 'thread'
+    assert phase2['isThematicsTable'] is False
     assert phase2['title'] == 'phase 2'
     assert phase2['titleEntries'][0]['localeCode'] == 'en'
     assert phase2['titleEntries'][0]['value'] == 'phase 2'
@@ -35,6 +37,7 @@ def test_mutation_create_discussion_phase(graphql_request, discussion_with_2_pha
         variable_values={
             "lang": u"en",
             "identifier": u"voteSession",
+            "isThematicsTable": True,
             "titleEntries": [
                 { "localeCode": "en", "value": u"My new phase" }
             ],
@@ -46,6 +49,7 @@ def test_mutation_create_discussion_phase(graphql_request, discussion_with_2_pha
     phase = res.data['createDiscussionPhase']['discussionPhase']
     assert phase['id']
     assert phase['identifier'] == u'voteSession'
+    assert phase['isThematicsTable'] is True
     assert phase['title'] == u'My new phase'
     assert phase['titleEntries'][0]['localeCode'] == u'en'
     assert phase['titleEntries'][0]['value'] == u'My new phase'
@@ -63,6 +67,7 @@ def test_mutation_update_discussion_phase(graphql_request, discussion_with_2_pha
             "id": phase1_id,
             "lang": u"en",
             "identifier": u"multiColumn",
+            "isThematicsTable": True,
             "titleEntries": [
                 { "localeCode": "en", "value": u"My new title" }
             ],
@@ -74,6 +79,7 @@ def test_mutation_update_discussion_phase(graphql_request, discussion_with_2_pha
     phase1_updated = res.data['updateDiscussionPhase']['discussionPhase']
     assert phase1_updated['id'] == phase1_id
     assert phase1_updated['identifier'] == 'multiColumn'
+    assert phase1_updated['isThematicsTable'] is True
     assert phase1_updated['title'] == u'My new title'
     assert phase1_updated['titleEntries'][0]['localeCode'] == u'en'
     assert phase1_updated['titleEntries'][0]['value'] == u'My new title'

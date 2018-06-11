@@ -63,6 +63,9 @@ class TimelineEvent(DiscussionBoundBase):
 
     image_url = Column(URLString())
 
+    is_thematics_table = Column(
+        Boolean, server_default='false', default=False)
+
     start = Column(DateTime)
 
     end = Column(DateTime)

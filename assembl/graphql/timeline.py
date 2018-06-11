@@ -19,6 +19,7 @@ class DiscussionPhase(SecureObjectType, SQLAlchemyObjectType):
         only_fields = ('id',)
 
     identifier = graphene.String()
+    is_thematics_table = graphene.Boolean()
     title = graphene.String(lang=graphene.String())
     title_entries = graphene.List(LangStringEntry)
     start = DateTime()
@@ -35,6 +36,7 @@ class CreateDiscussionPhase(graphene.Mutation):
     class Input:
         lang = graphene.String(required=True)
         identifier = graphene.String(required=True)
+        is_thematics_table = graphene.Boolean()
         title_entries = graphene.List(LangStringEntryInput, required=True)
         start = DateTime(required=True)
         end = DateTime(required=True)
@@ -57,6 +59,7 @@ class CreateDiscussionPhase(graphene.Mutation):
             saobj = cls(
                 discussion_id=discussion_id,
                 identifier=args.get('identifier'),
+                is_thematics_table=args.get('is_thematics_table'),
                 title=title_langstring,
                 start=args.get('start'),
                 end=args.get('end'))
@@ -70,6 +73,7 @@ class CreateDiscussionPhase(graphene.Mutation):
 class UpdateDiscussionPhase(graphene.Mutation):
     class Input:
         id = graphene.ID(required=True)
+        is_thematics_table = graphene.Boolean()
         lang = graphene.String(required=True)
         identifier = graphene.String(required=True)
         title_entries = graphene.List(LangStringEntryInput, required=True)
@@ -94,6 +98,7 @@ class UpdateDiscussionPhase(graphene.Mutation):
 
             update_langstring_from_input_entries(phase, 'title', title_entries)
             phase.identifier = args.get('identifier')
+            phase.is_thematics_table = args.get('is_thematics_table')
             # SQLAlchemy wants naive datetimes
             phase.start = args.get('start').replace(tzinfo=None)
             phase.end = args.get('end').replace(tzinfo=None)
