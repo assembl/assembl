@@ -137,6 +137,7 @@ class AnswerForm extends React.PureComponent<AnswerFormProps, AnswerFormState> {
             <div className="answer-form-inner">
               <FormGroup>
                 <RichTextEditor
+                  key={this.state.body ? 'notEmpty' : 'empty'}
                   rawContentState={this.state.body}
                   handleInputFocus={this.handleInputFocus}
                   maxLength={TEXT_AREA_MAX_LENGTH}

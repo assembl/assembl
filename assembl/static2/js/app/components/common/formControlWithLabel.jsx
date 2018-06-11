@@ -98,8 +98,10 @@ class FormControlWithLabel extends React.Component<FormControlWithLabelProps, Fo
 
   renderRichTextEditor = () => {
     const { onChange, value } = this.props;
+    const key = value ? 'notEmpty' : 'empty';
     return (
       <RichTextEditor
+        key={key}
         rawContentState={value}
         placeholder={this.getLabel()}
         toolbarPosition="bottom"

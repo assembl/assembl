@@ -1,4 +1,12 @@
 // @flow
+/*
+  Note that this component is fully uncontrolled
+  Warning: you need to set a key on it to specify if editor state is empty or not
+  Therefore, react will recreate the editor if the status (empty/not empty) changes
+*/
+// eslint-disable-next-line
+// See https://reactjs.org/blog/2018/06/07/you-probably-dont-need-derived-state.html#recommendation-fully-uncontrolled-component-with-a-key
+
 import * as React from 'react';
 import { Translate, I18n } from 'react-redux-i18n';
 import { convertFromRaw, convertToRaw, Editor, EditorState, RawContentState, RichUtils } from 'draft-js';
@@ -60,12 +68,6 @@ export default class RichTextEditor extends React.Component<RichTextEditorProps,
       editorState: editorState,
       editorHasFocus: false
     };
-  }
-
-  componentWillReceiveProps(nextProps: RichTextEditorProps) {
-    if (this.props.rawContentState !== null && nextProps.rawContentState === null) {
-      this.setState({ editorState: EditorState.createEmpty() });
-    }
   }
 
   getCurrentRawContentState = () => convertToRaw(this.state.editorState.getCurrentContent());
