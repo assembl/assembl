@@ -1,7 +1,6 @@
 // @flow
 import React from 'react';
 import { I18n, Translate } from 'react-redux-i18n';
-import { List } from 'immutable';
 import { OverlayTrigger, Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { addPhaseTooltip } from '../../common/tooltips';
@@ -13,7 +12,7 @@ import PhaseTitleForm from './phaseTitleForm';
 
 type TimelineFormProps = {
   editLocale: string,
-  phases: List<string>, // TODO: specify object shape
+  phases: Array<string>,
   handleCreatePhase: Function
 };
 
@@ -25,19 +24,19 @@ export class DumbTimelineForm extends React.Component<TimelineFormProps, Timelin
   constructor(props: TimelineFormProps) {
     super(props);
     this.state = {
-      selectedPhaseId: props.phases ? props.phases.toJS()[0] : ''
+      selectedPhaseId: props.phases ? props.phases[0] : ''
     };
   }
 
   componentWillReceiveProps(nextProps: TimelineFormProps) {
     if (!this.state.selectedPhaseId) {
       this.setState({
-        selectedPhaseId: nextProps.phases ? nextProps.phases.toJS()[0] : ''
+        selectedPhaseId: nextProps.phases ? nextProps.phases[0] : ''
       });
     }
   }
 
-  getPhaseNumberById = (id: string) => (this.props.phases.toJS().indexOf(id) + 1);
+  getPhaseNumberById = (id: string) => (this.props.phases.indexOf(id) + 1);
 
   render() {
     const { editLocale, phases, handleCreatePhase } = this.props;
@@ -68,7 +67,7 @@ export class DumbTimelineForm extends React.Component<TimelineFormProps, Timelin
         <Translate value="administration.timelineAdmin.instruction2" className="admin-instruction" />
         <div className="admin-content">
           <Row>
-            {phases && phases.toJS().map((id, index) => {
+            {phases && phases.map((id, index) => {
               const linkClassNames = selectedPhaseId === id ? 'tab-title-active ellipsis' : 'tab-title ellipsis';
               return (
                 <Col xs={12} md={Math.round(12 / phases.length)} key={index}>
@@ -106,7 +105,7 @@ const mapStateToProps = (state) => {
   return {
     editLocale: state.admin.editLocale,
     lang: state.i18n.locale,
-    phases: phasesInOrder.filter(id => !phasesById.get(id).get('_toDelete'))
+    phases: phasesInOrder.filter(id => !phasesById.get(id).get('_toDelete')).toJS()
   };
 };
 

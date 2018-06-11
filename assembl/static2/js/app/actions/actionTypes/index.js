@@ -636,14 +636,16 @@ export type UpdatePhaseIdentifier = {
   type: typeof UPDATE_PHASE_IDENTIFIER
 };
 
-export type UpdateStartDate = {
+export type UpdatePhaseStart = {
   id: string,
-  value: moment
+  value: moment,
+  type: typeof UPDATE_PHASE_START
 };
 
-export type UpdateEndDate = {
+export type UpdatePhaseEnd = {
   id: string,
-  value: moment
+  value: moment,
+  type: typeof UPDATE_PHASE_END
 };
 
 export type UpdateIsThematicsTable = {
@@ -680,8 +682,8 @@ type TimelineActions =
   | DeletePhase
   | UpdatePhaseTitle
   | UpdatePhaseIdentifier
-  | UpdateStartDate
-  | UpdateEndDate
+  | UpdatePhaseStart
+  | UpdatePhaseEnd
   | UpdateIsThematicsTable;
 
 type VoteSessionActions =

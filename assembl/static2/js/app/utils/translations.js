@@ -478,7 +478,8 @@ const Translations = {
         instruction2: "Renseignez les champs requis pour chaque phase en sélectionnant chaque onglet",
         phaseModule: "Modalité de participation pour cette phase :",
         thematicsTable: "Thematics table",
-        configurePhase: "Configurer Phase %{count}"
+        configurePhase: "Configurer Phase %{count}",
+        successSave: "La ligne de temps a été sauvegardée avec succès"
       },
       modules: {
         survey: "Questions ouvertes",
@@ -1204,7 +1205,8 @@ const Translations = {
         instruction2: "Fill in the required fields for each phase by selecting each tab",
         phaseModule: "Module for this phase:",
         thematicsTable: "Table des thématiques",
-        configurePhase: "Configure Phase %{count}"
+        configurePhase: "Configure Phase %{count}",
+        successSave: "The timeline has been sucessfuly saved"
       },
       modules: {
         survey: "Survey",

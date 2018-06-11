@@ -31,13 +31,13 @@ export const deletePhase = (id: string): actionTypes.DeletePhase => ({
   type: actionTypes.DELETE_PHASE
 });
 
-export const updateStartDate = (id: string, value: moment): actionTypes.UpdateStartDate => ({
+export const updateStartDate = (id: string, value: moment): actionTypes.UpdatePhaseStart => ({
   id: id,
   value: value,
   type: actionTypes.UPDATE_PHASE_START
 });
 
-export const updateEndDate = (id: string, value: moment): actionTypes.UpdateEndDate => ({
+export const updateEndDate = (id: string, value: moment): actionTypes.UpdatePhaseEnd => ({
   id: id,
   value: value,
   type: actionTypes.UPDATE_PHASE_END

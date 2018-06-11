@@ -37,15 +37,17 @@ export const phasesById: PhasesByIdReducer = (state: PhasesByIdState = Map(), ac
   case DELETE_PHASE:
     return state.setIn([action.id, '_toDelete'], true);
   case UPDATE_PHASE_TITLE:
-    return state.updateIn([action.id, 'titleEntries'], updateInLangstringEntries(action.locale, action.value));
+    return state
+      .updateIn([action.id, 'titleEntries'], updateInLangstringEntries(action.locale, action.value))
+      .setIn([action.id, '_hasChanged'], true);
   case UPDATE_PHASE_IDENTIFIER:
-    return state.setIn([action.id, 'identifier'], action.value);
+    return state.setIn([action.id, 'identifier'], action.value).setIn([action.id, '_hasChanged'], true);
   case UPDATE_PHASE_START:
-    return state.setIn([action.id, 'start'], action.value);
+    return state.setIn([action.id, 'start'], action.value).setIn([action.id, '_hasChanged'], true);
   case UPDATE_PHASE_END:
-    return state.setIn([action.id, 'end'], action.value);
+    return state.setIn([action.id, 'end'], action.value).setIn([action.id, '_hasChanged'], true);
   case UPDATE_IS_THEMATICS_TABLE:
-    return state.setIn([action.id, 'isThematicsTable'], action.value);
+    return state.setIn([action.id, 'isThematicsTable'], action.value).setIn([action.id, '_hasChanged'], true);
   case UPDATE_PHASES: {
     let newState = Map();
     action.phases.forEach(({ identifier, titleEntries, start, end, id, isThematicsTable }) => {
@@ -57,7 +59,8 @@ export const phasesById: PhasesByIdReducer = (state: PhasesByIdState = Map(), ac
         titleEntries: fromJS(titleEntries),
         start: start,
         end: end,
-        isThematicsTable: isThematicsTable
+        isThematicsTable: isThematicsTable,
+        id: id
       });
 
       newState = newState.set(id, phaseInfo);

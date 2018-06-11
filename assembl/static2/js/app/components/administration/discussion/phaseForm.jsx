@@ -43,8 +43,8 @@ export const DumbPhaseForm = ({
   handleThematicsTableUncheck
 }: PhaseFormProps) => (
   <div className="phase-form">
-    <DatePicker selected={start} onChange={handleStartDateChange} showTimeSelect />
-    <DatePicker selected={end} onChange={handleEndDateChange} showTimeSelect />
+    <DatePicker selected={start} onChange={handleStartDateChange} showTimeSelect timeFormat="HH:mm" />
+    <DatePicker selected={end} onChange={handleEndDateChange} showTimeSelect timeFormat="HH:mm" />
     <Translate value="administration.timelineAdmin.phaseModule" />
     <div className="margin-m">
       <Radio onChange={handleThematicsTableCheck} checked={isThematicsTable}>
@@ -54,7 +54,7 @@ export const DumbPhaseForm = ({
         <SplitButton
           className="admin-dropdown"
           id={`dropdown-${phaseId}`}
-          title={I18n.t(`administration.modules.${identifier}`)}
+          title={I18n.t(`administration.modules.${identifier || modulesTranslationKeys[0]}`)}
           onSelect={handleIdentifierChange}
         >
           {modulesTranslationKeys.map(key => (
@@ -77,8 +77,8 @@ const mapStateToProps = (state, { phaseId }) => {
   return {
     identifier: phase.get('identifier'),
     start: phase.get('start'),
-    end: phase.get('end'),
-    isThematicsTable: phase.get('isThematicsTable')
+    end: phase.get('end')
+    // isThematicsTable: phase.get('isThematicsTable')
   };
 };
 
