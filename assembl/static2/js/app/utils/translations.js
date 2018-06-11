@@ -680,7 +680,8 @@ const Translations = {
           logoDescription:
             "Le logo doit avoir une hauteur maximale de 78px et une largeur maximale de 200px. Le poids ne doit pas dépasser 1Mo. Le fond doit être transparent."
         },
-        successSave: "Les modules ont été enregistrés avec succès !"
+        successSave: "Les modules ont été enregistrés avec succès !",
+        headerSuccessSave: "Le bandeau de la page d'accueil a été sauvegardé avec succès !"
       },
       profileOptions: {
         addTextField: "Ajouter un champ",
@@ -1375,7 +1376,8 @@ const Translations = {
           logoDescription:
             "The logo must have a maximum height of 78px and a maximum width of 200px. The weight must not exceed 1 MB. The background must be transparent."
         },
-        successSave: "The modules have been saved with success!"
+        successSave: "The modules have been saved with success!",
+        headerSuccessSave: "The home page header have been saved with success!"
       },
       profileOptions: {
         addTextField: "Add a field",

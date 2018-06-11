@@ -14,13 +14,13 @@ exports[`ManageModules component should render a page to manage the landing page
     <div
       className="form-container"
     >
-      <p
-        className="admin-paragraph"
-      >
-        <Translate
-          value="administration.landingPage.header.helper"
-        />
-      </p>
+      <Helper
+        additionalTextClasses=""
+        classname="admin-paragraph"
+        helperText="Top page header. It contains the consultation's title and subtitle and a button to access to the consultation."
+        helperUrl="/static2/img/helpers/landing_page_admin/header.png"
+        label="Customize appearance of the header."
+      />
       <div
         className="margin-l"
       />

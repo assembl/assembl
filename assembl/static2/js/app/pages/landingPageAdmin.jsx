@@ -113,7 +113,7 @@ class LandingPageAdmin extends React.Component<Props, State> {
         }
       })
         .then(() => {
-          displayAlert('success', I18n.t('administration.landingPage.successSave'));
+          displayAlert('success', I18n.t('administration.landingPage.headerSuccessSave'));
         })
         .catch((error) => {
           displayAlert('danger', error.message);

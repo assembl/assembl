@@ -6,6 +6,7 @@ import { FormGroup } from 'react-bootstrap';
 import SectionTitle from '../../administration/sectionTitle';
 import FormControlWithLabel from '../../common/formControlWithLabel';
 import FileUploader from '../../common/fileUploader';
+import Helper from '../../common/helper';
 import {
   updateLandingPageHeaderTitle,
   updateLandingPageHeaderSubtitle,
@@ -62,9 +63,12 @@ export const DumbCustomizeHeader = ({
       <SectionTitle title={I18n.t('administration.landingPage.header.title')} annotation={I18n.t('administration.annotation')} />
       <div className="admin-content">
         <div className="form-container">
-          <p className="admin-paragraph">
-            <Translate value="administration.landingPage.header.helper" />
-          </p>
+          <Helper
+            classname="admin-paragraph"
+            label={I18n.t('administration.landingPage.header.helper')}
+            helperUrl={'/static2/img/helpers/landing_page_admin/header.png'}
+            helperText={I18n.t('administration.helpers.landingPage.header')}
+          />
           <div className="margin-l" />
           <FormControlWithLabel label={titlePh} onChange={handleTitleChange} required type="text" value={title} />
           <FormControlWithLabel
