@@ -734,6 +734,7 @@ def get_visitors(request):
     db = discussion.db
     from assembl import models as m
     from graphene.relay import Node
+    # Adding configurable fields titles to the csv
     configurable_fields = db.query(m.AbstractConfigurableField).filter(m.AbstractConfigurableField.discussion_id == discussion.id).all()
     for configurable_field in configurable_fields:
         fieldnames.append((configurable_field.title.best_lang(user_prefs).value).encode("utf-8"))
