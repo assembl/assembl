@@ -60,6 +60,7 @@ type Props = {
   },
   languagePreferenceHasChanged: boolean,
   legalContents: Map,
+  legalContentsHaveChanged: boolean,
   preferences: LanguagePreferencesState,
   refetchLegalContents: Function,
   refetchSections: Function,
@@ -113,7 +114,7 @@ class DiscussionAdmin extends React.Component<Props, State> {
     this.props.languagePreferenceHasChanged ||
     this.props.sectionsHaveChanged ||
     this.props.profileOptionsHasChanged ||
-    this.props.legalContents.get('_hasChanged');
+    this.props.legalContentsHaveChanged;
 
   saveAction = () => {
     const {
@@ -124,6 +125,7 @@ class DiscussionAdmin extends React.Component<Props, State> {
       i18n,
       languagePreferenceHasChanged,
       legalContents,
+      legalContentsHaveChanged,
       preferences,
       refetchLegalContents,
       refetchSections,
@@ -186,7 +188,7 @@ class DiscussionAdmin extends React.Component<Props, State> {
         });
     }
 
-    if (legalContents.get('_hasChanged')) {
+    if (legalContentsHaveChanged) {
       const legalNoticeEntries = legalContents.get('legalNoticeEntries').toJS();
       const termsAndConditionsEntries = legalContents.get('termsAndConditionsEntries').toJS();
       const cookiesPolicyEntries = legalContents.get('cookiesPolicyEntries').toJS();
@@ -303,6 +305,7 @@ const mapStateToProps: MapStateToProps<ReduxState, *, *> = ({
       .valueSeq() // convert to array of Map
       .toJS(), // convert to array of objects
     legalContents: legalContents,
+    legalContentsHaveChanged: legalContents.get('_hasChanged'),
     profileOptionsHasChanged: profileOptionsHasChanged,
     textFields: textFields
   };

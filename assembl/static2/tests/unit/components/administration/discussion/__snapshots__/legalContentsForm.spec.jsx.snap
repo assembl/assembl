@@ -63,7 +63,7 @@ exports[`LegalContentsForm dumb component should render a form to edit legal not
           helperText=""
           helperUrl=""
           id={undefined}
-          label="Privacy policy"
+          label="Information on cookies"
           labelAlwaysVisible={false}
           name={undefined}
           onChange={[Function]}
@@ -82,7 +82,7 @@ exports[`LegalContentsForm dumb component should render a form to edit legal not
           helperText=""
           helperUrl=""
           id={undefined}
-          label="Information on cookies"
+          label="Privacy policy"
           labelAlwaysVisible={false}
           name={undefined}
           onChange={[Function]}

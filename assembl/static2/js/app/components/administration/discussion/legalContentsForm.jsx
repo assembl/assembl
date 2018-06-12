@@ -36,8 +36,8 @@ export const DumbLegalContentsForm = ({
 }: LegalContentsFormProps) => {
   const legalNoticeLabel = I18n.t('administration.legalContents.legalNoticeLabel');
   const tacLabel = I18n.t('administration.legalContents.termsAndConditionsLabel');
-  const privacyPolicyLabel = I18n.t('administration.legalContents.cookiesPolicyLabel');
-  const cookiesPolicyLabel = I18n.t('administration.legalContents.privacyPolicyLabel');
+  const cookiesPolicyLabel = I18n.t('administration.legalContents.cookiesPolicyLabel');
+  const privacyPolicyLabel = I18n.t('administration.legalContents.privacyPolicyLabel');
   return (
     <div className="admin-box">
       <SectionTitle title={I18n.t('administration.discussion.4')} annotation={I18n.t('administration.annotation')} />
