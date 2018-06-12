@@ -176,8 +176,7 @@ def auto_subscribe(backend, social, user, *args, **kwargs):
     if discussion:
         user.successful_social_login()
         check_subscription = discussion.preferences['whitelist_on_authentication_backend']
-        if check_subscription:
-            maybe_auto_subscribe(user, discussion)
+        maybe_auto_subscribe(user, discussion, check_authorization=check_subscription)
         return {"discussion": discussion}
 
 
