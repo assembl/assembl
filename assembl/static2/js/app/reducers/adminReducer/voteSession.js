@@ -401,11 +401,7 @@ export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction
     const specificInfo = template.filter((v, k) => specificKeys.includes(k)).toJS();
     return state
       .update(action.id, m => m.set('isNumberGauge', template.get('isNumberGauge')))
-      .update(action.id, m =>
-        m
-          .set('isCustom', false)
-          .set('_hasChanged', true)
-      )
+      .update(action.id, m => m.set('isCustom', false).set('_hasChanged', true))
       .update(action.id, updateGaugeSpecificInfo(specificInfo))
       .setIn([action.id, 'instructionsEntries'], template.get('instructionsEntries'))
       .deleteIn([action.id, 'choices']);
@@ -526,7 +522,11 @@ export const voteProposalsById = (state: Map<string, Map> = Map(), action: Redux
     return newState;
   }
   case CREATE_VOTE_PROPOSAL: {
-    const order = state.map(v => v.get('order')).max() + 1.0;
+    const order =
+        state
+          .filter(item => !item.get('_toDelete'))
+          .map(v => v.get('order'))
+          .max() + 1.0;
     return state.set(action.id, defaultVoteProposal.set('id', action.id).set('order', order));
   }
   case DELETE_VOTE_PROPOSAL:
