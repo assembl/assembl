@@ -25,6 +25,7 @@ import PostBody from '../common/post/postBody';
 import hashLinkScroll from '../../../utils/hashLinkScroll';
 import DeletePostButton from '../common/deletePostButton';
 import QuestionQuery from '../../../graphql/QuestionQuery.graphql';
+import ThematicQuery from '../../../graphql/ThematicQuery.graphql';
 
 type Props = {
   addSentiment: Function,
@@ -37,7 +38,8 @@ type Props = {
   lang: string,
   originalLocale: string,
   questionId: string,
-  screenWidth: number
+  screenWidth: number,
+  themeId: string
 };
 
 class Post extends React.Component<Props> {
@@ -148,7 +150,7 @@ class Post extends React.Component<Props> {
       return null;
     }
 
-    const { contentLocale, lang, screenWidth, originalLocale, questionId } = this.props;
+    const { contentLocale, lang, screenWidth, originalLocale, questionId, themeId } = this.props;
     const { debateData } = this.props.debate;
     const { bodyEntries } = post;
     const translate = contentLocale !== originalLocale;
@@ -161,6 +163,16 @@ class Post extends React.Component<Props> {
         lang: lang
       }
     };
+
+    const updateThematicQuery = {
+      query: ThematicQuery,
+      variables: {
+        id: themeId,
+        lang: lang
+      }
+    };
+
+    const refetchQueries = [updateQuestionQuery, updateThematicQuery];
 
     let body = '';
     if (bodyEntries) {
@@ -183,7 +195,7 @@ class Post extends React.Component<Props> {
       <div
         className={post.mySentiment === 'LIKE' ? 'sentiment sentiment-active' : 'sentiment'}
         onClick={(event) => {
-          this.handleSentiment(event, 'LIKE', [updateQuestionQuery], currentCounts);
+          this.handleSentiment(event, 'LIKE', refetchQueries, currentCounts);
         }}
       >
         <Like size={25} />
@@ -194,7 +206,7 @@ class Post extends React.Component<Props> {
       <div
         className={post.mySentiment === 'DISAGREE' ? 'sentiment sentiment-active' : 'sentiment'}
         onClick={(event) => {
-          this.handleSentiment(event, 'DISAGREE', [updateQuestionQuery], currentCounts);
+          this.handleSentiment(event, 'DISAGREE', refetchQueries, currentCounts);
         }}
       >
         <Disagree size={25} />
@@ -212,9 +224,7 @@ class Post extends React.Component<Props> {
       creatorName = isDeleted ? I18n.t('deletedUser') : displayName;
     }
 
-    const deleteButton = (
-      <DeletePostButton postId={post.id} refetchQueries={[updateQuestionQuery]} linkClassName="overflow-action" />
-    );
+    const deleteButton = <DeletePostButton postId={post.id} refetchQueries={refetchQueries} linkClassName="overflow-action" />;
 
     return (
       <div className="shown box" id={post.id}>

@@ -122,7 +122,7 @@ class Survey extends React.Component<SurveyProps, SurveyState> {
       displayAlert('danger', I18n.t('error.loading'));
       return null;
     }
-    const { imgUrl, media, numPosts, numContributors, questions, refetchThematic, title, slug, totalSentiments } = this.props;
+    const { id, imgUrl, media, numPosts, numContributors, questions, refetchThematic, title, slug, totalSentiments } = this.props;
     const { debateData } = this.props.debate;
     const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, 'survey');
     const phaseUrl = `${getRoute('debate', { slug: slug, phase: 'survey' })}`;
@@ -172,13 +172,13 @@ class Survey extends React.Component<SurveyProps, SurveyState> {
                       questions.map((question, index) => (
                         <Proposals
                           nbPostsToShow={3}
+                          themeId={id}
                           title={question.title}
                           posts={question.posts.edges}
                           questionIndex={index + 1}
                           questionId={question.id}
                           phaseUrl={phaseUrl}
                           key={index}
-                          refetchTheme={refetchThematic}
                         />
                       ))}
                   </div>

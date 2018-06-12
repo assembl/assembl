@@ -16,7 +16,7 @@ class Proposals extends React.Component {
   };
 
   render() {
-    const { questionIndex, questionId, title, posts, refetchTheme, nbPostsToShow, phaseUrl } = this.props;
+    const { questionIndex, questionId, themeId, title, posts, nbPostsToShow, phaseUrl } = this.props;
     const postsToShow = posts.slice(0, nbPostsToShow);
     const link = `${phaseUrl}${getRoute('question', { questionId: questionId, questionIndex: questionIndex })}`;
     return (
@@ -34,7 +34,7 @@ class Proposals extends React.Component {
           <div className={this.state.hideProposals ? 'hidden' : 'shown'}>
             {postsToShow.map((post, index) => (
               <Post
-                refetchTheme={refetchTheme}
+                themeId={themeId}
                 id={post.node.id}
                 originalLocale={post.node.originalLocale}
                 postIndex={index}
