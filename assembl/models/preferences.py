@@ -757,8 +757,8 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
 
         # Allow whitelist to be applied to the regular login process
         {
-            "id": "whitelist_on_login",
-            "name": _("Whitelist on default login"),
+            "id": "whitelist_on_register",
+            "name": _("Whitelist on standard registration"),
             "value_type": "bool",
             # "scalar_values": {value: "label"},
             "description": _(
