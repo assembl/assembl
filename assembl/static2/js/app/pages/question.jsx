@@ -66,7 +66,7 @@ export function DumbQuestion(props: QuestionProps) {
                 <h3 className="collapsed-title">
                   <span>{`${params.questionIndex}/ ${title}`}</span>
                 </h3>
-                <Posts questionId={params.questionId} />
+                <Posts questionId={params.questionId} themeId={thematicId} />
                 <div className="back-btn-container">
                   <Link to={link} className="button-submit button-dark">
                     <Translate value="debate.question.backToQuestions" />

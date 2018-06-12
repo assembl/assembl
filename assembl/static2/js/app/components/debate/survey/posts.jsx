@@ -31,6 +31,7 @@ type PostsProps = {
   fetchMore: Function,
   refetch: Function,
   questionId: string,
+  themeId: string,
   updateContentLocaleMapping: Function
 };
 
@@ -66,7 +67,7 @@ export class DumbPosts extends React.Component<PostsProps> {
       displayAlert('danger', I18n.t('error.loading'));
       return null;
     }
-    const { networkStatus, fetchMore, refetch, posts, questionId } = this.props;
+    const { networkStatus, fetchMore, refetch, themeId, posts, questionId } = this.props;
     return (
       <FlatList
         items={posts}
@@ -80,7 +81,8 @@ export class DumbPosts extends React.Component<PostsProps> {
         itemData={item => ({
           id: item.node.id,
           originalLocale: item.node.originalLocale,
-          questionId: questionId
+          questionId: questionId,
+          themeId: themeId
         })}
       />
     );

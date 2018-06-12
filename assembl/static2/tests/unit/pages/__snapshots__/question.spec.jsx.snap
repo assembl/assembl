@@ -92,6 +92,7 @@ exports[`Question page should match Question with data snapshot 1`] = `
             </h3>
             <Connect(withRouter(Apollo(Component)))
               questionId="FooInd"
+              themeId="ThematicId"
             />
             <div
               className="back-btn-container"
