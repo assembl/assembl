@@ -93,7 +93,7 @@ describe('Admin reducers', () => {
         }
       });
       const expected = {
-'0': {
+        '0': {
           id: '0',
           order: 2.0,
           _toDelete: false
