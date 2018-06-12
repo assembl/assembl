@@ -13,13 +13,28 @@
 }
 
 .date-picker-field {
-  &:first-child {
-    margin: 20px 0 0;
-  }
-
-  margin: 0 0 30px;
-
   span {
     font-size: $font-size-xs;
   }
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .datepicker-label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    input {
+      margin: 20px 0 0;
+    }
+  }
+
+  .assembl-icon-schedule {
+    font-size: 20px;
+    cursor: pointer;
+  }
+
+  margin: 0 0 30px;
 }
