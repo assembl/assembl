@@ -1,7 +1,6 @@
 // @flow
 import type ReduxAction from 'redux';
 import { combineReducers } from 'redux';
-import moment from 'moment';
 import { List, Map, fromJS } from 'immutable';
 import { updateInLangstringEntries } from '../../utils/i18n';
 
@@ -23,8 +22,8 @@ const emptyPhase = Map({
   _toDelete: false,
   identifier: '',
   titleEntries: List(),
-  start: moment(),
-  end: moment(),
+  start: null,
+  end: null,
   isThematicsTable: false
 });
 

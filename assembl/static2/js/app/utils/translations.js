@@ -481,12 +481,15 @@ const Translations = {
         configurePhase: "Configurer Phase %{count}",
         successSave: "La ligne de temps a été sauvegardée avec succès",
         endIsBeforeStart: "Veuillez sélectionner une date de fin postérieure à celle de début",
-        startIsAfterEnd: "Veuillez une sélectionner une date de début ultérieure à celle de fin"
+        startIsAfterEnd: "Veuillez une sélectionner une date de début ultérieure à celle de fin",
+        singleModule: "Module unique de participation",
+        selectStart: "Date de démarrage de la phase %{count}",
+        selectEnd: "Date de fin de la phase %{count}"
       },
       modules: {
-        survey: "Questions ouvertes",
-        thread: "Fil de discussion",
-        multiColumns: "Multi-colonnes",
+        survey: "Module Questions",
+        thread: "Module Threads",
+        multiColumns: "Module Multi-colonnes",
         voteSession: "Module de vote"
       },
       noTimeline: "Aucune timeline n'a été configurée pour ce débat.",
@@ -1210,13 +1213,16 @@ const Translations = {
         configurePhase: "Configure Phase %{count}",
         successSave: "The timeline has been sucessfully saved",
         endIsBeforeStart: "Please select an end date posterior to the start",
-        startIsAfterEnd: "Please select a start ulterior to the end"
+        startIsAfterEnd: "Please select a start ulterior to the end",
+        singleModule: "Single participation module",
+        selectStart: "Phase %{count}'s start date",
+        selectEnd: "Phase %{count}'s end date"
       },
       modules: {
-        survey: "Survey",
-        thread: "Thread",
-        multiColumns: "Multi-columns",
-        voteSession: "Vote Session"
+        survey: "Survey module",
+        thread: "Thread module",
+        multiColumns: "Multi-columns module",
+        voteSession: "Vote module"
       },
       noTimeline: "No timeline has been configured yet",
       survey: {

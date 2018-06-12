@@ -47,6 +47,14 @@ export const DumbPhaseForm = ({
       handleEndDateChange(newEndDate);
     }
   };
+
+  const startDatePickerPlaceholder = I18n.t('administration.timelineAdmin.selectStart', { count: phaseNumber });
+  const endDatePickerPlaceholder = I18n.t('administration.timelineAdmin.selectEnd', { count: phaseNumber });
+
+  const splitButtonTitle = identifier ?
+    I18n.t(`administration.modules.${identifier}`) :
+    I18n.t('administration.timelineAdmin.singleModule');
+
   return (
     <div className="phase-form">
       <div className="date-picker-field">
@@ -54,7 +62,14 @@ export const DumbPhaseForm = ({
           <Translate value="search.datefilter.from" />
         </div>
         <label htmlFor="start-datepicker" className="datepicker-label">
-          <DatePicker id="start-datepicker" selected={start} onChange={onStartDateChange} showTimeSelect timeFormat="HH:mm" />
+          <DatePicker
+            placeholderText={startDatePickerPlaceholder}
+            selected={start}
+            id="start-datepicker"
+            onChange={onStartDateChange}
+            showTimeSelect
+            timeFormat="HH:mm"
+          />
           <div className="icon-schedule-container">
             <span className="assembl-icon-schedule grey" />
           </div>
@@ -65,7 +80,14 @@ export const DumbPhaseForm = ({
           <Translate value="search.datefilter.to" />
         </div>
         <label htmlFor="end-datepicker" className="datepicker-label">
-          <DatePicker id="end-datepicker" selected={end} onChange={onEndDateChange} showTimeSelect timeFormat="HH:mm" />
+          <DatePicker
+            placeholderText={endDatePickerPlaceholder}
+            id="end-datepicker"
+            selected={end}
+            onChange={onEndDateChange}
+            showTimeSelect
+            timeFormat="HH:mm"
+          />
           <div className="icon-schedule-container">
             <span className="assembl-icon-schedule grey" />
           </div>
@@ -78,7 +100,7 @@ export const DumbPhaseForm = ({
         <SplitButton
           className="admin-dropdown"
           id={`dropdown-${phaseId}`}
-          title={I18n.t(`administration.modules.${identifier || modulesTranslationKeys[0]}`)}
+          title={splitButtonTitle}
           onSelect={handleIdentifierChange}
         >
           {modulesTranslationKeys.map(key => (
@@ -90,7 +112,7 @@ export const DumbPhaseForm = ({
       </div>
       <div className="text-xs margin-l">
         <Link to="" /* TODO: add route to phase configuration page */>
-          <Translate value="administration.timelineAdmin.configurePhase" count={phaseNumber} />{' '}
+          <Translate value="administration.timelineAdmin.configurePhase" count={phaseNumber} />
         </Link>
       </div>
     </div>
