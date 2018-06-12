@@ -50,20 +50,28 @@ export const DumbPhaseForm = ({
   return (
     <div className="phase-form">
       <div className="date-picker-field">
-        <Translate value="search.datefilter.from" />
+        <div className="date-picker-type">
+          <Translate value="search.datefilter.from" />
+        </div>
         <label htmlFor="start-datepicker" className="datepicker-label">
           <DatePicker id="start-datepicker" selected={start} onChange={onStartDateChange} showTimeSelect timeFormat="HH:mm" />
-          <i className="assembl-icon-schedule" />
+          <div className="icon-schedule-container">
+            <span className="assembl-icon-schedule grey" />
+          </div>
         </label>
       </div>
       <div className="date-picker-field">
-        <Translate value="search.datefilter.to" />
+        <div className="date-picker-type">
+          <Translate value="search.datefilter.to" />
+        </div>
         <label htmlFor="end-datepicker" className="datepicker-label">
           <DatePicker id="end-datepicker" selected={end} onChange={onEndDateChange} showTimeSelect timeFormat="HH:mm" />
-          <i className="assembl-icon-schedule" />
+          <div className="icon-schedule-container">
+            <span className="assembl-icon-schedule grey" />
+          </div>
         </label>
       </div>
-      <div className="inline text-xs">
+      <div className="inline text-xs margin-l">
         <Translate value="administration.timelineAdmin.phaseModule" />
       </div>
       <div className="margin-m">

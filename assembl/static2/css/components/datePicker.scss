@@ -1,40 +1,44 @@
-.date-picker-field > div {
-  display: inline-block;
-  margin: 20px 0 0 10px;
-
-  input[type="text"] {
-    box-shadow: none;
-    width: 200px;
-    height: 34px;
-    font-size: $font-size-xxs;
-    font-family: $font-family4;
-    padding-left: 10px;
-  }
-}
-
 .date-picker-field {
-  span {
-    font-size: $font-size-xs;
+  &:first-child {
+    margin-bottom: 15px;
   }
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  .datepicker-label > div {
+    display: inline-block;
+  }
 
-  .datepicker-label {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    input {
-      margin: 20px 0 0;
+  .react-datepicker__input-container {
+    input[type="text"] {
+      box-shadow: none;
+      width: 250px;
+      height: 34px;
+      font-size: $font-size-xxs;
+      font-family: $font-family4;
+      padding-left: 10px;
     }
   }
 
-  .assembl-icon-schedule {
-    font-size: 20px;
-    cursor: pointer;
+  .react-datepicker__time-list-item {
+    margin-left: -80px;
   }
 
-  margin: 0 0 30px;
+  .date-picker-type {
+    font-size: $font-size-xs;
+    display: inline-block;
+    width: 40px;
+    text-align: left;
+  }
+
+  .icon-schedule-container {
+    margin-left: 10px;
+
+    .assembl-icon-schedule {
+      cursor: pointer;
+
+      &:before {
+        font-size: 25px;
+        vertical-align: sub;
+      }
+    }
+  }
 }

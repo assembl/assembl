@@ -5,7 +5,7 @@
     border-radius: 0 !important;
 
     &:focus {
-      border-color: $second-color;
+      border-color: $first-color;
       outline: 0;
       box-shadow: none;
     }
@@ -611,8 +611,7 @@
 
   .phase-form {
     .admin-dropdown {
-      width: 174px;
-      margin-left: 28px;
+      width: 224px;
       font-size: $font-size-xs;
       height: 34px;
       text-align: left;
@@ -620,10 +619,9 @@
     }
 
     .open > .dropdown-menu {
-      margin-left: 28px;
       font-size: $font-size-xs;
       font-family: $font-family4;
-      width: 174px;
+      width: 224px;
     }
 
     .dropdown-menu > li > a {
