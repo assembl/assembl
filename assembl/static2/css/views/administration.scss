@@ -3,6 +3,12 @@
 
   input[type='text'], input[type='textarea'], .form-control, .admin-dropdown, .dropdown-toggle, .btn-default {
     border-radius: 0 !important;
+
+    &:focus {
+      border-color: $second-color;
+      outline: 0;
+      box-shadow: none;
+    }
   }
 
   .profile-options {
