@@ -141,7 +141,7 @@ class LegalContents(graphene.ObjectType):
         discussion = models.Discussion.get(discussion_id)
         return resolve_langstring(discussion.cookies_policy, args.get('lang'))
 
-    def resolve_privacy_policy_conditions(self, args, context, info):
+    def resolve_privacy_policy(self, args, context, info):
         """Privacy policy value in given locale."""
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)

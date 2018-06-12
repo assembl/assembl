@@ -329,8 +329,8 @@ const mergeLoadingAndHasErrors = WrappedComponent => (props) => {
     sectionsLoading,
     tabsConditionsLoading,
     tabsConditionsHasErrors,
-    legalContentsLoading,
-    legalContentsHasErrors,
+    legalContentsAreLoading,
+    legalContentsHaveErrors,
     textFieldsLoading,
     textFieldsHasErrors
   } = props;
@@ -340,7 +340,7 @@ const mergeLoadingAndHasErrors = WrappedComponent => (props) => {
     resourcesHasErrors ||
     resourcesCenterHasErrors ||
     tabsConditionsHasErrors ||
-    legalContentsHasErrors ||
+    legalContentsHaveErrors ||
     sectionsHasErrors ||
     props[landingPagePlugin.hasErrors] ||
     textFieldsHasErrors ||
@@ -350,7 +350,7 @@ const mergeLoadingAndHasErrors = WrappedComponent => (props) => {
     resourcesLoading ||
     resourcesCenterLoading ||
     tabsConditionsLoading ||
-    legalContentsLoading ||
+    legalContentsAreLoading ||
     sectionsLoading ||
     props[landingPagePlugin.loading] ||
     textFieldsLoading ||
@@ -483,18 +483,18 @@ export default compose(
     props: ({ data }) => {
       if (data.loading) {
         return {
-          legalContentsLoading: true
+          legalContentsAreLoading: true
         };
       }
       if (data.error) {
         return {
-          legalContentsHasErrors: true
+          legalContentsHaveErrors: true
         };
       }
 
       return {
-        legalContentsLoading: data.loading,
-        legalContentsHasErrors: data.error,
+        legalContentsAreLoading: data.loading,
+        legalContentsHaveErrors: data.error,
         refetchLegalContents: data.refetch,
         legalContents: data.legalContents
       };

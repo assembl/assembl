@@ -145,6 +145,8 @@ const Translations = {
     footer: {
       terms: "Conditions générales d'utilisation",
       legalNotice: "Mentions légales",
+      cookiePolicy: "Information sur les cookies",
+      privacyPolicy: "Politique de protection des données personnelles",
       socialMedias: "Suivez-nous sur"
     },
     login: {
@@ -425,6 +427,12 @@ const Translations = {
     },
     legalNotice: {
       headerTitle: "Mentions légales"
+    },
+    cookiesPolicy: {
+      headerTitle: "Information sur les cookies"
+    },
+    privacyPolicy: {
+      headerTitle: "Politique de protection des données personnelles"
     },
     administration: {
       confirmTextFieldDeletionTitle: "Supprimer le champ",
@@ -831,6 +839,8 @@ const Translations = {
     footer: {
       terms: "Terms & Conditions",
       legalNotice: "Legal Notice",
+      cookiePolicy: "Cookies",
+      privacyPolicy: "Privacy Policy",
       socialMedias: "Follow us"
     },
     login: {
@@ -1110,6 +1120,12 @@ const Translations = {
     },
     legalNotice: {
       headerTitle: "Legal Notice"
+    },
+    cookiesPolicy: {
+      headerTitle: "Cookies"
+    },
+    privacyPolicy: {
+      headerTitle: "Privacy policy"
     },
     administration: {
       confirmTextFieldDeletionTitle: "Delete the field",
