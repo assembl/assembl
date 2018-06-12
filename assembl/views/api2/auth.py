@@ -546,7 +546,7 @@ def assembl_register_user(request):
                 print "email token:", request.route_url(
                     'user_confirm_email', token=email_token(account))
             if discussion:
-                check_subscription = discussion.preferences['whitelist_on_register'] or False
+                check_subscription = discussion.preferences['whitelist_on_register']
                 maybe_auto_subscribe(user, discussion, check_authorization=check_subscription)
         session.flush()
         return CreationResponse(user, Everyone, permissions)
