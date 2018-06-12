@@ -472,7 +472,21 @@ def assembl_register_user(request):
                 "We already have a user with this username.")),
                 ErrorTypes.EXISTING_USERNAME,
                 HTTPConflict.code)
-
+    if discussion:
+        check_subscription = discussion.preference['whitelist_on_login']
+        if check_subscription:
+            status = discussion.check_email(email)
+            if not status:
+                admin_emails = discussion.get_admin_emails()
+                num = len(admin_emails)
+                errors.add_error(
+                    localizer.pluralize(
+                        _("Your email domain has not been approved for registration. Please contact ${emails} for support."),
+                        _("Your email domain has not been approved for registration. Please contact one of ${emails} for support."),
+                        num,
+                        mapping={'emails': ", ".join(admin_emails)}
+                    )
+                )
     if errors:
         raise errors
 
