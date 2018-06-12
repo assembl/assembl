@@ -10,8 +10,6 @@ import withoutLoadingIndicator from '../../components/common/withoutLoadingIndic
 import TabsConditionQuery from '../../graphql/TabsConditionQuery.graphql';
 
 class Footer extends React.Component {
-  getLegalContentsLinks = () => {};
-
   render() {
     const {
       assemblVersion,
