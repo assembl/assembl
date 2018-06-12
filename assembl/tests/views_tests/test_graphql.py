@@ -2594,3 +2594,238 @@ query { discussion { homepageUrl }  }
 """
     res = schema.execute(query, context_value=graphql_request)
     assert res.data['discussion']['homepageUrl'] == url
+
+
+def test_query_discussion_langstring_fields(discussion, graphql_request):
+    res = schema.execute(u"""query {
+        discussion {
+            title
+            titleEntries {
+                value
+                localeCode
+            }
+            subtitle
+            subtitleEntries {
+                value
+                localeCode
+            }
+            buttonLabel
+            buttonLabelEntries {
+                value
+                localeCode
+            }
+        }
+    }""", context_value=graphql_request)
+    assert res.errors is None
+    res_data = json.loads(json.dumps(res.data))
+
+    assert res_data == {
+        u'discussion': {
+            u'title': u'Should we eat bananas?',
+            u'titleEntries': [
+                {
+                    u'value': u'Should we eat bananas?',
+                    u'localeCode': u'en'
+                },
+                {
+                    u'value': u'Faut-il manger des bananes ?',
+                    u'localeCode': u'fr'
+                }
+            ],
+            u'subtitle': u'Tell me what you eat and I will tell you who you are',
+            u'subtitleEntries': [
+                {
+                    u'value': u'Tell me what you eat and I will tell you who you are',
+                    u'localeCode': u'en'
+                },
+                {
+                    u'value': u'Dis-moi ce que tu manges et je te dirai qui tu es',
+                    u'localeCode': u'fr'
+                }
+            ],
+            u'buttonLabel': u'Discuss bananas',
+            u'buttonLabelEntries': [
+                {
+                    u'value': u'Discuss bananas',
+                    u'localeCode': u'en'
+                },
+                {
+                    u'value': u'Discuter des bananes',
+                    u'localeCode': u'fr'
+                }
+            ]
+        }
+    }
+
+
+def test_mutation_update_discussion_langstring_fields(graphql_request, discussion):
+    title_entry_en = u"Should we eat tomatoes?"
+    title_entry_fr = u"Faut-il manger des tomates ?"
+    title_entries = [
+        {u"value": title_entry_en, u"localeCode": u"en"},
+        {u"value": title_entry_fr, u"localeCode": u"fr"}
+    ]
+
+    subtitle_entry_en = u"By the way is it a fruit or a vegetable?"
+    subtitle_entry_fr = u"D'ailleurs c'est un fruit ou un légume ?"
+    subtitle_entries = [
+        {u"value": subtitle_entry_en, u"localeCode": u"en"},
+        {u"value": subtitle_entry_fr, u"localeCode": u"fr"}
+    ]
+
+    button_label_entry_en = u"Discuss tomatoes"
+    button_label_entry_fr = u"Discuter des tomates"
+    button_label_entries = [
+        {u"value": button_label_entry_en, u"localeCode": u"en"},
+        {u"value": button_label_entry_fr, u"localeCode": u"fr"}
+    ]
+
+    variables = {
+        "titleEntries": title_entries,
+        "subtitleEntries": subtitle_entries,
+        "buttonLabelEntries": button_label_entries
+    }
+    res = schema.execute(u"""
+mutation myFirstMutation(
+    $titleEntries: [LangStringEntryInput!]!,
+    $subtitleEntries: [LangStringEntryInput!]!,
+    $buttonLabelEntries: [LangStringEntryInput!]!
+) {
+    updateDiscussion(
+        titleEntries: $titleEntries
+        subtitleEntries: $subtitleEntries
+        buttonLabelEntries: $buttonLabelEntries
+    ) {
+        discussion {
+            id
+            title
+            titleEntries {
+                value
+                localeCode
+            }
+            subtitle
+            subtitleEntries {
+                value
+                localeCode
+            }
+            buttonLabel
+            buttonLabelEntries {
+                value
+                localeCode
+            }
+        }
+    }
+}
+""", context_value=graphql_request, variable_values=variables)
+    result = res.data
+    assert result is not None
+    assert result['updateDiscussion'] is not None
+    discussion = result['updateDiscussion']['discussion']
+
+    assert discussion['title'] == title_entry_en
+    assert discussion['titleEntries'] == title_entries
+
+    assert discussion['subtitle'] == subtitle_entry_en
+    assert discussion['subtitleEntries'] == subtitle_entries
+
+    assert discussion['buttonLabel'] == button_label_entry_en
+    assert discussion['buttonLabelEntries'] == button_label_entries
+
+
+def test_query_discussion_landing_page_image_fields(
+        discussion, graphql_request, graphql_registry, test_session, simple_file, moderator_user):
+
+    from assembl.models.attachment import DiscussionAttachment
+    from assembl.models import AttachmentPurpose
+
+    LANDING_PAGE_HEADER_IMAGE = AttachmentPurpose.LANDING_PAGE_HEADER_IMAGE.value
+    LANDING_PAGE_LOGO_IMAGE = AttachmentPurpose.LANDING_PAGE_LOGO_IMAGE.value
+
+    header_image = DiscussionAttachment(
+        discussion=discussion,
+        document=simple_file,
+        title=u"Landing page header image",
+        creator=moderator_user,
+        attachmentPurpose=LANDING_PAGE_HEADER_IMAGE
+    )
+
+    logo_image = DiscussionAttachment(
+        discussion=discussion,
+        document=simple_file,
+        title=u"Landing page logo image",
+        creator=moderator_user,
+        attachmentPurpose=LANDING_PAGE_LOGO_IMAGE
+    )
+
+    discussion.db.flush()
+
+    res = schema.execute(
+        graphql_registry['LandingPage'],
+        context_value=graphql_request,
+        variable_values={"lang": u"en"})
+    assert res.errors is None
+    res_data = json.loads(json.dumps(res.data))
+    res_discussion = res_data['discussion']
+    assert res_discussion['headerImage']['mimeType'] == u'image/png'
+    assert '/documents/' in res_discussion['headerImage']['externalUrl']
+    assert res_discussion['logoImage']['mimeType'] == u'image/png'
+    assert '/documents/' in res_discussion['logoImage']['externalUrl']
+
+    discussion.db.delete(header_image)
+    discussion.db.delete(logo_image)
+    discussion.db.flush()
+
+
+def test_update_discussion_landing_page_image_fields(graphql_request, graphql_registry, discussion):
+    import os
+    from io import BytesIO
+
+    class FieldStorage(object):
+        file = BytesIO(os.urandom(16))
+
+        def __init__(self, filename, type):
+            self.filename = filename
+            self.type = type
+
+    graphql_request.POST['variables.headerImage'] = FieldStorage(
+        u'path/to/new-img.png', 'image/png')
+    graphql_request.POST['variables.logoImage'] = FieldStorage(
+        u'path/to/new-img2.png', 'image/png')
+
+    res = schema.execute(
+        graphql_registry['updateDiscussion'],
+        context_value=graphql_request,
+        variable_values={
+            "headerImage": u"variables.headerImage",
+            "logoImage": u"variables.logoImage",
+            "titleEntries": [{
+                "localeCode": "en",
+                "value": "My title"
+            }],
+            "subtitleEntries": [{
+                "localeCode": "en",
+                "value": "My subtitle"
+            }],
+            "buttonLabelEntries": [{
+                "localeCode": "en",
+                "value": "My button label"
+            }]
+        })
+
+    assert res.data is not None
+    assert res.data['updateDiscussion'] is not None
+    assert res.data['updateDiscussion']['discussion'] is not None
+
+    res_discussion = res.data['updateDiscussion']['discussion']
+
+    assert res_discussion['headerImage'] is not None
+    assert '/documents/' in res_discussion['headerImage']['externalUrl']
+    assert res_discussion['headerImage']['mimeType'] == 'image/png'
+
+    assert res_discussion['logoImage'] is not None
+    assert '/documents/' in res_discussion['logoImage']['externalUrl']
+    assert res_discussion['logoImage']['mimeType'] == 'image/png'
+
+    assert res_discussion['titleEntries'][0]['value'] == u'My title'
+    assert res_discussion['subtitleEntries'][0]['value'] == u'My subtitle'
+    assert res_discussion['buttonLabelEntries'][0]['value'] == u'My button label'

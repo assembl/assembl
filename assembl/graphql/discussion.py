@@ -17,17 +17,197 @@ from .langstring import (
 from .utils import abort_transaction_on_exception
 
 
+# Mostly fields related to the discussion title and landing page
 class Discussion(SecureObjectType, SQLAlchemyObjectType):
     class Meta:
         model = models.Discussion
         only_fields = ('id',)
 
     homepage_url = graphene.String()
+    title = graphene.String(lang=graphene.String())
+    title_entries = graphene.List(LangStringEntry)
+    subtitle = graphene.String(lang=graphene.String())
+    subtitle_entries = graphene.List(LangStringEntry)
+    button_label = graphene.String(lang=graphene.String())
+    button_label_entries = graphene.List(LangStringEntry)
+    header_image = graphene.Field(Document)
+    logo_image = graphene.Field(Document)
 
     def resolve_homepage_url(self, args, context, info):
         # TODO: Remove this resolver and add URLString to
         # the Graphene SQLA converters list
         return self.homepage_url
+
+    def resolve_title(self, args, context, info):
+        """Title value in given locale."""
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        return resolve_langstring(discussion.title, args.get('lang'))
+
+    def resolve_title_entries(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        if discussion.title:
+            return resolve_langstring_entries(discussion, 'title')
+
+        return []
+
+    def resolve_subtitle(self, args, context, info):
+        """Subtitle value in given locale."""
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        return resolve_langstring(discussion.subtitle, args.get('lang'))
+
+    def resolve_subtitle_entries(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        if discussion.subtitle:
+            return resolve_langstring_entries(discussion, 'subtitle')
+
+        return []
+
+    def resolve_button_label(self, args, context, info):
+        """Button label value in given locale."""
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        return resolve_langstring(discussion.button_label, args.get('lang'))
+
+    def resolve_button_label_entries(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        if discussion.subtitle:
+            return resolve_langstring_entries(discussion, 'button_label')
+
+        return []
+
+    def resolve_header_image(self, args, context, info):
+        LANDING_PAGE_HEADER_IMAGE = models.AttachmentPurpose.LANDING_PAGE_HEADER_IMAGE.value
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        for attachment in discussion.attachments:
+            if attachment.attachmentPurpose == LANDING_PAGE_HEADER_IMAGE:
+                return attachment.document
+
+    def resolve_logo_image(self, args, context, info):
+        LANDING_PAGE_LOGO_IMAGE = models.AttachmentPurpose.LANDING_PAGE_LOGO_IMAGE.value
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        for attachment in discussion.attachments:
+            if attachment.attachmentPurpose == LANDING_PAGE_LOGO_IMAGE:
+                return attachment.document
+
+
+class UpdateDiscussion(graphene.Mutation):
+    class Input:
+        title_entries = graphene.List(LangStringEntryInput)
+        subtitle_entries = graphene.List(LangStringEntryInput)
+        button_label_entries = graphene.List(LangStringEntryInput)
+        header_image = graphene.String()
+        logo_image = graphene.String()
+
+    discussion = graphene.Field(lambda: Discussion)
+
+    @staticmethod
+    @abort_transaction_on_exception
+    def mutate(root, args, context, info):
+        cls = models.Discussion
+        discussion_id = context.matchdict['discussion_id']
+        discussion = cls.get(discussion_id)
+        user_id = context.authenticated_userid or Everyone
+
+        permissions = get_permissions(user_id, discussion_id)
+        allowed = discussion.user_can(
+            user_id, CrudPermissions.UPDATE, permissions)
+        if not allowed:
+            raise HTTPUnauthorized()
+
+        with cls.default_db.no_autoflush as db:
+            title_entries = args.get('title_entries')
+            if title_entries is not None and len(title_entries) == 0:
+                raise Exception(
+                    'Title entries needs at least one entry')
+                # Better to have this message than
+                # 'NoneType' object has no attribute 'owner_object'
+                # when creating the saobj below if title=None
+
+            update_langstring_from_input_entries(
+                discussion, 'title', title_entries)
+
+            subtitle_entries = args.get('subtitle_entries')
+            update_langstring_from_input_entries(
+                discussion, 'subtitle', subtitle_entries)
+
+            button_label_entries = args.get('button_label_entries')
+            update_langstring_from_input_entries(
+                discussion, 'button_label', button_label_entries)
+
+            # add uploaded header image as an attachment to the discussion
+            LANDING_PAGE_HEADER_IMAGE = models.AttachmentPurpose.LANDING_PAGE_HEADER_IMAGE.value
+            image = args.get('header_image')
+            if image is not None:
+                filename = os.path.basename(context.POST[image].filename)
+                mime_type = context.POST[image].type
+                document = models.File(
+                    discussion=discussion,
+                    mime_type=mime_type,
+                    title=filename)
+                document.add_file_data(context.POST[image].file)
+
+                # if there is already an IMAGE, remove it with the
+                # associated document
+                header_images = [
+                    att for att in discussion.attachments
+                    if att.attachmentPurpose == LANDING_PAGE_HEADER_IMAGE
+                ]
+                if header_images:
+                    header_image = header_images[0]
+                    header_image.document.delete_file()
+                    db.delete(header_image.document)
+                    discussion.attachments.remove(header_image)
+
+                db.add(models.DiscussionAttachment(
+                    document=document,
+                    discussion=discussion,
+                    creator_id=context.authenticated_userid,
+                    title=filename,
+                    attachmentPurpose=LANDING_PAGE_HEADER_IMAGE
+                ))
+
+            # add uploaded logo image as an attachment to the discussion
+            LANDING_PAGE_LOGO_IMAGE = models.AttachmentPurpose.LANDING_PAGE_LOGO_IMAGE.value
+            image = args.get('logo_image')
+            if image is not None:
+                filename = os.path.basename(context.POST[image].filename)
+                mime_type = context.POST[image].type
+                document = models.File(
+                    discussion=discussion,
+                    mime_type=mime_type,
+                    title=filename)
+                document.add_file_data(context.POST[image].file)
+
+                # if there is already an IMAGE, remove it with the
+                # associated document
+                logo_images = [
+                    att for att in discussion.attachments
+                    if att.attachmentPurpose == LANDING_PAGE_LOGO_IMAGE
+                ]
+                if logo_images:
+                    logo_image = logo_images[0]
+                    logo_image.document.delete_file()
+                    db.delete(logo_image.document)
+                    discussion.attachments.remove(logo_image)
+
+                db.add(models.DiscussionAttachment(
+                    document=document,
+                    discussion=discussion,
+                    creator_id=context.authenticated_userid,
+                    title=filename,
+                    attachmentPurpose=LANDING_PAGE_LOGO_IMAGE
+                ))
+
+        db.flush()
+        discussion = cls.get(discussion_id)
+        return UpdateDiscussion(discussion=discussion)
 
 
 class LocalePreference(graphene.ObjectType):

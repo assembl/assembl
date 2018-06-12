@@ -641,7 +641,7 @@ const Translations = {
           "Vous pouvez exporter l'ensemble des données du module de questions ouvertes en cliquant sur le bouton Exporter",
         threadAnnotation: "Vous pouvez exporter l'ensemble des données du module de thread en cliquant sur le bouton Exporter",
         multicolumnAnnotation:
-          "Vous pouvez exporter l'ensmeble des données du module de multi-colonnes en cliquant sur le bouton Exporter",
+          "Vous pouvez exporter l'ensemble des données du module de multi-colonnes en cliquant sur le bouton Exporter",
         voteSessionAnnotation: "Vous pouvez exporter l'ensemble des données du module de vote en cliquant sur le bouton Exporter",
         taxonomyAnnotation: "Vous pouvez exporter l'ensemble des taxonomies en cliquant sur le bouton exporter",
         link: "Exporter",
@@ -667,7 +667,21 @@ const Translations = {
           title: "Administrer les modules",
           helper: "Choisissez les modules que vous souhaitez voir apparaître dans la page d'accueil et leurs emplacements."
         },
-        successSave: "Les modules ont été enregistrés avec succès !"
+        header: {
+          title: "Header",
+          helper: "Personnalisez l'apparence du header de la page d'accueil.",
+          titleLabel: "Titre du débat",
+          subtitleLabel: "Sous-titre du débat",
+          buttonLabel: "Nom du bouton de renvoi vers le débat",
+          headerImage: "Choisir l'image de font du bandeau",
+          logoImage: "Choisir le logo du débat",
+          headerDescription:
+            "L'image doit avoir une hauteur de 450px de haut et une largeur de 1280px. Le poids ne doit pas dépasser 1Mo.",
+          logoDescription:
+            "Le logo doit avoir une hauteur maximale de 78px et une largeur maximale de 200px. Le poids ne doit pas dépasser 1Mo. Le fond doit être transparent."
+        },
+        successSave: "Les modules ont été enregistrés avec succès !",
+        headerSuccessSave: "Le bandeau de la page d'accueil a été sauvegardé avec succès !"
       },
       profileOptions: {
         addTextField: "Ajouter un champ",
@@ -1350,7 +1364,20 @@ const Translations = {
           title: "Manage the modules",
           helper: "Choose the modules you want to see in the landing page and their position."
         },
-        successSave: "The modules have been saved with success!"
+        header: {
+          title: "Header",
+          helper: "Customize appearance of the header.",
+          titleLabel: "Debate title",
+          subtitleLabel: "Debate subtitle",
+          buttonLabel: "Name of the referral button to the debate",
+          headerImage: "Choose the header image",
+          logoImage: "Choose the header logo",
+          headerDescription: "The image must have a height of 450px and a width of 1280px. The weight must not exceed 1 MB.",
+          logoDescription:
+            "The logo must have a maximum height of 78px and a maximum width of 200px. The weight must not exceed 1 MB. The background must be transparent."
+        },
+        successSave: "The modules have been saved with success!",
+        headerSuccessSave: "The home page header have been saved with success!"
       },
       profileOptions: {
         addTextField: "Add a field",

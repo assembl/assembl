@@ -1,0 +1,37 @@
+#import "../fragments/LangString.graphql"
+
+mutation UpdateDiscussion(
+  $titleEntries: [LangStringEntryInput!]!
+  $subtitleEntries: [LangStringEntryInput!]!
+  $buttonLabelEntries: [LangStringEntryInput!]!
+  $headerImage: String
+  $logoImage: String
+) {
+  updateDiscussion(
+    titleEntries: $titleEntries
+    subtitleEntries: $subtitleEntries
+    buttonLabelEntries: $buttonLabelEntries
+    headerImage: $headerImage
+    logoImage: $logoImage
+  ) {
+    discussion {
+      titleEntries {
+        ...langStringEntry
+      }
+      subtitleEntries {
+        ...langStringEntry
+      }
+      buttonLabelEntries {
+        ...langStringEntry
+      }
+      headerImage {
+        externalUrl
+        mimeType
+      }
+      logoImage {
+        externalUrl
+        mimeType
+      }
+    }
+  }
+}

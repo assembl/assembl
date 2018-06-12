@@ -434,6 +434,13 @@
     font-family: $font-family6;
   }
 
+  .description-block {
+    color: $grey8;
+    font-size: $font-size-xxs;
+    margin: 10px 0 0 5px;
+    font-family: $font-family6;
+  }
+
   .assembl-icon-faq {
     &:before {
       font-size: $font-size-xxs;
@@ -468,10 +475,6 @@
       .admin-content {
         text-align: left;
       }
-    }
-
-    .form-container {
-      max-width: 700px;
     }
 
     .modules-preview {

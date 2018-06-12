@@ -11,7 +11,8 @@ from graphene_sqlalchemy.utils import get_query
 from sqlalchemy.orm import contains_eager, joinedload, subqueryload
 
 from assembl import models
-from assembl.graphql.discussion import (Discussion, DiscussionPreferences,
+
+from assembl.graphql.discussion import (Discussion, UpdateDiscussion, DiscussionPreferences,
                                         LegalContents, LocalePreference,
                                         UpdateLegalContents,
                                         ResourcesCenter,
@@ -369,6 +370,7 @@ class Query(graphene.ObjectType):
 
 class Mutations(graphene.ObjectType):
 
+    update_discussion = UpdateDiscussion.Field()
     create_thematic = CreateThematic.Field()
     update_thematic = UpdateThematic.Field()
     delete_thematic = DeleteThematic.Field()

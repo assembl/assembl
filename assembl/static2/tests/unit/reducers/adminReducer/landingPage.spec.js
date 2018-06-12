@@ -1,4 +1,4 @@
-import { List, Map } from 'immutable';
+import { fromJS, List, Map } from 'immutable';
 
 import * as actionTypes from '../../../../js/app/actions/actionTypes';
 import * as reducers from '../../../../js/app/reducers/adminReducer/landingPage';
@@ -187,5 +187,215 @@ describe('Landing page modulesHasChanged reducer', () => {
     const expected = false;
     const actual = reducer(oldState, action);
     expect(actual).toEqual(expected);
+  });
+});
+
+describe('page reducer', () => {
+  const reducer = reducers.page;
+  it('should handle UPDATE_LANDING_PAGE_HEADER_TITLE action type', () => {
+    const oldState = fromJS({
+      _hasChanged: false,
+      titleEntries: [{ localeCode: 'fr', value: 'en français' }, { localeCode: 'en', value: 'in english' }],
+      subtitleEntries: [{ localeCode: 'fr', value: 'en français' }, { localeCode: 'en', value: 'in english' }],
+      buttonLabelEntries: [{ localeCode: 'fr', value: 'en français' }, { localeCode: 'en', value: 'in english' }],
+      headerImage: {
+        externalUrl: '',
+        mimeType: '',
+        title: ''
+      },
+      logoImage: {
+        externalUrl: '',
+        mimeType: '',
+        title: ''
+      }
+    });
+    const expected = fromJS({
+      _hasChanged: true,
+      titleEntries: [{ localeCode: 'fr', value: 'nouvelle valeur en français' }, { localeCode: 'en', value: 'in english' }],
+      subtitleEntries: [{ localeCode: 'fr', value: 'en français' }, { localeCode: 'en', value: 'in english' }],
+      buttonLabelEntries: [{ localeCode: 'fr', value: 'en français' }, { localeCode: 'en', value: 'in english' }],
+      headerImage: {
+        externalUrl: '',
+        mimeType: '',
+        title: ''
+      },
+      logoImage: {
+        externalUrl: '',
+        mimeType: '',
+        title: ''
+      }
+    });
+    const action = {
+      locale: 'fr',
+      value: 'nouvelle valeur en français',
+      type: actionTypes.UPDATE_LANDING_PAGE_HEADER_TITLE
+    };
+    expect(reducer(oldState, action)).toEqual(expected);
+  });
+
+  it('should handle UPDATE_LANDING_PAGE_HEADER_SUBTITLE action type', () => {
+    const oldState = fromJS({
+      _hasChanged: false,
+      titleEntries: [{ localeCode: 'fr', value: 'en français' }, { localeCode: 'en', value: 'in english' }],
+      subtitleEntries: [{ localeCode: 'fr', value: 'en français' }, { localeCode: 'en', value: 'in english' }],
+      buttonLabelEntries: [{ localeCode: 'fr', value: 'en français' }, { localeCode: 'en', value: 'in english' }],
+      headerImage: {
+        externalUrl: '',
+        mimeType: '',
+        title: ''
+      },
+      logoImage: {
+        externalUrl: '',
+        mimeType: '',
+        title: ''
+      }
+    });
+    const expected = fromJS({
+      _hasChanged: true,
+      titleEntries: [{ localeCode: 'fr', value: 'en français' }, { localeCode: 'en', value: 'in english' }],
+      subtitleEntries: [{ localeCode: 'fr', value: 'nouvelle valeur en français' }, { localeCode: 'en', value: 'in english' }],
+      buttonLabelEntries: [{ localeCode: 'fr', value: 'en français' }, { localeCode: 'en', value: 'in english' }],
+      headerImage: {
+        externalUrl: '',
+        mimeType: '',
+        title: ''
+      },
+      logoImage: {
+        externalUrl: '',
+        mimeType: '',
+        title: ''
+      }
+    });
+    const action = {
+      locale: 'fr',
+      value: 'nouvelle valeur en français',
+      type: actionTypes.UPDATE_LANDING_PAGE_HEADER_SUBTITLE
+    };
+    expect(reducer(oldState, action)).toEqual(expected);
+  });
+
+  it('should handle UPDATE_LANDING_PAGE_HEADER_BUTTON_LABEL action type', () => {
+    const oldState = fromJS({
+      _hasChanged: false,
+      titleEntries: [{ localeCode: 'fr', value: 'en français' }, { localeCode: 'en', value: 'in english' }],
+      subtitleEntries: [{ localeCode: 'fr', value: 'en français' }, { localeCode: 'en', value: 'in english' }],
+      buttonLabelEntries: [{ localeCode: 'fr', value: 'en français' }, { localeCode: 'en', value: 'in english' }],
+      headerImage: {
+        externalUrl: '',
+        mimeType: '',
+        title: ''
+      },
+      logoImage: {
+        externalUrl: '',
+        mimeType: '',
+        title: ''
+      }
+    });
+    const expected = fromJS({
+      _hasChanged: true,
+      titleEntries: [{ localeCode: 'fr', value: 'en français' }, { localeCode: 'en', value: 'in english' }],
+      subtitleEntries: [{ localeCode: 'fr', value: 'en français' }, { localeCode: 'en', value: 'in english' }],
+      buttonLabelEntries: [{ localeCode: 'fr', value: 'nouvelle valeur en français' }, { localeCode: 'en', value: 'in english' }],
+      headerImage: {
+        externalUrl: '',
+        mimeType: '',
+        title: ''
+      },
+      logoImage: {
+        externalUrl: '',
+        mimeType: '',
+        title: ''
+      }
+    });
+    const action = {
+      locale: 'fr',
+      value: 'nouvelle valeur en français',
+      type: actionTypes.UPDATE_LANDING_PAGE_HEADER_BUTTON_LABEL
+    };
+    expect(reducer(oldState, action)).toEqual(expected);
+  });
+
+  it('should handle UPDATE_LANDING_PAGE_HEADER_IMAGE action type', () => {
+    const oldState = fromJS({
+      _hasChanged: true,
+      titleEntries: [],
+      subtitleEntries: [],
+      buttonLabelEntries: [],
+      headerImage: {
+        externalUrl: '',
+        mimeType: '',
+        title: ''
+      },
+      logoImage: {
+        externalUrl: '',
+        mimeType: '',
+        title: ''
+      }
+    });
+    const file = new File([''], 'foo.jpg', { name: 'foo.jpg', type: 'image/jpeg' });
+    const expected = {
+      _hasChanged: true,
+      titleEntries: [],
+      subtitleEntries: [],
+      buttonLabelEntries: [],
+      headerImage: {
+        title: '',
+        externalUrl: file,
+        mimeType: 'image/jpeg'
+      },
+      logoImage: {
+        externalUrl: '',
+        mimeType: '',
+        title: ''
+      }
+    };
+    const action = {
+      value: file,
+      type: actionTypes.UPDATE_LANDING_PAGE_HEADER_IMAGE
+    };
+    const actual = reducer(oldState, action);
+    expect(actual.toJS()).toEqual(expected);
+  });
+
+  it('should handle UPDATE_LANDING_PAGE_HEADER_LOGO action type', () => {
+    const oldState = fromJS({
+      _hasChanged: true,
+      titleEntries: [],
+      subtitleEntries: [],
+      buttonLabelEntries: [],
+      headerImage: {
+        externalUrl: '',
+        mimeType: '',
+        title: ''
+      },
+      logoImage: {
+        externalUrl: '',
+        mimeType: '',
+        title: ''
+      }
+    });
+    const file = new File([''], 'foo.jpg', { name: 'foo.jpg', type: 'image/jpeg' });
+    const expected = {
+      _hasChanged: true,
+      titleEntries: [],
+      subtitleEntries: [],
+      buttonLabelEntries: [],
+      headerImage: {
+        title: '',
+        externalUrl: '',
+        mimeType: ''
+      },
+      logoImage: {
+        externalUrl: file,
+        mimeType: 'image/jpeg',
+        title: ''
+      }
+    };
+    const action = {
+      value: file,
+      type: actionTypes.UPDATE_LANDING_PAGE_HEADER_LOGO
+    };
+    const actual = reducer(oldState, action);
+    expect(actual.toJS()).toEqual(expected);
   });
 });

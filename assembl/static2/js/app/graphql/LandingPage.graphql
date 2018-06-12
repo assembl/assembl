@@ -1,0 +1,28 @@
+#import "./fragments/LangString.graphql"
+
+query LandingPage($lang: String!) {
+  discussion {
+    titleEntries {
+      ...langStringEntry
+    }
+    title(lang: $lang)
+    subtitleEntries {
+      ...langStringEntry
+    }
+    subtitle(lang: $lang)
+    buttonLabelEntries {
+      ...langStringEntry
+    }
+    buttonLabel(lang: $lang)
+    headerImage {
+      externalUrl
+      mimeType
+      title
+    }
+    logoImage {
+      externalUrl
+      mimeType
+      title
+    }
+  }
+}

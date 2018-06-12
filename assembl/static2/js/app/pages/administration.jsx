@@ -10,7 +10,7 @@ import { updateResources, updateResourcesCenterPage } from '../actions/adminActi
 import { updateVoteSessionPage, updateVoteModules, updateVoteProposals } from '../actions/adminActions/voteSession';
 import { updateSections } from '../actions/adminActions/adminSections';
 import { updateLegalContents } from '../actions/adminActions/legalContents';
-import { updateLandingPageModules } from '../actions/adminActions/landingPage';
+import { updateLandingPageModules, updateLandingPage } from '../actions/adminActions/landingPage';
 import { updateTextFields } from '../actions/adminActions/profileOptions';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
 import Menu from '../components/administration/menu';
@@ -23,6 +23,7 @@ import TabsConditionQuery from '../graphql/TabsConditionQuery.graphql';
 import TextFields from '../graphql/TextFields.graphql';
 import LegalContentsQuery from '../graphql/LegalContents.graphql';
 import VoteSessionQuery from '../graphql/VoteSession.graphql';
+import LandingPageQuery from '../graphql/LandingPage.graphql';
 import { convertEntriesToRawContentState } from '../utils/draftjs';
 import { getPhaseId } from '../utils/timeline';
 import landingPagePlugin from '../utils/administration/landingPage';
@@ -60,6 +61,7 @@ class Administration extends React.Component {
     this.putVoteSessionInStore = this.putVoteSessionInStore.bind(this);
     this.putLandingPageModulesInStore = this.putLandingPageModulesInStore.bind(this);
     this.putTextFieldsInStore = this.putTextFieldsInStore.bind(this);
+    this.putLandingPageInStore = this.putLandingPageInStore.bind(this);
     this.state = {
       showLanguageMenu: true
     };
@@ -80,6 +82,7 @@ class Administration extends React.Component {
     this.props.displayLanguageMenu(isHidden);
     this.putLandingPageModulesInStore(this.props.landingPageModules);
     this.putTextFieldsInStore(this.props.textFields);
+    this.putLandingPageInStore(this.props.landingPage);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -117,6 +120,10 @@ class Administration extends React.Component {
 
     if (nextProps.legalContents !== this.props.legalContents) {
       this.putLegalContentsInStore(nextProps.legalContents);
+    }
+
+    if (nextProps.landingPage !== this.props.landingPage) {
+      this.putLandingPageInStore(nextProps.landingPage);
     }
   }
 
@@ -195,15 +202,18 @@ class Administration extends React.Component {
     const filtered = filter(LegalContentsQuery, { legalContents: legalContents });
     const filteredLegalContents = filtered.legalContents;
     const convertedLegalContents = {
-      legalNoticeEntries: filteredLegalContents.legalNoticeEntries ?
-        convertEntriesToRawContentState(filteredLegalContents.legalNoticeEntries) : null,
+      legalNoticeEntries: filteredLegalContents.legalNoticeEntries
+        ? convertEntriesToRawContentState(filteredLegalContents.legalNoticeEntries)
+        : null,
       termsAndConditionsEntries: filteredLegalContents.termsAndConditionsEntries
         ? convertEntriesToRawContentState(filteredLegalContents.termsAndConditionsEntries)
         : null,
-      cookiesPolicyEntries: filteredLegalContents.cookiesPolicyEntries ?
-        convertEntriesToRawContentState(filteredLegalContents.cookiesPolicyEntries) : null,
-      privacyPolicyEntries: filteredLegalContents.privacyPolicyEntries ?
-        convertEntriesToRawContentState(filteredLegalContents.privacyPolicyEntries) : null
+      cookiesPolicyEntries: filteredLegalContents.cookiesPolicyEntries
+        ? convertEntriesToRawContentState(filteredLegalContents.cookiesPolicyEntries)
+        : null,
+      privacyPolicyEntries: filteredLegalContents.privacyPolicyEntries
+        ? convertEntriesToRawContentState(filteredLegalContents.privacyPolicyEntries)
+        : null
     };
     this.props.updateLegalContents(convertedLegalContents);
   }
@@ -220,6 +230,17 @@ class Administration extends React.Component {
     }
   }
 
+  putLandingPageInStore(landingPage) {
+    const filtered = filter(LandingPageQuery, { discussion: landingPage });
+    const dataForStore = {
+      ...filtered.discussion,
+      subtitleEntries: filtered.discussion.subtitleEntries
+        ? convertEntriesToRawContentState(filtered.discussion.subtitleEntries)
+        : null
+    };
+    this.props.updateLandingPage(dataForStore);
+  }
+
   render() {
     const {
       children,
@@ -234,7 +255,8 @@ class Administration extends React.Component {
       refetchLegalContents,
       refetchVoteSession,
       refetchLandingPageModules,
-      refetchTextFields
+      refetchTextFields,
+      refetchLandingPage
     } = this.props;
     const { phase } = params;
     const { timeline } = this.props.debate.debateData;
@@ -249,10 +271,10 @@ class Administration extends React.Component {
         refetchResourcesCenter: refetchResourcesCenter,
         refetchLandingPageModules: refetchLandingPageModules,
         refetchLegalContents: refetchLegalContents,
-        refetchTextFields: refetchTextFields
+        refetchTextFields: refetchTextFields,
+        refetchLandingPage: refetchLandingPage
       })
     );
-
     return (
       <div className="administration">
         <div className="save-bar">
@@ -313,7 +335,8 @@ const mapDispatchToProps = dispatch => ({
   updateLegalContents: legalContents => dispatch(updateLegalContents(legalContents)),
   displayLanguageMenu: isHidden => dispatch(displayLanguageMenu(isHidden)),
   updateLandingPageModules: landingPageModules => dispatch(updateLandingPageModules(landingPageModules)),
-  updateTextFields: textFields => dispatch(updateTextFields(textFields))
+  updateTextFields: textFields => dispatch(updateTextFields(textFields)),
+  updateLandingPage: landingPage => dispatch(updateLandingPage(landingPage))
 });
 
 const mergeLoadingAndHasErrors = WrappedComponent => (props) => {
@@ -332,7 +355,9 @@ const mergeLoadingAndHasErrors = WrappedComponent => (props) => {
     legalContentsAreLoading,
     legalContentsHaveErrors,
     textFieldsLoading,
-    textFieldsHasErrors
+    textFieldsHasErrors,
+    landingPageHasErrors,
+    landingPageLoading
   } = props;
 
   const hasErrors =
@@ -341,6 +366,7 @@ const mergeLoadingAndHasErrors = WrappedComponent => (props) => {
     resourcesCenterHasErrors ||
     tabsConditionsHasErrors ||
     legalContentsHaveErrors ||
+    landingPageHasErrors ||
     sectionsHasErrors ||
     props[landingPagePlugin.hasErrors] ||
     textFieldsHasErrors ||
@@ -351,6 +377,7 @@ const mergeLoadingAndHasErrors = WrappedComponent => (props) => {
     resourcesCenterLoading ||
     tabsConditionsLoading ||
     legalContentsAreLoading ||
+    landingPageLoading ||
     sectionsLoading ||
     props[landingPagePlugin.loading] ||
     textFieldsLoading ||
@@ -528,6 +555,30 @@ export default compose(
     skip: (props) => {
       const currentLocation = props.router.getCurrentLocation();
       return !currentLocation.pathname.endsWith('discussion') || currentLocation.search !== '?section=3';
+    }
+  }),
+  graphql(LandingPageQuery, {
+    options: ({ i18n }) => ({
+      variables: { lang: i18n.locale }
+    }),
+    props: ({ data }) => {
+      if (data.loading) {
+        return {
+          landingPageLoading: true
+        };
+      }
+      if (data.error) {
+        return {
+          landingPageHasErrors: true
+        };
+      }
+
+      return {
+        landingPageLoading: data.loading,
+        landingPageHasErrors: data.error,
+        refetchLandingPage: data.refetch,
+        landingPage: data.discussion
+      };
     }
   }),
   mergeLoadingAndHasErrors,

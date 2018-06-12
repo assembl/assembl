@@ -4,12 +4,15 @@ import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { type Route, type Router } from 'react-router';
 import { I18n } from 'react-redux-i18n';
-
+import { convertEntriesToHTML } from '../utils/draftjs';
+import { getEntryValueForLocale } from '../utils/i18n';
 import ManageModules from '../components/administration/landingPage/manageModules';
+import CustomizeHeader from '../components/administration/landingPage/customizeHeader';
 import Navbar from '../components/administration/navbar';
 import { displayAlert } from '../utils/utilityManager';
 import SaveButton, { getMutationsPromises, runSerial } from '../components/administration/saveButton';
 import landingPagePlugin from '../utils/administration/landingPage';
+import updateDiscussionMutation from '../graphql/mutations/updateDiscussion.graphql';
 
 type Props = {
   landingPageModules: Array<Object>,
@@ -17,7 +20,22 @@ type Props = {
   refetchLandingPageModules: Function,
   route: Route,
   router: Router,
-  section: string
+  section: string,
+  editLocale: string,
+  header: {
+    title: string,
+    subtitle: ?string,
+    buttonLabel: string,
+    headerImgMimeType: string,
+    headerImgUrl: string,
+    headerImgTitle: string,
+    logoImgMimeType: string,
+    logoImgUrl: string,
+    logoImgTitle: string
+  },
+  pageHasChanged: boolean,
+  page: Object,
+  updateDiscussion: Function
 };
 
 type State = {
@@ -41,17 +59,32 @@ class LandingPageAdmin extends React.Component<Props, State> {
   }
 
   routerWillLeave = () => {
-    if (this.props.landingPageModulesHasChanged && !this.state.refetching) {
+    if (this.dataHaveChanged() && !this.state.refetching) {
       return I18n.t('administration.confirmUnsavedChanges');
     }
 
     return null;
   };
 
+  getImageVariable = (img) => {
+    const externalUrl = img ? img.externalUrl : null;
+    if (externalUrl === 'TO_DELETE') {
+      return externalUrl;
+    }
+    return typeof externalUrl === 'object' ? externalUrl : null;
+  };
+
   saveAction = () => {
+    const {
+      landingPageModulesHasChanged,
+      landingPageModules,
+      refetchLandingPageModules,
+      pageHasChanged,
+      page,
+      updateDiscussion
+    } = this.props;
     displayAlert('success', `${I18n.t('loading.wait')}...`);
-    if (this.props.landingPageModulesHasChanged) {
-      const { landingPageModules, refetchLandingPageModules } = this.props;
+    if (landingPageModulesHasChanged) {
       const mutationsPromises = getMutationsPromises({
         items: landingPageModules,
         variablesCreator: landingPagePlugin.variablesCreator,
@@ -68,33 +101,72 @@ class LandingPageAdmin extends React.Component<Props, State> {
           displayAlert('danger', error, false, 30000);
         });
     }
+
+    if (pageHasChanged) {
+      updateDiscussion({
+        variables: {
+          titleEntries: page.titleEntries,
+          subtitleEntries: convertEntriesToHTML(page.subtitleEntries),
+          buttonLabelEntries: page.buttonLabelEntries,
+          headerImage: this.getImageVariable(page.headerImage),
+          logoImage: this.getImageVariable(page.logoImage)
+        }
+      })
+        .then(() => {
+          displayAlert('success', I18n.t('administration.landingPage.headerSuccessSave'));
+        })
+        .catch((error) => {
+          displayAlert('danger', error.message);
+        });
+    }
   };
 
+  dataHaveChanged = (): boolean => this.props.landingPageModulesHasChanged || this.props.pageHasChanged;
+
   render() {
-    const { landingPageModulesHasChanged, section } = this.props;
+    const { section } = this.props;
     const currentStep = parseInt(section, 10);
-    const saveDisabled = !landingPageModulesHasChanged;
+    const saveDisabled = !this.dataHaveChanged();
     return (
       <div className="landing-page-admin">
         <SaveButton disabled={saveDisabled} saveAction={this.saveAction} />
         {section === '1' && <ManageModules {...this.props} />}
-        {!isNaN(currentStep) && <Navbar currentStep={currentStep} totalSteps={1} phaseIdentifier="landingPage" />}
+        {section === '2' && <CustomizeHeader {...this.props} />}
+        {!isNaN(currentStep) && <Navbar currentStep={currentStep} totalSteps={2} phaseIdentifier="landingPage" />}
       </div>
     );
   }
 }
 
-const mapStateToProps = ({ admin: { landingPage } }) => ({
-  landingPageModulesHasChanged: landingPage.modulesHasChanged,
-  landingPageModules: landingPage.modulesByIdentifier
-    .map((module) => {
-      const identifier = module.getIn(['moduleType', 'identifier']);
-      const idx = landingPage.enabledModulesInOrder.indexOf(identifier);
-      return module.set('order', idx + 1).set('_isNew', !module.get('existsInDatabase'));
-    })
-    .valueSeq()
-    .toJS()
-});
+const mapStateToProps = ({ admin: { editLocale, landingPage } }) => {
+  const { page } = landingPage;
+  const subtitle = getEntryValueForLocale(page.get('subtitleEntries'), editLocale, '');
+  return {
+    landingPageModulesHasChanged: landingPage.modulesHasChanged,
+    landingPageModules: landingPage.modulesByIdentifier
+      .map((module) => {
+        const identifier = module.getIn(['moduleType', 'identifier']);
+        const idx = landingPage.enabledModulesInOrder.indexOf(identifier);
+        return module.set('order', idx + 1).set('_isNew', !module.get('existsInDatabase'));
+      })
+      .valueSeq()
+      .toJS(),
+    header: {
+      title: getEntryValueForLocale(page.get('titleEntries'), editLocale, ''),
+      subtitle: subtitle && typeof subtitle !== 'string' ? subtitle.toJS() : null,
+      buttonLabel: getEntryValueForLocale(page.get('buttonLabelEntries'), editLocale, ''),
+      headerImgMimeType: page.getIn(['headerImage', 'mimeType']),
+      headerImgUrl: page.getIn(['headerImage', 'externalUrl']),
+      headerImgTitle: page.getIn(['headerImage', 'title']),
+      logoImgMimeType: page.getIn(['logoImage', 'mimeType']),
+      logoImgUrl: page.getIn(['logoImage', 'externalUrl']),
+      logoImgTitle: page.getIn(['logoImage', 'title'])
+    },
+    page: landingPage.page.toJS(),
+    pageHasChanged: landingPage.pageHasChanged,
+    editLocale: editLocale
+  };
+};
 
 export default compose(
   connect(mapStateToProps),
@@ -103,5 +175,8 @@ export default compose(
   }),
   graphql(landingPagePlugin.updateMutation, {
     name: landingPagePlugin.updateMutationName
+  }),
+  graphql(updateDiscussionMutation, {
+    name: 'updateDiscussion'
   })
 )(LandingPageAdmin);
