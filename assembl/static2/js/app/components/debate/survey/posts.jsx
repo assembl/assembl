@@ -30,6 +30,7 @@ type PostsProps = {
   defaultContentLocaleMapping: Map,
   fetchMore: Function,
   refetch: Function,
+  questionId: string,
   updateContentLocaleMapping: Function
 };
 
@@ -65,10 +66,9 @@ export class DumbPosts extends React.Component<PostsProps> {
       displayAlert('danger', I18n.t('error.loading'));
       return null;
     }
-    const { networkStatus, fetchMore, refetch, posts } = this.props;
+    const { networkStatus, fetchMore, refetch, posts, questionId } = this.props;
     return (
       <FlatList
-        // $FlowFixMe
         items={posts}
         ListItem={Post}
         onEndReachedThreshold={0.6}
@@ -76,8 +76,12 @@ export class DumbPosts extends React.Component<PostsProps> {
         networkStatus={networkStatus}
         fetchMore={fetchMore}
         refetch={refetch}
-        itemData={item => ({ id: item.node.id, originalLocale: item.node.originalLocale })}
         loadPreviousMessage="debate.survey.loadRecentPosts"
+        itemData={item => ({
+          id: item.node.id,
+          originalLocale: item.node.originalLocale,
+          questionId: questionId
+        })}
       />
     );
   }

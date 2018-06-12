@@ -1,4 +1,5 @@
 // @flow
+import * as React from 'react';
 
 import Like from '../../svg/like';
 import Disagree from '../../svg/disagree';
@@ -6,7 +7,15 @@ import DontUnderstand from '../../svg/dontUnderstand';
 import MoreInfo from '../../svg/moreInfo';
 import { likeTooltip, disagreeTooltip, dontUnderstandTooltip, moreInfoTooltip } from '../../common/tooltips';
 
-const sentimentDefinitions = [
+export type SentimentDefinition = {
+  type: SentimentTypes,
+  camelType: string,
+  color: string,
+  tooltip: React.Node,
+  SvgComponent: React.ComponentType<any>
+};
+
+const sentimentDefinitions: Array<SentimentDefinition> = [
   {
     type: 'LIKE',
     camelType: 'like',
@@ -36,10 +45,6 @@ const sentimentDefinitions = [
     SvgComponent: MoreInfo
   }
 ];
-
-const firstSentimentDefinition = sentimentDefinitions[0];
-
-export type SentimentDefinition = typeof firstSentimentDefinition;
 
 type SentimentDefinitionsObject = {
   [string]: SentimentDefinition

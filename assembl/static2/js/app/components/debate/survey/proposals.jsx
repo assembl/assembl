@@ -38,6 +38,7 @@ class Proposals extends React.Component {
                 id={post.node.id}
                 originalLocale={post.node.originalLocale}
                 postIndex={index}
+                questionId={questionId}
                 key={post.node.id}
               />
             ))}

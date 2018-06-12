@@ -1,9 +1,11 @@
+// @flow
 import React from 'react';
-import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
-import { compose, graphql } from 'react-apollo';
+import { compose, graphql, withApollo } from 'react-apollo';
 import { Translate, I18n } from 'react-redux-i18n';
+
 import { getConnectedUserId } from '../../../utils/globalFunctions';
+import Permissions, { connectedUserCan } from '../../../utils/permissions';
 import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
 import PostCreator from './postCreator';
 import Like from '../../svg/like';
@@ -12,7 +14,7 @@ import { inviteUserToLogin, displayAlert, displayModal } from '../../../utils/ut
 import addSentimentMutation from '../../../graphql/mutations/addSentiment.graphql';
 import deleteSentimentMutation from '../../../graphql/mutations/deleteSentiment.graphql';
 import PostQuery from '../../../graphql/PostQuery.graphql';
-import { likeTooltip, disagreeTooltip } from '../../common/tooltips';
+import { deleteMessageTooltip, likeTooltip, disagreeTooltip } from '../../common/tooltips';
 import { sentimentDefinitionsObject } from '../common/sentimentDefinitions';
 import StatisticsDoughnut from '../common/statisticsDoughnut';
 import { EXTRA_SMALL_SCREEN_WIDTH } from '../../../constants';
@@ -21,8 +23,24 @@ import ResponsiveOverlayTrigger from '../../common/responsiveOverlayTrigger';
 import { withScreenWidth } from '../../common/screenDimensions';
 import PostBody from '../common/post/postBody';
 import hashLinkScroll from '../../../utils/hashLinkScroll';
+import DeletePostButton from '../common/deletePostButton';
+import QuestionQuery from '../../../graphql/QuestionQuery.graphql';
 
-class Post extends React.Component {
+type Props = {
+  addSentiment: Function,
+  contentLocale: string,
+  debate: DebateData,
+  deleteSentiment: Function,
+  data: {
+    post: PostFragment
+  },
+  lang: string,
+  originalLocale: string,
+  questionId: string,
+  screenWidth: number
+};
+
+class Post extends React.Component<Props> {
   componentDidMount() {
     // If we have a hash in url and the post id match it, scroll to it.
     const postId = this.props.data.post.id;
@@ -36,7 +54,7 @@ class Post extends React.Component {
     }
   }
 
-  handleSentiment = (event, type) => {
+  handleSentiment = (event, type, refetchQueries, currentCounts: { disagree: number, like: number }) => {
     const { post } = this.props.data;
     const isUserConnected = getConnectedUserId() !== null;
     if (isUserConnected) {
@@ -46,9 +64,9 @@ class Post extends React.Component {
         const target = event.currentTarget;
         const isMySentiment = post.mySentiment === type;
         if (isMySentiment) {
-          this.handleDeleteSentiment(target);
+          this.handleDeleteSentiment(refetchQueries, currentCounts);
         } else {
-          this.handleAddSentiment(target, type);
+          this.handleAddSentiment(target, type, refetchQueries, currentCounts);
         }
       } else {
         const body = (
@@ -63,8 +81,8 @@ class Post extends React.Component {
     }
   };
 
-  handleAddSentiment(target, type) {
-    const { id, sentimentCounts, mySentiment } = this.props.data.post;
+  handleAddSentiment(target, type, refetchQueries, currentCounts) {
+    const { id, mySentiment } = this.props.data.post;
     this.props
       .addSentiment({
         variables: { postId: id, type: type },
@@ -73,11 +91,11 @@ class Post extends React.Component {
             post: {
               id: id,
               sentimentCounts: {
-                like: type === 'LIKE' ? sentimentCounts.like + 1 : sentimentCounts.like - (mySentiment === 'LIKE' ? 1 : 0),
+                like: type === 'LIKE' ? currentCounts.like + 1 : currentCounts.like - (mySentiment === 'LIKE' ? 1 : 0),
                 disagree:
                   type === 'DISAGREE'
-                    ? sentimentCounts.disagree + 1
-                    : sentimentCounts.disagree - (mySentiment === 'DISAGREE' ? 1 : 0),
+                    ? currentCounts.disagree + 1
+                    : currentCounts.disagree - (mySentiment === 'DISAGREE' ? 1 : 0),
                 dontUnderstand: 0,
                 moreInfo: 0,
                 __typename: 'SentimentCounts'
@@ -87,15 +105,16 @@ class Post extends React.Component {
             },
             __typename: 'AddSentiment'
           }
-        }
+        },
+        refetchQueries: refetchQueries
       })
       .catch((error) => {
         displayAlert('danger', `${error}`);
       });
   }
 
-  handleDeleteSentiment() {
-    const { id, sentimentCounts, mySentiment } = this.props.data.post;
+  handleDeleteSentiment(refetchQueries, currentCounts) {
+    const { id, mySentiment } = this.props.data.post;
     this.props
       .deleteSentiment({
         variables: { postId: id },
@@ -104,8 +123,8 @@ class Post extends React.Component {
             post: {
               id: id,
               sentimentCounts: {
-                like: sentimentCounts.like - (mySentiment === 'LIKE' ? 1 : 0),
-                disagree: sentimentCounts.disagree - (mySentiment === 'DISAGREE' ? 1 : 0),
+                like: currentCounts.like - (mySentiment === 'LIKE' ? 1 : 0),
+                disagree: currentCounts.disagree - (mySentiment === 'DISAGREE' ? 1 : 0),
                 dontUnderstand: 0,
                 moreInfo: 0,
                 __typename: 'SentimentCounts'
@@ -115,7 +134,8 @@ class Post extends React.Component {
             },
             __typename: 'DeleteSentiment'
           }
-        }
+        },
+        refetchQueries: refetchQueries
       })
       .catch((error) => {
         displayAlert('danger', `${error}`);
@@ -124,50 +144,87 @@ class Post extends React.Component {
 
   render() {
     const { post } = this.props.data;
-    const { contentLocale, lang, screenWidth, originalLocale } = this.props;
+    if (!post.publicationState || post.publicationState.startsWith('DELETED')) {
+      return null;
+    }
+
+    const { contentLocale, lang, screenWidth, originalLocale, questionId } = this.props;
     const { debateData } = this.props.debate;
     const { bodyEntries } = post;
     const translate = contentLocale !== originalLocale;
 
-    let body;
-    if (bodyEntries.length > 1) {
-      // first entry is the translated version, example localeCode "fr-x-mtfrom-en"
-      // second entry is the original, example localeCode "en"
-      body = translate ? bodyEntries[0].value : bodyEntries[1].value;
-    } else {
-      // translation is not enabled or the message is already in the desired locale
-      body = bodyEntries[0].value;
+    // to update the question header when we delete the post or add/remove a sentiment
+    const updateQuestionQuery = {
+      query: QuestionQuery,
+      variables: {
+        id: questionId,
+        lang: lang
+      }
+    };
+
+    let body = '';
+    if (bodyEntries) {
+      if (bodyEntries.length > 1) {
+        // first entry is the translated version, example localeCode "fr-x-mtfrom-en"
+        // second entry is the original, example localeCode "en"
+        body = translate ? bodyEntries[0] && bodyEntries[0].value : bodyEntries[1] && bodyEntries[1].value;
+      } else {
+        // translation is not enabled or the message is already in the desired locale
+        body = bodyEntries[0] ? bodyEntries[0].value : '';
+      }
     }
+
+    const sentimentCounts = post.sentimentCounts;
+    const currentCounts = {
+      like: sentimentCounts && sentimentCounts.like ? sentimentCounts.like : 0,
+      disagree: sentimentCounts && sentimentCounts.disagree ? sentimentCounts.disagree : 0
+    };
     const likeComponent = (
       <div
         className={post.mySentiment === 'LIKE' ? 'sentiment sentiment-active' : 'sentiment'}
         onClick={(event) => {
-          this.handleSentiment(event, 'LIKE');
+          this.handleSentiment(event, 'LIKE', [updateQuestionQuery], currentCounts);
         }}
       >
         <Like size={25} />
       </div>
     );
+
     const disagreeComponent = (
       <div
         className={post.mySentiment === 'DISAGREE' ? 'sentiment sentiment-active' : 'sentiment'}
         onClick={(event) => {
-          this.handleSentiment(event, 'DISAGREE');
+          this.handleSentiment(event, 'DISAGREE', [updateQuestionQuery], currentCounts);
         }}
       >
         <Disagree size={25} />
       </div>
     );
 
-    const { displayName, isDeleted } = post.creator;
+    let creatorName = '';
+    let userCanDeleteThisMessage = false;
+    if (post.creator) {
+      const { displayName, isDeleted } = post.creator;
+      const connectedUserId = getConnectedUserId();
+      userCanDeleteThisMessage =
+        (post.creator && (connectedUserId === String(post.creator.userId) && connectedUserCan(Permissions.DELETE_MY_POST))) ||
+        connectedUserCan(Permissions.DELETE_POST);
+      creatorName = isDeleted ? I18n.t('deletedUser') : displayName;
+    }
+
+    const deleteButton = (
+      <DeletePostButton postId={post.id} refetchQueries={[updateQuestionQuery]} linkClassName="overflow-action" />
+    );
 
     return (
       <div className="shown box" id={post.id}>
         <div className="content">
-          <PostCreator name={isDeleted ? I18n.t('deletedUser') : displayName} />
+          <PostCreator name={creatorName} />
           <PostBody
+            dbId={post.dbId}
             translationEnabled={debateData.translationEnabled}
             contentLocale={contentLocale}
+            extracts={post.extracts}
             id={post.id}
             lang={lang}
             translate={translate}
@@ -175,12 +232,19 @@ class Post extends React.Component {
             body={body}
             bodyMimeType={post.bodyMimeType}
           />
-          <div className="sentiments">
-            <div className="sentiment-label">
-              <Translate value="debate.survey.react" />
+          <div className="post-footer">
+            <div className="sentiments">
+              <div className="sentiment-label">
+                <Translate value="debate.survey.react" />
+              </div>
+              <ResponsiveOverlayTrigger placement="top" tooltip={likeTooltip} component={likeComponent} />
+              <ResponsiveOverlayTrigger placement="top" tooltip={disagreeTooltip} component={disagreeComponent} />
             </div>
-            <ResponsiveOverlayTrigger placement="top" tooltip={likeTooltip} component={likeComponent} />
-            <ResponsiveOverlayTrigger placement="top" tooltip={disagreeTooltip} component={disagreeComponent} />
+            <div className="actions">
+              {userCanDeleteThisMessage ? (
+                <ResponsiveOverlayTrigger placement="top" tooltip={deleteMessageTooltip} component={deleteButton} />
+              ) : null}
+            </div>
           </div>
         </div>
         <div className="statistic">
@@ -190,35 +254,39 @@ class Post extends React.Component {
               <ResponsiveOverlayTrigger placement="top" tooltip={disagreeTooltip} component={disagreeComponent} />
             </div>
           )}
-          <StatisticsDoughnut
-            elements={[
-              { color: sentimentDefinitionsObject.like.color, count: post.sentimentCounts.like },
-              { color: sentimentDefinitionsObject.disagree.color, count: post.sentimentCounts.disagree }
-            ]}
-          />
-          <div className="stat-sentiment">
-            <div>
-              <div className="min-sentiment">
-                <Like size={15} />&nbsp;<span className="txt">{post.sentimentCounts.like}</span>
+          <div>
+            <StatisticsDoughnut
+              elements={[
+                { color: sentimentDefinitionsObject.like.color, count: currentCounts.like },
+                { color: sentimentDefinitionsObject.disagree.color, count: currentCounts.disagree }
+              ]}
+            />
+            <div className="stat-sentiment">
+              <div>
+                <div className="min-sentiment">
+                  <Like size={15} />&nbsp;<span className="txt">{currentCounts.like}</span>
+                </div>
               </div>
-            </div>
-            <div>
-              <div className="min-sentiment">
-                <Disagree size={15} />&nbsp;<span className="txt">{post.sentimentCounts.disagree}</span>
+              <div>
+                <div className="min-sentiment">
+                  <Disagree size={15} />&nbsp;<span className="txt">{currentCounts.disagree}</span>
+                </div>
               </div>
             </div>
           </div>
+          {screenWidth < EXTRA_SMALL_SCREEN_WIDTH && (
+            <div className="actions">
+              {userCanDeleteThisMessage ? (
+                <ResponsiveOverlayTrigger placement="top" tooltip={deleteMessageTooltip} component={deleteButton} />
+              ) : null}
+            </div>
+          )}
         </div>
         <div className="clear">&nbsp;</div>
       </div>
     );
   }
 }
-
-Post.propTypes = {
-  addSentiment: PropTypes.func.isRequired,
-  deleteSentiment: PropTypes.func.isRequired
-};
 
 const mapStateToProps = (state, { id }) => ({
   debate: state.debate,
@@ -236,5 +304,6 @@ export default compose(
     name: 'deleteSentiment'
   }),
   withLoadingIndicator(),
-  withScreenWidth
+  withScreenWidth,
+  withApollo
 )(Post);
