@@ -10,11 +10,7 @@ import { type moment } from 'moment';
 import { modulesTranslationKeys } from '../../../constants';
 import { displayAlert } from '../../../utils/utilityManager';
 
-import {
-  updatePhaseIdentifier,
-  updateStartDate,
-  updateEndDate
-} from '../../../actions/adminActions/timeline';
+import { updatePhaseIdentifier, updateStartDate, updateEndDate } from '../../../actions/adminActions/timeline';
 
 type PhaseFormProps = {
   phaseId: string,
@@ -25,7 +21,7 @@ type PhaseFormProps = {
   handleStartDateChange: Function,
   handleEndDateChange: Function,
   handleIdentifierChange: Function
-}
+};
 
 export const DumbPhaseForm = ({
   phaseId,
@@ -53,8 +49,14 @@ export const DumbPhaseForm = ({
   };
   return (
     <div className="phase-form">
-      <DatePicker selected={start} onChange={onStartDateChange} showTimeSelect timeFormat="HH:mm" />
-      <DatePicker selected={end} onChange={onEndDateChange} showTimeSelect timeFormat="HH:mm" />
+      <div className="date-picker-field">
+        <Translate value="search.datefilter.from" />
+        <DatePicker selected={start} onChange={onStartDateChange} showTimeSelect timeFormat="HH:mm" />
+      </div>
+      <div className="date-picker-field">
+        <Translate value="search.datefilter.to" />
+        <DatePicker selected={end} onChange={onEndDateChange} showTimeSelect timeFormat="HH:mm" />
+      </div>
       <Translate value="administration.timelineAdmin.phaseModule" />
       <div className="margin-m">
         <SplitButton
@@ -70,13 +72,12 @@ export const DumbPhaseForm = ({
           ))}
         </SplitButton>
       </div>
-      <Link to="" /* TODO: add route to phase configuration page */ >
+      <Link to="" /* TODO: add route to phase configuration page */>
         <Translate value="administration.timelineAdmin.configurePhase" count={phaseNumber} />{' '}
       </Link>
     </div>
   );
 };
-
 
 const mapStateToProps = (state, { phaseId }) => {
   const phase = state.admin.timeline.phasesById.get(phaseId);
@@ -88,7 +89,6 @@ const mapStateToProps = (state, { phaseId }) => {
 };
 
 const mapDispatchToProps = (dispatch, { phaseId }) => ({
-
   handleIdentifierChange: eventKey => dispatch(updatePhaseIdentifier(phaseId, eventKey)),
   handleStartDateChange: date => dispatch(updateStartDate(phaseId, date)),
   handleEndDateChange: date => dispatch(updateEndDate(phaseId, date))
