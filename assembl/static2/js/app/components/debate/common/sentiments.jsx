@@ -6,7 +6,7 @@ import addSentimentMutation from '../../../graphql/mutations/addSentiment.graphq
 import deleteSentimentMutation from '../../../graphql/mutations/deleteSentiment.graphql';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
 import { inviteUserToLogin, displayModal } from '../../../utils/utilityManager';
-import sentimentDefinitions from './sentimentDefinitions';
+import sentimentDefinitions, { type SentimentDefinition } from './sentimentDefinitions';
 import ResponsiveOverlayTrigger from '../../common/responsiveOverlayTrigger';
 
 type SentimentProps = {
@@ -16,7 +16,7 @@ type SentimentProps = {
   mySentiment: ?string,
   placement: string,
   postId: string,
-  sentiment: Object, // TODO:
+  sentiment: SentimentDefinition,
   sentimentCounts: SentimentCountsFragment
 };
 
