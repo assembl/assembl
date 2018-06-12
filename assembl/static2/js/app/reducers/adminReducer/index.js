@@ -51,7 +51,11 @@ export const thematicsById: ThematicsByIdReducer = (state = Map(), action) => {
       titleEntries: List(),
       video: null
     });
-    const order = state.size + 1.0;
+    const order =
+        state
+          .filter(item => !item.get('_toDelete'))
+          .map(v => v.get('order'))
+          .max() + 1.0;
     return state.set(action.id, emptyThematic.set('id', action.id).set('order', order));
   }
   case 'DELETE_THEMATIC':

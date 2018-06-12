@@ -77,24 +77,42 @@ describe('Admin reducers', () => {
       };
       const oldState = fromJS({
         '0': {
-          id: '0'
+          id: '0',
+          order: 2.0,
+          _toDelete: false
         },
         '1': {
-          id: '1'
+          id: '1',
+          order: 4.0,
+          _toDelete: false
+        },
+        '2': {
+          id: '2',
+          order: 5.0,
+          _toDelete: true
         }
       });
       const expected = {
-        '0': {
-          id: '0'
+'0': {
+          id: '0',
+          order: 2.0,
+          _toDelete: false
         },
         '1': {
-          id: '1'
+          id: '1',
+          order: 4.0,
+          _toDelete: false
+        },
+        '2': {
+          id: '2',
+          order: 5.0,
+          _toDelete: true
         },
         '-278290': {
           _hasChanged: false,
           _isNew: true,
           _toDelete: false,
-          order: 3,
+          order: 5.0,
           id: '-278290',
           img: {
             externalUrl: ''
