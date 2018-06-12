@@ -20,7 +20,8 @@ type PhaseFormProps = {
   end: moment,
   handleStartDateChange: Function,
   handleEndDateChange: Function,
-  handleIdentifierChange: Function
+  handleIdentifierChange: Function,
+  locale: string
 };
 
 export const DumbPhaseForm = ({
@@ -31,7 +32,8 @@ export const DumbPhaseForm = ({
   handleEndDateChange,
   identifier,
   start,
-  end
+  end,
+  locale
 }: PhaseFormProps) => {
   const onStartDateChange = (newStartDate) => {
     if (newStartDate.isAfter(end)) {
@@ -69,6 +71,9 @@ export const DumbPhaseForm = ({
             onChange={onStartDateChange}
             showTimeSelect
             timeFormat="HH:mm"
+            dateFormat="LLL"
+            locale={locale}
+            shouldCloseOnSelect
           />
           <div className="icon-schedule-container">
             <span className="assembl-icon-schedule grey" />
@@ -87,6 +92,9 @@ export const DumbPhaseForm = ({
             onChange={onEndDateChange}
             showTimeSelect
             timeFormat="HH:mm"
+            dateFormat="LLL"
+            locale={locale}
+            shouldCloseOnSelect
           />
           <div className="icon-schedule-container">
             <span className="assembl-icon-schedule grey" />
@@ -124,7 +132,8 @@ const mapStateToProps = (state, { phaseId }) => {
   return {
     identifier: phase.get('identifier'),
     start: phase.get('start'),
-    end: phase.get('end')
+    end: phase.get('end'),
+    locale: state.i18n.locale
   };
 };
 
