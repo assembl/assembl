@@ -57,7 +57,9 @@ export const DumbPhaseForm = ({
         <Translate value="search.datefilter.to" />
         <DatePicker selected={end} onChange={onEndDateChange} showTimeSelect timeFormat="HH:mm" />
       </div>
-      <Translate value="administration.timelineAdmin.phaseModule" />
+      <div className="inline text-xs">
+        <Translate value="administration.timelineAdmin.phaseModule" />
+      </div>
       <div className="margin-m">
         <SplitButton
           className="admin-dropdown"
@@ -72,9 +74,11 @@ export const DumbPhaseForm = ({
           ))}
         </SplitButton>
       </div>
-      <Link to="" /* TODO: add route to phase configuration page */>
-        <Translate value="administration.timelineAdmin.configurePhase" count={phaseNumber} />{' '}
-      </Link>
+      <div className="text-xs margin-l">
+        <Link to="" /* TODO: add route to phase configuration page */>
+          <Translate value="administration.timelineAdmin.configurePhase" count={phaseNumber} />{' '}
+        </Link>
+      </div>
     </div>
   );
 };

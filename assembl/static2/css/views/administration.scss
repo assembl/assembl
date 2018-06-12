@@ -1,12 +1,15 @@
 .administration {
   margin: $margin-section + $navbar-height 0;
 
+  input[type='text'], input[type='textarea'], .form-control, .admin-dropdown, .dropdown-toggle, .btn-default {
+    border-radius: 0 !important;
+  }
+
   .profile-options {
     .profile-options-field {
       margin-bottom: 25px;
 
       input[type='text'] {
-        border-radius: 0;
         min-width: 350px;
       }
 
@@ -383,14 +386,12 @@
   }
 
   .preview {
-    border-radius: 5px;
     margin: 25px 0 0;
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
 
     img {
-      border-radius: 5px;
       width: 50%;
       max-height: 300px;
     }
@@ -595,6 +596,28 @@
 
     .delete-button-high {
       margin-bottom: 25px;
+    }
+  }
+
+  .phase-form {
+    .admin-dropdown {
+      width: 174px;
+      margin-left: 28px;
+      font-size: $font-size-xs;
+      height: 34px;
+      text-align: left;
+      font-family: $font-family4;
+    }
+
+    .open > .dropdown-menu {
+      margin-left: 28px;
+      font-size: $font-size-xs;
+      font-family: $font-family4;
+      width: 174px;
+    }
+
+    .dropdown-menu > li > a {
+      letter-spacing: 0;
     }
   }
 }

@@ -1,4 +1,25 @@
 .date-picker-field > div {
   display: inline-block;
   margin: 20px 0 0 10px;
+
+  input[type="text"] {
+    box-shadow: none;
+    width: 200px;
+    height: 34px;
+    font-size: $font-size-xxs;
+    font-family: $font-family4;
+    padding-left: 10px;
+  }
+}
+
+.date-picker-field {
+  &:first-child {
+    margin: 20px 0 0;
+  }
+
+  margin: 0 0 30px;
+
+  span {
+    font-size: $font-size-xs;
+  }
 }

@@ -36,7 +36,7 @@ export class DumbTimelineForm extends React.Component<TimelineFormProps, Timelin
     }
   }
 
-  getPhaseNumberById = (id: string) => (this.props.phases.indexOf(id) + 1);
+  getPhaseNumberById = (id: string) => this.props.phases.indexOf(id) + 1;
 
   render() {
     const { editLocale, phases, handleCreatePhase } = this.props;
@@ -51,14 +51,13 @@ export class DumbTimelineForm extends React.Component<TimelineFormProps, Timelin
         <div className="admin-content">
           <div className="form-container">
             <form>
-              {phases && phases.map((id, index) => (
-                <PhaseTitleForm key={`phase-title-form-${id}`} id={id} editLocale={editLocale} phaseIndex={index + 1} />
-              )
-              )
-              }
+              {phases &&
+                phases.map((id, index) => (
+                  <PhaseTitleForm key={`phase-title-form-${id}`} id={id} editLocale={editLocale} phaseIndex={index + 1} />
+                ))}
               <OverlayTrigger placement="top" overlay={addPhaseTooltip}>
-                <div onClick={() => handleCreatePhase()} className="plus margin-l">
-            +
+                <div onClick={() => handleCreatePhase()} className="plus margin-s">
+                  +
                 </div>
               </OverlayTrigger>
             </form>
@@ -67,23 +66,23 @@ export class DumbTimelineForm extends React.Component<TimelineFormProps, Timelin
         <Translate value="administration.timelineAdmin.instruction2" className="admin-instruction" />
         <div className="admin-content">
           <Row>
-            {phases && phases.map((id, index) => {
-              const linkClassNames = selectedPhaseId === id ? 'tab-title-active ellipsis' : 'tab-title ellipsis';
-              return (
-                <Col xs={12} md={Math.round(12 / phases.length)} key={index}>
-                  <a
-                    className={linkClassNames}
-                    key={`phase-link-${id}`}
-                    onClick={() => {
-                      this.setState({ selectedPhaseId: id });
-                    }}
-                  >
-                    <Translate value="administration.timelineAdmin.phase" count={index + 1} />
-                  </a>
-                </Col>
-              );
-            }
-            )}
+            {phases &&
+              phases.map((id, index) => {
+                const linkClassNames = selectedPhaseId === id ? 'tab-title-active ellipsis' : 'tab-title ellipsis';
+                return (
+                  <Col xs={12} md={Math.round(12 / phases.length)} key={index}>
+                    <a
+                      className={linkClassNames}
+                      key={`phase-link-${id}`}
+                      onClick={() => {
+                        this.setState({ selectedPhaseId: id });
+                      }}
+                    >
+                      <Translate value="administration.timelineAdmin.phase" count={index + 1} />
+                    </a>
+                  </Col>
+                );
+              })}
           </Row>
           {selectedPhaseId && (
             <Row>
