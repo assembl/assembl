@@ -22,9 +22,7 @@ def upgrade(pyramid_env):
     from assembl import models as m
     db = m.get_session_maker()()
     with transaction.manager:
-        extra_fields = db.query(m.ProfileField).join(m.User).filter(m.User.is_deleted).all()
-        for ef in extra_fields:
-            db.delele(ef)
+        db.query(m.ProfileField).join(m.User).filter(m.User.is_deleted).delete()
 
 
 def downgrade(pyramid_env):
