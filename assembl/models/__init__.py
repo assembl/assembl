@@ -129,7 +129,8 @@ from .configurable_fields import (  # noqa: E402, F401
     SelectField,
     SelectFieldOption,
     TextField,
-    ProfileField
+    ProfileField,
+    ConfigurableFieldIdentifiersEnum
 )
 from .social_auth import (  # noqa: E402, F401
     Nonce,
