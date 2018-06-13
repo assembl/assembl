@@ -540,7 +540,7 @@ var EmailPreferenceView = StringPreferenceView.extend({
   constructor: function EmailPreferenceView() {
     StringPreferenceView.apply(this, arguments);
   },
-  regexp: new RegExp("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$"),
+  regexp: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
   processValue: function(value) {
     if (!this.regexp.test(value)) {
         throw i18n.gettext("This does not appear to be an email");
