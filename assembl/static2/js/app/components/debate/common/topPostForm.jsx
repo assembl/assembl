@@ -168,6 +168,7 @@ class TopPostForm extends React.Component<TopPostFormProps, TopPostFormState> {
           {this.state.isActive || this.props.ideaOnColumn ? (
             <div className="margin-m">
               <RichTextEditor
+                key={this.state.body ? 'notEmpty' : 'empty'}
                 rawContentState={this.state.body}
                 handleInputFocus={this.handleInputFocus}
                 maxLength={TEXT_AREA_MAX_LENGTH}
