@@ -1,204 +1,204 @@
+﻿# Translations template for assembl.
 # Copyright (C) 2018 ORGANIZATION
 # This file is distributed under the same license as the assembl project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2018.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: assembl 2.12.5\n"
+"Project-Id-Version: assembl 2.8.9\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-06-06 11:14+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"POT-Creation-Date: 2018-02-28 14:24+0100\n"
+"PO-Revision-Date: 2018-05-18 16:14+0200\n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.3.4\n"
+"X-Generator: Poedit 2.0.7\n"
+"Last-Translator: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: hu_HU\n"
 
 #: assembl/auth/util.py:140
 msgid "Your session has expired, you need to login again"
-msgstr ""
+msgstr "A munkamenet lejárt, jelentkezzen be újra"
 
 #: assembl/auth/util.py:504
 msgid "The CSV file must have two columns"
-msgstr ""
+msgstr "A CSV fájlnak két oszlopból kell állnia"
 
 #: assembl/auth/util.py:511
 #, python-format
 msgid "Not an email: <%s> at line %d"
-msgstr ""
+msgstr "Nincs e-mail cím: <%s> at line %d"
 
 #: assembl/auth/util.py:514
 #, python-format
 msgid "Name too short: <%s> at line %d"
-msgstr ""
+msgstr "Név túl rövid: <%s> at line %d"
 
 #: assembl/lib/colander.py:174
 msgid "${val} cannot be serialized: ${err}"
-msgstr ""
+msgstr "${val} nem állítható sorba: ${err}"
 
 #: assembl/lib/colander.py:193
 msgid "${val} is not a string: ${err}"
-msgstr ""
+msgstr "${val} nem egy karakterlánc: ${err}"
 
 #: assembl/models/edgesense_drupal.py:173
 msgid "Unknown User ${uid}"
-msgstr ""
+msgstr "Ismeretlen felhasználó ${uid}"
 
-#: assembl/models/idea.py:263 assembl/static/js/app/views/ideaPanel.js:211
-msgid "Idea"
-msgstr ""
-
-#: assembl/models/notification.py:621
+#: assembl/models/notification.py:626
 msgid "A synthesis is posted"
-msgstr ""
+msgstr "Egy összefoglaló közzétételre kerül"
 
-#: assembl/models/notification.py:650
+#: assembl/models/notification.py:655
 msgid "Any message is posted to the discussion"
-msgstr ""
+msgstr "Üzenet közzétéve a beszélgetésben"
 
-#: assembl/models/notification.py:679
+#: assembl/models/notification.py:684
 msgid "Someone directly responds to one of your messages"
-msgstr ""
+msgstr "Valaki közvetlenül az Ön üzenetére válaszol"
 
-#: assembl/models/notification.py:1093
+#: assembl/models/notification.py:1101
 msgid "SYNTHESIS: "
-msgstr ""
+msgstr "ÖSSZEFOGLALÓ:"
 
 #: assembl/models/preferences.py:114 assembl/models/preferences.py:548
 msgid "No special authentication"
-msgstr ""
+msgstr "Nincs speciális hitelesítés"
 
 #: assembl/models/preferences.py:386
 msgid "Languages used"
-msgstr ""
+msgstr "Használt nyelvek"
 
 #: assembl/models/preferences.py:387
 msgid "All languages expected in the discussion"
-msgstr ""
+msgstr "A beszélgetésben várható nyelvek"
 
 #: assembl/models/preferences.py:397
 msgid "Use landing page"
-msgstr ""
+msgstr "Céloldal használata"
 
 #: assembl/models/preferences.py:398
 msgid ""
-"Are users directed to the landing page and phases at login, or diretly to the"
-" debate"
+"Are users directed to the landing page and phases at login, or diretly to "
+"the debate"
 msgstr ""
+"A felhasználók közvetlenül a céloldalra és a bejelentkezési fázisokhoz kerülnek átirányításra, vagy közvetlenül a vitához"
 
 #: assembl/models/preferences.py:406 assembl/models/preferences.py:420
 msgid "Translation service"
-msgstr ""
+msgstr "Fordítói szolgáltatás"
 
 #: assembl/models/preferences.py:409
 msgid "No translation"
-msgstr ""
+msgstr "Nincs fordítás"
 
 #: assembl/models/preferences.py:411
 msgid "Dummy translation service (two steps)"
-msgstr ""
+msgstr "Dummy translation service (two steps)"
 
 #: assembl/models/preferences.py:413
 msgid "Dummy translation service (one step)"
-msgstr ""
+msgstr "Dummy translation service (one step)"
 
 #: assembl/models/preferences.py:415
 msgid "Dummy translation service (two steps) with errors"
-msgstr ""
+msgstr "Dummy translation service (two steps) with errors"
 
 #: assembl/models/preferences.py:417
 msgid "Dummy translation service (one step) with errors"
-msgstr ""
+msgstr "Dummy translation service (one step) with errors"
 
 #: assembl/models/preferences.py:419
 msgid "Google Translate"
-msgstr ""
+msgstr "Google fordító"
 
 #: assembl/models/preferences.py:432
 msgid "Panel order in simple view"
-msgstr ""
+msgstr "Panelelrendezés egyszerű nézetben"
 
 #: assembl/models/preferences.py:435
 msgid "Navigation, Idea, Messages"
-msgstr ""
+msgstr "Navigáció, Ötlet, Üzenetek"
 
 #: assembl/models/preferences.py:436
 msgid "Navigation, Messages, Idea"
-msgstr ""
+msgstr "Navigáció, Üzenetek, Ötlet"
 
 #: assembl/models/preferences.py:437
 msgid "Order of panels"
-msgstr ""
+msgstr "Panelek sorrendje"
 
 #: assembl/models/preferences.py:449
 msgid "Extra JSON parameters"
-msgstr ""
+msgstr "Extra JSON paraméterek"
 
 #: assembl/models/preferences.py:451
 msgid "Parameters for quick frontend settings"
-msgstr ""
+msgstr "Paraméterek a kezelőfelület gyors beállításaihoz"
 
 #: assembl/models/preferences.py:460
 msgid "Terms of use URL"
-msgstr ""
+msgstr "URL használati feltételek"
 
 #: assembl/models/preferences.py:462
 msgid "URL of a document presenting terms of use for the discussion"
-msgstr ""
+msgstr "A beszélgetés használati feltételeit bemutató dokumentum URL"
 
 #: assembl/models/preferences.py:471
 msgid "Video URL"
-msgstr ""
+msgstr "Videó URL"
 
 #: assembl/models/preferences.py:473
 msgid "URL of a video presenting the discussion"
-msgstr ""
+msgstr "A beszélgetést bemutató videó URL"
 
 #: assembl/models/preferences.py:482
 msgid "Video description"
-msgstr ""
+msgstr "Videó leírása"
 
 #: assembl/models/preferences.py:484
 msgid "Description of the video presenting the discussion"
-msgstr ""
+msgstr "A beszélgetést bemutató videó leírása"
 
 #: assembl/models/preferences.py:493
 msgid "Social sharing"
-msgstr ""
+msgstr "Közösségi megosztás"
 
 #: assembl/models/preferences.py:496
 msgid "Show the share button on posts and ideas"
-msgstr ""
+msgstr "Megosztás gomb megjelenítése a bejegyzéseknél és ötleteknél"
 
 #: assembl/models/preferences.py:507
 msgid "Private social sharing"
-msgstr ""
+msgstr "Privát közösségi megosztás"
 
 #: assembl/models/preferences.py:509
 msgid "Publicizing or privatizing social sharing"
-msgstr ""
+msgstr "Nyilvános vagy privát közösségi megosztás"
 
 #: assembl/models/preferences.py:518
 msgid "Extra data for CSV reports"
-msgstr ""
+msgstr "Extra adatok a CSV jelentésekhez"
 
 #: assembl/models/preferences.py:521
 msgid "data taken from social_auth's extra_data to add to CSV reports"
-msgstr ""
+msgstr "adatok a social_auth's extra_data-ból, hozzáadása a CSV jelentésekhez"
 
 #: assembl/models/preferences.py:533
 msgid "Require anti-virus check"
-msgstr ""
+msgstr "Vírusellenőrzés szükséges"
 
 #: assembl/models/preferences.py:536
 msgid "Run an anti-virus on file attachments"
-msgstr ""
+msgstr "Vírusellenőrzés futtatása a fájl mellékletekben"
 
 #: assembl/models/preferences.py:550
 msgid "Authentication service type"
-msgstr ""
+msgstr "Hitelesítési szolgáltatás típusa"
 
 #: assembl/models/preferences.py:552
 msgid ""
@@ -206,62 +206,65 @@ msgid ""
 "social-auth backend. Participants will be auto-logged in to that server, and "
 "discussion auto-subscription will require an account from this backend."
 msgstr ""
+"A beszélgetéshez megadott elsődleges kiszolgáló szerver python-social-auth háttéralkalmazásként került meghatározásra. A résztvevők automatikusan bejelentkeztetésre kerülnek erre a szerverre, és a beszélgetés auto-feliratkozása egy felhasználói fiókot kér ettől a háttéralkalmazástól."
 
 #: assembl/models/preferences.py:567
 msgid "Allow access to moderated text"
-msgstr ""
+msgstr "Hozzáférés engedélyezése a szöveg moderálásához"
 
 #: assembl/models/preferences.py:570
 msgid "Are moderated posts simply hidden or made inaccessible by default?"
-msgstr ""
+msgstr "A moderált bejegyzések szimplán elrejtésre kerülnek vagy alapértelmezés szerint elérhetetlenek lesznek?"
 
 #: assembl/models/preferences.py:583
 msgid "Idea panel opens automatically"
-msgstr ""
+msgstr "Az ötletpanel automatikusan megnyílik"
 
 #: assembl/models/preferences.py:586
 msgid ""
 "Does the Idea panel automatically open when an idea is clicked ? (and close "
 "when a special section is clicked)"
 msgstr ""
+"Az ötletpanel automatikusan megnyílik, ha egy ötletre rákattintanak? (és bezárásra kerül, ha egy speciális szakaszra rákattintanak)"
 
 #: assembl/models/preferences.py:598
 msgid "Ids of columns in column view"
-msgstr ""
+msgstr "Oszlopazonosítók oszlop nézetben"
 
 #: assembl/models/preferences.py:600
 msgid "What are (ordered) identifiers of columns in multi-column views?"
-msgstr ""
+msgstr "Melyek az oszlopok (hozzárendelt) azonosítói többoszlopos nézetben?"
 
 #: assembl/models/preferences.py:613
 msgid "Default colors of columns in column view"
-msgstr ""
+msgstr "Alapértelmezett oszlopszínek oszlop nézetben"
 
 #: assembl/models/preferences.py:615
 msgid "What are (default) theme colors of columns in multi-column views?"
-msgstr ""
+msgstr "Melyek az oszlopok (alapértelmezett) színei többoszlopos nézetben?"
 
 #: assembl/models/preferences.py:627
 msgid "Names of columns in column view"
-msgstr ""
+msgstr "Oszlopnevek oszlop nézetben"
 
 #: assembl/models/preferences.py:629
 msgid ""
-"What are (default) names of columns in multi-column views, in each discussion"
-" language?"
+"What are (default) names of columns in multi-column views, in each "
+"discussion language?"
 msgstr ""
+"Melyek az (alapértelmezett) oszlopnevek többoszlopos nézetben, az egyes nyelveknél?"
 
 #: assembl/models/preferences.py:642
 msgid "Default permissions"
-msgstr ""
+msgstr "Alapértelmezett engedélyek"
 
 #: assembl/models/preferences.py:645
 msgid "The basic permissions for a new discussion"
-msgstr ""
+msgstr "Egy új beszélgetés alapszintű engedélyei"
 
 #: assembl/models/preferences.py:727
 msgid "Require Email Domain"
-msgstr ""
+msgstr "e-mail domain szükséges"
 
 #: assembl/models/preferences.py:730
 msgid ""
@@ -269,259 +272,250 @@ msgid ""
 "Only accounts with at least an email from those domains can self-register to "
 "this discussion. Anyone can self-register if this is empty."
 msgstr ""
+"List of domain names of user email address required for self-registration. Only accounts with at least an email from those domains can self-register to this discussion. Anyone can self-register if this is empty."
 
 #: assembl/models/preferences.py:746
 msgid "Show CI Dashboard"
-msgstr ""
+msgstr "CI irányítópult megjelenítése"
 
 #: assembl/models/preferences.py:749
 msgid "Show the CI Dashboard in the panel group window"
-msgstr ""
+msgstr "CI irányítópult megjelenítése a panelcsoport ablakban"
 
 #: assembl/models/preferences.py:761
 msgid "URL of CI Dashboard"
-msgstr ""
+msgstr "CI irányítópult URL"
 
 #: assembl/models/preferences.py:763
 msgid "Configuration of the visualizations shown in the CI Dashboard"
-msgstr ""
+msgstr "A CI irányítópulton megjelenített vizualizáció konfigurációja"
 
 #: assembl/models/preferences.py:781
 msgid "Catalyst Visualizations"
-msgstr ""
+msgstr "Catalyst vizualizáció"
 
 #: assembl/models/preferences.py:784
 msgid "A JSON description of available Catalyst visualizations"
-msgstr ""
+msgstr "Az elérhető Catalyst vizualizáció JSON leírása"
 
 #: assembl/models/preferences.py:796
 msgid "Navigation sections"
-msgstr ""
+msgstr "Navigációs részek"
 
 #: assembl/models/preferences.py:799
 msgid ""
 "A JSON specification of Catalyst visualizations to show in the navigation "
 "section"
 msgstr ""
+"A Catalyst vizualizáció JSON leírása, amely a navigációs részen megjelenítésre kerül"
 
 #: assembl/models/preferences.py:812
 msgid "Catalyst translations"
-msgstr ""
+msgstr "Catalyst fordítások"
 
 #: assembl/models/preferences.py:815
-msgid "Translations applicable to Catalyst visualizations, in Jed (JSON) format"
+msgid ""
+"Translations applicable to Catalyst visualizations, in Jed (JSON) format"
 msgstr ""
+"A Catalyst vizualizációra vonatkozó fordítások Jed (JSON) formátumban"
 
 #: assembl/models/preferences.py:832
 msgid "Default Table of Ideas Collapsed state"
-msgstr ""
+msgstr "Alapértelmezett ötletlista összecsukott állapot"
 
 #: assembl/models/preferences.py:835
 msgid ""
 "Default expanded/collapsed state of each idea in the table of ideas. A user "
 "can override it by opening/closing an idea"
 msgstr ""
+"Az ötletlista egyes elemeinek alapértelmezett kibontott/összecsukott állapota. A felhasználó felülírhatja az ötlet megnyitásával/bezárásával"
 
 #: assembl/models/preferences.py:850
 msgid "Preference data"
-msgstr ""
+msgstr "Beállítások adatai"
 
 #: assembl/models/preferences.py:853
 msgid "The preference configuration; override only with care"
-msgstr ""
+msgstr "A beállítások konfigurációja; felülírás csak körültekintéssel"
 
 #: assembl/models/preferences.py:865
 msgid "Cookies banner"
-msgstr ""
+msgstr "Sütik alkalmazásszalag"
 
 #: assembl/models/preferences.py:868
 msgid "Show the banner offering to disable Piwik cookies"
-msgstr ""
-
-#: assembl/models/preferences.py:880
-msgid "Custom HTML code on the landing page"
-msgstr ""
-
-#: assembl/models/preferences.py:883
-msgid ""
-"Custom HTML code that will be integrated on the landing page of the debate, "
-"right after the <body> tag"
-msgstr ""
-
-#: assembl/models/preferences.py:893
-msgid "Custom HTML code on the user registration page"
-msgstr ""
-
-#: assembl/models/preferences.py:896
-msgid ""
-"Custom HTML code that will be integrated on the user registration page of the"
-" debate, right after the <body> tag"
-msgstr ""
+msgstr "A Piwik sütik letiltását felajánló alkalmazásszalag megjelenítése"
 
 #: assembl/static/js/app/routeManager.js:416
 msgid "Requested vote widget could not be found."
-msgstr ""
+msgstr "A kért szavazás vezérlő nem található."
 
 #: assembl/static/js/app/routeManager.js:602
 msgid "You must be logged in to access this page."
-msgstr ""
+msgstr "Az oldal eléréséhez be kell jelentkezni."
 
 #: assembl/static/js/app/routeManager.js:625
-msgid "Your level of permissions do not allow you to see the rest of this content"
+msgid ""
+"Your level of permissions do not allow you to see the rest of this content"
 msgstr ""
+"Az engedélyszint nem teszi lehetővé, hogy a tartalom többi részét is megtekintse"
 
 #: assembl/static/js/app/common/context.js:156
 msgid "Message titles"
-msgstr ""
+msgstr "Üzenetcímek"
 
 #: assembl/static/js/app/common/context.js:160
 msgid "Message previews"
-msgstr ""
+msgstr "Üzenet előnézetek"
 
 #: assembl/static/js/app/common/context.js:164
 msgid "Complete messages"
-msgstr ""
+msgstr "Teljes üzenetek"
 
 #: assembl/static/js/app/common/context.js:893
 msgid "Extract"
-msgstr ""
+msgstr "Kivonat"
 
 #: assembl/static/js/app/common/context.js:1255
 msgid "ajax error message:"
-msgstr ""
+msgstr "ajax hibaüzenet:"
 
 #: assembl/static/js/app/models/agents.js:132
 msgid "need no additional permissions"
-msgstr ""
+msgstr "kiegészítő engedélyek nem szükségesek"
 
 #: assembl/static/js/app/models/agents.js:147
 #, python-format
 msgid "you must first <a href='%s'>Sign in</a>"
-msgstr ""
+msgstr "először <a href='%s'>Bejelentkezés</a>"
 
 #: assembl/static/js/app/models/agents.js:153
 msgid "you must first join this discussion"
-msgstr ""
+msgstr "először csatlakozzon a beszélgetéshez"
 
 #: assembl/static/js/app/models/agents.js:158
 #, python-format
 msgid "you must ask a discussion administrator for the following role: %s"
-msgid_plural "you must ask a discussion administrator for one of the following roles: %s"
-msgstr[0] ""
-msgstr[1] ""
+msgid_plural ""
+"you must ask a discussion administrator for one of the following roles: %s"
+msgstr[0] "egy beszélgetés adminisztrátortól kérje a következő szerepkört: %s"
+msgstr[1] "egy beszélgetés adminisztrátortól kérje a következő szerepkörök valamelyikét: %s"
 
 #: assembl/static/js/app/models/agents.js:162
 msgid "the administrator has closed this discussion to all contributions"
-msgstr ""
+msgstr "az adminisztrátor lezárta a beszélgetést minden közreműködő számára"
 
 #: assembl/static/js/app/models/agents.js:165
 msgid "you need additional permissions"
-msgstr ""
+msgstr "kiegészítő engedélyre van szükség"
 
 #: assembl/static/js/app/models/agents.js:232
 msgid "Unknown user"
-msgstr ""
+msgstr "Ismeretlen felhasználó "
 
 #: assembl/static/js/app/models/attachments.js:26
 msgid "Do not show anything special"
-msgstr ""
+msgstr "Nem jelenít meg semmi különöset"
 
 #: assembl/static/js/app/models/attachments.js:30
 msgid "Show the following preview at the end of your message"
-msgstr ""
+msgstr "A következő előnézet megjelenítése az üzenet végén"
 
 #: assembl/static/js/app/models/attachments.js:456
-msgid "Sorry, only an image type is supported in this upload. Please try again."
+msgid ""
+"Sorry, only an image type is supported in this upload. Please try again."
 msgstr ""
+"Elnézést, a feltöltés csak egy képtípust támogat. Kérjük, próbálja újra."
 
 #: assembl/static/js/app/models/idea.js:132
 msgid "The root idea will not be in the synthesis"
-msgstr ""
+msgstr "The root idea will not be in the synthesis"
 
 #: assembl/static/js/app/models/idea.js:149
 msgid "Add a description of this idea"
-msgstr ""
+msgstr "Leírás hozzáadása ehhez az ötlethez"
 
 #: assembl/static/js/app/models/idea.js:160
 msgid "The root idea will never be in the synthesis"
-msgstr ""
+msgstr "A gyökérötlet soha nem jelenik meg az összefoglalóban"
 
 #: assembl/static/js/app/models/idea.js:183
 msgid "You can add an expression for the next synthesis"
-msgstr ""
+msgstr "A kifejezést hozzáadhatja a következő összefoglalóhoz"
 
 #: assembl/static/js/app/models/idea.js:193
 msgid "All posts"
-msgstr ""
+msgstr "Összes bejegyzés"
 
 #: assembl/static/js/app/models/idea.js:216
 #: assembl/static/js/app/views/ideaPanel.js:528
 msgid "New idea"
-msgstr ""
+msgstr "Új ötlet"
 
 #: assembl/static/js/app/models/segment.js:114
 msgid "You must be logged in to create segments"
-msgstr ""
+msgstr "Szegmensek létrehozásához be kell jelentkezni"
 
 #: assembl/static/js/app/models/segment.js:125
 msgid ""
 "invalid extract: the extract must have a valid idPost (here ) or a valid uri "
 "(here )"
 msgstr ""
+"érvénytelen kivonat: a kivonatnak rendelkeznie kell érvényes idPost-tal (itt) vagy érvényes uri-val (itt)"
 
 #: assembl/static/js/app/models/segment.js:129
 msgid "invalid creationDate: "
-msgstr ""
+msgstr "érvénytelen létrehozási dátum:"
 
 #: assembl/static/js/app/models/segment.js:133
 msgid "invalid idIdea: "
-msgstr ""
+msgstr "érvénytelen idIdea: "
 
 #: assembl/static/js/app/models/segment.js:137
 msgid "invalid idCreator: "
-msgstr ""
+msgstr "érvénytelen idCreator: "
 
 #: assembl/static/js/app/models/sources.js:25
 msgid "Abstract content source"
-msgstr ""
+msgstr "Abstract content source"
 
 #: assembl/static/js/app/models/sources.js:75
 msgid "IMAP mailbox"
-msgstr ""
+msgstr "IMAP postaláda"
 
 #: assembl/static/js/app/models/sources.js:93
 msgid "Mailing list"
-msgstr ""
+msgstr "Levelezőlista"
 
 #: assembl/static/js/app/models/sources.js:121
 msgid "Comments to a given facebook post (by URL)"
-msgstr ""
+msgstr "Megjegyzések egy adott facebook bejegyzéshez (URL alapján)"
 
 #: assembl/static/js/app/models/sources.js:133
 msgid "Posts from a Facebook group (by URL)"
-msgstr ""
+msgstr "Bejegyzések egy Facebook csoportból (URL alapján)"
 
 #: assembl/static/js/app/models/sources.js:145
 msgid "Posts from a Facebook group to which you're subscribed"
-msgstr ""
+msgstr "Bejegyzések egy Facebook csoportból, amelyre feliratkozott"
 
 #: assembl/static/js/app/models/sources.js:157
 msgid "Posts from a Facebook page to which you're subscribed"
-msgstr ""
+msgstr "Bejegyzések egy Facebook oldalról, amelyre feliratkozott"
 
 #: assembl/static/js/app/models/sources.js:169
 msgid "Posts from users on a Facebook page to which you're subscribed"
-msgstr ""
+msgstr "Bejegyzések egy Facebook oldal feladásitól, amelyre feliratkozott"
 
 #: assembl/static/js/app/models/widget.js:258
 msgid "Create a voting session on this idea"
-msgstr ""
+msgstr "Szavazás létrehozása ehhez az ötlethez"
 
 #: assembl/static/js/app/models/widget.js:261
 #: assembl/static/js/app/models/widget.js:273
 #: assembl/static/js/app/models/widget.js:478
 msgid "Vote"
-msgstr ""
+msgstr "Szavazás"
 
 #: assembl/static/js/app/models/widget.js:263
 #: assembl/static/js/app/models/widget.js:267
@@ -530,186 +524,187 @@ msgstr ""
 #: assembl/static/js/app/models/widget.js:1045
 #: assembl/static/js/app/models/widget.js:1185
 msgid "Configure"
-msgstr ""
+msgstr "Konfigurálás"
 
 #: assembl/static/js/app/models/widget.js:275
 msgid "Complete your vote"
-msgstr ""
+msgstr "Szavazás befejezése"
 
 #: assembl/static/js/app/models/widget.js:277
 msgid "Modify your vote"
-msgstr ""
+msgstr "Szavazás módosítása"
 
 #: assembl/static/js/app/models/widget.js:280
 msgid "See the vote results"
-msgstr ""
+msgstr "Szavazás eredményeinek megtekintése"
 
 #: assembl/static/js/app/models/widget.js:283
 msgid "Configure this vote widget"
-msgstr ""
+msgstr "Szavazás vezérlő konfigurálása"
 
 #: assembl/static/js/app/models/widget.js:286
 msgid "See results from the vote of "
-msgstr ""
+msgstr "A szavazás eredményeinek megtekintése"
 
 #: assembl/static/js/app/models/widget.js:289
 msgid "Vote results"
-msgstr ""
+msgstr "Szavazás eredményei"
 
 #: assembl/static/js/app/models/widget.js:332
 msgid "This vote widget is not fully configured"
-msgstr ""
+msgstr "Ez a szavazás vezérlő nincs teljesen konfigurálva"
 
 #: assembl/static/js/app/models/widget.js:336
 msgid "A voting session has started."
-msgstr ""
+msgstr "A szavazás elkezdődött."
 
 #: assembl/static/js/app/models/widget.js:342
 #, python-format
 msgid "You cannot vote right now because %s."
-msgstr ""
+msgstr "Nem szavazhat azonnal, mivel %s."
 
 #: assembl/static/js/app/models/widget.js:350
 #, python-format
 msgid "The option “%s” is being considered in a vote"
-msgstr ""
+msgstr "Az “%s” opció figyelembe véve a szavazásban"
 
 #: assembl/static/js/app/models/widget.js:353
 #, python-format
 msgid "The option “%s” was considered in a vote"
-msgstr ""
+msgstr "Az “%s” opció figyelembe vételre került a szavazásban"
 
 #: assembl/static/js/app/models/widget.js:355
 msgid "A voting session is ongoing on this issue"
-msgstr ""
+msgstr "Szavazás van folyamatban erről a kérdésről"
 
 #: assembl/static/js/app/models/widget.js:357
 msgid "A voting session has happened on this issue"
-msgstr ""
+msgstr "Szavazás történt erről a kérdésről"
 
 #: assembl/static/js/app/models/widget.js:359
 #, python-format
 msgid "“%s” is being used as a criterion in a vote"
-msgstr ""
+msgstr "“%s” felhasználva, mint feltétel a szavazásban"
 
 #: assembl/static/js/app/models/widget.js:361
 #, python-format
 msgid "“%s” was used as a criterion in a vote"
-msgstr ""
+msgstr "“%s” felhasználásra került, mint feltétel a szavazásban"
 
 #: assembl/static/js/app/models/widget.js:371
 #, python-format
 msgid "You have %s to vote"
-msgstr ""
+msgstr "%s rendelkezik a szavazáshoz"
 
 #: assembl/static/js/app/models/widget.js:438
 msgid "Create a multi-criterion voting session on this idea"
-msgstr ""
+msgstr "Többfeltételes szavazás létrehozása ehhez az ötlethez"
 
 #: assembl/static/js/app/models/widget.js:474
 msgid "Create a token voting session on this idea"
-msgstr ""
+msgstr "Token szavazás létrehozása ehhez az ötlethez"
 
 #: assembl/static/js/app/models/widget.js:1032
 msgid "Create a creativity session on this idea"
-msgstr ""
+msgstr "Kreatív munkamenet létrehozása ehhez az ötlethez"
 
 #: assembl/static/js/app/models/widget.js:1035
 #: assembl/static/js/app/models/widget.js:1049
 msgid "Participate"
-msgstr ""
+msgstr "Részvétel"
 
 #: assembl/static/js/app/models/widget.js:1042
 msgid "Configure the creativity session on this idea"
-msgstr ""
+msgstr "Kreatív munkamenet konfigurálása ehhez az ötlethez"
 
 #: assembl/static/js/app/models/widget.js:1051
 msgid "Review the session"
-msgstr ""
+msgstr "Munkamenet áttekintése"
 
 #: assembl/static/js/app/models/widget.js:1080
 msgid "This widget is not fully configured"
-msgstr ""
+msgstr "Ez a vezérlő nincs teljesen konfigurálva"
 
 #: assembl/static/js/app/models/widget.js:1084
 msgid "A creativity session is ongoing."
-msgstr ""
+msgstr "Kreatív munkamenet folyamatban."
 
 #: assembl/static/js/app/models/widget.js:1092
 msgid "A creativity session is ongoing on this issue"
-msgstr ""
+msgstr "Kreatív munkamenet van folyamatban erről a kérdésről"
 
 #: assembl/static/js/app/models/widget.js:1094
 msgid "A creativity session has happened on this issue"
-msgstr ""
+msgstr "Kreatív munkamenet történt erről a kérdésről"
 
 #: assembl/static/js/app/models/widget.js:1098
 #, python-format
 msgid "You have %s to participate"
-msgstr ""
+msgstr "%s rendelkezik a részvételhez"
 
 #: assembl/static/js/app/models/widget.js:1174
 msgid "Create an inspiration module on this idea"
-msgstr ""
+msgstr "Inspirációs modul létrehozása ehhez az ötlethez"
 
 #: assembl/static/js/app/models/widget.js:1176
 msgid "Create an inspiration module on this discussion"
-msgstr ""
+msgstr "Inspirációs modul létrehozása ehhez a beszélgetéshez"
 
 #: assembl/static/js/app/models/widget.js:1178
 msgid "Configure the inspiration module associated to the discussion"
-msgstr ""
+msgstr "A beszélgetéshez rendelt inspirációs modul konfigurálása"
 
 #: assembl/static/js/app/models/widget.js:1180
 msgid "Configure the inspiration module associated to this idea"
-msgstr ""
+msgstr "Az ötlethez rendelt inspirációs modul konfigurálása"
 
 #: assembl/static/js/app/models/widget.js:1183
 #: assembl/templates/views/messageList.tmpl:35
 #: assembl/templates/views/messageList.tmpl:45
 msgid "I need inspiration"
-msgstr ""
+msgstr "Inspirációra van szükségem"
 
 #: assembl/static/js/app/utils/tourManager.js:22
 #: assembl/static/js/app/utils/tourManager.js:193
 msgid "Next"
-msgstr ""
+msgstr "Következő"
 
 #: assembl/static/js/app/utils/tourManager.js:23
 msgid "Back"
-msgstr ""
+msgstr "Vissza"
 
 #: assembl/static/js/app/utils/tourManager.js:24
 msgid "Done"
-msgstr ""
+msgstr "Kész"
 
 #: assembl/static/js/app/utils/tourManager.js:25
 msgid "Skip"
-msgstr ""
+msgstr "Kihagy"
 
 #: assembl/static/js/app/utils/tourManager.js:26
 #: assembl/templates/views/exportPostModal.tmpl:32
 msgid "Close"
-msgstr ""
+msgstr "Bezár"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:18
 #: assembl/templates/views/helperDebate.tmpl:3
 msgid "Welcome!"
-msgstr ""
+msgstr "Üdvözöljük!"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:20
 msgid "Thank you"
-msgstr ""
+msgstr "Köszönjük"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:22
 msgid ""
 "Welcome to this discussion. We’ve created series of hints to help you get "
 "started using Assembl."
 msgstr ""
+"Üdvözöljük a beszélgetésben. Összeállítottunk pár ötletet, amely segíthet megismerkedni az Assembl használatával."
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:37
 msgid "Join the discussion"
-msgstr ""
+msgstr "Csatlakoztatás a beszélgetéshez"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:38
 msgid ""
@@ -717,30 +712,33 @@ msgid ""
 "reply to messages directly, or start a new topic by clicking ‘Start a new "
 "discussion thread’ at the bottom of the panel."
 msgstr ""
+"Ez a beszélgetés panel, ahol a beszélgetések zajlanak. közvetlenül válaszolhat üzenetekre, vagy úgy témát indíthat az ‘Új beszélgetés indítása’ gombra kattintva a panel alján."
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:64
 msgid "Customize your view"
-msgstr ""
+msgstr "Nézet testre szabása"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:65
 msgid ""
 "You can view the discussion in many different ways using the filters at the "
 "top."
 msgstr ""
+"Az oldal tetején található szűrők segítségével számos módon jelenítheti meg a beszélgetéseket."
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:91
 msgid "Spot relevant quotes on each idea"
-msgstr ""
+msgstr "Emelje ki az egyes ötletek releváns idézeteit"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:92
 msgid ""
 "Excerpts from messages are harvested and are organized to help you find "
 "relevant contributions on this idea."
 msgstr ""
+"Az üzenetekből készített kivonatok megfelelően elrendezésre kerülnek, amely lehetővé teszi, hogy megtalálja az adott ötlethez kapcsolódó releváns hozzászólást."
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:107
 msgid "Explore one of these topics"
-msgstr ""
+msgstr "A témakörök felfedezése"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:108
 msgid ""
@@ -748,150 +746,158 @@ msgid ""
 "contents. Clicking on a topic will filter the conversation to only show "
 "messages that are related to this topic."
 msgstr ""
+"Ezen a tartalomjegyzéken megtalálja azokat a témákat, amelyekről éppen beszélgetés zajlik. A témára kattintva megjelenítheti csak azokat az üzeneteket, amelyek az adott témához kapcsolódnak."
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:119
 msgid "Catch up on what’s been said"
-msgstr ""
+msgstr "Nézze meg, hol tart a beszélgetés"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:121
 msgid ""
 "Periodically an executive summary of the discussion is created to give you a "
 "quick overview of what was said since the last executive summary"
 msgstr ""
+"Rendszeres időközönként egy összefoglaló készül a beszélgetésről, amely segítségével gyorsan áttekintheti, mi történt az utolsó összefoglaló óta"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:131
 msgid "DISABLED"
-msgstr ""
+msgstr "LETILTVA"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:133
-msgid "Find the different syntheses produced since the beginning of the discussion"
+msgid ""
+"Find the different syntheses produced since the beginning of the discussion"
 msgstr ""
+"Másik összefoglaló keresése, amely a beszélgetés kezdete óta készült"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:143
 msgid "Catch up on the evolution"
-msgstr ""
+msgstr "Tekintse át az előrehaladást"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:145
 msgid ""
 "The facilitator of the discussion has written this synthesis to help you get "
 "on board of the discussion. Enjoy reading!"
 msgstr ""
+"A beszélgetés moderátora készített egy összefoglalót, hogy Ön minél könnyebben bekapcsolódhasson a beszélgetésbe. Élvezze az olvasást!"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:155
 msgid "Dig more on an interesting idea and post your contribution"
-msgstr ""
+msgstr "Ásson mélyebbre az érdekes ötletekben és szóljon hozzá a témához"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:157
 msgid ""
 "You can click on this idea to see current discussions happening on it. You "
 "would be able to start contributing on this idea from there."
 msgstr ""
+"Rákattintva az ötletre megtekintheti a folyamatban lévő beszélgetéseket. Innen már Ön is hozzászólhat a beszélgetéshez."
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:170
 msgid "Stay informed"
-msgstr ""
+msgstr "Maradjon naprakész"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:171
 msgid ""
-"Notifications are set to go to your email. If you aren’t receiving them, make"
-" sure to check your spam folder! You can update your notification settings "
-"here."
+"Notifications are set to go to your email. If you aren’t receiving them, "
+"make sure to check your spam folder! You can update your notification "
+"settings here."
 msgstr ""
+"E-mailben értesítéseket fog kapni. Ha nem kapja meg őket, ellenőrizze a levélszemét mappát! Itt frissítheti az értesítések beállításait."
 
 #: assembl/static/js/app/views/agent.js:87
 #, python-format
 msgid "All messages by %s"
-msgstr ""
+msgstr "A következő által küldött üzenetek: %s"
 
 #: assembl/static/js/app/views/announcements.js:177
 msgid "Please give a title of this announcement..."
-msgstr ""
+msgstr "Adja meg ennek a közleménynek a címét..."
 
 #: assembl/static/js/app/views/announcements.js:185
 msgid "Please write the content of this announcement here..."
-msgstr ""
+msgstr "Itt adja meg a közlemény tartalmát..."
 
 #: assembl/static/js/app/views/attachments.js:138
 #, python-format
 msgid "For URL %s in the text above"
-msgstr ""
+msgstr "A fenti szövegben található URL-hez %s"
 
 #: assembl/static/js/app/views/attachments.js:260
 #: assembl/templates/views/langStringEntry.tmpl:12
 msgid "Remove"
-msgstr ""
+msgstr "Eltávolít"
 
 #: assembl/static/js/app/views/attachments.js:267
 msgid "For the uploaded file"
-msgstr ""
+msgstr "A feltöltött fájlhoz"
 
 #: assembl/static/js/app/views/attachments.js:336
 #, python-format
 msgid ""
-"We are sorry, there was an error during the upload of the file \"%s\". Please"
-" try again."
+"We are sorry, there was an error during the upload of the file \"%s\". "
+"Please try again."
 msgstr ""
+"Sajnáljuk, hiba lépett fel a fájl feltöltése közben \"%s\". Kérjük, próbálja meg újra."
 
 #: assembl/static/js/app/views/attachments.js:507
 msgid "Upload an Image to the Idea Panel"
-msgstr ""
+msgstr "Kép feltöltése az ötletpanelre"
 
 #: assembl/static/js/app/views/baseMessageList.js:186
 msgid "Recently active threads"
-msgstr ""
+msgstr "Mostanában aktív beszélgetések"
 
 #: assembl/static/js/app/views/baseMessageList.js:191
 msgid "Recently started threads"
-msgstr ""
+msgstr "Mostanában indított beszélgetések"
 
 #: assembl/static/js/app/views/baseMessageList.js:196
 msgid "Chronological threads"
-msgstr ""
+msgstr "Beszélgetések időrendi sorrendben"
 
 #: assembl/static/js/app/views/baseMessageList.js:201
 msgid "Chronological threads + jump to oldest unread message"
-msgstr ""
+msgstr "Beszélgetések időrendi sorrendben + ugrás a legrégebbi olvasatlan üzenetre"
 
 #: assembl/static/js/app/views/baseMessageList.js:206
 #: assembl/static/js/app/views/messageColumnsPanel.js:241
 msgid "Newest messages first"
-msgstr ""
+msgstr "Legújabb üzenet elöl"
 
 #: assembl/static/js/app/views/baseMessageList.js:211
 #: assembl/static/js/app/views/messageColumnsPanel.js:246
 msgid "Most popular messages first"
-msgstr ""
+msgstr "Legnépszerűbb üzenetek elöl"
 
 #: assembl/static/js/app/views/baseMessageList.js:691
 msgid "No messages"
-msgstr ""
+msgstr "Nincsenek üzenetek"
 
 #: assembl/static/js/app/views/baseMessageList.js:1046
 #: assembl/static/js/app/views/messageSend.js:191
 #: assembl/templates/do_password_change.jinja2:30
 #: assembl/templates/request_password_change.jinja2:28
 msgid "Send"
-msgstr ""
+msgstr "Küldés"
 
 #: assembl/static/js/app/views/baseMessageList.js:1047
 msgid "Subject"
-msgstr ""
+msgstr "Tárgy"
 
 #: assembl/static/js/app/views/baseMessageList.js:1048
 msgid "Add a subject above and start a new topic here"
-msgstr ""
+msgstr "Tárgy megadása fent és új téma indítása itt"
 
 #: assembl/static/js/app/views/baseMessageList.js:1049
 msgid "You need to type a comment first..."
-msgstr ""
+msgstr "Először be kell írnia a hozzászólást..."
 
 #: assembl/static/js/app/views/baseMessageList.js:1050
 msgid "You need to set a subject to add a new topic..."
-msgstr ""
+msgstr "Az új téma hozzáadásához meg kell határoznia a tárgyat..."
 
 #: assembl/static/js/app/views/baseMessageList.js:1555
 msgid "Send to clipboard"
-msgstr ""
+msgstr "Küldés vágólapra"
 
 #: assembl/static/js/app/views/baseMessageList.js:1557
 #: assembl/static/js/app/views/confirmModal.js:32
@@ -908,15 +914,15 @@ msgstr ""
 #: assembl/templates/views/message_translation_question_selection.tmpl:14
 #: assembl/templates/views/showSegmentByAnnotation.tmpl:9
 msgid "Cancel"
-msgstr ""
+msgstr "Mégse"
 
 #: assembl/static/js/app/views/baseMessageList.js:1561
 msgid "You can drag the segment below directly to the table of ideas"
-msgstr ""
+msgstr "A lenti szegmenst közvetlenül az ötlettáblára húzhatja"
 
 #: assembl/static/js/app/views/baseMessageList.js:1562
 msgid "You can also copy-paste from the text in the zone below"
-msgstr ""
+msgstr "Az alábbi zónában a szöveget másolás-beillesztéssel is elhelyezheti"
 
 #: assembl/static/js/app/views/baseMessageList.js:1606
 #, python-format
@@ -924,44 +930,45 @@ msgid ""
 "This extract was organized in the idea \" %s \" by the facilitator of the "
 "debate"
 msgstr ""
+"Az \" %s \" ötletnél a kivonatot a vita moderátora rendezte el"
 
 #: assembl/static/js/app/views/baseMessageList.js:1609
 msgid "This extract is in a harvester's clipboard and hasn' been sorted yet."
-msgstr ""
+msgstr "Ez a kivonat még a vágólapon található, még nem került elmentésre."
 
 #: assembl/static/js/app/views/baseMessageList.js:2265
 #, python-format
 msgid "%d new message has been posted.  Click here to refresh"
 msgid_plural "%d new messages have been posted.  Click here to refresh"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d új üzenet megosztva. A frissítéshez kattintson ide"
+msgstr[1] "%d új üzenet került megosztásra. A frissítéshez kattintson ide"
 
 #: assembl/static/js/app/views/confirmModal.js:33
 #: assembl/static/js/app/views/ideaPanel.js:720
 #: assembl/static/js/app/views/ideaPanel.js:731
 #: assembl/static/js/app/views/ideaPanel.js:740
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: assembl/static/js/app/views/contextPage.js:91
 #: assembl/static/js/app/views/navigation/synthesisInNavigation.js:146
 msgid "No synthesis of the discussion has been published yet"
-msgstr ""
+msgstr "A beszélgetés összefoglalása még nem került kiadásra"
 
 #: assembl/static/js/app/views/contextPage.js:274
 #: assembl/templates/views/navigation.tmpl:21
 msgid "Home"
-msgstr ""
+msgstr "Kezdőlap"
 
 #: assembl/static/js/app/views/documents.js:102
 #, python-format
 msgid "Sorry, we have failed to upload your file \"%s\". Please try again."
-msgstr ""
+msgstr "Elnézést, nem sikerült feltöltenünk a fájlt \"%s\". Kérjük, próbálja meg újra."
 
 #: assembl/static/js/app/views/externalVisualization.js:24
 #: assembl/templates/views/create-group.tmpl:107
 msgid "CI Dashboard"
-msgstr ""
+msgstr "CI irányítópult"
 
 #: assembl/static/js/app/views/facebookViews.js:40
 msgid ""
@@ -969,6 +976,9 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
+"A következő üzenet megosztva az Assembl-n:\n"
+"\n"
+"\n"
 
 #: assembl/static/js/app/views/facebookViews.js:42
 #, python-format
@@ -977,38 +987,43 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
+"%s a következő üzenetet osztotta meg az Assembl-n:"
 
 #: assembl/static/js/app/views/facebookViews.js:51
 msgid ""
 "Please be aware that comments below will be imported into a discussion found "
 "at "
 msgstr ""
+"Kérjük, vegye figyelembe, hogy az alábbi megjegyzések, a következő helyen talált beszélgetésbe kerülnek importálásra: "
 
 #: assembl/static/js/app/views/facebookViews.js:297
 msgid ""
 "An error occured whilst communicating with Facebook. Close the box and try "
 "again."
 msgstr ""
+"Hiba lépett fel a Facebook-kal történő kommunikáció során. Zárja be és próbálja meg újra."
 
 #: assembl/static/js/app/views/facebookViews.js:432
 msgid "You did not log into facebook. Please log-in to continue."
-msgstr ""
+msgstr "Nem jelentkezett be a facebook-ba. A folytatáshoz jelentkezzen be."
 
 #: assembl/static/js/app/views/facebookViews.js:451
 msgid ""
-"There was an issue with getting your Facebook login status. Please close this"
-" box and contact your discussion administrator."
+"There was an issue with getting your Facebook login status. Please close "
+"this box and contact your discussion administrator."
 msgstr ""
+"Hiba történt a Facebook bejelentkezési állapotának lekérésekor. Kérjük, zárja be ezt az ablakot és vegye fel a kapcsolatot a beszélgetés adminisztrátorával."
 
 #: assembl/static/js/app/views/facebookViews.js:546
 msgid ""
-"Great! You already have a facebook account. Below are the list of permissions"
-" we need for the exportation process."
+"Great! You already have a facebook account. Below are the list of "
+"permissions we need for the exportation process."
 msgstr ""
+"Nagyszerű! Már van facebook fiókja. Az alábbiakban találhatók azok az engedélyek, amelyek a exportáláshoz szükségesek."
 
 #: assembl/static/js/app/views/facebookViews.js:547
 msgid "Click here if you agree with these permissions."
-msgstr ""
+msgstr "Kattintson ide, ha egyetért ezekkel az engedélyekkel."
 
 #: assembl/static/js/app/views/facebookViews.js:551
 msgid ""
@@ -1016,447 +1031,459 @@ msgid ""
 "session. As always, below are the permissions that Assembl would need to "
 "continue."
 msgstr ""
+"Úgy tűnik, hogy a munkamenet lejárt. Kattintson a lenti gombra, hogy frissíthesse a munkamenetet. Mint mindig, az alábbiakban találhatók azok az engedélyek, amelyekre az Assembl-nek szüksége van a folytatáshoz."
 
 #: assembl/static/js/app/views/facebookViews.js:552
 msgid "Click here to continue."
-msgstr ""
+msgstr "Kattintson ide a folytatáshoz."
 
 #: assembl/static/js/app/views/facebookViews.js:556
 msgid "You must create an account. Warning: This will refresh the page"
-msgstr ""
+msgstr "Létre kell hoznia egy fiókot. Figyelem: Ez frissíti az oldalt"
 
 #: assembl/static/js/app/views/facebookViews.js:557
 msgid "Sign in using your Facebook account"
-msgstr ""
+msgstr "Bejelentkezés a Facebook fiók használatával"
 
 #: assembl/static/js/app/views/facebookViews.js:799
 msgid ""
-"Assembl is a collective intelligence tool designed to enable open, democratic"
-" discussions that lead to idea generation and innovation."
+"Assembl is a collective intelligence tool designed to enable open, "
+"democratic discussions that lead to idea generation and innovation."
 msgstr ""
+"Az Assembl egy olyan kollektív intelligencia-eszköz, amely lehetővé teszi a nyitott, demokratikus beszélgetéseket, amelyek új ötletek generálásához és innovációhoz vezetnek."
 
 #: assembl/static/js/app/views/facebookViews.js:866
 msgid "Facebook was unable to create the post. Close the box and try again."
-msgstr ""
+msgstr "A Facebook nem tudta létrehozni a bejegyzést. Zárja be az ablakot és próbálja meg újra."
 
 #: assembl/static/js/app/views/facebookViews.js:947
 msgid ""
 "Please select between pages, groups or your wall as the final destination to "
 "complete the form."
 msgstr ""
+"Az űrlap befejezéséhez célállomásként válasszon az oldalak, a csoportok vagy az üzenőfal közül."
 
 #: assembl/static/js/app/views/facebookViews.js:970
 msgid ""
-"Something went wrong on Assembl whilst creating your post. Please contact the"
-" Discussion administrator for more information."
+"Something went wrong on Assembl whilst creating your post. Please contact "
+"the Discussion administrator for more information."
 msgstr ""
+"Hiba lépett fel az Assembl-n a bejegyzés létrehozása közben. További információért vegye fel a kapcsolatot a beszélgetés adminisztrátorával."
 
 #: assembl/static/js/app/views/facebookViews.js:1066
 msgid "This account does NOT have a facebook account"
-msgstr ""
+msgstr "Ez a fiók NEM rendelkezik facebook fiókkal"
 
 #: assembl/static/js/app/views/facebookViews.js:1084
 msgid "Could not create the message source"
-msgstr ""
+msgstr "Az üzenetforrás nem hozható létre"
 
 #: assembl/static/js/app/views/facebookViews.js:1088
 #: assembl/static/js/app/views/facebookViews.js:1093
 msgid "There was an error creating the message source"
-msgstr ""
+msgstr "Hiba lépett fel az üzenetforrás létrehozása közben"
 
 #: assembl/static/js/app/views/facebookViews.js:1214
 msgid "There was an error with creating a source of type"
-msgstr ""
+msgstr "Hiba lépett fel a típusforrás létrehozásakor"
 
 #: assembl/static/js/app/views/facebookViews.js:1254
 msgid "Please select a destination to export to before continuing"
-msgstr ""
+msgstr "Kérjük, válasszon ki egy célállomást az exportáláshoz, mielőtt továbblépne"
 
 #: assembl/static/js/app/views/facebookViews.js:1258
 msgid "Please complete facebook login"
-msgstr ""
+msgstr "Kérjük, fejezze be a facebook bejelentkezést"
 
 #: assembl/static/js/app/views/ideaClassificationOnMessage.js:152
 msgid "Go to this idea"
-msgstr ""
+msgstr "Ugrás erre az ötletre"
 
 #: assembl/static/js/app/views/ideaClassificationOnMessage.js:362
 msgid "This message is linked to the following idea because: "
 msgid_plural "This message is linked to the %1$d following ideas because: "
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Ez üzenet a következő ötlethez van hozzárendelve, mivel: "
+msgstr[1] "Ez üzenet a következő ötletekhez %1$d van hozzárendelve, mivel:"
 
 #: assembl/static/js/app/views/ideaClassificationOnMessage.js:367
 msgid "Link between this message and the idea"
 msgid_plural "Links between this message and ideas"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Kapcsolat az üzenet és az ötlet között"
+msgstr[1] "Kapcsolat az üzenetek és az ötletek között"
 
 #: assembl/static/js/app/views/ideaInSynthesis.js:167
 #, python-format
 msgid "%d message is available under this idea"
 msgid_plural "%d messages are available under this idea"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d üzenet érhető el ez alatt az ötlet alatt"
+msgstr[1] "%d üzenet érhető el ez alatt az ötlet alatt"
 
 #: assembl/static/js/app/views/ideaList.js:260
 #: assembl/templates/views/create-group.tmpl:42
 #: assembl/templates/views/ideaList.tmpl:14
 msgid "Table of ideas"
-msgstr ""
+msgstr "Ötletlista"
 
 #: assembl/static/js/app/views/ideaList.js:805
 msgid "You don't have the permission to do this."
-msgstr ""
+msgstr "Ön nem rendelkezik engedéllyel ehhez."
+
+#: assembl/static/js/app/views/ideaPanel.js:211
+msgid "Idea"
+msgstr "Ötlet"
 
 #: assembl/static/js/app/views/ideaPanel.js:214
-msgid "Detailled information about the currently selected idea in the Table of ideas"
+msgid ""
+"Detailled information about the currently selected idea in the Table of ideas"
 msgstr ""
+"Az ötletlistában aktuálisan kiválasztott ötlet részletes információi"
 
 #: assembl/static/js/app/views/ideaPanel.js:222
 msgid "This idea has no sub-ideas"
-msgstr ""
+msgstr "Ehhez az ötlethez nem tartoznak al-ötletek"
 
 #: assembl/static/js/app/views/ideaPanel.js:225
 #, python-format
 msgid "This idea has %d sub-idea"
 msgid_plural "This idea has %d sub-ideas"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Ehhez az ötlethez %d al-ötlet tartozik"
+msgstr[1] "Ehhez az ötlethez %d al-ötlet tartozik"
 
 #: assembl/static/js/app/views/ideaPanel.js:246
 msgid "No extract was harvested"
-msgstr ""
+msgstr "Nem készült kivonat"
 
 #: assembl/static/js/app/views/ideaPanel.js:249
 msgid "No important nugget was harvested"
-msgstr ""
+msgstr "Nincsenek fontos elemek összegyűjtve"
 
 #: assembl/static/js/app/views/ideaPanel.js:254
 #, python-format
 msgid "%d extract was harvested"
 msgid_plural "%d extracts were harvested"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d kivonat készült"
+msgstr[1] "%d kivonat készült"
 
 #: assembl/static/js/app/views/ideaPanel.js:257
 #, python-format
 msgid "%d important nugget was harvested"
 msgid_plural "%d important nuggets were harvested"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d fontos elem került összegyűjtésre"
+msgstr[1] "%d fontos elem került összegyűjtésre"
 
 #: assembl/static/js/app/views/ideaPanel.js:505
 #, python-format
 msgid "%d contributor"
 msgid_plural "%d contributors"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d közreműködő"
+msgstr[1] "%d közreműködő"
 
 #: assembl/static/js/app/views/ideaPanel.js:527
 msgid "Short expression (only a few words) of the idea in the table of ideas."
-msgstr ""
+msgstr "Az ötlet rövid leírása (csak néhány szó) az ötletlistában."
 
 #: assembl/static/js/app/views/ideaPanel.js:719
 msgid "You cannot delete an idea while it has sub-ideas."
-msgstr ""
+msgstr "Addig nem törölhető az ötlet, amíg vannak al-ötletek."
 
 #: assembl/static/js/app/views/ideaPanel.js:730
 msgid "You cannot delete an idea associated to extracts."
-msgstr ""
+msgstr "Nem törölheti a kivonathoz kapcsolódó ötletet."
 
 #: assembl/static/js/app/views/ideaPanel.js:739
 msgid "You cannot delete an idea associated to comments."
-msgstr ""
+msgstr "Nem törölheti a megjegyzéshez kapcsolódó ötletet."
 
 #: assembl/static/js/app/views/ideaPanel.js:759
 msgid "Confirm that you want to delete this idea."
-msgstr ""
+msgstr "Erősítse meg, hogy tényleg szeretné törölni az ötletet."
 
 #: assembl/static/js/app/views/ideaPanel.js:760
 #: assembl/static/js/app/views/message.js:1650
 msgid "No"
-msgstr ""
+msgstr "Nem"
 
 #: assembl/static/js/app/views/ideaPanel.js:761
 #: assembl/static/js/app/views/message.js:1651
 msgid "Yes"
-msgstr ""
+msgstr "Igen"
 
 #: assembl/static/js/app/views/ideaPanel.js:936
 msgid "Confirm that you want to send all extracts back to the clipboard."
-msgstr ""
+msgstr "Erősítse meg, hogy szeretné visszaküldeni az összes kivonatot a vágólapra."
 
 #: assembl/static/js/app/views/ideaPanel.js:1005
 msgid "You may want to describe this idea for users here..."
-msgstr ""
+msgstr "Itt bemutathatja ezt az ötletet a felhasználók számára..."
 
 #: assembl/static/js/app/views/message.js:133
 msgid "This message is linked to the following idea: "
 msgid_plural "This message is linked to the following ideas: "
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Ez üzenet a következő ötlethez van hozzárendelve:"
+msgstr[1] "Ez üzenet a következő ötletekhez van hozzárendelve:"
 
 #: assembl/static/js/app/views/message.js:137
 #, python-format
 msgid "and %d other idea</a>"
 msgid_plural "and %d other ideas</a>"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "és %d másik ötlet</a>"
+msgstr[1] "és %d másik ötletek</a>"
 
 #: assembl/static/js/app/views/message.js:802
 msgid "Type your response here..."
-msgstr ""
+msgstr "Ide írja be válaszát..."
 
 #: assembl/static/js/app/views/message.js:804
 msgid "Send your reply"
-msgstr ""
+msgstr "Válasz elküldése"
 
 #: assembl/static/js/app/views/message.js:806
 msgid "You did not type a response yet..."
-msgstr ""
+msgstr "Még nem írt be választ..."
 
 #: assembl/static/js/app/views/message.js:1029
 msgid "You"
-msgstr ""
+msgstr "Ön"
 
 #: assembl/static/js/app/views/message.js:1034
 #, python-format
 msgid "You and %d Another person"
 msgid_plural "You and %d Other persons"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Ön és %d másik személy"
+msgstr[1] "Ön és %d más személyek"
 
 #: assembl/static/js/app/views/message.js:1042
 #, python-format
 msgid "%d person"
 msgid_plural "%d persons"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d személy"
+msgstr[1] "%d személy"
 
 #: assembl/static/js/app/views/message.js:1632
 msgid "Message has been successfully deleted."
-msgstr ""
+msgstr "Az üzenet sikeresen törölve."
 
 #: assembl/static/js/app/views/message.js:1643
 msgid "Error: Message could not be deleted."
-msgstr ""
+msgstr "Hiba: Az üzenet nem törölhető."
 
 #: assembl/static/js/app/views/message.js:1649
 msgid "Are you sure you want to delete this message?"
-msgstr ""
+msgstr "Valóban szeretné törölni ezt az üzenetet?"
 
 #: assembl/static/js/app/views/messageColumnsPanel.js:170
 #: assembl/static/js/app/views/messageList.js:184
 msgid "Messages"
-msgstr ""
+msgstr "Üzenetek"
 
 #: assembl/static/js/app/views/messageColumnsPanel.js:251
 msgid "Oldest messages first"
-msgstr ""
+msgstr "Legrégebbi üzenetek elöl"
 
 #: assembl/static/js/app/views/messageColumnsPanel.js:388
 #, python-format
 msgid "%d message on theme “%s”"
 msgid_plural "%d messages on theme “%s”"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d üzenet a témával kapcsolatban “%s”"
+msgstr[1] "%d üzenet a témával kapcsolatban “%s”"
 
 #: assembl/static/js/app/views/messageColumnsPanel.js:434
 #, python-format
 msgid "Add your thoughts on theme “%s”"
-msgstr ""
+msgstr "Írja le gondolatait a témával kapcsolatban “%s”"
 
 #: assembl/static/js/app/views/messageDeletedByAdmin.js:20
 msgid "This message has been deleted by an administrator."
-msgstr ""
+msgstr "Ezt az üzenetet az adminisztrátor törölte."
 
 #: assembl/static/js/app/views/messageDeletedByUser.js:38
 msgid "This message has been deleted by its author."
-msgstr ""
+msgstr "Ezt az üzenetet a szerző törölte."
 
 #: assembl/static/js/app/views/messageFamily.js:121
 #, python-format
 msgid "%d more message is available in this message's full context."
 msgid_plural "%d more messages are available in this message's full context."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d további üzenet érhető el a üzenet teljes kontextusában."
+msgstr[1] "%d további üzenet érhető el a üzenet teljes kontextusában."
 
 #: assembl/static/js/app/views/messageFamily.js:123
 #, python-format
-msgid "Messages available in this message's full context are from %d more author."
-msgid_plural "Messages available in this message's full context are from %d more authors."
-msgstr[0] ""
-msgstr[1] ""
+msgid ""
+"Messages available in this message's full context are from %d more author."
+msgid_plural ""
+"Messages available in this message's full context are from %d more authors."
+msgstr[0] "Az üzenet teljes kontextusában elérhető üzenetek további %d szerzőtől származnak."
+msgstr[1] "Az üzenet teljes kontextusában elérhető üzenetek további %d szerzőtől származnak."
 
 #: assembl/static/js/app/views/messageFamily.js:245
 #, python-format
 msgid "Zooming on the conversation around \"%s\""
-msgstr ""
+msgstr "A beszélgetés nagyítása \"%s\""
 
 #: assembl/static/js/app/views/messageListHeader.js:191
 msgid "Add filter"
-msgstr ""
+msgstr "Szűrő hozzáadása"
 
 #: assembl/static/js/app/views/messageListPostQuery.js:40
 msgid "Threaded view"
-msgstr ""
+msgstr "Beszélgetéslánc nézet"
 
 #: assembl/static/js/app/views/messageListPostQuery.js:48
 msgid "Oldest first"
-msgstr ""
+msgstr "Legrégebbi elöl"
 
 #: assembl/static/js/app/views/messageListPostQuery.js:55
 msgid "Newest first"
-msgstr ""
+msgstr "Legújabb elöl"
 
 #: assembl/static/js/app/views/messageListPostQuery.js:62
 msgid "Popularity"
-msgstr ""
+msgstr "Népszerűség"
 
 #: assembl/static/js/app/views/messageListPostQuery.js:517
 msgid "Clear filters"
-msgstr ""
+msgstr "Szűrők törlése"
 
 #: assembl/static/js/app/views/messageListPostQuery.js:537
 msgid "No query has been executed yet"
-msgstr ""
+msgstr "Lekérdezés még nem került végrehajtásra"
 
 #: assembl/static/js/app/views/messageListPostQuery.js:544
 msgid "There is no message to display with those filters:"
-msgstr ""
+msgstr "Ezekkel a szűrőkkel nincs megjeleníthető üzenet:"
 
 #: assembl/static/js/app/views/messageListPostQuery.js:547
 msgid "There are no messages in the discussion."
-msgstr ""
+msgstr "Nincsenek üzenetek ebben a beszélgetésben."
 
 #: assembl/static/js/app/views/messageListPostQuery.js:555
 msgid " (unread)"
-msgstr ""
+msgstr " (olvasatlan)"
 
 #: assembl/static/js/app/views/messageListPostQuery.js:557
 msgid " (all unread)"
-msgstr ""
+msgstr " (összes olvasatlan)"
 
 #: assembl/static/js/app/views/messageListPostQuery.js:561
 #, python-format
 msgid " (%d unread)"
 msgid_plural " (%d unread)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " (%d olvasatlan)"
+msgstr[1] "(%d olvasatlan)"
 
 #: assembl/static/js/app/views/messageListPostQuery.js:567
 #, python-format
 msgid "Found %d message%s out of %d messages that:"
 msgid_plural "Found %d messages%s out of %d messages that:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d üzenet található %s az %d üzenetből, amely:"
+msgstr[1] "%d üzenet található %s az %d üzenetből, amely:"
 
 #: assembl/static/js/app/views/messageListPostQuery.js:570
 #, python-format
 msgid "Found %d message%s out of %d messages:"
 msgid_plural "Found %d messages%s out of %d messages:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d üzenet található %s az %d üzenetből:"
+msgstr[1] "%d üzenet található %s az %d üzenetből:"
 
 #: assembl/static/js/app/views/messageSend.js:94
 msgid "Type your message here..."
-msgstr ""
+msgstr "Ide írja be az üzenetét..."
 
 #: assembl/static/js/app/views/messageSend.js:176
 #: assembl/templates/views/messageList.tmpl:43
 msgid "Start a new discussion thread"
-msgstr ""
+msgstr "Indítson egy új beszélgetésláncot"
 
 #: assembl/static/js/app/views/messageSend.js:223
 #, python-format
 msgid "Before you can reply to this message %s"
-msgstr ""
+msgstr "Mielőtt még válaszolni tudna erre az üzenetre %s"
 
 #: assembl/static/js/app/views/messageSend.js:226
 #, python-format
 msgid "Before you can post a message %s"
-msgstr ""
+msgstr "Mielőtt közzétehetné ezt az üzenetet %s"
 
 #: assembl/static/js/app/views/messageSend.js:308
 msgid "You need to set a subject before you can send your message..."
-msgstr ""
+msgstr "Az üzenet elküldése előtt meg kell adnia a tárgyat..."
 
 #: assembl/static/js/app/views/messageSend.js:318
 msgid "You need to type a message before you can send your message..."
-msgstr ""
+msgstr "Az üzenet elküldése előtt meg kell írnia az üzentet..."
 
 #: assembl/static/js/app/views/messageSend.js:326
 msgid "Sending..."
-msgstr ""
+msgstr "Küldés..."
 
 #: assembl/static/js/app/views/messageSend.js:358
 msgid "Message posted!"
-msgstr ""
+msgstr "Üzenet közzétéve!"
 
 #: assembl/static/js/app/views/messageTranslationQuestion.js:100
 msgid "Please select a language."
-msgstr ""
+msgstr "Kérjük, válasszon ki egy nyelvet."
 
 #: assembl/static/js/app/views/messageTranslationQuestion.js:108
 msgid "You cannot select more than one language"
-msgstr ""
+msgstr "Nem választhat ki egynél több nyelvet"
 
 #: assembl/static/js/app/views/messageTranslationQuestion.js:128
 #, python-format
 msgid "Select the language you wish to translate %s to:"
-msgstr ""
+msgstr "Válassza ki a nyelvet, amelyre fordíttatni szeretne %s :"
 
 #: assembl/static/js/app/views/messageTranslationQuestion.js:289
 #, python-format
 msgid "Translate all messages from %s to %s?"
-msgstr ""
+msgstr "Össze üzenet fordítása erről: %s erre: %s?"
 
 #: assembl/static/js/app/views/messageTranslationQuestion.js:300
 #, python-format
 msgid "Keep %s messages untranslated?"
-msgstr ""
+msgstr "Az %s üzenetek ne legyenek lefordítva?"
 
 #: assembl/static/js/app/views/messageTranslationQuestion.js:305
 msgid "Yes, Thanks!"
-msgstr ""
+msgstr "Igen, köszönöm!"
 
 #: assembl/static/js/app/views/messageTranslationQuestion.js:306
 msgid "Do not translate"
-msgstr ""
+msgstr "Nem fordítsa le"
 
 #: assembl/static/js/app/views/messageTranslationQuestion.js:307
 msgid "Translate to another language"
-msgstr ""
+msgstr "Fordítás másik nyelvre"
 
 #: assembl/static/js/app/views/postFilters.js:120
 #, python-format
 msgid "%s (%s)"
 msgid_plural "%s (%s)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%s (%s)"
+msgstr[1] "%s (%s)"
 
 #: assembl/static/js/app/views/postFilters.js:183
 #, python-format
 msgid "%s"
-msgstr ""
+msgstr "%s"
 
 #: assembl/static/js/app/views/postFilters.js:183
 #, python-format
 msgid "NOT %s"
-msgstr ""
+msgstr "NEM %s"
 
 #: assembl/static/js/app/views/postFilters.js:203
 msgid "Posts with specific ids"
-msgstr ""
+msgstr "Megadott azonosítóval rendelkező bejegyzések"
 
 #: assembl/static/js/app/views/postFilters.js:207
 msgid "Only include posts that are in a range of specific ids"
-msgstr ""
+msgstr "Csak azok a bejegyezések, amelyek a megadott azonosító-tartományba tartoznak"
 
 #: assembl/static/js/app/views/postFilters.js:224
 msgid "Related to idea"
-msgstr ""
+msgstr "Az ötlethez kapcsoló"
 
 #: assembl/static/js/app/views/postFilters.js:227
 msgid ""
@@ -1464,13 +1491,14 @@ msgid ""
 "recursive:  Messages related to ideas that are descendents of the idea are "
 "included."
 msgstr ""
+"Csak azokat az üzenteket tartalmazza, amelyek az adott ötlethez kapcsolódnak: Azokat az üzeneteket is tartalmazza, amelyek az ötlethez kapcsolódó üzenetek leszármazottai."
 
 #: assembl/static/js/app/views/postFilters.js:245
 #, python-format
 msgid "Discuss idea %s"
 msgid_plural "Discuss ideas: %s"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Ötlet megvitatása %s"
+msgstr[1] "Ötletek megvitatása: %s"
 
 #: assembl/static/js/app/views/postFilters.js:245
 #: assembl/static/js/app/views/postFilters.js:289
@@ -1479,246 +1507,256 @@ msgstr[1] ""
 #: assembl/static/js/app/views/postFilters.js:423
 #: assembl/static/js/app/views/postFilters.js:451
 msgid " AND "
-msgstr ""
+msgstr " ÉS"
 
 #: assembl/static/js/app/views/postFilters.js:263
 msgid "Part of thread of"
-msgstr ""
+msgstr "Beszélgetés része"
 
 #: assembl/static/js/app/views/postFilters.js:266
 msgid "Only include messages that are in the specified post reply thread."
-msgstr ""
+msgstr "Csak azokat az üzeneteket tartalmazza, amelyek a megadott bejegyzés válaszüzeneteiben találhatók."
 
 #: assembl/static/js/app/views/postFilters.js:280
 #: assembl/static/js/app/views/postFilters.js:324
 #, python-format
 msgid "synthesis \"%s\""
-msgstr ""
+msgstr "összefoglaló \"%s\""
 
 #: assembl/static/js/app/views/postFilters.js:283
 #: assembl/static/js/app/views/postFilters.js:327
 #, python-format
 msgid "message \"%s\""
-msgstr ""
+msgstr "üzenet \"%s\""
 
 #: assembl/static/js/app/views/postFilters.js:289
 #, python-format
 msgid "Are in the conversation that follows: %s"
-msgstr ""
+msgstr "A következő beszélgetésben találhatók: %s"
 
 #: assembl/static/js/app/views/postFilters.js:307
 msgid "Part of the context of"
-msgstr ""
+msgstr "Kontextus része"
 
 #: assembl/static/js/app/views/postFilters.js:310
-msgid "Only include messages that are in the specified post reply thread or ancestry."
+msgid ""
+"Only include messages that are in the specified post reply thread or "
+"ancestry."
 msgstr ""
+"Csak azokat az üzeneteket tartalmazza, amelyek a megadott bejegyzés válaszüzeneteiben vagy elődelemeiben találhatók."
 
 #: assembl/static/js/app/views/postFilters.js:333
 #, python-format
 msgid "Are in the context of: %s"
-msgstr ""
+msgstr "A következő kontextusban találhatók: %s"
 
 #: assembl/static/js/app/views/postFilters.js:351
 msgid "Posted by"
-msgstr ""
+msgstr "Közzétette:"
 
 #: assembl/static/js/app/views/postFilters.js:354
 msgid "Only include messages that are posted by a specific user."
-msgstr ""
+msgstr "Csak azokat az üzeneteket tartalmazza, amelyet a megadott felhasználó tett közzé."
 
 #: assembl/static/js/app/views/postFilters.js:363
 #: assembl/static/js/app/views/postFilters.js:418
 #, python-format
 msgid "\"%s\""
-msgstr ""
+msgstr "\"%s\""
 
 #: assembl/static/js/app/views/postFilters.js:368
 #, python-format
 msgid "Are posted by: %s"
-msgstr ""
+msgstr "Közzétéve: %s"
 
 #: assembl/static/js/app/views/postFilters.js:386
 msgid "Messages I posted"
-msgstr ""
+msgstr "Általam közzétett üzenetek"
 
 #: assembl/static/js/app/views/postFilters.js:389
 msgid "Only include messages that I posted."
-msgstr ""
+msgstr "Csak az által közzétett üzeneteket tartalmazza."
 
 #: assembl/static/js/app/views/postFilters.js:406
 msgid "Replies to"
-msgstr ""
+msgstr "Válaszok a következőnek"
 
 #: assembl/static/js/app/views/postFilters.js:409
 msgid "Only include messages that reply to a specific user."
-msgstr ""
+msgstr "Csak azokat az üzeneteket tartalmazza, amelyek a megadott felhasználónak válaszolnak."
 
 #: assembl/static/js/app/views/postFilters.js:423
 #, python-format
 msgid "Replies to: %s"
-msgstr ""
+msgstr "Válaszok a következőnek: %s"
 
 #: assembl/static/js/app/views/postFilters.js:441
 msgid "In column category"
-msgstr ""
+msgstr "Oszlop kategóriában"
 
 #: assembl/static/js/app/views/postFilters.js:444
 msgid ""
-"Only include messages that were classified in a specific category. Use "
-"\"null\" for no category."
+"Only include messages that were classified in a specific category. Use \"null"
+"\" for no category."
 msgstr ""
+"Csak azokat az üzeneteket tartalmazza, amelyek egy meghatározott kategóriába kerültek besorolásra. Használja a \"nulla\" értéket, ha nincs kategória."
 
 #: assembl/static/js/app/views/postFilters.js:451
 #, python-format
 msgid "In category: %s"
-msgstr ""
+msgstr "Kategóriában: %s"
 
 #: assembl/static/js/app/views/postFilters.js:469
 msgid "Messages that reply to me"
-msgstr ""
+msgstr "Válaszüzenetek nekem"
 
 #: assembl/static/js/app/views/postFilters.js:472
 msgid "Only include messages that reply one of the messages I posted."
-msgstr ""
+msgstr "Csak olyan üzeneteket tartalmazza, amelyek az én egyik bejegyzésemre válaszolnak."
 
 #: assembl/static/js/app/views/postFilters.js:492
 #: assembl/templates/views/orphanMessagesInIdeaList.tmpl:4
 msgid "Messages not yet associated with an idea"
-msgstr ""
+msgstr "Üzenetek, amelyek nincsenek hozzárendelve egy ötlethez sem"
 
 #: assembl/static/js/app/views/postFilters.js:495
 msgid "Only include messages that are not found in any idea."
-msgstr ""
+msgstr "Csak az olyan üzeneteket tartalmazza, amelyek nem találhatók meg egyik ötletnél sem."
 
 #: assembl/static/js/app/views/postFilters.js:515
 msgid "Synthesis messages"
-msgstr ""
+msgstr "Összefoglaló üzenetek"
 
 #: assembl/static/js/app/views/postFilters.js:518
 msgid "Only include messages that represent a synthesis of the discussion."
-msgstr ""
+msgstr "Csak azokat az üzeneteket tartalmazza, amelyek a beszélgetés összefoglalóját tartalmazzák."
 
 #: assembl/static/js/app/views/postFilters.js:540
 msgid "Have unread value"
-msgstr ""
+msgstr "Olvasatlan érték"
 
 #: assembl/static/js/app/views/postFilters.js:546
 msgid "You haven't read yet"
-msgstr ""
+msgstr "Még nem olvasta"
 
 #: assembl/static/js/app/views/postFilters.js:548
 msgid "You've already read"
-msgstr ""
+msgstr "Már olvasta"
 
 #: assembl/static/js/app/views/postFilters.js:576
 msgid "Unread messages"
-msgstr ""
+msgstr "Olvasatlan üzenetek"
 
 #: assembl/static/js/app/views/postFilters.js:579
-msgid "Only include messages you haven't read yet, or you manually marked unread."
+msgid ""
+"Only include messages you haven't read yet, or you manually marked unread."
 msgstr ""
+"Csak az olvasatlan vagy a manuálisan olvasatlanra állított üzeneteket tartalmazza."
 
 #: assembl/static/js/app/views/postFilters.js:599
 msgid "Read messages"
-msgstr ""
+msgstr "Üzenetek olvasása"
 
 #: assembl/static/js/app/views/postFilters.js:602
 msgid "Only include messages that have previously been marked read."
-msgstr ""
+msgstr "Csak azokat az üzeneteket tartalmazza, amelyeket korábban olvasottnak jelölt."
 
 #: assembl/static/js/app/views/postFilters.js:642
 msgid "Messages posted after..."
-msgstr ""
+msgstr "A dátumot követően közzétett üzenetek..."
 
 #: assembl/static/js/app/views/postFilters.js:648
 msgid "Only include posts created after a given date."
-msgstr ""
+msgstr "Csak azokat az üzeneteket tartalmazza, amelyek az adott dátum után kerültek közzétételre."
 
 #: assembl/static/js/app/views/postFilters.js:652
 msgid ""
 "Please type a date. The filter will then show only posts which have been "
 "created after this date. Example: 2015-01-01"
 msgstr ""
+"Kérjük, adjon meg egy dátumot. A szűrő megjeleníti azokat az üzeneteket, amelyek ez után a dátum után kerültek létrehozásra. Példa: 2015-01-01"
 
 #: assembl/static/js/app/views/postFilters.js:694
 msgid "Messages posted before..."
-msgstr ""
+msgstr "A dátumot megelőzően közzétett üzenetek..."
 
 #: assembl/static/js/app/views/postFilters.js:700
 msgid "Only include posts created before a given date."
-msgstr ""
+msgstr "Csak azokat az üzeneteket tartalmazza, amelyek az adott dátum előtt kerültek közzétételre."
 
 #: assembl/static/js/app/views/postFilters.js:704
 msgid ""
 "Please type a date. The filter will then show only posts which have been "
 "created before this date. Example: 2015-01-01"
 msgstr ""
+"Kérjük, adjon meg egy dátumot. A szűrő megjeleníti azokat az üzeneteket, amelyek ez előtt a dátum előtt kerültek létrehozásra. Példa: 2015-01-01"
 
 #: assembl/static/js/app/views/postFilters.js:744
 #, python-format
 msgid "Messages posted since the last synthesis (%s)"
-msgstr ""
+msgstr "Az utolsó összegzés óta közzétett üzenetek (%s)"
 
 #: assembl/static/js/app/views/postFilters.js:748
 msgid "Only include posts created after the last synthesis."
-msgstr ""
+msgstr "Csak azokat az üzeneteket tartalmazza, amelyek az utolsó összegzés után kerültek közzétételre."
 
 #: assembl/static/js/app/views/postFilters.js:771
 msgid "Deleted messages"
-msgstr ""
+msgstr "Törölt üzenetek"
 
 #: assembl/static/js/app/views/postFilters.js:774
 msgid ""
 "Only include messages that have been deleted (by their author or by an "
 "administrator), and their ancestors."
 msgstr ""
+"Csak a (szerző vagy egy adminisztrátor által) törölt üzeneteket, illetve az elődelemeket tartalmazza."
 
 #: assembl/static/js/app/views/postFilters.js:811
 msgid "Show also deleted messages"
-msgstr ""
+msgstr "Megjeleníti a törölt üzeneteket is"
 
 #: assembl/static/js/app/views/postFilters.js:814
 msgid ""
 "Also include messages that have been deleted (by their author or by an "
 "administrator)."
 msgstr ""
+"Megjeleníti a (szerző vagy egy adminisztrátor által) törölt üzeneteket is."
 
 #: assembl/static/js/app/views/preferencesView.js:153
 msgid "Your settings were reset to default"
-msgstr ""
+msgstr "A beállítások visszaállításra kerültek az alapértelmezett értékre"
 
 #: assembl/static/js/app/views/preferencesView.js:157
 msgid "Your settings were not be reset, but could not be read back."
-msgstr ""
+msgstr "A beállítások nem kerültek visszaállításra, nem lehetett visszaolvasni."
 
 #: assembl/static/js/app/views/preferencesView.js:163
 msgid "Your settings could not be reset."
-msgstr ""
+msgstr "A beállítások nem állíthatók vissza."
 
 #: assembl/static/js/app/views/preferencesView.js:349
 msgid "This is not valid JSON: "
-msgstr ""
+msgstr "Ez nem egy érvényes JSON: "
 
 #: assembl/static/js/app/views/preferencesView.js:428
 msgid "Please enter a number"
-msgstr ""
+msgstr "Kérjük, adjon meg egy számot"
 
 #: assembl/static/js/app/views/preferencesView.js:527
 msgid "This does not appear to be a URL"
-msgstr ""
+msgstr "Úgy tűnik, ez nem egy URL"
 
 #: assembl/static/js/app/views/preferencesView.js:546
 msgid "This does not appear to be an email"
-msgstr ""
+msgstr "Úgy tűnik, ez nem egy e-mail cím"
 
 #: assembl/static/js/app/views/preferencesView.js:566
 msgid "This does not appear to be a domain"
-msgstr ""
+msgstr "Úgy tűnik, ez nem egy domain"
 
 #: assembl/static/js/app/views/preferencesView.js:901
 msgid "The following settings were not saved: "
-msgstr ""
+msgstr "A következő beállítások nem kerültek mentésre: "
 
 #: assembl/static/js/app/views/admin/adminDiscussion.js:96
 #: assembl/static/js/app/views/preferencesView.js:904
@@ -1726,149 +1764,150 @@ msgstr ""
 #: assembl/static/js/app/views/user/account.js:126
 #: assembl/static/js/app/views/user/profile.js:66
 msgid "Your settings were saved!"
-msgstr ""
+msgstr "A beállítások mentésre kerültek!"
 
 #: assembl/static/js/app/views/preferencesView.js:910
 msgid "Your settings are up-to-date."
-msgstr ""
+msgstr "A beállítások naprakészek."
 
 #: assembl/static/js/app/views/segmentList.js:321
 #: assembl/static/js/app/views/segmentList.js:367
 #: assembl/static/js/app/views/segmentList.js:370
 #: assembl/templates/views/create-group.tmpl:118
 msgid "Clipboard"
-msgstr ""
+msgstr "Vágólap"
 
 #: assembl/static/js/app/views/segmentList.js:370
 msgid "empty"
-msgstr ""
+msgstr "üres"
 
 #: assembl/static/js/app/views/segmentList.js:557
 msgid "Are you sure you want to empty your entire clipboard?"
-msgstr ""
+msgstr "Biztos benne, hogy szeretné kiüríteni a vágólapot?"
 
 #: assembl/static/js/app/views/admin/adminDiscussion.js:99
 #: assembl/static/js/app/views/sourceEditView.js:53
 #: assembl/static/js/app/views/user/account.js:129
 #: assembl/static/js/app/views/user/profile.js:69
 msgid "Your settings failed to update."
-msgstr ""
+msgstr "A beállítások frissítése nem sikerült."
 
 #: assembl/static/js/app/views/statistics.js:71
 msgid "Evolution of the total number of messages"
-msgstr ""
+msgstr "Az összes üzenet számának alakulása"
 
 #: assembl/static/js/app/views/statistics.js:71
 msgid "Evolution of the number of messages posted"
-msgstr ""
+msgstr "A közzétett üzenetek számának alakulása"
 
 #: assembl/static/js/app/views/statistics.js:72
 #: assembl/templates/views/navigation.tmpl:28
 #: assembl/templates/views/statistics.tmpl:5
 msgid "Statistics"
-msgstr ""
+msgstr "Statisztikák"
 
 #: assembl/static/js/app/views/statistics.js:377
 msgid "messages"
-msgstr ""
+msgstr "üzenetek"
 
 #: assembl/static/js/app/views/statistics.js:612
 #: assembl/static/js/app/views/statistics.js:625
 msgid "messages, posted by"
-msgstr ""
+msgstr "Ön által közzétett üzenetek"
 
 #: assembl/static/js/app/views/statistics.js:789
 msgid "Not enough data yet."
-msgstr ""
+msgstr "Még nincs elegendő adat."
 
 #: assembl/static/js/app/views/statistics.js:857
 msgid "last week"
-msgstr ""
+msgstr "elmúlt hét"
 
 #: assembl/static/js/app/views/statistics.js:860
 msgid "last 2 weeks"
-msgstr ""
+msgstr "utolsó 2 hét"
 
 #: assembl/static/js/app/views/statistics.js:863
 msgid "last month"
-msgstr ""
+msgstr "elmúlt hónap"
 
 #: assembl/static/js/app/views/statistics.js:866
 msgid "last 3 months"
-msgstr ""
+msgstr "utolsó 3 hónap"
 
 #: assembl/static/js/app/views/statistics.js:869
 msgid "last 6 months"
-msgstr ""
+msgstr "utolsó 6 hónap"
 
 #: assembl/static/js/app/views/statistics.js:872
 msgid "last year"
-msgstr ""
+msgstr "elmúlt év"
 
 #: assembl/static/js/app/views/statistics.js:1027
 #, python-format
 msgid "%d participant has contributed in the %s"
 msgid_plural "%d participants have contributed in the %s"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d résztvevő vett részt a következőben: %s"
+msgstr[1] "%d résztvevő vett részt a következőben: %s"
 
 #: assembl/static/js/app/views/statistics.js:1036
 #, python-format
 msgid "%d new participant started contributing in the %s"
 msgid_plural "%d new participants started contributing in the %s"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d új résztvevő vett rész a következőben: %s"
+msgstr[1] "%d új résztvevő vett rész a következőben: %s"
 
 #: assembl/static/js/app/views/statistics.js:1046
 #, python-format
 msgid "%d active participant had contributed before %s"
 msgid_plural "%d active participants had contributed before %s"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d aktív résztvevő vett részt a következő előtt: %s"
+msgstr[1] "%d aktív résztvevő vett részt a következő előtt: %s"
 
 #: assembl/static/js/app/views/statistics.js:1059
 #, python-format
 msgid "%d participant's last contribution was prior to %s"
 msgid_plural "%d participants' last contribution was prior to %s"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d résztvevő utolsó részvétele a következő előtt: %s"
+msgstr[1] "%d résztvevő utolsó részvétele a következő előtt: %s"
 
 #: assembl/static/js/app/views/statistics.js:1074
 #, python-format
 msgid "%d participant has contributed since the beginning of the discussion"
-msgid_plural "%d participants have contributed since the beginning of the discussion"
-msgstr[0] ""
-msgstr[1] ""
+msgid_plural ""
+"%d participants have contributed since the beginning of the discussion"
+msgstr[0] "%d résztvevő vett részt a beszélgetésben a kezdetek óra"
+msgstr[1] "%d résztvevő vett részt a beszélgetésben a kezdetek óra"
 
 #: assembl/static/js/app/views/statistics.js:1086
 msgid "Contributors active recently"
-msgstr ""
+msgstr "Mostanában aktív résztvevők"
 
 #: assembl/static/js/app/views/statistics.js:1090
 msgid "Contributors inactive recently"
-msgstr ""
+msgstr "Mostanában aktív résztvevők"
 
 #: assembl/static/js/app/views/synthesisPanel.js:113
 #: assembl/templates/views/navigation.tmpl:3
 #: assembl/templates/views/synthesisContext.tmpl:6
 msgid "Synthesis"
-msgstr ""
+msgstr "Összefoglaló "
 
 #: assembl/static/js/app/views/synthesisPanel.js:227
 msgid "A short title for the synthesis"
-msgstr ""
+msgstr "Az összefoglaló rövid címe"
 
 #: assembl/static/js/app/views/synthesisPanel.js:228
 msgid "New Synthesis"
-msgstr ""
+msgstr "Új összefoglaló"
 
 #: assembl/static/js/app/views/synthesisPanel.js:239
 msgid "You can add an introduction to your synthesis here..."
-msgstr ""
+msgstr "Itt megadhatja az összefoglaló rövid bevezetését..."
 
 #: assembl/static/js/app/views/synthesisPanel.js:251
 msgid "You can add a conclusion to your synthesis here..."
-msgstr ""
+msgstr "Itt megadhatja az összefoglaló következtetéseit..."
 
 #: assembl/static/js/app/views/synthesisPanel.js:321
 msgid ""
@@ -1876,52 +1915,56 @@ msgid ""
 "delete it afterwards, and participants who subscribed to notifications "
 "related to the synthesis will receive a notification by email."
 msgstr ""
+"Biztos benne, hogy szeretné közzétenni az összefoglalót? A későbbiekben már nem tudja törölni azt, illetve a részvevők, akik feliratkoztak az összefoglalóval kapcsolatos értesítésekre, e-mailben értesítést fognak kapni."
 
 #: assembl/static/js/app/views/synthesisPanel.js:344
 msgid "Synthesis has been successfully published!"
-msgstr ""
+msgstr "Az összefoglaló sikeresen közzétételre került!"
 
 #: assembl/static/js/app/views/synthesisPanel.js:351
 msgid "Failed publishing synthesis!"
-msgstr ""
+msgstr "Összefoglaló közzététele sikertelen!"
 
 #: assembl/static/js/app/views/tokenVoteSession.js:264
 #, python-format
 msgid "<span class='available-tokens-number'>%d</span> remaining %s token"
-msgid_plural "<span class='available-tokens-number'>%d</span> remaining %s tokens"
-msgstr[0] ""
-msgstr[1] ""
+msgid_plural ""
+"<span class='available-tokens-number'>%d</span> remaining %s tokens"
+msgstr[0] "<span class='available-tokens-number'>%d</span> fennmaradó %s token"
+msgstr[1] "<span class='available-tokens-number'>%d</span> fennmaradó %s token"
 
 #: assembl/static/js/app/views/tokenVoteSession.js:535
 #, python-format
 msgid "set %d tokens"
-msgstr ""
+msgstr "beállított %d tokenek"
 
 #: assembl/static/js/app/views/tokenVoteSession.js:566
 msgid "You don't have enough tokens remaining."
-msgstr ""
+msgstr "Nincs elegendő token."
 
 #: assembl/static/js/app/views/tokenVoteSession.js:950
 msgid "See Description"
-msgstr ""
+msgstr "Lásd a leírást"
 
 #: assembl/static/js/app/views/tokenVoteSession.js:1037
 #, python-format
-msgid "%d token \"%s\" was voted on this idea, out of a total %d \"%s\" tokens voted "
+msgid ""
+"%d token \"%s\" was voted on this idea, out of a total %d \"%s\" tokens "
+"voted "
 msgid_plural ""
 "%d tokens \"%s\" were voted on this idea, out of a total %d \"%s\" tokens "
 "voted"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d token \"%s\" szavazat erre az ötletre, az összes %d \"%s\" token szavazatból "
+msgstr[1] "%d token \"%s\" szavazat erre az ötletre, az összes %d \"%s\" token szavazatból"
 
 #: assembl/static/js/app/views/tokenVoteSession.js:1093
 msgid "Hide Description"
-msgstr ""
+msgstr "Leírás elrejtése"
 
 #: assembl/static/js/app/views/tokenVoteSession.js:1215
 #, python-format
 msgid "Token: \"%s\""
-msgstr ""
+msgstr "Token: \"%s\""
 
 #: assembl/static/js/app/views/tokenVoteSession.js:1353
 #, python-format
@@ -1931,183 +1974,186 @@ msgid ""
 msgid_plural ""
 "%d participants voted between %s and %s. The number of tokens available for "
 "voting per participant:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d résztvevő szavazott %s és %s között. A szavazásra elérhető tokenek száma résztvevőnként:"
+msgstr[1] "%d résztvevő szavazott %s és %s között. A szavazásra elérhető tokenek száma résztvevőnként:"
 
 #: assembl/static/js/app/views/tokenVoteSession.js:1362
 #, python-format
 msgid "<strong>%d</strong> token of type \"%s\""
 msgid_plural "<strong>%d</strong> tokens of type \"%s\""
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "<strong>%d</strong> token típus \"%s\""
+msgstr[1] "<strong>%d</strong> token típus \"%s\""
 
 #: assembl/static/js/app/views/tokenVoteSession.js:1411
 msgid "Token Vote Results"
-msgstr ""
+msgstr "Token szavazás eredményei"
 
 #: assembl/static/js/app/views/tokenVoteSession.js:1602
 msgid "Guideline"
-msgstr ""
+msgstr "Útmutató"
 
 #: assembl/static/js/app/views/tokenVoteSession.js:1603
 msgid ""
 "Split your tokens among the ideas of your choice. By default, your vote is "
 "neutral per project."
 msgstr ""
+"Ossza meg a tokeneket a választott ötletek között. Alapértelmezés szerint szavazata semleges minden projekt esetében."
 
 #: assembl/static/js/app/views/tokenVoteSession.js:1604
 msgid "Save my votes"
-msgstr ""
+msgstr "Szavazataim elmentése"
 
 #: assembl/static/js/app/views/tokenVoteSession.js:1772
 msgid "Collective votes"
-msgstr ""
+msgstr "Kollektív szavazatok"
 
 #: assembl/static/js/app/views/tokenVoteSession.js:1807
 msgid "Your vote has been saved successfully."
-msgstr ""
+msgstr "Szavazata sikeresen mentésre került."
 
 #: assembl/static/js/app/views/tokenVoteSession.js:1811
 msgid "Go back to the discussion"
-msgstr ""
+msgstr "Vissza a beszélgetéshez"
 
 #: assembl/static/js/app/views/tokenVoteSession.js:1815
 msgid "Modify my vote"
-msgstr ""
+msgstr "Szavazatom módosítása"
 
 #: assembl/static/js/app/views/tokenVoteSession.js:1839
 #: assembl/static/js/app/views/tokenVoteSession.js:1870
 msgid "Vote confirmation"
-msgstr ""
+msgstr "Szavazat megerősítése"
 
 #: assembl/static/js/app/views/admin/adminDiscussion.js:116
 msgid "The logo will show like this:"
-msgstr ""
+msgstr "A logó így fog kinézni:"
 
 #: assembl/static/js/app/views/admin/adminMessageColumns.js:100
 msgid "Columns saved"
-msgstr ""
+msgstr "Elmentett oszlopok"
 
 #: assembl/static/js/app/views/admin/adminMessageColumns.js:319
 msgid "Define columns"
-msgstr ""
+msgstr "Oszlopok meghatározása"
 
 #: assembl/static/js/app/views/admin/adminTimelineEvents.js:247
 #: assembl/static/js/app/views/admin/adminTimelineEvents.js:257
 msgid "Invalid date and time"
-msgstr ""
+msgstr "Érvénytelen dátum és idő"
 
 #: assembl/static/js/app/views/admin/generalSource.js:79
 msgid "There was a reimport error!"
-msgstr ""
+msgstr "Újraimportálási hiba!"
 
 #: assembl/static/js/app/views/admin/generalSource.js:82
 msgid "Reimport has begun! It can take up to 15 minutes to complete."
-msgstr ""
+msgstr "Újraimportálás megkezdődött! Akár 15 percig is eltarthat."
 
 #: assembl/static/js/app/views/admin/generalSource.js:84
 msgid "Reimport failed."
-msgstr ""
+msgstr "Újraimportálás sikertelen."
 
 #: assembl/static/js/app/views/admin/generalSource.js:93
 msgid "There was a reprocess error!"
-msgstr ""
+msgstr "Újrafeldolgozási hiba!"
 
 #: assembl/static/js/app/views/admin/generalSource.js:96
 msgid "Reprocess has begun! It can take up to 15 minutes to complete."
-msgstr ""
+msgstr "Újrafeldolgozás megkezdődött! Akár 15 percig is eltarthat."
 
 #: assembl/static/js/app/views/admin/generalSource.js:98
 msgid "Reprocess failed"
-msgstr ""
+msgstr "Újrafeldolgozás sikertelen"
 
 #: assembl/static/js/app/views/admin/generalSource.js:117
 msgid "Import has begun!"
-msgstr ""
+msgstr "Importálás megkezdődött!"
 
 #: assembl/static/js/app/views/groups/panelWrapper.js:186
 #: assembl/templates/views/panelWrapper.tmpl:34
 msgid "Maximize panel"
-msgstr ""
+msgstr "Panel maximalizálása"
 
 #: assembl/static/js/app/views/groups/panelWrapper.js:197
 #: assembl/templates/views/navigation.tmpl:5
 #: assembl/templates/views/navigation.tmpl:14
 #: assembl/templates/views/panelWrapper.tmpl:8
 msgid "Minimize panel"
-msgstr ""
+msgstr "Panel minimalizálása"
 
 #: assembl/static/js/app/views/groups/panelWrapper.js:233
 msgid "Unlock panel"
-msgstr ""
+msgstr "Panel zárolásának feloldása"
 
 #: assembl/static/js/app/views/groups/panelWrapper.js:263
 msgid ""
 "We have locked the panel for you, so its content won't change while you're "
 "writing your message. Click here to unlock"
 msgstr ""
+"A panelt zároltuk, így a tartalma addig nem változik, amíg megírja az üzenetet. A zárolás feloldásához kattintson ide"
 
 #: assembl/static/js/app/views/groups/panelWrapper.js:266
 msgid ""
-"We have unlocked the panel for you, so its content can change now that you're"
-" not writing a message anymore. Click here to lock it back"
+"We have unlocked the panel for you, so its content can change now that "
+"you're not writing a message anymore. Click here to lock it back"
 msgstr ""
+"A panel zárolását feloldottuk, így a tartalma változhat, most hogy már nem írja az üzenetet. A zároláshoz kattintson ide"
 
 #: assembl/static/js/app/views/groups/panelWrapper.js:270
 msgid "We have locked the panel for you. Click here to unlock"
-msgstr ""
+msgstr "Zároltuk Önnek a panelt. A feloldáshoz kattintson ide"
 
 #: assembl/static/js/app/views/groups/panelWrapper.js:273
 msgid "We have unlocked the panel for you. Click here to lock it back"
-msgstr ""
+msgstr "A panel zárolását feloldottuk Önnek. A zároláshoz kattintson ide"
 
 #: assembl/static/js/app/views/groups/panelWrapper.js:311
 #: assembl/templates/views/panelWrapper.tmpl:14
 msgid "Lock panel"
-msgstr ""
+msgstr "Panel zárolása"
 
 #: assembl/static/js/app/views/modals/discussionStatisticsModal.js:95
 msgid "The end date should be later than the start date"
-msgstr ""
+msgstr "A befejezés dátumának későbbre kell esnie, mint a kezdés dátumának"
 
 #: assembl/static/js/app/views/modals/discussionStatisticsModal.js:187
 #: assembl/templates/views/navBarLeft.tmpl:25
 msgid "Discussion statistics"
-msgstr ""
+msgstr "Beszélgetés statisztikák"
 
 #: assembl/static/js/app/views/modals/ideaInModal.js:44
 #: assembl/static/js/app/views/modals/ideaInModal.js:49
 #, python-format
 msgid "Exploring idea \"%s\""
-msgstr ""
+msgstr "Ötlet felfedezése \"%s\""
 
 #: assembl/static/js/app/views/user/account.js:193
 msgid "Empty email"
-msgstr ""
+msgstr "Üres e-mail"
 
 #: assembl/static/js/app/views/user/account.js:198
 msgid "Invalid email"
-msgstr ""
+msgstr "Érvénytelen e-mail"
 
 #: assembl/static/js/app/views/user/account.js:210
 msgid "Your settings were saved"
-msgstr ""
+msgstr "A beállítások mentésre kerültek"
 
 #: assembl/static/js/app/views/user/account.js:216
 msgid "Your settings failed to update"
-msgstr ""
+msgstr "A beállítások frissítése nem sikerült"
 
 #: assembl/tasks/email_discussion_creator.py:69
 msgid "Your consultation was created"
-msgstr ""
+msgstr "A konzultáció létrehozva"
 
 #: assembl/templates/adminIndex.jinja2:3
 msgid "Administration"
-msgstr ""
+msgstr "Felügyelet"
 
 #: assembl/templates/cannot_read_discussion.jinja2:4
 msgid "You are not authorized to read this discussion."
-msgstr ""
+msgstr "Nem jogosult a beszélgetés olvasására."
 
 #: assembl/templates/cannot_read_discussion.jinja2:5
 #, python-format
@@ -2115,282 +2161,289 @@ msgid ""
 "You may <a href=\"%(logout)s\">logout</a> and login as another user with "
 "those permissions."
 msgstr ""
+"<a href=\"%(logout)s\">Kijelentkezhet</a> és egy másik felhasználóként, aki rendelkezik a jogosultságokkal, bejelentkezhet."
 
 #: assembl/templates/confirm.jinja2:23
 msgid "Resend the email"
-msgstr ""
+msgstr "E-mail újraküldése"
 
 #: assembl/templates/discussion_list.jinja2:10
 msgid "Admin"
-msgstr ""
+msgstr "Admin"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:15
 #: assembl/templates/discussion_list.jinja2:13
 msgid "Permissions"
-msgstr ""
+msgstr "Engedélyek"
 
 #: assembl/templates/admin/discussions.jinja2:86
 #: assembl/templates/discussion_list.jinja2:21
 msgid "There are no discussions on this server yet"
-msgstr ""
+msgstr "Ezen a szerveren még nincsenek beszélgetések"
 
 #: assembl/templates/discussion_list.jinja2:27
 #: assembl/templates/views/navBarRight.tmpl:60
 msgid "Sign in"
-msgstr ""
+msgstr "Bejelentkezés"
 
 #: assembl/templates/discussion_list.jinja2:28
 msgid " to see all available discussions."
-msgstr ""
+msgstr " az összes elérhető beszélgetés megtekintéséhez."
 
 #: assembl/templates/discussion_list.jinja2:36
 msgid "Create a new discussion"
-msgstr ""
+msgstr "Új beszélgetés létrehozása"
 
 #: assembl/templates/discussion_list.jinja2:39
 msgid "Change global permissions"
-msgstr ""
+msgstr "Globális engedélyek módosítása"
 
 #: assembl/templates/discussion_list.jinja2:42
 msgid "Change global preferences"
-msgstr ""
+msgstr "Globális beállítások módosítása"
 
 #: assembl/templates/discussion_list.jinja2:45
 #: assembl/templates/views/navBarRight.tmpl:55
 msgid "Sign out"
-msgstr ""
+msgstr "Kijelentkezés"
 
-#: assembl/templates/do_password_change.jinja2:28 assembl/templates/login.jinja2:72
-#: assembl/templates/register.jinja2:28 assembl/templates/views/emailSource.tmpl:74
+#: assembl/templates/do_password_change.jinja2:28
+#: assembl/templates/login.jinja2:72 assembl/templates/register.jinja2:28
+#: assembl/templates/views/emailSource.tmpl:74
 msgid "Password"
-msgstr ""
+msgstr "Jelszó"
 
 #: assembl/templates/do_password_change.jinja2:29
 #: assembl/templates/profile.jinja2:56 assembl/templates/profile.jinja2:58
 #: assembl/templates/register.jinja2:29
 msgid "Repeat password"
-msgstr ""
+msgstr "Jelszó újra"
 
 #: assembl/templates/idea_in_synthesis.jinja2:12
 #: assembl/templates/views/ideaInSynthesis.tmpl:6
 msgid "By"
-msgstr ""
+msgstr "Létrehozta:"
 
 #: assembl/templates/idea_in_synthesis.jinja2:16
 msgid "See the conversation around this idea"
-msgstr ""
+msgstr "Lásd az ötlethez kapcsolódó beszélgetéseket"
 
 #: assembl/templates/login.jinja2:30
 #, python-format
 msgid "Log in to \"%(discussion_title)s\""
-msgstr ""
+msgstr "Bejelentkezés a következőbe: \"%(discussion_title)s\""
 
 #: assembl/templates/login.jinja2:30
 msgid "Log in to Assembl"
-msgstr ""
+msgstr "Bejelentkezés az Assembl-be"
 
 #: assembl/templates/login.jinja2:37
 msgid "Log in using one of these social networks"
-msgstr ""
+msgstr "Bejelentkezés az egyik közösségi háló bejelentkezési adataival"
 
 #: assembl/templates/login.jinja2:51 assembl/templates/profile.jinja2:220
 msgid "Login with "
-msgstr ""
+msgstr "Bejelentkezés a következővel:"
 
 #: assembl/templates/login.jinja2:65
 msgid "Already have an account?"
-msgstr ""
+msgstr "Van már fiókja?"
 
 #: assembl/templates/login.jinja2:69
 #: assembl/templates/request_password_change.jinja2:27
 msgid "Email or username"
-msgstr ""
+msgstr "E-mail vagy felhasználónév"
 
 #: assembl/templates/login.jinja2:78
 msgid "Log in"
-msgstr ""
+msgstr "Bejelentkezés"
 
 #: assembl/templates/login.jinja2:80
 msgid "Forgot your password?"
-msgstr ""
+msgstr "Elfelejtette a jelszavát?"
 
 #: assembl/templates/login.jinja2:84
 msgid "No account yet?"
-msgstr ""
+msgstr "Még nincs fiókja?"
 
 #: assembl/templates/login.jinja2:87 assembl/templates/register.jinja2:30
 msgid "Sign up"
-msgstr ""
+msgstr "Regisztráció"
 
 #: assembl/templates/profile.jinja2:7 assembl/templates/view_profile.jinja2:7
 #: assembl/templates/views/navBarRight.tmpl:38
 #: assembl/templates/views/userProfile.tmpl:6
 msgid "Profile"
-msgstr ""
+msgstr "Profil"
 
 #: assembl/templates/profile.jinja2:27 assembl/templates/view_profile.jinja2:25
 #: assembl/templates/views/emailSource.tmpl:67
 #: assembl/templates/views/userAccountForm.tmpl:6
 msgid "Username"
-msgstr ""
+msgstr "Felhasználónév"
 
 #: assembl/templates/profile.jinja2:32
 msgid "Desired username"
-msgstr ""
+msgstr "Kívánt felhasználónév"
 
 #: assembl/templates/profile.jinja2:38 assembl/templates/view_profile.jinja2:29
 #: assembl/templates/views/adminMessageColumn.tmpl:17
 #: assembl/templates/views/discussionStatisticsModal.tmpl:95
 #: assembl/templates/views/emailSource.tmpl:5
 msgid "Name"
-msgstr ""
+msgstr "Név"
 
 #: assembl/templates/profile.jinja2:43
 msgid "Your name"
-msgstr ""
+msgstr "Ön neve"
 
 #: assembl/templates/profile.jinja2:49
 msgid "Change password"
-msgstr ""
+msgstr "Jelszó módosítása"
 
 #: assembl/templates/profile.jinja2:51
 msgid "New Password"
-msgstr ""
+msgstr "Új jelszó"
 
 #: assembl/templates/profile.jinja2:63 assembl/templates/view_profile.jinja2:36
 msgid "Emails"
-msgstr ""
+msgstr "E-mail cím"
 
 #: assembl/templates/profile.jinja2:70
 msgid "Confirm and fuse accounts"
-msgstr ""
+msgstr "Megerősítés és fiókok összevonása"
 
 #: assembl/templates/profile.jinja2:72
 msgid "unconfirmed"
-msgstr ""
+msgstr "nincs megerősítve"
 
 #: assembl/templates/profile.jinja2:73
 msgid "Send confirmation message"
-msgstr ""
+msgstr "Jóváhagyást kérő üzenet küldése"
 
 #: assembl/templates/profile.jinja2:82
 msgid "Add an email account"
-msgstr ""
+msgstr "E-mail fiók hozzáadása"
 
 #: assembl/templates/profile.jinja2:84 assembl/templates/register.jinja2:27
 msgid "Email"
-msgstr ""
+msgstr "E-mail"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:52
 #: assembl/templates/admin/discussion_permissions.jinja2:89
 #: assembl/templates/admin/discussion_permissions.jinja2:149
 #: assembl/templates/admin/global_permissions.jinja2:37
-#: assembl/templates/profile.jinja2:89 assembl/templates/views/ckeditorField.tmpl:9
+#: assembl/templates/profile.jinja2:89
+#: assembl/templates/views/ckeditorField.tmpl:9
 #: assembl/templates/views/messageModerationOptions.tmpl:32
 #: assembl/templates/views/preferenceView.tmpl:14
 #: assembl/templates/views/sourceFacebook.tmpl:3
 #: assembl/templates/views/userAccount.tmpl:47
 msgid "Save"
-msgstr ""
+msgstr "Mentés"
 
 #: assembl/templates/profile.jinja2:206
 msgid "Connect other accounts to Assembl"
-msgstr ""
+msgstr "Egy másik fiók hozzárendelése az Assembl-hez"
 
 #: assembl/templates/react_unauthorized.jinja2:10
 #, python-format
 msgid "Unauthorized <small>Error %(error_num)s</small>"
-msgstr ""
+msgstr "Nem engedélyezett <small>Hiba %(error_num)s</small>"
 
 #: assembl/templates/react_unauthorized.jinja2:11
 msgid "The requested resource requires proper permissions."
-msgstr ""
+msgstr "A kért erőforráshoz megfelelő engedélyekre van szükség."
 
 #: assembl/templates/react_unauthorized.jinja2:12
 #, python-format
-msgid "Please <a href='%(logout)s'>logout</a> and re-login as a permissible user."
+msgid ""
+"Please <a href='%(logout)s'>logout</a> and re-login as a permissible user."
 msgstr ""
+"Kérjük, <a href='%(logout)s'>jelentkezzen ki</a>, majd jelentkezzen be, mint engedélyekkel rendelkező felhasználó."
 
 #: assembl/templates/react_unauthorized.jinja2:16
 #, python-format
 msgid "Technical Contact: <a href=mailto:%(admin_email)s>%(admin_email)s</a>"
-msgstr ""
+msgstr "Technikai kapcsolattartó: <a href=mailto:%(admin_email)s>%(admin_email)s</a>"
 
 #: assembl/templates/register.jinja2:12
 #, python-format
 msgid "Join \"%(discussion_title)s\""
-msgstr ""
+msgstr "Csatlakozás \"%(discussion_title)s\""
 
 #: assembl/templates/register.jinja2:12
 msgid "Join Assembl"
-msgstr ""
+msgstr "Csatlakozás az Assembl-hez"
 
 #: assembl/templates/register.jinja2:22
 msgid "This is a closed discussion."
-msgstr ""
+msgstr "Ez egy lezárt beszélgetés."
 
-#: assembl/templates/register.jinja2:26 assembl/templates/views/userProfile.tmpl:13
+#: assembl/templates/register.jinja2:26
+#: assembl/templates/views/userProfile.tmpl:13
 msgid "Full name"
-msgstr ""
+msgstr "Teljes név"
 
 #: assembl/templates/register.jinja2:34
 msgid "Do you already have an account?"
-msgstr ""
+msgstr "Rendelkezik már fiókkal?"
 
 #: assembl/templates/register.jinja2:34
 msgid "Log in!"
-msgstr ""
+msgstr "Jelentkezzen be!"
 
 #: assembl/templates/view_profile.jinja2:48
 msgid "Accounts"
-msgstr ""
+msgstr "Fiókok"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:10
 msgid "Discussion "
-msgstr ""
+msgstr "Beszélgetés"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:11
 msgid "Role permissions:"
-msgstr ""
+msgstr "Szerepkör engedélyek:"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:15
 #: assembl/templates/admin/discussion_permissions.jinja2:60
 #: assembl/templates/admin/global_permissions.jinja2:8
 msgid "Roles"
-msgstr ""
+msgstr "Szerepkörök"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:37
 msgid "delete role"
-msgstr ""
+msgstr "szerepkör törlése"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:47
 msgid "Add a role"
-msgstr ""
+msgstr "Szerepkör hozzáadása"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:56
 msgid "User roles specific to this discussion:"
-msgstr ""
+msgstr "A beszélgetéshez meghatározott felhasználói szerepkörök:"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:60
 #: assembl/templates/admin/global_permissions.jinja2:8
 msgid "Users"
-msgstr ""
+msgstr "Felhasználók"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:84
 #: assembl/templates/admin/global_permissions.jinja2:32
 msgid "Search for users"
-msgstr ""
+msgstr "Felhasználók keresése"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:94
 msgid "Add users with a CSV file"
-msgstr ""
+msgstr "Felhasználók hozzáadása CSV fájlok segítségével"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:95
 msgid ""
-"The CSV file must have two fields, in this order: full name, email. If it has"
-" a header, it MUST be on the first line. Imported user's email will be "
+"The CSV file must have two fields, in this order: full name, email. If it "
+"has a header, it MUST be on the first line. Imported user's email will be "
 "considered validated. Here is an example of CSV file:"
 msgstr ""
+"A CSV fájlban két oszlopnak kell lennie, a következő sorrendben: teljes név, e-mail cím. Ha rendelkezik fejléccel, akkor annak az első sorban KELL lennie. Az importált felhasználói e-mail címeket érvényesítettnek tekintjük. Itt egy példa a CSV fájlra:"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:99
 msgid ""
@@ -2398,18 +2451,19 @@ msgid ""
 "another discussion. If you do not get Assembl to \"Send an invite message\", "
 "send one yourself, explaining how to reset password."
 msgstr ""
+"A meghívó üzenet nem kerül kiküldésre a már meglévő felhasználók számára, még akkor sem, ha egy új beszélgetés került létrehozásra. Ha az Assembl nem küldi el a \"Meghívó üzenet küldése\" üzentet, küldjön Ön egyet, amelyben elmagyarázza, hogyan lehet helyreállítani a jelszót."
 
 #: assembl/templates/admin/discussion_permissions.jinja2:101
 msgid "Role"
-msgstr ""
+msgstr "Szerepkör"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:113
 msgid "CSV File"
-msgstr ""
+msgstr "CSV fájl"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:117
 msgid "Send an invite message"
-msgstr ""
+msgstr "Megívó üzenet küldése"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:120
 msgid ""
@@ -2417,23 +2471,24 @@ msgid ""
 "use the following placeholders: {name}, {confirm_url}, {discussion_topic}, "
 "{discussion_url}"
 msgstr ""
+"Tartsa szem előtt, hogy ez az e-mail csak az új felhasználók számára kerül kiküldésre. Az üzenetekben a következő helyőrzőket használhatja: {name}, {confirm_url}, {discussion_topic}, {discussion_url}"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:122
 msgid "Sender name:"
-msgstr ""
+msgstr "Feladó neve:"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:124
 msgid "Subject:"
-msgstr ""
+msgstr "Tárgy:"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:125
 #: assembl/views/auth/views.py:1011
 msgid "Welcome to {discussion_topic}."
-msgstr ""
+msgstr "Üdvözöljük a {discussion_topic} beszélgetésben."
 
 #: assembl/templates/admin/discussion_permissions.jinja2:126
 msgid "Text email message:"
-msgstr ""
+msgstr "Szöveges e-mail üzenet:"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:127
 msgid ""
@@ -2447,44 +2502,59 @@ msgid ""
 "Best regards,\n"
 "The Assembl Team\n"
 msgstr ""
+"Helló {name}!\n"
+"Ön meghívást kapott a következő Assembl beszélgetésbe: {discussion_topic}.\n"
+"A linkre kattintva beállíthatja jelszavát, amely használatával be is jelentkezhet.\n"
+"<{confirm_url}>\n"
+"\n"
+"Amennyiben Ön nem kérte, hogy csatlakozhasson, kérjük, tekintse tárgytalannak ezt az e-mailt.\n"
+"\n"
+"Üdvözlettel,\n"
+"Az Assembl csapata\n"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:137
 msgid "HTML email message:"
-msgstr ""
+msgstr "HTML e-mail üzenet:"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:138
 msgid ""
 "<p>Hello, {name}!</p>\n"
-"<p>You have been invited to the Assembl discussion <a "
-"href=\"{discussion_url}\">{discussion_topic}</a>.\n"
+"<p>You have been invited to the Assembl discussion <a href="
+"\"{discussion_url}\">{discussion_topic}</a>.\n"
 "Please <a href=\"{confirm_url}\">click here</a> to set your password, after "
 "which you can log in.</p>\n"
 "<p>If you did not ask to join please disregard this email.</p>\n"
 "<p>Best regards,<br />The Assembl Team</p>\n"
 msgstr ""
+"<p>Helló, {name}!</p>\n"
+"<p>Ön meghívást kapott a következő Assembl beszélgetésbe: <a href=\"{discussion_url}\">{discussion_topic}</a>.\n"
+"Kérjük, <a href=\"{confirm_url}\">kattintson ide</a> a jelszó beállításához, amely használatával be is jelentkezhet.</p>\n"
+"<p>Amennyiben Ön nem kérte, hogy csatlakozhasson, kérjük, tekintse tárgytalannak ezt az e-mailt.</p>\n"
+"<p>Üdvözlettel,<br />Az Assembl csapata</p>\n"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:145
 msgid "Re-send to people who did not log in yet (USE SPARINGLY)"
-msgstr ""
+msgstr "Újraküldés azoknak az embereknek, amik még nem jelentkeztek be (SPARINGLY HASZNÁLATA)"
 
 #: assembl/templates/admin/global_permissions.jinja2:4
 #: assembl/templates/views/globalAdminNavigationMenu.tmpl:6
 msgid "Global roles"
-msgstr ""
+msgstr "Globális szerepkörök"
 
 #: assembl/templates/includes/updatebrowser.jinja2:41
 msgid ""
 "Your version of <strong>{0}</strong> is outdated and may deteriorate your "
 "experience on Assembl."
 msgstr ""
+"Az Ön <strong>{0}</strong> verziója elavult, előfordulhat, hogy nem tudja megfelelően élvezni az Assembl élményt."
 
 #: assembl/templates/includes/updatebrowser.jinja2:42
 msgid "update your browser"
-msgstr ""
+msgstr "frissítse böngészőjét"
 
 #: assembl/templates/includes/updatebrowser.jinja2:43
 msgid "Thanks!"
-msgstr ""
+msgstr "Köszönjük!"
 
 #: assembl/templates/notifications/html_mail.jinja2:82
 #, python-format
@@ -2492,29 +2562,34 @@ msgid ""
 "You are receiving this because you are subscribed to discussion "
 "%(discussionLink)s.  Specifically, you currently receive a notification when:"
 msgstr ""
+"Ön azért kapta ezt a levelet, mivel feliratkozott a következő beszélgetésre: %(discussionLink)s. Jelen esetben akkor kap értesítést, ha:"
 
 #: assembl/templates/notifications/html_mail_post.jinja2:62
 msgid "Reply to this message"
-msgstr ""
+msgstr "Válasz érkezik erre az üzenetre"
 
 #: assembl/templates/notifications/html_mail_post_synthesis.jinja2:31
 msgid "Comment on this synthesis"
-msgstr ""
+msgstr "Hozzászólás érkezik ehhez az összefoglalóhoz"
 
 #: assembl/templates/notifications/html_new_discussion.jinja2:22
 msgid ""
-"<h1>Congratulations, your <a href='{discussion_url}'>Assembl consultation</a>"
-" is ready.</h1>\n"
+"<h1>Congratulations, your <a href='{discussion_url}'>Assembl consultation</"
+"a> is ready.</h1>\n"
 "<p>You can <a href='{connection_url}'>connect here</a> to define your "
 "password.</p>\n"
 "<p>You will find <a href='{documentation_url}'>documentation here</a>.</p>\n"
 "<p>The Assembl tool enables consultations involving a great number of users "
 "(hundreds or thousands of users, public officials, etc.) in the co-design of "
 "a deliverable. If you need advice on structuring your consultation process "
-"and building skills in using Assembl, you can contact <a "
-"href='mailto:{admin_email}'>{admin_name}</a> from <a "
+"and building skills in using Assembl, you can contact <a href='mailto:"
+"{admin_email}'>{admin_name}</a> from <a "
 "href='{admin_org_url}'>{admin_org_name}</a>.</p>"
 msgstr ""
+"<h1>Gratulálunk, az Ön <a href='{discussion_url}'>Assembl konzultációja</a> készen áll.</h1>\n"
+"<p>Ide <a href='{connection_url}'>kapcsolódva</a> meghatározhatja jelszavát.</p>\n"
+"<p>A <a href='{documentation_url}'>dokumentációt</a> itt találja meg.</p>\n"
+"<p>Az Assembl eszköz segítségével nagy számú felhasználó bevonásával (felhasználók, köztisztviselők, stb. százai vagy ezrei) vitathatja meg például egy termék kialakítását. Ha az Assembl eszközben alkalmazott konzultációs folyamat kialakításával vagy képességek fejlesztésével kapcsolatban segítségre van szüksége, vegye fel a kapcsolatot a következővel: <a href='mailto:{admin_email}'>{admin_name}</a> (<a href='{admin_org_url}'>{admin_org_name}</a>).</p>"
 
 #: assembl/templates/notifications/txt_new_discussion.jinja2:16
 msgid ""
@@ -2532,6 +2607,14 @@ msgid ""
 "and building skills in using Assembl, you can contact {admin_name} at "
 "<{admin_email}>, from {admin_org_name} ({admin_org_url}) for more details."
 msgstr ""
+"Gratulálunk, az Ön Assembl konzultációja készen áll, itt megtalálhatja:\n"
+"{discussion_url}\n"
+"A jelszó meghatározásához használja az alábbi linket:\n"
+"{connection_url}\n"
+"A dokumentációt itt találja meg:\n"
+"{documentation_url}\n"
+"\n"
+"Az Assembl eszköz segítségével nagy számú felhasználó bevonásával (felhasználók, köztisztviselők, stb. százai vagy ezrei) vitathatja meg például egy termék kialakítását. Ha az Assembl eszközben alkalmazott konzultációs folyamat kialakításával vagy képességek fejlesztésével kapcsolatban segítségre van szüksége, vegye fel a kapcsolatot a következővel: {admin_name}<{admin_email}> ({admin_org_name}{admin_org_url})."
 
 #: assembl/templates/styleguide/components/Dialogs.jinja2:120
 #: assembl/templates/styleguide/components/Dialogs.jinja2:147
@@ -2540,33 +2623,33 @@ msgstr ""
 #: assembl/templates/views/create-group.tmpl:129
 #: assembl/templates/views/message_translation_question_selection.tmpl:12
 msgid "Validate"
-msgstr ""
+msgstr "Érvényesít"
 
 #: assembl/templates/views/DiscussionSettingsCreateSource.tmpl:2
 msgid "Create a message source:"
-msgstr ""
+msgstr "Új üzenetforrás létrehozása:"
 
 #: assembl/templates/views/DiscussionSettingsCreateSource.tmpl:5
 msgid "Select a message source type"
-msgstr ""
+msgstr "Üzenetforrás-típus kiválasztása"
 
 #: assembl/templates/views/DiscussionSettingsCreateSource.tmpl:14
 msgid "Create"
-msgstr ""
+msgstr "Létrehozás"
 
 #: assembl/templates/views/about.tmpl:2
 msgid "How it works"
-msgstr ""
+msgstr "Hogyan működik"
 
 #: assembl/templates/views/about.tmpl:5
 #, python-format
 msgid ""
 "<p>How to participate in the discussion \"%(debate_name)s\":</p>\n"
 "\t<ol>\n"
-"\t\t<li>Explore the discussions using the ideas that have already "
-"emerged</li>\n"
-"\t\t<li>Join in the conversation by replying directly to the contributions of"
-" participants</li>\n"
+"\t\t<li>Explore the discussions using the ideas that have already emerged</"
+"li>\n"
+"\t\t<li>Join in the conversation by replying directly to the contributions "
+"of participants</li>\n"
 "\t\t<li>Start a new topic of discussion if you wish to rejuvenate the "
 "discussion around a particular idea</li>\n"
 "\t</ol>\n"
@@ -2578,143 +2661,157 @@ msgid ""
 "contents of the ideas shared</li>\n"
 "\t</ol>"
 msgstr ""
+"<p>Részvétel a beszélgetésben \"%(debate_name)s\":</p>\n"
+"\t<ol>\n"
+"\t\t<li>A beszélgetéseket felfedezheti a már felmerült ötletek használatával</li>\n"
+"\t\t<li>Csatlakozzon a beszélgetéshez úgy, hogy közvetlenül válaszol a résztvevők által írt bejegyzésekre</li>\n"
+"\t\t<li>Indítson egy új témát, ha szeretné felfrissíteni az adott ötlet körüli beszélgetést</li>\n"
+"\t</ol>\n"
+"\t<p>Munka feldolgozása:</p>\n"
+"\t<ol>\n"
+"\t\t<li>A hozzászólást követően az összegzésért felelős személyek kiválogatják a kulcsfontosságú ötleteket az Ön üzeneteiből – ők azért vannak itt, hogy az Ön hozzászólásai láthatók legyenek</li>\n"
+"\t\t<li>Ezek alapján az ötletek alapján újrarendezik az ötleteket a már megosztott ötletek listájában</li>\n"
+"\t</ol>"
 
 #: assembl/templates/views/about.tmpl:18
 msgid "Join the discussions"
-msgstr ""
+msgstr "Csatlakoztatás a beszélgetésekhez"
 
 #: assembl/templates/views/about.tmpl:20
 msgid "Your opinion deserves to be heard"
-msgstr ""
+msgstr "Megérdemli, hogy meghallgassák véleményét"
 
 #: assembl/templates/views/about.tmpl:23
 msgid "Read the discussions"
-msgstr ""
+msgstr "Olvassa el a beszélgetéseket"
 
 #: assembl/templates/views/about.tmpl:30
 msgid "Content to be tracked!"
-msgstr ""
+msgstr "Csatlakozzon, hogy nyomon követhessék!"
 
 #: assembl/templates/views/adminDiscussion.tmpl:6
 #: assembl/templates/views/discussionAdminNavigationMenu.tmpl:3
 msgid "Edit discussion"
-msgstr ""
+msgstr "Beszélgetés szerkesztése"
 
 #: assembl/templates/views/adminDiscussion.tmpl:13
 msgid "Edit discussion permissions"
-msgstr ""
+msgstr "Beszélgetés engedélyek szerkesztése"
 
 #: assembl/templates/views/adminDiscussion.tmpl:20
 msgid "Discussion topic"
-msgstr ""
+msgstr "Beszélgetés téma"
 
 #: assembl/templates/views/adminDiscussion.tmpl:28
 msgid "Discussion slug"
-msgstr ""
+msgstr "Beszélgetés szövegtörzs"
 
 #: assembl/templates/views/adminDiscussion.tmpl:36
 #: assembl/templates/views/synthesisPanel.tmpl:5
 #: assembl/templates/views/synthesisPanelMessage.tmpl:4
 msgid "Introduction"
-msgstr ""
+msgstr "Bevezetés"
 
 #: assembl/templates/views/adminDiscussion.tmpl:44
 msgid "Objectives"
-msgstr ""
+msgstr "Célkitűzések"
 
 #: assembl/templates/views/adminDiscussion.tmpl:52
-msgid "Show a small help message when the user arrives in the Discussion section"
+msgid ""
+"Show a small help message when the user arrives in the Discussion section"
 msgstr ""
+"Egy kis súgó üzenet jelenik meg, amikor a felhasználó belép a Beszélgetés részbe"
 
 #: assembl/templates/views/adminDiscussion.tmpl:60
 msgid "Web analytics: Piwik id site"
-msgstr ""
+msgstr "Web analitikák: Piwik id oldal"
 
 #: assembl/templates/views/adminDiscussion.tmpl:68
 #, python-format
 msgid "URL of the Help page (use \"%s\" for language)"
-msgstr ""
+msgstr "Súgó oldal URL (\"%s\" használata a nyelvhez)"
 
 #: assembl/templates/views/adminDiscussion.tmpl:76
 msgid "Homepage URL (optional)"
-msgstr ""
+msgstr "Kezdőlap URL (opcionális)"
 
 #: assembl/templates/views/adminDiscussion.tmpl:84
 msgid "Logo URL (optional)"
-msgstr ""
+msgstr "Logó URL (opcionális)"
 
 #: assembl/templates/views/adminDiscussion.tmpl:95
 msgid ""
 "The logo image can have a maximum height of 40px, and a maximum width of "
 "215px. Background must be transparent. Margins must be included in the image."
 msgstr ""
+"A logó kép magassága maximum 40px, míg a szélessége maximum 215px lehet. A háttérnek áttetszőnek kell lennie. A margó is a kép részét képezi."
 
 #: assembl/templates/views/adminDiscussion.tmpl:101
 #: assembl/templates/views/emailSource.tmpl:82
 #: assembl/templates/views/userAccountForm.tmpl:42
 #: assembl/templates/views/userProfile.tmpl:74
 msgid "Save changes"
-msgstr ""
+msgstr "Módosítások mentése"
 
 #: assembl/templates/views/adminDiscussionSettings.tmpl:6
 #: assembl/templates/views/navBarLeft.tmpl:21
 msgid "Discussion settings"
-msgstr ""
+msgstr "Beszélgetés beállításai"
 
 #: assembl/templates/views/adminDiscussionSettings.tmpl:14
 msgid "Message source successfully added"
-msgstr ""
+msgstr "Üzenetforrás sikeresen hozzáadva"
 
 #: assembl/templates/views/adminDiscussionSettings.tmpl:18
 msgid "Add a message source"
-msgstr ""
+msgstr "Üzenetforrás hozzáadása"
 
 #: assembl/templates/views/adminDiscussionSettingsGeneralSource.tmpl:9
 msgid "Edit message source"
-msgstr ""
+msgstr "Üzenetforrás szerkesztése"
 
 #: assembl/templates/views/adminDiscussionSettingsGeneralSource.tmpl:16
 msgid "Reimport"
-msgstr ""
+msgstr "Újraimportálás"
 
 #: assembl/templates/views/adminDiscussionSettingsGeneralSource.tmpl:17
 msgid "Reprocess"
-msgstr ""
+msgstr "Újrafeldolgozás"
 
 #: assembl/templates/views/adminDiscussionSettingsGeneralSourceRead.tmpl:7
 msgid "Connexion error"
-msgstr ""
+msgstr "Kapcsolódási hiba"
 
 #: assembl/templates/views/adminDiscussionSettingsGeneralSourceRead.tmpl:10
 msgid "Next connection attempt:"
-msgstr ""
+msgstr "Következő kapcsolódási kísérlet:"
 
 #: assembl/templates/views/adminDiscussionSettingsGeneralSourceRead.tmpl:14
 msgid "Manual start"
-msgstr ""
+msgstr "Manuális indítás"
 
 #: assembl/templates/views/adminDiscussionSettingsGeneralSourceRead.tmpl:15
 #: assembl/templates/views/message.tmpl:33
 #: assembl/templates/views/messageDeletedByUser.tmpl:25
 #: assembl/templates/views/messageListHeader.tmpl:4
 msgid "More options"
-msgstr ""
+msgstr "További beállítások"
 
 #: assembl/templates/views/adminMessageColumn.tmpl:4
 #: assembl/templates/views/adminMessageColumn.tmpl:5
 #: assembl/templates/views/adminTimelineEvent.tmpl:5
 msgid "Identifier"
-msgstr ""
+msgstr "Azonosító"
 
 #: assembl/templates/views/adminMessageColumn.tmpl:8
 #: assembl/templates/views/adminMessageColumn.tmpl:9
 msgid "Color"
-msgstr ""
+msgstr "Szín"
 
 #: assembl/templates/views/adminMessageColumn.tmpl:13
 #: assembl/templates/views/adminTimelineEvent.tmpl:37
 msgid "Title"
-msgstr ""
+msgstr "Cím"
 
 #: assembl/templates/views/adminMessageColumn.tmpl:27
 #: assembl/templates/views/adminTimelineEvent.tmpl:51
@@ -2722,230 +2819,235 @@ msgstr ""
 #: assembl/templates/views/listPreferenceItemView.tmpl:7
 #: assembl/templates/views/partnersInAdmin.tmpl:20
 msgid "Delete"
-msgstr ""
+msgstr "Törlés"
 
 #: assembl/templates/views/adminMessageColumns.tmpl:5
 #: assembl/templates/views/adminPartnerForm.tmpl:62
 #: assembl/templates/views/adminTimelineEvents.tmpl:20
 #: assembl/templates/views/listPreferenceView.tmpl:4
 msgid "Add"
-msgstr ""
+msgstr "Hozzáadás"
 
 #: assembl/templates/views/adminMessageColumns.tmpl:8
 msgid "Activate multi-column view"
-msgstr ""
+msgstr "Többoszlopos nézet aktiválása"
 
 #: assembl/templates/views/adminNotificationSubscriptions.tmpl:6
 #: assembl/templates/views/discussionAdminNavigationMenu.tmpl:12
 msgid "Edit notifications"
-msgstr ""
+msgstr "Értesítések szerkesztése"
 
 #: assembl/templates/views/adminNotificationSubscriptions.tmpl:13
 #: assembl/templates/views/adminTimelineEvents.tmpl:13
 msgid "Your change has been saved!"
-msgstr ""
+msgstr "Módosításai elmentésre kerülnek!"
 
 #: assembl/templates/views/adminNotificationSubscriptions.tmpl:17
 msgid "Default notifications"
-msgstr ""
+msgstr "Alapértelmezett értesítések"
 
 #: assembl/templates/views/adminNotificationSubscriptions.tmpl:18
 msgid ""
-"These are the notifications which a user gets subscribed to when one of these"
-" conditions is matched: 1. The user clicks on the \"Join this discussion\" "
-"button. 2. The user posts his/her first message, Assembl shows a subscription"
-" pop-in, and the user accepts subscribing. 3. The discussion parameter "
-"\"Auto-subscribe users to default notifications when they register\" is "
-"active and the user confirms their account."
+"These are the notifications which a user gets subscribed to when one of "
+"these conditions is matched: 1. The user clicks on the \"Join this discussion"
+"\" button. 2. The user posts his/her first message, Assembl shows a "
+"subscription pop-in, and the user accepts subscribing. 3. The discussion "
+"parameter \"Auto-subscribe users to default notifications when they register"
+"\" is active and the user confirms their account."
 msgstr ""
+"Egy feliratkozó felhasználó ezeket az értesítéseket kapja meg, amikor valamelyik feltétel teljesül: 1. A felhasználó rákattint a \"Csatlakozás ehhez a beszélgetéshez\" gombra. 2. A felhasználó közzéteszi első üzenetét, az Assembl megjelenít egy felugró ablakot a feliratkozással kapcsolatban és a felhasználó elfogadja. 3. A \"Felhasználók automatikus feliratkozása az alapértelmezett értesítésekre regisztráció alkalmával\" beszélgetés-paraméter aktív és a felhasznál megerősíti fiókját."
 
 #: assembl/templates/views/adminNotificationSubscriptions.tmpl:21
 msgid "Auto-subscribe users to default notifications"
-msgstr ""
+msgstr "Felhasználók automatikus feliratkozása az alapértelmezett értesítésekre"
 
 #: assembl/templates/views/adminPartnerEditForm.tmpl:2
 msgid "edit partner"
-msgstr ""
+msgstr "partner szerkesztése"
 
 #: assembl/templates/views/adminPartnerEditForm.tmpl:9
 #: assembl/templates/views/adminPartnerForm.tmpl:8
 msgid "Partner name"
-msgstr ""
+msgstr "Partner neve"
 
 #: assembl/templates/views/adminPartnerEditForm.tmpl:13
 #: assembl/templates/views/adminPartnerForm.tmpl:12
 msgid "This field is mandatory"
-msgstr ""
+msgstr "Mező kitöltése kötelező"
 
 #: assembl/templates/views/adminPartnerEditForm.tmpl:20
 #: assembl/templates/views/adminPartnerForm.tmpl:19
 #: assembl/templates/views/adminTimelineEvent.tmpl:41
 msgid "Description"
-msgstr ""
+msgstr "Leírás"
 
 #: assembl/templates/views/adminPartnerEditForm.tmpl:23
 #: assembl/templates/views/adminPartnerForm.tmpl:22
 msgid "Share what the organisation is all about"
-msgstr ""
+msgstr "Ossza meg, hogy mivel foglalkozik a szervezet"
 
 #: assembl/templates/views/adminPartnerEditForm.tmpl:25
 #: assembl/templates/views/adminPartnerForm.tmpl:24
 msgid "please correct the error"
-msgstr ""
+msgstr "kérjük, javítsa ki a hibát"
 
 #: assembl/templates/views/adminPartnerEditForm.tmpl:32
 #: assembl/templates/views/adminPartnerForm.tmpl:31
 msgid "Website"
-msgstr ""
+msgstr "Webhely"
 
 #: assembl/templates/views/adminPartnerEditForm.tmpl:35
 #: assembl/templates/views/adminPartnerForm.tmpl:34
 msgid "Example : http://example.org/ or http://www.hompage.com/"
-msgstr ""
+msgstr "Példa: http://example.org/ or http://www.hompage.com/"
 
 #: assembl/templates/views/adminPartnerEditForm.tmpl:37
 #: assembl/templates/views/adminPartnerEditForm.tmpl:49
 #: assembl/templates/views/adminPartnerForm.tmpl:36
 #: assembl/templates/views/adminPartnerForm.tmpl:48
 msgid "Invalid URL format"
-msgstr ""
+msgstr "Érvénytelen URL formátum"
 
 #: assembl/templates/views/adminPartnerEditForm.tmpl:44
 #: assembl/templates/views/adminPartnerForm.tmpl:43
 msgid "URL of logo image"
-msgstr ""
+msgstr "Logó kép URL"
 
 #: assembl/templates/views/adminPartnerEditForm.tmpl:47
 #: assembl/templates/views/adminPartnerForm.tmpl:46
 msgid "Example : http://example.org/logo.jpg"
-msgstr ""
+msgstr "Példa: http://example.org/logo.jpg"
 
 #: assembl/templates/views/adminPartnerEditForm.tmpl:56
 #: assembl/templates/views/adminPartnerForm.tmpl:55
 msgid "Is instigator of the discussion"
-msgstr ""
+msgstr "A vita indítója"
 
 #: assembl/templates/views/adminPartnerEditForm.tmpl:66
 msgid "Confirm"
-msgstr ""
+msgstr "Megerősítés"
 
 #: assembl/templates/views/adminPartnerForm.tmpl:2
 msgid "Add a new partner"
-msgstr ""
+msgstr "Új partner hozzáadása"
 
 #: assembl/templates/views/adminPartners.tmpl:7
 #: assembl/templates/views/partnerList.tmpl:6
 #: assembl/templates/views/partnerList.tmpl:10
 #: assembl/templates/views/partnerList.tmpl:12
 msgid "Partners"
-msgstr ""
+msgstr "Partnerek"
 
 #: assembl/templates/views/adminPartners.tmpl:15
 msgid "Partner successfully added"
-msgstr ""
+msgstr "Partner sikeresen hozzáadva"
 
 #: assembl/templates/views/adminPartners.tmpl:19
 msgid "Add partner"
-msgstr ""
+msgstr "Partner hozzáadása"
 
 #: assembl/templates/views/adminTimelineEvent.tmpl:11
 msgid "Start date (local time)"
-msgstr ""
+msgstr "Kezdő dátum (helyi idő)"
 
 #: assembl/templates/views/adminTimelineEvent.tmpl:17
 msgid "End date (local time)"
-msgstr ""
+msgstr "Záró dátum (helyi idő)"
 
 #: assembl/templates/views/adminTimelineEvent.tmpl:23
 msgid "Image URL"
-msgstr ""
+msgstr "Kép URL"
 
 #: assembl/templates/views/adminTimelineEvent.tmpl:29
 msgid "Use v1 interface"
-msgstr ""
+msgstr "v1 interfész használata"
 
 #: assembl/templates/views/adminTimelineEvents.tmpl:6
 #: assembl/templates/views/discussionAdminNavigationMenu.tmpl:15
 msgid "Edit timeline"
-msgstr ""
+msgstr "Idővonal szerkesztése"
 
 #: assembl/templates/views/agentAvatar.tmpl:4
 msgid "anonymous"
-msgstr ""
+msgstr "anonim"
 
 #: assembl/templates/views/agentName.tmpl:4
 msgid "Anonymous"
-msgstr ""
+msgstr "Anonim"
 
 #: assembl/templates/views/ajaxError.tmpl:2
 msgid "Assembl needs to be reloaded"
-msgstr ""
+msgstr "Az Assembl-t újra be kell tölteni"
 
 #: assembl/templates/views/ajaxError.tmpl:7
 msgid ""
 "Assembl has encountered a problem and needs to be refreshed. Do not worry, "
 "any messages that are in the process of being composed will not be lost."
 msgstr ""
+"Az Assembl működésében hiba lépett fel és frissíteni kell. Ne aggódjon, a folyamatban lévő üzenetek nem vesznek el."
 
 #: assembl/templates/views/ajaxError.tmpl:8
 msgid "See you in a minute on Assembl!"
-msgstr ""
+msgstr "Egy perc múlva újra találkozunk az Assembl-n!"
 
 #: assembl/templates/views/ajaxError.tmpl:9
 msgid ""
-"If you are in contact with the technical team, please let them know about the"
-" following message:"
+"If you are in contact with the technical team, please let them know about "
+"the following message:"
 msgstr ""
+"Ha felveszi a kapcsolatot a technikai csapatunkkal, tájékoztass őket a következő üzenetről:"
 
 #: assembl/templates/views/ajaxError.tmpl:16
 #: assembl/templates/views/firstPost.tmpl:18
 msgid "Not now"
-msgstr ""
+msgstr "Nem most"
 
 #: assembl/templates/views/ajaxError.tmpl:17
 msgid "Reload"
-msgstr ""
+msgstr "Újratöltés"
 
 #: assembl/templates/views/allMessagesInIdeaList.tmpl:4
 msgid "Number of posts in the entire discussion"
-msgstr ""
+msgstr "Bejegyzések száma a teljes beszélgetésben"
 
 #: assembl/templates/views/allMessagesInIdeaList.tmpl:9
 #: assembl/templates/views/allMessagesInIdeaList.tmpl:10
 msgid "All messages"
-msgstr ""
+msgstr "Összes üzenet "
 
 #: assembl/templates/views/allMessagesInIdeaList.tmpl:12
 msgid "Number of unread posts in the entire discussion"
-msgstr ""
+msgstr "Olvasatlan bejegyzések száma a teljes beszélgetésben"
 
 #: assembl/templates/views/announcementEditable.tmpl:1
 msgid "The title of this announcement"
-msgstr ""
+msgstr "A közlemény címe"
 
 #: assembl/templates/views/announcementEditable.tmpl:4
 msgid ""
 "The text of this this announcement.  Will be displayed on top of the message "
 "list for this idea."
 msgstr ""
+"A közlemény szövege. Az ötlethez kapcsolódó üzenetek listájának tetején jelenik meg."
 
 #: assembl/templates/views/announcementEditable.tmpl:7
 msgid ""
 "If checked, this announcement will also be shown for any sub-idea that "
 "doesn't have its own announcement."
 msgstr ""
+"Ellenőrzést követően ez a közlemény olyan al-ötleteknél jelenik meg, amelyek nem rendelkeznek saját közleménnyel."
 
 #: assembl/templates/views/announcementEditable.tmpl:8
 msgid "Propagate this announcement to sub-ideas:"
-msgstr ""
+msgstr "Közlemény propagálása al-ötletekhez:"
 
 #: assembl/templates/views/announcementEditable.tmpl:10
 msgid "Delete this announcement"
-msgstr ""
+msgstr "Közlemény törlése"
 
 #: assembl/templates/views/announcementListEmptyEditable.tmpl:1
 msgid "Add a new announcement to this idea"
-msgstr ""
+msgstr "Új közlemény hozzáadása ehhez az ötlethez"
 
 #: assembl/templates/views/announcementMessage.tmpl:10
 #: assembl/templates/views/message.tmpl:150
@@ -2954,431 +3056,438 @@ msgstr ""
 #: assembl/templates/views/messageDeletedByUser.tmpl:72
 #, python-format
 msgid "<time title=\"%(precise_date)s\">%(nice_date)s</time>"
-msgstr ""
+msgstr "<time title=\"%(precise_date)s\">%(nice_date)s</time>"
 
 #: assembl/templates/views/associateAccount.tmpl:24
 msgid "Validate this email"
-msgstr ""
+msgstr "E-mail érvényesítése"
 
 #: assembl/templates/views/associateAccounts.tmpl:4
 msgid "Associated accounts"
-msgstr ""
+msgstr "Kapcsolódó fiókok"
 
 #: assembl/templates/views/attachmentText.tmpl:2
 msgid "Add Cover Image"
-msgstr ""
+msgstr "Borítókép hozzáadása"
 
 #: assembl/templates/views/bookmarket.tmpl:3
 msgid "activate web annotation"
-msgstr ""
+msgstr "webjegyzet aktiválása"
 
 #: assembl/templates/views/bookmarket.tmpl:8
 msgid "How it works:"
-msgstr ""
+msgstr "Hogyan működik:"
 
 #: assembl/templates/views/bookmarket.tmpl:10
 msgid "Drag the following button in your browser's bookmark bar."
-msgstr ""
+msgstr "Húzza a következő gombot a böngésző könyvjelzősávjára."
 
 #: assembl/templates/views/bookmarket.tmpl:12
 msgid ""
 "Drag this button to your bookmark bar to create a bookmarklet. You can then "
-"capture selections from most webpages (those that are not secured with https)"
-" by 1. Clicking on the bookmarklet and 2. Highlighting the section of text "
-"you wish to send to the discussion."
+"capture selections from most webpages (those that are not secured with "
+"https) by 1. Clicking on the bookmarklet and 2. Highlighting the section of "
+"text you wish to send to the discussion."
 msgstr ""
+"Húzza ezt a gombot a könyvjelzősávra, hogy létrehozhassa a könyvjelzőt. Ezt követően a legtöbb weblapról rögzíthet kiválasztott elemeket (amelyek nincsenek https-sel védve), ehhez 1. Kattintson a könyvjelzőre és 2. Jelölje ki a szövegrészletet, amelyet szeretne a beszélgetésbe küldeni."
 
 #: assembl/templates/views/bookmarket.tmpl:12
 msgid "Web capture to"
-msgstr ""
+msgstr "Web rögzítése"
 
 #: assembl/templates/views/bookmarket.tmpl:14
 msgid ""
-"Find extracts that will add value to the current discussion. For example, you"
-" could find extracts for:"
+"Find extracts that will add value to the current discussion. For example, "
+"you could find extracts for:"
 msgstr ""
+"Olyan kivonatok keresése, amelyek értéket adnak az aktuális beszélgetéshez. Például kivonatokat kereshet a következőkhöz:"
 
 #: assembl/templates/views/bookmarket.tmpl:16
 msgid "Dig deeper in an existing idea"
-msgstr ""
+msgstr "Mélyebbre áshat meglévő ötletben"
 
 #: assembl/templates/views/bookmarket.tmpl:17
 msgid "Bring supplementary information relative to an idea"
-msgstr ""
+msgstr "Kiegészítő információkat adhat az adott ötletekhez"
 
 #: assembl/templates/views/bookmarket.tmpl:18
 msgid "Find new viewpoints and arguments"
-msgstr ""
+msgstr "Új nézőpontokat és érveket találhat"
 
 #: assembl/templates/views/bookmarket.tmpl:19
 msgid "Add an inspiring quote"
-msgstr ""
+msgstr "Inspiráló idézeteket adhat hozzá"
 
 #: assembl/templates/views/bookmarket.tmpl:22
 msgid ""
 "Click on the button, where you had dragged it in your browser, to activate "
 "web annotation."
 msgstr ""
+"Kattintson a gombra ott, ahová a böngészőben húzta, hogy aktiválhassa a webjegyzetet."
 
 #: assembl/templates/views/bookmarket.tmpl:28
 msgid "I understand"
-msgstr ""
+msgstr "Értem"
 
 #: assembl/templates/views/ckeditorField.tmpl:18
 msgid "See more"
-msgstr ""
+msgstr "Több megtekintése"
 
 #: assembl/templates/views/ckeditorField.tmpl:19
 msgid "See less"
-msgstr ""
+msgstr "Kevesebb megtekintése"
 
 #: assembl/templates/views/cookieBanner.tmpl:2
 msgid ""
 "By using our site, you consent to cookies being used for improvement of our "
 "service?"
 msgstr ""
+"Honlapunk használatával Ön belegyezik a sütik használatába, amelyek segítségével tovább fejlesztjük szolgáltatásainkat?"
 
 #: assembl/templates/views/cookieBanner.tmpl:3
 msgid "Yes, I accept."
-msgstr ""
+msgstr "Igen, elfogadom."
 
 #: assembl/templates/views/cookieBanner.tmpl:3
 msgid "No, Thanks."
-msgstr ""
+msgstr "Nem, köszönöm."
 
 #: assembl/templates/views/create-group.tmpl:3
 msgid "Create a panel group"
-msgstr ""
+msgstr "Panelcsoport létrehozása"
 
 #: assembl/templates/views/create-group.tmpl:8
 msgid "Choose a navigation panel:"
-msgstr ""
+msgstr "Navigációs panel választása:"
 
 #: assembl/templates/views/create-group.tmpl:18
 msgid "simpleView"
-msgstr ""
+msgstr "simpleView"
 
 #: assembl/templates/views/create-group.tmpl:30
 msgid "Create a synthesis"
-msgstr ""
+msgstr "Összefoglaló készítése"
 
 #: assembl/templates/views/create-group.tmpl:51
 msgid "Others:"
-msgstr ""
+msgstr "Egyebek:"
 
 #: assembl/templates/views/create-group.tmpl:61
 #: assembl/templates/views/create-group.tmpl:93
 msgid "Idea Panel"
-msgstr ""
+msgstr "Ötlet panel"
 
 #: assembl/templates/views/create-group.tmpl:71
 #: assembl/templates/views/create-group.tmpl:83
 #: assembl/templates/views/navigation.tmpl:11
 msgid "Discussion"
-msgstr ""
+msgstr "Beszélgetés"
 
 #: assembl/templates/views/defaultNotification.tmpl:7
 msgid "Auto-subscribe users to default notifications when they register"
-msgstr ""
+msgstr "Felhasználók automatikus feliratkozása az alapértelmezett értesítésekre regisztráció alkalmával"
 
 #: assembl/templates/views/discussionAdminNavigationMenu.tmpl:6
 #: assembl/templates/views/userNavigationMenu.tmpl:14
 msgid "Discussion preferences"
-msgstr ""
+msgstr "Beszélgetés beállítások"
 
 #: assembl/templates/views/discussionAdminNavigationMenu.tmpl:9
 msgid "Server settings"
-msgstr ""
+msgstr "Szerver beállítások"
 
 #: assembl/templates/views/discussionAdminNavigationMenu.tmpl:18
 msgid "Edit partners"
-msgstr ""
+msgstr "Partnerek szerkesztése"
 
 #: assembl/templates/views/discussionAdminNavigationMenu.tmpl:21
 #: assembl/templates/views/userAccountForm.tmpl:43
 #: assembl/templates/views/userNavigationMenu.tmpl:17
 #: assembl/templates/views/userProfile.tmpl:75
 msgid "Return to the discussion"
-msgstr ""
+msgstr "Vissza a beszélgetéshez"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:4
 msgid "Users visits"
-msgstr ""
+msgstr "Felhasználók látogatásai"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:7
 msgid "Users' date of first visit"
-msgstr ""
+msgstr "Felhasználók első látogatásának dátuma"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:8
 msgid "Users' date of last visit"
-msgstr ""
+msgstr "Felhasználók utolsó látogatásának dátuma"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:14
 msgid "Time series analytics"
-msgstr ""
+msgstr "Idősorozatok analitikája"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:18
 msgid "Start date"
-msgstr ""
+msgstr "Kezdő dátum"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:22
 msgid "End date"
-msgstr ""
+msgstr "Záró dátum"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:26
 msgid "Interval"
-msgstr ""
+msgstr "Intervallum"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:28
 msgid "Single interval"
-msgstr ""
+msgstr "Szimpla intervallum"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:29
 msgid "One year"
-msgstr ""
+msgstr "Egy év"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:30
 msgid "One month"
-msgstr ""
+msgstr "Egy hónap"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:31
 msgid "One week"
-msgstr ""
+msgstr "Egy hét"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:32
 msgid "One day"
-msgstr ""
+msgstr "Egy nap"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:33
 msgid "custom"
-msgstr ""
+msgstr "egyedi"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:37
 msgid "File format"
-msgstr ""
+msgstr "Fájlformátum"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:39
 msgid "MS Excel"
-msgstr ""
+msgstr "MS Excel"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:40
 msgid "Comma-separated values"
-msgstr ""
+msgstr "Vesszővel tagolt értékek"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:52
 msgid "General discussion statistics"
-msgstr ""
+msgstr "Általános beszélgetés statisztikák"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:53
 msgid "Get general discussion statistics"
-msgstr ""
+msgstr "Általános beszélgetés statisztikák lekérése"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:60
 msgid "Per participant statistics"
-msgstr ""
+msgstr "Résztvevőnkénti statisztikák"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:62
 msgid "Show fields:"
-msgstr ""
+msgstr "Mezők megjelenítése:"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:65
 #: assembl/templates/views/discussionStatisticsModal.tmpl:99
 msgid "Posts"
-msgstr ""
+msgstr "Bejegyzések"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:66
 #: assembl/templates/views/discussionStatisticsModal.tmpl:100
 msgid "Cumulative posts"
-msgstr ""
+msgstr "Összesített bejegyzések"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:67
 #: assembl/templates/views/discussionStatisticsModal.tmpl:101
 msgid "Replies received"
-msgstr ""
+msgstr "Kapott válaszok"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:68
 #: assembl/templates/views/discussionStatisticsModal.tmpl:102
 msgid "Cumulative replies received"
-msgstr ""
+msgstr "Összesített kapott válaszok"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:70
 #: assembl/templates/views/discussionStatisticsModal.tmpl:104
 msgid "Liking"
-msgstr ""
+msgstr "Kedvelés"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:71
 #: assembl/templates/views/discussionStatisticsModal.tmpl:105
 msgid "Cumulative liking"
-msgstr ""
+msgstr "Összesített kedvelés"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:72
 #: assembl/templates/views/discussionStatisticsModal.tmpl:106
 msgid "Liked"
-msgstr ""
+msgstr "Kedvelt"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:73
 #: assembl/templates/views/discussionStatisticsModal.tmpl:107
 msgid "Cumulative liked"
-msgstr ""
+msgstr "Összesített kedvelt"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:75
 #: assembl/templates/views/discussionStatisticsModal.tmpl:109
 msgid "Disagreeing"
-msgstr ""
+msgstr "Egyet nem értés"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:76
 #: assembl/templates/views/discussionStatisticsModal.tmpl:110
 msgid "Cumulative disagreeing"
-msgstr ""
+msgstr "Összesített egyet nem értés"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:77
 #: assembl/templates/views/discussionStatisticsModal.tmpl:111
 msgid "Disagreed"
-msgstr ""
+msgstr "Egyet nem értett"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:78
 #: assembl/templates/views/discussionStatisticsModal.tmpl:112
 msgid "Cumulative disagreed"
-msgstr ""
+msgstr "Összesített egyet nem értett"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:80
 msgid "misunderstanding"
-msgstr ""
+msgstr "félreértés"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:81
 #: assembl/templates/views/discussionStatisticsModal.tmpl:115
 msgid "Cumulative misunderstanding"
-msgstr ""
+msgstr "Összesített félreértés"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:82
 #: assembl/templates/views/discussionStatisticsModal.tmpl:116
 msgid "Misunderstood"
-msgstr ""
+msgstr "Félreértett"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:83
 #: assembl/templates/views/discussionStatisticsModal.tmpl:117
 msgid "Cumulative misunderstood"
-msgstr ""
+msgstr "Összesített félreértett"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:85
 #: assembl/templates/views/discussionStatisticsModal.tmpl:119
 msgid "Requesting info"
-msgstr ""
+msgstr "Információkérés"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:86
 #: assembl/templates/views/discussionStatisticsModal.tmpl:120
 msgid "Cumulative requesting info"
-msgstr ""
+msgstr "Összesített információkérés"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:87
 #: assembl/templates/views/discussionStatisticsModal.tmpl:121
 msgid "Info requested"
-msgstr ""
+msgstr "Kért információ"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:88
 #: assembl/templates/views/discussionStatisticsModal.tmpl:122
 msgid "Cumulative info requested"
-msgstr ""
+msgstr "Összesített kért információ"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:93
 msgid "Sorted by"
-msgstr ""
+msgstr "Rendezés a következő szerint"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:97
 msgid "Domain"
-msgstr ""
+msgstr "Domain"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:114
 msgid "Misunderstanding"
-msgstr ""
+msgstr "Félreértés"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:127
 msgid "Show emails"
-msgstr ""
+msgstr "E-mailek megjelenítése"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:133
 msgid "Get discussion participant statistics"
-msgstr ""
+msgstr "Beszélgetés-résztvevők statisztikáinak lekérése"
 
 #: assembl/templates/views/emailSource.tmpl:13
 msgid "Admin sender"
-msgstr ""
+msgstr "Admin feladó"
 
 #: assembl/templates/views/emailSource.tmpl:16
 msgid ""
 "This field is an e-mail address, and is mandatory: it will be the value of "
 "notification emails' From field"
 msgstr ""
+"Ez a mező egy e-mail cím, amely kitöltése kötelező: ez lesz az értkesítő e-mailek értéke A mezőből"
 
 #: assembl/templates/views/emailSource.tmpl:22
 msgid "Post email address"
-msgstr ""
+msgstr "E-mail cím közzététele"
 
 #: assembl/templates/views/emailSource.tmpl:25
 msgid "For mailing lists only: Where messages are sent to the list"
-msgstr ""
+msgstr "Csak levelezőlistákhoz: Ahol az üzenetek listára kerülnek kiküldésre"
 
 #: assembl/templates/views/emailSource.tmpl:30
 msgid "Host"
-msgstr ""
+msgstr "Gazdaszámítógép"
 
 #: assembl/templates/views/emailSource.tmpl:37
 msgid "Use SSL"
-msgstr ""
+msgstr "SSL használata"
 
 #: assembl/templates/views/emailSource.tmpl:43
 msgid "True"
-msgstr ""
+msgstr "Igaz"
 
 #: assembl/templates/views/emailSource.tmpl:48
 msgid "False"
-msgstr ""
+msgstr "Hamis"
 
 #: assembl/templates/views/emailSource.tmpl:52
 msgid "Folder"
-msgstr ""
+msgstr "Mappa"
 
 #: assembl/templates/views/emailSource.tmpl:60
 msgid "Port"
-msgstr ""
+msgstr "Port"
 
 #: assembl/templates/views/exportPostModal-fb-group.tmpl:2
 msgid "Select Group"
-msgstr ""
+msgstr "Csoport kiválasztása"
 
 #: assembl/templates/views/exportPostModal-fb-page.tmpl:2
 msgid "Select Page"
-msgstr ""
+msgstr "Oldal kiválasztása"
 
 #: assembl/templates/views/exportPostModal-fb-page.tmpl:14
 msgid "Post as"
-msgstr ""
+msgstr "Közzététel, mint"
 
 #: assembl/templates/views/exportPostModal-fb-token-error.tmpl:6
 msgid "Basic"
-msgstr ""
+msgstr "Alapszintű"
 
 #: assembl/templates/views/exportPostModal-fb-token-error.tmpl:6
 msgid ""
-"We will need your permission to publish the message you are exporting on your"
-" behalf,  as well as permission to read the posts back in order to import "
-"them back into Assembl."
+"We will need your permission to publish the message you are exporting on "
+"your behalf,  as well as permission to read the posts back in order to "
+"import them back into Assembl."
 msgstr ""
+"Szükségünk lesz az Ön engedélyére, hogy közzétegyük az Ön által exportált üzenetet, illetve hogy visszaolvassuk a bejegyzéseket az Assembl-be való visszaimportáláshoz."
 
 #: assembl/templates/views/exportPostModal-fb-token-error.tmpl:7
 msgid "Groups"
-msgstr ""
+msgstr "Csoportok"
 
 #: assembl/templates/views/exportPostModal-fb-token-error.tmpl:7
 msgid ""
-"We will need your permission to access the list of groups that you are a part"
-" of and to be able to post on them, both on your behalf, or if you are the "
-"group administrator, on behalf of the group itself. "
+"We will need your permission to access the list of groups that you are a "
+"part of and to be able to post on them, both on your behalf, or if you are "
+"the group administrator, on behalf of the group itself. "
 msgstr ""
+"Szükségünk lesz az Ön engedélyére, hogy hozzáférjünk azokhoz a csoportokhoz, amelyeknek Ön tagja, valamint azért, hogy a saját nevében, vagy ha csoportadminisztrátorként szerepel, a csoport nevében is tehessen közzé bejegyzéseket. "
 
 #: assembl/templates/views/exportPostModal-fb-token-error.tmpl:8
 msgid "Pages"
-msgstr ""
+msgstr "Oldalak"
 
 #: assembl/templates/views/exportPostModal-fb-token-error.tmpl:8
 msgid ""
@@ -3387,141 +3496,147 @@ msgid ""
 "on your behalf or, if you are the page administrator, on behalf of the page "
 "itself"
 msgstr ""
+"Szükségünk lesz az Ön engedélyére, hogy hozzáférjünk az Ön által kedvelt, illetve adminisztrátorként kezelt oldalak listájához, valamint azért, hogy a saját nevében, vagy ha oldaladminisztrátorként szerepel, az oldal nevében is tehessen közzé bejegyzéseket"
 
 #: assembl/templates/views/exportPostModal-fb.tmpl:23
 msgid "Pick where to post to"
-msgstr ""
+msgstr "Válassza ki, hol szeretné a bejegyzést közzétenni"
 
 #: assembl/templates/views/exportPostModal-fb.tmpl:28
 msgid "Your Wall"
-msgstr ""
+msgstr "Az Ön üzenőfala"
 
 #: assembl/templates/views/exportPostModal-fb.tmpl:29
 msgid "Your Pages"
-msgstr ""
+msgstr "Az Ön oldalai"
 
 #: assembl/templates/views/exportPostModal-fb.tmpl:30
 msgid "Your Groups"
-msgstr ""
+msgstr "Az Ön csoportjai"
 
 #: assembl/templates/views/exportPostModal-fb.tmpl:41
 msgid "Suggested preview"
-msgstr ""
+msgstr "Javasolt előnézet"
 
 #: assembl/templates/views/exportPostModal-fb.tmpl:44
 msgid "Message Header:"
-msgstr ""
+msgstr "Üzenetfejléc:"
 
 #: assembl/templates/views/exportPostModal-fb.tmpl:49
 msgid "Extra Message:"
-msgstr ""
+msgstr "Extra üzenet:"
 
 #: assembl/templates/views/exportPostModal-fb.tmpl:57
 msgid "Link URL:"
-msgstr ""
+msgstr "Hivatkozás URL:"
 
 #: assembl/templates/views/exportPostModal-fb.tmpl:58
 msgid "Title Override:"
-msgstr ""
+msgstr "Cím felülírása:"
 
 #: assembl/templates/views/exportPostModal-fb.tmpl:59
 msgid "Caption Override:"
-msgstr ""
+msgstr "Képaláírás felülírása:"
 
 #: assembl/templates/views/exportPostModal-fb.tmpl:60
 msgid "Description Override:"
-msgstr ""
+msgstr "Leírás felülírása:"
 
 #: assembl/templates/views/exportPostModal.tmpl:2
 msgid "Export post by "
-msgstr ""
+msgstr "Bejegyzés exportálása a következő által"
 
 #: assembl/templates/views/exportPostModal.tmpl:10
 msgid "Select your desired export location"
-msgstr ""
+msgstr "Válassza ki a kívánt exportálási tárhelyet"
 
 #: assembl/templates/views/facebookSourceForm.tmpl:7
 msgid ""
 "How many top posts and their comments would you like to import? Leave blank "
 "to import all posts"
 msgstr ""
+"Hány bejegyzést és megjegyzést szeretne importálni? Hagyja üresen az összes bejegyzés importálásához"
 
 #: assembl/templates/views/facebookSourceForm.tmpl:7
 msgid "Maximum number of threads"
-msgstr ""
+msgstr "Beszélgetések maximális száma"
 
 #: assembl/templates/views/facebookSourceForm.tmpl:14
 msgid ""
 "When has been posted the oldest post you would like to import? Use ISO 8601 "
 "UTC. (ex: 2015-10-20T00:00:00Z ) Leave blank for no limit"
 msgstr ""
+"Mikor tették közzé azt a legrégebbi bejegyzést, amelyet szeretne importálni? ISO 8601 UTC használata. (pl: 2015-10-20T00:00:00Z ) Hagyja üresen a korlátozások kihagyásához"
 
 #: assembl/templates/views/facebookSourceForm.tmpl:14
 msgid "Minimum date"
-msgstr ""
+msgstr "Minimum dátum"
 
 #: assembl/templates/views/facebookSourceForm.tmpl:21
 msgid ""
 "When has been posted the newest post you would like to import? Use ISO 8601 "
 "UTC. (ex: 2015-10-20T00:00:00Z ) Leave blank for no limit"
 msgstr ""
+"Mikor tették közzé azt a legfrissebb bejegyzést, amelyet szeretne importálni? ISO 8601 UTC használata. (pl: 2015-10-20T00:00:00Z ) Hagyja üresen a korlátozások kihagyásához"
 
 #: assembl/templates/views/facebookSourceForm.tmpl:21
 msgid "Maximum date"
-msgstr ""
+msgstr "Maximum dátum"
 
 #: assembl/templates/views/firstLoginAfterAutoSubscribeToNotifications.tmpl:7
 msgid "Welcome on the discussion!"
-msgstr ""
+msgstr "Üdvözöljük a hozzászólásokban!"
 
 #: assembl/templates/views/firstLoginAfterAutoSubscribeToNotifications.tmpl:8
 msgid "You will receive notifications when:"
-msgstr ""
+msgstr "Akkor fog értesítéseket kapni, ha:"
 
 #: assembl/templates/views/firstLoginAfterAutoSubscribeToNotifications.tmpl:12
 #: assembl/templates/views/firstPost.tmpl:12
 #: assembl/templates/views/joinDiscussion.tmpl:12
 msgid ""
-"You can modify at anytime the type of notification you receive by clicking on"
-" the ‘Notifications’ section of your profile."
+"You can modify at anytime the type of notification you receive by clicking "
+"on the ‘Notifications’ section of your profile."
 msgstr ""
+"Bármikor módosíthatja a kapott értesítések típusát úgy, hogy az ‘Értesítések’ opcióra kattint a profiljában."
 
 #: assembl/templates/views/firstLoginAfterAutoSubscribeToNotifications.tmpl:18
 #: assembl/templates/views/joinDiscussion.tmpl:18
 msgid "Edit my notifications"
-msgstr ""
+msgstr "Értesítéseim szerkesztése"
 
 #: assembl/templates/views/firstLoginAfterAutoSubscribeToNotifications.tmpl:19
 msgid "Continue to the discussion"
-msgstr ""
+msgstr "Tovább a beszélgetéshez"
 
 #: assembl/templates/views/firstPost.tmpl:7
 msgid "Congratulations on making your first contribution!"
-msgstr ""
+msgstr "Gratulálunk az első hozzászólásához!"
 
 #: assembl/templates/views/firstPost.tmpl:8
 #: assembl/templates/views/joinDiscussion.tmpl:8
 msgid ""
-"Stay informed and up to date with the evolution of the discussion and receive"
-" notifications when:"
+"Stay informed and up to date with the evolution of the discussion and "
+"receive notifications when:"
 msgstr ""
+"Legyen folyamatosan naprakész a beszélgetés alakulásával kapcsolatban és fogadjon értesítéseket, amikor:"
 
 #: assembl/templates/views/firstPost.tmpl:19
 #: assembl/templates/views/joinDiscussion.tmpl:19
 msgid "Receive notifications"
-msgstr ""
+msgstr "Értesítések fogadása"
 
 #: assembl/templates/views/globalAdminNavigationMenu.tmpl:3
 msgid "Global preferences"
-msgstr ""
+msgstr "Globális beállítások"
 
 #: assembl/templates/views/globalAdminNavigationMenu.tmpl:9
 msgid "Create a discussion"
-msgstr ""
+msgstr "Beszélgetés létrehozása"
 
 #: assembl/templates/views/helperDebate.tmpl:4
 msgid "Pick a topic and start contributing"
-msgstr ""
+msgstr "Válasszon egy témakört és kezdje el a közreműködést"
 
 #: assembl/templates/views/helperDebate.tmpl:5
 msgid ""
@@ -3529,10 +3644,11 @@ msgid ""
 "interested in so you don’t get overwhelmed. Topics include messages from all "
 "related sub-topics as well."
 msgstr ""
+"Ez a tartalomjegyzék segít megtalálni azokat a beszélgetéseket, amelyek érdeklik Önt, így nem lesz túlterhelt. A témákban megtalálhatók azok az üzenetek is, amelyek az al-témákhoz tartoznak."
 
 #: assembl/templates/views/helperDebate.tmpl:6
 msgid "This is a safe and respectful space. All ideas are welcome!"
-msgstr ""
+msgstr "Ez egy biztonságos és tiszteletteljes tér! Minden ötletet szívesen látunk!"
 
 #: assembl/templates/views/ideaClassification_directExtract.tmpl:3
 #, python-format
@@ -3540,17 +3656,18 @@ msgid ""
 "<span class=\"harvester\">%s</span> has considered this message relevant to "
 "the idea:"
 msgstr ""
+"<span class=\"harvester\">%s</span> úgy gondolja, hogy ez az üzenet kapcsolódik ehhez az ötlethez:"
 
 #: assembl/templates/views/ideaClassification_directExtract.tmpl:7
 #: assembl/templates/views/ideaClassification_indirectExtract.tmpl:7
 msgid "Considering this extract:"
-msgstr ""
+msgstr "Fontolja meg ezt az összefoglalót:"
 
 #: assembl/templates/views/ideaClassification_directExtract.tmpl:12
 #: assembl/templates/views/ideaClassification_indirectExtract.tmpl:12
 #, python-format
 msgid "by %s"
-msgstr ""
+msgstr "létrehozta %s"
 
 #: assembl/templates/views/ideaClassification_directMessage.tmpl:3
 #, python-format
@@ -3558,6 +3675,7 @@ msgid ""
 "<span class=\"author\">%s</span> started this new discussion thread directly "
 "on the idea:"
 msgstr ""
+"<span class=\"author\">%s</span> egy új beszélgetést indított közvetlenül erről a témáról:"
 
 #: assembl/templates/views/ideaClassification_indirectExtract.tmpl:3
 #, python-format
@@ -3565,411 +3683,426 @@ msgid ""
 "This message is part of a thread, which <span class=\"harvester\">%s</span> "
 "considered relevant to the idea:"
 msgstr ""
+"Ez az üzenet egy beszélgetés része, amelyről <span class=\"harvester\">%s</span> úgy gondolja, hogy kapcsolódik ehhez a témához:"
 
 #: assembl/templates/views/ideaClassification_indirectMessage.tmpl:3
 #, python-format
 msgid ""
-"This message is part of a thread, started by <span class=\"author\">%s</span>"
-" on the idea:"
+"This message is part of a thread, started by <span class=\"author\">%s</"
+"span> on the idea:"
 msgstr ""
+"Ez az üzenet egy beszélgetés része, amelyet <span class=\"author\">%s</span> indított az ötletről:"
 
 #: assembl/templates/views/ideaInIdeaList.tmpl:7
 msgid "Remove from next synthesis"
-msgstr ""
+msgstr "Eltávolítás a következő összefoglalóból"
 
 #: assembl/templates/views/ideaInIdeaList.tmpl:7
 msgid "Add to next synthesis"
-msgstr ""
+msgstr "Hozzáadás a következő összefoglalóhoz"
 
 #: assembl/templates/views/ideaInIdeaList.tmpl:45
 msgid "Number of messages related to this idea, or any of its sub-ideas"
-msgstr ""
+msgstr "Az ötlethez vagy az al-ötletekhez kapcsolódó üzenetek száma"
 
 #: assembl/templates/views/ideaInIdeaList.tmpl:50
 msgid "This idea has been created recently"
-msgstr ""
+msgstr "Ez az ötlet mostanában létrehozva"
 
 #: assembl/templates/views/ideaInIdeaList.tmpl:50
 msgid "new!"
-msgstr ""
+msgstr "új!"
 
 #: assembl/templates/views/ideaInIdeaList.tmpl:55
 msgid "Number of unread messages related to this idea, or any of its sub-ideas"
-msgstr ""
+msgstr "Az ötlethez vagy az al-ötletekhez kapcsolódó olvasatlan üzenetek száma"
 
 #: assembl/templates/views/ideaInIdeaList.tmpl:59
 msgid ""
 "Number of unread messages related to this idea, or any of its sub-ideas.  "
 "Click on this number to view ONLY the new unread messages"
 msgstr ""
+"Az ötlethez vagy az al-ötletekhez kapcsolódó olvasatlan üzenetek száma. Erre a számra kattintva megjelenítheti CSAK az olvasatlan üzeneteket"
 
 #: assembl/templates/views/ideaInSynthesis.tmpl:14
 msgid "View conversation on this idea"
-msgstr ""
+msgstr "Az ötlettel kapcsolatos beszélgetés megtekintése"
 
 #: assembl/templates/views/ideaInSynthesis.tmpl:26
 msgid "View Idea in popup"
-msgstr ""
+msgstr "Ötlet megtekintése felugró ablakban"
 
 #: assembl/templates/views/ideaList.tmpl:18
 msgid "Add idea"
-msgstr ""
+msgstr "Ötlet hozzáadása"
 
 #: assembl/templates/views/ideaList.tmpl:22
 msgid "Options"
-msgstr ""
+msgstr "Opciók"
 
 #: assembl/templates/views/ideaList.tmpl:24
 msgid "Decrease row height"
-msgstr ""
+msgstr "Sormagasság csökkentése"
 
 #: assembl/templates/views/ideaList.tmpl:25
 msgid "Increase row height"
-msgstr ""
+msgstr "Sormagasság növelése"
 
 #: assembl/templates/views/ideaList.tmpl:26
 msgid "Toggle decreasing font size with depth"
-msgstr ""
+msgstr "Toggle decreasing font size with depth"
 
 #: assembl/templates/views/ideaList.tmpl:27
 msgid "Expand all ideas"
-msgstr ""
+msgstr "Összes ötlet kibontása"
 
 #: assembl/templates/views/ideaList.tmpl:28
 msgid "Collapse all ideas"
-msgstr ""
+msgstr "Összes ötlet összecsukása"
 
 #: assembl/templates/views/ideaList.tmpl:30
 msgid "Save the current expanded/collapsed state as default for users"
-msgstr ""
+msgstr "Az aktuális kibontott/összecsukott állapot mentése alapértelmezettként a felhasználók számára"
 
 #: assembl/templates/views/ideaList.tmpl:32
 msgid "Restore default expanded/collapsed state"
-msgstr ""
+msgstr "Az alapértelmezett kibontott/összecsukott állapot visszaállítása"
 
-#: assembl/templates/views/ideaPanel.tmpl:2 assembl/templates/views/message.tmpl:25
+#: assembl/templates/views/ideaPanel.tmpl:2
+#: assembl/templates/views/message.tmpl:25
 msgid "Share"
-msgstr ""
+msgstr "Megosztás"
 
 #: assembl/templates/views/ideaPanel.tmpl:12
 msgid "The name of this idea in the table of ideas"
-msgstr ""
+msgstr "Az ötlet neve az ötletlistában"
 
 #: assembl/templates/views/ideaPanel.tmpl:20
 msgid "Voting session"
-msgstr ""
+msgstr "Szavazás munkamenet"
 
 #: assembl/templates/views/ideaPanel.tmpl:27
 msgid "What you need to know"
-msgstr ""
+msgstr "Amit tudni kell"
 
 #: assembl/templates/views/ideaPanel.tmpl:33
 msgid "Expression in next synthesis"
-msgstr ""
+msgstr "Megjelenítés a következő összefoglalóban"
 
 #: assembl/templates/views/ideaPanel.tmpl:36
 msgid ""
-"Expression of this idea in the next synthesis.  You may want to edit them all"
-" together in the synthesis panel rather than here."
+"Expression of this idea in the next synthesis.  You may want to edit them "
+"all together in the synthesis panel rather than here."
 msgstr ""
+"Megjelenítés a következő összefoglalóban. Az összeset együtt szeretné szerkeszteni az összefoglaló panelen, ahelyett, hogy itt szerkesztené."
 
 #: assembl/templates/views/ideaPanel.tmpl:40
 msgid "Description of this idea"
-msgstr ""
+msgstr "Ötlet leírása"
 
 #: assembl/templates/views/ideaPanel.tmpl:43
 msgid "A description of this idea"
-msgstr ""
+msgstr "Az ötlet leírása"
 
 #: assembl/templates/views/ideaPanel.tmpl:48
 msgid "Announcement for this idea"
-msgstr ""
+msgstr "Közlemény ehhez az ötlethez"
 
 #: assembl/templates/views/ideaPanel.tmpl:67
 msgid ""
 "Number of participants who contributed messages about this idea or it's sub-"
 "ideas."
 msgstr ""
+"A résztvevők száma, akik ehhez az üzenethez vagy al-ötlethez hozzájárultak."
 
 #: assembl/templates/views/ideaPanel.tmpl:86
 msgid "Expressions of this idea in messages or on the web"
-msgstr ""
+msgstr "Az ötlet kifejezései üzenetekben vagy a weben"
 
 #: assembl/templates/views/ideaPanel.tmpl:91
-msgid "Nuggets are important expressions of this idea in messages or on the web"
+msgid ""
+"Nuggets are important expressions of this idea in messages or on the web"
 msgstr ""
+"A kulcsszavak az ötlet fontos kifejezései üzenetekben vagy a weben"
 
 #: assembl/templates/views/ideaPanel.tmpl:99
-msgid "Add extracts by dragging them in this panel from the clipboard or messages"
+msgid ""
+"Add extracts by dragging them in this panel from the clipboard or messages"
 msgstr ""
+"Kivonat létrehozása vágólapról vagy üzenetekből való behúzással erre a panelre"
 
 #: assembl/templates/views/ideaPanel.tmpl:109
 msgid ""
 "Remove all extracts from this idea.  Removed extracts will be available in "
 "your clipboard"
 msgstr ""
+"Az összes kivonat eltávolítása ebből az ötletből. Az eltávolított kivonatok a vágólapon lesznek elérhetők"
 
 #: assembl/templates/views/ideaPanel.tmpl:109
 msgid "Remove all extracts"
-msgstr ""
+msgstr "Az összes kivonat eltávolítása"
 
 #: assembl/templates/views/ideaPanel.tmpl:114
 msgid "Delete this idea completely"
-msgstr ""
+msgstr "Az ötlet teljes törlése"
 
 #: assembl/templates/views/ideaPanel.tmpl:114
 msgid "Delete idea"
-msgstr ""
+msgstr "Ötlet törlése"
 
 #: assembl/templates/views/ideaPanel.tmpl:118
 msgid "Define a multi-column message view on this idea"
-msgstr ""
+msgstr "Többoszlopos üzenet nézet meghatározása ehhez az ötlethez"
 
 #: assembl/templates/views/ideaPanel.tmpl:118
 msgid "Define column view"
-msgstr ""
+msgstr "Oszlop nézet meghatározása"
 
 #: assembl/templates/views/ideaPanel.tmpl:130
 msgid "No idea selected"
-msgstr ""
+msgstr "Nincs ötlet kiválasztva"
 
 #: assembl/templates/views/ideaPanel.tmpl:131
 msgid ""
 "Choose an idea in the Table of ideas to explore the discussion or close this "
 "panel as you will have open"
 msgstr ""
+"Válasszon ki egy ötletet az ötletlistából, hogy felfedezhesse a beszélgetést vagy zárja be ezt a panelt, mivel nyitva van"
 
 #: assembl/templates/views/instigator.tmpl:6
 #: assembl/templates/views/instigator.tmpl:8
 msgid "Instigated by"
-msgstr ""
+msgstr "Vitaindító"
 
 #: assembl/templates/views/instigator.tmpl:6
 msgid "edit instigator"
-msgstr ""
+msgstr "vitaindító szerkesztése"
 
 #: assembl/templates/views/introductions.tmpl:22
 msgid "Context"
-msgstr ""
+msgstr "Kontextus"
 
 #: assembl/templates/views/introductions.tmpl:25
 msgid "You probably want to add a context for this discussion"
-msgstr ""
+msgstr "Valószínűleg szeretne kontextust meghatározni ehhez a beszélgetéshez"
 
 #: assembl/templates/views/introductions.tmpl:34
 msgid "Discussion objectives"
-msgstr ""
+msgstr "Beszélgetés célkitűzései"
 
 #: assembl/templates/views/introductions.tmpl:38
 msgid "You probably want to add some discussion objectives"
-msgstr ""
+msgstr "Valószínűleg szeretne beszélgetés célkitűzéseket hozzáadni"
 
 #: assembl/templates/views/joinDiscussion.tmpl:7
 msgid "Keep up with the evolution of the discussion"
-msgstr ""
+msgstr "Tartson lépést a beszélgetés alakulásával"
 
-#: assembl/templates/views/message.tmpl:10 assembl/templates/views/message.tmpl:39
+#: assembl/templates/views/message.tmpl:10
+#: assembl/templates/views/message.tmpl:39
 #: assembl/templates/views/messageDeletedByUser.tmpl:10
 #: assembl/templates/views/messageDeletedByUser.tmpl:31
 msgid "Mark as unread"
-msgstr ""
+msgstr "Jelölés olvasatlanként"
 
-#: assembl/templates/views/message.tmpl:12 assembl/templates/views/message.tmpl:41
+#: assembl/templates/views/message.tmpl:12
+#: assembl/templates/views/message.tmpl:41
 #: assembl/templates/views/messageDeletedByUser.tmpl:12
 #: assembl/templates/views/messageDeletedByUser.tmpl:33
 msgid "Mark as read"
-msgstr ""
+msgstr "Jelölés olvasottként"
 
 #: assembl/templates/views/message.tmpl:20
 msgid "This link inspired the author to write this message"
-msgstr ""
+msgstr "Ez a link inspirálta a szerzőt az üzenet megírására"
 
 #: assembl/templates/views/message.tmpl:20
 msgid "Inspiration source"
-msgstr ""
+msgstr "Inspirációs forrás"
 
 #: assembl/templates/views/message.tmpl:46
 msgid "Export Post"
-msgstr ""
+msgstr "Bejegyzés exportálása"
 
 #: assembl/templates/views/message.tmpl:57
 msgid "Show this message in its entire thread (clears all filters)"
-msgstr ""
+msgstr "Üzenet megjelenítése a teljes beszélgetésben (összes szűrő törlése)"
 
 #: assembl/templates/views/message.tmpl:60
 msgid "Show this message in the full Newest first view (clears all filters)"
-msgstr ""
+msgstr "Üzenet megjelenítése a teljes Legújabb elöl nézetben (összes szűrő törlése)"
 
 #: assembl/templates/views/message.tmpl:64
 msgid "Go back to the entire topic thread"
-msgstr ""
+msgstr "Vissza a teljes téma-lánchoz"
 
 #: assembl/templates/views/message.tmpl:66
 msgid "Show only this message and its replies"
-msgstr ""
+msgstr "Csak ennek az üzenetnek és válaszainak megjelenítése"
 
 #: assembl/templates/views/message.tmpl:70
 #, python-format
 msgid "Show all posts by %s"
-msgstr ""
+msgstr "A következő által írt összes bejegyzés megjelenítése: %s"
 
 #: assembl/templates/views/message.tmpl:74
 #: assembl/templates/views/messageDeletedByUser.tmpl:38
 msgid "Send an email to this user"
-msgstr ""
+msgstr "E-mail küldése ennek a felhasználónak"
 
 #: assembl/templates/views/message.tmpl:79
 msgid "Display translation preferences"
-msgstr ""
+msgstr "Fordítási beállítások megjelenítése"
 
 #: assembl/templates/views/message.tmpl:84
 msgid "Show/hide extracts"
-msgstr ""
+msgstr "Kivonatok megjelenítése/elrejtése"
 
 #: assembl/templates/views/message.tmpl:88
 msgid "Moderation options"
-msgstr ""
+msgstr "Moderálási opciók"
 
 #: assembl/templates/views/message.tmpl:92
 msgid "Export Post in HTML"
-msgstr ""
+msgstr "Bejegyzés exportálása HTML-ben"
 
 #: assembl/templates/views/message.tmpl:96
 msgid "Delete this message"
-msgstr ""
+msgstr "Üzenet törlése"
 
 #: assembl/templates/views/message.tmpl:109
 msgid "View the original message"
-msgstr ""
+msgstr "Eredeti üzenet megtekintése"
 
 #: assembl/templates/views/message.tmpl:112
 msgid "Return to the translated message"
-msgstr ""
+msgstr "Vissza a lefordított üzenethez"
 
 #: assembl/templates/views/message.tmpl:126
 msgid "Sorry, we could not translate this message."
-msgstr ""
+msgstr "Elnézést, nem tudtuk lefordítani ezt az üzenetet."
 
 #: assembl/templates/views/message.tmpl:128
 msgid "Please try again later."
-msgstr ""
+msgstr "Kérjük, később próbálja újra."
 
 #: assembl/templates/views/message.tmpl:131
 msgid ""
 "Sorry, we cannot translate this because we could not identify the source "
 "language."
 msgstr ""
+"Elnézést, nem tudtuk lefordítani ezt, mivel nem tudtuk azonosítani a forrásnyelvet."
 
 #: assembl/templates/views/message.tmpl:190
 #: assembl/templates/views/messageDeletedByUser.tmpl:92
 msgid "Read more"
-msgstr ""
+msgstr "Több olvasása"
 
 #: assembl/templates/views/message.tmpl:199
 #: assembl/templates/views/messageDeletedByUser.tmpl:100
 msgid "Read less"
-msgstr ""
+msgstr "Kevesebb olvasása"
 
 #: assembl/templates/views/message.tmpl:203
 #: assembl/templates/views/message.tmpl:255
 msgid "Like"
-msgstr ""
+msgstr "Kedvelés"
 
 #: assembl/templates/views/message.tmpl:204
 #: assembl/templates/views/message.tmpl:271
 msgid "Disagree"
-msgstr ""
+msgstr "Egyet nem értés"
 
 #: assembl/templates/views/message.tmpl:205
 #: assembl/templates/views/message.tmpl:286
 msgid "Did not get it"
-msgstr ""
+msgstr "Nem kapta meg"
 
 #: assembl/templates/views/message.tmpl:206
 #: assembl/templates/views/message.tmpl:301
 msgid "More info please?"
-msgstr ""
+msgstr "Több információt?"
 
 #: assembl/templates/views/message.tmpl:218
 msgid "Reply"
-msgstr ""
+msgstr "Válasz"
 
 #: assembl/templates/views/messageColumn.tmpl:23
 #: assembl/templates/views/messageList.tmpl:13
 msgid "Load previous messages"
-msgstr ""
+msgstr "Előző üzenetek betöltése"
 
 #: assembl/templates/views/messageColumn.tmpl:36
 #: assembl/templates/views/messageList.tmpl:25
 msgid "Load more messages"
-msgstr ""
+msgstr "További üzenetek betöltése"
 
 #: assembl/templates/views/messageColumn.tmpl:37
 #: assembl/templates/views/messageList.tmpl:26
 msgid "Load all remaining messages at once"
-msgstr ""
+msgstr "Az összes fennmaradó üzenet betöltése egyszerre"
 
 #: assembl/templates/views/messageFamily.tmpl:7
 msgid "View conversation"
-msgstr ""
+msgstr "Beszélgetés megtekintése"
 
 #: assembl/templates/views/messageListHeader.tmpl:33
 msgid "Format message in a view useful for copy-pasting of printing"
-msgstr ""
+msgstr "Üzenet formázása olyan nézetben, amely nyomástáshoz vagy másolás-beillesztés opcióhoz használható"
 
 #: assembl/templates/views/messageListHeader.tmpl:33
 msgid "Print"
-msgstr ""
+msgstr "Nyomtatás"
 
 #: assembl/templates/views/messageModerationOptions.tmpl:1
 msgid "Initial message content"
-msgstr ""
+msgstr "Kezdeti üzenet tartalma"
 
 #: assembl/templates/views/messageModerationOptions.tmpl:4
 msgid "Message publication status"
-msgstr ""
+msgstr "Üzenet közzétételi állapota"
 
 #: assembl/templates/views/messageModerationOptions.tmpl:6
 msgid "Published without moderation"
-msgstr ""
+msgstr "Moderálás nélkül közzétéve"
 
 #: assembl/templates/views/messageModerationOptions.tmpl:7
 msgid "Moderated, initial content available"
-msgstr ""
+msgstr "Moderálva, kezdeti tartalom elérhető"
 
 #: assembl/templates/views/messageModerationOptions.tmpl:8
 msgid "Moderated, initial content not available"
-msgstr ""
+msgstr "Moderálva, kezdeti tartalom nem elérhető"
 
 #: assembl/templates/views/messageModerationOptions.tmpl:15
 msgid "Moderated by"
-msgstr ""
+msgstr "Moderálta:"
 
 #: assembl/templates/views/messageModerationOptions.tmpl:21
 msgid "Moderated version of the message"
-msgstr ""
+msgstr "Az üzenet moderált verziója"
 
 #: assembl/templates/views/messageModerationOptions.tmpl:22
 #: assembl/templates/views/messageModerationOptions.tmpl:27
 msgid "Type something..."
-msgstr ""
+msgstr "Írjon valamit..."
 
 #: assembl/templates/views/messageModerationOptions.tmpl:26
 msgid "Moderation remarks"
-msgstr ""
+msgstr "Moderálás megjegyzései"
 
 #: assembl/templates/views/messageSend.tmpl:17
 msgid "New topic subject:"
-msgstr ""
+msgstr "Új téma tárgya:"
 
 #: assembl/templates/views/messageSend.tmpl:28
 msgid "Your message will be posted:"
-msgstr ""
+msgstr "Üzenete közzétételre kerül:"
 
 #: assembl/templates/views/messageSend.tmpl:29
 #, python-format
 msgid "Under the idea \"%s\""
-msgstr ""
+msgstr "Az ötlet alatt \"%s\""
 
 #: assembl/templates/views/messageSend.tmpl:31
 #, python-format
@@ -3978,275 +4111,283 @@ msgid ""
 "contribution in the table of ideas afterwards, possibly by creating a new "
 "idea)"
 msgstr ""
+"Az általános \"%s\" beszélgetésben (a közösség menedzsere elrendezi az Ön hozzászólását az ötletlistában, talán egy új ötlet létrehozásával)"
 
 #: assembl/templates/views/messageSend.tmpl:33
 msgid "Your message will be posted as a child of the previous message."
-msgstr ""
+msgstr "Az Ön üzenete az előző üzenet gyermekekén kerül létrehozásra."
 
 #: assembl/templates/views/messageSend.tmpl:35
 msgid "Your message will be posted in the general conversation."
-msgstr ""
+msgstr "Az Ön üzenete az általános beszélgetésben kerül közzétételre."
 
 #: assembl/templates/views/message_translation_question.tmpl:14
 msgid "Hide"
-msgstr ""
+msgstr "Elrejtés"
 
 #: assembl/templates/views/moderatedBody.tmpl:3
-msgid "This message has been moderated and the original message is not available."
+msgid ""
+"This message has been moderated and the original message is not available."
 msgstr ""
+"Ez az üzenet moderálása került, és az eredeti üzenet nem elérhető."
 
 #: assembl/templates/views/moderatedBody.tmpl:6
 msgid "Click here to see original message"
-msgstr ""
+msgstr "Kattintson ide az eredeti üzenet megtekintéséhez"
 
 #: assembl/templates/views/navBarLeft.tmpl:7
 msgid "Connecting..."
-msgstr ""
+msgstr "Csatlakozás..."
 
 #: assembl/templates/views/navBarLeft.tmpl:22
 msgid "Discussion permissions"
-msgstr ""
+msgstr "Beszélgetés engedélyei"
 
 #: assembl/templates/views/navBarRight.tmpl:6
 msgid "Help"
-msgstr ""
+msgstr "Súgó"
 
 #: assembl/templates/views/navBarRight.tmpl:14
 #: assembl/templates/views/navBarRight.tmpl:20
 #: assembl/templates/views/userSubscriber.tmpl:23
 msgid "Join this discussion"
-msgstr ""
+msgstr "Csatlakoztatás a beszélgetéshez"
 
 #: assembl/templates/views/navBarRight.tmpl:41
 #: assembl/templates/views/userNavigationMenu.tmpl:10
 #: assembl/templates/views/userNotificationSubscriptions.tmpl:6
 msgid "Notifications"
-msgstr ""
+msgstr "Értesítések"
 
 #: assembl/templates/views/navBarRight.tmpl:46
 msgid "Add a new panel group"
-msgstr ""
+msgstr "Új panelcsoport hozzáadása"
 
 #: assembl/templates/views/navBarRight.tmpl:48
 msgid "Switch to simple mode"
-msgstr ""
+msgstr "Átváltás egyszerű üzemmódra"
 
 #: assembl/templates/views/navBarRight.tmpl:50
 msgid "Switch to full-functionality mode"
-msgstr ""
+msgstr "Átváltás teljes funkcionális üzemmódra"
 
 #: assembl/templates/views/navigation.tmpl:23
 msgid "About"
-msgstr ""
+msgstr "Névjegy"
 
 #: assembl/templates/views/notificationByEmails.tmpl:5
 msgid "Receive notifications on"
-msgstr ""
+msgstr "Értesítések fogadása be"
 
 #: assembl/templates/views/orphanMessagesInIdeaList.tmpl:8
-msgid "Messages top-posted and whose thread has not yet been harvested into an idea"
+msgid ""
+"Messages top-posted and whose thread has not yet been harvested into an idea"
 msgstr ""
+"Legfelül található üzenetek, illetve azon beszélgetések, amelyek még nem kerültek átalakításra ötletté"
 
 #: assembl/templates/views/orphanMessagesInIdeaList.tmpl:9
 msgid "Messages yet to be organised"
-msgstr ""
+msgstr "Rendezésre váró üzenetek"
 
 #: assembl/templates/views/otherInIdeaList.tmpl:2
 msgid "Messages not in the table of ideas"
-msgstr ""
+msgstr "Az ötletlistában nem megtalálható üzenetek"
 
 #: assembl/templates/views/panelWrapper.tmpl:16
 msgid "Fullsize"
-msgstr ""
+msgstr "Teljes méret"
 
 #: assembl/templates/views/panelWrapper.tmpl:18
 msgid "Close panel"
-msgstr ""
+msgstr "Panel bezárása"
 
 #: assembl/templates/views/partnerList.tmpl:6
 #: assembl/templates/views/partnerList.tmpl:10
 msgid "edit partners"
-msgstr ""
+msgstr "partnerek szerkesztése"
 
 #: assembl/templates/views/partnersInAdmin.tmpl:9
 msgid "What is the organisation about?"
-msgstr ""
+msgstr "Mivel foglalkozik a szervezet?"
 
 #: assembl/templates/views/partnersInAdmin.tmpl:13
 msgid "link"
-msgstr ""
+msgstr "hivatkozás"
 
 #: assembl/templates/views/partnersInAdmin.tmpl:15
 msgid "What is their website?"
-msgstr ""
+msgstr "Mi a webhelyük?"
 
 #: assembl/templates/views/partnersInAdmin.tmpl:19
 msgid "Edit"
-msgstr ""
+msgstr "Szerkesztés"
 
 #: assembl/templates/views/partnersInAdmin.tmpl:25
 msgid "is initiator"
-msgstr ""
+msgstr "kezdeményező"
 
 #: assembl/templates/views/partnersInAdmin.tmpl:32
 msgid "What is their logo?"
-msgstr ""
+msgstr "Mi a logójuk?"
 
 #: assembl/templates/views/piwikIframeModal.tmpl:3
 msgid "Set cookies"
-msgstr ""
+msgstr "Sütik beállítása"
 
 #: assembl/templates/views/preferenceItemView.tmpl:13
 msgid "Reset to default"
-msgstr ""
+msgstr "Alapértelmezett visszaállítása"
 
 #: assembl/templates/views/preferenceView.tmpl:7
 msgid "Preferences"
-msgstr ""
+msgstr "Beállítások"
 
 #: assembl/templates/views/segment.tmpl:8
 #, python-format
 msgid "Harvested by %(name)s %(date)s"
-msgstr ""
+msgstr "Összegyűjtötte: %(name)s %(date)s"
 
 #: assembl/templates/views/segment.tmpl:11
-msgid "Click here to see the original contribution this segment is quoted from."
+msgid ""
+"Click here to see the original contribution this segment is quoted from."
 msgstr ""
+"Kattintson ide, ha látni szeretné azt a beszélgetést, ahonnan ez a szegmens származik."
 
 #: assembl/templates/views/segment.tmpl:12
 msgid "Show in original context"
-msgstr ""
+msgstr "Eredeti tartalom kontextus megjelenítése"
 
 #: assembl/templates/views/segment.tmpl:29
 msgid "Show or hide this extract to participants"
-msgstr ""
+msgstr "Összefoglaló megjelenítése vagy elrejtése a résztvevők számára"
 
 #: assembl/templates/views/segment.tmpl:35
 #, python-format
 msgid "%(img)s"
-msgstr ""
+msgstr "%(img)s"
 
 #: assembl/templates/views/segment.tmpl:54
 #, python-format
 msgid "Posted %(nice_date)s by %(name)s"
-msgstr ""
+msgstr "Közzétette: %(name)s, ekkor: %(nice_date)s"
 
 #: assembl/templates/views/segment.tmpl:61
 msgid "Document extracted from the web"
-msgstr ""
+msgstr "Dokumentum a webről kiemelve"
 
 #: assembl/templates/views/segment.tmpl:62
 msgid "Harvested from webpage"
-msgstr ""
+msgstr "Weblapról begyűjtve"
 
 #: assembl/templates/views/segment.tmpl:64
 msgid "Unknown segment type: "
-msgstr ""
+msgstr "Ismeretlen szegmenstípus: "
 
 #: assembl/templates/views/segmentList.tmpl:4
 msgid "Annotation on the web"
-msgstr ""
+msgstr "Jegyzet a weben"
 
 #: assembl/templates/views/segmentList.tmpl:5
 msgid "If you desire catching extracts out of assembl (exemple : Wikipedia),"
-msgstr ""
+msgstr "Ha szeretne összefoglalókat készíteni az assembl-n kívül (például: Wikipedia),"
 
 #: assembl/templates/views/segmentList.tmpl:6
 msgid "click here to activate the annotation"
-msgstr ""
+msgstr "kattintson ide a jegyzet aktiválásához"
 
 #: assembl/templates/views/segmentList.tmpl:9
 msgid "Extracts not yet associated with an idea"
-msgstr ""
+msgstr "Összefoglalók, amelyek nincsenek hozzárendelve egy ötlethez sem"
 
 #: assembl/templates/views/segmentList.tmpl:14
 msgid "Clear"
-msgstr ""
+msgstr "Törlés"
 
 #: assembl/templates/views/showSegmentByAnnotation.tmpl:3
 msgid ""
-"You will be redirected to another idea in connection with the nugget on which"
-" you clicked."
+"You will be redirected to another idea in connection with the nugget on "
+"which you clicked."
 msgstr ""
+"Átirányításra kerül egy másik ötlethez, amely kapcsolódik ahhoz a kiemelt elemhez, amelyre rákattintott."
 
 #: assembl/templates/views/showSegmentByAnnotation.tmpl:10
 msgid "Ok"
-msgstr ""
+msgstr "Ok"
 
 #: assembl/templates/views/simpleLangStringEdit.tmpl:3
 msgid "Add entry"
-msgstr ""
+msgstr "Bejegyzés hozzáadása"
 
 #: assembl/templates/views/socialProviders.tmpl:4
 msgid "Add a social account"
-msgstr ""
+msgstr "Közösségi fiók hozzáadása"
 
 #: assembl/templates/views/socialProviders.tmpl:10
 #, python-format
 msgid "Add a %s account"
-msgstr ""
+msgstr "%s fiók hozzáadása"
 
 #: assembl/templates/views/statistics.tmpl:7
 msgid "Loading..."
-msgstr ""
+msgstr "Betöltés..."
 
 #: assembl/templates/views/synthesisContext.tmpl:10
 msgid "Last synthesis"
-msgstr ""
+msgstr "Utolsó összefoglaló"
 
 #: assembl/templates/views/synthesisContext.tmpl:18
 msgid "Read the synthesis"
-msgstr ""
+msgstr "Olvassa el az összefoglalót"
 
 #: assembl/templates/views/synthesisInIdeaList.tmpl:4
 msgid "All syntheses"
-msgstr ""
+msgstr "Összes összefoglaló"
 
 #: assembl/templates/views/synthesisInIdeaList.tmpl:8
 msgid "Syntheses are summaries of the discussion published on a regular basis"
-msgstr ""
+msgstr "Az összefoglalók a rendszeresen közzétett beszélgetések összegzései"
 
 #: assembl/templates/views/synthesisInIdeaList.tmpl:9
 msgid "Syntheses"
-msgstr ""
+msgstr "Összefoglalók"
 
 #: assembl/templates/views/synthesisPanel.tmpl:15
 #: assembl/templates/views/synthesisPanelMessage.tmpl:14
 msgid "Conclusion"
-msgstr ""
+msgstr "Konklúzió"
 
 #: assembl/templates/views/synthesisPanel.tmpl:22
 msgid "Publish"
-msgstr ""
+msgstr "Közzétesz"
 
 #: assembl/templates/views/tokenVoteCollection.tmpl:4
 #, python-format
 msgid "Ideas (%s)"
-msgstr ""
+msgstr "Ötletek (%s)"
 
 #: assembl/templates/views/tokenVoteCollection.tmpl:5
 msgid "Your votes"
-msgstr ""
+msgstr "Az Ön szavazatai"
 
 #: assembl/templates/views/tokenVoteResultCollectionView.tmpl:4
 msgid "Ideas"
-msgstr ""
+msgstr "Ötletek"
 
 #: assembl/templates/views/tokenVoteResultView.tmpl:7
 msgid "Vote Summary"
-msgstr ""
+msgstr "Szavazás összefoglalása"
 
 #: assembl/templates/views/userAccount.tmpl:7
 msgid "Assembl account settings"
-msgstr ""
+msgstr "Assembl fiókbeállítások"
 
 #: assembl/templates/views/userAccount.tmpl:18
 msgid "Manage associated accounts"
-msgstr ""
+msgstr "Kapcsolódó fiókok kezelése"
 
 #: assembl/templates/views/userAccount.tmpl:40
 msgid "Add another email"
-msgstr ""
+msgstr "Másik e-mail hozzáadása"
 
 #: assembl/templates/views/userAccount.tmpl:55
 msgid ""
@@ -4254,181 +4395,184 @@ msgid ""
 "use your profile's picture. Otherwise, you can set your profile picture with "
 "the <a href='http://en.gravatar.com/'>gravatar</a> service."
 msgstr ""
+"A fiók összekapcsolása lehetővé teszi, hogy a közösségi hálózatokon keresztül jelentkezzen be és használja ottani profilképét. Ellenkező esetben a <a href='http://en.gravatar.com/'>gravatar</a> szolgáltatással állíthatja be profilképét."
 
 #: assembl/templates/views/userAccountForm.tmpl:10
 msgid "You can set a username as an alternate way to login."
-msgstr ""
+msgstr "Beállíthat egy felhasználónevet az alternatív bejelentkezéshez."
 
 #: assembl/templates/views/userAccountForm.tmpl:15
 msgid "New password"
-msgstr ""
+msgstr "Új jelszó"
 
 #: assembl/templates/views/userAccountForm.tmpl:20
 #: assembl/templates/views/userAccountForm.tmpl:31
 msgid "password 1 and 2 should be identical"
-msgstr ""
+msgstr "az 1. és 2. jelszónak azonosnak kell lennie"
 
 #: assembl/templates/views/userAccountForm.tmpl:26
 msgid "Confirm password"
-msgstr ""
+msgstr "Jelszó megerősítése"
 
 #: assembl/templates/views/userAccountForm.tmpl:37
 msgid ""
-"You can set your profile picture with the <a "
-"href='http://en.gravatar.com/'>gravatar</a> service."
+"You can set your profile picture with the <a href='http://en.gravatar."
+"com/'>gravatar</a> service."
 msgstr ""
+"A <a href='http://en.gravatar.com/'>gravatar</a> szolgáltatással beállíthatja profilképét."
 
 #: assembl/templates/views/userNavigationMenu.tmpl:3
 msgid "Modify your profile"
-msgstr ""
+msgstr "Profil módosítása"
 
 #: assembl/templates/views/userNavigationMenu.tmpl:6
 msgid "Account settings"
-msgstr ""
+msgstr "Fiókbeállítások"
 
 #: assembl/templates/views/userNotificationSubscriptions.tmpl:15
 msgid "Notifiy me when"
-msgstr ""
+msgstr "Értesítés, ha"
 
 #: assembl/templates/views/userProfile.tmpl:16
 msgid "Real name"
-msgstr ""
+msgstr "Valódi név"
 
 #: assembl/templates/views/userSubscriber.tmpl:5
 msgid "Subscription settings"
-msgstr ""
+msgstr "Előfizetés beállítások"
 
 #: assembl/templates/views/userSubscriber.tmpl:11
 msgid "subscribed"
-msgstr ""
+msgstr "feliratkozva"
 
 #: assembl/templates/views/userSubscriber.tmpl:14
 msgid "Unsubscribe"
-msgstr ""
+msgstr "Leiratkozás"
 
 #: assembl/templates/views/userSubscriber.tmpl:20
 msgid "unsubscribed"
-msgstr ""
+msgstr "leiratkozva"
 
 #: assembl/views/admin/views.py:392
 msgid "No file given."
-msgstr ""
+msgstr "Nincs szűrő megadva."
 
-#: assembl/views/api/post.py:80 assembl/views/api/post.py:624
+#: assembl/views/api/post.py:81 assembl/views/api/post.py:625
 #, python-format
 msgid "No discussion found with id=%s"
-msgstr ""
+msgstr "Nem található beszélgetés a következővel: id=%s"
 
-#: assembl/views/api/post.py:227
+#: assembl/views/api/post.py:228
 msgid "Getting orphan posts of a specific idea isn't supported."
-msgstr ""
+msgstr "Egy adott ötlethez tartozó árva bejegyzések nem támogatottak."
 
-#: assembl/views/api/post.py:297
+#: assembl/views/api/post.py:298
 msgid "Do not combine negative and positive classifiers"
-msgstr ""
+msgstr "Ne kombinálja a negatív és pozitív osztályozókat"
 
-#: assembl/views/api/post.py:358
+#: assembl/views/api/post.py:359
 msgid "You must be logged in to view which posts are read"
-msgstr ""
+msgstr "Az olvasott bejegyzés megtekintéséhez be kell jelentkeznie"
 
-#: assembl/views/api/post.py:608
+#: assembl/views/api/post.py:609
 msgid "Your message is empty"
-msgstr ""
+msgstr "Az Ön üzenete üres"
 
-#: assembl/views/api2/auth.py:346
+#: assembl/views/api2/auth.py:343
 msgid "The user does not exist"
-msgstr ""
+msgstr "A felhasználó nem létezik"
 
-#: assembl/views/api2/auth.py:357
+#: assembl/views/api2/auth.py:354
 msgid "This email does not exist"
-msgstr ""
+msgstr "Az e-mail nem létezik"
 
-#: assembl/views/api2/auth.py:362
+#: assembl/views/api2/auth.py:359
 msgid "Please give an identifier"
-msgstr ""
+msgstr "Kérjük, adjon meg egy azonosítót"
+
+#: assembl/views/api2/auth.py:364
+msgid "This user has no email"
+msgstr "A felhasználónak nincs e-mail címe"
 
 #: assembl/views/api2/auth.py:367
-msgid "This user has no email"
-msgstr ""
-
-#: assembl/views/api2/auth.py:370
 msgid "This is not a user"
-msgstr ""
+msgstr "Ez nem egy felhasználó"
 
-#: assembl/views/api2/auth.py:391
+#: assembl/views/api2/auth.py:388
 msgid "The passwords that were entered are mismatched!"
-msgstr ""
+msgstr "A megadott jelszavak nem egyeznek!"
 
-#: assembl/views/api2/auth.py:405 assembl/views/auth/views.py:964
+#: assembl/views/api2/auth.py:402 assembl/views/auth/views.py:964
 #: assembl/views/auth/views.py:1032
 msgid "This link is not valid. Do you want us to send another?"
-msgstr ""
+msgstr "A hivatkozás nem érvényes. Szeretne egy másikat küldeni?"
 
-#: assembl/views/api2/auth.py:408 assembl/views/auth/views.py:967
+#: assembl/views/api2/auth.py:405 assembl/views/auth/views.py:967
 #: assembl/views/auth/views.py:1035
 msgid "This link has been used. Do you want us to send another?"
-msgstr ""
+msgstr "A hivatkozás már használatban. Szeretne egy másikat küldeni?"
 
-#: assembl/views/api2/auth.py:443 assembl/views/auth/views.py:388
+#: assembl/views/api2/auth.py:440 assembl/views/auth/views.py:388
 msgid "Please use a name of at least 3 characters"
-msgstr ""
+msgstr "Kérjük, használjon egy legalább 3 karakterből álló nevet"
 
-#: assembl/views/api2/auth.py:452 assembl/views/auth/views.py:321
+#: assembl/views/api2/auth.py:449 assembl/views/auth/views.py:321
 #: assembl/views/auth/views.py:395
 msgid "This is not a valid email"
-msgstr ""
+msgstr "Ez nem egy érvényes e-mail cím"
 
-#: assembl/views/api2/auth.py:460 assembl/views/auth/views.py:402
+#: assembl/views/api2/auth.py:457 assembl/views/auth/views.py:402
 msgid "We already have a user with this email."
-msgstr ""
+msgstr "Már létezik felhasználó ezzel az e-mail címmel."
 
-#: assembl/views/api2/auth.py:465
+#: assembl/views/api2/auth.py:462
 msgid "No email."
-msgstr ""
+msgstr "Nincs e-mail cím."
 
-#: assembl/views/api2/auth.py:471
+#: assembl/views/api2/auth.py:468
 msgid "We already have a user with this username."
-msgstr ""
+msgstr "Már létezik felhasználó ezzel a felhasználónévvel."
 
 #: assembl/views/auth/views.py:294
 #, python-format
 msgid "The username %s is already used"
-msgstr ""
+msgstr "A %s felhasználónév már használatban"
 
 #: assembl/views/auth/views.py:313 assembl/views/auth/views.py:1046
 msgid "The passwords are not identical"
-msgstr ""
+msgstr "A jelszavak nem egyeznek"
 
 #: assembl/views/auth/views.py:406
 msgid "The passwords should be identical"
-msgstr ""
+msgstr "A jelszavaknak meg kell egyezniük"
 
 #: assembl/views/auth/views.py:462
 msgid ""
 "Your email was refused by the SMTP server.  You probably entered an email "
 "that does not exist."
 msgstr ""
+"Az Ön elektronikus levelét az SMTP szerver elutasította. Valószínűleg egy nem létező e-mail címet adott meg."
 
 #: assembl/views/auth/views.py:519 assembl/views/auth/views.py:844
 #: assembl/views/auth/views.py:850
 msgid "This user cannot be found"
-msgstr ""
+msgstr "Ez a felhasználó nem található"
 
 #: assembl/views/auth/views.py:537
 msgid "Invalid user and password"
-msgstr ""
+msgstr "Érvénytelen felhasználó és jelszó"
 
 #: assembl/views/auth/views.py:601
 msgid "This email address is already confirmed"
-msgstr ""
+msgstr "Ez az e-mail cím már megerősítésre került"
 
 #: assembl/views/auth/views.py:602
 msgid "You do not need to confirm this email address, it is already confirmed."
-msgstr ""
+msgstr "Nem kell megerősítenie ezt az e-mail címet, már megerősítésre került."
 
 #: assembl/views/auth/views.py:610 assembl/views/auth/views.py:809
 msgid "Confirmation requested"
-msgstr ""
+msgstr "Megerősítés szükséges"
 
 #: assembl/views/auth/views.py:611 assembl/views/auth/views.py:810
 msgid ""
@@ -4437,24 +4581,25 @@ msgid ""
 "in order to confirm your e-mail address. If you did not receive any "
 "confirmation e-mail (check your spams), click here."
 msgstr ""
+"Egy megerősítő e-mailt küldtünk az Ön fiókjába, amelynek néhány percen belül meg kell jelennie a bejövő üzeneteiben. Egy megerősítő hivatkozást tartalmaz, amelyre kattintva megerősítheti az e-mail címét. Ha nem kapja meg a megerősítő e-mailt (ellenőrizze a levélszemetet is), kattintson ide."
 
 #: assembl/views/auth/views.py:659 assembl/views/auth/views.py:683
 #: assembl/views/auth/views.py:705
 #, python-format
 msgid "Email <%s> already confirmed"
-msgstr ""
+msgstr "Az <%s> e-mail cím már megerősítésre került"
 
 #: assembl/views/auth/views.py:671
 msgid "This link was not valid. We sent another."
-msgstr ""
+msgstr "A hivatkozás nem volt érvényes, egy másikat küldtünk."
 
 #: assembl/views/auth/views.py:674
 msgid "This link has been used. We sent another."
-msgstr ""
+msgstr "A hivatkozás felhasználásra kerül, egy másikat küldtünk."
 
 #: assembl/views/auth/views.py:687
 msgid "This link is not valid. Please attempt to login to get another one."
-msgstr ""
+msgstr "A hivatkozás nem érvényes. Kérjük, próbáljon meg bejelentkezni és kérjen egy másikat."
 
 #: assembl/views/auth/views.py:726
 #, python-format
@@ -4462,65 +4607,67 @@ msgid ""
 "Your email address %s has been confirmed, and you are now subscribed to "
 "discussion's default notifications."
 msgstr ""
+"Az Ön %s e-mail címe megerősítésre került és Ön feliratkozott a beszélgetés alapértelmezett értesítéseire."
 
 #: assembl/views/auth/views.py:731
 #, python-format
 msgid "Your email address %s has been confirmed."
-msgstr ""
+msgstr "Az Ön %s e-mail címe megerősítésre került."
 
 #: assembl/views/auth/views.py:756
 msgid "Login failed, try again"
-msgstr ""
+msgstr "Bejelentkezés sikertelen, próbálja meg újra"
 
 #: assembl/views/auth/views.py:797
 msgid "This email is already confirmed."
-msgstr ""
+msgstr "Ez az e-mail már megerősítésre került"
 
 #: assembl/views/auth/views.py:818
 msgid "We do not know about this email."
-msgstr ""
+msgstr "Nem ismerjük ezt az e-mail címet."
 
 #: assembl/views/auth/views.py:897
 msgid "Password change requested"
-msgstr ""
+msgstr "Jelszó módosítása szükséges"
 
 #: assembl/views/auth/views.py:898
 msgid ""
 "We have sent you an email with a temporary connection link. Please use that "
 "link to log in and change your password."
 msgstr ""
+"Küldtünk Önnek egy e-mailt, amely egy ideiglenes hivatkozást tartalmaz. Kérjük, használja ezt a hivatkozást a bejelentkezéshez és módosítsa jelszavát."
 
 #: assembl/views/auth/views.py:979
 msgid "You will enter the discussion as <b>{name}</b>."
-msgstr ""
+msgstr "A beszélgetésbe a következő néven fog csatlakozni: <b>{name}</b>."
 
 #: assembl/views/auth/views.py:983
 msgid "You will enter Assembl as <b>{name}</b>."
-msgstr ""
+msgstr "Az Assembl-be a következő néven fog bejelentkezni: <b>{name}</b>."
 
 #: assembl/views/auth/views.py:986
 msgid "Please choose your password for security reasons."
-msgstr ""
+msgstr "Kérjük, válasszon jelszőt biztonsági okokból."
 
 #: assembl/views/auth/views.py:1015
 msgid "Change your password"
-msgstr ""
+msgstr "Módosítsa jelszavát"
 
 #: assembl/views/auth/views.py:1054
 msgid "Password changed"
-msgstr ""
+msgstr "Jelszó módosítva"
 
 #: assembl/views/auth/views.py:1068
 msgid "email"
-msgstr ""
+msgstr "e-mail"
 
 #: assembl/views/auth/views.py:1069
 msgid "Please confirm your {confirm_what} with {assembl}"
-msgstr ""
+msgstr "Kérjük erősítse meg a következőt: {confirm_what} az {assembl}-lel"
 
 #: assembl/views/auth/views.py:1071
 msgid "account"
-msgstr ""
+msgstr "fiók"
 
 #: assembl/views/auth/views.py:1072
 msgid ""
@@ -4533,6 +4680,13 @@ msgid ""
 "Best regards,\n"
 "The {assembl} Team"
 msgstr ""
+"Helló, {name}, üdvözöljük az {assembl}-ben!\n"
+"\n"
+"Kérjük, az alábbi linkre kattintva erősítse meg e-mail címét és fejezze be regisztrációját.\n"
+"<{confirm_url}>\n"
+"\n"
+"Üdvözlettel,\n"
+"Az {assembl} csapata"
 
 #: assembl/views/auth/views.py:1079
 msgid ""
@@ -4542,6 +4696,10 @@ msgid ""
 "and complete your registration.</p>\n"
 "<p>Best regards,<br />The {assembl} Team</p>"
 msgstr ""
+"<p>Helló, {name}, üdvözöljük az {assembl}-ben!</p>\n"
+"<p>Kérjük, <a href=\"{confirm_url}\">az alábbi linkre kattintva erősítse meg e-mail címét</a>\n"
+"és fejezze be regisztrációját.</p>\n"
+"<p>Üdvözlettel,<br />Az {assembl} csapata</p>"
 
 #: assembl/views/auth/views.py:1084
 msgid ""
@@ -4554,6 +4712,13 @@ msgid ""
 "Best regards,\n"
 "The {assembl} Team"
 msgstr ""
+"Helló, {name}!\n"
+"\n"
+"Kérjük, az alábbi linkre kattintva erősítse meg új e-mail címét <{email}>, amely az Ön {assembl} fiókjához tartozik.\n"
+"<{confirm_url}>\n"
+"\n"
+"Üdvözlettel,\n"
+"Az {assembl} csapata"
 
 #: assembl/views/auth/views.py:1091
 msgid ""
@@ -4563,27 +4728,36 @@ msgid ""
 "on your {assembl} account.</p>\n"
 "<p>Best regards,<br />The {assembl} Team</p>"
 msgstr ""
+"<p>Helló, {name}!</p>\n"
+"<p>Kérjük, <a href=\"{confirm_url}\">az alábbi linkre kattintva erősítse meg az új e-mail címét</a>, amely az Ön {assembl} fiókjához tartozik.</p>\n"
+"<p>Üdvözlettel,<br />Az {assembl} csapata</p>"
 
-#: assembl/views/auth/views.py:1145
+#: assembl/views/auth/views.py:1142
 msgid "Request for password change"
-msgstr ""
+msgstr "Jelszómódosítás kérése"
 
-#: assembl/views/auth/views.py:1149
+#: assembl/views/auth/views.py:1146
 msgid ""
 "<p>Hello, {name}!</p>\n"
 "<p>We have received a request to change the password on your {assembl} "
 "account.\n"
-"Please <a href=\"{confirm_url}\">click here to confirm your password "
-"change</a>.</p>\n"
-"<p>If you did not ask to reset your password please disregard this email.</p>"
-"\n"
+"Please <a href=\"{confirm_url}\">click here to confirm your password change</"
+"a>.</p>\n"
+"<p>If you did not ask to reset your password please disregard this email.</"
+"p>\n"
 "<p>Best regards,<br />The {assembl} Team</p>\n"
 msgstr ""
+"<p>Helló, {name}!</p>\n"
+"<p>Az Ön {assembl} fiókjához kapcsolódóan egy jelszómódosítási kérelmet kaptunk.\n"
+"Kérjük, <a href=\"{confirm_url}\">kattintson ide a jelszómódosítás megerősítéséhez</a>.</p>\n"
+"<p>Ha Ön nem kérte a jelszó módosítását, kérjük, hagyja figyelmen kívül ezt az e-mailt.</p>\n"
+"<p>Üdvözlettel,<br />Az {assembl} csapata</p>\n"
 
-#: assembl/views/auth/views.py:1155
+#: assembl/views/auth/views.py:1152
 msgid ""
 "Hello, {name}!\n"
-"We have received a request to change the password on your {assembl} account.\n"
+"We have received a request to change the password on your {assembl} "
+"account.\n"
 "To confirm your password change please click on the link below.\n"
 "<{confirm_url}>\n"
 "\n"
@@ -4592,9 +4766,17 @@ msgid ""
 "Best regards,\n"
 "The {assembl} Team\n"
 msgstr ""
+"Helló, {name}!\n"
+"Az Ön {assembl} fiókjához kapcsolódóan egy jelszómódosítási kérelmet kaptunk.\n"
+"Kérjük, kattintson ide a jelszómódosítás megerősítéséhez.\n"
+"<{confirm_url}>\n"
+"\n"
+"Ha Ön nem kérte a jelszó módosítását, kérjük, hagyja figyelmen kívül ezt az e-mailt.\n"
+"\n"
+"Üdvözlettel,\n"
+"Az {assembl} csapata"
 
-#: assembl/views/discussion/views.py:56
+#: assembl/views/discussion/views.py:51
 #, python-format
 msgid "No discussion found for slug=%s"
-msgstr ""
-
+msgstr "Nem található beszélgetés a következővel kapcsolatban: slug=%s"

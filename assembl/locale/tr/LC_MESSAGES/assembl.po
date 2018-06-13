@@ -1,204 +1,204 @@
+﻿# Translations template for assembl.
 # Copyright (C) 2018 ORGANIZATION
 # This file is distributed under the same license as the assembl project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2018.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: assembl 2.12.5\n"
+"Project-Id-Version: assembl 2.8.9\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-06-06 11:14+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"POT-Creation-Date: 2018-02-28 14:24+0100\n"
+"PO-Revision-Date: 2018-05-18 15:47+0200\n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.3.4\n"
+"X-Generator: Poedit 2.0.7\n"
+"Last-Translator: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: tr_TR\n"
 
 #: assembl/auth/util.py:140
 msgid "Your session has expired, you need to login again"
-msgstr ""
+msgstr "Oturumunuzun süresi doldu, tekrar oturum açın"
 
 #: assembl/auth/util.py:504
 msgid "The CSV file must have two columns"
-msgstr ""
+msgstr "CSV dosyası iki sütundan oluşmalıdır"
 
 #: assembl/auth/util.py:511
 #, python-format
 msgid "Not an email: <%s> at line %d"
-msgstr ""
+msgstr "Not an email: <%s> at line %d"
 
 #: assembl/auth/util.py:514
 #, python-format
 msgid "Name too short: <%s> at line %d"
-msgstr ""
+msgstr "Name too short: <%s> at line %d"
 
 #: assembl/lib/colander.py:174
 msgid "${val} cannot be serialized: ${err}"
-msgstr ""
+msgstr "${val} seri haline getirilemez: ${err}"
 
 #: assembl/lib/colander.py:193
 msgid "${val} is not a string: ${err}"
-msgstr ""
+msgstr "${val} bir dizi değil: ${err}"
 
 #: assembl/models/edgesense_drupal.py:173
 msgid "Unknown User ${uid}"
-msgstr ""
+msgstr "Bilinmeyen Kullanıcı ${uid}"
 
-#: assembl/models/idea.py:263 assembl/static/js/app/views/ideaPanel.js:211
-msgid "Idea"
-msgstr ""
-
-#: assembl/models/notification.py:621
+#: assembl/models/notification.py:626
 msgid "A synthesis is posted"
-msgstr ""
+msgstr "Bir sentez yayınlandı"
 
-#: assembl/models/notification.py:650
+#: assembl/models/notification.py:655
 msgid "Any message is posted to the discussion"
-msgstr ""
+msgstr "Tartışmada herhangi bir mesaj yayınlandı"
 
-#: assembl/models/notification.py:679
+#: assembl/models/notification.py:684
 msgid "Someone directly responds to one of your messages"
-msgstr ""
+msgstr "Birisi mesajlarınızdan birine doğrudan yanıt verdi"
 
-#: assembl/models/notification.py:1093
+#: assembl/models/notification.py:1101
 msgid "SYNTHESIS: "
-msgstr ""
+msgstr "SENTEZ:"
 
 #: assembl/models/preferences.py:114 assembl/models/preferences.py:548
 msgid "No special authentication"
-msgstr ""
+msgstr "Özel bir kimlik doğrulama yok"
 
 #: assembl/models/preferences.py:386
 msgid "Languages used"
-msgstr ""
+msgstr "Kullanılan diller"
 
 #: assembl/models/preferences.py:387
 msgid "All languages expected in the discussion"
-msgstr ""
+msgstr "Tartışmada yer alması beklenen tüm diller"
 
 #: assembl/models/preferences.py:397
 msgid "Use landing page"
-msgstr ""
+msgstr "Varış sayfası kullan"
 
 #: assembl/models/preferences.py:398
 msgid ""
-"Are users directed to the landing page and phases at login, or diretly to the"
-" debate"
+"Are users directed to the landing page and phases at login, or diretly to "
+"the debate"
 msgstr ""
+"Kullanıcılar varış sayfasına ve oturum açma aşamalarına veya doğrudan tartışmaya yönlendirilir"
 
 #: assembl/models/preferences.py:406 assembl/models/preferences.py:420
 msgid "Translation service"
-msgstr ""
+msgstr "Çeviri hizmeti"
 
 #: assembl/models/preferences.py:409
 msgid "No translation"
-msgstr ""
+msgstr "Çeviri yok"
 
 #: assembl/models/preferences.py:411
 msgid "Dummy translation service (two steps)"
-msgstr ""
+msgstr "Dummy translation service (two steps)"
 
 #: assembl/models/preferences.py:413
 msgid "Dummy translation service (one step)"
-msgstr ""
+msgstr "Dummy translation service (one step)"
 
 #: assembl/models/preferences.py:415
 msgid "Dummy translation service (two steps) with errors"
-msgstr ""
+msgstr "Dummy translation service (two steps) with errors"
 
 #: assembl/models/preferences.py:417
 msgid "Dummy translation service (one step) with errors"
-msgstr ""
+msgstr "Dummy translation service (one step) with errors"
 
 #: assembl/models/preferences.py:419
 msgid "Google Translate"
-msgstr ""
+msgstr "Google Çeviri"
 
 #: assembl/models/preferences.py:432
 msgid "Panel order in simple view"
-msgstr ""
+msgstr "Basit görünümde panel düzeni"
 
 #: assembl/models/preferences.py:435
 msgid "Navigation, Idea, Messages"
-msgstr ""
+msgstr "Gezinti, Fikir, Mesajlar"
 
 #: assembl/models/preferences.py:436
 msgid "Navigation, Messages, Idea"
-msgstr ""
+msgstr "Gezinti, Mesajlar, Fikir"
 
 #: assembl/models/preferences.py:437
 msgid "Order of panels"
-msgstr ""
+msgstr "Panel düzeni"
 
 #: assembl/models/preferences.py:449
 msgid "Extra JSON parameters"
-msgstr ""
+msgstr "Ekstra JSON parametreleri"
 
 #: assembl/models/preferences.py:451
 msgid "Parameters for quick frontend settings"
-msgstr ""
+msgstr "Hızlı ön yüz ayarları için parametreler"
 
 #: assembl/models/preferences.py:460
 msgid "Terms of use URL"
-msgstr ""
+msgstr "Kullanım koşulları URL’si"
 
 #: assembl/models/preferences.py:462
 msgid "URL of a document presenting terms of use for the discussion"
-msgstr ""
+msgstr "Tartışma için kullanım koşullarını tanıtan bir belgenin URL’si"
 
 #: assembl/models/preferences.py:471
 msgid "Video URL"
-msgstr ""
+msgstr "Video URL’si"
 
 #: assembl/models/preferences.py:473
 msgid "URL of a video presenting the discussion"
-msgstr ""
+msgstr "Tartışmayı tanıtan bir videonun URL’si"
 
 #: assembl/models/preferences.py:482
 msgid "Video description"
-msgstr ""
+msgstr "Video açıklaması"
 
 #: assembl/models/preferences.py:484
 msgid "Description of the video presenting the discussion"
-msgstr ""
+msgstr "Tartışmayı tanıtan videonun açıklaması"
 
 #: assembl/models/preferences.py:493
 msgid "Social sharing"
-msgstr ""
+msgstr "Sosyal paylaşım"
 
 #: assembl/models/preferences.py:496
 msgid "Show the share button on posts and ideas"
-msgstr ""
+msgstr "Gönderilerde ve fikirlerde paylaş butonunu göster"
 
 #: assembl/models/preferences.py:507
 msgid "Private social sharing"
-msgstr ""
+msgstr "Özel sosyal paylaşım"
 
 #: assembl/models/preferences.py:509
 msgid "Publicizing or privatizing social sharing"
-msgstr ""
+msgstr "Sosyal paylaşımı kamuya açma veya özelleştirme"
 
 #: assembl/models/preferences.py:518
 msgid "Extra data for CSV reports"
-msgstr ""
+msgstr "CSV raporları için ekstra veriler"
 
 #: assembl/models/preferences.py:521
 msgid "data taken from social_auth's extra_data to add to CSV reports"
-msgstr ""
+msgstr "social_auth's extra_data ’dan CSV raporlarına eklenmek üzere alınan veriler"
 
 #: assembl/models/preferences.py:533
 msgid "Require anti-virus check"
-msgstr ""
+msgstr "Anti-virüs kontrolü talep et"
 
 #: assembl/models/preferences.py:536
 msgid "Run an anti-virus on file attachments"
-msgstr ""
+msgstr "Dosya eklerinde anti-virüs taraması yap"
 
 #: assembl/models/preferences.py:550
 msgid "Authentication service type"
-msgstr ""
+msgstr "Kimlik doğrulama hizmeti türü"
 
 #: assembl/models/preferences.py:552
 msgid ""
@@ -206,62 +206,65 @@ msgid ""
 "social-auth backend. Participants will be auto-logged in to that server, and "
 "discussion auto-subscription will require an account from this backend."
 msgstr ""
+"A primary authentication server for this discussion, defined as a python-social-auth backend. Participants will be auto-logged in to that server, and discussion auto-subscription will require an account from this backend."
 
 #: assembl/models/preferences.py:567
 msgid "Allow access to moderated text"
-msgstr ""
+msgstr "Denetlenen metne erişim izni ver"
 
 #: assembl/models/preferences.py:570
 msgid "Are moderated posts simply hidden or made inaccessible by default?"
-msgstr ""
+msgstr "Denetlenen bildirimler gizleniyor mu, yoksa varsayılan olarak erişilemez hale mi geliyor?"
 
 #: assembl/models/preferences.py:583
 msgid "Idea panel opens automatically"
-msgstr ""
+msgstr "Fikir panosu otomatik olarak açılır"
 
 #: assembl/models/preferences.py:586
 msgid ""
 "Does the Idea panel automatically open when an idea is clicked ? (and close "
 "when a special section is clicked)"
 msgstr ""
+"Bir fikre tıklandığında Fikir panosu otomatik olarak mı açılır (ve özel bir bölüme tıklandığında otomatik olarak mı kapanır)?"
 
 #: assembl/models/preferences.py:598
 msgid "Ids of columns in column view"
-msgstr ""
+msgstr "Sütun görünümünde sütun kimlikleri"
 
 #: assembl/models/preferences.py:600
 msgid "What are (ordered) identifiers of columns in multi-column views?"
-msgstr ""
+msgstr "Çoklu sütun görünümlerinde sütunların (sıralı) tanımlayıcıları nelerdir?"
 
 #: assembl/models/preferences.py:613
 msgid "Default colors of columns in column view"
-msgstr ""
+msgstr "Sütun görünümünde sütunların varsayılan renkleri"
 
 #: assembl/models/preferences.py:615
 msgid "What are (default) theme colors of columns in multi-column views?"
-msgstr ""
+msgstr "Çoklu sütun görünümlerinde sütunların (varsayılan) tema renkleri nelerdir?"
 
 #: assembl/models/preferences.py:627
 msgid "Names of columns in column view"
-msgstr ""
+msgstr "Sütun görünümünde sütun isimleri"
 
 #: assembl/models/preferences.py:629
 msgid ""
-"What are (default) names of columns in multi-column views, in each discussion"
-" language?"
+"What are (default) names of columns in multi-column views, in each "
+"discussion language?"
 msgstr ""
+"Çoklu sütun görünümlerinde sütunların tüm tartışma dillerindeki (varsayılan) isimleri nelerdir?"
 
 #: assembl/models/preferences.py:642
 msgid "Default permissions"
-msgstr ""
+msgstr "Varsayılan izinler"
 
 #: assembl/models/preferences.py:645
 msgid "The basic permissions for a new discussion"
-msgstr ""
+msgstr "Yeni bir tartışma için temel izinler"
 
 #: assembl/models/preferences.py:727
 msgid "Require Email Domain"
-msgstr ""
+msgstr "E-Posta Alan Adı Gereksinimi"
 
 #: assembl/models/preferences.py:730
 msgid ""
@@ -269,259 +272,250 @@ msgid ""
 "Only accounts with at least an email from those domains can self-register to "
 "this discussion. Anyone can self-register if this is empty."
 msgstr ""
+"List of domain names of user email address required for self-registration. Only accounts with at least an email from those domains can self-register to this discussion. Anyone can self-register if this is empty."
 
 #: assembl/models/preferences.py:746
 msgid "Show CI Dashboard"
-msgstr ""
+msgstr "KZ (Kolektif Zeka) Gösterge Panelini göster"
 
 #: assembl/models/preferences.py:749
 msgid "Show the CI Dashboard in the panel group window"
-msgstr ""
+msgstr "Panel grubu penceresinde KZ Gösterge Panelini göster"
 
 #: assembl/models/preferences.py:761
 msgid "URL of CI Dashboard"
-msgstr ""
+msgstr "KZ Gösterge Paneli URL’i"
 
 #: assembl/models/preferences.py:763
 msgid "Configuration of the visualizations shown in the CI Dashboard"
-msgstr ""
+msgstr "KZ Gösterge Panelinde gösterilen yapılandırmalar ve görselleştirmeler"
 
 #: assembl/models/preferences.py:781
 msgid "Catalyst Visualizations"
-msgstr ""
+msgstr "Katalist Görselleştirmeleri"
 
 #: assembl/models/preferences.py:784
 msgid "A JSON description of available Catalyst visualizations"
-msgstr ""
+msgstr "Mevcut Katalist görselleştirmelerinin bir JSON açıklaması"
 
 #: assembl/models/preferences.py:796
 msgid "Navigation sections"
-msgstr ""
+msgstr "Gezinti kısımları"
 
 #: assembl/models/preferences.py:799
 msgid ""
 "A JSON specification of Catalyst visualizations to show in the navigation "
 "section"
 msgstr ""
+"Gezinti kısmında gösterilmek üzere Katalist görselleştirmelerinin bir JSON tanımı"
 
 #: assembl/models/preferences.py:812
 msgid "Catalyst translations"
-msgstr ""
+msgstr "Katalist çeviriler"
 
 #: assembl/models/preferences.py:815
-msgid "Translations applicable to Catalyst visualizations, in Jed (JSON) format"
+msgid ""
+"Translations applicable to Catalyst visualizations, in Jed (JSON) format"
 msgstr ""
+"Jed (JSON) formatlı, Katalist görselleştirmelere uygulanabilir çeviriler"
 
 #: assembl/models/preferences.py:832
 msgid "Default Table of Ideas Collapsed state"
-msgstr ""
+msgstr "Varsayılan Fikirler Tablosu Daraltılmış hal"
 
 #: assembl/models/preferences.py:835
 msgid ""
 "Default expanded/collapsed state of each idea in the table of ideas. A user "
 "can override it by opening/closing an idea"
 msgstr ""
+"Fikirler tablosunda tüm fikirlerin varsayılan genişletilmiş/daraltılmış hali. Bir kullanıcı bir fikri açarak/kapayarak bunu yeniden uyarlayabilir"
 
 #: assembl/models/preferences.py:850
 msgid "Preference data"
-msgstr ""
+msgstr "Tercih verileri"
 
 #: assembl/models/preferences.py:853
 msgid "The preference configuration; override only with care"
-msgstr ""
+msgstr "Tercih yapılandırması; yeniden uyarlarken dikkat edin"
 
 #: assembl/models/preferences.py:865
 msgid "Cookies banner"
-msgstr ""
+msgstr "Çerez uyarısı başlığı"
 
 #: assembl/models/preferences.py:868
 msgid "Show the banner offering to disable Piwik cookies"
-msgstr ""
-
-#: assembl/models/preferences.py:880
-msgid "Custom HTML code on the landing page"
-msgstr ""
-
-#: assembl/models/preferences.py:883
-msgid ""
-"Custom HTML code that will be integrated on the landing page of the debate, "
-"right after the <body> tag"
-msgstr ""
-
-#: assembl/models/preferences.py:893
-msgid "Custom HTML code on the user registration page"
-msgstr ""
-
-#: assembl/models/preferences.py:896
-msgid ""
-"Custom HTML code that will be integrated on the user registration page of the"
-" debate, right after the <body> tag"
-msgstr ""
+msgstr "Piwik çerezleri devre dışı bırakmayı öneren uyarı başlığını göster"
 
 #: assembl/static/js/app/routeManager.js:416
 msgid "Requested vote widget could not be found."
-msgstr ""
+msgstr "Talep edilen oylama aracı bulunamadı."
 
 #: assembl/static/js/app/routeManager.js:602
 msgid "You must be logged in to access this page."
-msgstr ""
+msgstr "Bu sayfaya erişmek için giriş yapmalısınız."
 
 #: assembl/static/js/app/routeManager.js:625
-msgid "Your level of permissions do not allow you to see the rest of this content"
+msgid ""
+"Your level of permissions do not allow you to see the rest of this content"
 msgstr ""
+"Yetki düzeyiniz bu içeriğin geri kalanını görmenize olanak vermiyor"
 
 #: assembl/static/js/app/common/context.js:156
 msgid "Message titles"
-msgstr ""
+msgstr "Mesaj başlıkları"
 
 #: assembl/static/js/app/common/context.js:160
 msgid "Message previews"
-msgstr ""
+msgstr "Mesaj önizleme"
 
 #: assembl/static/js/app/common/context.js:164
 msgid "Complete messages"
-msgstr ""
+msgstr "Mesajların tümü"
 
 #: assembl/static/js/app/common/context.js:893
 msgid "Extract"
-msgstr ""
+msgstr "Alıntı"
 
 #: assembl/static/js/app/common/context.js:1255
 msgid "ajax error message:"
-msgstr ""
+msgstr "ajax hata mesajı:"
 
 #: assembl/static/js/app/models/agents.js:132
 msgid "need no additional permissions"
-msgstr ""
+msgstr "ek izne gerek yok"
 
 #: assembl/static/js/app/models/agents.js:147
 #, python-format
 msgid "you must first <a href='%s'>Sign in</a>"
-msgstr ""
+msgstr "ilk olarak <a href='%s'>Giriş yapın</a>"
 
 #: assembl/static/js/app/models/agents.js:153
 msgid "you must first join this discussion"
-msgstr ""
+msgstr "ilk olarak bu tartışmaya katılmalısınız"
 
 #: assembl/static/js/app/models/agents.js:158
 #, python-format
 msgid "you must ask a discussion administrator for the following role: %s"
-msgid_plural "you must ask a discussion administrator for one of the following roles: %s"
-msgstr[0] ""
-msgstr[1] ""
+msgid_plural ""
+"you must ask a discussion administrator for one of the following roles: %s"
+msgstr[0] "bir tartışma yöneticisinden şu rolü istemelisiniz: %s"
+msgstr[1] "bir tartışma yöneticisinden şu rollerden birini istemelisiniz: %s"
 
 #: assembl/static/js/app/models/agents.js:162
 msgid "the administrator has closed this discussion to all contributions"
-msgstr ""
+msgstr "yönetici bu tartışmayı tüm katılımcılara kapattı."
 
 #: assembl/static/js/app/models/agents.js:165
 msgid "you need additional permissions"
-msgstr ""
+msgstr "ek izinlere ihtiyacınız var"
 
 #: assembl/static/js/app/models/agents.js:232
 msgid "Unknown user"
-msgstr ""
+msgstr "Bilinmeyen kullanıcı"
 
 #: assembl/static/js/app/models/attachments.js:26
 msgid "Do not show anything special"
-msgstr ""
+msgstr "Özel hiçbir şey gösterme"
 
 #: assembl/static/js/app/models/attachments.js:30
 msgid "Show the following preview at the end of your message"
-msgstr ""
+msgstr "Mesajın sonunda şu önizlemeyi göster"
 
 #: assembl/static/js/app/models/attachments.js:456
-msgid "Sorry, only an image type is supported in this upload. Please try again."
+msgid ""
+"Sorry, only an image type is supported in this upload. Please try again."
 msgstr ""
+"Üzgünüz, bu yüklemede sadece bir görüntü tipi destekleniyor. Lütfen tekrar deneyin."
 
 #: assembl/static/js/app/models/idea.js:132
 msgid "The root idea will not be in the synthesis"
-msgstr ""
+msgstr "The root idea will not be in the synthesis"
 
 #: assembl/static/js/app/models/idea.js:149
 msgid "Add a description of this idea"
-msgstr ""
+msgstr "Bu fikir için bir tanım ekleyin"
 
 #: assembl/static/js/app/models/idea.js:160
 msgid "The root idea will never be in the synthesis"
-msgstr ""
+msgstr "İlk fikir sentezde asla bulunmayacak"
 
 #: assembl/static/js/app/models/idea.js:183
 msgid "You can add an expression for the next synthesis"
-msgstr ""
+msgstr "Bir sonraki sentez için bir ifade ekleyebilirsiniz"
 
 #: assembl/static/js/app/models/idea.js:193
 msgid "All posts"
-msgstr ""
+msgstr "Tüm gönderiler"
 
 #: assembl/static/js/app/models/idea.js:216
 #: assembl/static/js/app/views/ideaPanel.js:528
 msgid "New idea"
-msgstr ""
+msgstr "Yeni fikir"
 
 #: assembl/static/js/app/models/segment.js:114
 msgid "You must be logged in to create segments"
-msgstr ""
+msgstr "Segment oluşturmak için giriş yapmalısınız"
 
 #: assembl/static/js/app/models/segment.js:125
 msgid ""
 "invalid extract: the extract must have a valid idPost (here ) or a valid uri "
 "(here )"
 msgstr ""
+"geçersiz alıntı: alıntı geçerli bir idPost’a (burada) veya uri’ye (burada) sahip olmalıdır"
 
 #: assembl/static/js/app/models/segment.js:129
 msgid "invalid creationDate: "
-msgstr ""
+msgstr "invalid creationDate: "
 
 #: assembl/static/js/app/models/segment.js:133
 msgid "invalid idIdea: "
-msgstr ""
+msgstr "invalid idIdea: "
 
 #: assembl/static/js/app/models/segment.js:137
 msgid "invalid idCreator: "
-msgstr ""
+msgstr "invalid idCreator: "
 
 #: assembl/static/js/app/models/sources.js:25
 msgid "Abstract content source"
-msgstr ""
+msgstr "Abstract content source"
 
 #: assembl/static/js/app/models/sources.js:75
 msgid "IMAP mailbox"
-msgstr ""
+msgstr "IMAP posta kutusu"
 
 #: assembl/static/js/app/models/sources.js:93
 msgid "Mailing list"
-msgstr ""
+msgstr "E-posta listesi"
 
 #: assembl/static/js/app/models/sources.js:121
 msgid "Comments to a given facebook post (by URL)"
-msgstr ""
+msgstr "Belirli bir facebook bildirimine yapılan yorumlar (URL ile)"
 
 #: assembl/static/js/app/models/sources.js:133
 msgid "Posts from a Facebook group (by URL)"
-msgstr ""
+msgstr "Bir Facebook grubunun bildirimleri (URL ile)"
 
 #: assembl/static/js/app/models/sources.js:145
 msgid "Posts from a Facebook group to which you're subscribed"
-msgstr ""
+msgstr "Üyesi olduğunuz bir Facebook grubunun bildirimleri"
 
 #: assembl/static/js/app/models/sources.js:157
 msgid "Posts from a Facebook page to which you're subscribed"
-msgstr ""
+msgstr "Üyesi olduğunuz bir Facebook sayfasının bildirimleri"
 
 #: assembl/static/js/app/models/sources.js:169
 msgid "Posts from users on a Facebook page to which you're subscribed"
-msgstr ""
+msgstr "Üyesi olduğunuz bir Facebook sayfasının kullanıcılarının bildirimleri"
 
 #: assembl/static/js/app/models/widget.js:258
 msgid "Create a voting session on this idea"
-msgstr ""
+msgstr "Bu fikir için bir oylama süreci yaratın"
 
 #: assembl/static/js/app/models/widget.js:261
 #: assembl/static/js/app/models/widget.js:273
 #: assembl/static/js/app/models/widget.js:478
 msgid "Vote"
-msgstr ""
+msgstr "Oyla"
 
 #: assembl/static/js/app/models/widget.js:263
 #: assembl/static/js/app/models/widget.js:267
@@ -530,186 +524,187 @@ msgstr ""
 #: assembl/static/js/app/models/widget.js:1045
 #: assembl/static/js/app/models/widget.js:1185
 msgid "Configure"
-msgstr ""
+msgstr "Yapılandır"
 
 #: assembl/static/js/app/models/widget.js:275
 msgid "Complete your vote"
-msgstr ""
+msgstr "Oyunuzu tamamlayın"
 
 #: assembl/static/js/app/models/widget.js:277
 msgid "Modify your vote"
-msgstr ""
+msgstr "Oyunuzu değiştirin"
 
 #: assembl/static/js/app/models/widget.js:280
 msgid "See the vote results"
-msgstr ""
+msgstr "Oylama sonuçlarını görün"
 
 #: assembl/static/js/app/models/widget.js:283
 msgid "Configure this vote widget"
-msgstr ""
+msgstr "Bu oy gerecini yapılandır"
 
 #: assembl/static/js/app/models/widget.js:286
 msgid "See results from the vote of "
-msgstr ""
+msgstr "Şu oylamanın sonuçlarını görün"
 
 #: assembl/static/js/app/models/widget.js:289
 msgid "Vote results"
-msgstr ""
+msgstr "Oylama sonuçları"
 
 #: assembl/static/js/app/models/widget.js:332
 msgid "This vote widget is not fully configured"
-msgstr ""
+msgstr "Bu oylama gereci tam olarak yapılandırılmamış"
 
 #: assembl/static/js/app/models/widget.js:336
 msgid "A voting session has started."
-msgstr ""
+msgstr "Bir oylama süreci başladı."
 
 #: assembl/static/js/app/models/widget.js:342
 #, python-format
 msgid "You cannot vote right now because %s."
-msgstr ""
+msgstr "Şu an oy kullanamazsınız, çünkü %s."
 
 #: assembl/static/js/app/models/widget.js:350
 #, python-format
 msgid "The option “%s” is being considered in a vote"
-msgstr ""
+msgstr "“%s” seçeneği bir oyda ele alınıyor"
 
 #: assembl/static/js/app/models/widget.js:353
 #, python-format
 msgid "The option “%s” was considered in a vote"
-msgstr ""
+msgstr "“%s” seçeneği bir oylamada ele alınmış"
 
 #: assembl/static/js/app/models/widget.js:355
 msgid "A voting session is ongoing on this issue"
-msgstr ""
+msgstr "Bu konu üzerinde devam eden bir oylama süreci bulunmakta"
 
 #: assembl/static/js/app/models/widget.js:357
 msgid "A voting session has happened on this issue"
-msgstr ""
+msgstr "Bu konu üzerinde tamamlanmış bir oylama süreci bulunmakta"
 
 #: assembl/static/js/app/models/widget.js:359
 #, python-format
 msgid "“%s” is being used as a criterion in a vote"
-msgstr ""
+msgstr "“%s” bir oylamada kriter olarak kullanılmakta"
 
 #: assembl/static/js/app/models/widget.js:361
 #, python-format
 msgid "“%s” was used as a criterion in a vote"
-msgstr ""
+msgstr "“%s” bir oylamada kriter olarak kullanılmış"
 
 #: assembl/static/js/app/models/widget.js:371
 #, python-format
 msgid "You have %s to vote"
-msgstr ""
+msgstr "Oy vermek için elinizde %s var "
 
 #: assembl/static/js/app/models/widget.js:438
 msgid "Create a multi-criterion voting session on this idea"
-msgstr ""
+msgstr "Bu fikir için çok-kriterli bir oylama süreci yaratın"
 
 #: assembl/static/js/app/models/widget.js:474
 msgid "Create a token voting session on this idea"
-msgstr ""
+msgstr "Bu fikir için jeton kullanılan bir oylama süreci yaratın"
 
 #: assembl/static/js/app/models/widget.js:1032
 msgid "Create a creativity session on this idea"
-msgstr ""
+msgstr "Bu fikir için bir yaratıcılık oturumu oluşturun"
 
 #: assembl/static/js/app/models/widget.js:1035
 #: assembl/static/js/app/models/widget.js:1049
 msgid "Participate"
-msgstr ""
+msgstr "Katıl"
 
 #: assembl/static/js/app/models/widget.js:1042
 msgid "Configure the creativity session on this idea"
-msgstr ""
+msgstr "Bu fikir için oluşturulan yaratıcılık oturumunu yapılandırın"
 
 #: assembl/static/js/app/models/widget.js:1051
 msgid "Review the session"
-msgstr ""
+msgstr "Oturumu inceleyin"
 
 #: assembl/static/js/app/models/widget.js:1080
 msgid "This widget is not fully configured"
-msgstr ""
+msgstr "Bu gereç tam olarak yapılandırılmamış"
 
 #: assembl/static/js/app/models/widget.js:1084
 msgid "A creativity session is ongoing."
-msgstr ""
+msgstr "Devam etmekte olan bir yaratıcılık oturumu vardır."
 
 #: assembl/static/js/app/models/widget.js:1092
 msgid "A creativity session is ongoing on this issue"
-msgstr ""
+msgstr "Bu konu üzerinde devam eden bir yaratıcılık oturumu vardır"
 
 #: assembl/static/js/app/models/widget.js:1094
 msgid "A creativity session has happened on this issue"
-msgstr ""
+msgstr "Bu konu üzerinde tamamlanmış bir yaratıcılık oturumu vardır"
 
 #: assembl/static/js/app/models/widget.js:1098
 #, python-format
 msgid "You have %s to participate"
-msgstr ""
+msgstr "Katılmak için elinizde %s var"
 
 #: assembl/static/js/app/models/widget.js:1174
 msgid "Create an inspiration module on this idea"
-msgstr ""
+msgstr "Bu fikir için bir ilham birimi yaratın"
 
 #: assembl/static/js/app/models/widget.js:1176
 msgid "Create an inspiration module on this discussion"
-msgstr ""
+msgstr "Bu tartışma için bir ilham birimi yaratın"
 
 #: assembl/static/js/app/models/widget.js:1178
 msgid "Configure the inspiration module associated to the discussion"
-msgstr ""
+msgstr "Bu tartışmayla ilişkilendirilen ilham birimini yapılandırın"
 
 #: assembl/static/js/app/models/widget.js:1180
 msgid "Configure the inspiration module associated to this idea"
-msgstr ""
+msgstr "Bu fikirle ilişkilendirilen ilham birimini yapılandırın"
 
 #: assembl/static/js/app/models/widget.js:1183
 #: assembl/templates/views/messageList.tmpl:35
 #: assembl/templates/views/messageList.tmpl:45
 msgid "I need inspiration"
-msgstr ""
+msgstr "İlhama ihtiyacım var"
 
 #: assembl/static/js/app/utils/tourManager.js:22
 #: assembl/static/js/app/utils/tourManager.js:193
 msgid "Next"
-msgstr ""
+msgstr "Sonraki"
 
 #: assembl/static/js/app/utils/tourManager.js:23
 msgid "Back"
-msgstr ""
+msgstr "Geri"
 
 #: assembl/static/js/app/utils/tourManager.js:24
 msgid "Done"
-msgstr ""
+msgstr "Bitti"
 
 #: assembl/static/js/app/utils/tourManager.js:25
 msgid "Skip"
-msgstr ""
+msgstr "Atla"
 
 #: assembl/static/js/app/utils/tourManager.js:26
 #: assembl/templates/views/exportPostModal.tmpl:32
 msgid "Close"
-msgstr ""
+msgstr "Kapat"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:18
 #: assembl/templates/views/helperDebate.tmpl:3
 msgid "Welcome!"
-msgstr ""
+msgstr "Hoş geldiniz!"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:20
 msgid "Thank you"
-msgstr ""
+msgstr "Teşekkürler"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:22
 msgid ""
 "Welcome to this discussion. We’ve created series of hints to help you get "
 "started using Assembl."
 msgstr ""
+"Tartışmaya hoş geldiniz. Assembl’ı kullanmaya başlamanıza yardımcı olmak için bir dizi ipucu hazırladık."
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:37
 msgid "Join the discussion"
-msgstr ""
+msgstr "Tartışmaya katılın"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:38
 msgid ""
@@ -717,30 +712,33 @@ msgid ""
 "reply to messages directly, or start a new topic by clicking ‘Start a new "
 "discussion thread’ at the bottom of the panel."
 msgstr ""
+"Burası tartışmaların yer aldığı konuşma panelidir. Mesajlara doğrudan cevap verebilir veya panelin alt kısmında yer alan “Yeni bir tartışma dizisi oluştur” butonuna tıklayarak yeni bir konu açabilirsiniz."
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:64
 msgid "Customize your view"
-msgstr ""
+msgstr "Görünümü özelleştirin"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:65
 msgid ""
 "You can view the discussion in many different ways using the filters at the "
 "top."
 msgstr ""
+"Yukarıdaki filtreleri kullanarak tartışmayı birçok farklı biçimde görüntüleyebilirsiniz."
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:91
 msgid "Spot relevant quotes on each idea"
-msgstr ""
+msgstr "Tüm fikirlerdeki ilgili kısımları tespit edin"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:92
 msgid ""
 "Excerpts from messages are harvested and are organized to help you find "
 "relevant contributions on this idea."
 msgstr ""
+"Mesajlardan seçilen parçalar toplanır ve bu fikir için katkı sağlayabilecek olan ilgili kısımları bulmanız için organize edilir."
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:107
 msgid "Explore one of these topics"
-msgstr ""
+msgstr "Bu konulardan birini keşfedin"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:108
 msgid ""
@@ -748,150 +746,158 @@ msgid ""
 "contents. Clicking on a topic will filter the conversation to only show "
 "messages that are related to this topic."
 msgstr ""
+"Bu içerik tablosunda şu anda tartışılmakta olan konuları bulabilirsiniz. Bir konu üzerine tıkladığınızda konuşma filtrelenir ve yalnızca konuyla ilgili mesajlar gösterilir."
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:119
 msgid "Catch up on what’s been said"
-msgstr ""
+msgstr "Siz yokken neler konuşulduğunu öğrenin"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:121
 msgid ""
 "Periodically an executive summary of the discussion is created to give you a "
 "quick overview of what was said since the last executive summary"
 msgstr ""
+"Periyodik olarak oluşturulan özet, bir önceki özetten bu yana konuşulanlar hakkında size hızlı bir genel bakış sunar"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:131
 msgid "DISABLED"
-msgstr ""
+msgstr "DEVRE DIŞI BIRAKILDI"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:133
-msgid "Find the different syntheses produced since the beginning of the discussion"
+msgid ""
+"Find the different syntheses produced since the beginning of the discussion"
 msgstr ""
+"Tartışmanın başından bu yana üretilen farklı sentezleri bulun"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:143
 msgid "Catch up on the evolution"
-msgstr ""
+msgstr "Siz yokken yaşanan gelişmeleri öğrenin"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:145
 msgid ""
 "The facilitator of the discussion has written this synthesis to help you get "
 "on board of the discussion. Enjoy reading!"
 msgstr ""
+"Tartışma sadeleştirici, konuşulanlara dahil olmanıza yardımcı olmak için bu sentezi yazdı. İyi okumalar!"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:155
 msgid "Dig more on an interesting idea and post your contribution"
-msgstr ""
+msgstr "İlginç bir fikir hakkında daha fazla bilgi edinin ve katkıda bulunun"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:157
 msgid ""
 "You can click on this idea to see current discussions happening on it. You "
 "would be able to start contributing on this idea from there."
 msgstr ""
+"Bu fikre tıklayarak hakkında gerçekleşmekte olan tartışmaları görebilirsiniz. Bu fikre bu noktadan başlayarak katkıda bulunabilirsiniz."
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:170
 msgid "Stay informed"
-msgstr ""
+msgstr "Haberdar kalın"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:171
 msgid ""
-"Notifications are set to go to your email. If you aren’t receiving them, make"
-" sure to check your spam folder! You can update your notification settings "
-"here."
+"Notifications are set to go to your email. If you aren’t receiving them, "
+"make sure to check your spam folder! You can update your notification "
+"settings here."
 msgstr ""
+"Bildirimler e-posta adresinize gönderilir. Eğer bildirimleri almıyorsanız gereksiz e-posta kutunuzu kontrol etmeyi unutmayın! Bildirim ayarlarınızı burada güncelleyebilirsiniz."
 
 #: assembl/static/js/app/views/agent.js:87
 #, python-format
 msgid "All messages by %s"
-msgstr ""
+msgstr "%s ‘nın tüm mesajları"
 
 #: assembl/static/js/app/views/announcements.js:177
 msgid "Please give a title of this announcement..."
-msgstr ""
+msgstr "Lütfen bu duyuruya bir başlık verin..."
 
 #: assembl/static/js/app/views/announcements.js:185
 msgid "Please write the content of this announcement here..."
-msgstr ""
+msgstr "Lütfen bu duyurunun içeriğini buraya yazın..."
 
 #: assembl/static/js/app/views/attachments.js:138
 #, python-format
 msgid "For URL %s in the text above"
-msgstr ""
+msgstr "Aşağıdaki metindeki %s URL için"
 
 #: assembl/static/js/app/views/attachments.js:260
 #: assembl/templates/views/langStringEntry.tmpl:12
 msgid "Remove"
-msgstr ""
+msgstr "Kaldır"
 
 #: assembl/static/js/app/views/attachments.js:267
 msgid "For the uploaded file"
-msgstr ""
+msgstr "Yüklenen dosya için"
 
 #: assembl/static/js/app/views/attachments.js:336
 #, python-format
 msgid ""
-"We are sorry, there was an error during the upload of the file \"%s\". Please"
-" try again."
+"We are sorry, there was an error during the upload of the file \"%s\". "
+"Please try again."
 msgstr ""
+"Üzgünüz, \"%s\" dosyası yüklenirken bir hata oluştu. Lütfen daha sonra tekrar deneyin."
 
 #: assembl/static/js/app/views/attachments.js:507
 msgid "Upload an Image to the Idea Panel"
-msgstr ""
+msgstr "Fikir Panosu’na bir görsel yükleyin"
 
 #: assembl/static/js/app/views/baseMessageList.js:186
 msgid "Recently active threads"
-msgstr ""
+msgstr "Son zamanlarda tartışılan konular"
 
 #: assembl/static/js/app/views/baseMessageList.js:191
 msgid "Recently started threads"
-msgstr ""
+msgstr "Yakın zamanda başlatılan tartışmalar"
 
 #: assembl/static/js/app/views/baseMessageList.js:196
 msgid "Chronological threads"
-msgstr ""
+msgstr "Kronolojik sıralama"
 
 #: assembl/static/js/app/views/baseMessageList.js:201
 msgid "Chronological threads + jump to oldest unread message"
-msgstr ""
+msgstr "Kronolojik sıralama + okunmamış en eski mesaja atla"
 
 #: assembl/static/js/app/views/baseMessageList.js:206
 #: assembl/static/js/app/views/messageColumnsPanel.js:241
 msgid "Newest messages first"
-msgstr ""
+msgstr "Önce en yeni mesajlar"
 
 #: assembl/static/js/app/views/baseMessageList.js:211
 #: assembl/static/js/app/views/messageColumnsPanel.js:246
 msgid "Most popular messages first"
-msgstr ""
+msgstr "Önce en popüler mesajlar"
 
 #: assembl/static/js/app/views/baseMessageList.js:691
 msgid "No messages"
-msgstr ""
+msgstr "Mesaj yok"
 
 #: assembl/static/js/app/views/baseMessageList.js:1046
 #: assembl/static/js/app/views/messageSend.js:191
 #: assembl/templates/do_password_change.jinja2:30
 #: assembl/templates/request_password_change.jinja2:28
 msgid "Send"
-msgstr ""
+msgstr "Gönder"
 
 #: assembl/static/js/app/views/baseMessageList.js:1047
 msgid "Subject"
-msgstr ""
+msgstr "Konu"
 
 #: assembl/static/js/app/views/baseMessageList.js:1048
 msgid "Add a subject above and start a new topic here"
-msgstr ""
+msgstr "Yukarıya bir konu başlığı ekleyin ve burada yeni bir tartışma konusu başlatın"
 
 #: assembl/static/js/app/views/baseMessageList.js:1049
 msgid "You need to type a comment first..."
-msgstr ""
+msgstr "İlk olarak bir yorum yazmalısınız..."
 
 #: assembl/static/js/app/views/baseMessageList.js:1050
 msgid "You need to set a subject to add a new topic..."
-msgstr ""
+msgstr "Yeni bir tartışma konusu eklemek için bir konu belirlemelisiniz..."
 
 #: assembl/static/js/app/views/baseMessageList.js:1555
 msgid "Send to clipboard"
-msgstr ""
+msgstr "Panoya gönder"
 
 #: assembl/static/js/app/views/baseMessageList.js:1557
 #: assembl/static/js/app/views/confirmModal.js:32
@@ -908,15 +914,15 @@ msgstr ""
 #: assembl/templates/views/message_translation_question_selection.tmpl:14
 #: assembl/templates/views/showSegmentByAnnotation.tmpl:9
 msgid "Cancel"
-msgstr ""
+msgstr "İptal"
 
 #: assembl/static/js/app/views/baseMessageList.js:1561
 msgid "You can drag the segment below directly to the table of ideas"
-msgstr ""
+msgstr "Aşağıdaki segmenti doğrudan fikirler tablosuna sürükleyebilirsiniz"
 
 #: assembl/static/js/app/views/baseMessageList.js:1562
 msgid "You can also copy-paste from the text in the zone below"
-msgstr ""
+msgstr "Aşağıdaki kısımda yer alan metinden kopyalama-yapıştırma da yapabilirsiniz"
 
 #: assembl/static/js/app/views/baseMessageList.js:1606
 #, python-format
@@ -924,44 +930,45 @@ msgid ""
 "This extract was organized in the idea \" %s \" by the facilitator of the "
 "debate"
 msgstr ""
+"Bu alıntı tartışma sadeleştirici tarafından \" %s \" fikri olarak düzenlendi."
 
 #: assembl/static/js/app/views/baseMessageList.js:1609
 msgid "This extract is in a harvester's clipboard and hasn' been sorted yet."
-msgstr ""
+msgstr "Bu alıntı bir Hasatçı’nın panosunda ve düzenlenmesi henüz tamamlanmadı."
 
 #: assembl/static/js/app/views/baseMessageList.js:2265
 #, python-format
 msgid "%d new message has been posted.  Click here to refresh"
 msgid_plural "%d new messages have been posted.  Click here to refresh"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d yeni mesaj gönderildi.  Sayfayı yenilemek için tıklayın"
+msgstr[1] "%d yeni mesaj gönderildi.  Sayfayı yenilemek için tıklayın"
 
 #: assembl/static/js/app/views/confirmModal.js:33
 #: assembl/static/js/app/views/ideaPanel.js:720
 #: assembl/static/js/app/views/ideaPanel.js:731
 #: assembl/static/js/app/views/ideaPanel.js:740
 msgid "OK"
-msgstr ""
+msgstr "TAMAM"
 
 #: assembl/static/js/app/views/contextPage.js:91
 #: assembl/static/js/app/views/navigation/synthesisInNavigation.js:146
 msgid "No synthesis of the discussion has been published yet"
-msgstr ""
+msgstr "Henüz tartışmaya ait hiçbir sentez yayınlanmadı"
 
 #: assembl/static/js/app/views/contextPage.js:274
 #: assembl/templates/views/navigation.tmpl:21
 msgid "Home"
-msgstr ""
+msgstr "Ana sayfa"
 
 #: assembl/static/js/app/views/documents.js:102
 #, python-format
 msgid "Sorry, we have failed to upload your file \"%s\". Please try again."
-msgstr ""
+msgstr "Üzgünüz, \"%s\" dosyası yüklenemedi. Lütfen tekrar deneyin."
 
 #: assembl/static/js/app/views/externalVisualization.js:24
 #: assembl/templates/views/create-group.tmpl:107
 msgid "CI Dashboard"
-msgstr ""
+msgstr "KZ Gösterge Paneli"
 
 #: assembl/static/js/app/views/facebookViews.js:40
 msgid ""
@@ -969,6 +976,7 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
+"Aşağıdaki mesaj Assembl’da yayınlandı:"
 
 #: assembl/static/js/app/views/facebookViews.js:42
 #, python-format
@@ -977,38 +985,45 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
+"Aşağıdaki mesaj %s tarafından Assembl’da yayınlandı:\n"
+"\n"
+"\n"
 
 #: assembl/static/js/app/views/facebookViews.js:51
 msgid ""
 "Please be aware that comments below will be imported into a discussion found "
 "at "
 msgstr ""
+"Aşağıdaki yorumların şu tartışmaya taşınacağını önemli bildiririz:"
 
 #: assembl/static/js/app/views/facebookViews.js:297
 msgid ""
 "An error occured whilst communicating with Facebook. Close the box and try "
 "again."
 msgstr ""
+"Facebook ile iletişim kurulurken bir hata oluştu. Kapatıp yeniden deneyin."
 
 #: assembl/static/js/app/views/facebookViews.js:432
 msgid "You did not log into facebook. Please log-in to continue."
-msgstr ""
+msgstr "Facebook’a giriş yapmadınız. Devam etmek için lütfen giriş yapın."
 
 #: assembl/static/js/app/views/facebookViews.js:451
 msgid ""
-"There was an issue with getting your Facebook login status. Please close this"
-" box and contact your discussion administrator."
+"There was an issue with getting your Facebook login status. Please close "
+"this box and contact your discussion administrator."
 msgstr ""
+"Facebook oturum durumunuzu alırken bir sorunla karşılatık. Lütfen bu pencereyi kapatıp tartışma yöneticinizle iletişime geçin."
 
 #: assembl/static/js/app/views/facebookViews.js:546
 msgid ""
-"Great! You already have a facebook account. Below are the list of permissions"
-" we need for the exportation process."
+"Great! You already have a facebook account. Below are the list of "
+"permissions we need for the exportation process."
 msgstr ""
+"Harika! Zaten bir Facebook hesabınız var. Aşağıda aktarım için gerekli olan izinlerin listesini bulabilirsiniz."
 
 #: assembl/static/js/app/views/facebookViews.js:547
 msgid "Click here if you agree with these permissions."
-msgstr ""
+msgstr "Bu izinleri onaylıyorsanız burayı tıklayın."
 
 #: assembl/static/js/app/views/facebookViews.js:551
 msgid ""
@@ -1016,447 +1031,459 @@ msgid ""
 "session. As always, below are the permissions that Assembl would need to "
 "continue."
 msgstr ""
+"Oturumunuz sona ermiş görünüyor. Yenilemek için aşağıya tıklayın. Devam etmek için Assembl’ın ihtiyacı olan izinleri her zaman olduğu gibi aşağıda bulabilirsiniz."
 
 #: assembl/static/js/app/views/facebookViews.js:552
 msgid "Click here to continue."
-msgstr ""
+msgstr "Devam etmek için buraya tıklayın."
 
 #: assembl/static/js/app/views/facebookViews.js:556
 msgid "You must create an account. Warning: This will refresh the page"
-msgstr ""
+msgstr "Bir hesap oluşturmanız gerekmektedir. Dikkat: Bunu yaptığınızda sayfa yenilenecektir"
 
 #: assembl/static/js/app/views/facebookViews.js:557
 msgid "Sign in using your Facebook account"
-msgstr ""
+msgstr "Facebook hesabınızı kullanarak giriş yapın"
 
 #: assembl/static/js/app/views/facebookViews.js:799
 msgid ""
-"Assembl is a collective intelligence tool designed to enable open, democratic"
-" discussions that lead to idea generation and innovation."
+"Assembl is a collective intelligence tool designed to enable open, "
+"democratic discussions that lead to idea generation and innovation."
 msgstr ""
+"Assembl açık ve demokratik tartışmaları mümkün kılarak fikir üretimi ve yeniliği desteklemek için tasarlanmış bir kolektif zeka aracıdır."
 
 #: assembl/static/js/app/views/facebookViews.js:866
 msgid "Facebook was unable to create the post. Close the box and try again."
-msgstr ""
+msgstr "Facebook gönderiyi oluşturamadı. Sayfayı kapatıp yeniden deneyin."
 
 #: assembl/static/js/app/views/facebookViews.js:947
 msgid ""
 "Please select between pages, groups or your wall as the final destination to "
 "complete the form."
 msgstr ""
+"Formu tamamlamak için lütfen son hedef olarak sayfalar, gruplar veya duvarınız arasında bir seçim yapın."
 
 #: assembl/static/js/app/views/facebookViews.js:970
 msgid ""
-"Something went wrong on Assembl whilst creating your post. Please contact the"
-" Discussion administrator for more information."
+"Something went wrong on Assembl whilst creating your post. Please contact "
+"the Discussion administrator for more information."
 msgstr ""
+"Gönderinizi oluştururken Assembl’da bir şeyler ters gitti.Daha fazla bilgi için lütfen tartışma yöneticisiyle iletişime geçin."
 
 #: assembl/static/js/app/views/facebookViews.js:1066
 msgid "This account does NOT have a facebook account"
-msgstr ""
+msgstr "Bu hesabın bir Facebook hesabı YOKTUR"
 
 #: assembl/static/js/app/views/facebookViews.js:1084
 msgid "Could not create the message source"
-msgstr ""
+msgstr "Mesaj kaynağı oluşturulamadı"
 
 #: assembl/static/js/app/views/facebookViews.js:1088
 #: assembl/static/js/app/views/facebookViews.js:1093
 msgid "There was an error creating the message source"
-msgstr ""
+msgstr "Mesaj kaynağı oluşturulurken bir hata oldu"
 
 #: assembl/static/js/app/views/facebookViews.js:1214
 msgid "There was an error with creating a source of type"
-msgstr ""
+msgstr "Kaynak oluşturulurken şu tür bir hata oldu"
 
 #: assembl/static/js/app/views/facebookViews.js:1254
 msgid "Please select a destination to export to before continuing"
-msgstr ""
+msgstr "Lütfen alıntının aktarılacağı yeri seçin"
 
 #: assembl/static/js/app/views/facebookViews.js:1258
 msgid "Please complete facebook login"
-msgstr ""
+msgstr "Lütfen Facebook’ta oturum açma işlemini tamamlayın"
 
 #: assembl/static/js/app/views/ideaClassificationOnMessage.js:152
 msgid "Go to this idea"
-msgstr ""
+msgstr "Bu fikre git"
 
 #: assembl/static/js/app/views/ideaClassificationOnMessage.js:362
 msgid "This message is linked to the following idea because: "
 msgid_plural "This message is linked to the %1$d following ideas because: "
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Bu mesaj aşağıdaki fikre bağlıdır, çünkü:"
+msgstr[1] "Bu mesaj aşağıdaki %1$d fikre bağlıdır, çünkü:"
 
 #: assembl/static/js/app/views/ideaClassificationOnMessage.js:367
 msgid "Link between this message and the idea"
 msgid_plural "Links between this message and ideas"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Bu mesaj ve fikir arasındaki bağlantı"
+msgstr[1] "Bu mesaj ve fikirler arasındaki bağlantılar"
 
 #: assembl/static/js/app/views/ideaInSynthesis.js:167
 #, python-format
 msgid "%d message is available under this idea"
 msgid_plural "%d messages are available under this idea"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Bu fikir altında %d mesaj mevcuttur"
+msgstr[1] "Bu fikir altında %d mesaj mevcuttur"
 
 #: assembl/static/js/app/views/ideaList.js:260
 #: assembl/templates/views/create-group.tmpl:42
 #: assembl/templates/views/ideaList.tmpl:14
 msgid "Table of ideas"
-msgstr ""
+msgstr "Fikirler tablosu"
 
 #: assembl/static/js/app/views/ideaList.js:805
 msgid "You don't have the permission to do this."
-msgstr ""
+msgstr "Bunu gerçekleştirme yetkiniz bulunmamakta."
+
+#: assembl/static/js/app/views/ideaPanel.js:211
+msgid "Idea"
+msgstr "Fikir"
 
 #: assembl/static/js/app/views/ideaPanel.js:214
-msgid "Detailled information about the currently selected idea in the Table of ideas"
+msgid ""
+"Detailled information about the currently selected idea in the Table of ideas"
 msgstr ""
+"Fikirler Tablosundan seçilmiş olan fikir hakkında ayrıntılı bilgi"
 
 #: assembl/static/js/app/views/ideaPanel.js:222
 msgid "This idea has no sub-ideas"
-msgstr ""
+msgstr "Bu fikre bağlı altı-fikirler yoktur"
 
 #: assembl/static/js/app/views/ideaPanel.js:225
 #, python-format
 msgid "This idea has %d sub-idea"
 msgid_plural "This idea has %d sub-ideas"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Bu fikre bağlı %d alt-fikir vardır"
+msgstr[1] "Bu fikre bağlı %d alt-fikir vardır"
 
 #: assembl/static/js/app/views/ideaPanel.js:246
 msgid "No extract was harvested"
-msgstr ""
+msgstr "Aktarılacak veri toplanamadı"
 
 #: assembl/static/js/app/views/ideaPanel.js:249
 msgid "No important nugget was harvested"
-msgstr ""
+msgstr "Önemli bir nugget toplanmadı"
 
 #: assembl/static/js/app/views/ideaPanel.js:254
 #, python-format
 msgid "%d extract was harvested"
 msgid_plural "%d extracts were harvested"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d aktarılacak veri toplandı"
+msgstr[1] "%d aktarılacak veri toplandı"
 
 #: assembl/static/js/app/views/ideaPanel.js:257
 #, python-format
 msgid "%d important nugget was harvested"
 msgid_plural "%d important nuggets were harvested"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d önemli nugget toplandı"
+msgstr[1] "%d önemli nugget toplandı"
 
 #: assembl/static/js/app/views/ideaPanel.js:505
 #, python-format
 msgid "%d contributor"
 msgid_plural "%d contributors"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d kişi katkıda bulundu"
+msgstr[1] "%d kişi katkıda bulundu"
 
 #: assembl/static/js/app/views/ideaPanel.js:527
 msgid "Short expression (only a few words) of the idea in the table of ideas."
-msgstr ""
+msgstr "Fikirler tablosundaki fikrin kısa ifadesi (sadece birkaç kelime)."
 
 #: assembl/static/js/app/views/ideaPanel.js:719
 msgid "You cannot delete an idea while it has sub-ideas."
-msgstr ""
+msgstr "Alt-fikirleri olan bir fikri silemezsiniz."
 
 #: assembl/static/js/app/views/ideaPanel.js:730
 msgid "You cannot delete an idea associated to extracts."
-msgstr ""
+msgstr "Alıntılarla ilişkisi olan bir fikri silemezsiniz."
 
 #: assembl/static/js/app/views/ideaPanel.js:739
 msgid "You cannot delete an idea associated to comments."
-msgstr ""
+msgstr "Yorumlarla ilişkisi olan bir fikri silemezsiniz."
 
 #: assembl/static/js/app/views/ideaPanel.js:759
 msgid "Confirm that you want to delete this idea."
-msgstr ""
+msgstr "Bu fikri silmek istediğinizi onaylayın."
 
 #: assembl/static/js/app/views/ideaPanel.js:760
 #: assembl/static/js/app/views/message.js:1650
 msgid "No"
-msgstr ""
+msgstr "Hayır"
 
 #: assembl/static/js/app/views/ideaPanel.js:761
 #: assembl/static/js/app/views/message.js:1651
 msgid "Yes"
-msgstr ""
+msgstr "Evet"
 
 #: assembl/static/js/app/views/ideaPanel.js:936
 msgid "Confirm that you want to send all extracts back to the clipboard."
-msgstr ""
+msgstr "Tüm alıntıları tekrar panoya göndermek istediğinizi onaylayın."
 
 #: assembl/static/js/app/views/ideaPanel.js:1005
 msgid "You may want to describe this idea for users here..."
-msgstr ""
+msgstr "Bu fikri kullanıcılara açıklamak için burayı kullanabilirsiniz..."
 
 #: assembl/static/js/app/views/message.js:133
 msgid "This message is linked to the following idea: "
 msgid_plural "This message is linked to the following ideas: "
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Bu mesaj aşağıdaki fikre bağlıdır:"
+msgstr[1] "Bu mesaj aşağıdaki fikirlere bağlıdır:"
 
 #: assembl/static/js/app/views/message.js:137
 #, python-format
 msgid "and %d other idea</a>"
 msgid_plural "and %d other ideas</a>"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "ve %d diğer fikre</a>"
+msgstr[1] "ve %d diğer fikre</a>"
 
 #: assembl/static/js/app/views/message.js:802
 msgid "Type your response here..."
-msgstr ""
+msgstr "Yanıtınızı buraya yazın..."
 
 #: assembl/static/js/app/views/message.js:804
 msgid "Send your reply"
-msgstr ""
+msgstr "Yanıtınızı gönderin"
 
 #: assembl/static/js/app/views/message.js:806
 msgid "You did not type a response yet..."
-msgstr ""
+msgstr "Henüz bir yanıt yazmadınız..."
 
 #: assembl/static/js/app/views/message.js:1029
 msgid "You"
-msgstr ""
+msgstr "Siz"
 
 #: assembl/static/js/app/views/message.js:1034
 #, python-format
 msgid "You and %d Another person"
 msgid_plural "You and %d Other persons"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Siz ve %d kişi"
+msgstr[1] "Siz ve %d kişi"
 
 #: assembl/static/js/app/views/message.js:1042
 #, python-format
 msgid "%d person"
 msgid_plural "%d persons"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d kişi"
+msgstr[1] "%d kişi"
 
 #: assembl/static/js/app/views/message.js:1632
 msgid "Message has been successfully deleted."
-msgstr ""
+msgstr "Mesaj başarıyla silindi."
 
 #: assembl/static/js/app/views/message.js:1643
 msgid "Error: Message could not be deleted."
-msgstr ""
+msgstr "Hata: Mesaj silinemedi."
 
 #: assembl/static/js/app/views/message.js:1649
 msgid "Are you sure you want to delete this message?"
-msgstr ""
+msgstr "Bu mesajı silmek istediğinizden emin misiniz?"
 
 #: assembl/static/js/app/views/messageColumnsPanel.js:170
 #: assembl/static/js/app/views/messageList.js:184
 msgid "Messages"
-msgstr ""
+msgstr "Mesajlar"
 
 #: assembl/static/js/app/views/messageColumnsPanel.js:251
 msgid "Oldest messages first"
-msgstr ""
+msgstr "İlk önce en eski mesaj"
 
 #: assembl/static/js/app/views/messageColumnsPanel.js:388
 #, python-format
 msgid "%d message on theme “%s”"
 msgid_plural "%d messages on theme “%s”"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "“%s” konusunda %d mesaj"
+msgstr[1] "“%s” konusunda %d mesaj"
 
 #: assembl/static/js/app/views/messageColumnsPanel.js:434
 #, python-format
 msgid "Add your thoughts on theme “%s”"
-msgstr ""
+msgstr "“%s” konusuna düşüncelerinizi ekleyin."
 
 #: assembl/static/js/app/views/messageDeletedByAdmin.js:20
 msgid "This message has been deleted by an administrator."
-msgstr ""
+msgstr "Bu mesaj bir yönetici tarafından silindi."
 
 #: assembl/static/js/app/views/messageDeletedByUser.js:38
 msgid "This message has been deleted by its author."
-msgstr ""
+msgstr "Bu mesaj yazarı tarafından silindi."
 
 #: assembl/static/js/app/views/messageFamily.js:121
 #, python-format
 msgid "%d more message is available in this message's full context."
 msgid_plural "%d more messages are available in this message's full context."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Bu mesajın içeriğine tam olarak uyan %d mesaj daha var."
+msgstr[1] "Bu mesajın içeriğine tam olarak uyan %d mesaj daha var."
 
 #: assembl/static/js/app/views/messageFamily.js:123
 #, python-format
-msgid "Messages available in this message's full context are from %d more author."
-msgid_plural "Messages available in this message's full context are from %d more authors."
-msgstr[0] ""
-msgstr[1] ""
+msgid ""
+"Messages available in this message's full context are from %d more author."
+msgid_plural ""
+"Messages available in this message's full context are from %d more authors."
+msgstr[0] "Bu mesajın içeriğine tam olarak uyan mesajlar yazmış %d yazar var."
+msgstr[1] "Bu mesajın içeriğine tam olarak uyan mesajlar yazmış %d yazar var."
 
 #: assembl/static/js/app/views/messageFamily.js:245
 #, python-format
 msgid "Zooming on the conversation around \"%s\""
-msgstr ""
+msgstr "\"%s\" civarındaki konuşmalara odaklan"
 
 #: assembl/static/js/app/views/messageListHeader.js:191
 msgid "Add filter"
-msgstr ""
+msgstr "Filtre ekle"
 
 #: assembl/static/js/app/views/messageListPostQuery.js:40
 msgid "Threaded view"
-msgstr ""
+msgstr "Zincirlenmiş görünüm"
 
 #: assembl/static/js/app/views/messageListPostQuery.js:48
 msgid "Oldest first"
-msgstr ""
+msgstr "Önce en eski"
 
 #: assembl/static/js/app/views/messageListPostQuery.js:55
 msgid "Newest first"
-msgstr ""
+msgstr "Önce en yeni"
 
 #: assembl/static/js/app/views/messageListPostQuery.js:62
 msgid "Popularity"
-msgstr ""
+msgstr "Popülerlik"
 
 #: assembl/static/js/app/views/messageListPostQuery.js:517
 msgid "Clear filters"
-msgstr ""
+msgstr "Filtreleri temizle"
 
 #: assembl/static/js/app/views/messageListPostQuery.js:537
 msgid "No query has been executed yet"
-msgstr ""
+msgstr "Henüz hiçbir sorgu yapılmadı"
 
 #: assembl/static/js/app/views/messageListPostQuery.js:544
 msgid "There is no message to display with those filters:"
-msgstr ""
+msgstr "Bu filtrelerle görüntülenebilecek hiçbir mesaj bulunmuyor:"
 
 #: assembl/static/js/app/views/messageListPostQuery.js:547
 msgid "There are no messages in the discussion."
-msgstr ""
+msgstr "Tartışmada hiç mesaj bulunmuyor."
 
 #: assembl/static/js/app/views/messageListPostQuery.js:555
 msgid " (unread)"
-msgstr ""
+msgstr " (okunmamış)"
 
 #: assembl/static/js/app/views/messageListPostQuery.js:557
 msgid " (all unread)"
-msgstr ""
+msgstr " (tümü okunmamış)"
 
 #: assembl/static/js/app/views/messageListPostQuery.js:561
 #, python-format
 msgid " (%d unread)"
 msgid_plural " (%d unread)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " (%d okunmamış)"
+msgstr[1] " (%d okunmamış)"
 
 #: assembl/static/js/app/views/messageListPostQuery.js:567
 #, python-format
 msgid "Found %d message%s out of %d messages that:"
 msgid_plural "Found %d messages%s out of %d messages that:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d mesajdan %s %d‘si için:"
+msgstr[1] "%d mesajdan %s %d‘si için:"
 
 #: assembl/static/js/app/views/messageListPostQuery.js:570
 #, python-format
 msgid "Found %d message%s out of %d messages:"
 msgid_plural "Found %d messages%s out of %d messages:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d mesajdan %s %d‘si:"
+msgstr[1] "%d mesajdan %s %d‘si:"
 
 #: assembl/static/js/app/views/messageSend.js:94
 msgid "Type your message here..."
-msgstr ""
+msgstr "Mesajınızı buraya yazın..."
 
 #: assembl/static/js/app/views/messageSend.js:176
 #: assembl/templates/views/messageList.tmpl:43
 msgid "Start a new discussion thread"
-msgstr ""
+msgstr "Yeni bir tartışma dizisi başlatın"
 
 #: assembl/static/js/app/views/messageSend.js:223
 #, python-format
 msgid "Before you can reply to this message %s"
-msgstr ""
+msgstr "Bu mesaja yanıt vermeden önce %s"
 
 #: assembl/static/js/app/views/messageSend.js:226
 #, python-format
 msgid "Before you can post a message %s"
-msgstr ""
+msgstr "Bir mesaj göndermeden önce %s"
 
 #: assembl/static/js/app/views/messageSend.js:308
 msgid "You need to set a subject before you can send your message..."
-msgstr ""
+msgstr "Mesajınızı göndermen önce bir konu belirlemeniz gerekmektedir..."
 
 #: assembl/static/js/app/views/messageSend.js:318
 msgid "You need to type a message before you can send your message..."
-msgstr ""
+msgstr "Mesajınızı göndermen önce bir mesaj yazmanız gerekmektedir..."
 
 #: assembl/static/js/app/views/messageSend.js:326
 msgid "Sending..."
-msgstr ""
+msgstr "Gönderiliyor..."
 
 #: assembl/static/js/app/views/messageSend.js:358
 msgid "Message posted!"
-msgstr ""
+msgstr "Mesaj gönderildi!"
 
 #: assembl/static/js/app/views/messageTranslationQuestion.js:100
 msgid "Please select a language."
-msgstr ""
+msgstr "Lütfen bir dil seçin."
 
 #: assembl/static/js/app/views/messageTranslationQuestion.js:108
 msgid "You cannot select more than one language"
-msgstr ""
+msgstr "Bir dilden daha fazlasını seçemezsiniz"
 
 #: assembl/static/js/app/views/messageTranslationQuestion.js:128
 #, python-format
 msgid "Select the language you wish to translate %s to:"
-msgstr ""
+msgstr "Şu dile çevirmek istediğiniz mesajları %s seçin:"
 
 #: assembl/static/js/app/views/messageTranslationQuestion.js:289
 #, python-format
 msgid "Translate all messages from %s to %s?"
-msgstr ""
+msgstr "Tüm mesajları %s dilinden %s diline çevirmek mi istiyorsunuz?"
 
 #: assembl/static/js/app/views/messageTranslationQuestion.js:300
 #, python-format
 msgid "Keep %s messages untranslated?"
-msgstr ""
+msgstr "Bu %s mesaj(lar) çevrilmesin mi?"
 
 #: assembl/static/js/app/views/messageTranslationQuestion.js:305
 msgid "Yes, Thanks!"
-msgstr ""
+msgstr "Evet, teşekkürler!"
 
 #: assembl/static/js/app/views/messageTranslationQuestion.js:306
 msgid "Do not translate"
-msgstr ""
+msgstr "Çeviri yapma"
 
 #: assembl/static/js/app/views/messageTranslationQuestion.js:307
 msgid "Translate to another language"
-msgstr ""
+msgstr "Başka bir dile çevir"
 
 #: assembl/static/js/app/views/postFilters.js:120
 #, python-format
 msgid "%s (%s)"
 msgid_plural "%s (%s)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%s (%s)"
+msgstr[1] "%s (%s)"
 
 #: assembl/static/js/app/views/postFilters.js:183
 #, python-format
 msgid "%s"
-msgstr ""
+msgstr "%s"
 
 #: assembl/static/js/app/views/postFilters.js:183
 #, python-format
 msgid "NOT %s"
-msgstr ""
+msgstr " %s DEĞİL"
 
 #: assembl/static/js/app/views/postFilters.js:203
 msgid "Posts with specific ids"
-msgstr ""
+msgstr "Özel kimlikli bildirimler"
 
 #: assembl/static/js/app/views/postFilters.js:207
 msgid "Only include posts that are in a range of specific ids"
-msgstr ""
+msgstr "Yalnızca bir özel kimlik kapsamındaki bildirimleri dahil et"
 
 #: assembl/static/js/app/views/postFilters.js:224
 msgid "Related to idea"
-msgstr ""
+msgstr "Fikirle ilgili"
 
 #: assembl/static/js/app/views/postFilters.js:227
 msgid ""
@@ -1464,13 +1491,14 @@ msgid ""
 "recursive:  Messages related to ideas that are descendents of the idea are "
 "included."
 msgstr ""
+"Yalnızca belirtilen fikirle ilgili olan mesajları dahil et.  Bu filtre yinelenen türdedir: Fikre bağlı olan fikirlerle ilgili olan mesajlar da dahil edilir."
 
 #: assembl/static/js/app/views/postFilters.js:245
 #, python-format
 msgid "Discuss idea %s"
 msgid_plural "Discuss ideas: %s"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Şu fikri tartış: %s"
+msgstr[1] "Şu fikirleri tartış: %s"
 
 #: assembl/static/js/app/views/postFilters.js:245
 #: assembl/static/js/app/views/postFilters.js:289
@@ -1479,246 +1507,256 @@ msgstr[1] ""
 #: assembl/static/js/app/views/postFilters.js:423
 #: assembl/static/js/app/views/postFilters.js:451
 msgid " AND "
-msgstr ""
+msgstr " VE "
 
 #: assembl/static/js/app/views/postFilters.js:263
 msgid "Part of thread of"
-msgstr ""
+msgstr "Tartışma dizininin bir parçası"
 
 #: assembl/static/js/app/views/postFilters.js:266
 msgid "Only include messages that are in the specified post reply thread."
-msgstr ""
+msgstr "Yalnızca belirtilen gönderi yanıtı dizisinde bulunan mesajları dahil et."
 
 #: assembl/static/js/app/views/postFilters.js:280
 #: assembl/static/js/app/views/postFilters.js:324
 #, python-format
 msgid "synthesis \"%s\""
-msgstr ""
+msgstr "sentez \"%s\""
 
 #: assembl/static/js/app/views/postFilters.js:283
 #: assembl/static/js/app/views/postFilters.js:327
 #, python-format
 msgid "message \"%s\""
-msgstr ""
+msgstr "mesaj \"%s\""
 
 #: assembl/static/js/app/views/postFilters.js:289
 #, python-format
 msgid "Are in the conversation that follows: %s"
-msgstr ""
+msgstr "Aşağıdaki konuşmadadır: %s"
 
 #: assembl/static/js/app/views/postFilters.js:307
 msgid "Part of the context of"
-msgstr ""
+msgstr "Bağlamın parçası"
 
 #: assembl/static/js/app/views/postFilters.js:310
-msgid "Only include messages that are in the specified post reply thread or ancestry."
+msgid ""
+"Only include messages that are in the specified post reply thread or "
+"ancestry."
 msgstr ""
+"Yalnızca belirtilen bildirim yanıtı dizisinde veya kaynağında bulunan mesajları dahil et."
 
 #: assembl/static/js/app/views/postFilters.js:333
 #, python-format
 msgid "Are in the context of: %s"
-msgstr ""
+msgstr "Bağlamındadır: %s"
 
 #: assembl/static/js/app/views/postFilters.js:351
 msgid "Posted by"
-msgstr ""
+msgstr "Gönderen:"
 
 #: assembl/static/js/app/views/postFilters.js:354
 msgid "Only include messages that are posted by a specific user."
-msgstr ""
+msgstr "Yalnızca belirli bir kullanıcı tarafından gönderilen mesajları dahil et."
 
 #: assembl/static/js/app/views/postFilters.js:363
 #: assembl/static/js/app/views/postFilters.js:418
 #, python-format
 msgid "\"%s\""
-msgstr ""
+msgstr "\"%s\""
 
 #: assembl/static/js/app/views/postFilters.js:368
 #, python-format
 msgid "Are posted by: %s"
-msgstr ""
+msgstr "Gönderen: %s"
 
 #: assembl/static/js/app/views/postFilters.js:386
 msgid "Messages I posted"
-msgstr ""
+msgstr "Gönderdiğim mesajlar"
 
 #: assembl/static/js/app/views/postFilters.js:389
 msgid "Only include messages that I posted."
-msgstr ""
+msgstr "Yalnızca benim gönderdiğim mesajları dahil et."
 
 #: assembl/static/js/app/views/postFilters.js:406
 msgid "Replies to"
-msgstr ""
+msgstr "Yanıtlar"
 
 #: assembl/static/js/app/views/postFilters.js:409
 msgid "Only include messages that reply to a specific user."
-msgstr ""
+msgstr "Yalnızca belirli bir kullanıcıya yanıt veren mesajları dahil et."
 
 #: assembl/static/js/app/views/postFilters.js:423
 #, python-format
 msgid "Replies to: %s"
-msgstr ""
+msgstr " %s ‘a yanıt veren"
 
 #: assembl/static/js/app/views/postFilters.js:441
 msgid "In column category"
-msgstr ""
+msgstr "Sütun kategorisinde"
 
 #: assembl/static/js/app/views/postFilters.js:444
 msgid ""
-"Only include messages that were classified in a specific category. Use "
-"\"null\" for no category."
+"Only include messages that were classified in a specific category. Use \"null"
+"\" for no category."
 msgstr ""
+"Yalnızca belirli bir kategoride sınıflandırılmış mesajları dahil et. Kategorisi olmayanları \"atla\" ."
 
 #: assembl/static/js/app/views/postFilters.js:451
 #, python-format
 msgid "In category: %s"
-msgstr ""
+msgstr " %s kategorisinde"
 
 #: assembl/static/js/app/views/postFilters.js:469
 msgid "Messages that reply to me"
-msgstr ""
+msgstr "Bana cevap veren mesajlar"
 
 #: assembl/static/js/app/views/postFilters.js:472
 msgid "Only include messages that reply one of the messages I posted."
-msgstr ""
+msgstr "Yalnızca gönderdiğim mesajlardan birine cevap veren mesajları dahil et."
 
 #: assembl/static/js/app/views/postFilters.js:492
 #: assembl/templates/views/orphanMessagesInIdeaList.tmpl:4
 msgid "Messages not yet associated with an idea"
-msgstr ""
+msgstr "Henüz bir fikirle ilişkilendirilmemiş mesajlar"
 
 #: assembl/static/js/app/views/postFilters.js:495
 msgid "Only include messages that are not found in any idea."
-msgstr ""
+msgstr "Yalnızca henüz bir fikir dahilinde olmayan mesajları dahil et."
 
 #: assembl/static/js/app/views/postFilters.js:515
 msgid "Synthesis messages"
-msgstr ""
+msgstr "Sentez mesajları"
 
 #: assembl/static/js/app/views/postFilters.js:518
 msgid "Only include messages that represent a synthesis of the discussion."
-msgstr ""
+msgstr "Yalnızca tartışmanın bir sentezi olan mesajları dahil et."
 
 #: assembl/static/js/app/views/postFilters.js:540
 msgid "Have unread value"
-msgstr ""
+msgstr "Okunmamış değer"
 
 #: assembl/static/js/app/views/postFilters.js:546
 msgid "You haven't read yet"
-msgstr ""
+msgstr "Henüz okumadınız"
 
 #: assembl/static/js/app/views/postFilters.js:548
 msgid "You've already read"
-msgstr ""
+msgstr "Okudunuz"
 
 #: assembl/static/js/app/views/postFilters.js:576
 msgid "Unread messages"
-msgstr ""
+msgstr "Okunmamış mesajlar"
 
 #: assembl/static/js/app/views/postFilters.js:579
-msgid "Only include messages you haven't read yet, or you manually marked unread."
+msgid ""
+"Only include messages you haven't read yet, or you manually marked unread."
 msgstr ""
+"Yalnızca okumamış olduğunuz veya okunmamış olarak işaretlediğiniz mesajları dahil edin."
 
 #: assembl/static/js/app/views/postFilters.js:599
 msgid "Read messages"
-msgstr ""
+msgstr "Mesajları oku"
 
 #: assembl/static/js/app/views/postFilters.js:602
 msgid "Only include messages that have previously been marked read."
-msgstr ""
+msgstr "Yalnızca daha önce okunmamış olarak işaretlenen mesajları dahil et."
 
 #: assembl/static/js/app/views/postFilters.js:642
 msgid "Messages posted after..."
-msgstr ""
+msgstr "...’den sonra gönderilen mesajlar"
 
 #: assembl/static/js/app/views/postFilters.js:648
 msgid "Only include posts created after a given date."
-msgstr ""
+msgstr "Yalnızca belirli bir tarihten sonra oluşturulan mesajları dahil et."
 
 #: assembl/static/js/app/views/postFilters.js:652
 msgid ""
 "Please type a date. The filter will then show only posts which have been "
 "created after this date. Example: 2015-01-01"
 msgstr ""
+"Lütfen bir tarih girin. Filtre yalnızca bu tarihten sonra oluşturulan mesajları gösterecektir. Örnek: 2015-01-01"
 
 #: assembl/static/js/app/views/postFilters.js:694
 msgid "Messages posted before..."
-msgstr ""
+msgstr "...’den önce gönderilen mesajlar"
 
 #: assembl/static/js/app/views/postFilters.js:700
 msgid "Only include posts created before a given date."
-msgstr ""
+msgstr "Yalnızca belirli bir tarihten önce oluşturulan mesajları dahil et."
 
 #: assembl/static/js/app/views/postFilters.js:704
 msgid ""
 "Please type a date. The filter will then show only posts which have been "
 "created before this date. Example: 2015-01-01"
 msgstr ""
+"Lütfen bir tarih girin. Filtre yalnızca bu tarihten önce oluşturulan mesajları gösterecektir. Örnek: 2015-01-01"
 
 #: assembl/static/js/app/views/postFilters.js:744
 #, python-format
 msgid "Messages posted since the last synthesis (%s)"
-msgstr ""
+msgstr "Son sentezden bu yana gönderilen mesajlar (%s)"
 
 #: assembl/static/js/app/views/postFilters.js:748
 msgid "Only include posts created after the last synthesis."
-msgstr ""
+msgstr "Yalnızca son sentezden sonra oluşturulan mesajları dahil et."
 
 #: assembl/static/js/app/views/postFilters.js:771
 msgid "Deleted messages"
-msgstr ""
+msgstr "Silinmiş mesajlar"
 
 #: assembl/static/js/app/views/postFilters.js:774
 msgid ""
 "Only include messages that have been deleted (by their author or by an "
 "administrator), and their ancestors."
 msgstr ""
+"Yalnızca silinmiş (yazarları veya yöneticileri tarafından) mesajları ve bunların kaynağındaki mesajları dahil et."
 
 #: assembl/static/js/app/views/postFilters.js:811
 msgid "Show also deleted messages"
-msgstr ""
+msgstr "Silinen mesajları da göster"
 
 #: assembl/static/js/app/views/postFilters.js:814
 msgid ""
 "Also include messages that have been deleted (by their author or by an "
 "administrator)."
 msgstr ""
+"Silinmiş (yazarları veya yöneticileri tarafından) mesajları da dahil et."
 
 #: assembl/static/js/app/views/preferencesView.js:153
 msgid "Your settings were reset to default"
-msgstr ""
+msgstr "Ayarlarınız sıfırlandı"
 
 #: assembl/static/js/app/views/preferencesView.js:157
 msgid "Your settings were not be reset, but could not be read back."
-msgstr ""
+msgstr "Ayarlarınız sıfırlanmadı, ancak yeniden okunamamakta."
 
 #: assembl/static/js/app/views/preferencesView.js:163
 msgid "Your settings could not be reset."
-msgstr ""
+msgstr "Ayarlarınız sıfırlanamadı."
 
 #: assembl/static/js/app/views/preferencesView.js:349
 msgid "This is not valid JSON: "
-msgstr ""
+msgstr "Bu geçerli bir JSON değil:"
 
 #: assembl/static/js/app/views/preferencesView.js:428
 msgid "Please enter a number"
-msgstr ""
+msgstr "Lütfen bir sayı giriniz"
 
 #: assembl/static/js/app/views/preferencesView.js:527
 msgid "This does not appear to be a URL"
-msgstr ""
+msgstr "Bu bir URL değildir"
 
 #: assembl/static/js/app/views/preferencesView.js:546
 msgid "This does not appear to be an email"
-msgstr ""
+msgstr "Bu bir e-posta adresi değildir"
 
 #: assembl/static/js/app/views/preferencesView.js:566
 msgid "This does not appear to be a domain"
-msgstr ""
+msgstr "Bu bir alan adı değildir"
 
 #: assembl/static/js/app/views/preferencesView.js:901
 msgid "The following settings were not saved: "
-msgstr ""
+msgstr "Aşağıdaki ayarlar kaydedilmedi:"
 
 #: assembl/static/js/app/views/admin/adminDiscussion.js:96
 #: assembl/static/js/app/views/preferencesView.js:904
@@ -1726,149 +1764,150 @@ msgstr ""
 #: assembl/static/js/app/views/user/account.js:126
 #: assembl/static/js/app/views/user/profile.js:66
 msgid "Your settings were saved!"
-msgstr ""
+msgstr "Ayarlarınız kaydedildi!"
 
 #: assembl/static/js/app/views/preferencesView.js:910
 msgid "Your settings are up-to-date."
-msgstr ""
+msgstr "Ayarlarınız günceldir."
 
 #: assembl/static/js/app/views/segmentList.js:321
 #: assembl/static/js/app/views/segmentList.js:367
 #: assembl/static/js/app/views/segmentList.js:370
 #: assembl/templates/views/create-group.tmpl:118
 msgid "Clipboard"
-msgstr ""
+msgstr "Pano"
 
 #: assembl/static/js/app/views/segmentList.js:370
 msgid "empty"
-msgstr ""
+msgstr "boş"
 
 #: assembl/static/js/app/views/segmentList.js:557
 msgid "Are you sure you want to empty your entire clipboard?"
-msgstr ""
+msgstr "Tüm panonuzu temizlemek istediğinizden emin misiniz?"
 
 #: assembl/static/js/app/views/admin/adminDiscussion.js:99
 #: assembl/static/js/app/views/sourceEditView.js:53
 #: assembl/static/js/app/views/user/account.js:129
 #: assembl/static/js/app/views/user/profile.js:69
 msgid "Your settings failed to update."
-msgstr ""
+msgstr "Ayalarınız güncellenemedi."
 
 #: assembl/static/js/app/views/statistics.js:71
 msgid "Evolution of the total number of messages"
-msgstr ""
+msgstr "Toplam mesaj sayısındaki değişim"
 
 #: assembl/static/js/app/views/statistics.js:71
 msgid "Evolution of the number of messages posted"
-msgstr ""
+msgstr "Gönderilen mesaj sayısındaki değişim"
 
 #: assembl/static/js/app/views/statistics.js:72
 #: assembl/templates/views/navigation.tmpl:28
 #: assembl/templates/views/statistics.tmpl:5
 msgid "Statistics"
-msgstr ""
+msgstr "İstatistikler"
 
 #: assembl/static/js/app/views/statistics.js:377
 msgid "messages"
-msgstr ""
+msgstr "mesajlar"
 
 #: assembl/static/js/app/views/statistics.js:612
 #: assembl/static/js/app/views/statistics.js:625
 msgid "messages, posted by"
-msgstr ""
+msgstr "tarafından gönderilen mesajlar"
 
 #: assembl/static/js/app/views/statistics.js:789
 msgid "Not enough data yet."
-msgstr ""
+msgstr "Henüz yeterli veri yok."
 
 #: assembl/static/js/app/views/statistics.js:857
 msgid "last week"
-msgstr ""
+msgstr "geçen hafta"
 
 #: assembl/static/js/app/views/statistics.js:860
 msgid "last 2 weeks"
-msgstr ""
+msgstr "son iki hafta"
 
 #: assembl/static/js/app/views/statistics.js:863
 msgid "last month"
-msgstr ""
+msgstr "son ay"
 
 #: assembl/static/js/app/views/statistics.js:866
 msgid "last 3 months"
-msgstr ""
+msgstr "son 3 ay"
 
 #: assembl/static/js/app/views/statistics.js:869
 msgid "last 6 months"
-msgstr ""
+msgstr "son 6 ay"
 
 #: assembl/static/js/app/views/statistics.js:872
 msgid "last year"
-msgstr ""
+msgstr "geçen yıl"
 
 #: assembl/static/js/app/views/statistics.js:1027
 #, python-format
 msgid "%d participant has contributed in the %s"
 msgid_plural "%d participants have contributed in the %s"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d katılımcı %s ‘ya katkıda bulundu"
+msgstr[1] "%d katılımcı %s ‘ya katkıda bulundu"
 
 #: assembl/static/js/app/views/statistics.js:1036
 #, python-format
 msgid "%d new participant started contributing in the %s"
 msgid_plural "%d new participants started contributing in the %s"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d yeni katılımcı %s ‘ya katkıda bulundu"
+msgstr[1] "%d yeni katılımcı %s ‘ya katkıda bulundu"
 
 #: assembl/static/js/app/views/statistics.js:1046
 #, python-format
 msgid "%d active participant had contributed before %s"
 msgid_plural "%d active participants had contributed before %s"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d aktif katılımcı %s ‘den önce katkıda bulunmuştu"
+msgstr[1] "%d aktif katılımcı %s ‘den önce katkıda bulunmuştu"
 
 #: assembl/static/js/app/views/statistics.js:1059
 #, python-format
 msgid "%d participant's last contribution was prior to %s"
 msgid_plural "%d participants' last contribution was prior to %s"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d katılımcının son katkısı %s ‘den önceydi"
+msgstr[1] "%d katılımcının son katkısı %s ‘den önceydi"
 
 #: assembl/static/js/app/views/statistics.js:1074
 #, python-format
 msgid "%d participant has contributed since the beginning of the discussion"
-msgid_plural "%d participants have contributed since the beginning of the discussion"
-msgstr[0] ""
-msgstr[1] ""
+msgid_plural ""
+"%d participants have contributed since the beginning of the discussion"
+msgstr[0] "%d katılımcı tartışmanın başından bu yana katkıda bulundu"
+msgstr[1] "%d katılımcı tartışmanın başından bu yana katkıda bulundu"
 
 #: assembl/static/js/app/views/statistics.js:1086
 msgid "Contributors active recently"
-msgstr ""
+msgstr "Şu an aktif olan yazarlar"
 
 #: assembl/static/js/app/views/statistics.js:1090
 msgid "Contributors inactive recently"
-msgstr ""
+msgstr "Şu an aktif olmayan yazarlar"
 
 #: assembl/static/js/app/views/synthesisPanel.js:113
 #: assembl/templates/views/navigation.tmpl:3
 #: assembl/templates/views/synthesisContext.tmpl:6
 msgid "Synthesis"
-msgstr ""
+msgstr "Sentez"
 
 #: assembl/static/js/app/views/synthesisPanel.js:227
 msgid "A short title for the synthesis"
-msgstr ""
+msgstr "Sentez için kısa bir başlık"
 
 #: assembl/static/js/app/views/synthesisPanel.js:228
 msgid "New Synthesis"
-msgstr ""
+msgstr "Yeni Sentez"
 
 #: assembl/static/js/app/views/synthesisPanel.js:239
 msgid "You can add an introduction to your synthesis here..."
-msgstr ""
+msgstr "Sentezinizin giriş kısmını buraya ekleyebilirsiniz..."
 
 #: assembl/static/js/app/views/synthesisPanel.js:251
 msgid "You can add a conclusion to your synthesis here..."
-msgstr ""
+msgstr "Sentezinizin sonuç kısmını buraya ekleyebilirsiniz..."
 
 #: assembl/static/js/app/views/synthesisPanel.js:321
 msgid ""
@@ -1876,52 +1915,56 @@ msgid ""
 "delete it afterwards, and participants who subscribed to notifications "
 "related to the synthesis will receive a notification by email."
 msgstr ""
+"Sentezi yayınlamak istediğinizden emin misiniz? Sentezi yayınladıktan sonra silemezsiniz. Sentezle ilgili otomatik bildirime abone olan katılımcılar e-posta yoluyla bildirim alacaktır."
 
 #: assembl/static/js/app/views/synthesisPanel.js:344
 msgid "Synthesis has been successfully published!"
-msgstr ""
+msgstr "Sentez başarıyla yayınlandı!"
 
 #: assembl/static/js/app/views/synthesisPanel.js:351
 msgid "Failed publishing synthesis!"
-msgstr ""
+msgstr "Sentez yayınlanamadı!"
 
 #: assembl/static/js/app/views/tokenVoteSession.js:264
 #, python-format
 msgid "<span class='available-tokens-number'>%d</span> remaining %s token"
-msgid_plural "<span class='available-tokens-number'>%d</span> remaining %s tokens"
-msgstr[0] ""
-msgstr[1] ""
+msgid_plural ""
+"<span class='available-tokens-number'>%d</span> remaining %s tokens"
+msgstr[0] "<span class='available-tokens-number'>%d</span> adet %s jetonunuz kaldı"
+msgstr[1] "<span class='available-tokens-number'>%d</span> adet %s jetonunuz kaldı"
 
 #: assembl/static/js/app/views/tokenVoteSession.js:535
 #, python-format
 msgid "set %d tokens"
-msgstr ""
+msgstr " %d jeton düzenle"
 
 #: assembl/static/js/app/views/tokenVoteSession.js:566
 msgid "You don't have enough tokens remaining."
-msgstr ""
+msgstr "Yeterli sayıda jetonunuz bulunmamakta."
 
 #: assembl/static/js/app/views/tokenVoteSession.js:950
 msgid "See Description"
-msgstr ""
+msgstr "Açıklamayı Gör"
 
 #: assembl/static/js/app/views/tokenVoteSession.js:1037
 #, python-format
-msgid "%d token \"%s\" was voted on this idea, out of a total %d \"%s\" tokens voted "
+msgid ""
+"%d token \"%s\" was voted on this idea, out of a total %d \"%s\" tokens "
+"voted "
 msgid_plural ""
 "%d tokens \"%s\" were voted on this idea, out of a total %d \"%s\" tokens "
 "voted"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Toplamda kullanılan %d \"%s\" jetondan %d jeton \"%s\" bu fikri desteklemek için kullanıldı."
+msgstr[1] "Toplamda kullanılan %d \"%s\" jetondan %d jeton \"%s\" bu fikri desteklemek için kullanıldı."
 
 #: assembl/static/js/app/views/tokenVoteSession.js:1093
 msgid "Hide Description"
-msgstr ""
+msgstr "Açıklamayı Gizle"
 
 #: assembl/static/js/app/views/tokenVoteSession.js:1215
 #, python-format
 msgid "Token: \"%s\""
-msgstr ""
+msgstr "Jeton: \"%s\""
 
 #: assembl/static/js/app/views/tokenVoteSession.js:1353
 #, python-format
@@ -1931,183 +1974,186 @@ msgid ""
 msgid_plural ""
 "%d participants voted between %s and %s. The number of tokens available for "
 "voting per participant:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d katılımcı %s ile %s arasında oy kullandı. Katılımcı başına kullanılabilen jeton adedi:"
+msgstr[1] "%d katılımcı %s ile %s arasında oy kullandı. Katılımcı başına kullanılabilen jeton adedi:"
 
 #: assembl/static/js/app/views/tokenVoteSession.js:1362
 #, python-format
 msgid "<strong>%d</strong> token of type \"%s\""
 msgid_plural "<strong>%d</strong> tokens of type \"%s\""
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "\"%s\" tipi <strong>%d</strong> jeton"
+msgstr[1] "\"%s\" tipi <strong>%d</strong> jeton"
 
 #: assembl/static/js/app/views/tokenVoteSession.js:1411
 msgid "Token Vote Results"
-msgstr ""
+msgstr "Jetonlu Oylama Sonuçları"
 
 #: assembl/static/js/app/views/tokenVoteSession.js:1602
 msgid "Guideline"
-msgstr ""
+msgstr "Kılavuz"
 
 #: assembl/static/js/app/views/tokenVoteSession.js:1603
 msgid ""
 "Split your tokens among the ideas of your choice. By default, your vote is "
 "neutral per project."
 msgstr ""
+"Jetonlarınızı seçtiğiniz fikirler arasında paylaştırın. Varsayılan olarak her proje içiniz oyunuz tarafsızdır."
 
 #: assembl/static/js/app/views/tokenVoteSession.js:1604
 msgid "Save my votes"
-msgstr ""
+msgstr "Oylarımı kaydet"
 
 #: assembl/static/js/app/views/tokenVoteSession.js:1772
 msgid "Collective votes"
-msgstr ""
+msgstr "Toplu oylar"
 
 #: assembl/static/js/app/views/tokenVoteSession.js:1807
 msgid "Your vote has been saved successfully."
-msgstr ""
+msgstr "Oyunuz başarıyla kaydedildi!"
 
 #: assembl/static/js/app/views/tokenVoteSession.js:1811
 msgid "Go back to the discussion"
-msgstr ""
+msgstr "Tartışmaya geri dönün"
 
 #: assembl/static/js/app/views/tokenVoteSession.js:1815
 msgid "Modify my vote"
-msgstr ""
+msgstr "Oyumu değiştir"
 
 #: assembl/static/js/app/views/tokenVoteSession.js:1839
 #: assembl/static/js/app/views/tokenVoteSession.js:1870
 msgid "Vote confirmation"
-msgstr ""
+msgstr "Oy onaylama"
 
 #: assembl/static/js/app/views/admin/adminDiscussion.js:116
 msgid "The logo will show like this:"
-msgstr ""
+msgstr "Logo şöyle gözükecektir:"
 
 #: assembl/static/js/app/views/admin/adminMessageColumns.js:100
 msgid "Columns saved"
-msgstr ""
+msgstr "Kaydedilen sütunlar"
 
 #: assembl/static/js/app/views/admin/adminMessageColumns.js:319
 msgid "Define columns"
-msgstr ""
+msgstr "Sütunları tanımla"
 
 #: assembl/static/js/app/views/admin/adminTimelineEvents.js:247
 #: assembl/static/js/app/views/admin/adminTimelineEvents.js:257
 msgid "Invalid date and time"
-msgstr ""
+msgstr "Geçersiz tarih ve saat"
 
 #: assembl/static/js/app/views/admin/generalSource.js:79
 msgid "There was a reimport error!"
-msgstr ""
+msgstr "Bir yeniden aktarım hatası oluştu!"
 
 #: assembl/static/js/app/views/admin/generalSource.js:82
 msgid "Reimport has begun! It can take up to 15 minutes to complete."
-msgstr ""
+msgstr "Yeniden aktarım başladı! Tamamlanması 15 dakika kadar sürebilir."
 
 #: assembl/static/js/app/views/admin/generalSource.js:84
 msgid "Reimport failed."
-msgstr ""
+msgstr "Yeniden aktarım başarısız oldu."
 
 #: assembl/static/js/app/views/admin/generalSource.js:93
 msgid "There was a reprocess error!"
-msgstr ""
+msgstr "Bir yeniden işleme hatası oluştu!"
 
 #: assembl/static/js/app/views/admin/generalSource.js:96
 msgid "Reprocess has begun! It can take up to 15 minutes to complete."
-msgstr ""
+msgstr "Yeniden işleme başladı! Tamamlanması 15 dakika kadar sürebilir."
 
 #: assembl/static/js/app/views/admin/generalSource.js:98
 msgid "Reprocess failed"
-msgstr ""
+msgstr "Yeniden i̇şleme başarısız oldu"
 
 #: assembl/static/js/app/views/admin/generalSource.js:117
 msgid "Import has begun!"
-msgstr ""
+msgstr "Aktarım başladı!"
 
 #: assembl/static/js/app/views/groups/panelWrapper.js:186
 #: assembl/templates/views/panelWrapper.tmpl:34
 msgid "Maximize panel"
-msgstr ""
+msgstr "Paneli en yüksek büyüklüğe çıkar"
 
 #: assembl/static/js/app/views/groups/panelWrapper.js:197
 #: assembl/templates/views/navigation.tmpl:5
 #: assembl/templates/views/navigation.tmpl:14
 #: assembl/templates/views/panelWrapper.tmpl:8
 msgid "Minimize panel"
-msgstr ""
+msgstr "Paneli en düşük küçüklüğe indir"
 
 #: assembl/static/js/app/views/groups/panelWrapper.js:233
 msgid "Unlock panel"
-msgstr ""
+msgstr "Panelin kilidini aç"
 
 #: assembl/static/js/app/views/groups/panelWrapper.js:263
 msgid ""
 "We have locked the panel for you, so its content won't change while you're "
 "writing your message. Click here to unlock"
 msgstr ""
+"Siz mesajınızı yazarken içeriğin değişmemesi için paneli sizin için kilitledik. Kilidi açmak için buraya tıklayın"
 
 #: assembl/static/js/app/views/groups/panelWrapper.js:266
 msgid ""
-"We have unlocked the panel for you, so its content can change now that you're"
-" not writing a message anymore. Click here to lock it back"
+"We have unlocked the panel for you, so its content can change now that "
+"you're not writing a message anymore. Click here to lock it back"
 msgstr ""
+"Artık mesaj yazmadığınızdan içeriğinin değişebilmesi için panelin kilidini sizin için açtık. Tekrar kilitlemek için buraya tıklayın"
 
 #: assembl/static/js/app/views/groups/panelWrapper.js:270
 msgid "We have locked the panel for you. Click here to unlock"
-msgstr ""
+msgstr "Paneli sizin için kilitledik. Kilidi açmak için buraya tıklayın"
 
 #: assembl/static/js/app/views/groups/panelWrapper.js:273
 msgid "We have unlocked the panel for you. Click here to lock it back"
-msgstr ""
+msgstr "Panelin kilidini sizin için açtık. Tekrar kilitlemek için buraya tıklayın"
 
 #: assembl/static/js/app/views/groups/panelWrapper.js:311
 #: assembl/templates/views/panelWrapper.tmpl:14
 msgid "Lock panel"
-msgstr ""
+msgstr "Paneli kilitle"
 
 #: assembl/static/js/app/views/modals/discussionStatisticsModal.js:95
 msgid "The end date should be later than the start date"
-msgstr ""
+msgstr "Bitiş tarihi başlangıç tarihinden sonra olmalıdır"
 
 #: assembl/static/js/app/views/modals/discussionStatisticsModal.js:187
 #: assembl/templates/views/navBarLeft.tmpl:25
 msgid "Discussion statistics"
-msgstr ""
+msgstr "Tartışma i̇statistikleri"
 
 #: assembl/static/js/app/views/modals/ideaInModal.js:44
 #: assembl/static/js/app/views/modals/ideaInModal.js:49
 #, python-format
 msgid "Exploring idea \"%s\""
-msgstr ""
+msgstr " \"%s\" fikrini keşfetmek"
 
 #: assembl/static/js/app/views/user/account.js:193
 msgid "Empty email"
-msgstr ""
+msgstr "Boş e-posta"
 
 #: assembl/static/js/app/views/user/account.js:198
 msgid "Invalid email"
-msgstr ""
+msgstr "Geçersiz e-posta"
 
 #: assembl/static/js/app/views/user/account.js:210
 msgid "Your settings were saved"
-msgstr ""
+msgstr "Ayarlarınız kaydedildi"
 
 #: assembl/static/js/app/views/user/account.js:216
 msgid "Your settings failed to update"
-msgstr ""
+msgstr "Ayarlarınız güncellenemedi"
 
 #: assembl/tasks/email_discussion_creator.py:69
 msgid "Your consultation was created"
-msgstr ""
+msgstr "Müzakereniz oluşturuldu"
 
 #: assembl/templates/adminIndex.jinja2:3
 msgid "Administration"
-msgstr ""
+msgstr "Yönetim"
 
 #: assembl/templates/cannot_read_discussion.jinja2:4
 msgid "You are not authorized to read this discussion."
-msgstr ""
+msgstr "Bu tartışmayı okuma yetkiniz bulunmamakta."
 
 #: assembl/templates/cannot_read_discussion.jinja2:5
 #, python-format
@@ -2115,282 +2161,289 @@ msgid ""
 "You may <a href=\"%(logout)s\">logout</a> and login as another user with "
 "those permissions."
 msgstr ""
+"Dilerseniz <a href=\"%(logout)s\">oturum kapat</a> ile çıkış yapıp bu haklara sahip bir kullanıcı hesabıyla giriş yapabilirsiniz."
 
 #: assembl/templates/confirm.jinja2:23
 msgid "Resend the email"
-msgstr ""
+msgstr "Yeniden e-posta gönder"
 
 #: assembl/templates/discussion_list.jinja2:10
 msgid "Admin"
-msgstr ""
+msgstr "Yönetim"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:15
 #: assembl/templates/discussion_list.jinja2:13
 msgid "Permissions"
-msgstr ""
+msgstr "İzinler"
 
 #: assembl/templates/admin/discussions.jinja2:86
 #: assembl/templates/discussion_list.jinja2:21
 msgid "There are no discussions on this server yet"
-msgstr ""
+msgstr "Bu sunucuda henüz bir tartışma yok"
 
 #: assembl/templates/discussion_list.jinja2:27
 #: assembl/templates/views/navBarRight.tmpl:60
 msgid "Sign in"
-msgstr ""
+msgstr "Giriş yap"
 
 #: assembl/templates/discussion_list.jinja2:28
 msgid " to see all available discussions."
-msgstr ""
+msgstr " ile tüm mevcut tartışmaları görebilirsiniz."
 
 #: assembl/templates/discussion_list.jinja2:36
 msgid "Create a new discussion"
-msgstr ""
+msgstr "Yeni bir tartışma oluştur"
 
 #: assembl/templates/discussion_list.jinja2:39
 msgid "Change global permissions"
-msgstr ""
+msgstr "Genel izinleri değiştir"
 
 #: assembl/templates/discussion_list.jinja2:42
 msgid "Change global preferences"
-msgstr ""
+msgstr "Genel tercihleri değiştir"
 
 #: assembl/templates/discussion_list.jinja2:45
 #: assembl/templates/views/navBarRight.tmpl:55
 msgid "Sign out"
-msgstr ""
+msgstr "Oturum kapat"
 
-#: assembl/templates/do_password_change.jinja2:28 assembl/templates/login.jinja2:72
-#: assembl/templates/register.jinja2:28 assembl/templates/views/emailSource.tmpl:74
+#: assembl/templates/do_password_change.jinja2:28
+#: assembl/templates/login.jinja2:72 assembl/templates/register.jinja2:28
+#: assembl/templates/views/emailSource.tmpl:74
 msgid "Password"
-msgstr ""
+msgstr "Parola"
 
 #: assembl/templates/do_password_change.jinja2:29
 #: assembl/templates/profile.jinja2:56 assembl/templates/profile.jinja2:58
 #: assembl/templates/register.jinja2:29
 msgid "Repeat password"
-msgstr ""
+msgstr "Parolayı tekrarla"
 
 #: assembl/templates/idea_in_synthesis.jinja2:12
 #: assembl/templates/views/ideaInSynthesis.tmpl:6
 msgid "By"
-msgstr ""
+msgstr "‘den"
 
 #: assembl/templates/idea_in_synthesis.jinja2:16
 msgid "See the conversation around this idea"
-msgstr ""
+msgstr "Bu fikir ile ilgili konuşmalara bakın"
 
 #: assembl/templates/login.jinja2:30
 #, python-format
 msgid "Log in to \"%(discussion_title)s\""
-msgstr ""
+msgstr " \"%(discussion_title)s\" oturumu açın"
 
 #: assembl/templates/login.jinja2:30
 msgid "Log in to Assembl"
-msgstr ""
+msgstr "Assembl’da oturum açın"
 
 #: assembl/templates/login.jinja2:37
 msgid "Log in using one of these social networks"
-msgstr ""
+msgstr "Bu sosyal ağlardan birini kullanarak oturum açın"
 
 #: assembl/templates/login.jinja2:51 assembl/templates/profile.jinja2:220
 msgid "Login with "
-msgstr ""
+msgstr "Oturum açma:"
 
 #: assembl/templates/login.jinja2:65
 msgid "Already have an account?"
-msgstr ""
+msgstr "Zaten bir hesabınız var mı?"
 
 #: assembl/templates/login.jinja2:69
 #: assembl/templates/request_password_change.jinja2:27
 msgid "Email or username"
-msgstr ""
+msgstr "E-posta ya da kullanıcı adı"
 
 #: assembl/templates/login.jinja2:78
 msgid "Log in"
-msgstr ""
+msgstr "Oturum aç"
 
 #: assembl/templates/login.jinja2:80
 msgid "Forgot your password?"
-msgstr ""
+msgstr "Şifrenizi mi unuttunuz?"
 
 #: assembl/templates/login.jinja2:84
 msgid "No account yet?"
-msgstr ""
+msgstr "Henüz hesabınız yok mu?"
 
 #: assembl/templates/login.jinja2:87 assembl/templates/register.jinja2:30
 msgid "Sign up"
-msgstr ""
+msgstr "Kaydolun"
 
 #: assembl/templates/profile.jinja2:7 assembl/templates/view_profile.jinja2:7
 #: assembl/templates/views/navBarRight.tmpl:38
 #: assembl/templates/views/userProfile.tmpl:6
 msgid "Profile"
-msgstr ""
+msgstr "Profil"
 
 #: assembl/templates/profile.jinja2:27 assembl/templates/view_profile.jinja2:25
 #: assembl/templates/views/emailSource.tmpl:67
 #: assembl/templates/views/userAccountForm.tmpl:6
 msgid "Username"
-msgstr ""
+msgstr "Kullanıcı adı"
 
 #: assembl/templates/profile.jinja2:32
 msgid "Desired username"
-msgstr ""
+msgstr "İstenen kullanıcı adı"
 
 #: assembl/templates/profile.jinja2:38 assembl/templates/view_profile.jinja2:29
 #: assembl/templates/views/adminMessageColumn.tmpl:17
 #: assembl/templates/views/discussionStatisticsModal.tmpl:95
 #: assembl/templates/views/emailSource.tmpl:5
 msgid "Name"
-msgstr ""
+msgstr "Ad"
 
 #: assembl/templates/profile.jinja2:43
 msgid "Your name"
-msgstr ""
+msgstr "Soyad"
 
 #: assembl/templates/profile.jinja2:49
 msgid "Change password"
-msgstr ""
+msgstr "Parola değiştir"
 
 #: assembl/templates/profile.jinja2:51
 msgid "New Password"
-msgstr ""
+msgstr "Yeni Parola"
 
 #: assembl/templates/profile.jinja2:63 assembl/templates/view_profile.jinja2:36
 msgid "Emails"
-msgstr ""
+msgstr "E-Postalar"
 
 #: assembl/templates/profile.jinja2:70
 msgid "Confirm and fuse accounts"
-msgstr ""
+msgstr "Onaylayın ve hesapları birleştirin"
 
 #: assembl/templates/profile.jinja2:72
 msgid "unconfirmed"
-msgstr ""
+msgstr "onaylanmamış"
 
 #: assembl/templates/profile.jinja2:73
 msgid "Send confirmation message"
-msgstr ""
+msgstr "Onay mesajı gönder"
 
 #: assembl/templates/profile.jinja2:82
 msgid "Add an email account"
-msgstr ""
+msgstr "Bir e-posta hesabı ekle"
 
 #: assembl/templates/profile.jinja2:84 assembl/templates/register.jinja2:27
 msgid "Email"
-msgstr ""
+msgstr "E-Posta"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:52
 #: assembl/templates/admin/discussion_permissions.jinja2:89
 #: assembl/templates/admin/discussion_permissions.jinja2:149
 #: assembl/templates/admin/global_permissions.jinja2:37
-#: assembl/templates/profile.jinja2:89 assembl/templates/views/ckeditorField.tmpl:9
+#: assembl/templates/profile.jinja2:89
+#: assembl/templates/views/ckeditorField.tmpl:9
 #: assembl/templates/views/messageModerationOptions.tmpl:32
 #: assembl/templates/views/preferenceView.tmpl:14
 #: assembl/templates/views/sourceFacebook.tmpl:3
 #: assembl/templates/views/userAccount.tmpl:47
 msgid "Save"
-msgstr ""
+msgstr "Kaydet"
 
 #: assembl/templates/profile.jinja2:206
 msgid "Connect other accounts to Assembl"
-msgstr ""
+msgstr "Assembl’a başka hesaplar bağla"
 
 #: assembl/templates/react_unauthorized.jinja2:10
 #, python-format
 msgid "Unauthorized <small>Error %(error_num)s</small>"
-msgstr ""
+msgstr "Yetkisiz <small>Hata %(error_num)s</small>"
 
 #: assembl/templates/react_unauthorized.jinja2:11
 msgid "The requested resource requires proper permissions."
-msgstr ""
+msgstr "İstenen kaynak uygun izinler talep ediyor."
 
 #: assembl/templates/react_unauthorized.jinja2:12
 #, python-format
-msgid "Please <a href='%(logout)s'>logout</a> and re-login as a permissible user."
+msgid ""
+"Please <a href='%(logout)s'>logout</a> and re-login as a permissible user."
 msgstr ""
+"Lütfen <a href='%(logout)s'>oturum kapat</a> ile çıkış yapın ve izin verilen bir hesapla oturum açın."
 
 #: assembl/templates/react_unauthorized.jinja2:16
 #, python-format
 msgid "Technical Contact: <a href=mailto:%(admin_email)s>%(admin_email)s</a>"
-msgstr ""
+msgstr "Teknik Ekip: <a href=mailto:%(admin_email)s>%(admin_email)s</a>"
 
 #: assembl/templates/register.jinja2:12
 #, python-format
 msgid "Join \"%(discussion_title)s\""
-msgstr ""
+msgstr "\"%(discussion_title)s\" ‘a katılın"
 
 #: assembl/templates/register.jinja2:12
 msgid "Join Assembl"
-msgstr ""
+msgstr "Assembl’a katılın"
 
 #: assembl/templates/register.jinja2:22
 msgid "This is a closed discussion."
-msgstr ""
+msgstr "Bu kapalı bir tartışmadır."
 
-#: assembl/templates/register.jinja2:26 assembl/templates/views/userProfile.tmpl:13
+#: assembl/templates/register.jinja2:26
+#: assembl/templates/views/userProfile.tmpl:13
 msgid "Full name"
-msgstr ""
+msgstr "Ad ve Soyad"
 
 #: assembl/templates/register.jinja2:34
 msgid "Do you already have an account?"
-msgstr ""
+msgstr "Zaten bir hesabınız var mı?"
 
 #: assembl/templates/register.jinja2:34
 msgid "Log in!"
-msgstr ""
+msgstr "Oturum açın!"
 
 #: assembl/templates/view_profile.jinja2:48
 msgid "Accounts"
-msgstr ""
+msgstr "Hesaplar"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:10
 msgid "Discussion "
-msgstr ""
+msgstr "Tartışmalar"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:11
 msgid "Role permissions:"
-msgstr ""
+msgstr "Rol izinleri:"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:15
 #: assembl/templates/admin/discussion_permissions.jinja2:60
 #: assembl/templates/admin/global_permissions.jinja2:8
 msgid "Roles"
-msgstr ""
+msgstr "Roller"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:37
 msgid "delete role"
-msgstr ""
+msgstr "rolü sil"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:47
 msgid "Add a role"
-msgstr ""
+msgstr "Rol ekle"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:56
 msgid "User roles specific to this discussion:"
-msgstr ""
+msgstr "Bu tartışmaya özgü kullanıcı rolleri:"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:60
 #: assembl/templates/admin/global_permissions.jinja2:8
 msgid "Users"
-msgstr ""
+msgstr "Kullanıcılar"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:84
 #: assembl/templates/admin/global_permissions.jinja2:32
 msgid "Search for users"
-msgstr ""
+msgstr "Kullanıcıları ara"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:94
 msgid "Add users with a CSV file"
-msgstr ""
+msgstr "CSV dosyası ile kullanıcı ekle"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:95
 msgid ""
-"The CSV file must have two fields, in this order: full name, email. If it has"
-" a header, it MUST be on the first line. Imported user's email will be "
+"The CSV file must have two fields, in this order: full name, email. If it "
+"has a header, it MUST be on the first line. Imported user's email will be "
 "considered validated. Here is an example of CSV file:"
 msgstr ""
+"CSV dosyasında sırasıyla şu iki alan olmalıdır: ad - soyadı, e-posta. Eğer bir üstbilgi bulunacaksa MUTLAKA ilk satırda olmalıdır. Aktarılan kullanıcının e-posta adresi onaylanmış kabul edilir. CSV dosyası örneğini burada bulabilirsiniz:"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:99
 msgid ""
@@ -2398,18 +2451,19 @@ msgid ""
 "another discussion. If you do not get Assembl to \"Send an invite message\", "
 "send one yourself, explaining how to reset password."
 msgstr ""
+"Başka bir tartışmada oluşturulmuş olsa dahi üyelere davet mesajı gönderilemez. Eğer Assembl \"Davet mesajı gönder\" komutuna uymuyorsa davetiyeyi siz gönderin ve parolanın nasıl sıfırlandığını açıklayın."
 
 #: assembl/templates/admin/discussion_permissions.jinja2:101
 msgid "Role"
-msgstr ""
+msgstr "Rol"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:113
 msgid "CSV File"
-msgstr ""
+msgstr "CSV Dosyası"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:117
 msgid "Send an invite message"
-msgstr ""
+msgstr "Davet mesajı gönder"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:120
 msgid ""
@@ -2417,23 +2471,24 @@ msgid ""
 "use the following placeholders: {name}, {confirm_url}, {discussion_topic}, "
 "{discussion_url}"
 msgstr ""
+"Bu e-posta yalnızca yeni kullanıcılara gönderilir. Mesajınızda şu bilgi alanlarını kullanabilirsiniz: {name}, {confirm_url}, {discussion_topic}, {discussion_url}"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:122
 msgid "Sender name:"
-msgstr ""
+msgstr "Kullanıcı adı:"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:124
 msgid "Subject:"
-msgstr ""
+msgstr "Konu:"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:125
 #: assembl/views/auth/views.py:1011
 msgid "Welcome to {discussion_topic}."
-msgstr ""
+msgstr " {discussion_topic} ‘ya hoş geldiniz!"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:126
 msgid "Text email message:"
-msgstr ""
+msgstr "Metin e-posta mesajı:"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:127
 msgid ""
@@ -2447,44 +2502,59 @@ msgid ""
 "Best regards,\n"
 "The Assembl Team\n"
 msgstr ""
+"Merhaba, {name}!\n"
+"Assembl’daki {discussion_topic} tartışmasına davet edildiniz.\n"
+"Giriş yapmak için bu bağlantıyı kullanarak şifrenizi oluşturabilirsiniz.\n"
+"<{confirm_url}>\n"
+"\n"
+"Eğer katılmayı istemediyseniz, lütfen bu iletiyi yok sayın.\n"
+"\n"
+"Saygılarımızla,\n"
+"Assembl Ekibi\n"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:137
 msgid "HTML email message:"
-msgstr ""
+msgstr "HTML e-posta mesajı:"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:138
 msgid ""
 "<p>Hello, {name}!</p>\n"
-"<p>You have been invited to the Assembl discussion <a "
-"href=\"{discussion_url}\">{discussion_topic}</a>.\n"
+"<p>You have been invited to the Assembl discussion <a href="
+"\"{discussion_url}\">{discussion_topic}</a>.\n"
 "Please <a href=\"{confirm_url}\">click here</a> to set your password, after "
 "which you can log in.</p>\n"
 "<p>If you did not ask to join please disregard this email.</p>\n"
 "<p>Best regards,<br />The Assembl Team</p>\n"
 msgstr ""
+"<p>Merhaba, {name}!</p>\n"
+"<p>Assembl’daki <a href=\"{discussion_url}\">{discussion_topic}</a> tartışmasına davet edildiniz.\n"
+"Giriş yapmak için bu <a href=\"{confirm_url}\">bağlantıyı</a> kullanarak şifrenizi oluşturabilirsiniz.</p>\n"
+"<p>IEğer katılmayı istemediyseniz, lütfen bu iletiyi yok sayın.</p>\n"
+"<p>Saygılarımızla,<br />Assembl Ekibi</p>\n"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:145
 msgid "Re-send to people who did not log in yet (USE SPARINGLY)"
-msgstr ""
+msgstr "Henüz giriş yapmamış kişilere yeniden gönderin (TEDBİRLİ KULLANINIZ)"
 
 #: assembl/templates/admin/global_permissions.jinja2:4
 #: assembl/templates/views/globalAdminNavigationMenu.tmpl:6
 msgid "Global roles"
-msgstr ""
+msgstr "Global roller"
 
 #: assembl/templates/includes/updatebrowser.jinja2:41
 msgid ""
 "Your version of <strong>{0}</strong> is outdated and may deteriorate your "
 "experience on Assembl."
 msgstr ""
+" <strong>{0}</strong> sürümünüz eski tarihlidir ve Assembl deneyiminizin kalitesini düşürebilir."
 
 #: assembl/templates/includes/updatebrowser.jinja2:42
 msgid "update your browser"
-msgstr ""
+msgstr "tarayıcınızı güncelleyin"
 
 #: assembl/templates/includes/updatebrowser.jinja2:43
 msgid "Thanks!"
-msgstr ""
+msgstr "Teşekkürler!"
 
 #: assembl/templates/notifications/html_mail.jinja2:82
 #, python-format
@@ -2492,29 +2562,34 @@ msgid ""
 "You are receiving this because you are subscribed to discussion "
 "%(discussionLink)s.  Specifically, you currently receive a notification when:"
 msgstr ""
+"Bu mesajı %(discussionLink)s tartışmasına kayıtlı olduğunuz için alıyorsunuz.  Şu an, özellikle aşağıdaki durumlarda mesaj almaktasınız:"
 
 #: assembl/templates/notifications/html_mail_post.jinja2:62
 msgid "Reply to this message"
-msgstr ""
+msgstr "Bu mesaja yanıt ver"
 
 #: assembl/templates/notifications/html_mail_post_synthesis.jinja2:31
 msgid "Comment on this synthesis"
-msgstr ""
+msgstr "Bu sentezle ilgili yorumlar"
 
 #: assembl/templates/notifications/html_new_discussion.jinja2:22
 msgid ""
-"<h1>Congratulations, your <a href='{discussion_url}'>Assembl consultation</a>"
-" is ready.</h1>\n"
+"<h1>Congratulations, your <a href='{discussion_url}'>Assembl consultation</"
+"a> is ready.</h1>\n"
 "<p>You can <a href='{connection_url}'>connect here</a> to define your "
 "password.</p>\n"
 "<p>You will find <a href='{documentation_url}'>documentation here</a>.</p>\n"
 "<p>The Assembl tool enables consultations involving a great number of users "
 "(hundreds or thousands of users, public officials, etc.) in the co-design of "
 "a deliverable. If you need advice on structuring your consultation process "
-"and building skills in using Assembl, you can contact <a "
-"href='mailto:{admin_email}'>{admin_name}</a> from <a "
+"and building skills in using Assembl, you can contact <a href='mailto:"
+"{admin_email}'>{admin_name}</a> from <a "
 "href='{admin_org_url}'>{admin_org_name}</a>.</p>"
 msgstr ""
+"<h1>Tebrikler, <a href='{discussion_url}'>Assembl müzakereniz</a> hazırdır.</h1>\n"
+"<p>Parolanızı oluşturmak için <a href='{connection_url}'>buraya</a> bağlanabilirsiniz.</p>\n"
+"<p>İlgili <a href='{documentation_url}'>belgelere buradan ulaşabilirsiniz</a>.</p>\n"
+"<p>Assembl çok sayıda kullanıcının (yüzlerce veya binlerce kullanıcı, kamu yetkilileri vb.) katıldığı müzakereleri ortak bir tasarım oluşturmak için bir araya getiren bir araçtır. Eğer müzakere süreciniz ve Assembl kullanımının incelikleri hakkında tavsiyeye ihtiyacınız varsa <a href='{admin_org_url}'>{admin_org_name}</a>‘den <a href='mailto:{admin_email}'>{admin_name}</a> ile iletişime geçebilirsiniz.</p>"
 
 #: assembl/templates/notifications/txt_new_discussion.jinja2:16
 msgid ""
@@ -2532,6 +2607,10 @@ msgid ""
 "and building skills in using Assembl, you can contact {admin_name} at "
 "<{admin_email}>, from {admin_org_name} ({admin_org_url}) for more details."
 msgstr ""
+"Tebrikler, Assembl müzakereniz hazırdır.\n"
+"Parolanızı oluşturmak için buraya{discussion_url} bağlanabilirsiniz.\n"
+"{connection_url}İlgili belgelere buradan ulaşabilirsiniz.\n"
+"{documentation_url}Assembl çok sayıda kullanıcının (yüzlerce veya binlerce kullanıcı, kamu yetkilileri vb.) katıldığı müzakereleri ortak bir tasarım oluşturmak için bir araya getiren bir araçtır. Eğer müzakere süreciniz ve Assembl kullanımının incelikleri hakkında tavsiyeye ihtiyacınız varsa {admin_org_name}{admin_org_url}‘den {admin_name}<{admin_email}> ile iletişime geçebilirsiniz."
 
 #: assembl/templates/styleguide/components/Dialogs.jinja2:120
 #: assembl/templates/styleguide/components/Dialogs.jinja2:147
@@ -2540,33 +2619,33 @@ msgstr ""
 #: assembl/templates/views/create-group.tmpl:129
 #: assembl/templates/views/message_translation_question_selection.tmpl:12
 msgid "Validate"
-msgstr ""
+msgstr "Onayla"
 
 #: assembl/templates/views/DiscussionSettingsCreateSource.tmpl:2
 msgid "Create a message source:"
-msgstr ""
+msgstr "Bir mesaj kaynağı oluşturun:"
 
 #: assembl/templates/views/DiscussionSettingsCreateSource.tmpl:5
 msgid "Select a message source type"
-msgstr ""
+msgstr "Bir mesaj kaynağı tipi seçin"
 
 #: assembl/templates/views/DiscussionSettingsCreateSource.tmpl:14
 msgid "Create"
-msgstr ""
+msgstr "Oluştur"
 
 #: assembl/templates/views/about.tmpl:2
 msgid "How it works"
-msgstr ""
+msgstr "Nasıl işler?"
 
 #: assembl/templates/views/about.tmpl:5
 #, python-format
 msgid ""
 "<p>How to participate in the discussion \"%(debate_name)s\":</p>\n"
 "\t<ol>\n"
-"\t\t<li>Explore the discussions using the ideas that have already "
-"emerged</li>\n"
-"\t\t<li>Join in the conversation by replying directly to the contributions of"
-" participants</li>\n"
+"\t\t<li>Explore the discussions using the ideas that have already emerged</"
+"li>\n"
+"\t\t<li>Join in the conversation by replying directly to the contributions "
+"of participants</li>\n"
 "\t\t<li>Start a new topic of discussion if you wish to rejuvenate the "
 "discussion around a particular idea</li>\n"
 "\t</ol>\n"
@@ -2578,143 +2657,157 @@ msgid ""
 "contents of the ideas shared</li>\n"
 "\t</ol>"
 msgstr ""
+"<p>Tartışmalara nasıl katılınır \"%(debate_name)s\":</p>\n"
+"\t<ol>\n"
+"\t\t<li>Ortaya çıkmış fikirleri kullanarak tartışmaları keşfedin</li>\n"
+"\t\t<li>Katılımcıların yazılarına doğrudan cevap vererek konuşmalara katılın</li>\n"
+"\t\t<li>Tartışmanın belirli bir fikir etrafında yenilenmesini istiyorsanız yeni bir tartışma konusu başlatın</li>\n"
+"\t</ol>\n"
+"\t<p>Süreç nasıl işliyor:</p>\n"
+"\t<ol>\n"
+"\t\t<li>Siz katkıda bulunmaya devam ederken, Hasatçılar mesajlarınızdaki en önemli fikirleri seçerler – Hasatçıların amacı, katkılarınızın fark edilmesini sağlamaktır</li>\n"
+"\t\t<li>Bu fikirleri temel alıp yeniden organize ederek, paylaşılmış fikirleri bir tablo haline getirirler</li>\n"
+"\t</ol>"
 
 #: assembl/templates/views/about.tmpl:18
 msgid "Join the discussions"
-msgstr ""
+msgstr "Tartışmalara katılın"
 
 #: assembl/templates/views/about.tmpl:20
 msgid "Your opinion deserves to be heard"
-msgstr ""
+msgstr "Fikriniz duyulmayı hak ediyor"
 
 #: assembl/templates/views/about.tmpl:23
 msgid "Read the discussions"
-msgstr ""
+msgstr "Tartışmaları okuyun"
 
 #: assembl/templates/views/about.tmpl:30
 msgid "Content to be tracked!"
-msgstr ""
+msgstr "Takip edilecek içerik!"
 
 #: assembl/templates/views/adminDiscussion.tmpl:6
 #: assembl/templates/views/discussionAdminNavigationMenu.tmpl:3
 msgid "Edit discussion"
-msgstr ""
+msgstr "Tartışmayı düzenle"
 
 #: assembl/templates/views/adminDiscussion.tmpl:13
 msgid "Edit discussion permissions"
-msgstr ""
+msgstr "Tartışma izinlerini düzenle"
 
 #: assembl/templates/views/adminDiscussion.tmpl:20
 msgid "Discussion topic"
-msgstr ""
+msgstr "Tartışma konusu"
 
 #: assembl/templates/views/adminDiscussion.tmpl:28
 msgid "Discussion slug"
-msgstr ""
+msgstr "Tartışmada öne çıkanlar"
 
 #: assembl/templates/views/adminDiscussion.tmpl:36
 #: assembl/templates/views/synthesisPanel.tmpl:5
 #: assembl/templates/views/synthesisPanelMessage.tmpl:4
 msgid "Introduction"
-msgstr ""
+msgstr "Giriş"
 
 #: assembl/templates/views/adminDiscussion.tmpl:44
 msgid "Objectives"
-msgstr ""
+msgstr "Amaçlar"
 
 #: assembl/templates/views/adminDiscussion.tmpl:52
-msgid "Show a small help message when the user arrives in the Discussion section"
+msgid ""
+"Show a small help message when the user arrives in the Discussion section"
 msgstr ""
+"Kullanıcı Tartışma bölümüne geldiğinde küçük bir yardım mesajı göster"
 
 #: assembl/templates/views/adminDiscussion.tmpl:60
 msgid "Web analytics: Piwik id site"
-msgstr ""
+msgstr "Web analytics: Piwik id sitesi"
 
 #: assembl/templates/views/adminDiscussion.tmpl:68
 #, python-format
 msgid "URL of the Help page (use \"%s\" for language)"
-msgstr ""
+msgstr "Yardım sayfasının URL’si (dil için \"%s\" kullan)"
 
 #: assembl/templates/views/adminDiscussion.tmpl:76
 msgid "Homepage URL (optional)"
-msgstr ""
+msgstr "Anasayfa URL’si (isteğe bağlı)"
 
 #: assembl/templates/views/adminDiscussion.tmpl:84
 msgid "Logo URL (optional)"
-msgstr ""
+msgstr "Logo URL’si (isteğe bağlı)"
 
 #: assembl/templates/views/adminDiscussion.tmpl:95
 msgid ""
 "The logo image can have a maximum height of 40px, and a maximum width of "
 "215px. Background must be transparent. Margins must be included in the image."
 msgstr ""
+"Logo görselinin yüksekliği en fazla 40px, genişliği en fazla 215px olmalıdır. Fon şeffaf olmalıdır. Kenar boşluğu görsele dahil edilmelidir."
 
 #: assembl/templates/views/adminDiscussion.tmpl:101
 #: assembl/templates/views/emailSource.tmpl:82
 #: assembl/templates/views/userAccountForm.tmpl:42
 #: assembl/templates/views/userProfile.tmpl:74
 msgid "Save changes"
-msgstr ""
+msgstr "Değişiklikleri kaydet"
 
 #: assembl/templates/views/adminDiscussionSettings.tmpl:6
 #: assembl/templates/views/navBarLeft.tmpl:21
 msgid "Discussion settings"
-msgstr ""
+msgstr "Tartışma ayarları"
 
 #: assembl/templates/views/adminDiscussionSettings.tmpl:14
 msgid "Message source successfully added"
-msgstr ""
+msgstr "Mesaj kaynağı başarıyla eklendi"
 
 #: assembl/templates/views/adminDiscussionSettings.tmpl:18
 msgid "Add a message source"
-msgstr ""
+msgstr "Bir mesaj kaynağı ekle"
 
 #: assembl/templates/views/adminDiscussionSettingsGeneralSource.tmpl:9
 msgid "Edit message source"
-msgstr ""
+msgstr "Mesaj kaynağını düzenle"
 
 #: assembl/templates/views/adminDiscussionSettingsGeneralSource.tmpl:16
 msgid "Reimport"
-msgstr ""
+msgstr "Yeniden aktar"
 
 #: assembl/templates/views/adminDiscussionSettingsGeneralSource.tmpl:17
 msgid "Reprocess"
-msgstr ""
+msgstr "Yeniden işle"
 
 #: assembl/templates/views/adminDiscussionSettingsGeneralSourceRead.tmpl:7
 msgid "Connexion error"
-msgstr ""
+msgstr "Bağlantı hatası"
 
 #: assembl/templates/views/adminDiscussionSettingsGeneralSourceRead.tmpl:10
 msgid "Next connection attempt:"
-msgstr ""
+msgstr "Sonraki bağlantı girişimi:"
 
 #: assembl/templates/views/adminDiscussionSettingsGeneralSourceRead.tmpl:14
 msgid "Manual start"
-msgstr ""
+msgstr "Manuel çalıştırma"
 
 #: assembl/templates/views/adminDiscussionSettingsGeneralSourceRead.tmpl:15
 #: assembl/templates/views/message.tmpl:33
 #: assembl/templates/views/messageDeletedByUser.tmpl:25
 #: assembl/templates/views/messageListHeader.tmpl:4
 msgid "More options"
-msgstr ""
+msgstr "Daha fazla seçenek"
 
 #: assembl/templates/views/adminMessageColumn.tmpl:4
 #: assembl/templates/views/adminMessageColumn.tmpl:5
 #: assembl/templates/views/adminTimelineEvent.tmpl:5
 msgid "Identifier"
-msgstr ""
+msgstr "Tanımlayıcı"
 
 #: assembl/templates/views/adminMessageColumn.tmpl:8
 #: assembl/templates/views/adminMessageColumn.tmpl:9
 msgid "Color"
-msgstr ""
+msgstr "Renk"
 
 #: assembl/templates/views/adminMessageColumn.tmpl:13
 #: assembl/templates/views/adminTimelineEvent.tmpl:37
 msgid "Title"
-msgstr ""
+msgstr "Başlık"
 
 #: assembl/templates/views/adminMessageColumn.tmpl:27
 #: assembl/templates/views/adminTimelineEvent.tmpl:51
@@ -2722,230 +2815,235 @@ msgstr ""
 #: assembl/templates/views/listPreferenceItemView.tmpl:7
 #: assembl/templates/views/partnersInAdmin.tmpl:20
 msgid "Delete"
-msgstr ""
+msgstr "Sil"
 
 #: assembl/templates/views/adminMessageColumns.tmpl:5
 #: assembl/templates/views/adminPartnerForm.tmpl:62
 #: assembl/templates/views/adminTimelineEvents.tmpl:20
 #: assembl/templates/views/listPreferenceView.tmpl:4
 msgid "Add"
-msgstr ""
+msgstr "Ekle"
 
 #: assembl/templates/views/adminMessageColumns.tmpl:8
 msgid "Activate multi-column view"
-msgstr ""
+msgstr "Çoklu sütun görünümünü etkinleştir"
 
 #: assembl/templates/views/adminNotificationSubscriptions.tmpl:6
 #: assembl/templates/views/discussionAdminNavigationMenu.tmpl:12
 msgid "Edit notifications"
-msgstr ""
+msgstr "Bildirimleri düzenle"
 
 #: assembl/templates/views/adminNotificationSubscriptions.tmpl:13
 #: assembl/templates/views/adminTimelineEvents.tmpl:13
 msgid "Your change has been saved!"
-msgstr ""
+msgstr "Değişiklikleriniz kaydedildi!"
 
 #: assembl/templates/views/adminNotificationSubscriptions.tmpl:17
 msgid "Default notifications"
-msgstr ""
+msgstr "Varsayılan bildirimler"
 
 #: assembl/templates/views/adminNotificationSubscriptions.tmpl:18
 msgid ""
-"These are the notifications which a user gets subscribed to when one of these"
-" conditions is matched: 1. The user clicks on the \"Join this discussion\" "
-"button. 2. The user posts his/her first message, Assembl shows a subscription"
-" pop-in, and the user accepts subscribing. 3. The discussion parameter "
-"\"Auto-subscribe users to default notifications when they register\" is "
-"active and the user confirms their account."
+"These are the notifications which a user gets subscribed to when one of "
+"these conditions is matched: 1. The user clicks on the \"Join this discussion"
+"\" button. 2. The user posts his/her first message, Assembl shows a "
+"subscription pop-in, and the user accepts subscribing. 3. The discussion "
+"parameter \"Auto-subscribe users to default notifications when they register"
+"\" is active and the user confirms their account."
 msgstr ""
+"Bu bildirimler, şu durumlardan biri söz konusu olduğunda bir kullanıcının abone olduğu bildirimlerdir: 1. Kullanıcı \"Tartışmaya katıl\" butonuna tıklar. 2. Kullanıcı ilk mesajını gönderdiğinde, Assembl bir abonelik penceresi açar ve kullanıcı aboneliği kabul eder. 3. \"Kaydolan kullanıcıları varsayılan bildirimlere otomatik olarak abone yap\" tartışma parametresi etkindir ve kullanıcı hesabını onaylar."
 
 #: assembl/templates/views/adminNotificationSubscriptions.tmpl:21
 msgid "Auto-subscribe users to default notifications"
-msgstr ""
+msgstr "Kullanıcıları varsayılan bildirimlere otomatik olarak abone yap"
 
 #: assembl/templates/views/adminPartnerEditForm.tmpl:2
 msgid "edit partner"
-msgstr ""
+msgstr "ortağı düzenle"
 
 #: assembl/templates/views/adminPartnerEditForm.tmpl:9
 #: assembl/templates/views/adminPartnerForm.tmpl:8
 msgid "Partner name"
-msgstr ""
+msgstr "Ortak ismi"
 
 #: assembl/templates/views/adminPartnerEditForm.tmpl:13
 #: assembl/templates/views/adminPartnerForm.tmpl:12
 msgid "This field is mandatory"
-msgstr ""
+msgstr "Bu alan zorunludur"
 
 #: assembl/templates/views/adminPartnerEditForm.tmpl:20
 #: assembl/templates/views/adminPartnerForm.tmpl:19
 #: assembl/templates/views/adminTimelineEvent.tmpl:41
 msgid "Description"
-msgstr ""
+msgstr "Tanım"
 
 #: assembl/templates/views/adminPartnerEditForm.tmpl:23
 #: assembl/templates/views/adminPartnerForm.tmpl:22
 msgid "Share what the organisation is all about"
-msgstr ""
+msgstr "Organizasyon hakkında her şeyi paylaş"
 
 #: assembl/templates/views/adminPartnerEditForm.tmpl:25
 #: assembl/templates/views/adminPartnerForm.tmpl:24
 msgid "please correct the error"
-msgstr ""
+msgstr "lütfen hatayı düzeltin"
 
 #: assembl/templates/views/adminPartnerEditForm.tmpl:32
 #: assembl/templates/views/adminPartnerForm.tmpl:31
 msgid "Website"
-msgstr ""
+msgstr "İnternet sitesi"
 
 #: assembl/templates/views/adminPartnerEditForm.tmpl:35
 #: assembl/templates/views/adminPartnerForm.tmpl:34
 msgid "Example : http://example.org/ or http://www.hompage.com/"
-msgstr ""
+msgstr "Örnek : http://example.org/ veya http://www.hompage.com/"
 
 #: assembl/templates/views/adminPartnerEditForm.tmpl:37
 #: assembl/templates/views/adminPartnerEditForm.tmpl:49
 #: assembl/templates/views/adminPartnerForm.tmpl:36
 #: assembl/templates/views/adminPartnerForm.tmpl:48
 msgid "Invalid URL format"
-msgstr ""
+msgstr "Geçersiz URL formatı"
 
 #: assembl/templates/views/adminPartnerEditForm.tmpl:44
 #: assembl/templates/views/adminPartnerForm.tmpl:43
 msgid "URL of logo image"
-msgstr ""
+msgstr "Logo görseli URL’si"
 
 #: assembl/templates/views/adminPartnerEditForm.tmpl:47
 #: assembl/templates/views/adminPartnerForm.tmpl:46
 msgid "Example : http://example.org/logo.jpg"
-msgstr ""
+msgstr "Örnek : http://example.org/logo.jpg"
 
 #: assembl/templates/views/adminPartnerEditForm.tmpl:56
 #: assembl/templates/views/adminPartnerForm.tmpl:55
 msgid "Is instigator of the discussion"
-msgstr ""
+msgstr "...tartışmayı başlatmıştır "
 
 #: assembl/templates/views/adminPartnerEditForm.tmpl:66
 msgid "Confirm"
-msgstr ""
+msgstr "Onayla"
 
 #: assembl/templates/views/adminPartnerForm.tmpl:2
 msgid "Add a new partner"
-msgstr ""
+msgstr "Yeni bir ortak ekle"
 
 #: assembl/templates/views/adminPartners.tmpl:7
 #: assembl/templates/views/partnerList.tmpl:6
 #: assembl/templates/views/partnerList.tmpl:10
 #: assembl/templates/views/partnerList.tmpl:12
 msgid "Partners"
-msgstr ""
+msgstr "Ortaklar"
 
 #: assembl/templates/views/adminPartners.tmpl:15
 msgid "Partner successfully added"
-msgstr ""
+msgstr "Ortak başarıyla eklendi"
 
 #: assembl/templates/views/adminPartners.tmpl:19
 msgid "Add partner"
-msgstr ""
+msgstr "Ortak ekle"
 
 #: assembl/templates/views/adminTimelineEvent.tmpl:11
 msgid "Start date (local time)"
-msgstr ""
+msgstr "Başlangıç tarihi (yerel saat)"
 
 #: assembl/templates/views/adminTimelineEvent.tmpl:17
 msgid "End date (local time)"
-msgstr ""
+msgstr "Bitiş tarihi (yerel saat)"
 
 #: assembl/templates/views/adminTimelineEvent.tmpl:23
 msgid "Image URL"
-msgstr ""
+msgstr "Görsel URL’si"
 
 #: assembl/templates/views/adminTimelineEvent.tmpl:29
 msgid "Use v1 interface"
-msgstr ""
+msgstr "v1 arayüzünü kullan"
 
 #: assembl/templates/views/adminTimelineEvents.tmpl:6
 #: assembl/templates/views/discussionAdminNavigationMenu.tmpl:15
 msgid "Edit timeline"
-msgstr ""
+msgstr "Zaman tünelini düzenle"
 
 #: assembl/templates/views/agentAvatar.tmpl:4
 msgid "anonymous"
-msgstr ""
+msgstr "anonim"
 
 #: assembl/templates/views/agentName.tmpl:4
 msgid "Anonymous"
-msgstr ""
+msgstr "Anonim"
 
 #: assembl/templates/views/ajaxError.tmpl:2
 msgid "Assembl needs to be reloaded"
-msgstr ""
+msgstr "Assembl’in yeniden yüklenmesi gerekiyor"
 
 #: assembl/templates/views/ajaxError.tmpl:7
 msgid ""
 "Assembl has encountered a problem and needs to be refreshed. Do not worry, "
 "any messages that are in the process of being composed will not be lost."
 msgstr ""
+"Assembl bir sorunla karşılaştı ve yenilenmesi gerekiyor. Merak etmeyin, yazılmakta olan mesajlarınızı kaybetmeyeceksiniz."
 
 #: assembl/templates/views/ajaxError.tmpl:8
 msgid "See you in a minute on Assembl!"
-msgstr ""
+msgstr "Bir dakika sonra Assembl’da görüşürüz!"
 
 #: assembl/templates/views/ajaxError.tmpl:9
 msgid ""
-"If you are in contact with the technical team, please let them know about the"
-" following message:"
+"If you are in contact with the technical team, please let them know about "
+"the following message:"
 msgstr ""
+"Eğer teknik ekiple iletişim halindeyseniz, lütfen aşağıdaki mesajı iletin:"
 
 #: assembl/templates/views/ajaxError.tmpl:16
 #: assembl/templates/views/firstPost.tmpl:18
 msgid "Not now"
-msgstr ""
+msgstr "Şimdi değil"
 
 #: assembl/templates/views/ajaxError.tmpl:17
 msgid "Reload"
-msgstr ""
+msgstr "Yeniden yükle"
 
 #: assembl/templates/views/allMessagesInIdeaList.tmpl:4
 msgid "Number of posts in the entire discussion"
-msgstr ""
+msgstr "Tüm tartışmadaki gönderi sayısı"
 
 #: assembl/templates/views/allMessagesInIdeaList.tmpl:9
 #: assembl/templates/views/allMessagesInIdeaList.tmpl:10
 msgid "All messages"
-msgstr ""
+msgstr "Tüm mesajlar"
 
 #: assembl/templates/views/allMessagesInIdeaList.tmpl:12
 msgid "Number of unread posts in the entire discussion"
-msgstr ""
+msgstr "Tüm tartışmadaki okunmamış gönderi sayısı"
 
 #: assembl/templates/views/announcementEditable.tmpl:1
 msgid "The title of this announcement"
-msgstr ""
+msgstr "Bu duyurunun başlığı"
 
 #: assembl/templates/views/announcementEditable.tmpl:4
 msgid ""
 "The text of this this announcement.  Will be displayed on top of the message "
 "list for this idea."
 msgstr ""
+"Bu duyurunun metni.  Bu fikir için oluşturulan mesaj listesinin üstünde görüntülenecektir."
 
 #: assembl/templates/views/announcementEditable.tmpl:7
 msgid ""
 "If checked, this announcement will also be shown for any sub-idea that "
 "doesn't have its own announcement."
 msgstr ""
+"Eğer işaretlerseniz, bu duyuru henüz kendi duyurusu olmayan tüm alt-fikirler için de gösterilecektir."
 
 #: assembl/templates/views/announcementEditable.tmpl:8
 msgid "Propagate this announcement to sub-ideas:"
-msgstr ""
+msgstr "Bu duyuruyu alt-fikirlere de bağla"
 
 #: assembl/templates/views/announcementEditable.tmpl:10
 msgid "Delete this announcement"
-msgstr ""
+msgstr "Bu duyuruyu sil"
 
 #: assembl/templates/views/announcementListEmptyEditable.tmpl:1
 msgid "Add a new announcement to this idea"
-msgstr ""
+msgstr "Bu fikre yeni bir duyuru ekle"
 
 #: assembl/templates/views/announcementMessage.tmpl:10
 #: assembl/templates/views/message.tmpl:150
@@ -2954,431 +3052,438 @@ msgstr ""
 #: assembl/templates/views/messageDeletedByUser.tmpl:72
 #, python-format
 msgid "<time title=\"%(precise_date)s\">%(nice_date)s</time>"
-msgstr ""
+msgstr "<time title=\"%(precise_date)s\">%(nice_date)s</time>"
 
 #: assembl/templates/views/associateAccount.tmpl:24
 msgid "Validate this email"
-msgstr ""
+msgstr "Bu e-postayı onayla"
 
 #: assembl/templates/views/associateAccounts.tmpl:4
 msgid "Associated accounts"
-msgstr ""
+msgstr "Bağlı hesaplar"
 
 #: assembl/templates/views/attachmentText.tmpl:2
 msgid "Add Cover Image"
-msgstr ""
+msgstr "Kapak Görseli Ekleyin"
 
 #: assembl/templates/views/bookmarket.tmpl:3
 msgid "activate web annotation"
-msgstr ""
+msgstr "Web açıklamasını etkinleştirin"
 
 #: assembl/templates/views/bookmarket.tmpl:8
 msgid "How it works:"
-msgstr ""
+msgstr "Nasıl işler?"
 
 #: assembl/templates/views/bookmarket.tmpl:10
 msgid "Drag the following button in your browser's bookmark bar."
-msgstr ""
+msgstr "Aşağıdaki butonu tarayıcınızın yer imi çubuğuna sürükleyin."
 
 #: assembl/templates/views/bookmarket.tmpl:12
 msgid ""
 "Drag this button to your bookmark bar to create a bookmarklet. You can then "
-"capture selections from most webpages (those that are not secured with https)"
-" by 1. Clicking on the bookmarklet and 2. Highlighting the section of text "
-"you wish to send to the discussion."
+"capture selections from most webpages (those that are not secured with "
+"https) by 1. Clicking on the bookmarklet and 2. Highlighting the section of "
+"text you wish to send to the discussion."
 msgstr ""
+"Bookmarklet oluşturmak için bu butonu tarayıcınızın yer imi çubuğuna sürükleyin. Ardından çoğu internet sayfasından (https ile korunmayanlardan) seçtiğiniz kısımları şu yöntemle alabilirsiniz 1. Bookmarklet’e tıklayın ve 2. Tartışmaya göndermek istediğiniz kısmı seçin."
 
 #: assembl/templates/views/bookmarket.tmpl:12
 msgid "Web capture to"
-msgstr ""
+msgstr "Web’den alıntı"
 
 #: assembl/templates/views/bookmarket.tmpl:14
 msgid ""
-"Find extracts that will add value to the current discussion. For example, you"
-" could find extracts for:"
+"Find extracts that will add value to the current discussion. For example, "
+"you could find extracts for:"
 msgstr ""
+"Tartışmaya değer katacak alıntılar bulun. Örneğin şunlar için alıntı yapabilirsiniz:"
 
 #: assembl/templates/views/bookmarket.tmpl:16
 msgid "Dig deeper in an existing idea"
-msgstr ""
+msgstr "Mevcut bir fikri derinleştirmek"
 
 #: assembl/templates/views/bookmarket.tmpl:17
 msgid "Bring supplementary information relative to an idea"
-msgstr ""
+msgstr "Bir fikre dair ek bilgiler sunmak"
 
 #: assembl/templates/views/bookmarket.tmpl:18
 msgid "Find new viewpoints and arguments"
-msgstr ""
+msgstr "Yeni bakış açıları ve iddialar bulmak"
 
 #: assembl/templates/views/bookmarket.tmpl:19
 msgid "Add an inspiring quote"
-msgstr ""
+msgstr "İlham verici bir alıntı eklemek"
 
 #: assembl/templates/views/bookmarket.tmpl:22
 msgid ""
 "Click on the button, where you had dragged it in your browser, to activate "
 "web annotation."
 msgstr ""
+"Web’den alıntı yapma özelliğini etkinleştirmek için, tarayıcınıza sürüklediğiniz butona tıklayın."
 
 #: assembl/templates/views/bookmarket.tmpl:28
 msgid "I understand"
-msgstr ""
+msgstr "Anladım"
 
 #: assembl/templates/views/ckeditorField.tmpl:18
 msgid "See more"
-msgstr ""
+msgstr "Daha fazla"
 
 #: assembl/templates/views/ckeditorField.tmpl:19
 msgid "See less"
-msgstr ""
+msgstr "Daha az"
 
 #: assembl/templates/views/cookieBanner.tmpl:2
 msgid ""
 "By using our site, you consent to cookies being used for improvement of our "
 "service?"
 msgstr ""
+"Sitemizi kullanarak, size daha iyi hizmet sunmamız için çerez kullanımına onay veriyor musunuz?"
 
 #: assembl/templates/views/cookieBanner.tmpl:3
 msgid "Yes, I accept."
-msgstr ""
+msgstr "Evet, kabul ediyorum."
 
 #: assembl/templates/views/cookieBanner.tmpl:3
 msgid "No, Thanks."
-msgstr ""
+msgstr "Hayır, teşekkürler!"
 
 #: assembl/templates/views/create-group.tmpl:3
 msgid "Create a panel group"
-msgstr ""
+msgstr "Bir panel grubu oluşturun"
 
 #: assembl/templates/views/create-group.tmpl:8
 msgid "Choose a navigation panel:"
-msgstr ""
+msgstr "Bir gezinti paneli seçin:"
 
 #: assembl/templates/views/create-group.tmpl:18
 msgid "simpleView"
-msgstr ""
+msgstr "simpleView"
 
 #: assembl/templates/views/create-group.tmpl:30
 msgid "Create a synthesis"
-msgstr ""
+msgstr "Bir sentez yaratın"
 
 #: assembl/templates/views/create-group.tmpl:51
 msgid "Others:"
-msgstr ""
+msgstr "Diğerleri:"
 
 #: assembl/templates/views/create-group.tmpl:61
 #: assembl/templates/views/create-group.tmpl:93
 msgid "Idea Panel"
-msgstr ""
+msgstr "Fikir Panosu"
 
 #: assembl/templates/views/create-group.tmpl:71
 #: assembl/templates/views/create-group.tmpl:83
 #: assembl/templates/views/navigation.tmpl:11
 msgid "Discussion"
-msgstr ""
+msgstr "Tartışma"
 
 #: assembl/templates/views/defaultNotification.tmpl:7
 msgid "Auto-subscribe users to default notifications when they register"
-msgstr ""
+msgstr "Kaydolan kullanıcıları varsayılan bildirimlere otomatik olarak abone yap"
 
 #: assembl/templates/views/discussionAdminNavigationMenu.tmpl:6
 #: assembl/templates/views/userNavigationMenu.tmpl:14
 msgid "Discussion preferences"
-msgstr ""
+msgstr "Tartışma tercihleri"
 
 #: assembl/templates/views/discussionAdminNavigationMenu.tmpl:9
 msgid "Server settings"
-msgstr ""
+msgstr "Sunucu ayarları"
 
 #: assembl/templates/views/discussionAdminNavigationMenu.tmpl:18
 msgid "Edit partners"
-msgstr ""
+msgstr "Ortakları düzenle"
 
 #: assembl/templates/views/discussionAdminNavigationMenu.tmpl:21
 #: assembl/templates/views/userAccountForm.tmpl:43
 #: assembl/templates/views/userNavigationMenu.tmpl:17
 #: assembl/templates/views/userProfile.tmpl:75
 msgid "Return to the discussion"
-msgstr ""
+msgstr "Tartışmaya geri dön"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:4
 msgid "Users visits"
-msgstr ""
+msgstr "Kullanıcı ziyaretleri"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:7
 msgid "Users' date of first visit"
-msgstr ""
+msgstr "Kullanıcıların ilk ziyaret verileri"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:8
 msgid "Users' date of last visit"
-msgstr ""
+msgstr "Kullanıcıların son ziyaret verileri"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:14
 msgid "Time series analytics"
-msgstr ""
+msgstr "Zaman serileri analizleri"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:18
 msgid "Start date"
-msgstr ""
+msgstr "Başlangıç tarihi"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:22
 msgid "End date"
-msgstr ""
+msgstr "Bitiş tarihi"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:26
 msgid "Interval"
-msgstr ""
+msgstr "Zaman aralığı"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:28
 msgid "Single interval"
-msgstr ""
+msgstr "Tek bir zaman aralığı"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:29
 msgid "One year"
-msgstr ""
+msgstr "Bir yıl"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:30
 msgid "One month"
-msgstr ""
+msgstr "Bir ay"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:31
 msgid "One week"
-msgstr ""
+msgstr "Bir hafta"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:32
 msgid "One day"
-msgstr ""
+msgstr "Bir gün"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:33
 msgid "custom"
-msgstr ""
+msgstr "özel"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:37
 msgid "File format"
-msgstr ""
+msgstr "Dosya formatı"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:39
 msgid "MS Excel"
-msgstr ""
+msgstr "MS Excel"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:40
 msgid "Comma-separated values"
-msgstr ""
+msgstr "Virgülle ayrılmış değerler"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:52
 msgid "General discussion statistics"
-msgstr ""
+msgstr "Genel tartışma i̇statistikleri"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:53
 msgid "Get general discussion statistics"
-msgstr ""
+msgstr "Genel tartışma i̇statistiklerini edinin"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:60
 msgid "Per participant statistics"
-msgstr ""
+msgstr "Katılımcı başına istatistikler"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:62
 msgid "Show fields:"
-msgstr ""
+msgstr "Alanları göster:"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:65
 #: assembl/templates/views/discussionStatisticsModal.tmpl:99
 msgid "Posts"
-msgstr ""
+msgstr "Gönderiler"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:66
 #: assembl/templates/views/discussionStatisticsModal.tmpl:100
 msgid "Cumulative posts"
-msgstr ""
+msgstr "Toplu gönderiler"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:67
 #: assembl/templates/views/discussionStatisticsModal.tmpl:101
 msgid "Replies received"
-msgstr ""
+msgstr "Alınan yanıtlar"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:68
 #: assembl/templates/views/discussionStatisticsModal.tmpl:102
 msgid "Cumulative replies received"
-msgstr ""
+msgstr "Alınan toplu yanıtlar"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:70
 #: assembl/templates/views/discussionStatisticsModal.tmpl:104
 msgid "Liking"
-msgstr ""
+msgstr "Beğenme"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:71
 #: assembl/templates/views/discussionStatisticsModal.tmpl:105
 msgid "Cumulative liking"
-msgstr ""
+msgstr "Toplu beğenme"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:72
 #: assembl/templates/views/discussionStatisticsModal.tmpl:106
 msgid "Liked"
-msgstr ""
+msgstr "Beğenildi"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:73
 #: assembl/templates/views/discussionStatisticsModal.tmpl:107
 msgid "Cumulative liked"
-msgstr ""
+msgstr "Toplu olarak beğenildi"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:75
 #: assembl/templates/views/discussionStatisticsModal.tmpl:109
 msgid "Disagreeing"
-msgstr ""
+msgstr "Karşı çıkma"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:76
 #: assembl/templates/views/discussionStatisticsModal.tmpl:110
 msgid "Cumulative disagreeing"
-msgstr ""
+msgstr "Toplu karşı çıkma"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:77
 #: assembl/templates/views/discussionStatisticsModal.tmpl:111
 msgid "Disagreed"
-msgstr ""
+msgstr "Karşı çıkıldı"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:78
 #: assembl/templates/views/discussionStatisticsModal.tmpl:112
 msgid "Cumulative disagreed"
-msgstr ""
+msgstr "Toplu olarak karşı çıkıldı"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:80
 msgid "misunderstanding"
-msgstr ""
+msgstr "Yanlış anlama"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:81
 #: assembl/templates/views/discussionStatisticsModal.tmpl:115
 msgid "Cumulative misunderstanding"
-msgstr ""
+msgstr "Toplu yanlış anlama"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:82
 #: assembl/templates/views/discussionStatisticsModal.tmpl:116
 msgid "Misunderstood"
-msgstr ""
+msgstr "Yanlış anlaşılma"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:83
 #: assembl/templates/views/discussionStatisticsModal.tmpl:117
 msgid "Cumulative misunderstood"
-msgstr ""
+msgstr "Toplu yanlış anlaşılma"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:85
 #: assembl/templates/views/discussionStatisticsModal.tmpl:119
 msgid "Requesting info"
-msgstr ""
+msgstr "Bilgi talep etme"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:86
 #: assembl/templates/views/discussionStatisticsModal.tmpl:120
 msgid "Cumulative requesting info"
-msgstr ""
+msgstr "Toplu bilgi talep etme"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:87
 #: assembl/templates/views/discussionStatisticsModal.tmpl:121
 msgid "Info requested"
-msgstr ""
+msgstr "Bilgi talep edilme"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:88
 #: assembl/templates/views/discussionStatisticsModal.tmpl:122
 msgid "Cumulative info requested"
-msgstr ""
+msgstr "Toplu bilgi talep edilme"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:93
 msgid "Sorted by"
-msgstr ""
+msgstr "... göre sıralandı"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:97
 msgid "Domain"
-msgstr ""
+msgstr "Alan"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:114
 msgid "Misunderstanding"
-msgstr ""
+msgstr "Yanlış anlaşılma"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:127
 msgid "Show emails"
-msgstr ""
+msgstr "E-postaları göster"
 
 #: assembl/templates/views/discussionStatisticsModal.tmpl:133
 msgid "Get discussion participant statistics"
-msgstr ""
+msgstr "Tartışma katılımcılarının istatistiklerini edinin"
 
 #: assembl/templates/views/emailSource.tmpl:13
 msgid "Admin sender"
-msgstr ""
+msgstr "Yönetici gönderen"
 
 #: assembl/templates/views/emailSource.tmpl:16
 msgid ""
 "This field is an e-mail address, and is mandatory: it will be the value of "
 "notification emails' From field"
 msgstr ""
+"Bu alan bir e-posta adresidir ve zorunludur: alandan giden bilgilendirme e-postalarının değeri olacaktır"
 
 #: assembl/templates/views/emailSource.tmpl:22
 msgid "Post email address"
-msgstr ""
+msgstr "E-posta adresi gönder"
 
 #: assembl/templates/views/emailSource.tmpl:25
 msgid "For mailing lists only: Where messages are sent to the list"
-msgstr ""
+msgstr "Yalnızca e-posta listeleri için: Mesajların listeye gönderildiği yer"
 
 #: assembl/templates/views/emailSource.tmpl:30
 msgid "Host"
-msgstr ""
+msgstr "Sunucu"
 
 #: assembl/templates/views/emailSource.tmpl:37
 msgid "Use SSL"
-msgstr ""
+msgstr "SSL kullan"
 
 #: assembl/templates/views/emailSource.tmpl:43
 msgid "True"
-msgstr ""
+msgstr "Doğru"
 
 #: assembl/templates/views/emailSource.tmpl:48
 msgid "False"
-msgstr ""
+msgstr "Yanlış"
 
 #: assembl/templates/views/emailSource.tmpl:52
 msgid "Folder"
-msgstr ""
+msgstr "Klasör"
 
 #: assembl/templates/views/emailSource.tmpl:60
 msgid "Port"
-msgstr ""
+msgstr "Bağlantı Noktası"
 
 #: assembl/templates/views/exportPostModal-fb-group.tmpl:2
 msgid "Select Group"
-msgstr ""
+msgstr "Grup Seç"
 
 #: assembl/templates/views/exportPostModal-fb-page.tmpl:2
 msgid "Select Page"
-msgstr ""
+msgstr "Sayfa seç"
 
 #: assembl/templates/views/exportPostModal-fb-page.tmpl:14
 msgid "Post as"
-msgstr ""
+msgstr "... olarak gönderin"
 
 #: assembl/templates/views/exportPostModal-fb-token-error.tmpl:6
 msgid "Basic"
-msgstr ""
+msgstr "Temel"
 
 #: assembl/templates/views/exportPostModal-fb-token-error.tmpl:6
 msgid ""
-"We will need your permission to publish the message you are exporting on your"
-" behalf,  as well as permission to read the posts back in order to import "
-"them back into Assembl."
+"We will need your permission to publish the message you are exporting on "
+"your behalf,  as well as permission to read the posts back in order to "
+"import them back into Assembl."
 msgstr ""
+"Aktardığınız mesajı sizin adınıza yayınlamak ve gönderileri Assembl’a tekrar geri aktarmak üzere okumak için izninize ihtiyacımız var."
 
 #: assembl/templates/views/exportPostModal-fb-token-error.tmpl:7
 msgid "Groups"
-msgstr ""
+msgstr "Gruplar"
 
 #: assembl/templates/views/exportPostModal-fb-token-error.tmpl:7
 msgid ""
-"We will need your permission to access the list of groups that you are a part"
-" of and to be able to post on them, both on your behalf, or if you are the "
-"group administrator, on behalf of the group itself. "
+"We will need your permission to access the list of groups that you are a "
+"part of and to be able to post on them, both on your behalf, or if you are "
+"the group administrator, on behalf of the group itself. "
 msgstr ""
+"Dahil olduğunuz grupların listesine ulaşabilmemiz ve bunlara sizin adınıza veya eğer grup yöneticisiyseniz grup adına gönderimde bulunabilmemiz için izninize ihtiyacımız var."
 
 #: assembl/templates/views/exportPostModal-fb-token-error.tmpl:8
 msgid "Pages"
-msgstr ""
+msgstr "Sayfalar"
 
 #: assembl/templates/views/exportPostModal-fb-token-error.tmpl:8
 msgid ""
@@ -3387,141 +3492,147 @@ msgid ""
 "on your behalf or, if you are the page administrator, on behalf of the page "
 "itself"
 msgstr ""
+"Beğendiğiniz veya yöneticisi olduğunuz sayfaların listesine erişebilmemiz ve bunlara sizin adınıza veya eğer grup yöneticisiyseniz grup adına gönderimde bulunabilmemiz için izninize ihtiyacımız var."
 
 #: assembl/templates/views/exportPostModal-fb.tmpl:23
 msgid "Pick where to post to"
-msgstr ""
+msgstr "Gönderinin nerede yayınlanacağını seçin"
 
 #: assembl/templates/views/exportPostModal-fb.tmpl:28
 msgid "Your Wall"
-msgstr ""
+msgstr "Duvarınız"
 
 #: assembl/templates/views/exportPostModal-fb.tmpl:29
 msgid "Your Pages"
-msgstr ""
+msgstr "Sayfalarınız"
 
 #: assembl/templates/views/exportPostModal-fb.tmpl:30
 msgid "Your Groups"
-msgstr ""
+msgstr "Gruplarınız"
 
 #: assembl/templates/views/exportPostModal-fb.tmpl:41
 msgid "Suggested preview"
-msgstr ""
+msgstr "Önerilen önizleme"
 
 #: assembl/templates/views/exportPostModal-fb.tmpl:44
 msgid "Message Header:"
-msgstr ""
+msgstr "Mesaj üstbilgisi"
 
 #: assembl/templates/views/exportPostModal-fb.tmpl:49
 msgid "Extra Message:"
-msgstr ""
+msgstr "Ekstra Mesaj:"
 
 #: assembl/templates/views/exportPostModal-fb.tmpl:57
 msgid "Link URL:"
-msgstr ""
+msgstr "URL bağlantısı:"
 
 #: assembl/templates/views/exportPostModal-fb.tmpl:58
 msgid "Title Override:"
-msgstr ""
+msgstr "Başlığı Yeniden Uyarlama:"
 
 #: assembl/templates/views/exportPostModal-fb.tmpl:59
 msgid "Caption Override:"
-msgstr ""
+msgstr "Alt Başlığı Yeniden Uyarlama:"
 
 #: assembl/templates/views/exportPostModal-fb.tmpl:60
 msgid "Description Override:"
-msgstr ""
+msgstr "Tanımı Yeniden Uyarlama:"
 
 #: assembl/templates/views/exportPostModal.tmpl:2
 msgid "Export post by "
-msgstr ""
+msgstr "Dışa aktarımı yapan"
 
 #: assembl/templates/views/exportPostModal.tmpl:10
 msgid "Select your desired export location"
-msgstr ""
+msgstr "Dışa aktarımınızı nereye kaydetmek istediğinizi seçin"
 
 #: assembl/templates/views/facebookSourceForm.tmpl:7
 msgid ""
 "How many top posts and their comments would you like to import? Leave blank "
 "to import all posts"
 msgstr ""
+"Sıralamada en üstte olan gönderilerin ve bunlara yapılan yorumlarının kaçının içe aktarılmasını istiyorsunuz? Tüm gönderileri aktarmak için boş bırakın"
 
 #: assembl/templates/views/facebookSourceForm.tmpl:7
 msgid "Maximum number of threads"
-msgstr ""
+msgstr "Maksimum tartışma dizisi"
 
 #: assembl/templates/views/facebookSourceForm.tmpl:14
 msgid ""
 "When has been posted the oldest post you would like to import? Use ISO 8601 "
 "UTC. (ex: 2015-10-20T00:00:00Z ) Leave blank for no limit"
 msgstr ""
+"İçe aktarmak istediğiniz en eski gönderi ne zaman oluşturuldu? ISO 8601 UTC kullanın. (örnek: 2015-10-20T00:00:00Z ) Limit koymamak için boş bırakın"
 
 #: assembl/templates/views/facebookSourceForm.tmpl:14
 msgid "Minimum date"
-msgstr ""
+msgstr "Minimum tarih"
 
 #: assembl/templates/views/facebookSourceForm.tmpl:21
 msgid ""
 "When has been posted the newest post you would like to import? Use ISO 8601 "
 "UTC. (ex: 2015-10-20T00:00:00Z ) Leave blank for no limit"
 msgstr ""
+"İçe aktarmak istediğiniz en yeni gönderi ne zaman oluşturuldu? ISO 8601 UTC kullanın. (örnek: 2015-10-20T00:00:00Z ) Limit koymamak için boş bırakın"
 
 #: assembl/templates/views/facebookSourceForm.tmpl:21
 msgid "Maximum date"
-msgstr ""
+msgstr "Maksimum tarih"
 
 #: assembl/templates/views/firstLoginAfterAutoSubscribeToNotifications.tmpl:7
 msgid "Welcome on the discussion!"
-msgstr ""
+msgstr "Tartışmaya hoş geldiniz!"
 
 #: assembl/templates/views/firstLoginAfterAutoSubscribeToNotifications.tmpl:8
 msgid "You will receive notifications when:"
-msgstr ""
+msgstr "Şu durumlarda bildirim alacaksınız:"
 
 #: assembl/templates/views/firstLoginAfterAutoSubscribeToNotifications.tmpl:12
 #: assembl/templates/views/firstPost.tmpl:12
 #: assembl/templates/views/joinDiscussion.tmpl:12
 msgid ""
-"You can modify at anytime the type of notification you receive by clicking on"
-" the ‘Notifications’ section of your profile."
+"You can modify at anytime the type of notification you receive by clicking "
+"on the ‘Notifications’ section of your profile."
 msgstr ""
+"Profilinizin “Bildirimler” bölümüne tıklayarak aldığınız bildirimlerin türünü dilediğiniz zaman değiştirebilirsiniz."
 
 #: assembl/templates/views/firstLoginAfterAutoSubscribeToNotifications.tmpl:18
 #: assembl/templates/views/joinDiscussion.tmpl:18
 msgid "Edit my notifications"
-msgstr ""
+msgstr "Bildirimlerimi düzenle"
 
 #: assembl/templates/views/firstLoginAfterAutoSubscribeToNotifications.tmpl:19
 msgid "Continue to the discussion"
-msgstr ""
+msgstr "Tartışmaya devam et"
 
 #: assembl/templates/views/firstPost.tmpl:7
 msgid "Congratulations on making your first contribution!"
-msgstr ""
+msgstr "İlk katkınız için sizi tebrik ederiz!"
 
 #: assembl/templates/views/firstPost.tmpl:8
 #: assembl/templates/views/joinDiscussion.tmpl:8
 msgid ""
-"Stay informed and up to date with the evolution of the discussion and receive"
-" notifications when:"
+"Stay informed and up to date with the evolution of the discussion and "
+"receive notifications when:"
 msgstr ""
+"Tartışmanın gelişiminden haberdar kalmak için şu durumlarda bildirim alın:"
 
 #: assembl/templates/views/firstPost.tmpl:19
 #: assembl/templates/views/joinDiscussion.tmpl:19
 msgid "Receive notifications"
-msgstr ""
+msgstr "Bildirim alın"
 
 #: assembl/templates/views/globalAdminNavigationMenu.tmpl:3
 msgid "Global preferences"
-msgstr ""
+msgstr "Genel tercihler"
 
 #: assembl/templates/views/globalAdminNavigationMenu.tmpl:9
 msgid "Create a discussion"
-msgstr ""
+msgstr "Bir tartışma oluşturun"
 
 #: assembl/templates/views/helperDebate.tmpl:4
 msgid "Pick a topic and start contributing"
-msgstr ""
+msgstr "Bir konu seçin ve katkıda bulunmaya başlayın"
 
 #: assembl/templates/views/helperDebate.tmpl:5
 msgid ""
@@ -3529,10 +3640,11 @@ msgid ""
 "interested in so you don’t get overwhelmed. Topics include messages from all "
 "related sub-topics as well."
 msgstr ""
+"Bu içerik tablosu ilginizi çeken konuşmaları ve konuları zorlanmadan bulmanıza yardımcı olur. Konular arasına ilgili tüm alt-konulara ait mesajlar da dahil edilmiştir."
 
 #: assembl/templates/views/helperDebate.tmpl:6
 msgid "This is a safe and respectful space. All ideas are welcome!"
-msgstr ""
+msgstr "Burası güvenli ve saygılı bir alandır. Tüm fikirler memnuniyetle karşılanır!"
 
 #: assembl/templates/views/ideaClassification_directExtract.tmpl:3
 #, python-format
@@ -3540,17 +3652,18 @@ msgid ""
 "<span class=\"harvester\">%s</span> has considered this message relevant to "
 "the idea:"
 msgstr ""
+"<span class=\"harvester\">%s</span> bu mesajın şu fikirle ilgili olduğunu düşünüyor:"
 
 #: assembl/templates/views/ideaClassification_directExtract.tmpl:7
 #: assembl/templates/views/ideaClassification_indirectExtract.tmpl:7
 msgid "Considering this extract:"
-msgstr ""
+msgstr "Şu kısmı göz önüne alarak:"
 
 #: assembl/templates/views/ideaClassification_directExtract.tmpl:12
 #: assembl/templates/views/ideaClassification_indirectExtract.tmpl:12
 #, python-format
 msgid "by %s"
-msgstr ""
+msgstr " %s‘den"
 
 #: assembl/templates/views/ideaClassification_directMessage.tmpl:3
 #, python-format
@@ -3558,6 +3671,7 @@ msgid ""
 "<span class=\"author\">%s</span> started this new discussion thread directly "
 "on the idea:"
 msgstr ""
+"<span class=\"author\">%s</span> bu yeni tartışma dizisini doğrudan şu fikir altında başlattı:"
 
 #: assembl/templates/views/ideaClassification_indirectExtract.tmpl:3
 #, python-format
@@ -3565,411 +3679,426 @@ msgid ""
 "This message is part of a thread, which <span class=\"harvester\">%s</span> "
 "considered relevant to the idea:"
 msgstr ""
+"Bu mesaj <span class=\"harvester\">%s</span> ‘nın şu fikirle ilgili olduğunu düşündüğü bir tartışma dizisinin parçası:"
 
 #: assembl/templates/views/ideaClassification_indirectMessage.tmpl:3
 #, python-format
 msgid ""
-"This message is part of a thread, started by <span class=\"author\">%s</span>"
-" on the idea:"
+"This message is part of a thread, started by <span class=\"author\">%s</"
+"span> on the idea:"
 msgstr ""
+"Bu mesaj <span class=\"author\">%s</span> tarafından şu fikirle ilgili olarak başlatılan bir tartışma dizisinin parçası:"
 
 #: assembl/templates/views/ideaInIdeaList.tmpl:7
 msgid "Remove from next synthesis"
-msgstr ""
+msgstr "Bir sonraki sentezden çıkar"
 
 #: assembl/templates/views/ideaInIdeaList.tmpl:7
 msgid "Add to next synthesis"
-msgstr ""
+msgstr "Bir sonraki senteze ekle"
 
 #: assembl/templates/views/ideaInIdeaList.tmpl:45
 msgid "Number of messages related to this idea, or any of its sub-ideas"
-msgstr ""
+msgstr "Bu fikirle veya fikre ait alt-fikirlerle ilgili olan mesaj sayısı"
 
 #: assembl/templates/views/ideaInIdeaList.tmpl:50
 msgid "This idea has been created recently"
-msgstr ""
+msgstr "Bu fikir yakın zamanda oluşturuldu"
 
 #: assembl/templates/views/ideaInIdeaList.tmpl:50
 msgid "new!"
-msgstr ""
+msgstr "yeni!"
 
 #: assembl/templates/views/ideaInIdeaList.tmpl:55
 msgid "Number of unread messages related to this idea, or any of its sub-ideas"
-msgstr ""
+msgstr "Bu fikirle veya fikre ait alt-fikirlerle ilgili olan okunmamış mesaj sayısı"
 
 #: assembl/templates/views/ideaInIdeaList.tmpl:59
 msgid ""
 "Number of unread messages related to this idea, or any of its sub-ideas.  "
 "Click on this number to view ONLY the new unread messages"
 msgstr ""
+"Bu fikirle veya fikre ait alt-fikirlerle ilgili olan okunmamış mesaj sayısı.  Bu sayıya tıklayarak YALNIZCA okunmamış yeni mesajları görebilirsiniz"
 
 #: assembl/templates/views/ideaInSynthesis.tmpl:14
 msgid "View conversation on this idea"
-msgstr ""
+msgstr "Bu fikirle ilgili konuşmaları görün"
 
 #: assembl/templates/views/ideaInSynthesis.tmpl:26
 msgid "View Idea in popup"
-msgstr ""
+msgstr "Fikri ileti penceresinde görün"
 
 #: assembl/templates/views/ideaList.tmpl:18
 msgid "Add idea"
-msgstr ""
+msgstr "Fikir ekleyin"
 
 #: assembl/templates/views/ideaList.tmpl:22
 msgid "Options"
-msgstr ""
+msgstr "Seçenekler"
 
 #: assembl/templates/views/ideaList.tmpl:24
 msgid "Decrease row height"
-msgstr ""
+msgstr "Satır yüksekliğini azalt"
 
 #: assembl/templates/views/ideaList.tmpl:25
 msgid "Increase row height"
-msgstr ""
+msgstr "Satır yüksekliğini artırma"
 
 #: assembl/templates/views/ideaList.tmpl:26
 msgid "Toggle decreasing font size with depth"
-msgstr ""
+msgstr "Toggle decreasing font size with depth"
 
 #: assembl/templates/views/ideaList.tmpl:27
 msgid "Expand all ideas"
-msgstr ""
+msgstr "Tüm fikirleri genişlet"
 
 #: assembl/templates/views/ideaList.tmpl:28
 msgid "Collapse all ideas"
-msgstr ""
+msgstr "Tüm fikirleri daralt"
 
 #: assembl/templates/views/ideaList.tmpl:30
 msgid "Save the current expanded/collapsed state as default for users"
-msgstr ""
+msgstr "Şu anki genişletilmiş/daraltılmış hali tüm kullanıcılar için varsayılan olarak kaydet"
 
 #: assembl/templates/views/ideaList.tmpl:32
 msgid "Restore default expanded/collapsed state"
-msgstr ""
+msgstr "Varsayılan genişletilmiş/daraltılmış hali geri getir"
 
-#: assembl/templates/views/ideaPanel.tmpl:2 assembl/templates/views/message.tmpl:25
+#: assembl/templates/views/ideaPanel.tmpl:2
+#: assembl/templates/views/message.tmpl:25
 msgid "Share"
-msgstr ""
+msgstr "Paylaş"
 
 #: assembl/templates/views/ideaPanel.tmpl:12
 msgid "The name of this idea in the table of ideas"
-msgstr ""
+msgstr "Bu fikrin fikirler tablosundaki adı"
 
 #: assembl/templates/views/ideaPanel.tmpl:20
 msgid "Voting session"
-msgstr ""
+msgstr "Oylama oturumu"
 
 #: assembl/templates/views/ideaPanel.tmpl:27
 msgid "What you need to know"
-msgstr ""
+msgstr "Bilmeniz gerekenler"
 
 #: assembl/templates/views/ideaPanel.tmpl:33
 msgid "Expression in next synthesis"
-msgstr ""
+msgstr "Bir sonraki sentezdeki ifade"
 
 #: assembl/templates/views/ideaPanel.tmpl:36
 msgid ""
-"Expression of this idea in the next synthesis.  You may want to edit them all"
-" together in the synthesis panel rather than here."
+"Expression of this idea in the next synthesis.  You may want to edit them "
+"all together in the synthesis panel rather than here."
 msgstr ""
+"Bu fikrin bir sonraki sentezde ifade edilişi.  Tümünü sentez panelinde düzenlemeyi burada düzenleme yapmaya tercih edebilirsiniz."
 
 #: assembl/templates/views/ideaPanel.tmpl:40
 msgid "Description of this idea"
-msgstr ""
+msgstr "Bu fikrin açıklaması"
 
 #: assembl/templates/views/ideaPanel.tmpl:43
 msgid "A description of this idea"
-msgstr ""
+msgstr "Bu fikrin bir açıklaması"
 
 #: assembl/templates/views/ideaPanel.tmpl:48
 msgid "Announcement for this idea"
-msgstr ""
+msgstr "Bu fikrin duyurusu"
 
 #: assembl/templates/views/ideaPanel.tmpl:67
 msgid ""
 "Number of participants who contributed messages about this idea or it's sub-"
 "ideas."
 msgstr ""
+"Bu fikirle veya fikre ait alt-fikirlerle ilgili mesajlarla katkıda bulunan katılımcı sayısı."
 
 #: assembl/templates/views/ideaPanel.tmpl:86
 msgid "Expressions of this idea in messages or on the web"
-msgstr ""
+msgstr "Bu fikrin mesajlardaki veya internetteki ifadeleri"
 
 #: assembl/templates/views/ideaPanel.tmpl:91
-msgid "Nuggets are important expressions of this idea in messages or on the web"
+msgid ""
+"Nuggets are important expressions of this idea in messages or on the web"
 msgstr ""
+"Nugget’lar bu fikrin mesajlardaki veya internetteki öne çıkan ifadeleridir"
 
 #: assembl/templates/views/ideaPanel.tmpl:99
-msgid "Add extracts by dragging them in this panel from the clipboard or messages"
+msgid ""
+"Add extracts by dragging them in this panel from the clipboard or messages"
 msgstr ""
+"Pano veya mesajlardan bu panele sürükleyerek alıntı ekleyin"
 
 #: assembl/templates/views/ideaPanel.tmpl:109
 msgid ""
 "Remove all extracts from this idea.  Removed extracts will be available in "
 "your clipboard"
 msgstr ""
+"Bu fikirden tüm alıntıları kaldır.  Kaldırılan alıntılar panonuza kopyalanır"
 
 #: assembl/templates/views/ideaPanel.tmpl:109
 msgid "Remove all extracts"
-msgstr ""
+msgstr "Tüm alıntıları kaldır"
 
 #: assembl/templates/views/ideaPanel.tmpl:114
 msgid "Delete this idea completely"
-msgstr ""
+msgstr "Bu fikri tümüyle sil"
 
 #: assembl/templates/views/ideaPanel.tmpl:114
 msgid "Delete idea"
-msgstr ""
+msgstr "Fikri sil"
 
 #: assembl/templates/views/ideaPanel.tmpl:118
 msgid "Define a multi-column message view on this idea"
-msgstr ""
+msgstr "Bu fikirden bir çok-sütunlu mesaj görünümünü sil"
 
 #: assembl/templates/views/ideaPanel.tmpl:118
 msgid "Define column view"
-msgstr ""
+msgstr "Bir sütun görünümü tanımla"
 
 #: assembl/templates/views/ideaPanel.tmpl:130
 msgid "No idea selected"
-msgstr ""
+msgstr "Seçilen fikir yok"
 
 #: assembl/templates/views/ideaPanel.tmpl:131
 msgid ""
 "Choose an idea in the Table of ideas to explore the discussion or close this "
 "panel as you will have open"
 msgstr ""
+"Fikirler tablosundan bir fikir seçerek tartışmayı keşfedin veya bu paneli açtığınız gibi kapatın"
 
 #: assembl/templates/views/instigator.tmpl:6
 #: assembl/templates/views/instigator.tmpl:8
 msgid "Instigated by"
-msgstr ""
+msgstr "Başlatan"
 
 #: assembl/templates/views/instigator.tmpl:6
 msgid "edit instigator"
-msgstr ""
+msgstr "başlatanı düzenle"
 
 #: assembl/templates/views/introductions.tmpl:22
 msgid "Context"
-msgstr ""
+msgstr "Bağlam"
 
 #: assembl/templates/views/introductions.tmpl:25
 msgid "You probably want to add a context for this discussion"
-msgstr ""
+msgstr "Bu fikre muhtemelen bir bağlam eklemek istiyorsunuz"
 
 #: assembl/templates/views/introductions.tmpl:34
 msgid "Discussion objectives"
-msgstr ""
+msgstr "Tartışma hedefleri"
 
 #: assembl/templates/views/introductions.tmpl:38
 msgid "You probably want to add some discussion objectives"
-msgstr ""
+msgstr "Muhtemelen bazı tartışma hedefleri eklemek istiyorsunuz"
 
 #: assembl/templates/views/joinDiscussion.tmpl:7
 msgid "Keep up with the evolution of the discussion"
-msgstr ""
+msgstr "Tartışmanın gelişiminden haberdar olun"
 
-#: assembl/templates/views/message.tmpl:10 assembl/templates/views/message.tmpl:39
+#: assembl/templates/views/message.tmpl:10
+#: assembl/templates/views/message.tmpl:39
 #: assembl/templates/views/messageDeletedByUser.tmpl:10
 #: assembl/templates/views/messageDeletedByUser.tmpl:31
 msgid "Mark as unread"
-msgstr ""
+msgstr "Okunmadı olarak işaretle"
 
-#: assembl/templates/views/message.tmpl:12 assembl/templates/views/message.tmpl:41
+#: assembl/templates/views/message.tmpl:12
+#: assembl/templates/views/message.tmpl:41
 #: assembl/templates/views/messageDeletedByUser.tmpl:12
 #: assembl/templates/views/messageDeletedByUser.tmpl:33
 msgid "Mark as read"
-msgstr ""
+msgstr "Okundu olarak işaretle"
 
 #: assembl/templates/views/message.tmpl:20
 msgid "This link inspired the author to write this message"
-msgstr ""
+msgstr "Bu bağlantı, yazara şu mesajı yazma ilham verdi"
 
 #: assembl/templates/views/message.tmpl:20
 msgid "Inspiration source"
-msgstr ""
+msgstr "İlham kaynağı"
 
 #: assembl/templates/views/message.tmpl:46
 msgid "Export Post"
-msgstr ""
+msgstr "Gönderiyi dışa aktar"
 
 #: assembl/templates/views/message.tmpl:57
 msgid "Show this message in its entire thread (clears all filters)"
-msgstr ""
+msgstr "Bu mesajı tüm tartışma dizisi içinde göster (filtreleri kaldır)"
 
 #: assembl/templates/views/message.tmpl:60
 msgid "Show this message in the full Newest first view (clears all filters)"
-msgstr ""
+msgstr "Bu mesajı istisnasız Önce En Yeni görünümünde göster (filtreleri kaldır)"
 
 #: assembl/templates/views/message.tmpl:64
 msgid "Go back to the entire topic thread"
-msgstr ""
+msgstr "Tam konu dizisine geri dön"
 
 #: assembl/templates/views/message.tmpl:66
 msgid "Show only this message and its replies"
-msgstr ""
+msgstr "Yalnızca bu mesajı ve buna verilen yanıtları göster"
 
 #: assembl/templates/views/message.tmpl:70
 #, python-format
 msgid "Show all posts by %s"
-msgstr ""
+msgstr " %s‘in tüm gönderilerini göster"
 
 #: assembl/templates/views/message.tmpl:74
 #: assembl/templates/views/messageDeletedByUser.tmpl:38
 msgid "Send an email to this user"
-msgstr ""
+msgstr "Bu kullanıcıya bir e-posta gönder"
 
 #: assembl/templates/views/message.tmpl:79
 msgid "Display translation preferences"
-msgstr ""
+msgstr "Çeviri tercihlerini göster"
 
 #: assembl/templates/views/message.tmpl:84
 msgid "Show/hide extracts"
-msgstr ""
+msgstr "Alıntıları göster/gizle"
 
 #: assembl/templates/views/message.tmpl:88
 msgid "Moderation options"
-msgstr ""
+msgstr "Denetim seçenekleri"
 
 #: assembl/templates/views/message.tmpl:92
 msgid "Export Post in HTML"
-msgstr ""
+msgstr "Gönderiyi HTML olarak dışa aktar"
 
 #: assembl/templates/views/message.tmpl:96
 msgid "Delete this message"
-msgstr ""
+msgstr "Bu mesajı sil"
 
 #: assembl/templates/views/message.tmpl:109
 msgid "View the original message"
-msgstr ""
+msgstr "Orijinal mesajı görüntüle"
 
 #: assembl/templates/views/message.tmpl:112
 msgid "Return to the translated message"
-msgstr ""
+msgstr "Çevirisi yapılmış mesaja geri dön"
 
 #: assembl/templates/views/message.tmpl:126
 msgid "Sorry, we could not translate this message."
-msgstr ""
+msgstr "Üzgünüz, mesajınızın çevirisini yapamadık."
 
 #: assembl/templates/views/message.tmpl:128
 msgid "Please try again later."
-msgstr ""
+msgstr "Lütfen daha sonra yeniden deneyin."
 
 #: assembl/templates/views/message.tmpl:131
 msgid ""
 "Sorry, we cannot translate this because we could not identify the source "
 "language."
 msgstr ""
+"Üzgünüz, kaynak dili tespit edemediğimiz için çeviriyi yapamadık."
 
 #: assembl/templates/views/message.tmpl:190
 #: assembl/templates/views/messageDeletedByUser.tmpl:92
 msgid "Read more"
-msgstr ""
+msgstr "Daha fazla bilgi"
 
 #: assembl/templates/views/message.tmpl:199
 #: assembl/templates/views/messageDeletedByUser.tmpl:100
 msgid "Read less"
-msgstr ""
+msgstr "Daha az bilgi"
 
 #: assembl/templates/views/message.tmpl:203
 #: assembl/templates/views/message.tmpl:255
 msgid "Like"
-msgstr ""
+msgstr "Beğen"
 
 #: assembl/templates/views/message.tmpl:204
 #: assembl/templates/views/message.tmpl:271
 msgid "Disagree"
-msgstr ""
+msgstr "Karşı çık"
 
 #: assembl/templates/views/message.tmpl:205
 #: assembl/templates/views/message.tmpl:286
 msgid "Did not get it"
-msgstr ""
+msgstr "Anlamadım"
 
 #: assembl/templates/views/message.tmpl:206
 #: assembl/templates/views/message.tmpl:301
 msgid "More info please?"
-msgstr ""
+msgstr "Daha fazla bilgi verir misiniz?"
 
 #: assembl/templates/views/message.tmpl:218
 msgid "Reply"
-msgstr ""
+msgstr "Yanıtla"
 
 #: assembl/templates/views/messageColumn.tmpl:23
 #: assembl/templates/views/messageList.tmpl:13
 msgid "Load previous messages"
-msgstr ""
+msgstr "Önceki mesajları yükle"
 
 #: assembl/templates/views/messageColumn.tmpl:36
 #: assembl/templates/views/messageList.tmpl:25
 msgid "Load more messages"
-msgstr ""
+msgstr "Daha fazla mesaj yükle"
 
 #: assembl/templates/views/messageColumn.tmpl:37
 #: assembl/templates/views/messageList.tmpl:26
 msgid "Load all remaining messages at once"
-msgstr ""
+msgstr "Geriye kalan tüm mesajları tek seferde yükle"
 
 #: assembl/templates/views/messageFamily.tmpl:7
 msgid "View conversation"
-msgstr ""
+msgstr "Konuşmayı görüntüle"
 
 #: assembl/templates/views/messageListHeader.tmpl:33
 msgid "Format message in a view useful for copy-pasting of printing"
-msgstr ""
+msgstr "Mesajı kopyalama-yapıştırma veya yazdırma için kullanışlı bir formatta görüntüle"
 
 #: assembl/templates/views/messageListHeader.tmpl:33
 msgid "Print"
-msgstr ""
+msgstr "Yazdır"
 
 #: assembl/templates/views/messageModerationOptions.tmpl:1
 msgid "Initial message content"
-msgstr ""
+msgstr "Mesajın başlangıçtaki içeriği"
 
 #: assembl/templates/views/messageModerationOptions.tmpl:4
 msgid "Message publication status"
-msgstr ""
+msgstr "Mesaj yayın durumu"
 
 #: assembl/templates/views/messageModerationOptions.tmpl:6
 msgid "Published without moderation"
-msgstr ""
+msgstr "Denetim olmadan yayınlandı"
 
 #: assembl/templates/views/messageModerationOptions.tmpl:7
 msgid "Moderated, initial content available"
-msgstr ""
+msgstr "Denetimden geçti, başlangıçtaki içerik mevcut"
 
 #: assembl/templates/views/messageModerationOptions.tmpl:8
 msgid "Moderated, initial content not available"
-msgstr ""
+msgstr "Denetimden geçti, başlangıçtaki içerik mevcut değil"
 
 #: assembl/templates/views/messageModerationOptions.tmpl:15
 msgid "Moderated by"
-msgstr ""
+msgstr "Denetleyen:"
 
 #: assembl/templates/views/messageModerationOptions.tmpl:21
 msgid "Moderated version of the message"
-msgstr ""
+msgstr "Mesajın denetlenmiş versiyonu"
 
 #: assembl/templates/views/messageModerationOptions.tmpl:22
 #: assembl/templates/views/messageModerationOptions.tmpl:27
 msgid "Type something..."
-msgstr ""
+msgstr "Bir şey yazın..."
 
 #: assembl/templates/views/messageModerationOptions.tmpl:26
 msgid "Moderation remarks"
-msgstr ""
+msgstr "Denetim açıklamaları"
 
 #: assembl/templates/views/messageSend.tmpl:17
 msgid "New topic subject:"
-msgstr ""
+msgstr "Yeni konunun mevzusu:"
 
 #: assembl/templates/views/messageSend.tmpl:28
 msgid "Your message will be posted:"
-msgstr ""
+msgstr "Mesajınız şuralarda yayınlanacak:"
 
 #: assembl/templates/views/messageSend.tmpl:29
 #, python-format
 msgid "Under the idea \"%s\""
-msgstr ""
+msgstr " \"%s\" fikri altında"
 
 #: assembl/templates/views/messageSend.tmpl:31
 #, python-format
@@ -3978,275 +4107,283 @@ msgid ""
 "contribution in the table of ideas afterwards, possibly by creating a new "
 "idea)"
 msgstr ""
+"Genel \"%s\" konuşmasında (ardından bir topluluk yöneticisi katkınızı, muhtemelen yeni bir fikir oluşturarak, fikirler tablosuna yerleştirecek)"
 
 #: assembl/templates/views/messageSend.tmpl:33
 msgid "Your message will be posted as a child of the previous message."
-msgstr ""
+msgstr "Mesajınız bir önceki mesajın altında yayınlanacak"
 
 #: assembl/templates/views/messageSend.tmpl:35
 msgid "Your message will be posted in the general conversation."
-msgstr ""
+msgstr "Mesajınız genel konuşmada yayınlanacak."
 
 #: assembl/templates/views/message_translation_question.tmpl:14
 msgid "Hide"
-msgstr ""
+msgstr "Gizle"
 
 #: assembl/templates/views/moderatedBody.tmpl:3
-msgid "This message has been moderated and the original message is not available."
+msgid ""
+"This message has been moderated and the original message is not available."
 msgstr ""
+"Bu mesaj denetimden geçerek değiştirilmiştir ve orijinal mesaj mevcut değildir."
 
 #: assembl/templates/views/moderatedBody.tmpl:6
 msgid "Click here to see original message"
-msgstr ""
+msgstr "Orijinal mesajı görmek için tıklayın"
 
 #: assembl/templates/views/navBarLeft.tmpl:7
 msgid "Connecting..."
-msgstr ""
+msgstr "Bağlanıyor..."
 
 #: assembl/templates/views/navBarLeft.tmpl:22
 msgid "Discussion permissions"
-msgstr ""
+msgstr "Tartışma i̇zinleri"
 
 #: assembl/templates/views/navBarRight.tmpl:6
 msgid "Help"
-msgstr ""
+msgstr "Yardım"
 
 #: assembl/templates/views/navBarRight.tmpl:14
 #: assembl/templates/views/navBarRight.tmpl:20
 #: assembl/templates/views/userSubscriber.tmpl:23
 msgid "Join this discussion"
-msgstr ""
+msgstr "Bu tartışmaya katılın"
 
 #: assembl/templates/views/navBarRight.tmpl:41
 #: assembl/templates/views/userNavigationMenu.tmpl:10
 #: assembl/templates/views/userNotificationSubscriptions.tmpl:6
 msgid "Notifications"
-msgstr ""
+msgstr "Bildirimler"
 
 #: assembl/templates/views/navBarRight.tmpl:46
 msgid "Add a new panel group"
-msgstr ""
+msgstr "Yeni bir panel grubu ekle"
 
 #: assembl/templates/views/navBarRight.tmpl:48
 msgid "Switch to simple mode"
-msgstr ""
+msgstr "Basit moda geç"
 
 #: assembl/templates/views/navBarRight.tmpl:50
 msgid "Switch to full-functionality mode"
-msgstr ""
+msgstr "Çok fonksiyonlu moda geç"
 
 #: assembl/templates/views/navigation.tmpl:23
 msgid "About"
-msgstr ""
+msgstr "Hakkında"
 
 #: assembl/templates/views/notificationByEmails.tmpl:5
 msgid "Receive notifications on"
-msgstr ""
+msgstr "Hakkında bildirim alın"
 
 #: assembl/templates/views/orphanMessagesInIdeaList.tmpl:8
-msgid "Messages top-posted and whose thread has not yet been harvested into an idea"
+msgid ""
+"Messages top-posted and whose thread has not yet been harvested into an idea"
 msgstr ""
+"Yeni bir tartışma dizisi oluşturmuş ve dizisi henüz Hasatçı tarafından bir fikir haline getirilmemiş mesajlar"
 
 #: assembl/templates/views/orphanMessagesInIdeaList.tmpl:9
 msgid "Messages yet to be organised"
-msgstr ""
+msgstr "Organize edilmeyi bekleyen mesajlar"
 
 #: assembl/templates/views/otherInIdeaList.tmpl:2
 msgid "Messages not in the table of ideas"
-msgstr ""
+msgstr "Fikirler tablosunda olmayan mesajlar"
 
 #: assembl/templates/views/panelWrapper.tmpl:16
 msgid "Fullsize"
-msgstr ""
+msgstr "Tam boy"
 
 #: assembl/templates/views/panelWrapper.tmpl:18
 msgid "Close panel"
-msgstr ""
+msgstr "Paneli kapat"
 
 #: assembl/templates/views/partnerList.tmpl:6
 #: assembl/templates/views/partnerList.tmpl:10
 msgid "edit partners"
-msgstr ""
+msgstr "ortakları düzenle"
 
 #: assembl/templates/views/partnersInAdmin.tmpl:9
 msgid "What is the organisation about?"
-msgstr ""
+msgstr "Organizasyon ne hakkında?"
 
 #: assembl/templates/views/partnersInAdmin.tmpl:13
 msgid "link"
-msgstr ""
+msgstr "bağlantı"
 
 #: assembl/templates/views/partnersInAdmin.tmpl:15
 msgid "What is their website?"
-msgstr ""
+msgstr "İnternet siteleri nedir?"
 
 #: assembl/templates/views/partnersInAdmin.tmpl:19
 msgid "Edit"
-msgstr ""
+msgstr "Düzenle"
 
 #: assembl/templates/views/partnersInAdmin.tmpl:25
 msgid "is initiator"
-msgstr ""
+msgstr "başlatmıştır"
 
 #: assembl/templates/views/partnersInAdmin.tmpl:32
 msgid "What is their logo?"
-msgstr ""
+msgstr "Logoları nedir?"
 
 #: assembl/templates/views/piwikIframeModal.tmpl:3
 msgid "Set cookies"
-msgstr ""
+msgstr "Çerezleri tanımla"
 
 #: assembl/templates/views/preferenceItemView.tmpl:13
 msgid "Reset to default"
-msgstr ""
+msgstr "Varsayılana geri dön"
 
 #: assembl/templates/views/preferenceView.tmpl:7
 msgid "Preferences"
-msgstr ""
+msgstr "Tercihler"
 
 #: assembl/templates/views/segment.tmpl:8
 #, python-format
 msgid "Harvested by %(name)s %(date)s"
-msgstr ""
+msgstr "Hasat yapan %(name)s %(date)s"
 
 #: assembl/templates/views/segment.tmpl:11
-msgid "Click here to see the original contribution this segment is quoted from."
+msgid ""
+"Click here to see the original contribution this segment is quoted from."
 msgstr ""
+"Bu segmentin alıntılandığı yazının orijinalini görmek için buraya tıklayın."
 
 #: assembl/templates/views/segment.tmpl:12
 msgid "Show in original context"
-msgstr ""
+msgstr "Orijinal bağlamda göster"
 
 #: assembl/templates/views/segment.tmpl:29
 msgid "Show or hide this extract to participants"
-msgstr ""
+msgstr "Bu alıntıyı katılımcılara göster/gizle"
 
 #: assembl/templates/views/segment.tmpl:35
 #, python-format
 msgid "%(img)s"
-msgstr ""
+msgstr "%(img)s"
 
 #: assembl/templates/views/segment.tmpl:54
 #, python-format
 msgid "Posted %(nice_date)s by %(name)s"
-msgstr ""
+msgstr "Gönderiyi %(nice_date)s yazan: %(name)s"
 
 #: assembl/templates/views/segment.tmpl:61
 msgid "Document extracted from the web"
-msgstr ""
+msgstr "İnternetten alınmış doküman"
 
 #: assembl/templates/views/segment.tmpl:62
 msgid "Harvested from webpage"
-msgstr ""
+msgstr "İnternet sayfasından toplanmış"
 
 #: assembl/templates/views/segment.tmpl:64
 msgid "Unknown segment type: "
-msgstr ""
+msgstr "Bilinmeyen segment tipi:"
 
 #: assembl/templates/views/segmentList.tmpl:4
 msgid "Annotation on the web"
-msgstr ""
+msgstr "Alıntının intenetteki hali"
 
 #: assembl/templates/views/segmentList.tmpl:5
 msgid "If you desire catching extracts out of assembl (exemple : Wikipedia),"
-msgstr ""
+msgstr "Eğer Asseml dışından alıntı yapmak isterseniz (örnek: wikipedia),"
 
 #: assembl/templates/views/segmentList.tmpl:6
 msgid "click here to activate the annotation"
-msgstr ""
+msgstr "buraya tıklayarak alıntıyı etkinleştirin"
 
 #: assembl/templates/views/segmentList.tmpl:9
 msgid "Extracts not yet associated with an idea"
-msgstr ""
+msgstr "Henüz bir fikirle ilişkilendirilmemiş alıntılar"
 
 #: assembl/templates/views/segmentList.tmpl:14
 msgid "Clear"
-msgstr ""
+msgstr "Temizle"
 
 #: assembl/templates/views/showSegmentByAnnotation.tmpl:3
 msgid ""
-"You will be redirected to another idea in connection with the nugget on which"
-" you clicked."
+"You will be redirected to another idea in connection with the nugget on "
+"which you clicked."
 msgstr ""
+"Tıkladığınız nugget’la ilişkisi olan bir başka fikre yönlendirileceksiniz."
 
 #: assembl/templates/views/showSegmentByAnnotation.tmpl:10
 msgid "Ok"
-msgstr ""
+msgstr "Tamam"
 
 #: assembl/templates/views/simpleLangStringEdit.tmpl:3
 msgid "Add entry"
-msgstr ""
+msgstr "Girdi ekle"
 
 #: assembl/templates/views/socialProviders.tmpl:4
 msgid "Add a social account"
-msgstr ""
+msgstr "Bir sosyal hesap ekle"
 
 #: assembl/templates/views/socialProviders.tmpl:10
 #, python-format
 msgid "Add a %s account"
-msgstr ""
+msgstr "Bir %s hesabı ekle"
 
 #: assembl/templates/views/statistics.tmpl:7
 msgid "Loading..."
-msgstr ""
+msgstr "Yüklüyor..."
 
 #: assembl/templates/views/synthesisContext.tmpl:10
 msgid "Last synthesis"
-msgstr ""
+msgstr "Son sentez"
 
 #: assembl/templates/views/synthesisContext.tmpl:18
 msgid "Read the synthesis"
-msgstr ""
+msgstr "Sentezi oku"
 
 #: assembl/templates/views/synthesisInIdeaList.tmpl:4
 msgid "All syntheses"
-msgstr ""
+msgstr "Tüm sentezler"
 
 #: assembl/templates/views/synthesisInIdeaList.tmpl:8
 msgid "Syntheses are summaries of the discussion published on a regular basis"
-msgstr ""
+msgstr "Sentezler düzenli olarak yayınlanan tartışma özetleridir"
 
 #: assembl/templates/views/synthesisInIdeaList.tmpl:9
 msgid "Syntheses"
-msgstr ""
+msgstr "Sentezler"
 
 #: assembl/templates/views/synthesisPanel.tmpl:15
 #: assembl/templates/views/synthesisPanelMessage.tmpl:14
 msgid "Conclusion"
-msgstr ""
+msgstr "Sonuç"
 
 #: assembl/templates/views/synthesisPanel.tmpl:22
 msgid "Publish"
-msgstr ""
+msgstr "Yayınla"
 
 #: assembl/templates/views/tokenVoteCollection.tmpl:4
 #, python-format
 msgid "Ideas (%s)"
-msgstr ""
+msgstr "(%s) fikir"
 
 #: assembl/templates/views/tokenVoteCollection.tmpl:5
 msgid "Your votes"
-msgstr ""
+msgstr "Oylarınız"
 
 #: assembl/templates/views/tokenVoteResultCollectionView.tmpl:4
 msgid "Ideas"
-msgstr ""
+msgstr "Fikirleriniz"
 
 #: assembl/templates/views/tokenVoteResultView.tmpl:7
 msgid "Vote Summary"
-msgstr ""
+msgstr "Oy Özeti"
 
 #: assembl/templates/views/userAccount.tmpl:7
 msgid "Assembl account settings"
-msgstr ""
+msgstr "Assembl hesap ayarları"
 
 #: assembl/templates/views/userAccount.tmpl:18
 msgid "Manage associated accounts"
-msgstr ""
+msgstr "Bağlı hesapları yönet"
 
 #: assembl/templates/views/userAccount.tmpl:40
 msgid "Add another email"
-msgstr ""
+msgstr "Başka bir e-posta ekle"
 
 #: assembl/templates/views/userAccount.tmpl:55
 msgid ""
@@ -4254,181 +4391,184 @@ msgid ""
 "use your profile's picture. Otherwise, you can set your profile picture with "
 "the <a href='http://en.gravatar.com/'>gravatar</a> service."
 msgstr ""
+"Hesabınızı bağlamak, sosyal medya üzerinden bağlanmanıza ve profil resminizi kullanmanıza olanak tanır. Aksi takdirde, profil resminizi <a href='http://en.gravatar.com/'>gravatar</a> hizmeti ile de belirleyebilirsiniz."
 
 #: assembl/templates/views/userAccountForm.tmpl:10
 msgid "You can set a username as an alternate way to login."
-msgstr ""
+msgstr "Alternatif bir oturum açma yöntemi olarak bir kullanıcı adı belirleyebilirsiniz."
 
 #: assembl/templates/views/userAccountForm.tmpl:15
 msgid "New password"
-msgstr ""
+msgstr "Yeni parola"
 
 #: assembl/templates/views/userAccountForm.tmpl:20
 #: assembl/templates/views/userAccountForm.tmpl:31
 msgid "password 1 and 2 should be identical"
-msgstr ""
+msgstr "1 ve 2 numaralı parolalar aynı olmalıdır"
 
 #: assembl/templates/views/userAccountForm.tmpl:26
 msgid "Confirm password"
-msgstr ""
+msgstr "Parolayı onayla"
 
 #: assembl/templates/views/userAccountForm.tmpl:37
 msgid ""
-"You can set your profile picture with the <a "
-"href='http://en.gravatar.com/'>gravatar</a> service."
+"You can set your profile picture with the <a href='http://en.gravatar."
+"com/'>gravatar</a> service."
 msgstr ""
+"Profil resminizi <a href='http://en.gravatar.com/'>gravatar</a> hizmeti ile belirleyebilirsiniz."
 
 #: assembl/templates/views/userNavigationMenu.tmpl:3
 msgid "Modify your profile"
-msgstr ""
+msgstr "Profilinizi değiştirin"
 
 #: assembl/templates/views/userNavigationMenu.tmpl:6
 msgid "Account settings"
-msgstr ""
+msgstr "Hesap ayarları"
 
 #: assembl/templates/views/userNotificationSubscriptions.tmpl:15
 msgid "Notifiy me when"
-msgstr ""
+msgstr "Beni şu durumlarda bilgilendir"
 
 #: assembl/templates/views/userProfile.tmpl:16
 msgid "Real name"
-msgstr ""
+msgstr "Gerçek ad"
 
 #: assembl/templates/views/userSubscriber.tmpl:5
 msgid "Subscription settings"
-msgstr ""
+msgstr "Abonelik ayarları"
 
 #: assembl/templates/views/userSubscriber.tmpl:11
 msgid "subscribed"
-msgstr ""
+msgstr "abone olun"
 
 #: assembl/templates/views/userSubscriber.tmpl:14
 msgid "Unsubscribe"
-msgstr ""
+msgstr "Abonelik iptali"
 
 #: assembl/templates/views/userSubscriber.tmpl:20
 msgid "unsubscribed"
-msgstr ""
+msgstr "abonelik iptal edildi"
 
 #: assembl/views/admin/views.py:392
 msgid "No file given."
-msgstr ""
+msgstr "Dosya yok."
 
-#: assembl/views/api/post.py:80 assembl/views/api/post.py:624
+#: assembl/views/api/post.py:81 assembl/views/api/post.py:625
 #, python-format
 msgid "No discussion found with id=%s"
-msgstr ""
+msgstr " id=%s ile yapılan bir tartışma yok"
 
-#: assembl/views/api/post.py:227
+#: assembl/views/api/post.py:228
 msgid "Getting orphan posts of a specific idea isn't supported."
-msgstr ""
+msgstr "Belirli bir fikre ait artık gönderi alımı desteklenmiyor."
 
-#: assembl/views/api/post.py:297
+#: assembl/views/api/post.py:298
 msgid "Do not combine negative and positive classifiers"
-msgstr ""
+msgstr "Negatif ve pozitif sınıflandırıcıları birleştirmeyin"
 
-#: assembl/views/api/post.py:358
+#: assembl/views/api/post.py:359
 msgid "You must be logged in to view which posts are read"
-msgstr ""
+msgstr "Okunan gönderileri görüntülemek için oturum açmalısınız"
 
-#: assembl/views/api/post.py:608
+#: assembl/views/api/post.py:609
 msgid "Your message is empty"
-msgstr ""
+msgstr "Mesajınız boş"
 
-#: assembl/views/api2/auth.py:346
+#: assembl/views/api2/auth.py:343
 msgid "The user does not exist"
-msgstr ""
+msgstr "Böyle bir kullanıcı yok"
 
-#: assembl/views/api2/auth.py:357
+#: assembl/views/api2/auth.py:354
 msgid "This email does not exist"
-msgstr ""
+msgstr "Böyle bir e-posta yok"
 
-#: assembl/views/api2/auth.py:362
+#: assembl/views/api2/auth.py:359
 msgid "Please give an identifier"
-msgstr ""
+msgstr "Lütfen bir tanımlayıcı verin"
+
+#: assembl/views/api2/auth.py:364
+msgid "This user has no email"
+msgstr "Bu kullanıcının e-postası yok"
 
 #: assembl/views/api2/auth.py:367
-msgid "This user has no email"
-msgstr ""
-
-#: assembl/views/api2/auth.py:370
 msgid "This is not a user"
-msgstr ""
+msgstr "Bu bir kullanıcı değil"
 
-#: assembl/views/api2/auth.py:391
+#: assembl/views/api2/auth.py:388
 msgid "The passwords that were entered are mismatched!"
-msgstr ""
+msgstr "Girilen parolalar uyumsuzdur!"
 
-#: assembl/views/api2/auth.py:405 assembl/views/auth/views.py:964
+#: assembl/views/api2/auth.py:402 assembl/views/auth/views.py:964
 #: assembl/views/auth/views.py:1032
 msgid "This link is not valid. Do you want us to send another?"
-msgstr ""
+msgstr "Bu bağlantı geçerli değil. Başka bir tane göndermemizi ister misiniz?"
 
-#: assembl/views/api2/auth.py:408 assembl/views/auth/views.py:967
+#: assembl/views/api2/auth.py:405 assembl/views/auth/views.py:967
 #: assembl/views/auth/views.py:1035
 msgid "This link has been used. Do you want us to send another?"
-msgstr ""
+msgstr "Bu bağlantı kullanılmış. Başka bir tane göndermemizi ister misiniz?"
 
-#: assembl/views/api2/auth.py:443 assembl/views/auth/views.py:388
+#: assembl/views/api2/auth.py:440 assembl/views/auth/views.py:388
 msgid "Please use a name of at least 3 characters"
-msgstr ""
+msgstr "Lütfen en az 3 karakterden oluşan bir isim kullanın"
 
-#: assembl/views/api2/auth.py:452 assembl/views/auth/views.py:321
+#: assembl/views/api2/auth.py:449 assembl/views/auth/views.py:321
 #: assembl/views/auth/views.py:395
 msgid "This is not a valid email"
-msgstr ""
+msgstr "Bu geçerli bir e-posta değil"
 
-#: assembl/views/api2/auth.py:460 assembl/views/auth/views.py:402
+#: assembl/views/api2/auth.py:457 assembl/views/auth/views.py:402
 msgid "We already have a user with this email."
-msgstr ""
+msgstr "Bu e-posta adresiyle kaydolmuş bir kullanıcımız var."
 
-#: assembl/views/api2/auth.py:465
+#: assembl/views/api2/auth.py:462
 msgid "No email."
-msgstr ""
+msgstr "E-posta yok."
 
-#: assembl/views/api2/auth.py:471
+#: assembl/views/api2/auth.py:468
 msgid "We already have a user with this username."
-msgstr ""
+msgstr "Bu kullanıcı adıyla kaydolmuş bir kullanıcımız var."
 
 #: assembl/views/auth/views.py:294
 #, python-format
 msgid "The username %s is already used"
-msgstr ""
+msgstr "%s kullanıcı adı daha önce alınmış"
 
 #: assembl/views/auth/views.py:313 assembl/views/auth/views.py:1046
 msgid "The passwords are not identical"
-msgstr ""
+msgstr "Parolalar aynı değil"
 
 #: assembl/views/auth/views.py:406
 msgid "The passwords should be identical"
-msgstr ""
+msgstr "Parolalar aynı olmalıdır"
 
 #: assembl/views/auth/views.py:462
 msgid ""
 "Your email was refused by the SMTP server.  You probably entered an email "
 "that does not exist."
 msgstr ""
+"E-postanız SMTP sunucusu tarafından reddedildi.  Muhtemelen olmayan bir e-posta girdiniz."
 
 #: assembl/views/auth/views.py:519 assembl/views/auth/views.py:844
 #: assembl/views/auth/views.py:850
 msgid "This user cannot be found"
-msgstr ""
+msgstr "Bu kullanıcı bulunamadı."
 
 #: assembl/views/auth/views.py:537
 msgid "Invalid user and password"
-msgstr ""
+msgstr "Geçersiz kullanıcı adı ve parola"
 
 #: assembl/views/auth/views.py:601
 msgid "This email address is already confirmed"
-msgstr ""
+msgstr "E-posta adresi daha önce doğrulanmış"
 
 #: assembl/views/auth/views.py:602
 msgid "You do not need to confirm this email address, it is already confirmed."
-msgstr ""
+msgstr "Bu e-posta adresini doğrulamanıza gerek yok. Adres daha önce doğrulanmış."
 
 #: assembl/views/auth/views.py:610 assembl/views/auth/views.py:809
 msgid "Confirmation requested"
-msgstr ""
+msgstr "Doğrulama talep edildi"
 
 #: assembl/views/auth/views.py:611 assembl/views/auth/views.py:810
 msgid ""
@@ -4437,24 +4577,25 @@ msgid ""
 "in order to confirm your e-mail address. If you did not receive any "
 "confirmation e-mail (check your spams), click here."
 msgstr ""
+"Birkaç dakika içinde gelen kutunuza varacak olan bir doğrulama e-postası hesabınıza gönderildi. Lütfen e-posta adresinizi doğrulamak için bu e-posta ile gönderilen onay bağlantısına tıklayın. Eğer doğrulama e-postası almadıysanız (gereksiz e-posta kutunuzu kontrol ettikten sonra), lütfen buraya tıklayın."
 
 #: assembl/views/auth/views.py:659 assembl/views/auth/views.py:683
 #: assembl/views/auth/views.py:705
 #, python-format
 msgid "Email <%s> already confirmed"
-msgstr ""
+msgstr "E-posta <%s> daha önce doğrulanmış"
 
 #: assembl/views/auth/views.py:671
 msgid "This link was not valid. We sent another."
-msgstr ""
+msgstr "Bu bağlantı geçerli değildi. Yeni bir bağlantı gönderdik."
 
 #: assembl/views/auth/views.py:674
 msgid "This link has been used. We sent another."
-msgstr ""
+msgstr "Bu bağlantı daha önce kullanılmıştı. Yeni bir bağlantı gönderdik."
 
 #: assembl/views/auth/views.py:687
 msgid "This link is not valid. Please attempt to login to get another one."
-msgstr ""
+msgstr "Bu bağlantı geçerli değildir. Lütfen yeni bir bağlantı almak için oturum açma girişiminde bulunun."
 
 #: assembl/views/auth/views.py:726
 #, python-format
@@ -4462,65 +4603,67 @@ msgid ""
 "Your email address %s has been confirmed, and you are now subscribed to "
 "discussion's default notifications."
 msgstr ""
+"E-posta adresiniz %s doğrulandı. Artık tartışmanın varsayılan bildirimlerine abone oldunuz."
 
 #: assembl/views/auth/views.py:731
 #, python-format
 msgid "Your email address %s has been confirmed."
-msgstr ""
+msgstr "E-posta adresiniz %s onaylandı."
 
 #: assembl/views/auth/views.py:756
 msgid "Login failed, try again"
-msgstr ""
+msgstr "Oturum açma başarısız oldu, tekrar deneyin"
 
 #: assembl/views/auth/views.py:797
 msgid "This email is already confirmed."
-msgstr ""
+msgstr "Bu e-posta daha önce doğrulanmış."
 
 #: assembl/views/auth/views.py:818
 msgid "We do not know about this email."
-msgstr ""
+msgstr "Bu e-postayı tanımıyoruz."
 
 #: assembl/views/auth/views.py:897
 msgid "Password change requested"
-msgstr ""
+msgstr "Parola değiştirme talebi"
 
 #: assembl/views/auth/views.py:898
 msgid ""
 "We have sent you an email with a temporary connection link. Please use that "
 "link to log in and change your password."
 msgstr ""
+"Geçici bir bağlantı içeren bir e-posta adresinize gönderildi. Lütfen oturum açmak ve parolanızı değiştirmek için bu bağlantıyı kullanın."
 
 #: assembl/views/auth/views.py:979
 msgid "You will enter the discussion as <b>{name}</b>."
-msgstr ""
+msgstr "Tartışmaya <b>{name}</b> adıyla gireceksiniz."
 
 #: assembl/views/auth/views.py:983
 msgid "You will enter Assembl as <b>{name}</b>."
-msgstr ""
+msgstr "Assembl’a <b>{name}</b> adıyla gireceksiniz."
 
 #: assembl/views/auth/views.py:986
 msgid "Please choose your password for security reasons."
-msgstr ""
+msgstr "Lütfen güvenlik nedenlerinden ötürü parolanızı seçin."
 
 #: assembl/views/auth/views.py:1015
 msgid "Change your password"
-msgstr ""
+msgstr "Parolanızı değiştirin"
 
 #: assembl/views/auth/views.py:1054
 msgid "Password changed"
-msgstr ""
+msgstr "Parola değiştirildi"
 
 #: assembl/views/auth/views.py:1068
 msgid "email"
-msgstr ""
+msgstr "e-posta"
 
 #: assembl/views/auth/views.py:1069
 msgid "Please confirm your {confirm_what} with {assembl}"
-msgstr ""
+msgstr "Lütfen {confirm_what} ‘ızı {assembl} ile onaylayın"
 
 #: assembl/views/auth/views.py:1071
 msgid "account"
-msgstr ""
+msgstr "hesap"
 
 #: assembl/views/auth/views.py:1072
 msgid ""
@@ -4533,6 +4676,13 @@ msgid ""
 "Best regards,\n"
 "The {assembl} Team"
 msgstr ""
+"Merhaba, {name}, {assembl}‘a hoş geldiniz!\n"
+"\n"
+"Lütfen aşağıdaki bağlantıya tıklayarak e-posta adresinizi doğrulayın ve kaydınızı tamamlayın.\n"
+"<{confirm_url}>\n"
+"\n"
+"Saygılarımızla,\n"
+"{assembl} Ekibi"
 
 #: assembl/views/auth/views.py:1079
 msgid ""
@@ -4542,6 +4692,10 @@ msgid ""
 "and complete your registration.</p>\n"
 "<p>Best regards,<br />The {assembl} Team</p>"
 msgstr ""
+"<p>Merhaba, {name}, {assembl}‘a hoş geldiniz!</p>\n"
+"<p>Lütfen <a href=\"{confirm_url}\">buraya tıklayarak e-posta adresinizi doğrulayın</a>\n"
+"ve kaydınızı tamamlayın.</p>\n"
+"<p>Saygılarımızla,<br /> {assembl} Ekibi</p>"
 
 #: assembl/views/auth/views.py:1084
 msgid ""
@@ -4554,6 +4708,13 @@ msgid ""
 "Best regards,\n"
 "The {assembl} Team"
 msgstr ""
+"Merhaba, {name}!\n"
+"\n"
+"Lütfen {assembl} hesabınızdaki yeni e-posta adresiniz <{email}>‘i doğrulamak için aşağıdaki bağlantıya tıklayın.\n"
+"<{confirm_url}>\n"
+"\n"
+"Saygılarımızla,\n"
+"{assembl} Ekibi"
 
 #: assembl/views/auth/views.py:1091
 msgid ""
@@ -4563,27 +4724,36 @@ msgid ""
 "on your {assembl} account.</p>\n"
 "<p>Best regards,<br />The {assembl} Team</p>"
 msgstr ""
+"<p>Merhaba, {name}!</p>\n"
+"<p>Lütfen {assembl} hesabınızdaki <a href=\"{confirm_url}\">yeni e-posta adresinizi doğrulamak için buraya tıklayın.</a> </p>\n"
+"<p>Saygılarımızla,<br /> {assembl} Ekibi</p>"
 
-#: assembl/views/auth/views.py:1145
+#: assembl/views/auth/views.py:1142
 msgid "Request for password change"
-msgstr ""
+msgstr "Parola değiştirme talebi"
 
-#: assembl/views/auth/views.py:1149
+#: assembl/views/auth/views.py:1146
 msgid ""
 "<p>Hello, {name}!</p>\n"
 "<p>We have received a request to change the password on your {assembl} "
 "account.\n"
-"Please <a href=\"{confirm_url}\">click here to confirm your password "
-"change</a>.</p>\n"
-"<p>If you did not ask to reset your password please disregard this email.</p>"
-"\n"
+"Please <a href=\"{confirm_url}\">click here to confirm your password change</"
+"a>.</p>\n"
+"<p>If you did not ask to reset your password please disregard this email.</"
+"p>\n"
 "<p>Best regards,<br />The {assembl} Team</p>\n"
 msgstr ""
+"<p>Merhaba, {name}!</p>\n"
+"<p> {assembl} hesabınızın parolasını değiştirmek için yaptığınız talebi aldık.\n"
+"Lütfen <a href=\"{confirm_url}\">parola değişimini onaylamak için buraya tıklayın</a>.</p>\n"
+"<p>Eğer parolanızı sıfırlama talebinde bulunmadıysanız, lütfen bu e-postayı dikkate almayın.</p>\n"
+"<p>Saygılarımızla,<br /> {assembl} Ekibi</p>\n"
 
-#: assembl/views/auth/views.py:1155
+#: assembl/views/auth/views.py:1152
 msgid ""
 "Hello, {name}!\n"
-"We have received a request to change the password on your {assembl} account.\n"
+"We have received a request to change the password on your {assembl} "
+"account.\n"
 "To confirm your password change please click on the link below.\n"
 "<{confirm_url}>\n"
 "\n"
@@ -4592,9 +4762,17 @@ msgid ""
 "Best regards,\n"
 "The {assembl} Team\n"
 msgstr ""
+"Merhaba, {name}!\n"
+"{assembl} hesabınızın parolasını değiştirmek için yaptığınız talebi aldık.\n"
+"Lütfen parola değişimini onaylamak için aşağıdaki bağlantıya tıklayın.\n"
+"<{confirm_url}>\n"
+"\n"
+"Eğer parolanızı sıfırlama talebinde bulunmadıysanız, lütfen bu e-postayı dikkate almayın.\n"
+"\n"
+"Saygılarımızla,\n"
+"{assembl} Ekibi\n"
 
-#: assembl/views/discussion/views.py:56
+#: assembl/views/discussion/views.py:51
 #, python-format
 msgid "No discussion found for slug=%s"
-msgstr ""
-
+msgstr "slug=%s için bir tartışma bulunamadı "
