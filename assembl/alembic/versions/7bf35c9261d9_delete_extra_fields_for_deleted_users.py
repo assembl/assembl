@@ -19,16 +19,12 @@ from assembl.lib import config
 
 
 def upgrade(pyramid_env):
-    with context.begin_transaction():
-        pass
-
-    # Do stuff with the app's models here.
     from assembl import models as m
     db = m.get_session_maker()()
     with transaction.manager:
         extra_fields = db.query(m.ProfileField).join(m.User).filter(m.User.is_deleted).all()
         for ef in extra_fields:
-            db.delete_extra_field
+            db.delele(ef)
 
 
 def downgrade(pyramid_env):
