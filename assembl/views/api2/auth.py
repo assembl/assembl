@@ -431,12 +431,6 @@ def assembl_register_user(request):
     permissions = get_permissions(
         Everyone, discussion.id if discussion else None)
 
-    if discussion and not (
-            P_SELF_REGISTER in permissions or
-            P_SELF_REGISTER_REQUEST in permissions):
-        # Consider it without context
-        discussion = None
-
     name = json.get('real_name', '').strip()
     errors = JSONError()
     if not name or len(name) < 3:
@@ -489,6 +483,14 @@ def assembl_register_user(request):
                 )
     if errors:
         raise errors
+
+    # This logic needs to be above the JSONError checks to ensure that whitelisting is applied
+    # even if the discusison does not have a P_SELF_REGISTER on system.Everyone
+    if discussion and not (
+            P_SELF_REGISTER in permissions or
+            P_SELF_REGISTER_REQUEST in permissions):
+        # Consider it without context
+        discussion = None
 
     validate_registration = asbool(config.get(
         'assembl.validate_registration_emails'))
