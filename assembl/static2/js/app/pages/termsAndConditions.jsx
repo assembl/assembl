@@ -14,7 +14,7 @@ const withData: OperationComponent<LegalContentsQuery, LegalContentsQueryVariabl
   LegalContents,
   {
     props: ({ data }) => {
-      const text = data.LegalContents ? data.LegalContents.termsAndConditions : '';
+      const text = data.legalContents ? data.legalContents.termsAndConditions : '';
       return {
         ...data,
         text: text,
