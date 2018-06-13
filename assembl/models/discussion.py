@@ -474,7 +474,7 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
             return admin_emails
         # If no discussion admin is set, use the server administrator
         # This field MUST be set, else Assembl will throw error at startup
-        return (get_config().get('admin_email'),)
+        return (get_config().get('assembl.admin_email'),)
 
     @property
     def widget_collection_url(self):

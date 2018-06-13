@@ -473,7 +473,7 @@ def assembl_register_user(request):
                 ErrorTypes.EXISTING_USERNAME,
                 HTTPConflict.code)
     if discussion:
-        check_subscription = discussion.preference['whitelist_on_login']
+        check_subscription = discussion.preferences['whitelist_on_register']
         if check_subscription:
             status = discussion.check_email(email)
             if not status:
