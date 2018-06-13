@@ -17,7 +17,7 @@ import PostQuery from '../../../graphql/PostQuery.graphql';
 import { deleteMessageTooltip, likeTooltip, disagreeTooltip } from '../../common/tooltips';
 import { sentimentDefinitionsObject } from '../common/sentimentDefinitions';
 import StatisticsDoughnut from '../common/statisticsDoughnut';
-import { EXTRA_SMALL_SCREEN_WIDTH } from '../../../constants';
+import { EXTRA_SMALL_SCREEN_WIDTH, DeletedPublicationStates } from '../../../constants';
 import withLoadingIndicator from '../../common/withLoadingIndicator';
 import ResponsiveOverlayTrigger from '../../common/responsiveOverlayTrigger';
 import { withScreenWidth } from '../../common/screenDimensions';
@@ -146,13 +146,13 @@ class Post extends React.Component<Props> {
 
   render() {
     const { post } = this.props.data;
-    if (!post.publicationState || post.publicationState.startsWith('DELETED')) {
+    const { bodyEntries, publicationState } = post;
+    if (!publicationState || publicationState in DeletedPublicationStates) {
       return null;
     }
 
     const { contentLocale, lang, screenWidth, originalLocale, questionId, themeId } = this.props;
     const { debateData } = this.props.debate;
-    const { bodyEntries } = post;
     const translate = contentLocale !== originalLocale;
 
     // to update the question header when we delete the post or add/remove a sentiment
