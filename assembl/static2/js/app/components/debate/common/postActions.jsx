@@ -114,7 +114,9 @@ class PostActions extends React.Component<Props> {
               })
             }
           >
-            <ResponsiveOverlayTrigger placement={tooltipPlacement} tooltip={sharePostTooltip} component={shareIcon} />
+            <ResponsiveOverlayTrigger placement={tooltipPlacement} tooltip={sharePostTooltip}>
+              {shareIcon}
+            </ResponsiveOverlayTrigger>
           </div>
           <Sentiments
             sentimentCounts={sentimentCounts}

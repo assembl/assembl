@@ -14,7 +14,7 @@ type SentimentProps = {
   isPhaseCompleted: boolean,
   isSelected: boolean,
   mySentiment: ?string,
-  placement: string,
+  placement: OverlayPlacement,
   postId: string,
   sentiment: SentimentDefinition,
   sentimentCounts: SentimentCountsFragment
@@ -109,14 +109,18 @@ const Sentiment = ({
       <sentiment.SvgComponent size={23} />
     </div>
   );
-  return <ResponsiveOverlayTrigger placement={placement} tooltip={sentiment.tooltip} component={sentimentComponent} />;
+  return (
+    <ResponsiveOverlayTrigger placement={placement} tooltip={sentiment.tooltip}>
+      {sentimentComponent}
+    </ResponsiveOverlayTrigger>
+  );
 };
 
 type SentimentsProps = {
   client: ApolloClient,
   isPhaseCompleted: boolean,
   mySentiment: ?string,
-  placement: string,
+  placement: OverlayPlacement,
   postId: string,
   sentimentCounts: SentimentCountsFragment
 };

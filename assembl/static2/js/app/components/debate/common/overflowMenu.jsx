@@ -14,24 +14,20 @@ const getOverflowMenuForPost = (
   userCanEditThisMessage: boolean,
   handleEditClick: Function
 ): React.Node => {
-  const deleteButton = (
-    <span>
-      <DeletePostButton postId={postId} linkClassName="overflow-menu-action" />
-    </span>
-  );
-  const editButton = (
-    <span>
-      <EditPostButton handleClick={handleEditClick} linkClassName="overflow-menu-action" />
-    </span>
-  );
+  const deleteButton = <DeletePostButton postId={postId} linkClassName="overflow-menu-action" />;
+  const editButton = <EditPostButton handleClick={handleEditClick} linkClassName="overflow-menu-action" />;
   return (
     <Popover id="edit-delete-actions" className="overflow-menu">
       <div className="overflow-menu-container">
         {userCanDeleteThisMessage ? (
-          <ResponsiveOverlayTrigger placement="right" tooltip={deleteMessageTooltip} component={deleteButton} />
+          <ResponsiveOverlayTrigger placement="right" tooltip={deleteMessageTooltip}>
+            {deleteButton}
+          </ResponsiveOverlayTrigger>
         ) : null}
         {userCanEditThisMessage ? (
-          <ResponsiveOverlayTrigger placement="right" tooltip={editMessageTooltip} component={editButton} />
+          <ResponsiveOverlayTrigger placement="right" tooltip={editMessageTooltip}>
+            {editButton}
+          </ResponsiveOverlayTrigger>
         ) : null}
       </div>
     </Popover>

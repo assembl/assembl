@@ -144,3 +144,5 @@ type ConfigurableField = {
   options?: Array<SelectFieldOption>,
   __typename: string
 };
+
+type OverlayPlacement = 'top' | 'right' | 'bottom' | 'left';

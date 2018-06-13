@@ -224,11 +224,7 @@ class Post extends React.Component<Props> {
       creatorName = isDeleted ? I18n.t('deletedUser') : displayName;
     }
 
-    const deleteButton = (
-      <span>
-        <DeletePostButton postId={post.id} refetchQueries={refetchQueries} linkClassName="overflow-action" />
-      </span>
-    );
+    const deleteButton = <DeletePostButton postId={post.id} refetchQueries={refetchQueries} linkClassName="overflow-action" />;
 
     return (
       <div className="shown box" id={post.id}>
@@ -251,12 +247,18 @@ class Post extends React.Component<Props> {
               <div className="sentiment-label">
                 <Translate value="debate.survey.react" />
               </div>
-              <ResponsiveOverlayTrigger placement="top" tooltip={likeTooltip} component={likeComponent} />
-              <ResponsiveOverlayTrigger placement="top" tooltip={disagreeTooltip} component={disagreeComponent} />
+              <ResponsiveOverlayTrigger placement="top" tooltip={likeTooltip}>
+                {likeComponent}
+              </ResponsiveOverlayTrigger>
+              <ResponsiveOverlayTrigger placement="top" tooltip={disagreeTooltip}>
+                {disagreeComponent}
+              </ResponsiveOverlayTrigger>
             </div>
             <div className="actions">
               {userCanDeleteThisMessage ? (
-                <ResponsiveOverlayTrigger placement="top" tooltip={deleteMessageTooltip} component={deleteButton} />
+                <ResponsiveOverlayTrigger placement="top" tooltip={deleteMessageTooltip}>
+                  {deleteButton}
+                </ResponsiveOverlayTrigger>
               ) : null}
             </div>
           </div>
@@ -264,8 +266,12 @@ class Post extends React.Component<Props> {
         <div className="statistic">
           {screenWidth < EXTRA_SMALL_SCREEN_WIDTH && (
             <div className="sentiments">
-              <ResponsiveOverlayTrigger placement="top" tooltip={likeTooltip} component={likeComponent} />
-              <ResponsiveOverlayTrigger placement="top" tooltip={disagreeTooltip} component={disagreeComponent} />
+              <ResponsiveOverlayTrigger placement="top" tooltip={likeTooltip}>
+                {likeComponent}
+              </ResponsiveOverlayTrigger>
+              <ResponsiveOverlayTrigger placement="top" tooltip={disagreeTooltip}>
+                {disagreeComponent}
+              </ResponsiveOverlayTrigger>
             </div>
           )}
           <div>
@@ -291,7 +297,9 @@ class Post extends React.Component<Props> {
           {screenWidth < EXTRA_SMALL_SCREEN_WIDTH && (
             <div className="actions">
               {userCanDeleteThisMessage ? (
-                <ResponsiveOverlayTrigger placement="top" tooltip={deleteMessageTooltip} component={deleteButton} />
+                <ResponsiveOverlayTrigger placement="top" tooltip={deleteMessageTooltip}>
+                  {deleteButton}
+                </ResponsiveOverlayTrigger>
               ) : null}
             </div>
           )}

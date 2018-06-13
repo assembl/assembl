@@ -1,16 +1,23 @@
-import React from 'react';
+// @flow
+import * as React from 'react';
 import { OverlayTrigger } from 'react-bootstrap';
 import { isMobile } from '../../utils/globalFunctions';
 
-const ResponsiveOverlayTrigger = ({ component, placement, tooltip }) => {
+type Props = {
+  children: React.Node,
+  placement: OverlayPlacement,
+  tooltip: React.Node
+};
+
+const ResponsiveOverlayTrigger = ({ children, placement, tooltip }: Props) => {
   const isTouchScreenDevice = isMobile.any();
   return (
     <div className="custom-overlay">
       {isTouchScreenDevice ? (
-        component
+        children
       ) : (
         <OverlayTrigger placement={placement} overlay={tooltip}>
-          {component}
+          <div>{children}</div>
         </OverlayTrigger>
       )}
     </div>
