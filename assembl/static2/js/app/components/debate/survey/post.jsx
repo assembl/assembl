@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { compose, graphql, withApollo } from 'react-apollo';
 import { Translate, I18n } from 'react-redux-i18n';
 
-import { EXTRA_SMALL_SCREEN_WIDTH, DeletedPublicationStates, PublicationStates } from '../../../constants';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
 import Permissions, { connectedUserCan } from '../../../utils/permissions';
 import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
@@ -18,6 +17,7 @@ import PostQuery from '../../../graphql/PostQuery.graphql';
 import { deleteMessageTooltip, likeTooltip, disagreeTooltip } from '../../common/tooltips';
 import { sentimentDefinitionsObject } from '../common/sentimentDefinitions';
 import StatisticsDoughnut from '../common/statisticsDoughnut';
+import { EXTRA_SMALL_SCREEN_WIDTH } from '../../../constants';
 import withLoadingIndicator from '../../common/withLoadingIndicator';
 import ResponsiveOverlayTrigger from '../../common/responsiveOverlayTrigger';
 import { withScreenWidth } from '../../common/screenDimensions';
@@ -26,7 +26,6 @@ import hashLinkScroll from '../../../utils/hashLinkScroll';
 import DeletePostButton from '../common/deletePostButton';
 import QuestionQuery from '../../../graphql/QuestionQuery.graphql';
 import ThematicQuery from '../../../graphql/ThematicQuery.graphql';
-import DeletedPost from '../common/deletedPost';
 
 type Props = {
   addSentiment: Function,
@@ -147,14 +146,13 @@ class Post extends React.Component<Props> {
 
   render() {
     const { post } = this.props.data;
-    const { bodyEntries, id, publicationState } = post;
-    if (!publicationState || publicationState in DeletedPublicationStates) {
-      const deletedBy = publicationState === PublicationStates.DELETED_BY_USER ? 'user' : 'admin';
-      return <DeletedPost id={id} deletedBy={deletedBy} />;
+    if (!post.publicationState || post.publicationState.startsWith('DELETED')) {
+      return null;
     }
 
     const { contentLocale, lang, screenWidth, originalLocale, questionId, themeId } = this.props;
     const { debateData } = this.props.debate;
+    const { bodyEntries } = post;
     const translate = contentLocale !== originalLocale;
 
     // to update the question header when we delete the post or add/remove a sentiment

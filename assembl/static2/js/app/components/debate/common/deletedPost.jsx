@@ -7,7 +7,7 @@ type DeletedByType = 'user' | 'admin';
 
 type DeletedPostProps = {
   id: string,
-  subject: React.Node,
+  subject: React.Element<any>,
   deletedBy: DeletedByType
 };
 
@@ -25,9 +25,5 @@ const DeletedPost = ({ id, subject, deletedBy }: DeletedPostProps): React.Elemen
     </div>
   </div>
 );
-
-DeletedPost.defaultProps = {
-  subject: null
-};
 
 export default DeletedPost;
