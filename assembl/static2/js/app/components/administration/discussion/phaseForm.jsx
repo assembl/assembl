@@ -9,7 +9,8 @@ import { Link } from 'react-router';
 import { type moment } from 'moment';
 import { modulesTranslationKeys } from '../../../constants';
 import { displayAlert } from '../../../utils/utilityManager';
-
+import { getDiscussionSlug } from '../../../utils/globalFunctions';
+import { get } from '../../../utils/routeMap';
 import { updatePhaseIdentifier, updateStartDate, updateEndDate } from '../../../actions/adminActions/timeline';
 
 type PhaseFormProps = {
@@ -53,9 +54,12 @@ export const DumbPhaseForm = ({
   const startDatePickerPlaceholder = I18n.t('administration.timelineAdmin.selectStart', { count: phaseNumber });
   const endDatePickerPlaceholder = I18n.t('administration.timelineAdmin.selectEnd', { count: phaseNumber });
 
+
   const splitButtonTitle = identifier ?
     I18n.t(`administration.modules.${identifier}`) :
     I18n.t('administration.timelineAdmin.singleModule');
+
+  const slug = { slug: getDiscussionSlug() };
 
   return (
     <div className="phase-form">
@@ -120,7 +124,7 @@ export const DumbPhaseForm = ({
       </div>
       <div className="text-xs configure-module-text">
         <Translate value="administration.timelineAdmin.configureModule" />
-        <Link to="" /* TODO: add route to phase configuration page */ className="configure-module-link">
+        <Link to={`${get('administration', slug)}${get('adminPhase', { ...slug, phase: identifier })}?section=1`} className="configure-module-link">
           <Translate value="administration.timelineAdmin.configureModuleLink" count={phaseNumber} />
         </Link>
       </div>
