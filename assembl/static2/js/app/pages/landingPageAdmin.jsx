@@ -18,6 +18,7 @@ type Props = {
   landingPageModules: Array<Object>,
   landingPageModulesHasChanged: boolean,
   refetchLandingPageModules: Function,
+  refetchLandingPage: Function,
   route: Route,
   router: Router,
   section: string,
@@ -79,6 +80,7 @@ class LandingPageAdmin extends React.Component<Props, State> {
       landingPageModulesHasChanged,
       landingPageModules,
       refetchLandingPageModules,
+      refetchLandingPage,
       pageHasChanged,
       page,
       updateDiscussion
@@ -113,6 +115,7 @@ class LandingPageAdmin extends React.Component<Props, State> {
         }
       })
         .then(() => {
+          refetchLandingPage().then(() => this.setState({ refetching: false }));
           displayAlert('success', I18n.t('administration.landingPage.headerSuccessSave'));
         })
         .catch((error) => {
