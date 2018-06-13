@@ -523,7 +523,7 @@ var UrlPreferenceView = StringPreferenceView.extend({
   },
   regexp: new RegExp('^(?:(?:http|https|ftp)://)(?:\\S+(?::\\S*)?@)?(?:(?:(?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}(?:\\.(?:[0-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))|(?:(?:[a-z\\u00a1-\\uffff0-9]+-?)*[a-z\\u00a1-\\uffff0-9]+)(?:\\.(?:[a-z\\u00a1-\\uffff0-9]+-?)*[a-z\\u00a1-\\uffff0-9]+)*(?:\\.(?:[a-z\\u00a1-\\uffff]{2,})))|localhost)(?::\\d{2,5})?(?:(/|\\?|#)[^\\s]*)?$', 'i'),
   processValue: function(value) {
-    if (!this.regexp.test(value)) {
+    if (!this.regexp.test(value.trim())) {
         throw i18n.gettext("This does not appear to be a URL");
     }
     return value;
@@ -542,7 +542,7 @@ var EmailPreferenceView = StringPreferenceView.extend({
   },
   regexp: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
   processValue: function(value) {
-    if (!this.regexp.test(value)) {
+    if (!this.regexp.test(value.trim())) {
         throw i18n.gettext("This does not appear to be an email");
     }
     return value;
@@ -562,7 +562,7 @@ var DomainPreferenceView = StringPreferenceView.extend({
   // too lenient: accepts single element ("com")
   regexp: new RegExp("^([a-zA-Z0-9][a-zA-Z0-9-_]{0,61}[a-zA-Z0-9]{0,1}\.)+([a-zA-Z]{1,6}|[a-zA-Z0-9-]{1,30}\.[a-zA-Z]{2,3})$"),
   processValue: function(value) {
-    if (!this.regexp.test(value)) {
+    if (!this.regexp.test(value.trim())) {
         throw i18n.gettext("This does not appear to be a domain");
     }
     return value.toLowerCase();
