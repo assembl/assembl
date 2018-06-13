@@ -627,6 +627,20 @@
     .dropdown-menu > li > a {
       letter-spacing: 0;
     }
+
+    .configure-module-text {
+      margin: 40px auto 0 auto;
+      width: 300px;
+    }
+
+    .configure-module-link {
+      cursor: pointer;
+      text-decoration: underline;
+
+      &:hover {
+        text-decoration: none;
+      }
+    }
   }
 }
 

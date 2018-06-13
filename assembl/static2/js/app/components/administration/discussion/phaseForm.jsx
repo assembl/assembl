@@ -118,9 +118,10 @@ export const DumbPhaseForm = ({
           ))}
         </SplitButton>
       </div>
-      <div className="text-xs margin-l">
-        <Link to="" /* TODO: add route to phase configuration page */>
-          <Translate value="administration.timelineAdmin.configurePhase" count={phaseNumber} />
+      <div className="text-xs configure-module-text">
+        <Translate value="administration.timelineAdmin.configureModule" />
+        <Link to="" /* TODO: add route to phase configuration page */ className="configure-module-link">
+          <Translate value="administration.timelineAdmin.configureModuleLink" count={phaseNumber} />
         </Link>
       </div>
     </div>
@@ -130,9 +131,9 @@ export const DumbPhaseForm = ({
 const mapStateToProps = (state, { phaseId }) => {
   const phase = state.admin.timeline.phasesById.get(phaseId);
   return {
-    identifier: phase.get('identifier'),
-    start: phase.get('start'),
-    end: phase.get('end'),
+    identifier: phase ? phase.get('identifier') : null,
+    start: phase ? phase.get('start') : null,
+    end: phase ? phase.get('end') : null,
     locale: state.i18n.locale
   };
 };

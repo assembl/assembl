@@ -3,6 +3,7 @@ import React from 'react';
 import { I18n, Translate } from 'react-redux-i18n';
 import { OverlayTrigger, Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import range from 'lodash/range';
 import { addPhaseTooltip } from '../../common/tooltips';
 import SectionTitle from '../sectionTitle';
 import PhaseForm from './phaseForm';
@@ -29,9 +30,14 @@ export class DumbTimelineForm extends React.Component<TimelineFormProps, Timelin
   }
 
   componentWillReceiveProps(nextProps: TimelineFormProps) {
-    if (!this.state.selectedPhaseId) {
+    if (!this.state.selectedPhaseId && nextProps.phases) {
       this.setState({
-        selectedPhaseId: nextProps.phases ? nextProps.phases[0] : ''
+        selectedPhaseId: nextProps.phases[0]
+      });
+    }
+    if (nextProps.phases.length === 0) {
+      range(4).forEach(() => {
+        this.props.handleCreatePhase();
       });
     }
   }
