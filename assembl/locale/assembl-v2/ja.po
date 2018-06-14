@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2018-06-06T09:14:50.840Z\n"
+"POT-Creation-Date: 2018-06-14T14:06:30.001Z\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Vincent Fretin <vincent.fretin@gmail.com>\n"
 "Language-Team: \n"
@@ -559,6 +559,86 @@ msgstr "テーマを保存"
 #, fuzzy
 msgid "administration.instructions"
 msgstr "段階 %{count} - %{description}"
+
+#. [administration.landingPage.header.buttonLabel]
+#. defaultMessage is:
+#. Name of the referral button to the debate
+#: messages.json
+#, fuzzy
+msgid "administration.landingPage.header.buttonLabel"
+msgstr "ランディングページ"
+
+#. [administration.landingPage.header.headerDescription]
+#. defaultMessage is:
+#. The image must have a height of 450px and a width of 1280px. The weight must not exceed 1 MB.
+#: messages.json
+#, fuzzy
+msgid "administration.landingPage.header.headerDescription"
+msgstr "ランディングページ"
+
+#. [administration.landingPage.header.headerImage]
+#. defaultMessage is:
+#. Choose the header image
+#: messages.json
+#, fuzzy
+msgid "administration.landingPage.header.headerImage"
+msgstr "ランディングページ"
+
+#. [administration.landingPage.header.helper]
+#. defaultMessage is:
+#. Customize appearance of the header.
+#: messages.json
+#, fuzzy
+msgid "administration.landingPage.header.helper"
+msgstr "ランディングページ"
+
+#. [administration.landingPage.header.logoDescription]
+#. defaultMessage is:
+#. The logo must have a maximum height of 78px and a maximum width of 200px. The weight must not exceed 1 MB. The background must be transparent.
+#: messages.json
+#, fuzzy
+msgid "administration.landingPage.header.logoDescription"
+msgstr "ランディングページ"
+
+#. [administration.landingPage.header.logoImage]
+#. defaultMessage is:
+#. Choose the header logo
+#: messages.json
+#, fuzzy
+msgid "administration.landingPage.header.logoImage"
+msgstr "ランディングページ"
+
+#. [administration.landingPage.header.subtitleLabel]
+#. defaultMessage is:
+#. Debate subtitle
+#: messages.json
+#, fuzzy
+msgid "administration.landingPage.header.subtitleLabel"
+msgstr "ランディングページ"
+
+#. [administration.landingPage.header.title]
+#. defaultMessage is:
+#. Header
+#: messages.json
+#, fuzzy
+msgid "administration.landingPage.header.title"
+msgstr "ランディングページ"
+
+#. [administration.landingPage.header.titleLabel]
+#. defaultMessage is:
+#. Debate title
+#: messages.json
+#, fuzzy
+msgid "administration.landingPage.header.titleLabel"
+msgstr "ランディングページ"
+
+#. [administration.landingPage.headerSuccessSave]
+#. defaultMessage is:
+#. The home page header have been saved with success!
+#: messages.json
+#, fuzzy
+msgid "administration.landingPage.headerSuccessSave"
+msgstr "リソースの保存に成功しました"
 
 #. [administration.landingPage.manageModules.helper]
 #. defaultMessage is:
@@ -1637,6 +1717,13 @@ msgstr "Assemblのコミュニティページへようこそ"
 msgid "conclusion"
 msgstr "結論"
 
+#. [cookiesPolicy.headerTitle]
+#. defaultMessage is:
+#. Cookies
+#: messages.json
+msgid "cookiesPolicy.headerTitle"
+msgstr ""
+
 #. [date.format]
 #. defaultMessage is:
 #. MMMM Do, YYYY
@@ -1889,6 +1976,14 @@ msgstr ""
 #: messages.json
 msgid "debate.survey.endPhase"
 msgstr "%{closedPhaseName}フェーズは終了しました"
+
+#. [debate.survey.loadRecentPosts]
+#. defaultMessage is:
+#. Load recent proposals
+#: messages.json
+#, fuzzy
+msgid "debate.survey.loadRecentPosts"
+msgstr "反応"
 
 #. [debate.survey.moreProposals]
 #. defaultMessage is:
@@ -2429,6 +2524,13 @@ msgstr "申し訳ありませんが、エラーが発生しました："
 msgid "error.required"
 msgstr "この項目は必須です。"
 
+#. [footer.cookiePolicy]
+#. defaultMessage is:
+#. Cookies
+#: messages.json
+msgid "footer.cookiePolicy"
+msgstr ""
+
 #. [footer.legalNotice]
 #. defaultMessage is:
 #. Legal Notice
@@ -2436,6 +2538,13 @@ msgstr "この項目は必須です。"
 #, fuzzy
 msgid "footer.legalNotice"
 msgstr "規約と条件"
+
+#. [footer.privacyPolicy]
+#. defaultMessage is:
+#. Privacy Policy
+#: messages.json
+msgid "footer.privacyPolicy"
+msgstr ""
 
 #. [footer.socialMedias]
 #. defaultMessage is:
@@ -3178,6 +3287,13 @@ msgstr ""
 #: messages.json
 msgid "notFound.panelTitle"
 msgstr "申し訳ありません、このページは存在しません"
+
+#. [privacyPolicy.headerTitle]
+#. defaultMessage is:
+#. Privacy policy
+#: messages.json
+msgid "privacyPolicy.headerTitle"
+msgstr ""
 
 #. [profile.changePassword]
 #. defaultMessage is:

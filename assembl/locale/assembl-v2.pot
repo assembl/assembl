@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2018-06-06T09:14:50.840Z\n"
+"POT-Creation-Date: 2018-06-14T14:06:30.001Z\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "MIME-Version: 1.0\n"
@@ -481,6 +481,76 @@ msgstr ""
 #. defaultMessage is:
 #. Instructions section configuration
 msgid "administration.instructions"
+msgstr ""
+
+#: messages.json
+#. [administration.landingPage.header.buttonLabel]
+#. defaultMessage is:
+#. Name of the referral button to the debate
+msgid "administration.landingPage.header.buttonLabel"
+msgstr ""
+
+#: messages.json
+#. [administration.landingPage.header.headerDescription]
+#. defaultMessage is:
+#. The image must have a height of 450px and a width of 1280px. The weight must not exceed 1 MB.
+msgid "administration.landingPage.header.headerDescription"
+msgstr ""
+
+#: messages.json
+#. [administration.landingPage.header.headerImage]
+#. defaultMessage is:
+#. Choose the header image
+msgid "administration.landingPage.header.headerImage"
+msgstr ""
+
+#: messages.json
+#. [administration.landingPage.header.helper]
+#. defaultMessage is:
+#. Customize appearance of the header.
+msgid "administration.landingPage.header.helper"
+msgstr ""
+
+#: messages.json
+#. [administration.landingPage.header.logoDescription]
+#. defaultMessage is:
+#. The logo must have a maximum height of 78px and a maximum width of 200px. The weight must not exceed 1 MB. The background must be transparent.
+msgid "administration.landingPage.header.logoDescription"
+msgstr ""
+
+#: messages.json
+#. [administration.landingPage.header.logoImage]
+#. defaultMessage is:
+#. Choose the header logo
+msgid "administration.landingPage.header.logoImage"
+msgstr ""
+
+#: messages.json
+#. [administration.landingPage.header.subtitleLabel]
+#. defaultMessage is:
+#. Debate subtitle
+msgid "administration.landingPage.header.subtitleLabel"
+msgstr ""
+
+#: messages.json
+#. [administration.landingPage.header.title]
+#. defaultMessage is:
+#. Header
+msgid "administration.landingPage.header.title"
+msgstr ""
+
+#: messages.json
+#. [administration.landingPage.header.titleLabel]
+#. defaultMessage is:
+#. Debate title
+msgid "administration.landingPage.header.titleLabel"
+msgstr ""
+
+#: messages.json
+#. [administration.landingPage.headerSuccessSave]
+#. defaultMessage is:
+#. The home page header have been saved with success!
+msgid "administration.landingPage.headerSuccessSave"
 msgstr ""
 
 #: messages.json
@@ -1464,6 +1534,13 @@ msgid "conclusion"
 msgstr ""
 
 #: messages.json
+#. [cookiesPolicy.headerTitle]
+#. defaultMessage is:
+#. Cookies
+msgid "cookiesPolicy.headerTitle"
+msgstr ""
+
+#: messages.json
 #. [date.format]
 #. defaultMessage is:
 #. MMMM Do, YYYY
@@ -1706,6 +1783,13 @@ msgstr ""
 #. defaultMessage is:
 #. The %{closedPhaseName} phase is closed.
 msgid "debate.survey.endPhase"
+msgstr ""
+
+#: messages.json
+#. [debate.survey.loadRecentPosts]
+#. defaultMessage is:
+#. Load recent proposals
+msgid "debate.survey.loadRecentPosts"
 msgstr ""
 
 #: messages.json
@@ -2234,10 +2318,24 @@ msgid "error.required"
 msgstr ""
 
 #: messages.json
+#. [footer.cookiePolicy]
+#. defaultMessage is:
+#. Cookies
+msgid "footer.cookiePolicy"
+msgstr ""
+
+#: messages.json
 #. [footer.legalNotice]
 #. defaultMessage is:
 #. Legal Notice
 msgid "footer.legalNotice"
+msgstr ""
+
+#: messages.json
+#. [footer.privacyPolicy]
+#. defaultMessage is:
+#. Privacy Policy
+msgid "footer.privacyPolicy"
 msgstr ""
 
 #: messages.json
@@ -2959,6 +3057,13 @@ msgstr ""
 #. defaultMessage is:
 #. Sorry, this page doesn't exist
 msgid "notFound.panelTitle"
+msgstr ""
+
+#: messages.json
+#. [privacyPolicy.headerTitle]
+#. defaultMessage is:
+#. Privacy policy
+msgid "privacyPolicy.headerTitle"
 msgstr ""
 
 #: messages.json
