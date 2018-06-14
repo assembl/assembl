@@ -431,12 +431,6 @@ def assembl_register_user(request):
     permissions = get_permissions(
         Everyone, discussion.id if discussion else None)
 
-    if discussion and not (
-            P_SELF_REGISTER in permissions or
-            P_SELF_REGISTER_REQUEST in permissions):
-        # Consider it without context
-        discussion = None
-
     name = json.get('real_name', '').strip()
     errors = JSONError()
     if not name or len(name) < 3:
@@ -472,9 +466,32 @@ def assembl_register_user(request):
                 "We already have a user with this username.")),
                 ErrorTypes.EXISTING_USERNAME,
                 HTTPConflict.code)
-
+    if discussion:
+        check_subscription = discussion.preferences['whitelist_on_register']
+        whitelist = discussion.preferences['require_email_domain']
+        if check_subscription and whitelist:
+            status = discussion.check_email(email)
+            if not status:
+                admin_emails = discussion.get_admin_emails()
+                num = len(admin_emails)
+                errors.add_error(
+                    localizer.pluralize(
+                        _("Your email domain has not been approved for registration. Please contact ${emails} for support."),
+                        _("Your email domain has not been approved for registration. Please contact one of ${emails} for support."),
+                        num,
+                        mapping={'emails': ", ".join(admin_emails)}
+                    )
+                )
     if errors:
         raise errors
+
+    # This logic needs to be above the JSONError checks to ensure that whitelisting is applied
+    # even if the discussion does not have a P_SELF_REGISTER on system.Everyone
+    if discussion and not (
+            P_SELF_REGISTER in permissions or
+            P_SELF_REGISTER_REQUEST in permissions):
+        # Consider it without context
+        discussion = None
 
     validate_registration = asbool(config.get(
         'assembl.validate_registration_emails'))
@@ -532,7 +549,8 @@ def assembl_register_user(request):
                 print "email token:", request.route_url(
                     'user_confirm_email', token=email_token(account))
             if discussion:
-                maybe_auto_subscribe(user, discussion)
+                check_subscription = discussion.preferences['whitelist_on_register']
+                maybe_auto_subscribe(user, discussion, check_authorization=check_subscription)
         session.flush()
         return CreationResponse(user, Everyone, permissions)
     finally:

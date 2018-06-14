@@ -361,7 +361,7 @@ def users_with_permission(discussion_id, permission, id_only=True):
         return db.query(AgentProfile).filter(AgentProfile.id.in_(user_ids)).all()
 
 
-def maybe_auto_subscribe(user, discussion):
+def maybe_auto_subscribe(user, discussion, check_authorization=True):
     """Auto-subscribe user to notifications if discussion requires it
 
     Idempotent. Currently called at first login, maybe at user invite,
@@ -369,7 +369,7 @@ def maybe_auto_subscribe(user, discussion):
     """
     if (not discussion or
             not discussion.subscribe_to_notifications_on_signup or
-            not discussion.check_authorized_email(user)):
+            (check_authorization and not discussion.check_authorized_email(user))):
         return False
     # really auto-subscribe user
     user.subscribe(discussion)

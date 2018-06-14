@@ -456,6 +456,16 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
             discussion_urls.append(discussion_url_https)
         return discussion_urls
 
+    def check_email(self, email):
+        require_email_domain = self.preferences['require_email_domain']
+        if not email or '@' not in email:
+            return False
+        if require_email_domain:
+            email = email.split('@', 1)[-1]
+            if email.lower() in require_email_domain:
+                return True
+        return False
+
     def check_authorized_email(self, user):
         # Check if the user has a verified email from a required domain
         from .social_auth import SocialAuthAccount
@@ -469,18 +479,27 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
             # Note that this allows an account which is either from the SSO
             # OR from an allowed domain, if any. In most cases, only one
             # validation mechanism will be defined.
-            if require_email_domain:
-                email = account.email
-                if not email or '@' not in email:
-                    continue
-                email = email.split('@', 1)[-1]
-                if email.lower() in require_email_domain:
-                    return True
+            email = account.email
+            email_check = self.check_email(email)
+            if not email_check:
+                continue
+            else:
+                return True
             if autologin_backend:
                 if isinstance(account, SocialAuthAccount):
                     if account.provider_with_idp == autologin_backend:
                         return True
         return False
+
+    def get_admin_emails(self):
+        """Return a list or tuple of discussion administrator emails set for the discussion"""
+
+        admin_emails = self.preferences['discussion_administrators']
+        if admin_emails:
+            return admin_emails
+        # If no discussion admin is set, use the server administrator
+        # This field MUST be set, else Assembl will throw error at startup
+        return (get_config().get('assembl.admin_email'),)
 
     @property
     def widget_collection_url(self):
