@@ -740,6 +740,52 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
             "item_default": ""
         },
 
+        # Allow whitelist to be applied to SSO login process
+        {
+            "id": "whitelist_on_authentication_backend",
+            "name": _("Whitelist on authentication service"),
+            "value_type": "bool",
+            # "scalar_values": {value: "label"},
+            "description": _(
+                "Allow white list to be applied to the authentication service chosen"),
+            "allow_user_override": None,
+            "modification_permission": P_ADMIN_DISC,
+            # "frontend_validator_function": func_name...?,
+            # "backend_validator_function": func_name...?,
+            "default": False
+        },
+
+        # Allow whitelist to be applied to the regular login process
+        {
+            "id": "whitelist_on_register",
+            "name": _("Whitelist on standard registration"),
+            "value_type": "bool",
+            # "scalar_values": {value: "label"},
+            "description": _(
+                "Allow white list to be applied to the default login process"),
+            "allow_user_override": None,
+            "modification_permission": P_ADMIN_DISC,
+            # "frontend_validator_function": func_name...?,
+            # "backend_validator_function": func_name...?,
+            "default": True
+        },
+
+        # A discussion administrator, if different from the server administrator
+        {
+            "id": "discussion_administrators",
+            "name": _("Discussion administrators"),
+            "value_type": "list_of_email",
+            # "scalar_values": {value: "label"},
+            "description": _(
+                "A list of discussion administrators, if different from the server administrator"),
+            "allow_user_override": None,
+            "modification_permission": P_ADMIN_DISC,
+            # "frontend_validator_function": func_name...?,
+            # "backend_validator_function": func_name...?,
+            "default": False
+        },
+
+
         # Show the CI Dashboard in the panel group window
         {
             "id": "show_ci_dashboard",
