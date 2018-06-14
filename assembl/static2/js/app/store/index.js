@@ -26,6 +26,9 @@ export default function createAppStore(initialState) {
   if (storedLocale === 'en_GB' || storedLocale === 'en_CA') {
     storedLocale = 'en';
   }
+  if (storedLocale === 'no') {
+    storedLocale = 'nb';
+  }
   const isLocaleStored = storedLocale !== null;
   const userLocale = isLocaleStored ? storedLocale : getLocale(browserLanguage);
   syncTranslationWithStore(store);

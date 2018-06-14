@@ -1,3823 +1,3933 @@
 msgid ""
 msgstr ""
+"Project-Id-Version: \n"
 "POT-Creation-Date: 2018-06-14T14:06:30.001Z\n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: nb_NO\n"
+"MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"MIME-Version: 1.0\n"
-"X-Generator: react-intl-po\n"
+"X-Generator: Poedit 2.0.7\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-
-#: messages.json
 #. [accountDeleted]
 #. defaultMessage is:
 #. Your account has been successfully deleted
-msgid "accountDeleted"
-msgstr ""
-
 #: messages.json
+#, fuzzy
+msgid "accountDeleted"
+msgstr "Din konto er opprettet"
+
 #. [administration.addQuestion]
 #. defaultMessage is:
 #. Add a question
-msgid "administration.addQuestion"
-msgstr ""
-
 #: messages.json
+msgid "administration.addQuestion"
+msgstr "Legg til et spørsmål"
+
 #. [administration.addThematic]
 #. defaultMessage is:
 #. Add a theme
-msgid "administration.addThematic"
-msgstr ""
-
 #: messages.json
+msgid "administration.addThematic"
+msgstr "Legg til et tema"
+
 #. [administration.anErrorOccured]
 #. defaultMessage is:
 #. An error occured during save. Please check that you filled all the required fields.
+#: messages.json
 msgid "administration.anErrorOccured"
 msgstr ""
+"Det skjedde en feil under lagring. Kontroller at du fylte ut alle "
+"obligatoriske felt."
 
-#: messages.json
 #. [administration.annotation]
 #. defaultMessage is:
 #. * Fields are required.
-msgid "administration.annotation"
-msgstr ""
-
 #: messages.json
+msgid "administration.annotation"
+msgstr "* Felt er obligatoriske."
+
 #. [administration.announcementModule]
 #. defaultMessage is:
 #. Announcement module
-msgid "administration.announcementModule"
-msgstr ""
-
 #: messages.json
+msgid "administration.announcementModule"
+msgstr "Kunngjøringsmodul"
+
 #. [administration.backToPreviousStep]
 #. defaultMessage is:
 #. Return to step %{number}
-msgid "administration.backToPreviousStep"
-msgstr ""
-
 #: messages.json
+msgid "administration.backToPreviousStep"
+msgstr "Tilbake til trinn %{number}"
+
 #. [administration.changeLanguage]
 #. defaultMessage is:
 #. Set another language
-msgid "administration.changeLanguage"
-msgstr ""
-
 #: messages.json
+msgid "administration.changeLanguage"
+msgstr "Definer et annet språk"
+
 #. [administration.configureVoteModules]
 #. defaultMessage is:
 #. You need to configure at least one vote module.
-msgid "administration.configureVoteModules"
-msgstr ""
-
 #: messages.json
+msgid "administration.configureVoteModules"
+msgstr "Du må konfigurere minst én stemmemodul."
+
 #. [administration.configureVoteSession]
 #. defaultMessage is:
 #. You need to configure a vote session.
-msgid "administration.configureVoteSession"
-msgstr ""
-
 #: messages.json
+msgid "administration.configureVoteSession"
+msgstr "Du må konfigurere en stemmeøkt."
+
 #. [administration.confirmDeleteThematic]
 #. defaultMessage is:
 #. Are you sure you want to delete this theme?
-msgid "administration.confirmDeleteThematic"
-msgstr ""
-
 #: messages.json
+msgid "administration.confirmDeleteThematic"
+msgstr "Er du sikker på at du vil slette dette temaet?"
+
 #. [administration.confirmDeleteThematicTitle]
 #. defaultMessage is:
 #. Confirm deletion
-msgid "administration.confirmDeleteThematicTitle"
-msgstr ""
-
 #: messages.json
+msgid "administration.confirmDeleteThematicTitle"
+msgstr "Bekreft sletting"
+
 #. [administration.confirmSelectFieldOptionDeletion]
 #. defaultMessage is:
 #. Are you sure that you want to delete this item?
-msgid "administration.confirmSelectFieldOptionDeletion"
-msgstr ""
-
 #: messages.json
+#, fuzzy
+msgid "administration.confirmSelectFieldOptionDeletion"
+msgstr "Er du sikker på at du vil slette dette temaet?"
+
 #. [administration.confirmSelectFieldOptionDeletionTitle]
 #. defaultMessage is:
 #. Delete this item
-msgid "administration.confirmSelectFieldOptionDeletionTitle"
-msgstr ""
-
 #: messages.json
+#, fuzzy
+msgid "administration.confirmSelectFieldOptionDeletionTitle"
+msgstr "Bekreft sletting"
+
 #. [administration.confirmTextFieldDeletion]
 #. defaultMessage is:
 #. Are you sure that you want to delete this field?
-msgid "administration.confirmTextFieldDeletion"
-msgstr ""
-
 #: messages.json
+#, fuzzy
+msgid "administration.confirmTextFieldDeletion"
+msgstr "Du må konfigurere en stemmeøkt."
+
 #. [administration.confirmTextFieldDeletionTitle]
 #. defaultMessage is:
 #. Delete the field
-msgid "administration.confirmTextFieldDeletionTitle"
-msgstr ""
-
 #: messages.json
+#, fuzzy
+msgid "administration.confirmTextFieldDeletionTitle"
+msgstr "Bekreft sletting"
+
 #. [administration.confirmUnsavedChanges]
 #. defaultMessage is:
 #. You have unsaved changes. Are you sure you want to leave this page?
+#: messages.json
 msgid "administration.confirmUnsavedChanges"
 msgstr ""
+"Du har ikke-lagrede endringer. Er du sikker på at du vil avslutte denne "
+"siden?"
 
-#: messages.json
 #. [administration.defineGaugeNumer]
 #. defaultMessage is:
 #. Define gauges number
-msgid "administration.defineGaugeNumer"
-msgstr ""
-
 #: messages.json
+msgid "administration.defineGaugeNumer"
+msgstr "Definer antall målere"
+
 #. [administration.deleteQuestion]
 #. defaultMessage is:
 #. Delete the question
-msgid "administration.deleteQuestion"
-msgstr ""
-
 #: messages.json
+msgid "administration.deleteQuestion"
+msgstr "Slett spørsmålet"
+
 #. [administration.deleteThematic]
 #. defaultMessage is:
 #. Delete the theme
-msgid "administration.deleteThematic"
-msgstr ""
-
 #: messages.json
+msgid "administration.deleteThematic"
+msgstr "Slett temaet"
+
 #. [administration.deleteThematicImage]
 #. defaultMessage is:
 #. Delete the image associated to this thematic
-msgid "administration.deleteThematicImage"
-msgstr ""
-
 #: messages.json
+msgid "administration.deleteThematicImage"
+msgstr "Slett bildet knyttet til denne tematikken"
+
 #. [administration.discussion.0]
 #. defaultMessage is:
 #. Languages of the Discussion
-msgid "administration.discussion.0"
-msgstr ""
-
 #: messages.json
+msgid "administration.discussion.0"
+msgstr "Diskusjonens språk"
+
 #. [administration.discussion.3]
 #. defaultMessage is:
 #. Registration options
-msgid "administration.discussion.3"
-msgstr ""
-
 #: messages.json
+msgid "administration.discussion.3"
+msgstr "Vilkår og betingelser og juridiske merknader"
+
 #. [administration.discussion.4]
 #. defaultMessage is:
 #. Legal contents
-msgid "administration.discussion.4"
-msgstr ""
-
 #: messages.json
+#, fuzzy
+msgid "administration.discussion.4"
+msgstr "Diskusjonens språk"
+
 #. [administration.down]
 #. defaultMessage is:
 #. Down
-msgid "administration.down"
-msgstr ""
-
 #: messages.json
+msgid "administration.down"
+msgstr "Ned"
+
 #. [administration.edition]
 #. defaultMessage is:
 #. Edit the discussion
-msgid "administration.edition"
-msgstr ""
-
 #: messages.json
+msgid "administration.edition"
+msgstr "Rediger diskusjonen"
+
 #. [administration.exclusive]
 #. defaultMessage is:
 #. Exclusive
-msgid "administration.exclusive"
-msgstr ""
-
 #: messages.json
+msgid "administration.exclusive"
+msgstr "Eksklusiv"
+
 #. [administration.export.defaultAnnotation]
 #. defaultMessage is:
 #. You can export all of the data by clicking on the export button
-msgid "administration.export.defaultAnnotation"
-msgstr ""
-
 #: messages.json
+msgid "administration.export.defaultAnnotation"
+msgstr "Du kan eksportere alle data ved å klikke på eksportknappen"
+
 #. [administration.export.defaultSectionTitle]
 #. defaultMessage is:
 #. Export data
-msgid "administration.export.defaultSectionTitle"
-msgstr ""
-
 #: messages.json
+#, fuzzy
+msgid "administration.export.defaultSectionTitle"
+msgstr "Eksporter data"
+
 #. [administration.export.link]
 #. defaultMessage is:
 #. Export
-msgid "administration.export.link"
-msgstr ""
-
 #: messages.json
+msgid "administration.export.link"
+msgstr "Eksporter"
+
 #. [administration.export.multicolumnAnnotation]
 #. defaultMessage is:
 #. You can export all the Multi Column data by clicking on the Export button
-msgid "administration.export.multicolumnAnnotation"
-msgstr ""
-
 #: messages.json
+#, fuzzy
+msgid "administration.export.multicolumnAnnotation"
+msgstr "Du kan eksportere alle data ved å klikke på eksportknappen"
+
 #. [administration.export.noExportLanguage]
 #. defaultMessage is:
 #. Keep the messages in their original languages
-msgid "administration.export.noExportLanguage"
-msgstr ""
-
 #: messages.json
+msgid "administration.export.noExportLanguage"
+msgstr "Behold meldingene på sine originalspråk"
+
 #. [administration.export.surveyAnnotation]
 #. defaultMessage is:
 #. You can export all the survey module data by clicking on the Export button
+#: messages.json
 msgid "administration.export.surveyAnnotation"
 msgstr ""
+"Du kan eksportere alle data i undersøkelsesmodulen ved å klikke på "
+"eksportknappen"
 
-#: messages.json
 #. [administration.export.taxonomyAnnotation]
 #. defaultMessage is:
 #. You can export all of the taxonomies by clicking on the export button
+#: messages.json
+#, fuzzy
 msgid "administration.export.taxonomyAnnotation"
 msgstr ""
+"Du kan eksportere alle data i undersøkelsesmodulen ved å klikke på "
+"eksportknappen"
 
-#: messages.json
 #. [administration.export.taxonomySectionTitle]
 #. defaultMessage is:
 #. Export taxonomy
-msgid "administration.export.taxonomySectionTitle"
-msgstr ""
-
 #: messages.json
+#, fuzzy
+msgid "administration.export.taxonomySectionTitle"
+msgstr "Eksporter data"
+
 #. [administration.export.threadAnnotation]
 #. defaultMessage is:
 #. You can export all the thread module data by clicking on the Export butotn
+#: messages.json
+#, fuzzy
 msgid "administration.export.threadAnnotation"
 msgstr ""
+"Du kan eksportere alle data i undersøkelsesmodulen ved å klikke på "
+"eksportknappen"
 
-#: messages.json
 #. [administration.export.title]
 #. defaultMessage is:
 #. Export the debate data
-msgid "administration.export.title"
-msgstr ""
-
 #: messages.json
+msgid "administration.export.title"
+msgstr "Eksporter debattdataene"
+
 #. [administration.export.translateTheMessagesIn]
 #. defaultMessage is:
 #. Translate the messages in:
-msgid "administration.export.translateTheMessagesIn"
-msgstr ""
-
 #: messages.json
+msgid "administration.export.translateTheMessagesIn"
+msgstr "Oversett meldingene til:"
+
 #. [administration.export.voteSessionAnnotation]
 #. defaultMessage is:
 #. You can export all the vote session data by clicking on the Export button
+#: messages.json
 msgid "administration.export.voteSessionAnnotation"
 msgstr ""
+"Du kan eksportere alle data i stemmeøkten ved å klikke på eksportknappen"
 
-#: messages.json
 #. [administration.gauge]
 #. defaultMessage is:
 #. Gauge %{number}
-msgid "administration.gauge"
-msgstr ""
-
 #: messages.json
+msgid "administration.gauge"
+msgstr "Måler %{number}"
+
 #. [administration.gaugeModal.applyToAllProposalsCheckboxLabel]
 #. defaultMessage is:
 #. Apply these changes to all of the proposals
-msgid "administration.gaugeModal.applyToAllProposalsCheckboxLabel"
-msgstr ""
-
 #: messages.json
+msgid "administration.gaugeModal.applyToAllProposalsCheckboxLabel"
+msgstr "Bruk disse endringene på samtlige forslag"
+
 #. [administration.gaugeModal.subTitle]
 #. defaultMessage is:
 #. You are about to modify the settings on this gauge only. If you wish to modify all of the gauges, please check the box at the end of the form.
+#: messages.json
 msgid "administration.gaugeModal.subTitle"
 msgstr ""
+"Du er i ferd med å endre innstillingene bare på denne måleren. Hvis du vil "
+"endre alle målerne, kryss av boksen på slutten av skjemaet."
 
-#: messages.json
 #. [administration.gaugeModal.title]
 #. defaultMessage is:
 #. Modification of the gauge's settings
-msgid "administration.gaugeModal.title"
-msgstr ""
-
 #: messages.json
+msgid "administration.gaugeModal.title"
+msgstr "Endring av målerens innstillinger"
+
 #. [administration.gaugeNumber]
 #. defaultMessage is:
 #. Gauge number
-msgid "administration.gaugeNumber"
-msgstr ""
-
 #: messages.json
+msgid "administration.gaugeNumber"
+msgstr "Målernummer"
+
 #. [administration.gaugeVoteCheckbox]
 #. defaultMessage is:
 #. You can choose to have one or several gages
-msgid "administration.gaugeVoteCheckbox"
-msgstr ""
-
 #: messages.json
+msgid "administration.gaugeVoteCheckbox"
+msgstr "Du kan velge å ha én eller flere målere"
+
 #. [administration.gaugeVoteInstructions]
 #. defaultMessage is:
 #. Instructions for the gauge vote
-msgid "administration.gaugeVoteInstructions"
-msgstr ""
-
 #: messages.json
+msgid "administration.gaugeVoteInstructions"
+msgstr "Instruksjoner for stemmemålerne"
+
 #. [administration.headerTitle]
 #. defaultMessage is:
 #. Top page Header configuration
-msgid "administration.headerTitle"
-msgstr ""
-
 #: messages.json
+msgid "administration.headerTitle"
+msgstr "Konfigurasjon av sidens topptekst"
+
 #. [administration.helpers.exclusive]
 #. defaultMessage is:
 #. You can decide wether the participant can distribute a single type of token (exclusive) or several types of token per proposal.
+#: messages.json
 msgid "administration.helpers.exclusive"
 msgstr ""
+"Du kan bestemme hvorvidt deltakeren kan distribuere en enkelt sjetongtype "
+"(eksklusiv) eller flere sjetongtyper per forslag."
 
-#: messages.json
 #. [administration.helpers.gaugeVoteInstructions]
 #. defaultMessage is:
 #. Depending on the objective of the gauge module, incite the participants to take action.
-msgid "administration.helpers.gaugeVoteInstructions"
-msgstr ""
-
 #: messages.json
+msgid "administration.helpers.gaugeVoteInstructions"
+msgstr "Avhengig av målet med målermodulen, oppfordre deltakerne til å handle."
+
 #. [administration.helpers.landingPage.chatbot]
 #. defaultMessage is:
 #.  
+#: messages.json
 msgid "administration.helpers.landingPage.chatbot"
 msgstr ""
 
-#: messages.json
 #. [administration.helpers.landingPage.contact]
 #. defaultMessage is:
 #.  
+#: messages.json
 msgid "administration.helpers.landingPage.contact"
 msgstr ""
 
-#: messages.json
 #. [administration.helpers.landingPage.data]
 #. defaultMessage is:
 #.  
+#: messages.json
 msgid "administration.helpers.landingPage.data"
 msgstr ""
 
-#: messages.json
 #. [administration.helpers.landingPage.footer]
 #. defaultMessage is:
 #.  
+#: messages.json
 msgid "administration.helpers.landingPage.footer"
 msgstr ""
 
-#: messages.json
 #. [administration.helpers.landingPage.header]
 #. defaultMessage is:
 #. Top page header. It contains the consultation's title and subtitle and a button to access to the consultation.
+#: messages.json
 msgid "administration.helpers.landingPage.header"
 msgstr ""
+"Sidetopptekst. Inneholder konsultasjonens tittel og undertittel og en knapp "
+"for å åpne den."
 
-#: messages.json
 #. [administration.helpers.landingPage.introduction]
 #. defaultMessage is:
 #.  
+#: messages.json
 msgid "administration.helpers.landingPage.introduction"
 msgstr ""
 
-#: messages.json
 #. [administration.helpers.landingPage.news]
 #. defaultMessage is:
 #.  
+#: messages.json
 msgid "administration.helpers.landingPage.news"
 msgstr ""
 
-#: messages.json
 #. [administration.helpers.landingPage.partners]
 #. defaultMessage is:
 #.  
+#: messages.json
 msgid "administration.helpers.landingPage.partners"
 msgstr ""
 
-#: messages.json
 #. [administration.helpers.landingPage.timeline]
 #. defaultMessage is:
 #.  
+#: messages.json
 msgid "administration.helpers.landingPage.timeline"
 msgstr ""
 
-#: messages.json
 #. [administration.helpers.landingPage.top_thematics]
 #. defaultMessage is:
 #.  
+#: messages.json
 msgid "administration.helpers.landingPage.top_thematics"
 msgstr ""
 
-#: messages.json
 #. [administration.helpers.landingPage.tweets]
 #. defaultMessage is:
 #.  
+#: messages.json
 msgid "administration.helpers.landingPage.tweets"
 msgstr ""
 
-#: messages.json
 #. [administration.helpers.landingPage.video]
 #. defaultMessage is:
 #.  
+#: messages.json
 msgid "administration.helpers.landingPage.video"
 msgstr ""
 
-#: messages.json
 #. [administration.helpers.tokenCategoryNumber]
 #. defaultMessage is:
 #. Select the number of different token types for this vote
-msgid "administration.helpers.tokenCategoryNumber"
-msgstr ""
-
 #: messages.json
+msgid "administration.helpers.tokenCategoryNumber"
+msgstr "Velg antallet ulike sjetongtyper for denne stemmingen"
+
 #. [administration.helpers.tokenVoteInstructions]
 #. defaultMessage is:
 #. Depending on the objective of the token module, incite the participants to take action.
+#: messages.json
 msgid "administration.helpers.tokenVoteInstructions"
 msgstr ""
+"Avhengig av målet med sjetongrmodulen, oppfordre deltakerne til å handle."
 
-#: messages.json
 #. [administration.helpers.voteSessionHeader]
 #. defaultMessage is:
 #. The top page header must contain an image and a title. The subtitle is optional.
+#: messages.json
 msgid "administration.helpers.voteSessionHeader"
 msgstr ""
+"Sidetoppteksten må inneholde et bilde og en tittel. Undertittelen er valgfri."
 
-#: messages.json
 #. [administration.helpers.voteSessionInstructions]
 #. defaultMessage is:
 #. The instructions section must contain a title and a description that will guide the participants for their contribution.
+#: messages.json
 msgid "administration.helpers.voteSessionInstructions"
 msgstr ""
+"Instruksjonsseksjonen må inneholde en tittel og en beskrivelse som vil "
+"hjelpe deltakerne med deres bidrag."
 
-#: messages.json
 #. [administration.helpers.voteSessionProposalSection]
 #. defaultMessage is:
 #. The proposals section is introduced by a title. You define the title based on the proposal content.
+#: messages.json
 msgid "administration.helpers.voteSessionProposalSection"
 msgstr ""
+"Forslagsseksjonen er innledet med en tittel. Du definerer tittelen ut fra "
+"forslagsinnholdet."
 
-#: messages.json
 #. [administration.imageRequirements]
 #. defaultMessage is:
 #. The image must have a height of 480 px and a width of 1280px. Its size has to be under 1 MB.
+#: messages.json
 msgid "administration.imageRequirements"
 msgstr ""
+"Bildet må ha en høyde på 480 px og en bredde på 1280 px. Størrelsen må være "
+"under 1 MB."
 
-#: messages.json
 #. [administration.instructions]
 #. defaultMessage is:
 #. Instructions section configuration
-msgid "administration.instructions"
-msgstr ""
-
 #: messages.json
+msgid "administration.instructions"
+msgstr "Konfigurasjon av instruksjonsseksjonen"
+
 #. [administration.landingPage.header.buttonLabel]
 #. defaultMessage is:
 #. Name of the referral button to the debate
+#: messages.json
+#, fuzzy
 msgid "administration.landingPage.header.buttonLabel"
 msgstr ""
+"Sidetopptekst. Inneholder konsultasjonens tittel og undertittel og en knapp "
+"for å åpne den."
 
-#: messages.json
 #. [administration.landingPage.header.headerDescription]
 #. defaultMessage is:
 #. The image must have a height of 450px and a width of 1280px. The weight must not exceed 1 MB.
+#: messages.json
+#, fuzzy
 msgid "administration.landingPage.header.headerDescription"
 msgstr ""
+"Sidetopptekst. Inneholder konsultasjonens tittel og undertittel og en knapp "
+"for å åpne den."
 
-#: messages.json
 #. [administration.landingPage.header.headerImage]
 #. defaultMessage is:
 #. Choose the header image
+#: messages.json
+#, fuzzy
 msgid "administration.landingPage.header.headerImage"
 msgstr ""
+"Sidetopptekst. Inneholder konsultasjonens tittel og undertittel og en knapp "
+"for å åpne den."
 
-#: messages.json
 #. [administration.landingPage.header.helper]
 #. defaultMessage is:
 #. Customize appearance of the header.
-msgid "administration.landingPage.header.helper"
-msgstr ""
-
 #: messages.json
+#, fuzzy
+msgid "administration.landingPage.header.helper"
+msgstr "Velg modulene du vil se på målsiden, samt deres posisjon."
+
 #. [administration.landingPage.header.logoDescription]
 #. defaultMessage is:
 #. The logo must have a maximum height of 78px and a maximum width of 200px. The weight must not exceed 1 MB. The background must be transparent.
+#: messages.json
+#, fuzzy
 msgid "administration.landingPage.header.logoDescription"
 msgstr ""
+"Sidetopptekst. Inneholder konsultasjonens tittel og undertittel og en knapp "
+"for å åpne den."
 
-#: messages.json
 #. [administration.landingPage.header.logoImage]
 #. defaultMessage is:
 #. Choose the header logo
+#: messages.json
+#, fuzzy
 msgid "administration.landingPage.header.logoImage"
 msgstr ""
+"Sidetopptekst. Inneholder konsultasjonens tittel og undertittel og en knapp "
+"for å åpne den."
 
-#: messages.json
 #. [administration.landingPage.header.subtitleLabel]
 #. defaultMessage is:
 #. Debate subtitle
-msgid "administration.landingPage.header.subtitleLabel"
-msgstr ""
-
 #: messages.json
+#, fuzzy
+msgid "administration.landingPage.header.subtitleLabel"
+msgstr "Styr modulene"
+
 #. [administration.landingPage.header.title]
 #. defaultMessage is:
 #. Header
-msgid "administration.landingPage.header.title"
-msgstr ""
-
 #: messages.json
+#, fuzzy
+msgid "administration.landingPage.header.title"
+msgstr "Styr modulene"
+
 #. [administration.landingPage.header.titleLabel]
 #. defaultMessage is:
 #. Debate title
-msgid "administration.landingPage.header.titleLabel"
-msgstr ""
-
 #: messages.json
+#, fuzzy
+msgid "administration.landingPage.header.titleLabel"
+msgstr "Styr modulene"
+
 #. [administration.landingPage.headerSuccessSave]
 #. defaultMessage is:
 #. The home page header have been saved with success!
-msgid "administration.landingPage.headerSuccessSave"
-msgstr ""
-
 #: messages.json
+#, fuzzy
+msgid "administration.landingPage.headerSuccessSave"
+msgstr "Modulene er blitt lagret!"
+
 #. [administration.landingPage.manageModules.helper]
 #. defaultMessage is:
 #. Choose the modules you want to see in the landing page and their position.
-msgid "administration.landingPage.manageModules.helper"
-msgstr ""
-
 #: messages.json
+msgid "administration.landingPage.manageModules.helper"
+msgstr "Velg modulene du vil se på målsiden, samt deres posisjon."
+
 #. [administration.landingPage.manageModules.title]
 #. defaultMessage is:
 #. Manage the modules
-msgid "administration.landingPage.manageModules.title"
-msgstr ""
-
 #: messages.json
+msgid "administration.landingPage.manageModules.title"
+msgstr "Styr modulene"
+
 #. [administration.landingPage.successSave]
 #. defaultMessage is:
 #. The modules have been saved with success!
-msgid "administration.landingPage.successSave"
-msgstr ""
-
 #: messages.json
+msgid "administration.landingPage.successSave"
+msgstr "Modulene er blitt lagret!"
+
 #. [administration.landingpage]
 #. defaultMessage is:
 #. Landing page
-msgid "administration.landingpage"
-msgstr ""
-
 #: messages.json
+msgid "administration.landingpage"
+msgstr "Målside"
+
 #. [administration.languageChoice]
 #. defaultMessage is:
 #. Select desired languages below
-msgid "administration.languageChoice"
-msgstr ""
-
 #: messages.json
+msgid "administration.languageChoice"
+msgstr "Velg ønsket språk nedenfor"
+
 #. [administration.legalContents.cookiesPolicyLabel]
 #. defaultMessage is:
 #. Information on cookies
-msgid "administration.legalContents.cookiesPolicyLabel"
-msgstr ""
-
 #: messages.json
+#, fuzzy
+msgid "administration.legalContents.cookiesPolicyLabel"
+msgstr "Juridisk merknad"
+
 #. [administration.legalContents.legalNoticeLabel]
 #. defaultMessage is:
 #. Legal notice
-msgid "administration.legalContents.legalNoticeLabel"
-msgstr ""
-
 #: messages.json
+#, fuzzy
+msgid "administration.legalContents.legalNoticeLabel"
+msgstr "Juridisk merknad"
+
 #. [administration.legalContents.privacyPolicyLabel]
 #. defaultMessage is:
 #. Privacy policy
-msgid "administration.legalContents.privacyPolicyLabel"
-msgstr ""
-
 #: messages.json
+#, fuzzy
+msgid "administration.legalContents.privacyPolicyLabel"
+msgstr "Juridisk merknad"
+
 #. [administration.legalContents.successSave]
 #. defaultMessage is:
 #. The legal contents have been saved with success!
-msgid "administration.legalContents.successSave"
-msgstr ""
-
 #: messages.json
+#, fuzzy
+msgid "administration.legalContents.successSave"
+msgstr "Vilkår og betingelser og juridisk merknad er blitt lagret!"
+
 #. [administration.legalContents.termsAndConditionsLabel]
 #. defaultMessage is:
 #. Terms and conditions
-msgid "administration.legalContents.termsAndConditionsLabel"
-msgstr ""
-
 #: messages.json
+#, fuzzy
+msgid "administration.legalContents.termsAndConditionsLabel"
+msgstr "Vilkår og betingelser"
+
 #. [administration.maxValue]
 #. defaultMessage is:
 #. Maximum value
-msgid "administration.maxValue"
-msgstr ""
-
 #: messages.json
+msgid "administration.maxValue"
+msgstr "Maksimal verdi"
+
 #. [administration.menu.exportTaxonomies]
 #. defaultMessage is:
 #. Export taxonomies
-msgid "administration.menu.exportTaxonomies"
-msgstr ""
-
 #: messages.json
+msgid "administration.menu.exportTaxonomies"
+msgstr "Eksporter taksonomier"
+
 #. [administration.menu.language]
 #. defaultMessage is:
 #. Discussion language
-msgid "administration.menu.language"
-msgstr ""
-
 #: messages.json
+msgid "administration.menu.language"
+msgstr "Diskusjonsspråk"
+
 #. [administration.menu.legalContents]
 #. defaultMessage is:
 #. Edit legal content
-msgid "administration.menu.legalContents"
-msgstr ""
-
 #: messages.json
+#, fuzzy
+msgid "administration.menu.legalContents"
+msgstr "Vilkår og betingelser og juridisk merknad"
+
 #. [administration.menu.manageProfileOptions]
 #. defaultMessage is:
 #. Registration options
-msgid "administration.menu.manageProfileOptions"
-msgstr ""
-
 #: messages.json
+#, fuzzy
+msgid "administration.menu.manageProfileOptions"
+msgstr "Rediger debattseksjoner"
+
 #. [administration.menu.phase]
 #. defaultMessage is:
 #. Phase %{count} - %{description}
-msgid "administration.menu.phase"
-msgstr ""
-
 #: messages.json
+msgid "administration.menu.phase"
+msgstr "Fase %{count} - %{description}"
+
 #. [administration.menu.sections]
 #. defaultMessage is:
 #. Edit debate sections
-msgid "administration.menu.sections"
-msgstr ""
-
 #: messages.json
+msgid "administration.menu.sections"
+msgstr "Rediger debattseksjoner"
+
 #. [administration.minValue]
 #. defaultMessage is:
 #. Minimum value
-msgid "administration.minValue"
-msgstr ""
-
 #: messages.json
+msgid "administration.minValue"
+msgstr "Minimal verdi"
+
 #. [administration.multiColumn.0]
 #. defaultMessage is:
 #. Export Data
-msgid "administration.multiColumn.0"
-msgstr ""
-
 #: messages.json
+#, fuzzy
+msgid "administration.multiColumn.0"
+msgstr "Diskusjonens språk"
+
 #. [administration.nbTicks]
 #. defaultMessage is:
 #. Ticks number
-msgid "administration.nbTicks"
-msgstr ""
-
 #: messages.json
+msgid "administration.nbTicks"
+msgstr "Merkenummer"
+
 #. [administration.nbTicksHelper]
 #. defaultMessage is:
 #. Define ticks number for the gauge
-msgid "administration.nbTicksHelper"
-msgstr ""
-
 #: messages.json
+msgid "administration.nbTicksHelper"
+msgstr "Definer merkenummer for måleren"
+
 #. [administration.nextStep]
 #. defaultMessage is:
 #. Next step
-msgid "administration.nextStep"
-msgstr ""
-
 #: messages.json
+msgid "administration.nextStep"
+msgstr "Neste skritt"
+
 #. [administration.noTimeline]
 #. defaultMessage is:
 #. No timeline has been configured yet
-msgid "administration.noTimeline"
-msgstr ""
-
 #: messages.json
+msgid "administration.noTimeline"
+msgstr "Ingen tidslinje er blitt konfigurert ennå"
+
 #. [administration.notExclusive]
 #. defaultMessage is:
 #. Not exclusive
-msgid "administration.notExclusive"
-msgstr ""
-
 #: messages.json
+msgid "administration.notExclusive"
+msgstr "Ikke eksklusiv"
+
 #. [administration.numberValue]
 #. defaultMessage is:
 #. Number value
-msgid "administration.numberValue"
-msgstr ""
-
 #: messages.json
+msgid "administration.numberValue"
+msgstr "Tallverdi"
+
 #. [administration.ph.descriptionBottom]
 #. defaultMessage is:
 #. Comments below video
-msgid "administration.ph.descriptionBottom"
-msgstr ""
-
 #: messages.json
+msgid "administration.ph.descriptionBottom"
+msgstr "Kommentarer under video"
+
 #. [administration.ph.descriptionTop]
 #. defaultMessage is:
 #. Comments above video
-msgid "administration.ph.descriptionTop"
-msgstr ""
-
 #: messages.json
+msgid "administration.ph.descriptionTop"
+msgstr "Kommentarer over video"
+
 #. [administration.ph.headerSubtitle]
 #. defaultMessage is:
 #. Header subtitle
-msgid "administration.ph.headerSubtitle"
-msgstr ""
-
 #: messages.json
+msgid "administration.ph.headerSubtitle"
+msgstr "Topptekst undertittel"
+
 #. [administration.ph.headerTitle]
 #. defaultMessage is:
 #. Header title
-msgid "administration.ph.headerTitle"
-msgstr ""
-
 #: messages.json
+msgid "administration.ph.headerTitle"
+msgstr "Topptekst tittel"
+
 #. [administration.ph.instructionsContent]
 #. defaultMessage is:
 #. Instructions content
-msgid "administration.ph.instructionsContent"
-msgstr ""
-
 #: messages.json
+msgid "administration.ph.instructionsContent"
+msgstr "Instruksjonsinnhold"
+
 #. [administration.ph.instructionsTitle]
 #. defaultMessage is:
 #. Instructions title
-msgid "administration.ph.instructionsTitle"
-msgstr ""
-
 #: messages.json
+msgid "administration.ph.instructionsTitle"
+msgstr "Instruksjonstittel"
+
 #. [administration.ph.mediaLink]
 #. defaultMessage is:
 #. Online media link (video, picture, etc..)
-msgid "administration.ph.mediaLink"
-msgstr ""
-
 #: messages.json
+msgid "administration.ph.mediaLink"
+msgstr "Nettmedielenke (video, bilde osv.)"
+
 #. [administration.ph.orAttachPicture]
 #. defaultMessage is:
 #. Or upload an image from your computer
-msgid "administration.ph.orAttachPicture"
-msgstr ""
-
 #: messages.json
+msgid "administration.ph.orAttachPicture"
+msgstr "Eller last opp et bilde fra din datamaskin"
+
 #. [administration.ph.propositionSectionTitle]
 #. defaultMessage is:
 #. Section title
-msgid "administration.ph.propositionSectionTitle"
-msgstr ""
-
 #: messages.json
+msgid "administration.ph.propositionSectionTitle"
+msgstr "Seksjonstittel"
+
 #. [administration.ph.quote]
 #. defaultMessage is:
 #. Quote
-msgid "administration.ph.quote"
-msgstr ""
-
 #: messages.json
+msgid "administration.ph.quote"
+msgstr "Sitat"
+
 #. [administration.ph.title]
 #. defaultMessage is:
 #. *Title
-msgid "administration.ph.title"
-msgstr ""
-
 #: messages.json
+msgid "administration.ph.title"
+msgstr "*Tittel"
+
 #. [administration.previousStep]
 #. defaultMessage is:
 #. Previous step
-msgid "administration.previousStep"
-msgstr ""
-
 #: messages.json
+msgid "administration.previousStep"
+msgstr "Forrige skritt"
+
 #. [administration.profileOptions.addSelectFieldOption]
 #. defaultMessage is:
 #. Add a new item
-msgid "administration.profileOptions.addSelectFieldOption"
-msgstr ""
-
 #: messages.json
+#, fuzzy
+msgid "administration.profileOptions.addSelectFieldOption"
+msgstr "Legg til en seksjon"
+
 #. [administration.profileOptions.addTextField]
 #. defaultMessage is:
 #. Add a field
-msgid "administration.profileOptions.addTextField"
-msgstr ""
-
 #: messages.json
+#, fuzzy
+msgid "administration.profileOptions.addTextField"
+msgstr "Legg til en seksjon"
+
 #. [administration.profileOptions.choiceSelectField]
 #. defaultMessage is:
 #. Dropdown field
-msgid "administration.profileOptions.choiceSelectField"
-msgstr ""
-
 #: messages.json
+#, fuzzy
+msgid "administration.profileOptions.choiceSelectField"
+msgstr "Forslag seksjonstittel konfigurasjon"
+
 #. [administration.profileOptions.choiceTextField]
 #. defaultMessage is:
 #. Text field
-msgid "administration.profileOptions.choiceTextField"
-msgstr ""
-
 #: messages.json
+#, fuzzy
+msgid "administration.profileOptions.choiceTextField"
+msgstr "Forslag seksjonstittel konfigurasjon"
+
 #. [administration.profileOptions.createNewFieldModalBody]
 #. defaultMessage is:
 #. Select the field type you want to add to the register page:
-msgid "administration.profileOptions.createNewFieldModalBody"
-msgstr ""
-
 #: messages.json
+#, fuzzy
+msgid "administration.profileOptions.createNewFieldModalBody"
+msgstr "Er du sikker på at du vil slette dette forslaget?"
+
 #. [administration.profileOptions.deleteSelectFieldOption]
 #. defaultMessage is:
 #. Delete this item
-msgid "administration.profileOptions.deleteSelectFieldOption"
-msgstr ""
-
 #: messages.json
+#, fuzzy
+msgid "administration.profileOptions.deleteSelectFieldOption"
+msgstr "Slett seksjonen"
+
 #. [administration.profileOptions.deleteTextField]
 #. defaultMessage is:
 #. Delete the field
-msgid "administration.profileOptions.deleteTextField"
-msgstr ""
-
 #: messages.json
+#, fuzzy
+msgid "administration.profileOptions.deleteTextField"
+msgstr "Slett seksjonen"
+
 #. [administration.profileOptions.introText]
 #. defaultMessage is:
 #. Configure the fields that you want to display in the registration form. Fill in the names and whether the fields are required or optional.
-msgid "administration.profileOptions.introText"
-msgstr ""
-
 #: messages.json
+#, fuzzy
+msgid "administration.profileOptions.introText"
+msgstr "Forslag seksjonstittel konfigurasjon"
+
 #. [administration.profileOptions.successSave]
 #. defaultMessage is:
 #. The profile options has been saved with success!
-msgid "administration.profileOptions.successSave"
-msgstr ""
-
 #: messages.json
+#, fuzzy
+msgid "administration.profileOptions.successSave"
+msgstr "Seksjoner er endret"
+
 #. [administration.profileOptions.textFieldToggleOptional]
 #. defaultMessage is:
 #. Make this field optional
-msgid "administration.profileOptions.textFieldToggleOptional"
-msgstr ""
-
 #: messages.json
+#, fuzzy
+msgid "administration.profileOptions.textFieldToggleOptional"
+msgstr "Slett seksjonen"
+
 #. [administration.profileOptions.textFieldToggleRequired]
 #. defaultMessage is:
 #. Make this field required
-msgid "administration.profileOptions.textFieldToggleRequired"
-msgstr ""
-
 #: messages.json
+#, fuzzy
+msgid "administration.profileOptions.textFieldToggleRequired"
+msgstr "Bruk ekstern side"
+
 #. [administration.proposalSectionTitle]
 #. defaultMessage is:
 #. Proposal section title configuration
-msgid "administration.proposalSectionTitle"
-msgstr ""
-
 #: messages.json
+msgid "administration.proposalSectionTitle"
+msgstr "Forslag seksjonstittel konfigurasjon"
+
 #. [administration.propositionSectionTitle]
 #. defaultMessage is:
 #. Proposals section title configuration
-msgid "administration.propositionSectionTitle"
-msgstr ""
-
 #: messages.json
+msgid "administration.propositionSectionTitle"
+msgstr "Forslag seksjonstittel konfigurasjon"
+
 #. [administration.question_label]
 #. defaultMessage is:
 #. Question
-msgid "administration.question_label"
-msgstr ""
-
 #: messages.json
+msgid "administration.question_label"
+msgstr "Spørsmål"
+
 #. [administration.resourcesCenter.createResource]
 #. defaultMessage is:
 #. Add a media
-msgid "administration.resourcesCenter.createResource"
-msgstr ""
-
 #: messages.json
+msgid "administration.resourcesCenter.createResource"
+msgstr "Legg til et medium"
+
 #. [administration.resourcesCenter.deleteResource]
 #. defaultMessage is:
 #. Delete the resource
-msgid "administration.resourcesCenter.deleteResource"
-msgstr ""
-
 #: messages.json
+msgid "administration.resourcesCenter.deleteResource"
+msgstr "Slett ressursen"
+
 #. [administration.resourcesCenter.documentLabel]
 #. defaultMessage is:
 #. Document
-msgid "administration.resourcesCenter.documentLabel"
-msgstr ""
-
 #: messages.json
+msgid "administration.resourcesCenter.documentLabel"
+msgstr "Dokument"
+
 #. [administration.resourcesCenter.editResourceFormTitle]
 #. defaultMessage is:
 #. Edit resource number %{num}
-msgid "administration.resourcesCenter.editResourceFormTitle"
-msgstr ""
-
 #: messages.json
+msgid "administration.resourcesCenter.editResourceFormTitle"
+msgstr "Rediger ressursnummer %{num}"
+
 #. [administration.resourcesCenter.embedCodeLabel]
 #. defaultMessage is:
 #. Video/Slides
-msgid "administration.resourcesCenter.embedCodeLabel"
-msgstr ""
-
 #: messages.json
+msgid "administration.resourcesCenter.embedCodeLabel"
+msgstr "Video/lysbilder"
+
 #. [administration.resourcesCenter.headerImageLabel]
 #. defaultMessage is:
 #. Header image
-msgid "administration.resourcesCenter.headerImageLabel"
-msgstr ""
-
 #: messages.json
+msgid "administration.resourcesCenter.headerImageLabel"
+msgstr "Topptekstbilde"
+
 #. [administration.resourcesCenter.imageLabel]
 #. defaultMessage is:
 #. Image
-msgid "administration.resourcesCenter.imageLabel"
-msgstr ""
-
 #: messages.json
+msgid "administration.resourcesCenter.imageLabel"
+msgstr "Bilde"
+
 #. [administration.resourcesCenter.menuTitle]
 #. defaultMessage is:
 #. Edit the resources center
-msgid "administration.resourcesCenter.menuTitle"
-msgstr ""
-
 #: messages.json
+msgid "administration.resourcesCenter.menuTitle"
+msgstr "Rediger ressurssenteret"
+
 #. [administration.resourcesCenter.pageTitleLabel]
 #. defaultMessage is:
 #. Page title
-msgid "administration.resourcesCenter.pageTitleLabel"
-msgstr ""
-
 #: messages.json
+msgid "administration.resourcesCenter.pageTitleLabel"
+msgstr "Sidetittel"
+
 #. [administration.resourcesCenter.successSave]
 #. defaultMessage is:
 #. Resources have been saved with success!
-msgid "administration.resourcesCenter.successSave"
-msgstr ""
-
 #: messages.json
+msgid "administration.resourcesCenter.successSave"
+msgstr "Ressursene er blitt lagret!"
+
 #. [administration.resourcesCenter.textLabel]
 #. defaultMessage is:
 #. Text
-msgid "administration.resourcesCenter.textLabel"
-msgstr ""
-
 #: messages.json
+msgid "administration.resourcesCenter.textLabel"
+msgstr "Tekst"
+
 #. [administration.resourcesCenter.title]
 #. defaultMessage is:
 #. Resources center
-msgid "administration.resourcesCenter.title"
-msgstr ""
-
 #: messages.json
+msgid "administration.resourcesCenter.title"
+msgstr "Ressurssenter"
+
 #. [administration.resourcesCenter.titleLabel]
 #. defaultMessage is:
 #. Title
-msgid "administration.resourcesCenter.titleLabel"
-msgstr ""
-
 #: messages.json
+msgid "administration.resourcesCenter.titleLabel"
+msgstr "Tittel"
+
 #. [administration.resultsNotVisible]
 #. defaultMessage is:
 #. No, only show the results once the vote is closed.
-msgid "administration.resultsNotVisible"
-msgstr ""
-
 #: messages.json
+msgid "administration.resultsNotVisible"
+msgstr "Nei, bare vis resultatene når stemmingen er lukket."
+
 #. [administration.resultsVisible]
 #. defaultMessage is:
 #. Yes, even before having voted.
-msgid "administration.resultsVisible"
-msgstr ""
-
 #: messages.json
+msgid "administration.resultsVisible"
+msgstr "Ja, selv før du stemte."
+
 #. [administration.saveFirstStep]
 #. defaultMessage is:
 #. Please return to step 1 and save the instructions first.
-msgid "administration.saveFirstStep"
-msgstr ""
-
 #: messages.json
+msgid "administration.saveFirstStep"
+msgstr "Vennligst gå tilbake til trinn 1 og lagre instruksjonene først."
+
 #. [administration.saveSecondStep]
 #. defaultMessage is:
 #. Please return to step 2 and configure and save the vote modules.
+#: messages.json
 msgid "administration.saveSecondStep"
 msgstr ""
+"Vennligst gå tilbake til trinn 2 og konfigurer og lagre stemmemodulene."
 
-#: messages.json
 #. [administration.saveThemes]
 #. defaultMessage is:
 #. Save
-msgid "administration.saveThemes"
-msgstr ""
-
 #: messages.json
+msgid "administration.saveThemes"
+msgstr "Lagre"
+
 #. [administration.sections.addSection]
 #. defaultMessage is:
 #. Add a section
-msgid "administration.sections.addSection"
-msgstr ""
-
 #: messages.json
+msgid "administration.sections.addSection"
+msgstr "Legg til en seksjon"
+
 #. [administration.sections.custom]
 #. defaultMessage is:
 #. Added section
-msgid "administration.sections.custom"
-msgstr ""
-
 #: messages.json
+msgid "administration.sections.custom"
+msgstr "Tilføyd seksjon"
+
 #. [administration.sections.deleteSection]
 #. defaultMessage is:
 #. Delete the section
-msgid "administration.sections.deleteSection"
-msgstr ""
-
 #: messages.json
+msgid "administration.sections.deleteSection"
+msgstr "Slett seksjonen"
+
 #. [administration.sections.externalPage]
 #. defaultMessage is:
 #. Use external page
-msgid "administration.sections.externalPage"
-msgstr ""
-
 #: messages.json
+msgid "administration.sections.externalPage"
+msgstr "Bruk ekstern side"
+
 #. [administration.sections.resources_center]
 #. defaultMessage is:
 #. Resources center
-msgid "administration.sections.resources_center"
-msgstr ""
-
 #: messages.json
+msgid "administration.sections.resources_center"
+msgstr "Ressurssenter"
+
 #. [administration.sections.sectionsTitle]
 #. defaultMessage is:
 #. Set sections
-msgid "administration.sections.sectionsTitle"
-msgstr ""
-
 #: messages.json
+msgid "administration.sections.sectionsTitle"
+msgstr "Definer seksjoner"
+
 #. [administration.sections.successSave]
 #. defaultMessage is:
 #. Sections are modified with success
-msgid "administration.sections.successSave"
-msgstr ""
-
 #: messages.json
+msgid "administration.sections.successSave"
+msgstr "Seksjoner er endret"
+
 #. [administration.sections.titlePh]
 #. defaultMessage is:
 #. Title
-msgid "administration.sections.titlePh"
-msgstr ""
-
 #: messages.json
+msgid "administration.sections.titlePh"
+msgstr "Tittel"
+
 #. [administration.sections.urlPh]
 #. defaultMessage is:
 #. URL
-msgid "administration.sections.urlPh"
-msgstr ""
-
 #: messages.json
+msgid "administration.sections.urlPh"
+msgstr "URL"
+
 #. [administration.seeCurrentVotes]
 #. defaultMessage is:
 #. Do you want participants to see the evolution of the votes in progress?
-msgid "administration.seeCurrentVotes"
-msgstr ""
-
 #: messages.json
+msgid "administration.seeCurrentVotes"
+msgstr "Vil du at deltakerne skal se det aktuelle stemmeforløpet?"
+
 #. [administration.step_x_total]
 #. defaultMessage is:
 #. Section %{num} on %{total}
-msgid "administration.step_x_total"
-msgstr ""
-
 #: messages.json
+msgid "administration.step_x_total"
+msgstr "Seksjon %{num} på %{total}"
+
 #. [administration.successLanguagePreference]
 #. defaultMessage is:
 #. Discussion language preferences have been saved with success!
-msgid "administration.successLanguagePreference"
-msgstr ""
-
 #: messages.json
+msgid "administration.successLanguagePreference"
+msgstr "Diskusjonsspråkpreferansene er blitt lagret!"
+
 #. [administration.successThemeCreation]
 #. defaultMessage is:
 #. Themes have been saved with success!
-msgid "administration.successThemeCreation"
-msgstr ""
-
 #: messages.json
+msgid "administration.successThemeCreation"
+msgstr "Temaene er blitt lagret!"
+
 #. [administration.survey.0]
 #. defaultMessage is:
 #. Set themes
-msgid "administration.survey.0"
-msgstr ""
-
 #: messages.json
+msgid "administration.survey.0"
+msgstr "Definer temaer"
+
 #. [administration.survey.1]
 #. defaultMessage is:
 #. Set questions
-msgid "administration.survey.1"
-msgstr ""
-
 #: messages.json
+msgid "administration.survey.1"
+msgstr "Definer spørsmål"
+
 #. [administration.survey.2]
 #. defaultMessage is:
 #. Export data
-msgid "administration.survey.2"
-msgstr ""
-
 #: messages.json
+msgid "administration.survey.2"
+msgstr "Eksporter data"
+
 #. [administration.textValue]
 #. defaultMessage is:
 #. Textual value
-msgid "administration.textValue"
-msgstr ""
-
 #: messages.json
+msgid "administration.textValue"
+msgstr "Tekstverdi"
+
 #. [administration.thematic]
 #. defaultMessage is:
 #. Theme
-msgid "administration.thematic"
-msgstr ""
-
 #: messages.json
+msgid "administration.thematic"
+msgstr "Tema"
+
 #. [administration.themeNum]
 #. defaultMessage is:
 #. Theme %{index}
-msgid "administration.themeNum"
-msgstr ""
-
 #: messages.json
+msgid "administration.themeNum"
+msgstr "Tema %{index}"
+
 #. [administration.thread.0]
 #. defaultMessage is:
 #. Export Data
-msgid "administration.thread.0"
-msgstr ""
-
 #: messages.json
+#, fuzzy
+msgid "administration.thread.0"
+msgstr "Tema"
+
 #. [administration.timeline]
 #. defaultMessage is:
 #. timeline
-msgid "administration.timeline"
-msgstr ""
-
 #: messages.json
+msgid "administration.timeline"
+msgstr "tidslinjen"
+
 #. [administration.token]
 #. defaultMessage is:
 #. Token %{number}
-msgid "administration.token"
-msgstr ""
-
 #: messages.json
+msgid "administration.token"
+msgstr "Sjetong %{number}"
+
 #. [administration.tokenCategoryNumber]
 #. defaultMessage is:
 #. Number of token types
-msgid "administration.tokenCategoryNumber"
-msgstr ""
-
 #: messages.json
+msgid "administration.tokenCategoryNumber"
+msgstr "Antall sjetongtyper"
+
 #. [administration.tokenColor]
 #. defaultMessage is:
 #. Color of the token
-msgid "administration.tokenColor"
-msgstr ""
-
 #: messages.json
+msgid "administration.tokenColor"
+msgstr "Farge på sjetongen"
+
 #. [administration.tokenNumber]
 #. defaultMessage is:
 #. Number of tokens per participant
-msgid "administration.tokenNumber"
-msgstr ""
-
 #: messages.json
+msgid "administration.tokenNumber"
+msgstr "Antall sjetonger per deltaker"
+
 #. [administration.tokenTitle]
 #. defaultMessage is:
 #. Token title
-msgid "administration.tokenTitle"
-msgstr ""
-
 #: messages.json
+msgid "administration.tokenTitle"
+msgstr "Sjetongtittel"
+
 #. [administration.tokenVoteCheckbox]
 #. defaultMessage is:
 #. The token vote module allows you to select propositions proportionnaly. Each participant has a certain amount of tokens et will have to spread them on the different propositions
+#: messages.json
 msgid "administration.tokenVoteCheckbox"
 msgstr ""
+"Sjetongstemmemodulen gjør det mulig å velge forslagene proporsjonalt. Hver "
+"deltaker har et visst antall sjetonger og må fordele dem på de forskjellige "
+"forslagene."
 
-#: messages.json
 #. [administration.tokenVoteInstructions]
 #. defaultMessage is:
 #. Instructions for the token vote
-msgid "administration.tokenVoteInstructions"
-msgstr ""
-
 #: messages.json
+msgid "administration.tokenVoteInstructions"
+msgstr "Instruksjoner for sjetongstemmingen"
+
 #. [administration.unit]
 #. defaultMessage is:
 #. Unit
-msgid "administration.unit"
-msgstr ""
-
 #: messages.json
+msgid "administration.unit"
+msgstr "Enhet"
+
 #. [administration.up]
 #. defaultMessage is:
 #. Up
-msgid "administration.up"
-msgstr ""
-
 #: messages.json
+msgid "administration.up"
+msgstr "Opp"
+
 #. [administration.valueTitle]
 #. defaultMessage is:
 #. Value title
-msgid "administration.valueTitle"
-msgstr ""
-
 #: messages.json
+msgid "administration.valueTitle"
+msgstr "Verditittel"
+
 #. [administration.videoHelp]
 #. defaultMessage is:
 #. *Authorized video links: "https://www.youtube.com/embed/[videoId]" or "https://player.vimeo.com/video/[videoId]?"
+#: messages.json
 msgid "administration.videoHelp"
 msgstr ""
+"*Autoriserte videokoblinger: \"https://www.youtube.com/embed/[videoId]\" "
+"eller \"https://player.vimeo.com/video/[videoId]?\""
 
-#: messages.json
 #. [administration.voteModulesIntroText1]
 #. defaultMessage is:
 #. You chose the vote module
-msgid "administration.voteModulesIntroText1"
-msgstr ""
-
 #: messages.json
+msgid "administration.voteModulesIntroText1"
+msgstr "Du velger stemmemodulen"
+
 #. [administration.voteModulesIntroText2]
 #. defaultMessage is:
 #. To modify your choice, modify the 
-msgid "administration.voteModulesIntroText2"
-msgstr ""
-
 #: messages.json
+msgid "administration.voteModulesIntroText2"
+msgstr "For å endre valget endre"
+
 #. [administration.voteProposals.addProposal]
 #. defaultMessage is:
 #. Add a proposal
-msgid "administration.voteProposals.addProposal"
-msgstr ""
-
 #: messages.json
+msgid "administration.voteProposals.addProposal"
+msgstr "Legg til et forslag"
+
 #. [administration.voteProposals.cancelCustomization]
 #. defaultMessage is:
 #. Cancel settings
-msgid "administration.voteProposals.cancelCustomization"
-msgstr ""
-
 #: messages.json
+msgid "administration.voteProposals.cancelCustomization"
+msgstr "Avbryt innstillinger"
+
 #. [administration.voteProposals.customGauge]
 #. defaultMessage is:
 #. Gauge %{number} (customized for this proposal)
-msgid "administration.voteProposals.customGauge"
-msgstr ""
-
 #: messages.json
+msgid "administration.voteProposals.customGauge"
+msgstr "Måler %{number} (tilpasset for forslaget)"
+
 #. [administration.voteProposals.defineProposal]
 #. defaultMessage is:
 #. Define proposal %{number}
-msgid "administration.voteProposals.defineProposal"
-msgstr ""
-
 #: messages.json
+msgid "administration.voteProposals.defineProposal"
+msgstr "Definer forslag %{number}"
+
 #. [administration.voteProposals.deleteModalBody]
 #. defaultMessage is:
 #. Are you sure you want to delete this proposal?
-msgid "administration.voteProposals.deleteModalBody"
-msgstr ""
-
 #: messages.json
+msgid "administration.voteProposals.deleteModalBody"
+msgstr "Er du sikker på at du vil slette dette forslaget?"
+
 #. [administration.voteProposals.deleteModalTitle]
 #. defaultMessage is:
 #. Confirm deletion
-msgid "administration.voteProposals.deleteModalTitle"
-msgstr ""
-
 #: messages.json
+msgid "administration.voteProposals.deleteModalTitle"
+msgstr "Bekreft sletting"
+
 #. [administration.voteProposals.deleteProposal]
 #. defaultMessage is:
 #. Delete this proposal
-msgid "administration.voteProposals.deleteProposal"
-msgstr ""
-
 #: messages.json
+msgid "administration.voteProposals.deleteProposal"
+msgstr "Slett dette forslaget"
+
 #. [administration.voteProposals.description]
 #. defaultMessage is:
 #. Description
-msgid "administration.voteProposals.description"
-msgstr ""
-
 #: messages.json
+msgid "administration.voteProposals.description"
+msgstr "Beskrivelse"
+
 #. [administration.voteProposals.gauge]
 #. defaultMessage is:
 #. Gauge %{number}
-msgid "administration.voteProposals.gauge"
-msgstr ""
-
 #: messages.json
+msgid "administration.voteProposals.gauge"
+msgstr "Måler %{number}"
+
 #. [administration.voteProposals.gaugeSettings]
 #. defaultMessage is:
 #. Edit settings
-msgid "administration.voteProposals.gaugeSettings"
-msgstr ""
-
 #: messages.json
+msgid "administration.voteProposals.gaugeSettings"
+msgstr "Rediger innstillinger"
+
 #. [administration.voteProposals.sectionTitle]
 #. defaultMessage is:
 #. Configure the proposals associated to the vote modules
-msgid "administration.voteProposals.sectionTitle"
-msgstr ""
-
 #: messages.json
+msgid "administration.voteProposals.sectionTitle"
+msgstr "Konfigurer forslagene knyttet til stemmemodulene"
+
 #. [administration.voteProposals.title]
 #. defaultMessage is:
 #. Title of the proposal
-msgid "administration.voteProposals.title"
-msgstr ""
-
 #: messages.json
+msgid "administration.voteProposals.title"
+msgstr "Forslagets tittel"
+
 #. [administration.voteProposals.tokenVote]
 #. defaultMessage is:
 #. Token vote
-msgid "administration.voteProposals.tokenVote"
-msgstr ""
-
 #: messages.json
+msgid "administration.voteProposals.tokenVote"
+msgstr "Sjetongstemming"
+
 #. [administration.voteProposals.validationErrors.atLeastOneModule]
 #. defaultMessage is:
 #. You should select at least one module.
-msgid "administration.voteProposals.validationErrors.atLeastOneModule"
-msgstr ""
-
 #: messages.json
+msgid "administration.voteProposals.validationErrors.atLeastOneModule"
+msgstr "Du bør velge minst én modul."
+
 #. [administration.voteSession.0]
 #. defaultMessage is:
 #. Page configuration
-msgid "administration.voteSession.0"
-msgstr ""
-
 #: messages.json
+msgid "administration.voteSession.0"
+msgstr "Sidekonfigurasjon"
+
 #. [administration.voteSession.1]
 #. defaultMessage is:
 #. Configure the voting modules
-msgid "administration.voteSession.1"
-msgstr ""
-
 #: messages.json
+msgid "administration.voteSession.1"
+msgstr "Konfigurer stemmemodulene"
+
 #. [administration.voteSession.2]
 #. defaultMessage is:
 #. Configure the voting proposals
-msgid "administration.voteSession.2"
-msgstr ""
-
 #: messages.json
+msgid "administration.voteSession.2"
+msgstr "Konfigurer stemmeforslagene"
+
 #. [administration.voteSession.3]
 #. defaultMessage is:
 #. Export data
-msgid "administration.voteSession.3"
-msgstr ""
-
 #: messages.json
+msgid "administration.voteSession.3"
+msgstr "Eksporter data"
+
 #. [administration.voteSessionHeaderLabel]
 #. defaultMessage is:
 #. Choose the header background image
-msgid "administration.voteSessionHeaderLabel"
-msgstr ""
-
 #: messages.json
+msgid "administration.voteSessionHeaderLabel"
+msgstr "Velg topptekstens bakgrunnsbilde"
+
 #. [administration.voteSessionSuccess]
 #. defaultMessage is:
 #. The vote session is saved with success.
-msgid "administration.voteSessionSuccess"
-msgstr ""
-
 #: messages.json
+msgid "administration.voteSessionSuccess"
+msgstr "Stemmeøkten er blitt lagret."
+
 #. [administration.voteWithGauges]
 #. defaultMessage is:
 #. Gauge(s) vote
-msgid "administration.voteWithGauges"
-msgstr ""
-
 #: messages.json
+msgid "administration.voteWithGauges"
+msgstr "Målerstemmingen"
+
 #. [administration.voteWithTokens]
 #. defaultMessage is:
 #. Tokens vote
-msgid "administration.voteWithTokens"
-msgstr ""
-
 #: messages.json
+msgid "administration.voteWithTokens"
+msgstr "Sjetongstemming"
+
 #. [cancel]
 #. defaultMessage is:
 #. Cancel
-msgid "cancel"
-msgstr ""
-
 #: messages.json
+msgid "cancel"
+msgstr "Avbryt"
+
 #. [changePassword.panelTitle]
 #. defaultMessage is:
 #. Welcome to Assembl forgot password page
-msgid "changePassword.panelTitle"
-msgstr ""
-
 #: messages.json
+msgid "changePassword.panelTitle"
+msgstr "Velkommen til Assmbl-siden for glemt passord"
+
 #. [chatframe.title]
 #. defaultMessage is:
 #. Instant discussion window
-msgid "chatframe.title"
-msgstr ""
-
 #: messages.json
+msgid "chatframe.title"
+msgstr "Øyeblikkelig diskusjonsvindu"
+
 #. [chatframe.tooltip]
 #. defaultMessage is:
 #. Assemb'Bot
-msgid "chatframe.tooltip"
-msgstr ""
-
 #: messages.json
+msgid "chatframe.tooltip"
+msgstr "Assemb'Bot"
+
 #. [common.attachFileForm.label]
 #. defaultMessage is:
 #. Add an attachment
-msgid "common.attachFileForm.label"
-msgstr ""
-
 #: messages.json
+msgid "common.attachFileForm.label"
+msgstr "Legg til et vedlegg"
+
 #. [common.attachFileForm.submit]
 #. defaultMessage is:
 #. Submit
-msgid "common.attachFileForm.submit"
-msgstr ""
-
 #: messages.json
+msgid "common.attachFileForm.submit"
+msgstr "Send"
+
 #. [common.attachments.download]
 #. defaultMessage is:
 #. Download
-msgid "common.attachments.download"
-msgstr ""
-
 #: messages.json
+msgid "common.attachments.download"
+msgstr "Last ned"
+
 #. [common.editor.attachment]
 #. defaultMessage is:
 #. Add a file
-msgid "common.editor.attachment"
-msgstr ""
-
 #: messages.json
+msgid "common.editor.attachment"
+msgstr "Legg til en fil"
+
 #. [common.editor.bold]
 #. defaultMessage is:
 #. Bold
-msgid "common.editor.bold"
-msgstr ""
-
 #: messages.json
+msgid "common.editor.bold"
+msgstr "Skrift"
+
 #. [common.editor.bulletList]
 #. defaultMessage is:
 #. Bullet list
-msgid "common.editor.bulletList"
-msgstr ""
-
 #: messages.json
+msgid "common.editor.bulletList"
+msgstr "Punktliste"
+
 #. [common.editor.italic]
 #. defaultMessage is:
 #. Italic
-msgid "common.editor.italic"
-msgstr ""
-
 #: messages.json
+msgid "common.editor.italic"
+msgstr "Kursiv"
+
 #. [common.goUp]
 #. defaultMessage is:
 #. Back to top
-msgid "common.goUp"
-msgstr ""
-
 #: messages.json
+msgid "common.goUp"
+msgstr "Tilbake til topp"
+
 #. [common.uploadButton]
 #. defaultMessage is:
 #. Choose a file to upload
-msgid "common.uploadButton"
-msgstr ""
-
 #: messages.json
+msgid "common.uploadButton"
+msgstr "Velg en fil for opplasting"
+
 #. [community.panelTitle]
 #. defaultMessage is:
 #. Welcome to Assembl community page
-msgid "community.panelTitle"
-msgstr ""
-
 #: messages.json
+msgid "community.panelTitle"
+msgstr "Velkommen til Assembl-fellesskapssiden"
+
 #. [conclusion]
 #. defaultMessage is:
 #. Conclusion
-msgid "conclusion"
-msgstr ""
-
 #: messages.json
+msgid "conclusion"
+msgstr "Konklusjon"
+
 #. [cookiesPolicy.headerTitle]
 #. defaultMessage is:
 #. Cookies
-msgid "cookiesPolicy.headerTitle"
-msgstr ""
-
 #: messages.json
+#, fuzzy
+msgid "cookiesPolicy.headerTitle"
+msgstr "Juridisk merknad"
+
 #. [date.format]
 #. defaultMessage is:
 #. MMMM Do, YYYY
-msgid "date.format"
-msgstr ""
-
 #: messages.json
+msgid "date.format"
+msgstr "MMMM DD, ÅÅÅÅ"
+
 #. [date.format2]
 #. defaultMessage is:
 #. YYYY-MM-DD
-msgid "date.format2"
-msgstr ""
-
 #: messages.json
+msgid "date.format2"
+msgstr "ÅÅÅÅ-MM-DD"
+
 #. [debate.agree]
 #. defaultMessage is:
 #. Agree
-msgid "debate.agree"
-msgstr ""
-
 #: messages.json
+msgid "debate.agree"
+msgstr "Samtykker"
+
 #. [debate.agreeCount]
 #. defaultMessage is:
 #. %{count} agree
-msgid "debate.agreeCount"
-msgstr ""
-
 #: messages.json
+msgid "debate.agreeCount"
+msgstr "%{count} samtykker"
+
 #. [debate.answer]
 #. defaultMessage is:
 #. I answer:
-msgid "debate.answer"
-msgstr ""
-
 #: messages.json
+msgid "debate.answer"
+msgstr "Jeg forstår:"
+
 #. [debate.confirmDeletionBody]
 #. defaultMessage is:
 #. Are you sure you want to delete this message?
-msgid "debate.confirmDeletionBody"
-msgstr ""
-
 #: messages.json
+msgid "debate.confirmDeletionBody"
+msgstr "Er du sikker på at du vil slette denne meldingen?"
+
 #. [debate.confirmDeletionButtonCancel]
 #. defaultMessage is:
 #. Cancel
-msgid "debate.confirmDeletionButtonCancel"
-msgstr ""
-
 #: messages.json
+msgid "debate.confirmDeletionButtonCancel"
+msgstr "Avbryt"
+
 #. [debate.confirmDeletionButtonDelete]
 #. defaultMessage is:
 #. Delete
-msgid "debate.confirmDeletionButtonDelete"
-msgstr ""
-
 #: messages.json
+msgid "debate.confirmDeletionButtonDelete"
+msgstr "Slett"
+
 #. [debate.confirmDeletionTitle]
 #. defaultMessage is:
 #. Confirm deletion
-msgid "debate.confirmDeletionTitle"
-msgstr ""
-
 #: messages.json
+msgid "debate.confirmDeletionTitle"
+msgstr "Bekreft sletting"
+
 #. [debate.copyLink]
 #. defaultMessage is:
 #. Copy the link to the clipboard
-msgid "debate.copyLink"
-msgstr ""
-
 #: messages.json
+msgid "debate.copyLink"
+msgstr "Kopier lenken til utklippstavlen "
+
 #. [debate.deleteMessage]
 #. defaultMessage is:
 #. Delete this message
-msgid "debate.deleteMessage"
-msgstr ""
-
 #: messages.json
+msgid "debate.deleteMessage"
+msgstr "Slett denne meldingen"
+
 #. [debate.disagree]
 #. defaultMessage is:
 #. Disagree
-msgid "debate.disagree"
-msgstr ""
-
 #: messages.json
+msgid "debate.disagree"
+msgstr "Forkaster"
+
 #. [debate.disagreeCount]
 #. defaultMessage is:
 #. %{count} disagree
-msgid "debate.disagreeCount"
-msgstr ""
-
 #: messages.json
+msgid "debate.disagreeCount"
+msgstr "%{count} forkaster"
+
 #. [debate.dontUnderstand]
 #. defaultMessage is:
 #. Did not get it
-msgid "debate.dontUnderstand"
-msgstr ""
-
 #: messages.json
+msgid "debate.dontUnderstand"
+msgstr "Fikk det ikke"
+
 #. [debate.edit.body]
 #. defaultMessage is:
 #. Comment
-msgid "debate.edit.body"
-msgstr ""
-
 #: messages.json
+msgid "debate.edit.body"
+msgstr "Kommentar"
+
 #. [debate.edit.subject]
 #. defaultMessage is:
 #. Subject
-msgid "debate.edit.subject"
-msgstr ""
-
 #: messages.json
+msgid "debate.edit.subject"
+msgstr "Emne"
+
 #. [debate.edit.title]
 #. defaultMessage is:
 #. I edit my message
-msgid "debate.edit.title"
-msgstr ""
-
 #: messages.json
+msgid "debate.edit.title"
+msgstr "Jeg redigerer min melding"
+
 #. [debate.editMessage]
 #. defaultMessage is:
 #. Edit this message
-msgid "debate.editMessage"
-msgstr ""
-
 #: messages.json
+msgid "debate.editMessage"
+msgstr "Rediger denne meldingen"
+
 #. [debate.insert]
 #. defaultMessage is:
 #. Post a comment
-msgid "debate.insert"
-msgstr ""
-
 #: messages.json
+msgid "debate.insert"
+msgstr "Post en kommentar"
+
 #. [debate.isCompleted]
 #. defaultMessage is:
 #. This phase is closed. You can no longer vote.
-msgid "debate.isCompleted"
-msgstr ""
-
 #: messages.json
+msgid "debate.isCompleted"
+msgstr "Denne fasen er lukket. Du kan ikke lenger stemme."
+
 #. [debate.like]
 #. defaultMessage is:
 #. Like
-msgid "debate.like"
-msgstr ""
-
 #: messages.json
+msgid "debate.like"
+msgstr "Liker"
+
 #. [debate.linkCopied]
 #. defaultMessage is:
 #. Link copied
-msgid "debate.linkCopied"
-msgstr ""
-
 #: messages.json
+msgid "debate.linkCopied"
+msgstr "Lenke kopiert"
+
 #. [debate.moreInfo]
 #. defaultMessage is:
 #. More info please
-msgid "debate.moreInfo"
-msgstr ""
-
 #: messages.json
+msgid "debate.moreInfo"
+msgstr "Vennligst mer info"
+
 #. [debate.noAnswer]
 #. defaultMessage is:
 #. This phase is closed. You can no longer answer.
-msgid "debate.noAnswer"
-msgstr ""
-
 #: messages.json
+msgid "debate.noAnswer"
+msgstr "Denne fasen er lukket. Du kan ikke lenger svare."
+
 #. [debate.notStarted]
 #. defaultMessage is:
 #. The %{phaseName} phase has not started. Please come back from 
-msgid "debate.notStarted"
-msgstr ""
-
 #: messages.json
+msgid "debate.notStarted"
+msgstr "Fasen %{phaseName} har ikke startet. Vennligst kom tilbake fra"
+
 #. [debate.post]
 #. defaultMessage is:
 #. Post
-msgid "debate.post"
-msgstr ""
-
 #: messages.json
+msgid "debate.post"
+msgstr "Post"
+
 #. [debate.question.backToQuestions]
 #. defaultMessage is:
 #. Back to questions
-msgid "debate.question.backToQuestions"
-msgstr ""
-
 #: messages.json
+msgid "debate.question.backToQuestions"
+msgstr "Tilbake til spørsmål"
+
 #. [debate.remaining_x_characters]
 #. defaultMessage is:
 #. You have %{nbCharacters} characters left
-msgid "debate.remaining_x_characters"
-msgstr ""
-
 #: messages.json
+msgid "debate.remaining_x_characters"
+msgstr "Du har %{nbCharacters} tegn igjen"
+
 #. [debate.share]
 #. defaultMessage is:
 #. Share
-msgid "debate.share"
-msgstr ""
-
 #: messages.json
+msgid "debate.share"
+msgstr "Del"
+
 #. [debate.sharePost]
 #. defaultMessage is:
 #. Share this message
-msgid "debate.sharePost"
-msgstr ""
-
 #: messages.json
+msgid "debate.sharePost"
+msgstr "Del denne meldingen"
+
 #. [debate.shareSynthesis]
 #. defaultMessage is:
 #. Share this synthesis
-msgid "debate.shareSynthesis"
-msgstr ""
-
 #: messages.json
+msgid "debate.shareSynthesis"
+msgstr "Del denne syntesen"
+
 #. [debate.shareThematic]
 #. defaultMessage is:
 #. Share this thematic
-msgid "debate.shareThematic"
-msgstr ""
-
 #: messages.json
+msgid "debate.shareThematic"
+msgstr "Del denne tematikken"
+
 #. [debate.subject]
 #. defaultMessage is:
 #. Write the title
-msgid "debate.subject"
-msgstr ""
-
 #: messages.json
+msgid "debate.subject"
+msgstr "Skriv tittelen"
+
 #. [debate.survey.allProposals]
 #. defaultMessage is:
 #. See all points of view
-msgid "debate.survey.allProposals"
-msgstr ""
-
 #: messages.json
+msgid "debate.survey.allProposals"
+msgstr "Se alle synspunkter"
+
 #. [debate.survey.endPhase]
 #. defaultMessage is:
 #. The %{closedPhaseName} phase is closed.
-msgid "debate.survey.endPhase"
-msgstr ""
-
 #: messages.json
+msgid "debate.survey.endPhase"
+msgstr "Fasen %{closedPhaseName} er lukket."
+
 #. [debate.survey.loadRecentPosts]
 #. defaultMessage is:
 #. Load recent proposals
-msgid "debate.survey.loadRecentPosts"
-msgstr ""
-
 #: messages.json
+#, fuzzy
+msgid "debate.survey.loadRecentPosts"
+msgstr "Reaksjoner"
+
 #. [debate.survey.moreProposals]
 #. defaultMessage is:
 #. More points of view
-msgid "debate.survey.moreProposals"
-msgstr ""
-
 #: messages.json
+msgid "debate.survey.moreProposals"
+msgstr "Flere synspunkter"
+
 #. [debate.survey.noProposals]
 #. defaultMessage is:
 #. There is no point of view for the moment. Be the first to contribute!
-msgid "debate.survey.noProposals"
-msgstr ""
-
 #: messages.json
+msgid "debate.survey.noProposals"
+msgstr "Det er ingen synspunkt for tiden. Vær den første til å bidra!"
+
 #. [debate.survey.postSuccess]
 #. defaultMessage is:
 #. Thanks for your participation. Your proposal has been sent!
-msgid "debate.survey.postSuccess"
-msgstr ""
-
 #: messages.json
+msgid "debate.survey.postSuccess"
+msgstr "Takk for at du deltok. Ditt forslag er blitt sendt!"
+
 #. [debate.survey.proposalsTitle]
 #. defaultMessage is:
 #. Do you agree with these points of view?
-msgid "debate.survey.proposalsTitle"
-msgstr ""
-
 #: messages.json
+msgid "debate.survey.proposalsTitle"
+msgstr "Er du enig i disse synspunktene?"
+
 #. [debate.survey.question_x_on_total]
 #. defaultMessage is:
 #. Question %{current} on %{total}
-msgid "debate.survey.question_x_on_total"
-msgstr ""
-
 #: messages.json
+msgid "debate.survey.question_x_on_total"
+msgstr "Spørsmål %{current} av %{total}"
+
 #. [debate.survey.react]
 #. defaultMessage is:
 #. React:
-msgid "debate.survey.react"
-msgstr ""
-
 #: messages.json
+msgid "debate.survey.react"
+msgstr "Reager:"
+
 #. [debate.survey.reactions]
 #. defaultMessage is:
 #. Reactions
-msgid "debate.survey.reactions"
-msgstr ""
-
 #: messages.json
+msgid "debate.survey.reactions"
+msgstr "Reaksjoner"
+
 #. [debate.survey.reactions_0]
 #. defaultMessage is:
 #. Reaction
-msgid "debate.survey.reactions_0"
-msgstr ""
-
 #: messages.json
+msgid "debate.survey.reactions_0"
+msgstr "Reaksjon"
+
 #. [debate.survey.reactions_1]
 #. defaultMessage is:
 #. Reaction
-msgid "debate.survey.reactions_1"
-msgstr ""
-
 #: messages.json
+msgid "debate.survey.reactions_1"
+msgstr "Reaksjon"
+
 #. [debate.survey.submit]
 #. defaultMessage is:
 #. Submit
-msgid "debate.survey.submit"
-msgstr ""
-
 #: messages.json
+msgid "debate.survey.submit"
+msgstr "Send"
+
 #. [debate.survey.themesTitle]
 #. defaultMessage is:
 #. Choose a theme!
-msgid "debate.survey.themesTitle"
-msgstr ""
-
 #: messages.json
+msgid "debate.survey.themesTitle"
+msgstr "Velg et tema!"
+
 #. [debate.survey.titleVideo]
 #. defaultMessage is:
 #. A video to better understand the subject...
-msgid "debate.survey.titleVideo"
-msgstr ""
-
 #: messages.json
+msgid "debate.survey.titleVideo"
+msgstr "En video for bedre å forstå emnet..."
+
 #. [debate.survey.txtAreaPh]
 #. defaultMessage is:
 #. Write your point of view
-msgid "debate.survey.txtAreaPh"
-msgstr ""
-
 #: messages.json
+msgid "debate.survey.txtAreaPh"
+msgstr "Skriv ditt synspunkt"
+
 #. [debate.syntheses]
 #. defaultMessage is:
 #. Syntheses
-msgid "debate.syntheses"
-msgstr ""
-
 #: messages.json
+msgid "debate.syntheses"
+msgstr "Synteser"
+
 #. [debate.themes]
 #. defaultMessage is:
 #. Themes
-msgid "debate.themes"
-msgstr ""
-
 #: messages.json
+msgid "debate.themes"
+msgstr "Temaer"
+
 #. [debate.thread.announcement]
 #. defaultMessage is:
 #. Announcement
-msgid "debate.thread.announcement"
-msgstr ""
-
 #: messages.json
+msgid "debate.thread.announcement"
+msgstr "Kunngjøring"
+
 #. [debate.thread.chooseLanguagePh]
 #. defaultMessage is:
 #. Please choose the language
-msgid "debate.thread.chooseLanguagePh"
-msgstr ""
-
 #: messages.json
+msgid "debate.thread.chooseLanguagePh"
+msgstr "Velg språket"
+
 #. [debate.thread.fillBody]
 #. defaultMessage is:
 #. Please, write a comment
-msgid "debate.thread.fillBody"
-msgstr ""
-
 #: messages.json
+msgid "debate.thread.fillBody"
+msgstr "Vennligst skriv en kommentar"
+
 #. [debate.thread.fillSubject]
 #. defaultMessage is:
 #. Please, write a title
-msgid "debate.thread.fillSubject"
-msgstr ""
-
 #: messages.json
+msgid "debate.thread.fillSubject"
+msgstr "Vennligst skriv en tittel"
+
 #. [debate.thread.foldedPostLink]
 #. defaultMessage is:
 #. Show %{count} responses
-msgid "debate.thread.foldedPostLink"
-msgstr ""
-
 #: messages.json
+msgid "debate.thread.foldedPostLink"
+msgstr "Vis %{count} svar"
+
 #. [debate.thread.foldedPostLink_1]
 #. defaultMessage is:
 #. Show 1 response
-msgid "debate.thread.foldedPostLink_1"
-msgstr ""
-
 #: messages.json
+msgid "debate.thread.foldedPostLink_1"
+msgstr "Vis 1 svar"
+
 #. [debate.thread.goToIdea]
 #. defaultMessage is:
 #. View all messages
-msgid "debate.thread.goToIdea"
-msgstr ""
-
 #: messages.json
+msgid "debate.thread.goToIdea"
+msgstr "Vis alle meldinger"
+
 #. [debate.thread.linkIdea]
 #. defaultMessage is:
 #. This post is related to the following themes:
-msgid "debate.thread.linkIdea"
-msgstr ""
-
 #: messages.json
+msgid "debate.thread.linkIdea"
+msgstr "Denne posten er knyttet til følgende temaer:"
+
 #. [debate.thread.messageOriginallyIn]
 #. defaultMessage is:
 #. This message has been written in %{language}
-msgid "debate.thread.messageOriginallyIn"
-msgstr ""
-
 #: messages.json
+msgid "debate.thread.messageOriginallyIn"
+msgstr "Denne meldingen er skrevet på %{language}"
+
 #. [debate.thread.messageTranslatedFrom]
 #. defaultMessage is:
 #. This message has been translated from %{language}.
-msgid "debate.thread.messageTranslatedFrom"
-msgstr ""
-
 #: messages.json
+msgid "debate.thread.messageTranslatedFrom"
+msgstr "Denne meldingen er oversatt fra %{language}"
+
 #. [debate.thread.noPostsInThread]
 #. defaultMessage is:
 #. Be the first to contribute, start a discussion!
-msgid "debate.thread.noPostsInThread"
-msgstr ""
-
 #: messages.json
+msgid "debate.thread.noPostsInThread"
+msgstr "Vær først til å bidra, start en diskusjon!"
+
 #. [debate.thread.numberOfReactions]
 #. defaultMessage is:
 #. %{count} reactions
-msgid "debate.thread.numberOfReactions"
-msgstr ""
-
 #: messages.json
+msgid "debate.thread.numberOfReactions"
+msgstr "%{count} reaksjoner"
+
 #. [debate.thread.numberOfReactions_1]
 #. defaultMessage is:
 #. %{count} reaction
-msgid "debate.thread.numberOfReactions_1"
-msgstr ""
-
 #: messages.json
+msgid "debate.thread.numberOfReactions_1"
+msgstr "%{count} reaksjon"
+
 #. [debate.thread.numberOfResponses]
 #. defaultMessage is:
 #. %{count} responses to this post
-msgid "debate.thread.numberOfResponses"
-msgstr ""
-
 #: messages.json
+msgid "debate.thread.numberOfResponses"
+msgstr "%{count} svar på denne posten"
+
 #. [debate.thread.numberOfResponses_0]
 #. defaultMessage is:
 #. No response to this post
-msgid "debate.thread.numberOfResponses_0"
-msgstr ""
-
 #: messages.json
+msgid "debate.thread.numberOfResponses_0"
+msgstr "Intet svar på denne posten"
+
 #. [debate.thread.numberOfResponses_1]
 #. defaultMessage is:
 #. %{count} response to this post
-msgid "debate.thread.numberOfResponses_1"
-msgstr ""
-
 #: messages.json
+msgid "debate.thread.numberOfResponses_1"
+msgstr "%{count} svar på denne posten"
+
 #. [debate.thread.postDeletedByAdmin]
 #. defaultMessage is:
 #. This message has been deleted by the community manager.
-msgid "debate.thread.postDeletedByAdmin"
-msgstr ""
-
 #: messages.json
+msgid "debate.thread.postDeletedByAdmin"
+msgstr "Denne meldingen er blitt slettet av fellesskapsforvalteren."
+
 #. [debate.thread.postDeletedByUser]
 #. defaultMessage is:
 #. This message has been deleted by the author.
-msgid "debate.thread.postDeletedByUser"
-msgstr ""
-
 #: messages.json
+msgid "debate.thread.postDeletedByUser"
+msgstr "Denne meldingen er blitt slettet av forfatteren."
+
 #. [debate.thread.postEdited]
 #. defaultMessage is:
 #. edited
-msgid "debate.thread.postEdited"
-msgstr ""
-
 #: messages.json
+msgid "debate.thread.postEdited"
+msgstr "redigert"
+
 #. [debate.thread.postSuccess]
 #. defaultMessage is:
 #. Thanks for your participation. Your comment has been sent!
-msgid "debate.thread.postSuccess"
-msgstr ""
-
 #: messages.json
+msgid "debate.thread.postSuccess"
+msgstr "Takk for at du deltok. Din kommentar er blitt sendt!"
+
 #. [debate.thread.seeSubIdeas]
 #. defaultMessage is:
 #. See %{count} sub-thematics
-msgid "debate.thread.seeSubIdeas"
-msgstr ""
-
 #: messages.json
+msgid "debate.thread.seeSubIdeas"
+msgstr "Se %{count} undertemaer"
+
 #. [debate.thread.seeSubIdeas_1]
 #. defaultMessage is:
 #. See sub-thematic
-msgid "debate.thread.seeSubIdeas_1"
-msgstr ""
-
 #: messages.json
+msgid "debate.thread.seeSubIdeas_1"
+msgstr "Se undertematikk"
+
 #. [debate.thread.showOriginal]
 #. defaultMessage is:
 #. Show original
-msgid "debate.thread.showOriginal"
-msgstr ""
-
 #: messages.json
+msgid "debate.thread.showOriginal"
+msgstr "Vis original"
+
 #. [debate.thread.startDiscussion]
 #. defaultMessage is:
 #. Start a new thread
-msgid "debate.thread.startDiscussion"
-msgstr ""
-
 #: messages.json
+msgid "debate.thread.startDiscussion"
+msgstr "Start en ny tråd"
+
 #. [debate.thread.translate]
 #. defaultMessage is:
 #. Translate
-msgid "debate.thread.translate"
-msgstr ""
-
 #: messages.json
+msgid "debate.thread.translate"
+msgstr "Oversett"
+
 #. [debate.thread.translateAllMessagesIn]
 #. defaultMessage is:
 #. Translate all messages posted in %{language}.
-msgid "debate.thread.translateAllMessagesIn"
-msgstr ""
-
 #: messages.json
+msgid "debate.thread.translateAllMessagesIn"
+msgstr "Oversett alle meldinger postet på %{language}."
+
 #. [debate.thread.translateOnlyThisMessage]
 #. defaultMessage is:
 #. Translate only this message.
-msgid "debate.thread.translateOnlyThisMessage"
-msgstr ""
-
 #: messages.json
+msgid "debate.thread.translateOnlyThisMessage"
+msgstr "Oversett bare denne meldingen."
+
 #. [debate.thread.untranslateAllMessagesIn]
 #. defaultMessage is:
 #. I don't want to translate all messages in %{language}.
-msgid "debate.thread.untranslateAllMessagesIn"
-msgstr ""
-
 #: messages.json
+msgid "debate.thread.untranslateAllMessagesIn"
+msgstr "Jeg ønsker ikke å oversette alle meldinger til %{language}."
+
 #. [debate.thread.untranslateOnlyThisMessage]
 #. defaultMessage is:
 #. I don't want to translate only this message
-msgid "debate.thread.untranslateOnlyThisMessage"
-msgstr ""
-
 #: messages.json
+msgid "debate.thread.untranslateOnlyThisMessage"
+msgstr "Jeg ønsker ikke å oversette bare denne meldingen"
+
 #. [debate.toAnswer]
 #. defaultMessage is:
 #. Answer
-msgid "debate.toAnswer"
-msgstr ""
-
 #: messages.json
+msgid "debate.toAnswer"
+msgstr "Svar"
+
 #. [debate.vote]
 #. defaultMessage is:
 #. Vote
-msgid "debate.vote"
-msgstr ""
-
 #: messages.json
+msgid "debate.vote"
+msgstr "Stem"
+
 #. [debate.voteSession.currentTokenDistribution]
 #. defaultMessage is:
 #. Current distribution of tokens
-msgid "debate.voteSession.currentTokenDistribution"
-msgstr ""
-
 #: messages.json
+msgid "debate.voteSession.currentTokenDistribution"
+msgstr "Aktuell sjetongdistribusjon"
+
 #. [debate.voteSession.estimate]
 #. defaultMessage is:
 #. Average estimate
-msgid "debate.voteSession.estimate"
-msgstr ""
-
 #: messages.json
+msgid "debate.voteSession.estimate"
+msgstr "Gjennomsnittsanslag"
+
 #. [debate.voteSession.exclusiveTokens]
 #. defaultMessage is:
 #. You already voted for another category for this proposal
-msgid "debate.voteSession.exclusiveTokens"
-msgstr ""
-
 #: messages.json
+msgid "debate.voteSession.exclusiveTokens"
+msgstr "Du stemte allerede for en annen kategori for dette forslaget"
+
 #. [debate.voteSession.isCompleted]
 #. defaultMessage is:
 #. This vote phase is closed. Thank you for your participation!
-msgid "debate.voteSession.isCompleted"
-msgstr ""
-
 #: messages.json
+msgid "debate.voteSession.isCompleted"
+msgstr "Stemmefasen er lukket. Takk for at du deltok!"
+
 #. [debate.voteSession.noVoteSession.text]
 #. defaultMessage is:
 #. An administrator must configure the vote session
-msgid "debate.voteSession.noVoteSession.text"
-msgstr ""
-
 #: messages.json
+msgid "debate.voteSession.noVoteSession.text"
+msgstr "En administrator må konfigurere stemmeøkten"
+
 #. [debate.voteSession.noVoteSession.title]
 #. defaultMessage is:
 #. Vote session is not configured
-msgid "debate.voteSession.noVoteSession.title"
-msgstr ""
-
 #: messages.json
+msgid "debate.voteSession.noVoteSession.title"
+msgstr "Stemmeøkt er ikke konfigurert"
+
 #. [debate.voteSession.notEnoughTokens]
 #. defaultMessage is:
 #. You don't have enough tokens
-msgid "debate.voteSession.notEnoughTokens"
-msgstr ""
-
 #: messages.json
+msgid "debate.voteSession.notEnoughTokens"
+msgstr "Du har ikke nok sjetonger"
+
 #. [debate.voteSession.participantsCount]
 #. defaultMessage is:
 #. %{count} participants voted!
-msgid "debate.voteSession.participantsCount"
-msgstr ""
-
 #: messages.json
+msgid "debate.voteSession.participantsCount"
+msgstr "%{count} deltakere stemte!"
+
 #. [debate.voteSession.participantsCount_0]
 #. defaultMessage is:
 #. No participant voted yet
-msgid "debate.voteSession.participantsCount_0"
-msgstr ""
-
 #: messages.json
+msgid "debate.voteSession.participantsCount_0"
+msgstr "Ingen deltaker stemte ennå"
+
 #. [debate.voteSession.participantsCount_1]
 #. defaultMessage is:
 #. %{count} participant voted
-msgid "debate.voteSession.participantsCount_1"
-msgstr ""
-
 #: messages.json
+msgid "debate.voteSession.participantsCount_1"
+msgstr "%{count} deltaker stemte"
+
 #. [debate.voteSession.postSuccess]
 #. defaultMessage is:
 #. Thank you for your participation! Your vote has been set. You can modify this vote during the entire duration of the vote session.
+#: messages.json
 msgid "debate.voteSession.postSuccess"
 msgstr ""
+"Takk for ditt bidrag! Du kan endre stemmingen så lenge hele stemmeøkten "
+"varer."
 
-#: messages.json
 #. [debate.voteSession.remainingTokens]
 #. defaultMessage is:
 #. You have %{count} tokens remaining.
-msgid "debate.voteSession.remainingTokens"
-msgstr ""
-
 #: messages.json
+msgid "debate.voteSession.remainingTokens"
+msgstr "Du har %{count} sjetonger igjen."
+
 #. [debate.voteSession.resetTokens]
 #. defaultMessage is:
 #. Reset my vote
-msgid "debate.voteSession.resetTokens"
-msgstr ""
-
 #: messages.json
+msgid "debate.voteSession.resetTokens"
+msgstr "Tilbakestill min stemming"
+
 #. [debate.voteSession.showLess]
 #. defaultMessage is:
 #. Close votes of the community
-msgid "debate.voteSession.showLess"
-msgstr ""
-
 #: messages.json
+msgid "debate.voteSession.showLess"
+msgstr "Lukk fellesskapets stemmer"
+
 #. [debate.voteSession.showVotesInProgress]
 #. defaultMessage is:
 #. Show votes of the community
-msgid "debate.voteSession.showVotesInProgress"
-msgstr ""
-
 #: messages.json
+msgid "debate.voteSession.showVotesInProgress"
+msgstr "Vis fellesskapets stemmer"
+
 #. [debate.voteSession.submit]
 #. defaultMessage is:
 #. Submit vote
-msgid "debate.voteSession.submit"
-msgstr ""
-
 #: messages.json
+msgid "debate.voteSession.submit"
+msgstr "Send inn stemme"
+
 #. [debate.voteSession.tokenDistribution]
 #. defaultMessage is:
 #. Distribution of votes
-msgid "debate.voteSession.tokenDistribution"
-msgstr ""
-
 #: messages.json
+msgid "debate.voteSession.tokenDistribution"
+msgstr "Stemmedistribusjon"
+
 #. [debate.voteSession.tokenTooltip]
 #. defaultMessage is:
 #. %{count} %{name} tokens
-msgid "debate.voteSession.tokenTooltip"
-msgstr ""
-
 #: messages.json
+msgid "debate.voteSession.tokenTooltip"
+msgstr "%{count} %{name} sjetonger"
+
 #. [debate.voteSession.totalVotes]
 #. defaultMessage is:
 #. %{count} votes
-msgid "debate.voteSession.totalVotes"
-msgstr ""
-
 #: messages.json
+msgid "debate.voteSession.totalVotes"
+msgstr "%{count} stemmer"
+
 #. [debate.voteSession.valueWithUnit]
 #. defaultMessage is:
 #. %{unit}%{num}
-msgid "debate.voteSession.valueWithUnit"
-msgstr ""
-
 #: messages.json
+msgid "debate.voteSession.valueWithUnit"
+msgstr "%{unit}%{num}"
+
 #. [debate.voteSession.voteResultsPlusTitle]
 #. defaultMessage is:
 #. Vote results: %{title}
-msgid "debate.voteSession.voteResultsPlusTitle"
-msgstr ""
-
 #: messages.json
+msgid "debate.voteSession.voteResultsPlusTitle"
+msgstr "Stemmeresultater: %{title}"
+
 #. [debate.votes]
 #. defaultMessage is:
 #. Votes
-msgid "debate.votes"
-msgstr ""
-
 #: messages.json
+msgid "debate.votes"
+msgstr "Stemmer"
+
 #. [debate.whatYouNeedToKnow]
 #. defaultMessage is:
 #. What you need to know
-msgid "debate.whatYouNeedToKnow"
-msgstr ""
-
 #: messages.json
+msgid "debate.whatYouNeedToKnow"
+msgstr "Hva du trenger å vite"
+
 #. [delete]
 #. defaultMessage is:
 #. Delete
+#: messages.json
 msgid "delete"
 msgstr ""
 
-#: messages.json
 #. [deletedUser]
 #. defaultMessage is:
 #. Deleted user account
+#: messages.json
 msgid "deletedUser"
 msgstr ""
 
-#: messages.json
 #. [duration.format]
 #. defaultMessage is:
 #. h [h]
-msgid "duration.format"
-msgstr ""
-
 #: messages.json
+msgid "duration.format"
+msgstr "t [t]"
+
 #. [error.loading]
 #. defaultMessage is:
 #. An error occurred, please reload the page
-msgid "error.loading"
-msgstr ""
-
 #: messages.json
+msgid "error.loading"
+msgstr "Det skjedde en feil, vennligst last inn siden på nytt"
+
 #. [error.reason]
 #. defaultMessage is:
 #. Sorry, an error occurred:
-msgid "error.reason"
-msgstr ""
-
 #: messages.json
+msgid "error.reason"
+msgstr "Beklager, det skjedde en feil:"
+
 #. [error.required]
 #. defaultMessage is:
 #. This field is required.
-msgid "error.required"
-msgstr ""
-
 #: messages.json
+msgid "error.required"
+msgstr "Dette feltet er nødvendig."
+
 #. [footer.cookiePolicy]
 #. defaultMessage is:
 #. Cookies
+#: messages.json
 msgid "footer.cookiePolicy"
 msgstr ""
 
-#: messages.json
 #. [footer.legalNotice]
 #. defaultMessage is:
 #. Legal Notice
-msgid "footer.legalNotice"
-msgstr ""
-
 #: messages.json
+msgid "footer.legalNotice"
+msgstr "Juridisk merknad"
+
 #. [footer.privacyPolicy]
 #. defaultMessage is:
 #. Privacy Policy
+#: messages.json
 msgid "footer.privacyPolicy"
 msgstr ""
 
-#: messages.json
 #. [footer.socialMedias]
 #. defaultMessage is:
 #. Follow us
-msgid "footer.socialMedias"
-msgstr ""
-
 #: messages.json
+msgid "footer.socialMedias"
+msgstr "Følg oss"
+
 #. [footer.terms]
 #. defaultMessage is:
 #. Terms & Conditions
-msgid "footer.terms"
-msgstr ""
-
 #: messages.json
+msgid "footer.terms"
+msgstr "Vilkår og betingelser"
+
 #. [harvesting.confirmDeleteExtract]
 #. defaultMessage is:
 #. Are you sure that you wish to delete this extract?
-msgid "harvesting.confirmDeleteExtract"
-msgstr ""
-
 #: messages.json
+msgid "harvesting.confirmDeleteExtract"
+msgstr "Er du sikker på at du vil slette dette utdraget?"
+
 #. [harvesting.deleteExtract]
 #. defaultMessage is:
 #. Delete the extract
-msgid "harvesting.deleteExtract"
-msgstr ""
-
 #: messages.json
+msgid "harvesting.deleteExtract"
+msgstr "Slett utdraget"
+
 #. [harvesting.disableHarvestingMode]
 #. defaultMessage is:
 #. Disable harvesting mode
-msgid "harvesting.disableHarvestingMode"
-msgstr ""
-
 #: messages.json
+msgid "harvesting.disableHarvestingMode"
+msgstr "Deaktiver uthevingsmodus"
+
 #. [harvesting.editExtract]
 #. defaultMessage is:
 #. Edit the extract
-msgid "harvesting.editExtract"
-msgstr ""
-
 #: messages.json
+msgid "harvesting.editExtract"
+msgstr "Rediger utdraget"
+
 #. [harvesting.enableHarvestingMode]
 #. defaultMessage is:
 #. Enable harvesting mode
-msgid "harvesting.enableHarvestingMode"
-msgstr ""
-
 #: messages.json
+msgid "harvesting.enableHarvestingMode"
+msgstr "Aktiver uthevingsmodus"
+
 #. [harvesting.harvesting]
 #. defaultMessage is:
 #. Harvesting
-msgid "harvesting.harvesting"
-msgstr ""
-
 #: messages.json
+msgid "harvesting.harvesting"
+msgstr "Utheving"
+
 #. [harvesting.harvestingDeleted]
 #. defaultMessage is:
 #. The extract was deleted successfully.
-msgid "harvesting.harvestingDeleted"
-msgstr ""
-
 #: messages.json
+msgid "harvesting.harvestingDeleted"
+msgstr "Utdraget ble slettet."
+
 #. [harvesting.harvestingSuccess]
 #. defaultMessage is:
 #. The extract was updated successfully.
-msgid "harvesting.harvestingSuccess"
-msgstr ""
-
 #: messages.json
+msgid "harvesting.harvestingSuccess"
+msgstr "Utdraget ble oppdatert."
+
 #. [harvesting.inProgress]
 #. defaultMessage is:
 #. Harvesting in progress
-msgid "harvesting.inProgress"
-msgstr ""
-
 #: messages.json
+msgid "harvesting.inProgress"
+msgstr "Utheving pågår"
+
 #. [harvesting.move]
 #. defaultMessage is:
 #. Move
-msgid "harvesting.move"
-msgstr ""
-
 #: messages.json
+msgid "harvesting.move"
+msgstr "Flytt"
+
 #. [harvesting.now]
 #. defaultMessage is:
 #. Now
-msgid "harvesting.now"
-msgstr ""
-
 #: messages.json
+msgid "harvesting.now"
+msgstr "Nå"
+
 #. [harvesting.nuggetExtract]
 #. defaultMessage is:
 #. Mark as nugget
-msgid "harvesting.nuggetExtract"
-msgstr ""
-
 #: messages.json
+msgid "harvesting.nuggetExtract"
+msgstr "Merk som nugget"
+
 #. [harvesting.qualifyAction]
 #. defaultMessage is:
 #. Qualify by action
-msgid "harvesting.qualifyAction"
-msgstr ""
-
 #: messages.json
+msgid "harvesting.qualifyAction"
+msgstr "Kvalifiser etter handling"
+
 #. [harvesting.qualifyExtract]
 #. defaultMessage is:
 #. Qualify the extract
-msgid "harvesting.qualifyExtract"
-msgstr ""
-
 #: messages.json
+msgid "harvesting.qualifyExtract"
+msgstr "Kvalifiser utdraget"
+
 #. [harvesting.qualifyNature]
 #. defaultMessage is:
 #. Qualify by nature
-msgid "harvesting.qualifyNature"
-msgstr ""
-
 #: messages.json
+msgid "harvesting.qualifyNature"
+msgstr "Kvalifiser etter natur"
+
 #. [harvesting.validateExtract]
 #. defaultMessage is:
 #. Extract validated
-msgid "harvesting.validateExtract"
-msgstr ""
-
 #: messages.json
+msgid "harvesting.validateExtract"
+msgstr "Utdrag godkjent"
+
 #. [harvesting.validated]
 #. defaultMessage is:
 #. Harvesting validated
-msgid "harvesting.validated"
-msgstr ""
-
 #: messages.json
+msgid "harvesting.validated"
+msgstr "Utheving godkjent"
+
 #. [home.accessButton]
 #. defaultMessage is:
 #. I want to participate
-msgid "home.accessButton"
-msgstr ""
-
 #: messages.json
+msgid "home.accessButton"
+msgstr "Jeg ønsker å delta"
+
 #. [home.assemblNotConfigured]
 #. defaultMessage is:
 #. Assembl has not been fully configured yet
-msgid "home.assemblNotConfigured"
-msgstr ""
-
 #: messages.json
+msgid "home.assemblNotConfigured"
+msgstr "Assembl er ennå ikke helt konfigurert"
+
 #. [home.chatbot]
 #. defaultMessage is:
 #. Chat with %{chatbotName}
-msgid "home.chatbot"
-msgstr ""
-
 #: messages.json
+msgid "home.chatbot"
+msgstr "Chat med %{chatbotName}"
+
 #. [home.contact]
 #. defaultMessage is:
 #. Do you wish to know more about this platform?
-msgid "home.contact"
-msgstr ""
-
 #: messages.json
+msgid "home.contact"
+msgstr "Vil du vite mer om denne plattformen?"
+
 #. [home.contactUs]
 #. defaultMessage is:
 #. Contact us
-msgid "home.contactUs"
-msgstr ""
-
 #: messages.json
+msgid "home.contactUs"
+msgstr "Ta kontakt med oss"
+
 #. [home.contribution]
 #. defaultMessage is:
 #. contributions
-msgid "home.contribution"
-msgstr ""
-
 #: messages.json
+msgid "home.contribution"
+msgstr "bidrag"
+
 #. [home.contribution_0]
 #. defaultMessage is:
 #. contribution
-msgid "home.contribution_0"
-msgstr ""
-
 #: messages.json
+msgid "home.contribution_0"
+msgstr "bidrag"
+
 #. [home.contribution_1]
 #. defaultMessage is:
 #. contribution
-msgid "home.contribution_1"
-msgstr ""
-
 #: messages.json
+msgid "home.contribution_1"
+msgstr "bidrag"
+
 #. [home.controversial]
 #. defaultMessage is:
 #. Controversial discussions
-msgid "home.controversial"
-msgstr ""
-
 #: messages.json
+msgid "home.controversial"
+msgstr "Kontroversielle diskusjoner"
+
 #. [home.from_start_to_end]
 #. defaultMessage is:
 #. from %{start} to %{end}
-msgid "home.from_start_to_end"
-msgstr ""
-
 #: messages.json
+msgid "home.from_start_to_end"
+msgstr "fra %{start} til %{end}"
+
 #. [home.longerThread]
 #. defaultMessage is:
 #. Longer thread
-msgid "home.longerThread"
-msgstr ""
-
 #: messages.json
+msgid "home.longerThread"
+msgstr "Lenger tråd"
+
 #. [home.messages]
 #. defaultMessage is:
 #. messages
-msgid "home.messages"
-msgstr ""
-
 #: messages.json
+msgid "home.messages"
+msgstr "meldinger"
+
 #. [home.messages_0]
 #. defaultMessage is:
 #. message
-msgid "home.messages_0"
-msgstr ""
-
 #: messages.json
+msgid "home.messages_0"
+msgstr "melding"
+
 #. [home.messages_1]
 #. defaultMessage is:
 #. message
-msgid "home.messages_1"
-msgstr ""
-
 #: messages.json
+msgid "home.messages_1"
+msgstr "melding"
+
 #. [home.objectivesTitle]
 #. defaultMessage is:
 #. What is the objective?
-msgid "home.objectivesTitle"
-msgstr ""
-
 #: messages.json
+msgid "home.objectivesTitle"
+msgstr "Hva er målsettingen?"
+
 #. [home.pageViews]
 #. defaultMessage is:
 #. page views
-msgid "home.pageViews"
-msgstr ""
-
 #: messages.json
+msgid "home.pageViews"
+msgstr "sidevisninger"
+
 #. [home.participant]
 #. defaultMessage is:
 #. participants
-msgid "home.participant"
-msgstr ""
-
 #: messages.json
+msgid "home.participant"
+msgstr "deltakere"
+
 #. [home.participant_0]
 #. defaultMessage is:
 #. participant
-msgid "home.participant_0"
-msgstr ""
-
 #: messages.json
+msgid "home.participant_0"
+msgstr "deltaker"
+
 #. [home.participant_1]
 #. defaultMessage is:
 #. participant
-msgid "home.participant_1"
-msgstr ""
-
 #: messages.json
+msgid "home.participant_1"
+msgstr "deltaker"
+
 #. [home.participations]
 #. defaultMessage is:
 #. participations
-msgid "home.participations"
-msgstr ""
-
 #: messages.json
+msgid "home.participations"
+msgstr "deltakelser"
+
 #. [home.participations_0]
 #. defaultMessage is:
 #. participation
-msgid "home.participations_0"
-msgstr ""
-
 #: messages.json
+msgid "home.participations_0"
+msgstr "deltakelse"
+
 #. [home.participations_1]
 #. defaultMessage is:
 #. participation
-msgid "home.participations_1"
-msgstr ""
-
 #: messages.json
+msgid "home.participations_1"
+msgstr "deltakelse"
+
 #. [home.partners]
 #. defaultMessage is:
 #. Partners
-msgid "home.partners"
-msgstr ""
-
 #: messages.json
+msgid "home.partners"
+msgstr "Partnere"
+
 #. [home.recentDiscussion]
 #. defaultMessage is:
 #. Recent discussion
-msgid "home.recentDiscussion"
-msgstr ""
-
 #: messages.json
+msgid "home.recentDiscussion"
+msgstr "Nylig diskusjon"
+
 #. [home.sentiments]
 #. defaultMessage is:
 #. votes
-msgid "home.sentiments"
-msgstr ""
-
 #: messages.json
+msgid "home.sentiments"
+msgstr "stemmer"
+
 #. [home.sentiments_0]
 #. defaultMessage is:
 #. vote
-msgid "home.sentiments_0"
-msgstr ""
-
 #: messages.json
+msgid "home.sentiments_0"
+msgstr "stem"
+
 #. [home.sentiments_1]
 #. defaultMessage is:
 #. vote
-msgid "home.sentiments_1"
-msgstr ""
-
 #: messages.json
+msgid "home.sentiments_1"
+msgstr "stem"
+
 #. [home.sumVisitsLength]
 #. defaultMessage is:
 #. global time spent
-msgid "home.sumVisitsLength"
-msgstr ""
-
 #: messages.json
+msgid "home.sumVisitsLength"
+msgstr "global tid tilbrakt"
+
 #. [home.themesSubtitle]
 #. defaultMessage is:
 #. Find your most controversial and highly acclaimed discussions on the front page
-msgid "home.themesSubtitle"
-msgstr ""
-
 #: messages.json
+msgid "home.themesSubtitle"
+msgstr "Finn de mest kontroversielle, populære diskusjonene på forsiden"
+
 #. [home.themesTitle]
 #. defaultMessage is:
 #. Ongoing themes
-msgid "home.themesTitle"
-msgstr ""
-
 #: messages.json
+msgid "home.themesTitle"
+msgstr "Pågående temaer"
+
 #. [home.timelineTitle]
 #. defaultMessage is:
 #. The timeline in %{count} phases
-msgid "home.timelineTitle"
-msgstr ""
-
 #: messages.json
+msgid "home.timelineTitle"
+msgstr "Tidslinjen i %{count} faser"
+
 #. [home.topContributor]
 #. defaultMessage is:
 #. Top contributor
-msgid "home.topContributor"
-msgstr ""
-
 #: messages.json
+msgid "home.topContributor"
+msgstr "Topp bidragsyter"
+
 #. [home.twitterTitle]
 #. defaultMessage is:
 #. Tweet
-msgid "home.twitterTitle"
-msgstr ""
-
 #: messages.json
+msgid "home.twitterTitle"
+msgstr "Tweet"
+
 #. [home.video]
 #. defaultMessage is:
 #. Video of the debate
-msgid "home.video"
-msgstr ""
-
 #: messages.json
+msgid "home.video"
+msgstr "Debattens video"
+
 #. [home.visit]
 #. defaultMessage is:
 #. visits
-msgid "home.visit"
-msgstr ""
-
 #: messages.json
+msgid "home.visit"
+msgstr "besøk"
+
 #. [introduction]
 #. defaultMessage is:
 #. Introduction
-msgid "introduction"
-msgstr ""
-
 #: messages.json
+msgid "introduction"
+msgstr "Innledning"
+
 #. [legalNotice.headerTitle]
 #. defaultMessage is:
 #. Legal Notice
-msgid "legalNotice.headerTitle"
-msgstr ""
-
 #: messages.json
+msgid "legalNotice.headerTitle"
+msgstr "Juridisk merknad"
+
 #. [loading.wait]
 #. defaultMessage is:
 #. Please wait...
-msgid "loading.wait"
-msgstr ""
-
 #: messages.json
+msgid "loading.wait"
+msgstr "Vennligst vent..."
+
 #. [login.accountCreated]
 #. defaultMessage is:
 #. Your account has been created
-msgid "login.accountCreated"
-msgstr ""
-
 #: messages.json
+msgid "login.accountCreated"
+msgstr "Din konto er opprettet"
+
 #. [login.accountCreatedMsg]
 #. defaultMessage is:
 #. A confirmation e-mail has been sent to your account and should be in your inbox in a few minutes. It contains a confirmation link, please click on it in order to confirm your e-mail address. Check your spam folder if you did not receive a confirmation e-mail.
+#: messages.json
 msgid "login.accountCreatedMsg"
 msgstr ""
+"En bekreftende e-post er sendt til din konto og skal være i innboksen om et "
+"par minutter. Den inneholder en bekreftelseslenke, vennligst klikk på den "
+"for å bekrefte din e-postadresse. Sjekk spam-mappen hvis du ikke mottok en "
+"bekreftelses-e-post."
 
-#: messages.json
 #. [login.alreadyAccount]
 #. defaultMessage is:
 #. Do you already have an account?
-msgid "login.alreadyAccount"
-msgstr ""
-
 #: messages.json
+msgid "login.alreadyAccount"
+msgstr "Har du allerede en konto?"
+
 #. [login.changePassword]
 #. defaultMessage is:
 #. Change Password
-msgid "login.changePassword"
-msgstr ""
-
 #: messages.json
+msgid "login.changePassword"
+msgstr "Endre passord"
+
 #. [login.createAccount]
 #. defaultMessage is:
 #. Create an account
-msgid "login.createAccount"
-msgstr ""
-
 #: messages.json
+msgid "login.createAccount"
+msgstr "Opprett en konto"
+
 #. [login.email]
 #. defaultMessage is:
 #. Email
-msgid "login.email"
-msgstr ""
-
 #: messages.json
+msgid "login.email"
+msgstr "E-post"
+
 #. [login.emailNotFound]
 #. defaultMessage is:
 #. The email you have entered was not found. Please try again.
-msgid "login.emailNotFound"
-msgstr ""
-
 #: messages.json
+msgid "login.emailNotFound"
+msgstr "E-posten du oppga fantes ikke. Vennligst prøv igjen."
+
 #. [login.existingEmail]
 #. defaultMessage is:
 #. The email you have entered already exists
-msgid "login.existingEmail"
-msgstr ""
-
 #: messages.json
+msgid "login.existingEmail"
+msgstr "E-posten du oppga finnes allerede"
+
 #. [login.existingUsername]
 #. defaultMessage is:
 #. The username you have entered already exists
-msgid "login.existingUsername"
-msgstr ""
-
 #: messages.json
+msgid "login.existingUsername"
+msgstr "Brukernavnet du oppga finnes allerede"
+
 #. [login.forgotPwd]
 #. defaultMessage is:
 #. Reset your password
-msgid "login.forgotPwd"
-msgstr ""
-
 #: messages.json
+msgid "login.forgotPwd"
+msgstr "Tilbakestill passordet"
+
 #. [login.fullName]
 #. defaultMessage is:
 #. Full name
-msgid "login.fullName"
-msgstr ""
-
 #: messages.json
+msgid "login.fullName"
+msgstr "Fullt navn"
+
 #. [login.incorrectPassword]
 #. defaultMessage is:
 #. The passwords that you have entered do not match
-msgid "login.incorrectPassword"
-msgstr ""
-
 #: messages.json
+msgid "login.incorrectPassword"
+msgstr "Passordene du oppga stemmer ikke overens"
+
 #. [login.incorrectPasswordLogin]
 #. defaultMessage is:
 #. The password you have entered does not match with the entered user. Please try again.
+#: messages.json
 msgid "login.incorrectPasswordLogin"
 msgstr ""
+"Passordet du oppga stemmer ikke med brukeren du oppga. Vennligst prøv igjen."
 
-#: messages.json
 #. [login.invalidEmail]
 #. defaultMessage is:
 #. The email you have entered is invalid
-msgid "login.invalidEmail"
-msgstr ""
-
 #: messages.json
+msgid "login.invalidEmail"
+msgstr "E-posten du oppga er ugyldig"
+
 #. [login.login]
 #. defaultMessage is:
 #. Log in
-msgid "login.login"
-msgstr ""
-
 #: messages.json
+msgid "login.login"
+msgstr "Logg på"
+
 #. [login.loginModalBody]
 #. defaultMessage is:
 #. You have to be connected to participate.
-msgid "login.loginModalBody"
-msgstr ""
-
 #: messages.json
+msgid "login.loginModalBody"
+msgstr "Du må være koblet til for å delta."
+
 #. [login.loginModalFooter]
 #. defaultMessage is:
 #. Please connect
-msgid "login.loginModalFooter"
-msgstr ""
-
 #: messages.json
+msgid "login.loginModalFooter"
+msgstr "Vennligst koble til"
+
 #. [login.loginWithSocialMedia]
 #. defaultMessage is:
 #. Care to use social media?
-msgid "login.loginWithSocialMedia"
-msgstr ""
-
 #: messages.json
+msgid "login.loginWithSocialMedia"
+msgstr "Lyst til å bruke sosiale nettverk?"
+
 #. [login.newPassword]
 #. defaultMessage is:
 #. New password
-msgid "login.newPassword"
-msgstr ""
-
 #: messages.json
+msgid "login.newPassword"
+msgstr "Nytt passord"
+
 #. [login.newPassword2]
 #. defaultMessage is:
 #. Re-enter new password
-msgid "login.newPassword2"
-msgstr ""
-
 #: messages.json
+msgid "login.newPassword2"
+msgstr "Tast inn nytt passord på nytt"
+
 #. [login.noAccount]
 #. defaultMessage is:
 #. No account yet?
-msgid "login.noAccount"
-msgstr ""
-
 #: messages.json
+msgid "login.noAccount"
+msgstr "Ingen konto ennå?"
+
 #. [login.password]
 #. defaultMessage is:
 #. Password
-msgid "login.password"
-msgstr ""
-
 #: messages.json
+msgid "login.password"
+msgstr "Passord"
+
 #. [login.password2]
 #. defaultMessage is:
 #. Repeat password
-msgid "login.password2"
-msgstr ""
-
 #: messages.json
+msgid "login.password2"
+msgstr "Gjenta passord"
+
 #. [login.passwordChangeRequestError]
 #. defaultMessage is:
 #. Oh oh! There seems to be a problem on our end. Please try again later.
+#: messages.json
 msgid "login.passwordChangeRequestError"
 msgstr ""
+"Obs, det ser ut til å være et problem på vår side. Vennlligst prøv igjen "
+"senere."
 
-#: messages.json
 #. [login.passwordChangeRequestSuccess]
 #. defaultMessage is:
 #. Great! An email has been sent to your account. Make sure to check your spam folder as well
+#: messages.json
 msgid "login.passwordChangeRequestSuccess"
 msgstr ""
+"Flott! En e-post ble sendt til din konto. Husk også å sjekke din spam-mappe"
 
-#: messages.json
 #. [login.resend]
 #. defaultMessage is:
 #. Resend the email
-msgid "login.resend"
-msgstr ""
-
 #: messages.json
+msgid "login.resend"
+msgstr "Send e-posten på nytt"
+
 #. [login.send]
 #. defaultMessage is:
 #. Send
-msgid "login.send"
-msgstr ""
-
 #: messages.json
+msgid "login.send"
+msgstr "Send"
+
 #. [login.sendPwdConfirm]
 #. defaultMessage is:
 #. Password change requested
-msgid "login.sendPwdConfirm"
-msgstr ""
-
 #: messages.json
+msgid "login.sendPwdConfirm"
+msgstr "Det ble bedt om passordendring"
+
 #. [login.sendPwdMsg]
 #. defaultMessage is:
 #. We have sent you an email with a temporary connection link. Please use that link to log in and change your password. Make sure to check your spam folder if an email is not in your inbox
+#: messages.json
 msgid "login.sendPwdMsg"
 msgstr ""
+"Vi har sendt deg en e-post med en lenke for midlertidig kobling. Vennligst "
+"bruk denne lenken for å logge på og endre ditt passord. Sjekk også spam-"
+"mappen for å se om den ikke inneholder en e-post"
 
-#: messages.json
 #. [login.signUp]
 #. defaultMessage is:
 #. Sign up
-msgid "login.signUp"
-msgstr ""
-
 #: messages.json
+msgid "login.signUp"
+msgstr "Logg på"
+
 #. [login.somethingWentWrong]
 #. defaultMessage is:
 #. We are sorry! Something went terribly wrong. Please try again
-msgid "login.somethingWentWrong"
-msgstr ""
-
 #: messages.json
+msgid "login.somethingWentWrong"
+msgstr "Vi beklager! Noe gikk virkelig galt. Vennligst prøv igjen"
+
 #. [login.userName]
 #. defaultMessage is:
 #. Username (optional)
-msgid "login.userName"
-msgstr ""
-
 #: messages.json
+msgid "login.userName"
+msgstr "Brukernavn (valgfritt)"
+
 #. [login.username]
 #. defaultMessage is:
 #. Email or user name
-msgid "login.username"
-msgstr ""
-
 #: messages.json
+msgid "login.username"
+msgstr "E-postadresse eller brukernavn"
+
 #. [multiColumns.synthesis.noSynthesisYet]
 #. defaultMessage is:
 #. The synthesis is currently being written
-msgid "multiColumns.synthesis.noSynthesisYet"
-msgstr ""
-
 #: messages.json
+msgid "multiColumns.synthesis.noSynthesisYet"
+msgstr "Syntesen er nå i ferd med å skrives"
+
 #. [multiColumns.synthesis.title]
 #. defaultMessage is:
 #. Synthesis: %{colName}
-msgid "multiColumns.synthesis.title"
-msgstr ""
-
 #: messages.json
+msgid "multiColumns.synthesis.title"
+msgstr "Syntese: %{colName}"
+
 #. [navbar.administration]
 #. defaultMessage is:
 #. Administration
-msgid "navbar.administration"
-msgstr ""
-
 #: messages.json
+msgid "navbar.administration"
+msgstr "Administrasjon"
+
 #. [navbar.community]
 #. defaultMessage is:
 #. community
-msgid "navbar.community"
-msgstr ""
-
 #: messages.json
+msgid "navbar.community"
+msgstr "fellesskap"
+
 #. [navbar.connection]
 #. defaultMessage is:
 #. Login
-msgid "navbar.connection"
-msgstr ""
-
 #: messages.json
+msgid "navbar.connection"
+msgstr "Pålogging"
+
 #. [navbar.debate]
 #. defaultMessage is:
 #. debate
-msgid "navbar.debate"
-msgstr ""
-
 #: messages.json
+msgid "navbar.debate"
+msgstr "debatt"
+
 #. [navbar.home]
 #. defaultMessage is:
 #. home
-msgid "navbar.home"
-msgstr ""
-
 #: messages.json
+msgid "navbar.home"
+msgstr "start"
+
 #. [navbar.logout]
 #. defaultMessage is:
 #. Logout
-msgid "navbar.logout"
-msgstr ""
-
 #: messages.json
+msgid "navbar.logout"
+msgstr "Avlogging"
+
 #. [navbar.profile]
 #. defaultMessage is:
 #. My profile
-msgid "navbar.profile"
-msgstr ""
-
 #: messages.json
+msgid "navbar.profile"
+msgstr "Min profil"
+
 #. [navbar.resourcesCenter]
 #. defaultMessage is:
 #. Resources
-msgid "navbar.resourcesCenter"
-msgstr ""
-
 #: messages.json
+msgid "navbar.resourcesCenter"
+msgstr "Ressurser"
+
 #. [navbar.syntheses]
 #. defaultMessage is:
 #. Syntheses
-msgid "navbar.syntheses"
-msgstr ""
-
 #: messages.json
+msgid "navbar.syntheses"
+msgstr "Synteser"
+
 #. [no]
 #. defaultMessage is:
 #. no
-msgid "no"
-msgstr ""
-
 #: messages.json
+msgid "no"
+msgstr "nei"
+
 #. [notFound.panelTitle]
 #. defaultMessage is:
 #. Sorry, this page doesn't exist
-msgid "notFound.panelTitle"
-msgstr ""
-
 #: messages.json
+msgid "notFound.panelTitle"
+msgstr "Beklager, denne siden eksisterer ikke"
+
 #. [privacyPolicy.headerTitle]
 #. defaultMessage is:
 #. Privacy policy
-msgid "privacyPolicy.headerTitle"
-msgstr ""
-
 #: messages.json
+#, fuzzy
+msgid "privacyPolicy.headerTitle"
+msgstr "Juridisk merknad"
+
 #. [profile.changePassword]
 #. defaultMessage is:
 #. Change my password
-msgid "profile.changePassword"
-msgstr ""
-
 #: messages.json
+msgid "profile.changePassword"
+msgstr "Endre mitt passord"
+
 #. [profile.deleteMyAccount]
 #. defaultMessage is:
 #. Delete my account
-msgid "profile.deleteMyAccount"
-msgstr ""
-
 #: messages.json
+#, fuzzy
+msgid "profile.deleteMyAccount"
+msgstr "Opprett en konto"
+
 #. [profile.deleteMyAccountConfirmation]
 #. defaultMessage is:
 #. Delete my account and my data
+#: messages.json
 msgid "profile.deleteMyAccountConfirmation"
 msgstr ""
 
-#: messages.json
 #. [profile.deleteMyAccountModal]
 #. defaultMessage is:
 #. Are you sure you want to permanently delete your account and all of your personal data? By validating, you will no longer be able to contribute to the consultation.
+#: messages.json
 msgid "profile.deleteMyAccountModal"
 msgstr ""
 
-#: messages.json
 #. [profile.deleteMyAccountText]
 #. defaultMessage is:
 #. By deleting your account, you permanently delete all of your personal data and your account. You will no longer be able to contribute to the debate without an account.
+#: messages.json
 msgid "profile.deleteMyAccountText"
 msgstr ""
 
-#: messages.json
 #. [profile.email]
 #. defaultMessage is:
 #. Email
-msgid "profile.email"
-msgstr ""
-
 #: messages.json
+msgid "profile.email"
+msgstr "E-post"
+
 #. [profile.fullname]
 #. defaultMessage is:
 #. Full name
-msgid "profile.fullname"
-msgstr ""
-
 #: messages.json
+msgid "profile.fullname"
+msgstr "Fullt navn"
+
 #. [profile.memberSince]
 #. defaultMessage is:
 #. Member since %{date}
-msgid "profile.memberSince"
-msgstr ""
-
 #: messages.json
+msgid "profile.memberSince"
+msgstr "Medlem siden %{date}"
+
 #. [profile.newPassword]
 #. defaultMessage is:
 #. New password
-msgid "profile.newPassword"
-msgstr ""
-
 #: messages.json
+msgid "profile.newPassword"
+msgstr "Nytt passord"
+
 #. [profile.newPassword2]
 #. defaultMessage is:
 #. Retype password
-msgid "profile.newPassword2"
-msgstr ""
-
 #: messages.json
+msgid "profile.newPassword2"
+msgstr "Tast passordet på nytt"
+
 #. [profile.oldPassword]
 #. defaultMessage is:
 #. Current password
-msgid "profile.oldPassword"
-msgstr ""
-
 #: messages.json
+msgid "profile.oldPassword"
+msgstr "Aktuelt passord"
+
 #. [profile.panelTitle]
 #. defaultMessage is:
 #. Your account
-msgid "profile.panelTitle"
-msgstr ""
-
 #: messages.json
+msgid "profile.panelTitle"
+msgstr "Din konto"
+
 #. [profile.password]
 #. defaultMessage is:
 #. Password
-msgid "profile.password"
-msgstr ""
-
 #: messages.json
+msgid "profile.password"
+msgstr "Passord"
+
 #. [profile.passwordModifiedSuccess]
 #. defaultMessage is:
 #. Your password has been changed with success
-msgid "profile.passwordModifiedSuccess"
-msgstr ""
-
 #: messages.json
+msgid "profile.passwordModifiedSuccess"
+msgstr "Ditt passord er blitt endret"
+
 #. [profile.personalInfos]
 #. defaultMessage is:
 #. Personal information
-msgid "profile.personalInfos"
-msgstr ""
-
 #: messages.json
+msgid "profile.personalInfos"
+msgstr "Personlige opplysninger"
+
 #. [profile.save]
 #. defaultMessage is:
 #. Save
-msgid "profile.save"
-msgstr ""
-
 #: messages.json
+msgid "profile.save"
+msgstr "Lagre"
+
 #. [profile.saveSuccess]
 #. defaultMessage is:
 #. Your profile is updated
-msgid "profile.saveSuccess"
-msgstr ""
-
 #: messages.json
+msgid "profile.saveSuccess"
+msgstr "Din profil er oppdatert"
+
 #. [profile.updateUser.errorMessage.1]
 #. defaultMessage is:
 #. We already have a user with this username.
-msgid "profile.updateUser.errorMessage.1"
-msgstr ""
-
 #: messages.json
+msgid "profile.updateUser.errorMessage.1"
+msgstr "Vi har allerede en bruker med dette brukernavnet."
+
 #. [profile.updateUser.errorMessage.2]
 #. defaultMessage is:
 #. The entered password doesn't match your current password.
-msgid "profile.updateUser.errorMessage.2"
-msgstr ""
-
 #: messages.json
+msgid "profile.updateUser.errorMessage.2"
+msgstr "Passordet du tastet inn, stemmer ikke med ditt aktuelle passord."
+
 #. [profile.updateUser.errorMessage.3]
 #. defaultMessage is:
 #. You entered two different passwords.
-msgid "profile.updateUser.errorMessage.3"
-msgstr ""
-
 #: messages.json
+msgid "profile.updateUser.errorMessage.3"
+msgstr "Du oppga to forskjellige passord."
+
 #. [profile.updateUser.errorMessage.4]
 #. defaultMessage is:
 #. The new password has to be different than the current password.
-msgid "profile.updateUser.errorMessage.4"
-msgstr ""
-
 #: messages.json
+msgid "profile.updateUser.errorMessage.4"
+msgstr "Det nye passordet må være forskjellig fra det aktuelle."
+
 #. [profile.updateUser.errorMessage.5]
 #. defaultMessage is:
 #. The new password has to be different than the last 5 passwords you set.
+#: messages.json
 msgid "profile.updateUser.errorMessage.5"
 msgstr ""
+"Det nye passordet må være forskjellig fra de siste 5 passordene du oppga."
 
-#: messages.json
 #. [profile.userName]
 #. defaultMessage is:
 #. User name
-msgid "profile.userName"
-msgstr ""
-
 #: messages.json
+msgid "profile.userName"
+msgstr "Brukernavn"
+
 #. [redirectToV1]
 #. defaultMessage is:
 #. You will be redirected to the %{phaseName} phase in a few seconds. Assembl is being improved, please excuse us for the interface change. If nothing happens, click on the button.
+#: messages.json
 msgid "redirectToV1"
 msgstr ""
+"Du vil bli omdirigert til fasen %{phaseName} om noen sekunder. Assembl er "
+"under forbedring, vi beklager grensesnittendringen. Klikk på knappen hvis "
+"det ikke skjer noe."
 
-#: messages.json
 #. [resourcesCenter.defaultHeaderTitle]
 #. defaultMessage is:
 #. Online resources center
-msgid "resourcesCenter.defaultHeaderTitle"
-msgstr ""
-
 #: messages.json
+msgid "resourcesCenter.defaultHeaderTitle"
+msgstr "Nettressurssenter"
+
 #. [resourcesCenter.download]
 #. defaultMessage is:
 #. Download the document
-msgid "resourcesCenter.download"
-msgstr ""
-
 #: messages.json
+msgid "resourcesCenter.download"
+msgstr "Last ned dokumentet"
+
 #. [search.Action]
 #. defaultMessage is:
 #. Action
-msgid "search.Action"
-msgstr ""
-
 #: messages.json
+msgid "search.Action"
+msgstr "Handling"
+
 #. [search.All]
 #. defaultMessage is:
 #. All
-msgid "search.All"
-msgstr ""
-
 #: messages.json
+msgid "search.All"
+msgstr "Alle"
+
 #. [search.By relevance]
 #. defaultMessage is:
 #. By relevance
-msgid "search.By relevance"
-msgstr ""
-
 #: messages.json
+msgid "search.By relevance"
+msgstr "Etter relevans"
+
 #. [search.Categories]
 #. defaultMessage is:
 #. Categories
-msgid "search.Categories"
-msgstr ""
-
 #: messages.json
+msgid "search.Categories"
+msgstr "Kategorier"
+
 #. [search.Creative participants]
 #. defaultMessage is:
 #. Creative participants
-msgid "search.Creative participants"
-msgstr ""
-
 #: messages.json
+msgid "search.Creative participants"
+msgstr "Kreative deltakere"
+
 #. [search.Filter by date]
 #. defaultMessage is:
 #. Filter by date
-msgid "search.Filter by date"
-msgstr ""
-
 #: messages.json
+msgid "search.Filter by date"
+msgstr "Filtrer etter dato"
+
 #. [search.Learning participants]
 #. defaultMessage is:
 #. Learning participants
-msgid "search.Learning participants"
-msgstr ""
-
 #: messages.json
+msgid "search.Learning participants"
+msgstr "Lærende deltakere"
+
 #. [search.Less popular messages]
 #. defaultMessage is:
 #. Less popular messages
-msgid "search.Less popular messages"
-msgstr ""
-
 #: messages.json
+msgid "search.Less popular messages"
+msgstr "Mindre populære meldinger"
+
 #. [search.Messages]
 #. defaultMessage is:
 #. Messages
-msgid "search.Messages"
-msgstr ""
-
 #: messages.json
+msgid "search.Messages"
+msgstr "Meldinger"
+
 #. [search.Messages in response to my contributions]
 #. defaultMessage is:
 #. Messages in response to my contributions
-msgid "search.Messages in response to my contributions"
-msgstr ""
-
 #: messages.json
+msgid "search.Messages in response to my contributions"
+msgstr "Meldinger som svar på mine bidrag"
+
 #. [search.Messages judged unclear]
 #. defaultMessage is:
 #. Messages judged unclear
-msgid "search.Messages judged unclear"
-msgstr ""
-
 #: messages.json
+msgid "search.Messages judged unclear"
+msgstr "Meldinger ansett som uklare"
+
 #. [search.Most consensus messages]
 #. defaultMessage is:
 #. Most consensus messages
-msgid "search.Most consensus messages"
-msgstr ""
-
 #: messages.json
+msgid "search.Most consensus messages"
+msgstr "Meldinger med størst enighet"
+
 #. [search.Most controversial messages]
 #. defaultMessage is:
 #. Most controversial messages
-msgid "search.Most controversial messages"
-msgstr ""
-
 #: messages.json
+msgid "search.Most controversial messages"
+msgstr "Mest kontroversielle meldinger"
+
 #. [search.Most popular messages]
 #. defaultMessage is:
 #. Most popular messages
-msgid "search.Most popular messages"
-msgstr ""
-
 #: messages.json
+msgid "search.Most popular messages"
+msgstr "Mest populære meldinger"
+
 #. [search.Most recent first]
 #. defaultMessage is:
 #. More recent first
-msgid "search.Most recent first"
-msgstr ""
-
 #: messages.json
+msgid "search.Most recent first"
+msgstr "Siste først"
+
 #. [search.My messages]
 #. defaultMessage is:
 #. My messages
-msgid "search.My messages"
-msgstr ""
-
 #: messages.json
+msgid "search.My messages"
+msgstr "Mine meldinger"
+
 #. [search.Nature]
 #. defaultMessage is:
 #. Nature
-msgid "search.Nature"
-msgstr ""
-
 #: messages.json
+msgid "search.Nature"
+msgstr "Natur"
+
 #. [search.NoHits.DidYouMean]
 #. defaultMessage is:
 #. Search for {suggestion}.
-msgid "search.NoHits.DidYouMean"
-msgstr ""
-
 #: messages.json
+msgid "search.NoHits.DidYouMean"
+msgstr "Søk etter {suggestion}."
+
 #. [search.NoHits.NoResultsFound]
 #. defaultMessage is:
 #. No results found for {query}.
-msgid "search.NoHits.NoResultsFound"
-msgstr ""
-
 #: messages.json
+msgid "search.NoHits.NoResultsFound"
+msgstr "Ingen resultater funnet for {query}."
+
 #. [search.NoHits.NoResultsFoundDidYouMean]
 #. defaultMessage is:
 #. No results found for {query}. Did you mean {suggestion}?
-msgid "search.NoHits.NoResultsFoundDidYouMean"
-msgstr ""
-
 #: messages.json
+msgid "search.NoHits.NoResultsFoundDidYouMean"
+msgstr "Ingen resultater funnet for {query}. Mente du {suggestion}?"
+
 #. [search.NoHits.SearchWithoutFilters]
 #. defaultMessage is:
 #. Search for {query} without filters
-msgid "search.NoHits.SearchWithoutFilters"
-msgstr ""
-
 #: messages.json
+msgid "search.NoHits.SearchWithoutFilters"
+msgstr "Søk etter {query} uten filtre"
+
 #. [search.Oldest first]
 #. defaultMessage is:
 #. Oldest first
-msgid "search.Oldest first"
-msgstr ""
-
 #: messages.json
+msgid "search.Oldest first"
+msgstr "Eldste først"
+
 #. [search.Participants]
 #. defaultMessage is:
 #. Participants
-msgid "search.Participants"
-msgstr ""
-
 #: messages.json
+msgid "search.Participants"
+msgstr "Deltakere"
+
 #. [search.Participants having the less posted messages]
 #. defaultMessage is:
 #. Participants having the less posted messages
-msgid "search.Participants having the less posted messages"
-msgstr ""
-
 #: messages.json
+msgid "search.Participants having the less posted messages"
+msgstr "Deltakere med færrest postede meldinger"
+
 #. [search.Participants having the most posted messages]
 #. defaultMessage is:
 #. Participants having the most posted messages
-msgid "search.Participants having the most posted messages"
-msgstr ""
-
 #: messages.json
+msgid "search.Participants having the most posted messages"
+msgstr "Deltakere med flest postede meldinger"
+
 #. [search.Participants pleased by their peers]
 #. defaultMessage is:
 #. Participants pleased by their peers
-msgid "search.Participants pleased by their peers"
-msgstr ""
-
 #: messages.json
+msgid "search.Participants pleased by their peers"
+msgstr "Deltakere som er anbefalt av andre medlemmer"
+
 #. [search.Reactive participants]
 #. defaultMessage is:
 #. Reactive participants
-msgid "search.Reactive participants"
-msgstr ""
-
 #: messages.json
+msgid "search.Reactive participants"
+msgstr "Reaktive deltakere"
+
 #. [search.Sort]
 #. defaultMessage is:
 #. Sort
-msgid "search.Sort"
-msgstr ""
-
 #: messages.json
+msgid "search.Sort"
+msgstr "Sorter"
+
 #. [search.by]
 #. defaultMessage is:
 #. by
-msgid "search.by"
-msgstr ""
-
 #: messages.json
+msgid "search.by"
+msgstr "etter"
+
 #. [search.collapse_search]
 #. defaultMessage is:
 #. Close search
-msgid "search.collapse_search"
-msgstr ""
-
 #: messages.json
+msgid "search.collapse_search"
+msgstr "Lukk søk"
+
 #. [search.datefilter.from]
 #. defaultMessage is:
 #. From
-msgid "search.datefilter.from"
-msgstr ""
-
 #: messages.json
+msgid "search.datefilter.from"
+msgstr "Fra"
+
 #. [search.datefilter.to]
 #. defaultMessage is:
 #. To
-msgid "search.datefilter.to"
-msgstr ""
-
 #: messages.json
+msgid "search.datefilter.to"
+msgstr "Til"
+
 #. [search.disagree]
 #. defaultMessage is:
 #. Disagree
-msgid "search.disagree"
-msgstr ""
-
 #: messages.json
+msgid "search.disagree"
+msgstr "Uenig"
+
 #. [search.dont_understand]
 #. defaultMessage is:
 #. Did not get it
-msgid "search.dont_understand"
-msgstr ""
-
 #: messages.json
+msgid "search.dont_understand"
+msgstr "Fikk det ikke"
+
 #. [search.facets.view_all]
 #. defaultMessage is:
 #. View all
-msgid "search.facets.view_all"
-msgstr ""
-
 #: messages.json
+msgid "search.facets.view_all"
+msgstr "Vis alle"
+
 #. [search.facets.view_less]
 #. defaultMessage is:
 #. View less
-msgid "search.facets.view_less"
-msgstr ""
-
 #: messages.json
+msgid "search.facets.view_less"
+msgstr "Vis mindre"
+
 #. [search.facets.view_more]
 #. defaultMessage is:
 #. View more
-msgid "search.facets.view_more"
-msgstr ""
-
 #: messages.json
+msgid "search.facets.view_more"
+msgstr "Vis mer"
+
 #. [search.hitstats.results_found]
 #. defaultMessage is:
 #. {hitCount} results found
-msgid "search.hitstats.results_found"
-msgstr ""
-
 #: messages.json
+msgid "search.hitstats.results_found"
+msgstr "{hitCount} resultater funnet"
+
 #. [search.idea]
 #. defaultMessage is:
 #. Ideas
-msgid "search.idea"
-msgstr ""
-
 #: messages.json
+msgid "search.idea"
+msgstr "Ideer"
+
 #. [search.like]
 #. defaultMessage is:
 #. Like
-msgid "search.like"
-msgstr ""
-
 #: messages.json
+msgid "search.like"
+msgstr "Liker"
+
 #. [search.member_since]
 #. defaultMessage is:
 #. Member since
-msgid "search.member_since"
-msgstr ""
-
 #: messages.json
+msgid "search.member_since"
+msgstr "Medlem siden"
+
 #. [search.more_info]
 #. defaultMessage is:
 #. More info please?
-msgid "search.more_info"
-msgstr ""
-
 #: messages.json
+msgid "search.more_info"
+msgstr "Vennligst mer info?"
+
 #. [search.pagination.next]
 #. defaultMessage is:
 #. Next
-msgid "search.pagination.next"
-msgstr ""
-
 #: messages.json
+msgid "search.pagination.next"
+msgstr "Neste"
+
 #. [search.pagination.previous]
 #. defaultMessage is:
 #. Previous
-msgid "search.pagination.previous"
-msgstr ""
-
 #: messages.json
+msgid "search.pagination.previous"
+msgstr "Forrige"
+
 #. [search.post]
 #. defaultMessage is:
 #. Messages
-msgid "search.post"
-msgstr ""
-
 #: messages.json
+msgid "search.post"
+msgstr "Meldinger"
+
 #. [search.published_on]
 #. defaultMessage is:
 #. Published on
-msgid "search.published_on"
-msgstr ""
-
 #: messages.json
+msgid "search.published_on"
+msgstr "Publisert"
+
 #. [search.reset.clear_all]
 #. defaultMessage is:
 #. Clear All Filters
-msgid "search.reset.clear_all"
-msgstr ""
-
 #: messages.json
+msgid "search.reset.clear_all"
+msgstr "Slett alle filtre"
+
 #. [search.search_come_from_announcement]
 #. defaultMessage is:
 #. Search done in the "announcement" section of this discussion
-msgid "search.search_come_from_announcement"
-msgstr ""
-
 #: messages.json
+msgid "search.search_come_from_announcement"
+msgstr "Søk utført i seksjonen “kunngjøring” i denne diskusjonen"
+
 #. [search.search_come_from_what_you_need_to_know]
 #. defaultMessage is:
 #. Search done in the "What you need to know" section of this discussion
-msgid "search.search_come_from_what_you_need_to_know"
-msgstr ""
-
 #: messages.json
+msgid "search.search_come_from_what_you_need_to_know"
+msgstr "Søk utført i seksjonen “Hva du trenger å vite” i denne diskusjonen"
+
 #. [search.searchbox.placeholder]
 #. defaultMessage is:
 #. Search
-msgid "search.searchbox.placeholder"
-msgstr ""
-
 #: messages.json
+msgid "search.searchbox.placeholder"
+msgstr "Søk"
+
 #. [search.synthesis]
 #. defaultMessage is:
 #. Synthesis
-msgid "search.synthesis"
-msgstr ""
-
 #: messages.json
+msgid "search.synthesis"
+msgstr "Syntese"
+
 #. [search.taxonomy_action.argument]
 #. defaultMessage is:
 #. Argument
-msgid "search.taxonomy_action.argument"
-msgstr ""
-
 #: messages.json
+msgid "search.taxonomy_action.argument"
+msgstr "Argument"
+
 #. [search.taxonomy_action.classify]
 #. defaultMessage is:
 #. Classify
-msgid "search.taxonomy_action.classify"
-msgstr ""
-
 #: messages.json
+msgid "search.taxonomy_action.classify"
+msgstr "Klassifiser"
+
 #. [search.taxonomy_action.display_bright_mirror]
 #. defaultMessage is:
 #. Display Design Fiction
-msgid "search.taxonomy_action.display_bright_mirror"
-msgstr ""
-
 #: messages.json
+msgid "search.taxonomy_action.display_bright_mirror"
+msgstr "Vis Design Fiction"
+
 #. [search.taxonomy_action.display_multi_column]
 #. defaultMessage is:
 #. Display Multi-column
-msgid "search.taxonomy_action.display_multi_column"
-msgstr ""
-
 #: messages.json
+msgid "search.taxonomy_action.display_multi_column"
+msgstr "Vis Flerkolonne"
+
 #. [search.taxonomy_action.display_open_questions]
 #. defaultMessage is:
 #. Display Open questions
-msgid "search.taxonomy_action.display_open_questions"
-msgstr ""
-
 #: messages.json
+msgid "search.taxonomy_action.display_open_questions"
+msgstr "Vis Åpne spørsmål"
+
 #. [search.taxonomy_action.display_thread]
 #. defaultMessage is:
 #. Display Thread
-msgid "search.taxonomy_action.display_thread"
-msgstr ""
-
 #: messages.json
+msgid "search.taxonomy_action.display_thread"
+msgstr "Vis tråd"
+
 #. [search.taxonomy_action.display_tokens]
 #. defaultMessage is:
 #. Display tokens
-msgid "search.taxonomy_action.display_tokens"
-msgstr ""
-
 #: messages.json
+msgid "search.taxonomy_action.display_tokens"
+msgstr "Vis sjetonger"
+
 #. [search.taxonomy_action.give_examples]
 #. defaultMessage is:
 #. Give examples
-msgid "search.taxonomy_action.give_examples"
-msgstr ""
-
 #: messages.json
+msgid "search.taxonomy_action.give_examples"
+msgstr "Gi eksempler"
+
 #. [search.taxonomy_action.make_generic]
 #. defaultMessage is:
 #. Make generic
-msgid "search.taxonomy_action.make_generic"
-msgstr ""
-
 #: messages.json
+msgid "search.taxonomy_action.make_generic"
+msgstr "Gjør generell"
+
 #. [search.taxonomy_action.mix_match]
 #. defaultMessage is:
 #. Mix & match
-msgid "search.taxonomy_action.mix_match"
-msgstr ""
-
 #: messages.json
+msgid "search.taxonomy_action.mix_match"
+msgstr "Bland og match"
+
 #. [search.taxonomy_action.more_specific]
 #. defaultMessage is:
 #. Be more specific
-msgid "search.taxonomy_action.more_specific"
-msgstr ""
-
 #: messages.json
+msgid "search.taxonomy_action.more_specific"
+msgstr "Vær mer spesifikk"
+
 #. [search.taxonomy_nature.actionable_solution]
 #. defaultMessage is:
 #. Actionable solution
-msgid "search.taxonomy_nature.actionable_solution"
-msgstr ""
-
 #: messages.json
+msgid "search.taxonomy_nature.actionable_solution"
+msgstr "Utførbar løsning"
+
 #. [search.taxonomy_nature.argument]
 #. defaultMessage is:
 #. Argument
-msgid "search.taxonomy_nature.argument"
-msgstr ""
-
 #: messages.json
+msgid "search.taxonomy_nature.argument"
+msgstr "Argument"
+
 #. [search.taxonomy_nature.cognitive_bias]
 #. defaultMessage is:
 #. Cognitive bias
-msgid "search.taxonomy_nature.cognitive_bias"
-msgstr ""
-
 #: messages.json
+msgid "search.taxonomy_nature.cognitive_bias"
+msgstr "Kognitiv bias"
+
 #. [search.taxonomy_nature.concept]
 #. defaultMessage is:
 #. Concept
-msgid "search.taxonomy_nature.concept"
-msgstr ""
-
 #: messages.json
+msgid "search.taxonomy_nature.concept"
+msgstr "Konsept"
+
 #. [search.taxonomy_nature.example]
 #. defaultMessage is:
 #. Example
-msgid "search.taxonomy_nature.example"
-msgstr ""
-
 #: messages.json
+msgid "search.taxonomy_nature.example"
+msgstr "Eksempel"
+
 #. [search.taxonomy_nature.issue]
 #. defaultMessage is:
 #. Issue
-msgid "search.taxonomy_nature.issue"
-msgstr ""
-
 #: messages.json
+msgid "search.taxonomy_nature.issue"
+msgstr "Problem"
+
 #. [search.taxonomy_nature.knowledge]
 #. defaultMessage is:
 #. Knowledge
-msgid "search.taxonomy_nature.knowledge"
-msgstr ""
-
 #: messages.json
+msgid "search.taxonomy_nature.knowledge"
+msgstr "Kjennskap"
+
 #. [search.user]
 #. defaultMessage is:
 #. Participants
-msgid "search.user"
-msgstr ""
-
 #: messages.json
+msgid "search.user"
+msgstr "Deltakere"
+
 #. [synthesis.noSynthesisYet]
 #. defaultMessage is:
 #. There is no synthesis available yet.
-msgid "synthesis.noSynthesisYet"
-msgstr ""
-
 #: messages.json
+msgid "synthesis.noSynthesisYet"
+msgstr "Ingen syntese er foreløpig tilgjengelig."
+
 #. [synthesis.seeConversation]
 #. defaultMessage is:
 #. See the conversation
-msgid "synthesis.seeConversation"
-msgstr ""
-
 #: messages.json
+msgid "synthesis.seeConversation"
+msgstr "Se samtalen"
+
 #. [synthesis.tableOfContents]
 #. defaultMessage is:
 #. Table of contents
-msgid "synthesis.tableOfContents"
-msgstr ""
-
 #: messages.json
+msgid "synthesis.tableOfContents"
+msgstr "Innholdsfortegnelse"
+
 #. [synthesis.title]
 #. defaultMessage is:
 #. synthesis
-msgid "synthesis.title"
-msgstr ""
-
 #: messages.json
+msgid "synthesis.title"
+msgstr "syntese"
+
 #. [termsAndConditions.accept]
 #. defaultMessage is:
 #. I accept
-msgid "termsAndConditions.accept"
-msgstr ""
-
 #: messages.json
+msgid "termsAndConditions.accept"
+msgstr "Jeg godtar"
+
 #. [termsAndConditions.headerTitle]
 #. defaultMessage is:
 #. Terms & Conditions
-msgid "termsAndConditions.headerTitle"
-msgstr ""
-
 #: messages.json
+msgid "termsAndConditions.headerTitle"
+msgstr "Vilkår og betingelser"
+
 #. [termsAndConditions.iAccept]
 #. defaultMessage is:
 #. I have read and I accept the 
-msgid "termsAndConditions.iAccept"
-msgstr ""
-
 #: messages.json
+msgid "termsAndConditions.iAccept"
+msgstr "Jeg har lest og godtar"
+
 #. [termsAndConditions.link]
 #. defaultMessage is:
 #. Terms & Conditions
-msgid "termsAndConditions.link"
-msgstr ""
-
 #: messages.json
+msgid "termsAndConditions.link"
+msgstr "Vilkår og betingelser"
+
 #. [unauthorizedAdministration.returnButton]
 #. defaultMessage is:
 #. Back to home
-msgid "unauthorizedAdministration.returnButton"
-msgstr ""
-
 #: messages.json
+msgid "unauthorizedAdministration.returnButton"
+msgstr "Tilbake til start"
+
 #. [unauthorizedAdministration.unauthorizedMessage]
 #. defaultMessage is:
 #. You are not authorized to access the administration section. Please contact the administrator of the website.
+#: messages.json
 msgid "unauthorizedAdministration.unauthorizedMessage"
 msgstr ""
+"Du har ikke adgang til administrasjonsseksjonen. Vennligst ta kontakt med "
+"nettsidens administrator."
 
-#: messages.json
 #. [validate]
 #. defaultMessage is:
 #. Validate
-msgid "validate"
-msgstr ""
-
 #: messages.json
+msgid "validate"
+msgstr "Godkjenn"
+
 #. [yes]
 #. defaultMessage is:
 #. yes
+#: messages.json
 msgid "yes"
-msgstr ""
+msgstr "ja"

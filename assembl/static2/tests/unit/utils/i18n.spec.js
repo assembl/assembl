@@ -4,7 +4,7 @@ describe('i18n util module', () => {
   describe('getLocale function', () => {
     it('should return the browser language', () => {
       const testedLocales = ['fr-FR', 'de-DE', 'de-AT', 'en-US', 'fr-fr', 'de-de', 'de-at', 'en-us', 'fr', 'de', 'ar', 'be'];
-      const expectedResult = ['fr', 'en', 'en', 'en', 'fr', 'en', 'en', 'en', 'fr', 'en', 'en', 'en'];
+      const expectedResult = ['fr', 'de', 'de', 'en', 'fr', 'de', 'de', 'en', 'fr', 'de', 'en', 'en'];
       const result = testedLocales.map(testedLocale => getLocale(testedLocale));
       expect(result).toEqual(expectedResult);
     });
