@@ -1211,7 +1211,7 @@ const Translations = {
         instruction2: "Fill in the required fields for each phase by selecting each tab",
         phaseModule: "Module for this phase:",
         thematicsTable: "Table des thématiques",
-        configureModule: "Once you saved your work, onfigure the module by clicking on the vertical menu on the left or on the following link: ",
+        configureModule: "Once you saved your work, configure the module by clicking on the vertical menu on the left or on the following link: ",
         configureModuleLink: "Configure Phase %{count}",
         successSave: "The timeline has been sucessfully saved",
         endIsBeforeStart: "Please select an end date posterior to the start",

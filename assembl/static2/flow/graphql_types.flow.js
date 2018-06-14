@@ -184,6 +184,7 @@ export type IdeaQuery = {|
     | {}
     | {}
     | {}
+    | {}
     | {})
 |};
 
@@ -270,7 +271,42 @@ export type IdeaWithPostsQuery = {|
     | {}
     | {}
     | {}
+    | {}
     | {})
+|};
+
+export type LandingPageQueryVariables = {|
+  lang: string
+|};
+
+export type LandingPageQuery = {|
+  discussion: ?{|
+    titleEntries: ?Array<?{|
+      localeCode: string,
+      value: ?string
+    |}>,
+    title: ?string,
+    subtitleEntries: ?Array<?{|
+      localeCode: string,
+      value: ?string
+    |}>,
+    subtitle: ?string,
+    buttonLabelEntries: ?Array<?{|
+      localeCode: string,
+      value: ?string
+    |}>,
+    buttonLabel: ?string,
+    headerImage: ?{|
+      externalUrl: ?string,
+      mimeType: ?string,
+      title: ?string
+    |},
+    logoImage: ?{|
+      externalUrl: ?string,
+      mimeType: ?string,
+      title: ?string
+    |}
+  |}
 |};
 
 export type LandingPageModuleTypesQueryVariables = {|
@@ -454,6 +490,7 @@ export type PostQuery = {|
     | {}
     | {}
     | {}
+    | {}
     | {})
 |};
 
@@ -508,7 +545,8 @@ export type ProfileFieldsQuery = {|
 export type QuestionPostsQueryVariables = {|
   id: string,
   first: number,
-  after: string
+  after: string,
+  fromNode?: ?string
 |};
 
 export type QuestionPostsQuery = {|
@@ -550,6 +588,7 @@ export type QuestionPostsQuery = {|
           |}>
         |}
       }
+    | {}
     | {}
     | {}
     | {}
@@ -602,6 +641,7 @@ export type QuestionQuery = {|
           |}
         |}
       }
+    | {}
     | {}
     | {}
     | {}
@@ -927,6 +967,10 @@ export type SynthesisQueryQuery = {|
     | {
         // The ID of the object.
         id: string
+      }
+    | {
+        // The ID of the object.
+        id: string
       })
 |};
 
@@ -939,6 +983,8 @@ export type TabsConditionQuery = {|
   hasSyntheses: ?boolean,
   hasLegalNotice: ?boolean,
   hasTermsAndConditions: ?boolean,
+  hasCookiesPolicy: ?boolean,
+  hasPrivacyPolicy: ?boolean,
   discussion: ?{|
     homepageUrl: ?string
   |}
@@ -1053,6 +1099,7 @@ export type ThematicQueryQuery = {|
     | {}
     | {}
     | {}
+    | {}
     | {})
 |};
 
@@ -1101,6 +1148,26 @@ export type ThematicsQueryQuery = {|
         value: ?string
       |}>
     |}>
+  |}>
+|};
+
+export type TimelineQueryVariables = {|
+  lang: string
+|};
+
+export type TimelineQuery = {|
+  timeline: ?Array<?{|
+    // The ID of the object.
+    id: string,
+    identifier: ?string,
+    isThematicsTable: ?boolean,
+    title: ?string,
+    titleEntries: ?Array<?{|
+      localeCode: string,
+      value: ?string
+    |}>,
+    start: ?any,
+    end: ?any
   |}>
 |};
 
@@ -1524,6 +1591,33 @@ export type addTokenVoteMutation = {|
   |}
 |};
 
+export type createDiscussionPhaseMutationVariables = {|
+  lang: string,
+  identifier: string,
+  isThematicsTable: boolean,
+  titleEntries: Array<?LangStringEntryInput>,
+  start: any,
+  end: any
+|};
+
+export type createDiscussionPhaseMutation = {|
+  createDiscussionPhase: ?{|
+    discussionPhase: ?{|
+      // The ID of the object.
+      id: string,
+      identifier: ?string,
+      isThematicsTable: ?boolean,
+      title: ?string,
+      titleEntries: ?Array<?{|
+        localeCode: string,
+        value: ?string
+      |}>,
+      start: ?any,
+      end: ?any
+    |}
+  |}
+|};
+
 export type createGaugeVoteSpecificationMutationVariables = {|
   voteSessionId: string,
   titleEntries: Array<?LangStringEntryInput>,
@@ -1899,6 +1993,16 @@ export type createTokenVoteSpecificationMutation = {|
   |}
 |};
 
+export type deleteDiscussionPhaseMutationVariables = {|
+  id: string
+|};
+
+export type deleteDiscussionPhaseMutation = {|
+  deleteDiscussionPhase: ?{|
+    success: ?boolean
+  |}
+|};
+
 export type deleteExtractMutationVariables = {|
   extractId: string
 |};
@@ -2067,6 +2171,69 @@ export type deleteVoteSpecificationMutationVariables = {|
 export type deleteVoteSpecificationMutation = {|
   deleteVoteSpecification: ?{|
     success: ?boolean
+  |}
+|};
+
+export type UpdateDiscussionMutationVariables = {|
+  titleEntries: Array<LangStringEntryInput>,
+  subtitleEntries: Array<LangStringEntryInput>,
+  buttonLabelEntries: Array<LangStringEntryInput>,
+  headerImage?: ?string,
+  logoImage?: ?string
+|};
+
+export type UpdateDiscussionMutation = {|
+  updateDiscussion: ?{|
+    discussion: ?{|
+      titleEntries: ?Array<?{|
+        localeCode: string,
+        value: ?string
+      |}>,
+      subtitleEntries: ?Array<?{|
+        localeCode: string,
+        value: ?string
+      |}>,
+      buttonLabelEntries: ?Array<?{|
+        localeCode: string,
+        value: ?string
+      |}>,
+      headerImage: ?{|
+        externalUrl: ?string,
+        mimeType: ?string
+      |},
+      logoImage: ?{|
+        externalUrl: ?string,
+        mimeType: ?string
+      |}
+    |}
+  |}
+|};
+
+export type updateDiscussionPhaseMutationVariables = {|
+  id: string,
+  lang: string,
+  identifier: string,
+  isThematicsTable: boolean,
+  titleEntries: Array<?LangStringEntryInput>,
+  start: any,
+  end: any
+|};
+
+export type updateDiscussionPhaseMutation = {|
+  updateDiscussionPhase: ?{|
+    discussionPhase: ?{|
+      // The ID of the object.
+      id: string,
+      identifier: ?string,
+      isThematicsTable: ?boolean,
+      title: ?string,
+      titleEntries: ?Array<?{|
+        localeCode: string,
+        value: ?string
+      |}>,
+      start: ?any,
+      end: ?any
+    |}
   |}
 |};
 
@@ -2698,6 +2865,7 @@ export type UserQuery = {|
         hasPassword: ?boolean,
         isDeleted: ?boolean
       }
+    | {}
     | {}
     | {}
     | {}

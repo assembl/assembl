@@ -22,6 +22,14 @@ type TimelineFormState = {
 };
 
 export class DumbTimelineForm extends React.Component<TimelineFormProps, TimelineFormState> {
+  static getDerivedStateFromProps(props: TimelineFormProps, state: TimelineFormState) {
+    if (!state.selectedPhaseId && props.phases) {
+      return {
+        selectedPhaseId: props.phases[0]
+      };
+    } return state;
+  }
+
   constructor(props: TimelineFormProps) {
     super(props);
     this.state = {
@@ -29,13 +37,8 @@ export class DumbTimelineForm extends React.Component<TimelineFormProps, Timelin
     };
   }
 
-  componentWillReceiveProps(nextProps: TimelineFormProps) {
-    if (!this.state.selectedPhaseId && nextProps.phases) {
-      this.setState({
-        selectedPhaseId: nextProps.phases[0]
-      });
-    }
-    if (nextProps.phases.length === 0) {
+  componentDidUpdate() {
+    if (this.props.phases.length === 0) {
       range(4).forEach(() => {
         this.props.handleCreatePhase();
       });

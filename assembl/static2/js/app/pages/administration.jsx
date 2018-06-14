@@ -25,11 +25,8 @@ import TabsConditionQuery from '../graphql/TabsConditionQuery.graphql';
 import TextFields from '../graphql/TextFields.graphql';
 import LegalContentsQuery from '../graphql/LegalContents.graphql';
 import VoteSessionQuery from '../graphql/VoteSession.graphql';
-<<<<<<< HEAD
 import LandingPageQuery from '../graphql/LandingPage.graphql';
-=======
 import TimelineQuery from '../graphql/Timeline.graphql';
->>>>>>> wip: create actions and reducers
 import { convertEntriesToRawContentState } from '../utils/draftjs';
 import { getPhaseId } from '../utils/timeline';
 import landingPagePlugin from '../utils/administration/landingPage';
@@ -190,8 +187,8 @@ class Administration extends React.Component {
     const filteredPhases = filter(TimelineQuery, { timeline: timeline });
     const phasesForStore = filteredPhases.timeline.map(phase => ({
       ...phase,
-      start: phase.start ? moment(phase.start) : moment(),
-      end: phase.end ? moment(phase.end) : moment()
+      start: moment(phase.start),
+      end: moment(phase.end)
     }));
     this.props.updatePhases(phasesForStore);
   }
@@ -277,11 +274,8 @@ class Administration extends React.Component {
       refetchVoteSession,
       refetchLandingPageModules,
       refetchTextFields,
-<<<<<<< HEAD
-      refetchLandingPage
-=======
+      refetchLandingPage,
       refetchTimeline
->>>>>>> wip: create actions and reducers
     } = this.props;
     const { phase } = params;
     const { timeline } = this.props.debate.debateData;
