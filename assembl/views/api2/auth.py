@@ -468,7 +468,8 @@ def assembl_register_user(request):
                 HTTPConflict.code)
     if discussion:
         check_subscription = discussion.preferences['whitelist_on_register']
-        if check_subscription:
+        whitelist = discussion.preferences['require_email_domain']
+        if check_subscription and whitelist:
             status = discussion.check_email(email)
             if not status:
                 admin_emails = discussion.get_admin_emails()
@@ -485,7 +486,7 @@ def assembl_register_user(request):
         raise errors
 
     # This logic needs to be above the JSONError checks to ensure that whitelisting is applied
-    # even if the discusison does not have a P_SELF_REGISTER on system.Everyone
+    # even if the discussion does not have a P_SELF_REGISTER on system.Everyone
     if discussion and not (
             P_SELF_REGISTER in permissions or
             P_SELF_REGISTER_REQUEST in permissions):

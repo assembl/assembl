@@ -767,7 +767,7 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
             "modification_permission": P_ADMIN_DISC,
             # "frontend_validator_function": func_name...?,
             # "backend_validator_function": func_name...?,
-            "default": False
+            "default": True
         },
 
         # A discussion administrator, if different from the server administrator
