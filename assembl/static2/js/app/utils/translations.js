@@ -464,8 +464,34 @@ const Translations = {
         language: "Éditer la langue du débat",
         sections: "Éditer les rubriques du débat",
         legalContents: "Éditer les contenus juridiques",
+        timeline: "Éditer les phases et modules",
         exportTaxonomies: "Exporter les taxonomies",
         manageProfileOptions: "Options d'inscription"
+      },
+      timelineAdmin: {
+        phase: "Phase %{count}",
+        annotation: "Module à renseigner obligatoirement. Les champs * sont requis.",
+        phaseLabel: "Titre de la phase",
+        addPhase: "Ajouter une phase",
+        deletePhase: "Supprimer la phase",
+        instruction1: "Choisissez le nombre de phases qui jalonneront votre débat",
+        instruction2: "Renseignez les champs requis pour chaque phase en sélectionnant chaque onglet",
+        phaseModule: "Modalité de participation pour cette phase :",
+        thematicsTable: "Thematics table",
+        configureModule: "Après avoir sauvegardé, configurez le module en cliquant dans le menu vertical gauche ou sur le lien suivant : ",
+        configureModuleLink: "Configurer Phase %{count}",
+        successSave: "La ligne de temps a été sauvegardée avec succès",
+        endIsBeforeStart: "Veuillez sélectionner une date de fin postérieure à celle de début",
+        startIsAfterEnd: "Veuillez une sélectionner une date de début ultérieure à celle de fin",
+        singleModule: "Module unique de participation",
+        selectStart: "Date de démarrage de la phase %{count}",
+        selectEnd: "Date de fin de la phase %{count}"
+      },
+      modules: {
+        survey: "Module Questions",
+        thread: "Module Threads",
+        multiColumns: "Module Multi-colonnes",
+        voteSession: "Module de vote"
       },
       noTimeline: "Aucune timeline n'a été configurée pour ce débat.",
       survey: {
@@ -604,7 +630,8 @@ const Translations = {
       discussion: {
         "0": "Langues utilisées",
         "3": "Options d'inscription",
-        "4": "Contenus juridiques"
+        "4": "Contenus juridiques",
+        "5": "Édition des phases et modules"
       },
       languageChoice: "Sélection des langues du débat",
       ph: {
@@ -1170,8 +1197,34 @@ const Translations = {
         language: "Discussion language",
         sections: "Edit debate sections",
         legalContents: "Edit legal content",
+        timeline: "Edit the phases and modules",
         exportTaxonomies: "Export taxonomies",
         manageProfileOptions: "Registration options"
+      },
+      timelineAdmin: {
+        phase: "Phase %{count}",
+        annotation: "This module has to be filled. * Fields are required",
+        phaseLabel: "Phase title",
+        addPhase: "Add a phase",
+        deletePhase: "Delete the phase",
+        instruction1: "Choose the number of phases for your debate",
+        instruction2: "Fill in the required fields for each phase by selecting each tab",
+        phaseModule: "Module for this phase:",
+        thematicsTable: "Table des thématiques",
+        configureModule: "Once you saved your work, configure the module by clicking on the vertical menu on the left or on the following link: ",
+        configureModuleLink: "Configure Phase %{count}",
+        successSave: "The timeline has been sucessfully saved",
+        endIsBeforeStart: "Please select an end date posterior to the start",
+        startIsAfterEnd: "Please select a start ulterior to the end",
+        singleModule: "Single participation module",
+        selectStart: "Phase %{count}'s start date",
+        selectEnd: "Phase %{count}'s end date"
+      },
+      modules: {
+        survey: "Survey module",
+        thread: "Thread module",
+        multiColumns: "Multi-columns module",
+        voteSession: "Vote module"
       },
       noTimeline: "No timeline has been configured yet",
       survey: {
@@ -1303,7 +1356,8 @@ const Translations = {
       discussion: {
         "0": "Languages of the Discussion",
         "3": "Registration options",
-        "4": "Legal contents"
+        "4": "Legal contents",
+        "5": "Edition of the phases and modules"
       },
       languageChoice: "Select desired languages below",
       ph: {

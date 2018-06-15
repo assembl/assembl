@@ -1,0 +1,33 @@
+#import "../fragments/LangString.graphql"
+
+mutation updateDiscussionPhase(
+  $id: ID!
+  $lang: String!
+  $identifier: String!
+  $isThematicsTable: Boolean!
+  $titleEntries: [LangStringEntryInput]!
+  $start: DateTime!
+  $end: DateTime!
+) {
+  updateDiscussionPhase(
+    id: $id
+    lang: $lang
+    identifier: $identifier
+    isThematicsTable: $isThematicsTable
+    titleEntries: $titleEntries
+    start: $start
+    end: $end
+  ) {
+    discussionPhase {
+      id
+      identifier
+      isThematicsTable
+      title(lang: $lang)
+      titleEntries {
+        ...langStringEntry
+      }
+      start
+      end
+    }
+  }
+}

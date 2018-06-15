@@ -5,10 +5,12 @@ import { type Route, type Router } from 'react-router';
 import { type ApolloClient, compose, graphql, withApollo } from 'react-apollo';
 import { I18n } from 'react-redux-i18n';
 import { type Map } from 'immutable';
+import moment from 'moment';
 
 import { languagePreferencesHasChanged, updateEditLocale } from '../actions/adminActions';
 import ManageSectionsForm from '../components/administration/discussion/manageSectionsForm';
 import LegalContentsForm from '../components/administration/discussion/legalContentsForm';
+import TimelineForm from '../components/administration/discussion/timelineForm';
 import LanguageSection from '../components/administration/discussion/languageSection';
 import ManageProfileOptionsForm from '../components/administration/discussion/manageProfileOptionsForm';
 import { displayAlert } from '../utils/utilityManager';
@@ -24,6 +26,9 @@ import ProfileFieldsQuery from '../graphql/ProfileFields.graphql';
 import createTextFieldMutation from '../graphql/mutations/createTextField.graphql';
 import updateTextFieldMutation from '../graphql/mutations/updateTextField.graphql';
 import deleteTextFieldMutation from '../graphql/mutations/deleteTextField.graphql';
+import updateDiscussionPhaseMutation from '../graphql/mutations/updateDiscussionPhase.graphql';
+import createDiscussionPhaseMutation from '../graphql/mutations/createDiscussionPhase.graphql';
+import deleteDiscussionPhaseMutation from '../graphql/mutations/deleteDiscussionPhase.graphql';
 import { type LanguagePreferencesState } from '../reducers/adminReducer';
 import { type State as ReduxState } from '../reducers/rootReducer';
 
@@ -47,6 +52,18 @@ const createVariablesForTextFieldMutation = textField => ({
 const createVariablesForDeleteSectionMutation = section => ({ sectionId: section.id });
 
 const createVariablesForDeleteTextFieldMutation = textField => ({ id: textField.id });
+
+const createVariablesForDiscussionPhaseMutation = phase => ({
+  identifier: phase.identifier,
+  isThematicsTable: phase.isThematicsTable,
+  start: moment(phase.start, moment.ISO_8601),
+  end: moment(phase.end, moment.ISO_8601),
+  titleEntries: phase.titleEntries
+});
+
+const createVariablesForDeleteDiscussionPhaseMutation = phase => ({
+  id: phase.id
+});
 
 type Props = {
   changeLocale: Function,
@@ -79,7 +96,13 @@ type Props = {
   deleteTextField: Function,
   profileOptionsHasChanged: boolean,
   refetchTextFields: Function,
-  textFields: string
+  textFields: string,
+  updateDiscussionPhase: Function,
+  createDiscussionPhase: Function,
+  deleteDiscussionPhase: Function,
+  refetchTimeline: Function,
+  phasesHaveChanged: boolean,
+  phases: Array<Object>
 };
 
 type State = {
@@ -114,7 +137,8 @@ class DiscussionAdmin extends React.Component<Props, State> {
     this.props.languagePreferenceHasChanged ||
     this.props.sectionsHaveChanged ||
     this.props.profileOptionsHasChanged ||
-    this.props.legalContentsHaveChanged;
+    this.props.legalContentsHaveChanged ||
+    this.props.phasesHaveChanged;
 
   saveAction = () => {
     const {
@@ -140,7 +164,14 @@ class DiscussionAdmin extends React.Component<Props, State> {
       deleteTextField,
       profileOptionsHasChanged,
       textFields,
-      refetchTextFields
+      refetchTextFields,
+      phases,
+      phasesHaveChanged,
+      refetchTimeline,
+      updateDiscussionPhase,
+      createDiscussionPhase,
+      deleteDiscussionPhase,
+      editLocale
     } = this.props;
     displayAlert('success', `${I18n.t('loading.wait')}...`);
 
@@ -188,6 +219,32 @@ class DiscussionAdmin extends React.Component<Props, State> {
         });
     }
 
+    if (phasesHaveChanged) {
+      const mutationPromises = getMutationsPromises({
+        items: phases,
+        variablesCreator: createVariablesForDiscussionPhaseMutation,
+        deleteVariablesCreator: createVariablesForDeleteDiscussionPhaseMutation,
+        createMutation: createDiscussionPhase,
+        deleteMutation: deleteDiscussionPhase,
+        updateMutation: updateDiscussionPhase,
+        lang: editLocale
+      });
+
+
+      runSerial(mutationPromises)
+        .then(() => {
+          this.setState({ refetching: true }, () => {
+            refetchTimeline().then(() => {
+              displayAlert('success', I18n.t('administration.timelineAdmin.successSave'));
+              this.setState({ refetching: false });
+            });
+          });
+        })
+        .catch((error) => {
+          displayAlert('danger', `${error}`, false, 30000);
+        });
+    }
+
     if (legalContentsHaveChanged) {
       const legalNoticeEntries = legalContents.get('legalNoticeEntries').toJS();
       const termsAndConditionsEntries = legalContents.get('termsAndConditionsEntries').toJS();
@@ -214,6 +271,7 @@ class DiscussionAdmin extends React.Component<Props, State> {
           displayAlert('danger', `${error}`, false, 30000);
         });
     }
+
 
     if (profileOptionsHasChanged) {
       const mutationsPromises = getMutationsPromises({
@@ -255,6 +313,7 @@ class DiscussionAdmin extends React.Component<Props, State> {
         {section === '2' && <ManageSectionsForm {...this.props} />}
         {section === '3' && <ManageProfileOptionsForm />}
         {section === '4' && <LegalContentsForm {...this.props} />}
+        {section === '5' && <TimelineForm {...this.props} />}
       </div>
     );
   }
@@ -267,11 +326,13 @@ const mapStateToProps: MapStateToProps<ReduxState, *, *> = ({
     editLocale,
     legalContents,
     sections,
-    profileOptions
+    profileOptions,
+    timeline
   },
   i18n
 }) => {
   const { sectionsById, sectionsHaveChanged, sectionsInOrder } = sections;
+  const { phasesInOrder, phasesById, phasesHaveChanged } = timeline;
   const { profileOptionsHasChanged, textFieldsById } = profileOptions;
   const textFields = textFieldsById
     .map(textField => textField)
@@ -307,7 +368,9 @@ const mapStateToProps: MapStateToProps<ReduxState, *, *> = ({
     legalContents: legalContents,
     legalContentsHaveChanged: legalContents.get('_hasChanged'),
     profileOptionsHasChanged: profileOptionsHasChanged,
-    textFields: textFields
+    textFields: textFields,
+    phases: phasesInOrder.map(id => phasesById.get(id)).toJS(),
+    phasesHaveChanged: phasesHaveChanged
   };
 };
 
@@ -336,6 +399,15 @@ export default compose(
   }),
   graphql(updateLegalContentsMutation, {
     name: 'updateLegalContents'
+  }),
+  graphql(createDiscussionPhaseMutation, {
+    name: 'createDiscussionPhase'
+  }),
+  graphql(deleteDiscussionPhaseMutation, {
+    name: 'deleteDiscussionPhase'
+  }),
+  graphql(updateDiscussionPhaseMutation, {
+    name: 'updateDiscussionPhase'
   }),
   graphql(createTextFieldMutation, {
     name: 'createTextField'

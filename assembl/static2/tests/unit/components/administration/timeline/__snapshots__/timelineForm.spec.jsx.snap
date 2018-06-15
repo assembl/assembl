@@ -1,0 +1,139 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TimelineForm component should render a form to create, delete and edit the title of the phases 1`] = `
+<div
+  className="admin-box timeline-admin"
+>
+  <SectionTitle
+    annotation="This module has to be filled. * Fields are required"
+    title="Edition of the phases and modules"
+  />
+  <Translate
+    className="admin-instruction"
+    value="administration.timelineAdmin.instruction1"
+  />
+  <div
+    className="admin-content"
+  >
+    <div
+      className="form-container"
+    >
+      <form>
+        <Connect(Component)
+          editLocale="fr"
+          id="123"
+          phaseIndex={1}
+        />
+        <Connect(Component)
+          editLocale="fr"
+          id="345"
+          phaseIndex={2}
+        />
+        <Connect(Component)
+          editLocale="fr"
+          id="456"
+          phaseIndex={3}
+        />
+        <OverlayTrigger
+          defaultOverlayShown={false}
+          overlay={
+            <Tooltip
+              bsClass="tooltip"
+              id="addPhaseTooltip"
+              placement="right"
+            >
+              <Translate
+                value="administration.timelineAdmin.addPhase"
+              />
+            </Tooltip>
+          }
+          placement="top"
+          trigger={
+            Array [
+              "hover",
+              "focus",
+            ]
+          }
+        >
+          <div
+            className="plus margin-s"
+            onClick={[Function]}
+          >
+            +
+          </div>
+        </OverlayTrigger>
+      </form>
+    </div>
+  </div>
+  <Translate
+    className="admin-instruction"
+    value="administration.timelineAdmin.instruction2"
+  />
+  <div
+    className="admin-content"
+  >
+    <Row
+      bsClass="row"
+      componentClass="div"
+    >
+      <Col
+        bsClass="col"
+        componentClass="div"
+        md={4}
+        xs={12}
+      >
+        <a
+          className="tab-title-active ellipsis"
+          onClick={[Function]}
+        >
+          <Translate
+            count={1}
+            value="administration.timelineAdmin.phase"
+          />
+        </a>
+      </Col>
+      <Col
+        bsClass="col"
+        componentClass="div"
+        md={4}
+        xs={12}
+      >
+        <a
+          className="tab-title ellipsis"
+          onClick={[Function]}
+        >
+          <Translate
+            count={2}
+            value="administration.timelineAdmin.phase"
+          />
+        </a>
+      </Col>
+      <Col
+        bsClass="col"
+        componentClass="div"
+        md={4}
+        xs={12}
+      >
+        <a
+          className="tab-title ellipsis"
+          onClick={[Function]}
+        >
+          <Translate
+            count={3}
+            value="administration.timelineAdmin.phase"
+          />
+        </a>
+      </Col>
+    </Row>
+    <Row
+      bsClass="row"
+      componentClass="div"
+    >
+      <Connect(Component)
+        phaseId="123"
+        phaseNumber={1}
+      />
+    </Row>
+  </div>
+</div>
+`;

@@ -21,9 +21,11 @@ export const getMutationsPromises = (params) => {
       // do nothing
     } else if (item._isNew && !item._toDelete && createMutation) {
       // create item
+      const variables = variablesCreator(item, index);
+      variables.lang = lang;
       const payload = {
         refetchQueries: params.refetchQueries || [],
-        variables: variablesCreator(item, index)
+        variables: variables
       };
       const p1 = () => createMutation(payload);
       promises.push(p1);

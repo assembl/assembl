@@ -4,10 +4,12 @@ import { compose, graphql } from 'react-apollo';
 import { filter } from 'graphql-anywhere';
 import { Grid, Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import moment from 'moment';
 
 import { updateThematics, displayLanguageMenu } from '../actions/adminActions';
 import { updateResources, updateResourcesCenterPage } from '../actions/adminActions/resourcesCenter';
 import { updateVoteSessionPage, updateVoteModules, updateVoteProposals } from '../actions/adminActions/voteSession';
+import { updatePhases } from '../actions/adminActions/timeline';
 import { updateSections } from '../actions/adminActions/adminSections';
 import { updateLegalContents } from '../actions/adminActions/legalContents';
 import { updateLandingPageModules, updateLandingPage } from '../actions/adminActions/landingPage';
@@ -24,6 +26,7 @@ import TextFields from '../graphql/TextFields.graphql';
 import LegalContentsQuery from '../graphql/LegalContents.graphql';
 import VoteSessionQuery from '../graphql/VoteSession.graphql';
 import LandingPageQuery from '../graphql/LandingPage.graphql';
+import TimelineQuery from '../graphql/Timeline.graphql';
 import { convertEntriesToRawContentState } from '../utils/draftjs';
 import { getPhaseId } from '../utils/timeline';
 import landingPagePlugin from '../utils/administration/landingPage';
@@ -83,6 +86,7 @@ class Administration extends React.Component {
     this.putLandingPageModulesInStore(this.props.landingPageModules);
     this.putTextFieldsInStore(this.props.textFields);
     this.putLandingPageInStore(this.props.landingPage);
+    this.putTimelinePhasesInStore(this.props.timeline);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -124,6 +128,10 @@ class Administration extends React.Component {
 
     if (nextProps.landingPage !== this.props.landingPage) {
       this.putLandingPageInStore(nextProps.landingPage);
+    }
+
+    if (nextProps.timeline !== this.props.timeline) {
+      this.putTimelinePhasesInStore(nextProps.timeline);
     }
   }
 
@@ -173,6 +181,16 @@ class Administration extends React.Component {
         : null
     };
     this.props.updateVoteSessionPage(voteSessionForStore);
+  }
+
+  putTimelinePhasesInStore(timeline) {
+    const filteredPhases = filter(TimelineQuery, { timeline: timeline });
+    const phasesForStore = filteredPhases.timeline.map(phase => ({
+      ...phase,
+      start: moment(phase.start),
+      end: moment(phase.end)
+    }));
+    this.props.updatePhases(phasesForStore);
   }
 
   putVoteModulesInStore(voteSession) {
@@ -256,7 +274,8 @@ class Administration extends React.Component {
       refetchVoteSession,
       refetchLandingPageModules,
       refetchTextFields,
-      refetchLandingPage
+      refetchLandingPage,
+      refetchTimeline
     } = this.props;
     const { phase } = params;
     const { timeline } = this.props.debate.debateData;
@@ -272,7 +291,8 @@ class Administration extends React.Component {
         refetchLandingPageModules: refetchLandingPageModules,
         refetchLegalContents: refetchLegalContents,
         refetchTextFields: refetchTextFields,
-        refetchLandingPage: refetchLandingPage
+        refetchLandingPage: refetchLandingPage,
+        refetchTimeline: refetchTimeline
       })
     );
     return (
@@ -336,7 +356,8 @@ const mapDispatchToProps = dispatch => ({
   displayLanguageMenu: isHidden => dispatch(displayLanguageMenu(isHidden)),
   updateLandingPageModules: landingPageModules => dispatch(updateLandingPageModules(landingPageModules)),
   updateTextFields: textFields => dispatch(updateTextFields(textFields)),
-  updateLandingPage: landingPage => dispatch(updateLandingPage(landingPage))
+  updateLandingPage: landingPage => dispatch(updateLandingPage(landingPage)),
+  updatePhases: phases => dispatch(updatePhases(phases))
 });
 
 const mergeLoadingAndHasErrors = WrappedComponent => (props) => {
@@ -357,7 +378,9 @@ const mergeLoadingAndHasErrors = WrappedComponent => (props) => {
     textFieldsLoading,
     textFieldsHasErrors,
     landingPageHasErrors,
-    landingPageLoading
+    landingPageLoading,
+    timelineIsLoading,
+    timelineHasErrors
   } = props;
 
   const hasErrors =
@@ -370,6 +393,7 @@ const mergeLoadingAndHasErrors = WrappedComponent => (props) => {
     sectionsHasErrors ||
     props[landingPagePlugin.hasErrors] ||
     textFieldsHasErrors ||
+    timelineHasErrors ||
     (data && data.error);
   const loading =
     voteSessionLoading ||
@@ -380,7 +404,7 @@ const mergeLoadingAndHasErrors = WrappedComponent => (props) => {
     landingPageLoading ||
     sectionsLoading ||
     props[landingPagePlugin.loading] ||
-    textFieldsLoading ||
+    textFieldsLoading || timelineIsLoading ||
     (data && data.loading);
 
   return <WrappedComponent {...props} hasErrors={hasErrors} loading={loading} />;
@@ -524,6 +548,30 @@ export default compose(
         legalContentsHaveErrors: data.error,
         refetchLegalContents: data.refetch,
         legalContents: data.legalContents
+      };
+    }
+  }),
+  graphql(TimelineQuery, {
+    options: ({ i18n: { locale } }) => ({
+      variables: { lang: locale }
+    }),
+    props: ({ data }) => {
+      if (data.loading) {
+        return {
+          timelineIsLoading: true
+        };
+      }
+      if (data.error) {
+        return {
+          timelineHasErrors: true
+        };
+      }
+
+      return {
+        timelineIsLoading: data.loading,
+        timelineHasErrors: data.error,
+        refetchTimeline: data.refetch,
+        timeline: data.timeline
       };
     }
   }),

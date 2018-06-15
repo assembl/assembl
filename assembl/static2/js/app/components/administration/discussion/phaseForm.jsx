@@ -1,0 +1,151 @@
+// @flow
+import React from 'react';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import { connect } from 'react-redux';
+import { Translate, I18n } from 'react-redux-i18n';
+import { SplitButton, MenuItem } from 'react-bootstrap';
+import { Link } from 'react-router';
+import { type moment } from 'moment';
+import { modulesTranslationKeys } from '../../../constants';
+import { displayAlert } from '../../../utils/utilityManager';
+import { getDiscussionSlug } from '../../../utils/globalFunctions';
+import { get } from '../../../utils/routeMap';
+import { updatePhaseIdentifier, updateStartDate, updateEndDate } from '../../../actions/adminActions/timeline';
+
+type PhaseFormProps = {
+  phaseId: string,
+  phaseNumber: number,
+  identifier: string,
+  start: moment,
+  end: moment,
+  handleStartDateChange: Function,
+  handleEndDateChange: Function,
+  handleIdentifierChange: Function,
+  locale: string
+};
+
+export const DumbPhaseForm = ({
+  phaseId,
+  phaseNumber,
+  handleIdentifierChange,
+  handleStartDateChange,
+  handleEndDateChange,
+  identifier,
+  start,
+  end,
+  locale
+}: PhaseFormProps) => {
+  const onStartDateChange = (newStartDate) => {
+    if (newStartDate.isAfter(end)) {
+      displayAlert('danger', I18n.t('administration.timelineAdmin.startIsAfterEnd'));
+    } else {
+      handleStartDateChange(newStartDate);
+    }
+  };
+  const onEndDateChange = (newEndDate) => {
+    if (!newEndDate.isAfter(start)) {
+      displayAlert('danger', I18n.t('administration.timelineAdmin.endIsBeforeStart'));
+    } else {
+      handleEndDateChange(newEndDate);
+    }
+  };
+
+  const startDatePickerPlaceholder = I18n.t('administration.timelineAdmin.selectStart', { count: phaseNumber });
+  const endDatePickerPlaceholder = I18n.t('administration.timelineAdmin.selectEnd', { count: phaseNumber });
+
+
+  const splitButtonTitle = identifier ?
+    I18n.t(`administration.modules.${identifier}`) :
+    I18n.t('administration.timelineAdmin.singleModule');
+
+  const slug = { slug: getDiscussionSlug() };
+
+  return (
+    <div className="phase-form">
+      <div className="date-picker-field">
+        <div className="date-picker-type">
+          <Translate value="search.datefilter.from" />
+        </div>
+        <label htmlFor="start-datepicker" className="datepicker-label">
+          <DatePicker
+            placeholderText={startDatePickerPlaceholder}
+            selected={start}
+            id="start-datepicker"
+            onChange={onStartDateChange}
+            showTimeSelect
+            timeFormat="HH:mm"
+            dateFormat="LLL"
+            locale={locale}
+            shouldCloseOnSelect
+          />
+          <div className="icon-schedule-container">
+            <span className="assembl-icon-schedule grey" />
+          </div>
+        </label>
+      </div>
+      <div className="date-picker-field">
+        <div className="date-picker-type">
+          <Translate value="search.datefilter.to" />
+        </div>
+        <label htmlFor="end-datepicker" className="datepicker-label">
+          <DatePicker
+            placeholderText={endDatePickerPlaceholder}
+            id="end-datepicker"
+            selected={end}
+            onChange={onEndDateChange}
+            showTimeSelect
+            timeFormat="HH:mm"
+            dateFormat="LLL"
+            locale={locale}
+            shouldCloseOnSelect
+          />
+          <div className="icon-schedule-container">
+            <span className="assembl-icon-schedule grey" />
+          </div>
+        </label>
+      </div>
+      <div className="inline text-xs margin-l">
+        <Translate value="administration.timelineAdmin.phaseModule" />
+      </div>
+      <div className="margin-m">
+        <SplitButton
+          className="admin-dropdown"
+          id={`dropdown-${phaseId}`}
+          title={splitButtonTitle}
+          onSelect={handleIdentifierChange}
+        >
+          {modulesTranslationKeys.map(key => (
+            <MenuItem key={`module-${key}`} eventKey={key}>
+              {I18n.t(`administration.modules.${key}`)}
+            </MenuItem>
+          ))}
+        </SplitButton>
+      </div>
+      <div className="text-xs configure-module-text">
+        <Translate value="administration.timelineAdmin.configureModule" />
+        <Link to={`${get('administration', slug)}${get('adminPhase', { ...slug, phase: identifier })}?section=1`} className="configure-module-link">
+          <Translate value="administration.timelineAdmin.configureModuleLink" count={phaseNumber} />
+        </Link>
+      </div>
+    </div>
+  );
+};
+
+const mapStateToProps = (state, { phaseId }) => {
+  const phase = state.admin.timeline.phasesById.get(phaseId);
+  return {
+    identifier: phase ? phase.get('identifier') : null,
+    start: phase ? phase.get('start') : null,
+    end: phase ? phase.get('end') : null,
+    locale: state.i18n.locale
+  };
+};
+
+const mapDispatchToProps = (dispatch, { phaseId }) => ({
+  handleIdentifierChange: eventKey => dispatch(updatePhaseIdentifier(phaseId, eventKey)),
+  handleStartDateChange: date => dispatch(updateStartDate(phaseId, date)),
+  handleEndDateChange: date => dispatch(updateEndDate(phaseId, date))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(DumbPhaseForm);

@@ -1,12 +1,21 @@
 .administration {
   margin: $margin-section + $navbar-height 0;
 
+  input[type='text'], input[type='textarea'], .form-control, .admin-dropdown, .dropdown-toggle, .btn-default {
+    border-radius: 0 !important;
+
+    &:focus {
+      border-color: $first-color;
+      outline: 0;
+      box-shadow: none;
+    }
+  }
+
   .profile-options {
     .profile-options-field {
       margin-bottom: 25px;
 
       input[type='text'] {
-        border-radius: 0;
         min-width: 350px;
       }
 
@@ -385,14 +394,12 @@
   }
 
   .preview {
-    border-radius: 5px;
     margin: 25px 0 0;
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
 
     img {
-      border-radius: 5px;
       width: 50%;
       max-height: 300px;
     }
@@ -571,6 +578,69 @@
 
       .assembl-icon-edit:before {
         font-size: $font-size-s;
+      }
+    }
+  }
+
+  .timeline-admin {
+    .form-group {
+      flex-grow: 1;
+      margin-left: 15px;
+    }
+
+    .admin-instruction {
+      margin-left: 50px;
+      font-family: $font-family4;
+    }
+
+    .phase-side-title {
+      margin-left: -70px;
+      margin-top: 30px;
+    }
+
+    .phase-side-title-low {
+      margin-top: 6px;
+    }
+
+    .delete-button-high {
+      margin-bottom: 25px;
+    }
+
+    .phase-form {
+      margin-top: 50px;
+    }
+  }
+
+  .phase-form {
+    .admin-dropdown {
+      width: 224px;
+      font-size: $font-size-xs;
+      height: 34px;
+      text-align: left;
+      font-family: $font-family4;
+    }
+
+    .open > .dropdown-menu {
+      font-size: $font-size-xs;
+      font-family: $font-family4;
+      width: 224px;
+    }
+
+    .dropdown-menu > li > a {
+      letter-spacing: 0;
+    }
+
+    .configure-module-text {
+      margin: 40px auto 0 auto;
+      width: 300px;
+    }
+
+    .configure-module-link {
+      cursor: pointer;
+      text-decoration: underline;
+
+      &:hover {
+        text-decoration: none;
       }
     }
   }

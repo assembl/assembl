@@ -1,0 +1,44 @@
+.date-picker-field {
+  &:first-child {
+    margin-bottom: 15px;
+  }
+
+  .datepicker-label > div {
+    display: inline-block;
+  }
+
+  .react-datepicker__input-container {
+    input[type="text"] {
+      box-shadow: none;
+      width: 250px;
+      height: 34px;
+      font-size: $font-size-xxs;
+      font-family: $font-family4;
+      padding-left: 10px;
+    }
+  }
+
+  .react-datepicker__time-list-item {
+    margin-left: -80px;
+  }
+
+  .date-picker-type {
+    font-size: $font-size-xs;
+    display: inline-block;
+    width: 40px;
+    text-align: left;
+  }
+
+  .icon-schedule-container {
+    margin-left: 10px;
+
+    .assembl-icon-schedule {
+      cursor: pointer;
+
+      &:before {
+        font-size: 25px;
+        vertical-align: sub;
+      }
+    }
+  }
+}

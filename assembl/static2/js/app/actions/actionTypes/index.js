@@ -1,5 +1,6 @@
 /* redux action types */
 // @flow
+import { type moment } from 'moment';
 import { type AdminActions } from './admin';
 
 export const UPDATE_CONTENT_LOCALE_BY_ID: 'UPDATE_CONTENT_LOCALE_BY_ID' = 'UPDATE_CONTENT_LOCALE_BY_ID';
@@ -87,6 +88,15 @@ export const UPDATE_LANDING_PAGE_HEADER_BUTTON_LABEL: 'UPDATE_LANDING_PAGE_HEADE
   'UPDATE_LANDING_PAGE_HEADER_BUTTON_LABEL';
 export const UPDATE_LANDING_PAGE_HEADER_IMAGE: 'UPDATE_LANDING_PAGE_HEADER_IMAGE' = 'UPDATE_LANDING_PAGE_HEADER_IMAGE';
 export const UPDATE_LANDING_PAGE_HEADER_LOGO: 'UPDATE_LANDING_PAGE_HEADER_LOGO' = 'UPDATE_LANDING_PAGE_HEADER_LOGO';
+export const CREATE_PHASE: 'CREATE_PHASE' = 'CREATE_PHASE';
+export const UPDATE_PHASES: 'UPDATE_PHASES' = 'UPDATE_PHASES';
+export const DELETE_PHASE: 'DELETE_PHASE' = 'DELETE_PHASE';
+export const UPDATE_PHASE_TITLE: 'UPDATE_PHASE_TITLE' = 'UPDATE_PHASE_TITLE';
+export const UPDATE_PHASE_IDENTIFIER: 'UPDATE_PHASE_IDENTIFIER' = 'UPDATE_PHASE_IDENTIFIER';
+export const UPDATE_PHASE_START: 'UPDATE_PHASE_START' = 'UPDATE_PHASE_START';
+export const UPDATE_PHASE_END: 'UPDATE_PHASE_END' = 'UPDATE_PHASE_END';
+export const UPDATE_IS_THEMATICS_TABLE: 'UPDATE_IS_THEMATICS_TABLE' = 'UPDATE_IS_THEMATICS_TABLE';
+
 
 export type UpdateContentLocaleById = {
   type: typeof UPDATE_CONTENT_LOCALE_BY_ID,
@@ -592,6 +602,57 @@ export type CustomizeVoteModule = {
   type: typeof UPDATE_VOTE_MODULE
 };
 
+export type CreatePhase = {
+  id: string,
+  type: typeof CREATE_PHASE
+};
+
+export type PhaseInfo = {
+  id: string
+};
+
+export type PhasesArray = Array<PhaseInfo>;
+
+export type UpdatePhases = {
+  phases: PhasesArray,
+  type: typeof UPDATE_PHASES
+};
+
+export type DeletePhase = {
+  id: string,
+  type: typeof DELETE_PHASE
+};
+
+export type UpdatePhaseTitle = {
+  id: string,
+  locale: string,
+  value: string,
+  type: typeof UPDATE_PHASE_TITLE
+};
+
+export type UpdatePhaseIdentifier = {
+  id: string,
+  value: string,
+  type: typeof UPDATE_PHASE_IDENTIFIER
+};
+
+export type UpdatePhaseStart = {
+  id: string,
+  value: moment,
+  type: typeof UPDATE_PHASE_START
+};
+
+export type UpdatePhaseEnd = {
+  id: string,
+  value: moment,
+  type: typeof UPDATE_PHASE_END
+};
+
+export type UpdateIsThematicsTable = {
+  id: string,
+  value: boolean
+};
+
 type BasicAction = {
   type: string
 };
@@ -614,6 +675,16 @@ type ResourcesCenterActions =
 type LegalContentsActions = UpdateLegalNoticeEntry | UpdateTermsAndConditionsEntry | UpdateLegalContents;
 
 type SectionActions = CreateSection | DeleteSection | UpSection | DownSection;
+
+type TimelineActions =
+  | CreatePhase
+  | UpdatePhases
+  | DeletePhase
+  | UpdatePhaseTitle
+  | UpdatePhaseIdentifier
+  | UpdatePhaseStart
+  | UpdatePhaseEnd
+  | UpdateIsThematicsTable;
 
 type VoteSessionActions =
   | UpdateVoteSessionPageTitle
@@ -663,4 +734,5 @@ export type Action =
   | SectionActions
   | VoteSessionActions
   | AdminActions
+  | TimelineActions
   | BasicAction;

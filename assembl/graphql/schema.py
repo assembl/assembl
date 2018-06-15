@@ -37,6 +37,7 @@ from assembl.graphql.sentiment import AddSentiment, DeleteSentiment
 from assembl.graphql.synthesis import Synthesis
 from assembl.graphql.user import UpdateUser, DeleteUserInformation
 from .configurable_fields import ConfigurableFieldUnion, CreateTextField, UpdateTextField, DeleteTextField, ProfileField, UpdateProfileFields
+from assembl.graphql.timeline import DiscussionPhase, CreateDiscussionPhase, UpdateDiscussionPhase, DeleteDiscussionPhase
 from assembl.graphql.votes import AddTokenVote, DeleteTokenVote, AddGaugeVote, DeleteGaugeVote
 from assembl.graphql.vote_session import (
     VoteSession, UpdateVoteSession, CreateTokenVoteSpecification,
@@ -98,6 +99,7 @@ class Query(graphene.ObjectType):
     landing_page_modules = graphene.List(LandingPageModule)
     text_fields = graphene.List(ConfigurableFieldUnion)
     profile_fields = graphene.List(ProfileField)
+    timeline = graphene.List(DiscussionPhase)
 
     def resolve_resources(self, args, context, info):
         model = models.Resource
@@ -367,6 +369,11 @@ class Query(graphene.ObjectType):
 
         return profile_fields
 
+    def resolve_timeline(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        return discussion.timeline_phases
+
 
 class Mutations(graphene.ObjectType):
 
@@ -419,6 +426,9 @@ class Mutations(graphene.ObjectType):
     update_text_field = UpdateTextField.Field()
     delete_text_field = DeleteTextField.Field()
     update_profile_fields = UpdateProfileFields.Field()
+    create_discussion_phase = CreateDiscussionPhase.Field()
+    update_discussion_phase = UpdateDiscussionPhase.Field()
+    delete_discussion_phase = DeleteDiscussionPhase.Field()
 
 
 Schema = graphene.Schema(query=Query, mutation=Mutations)
