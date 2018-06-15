@@ -4,23 +4,55 @@ import { OverlayTrigger } from 'react-bootstrap';
 
 import { languageTooltip } from '../common/tooltips';
 import { updateEditLocale } from '../../actions/adminActions';
+import De from '../svg/flags/de';
 import En from '../svg/flags/en';
+import Es from '../svg/flags/es';
 import Fr from '../svg/flags/fr';
+import Hu from '../svg/flags/hu';
+import It from '../svg/flags/it';
 import Ja from '../svg/flags/ja';
-import ZhCN from '../svg/flags/zh_CN';
+import Nb from '../svg/flags/nb';
+import Nl from '../svg/flags/nl';
+import Pl from '../svg/flags/pl';
+import Pt from '../svg/flags/pt';
+import Ro from '../svg/flags/ro';
 import Ru from '../svg/flags/ru';
+import Th from '../svg/flags/th';
+import Tr from '../svg/flags/tr';
+import ZhCN from '../svg/flags/zh_CN';
 
-// TO DO get it dynamically
 const Flag = ({ locale }) => {
   switch (locale) {
+  case 'de':
+    return <De />;
   case 'en':
     return <En />;
+  case 'es':
+    return <Es />;
   case 'fr':
     return <Fr />;
+  case 'hu':
+    return <Hu />;
+  case 'it':
+    return <It />;
   case 'ja':
     return <Ja />;
+  case 'no':
+    return <Nb />;
+  case 'nl':
+    return <Nl />;
+  case 'pl':
+    return <Pl />;
+  case 'pt':
+    return <Pt />;
+  case 'ro':
+    return <Ro />;
   case 'ru':
     return <Ru />;
+  case 'th':
+    return <Th />;
+  case 'tr':
+    return <Tr />;
   case 'zh_Hans':
     return <ZhCN />;
   default:
@@ -37,6 +69,7 @@ const LanguageMenu = ({ changeLocale, editLocale, discussionPreferences, isHidde
             <div>
               {discussionPreferences.map((key, index) => (
                 <div
+                  title={key}
                   onClick={() => changeLocale(key)}
                   id={key}
                   className={editLocale === key ? 'flag-container active' : 'flag-container'}
