@@ -40,26 +40,29 @@ def upgrade(pyramid_env):
         def order(acc):
             return (acc.verified, acc.profile.creation_date)
 
-        for dups in duplicates:
-            # the "best" (verified, latest) will be last
-            dups.sort(key=order)
-            for acc in dups[:-1]:
-                assert not acc.verified
-            acc = dups[-1]
-            # Make the profile verified iff one verified account
-            acc.profile.verified = reduce(or_, [a.verified for a in acc.profile.accounts])
+        with db.no_autoflush as db:
+            for dups in duplicates:
+                # the "best" (verified, latest) will be last
+                dups.sort(key=order)
+                for acc in dups[:-1]:
+                    assert not acc.verified
+                acc = dups[-1]
+                # Make the profile verified iff one verified account
+                acc.profile.verified = reduce(or_, [a.verified for a in acc.profile.accounts])
 
-        for dups in duplicates:
-            # keep last profile
-            keep_profile = dups[-1].profile_id
-            for acc in dups[:-1]:
-                acc.delete()
-                # i.e. delete profile if not last.
-                # There were cases of 2 accounts to one profile, one verified
-                if acc.profile_id != keep_profile:
-                    if acc.profile.username:
-                        acc.profile.username.delete()
-                    acc.profile.delete()
+            for dups in duplicates:
+                # keep last profile
+                keep_profile = dups[-1].profile_id
+                for acc in dups[:-1]:
+                    acc.delete()
+                    # i.e. delete profile if not last.
+                    # There were cases of 2 accounts to one profile, one verified
+                    if acc.profile_id != keep_profile:
+                        if acc.profile.username:
+                            acc.profile.username.delete()
+                        acc.profile.delete()
+
+        db.flush()
 
 
 def downgrade(pyramid_env):
