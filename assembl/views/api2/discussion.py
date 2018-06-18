@@ -727,10 +727,21 @@ def get_visit_count(request):
              permission=P_DISC_STATS)
 def get_visitors(request):
     discussion = request.context._instance
+    user_prefs = LanguagePreferenceCollection.getCurrent()
     fieldnames = ["time", "name", "email"]
     extra_columns_info = (None if 'no_extra_columns' in request.GET else
                           load_social_columns_info(discussion, "en"))
+    db = discussion.db
+    from assembl import models as m
+    from graphene.relay import Node
+    # Adding configurable fields titles to the csv
+    configurable_fields = db.query(m.AbstractConfigurableField).filter(m.AbstractConfigurableField.discussion_id == discussion.id).filter(
+        m.AbstractConfigurableField.identifier == m.ConfigurableFieldIdentifiersEnum.CUSTOM.value).all()
+    for configurable_field in configurable_fields:
+        fieldnames.append((configurable_field.title.best_lang(user_prefs).value).encode("utf-8"))
 
+    select_field_options = db.query(m.SelectFieldOption).all()
+    select_field_options_dict = {sfd.id: sfd.label.best_lang(user_prefs).value for sfd in select_field_options}
     if extra_columns_info:
         # insert after email
         fieldnames.extend([name.encode('utf-8') for (name, path) in extra_columns_info])
@@ -743,9 +754,25 @@ def get_visitors(request):
     for st in discussion.agent_status_in_discussion:
         if not getattr(st, attribute, None):
             continue
+        profile_fields = db.query(m.AbstractConfigurableField, m.ProfileField).filter(m.ProfileField.discussion_id == discussion.id).join(m.ProfileField.configurable_field).filter(
+            m.ProfileField.agent_profile_id == st.agent_profile.id).filter(m.AbstractConfigurableField.identifier == m.ConfigurableFieldIdentifiersEnum.CUSTOM.value).filter(m.ProfileField.configurable_field_id == m.AbstractConfigurableField.id).all()
+
         data = {"time": getattr(st, attribute),
                 "name": (st.agent_profile.name or '').encode("utf-8"),
                 "email": (st.agent_profile.get_preferred_email() or '').encode("utf-8")}
+
+        for profile_field in profile_fields:
+            if profile_field[1].value_data["value"] != None and profile_field[0].title != None:
+                if type(profile_field[1].value_data["value"]) == list:
+                    profile_field_value_id = profile_field[1].value_data["value"][0]
+                    profile_field_value_id = int(Node.from_global_id(profile_field_value_id)[1])
+                    profile_field_value = select_field_options_dict.get(profile_field_value_id)
+                    if profile_field_value:
+                        data.update({(profile_field[0].title.best_lang(user_prefs).value).encode(
+                            "utf-8"): profile_field_value.encode("utf-8")})
+                else:
+                    data.update({(profile_field[0].title.best_lang(user_prefs).value).encode("utf-8"): (profile_field[1].value_data["value"]).encode("utf-8")})
+
         if extra_columns_info:
             extra_info = get_social_columns_from_user(
                 st.agent_profile, extra_columns_info, provider_id)
