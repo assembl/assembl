@@ -62,10 +62,16 @@ export class DumbTimelineForm extends React.Component<TimelineFormProps, Timelin
             <form>
               {phases &&
                 phases.map((id, index) => (
-                  <PhaseTitleForm key={`phase-title-form-${id}`} id={id} editLocale={editLocale} phaseIndex={index + 1} />
+                  <PhaseTitleForm
+                    key={`phase-title-form-${id}`}
+                    id={id}
+                    editLocale={editLocale}
+                    phaseIndex={index + 1}
+                    numberOfPhases={phases.length}
+                  />
                 ))}
               <OverlayTrigger placement="top" overlay={addPhaseTooltip}>
-                <div onClick={() => handleCreatePhase()} className="plus margin-s">
+                <div onClick={handleCreatePhase} className="plus margin-s">
                   +
                 </div>
               </OverlayTrigger>

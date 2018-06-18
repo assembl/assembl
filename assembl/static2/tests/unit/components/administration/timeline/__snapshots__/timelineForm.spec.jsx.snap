@@ -22,16 +22,19 @@ exports[`TimelineForm component should render a form to create, delete and edit 
         <Connect(Component)
           editLocale="fr"
           id="123"
+          numberOfPhases={3}
           phaseIndex={1}
         />
         <Connect(Component)
           editLocale="fr"
           id="345"
+          numberOfPhases={3}
           phaseIndex={2}
         />
         <Connect(Component)
           editLocale="fr"
           id="456"
+          numberOfPhases={3}
           phaseIndex={3}
         />
         <OverlayTrigger
