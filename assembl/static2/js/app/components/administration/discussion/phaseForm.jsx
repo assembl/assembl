@@ -105,7 +105,7 @@ export const DumbPhaseForm = ({
           </div>
         </label>
       </div>
-      <div className="inline text-xs margin-l">
+      <div className="module-selection-text">
         <Translate value="administration.timelineAdmin.phaseModule" />
       </div>
       <div className="margin-m">
