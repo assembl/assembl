@@ -96,6 +96,8 @@ export const UPDATE_PHASE_IDENTIFIER: 'UPDATE_PHASE_IDENTIFIER' = 'UPDATE_PHASE_
 export const UPDATE_PHASE_START: 'UPDATE_PHASE_START' = 'UPDATE_PHASE_START';
 export const UPDATE_PHASE_END: 'UPDATE_PHASE_END' = 'UPDATE_PHASE_END';
 export const UPDATE_IS_THEMATICS_TABLE: 'UPDATE_IS_THEMATICS_TABLE' = 'UPDATE_IS_THEMATICS_TABLE';
+export const MOVE_PHASE_UP: 'MOVE_PHASE_UP' = 'MOVE_PHASE_UP';
+export const MOVE_PHASE_DOWN: 'MOVE_PHASE_DOWN' = 'MOVE_PHASE_DOWN';
 
 
 export type UpdateContentLocaleById = {
@@ -650,7 +652,18 @@ export type UpdatePhaseEnd = {
 
 export type UpdateIsThematicsTable = {
   id: string,
-  value: boolean
+  value: boolean,
+  type: typeof UPDATE_IS_THEMATICS_TABLE
+};
+
+export type MovePhaseUp = {
+  id: string,
+  type: typeof MOVE_PHASE_UP
+};
+
+export type MovePhaseDown = {
+  id: string,
+  type: typeof MOVE_PHASE_DOWN
 };
 
 type BasicAction = {
@@ -684,7 +697,9 @@ type TimelineActions =
   | UpdatePhaseIdentifier
   | UpdatePhaseStart
   | UpdatePhaseEnd
-  | UpdateIsThematicsTable;
+  | UpdateIsThematicsTable
+  | MovePhaseUp
+  | MovePhaseDown;
 
 type VoteSessionActions =
   | UpdateVoteSessionPageTitle

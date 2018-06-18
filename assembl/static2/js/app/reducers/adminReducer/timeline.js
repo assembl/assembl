@@ -13,7 +13,9 @@ import {
   UPDATE_PHASE_IDENTIFIER,
   UPDATE_PHASE_START,
   UPDATE_PHASE_END,
-  UPDATE_IS_THEMATICS_TABLE
+  UPDATE_IS_THEMATICS_TABLE,
+  MOVE_PHASE_UP,
+  MOVE_PHASE_DOWN
 } from '../../actions/actionTypes';
 
 const emptyPhase = Map({
@@ -80,6 +82,14 @@ export const phasesInOrder: PhasesInOrderReducer = (state = List(), action) => {
     return state.push(action.id);
   case UPDATE_PHASES:
     return List(action.phases.map(phase => phase.id));
+  case MOVE_PHASE_UP: {
+    const idx = state.indexOf(action.id);
+    return state.delete(idx).insert(idx - 1, action.id);
+  }
+  case MOVE_PHASE_DOWN: {
+    const idx = state.indexOf(action.id);
+    return state.delete(idx).insert(idx + 1, action.id);
+  }
   default:
     return state;
   }

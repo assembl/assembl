@@ -48,3 +48,13 @@ export const updateIsThematicsTable = (id: string, value: boolean): actionTypes.
   value: value,
   type: actionTypes.UPDATE_IS_THEMATICS_TABLE
 });
+
+export const movePhaseUp = (id: string): actionTypes.MovePhaseUp => ({
+  id: id,
+  type: actionTypes.MOVE_PHASE_UP
+});
+
+export const movePhaseDown = (id: string): actionTypes.MovePhaseDown => ({
+  id: id,
+  type: actionTypes.MOVE_PHASE_DOWN
+});
