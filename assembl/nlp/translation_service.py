@@ -63,7 +63,10 @@ class LanguageIdentificationService(object):
         return cls.detector_factory().langlist
 
     def asKnownLocale(self, locale_code):
-        parts = locale_code.split("_")
+        # Google returns "zh-cn" or "zh-CN" when detecting Chinese and so
+        # we have langstring entries with locale code set to "zh-cn" or "zh-CN".
+        # We need to replace "-" by "_" for this code to work.
+        parts = locale_code.replace("-", "_").split("_")
         base = parts[0]
         if base == "zh":
             if len(parts) > 1 and parts[1] in ("Hant", "TW", "HK", "SG", "MO"):
@@ -423,7 +426,7 @@ class DummyGoogleTranslationService(AbstractTranslationService):
                 "idiosyncrasies": self.idiosyncrasies_reverse}
 
     def asKnownLocale(self, locale_code):
-        parts = locale_code.split("_")
+        parts = locale_code.replace("-", "_").split("_")
         base = parts[0]
         if base == "zh" and len(parts) > 1:
             p1 = parts[1]
