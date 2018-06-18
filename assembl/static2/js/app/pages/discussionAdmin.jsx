@@ -369,7 +369,12 @@ const mapStateToProps: MapStateToProps<ReduxState, *, *> = ({
     legalContentsHaveChanged: legalContents.get('_hasChanged'),
     profileOptionsHasChanged: profileOptionsHasChanged,
     textFields: textFields,
-    phases: phasesInOrder.map(id => phasesById.get(id)).toJS(),
+    phases: phasesById.map((phase) => {
+      const id = phase.get('id');
+      return phase.set('order', phasesInOrder.indexOf(id));
+    })
+      .valueSeq()
+      .toJS(),
     phasesHaveChanged: phasesHaveChanged
   };
 };

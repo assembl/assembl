@@ -9,22 +9,28 @@ exports[`PhaseTitleForm component should render a form to update the phase's tit
     count={1}
     value="administration.timelineAdmin.phase"
   />
-  <FormControlWithLabel
-    componentClass={undefined}
-    disabled={undefined}
-    formControlProps={undefined}
-    helperText=""
-    helperUrl=""
-    id={undefined}
-    label="Phase title FR"
-    labelAlwaysVisible={false}
-    name={undefined}
-    onChange={[Function]}
-    required={true}
-    type="text"
-    validationErrors={undefined}
-    value="Une phase intéressante"
-  />
+  <FormGroup
+    bsClass="form-group"
+    validationState={null}
+  >
+    <FormControlWithLabel
+      className={null}
+      componentClass={undefined}
+      disabled={undefined}
+      formControlProps={undefined}
+      helperText=""
+      helperUrl=""
+      id={undefined}
+      label="Phase title FR"
+      labelAlwaysVisible={false}
+      name={undefined}
+      onChange={[Function]}
+      required={true}
+      type="text"
+      validationErrors={undefined}
+      value="Une phase intéressante"
+    />
+  </FormGroup>
   <div
     className="flex"
   >

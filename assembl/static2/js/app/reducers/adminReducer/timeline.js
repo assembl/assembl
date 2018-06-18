@@ -51,7 +51,14 @@ export const phasesById: PhasesByIdReducer = (state: PhasesByIdState = Map(), ac
     return state.setIn([action.id, 'isThematicsTable'], action.value).setIn([action.id, '_hasChanged'], true);
   case UPDATE_PHASES: {
     let newState = Map();
-    action.phases.forEach(({ identifier, titleEntries, start, end, id, isThematicsTable }) => {
+    action.phases.forEach(({
+      identifier,
+      titleEntries,
+      start,
+      end,
+      id,
+      isThematicsTable
+    }) => {
       const phaseInfo = Map({
         _hasChanged: false,
         _isNew: false,
@@ -80,8 +87,9 @@ export const phasesInOrder: PhasesInOrderReducer = (state = List(), action) => {
   switch (action.type) {
   case CREATE_PHASE:
     return state.push(action.id);
-  case UPDATE_PHASES:
-    return List(action.phases.map(phase => phase.id));
+  case UPDATE_PHASES: {
+    const phases = action.phases.sort((a, b) => a.order - b.order);
+    return List(phases.map(phase => phase.id)); }
   case MOVE_PHASE_UP: {
     const idx = state.indexOf(action.id);
     return state.delete(idx).insert(idx - 1, action.id);
@@ -107,6 +115,8 @@ export const phasesHaveChanged: TimelineHasChangedReducer = (state = false, acti
   case UPDATE_PHASE_START:
   case UPDATE_PHASE_END:
   case UPDATE_IS_THEMATICS_TABLE:
+  case MOVE_PHASE_UP:
+  case MOVE_PHASE_DOWN:
     return true;
   default:
     return state;

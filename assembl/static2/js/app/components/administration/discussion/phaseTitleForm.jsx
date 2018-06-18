@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import { connect } from 'react-redux';
-import { OverlayTrigger, Button } from 'react-bootstrap';
+import { OverlayTrigger, Button, FormGroup } from 'react-bootstrap';
 import { I18n, Translate } from 'react-redux-i18n';
 import classnames from 'classnames';
 import { updatePhaseTitle, deletePhase, movePhaseUp, movePhaseDown } from '../../../actions/adminActions/timeline';
@@ -18,7 +18,8 @@ type PhaseTitleFormProps = {
   handleUpClick: Function,
   handleDownClick: Function,
   phaseIndex: number,
-  numberOfPhases: number
+  numberOfPhases: number,
+  hasConflictingDates: boolean
 }
 
 export const DumbPhaseTitleForm = ({
@@ -30,7 +31,8 @@ export const DumbPhaseTitleForm = ({
   handleUpClick,
   handleDownClick,
   phaseIndex,
-  numberOfPhases
+  numberOfPhases,
+  hasConflictingDates
 }: PhaseTitleFormProps) => {
   const phaseLabel = I18n.t('administration.timelineAdmin.phaseLabel');
   const isTitleEmpty = title.length === 0;
@@ -41,14 +43,16 @@ export const DumbPhaseTitleForm = ({
   return (
     <div className="flex phase-title-form">
       <Translate value="administration.timelineAdmin.phase" count={phaseIndex} className={phaseSideTitleClassNames} />
-      <FormControlWithLabel
-        key={`phase-${id}`}
-        label={`${phaseLabel} ${editLocale.toUpperCase()}`}
-        onChange={handleTitleChange}
-        type="text"
-        value={title}
-        required
-      />
+      <FormGroup validationState={hasConflictingDates ? 'warning' : null}>
+        <FormControlWithLabel
+          key={`phase-${id}`}
+          label={`${phaseLabel} ${editLocale.toUpperCase()}`}
+          onChange={handleTitleChange}
+          type="text"
+          value={title}
+          required
+          className={hasConflictingDates ? 'warning' : null}
+        /></FormGroup>
       <div className="flex">
         {!isLast ? (
           <OverlayTrigger placement="top" overlay={downTooltip}>
@@ -74,10 +78,19 @@ export const DumbPhaseTitleForm = ({
   );
 };
 
-const mapStateToProps = (state, { id, editLocale }: PhaseTitleFormProps) => {
-  const phase = state.admin.timeline.phasesById.get(id);
+const mapStateToProps = (state, { id, editLocale, phaseIndex }: PhaseTitleFormProps) => {
+  const { phasesById } = state.admin.timeline;
+  const phase = phasesById.get(id);
+  const start = phase.get('start');
+  const end = phase.get('end');
+  const nextPhaseId = state.admin.timeline.phasesInOrder.toJS()[phaseIndex];
+  const previousPhaseId = state.admin.timeline.phasesInOrder.toJS()[phaseIndex - 2];
+  const previousPhaseEnd = phasesById.getIn([previousPhaseId, 'end']);
+  const nextPhaseStart = phasesById.getIn([nextPhaseId, 'start']);
+  const hasConflictingDates = start && start.isBefore(previousPhaseEnd) || end && end.isAfter(nextPhaseStart);
   return {
-    title: getEntryValueForLocale(phase.get('titleEntries'), editLocale, '')
+    title: getEntryValueForLocale(phase.get('titleEntries'), editLocale, ''),
+    hasConflictingDates: hasConflictingDates
   };
 };
 
