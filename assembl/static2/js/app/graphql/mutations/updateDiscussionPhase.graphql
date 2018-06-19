@@ -6,8 +6,10 @@ mutation updateDiscussionPhase(
   $identifier: String!
   $isThematicsTable: Boolean!
   $titleEntries: [LangStringEntryInput]!
+  $descriptionEntries: [LangStringEntryInput]
   $start: DateTime!
   $end: DateTime!
+  $image: String
 ) {
   updateDiscussionPhase(
     id: $id
@@ -15,8 +17,10 @@ mutation updateDiscussionPhase(
     identifier: $identifier
     isThematicsTable: $isThematicsTable
     titleEntries: $titleEntries
+    descriptionEntries: $descriptionEntries
     start: $start
     end: $end
+    image: $image
   ) {
     discussionPhase {
       id
@@ -26,8 +30,15 @@ mutation updateDiscussionPhase(
       titleEntries {
         ...langStringEntry
       }
+      descriptionEntries {
+        ...langStringEntry
+      }
       start
       end
+      image {
+        externalUrl
+        mimeType
+      }
     }
   }
 }

@@ -326,6 +326,7 @@ from .attachment import (  # noqa: E402, F401
     PostAttachment,
     IdeaAttachment,
     ResourceAttachment,
+    TimelineEventAttachment,
     VoteSessionAttachment
 )
 

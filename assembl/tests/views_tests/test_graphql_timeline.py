@@ -58,6 +58,14 @@ def test_mutation_create_discussion_phase(graphql_request, discussion_with_2_pha
 
 
 def test_mutation_update_discussion_phase(graphql_request, discussion_with_2_phase_interface_v2, timeline_phase2_interface_v2, graphql_registry):
+    import os
+    from io import BytesIO
+    class FieldStorage(object):
+        file = BytesIO(os.urandom(16))
+        filename = u'path/to/img.png'
+        type = 'image/png'
+
+    graphql_request.POST['variables.image'] = FieldStorage()
     phase1 = discussion_with_2_phase_interface_v2.timeline_events[0]
     phase1_id = to_global_id('DiscussionPhase', phase1.id)
     res = schema.execute(
@@ -71,8 +79,12 @@ def test_mutation_update_discussion_phase(graphql_request, discussion_with_2_pha
             "titleEntries": [
                 { "localeCode": "en", "value": u"My new title" }
             ],
+            "descriptionEntries": [
+                { "localeCode": "en", "value": u"My new description" }
+            ],
             "start": '2018-01-20T09:01:00.000001Z',
             "end": '2018-05-20T00:00:00.100001Z',
+            "image": u"variables.image"
         }
     )
     assert res.errors is None
@@ -83,9 +95,11 @@ def test_mutation_update_discussion_phase(graphql_request, discussion_with_2_pha
     assert phase1_updated['title'] == u'My new title'
     assert phase1_updated['titleEntries'][0]['localeCode'] == u'en'
     assert phase1_updated['titleEntries'][0]['value'] == u'My new title'
+    assert phase1_updated['descriptionEntries'][0]['value'] == u'My new description'
     assert phase1_updated['start'] == u'2018-01-20T09:01:00.000001+00:00'
     assert phase1_updated['end'] == u'2018-05-20T00:00:00.100001+00:00'
-
+    assert '/documents/' in phase1_updated['image']['externalUrl']
+    assert phase1_updated['image']['mimeType'] == 'image/png'
 
 def test_mutation_delete_discussion_phase(graphql_request, discussion_with_2_phase_interface_v2, timeline_phase2_interface_v2, graphql_registry):
     phase1 = discussion_with_2_phase_interface_v2.timeline_events[0]

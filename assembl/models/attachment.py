@@ -30,6 +30,7 @@ from .idea import Idea
 from .resource import Resource
 from .vote_session import VoteSession
 from .auth import AgentProfile
+from .timeline import TimelineEvent
 from assembl.auth import (
     CrudPermissions, P_READ, P_ADMIN_DISC, P_ADD_POST,
     P_SYSADMIN, P_EDIT_POST, P_ADD_IDEA, P_EDIT_IDEA, P_MANAGE_RESOURCE)
@@ -491,6 +492,42 @@ class AgentProfileAttachment(Attachment):
 
     def is_owner(self, user_id):
         return user_id == self.user_id
+
+
+class TimelineEventAttachment(Attachment):
+
+    __tablename__ = "timeline_event_attachment"
+
+    id = Column(Integer, ForeignKey(
+        'attachment.id',
+        ondelete='CASCADE',
+        onupdate='CASCADE'
+    ), primary_key=True)
+
+    timeline_event_id = Column(Integer, ForeignKey(
+        'timeline_event.id',
+        ondelete='CASCADE',
+        onupdate='CASCADE',
+        ),
+        nullable=False,
+        index=True)
+
+    timeline_event = relationship(
+        TimelineEvent,
+        backref=backref(
+            'attachments',
+            cascade="all, delete-orphan"),
+    )
+    __mapper_args__ = {
+        'polymorphic_identity': 'timeline_event_attachment',
+        'with_polymorphic': '*'
+    }
+
+    crud_permissions = CrudPermissions(
+        create=P_ADMIN_DISC,
+        read=P_READ,
+        update=P_ADMIN_DISC,
+        delete=P_ADMIN_DISC)
 
 
 class VoteSessionAttachment(Attachment):
