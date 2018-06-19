@@ -8,6 +8,7 @@ import { convertEntriesToHTML } from '../utils/draftjs';
 import { getEntryValueForLocale } from '../utils/i18n';
 import ManageModules from '../components/administration/landingPage/manageModules';
 import CustomizeHeader from '../components/administration/landingPage/customizeHeader';
+import ManageTimeline from '../components/administration/landingPage/manageTimeline';
 import Navbar from '../components/administration/navbar';
 import { displayAlert } from '../utils/utilityManager';
 import SaveButton, { getMutationsPromises, runSerial } from '../components/administration/saveButton';
@@ -135,7 +136,8 @@ class LandingPageAdmin extends React.Component<Props, State> {
         <SaveButton disabled={saveDisabled} saveAction={this.saveAction} />
         {section === '1' && <ManageModules {...this.props} />}
         {section === '2' && <CustomizeHeader {...this.props} />}
-        {!isNaN(currentStep) && <Navbar currentStep={currentStep} totalSteps={2} phaseIdentifier="landingPage" />}
+        {section === '3' && <ManageTimeline {...this.props} />}
+        {!isNaN(currentStep) && <Navbar currentStep={currentStep} totalSteps={3} phaseIdentifier="landingPage" />}
       </div>
     );
   }

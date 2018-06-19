@@ -76,6 +76,11 @@ class Menu extends React.Component {
                 <Translate value="administration.landingPage.header.title" />
               </Link>
             </li>
+            <li>
+              <Link to={`${get('administration', slug)}/landingPage?section=3`} activeClassName="active">
+                <Translate value="administration.landingPage.timeline.title" />
+              </Link>
+            </li>
           </ul>
         </li>
         <li className="menu-item">
