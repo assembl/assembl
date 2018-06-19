@@ -723,6 +723,7 @@ const Translations = {
         defaultSectionTitle: "Exporter les données",
         taxonomySectionTitle: "Exporter les taxonomies",
         translateTheMessagesIn: "Traduire l'ensemble des messages en:"
+        anonymous: "Rendre les données anonymes"
       },
       step_x_total: "Section %{num} sur %{total}",
       saveThemes: "Sauvegarder",
@@ -1514,6 +1515,7 @@ const Translations = {
         defaultSectionTitle: "Export data",
         taxonomySectionTitle: "Export taxonomy",
         translateTheMessagesIn: "Translate the messages in:"
+        anonymous: "Make the data anonymous"
       },
       step_x_total: "Section %{num} on %{total}",
       saveThemes: "Save",

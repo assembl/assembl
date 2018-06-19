@@ -14,6 +14,17 @@ exports[`ExportSection component should render an ExportSection component with l
     <FormGroup
       bsClass="form-group"
     >
+      <Checkbox
+        bsClass="checkbox"
+        disabled={false}
+        inline={false}
+        onChange={[Function]}
+        title=""
+      >
+        <Translate
+          value="administration.export.anonymous"
+        />
+      </Checkbox>
       <Radio
         bsClass="radio"
         checked={true}

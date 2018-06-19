@@ -3,13 +3,14 @@
 import * as React from 'react';
 import { I18n, Translate } from 'react-redux-i18n';
 import { Link } from 'react-router';
-import { FormGroup, Radio, FormControl } from 'react-bootstrap';
+import { FormGroup, Radio, Checkbox, FormControl } from 'react-bootstrap';
 import SectionTitle from './sectionTitle';
 
 type ExportSectionProps = {
   languages?: Array<Object>,
   handleTranslationChange?: (shouldTranslate: boolean) => void,
   handleExportLocaleChange?: (locale: string) => void,
+  handleAnonymousChange?: void => void,
   withLanguageOptions?: boolean,
   exportLink: string,
   exportLocale?: string,
@@ -62,6 +63,7 @@ class ExportSection extends React.Component<ExportSectionProps> {
       languages,
       handleTranslationChange,
       handleExportLocaleChange,
+      handleAnonymousChange,
       withLanguageOptions,
       exportLink,
       translate,
@@ -77,10 +79,16 @@ class ExportSection extends React.Component<ExportSectionProps> {
           annotation={I18n.t(`administration.export.${annotation}`)}
         />
         <div className="admin-content">
-          {withLanguageOptions &&
+          {withLanguageOptions && 
             handleTranslationChange &&
-            handleExportLocaleChange && (
+            handleExportLocaleChange && 
+            handleAnonymousChange && (
               <FormGroup>
+                <Checkbox
+                  onChange={() => { handleAnonymousChange(); }}
+                >
+                  <Translate value="administration.export.anonymous" />
+                </Checkbox>
                 <Radio
                   checked={!translate}
                   onChange={() => {
@@ -105,7 +113,7 @@ class ExportSection extends React.Component<ExportSectionProps> {
                   )}
                 </Radio>
               </FormGroup>
-            )}
+          )}
 
           <br />
           <Link className="button-link button-dark margin-l" href={exportLink}>
