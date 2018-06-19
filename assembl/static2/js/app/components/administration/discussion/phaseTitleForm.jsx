@@ -39,7 +39,9 @@ export const DumbPhaseTitleForm = ({
   const isFirst = phaseIndex === 1;
   const isLast = phaseIndex === numberOfPhases;
   const phaseSideTitleClassNames = classnames('phase-side-title', { 'phase-side-title-low': isTitleEmpty });
-  const deleteButtonClassNames = classnames('admin-icons', { 'delete-button-high': isTitleEmpty });
+  const deleteButtonClassNames = classnames('admin-icons', { 'side-button-high': isTitleEmpty });
+  const upButtonsClassNames = classnames('admin-icons', { 'end-items': isLast, 'side-button-high': isTitleEmpty });
+  const downButtonClassNames = classnames('admin-icons', { 'end-items': isFirst, 'side-button-high': isTitleEmpty });
   return (
     <div className="flex phase-title-form">
       <Translate value="administration.timelineAdmin.phase" count={phaseIndex} className={phaseSideTitleClassNames} />
@@ -52,18 +54,19 @@ export const DumbPhaseTitleForm = ({
           value={title}
           required
           className={hasConflictingDates ? 'warning' : null}
-        /></FormGroup>
+        />
+      </FormGroup>
       <div className="flex">
         {!isLast ? (
           <OverlayTrigger placement="top" overlay={downTooltip}>
-            <Button onClick={handleDownClick} className={isFirst ? 'admin-icons end-items' : 'admin-icons'}>
+            <Button onClick={handleDownClick} className={downButtonClassNames}>
               <span className="assembl-icon-down-small grey" />
             </Button>
           </OverlayTrigger>
         ) : null}
         {!isFirst ? (
           <OverlayTrigger placement="top" overlay={upTooltip}>
-            <Button onClick={handleUpClick} className={isLast ? 'admin-icons end-items' : 'admin-icons'}>
+            <Button onClick={handleUpClick} className={upButtonsClassNames}>
               <span className="assembl-icon-up-small grey" />
             </Button>
           </OverlayTrigger>

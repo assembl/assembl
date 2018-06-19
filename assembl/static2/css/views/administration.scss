@@ -584,8 +584,11 @@
 
   .timeline-admin {
     .form-group {
-      flex-grow: 1;
       margin-left: 15px;
+
+      .form-control {
+        width: 270px;
+      }
     }
 
     .admin-instruction {
@@ -602,8 +605,12 @@
       margin-top: 6px;
     }
 
-    .delete-button-high {
+    .admin-icons {
       margin-bottom: 25px;
+    }
+
+    .side-button-high {
+      margin-bottom: 65px;
     }
 
     .phase-form {
