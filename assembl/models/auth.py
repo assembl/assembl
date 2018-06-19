@@ -79,6 +79,10 @@ def maxN(a, b):
     return max(a, b)
 
 
+def hash(content, size):
+    return hashlib.md5(content).hexdigest()[-size:]
+
+
 class AgentProfile(Base):
     """An agent identified on the platform.
 
@@ -120,21 +124,31 @@ class AgentProfile(Base):
             if accounts:
                 return accounts[0]
 
-    def get_preferred_email(self):
+    def get_preferred_email(self, anonymous=False):
         preferred_account = self.get_preferred_email_account()
         if preferred_account is not None:
+            if anonymous:
+                return "@".join(map(lambda x: hash(x, 10), preferred_account.email.split("@"))) + ".com"
             return preferred_account.email
 
-    def real_name(self):
+    def _anonymize_name(self):
+        CHARACTER_COUNT = 10
+        if self.name:
+            return hash(self.name.encode('utf-8'), CHARACTER_COUNT)
+        return hash("User_" + str(self.id), CHARACTER_COUNT)
+
+    def real_name(self, anonymous=False):
         if not self.name:
             for acc in self.identity_accounts:
                 name = acc.real_name()
                 if name:
                     self.name = name
                     break
+        if anonymous:
+            return self._anonymize_name()
         return self.name
 
-    def display_name(self):
+    def display_name(self, anonymous=False):
         # TODO: Prefer types?
         if self.name:
             return self.name
@@ -505,8 +519,10 @@ class EmailAccount(AbstractAgentAccount):
     }
     profile_e = relationship(AgentProfile, backref=backref('email_accounts'))
 
-    def display_name(self):
+    def display_name(self, anonymous=False):
         if self.verified:
+            if anonymous:
+                return self._faker.email()
             return self.email
 
     def signature(self):
@@ -897,10 +913,12 @@ class User(AgentProfile):
             return verify_password(password, self.password)
         return False
 
-    def get_preferred_email(self):
+    def get_preferred_email(self, anonymous=False):
+        if anonymous:
+            return super(User, self).get_preferred_email(anonymous=anonymous)
         if self.preferred_email:
             return self.preferred_email
-        return super(User, self).get_preferred_email()
+        return super(User, self).get_preferred_email(anonymous=anonymous)
 
     def merge(self, other_user):
         """Merge another user on this one, because they are the same entity.
@@ -972,7 +990,11 @@ class User(AgentProfile):
         return super(User, self).avatar_url(
             size, app_url, email or self.preferred_email)
 
-    def display_name(self):
+    def display_name(self, anonymous=False):
+        if anonymous:
+            return self._faker.name()
+        if self.name:
+            return self.name
         if self.username:
             return self.username.username
         if self.name:

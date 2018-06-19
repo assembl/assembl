@@ -1390,6 +1390,7 @@ def phase1_csv_export(request):
     """CSV export for phase 1."""
     from assembl.models import Locale, Idea
     has_lang = 'lang' in request.GET
+    has_anon = asbool(request.GET.get('anon', False))
     if has_lang:
         language = request.GET['lang']
         exists = Locale.get_id_of(language, create=False)
@@ -1456,8 +1457,8 @@ def phase1_csv_export(request):
                 else:
                     row[POST_BODY] = resolve_langstring(
                         post.get_body_as_text(), None)
-                row[POST_CREATOR_NAME] = post.creator.name
-                row[POST_CREATOR_EMAIL] = post.creator.get_preferred_email()
+                row[POST_CREATOR_NAME] = post.creator.real_name(anonymous=has_anon)
+                row[POST_CREATOR_EMAIL] = post.creator.get_preferred_email(anonymous=has_anon)
                 row[POST_CREATION_DATE] = format_date(post.creation_date)
                 row[POST_LIKE_COUNT] = post.like_count
                 row[POST_DISAGREE_COUNT] = post.disagree_count
@@ -1475,8 +1476,8 @@ def phase1_csv_export(request):
                     writer.writerow(convert_to_utf8(row))
 
                 for sentiment in post.sentiments:
-                    row[SENTIMENT_ACTOR_NAME] = sentiment.actor.name
-                    row[SENTIMENT_ACTOR_EMAIL] = sentiment.actor.get_preferred_email()
+                    row[SENTIMENT_ACTOR_NAME] = sentiment.actor.real_name(anonymous=has_anon)
+                    row[SENTIMENT_ACTOR_EMAIL] = sentiment.actor.get_preferred_email(anonymous=has_anon)
                     row[SENTIMENT_CREATION_DATE] = format_date(
                         sentiment.creation_date)
                     writer.writerow(convert_to_utf8(row))
@@ -1497,6 +1498,7 @@ def phase1_csv_export(request):
 def phase2_csv_export(request):
     """CSV export for phase 2."""
     from assembl.models import Locale, Idea
+    has_anon = asbool(request.GET.get('anon', False))
     has_lang = 'lang' in request.GET
     if has_lang:
         language = request.GET['lang']
@@ -1572,8 +1574,8 @@ def phase2_csv_export(request):
                 row[POST_BODY] = resolve_langstring(
                     post.get_body_as_text(), None)
 
-            row[POST_CREATOR_NAME] = post.creator.name
-            row[POST_CREATOR_EMAIL] = post.creator.get_preferred_email()
+            row[POST_CREATOR_NAME] = post.creator.real_name(anonymous=has_anon)
+            row[POST_CREATOR_EMAIL] = post.creator.get_preferred_email(anonymous=has_anon)
             row[POST_CREATION_DATE] = format_date(post.creation_date)
             row[POST_LIKE_COUNT] = post.like_count
             row[POST_DISAGREE_COUNT] = post.disagree_count
@@ -1591,8 +1593,8 @@ def phase2_csv_export(request):
                 writer.writerow(convert_to_utf8(row))
 
             for sentiment in post.sentiments:
-                row[SENTIMENT_ACTOR_NAME] = sentiment.actor.name
-                row[SENTIMENT_ACTOR_EMAIL] = sentiment.actor.get_preferred_email()
+                row[SENTIMENT_ACTOR_NAME] = sentiment.actor.real_name(anonymous=has_anon)
+                row[SENTIMENT_ACTOR_EMAIL] = sentiment.actor.get_preferred_email(anonymous=has_anon)
                 row[SENTIMENT_CREATION_DATE] = format_date(
                     sentiment.creation_date)
                 writer.writerow(convert_to_utf8(row))
