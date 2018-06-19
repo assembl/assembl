@@ -26,8 +26,16 @@ const emptyPhase = Map({
   titleEntries: List(),
   start: null,
   end: null,
-  isThematicsTable: false
+  isThematicsTable: false,
+  hasConflictingDates: false
 });
+
+const getHasConflictingDates = (phases, id, start, end) => {
+  const phaseIndex = phases.map(p => p.id).indexOf(id);
+  const previousPhase = phases[phaseIndex - 1];
+  const nextPhase = phases[phaseIndex + 1];
+  return start && previousPhase && start.isBefore(previousPhase.end) || end && nextPhase && end.isAfter(nextPhase.start);
+};
 
 type PhasesByIdState = Map<string, Map>;
 type PhasesByIdReducer = (PhasesByIdState, ReduxAction<Action>) => PhasesByIdState
@@ -68,7 +76,9 @@ export const phasesById: PhasesByIdReducer = (state: PhasesByIdState = Map(), ac
         start: start,
         end: end,
         isThematicsTable: isThematicsTable || false, // default to false until we have the interface to set a thematicstable
-        id: id
+        id: id,
+        hasConflictingDates: getHasConflictingDates(action.phases, id, start, end)
+        // hasConflictingDates is not properly working for the moment because phasesById are not ordered with 'order' yet
       });
 
       newState = newState.set(id, phaseInfo);

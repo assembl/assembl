@@ -81,19 +81,11 @@ export const DumbPhaseTitleForm = ({
   );
 };
 
-const mapStateToProps = (state, { id, editLocale, phaseIndex }: PhaseTitleFormProps) => {
-  const { phasesById } = state.admin.timeline;
-  const phase = phasesById.get(id);
-  const start = phase.get('start');
-  const end = phase.get('end');
-  const nextPhaseId = state.admin.timeline.phasesInOrder.toJS()[phaseIndex];
-  const previousPhaseId = state.admin.timeline.phasesInOrder.toJS()[phaseIndex - 2];
-  const previousPhaseEnd = phasesById.getIn([previousPhaseId, 'end']);
-  const nextPhaseStart = phasesById.getIn([nextPhaseId, 'start']);
-  const hasConflictingDates = start && start.isBefore(previousPhaseEnd) || end && end.isAfter(nextPhaseStart);
+const mapStateToProps = (state, { id, editLocale }: PhaseTitleFormProps) => {
+  const phase = state.admin.timeline.phasesById.get(id);
   return {
     title: getEntryValueForLocale(phase.get('titleEntries'), editLocale, ''),
-    hasConflictingDates: hasConflictingDates
+    hasConflictingDates: phase.get('hasConflictingDates')
   };
 };
 
