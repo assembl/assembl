@@ -651,6 +651,12 @@
       padding-left: 40px;
     }
 
+    .date-picker-field {
+      input {
+        font-size: $font-size-xs;
+      }
+    }
+
     .configure-module-link {
       cursor: pointer;
       text-decoration: underline;
