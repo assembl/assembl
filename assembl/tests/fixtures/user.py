@@ -33,6 +33,22 @@ def participant1_user(request, test_session, discussion):
 
 
 @pytest.fixture(scope="function")
+def participant1_username(request, test_session, participant1_user):
+    """A username for participant1_user"""
+    from assembl.models import Username
+    username = Username(user=participant1_user, username="test_username")
+    test_session.add(username)
+    test_session.flush()
+
+    def fin():
+        print "finalizer participant1_username"
+        test_session.delete(username)
+        test_session.flush()
+    request.addfinalizer(fin)
+    return username
+
+
+@pytest.fixture(scope="function")
 def test_participant1_webrequest(request, participant1_user, test_app_no_perm):
     """A Pyramid request fixture with an ADMIN user authorized"""
     req = PyramidWebTestRequest.blank('/', method="GET")
