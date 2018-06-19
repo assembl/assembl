@@ -649,7 +649,8 @@ const Translations = {
         instructionsTitle: "Titre de la consigne",
         instructionsContent: "Contenu de la consigne",
         propositionSectionTitle: "Titre de la section",
-        propositionSectionSubtitle: "Sous-titre de la section"
+        propositionSectionSubtitle: "Sous-titre de la section",
+        descriptionPhase: "Description de la phase"
       },
       resourcesCenter: {
         createResource: "Ajouter un média",
@@ -1386,7 +1387,8 @@ const Translations = {
         instructionsTitle: "Instructions title",
         instructionsContent: "Instructions content",
         propositionSectionTitle: "Section title",
-        propositionSectionSubtitle: "Section subtitle"
+        propositionSectionSubtitle: "Section subtitle",
+        descriptionPhase: "Description phase"
       },
       resourcesCenter: {
         createResource: "Add a media",

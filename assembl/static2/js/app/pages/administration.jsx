@@ -404,7 +404,8 @@ const mergeLoadingAndHasErrors = WrappedComponent => (props) => {
     landingPageLoading ||
     sectionsLoading ||
     props[landingPagePlugin.loading] ||
-    textFieldsLoading || timelineIsLoading ||
+    textFieldsLoading ||
+    timelineIsLoading ||
     (data && data.loading);
 
   return <WrappedComponent {...props} hasErrors={hasErrors} loading={loading} />;
