@@ -2406,7 +2406,7 @@ msgstr ""
 #. h [h]
 #: messages.json
 msgid "duration.format"
-msgstr "St. [h]"
+msgstr "h [St.]"
 
 #. [error.loading]
 #. defaultMessage is:
