@@ -1640,14 +1640,14 @@ msgstr "Aviso legal"
 #. MMMM Do, YYYY
 #: messages.json
 msgid "date.format"
-msgstr "DD MMMM AAAA"
+msgstr "LL"
 
 #. [date.format2]
 #. defaultMessage is:
 #. YYYY-MM-DD
 #: messages.json
 msgid "date.format2"
-msgstr "DD-MM-AAAA"
+msgstr "L"
 
 #. [debate.agree]
 #. defaultMessage is:
@@ -2392,7 +2392,7 @@ msgstr ""
 #. h [h]
 #: messages.json
 msgid "duration.format"
-msgstr "h [h]"
+msgstr "horas [h]"
 
 #. [error.loading]
 #. defaultMessage is:

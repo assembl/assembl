@@ -1729,14 +1729,14 @@ msgstr ""
 #. MMMM Do, YYYY
 #: messages.json
 msgid "date.format"
-msgstr "MMMM YYYYをする"
+msgstr "LL"
 
 #. [date.format2]
 #. defaultMessage is:
 #. YYYY-MM-DD
 #: messages.json
 msgid "date.format2"
-msgstr "YYYY-MM-DD"
+msgstr "L"
 
 #. [debate.agree]
 #. defaultMessage is:
@@ -2500,7 +2500,7 @@ msgstr ""
 #: messages.json
 #, fuzzy
 msgid "duration.format"
-msgstr "MMMM YYYYをする"
+msgstr "h [h]"
 
 #. [error.loading]
 #. defaultMessage is:
