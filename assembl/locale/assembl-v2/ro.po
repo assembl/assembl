@@ -1636,14 +1636,14 @@ msgstr "Mențiuni legale"
 #. MMMM Do, YYYY
 #: messages.json
 msgid "date.format"
-msgstr "LLLL Zi, AAAA"
+msgstr "LL"
 
 #. [date.format2]
 #. defaultMessage is:
 #. YYYY-MM-DD
 #: messages.json
 msgid "date.format2"
-msgstr "AAAA-LL-ZZ"
+msgstr "L"
 
 #. [debate.agree]
 #. defaultMessage is:
