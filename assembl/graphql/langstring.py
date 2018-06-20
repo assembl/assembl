@@ -19,6 +19,7 @@ def resolve_langstring(langstring, locale_code):
 
     try:
         if locale_code:
+            locale_code = locale_code.replace('-', '_')
             closest = langstring.closest_entry(locale_code)
             if closest:
                 return closest.value
@@ -60,6 +61,7 @@ def resolve_best_langstring_entries(langstring, target_locale=None):
 
     entries = []
     if target_locale:
+        target_locale = target_locale.replace('-', '_')
         entry = langstring.closest_entry(target_locale)
         if entry:
             entries.append(entry)
