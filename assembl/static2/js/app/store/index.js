@@ -17,7 +17,7 @@ export default function createAppStore(initialState) {
   }
   const browserLanguage = navigator.language || navigator.userLanguage;
   let storedLocale = getCookieItem('_LOCALE_');
-  if (storedLocale === 'zh_CN') {
+  if (storedLocale === 'zh_CN' || storedLocale === 'zh_Hans') {
     storedLocale = 'zh-CN';
   }
   if (storedLocale === 'fr_FR') {
