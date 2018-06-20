@@ -87,6 +87,7 @@ export const phasesById: PhasesByIdReducer = (state: PhasesByIdState = Map(), ac
     return state
       .setIn([action.id, 'image', 'externalUrl'], action.value)
       .setIn([action.id, 'image', 'mimeType'], action.value.type)
+      .setIn([action.id, 'image', 'title'], action.value.name)
       .setIn([action.id, '_hasChanged'], true);
   case UPDATE_IS_THEMATICS_TABLE:
     return state.setIn([action.id, 'isThematicsTable'], action.value).setIn([action.id, '_hasChanged'], true);

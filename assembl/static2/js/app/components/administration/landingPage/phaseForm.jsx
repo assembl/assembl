@@ -52,11 +52,9 @@ const DumbPhaseForm = ({
           imgTitle={phaseImgTitle}
           handleChange={handleImageChange}
           mimeType={phaseImgMimeType}
-          name="landing-page-img-header"
+          name="landing-page-phase-img"
           isAdminUploader
-          onDeleteClick={() => {
-            handleImageChange('TO_DELETE');
-          }}
+          onDeleteClick={() => handleImageChange('TO_DELETE')}
         />
         <div className="description-block">
           <Translate value="administration.landingPage.timeline.imageDescription" />
@@ -80,7 +78,9 @@ const mapStateToProps = (state, { phaseId, editLocale }) => {
 
 const mapDispatchToProps = (dispatch, { phaseId, editLocale }) => ({
   handleDescriptionChange: e => dispatch(updatePhaseDescription(phaseId, editLocale, e.target.value)),
-  handleImageChange: value => dispatch(updatePhaseImage(phaseId, value))
+  handleImageChange: (value) => {
+    dispatch(updatePhaseImage(phaseId, value));
+  }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(DumbPhaseForm);

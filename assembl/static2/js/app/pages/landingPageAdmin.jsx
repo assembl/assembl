@@ -4,6 +4,7 @@ import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { type Route, type Router } from 'react-router';
 import { I18n } from 'react-redux-i18n';
+import moment from 'moment';
 import { convertEntriesToHTML } from '../utils/draftjs';
 import { getEntryValueForLocale } from '../utils/i18n';
 import ManageModules from '../components/administration/landingPage/manageModules';
@@ -14,6 +15,7 @@ import { displayAlert } from '../utils/utilityManager';
 import SaveButton, { getMutationsPromises, runSerial } from '../components/administration/saveButton';
 import landingPagePlugin from '../utils/administration/landingPage';
 import updateDiscussionMutation from '../graphql/mutations/updateDiscussion.graphql';
+import updateDiscussionPhaseMutation from '../graphql/mutations/updateDiscussionPhase.graphql';
 
 type Props = {
   landingPageModules: Array<Object>,
@@ -36,8 +38,12 @@ type Props = {
     logoImgTitle: string
   },
   pageHasChanged: boolean,
+  phasesHaveChanged: boolean,
   page: Object,
-  updateDiscussion: Function
+  updateDiscussion: Function,
+  updateDiscussionPhase: Function,
+  discussionPhases: Array<Object>,
+  refetchTimeline: Function
 };
 
 type State = {
@@ -76,6 +82,17 @@ class LandingPageAdmin extends React.Component<Props, State> {
     return typeof externalUrl === 'object' ? externalUrl : null;
   };
 
+  createVariablesForDiscussionPhaseMutation = phase => ({
+    id: phase.id,
+    identifier: phase.identifier,
+    isThematicsTable: phase.isThematicsTable,
+    start: moment(phase.start, moment.ISO_8601),
+    end: moment(phase.end, moment.ISO_8601),
+    titleEntries: phase.titleEntries,
+    descriptionEntries: phase.descriptionEntries,
+    image: phase.image && typeof phase.image.externalUrl === 'object' ? phase.image.externalUrl : null
+  });
+
   saveAction = () => {
     const {
       landingPageModulesHasChanged,
@@ -84,7 +101,12 @@ class LandingPageAdmin extends React.Component<Props, State> {
       refetchLandingPage,
       pageHasChanged,
       page,
-      updateDiscussion
+      updateDiscussion,
+      phasesHaveChanged,
+      discussionPhases,
+      editLocale,
+      updateDiscussionPhase,
+      refetchTimeline
     } = this.props;
     displayAlert('success', `${I18n.t('loading.wait')}...`);
     if (landingPageModulesHasChanged) {
@@ -123,9 +145,32 @@ class LandingPageAdmin extends React.Component<Props, State> {
           displayAlert('danger', error.message);
         });
     }
+
+    if (phasesHaveChanged) {
+      const mutationPromises = getMutationsPromises({
+        items: discussionPhases,
+        variablesCreator: this.createVariablesForDiscussionPhaseMutation,
+        updateMutation: updateDiscussionPhase,
+        lang: editLocale
+      });
+
+      runSerial(mutationPromises)
+        .then(() => {
+          this.setState({ refetching: true }, () => {
+            refetchTimeline().then(() => {
+              displayAlert('success', I18n.t('administration.timelineAdmin.successSave'));
+              this.setState({ refetching: false });
+            });
+          });
+        })
+        .catch((error) => {
+          displayAlert('danger', `${error}`, false, 30000);
+        });
+    }
   };
 
-  dataHaveChanged = (): boolean => this.props.landingPageModulesHasChanged || this.props.pageHasChanged;
+  dataHaveChanged = (): boolean =>
+    this.props.landingPageModulesHasChanged || this.props.pageHasChanged || this.props.phasesHaveChanged;
 
   render() {
     const { section } = this.props;
@@ -143,7 +188,7 @@ class LandingPageAdmin extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = ({ admin: { editLocale, landingPage } }) => {
+const mapStateToProps = ({ admin: { editLocale, landingPage, timeline } }) => {
   const { page } = landingPage;
   const subtitle = getEntryValueForLocale(page.get('subtitleEntries'), editLocale, '');
   return {
@@ -169,7 +214,12 @@ const mapStateToProps = ({ admin: { editLocale, landingPage } }) => {
     },
     page: landingPage.page.toJS(),
     pageHasChanged: landingPage.pageHasChanged,
-    editLocale: editLocale
+    editLocale: editLocale,
+    phasesHaveChanged: timeline.phasesHaveChanged,
+    discussionPhases: timeline.phasesInOrder
+      .map(phaseId => timeline.phasesById.get(phaseId))
+      .valueSeq()
+      .toJS()
   };
 };
 
@@ -183,5 +233,8 @@ export default compose(
   }),
   graphql(updateDiscussionMutation, {
     name: 'updateDiscussion'
+  }),
+  graphql(updateDiscussionPhaseMutation, {
+    name: 'updateDiscussionPhase'
   })
 )(LandingPageAdmin);
