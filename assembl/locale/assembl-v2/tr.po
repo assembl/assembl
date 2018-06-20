@@ -1630,14 +1630,14 @@ msgstr "Yasal Uyarı"
 #. MMMM Do, YYYY
 #: messages.json
 msgid "date.format"
-msgstr "AAAA G YYYY"
+msgstr "LL"
 
 #. [date.format2]
 #. defaultMessage is:
 #. YYYY-MM-DD
 #: messages.json
 msgid "date.format2"
-msgstr "YYYY-AA-GG"
+msgstr "L"
 
 #. [debate.agree]
 #. defaultMessage is:
@@ -2382,7 +2382,7 @@ msgstr ""
 #. h [h]
 #: messages.json
 msgid "duration.format"
-msgstr "saat [s]"
+msgstr "saat [h]"
 
 #. [error.loading]
 #. defaultMessage is:

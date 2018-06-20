@@ -1638,14 +1638,14 @@ msgstr "Note legali"
 #. MMMM Do, YYYY
 #: messages.json
 msgid "date.format"
-msgstr "DD MMMM YYYY"
+msgstr "LL"
 
 #. [date.format2]
 #. defaultMessage is:
 #. YYYY-MM-DD
 #: messages.json
 msgid "date.format2"
-msgstr "DD-MM-YYYY"
+msgstr "L"
 
 #. [debate.agree]
 #. defaultMessage is:
