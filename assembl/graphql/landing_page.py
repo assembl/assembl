@@ -6,7 +6,9 @@ from graphene_sqlalchemy import SQLAlchemyObjectType
 from assembl import models
 from assembl.auth import CrudPermissions
 
-from .langstring import LangStringEntry, resolve_langstring, resolve_langstring_entries
+from .langstring import (
+    LangStringEntry, LangStringEntryInput, resolve_langstring,
+    resolve_langstring_entries, update_langstring_from_input_entries)
 from .permissions_helpers import require_cls_permission, require_instance_permission
 from .types import SecureObjectType
 from .utils import abort_transaction_on_exception
@@ -38,6 +40,10 @@ class LandingPageModule(SecureObjectType, SQLAlchemyObjectType):
 
     module_type = graphene.Field(LandingPageModuleType)
     exists_in_database = graphene.Boolean()
+    title = graphene.String(lang=graphene.String())
+    title_entries = graphene.List(LangStringEntry)
+    subtitle = graphene.String(lang=graphene.String())
+    subtitle_entries = graphene.List(LangStringEntry)
 
     def resolve_exists_in_database(self, args, context, info):
         return self.id > 0
@@ -55,6 +61,26 @@ class LandingPageModule(SecureObjectType, SQLAlchemyObjectType):
                 return self.__mapper__.primary_key_from_instance(self)[0]
             return getattr(self, graphene_type._meta.id, None)
 
+    def resolve_title(self, args, context, info):
+        """Title value in given locale."""
+        return resolve_langstring(self.title, args.get('lang'))
+
+    def resolve_title_entries(self, args, context, info):
+        if self.title:
+            return resolve_langstring_entries(self, 'title')
+
+        return []
+
+    def resolve_subtitle(self, args, context, info):
+        """Subtitle value in given locale."""
+        return resolve_langstring(self.subtitle, args.get('lang'))
+
+    def resolve_subtitle_entries(self, args, context, info):
+        if self.subtitle:
+            return resolve_langstring_entries(self, 'subtitle')
+
+        return []
+
 
 class CreateLandingPageModule(graphene.Mutation):
 
@@ -63,6 +89,8 @@ class CreateLandingPageModule(graphene.Mutation):
         enabled = graphene.Boolean()
         order = graphene.Float()
         configuration = graphene.String()
+        title_entries = graphene.List(LangStringEntryInput)
+        subtitle_entries = graphene.List(LangStringEntryInput)
 
     landing_page_module = graphene.Field(lambda: LandingPageModule)
 
@@ -86,6 +114,13 @@ class CreateLandingPageModule(graphene.Mutation):
                 enabled=enabled,
                 module_type=module_type
             )
+            title_entries = args.get('title_entries')
+            update_langstring_from_input_entries(
+                saobj, 'title', title_entries)
+
+            subtitle_entries = args.get('subtitle_entries')
+            update_langstring_from_input_entries(
+                saobj, 'subtitle', subtitle_entries)
             db.add(saobj)
             db.flush()
 
@@ -99,6 +134,8 @@ class UpdateLandingPageModule(graphene.Mutation):
         enabled = graphene.Boolean()
         order = graphene.Float()
         configuration = graphene.String()
+        title_entries = graphene.List(LangStringEntryInput)
+        subtitle_entries = graphene.List(LangStringEntryInput)
 
     landing_page_module = graphene.Field(lambda: LandingPageModule)
 
@@ -118,6 +155,13 @@ class UpdateLandingPageModule(graphene.Mutation):
             module.enabled = enabled
             module.order = order
             module.configuration = configuration
+            title_entries = args.get('title_entries')
+            update_langstring_from_input_entries(
+                module, 'title', title_entries)
+
+            subtitle_entries = args.get('subtitle_entries')
+            update_langstring_from_input_entries(
+                module, 'subtitle', subtitle_entries)
             db.flush()
 
         return UpdateLandingPageModule(landing_page_module=module)

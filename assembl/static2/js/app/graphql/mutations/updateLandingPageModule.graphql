@@ -1,6 +1,26 @@
-mutation updateLandingPageModule($id: ID!, $enabled: Boolean, $order: Float, $configuration: String) {
-  updateLandingPageModule(id: $id, enabled: $enabled, order: $order, configuration: $configuration) {
+mutation updateLandingPageModule(
+  $id: ID!
+  $enabled: Boolean
+  $order: Float
+  $configuration: String
+  $titleEntries: [LangStringEntryInput!]
+  $subtitleEntries: [LangStringEntryInput!]
+) {
+  updateLandingPageModule(
+    id: $id
+    enabled: $enabled
+    order: $order
+    configuration: $configuration
+    titleEntries: $titleEntries
+    subtitleEntries: $subtitleEntries
+  ) {
     landingPageModule {
+      titleEntries {
+        ...langStringEntry
+      }
+      subtitleEntries {
+        ...langStringEntry
+      }
       configuration
       enabled
       moduleType {

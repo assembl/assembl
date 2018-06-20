@@ -1,5 +1,15 @@
+#import "./fragments/LangString.graphql"
+
 query LandingPageModules($lang: String!) {
   landingPageModules {
+    titleEntries {
+      ...langStringEntry
+    }
+    title(lang: $lang)
+    subtitleEntries {
+      ...langStringEntry
+    }
+    subtitle(lang: $lang)
     configuration
     enabled
     existsInDatabase
