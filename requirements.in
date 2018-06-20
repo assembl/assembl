@@ -83,6 +83,7 @@ pyzmq==15.2.0
 zope.component==4.2.2
 zope.interface==4.5.0
 zope.sqlalchemy==0.7.7
+zxcvbn==4.4.26
 
 # are any of those really needed?
 # ecdsa==0.13

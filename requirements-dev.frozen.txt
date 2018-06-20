@@ -210,3 +210,4 @@ zope.deprecation==4.3.0   # via pyramid, pyramid-jinja2
 zope.event==4.3.0         # via zope.component
 zope.interface==4.5.0
 zope.sqlalchemy==0.7.7
+zxcvbn==4.4.26

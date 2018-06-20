@@ -249,7 +249,7 @@ def test_api_register(discussion, test_app_no_perm,
 
         # Register
         email = "jsmith@example.com"
-        password = '1234'
+        password = '12345'
         path = test_webrequest.route_path('register')
         r = test_app_no_perm.post(path, {
             'name': "John Smith",

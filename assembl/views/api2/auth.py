@@ -431,7 +431,12 @@ def do_password_change(request):
             error = localizer.translate(_(
                 "This link has been used. Do you want us to send another?"))
         raise JSONError(error, validity)
-    user.password_p = password1
+    try:
+        user.password_p = password1
+    except ValueError as e:
+        message = '\n'.join([
+            localizer.translate(m) for m in e.message.split('\n')])
+        raise JSONError(message)
     user.successful_login()
     headers = remember(request, user.id)
     request.response.headerlist.extend(headers)
@@ -548,10 +553,15 @@ def assembl_register_user(request):
         now = datetime.utcnow()
         user = User(
             name=name,
-            password=password,
             verified=not validate_registration,
             creation_date=now
         )
+        try:
+            user.password_p = password
+        except ValueError as e:
+            message = '\n'.join([
+                localizer.translate(m) for m in e.message.split('\n')])
+            raise JSONError(message)
 
         session.add(user)
         session.flush()

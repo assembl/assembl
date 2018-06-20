@@ -7,6 +7,8 @@ import hashlib
 import simplejson as json
 from collections import defaultdict
 from enum import IntEnum
+import logging
+import re
 from abc import abstractmethod
 
 from sqlalchemy.ext.hybrid import hybrid_property
@@ -29,6 +31,7 @@ from sqlalchemy import (
 )
 from pyramid.httpexceptions import HTTPBadRequest, HTTPUnauthorized
 from sqlalchemy import orm
+from pyramid.i18n import TranslationStringFactory
 from sqlalchemy.orm import (
     relationship, backref, deferred)
 from sqlalchemy.orm.attributes import NO_VALUE
@@ -59,7 +62,9 @@ from ..auth import (
 from .langstrings import Locale
 from assembl.models.cookie_types import CookieTypes, AcceptedCookies, RejectedCookies
 
-log = logging.getLogger()
+
+log = logging.getLogger('assembl')
+_ = TranslationStringFactory('assembl')
 
 
 # None-tolerant min, max
@@ -801,11 +806,10 @@ class User(AgentProfile):
     last_rejected_user_guideline_date = Column(DateTime)
 
     def __init__(self, **kwargs):
-        if kwargs.get('password', None) is not None:
-            from ..auth.password import hash_password
-            kwargs['password'] = hash_password(kwargs['password'])
-
+        password = kwargs.pop('password', None)
         super(User, self).__init__(**kwargs)
+        if password is not None:
+            self.password_p = password
 
     @classmethod
     def populate_db(cls, db=None):
@@ -934,16 +938,44 @@ class User(AgentProfile):
     def password_p(self):
         return ""
 
+    def validate_password(self, password):
+        from ..auth.password import verify_password
+        # check length
+        if len(password) < int(config.get("minimum_password_length", 5)):
+            raise ValueError(_("Password too short"))
+        # look for presence of required elements (see regexp)
+        password_required_classes = config.get("password_required_classes", None)
+        if password_required_classes:
+            for charclass in password_required_classes.strip().split(';'):
+                if re.search(charclass, password) is None:
+                    raise ValueError("No character of the form " + charclass)
+        # Check zxcvbn complexity
+        minimum_password_complexity = int(config.get("minimum_password_complexity", 0))
+        if minimum_password_complexity:
+            from zxcvbn import zxcvbn
+            results = zxcvbn(password, user_inputs=(self.name or '').split(' '))
+            if results['score'] < minimum_password_complexity:
+                raise ValueError(' '.join(results['feedback']['suggestions']))
+        # refuse if reusing an old password
+        for p in self.old_passwords:
+            if verify_password(password, p.password):
+                raise ValueError(_("Please choose a new password."))
+
     @password_p.setter
     def password_p(self, password):
-        from ..auth.password import hash_password
+        from ..auth.password import hash_password, verify_password
         if password:
-            # keep the current password to avoid the user to reuse it later
-            self.old_passwords.append(
-                OldPassword(password=self.password))
-            # keep only the last 5 passwords (4 in self.old_passwords
-            # and the current password)
-            for p in self.old_passwords[0:-4]:
+            if self.password and verify_password(password, self.password):
+                # unchanged password, allow at this level
+                return
+            self.validate_password(password)
+            if self.password:
+                # keep the current password to avoid the user to reuse it later
+                self.old_passwords.append(
+                    OldPassword(password=self.password))
+            # keep only the last N+1 passwords (including current)
+            keep_past_passwords = int(config.get("keep_past_passwords", 4))
+            for p in list(self.old_passwords[0:-keep_past_passwords]):
                 self.old_passwords.remove(p)
 
             # set the new password
