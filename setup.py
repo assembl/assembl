@@ -25,7 +25,7 @@ tests_require = ['WebTest']
 
 
 setup(name='assembl',
-      version='2.12.16',
+      version='2.12.17',
       description='Collective Intelligence platform',
       long_description=README + '\n\n' + CHANGES,
       classifiers=[

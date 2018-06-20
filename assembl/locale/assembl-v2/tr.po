@@ -2382,7 +2382,7 @@ msgstr ""
 #. h [h]
 #: messages.json
 msgid "duration.format"
-msgstr "saat [h]"
+msgstr "h [saat]"
 
 #. [error.loading]
 #. defaultMessage is:

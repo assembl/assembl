@@ -2498,7 +2498,6 @@ msgstr ""
 #. defaultMessage is:
 #. h [h]
 #: messages.json
-#, fuzzy
 msgid "duration.format"
 msgstr "h [h]"
 
