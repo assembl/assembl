@@ -100,6 +100,8 @@ export const UPDATE_PHASE_END: 'UPDATE_PHASE_END' = 'UPDATE_PHASE_END';
 export const UPDATE_IS_THEMATICS_TABLE: 'UPDATE_IS_THEMATICS_TABLE' = 'UPDATE_IS_THEMATICS_TABLE';
 export const MOVE_PHASE_UP: 'MOVE_PHASE_UP' = 'MOVE_PHASE_UP';
 export const MOVE_PHASE_DOWN: 'MOVE_PHASE_DOWN' = 'MOVE_PHASE_DOWN';
+export const UPDATE_LANDING_PAGE_MODULE_TITLE: 'UPDATE_LANDING_PAGE_MODULE_TITLE' = 'UPDATE_LANDING_PAGE_MODULE_TITLE';
+export const UPDATE_LANDING_PAGE_MODULE_SUBTITLE: 'UPDATE_LANDING_PAGE_MODULE_SUBTITLE' = 'UPDATE_LANDING_PAGE_MODULE_SUBTITLE';
 
 export type UpdateContentLocaleById = {
   type: typeof UPDATE_CONTENT_LOCALE_BY_ID,
@@ -511,6 +513,20 @@ export type MoveLandingPageModuleUp = {
 export type MoveLandingPageModuleDown = {
   moduleTypeIdentifier: string,
   type: typeof MOVE_LANDING_PAGE_MODULE_DOWN
+};
+
+export type UpdateLandingPageModuleTitle = {
+  moduleTypeIdentifier: string,
+  locale: string,
+  value: string,
+  type: typeof UPDATE_LANDING_PAGE_MODULE_TITLE
+};
+
+export type UpdateLandingPageModuleSubtitle = {
+  moduleTypeIdentifier: string,
+  locale: string,
+  value: string,
+  type: typeof UPDATE_LANDING_PAGE_MODULE_SUBTITLE
 };
 
 export type UpdateGaugeVoteInstructions = {

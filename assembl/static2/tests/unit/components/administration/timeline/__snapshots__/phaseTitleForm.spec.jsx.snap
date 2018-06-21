@@ -4,8 +4,52 @@ exports[`PhaseTitleForm component should render a form to update the phase's tit
 <div
   className="phase-title-form-container"
 >
+<<<<<<< HEAD
   <div
     className="flex phase-title-form"
+=======
+  <Translate
+    className="phase-side-title"
+    count={1}
+    value="administration.timelineAdmin.phase"
+  />
+  <FormControlWithLabel
+    componentClass={undefined}
+    disabled={undefined}
+    formControlProps={undefined}
+    helperText=""
+    helperUrl=""
+    id={undefined}
+    label="Phase title FR"
+    labelAlwaysVisible={false}
+    name={undefined}
+    onChange={[Function]}
+    required={true}
+    type="text"
+    validationErrors={undefined}
+    value="Une phase intéressante"
+  />
+  <OverlayTrigger
+    defaultOverlayShown={false}
+    overlay={
+      <Tooltip
+        bsClass="tooltip"
+        id="deletePhaseTooltip"
+        placement="right"
+      >
+        <Translate
+          value="administration.timelineAdmin.deletePhase"
+        />
+      </Tooltip>
+    }
+    placement="top"
+    trigger={
+      Array [
+        "hover",
+        "focus",
+      ]
+    }
+>>>>>>> Add actions and reducers (suite)
   >
     <Translate
       className="phase-side-title"

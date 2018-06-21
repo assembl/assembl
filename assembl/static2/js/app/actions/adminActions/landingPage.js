@@ -61,3 +61,25 @@ export const updateLandingPageHeaderLogo = (value: File): actionTypes.UpdateLand
   value: value,
   type: actionTypes.UPDATE_LANDING_PAGE_HEADER_LOGO
 });
+
+export const updateLandingPageModuleTitle = (
+  moduleTypeIdentifier: string,
+  locale: string,
+  value: string
+): actionTypes.UpdateLandingPageModuleTitle => ({
+  moduleTypeIdentifier: moduleTypeIdentifier,
+  locale: locale,
+  value: value,
+  type: actionTypes.UPDATE_LANDING_PAGE_MODULE_TITLE
+});
+
+export const updateLandingPageModuleSubtitle = (
+  moduleTypeIdentifier: string,
+  locale: string,
+  value: string
+): actionTypes.UpdateLandingPageModuleSubtitle => ({
+  moduleTypeIdentifier: moduleTypeIdentifier,
+  locale: locale,
+  value: value,
+  type: actionTypes.UPDATE_LANDING_PAGE_MODULE_SUBTITLE
+});

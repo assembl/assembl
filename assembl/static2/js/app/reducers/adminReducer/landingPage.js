@@ -9,6 +9,8 @@ import {
   MOVE_LANDING_PAGE_MODULE_UP,
   TOGGLE_LANDING_PAGE_MODULE,
   UPDATE_LANDING_PAGE_MODULES,
+  UPDATE_LANDING_PAGE_MODULE_TITLE,
+  UPDATE_LANDING_PAGE_MODULE_SUBTITLE,
   UPDATE_LANDING_PAGE,
   UPDATE_LANDING_PAGE_HEADER_TITLE,
   UPDATE_LANDING_PAGE_HEADER_SUBTITLE,
@@ -22,6 +24,8 @@ export const modulesHasChanged: ModulesHasChangedReducer = (state = false, actio
   switch (action.type) {
   case MOVE_LANDING_PAGE_MODULE_UP:
   case MOVE_LANDING_PAGE_MODULE_DOWN:
+  case UPDATE_LANDING_PAGE_MODULE_TITLE:
+  case UPDATE_LANDING_PAGE_MODULE_SUBTITLE:
   case TOGGLE_LANDING_PAGE_MODULE:
     return true;
   case UPDATE_LANDING_PAGE_MODULES:
@@ -83,6 +87,14 @@ export const modulesByIdentifier: ModulesByIdentifierReducer = (state = initialS
     });
     return newState;
   }
+  case UPDATE_LANDING_PAGE_MODULE_TITLE:
+    return state
+      .updateIn([action.moduleTypeIdentifier, 'titleEntries'], updateInLangstringEntries(action.locale, action.value))
+      .setIn([action.moduleTypeIdentifier, '_hasChanged'], true);
+  case UPDATE_LANDING_PAGE_MODULE_SUBTITLE:
+    return state
+      .updateIn([action.moduleTypeIdentifier, 'subtitleEntries'], updateInLangstringEntries(action.locale, action.value))
+      .setIn([action.moduleTypeIdentifier, '_hasChanged'], true);
   default:
     return state;
   }

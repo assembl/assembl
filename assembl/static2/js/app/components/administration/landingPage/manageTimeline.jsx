@@ -2,15 +2,23 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { I18n } from 'react-redux-i18n';
+import { getEntryValueForLocale } from '../../../utils/i18n';
 import SectionTitle from '../../administration/sectionTitle';
 import FormControlWithLabel from '../../common/formControlWithLabel';
 import PhaseForm from './phaseForm';
 import Helper from '../../common/helper';
+import { updateLandingPageModuleTitle, updateLandingPageModuleSubtitle } from '../../../actions/adminActions/landingPage';
 
-const DumbManageTimeline = ({ discussionPhaseIds, editLocale }) => {
-  const titleSectionPh = I18n.t('administration.ph.propositionSectionTitle');
+const DumbManageTimeline = ({
+  discussionPhaseIds,
+  editLocale,
+  sectionTitle,
+  sectionSubtitle,
+  handleTitleChange,
+  handleSubtitleChange
+}) => {
+  const sectionTitlePh = I18n.t('administration.ph.propositionSectionTitle');
   const subtitleSectionPh = I18n.t('administration.ph.propositionSectionSubtitle');
-  const handleButtonLabelChange = () => {};
   return (
     <div className="admin-box">
       <SectionTitle
@@ -25,19 +33,13 @@ const DumbManageTimeline = ({ discussionPhaseIds, editLocale }) => {
             helperText={I18n.t('administration.helpers.timelineTitle')}
             classname="title"
           />
-          <FormControlWithLabel
-            label={titleSectionPh}
-            onChange={handleButtonLabelChange}
-            required
-            type="text"
-            value={titleSectionPh}
-          />
+          <FormControlWithLabel label={sectionTitlePh} onChange={handleTitleChange} required type="text" value={sectionTitle} />
           <FormControlWithLabel
             label={subtitleSectionPh}
-            onChange={handleButtonLabelChange}
+            onChange={handleSubtitleChange}
             required
             type="text"
-            value={subtitleSectionPh}
+            value={sectionSubtitle}
           />
           <div className="margin-l">
             <Helper
@@ -58,10 +60,19 @@ const DumbManageTimeline = ({ discussionPhaseIds, editLocale }) => {
 
 const mapStateToProps = (state, { editLocale }) => {
   const { phasesInOrder } = state.admin.timeline;
+  const { modulesByIdentifier } = state.admin.landingPage;
+  const timelineModule = modulesByIdentifier.get('TIMELINE');
   return {
+    sectionTitle: timelineModule ? getEntryValueForLocale(timelineModule.get('titleEntries'), editLocale, '') : null,
+    sectionSubtitle: timelineModule ? getEntryValueForLocale(timelineModule.get('subtitleEntries'), editLocale, '') : null,
     discussionPhaseIds: phasesInOrder,
     editLocale: editLocale
   };
 };
 
-export default connect(mapStateToProps)(DumbManageTimeline);
+const mapDispatchToProps = (dispatch, { editLocale }) => ({
+  handleTitleChange: e => dispatch(updateLandingPageModuleTitle('TIMELINE', editLocale, e.target.value)),
+  handleSubtitleChange: e => dispatch(updateLandingPageModuleSubtitle('TIMELINE', editLocale, e.target.value))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(DumbManageTimeline);
