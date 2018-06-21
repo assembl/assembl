@@ -165,7 +165,7 @@ class DiscussionPhase(TimelineEvent):
 
 
 Discussion.timeline_phases = relationship(
-    DiscussionPhase, order_by=TimelineEvent.start)
+    DiscussionPhase, order_by=TimelineEvent.order)
 
 
 class DiscussionSession(TimelineEvent):
