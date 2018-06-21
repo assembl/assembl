@@ -24,7 +24,7 @@ class LocalizableErrorWithMapping(LocalizableError):
                     langstring, localizer.locale_name)
         if self.pluralmessage:
             return localizer.pluralize(
-                _(self.message), self.pluralmessage, self.pluralval,
+                _(self.message), _(self.pluralmessage), self.pluralval,
                 mapping=mapping)
         else:
             return localizer.translate(_(self.message), mapping=mapping)
