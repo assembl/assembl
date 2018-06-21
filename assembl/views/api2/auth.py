@@ -18,6 +18,7 @@ from pyisemail import is_email
 from graphql_relay.node.node import from_global_id
 from assembl.lib.sqla_types import EmailString
 from ...lib import config
+from ...lib.exceptions import LocalizableError
 from assembl.auth import (
     P_ADMIN_DISC, P_SELF_REGISTER, P_SELF_REGISTER_REQUEST,
     R_PARTICIPANT, P_READ, CrudPermissions)
@@ -433,10 +434,8 @@ def do_password_change(request):
         raise JSONError(error, validity)
     try:
         user.password_p = password1
-    except ValueError as e:
-        message = '\n'.join([
-            localizer.translate(m) for m in e.message.split('\n')])
-        raise JSONError(message)
+    except LocalizableError as e:
+        raise JSONError(e.localized_message(localizer))
     user.successful_login()
     headers = remember(request, user.id)
     request.response.headerlist.extend(headers)
@@ -558,10 +557,8 @@ def assembl_register_user(request):
         )
         try:
             user.password_p = password
-        except ValueError as e:
-            message = '\n'.join([
-                localizer.translate(m) for m in e.message.split('\n')])
-            raise JSONError(message)
+        except LocalizableError as e:
+            raise JSONError(e.localized_message(localizer))
 
         session.add(user)
         session.flush()

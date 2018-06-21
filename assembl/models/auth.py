@@ -40,6 +40,7 @@ from sqlalchemy.sql.functions import count
 from ..lib import config, logging
 from ..lib.locale import to_posix_string
 from ..lib.model_watcher import get_model_watcher
+from ..lib.exceptions import LocalizableError, LocalizableMultipleErrors, LocalizableErrorWithMapping
 from ..lib.sqla import CrudOperation, PrivateObjectMixin
 from ..lib.sqla_types import (
     URLString, EmailString, EmailUnicode, CaseInsensitiveWord, CoerceUnicode)
@@ -635,6 +636,39 @@ class IdentityProvider(Base):
                 db_provider.trust_emails = (provider in trusted_providers)
 
 
+# copied from zxcvbn/src/feedback.coffee
+# because extracting from another library is needlessly complicated
+zxcvbn_messages = [
+    _('Straight rows of keys are easy to guess.'),
+    _('Short keyboard patterns are easy to guess.'),
+    _('Repeats like "aaa" are easy to guess.'),
+    _('Repeats like "abcabcabc" are only slightly harder to guess than "abc".'),
+    _("Sequences like abc or 6543 are easy to guess."),
+    _("Recent years are easy to guess."),
+    _("Dates are often easy to guess."),
+    _('This is a top-10 common password.'),
+    _('This is a top-100 common password.'),
+    _('This is a very common password.'),
+    _('This is similar to a commonly used password.'),
+    _('A word by itself is easy to guess.'),
+    _('Names and surnames by themselves are easy to guess.'),
+    _('Common names and surnames are easy to guess.'),
+    _("Use a few words, avoid common phrases."),
+    _("No need for symbols, digits, or uppercase letters."),
+    _('Add another word or two. Uncommon words are better.'),
+    _('Use a longer keyboard pattern with more turns.'),
+    _('Avoid repeated words and characters.'),
+    _('Avoid sequences.'),
+    _('Avoid recent years.'),
+    _('Avoid years that are associated with you.'),
+    _('Avoid dates and years that are associated with you.'),
+    _("Capitalization doesn't help very much."),
+    _("All-uppercase is almost as easy to guess as all-lowercase."),
+    _("Reversed words aren't much harder to guess."),
+    _("Predictable substitutions like '@' instead of 'a' don't help very much."),
+]
+
+
 class AgentStatusInDiscussion(DiscussionBoundBase):
     """Information about a user's activity in a discussion
 
@@ -941,25 +975,34 @@ class User(AgentProfile):
     def validate_password(self, password):
         from ..auth.password import verify_password
         # check length
-        if len(password) < int(config.get("minimum_password_length", 5)):
-            raise ValueError(_("Password too short"))
+        minimum_password_length = int(config.get("minimum_password_length", 5))
+        if len(password) < minimum_password_length:
+            raise LocalizableErrorWithMapping(
+                _("Password shorter than ${minlen} characters"),
+                mapping={"minlen": minimum_password_length})
         # look for presence of required elements (see regexp)
         password_required_classes = config.get("password_required_classes", None)
         if password_required_classes:
-            for charclass in password_required_classes.strip().split(';'):
+            if not isinstance(password_required_classes, dict):
+                # Should be done upstream to optimize
+                password_required_classes = json.loads(password_required_classes)
+            for charclass, langstring in password_required_classes.items():
                 if re.search(charclass, password) is None:
-                    raise ValueError("No character of the form " + charclass)
+                    raise LocalizableErrorWithMapping(
+                        _("Your password should include at least a ${class}"),
+                        langstrings={"class": langstring})
         # Check zxcvbn complexity
         minimum_password_complexity = int(config.get("minimum_password_complexity", 0))
         if minimum_password_complexity:
             from zxcvbn import zxcvbn
             results = zxcvbn(password, user_inputs=(self.name or '').split(' '))
             if results['score'] < minimum_password_complexity:
-                raise ValueError(' '.join(results['feedback']['suggestions']))
+                raise LocalizableMultipleErrors(
+                    [results['feedback']['warning']] + results['feedback']['suggestions'])
         # refuse if reusing an old password
         for p in self.old_passwords:
             if verify_password(password, p.password):
-                raise ValueError(_("Please choose a new password."))
+                raise LocalizableError(_("Please do not repeat an older password."))
 
     @password_p.setter
     def password_p(self, password):
