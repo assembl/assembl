@@ -31,7 +31,7 @@ def load_social_columns_info(discussion, locale=None):
 
 def get_social_columns_from_json(json_data, columns_info):
     result = [path.find(json_data) for (name, path) in columns_info]
-    return [v[0].value if v else '' for v in result]
+    return [v[0].value.encode('utf-8') if v else '' for v in result]
 
 
 def get_social_columns_from_json_list(json_data_list, columns_info):
