@@ -5,6 +5,14 @@ from assembl import models
 from assembl.models.auth import LanguagePreferenceCollection
 
 
+def to_known_locale_code(locale_code):
+    locale_code = locale_code.replace('-', '_')
+    if locale_code == 'nb':
+        return 'no'
+
+    return locale_code
+
+
 def resolve_langstring(langstring, locale_code):
     """If locale_code is None, return the best lang based on user prefs,
     otherwise respect the locale_code to return the right translation.
@@ -19,7 +27,7 @@ def resolve_langstring(langstring, locale_code):
 
     try:
         if locale_code:
-            locale_code = locale_code.replace('-', '_')
+            locale_code = to_known_locale_code(locale_code)
             closest = langstring.closest_entry(locale_code)
             if closest:
                 return closest.value
@@ -61,7 +69,7 @@ def resolve_best_langstring_entries(langstring, target_locale=None):
 
     entries = []
     if target_locale:
-        target_locale = target_locale.replace('-', '_')
+        target_locale = to_known_locale_code(target_locale)
         entry = langstring.closest_entry(target_locale)
         if entry:
             entries.append(entry)
