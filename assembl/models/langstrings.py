@@ -24,6 +24,7 @@ import simplejson as json
 
 from . import Base, TombstonableMixin
 from ..lib.abc import classproperty
+from ..lib.locale import compatible
 from ..auth import CrudPermissions, P_READ, P_ADMIN_DISC, P_SYSADMIN
 
 
@@ -127,28 +128,12 @@ class Locale(Base):
 
     @classmethod
     def compatible(cls, locname1, locname2):
-        """Are the two locales similar enough to be substituted
-        one for the other. Mostly same language/script, disregard country.
-        """
-        # Google special case... should be done upstream ideally.
-        if locname1 == 'zh':
-            locname1 = 'zh_Hans'
-        if locname2 == 'zh':
-            locname2 = 'zh_Hans'
-        loc1 = locname1.split("_")
-        loc2 = locname2.split("_")
-        for i in range(min(len(loc1), len(loc2))):
-            if loc1[i] != loc2[i]:
-                if i and len(loc1[i]) == 2:
-                    # discount difference in country
-                    return i
-                return False
-        return i + 1
+        return compatible(locname1, locname2)
 
     @classmethod
     def any_compatible(cls, locname, locnames):
         for l in locnames:
-            if cls.compatible(l, locname):
+            if compatible(l, locname):
                 return True
         return False
 
@@ -802,7 +787,7 @@ class LangString(Base):
 
     def closest_entry(self, target_locale, filter_errors=True):
         def common_len(e):
-            return Locale.compatible(
+            return compatible(
                 target_locale,
                 Locale.extract_base_locale(e.locale_code))
         if filter_errors:
@@ -833,7 +818,7 @@ class LangString(Base):
         """
         from .auth import LanguagePreferenceCollection
         for lse in self.non_mt_entries():
-            if Locale.compatible(lse.locale_code, target_locale):
+            if compatible(lse.locale_code, target_locale):
                 return [(lse, True)]
                 # return [lse]
         original = self.first_original()

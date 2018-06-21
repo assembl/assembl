@@ -122,6 +122,41 @@ def strip_country(locale):
     return locale
 
 
+def compatible(locname1, locname2):
+    """Are the two locales similar enough to be substituted
+    one for the other. Mostly same language/script, disregard country.
+    """
+    # Google special case... should be done upstream ideally.
+    if locname1 == 'zh':
+        locname1 = 'zh_Hans'
+    if locname2 == 'zh':
+        locname2 = 'zh_Hans'
+    loc1 = locname1.split("_")
+    loc2 = locname2.split("_")
+    for i in range(min(len(loc1), len(loc2))):
+        if loc1[i] != loc2[i]:
+            if i and len(loc1[i]) == 2:
+                # discount difference in country
+                return i
+            return False
+    return i + 1
+
+
+def get_best_string_from_dict(langstring, target_locale):
+    for lang, value in langstring:
+        if compatible(target_locale, lang):
+            return value
+    else:
+        # get some value...
+        for lang in get_config().get('available_languages', 'en fr').split():
+            if lang in langstring:
+                return langstring[lang]
+            elif strip_country(lang) in langstring:
+                return langstring[strip_country(lang)]
+        else:
+            return next(iter(langstring.values()))
+
+
 def get_preferred_languages(session, user_id):
     from ..models import UserLanguagePreference, Locale
     prefs = (session.query(UserLanguagePreference)
