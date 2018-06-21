@@ -148,14 +148,22 @@ class UpdateDiscussionPhase(graphene.Mutation):
                         mime_type=mime_type,
                         title=filename)
                     document.add_file_data(context.POST[image].file)
-                    db.add(models.TimelineEventAttachment(
+                    # if there is already an attachment, remove it with the
+                    # associated document (image)
+                    if phase.attachments:
+                        for attachment in phase.attachments[:]:
+                            attachment.document.delete_file()
+                            db.delete(attachment.document)
+                            phase.attachments.remove(attachment)
+
+                    models.TimelineEventAttachment(
                         document=document,
-                        timeline_event=phase,
                         discussion=discussion,
                         creator_id=context.authenticated_userid,
                         title=filename,
                         attachmentPurpose=models.AttachmentPurpose.IMAGE.value
-                    ))
+                    )
+                    phase.attachments.append(attachment)
 
             db.flush()
 
