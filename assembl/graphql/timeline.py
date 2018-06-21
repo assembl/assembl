@@ -156,7 +156,7 @@ class UpdateDiscussionPhase(graphene.Mutation):
                             db.delete(attachment.document)
                             phase.attachments.remove(attachment)
 
-                    models.TimelineEventAttachment(
+                    attachment = models.TimelineEventAttachment(
                         document=document,
                         discussion=discussion,
                         creator_id=context.authenticated_userid,
