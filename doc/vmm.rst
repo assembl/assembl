@@ -114,10 +114,10 @@ and add the following:
     smtp_tls_CAfile =  /etc/ssl/certs/ca-certificates.crt
     smtp_tls_loglevel = 1
     smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
-    smtp_tls_security_level = may
+    smtp_tls_security_level = encrypt
     
     smtpd_relay_restrictions = permit_mynetworks permit_sasl_authenticated defer_unauth_destination
-    smtpd_tls_security_level = encrypt
+    smtpd_tls_security_level = may
     smtpd_tls_mandatory_ciphers = medium
     smtpd_tls_mandatory_exclude_ciphers = aNULL, MD5
     smtpd_tls_mandatory_protocols = !SSLv2, !SSLv3
