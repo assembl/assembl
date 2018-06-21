@@ -1,6 +1,7 @@
 /* eslint max-len: "off", quotes: ["error", "double"] */
 const Translations = {
   fr: {
+    here: "ici",
     yes: "oui",
     no: "non",
     "Number of contributions": "Nombre de messages",
@@ -714,10 +715,12 @@ const Translations = {
         },
         timeline: {
           title: "Timeline",
-          image: "Choisissez l'image pour cette phase",
+          image: "Choisir l'image pour cette phase",
           phaseSection: "Configurer les phases du débat",
           imageDescription: "L'image doit avoir une hauteur de 500px et une largeur de 400px.",
-          sectionTitle: "Configurer le titre et sous-titre de la section"
+          sectionTitle: "Configurer le titre et sous-titre de la section",
+          linkToTimeline: "Configurer le nombre phases souhaitées pour le débat",
+          linkToLandingPage: "Configurer la description et l'image pour chaque phase"
         },
         successSave: "Les modules ont été enregistrés avec succès !",
         headerSuccessSave: "Le bandeau de la page d'accueil a été sauvegardé avec succès !"
@@ -750,6 +753,7 @@ const Translations = {
     }
   },
   en: {
+    here: "here",
     yes: "yes",
     no: "no",
     cancel: "Cancel",
@@ -1452,7 +1456,9 @@ const Translations = {
           image: "Choose the image for this phase",
           sectionTitle: "Configure the title and the subtitle of the section",
           phaseSection: "Configure each phase of the debate",
-          imageDescription: "The image must have a height of 500px and a width of 400px."
+          imageDescription: "The image must have a height of 500px and a width of 400px.",
+          linkToTimeline: "Set the number of phases for the debate",
+          linkToLandingPage: "Set the description and the image for each phase"
         },
         successSave: "The modules have been saved with success!",
         headerSuccessSave: "The home page header have been saved with success!"

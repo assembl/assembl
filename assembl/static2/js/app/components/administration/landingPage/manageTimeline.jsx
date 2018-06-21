@@ -1,13 +1,16 @@
 // @flow
 import React from 'react';
 import { connect } from 'react-redux';
-import { I18n } from 'react-redux-i18n';
+import { Translate, I18n } from 'react-redux-i18n';
+import { Link } from 'react-router';
 import { getEntryValueForLocale } from '../../../utils/i18n';
 import SectionTitle from '../../administration/sectionTitle';
 import FormControlWithLabel from '../../common/formControlWithLabel';
 import PhaseForm from './phaseForm';
 import Helper from '../../common/helper';
 import { updateLandingPageModuleTitle, updateLandingPageModuleSubtitle } from '../../../actions/adminActions/landingPage';
+import { getDiscussionSlug } from '../../../utils/globalFunctions';
+import { get } from '../../../utils/routeMap';
 
 const DumbManageTimeline = ({
   discussionPhaseIds,
@@ -19,6 +22,7 @@ const DumbManageTimeline = ({
 }) => {
   const sectionTitlePh = I18n.t('administration.ph.propositionSectionTitle');
   const subtitleSectionPh = I18n.t('administration.ph.propositionSectionSubtitle');
+  const slug = { slug: getDiscussionSlug() };
   return (
     <div className="admin-box">
       <SectionTitle
@@ -51,6 +55,13 @@ const DumbManageTimeline = ({
             {discussionPhaseIds.map((phaseId, index) => (
               <PhaseForm key={`phase-${index}`} phaseId={phaseId} editLocale={editLocale} index={index} />
             ))}
+          </div>
+          <div>
+            <Translate value="administration.landingPage.timeline.linkToTimeline" />
+            <span>&nbsp;</span>
+            <Link to={get('discussionTimelineAdmin', { ...slug })}>
+              <Translate value="here" />
+            </Link>
           </div>
         </div>
       </div>
