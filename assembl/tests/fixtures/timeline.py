@@ -118,6 +118,7 @@ def timeline_phase2_interface_v2(request, test_app, test_session, discussion):
         'previous_event': uri1,
         'start': "20151231T09:01:00Z",
         'end': "20491231T09:00:00Z",
+        'order': 2.0,
         'interface_v1': False
     }
 

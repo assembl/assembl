@@ -10,6 +10,7 @@ mutation updateDiscussionPhase(
   $start: DateTime!
   $end: DateTime!
   $image: String
+  $order: Float!
 ) {
   updateDiscussionPhase(
     id: $id
@@ -21,6 +22,7 @@ mutation updateDiscussionPhase(
     start: $start
     end: $end
     image: $image
+    order: $order
   ) {
     discussionPhase {
       id
@@ -35,6 +37,7 @@ mutation updateDiscussionPhase(
       }
       start
       end
+      order
       image {
         externalUrl
         mimeType
