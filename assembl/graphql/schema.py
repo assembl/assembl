@@ -218,14 +218,27 @@ class Query(graphene.ObjectType):
     def resolve_locales(self, args, context, info):
         locales = DummyGoogleTranslationService.target_localesC()
         asPosixLocale = DummyGoogleTranslationService.asPosixLocale
+        lang = args.get('lang')
         target_locale = strip_country(
-            models.Locale.get_or_create(args.get('lang')))
-        labels = models.LocaleLabel.names_of_locales_in_locale(
-            [strip_country(asPosixLocale(loc)) for loc in locales],
-            target_locale)
-        return [Locale(locale_code=locale_code, label=label)
-                for locale_code, label in sorted(labels.items(),
-                                                 key=lambda entry: entry[1])]
+            models.Locale.get_or_create(lang))
+        locales_without_country = [strip_country(asPosixLocale(loc)) for loc in locales]
+        labels_en = models.LocaleLabel.names_of_locales_in_locale(
+            locales_without_country,
+            models.Locale.get_or_create('en'))
+        if lang == 'en':
+            labels = labels_en
+        else:
+            # labels can be a subset of labels_en or completely empty
+            # if there is no translation of the locales for target_locale
+            labels = models.LocaleLabel.names_of_locales_in_locale(
+                locales_without_country,
+                target_locale)
+        result = []
+        for locale_code, label_en in labels_en.items():
+            label = labels.get(locale_code, label_en)
+            result.append(Locale(locale_code=locale_code, label=label))
+
+        return sorted(result, key=lambda locale: locale.label)
 
     def resolve_resources_center(self, args, context, info):
         return ResourcesCenter()
