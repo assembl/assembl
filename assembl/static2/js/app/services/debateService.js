@@ -27,10 +27,16 @@ export const buildDebateData = (debateData, prefs, timeline, socialShare) => {
         if (entry['@language'] === 'zh_Hans') {
           entry['@language'] = 'zh-CN'; // eslint-disable-line
         }
+        if (entry['@language'] === 'no') {
+          entry['@language'] = 'nb'; // eslint-disable-line
+        }
       });
       get(phase, 'title.entries', []).forEach((entry) => {
         if (entry['@language'] === 'zh_Hans') {
           entry['@language'] = 'zh-CN'; // eslint-disable-line
+        }
+        if (entry['@language'] === 'no') {
+          entry['@language'] = 'nb'; // eslint-disable-line
         }
       });
     });

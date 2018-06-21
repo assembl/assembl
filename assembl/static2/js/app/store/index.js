@@ -20,7 +20,7 @@ export default function createAppStore(initialState) {
   if (storedLocale === 'zh_CN' || storedLocale === 'zh_Hans') {
     storedLocale = 'zh-CN';
   }
-  if (storedLocale === 'fr_FR') {
+  if (storedLocale === 'fr_FR' || storedLocale === 'fr_CA') {
     storedLocale = 'fr';
   }
   if (storedLocale === 'en_GB' || storedLocale === 'en_CA') {
