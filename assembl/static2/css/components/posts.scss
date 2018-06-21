@@ -675,6 +675,10 @@ $deleted-post-border: 1px solid $grey1 !default;
 }
 
 .column-post {
+  .post-body-title {
+    display: none;
+  }
+
   .box {
     border: none;
   }
