@@ -58,6 +58,7 @@ const createVariablesForDiscussionPhaseMutation = phase => ({
   isThematicsTable: phase.isThematicsTable,
   start: moment(phase.start, moment.ISO_8601),
   end: moment(phase.end, moment.ISO_8601),
+  order: phase.order,
   titleEntries: phase.titleEntries
 });
 

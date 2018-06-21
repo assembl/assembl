@@ -485,7 +485,8 @@ const Translations = {
         startIsAfterEnd: "Veuillez une sélectionner une date de début ultérieure à celle de fin",
         singleModule: "Module unique de participation",
         selectStart: "Date de démarrage de la phase %{count}",
-        selectEnd: "Date de fin de la phase %{count}"
+        selectEnd: "Date de fin de la phase %{count}",
+        warningLabel: "Les dates que vous configuré entrent en conflit."
       },
       modules: {
         survey: "Module Questions",
@@ -1218,7 +1219,8 @@ const Translations = {
         startIsAfterEnd: "Please select a start ulterior to the end",
         singleModule: "Single participation module",
         selectStart: "Phase %{count}'s start date",
-        selectEnd: "Phase %{count}'s end date"
+        selectEnd: "Phase %{count}'s end date",
+        warningLabel: "The dates you have set are conflicted"
       },
       modules: {
         survey: "Survey module",

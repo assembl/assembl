@@ -22,7 +22,8 @@ type PhaseFormProps = {
   handleStartDateChange: Function,
   handleEndDateChange: Function,
   handleIdentifierChange: Function,
-  locale: string
+  locale: string,
+  hasConflictingDates: boolean
 };
 
 export const DumbPhaseForm = ({
@@ -34,6 +35,7 @@ export const DumbPhaseForm = ({
   identifier,
   start,
   end,
+  hasConflictingDates,
   locale
 }: PhaseFormProps) => {
   const onStartDateChange = (newStartDate) => {
@@ -78,6 +80,7 @@ export const DumbPhaseForm = ({
             dateFormat="LLL"
             locale={locale}
             shouldCloseOnSelect
+            className={hasConflictingDates ? 'warning' : ''}
           />
           <div className="icon-schedule-container">
             <span className="assembl-icon-schedule grey" />
@@ -99,6 +102,7 @@ export const DumbPhaseForm = ({
             dateFormat="LLL"
             locale={locale}
             shouldCloseOnSelect
+            className={hasConflictingDates ? 'warning' : ''}
           />
           <div className="icon-schedule-container">
             <span className="assembl-icon-schedule grey" />
@@ -141,6 +145,7 @@ const mapStateToProps = (state, { phaseId }) => {
     identifier: phase ? phase.get('identifier') : null,
     start: phase ? phase.get('start') : null,
     end: phase ? phase.get('end') : null,
+    hasConflictingDates: phase ? phase.get('hasConflictingDates') : null,
     locale: state.i18n.locale
   };
 };

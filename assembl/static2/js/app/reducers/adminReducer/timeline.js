@@ -3,6 +3,7 @@ import type ReduxAction from 'redux';
 import { combineReducers } from 'redux';
 import { List, Map, fromJS } from 'immutable';
 import { updateInLangstringEntries } from '../../utils/i18n';
+import { moveItemUp, moveItemDown } from '../../utils/globalFunctions';
 
 import {
   type Action,
@@ -42,7 +43,7 @@ type PhasesByIdReducer = (PhasesByIdState, ReduxAction<Action>) => PhasesByIdSta
 export const phasesById: PhasesByIdReducer = (state: PhasesByIdState = Map(), action: ReduxAction<Action>) => {
   switch (action.type) {
   case CREATE_PHASE:
-    return state.set(action.id, emptyPhase.set('id', action.id));
+    return state.set(action.id, emptyPhase.set('id', action.id).set('order', action.order));
   case DELETE_PHASE:
     return state.setIn([action.id, '_toDelete'], true);
   case UPDATE_PHASE_TITLE:
@@ -57,6 +58,10 @@ export const phasesById: PhasesByIdReducer = (state: PhasesByIdState = Map(), ac
     return state.setIn([action.id, 'end'], action.value).setIn([action.id, '_hasChanged'], true);
   case UPDATE_IS_THEMATICS_TABLE:
     return state.setIn([action.id, 'isThematicsTable'], action.value).setIn([action.id, '_hasChanged'], true);
+  case MOVE_PHASE_UP:
+    return moveItemUp(state, action.id);
+  case MOVE_PHASE_DOWN:
+    return moveItemDown(state, action.id);
   case UPDATE_PHASES: {
     let newState = Map();
     action.phases.forEach(({
@@ -65,7 +70,8 @@ export const phasesById: PhasesByIdReducer = (state: PhasesByIdState = Map(), ac
       start,
       end,
       id,
-      isThematicsTable
+      isThematicsTable,
+      order
     }) => {
       const phaseInfo = Map({
         _hasChanged: false,
@@ -77,8 +83,8 @@ export const phasesById: PhasesByIdReducer = (state: PhasesByIdState = Map(), ac
         end: end,
         isThematicsTable: isThematicsTable || false, // default to false until we have the interface to set a thematicstable
         id: id,
-        hasConflictingDates: getHasConflictingDates(action.phases, id, start, end)
-        // hasConflictingDates is not properly working for the moment because phasesById are not ordered with 'order' yet
+        order: order,
+        hasConflictingDates: getHasConflictingDates(action.phases, id, start, end) || false
       });
 
       newState = newState.set(id, phaseInfo);

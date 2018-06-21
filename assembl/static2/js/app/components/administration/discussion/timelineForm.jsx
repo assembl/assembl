@@ -38,9 +38,10 @@ export class DumbTimelineForm extends React.Component<TimelineFormProps, Timelin
   }
 
   componentDidUpdate() {
-    if (this.props.phases.length === 0) {
+    const { length } = this.props.phases;
+    if (length === 0) {
       range(4).forEach(() => {
-        this.props.handleCreatePhase();
+        this.props.handleCreatePhase(length);
       });
     }
   }
@@ -71,7 +72,7 @@ export class DumbTimelineForm extends React.Component<TimelineFormProps, Timelin
                   />
                 ))}
               <OverlayTrigger placement="top" overlay={addPhaseTooltip}>
-                <div onClick={handleCreatePhase} className="plus margin-s">
+                <div onClick={() => { handleCreatePhase(phases.length); }} className="plus margin-s">
                   +
                 </div>
               </OverlayTrigger>
@@ -124,9 +125,9 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  handleCreatePhase: () => {
+  handleCreatePhase: (nextOrder) => {
     const newId = createRandomId();
-    return dispatch(createPhase(newId));
+    return dispatch(createPhase(newId, nextOrder));
   }
 });
 

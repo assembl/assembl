@@ -616,6 +616,21 @@
     .phase-form {
       margin-top: 50px;
     }
+
+    .phase-title-form-container {
+      margin: 20px auto;
+
+      .phase-title-form {
+        margin-bottom: -45px;
+      }
+    }
+
+    .warning-label {
+      width: 270px;
+      margin-left: 25px;
+      font-size: $font-size-xs;
+      color: $orange;
+    }
   }
 
   .phase-form {

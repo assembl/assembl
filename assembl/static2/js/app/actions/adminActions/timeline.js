@@ -2,8 +2,9 @@
 import { type moment } from 'moment';
 import * as actionTypes from '../actionTypes';
 
-export const createPhase = (id: string): actionTypes.CreatePhase => ({
+export const createPhase = (id: string, order: number): actionTypes.CreatePhase => ({
   id: id,
+  order: order,
   type: actionTypes.CREATE_PHASE
 });
 

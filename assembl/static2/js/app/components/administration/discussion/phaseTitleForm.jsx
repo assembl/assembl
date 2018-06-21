@@ -43,39 +43,44 @@ export const DumbPhaseTitleForm = ({
   const upButtonsClassNames = classnames('admin-icons', { 'end-items': isLast, 'side-button-high': isTitleEmpty });
   const downButtonClassNames = classnames('admin-icons', { 'end-items': isFirst, 'side-button-high': isTitleEmpty });
   return (
-    <div className="flex phase-title-form">
-      <Translate value="administration.timelineAdmin.phase" count={phaseIndex} className={phaseSideTitleClassNames} />
-      <FormGroup validationState={hasConflictingDates ? 'warning' : null}>
-        <FormControlWithLabel
-          key={`phase-${id}`}
-          label={`${phaseLabel} ${editLocale.toUpperCase()}`}
-          onChange={handleTitleChange}
-          type="text"
-          value={title}
-          required
-          className={hasConflictingDates ? 'warning' : null}
-        />
-      </FormGroup>
-      <div className="flex">
-        {!isLast ? (
-          <OverlayTrigger placement="top" overlay={downTooltip}>
-            <Button onClick={handleDownClick} className={downButtonClassNames}>
-              <span className="assembl-icon-down-small grey" />
+    <div className="phase-title-form-container">
+      <div className="flex phase-title-form">
+        <Translate value="administration.timelineAdmin.phase" count={phaseIndex} className={phaseSideTitleClassNames} />
+        <FormGroup validationState={hasConflictingDates ? 'warning' : null}>
+          <FormControlWithLabel
+            key={`phase-${id}`}
+            label={`${phaseLabel} ${editLocale.toUpperCase()}`}
+            onChange={handleTitleChange}
+            type="text"
+            value={title}
+            required
+            className={hasConflictingDates && 'warning'}
+          />
+        </FormGroup>
+        <div className="flex">
+          {!isLast ? (
+            <OverlayTrigger placement="top" overlay={downTooltip}>
+              <Button onClick={handleDownClick} className={downButtonClassNames}>
+                <span className="assembl-icon-down-small grey" />
+              </Button>
+            </OverlayTrigger>
+          ) : null}
+          {!isFirst ? (
+            <OverlayTrigger placement="top" overlay={upTooltip}>
+              <Button onClick={handleUpClick} className={upButtonsClassNames}>
+                <span className="assembl-icon-up-small grey" />
+              </Button>
+            </OverlayTrigger>
+          ) : null}
+          <OverlayTrigger placement="top" overlay={deletePhaseTooltip}>
+            <Button onClick={handleDeleteClick} className={deleteButtonClassNames}>
+              <span className="assembl-icon-delete grey" />
             </Button>
           </OverlayTrigger>
-        ) : null}
-        {!isFirst ? (
-          <OverlayTrigger placement="top" overlay={upTooltip}>
-            <Button onClick={handleUpClick} className={upButtonsClassNames}>
-              <span className="assembl-icon-up-small grey" />
-            </Button>
-          </OverlayTrigger>
-        ) : null}
-        <OverlayTrigger placement="top" overlay={deletePhaseTooltip}>
-          <Button onClick={handleDeleteClick} className={deleteButtonClassNames}>
-            <span className="assembl-icon-delete grey" />
-          </Button>
-        </OverlayTrigger>
+        </div>
+      </div>
+      <div className="warning-label">
+        <span>{hasConflictingDates ? <Translate value="administration.timelineAdmin.warningLabel" /> : null}</span>
       </div>
     </div>
   );
