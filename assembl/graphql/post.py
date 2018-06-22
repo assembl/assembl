@@ -299,14 +299,29 @@ class CreatePost(graphene.Mutation):
                     subject = original_subject.value
                 elif in_reply_to_idea:
                     # TODO: some ideas have extra langstring titles
-                    subject = (in_reply_to_idea.title.first_original().value)
-                    locale = discussion.main_locale
+                    # we try to guess the locale of the body to use the same locale for post's subject
+                    body_lang, data = discussion.translation_service().identify(
+                        body_langstring.entries[0].value,
+                        discussion.discussion_locales)
+
+                    closest_subject = in_reply_to_idea.title.closest_entry(body_lang)
+                    if closest_subject:
+                        subject = closest_subject.value
+                        locale = closest_subject.locale.code
+                    else:
+                        # rather no subject than one in a random locale
+                        subject = u''
+                        locale = discussion.main_locale
                 else:
                     subject = discussion.topic if discussion.topic else ''
                     locale = discussion.main_locale
 
-                if subject:
-                    new_subject = u'Re: ' + restrip_pat.sub('', subject).strip()  # noqa: E501
+                if subject is not None:
+                    if len(subject) == 0:
+                        new_subject = subject
+                    else:
+                        new_subject = u'Re: ' + restrip_pat.sub('', subject).strip()  # noqa: E501
+
                     if (in_reply_to_post and new_subject == subject and
                             in_reply_to_post.get_title()):
                         # reuse subject and translations
