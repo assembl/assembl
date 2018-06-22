@@ -130,7 +130,7 @@ def generate_ini_files(config, config_fname):
     if secure and port == 80:
         # old misconfiguration
         port = 443
-    webpack_port = 8080
+    webpack_port = 8000
     if config.has_option(SECTION, 'webpack_port'):
         webpack_port = config.getint(SECTION, 'webpack_port')
     webpack_host = config.get(SECTION, 'webpack_host', public_hostname)

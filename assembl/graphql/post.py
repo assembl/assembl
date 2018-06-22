@@ -103,6 +103,9 @@ class PostInterface(SQLAlchemyInterface):
     attachments = graphene.List(PostAttachment, description=docs.PostInterface.attachments)
     original_locale = graphene.String(description=docs.PostInterface.original_locale)
     publishes_synthesis = graphene.Field(lambda: Synthesis, description=docs.PostInterface.publishes_synthesis)
+    type = graphene.String(description=docs.PostInterface.type)
+    discussion_id = graphene.String(description=docs.PostInterface.discussion_id)
+    modified = graphene.Boolean(description=docs.PostInterface.modified)
 
     def resolve_db_id(self, args, context, info):
         return self.id
@@ -222,6 +225,12 @@ class PostInterface(SQLAlchemyInterface):
 
         return u''
 
+    def resolve_type(self, args, context, info):
+        return self.__class__.__name__
+
+    def resolve_modified(self, args, context, info):
+        return self.modification_date and self.creation_date > self.modification_date
+
 
 class Post(SecureObjectType, SQLAlchemyObjectType):
     __doc__ = docs.Post.__doc__
@@ -238,6 +247,23 @@ class PostConnection(graphene.Connection):
 
     class Meta:
         node = Post
+
+
+class PostExtractEntryFields(graphene.AbstractType):
+    post_id = graphene.String(required=True)
+    offset_start = graphene.Int(required=True)
+    offset_end = graphene.Int(required=True)
+    xpath_start = graphene.String(required=True)
+    xpath_end = graphene.String(required=True)
+    body = graphene.String(required=True)
+
+
+class PostExtractEntry(graphene.ObjectType, PostExtractEntryFields):
+    pass
+
+
+class PostExtractEntryInput(graphene.InputObjectType, PostExtractEntryFields):
+    pass
 
 
 class CreatePost(graphene.Mutation):
@@ -342,13 +368,16 @@ class CreatePost(graphene.Mutation):
                         subject_langstring = models.LangString.create(
                             new_subject, locale)
 
+            now = datetime.utcnow()
             new_post = cls(
                 discussion=discussion,
                 subject=subject_langstring,
                 body=body_langstring,
                 creator_id=user_id,
                 body_mime_type=u'text/html',
-                message_classifier=classifier
+                message_classifier=classifier,
+                creation_date=now,
+                modification_date=now,
             )
             new_post.guess_languages()
             db = new_post.db
@@ -690,3 +719,43 @@ class AddPostExtract(graphene.Mutation):
         post.db.flush()
 
         return AddPostExtract(post=post)
+
+
+class AddPostsExtract(graphene.Mutation):
+    class Input:
+        extracts = graphene.List(PostExtractEntryInput, required=True)
+
+    status = graphene.Boolean()
+
+    @staticmethod
+    @abort_transaction_on_exception
+    def mutate(root, args, context, info):
+        status = False
+        require_cls_permission(CrudPermissions.CREATE, models.Extract, context)
+        discussion_id = context.matchdict['discussion_id']
+        user_id = context.authenticated_userid or Everyone
+        extracts = args.get('extracts')
+        status = True
+        for extract in extracts:
+            post_id = extract.get('post_id')
+            post_id = int(Node.from_global_id(post_id)[1])
+            post = models.Post.get(post_id)
+            new_extract = models.Extract(
+                creator_id=user_id,
+                owner_id=user_id,
+                discussion_id=discussion_id,
+                body=extract.get('body'),
+                important=extract.get('important', False),
+                content=post
+            )
+            post.db.add(new_extract)
+            range = models.TextFragmentIdentifier(
+                extract=new_extract,
+                xpath_start=extract.get('xpath_start'),
+                offset_start=extract.get('offset_start'),
+                xpath_end=extract.get('xpath_end'),
+                offset_end=extract.get('offset_end'))
+            post.db.add(range)
+            post.db.flush()
+
+        return AddPostsExtract(status=status)

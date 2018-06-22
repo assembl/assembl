@@ -41,6 +41,7 @@ class Discussion(SecureObjectType, SQLAlchemyObjectType):
     button_label_entries = graphene.List(LangStringEntry, description=docs.Default.langstring_entries)
     header_image = graphene.Field(Document, description=docs.Discussion.header_image)
     logo_image = graphene.Field(Document, description=docs.Discussion.logo_image)
+    slug = graphene.String(description=docs.Discussion.slug)
 
     def resolve_homepage_url(self, args, context, info):
         # TODO: Remove this resolver and add URLString to

@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 import logging
+import dateutil.parser
 from random import randint
 from operator import attrgetter
 
 import graphene
 from graphene.relay import Node
+from graphene_sqlalchemy import SQLAlchemyConnectionField
 from graphene_sqlalchemy.converter import (convert_column_to_string,
                                            convert_sqlalchemy_type)
 from graphene_sqlalchemy.utils import get_query
@@ -28,7 +30,8 @@ from assembl.graphql.langstring import resolve_langstring
 from assembl.graphql.locale import Locale
 from assembl.graphql.post import (AddPostAttachment, CreatePost, DeletePost,
                                   DeletePostAttachment, UndeletePost,
-                                  UpdatePost, AddPostExtract)
+                                  UpdatePost, AddPostExtract, PostConnection,
+                                  AddPostsExtract)
 from assembl.graphql.extract import (UpdateExtract, DeleteExtract)
 from assembl.graphql.resource import (CreateResource, DeleteResource, Resource,
                                       UpdateResource)
@@ -116,6 +119,11 @@ class Query(graphene.ObjectType):
     text_fields = graphene.List(ConfigurableFieldUnion, description=docs.Schema.text_fields)
     profile_fields = graphene.List(ProfileField, description=docs.Schema.profile_fields)
     timeline = graphene.List(DiscussionPhase, description=docs.Schema.timeline)
+    posts = SQLAlchemyConnectionField(
+        PostConnection,
+        start_date=graphene.String(description=docs.Schema.posts.start_date),
+        end_date=graphene.String(description=docs.Schema.posts.start_date),
+        description=docs.Schema.posts)
 
     def resolve_resources(self, args, context, info):
         model = models.Resource
@@ -405,6 +413,27 @@ class Query(graphene.ObjectType):
         discussion = models.Discussion.get(discussion_id)
         return discussion.timeline_phases
 
+    def resolve_posts(self, args, context, info):
+        model = models.AssemblPost
+        query = get_query(model, context)
+        discussion_id = context.matchdict['discussion_id']
+        query = query.filter(
+            model.discussion_id == discussion_id,
+            model.hidden == False,  # noqa: E712
+            model.tombstone_condition()
+            )
+        start_date = args.get('start_date', None)
+        end_date = args.get('end_date', None)
+        if start_date:
+            start_date = dateutil.parser.parse(start_date)
+            query = query.filter(model.modification_date >= start_date)
+
+        if end_date:
+            end_date = dateutil.parser.parse(end_date)
+            query = query.filter(model.modification_date >= end_date)
+
+        return query.all()
+
 
 class Mutations(graphene.ObjectType):
 
@@ -449,6 +478,7 @@ class Mutations(graphene.ObjectType):
     add_token_vote = AddTokenVote.Field(description=docs.AddTokenVote.__doc__)
     add_gauge_vote = AddGaugeVote.Field(description=docs.AddGaugeVote.__doc__)
     add_post_extract = AddPostExtract.Field(description=docs.AddPostExtract.__doc__)
+    add_posts_extract = AddPostsExtract.Field(description=docs.AddPostsExtract.__doc__)
     update_extract = UpdateExtract.Field(description=docs.UpdateExtract.__doc__)
     delete_extract = DeleteExtract.Field(description=docs.DeleteExtract.__doc__)
     create_text_field = CreateTextField.Field(description=docs.CreateTextField.__doc__)

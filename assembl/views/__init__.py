@@ -214,7 +214,7 @@ def get_default_context(request, **kwargs):
                        'localhost'))
         react_url = 'http://%s:%d' % (
             webpack_host,
-            int(config.get('webpack_port', 8080)))
+            int(config.get('webpack_port', 8000)))
     socket_proxied = asbool(config.get('changes.websocket.proxied'))
     websocket_port = None if socket_proxied \
         else config.get('changes.websocket.port')

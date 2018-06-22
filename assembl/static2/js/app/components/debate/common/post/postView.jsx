@@ -120,7 +120,7 @@ class PostView extends React.PureComponent<Props, State> {
       dbId,
       indirectIdeaContentLinks,
       creator,
-      modificationDate,
+      modified,
       sentimentCounts,
       mySentiment,
       attachments,
@@ -205,7 +205,7 @@ class PostView extends React.PureComponent<Props, State> {
                   userName={creator.isDeleted ? I18n.t('deletedUser') : creator.displayName}
                   creationDate={creationDate}
                   locale={lang}
-                  modified={modificationDate !== null}
+                  modified={modified}
                 />
               )}
               <PostBody

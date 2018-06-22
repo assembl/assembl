@@ -199,6 +199,7 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
     message_columns = graphene.List(lambda: IdeaMessageColumn, description=docs.Idea.message_columns)
     ancestors = graphene.List(graphene.ID, description=docs.Idea.ancestors)
     vote_results = graphene.Field(VoteResults, required=True, description=docs.Idea.vote_results)
+    type = graphene.String(description=docs.Idea.type)
 
     def resolve_vote_results(self, args, context, info):
         vote_specifications = self.criterion_for
@@ -340,6 +341,9 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
 
     def resolve_announcement(self, args, context, info):
         return self.get_applicable_announcement()
+
+    def resolve_type(self, args, context, info):
+        return self.__class__.__name__
 
 
 class Question(SecureObjectType, SQLAlchemyObjectType):
