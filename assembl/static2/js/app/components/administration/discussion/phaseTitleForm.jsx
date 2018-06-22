@@ -80,7 +80,7 @@ export const DumbPhaseTitleForm = ({
         </div>
       </div>
       <div className="warning-label">
-        <span>{hasConflictingDates ? <Translate value="administration.timelineAdmin.warningLabel" /> : null}</span>
+        {hasConflictingDates && <Translate value="administration.timelineAdmin.warningLabel" />}
       </div>
     </div>
   );

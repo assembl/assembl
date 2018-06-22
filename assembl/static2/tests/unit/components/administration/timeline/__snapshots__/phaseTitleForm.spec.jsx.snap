@@ -76,8 +76,6 @@ exports[`PhaseTitleForm component should render a form to update the phase's tit
   </div>
   <div
     className="warning-label"
-  >
-    <span />
-  </div>
+  />
 </div>
 `;

@@ -86,6 +86,10 @@ export const DumbPhaseForm = ({
             <span className="assembl-icon-schedule grey" />
           </div>
         </label>
+        {hasConflictingDates &&
+          <div className="warning-label">
+            <Translate value="administration.timelineAdmin.warningLabel" />
+          </div>}
       </div>
       <div className="date-picker-field">
         <div className="date-picker-type">
@@ -108,6 +112,10 @@ export const DumbPhaseForm = ({
             <span className="assembl-icon-schedule grey" />
           </div>
         </label>
+        {hasConflictingDates &&
+          <div className="warning-label">
+            <Translate value="administration.timelineAdmin.warningLabel" />
+          </div>}
       </div>
       <div className="module-selection-text">
         <Translate value="administration.timelineAdmin.phaseModule" />

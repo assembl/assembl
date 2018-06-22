@@ -1220,7 +1220,7 @@ const Translations = {
         singleModule: "Single participation module",
         selectStart: "Phase %{count}'s start date",
         selectEnd: "Phase %{count}'s end date",
-        warningLabel: "The dates you have set are conflicted"
+        warningLabel: "The dates you have set are in conflict"
       },
       modules: {
         survey: "Survey module",
