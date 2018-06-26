@@ -333,7 +333,7 @@ const mapStateToProps: MapStateToProps<ReduxState, *, *> = ({
   i18n
 }) => {
   const { sectionsById, sectionsHaveChanged, sectionsInOrder } = sections;
-  const { phasesInOrder, phasesById, phasesHaveChanged } = timeline;
+  const { phasesById, phasesHaveChanged } = timeline;
   const { profileOptionsHasChanged, textFieldsById } = profileOptions;
   const textFields = textFieldsById
     .map(textField => textField)
@@ -353,6 +353,7 @@ const mapStateToProps: MapStateToProps<ReduxState, *, *> = ({
       }));
     }
   });
+
   return {
     editLocale: editLocale,
     i18n: i18n,
@@ -370,12 +371,7 @@ const mapStateToProps: MapStateToProps<ReduxState, *, *> = ({
     legalContentsHaveChanged: legalContents.get('_hasChanged'),
     profileOptionsHasChanged: profileOptionsHasChanged,
     textFields: textFields,
-    phases: phasesById.map((phase) => {
-      const id = phase.get('id');
-      return phase.set('order', phasesInOrder.indexOf(id));
-    })
-      .valueSeq()
-      .toJS(),
+    phases: Object.values(phasesById.sortBy(phase => phase.get('order')).toJS()),
     phasesHaveChanged: phasesHaveChanged
   };
 };

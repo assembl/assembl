@@ -4,40 +4,6 @@ import { fromJS, List } from 'immutable';
 import * as actionTypes from '../../../../js/app/actions/actionTypes';
 import * as reducers from '../../../../js/app/reducers/adminReducer/timeline';
 
-describe('Timeline phasesInOrder reducer', () => {
-  const { phasesInOrder } = reducers;
-  it('should return the initial state', () => {
-    const action = {};
-    const actual = phasesInOrder(undefined, action);
-    const expected = List();
-    expect(actual).toEqual(expected);
-  });
-  it('should return the current state for other actions', () => {
-    const action = { type: 'HELLO' };
-    const oldState = List.of('123', '456', '789');
-    const actual = phasesInOrder(oldState, action);
-    const expected = oldState;
-    expect(actual).toEqual(expected);
-  });
-  it('should handle CREATE_PHASE', () => {
-    const action = { id: '999', type: actionTypes.CREATE_PHASE };
-    const oldState = List.of('123', '456', '789');
-    const actual = phasesInOrder(oldState, action);
-    const expected = List.of('123', '456', '789', '999');
-    expect(actual).toEqual(expected);
-  });
-  it('should handle UPDATE_PHASES', () => {
-    const action = {
-      phases: [{ id: '999' }],
-      type: actionTypes.UPDATE_PHASES
-    };
-    const oldState = List.of('123', '456', '789');
-    const actual = phasesInOrder(oldState, action);
-    const expected = List.of('999');
-    expect(actual).toEqual(expected);
-  });
-});
-
 describe('Timeline PhasesByIdReducer', () => {
   const { phasesById } = reducers;
   const oldState = fromJS({

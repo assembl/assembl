@@ -97,28 +97,6 @@ export const phasesById: PhasesByIdReducer = (state: PhasesByIdState = Map(), ac
   }
 };
 
-type PhasesInOrderState = List<string>;
-type PhasesInOrderReducer = (PhasesInOrderState, ReduxAction<Action>) => PhasesInOrderState;
-export const phasesInOrder: PhasesInOrderReducer = (state = List(), action) => {
-  switch (action.type) {
-  case CREATE_PHASE:
-    return state.push(action.id);
-  case UPDATE_PHASES: {
-    const phases = action.phases.sort((a, b) => a.order - b.order);
-    return List(phases.map(phase => phase.id)); }
-  case MOVE_PHASE_UP: {
-    const idx = state.indexOf(action.id);
-    return state.delete(idx).insert(idx - 1, action.id);
-  }
-  case MOVE_PHASE_DOWN: {
-    const idx = state.indexOf(action.id);
-    return state.delete(idx).insert(idx + 1, action.id);
-  }
-  default:
-    return state;
-  }
-};
-
 type TimelineHasChangedReducer = (boolean, ReduxAction<Action>) => boolean;
 export const phasesHaveChanged: TimelineHasChangedReducer = (state = false, action) => {
   switch (action.type) {
@@ -140,7 +118,6 @@ export const phasesHaveChanged: TimelineHasChangedReducer = (state = false, acti
 };
 
 export default combineReducers({
-  phasesInOrder: phasesInOrder,
   phasesHaveChanged: phasesHaveChanged,
   phasesById: phasesById
 });
