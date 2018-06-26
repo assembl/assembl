@@ -5,8 +5,26 @@
   bottom: 0;
   transition: opacity 1s ease-in-out;
   width: 100%;
+  padding: 10px 30px;
+  background-color: $grey0;
 
   .cookies-text {
-    font-size: 30px;
+    font-size: $font-size-s;
+    font-family: $font-family;
   }
+
+  .cookies-button {
+    margin-right: 50px;
+    margin-top: 15px;
+  }
+}
+
+.show-cookies-bar {
+  opacity: 1;
+  z-index: 1000;
+}
+
+.hide-cookies-bar {
+  opacity: 0;
+  z-index: -1;
 }

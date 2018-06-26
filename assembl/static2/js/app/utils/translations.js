@@ -795,7 +795,7 @@ const Translations = {
     cookiesBar: {
       cookiesNotice: "Assembl uses cookies to offer you the best possible experience. To use Assembl, you have to agree to the cookies policy of the debate.",
       accept: "I agree",
-      seeCookiesPolicy: "See the cookies "
+      seeCookiesPolicy: "See the cookies policy"
     },
     redirectToV1:
       "You will be redirected to the %{phaseName} phase in a few seconds. Assembl is being improved, please excuse us for the interface change. If nothing happens, click on the button.",
