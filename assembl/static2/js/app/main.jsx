@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { getCurrentPhaseIdentifier } from './utils/timeline';
 import Navbar from './components/navbar/navbar';
 import Footer from './components/common/footer';
+import CookiesBar from './components/cookiesBar';
 
 type Props = {
   timeline: Timeline,
@@ -53,6 +54,7 @@ class Main extends React.Component<Props, State> {
       <div className="main">
         <Navbar location={this.state.location} themeId={themeId} />
         <div className="app-content">{children}</div>
+        <CookiesBar />
         <Footer />
       </div>
     );
