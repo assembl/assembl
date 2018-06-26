@@ -18,7 +18,8 @@ class CookiesBar extends React.Component<*, State> {
   }
 
   acceptCookies = () => {
-    setCookieItem('_ACCEPTED_COOKIES_', true); this.setState({ hide: true });
+    setCookieItem('_ACCEPTED_COOKIES_', true);
+    this.setState({ hide: true });
     // The local state is updated here to avoid having to refresh to hide the bar
   }
 

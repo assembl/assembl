@@ -1,0 +1,48 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CookiesBar component should render a bar with 2 buttons to accept the cookies policy or read them 1`] = `
+<div
+  className="cookies-bar show-cookies-bar"
+>
+  <span
+    className="cookies-text"
+    style={undefined}
+  >
+    Assembl uses cookies to offer you the best possible experience. To use Assembl, you have to agree to the cookies policy of the debate.
+  </span>
+  <div
+    className="cookies-buttons-container"
+  >
+    <button
+      className="button-submit button-dark cookies-button btn btn-default"
+      disabled={false}
+      onClick={[Function]}
+      type="button"
+    >
+      <span
+        className={undefined}
+        style={undefined}
+      >
+        I agree
+      </span>
+    </button>
+    <a
+      onClick={[Function]}
+      style={Object {}}
+    >
+      <button
+        className="button-submit button-dark cookies-button btn btn-default"
+        disabled={false}
+        type="button"
+      >
+        <span
+          className={undefined}
+          style={undefined}
+        >
+          See the cookies policy
+        </span>
+      </button>
+    </a>
+  </div>
+</div>
+`;
