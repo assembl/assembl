@@ -45,17 +45,11 @@ exports[`DebateLink component should match the DebateLink 1`] = `
       >
         <DumbTimeline
           activeSegment={-1}
-          debate={
-            Object {
-              "debateData": Object {
-                "timeline": Array [],
-              },
-            }
-          }
           identifier="survey"
           onItemDeselect={[Function]}
           onItemSelect={[Function]}
           showNavigation={true}
+          timeline={Array []}
         />
       </div>
     </section>

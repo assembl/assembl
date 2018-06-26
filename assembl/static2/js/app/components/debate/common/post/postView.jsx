@@ -13,6 +13,7 @@ import HarvestingMenu from '../../../harvesting/harvestingMenu';
 import type { Props as PostProps } from './index';
 
 type Props = PostProps & {
+  timeline: Timeline,
   body: string,
   subject: string,
   handleEditClick: Function,
@@ -141,7 +142,8 @@ class PostView extends React.PureComponent<Props, State> {
       subject,
       modifiedSubject,
       multiColumns,
-      isHarvesting
+      isHarvesting,
+      timeline
     } = this.props;
     const translate = contentLocale !== originalLocale;
 
@@ -248,6 +250,7 @@ class PostView extends React.PureComponent<Props, State> {
                 debateData={debateData}
                 postSubject={subject.replace('Re: ', '')}
                 identifier={identifier}
+                timeline={timeline}
               />
             </div>
           </div>

@@ -1,16 +1,21 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
+import { compose, graphql } from 'react-apollo';
+import { filter } from 'graphql-anywhere';
 
 import { get } from './utils/routeMap';
 import { getDiscussionId, getConnectedUserId, getConnectedUserName } from './utils/globalFunctions';
 import { getCurrentPhaseIdentifier } from './utils/timeline';
 import { fetchDebateData } from './actions/debateActions';
 import { addContext } from './actions/contextActions';
+import { updateTimeline } from './actions/timelineActions';
 import Loader from './components/common/loader';
 import Error from './components/common/error';
 import ChatFrame from './components/common/ChatFrame';
 import { browserHistory } from './router';
+import TimelineQuery from './graphql/Timeline.graphql';
+import withLoadingIndicator from './components/common/withLoadingIndicator';
 
 class App extends React.Component {
   constructor(props) {
@@ -23,21 +28,36 @@ class App extends React.Component {
   }
 
   componentDidUpdate() {
-    const { debate, location, params } = this.props;
+    const { debate, location, params, timeline } = this.props;
     if (!params.phase && !debate.debateLoading && location.pathname.split('/').indexOf('debate') > -1) {
-      const currentPhaseIdentifier = getCurrentPhaseIdentifier(debate.debateData.timeline);
+      const currentPhaseIdentifier = getCurrentPhaseIdentifier(timeline);
       browserHistory.push(get('debate', { slug: params.slug, phase: currentPhaseIdentifier }));
     }
   }
 
   render() {
+    const { timelineLoading, timeline, putTimelineInStore } = this.props;
     const { debateData, debateLoading, debateError } = this.props.debate;
     const divClassNames = classNames('app', { 'harvesting-mode-on': this.props.isHarvesting });
+    if (!timelineLoading) {
+      const filteredPhases = filter(TimelineQuery, { timeline: timeline });
+      const phasesForStore = filteredPhases.timeline.map(phase => ({
+        id: phase.id,
+        identifier: phase.identifier,
+        isThematicsTable: phase.isThematicsTable,
+        start: phase.start,
+        end: phase.end,
+        image: phase.image,
+        title: phase.title,
+        description: phase.description
+      }));
+      putTimelineInStore(phasesForStore);
+    }
     return (
       <div className={divClassNames}>
         <ChatFrame />
         {debateLoading && <Loader />}
-        {debateData && <div className="app-child">{this.props.children}</div>}
+        {debateData && !timelineLoading && <div className="app-child">{this.props.children}</div>}
         {debateError && <Error errorMessage={debateError} />}
       </div>
     );
@@ -45,6 +65,7 @@ class App extends React.Component {
 }
 
 const mapStateToProps = state => ({
+  i18n: state.i18n,
   debate: state.debate,
   isHarvesting: state.context.isHarvesting
 });
@@ -55,7 +76,37 @@ const mapDispatchToProps = dispatch => ({
   },
   addContext: (path, debateId, connectedUserId, connectedUserName) => {
     dispatch(addContext(path, debateId, connectedUserId, connectedUserName));
+  },
+  putTimelineInStore: (timeline) => {
+    dispatch(updateTimeline(timeline));
   }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  graphql(TimelineQuery, {
+    options: ({ i18n: { locale } }) => ({
+      variables: { lang: locale }
+    }),
+    props: ({ data }) => {
+      if (data.loading) {
+        return {
+          timelineLoading: true
+        };
+      }
+      if (data.error) {
+        return {
+          timelineHasErrors: true
+        };
+      }
+
+      return {
+        timelineLoading: data.loading,
+        timelineHasErrors: data.error,
+        refetchTimeline: data.refetch,
+        timeline: data.timeline
+      };
+    }
+  }),
+  withLoadingIndicator()
+)(App);

@@ -13,10 +13,9 @@ describe('DebateLink component', () => {
       activeClassName: 'debate-class-active',
       dataText: 'Debate',
       debate: {
-        debateData: {
-          timeline: []
-        }
-      }
+        debateData: {}
+      },
+      timeline: []
     };
     const renderer = new ShallowRenderer();
     renderer.render(<DumbDebateLink {...props} />);
@@ -33,10 +32,9 @@ describe('DebateLink component', () => {
       dataText: 'Debate',
       screenTooSmall: true,
       debate: {
-        debateData: {
-          timeline: []
-        }
-      }
+        debateData: {}
+      },
+      timeline: []
     };
     const renderer = new ShallowRenderer();
     renderer.render(<DumbDebateLink {...props} />);

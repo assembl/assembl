@@ -29,6 +29,7 @@ export type Response = {
 };
 
 export type Props = {
+  timeline: Timeline,
   borderLeftColor: ?string,
   contentLocale: string,
   creationDate: string,
@@ -140,7 +141,17 @@ export class DumbPost extends React.PureComponent<Props, State> {
 
   render() {
     const { publicationState } = this.props.data.post;
-    const { contentLocale, fullLevel, id, multiColumns, originalLocale, parentId, refetchIdea, isHarvesting } = this.props;
+    const {
+      contentLocale,
+      fullLevel,
+      id,
+      multiColumns,
+      originalLocale,
+      parentId,
+      refetchIdea,
+      isHarvesting,
+      timeline
+    } = this.props;
     const translate = contentLocale !== originalLocale;
     const { body, subject, originalBody, originalSubject } = this.getBodyAndSubject(translate);
 
@@ -191,6 +202,7 @@ export class DumbPost extends React.PureComponent<Props, State> {
             handleEditClick={this.handleEditClick}
             modifiedSubject={modifiedSubject}
             isHarvesting={isHarvesting}
+            timeline={timeline}
           />
         )}
       </div>

@@ -3,12 +3,14 @@
 import { isDateExpired, getNumberOfDays, calculatePercentage } from './globalFunctions';
 
 type Phase = {
+  id: string,
   identifier: string,
-  interface_v1: boolean,
+  isThematicsTable: boolean,
   start: string,
   end: string,
-  '@id': string,
-  title: { entries: Array<{ [string]: string }> }
+  image: File,
+  title: string,
+  description: string
 };
 export type Timeline = Array<Phase>;
 
@@ -119,21 +121,16 @@ export const isCurrentPhase = (_phase: Phase) => {
   return currentPhase;
 };
 
-export const getPhaseName = (_timeline: Timeline, _identifier: string, _locale: string) => {
+export const getPhaseName = (_timeline: Timeline, _identifier: string) => {
   let timeline = _timeline;
   if (!timeline) {
     timeline = [];
   }
   const identifier = _identifier;
-  const locale = _locale;
   let phaseName = '';
   timeline.forEach((phase) => {
     if (phase.identifier === identifier) {
-      phase.title.entries.forEach((entry) => {
-        if (entry['@language'] === locale) {
-          phaseName = entry.value;
-        }
-      });
+      phaseName = phase.title;
     }
   });
   return phaseName;
@@ -188,6 +185,6 @@ export const getPhaseId = (_timeline: Timeline, identifier: string) => {
     timeline = [];
   }
   const phase = timeline.find(p => p.identifier === identifier);
-  const phaseId = phase && phase['@id'].split('/')[1];
+  const phaseId = phase && phase.id;
   return phaseId;
 };

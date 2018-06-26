@@ -16,6 +16,7 @@ query Timeline($lang: String!) {
       title
       externalUrl
     }
+    description(lang: $lang)
     descriptionEntries {
       localeCode
       value

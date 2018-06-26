@@ -19,16 +19,15 @@ type Props = {
   additionalHeaderClasses: string,
   type: string,
   debate: DebateType,
-  i18n: { locale: string }
+  timeline: Timeline
 };
 
 class Header extends React.Component<Props> {
   render() {
-    const { children, title, subtitle, imgUrl, identifier, synthesisTitle, additionalHeaderClasses, type } = this.props;
+    const { children, title, subtitle, imgUrl, identifier, synthesisTitle, additionalHeaderClasses, type, timeline } = this.props;
     const { debateData } = this.props.debate;
-    const { locale } = this.props.i18n;
-    const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, identifier);
-    const closedPhaseName = getPhaseName(debateData.timeline, identifier, locale).toLowerCase();
+    const isPhaseCompleted = getIfPhaseCompletedByIdentifier(timeline, identifier);
+    const closedPhaseName = getPhaseName(timeline, identifier).toLowerCase();
     const titleClassNames = classnames([additionalHeaderClasses], 'light-title-7');
     return (
       <div className="header-section-container">
@@ -63,7 +62,7 @@ class Header extends React.Component<Props> {
 
 const mapStateToProps = state => ({
   debate: state.debate,
-  i18n: state.i18n
+  timeline: state.timeline
 });
 
 export default connect(mapStateToProps)(Header);

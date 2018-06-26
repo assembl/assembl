@@ -6,7 +6,7 @@ import Debate from './debateReducer';
 import Partners from './partnersReducer';
 import Synthesis from './synthesisReducer';
 import Auth from './authenticationReducer';
-import Phase from './phaseReducer';
+import Timeline from './timelineReducers';
 import Admin from './adminReducer';
 import contentLocale, { defaultContentLocaleMapping } from './contentLocaleReducer';
 import * as screenDimensions from './screenDimensionsReducers';
@@ -20,7 +20,7 @@ const reducers = {
   partners: Partners,
   synthesis: Synthesis,
   auth: Auth,
-  phase: Phase,
+  timeline: Timeline,
   admin: Admin,
   ...screenDimensions
 };

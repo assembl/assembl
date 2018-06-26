@@ -1,10 +1,10 @@
 // @flow
 import * as React from 'react';
 import { isCurrentPhase, getBarPercent, isStepCompleted } from '../../../utils/timeline';
-import TimelineSegment, { type DebateType } from './timelineSegment';
+import TimelineSegment from './timelineSegment';
 
 type TimelineProps = {
-  debate: DebateType,
+  timeline: Timeline,
   showNavigation: boolean,
   identifier: string,
   activeSegment: number,
@@ -12,19 +12,25 @@ type TimelineProps = {
   onItemDeselect: Function
 };
 
-export function DumbTimeline({ debate, activeSegment, showNavigation, identifier, onItemSelect, onItemDeselect }: TimelineProps) {
-  const { debateData } = debate;
+export function DumbTimeline({
+  timeline,
+  activeSegment,
+  showNavigation,
+  identifier,
+  onItemSelect,
+  onItemDeselect
+}: TimelineProps) {
   return (
     <div className="timeline-container">
-      {debateData.timeline &&
-        debateData.timeline.map((phase, index) => (
+      {timeline &&
+        timeline.map((phase, index) => (
           <TimelineSegment
             title={phase.title}
             index={index}
             active={index === activeSegment}
             key={index}
-            barPercent={getBarPercent(debateData.timeline[index])}
-            isCurrentPhase={isCurrentPhase(debateData.timeline[index])}
+            barPercent={getBarPercent(timeline[index])}
+            isCurrentPhase={isCurrentPhase(timeline[index])}
             showNavigation={showNavigation}
             identifier={identifier}
             phaseIdentifier={phase.identifier}

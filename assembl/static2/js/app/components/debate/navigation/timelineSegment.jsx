@@ -16,18 +16,16 @@ export const phasesToIgnore = [PHASES.voteSession];
 
 export type DebateType = {
   debateData: {
-    timeline: Timeline,
     slug: string,
     useSocialMedia: boolean
   }
 };
 
 type TimelineSegmentProps = {
+  timeline: Timeline,
   index: number,
   client: ApolloClient,
-  title: {
-    entries: Array<*>
-  },
+  title: string,
   startDate: string,
   endDate: string,
   phaseIdentifier: string,
@@ -55,13 +53,7 @@ export class DumbTimelineSegment extends React.Component<TimelineSegmentProps, T
     const inProgress = this.phaseStatus === PHASE_STATUS.inProgress;
     const ignore = phasesToIgnore.includes(phaseIdentifier);
     this.ignoreMenu = ignore && !inProgress;
-    let phaseName = '';
-    title.entries.forEach((entry) => {
-      if (locale === entry['@language']) {
-        phaseName = entry.value.toLowerCase();
-      }
-    });
-    this.phaseName = phaseName;
+    this.phaseName = title;
     prefetchMenuQuery(client, {
       lang: locale,
       identifier: phaseIdentifier
@@ -94,36 +86,26 @@ export class DumbTimelineSegment extends React.Component<TimelineSegmentProps, T
   };
 
   displayPhase = () => {
-    const { phaseIdentifier, onDeselect } = this.props;
+    const { phaseIdentifier, onDeselect, timeline } = this.props;
     const { debateData } = this.props.debate;
-    const phase = debateData.timeline.filter(p => p.identifier === phaseIdentifier);
-    const isRedirectionToV1 = phase[0].interface_v1;
-    const slug = { slug: debateData.slug };
     const params = { slug: debateData.slug, phase: phaseIdentifier };
-    const isSeveralPhases = isSeveralIdentifiers(debateData.timeline);
+    const isSeveralPhases = isSeveralIdentifiers(timeline);
     if (isSeveralPhases) {
       if (this.phaseStatus === PHASE_STATUS.notStarted) {
         displayModal(null, this.renderNotStarted(), true, null, null, true);
         onDeselect();
       }
       if (this.phaseStatus === PHASE_STATUS.inProgress || this.phaseStatus === PHASE_STATUS.completed) {
-        if (!isRedirectionToV1) {
-          goTo(get('debate', params));
-          onDeselect();
-        } else {
-          window.location = get('oldVote', slug);
-        }
+        goTo(get('debate', params));
+        onDeselect();
       }
-    } else if (!isRedirectionToV1) {
-      goTo(get('debate', params));
-      onDeselect();
-    } else {
-      window.location = get('oldVote', slug);
     }
+    goTo(get('debate', params));
+    onDeselect();
   };
 
   render() {
-    const { barPercent, title, locale, active } = this.props;
+    const { barPercent, title, active } = this.props;
     const inProgress = this.phaseStatus === PHASE_STATUS.inProgress;
     const timelineClass = 'timeline-title txt-active-light';
     const touchActive = this.isTouchScreenDevice && !active;
@@ -138,12 +120,10 @@ export class DumbTimelineSegment extends React.Component<TimelineSegmentProps, T
         })}
         onMouseOver={!this.isTouchScreenDevice ? this.select : null}
       >
-        {title.entries.filter(entry => locale === entry['@language']).map((entry, index) => (
-          <div onClick={onClick} className={timelineClass} key={index}>
-            {inProgress && <span className="arrow assembl-icon assembl-icon-right-dir" />}
-            <div className="timeline-link">{entry.value}</div>
-          </div>
-        ))}
+        <div onClick={onClick} className={timelineClass}>
+          {inProgress && <span className="arrow assembl-icon assembl-icon-right-dir" />}
+          <div className="timeline-link">{title}</div>
+        </div>
         <div className="timeline-graph">
           <div className="timeline-bars">
             {barPercent > 0 && (

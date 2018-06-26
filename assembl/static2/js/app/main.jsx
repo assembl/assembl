@@ -4,17 +4,13 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 
 import { getCurrentPhaseIdentifier, type Timeline } from './utils/timeline';
-import { addRedirectionToV1 } from './actions/phaseActions';
 import Navbar from './components/navbar/navbar';
 import Footer from './components/common/footer';
 
-type Debate = { debateData: { timeline: Timeline } };
-
 type Props = {
-  debate: Debate,
+  timeline: Timeline,
   params: { phase: string, themeId: ?string },
   location: { query: { phase: string }, pathname: string },
-  addRedirectionToV1: boolean => {},
   children: React.Node
 };
 
@@ -23,8 +19,8 @@ type State = { identifier: string, location: string };
 class Main extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    const { debateData } = this.props.debate;
-    const paramsIdentifier = this.props.params.phase || getCurrentPhaseIdentifier(debateData.timeline);
+    const { timeline } = this.props;
+    const paramsIdentifier = this.props.params.phase || getCurrentPhaseIdentifier(timeline);
     const queryIdentifier = this.props.location.query.phase || paramsIdentifier;
     this.state = {
       identifier: queryIdentifier,
@@ -32,24 +28,10 @@ class Main extends React.Component<Props, State> {
     };
   }
 
-  componentWillMount() {
-    const { debateData } = this.props.debate;
-    const currentPhaseIdentifier = getCurrentPhaseIdentifier(debateData.timeline);
-    let isRedirectionToV1;
-    if (debateData.timeline === null) {
-      // timeline is not configured
-      isRedirectionToV1 = true;
-    } else {
-      const currentPhase = debateData.timeline.filter(phase => phase.identifier === currentPhaseIdentifier);
-      isRedirectionToV1 = currentPhase[0] && currentPhase[0].interface_v1;
-    }
-    this.props.addRedirectionToV1(isRedirectionToV1);
-  }
-
   componentWillReceiveProps(nextProps) {
     const location = nextProps.location.pathname;
-    const { debateData } = this.props.debate;
-    const paramsIdentifier = nextProps.params.phase || getCurrentPhaseIdentifier(debateData.timeline);
+    const { timeline } = this.props;
+    const paramsIdentifier = nextProps.params.phase || getCurrentPhaseIdentifier(timeline);
     const queryIdentifier = nextProps.location.query.phase || paramsIdentifier;
     this.setState({
       identifier: queryIdentifier,
@@ -77,14 +59,8 @@ class Main extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state: { debate: Debate }) => ({
-  debate: state.debate
+const mapStateToProps = (state: { timeline: Timeline }) => ({
+  timeline: state.timeline
 });
 
-const mapDispatchToProps = dispatch => ({
-  addRedirectionToV1: (discussionId: string) => {
-    dispatch(addRedirectionToV1(discussionId));
-  }
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Main);
+export default connect(mapStateToProps)(Main);

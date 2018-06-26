@@ -16,7 +16,7 @@ import { convertRawContentStateToHTML } from '../../../utils/draftjs';
 
 type QuestionProps = {
   title: string,
-  debate: DebateData,
+  timeline: Timeline,
   contentLocale: string,
   questionId: string,
   scrollToQuestion: Function,
@@ -90,13 +90,13 @@ class Question extends React.Component<QuestionProps, QuestionState> {
   render() {
     const { index, title, screenWidth, screenHeight } = this.props;
     let height = screenHeight;
-    const timeline = document && document.getElementById('timeline');
+    const timelineElm = document && document.getElementById('timeline');
     // This is necessary to bypass an issue with Flow
-    if (timeline) {
-      height = screenHeight - timeline.clientHeight;
+    if (timelineElm) {
+      height = screenHeight - timelineElm.clientHeight;
     }
-    const { debateData } = this.props.debate;
-    const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, 'survey');
+    const { timeline } = this.props;
+    const isPhaseCompleted = getIfPhaseCompletedByIdentifier(timeline, 'survey');
     return (
       <section
         className={isPhaseCompleted ? 'hidden' : 'questions-section'}
@@ -136,7 +136,7 @@ class Question extends React.Component<QuestionProps, QuestionState> {
 }
 
 const mapStateToProps = state => ({
-  debate: state.debate,
+  timeline: state.timeline,
   contentLocale: state.i18n.locale
 });
 

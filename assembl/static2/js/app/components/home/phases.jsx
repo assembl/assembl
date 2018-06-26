@@ -8,7 +8,7 @@ import Timeline from './phases/timeline';
 
 class Phases extends React.Component {
   render() {
-    const { debateData } = this.props.debate;
+    const { timeline } = this.props;
     return (
       <section className="home-section phases-section">
         <Grid fluid>
@@ -16,21 +16,21 @@ class Phases extends React.Component {
             <div className="title-section">
               <div className="title-hyphen">&nbsp;</div>
               <h1 className="dark-title-1">
-                <Translate value="home.timelineTitle" count={debateData.timeline.length} />
+                <Translate value="home.timelineTitle" count={timeline.length} />
               </h1>
             </div>
             <div className="content-section">
               <Row className="no-margin">
-                {debateData.timeline.map((phase, index) => (
+                {timeline.map((phase, index) => (
                   <Col
                     xs={12}
-                    sm={24 / debateData.timeline.length}
-                    md={12 / debateData.timeline.length}
-                    className={isCurrentPhase(debateData.timeline[index]) ? 'no-padding phase' : 'no-padding phase hidden-xs'}
+                    sm={24 / timeline.length}
+                    md={12 / timeline.length}
+                    className={isCurrentPhase(timeline[index]) ? 'no-padding phase' : 'no-padding phase hidden-xs'}
                     key={index}
                   >
                     <Phase
-                      imgUrl={phase.image_url}
+                      imgUrl={phase.image.externalUrl}
                       startDate={phase.start}
                       endDate={phase.end}
                       index={index}
@@ -42,11 +42,11 @@ class Phases extends React.Component {
                 ))}
               </Row>
               <Row className="no-margin">
-                {debateData.timeline.map((phase, index) => (
+                {timeline.map((phase, index) => (
                   <Col
-                    xs={12 / debateData.timeline.length}
-                    sm={12 / debateData.timeline.length}
-                    md={12 / debateData.timeline.length}
+                    xs={12 / timeline.length}
+                    sm={12 / timeline.length}
+                    md={12 / timeline.length}
                     className={'no-padding bar'}
                     key={index}
                   >
@@ -63,7 +63,7 @@ class Phases extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  debate: state.debate
+  timeline: state.timeline
 });
 
 export default connect(mapStateToProps)(Phases);

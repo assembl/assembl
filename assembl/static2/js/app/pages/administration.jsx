@@ -263,7 +263,6 @@ class Administration extends React.Component {
     const {
       children,
       data,
-      debate,
       i18n,
       params,
       refetchResources,
@@ -275,10 +274,10 @@ class Administration extends React.Component {
       refetchLandingPageModules,
       refetchTextFields,
       refetchLandingPage,
-      refetchTimeline
+      refetchTimeline,
+      timeline
     } = this.props;
     const { phase } = params;
-    const { timeline } = this.props.debate.debateData;
     const childrenWithProps = React.Children.map(children, child =>
       React.cloneElement(child, {
         locale: i18n.locale,
@@ -315,7 +314,7 @@ class Administration extends React.Component {
             <Row>
               <Col xs={12} md={3}>
                 <div className="admin-menu-container">
-                  <Menu debate={debate} i18n={i18n} requestedPhase={phase} />
+                  <Menu timeline={timeline} i18n={i18n} requestedPhase={phase} />
                 </div>
               </Col>
               <Col xs={12} md={8}>
@@ -338,7 +337,7 @@ class Administration extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  debate: state.debate,
+  timeline: state.timeline,
   i18n: state.i18n
 });
 
@@ -439,9 +438,9 @@ export default compose(
     }
   }),
   graphql(VoteSessionQuery, {
-    skip: ({ debate }) => typeof getPhaseId(debate.debateData.timeline, 'voteSession') !== 'string',
-    options: ({ debate, i18n }) => ({
-      variables: { discussionPhaseId: getPhaseId(debate.debateData.timeline, 'voteSession'), lang: i18n.locale }
+    skip: ({ timeline }) => typeof getPhaseId(timeline, 'voteSession') !== 'string',
+    options: ({ timeline, i18n }) => ({
+      variables: { discussionPhaseId: atob(getPhaseId(timeline, 'voteSession')).split(':')[1], lang: i18n.locale }
     }),
     props: ({ data }) => {
       if (data.loading) {

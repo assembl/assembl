@@ -19,6 +19,7 @@ import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
 import { withScreenWidth } from '../../common/screenDimensions';
 
 type Props = {
+  timeline: Timeline,
   client: ApolloClient,
   creatorUserId: string,
   debateData: DebateData,
@@ -53,6 +54,7 @@ class PostActions extends React.Component<Props> {
       client,
       creatorUserId,
       debateData,
+      timeline,
       editable,
       handleEditClick,
       identifier,
@@ -77,7 +79,7 @@ class PostActions extends React.Component<Props> {
     const useSocial = debateData.useSocialMedia;
     let overflowMenu = null;
     const tooltipPlacement = screenWidth >= MEDIUM_SCREEN_WIDTH ? 'left' : 'top';
-    const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, identifier);
+    const isPhaseCompleted = getIfPhaseCompletedByIdentifier(timeline, identifier);
     if (editable && (userCanDeleteThisMessage || userCanEditThisMessage)) {
       overflowMenu = (
         <div className="overflow-action">

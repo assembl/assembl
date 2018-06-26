@@ -427,9 +427,10 @@ class DumbVoteSession extends React.Component<Props, State> {
 }
 
 const mapStateToProps = state => ({
+  timeline: state.timeline,
   debate: state.debate,
   lang: state.i18n.locale,
-  isPhaseCompleted: getIfPhaseCompletedByIdentifier(state.debate.debateData.timeline, 'voteSession')
+  isPhaseCompleted: getIfPhaseCompletedByIdentifier(state.timeline, 'voteSession')
 });
 
 export { DumbVoteSession };
@@ -437,9 +438,12 @@ export { DumbVoteSession };
 export default compose(
   connect(mapStateToProps),
   graphql(VoteSessionQuery, {
-    options: ({ debate, lang }) => ({
-      variables: { discussionPhaseId: getPhaseId(debate.debateData.timeline, 'voteSession'), lang: lang }
-    }),
+    options: ({ timeline, lang }) => {
+      const phaseId = timeline ? getPhaseId(timeline, 'voteSession') : null;
+      return {
+        variables: { discussionPhaseId: phaseId ? atob(phaseId).split(':')[1] : null, lang: lang }
+      };
+    },
     props: ({ data, ownProps }) => {
       const defaultHeaderImage = ownProps.debate.debateData.headerBackgroundUrl || '';
       if (data.loading) {

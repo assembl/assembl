@@ -21,9 +21,9 @@ class ThreadView extends React.Component {
       posts,
       initialRowIndex,
       identifier,
-      debateData
+      timeline
     } = this.props;
-    const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, identifier);
+    const isPhaseCompleted = getIfPhaseCompletedByIdentifier(timeline, identifier);
     return (
       <div className="overflow-x">
         {(!isUserConnected || connectedUserCan(Permissions.ADD_POST)) && !isPhaseCompleted ? (

@@ -32,12 +32,13 @@ class ColumnsView extends React.Component<$FlowFixMeProps> {
       refetchIdea,
       routerParams,
       identifier,
-      debateData
+      debateData,
+      timeline
     } = this.props;
     if (!Array.isArray(messageColumns)) return null;
     const showSynthesis = messageColumns.some(column => !!get(column, 'columnSynthesis.body'));
     const columnsArray = orderPostsByMessageClassifier(messageColumns, posts);
-    const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, identifier);
+    const isPhaseCompleted = getIfPhaseCompletedByIdentifier(timeline, identifier);
     let ColumnsComponent;
     if (this.shouldShowTabs(messageColumns.length)) {
       ColumnsComponent = TabbedColumns;
