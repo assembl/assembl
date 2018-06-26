@@ -317,7 +317,7 @@ class CreatePost(graphene.Mutation):
                     locale = discussion.main_locale
 
                 if subject is not None:
-                    if len(subject) == 0:
+                    if in_reply_to_idea and in_reply_to_idea.message_view_override == u'messageColumns':
                         new_subject = subject
                     else:
                         new_subject = u'Re: ' + restrip_pat.sub('', subject).strip()  # noqa: E501
