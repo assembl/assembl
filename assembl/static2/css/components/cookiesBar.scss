@@ -7,6 +7,7 @@
   width: 100%;
   padding: 10px 30px;
   background-color: $grey0;
+  border-top: 1px solid $grey1;
 
   .cookies-text {
     font-size: $font-size-s;
@@ -20,10 +21,8 @@
 
 .show-cookies-bar {
   opacity: 1;
-  z-index: 1000;
 }
 
 .hide-cookies-bar {
   opacity: 0;
-  z-index: -1;
 }
