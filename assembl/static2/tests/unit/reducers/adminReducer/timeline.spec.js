@@ -18,7 +18,8 @@ describe('Timeline PhasesByIdReducer', () => {
       end: moment('2014-12-31T09:00:00+00:00'),
       isThematicsTable: false,
       order: 1,
-      hasConflictingDates: false
+      hasConflictingDates: false,
+      endIsBeforeStart: false
     }
   });
   it('should return the current state for any other action', () => {
@@ -42,7 +43,8 @@ describe('Timeline PhasesByIdReducer', () => {
         end: moment('2014-12-31T09:00:00+00:00'),
         isThematicsTable: false,
         order: 1,
-        hasConflictingDates: false
+        hasConflictingDates: false,
+        endIsBeforeStart: false
       },
       2: {
         _hasChanged: false,
@@ -55,7 +57,8 @@ describe('Timeline PhasesByIdReducer', () => {
         end: null,
         isThematicsTable: false,
         order: 2,
-        hasConflictingDates: false
+        hasConflictingDates: false,
+        endIsBeforeStart: false
       }
     });
     expect(actual).toEqual(expected);
@@ -75,7 +78,8 @@ describe('Timeline PhasesByIdReducer', () => {
         end: moment('2014-12-31T09:00:00+00:00'),
         isThematicsTable: false,
         order: 1,
-        hasConflictingDates: false
+        hasConflictingDates: false,
+        endIsBeforeStart: false
       }
     });
     expect(actual).toEqual(expected);
@@ -95,7 +99,8 @@ describe('Timeline PhasesByIdReducer', () => {
         end: moment('2014-12-31T09:00:00+00:00'),
         isThematicsTable: false,
         order: 1,
-        hasConflictingDates: false
+        hasConflictingDates: false,
+        endIsBeforeStart: false
       }
     });
     expect(actual).toEqual(expected);
@@ -115,7 +120,8 @@ describe('Timeline PhasesByIdReducer', () => {
         end: moment('2014-12-31T09:00:00+00:00'),
         isThematicsTable: false,
         order: 1,
-        hasConflictingDates: false
+        hasConflictingDates: false,
+        endIsBeforeStart: false
       }
     });
     expect(actual).toEqual(expected);
@@ -135,7 +141,8 @@ describe('Timeline PhasesByIdReducer', () => {
         end: moment('2014-12-31T09:00:00+00:00'),
         isThematicsTable: false,
         order: 1,
-        hasConflictingDates: false
+        hasConflictingDates: false,
+        endIsBeforeStart: false
       }
     });
     expect(actual).toEqual(expected);
@@ -155,7 +162,8 @@ describe('Timeline PhasesByIdReducer', () => {
         end: moment('2023-12-31T09:00:00+00:00'),
         isThematicsTable: false,
         order: 1,
-        hasConflictingDates: false
+        hasConflictingDates: false,
+        endIsBeforeStart: false
       }
     });
     expect(actual).toEqual(expected);
@@ -175,7 +183,8 @@ describe('Timeline PhasesByIdReducer', () => {
         end: moment('2014-12-31T09:00:00+00:00'),
         isThematicsTable: true,
         order: 1,
-        hasConflictingDates: false
+        hasConflictingDates: false,
+        endIsBeforeStart: false
       }
     });
     expect(actual).toEqual(expected);
@@ -191,7 +200,8 @@ describe('Timeline PhasesByIdReducer', () => {
           end: moment('2023-12-31T09:00:00+00:00'),
           isThematicsTable: false,
           order: 1,
-          hasConflictingDates: false
+          hasConflictingDates: false,
+          endIsBeforeStart: false
         }
       ],
       type: actionTypes.UPDATE_PHASES
@@ -209,7 +219,8 @@ describe('Timeline PhasesByIdReducer', () => {
         end: moment('2023-12-31T09:00:00+00:00'),
         isThematicsTable: false,
         order: 1,
-        hasConflictingDates: false
+        hasConflictingDates: false,
+        endIsBeforeStart: false
       }
     });
     expect(actual).toEqual(expected);

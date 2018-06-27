@@ -28,7 +28,8 @@ const emptyPhase = Map({
   start: null,
   end: null,
   isThematicsTable: false,
-  hasConflictingDates: false
+  hasConflictingDates: false,
+  endIsBeforeStart: false
 });
 
 const getHasConflictingDates = (phases, id, start, end) => {
@@ -84,7 +85,8 @@ export const phasesById: PhasesByIdReducer = (state: PhasesByIdState = Map(), ac
         isThematicsTable: isThematicsTable || false, // default to false until we have the interface to set a thematicstable
         id: id,
         order: order,
-        hasConflictingDates: getHasConflictingDates(action.phases, id, start, end) || false
+        hasConflictingDates: getHasConflictingDates(action.phases, id, start, end) || false,
+        endIsBeforeStart: end.isBefore(start)
       });
 
       newState = newState.set(id, phaseInfo);

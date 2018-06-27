@@ -8,7 +8,6 @@ import { SplitButton, MenuItem } from 'react-bootstrap';
 import { Link } from 'react-router';
 import { type moment } from 'moment';
 import { modulesTranslationKeys } from '../../../constants';
-import { displayAlert } from '../../../utils/utilityManager';
 import { getDiscussionSlug } from '../../../utils/globalFunctions';
 import { get } from '../../../utils/routeMap';
 import { updatePhaseIdentifier, updateStartDate, updateEndDate } from '../../../actions/adminActions/timeline';
@@ -38,21 +37,6 @@ export const DumbPhaseForm = ({
   hasConflictingDates,
   locale
 }: PhaseFormProps) => {
-  const onStartDateChange = (newStartDate) => {
-    if (newStartDate.isAfter(end)) {
-      displayAlert('danger', I18n.t('administration.timelineAdmin.startIsAfterEnd'));
-    } else {
-      handleStartDateChange(newStartDate);
-    }
-  };
-  const onEndDateChange = (newEndDate) => {
-    if (!newEndDate.isAfter(start)) {
-      displayAlert('danger', I18n.t('administration.timelineAdmin.endIsBeforeStart'));
-    } else {
-      handleEndDateChange(newEndDate);
-    }
-  };
-
   const startDatePickerPlaceholder = I18n.t('administration.timelineAdmin.selectStart', { count: phaseNumber });
   const endDatePickerPlaceholder = I18n.t('administration.timelineAdmin.selectEnd', { count: phaseNumber });
 
@@ -74,7 +58,7 @@ export const DumbPhaseForm = ({
             placeholderText={startDatePickerPlaceholder}
             selected={start}
             id="start-datepicker"
-            onChange={onStartDateChange}
+            onChange={handleStartDateChange}
             showTimeSelect
             timeFormat="HH:mm"
             dateFormat="LLL"
@@ -100,7 +84,7 @@ export const DumbPhaseForm = ({
             placeholderText={endDatePickerPlaceholder}
             id="end-datepicker"
             selected={end}
-            onChange={onEndDateChange}
+            onChange={handleEndDateChange}
             showTimeSelect
             timeFormat="HH:mm"
             dateFormat="LLL"

@@ -53,14 +53,19 @@ const createVariablesForDeleteSectionMutation = section => ({ sectionId: section
 
 const createVariablesForDeleteTextFieldMutation = textField => ({ id: textField.id });
 
-const createVariablesForDiscussionPhaseMutation = phase => ({
-  identifier: phase.identifier,
-  isThematicsTable: phase.isThematicsTable,
-  start: moment(phase.start, moment.ISO_8601),
-  end: moment(phase.end, moment.ISO_8601),
-  order: phase.order,
-  titleEntries: phase.titleEntries
-});
+const createVariablesForDiscussionPhaseMutation = (phase) => {
+  if (phase.endIsBeforeStart) {
+    displayAlert('danger', I18n.t('administration.timelineAdmin.endIsBeforeStart'));
+  }
+  return {
+    identifier: phase.identifier,
+    isThematicsTable: phase.isThematicsTable,
+    start: moment(phase.start, moment.ISO_8601),
+    end: moment(phase.end, moment.ISO_8601),
+    order: phase.order,
+    titleEntries: phase.titleEntries
+  };
+};
 
 const createVariablesForDeleteDiscussionPhaseMutation = phase => ({
   id: phase.id
