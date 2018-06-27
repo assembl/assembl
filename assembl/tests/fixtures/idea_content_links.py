@@ -184,6 +184,50 @@ def extract_with_range_in_reply_post_1(
 
 
 @pytest.fixture(scope="function")
+def extract_with_range_submitted_in_reply_post_1(
+        request, discussion_admin_user, reply_post_1,
+        subidea_1_1, discussion, test_session):
+    """ Create an extract of a given range of text in a message """
+
+    from assembl.models import Extract, TextFragmentIdentifier, ExtractStates
+
+    extract_body = "variable-temperature spectra indicate the onset of oxide-ion motion involving the interstitials at 130 °C, which is linked to an orthorhombic−tetragonal phase transition. For the V-doped phases, an oxide-ion conduction mechanism is observed that involves oxygen exchange between the Bi-O sublattice and rapidly rotating VO4 tetrahedral units. The more poorly conducting P-doped phase exhibits only vacancy conduction with no evidence of sublattice exchange, a result ascribed to the differing propensities of the dopants to undergo variable oxygen coordination. So I think it would be a very bad idea to allow hot beverages in coworking spaces."
+    xpathStart = u"//div[@id='message-body-local:Content/%s']/" % reply_post_1.id
+    xpathEnd = xpathStart
+    offsetStart = 314
+    offsetEnd = 958
+
+    new_extract = Extract(
+        creator_id=discussion_admin_user.id,
+        owner_id=discussion_admin_user.id,
+        discussion_id=discussion.id,
+        body=extract_body,
+        important=True,
+        content=reply_post_1,
+        extract_state=ExtractStates.SUBMITTED.value
+    )
+    test_session.add(new_extract)
+
+    new_range = TextFragmentIdentifier(
+        extract=new_extract,
+        xpath_start=xpathStart,
+        offset_start=offsetStart,
+        xpath_end=xpathEnd,
+        offset_end=offsetEnd
+    )
+    test_session.add(new_range)
+    test_session.flush()
+
+    def fin():
+        print "finalizer extract_with_range_in_reply_post_1"
+        test_session.delete(new_range)
+        test_session.delete(new_extract)
+        test_session.flush()
+    request.addfinalizer(fin)
+
+    return new_extract
+
+@pytest.fixture(scope="function")
 def jack_layton_linked_discussion(
         request, test_session, jack_layton_mailbox, subidea_1, subidea_1_1,
         subidea_1_1_1, subidea_1_1_1_1, subidea_1_1_1_1_1, subidea_1_1_1_1_2,

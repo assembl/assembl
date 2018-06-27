@@ -1,6 +1,8 @@
 import graphene
+from graphene.pyutils.enum import Enum as PyEnum
 from graphene.relay import Node
 from graphene_sqlalchemy import SQLAlchemyObjectType
+from pyramid.security import Everyone
 
 import assembl.graphql.docstrings as docs
 from assembl.auth import CrudPermissions
@@ -10,6 +12,10 @@ from .permissions_helpers import require_instance_permission
 from .types import SecureObjectType, SQLAlchemyInterface
 from .utils import abort_transaction_on_exception, DateTime
 from .user import AgentProfile
+
+extract_states_enum = PyEnum(
+    'ExtractStates', [(k.value, k.value) for k in models.ExtractStates.__members__.values()])
+ExtractStates = graphene.Enum.from_enum(extract_states_enum)
 
 
 class TextFragmentIdentifier(SecureObjectType, SQLAlchemyObjectType):
@@ -45,10 +51,14 @@ class Extract(SecureObjectType, SQLAlchemyObjectType):
     creation_date = DateTime(description=docs.ExtractInterface.creation_date)
     creator_id = graphene.Int(description=docs.ExtractInterface.creator_id)
     creator = graphene.Field(lambda: AgentProfile, description=docs.ExtractInterface.creator)
+    extract_state = graphene.Field(type=ExtractStates, description=docs.ExtractInterface.extract_state)
 
     def resolve_creator(self, args, context, info):
         if self.creator_id is not None:
             return models.AgentProfile.get(self.creator_id)
+
+    def resolve_extract_state(self, args, context, info):
+        return self.extract_state
 
 
 class UpdateExtract(graphene.Mutation):
@@ -108,3 +118,24 @@ class DeleteExtract(graphene.Mutation):
         extract.db.flush()
 
         return DeleteExtract(success=True)
+
+
+class ConfirmExtract(graphene.Mutation):
+    class Input:
+        extract_id = graphene.ID(required=True)
+
+    success = graphene.Boolean()
+
+    @staticmethod
+    @abort_transaction_on_exception
+    def mutate(root, args, context, info):
+        extract_id = args.get('extract_id')
+        extract_id = int(Node.from_global_id(extract_id)[1])
+        extract = models.Extract.get(extract_id)
+        require_instance_permission(CrudPermissions.UPDATE, extract, context)
+        user_id = context.authenticated_userid or Everyone
+        # Publish the extract
+        extract.extract_state = models.ExtractStates.PUBLISHED.value
+        extract.owner_id = user_id
+        extract.db.flush()
+        return ConfirmExtract(success=True)

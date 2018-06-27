@@ -2830,3 +2830,44 @@ def test_update_discussion_landing_page_image_fields(graphql_request, graphql_re
     assert res_discussion['titleEntries'][0]['value'] == u'My title'
     assert res_discussion['subtitleEntries'][0]['value'] == u'My subtitle'
     assert res_discussion['buttonLabelEntries'][0]['value'] == u'My button label'
+
+
+def test_get_all_posts(graphql_request, proposition_id):
+    from assembl.graphql.schema import Schema as schema
+    res = schema.execute(
+        u"""query Posts($contentLocale: String!, $startDate: String, $endDate: String) {
+              posts(startDate: $startDate, endDate: $endDate) {
+                edges {
+                  node {
+                    ... on Post {
+                      id
+                      dbId
+                      discussionId
+                      type
+                      creationDate
+                      publicationState
+                      subject(lang: $contentLocale)
+                      body(lang: $contentLocale)
+                      parentId
+                      creator {
+                        id
+                      }
+                      indirectIdeaContentLinks {
+                        ideaId
+                        postId
+                      }
+                    }
+                  }
+                }
+              }
+            }
+        """,
+        context_value=graphql_request,
+        variable_values={
+            "contentLocale": "fr"
+        })
+    assert res.data
+    assert len(res.data['posts']['edges']) == 1
+    first_post = res.data['posts']['edges'][0]['node']
+    assert proposition_id == first_post['id']
+    return res

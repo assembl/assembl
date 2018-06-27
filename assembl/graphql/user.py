@@ -38,6 +38,7 @@ class AgentProfile(SecureObjectType, SQLAlchemyObjectType):
     creation_date = DateTime(description=docs.AgentProfile.creation_date)  # creation_date only exists on User, not AgentProfile
     has_password = graphene.Boolean(description=docs.AgentProfile.has_password)
     is_deleted = graphene.Boolean(description=docs.AgentProfile.is_deleted)
+    is_machine = graphene.Boolean(description=docs.AgentProfile.is_machine)
 
     def resolve_is_deleted(self, args, context, info):
         return self.is_deleted or False
@@ -71,6 +72,9 @@ class AgentProfile(SecureObjectType, SQLAlchemyObjectType):
 
     def resolve_has_password(self, args, context, info):
         return self.password is not None
+
+    def resolve_is_machine(self, args, context, info):
+        return getattr(self, 'is_machine', False)
 
 
 class UpdateUser(graphene.Mutation):

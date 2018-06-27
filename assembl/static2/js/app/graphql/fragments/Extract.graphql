@@ -7,6 +7,7 @@ fragment Extract on Extract {
   body
   extractNature
   extractAction
+  extractState
   textFragmentIdentifiers {
     xpathStart
     xpathEnd

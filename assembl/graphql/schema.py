@@ -32,7 +32,7 @@ from assembl.graphql.post import (AddPostAttachment, CreatePost, DeletePost,
                                   DeletePostAttachment, UndeletePost,
                                   UpdatePost, AddPostExtract, PostConnection,
                                   AddPostsExtract)
-from assembl.graphql.extract import (UpdateExtract, DeleteExtract)
+from assembl.graphql.extract import (UpdateExtract, DeleteExtract, ConfirmExtract)
 from assembl.graphql.resource import (CreateResource, DeleteResource, Resource,
                                       UpdateResource)
 from assembl.graphql.section import (CreateSection, DeleteSection, Section,
@@ -482,13 +482,13 @@ class Mutations(graphene.ObjectType):
     update_extract = UpdateExtract.Field(description=docs.UpdateExtract.__doc__)
     delete_extract = DeleteExtract.Field(description=docs.DeleteExtract.__doc__)
     create_text_field = CreateTextField.Field(description=docs.CreateTextField.__doc__)
+    confirm_extract = ConfirmExtract.Field(description=docs.ConfirmExtract.__doc__)
     update_text_field = UpdateTextField.Field(description=docs.UpdateTextField.__doc__)
     delete_text_field = DeleteTextField.Field(description=docs.DeleteTextField.__doc__)
     update_profile_fields = UpdateProfileFields.Field(description=docs.UpdateProfileFields.__doc__)
     create_discussion_phase = CreateDiscussionPhase.Field(description=docs.CreateDiscussionPhase.__doc__)
     update_discussion_phase = UpdateDiscussionPhase.Field(description=docs.CreateDiscussionPhase.__doc__)
     delete_discussion_phase = DeleteDiscussionPhase.Field(description=docs.DeleteDiscussionPhase.__doc__)
-
 
 Schema = graphene.Schema(query=Query, mutation=Mutations)
 

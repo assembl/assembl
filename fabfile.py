@@ -521,7 +521,8 @@ def app_reload():
             venvcmd("supervisorctl update")
             processes = filter_autostart_processes([
                 "celery_imap", "changes_router", "celery_notification_dispatch",
-                "celery_notify", "celery_notify_beat", "source_reader", "urlmetadata"])
+                "celery_notify", "celery_notify_beat", "source_reader", "urlmetadata",
+                "bluenove_actionable"])
             venvcmd("supervisorctl restart " + " ".join(processes))
             if env.uses_uwsgi:
                 venvcmd("supervisorctl restart prod:uwsgi")
@@ -592,6 +593,14 @@ def build_virtualenv():
         return
     run('python2 -mvirtualenv --no-setuptools %(venvpath)s' % env)
     # create the virtualenv with --no-setuptools to avoid downgrading setuptools that may fail
+    if not exists("%(projectpath)s/../bluenove-actionable/" % env):
+        print cyan("Cloning git repository")
+        with cd("%(projectpath)s/.." % env):
+            run('git clone git://github.com/bluenove/bluenove-actionable.git')
+
+        with cd("%(projectpath)s/../bluenove-actionable/" % env):
+            run('docker-compose build')
+
     if env.mac:
         # Virtualenv does not reuse distutils.cfg from the homebrew python,
         # and that sometimes precludes building python modules.
@@ -843,6 +852,13 @@ def updatemaincode(backup=False):
                 run('git pull')
 
             venvcmd_py3('pip install -r ../url_metadata/requirements.txt')
+
+        path = join(env.projectpath, '..', 'bluenove-actionable')
+        if exists(path):
+            print(cyan('Updating bluenove-actionable Git repository'))
+            with cd(path):
+                run('git pull')
+                run('docker kill bluenoveact && docker-compose build')
 
 
 @task

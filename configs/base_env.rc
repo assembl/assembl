@@ -102,3 +102,4 @@ supervisor__autostart_metrics_server = false
 supervisor__autostart_edgesense_server = false
 supervisor__autostart_elasticsearch_server = true
 supervisor__autostart_urlmetadata = true
+supervisor__autostart_bluenove_actionable = true

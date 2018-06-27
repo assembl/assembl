@@ -17,6 +17,7 @@ from sqlalchemy import (
     DateTime,
     ForeignKey,
     event,
+    Enum as SAEnum
 )
 
 from . import DiscussionBoundBase
@@ -289,6 +290,17 @@ class ExtractActionVocabulary(AbstractEnumVocabulary):
 # LangString.setup_ownership_load_event(ExtractActionVocabulary, ['name'])
 
 
+# Those states lists need to be kept in sync with frontend code
+# static2/js/app/constants.js
+class ExtractStates(Enum):
+
+    SUBMITTED = "SUBMITTED"  # For the Bigdatext (a machine user)
+    PUBLISHED = "PUBLISHED"  # For the human catcher
+
+
+extract_states_identifiers = [t.value for t in ExtractStates.__members__.values()]
+
+
 class Extract(IdeaContentPositiveLink):
     """
     An extracted part of a Content. A quotation to be referenced by an `Idea`.
@@ -324,6 +336,12 @@ class Extract(IdeaContentPositiveLink):
     extract_nature_term = relationship(ExtractNatureVocabulary)
 
     extract_action_term = relationship(ExtractActionVocabulary)
+
+    extract_state = Column(
+        SAEnum(*extract_states_identifiers, name='extract_states'),
+        nullable=False,
+        default=ExtractStates.PUBLISHED.value,
+        server_default=ExtractStates.PUBLISHED.value)
 
     @property
     def extract_nature_name(self):

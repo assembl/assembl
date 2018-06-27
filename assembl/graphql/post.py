@@ -16,6 +16,7 @@ from assembl.auth.util import get_permissions
 from assembl.lib.clean_input import sanitize_html, sanitize_text
 from assembl.models.auth import (LanguagePreferenceCollection,
                                  LanguagePreferenceCollectionWithDefault)
+from assembl.models.idea_content_link import ExtractStates
 from jwzthreading import restrip_pat
 
 import assembl.graphql.docstrings as docs
@@ -721,9 +722,12 @@ class AddPostExtract(graphene.Mutation):
         return AddPostExtract(post=post)
 
 
+# Used by the Bigdatext app
 class AddPostsExtract(graphene.Mutation):
     class Input:
         extracts = graphene.List(PostExtractEntryInput, required=True)
+        extract_nature = graphene.String()
+        extract_state = graphene.String()
 
     status = graphene.Boolean()
 
@@ -733,20 +737,28 @@ class AddPostsExtract(graphene.Mutation):
         status = False
         require_cls_permission(CrudPermissions.CREATE, models.Extract, context)
         discussion_id = context.matchdict['discussion_id']
+        # Retrieve the user id
         user_id = context.authenticated_userid or Everyone
         extracts = args.get('extracts')
         status = True
+        # Add all of extracts
         for extract in extracts:
             post_id = extract.get('post_id')
             post_id = int(Node.from_global_id(post_id)[1])
             post = models.Post.get(post_id)
+            extract_nature = getattr(
+                models.ExtractNatureVocabulary.Enum, args.get('extract_nature', ''), None)
+            extract_state = getattr(
+                ExtractStates, args.get('extract_state', ''), None)
             new_extract = models.Extract(
                 creator_id=user_id,
                 owner_id=user_id,
                 discussion_id=discussion_id,
                 body=extract.get('body'),
                 important=extract.get('important', False),
-                content=post
+                content=post,
+                extract_nature=extract_nature,
+                extract_state=extract_state.value
             )
             post.db.add(new_extract)
             range = models.TextFragmentIdentifier(
