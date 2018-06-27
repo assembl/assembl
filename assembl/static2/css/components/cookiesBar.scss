@@ -1,16 +1,25 @@
 .cookies-bar {
-  border: none;
   position: fixed;
   left: 0;
   bottom: 0;
   transition: opacity 1s ease-in-out, z-index 1s ease-in-out;
   width: 100%;
   padding: 10px 30px;
-  background-color: $grey0;
-  border-top: 1px solid $grey1;
+  background-color: $first-color-light;
+  display: flex;
+  align-items: center;
 
   .cookies-text {
     font-size: $font-size-s;
+    width: 60%;
+  }
+
+  .cookies-buttons-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 40%;
+    margin-bottom: 10px;
   }
 
   .cookies-button {
@@ -20,7 +29,7 @@
 }
 
 .show-cookies-bar {
-  opacity: 0.9;
+  opacity: 1;
   z-index: 1000;
 }
 

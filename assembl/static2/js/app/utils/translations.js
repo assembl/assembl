@@ -18,7 +18,7 @@ const Translations = {
     cookiesBar: {
       cookiesNotice: "Assembl utilise les cookies afin de vous offrir la meilleure expérience possible. Pour utiliser Assembl, vous devez accepter la politique d'utilisation des cookies du débat.",
       accept: "J'accepte",
-      seeCookiesPolicy: "Voir la politique d'utilisation des cookies"
+      seeCookiesPolicy: "En savoir plus"
     },
     introduction: "Introduction",
     conclusion: "Conclusion",
@@ -795,7 +795,7 @@ const Translations = {
     cookiesBar: {
       cookiesNotice: "Assembl uses cookies to offer you the best possible experience. To use Assembl, you have to agree to the cookies policy of the debate.",
       accept: "I agree",
-      seeCookiesPolicy: "See the cookies policy"
+      seeCookiesPolicy: "See more"
     },
     redirectToV1:
       "You will be redirected to the %{phaseName} phase in a few seconds. Assembl is being improved, please excuse us for the interface change. If nothing happens, click on the button.",

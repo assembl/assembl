@@ -39,7 +39,7 @@ exports[`CookiesBar component should render a bar with 2 buttons to accept the c
           className={undefined}
           style={undefined}
         >
-          See the cookies policy
+          See more
         </span>
       </button>
     </a>
