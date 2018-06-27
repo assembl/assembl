@@ -117,11 +117,12 @@ export class DumbTimelineForm extends React.Component<TimelineFormProps, Timelin
 
 const mapStateToProps = (state) => {
   const { phasesById } = state.admin.timeline;
-  const phasesId = Object.keys(phasesById.toJS());
+  const filteredPhases = phasesById.sortBy(phase => phase.get('order')).filter(phase => !phase.get('_toDelete'));
+  const filteredPhasesId = Object.keys(filteredPhases.toJS());
   return {
     editLocale: state.admin.editLocale,
     lang: state.i18n.locale,
-    phases: phasesId.filter(id => !phasesById.get(id).get('_toDelete'))
+    phases: filteredPhasesId
   };
 };
 
