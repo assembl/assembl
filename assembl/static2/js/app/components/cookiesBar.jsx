@@ -8,13 +8,15 @@ import { getCookieItem, setCookieItem, getDiscussionSlug } from '../utils/global
 import { get } from '../utils/routeMap';
 
 type State = {
-  hide: ?boolean | string
+  hide: boolean
 };
 
-class CookiesBar extends React.Component<*, State> {
-  constructor(props: *) {
+type Props = {};
+
+class CookiesBar extends React.Component<Props, State> {
+  constructor(props: Props) {
     super(props);
-    this.state = { hide: getCookieItem('_ACCEPTED_COOKIES_') };
+    this.state = { hide: getCookieItem('_ACCEPTED_COOKIES_') === 'true' };
   }
 
   acceptCookies = () => {
@@ -33,11 +35,11 @@ class CookiesBar extends React.Component<*, State> {
       >
         <Translate value="cookiesBar.cookiesNotice" className="cookies-text" />
         <div className="cookies-buttons-container">
-          <Button onClick={this.acceptCookies} className="button-submit button-dark cookies-button" key="accept-cookies">
+          <Button onClick={this.acceptCookies} className="button-submit button-dark cookies-button" >
             <Translate value="cookiesBar.accept" />
           </Button>
           <Link to={get('cookiesPolicy', { slug: slug })}>
-            <Button key="see-cookies-policy" className="button-submit button-dark cookies-button">
+            <Button className="button-submit button-dark cookies-button">
               <Translate value="cookiesBar.seeCookiesPolicy" />
             </Button>
           </Link>
