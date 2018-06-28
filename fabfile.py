@@ -2280,3 +2280,12 @@ def build_translation_json_files():
     execute(compile_messages)
     # Version2
     execute(compile_new_messages)
+
+
+@task
+def increase_socket_buffer_size(size=1028):
+    """For performance tuning of Ubuntu servers in order to accomodate higher loads at peak"""
+    # Increase the size of the buffer to 1028 connections
+    # This number was picked based on live servers. Increase when needed
+    # This must also be accompanied with an increase of the uwsgi conenction listen field in the ini file
+    sudo('sysctl -w net.core.somaxconn=%s' % size)
