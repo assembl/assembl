@@ -23,7 +23,7 @@ const emptyPhase = Map({
   _hasChanged: false,
   _isNew: true,
   _toDelete: false,
-  identifier: '',
+  identifier: null,
   titleEntries: List(),
   start: null,
   end: null,
@@ -36,11 +36,11 @@ const getHasConflictingDates = (phases, id, start, end) => {
   const phaseIndex = phases.map(p => p.id).indexOf(id);
   const previousPhase = phases[phaseIndex - 1];
   const nextPhase = phases[phaseIndex + 1];
-  return start && previousPhase && start.isBefore(previousPhase.end) || end && nextPhase && end.isAfter(nextPhase.start);
+  return (start && previousPhase && start.isBefore(previousPhase.end)) || (end && nextPhase && end.isAfter(nextPhase.start));
 };
 
 type PhasesByIdState = Map<string, Map>;
-type PhasesByIdReducer = (PhasesByIdState, ReduxAction<Action>) => PhasesByIdState
+type PhasesByIdReducer = (PhasesByIdState, ReduxAction<Action>) => PhasesByIdState;
 export const phasesById: PhasesByIdReducer = (state: PhasesByIdState = Map(), action: ReduxAction<Action>) => {
   switch (action.type) {
   case CREATE_PHASE:
@@ -65,15 +65,7 @@ export const phasesById: PhasesByIdReducer = (state: PhasesByIdState = Map(), ac
     return moveItemDown(state, action.id);
   case UPDATE_PHASES: {
     let newState = Map();
-    action.phases.forEach(({
-      identifier,
-      titleEntries,
-      start,
-      end,
-      id,
-      isThematicsTable,
-      order
-    }) => {
+    action.phases.forEach(({ identifier, titleEntries, start, end, id, isThematicsTable, order }) => {
       const phaseInfo = Map({
         _hasChanged: false,
         _isNew: false,

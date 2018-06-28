@@ -40,10 +40,9 @@ export const DumbPhaseForm = ({
   const startDatePickerPlaceholder = I18n.t('administration.timelineAdmin.selectStart', { count: phaseNumber });
   const endDatePickerPlaceholder = I18n.t('administration.timelineAdmin.selectEnd', { count: phaseNumber });
 
-
-  const splitButtonTitle = identifier ?
-    I18n.t(`administration.modules.${identifier}`) :
-    I18n.t('administration.timelineAdmin.singleModule');
+  const splitButtonTitle = identifier
+    ? I18n.t(`administration.modules.${identifier}`)
+    : I18n.t('administration.timelineAdmin.singleModule');
 
   const slug = { slug: getDiscussionSlug() };
 
@@ -70,10 +69,11 @@ export const DumbPhaseForm = ({
             <span className="assembl-icon-schedule grey" />
           </div>
         </label>
-        {hasConflictingDates &&
+        {hasConflictingDates && (
           <div className="warning-label">
             <Translate value="administration.timelineAdmin.warningLabel" />
-          </div>}
+          </div>
+        )}
       </div>
       <div className="date-picker-field">
         <div className="date-picker-type">
@@ -96,10 +96,11 @@ export const DumbPhaseForm = ({
             <span className="assembl-icon-schedule grey" />
           </div>
         </label>
-        {hasConflictingDates &&
+        {hasConflictingDates && (
           <div className="warning-label">
             <Translate value="administration.timelineAdmin.warningLabel" />
-          </div>}
+          </div>
+        )}
       </div>
       <div className="module-selection-text">
         <Translate value="administration.timelineAdmin.phaseModule" />

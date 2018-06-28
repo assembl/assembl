@@ -51,7 +51,7 @@ describe('Timeline PhasesByIdReducer', () => {
         _isNew: true,
         _toDelete: false,
         id: '2',
-        identifier: '',
+        identifier: null,
         titleEntries: List(),
         start: null,
         end: null,
