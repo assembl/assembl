@@ -137,5 +137,6 @@ class ConfirmExtract(graphene.Mutation):
         # Publish the extract
         extract.extract_state = models.ExtractStates.PUBLISHED.value
         extract.owner_id = user_id
+        extract.creator_id = user_id
         extract.db.flush()
         return ConfirmExtract(success=True)
