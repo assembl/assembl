@@ -47,6 +47,7 @@ from assembl.graphql.vote_session import (
     CreateProposal, UpdateProposal, DeleteProposal
 )
 from assembl.graphql.utils import get_fields, get_root_thematic_for_phase
+import assembl.graphql.docstrings as docs
 from assembl.lib.locale import strip_country
 from assembl.lib.sqla_types import EmailString
 from assembl.models.action import SentimentOfPost
@@ -70,36 +71,46 @@ log = logging.getLogger('assembl')
 # manually.
 
 class Query(graphene.ObjectType):
-    node = Node.Field()
-    root_idea = graphene.Field(IdeaUnion, identifier=graphene.String())
-    ideas = graphene.List(Idea, identifier=graphene.String(required=True))
+    node = Node.Field(description=docs.Schema.node)
+    root_idea = graphene.Field(IdeaUnion, identifier=graphene.String(), description=docs.Schema.root_idea)
+    ideas = graphene.List(Idea, identifier=graphene.String(required=True), description=docs.Schema.ideas)
     thematics = graphene.List(
-        Thematic, identifier=graphene.String(required=True))
-    syntheses = graphene.List(Synthesis)
-    num_participants = graphene.Int()
-    discussion_preferences = graphene.Field(DiscussionPreferences)
-    default_preferences = graphene.Field(DiscussionPreferences)
-    locales = graphene.List(Locale, lang=graphene.String(required=True))
-    total_sentiments = graphene.Int()
-    has_syntheses = graphene.Boolean()
-    vote_session = graphene.Field(VoteSession, discussion_phase_id=graphene.Int(required=True))
-    resources = graphene.List(Resource)
-    resources_center = graphene.Field(lambda: ResourcesCenter)
-    has_resources_center = graphene.Boolean()
-    sections = graphene.List(Section)
-    legal_contents = graphene.Field(lambda: LegalContents)
-    has_legal_notice = graphene.Boolean(lang=graphene.String(required=True))
+        Thematic, identifier=graphene.String(required=True), description=docs.Schema.thematics)
+    syntheses = graphene.List(Synthesis, description=docs.Schema.syntheses)
+    num_participants = graphene.Int(description=docs.Schema.num_participants)
+    discussion_preferences = graphene.Field(DiscussionPreferences, description=docs.Schema.discussion_preferences)
+    default_preferences = graphene.Field(DiscussionPreferences, description=docs.Schema.default_preferences)
+    locales = graphene.List(
+        Locale,
+        lang=graphene.String(required=True, description=docs.Default.required_language_input),
+        description=docs.Schema.locales)
+    total_sentiments = graphene.Int(description=docs.Schema.total_sentiments)
+    has_syntheses = graphene.Boolean(description=docs.Schema.has_syntheses)
+    vote_session = graphene.Field(VoteSession, discussion_phase_id=graphene.Int(required=True), description=docs.Schema.vote_session)
+    resources = graphene.List(Resource, description=docs.Schema.resources)
+    resources_center = graphene.Field(lambda: ResourcesCenter, description=docs.Schema.resources_center)
+    has_resources_center = graphene.Boolean(description=docs.Schema.has_resources_center)
+    sections = graphene.List(Section, description=docs.Schema.sections)
+    legal_contents = graphene.Field(lambda: LegalContents, description=docs.Schema.legal_contents)
+    has_legal_notice = graphene.Boolean(
+        lang=graphene.String(required=True, description=docs.Default.required_language_input),
+        description=docs.Schema.has_legal_notice)
     has_terms_and_conditions = graphene.Boolean(
-        lang=graphene.String(required=True))
-    has_cookies_policy = graphene.Boolean(lang=graphene.String(required=True))
-    has_privacy_policy = graphene.Boolean(lang=graphene.String(required=True))
-    visits_analytics = graphene.Field(lambda: VisitsAnalytics)
-    discussion = graphene.Field(Discussion)
-    landing_page_module_types = graphene.List(LandingPageModuleType)
-    landing_page_modules = graphene.List(LandingPageModule)
-    text_fields = graphene.List(ConfigurableFieldUnion)
-    profile_fields = graphene.List(ProfileField)
-    timeline = graphene.List(DiscussionPhase)
+        lang=graphene.String(required=True, description=docs.Default.required_language_input),
+        description=docs.Schema.has_terms_and_conditions)
+    has_cookies_policy = graphene.Boolean(
+        lang=graphene.String(required=True, description=docs.Default.required_language_input),
+        description=docs.Schema.has_cookies_policy)
+    has_privacy_policy = graphene.Boolean(
+        lang=graphene.String(required=True, description=docs.Default.required_language_input),
+        description=docs.Schema.has_privacy_policy)
+    visits_analytics = graphene.Field(lambda: VisitsAnalytics, description=docs.Schema.visits_analytics)
+    discussion = graphene.Field(Discussion, description=docs.Schema.discussion)
+    landing_page_module_types = graphene.List(LandingPageModuleType, description=docs.Schema.landing_page_module_types)
+    landing_page_modules = graphene.List(LandingPageModule, description=docs.Schema.landing_page_modules)
+    text_fields = graphene.List(ConfigurableFieldUnion, description=docs.Schema.text_fields)
+    profile_fields = graphene.List(ProfileField, description=docs.Schema.profile_fields)
+    timeline = graphene.List(DiscussionPhase, description=docs.Schema.timeline)
 
     def resolve_resources(self, args, context, info):
         model = models.Resource
