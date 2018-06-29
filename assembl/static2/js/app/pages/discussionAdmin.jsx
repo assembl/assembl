@@ -55,7 +55,7 @@ const createVariablesForDeleteTextFieldMutation = textField => ({ id: textField.
 
 const createVariablesForDiscussionPhaseMutation = (phase) => {
   if (phase.endIsBeforeStart) {
-    displayAlert('danger', I18n.t('administration.timelineAdmin.endIsBeforeStart'));
+    return displayAlert('danger', I18n.t('administration.timelineAdmin.endIsBeforeStart'));
   }
   return {
     identifier: phase.identifier,
@@ -236,7 +236,6 @@ class DiscussionAdmin extends React.Component<Props, State> {
         lang: editLocale
       });
 
-
       runSerial(mutationPromises)
         .then(() => {
           this.setState({ refetching: true }, () => {
@@ -277,7 +276,6 @@ class DiscussionAdmin extends React.Component<Props, State> {
           displayAlert('danger', `${error}`, false, 30000);
         });
     }
-
 
     if (profileOptionsHasChanged) {
       const mutationsPromises = getMutationsPromises({

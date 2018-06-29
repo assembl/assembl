@@ -53,10 +53,22 @@ export const phasesById: PhasesByIdReducer = (state: PhasesByIdState = Map(), ac
       .setIn([action.id, '_hasChanged'], true);
   case UPDATE_PHASE_IDENTIFIER:
     return state.setIn([action.id, 'identifier'], action.value).setIn([action.id, '_hasChanged'], true);
-  case UPDATE_PHASE_START:
-    return state.setIn([action.id, 'start'], action.value).setIn([action.id, '_hasChanged'], true);
-  case UPDATE_PHASE_END:
-    return state.setIn([action.id, 'end'], action.value).setIn([action.id, '_hasChanged'], true);
+  case UPDATE_PHASE_START: {
+    const end = state.getIn([action.id, 'end']);
+    const newStart = action.value;
+    return state
+      .setIn([action.id, 'start'], newStart)
+      .setIn([action.id, 'endIsBeforeStart'], end.isBefore(newStart))
+      .setIn([action.id, '_hasChanged'], true);
+  }
+  case UPDATE_PHASE_END: {
+    const start = state.getIn([action.id, 'start']);
+    const newEnd = action.value;
+    return state
+      .setIn([action.id, 'end'], newEnd)
+      .setIn([action.id, 'endIsBeforeStart'], newEnd.isBefore(start))
+      .setIn([action.id, '_hasChanged'], true);
+  }
   case UPDATE_IS_THEMATICS_TABLE:
     return state.setIn([action.id, 'isThematicsTable'], action.value).setIn([action.id, '_hasChanged'], true);
   case MOVE_PHASE_UP:
