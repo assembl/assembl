@@ -4,40 +4,6 @@ import { fromJS, List } from 'immutable';
 import * as actionTypes from '../../../../js/app/actions/actionTypes';
 import * as reducers from '../../../../js/app/reducers/adminReducer/timeline';
 
-describe('Timeline phasesInOrder reducer', () => {
-  const { phasesInOrder } = reducers;
-  it('should return the initial state', () => {
-    const action = {};
-    const actual = phasesInOrder(undefined, action);
-    const expected = List();
-    expect(actual).toEqual(expected);
-  });
-  it('should return the current state for other actions', () => {
-    const action = { type: 'HELLO' };
-    const oldState = List.of('123', '456', '789');
-    const actual = phasesInOrder(oldState, action);
-    const expected = oldState;
-    expect(actual).toEqual(expected);
-  });
-  it('should handle CREATE_PHASE', () => {
-    const action = { id: '999', type: actionTypes.CREATE_PHASE };
-    const oldState = List.of('123', '456', '789');
-    const actual = phasesInOrder(oldState, action);
-    const expected = List.of('123', '456', '789', '999');
-    expect(actual).toEqual(expected);
-  });
-  it('should handle UPDATE_PHASES', () => {
-    const action = {
-      phases: [{ id: '999' }],
-      type: actionTypes.UPDATE_PHASES
-    };
-    const oldState = List.of('123', '456', '789');
-    const actual = phasesInOrder(oldState, action);
-    const expected = List.of('999');
-    expect(actual).toEqual(expected);
-  });
-});
-
 describe('Timeline PhasesByIdReducer', () => {
   const { phasesById } = reducers;
   const oldState = fromJS({
@@ -50,7 +16,10 @@ describe('Timeline PhasesByIdReducer', () => {
       titleEntries: fromJS([{ locale: 'fr', value: 'Titre de la phase' }]),
       start: moment('2014-12-27T09:00:00+00:00'),
       end: moment('2014-12-31T09:00:00+00:00'),
-      isThematicsTable: false
+      isThematicsTable: false,
+      order: 1,
+      hasConflictingDates: false,
+      endIsBeforeStart: false
     }
   });
   it('should return the current state for any other action', () => {
@@ -60,7 +29,7 @@ describe('Timeline PhasesByIdReducer', () => {
     expect(actual).toEqual(expected);
   });
   it('should handle CREATE_PHASE', () => {
-    const action = { id: '2', type: actionTypes.CREATE_PHASE };
+    const action = { id: '2', order: 2, type: actionTypes.CREATE_PHASE };
     const actual = phasesById(oldState, action);
     const expected = fromJS({
       1: {
@@ -72,18 +41,24 @@ describe('Timeline PhasesByIdReducer', () => {
         titleEntries: fromJS([{ locale: 'fr', value: 'Titre de la phase' }]),
         start: moment('2014-12-27T09:00:00+00:00'),
         end: moment('2014-12-31T09:00:00+00:00'),
-        isThematicsTable: false
+        isThematicsTable: false,
+        order: 1,
+        hasConflictingDates: false,
+        endIsBeforeStart: false
       },
       2: {
         _hasChanged: false,
         _isNew: true,
         _toDelete: false,
         id: '2',
-        identifier: '',
+        identifier: null,
         titleEntries: List(),
         start: null,
         end: null,
-        isThematicsTable: false
+        isThematicsTable: false,
+        order: 2,
+        hasConflictingDates: false,
+        endIsBeforeStart: false
       }
     });
     expect(actual).toEqual(expected);
@@ -101,7 +76,10 @@ describe('Timeline PhasesByIdReducer', () => {
         titleEntries: fromJS([{ locale: 'fr', value: 'Titre de la phase' }]),
         start: moment('2014-12-27T09:00:00+00:00'),
         end: moment('2014-12-31T09:00:00+00:00'),
-        isThematicsTable: false
+        isThematicsTable: false,
+        order: 1,
+        hasConflictingDates: false,
+        endIsBeforeStart: false
       }
     });
     expect(actual).toEqual(expected);
@@ -119,7 +97,10 @@ describe('Timeline PhasesByIdReducer', () => {
         titleEntries: fromJS([{ locale: 'fr', value: 'Nouveau titre' }]),
         start: moment('2014-12-27T09:00:00+00:00'),
         end: moment('2014-12-31T09:00:00+00:00'),
-        isThematicsTable: false
+        isThematicsTable: false,
+        order: 1,
+        hasConflictingDates: false,
+        endIsBeforeStart: false
       }
     });
     expect(actual).toEqual(expected);
@@ -137,7 +118,10 @@ describe('Timeline PhasesByIdReducer', () => {
         titleEntries: [{ locale: 'fr', value: 'Titre de la phase' }],
         start: moment('2014-12-27T09:00:00+00:00'),
         end: moment('2014-12-31T09:00:00+00:00'),
-        isThematicsTable: false
+        isThematicsTable: false,
+        order: 1,
+        hasConflictingDates: false,
+        endIsBeforeStart: false
       }
     });
     expect(actual).toEqual(expected);
@@ -155,7 +139,10 @@ describe('Timeline PhasesByIdReducer', () => {
         titleEntries: fromJS([{ locale: 'fr', value: 'Titre de la phase' }]),
         start: moment('2014-12-28T09:00:00+00:00'),
         end: moment('2014-12-31T09:00:00+00:00'),
-        isThematicsTable: false
+        isThematicsTable: false,
+        order: 1,
+        hasConflictingDates: false,
+        endIsBeforeStart: false
       }
     });
     expect(actual).toEqual(expected);
@@ -173,7 +160,10 @@ describe('Timeline PhasesByIdReducer', () => {
         titleEntries: [{ locale: 'fr', value: 'Titre de la phase' }],
         start: moment('2014-12-27T09:00:00+00:00'),
         end: moment('2023-12-31T09:00:00+00:00'),
-        isThematicsTable: false
+        isThematicsTable: false,
+        order: 1,
+        hasConflictingDates: false,
+        endIsBeforeStart: false
       }
     });
     expect(actual).toEqual(expected);
@@ -191,7 +181,10 @@ describe('Timeline PhasesByIdReducer', () => {
         titleEntries: [{ locale: 'fr', value: 'Titre de la phase' }],
         start: moment('2014-12-27T09:00:00+00:00'),
         end: moment('2014-12-31T09:00:00+00:00'),
-        isThematicsTable: true
+        isThematicsTable: true,
+        order: 1,
+        hasConflictingDates: false,
+        endIsBeforeStart: false
       }
     });
     expect(actual).toEqual(expected);
@@ -205,7 +198,10 @@ describe('Timeline PhasesByIdReducer', () => {
           titleEntries: [{ locale: 'fr', value: 'Titre de la phase' }],
           start: moment('2014-12-28T09:00:00+00:00'),
           end: moment('2023-12-31T09:00:00+00:00'),
-          isThematicsTable: false
+          isThematicsTable: false,
+          order: 1,
+          hasConflictingDates: false,
+          endIsBeforeStart: false
         }
       ],
       type: actionTypes.UPDATE_PHASES
@@ -221,7 +217,10 @@ describe('Timeline PhasesByIdReducer', () => {
         titleEntries: [{ locale: 'fr', value: 'Titre de la phase' }],
         start: moment('2014-12-28T09:00:00+00:00'),
         end: moment('2023-12-31T09:00:00+00:00'),
-        isThematicsTable: false
+        isThematicsTable: false,
+        order: 1,
+        hasConflictingDates: false,
+        endIsBeforeStart: false
       }
     });
     expect(actual).toEqual(expected);

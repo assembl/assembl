@@ -38,9 +38,10 @@ export class DumbTimelineForm extends React.Component<TimelineFormProps, Timelin
   }
 
   componentDidUpdate() {
-    if (this.props.phases.length === 0) {
+    const { length } = this.props.phases;
+    if (length === 0) {
       range(4).forEach(() => {
-        this.props.handleCreatePhase();
+        this.props.handleCreatePhase(length);
       });
     }
   }
@@ -62,10 +63,16 @@ export class DumbTimelineForm extends React.Component<TimelineFormProps, Timelin
             <form>
               {phases &&
                 phases.map((id, index) => (
-                  <PhaseTitleForm key={`phase-title-form-${id}`} id={id} editLocale={editLocale} phaseIndex={index + 1} />
+                  <PhaseTitleForm
+                    key={`phase-title-form-${id}`}
+                    id={id}
+                    editLocale={editLocale}
+                    phaseIndex={index + 1}
+                    numberOfPhases={phases.length}
+                  />
                 ))}
               <OverlayTrigger placement="top" overlay={addPhaseTooltip}>
-                <div onClick={() => handleCreatePhase()} className="plus margin-s">
+                <div onClick={() => { handleCreatePhase(phases.length); }} className="plus margin-s">
                   +
                 </div>
               </OverlayTrigger>
@@ -109,18 +116,20 @@ export class DumbTimelineForm extends React.Component<TimelineFormProps, Timelin
 }
 
 const mapStateToProps = (state) => {
-  const { phasesInOrder, phasesById } = state.admin.timeline;
+  const { phasesById } = state.admin.timeline;
+  const filteredPhases = phasesById.sortBy(phase => phase.get('order')).filter(phase => !phase.get('_toDelete'));
+  const filteredPhasesId = Object.keys(filteredPhases.toJS());
   return {
     editLocale: state.admin.editLocale,
     lang: state.i18n.locale,
-    phases: phasesInOrder.filter(id => !phasesById.get(id).get('_toDelete')).toJS()
+    phases: filteredPhasesId
   };
 };
 
 const mapDispatchToProps = dispatch => ({
-  handleCreatePhase: () => {
+  handleCreatePhase: (nextOrder) => {
     const newId = createRandomId();
-    return dispatch(createPhase(newId));
+    return dispatch(createPhase(newId, nextOrder));
   }
 });
 

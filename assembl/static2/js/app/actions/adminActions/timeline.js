@@ -2,8 +2,9 @@
 import { type moment } from 'moment';
 import * as actionTypes from '../actionTypes';
 
-export const createPhase = (id: string): actionTypes.CreatePhase => ({
+export const createPhase = (id: string, order: number): actionTypes.CreatePhase => ({
   id: id,
+  order: order,
   type: actionTypes.CREATE_PHASE
 });
 
@@ -47,4 +48,14 @@ export const updateIsThematicsTable = (id: string, value: boolean): actionTypes.
   id: id,
   value: value,
   type: actionTypes.UPDATE_IS_THEMATICS_TABLE
+});
+
+export const movePhaseUp = (id: string): actionTypes.MovePhaseUp => ({
+  id: id,
+  type: actionTypes.MOVE_PHASE_UP
+});
+
+export const movePhaseDown = (id: string): actionTypes.MovePhaseDown => ({
+  id: id,
+  type: actionTypes.MOVE_PHASE_DOWN
 });

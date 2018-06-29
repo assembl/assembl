@@ -20,6 +20,7 @@ def test_query_timeline(graphql_request, discussion_with_2_phase_interface_v2, g
     assert phase1['titleEntries'][0]['value'] == 'phase 1'
     assert phase1['start'] == '2014-12-31T09:00:00+00:00'
     assert phase1['end'] == '2015-12-31T09:00:00+00:00'
+    assert phase1['order'] == 0.0
     phase2 = res.data['timeline'][1]
     assert phase2['identifier'] == 'thread'
     assert phase2['isThematicsTable'] is False
@@ -28,6 +29,7 @@ def test_query_timeline(graphql_request, discussion_with_2_phase_interface_v2, g
     assert phase2['titleEntries'][0]['value'] == 'phase 2'
     assert phase2['start'] == '2015-12-31T09:01:00+00:00'
     assert phase2['end'] == '2049-12-31T09:00:00+00:00'
+    assert phase2['order'] == 2.0
 
 
 def test_mutation_create_discussion_phase(graphql_request, discussion_with_2_phase_interface_v2, graphql_registry):
@@ -43,6 +45,7 @@ def test_mutation_create_discussion_phase(graphql_request, discussion_with_2_pha
             ],
             "start": '2018-01-20T09:01:00.000001Z',
             "end": '2018-05-20T00:00:00.100001Z',
+            "order": 1.0
         }
     )
     assert res.errors is None
@@ -55,6 +58,7 @@ def test_mutation_create_discussion_phase(graphql_request, discussion_with_2_pha
     assert phase['titleEntries'][0]['value'] == u'My new phase'
     assert phase['start'] == u'2018-01-20T09:01:00.000001+00:00'
     assert phase['end'] == u'2018-05-20T00:00:00.100001+00:00'
+    assert phase['order'] == 1.0
 
 
 def test_mutation_update_discussion_phase(graphql_request, discussion_with_2_phase_interface_v2, timeline_phase2_interface_v2, graphql_registry):
@@ -84,7 +88,8 @@ def test_mutation_update_discussion_phase(graphql_request, discussion_with_2_pha
             ],
             "start": '2018-01-20T09:01:00.000001Z',
             "end": '2018-05-20T00:00:00.100001Z',
-            "image": u"variables.image"
+            "image": u"variables.image",
+            "order": 1.0
         }
     )
     assert res.errors is None
@@ -100,6 +105,7 @@ def test_mutation_update_discussion_phase(graphql_request, discussion_with_2_pha
     assert phase1_updated['end'] == u'2018-05-20T00:00:00.100001+00:00'
     assert '/documents/' in phase1_updated['image']['externalUrl']
     assert phase1_updated['image']['mimeType'] == 'image/png'
+    assert phase1_updated['order'] == 1.0
 
 def test_mutation_delete_discussion_phase(graphql_request, discussion_with_2_phase_interface_v2, timeline_phase2_interface_v2, graphql_registry):
     phase1 = discussion_with_2_phase_interface_v2.timeline_events[0]

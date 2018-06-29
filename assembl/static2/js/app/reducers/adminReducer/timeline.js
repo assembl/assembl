@@ -3,6 +3,7 @@ import type ReduxAction from 'redux';
 import { combineReducers } from 'redux';
 import { List, Map, fromJS } from 'immutable';
 import { updateInLangstringEntries } from '../../utils/i18n';
+import { moveItemUp, moveItemDown } from '../../utils/globalFunctions';
 
 import {
   type Action,
@@ -13,26 +14,37 @@ import {
   UPDATE_PHASE_IDENTIFIER,
   UPDATE_PHASE_START,
   UPDATE_PHASE_END,
-  UPDATE_IS_THEMATICS_TABLE
+  UPDATE_IS_THEMATICS_TABLE,
+  MOVE_PHASE_UP,
+  MOVE_PHASE_DOWN
 } from '../../actions/actionTypes';
 
 const emptyPhase = Map({
   _hasChanged: false,
   _isNew: true,
   _toDelete: false,
-  identifier: '',
+  identifier: null,
   titleEntries: List(),
   start: null,
   end: null,
-  isThematicsTable: false
+  isThematicsTable: false,
+  hasConflictingDates: false,
+  endIsBeforeStart: false
 });
 
+const getHasConflictingDates = (phases, id, start, end) => {
+  const phaseIndex = phases.map(p => p.id).indexOf(id);
+  const previousPhase = phases[phaseIndex - 1];
+  const nextPhase = phases[phaseIndex + 1];
+  return (start && previousPhase && start.isBefore(previousPhase.end)) || (end && nextPhase && end.isAfter(nextPhase.start));
+};
+
 type PhasesByIdState = Map<string, Map>;
-type PhasesByIdReducer = (PhasesByIdState, ReduxAction<Action>) => PhasesByIdState
+type PhasesByIdReducer = (PhasesByIdState, ReduxAction<Action>) => PhasesByIdState;
 export const phasesById: PhasesByIdReducer = (state: PhasesByIdState = Map(), action: ReduxAction<Action>) => {
   switch (action.type) {
   case CREATE_PHASE:
-    return state.set(action.id, emptyPhase.set('id', action.id));
+    return state.set(action.id, emptyPhase.set('id', action.id).set('order', action.order));
   case DELETE_PHASE:
     return state.setIn([action.id, '_toDelete'], true);
   case UPDATE_PHASE_TITLE:
@@ -47,9 +59,13 @@ export const phasesById: PhasesByIdReducer = (state: PhasesByIdState = Map(), ac
     return state.setIn([action.id, 'end'], action.value).setIn([action.id, '_hasChanged'], true);
   case UPDATE_IS_THEMATICS_TABLE:
     return state.setIn([action.id, 'isThematicsTable'], action.value).setIn([action.id, '_hasChanged'], true);
+  case MOVE_PHASE_UP:
+    return moveItemUp(state, action.id);
+  case MOVE_PHASE_DOWN:
+    return moveItemDown(state, action.id);
   case UPDATE_PHASES: {
     let newState = Map();
-    action.phases.forEach(({ identifier, titleEntries, start, end, id, isThematicsTable }) => {
+    action.phases.forEach(({ identifier, titleEntries, start, end, id, isThematicsTable, order }) => {
       const phaseInfo = Map({
         _hasChanged: false,
         _isNew: false,
@@ -59,7 +75,10 @@ export const phasesById: PhasesByIdReducer = (state: PhasesByIdState = Map(), ac
         start: start,
         end: end,
         isThematicsTable: isThematicsTable || false, // default to false until we have the interface to set a thematicstable
-        id: id
+        id: id,
+        order: order,
+        hasConflictingDates: getHasConflictingDates(action.phases, id, start, end) || false,
+        endIsBeforeStart: end.isBefore(start)
       });
 
       newState = newState.set(id, phaseInfo);
@@ -67,19 +86,6 @@ export const phasesById: PhasesByIdReducer = (state: PhasesByIdState = Map(), ac
 
     return newState;
   }
-  default:
-    return state;
-  }
-};
-
-type PhasesInOrderState = List<string>;
-type PhasesInOrderReducer = (PhasesInOrderState, ReduxAction<Action>) => PhasesInOrderState;
-export const phasesInOrder: PhasesInOrderReducer = (state = List(), action) => {
-  switch (action.type) {
-  case CREATE_PHASE:
-    return state.push(action.id);
-  case UPDATE_PHASES:
-    return List(action.phases.map(phase => phase.id));
   default:
     return state;
   }
@@ -97,6 +103,8 @@ export const phasesHaveChanged: TimelineHasChangedReducer = (state = false, acti
   case UPDATE_PHASE_START:
   case UPDATE_PHASE_END:
   case UPDATE_IS_THEMATICS_TABLE:
+  case MOVE_PHASE_UP:
+  case MOVE_PHASE_DOWN:
     return true;
   default:
     return state;
@@ -104,7 +112,6 @@ export const phasesHaveChanged: TimelineHasChangedReducer = (state = false, acti
 };
 
 export default combineReducers({
-  phasesInOrder: phasesInOrder,
   phasesHaveChanged: phasesHaveChanged,
   phasesById: phasesById
 });

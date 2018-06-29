@@ -30,6 +30,7 @@ class DiscussionPhase(SecureObjectType, SQLAlchemyObjectType):
     start = DateTime()
     end = DateTime()
     image = graphene.Field(Document)
+    order = graphene.Float()
 
     def resolve_title(self, args, context, info):
         return resolve_langstring(self.title, args.get('lang'))
@@ -56,6 +57,7 @@ class CreateDiscussionPhase(graphene.Mutation):
         title_entries = graphene.List(LangStringEntryInput, required=True)
         start = DateTime(required=True)
         end = DateTime(required=True)
+        order = graphene.Float(required=True)
 
     discussion_phase = graphene.Field(lambda: DiscussionPhase)
 
@@ -78,7 +80,8 @@ class CreateDiscussionPhase(graphene.Mutation):
                 is_thematics_table=args.get('is_thematics_table'),
                 title=title_langstring,
                 start=args.get('start'),
-                end=args.get('end'))
+                end=args.get('end'),
+                order=args.get('order'))
 
             db.add(saobj)
             db.flush()
@@ -97,6 +100,7 @@ class UpdateDiscussionPhase(graphene.Mutation):
         start = DateTime(required=True)
         end = DateTime(required=True)
         image = graphene.String()
+        order = graphene.Float(required=True)
 
     discussion_phase = graphene.Field(lambda: DiscussionPhase)
 
@@ -124,6 +128,7 @@ class UpdateDiscussionPhase(graphene.Mutation):
             # SQLAlchemy wants naive datetimes
             phase.start = args.get('start').replace(tzinfo=None)
             phase.end = args.get('end').replace(tzinfo=None)
+            phase.order = args.get('order')
             image = args.get('image')
             discussion_id = context.matchdict['discussion_id']
             discussion = models.Discussion.get(discussion_id)

@@ -9,6 +9,7 @@ from sqlalchemy import (
     DateTime,
     ForeignKey,
     inspect,
+    Float
 )
 
 from . import DiscussionBoundBase
@@ -69,6 +70,8 @@ class TimelineEvent(DiscussionBoundBase):
     start = Column(DateTime)
 
     end = Column(DateTime)
+
+    order = Column(Float, nullable=False, default=0.0, server_default='0')
 
     # Since dates are optional, the previous event pointer allows
     # dateless events to form a linked list.
@@ -162,7 +165,7 @@ class DiscussionPhase(TimelineEvent):
 
 
 Discussion.timeline_phases = relationship(
-    DiscussionPhase, order_by=TimelineEvent.start)
+    DiscussionPhase, order_by=TimelineEvent.order)
 
 
 class DiscussionSession(TimelineEvent):

@@ -38,6 +38,7 @@ var TimelineEventModel = Base.Model.extend({
     'interface_v1': false,
     'start': null,
     'end': null,
+    'order': 0.0
   },
   parse: function(rawModel) {
     if (rawModel.title !== undefined) {

@@ -482,10 +482,10 @@ const Translations = {
         configureModuleLink: "Configurer Phase %{count}",
         successSave: "La ligne de temps a été sauvegardée avec succès",
         endIsBeforeStart: "Veuillez sélectionner une date de fin postérieure à celle de début",
-        startIsAfterEnd: "Veuillez une sélectionner une date de début ultérieure à celle de fin",
         singleModule: "Module unique de participation",
         selectStart: "Date de démarrage de la phase %{count}",
-        selectEnd: "Date de fin de la phase %{count}"
+        selectEnd: "Date de fin de la phase %{count}",
+        warningLabel: "Les dates que vous configuré entrent en conflit."
       },
       modules: {
         survey: "Module Questions",
@@ -1215,10 +1215,10 @@ const Translations = {
         configureModuleLink: "Configure Phase %{count}",
         successSave: "The timeline has been sucessfully saved",
         endIsBeforeStart: "Please select an end date posterior to the start",
-        startIsAfterEnd: "Please select a start ulterior to the end",
         singleModule: "Single participation module",
         selectStart: "Phase %{count}'s start date",
-        selectEnd: "Phase %{count}'s end date"
+        selectEnd: "Phase %{count}'s end date",
+        warningLabel: "The dates you have set are in conflict"
       },
       modules: {
         survey: "Survey module",

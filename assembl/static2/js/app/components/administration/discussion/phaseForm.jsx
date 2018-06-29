@@ -8,7 +8,6 @@ import { SplitButton, MenuItem } from 'react-bootstrap';
 import { Link } from 'react-router';
 import { type moment } from 'moment';
 import { modulesTranslationKeys } from '../../../constants';
-import { displayAlert } from '../../../utils/utilityManager';
 import { getDiscussionSlug } from '../../../utils/globalFunctions';
 import { get } from '../../../utils/routeMap';
 import { updatePhaseIdentifier, updateStartDate, updateEndDate } from '../../../actions/adminActions/timeline';
@@ -22,7 +21,8 @@ type PhaseFormProps = {
   handleStartDateChange: Function,
   handleEndDateChange: Function,
   handleIdentifierChange: Function,
-  locale: string
+  locale: string,
+  hasConflictingDates: boolean
 };
 
 export const DumbPhaseForm = ({
@@ -34,30 +34,15 @@ export const DumbPhaseForm = ({
   identifier,
   start,
   end,
+  hasConflictingDates,
   locale
 }: PhaseFormProps) => {
-  const onStartDateChange = (newStartDate) => {
-    if (newStartDate.isAfter(end)) {
-      displayAlert('danger', I18n.t('administration.timelineAdmin.startIsAfterEnd'));
-    } else {
-      handleStartDateChange(newStartDate);
-    }
-  };
-  const onEndDateChange = (newEndDate) => {
-    if (!newEndDate.isAfter(start)) {
-      displayAlert('danger', I18n.t('administration.timelineAdmin.endIsBeforeStart'));
-    } else {
-      handleEndDateChange(newEndDate);
-    }
-  };
-
   const startDatePickerPlaceholder = I18n.t('administration.timelineAdmin.selectStart', { count: phaseNumber });
   const endDatePickerPlaceholder = I18n.t('administration.timelineAdmin.selectEnd', { count: phaseNumber });
 
-
-  const splitButtonTitle = identifier ?
-    I18n.t(`administration.modules.${identifier}`) :
-    I18n.t('administration.timelineAdmin.singleModule');
+  const splitButtonTitle = identifier
+    ? I18n.t(`administration.modules.${identifier}`)
+    : I18n.t('administration.timelineAdmin.singleModule');
 
   const slug = { slug: getDiscussionSlug() };
 
@@ -72,17 +57,23 @@ export const DumbPhaseForm = ({
             placeholderText={startDatePickerPlaceholder}
             selected={start}
             id="start-datepicker"
-            onChange={onStartDateChange}
+            onChange={handleStartDateChange}
             showTimeSelect
             timeFormat="HH:mm"
             dateFormat="LLL"
             locale={locale}
             shouldCloseOnSelect
+            className={hasConflictingDates ? 'warning' : ''}
           />
           <div className="icon-schedule-container">
             <span className="assembl-icon-schedule grey" />
           </div>
         </label>
+        {hasConflictingDates && (
+          <div className="warning-label">
+            <Translate value="administration.timelineAdmin.warningLabel" />
+          </div>
+        )}
       </div>
       <div className="date-picker-field">
         <div className="date-picker-type">
@@ -93,19 +84,25 @@ export const DumbPhaseForm = ({
             placeholderText={endDatePickerPlaceholder}
             id="end-datepicker"
             selected={end}
-            onChange={onEndDateChange}
+            onChange={handleEndDateChange}
             showTimeSelect
             timeFormat="HH:mm"
             dateFormat="LLL"
             locale={locale}
             shouldCloseOnSelect
+            className={hasConflictingDates ? 'warning' : ''}
           />
           <div className="icon-schedule-container">
             <span className="assembl-icon-schedule grey" />
           </div>
         </label>
+        {hasConflictingDates && (
+          <div className="warning-label">
+            <Translate value="administration.timelineAdmin.warningLabel" />
+          </div>
+        )}
       </div>
-      <div className="inline text-xs margin-l">
+      <div className="module-selection-text">
         <Translate value="administration.timelineAdmin.phaseModule" />
       </div>
       <div className="margin-m">
@@ -124,7 +121,10 @@ export const DumbPhaseForm = ({
       </div>
       <div className="text-xs configure-module-text">
         <Translate value="administration.timelineAdmin.configureModule" />
-        <Link to={`${get('administration', slug)}${get('adminPhase', { ...slug, phase: identifier })}?section=1`} className="configure-module-link">
+        <Link
+          to={`${get('administration', slug)}${get('adminPhase', { ...slug, phase: identifier })}?section=1`}
+          className="configure-module-link"
+        >
           <Translate value="administration.timelineAdmin.configureModuleLink" count={phaseNumber} />
         </Link>
       </div>
@@ -138,6 +138,7 @@ const mapStateToProps = (state, { phaseId }) => {
     identifier: phase ? phase.get('identifier') : null,
     start: phase ? phase.get('start') : null,
     end: phase ? phase.get('end') : null,
+    hasConflictingDates: phase ? phase.get('hasConflictingDates') : null,
     locale: state.i18n.locale
   };
 };

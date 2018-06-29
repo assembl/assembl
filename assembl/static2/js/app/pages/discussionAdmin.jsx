@@ -53,13 +53,19 @@ const createVariablesForDeleteSectionMutation = section => ({ sectionId: section
 
 const createVariablesForDeleteTextFieldMutation = textField => ({ id: textField.id });
 
-const createVariablesForDiscussionPhaseMutation = phase => ({
-  identifier: phase.identifier,
-  isThematicsTable: phase.isThematicsTable,
-  start: moment(phase.start, moment.ISO_8601),
-  end: moment(phase.end, moment.ISO_8601),
-  titleEntries: phase.titleEntries
-});
+const createVariablesForDiscussionPhaseMutation = (phase) => {
+  if (phase.endIsBeforeStart) {
+    displayAlert('danger', I18n.t('administration.timelineAdmin.endIsBeforeStart'));
+  }
+  return {
+    identifier: phase.identifier,
+    isThematicsTable: phase.isThematicsTable,
+    start: moment(phase.start, moment.ISO_8601),
+    end: moment(phase.end, moment.ISO_8601),
+    order: phase.order,
+    titleEntries: phase.titleEntries
+  };
+};
 
 const createVariablesForDeleteDiscussionPhaseMutation = phase => ({
   id: phase.id
@@ -332,7 +338,7 @@ const mapStateToProps: MapStateToProps<ReduxState, *, *> = ({
   i18n
 }) => {
   const { sectionsById, sectionsHaveChanged, sectionsInOrder } = sections;
-  const { phasesInOrder, phasesById, phasesHaveChanged } = timeline;
+  const { phasesById, phasesHaveChanged } = timeline;
   const { profileOptionsHasChanged, textFieldsById } = profileOptions;
   const textFields = textFieldsById
     .map(textField => textField)
@@ -352,6 +358,7 @@ const mapStateToProps: MapStateToProps<ReduxState, *, *> = ({
       }));
     }
   });
+
   return {
     editLocale: editLocale,
     i18n: i18n,
@@ -369,7 +376,7 @@ const mapStateToProps: MapStateToProps<ReduxState, *, *> = ({
     legalContentsHaveChanged: legalContents.get('_hasChanged'),
     profileOptionsHasChanged: profileOptionsHasChanged,
     textFields: textFields,
-    phases: phasesInOrder.map(id => phasesById.get(id)).toJS(),
+    phases: Object.values(phasesById.sortBy(phase => phase.get('order')).toJS()),
     phasesHaveChanged: phasesHaveChanged
   };
 };

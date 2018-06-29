@@ -13,7 +13,8 @@ describe('PhaseTitleForm component', () => {
       editLocale: 'fr',
       handleTitleChange: handleTitleChangeSpy,
       handleDeleteClick: handleDeleteClickSpy,
-      phaseIndex: 1
+      phaseIndex: 1,
+      numberOfPhases: 1
     };
     const shallowRenderer = new ShallowRenderer();
     shallowRenderer.render(<DumbPhaseTitleForm {...props} />);

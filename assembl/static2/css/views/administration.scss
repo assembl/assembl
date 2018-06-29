@@ -584,8 +584,11 @@
 
   .timeline-admin {
     .form-group {
-      flex-grow: 1;
       margin-left: 15px;
+
+      .form-control {
+        width: 270px;
+      }
     }
 
     .admin-instruction {
@@ -602,12 +605,35 @@
       margin-top: 6px;
     }
 
-    .delete-button-high {
+    .admin-icons {
       margin-bottom: 25px;
+    }
+
+    .side-button-high {
+      margin-bottom: 65px;
     }
 
     .phase-form {
       margin-top: 50px;
+    }
+
+    .warning-label {
+      width: 250px;
+      font-size: $font-size-xs;
+      color: $orange2;
+      text-align: left;
+    }
+
+    .phase-title-form-container {
+      margin: 20px auto;
+
+      .phase-title-form {
+        margin-bottom: -45px;
+      }
+
+      .warning-label {
+        margin-left: 30px;
+      }
     }
   }
 
@@ -630,9 +656,24 @@
       letter-spacing: 0;
     }
 
+    .module-selection-text {
+      width: 330px;
+      font-size: $font-size-s;
+      text-align: left;
+      margin: 40px auto 0 auto;
+    }
+
     .configure-module-text {
       margin: 40px auto 0 auto;
-      width: 300px;
+      width: 330px;
+      text-align: left;
+      padding-left: 40px;
+    }
+
+    .date-picker-field {
+      input {
+        font-size: $font-size-xs;
+      }
     }
 
     .configure-module-link {

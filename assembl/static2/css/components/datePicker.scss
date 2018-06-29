@@ -1,6 +1,17 @@
 .date-picker-field {
+  .warning-label {
+    margin: auto;
+    width: 250px;
+    padding-left: 10px;
+  }
+
   &:first-child {
     margin-bottom: 15px;
+  }
+
+  .warning {
+    border-color: $orange !important;
+    border-width: 2px !important;
   }
 
   .datepicker-label > div {

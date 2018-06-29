@@ -20,6 +20,7 @@ exports[`PhaseForm component should render a form to update the dates and module
     >
       <DatePicker
         allowSameDay={false}
+        className=""
         dateFormat="LLL"
         dateFormatCalendar="MMMM YYYY"
         disabled={false}
@@ -71,6 +72,7 @@ exports[`PhaseForm component should render a form to update the dates and module
     >
       <DatePicker
         allowSameDay={false}
+        className=""
         dateFormat="LLL"
         dateFormatCalendar="MMMM YYYY"
         disabled={false}
@@ -107,7 +109,7 @@ exports[`PhaseForm component should render a form to update the dates and module
     </label>
   </div>
   <div
-    className="inline text-xs margin-l"
+    className="module-selection-text"
   >
     <Translate
       value="administration.timelineAdmin.phaseModule"

@@ -7,6 +7,7 @@ mutation createDiscussionPhase(
   $titleEntries: [LangStringEntryInput]!
   $start: DateTime!
   $end: DateTime!
+  $order: Float!
 ) {
   createDiscussionPhase(
     lang: $lang
@@ -15,6 +16,7 @@ mutation createDiscussionPhase(
     titleEntries: $titleEntries
     start: $start
     end: $end
+    order: $order
   ) {
     discussionPhase {
       id
@@ -26,6 +28,7 @@ mutation createDiscussionPhase(
       }
       start
       end
+      order
     }
   }
 }
