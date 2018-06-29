@@ -30,6 +30,7 @@ from sqlalchemy import (
 from sqlalchemy.orm import with_polymorphic, subqueryload
 from sqlalchemy.orm.util import aliased
 from sqlalchemy.sql.expression import literal
+from cornice import Service
 import transaction
 
 import simplejson as json
@@ -55,7 +56,7 @@ from assembl.auth import (
     P_READ, P_READ_PUBLIC_CIF, P_ADMIN_DISC, P_DISC_STATS, P_SYSADMIN,
     R_ADMINISTRATOR)
 from assembl.auth.password import verify_data_token, data_token, Validity
-from assembl.auth.util import get_permissions
+from assembl.auth.util import get_permissions, discussions_with_access
 from assembl.graphql.langstring import resolve_langstring
 from assembl.models import (Discussion, Permission)
 from assembl.utils import format_date, get_thematics, get_published_posts, get_ideas
@@ -1612,6 +1613,21 @@ def update_notification_subscriptions(request):
     for user in participants:
         user.get_notification_subscriptions(discussion.id)
     return {'status': 'Notification subscriptions have been updated.'}
+
+
+discussions_slugs = Service(
+    name='discussions_slugs',
+    path='/discussions_slugs',
+    description="List of existing Discussion slugs",
+    renderer='json'
+)
+
+
+@discussions_slugs.get()
+def get_discussions_slugs(request):
+    user_id = request.authenticated_userid or Everyone
+    discussions = discussions_with_access(user_id)
+    return {'slugs': [discussion.slug for discussion in discussions]}
 
 
 def includeme(config):
