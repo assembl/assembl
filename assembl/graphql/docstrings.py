@@ -1,0 +1,36 @@
+
+class Schema:
+    node = """A Relay node. Any entity that uses the Relay object structure, along with connections (edges), can be queried from Node."""
+    root_idea = """An idea union between either an Idea type or a Thematic type."""
+    ideas = """List of all ideas on the debate."""
+    thematics = """List of all thematics on the debate. Thematics are a subset of Ideas."""
+    syntheses = """List of all syntheses on the debate."""
+    num_participants = """The number of active participants on the debate with any form of contribution."""
+    discussion_preferences = """
+        The dicussion preferences of the debate.
+        These are configurations that characterize how the debate will behave, look, and act under certain conditions."""
+    default_preferences = """The default discussion preferences. These are server wide settings, independent of the debate."""
+    locales = """The list of locales supported on the debate. These are the languages of the debate."""
+    total_sentiments = """The total count of sentiments on the debate, regardless of chosen type. Deleted users' sentiments are not counted."""
+    has_syntheses = """A boolean flag indicating if the debate has yet released a synthesis or not."""
+    vote_session = """A vote session's meta data, if a vote session exists."""
+    resources = """A list of Resource meta data on the debate."""
+    resources_center = """A singular Resource Center meta data object."""
+    has_resources_center = """A boolean flag indicating if the debate has a resource center set or not."""
+    sections = """A list of Section meta data on the discussion."""
+    legal_contents = """The legal contents metadata representing the data."""
+    has_legal_notice = """A boolean flag of whether a debate has set a legal notice."""
+    has_terms_and_conditions = """A boolean flag of whether a debate has set a terms and conditions page."""
+    has_cookies_policy = """A boolean flag of whether a debate has set a cookie policy page."""
+    has_privacy_policy = """A boolean flag of whether a debate has set a privacy policy page."""
+    visits_analytics = """The object containing the summary data of analytics on the page, based on time-series analysis of analytics engine data."""
+    discussion = """The discussion object metadata."""
+    landing_page_module_types = """The metadata object for LandingPageModule object."""
+    landing_page_modules = """A list of LandingPageModules."""
+    text_fields = """A list of ConfigurableField union, where each text field represents a field on a bound entity."""
+    profile_fields = """A list of ConfigurableField union, where each text field represents a field on a profile only."""
+    timeline = """A list of DiscussionPhase objects, descriping the timeline objects on the debate."""
+
+
+class Default:
+    required_language_input = """A locale input is required to specify in which language the content should be returned."""
