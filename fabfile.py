@@ -23,6 +23,7 @@ from fabric.contrib.files import (exists, is_link, append)
 from fabric.api import (
     abort, cd, env, execute, hide, prefix, settings, task as fab_task)
 from fabric.colors import yellow, cyan, red, green
+from fabric.context_managers import shell_env
 
 # import logging
 # import paramiko
@@ -521,8 +522,7 @@ def app_reload():
             venvcmd("supervisorctl update")
             processes = filter_autostart_processes([
                 "celery_imap", "changes_router", "celery_notification_dispatch",
-                "celery_notify", "celery_notify_beat", "source_reader", "urlmetadata",
-                "bluenove_actionable"])
+                "celery_notify", "celery_notify_beat", "source_reader", "urlmetadata"])
             venvcmd("supervisorctl restart " + " ".join(processes))
             if env.uses_uwsgi:
                 venvcmd("supervisorctl restart prod:uwsgi")
@@ -594,12 +594,12 @@ def build_virtualenv():
     run('python2 -mvirtualenv --no-setuptools %(venvpath)s' % env)
     # create the virtualenv with --no-setuptools to avoid downgrading setuptools that may fail
     if not exists("%(projectpath)s/../bluenove-actionable/" % env):
-        print cyan("Cloning git repository")
+        print cyan("Cloning git bluenove-actionable repository")
         with cd("%(projectpath)s/.." % env):
             run('git clone git://github.com/bluenove/bluenove-actionable.git')
 
         with cd("%(projectpath)s/../bluenove-actionable/" % env):
-            run('docker-compose build')
+            run('docker-compose build', warn_only=True)
 
     if env.mac:
         # Virtualenv does not reuse distutils.cfg from the homebrew python,
@@ -853,12 +853,66 @@ def updatemaincode(backup=False):
 
             venvcmd_py3('pip install -r ../url_metadata/requirements.txt')
 
-        path = join(env.projectpath, '..', 'bluenove-actionable')
-        if exists(path):
-            print(cyan('Updating bluenove-actionable Git repository'))
-            with cd(path):
-                run('git pull')
-                run('docker kill bluenoveact && docker-compose build')
+        execute(update_bluenove_actionable)
+
+
+def get_robot_machine():
+    """
+    Return the configured robot machine: (the first configured machine)
+    """
+    machines = env.get('machines', '').split('/')
+    if machines:
+        robot = machines[0]
+        robot_data = robot.split(',')
+        return {
+            'identifier': robot_data[0].strip(),
+            'name': robot_data[1].strip(),
+            'password': robot_data[2].strip()
+        }
+
+    return None
+
+
+@task
+def update_bluenove_actionable():
+    path = join(env.projectpath, '..', 'bluenove-actionable')
+    robot = get_robot_machine()
+    if exists(path) and robot:
+        print(cyan('Updating bluenove-actionable Git repository'))
+        with cd(path):
+            run('git pull')
+            execute(stop_bluenove_actionable)
+            run('docker-compose build', warn_only=True)
+
+
+@task
+def stop_bluenove_actionable():
+    path = join(env.projectpath, '..', 'bluenove-actionable')
+    if exists(path):
+        print(cyan('stop bluenove-actionable'))
+        with cd(path):
+            fabsudo('docker kill bluenoveact', warn_only=True)
+
+
+@task
+def start_bluenove_actionable():
+    path = join(env.projectpath, '..', 'bluenove-actionable')
+    robot = get_robot_machine()
+    if exists(path) and robot:
+        print(cyan('run bluenove-actionable'))
+        with cd(path):
+            with shell_env(
+                URL_INSTANCE=env.public_hostname,
+                ROBOT_IDENTIFIER=robot.get('identifier'),
+                ROBOT_PASSWORD=robot.get('password')
+            ):
+                fabsudo('docker-compose up -d', warn_only=True)
+
+
+@task
+def restart_bluenove_actionable():
+    execute(stop_bluenove_actionable)
+    execute(start_bluenove_actionable)
 
 
 @task
@@ -1000,6 +1054,8 @@ def webservers_reload():
             run('sudo /etc/init.d/nginx reload')
         elif env.mac:
             sudo('killall -HUP nginx')
+
+    execute(restart_bluenove_actionable)
 
 
 def webservers_stop():

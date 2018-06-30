@@ -694,7 +694,7 @@ class User(AgentProfile):
     def populate_db(cls, db=None):
         default_config = config.get_config()
         # retrieve the configured machines
-        machines_data = default_config.get('machine.machines', '')
+        machines_data = default_config.get('machines', '')
         if machines_data:
             from ..auth.util import add_user
             db = db or cls.default_db()

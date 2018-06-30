@@ -51,7 +51,6 @@ supervisor__autostart_celery_notify_beat = false
 supervisor__autostart_source_reader = false
 supervisor__autostart_uwsgi = false
 supervisor__autostart_urlmetadata = false
-supervisor__autostart_bluenove_actionable = false
 uwsgi__processes = 4
 web_analytics_piwik_script =
 filter:raven__dsn =

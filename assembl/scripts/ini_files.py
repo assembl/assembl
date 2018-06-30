@@ -177,7 +177,6 @@ def generate_ini_files(config, config_fname):
             'autostart_webpack',
             'autostart_elasticsearch_server',
             'autostart_urlmetadata',
-            'autostart_bluenove_actionable',
             'autostart_uwsgi'):
         vars[var] = config.get('supervisor', var)
 
