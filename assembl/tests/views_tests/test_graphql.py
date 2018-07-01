@@ -2835,8 +2835,8 @@ def test_update_discussion_landing_page_image_fields(graphql_request, graphql_re
 def test_get_all_posts(graphql_request, proposition_id):
     from assembl.graphql.schema import Schema as schema
     res = schema.execute(
-        u"""query Posts($contentLocale: String!, $startDate: String, $endDate: String) {
-              posts(startDate: $startDate, endDate: $endDate) {
+        u"""query Posts($contentLocale: String!, $startDate: String, $endDate: String,  $identifiers: [String]) {
+            posts(startDate: $startDate, endDate: $endDate, identifiers: $identifiers) {
                 edges {
                   node {
                     ... on Post {
@@ -2864,7 +2864,8 @@ def test_get_all_posts(graphql_request, proposition_id):
         """,
         context_value=graphql_request,
         variable_values={
-            "contentLocale": "fr"
+            "contentLocale": "fr",
+            "identifiers": ["survey"]
         })
     assert res.data
     assert len(res.data['posts']['edges']) == 1

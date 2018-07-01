@@ -58,6 +58,8 @@ from assembl.models.post import countable_publication_states
 from assembl.nlp.translation_service import DummyGoogleTranslationService
 from assembl.graphql.permissions_helpers import require_instance_permission
 from assembl.auth import CrudPermissions
+from assembl.utils import get_ideas
+
 
 convert_sqlalchemy_type.register(EmailString)(convert_column_to_string)
 models.Base.query = models.Base.default_db.query_property()
@@ -123,6 +125,7 @@ class Query(graphene.ObjectType):
         PostConnection,
         start_date=graphene.String(description=docs.Schema.posts.start_date),
         end_date=graphene.String(description=docs.Schema.posts.start_date),
+        identifiers=graphene.List(graphene.String, description=docs.Schema.posts.identifiers),
         description=docs.Schema.posts)
 
     def resolve_resources(self, args, context, info):
@@ -417,6 +420,42 @@ class Query(graphene.ObjectType):
         model = models.AssemblPost
         query = get_query(model, context)
         discussion_id = context.matchdict['discussion_id']
+        identifiers = args.get('identifiers', [])
+        ideas = []
+        if 'survey' in identifiers:
+            discussion = models.Discussion.get(discussion_id)
+            root_thematic = get_root_thematic_for_phase(discussion, 'survey')
+            if root_thematic:
+                ideas.append(root_thematic)
+
+            identifiers.remove('survey')
+
+        if identifiers:
+            is_multi_columns = 'multiColumns' in identifiers and len(identifiers) == 1
+            ideas.extend(
+                get_ideas(
+                    discussion_id,
+                    'multiColumns' if is_multi_columns else None
+                ).all()
+            )
+
+        query_base = query
+        for index, idea in enumerate(ideas):
+            related = idea.get_related_posts_query(True)
+            if index == 0:
+                query = query_base.join(
+                    related, model.id == related.c.post_id
+                )
+            else:
+                query = query.union(
+                    query_base.join(
+                        related, model.id == related.c.post_id
+                    )
+                )
+
+        if not ideas and identifiers:
+            return []
+
         query = query.filter(
             model.discussion_id == discussion_id,
             model.hidden == False,  # noqa: E712
