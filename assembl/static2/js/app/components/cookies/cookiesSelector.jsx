@@ -31,18 +31,19 @@ class CookiesSelector extends React.Component<CookiesSelectorProps, CookiesSelec
         {TRANSLATION_KEYS.map((key) => {
           const isActiveKey = key === activeKey;
           return (
-            <div
-              className="cookies-category-selector"
-              key={`category-${key}`}
-              onClick={() => {
-                this.setState({ activeKey: key, show: !show });
-                return key !== activeKey && this.setState({ show: true });
-              }}
-            >
-              <span className={classnames('assembl-icon-right-dir', { 'active-arrow': isActiveKey })} />
-              <Translate value={`cookiesPolicy.${key}`} />
+            <div key={`category-${key}`}>
+              <div
+                className="cookies-category-selector"
+                onClick={() => {
+                  this.setState({ activeKey: key, show: !show });
+                  return key !== activeKey && this.setState({ show: true });
+                }}
+              >
+                <span className={classnames('assembl-icon-right-dir', { 'active-arrow': isActiveKey })} />
+                <Translate value={`cookiesPolicy.${key}`} className="dark-title-4" />
+              </div>
               {isActiveKey && show &&
-              <div className="cookie-title">This is the active categoryV</div>}
+              <div className="cookie-title dark-title-3 ellipsis">This is the active category</div>}
             </div>
           );
         })}
