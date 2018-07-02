@@ -265,13 +265,13 @@ class DeleteUserInformation(graphene.Mutation):
 
         with cls.default_db.no_autoflush as db:
             user.is_deleted = True
-            user.password_p = random_string()
+            user.password = ''
             user.preferred_email = random_string() + "@" + random_string()
             user.last_assembl_login = datetime(1900, 1, 1, 1, 1, 1, 1)
             user.last_login = datetime(1900, 1, 1, 1, 1, 1, 1)
             user.real_name_p = random_string()
             for p in user.old_passwords:
-                p.password_p = ""
+                p.delete()
 
             # Deleting Username
             username = user.username
