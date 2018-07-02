@@ -297,7 +297,7 @@ def test_graphql_update_user_modify_password_can_reuse_the_old_6th_password_set(
 
 def test_graphql_delete_user_information(participant1_user, graphql_request):
     from assembl.auth.password import random_string
-    user_password = participant1_user.password_p
+    user_password = participant1_user.password
     user_username = participant1_user.username_p
     user_preferred_email = participant1_user.preferred_email
     user_last_assembl_login = participant1_user.last_assembl_login
@@ -342,7 +342,7 @@ def test_graphql_delete_admin_user_not_alone(discussion_admin_user, discussion_a
     Testing if is possible to delete an admin user when he is not the only admin
     """
     from assembl.auth.password import random_string
-    user_password = discussion_admin_user.password_p
+    user_password = discussion_admin_user.password
     user_username = discussion_admin_user.username_p
     user_preferred_email = discussion_admin_user.preferred_email
     user_last_assembl_login = discussion_admin_user.last_assembl_login
