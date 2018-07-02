@@ -50,7 +50,9 @@ from assembl.graphql.vote_session import (
     UpdateTokenVoteSpecification, DeleteVoteSpecification,
     CreateProposal, UpdateProposal, DeleteProposal
 )
-from assembl.graphql.utils import get_fields, get_root_thematic_for_phase
+from assembl.graphql.utils import (
+    get_fields, get_root_thematic_for_phase,
+    get_posts_for_phases)
 from assembl.lib.locale import strip_country
 from assembl.lib.sqla_types import EmailString
 from assembl.models.action import SentimentOfPost
@@ -58,7 +60,6 @@ from assembl.models.post import countable_publication_states
 from assembl.nlp.translation_service import DummyGoogleTranslationService
 from assembl.graphql.permissions_helpers import require_instance_permission
 from assembl.auth import CrudPermissions
-from assembl.utils import get_ideas
 
 
 convert_sqlalchemy_type.register(EmailString)(convert_column_to_string)
@@ -417,50 +418,25 @@ class Query(graphene.ObjectType):
         return discussion.timeline_phases
 
     def resolve_posts(self, args, context, info):
-        model = models.AssemblPost
-        query = get_query(model, context)
         discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
         identifiers = args.get('identifiers', [])
-        ideas = []
-        if 'survey' in identifiers:
-            discussion = models.Discussion.get(discussion_id)
-            root_thematic = get_root_thematic_for_phase(discussion, 'survey')
-            if root_thematic:
-                ideas.append(root_thematic)
-
-            identifiers.remove('survey')
-
-        if identifiers:
-            is_multi_columns = 'multiColumns' in identifiers and len(identifiers) == 1
-            ideas.extend(
-                get_ideas(
-                    discussion_id,
-                    'multiColumns' if is_multi_columns else None
-                ).all()
-            )
-
-        query_base = query
-        for index, idea in enumerate(ideas):
-            related = idea.get_related_posts_query(True)
-            if index == 0:
-                query = query_base.join(
-                    related, model.id == related.c.post_id
-                )
-            else:
-                query = query.union(
-                    query_base.join(
-                        related, model.id == related.c.post_id
-                    )
-                )
-
-        if not ideas and identifiers:
+        model = models.AssemblPost
+        query = get_posts_for_phases(discussion, identifiers)
+        # If no posts in the specified identifiers, we return an empty list
+        if identifiers and query is None:
             return []
+        elif query is None:
+            # If we have no identifier, we return all of posts
+            query = get_query(model, context)
 
+        # We filter posts by their discussion id
         query = query.filter(
             model.discussion_id == discussion_id,
             model.hidden == False,  # noqa: E712
             model.tombstone_condition()
             )
+        # We filter posts by their modification date
         start_date = args.get('start_date', None)
         end_date = args.get('end_date', None)
         if start_date:

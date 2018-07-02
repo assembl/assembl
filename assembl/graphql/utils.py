@@ -1,12 +1,29 @@
 from datetime import datetime
 import os.path
-
 import pytz
+
+from enum import Enum
 from graphene.types.scalars import Scalar
 from graphql.language import ast
 from graphql.utils.ast_to_dict import ast_to_dict
+
 from .langstring import langstring_from_input_entries
 from assembl import models
+from assembl.utils import get_ideas
+
+
+class Phases(Enum):
+    survey = 'survey'
+    thread = 'thread'
+    multiColumns = 'multiColumns'
+    voteSession = 'voteSession'
+
+
+PHASES_WITH_POSTS = [
+    Phases.survey.value,
+    Phases.thread.value,
+    Phases.multiColumns.value
+]
 
 
 class DateTime(Scalar):
@@ -189,3 +206,46 @@ def update_attachment(discussion, attachment_model, new_value, attachments, atta
             attachmentPurpose=attachment_purpose
         )
         attachments.append(attachment)
+
+
+def get_posts_for_phases(discussion, identifiers):
+    """Return related posts for the given phases `identifiers` on `discussion`.
+    """
+    # Retrieve the phases with posts
+    identifiers_with_posts = [i for i in identifiers if i in PHASES_WITH_POSTS]
+    if not discussion or not identifiers_with_posts:
+        return None
+
+    ideas = []
+    # If servey phase, we need the root thematic
+    if Phases.survey.value in identifiers_with_posts:
+        root_thematic = get_root_thematic_for_phase(discussion, Phases.survey.value)
+        if root_thematic:
+            ideas.append(root_thematic)
+
+        identifiers_with_posts.remove(Phases.survey.value)
+
+    if identifiers_with_posts:
+        is_multi_columns = Phases.multiColumns.value in identifiers_with_posts and \
+            len(identifiers_with_posts) == 1
+        ideas.extend(
+            get_ideas(
+                discussion.id,
+                Phases.multiColumns.value if is_multi_columns else None
+            ).all()
+        )
+
+    if not ideas:
+        return None
+
+    model = models.AssemblPost
+    query = discussion.db.query(model)
+    query_source = query
+    for index, idea in enumerate(ideas):
+        related = idea.get_related_posts_query(True)
+        related_query = query_source.join(
+            related, model.id == related.c.post_id
+        )
+        query = related_query if index == 0 else query.union(related_query)
+
+    return query
