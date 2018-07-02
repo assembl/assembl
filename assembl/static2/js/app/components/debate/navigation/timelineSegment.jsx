@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import classNames from 'classnames';
 
 import { prefetchMenuQuery } from './menuTable';
-import { getPhaseStatus, isSeveralIdentifiers, type Timeline } from '../../../utils/timeline';
+import { getPhaseStatus, isSeveralIdentifiers } from '../../../utils/timeline';
 import { displayModal } from '../../../utils/utilityManager';
 import { get, goTo } from '../../../utils/routeMap';
 import { isMobile } from '../../../utils/globalFunctions';

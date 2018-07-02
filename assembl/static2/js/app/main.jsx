@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-import { getCurrentPhaseIdentifier, type Timeline } from './utils/timeline';
+import { getCurrentPhaseIdentifier } from './utils/timeline';
 import Navbar from './components/navbar/navbar';
 import Footer from './components/common/footer';
 
