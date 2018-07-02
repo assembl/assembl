@@ -454,7 +454,9 @@ const Translations = {
       headerTitle: "Mentions légales"
     },
     cookiesPolicy: {
-      headerTitle: "Information sur les cookies"
+      headerTitle: "Information sur les cookies",
+      essential: "Essentiel",
+      analytics: "Analytics and customization"
     },
     privacyPolicy: {
       headerTitle: "Politique de protection des données personnelles"
@@ -1255,7 +1257,9 @@ const Translations = {
       headerTitle: "Legal Notice"
     },
     cookiesPolicy: {
-      headerTitle: "Cookies"
+      headerTitle: "Cookies",
+      essential: "Essential",
+      analytics: "Analytique et personnalisation"
     },
     privacyPolicy: {
       headerTitle: "Privacy policy"

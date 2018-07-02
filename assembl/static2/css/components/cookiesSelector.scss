@@ -1,0 +1,9 @@
+.cookies-selector {
+  .cookies-category-selector {
+    cursor: pointer;
+  }
+
+  .active-arrow {
+    transform: rotateX(90deg);
+  }
+}
