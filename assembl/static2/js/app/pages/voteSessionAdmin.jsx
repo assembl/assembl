@@ -414,12 +414,13 @@ class VoteSessionAdmin extends React.Component<VoteSessionAdminProps, VoteSessio
     };
     const voteSessionPageId = voteSessionPage.get('id');
 
+    let allMutations: Array<() => Promise<*>> = [];
     if (voteSessionPage.get('id')) {
       if (modulesOrProposalsHaveChanged) {
         // mutations for modules templates
         const modules = voteModules.map(m => ({ ...m.toJS(), voteSessionId: voteSessionPageId })).toArray();
         const allSpecsMutationsPromises = getMutationsForModules(modules);
-        this.runMutations(allSpecsMutationsPromises);
+        allMutations = allMutations.concat(allSpecsMutationsPromises);
 
         // mutations for proposals and their modules
         const isValid = this.validateProposals(voteProposals);
@@ -433,52 +434,63 @@ class VoteSessionAdmin extends React.Component<VoteSessionAdminProps, VoteSessio
           items.push({ ...t.toJS(), voteSessionId: voteSessionPageId });
         });
         const proposalsToDeleteOrUpdate = items.filter(item => !item._isNew);
-        let mutationsPromises: Array<Promise<*>> = [];
+        let mutationsPromises: Array<() => Promise<*>> = [];
         proposalsToDeleteOrUpdate.forEach((proposal) => {
           if (proposal._toDelete) {
             // delete all modules and then delete the proposal
             mutationsPromises = mutationsPromises.concat(
               proposal.modules.map(m => deleteVoteSpecification({ variables: createVariablesForDeleteMutation(m) }))
             );
-            mutationsPromises.push(deleteProposal({ variables: createVariablesForDeleteMutation(proposal) }));
+            mutationsPromises.push(() => deleteProposal({ variables: createVariablesForDeleteMutation(proposal) }));
           }
 
+          // we have to mutate the modules even if the proposal has not changed
           const modulesToMutate = proposal.modules.map(m => ({ ...m, voteSessionId: voteSessionPageId }));
           const modulesMutations = getMutationsForModules(modulesToMutate);
           mutationsPromises = mutationsPromises.concat(modulesMutations);
 
-          const updateVariables = {
-            ...createVariablesForProposalsMutation(proposal),
-            id: proposal.id,
-            lang: i18n.locale
-          };
-          mutationsPromises.push(updateProposal({ variables: updateVariables }));
+          if (proposal._hasChanged) {
+            const updateVariables = {
+              ...createVariablesForProposalsMutation(proposal),
+              id: proposal.id,
+              lang: i18n.locale
+            };
+            mutationsPromises.push(() => updateProposal({ variables: updateVariables }));
+          }
         });
-        this.runMutations(mutationsPromises);
+
+        allMutations = allMutations.concat(mutationsPromises);
 
         const proposalsToCreate = items.filter(item => item._isNew && !item._toDelete);
+        const proposalsMutations = [];
         proposalsToCreate.forEach((proposal) => {
           const payload = {
             variables: createVariablesForProposalsMutation(proposal)
           };
 
           let modulesToCreate = proposal.modules.filter(pModule => pModule._isNew && !pModule._toDelete);
-          createProposal(payload).then((res) => {
-            if (res.data) {
-              const proposalId = res.data.createProposal.proposal.id;
-              // create the modules
-              modulesToCreate = modulesToCreate.map(m => ({
-                ...m,
-                proposalId: proposalId,
-                voteSessionId: voteSessionPageId
-              }));
+          const createProposalPromise = () =>
+            createProposal(payload).then((res) => {
+              if (res.data) {
+                const proposalId = res.data.createProposal.proposal.id;
+                // create the modules
+                modulesToCreate = modulesToCreate.map(m => ({
+                  ...m,
+                  proposalId: proposalId,
+                  voteSessionId: voteSessionPageId
+                }));
 
-              this.runMutations(getMutationsForModules(modulesToCreate));
-            }
-          });
+                this.runMutations(getMutationsForModules(modulesToCreate));
+              }
+            });
+          proposalsMutations.push(createProposalPromise);
         });
+
+        allMutations = allMutations.concat(proposalsMutations);
       }
     }
+
+    this.runMutations(allMutations);
   };
 
   dataHaveChanged = (): boolean => this.props.modulesOrProposalsHaveChanged || this.props.voteSessionPage.get('_hasChanged');

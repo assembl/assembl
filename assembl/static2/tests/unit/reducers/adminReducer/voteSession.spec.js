@@ -993,6 +993,72 @@ describe('voteSession admin reducers', () => {
       const result = voteProposalsById(state, action);
       expect(result).toEqual(expected);
     });
+
+    it('should handle UPDATE_VOTE_PROPOSAL_TITLE action type', () => {
+      const proposal1 = fromJS({
+        _hasChanged: false,
+        _isNew: false,
+        _toDelete: false,
+        order: 1.0,
+        id: 'proposal1',
+        titleEntries: [],
+        descriptionEntries: [],
+        modules: []
+      });
+      const state = Map({ proposal1: proposal1 });
+      const action = {
+        id: 'proposal1',
+        type: actionTypes.UPDATE_VOTE_PROPOSAL_TITLE,
+        locale: 'en',
+        value: 'New title'
+      };
+      const expectedProposal1 = fromJS({
+        _hasChanged: true,
+        _isNew: false,
+        _toDelete: false,
+        order: 1.0,
+        id: 'proposal1',
+        titleEntries: [{ localeCode: 'en', value: 'New title' }],
+        descriptionEntries: [],
+        modules: []
+      });
+      const expected = Map({ proposal1: expectedProposal1 });
+      const result = voteProposalsById(state, action);
+      expect(result).toEqual(expected);
+    });
+
+    it('should handle UPDATE_VOTE_PROPOSAL_DESCRIPTION action type', () => {
+      const proposal1 = fromJS({
+        _hasChanged: false,
+        _isNew: false,
+        _toDelete: false,
+        order: 1.0,
+        id: 'proposal1',
+        titleEntries: [],
+        descriptionEntries: [],
+        modules: []
+      });
+      const state = Map({ proposal1: proposal1 });
+      const action = {
+        id: 'proposal1',
+        type: actionTypes.UPDATE_VOTE_PROPOSAL_DESCRIPTION,
+        locale: 'en',
+        value: 'New description'
+      };
+      const expectedProposal1 = fromJS({
+        _hasChanged: true,
+        _isNew: false,
+        _toDelete: false,
+        order: 1.0,
+        id: 'proposal1',
+        titleEntries: [],
+        descriptionEntries: [{ localeCode: 'en', value: 'New description' }],
+        modules: []
+      });
+      const expected = Map({ proposal1: expectedProposal1 });
+      const result = voteProposalsById(state, action);
+      expect(result).toEqual(expected);
+    });
   });
 
   describe('modulesById reducer', () => {
