@@ -445,7 +445,7 @@ class Query(graphene.ObjectType):
 
         if end_date:
             end_date = dateutil.parser.parse(end_date)
-            query = query.filter(model.modification_date >= end_date)
+            query = query.filter(model.modification_date <= end_date)
 
         return query.all()
 

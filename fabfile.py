@@ -596,6 +596,7 @@ def build_virtualenv():
     if not exists("%(projectpath)s/../bluenove-actionable/" % env):
         print cyan("Cloning git bluenove-actionable repository")
         with cd("%(projectpath)s/.." % env):
+            # TODO We need an ssh access
             run('git clone git://github.com/bluenove/bluenove-actionable.git')
 
         with cd("%(projectpath)s/../bluenove-actionable/" % env):
@@ -876,13 +877,13 @@ def get_robot_machine():
 @task
 def update_bluenove_actionable():
     path = join(env.projectpath, '..', 'bluenove-actionable')
-    robot = get_robot_machine()
-    if exists(path) and robot:
+    if exists(path):
         print(cyan('Updating bluenove-actionable Git repository'))
         with cd(path):
-            run('git pull')
+            # TODO We need an ssh access
+            run('git pull', warn_only=True)
             execute(stop_bluenove_actionable)
-            run('docker-compose build', warn_only=True)
+            run('docker-compose build --no-cache', warn_only=True)
 
 
 @task

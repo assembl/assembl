@@ -1,14 +1,14 @@
-"""create robot user
+"""add_user_machine
 
-Revision ID: 07116366204a
-Revises: e3f681bd70e0
-Create Date: 2018-06-25 10:32:36.419917
+Revision ID: a5bf5017b280
+Revises: d7452db4dcd2
+Create Date: 2018-07-03 19:34:36.005334
 
 """
 
 # revision identifiers, used by Alembic.
-revision = '07116366204a'
-down_revision = 'e3f681bd70e0'
+revision = 'a5bf5017b280'
+down_revision = 'd7452db4dcd2'
 
 from alembic import context, op
 import sqlalchemy as sa
