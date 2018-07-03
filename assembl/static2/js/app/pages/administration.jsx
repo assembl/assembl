@@ -303,7 +303,8 @@ class Administration extends React.Component {
               <Row>
                 <Col xs={12} md={3} />
                 <Col xs={12} md={8}>
-                  {/* save button is moved here in css */}
+                  {/* save button is moved here via a ReactDOM portal */}
+                  <div id="save-button" />
                 </Col>
                 <Col xs={12} md={1} />
               </Row>

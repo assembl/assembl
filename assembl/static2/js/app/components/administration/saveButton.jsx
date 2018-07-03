@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
@@ -59,8 +60,8 @@ const mapStateToProps = state => ({
 });
 
 export const DumbSaveButton = ({ disabled, saveAction, specificClasses, isLargeLogo }) => {
-  const buttonClasses = specificClasses ||
-    classNames('save-button button-submit button-dark right', { 'save-button-low': isLargeLogo });
+  const buttonClasses =
+    specificClasses || classNames('save-button button-submit button-dark right', { 'save-button-low': isLargeLogo });
   return (
     <Button className={buttonClasses} disabled={disabled} onClick={saveAction}>
       <Translate value="administration.saveThemes" />
@@ -68,4 +69,23 @@ export const DumbSaveButton = ({ disabled, saveAction, specificClasses, isLargeL
   );
 };
 
-export default connect(mapStateToProps)(DumbSaveButton);
+class SaveButtonInPortal extends React.PureComponent {
+  constructor(props) {
+    super(props);
+    this.el = document.createElement('span');
+  }
+
+  componentDidMount() {
+    document.getElementById('save-button').appendChild(this.el);
+  }
+
+  componentWillUnmount() {
+    document.getElementById('save-button').removeChild(this.el);
+  }
+
+  render() {
+    return ReactDOM.createPortal(<DumbSaveButton {...this.props} />, this.el);
+  }
+}
+
+export default connect(mapStateToProps)(SaveButtonInPortal);
