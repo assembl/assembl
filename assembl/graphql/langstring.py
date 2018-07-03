@@ -1,6 +1,7 @@
 import graphene
 from sqlalchemy import inspect
 
+import assembl.graphql.docstrings as docs
 from assembl import models
 from assembl.models.auth import LanguagePreferenceCollection
 
@@ -149,14 +150,14 @@ def update_langstring_from_input_entries(obj, attr, entries):
 
 
 class LangStringEntryFields(graphene.AbstractType):
-    value = graphene.String(required=False)
-    locale_code = graphene.String(required=True)
+    value = graphene.String(required=False, description=docs.LangString.value)
+    locale_code = graphene.String(required=True, description=docs.LangString.locale_code)
 
 
 class LangStringEntry(graphene.ObjectType, LangStringEntryFields):
-    translated_from_locale_code = graphene.String(required=False)
-    supposed_understood = graphene.Boolean(required=False)
-    error_code = graphene.Int(required=False)
+    translated_from_locale_code = graphene.String(required=False, description=docs.LangString.translated_from_locale_code)
+    supposed_understood = graphene.Boolean(required=False, description=docs.LangString.supposed_understood)
+    error_code = graphene.Int(required=False, description=docs.LangString.error_code)
 
 
 class LangStringEntryInput(graphene.InputObjectType, LangStringEntryFields):

@@ -10,6 +10,7 @@ from graphene_sqlalchemy.converter import (convert_column_to_string,
 from graphene_sqlalchemy.utils import get_query
 from sqlalchemy.orm import contains_eager, joinedload, subqueryload
 
+import assembl.graphql.docstrings as docs
 from assembl import models
 
 from assembl.graphql.discussion import (Discussion, UpdateDiscussion, DiscussionPreferences,
@@ -47,7 +48,6 @@ from assembl.graphql.vote_session import (
     CreateProposal, UpdateProposal, DeleteProposal
 )
 from assembl.graphql.utils import get_fields, get_root_thematic_for_phase
-import assembl.graphql.docstrings as docs
 from assembl.lib.locale import strip_country
 from assembl.lib.sqla_types import EmailString
 from assembl.models.action import SentimentOfPost
