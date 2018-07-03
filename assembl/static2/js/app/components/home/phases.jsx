@@ -30,7 +30,7 @@ class Phases extends React.Component {
                     key={index}
                   >
                     <Phase
-                      imgUrl={phase.image.externalUrl}
+                      imgUrl={phase.image ? phase.image.externalUrl : null}
                       startDate={phase.start}
                       endDate={phase.end}
                       index={index}
