@@ -5,7 +5,7 @@ exports[`tokenTypeForm component should render a TokenCategoryForm component 1`]
   className="token-type-form"
 >
   <Translate
-    number={NaN}
+    number={2}
     value="administration.token"
   />
   <div
@@ -17,7 +17,7 @@ exports[`tokenTypeForm component should render a TokenCategoryForm component 1`]
       formControlProps={undefined}
       helperText=""
       helperUrl=""
-      id={undefined}
+      id="token-title1"
       label="Token title"
       labelAlwaysVisible={false}
       name={undefined}
@@ -37,7 +37,7 @@ exports[`tokenTypeForm component should render a TokenCategoryForm component 1`]
       }
       helperText=""
       helperUrl=""
-      id={undefined}
+      id="token-number1"
       label="Number of tokens per participant"
       labelAlwaysVisible={false}
       name={undefined}

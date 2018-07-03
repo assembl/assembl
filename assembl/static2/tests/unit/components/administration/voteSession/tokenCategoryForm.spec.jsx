@@ -9,6 +9,7 @@ describe('tokenTypeForm component', () => {
     const handleColorChangeSpy = jest.fn(() => {});
     const handleTotalNumberChangeSpy = jest.fn(() => {});
     const props = {
+      index: 1,
       title: 'En faveur',
       color: '#00AA7B',
       totalNumber: 12,

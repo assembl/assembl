@@ -21,6 +21,7 @@ exports[`ModulesSection component should render a ModuleSection component with t
           bsClass="checkbox"
           checked={false}
           disabled={false}
+          id="token-checkbox"
           inline={false}
           onChange={[Function]}
           title=""
@@ -42,6 +43,7 @@ exports[`ModulesSection component should render a ModuleSection component with t
           bsClass="checkbox"
           checked={true}
           disabled={false}
+          id="gauge-checkbox"
           inline={false}
           onChange={[Function]}
           title=""
@@ -246,6 +248,7 @@ exports[`ModulesSection component should render a ModulesSection component witho
           bsClass="checkbox"
           checked={false}
           disabled={false}
+          id="token-checkbox"
           inline={false}
           onChange={[Function]}
           title=""
@@ -264,6 +267,7 @@ exports[`ModulesSection component should render a ModulesSection component witho
           bsClass="checkbox"
           checked={false}
           disabled={false}
+          id="gauge-checkbox"
           inline={false}
           onChange={[Function]}
           title=""

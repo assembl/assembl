@@ -51,6 +51,7 @@ const DumbModulesSection = ({
         <div className="form-container">
           <div className="vote-modules-form">
             <Checkbox
+              id="token-checkbox"
               checked={tokenModuleChecked}
               onChange={() => {
                 toggleModuleCheckbox(tokenModuleChecked, tokenModules, 'tokens');
@@ -66,6 +67,7 @@ const DumbModulesSection = ({
             {activeTokenModulesIds.map(id => <TokensForm key={id} id={id} editLocale={editLocale} />)}
             {(tokenModuleChecked || gaugeModuleChecked) && <div className="separator" />}
             <Checkbox
+              id="gauge-checkbox"
               checked={gaugeModuleChecked}
               onChange={() => {
                 toggleModuleCheckbox(gaugeModuleChecked, gaugeModules, 'gauge');
