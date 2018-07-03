@@ -1,14 +1,14 @@
 """add title and subtitle to landing_page_module
 
 Revision ID: 2d0777b24f0d
-Revises: 4d6fcaafe1e6
+Revises: d7452db4dcd2
 Create Date: 2018-06-20 16:09:23.885102
 
 """
 
 # revision identifiers, used by Alembic.
 revision = '2d0777b24f0d'
-down_revision = '4d6fcaafe1e6'
+down_revision = 'd7452db4dcd2'
 
 from alembic import context, op
 import sqlalchemy as sa
