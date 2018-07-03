@@ -14,4 +14,20 @@
   .cookie-title {
     margin-left: 20px;
   }
+
+  .cookies-toggles {
+    margin: 10px 0;
+  }
+
+  .cookie-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 60%;
+    margin: 5px;
+
+    .rsbc-switch-button {
+      margin-top: 6px;
+    }
+  }
 }

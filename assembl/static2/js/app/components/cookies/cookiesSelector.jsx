@@ -2,6 +2,7 @@
 import React from 'react';
 import { Translate } from 'react-redux-i18n';
 import classnames from 'classnames';
+import CookieToggle from './cookieToggle';
 
 const TRANSLATION_KEYS = ['essential', 'analytics'];
 
@@ -13,6 +14,8 @@ type CookiesSelectorState = {
   activeKey: ?string,
   show: boolean
 }
+
+const mockCookiesList = ['premier cookie', '2eme cookie sympa', 'encore un autre'];
 
 class CookiesSelector extends React.Component<CookiesSelectorProps, CookiesSelectorState> {
   constructor(props: CookiesSelectorProps) {
@@ -30,6 +33,7 @@ class CookiesSelector extends React.Component<CookiesSelectorProps, CookiesSelec
       <div className="cookies-selector page-body">
         {TRANSLATION_KEYS.map((key) => {
           const isActiveKey = key === activeKey;
+          const isEssential = key === 'essential';
           return (
             <div key={`category-${key}`}>
               <div
@@ -42,8 +46,13 @@ class CookiesSelector extends React.Component<CookiesSelectorProps, CookiesSelec
                 <span className={classnames('assembl-icon-right-dir', { 'active-arrow': isActiveKey })} />
                 <Translate value={`cookiesPolicy.${key}`} className="dark-title-4" />
               </div>
-              {isActiveKey && show &&
-              <div className="cookie-title dark-title-3 ellipsis">This is the active category</div>}
+              <div className="cookies-toggles">
+                {isActiveKey && show &&
+                mockCookiesList.map(cookie => (
+                  <CookieToggle name={cookie} isEssential={isEssential} key={cookie} />
+                ))
+                }
+              </div>
             </div>
           );
         })}
