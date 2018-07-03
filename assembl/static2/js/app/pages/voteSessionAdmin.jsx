@@ -414,13 +414,15 @@ class VoteSessionAdmin extends React.Component<VoteSessionAdminProps, VoteSessio
     };
     const voteSessionPageId = voteSessionPage.get('id');
 
-    let allMutations: Array<() => Promise<*>> = [];
     if (voteSessionPage.get('id')) {
       if (modulesOrProposalsHaveChanged) {
         // mutations for modules templates
         const modules = voteModules.map(m => ({ ...m.toJS(), voteSessionId: voteSessionPageId })).toArray();
+
         const allSpecsMutationsPromises = getMutationsForModules(modules);
-        allMutations = allMutations.concat(allSpecsMutationsPromises);
+        this.runMutations(allSpecsMutationsPromises);
+
+        let proposalsAndModulesMutations: Array<() => Promise<*>> = [];
 
         // mutations for proposals and their modules
         const isValid = this.validateProposals(voteProposals);
@@ -459,7 +461,7 @@ class VoteSessionAdmin extends React.Component<VoteSessionAdminProps, VoteSessio
           }
         });
 
-        allMutations = allMutations.concat(mutationsPromises);
+        proposalsAndModulesMutations = proposalsAndModulesMutations.concat(mutationsPromises);
 
         const proposalsToCreate = items.filter(item => item._isNew && !item._toDelete);
         const proposalsMutations = [];
@@ -483,14 +485,14 @@ class VoteSessionAdmin extends React.Component<VoteSessionAdminProps, VoteSessio
                 this.runMutations(getMutationsForModules(modulesToCreate));
               }
             });
-          proposalsMutations.push(createProposalPromise);
-        });
 
-        allMutations = allMutations.concat(proposalsMutations);
+          proposalsMutations.push(createProposalPromise);
+        }); // end proposalsToCreate.forEach
+
+        proposalsAndModulesMutations = proposalsAndModulesMutations.concat(proposalsMutations);
+        this.runMutations(proposalsAndModulesMutations);
       }
     }
-
-    this.runMutations(allMutations);
   };
 
   dataHaveChanged = (): boolean => this.props.modulesOrProposalsHaveChanged || this.props.voteSessionPage.get('_hasChanged');
