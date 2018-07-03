@@ -9,6 +9,7 @@ from assembl import models
 from assembl.auth import IF_OWNED, CrudPermissions
 from assembl.auth.util import get_permissions
 
+import assembl.graphql.docstrings as docs
 from .document import Document
 from .types import SecureObjectType
 from .langstring import (
@@ -23,15 +24,21 @@ class Discussion(SecureObjectType, SQLAlchemyObjectType):
         model = models.Discussion
         only_fields = ('id',)
 
-    homepage_url = graphene.String()
-    title = graphene.String(lang=graphene.String())
-    title_entries = graphene.List(LangStringEntry)
-    subtitle = graphene.String(lang=graphene.String())
-    subtitle_entries = graphene.List(LangStringEntry)
-    button_label = graphene.String(lang=graphene.String())
-    button_label_entries = graphene.List(LangStringEntry)
-    header_image = graphene.Field(Document)
-    logo_image = graphene.Field(Document)
+    homepage_url = graphene.String(description=docs.Discussion.homepage_url)
+    title = graphene.String(
+        lang=graphene.String(description=docs.Default.required_language_input),
+        description=docs.Discussion.title)
+    title_entries = graphene.List(LangStringEntry, description=docs.Default.langstring_entries)
+    subtitle = graphene.String(
+        lang=graphene.String(description=docs.Default.required_language_input),
+        description=docs.Discussion.subtitle)
+    subtitle_entries = graphene.List(LangStringEntry, description=docs.Default.langstring_entries)
+    button_label = graphene.String(
+        lang=graphene.String(description=docs.Default.required_language_input),
+        description=docs.Discussion.button_label)
+    button_label_entries = graphene.List(LangStringEntry, description=docs.Default.langstring_entries)
+    header_image = graphene.Field(Document, description=docs.Discussion.header_image)
+    logo_image = graphene.Field(Document, description=docs.Discussion.logo_image)
 
     def resolve_homepage_url(self, args, context, info):
         # TODO: Remove this resolver and add URLString to
@@ -99,11 +106,11 @@ class Discussion(SecureObjectType, SQLAlchemyObjectType):
 
 class UpdateDiscussion(graphene.Mutation):
     class Input:
-        title_entries = graphene.List(LangStringEntryInput)
-        subtitle_entries = graphene.List(LangStringEntryInput)
-        button_label_entries = graphene.List(LangStringEntryInput)
-        header_image = graphene.String()
-        logo_image = graphene.String()
+        title_entries = graphene.List(LangStringEntryInput, description=docs.UpdateDiscussion.title_entries)
+        subtitle_entries = graphene.List(LangStringEntryInput, description=docs.UpdateDiscussion.subtitle_entries)
+        button_label_entries = graphene.List(LangStringEntryInput, description=docs.UpdateDiscussion.button_label_entries)
+        header_image = graphene.String(description=docs.UpdateDiscussion.header_image)
+        logo_image = graphene.String(description=docs.UpdateDiscussion.logo_image)
 
     discussion = graphene.Field(lambda: Discussion)
 
@@ -225,9 +232,9 @@ class UpdateDiscussion(graphene.Mutation):
 
 
 class LocalePreference(graphene.ObjectType):
-    locale = graphene.String()
-    name = graphene.String(in_locale=graphene.String(required=True))
-    native_name = graphene.String()
+    locale = graphene.String(description=docs.LocalePreference.locale)
+    name = graphene.String(in_locale=graphene.String(required=True), description=docs.LocalePreference.name)
+    native_name = graphene.String(description=docs.LocalePreference.native_name)
 
     def resolve_name(self, args, context, info):
         in_locale = args.get('in_locale') or None
@@ -261,14 +268,14 @@ class LocalePreference(graphene.ObjectType):
 
 
 class DiscussionPreferences(graphene.ObjectType):
-    languages = graphene.List(LocalePreference)
+    languages = graphene.List(LocalePreference, description=docs.DiscussionPreferences.languages)
 
 
 class ResourcesCenter(graphene.ObjectType):
-
-    title = graphene.String(lang=graphene.String())
-    title_entries = graphene.List(LangStringEntry)
-    header_image = graphene.Field(Document)
+    __doc__ = docs.ResourcesCenter.__doc__
+    title = graphene.String(lang=graphene.String(), description=docs.ResourcesCenter.title)
+    title_entries = graphene.List(LangStringEntry, description=docs.ResourcesCenter.title_entries)
+    header_image = graphene.Field(Document, description=docs.ResourcesCenter.header_image)
 
     def resolve_title(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
@@ -291,15 +298,15 @@ class ResourcesCenter(graphene.ObjectType):
 
 
 class LegalContents(graphene.ObjectType):
-
-    legal_notice = graphene.String(lang=graphene.String())
-    terms_and_conditions = graphene.String(lang=graphene.String())
-    legal_notice_entries = graphene.List(LangStringEntry)
-    terms_and_conditions_entries = graphene.List(LangStringEntry)
-    cookies_policy = graphene.String(lang=graphene.String())
-    privacy_policy = graphene.String(lang=graphene.String())
-    cookies_policy_entries = graphene.List(LangStringEntry)
-    privacy_policy_entries = graphene.List(LangStringEntry)
+    __doc__ = docs.LegalContents.__doc__
+    legal_notice = graphene.String(lang=graphene.String(), description=docs.LegalContents.legal_notice)
+    terms_and_conditions = graphene.String(lang=graphene.String(), description=docs.LegalContents.terms_and_conditions)
+    legal_notice_entries = graphene.List(LangStringEntry, description=docs.LegalContents.legal_notice_entries)
+    terms_and_conditions_entries = graphene.List(LangStringEntry, description=docs.LegalContents.terms_and_conditions_entries)
+    cookies_policy = graphene.String(lang=graphene.String(), description=docs.LegalContents.cookies_policy)
+    privacy_policy = graphene.String(lang=graphene.String(), description=docs.LegalContents.privacy_policy)
+    cookies_policy_entries = graphene.List(LangStringEntry, description=docs.LegalContents.cookies_policy_entries)
+    privacy_policy_entries = graphene.List(LangStringEntry, description=docs.LegalContents.privacy_policy_entries)
 
     def resolve_legal_notice(self, args, context, info):
         """Legal notice value in given locale."""
@@ -360,8 +367,8 @@ class LegalContents(graphene.ObjectType):
 
 class UpdateResourcesCenter(graphene.Mutation):
     class Input:
-        title_entries = graphene.List(LangStringEntryInput)
-        header_image = graphene.String()
+        title_entries = graphene.List(LangStringEntryInput, description=docs.UpdateResourcesCenter.title_entries)
+        header_image = graphene.String(description=docs.UpdateResourcesCenter.header_image)
 
     resources_center = graphene.Field(lambda: ResourcesCenter)
 
@@ -430,8 +437,10 @@ class UpdateResourcesCenter(graphene.Mutation):
 
 
 class UpdateDiscussionPreferences(graphene.Mutation):
+    __doc__ = docs.UpdateDiscussionPreferences.__doc__
+
     class Input:
-        languages = graphene.List(graphene.String, required=True)
+        languages = graphene.List(graphene.String, required=True, description=docs.UpdateDiscussionPreferences.languages)
 
     preferences = graphene.Field(lambda: DiscussionPreferences)
 
@@ -463,11 +472,13 @@ class UpdateDiscussionPreferences(graphene.Mutation):
 
 
 class UpdateLegalContents(graphene.Mutation):
+    __doc__ = docs.UpdateLegalContents.__doc__
+
     class Input:
-        legal_notice_entries = graphene.List(LangStringEntryInput)
-        terms_and_conditions_entries = graphene.List(LangStringEntryInput)
-        cookies_policy_entries = graphene.List(LangStringEntryInput)
-        privacy_policy_entries = graphene.List(LangStringEntryInput)
+        legal_notice_entries = graphene.List(LangStringEntryInput, description=docs.UpdateLegalContents.legal_notice_entries)
+        terms_and_conditions_entries = graphene.List(LangStringEntryInput, description=docs.UpdateLegalContents.terms_and_conditions_entries)
+        cookies_policy_entries = graphene.List(LangStringEntryInput, description=docs.UpdateLegalContents.cookies_policy_entries)
+        privacy_policy_entries = graphene.List(LangStringEntryInput, description=docs.UpdateLegalContents.privacy_policy_entries)
 
     legal_contents = graphene.Field(lambda: LegalContents)
 
@@ -532,10 +543,10 @@ class UpdateLegalContents(graphene.Mutation):
 
 
 class VisitsAnalytics(graphene.ObjectType):
-
-    sum_visits_length = graphene.Int()
-    nb_pageviews = graphene.Int()
-    nb_uniq_pageviews = graphene.Int()
+    __doc__ = docs.VisitsAnalytics.__doc__
+    sum_visits_length = graphene.Int(description=docs.VisitsAnalytics.sum_visits_length)
+    nb_pageviews = graphene.Int(description=docs.VisitsAnalytics.nb_pageviews)
+    nb_uniq_pageviews = graphene.Int(description=docs.VisitsAnalytics.nb_uniq_pageviews)
 
     @classmethod
     def query_analytics(cls, args, context, info, single_metric=None):
