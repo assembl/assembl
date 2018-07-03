@@ -90,6 +90,7 @@ exports[`Post component should render a PostView component and pass its props to
     }
     rowIndex={0}
     subject="We need to hack the solid state HTTP alarm!"
+    timeline={undefined}
   />
 </div>
 `;
@@ -198,6 +199,7 @@ exports[`PostView component should render a post in view mode 1`] = `
             }
           }
           sentimentCounts={3}
+          timeline={undefined}
         />
       </div>
     </div>

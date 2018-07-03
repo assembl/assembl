@@ -163,12 +163,13 @@ class Idea extends React.Component {
   };
 
   getTopPosts() {
-    const { ideaWithPostsData, routerParams, debateData } = this.props;
+    const { ideaWithPostsData, routerParams, timeline, debateData } = this.props;
     if (!ideaWithPostsData.idea) return [];
     const topPosts = transformPosts(ideaWithPostsData.idea.posts.edges, ideaWithPostsData.idea.messageColumns, {
       refetchIdea: ideaWithPostsData.refetch,
       ideaId: ideaWithPostsData.idea.id,
       routerParams: routerParams,
+      timeline: timeline,
       debateData: debateData
     });
     return topPosts;
@@ -177,6 +178,7 @@ class Idea extends React.Component {
   render() {
     const {
       contentLocaleMapping,
+      timeline,
       debateData,
       isHarvesting,
       lang,
@@ -209,6 +211,7 @@ class Idea extends React.Component {
     const topPosts = this.getTopPosts();
     const childProps = {
       identifier: identifier,
+      timeline: timeline,
       debateData: debateData,
       ideaId: id,
       ideaWithPostsData: ideaWithPostsData,
@@ -275,10 +278,11 @@ class Idea extends React.Component {
 
 const mapStateToProps = state => ({
   contentLocaleMapping: state.contentLocale,
-  debateData: state.debate.debateData,
+  timeline: state.timeline,
   defaultContentLocaleMapping: state.defaultContentLocaleMapping,
   isHarvesting: state.context.isHarvesting,
-  lang: state.i18n.locale
+  lang: state.i18n.locale,
+  debateData: state.debate.debateData
 });
 
 const mapDispatchToProps = dispatch => ({

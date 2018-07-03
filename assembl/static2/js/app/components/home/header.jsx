@@ -15,17 +15,11 @@ class Header extends React.Component {
     this.displayPhase = this.displayPhase.bind(this);
   }
 
-  // This redirection should be removed when the phase 2 will be done
   displayPhase() {
     const slug = { slug: getDiscussionSlug() };
-    const { isRedirectionToV1 } = this.props.phase;
-    const { timeline } = this.props.debate.debateData;
+    const { timeline } = this.props;
     const currentPhaseIdentifier = getCurrentPhaseIdentifier(timeline);
-    if (isRedirectionToV1) {
-      window.location = get('oldVote', slug);
-    } else {
-      browserHistory.push(get('debate', { ...slug, phase: currentPhaseIdentifier }));
-    }
+    browserHistory.push(get('debate', { ...slug, phase: currentPhaseIdentifier }));
   }
 
   render() {
@@ -71,8 +65,8 @@ class Header extends React.Component {
 
 const mapStateToProps = state => ({
   debate: state.debate,
-  phase: state.phase,
-  i18n: state.i18n
+  i18n: state.i18n,
+  timeline: state.timeline
 });
 
 export default connect(mapStateToProps)(Header);

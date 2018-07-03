@@ -11,7 +11,9 @@ import {
   UPDATE_PHASES,
   DELETE_PHASE,
   UPDATE_PHASE_TITLE,
+  UPDATE_PHASE_DESCRIPTION,
   UPDATE_PHASE_IDENTIFIER,
+  UPDATE_PHASE_IMAGE,
   UPDATE_PHASE_START,
   UPDATE_PHASE_END,
   UPDATE_IS_THEMATICS_TABLE,
@@ -19,17 +21,25 @@ import {
   MOVE_PHASE_DOWN
 } from '../../actions/actionTypes';
 
+const defaultImage = Map({
+  externalUrl: '',
+  mimeType: '',
+  title: ''
+});
+
 const emptyPhase = Map({
   _hasChanged: false,
   _isNew: true,
   _toDelete: false,
   identifier: null,
   titleEntries: List(),
+  descriptionEntries: List(),
   start: null,
   end: null,
   isThematicsTable: false,
   hasConflictingDates: false,
-  endIsBeforeStart: false
+  endIsBeforeStart: false,
+  image: defaultImage
 });
 
 const getHasConflictingDates = (phases, id, start, end) => {
@@ -51,6 +61,10 @@ export const phasesById: PhasesByIdReducer = (state: PhasesByIdState = Map(), ac
     return state
       .updateIn([action.id, 'titleEntries'], updateInLangstringEntries(action.locale, action.value))
       .setIn([action.id, '_hasChanged'], true);
+  case UPDATE_PHASE_DESCRIPTION:
+    return state
+      .updateIn([action.id, 'descriptionEntries'], updateInLangstringEntries(action.locale, action.value))
+      .setIn([action.id, '_hasChanged'], true);
   case UPDATE_PHASE_IDENTIFIER:
     return state.setIn([action.id, 'identifier'], action.value).setIn([action.id, '_hasChanged'], true);
   case UPDATE_PHASE_START: {
@@ -69,6 +83,12 @@ export const phasesById: PhasesByIdReducer = (state: PhasesByIdState = Map(), ac
       .setIn([action.id, 'endIsBeforeStart'], newEnd.isBefore(start))
       .setIn([action.id, '_hasChanged'], true);
   }
+  case UPDATE_PHASE_IMAGE:
+    return state
+      .setIn([action.id, 'image', 'externalUrl'], action.value)
+      .setIn([action.id, 'image', 'mimeType'], action.value.type)
+      .setIn([action.id, 'image', 'title'], action.value.name)
+      .setIn([action.id, '_hasChanged'], true);
   case UPDATE_IS_THEMATICS_TABLE:
     return state.setIn([action.id, 'isThematicsTable'], action.value).setIn([action.id, '_hasChanged'], true);
   case MOVE_PHASE_UP:
@@ -77,24 +97,28 @@ export const phasesById: PhasesByIdReducer = (state: PhasesByIdState = Map(), ac
     return moveItemDown(state, action.id);
   case UPDATE_PHASES: {
     let newState = Map();
-    action.phases.forEach(({ identifier, titleEntries, start, end, id, isThematicsTable, order }) => {
-      const phaseInfo = Map({
-        _hasChanged: false,
-        _isNew: false,
-        _toDelete: false,
-        identifier: identifier,
-        titleEntries: fromJS(titleEntries),
-        start: start,
-        end: end,
-        isThematicsTable: isThematicsTable || false, // default to false until we have the interface to set a thematicstable
-        id: id,
-        order: order,
-        hasConflictingDates: getHasConflictingDates(action.phases, id, start, end) || false,
-        endIsBeforeStart: end.isBefore(start)
-      });
+    action.phases.forEach(
+      ({ identifier, titleEntries, start, end, id, isThematicsTable, order, image, descriptionEntries }) => {
+        const phaseInfo = Map({
+          _hasChanged: false,
+          _isNew: false,
+          _toDelete: false,
+          identifier: identifier,
+          titleEntries: fromJS(titleEntries),
+          start: start,
+          end: end,
+          isThematicsTable: isThematicsTable || false, // default to false until we have the interface to set a thematicstable
+          id: id,
+          order: order,
+          hasConflictingDates: getHasConflictingDates(action.phases, id, start, end) || false,
+          endIsBeforeStart: end.isBefore(start),
+          image: image ? fromJS(image) : defaultImage,
+          descriptionEntries: fromJS(descriptionEntries)
+        });
 
-      newState = newState.set(id, phaseInfo);
-    });
+        newState = newState.set(id, phaseInfo);
+      }
+    );
 
     return newState;
   }
@@ -111,7 +135,9 @@ export const phasesHaveChanged: TimelineHasChangedReducer = (state = false, acti
   case CREATE_PHASE:
   case DELETE_PHASE:
   case UPDATE_PHASE_TITLE:
+  case UPDATE_PHASE_DESCRIPTION:
   case UPDATE_PHASE_IDENTIFIER:
+  case UPDATE_PHASE_IMAGE:
   case UPDATE_PHASE_START:
   case UPDATE_PHASE_END:
   case UPDATE_IS_THEMATICS_TABLE:

@@ -16,7 +16,6 @@ import Proposals from '../components/debate/survey/proposals';
 import { getIfPhaseCompletedByIdentifier } from '../utils/timeline';
 import ThematicQuery from '../graphql/ThematicQuery.graphql';
 import { displayAlert } from '../utils/utilityManager';
-import type { Timeline } from '../utils/timeline';
 import { get as getRoute } from '../utils/routeMap';
 import HeaderStatistics, { statContributions, statMessages, statParticipants } from '../components/common/headerStatistics';
 
@@ -36,11 +35,7 @@ type QuestionType = {
 };
 
 type SurveyProps = {
-  debate: {
-    debateData: {
-      timeline: Timeline
-    }
-  },
+  timeline: Timeline,
   defaultContentLocaleMapping: Map,
   hasErrors: boolean,
   imgUrl: string,
@@ -122,9 +117,20 @@ class Survey extends React.Component<SurveyProps, SurveyState> {
       displayAlert('danger', I18n.t('error.loading'));
       return null;
     }
-    const { id, imgUrl, media, numPosts, numContributors, questions, refetchThematic, title, slug, totalSentiments } = this.props;
-    const { debateData } = this.props.debate;
-    const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, 'survey');
+    const {
+      id,
+      imgUrl,
+      media,
+      numPosts,
+      numContributors,
+      questions,
+      refetchThematic,
+      title,
+      slug,
+      totalSentiments,
+      timeline
+    } = this.props;
+    const isPhaseCompleted = getIfPhaseCompletedByIdentifier(timeline, 'survey');
     const phaseUrl = `${getRoute('debate', { slug: slug, phase: 'survey' })}`;
     let statElements = [];
     const numContributions = numPosts + totalSentiments;
@@ -194,7 +200,7 @@ class Survey extends React.Component<SurveyProps, SurveyState> {
 }
 
 const mapStateToProps = state => ({
-  debate: state.debate,
+  timeline: state.timeline,
   defaultContentLocaleMapping: state.defaultContentLocaleMapping,
   lang: state.i18n.locale,
   slug: state.debate.debateData.slug

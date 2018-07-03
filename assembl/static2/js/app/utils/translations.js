@@ -1,6 +1,7 @@
 /* eslint max-len: "off", quotes: ["error", "double"] */
 const Translations = {
   fr: {
+    here: "ici",
     yes: "oui",
     no: "non",
     "Number of contributions": "Nombre de messages",
@@ -16,8 +17,6 @@ const Translations = {
     },
     introduction: "Introduction",
     conclusion: "Conclusion",
-    redirectToV1:
-      "Vous allez être redirigé vers la phase %{phaseName} dans quelques secondes. Assembl est en cours d'amélioration, veuillez nous excuser pour le changement d'interface. Si rien ne se produit, cliquez sur le bouton ci-dessous.",
     harvesting: {
       enableHarvestingMode: "Activer le mode attrapage",
       disableHarvestingMode: "Désactiver le mode attrapage",
@@ -478,7 +477,8 @@ const Translations = {
         instruction2: "Renseignez les champs requis pour chaque phase en sélectionnant chaque onglet",
         phaseModule: "Modalité de participation pour cette phase :",
         thematicsTable: "Thematics table",
-        configureModule: "Après avoir sauvegardé, configurez le module en cliquant dans le menu vertical gauche ou sur le lien suivant : ",
+        configureModule:
+          "Après avoir sauvegardé, configurez le module en cliquant dans le menu vertical gauche ou sur le lien suivant : ",
         configureModuleLink: "Configurer Phase %{count}",
         successSave: "La ligne de temps a été sauvegardée avec succès",
         endIsBeforeStart: "Veuillez sélectionner une date de fin postérieure à celle de début",
@@ -593,6 +593,8 @@ const Translations = {
         sectionsTitle: "Renseigner les rubriques"
       },
       helpers: {
+        timelinePhases: "Choisissez une description et une image pour chaque phase du débat visible dans la landing page",
+        timelineTitle: "Configurez le titre et le sous-titre de la section timeline visible dans la landing page",
         voteSessionHeader: "Le bandeau de haut de page doit contenir une image et un titre. Le sous-titre est optionnel.",
         voteSessionInstructions:
           "La section consigne comporte un titre et une consigne qui permettent de guider les participants dans leur contribution.",
@@ -645,7 +647,9 @@ const Translations = {
         headerSubtitle: "Sous-titre du bandeau",
         instructionsTitle: "Titre de la consigne",
         instructionsContent: "Contenu de la consigne",
-        propositionSectionTitle: "Titre de la section"
+        propositionSectionTitle: "Titre de la section",
+        propositionSectionSubtitle: "Sous-titre de la section",
+        descriptionPhase: "Description de la phase"
       },
       resourcesCenter: {
         createResource: "Ajouter un média",
@@ -707,6 +711,15 @@ const Translations = {
           logoDescription:
             "Le logo doit avoir une hauteur maximale de 78px et une largeur maximale de 200px. Le poids ne doit pas dépasser 1Mo. Le fond doit être transparent."
         },
+        timeline: {
+          title: "Timeline",
+          image: "Choisir l'image pour cette phase",
+          phaseSection: "Configurer les phases du débat",
+          imageDescription: "L'image doit avoir une hauteur de 500px et une largeur de 400px.",
+          sectionTitle: "Configurer le titre et sous-titre de la section",
+          linkToTimeline: "Configurer le nombre phases souhaitées pour le débat",
+          linkToLandingPage: "Configurer la description et l'image pour chaque phase"
+        },
         successSave: "Les modules ont été enregistrés avec succès !",
         headerSuccessSave: "Le bandeau de la page d'accueil a été sauvegardé avec succès !"
       },
@@ -738,6 +751,7 @@ const Translations = {
     }
   },
   en: {
+    here: "here",
     yes: "yes",
     no: "no",
     cancel: "Cancel",
@@ -751,8 +765,6 @@ const Translations = {
       title: "Instant discussion window",
       tooltip: "Assemb'Bot"
     },
-    redirectToV1:
-      "You will be redirected to the %{phaseName} phase in a few seconds. Assembl is being improved, please excuse us for the interface change. If nothing happens, click on the button.",
     harvesting: {
       enableHarvestingMode: "Enable harvesting mode",
       disableHarvestingMode: "Disable harvesting mode",
@@ -1211,7 +1223,8 @@ const Translations = {
         instruction2: "Fill in the required fields for each phase by selecting each tab",
         phaseModule: "Module for this phase:",
         thematicsTable: "Table des thématiques",
-        configureModule: "Once you saved your work, configure the module by clicking on the vertical menu on the left or on the following link: ",
+        configureModule:
+          "Once you saved your work, configure the module by clicking on the vertical menu on the left or on the following link: ",
         configureModuleLink: "Configure Phase %{count}",
         successSave: "The timeline has been sucessfully saved",
         endIsBeforeStart: "Please select an end date posterior to the start",
@@ -1323,6 +1336,8 @@ const Translations = {
         sectionsTitle: "Set sections"
       },
       helpers: {
+        timelinePhases: "Choose a description and an image for each phase of the debate displayed in the landing page",
+        timelineTitle: "Configure the title and the sub-title of the timeline section displayed in the landing page",
         voteSessionHeader: "The top page header must contain an image and a title. The subtitle is optional.",
         voteSessionInstructions:
           "The instructions section must contain a title and a description that will guide the participants for their contribution.",
@@ -1371,7 +1386,9 @@ const Translations = {
         headerSubtitle: "Header subtitle",
         instructionsTitle: "Instructions title",
         instructionsContent: "Instructions content",
-        propositionSectionTitle: "Section title"
+        propositionSectionTitle: "Section title",
+        propositionSectionSubtitle: "Section subtitle",
+        descriptionPhase: "Description phase"
       },
       resourcesCenter: {
         createResource: "Add a media",
@@ -1429,6 +1446,15 @@ const Translations = {
           headerDescription: "The image must have a height of 450px and a width of 1280px. The weight must not exceed 1 MB.",
           logoDescription:
             "The logo must have a maximum height of 78px and a maximum width of 200px. The weight must not exceed 1 MB. The background must be transparent."
+        },
+        timeline: {
+          title: "Timeline",
+          image: "Choose the image for this phase",
+          sectionTitle: "Configure the title and the subtitle of the section",
+          phaseSection: "Configure each phase of the debate",
+          imageDescription: "The image must have a height of 500px and a width of 400px.",
+          linkToTimeline: "Set the number of phases for the debate",
+          linkToLandingPage: "Set the description and the image for each phase"
         },
         successSave: "The modules have been saved with success!",
         headerSuccessSave: "The home page header have been saved with success!"

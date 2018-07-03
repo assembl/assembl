@@ -28,6 +28,7 @@ import QuestionQuery from '../../../graphql/QuestionQuery.graphql';
 import ThematicQuery from '../../../graphql/ThematicQuery.graphql';
 
 type Props = {
+  timeline: Timeline,
   addSentiment: Function,
   contentLocale: string,
   debate: DebateData,
@@ -60,8 +61,8 @@ class Post extends React.Component<Props> {
     const { post } = this.props.data;
     const isUserConnected = getConnectedUserId() !== null;
     if (isUserConnected) {
-      const { debateData } = this.props.debate;
-      const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, 'survey');
+      const { timeline } = this.props;
+      const isPhaseCompleted = getIfPhaseCompletedByIdentifier(timeline, 'survey');
       if (!isPhaseCompleted) {
         const target = event.currentTarget;
         const isMySentiment = post.mySentiment === type;
@@ -312,6 +313,7 @@ class Post extends React.Component<Props> {
 
 const mapStateToProps = (state, { id }) => ({
   debate: state.debate,
+  timeline: state.timeline,
   contentLocale: state.contentLocale.getIn([id, 'contentLocale']),
   lang: state.i18n.locale
 });

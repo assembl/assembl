@@ -11,5 +11,15 @@ query Timeline($lang: String!) {
     start
     end
     order
+    image {
+      mimeType
+      title
+      externalUrl
+    }
+    description(lang: $lang)
+    descriptionEntries {
+      localeCode
+      value
+    }
   }
 }

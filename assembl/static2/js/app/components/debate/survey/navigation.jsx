@@ -74,8 +74,8 @@ class Navigation extends React.Component {
     const limitToHide = getDomElementOffset(firstTextarea).top + firstTextarea.clientHeight;
     const limitToShow = limitToHide + document.getElementById('nav').clientHeight;
     const windowOffset = window.pageYOffset + this.props.screenHeight;
-    const { debateData } = this.props.debate;
-    const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, 'survey');
+    const { timeline } = this.props;
+    const isPhaseCompleted = getIfPhaseCompletedByIdentifier(timeline, 'survey');
     if (windowOffset < limitToHide && !isPhaseCompleted) {
       this.setState({
         isHidden: true
@@ -186,7 +186,7 @@ class Navigation extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  debate: state.debate
+  timeline: state.timeline
 });
 
 export default withScreenDimensions(connect(mapStateToProps)(Navigation));

@@ -7,7 +7,7 @@ import { getDiscussionSlug } from '../../utils/globalFunctions';
 class Menu extends React.Component {
   render() {
     const slug = { slug: getDiscussionSlug() };
-    const { timeline } = this.props.debate.debateData;
+    const { timeline } = this.props;
     const { locale, translations } = this.props.i18n;
     const { requestedPhase } = this.props;
     return (
@@ -76,6 +76,11 @@ class Menu extends React.Component {
                 <Translate value="administration.landingPage.header.title" />
               </Link>
             </li>
+            <li>
+              <Link to={`${get('administration', slug)}/landingPage?section=3`} activeClassName="active">
+                <Translate value="administration.landingPage.timeline.title" />
+              </Link>
+            </li>
           </ul>
         </li>
         <li className="menu-item">
@@ -90,17 +95,7 @@ class Menu extends React.Component {
                 to={`${get('administration', slug)}${get('adminPhase', { ...slug, phase: phase.identifier })}?section=1`}
                 activeClassName="active"
               >
-                {phase.title.entries.map((entry, index) => {
-                  if (entry['@language'] === locale) {
-                    return (
-                      <span key={index}>
-                        <Translate value="administration.menu.phase" count={phaseIndex + 1} description={entry.value} />
-                      </span>
-                    );
-                  }
-
-                  return null;
-                })}
+                <Translate value="administration.menu.phase" count={phaseIndex + 1} description={phase.title} />
               </Link>
               {translations[locale].administration[phase.identifier] && (
                 <ul className={phase.identifier === requestedPhase ? 'shown admin-menu2' : 'hidden admin-menu2'}>

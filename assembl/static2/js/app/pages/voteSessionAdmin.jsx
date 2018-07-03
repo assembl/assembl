@@ -345,9 +345,11 @@ class VoteSessionAdmin extends React.Component<VoteSessionAdminProps, VoteSessio
       const propositionsSectionTitleEntries = voteSessionPage.get('propositionsSectionTitleEntries').toJS();
       const pageHeaderImage = voteSessionPage.get('headerImage').toJS();
       const headerImage = typeof pageHeaderImage.externalUrl === 'object' ? pageHeaderImage.externalUrl : null;
+      const phaseId = timeline ? getPhaseId(timeline, 'voteSession') : null;
+      const discussionPhaseId = phaseId ? atob(phaseId).split(':')[1] : null;
       const payload = {
         variables: {
-          discussionPhaseId: getPhaseId(timeline, 'voteSession'),
+          discussionPhaseId: discussionPhaseId,
           titleEntries: titleEntries,
           subTitleEntries: subTitleEntries,
           instructionsSectionTitleEntries: instructionsSectionTitleEntries,
@@ -515,7 +517,7 @@ class VoteSessionAdmin extends React.Component<VoteSessionAdminProps, VoteSessio
   }
 }
 
-const mapStateToProps = ({ admin: { editLocale, voteSession }, debate, i18n, context }) => {
+const mapStateToProps = ({ admin: { editLocale, voteSession }, i18n, context, timeline }) => {
   const {
     modulesById,
     modulesInOrder,
@@ -563,7 +565,7 @@ const mapStateToProps = ({ admin: { editLocale, voteSession }, debate, i18n, con
     editLocale: editLocale,
     i18n: i18n,
     modulesOrProposalsHaveChanged: modulesOrProposalsHaveChanged,
-    timeline: debate.debateData.timeline,
+    timeline: timeline,
     voteModules: voteModules,
     voteSessionPage: voteSession.page,
     debateId: context.debateId,

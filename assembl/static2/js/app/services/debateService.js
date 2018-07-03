@@ -1,9 +1,6 @@
-import get from 'lodash/get';
-
 import { xmlHttpRequest } from '../utils/httpRequestHandler';
-import { getSortedArrayByKey } from '../utils/globalFunctions';
 
-export const buildDebateData = (debateData, prefs, timeline, socialShare) => {
+export const buildDebateData = (debateData, prefs, socialShare) => {
   const headerBackgroundUrl =
     prefs.extra_json && prefs.extra_json.headerBackgroundUrl ? prefs.extra_json.headerBackgroundUrl : null;
   const headerLogoUrl = prefs.extra_json && prefs.extra_json.headerLogoUrl ? prefs.extra_json.headerLogoUrl : null;
@@ -19,28 +16,6 @@ export const buildDebateData = (debateData, prefs, timeline, socialShare) => {
   const socialMedias = prefs.extra_json && prefs.extra_json.socialMedias ? prefs.extra_json.socialMedias : null;
   const footerLinks = prefs.extra_json && prefs.extra_json.footerLinks ? prefs.extra_json.footerLinks : null;
   const isLargeLogo = prefs.extra_json && prefs.extra_json.isLargeLogo ? prefs.extra_json.isLargeLogo : null;
-
-  const sortedTimeline = timeline.length > 0 ? getSortedArrayByKey(timeline, 'start') : null;
-  if (sortedTimeline) {
-    sortedTimeline.forEach((phase) => {
-      get(phase, 'description.entries', []).forEach((entry) => {
-        if (entry['@language'] === 'zh_Hans') {
-          entry['@language'] = 'zh-CN'; // eslint-disable-line
-        }
-        if (entry['@language'] === 'no') {
-          entry['@language'] = 'nb'; // eslint-disable-line
-        }
-      });
-      get(phase, 'title.entries', []).forEach((entry) => {
-        if (entry['@language'] === 'zh_Hans') {
-          entry['@language'] = 'zh-CN'; // eslint-disable-line
-        }
-        if (entry['@language'] === 'no') {
-          entry['@language'] = 'nb'; // eslint-disable-line
-        }
-      });
-    });
-  }
 
   const customHtmlCodeLandingPage = prefs.custom_html_code_landing_page ? prefs.custom_html_code_landing_page : null;
   const customHtmlCodeRegistrationPage = prefs.custom_html_code_user_registration_page
@@ -58,7 +33,6 @@ export const buildDebateData = (debateData, prefs, timeline, socialShare) => {
     video: video,
     headerLogoUrl: headerLogoUrl,
     headerBackgroundUrl: headerBackgroundUrl,
-    timeline: sortedTimeline,
     helpUrl: debateData.help_url,
     termsOfUseUrl: prefs.terms_of_use_url,
     socialMedias: socialMedias,
@@ -77,17 +51,14 @@ export const buildDebateData = (debateData, prefs, timeline, socialShare) => {
 export const getDebateData = (debateId) => {
   const dataUrl = `/data/Discussion/${debateId}`;
   const prefsUrl = `/data/Discussion/${debateId}/preferences`;
-  const timelineUrl = `/data/Discussion/${debateId}/timeline_events/`;
   const socialShareUrl = `/data/Discussion/${debateId}/settings/social_sharing`;
   const dataRequest = xmlHttpRequest({ method: 'GET', url: dataUrl });
   const prefsRequest = xmlHttpRequest({ method: 'GET', url: prefsUrl });
-  const timelineRequest = xmlHttpRequest({ method: 'GET', url: timelineUrl });
   const socialShareRequest = xmlHttpRequest({ method: 'GET', url: socialShareUrl });
-  return Promise.all([dataRequest, prefsRequest, timelineRequest, socialShareRequest]).then((results) => {
+  return Promise.all([dataRequest, prefsRequest, socialShareRequest]).then((results) => {
     const data = results[0];
     const prefs = results[1];
-    const timeline = results[2];
     const socialShare = results[3];
-    return buildDebateData(data, prefs[0], timeline, socialShare);
+    return buildDebateData(data, prefs[0], socialShare);
   });
 };

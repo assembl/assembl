@@ -7,7 +7,7 @@ import { Navbar } from 'react-bootstrap';
 import { compose, graphql } from 'react-apollo';
 import bind from 'lodash/bind';
 
-import { getCurrentPhaseIdentifier, isSeveralIdentifiers } from '../../utils/timeline';
+import { getCurrentPhaseIdentifier } from '../../utils/timeline';
 import { get } from '../../utils/routeMap';
 import { withScreenWidth } from '../common/screenDimensions';
 import { connectedUserIsAdmin } from '../../utils/permissions';
@@ -94,28 +94,6 @@ const createRedirectionToV1 = () => () => {
   window.location = get('oldVote', slug);
 };
 
-const mapDebateSectionToElement = (debateSection, options) => {
-  const { title } = debateSection;
-  const { phaseContext, displayRedirectionToV1 } = options;
-  const key = sectionKey(debateSection);
-  switch (phaseContext) {
-  case 'modal':
-    return (
-      <div key={key} onClick={displayRedirectionToV1} className="navbar-menu-item pointer" data-text={title}>
-        {title}
-      </div>
-    );
-  case 'old':
-    return (
-      <a key={key} className="navbar-menu-item pointer" href={get('oldVote', { slug: options.slug })} data-text={title}>
-        {title}
-      </a>
-    );
-  default:
-    return <SectionLink key={key} section={debateSection} options={options} />;
-  }
-};
-
 type MapSectionOptions = {
   phase: string,
   phaseContext: string,
@@ -133,21 +111,12 @@ type Section = {
 
 export const mapSectionToElement = (section: Section, options: MapSectionOptions) =>
   (section.sectionType === 'DEBATE' ? (
-    mapDebateSectionToElement(section, options)
+    <SectionLink key={sectionKey(section)} section={section} options={options} />
   ) : (
     <SectionLink key={sectionKey(section)} section={section} options={options} />
   ));
 
-const phaseContext = (timeline, phase) => {
-  const isSeveralPhases = isSeveralIdentifiers(timeline);
-  if (phase.isRedirectionToV1) {
-    if (isSeveralPhases) {
-      return 'modal';
-    }
-    return 'old';
-  }
-  return 'new';
-};
+const phaseContext = () => 'new';
 
 type AssemblNavbarProps = {};
 
@@ -161,10 +130,10 @@ export class AssemblNavbar extends React.PureComponent<AssemblNavbarProps, Assem
   };
 
   render = () => {
-    const { screenWidth, debate, data, location, phase } = this.props;
+    const { screenWidth, debate, data, location, phase, timeline } = this.props;
     const sections = data.sections;
     const { debateData } = debate;
-    const { timeline, logo, slug, helpUrl, isLargeLogo } = debateData;
+    const { logo, slug, helpUrl, isLargeLogo } = debateData;
     const flatWidth = (this.state && this.state.flatWidth) || 0;
     const maxAppWidth = Math.min(APP_CONTAINER_MAX_WIDTH, screenWidth) - APP_CONTAINER_PADDING * 2;
     const screenTooSmall = flatWidth > maxAppWidth;
@@ -215,7 +184,8 @@ export default compose(
   connect(state => ({
     debate: state.debate,
     phase: state.phase,
-    i18n: state.i18n
+    i18n: state.i18n,
+    timeline: state.timeline
   })),
   graphql(SectionsQuery, {
     options: ({ i18n }) => ({

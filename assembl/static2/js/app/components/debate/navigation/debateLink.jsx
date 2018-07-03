@@ -3,14 +3,13 @@ import * as React from 'react';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
 
-import Timeline from './timeline';
+import TimelineCpt from './timeline';
 import TimelineSegmentMenu from './timelineSegmentMenu';
 import { isMobile } from '../../../utils/globalFunctions';
 import { goTo } from '../../../utils/routeMap';
-import { type DebateType } from './timelineSegment';
 
 type DebateLinkProps = {
-  debate: DebateType,
+  timeline: Timeline,
   identifier: string,
   className: string,
   activeClassName: string,
@@ -68,9 +67,9 @@ export class DumbDebateLink extends React.Component<DebateLinkProps, DebateLinkS
   };
 
   render() {
-    const { identifier, children, to, className, activeClassName, dataText, screenTooSmall, debate } = this.props;
+    const { identifier, children, to, className, activeClassName, dataText, screenTooSmall, timeline } = this.props;
     const { timeLineActive, activeSegment } = this.state;
-    const activeSegmentPhase = debate.debateData.timeline[activeSegment];
+    const activeSegmentPhase = timeline[activeSegment];
     // The first touch show the menu and the second activate the link
     const isTouchScreenDevice = isMobile.any();
     const touchActive = isTouchScreenDevice && !timeLineActive;
@@ -92,8 +91,8 @@ export class DumbDebateLink extends React.Component<DebateLinkProps, DebateLinkS
           <div className="header-container">
             <section className="timeline-section" id="timeline">
               <div className="max-container">
-                <Timeline
-                  debate={debate}
+                <TimelineCpt
+                  timeline={timeline}
                   activeSegment={activeSegment}
                   showNavigation
                   identifier={identifier}
@@ -119,7 +118,7 @@ export class DumbDebateLink extends React.Component<DebateLinkProps, DebateLinkS
 }
 
 const mapStateToProps = state => ({
-  debate: state.debate
+  timeline: state.timeline
 });
 
 export default connect(mapStateToProps)(DumbDebateLink);

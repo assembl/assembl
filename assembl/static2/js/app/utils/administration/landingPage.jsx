@@ -41,7 +41,9 @@ const landingPagePlugin = {
     configuration: '{}',
     enabled: item.enabled,
     order: item.order,
-    typeIdentifier: item.moduleType.identifier
+    typeIdentifier: item.moduleType.identifier,
+    titleEntries: item.titleEntries,
+    subtitleEntries: item.subtitleEntries
   })
 };
 

@@ -6,10 +6,9 @@ import Pointer from '../../svg/pointer';
 
 class Timeline extends React.Component {
   render() {
-    const { debateData } = this.props.debate;
-    const { index } = this.props;
-    const currentPhase = isCurrentPhase(debateData.timeline[index]);
-    const barPercent = getBarPercent(debateData.timeline[index]);
+    const { index, timeline } = this.props;
+    const currentPhase = isCurrentPhase(timeline[index]);
+    const barPercent = getBarPercent(timeline[index]);
     const currentDate = new Date();
     const datePosition = 100 - barPercent;
     return (
@@ -34,7 +33,7 @@ class Timeline extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  debate: state.debate
+  timeline: state.timeline
 });
 
 export default connect(mapStateToProps)(Timeline);

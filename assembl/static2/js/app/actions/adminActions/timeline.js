@@ -20,12 +20,24 @@ export const updatePhaseTitle = (id: string, locale: string, value: string): act
   type: actionTypes.UPDATE_PHASE_TITLE
 });
 
+export const updatePhaseDescription = (id: string, locale: string, value: string): actionTypes.UpdatePhaseDescription => ({
+  id: id,
+  locale: locale,
+  value: value,
+  type: actionTypes.UPDATE_PHASE_DESCRIPTION
+});
+
 export const updatePhaseIdentifier = (id: string, identifier: string): actionTypes.UpdatePhaseIdentifier => ({
   id: id,
   value: identifier,
   type: actionTypes.UPDATE_PHASE_IDENTIFIER
 });
 
+export const updatePhaseImage = (id: string, value: File): actionTypes.UpdatePhaseImage => ({
+  id: id,
+  value: value,
+  type: actionTypes.UPDATE_PHASE_IMAGE
+});
 
 export const deletePhase = (id: string): actionTypes.DeletePhase => ({
   id: id,

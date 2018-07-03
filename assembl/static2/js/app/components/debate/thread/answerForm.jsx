@@ -26,7 +26,7 @@ type AnswerFormProps = {
   refetchIdea: Function,
   textareaRef: Function,
   uploadDocument: Function,
-  debateData: Object,
+  timeline: Timeline,
   identifier: string,
   handleAnswerClick: Function
 };
@@ -48,8 +48,8 @@ class AnswerForm extends React.PureComponent<AnswerFormProps, AnswerFormState> {
   }
 
   componentWillMount() {
-    const { debateData, identifier } = this.props;
-    const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, identifier);
+    const { identifier, timeline } = this.props;
+    const isPhaseCompleted = getIfPhaseCompletedByIdentifier(timeline, identifier);
     if (isPhaseCompleted) this.setState({ isHidden: true });
   }
 
@@ -165,7 +165,7 @@ class AnswerForm extends React.PureComponent<AnswerFormProps, AnswerFormState> {
 
 const mapStateToProps = state => ({
   contentLocale: state.i18n.locale,
-  debateData: state.debate.debateData
+  timeline: state.timeline
 });
 
 export default compose(

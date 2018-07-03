@@ -1,5 +1,4 @@
 import { buildDebateData } from '../../../js/app/services/debateService';
-import { getSortedArrayByKey } from '../../../js/app/utils/globalFunctions';
 
 const mockDiscussion = {
   translation_service_class: 'assembl.nlp.translation_service.GoogleTranslationService',
@@ -100,124 +99,6 @@ const mockPreferences = {
   }
 };
 
-const mockTimeline = [
-  {
-    end: '2017-07-29T22:00:00Z',
-    description: { entries: [] },
-    title: { entries: [] },
-    discussion: '',
-    previous_event: '',
-    start: '2017-07-15T22:00:00Z',
-    image_url: '',
-    next_event: '',
-    identifier: '',
-    '@id': '',
-    '@type': '',
-    '@view': ''
-  },
-  {
-    end: '2017-08-29T22:00:00Z',
-    description: { entries: [] },
-    title: { entries: [] },
-    discussion: '',
-    previous_event: '',
-    start: '2017-07-30T22:00:00Z',
-    image_url: '',
-    next_event: '',
-    identifier: '',
-    '@id': '',
-    '@type': '',
-    '@view': ''
-  },
-  {
-    end: '2017-06-19T22:00:00Z',
-    description: { entries: [] },
-    title: { entries: [] },
-    discussion: '',
-    previous_event: '',
-    start: '2017-05-31T22:00:00Z',
-    image_url: '',
-    next_event: '',
-    identifier: '',
-    '@id': '',
-    '@type': '',
-    '@view': ''
-  },
-  {
-    end: '2017-07-14T22:00:00Z',
-    description: { entries: [] },
-    title: { entries: [] },
-    discussion: '',
-    previous_event: '',
-    start: '2017-06-20T22:00:00Z',
-    image_url: '',
-    next_event: '',
-    identifier: '',
-    '@id': '',
-    '@type': '',
-    '@view': ''
-  }
-];
-
-const expectedTimeline = [
-  {
-    end: '2017-06-19T22:00:00Z',
-    description: { entries: [] },
-    title: { entries: [] },
-    discussion: '',
-    previous_event: '',
-    start: '2017-05-31T22:00:00Z',
-    image_url: '',
-    next_event: '',
-    identifier: '',
-    '@id': '',
-    '@type': '',
-    '@view': ''
-  },
-  {
-    end: '2017-07-14T22:00:00Z',
-    description: { entries: [] },
-    title: { entries: [] },
-    discussion: '',
-    previous_event: '',
-    start: '2017-06-20T22:00:00Z',
-    image_url: '',
-    next_event: '',
-    identifier: '',
-    '@id': '',
-    '@type': '',
-    '@view': ''
-  },
-  {
-    end: '2017-07-29T22:00:00Z',
-    description: { entries: [] },
-    title: { entries: [] },
-    discussion: '',
-    previous_event: '',
-    start: '2017-07-15T22:00:00Z',
-    image_url: '',
-    next_event: '',
-    identifier: '',
-    '@id': '',
-    '@type': '',
-    '@view': ''
-  },
-  {
-    end: '2017-08-29T22:00:00Z',
-    description: { entries: [] },
-    title: { entries: [] },
-    discussion: '',
-    previous_event: '',
-    start: '2017-07-30T22:00:00Z',
-    image_url: '',
-    next_event: '',
-    identifier: '',
-    '@id': '',
-    '@type': '',
-    '@view': ''
-  }
-];
-
 describe('This test concern debate Service', () => {
   it('Should return the model built from API response', () => {
     const expectedResult = {
@@ -276,7 +157,6 @@ describe('This test concern debate Service', () => {
       isLargeLogo: true,
       headerLogoUrl: null,
       headerBackgroundUrl: null,
-      timeline: expectedTimeline,
       helpUrl: 'help.fr',
       termsOfUseUrl: 'terms.fr',
       socialMedias: [
@@ -318,13 +198,13 @@ describe('This test concern debate Service', () => {
       customHtmlCodeLandingPage: null,
       customHtmlCodeRegistrationPage: null
     };
-    const result = buildDebateData(mockDiscussion, mockPreferences, getSortedArrayByKey(mockTimeline));
+    const result = buildDebateData(mockDiscussion, mockPreferences);
     expect(result).toEqual(expectedResult);
   });
 
   it('translationEnabled should be false', () => {
     const modifiedMockDiscussion = { ...mockDiscussion, translation_service_class: '' };
-    const result = buildDebateData(modifiedMockDiscussion, mockPreferences, getSortedArrayByKey(mockTimeline));
+    const result = buildDebateData(modifiedMockDiscussion, mockPreferences);
     expect(result.translationEnabled).toEqual(false);
   });
 });

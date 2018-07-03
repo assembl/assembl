@@ -36,6 +36,8 @@ def test_query_landing_page_module_types(graphql_request):
 def test_query_landing_page_modules(graphql_request, simple_landing_page_module):
     query = u"""query LandingPageModules($lang: String!) {
         landingPageModules {
+            title(lang: $lang)
+            subtitle(lang: $lang)
             configuration
             enabled
             existsInDatabase
@@ -65,6 +67,8 @@ def test_query_landing_page_modules(graphql_request, simple_landing_page_module)
             assert lpm[u'existsInDatabase'] is True
             assert lpm[u'order'] == 42.0
             assert lpm[u'enabled'] is True
+            assert lpm[u'title'] is None
+            assert lpm[u'subtitle'] is None
             assert lpm[u'configuration'] == u'{text:"The SDD feed is down, override the optical system so we can connect the SAS bus!"}'
             assert lpm[u'moduleType'][u'title'] == u'Header'
             assert lpm[u'moduleType'][u'defaultOrder'] == 1.0
@@ -88,6 +92,8 @@ def test_mutation_create_landing_page_module(graphql_request):
                             $enabled: Boolean
                             $order: Float
                             $configuration: String
+                            $titleEntries: [LangStringEntryInput!]
+                            $subtitleEntries: [LangStringEntryInput!]
                             )
                                 {
                                 createLandingPageModule
@@ -96,10 +102,14 @@ def test_mutation_create_landing_page_module(graphql_request):
                                 enabled: $enabled
                                 order: $order
                                 configuration: $configuration
+                                titleEntries: $titleEntries
+                                subtitleEntries: $subtitleEntries
                                 )
                                     {
                                     landingPageModule
                                         {
+                                        titleEntries { value localeCode }
+                                        subtitleEntries { value localeCode }
                                         configuration
                                         enabled
                                         moduleType
@@ -132,6 +142,8 @@ def test_mutation_update_landing_page_module(graphql_request, simple_landing_pag
                             $enabled: Boolean
                             $order: Float
                             $configuration: String
+                            $titleEntries: [LangStringEntryInput!]
+                            $subtitleEntries: [LangStringEntryInput!]
                             )
                                 {
                                 updateLandingPageModule
@@ -140,10 +152,14 @@ def test_mutation_update_landing_page_module(graphql_request, simple_landing_pag
                                 enabled: $enabled
                                 order: $order
                                 configuration: $configuration
+                                titleEntries: $titleEntries
+                                subtitleEntries: $subtitleEntries
                                 )
                                     {
                                     landingPageModule
                                         {
+                                        titleEntries { value localeCode }
+                                        subtitleEntries { value localeCode }
                                         configuration
                                         enabled
                                         moduleType
@@ -160,9 +176,21 @@ def test_mutation_update_landing_page_module(graphql_request, simple_landing_pag
         'id': to_global_id('LandingPageModule', simple_landing_page_module.id),
         'enabled': False, 'order': 43.0,
         'configuration': 'Standard_configuration_updated',
+        'titleEntries': [
+          {'value': "New section", 'localeCode': "en"}
+        ],
+        'subtitleEntries': [
+          {'value': "New section with subtitle", 'localeCode': "en"}
+        ]
     })
     assert res.errors is None
     lpm = res.data[u'updateLandingPageModule']['landingPageModule']
     assert lpm[u'configuration'] == 'Standard_configuration_updated'
     assert lpm[u'enabled'] is False
     assert lpm[u'order'] == 43.0
+    assert lpm[u'titleEntries'] == [
+        {'value': "New section", 'localeCode': "en"}
+    ]
+    assert lpm[u'subtitleEntries'] == [
+        {'value': "New section with subtitle", 'localeCode': "en"}
+    ]

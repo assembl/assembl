@@ -1,6 +1,6 @@
 /* eslint-disable quote-props */
 import moment from 'moment';
-import { fromJS, List } from 'immutable';
+import { fromJS, List, Map } from 'immutable';
 import * as actionTypes from '../../../../js/app/actions/actionTypes';
 import * as reducers from '../../../../js/app/reducers/adminReducer/timeline';
 
@@ -14,12 +14,14 @@ describe('Timeline PhasesByIdReducer', () => {
       id: '1',
       identifier: 'survey',
       titleEntries: fromJS([{ locale: 'fr', value: 'Titre de la phase' }]),
+      descriptionEntries: fromJS([{ locale: 'fr', value: 'Description de la phase' }]),
       start: moment('2014-12-27T09:00:00+00:00'),
       end: moment('2014-12-31T09:00:00+00:00'),
       isThematicsTable: false,
       order: 1,
       hasConflictingDates: false,
-      endIsBeforeStart: false
+      endIsBeforeStart: false,
+      image: Map({ externalUrl: '', mimeType: '', title: '' })
     }
   });
   it('should return the current state for any other action', () => {
@@ -39,12 +41,14 @@ describe('Timeline PhasesByIdReducer', () => {
         id: '1',
         identifier: 'survey',
         titleEntries: fromJS([{ locale: 'fr', value: 'Titre de la phase' }]),
+        descriptionEntries: fromJS([{ locale: 'fr', value: 'Description de la phase' }]),
         start: moment('2014-12-27T09:00:00+00:00'),
         end: moment('2014-12-31T09:00:00+00:00'),
         isThematicsTable: false,
         order: 1,
         hasConflictingDates: false,
-        endIsBeforeStart: false
+        endIsBeforeStart: false,
+        image: Map({ externalUrl: '', mimeType: '', title: '' })
       },
       2: {
         _hasChanged: false,
@@ -53,12 +57,14 @@ describe('Timeline PhasesByIdReducer', () => {
         id: '2',
         identifier: null,
         titleEntries: List(),
+        descriptionEntries: List(),
         start: null,
         end: null,
         isThematicsTable: false,
         order: 2,
         hasConflictingDates: false,
-        endIsBeforeStart: false
+        endIsBeforeStart: false,
+        image: Map({ externalUrl: '', mimeType: '', title: '' })
       }
     });
     expect(actual).toEqual(expected);
@@ -74,12 +80,14 @@ describe('Timeline PhasesByIdReducer', () => {
         id: '1',
         identifier: 'survey',
         titleEntries: fromJS([{ locale: 'fr', value: 'Titre de la phase' }]),
+        descriptionEntries: fromJS([{ locale: 'fr', value: 'Description de la phase' }]),
         start: moment('2014-12-27T09:00:00+00:00'),
         end: moment('2014-12-31T09:00:00+00:00'),
         isThematicsTable: false,
         order: 1,
         hasConflictingDates: false,
-        endIsBeforeStart: false
+        endIsBeforeStart: false,
+        image: Map({ externalUrl: '', mimeType: '', title: '' })
       }
     });
     expect(actual).toEqual(expected);
@@ -95,12 +103,14 @@ describe('Timeline PhasesByIdReducer', () => {
         id: '1',
         identifier: 'survey',
         titleEntries: fromJS([{ locale: 'fr', value: 'Nouveau titre' }]),
+        descriptionEntries: fromJS([{ locale: 'fr', value: 'Description de la phase' }]),
         start: moment('2014-12-27T09:00:00+00:00'),
         end: moment('2014-12-31T09:00:00+00:00'),
         isThematicsTable: false,
         order: 1,
         hasConflictingDates: false,
-        endIsBeforeStart: false
+        endIsBeforeStart: false,
+        image: Map({ externalUrl: '', mimeType: '', title: '' })
       }
     });
     expect(actual).toEqual(expected);
@@ -116,12 +126,14 @@ describe('Timeline PhasesByIdReducer', () => {
         id: '1',
         identifier: 'thread',
         titleEntries: [{ locale: 'fr', value: 'Titre de la phase' }],
+        descriptionEntries: fromJS([{ locale: 'fr', value: 'Description de la phase' }]),
         start: moment('2014-12-27T09:00:00+00:00'),
         end: moment('2014-12-31T09:00:00+00:00'),
         isThematicsTable: false,
         order: 1,
         hasConflictingDates: false,
-        endIsBeforeStart: false
+        endIsBeforeStart: false,
+        image: Map({ externalUrl: '', mimeType: '', title: '' })
       }
     });
     expect(actual).toEqual(expected);
@@ -137,12 +149,14 @@ describe('Timeline PhasesByIdReducer', () => {
         id: '1',
         identifier: 'survey',
         titleEntries: fromJS([{ locale: 'fr', value: 'Titre de la phase' }]),
+        descriptionEntries: fromJS([{ locale: 'fr', value: 'Description de la phase' }]),
         start: moment('2014-12-28T09:00:00+00:00'),
         end: moment('2014-12-31T09:00:00+00:00'),
         isThematicsTable: false,
         order: 1,
         hasConflictingDates: false,
-        endIsBeforeStart: false
+        endIsBeforeStart: false,
+        image: Map({ externalUrl: '', mimeType: '', title: '' })
       }
     });
     expect(actual).toEqual(expected);
@@ -158,12 +172,14 @@ describe('Timeline PhasesByIdReducer', () => {
         id: '1',
         identifier: 'survey',
         titleEntries: [{ locale: 'fr', value: 'Titre de la phase' }],
+        descriptionEntries: fromJS([{ locale: 'fr', value: 'Description de la phase' }]),
         start: moment('2014-12-27T09:00:00+00:00'),
         end: moment('2023-12-31T09:00:00+00:00'),
         isThematicsTable: false,
         order: 1,
         hasConflictingDates: false,
-        endIsBeforeStart: false
+        endIsBeforeStart: false,
+        image: Map({ externalUrl: '', mimeType: '', title: '' })
       }
     });
     expect(actual).toEqual(expected);
@@ -179,12 +195,14 @@ describe('Timeline PhasesByIdReducer', () => {
         id: '1',
         identifier: 'survey',
         titleEntries: [{ locale: 'fr', value: 'Titre de la phase' }],
+        descriptionEntries: fromJS([{ locale: 'fr', value: 'Description de la phase' }]),
         start: moment('2014-12-27T09:00:00+00:00'),
         end: moment('2014-12-31T09:00:00+00:00'),
         isThematicsTable: true,
         order: 1,
         hasConflictingDates: false,
-        endIsBeforeStart: false
+        endIsBeforeStart: false,
+        image: Map({ externalUrl: '', mimeType: '', title: '' })
       }
     });
     expect(actual).toEqual(expected);
@@ -196,12 +214,14 @@ describe('Timeline PhasesByIdReducer', () => {
           id: '2',
           identifier: 'voteSession',
           titleEntries: [{ locale: 'fr', value: 'Titre de la phase' }],
+          descriptionEntries: fromJS([{ locale: 'fr', value: 'Description de la phase' }]),
           start: moment('2014-12-28T09:00:00+00:00'),
           end: moment('2023-12-31T09:00:00+00:00'),
           isThematicsTable: false,
           order: 1,
           hasConflictingDates: false,
-          endIsBeforeStart: false
+          endIsBeforeStart: false,
+          image: Map({ externalUrl: '', mimeType: '', title: '' })
         }
       ],
       type: actionTypes.UPDATE_PHASES
@@ -215,12 +235,14 @@ describe('Timeline PhasesByIdReducer', () => {
         id: '2',
         identifier: 'voteSession',
         titleEntries: [{ locale: 'fr', value: 'Titre de la phase' }],
+        descriptionEntries: fromJS([{ locale: 'fr', value: 'Description de la phase' }]),
         start: moment('2014-12-28T09:00:00+00:00'),
         end: moment('2023-12-31T09:00:00+00:00'),
         isThematicsTable: false,
         order: 1,
         hasConflictingDates: false,
-        endIsBeforeStart: false
+        endIsBeforeStart: false,
+        image: Map({ externalUrl: '', mimeType: '', title: '' })
       }
     });
     expect(actual).toEqual(expected);

@@ -3,13 +3,15 @@ import React from 'react';
 import { I18n, Translate } from 'react-redux-i18n';
 import { OverlayTrigger, Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 import range from 'lodash/range';
 import { addPhaseTooltip } from '../../common/tooltips';
 import SectionTitle from '../sectionTitle';
 import PhaseForm from './phaseForm';
-import { createRandomId } from '../../../utils/globalFunctions';
+import { createRandomId, getDiscussionSlug } from '../../../utils/globalFunctions';
 import { createPhase } from '../../../actions/adminActions/timeline';
 import PhaseTitleForm from './phaseTitleForm';
+import { get } from '../../../utils/routeMap';
 
 type TimelineFormProps = {
   editLocale: string,
@@ -27,7 +29,8 @@ export class DumbTimelineForm extends React.Component<TimelineFormProps, Timelin
       return {
         selectedPhaseId: props.phases[0]
       };
-    } return state;
+    }
+    return state;
   }
 
   constructor(props: TimelineFormProps) {
@@ -51,6 +54,7 @@ export class DumbTimelineForm extends React.Component<TimelineFormProps, Timelin
   render() {
     const { editLocale, phases, handleCreatePhase } = this.props;
     const { selectedPhaseId } = this.state;
+    const slug = { slug: getDiscussionSlug() };
     return (
       <div className="admin-box timeline-admin">
         <SectionTitle
@@ -77,6 +81,13 @@ export class DumbTimelineForm extends React.Component<TimelineFormProps, Timelin
                 </div>
               </OverlayTrigger>
             </form>
+          </div>
+          <div className="margin-l">
+            <Translate value="administration.landingPage.timeline.linkToLandingPage" />
+            <span>&nbsp;</span>
+            <Link to={get('landingPageTimelineAdmin', { ...slug })}>
+              <Translate value="here" />
+            </Link>
           </div>
         </div>
         <Translate value="administration.timelineAdmin.instruction2" className="admin-instruction" />

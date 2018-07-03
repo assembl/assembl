@@ -38,7 +38,8 @@ class Home extends React.Component {
   render() {
     const { debateData } = this.props.debate;
     const { locale } = this.props.i18n;
-    if (!debateData.timeline || debateData.timeline.length === 0) {
+    const { timeline } = this.props;
+    if (!timeline || timeline.length === 0) {
       return <MessagePage title={I18n.t('home.assemblNotConfigured')} text={I18n.t('administration.noTimeline')} />;
     }
 
@@ -47,7 +48,7 @@ class Home extends React.Component {
         <Header />
         <ScrollOnePageButton hidden={this.state.scrollOnePageButtonHidden} />
         {debateData.objectives && <Objectives />}
-        {debateData.timeline && <Phases />}
+        {timeline && <Phases />}
         {debateData.video && <Video />}
         {debateData.twitter && <Twitter />}
         {debateData.chatbot && <Chatbot chatbot={debateData.chatbot} locale={locale} />}
@@ -59,6 +60,7 @@ class Home extends React.Component {
 
 const mapStateToProps = state => ({
   debate: state.debate,
+  timeline: state.timeline,
   i18n: state.i18n
 });
 
