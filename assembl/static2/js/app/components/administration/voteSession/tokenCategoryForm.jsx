@@ -33,11 +33,10 @@ const DumbTokenCategoryForm = ({
   handleNumberChange,
   tokenCategoryNumber
 }: TokenCategoryFormProps) => (
-  <div className="token-type-form">
+  <div className="token-type-form" id={`type-form-${index}`}>
     <Translate value="administration.token" number={index + 1} />
     <div className="margin-m">
       <FormControlWithLabel
-        id={`token-title${index}`}
         label={I18n.t('administration.tokenTitle')}
         required
         type="text"
@@ -45,7 +44,6 @@ const DumbTokenCategoryForm = ({
         value={title}
       />
       <FormControlWithLabel
-        id={`token-number${index}`}
         label={I18n.t('administration.tokenNumber')}
         required
         type="number"

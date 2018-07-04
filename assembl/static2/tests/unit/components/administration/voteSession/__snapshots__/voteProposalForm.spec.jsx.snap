@@ -3,6 +3,7 @@
 exports[`VoteProposalForm component should render an empty form to create a vote proposal with validation errors 1`] = `
 <div
   className="form-container vote-proposal-form"
+  id="proposal-form-1"
 >
   <div
     className="pointer right"
@@ -78,6 +79,7 @@ exports[`VoteProposalForm component should render an empty form to create a vote
 exports[`VoteProposalForm component should render an empty form to create a vote proposal without any checkbox below 1`] = `
 <div
   className="form-container vote-proposal-form"
+  id="proposal-form-1"
 >
   <div
     className="pointer right"

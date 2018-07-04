@@ -3,6 +3,7 @@
 exports[`tokenTypeForm component should render a TokenCategoryForm component 1`] = `
 <div
   className="token-type-form"
+  id="type-form-1"
 >
   <Translate
     number={2}
@@ -17,7 +18,7 @@ exports[`tokenTypeForm component should render a TokenCategoryForm component 1`]
       formControlProps={undefined}
       helperText=""
       helperUrl=""
-      id="token-title1"
+      id={undefined}
       label="Token title"
       labelAlwaysVisible={false}
       name={undefined}
@@ -37,7 +38,7 @@ exports[`tokenTypeForm component should render a TokenCategoryForm component 1`]
       }
       helperText=""
       helperUrl=""
-      id="token-number1"
+      id={undefined}
       label="Number of tokens per participant"
       labelAlwaysVisible={false}
       name={undefined}

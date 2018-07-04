@@ -119,7 +119,7 @@ const DumbVoteProposalForm = ({
   const areFieldsEmpty = isDescriptionEmpty && isTitleEmpty;
 
   return (
-    <div className="form-container vote-proposal-form">
+    <div className="form-container vote-proposal-form" id={`proposal-form-${index}`}>
       <div className="pointer right">
         <div className="inline">
           {index < nbProposals ? (
