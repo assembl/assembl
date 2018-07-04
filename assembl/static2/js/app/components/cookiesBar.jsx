@@ -4,25 +4,31 @@ import { Translate } from 'react-redux-i18n';
 import { Link } from 'react-router';
 import { Button } from 'react-bootstrap';
 import classnames from 'classnames';
-import { getCookieItem, setCookieItem, getDiscussionSlug } from '../utils/globalFunctions';
+import { getCookieItem, setCookieItem, getDiscussionSlug, getDiscussionId } from '../utils/globalFunctions';
 import { get } from '../utils/routeMap';
 
 type State = {
-  hide: boolean
+  hide: ?boolean
 };
 
 type Props = {};
 
+const discussionId = getDiscussionId();
+
 class CookiesBar extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = { hide: getCookieItem('_ACCEPTED_COOKIES_') === 'true' };
+    const hasAcceptedCookies = discussionId && getCookieItem(`cookiesUserAuthorization_discussion${discussionId}`) === 'done';
+    this.state = { hide: hasAcceptedCookies || false };
   }
 
   acceptCookies = () => {
-    setCookieItem('_ACCEPTED_COOKIES_', true);
-    this.setState({ hide: true });
-    // The local state is updated here to avoid having to refresh to hide the bar
+    const cookieName = discussionId && `cookiesUserAuthorization_discussion${discussionId}`;
+    if (cookieName) {
+      setCookieItem(cookieName, 'done');
+      this.setState({ hide: true });
+      // The local state is updated here to avoid having to refresh to hide the bar
+    }
   }
 
   render() {
