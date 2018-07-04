@@ -120,3 +120,16 @@ class VisitsAnalytics:
     sum_visits_length = """The total number of hours spent on the platform by all users."""
     nb_pageviews = """The total number of page views accumulated."""
     nb_uniq_pageviews = """The total number of unique page views."""
+
+
+class Synthesis:
+    subject = """The subject of the synthesis"""
+    subject_entries = Default.langstring_entries % ("This is the subject in various languages.",)
+    introduction = """This is the introduction of the synthesis"""
+    introduction_entries = Default.langstring_entries % ("This is the introduction in various languages.",)
+    conclusion = """This is the conclusion of the synthesis"""
+    conclusion_entries = Default.langstring_entries % ("This is the conclusion of the synthesis in different languages.",)
+    ideas = """This is the list of ideas related to the synthesis"""
+    img = """This is the image to be posted at the top of the page of that synthesis"""
+    creation_date = """The creation data of the synthesis"""
+    post = """The synthesis post to be created"""
