@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import { Translate } from 'react-redux-i18n';
+import { Button } from 'react-bootstrap';
 import classnames from 'classnames';
 import CookieToggle from './cookieToggle';
 
@@ -21,11 +22,23 @@ class CookiesSelector extends React.Component<CookiesSelectorProps, CookiesSelec
   constructor(props: CookiesSelectorProps) {
     super(props);
     this.state = {
-      activeKey: null,
-      show: false
+      activeKey: 'essential',
+      show: true,
+      cookies: {}
+      // cookies object should be fetched from backend and not be an empty object
     };
   }
 
+  handleToggle = (cookieName: string, accepted: boolean) => {
+    const { cookies } = this.state;
+    cookies[cookieName] = accepted;
+    this.setState({ cookies: cookies });
+  }
+
+  saveChanges = () => {
+    const { cookies } = this.state;
+    console.log('Let\'s save these new cookies settings in the backend: ', cookies);
+  }
 
   render() {
     const { activeKey, show } = this.state;
@@ -49,13 +62,16 @@ class CookiesSelector extends React.Component<CookiesSelectorProps, CookiesSelec
               <div className="cookies-toggles">
                 {isActiveKey && show &&
                 mockCookiesList.map(cookie => (
-                  <CookieToggle name={cookie} isEssential={isEssential} key={cookie} />
+                  <CookieToggle name={cookie} isEssential={isEssential} key={cookie} handleToggle={this.handleToggle} />
                 ))
                 }
               </div>
             </div>
           );
         })}
+        <Button onClick={this.saveChanges} className="button-submit button-dark">
+          <Translate value="profile.save" />
+        </Button>
       </div>);
   }
 }

@@ -15,19 +15,19 @@ type CookieToggleState = {
 class CookieToggle extends React.Component<CookieToggleProps, CookieToggleState> {
   constructor(props: CookieToggleProps) {
     super(props);
-    const { isEssential } = props;
     this.state = {
-      accepted: isEssential || false
+      accepted: true
+      // this local state is temporary, backend should provide this value to the
+      // parent component and it will be passed down as a prop
     };
   }
 
   toggleSwitch = () => {
     const { accepted } = this.state;
-    const { isEssential } = this.props;
+    const { handleToggle, name } = this.props;
 
-    if (!isEssential) {
-      this.setState({ accepted: !accepted });
-    }
+    this.setState({ accepted: !accepted });
+    handleToggle(name, !accepted);
   };
 
   render() {
