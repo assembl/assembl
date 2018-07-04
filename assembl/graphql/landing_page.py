@@ -3,6 +3,7 @@ import graphene
 from graphene.relay import Node
 from graphene_sqlalchemy import SQLAlchemyObjectType
 
+import assembl.graphql.docstrings as docs
 from assembl import models
 from assembl.auth import CrudPermissions
 
@@ -15,14 +16,15 @@ from .utils import abort_transaction_on_exception
 
 
 class LandingPageModuleType(SecureObjectType, SQLAlchemyObjectType):
+    __doc__ = docs.LandingPageModuleType.__doc__
 
     class Meta:
         model = models.LandingPageModuleType
         interfaces = (Node, )
         only_fields = ('id', 'default_order', 'editable_order', 'identifier', 'required')
 
-    title = graphene.String(lang=graphene.String())
-    title_entries = graphene.List(LangStringEntry)
+    title = graphene.String(lang=graphene.String(), description=docs.LandingPageModuleType.title)
+    title_entries = graphene.List(LangStringEntry, description=docs.LandingPageModuleType.title_entries)
 
     def resolve_title(self, args, context, info):
         return resolve_langstring(self.title, args.get('lang'))
@@ -32,18 +34,24 @@ class LandingPageModuleType(SecureObjectType, SQLAlchemyObjectType):
 
 
 class LandingPageModule(SecureObjectType, SQLAlchemyObjectType):
+    __doc__ = docs.LandingPageModule.__doc__
 
     class Meta:
         model = models.LandingPageModule
         interfaces = (Node, )
         only_fields = ('id', 'enabled', 'order', 'configuration')
 
+<<<<<<< HEAD
     module_type = graphene.Field(LandingPageModuleType)
     exists_in_database = graphene.Boolean()
     title = graphene.String(lang=graphene.String())
     title_entries = graphene.List(LangStringEntry)
     subtitle = graphene.String(lang=graphene.String())
     subtitle_entries = graphene.List(LangStringEntry)
+=======
+    module_type = graphene.Field(LandingPageModuleType, description=docs.LandingPageModule.module_type)
+    exists_in_database = graphene.Boolean(description=docs.LandingPageModule.exists_in_database)
+>>>>>>> Update landing page docstrings
 
     def resolve_exists_in_database(self, args, context, info):
         return self.id > 0
@@ -83,16 +91,17 @@ class LandingPageModule(SecureObjectType, SQLAlchemyObjectType):
 
 
 class CreateLandingPageModule(graphene.Mutation):
+    __doc__ = docs.CreateLandingPageModule.__doc__
 
     class Input:
-        type_identifier = graphene.String()
-        enabled = graphene.Boolean()
-        order = graphene.Float()
-        configuration = graphene.String()
+        type_identifier = graphene.String(description=docs.CreateLandingPageModule.type_identifier)
+        enabled = graphene.Boolean(description=docs.CreateLandingPageModule.enabled)
+        order = graphene.Float(description=docs.CreateLandingPageModule.order)
+        configuration = graphene.String(description=docs.CreateLandingPageModule.configuration)
         title_entries = graphene.List(LangStringEntryInput)
         subtitle_entries = graphene.List(LangStringEntryInput)
 
-    landing_page_module = graphene.Field(lambda: LandingPageModule)
+    landing_page_module = graphene.Field(lambda: LandingPageModule, description=docs.CreateLandingPageModule.landing_page_module)
 
     @staticmethod
     @abort_transaction_on_exception
@@ -128,16 +137,17 @@ class CreateLandingPageModule(graphene.Mutation):
 
 
 class UpdateLandingPageModule(graphene.Mutation):
+    __doc__ = docs.UpdateLandingPageModule.__doc__
 
     class Input:
-        id = graphene.ID(required=True)
-        enabled = graphene.Boolean()
-        order = graphene.Float()
-        configuration = graphene.String()
+        id = graphene.ID(required=True, description=docs.UpdateLandingPageModule.id)
+        enabled = graphene.Boolean(description=docs.UpdateLandingPageModule.enabled)
+        order = graphene.Float(description=docs.UpdateLandingPageModule.order)
+        configuration = graphene.String(description=docs.UpdateLandingPageModule.configuration)
         title_entries = graphene.List(LangStringEntryInput)
         subtitle_entries = graphene.List(LangStringEntryInput)
 
-    landing_page_module = graphene.Field(lambda: LandingPageModule)
+    landing_page_module = graphene.Field(lambda: LandingPageModule, description=docs.UpdateLandingPageModule.landing_page_module)
 
     @staticmethod
     @abort_transaction_on_exception

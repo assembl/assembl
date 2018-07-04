@@ -11,6 +11,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import relationship, backref
 
+import assembl.graphql.docstrings as docs
 from assembl.lib.sqla import Base
 from assembl.auth import CrudPermissions, P_ADMIN_DISC, P_SYSADMIN, P_READ
 from . import DiscussionBoundBase
@@ -126,7 +127,7 @@ class LandingPageModuleType(Base):
 
     id = Column(Integer, primary_key=True)
 
-    identifier = Column(String(30), nullable=False)
+    identifier = Column(String(30), nullable=False, doc=docs.LandingPageModuleType.identifier)
 
     title_id = Column(
         Integer(), ForeignKey(LangString.id))
@@ -137,11 +138,11 @@ class LandingPageModuleType(Base):
         backref=backref("landing_page_module_type_from_title", lazy="dynamic"),
         cascade="all, delete-orphan")
 
-    default_order = Column(Float, nullable=False)
+    default_order = Column(Float, nullable=False, doc=docs.LandingPageModuleType.default_order)
 
-    editable_order = Column(Boolean, default=True)
+    editable_order = Column(Boolean, default=True, doc=docs.LandingPageModuleType.editable_order)
 
-    required = Column(Boolean, default=False)
+    required = Column(Boolean, default=False, doc=docs.LandingPageModuleType.required)
 
     __mapper_args__ = {
         'polymorphic_identity': 'landing_page_module_type',
@@ -211,11 +212,11 @@ class LandingPageModule(DiscussionBoundBase):
         backref=backref('landing_page_modules', cascade="all, delete-orphan")
     )
 
-    configuration = Column(UnicodeText)
+    configuration = Column(UnicodeText, doc=docs.LandingPageModule.configuration)
 
-    order = Column(Float, nullable=False)
+    order = Column(Float, nullable=False, doc=docs.LandingPageModule.order)
 
-    enabled = Column(Boolean, default=False)
+    enabled = Column(Boolean, default=False, doc=docs.LandingPageModule.enabled)
 
     title_id = Column(Integer(), ForeignKey(LangString.id))
     title = relationship(

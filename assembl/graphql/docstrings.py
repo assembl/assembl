@@ -7,6 +7,7 @@ class Default:
     document = """%sA file metadata object, described by the Document object."""
     string_entry = """A %s in a given language."""
     float_entry = """A %s  as a float"""
+    node_id = """The Relay.Node ID type of the %s object."""
 
 
 class Schema:
@@ -240,3 +241,53 @@ class CreateThematic:
 class DeleteThematic:
     __doc__ = """Method to delete a thematic."""
     thematic_id = """Id of the thematic to be deleted."""
+
+
+class LandingPageModuleType:
+    __doc__ = """The metadata description of the types of modules (or sections) available in the landing page."""
+    default_order = """The default order of this LandingPageModuleType in the context of the landing page."""
+    editable_order = """A boolean flag indicating whether the LandingPageModuleType's order can be editeded or not."""
+    identifier = """The unique ID of the module type. These can be one of:\n\n
+        HEADER: The header section of the landing page.\n
+        INTRODUCTION: The introduction section.\n
+        TIMELINE: The list of timelines present in the debate.\n
+        FOOTER: The footer in the landing page, including information such as privacy policies, etc..\n
+        TOP_THEMATICS: The section hosting the top active thematics.\n
+        TWEETS: The tweets section, displaying top tweets in the landing page.\n
+        CHATBOT: The chatbot section, according to the configured chatbot.\n
+        CONTACT: The contacts section.\n
+        NEWS: The latest news section, as configured.\n
+        DATA: The data sections.\n
+        PARTNERS: The partners section, highlighting the contributing partners' logos.\n
+    """
+    required = """A Boolean flag defining if the section is required for the landing page or not."""
+    title = """The title of the section."""
+    title_entries = Default.langstring_entries % ("The Title will be available in every supported language.",)
+
+
+class LandingPageModule:
+    __doc__ = """The LandingPageModule configurations for the debate."""
+    # TODO: Add more to the configuration description
+    configuration = """The JSON-based configuration of the LandingPageModule in the debate."""
+    order = """The order of the Module in the entire LandingPage."""
+    enabled = """Whether the Module is activated or not."""
+    module_type = """The LandingPageModuleType describing the Module."""
+    exists_in_database = """A flag describign whether the module already exists in the database or not."""
+
+
+class CreateLandingPageModule:
+    __doc__ = """A mutation that allows for the creation of the LandingPageModule."""
+    type_identifier = LandingPageModuleType.identifier
+    enabled = LandingPageModule.enabled
+    order = LandingPageModule.order
+    configuration = LandingPageModule.configuration
+    landing_page_module = """A LandingPageModules that is associated to the debate."""
+
+
+class UpdateLandingPageModule:
+    __doc__ = """A mutation that allows for updating an existing LandingPageModule."""
+    id = Default.node_id % "LandingPageModule"
+    enabled = LandingPageModule.enabled
+    order = LandingPageModule.order
+    configuration = LandingPageModule.configuration
+    landing_page_module = CreateLandingPageModule.landing_page_module
