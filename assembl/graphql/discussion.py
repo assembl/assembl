@@ -20,6 +20,8 @@ from .utils import abort_transaction_on_exception
 
 # Mostly fields related to the discussion title and landing page
 class Discussion(SecureObjectType, SQLAlchemyObjectType):
+    __doc__ = docs.Discussion.__doc__
+
     class Meta:
         model = models.Discussion
         only_fields = ('id',)
@@ -105,6 +107,8 @@ class Discussion(SecureObjectType, SQLAlchemyObjectType):
 
 
 class UpdateDiscussion(graphene.Mutation):
+    __doc__ = docs.UpdateDiscussion.__doc__
+
     class Input:
         title_entries = graphene.List(LangStringEntryInput, description=docs.UpdateDiscussion.title_entries)
         subtitle_entries = graphene.List(LangStringEntryInput, description=docs.UpdateDiscussion.subtitle_entries)
@@ -232,6 +236,8 @@ class UpdateDiscussion(graphene.Mutation):
 
 
 class LocalePreference(graphene.ObjectType):
+    __doc__ = docs.LocalePreference.__doc__
+
     locale = graphene.String(description=docs.LocalePreference.locale)
     name = graphene.String(in_locale=graphene.String(required=True), description=docs.LocalePreference.name)
     native_name = graphene.String(description=docs.LocalePreference.native_name)

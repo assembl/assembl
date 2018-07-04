@@ -42,6 +42,7 @@ class Schema:
 
 
 class Discussion:
+    __docs__ = """The Discussion object. This object describes certain parts of the core state of the debate."""
     homepage_url = """A URL for the homepage (optional). Often placed on the logo."""
     title = """The title of the discussion, in the language specified by the input"""
     subtitle = """The subtitle of the discussion, in the language specified by the input"""
@@ -51,6 +52,7 @@ class Discussion:
 
 
 class UpdateDiscussion:
+    __doc__ = """The mutation that allows to update an existing Discussion object"""
     header_image = Default.document % ("The header image that will be viewed on the discussion's landing page. ",)
     logo_image = Default.document % ("The smalller logo image that will be viewed on the discussion's navigation bar. ",)
     button_label_entries = """The contents inside of the \"follow\" button in the landing page."""
@@ -67,13 +69,15 @@ class LangString:
 
 
 class LocalePreference:
+    __doc__ = """The locale stored in the Discussion Preferences metadata object."""
     locale = """The ISO 639-1 language string of the locale. Ex. \'"fr"\'. """
     name = """The name of the locale, in the language of the locale given. Ex. French, if the given locale is \'"en"\'."""
     native_name = """The name of the locale, in the original language. Ex Français."""
 
 
 class DiscussionPreferences:
-    languages = """A list of LocalePreference metadata objects on the discussion."""
+    __doc__ = """A discussion can have many preferences. This metadata object describes these preferences."""
+    languages = """A list of LocalePreference metadata objects on the discussion which describe the languages supported by the debate."""
 
 
 class ResourcesCenter:
@@ -97,6 +101,7 @@ class LegalContents:
 
 
 class UpdateResourcesCenter:
+    __doc__ = """The mutation that allows to update existing Resource Center objects."""
     title_entries = Default.string_entry
     header_image = Default.document % ("""Update the main image associated with a ResourceCenter. """,)
 
