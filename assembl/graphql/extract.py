@@ -2,6 +2,7 @@ import graphene
 from graphene.relay import Node
 from graphene_sqlalchemy import SQLAlchemyObjectType
 
+import assembl.graphql.docstrings as docs
 from assembl.auth import CrudPermissions
 from assembl import models
 
@@ -12,6 +13,8 @@ from .user import AgentProfile
 
 
 class TextFragmentIdentifier(SecureObjectType, SQLAlchemyObjectType):
+    __doc__ = docs.TextFragmentIdentifier.__doc__
+
     class Meta:
         model = models.TextFragmentIdentifier
         interfaces = (Node,)
@@ -19,24 +22,29 @@ class TextFragmentIdentifier(SecureObjectType, SQLAlchemyObjectType):
 
 
 class ExtractInterface(SQLAlchemyInterface):
+    __doc__ = docs.ExtractInterface.__doc__
+
     class Meta:
         model = models.Extract
         only_fields = ('body', 'important', 'extract_nature', 'extract_action')
         # Don't add id in only_fields in an interface or the the id of Post
         # will be just the primary key, not the base64 type:id
 
-    text_fragment_identifiers = graphene.List(TextFragmentIdentifier)
+    text_fragment_identifiers = graphene.List(TextFragmentIdentifier,
+                                              description=docs.ExtractInterface.text_fragment_identifiers)
 
 
 class Extract(SecureObjectType, SQLAlchemyObjectType):
+    __doc__ = docs.ExtractInterface.__doc__
+
     class Meta:
         model = models.Extract
         interfaces = (Node, ExtractInterface)
         only_fields = ('id')
 
-    creation_date = DateTime()
-    creator_id = graphene.Int()
-    creator = graphene.Field(lambda: AgentProfile)
+    creation_date = DateTime(description=docs.ExtractInterface.creation_date)
+    creator_id = graphene.Int(description=docs.ExtractInterface.creator_id)
+    creator = graphene.Field(lambda: AgentProfile, description=docs.ExtractInterface.creator)
 
     def resolve_creator(self, args, context, info):
         if self.creator_id is not None:
@@ -44,13 +52,15 @@ class Extract(SecureObjectType, SQLAlchemyObjectType):
 
 
 class UpdateExtract(graphene.Mutation):
+    __doc__ = docs.UpdateExtract.__doc__
+
     class Input:
-        extract_id = graphene.ID(required=True)
-        idea_id = graphene.ID()
-        important = graphene.Boolean()
-        extract_nature = graphene.String()
-        extract_action = graphene.String()
-        body = graphene.String()
+        extract_id = graphene.ID(required=True, description=docs.UpdateExtract.extract_id)
+        idea_id = graphene.ID(description=docs.UpdateExtract.idea_id)
+        important = graphene.Boolean(description=docs.UpdateExtract.important)
+        extract_nature = graphene.String(description=docs.UpdateExtract.extract_nature)
+        extract_action = graphene.String(description=docs.UpdateExtract.extract_action)
+        body = graphene.String(description=docs.UpdateExtract.body)
 
     extract = graphene.Field(lambda: Extract)
 
@@ -79,9 +89,9 @@ class UpdateExtract(graphene.Mutation):
 
 class DeleteExtract(graphene.Mutation):
     class Input:
-        extract_id = graphene.ID(required=True)
+        extract_id = graphene.ID(required=True, description=docs.DeleteExtract.extract_id)
 
-    success = graphene.Boolean()
+    success = graphene.Boolean(description=docs.DeleteExtract.success)
 
     @staticmethod
     @abort_transaction_on_exception

@@ -138,3 +138,59 @@ class Synthesis:
     img = """This is the image to be posted at the top of the page of that synthesis"""
     creation_date = """The creation data of the synthesis"""
     post = """The synthesis post to be created"""
+
+
+class TextFragmentIdentifier:
+    __doc__ = """A text fragment metadata that describes the positioning of the fragment both in the DOM and its position in the string of text."""
+    xpath_start = """The xPath selector starting point in the DOM, representing where the string text that the fragment is held is positioned."""
+    offset_start = """The character offset index where an extract begins, beginning from index 0 in a string of text."""
+    xpath_end = """The xPath selector ending point in the DOM, representing where the string text that the fragment is held is positioned.
+    Often times the xpathEnd variable is the same as the xpathStart selector."""
+    offset_end = """The character offset index where an extract ends in a string of text."""
+
+
+class ExtractInterface:
+    __doc__ = """An Extract is an extraction of text from a post which is deemed to be important by a priviledged user."""
+    body = """The body of text that is extracted from the post. This is not language dependent, but rather just unicode text."""
+    important = """A flag for importance of the Extract."""
+    extract_nature = """The taxonomy (or classification) of the extracted body. The options are one of:\n\n
+        issue: The body of text is an issue.\n
+        actionable_solution: The body of text is a potentially actionable solution.\n
+        knowledge: The body of text is in fact knowledge gained by the community.\n
+        example: The body of text is an example in the context that it was derived from.\n
+        concept: The body of text is a high level concept.\n
+        argument: The body of text is an argument for/against in the context that it was extracted from.\n
+        cognitive_bias: The body of text, in fact, has cognitive bias in the context it was extracted from.\n
+    """
+    extract_action = """The taxonomy (or classification) of the actions that can be taken from the extracted body. The options are one of:\n\n
+        classify: This body of text should be re-classified by an priviledged user.\n
+        make_generic: The body of text is a specific example and not generic.\n
+        argument: A user must give more arguments.\n
+        give_examples: A user must give more examples.\n
+        more_specific: A user must be more specific within the same context.\n
+        mix_match: The body of text has relevancy in another section of the deabte. These should be mixed and matched to create greater meaning.\n
+        display_multi_column: A priviledged user should activate the Mutli-Column view.\n
+        display_thread: A priviledged user should activate the Thread view.\n
+        display_tokens: A priviledged user should activate the Token Vote view.\n
+        display_open_questions: A priviledged user should activate the Open Question view.\n
+        display_bright_mirror: A priviledged user should activate the Bright Mirror view.\n
+    """
+    text_fragment_identifiers = """A list of TextFragmentIdentifiers."""
+    creation_date = """The date the Extract was created, in UTC timezone."""
+    creator_id = """The id of the User who created the extract."""
+    creator = """The AgentProfile object description of the creator."""
+
+
+class UpdateExtract:
+    __doc__ = """A mutation to update an existing extract."""
+    extract_id = """The Relay.Node ID type of the Extract object to the updated."""
+    idea_id = """The Relay.Node ID type of the Idea object associated to the Extract."""
+    important = ExtractInterface.important
+    extract_nature = ExtractInterface.extract_nature
+    extract_action = ExtractInterface.extract_action
+    body = ExtractInterface.body
+
+
+class DeleteExtract:
+    extract_id = UpdateExtract.extract_id
+    success = """A Boolean of whether the extract was successfully saved or not."""

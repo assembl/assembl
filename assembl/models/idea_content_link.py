@@ -5,6 +5,7 @@ import quopri
 from datetime import datetime
 from enum import Enum
 
+import assembl.graphql.docstrings as docs
 from sqlalchemy.orm import (relationship, backref)
 from sqlalchemy import (
     Column,
@@ -303,7 +304,7 @@ class Extract(IdeaContentPositiveLink):
     # which should belong in the TextFragmentIdentifier,
     # whereas it was meant to be a comment on the extract
     # if used from the Web annotator. It seems like a fait accompli now.
-    body = Column(UnicodeText, nullable=False)
+    body = Column(UnicodeText, nullable=False, doc=docs.ExtractInterface.body)
 
     discussion_id = Column(Integer, ForeignKey(
         'discussion.id', ondelete="CASCADE", onupdate="CASCADE"),
@@ -311,14 +312,14 @@ class Extract(IdeaContentPositiveLink):
     discussion = relationship(
         Discussion, backref=backref('extracts', cascade="all, delete-orphan"))
 
-    important = Column('important', Boolean, server_default='0')
+    important = Column('important', Boolean, server_default='0', doc=docs.ExtractInterface.important)
 
     extract_nature = Column(
         'extract_nature', ExtractNatureVocabulary.pg_enum,
-        ForeignKey(ExtractNatureVocabulary.id))
+        ForeignKey(ExtractNatureVocabulary.id), doc=docs.ExtractInterface.extract_nature)
     extract_action = Column(
         'extract_action', ExtractActionVocabulary.pg_enum,
-        ForeignKey(ExtractActionVocabulary.id))
+        ForeignKey(ExtractActionVocabulary.id), doc=docs.ExtractInterface.extract_action)
 
     extract_nature_term = relationship(ExtractNatureVocabulary)
 
@@ -485,10 +486,10 @@ class TextFragmentIdentifier(DiscussionBoundBase):
     id = Column(Integer, primary_key=True)
     extract_id = Column(Integer, ForeignKey(
         Extract.id, ondelete="CASCADE"), nullable=False, index=True)
-    xpath_start = Column(String)
-    offset_start = Column(Integer)
-    xpath_end = Column(String)
-    offset_end = Column(Integer)
+    xpath_start = Column(String, doc=docs.TextFragmentIdentifier.xpath_start)
+    offset_start = Column(Integer, doc=docs.TextFragmentIdentifier.offset_start)
+    xpath_end = Column(String, doc=docs.TextFragmentIdentifier.xpath_end)
+    offset_end = Column(Integer, doc=docs.TextFragmentIdentifier.offset_end)
     extract = relationship(Extract, backref=backref(
         'text_fragment_identifiers', cascade="all, delete-orphan"))
 
