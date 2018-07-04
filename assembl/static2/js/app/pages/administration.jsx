@@ -440,9 +440,13 @@ export default compose(
   }),
   graphql(VoteSessionQuery, {
     skip: ({ timeline }) => typeof getPhaseId(timeline, 'voteSession') !== 'string',
-    options: ({ timeline, i18n }) => ({
-      variables: { discussionPhaseId: atob(getPhaseId(timeline, 'voteSession')).split(':')[1], lang: i18n.locale }
-    }),
+    options: ({ timeline, i18n }) => {
+      const id = timeline ? getPhaseId(timeline, 'voteSession') : null;
+      const discussionPhaseId = id ? atob(id).split(':')[1] : null;
+      return {
+        variables: { discussionPhaseId: discussionPhaseId, lang: i18n.locale }
+      };
+    },
     props: ({ data }) => {
       if (data.loading) {
         return {
