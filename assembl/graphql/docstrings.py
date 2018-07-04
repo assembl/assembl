@@ -194,3 +194,9 @@ class UpdateExtract:
 class DeleteExtract:
     extract_id = UpdateExtract.extract_id
     success = """A Boolean of whether the extract was successfully saved or not."""
+
+
+class Locale:
+    __doc__ = """The Locale object describing the language model."""
+    locale_code = """The ISO 639-1 locale code of the language of choice."""
+    label = """The name of the locale, in a specifically given language."""
