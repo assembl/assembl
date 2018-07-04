@@ -1,14 +1,14 @@
 """add_user_machine
 
-Revision ID: a5bf5017b280
-Revises: d7452db4dcd2
-Create Date: 2018-07-03 19:34:36.005334
+Revision ID: 10a3fea34f8e
+Revises: 2d0777b24f0d
+Create Date: 2018-07-04 18:01:09.655927
 
 """
 
 # revision identifiers, used by Alembic.
-revision = 'a5bf5017b280'
-down_revision = 'd7452db4dcd2'
+revision = '10a3fea34f8e'
+down_revision = '2d0777b24f0d'
 
 from alembic import context, op
 import sqlalchemy as sa
