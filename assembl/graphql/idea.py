@@ -29,6 +29,7 @@ from .user import AgentProfile
 from .utils import (
     abort_transaction_on_exception, get_fields, get_root_thematic_for_phase,
     create_root_thematic)
+import assembl.graphql.docstrings as docs
 
 
 class Video(graphene.ObjectType):
@@ -102,6 +103,7 @@ class IdeaInterface(graphene.Interface):
 
 
 class IdeaAnnoucement(SecureObjectType, SQLAlchemyObjectType):
+
     class Meta:
         model = models.IdeaAnnouncement
         interfaces = (Node,)
@@ -118,6 +120,7 @@ class IdeaAnnoucement(SecureObjectType, SQLAlchemyObjectType):
 
 
 class IdeaMessageColumn(SecureObjectType, SQLAlchemyObjectType):
+
     class Meta:
         model = models.IdeaMessageColumn
         interfaces = (Node,)
@@ -164,6 +167,7 @@ class VoteResults(graphene.ObjectType):
 
 
 class Idea(SecureObjectType, SQLAlchemyObjectType):
+
     class Meta:
         model = models.Idea
         interfaces = (Node, IdeaInterface)
@@ -329,6 +333,7 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
 
 
 class Question(SecureObjectType, SQLAlchemyObjectType):
+
     class Meta:
         model = models.Question
         interfaces = (Node, )
@@ -447,6 +452,7 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
 
 
 class Thematic(SecureObjectType, SQLAlchemyObjectType):
+
     class Meta:
         model = models.Thematic
         interfaces = (Node, IdeaInterface)
@@ -506,6 +512,7 @@ class Thematic(SecureObjectType, SQLAlchemyObjectType):
 
 
 class IdeaUnion(SQLAlchemyUnion):
+
     class Meta:
         types = (Idea, Thematic)
         model = models.Idea
@@ -521,16 +528,16 @@ class IdeaUnion(SQLAlchemyUnion):
 
 
 class QuestionInput(graphene.InputObjectType):
-    id = graphene.ID()
-    title_entries = graphene.List(LangStringEntryInput, required=True)
+    id = graphene.ID(description=docs.QuestionInput.id)
+    title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.QuestionInput.title_entries)
 
 
 class VideoInput(graphene.InputObjectType):
-    title_entries = graphene.List(LangStringEntryInput)
-    description_entries_top = graphene.List(LangStringEntryInput)
-    description_entries_bottom = graphene.List(LangStringEntryInput)
-    description_entries_side = graphene.List(LangStringEntryInput)
-    html_code = graphene.String()
+    title_entries = graphene.List(LangStringEntryInput, description=docs.VideoInput.title_entries)
+    description_entries_top = graphene.List(LangStringEntryInput, description=docs.VideoInput.description_entries_top)
+    description_entries_bottom = graphene.List(LangStringEntryInput, description=docs.VideoInput.description_entries_bottom)
+    description_entries_side = graphene.List(LangStringEntryInput, description=docs.VideoInput.description_entries_side)
+    html_code = graphene.String(description=docs.VideoInput.html_code)
 
 
 # Create an Idea to be used in a Thread phase
@@ -541,15 +548,16 @@ class VideoInput(graphene.InputObjectType):
 # do in CreateThematic mutation, because behavior between frontend
 # v1 and v2 has not yet been completely clarified.
 class CreateIdea(graphene.Mutation):
+
     class Input:
         # Careful, having required=True on a graphene.List only means
         # it can't be None, having an empty [] is perfectly valid.
-        title_entries = graphene.List(LangStringEntryInput, required=True)
-        description_entries = graphene.List(LangStringEntryInput)
+        title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.CreateIdea.title_entries)
+        description_entries = graphene.List(LangStringEntryInput, description=docs.CreateIdea.description_entries)
         # this is the identifier of the part in a multipart POST
-        image = graphene.String()
-        order = graphene.Float()
-        parent_id = graphene.ID()
+        image = graphene.String(description=docs.CreateIdea.image)
+        order = graphene.Float(description=docs.CreateIdea.order)
+        parent_id = graphene.ID(description=docs.CreateIdea.parent_id)
 
     idea = graphene.Field(lambda: Idea)
 
@@ -585,19 +593,19 @@ class CreateIdea(graphene.Mutation):
 
             parent_idea_id = args.get('parent_id')
             if parent_idea_id:
-                    parent_idea_id = int(
-                        Node.from_global_id(parent_idea_id)[1])
-                    if parent_idea_id:
-                        parent_idea = models.Idea.get(parent_idea_id)
-                        if not parent_idea:
-                            raise Exception('Parent Idea not found')
-                        if parent_idea.discussion != discussion:
-                            # No cross-debate references are allowed,
-                            # for security reasons
-                            raise Exception(
-                                'Parent Idea does not belong to this discussion')  # noqa: E501
-                    else:
+                parent_idea_id = int(
+                    Node.from_global_id(parent_idea_id)[1])
+                if parent_idea_id:
+                    parent_idea = models.Idea.get(parent_idea_id)
+                    if not parent_idea:
                         raise Exception('Parent Idea not found')
+                    if parent_idea.discussion != discussion:
+                        # No cross-debate references are allowed,
+                        # for security reasons
+                        raise Exception(
+                            'Parent Idea does not belong to this discussion')  # noqa: E501
+                else:
+                    raise Exception('Parent Idea not found')
             if not parent_idea_id:
                 parent_idea = discussion.root_idea
 
@@ -648,17 +656,19 @@ class CreateIdea(graphene.Mutation):
 # in the variables, so here `image` input argument will be 'variables.img'
 # (assuming assigning image: $img in the mutation)
 class CreateThematic(graphene.Mutation):
+    __doc__ = docs.CreateThematic.__doc__
+
     class Input:
         # Careful, having required=True on a graphene.List only means
         # it can't be None, having an empty [] is perfectly valid.
-        title_entries = graphene.List(LangStringEntryInput, required=True)
-        description_entries = graphene.List(LangStringEntryInput)
-        identifier = graphene.String(required=True)
-        video = graphene.Argument(VideoInput)
-        questions = graphene.List(QuestionInput)
+        title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.Default.langstring_entries)
+        description_entries = graphene.List(LangStringEntryInput, description=docs.Default.langstring_entries)
+        identifier = graphene.String(required=True, description=docs.Default.required_language_input)
+        video = graphene.Argument(VideoInput, description=docs.CreateThematic.video)
+        questions = graphene.List(QuestionInput, description=docs.CreateThematic.questions)
         # this is the identifier of the part in a multipart POST
-        image = graphene.String()
-        order = graphene.Float()
+        image = graphene.String(description=docs.Default.required_language_input)
+        order = graphene.Float(description=docs.Default.float_entry)
 
     thematic = graphene.Field(lambda: Thematic)
 
@@ -782,16 +792,18 @@ class CreateThematic(graphene.Mutation):
 
 
 class UpdateThematic(graphene.Mutation):
+    __doc__ = docs.UpdateThematic.__doc__
+
     class Input:
         id = graphene.ID(required=True)
-        title_entries = graphene.List(LangStringEntryInput)
-        description_entries = graphene.List(LangStringEntryInput)
-        identifier = graphene.String()
-        video = graphene.Argument(VideoInput)
-        questions = graphene.List(QuestionInput)
+        title_entries = graphene.List(LangStringEntryInput, description=docs.Default.langstring_entries)
+        description_entries = graphene.List(LangStringEntryInput, description=docs.Default.langstring_entries)
+        identifier = graphene.String(description=docs.Default.required_language_input)
+        video = graphene.Argument(VideoInput, description=docs.UpdateThematic.video)
+        questions = graphene.List(QuestionInput, description=docs.UpdateThematic.questions)
         # this is the identifier of the part in a multipart POST
-        image = graphene.String()
-        order = graphene.Float()
+        image = graphene.String(description=docs.Default.required_language_input)
+        order = graphene.Float(description=docs.Default.float_entry)
 
     thematic = graphene.Field(lambda: Thematic)
 
@@ -931,8 +943,10 @@ class UpdateThematic(graphene.Mutation):
 
 
 class DeleteThematic(graphene.Mutation):
+    __doc__ = docs.DeleteThematic.__doc__
+
     class Input:
-        thematic_id = graphene.ID(required=True)
+        thematic_id = graphene.ID(required=True, description=docs.DeleteThematic.thematic_id)
 
     success = graphene.Boolean()
 

@@ -6,6 +6,7 @@ class Default:
     langstring_entries = """A list of possible languages of the entity as LangStringEntry objects. %s"""
     document = """%sA file metadata object, described by the Document object."""
     string_entry = """A %s in a given language."""
+    float_entry = """A %s  as a float"""
 
 
 class Schema:
@@ -128,6 +129,7 @@ class VisitsAnalytics:
 
 
 class Synthesis:
+    __doc__ = """This class is to model the synthesis of a discussion"""
     subject = """The subject of the synthesis"""
     subject_entries = Default.langstring_entries % ("This is the subject in various languages.",)
     introduction = """This is the introduction of the synthesis"""
@@ -135,8 +137,8 @@ class Synthesis:
     conclusion = """This is the conclusion of the synthesis"""
     conclusion_entries = Default.langstring_entries % ("This is the conclusion of the synthesis in different languages.",)
     ideas = """This is the list of ideas related to the synthesis"""
-    img = """This is the image to be posted at the top of the page of that synthesis"""
-    creation_date = """The creation data of the synthesis"""
+    img = Default.document % ("""This is the image to be posted at the top of the page of that synthesis""")
+    creation_date = """The creation date of the synthesis"""
     post = """The synthesis post to be created"""
 
 
@@ -200,3 +202,41 @@ class Locale:
     __doc__ = """The Locale object describing the language model."""
     locale_code = """The ISO 639-1 locale code of the language of choice."""
     label = """The name of the locale, in a specifically given language."""
+
+
+class QuestionInput:
+    id = """Id of the question input"""
+    title_entries = Default.langstring_entries % ("Title of the question in various languages")
+
+
+class VideoInput:
+    title_entries = Default.langstring_entries % ("Title of the video in various languages")
+    description_entries_top = Default.langstring_entries % ("Description on the top of the video in various languages")
+    description_entries_bottom = Default.langstring_entries % ("Description on the bottom of the video in various languages")
+    description_entries_side = Default.langstring_entries % ("Description on the side of the video in various languages")
+    html_code = Default.required_language_input % ("")
+
+
+class CreateIdea:
+    __doc__ = """This is a method to create an idea"""
+    title_entries = Default.langstring_entries % ("Title of the idea in various languages.",)
+    description_entries = Default.langstring_entries % ("List of the description of the idea in different languages")
+    image = Default.document % ("""Main image associated with this idea""",)
+    order = """Order of the thematic"""
+    parent_id = """Id of the parent Idea of this idea"""
+
+
+class CreateThematic:
+    __doc__ = """Method to create a new thematic"""
+    title_entries = Default.langstring_entries % ("""Title of the thematic to be created in different languages""")
+    description_entries = Default.langstring_entries % ("""Description of the thematic to be created in different languages""")
+    identifier = Default.required_language_input % ("""Thematic to be created""")
+    video = """Video to be integrated with the thematic"""
+    questions = """Questions for the thematic"""
+    image = Default.required_language_input % ("Image to be shown in the thematic")
+    order = Default.float_entry % (" Order of the thematic")
+
+
+class DeleteThematic:
+    __doc__ = """Method to delete a thematic"""
+    thematic_id = """Id of the thematic to be deleted"""

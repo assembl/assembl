@@ -3,7 +3,7 @@ from graphene.relay import Node
 from graphene_sqlalchemy import SQLAlchemyObjectType
 
 from assembl import models
-
+import assembl.graphql.docstrings as docs
 from .document import Document
 from .idea import IdeaUnion
 from .langstring import (
@@ -13,21 +13,23 @@ from .utils import DateTime
 
 
 class Synthesis(SecureObjectType, SQLAlchemyObjectType):
+    __doc__ = docs.Synthesis.__doc__
+
     class Meta:
         model = models.Synthesis
         interfaces = (Node, )
         only_fields = ('id', )
 
-    subject = graphene.String(lang=graphene.String())
-    subject_entries = graphene.List(LangStringEntry)
-    introduction = graphene.String(lang=graphene.String())
-    introduction_entries = graphene.List(LangStringEntry)
-    conclusion = graphene.String(lang=graphene.String())
-    conclusion_entries = graphene.List(LangStringEntry)
-    ideas = graphene.List(lambda: IdeaUnion)
-    img = graphene.Field(Document)
-    creation_date = DateTime()
-    post = graphene.Field("assembl.graphql.post.Post")
+    subject = graphene.String(lang=graphene.String(), description=docs.Synthesis.subject)
+    subject_entries = graphene.List(LangStringEntry, description=docs.Synthesis.subject_entries)
+    introduction = graphene.String(lang=graphene.String(), description=docs.Synthesis.introduction)
+    introduction_entries = graphene.List(LangStringEntry, description=docs.Synthesis.introduction_entries)
+    conclusion = graphene.String(lang=graphene.String(), description=docs.Synthesis.conclusion)
+    conclusion_entries = graphene.List(LangStringEntry, description=docs.Synthesis.conclusion_entries)
+    ideas = graphene.List(lambda: IdeaUnion, description=docs.Synthesis.ideas)
+    img = graphene.Field(Document, description=docs.Synthesis.img)
+    creation_date = DateTime(description=docs.Synthesis.creation_date)
+    post = graphene.Field("assembl.graphql.post.Post", description=docs.Synthesis.post)
 
     def resolve_subject(self, args, context, info):
         return resolve_langstring(self.subject, args.get('lang'))
