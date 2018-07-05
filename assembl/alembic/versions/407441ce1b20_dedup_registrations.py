@@ -16,6 +16,7 @@ import transaction
 from collections import defaultdict
 from operator import or_
 from sqlalchemy.orm import joinedload
+from datetime import datetime
 
 from assembl.lib import config
 
@@ -29,16 +30,17 @@ def upgrade(pyramid_env):
     db = m.get_session_maker()()
     with transaction.manager:
         bymail = defaultdict(list)
-        emails=db.query(m.EmailAccount).options(
+        emails = db.query(m.EmailAccount).options(
             joinedload(m.EmailAccount.profile)).all()
         for e in emails:
-           bymail[e.email].append(e)
+            bymail[e.email].append(e)
 
         # all emails with duplicate accounts
-        duplicates = [v for v in bymail.values() if len(v)>1]
+        duplicates = [v for v in bymail.values() if len(v) > 1]
 
         def order(acc):
-            return (acc.verified, acc.profile.creation_date)
+            pre_assembl_life = datetime(year=2000, month=1, day=1)
+            return (acc.verified, getattr(acc.profile, 'creation_date', pre_assembl_life))
 
         with db.no_autoflush as db:
             for dups in duplicates:
@@ -48,7 +50,8 @@ def upgrade(pyramid_env):
                     assert not acc.verified
                 acc = dups[-1]
                 # Make the profile verified iff one verified account
-                acc.profile.verified = reduce(or_, [a.verified for a in acc.profile.accounts])
+                if isinstance(acc.profile, m.User):
+                    acc.profile.verified = reduce(or_, [getattr(a, 'verified', False) for a in acc.profile.accounts])
 
             for dups in duplicates:
                 # keep last profile
@@ -58,8 +61,9 @@ def upgrade(pyramid_env):
                     # i.e. delete profile if not last.
                     # There were cases of 2 accounts to one profile, one verified
                     if acc.profile_id != keep_profile:
-                        if acc.profile.username:
-                            acc.profile.username.delete()
+                        if isinstance(acc.profile, m.User):
+                            if acc.profile.username:
+                                acc.profile.username.delete()
                         acc.profile.delete()
 
         db.flush()
