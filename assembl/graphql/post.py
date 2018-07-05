@@ -680,6 +680,7 @@ class AddPostExtract(graphene.Mutation):
         post_id = graphene.ID(required=True, description=docs.AddPostExtract.post_id)
         body = graphene.String(required=True, description=docs.AddPostExtract.body)
         important = graphene.Boolean(description=docs.AddPostExtract.important)
+        lang = graphene.String(required=True, description=docs.AddPostExtract.lang)
         xpath_start = graphene.String(required=True, description=docs.AddPostExtract.xpath_start)
         xpath_end = graphene.String(required=True, description=docs.AddPostExtract.xpath_end)
         offset_start = graphene.Int(required=True, description=docs.AddPostExtract.offset_start)
@@ -704,7 +705,8 @@ class AddPostExtract(graphene.Mutation):
             discussion_id=discussion_id,
             body=args.get('body'),
             important=args.get('important', False),
-            content=post
+            content=post,
+            lang=args.get('lang')
         )
         post.db.add(new_extract)
         range = models.TextFragmentIdentifier(

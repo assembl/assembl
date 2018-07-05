@@ -447,6 +447,7 @@ export type PostQuery = {|
           creationDate: ?any,
           important: ?boolean,
           body: string,
+          lang: string,
           extractNature: ?string,
           extractAction: ?string,
           textFragmentIdentifiers: ?Array<?{|
@@ -1517,6 +1518,7 @@ export type addPostExtractMutation = {|
         creationDate: ?any,
         important: ?boolean,
         body: string,
+        lang: string,
         extractNature: ?string,
         extractAction: ?string,
         textFragmentIdentifiers: ?Array<?{|
@@ -1770,6 +1772,7 @@ export type createPostMutation = {|
         creationDate: ?any,
         important: ?boolean,
         body: string,
+        lang: string,
         extractNature: ?string,
         extractAction: ?string,
         textFragmentIdentifiers: ?Array<?{|
@@ -2268,6 +2271,7 @@ export type updateExtractMutation = {|
       creationDate: ?any,
       important: ?boolean,
       body: string,
+      lang: string,
       extractNature: ?string,
       extractAction: ?string,
       textFragmentIdentifiers: ?Array<?{|
@@ -2461,6 +2465,7 @@ export type updatePostMutation = {|
         creationDate: ?any,
         important: ?boolean,
         body: string,
+        lang: string,
         extractNature: ?string,
         extractAction: ?string,
         textFragmentIdentifiers: ?Array<?{|
@@ -3037,6 +3042,7 @@ export type ExtractFragment = {|
   creationDate: ?any,
   important: ?boolean,
   body: string,
+  lang: string,
   extractNature: ?string,
   extractAction: ?string,
   extractState: ?string,
@@ -3136,6 +3142,7 @@ export type PostFragment = {|
     creationDate: ?any,
     important: ?boolean,
     body: string,
+    lang: string,
     extractNature: ?string,
     extractAction: ?string,
     extractState: ?string,

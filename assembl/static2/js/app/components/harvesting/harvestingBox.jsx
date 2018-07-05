@@ -26,6 +26,7 @@ type Props = {
   extract: ?Extract,
   postId: string,
   contentLocale: string,
+  lang?: string,
   selection: ?Object,
   setHarvestingBoxDisplay: Function,
   cancelHarvesting: Function,
@@ -237,7 +238,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
   };
 
   validateHarvesting = (): void => {
-    const { postId, selection, contentLocale, addPostExtract, setHarvestingBoxDisplay, refetchPost } = this.props;
+    const { postId, selection, contentLocale, lang, addPostExtract, setHarvestingBoxDisplay, refetchPost } = this.props;
     if (!selection) {
       return;
     }
@@ -255,6 +256,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
       postId: postId,
       body: selectionText,
       important: false,
+      lang: lang,
       xpathStart: serializedAnnotatorRange.start,
       xpathEnd: serializedAnnotatorRange.end,
       offsetStart: serializedAnnotatorRange.startOffset,

@@ -185,6 +185,7 @@ class PostView extends React.PureComponent<Props, State> {
         {isHarvesting && (
           <HarvestingMenu
             postId={id}
+            lang={contentLocale}
             extracts={extracts}
             isAuthorAccountDeleted={creator.isDeleted}
             harvestingAnchorPosition={harvestingAnchorPosition}

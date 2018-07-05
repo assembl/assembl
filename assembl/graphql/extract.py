@@ -55,6 +55,7 @@ class Extract(SecureObjectType, SQLAlchemyObjectType):
     creator_id = graphene.Int(description=docs.ExtractInterface.creator_id)
     creator = graphene.Field(lambda: AgentProfile, description=docs.ExtractInterface.creator)
     extract_state = graphene.Field(type=ExtractStates, description=docs.ExtractInterface.extract_state)
+    lang = graphene.String(description=docs.ExtractInterface.lang)
 
     def resolve_creator(self, args, context, info):
         if self.creator_id is not None:

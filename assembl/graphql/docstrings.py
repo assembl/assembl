@@ -206,6 +206,7 @@ class ExtractInterface:
     creation_date = """The date the Extract was created, in UTC timezone."""
     creator_id = """The id of the User who created the extract."""
     creator = """The AgentProfile object description of the creator."""
+    lang = """The lang of the extract."""
 
 
 class PostExtract:
@@ -579,6 +580,7 @@ class AddPostExtract:
     post_id = Default.node_id % ("Post")
     body = "The body of text defined in this Extract on the Post."
     important = "An optional boolean to set the extract as a nugget. The default is False."
+    lang = """The lang of the extract."""
     xpath_start = TextFragmentIdentifier.xpath_start
     xpath_end = TextFragmentIdentifier.xpath_end
     offset_start = TextFragmentIdentifier.offset_start

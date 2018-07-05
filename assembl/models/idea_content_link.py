@@ -326,6 +326,8 @@ class Extract(IdeaContentPositiveLink):
 
     important = Column('important', Boolean, server_default='0', doc=docs.ExtractInterface.important)
 
+    lang = Column(String(10), nullable=False)
+
     extract_nature = Column(
         'extract_nature', ExtractNatureVocabulary.pg_enum,
         ForeignKey(ExtractNatureVocabulary.id), doc=docs.ExtractInterface.extract_nature)

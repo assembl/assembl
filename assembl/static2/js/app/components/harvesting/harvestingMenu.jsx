@@ -9,6 +9,7 @@ import HarvestingBox from './harvestingBox';
 type Props = {
   extracts: Array<Extract>,
   postId: string,
+  lang: string,
   displayHarvestingBox: boolean,
   displayHarvestingAnchor: boolean,
   harvestingAnchorPosition: Object,
@@ -37,7 +38,8 @@ class HarvestingMenu extends React.Component<Props> {
       harvestingAnchorPosition,
       refetchPost,
       cancelHarvesting,
-      isAuthorAccountDeleted
+      isAuthorAccountDeleted,
+      lang
     } = this.props;
     const selection = window.getSelection();
     return (
@@ -61,6 +63,7 @@ class HarvestingMenu extends React.Component<Props> {
           <HarvestingBox
             postId={postId}
             selection={selection}
+            lang={lang}
             extract={null}
             displayHarvestingBox={displayHarvestingBox}
             refetchPost={refetchPost}

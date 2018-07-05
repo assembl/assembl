@@ -72,7 +72,7 @@ const postBodyReplacementComponents = afterLoad => ({
 });
 
 const Html = (props) => {
-  const { extracts, rawHtml, divRef, dbId, replacementComponents } = props;
+  const { extracts, rawHtml, divRef, dbId, replacementComponents, contentLocale } = props;
   /*
    * The activeHtml() function will parse the raw html,
    * replace specified tags with provided components
@@ -90,7 +90,7 @@ const Html = (props) => {
       html = html.body;
     }
     extracts.forEach((extract) => {
-      if (extract) {
+      if (extract && extract.lang === contentLocale) {
         const tfis = extract.textFragmentIdentifiers;
         const wrapper = jQuery(`<annotation id="${extract.id}" data-state="${extract.extractState || ''}"></annotation>`);
         if (tfis) {
@@ -147,7 +147,7 @@ const PostBody = ({
   handleMouseUpWhileHarvesting,
   measureTreeHeight
 }: Props) => {
-  const divClassNames = classNames('post-body', { 'post-body--is-harvestable': !translate });
+  const divClassNames = 'post-body post-body--is-harvestable';
   const htmlClassNames = classNames('post-body-content', 'body', {
     'pre-wrap': bodyMimeType === 'text/plain'
   });
@@ -179,6 +179,7 @@ const PostBody = ({
             extracts={extracts}
             dbId={dbId}
             replacementComponents={postBodyReplacementComponents(afterLoad)}
+            contentLocale={contentLocale}
           />
           {/* {urls && (
             <div className="urls-container">
