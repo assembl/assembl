@@ -19,7 +19,7 @@ def upgrade(pyramid_env):
     with context.begin_transaction():
         op.add_column(
             'extract',
-            sa.Column('lang', sa.String(20), nullable=False))
+            sa.Column('lang', sa.String(20), server_default=""))
 
     from assembl import models as m
     db = m.get_session_maker()()
