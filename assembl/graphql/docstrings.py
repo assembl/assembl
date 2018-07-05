@@ -678,6 +678,10 @@ class DeleteDiscussionPhase:
     id = Default.node_id % ("DiscussionPhase")
 
 
+class UpdateHarvestingLocale:
+    __doc__ = "A mutation to save haversting locale preferences"
+
+
 class AgentProfile:
     __doc__ = "A meta-data object describing the characteristics of a User or AgentProfile."
     user_id = "The unique database identifier of the User."
@@ -691,6 +695,7 @@ class AgentProfile:
     is_deleted = """A boolean flag that shows if the User is deleted.
     If True, the User information is cleansed from the system, and the User can no longer log in."""
     is_machine = """A boolean flag describing if the User is a machine user or human user."""
+    preferences = """The preferences of the User."""
 
 
 class UpdateUser:

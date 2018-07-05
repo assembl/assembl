@@ -955,6 +955,16 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
             "allow_user_override": None,
             "modification_permission": P_ADMIN_DISC,
             "default": None
+        },
+        # Harvesting locale
+        {
+            "id": "harvesting_locale",
+            "name": _("Harvesting locale"),
+            "value_type": "string",
+            "show_in_preferences": True,
+            "description": _("Harvesting locale"),
+            "allow_user_override": P_READ,
+            "default": ""
         }
     ]
 

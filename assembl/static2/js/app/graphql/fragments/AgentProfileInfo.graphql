@@ -4,4 +4,7 @@ fragment AgentProfileInfo on AgentProfile {
   displayName
   isDeleted
   isMachine
+  preferences {
+    harvestingLocale
+  }
 }

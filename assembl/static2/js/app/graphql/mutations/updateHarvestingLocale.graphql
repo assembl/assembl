@@ -1,0 +1,7 @@
+mutation updateHarvestingLocale($id: ID!, $locale: String) {
+  updateHarvestingLocale(id: $id, locale: $locale) {
+    preferences {
+      harvestingLocale
+    }
+  }
+}
