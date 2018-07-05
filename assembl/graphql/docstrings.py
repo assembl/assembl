@@ -130,7 +130,8 @@ class VisitsAnalytics:
 
 
 class Synthesis:
-    __doc__ = """Class to model the synthesis of a discussion."""
+    __doc__ = """Class to model the synthesis of a discussion. A synthesis is one of the core features of Assembl that a debate administrator
+    uses to synthesize the main ideas of a debate. It has an introduction and a conclusion"""
     subject = """The subject of the synthesis."""
     subject_entries = Default.langstring_entries % ("The subject in various languages.",)
     introduction = """The introduction of the synthesis."""
