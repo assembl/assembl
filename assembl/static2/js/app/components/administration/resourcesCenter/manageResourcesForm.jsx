@@ -9,9 +9,9 @@ import { createRandomId } from '../../../utils/globalFunctions';
 
 const ManageResourcesForm = ({ createResource, resources, editLocale }) => (
   <div style={{ paddingBottom: '50px' }}>
-    {resources.map(id => <EditResourceForm key={id} id={id} editLocale={editLocale} />)}
+    {resources.map((id, index) => <EditResourceForm key={id} id={id} editLocale={editLocale} index={index} />)}
     <OverlayTrigger placement="top" overlay={createResourceTooltip}>
-      <div onClick={() => createResource(resources.size + 1)} className="plus margin-l">
+      <div onClick={() => createResource(resources.size + 1)} className="plus margin-l" id="add-media-button">
         +
       </div>
     </OverlayTrigger>

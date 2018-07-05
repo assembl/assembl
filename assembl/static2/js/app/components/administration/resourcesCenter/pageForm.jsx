@@ -31,6 +31,7 @@ const DumbPageForm = ({
   return (
     <div className="form-container">
       <FormControlWithLabel
+        id="ressource-title"
         key={`title-${editLocale}`}
         label={titleLabel}
         onChange={handlePageTitleChange}
@@ -42,6 +43,7 @@ const DumbPageForm = ({
           <Translate value="administration.resourcesCenter.headerImageLabel" />
         </label>
         <FileUploader
+          id="file-uploader"
           mimeType={headerMimeType}
           name={headerImageFieldName}
           fileOrUrl={headerUrl}

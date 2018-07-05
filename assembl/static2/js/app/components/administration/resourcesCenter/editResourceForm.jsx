@@ -35,7 +35,8 @@ type EditResourceFormProps = {
   markAsToDelete: Function,
   order: number,
   text: RawContentState,
-  title: string
+  title: string,
+  index: number
 };
 
 const EditResourceForm = ({
@@ -54,7 +55,8 @@ const EditResourceForm = ({
   markAsToDelete,
   order,
   text,
-  title
+  title,
+  index
 }: EditResourceFormProps) => {
   const divClassname = classnames('form-container', `edit-${id}`);
   const textLabel = I18n.t('administration.resourcesCenter.textLabel');
@@ -69,14 +71,22 @@ const EditResourceForm = ({
       </div>
       <div className="pointer right">
         <OverlayTrigger placement="top" overlay={deleteResourceTooltip}>
-          <Button onClick={markAsToDelete} className="admin-icons">
+          <Button onClick={markAsToDelete} className="admin-icons" id={`trash-icon-${index}`}>
             <span className="assembl-icon-delete grey" />
           </Button>
         </OverlayTrigger>
       </div>
       <div className="clear" />
-      <FormControlWithLabel label={titleLabel} onChange={handleTitleChange} required type="text" value={title} />
       <FormControlWithLabel
+        id={`media-title-${index}`}
+        label={titleLabel}
+        onChange={handleTitleChange}
+        required
+        type="text"
+        value={title}
+      />
+      <FormControlWithLabel
+        id={`media-text-${index}`}
         label={textLabel}
         onChange={handleTextChange}
         required
@@ -86,6 +96,7 @@ const EditResourceForm = ({
       />
       <FormControlWithLabel
         componentClass="textarea"
+        id={`embed-link-${index}`}
         label={embedCodeLabel}
         onChange={handleEmbedCodeChange}
         required={false}
@@ -96,13 +107,20 @@ const EditResourceForm = ({
         <label htmlFor={imageFieldName}>
           <Translate value="administration.resourcesCenter.imageLabel" />
         </label>
-        <FileUploader name={imageFieldName} fileOrUrl={imgUrl} handleChange={handleImageChange} mimeType={imgMimeType} />
+        <FileUploader
+          id={`media-image-file-uploader-${index}`}
+          name={imageFieldName}
+          fileOrUrl={imgUrl}
+          handleChange={handleImageChange}
+          mimeType={imgMimeType}
+        />
       </FormGroup>
       <FormGroup>
         <label htmlFor={documentFieldName}>
           <Translate value="administration.resourcesCenter.documentLabel" />
         </label>
         <FileUploader
+          id={`media-document-file-uploader-${index}`}
           name={documentFieldName}
           filename={documentFilename}
           fileOrUrl={documentUrl}

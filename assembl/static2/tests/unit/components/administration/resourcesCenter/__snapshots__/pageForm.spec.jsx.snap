@@ -9,14 +9,14 @@ exports[`DumbPageForm component should render a form to update the resources cen
   >
     <label
       className="control-label"
-      htmlFor={undefined}
+      htmlFor="ressource-title"
     >
       Page title
     </label>
     <input
       className="form-control"
-      id={undefined}
-      name={undefined}
+      id="ressource-title"
+      name="ressource-title"
       onBlur={[Function]}
       onChange={[Function]}
       placeholder="Page title"
