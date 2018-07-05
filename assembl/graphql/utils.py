@@ -1,4 +1,5 @@
 from datetime import datetime
+import os.path
 
 import pytz
 from graphene.types.scalars import Scalar
@@ -121,3 +122,71 @@ def create_root_thematic(discussion, identifier):
         hidden=True)
     discussion.root_idea.children.append(root_thematic)
     return root_thematic
+
+
+def get_attachment_with_purpose(attachments, purpose):
+    for att in attachments:
+        if att.attachmentPurpose == purpose:
+            return att
+
+    return None
+
+
+def create_attachment(discussion, attachment_model, new_value, attachment_purpose, context):
+    filename = os.path.basename(context.POST[new_value].filename)
+    mime_type = context.POST[new_value].type
+    document = models.File(
+        discussion=discussion,
+        mime_type=mime_type,
+        title=filename)
+    document.add_file_data(context.POST[new_value].file)
+    new_attachment = attachment_model(
+        document=document,
+        discussion=discussion,
+        creator_id=context.authenticated_userid,
+        title=filename,
+        attachmentPurpose=attachment_purpose
+    )
+
+    return new_attachment
+
+
+def update_attachment(discussion, attachment_model, new_value, attachments, attachment_purpose, db, context):
+    """Update or delete attachment."""
+    current_attachment = None
+    if attachments:
+        purposes_attachments = [
+            att for att in attachments if att.attachmentPurpose == attachment_purpose]
+        if purposes_attachments:
+            current_attachment = purposes_attachments[0]
+
+    if new_value == 'TO_DELETE' and current_attachment:
+        # delete the new_value
+        current_attachment.document.delete_file()
+        db.delete(current_attachment.document)
+        db.delete(current_attachment)
+        attachments.remove(current_attachment)
+    else:
+        filename = os.path.basename(context.POST[new_value].filename)
+        mime_type = context.POST[new_value].type
+        document = models.File(
+            discussion=discussion,
+            mime_type=mime_type,
+            title=filename)
+        document.add_file_data(context.POST[new_value].file)
+        # if there is already an attachment, remove it with the
+        # associated document (image)
+        if current_attachment:
+            current_attachment.document.delete_file()
+            db.delete(current_attachment.document)
+            attachments.remove(current_attachment)
+
+        attachment = attachment_model(
+            document=document,
+            discussion=discussion,
+            creator_id=context.authenticated_userid,
+            title=filename,
+            attachmentPurpose=attachment_purpose
+        )
+        attachments.append(attachment)
+        db.flush()

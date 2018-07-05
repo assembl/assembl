@@ -40,6 +40,7 @@ class AttachmentPurpose(enum.Enum):
 
     DOCUMENT = 'DOCUMENT'  # used for resources center
     EMBED_ATTACHMENT = 'EMBED_ATTACHMENT'
+    MEDIA_ATTACHMENT = 'MEDIA_ATTACHMENT'
     IMAGE = 'IMAGE'  # used for resources center
     PROFILE_PICTURE = 'PROFILE_PICTURE'
     RESOURCES_CENTER_HEADER_IMAGE = 'RESOURCES_CENTER_HEADER_IMAGE'
