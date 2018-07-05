@@ -21,7 +21,6 @@ def upgrade(pyramid_env):
             'extract',
             sa.Column('lang', sa.String(20), nullable=False))
 
-    # Do stuff with the app's models here.
     from assembl import models as m
     db = m.get_session_maker()()
     with transaction.manager:
