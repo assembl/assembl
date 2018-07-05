@@ -95,7 +95,7 @@ const Html = (props) => {
         const wrapper = jQuery(`<annotation id="${extract.id}" data-state="${extract.extractState || ''}"></annotation>`);
         if (tfis) {
           tfis.forEach((tfi) => {
-            if (tfi && tfi.xpathStart && tfi.offsetStart && tfi.xpathEnd && tfi.offsetEnd) {
+            if (tfi && tfi.xpathStart && tfi.offsetStart !== null && tfi.xpathEnd && tfi.offsetEnd !== null) {
               const range = new ARange.SerializedRange({
                 start: tfi.xpathStart,
                 startOffset: tfi.offsetStart,
