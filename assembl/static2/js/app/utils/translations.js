@@ -475,7 +475,7 @@ const Translations = {
         deletePhase: "Supprimer la phase",
         instruction1: "Choisissez le nombre de phases qui jalonneront votre débat",
         instruction2: "Renseignez les champs requis pour chaque phase en sélectionnant chaque onglet",
-        phaseModule: "Modalité de participation pour cette phase :",
+        phaseModule: "Modalité de participation pour cette phase",
         thematicsTable: "Thematics table",
         configureModule:
           "Après avoir sauvegardé, configurez le module en cliquant dans le menu vertical gauche ou sur le lien suivant : ",

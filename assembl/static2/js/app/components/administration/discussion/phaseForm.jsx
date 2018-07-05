@@ -40,9 +40,8 @@ export const DumbPhaseForm = ({
   const startDatePickerPlaceholder = I18n.t('administration.timelineAdmin.selectStart', { count: phaseNumber });
   const endDatePickerPlaceholder = I18n.t('administration.timelineAdmin.selectEnd', { count: phaseNumber });
 
-  const splitButtonTitle = identifier
-    ? I18n.t(`administration.modules.${identifier}`)
-    : I18n.t('administration.timelineAdmin.singleModule');
+
+  const splitButtonTitle = I18n.t(`administration.modules.${identifier}`);
 
   const slug = { slug: getDiscussionSlug() };
 
@@ -135,7 +134,7 @@ export const DumbPhaseForm = ({
 const mapStateToProps = (state, { phaseId }) => {
   const phase = state.admin.timeline.phasesById.get(phaseId);
   return {
-    identifier: phase ? phase.get('identifier') : null,
+    identifier: phase && phase.get('identifier') || 'survey',
     start: phase ? phase.get('start') : null,
     end: phase ? phase.get('end') : null,
     hasConflictingDates: phase ? phase.get('hasConflictingDates') : null,
