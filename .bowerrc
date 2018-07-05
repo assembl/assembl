@@ -1,4 +1,5 @@
 {
     "directory": "assembl/static/js/bower",
-    "interactive": false
+    "interactive": false,
+    "registry": "https://registry.bower.io"
 }
