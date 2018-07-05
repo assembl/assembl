@@ -3,6 +3,7 @@
 exports[`GaugeForm component should render a form to set up a gauge and a numberGaugeForm below 1`] = `
 <div
   className="gauges-vote-form"
+  id="gauge-form-2"
 >
   <Translate
     number={2}
@@ -17,7 +18,7 @@ exports[`GaugeForm component should render a form to set up a gauge and a number
       formControlProps={undefined}
       helperText="Depending on the objective of the gauge module, incite the participants to take action."
       helperUrl="/static2/img/helpers/helper6.png"
-      id={undefined}
+      id="gauge-vote-instructions-2"
       label="Instructions for the gauge vote"
       labelAlwaysVisible={false}
       name={undefined}
@@ -35,7 +36,7 @@ exports[`GaugeForm component should render a form to set up a gauge and a number
       className="flex"
     >
       <label
-        htmlFor="dropdown-1234"
+        htmlFor="dropdown-2"
       >
         <Translate
           value="administration.nbTicks"
@@ -44,7 +45,7 @@ exports[`GaugeForm component should render a form to set up a gauge and a number
     </div>
     <SplitButton
       className="admin-dropdown"
-      id="dropdown-1234"
+      id="dropdown-2"
       onSelect={[Function]}
       required={true}
       title={10}
@@ -139,6 +140,7 @@ exports[`GaugeForm component should render a form to set up a gauge and a number
       bsClass="radio"
       checked={false}
       disabled={false}
+      id="radio-text-2"
       inline={false}
       name="gauge-type-1234"
       onChange={[Function]}
@@ -152,6 +154,7 @@ exports[`GaugeForm component should render a form to set up a gauge and a number
       bsClass="radio"
       checked={true}
       disabled={false}
+      id="radio-number-2"
       inline={false}
       name="gauge-type-1234"
       onChange={[Function]}
@@ -180,6 +183,7 @@ exports[`GaugeForm component should render a form to set up a gauge and a number
 exports[`GaugeForm component should render a form to set up a gauge and a textGaugeForm below 1`] = `
 <div
   className="gauges-vote-form"
+  id="gauge-form-2"
 >
   <Translate
     number={2}
@@ -194,7 +198,7 @@ exports[`GaugeForm component should render a form to set up a gauge and a textGa
       formControlProps={undefined}
       helperText="Depending on the objective of the gauge module, incite the participants to take action."
       helperUrl="/static2/img/helpers/helper6.png"
-      id={undefined}
+      id="gauge-vote-instructions-2"
       label="Instructions for the gauge vote"
       labelAlwaysVisible={false}
       name={undefined}
@@ -212,7 +216,7 @@ exports[`GaugeForm component should render a form to set up a gauge and a textGa
       className="flex"
     >
       <label
-        htmlFor="dropdown-5678"
+        htmlFor="dropdown-2"
       >
         <Translate
           value="administration.nbTicks"
@@ -221,7 +225,7 @@ exports[`GaugeForm component should render a form to set up a gauge and a textGa
     </div>
     <SplitButton
       className="admin-dropdown"
-      id="dropdown-5678"
+      id="dropdown-2"
       onSelect={[Function]}
       required={true}
       title={2}
@@ -316,6 +320,7 @@ exports[`GaugeForm component should render a form to set up a gauge and a textGa
       bsClass="radio"
       checked={true}
       disabled={false}
+      id="radio-text-2"
       inline={false}
       name="gauge-type-5678"
       onChange={[Function]}
@@ -329,6 +334,7 @@ exports[`GaugeForm component should render a form to set up a gauge and a textGa
       bsClass="radio"
       checked={false}
       disabled={false}
+      id="radio-number-2"
       inline={false}
       name="gauge-type-5678"
       onChange={[Function]}
@@ -367,6 +373,7 @@ exports[`GaugeForm component should render a form to set up a gauge and a textGa
 exports[`GaugeForm component should render a gauge form with no radio if canChangeType is false 1`] = `
 <div
   className="gauges-vote-form"
+  id="gauge-form-2"
 >
   <Translate
     number={2}
@@ -381,7 +388,7 @@ exports[`GaugeForm component should render a gauge form with no radio if canChan
       formControlProps={undefined}
       helperText="Depending on the objective of the gauge module, incite the participants to take action."
       helperUrl="/static2/img/helpers/helper6.png"
-      id={undefined}
+      id="gauge-vote-instructions-2"
       label="Instructions for the gauge vote"
       labelAlwaysVisible={false}
       name={undefined}
@@ -399,7 +406,7 @@ exports[`GaugeForm component should render a gauge form with no radio if canChan
       className="flex"
     >
       <label
-        htmlFor="dropdown-5678"
+        htmlFor="dropdown-2"
       >
         <Translate
           value="administration.nbTicks"
@@ -408,7 +415,7 @@ exports[`GaugeForm component should render a gauge form with no radio if canChan
     </div>
     <SplitButton
       className="admin-dropdown"
-      id="dropdown-5678"
+      id="dropdown-2"
       onSelect={[Function]}
       required={true}
       title={2}

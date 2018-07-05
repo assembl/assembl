@@ -151,6 +151,7 @@ const DumbVoteProposalForm = ({
       </div>
 
       <FormControlWithLabel
+        id={`proposal-title-${index}`}
         value={title}
         label={I18n.t('administration.voteProposals.title')}
         onChange={handleTitleChange}
@@ -160,6 +161,7 @@ const DumbVoteProposalForm = ({
       />
 
       <FormControlWithLabel
+        id={`proposal-description-${index}`}
         key={`description-${editLocale}`}
         value={description}
         label={I18n.t('administration.voteProposals.description')}
@@ -177,8 +179,9 @@ const DumbVoteProposalForm = ({
             </HelpBlock>
           ))}
 
-        {tokenModules.map(voteSpecTemplateId => (
+        {tokenModules.map((voteSpecTemplateId, idx) => (
           <Checkbox
+            id={`token-checkbox-${idx}`}
             key={voteSpecTemplateId}
             checked={moduleIsSelected(voteSpecTemplateId)}
             onChange={() => toggleModule(voteSpecTemplateId)}
@@ -192,6 +195,7 @@ const DumbVoteProposalForm = ({
           return (
             <div key={voteSpecTemplateId}>
               <Checkbox
+                id={`gauge-checkbox-${idx}`}
                 className="inline"
                 checked={moduleIsSelected(voteSpecTemplateId)}
                 onChange={() => toggleModule(voteSpecTemplateId)}

@@ -18,7 +18,7 @@ exports[`tokenTypeForm component should render a TokenCategoryForm component 1`]
       formControlProps={undefined}
       helperText=""
       helperUrl=""
-      id={undefined}
+      id="token-title-1"
       label="Token title"
       labelAlwaysVisible={false}
       name={undefined}
@@ -38,7 +38,7 @@ exports[`tokenTypeForm component should render a TokenCategoryForm component 1`]
       }
       helperText=""
       helperUrl=""
-      id={undefined}
+      id="token-number-1"
       label="Number of tokens per participant"
       labelAlwaysVisible={false}
       name={undefined}
@@ -49,7 +49,7 @@ exports[`tokenTypeForm component should render a TokenCategoryForm component 1`]
       value={12}
     />
     <label
-      htmlFor="color-picker"
+      htmlFor="color-picker-1"
     >
       Color of the token
     </label>
@@ -70,7 +70,7 @@ exports[`tokenTypeForm component should render a TokenCategoryForm component 1`]
           "#000000",
         ]
       }
-      id="color-picker"
+      id="color-picker-1"
       onChange={[Function]}
       triangle="hide"
       width="100%"

@@ -129,10 +129,11 @@ const DumbGaugeForm = ({
   handleGaugeChoiceLabelChange,
   index
 }: GaugeFormProps) => (
-  <div className="gauges-vote-form">
+  <div className="gauges-vote-form" id={`gauge-form-${index + 1}`}>
     {index !== null && <Translate value="administration.gauge" number={index + 1} />}
     <div className="flex margin-m">
       <FormControlWithLabel
+        id={`gauge-vote-instructions-${index + 1}`}
         value={instructions}
         label={I18n.t('administration.gaugeVoteInstructions')}
         required
@@ -144,13 +145,13 @@ const DumbGaugeForm = ({
     </div>
     <FormGroup>
       <div className="flex">
-        <label htmlFor={`dropdown-${id}`}>
+        <label htmlFor={`dropdown-${index + 1}`}>
           <Translate value="administration.nbTicks" />
         </label>
       </div>
       <SplitButton
         title={nbTicks}
-        id={`dropdown-${id}`}
+        id={`dropdown-${index + 1}`}
         required
         className="admin-dropdown"
         onSelect={eventKey =>
@@ -173,10 +174,20 @@ const DumbGaugeForm = ({
     </FormGroup>
     {canChangeType && (
       <div className="margin-m">
-        <Radio onChange={handleNumberGaugeUncheck} checked={!isNumberGauge} name={`gauge-type-${id}`}>
+        <Radio
+          onChange={handleNumberGaugeUncheck}
+          checked={!isNumberGauge}
+          name={`gauge-type-${id}`}
+          id={`radio-text-${index + 1}`}
+        >
           <Translate value="administration.textValue" />
         </Radio>
-        <Radio onChange={handleNumberGaugeCheck} checked={isNumberGauge} name={`gauge-type-${id}`}>
+        <Radio
+          onChange={handleNumberGaugeCheck}
+          checked={isNumberGauge}
+          name={`gauge-type-${id}`}
+          id={`radio-number-${index + 1}`}
+        >
           <Translate value="administration.numberValue" />
         </Radio>
       </div>

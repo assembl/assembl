@@ -28,7 +28,7 @@ exports[`VoteProposalForm component should render an empty form to create a vote
     formControlProps={undefined}
     helperText=""
     helperUrl=""
-    id={undefined}
+    id="proposal-title-1"
     label="Title of the proposal"
     labelAlwaysVisible={false}
     name={undefined}
@@ -51,7 +51,7 @@ exports[`VoteProposalForm component should render an empty form to create a vote
     formControlProps={undefined}
     helperText=""
     helperUrl=""
-    id={undefined}
+    id="proposal-description-1"
     label="Description"
     labelAlwaysVisible={false}
     name={undefined}
@@ -104,7 +104,7 @@ exports[`VoteProposalForm component should render an empty form to create a vote
     formControlProps={undefined}
     helperText=""
     helperUrl=""
-    id={undefined}
+    id="proposal-title-1"
     label="Title of the proposal"
     labelAlwaysVisible={false}
     name={undefined}
@@ -120,7 +120,7 @@ exports[`VoteProposalForm component should render an empty form to create a vote
     formControlProps={undefined}
     helperText=""
     helperUrl=""
-    id={undefined}
+    id="proposal-description-1"
     label="Description"
     labelAlwaysVisible={false}
     name={undefined}
