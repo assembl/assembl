@@ -70,17 +70,19 @@ export const phasesById: PhasesByIdReducer = (state: PhasesByIdState = Map(), ac
   case UPDATE_PHASE_START: {
     const end = state.getIn([action.id, 'end']);
     const newStart = action.value;
+    const endIsBeforeNewStart = end && end.isBefore(newStart);
     return state
       .setIn([action.id, 'start'], newStart)
-      .setIn([action.id, 'endIsBeforeStart'], end.isBefore(newStart))
+      .setIn([action.id, 'endIsBeforeStart'], endIsBeforeNewStart || false)
       .setIn([action.id, '_hasChanged'], true);
   }
   case UPDATE_PHASE_END: {
     const start = state.getIn([action.id, 'start']);
     const newEnd = action.value;
+    const newIsBeforeStart = start && newEnd.isBefore(start);
     return state
       .setIn([action.id, 'end'], newEnd)
-      .setIn([action.id, 'endIsBeforeStart'], newEnd.isBefore(start))
+      .setIn([action.id, 'endIsBeforeStart'], newIsBeforeStart || false)
       .setIn([action.id, '_hasChanged'], true);
   }
   case UPDATE_PHASE_IMAGE:
