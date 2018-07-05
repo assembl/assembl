@@ -22,21 +22,21 @@ from assembl.lib import config
 def upgrade(pyramid_env):
     """Create text_field and profile_text_field tables,
     then add default text fields for each discussion."""
-    from assembl import models as m
     from assembl.models.configurable_fields import ConfigurableFieldIdentifiersEnum, TextFieldsTypesEnum, identifiers, field_types
-    db = m.get_session_maker()()
-    with transaction.manager:
+    with context.begin_transaction():
         op.create_table(
             "configurable_field",
             sa.Column('id', sa.Integer, primary_key=True),
-            sa.Column('identifier',
+            sa.Column(
+                'identifier',
                 sa.Enum(*identifiers, name='configurable_field_identifiers'),
                 nullable=False,
                 default=ConfigurableFieldIdentifiersEnum.CUSTOM.value,
                 server_default=ConfigurableFieldIdentifiersEnum.CUSTOM.value
             ),
             sa.Column('type', sa.String(60), nullable=False),
-            sa.Column('discussion_id',
+            sa.Column(
+                'discussion_id',
                 sa.Integer,
                 sa.ForeignKey(
                     'discussion.id',
@@ -55,7 +55,8 @@ def upgrade(pyramid_env):
                 "id", sa.Integer,
                 sa.ForeignKey("configurable_field.id"),
                 primary_key=True),
-            sa.Column('field_type',
+            sa.Column(
+                'field_type',
                 sa.Enum(*field_types, name='text_field_types'),
                 nullable=False,
                 default=TextFieldsTypesEnum.TEXT.value,
@@ -77,14 +78,19 @@ def upgrade(pyramid_env):
                 sa.Integer,
                 sa.ForeignKey('configurable_field.id', ondelete="CASCADE", onupdate="CASCADE"),
                 nullable=False, index=False),
-            sa.Column('agent_profile_id',
+            sa.Column(
+                'agent_profile_id',
                 sa.Integer,
                 sa.ForeignKey('agent_profile.id', ondelete="CASCADE", onupdate="CASCADE"),
                 nullable=False, index=False),
             sa.Column('value_data', JSONB),
         )
 
-        # insert default text fields
+    from assembl import models as m
+    db = m.get_session_maker()()
+
+    # insert default text fields
+    with transaction.manager:
         with m.TextField.default_db.no_autoflush as db:
             discussions = db.query(m.Discussion.id).all()
             for discussion_id in discussions:
@@ -146,7 +152,7 @@ def upgrade(pyramid_env):
                 )
                 db.add(password2_field)
 
-            db.flush()
+        db.flush()
 
 
 def downgrade(pyramid_env):
