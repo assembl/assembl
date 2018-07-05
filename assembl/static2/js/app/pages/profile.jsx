@@ -180,7 +180,11 @@ class Profile extends React.PureComponent<ProfileProps, ProfileState> {
                         {this.state.passwordEditionOpen ? (
                           <ModifyPasswordForm id={id} successCallback={() => this.setState({ passwordEditionOpen: false })} />
                         ) : (
-                          <Button className="button-submit button-dark" onClick={this.handlePasswordClick}>
+                          <Button
+                            id="modify-password-button"
+                            className="button-submit button-dark"
+                            onClick={this.handlePasswordClick}
+                          >
                             <Translate value="profile.changePassword" />
                           </Button>
                         )}

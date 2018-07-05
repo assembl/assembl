@@ -29,10 +29,10 @@ class DeleteMyAccount extends React.Component<Props, State> {
   displayConfirmationModal() {
     const body = <Translate value="profile.deleteMyAccountModal" />;
     const footer = [
-      <Button key="cancel" onClick={closeModal} className="button-cancel button-dark">
+      <Button key="cancel" id="cancel-deleting-button" onClick={closeModal} className="button-cancel button-dark">
         <Translate value="cancel" />
       </Button>,
-      <Button key="delete" onClick={this.deleteMyAccount} className="button-submit button-dark">
+      <Button key="delete" id="confirm-deleting-button" onClick={this.deleteMyAccount} className="button-submit button-dark">
         <Translate value="validate" />
       </Button>
     ];
@@ -76,7 +76,7 @@ class DeleteMyAccount extends React.Component<Props, State> {
         <div className="profile-form">
           <form>
             <FormGroup>
-              <Checkbox checked={checked} onChange={this.toggleDeleteMyAccount}>
+              <Checkbox id="delete-account-checkbox" checked={checked} onChange={this.toggleDeleteMyAccount}>
                 <div style={{ marginTop: '-16px' }}>
                   <Helper
                     label={I18n.t('profile.deleteMyAccountConfirmation')}
@@ -88,6 +88,7 @@ class DeleteMyAccount extends React.Component<Props, State> {
             </FormGroup>
             <div className="center margin-l">
               <Button
+                id="delete-account-button"
                 disabled={!checked}
                 className="button-submit button-dark"
                 onClick={this.handleDeleteClick}

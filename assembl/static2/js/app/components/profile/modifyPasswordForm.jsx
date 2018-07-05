@@ -103,7 +103,12 @@ class ModifyPasswordForm extends React.Component<Props, State> {
           required
           value={newPassword2}
         />
-        <Button disabled={this.state.disabled} className="button-submit button-dark margin-l" onClick={this.handleSaveClick}>
+        <Button
+          disabled={this.state.disabled}
+          id="save-new-password"
+          className="button-submit button-dark margin-l"
+          onClick={this.handleSaveClick}
+        >
           <Translate value="profile.save" />
         </Button>
       </div>
