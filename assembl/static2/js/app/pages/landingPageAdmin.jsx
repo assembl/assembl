@@ -216,10 +216,7 @@ const mapStateToProps = ({ admin: { editLocale, landingPage, timeline } }) => {
     pageHasChanged: landingPage.pageHasChanged,
     editLocale: editLocale,
     phasesHaveChanged: timeline.phasesHaveChanged,
-    discussionPhases: timeline.phasesInOrder
-      .map(phaseId => timeline.phasesById.get(phaseId))
-      .valueSeq()
-      .toJS()
+    discussionPhases: Object.values(timeline.phasesById.sortBy(phase => phase.get('order')).toJS())
   };
 };
 

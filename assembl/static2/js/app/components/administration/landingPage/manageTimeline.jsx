@@ -70,13 +70,14 @@ const DumbManageTimeline = ({
 };
 
 const mapStateToProps = (state, { editLocale }) => {
-  const { phasesInOrder } = state.admin.timeline;
+  const { phasesById } = state.admin.timeline;
+  const discussionPhaseIds = Object.keys(phasesById.toJS());
   const { modulesByIdentifier } = state.admin.landingPage;
   const timelineModule = modulesByIdentifier.get('TIMELINE');
   return {
     sectionTitle: timelineModule ? getEntryValueForLocale(timelineModule.get('titleEntries'), editLocale, '') : null,
     sectionSubtitle: timelineModule ? getEntryValueForLocale(timelineModule.get('subtitleEntries'), editLocale, '') : null,
-    discussionPhaseIds: phasesInOrder,
+    discussionPhaseIds: discussionPhaseIds.filter(id => !phasesById.get(id).get('_toDelete')),
     editLocale: editLocale
   };
 };
