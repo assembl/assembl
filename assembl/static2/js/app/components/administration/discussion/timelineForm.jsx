@@ -5,7 +5,9 @@ import { OverlayTrigger, Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import range from 'lodash/range';
+
 import { addPhaseTooltip } from '../../common/tooltips';
+import TabbedContent from '../../common/tabbedContent';
 import SectionTitle from '../sectionTitle';
 import PhaseForm from './phaseForm';
 import { createRandomId, getDiscussionSlug } from '../../../utils/globalFunctions';
@@ -96,36 +98,23 @@ export class DumbTimelineForm extends React.Component<TimelineFormProps, Timelin
           </div>
         </div>
         <Translate value="administration.timelineAdmin.instruction2" className="admin-instruction" />
-        <div className="admin-content">
-          <Row>
-            {phases &&
-              phases.map((id, index) => {
-                const linkClassNames = selectedPhaseId === id ? 'tab-title-active ellipsis' : 'tab-title ellipsis';
-                return (
-                  <Col xs={12} md={Math.round(12 / phases.length)} key={index}>
-                    <a
-                      className={linkClassNames}
-                      key={`phase-link-${id}`}
-                      onClick={() => {
-                        this.setState({ selectedPhaseId: id });
-                      }}
-                    >
-                      <Translate value="administration.timelineAdmin.phase" count={index + 1} />
-                    </a>
-                  </Col>
-                );
-              })}
-          </Row>
-          {selectedPhaseId && (
-            <Row>
+
+        {phases && (
+          <TabbedContent
+            divClassName="admin-content"
+            tabs={phases.map((id, index) => ({
+              id: id,
+              title: I18n.t('administration.timelineAdmin.phase', { count: index + 1 })
+            }))}
+            renderBody={tab => (
               <PhaseForm
-                key={`phase-form-${selectedPhaseId}-${editLocale}`}
-                phaseId={selectedPhaseId}
-                phaseNumber={this.getPhaseNumberById(selectedPhaseId)}
+                key={`phase-form-${tab.id}-${editLocale}`}
+                phaseId={tab.id}
+                phaseNumber={this.getPhaseNumberById(tab.id)}
               />
-            </Row>
-          )}
-        </div>
+            )}
+          />
+        )}
       </div>
     );
   }
