@@ -1,0 +1,13 @@
+query UserPrefernces($id: ID!) {
+  user: node(id: $id) {
+    ... on AgentProfile {
+      id
+      preferences {
+        harvestingTranslation {
+          localeFrom
+          localeInto
+        }
+      }
+    }
+  }
+}

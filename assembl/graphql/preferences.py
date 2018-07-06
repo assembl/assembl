@@ -9,18 +9,33 @@ from assembl import models
 from assembl.auth import Everyone, CrudPermissions
 
 
+class TranslationFields(graphene.AbstractType):
+    locale_from = graphene.String(required=False)
+    locale_into = graphene.String(required=True)
+
+
+class Translation(graphene.ObjectType, TranslationFields):
+    pass
+
+
+class TranslationInput(graphene.InputObjectType, TranslationFields):
+    pass
+
+
 class Preferences(graphene.ObjectType):
-    harvesting_locale = graphene.String()
+    harvesting_translation = graphene.Field(Translation)
 
-    def resolve_harvesting_locale(self, args, context, info):
-        return self.get('harvesting_locale', '')
+    def resolve_harvesting_translation(self, args, context, info):
+        translation = self.get('harvesting_translation', None)
+        if translation:
+            return Translation(**translation)
 
 
-class UpdateHarvestingLocale(graphene.Mutation):
+class UpdateHarvestingTranslationPreference(graphene.Mutation):
 
     class Input:
         id = graphene.ID(required=True)
-        locale = graphene.String(required=True)
+        translation = TranslationInput(required=True)
 
     preferences = graphene.Field(Preferences)
 
@@ -47,8 +62,8 @@ class UpdateHarvestingLocale(graphene.Mutation):
             preferences = user.get_preferences_for_discussion(discussion)
             # Permission check in the preferences setter
             # See models.user_key_value and models.preferences preference_data_list
-            preferences['harvesting_locale'] = args.get('locale')
+            preferences['harvesting_translation'] = args.get('translation')
             db.flush()
 
-        return UpdateHarvestingLocale(
+        return UpdateHarvestingTranslationPreference(
             preferences=preferences)

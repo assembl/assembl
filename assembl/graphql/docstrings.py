@@ -678,8 +678,8 @@ class DeleteDiscussionPhase:
     id = Default.node_id % ("DiscussionPhase")
 
 
-class UpdateHarvestingLocale:
-    __doc__ = "A mutation to save haversting locale preferences"
+class UpdateHarvestingTranslationPreference:
+    __doc__ = "A mutation to save harversting translation preferences"
 
 
 class AgentProfile:
