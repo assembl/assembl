@@ -51,6 +51,7 @@ exports[`DumbCustomizeGaugeForm component should render a form to customize a ga
       bsClass="checkbox"
       checked={false}
       disabled={false}
+      id="apply-to-all-button"
       inline={false}
       onClick={[Function]}
       title=""
@@ -66,6 +67,7 @@ exports[`DumbCustomizeGaugeForm component should render a form to customize a ga
       bsStyle="default"
       className="button-submit button-dark full-size"
       disabled={true}
+      id="modify-gauge-button"
       onClick={[Function]}
     >
       <Translate

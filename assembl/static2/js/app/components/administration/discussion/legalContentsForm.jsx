@@ -45,6 +45,7 @@ export const DumbLegalContentsForm = ({
         <Row>
           <div className="form-container">
             <FormControlWithLabel
+              id="terms-and-conditions"
               key={`tac-${editLocale}`}
               label={tacLabel}
               onChange={updateTermsAndConditions}
@@ -54,6 +55,7 @@ export const DumbLegalContentsForm = ({
             />
             <div className="separator" />
             <FormControlWithLabel
+              id="legal-notice"
               key={`legal-notice-${editLocale}`}
               label={legalNoticeLabel}
               onChange={updateLegalNotice}
@@ -63,6 +65,7 @@ export const DumbLegalContentsForm = ({
             />
             <div className="separator" />
             <FormControlWithLabel
+              id="cookie-policy"
               key={`cookies-policy-${editLocale}`}
               label={cookiesPolicyLabel}
               onChange={updateCookiesPolicy}
@@ -72,6 +75,7 @@ export const DumbLegalContentsForm = ({
             />
             <div className="separator" />
             <FormControlWithLabel
+              id="privacy-policy"
               key={`privacy-policy-${editLocale}`}
               label={privacyPolicyLabel}
               onChange={updatePrivacyPolicy}

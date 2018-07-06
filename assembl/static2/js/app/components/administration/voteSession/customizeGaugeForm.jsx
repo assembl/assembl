@@ -209,10 +209,11 @@ export class DumbCustomizeGaugeForm extends React.Component<Props, State> {
             handleUnitChange={this.handleUnitChange}
             handleGaugeChoiceLabelChange={this.handleGaugeChoiceLabelChange}
           />
-          <Checkbox onClick={this.toggleApplyToAllProposals} checked={this.state.applyToAllProposals}>
+          <Checkbox id="apply-to-all-button" onClick={this.toggleApplyToAllProposals} checked={this.state.applyToAllProposals}>
             <Translate value="administration.gaugeModal.applyToAllProposalsCheckboxLabel" />
           </Checkbox>
           <Button
+            id="modify-gauge-button"
             className="button-submit button-dark full-size"
             disabled={!this.state._hasChanged || this.state.saving}
             onClick={this.handleSubmit}

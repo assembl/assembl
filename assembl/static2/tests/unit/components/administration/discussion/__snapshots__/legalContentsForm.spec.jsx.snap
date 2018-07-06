@@ -24,7 +24,7 @@ exports[`LegalContentsForm dumb component should render a form to edit legal not
           formControlProps={undefined}
           helperText=""
           helperUrl=""
-          id={undefined}
+          id="terms-and-conditions"
           label="Terms and conditions"
           labelAlwaysVisible={false}
           name={undefined}
@@ -43,7 +43,7 @@ exports[`LegalContentsForm dumb component should render a form to edit legal not
           formControlProps={undefined}
           helperText=""
           helperUrl=""
-          id={undefined}
+          id="legal-notice"
           label="Legal notice"
           labelAlwaysVisible={false}
           name={undefined}
@@ -62,7 +62,7 @@ exports[`LegalContentsForm dumb component should render a form to edit legal not
           formControlProps={undefined}
           helperText=""
           helperUrl=""
-          id={undefined}
+          id="cookie-policy"
           label="Information on cookies"
           labelAlwaysVisible={false}
           name={undefined}
@@ -81,7 +81,7 @@ exports[`LegalContentsForm dumb component should render a form to edit legal not
           formControlProps={undefined}
           helperText=""
           helperUrl=""
-          id={undefined}
+          id="privacy-policy"
           label="Privacy policy"
           labelAlwaysVisible={false}
           name={undefined}
