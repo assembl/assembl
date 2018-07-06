@@ -1,16 +1,19 @@
 // @flow
 import * as React from 'react';
+import { compose, graphql } from 'react-apollo';
+import { connect } from 'react-redux';
 import activeHtml from 'react-active-html';
 import classNames from 'classnames';
 import jQuery from 'jquery';
 import ARange from 'annotator_range'; // eslint-disable-line
 
-import PostTranslate from '../../common/translations/postTranslate';
-import { transformLinksInHtml /* getUrls */ } from '../../../../utils/linkify';
-import Embed from '../../../common/urlPreview/embed';
-import URLMetadataLoader from '../../../common/urlPreview/urlMetadataLoader';
 import { isSpecialURL } from '../../../../utils/urlPreview';
 import { ExtractStates } from '../../../../constants';
+import { transformLinksInHtml /* getUrls */ } from '../../../../utils/linkify';
+import UpdateHarvestingTranslationPreference from '../../../../graphql/mutations/updateHarvestingTranslationPreference.graphql';
+import PostTranslate from '../../common/translations/postTranslate';
+import Embed from '../../../common/urlPreview/embed';
+import URLMetadataLoader from '../../../common/urlPreview/urlMetadataLoader';
 
 type Props = {
   body: ?string,
@@ -25,8 +28,10 @@ type Props = {
   originalLocale: string,
   translate: boolean,
   translationEnabled: boolean,
+  connectedUserId: string,
   handleMouseUpWhileHarvesting?: Function, // eslint-disable-line react/require-default-props
-  measureTreeHeight?: Function // eslint-disable-line react/require-default-props
+  measureTreeHeight?: Function, // eslint-disable-line react/require-default-props
+  updateHarvestingTranslation: Function
 };
 
 type ExtractInPostProps = {
@@ -131,7 +136,7 @@ const Html = (props) => {
   );
 };
 
-const PostBody = ({
+export const DumbPostBody = ({
   body,
   extracts,
   bodyDivRef,
@@ -145,7 +150,9 @@ const PostBody = ({
   translate,
   translationEnabled,
   handleMouseUpWhileHarvesting,
-  measureTreeHeight
+  measureTreeHeight,
+  connectedUserId,
+  updateHarvestingTranslation
 }: Props) => {
   const divClassNames = 'post-body post-body--is-harvestable';
   const htmlClassNames = classNames('post-body-content', 'body', {
@@ -167,6 +174,19 @@ const PostBody = ({
           originalLocale={originalLocale}
           translate={translate}
           afterLoad={afterLoad}
+          onTranslate={(from, into) => {
+            if (connectedUserId) {
+              updateHarvestingTranslation({
+                variables: {
+                  id: connectedUserId,
+                  translation: {
+                    localeFrom: from,
+                    localeInto: into
+                  }
+                }
+              });
+            }
+          }}
         />
       ) : null}
       {subject && <h3 className="post-body-title dark-title-3">{subject}</h3>}
@@ -192,4 +212,13 @@ const PostBody = ({
   );
 };
 
-export default PostBody;
+const mapStateToProps = state => ({
+  connectedUserId: btoa(`AgentProfile:${state.context.connectedUserId}`)
+});
+
+export default compose(
+  connect(mapStateToProps),
+  graphql(UpdateHarvestingTranslationPreference, {
+    name: 'updateHarvestingTranslation'
+  })
+)(DumbPostBody);

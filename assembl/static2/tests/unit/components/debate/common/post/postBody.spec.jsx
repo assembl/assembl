@@ -1,7 +1,7 @@
 import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
-import PostBody from '../../../../../../js/app/components/debate/common/post/postBody';
+import { DumbPostBody } from '../../../../../../js/app/components/debate/common/post/postBody';
 
 describe('PostBody component', () => {
   it('should render a post body', () => {
@@ -18,10 +18,11 @@ describe('PostBody component', () => {
       subject: <span>open-source Associate</span>,
       originalLocale: 'en',
       translate: true,
-      translationEnabled: true
+      translationEnabled: true,
+      connectedUserId: null
     };
     const renderer = new ShallowRenderer();
-    renderer.render(<PostBody {...props} />);
+    renderer.render(<DumbPostBody {...props} />);
     const result = renderer.getRenderOutput();
     expect(result).toMatchSnapshot();
   });

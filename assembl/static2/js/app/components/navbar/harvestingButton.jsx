@@ -35,9 +35,9 @@ type HarvestingButtonProps = {
 
 export class DumbHarvestingButton extends React.PureComponent<HarvestingButtonProps> {
   handleClick = () => {
-    const { data, onClick, updateByOriginalLocale } = this.props;
+    const { isActive, data, onClick, updateByOriginalLocale } = this.props;
     const translation = data.user.preferences.harvestingTranslation;
-    if (translation) {
+    if (!isActive && translation) {
       updateByOriginalLocale(translation.localeFrom, translation.localeInto);
     }
     onClick();
@@ -74,7 +74,7 @@ const mapDispatchToProps = dispatch => ({
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   graphql(UserPreferencesQuery, {
-    options: () => ({ notifyOnNetworkStatusChange: true })
+    options: () => ({ notifyOnNetworkStatusChange: true, fetchPolicy: 'network-only' })
   }),
   withoutLoadingIndicator()
 )(DumbHarvestingButton);
