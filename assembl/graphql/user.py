@@ -81,9 +81,7 @@ class AgentProfile(SecureObjectType, SQLAlchemyObjectType):
     def resolve_preferences(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
-        preferences = self.get_preferences_for_discussion(discussion)
-        # return Preferences(**self.get_preferences_for_discussion(discussion))
-        return Preferences(**{'harvesting_locale': preferences.get('harvesting_locale', '')})
+        return self.get_preferences_for_discussion(discussion)
 
 
 class UpdateUser(graphene.Mutation):
