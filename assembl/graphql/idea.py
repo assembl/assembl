@@ -792,7 +792,6 @@ class CreateThematic(graphene.Mutation):
 
 
 class UpdateThematic(graphene.Mutation):
-    __doc__ = docs.UpdateThematic.__doc__
 
     class Input:
         id = graphene.ID(required=True)

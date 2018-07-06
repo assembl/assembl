@@ -23,7 +23,7 @@ from .utils import (
     abort_transaction_on_exception,
     get_root_thematic_for_phase,
     create_root_thematic)
-
+import assembl.graphql.docstrings as docs
 
 langstrings_defs = {
     "title": {},
@@ -41,10 +41,10 @@ class VoteSession(SecureObjectType, SQLAlchemyObjectType):
         interfaces = (Node, langstrings_interface(langstrings_defs, models.VoteSession.__name__))
         only_fields = ('id', 'discussion_phase_id')
 
-    header_image = graphene.Field(Document)
-    vote_specifications = graphene.List(lambda: VoteSpecificationUnion, required=True)
-    proposals = graphene.List(lambda: Idea, required=True)
-    see_current_votes = graphene.Boolean(required=True)
+    header_image = graphene.Field(Document, description=docs.VoteSession.header_image)
+    vote_specifications = graphene.List(lambda: VoteSpecificationUnion, required=True, description=docs.VoteSession.header_image)
+    proposals = graphene.List(lambda: Idea, required=True, description=docs.VoteSession.proposals)
+    see_current_votes = graphene.Boolean(required=True, description=docs.VoteSession.see_current_votes)
 
     def resolve_header_image(self, args, context, info):
         ATTACHMENT_PURPOSE_IMAGE = models.AttachmentPurpose.IMAGE.value
@@ -68,10 +68,11 @@ class VoteSession(SecureObjectType, SQLAlchemyObjectType):
 
 
 class UpdateVoteSession(graphene.Mutation):
+
     class Input:
-        discussion_phase_id = graphene.Int(required=True)
-        header_image = graphene.String()
-        see_current_votes = graphene.Boolean()
+        discussion_phase_id = graphene.Int(required=True, description=docs.UpdateVoteSession.discussion_phase_id)
+        header_image = graphene.String(description=docs.UpdateVoteSession.header_image)
+        see_current_votes = graphene.Boolean(description=docs.UpdateVoteSession.see_current_votes)
 
     add_langstrings_input_attrs(Input, langstrings_defs.keys())
 
@@ -148,16 +149,16 @@ class UpdateVoteSession(graphene.Mutation):
 
 class VoteSpecificationInterface(graphene.Interface):
 
-    title = graphene.String(lang=graphene.String())
-    title_entries = graphene.List(LangStringEntry)
-    instructions = graphene.String(lang=graphene.String())
-    instructions_entries = graphene.List(LangStringEntry)
-    is_custom = graphene.Boolean(required=True)
-    vote_session_id = graphene.ID(required=True)
-    vote_spec_template_id = graphene.ID()
-    vote_type = graphene.String()
-    my_votes = graphene.List('assembl.graphql.votes.VoteUnion', required=True)
-    num_votes = graphene.Int(required=True)
+    title = graphene.String(lang=graphene.String(), description=docs.VoteSpecificationInterface.title)
+    title_entries = graphene.List(LangStringEntry, description=docs.VoteSpecificationInterface.title_entries)
+    instructions = graphene.String(lang=graphene.String(), description=docs.VoteSpecificationInterface.instructions)
+    instructions_entries = graphene.List(LangStringEntry, description=docs.VoteSpecificationInterface.instructions_entries)
+    is_custom = graphene.Boolean(required=True, description=docs.VoteSpecificationInterface.is_custom)
+    vote_session_id = graphene.ID(required=True, description=docs.VoteSpecificationInterface.vote_session_id)
+    vote_spec_template_id = graphene.ID(description=docs.VoteSpecificationInterface.vote_spec_template_id)
+    vote_type = graphene.String(description=docs.VoteSpecificationInterface.vote_type)
+    my_votes = graphene.List('assembl.graphql.votes.VoteUnion', required=True, description=docs.VoteSpecificationInterface.my_votes)
+    num_votes = graphene.Int(required=True, description=docs.VoteSpecificationInterface.num_votes)
 
     def resolve_title(self, args, context, info):
         return resolve_langstring(self.title, args.get('lang'))

@@ -206,6 +206,31 @@ class Locale:
     label = """The name of the locale, in a specifically given language."""
 
 
+class Video:
+    title = Default.string_entry % ("Title of the video.")
+    description_top = Default.string_entry % ("Description on top of the video.")
+    description_bottom = Default.string_entry % ("Description on bottom of the video.")
+    description_side = Default.string_entry % ("Description on the side of the video.")
+    html_code = Default.string_entry % ("")
+    title_entries = Default.langstring_entries % ("Title of the video in various languages.")
+    description_entries_top = Default.langstring_entries % ("Description on the top of the video in various languages.")
+    description_entries_bottom = Default.langstring_entries % ("Description on the bottom of the video in various languages.")
+    description_entries_side = Default.langstring_entries % ("Description on the side of the video in various languages.")
+
+
+class IdeaInterface:
+    num_posts = "Number of posts on that idea."
+    num_total_posts = "Total number of posts on that idea and on all its children ideas "
+    num_contributors = "Number of participants who contributed to that idea"
+    num_children = "Number of children ideas (subideas) of this idea."
+    img = Default.document % "Image associated with the idea. "
+    order = "Order of this Idea in the idea tree."
+    live = "???"  # graphene.Field(lambda: IdeaUnion)
+    message_view_override = Default.string_entry % " ."
+    total_sentiments = "Totla number of sentiments expressed by participants on posts related to that idea."
+    vote_specifications = "???"  # graphene.List('assembl.graphql.vote_session.VoteSpecificationUnion', required=True)
+
+
 class QuestionInput:
     id = """Id of the question input."""
     title_entries = Default.langstring_entries % ("Title of the question in various languages.")
@@ -216,11 +241,11 @@ class VideoInput:
     description_entries_top = Default.langstring_entries % ("Description on the top of the video in various languages.")
     description_entries_bottom = Default.langstring_entries % ("Description on the bottom of the video in various languages.")
     description_entries_side = Default.langstring_entries % ("Description on the side of the video in various languages.")
-    html_code = Default.required_language_input % ("")
+    html_code = Default.string_entry % ("???")
 
 
 class CreateIdea:
-    __doc__ = """This is a method to create an idea"""
+    __doc__ = """Method to create an idea."""
     title_entries = Default.langstring_entries % ("Title of the idea in various languages.",)
     description_entries = Default.langstring_entries % ("List of the description of the idea in different languages.")
     image = Default.document % ("""Main image associated with this idea.""",)
@@ -230,13 +255,33 @@ class CreateIdea:
 
 class CreateThematic:
     __doc__ = """Method to create a new thematic."""
-    title_entries = Default.langstring_entries % ("""Title of the thematic to be created in different languages.""")
-    description_entries = Default.langstring_entries % ("""Description of the thematic to be created in different languages.""")
-    identifier = Default.required_language_input % ("""Thematic to be created.""")
+    title_entries = Default.langstring_entries % ("""Title of the thematic in different languages.""")
+    description_entries = Default.langstring_entries % ("""Description of the thematic in different languages.""")
+    identifier = Default.string_entry % ("""Thematic to be created. """)
     video = """Video to be integrated with the thematic."""
-    questions = """Questions for the thematic."""
-    image = Default.required_language_input % ("Image to be shown in the thematic.")
+    questions = """List of Questions for the thematic."""
+    image = Default.string_entry % ("Image to be shown in the thematic. ")
     order = Default.float_entry % (" Order of the thematic.")
+
+
+class Thematic:
+    title = "Title of the thematic."
+    title_entries = CreateThematic.title_entries
+    description = "Description of the thematic."
+    questions = CreateThematic.questions
+    video = CreateThematic.video
+
+
+class UpdateThematic:
+    __doc__ = "Method to update a thematic."
+    id = "ID of the thematic to be updated."
+    title_entries = CreateThematic.title_entries
+    description_entries = CreateThematic.description_entries
+    identifier = CreateThematic.identifier
+    video = CreateThematic.video
+    questions = CreateThematic.questions
+    image = CreateThematic.image
+    order = CreateThematic.order
 
 
 class DeleteThematic:
@@ -292,3 +337,376 @@ class UpdateLandingPageModule:
     order = LandingPageModule.order
     configuration = LandingPageModule.configuration
     landing_page_module = CreateLandingPageModule.landing_page_module
+
+
+class PostAttachment:
+    document = Default.document % ("A document to attach to a post. ")
+
+
+class IdeaContentLink:
+    __doc__ = "An abstract class representing a link between an Idea and a content (typically a post)."
+    idea_id = "Id of the Idea to be linked to the post."
+    post_id = "Id of the post to be linked to the idea."
+    creator_id = "Id of the user(participant) who created the link."
+    type = Default.string_entry % (" . ")
+    idea = "A graphene field representing a relationship to the idea to be linked."
+    post = "A graphene field representing a relationship to the post to be linked."
+    creator = "A graphene field reprensenting a relationship to the creator of the link."
+    creation_date = "Date on which this link was created."
+
+
+class PostInterface:
+    creator = "Participant who created the message"
+    message_classifier = ""
+    creation_date = "Date on which the post was created."
+    modification_date = "Date of the modification of the post"
+    subject = Default.string_entry % ("Subject of the post")
+    body = Default.string_entry % ("Body of the post (the main content of the post).")
+    subject_entries = Default.langstring_entries % ("The subject of the post in various languages.")
+    body_entries = Default.langstring_entries % ("The body of the post in various languages.")
+    sentiment_counts = "A graphene field which contains the number of of each sentiment expressed (dont_understand, disagree, like, more info)"
+    my_sentiment = "A graphene field which contains a list of sentiment types."
+    indirect_idea_content_links = "List of links to ideas."
+    extracts = "List of extracts related to that post."
+    parent_id = "Id of the parent post."
+    db_id = " ???"
+    body_mime_type = Default.string_entry % "???"
+    publication_state = """A graphene Field containing the state of the publication of a certain post (DRAFT,SUBMITTED_IN_EDIT_GRACE_PERIOD,SUBMITTED_AWAITING_MODERATION,PUBLISHED,MODERATED_TEXT_ON_DEMAND,MODERATED_TEXT_NEVER_AVAILABLE,DELETED_BY_USER,DELETED_BY_ADMIN,WIDGET_SCOPED)"""
+
+    attachments = "List of attachements to the post."
+    original_locale = Default.string_entry % ("Locale in which the original message was written.")
+    publishes_synthesis = "Graphene Field modeling a relationship to a published synthesis."
+
+
+class Post:
+    __doc__ = "Inherits fields from PostInterface."
+
+
+class CreatePost:
+    __doc__ = "A function called each time a post is created."
+    subject = PostInterface.subject
+    body = PostInterface.body
+    idea_id = "Id of the idea to which the post is related."
+    # A Post (except proposals in survey phase) can reply to another post.
+    # See related code in views/api/post.py
+    parent_id = "Id of the parent post in case of "
+    attachments = PostInterface.attachments
+    message_classifier = PostInterface.message_classifier
+
+
+class UpdatePost:
+    __doc__ = "A function called when a post is updated."
+    post_id = "Id of the post to be updated."
+    subject = "Updated subject of the post."
+    body = Default.string_entry % ("Updated body of the post.")
+    attachments = "Updated attachments of the post."
+
+
+class DeletePost:
+    __doc__ = "A function called when post is deleted."
+    post_id = "Id of the post to be deleted."
+
+
+class UndeletePost:
+    __doc__ = "A function called to resurrect post after being deleted."
+    post_id = "Id of the post to be undeleted."
+
+
+class AddPostAttachement:
+    __doc__ = "A method to add attachment to a post."
+    post_id = "Id of the post to add an attachement to."
+    file = Default.string_entry % ("The path of the file to be attached.")
+
+
+class DeletePostAttachment:
+    post_id = "Id from which to delete the attachement."
+    attachement_id = "Id of the attachement to be deleted."
+
+
+class AddPostExtract:
+    __doc__ = "A method to harvest an extract from a post."
+    post_id = "Id of the post from which to harvest an extract."
+    body = "Body of the extract from the post."
+    important = "Boolean to set the extract as a doughnut or not."
+    xpath_start = TextFragmentIdentifier.xpath_start
+    xpath_end = TextFragmentIdentifier.xpath_end
+    offset_start = TextFragmentIdentifier.offset_start
+    offset_end = TextFragmentIdentifier.offset_end
+
+
+class Document:
+    __doc__ = "An SQLalchemytype class to model a document. In most cases, A document is used as an attachement to a post or a picture of a thematic, synthesis, etc ..."
+    external_url = Default.string_entry % ("A url to an image or a document to be attached.")
+    av_checked = Default.string_entry % ("???")
+
+
+class UploadDocument:
+    file = Default.string_entry % ("File to be uploaded.")
+
+
+class SentimentCounts:
+    __doc__ = "A class containing the number of sentiments expressed on a specific post. There are four sentiments in Assembl: dont_understand, disagree, like, more_info."
+    dont_understand = "Number of sentiments expressing dont_understand on a specific post."
+    disagree = "Number of sentiments disagreeing with the post."
+    like = "Number of positive sentiments expressed on the post."
+    more_info = "Number of sentiments requesting more info on the post."
+
+
+class AddSentiment:
+    post_id = "Id of the post on which to express a sentiment. A user can only add one sentiment per post."
+    type = "Type of the sentiment to be expressed on the post. There are four sentiments in Assembl: dont_understand, disagree, like, more_info."
+
+
+class DeleteSentiment:
+    __doc__ = "A method to delete a sentiment by the user. Since the user can only express one sentiment per post, it only takes a post_id as input."
+    post_id = "Id of the post from which to remove an expressed sentiment. A user can only remove a sentiment that he expressed."
+
+
+class DiscussionPhase:
+    __doc__ = "Assembl has four possible phases: Survey, multicolumn, thread, voteSession."
+    identifier = Default.string_entry % (
+        "Identifier of the phase. Assembl has four possible phase identifiers: Survey, multicolumn, thread, voteSession.")
+    is_thematics_table = " "
+    title = Default.string_entry % ("Title of the Phase.")
+    title_entries = Default.langstring_entries % ("Title of the phase in various languages.")
+    description = Default.string_entry % ("Description of the Phase.")
+    description_entries = Default.langstring_entries % ("Description of the phase in various languages.")
+    start = "A DateTime variable as the starting date of the phase."
+    end = "A DateTime variable as the end date of the phase."
+    image = Default.document % ("The image displayed on the phase.")
+    order = Default.float_entry % ("Order of the phase in the timeline.")
+
+
+class CreateDiscussionPhase:
+    __doc__ = DiscussionPhase.__doc__
+    lang = Default.string_entry % (".")
+    identifier = DiscussionPhase.identifier
+    is_thematics_table = DiscussionPhase.is_thematics_table
+    title_entries = DiscussionPhase.title_entries
+    start = DiscussionPhase.start
+    end = DiscussionPhase.end
+    order = DiscussionPhase.order
+
+
+class UpdateDiscussionPhase:
+    __doc__ = DiscussionPhase.__doc__
+    id = "Id of the phase to be updated."
+    is_thematics_table = DiscussionPhase.is_thematics_table
+    lang = CreateDiscussionPhase.lang
+    identifier = DiscussionPhase.identifier
+    title_entries = DiscussionPhase.title_entries
+    description_entries = DiscussionPhase.description_entries
+    start = DiscussionPhase.start
+    end = DiscussionPhase.end
+    image = DiscussionPhase.image
+    order = DiscussionPhase.order
+
+
+class DeleteDiscussionPhase:
+    __doc__ = DiscussionPhase.__doc__
+    id = "Id of the phase to be deleted."
+
+
+class AgentProfile:
+    __doc__ = "Abstract SQLalchemy class to model a user."
+    user_id = "Id if the user."
+    name = Default.string_entry % ("Name of the User. This Name will appear on all the activities done by the user on the debate.")
+    username = Default.string_entry % ("Username of the user.")
+    display_name = Default.string_entry % ("???")
+    email = "A string of the email used by the user for identification."
+    image = Default.document % ("Image appearing on the avatar of the user.")
+    creation_date = "Datetime variable of the creation of the profile. It exists only on user not AgentProfile."
+    has_password = "A boolean flag stating if the user has a password."
+    is_deleted = "A boolean flag to state if the this user is deleted or not."
+
+
+class UpdateUser:
+    __doc__ = "A method with which a user can update his name, his username, his avatar image or his password."
+    id = "Id of the user to be updated."
+    name = AgentProfile.name
+    username = AgentProfile.username
+    # this is the identifier of the part in a multipart POST
+    image = AgentProfile.image
+    old_password = Default.string_entry % ("Old password to be submitted by the user in case he wants to change his password.")
+    new_password = Default.string_entry % ("New password to be submitted by the user in case he wants to change his password.")
+    new_password2 = Default.string_entry % ("Retype of new password to be submitted by the user in case he wants to change his password.")
+
+
+class DeleteUserInformation:
+    __doc__ = "A method allowing a user to delete all his information according to article 17 of GDPR. It replaces all his personnal information with random strings."
+    id = "Id of the user to be deleted."
+
+
+class VoteSession:
+    __doc__ = "A vote session is one of the four phases available in Assembl (along with Survey, multicolumn and thread)."
+    discussion_phase_id = " ??? "
+    header_image = Default.document % ("Image appearing at the header of the vote session page.")
+    vote_specifications = "A list of the vote specifications."  # graphene.List(lambda: VoteSpecificationUnion, required=True)
+    proposals = "List of proposals on which the participants will be allowed to vote."
+    see_current_votes = "A boolean flag according to which the users will be allowed to see the current votes."
+
+
+class UpdateVoteSession:
+    discussion_phase_id = VoteSession.discussion_phase_id
+    header_image = VoteSession.header_image
+    see_current_votes = VoteSession.see_current_votes
+
+
+class VoteSpecificationInterface:
+    title = Default.string_entry % ("Title of the vote.")
+    title_entries = Default.langstring_entries % ("Title of the vote in various languages.")
+    instructions = Default.string_entry % ("Instructions of the vote.")
+    instructions_entries = Default.langstring_entries % ("Instructions of the vote in various languages.")
+    is_custom = "A boolean flag specifying if the module has been customized for a specific proposal."
+    vote_session_id = "Id of the vote session to which this vote is associated."
+    vote_spec_template_id = "???"  # graphene.ID()
+    vote_type = "Type of the vote: Tokens or gauge."
+    my_votes = "List of votes by a specific user."
+    num_votes = "Total number of voters for this vote."
+
+
+class TokenCategorySpecification:
+    __doc__ = "An SQLalchemy class to model the token in a token vote session."
+    color = "A string corresponding to the color of the coin?"
+    typename = "Name of the coin."
+    total_number = "Total number of coins allocated by user."
+    title = Default.string_entry % ("Title of the token category.")
+    title_entries = Default.langstring_entries % ("Title of the token category in various languages.")
+
+
+class VotesByCategory:
+    __doc__ = ""
+    token_category_id = "ID of the token category."
+    num_token = "Number of tokens on that category."
+
+
+class TokenVoteSpecification:
+    __doc__ = "An SQLalchemy class to model the specifications of a token vote."
+    exlusive_categories = "A boolean flag "
+    token_categories = "List of token category specification(TokenCategorySpecification)."
+    token_votes = "List of token votes (VotesByCategory)."
+
+
+class GaugeChoiceSpecification:
+    __doc__ = "An SQLalchemy class to model the specifications of a gauge vote."
+    value = "???"
+    label = Default.string_entry % ("Label of the Gauge.")
+    label_entries = Default.langstring_entries % ("Label of the gauge in various languages.")
+
+
+class GaugeVoteSpecification:
+    choices = "List of choices available on a Gauge."
+    average_label = Default.string_entry % ("Average vote on a textual vote. ")
+    average_result = Default.float_entry % ("Average vote on a numeric gauge. ")
+
+
+class NumberGaugeVoteSpecification:
+    minimum = "Minimum value on the gauge."
+    maximum = "Maximum value on the gauge."
+    nb_ticks = "Integer number of intervals between the minimum value and the maximum value."
+    unit = "Unit used on the gauge (could be USD, months, years, persons, etc ...)."
+    average_result = "Average value of the votes submitted by users."
+
+
+class TokenCategorySpecificationInput:
+    title_entries = TokenCategorySpecification.title_entries
+    total_number = TokenCategorySpecification.total_number
+    typename = TokenCategorySpecification.typename
+    color = TokenCategorySpecification.color
+
+
+class GaugeChoiceSpecificationInput:
+    label_entries = GaugeChoiceSpecification.label_entries
+    value = GaugeChoiceSpecification.value
+
+
+class CreateTokenVoteSpecification:
+    vote_session_id = VoteSpecificationInterface.vote_session_id
+    proposal_id = "Id of the proposal on the users will vote."
+    title_entries = VoteSpecificationInterface.title_entries
+    instructions_entries = VoteSpecificationInterface.instructions_entries
+    is_custom = VoteSpecificationInterface.is_custom
+    exclusive_categories = "A boolean flag to ???"
+    token_categories = TokenVoteSpecification.token_categories
+    vote_spec_template_id = "???"
+
+
+class UpdateTokenVoteSpecification:
+    id = "Id of the token vote to be updated."
+    title_entries = VoteSpecificationInterface.title_entries
+    instructions_entries = VoteSpecificationInterface.instructions_entries
+    is_custom = VoteSpecificationInterface.is_custom
+    exclusive_categories = CreateTokenVoteSpecification.exclusive_categories
+    token_categories = TokenVoteSpecification.token_categories
+
+
+class DeleteVoteSpecification:
+    id = "Id of the token vote to be deleted."
+
+
+class CreateGaugeVoteSpecification:
+    vote_session_id = VoteSpecificationInterface.vote_session_id
+    proposal_id = "Id of the proposal on the users will vote."
+    title_entries = VoteSpecificationInterface.title_entries
+    instructions_entries = VoteSpecificationInterface.instructions_entries
+    is_custom = VoteSpecificationInterface.is_custom
+    choices = GaugeVoteSpecification.choices
+    vote_spec_template_id = "???"  # graphene.ID()
+
+
+class UpdateGaugeVoteSpecification:
+    id = "ID of the gauge to be updated."
+    title_entries = VoteSpecificationInterface.title_entries
+    instructions_entries = VoteSpecificationInterface.instructions_entries
+    is_custom = VoteSpecificationInterface.is_custom
+    choices = GaugeVoteSpecification.choices
+
+
+class CreateNumberGaugeVoteSpecification:
+    __doc__ = "Create a numerical Gauge. "
+    vote_session_id = "ID of the vote session in which the numeric Gauge will be created."
+    proposal_id = CreateGaugeVoteSpecification.proposal_id
+    title_entries = VoteSpecificationInterface.title_entries
+    instructions_entries = VoteSpecificationInterface.instructions_entries
+    is_custom = VoteSpecificationInterface.is_custom
+    minimum = NumberGaugeVoteSpecification.minimum
+    maximum = NumberGaugeVoteSpecification.maximum
+    nb_ticks = NumberGaugeVoteSpecification.nb_ticks
+    unit = NumberGaugeVoteSpecification.unit
+    vote_spec_template_id = CreateGaugeVoteSpecification.vote_spec_template_id
+
+
+class UpdateNumberGaugeVoteSpecification:
+    id = "Id of the numerical Gauge Vote to be updated."
+    title_entries = VoteSpecificationInterface.title_entries
+    instructions_entries = VoteSpecificationInterface.instructions_entries
+    is_custom = VoteSpecificationInterface.is_custom
+    minimum = NumberGaugeVoteSpecification.minimum
+    maximum = NumberGaugeVoteSpecification.maximum
+    nb_ticks = NumberGaugeVoteSpecification.nb_ticks
+    unit = NumberGaugeVoteSpecification.unit
+
+
+class CreateProposal:
+    vote_session_id = "Id of the vote session containing the proposal."
+    title_entries = Default.langstring_entries % "Proposal title in various languages."
+    description_entries = Default.langstring_entries % "Proposal description in various languages."
+    order = "Order of the proposal in the voting session."
+
+
+class UpdateProposal:
+    id = "Id of the proposal to be updated."
+    title_entries = CreateProposal.title_entries
+    description_entries = CreateProposal.description_entries
+    order = CreateProposal.order
+
+
+class DeleteProposal:
+    id = "Id of the proposal to be deleted."
+
+
+class VoteInterface:
+    vote_date = "Date on which the participant submitted his vote."
+    voter_id = "Id of the voter."
+    vote_spec_id = ""  # graphene.ID(required=True)
+    proposal_id = "Id of the proposal on which the user has submitted his vote."
