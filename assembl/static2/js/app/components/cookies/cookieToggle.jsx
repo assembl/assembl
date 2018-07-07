@@ -1,41 +1,48 @@
 // @flow
 import React from 'react';
-import { I18n } from 'react-redux-i18n';
+import { I18n, Translate } from 'react-redux-i18n';
 import SwitchButton from '../common/switchButton';
+
+
+export type CookieObject = {
+  name: string,
+  category: string,
+  accepted: boolean
+}
 
 type CookieToggleProps = {
   isEssential: boolean,
-  name: string
+  accepted: boolean,
+  handleToggle: Function,
+  cookie: CookieObject
 };
 
 type CookieToggleState = {
-  accepted: boolean
+  accepted: boolean,
 };
 
 class CookieToggle extends React.Component<CookieToggleProps, CookieToggleState> {
   constructor(props: CookieToggleProps) {
     super(props);
     this.state = {
-      accepted: true
-      // this local state is temporary, backend should provide this value to the
-      // parent component and it will be passed down as a prop
+      accepted: props.accepted
     };
   }
 
   toggleSwitch = () => {
     const { accepted } = this.state;
-    const { handleToggle, name } = this.props;
-
+    const { handleToggle, cookie } = this.props;
     this.setState({ accepted: !accepted });
-    handleToggle(name, !accepted);
+    cookie.accepted = !accepted;
+    handleToggle(cookie);
   };
 
   render() {
     const { accepted } = this.state;
-    const { name, isEssential } = this.props;
+    const { cookie: { name }, isEssential } = this.props;
     return (
       <div className="cookie-toggle">
-        <div className="cookie-title dark-title-3 ellipsis">{name}</div>
+        <Translate className="cookie-title dark-title-3 ellipsis" value={`cookies.${name}`} />
         <SwitchButton
           label={I18n.t('refuse')}
           labelRight={I18n.t('accept')}

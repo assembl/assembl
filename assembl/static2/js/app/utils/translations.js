@@ -48,6 +48,9 @@ const Translations = {
       qualifyNature: "Qualifier par nature",
       qualifyAction: "Qualifier par action"
     },
+    cookies: {
+      userSession: "Session utilisateur"
+    },
     search: {
       reset: {
         clear_all: "Effacer tous les filtres"
@@ -853,6 +856,9 @@ const Translations = {
       move: "Move",
       qualifyNature: "Qualify by nature",
       qualifyAction: "Qualify by action"
+    },
+    cookies: {
+      userSession: "User Session"
     },
     search: {
       reset: {
