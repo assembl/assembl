@@ -255,8 +255,8 @@ class IdeaMessageColumn:
     color = "The CSS based RGB HEX code of the theme colour chosen for this column."
     index = """The order of the message column in the Idea/Thematic."""
     idea = """The Idea/Thematic that the message column is associated with."""
-    name = Default.string_entry % ("column name")
-    title = Default.string_entry % ("column title")
+    name = Default.string_entry % ("The name of the column")
+    title = Default.string_entry % ("The title of the column")
     column_synthesis = """A Synthesis done on the column, of type Post."""
     num_posts = """The number of posts contributed to only this column."""
 
@@ -294,8 +294,8 @@ class Question:
 
 
 class IdeaAnnoucement:
-    title = "Title of the announcement."
-    body = "Body of the announcement."
+    title = "The title of the announcement."
+    body = "The body of the announcement."
 
 
 class QuestionInput:
@@ -312,7 +312,7 @@ class VideoInput:
 
 
 class CreateIdea:
-    __doc__ = """Method to create an idea."""
+    __doc__ = """A mutation to create an idea."""
     title_entries = Idea.title_entries
     description_entries = Idea.description_entries
     image = Default.document % ("""Main image associated with this idea.""",)
@@ -321,7 +321,7 @@ class CreateIdea:
 
 
 class CreateThematic:
-    __doc__ = """Method to create a new thematic."""
+    __doc__ = """A mutation to create a new thematic."""
     title_entries = Default.langstring_entries % ("""Title of the thematic in different languages.""")
     description_entries = Default.langstring_entries % ("""Description of the thematic in different languages.""")
     identifier = Default.string_entry % ("""Thematic to be created. """)
@@ -343,7 +343,7 @@ class Thematic:
 
 
 class UpdateThematic:
-    __doc__ = "Method to update a thematic."
+    __doc__ = "A mutation to update a thematic."
     id = "ID of the thematic to be updated."
     title_entries = CreateThematic.title_entries
     description_entries = CreateThematic.description_entries
@@ -355,7 +355,7 @@ class UpdateThematic:
 
 
 class DeleteThematic:
-    __doc__ = """Method to delete a thematic."""
+    __doc__ = """A mutation to delete a thematic."""
     thematic_id = """Id of the thematic to be deleted."""
 
 
@@ -475,39 +475,39 @@ class CreatePost:
 
 
 class UpdatePost:
-    __doc__ = "A function called when a post is updated."
-    post_id = "Id of the post to be updated."
-    subject = "Updated subject of the post."
-    body = Default.string_entry % ("Updated body of the post.")
-    attachments = "Updated attachments of the post."
+    __doc__ = "A mutation called when a Post is updated."
+    post_id = "The graphene id of the Post to be updated."
+    subject = "The updated subject of the Post."
+    body = Default.string_entry % ("The updated body of the Post.")
+    attachments = "The updated Attachments of the Post."
 
 
 class DeletePost:
-    __doc__ = "A function called when post is deleted."
-    post_id = "Id of the post to be deleted."
+    __doc__ = "A mutation to delete a Post."
+    post_id = "The graphene id of the Post to be deleted."
 
 
 class UndeletePost:
-    __doc__ = "A function called to resurrect post after being deleted."
-    post_id = "Id of the post to be undeleted."
+    __doc__ = "A mutation called to resurrect Post after being deleted."
+    post_id = "The graphene id of the Post to be undeleted."
 
 
 class AddPostAttachment:
-    __doc__ = "A method to add attachment to a post."
-    post_id = "Id of the post to add an attachement to."
-    file = Default.string_entry % ("The path of the file to be attached.")
+    __doc__ = "A mutation to add Attachment to a Post."
+    post_id = "The graphene id of the Post to add an Attachement to."
+    file = "The path of the file to be attached."
 
 
 class DeletePostAttachment:
-    post_id = "Id from which to delete the attachement."
-    attachment_id = "Id of the attachement to be deleted."
+    post_id = "The graphene id from which to delete the Attachement."
+    attachment_id = "The id of the Attachement to be deleted."
 
 
 class AddPostExtract:
-    __doc__ = "A method to harvest an extract from a post."
-    post_id = "Id of the post from which to harvest an extract."
-    body = "Body of the extract from the post."
-    important = "Boolean to set the extract as a doughnut or not."
+    __doc__ = "A mutation to harvest an Extract from a Post."
+    post_id = "The graphene id of the Post from which to harvest an Extract."
+    body = "The body of the Extract from the Post."
+    important = "A boolean to set the Extract as a Nugget or not."
     xpath_start = TextFragmentIdentifier.xpath_start
     xpath_end = TextFragmentIdentifier.xpath_end
     offset_start = TextFragmentIdentifier.offset_start
@@ -522,41 +522,44 @@ class Document:
 
 
 class UploadDocument:
-    file = Default.string_entry % ("File to be uploaded.")
+    file = Default.string_entry % ("The file to be uploaded.")
 
 
 class SentimentCounts:
     __doc__ = """A class containing the number of sentiments expressed on a specific post.
     There are four sentiments in Assembl: dont_understand, disagree, like, more_info."""
-    dont_understand = "Number of sentiments expressing dont_understand on a specific post."
-    disagree = "Number of sentiments disagreeing with the post."
-    like = "Number of positive sentiments expressed on the post."
-    more_info = "Number of sentiments requesting more info on the post."
+    dont_understand = "The count of Sentiments expressing dont_understand on a specific Post."
+    disagree = "The number of Sentiments disagreeing with the Post."
+    like = "The count of positive Sentiments expressed on the Post."
+    more_info = "The number of Sentiments requesting more info on the Post."
 
 
 class AddSentiment:
-    post_id = "Id of the post on which to express a sentiment. A user can only add one sentiment per post."
-    type = "Type of the sentiment to be expressed on the post. There are four sentiments in Assembl: dont_understand, disagree, like, more_info."
+    post_id = "The graphene id of the Post on which to express a Sentiment. A User can only add one Sentiment per Post."
+    type = "The type of the Sentiment to be expressed on the Post. There are four sentiments in Assembl: dont_understand, disagree, like, more_info."
 
 
 class DeleteSentiment:
-    __doc__ = "A method to delete a sentiment by the user. Since the user can only express one sentiment per post, it only takes a post_id as input."
-    post_id = "Id of the post from which to remove an expressed sentiment. A user can only remove a sentiment that he expressed."
+    __doc__ = "A mutation to delete a Sentiment by the User. Since the User can only express one Sentiment per Post, it only takes a post_id as input."
+    post_id = "The graphene id of the Post from which to remove an expressed Sentiment. A User can only remove a Sentiment that he expressed."
 
 
 class DiscussionPhase:
-    __doc__ = "Assembl has four possible phases: Survey, multicolumn, thread, voteSession."
+    __doc__ = r"""Assembl has four possible phases:\n
+    Survey,\n
+    multicolumn,\n
+    thread, voteSession."""
     identifier = Default.string_entry % (
-        "Identifier of the phase. Assembl has four possible phase identifiers: Survey, multicolumn, thread, voteSession.")
+        "The identifier of the Phase. Assembl has four possible Phase identifiers: Survey, Multicolumn, Thread, voteSession.")
     is_thematics_table = " "
     title = Default.string_entry % ("Title of the Phase.")
     title_entries = Default.langstring_entries % ("Title of the phase in various languages.")
     description = Default.string_entry % ("Description of the Phase.")
     description_entries = Default.langstring_entries % ("Description of the phase in various languages.")
-    start = "A DateTime variable as the starting date of the phase."
-    end = "A DateTime variable as the end date of the phase."
+    start = "The dateTime variable as the starting date of the Phase."
+    end = "the dateTime variable as the end date of the Phase."
     image = Default.document % ("The image displayed on the phase.")
-    order = Default.float_entry % ("Order of the phase in the timeline.")
+    order = Default.float_entry % ("Order of the phase in the Timeline.")
 
 
 class CreateDiscussionPhase:
@@ -572,7 +575,7 @@ class CreateDiscussionPhase:
 
 class UpdateDiscussionPhase:
     __doc__ = DiscussionPhase.__doc__
-    id = "Id of the phase to be updated."
+    id = "The graphene id of the Phase to be updated."
     is_thematics_table = DiscussionPhase.is_thematics_table
     lang = CreateDiscussionPhase.lang
     identifier = DiscussionPhase.identifier
@@ -586,47 +589,50 @@ class UpdateDiscussionPhase:
 
 class DeleteDiscussionPhase:
     __doc__ = DiscussionPhase.__doc__
-    id = "Id of the phase to be deleted."
+    id = "The graphene id of the Phase to be deleted."
 
 
 class AgentProfile:
-    __doc__ = "Abstract SQLalchemy class to model a user."
-    user_id = "Id if the user."
-    name = Default.string_entry % ("Name of the User. This Name will appear on all the activities done by the user on the debate.")
-    username = Default.string_entry % ("Username of the user.")
+    __doc__ = "An abstract SQLalchemy class to model an AgentProfile."
+    user_id = "The graphene id if the User."
+    name = Default.string_entry % ("The name of the User. This Name will appear on all the activities done by the User on the Discussion.")
+    username = Default.string_entry % ("The Username of the User.")
     display_name = Default.string_entry % ("???")
-    email = "A string of the email used by the user for identification."
-    image = Default.document % ("Image appearing on the avatar of the user.")
-    creation_date = "Datetime variable of the creation of the profile. It exists only on user not AgentProfile."
-    has_password = "A boolean flag stating if the user has a password."
-    is_deleted = "A boolean flag to state if the this user is deleted or not."
+    email = "The email used by the User for identification."
+    image = Default.document % ("Image appearing on the avatar of the User.")
+    creation_date = "Datetime variable of the creation of the AgentProfile. It exists only on user not AgentProfile."
+    has_password = "A boolean flag stating if the User has a password."
+    is_deleted = "A boolean flag to state if the this User is deleted or not."
 
 
 class UpdateUser:
-    __doc__ = "A method with which a user can update his name, his username, his avatar image or his password."
-    id = "Id of the user to be updated."
+    __doc__ = "A mutation with which a User can update his name, his username, his avatar image or his password."
+    id = "The graphene id of the User to be updated."
     name = AgentProfile.name
     username = AgentProfile.username
     # this is the identifier of the part in a multipart POST
     image = AgentProfile.image
-    old_password = Default.string_entry % ("Old password to be submitted by the user in case he wants to change his password.")
-    new_password = Default.string_entry % ("New password to be submitted by the user in case he wants to change his password.")
-    new_password2 = Default.string_entry % ("Retype of new password to be submitted by the user in case he wants to change his password.")
+    old_password = "The old password to be submitted by the User in case he wants to change his password."
+    new_password = "The new password to be submitted by the User in case he wants to change his password."
+    new_password2 = "The retype of the new password to be submitted by the User in case he wants to change his password."
 
 
 class DeleteUserInformation:
-    __doc__ = """A method allowing a user to delete all his information according to article 17 of GDPR.
+    __doc__ = """A mutation allowing a user to delete all his information according to article 17 of GDPR.
     It replaces all his personnal information with random strings."""
     id = "Id of the user to be deleted."
 
 
 class VoteSession:
-    __doc__ = "A vote session is one of the four phases available in Assembl (along with Survey, multicolumn and thread)."
+    __doc__ = r"""A Vote session is one of the four phases available in Assembl along with \n
+    Survey,\n
+    Multicolumn,\n
+    thread)."""
     discussion_phase_id = " ??? "
-    header_image = Default.document % ("Image appearing at the header of the vote session page.")
-    vote_specifications = "A list of the vote specifications."  # graphene.List(lambda: VoteSpecificationUnion, required=True)
-    proposals = "List of proposals on which the participants will be allowed to vote."
-    see_current_votes = "A boolean flag according to which the users will be allowed to see the current votes."
+    header_image = Default.document % ("The Image appearing at the header of the Vote session page.")
+    vote_specifications = "A list of the vote specifications."
+    proposals = "The list of Proposals on which the Participant will be allowed to vote."
+    see_current_votes = "A boolean flag according to which the users will/won't be allowed to see the current votes."
 
 
 class UpdateVoteSession:
@@ -636,59 +642,58 @@ class UpdateVoteSession:
 
 
 class VoteSpecificationInterface:
-    title = Default.string_entry % ("Title of the vote.")
-    title_entries = Default.langstring_entries % ("Title of the vote in various languages.")
-    instructions = Default.string_entry % ("Instructions of the vote.")
-    instructions_entries = Default.langstring_entries % ("Instructions of the vote in various languages.")
-    is_custom = "A boolean flag specifying if the module has been customized for a specific proposal."
-    vote_session_id = "Id of the vote session to which this vote is associated."
+    title = Default.string_entry % ("The title of the Vote.")
+    title_entries = Default.langstring_entries % ("The title of the Vote in various languages.")
+    instructions = Default.string_entry % ("The instructions of the Vote.")
+    instructions_entries = Default.langstring_entries % ("The instructions of the Vote in various languages.")
+    is_custom = "A boolean flag specifying if the module has been customized for a specific Proposal."
+    vote_session_id = "The graphene id of the Vote session to which this Vote is associated."
     vote_spec_template_id = "???"  # graphene.ID()
-    vote_type = "Type of the vote: Tokens or gauge."
-    my_votes = "List of votes by a specific user."
-    num_votes = "Total number of voters for this vote."
+    vote_type = "Type of the Vote: Tokens or Gauge."
+    my_votes = "The list of Votes by a specific User."
+    num_votes = "The total number of Voters for this Vote."
 
 
 class TokenCategorySpecification:
-    __doc__ = "An SQLalchemy class to model the token in a token vote session."
-    color = "A string corresponding to the color of the coin?"
-    typename = "Name of the coin."
-    total_number = "Total number of coins allocated by user."
-    title = Default.string_entry % ("Title of the token category.")
-    title_entries = Default.langstring_entries % ("Title of the token category in various languages.")
+    __doc__ = "An SQLalchemy class to model the token in a Token Vote session."
+    color = "A string corresponding to the color of the Token."
+    typename = "The name of the Token."
+    total_number = "The total number of Tokens allocated by Participant."
+    title = Default.string_entry % ("The title of the Token Category.")
+    title_entries = Default.langstring_entries % ("The title of the Token Category in various languages.")
 
 
 class VotesByCategory:
-    __doc__ = ""
-    token_category_id = "ID of the token category."
-    num_token = "Number of tokens on that category."
+    token_category_id = "The graphene id of the token Category."
+    num_token = "The number of tokens on that Category."
 
 
 class TokenVoteSpecification:
     __doc__ = "An SQLalchemy class to model the specifications of a token vote."
-    exlusive_categories = "A boolean flag "
-    token_categories = "List of token category specification(TokenCategorySpecification)."
-    token_votes = "List of token votes (VotesByCategory)."
+    exlusive_categories = "A boolean flag defining whether a Participant can submit his Vote to several Proposals."
+    token_categories = "The list of Token category specification(TokenCategorySpecification)."
+    token_votes = "The list of Token Votes (VotesByCategory)."
 
 
 class GaugeChoiceSpecification:
-    __doc__ = "An SQLalchemy class to model the specifications of a gauge vote."
+    __doc__ = "An SQLalchemy class to model the specifications of a Gauge Vote."
     value = "???"
-    label = Default.string_entry % ("Label of the Gauge.")
-    label_entries = Default.langstring_entries % ("Label of the gauge in various languages.")
+    label = Default.string_entry % ("The label of the Gauge.")
+    label_entries = Default.langstring_entries % ("The label of the Gauge in various languages.")
 
 
 class GaugeVoteSpecification:
-    choices = "List of choices available on a Gauge."
-    average_label = Default.string_entry % ("Average vote on a textual vote. ")
-    average_result = Default.float_entry % ("Average vote on a numeric gauge. ")
+    choices = "The list of choices available on a Gauge."
+    average_label = Default.string_entry % ("The average Vote on a textual Gauge.")
+    average_result = Default.float_entry % ("The average Vote on a numeric Gauge.")
 
 
 class NumberGaugeVoteSpecification:
-    minimum = "Minimum value on the gauge."
-    maximum = "Maximum value on the gauge."
-    nb_ticks = "Integer number of intervals between the minimum value and the maximum value."
-    unit = "Unit used on the gauge (could be USD, months, years, persons, etc ...)."
-    average_result = "Average value of the votes submitted by users."
+    minimum = "The minimum value on the Gauge."
+    maximum = "The maximum value on the Gauge."
+    nb_ticks = "An Integer representing the number of intervals between the minimum value and the maximum value."
+    unit = "The unit used on the Gauge (could be USD, months, years, persons, etc ...)."
+    average_result = "The average value of the Votes submitted by Participants."
 
 
 class TokenCategorySpecificationInput:
@@ -705,17 +710,17 @@ class GaugeChoiceSpecificationInput:
 
 class CreateTokenVoteSpecification:
     vote_session_id = VoteSpecificationInterface.vote_session_id
-    proposal_id = "Id of the proposal on the users will vote."
+    proposal_id = "Id of the Proposal on the Participant will vote."
     title_entries = VoteSpecificationInterface.title_entries
     instructions_entries = VoteSpecificationInterface.instructions_entries
     is_custom = VoteSpecificationInterface.is_custom
-    exclusive_categories = "A boolean flag to ???"
+    exclusive_categories = "A boolean flag to say whether the User can/can't vote on several Proposals."
     token_categories = TokenVoteSpecification.token_categories
     vote_spec_template_id = "???"
 
 
 class UpdateTokenVoteSpecification:
-    id = "Id of the token vote to be updated."
+    id = "The graphene id of the Token Vote to be updated."
     title_entries = VoteSpecificationInterface.title_entries
     instructions_entries = VoteSpecificationInterface.instructions_entries
     is_custom = VoteSpecificationInterface.is_custom
@@ -724,12 +729,12 @@ class UpdateTokenVoteSpecification:
 
 
 class DeleteVoteSpecification:
-    id = "Id of the token vote to be deleted."
+    id = "The graphene id of the Vote Specification to be deleted."
 
 
 class CreateGaugeVoteSpecification:
     vote_session_id = VoteSpecificationInterface.vote_session_id
-    proposal_id = "Id of the proposal on the users will vote."
+    proposal_id = "Id of the Proposal on the users will vote."
     title_entries = VoteSpecificationInterface.title_entries
     instructions_entries = VoteSpecificationInterface.instructions_entries
     is_custom = VoteSpecificationInterface.is_custom
@@ -738,7 +743,7 @@ class CreateGaugeVoteSpecification:
 
 
 class UpdateGaugeVoteSpecification:
-    id = "ID of the gauge to be updated."
+    id = "The graphene id of the Gauge to be updated."
     title_entries = VoteSpecificationInterface.title_entries
     instructions_entries = VoteSpecificationInterface.instructions_entries
     is_custom = VoteSpecificationInterface.is_custom
@@ -746,8 +751,8 @@ class UpdateGaugeVoteSpecification:
 
 
 class CreateNumberGaugeVoteSpecification:
-    __doc__ = "Create a numerical Gauge. "
-    vote_session_id = "ID of the vote session in which the numeric Gauge will be created."
+    __doc__ = "A Mutation to create a numerical Gauge. "
+    vote_session_id = "The graphene id of the Vote session in which the numeric Gauge will be created."
     proposal_id = CreateGaugeVoteSpecification.proposal_id
     title_entries = VoteSpecificationInterface.title_entries
     instructions_entries = VoteSpecificationInterface.instructions_entries
@@ -760,7 +765,7 @@ class CreateNumberGaugeVoteSpecification:
 
 
 class UpdateNumberGaugeVoteSpecification:
-    id = "Id of the numerical Gauge Vote to be updated."
+    id = "The graphene id of the numerical Gauge Vote to be updated."
     title_entries = VoteSpecificationInterface.title_entries
     instructions_entries = VoteSpecificationInterface.instructions_entries
     is_custom = VoteSpecificationInterface.is_custom
@@ -771,45 +776,45 @@ class UpdateNumberGaugeVoteSpecification:
 
 
 class CreateProposal:
-    vote_session_id = "Id of the vote session containing the proposal."
-    title_entries = Default.langstring_entries % "Proposal title in various languages."
-    description_entries = Default.langstring_entries % "Proposal description in various languages."
-    order = "Order of the proposal in the voting session."
+    vote_session_id = "The graphene ID of the Vote session containing the Proposal."
+    title_entries = Default.langstring_entries % "The Proposal title in various languages."
+    description_entries = Default.langstring_entries % "The Proposal description in various languages."
+    order = "The order of the Proposal in the Vote session."
 
 
 class UpdateProposal:
-    id = "Id of the proposal to be updated."
+    id = "The graphene ID of the Proposal to be updated."
     title_entries = CreateProposal.title_entries
     description_entries = CreateProposal.description_entries
     order = CreateProposal.order
 
 
 class DeleteProposal:
-    id = "Id of the proposal to be deleted."
+    id = "The graphene ID of the proposal to be deleted."
 
 
 class VoteInterface:
-    vote_date = "Date on which the participant submitted his vote."
-    voter_id = "Id of the voter."
-    vote_spec_id = "Id of the vote specification(see Vote specification for more info)."  # graphene.ID(required=True)
-    proposal_id = "Id of the proposal on which the user has submitted his vote."
+    vote_date = "The date on which the Participant submitted his Vote."
+    voter_id = "The graphene id of the voting Participant."
+    vote_spec_id = "The graphene ID of the vote specification(see Vote Specification for more info)."  # graphene.ID(required=True)
+    proposal_id = "The graphene ID of the Proposal on which the User has submitted his Vote."
 
 
 class TokenVote:
-    vote_value = "Number of tokens used on a certain vote."
-    token_category_id = "The category of the token used."
+    vote_value = "The number of Tokens used on a certain Vote."
+    token_category_id = "The category of the Token used."
 
 
 class GaugeVote:
-    vote_value = "Value entered on the gauge vote."
+    vote_value = "The value entered on the Gauge Vote."
 
 
 class AddTokenVote:
-    proposal_id = "ID of the proposal on which the vote is expressed."
+    proposal_id = VoteInterface.proposal_id
     token_category_id = TokenVote.token_category_id  # graphene.ID(required=True)
     vote_spec_id = VoteInterface.vote_spec_id  # graphene.ID(required=True)
     vote_value = TokenVote.vote_value  # graphene.Int(required=True)
-    vote_specification = "Specification of the vote session."  # graphene.Field(lambda: TokenVoteSpecification)
+    vote_specification = "The specification of the Vote session."  # graphene.Field(lambda: TokenVoteSpecification)
 
 
 class DeleteTokenVote:
@@ -819,11 +824,11 @@ class DeleteTokenVote:
 
 
 class AddGaugeVote:
-    proposal_id = "ID of the proposal on which the vote is expressed."
-    vote_spec_id = "ID of the vote specification(see Vote specification for more info)."
+    proposal_id = VoteInterface.proposal_id
+    vote_spec_id = VoteInterface.vote_spec_id
     vote_value = GaugeVote.vote_value
 
 
 class DeleteGaugeVote:
     proposal_id = AddGaugeVote.proposal_id
-    vote_spec_id = AddGaugeVote.vote_spec_id
+    vote_spec_id = VoteInterface.vote_spec_id
