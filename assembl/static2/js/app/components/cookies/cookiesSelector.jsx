@@ -19,10 +19,7 @@ class CookiesSelector extends React.Component<CookiesSelectorProps, CookiesSelec
   constructor(props: CookiesSelectorProps) {
     super(props);
     const cookiesList = document.cookie.split(' ');
-    const cookies = [];
-    cookiesList
-      .map(cookie => ({ ...this.getCookieObject(cookie), accepted: true }))
-      .forEach(cookieObject => cookies.push(cookieObject));
+    const cookies = cookiesList.map(cookie => ({ ...this.getCookieObject(cookie), accepted: true }));
     this.state = {
       activeKey: 'essential',
       show: true,

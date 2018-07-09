@@ -16,7 +16,7 @@ exports[`CookiesSelector component should render a list of cookieToggle componen
         className="dark-title-4"
         style={undefined}
       >
-        Missing translation: cookiesPolicy.other
+        Autre
       </span>
     </div>
     <div
