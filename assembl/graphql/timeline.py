@@ -59,6 +59,7 @@ class DiscussionPhase(SecureObjectType, SQLAlchemyObjectType):
 
 
 class CreateDiscussionPhase(graphene.Mutation):
+    __doc__ = models.CreateDiscussionPhase.__doc__
 
     class Input:
         lang = graphene.String(required=True, description=docs.CreateDiscussionPhase.lang)

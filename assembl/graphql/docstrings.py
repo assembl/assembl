@@ -159,7 +159,7 @@ class ExtractInterface:
     body = """The body of text that is extracted from the post. This is not language dependent, but rather just unicode text."""
     important = """A flag for importance of the Extract."""
     extract_nature = """The taxonomy (or classification) of the extracted body. The options are one of:\n\n
-        issue: The body of text is an issue.
+        issue: The body of text is an issue.\n
         actionable_solution: The body of text is a potentially actionable solution.\n
         knowledge: The body of text is in fact knowledge gained by the community.\n
         example: The body of text is an example in the context that it was derived from.\n
@@ -231,7 +231,7 @@ class IdeaInterface:
     Ideas, like Posts, can be based on each other."""
     num_posts = "The total number of active posts on that idea (excludes deleted posts)."
     num_total_posts = "The total number of posts on that idea and on all its children ideas."
-    num_contributors = """The total number off users who contributed to the Idea/Thematic/Question.\n
+    num_contributors = """The total number of users who contributed to the Idea/Thematic/Question.\n
     Contribution is counted as either as a sentiment set, a post created."""
     num_children = "The total number of children ideas (called \"subideas\") on the Idea or Thematic."
     img = Default.document % "Header image associated with the idea. "
@@ -321,31 +321,32 @@ class CreateIdea:
     parent_id = Idea.parent_id
 
 
-class CreateThematic:
-    __doc__ = """A mutation to create a new thematic."""
-    title_entries = Default.langstring_entries % ("""Title of the thematic in different languages.""")
-    description_entries = Default.langstring_entries % ("""Description of the thematic in different languages.""")
-    identifier = Default.string_entry % ("""Thematic to be created. """)
-    video = """Video to be integrated with the thematic."""
-    questions = """List of Questions for the thematic."""
-    image = Default.string_entry % ("Image to be shown in the thematic. ")
-    order = Default.float_entry % (" Order of the thematic.")
-
-
 class Thematic:
     __doc__ = """A Thematic is an Idea that exists under the Survey Phase of a debate.
     Thematics differ slightly from Ideas because Thematics' subideas are Questions."""
     identifier = "The phase identifier of the Thematic."
     title = Default.string_entry % "Title of the thematic"
-    title_entries = CreateThematic.title_entries
-    description = "Description of the thematic."
-    questions = CreateThematic.questions
-    video = CreateThematic.video
+    title_entries = Default.langstring_entries % ("""Title of the thematic in different languages.""")
+    description = Default.string_entry % ("description") + " A description of the Thematic is often shown in the header of the Thematic."
+    description_entries = Default.langstring_entries % ("""Description of the thematic in different languages.""")
+    questions = """A list of Question objects that are bound to the Thematic."""
+    video = """A Video objet that is often integrated to the header of a Thematic."""
+
+
+class CreateThematic:
+    __doc__ = """A mutation to create a new thematic."""
+    title_entries = Thematic.title_entries
+    description_entries = Thematic.description_entries
+    identifier = Thematic.identifier
+    video = Thematic.video
+    questions = Thematic.questions
+    image = Default.document % ("An Image to be shown in the Thematic. ")
+    order = Default.float_entry % (" Order of the thematic.")
 
 
 class UpdateThematic:
     __doc__ = "A mutation to update a thematic."
-    id = "ID of the thematic to be updated."
+    id = Default.node_id % ("Thematic") + " The identifier of the Thematic to be updated."
     title_entries = CreateThematic.title_entries
     description_entries = CreateThematic.description_entries
     identifier = CreateThematic.identifier
@@ -357,7 +358,7 @@ class UpdateThematic:
 
 class DeleteThematic:
     __doc__ = """A mutation to delete a thematic."""
-    thematic_id = """Id of the thematic to be deleted."""
+    thematic_id = Default.node_id % ("Thematic") + " An identifier of the Thematic to be deleted."
 
 
 class LandingPageModuleType:
@@ -455,7 +456,7 @@ class PostInterface:
     More Info\n"""
     my_sentiment = "The SentimentType that the API calling User has on the Post, if any."
     indirect_idea_content_links = "A list of IdeaContentLinks, which describe all of the connections the Post has with various Ideas."
-    extracts = "A List of IdeaContentLinks that are in fact Extracts on the Post. Extracts are valuable entities taken from"
+    extracts = "A list of IdeaContentLinks that are in fact Extracts on the Post. Extracts are valuable entities taken from"
     parent_id = """The parent of a Post, if the Post is a reply to an existing Post. """ + Default.node_id % ("Post")
     db_id = """The internal database ID of the post.
     This should never be used in logical computations, however, it exists to give the exact database id for use in sorting or creating classifiers for Posts."""
@@ -494,38 +495,38 @@ class CreatePost:
 
 class UpdatePost:
     __doc__ = "A mutation called when a Post is updated."
-    post_id = "The graphene id of the Post to be updated."
-    subject = "The updated subject of the Post."
-    body = Default.string_entry % ("The updated body of the Post.")
-    attachments = "The updated Attachments of the Post."
+    post_id = Default.node_id % ("Post") + " The identifier of the Post to be updated."
+    subject = "The subject of Post, updated in the original langauge of the Post."
+    body = Default.string_entry % ("Post body") + " This is just a string input, and will update the original language body of the Post."
+    attachments = "A list of Attachments to be appended to the Post."
 
 
 class DeletePost:
     __doc__ = "A mutation to delete a Post."
-    post_id = "The graphene id of the Post to be deleted."
+    post_id = Default.node_id % "Post" + " This is the Post identifier that is to be deleted."
 
 
 class UndeletePost:
     __doc__ = "A mutation called to resurrect Post after being deleted."
-    post_id = "The graphene id of the Post to be undeleted."
+    post_id = Default.node_id % "Post" + " This is the Post identifier that is to be resurrected."
 
 
 class AddPostAttachment:
     __doc__ = "A mutation to add Attachment to a Post."
-    post_id = "The graphene id of the Post to add an Attachement to."
+    post_id = Default.node_id % ("Post") + " The identifier of the Post that the Attachment will be connected to."
     file = "The path of the file to be attached."
 
 
 class DeletePostAttachment:
-    post_id = "The graphene id from which to delete the Attachement."
-    attachment_id = "The id of the Attachement to be deleted."
+    post_id = Default.node_id % ("Post") + " The identifier of the Post that the Attachment will be deleted from."
+    attachment_id = "The database identifier of the Attachement to be deleted."
 
 
 class AddPostExtract:
     __doc__ = "A mutation to harvest an Extract from a Post."
-    post_id = "The graphene id of the Post from which to harvest an Extract."
-    body = "The body of the Extract from the Post."
-    important = "A boolean to set the Extract as a Nugget or not."
+    post_id = Default.node_id % ("Post")
+    body = "The body of text defined in this Extract on the Post."
+    important = "An optional boolean to set the extract as a nugget. The default is False."
     xpath_start = TextFragmentIdentifier.xpath_start
     xpath_end = TextFragmentIdentifier.xpath_end
     offset_start = TextFragmentIdentifier.offset_start
@@ -533,56 +534,69 @@ class AddPostExtract:
 
 
 class Document:
-    __doc__ = """An SQLalchemytype class to model a document.
-    In most cases, A document is used as an attachement to a post or a picture of a thematic, synthesis, etc ..."""
-    external_url = Default.string_entry % ("A url to an image or a document to be attached.")
-    av_checked = Default.string_entry % ("???")
+    __doc__ = """An object representing a File of an Attachment.
+    In most cases, a Document is used in an Attachement to a Post, Idea, Thematic, Synthesis, etc"""
+    title = "The filename title."
+    mime_type = "The MIME-Type of the file uploaded."
+    external_url = "A url to an image or a document to be attached."
+    av_checked = """Antivirus check status of the File, for servers that support Anti-Virus filtering. The possible options are:\n
+    \"unchecked\": The AV did not make a check on this file.\n
+    \"passed\": The AV did a pass on this file, and it passed AV check.\n
+    \"failed\": The AV did a pass on this file, and the file failed the AV check. Under this condition, the file would not be touched or
+    accessed by the application.\n"""
 
 
 class UploadDocument:
-    file = Default.string_entry % ("The file to be uploaded.")
+    __doc__ = "A mutation allowing the uploading of a File object."
+    file = "The File to be uploaded. This is a byte-stream Blob object, represented in the front-end by the MDN File object format."
 
 
 class SentimentCounts:
-    __doc__ = """A class containing the number of sentiments expressed on a specific post.
-    There are four sentiments in Assembl: dont_understand, disagree, like, more_info."""
-    dont_understand = "The count of Sentiments expressing dont_understand on a specific Post."
-    disagree = "The number of Sentiments disagreeing with the Post."
-    like = "The count of positive Sentiments expressed on the Post."
-    more_info = "The number of Sentiments requesting more info on the Post."
+    __doc__ = """An object containing the number of Sentiments expressed on a specific Post.
+    There are four Sentiments: "dont_understand", "disagree", "like", "more_info"."""
+    dont_understand = """The number of Sentiments expressing "dont_understand" on the Post."""
+    disagree = """The number of Sentiments disagreeing with the post."""
+    like = """The number of Sentiments expressed "like" on the post."""
+    more_info = """The number of Sentiments requesting "more_info" on the post."""
 
 
 class AddSentiment:
-    post_id = "The graphene id of the Post on which to express a Sentiment. A User can only add one Sentiment per Post."
-    type = "The type of the Sentiment to be expressed on the Post. There are four sentiments in Assembl: dont_understand, disagree, like, more_info."
+    __doc__ = """A mutation that allows for Sentiments to be added to a Post by the API-calling User."""
+    post_id = Default.node_id % ("Post") + " A User can only add one sentiment per post."
+    type = """The Type of the Sentiment to be expressed on the Post. There are four options:\n
+    LIKE\n
+    DISAGREE\n
+    DONT_UNDERSTAND\n
+    MORE_INFO\n"""
 
 
 class DeleteSentiment:
-    __doc__ = "A mutation to delete a Sentiment by the User. Since the User can only express one Sentiment per Post, it only takes a post_id as input."
-    post_id = "The graphene id of the Post from which to remove an expressed Sentiment. A User can only remove a Sentiment that he expressed."
+    __doc__ = """A mutation to delete the Sentiment by the API-calling User on a particular Post."""
+    post_id = Default.node_id % ("Post")
 
 
 class DiscussionPhase:
-    __doc__ = r"""Assembl has four possible phases:\n
-    Survey,\n
-    multicolumn,\n
-    thread, voteSession."""
-    identifier = Default.string_entry % (
-        "The identifier of the Phase. Assembl has four possible Phase identifiers: Survey, Multicolumn, Thread, voteSession.")
-    is_thematics_table = " "
-    title = Default.string_entry % ("Title of the Phase.")
-    title_entries = Default.langstring_entries % ("Title of the phase in various languages.")
-    description = Default.string_entry % ("Description of the Phase.")
-    description_entries = Default.langstring_entries % ("Description of the phase in various languages.")
-    start = "The dateTime variable as the starting date of the Phase."
-    end = "the dateTime variable as the end date of the Phase."
+    __doc__ = """Assembl has four possible phases:\n
+    survey: A divergence Phase, where Thematics are created, and Questions under each Thematic are asked\n
+    thread: A second divergence Phase, where Ideas are created, and discussions occur under Ideas
+    Under this phase, an Idea can be a regular threaded discussion, or an Idea under multi-columns\n
+    multiColumn: This is a convergence Phase, as there is one major Idea in the Phase, which is under multi-column\n
+    voteSession: This is another convergence Phase, as there is one major Idea in the Phase, and the Idea is under a VoteSession."""
+    identifier = """Identifier of the Phase. There are four possible phase identifiers: \"survey\", \"thread\", \"multiColumn\", & \"voteSession\"."""
+    is_thematics_table = "NOTE: THIS IS AN UNUSED VARIABLE CURRENTLY!"
+    title = Default.string_entry % ("title of the Phase.")
+    title_entries = Default.langstring_entries % ("These are the title of the phase in various languages.")
+    description = Default.string_entry % ("description of the Phase.")
+    description_entries = Default.langstring_entries % ("These are the description of the phase in various languages.")
+    start = "An ISO 8601, UTC timezoned time representing the starting date of the phase."
+    end = "An ISO 8601, UTC timezoned time representing the ending date of the phase."
     image = Default.document % ("The image displayed on the phase.")
     order = Default.float_entry % ("Order of the phase in the Timeline.")
 
 
 class CreateDiscussionPhase:
-    __doc__ = DiscussionPhase.__doc__
-    lang = Default.string_entry % (".")
+    __doc__ = "A mutation that enables the creation of a DiscussionPhase."
+    lang = Default.required_language_input
     identifier = DiscussionPhase.identifier
     is_thematics_table = DiscussionPhase.is_thematics_table
     title_entries = DiscussionPhase.title_entries
@@ -592,8 +606,8 @@ class CreateDiscussionPhase:
 
 
 class UpdateDiscussionPhase:
-    __doc__ = DiscussionPhase.__doc__
-    id = "The graphene id of the Phase to be updated."
+    __doc__ = "A mutation that enables the updating of an existing DiscussionPhase."
+    id = Default.node_id % ("DiscussionPhase")
     is_thematics_table = DiscussionPhase.is_thematics_table
     lang = CreateDiscussionPhase.lang
     identifier = DiscussionPhase.identifier
@@ -606,8 +620,8 @@ class UpdateDiscussionPhase:
 
 
 class DeleteDiscussionPhase:
-    __doc__ = DiscussionPhase.__doc__
-    id = "The graphene id of the Phase to be deleted."
+    __doc__ = "A mutation that enabled the removal of an existing DiscussionPhase."
+    id = Default.node_id % ("DiscussionPhase")
 
 
 class AgentProfile:
