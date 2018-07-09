@@ -30,7 +30,11 @@ class Child extends React.PureComponent {
   }
 
   onScroll = debounce(() => {
-    const box = this.holder.getBoundingClientRect();
+    const holder = this.holder;
+    if (!holder) {
+      return;
+    }
+    const box = holder.getBoundingClientRect();
     const pageYOffset = window.pageYOffset;
     const top = box.top + pageYOffset;
     // visible if the top of the box is in viewport or next page
