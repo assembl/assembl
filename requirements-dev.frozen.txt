@@ -157,7 +157,7 @@ python-saml==2.2.0
 pytz==2016.4
 pyyaml==3.12              # via aspy.yaml, pre-commit
 pyzmq==15.2.0
-raven==5.21.0
+raven==6.9.0
 redis==2.10.5
 repoze.lru==0.7           # via pyramid, pyramid-debugtoolbar
 repoze.sendmail==4.4.1    # via pyramid-mailer
