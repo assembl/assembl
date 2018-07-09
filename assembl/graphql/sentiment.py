@@ -24,6 +24,8 @@ SentimentTypes = graphene.Enum.from_enum(sentiments_enum)
 
 
 class SentimentCounts(graphene.ObjectType):
+    __doc__ = docs.SentimentCounts.__doc__
+
     dont_understand = graphene.Int(description=docs.SentimentCounts.dont_understand)
     disagree = graphene.Int(description=docs.SentimentCounts.disagree)
     like = graphene.Int(description=docs.SentimentCounts.like)
@@ -31,12 +33,13 @@ class SentimentCounts(graphene.ObjectType):
 
 
 class AddSentiment(graphene.Mutation):
+    __doc__ = docs.AddSentiment.__doc__
 
     class Input:
         post_id = graphene.ID(required=True, description=docs.AddSentiment.post_id)
         type = graphene.Argument(
             type=SentimentTypes,
-            required=True, description=docs.AddSentiment.post_id
+            required=True, description=docs.AddSentiment.type
         )
 
     post = graphene.Field('assembl.graphql.post.Post')
@@ -81,6 +84,7 @@ class AddSentiment(graphene.Mutation):
 
 
 class DeleteSentiment(graphene.Mutation):
+    __doc__ = docs.DeleteSentiment.__doc__
 
     class Input:
         post_id = graphene.ID(required=True, description=docs.DeleteSentiment.post_id)

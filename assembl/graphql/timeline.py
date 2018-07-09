@@ -5,17 +5,25 @@ import graphene
 from graphene.relay import Node
 from graphene_sqlalchemy import SQLAlchemyObjectType
 
+import assembl.graphql.docstrings as docs
 from assembl import models
 from assembl.auth import CrudPermissions
 from .document import Document
-from .langstring import LangStringEntry, LangStringEntryInput, resolve_langstring, resolve_langstring_entries, langstring_from_input_entries, update_langstring_from_input_entries
+from .langstring import (
+    LangStringEntry,
+    LangStringEntryInput,
+    resolve_langstring,
+    resolve_langstring_entries,
+    langstring_from_input_entries,
+    update_langstring_from_input_entries
+)
 from .permissions_helpers import require_cls_permission, require_instance_permission
 from .types import SecureObjectType
 from .utils import DateTime, abort_transaction_on_exception
-import assembl.graphql.docstrings as docs
 
 
 class DiscussionPhase(SecureObjectType, SQLAlchemyObjectType):
+    __doc__ = docs.DiscussionPhase.__doc__
 
     class Meta:
         model = models.DiscussionPhase
@@ -92,6 +100,7 @@ class CreateDiscussionPhase(graphene.Mutation):
 
 
 class UpdateDiscussionPhase(graphene.Mutation):
+    __doc__ = docs.UpdateDiscussionPhase.__doc__
 
     class Input:
         id = graphene.ID(required=True, description=docs.UpdateDiscussionPhase.id)
@@ -174,6 +183,7 @@ class UpdateDiscussionPhase(graphene.Mutation):
 
 
 class DeleteDiscussionPhase(graphene.Mutation):
+    __doc__ = docs.DeleteDiscussionPhase.__doc__
 
     class Input:
         id = graphene.ID(required=True, description=docs.DeleteDiscussionPhase.id)

@@ -8,6 +8,7 @@ class Default:
     string_entry = """A %s in a given language."""
     float_entry = """A %s  as a float"""
     node_id = """The Relay.Node ID type of the %s object."""
+    creation_date = "The date that the object was created, in UTC timezone, in ISO 8601 format."
 
 
 class Schema:
@@ -114,7 +115,7 @@ class UpdateDiscussionPreferences:
 
 
 class UpdateLegalContents:
-    __doc__ = """A method to update the Legal Contents of a debate."""
+    __doc__ = """A mutation to update the Legal Contents of a debate."""
     legal_notice_entries = Default.langstring_entries % ("This is the list of all Legal Notices in various languages.",)
     terms_and_conditions_entries = Default.langstring_entries % ("This is the list of all Terms and Conditions in various languages.",)
     cookies_policy_entries = Default.langstring_entries % ("This is the list of all Cookie Policies in various languages.",)
@@ -157,8 +158,8 @@ class ExtractInterface:
     __doc__ = """An Extract is an extraction of text from a post which is deemed to be important by a priviledged user."""
     body = """The body of text that is extracted from the post. This is not language dependent, but rather just unicode text."""
     important = """A flag for importance of the Extract."""
-    extract_nature = r"""The taxonomy (or classification) of the extracted body. The options are one of:\n\n
-        issue: The body of text is an issue.\n
+    extract_nature = """The taxonomy (or classification) of the extracted body. The options are one of:\n\n
+        issue: The body of text is an issue.
         actionable_solution: The body of text is a potentially actionable solution.\n
         knowledge: The body of text is in fact knowledge gained by the community.\n
         example: The body of text is an example in the context that it was derived from.\n
@@ -166,7 +167,7 @@ class ExtractInterface:
         argument: The body of text is an argument for/against in the context that it was extracted from.\n
         cognitive_bias: The body of text, in fact, has cognitive bias in the context it was extracted from.\n
     """
-    extract_action = r"""The taxonomy (or classification) of the actions that can be taken from the extracted body. The options are one of:\n\n
+    extract_action = """The taxonomy (or classification) of the actions that can be taken from the extracted body. The options are one of:\n\n
         classify: This body of text should be re-classified by an priviledged user.\n
         make_generic: The body of text is a specific example and not generic.\n
         argument: A user must give more arguments.\n
@@ -230,13 +231,13 @@ class IdeaInterface:
     Ideas, like Posts, can be based on each other."""
     num_posts = "The total number of active posts on that idea (excludes deleted posts)."
     num_total_posts = "The total number of posts on that idea and on all its children ideas."
-    num_contributors = r"""The total number off users who contributed to the Idea/Thematic/Question.\n
+    num_contributors = """The total number off users who contributed to the Idea/Thematic/Question.\n
     Contribution is counted as either as a sentiment set, a post created."""
     num_children = "The total number of children ideas (called \"subideas\") on the Idea or Thematic."
     img = Default.document % "Header image associated with the idea. "
     order = "The order of the Idea, Thematic, Question in the idea tree."
     live = """The IdeaUnion between an Idea or a Thematic. This can be used to query specific fields unique to the type of Idea."""
-    message_view_override = r"""Use a non-standard view for this idea.\nCurrently only supporting "messageColumns"\."""
+    message_view_override = """Use a non-standard view for this idea.\nCurrently only supporting "messageColumns"."""
     total_sentiments = "Total number of sentiments expressed by participants on posts related to that idea."
     vote_specifications = """The VoteSpecificationUnion placed on the Idea. This is the metadata describing the configuration of a VoteSession."""
 
@@ -410,34 +411,51 @@ class UpdateLandingPageModule:
 
 
 class PostAttachment:
+    __doc__ = "The Attachment object associated with a Post."
     document = Default.document % ("Any file that can be attached to a Post. ")
 
 
 class IdeaContentLink:
     __doc__ = "An object representing a link between an Idea and a Post type (of any kind - there are multiple types of Posts)."
-    idea_id = "Id of the Idea to be linked to the post."
-    post_id = "Id of the post to be linked to the idea."
-    creator_id = "Id of the user(participant) who created the link."
-    type = Default.string_entry % (" . ")
-    idea = "A graphene field representing a relationship to the idea to be linked."
-    post = "A graphene field representing a relationship to the post to be linked."
-    creator = "A graphene field reprensenting a relationship to the creator of the link."
-    creation_date = "Date on which this link was created."
+    idea_id = "The database identifier of the Idea that is linked to a Post."
+    post_id = "The database identifier of the Post that is linked to an Idea."
+    creator_id = "The database identifier of the participant who created the link."
+    type = """The type of the IdeaContentLink. Can be one of:\n
+    IdeaContentLink\n
+    IdeaContentPositiveLink\n
+    IdeaContentWidgetLink\n
+    IdeaRelatedPostLink\n
+    IdeaContentNegativeLink\n
+    IdeaThreadContextBreakLink\n
+    Extract\n\n
+    Note that the most commonly faced IdeaContentLink in the wild is the IdeaRelatedPostLink.
+    """
+    idea = "The Idea object associated with an IdeaContentLink."
+    post = "The Post object associated with an IdeaContentLink."
+    creator = "The User or AgentProfile who created the link."
+    creation_date = Default.creation_date
 
 
 class PostInterface:
+    __doc__ = "A Post object, representing a contribution made by a user."
     creator = "The User object who created the Post entity."
     message_classifier = "The classification ID for a Post that is under a column view. The classifer must match the identifier of a message column."
-    creation_date = "Date on which the post was created."
+    creation_date = Default.creation_date
     modification_date = "Date of the modification of the post, if any."
     subject = Default.string_entry % ("Subject of the post")
     body = Default.string_entry % ("Body of the post (the main content of the post).")
     subject_entries = Default.langstring_entries % ("The subject of the post in various languages.")
     body_entries = Default.langstring_entries % ("The body of the post in various languages.")
-    sentiment_counts = "A graphene field which contains the number of of each sentiment expressed (dont_understand, disagree, like, more info)"
-    my_sentiment = "A graphene field which contains a list of sentiment types."
-    indirect_idea_content_links = "List of links to ideas."
-    extracts = "List of extracts related to that post."
+    sentiment_counts = """A list of SentimentCounts which counts each sentiment expressed. These include:\n
+    Like,\n
+    Agree,\n
+    Disagree,\n
+    Like,\n
+    Don't Understand\n
+    More Info\n"""
+    my_sentiment = "The SentimentType that the API calling User has on the Post, if any."
+    indirect_idea_content_links = "A list of IdeaContentLinks, which describe all of the connections the Post has with various Ideas."
+    extracts = "A List of IdeaContentLinks that are in fact Extracts on the Post. Extracts are valuable entities taken from"
     parent_id = """The parent of a Post, if the Post is a reply to an existing Post. """ + Default.node_id % ("Post")
     db_id = """The internal database ID of the post.
     This should never be used in logical computations, however, it exists to give the exact database id for use in sorting or creating classifiers for Posts."""
@@ -458,12 +476,12 @@ class PostInterface:
 
 
 class Post:
-    __doc__ = "A Post object, representing a contribution made by a user."
-    message_id = "The email-compatible message-id for the post."
+    __doc__ = PostInterface.__doc__
+    message_id = "The email-compatible message-id for the Post."
 
 
 class CreatePost:
-    __doc__ = "A mutation which enables the creation of a post."
+    __doc__ = "A mutation which enables the creation of a Post."
     subject = PostInterface.subject
     body = PostInterface.body
     idea_id = Default.node_id % ("Idea")

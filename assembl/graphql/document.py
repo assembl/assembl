@@ -6,6 +6,7 @@ from graphene_sqlalchemy import SQLAlchemyObjectType
 from pyramid.httpexceptions import HTTPUnauthorized
 from pyramid.security import Everyone
 
+import assembl.graphql.docstrings as docs
 from assembl import models
 from assembl.auth import IF_OWNED, CrudPermissions
 from assembl.auth.util import get_permissions
@@ -15,18 +16,21 @@ from .utils import abort_transaction_on_exception
 
 
 class Document(SecureObjectType, SQLAlchemyObjectType):
+    __doc__ = docs.Document.__doc__
+
     class Meta:
         model = models.Document
         only_fields = ('id', 'title', 'mime_type')
 
-    external_url = graphene.String()
-    av_checked = graphene.String()
+    external_url = graphene.String(description=docs.Document.external_url)
+    av_checked = graphene.String(description=docs.Document.av_checked)
 
 
 class UploadDocument(graphene.Mutation):
     class Input:
         file = graphene.String(
-            required=True
+            required=True,
+            description=docs.UploadDocument.file
         )
 
     document = graphene.Field(lambda: Document)

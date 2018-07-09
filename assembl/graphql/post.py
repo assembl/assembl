@@ -18,6 +18,7 @@ from assembl.models.auth import (LanguagePreferenceCollection,
                                  LanguagePreferenceCollectionWithDefault)
 from jwzthreading import restrip_pat
 
+import assembl.graphql.docstrings as docs
 from .permissions_helpers import require_cls_permission
 from .document import Document
 from .idea import Idea
@@ -29,7 +30,6 @@ from .user import AgentProfile
 from .utils import DateTime, abort_transaction_on_exception
 from .synthesis import Synthesis
 from .extract import Extract
-import assembl.graphql.docstrings as docs
 
 
 _ = TranslationStringFactory('assembl')
@@ -40,15 +40,18 @@ PublicationStates = graphene.Enum.from_enum(publication_states_enum)
 
 
 class PostAttachment(SecureObjectType, SQLAlchemyObjectType):
+    __doc__ = docs.PostAttachment.__doc__
 
     class Meta:
         model = models.PostAttachment
         only_fields = ('id',)
 
-    document = graphene.Field(Document)
+    document = graphene.Field(Document, description=docs.PostAttachment.document)
 
 
 class IdeaContentLink(graphene.ObjectType):
+    __doc__ = docs.IdeaContentLink.__doc__
+
     idea_id = graphene.Int(description=docs.IdeaContentLink.idea_id)
     post_id = graphene.Int(description=docs.IdeaContentLink.post_id)
     creator_id = graphene.Int(description=docs.IdeaContentLink.creator_id)
@@ -75,6 +78,7 @@ class IdeaContentLink(graphene.ObjectType):
 
 
 class PostInterface(SQLAlchemyInterface):
+    __doc__ = docs.PostInterface.__doc__
 
     class Meta:
         model = models.Post

@@ -18,6 +18,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import relationship, backref
 
+import assembl.graphql.docstrings as docs
 from ..lib.antivirus import get_antivirus
 from ..lib.sqla_types import CoerceUnicode
 from ..lib.sqla import DuplicateHandling
@@ -87,9 +88,9 @@ class Document(DiscussionBoundBase):
     )
 
     oembed_type = Column(String(1024), server_default="")
-    mime_type = Column(String(1024), server_default="")
+    mime_type = Column(String(1024), server_default="", doc=docs.Document.mime_type)
     # From metadata, not the user
-    title = Column(CoerceUnicode(1024), server_default="")
+    title = Column(CoerceUnicode(1024), server_default="", doc=docs.Document.title)
 
     # From metadata, not the user
     description = Column(
