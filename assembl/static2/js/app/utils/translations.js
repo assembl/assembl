@@ -49,7 +49,9 @@ const Translations = {
       qualifyAction: "Qualifier par action"
     },
     cookies: {
-      userSession: "Session utilisateur"
+      userSession: "Session utilisateur",
+      locale: "Langue locale",
+      piwik: "Piwik"
     },
     search: {
       reset: {
@@ -858,7 +860,9 @@ const Translations = {
       qualifyAction: "Qualify by action"
     },
     cookies: {
-      userSession: "User Session"
+      userSession: "User Session",
+      locale: "Locale language",
+      piwik: "Piwik"
     },
     search: {
       reset: {

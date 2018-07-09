@@ -31,8 +31,11 @@ class CookiesSelector extends React.Component<CookiesSelectorProps, CookiesSelec
   }
 
   getCookieObject = (cookie: string) => {
-    if (cookie.includes('assembl_session' || 'LOCALE')) {
+    if (cookie.includes('assembl_session')) {
       return { category: 'essential', name: 'userSession' };
+    }
+    if (cookie.includes('LOCALE')) {
+      return { cateogry: 'essential', name: 'locale' };
     }
     if (cookie.includes('_pk_')) {
       return { category: 'analytics', name: 'piwik' };

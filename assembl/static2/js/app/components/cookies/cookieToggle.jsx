@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import { I18n, Translate } from 'react-redux-i18n';
+import { I18n } from 'react-redux-i18n';
 import SwitchButton from '../common/switchButton';
 
 
@@ -24,9 +24,13 @@ const CookieToggle = ({ handleToggle, cookie }: CookieToggleProps) => {
 
   const { name, category, accepted } = cookie;
 
+  const KNOWN_COOKIES_NAMES = ['userSession', 'locale', 'piwik'];
+
+  const cookieName = KNOWN_COOKIES_NAMES.includes(name) ? I18n.t(`cookies.${name}`) : name;
+
   return (
     <div className="cookie-toggle">
-      <Translate className="cookie-title dark-title-3 ellipsis" value={`cookies.${name}`} />
+      <span className="cookie-title dark-title-3 ellipsis">{cookieName}</span>
       <SwitchButton
         label={I18n.t('refuse')}
         labelRight={I18n.t('accept')}
