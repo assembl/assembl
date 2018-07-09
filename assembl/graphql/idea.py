@@ -33,28 +33,34 @@ import assembl.graphql.docstrings as docs
 
 
 class Video(graphene.ObjectType):
-    title = graphene.String()
-    description_top = graphene.String()
-    description_bottom = graphene.String()
-    description_side = graphene.String()
-    html_code = graphene.String()
-    title_entries = graphene.List(LangStringEntry)
-    description_entries_top = graphene.List(LangStringEntry)
-    description_entries_bottom = graphene.List(LangStringEntry)
-    description_entries_side = graphene.List(LangStringEntry)
+    __doc__ = docs.Video.__doc__
+
+    title = graphene.String(description=docs.Video.title)
+    description_top = graphene.String(description=docs.Video.description_top)
+    description_bottom = graphene.String(description=docs.Video.description_bottom)
+    description_side = graphene.String(description=docs.Video.description_side)
+    html_code = graphene.String(description=docs.Video.html_code)
+    title_entries = graphene.List(LangStringEntry, description=docs.Video.title_entries)
+    description_entries_top = graphene.List(LangStringEntry, description=docs.Video.description_entries_top)
+    description_entries_bottom = graphene.List(LangStringEntry, description=docs.Video.description_entries_bottom)
+    description_entries_side = graphene.List(LangStringEntry, description=docs.Video.description_entries_side)
 
 
 class IdeaInterface(graphene.Interface):
-    num_posts = graphene.Int()
-    num_total_posts = graphene.Int()
-    num_contributors = graphene.Int()
-    num_children = graphene.Int(identifier=graphene.String())
-    img = graphene.Field(Document)
-    order = graphene.Float()
-    live = graphene.Field(lambda: IdeaUnion)
-    message_view_override = graphene.String()
-    total_sentiments = graphene.Int(required=True)
-    vote_specifications = graphene.List('assembl.graphql.vote_session.VoteSpecificationUnion', required=True)
+    __doc__ = docs.IdeaInterface.__doc__
+
+    num_posts = graphene.Int(description=docs.IdeaInterface.num_posts)
+    num_total_posts = graphene.Int(description=docs.IdeaInterface.num_total_posts)
+    num_contributors = graphene.Int(description=docs.IdeaInterface.num_contributors)
+    num_children = graphene.Int(identifier=graphene.String(), description=docs.IdeaInterface.num_children)
+    img = graphene.Field(Document, description=docs.IdeaInterface.img)
+    order = graphene.Float(description=docs.IdeaInterface.order)
+    live = graphene.Field(lambda: IdeaUnion, description=docs.IdeaInterface.live)
+    message_view_override = graphene.String(description=docs.IdeaInterface.message_view_override)
+    total_sentiments = graphene.Int(required=True, description=docs.IdeaInterface.total_sentiments)
+    vote_specifications = graphene.List(
+        'assembl.graphql.vote_session.VoteSpecificationUnion',
+        required=True, description=docs.IdeaInterface.vote_specifications)
 
     def resolve_num_total_posts(self, args, context, info):
         if isinstance(self, models.RootIdea):
@@ -103,14 +109,15 @@ class IdeaInterface(graphene.Interface):
 
 
 class IdeaAnnoucement(SecureObjectType, SQLAlchemyObjectType):
+    __doc__ = docs.IdeaAnnouncement.__doc__
 
     class Meta:
         model = models.IdeaAnnouncement
         interfaces = (Node,)
         only_fields = ('id',)
 
-    title = graphene.String(lang=graphene.String())
-    body = graphene.String(lang=graphene.String())
+    title = graphene.String(lang=graphene.String(), description=docs.IdeaAnnouncement.title)
+    body = graphene.String(lang=graphene.String(), description=docs.IdeaAnnouncement.body)
 
     def resolve_title(self, args, context, info):
         return resolve_langstring(self.title, args.get('lang'))
@@ -120,18 +127,19 @@ class IdeaAnnoucement(SecureObjectType, SQLAlchemyObjectType):
 
 
 class IdeaMessageColumn(SecureObjectType, SQLAlchemyObjectType):
+    __doc__ = docs.IdeaMessageColumn.__doc__
 
     class Meta:
         model = models.IdeaMessageColumn
         interfaces = (Node,)
         only_fields = ('id', 'message_classifier', 'color')
 
-    index = graphene.Int()
-    idea = graphene.Field(lambda: Idea)
-    name = graphene.String(lang=graphene.String())
-    title = graphene.String(lang=graphene.String())
-    column_synthesis = graphene.Field('assembl.graphql.post.Post')
-    num_posts = graphene.Int()
+    index = graphene.Int(description=docs.IdeaMessageColumn.index)
+    idea = graphene.Field(lambda: Idea, description=docs.IdeaMessageColumn.idea)
+    name = graphene.String(lang=graphene.String(), description=docs.IdeaMessageColumn.name)
+    title = graphene.String(lang=graphene.String(), description=docs.IdeaMessageColumn.title)
+    column_synthesis = graphene.Field('assembl.graphql.post.Post', description=docs.IdeaMessageColumn.column_synthesis)
+    num_posts = graphene.Int(description=docs.IdeaMessageColumn.num_posts)
 
     def resolve_idea(self, args, context, info):
         if self.idea:
@@ -161,34 +169,36 @@ class IdeaMessageColumn(SecureObjectType, SQLAlchemyObjectType):
 
 
 class VoteResults(graphene.ObjectType):
+    __doc__ = docs.VoteResults.__doc__
 
-    num_participants = graphene.Int(required=True)
-    participants = graphene.List(AgentProfile, required=True)
+    num_participants = graphene.Int(required=True, description=docs.VoteResults.num_participants)
+    participants = graphene.List(AgentProfile, required=True, description=docs.VoteResults.participants)
 
 
 class Idea(SecureObjectType, SQLAlchemyObjectType):
+    __doc__ = docs.IdeaInterface.__doc__
 
     class Meta:
         model = models.Idea
         interfaces = (Node, IdeaInterface)
         only_fields = ('id', )
 
-    title = graphene.String(lang=graphene.String())
-    title_entries = graphene.List(LangStringEntry)
+    title = graphene.String(lang=graphene.String(), description=docs.Idea.title)
+    title_entries = graphene.List(LangStringEntry, description=docs.Idea.title_entries)
     # TODO: Look into seperating synthesis_title from 'What you need to know',
     # they mean different things
     # This is the "What you need to know"
-    synthesis_title = graphene.String(lang=graphene.String())
-    description = graphene.String(lang=graphene.String())
-    description_entries = graphene.List(LangStringEntry)
-    children = graphene.List(lambda: Idea)
-    parent_id = graphene.ID()
-    posts = SQLAlchemyConnectionField('assembl.graphql.post.PostConnection')  # use dotted name to avoid circular import  # noqa: E501
-    contributors = graphene.List(AgentProfile)
-    announcement = graphene.Field(lambda: IdeaAnnoucement)
-    message_columns = graphene.List(lambda: IdeaMessageColumn)
-    ancestors = graphene.List(graphene.ID)
-    vote_results = graphene.Field(VoteResults, required=True)
+    synthesis_title = graphene.String(lang=graphene.String(), description=docs.Idea.synthesis_title)
+    description = graphene.String(lang=graphene.String(), description=docs.Idea.description)
+    description_entries = graphene.List(LangStringEntry, description=docs.Idea.description_entries)
+    children = graphene.List(lambda: Idea, description=docs.Idea.children)
+    parent_id = graphene.ID(description=docs.Idea.parent_id)
+    posts = SQLAlchemyConnectionField('assembl.graphql.post.PostConnection', description=docs.Idea.posts)  # use dotted name to avoid circular import  # noqa: E501
+    contributors = graphene.List(AgentProfile, description=docs.Idea.contributors)
+    announcement = graphene.Field(lambda: IdeaAnnoucement, description=docs.Idea.announcement)
+    message_columns = graphene.List(lambda: IdeaMessageColumn, description=docs.Idea.message_columns)
+    ancestors = graphene.List(graphene.ID, description=docs.Idea.ancestors)
+    vote_results = graphene.Field(VoteResults, required=True, description=docs.Idea.vote_results)
 
     def resolve_vote_results(self, args, context, info):
         vote_specifications = self.criterion_for
@@ -333,22 +343,24 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
 
 
 class Question(SecureObjectType, SQLAlchemyObjectType):
+    __doc__ = docs.Question.__doc__
 
     class Meta:
         model = models.Question
         interfaces = (Node, )
         only_fields = ('id', )
 
-    num_posts = graphene.Int()
-    num_contributors = graphene.Int()
-    title = graphene.String(lang=graphene.String())
-    title_entries = graphene.List(LangStringEntry)
+    num_posts = graphene.Int(description=docs.Question.num_posts)
+    num_contributors = graphene.Int(description=docs.Question.num_contributors)
+    title = graphene.String(lang=graphene.String(), description=docs.Question.title)
+    title_entries = graphene.List(LangStringEntry, description=docs.Question.title_entries)
     posts = SQLAlchemyConnectionField(
         'assembl.graphql.post.PostConnection',  # use dotted name to avoid circular import  # noqa: E501
         random=graphene.Boolean(),
-        from_node=graphene.ID())
-    thematic = graphene.Field(lambda: Thematic)
-    total_sentiments = graphene.Int(required=True)
+        from_node=graphene.ID(),
+        description=docs.Question.posts)
+    thematic = graphene.Field(lambda: Thematic, description=docs.Question.thematic)
+    total_sentiments = graphene.Int(required=True, description=docs.Question.total_sentiments)
 
     def resolve_thematic(self, args, context, info):
         parents = self.get_parents()

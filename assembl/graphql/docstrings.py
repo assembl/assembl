@@ -157,7 +157,7 @@ class ExtractInterface:
     __doc__ = """An Extract is an extraction of text from a post which is deemed to be important by a priviledged user."""
     body = """The body of text that is extracted from the post. This is not language dependent, but rather just unicode text."""
     important = """A flag for importance of the Extract."""
-    extract_nature = """The taxonomy (or classification) of the extracted body. The options are one of:\n\n
+    extract_nature = r"""The taxonomy (or classification) of the extracted body. The options are one of:\n\n
         issue: The body of text is an issue.\n
         actionable_solution: The body of text is a potentially actionable solution.\n
         knowledge: The body of text is in fact knowledge gained by the community.\n
@@ -166,7 +166,7 @@ class ExtractInterface:
         argument: The body of text is an argument for/against in the context that it was extracted from.\n
         cognitive_bias: The body of text, in fact, has cognitive bias in the context it was extracted from.\n
     """
-    extract_action = """The taxonomy (or classification) of the actions that can be taken from the extracted body. The options are one of:\n\n
+    extract_action = r"""The taxonomy (or classification) of the actions that can be taken from the extracted body. The options are one of:\n\n
         classify: This body of text should be re-classified by an priviledged user.\n
         make_generic: The body of text is a specific example and not generic.\n
         argument: A user must give more arguments.\n
@@ -207,10 +207,11 @@ class Locale:
 
 
 class Video:
+    __doc__ = """The Video subsection in an Idea (or Thematic). This object describes the contents surrounding the video module."""
     title = Default.string_entry % ("Title of the video.")
-    description_top = Default.string_entry % ("Description on top of the video.")
-    description_bottom = Default.string_entry % ("Description on bottom of the video.")
-    description_side = Default.string_entry % ("Description on the side of the video.")
+    description_top = Default.string_entry % ("Description on top side of the video.")
+    description_bottom = Default.string_entry % ("Description on bottom side of the video.")
+    description_side = Default.string_entry % ("Description on one of the sides of the video.")
     html_code = Default.string_entry % ("")
     title_entries = Default.langstring_entries % ("Title of the video in various languages.")
     description_entries_top = Default.langstring_entries % ("Description on the top of the video in various languages.")
@@ -218,17 +219,78 @@ class Video:
     description_entries_side = Default.langstring_entries % ("Description on the side of the video in various languages.")
 
 
+class VoteResults:
+    __doc__ = """The metadata describing the resulting votes on a Thematic or Idea."""
+    num_participants = """The count of participants on the vote session."""
+    participants = """The list of users who participated on the vote session. The length of the list matches the number of participants."""
+
+
 class IdeaInterface:
-    num_posts = "Number of posts on that idea."
-    num_total_posts = "Total number of posts on that idea and on all its children ideas "
-    num_contributors = "Number of participants who contributed to that idea"
-    num_children = "Number of children ideas (subideas) of this idea."
-    img = Default.document % "Image associated with the idea. "
-    order = "Order of this Idea in the idea tree."
-    live = "???"  # graphene.Field(lambda: IdeaUnion)
-    message_view_override = Default.string_entry % " ."
-    total_sentiments = "Totla number of sentiments expressed by participants on posts related to that idea."
-    vote_specifications = "???"  # graphene.List('assembl.graphql.vote_session.VoteSpecificationUnion', required=True)
+    __doc__ = """An Idea or Thematic is an object describing a classification or cluster of discussions on a debate.
+    Ideas, like Posts, can be based on each other."""
+    num_posts = "The total number of active posts on that idea (excludes deleted posts)."
+    num_total_posts = "The total number of posts on that idea and on all its children ideas."
+    num_contributors = r"""The total number off users who contributed to the Idea/Thematic/Question.\n
+    Contribution is counted as either as a sentiment set, a post created."""
+    num_children = "The total number of children ideas (called \"subideas\") on the Idea or Thematic."
+    img = Default.document % "Header image associated with the idea. "
+    order = "The order of the Idea, Thematic, Question in the idea tree."
+    live = """The IdeaUnion between an Idea or a Thematic. This can be used to query specific fields unique to the type of Idea."""
+    message_view_override = r"""Use a non-standard view for this idea.\nCurrently only supporting "messageColumns"\."""
+    total_sentiments = "Total number of sentiments expressed by participants on posts related to that idea."
+    vote_specifications = """The VoteSpecificationUnion placed on the Idea. This is the metadata describing the configuration of a VoteSession."""
+
+
+class IdeaAnnouncement:
+    __doc__ = """The metadata object describing an announcement banner on an Idea or Thematic.
+    An Announcement is visible in the header of every Idea/Thematic."""
+    title = Default.string_entry % ("title of Announcement")
+    body = Default.string_entry % ("body of Announcement")
+
+
+class IdeaMessageColumn:
+    __doc__ = """The metadata object describing a single MessageColumn. Once a Thematic or Idea has a MessageColumn,
+    the entity is under the message mode."""
+    message_classifier = "The unique classification identifier of the MessageColumn. All content who will be put under this column must have this classifer."
+    color = "The CSS based RGB HEX code of the theme colour chosen for this column."
+    index = """The order of the message column in the Idea/Thematic."""
+    idea = """The Idea/Thematic that the message column is associated with."""
+    name = Default.string_entry % ("column name")
+    title = Default.string_entry % ("column title")
+    column_synthesis = """A Synthesis done on the column, of type Post."""
+    num_posts = """The number of posts contributed to only this column."""
+
+
+class Idea:
+    __doc__ = """An Idea metadata object represents the configuration and classification of on idea that has grown from the debate.
+    All ideas are currently created under a RootIdea, and Ideas can have subidea trees, Thematics and Questions associated to them."""
+    title = "The title of the Idea, often shown in the Idea header itself."
+    title_entries = Default.langstring_entries % ("This is the Idea title in multiple langauges.",)
+    synthesis_title = Default.string_entry % ("Synthesis title",)
+    description = "The description of the Idea, often shown in the header of the Idea."
+    description_entries = Default.langstring_entries % ("The entity is the description of the Idea in multiple languages.",)
+    children = """A list of all immediate child Ideas on the Idea, exluding any hidden Ideas. The RootIdea will not be shown here, for example.
+    The subchildren of each subIdea is not shown here."""
+    parent_id = Default.node_id % ("Idea",)
+    posts = """A list of all Posts under the Idea. These include posts of the subIdeas."""
+    contributors = """A list of participants who made a contribution to the idea by creating a post.
+    A participant who only made a sentiment is not included."""
+    announcement = """An Announcement object representing a summary of an Idea. This is often included in a header display of an Idea."""
+    message_columns = """A list of IdeaMessageColumn objects, if any set, on an Idea."""
+    ancestors = """A list of Relay.Node ID's representing the parents Ideas of the Idea."""
+    vote_results = """The VoteResult object showing the status and result of a VoteSession on Idea."""
+
+
+class Question:
+    __doc__ = """A Question is a subtype of a Thematic, where each Thematic can ask multiple Questions in the Survey Phase.
+    Each Question can have many Posts associated to it as a response."""
+    num_posts = IdeaInterface.num_posts
+    num_contributors = IdeaInterface.num_contributors
+    title = """The Question to be asked itself, in the language given."""
+    title_entries = Default.langstring_entries % ("")
+    posts = """The list of all posts under the Question."""
+    thematic = """The Thematic that the Question is categorized under. A Question, in the end, is an Idea type, as well as a Thematic."""
+    total_sentiments = """The count of total sentiments """
 
 
 class QuestionInput:
@@ -246,11 +308,11 @@ class VideoInput:
 
 class CreateIdea:
     __doc__ = """Method to create an idea."""
-    title_entries = Default.langstring_entries % ("Title of the idea in various languages.",)
-    description_entries = Default.langstring_entries % ("List of the description of the idea in different languages.")
+    title_entries = Idea.title_entries
+    description_entries = Idea.description_entries
     image = Default.document % ("""Main image associated with this idea.""",)
-    order = """Order of the thematic."""
-    parent_id = """Id of the parent Idea of this idea."""
+    order = """The order or positioning of the Idea/Thematic compared to other Ideas."""
+    parent_id = Idea.parent_id
 
 
 class CreateThematic:
@@ -265,7 +327,10 @@ class CreateThematic:
 
 
 class Thematic:
-    title = "Title of the thematic."
+    __doc__ = """A Thematic is an Idea that exists under the Survey Phase of a debate.
+    Thematics differ slightly from Ideas because Thematics' subideas are Questions."""
+    identifier = "The phase identifier of the Thematic."
+    title = Default.string_entry % "Title of the thematic"
     title_entries = CreateThematic.title_entries
     description = "Description of the thematic."
     questions = CreateThematic.questions
@@ -340,11 +405,11 @@ class UpdateLandingPageModule:
 
 
 class PostAttachment:
-    document = Default.document % ("A document to attach to a post. ")
+    document = Default.document % ("Any file that can be attached to a Post. ")
 
 
 class IdeaContentLink:
-    __doc__ = "An abstract class representing a link between an Idea and a content (typically a post)."
+    __doc__ = "An object representing a link between an Idea and a Post type (of any kind - there are multiple types of Posts)."
     idea_id = "Id of the Idea to be linked to the post."
     post_id = "Id of the post to be linked to the idea."
     creator_id = "Id of the user(participant) who created the link."
@@ -356,10 +421,10 @@ class IdeaContentLink:
 
 
 class PostInterface:
-    creator = "Participant who created the message"
-    message_classifier = ""
+    creator = "The User object who created the Post entity."
+    message_classifier = "The classification ID for a Post that is under a column view. The classifer must match the identifier of a message column."
     creation_date = "Date on which the post was created."
-    modification_date = "Date of the modification of the post"
+    modification_date = "Date of the modification of the post, if any."
     subject = Default.string_entry % ("Subject of the post")
     body = Default.string_entry % ("Body of the post (the main content of the post).")
     subject_entries = Default.langstring_entries % ("The subject of the post in various languages.")
@@ -368,28 +433,38 @@ class PostInterface:
     my_sentiment = "A graphene field which contains a list of sentiment types."
     indirect_idea_content_links = "List of links to ideas."
     extracts = "List of extracts related to that post."
-    parent_id = "Id of the parent post."
-    db_id = " ???"
+    parent_id = """The parent of a Post, if the Post is a reply to an existing Post. """ + Default.node_id % ("Post")
+    db_id = """The internal database ID of the post.
+    This should never be used in logical computations, however, it exists to give the exact database id for use in sorting or creating classifiers for Posts."""
     body_mime_type = Default.string_entry % "???"
-    publication_state = """A graphene Field containing the state of the publication of a certain post (DRAFT,SUBMITTED_IN_EDIT_GRACE_PERIOD,SUBMITTED_AWAITING_MODERATION,PUBLISHED,MODERATED_TEXT_ON_DEMAND,MODERATED_TEXT_NEVER_AVAILABLE,DELETED_BY_USER,DELETED_BY_ADMIN,WIDGET_SCOPED)"""
-
+    publication_state = """A graphene Field containing the state of the publication of a certain post. The options are:
+    DRAFT,\n
+    SUBMITTED_IN_EDIT_GRACE_PERIOD,\n
+    SUBMITTED_AWAITING_MODERATION,\n
+    PUBLISHED,\n
+    MODERATED_TEXT_ON_DEMAND,\n
+    MODERATED_TEXT_NEVER_AVAILABLE,\n
+    DELETED_BY_USER,\n
+    DELETED_BY_ADMIN,\n
+    WIDGET_SCOPED\n"""
     attachments = "List of attachements to the post."
     original_locale = Default.string_entry % ("Locale in which the original message was written.")
     publishes_synthesis = "Graphene Field modeling a relationship to a published synthesis."
 
 
 class Post:
-    __doc__ = "Inherits fields from PostInterface."
+    __doc__ = "A Post object, representing a contribution made by a user."
+    message_id = "The email-compatible message-id for the post."
 
 
 class CreatePost:
-    __doc__ = "A function called each time a post is created."
+    __doc__ = "A mutation which enables the creation of a post."
     subject = PostInterface.subject
     body = PostInterface.body
-    idea_id = "Id of the idea to which the post is related."
+    idea_id = Default.node_id % ("Idea")
     # A Post (except proposals in survey phase) can reply to another post.
     # See related code in views/api/post.py
-    parent_id = "Id of the parent post in case of "
+    parent_id = PostInterface.parent_id
     attachments = PostInterface.attachments
     message_classifier = PostInterface.message_classifier
 
@@ -435,7 +510,8 @@ class AddPostExtract:
 
 
 class Document:
-    __doc__ = "An SQLalchemytype class to model a document. In most cases, A document is used as an attachement to a post or a picture of a thematic, synthesis, etc ..."
+    __doc__ = """An SQLalchemytype class to model a document.
+    In most cases, A document is used as an attachement to a post or a picture of a thematic, synthesis, etc ..."""
     external_url = Default.string_entry % ("A url to an image or a document to be attached.")
     av_checked = Default.string_entry % ("???")
 
@@ -445,7 +521,8 @@ class UploadDocument:
 
 
 class SentimentCounts:
-    __doc__ = "A class containing the number of sentiments expressed on a specific post. There are four sentiments in Assembl: dont_understand, disagree, like, more_info."
+    __doc__ = """A class containing the number of sentiments expressed on a specific post.
+    There are four sentiments in Assembl: dont_understand, disagree, like, more_info."""
     dont_understand = "Number of sentiments expressing dont_understand on a specific post."
     disagree = "Number of sentiments disagreeing with the post."
     like = "Number of positive sentiments expressed on the post."
@@ -533,7 +610,8 @@ class UpdateUser:
 
 
 class DeleteUserInformation:
-    __doc__ = "A method allowing a user to delete all his information according to article 17 of GDPR. It replaces all his personnal information with random strings."
+    __doc__ = """A method allowing a user to delete all his information according to article 17 of GDPR.
+    It replaces all his personnal information with random strings."""
     id = "Id of the user to be deleted."
 
 

@@ -32,7 +32,7 @@ from .auth import AgentProfile
 from ..lib import config
 from .langstrings import LangString, LangStringEntry
 from assembl.views.traversal import AbstractCollectionDefinition
-
+import assembl.graphql.docstrings as docs
 
 log = logging.getLogger('assembl')
 
@@ -104,7 +104,7 @@ class Post(Content):
     message_id = Column(CoerceUnicode,
                         nullable=False,
                         index=True,
-                        doc="The email-compatible message-id for the post.")
+                        doc=docs.Post.message_id)
 
     ancestry = Column(String, default="")
 
@@ -154,7 +154,8 @@ class Post(Content):
 
     creator_id = Column(
         Integer, ForeignKey('agent_profile.id'), nullable=False, index=True)
-    creator = relationship(AgentProfile, foreign_keys=[creator_id], backref="posts_created")
+    creator = relationship(AgentProfile, foreign_keys=[creator_id], backref="posts_created",
+                           doc=docs.PostInterface.creator)
 
     __mapper_args__ = {
         'polymorphic_identity': 'post',

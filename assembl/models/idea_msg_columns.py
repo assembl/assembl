@@ -11,6 +11,7 @@ from sqlalchemy import (
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.sql.functions import count
 
+import assembl.graphql.docstrings as docs
 from ..auth import CrudPermissions, P_READ, P_ADMIN_DISC
 from . import DiscussionBoundBase
 from .idea import Idea
@@ -29,8 +30,7 @@ class IdeaMessageColumn(DiscussionBoundBase):
     idea_id = Column(Integer, ForeignKey(Idea.id), index=True, nullable=False,
                      doc="The idea to which this column applies")
     message_classifier = Column(String(100), index=True, nullable=False,
-                                doc=("Identifier for the column, will match "
-                                     ":py:attr:`assembl.models.generic.Content.message_classifier`"))
+                                doc=docs.IdeaMessageColumn.message_classifier)
     previous_column_id = Column(
         Integer, ForeignKey(id, ondelete='SET NULL'),
         nullable=True, unique=True,

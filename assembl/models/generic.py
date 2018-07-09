@@ -21,6 +21,7 @@ from sqlalchemy import (
 from sqlalchemy.orm import relationship, backref, aliased
 from sqlalchemy.sql.functions import count
 
+import assembl.graphql.docstrings as docs
 from ..lib.sqla import (CrudOperation, get_model_watcher, Base)
 from . import DiscussionBoundBase
 from .langstrings import (LangString, LangStringEntry)
@@ -31,7 +32,6 @@ from ..auth.util import get_current_user_id
 from .discussion import Discussion
 from ..lib.history_mixin import TombstonableMixin
 from ..lib.clean_input import sanitize_text, sanitize_html
-
 
 log = logging.getLogger('assembl')
 
@@ -274,7 +274,7 @@ class Content(TombstonableMixin, DiscussionBoundBase):
         cascade="all, delete-orphan")
 
     message_classifier = Column(String(100), index=True,
-                                doc="Classifier for column views")
+                                doc=docs.PostInterface.message_classifier)
 
     def __init__(self, *args, **kwargs):
         if (kwargs.get('subject', None) is None and
