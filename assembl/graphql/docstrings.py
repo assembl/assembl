@@ -625,38 +625,39 @@ class DeleteDiscussionPhase:
 
 
 class AgentProfile:
-    __doc__ = "An abstract SQLalchemy class to model an AgentProfile."
-    user_id = "The graphene id if the User."
-    name = Default.string_entry % ("The name of the User. This Name will appear on all the activities done by the User on the Discussion.")
-    username = Default.string_entry % ("The Username of the User.")
-    display_name = Default.string_entry % ("???")
+    __doc__ = "A meta-data object describing the characteristics of a User or AgentProfile."
+    user_id = "The unique database identifier of the User."
+    name = "The name of the User."
+    username = "The unique user name of the User. This field is unique throughout the server."
+    display_name = "How the User is represented throughout the debate. If a user-name exists, this will be chosen. If it does not, the name is determined."
     email = "The email used by the User for identification."
-    image = Default.document % ("Image appearing on the avatar of the User.")
-    creation_date = "Datetime variable of the creation of the AgentProfile. It exists only on user not AgentProfile."
-    has_password = "A boolean flag stating if the User has a password."
-    is_deleted = "A boolean flag to state if the this User is deleted or not."
+    image = Default.document % ("Image appearing on the avatar of the User. ")
+    creation_date = Default.creation_date
+    has_password = "A boolean flag describing if the User has a password."
+    is_deleted = """A boolean flag that shows if the User is deleted.
+    If True, the User information is cleansed from the system, and the User can no longer log in."""
 
 
 class UpdateUser:
     __doc__ = "A mutation with which a User can update his name, his username, his avatar image or his password."
-    id = "The graphene id of the User to be updated."
+    id = Default.node_id % ("User") + " The identifier of the User who is about to be updated."
     name = AgentProfile.name
     username = AgentProfile.username
     # this is the identifier of the part in a multipart POST
     image = AgentProfile.image
-    old_password = "The old password to be submitted by the User in case he wants to change his password."
-    new_password = "The new password to be submitted by the User in case he wants to change his password."
-    new_password2 = "The retype of the new password to be submitted by the User in case he wants to change his password."
+    old_password = "The old password to be submitted by the User (if/when he wants to change his password)."
+    new_password = "The new password to be submitted by the User (if/when he wants to change his password)."
+    new_password2 = "The retype of the new password to be submitted by the User (if/when he wants to change his password)."
 
 
 class DeleteUserInformation:
     __doc__ = """A mutation allowing a user to delete all his information according to article 17 of GDPR.
-    It replaces all his personnal information with random strings."""
-    id = "Id of the user to be deleted."
+    All vital information regarding the User acrosst the database is cleansed."""
+    id = Default.node_id % ("User")
 
 
 class VoteSession:
-    __doc__ = r"""A Vote session is one of the four phases available in Assembl along with \n
+    __doc__ = """A Vote session is one of the four phases available in Assembl along with \n
     Survey,\n
     Multicolumn,\n
     thread)."""

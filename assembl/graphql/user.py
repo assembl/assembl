@@ -6,6 +6,7 @@ from graphene_sqlalchemy import SQLAlchemyObjectType
 from pyramid.httpexceptions import HTTPUnauthorized
 from pyramid.i18n import TranslationStringFactory
 
+import assembl.graphql.docstrings as docs
 from assembl import models
 from assembl.auth import CrudPermissions
 from assembl.auth import Everyone, P_SYSADMIN, P_ADMIN_DISC
@@ -16,12 +17,12 @@ from .utils import DateTime, abort_transaction_on_exception
 from assembl.auth.password import random_string
 from datetime import datetime
 from .permissions_helpers import require_cls_permission
-import assembl.graphql.docstrings as docs
 
 _ = TranslationStringFactory('assembl')
 
 
 class AgentProfile(SecureObjectType, SQLAlchemyObjectType):
+    __doc__ = docs.AgentProfile.__doc__
 
     class Meta:
         model = models.AgentProfile
@@ -73,6 +74,7 @@ class AgentProfile(SecureObjectType, SQLAlchemyObjectType):
 
 
 class UpdateUser(graphene.Mutation):
+    __doc__ = docs.UpdateUser.__doc__
 
     class Input:
         id = graphene.ID(required=True, description=docs.UpdateUser.id)
@@ -186,6 +188,7 @@ class UpdateUser(graphene.Mutation):
 
 
 class DeleteUserInformation(graphene.Mutation):
+    __doc__ = docs.DeleteUserInformation.__doc__
 
     class Input:
         id = graphene.ID(required=True, description=docs.UpdateUser.id)
