@@ -1,6 +1,7 @@
 /* eslint react/no-multi-comp: "off" */
 
 import React from 'react';
+import debounce from 'lodash/debounce';
 import { AutoSizer, CellMeasurer, CellMeasurerCache, List, WindowScroller } from 'react-virtualized';
 import { scrollToPost } from '../../utils/hashLinkScroll';
 import NuggetsManager from './nuggetsManager';
@@ -12,7 +13,39 @@ class Child extends React.PureComponent {
     this.expandCollapse = this.expandCollapse.bind(this);
     this.resizeTreeHeight = this.resizeTreeHeight.bind(this);
     this.scrollToElement = this.scrollToElement.bind(this);
-    this.state = { expanded: true };
+    this.state = {
+      expanded: true,
+      visible: false
+    };
+  }
+
+  componentDidMount() {
+    this.onScroll();
+    window.addEventListener('scroll', this.onScroll);
+    window.addEventListener('resize', this.onScroll);
+  }
+
+  componentWillUnmount() {
+    this.stopListening();
+  }
+
+  onScroll = debounce(() => {
+    const box = this.holder.getBoundingClientRect();
+    const pageYOffset = window.pageYOffset;
+    const top = box.top + pageYOffset;
+    // visible if the top of the box is in viewport or next page
+    const isVisible = top < pageYOffset + 2 * window.innerHeight && top > pageYOffset;
+    if (isVisible) {
+      this.setState(() => ({
+        visible: true
+      }));
+      this.stopListening();
+    }
+  }, 100);
+
+  stopListening() {
+    window.removeEventListener('scroll', this.onScroll);
+    window.removeEventListener('resize', this.onScroll);
   }
 
   resizeTreeHeight(delay = 0) {
@@ -127,9 +160,16 @@ class Child extends React.PureComponent {
       numChildren: numChildren
     };
     delete forwardProps.children;
+    // InnerComponent, the post, is only rendered when the Child appears in the viewport or next page
     return (
-      <div className={cssClasses()} id={id}>
-        <InnerComponent {...forwardProps} measureTreeHeight={this.resizeTreeHeight} />
+      <div
+        className={cssClasses()}
+        id={id}
+        ref={(el) => {
+          this.holder = el;
+        }}
+      >
+        {this.state.visible ? <InnerComponent {...forwardProps} measureTreeHeight={this.resizeTreeHeight} /> : null}
         {numChildren > 0 ? this.renderToggleLink(expanded, level < 4) : null}
         {numChildren > 0
           ? children.map((child, idx) => {
