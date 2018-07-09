@@ -1,0 +1,40 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CookiesSelector component should render a list of cookieToggle components set in different categories 1`] = `
+<div
+  className="cookies-selector page-body"
+>
+  <div>
+    <div
+      className="cookies-category-selector"
+      onClick={[Function]}
+    >
+      <span
+        className="assembl-icon-right-dir"
+      />
+      <span
+        className="dark-title-4"
+        style={undefined}
+      >
+        Missing translation: cookiesPolicy.other
+      </span>
+    </div>
+    <div
+      className="cookies-toggles"
+    />
+  </div>
+  <button
+    className="button-submit button-dark btn btn-default"
+    disabled={false}
+    onClick={[Function]}
+    type="button"
+  >
+    <span
+      className={undefined}
+      style={undefined}
+    >
+      Save
+    </span>
+  </button>
+</div>
+`;
