@@ -165,15 +165,33 @@ class Child extends React.PureComponent {
     };
     delete forwardProps.children;
     // InnerComponent, the post, is only rendered when the Child appears in the viewport or next page
+    const { hash } = window.location;
+    let visible = this.state.visible;
+    // load right away the shared post
+    let hashid;
+    if (hash !== '') {
+      hashid = hash.replace('#', '').split('?')[0];
+      if (hashid === id) {
+        visible = true;
+      }
+    }
+
     return (
       <div
         className={cssClasses()}
         id={id}
         ref={(el) => {
           this.holder = el;
+          if (el && hashid === id) {
+            scrollToPost(el);
+          }
         }}
       >
-        {this.state.visible ? <InnerComponent {...forwardProps} measureTreeHeight={this.resizeTreeHeight} /> : null}
+        {visible ? (
+          <InnerComponent {...forwardProps} measureTreeHeight={this.resizeTreeHeight} />
+        ) : (
+          <div style={{ height: 0.5 * window.innerHeight }} />
+        )}
         {numChildren > 0 ? this.renderToggleLink(expanded, level < 4) : null}
         {numChildren > 0
           ? children.map((child, idx) => {
