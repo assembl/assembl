@@ -16,7 +16,7 @@ from .utils import DateTime, abort_transaction_on_exception
 from assembl.auth.password import random_string
 from datetime import datetime
 from .permissions_helpers import require_cls_permission
-
+import assembl.graphql.docstrings as docs
 
 _ = TranslationStringFactory('assembl')
 
@@ -28,15 +28,15 @@ class AgentProfile(SecureObjectType, SQLAlchemyObjectType):
         interfaces = (Node, )
         only_fields = ('id',)
 
-    user_id = graphene.Int(required=True)
-    name = graphene.String()
-    username = graphene.String()
-    display_name = graphene.String()
-    email = graphene.String()
-    image = graphene.Field(Document)
-    creation_date = DateTime()  # creation_date only exists on User, not AgentProfile
-    has_password = graphene.Boolean()
-    is_deleted = graphene.Boolean()
+    user_id = graphene.Int(required=True, description=docs.AgentProfile.user_id)
+    name = graphene.String(description=docs.AgentProfile.name)
+    username = graphene.String(description=docs.AgentProfile.username)
+    display_name = graphene.String(description=docs.AgentProfile.display_name)
+    email = graphene.String(description=docs.AgentProfile.email)
+    image = graphene.Field(Document, description=docs.AgentProfile.image)
+    creation_date = DateTime(description=docs.AgentProfile.creation_date)  # creation_date only exists on User, not AgentProfile
+    has_password = graphene.Boolean(description=docs.AgentProfile.has_password)
+    is_deleted = graphene.Boolean(description=docs.AgentProfile.is_deleted)
 
     def resolve_is_deleted(self, args, context, info):
         return self.is_deleted or False
@@ -75,14 +75,14 @@ class AgentProfile(SecureObjectType, SQLAlchemyObjectType):
 class UpdateUser(graphene.Mutation):
 
     class Input:
-        id = graphene.ID(required=True)
-        name = graphene.String()
-        username = graphene.String()
+        id = graphene.ID(required=True, description=docs.UpdateUser.id)
+        name = graphene.String(description=docs.UpdateUser.name)
+        username = graphene.String(description=docs.UpdateUser.username)
         # this is the identifier of the part in a multipart POST
-        image = graphene.String()
-        old_password = graphene.String()
-        new_password = graphene.String()
-        new_password2 = graphene.String()
+        image = graphene.String(description=docs.UpdateUser.image)
+        old_password = graphene.String(description=docs.UpdateUser.old_password)
+        new_password = graphene.String(description=docs.UpdateUser.new_password)
+        new_password2 = graphene.String(description=docs.UpdateUser.new_password2)
 
     user = graphene.Field(lambda: AgentProfile)
 
@@ -188,7 +188,7 @@ class UpdateUser(graphene.Mutation):
 class DeleteUserInformation(graphene.Mutation):
 
     class Input:
-        id = graphene.ID(required=True)
+        id = graphene.ID(required=True, description=docs.UpdateUser.id)
 
     user = graphene.Field(lambda: AgentProfile)
 
