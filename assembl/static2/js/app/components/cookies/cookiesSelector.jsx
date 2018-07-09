@@ -28,13 +28,13 @@ class CookiesSelector extends React.Component<CookiesSelectorProps, CookiesSelec
   }
 
   getCookieObject = (cookie: string) => {
-    if (cookie.includes('assembl_session')) {
+    if (cookie.startsWith('assembl_session')) {
       return { category: 'essential', name: 'userSession' };
     }
-    if (cookie.includes('LOCALE')) {
+    if (cookie.startsWith('_LOCALE_')) {
       return { cateogry: 'essential', name: 'locale' };
     }
-    if (cookie.includes('_pk_')) {
+    if (cookie.startsWith('_pk_')) {
       return { category: 'analytics', name: 'piwik' };
     }
     return { category: 'other', name: cookie };
@@ -42,8 +42,7 @@ class CookiesSelector extends React.Component<CookiesSelectorProps, CookiesSelec
 
   handleToggle = (updatedCookie: CookieObject) => {
     const { cookies } = this.state;
-    const filteredCookies = cookies.filter(c => c.name !== updatedCookie.name);
-    filteredCookies.push(updatedCookie);
+    const filteredCookies = cookies.map(c => (c.name === updatedCookie.name ? updatedCookie : c));
     this.setState({ cookies: filteredCookies });
   }
 

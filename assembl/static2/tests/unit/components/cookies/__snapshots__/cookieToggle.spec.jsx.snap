@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`CookieToggle componenet should render a cookie's name with a toggle to change its setting 1`] = `
+exports[`CookieToggle component should render a cookie's name with a toggle to change its setting 1`] = `
 <div
   className="cookie-toggle"
 >
