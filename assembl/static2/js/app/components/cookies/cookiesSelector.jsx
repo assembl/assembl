@@ -48,8 +48,7 @@ class CookiesSelector extends React.Component<CookiesSelectorProps, CookiesSelec
   }
 
   saveChanges = () => {
-    const { cookies } = this.state;
-    console.log('Let\'s save these new cookies settings in the backend: ', cookies);
+    // saves the new cookies settings stored in localstate in the backend
   }
 
   render() {
@@ -71,15 +70,12 @@ class CookiesSelector extends React.Component<CookiesSelectorProps, CookiesSelec
                 <Translate value={`cookiesPolicy.${category}`} className="dark-title-4" />
               </div>
               <div className="cookies-toggles">
-                {/* {isActiveKey && <div />} */}
                 {isActiveKey && show &&
                 cookies.filter(cookie => cookie.category === category).map(cookie => (
                   <CookieToggle
                     cookie={cookie}
-                    isEssential={category === 'essential'}
                     key={cookie.name}
                     handleToggle={this.handleToggle}
-                    accepted={cookie.accepted}
                   />
                 ))
                 }

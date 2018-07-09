@@ -11,49 +11,32 @@ export type CookieObject = {
 }
 
 type CookieToggleProps = {
-  isEssential: boolean,
-  accepted: boolean,
   handleToggle: Function,
   cookie: CookieObject
 };
 
-type CookieToggleState = {
-  accepted: boolean,
-};
 
-class CookieToggle extends React.Component<CookieToggleProps, CookieToggleState> {
-  constructor(props: CookieToggleProps) {
-    super(props);
-    this.state = {
-      accepted: props.accepted
-    };
-  }
-
-  toggleSwitch = () => {
-    const { accepted } = this.state;
-    const { handleToggle, cookie } = this.props;
-    this.setState({ accepted: !accepted });
-    cookie.accepted = !accepted;
-    handleToggle(cookie);
+const CookieToggle = ({ handleToggle, cookie }: CookieToggleProps) => {
+  const toggleSwitch = () => {
+    const updatedCookie = { ...cookie, accepted: !cookie.accepted };
+    handleToggle(updatedCookie);
   };
 
-  render() {
-    const { accepted } = this.state;
-    const { cookie: { name }, isEssential } = this.props;
-    return (
-      <div className="cookie-toggle">
-        <Translate className="cookie-title dark-title-3 ellipsis" value={`cookies.${name}`} />
-        <SwitchButton
-          label={I18n.t('refuse')}
-          labelRight={I18n.t('accept')}
-          onChange={this.toggleSwitch}
-          checked={!accepted}
-          disabled={isEssential}
-          name={name}
-        />
-      </div>
-    );
-  }
-}
+  const { name, category, accepted } = cookie;
+
+  return (
+    <div className="cookie-toggle">
+      <Translate className="cookie-title dark-title-3 ellipsis" value={`cookies.${name}`} />
+      <SwitchButton
+        label={I18n.t('refuse')}
+        labelRight={I18n.t('accept')}
+        onChange={toggleSwitch}
+        checked={!accepted}
+        disabled={category === 'essential'}
+        name={name}
+      />
+    </div>
+  );
+};
 
 export default CookieToggle;
