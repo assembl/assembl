@@ -463,7 +463,8 @@ const Translations = {
     cookiesPolicy: {
       headerTitle: "Information sur les cookies",
       essential: "Essentiel",
-      analytics: "Analytics and customization"
+      analytics: "Analytics and customization",
+      other: "Other"
     },
     privacyPolicy: {
       headerTitle: "Politique de protection des données personnelles"
@@ -1273,7 +1274,8 @@ const Translations = {
     cookiesPolicy: {
       headerTitle: "Cookies",
       essential: "Essential",
-      analytics: "Analytique et personnalisation"
+      analytics: "Analytique et personnalisation",
+      other: "Autre"
     },
     privacyPolicy: {
       headerTitle: "Privacy policy"
