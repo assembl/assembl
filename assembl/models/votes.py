@@ -23,6 +23,7 @@ from .auth import User
 from ..auth import CrudPermissions, P_VOTE, P_SYSADMIN, P_ADMIN_DISC, P_READ
 from ..views.traversal import AbstractCollectionDefinition
 from .langstrings import LangString
+import assembl.graphql.docstrings as docs
 
 
 class AbstractVoteSpecification(DiscussionBoundBase):
@@ -665,10 +666,10 @@ class NumberGaugeVoteSpecification(AbstractVoteSpecification):
         Integer,
         ForeignKey(AbstractVoteSpecification.id, ondelete="CASCADE", onupdate="CASCADE"),
         primary_key=True)
-    minimum = Column(Float, default=1)
-    maximum = Column(Float, default=10)
-    nb_ticks = Column(Integer, default=10)
-    unit = Column(String(60))
+    minimum = Column(Float, default=1, doc=docs.NumberGaugeVoteSpecification.minimum)
+    maximum = Column(Float, default=10, doc=docs.NumberGaugeVoteSpecification.maximum)
+    nb_ticks = Column(Integer, default=10, doc=docs.NumberGaugeVoteSpecification.nb_ticks)
+    unit = Column(String(60), doc=docs.NumberGaugeVoteSpecification.unit)
 
     @classmethod
     def get_vote_class(cls):
@@ -982,7 +983,7 @@ class GaugeIdeaVote(AbstractIdeaVote):
         onupdate='CASCADE'
     ), primary_key=True)
 
-    vote_value = Column(Float, nullable=False)
+    vote_value = Column(Float, nullable=False, doc=docs.GaugeVote.vote_value)
 
     @classmethod
     def external_typename(cls):
@@ -1088,7 +1089,7 @@ class TokenIdeaVote(AbstractIdeaVote):
 
     # the number of tokens the user sets on this idea
     vote_value = Column(
-        Integer, nullable=False)
+        Integer, nullable=False, doc=docs.TokenVote.vote_value)
 
     token_category_id = Column(
         Integer, ForeignKey(TokenCategorySpecification.id,

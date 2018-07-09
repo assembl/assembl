@@ -13,6 +13,7 @@ from .auth import CrudPermissions, P_READ, P_ADMIN_DISC
 from . import DiscussionBoundBase
 from .langstrings import LangString
 from ..lib.sqla_types import URLString
+import assembl.graphql.docstrings as docs
 
 
 class SectionTypesEnum(enum.Enum):
@@ -29,7 +30,7 @@ section_types = [t.value for t in SectionTypesEnum.__members__.values()]
 
 
 class Section(DiscussionBoundBase):
-
+    __doc__ = docs.Section.__doc__
     """Assembl configurable sections."""
 
     __tablename__ = "section"
@@ -68,11 +69,12 @@ class Section(DiscussionBoundBase):
         Enum(*section_types, name='section_types'),
         nullable=False,
         default=SectionTypesEnum.CUSTOM.value,
-        server_default=SectionTypesEnum.CUSTOM.value
+        server_default=SectionTypesEnum.CUSTOM.value,
+        doc=docs.Section.section_type
     )
 
     order = Column(
-        Float, nullable=False, default=0.0)
+        Float, nullable=False, default=0.0, doc=docs.Section.order)
 
     def get_discussion_id(self):
 

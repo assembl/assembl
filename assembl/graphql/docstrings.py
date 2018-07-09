@@ -9,6 +9,7 @@ class Default:
     float_entry = """A %s  as a float"""
     node_id = """The Relay.Node ID type of the %s object."""
     creation_date = "The date that the object was created, in UTC timezone, in ISO 8601 format."
+    object_id = """The SQLALCHEMY ID of the %s object."""
 
 
 class Schema:
@@ -46,6 +47,7 @@ class Schema:
 
 class Discussion:
     __docs__ = """The Discussion object. This object describes certain parts of the core state of the debate."""
+    id = Default.object_id % ("Discussion",)
     homepage_url = """A URL for the homepage (optional). Often placed on the logo."""
     title = """The title of the discussion, in the language specified by the input"""
     subtitle = """The subtitle of the discussion, in the language specified by the input"""
@@ -133,6 +135,7 @@ class VisitsAnalytics:
 class Synthesis:
     __doc__ = """Class to model the synthesis of a discussion. A synthesis is one of the core features of Assembl that a debate administrator
     uses to synthesize the main ideas of a debate. It has an introduction and a conclusion"""
+    id = Default.object_id % ("Synthesis",)
     subject = """The subject of the synthesis."""
     subject_entries = Default.langstring_entries % ("The subject in various languages.",)
     introduction = """The introduction of the synthesis."""
@@ -213,7 +216,7 @@ class Video:
     description_top = Default.string_entry % ("Description on top side of the video.")
     description_bottom = Default.string_entry % ("Description on bottom side of the video.")
     description_side = Default.string_entry % ("Description on one of the sides of the video.")
-    html_code = Default.string_entry % ("")
+    html_code = "HTML Code to add extra content in the video module section to be injected."
     title_entries = Default.langstring_entries % ("Title of the video in various languages.")
     description_entries_top = Default.langstring_entries % ("Description on the top of the video in various languages.")
     description_entries_bottom = Default.langstring_entries % ("Description on the bottom of the video in various languages.")
@@ -265,6 +268,7 @@ class IdeaMessageColumn:
 class Idea:
     __doc__ = """An Idea metadata object represents the configuration and classification of on idea that has grown from the debate.
     All ideas are currently created under a RootIdea, and Ideas can have subidea trees, Thematics and Questions associated to them."""
+    id = Default.object_id % ("Idea",)
     title = "The title of the Idea, often shown in the Idea header itself."
     title_entries = Default.langstring_entries % ("This is the Idea title in multiple langauges.",)
     synthesis_title = Default.string_entry % ("Synthesis title",)
@@ -285,6 +289,7 @@ class Idea:
 class Question:
     __doc__ = """A Question is a subtype of a Thematic, where each Thematic can ask multiple Questions in the Survey Phase.
     Each Question can have many Posts associated to it as a response."""
+    id = Default.object_id % ("Question",)
     num_posts = IdeaInterface.num_posts
     num_contributors = IdeaInterface.num_contributors
     title = """The Question to be asked itself, in the language given."""
@@ -309,7 +314,7 @@ class VideoInput:
     description_entries_top = Default.langstring_entries % ("Description on the top of the video in various languages.")
     description_entries_bottom = Default.langstring_entries % ("Description on the bottom of the video in various languages.")
     description_entries_side = Default.langstring_entries % ("Description on the side of the video in various languages.")
-    html_code = Default.string_entry % ("???")
+    html_code = "HTML Code to add extra content in the video module section to be injected."
 
 
 class CreateIdea:
@@ -680,8 +685,8 @@ class VoteSpecificationInterface:
     instructions = Default.string_entry % ("The instructions of the Vote.")
     instructions_entries = Default.langstring_entries % ("The instructions of the Vote in various languages.")
     is_custom = "A boolean flag specifying if the module has been customized for a specific Proposal."
-    vote_session_id = "The graphene id of the Vote session to which this Vote is associated."
-    vote_spec_template_id = "???"  # graphene.ID()
+    vote_session_id = Default.node_id % "Vote Session"
+    vote_spec_template_id = Default.node_id % "Vote Specification template"
     vote_type = "Type of the Vote: Tokens or Gauge."
     my_votes = "The list of Votes by a specific User."
     num_votes = "The total number of Voters for this Vote."
@@ -692,12 +697,13 @@ class TokenCategorySpecification:
     color = "A string corresponding to the color of the Token."
     typename = "The name of the Token."
     total_number = "The total number of Tokens allocated by Participant."
-    title = Default.string_entry % ("The title of the Token Category.")
-    title_entries = Default.langstring_entries % ("The title of the Token Category in various languages.")
+    title = Default.string_entry % ("The title of the Token Category.",)
+    title_entries = Default.langstring_entries % ("The title of the Token Category in various languages.",)
 
 
 class VotesByCategory:
-    token_category_id = "The graphene id of the token Category."
+    __doc__ = ""
+    token_category_id = Default.node_id % "Token"
     num_token = "The number of tokens on that Category."
 
 
@@ -711,8 +717,8 @@ class TokenVoteSpecification:
 class GaugeChoiceSpecification:
     __doc__ = "An SQLalchemy class to model the specifications of a Gauge Vote."
     value = "???"
-    label = Default.string_entry % ("The label of the Gauge.")
-    label_entries = Default.langstring_entries % ("The label of the Gauge in various languages.")
+    label = Default.string_entry % ("The label of the Gauge.",)
+    label_entries = Default.langstring_entries % ("The label of the Gauge in various languages.",)
 
 
 class GaugeVoteSpecification:
@@ -743,17 +749,17 @@ class GaugeChoiceSpecificationInput:
 
 class CreateTokenVoteSpecification:
     vote_session_id = VoteSpecificationInterface.vote_session_id
-    proposal_id = "Id of the Proposal on the Participant will vote."
+    proposal_id = Default.node_id % ("Proposal",)
     title_entries = VoteSpecificationInterface.title_entries
     instructions_entries = VoteSpecificationInterface.instructions_entries
     is_custom = VoteSpecificationInterface.is_custom
     exclusive_categories = "A boolean flag to say whether the User can/can't vote on several Proposals."
     token_categories = TokenVoteSpecification.token_categories
-    vote_spec_template_id = "???"
+    vote_spec_template_id = Default.node_id % ("Vote specification template",)
 
 
 class UpdateTokenVoteSpecification:
-    id = "The graphene id of the Token Vote to be updated."
+    id = Default.node_id % ("Token Vote Specification",)
     title_entries = VoteSpecificationInterface.title_entries
     instructions_entries = VoteSpecificationInterface.instructions_entries
     is_custom = VoteSpecificationInterface.is_custom
@@ -762,21 +768,21 @@ class UpdateTokenVoteSpecification:
 
 
 class DeleteVoteSpecification:
-    id = "The graphene id of the Vote Specification to be deleted."
+    id = Default.node_id % ("Vote Specification",)
 
 
 class CreateGaugeVoteSpecification:
     vote_session_id = VoteSpecificationInterface.vote_session_id
-    proposal_id = "Id of the Proposal on the users will vote."
+    proposal_id = Default.node_id % ("Proposal",) + " This is the proposal identifier on which the Gauge Vote will be created."
     title_entries = VoteSpecificationInterface.title_entries
     instructions_entries = VoteSpecificationInterface.instructions_entries
     is_custom = VoteSpecificationInterface.is_custom
     choices = GaugeVoteSpecification.choices
-    vote_spec_template_id = "???"  # graphene.ID()
+    vote_spec_template_id = "???"
 
 
 class UpdateGaugeVoteSpecification:
-    id = "The graphene id of the Gauge to be updated."
+    id = Default.node_id % ("Gauge Vote Specification.",)
     title_entries = VoteSpecificationInterface.title_entries
     instructions_entries = VoteSpecificationInterface.instructions_entries
     is_custom = VoteSpecificationInterface.is_custom
@@ -785,7 +791,7 @@ class UpdateGaugeVoteSpecification:
 
 class CreateNumberGaugeVoteSpecification:
     __doc__ = "A Mutation to create a numerical Gauge. "
-    vote_session_id = "The graphene id of the Vote session in which the numeric Gauge will be created."
+    vote_session_id = Default.node_id % ("Vote Session.") + " This is the identifier of the Vote session in which the numeric Gauge will be created."
     proposal_id = CreateGaugeVoteSpecification.proposal_id
     title_entries = VoteSpecificationInterface.title_entries
     instructions_entries = VoteSpecificationInterface.instructions_entries
@@ -798,7 +804,7 @@ class CreateNumberGaugeVoteSpecification:
 
 
 class UpdateNumberGaugeVoteSpecification:
-    id = "The graphene id of the numerical Gauge Vote to be updated."
+    id = Default.node_id % ("Number Gauge Vote specification.",)
     title_entries = VoteSpecificationInterface.title_entries
     instructions_entries = VoteSpecificationInterface.instructions_entries
     is_custom = VoteSpecificationInterface.is_custom
@@ -809,59 +815,147 @@ class UpdateNumberGaugeVoteSpecification:
 
 
 class CreateProposal:
-    vote_session_id = "The graphene ID of the Vote session containing the Proposal."
-    title_entries = Default.langstring_entries % "The Proposal title in various languages."
-    description_entries = Default.langstring_entries % "The Proposal description in various languages."
+    vote_session_id = Default.node_id % ("Vote Session",)
+    title_entries = Default.langstring_entries % ("The Proposal title in various languages.",)
+    description_entries = Default.langstring_entries % ("The Proposal description in various languages.",)
     order = "The order of the Proposal in the Vote session."
 
 
 class UpdateProposal:
-    id = "The graphene ID of the Proposal to be updated."
+    id = Default.node_id % ("Proposal",) + " This is the identifier of the proposal to be updated."
     title_entries = CreateProposal.title_entries
     description_entries = CreateProposal.description_entries
     order = CreateProposal.order
 
 
 class DeleteProposal:
-    id = "The graphene ID of the proposal to be deleted."
+    id = Default.node_id % ("Proposal",) + " This is the identifier of the proposal to eb deleted."
 
 
 class VoteInterface:
-    vote_date = "The date on which the Participant submitted his Vote."
-    voter_id = "The graphene id of the voting Participant."
-    vote_spec_id = "The graphene ID of the vote specification(see Vote Specification for more info)."  # graphene.ID(required=True)
-    proposal_id = "The graphene ID of the Proposal on which the User has submitted his Vote."
+    __doc__ = r"""In Assembl, in a vote session, participants are given the right
+    to vote on certain proposal. There are two types of votes in Assembl\n
+    Token Vote\n
+    Gauge Vote.
+    """
+    vote_date = Default.creation_date
+    voter_id = Default.node_id % "Voter"
+    vote_spec_id = Default.node_id % "Vote specification"
+    proposal_id = Default.node_id % "Proposal"
 
 
 class TokenVote:
+    __doc__ = "A Vote submitted by a User on a Token Vote."
     vote_value = "The number of Tokens used on a certain Vote."
     token_category_id = "The category of the Token used."
 
 
 class GaugeVote:
+    __doc__ = "A Vote submitted by a User on a Gauge Vote."
     vote_value = "The value entered on the Gauge Vote."
 
 
 class AddTokenVote:
+    __doc__ = "A mutation to add a Token Vote."
     proposal_id = VoteInterface.proposal_id
-    token_category_id = TokenVote.token_category_id  # graphene.ID(required=True)
-    vote_spec_id = VoteInterface.vote_spec_id  # graphene.ID(required=True)
-    vote_value = TokenVote.vote_value  # graphene.Int(required=True)
-    vote_specification = "The specification of the Vote session."  # graphene.Field(lambda: TokenVoteSpecification)
+    token_category_id = TokenVote.token_category_id
+    vote_spec_id = VoteInterface.vote_spec_id
+    vote_value = TokenVote.vote_value
+    vote_specification = "The specification of the Vote session."
 
 
 class DeleteTokenVote:
+    __doc__ = "A mutation to delete a Token Vote."
     proposal_id = VoteInterface.proposal_id
     token_category_id = TokenVote.token_category_id
     vote_spec_id = VoteInterface.vote_spec_id
 
 
 class AddGaugeVote:
+    __doc__ = "A mutation to add a Gauge Vote."
     proposal_id = VoteInterface.proposal_id
     vote_spec_id = VoteInterface.vote_spec_id
     vote_value = GaugeVote.vote_value
 
 
 class DeleteGaugeVote:
+    __doc__ = "A mutation to delete a Gauge Vote."
     proposal_id = AddGaugeVote.proposal_id
     vote_spec_id = VoteInterface.vote_spec_id
+
+
+class Section:
+    __doc__ = r"""Sections are the main tabs that appear on the top left of an Assembl Discussion.
+    There are 5 default sections:\n
+    Home\n
+    Debate\n
+    Syntheses\n
+    Resources center\n
+    Administration.
+    """
+    order = "The order of the Sections on the top of the page."
+    section_type = r"""There are 5 section types:\n
+    Home\n
+    Debate\n
+    Syntheses\n
+    Resources center\n
+    Administration."""
+    title = Default.string_entry % ("The title of the Section.",)
+    title_entries = Default.langstring_entries % ("The title of the Section in various languages.",)
+    url = "The URL of the section."
+
+
+class CreateSection:
+    __doc__ = Section.__doc__
+    title_entries = Section.title_entries
+    section_type = Section.section_type
+    url = Section.url
+    order = Section.order
+
+
+class DeleteSection:
+    __doc__ = Section.__doc__
+    section_id = Default.node_id % ("Section",)
+
+
+class UpdateSection:
+    __doc__ = Section.__doc__
+    id = Default.node_id % ("Section",)
+    title_entries = Section.title_entries
+    url = Section.url
+    order = Section.order
+
+
+class Resource:
+    __doc__ = "A Resource to be added to the Resource Center."
+    title = Default.string_entry % ("The title of the Resource.",)
+    text = Default.string_entry % ("The text of the Resource.",)
+    title_entries = Default.langstring_entries % ("The title of the Resource in various languages.",)
+    text_entries = Default.langstring_entries % ("The text in the Resource in various languages.",)
+    embed_code = ""
+    image = Default.document % ("An image attached to the Resource",)
+    doc = Default.document % ("A document attached to the Resource",)
+
+
+class CreateResource:
+    __doc__ = Resource.__doc__
+    title_entries = Resource.title_entries
+    text_entries = Resource.text_entries
+    embed_code = Resource.embed_code
+    image = Resource.image
+    doc = Resource.doc
+
+
+class DeleteResource:
+    __doc__ = Resource.__doc__
+    resource_id = Default.node_id % ("Resource") + " This is the Resource identifier that must be deleted."
+
+
+class UpdateResource:
+    __doc__ = Resource.__doc__
+    id = Default.node_id % ("Resource") + " This is the Resource identifier that must be updated."
+    title_entries = Resource.title_entries
+    text_entries = Resource.text_entries
+    embed_code = Resource.embed_code
+    image = Resource.image
+    doc = Resource.doc

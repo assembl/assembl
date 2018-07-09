@@ -35,6 +35,7 @@ langstrings_defs = {
 
 
 class VoteSession(SecureObjectType, SQLAlchemyObjectType):
+    __doc__ = docs.VoteSession.__doc__
 
     class Meta:
         model = models.VoteSession
@@ -68,6 +69,7 @@ class VoteSession(SecureObjectType, SQLAlchemyObjectType):
 
 
 class UpdateVoteSession(graphene.Mutation):
+    __doc__ = docs.UpdateVoteSession.__doc__
 
     class Input:
         discussion_phase_id = graphene.Int(required=True, description=docs.UpdateVoteSession.discussion_phase_id)
@@ -148,7 +150,7 @@ class UpdateVoteSession(graphene.Mutation):
 
 
 class VoteSpecificationInterface(graphene.Interface):
-
+    __doc__ = docs.VoteSpecificationInterface.__doc__
     title = graphene.String(lang=graphene.String(), description=docs.VoteSpecificationInterface.title)
     title_entries = graphene.List(LangStringEntry, description=docs.VoteSpecificationInterface.title_entries)
     instructions = graphene.String(lang=graphene.String(), description=docs.VoteSpecificationInterface.instructions)
@@ -201,6 +203,7 @@ class VoteSpecificationInterface(graphene.Interface):
 
 
 class TokenCategorySpecification(SecureObjectType, SQLAlchemyObjectType):
+    __doc__ = docs.TokenCategorySpecification.__doc__
 
     class Meta:
         model = models.TokenCategorySpecification
@@ -218,11 +221,13 @@ class TokenCategorySpecification(SecureObjectType, SQLAlchemyObjectType):
 
 
 class VotesByCategory(graphene.ObjectType):
+    __doc__ = docs.VotesByCategory.__doc__
     token_category_id = graphene.ID(required=True, description=docs.VotesByCategory.token_category_id)
     num_token = graphene.Int(required=True, description=docs.VotesByCategory.num_token)
 
 
 class TokenVoteSpecification(SecureObjectType, SQLAlchemyObjectType):
+    __doc__ = docs.TokenVoteSpecification.__doc__
 
     class Meta:
         model = models.TokenVoteSpecification
@@ -257,6 +262,7 @@ class TokenVoteSpecification(SecureObjectType, SQLAlchemyObjectType):
 
 
 class GaugeChoiceSpecification(SecureObjectType, SQLAlchemyObjectType):
+    __doc__ = docs.GaugeChoiceSpecification.__doc__
 
     class Meta:
         model = models.GaugeChoiceSpecification
@@ -285,6 +291,7 @@ def get_avg_choice(vote_spec):
 
 
 class GaugeVoteSpecification(SecureObjectType, SQLAlchemyObjectType):
+    __doc__ = docs.GaugeVoteSpecification.__doc__
 
     class Meta:
         model = models.GaugeVoteSpecification
@@ -314,6 +321,7 @@ class GaugeVoteSpecification(SecureObjectType, SQLAlchemyObjectType):
 
 
 class NumberGaugeVoteSpecification(SecureObjectType, SQLAlchemyObjectType):
+    __doc__ = docs.NumberGaugeVoteSpecification.__doc__
 
     class Meta:
         model = models.NumberGaugeVoteSpecification
@@ -352,6 +360,7 @@ class VoteSpecificationUnion(SQLAlchemyUnion):
 
 
 class TokenCategorySpecificationInput(graphene.InputObjectType):
+    __doc__ = docs.TokenCategorySpecificationInput.__doc__
     id = graphene.ID()
     title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.TokenCategorySpecificationInput.title_entries)
     total_number = graphene.Int(required=True, description=docs.TokenCategorySpecificationInput.total_number)
@@ -360,12 +369,14 @@ class TokenCategorySpecificationInput(graphene.InputObjectType):
 
 
 class GaugeChoiceSpecificationInput(graphene.InputObjectType):
+    __doc__ = docs.GaugeChoiceSpecificationInput.__doc__
     id = graphene.ID()
     label_entries = graphene.List(LangStringEntryInput, required=True)
     value = graphene.Float(required=True)
 
 
 class CreateTokenVoteSpecification(graphene.Mutation):
+    __doc__ = docs.CreateTokenVoteSpecification.__doc__
 
     class Input:
         vote_session_id = graphene.ID(required=True, description=docs.CreateTokenVoteSpecification.vote_session_id)
@@ -436,6 +447,7 @@ class CreateTokenVoteSpecification(graphene.Mutation):
 
 
 class UpdateTokenVoteSpecification(graphene.Mutation):
+    __doc__ = docs.UpdateTokenVoteSpecification.__doc__
 
     class Input:
         id = graphene.ID(required=True, description=docs.UpdateTokenVoteSpecification.id)
@@ -505,6 +517,7 @@ class UpdateTokenVoteSpecification(graphene.Mutation):
 
 
 class DeleteVoteSpecification(graphene.Mutation):
+    __doc__ = docs.DeleteVoteSpecification.__doc__
 
     class Input:
         id = graphene.ID(required=True, description=docs.DeleteVoteSpecification.id)
@@ -534,6 +547,7 @@ class DeleteVoteSpecification(graphene.Mutation):
 
 
 class CreateGaugeVoteSpecification(graphene.Mutation):
+    __doc__ = docs.CreateGaugeVoteSpecification.__doc__
 
     class Input:
         vote_session_id = graphene.ID(required=True, description=docs.CreateGaugeVoteSpecification.vote_session_id)
@@ -594,6 +608,7 @@ class CreateGaugeVoteSpecification(graphene.Mutation):
 
 
 class UpdateGaugeVoteSpecification(graphene.Mutation):
+    __doc__ = docs.UpdateGaugeVoteSpecification.__doc__
 
     class Input:
         id = graphene.ID(required=True, description=docs.UpdateGaugeVoteSpecification.id)
@@ -655,6 +670,7 @@ class UpdateGaugeVoteSpecification(graphene.Mutation):
 
 
 class CreateNumberGaugeVoteSpecification(graphene.Mutation):
+    __doc__ = docs.CreateNumberGaugeVoteSpecification.__doc__
 
     class Input:
         vote_session_id = graphene.ID(required=True, description=docs.CreateNumberGaugeVoteSpecification.vote_session_id)
@@ -712,6 +728,7 @@ class CreateNumberGaugeVoteSpecification(graphene.Mutation):
 
 
 class UpdateNumberGaugeVoteSpecification(graphene.Mutation):
+    __doc__ = docs.UpdateNumberGaugeVoteSpecification.__doc__
 
     class Input:
         id = graphene.ID(required=True)
@@ -752,6 +769,7 @@ class UpdateNumberGaugeVoteSpecification(graphene.Mutation):
 
 
 class CreateProposal(graphene.Mutation):
+    __doc__ = docs.CreateProposal.__doc__
 
     class Input:
         vote_session_id = graphene.ID(required=True)
@@ -798,6 +816,7 @@ class CreateProposal(graphene.Mutation):
 
 
 class UpdateProposal(graphene.Mutation):
+    __doc__ = docs.UpdateProposal.__doc__
 
     class Input:
         id = graphene.ID(required=True)
@@ -835,6 +854,7 @@ class UpdateProposal(graphene.Mutation):
 
 
 class DeleteProposal(graphene.Mutation):
+    __doc__ = docs.DeleteProposal.__doc__
 
     class Input:
         id = graphene.ID(required=True, description=docs.DeleteProposal.id)

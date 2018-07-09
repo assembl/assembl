@@ -462,6 +462,7 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
 
 
 class Thematic(SecureObjectType, SQLAlchemyObjectType):
+    __doc__ = docs.Thematic.__doc__
 
     class Meta:
         model = models.Thematic
@@ -538,11 +539,13 @@ class IdeaUnion(SQLAlchemyUnion):
 
 
 class QuestionInput(graphene.InputObjectType):
+    __doc__ = docs.QuestionInput.__doc__
     id = graphene.ID(description=docs.QuestionInput.id)
     title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.QuestionInput.title_entries)
 
 
 class VideoInput(graphene.InputObjectType):
+    __doc__ = docs.VideoInput.__doc__
     title_entries = graphene.List(LangStringEntryInput, description=docs.VideoInput.title_entries)
     description_entries_top = graphene.List(LangStringEntryInput, description=docs.VideoInput.description_entries_top)
     description_entries_bottom = graphene.List(LangStringEntryInput, description=docs.VideoInput.description_entries_bottom)
@@ -558,6 +561,7 @@ class VideoInput(graphene.InputObjectType):
 # do in CreateThematic mutation, because behavior between frontend
 # v1 and v2 has not yet been completely clarified.
 class CreateIdea(graphene.Mutation):
+    __doc__ = docs.CreateIdea.__doc__
 
     class Input:
         # Careful, having required=True on a graphene.List only means
@@ -802,6 +806,7 @@ class CreateThematic(graphene.Mutation):
 
 
 class UpdateThematic(graphene.Mutation):
+    __doc__ = docs.UpdateThematic.__doc__
 
     class Input:
         id = graphene.ID(required=True)

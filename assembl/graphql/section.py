@@ -15,12 +15,13 @@ from .langstring import (LangStringEntry, LangStringEntryInput,
                          update_langstring_from_input_entries)
 from .types import SecureObjectType
 from .utils import abort_transaction_on_exception
-
+import assembl.graphql.docstrings as docs
 
 SectionTypes = graphene.Enum.from_enum(SectionTypesEnum)
 
 
 class Section(SecureObjectType, SQLAlchemyObjectType):
+    __doc__ = docs.Section.__doc__
 
     class Meta:
         model = models.Section
@@ -40,6 +41,8 @@ class Section(SecureObjectType, SQLAlchemyObjectType):
 
 
 class CreateSection(graphene.Mutation):
+    __doc__ = docs.CreateSection.__doc__
+
     class Input:
         title_entries = graphene.List(LangStringEntryInput, required=True)
         section_type = graphene.Argument(SectionTypes)
@@ -86,6 +89,8 @@ class CreateSection(graphene.Mutation):
 
 
 class DeleteSection(graphene.Mutation):
+    __doc__ = docs.DeleteSection.__doc__
+
     class Input:
         section_id = graphene.ID(required=True)
 
@@ -114,6 +119,8 @@ class DeleteSection(graphene.Mutation):
 
 
 class UpdateSection(graphene.Mutation):
+    __doc__ = docs.UpdateSection.__doc__
+
     class Input:
         id = graphene.ID(required=True)
         title_entries = graphene.List(LangStringEntryInput)

@@ -88,6 +88,8 @@ class UpdateExtract(graphene.Mutation):
 
 
 class DeleteExtract(graphene.Mutation):
+    __doc__ = docs.DeleteExtract.__doc__
+
     class Input:
         extract_id = graphene.ID(required=True, description=docs.DeleteExtract.extract_id)
 

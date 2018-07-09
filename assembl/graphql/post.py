@@ -224,6 +224,7 @@ class PostInterface(SQLAlchemyInterface):
 
 
 class Post(SecureObjectType, SQLAlchemyObjectType):
+    __doc__ = docs.Post.__doc__
 
     class Meta:
         model = models.Content
@@ -240,6 +241,7 @@ class PostConnection(graphene.Connection):
 
 
 class CreatePost(graphene.Mutation):
+    __doc__ = docs.CreatePost.__doc__
 
     class Input:
         subject = graphene.String(description=docs.CreatePost.subject)
@@ -384,6 +386,7 @@ class CreatePost(graphene.Mutation):
 
 
 class UpdatePost(graphene.Mutation):
+    __doc__ = docs.UpdatePost.__doc__
 
     class Input:
         post_id = graphene.ID(required=True, description=docs.UpdatePost.post_id)
@@ -486,6 +489,7 @@ class UpdatePost(graphene.Mutation):
 
 
 class DeletePost(graphene.Mutation):
+    __doc__ = docs.DeletePost.__doc__
 
     class Input:
         post_id = graphene.ID(required=True, description=docs.DeletePost.post_id)
@@ -525,6 +529,7 @@ class DeletePost(graphene.Mutation):
 
 
 class UndeletePost(graphene.Mutation):
+    __doc__ = docs.UndeletePost.__doc__
 
     class Input:
         post_id = graphene.ID(required=True, description=docs.UndeletePost.post_id)
@@ -550,6 +555,7 @@ class UndeletePost(graphene.Mutation):
 
 
 class AddPostAttachment(graphene.Mutation):
+    __doc__ = docs.AddPostAttachment.__doc__
 
     class Input:
         post_id = graphene.ID(required=True, description=docs.AddPostAttachment.post_id)
@@ -605,6 +611,7 @@ class AddPostAttachment(graphene.Mutation):
 
 
 class DeletePostAttachment(graphene.Mutation):
+    __doc__ = docs.DeletePostAttachment.__doc__
 
     class Input:
         post_id = graphene.ID(required=True, description=docs.DeletePostAttachment.post_id)
@@ -640,6 +647,7 @@ class DeletePostAttachment(graphene.Mutation):
 
 
 class AddPostExtract(graphene.Mutation):
+    __doc__ = docs.AddPostExtract.__doc__
 
     class Input:
         post_id = graphene.ID(required=True, description=docs.AddPostExtract.post_id)

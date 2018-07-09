@@ -10,9 +10,11 @@ from .permissions_helpers import (
 from .types import SecureObjectType, SQLAlchemyUnion
 from .utils import DateTime, abort_transaction_on_exception
 from .vote_session import TokenVoteSpecification, VoteSpecificationUnion
+import assembl.graphql.docstrings as docs
 
 
 class VoteInterface(graphene.Interface):
+    __doc__ = docs.VoteInterface.__doc__
 
     vote_date = DateTime(required=True)
     voter_id = graphene.ID(required=True)
@@ -30,6 +32,7 @@ class VoteInterface(graphene.Interface):
 
 
 class TokenVote(SecureObjectType, SQLAlchemyObjectType):
+    __doc__ = docs.TokenVote.__doc__
 
     class Meta:
         model = models.TokenIdeaVote
@@ -43,6 +46,7 @@ class TokenVote(SecureObjectType, SQLAlchemyObjectType):
 
 
 class GaugeVote(SecureObjectType, SQLAlchemyObjectType):
+    __doc__ = docs.GaugeVote.__doc__
 
     class Meta:
         model = models.GaugeIdeaVote
@@ -51,6 +55,7 @@ class GaugeVote(SecureObjectType, SQLAlchemyObjectType):
 
 
 class VoteUnion(SQLAlchemyUnion):
+
     class Meta:
         types = (TokenVote, GaugeVote)
         model = models.AbstractIdeaVote
@@ -66,6 +71,8 @@ class VoteUnion(SQLAlchemyUnion):
 
 
 class AddTokenVote(graphene.Mutation):
+    __doc__ = docs.AddTokenVote.__doc__
+
     class Input:
         proposal_id = graphene.ID(required=True)
         token_category_id = graphene.ID(required=True)
@@ -121,6 +128,8 @@ class AddTokenVote(graphene.Mutation):
 
 
 class DeleteTokenVote(graphene.Mutation):
+    __doc__ = docs.DeleteTokenVote.__doc__
+
     class Input:
         proposal_id = graphene.ID(required=True)
         token_category_id = graphene.ID(required=True)
@@ -154,6 +163,8 @@ class DeleteTokenVote(graphene.Mutation):
 
 
 class AddGaugeVote(graphene.Mutation):
+    __doc__ = docs.AddGaugeVote.__doc__
+
     class Input:
         proposal_id = graphene.ID(required=True)
         vote_spec_id = graphene.ID(required=True)
@@ -202,6 +213,8 @@ class AddGaugeVote(graphene.Mutation):
 
 
 class DeleteGaugeVote(graphene.Mutation):
+    __doc__ = docs.DeleteGaugeVote.__doc__
+
     class Input:
         proposal_id = graphene.ID(required=True)
         vote_spec_id = graphene.ID(required=True)

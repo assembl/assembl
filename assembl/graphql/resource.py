@@ -17,9 +17,12 @@ from .langstring import (
     update_langstring_from_input_entries)
 from .types import SecureObjectType
 from .utils import abort_transaction_on_exception
+import assembl.graphql.docstrings as docs
 
 
 class Resource(SecureObjectType, SQLAlchemyObjectType):
+    __doc__ = docs.Resource.__doc__
+
     class Meta:
         model = models.Resource
         interfaces = (Node, )
@@ -61,6 +64,8 @@ class Resource(SecureObjectType, SQLAlchemyObjectType):
 
 
 class CreateResource(graphene.Mutation):
+    __doc__ = docs.CreateResource.__doc__
+
     class Input:
         # Careful, having required=True on a graphene.List only means
         # it can't be None, having an empty [] is perfectly valid.
@@ -154,6 +159,8 @@ class CreateResource(graphene.Mutation):
 
 
 class DeleteResource(graphene.Mutation):
+    __doc__ = docs.DeleteResource.__doc__
+
     class Input:
         resource_id = graphene.ID(required=True)
 
@@ -181,6 +188,8 @@ class DeleteResource(graphene.Mutation):
 
 
 class UpdateResource(graphene.Mutation):
+    __doc__ = docs.UpdateResource.__doc__
+
     class Input:
         id = graphene.ID(required=True)
         title_entries = graphene.List(LangStringEntryInput)

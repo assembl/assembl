@@ -27,6 +27,8 @@ class Document(SecureObjectType, SQLAlchemyObjectType):
 
 
 class UploadDocument(graphene.Mutation):
+    __doc__ = docs.UploadDocument.__doc__
+
     class Input:
         file = graphene.String(
             required=True,

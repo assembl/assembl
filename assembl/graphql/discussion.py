@@ -274,6 +274,7 @@ class LocalePreference(graphene.ObjectType):
 
 
 class DiscussionPreferences(graphene.ObjectType):
+    __doc__ = docs.DiscussionPreferences.__doc__
     languages = graphene.List(LocalePreference, description=docs.DiscussionPreferences.languages)
 
 
@@ -372,6 +373,8 @@ class LegalContents(graphene.ObjectType):
 
 
 class UpdateResourcesCenter(graphene.Mutation):
+    __doc__ = docs.UpdateResourcesCenter.__doc__
+
     class Input:
         title_entries = graphene.List(LangStringEntryInput, description=docs.UpdateResourcesCenter.title_entries)
         header_image = graphene.String(description=docs.UpdateResourcesCenter.header_image)
