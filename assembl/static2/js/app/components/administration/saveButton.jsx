@@ -1,9 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Button } from 'react-bootstrap';
-import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
-import classNames from 'classnames';
 
 export const runSerial = (tasks) => {
   let result = Promise.resolve();
@@ -55,13 +53,8 @@ export const getMutationsPromises = (params) => {
   return promises;
 };
 
-const mapStateToProps = state => ({
-  isLargeLogo: state.debate.debateData.isLargeLogo
-});
-
-export const DumbSaveButton = ({ disabled, saveAction, specificClasses, isLargeLogo }) => {
-  const buttonClasses =
-    specificClasses || classNames('save-button button-submit button-dark right', { 'save-button-low': isLargeLogo });
+export const DumbSaveButton = ({ disabled, saveAction, specificClasses }) => {
+  const buttonClasses = specificClasses || 'save-button button-submit button-dark right';
   return (
     <Button className={buttonClasses} disabled={disabled} onClick={saveAction}>
       <Translate value="administration.saveThemes" />
@@ -88,4 +81,4 @@ class SaveButtonInPortal extends React.PureComponent {
   }
 }
 
-export default connect(mapStateToProps)(SaveButtonInPortal);
+export default SaveButtonInPortal;
