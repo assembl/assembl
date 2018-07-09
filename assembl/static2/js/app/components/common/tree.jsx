@@ -183,7 +183,7 @@ class Child extends React.PureComponent {
         ref={(el) => {
           this.holder = el;
           if (el && hashid === id) {
-            scrollToPost(el);
+            scrollToPost(el, false);
           }
         }}
       >
