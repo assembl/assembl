@@ -33,6 +33,7 @@ assembl/locale/*/LC_MESSAGES/*.jed.json
 /virtuoso
 /assembl_dumps
 /requirements.txt
+/build
 
 # local
 /random.ini
