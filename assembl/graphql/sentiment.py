@@ -12,6 +12,7 @@ from assembl.models.action import (
     SentimentOfPost,
     LikeSentimentOfPost, DisagreeSentimentOfPost,
     DontUnderstandSentimentOfPost, MoreInfoSentimentOfPost)
+import assembl.graphql.docstrings as docs
 
 
 sentiments_enum = PyEnum('SentimentTypes', (
@@ -23,18 +24,19 @@ SentimentTypes = graphene.Enum.from_enum(sentiments_enum)
 
 
 class SentimentCounts(graphene.ObjectType):
-    dont_understand = graphene.Int()
-    disagree = graphene.Int()
-    like = graphene.Int()
-    more_info = graphene.Int()
+    dont_understand = graphene.Int(description=docs.SentimentCounts.dont_understand)
+    disagree = graphene.Int(description=docs.SentimentCounts.disagree)
+    like = graphene.Int(description=docs.SentimentCounts.like)
+    more_info = graphene.Int(description=docs.SentimentCounts.more_info)
 
 
 class AddSentiment(graphene.Mutation):
+
     class Input:
-        post_id = graphene.ID(required=True)
+        post_id = graphene.ID(required=True, description=docs.AddSentiment.post_id)
         type = graphene.Argument(
             type=SentimentTypes,
-            required=True
+            required=True, description=docs.AddSentiment.post_id
         )
 
     post = graphene.Field('assembl.graphql.post.Post')
@@ -79,8 +81,9 @@ class AddSentiment(graphene.Mutation):
 
 
 class DeleteSentiment(graphene.Mutation):
+
     class Input:
-        post_id = graphene.ID(required=True)
+        post_id = graphene.ID(required=True, description=docs.DeleteSentiment.post_id)
 
     post = graphene.Field('assembl.graphql.post.Post')
 

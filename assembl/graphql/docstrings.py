@@ -293,6 +293,11 @@ class Question:
     total_sentiments = """The count of total sentiments """
 
 
+class IdeaAnnoucement:
+    title = "Title of the announcement."
+    body = "Body of the announcement."
+
+
 class QuestionInput:
     id = """Id of the question input."""
     title_entries = Default.langstring_entries % ("Title of the question in various languages.")
@@ -487,7 +492,7 @@ class UndeletePost:
     post_id = "Id of the post to be undeleted."
 
 
-class AddPostAttachement:
+class AddPostAttachment:
     __doc__ = "A method to add attachment to a post."
     post_id = "Id of the post to add an attachement to."
     file = Default.string_entry % ("The path of the file to be attached.")
@@ -495,7 +500,7 @@ class AddPostAttachement:
 
 class DeletePostAttachment:
     post_id = "Id from which to delete the attachement."
-    attachement_id = "Id of the attachement to be deleted."
+    attachment_id = "Id of the attachement to be deleted."
 
 
 class AddPostExtract:
@@ -786,5 +791,39 @@ class DeleteProposal:
 class VoteInterface:
     vote_date = "Date on which the participant submitted his vote."
     voter_id = "Id of the voter."
-    vote_spec_id = ""  # graphene.ID(required=True)
+    vote_spec_id = "Id of the vote specification(see Vote specification for more info)."  # graphene.ID(required=True)
     proposal_id = "Id of the proposal on which the user has submitted his vote."
+
+
+class TokenVote:
+    vote_value = "Number of tokens used on a certain vote."
+    token_category_id = "The category of the token used."
+
+
+class GaugeVote:
+    vote_value = "Value entered on the gauge vote."
+
+
+class AddTokenVote:
+    proposal_id = "ID of the proposal on which the vote is expressed."
+    token_category_id = TokenVote.token_category_id  # graphene.ID(required=True)
+    vote_spec_id = VoteInterface.vote_spec_id  # graphene.ID(required=True)
+    vote_value = TokenVote.vote_value  # graphene.Int(required=True)
+    vote_specification = "Specification of the vote session."  # graphene.Field(lambda: TokenVoteSpecification)
+
+
+class DeleteTokenVote:
+    proposal_id = VoteInterface.proposal_id
+    token_category_id = TokenVote.token_category_id
+    vote_spec_id = VoteInterface.vote_spec_id
+
+
+class AddGaugeVote:
+    proposal_id = "ID of the proposal on which the vote is expressed."
+    vote_spec_id = "ID of the vote specification(see Vote specification for more info)."
+    vote_value = GaugeVote.vote_value
+
+
+class DeleteGaugeVote:
+    proposal_id = AddGaugeVote.proposal_id
+    vote_spec_id = AddGaugeVote.vote_spec_id

@@ -34,7 +34,6 @@ import assembl.graphql.docstrings as docs
 
 class Video(graphene.ObjectType):
     __doc__ = docs.Video.__doc__
-
     title = graphene.String(description=docs.Video.title)
     description_top = graphene.String(description=docs.Video.description_top)
     description_bottom = graphene.String(description=docs.Video.description_bottom)
@@ -48,7 +47,6 @@ class Video(graphene.ObjectType):
 
 class IdeaInterface(graphene.Interface):
     __doc__ = docs.IdeaInterface.__doc__
-
     num_posts = graphene.Int(description=docs.IdeaInterface.num_posts)
     num_total_posts = graphene.Int(description=docs.IdeaInterface.num_total_posts)
     num_contributors = graphene.Int(description=docs.IdeaInterface.num_contributors)
@@ -470,11 +468,11 @@ class Thematic(SecureObjectType, SQLAlchemyObjectType):
         interfaces = (Node, IdeaInterface)
         only_fields = ('id', 'identifier')
 
-    title = graphene.String(lang=graphene.String())
-    title_entries = graphene.List(LangStringEntry)
-    description = graphene.String(lang=graphene.String())
-    questions = graphene.List(Question)
-    video = graphene.Field(Video, lang=graphene.String())
+    title = graphene.String(lang=graphene.String(), description=docs.Thematic.title)
+    title_entries = graphene.List(LangStringEntry, description=docs.Thematic.title_entries)
+    description = graphene.String(lang=graphene.String(), description=docs.Thematic.description)
+    questions = graphene.List(Question, description=docs.Thematic.questions)
+    video = graphene.Field(Video, lang=graphene.String(), description=docs.Thematic.video)
 
     def resolve_title(self, args, context, info):
         title = resolve_langstring(self.title, args.get('lang'))

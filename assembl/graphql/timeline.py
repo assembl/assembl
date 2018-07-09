@@ -12,6 +12,7 @@ from .langstring import LangStringEntry, LangStringEntryInput, resolve_langstrin
 from .permissions_helpers import require_cls_permission, require_instance_permission
 from .types import SecureObjectType
 from .utils import DateTime, abort_transaction_on_exception
+import assembl.graphql.docstrings as docs
 
 
 class DiscussionPhase(SecureObjectType, SQLAlchemyObjectType):
@@ -21,16 +22,16 @@ class DiscussionPhase(SecureObjectType, SQLAlchemyObjectType):
         interfaces = (Node, )
         only_fields = ('id',)
 
-    identifier = graphene.String()
-    is_thematics_table = graphene.Boolean()
-    title = graphene.String(lang=graphene.String())
-    title_entries = graphene.List(LangStringEntry)
-    description = graphene.String(lang=graphene.String())
-    description_entries = graphene.List(LangStringEntry)
-    start = DateTime()
-    end = DateTime()
-    image = graphene.Field(Document)
-    order = graphene.Float()
+    identifier = graphene.String(description=docs.DiscussionPhase.identifier)
+    is_thematics_table = graphene.Boolean(description=docs.DiscussionPhase.is_thematics_table)
+    title = graphene.String(lang=graphene.String(), description=docs.DiscussionPhase.title)
+    title_entries = graphene.List(LangStringEntry, description=docs.DiscussionPhase.title_entries)
+    description = graphene.String(lang=graphene.String(), description=docs.DiscussionPhase.description)
+    description_entries = graphene.List(LangStringEntry, description=docs.DiscussionPhase.description_entries)
+    start = DateTime(description=docs.DiscussionPhase.start)
+    end = DateTime(description=docs.DiscussionPhase.end)
+    image = graphene.Field(Document, description=docs.DiscussionPhase.image)
+    order = graphene.Float(description=docs.DiscussionPhase.order)
 
     def resolve_title(self, args, context, info):
         return resolve_langstring(self.title, args.get('lang'))
@@ -50,14 +51,15 @@ class DiscussionPhase(SecureObjectType, SQLAlchemyObjectType):
 
 
 class CreateDiscussionPhase(graphene.Mutation):
+
     class Input:
-        lang = graphene.String(required=True)
-        identifier = graphene.String(required=True)
-        is_thematics_table = graphene.Boolean()
-        title_entries = graphene.List(LangStringEntryInput, required=True)
-        start = DateTime(required=True)
-        end = DateTime(required=True)
-        order = graphene.Float(required=True)
+        lang = graphene.String(required=True, description=docs.CreateDiscussionPhase.lang)
+        identifier = graphene.String(required=True, description=docs.CreateDiscussionPhase.identifier)
+        is_thematics_table = graphene.Boolean(description=docs.CreateDiscussionPhase.is_thematics_table)
+        title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.CreateDiscussionPhase.title_entries)
+        start = DateTime(required=True, description=docs.CreateDiscussionPhase.start)
+        end = DateTime(required=True, description=docs.CreateDiscussionPhase.end)
+        order = graphene.Float(required=True, description=docs.CreateDiscussionPhase.order)
 
     discussion_phase = graphene.Field(lambda: DiscussionPhase)
 
@@ -90,17 +92,18 @@ class CreateDiscussionPhase(graphene.Mutation):
 
 
 class UpdateDiscussionPhase(graphene.Mutation):
+
     class Input:
-        id = graphene.ID(required=True)
-        is_thematics_table = graphene.Boolean()
-        lang = graphene.String(required=True)
-        identifier = graphene.String(required=True)
-        title_entries = graphene.List(LangStringEntryInput, required=True)
-        description_entries = graphene.List(LangStringEntryInput, required=False)
-        start = DateTime(required=True)
-        end = DateTime(required=True)
-        image = graphene.String()
-        order = graphene.Float(required=True)
+        id = graphene.ID(required=True, description=docs.UpdateDiscussionPhase.id)
+        is_thematics_table = graphene.Boolean(description=docs.UpdateDiscussionPhase.is_thematics_table)
+        lang = graphene.String(required=True, description=docs.UpdateDiscussionPhase.lang)
+        identifier = graphene.String(required=True, description=docs.UpdateDiscussionPhase.identifier)
+        title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.UpdateDiscussionPhase.title_entries)
+        description_entries = graphene.List(LangStringEntryInput, required=False, description=docs.UpdateDiscussionPhase.description_entries)
+        start = DateTime(required=True, description=docs.UpdateDiscussionPhase.start)
+        end = DateTime(required=True, description=docs.UpdateDiscussionPhase.end)
+        image = graphene.String(description=docs.UpdateDiscussionPhase.image)
+        order = graphene.Float(required=True, description=docs.UpdateDiscussionPhase.order)
 
     discussion_phase = graphene.Field(lambda: DiscussionPhase)
 
@@ -171,8 +174,9 @@ class UpdateDiscussionPhase(graphene.Mutation):
 
 
 class DeleteDiscussionPhase(graphene.Mutation):
+
     class Input:
-        id = graphene.ID(required=True)
+        id = graphene.ID(required=True, description=docs.DeleteDiscussionPhase.id)
 
     success = graphene.Boolean()
 

@@ -207,8 +207,8 @@ class TokenCategorySpecification(SecureObjectType, SQLAlchemyObjectType):
         interfaces = (Node,)
         only_fields = ('id', 'color', 'typename', 'total_number')
 
-    title = graphene.String(lang=graphene.String())
-    title_entries = graphene.List(LangStringEntry)
+    title = graphene.String(lang=graphene.String(), description=docs.TokenCategorySpecification.title)
+    title_entries = graphene.List(LangStringEntry, description=docs.TokenCategorySpecification.title_entries)
 
     def resolve_title(self, args, context, info):
         return resolve_langstring(self.name, args.get('lang'))
@@ -218,8 +218,8 @@ class TokenCategorySpecification(SecureObjectType, SQLAlchemyObjectType):
 
 
 class VotesByCategory(graphene.ObjectType):
-    token_category_id = graphene.ID(required=True)
-    num_token = graphene.Int(required=True)
+    token_category_id = graphene.ID(required=True, description=docs.VotesByCategory.token_category_id)
+    num_token = graphene.Int(required=True, description=docs.VotesByCategory.num_token)
 
 
 class TokenVoteSpecification(SecureObjectType, SQLAlchemyObjectType):
@@ -229,8 +229,8 @@ class TokenVoteSpecification(SecureObjectType, SQLAlchemyObjectType):
         interfaces = (Node, VoteSpecificationInterface)
         only_fields = ('id', 'exclusive_categories')
 
-    token_categories = graphene.List(TokenCategorySpecification, required=True)
-    token_votes = graphene.List(VotesByCategory, required=True)
+    token_categories = graphene.List(TokenCategorySpecification, required=True, description=docs.TokenVoteSpecification.token_categories)
+    token_votes = graphene.List(VotesByCategory, required=True, description=docs.TokenVoteSpecification.token_votes)
 
     def resolve_token_votes(self, args, context, info):
         votes = []
@@ -263,8 +263,8 @@ class GaugeChoiceSpecification(SecureObjectType, SQLAlchemyObjectType):
         interfaces = (Node,)
         only_fields = ('id', 'value')
 
-    label = graphene.String(lang=graphene.String())
-    label_entries = graphene.List(LangStringEntry)
+    label = graphene.String(lang=graphene.String(), description=docs.GaugeChoiceSpecification.label)
+    label_entries = graphene.List(LangStringEntry, description=docs.GaugeChoiceSpecification.label_entries)
 
     def resolve_label(self, args, context, info):
         return resolve_langstring(self.label, args.get('lang'))
@@ -291,9 +291,9 @@ class GaugeVoteSpecification(SecureObjectType, SQLAlchemyObjectType):
         interfaces = (Node, VoteSpecificationInterface)
         only_fields = ('id', )
 
-    choices = graphene.List(GaugeChoiceSpecification)
-    average_label = graphene.String(lang=graphene.String())
-    average_result = graphene.Float(required=True)
+    choices = graphene.List(GaugeChoiceSpecification, description=docs.GaugeVoteSpecification.choices)
+    average_label = graphene.String(lang=graphene.String(), description=docs.GaugeVoteSpecification.average_label)
+    average_result = graphene.Float(required=True, description=docs.GaugeVoteSpecification.average_result)
 
     def resolve_average_label(self, args, context, info):
         avg_choice = get_avg_choice(self)
@@ -320,7 +320,7 @@ class NumberGaugeVoteSpecification(SecureObjectType, SQLAlchemyObjectType):
         interfaces = (Node, VoteSpecificationInterface)
         only_fields = ('id', 'minimum', 'maximum', 'nb_ticks', 'unit')
 
-    average_result = graphene.Float(required=True)
+    average_result = graphene.Float(required=True, description=docs.NumberGaugeVoteSpecification.average_result)
 
     def resolve_average_result(self, args, context, info):
         vote_cls = self.get_vote_class()
@@ -334,6 +334,7 @@ class NumberGaugeVoteSpecification(SecureObjectType, SQLAlchemyObjectType):
 
 
 class VoteSpecificationUnion(SQLAlchemyUnion):
+
     class Meta:
         types = (TokenVoteSpecification, GaugeVoteSpecification, NumberGaugeVoteSpecification)
         model = models.AbstractVoteSpecification
@@ -352,10 +353,10 @@ class VoteSpecificationUnion(SQLAlchemyUnion):
 
 class TokenCategorySpecificationInput(graphene.InputObjectType):
     id = graphene.ID()
-    title_entries = graphene.List(LangStringEntryInput, required=True)
-    total_number = graphene.Int(required=True)
-    typename = graphene.String()
-    color = graphene.String(required=True)
+    title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.TokenCategorySpecificationInput.title_entries)
+    total_number = graphene.Int(required=True, description=docs.TokenCategorySpecificationInput.total_number)
+    typename = graphene.String(description=docs.TokenCategorySpecificationInput.typename)
+    color = graphene.String(required=True, description=docs.TokenCategorySpecificationInput.color)
 
 
 class GaugeChoiceSpecificationInput(graphene.InputObjectType):
@@ -367,14 +368,14 @@ class GaugeChoiceSpecificationInput(graphene.InputObjectType):
 class CreateTokenVoteSpecification(graphene.Mutation):
 
     class Input:
-        vote_session_id = graphene.ID(required=True)
-        proposal_id = graphene.ID()
-        title_entries = graphene.List(LangStringEntryInput, required=True)
-        instructions_entries = graphene.List(LangStringEntryInput, required=True)
-        is_custom = graphene.Boolean()
-        exclusive_categories = graphene.Boolean(required=True)
-        token_categories = graphene.List(TokenCategorySpecificationInput, required=True)
-        vote_spec_template_id = graphene.ID()
+        vote_session_id = graphene.ID(required=True, description=docs.CreateTokenVoteSpecification.vote_session_id)
+        proposal_id = graphene.ID(description=docs.CreateTokenVoteSpecification.proposal_id)
+        title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.CreateTokenVoteSpecification.title_entries)
+        instructions_entries = graphene.List(LangStringEntryInput, required=True, description=docs.CreateTokenVoteSpecification.instructions_entries)
+        is_custom = graphene.Boolean(description=docs.CreateTokenVoteSpecification.is_custom)
+        exclusive_categories = graphene.Boolean(required=True, description=docs.CreateTokenVoteSpecification.exclusive_categories)
+        token_categories = graphene.List(TokenCategorySpecificationInput, required=True, description=docs.CreateTokenVoteSpecification.token_categories)
+        vote_spec_template_id = graphene.ID(description=docs.CreateTokenVoteSpecification.vote_spec_template_id)
 
     vote_specification = graphene.Field(lambda: TokenVoteSpecification)
 
@@ -437,12 +438,12 @@ class CreateTokenVoteSpecification(graphene.Mutation):
 class UpdateTokenVoteSpecification(graphene.Mutation):
 
     class Input:
-        id = graphene.ID(required=True)
-        title_entries = graphene.List(LangStringEntryInput, required=True)
-        instructions_entries = graphene.List(LangStringEntryInput, required=True)
-        is_custom = graphene.Boolean()
-        exclusive_categories = graphene.Boolean(required=True)
-        token_categories = graphene.List(TokenCategorySpecificationInput, required=True)
+        id = graphene.ID(required=True, description=docs.UpdateTokenVoteSpecification.id)
+        title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.UpdateTokenVoteSpecification.title_entries)
+        instructions_entries = graphene.List(LangStringEntryInput, required=True, description=docs.UpdateTokenVoteSpecification.instructions_entries)
+        is_custom = graphene.Boolean(description=docs.UpdateTokenVoteSpecification.is_custom)
+        exclusive_categories = graphene.Boolean(required=True, description=docs.UpdateTokenVoteSpecification.exclusive_categories)
+        token_categories = graphene.List(TokenCategorySpecificationInput, required=True, description=docs.UpdateTokenVoteSpecification.token_categories)
 
     vote_specification = graphene.Field(lambda: TokenVoteSpecification)
 
@@ -495,7 +496,7 @@ class UpdateTokenVoteSpecification(graphene.Mutation):
 
                 # remove token categories that are not in token_categories input
                 for token_category_id in set(existing_token_categories.keys()
-                                       ).difference(updated_token_categories):
+                                             ).difference(updated_token_categories):
                     db.delete(existing_token_categories[token_category_id])
 
             db.flush()
@@ -506,7 +507,7 @@ class UpdateTokenVoteSpecification(graphene.Mutation):
 class DeleteVoteSpecification(graphene.Mutation):
 
     class Input:
-        id = graphene.ID(required=True)
+        id = graphene.ID(required=True, description=docs.DeleteVoteSpecification.id)
 
     success = graphene.Boolean()
 
@@ -535,13 +536,13 @@ class DeleteVoteSpecification(graphene.Mutation):
 class CreateGaugeVoteSpecification(graphene.Mutation):
 
     class Input:
-        vote_session_id = graphene.ID(required=True)
-        proposal_id = graphene.ID()
-        title_entries = graphene.List(LangStringEntryInput, required=True)
-        instructions_entries = graphene.List(LangStringEntryInput, required=True)
-        is_custom = graphene.Boolean()
-        choices = graphene.List(GaugeChoiceSpecificationInput, required=True)
-        vote_spec_template_id = graphene.ID()
+        vote_session_id = graphene.ID(required=True, description=docs.CreateGaugeVoteSpecification.vote_session_id)
+        proposal_id = graphene.ID(description=docs.CreateGaugeVoteSpecification.proposal_id)
+        title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.CreateGaugeVoteSpecification.title_entries)
+        instructions_entries = graphene.List(LangStringEntryInput, required=True, description=docs.CreateGaugeVoteSpecification.instructions_entries)
+        is_custom = graphene.Boolean(description=docs.CreateGaugeVoteSpecification.is_custom)
+        choices = graphene.List(GaugeChoiceSpecificationInput, required=True, description=docs.CreateGaugeVoteSpecification.choices)
+        vote_spec_template_id = graphene.ID(description=docs.CreateGaugeVoteSpecification.vote_spec_template_id)
 
     vote_specification = graphene.Field(lambda: GaugeVoteSpecification)
 
@@ -595,11 +596,11 @@ class CreateGaugeVoteSpecification(graphene.Mutation):
 class UpdateGaugeVoteSpecification(graphene.Mutation):
 
     class Input:
-        id = graphene.ID(required=True)
-        title_entries = graphene.List(LangStringEntryInput, required=True)
-        instructions_entries = graphene.List(LangStringEntryInput, required=True)
-        is_custom = graphene.Boolean()
-        choices = graphene.List(GaugeChoiceSpecificationInput, required=True)
+        id = graphene.ID(required=True, description=docs.UpdateGaugeVoteSpecification.id)
+        title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.UpdateGaugeVoteSpecification.title_entries)
+        instructions_entries = graphene.List(LangStringEntryInput, required=True, description=docs.UpdateGaugeVoteSpecification.instructions_entries)
+        is_custom = graphene.Boolean(description=docs.UpdateGaugeVoteSpecification.is_custom)
+        choices = graphene.List(GaugeChoiceSpecificationInput, required=True, description=docs.UpdateGaugeVoteSpecification.choices)
 
     vote_specification = graphene.Field(lambda: GaugeVoteSpecification)
 
@@ -645,7 +646,7 @@ class UpdateGaugeVoteSpecification(graphene.Mutation):
 
             # remove choices that are not in choices input
             for choice_id in set(existing_choices.keys()
-                                   ).difference(updated_choices):
+                                 ).difference(updated_choices):
                 db.delete(existing_choices[choice_id])
 
             db.flush()
@@ -656,16 +657,16 @@ class UpdateGaugeVoteSpecification(graphene.Mutation):
 class CreateNumberGaugeVoteSpecification(graphene.Mutation):
 
     class Input:
-        vote_session_id = graphene.ID(required=True)
-        proposal_id = graphene.ID()
-        title_entries = graphene.List(LangStringEntryInput, required=True)
-        instructions_entries = graphene.List(LangStringEntryInput, required=True)
-        is_custom = graphene.Boolean()
-        minimum = graphene.Float(required=True)
-        maximum = graphene.Float(required=True)
-        nb_ticks = graphene.Int(required=True)
-        unit = graphene.String(required=True)
-        vote_spec_template_id = graphene.ID()
+        vote_session_id = graphene.ID(required=True, description=docs.CreateNumberGaugeVoteSpecification.vote_session_id)
+        proposal_id = graphene.ID(description=docs.CreateNumberGaugeVoteSpecification.proposal_id)
+        title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.CreateNumberGaugeVoteSpecification.title_entries)
+        instructions_entries = graphene.List(LangStringEntryInput, required=True, description=docs.CreateNumberGaugeVoteSpecification.instructions_entries)
+        is_custom = graphene.Boolean(description=docs.CreateNumberGaugeVoteSpecification.is_custom)
+        minimum = graphene.Float(required=True, description=docs.CreateNumberGaugeVoteSpecification.minimum)
+        maximum = graphene.Float(required=True, description=docs.CreateNumberGaugeVoteSpecification.maximum)
+        nb_ticks = graphene.Int(required=True, description=docs.CreateNumberGaugeVoteSpecification.nb_ticks)
+        unit = graphene.String(required=True, description=docs.CreateNumberGaugeVoteSpecification.unit)
+        vote_spec_template_id = graphene.ID(description=docs.CreateNumberGaugeVoteSpecification.vote_spec_template_id)
 
     vote_specification = graphene.Field(lambda: NumberGaugeVoteSpecification)
 
@@ -714,13 +715,13 @@ class UpdateNumberGaugeVoteSpecification(graphene.Mutation):
 
     class Input:
         id = graphene.ID(required=True)
-        title_entries = graphene.List(LangStringEntryInput, required=True)
-        instructions_entries = graphene.List(LangStringEntryInput, required=True)
-        is_custom = graphene.Boolean()
-        minimum = graphene.Float(required=True)
-        maximum = graphene.Float(required=True)
-        nb_ticks = graphene.Int(required=True)
-        unit = graphene.String(required=True)
+        title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.UpdateNumberGaugeVoteSpecification.title_entries)
+        instructions_entries = graphene.List(LangStringEntryInput, required=True, description=docs.UpdateNumberGaugeVoteSpecification.instructions_entries)
+        is_custom = graphene.Boolean(description=docs.UpdateNumberGaugeVoteSpecification.is_custom)
+        minimum = graphene.Float(required=True, description=docs.UpdateNumberGaugeVoteSpecification.minimum)
+        maximum = graphene.Float(required=True, description=docs.UpdateNumberGaugeVoteSpecification.maximum)
+        nb_ticks = graphene.Int(required=True, description=docs.UpdateNumberGaugeVoteSpecification.nb_ticks)
+        unit = graphene.String(required=True, description=docs.UpdateNumberGaugeVoteSpecification.unit)
 
     vote_specification = graphene.Field(lambda: NumberGaugeVoteSpecification)
 
@@ -754,9 +755,9 @@ class CreateProposal(graphene.Mutation):
 
     class Input:
         vote_session_id = graphene.ID(required=True)
-        title_entries = graphene.List(LangStringEntryInput, required=True)
-        description_entries = graphene.List(LangStringEntryInput, required=True)
-        order = graphene.Float()
+        title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.CreateProposal.title_entries)
+        description_entries = graphene.List(LangStringEntryInput, required=True, description=docs.CreateProposal.description_entries)
+        order = graphene.Float(description=docs.CreateProposal.order)
 
     proposal = graphene.Field(lambda: Idea)
 
@@ -800,9 +801,9 @@ class UpdateProposal(graphene.Mutation):
 
     class Input:
         id = graphene.ID(required=True)
-        title_entries = graphene.List(LangStringEntryInput, required=True)
-        description_entries = graphene.List(LangStringEntryInput, required=True)
-        order = graphene.Float()
+        title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.UpdateProposal.title_entries)
+        description_entries = graphene.List(LangStringEntryInput, required=True, description=docs.UpdateProposal.description_entries)
+        order = graphene.Float(description=docs.UpdateProposal.order)
 
     proposal = graphene.Field(lambda: Idea)
 
@@ -836,7 +837,7 @@ class UpdateProposal(graphene.Mutation):
 class DeleteProposal(graphene.Mutation):
 
     class Input:
-        id = graphene.ID(required=True)
+        id = graphene.ID(required=True, description=docs.DeleteProposal.id)
 
     success = graphene.Boolean()
 

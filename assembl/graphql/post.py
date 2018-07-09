@@ -29,6 +29,7 @@ from .user import AgentProfile
 from .utils import DateTime, abort_transaction_on_exception
 from .synthesis import Synthesis
 from .extract import Extract
+import assembl.graphql.docstrings as docs
 
 
 _ = TranslationStringFactory('assembl')
@@ -39,6 +40,7 @@ PublicationStates = graphene.Enum.from_enum(publication_states_enum)
 
 
 class PostAttachment(SecureObjectType, SQLAlchemyObjectType):
+
     class Meta:
         model = models.PostAttachment
         only_fields = ('id',)
@@ -47,14 +49,14 @@ class PostAttachment(SecureObjectType, SQLAlchemyObjectType):
 
 
 class IdeaContentLink(graphene.ObjectType):
-    idea_id = graphene.Int()
-    post_id = graphene.Int()
-    creator_id = graphene.Int()
-    type = graphene.String(required=True)
-    idea = graphene.Field(lambda: Idea)
-    post = graphene.Field(lambda: Post)
-    creator = graphene.Field(lambda: AgentProfile)
-    creation_date = DateTime()
+    idea_id = graphene.Int(description=docs.IdeaContentLink.idea_id)
+    post_id = graphene.Int(description=docs.IdeaContentLink.post_id)
+    creator_id = graphene.Int(description=docs.IdeaContentLink.creator_id)
+    type = graphene.String(required=True, description=docs.IdeaContentLink.type)
+    idea = graphene.Field(lambda: Idea, description=docs.IdeaContentLink.idea)
+    post = graphene.Field(lambda: Post, description=docs.IdeaContentLink.post)
+    creator = graphene.Field(lambda: AgentProfile, description=docs.IdeaContentLink.creator)
+    creation_date = DateTime(description=docs.IdeaContentLink.creation_date)
 
     def resolve_idea(self, args, context, info):
         if self.idea_id is not None:
@@ -73,39 +75,40 @@ class IdeaContentLink(graphene.ObjectType):
 
 
 class PostInterface(SQLAlchemyInterface):
+
     class Meta:
         model = models.Post
         only_fields = ('creator', 'message_classifier')
         # Don't add id in only_fields in an interface or the the id of Post
         # will be just the primary key, not the base64 type:id
 
-    creation_date = DateTime()
-    modification_date = DateTime()
-    subject = graphene.String(lang=graphene.String())
-    body = graphene.String(lang=graphene.String())
-    subject_entries = graphene.List(LangStringEntry, lang=graphene.String())
-    body_entries = graphene.List(LangStringEntry, lang=graphene.String())
-    sentiment_counts = graphene.Field(SentimentCounts)
-    my_sentiment = graphene.Field(type=SentimentTypes)
-    indirect_idea_content_links = graphene.List(IdeaContentLink)
-    extracts = graphene.List(Extract)
-    parent_id = graphene.ID()
-    db_id = graphene.Int()
-    body_mime_type = graphene.String(required=True)
-    publication_state = graphene.Field(type=PublicationStates)
-    attachments = graphene.List(PostAttachment)
-    original_locale = graphene.String()
-    publishes_synthesis = graphene.Field(lambda: Synthesis)
+    creation_date = DateTime(description=docs.PostInterface.creation_date)
+    modification_date = DateTime(description=docs.PostInterface.modification_date)
+    subject = graphene.String(lang=graphene.String(), description=docs.PostInterface.subject)
+    body = graphene.String(lang=graphene.String(), description=docs.PostInterface.body)
+    subject_entries = graphene.List(LangStringEntry, lang=graphene.String(), description=docs.PostInterface.subject_entries)
+    body_entries = graphene.List(LangStringEntry, lang=graphene.String(), description=docs.PostInterface.body_entries)
+    sentiment_counts = graphene.Field(SentimentCounts, description=docs.PostInterface.sentiment_counts)
+    my_sentiment = graphene.Field(type=SentimentTypes, description=docs.PostInterface.my_sentiment)
+    indirect_idea_content_links = graphene.List(IdeaContentLink, description=docs.PostInterface.indirect_idea_content_links)
+    extracts = graphene.List(Extract, description=docs.PostInterface.extracts)
+    parent_id = graphene.ID(description=docs.PostInterface.parent_id)
+    db_id = graphene.Int(description=docs.PostInterface.db_id)
+    body_mime_type = graphene.String(required=True, description=docs.PostInterface.body_mime_type)
+    publication_state = graphene.Field(type=PublicationStates, description=docs.PostInterface.publication_state)
+    attachments = graphene.List(PostAttachment, description=docs.PostInterface.attachments)
+    original_locale = graphene.String(description=docs.PostInterface.original_locale)
+    publishes_synthesis = graphene.Field(lambda: Synthesis, description=docs.PostInterface.publishes_synthesis)
 
     def resolve_db_id(self, args, context, info):
         return self.id
 
     def resolve_extracts(self, args, context, info):
         return self.db.query(models.Extract
-            ).join(models.Content, models.Extract.content == self
-            ).options(joinedload(models.Extract.text_fragment_identifiers)
-            ).order_by(models.Extract.creation_date
-            ).all()
+                             ).join(models.Content, models.Extract.content == self
+                                    ).options(joinedload(models.Extract.text_fragment_identifiers)
+                                              ).order_by(models.Extract.creation_date
+                                                         ).all()
 
     def resolve_subject(self, args, context, info):
         # Use self.subject and not self.get_subject() because we still
@@ -217,6 +220,7 @@ class PostInterface(SQLAlchemyInterface):
 
 
 class Post(SecureObjectType, SQLAlchemyObjectType):
+
     class Meta:
         model = models.Content
         # This matches models.Post and models.ColumnSynthesisPost which
@@ -226,20 +230,22 @@ class Post(SecureObjectType, SQLAlchemyObjectType):
 
 
 class PostConnection(graphene.Connection):
+
     class Meta:
         node = Post
 
 
 class CreatePost(graphene.Mutation):
+
     class Input:
-        subject = graphene.String()
-        body = graphene.String(required=True)
-        idea_id = graphene.ID(required=True)
+        subject = graphene.String(description=docs.CreatePost.subject)
+        body = graphene.String(required=True, description=docs.CreatePost.body)
+        idea_id = graphene.ID(required=True, description=docs.CreatePost.idea_id)
         # A Post (except proposals in survey phase) can reply to another post.
         # See related code in views/api/post.py
-        parent_id = graphene.ID()
-        attachments = graphene.List(graphene.String)
-        message_classifier = graphene.String()
+        parent_id = graphene.ID(description=docs.CreatePost.parent_id)
+        attachments = graphene.List(graphene.String, description=docs.CreatePost.attachments)
+        message_classifier = graphene.String(description=docs.CreatePost.message_classifier)
 
     post = graphene.Field(lambda: Post)
 
@@ -374,11 +380,12 @@ class CreatePost(graphene.Mutation):
 
 
 class UpdatePost(graphene.Mutation):
+
     class Input:
-        post_id = graphene.ID(required=True)
-        subject = graphene.String()
-        body = graphene.String(required=True)
-        attachments = graphene.List(graphene.String)
+        post_id = graphene.ID(required=True, description=docs.UpdatePost.post_id)
+        subject = graphene.String(description=docs.UpdatePost.subject)
+        body = graphene.String(required=True, description=docs.UpdatePost.body)
+        attachments = graphene.List(graphene.String, description=docs.UpdatePost.attachments)
 
     post = graphene.Field(lambda: Post)
 
@@ -475,8 +482,9 @@ class UpdatePost(graphene.Mutation):
 
 
 class DeletePost(graphene.Mutation):
+
     class Input:
-        post_id = graphene.ID(required=True)
+        post_id = graphene.ID(required=True, description=docs.DeletePost.post_id)
 
     post = graphene.Field(lambda: Post)
 
@@ -513,8 +521,9 @@ class DeletePost(graphene.Mutation):
 
 
 class UndeletePost(graphene.Mutation):
+
     class Input:
-        post_id = graphene.ID(required=True)
+        post_id = graphene.ID(required=True, description=docs.UndeletePost.post_id)
 
     post = graphene.Field(lambda: Post)
 
@@ -537,10 +546,11 @@ class UndeletePost(graphene.Mutation):
 
 
 class AddPostAttachment(graphene.Mutation):
+
     class Input:
-        post_id = graphene.ID(required=True)
+        post_id = graphene.ID(required=True, description=docs.AddPostAttachment.post_id)
         file = graphene.String(
-            required=True
+            required=True, description=docs.AddPostAttachment.file
         )
 
     post = graphene.Field(lambda: Post)
@@ -591,9 +601,10 @@ class AddPostAttachment(graphene.Mutation):
 
 
 class DeletePostAttachment(graphene.Mutation):
+
     class Input:
-        post_id = graphene.ID(required=True)
-        attachment_id = graphene.Int(required=True)
+        post_id = graphene.ID(required=True, description=docs.DeletePostAttachment.post_id)
+        attachment_id = graphene.Int(required=True, description=docs.DeletePostAttachment.attachment_id)
 
     post = graphene.Field(lambda: Post)
 
@@ -625,14 +636,15 @@ class DeletePostAttachment(graphene.Mutation):
 
 
 class AddPostExtract(graphene.Mutation):
+
     class Input:
-        post_id = graphene.ID(required=True)
-        body = graphene.String(required=True)
-        important = graphene.Boolean()
-        xpath_start = graphene.String(required=True)
-        xpath_end = graphene.String(required=True)
-        offset_start = graphene.Int(required=True)
-        offset_end = graphene.Int(required=True)
+        post_id = graphene.ID(required=True, description=docs.AddPostExtract.post_id)
+        body = graphene.String(required=True, description=docs.AddPostExtract.body)
+        important = graphene.Boolean(description=docs.AddPostExtract.important)
+        xpath_start = graphene.String(required=True, description=docs.AddPostExtract.xpath_start)
+        xpath_end = graphene.String(required=True, description=docs.AddPostExtract.xpath_end)
+        offset_start = graphene.Int(required=True, description=docs.AddPostExtract.offset_start)
+        offset_end = graphene.Int(required=True, description=docs.AddPostExtract.offset_end)
 
     post = graphene.Field(lambda: Post)
 
