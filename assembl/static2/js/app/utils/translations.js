@@ -485,7 +485,7 @@ const Translations = {
         singleModule: "Module unique de participation",
         selectStart: "Date de démarrage de la phase %{count}",
         selectEnd: "Date de fin de la phase %{count}",
-        warningLabel: "Les dates que vous configuré entrent en conflit."
+        warningLabel: "Les dates que vous avez configuré entrent en conflit."
       },
       modules: {
         survey: "Module Questions",
