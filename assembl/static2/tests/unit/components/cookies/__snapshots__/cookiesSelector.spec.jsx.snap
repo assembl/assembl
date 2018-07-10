@@ -10,13 +10,103 @@ exports[`CookiesSelector component should render a list of cookieToggle componen
       onClick={[Function]}
     >
       <span
+        className="assembl-icon-right-dir active-arrow"
+      />
+      <span
+        className="dark-title-4"
+        style={undefined}
+      >
+        Essential
+      </span>
+    </div>
+    <div
+      className="cookies-toggles"
+    >
+      <div
+        className="cookie-toggle"
+      >
+        <span
+          className="cookie-title dark-title-3 ellipsis"
+        >
+          User Session
+        </span>
+        <div
+          className="rsbc-switch-button rsbc-mode-switch rsbc-switch-button-flat-round disabled"
+        >
+          <label
+            htmlFor="userSession"
+          >
+            Refuse
+          </label>
+          <input
+            checked={false}
+            disabled={true}
+            id="userSession"
+            name="userSession"
+            onChange={[Function]}
+            type="checkbox"
+            value="1"
+          />
+          <label
+            htmlFor="userSession"
+          />
+          <label
+            htmlFor="userSession"
+          >
+            Accept
+          </label>
+        </div>
+      </div>
+      <div
+        className="cookie-toggle"
+      >
+        <span
+          className="cookie-title dark-title-3 ellipsis"
+        >
+          Locale language
+        </span>
+        <div
+          className="rsbc-switch-button rsbc-mode-switch rsbc-switch-button-flat-round disabled"
+        >
+          <label
+            htmlFor="locale"
+          >
+            Refuse
+          </label>
+          <input
+            checked={false}
+            disabled={true}
+            id="locale"
+            name="locale"
+            onChange={[Function]}
+            type="checkbox"
+            value="1"
+          />
+          <label
+            htmlFor="locale"
+          />
+          <label
+            htmlFor="locale"
+          >
+            Accept
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div
+      className="cookies-category-selector"
+      onClick={[Function]}
+    >
+      <span
         className="assembl-icon-right-dir"
       />
       <span
         className="dark-title-4"
         style={undefined}
       >
-        Autre
+        Analytique et personnalisation
       </span>
     </div>
     <div
