@@ -3,7 +3,7 @@ import React from 'react';
 class DeFlag extends React.Component {
   render() {
     return (
-      <svg x="0px" y="0px" viewBox="0 0 512 512" style={{ enableBackground: 'new 0 0 512 512' }}>
+      <svg width="20px" height="20px" x="0px" y="0px" viewBox="0 0 512 512" style={{ enableBackground: 'new 0 0 512 512' }}>
         <path
           style={{ fill: '#FFDA44' }}
           d="M15.923,345.043C52.094,442.527,145.929,512,256,512s203.906-69.473,240.077-166.957L256,

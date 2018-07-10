@@ -1,6 +1,7 @@
 /* eslint react/no-multi-comp: "off" */
 
 import React from 'react';
+import debounce from 'lodash/debounce';
 import { AutoSizer, CellMeasurer, CellMeasurerCache, List, WindowScroller } from 'react-virtualized';
 import { scrollToPost } from '../../utils/hashLinkScroll';
 import NuggetsManager from './nuggetsManager';
@@ -16,18 +17,49 @@ class Child extends React.PureComponent {
     this.expandCollapse = this.expandCollapse.bind(this);
     this.resizeTreeHeight = this.resizeTreeHeight.bind(this);
     this.scrollToElement = this.scrollToElement.bind(this);
-    this.state = { expanded: true };
+    this.state = {
+      expanded: true,
+      visible: false
+    };
+  }
+
+  componentDidMount() {
+    this.onScroll();
+    window.addEventListener('scroll', this.onScroll);
+    window.addEventListener('resize', this.onScroll);
+  }
+
+  componentWillUnmount() {
+    this.stopListening();
+  }
+
+  onScroll = debounce(() => {
+    const holder = this.holder;
+    if (!holder) {
+      return;
+    }
+    const box = holder.getBoundingClientRect();
+    const pageYOffset = window.pageYOffset;
+    const top = box.top + pageYOffset;
+    // visible if the top of the box is in viewport or next page
+    const isVisible = top < pageYOffset + 2 * window.innerHeight && top > pageYOffset;
+    if (isVisible) {
+      this.setState(() => ({
+        visible: true
+      }));
+      this.stopListening();
+    }
+  }, 100);
+
+  stopListening() {
+    window.removeEventListener('scroll', this.onScroll);
+    window.removeEventListener('resize', this.onScroll);
   }
 
   resizeTreeHeight(delay = 0) {
     // This function will be called by each post rendered, so we delay the
     // recomputation until no post are rendered in 200ms to avoid unnecessary lag.
     const { listRef, cache, rowIndex, nuggetsManager } = this.props;
-    // In Firefox (tested on version 59), recomputing row heights can jump back the page scroll
-    // to the same post (The scrollTop from the Grid component is fine.),
-    // potentially a post with a youtube video, but may be a coincidence.
-    // Saving pageYOffset and restoring it after recomputeRowHeights fixes the issue.
-    const pageYOffset = window.pageYOffset;
     cache.clear(rowIndex, 0);
     if (listRef) {
       let delayedRecomputeRowHeights = listRef.delayedRecomputeRowHeights;
@@ -42,6 +74,11 @@ class Child extends React.PureComponent {
       delayedRecomputeRowHeights[0] = setTimeout(() => {
         // if listRef.Grid is null, it means it has been unmounted, so we are now on a new List
         if (listRef.Grid) {
+          // In Firefox (tested on version 59), recomputing row heights can jump back the page scroll
+          // to the same post (The scrollTop from the Grid component is fine.),
+          // potentially a post with a youtube video, but may be a coincidence.
+          // Saving pageYOffset and restoring it after recomputeRowHeights fixes the issue.
+          const pageYOffset = window.pageYOffset;
           listRef.recomputeRowHeights(delayedRecomputeRowHeights[1]);
           window.scrollTo({ top: pageYOffset, left: 0 });
           nuggetsManager.update();
@@ -131,9 +168,34 @@ class Child extends React.PureComponent {
       numChildren: numChildren
     };
     delete forwardProps.children;
+    // InnerComponent, the post, is only rendered when the Child appears in the viewport or next page
+    const { hash } = window.location;
+    let visible = this.state.visible;
+    // load right away the shared post
+    let hashid;
+    if (hash !== '') {
+      hashid = hash.replace('#', '').split('?')[0];
+      if (hashid === id) {
+        visible = true;
+      }
+    }
+
     return (
-      <div className={cssClasses()} id={id}>
-        <InnerComponent {...forwardProps} measureTreeHeight={this.resizeTreeHeight} />
+      <div
+        className={cssClasses()}
+        id={id}
+        ref={(el) => {
+          this.holder = el;
+          if (el && hashid === id) {
+            scrollToPost(el, false);
+          }
+        }}
+      >
+        {visible ? (
+          <InnerComponent {...forwardProps} measureTreeHeight={this.resizeTreeHeight} />
+        ) : (
+          <div style={{ height: 0.5 * window.innerHeight }} />
+        )}
         {numChildren > 0 ? this.renderToggleLink(expanded, level < 4) : null}
         {numChildren > 0
           ? children.map((child, idx) => {

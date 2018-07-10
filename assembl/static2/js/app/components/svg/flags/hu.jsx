@@ -3,7 +3,7 @@ import React from 'react';
 class HuFlag extends React.Component {
   render() {
     return (
-      <svg x="0px" y="0px" viewBox="0 0 512 512" style={{ enableBackground: 'new 0 0 512 512' }}>
+      <svg width="20px" height="20px" x="0px" y="0px" viewBox="0 0 512 512" style={{ enableBackground: 'new 0 0 512 512' }}>
         <path
           style={{ fill: '#F0F0F0' }}
           d="M15.923,166.957C5.633,194.691,0,224.686,0,256s5.633,61.311,15.923,89.043L256,367.304

@@ -3,7 +3,7 @@ import React from 'react';
 class PtFlag extends React.Component {
   render() {
     return (
-      <svg x="0px" y="0px" viewBox="0 0 512 512" style={{ enableBackground: 'new 0 0 512 512' }}>
+      <svg width="20px" height="20px" x="0px" y="0px" viewBox="0 0 512 512" style={{ enableBackground: 'new 0 0 512 512' }}>
         <path
           style={{ fill: '#6DA544' }}
           d="M0,256c0,110.07,69.472,203.905,166.955,240.076l22.262-240.077L166.955,15.923
