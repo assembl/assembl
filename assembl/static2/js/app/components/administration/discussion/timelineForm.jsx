@@ -76,7 +76,12 @@ export class DumbTimelineForm extends React.Component<TimelineFormProps, Timelin
                   />
                 ))}
               <OverlayTrigger placement="top" overlay={addPhaseTooltip}>
-                <div onClick={() => { handleCreatePhase(phases.length); }} className="plus margin-s">
+                <div
+                  onClick={() => {
+                    handleCreatePhase(phases.length);
+                  }}
+                  className="plus margin-s"
+                >
                   +
                 </div>
               </OverlayTrigger>
@@ -129,7 +134,7 @@ export class DumbTimelineForm extends React.Component<TimelineFormProps, Timelin
 const mapStateToProps = (state) => {
   const { phasesById } = state.admin.timeline;
   const filteredPhases = phasesById.sortBy(phase => phase.get('order')).filter(phase => !phase.get('_toDelete'));
-  const filteredPhasesId = Object.keys(filteredPhases.toJS());
+  const filteredPhasesId = filteredPhases.keySeq().toJS();
   return {
     editLocale: state.admin.editLocale,
     lang: state.i18n.locale,
