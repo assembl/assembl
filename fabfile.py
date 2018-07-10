@@ -2229,7 +2229,8 @@ def run_db_command(command, user=None, *args, **kwargs):
 
 @task
 def build_doc():
-    """Build the Sphinx documentation"""
+    """Build the Sphinx documentation for the backend (and front-end) as well as build GraphQL documentation"""
+    execute(generate_graphql_documentation)
     with cd(env.projectpath):
         run('rm -rf doc/autodoc doc/jsdoc')
         venvcmd('./assembl/static/js/node_modules/.bin/jsdoc -t ./assembl/static/js/node_modules/jsdoc-rst-template/template/ --recurse assembl/static/js/app -d ./doc/jsdoc/')
@@ -2289,3 +2290,11 @@ def increase_socket_buffer_size(size=1028):
     # This number was picked based on live servers. Increase when needed
     # This must also be accompanied with an increase of the uwsgi conenction listen field in the ini file
     sudo('sysctl -w net.core.somaxconn=%s' % size)
+
+
+@task
+def generate_graphql_documentation():
+    """Generate HTML documentation page based on a GraphQL Schema file (genereated)"""
+    venvcmd('assembl-graphql-schema-json local.ini')
+    with cd(env.projectpath + "/assembl/static2"):
+        venvcmd("npm run documentation", chdir=False)

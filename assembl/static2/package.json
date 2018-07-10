@@ -22,7 +22,8 @@
     "format": "prettier-eslint --write 'js/**/*.js?' 'tests/**/*.js?' '*.js'",
     "i18n:export": "node ./scripts/translations2messages.js && rip json2pot messages.json -k id -o ../locale/assembl-v2.pot && ./scripts/merge_po_files.bash",
     "i18n:import": "rip po2json '../locale/assembl-v2/*.po' -m messages.json -k id -o './translations'",
-    "storybook": "start-storybook -p 9001 -c .storybook"
+    "storybook": "start-storybook -p 9001 -c .storybook",
+    "documentation": "graphdoc -s /tmp/schema.json -o ./graphql-documentation"
   },
   "author": "Bluenove",
   "license": "AGPL-3.0",
@@ -76,6 +77,7 @@
     "webpack-dev-server": "^2.7.1"
   },
   "dependencies": {
+    "@2fd/graphdoc": "^2.4.0",
     "apollo-upload-client": "^5.1.1",
     "babel-polyfill": "^6.26.0",
     "babel-preset-flow": "^6.23.0",
