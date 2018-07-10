@@ -458,9 +458,14 @@ class Mutations(graphene.ObjectType):
 Schema = graphene.Schema(query=Query, mutation=Mutations)
 
 
-def generate_schema_json_from_schema(schema, output='/tmp/schema.json'):
+def generate_schema_json_from_schema(schema, output='/tmp/schema.json', spec_wrap=False):
     import json
     schema_dict = schema.introspect()
+    if spec_wrap:
+        # According to graphql specifications, the output of a query, including the introspection query,
+        # should be wrapped in either "data" or "error".
+        # https://graphql.org/learn/introspection/
+        schema_dict = {u'data': schema_dict, u"error": None}
     with open(output, 'w') as outfile:
         json.dump(schema_dict, outfile, indent=2)
 
