@@ -374,7 +374,10 @@ const mapStateToProps: MapStateToProps<ReduxState, *, *> = ({
     legalContentsHaveChanged: legalContents.get('_hasChanged'),
     profileOptionsHasChanged: profileOptionsHasChanged,
     textFields: textFields,
-    phases: Object.values(phasesById.sortBy(phase => phase.get('order')).toJS()),
+    phases: phasesById
+      .sortBy(phase => phase.get('order'))
+      .valueSeq()
+      .toJS(),
     phasesHaveChanged: phasesHaveChanged
   };
 };
