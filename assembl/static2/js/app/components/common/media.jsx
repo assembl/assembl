@@ -34,8 +34,6 @@ class Media extends React.Component {
 
   static Content = ({ htmlCode, mediaFile }) => {
     const isLocal = !htmlCode && mediaFile && mediaFile.externalUrl;
-    console.log(isLocal, htmlCode, mediaFile);
-
     const component = isLocal ? (
       <Image responsive src={mediaFile.externalUrl} />
     ) : (

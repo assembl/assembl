@@ -28,6 +28,7 @@ import Administration from './pages/administration';
 import UnauthorizedAdministration from './pages/unauthorizedAdministration';
 import ResourcesCenterAdmin from './pages/resourcesCenterAdmin';
 import SurveyAdmin from './pages/surveyAdmin';
+import SurveyAdminRFF from './pages/surveyAdminRFF';
 import ThreadAdmin from './pages/threadAdmin';
 import DiscussionAdmin from './pages/discussionAdmin';
 import MultiColumnsAdmin from './pages/multiColumnsAdmin';
@@ -73,6 +74,8 @@ const AdminChild = (props) => {
     return <DiscussionAdmin {...props} section={props.location.query.section} />;
   case 'survey':
     return <SurveyAdmin {...props} thematicId={props.location.query.thematic} section={props.location.query.section} />;
+  case 'surveyrff':
+    return <SurveyAdminRFF {...props} thematicId={props.location.query.thematic} section={props.location.query.section} />;
   case 'thread':
     return <ThreadAdmin {...props} section={props.location.query.section} />;
   case 'multiColumn':
