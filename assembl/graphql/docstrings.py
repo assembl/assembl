@@ -46,7 +46,7 @@ class Schema:
 
 
 class Discussion:
-    __docs__ = """The Discussion object. This object describes certain parts of the core state of the debate."""
+    __doc__ = """The Discussion object. This object describes certain parts of the core state of the debate."""
     id = Default.object_id % ("Discussion",)
     homepage_url = """A URL for the homepage (optional). Often placed on the logo."""
     title = """The title of the discussion, in the language specified by the input"""

@@ -41,17 +41,12 @@ class LandingPageModule(SecureObjectType, SQLAlchemyObjectType):
         interfaces = (Node, )
         only_fields = ('id', 'enabled', 'order', 'configuration')
 
-<<<<<<< HEAD
-    module_type = graphene.Field(LandingPageModuleType)
-    exists_in_database = graphene.Boolean()
+    module_type = graphene.Field(LandingPageModuleType, description=docs.LandingPageModule.module_type)
+    exists_in_database = graphene.Boolean(description=docs.LandingPageModule.exists_in_database)
     title = graphene.String(lang=graphene.String())
     title_entries = graphene.List(LangStringEntry)
     subtitle = graphene.String(lang=graphene.String())
     subtitle_entries = graphene.List(LangStringEntry)
-=======
-    module_type = graphene.Field(LandingPageModuleType, description=docs.LandingPageModule.module_type)
-    exists_in_database = graphene.Boolean(description=docs.LandingPageModule.exists_in_database)
->>>>>>> Update landing page docstrings
 
     def resolve_exists_in_database(self, args, context, info):
         return self.id > 0
