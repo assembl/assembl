@@ -3,7 +3,7 @@ import React from 'react';
 class RoFlag extends React.Component {
   render() {
     return (
-      <svg x="0px" y="0px" viewBox="0 0 512 512" style={{ enableBackground: 'new 0 0 512 512' }}>
+      <svg width="20px" height="20px" x="0px" y="0px" viewBox="0 0 512 512" style={{ enableBackground: 'new 0 0 512 512' }}>
         <path
           style={{ fill: '#FFDA44' }}
           d="M345.043,15.922C317.309,5.633,287.314,0,256,0c-31.314-0.001-61.31,5.633-89.043,15.922

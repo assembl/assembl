@@ -3,7 +3,7 @@ import React from 'react';
 class EsFlag extends React.Component {
   render() {
     return (
-      <svg x="0px" y="0px" viewBox="0 0 512 512" style={{ enableBackground: 'new 0 0 512 512' }}>
+      <svg width="20px" height="20px" x="0px" y="0px" viewBox="0 0 512 512" style={{ enableBackground: 'new 0 0 512 512' }}>
         <path
           style={{ fill: '#FFDA44' }}
           d="M0,256c0,31.314,5.633,61.31,15.923,89.043L256,367.304l240.077-22.261

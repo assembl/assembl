@@ -88,9 +88,9 @@ export class DumbPost extends React.PureComponent<DefaultProps, Props, State> {
     if (hash !== '') {
       const id = hash.replace('#', '').split('?')[0];
       if (id === postId) {
-        // Wait an extra 1s to be sure that all previous posts are loaded
+        // Wait an extra 2s to be sure that all previous posts are loaded
         // and measureTreeHeight finished.
-        setTimeout(hashLinkScroll, 1000);
+        setTimeout(hashLinkScroll, 2000);
       }
     }
   }

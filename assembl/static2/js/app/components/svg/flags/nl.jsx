@@ -3,7 +3,7 @@ import React from 'react';
 class NlFlag extends React.Component {
   render() {
     return (
-      <svg x="0px" y="0px" viewBox="0 0 512 512" style={{ enableBackground: 'new 0 0 512 512' }}>
+      <svg width="20px" height="20px" x="0px" y="0px" viewBox="0 0 512 512" style={{ enableBackground: 'new 0 0 512 512' }}>
         <circle style={{ fill: '#F0F0F0' }} cx="256" cy="256" r="256" />
         <path
           style={{ fill: '#A2001D' }}
