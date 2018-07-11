@@ -47,7 +47,7 @@ const DumbSurveyAdminForm = ({ client, currentStep, debateId, editLocale, locale
           </form>
         </div>
         {!isNaN(currentStep) && (
-          <Navbar currentStep={currentStep} totalSteps={3} phaseIdentifier="surveyrff" beforeChangeSection={handleSubmit} />
+          <Navbar currentStep={currentStep} totalSteps={3} phaseIdentifier="survey" beforeChangeSection={handleSubmit} />
         )}
       </React.Fragment>
     )}
