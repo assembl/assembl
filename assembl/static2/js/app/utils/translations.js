@@ -50,7 +50,7 @@ const Translations = {
     },
     cookies: {
       userSession: "Session utilisateur",
-      locale: "Langue locale",
+      locale: "Langue",
       piwik: "Piwik"
     },
     search: {
@@ -464,7 +464,7 @@ const Translations = {
       headerTitle: "Information sur les cookies",
       essential: "Essentiel",
       analytics: "Analytics and customization",
-      other: "Other"
+      other: "Autre"
     },
     privacyPolicy: {
       headerTitle: "Politique de protection des données personnelles"
@@ -862,7 +862,7 @@ const Translations = {
     },
     cookies: {
       userSession: "User Session",
-      locale: "Locale language",
+      locale: "Language",
       piwik: "Piwik"
     },
     search: {
@@ -1275,7 +1275,7 @@ const Translations = {
       headerTitle: "Cookies",
       essential: "Essential",
       analytics: "Analytique et personnalisation",
-      other: "Autre"
+      other: "Other"
     },
     privacyPolicy: {
       headerTitle: "Privacy policy"
