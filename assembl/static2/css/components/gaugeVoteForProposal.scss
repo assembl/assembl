@@ -56,5 +56,11 @@
     svg.pointer {
       fill: $first-color;
     }
+
+    .rc-slider-handle.no-value {
+      svg.pointer {
+        fill: $grey5;
+      }
+    }
   }
 }

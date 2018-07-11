@@ -1,8 +1,10 @@
 // @flow
 /* eslint-disable react/no-multi-comp */
 import * as React from 'react';
+import { Button } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
 import Slider from 'rc-slider';
+
 import Pointer from '../svg/pointer';
 
 type Choice = {|
@@ -81,9 +83,9 @@ const handleIcon = (props) => {
     marginTop: '-15px',
     cursor: '-webkit-grab'
   };
+
   if (value === null) {
-    style.color = 'grey';
-    style.marginTop = '-30px';
+    restProps.className += ' no-value';
   }
 
   return (
@@ -94,8 +96,6 @@ const handleIcon = (props) => {
 };
 
 class GaugeVoteForProposal extends React.Component<GaugeVoteForProposalProps, GaugeVoteForProposalState> {
-  onAfterChange: Function;
-
   marks: Object;
 
   maximum: ?number;
@@ -106,8 +106,6 @@ class GaugeVoteForProposal extends React.Component<GaugeVoteForProposalProps, Ga
 
   constructor(props: GaugeVoteForProposalProps) {
     super(props);
-    this.onAfterChange = this.onAfterChange.bind(this);
-
     this.marks = {};
     this.maximum = null;
     this.minimum = null;
@@ -138,14 +136,19 @@ class GaugeVoteForProposal extends React.Component<GaugeVoteForProposalProps, Ga
     }
   }
 
-  onAfterChange(value: number) {
-    if (this.props.voteForProposal) {
-      this.props.voteForProposal(this.props.proposalId, this.props.id, value);
+  handleChange = (value: ?number) => {
+    const { id, proposalId, voteForProposal } = this.props;
+    if (voteForProposal) {
+      voteForProposal(proposalId, id, value);
     }
-  }
+  };
+
+  reset = () => {
+    this.handleChange(null);
+  };
 
   render() {
-    const { instructions, disabled } = this.props;
+    const { instructions, disabled, value } = this.props;
     return (
       <div className="gauge-vote-for-proposal">
         {instructions ? <p>{instructions}</p> : null}
@@ -160,9 +163,12 @@ class GaugeVoteForProposal extends React.Component<GaugeVoteForProposalProps, Ga
           railStyle={railStyle}
           handleStyle={handleStyle}
           handle={handleIcon}
-          value={this.props.value}
-          onChange={this.onAfterChange}
+          onChange={this.handleChange}
+          value={value}
         />
+        <Button onClick={this.reset}>
+          <span className="assembl-icon-delete grey" />
+        </Button>
       </div>
     );
   }
@@ -182,8 +188,6 @@ type NumberGaugeVoteForProposalProps = {
 };
 
 class NumberGaugeVoteForProposal extends React.Component<NumberGaugeVoteForProposalProps, NumberGaugeVoteForProposalState> {
-  onAfterChange: Function;
-
   marks: Object;
 
   maximum: ?number;
@@ -196,9 +200,6 @@ class NumberGaugeVoteForProposal extends React.Component<NumberGaugeVoteForPropo
 
   constructor(props: NumberGaugeVoteForProposalProps) {
     super(props);
-    this.state = { value: this.props.value };
-    this.onAfterChange = this.onAfterChange.bind(this);
-
     this.marks = {};
     this.inputElement = null;
     this.step = null;
@@ -250,24 +251,26 @@ class NumberGaugeVoteForProposal extends React.Component<NumberGaugeVoteForPropo
     }
   }
 
-  onAfterChange(value: ?number) {
-    this.setState({
-      value: value
-    });
-    if (this.props.voteForProposal) {
-      this.props.voteForProposal(this.props.proposalId, this.props.id, value);
+  handleChange = (value: ?number) => {
+    const { id, proposalId, voteForProposal } = this.props;
+    if (voteForProposal) {
+      voteForProposal(proposalId, id, value);
     }
-  }
+  };
+
+  reset = () => {
+    this.handleChange(null);
+  };
 
   render() {
-    const { instructions, disabled } = this.props;
+    const { disabled, instructions, maximum, minimum, value } = this.props;
     return (
       <div className="number-gauge-vote-for-proposal">
         {instructions ? <p>{instructions}</p> : null}
         <Slider
           disabled={disabled}
-          min={this.props.minimum}
-          max={this.props.maximum}
+          min={minimum}
+          max={maximum}
           marks={this.marks}
           step={this.step}
           included={false}
@@ -275,9 +278,12 @@ class NumberGaugeVoteForProposal extends React.Component<NumberGaugeVoteForPropo
           railStyle={railStyle}
           handleStyle={handleStyle}
           handle={handleIcon}
-          defaultValue={this.state.value}
-          onAfterChange={this.onAfterChange}
+          onChange={this.handleChange}
+          value={value}
         />
+        <Button onClick={this.reset}>
+          <span className="assembl-icon-delete grey" />
+        </Button>
       </div>
     );
   }

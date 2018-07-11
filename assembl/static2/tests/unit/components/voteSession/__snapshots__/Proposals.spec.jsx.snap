@@ -1659,11 +1659,16 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               className="rc-slider-mark"
             />
           </div>
-          <input
-            name="vote-for-proposal-proposal-2-vote-specification-text-gauge-module"
-            type="hidden"
-            value={0}
-          />
+          <button
+            className="btn btn-default"
+            disabled={false}
+            onClick={[Function]}
+            type="button"
+          >
+            <span
+              className="assembl-icon-delete grey"
+            />
+          </button>
         </div>
       </div>
     </div>
