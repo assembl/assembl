@@ -51,19 +51,21 @@ setup(name='assembl',
       install_requires=requires,
       tests_require=tests_require,
       extras_require=dict(test=tests_require),
-      entry_points="""\
-      [paste.app_factory]
-      main = assembl:main
-      maintenance = assembl.maintenance:main
-      [console_scripts]
-      assembl-db-manage = assembl.scripts.db_manage:main
-      assembl-ini-files = assembl.scripts.ini_files:main
-      assembl-imap-test = assembl.scripts.imap_test:main
-      assembl-add-user  = assembl.scripts.add_user:main
-      assembl-pypsql  = assembl.scripts.pypsql:main
-      assembl-pshell  = assembl.scripts.pshell:main
-      assembl-pserve   = assembl.scripts.pserve:main
-      assembl-reindex-all-contents  = assembl.scripts.reindex_all_contents:main
-      assembl-graphql-schema-json = assembl.scripts.export_graphql_schema:main
-      """,
+      entry_points={
+          "console_scripts": [
+              "assembl-db-manage = assembl.scripts.db_manage:main",
+              "assembl-ini-files = assembl.scripts.ini_files:main",
+              "assembl-imap-test = assembl.scripts.imap_test:main",
+              "assembl-add-user  = assembl.scripts.add_user:main",
+              "assembl-pypsql  = assembl.scripts.pypsql:main",
+              "assembl-pshell  = assembl.scripts.pshell:main",
+              "assembl-pserve   = assembl.scripts.pserve:main",
+              "assembl-reindex-all-contents  = assembl.scripts.reindex_all_contents:main",
+              "assembl-graphql-schema-json = assembl.scripts.export_graphql_schema:main"
+          ],
+          "paste.app_factory": [
+              "main = assembl:main",
+              "maintenance = assembl.maintenance:main"
+          ],
+      }
       )
