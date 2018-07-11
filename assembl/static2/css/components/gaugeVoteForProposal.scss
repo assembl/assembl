@@ -4,7 +4,8 @@
   }
 }
 
-.gauge-vote-for-proposal, .number-gauge-vote-for-proposal {
+.gauge-vote-for-proposal,
+.number-gauge-vote-for-proposal {
   width: 100%;
   padding: 0 10px 20px 10px;
 
@@ -37,7 +38,8 @@
       margin-left: 0;
     }
 
-    .rc-slider-dot:first-child, .rc-slider-dot:last-child {
+    .rc-slider-dot:first-child,
+    .rc-slider-dot:last-child {
       display: none;
     }
 
