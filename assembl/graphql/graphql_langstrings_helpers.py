@@ -1,5 +1,6 @@
 import graphene
 
+import assembl.graphql.docstrings as docs
 from .langstring import (
     LangStringEntry, LangStringEntryInput,
     resolve_langstring, resolve_langstring_entries,
@@ -35,14 +36,17 @@ def make_entries_resolver(langstring_name, langstring_def):
 def graphql_langstrings_attrs_dict(langstrings_defs):
     d = {}
     for langstring_name in langstrings_defs.keys():
-        d[langstring_name] = graphene.String(lang=graphene.String(required=True))
+        d[langstring_name] = graphene.String(
+            lang=graphene.String(required=True, description=docs.Default.required_language_input),
+            description=langstrings_defs[langstring_name]['documentation']['base'])
         d["resolve_" + langstring_name] = make_langstring_resolver(
             langstring_name,
             langstrings_defs[langstring_name]
         )
 
         entries_name = langstring_name + entries_suffix
-        d[entries_name] = graphene.List(LangStringEntry)
+        d[entries_name] = graphene.List(
+            LangStringEntry, description=langstrings_defs[langstring_name]['documentation']['entries'])
         d["resolve_" + entries_name] = make_entries_resolver(
             langstring_name,
             langstrings_defs[langstring_name]
