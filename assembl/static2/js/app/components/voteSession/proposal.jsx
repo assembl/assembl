@@ -93,7 +93,7 @@ class Proposal extends React.Component<Props, State> {
                   {...module}
                   voteForProposal={voteForProposalGauge}
                   proposalId={id}
-                  value={userGaugeVotes.getIn([id, module.id], 0)}
+                  value={userGaugeVotes.getIn([id, module.id], null)}
                 />
               ))}
 
@@ -109,7 +109,7 @@ class Proposal extends React.Component<Props, State> {
                   {...module}
                   voteForProposal={voteForProposalGauge}
                   proposalId={id}
-                  value={userGaugeVotes.getIn([id, module.id], 0)}
+                  value={userGaugeVotes.getIn([id, module.id], null)}
                 />
               ))}
           </Col>

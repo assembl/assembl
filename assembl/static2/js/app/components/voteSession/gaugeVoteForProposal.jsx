@@ -81,6 +81,11 @@ const handleIcon = (props) => {
     marginTop: '-15px',
     cursor: '-webkit-grab'
   };
+  if (value === null) {
+    style.color = 'grey';
+    style.marginTop = '-30px';
+  }
+
   return (
     <Handle value={value} {...restProps}>
       <Pointer width="15px" style={style} />
@@ -101,13 +106,11 @@ class GaugeVoteForProposal extends React.Component<GaugeVoteForProposalProps, Ga
 
   constructor(props: GaugeVoteForProposalProps) {
     super(props);
-    this.state = { value: this.props.value };
     this.onAfterChange = this.onAfterChange.bind(this);
 
     this.marks = {};
     this.maximum = null;
     this.minimum = null;
-    this.inputElement = null;
 
     if (props.choices && props.choices.length) {
       const choicesValues = props.choices.reduce((accumulator, item) => {
@@ -136,12 +139,6 @@ class GaugeVoteForProposal extends React.Component<GaugeVoteForProposalProps, Ga
   }
 
   onAfterChange(value: number) {
-    this.setState({
-      value: value
-    });
-    if (this.inputElement && 'value' in this.inputElement) {
-      this.inputElement.value = value;
-    }
     if (this.props.voteForProposal) {
       this.props.voteForProposal(this.props.proposalId, this.props.id, value);
     }
@@ -163,16 +160,8 @@ class GaugeVoteForProposal extends React.Component<GaugeVoteForProposalProps, Ga
           railStyle={railStyle}
           handleStyle={handleStyle}
           handle={handleIcon}
-          defaultValue={this.state.value}
-          onAfterChange={this.onAfterChange}
-        />
-        <input
-          type="hidden"
-          name={`vote-for-proposal-${this.props.proposalId}-vote-specification-${this.props.id}`}
-          value={this.state.value}
-          ref={(input) => {
-            this.inputElement = input;
-          }}
+          value={this.props.value}
+          onChange={this.onAfterChange}
         />
       </div>
     );
@@ -261,13 +250,10 @@ class NumberGaugeVoteForProposal extends React.Component<NumberGaugeVoteForPropo
     }
   }
 
-  onAfterChange(value: number) {
+  onAfterChange(value: ?number) {
     this.setState({
       value: value
     });
-    if (this.inputElement && 'value' in this.inputElement) {
-      this.inputElement.value = value;
-    }
     if (this.props.voteForProposal) {
       this.props.voteForProposal(this.props.proposalId, this.props.id, value);
     }
@@ -291,14 +277,6 @@ class NumberGaugeVoteForProposal extends React.Component<NumberGaugeVoteForPropo
           handle={handleIcon}
           defaultValue={this.state.value}
           onAfterChange={this.onAfterChange}
-        />
-        <input
-          type="hidden"
-          name={`vote-for-proposal-${this.props.proposalId}-vote-specification-${this.props.id}`}
-          value={this.state.value}
-          ref={(input) => {
-            this.inputElement = input;
-          }}
         />
       </div>
     );
