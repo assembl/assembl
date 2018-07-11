@@ -49,7 +49,7 @@ const Step2 = ({ editLocale, values }: Props) => (
             component={CheckboxFieldAdapter}
             type="checkbox"
           />
-          {values &&
+          {values && values.themes[idx].video &&
             values.themes[idx].video.present && (
               <div className="box video-fields">
                 <Field

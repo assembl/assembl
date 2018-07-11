@@ -31,7 +31,7 @@ function getImageVariable(img, initialImg) {
 }
 
 function getVideoVariable(video, initialVideo) {
-  if (video === null || !video.present) {
+  if (!video || !video.present) {
     // pass {} to remove all video fields on server side
     return {};
   }
