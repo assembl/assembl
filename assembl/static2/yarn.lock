@@ -7010,9 +7010,9 @@ rc-slider@^8.3.1:
     shallowequal "^1.0.1"
     warning "^3.0.0"
 
-rc-slider@assembl/slider:
+rc-slider@assembl/slider#use-src-instead-of-es:
   version "8.6.1"
-  resolved "https://codeload.github.com/assembl/slider/tar.gz/53242d549f3bbac733fa146999eb723070393606"
+  resolved "https://codeload.github.com/assembl/slider/tar.gz/6e28e22050b1f2ccbcd954c55d24f54336c71e4b"
   dependencies:
     babel-runtime "6.x"
     classnames "^2.2.5"
