@@ -20,17 +20,8 @@ class CookiesSelector extends React.Component<CookiesSelectorProps, CookiesSelec
   constructor(props: CookiesSelectorProps) {
     super(props);
     const cookiesList = 'assembl_session=1234; _LOCALE_=fr; _pk_id.abcd1234=1234;'.split(' ');
-
     const cookiesArray = cookiesList.map(cookie => ({ ...this.getCookieObject(cookie), accepted: true }));
-    const cookiesByCategory = {};
-    cookiesArray.forEach(function(cookie) { // eslint-disable-line
-      const { category } = cookie;
-      if (cookiesByCategory[category]) {
-        cookiesByCategory[category] = [...cookiesByCategory[category], cookie];
-      } else {
-        cookiesByCategory[category] = [cookie];
-      }
-    });
+    const cookiesByCategory = this.getCookiesObjectFromArray(cookiesArray);
     this.state = {
       activeKey: 'essential',
       show: true,
@@ -51,17 +42,25 @@ class CookiesSelector extends React.Component<CookiesSelectorProps, CookiesSelec
     return { category: 'other', name: cookie };
   };
 
+  getCookiesObjectFromArray = (cookiesArray: Array<CookieObject>) => {
+    const cookiesObject = {};
+    cookiesArray.forEach(function(cookie) { // eslint-disable-line
+      const { category } = cookie;
+      if (cookiesObject[category]) {
+        cookiesObject[category] = [...cookiesObject[category], cookie];
+      } else {
+        cookiesObject[category] = [cookie];
+      }
+    });
+    return cookiesObject;
+  }
+
   handleToggle = (updatedCookie: CookieObject) => {
-    // const { cookies } = this.state;
-    // const filteredCookies = Object.keys(cookies)
-    //   .filter(category => updatedCookie.category === cookies[category])
-    //   .map(c => (c.name === updatedCookie.name ? updatedCookie : c));
-    // // cookies.map(c => (c.name === updatedCookie.name ? updatedCookie : c));
-    // console.log('.filter', Object.keys(cookies)
-    //   .filter(category => updatedCookie.category === cookies[category]));
-    // cookies[updatedCookie.category] = filteredCookies;
-    // console.log('cookies', cookies);
-    // this.setState({ cookies: cookies });
+    const { cookies } = this.state;
+    const cookiesArray = Object.values(cookies).reduce((flat, next) => flat.concat(next), []);
+    const updatedCookiesArray = cookiesArray.map(cookie => (cookie.name === updatedCookie.name ? updatedCookie : cookie));
+    const updatedCookiesByCategory = this.getCookiesObjectFromArray(updatedCookiesArray);
+    this.setState({ cookies: updatedCookiesByCategory });
   }
 
   saveChanges = () => {

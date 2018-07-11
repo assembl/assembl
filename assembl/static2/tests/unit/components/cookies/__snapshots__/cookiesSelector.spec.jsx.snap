@@ -63,7 +63,7 @@ exports[`CookiesSelector component should render a list of cookieToggle componen
         <span
           className="cookie-title dark-title-3 ellipsis"
         >
-          Locale language
+          Language
         </span>
         <div
           className="rsbc-switch-button rsbc-mode-switch rsbc-switch-button-flat-round disabled"
