@@ -6,6 +6,7 @@ from graphene_sqlalchemy import SQLAlchemyObjectType
 from pyramid.httpexceptions import HTTPUnauthorized
 from pyramid.security import Everyone
 
+import assembl.graphql.docstrings as docs
 from assembl import models
 from assembl.auth import IF_OWNED, CrudPermissions
 from assembl.auth.util import get_permissions
@@ -17,7 +18,6 @@ from .langstring import (
     update_langstring_from_input_entries)
 from .types import SecureObjectType
 from .utils import abort_transaction_on_exception
-import assembl.graphql.docstrings as docs
 
 
 class Resource(SecureObjectType, SQLAlchemyObjectType):
@@ -28,13 +28,13 @@ class Resource(SecureObjectType, SQLAlchemyObjectType):
         interfaces = (Node, )
         only_fields = ('id', )
 
-    title = graphene.String(lang=graphene.String())
-    text = graphene.String(lang=graphene.String())
-    title_entries = graphene.List(LangStringEntry)
-    text_entries = graphene.List(LangStringEntry)
-    embed_code = graphene.String()
-    image = graphene.Field(Document)
-    doc = graphene.Field(Document)
+    title = graphene.String(lang=graphene.String(description=docs.Default.required_language_input))
+    text = graphene.String(lang=graphene.String(description=docs.Default.required_language_input))
+    title_entries = graphene.List(LangStringEntry, description=docs.Resource.title_entries)
+    text_entries = graphene.List(LangStringEntry, description=docs.Resource.title_entries)
+    embed_code = graphene.String(description=docs.Resource.embed_code)
+    image = graphene.Field(Document, description=docs.Resource.image)
+    doc = graphene.Field(Document, description=docs.Resource.doc)
 
     def resolve_title(self, args, context, info):
         title = resolve_langstring(self.title, args.get('lang'))
@@ -69,11 +69,11 @@ class CreateResource(graphene.Mutation):
     class Input:
         # Careful, having required=True on a graphene.List only means
         # it can't be None, having an empty [] is perfectly valid.
-        title_entries = graphene.List(LangStringEntryInput, required=True)
-        text_entries = graphene.List(LangStringEntryInput)
-        embed_code = graphene.String()
-        image = graphene.String()
-        doc = graphene.String()
+        title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.CreateResource.title_entries)
+        text_entries = graphene.List(LangStringEntryInput, description=docs.CreateResource.text_entries)
+        embed_code = graphene.String(description=docs.CreateResource.embed_code)
+        image = graphene.String(description=docs.CreateResource.image)
+        doc = graphene.String(description=docs.CreateResource.doc)
 
     resource = graphene.Field(lambda: Resource)
 
@@ -162,7 +162,7 @@ class DeleteResource(graphene.Mutation):
     __doc__ = docs.DeleteResource.__doc__
 
     class Input:
-        resource_id = graphene.ID(required=True)
+        resource_id = graphene.ID(required=True, description=docs.DeleteResource.resource_id)
 
     success = graphene.Boolean()
 
@@ -192,11 +192,11 @@ class UpdateResource(graphene.Mutation):
 
     class Input:
         id = graphene.ID(required=True)
-        title_entries = graphene.List(LangStringEntryInput)
-        text_entries = graphene.List(LangStringEntryInput)
-        embed_code = graphene.String()
-        image = graphene.String()
-        doc = graphene.String()
+        title_entries = graphene.List(LangStringEntryInput, description=docs.UpdateResource.title_entries)
+        text_entries = graphene.List(LangStringEntryInput, description=docs.UpdateResource.text_entries)
+        embed_code = graphene.String(description=docs.UpdateResource.embed_code)
+        image = graphene.String(description=docs.UpdateResource.image)
+        doc = graphene.String(description=docs.UpdateResource.doc)
 
     resource = graphene.Field(lambda: Resource)
 

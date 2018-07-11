@@ -26,11 +26,36 @@ from .utils import (
 import assembl.graphql.docstrings as docs
 
 langstrings_defs = {
-    "title": {},
-    "sub_title": {},
-    "instructions_section_title": {},
-    "instructions_section_content": {},
-    "propositions_section_title": {}
+    "title": {
+        "documentation": {
+            "base": docs.VoteSession.title,
+            "entries": docs.VoteSession.title_entries
+        }
+    },
+    "sub_title": {
+        "documentation": {
+            "base": docs.VoteSession.sub_title,
+            "entries": docs.VoteSession.sub_title_entries
+        }
+    },
+    "instructions_section_title": {
+        "documentation": {
+            "base": docs.VoteSession.instructions_section_title,
+            "entries": docs.VoteSession.instructions_section_title_entries
+        }
+    },
+    "instructions_section_content": {
+        "documentation": {
+            "base": docs.VoteSession.instructions_section_content,
+            "entries": docs.VoteSession.instructions_section_content_entries
+        }
+    },
+    "propositions_section_title": {
+        "documentation": {
+            "base": docs.VoteSession.propositions_section_title,
+            "entries": docs.VoteSession.propositions_section_title_entries
+        }
+    }
 }
 
 

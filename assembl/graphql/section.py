@@ -4,6 +4,7 @@ from pyramid.httpexceptions import HTTPUnauthorized
 from pyramid.security import Everyone
 from graphene.relay import Node
 
+import assembl.graphql.docstrings as docs
 from assembl import models
 from assembl.auth import IF_OWNED, CrudPermissions
 from assembl.auth.util import get_permissions
@@ -15,7 +16,6 @@ from .langstring import (LangStringEntry, LangStringEntryInput,
                          update_langstring_from_input_entries)
 from .types import SecureObjectType
 from .utils import abort_transaction_on_exception
-import assembl.graphql.docstrings as docs
 
 SectionTypes = graphene.Enum.from_enum(SectionTypesEnum)
 
@@ -28,9 +28,10 @@ class Section(SecureObjectType, SQLAlchemyObjectType):
         interfaces = (Node, )
         only_fields = ('id', 'section_type', 'order')
 
-    title = graphene.String(lang=graphene.String())
-    title_entries = graphene.List(LangStringEntry)
-    url = graphene.String()
+    title = graphene.String(lang=graphene.String(docs.Default.required_language_input),
+                            description=docs.Section.title)
+    title_entries = graphene.List(LangStringEntry, description=docs.Section.title_entries)
+    url = graphene.String(description=docs.Section.url)
 
     def resolve_title(self, args, context, info):
         title = resolve_langstring(self.title, args.get('lang'))
@@ -44,10 +45,10 @@ class CreateSection(graphene.Mutation):
     __doc__ = docs.CreateSection.__doc__
 
     class Input:
-        title_entries = graphene.List(LangStringEntryInput, required=True)
-        section_type = graphene.Argument(SectionTypes)
-        url = graphene.String()
-        order = graphene.Float()
+        title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.CreateSection.title_entries)
+        section_type = graphene.Argument(SectionTypes, description=docs.CreateSection.section_type)
+        url = graphene.String(description=docs.CreateSection.url)
+        order = graphene.Float(description=docs.CreateSection.order)
 
     section = graphene.Field(lambda: Section)
 
@@ -92,7 +93,7 @@ class DeleteSection(graphene.Mutation):
     __doc__ = docs.DeleteSection.__doc__
 
     class Input:
-        section_id = graphene.ID(required=True)
+        section_id = graphene.ID(required=True, description=docs.DeleteSection.section_id)
 
     success = graphene.Boolean()
 
@@ -122,10 +123,10 @@ class UpdateSection(graphene.Mutation):
     __doc__ = docs.UpdateSection.__doc__
 
     class Input:
-        id = graphene.ID(required=True)
-        title_entries = graphene.List(LangStringEntryInput)
-        url = graphene.String()
-        order = graphene.Float()
+        id = graphene.ID(required=True, description=docs.UpdateSection.id)
+        title_entries = graphene.List(LangStringEntryInput, description=docs.UpdateSection.title_entries)
+        url = graphene.String(description=docs.UpdateSection.url)
+        order = graphene.Float(description=docs.UpdateSection.order)
 
     section = graphene.Field(lambda: Section)
 

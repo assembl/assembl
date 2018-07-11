@@ -666,37 +666,51 @@ class VoteSession:
     Survey,\n
     Multicolumn,\n
     thread)."""
-    discussion_phase_id = " ??? "
-    header_image = Default.document % ("The Image appearing at the header of the Vote session page.")
-    vote_specifications = "A list of the vote specifications."
-    proposals = "The list of Proposals on which the Participant will be allowed to vote."
-    see_current_votes = "A boolean flag according to which the users will/won't be allowed to see the current votes."
+    discussion_phase_id = "The database identifier of the DiscussionPhase the session is under."
+    header_image = Default.document % ("The image appearing at the header of the Vote session page.")
+    vote_specifications = "A list of VoteSpecifications."
+    proposals = "The list of Proposals on which the Users will be allowed to vote."
+    see_current_votes = "A flag allowing users to view the current votes."
+    title = """The title of the VoteSession"""
+    title_entries = Default.langstring_entries % """The title in various languages. """
+    sub_title = """The subtitle of the VoteSession."""
+    sub_title_entries = Default.langstring_entries % """The subtitle in various languages. """
+    instructions_section_title = """The instructions section title to be given for a vote session."""
+    instructions_section_title_entries = Default.langstring_entries % """The voting instruction's title in various languages. """
+    instructions_section_content = """The instructions to be given for a vote session."""
+    instructions_section_content_entries = Default.langstring_entries % """The voting instructions in various languages. """
+    propositions_section_title = """The title of the section where all Propositions are given."""
+    propositions_section_title_entries = Default.langstring_entries % """The Proposal section's title in various languages. """
 
 
 class UpdateVoteSession:
+    __doc__ = """A mutation that allows for existing VoteSessions to be updated."""
     discussion_phase_id = VoteSession.discussion_phase_id
     header_image = VoteSession.header_image
     see_current_votes = VoteSession.see_current_votes
 
 
 class VoteSpecificationInterface:
-    title = Default.string_entry % ("The title of the Vote.")
-    title_entries = Default.langstring_entries % ("The title of the Vote in various languages.")
-    instructions = Default.string_entry % ("The instructions of the Vote.")
-    instructions_entries = Default.langstring_entries % ("The instructions of the Vote in various languages.")
-    is_custom = "A boolean flag specifying if the module has been customized for a specific Proposal."
+    __doc__ = """A VoteSpecification metadata object is a set of configurations of a specific type of voting for a VoteSession."""
+    title = Default.string_entry % ("The title of the VoteSpecification.")
+    title_entries = Default.langstring_entries % ("The title of the VoteSpecification in various languages.")
+    instructions = Default.string_entry % ("The instructions of the VoteSpecification.")
+    instructions_entries = Default.langstring_entries % ("The instructions of the VoteSpecification in various languages.")
+    is_custom = "A flag specifying if the module has been customized for a specific Proposal."
     vote_session_id = Default.node_id % "Vote Session"
-    vote_spec_template_id = Default.node_id % "Vote Specification template"
-    vote_type = "Type of the Vote: Tokens or Gauge."
+    vote_spec_template_id = Default.node_id % "Vote Specification template" + \
+        " A template is a VoteSpecification that this specification should template itself from. It is a form of inheritence for VoteSpecifications."
+    # TOOD: Give the list of types
+    vote_type = "The type of the VoteSpecification."
     my_votes = "The list of Votes by a specific User."
     num_votes = "The total number of Voters for this Vote."
 
 
 class TokenCategorySpecification:
-    __doc__ = "An SQLalchemy class to model the token in a Token Vote session."
-    color = "A string corresponding to the color of the Token."
-    typename = "The name of the Token."
-    total_number = "The total number of Tokens allocated by Participant."
+    __doc__ = "A configuration of Token voting in a Vote Session."
+    color = "A CSS-compatible Hex code depicting the colour of the Token."
+    typename = "The unique identifier of the token."
+    total_number = "The total number of Tokens allocated per vote."
     title = Default.string_entry % ("The title of the Token Category.",)
     title_entries = Default.langstring_entries % ("The title of the Token Category in various languages.",)
 
@@ -833,7 +847,7 @@ class DeleteProposal:
 
 
 class VoteInterface:
-    __doc__ = r"""In Assembl, in a vote session, participants are given the right
+    __doc__ = """In Assembl, in a vote session, participants are given the right
     to vote on certain proposal. There are two types of votes in Assembl\n
     Token Vote\n
     Gauge Vote.
@@ -885,28 +899,29 @@ class DeleteGaugeVote:
 
 
 class Section:
-    __doc__ = r"""Sections are the main tabs that appear on the top left of an Assembl Discussion.
-    There are 5 default sections:\n
+    __doc__ = """Sections are the tabs visible on the top navigation bar of a debate. There are 5 default sections:\n
     Home\n
     Debate\n
     Syntheses\n
     Resources center\n
-    Administration.
+    Administration.\n
+    More can be added with any name desired, but only by a debate administrator.
     """
     order = "The order of the Sections on the top of the page."
-    section_type = r"""There are 5 section types:\n
-    Home\n
-    Debate\n
-    Syntheses\n
-    Resources center\n
-    Administration."""
+    section_type = """There are 5 section types:\n
+    HOMEPAGE\n
+    DEBATE\n
+    SYNTHESES\n
+    RESOURCES_CENTER\n
+    CUSTOM\n
+    ADMINISTRATION"""
     title = Default.string_entry % ("The title of the Section.",)
     title_entries = Default.langstring_entries % ("The title of the Section in various languages.",)
-    url = "The URL of the section."
+    url = "An optional field. Should the tab redirect to a location outside of the platform, the URL is the location to redirect towards."
 
 
 class CreateSection:
-    __doc__ = Section.__doc__
+    __doc__ = """A mutation that allows for the creation of new Sections"""
     title_entries = Section.title_entries
     section_type = Section.section_type
     url = Section.url
@@ -914,12 +929,12 @@ class CreateSection:
 
 
 class DeleteSection:
-    __doc__ = Section.__doc__
+    __doc__ = """A mutation that allows an existing Section to be deleted."""
     section_id = Default.node_id % ("Section",)
 
 
 class UpdateSection:
-    __doc__ = Section.__doc__
+    __doc__ = """A mutation that allows for an existing Section to be updated."""
     id = Default.node_id % ("Section",)
     title_entries = Section.title_entries
     url = Section.url
@@ -932,13 +947,14 @@ class Resource:
     text = Default.string_entry % ("The text of the Resource.",)
     title_entries = Default.langstring_entries % ("The title of the Resource in various languages.",)
     text_entries = Default.langstring_entries % ("The text in the Resource in various languages.",)
-    embed_code = ""
+    embed_code = """The URL for any i-frame based content that matches the Content-Security-Policy of the server.
+    In effect, this is the \"src\" code inside of an iframe-based attachment to a Resource."""
     image = Default.document % ("An image attached to the Resource",)
-    doc = Default.document % ("A document attached to the Resource",)
+    doc = Default.document % ("A file attached to the Resource",)
 
 
 class CreateResource:
-    __doc__ = Resource.__doc__
+    __doc__ = """A mutation that enables a Resource to be created."""
     title_entries = Resource.title_entries
     text_entries = Resource.text_entries
     embed_code = Resource.embed_code
@@ -947,12 +963,12 @@ class CreateResource:
 
 
 class DeleteResource:
-    __doc__ = Resource.__doc__
+    __doc__ = """A mutation that enables the deletion of a Resource. Once a resource is deleted, it cannot be resurected."""
     resource_id = Default.node_id % ("Resource") + " This is the Resource identifier that must be deleted."
 
 
 class UpdateResource:
-    __doc__ = Resource.__doc__
+    __doc__ = """A mutation that enables existing Resources to be updated."""
     id = Default.node_id % ("Resource") + " This is the Resource identifier that must be updated."
     title_entries = Resource.title_entries
     text_entries = Resource.text_entries
