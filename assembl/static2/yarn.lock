@@ -6998,9 +6998,21 @@ rc-animate@2.x:
     css-animation "^1.3.2"
     prop-types "15.x"
 
-rc-slider@^8.3.1, rc-slider@^8.6.0:
+rc-slider@^8.3.1:
   version "8.6.0"
   resolved "https://registry.yarnpkg.com/rc-slider/-/rc-slider-8.6.0.tgz#73722ba6d838bfc8299c50b7a864226aa73f5c1e"
+  dependencies:
+    babel-runtime "6.x"
+    classnames "^2.2.5"
+    prop-types "^15.5.4"
+    rc-tooltip "^3.7.0"
+    rc-util "^4.0.4"
+    shallowequal "^1.0.1"
+    warning "^3.0.0"
+
+rc-slider@assembl/slider:
+  version "8.6.1"
+  resolved "https://codeload.github.com/assembl/slider/tar.gz/53242d549f3bbac733fa146999eb723070393606"
   dependencies:
     babel-runtime "6.x"
     classnames "^2.2.5"
