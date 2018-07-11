@@ -9,6 +9,7 @@ import Navbar from '../navbar';
 import SaveButton from '../saveButton';
 import Step1 from './step1';
 import Step2 from './step2';
+import Step3 from './step3';
 import { load, postLoadFormat } from './load';
 import { createMutationsPromises, save } from './save';
 import validate from './validate';
@@ -17,12 +18,14 @@ import Loader from '../../common/loader';
 type Props = {
   client: ApolloClient,
   currentStep: number,
-  editLocale: string
+  debateId: string,
+  editLocale: string,
+  locale: string
 };
 
 const loading = <Loader />;
 
-const DumbSurveyAdminForm = ({ client, currentStep, editLocale }: Props) => (
+const DumbSurveyAdminForm = ({ client, currentStep, debateId, editLocale, locale }: Props) => (
   <LoadSaveReinitializeForm
     load={() => load(client)}
     loading={loading}
@@ -40,6 +43,7 @@ const DumbSurveyAdminForm = ({ client, currentStep, editLocale }: Props) => (
             <SaveButton disabled={pristine || submitting} saveAction={handleSubmit} />
             {currentStep === 1 && <Step1 editLocale={editLocale} />}
             {currentStep === 2 && <Step2 editLocale={editLocale} values={values} />}
+            {currentStep === 3 && <Step3 debateId={debateId} locale={locale} />}
           </form>
         </div>
         {!isNaN(currentStep) && (
@@ -50,6 +54,10 @@ const DumbSurveyAdminForm = ({ client, currentStep, editLocale }: Props) => (
   />
 );
 
-const mapStateToProps = state => ({ editLocale: state.admin.editLocale });
+const mapStateToProps = state => ({
+  debateId: state.context.debateId,
+  editLocale: state.admin.editLocale,
+  locale: state.i18n.locale
+});
 
 export default compose(connect(mapStateToProps), withApollo)(DumbSurveyAdminForm);
