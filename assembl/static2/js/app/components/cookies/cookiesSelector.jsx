@@ -19,7 +19,7 @@ type CookiesSelectorState = {
 class CookiesSelector extends React.Component<CookiesSelectorProps, CookiesSelectorState> {
   constructor(props: CookiesSelectorProps) {
     super(props);
-    const cookiesList = document.cookie.split(' ');
+    const cookiesList = 'assembl_session=1234; _LOCALE_=fr; _pk_id.abcd1234=1234; random_cookie=333453453453453453453453453453444'.split(' ');
     const cookiesArray = cookiesList.map(cookie => ({ ...this.getCookieObject(cookie), accepted: true }));
     const cookiesByCategory = this.getCookiesObjectFromArray(cookiesArray);
     this.state = {
@@ -71,23 +71,25 @@ class CookiesSelector extends React.Component<CookiesSelectorProps, CookiesSelec
   render() {
     const { activeKey, show, cookies } = this.state;
     return (
-      <div className="cookies-selector page-body">
-        {Object.keys(cookies).map((category) => {
-          const isActiveKey = category === activeKey;
-          return (
-            <div key={`category-${category}`}>
-              <div
-                className="cookies-category-selector"
-                onClick={() => {
-                  this.setState({ activeKey: category, show: !show });
-                  return category !== activeKey && this.setState({ show: true });
-                }}
-              >
-                <span className={classnames('assembl-icon-right-dir', { 'active-arrow': isActiveKey })} />
-                <Translate value={`cookiesPolicy.${category}`} className="dark-title-4" />
-              </div>
-              <div className="cookies-toggles">
-                {isActiveKey && show &&
+      <div className="page-body">
+        <Translate value="cookiesPolicy.instructions" className="cookies-instructions" />
+        <div className="cookies-selector">
+          {Object.keys(cookies).map((category) => {
+            const isActiveKey = category === activeKey;
+            return (
+              <div key={`category-${category}`}>
+                <div
+                  className="cookies-category-selector"
+                  onClick={() => {
+                    this.setState({ activeKey: category, show: !show });
+                    return category !== activeKey && this.setState({ show: true });
+                  }}
+                >
+                  <span className={classnames('assembl-icon-right-dir', { 'active-arrow': isActiveKey })} />
+                  <Translate value={`cookiesPolicy.${category}`} className="dark-title-4" />
+                </div>
+                <div className="cookies-toggles">
+                  {isActiveKey && show &&
               cookies[category].map(cookie => (
                 <CookieToggle
                   cookie={cookie}
@@ -95,14 +97,16 @@ class CookiesSelector extends React.Component<CookiesSelectorProps, CookiesSelec
                   handleToggle={this.handleToggle}
                 />
               ))}
+                </div>
               </div>
-            </div>
-          );
-        }) }
-        <Button onClick={this.saveChanges} className="button-submit button-dark">
-          <Translate value="profile.save" />
-        </Button>
-      </div>);
+            );
+          }) }
+          <Button onClick={this.saveChanges} className="button-submit button-dark">
+            <Translate value="profile.save" />
+          </Button>
+        </div>
+      </div>
+    );
   }
 }
 

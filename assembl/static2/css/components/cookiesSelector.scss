@@ -1,4 +1,6 @@
 .cookies-selector {
+  margin-top: 30px;
+
   .cookies-category-selector {
     cursor: pointer;
   }
@@ -19,15 +21,28 @@
     margin: 10px 0;
   }
 
+  .button-submit {
+    margin-top: 20px;
+  }
+
+  .cookies-instructions {
+    font-family: $font-family4;
+    font-size: $font-size-sm;
+  }
+
   .cookie-toggle {
-    width: 60%;
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin: 5px;
 
+    .cookie-title {
+      width: 50%;
+    }
+
     .rsbc-switch-button {
       margin-top: 6px;
+      width: 100%;
     }
   }
 }

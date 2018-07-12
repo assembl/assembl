@@ -464,7 +464,8 @@ const Translations = {
       headerTitle: "Information sur les cookies",
       essential: "Essentiel",
       analytics: "Analytics and customization",
-      other: "Autre"
+      other: "Autre",
+      instructions: "Sélectionnez les cookies que vous souhaitez refuser ci-dessous"
     },
     privacyPolicy: {
       headerTitle: "Politique de protection des données personnelles"
@@ -1275,7 +1276,8 @@ const Translations = {
       headerTitle: "Cookies",
       essential: "Essential",
       analytics: "Analytique et personnalisation",
-      other: "Other"
+      other: "Other",
+      instructions: "Select the cookies you wish to refuse below"
     },
     privacyPolicy: {
       headerTitle: "Privacy policy"
