@@ -34,8 +34,8 @@ const MultilingualTextFieldAdapter = ({
 }: Props) => {
   const valueInLocale = value[editLocale] || '';
   return (
-    <FormGroup validationState={getValidationState(error, touched)}>
-      {valueInLocale ? <ControlLabel htmlFor={name}>{label}</ControlLabel> : null}
+    <FormGroup controlId={name} validationState={getValidationState(error, touched)}>
+      {valueInLocale ? <ControlLabel>{label}</ControlLabel> : null}
       <FormControl
         {...otherListeners}
         {...rest}

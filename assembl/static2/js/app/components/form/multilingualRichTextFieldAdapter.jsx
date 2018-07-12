@@ -29,8 +29,8 @@ const RichTextFieldAdapter = ({
   const valueInLocale = value[editLocale] || null;
   const key = valueInLocale ? 'notEmpty' : 'empty';
   return (
-    <FormGroup>
-      {valueInLocale ? <ControlLabel htmlFor={name}>{label}</ControlLabel> : null}
+    <FormGroup controlId={name}>
+      {valueInLocale ? <ControlLabel>{label}</ControlLabel> : null}
       <RichTextEditor
         {...otherListeners}
         {...rest}

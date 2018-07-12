@@ -8,7 +8,7 @@ type Props = {
 } & FieldRenderProps;
 
 const CheckboxFieldAdapter = ({ input, label, meta: { error, touched } }: Props) => (
-  <FormGroup>
+  <FormGroup controlId={input.name}>
     <Checkbox {...input}>{label}</Checkbox>
     {touched && error ? <HelpBlock>{error}</HelpBlock> : null}
   </FormGroup>

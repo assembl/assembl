@@ -25,8 +25,8 @@ const TextFieldAdapter = ({
   meta: { error, touched },
   ...rest
 }: Props) => (
-  <FormGroup validationState={getValidationState(error, touched)}>
-    {value ? <ControlLabel htmlFor={name}>{label}</ControlLabel> : null}
+  <FormGroup controlId={name} validationState={getValidationState(error, touched)}>
+    {value ? <ControlLabel>{label}</ControlLabel> : null}
     <FormControl
       {...otherListeners}
       {...rest}

@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import { type FieldRenderProps } from 'react-final-form';
-import { HelpBlock, FormGroup } from 'react-bootstrap';
+import { ControlLabel, HelpBlock, FormGroup } from 'react-bootstrap';
 
 import FileUploader from '../common/fileUploader';
 import { getValidationState } from './utils';
@@ -19,8 +19,8 @@ const FileUploaderFieldAdapter = ({ input, label, meta: { error, touched } }: Pr
     });
   };
   return (
-    <FormGroup validationState={getValidationState(error, touched)}>
-      <label htmlFor={input.name}>{label}</label>
+    <FormGroup controlId={input.name} validationState={getValidationState(error, touched)}>
+      <ControlLabel>{label}</ControlLabel>
       <FileUploader
         key={input.value ? 'notEmpty' : 'empty'}
         fileOrUrl={input.value.externalUrl}
