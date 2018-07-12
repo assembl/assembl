@@ -716,37 +716,43 @@ class TokenCategorySpecification:
 
 
 class VotesByCategory:
-    __doc__ = ""
-    token_category_id = Default.node_id % "Token"
+    __doc__ = "A metadata object describing votes per category."
+    token_category_id = Default.node_id % "TokenCategory"
     num_token = "The number of tokens on that Category."
 
 
 class TokenVoteSpecification:
-    __doc__ = "An SQLalchemy class to model the specifications of a token vote."
-    exlusive_categories = "A boolean flag defining whether a Participant can submit his Vote to several Proposals."
+    __doc__ = "A VoteSpecification metadata object is a set of configurations of a TokenVote type in the VoteSession."
+    exlusive_categories = "A flag defining whether a User can submit his Vote to several Proposals."
     token_categories = "The list of Token category specification(TokenCategorySpecification)."
-    token_votes = "The list of Token Votes (VotesByCategory)."
+    token_votes = "The list of information regarding votes (VotesByCategory)."
 
 
 class GaugeChoiceSpecification:
-    __doc__ = "An SQLalchemy class to model the specifications of a Gauge Vote."
-    value = "???"
-    label = Default.string_entry % ("The label of the Gauge.",)
+    __doc__ = "A VoteSpecification metadata object representing a choice in a GaugeVote."
+    value = Default.float % ("Gauge value")
+    label = Default.string_entry % ("The label of the Gauge",)
     label_entries = Default.langstring_entries % ("The label of the Gauge in various languages.",)
 
 
 class GaugeVoteSpecification:
-    choices = "The list of choices available on a Gauge."
-    average_label = Default.string_entry % ("The average Vote on a textual Gauge.")
-    average_result = Default.float_entry % ("The average Vote on a numeric Gauge.")
+    __doc__ = """A VoteSpecification metadata object is a set of configurations of a GaugeVote type in the VoteSession."""
+    choices = "The list of GaugeChoiceSpecifications available on a Gauge. These describe all of the options available in the GaugeVote."
+    average_label = Default.string_entry % ("The label of the average value for the Gauge")
+    average_result = Default.float_entry % ("The average value for the Gauge")
 
 
 class NumberGaugeVoteSpecification:
+    __doc__ = """A specific GaugeVoteSpecification based on numerical values."""
     minimum = "The minimum value on the Gauge."
     maximum = "The maximum value on the Gauge."
-    nb_ticks = "An Integer representing the number of intervals between the minimum value and the maximum value."
-    unit = "The unit used on the Gauge (could be USD, months, years, persons, etc ...)."
-    average_result = "The average value of the Votes submitted by Participants."
+    nb_ticks = "The number of intervals between the minimum and maximum values."
+    unit = """The unit used on the Gauge. This could be anything desired, like:\n
+    USD ($) or Euroes (€)\n
+    Months\n
+    PPM (Parts per million)\n
+    etc"""
+    average_result = "The average value of the Votes submitted by all Users."
 
 
 class TokenCategorySpecificationInput:
@@ -762,6 +768,7 @@ class GaugeChoiceSpecificationInput:
 
 
 class CreateTokenVoteSpecification:
+    __doc__ = "A mutation enabling the creation of a TokenVoteSpecification."
     vote_session_id = VoteSpecificationInterface.vote_session_id
     proposal_id = Default.node_id % ("Proposal",)
     title_entries = VoteSpecificationInterface.title_entries
@@ -769,10 +776,11 @@ class CreateTokenVoteSpecification:
     is_custom = VoteSpecificationInterface.is_custom
     exclusive_categories = "A boolean flag to say whether the User can/can't vote on several Proposals."
     token_categories = TokenVoteSpecification.token_categories
-    vote_spec_template_id = Default.node_id % ("Vote specification template",)
+    vote_spec_template_id = VoteSpecificationInterface.vote_spec_template_id
 
 
 class UpdateTokenVoteSpecification:
+    __doc__ = "A mutation enabling an existing TokenVoteSpecification to be updated."
     id = Default.node_id % ("Token Vote Specification",)
     title_entries = VoteSpecificationInterface.title_entries
     instructions_entries = VoteSpecificationInterface.instructions_entries
@@ -782,17 +790,19 @@ class UpdateTokenVoteSpecification:
 
 
 class DeleteVoteSpecification:
+    __doc__ = """A mutation enabling an existing VoteSpecification to be deleted."""
     id = Default.node_id % ("Vote Specification",)
 
 
 class CreateGaugeVoteSpecification:
+    __doc__ = "A mutation enabling the creation of a GaugeVoteSpecification."
     vote_session_id = VoteSpecificationInterface.vote_session_id
     proposal_id = Default.node_id % ("Proposal",) + " This is the proposal identifier on which the Gauge Vote will be created."
     title_entries = VoteSpecificationInterface.title_entries
     instructions_entries = VoteSpecificationInterface.instructions_entries
     is_custom = VoteSpecificationInterface.is_custom
     choices = GaugeVoteSpecification.choices
-    vote_spec_template_id = "???"
+    vote_spec_template_id = VoteSpecificationInterface.vote_spec_template_id
 
 
 class UpdateGaugeVoteSpecification:
@@ -804,7 +814,7 @@ class UpdateGaugeVoteSpecification:
 
 
 class CreateNumberGaugeVoteSpecification:
-    __doc__ = "A Mutation to create a numerical Gauge. "
+    __doc__ = "A mutation to create a numerical Gauge."
     vote_session_id = Default.node_id % ("Vote Session.") + " This is the identifier of the Vote session in which the numeric Gauge will be created."
     proposal_id = CreateGaugeVoteSpecification.proposal_id
     title_entries = VoteSpecificationInterface.title_entries
@@ -814,10 +824,11 @@ class CreateNumberGaugeVoteSpecification:
     maximum = NumberGaugeVoteSpecification.maximum
     nb_ticks = NumberGaugeVoteSpecification.nb_ticks
     unit = NumberGaugeVoteSpecification.unit
-    vote_spec_template_id = CreateGaugeVoteSpecification.vote_spec_template_id
+    vote_spec_template_id = VoteSpecificationInterface.vote_spec_template_id
 
 
 class UpdateNumberGaugeVoteSpecification:
+    __doc__ = "A mutation to update existing NumberGaugeVoteSpecifications."
     id = Default.node_id % ("Number Gauge Vote specification.",)
     title_entries = VoteSpecificationInterface.title_entries
     instructions_entries = VoteSpecificationInterface.instructions_entries
@@ -829,13 +840,15 @@ class UpdateNumberGaugeVoteSpecification:
 
 
 class CreateProposal:
+    __doc__ = "A mutation that enables the creation of a Proposal."
     vote_session_id = Default.node_id % ("Vote Session",)
     title_entries = Default.langstring_entries % ("The Proposal title in various languages.",)
     description_entries = Default.langstring_entries % ("The Proposal description in various languages.",)
-    order = "The order of the Proposal in the Vote session."
+    order = "The order (location) of the Proposal in the Vote session."
 
 
 class UpdateProposal:
+    __doc__ = "A mutation that enables existing Proposals to be updated."
     id = Default.node_id % ("Proposal",) + " This is the identifier of the proposal to be updated."
     title_entries = CreateProposal.title_entries
     description_entries = CreateProposal.description_entries
@@ -843,12 +856,12 @@ class UpdateProposal:
 
 
 class DeleteProposal:
+    __doc__ = "A mutation that enables the deletion of an existing Proposal."
     id = Default.node_id % ("Proposal",) + " This is the identifier of the proposal to eb deleted."
 
 
 class VoteInterface:
-    __doc__ = """In Assembl, in a vote session, participants are given the right
-    to vote on certain proposal. There are two types of votes in Assembl\n
+    __doc__ = """In a vote session, Users are given the right to vote on certain proposal. There are two types of votes in Assembl:\n
     Token Vote\n
     Gauge Vote.
     """
@@ -859,14 +872,14 @@ class VoteInterface:
 
 
 class TokenVote:
-    __doc__ = "A Vote submitted by a User on a Token Vote."
+    __doc__ = "A Vote submitted by a User on a TokenVote."
     vote_value = "The number of Tokens used on a certain Vote."
     token_category_id = "The category of the Token used."
 
 
 class GaugeVote:
-    __doc__ = "A Vote submitted by a User on a Gauge Vote."
-    vote_value = "The value entered on the Gauge Vote."
+    __doc__ = "A Vote submitted by a User on a GaugeVote."
+    vote_value = "The value entered on the GaugeVote."
 
 
 class AddTokenVote:
