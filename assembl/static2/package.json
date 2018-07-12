@@ -23,7 +23,7 @@
     "i18n:export": "node ./scripts/translations2messages.js && rip json2pot messages.json -k id -o ../locale/assembl-v2.pot && ./scripts/merge_po_files.bash",
     "i18n:import": "rip po2json '../locale/assembl-v2/*.po' -m messages.json -k id -o './translations'",
     "storybook": "start-storybook -p 9001 -c .storybook",
-    "documentation": "graphdoc -s /tmp/schema.json -o ./graphql-documentation"
+    "documentation": "graphdoc -s /tmp/schema.json -o ./graphql-documentation --force"
   },
   "author": "Bluenove",
   "license": "AGPL-3.0",
