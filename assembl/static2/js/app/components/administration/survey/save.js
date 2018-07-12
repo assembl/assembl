@@ -119,7 +119,7 @@ export const save = async (mutationsPromises: MutationsPromises): Promise<SaveSt
     })
     .catch((error) => {
       status = 'KO';
-      displayAlert('danger', error, false, 30000);
+      displayAlert('danger', error.message, false, 30000);
     });
 
   return status;
