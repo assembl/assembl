@@ -44,6 +44,7 @@ class Video(graphene.ObjectType):
     description_entries_top = graphene.List(LangStringEntry, description=docs.Video.description_entries_top)
     description_entries_bottom = graphene.List(LangStringEntry, description=docs.Video.description_entries_bottom)
     description_entries_side = graphene.List(LangStringEntry, description=docs.Video.description_entries_side)
+    media_file = graphene.Field(Document, description=docs.Video.media_file)
 
 
 class IdeaInterface(graphene.Interface):

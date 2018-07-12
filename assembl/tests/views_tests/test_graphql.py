@@ -74,7 +74,7 @@ def test_get_thematics_with_video(discussion, graphql_request, test_session):
         video_description_top=video_desc_top,
         video_description_bottom=video_desc_bottom,
         video_description_side=video_desc_side,
-        video_html_code=u"<object>....</object>",
+        video_html_code=u"https://something.com",
     )
     test_session.add(
         models.IdeaLink(source=root_thematic, target=thematic, order=1.0))
@@ -94,7 +94,7 @@ def test_get_thematics_with_video(discussion, graphql_request, test_session):
                                    u'descriptionTop': u"Personne ne veut d'un monde où on pourrait manipuler nos cerveaux et où les états pourraient les bidouiller",
                                    u'descriptionBottom': u"Calise de tabarnak",
                                    u'descriptionSide': u"Putain",
-                                   u'htmlCode': u"<object>....</object>",
+                                   u'htmlCode': u"https://something.com",
                                    }}]}
 
 
@@ -130,34 +130,35 @@ mutation myFirstMutation {
                     localeCode:"fr"
                 },
             ],
-            htmlCode: "<object>....</object>"
+            htmlCode: "https://something.com"
         },
         identifier: "survey") {
         thematic {
-            title,
+            title
             identifier
             video {
-                title,
+                title
                 titleEntries {
-                    localeCode,
+                    localeCode
+                    value
+                }
+                htmlCode
+                descriptionTop
+                descriptionBottom
+                descriptionSide
+                descriptionEntriesTop {
+                    localeCode
                     value
                 },
-            descriptionTop,
-            descriptionBottom,
-            descriptionSide,
-            descriptionEntriesTop {
-                localeCode,
-                value
-            },
-            descriptionEntriesBottom {
-                localeCode,
-                value
+                descriptionEntriesBottom {
+                    localeCode
+                    value
+                }
+                descriptionEntriesSide {
+                    localeCode
+                    value
+                }
             }
-            descriptionEntriesSide {
-                localeCode,
-                value
-            }
-            htmlCode}
         }
     }
 }
@@ -187,7 +188,7 @@ mutation myFirstMutation {
                                u'value': u"Putain",
                                u'localeCode': u"fr"
                            }],
-                           u'htmlCode': u"<object>....</object>",
+                           u'htmlCode': u"https://something.com",
                            }
             }}}
 

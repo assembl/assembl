@@ -225,6 +225,7 @@ class Video:
     description_bottom = Default.string_entry % ("Description on bottom side of the video.")
     description_side = Default.string_entry % ("Description on one of the sides of the video.")
     html_code = "HTML Code to add extra content in the video module section to be injected."
+    media_file = "File (image or video) to use in the video module section."
     title_entries = Default.langstring_entries % ("Title of the video in various languages.")
     description_entries_top = Default.langstring_entries % ("Description on the top of the video in various languages.")
     description_entries_bottom = Default.langstring_entries % ("Description on the bottom of the video in various languages.")

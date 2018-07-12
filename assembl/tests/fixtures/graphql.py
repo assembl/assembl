@@ -157,7 +157,7 @@ mutation myMutation {
                 {value:"Putain",
                  localeCode:"fr"},
             ],
-            htmlCode:"<object>....</object>"
+            htmlCode:"https://something.com"
         },
         identifier:"survey",
     ) {
