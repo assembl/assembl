@@ -879,7 +879,6 @@ class UpdateThematic(graphene.Mutation):
                         db,
                         context
                     )
-                    db.flush()
 
             if args.get('identifier') is not None:
                 kwargs['identifier'] = args.get('identifier')
@@ -904,7 +903,6 @@ class UpdateThematic(graphene.Mutation):
                     db,
                     context
                 )
-                db.flush()
 
             questions_input = args.get('questions')
             existing_questions = {
