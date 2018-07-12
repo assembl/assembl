@@ -91,7 +91,7 @@ exports[`PhaseForm component should render a form to update the dates and module
         onYearChange={[Function]}
         placeholderText="Phase 1's end date"
         preventOpenOnFocus={false}
-        selected={null}
+        selected={"2015-12-31T09:00:00.000Z"}
         shouldCloseOnSelect={true}
         showTimeSelect={true}
         timeCaption="Time"

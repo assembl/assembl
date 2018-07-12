@@ -16,7 +16,7 @@ describe('PhaseForm component', () => {
       handleEndDateChange: handleEndDateChangeSpy,
       identifier: 'survey',
       start: moment('2014-12-31T09:00:00+00:00'),
-      end: moment('2015-12-31T09:00:00+00:0'),
+      end: moment('2015-12-31T09:00:00+00:00'),
       locale: 'fr'
     };
 
