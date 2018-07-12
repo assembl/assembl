@@ -5,6 +5,7 @@ from graphene_sqlalchemy import SQLAlchemyObjectType
 from graphene_sqlalchemy.utils import get_query
 from pyramid.i18n import TranslationStringFactory
 
+import assembl.graphql.docstrings as docs
 from assembl import models
 from assembl.models.configurable_fields import ConfigurableFieldIdentifiersEnum
 from assembl.auth import CrudPermissions
@@ -19,12 +20,13 @@ _ = TranslationStringFactory('assembl')
 
 
 class ConfigurableFieldInterface(graphene.Interface):
+    __doc__ = docs.ConfigurableFieldInterface.__doc__
 
-    identifier = graphene.String()
-    order = graphene.Float()
-    required = graphene.Boolean()
-    title = graphene.String(lang=graphene.String())
-    title_entries = graphene.List(LangStringEntry)
+    identifier = graphene.String(description=docs.ConfigurableFieldInterface.identifier)
+    order = graphene.Float(description=docs.ConfigurableFieldInterface.identifier)
+    required = graphene.Boolean(description=docs.ConfigurableFieldInterface.identifier)
+    title = graphene.String(lang=graphene.String(description=docs.Default.required_language_input), description=docs.ConfigurableFieldInterface.identifier)
+    title_entries = graphene.List(LangStringEntry, description=docs.ConfigurableFieldInterface.identifier)
 
     def resolve_title(self, args, context, info):
         return resolve_langstring(self.title, args.get('lang'))
@@ -34,6 +36,8 @@ class ConfigurableFieldInterface(graphene.Interface):
 
 
 class TextField(SecureObjectType, SQLAlchemyObjectType):
+    __doc__ = docs.TextField.__doc__
+
     class Meta:
         model = models.TextField
         interfaces = (Node, ConfigurableFieldInterface)
@@ -41,14 +45,15 @@ class TextField(SecureObjectType, SQLAlchemyObjectType):
 
 
 class SelectFieldOption(SecureObjectType, SQLAlchemyObjectType):
+    __doc__ = docs.SelectFieldOption.__doc__
 
     class Meta:
         model = models.SelectFieldOption
         interfaces = (Node,)
         only_fields = ('id', 'order')
 
-    label = graphene.String(lang=graphene.String())
-    label_entries = graphene.List(LangStringEntry)
+    label = graphene.String(lang=graphene.String(description=docs.Default.required_language_input), description=docs.SelectFieldOption.label)
+    label_entries = graphene.List(LangStringEntry, description=docs.SelectFieldOption.label_entries)
 
     def resolve_label(self, args, context, info):
         return resolve_langstring(self.label, args.get('lang'))
@@ -58,12 +63,14 @@ class SelectFieldOption(SecureObjectType, SQLAlchemyObjectType):
 
 
 class SelectFieldOptionInput(graphene.InputObjectType):
-    id = graphene.ID()
-    label_entries = graphene.List(LangStringEntryInput, required=True)
-    order = graphene.Float(required=True)
+    id = graphene.ID(description=docs.SelectFieldOptionInput.id)
+    label_entries = graphene.List(LangStringEntryInput, required=True, description=docs.SelectFieldOptionInput.label_entries)
+    order = graphene.Float(required=True, description=docs.SelectFieldOptionInput.order)
 
 
 class SelectField(SecureObjectType, SQLAlchemyObjectType):
+    __doc__ = docs.SelectField.__doc__
+
     class Meta:
         model = models.SelectField
         interfaces = (Node, ConfigurableFieldInterface)
@@ -73,12 +80,14 @@ class SelectField(SecureObjectType, SQLAlchemyObjectType):
 
 
 class CreateTextField(graphene.Mutation):
+    __doc__ = docs.CreateTextField.__doc__
+
     class Input:
-        lang = graphene.String()
-        title_entries = graphene.List(LangStringEntryInput, required=True)
-        order = graphene.Float()
-        required = graphene.Boolean()
-        options = graphene.List(SelectFieldOptionInput, required=False)
+        lang = graphene.String(description=docs.CreateTextField.lang)
+        title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.CreateTextField.title_entries)
+        order = graphene.Float(description=docs.CreateTextField.order)
+        required = graphene.Boolean(description=docs.CreateTextField.required)
+        options = graphene.List(SelectFieldOptionInput, required=False, description=docs.CreateTextField.options)
 
     field = graphene.Field(lambda: ConfigurableFieldUnion)
 
@@ -123,13 +132,15 @@ class CreateTextField(graphene.Mutation):
 
 
 class UpdateTextField(graphene.Mutation):
+    __doc__ = docs.UpdateTextField.__doc__
+
     class Input:
-        id = graphene.ID(required=True)
-        lang = graphene.String(required=True)
-        title_entries = graphene.List(LangStringEntryInput, required=True)
-        order = graphene.Float(required=True)
-        required = graphene.Boolean(required=True)
-        options = graphene.List(SelectFieldOptionInput, required=False)
+        id = graphene.ID(required=True, description=docs.UpdateTextField.id)
+        lang = graphene.String(required=True, description=docs.UpdateTextField.lang)
+        title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.UpdateTextField.title_entries)
+        order = graphene.Float(required=True, description=docs.UpdateTextField.order)
+        required = graphene.Boolean(required=True, description=docs.UpdateTextField.required)
+        options = graphene.List(SelectFieldOptionInput, required=False, description=docs.UpdateTextField.options)
 
     field = graphene.Field(lambda: ConfigurableFieldUnion)
 
@@ -190,9 +201,10 @@ class UpdateTextField(graphene.Mutation):
 
 
 class DeleteTextField(graphene.Mutation):
+    __doc__ = docs.DeleteTextField.__doc__
 
     class Input:
-        id = graphene.ID(required=True)
+        id = graphene.ID(required=True, description=docs.DeleteTextField.id)
 
     success = graphene.Boolean()
 
@@ -215,6 +227,8 @@ class DeleteTextField(graphene.Mutation):
 
 
 class ConfigurableFieldUnion(SQLAlchemyUnion):
+    __doc__ = docs.ConfigurableFieldUnion.__doc__
+
     class Meta:
         types = (TextField, SelectField)
         model = models.AbstractConfigurableField
@@ -230,14 +244,16 @@ class ConfigurableFieldUnion(SQLAlchemyUnion):
 
 
 class ProfileField(SecureObjectType, SQLAlchemyObjectType):
+    __doc__ = docs.ProfileField.__doc__
+
     class Meta:
         model = models.ProfileField
         interfaces = (Node, )
         only_fields = ('id', )
 
-    agent_profile = graphene.Field(lambda: AgentProfile)
-    configurable_field = graphene.Field(lambda: ConfigurableFieldUnion, required=True)
-    value_data = GenericScalar()
+    agent_profile = graphene.Field(lambda: AgentProfile, description=docs.ProfileField.agent_profile)
+    configurable_field = graphene.Field(lambda: ConfigurableFieldUnion, required=True, description=docs.ProfileField.configurable_field)
+    value_data = GenericScalar(description=docs.ProfileField.value_data)
 
     def resolve_id(self, args, context, info):
         if self.id < 0:
@@ -257,9 +273,11 @@ class ProfileField(SecureObjectType, SQLAlchemyObjectType):
 
 
 class FieldData(graphene.AbstractType):
-    configurable_field_id = graphene.ID(required=True)
-    id = graphene.ID(required=True)
-    value_data = GenericScalar(required=True)
+    __doc__ = docs.FieldData.__doc__
+
+    configurable_field_id = graphene.ID(required=True, description=docs.FieldData.configurable_field_id)
+    id = graphene.ID(required=True, description=docs.FieldData.id)
+    value_data = GenericScalar(required=True, description=docs.FieldData.value_data)
 
 
 class FieldDataInput(graphene.InputObjectType, FieldData):
@@ -267,9 +285,11 @@ class FieldDataInput(graphene.InputObjectType, FieldData):
 
 
 class UpdateProfileFields(graphene.Mutation):
+    __doc__ = docs.UpdateProfileFields.__doc__
+
     class Input:
-        data = graphene.List(FieldDataInput, required=True)
-        lang = graphene.String(required=True)
+        data = graphene.List(FieldDataInput, required=True, description=docs.UpdateProfileFields.data)
+        lang = graphene.String(required=True, description=docs.UpdateProfileFields.lang)
 
     profile_fields = graphene.List(ProfileField)
 

@@ -10,14 +10,22 @@ class Default:
     node_id = """The Relay.Node ID type of the %s object."""
     creation_date = "The date that the object was created, in UTC timezone, in ISO 8601 format."
     object_id = """The SQLALCHEMY ID of the %s object."""
+    phase_identifier = """The phase identifier. Could be one of:\n
+    \"survey\"\n
+    \"thread\"\n
+    \"multiColumns\"\n
+    \"voteSession\"\n
+    """
+    phase_identifier_id = "The database identifier relating to the discussion phase."
 
 
 class Schema:
+    __doc__ = """The platform's Schema describing the core functionalities."""
     node = """A Relay node. Any entity that uses the Relay object structure, along with connections (edges), can be queried from Node."""
     root_idea = """An idea union between either an Idea type or a Thematic type."""
     ideas = """List of all ideas on the debate."""
-    thematics = """List of all thematics on the debate. Thematics are a subset of Ideas."""
-    syntheses = """List of all syntheses on the debate."""
+    thematics = """A list of all thematics on the debate. Thematics are a subset of Ideas."""
+    syntheses = """A list of all syntheses on the debate."""
     num_participants = """The number of active participants on the debate with any form of contribution."""
     discussion_preferences = """
         The dicussion preferences of the debate.
@@ -730,7 +738,7 @@ class TokenVoteSpecification:
 
 class GaugeChoiceSpecification:
     __doc__ = "A VoteSpecification metadata object representing a choice in a GaugeVote."
-    value = Default.float % ("Gauge value")
+    value = Default.float_entry % ("Gauge value")
     label = Default.string_entry % ("The label of the Gauge",)
     label_entries = Default.langstring_entries % ("The label of the Gauge in various languages.",)
 
@@ -988,3 +996,88 @@ class UpdateResource:
     embed_code = Resource.embed_code
     image = Resource.image
     doc = Resource.doc
+
+
+class ConfigurableFieldInterface:
+    __doc__ = """A ConfigurableField is a front-end text field that can be dymaically generated based on a set of configurations."""
+    identifier = """The unique identifier of the field."""
+    order = """The position (order) of the Field compared to other Fields."""
+    required = """A flag indicating if the Field is a requires an input or not."""
+    title = Default.string_entry % ("Text Field Label")
+    title_entries = Default.langstring_entries % ("The label in multiple languaes.")
+
+
+class TextField:
+    __doc__ = "A configurable HTML text field"
+    field_type = """The type of the field. The possible options are:\n
+    TEXT\n
+    EMAIL\n
+    PASSWORD"""
+
+
+class SelectFieldOption:
+    __doc__ = "Options for an HTML select field."
+    order = "The position (order) of the field."
+    label = ConfigurableFieldInterface.title
+    label_entries = ConfigurableFieldInterface.title_entries
+
+
+class SelectFieldOptionInput:
+    id = Default.node_id % ("SelectFieldOption")
+    label_entries = SelectFieldOption.label_entries
+    order = SelectFieldOption.order
+
+
+class SelectField:
+    __doc__ = "The configurable HTML-based Select Field."
+    multivalued = "A flag indicating whether this is a drop-down option."
+    options = "The list of SelectFieldOptions."
+
+
+class CreateTextField:
+    __doc__ = "A mutation that allows for the creation of a TextField."
+    # TODO: Check why lang is not used
+    lang = "The language of the entity. WARNING: Currently not used!"
+    title_entries = ConfigurableFieldInterface.title_entries
+    order = ConfigurableFieldInterface.order
+    required = ConfigurableFieldInterface.required
+    options = "A list of SelectFieldOptions. If this is passed, the mutation will be creating a SelectField instead of a TextField."
+
+
+class UpdateTextField:
+    __doc__ = "A mutation that allows an existing TextField to be updated."
+    id = Default.node_id % ("TextField")
+    lang = "The language of the source. Warning: Currently not used!"
+    title_entries = ConfigurableFieldInterface.title_entries
+    order = ConfigurableFieldInterface.order
+    required = ConfigurableFieldInterface.required
+    options = "A list of SelectFieldOptions. If this is passed, the mutation will be updating a SelectField instead of a TextField."
+
+
+class DeleteTextField:
+    __doc__ = "A mutation that enables the removal of an existing TextField."
+    id = Default.node_id % ("TextField")
+
+
+class ConfigurableFieldUnion:
+    __doc__ = "The Union type of both ConfigurableFields: TextField and SelectField."
+
+
+class ProfileField:
+    __doc__ = "A ConfigurableField connected to the profile of a User. This is often used in the Profile page."
+    agent_profile = "The AgentProfile that the ConfigurableField is connected to."
+    configurable_field = "The configuration options affecting this field."
+    value_data = "The value of the field. It can be of various types."
+
+
+class FieldData:
+    __doc__ = "A generic Field Data description."
+    configurable_field_id = Default.node_id % ("ConfigurableField")
+    id = Default.node_id % ("FieldData")
+    value_data = "The data of the field."
+
+
+class UpdateProfileFields:
+    __doc__ = "A mutation that enables an existing ProfileField to be updated."
+    data = "The data to update the ProfileField with."
+    lang = "The language of the data. Warning: `lang` is currently not used!"

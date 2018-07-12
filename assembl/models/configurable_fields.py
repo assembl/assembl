@@ -14,6 +14,7 @@ from sqlalchemy import (
 from sqlalchemy.dialects.postgresql.json import JSONB
 from sqlalchemy.orm import relationship, backref
 
+import assembl.graphql.docstrings as docs
 from . import DiscussionBoundBase
 from ..auth import CrudPermissions, P_ADMIN_DISC, P_READ
 from .langstrings import LangString
@@ -127,7 +128,8 @@ class TextField(AbstractConfigurableField):
         Enum(*field_types, name='text_field_types'),
         nullable=False,
         default=TextFieldsTypesEnum.TEXT.value,
-        server_default=TextFieldsTypesEnum.TEXT.value
+        server_default=TextFieldsTypesEnum.TEXT.value,
+        doc=docs.TextField.field_type
     )
 
 
@@ -145,7 +147,7 @@ class SelectField(AbstractConfigurableField):
         ForeignKey(AbstractConfigurableField.id, ondelete="CASCADE", onupdate="CASCADE"),
         primary_key=True)
 
-    multivalued = Column(Boolean, default=False)
+    multivalued = Column(Boolean, default=False, doc=docs.SelectField.multivalued)
 
     crud_permissions = CrudPermissions(
         P_ADMIN_DISC, P_READ, P_ADMIN_DISC, P_ADMIN_DISC)
@@ -158,7 +160,7 @@ class SelectFieldOption(DiscussionBoundBase):
     __tablename__ = "select_field_option"
 
     id = Column(Integer, primary_key=True)
-    order = Column(Float, nullable=False, default=0.0)
+    order = Column(Float, nullable=False, default=0.0, doc=docs.SelectFieldOption.order)
     label_id = Column(Integer, ForeignKey(LangString.id), nullable=False, index=True)
     select_field_id = Column(
         Integer, ForeignKey(
