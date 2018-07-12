@@ -27,6 +27,11 @@ class App extends React.Component {
     this.props.addContext(this.props.route.path, debateId, connectedUserId, connectedUserName);
   }
 
+  componentDidMount() {
+    const { timeline, putTimelineInStore } = this.props;
+    putTimelineInStore(timeline);
+  }
+
   componentDidUpdate() {
     const { debate, location, params, timeline } = this.props;
     if (!params.phase && !debate.debateLoading && location.pathname.split('/').indexOf('debate') > -1) {
@@ -36,28 +41,13 @@ class App extends React.Component {
   }
 
   render() {
-    const { timelineLoading, timeline, putTimelineInStore } = this.props;
     const { debateData, debateLoading, debateError } = this.props.debate;
     const divClassNames = classNames('app', { 'harvesting-mode-on': this.props.isHarvesting });
-    if (!timelineLoading) {
-      const filteredPhases = filter(TimelineQuery, { timeline: timeline });
-      const phasesForStore = filteredPhases.timeline.map(phase => ({
-        id: phase.id,
-        identifier: phase.identifier,
-        isThematicsTable: phase.isThematicsTable,
-        start: phase.start,
-        end: phase.end,
-        image: phase.image,
-        title: phase.title,
-        description: phase.description
-      }));
-      putTimelineInStore(phasesForStore);
-    }
     return (
       <div className={divClassNames}>
         <ChatFrame />
         {debateLoading && <Loader />}
-        {debateData && !timelineLoading && <div className="app-child">{this.props.children}</div>}
+        {debateData && <div className="app-child">{this.props.children}</div>}
         {debateError && <Error errorMessage={debateError} />}
       </div>
     );
@@ -91,20 +81,30 @@ export default compose(
     props: ({ data }) => {
       if (data.loading) {
         return {
-          timelineLoading: true
+          loading: true
         };
       }
       if (data.error) {
         return {
-          timelineHasErrors: true
+          loading: false,
+          timeline: []
         };
       }
 
+      const filteredPhases = filter(TimelineQuery, { timeline: data.timeline });
+      const phasesForStore = filteredPhases.timeline.map(phase => ({
+        id: phase.id,
+        identifier: phase.identifier,
+        isThematicsTable: phase.isThematicsTable,
+        start: phase.start,
+        end: phase.end,
+        image: phase.image,
+        title: phase.title,
+        description: phase.description
+      }));
       return {
-        timelineLoading: data.loading,
-        timelineHasErrors: data.error,
-        refetchTimeline: data.refetch,
-        timeline: data.timeline
+        loading: data.loading,
+        timeline: phasesForStore
       };
     }
   }),
