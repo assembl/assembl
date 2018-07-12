@@ -1,0 +1,76 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MultilingualTextFieldAdapter component should render a text field 1`] = `
+<div
+  className="form-group"
+>
+  <label
+    className="control-label"
+    htmlFor="title"
+  >
+    Title
+  </label>
+  <input
+    className="form-control"
+    id="title"
+    onChange={[Function]}
+    onFocus={[Function]}
+    placeholder="Title"
+    type={undefined}
+    value="Bonjour"
+  />
+</div>
+`;
+
+exports[`MultilingualTextFieldAdapter component should render a text field touched with error 1`] = `
+<div
+  className="form-group has-error"
+>
+  <input
+    className="form-control"
+    id="title"
+    onChange={[Function]}
+    onFocus={[Function]}
+    placeholder="Title"
+    type={undefined}
+    value=""
+  />
+  <span
+    className="help-block"
+  >
+    This field is required
+  </span>
+</div>
+`;
+
+exports[`MultilingualTextFieldAdapter component should render a text field untouched with error 1`] = `
+<div
+  className="form-group"
+>
+  <input
+    className="form-control"
+    id="title"
+    onChange={[Function]}
+    onFocus={[Function]}
+    placeholder="Title"
+    type={undefined}
+    value=""
+  />
+</div>
+`;
+
+exports[`MultilingualTextFieldAdapter component should render a text field without value 1`] = `
+<div
+  className="form-group"
+>
+  <input
+    className="form-control"
+    id="title"
+    onChange={[Function]}
+    onFocus={[Function]}
+    placeholder="Title"
+    type={undefined}
+    value=""
+  />
+</div>
+`;

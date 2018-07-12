@@ -1,0 +1,333 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FieldArrayWithActions component should render an array of fields with delete, move up, move down and a add button 1`] = `
+<form
+  onSubmit={[Function]}
+>
+  <div>
+    <div
+      className="form-container"
+    >
+      <div
+        className="title left"
+      >
+        <span
+          className={undefined}
+          style={undefined}
+        >
+          Missing translation: some.msg.id
+        </span>
+      </div>
+      <div
+        className="pointer right"
+      >
+        <div
+          className="inline"
+        >
+          <button
+            className="admin-icons btn btn-default"
+            disabled={false}
+            onBlur={[Function]}
+            onClick={[Function]}
+            onFocus={[Function]}
+            onMouseOut={[Function]}
+            onMouseOver={[Function]}
+            type="button"
+          >
+            <span
+              className="assembl-icon-down-bold grey"
+            />
+          </button>
+          <button
+            className="admin-icons btn btn-default"
+            disabled={false}
+            onBlur={[Function]}
+            onClick={[Function]}
+            onFocus={[Function]}
+            onMouseOut={[Function]}
+            onMouseOver={[Function]}
+            type="button"
+          >
+            <span
+              className="assembl-icon-delete grey"
+            />
+          </button>
+        </div>
+      </div>
+      <div
+        className="clear"
+      />
+      <input
+        label="Firstname"
+        name="persons[0].firstname"
+        onBlur={[Function]}
+        onChange={[Function]}
+        onFocus={[Function]}
+        value="Rosalinda"
+      />
+      <input
+        label="Firstname"
+        name="persons[0].lastname"
+        onBlur={[Function]}
+        onChange={[Function]}
+        onFocus={[Function]}
+        value="Tillman"
+      />
+      <div
+        className="separator"
+      />
+    </div>
+    <div
+      className="form-container"
+    >
+      <div
+        className="title left"
+      >
+        <span
+          className={undefined}
+          style={undefined}
+        >
+          Missing translation: some.msg.id
+        </span>
+      </div>
+      <div
+        className="pointer right"
+      >
+        <div
+          className="inline"
+        >
+          <button
+            className="admin-icons btn btn-default"
+            disabled={false}
+            onBlur={[Function]}
+            onClick={[Function]}
+            onFocus={[Function]}
+            onMouseOut={[Function]}
+            onMouseOver={[Function]}
+            type="button"
+          >
+            <span
+              className="assembl-icon-up-bold grey"
+            />
+          </button>
+          <button
+            className="admin-icons btn btn-default"
+            disabled={false}
+            onBlur={[Function]}
+            onClick={[Function]}
+            onFocus={[Function]}
+            onMouseOut={[Function]}
+            onMouseOver={[Function]}
+            type="button"
+          >
+            <span
+              className="assembl-icon-delete grey"
+            />
+          </button>
+        </div>
+      </div>
+      <div
+        className="clear"
+      />
+      <input
+        label="Firstname"
+        name="persons[1].firstname"
+        onBlur={[Function]}
+        onChange={[Function]}
+        onFocus={[Function]}
+        value="Lavinia"
+      />
+      <input
+        label="Firstname"
+        name="persons[1].lastname"
+        onBlur={[Function]}
+        onChange={[Function]}
+        onFocus={[Function]}
+        value="Kunde"
+      />
+      <div
+        className="separator"
+      />
+    </div>
+    <div
+      className="plus margin-l"
+      onBlur={[Function]}
+      onClick={[Function]}
+      onFocus={[Function]}
+      onMouseOut={[Function]}
+      onMouseOver={[Function]}
+    >
+      +
+    </div>
+  </div>
+  <button
+    disabled={true}
+    type="submit"
+  >
+    Submit
+  </button>
+</form>
+`;
+
+exports[`FieldArrayWithActions component should render an array of fields with delete, move up, move down and a add button without separators 1`] = `
+<form
+  onSubmit={[Function]}
+>
+  <div>
+    <div
+      className="form-container"
+    >
+      <div
+        className="title left"
+      >
+        <span
+          className={undefined}
+          style={undefined}
+        >
+          Missing translation: some.msg.id
+        </span>
+      </div>
+      <div
+        className="pointer right"
+      >
+        <div
+          className="inline"
+        >
+          <button
+            className="admin-icons btn btn-default"
+            disabled={false}
+            onBlur={[Function]}
+            onClick={[Function]}
+            onFocus={[Function]}
+            onMouseOut={[Function]}
+            onMouseOver={[Function]}
+            type="button"
+          >
+            <span
+              className="assembl-icon-down-bold grey"
+            />
+          </button>
+          <button
+            className="admin-icons btn btn-default"
+            disabled={false}
+            onBlur={[Function]}
+            onClick={[Function]}
+            onFocus={[Function]}
+            onMouseOut={[Function]}
+            onMouseOver={[Function]}
+            type="button"
+          >
+            <span
+              className="assembl-icon-delete grey"
+            />
+          </button>
+        </div>
+      </div>
+      <div
+        className="clear"
+      />
+      <input
+        label="Firstname"
+        name="persons[0].firstname"
+        onBlur={[Function]}
+        onChange={[Function]}
+        onFocus={[Function]}
+        value="Rosalinda"
+      />
+      <input
+        label="Firstname"
+        name="persons[0].lastname"
+        onBlur={[Function]}
+        onChange={[Function]}
+        onFocus={[Function]}
+        value="Tillman"
+      />
+    </div>
+    <div
+      className="form-container"
+    >
+      <div
+        className="title left"
+      >
+        <span
+          className={undefined}
+          style={undefined}
+        >
+          Missing translation: some.msg.id
+        </span>
+      </div>
+      <div
+        className="pointer right"
+      >
+        <div
+          className="inline"
+        >
+          <button
+            className="admin-icons btn btn-default"
+            disabled={false}
+            onBlur={[Function]}
+            onClick={[Function]}
+            onFocus={[Function]}
+            onMouseOut={[Function]}
+            onMouseOver={[Function]}
+            type="button"
+          >
+            <span
+              className="assembl-icon-up-bold grey"
+            />
+          </button>
+          <button
+            className="admin-icons btn btn-default"
+            disabled={false}
+            onBlur={[Function]}
+            onClick={[Function]}
+            onFocus={[Function]}
+            onMouseOut={[Function]}
+            onMouseOver={[Function]}
+            type="button"
+          >
+            <span
+              className="assembl-icon-delete grey"
+            />
+          </button>
+        </div>
+      </div>
+      <div
+        className="clear"
+      />
+      <input
+        label="Firstname"
+        name="persons[1].firstname"
+        onBlur={[Function]}
+        onChange={[Function]}
+        onFocus={[Function]}
+        value="Lavinia"
+      />
+      <input
+        label="Firstname"
+        name="persons[1].lastname"
+        onBlur={[Function]}
+        onChange={[Function]}
+        onFocus={[Function]}
+        value="Kunde"
+      />
+    </div>
+    <div
+      className="plus margin-l"
+      onBlur={[Function]}
+      onClick={[Function]}
+      onFocus={[Function]}
+      onMouseOut={[Function]}
+      onMouseOver={[Function]}
+    >
+      +
+    </div>
+  </div>
+  <button
+    disabled={true}
+    type="submit"
+  >
+    Submit
+  </button>
+</form>
+`;

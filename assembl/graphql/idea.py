@@ -28,7 +28,8 @@ from .types import SecureObjectType, SQLAlchemyUnion
 from .user import AgentProfile
 from .utils import (
     abort_transaction_on_exception, get_fields, get_root_thematic_for_phase,
-    create_root_thematic)
+    create_root_thematic, get_attachment_with_purpose, create_attachment,
+    update_attachment)
 import assembl.graphql.docstrings as docs
 
 
@@ -503,10 +504,16 @@ class Thematic(SecureObjectType, SQLAlchemyObjectType):
             self, 'video_description_bottom')
         description_entries_side = resolve_langstring_entries(
             self, 'video_description_side')
+
+        MEDIA_ATTACHMENT = models.AttachmentPurpose.MEDIA_ATTACHMENT.value
+        media_file = get_attachment_with_purpose(self.attachments, MEDIA_ATTACHMENT)
+
         if not (title_entries or
                 description_entries_top or
                 description_entries_bottom or
-                description_entries_side or self.video_html_code):
+                description_entries_side or
+                self.video_html_code or
+                media_file):
             return None
 
         return Video(
@@ -519,6 +526,7 @@ class Thematic(SecureObjectType, SQLAlchemyObjectType):
             description_entries_bottom=description_entries_bottom,
             description_entries_side=description_entries_side,
             html_code=self.video_html_code,
+            media_file=media_file and media_file.document
         )
 
 
@@ -551,6 +559,7 @@ class VideoInput(graphene.InputObjectType):
     description_entries_bottom = graphene.List(LangStringEntryInput, description=docs.VideoInput.description_entries_bottom)
     description_entries_side = graphene.List(LangStringEntryInput, description=docs.VideoInput.description_entries_side)
     html_code = graphene.String(description=docs.VideoInput.html_code)
+    media_file = graphene.String(description=docs.VideoInput.media_file)
 
 
 # Create an Idea to be used in a Thread phase
@@ -690,6 +699,7 @@ class CreateThematic(graphene.Mutation):
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
         EMBED_ATTACHMENT = models.AttachmentPurpose.EMBED_ATTACHMENT.value
+        MEDIA_ATTACHMENT = models.AttachmentPurpose.MEDIA_ATTACHMENT.value
         cls = models.Thematic
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
@@ -719,6 +729,7 @@ class CreateThematic(graphene.Mutation):
                 kwargs['description'] = description_langstring
 
             video = args.get('video')
+            video_media = None
             if video is not None:
                 video_title = langstring_from_input_entries(
                     video.get('title_entries', None))
@@ -746,6 +757,8 @@ class CreateThematic(graphene.Mutation):
                 if video_html_code is not None:
                     kwargs['video_html_code'] = video_html_code
 
+                video_media = video.get('media_file', None)
+
             # Our thematic, because it inherits from Idea, needs to be
             # associated to the root idea of the discussion.
             # We create a hidden root thematic, corresponding to the
@@ -770,23 +783,29 @@ class CreateThematic(graphene.Mutation):
             # add uploaded image as an attachment to the idea
             image = args.get('image')
             if image is not None:
-                filename = os.path.basename(context.POST[image].filename)
-                mime_type = context.POST[image].type
-                document = models.File(
-                    discussion=discussion,
-                    mime_type=mime_type,
-                    title=filename)
-                document.add_file_data(context.POST[image].file)
-                db.add(models.IdeaAttachment(
-                    document=document,
-                    idea=saobj,
-                    discussion=discussion,
-                    creator_id=context.authenticated_userid,
-                    title=filename,
-                    attachmentPurpose=EMBED_ATTACHMENT
-                ))
+                new_attachment = create_attachment(
+                    discussion,
+                    models.IdeaAttachment,
+                    image,
+                    EMBED_ATTACHMENT,
+                    context
+                )
+                new_attachment.idea = saobj
+                db.add(new_attachment)
+                db.flush()
 
-            db.flush()
+            # add uploaded image as an attachment to the idea
+            if video_media is not None:
+                new_attachment = create_attachment(
+                    discussion,
+                    models.IdeaAttachment,
+                    video_media,
+                    MEDIA_ATTACHMENT,
+                    context
+                )
+                new_attachment.idea = saobj
+                db.add(new_attachment)
+                db.flush()
 
             questions_input = args.get('questions')
             if questions_input is not None:
@@ -825,6 +844,7 @@ class UpdateThematic(graphene.Mutation):
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
         EMBED_ATTACHMENT = models.AttachmentPurpose.EMBED_ATTACHMENT.value
+        MEDIA_ATTACHMENT = models.AttachmentPurpose.MEDIA_ATTACHMENT.value
         cls = models.Thematic
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
@@ -840,7 +860,7 @@ class UpdateThematic(graphene.Mutation):
         if not allowed:
             raise HTTPUnauthorized()
 
-        with cls.default_db.no_autoflush:
+        with cls.default_db.no_autoflush as db:
             # introducing history at every step, including thematics + questions  # noqa: E501
             thematic.copy(tombstone=True)
             title_entries = args.get('title_entries')
@@ -871,13 +891,23 @@ class UpdateThematic(graphene.Mutation):
                     video.get('description_entries_side', []))
                 kwargs['video_html_code'] = video.get('html_code', None)
 
+                video_media = video.get('media_file', None)
+                if video_media:
+                    update_attachment(
+                        discussion,
+                        models.IdeaAttachment,
+                        video_media,
+                        thematic.attachments,
+                        MEDIA_ATTACHMENT,
+                        db,
+                        context
+                    )
+
             if args.get('identifier') is not None:
                 kwargs['identifier'] = args.get('identifier')
 
             for attr, value in kwargs.items():
                 setattr(thematic, attr, value)
-
-            db = thematic.db
 
             # change order if needed
             order = args.get('order')
@@ -887,37 +917,15 @@ class UpdateThematic(graphene.Mutation):
             # add uploaded image as an attachment to the idea
             image = args.get('image')
             if image is not None:
-                if image == 'TO_DELETE' and thematic.attachments:
-                    # delete the image
-                    attachment = thematic.attachments[0]
-                    attachment.document.delete_file()
-                    db.delete(attachment.document)
-                    db.delete(attachment)
-                    thematic.attachments.remove(attachment)
-                else:
-                    filename = os.path.basename(context.POST[image].filename)
-                    mime_type = context.POST[image].type
-                    document = models.File(
-                        discussion=discussion,
-                        mime_type=mime_type,
-                        title=filename)
-                    document.add_file_data(context.POST[image].file)
-                    # if there is already an attachment, remove it with the
-                    # associated document (image)
-                    if thematic.attachments:
-                        thematic.attachments[0].document.delete_file()
-                        db.delete(thematic.attachments[0].document)
-                        thematic.attachments.remove(thematic.attachments[0])
-
-                    attachment = models.IdeaAttachment(
-                        document=document,
-                        discussion=discussion,
-                        creator_id=context.authenticated_userid,
-                        title=filename,
-                        attachmentPurpose=EMBED_ATTACHMENT
-                    )
-                    thematic.attachments.append(attachment)
-            db.flush()
+                update_attachment(
+                    discussion,
+                    models.IdeaAttachment,
+                    image,
+                    thematic.attachments,
+                    EMBED_ATTACHMENT,
+                    db,
+                    context
+                )
 
             questions_input = args.get('questions')
             existing_questions = {

@@ -323,6 +323,7 @@ class VideoInput:
     description_entries_bottom = Default.langstring_entries % ("Description on the bottom of the video in various languages.")
     description_entries_side = Default.langstring_entries % ("Description on the side of the video in various languages.")
     html_code = "HTML Code to add extra content in the video module section to be injected."
+    media_file = "File (image or video) to use in the video module section."
 
 
 class CreateIdea:

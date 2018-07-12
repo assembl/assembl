@@ -1,0 +1,88 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TextFieldAdapter component should render a text field 1`] = `
+<div
+  className="form-group"
+>
+  <label
+    className="control-label"
+    htmlFor="fullname"
+  >
+    Full name
+  </label>
+  <input
+    className="form-control"
+    id="fullname"
+    onChange={[Function]}
+    onFocus={[Function]}
+    placeholder="Full name"
+    type={undefined}
+    value="Amber Zieme"
+  />
+</div>
+`;
+
+exports[`TextFieldAdapter component should render a text field touched with error 1`] = `
+<div
+  className="form-group has-error"
+>
+  <label
+    className="control-label"
+    htmlFor="fullname"
+  >
+    Full name
+  </label>
+  <input
+    className="form-control"
+    id="fullname"
+    onChange={[Function]}
+    onFocus={[Function]}
+    placeholder="Full name"
+    type={undefined}
+    value="Amber Zieme"
+  />
+  <span
+    className="help-block"
+  >
+    This field is required
+  </span>
+</div>
+`;
+
+exports[`TextFieldAdapter component should render a text field untouched with error 1`] = `
+<div
+  className="form-group"
+>
+  <label
+    className="control-label"
+    htmlFor="fullname"
+  >
+    Full name
+  </label>
+  <input
+    className="form-control"
+    id="fullname"
+    onChange={[Function]}
+    onFocus={[Function]}
+    placeholder="Full name"
+    type={undefined}
+    value="Amber Zieme"
+  />
+</div>
+`;
+
+exports[`TextFieldAdapter component should render a text field without value 1`] = `
+<div
+  className="form-group"
+>
+  <input
+    className="form-control"
+    id="fullname"
+    onChange={[Function]}
+    onFocus={[Function]}
+    placeholder="Full name"
+    type={undefined}
+    value={undefined}
+  />
+</div>
+`;

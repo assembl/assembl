@@ -45,7 +45,7 @@ class ExportSection extends React.Component<ExportSectionProps> {
         onChange={({ target: { value } }) => {
           onSelect(value);
         }}
-        value={activeLanguage ? activeLanguage.locale : null}
+        value={activeLanguage ? activeLanguage.locale : ''}
       >
         {languages &&
           languages.map(lang => (

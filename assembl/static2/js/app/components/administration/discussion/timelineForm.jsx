@@ -1,11 +1,13 @@
 // @flow
 import React from 'react';
 import { I18n, Translate } from 'react-redux-i18n';
-import { OverlayTrigger, Row, Col } from 'react-bootstrap';
+import { OverlayTrigger } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import range from 'lodash/range';
+
 import { addPhaseTooltip } from '../../common/tooltips';
+import TabbedContent from '../../common/tabbedContent';
 import SectionTitle from '../sectionTitle';
 import PhaseForm from './phaseForm';
 import { createRandomId, getDiscussionSlug } from '../../../utils/globalFunctions';
@@ -24,22 +26,6 @@ type TimelineFormState = {
 };
 
 export class DumbTimelineForm extends React.Component<TimelineFormProps, TimelineFormState> {
-  static getDerivedStateFromProps(props: TimelineFormProps, state: TimelineFormState) {
-    if (!state.selectedPhaseId && props.phases) {
-      return {
-        selectedPhaseId: props.phases[0]
-      };
-    }
-    return state;
-  }
-
-  constructor(props: TimelineFormProps) {
-    super(props);
-    this.state = {
-      selectedPhaseId: props.phases ? props.phases[0] : ''
-    };
-  }
-
   componentDidUpdate() {
     const { length } = this.props.phases;
     if (length === 0) {
@@ -53,7 +39,6 @@ export class DumbTimelineForm extends React.Component<TimelineFormProps, Timelin
 
   render() {
     const { editLocale, phases, handleCreatePhase } = this.props;
-    const { selectedPhaseId } = this.state;
     const slug = { slug: getDiscussionSlug() };
     return (
       <div className="admin-box timeline-admin">
@@ -96,36 +81,23 @@ export class DumbTimelineForm extends React.Component<TimelineFormProps, Timelin
           </div>
         </div>
         <Translate value="administration.timelineAdmin.instruction2" className="admin-instruction" />
-        <div className="admin-content">
-          <Row>
-            {phases &&
-              phases.map((id, index) => {
-                const linkClassNames = selectedPhaseId === id ? 'tab-title-active ellipsis' : 'tab-title ellipsis';
-                return (
-                  <Col xs={12} md={Math.round(12 / phases.length)} key={index}>
-                    <a
-                      className={linkClassNames}
-                      key={`phase-link-${id}`}
-                      onClick={() => {
-                        this.setState({ selectedPhaseId: id });
-                      }}
-                    >
-                      <Translate value="administration.timelineAdmin.phase" count={index + 1} />
-                    </a>
-                  </Col>
-                );
-              })}
-          </Row>
-          {selectedPhaseId && (
-            <Row>
+
+        {phases && (
+          <TabbedContent
+            divClassName="admin-content"
+            tabs={phases.map((id, index) => ({
+              id: id,
+              title: I18n.t('administration.timelineAdmin.phase', { count: index + 1 })
+            }))}
+            renderBody={tab => (
               <PhaseForm
-                key={`phase-form-${selectedPhaseId}-${editLocale}`}
-                phaseId={selectedPhaseId}
-                phaseNumber={this.getPhaseNumberById(selectedPhaseId)}
+                key={`phase-form-${tab.id}-${editLocale}`}
+                phaseId={tab.id}
+                phaseNumber={this.getPhaseNumberById(tab.id)}
               />
-            </Row>
-          )}
-        </div>
+            )}
+          />
+        )}
       </div>
     );
   }

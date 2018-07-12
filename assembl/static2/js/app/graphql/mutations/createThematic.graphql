@@ -27,6 +27,11 @@ mutation createThematic(
         descriptionBottom
         descriptionSide
         htmlCode
+        mediaFile {
+          externalUrl
+          mimeType
+          title
+        }
       }
       questions {
         title

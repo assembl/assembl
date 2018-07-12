@@ -16,6 +16,9 @@ query ThematicQuery($lang: String!, $id: ID!) {
         descriptionBottom
         descriptionSide
         htmlCode
+        mediaFile {
+          externalUrl
+        }
       }
       questions {
         ... on Question {

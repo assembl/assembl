@@ -28,6 +28,11 @@ mutation updateThematic(
         descriptionBottom
         descriptionSide
         htmlCode
+        mediaFile {
+          externalUrl
+          mimeType
+          title
+        }
       }
       questions {
         id

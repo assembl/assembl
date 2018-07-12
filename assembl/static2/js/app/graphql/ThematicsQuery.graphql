@@ -29,6 +29,11 @@ query ThematicsQuery($identifier: String!) {
         value
       }
       htmlCode
+      mediaFile {
+        externalUrl
+        mimeType
+        title
+      }
     }
     questions {
       id

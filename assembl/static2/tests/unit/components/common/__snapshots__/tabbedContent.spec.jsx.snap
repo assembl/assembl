@@ -1,0 +1,175 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TabbedContent component should match snapshot 1`] = `
+<div
+  className="tabbed-content"
+>
+  <div
+    className="row"
+  >
+    <div
+      className="col-md-4 col-xs-12"
+    >
+      <a
+        className="tab-title-active ellipsis"
+        onClick={[Function]}
+      >
+        One
+      </a>
+    </div>
+    <div
+      className="col-md-4 col-xs-12"
+    >
+      <a
+        className="tab-title ellipsis"
+        onClick={[Function]}
+      >
+        Two
+      </a>
+    </div>
+    <div
+      className="col-md-4 col-xs-12"
+    >
+      <a
+        className="tab-title ellipsis"
+        onClick={[Function]}
+      >
+        Three
+      </a>
+    </div>
+  </div>
+  <div
+    className="tab-body row"
+  >
+    <div
+      className="box"
+    >
+      <h2>
+        One
+         (
+        1
+        )
+      </h2>
+      <p>
+        If we override the transmitter, we can get to the PNG bus through the solid state RSS alarm!
+      </p>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`TabbedContent component should match snapshot with bodyRowClassName 1`] = `
+<div
+  className="tabbed-content"
+>
+  <div
+    className="row"
+  >
+    <div
+      className="col-md-4 col-xs-12"
+    >
+      <a
+        className="tab-title-active ellipsis"
+        onClick={[Function]}
+      >
+        One
+      </a>
+    </div>
+    <div
+      className="col-md-4 col-xs-12"
+    >
+      <a
+        className="tab-title ellipsis"
+        onClick={[Function]}
+      >
+        Two
+      </a>
+    </div>
+    <div
+      className="col-md-4 col-xs-12"
+    >
+      <a
+        className="tab-title ellipsis"
+        onClick={[Function]}
+      >
+        Three
+      </a>
+    </div>
+  </div>
+  <div
+    className="tab-body right row"
+  >
+    <div
+      className="box"
+    >
+      <h2>
+        One
+         (
+        1
+        )
+      </h2>
+      <p>
+        If we override the transmitter, we can get to the PNG bus through the solid state RSS alarm!
+      </p>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`TabbedContent component should match snapshot with divClassName 1`] = `
+<div
+  className="tabbed-content right"
+>
+  <div
+    className="row"
+  >
+    <div
+      className="col-md-4 col-xs-12"
+    >
+      <a
+        className="tab-title-active ellipsis"
+        onClick={[Function]}
+      >
+        One
+      </a>
+    </div>
+    <div
+      className="col-md-4 col-xs-12"
+    >
+      <a
+        className="tab-title ellipsis"
+        onClick={[Function]}
+      >
+        Two
+      </a>
+    </div>
+    <div
+      className="col-md-4 col-xs-12"
+    >
+      <a
+        className="tab-title ellipsis"
+        onClick={[Function]}
+      >
+        Three
+      </a>
+    </div>
+  </div>
+  <div
+    className="tab-body row"
+  >
+    <div
+      className="box"
+    >
+      <h2>
+        One
+         (
+        1
+        )
+      </h2>
+      <p>
+        If we override the transmitter, we can get to the PNG bus through the solid state RSS alarm!
+      </p>
+    </div>
+  </div>
+</div>
+`;

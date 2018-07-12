@@ -32,13 +32,13 @@ class Media extends React.Component {
     displayModal(null, content, false, null, null, true, 'large');
   };
 
-  static Content = ({ content }) => {
-    const isLocal = content[0] === '/';
+  static Content = ({ htmlCode, mediaFile }) => {
+    const isLocal = !htmlCode && mediaFile && mediaFile.externalUrl;
     const component = isLocal ? (
-      <Image responsive src={content} />
+      <Image responsive src={mediaFile.externalUrl} />
     ) : (
       <ResponsiveEmbed a16by9>
-        <iframe title="media" src={content} />
+        <iframe title="media" src={htmlCode} />
       </ResponsiveEmbed>
     );
     return (
@@ -57,12 +57,12 @@ class Media extends React.Component {
   );
 
   render() {
-    const { title, descriptionTop, descriptionBottom, descriptionSide, htmlCode, noTitle } = this.props;
+    const { title, descriptionTop, descriptionBottom, descriptionSide, htmlCode, mediaFile, noTitle } = this.props;
     const validDescriptionSide = Media.isValidDescription(descriptionSide);
     const validDescriptionTop = Media.isValidDescription(descriptionTop);
     const validDescriptionBottom = Media.isValidDescription(descriptionBottom);
 
-    const validMedia = !!htmlCode;
+    const validMedia = !!(htmlCode || mediaFile);
     const somethingOnRight = !!(validDescriptionTop || validDescriptionBottom || validMedia || validDescriptionSide);
     const somethingOnLeft = validDescriptionSide;
     const something = !!(somethingOnLeft || somethingOnRight);
@@ -84,7 +84,7 @@ class Media extends React.Component {
                 <Col sm={totalSize} md={somethingOnLeft ? rightSize : totalSize}>
                   <div className="media-right">
                     {validDescriptionTop && <Media.TopDescription content={descriptionTop} />}
-                    {validMedia && <Media.Content content={htmlCode} />}
+                    {validMedia && <Media.Content htmlCode={htmlCode} mediaFile={mediaFile} />}
                     {validDescriptionSide && <Media.SideDescription content={descriptionSide} />}
                     {validDescriptionBottom && <Media.BottomDescription content={descriptionBottom} />}
                   </div>

@@ -91,71 +91,26 @@ exports[`TimelineForm component should render a form to create, delete and edit 
     className="admin-instruction"
     value="administration.timelineAdmin.instruction2"
   />
-  <div
-    className="admin-content"
-  >
-    <Row
-      bsClass="row"
-      componentClass="div"
-    >
-      <Col
-        bsClass="col"
-        componentClass="div"
-        md={4}
-        xs={12}
-      >
-        <a
-          className="tab-title-active ellipsis"
-          onClick={[Function]}
-        >
-          <Translate
-            count={1}
-            value="administration.timelineAdmin.phase"
-          />
-        </a>
-      </Col>
-      <Col
-        bsClass="col"
-        componentClass="div"
-        md={4}
-        xs={12}
-      >
-        <a
-          className="tab-title ellipsis"
-          onClick={[Function]}
-        >
-          <Translate
-            count={2}
-            value="administration.timelineAdmin.phase"
-          />
-        </a>
-      </Col>
-      <Col
-        bsClass="col"
-        componentClass="div"
-        md={4}
-        xs={12}
-      >
-        <a
-          className="tab-title ellipsis"
-          onClick={[Function]}
-        >
-          <Translate
-            count={3}
-            value="administration.timelineAdmin.phase"
-          />
-        </a>
-      </Col>
-    </Row>
-    <Row
-      bsClass="row"
-      componentClass="div"
-    >
-      <Connect(Component)
-        phaseId="123"
-        phaseNumber={1}
-      />
-    </Row>
-  </div>
+  <TabbedContent
+    bodyRowClassName=""
+    divClassName="admin-content"
+    renderBody={[Function]}
+    tabs={
+      Array [
+        Object {
+          "id": "123",
+          "title": "Phase 1",
+        },
+        Object {
+          "id": "345",
+          "title": "Phase 2",
+        },
+        Object {
+          "id": "456",
+          "title": "Phase 3",
+        },
+      ]
+    }
+  />
 </div>
 `;

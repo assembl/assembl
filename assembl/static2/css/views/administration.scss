@@ -1,3 +1,22 @@
+.tabbed-content {
+  .tab-title {
+    border-bottom: $border-not-active;
+    color: $grey2;
+    cursor: pointer;
+    display: block;
+    padding: 0 0 5px 0;
+  }
+
+  .tab-title-active {
+    border-bottom: $border-active;
+    color: $grey3;
+    cursor: pointer;
+    display: block;
+    padding: 0 0 5px 0;
+    text-decoration: none;
+  }
+}
+
 .administration {
   .admin-phase-box {
     border: 1px solid #ccc;
@@ -155,7 +174,6 @@
   .admin-help {
     font-size: $font-size-xs;
     font-family: $font-family6;
-    margin-top: -15px;
     letter-spacing: 0;
   }
 
@@ -374,23 +392,6 @@
     top: $navbar-height;
     width: 100%;
     z-index: 100;
-  }
-
-  .tab-title {
-    border-bottom: $border-not-active;
-    color: $grey2;
-    cursor: pointer;
-    display: block;
-    padding: 0 0 5px 0;
-  }
-
-  .tab-title-active {
-    border-bottom: $border-active;
-    color: $grey3;
-    cursor: pointer;
-    display: block;
-    padding: 0 0 5px 0;
-    text-decoration: none;
   }
 
   .text-area {
