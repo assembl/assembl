@@ -189,4 +189,3 @@ def update_attachment(discussion, attachment_model, new_value, attachments, atta
             attachmentPurpose=attachment_purpose
         )
         attachments.append(attachment)
-        db.flush()
