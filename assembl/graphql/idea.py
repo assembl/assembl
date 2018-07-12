@@ -835,11 +835,9 @@ class UpdateThematic(graphene.Mutation):
         if not allowed:
             raise HTTPUnauthorized()
 
-        with cls.default_db.no_autoflush:
+        with cls.default_db.no_autoflush as db:
             # introducing history at every step, including thematics + questions  # noqa: E501
             thematic.copy(tombstone=True)
-
-            db = thematic.db
             title_entries = args.get('title_entries')
             if title_entries is not None and len(title_entries) == 0:
                 raise Exception(
