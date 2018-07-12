@@ -126,7 +126,6 @@ class Child extends React.PureComponent {
   render() {
     const {
       contentLocaleMapping,
-      isHarvesting,
       hidden,
       id,
       lang,
@@ -207,7 +206,6 @@ class Child extends React.PureComponent {
                 key={child.id}
                 {...child}
                 contentLocaleMapping={contentLocaleMapping}
-                isHarvesting={isHarvesting}
                 lang={lang}
                 rowIndex={rowIndex}
                 level={level + 1}
@@ -320,7 +318,6 @@ class Tree extends React.Component {
           <Child
             {...childData}
             contentLocaleMapping={parent.props.contentLocaleMapping}
-            isHarvesting={parent.props.isHarvesting}
             key={childData.id}
             lang={parent.props.lang}
             rowIndex={index}
@@ -338,7 +335,7 @@ class Tree extends React.Component {
   };
 
   render() {
-    const { contentLocaleMapping, isHarvesting, data, lang, noRowsRenderer } = this.props;
+    const { contentLocaleMapping, data, lang, noRowsRenderer } = this.props;
     return (
       <WindowScroller>
         {({ height, isScrolling, onChildScroll, scrollTop }) => (
@@ -353,7 +350,6 @@ class Tree extends React.Component {
             {({ width }) => (
               <List
                 contentLocaleMapping={contentLocaleMapping}
-                isHarvesting={isHarvesting}
                 height={height}
                 // pass lang to the List component to ensure that the rows are rendered again if we change the site language
                 lang={lang}

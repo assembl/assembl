@@ -52,50 +52,11 @@
   }
 }
 
-.extracts.extracts--is-harvesting {
-  left: 0;
-  max-width: 355px;
-  width: 20vw;
-  line-height: initial;
-
-  .extract {
-    border-left: $border-theme;
-    border-bottom: 1px solid #ddd;
-    border-right: 1px solid #ddd;
-    border-top: 1px solid #ddd;
-    background-color: $white;
-
-    .extract-txt {
-      quotes: "«" "»";
-      padding: 20px;
-
-      &:before {
-        content: open-quote;
-        padding-right: 5px;
-      }
-
-      &:after {
-        content: close-quote;
-        padding-left: 5px;
-      }
-    }
-
-    .extract-header {
-      padding: 25px;
-      border-bottom: 1px solid #ccc;
-
-      .extract-harvester {
-        display: flex;
-
-        .extract-harvester-right {
-          padding-left: 10px;
-        }
-      }
-    }
+.harvesting-mode-on {
+  .extracts {
+    display: none;
   }
-}
 
-.app.harvesting-mode-on {
   .post-body--is-harvestable {
     /* FIXME: Factorizing these ::selection rules cancels effect on Firefox */
     .post-body-content *::selection {
@@ -459,7 +420,7 @@
   display: inline;
 }
 
-.is-harvesting {
+.harvesting-mode-on {
   .extract-in-message {
     background-color: $harvesting-green-light;
   }

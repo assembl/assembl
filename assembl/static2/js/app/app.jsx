@@ -17,6 +17,8 @@ import { browserHistory } from './router';
 import TimelineQuery from './graphql/Timeline.graphql';
 import withLoadingIndicator from './components/common/withLoadingIndicator';
 
+export const IsHarvestingContext = React.createContext(false);
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -47,7 +49,11 @@ class App extends React.Component {
       <div className={divClassNames}>
         <ChatFrame />
         {debateLoading && <Loader />}
-        {debateData && <div className="app-child">{this.props.children}</div>}
+        {debateData && (
+          <div className="app-child">
+            <IsHarvestingContext.Provider value={this.props.isHarvesting}>{this.props.children}</IsHarvestingContext.Provider>
+          </div>
+        )}
         {debateError && <Error errorMessage={debateError} />}
       </div>
     );

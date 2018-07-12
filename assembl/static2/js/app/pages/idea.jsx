@@ -180,7 +180,6 @@ class Idea extends React.Component {
       contentLocaleMapping,
       timeline,
       debateData,
-      isHarvesting,
       lang,
       ideaLoading,
       ideaWithPostsData,
@@ -216,7 +215,6 @@ class Idea extends React.Component {
       ideaId: id,
       ideaWithPostsData: ideaWithPostsData,
       isUserConnected: getConnectedUserId(),
-      isHarvesting: isHarvesting,
       contentLocaleMapping: contentLocaleMapping,
       refetchIdea: refetchIdea,
       lang: lang,
@@ -280,7 +278,6 @@ const mapStateToProps = state => ({
   contentLocaleMapping: state.contentLocale,
   timeline: state.timeline,
   defaultContentLocaleMapping: state.defaultContentLocaleMapping,
-  isHarvesting: state.context.isHarvesting,
   lang: state.i18n.locale,
   debateData: state.debate.debateData
 });

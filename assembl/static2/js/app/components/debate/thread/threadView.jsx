@@ -11,7 +11,6 @@ import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
 class ThreadView extends React.Component {
   render() {
     const {
-      isHarvesting,
       isUserConnected,
       ideaId,
       contentLocaleMapping,
@@ -33,7 +32,6 @@ class ThreadView extends React.Component {
           <div className="max-container background-grey">
             <div className="content-section">
               <Tree
-                isHarvesting={isHarvesting}
                 contentLocaleMapping={contentLocaleMapping}
                 lang={lang}
                 data={posts}

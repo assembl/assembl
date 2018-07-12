@@ -10,7 +10,6 @@ import ColumnSynthesis, { type Props as ColumnSynthesisProps } from './columnSyn
 const Separator = () => <div style={{ height: '25px' }} />;
 
 type Props = {
-  isHarvesting: boolean,
   classifier: string,
   color: string,
   contentLocaleMapping: Object,
@@ -28,7 +27,6 @@ type Props = {
 };
 
 const PostColumn = ({
-  isHarvesting,
   classifier,
   color,
   contentLocaleMapping,
@@ -52,7 +50,6 @@ const PostColumn = ({
     <div className="column-tree">
       {data.length > 0 ? (
         <Tree
-          isHarvesting={isHarvesting}
           contentLocaleMapping={contentLocaleMapping}
           lang={lang}
           data={data}
