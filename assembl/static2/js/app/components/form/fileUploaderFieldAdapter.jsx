@@ -23,10 +23,10 @@ const FileUploaderFieldAdapter = ({ input, label, meta: { error, touched } }: Pr
       <ControlLabel>{label}</ControlLabel>
       <FileUploader
         key={input.value ? 'notEmpty' : 'empty'}
-        fileOrUrl={input.value.externalUrl}
-        imgTitle={input.value.title}
+        fileOrUrl={input.value && input.value.externalUrl}
+        imgTitle={input.value && input.value.title}
         handleChange={onChange}
-        mimeType={input.value.mimeType}
+        mimeType={input.value && input.value.mimeType}
         name={input.name}
         isAdminUploader
         onDeleteClick={() => input.onChange('')}
