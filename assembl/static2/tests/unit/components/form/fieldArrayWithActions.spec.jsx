@@ -20,7 +20,7 @@ describe('FieldArrayWithActions component', () => {
           <Field name={`${name}.lastname`} component="input" label="Firstname" />
         </React.Fragment>
       ),
-      titleMsgId: 'some.msg.id',
+      titleMsgId: 'profile.panelTitle',
       tooltips: {
         addTooltip: <div>Add</div>,
         deleteTooltip: <div>Delete</div>
@@ -57,7 +57,7 @@ describe('FieldArrayWithActions component', () => {
           <Field name={`${name}.lastname`} component="input" label="Firstname" />
         </React.Fragment>
       ),
-      titleMsgId: 'some.msg.id',
+      titleMsgId: 'profile.panelTitle',
       tooltips: {
         addTooltip: <div>Add</div>,
         deleteTooltip: <div>Delete</div>

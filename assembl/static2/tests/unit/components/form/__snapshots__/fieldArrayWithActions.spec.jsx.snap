@@ -15,7 +15,7 @@ exports[`FieldArrayWithActions component should render an array of fields with d
           className={undefined}
           style={undefined}
         >
-          Missing translation: some.msg.id
+          Your account
         </span>
       </div>
       <div
@@ -87,7 +87,7 @@ exports[`FieldArrayWithActions component should render an array of fields with d
           className={undefined}
           style={undefined}
         >
-          Missing translation: some.msg.id
+          Your account
         </span>
       </div>
       <div
@@ -184,7 +184,7 @@ exports[`FieldArrayWithActions component should render an array of fields with d
           className={undefined}
           style={undefined}
         >
-          Missing translation: some.msg.id
+          Your account
         </span>
       </div>
       <div
@@ -253,7 +253,7 @@ exports[`FieldArrayWithActions component should render an array of fields with d
           className={undefined}
           style={undefined}
         >
-          Missing translation: some.msg.id
+          Your account
         </span>
       </div>
       <div
