@@ -104,17 +104,21 @@ class Administration extends React.Component {
   }
 
   putResourcesInStore(resources) {
-    const filteredResources = filter(ResourcesQuery, { resources: resources });
-    const resourcesForStore = filteredResources.resources.map(resource => ({
-      ...resource,
-      textEntries: resource.textEntries ? convertEntriesToRawContentState(resource.textEntries) : null
-    }));
-    this.props.updateResources(resourcesForStore);
+    if (resources) {
+      const filteredResources = filter(ResourcesQuery, { resources: resources });
+      const resourcesForStore = filteredResources.resources.map(resource => ({
+        ...resource,
+        textEntries: resource.textEntries ? convertEntriesToRawContentState(resource.textEntries) : null
+      }));
+      this.props.updateResources(resourcesForStore);
+    }
   }
 
   putResourcesCenterInStore(resourcesCenter) {
-    const filteredResourcesCenter = filter(ResourcesCenterPage, { resourcesCenter: resourcesCenter });
-    this.props.updateResourcesCenterPage(filteredResourcesCenter.resourcesCenter);
+    if (resourcesCenter) {
+      const filteredResourcesCenter = filter(ResourcesCenterPage, { resourcesCenter: resourcesCenter });
+      this.props.updateResourcesCenterPage(filteredResourcesCenter.resourcesCenter);
+    }
   }
 
   putVoteSessionInStore(voteSession) {
@@ -145,13 +149,15 @@ class Administration extends React.Component {
   }
 
   putTimelinePhasesInStore(timeline) {
-    const filteredPhases = filter(TimelineQuery, { timeline: timeline });
-    const phasesForStore = filteredPhases.timeline.map(phase => ({
-      ...phase,
-      start: moment(phase.start),
-      end: moment(phase.end)
-    }));
-    this.props.updatePhases(phasesForStore);
+    if (timeline) {
+      const filteredPhases = filter(TimelineQuery, { timeline: timeline });
+      const phasesForStore = filteredPhases.timeline.map(phase => ({
+        ...phase,
+        start: moment(phase.start),
+        end: moment(phase.end)
+      }));
+      this.props.updatePhases(phasesForStore);
+    }
   }
 
   putVoteModulesInStore(voteSession) {
@@ -171,35 +177,41 @@ class Administration extends React.Component {
   }
 
   putSectionsInStore(sections) {
-    const filteredSections = filter(SectionsQuery, {
-      sections: sections.filter(section => section.sectionType !== 'ADMINISTRATION')
-    });
-    this.props.updateSections(filteredSections.sections);
+    if (sections) {
+      const filteredSections = filter(SectionsQuery, {
+        sections: sections.filter(section => section.sectionType !== 'ADMINISTRATION')
+      });
+      this.props.updateSections(filteredSections.sections);
+    }
   }
 
   putLegalContentsInStore(legalContents) {
-    const filtered = filter(LegalContentsQuery, { legalContents: legalContents });
-    const filteredLegalContents = filtered.legalContents;
-    const convertedLegalContents = {
-      legalNoticeEntries: filteredLegalContents.legalNoticeEntries
-        ? convertEntriesToRawContentState(filteredLegalContents.legalNoticeEntries)
-        : null,
-      termsAndConditionsEntries: filteredLegalContents.termsAndConditionsEntries
-        ? convertEntriesToRawContentState(filteredLegalContents.termsAndConditionsEntries)
-        : null,
-      cookiesPolicyEntries: filteredLegalContents.cookiesPolicyEntries
-        ? convertEntriesToRawContentState(filteredLegalContents.cookiesPolicyEntries)
-        : null,
-      privacyPolicyEntries: filteredLegalContents.privacyPolicyEntries
-        ? convertEntriesToRawContentState(filteredLegalContents.privacyPolicyEntries)
-        : null
-    };
-    this.props.updateLegalContents(convertedLegalContents);
+    if (legalContents) {
+      const filtered = filter(LegalContentsQuery, { legalContents: legalContents });
+      const filteredLegalContents = filtered.legalContents;
+      const convertedLegalContents = {
+        legalNoticeEntries: filteredLegalContents.legalNoticeEntries
+          ? convertEntriesToRawContentState(filteredLegalContents.legalNoticeEntries)
+          : null,
+        termsAndConditionsEntries: filteredLegalContents.termsAndConditionsEntries
+          ? convertEntriesToRawContentState(filteredLegalContents.termsAndConditionsEntries)
+          : null,
+        cookiesPolicyEntries: filteredLegalContents.cookiesPolicyEntries
+          ? convertEntriesToRawContentState(filteredLegalContents.cookiesPolicyEntries)
+          : null,
+        privacyPolicyEntries: filteredLegalContents.privacyPolicyEntries
+          ? convertEntriesToRawContentState(filteredLegalContents.privacyPolicyEntries)
+          : null
+      };
+      this.props.updateLegalContents(convertedLegalContents);
+    }
   }
 
   putLandingPageModulesInStore(landingPageModules) {
-    const filtered = filter(landingPagePlugin.graphqlQuery, { landingPageModules: landingPageModules });
-    this.props.updateLandingPageModules(filtered.landingPageModules);
+    if (landingPageModules) {
+      const filtered = filter(landingPagePlugin.graphqlQuery, { landingPageModules: landingPageModules });
+      this.props.updateLandingPageModules(filtered.landingPageModules);
+    }
   }
 
   putTextFieldsInStore(textFields) {
@@ -210,14 +222,16 @@ class Administration extends React.Component {
   }
 
   putLandingPageInStore(landingPage) {
-    const filtered = filter(LandingPageQuery, { discussion: landingPage });
-    const dataForStore = {
-      ...filtered.discussion,
-      subtitleEntries: filtered.discussion.subtitleEntries
-        ? convertEntriesToRawContentState(filtered.discussion.subtitleEntries)
-        : null
-    };
-    this.props.updateLandingPage(dataForStore);
+    if (landingPage) {
+      const filtered = filter(LandingPageQuery, { discussion: landingPage });
+      const dataForStore = {
+        ...filtered.discussion,
+        subtitleEntries: filtered.discussion.subtitleEntries
+          ? convertEntriesToRawContentState(filtered.discussion.subtitleEntries)
+          : null
+      };
+      this.props.updateLandingPage(dataForStore);
+    }
   }
 
   render() {
@@ -366,6 +380,12 @@ const mergeLoadingAndHasErrors = WrappedComponent => (props) => {
   return <WrappedComponent {...props} hasErrors={hasErrors} loading={loading} />;
 };
 
+const isNotInAdminSection = adminSectionName => props => !props.router.getCurrentLocation().pathname.endsWith(adminSectionName);
+
+const isNotInDiscussionAdmin = isNotInAdminSection('discussion');
+const isNotInResourcesCenterAdmin = isNotInAdminSection('resourcesCenter');
+const isNotInLandingPageAdmin = isNotInAdminSection('landingPage');
+
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   graphql(TabsConditionQuery, {
@@ -388,7 +408,8 @@ export default compose(
       return {
         refetchTabsConditions: data.refetch
       };
-    }
+    },
+    skip: isNotInResourcesCenterAdmin
   }),
   graphql(VoteSessionQuery, {
     skip: ({ timeline }) => typeof getPhaseId(timeline, 'voteSession') !== 'string',
@@ -438,7 +459,8 @@ export default compose(
         refetchResources: data.refetch,
         resources: data.resources
       };
-    }
+    },
+    skip: isNotInResourcesCenterAdmin
   }),
   graphql(ResourcesCenterPage, {
     props: ({ data }) => {
@@ -463,7 +485,8 @@ export default compose(
           titleEntries: titleEntries
         }
       };
-    }
+    },
+    skip: isNotInResourcesCenterAdmin
   }),
   graphql(SectionsQuery, {
     props: ({ data }) => {
@@ -485,7 +508,8 @@ export default compose(
         refetchSections: data.refetch,
         sections: data.sections
       };
-    }
+    },
+    skip: isNotInDiscussionAdmin
   }),
   graphql(LegalContentsQuery, {
     props: ({ data }) => {
@@ -506,7 +530,8 @@ export default compose(
         refetchLegalContents: data.refetch,
         legalContents: data.legalContents
       };
-    }
+    },
+    skip: isNotInDiscussionAdmin
   }),
   graphql(TimelineQuery, {
     options: ({ i18n: { locale } }) => ({
@@ -530,9 +555,14 @@ export default compose(
         refetchTimeline: data.refetch,
         timeline: data.timeline
       };
-    }
+    },
+    skip: props => isNotInDiscussionAdmin(props) || isNotInLandingPageAdmin(props)
   }),
-  graphql(landingPagePlugin.graphqlQuery, { options: landingPagePlugin.queryOptions, props: landingPagePlugin.dataToProps }),
+  graphql(landingPagePlugin.graphqlQuery, {
+    options: landingPagePlugin.queryOptions,
+    props: landingPagePlugin.dataToProps,
+    skip: isNotInLandingPageAdmin
+  }),
   graphql(TextFields, {
     options: ({ i18n }) => ({
       variables: { lang: i18n.locale }
@@ -557,10 +587,7 @@ export default compose(
         textFields: data.textFields
       };
     },
-    skip: (props) => {
-      const currentLocation = props.router.getCurrentLocation();
-      return !currentLocation.pathname.endsWith('discussion') || currentLocation.search !== '?section=3';
-    }
+    skip: props => isNotInDiscussionAdmin(props) || props.router.getCurrentLocation().search !== '?section=3'
   }),
   graphql(LandingPageQuery, {
     options: ({ i18n }) => ({
@@ -584,7 +611,8 @@ export default compose(
         refetchLandingPage: data.refetch,
         landingPage: data.discussion
       };
-    }
+    },
+    skip: isNotInLandingPageAdmin
   }),
   mergeLoadingAndHasErrors,
   withLoadingIndicator()
