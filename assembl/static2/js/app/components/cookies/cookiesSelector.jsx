@@ -19,7 +19,7 @@ type CookiesSelectorState = {
 class CookiesSelector extends React.Component<CookiesSelectorProps, CookiesSelectorState> {
   constructor(props: CookiesSelectorProps) {
     super(props);
-    const cookiesList = 'assembl_session=1234; _LOCALE_=fr; _pk_id.abcd1234=1234; random_cookie=333453453453453453453453453453444'.split(' ');
+    const cookiesList = document.cookie.split(' ');
     const cookiesArray = cookiesList.map(cookie => ({ ...this.getCookieObject(cookie), accepted: true }));
     const cookiesByCategory = this.getCookiesObjectFromArray(cookiesArray);
     this.state = {
