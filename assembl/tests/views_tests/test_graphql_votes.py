@@ -42,16 +42,17 @@ def test_graphql_delete_token_vote(graphql_participant1_request, vote_session, v
     assert res.errors is None
     # and remove it
     res = schema.execute(
-        graphql_registry['deleteTokenVote'],
+        graphql_registry['addTokenVote'],
         context_value=graphql_participant1_request,
         variable_values={
             "proposalId": proposal_id,
             "tokenCategoryId": token_category_id,
-            "voteSpecId": vote_spec_id
+            "voteSpecId": vote_spec_id,
+            "voteValue": 0
         }
     )
     assert res.errors is None
-    assert len(res.data['deleteTokenVote']['voteSpecification']['myVotes']) == 0
+    assert len(res.data['addTokenVote']['voteSpecification']['myVotes']) == 0
 
 
 def test_graphql_add_gauge_vote(graphql_participant1_request, vote_session, vote_proposal, gauge_vote_specification_associated_to_proposal, graphql_registry):
@@ -88,15 +89,16 @@ def test_graphql_delete_gauge_vote(graphql_participant1_request, vote_session, v
     assert res.errors is None
     # and remove it
     res = schema.execute(
-        graphql_registry['deleteGaugeVote'],
+        graphql_registry['addGaugeVote'],
         context_value=graphql_participant1_request,
         variable_values={
             "proposalId": proposal_id,
-            "voteSpecId": vote_spec_id
+            "voteSpecId": vote_spec_id,
+            "voteValue": None
         }
     )
     assert res.errors is None
-    assert len(res.data['deleteGaugeVote']['voteSpecification']['myVotes']) == 0
+    assert len(res.data['addGaugeVote']['voteSpecification']['myVotes']) == 0
 
 
 def test_graphql_vote_results(graphql_participant1_request, vote_session, vote_proposal, token_vote_spec_with_votes, gauge_vote_specification_with_votes, graphql_registry):

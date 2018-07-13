@@ -901,24 +901,11 @@ class AddTokenVote:
     vote_specification = "The specification of the Vote session."
 
 
-class DeleteTokenVote:
-    __doc__ = "A mutation to delete a Token Vote."
-    proposal_id = VoteInterface.proposal_id
-    token_category_id = TokenVote.token_category_id
-    vote_spec_id = VoteInterface.vote_spec_id
-
-
 class AddGaugeVote:
     __doc__ = "A mutation to add a Gauge Vote."
     proposal_id = VoteInterface.proposal_id
     vote_spec_id = VoteInterface.vote_spec_id
     vote_value = GaugeVote.vote_value
-
-
-class DeleteGaugeVote:
-    __doc__ = "A mutation to delete a Gauge Vote."
-    proposal_id = AddGaugeVote.proposal_id
-    vote_spec_id = VoteInterface.vote_spec_id
 
 
 class Section:

@@ -5,8 +5,7 @@ from graphene_sqlalchemy import SQLAlchemyObjectType
 from assembl import models
 from assembl.auth import CrudPermissions
 from assembl.auth.util import get_permissions
-from .permissions_helpers import (
-    require_cls_permission, require_instance_permission)
+from .permissions_helpers import require_cls_permission
 from .types import SecureObjectType, SQLAlchemyUnion
 from .utils import DateTime, abort_transaction_on_exception
 from .vote_session import TokenVoteSpecification, VoteSpecificationUnion
@@ -127,41 +126,6 @@ class AddTokenVote(graphene.Mutation):
         return AddTokenVote(vote_specification=vote_spec)
 
 
-class DeleteTokenVote(graphene.Mutation):
-    __doc__ = docs.DeleteTokenVote.__doc__
-
-    class Input:
-        proposal_id = graphene.ID(required=True)
-        token_category_id = graphene.ID(required=True)
-        vote_spec_id = graphene.ID(required=True)
-
-    vote_specification = graphene.Field(lambda: TokenVoteSpecification)
-
-    @staticmethod
-    @abort_transaction_on_exception
-    def mutate(root, args, context, info):
-        user_id = context.authenticated_userid
-
-        proposal_id = args.get('proposal_id')
-        proposal_id = int(Node.from_global_id(proposal_id)[1])
-
-        token_category_id = args.get('token_category_id')
-        token_category_id = int(Node.from_global_id(token_category_id)[1])
-
-        vote_spec_id = args.get('vote_spec_id')
-        vote_spec_id = int(Node.from_global_id(vote_spec_id)[1])
-        vote_spec = models.AbstractVoteSpecification.get(vote_spec_id)
-
-        vote = models.TokenIdeaVote.query.filter_by(
-            vote_spec_id=vote_spec.id, tombstone_date=None, voter_id=user_id,
-            token_category_id=token_category_id).one()
-
-        require_instance_permission(CrudPermissions.DELETE, vote, context)
-        vote.is_tombstone = True
-        vote.db.flush()
-        return DeleteTokenVote(vote_specification=vote_spec)
-
-
 class AddGaugeVote(graphene.Mutation):
     __doc__ = docs.AddGaugeVote.__doc__
 
@@ -210,33 +174,3 @@ class AddGaugeVote(graphene.Mutation):
                 vote.db.add(vote)
         vote.db.flush()
         return AddGaugeVote(vote_specification=vote_spec)
-
-
-class DeleteGaugeVote(graphene.Mutation):
-    __doc__ = docs.DeleteGaugeVote.__doc__
-
-    class Input:
-        proposal_id = graphene.ID(required=True)
-        vote_spec_id = graphene.ID(required=True)
-
-    vote_specification = graphene.Field(lambda: VoteSpecificationUnion)  # need to match GaugeVoteSpecification / NumberGaugeVoteSpecification
-
-    @staticmethod
-    @abort_transaction_on_exception
-    def mutate(root, args, context, info):
-        user_id = context.authenticated_userid
-
-        proposal_id = args.get('proposal_id')
-        proposal_id = int(Node.from_global_id(proposal_id)[1])
-
-        vote_spec_id = args.get('vote_spec_id')
-        vote_spec_id = int(Node.from_global_id(vote_spec_id)[1])
-        vote_spec = models.AbstractVoteSpecification.get(vote_spec_id)
-
-        vote = models.GaugeIdeaVote.query.filter_by(
-            vote_spec_id=vote_spec.id, tombstone_date=None, voter_id=user_id).one()
-
-        require_instance_permission(CrudPermissions.DELETE, vote, context)
-        vote.is_tombstone = True
-        vote.db.flush()
-        return DeleteGaugeVote(vote_specification=vote_spec)

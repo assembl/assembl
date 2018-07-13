@@ -39,7 +39,7 @@ from assembl.graphql.synthesis import Synthesis
 from assembl.graphql.user import UpdateUser, DeleteUserInformation
 from .configurable_fields import ConfigurableFieldUnion, CreateTextField, UpdateTextField, DeleteTextField, ProfileField, UpdateProfileFields
 from assembl.graphql.timeline import DiscussionPhase, CreateDiscussionPhase, UpdateDiscussionPhase, DeleteDiscussionPhase
-from assembl.graphql.votes import AddTokenVote, DeleteTokenVote, AddGaugeVote, DeleteGaugeVote
+from assembl.graphql.votes import AddTokenVote, AddGaugeVote
 from assembl.graphql.vote_session import (
     VoteSession, UpdateVoteSession, CreateTokenVoteSpecification,
     CreateGaugeVoteSpecification, UpdateGaugeVoteSpecification,
@@ -445,9 +445,7 @@ class Mutations(graphene.ObjectType):
     update_proposal = UpdateProposal.Field(description=docs.UpdateProposal.__doc__)
     delete_proposal = DeleteProposal.Field(description=docs.DeleteProposal.__doc__)
     add_token_vote = AddTokenVote.Field(description=docs.AddTokenVote.__doc__)
-    delete_token_vote = DeleteTokenVote.Field(description=docs.DeleteTokenVote.__doc__)
     add_gauge_vote = AddGaugeVote.Field(description=docs.AddGaugeVote.__doc__)
-    delete_gauge_vote = DeleteGaugeVote.Field(description=docs.DeleteGaugeVote.__doc__)
     add_post_extract = AddPostExtract.Field(description=docs.AddPostExtract.__doc__)
     update_extract = UpdateExtract.Field(description=docs.UpdateExtract.__doc__)
     delete_extract = DeleteExtract.Field(description=docs.DeleteExtract.__doc__)
