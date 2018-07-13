@@ -20,7 +20,7 @@ class CookiesSelector extends React.Component<CookiesSelectorProps, CookiesSelec
   constructor(props: CookiesSelectorProps) {
     super(props);
     const cookiesList = document.cookie.split(' ');
-    const cookiesArray = cookiesList.map(cookie => ({ ...this.getCookieObject(cookie), accepted: true }));
+    const cookiesArray = cookiesList.map(cookie => ({ ...this.getCookieObject(cookie), accepted: true, realName: cookie }));
     const cookiesByCategory = this.getCookiesObjectFromArray(cookiesArray);
     this.state = {
       activeKey: 'essential',
@@ -65,7 +65,10 @@ class CookiesSelector extends React.Component<CookiesSelectorProps, CookiesSelec
   }
 
   saveChanges = () => {
-    // saves the new cookies settings stored in localstate in the backend
+    const { cookies } = this.state;
+    const cookiesArray = Object.values(cookies).reduce((flat, next) => flat.concat(next), []);
+    const refusedCookies = cookiesArray.filter(cookie => !cookie.accepted);
+    refusedCookies.forEach(cookie => console.log('delete this cookie:', cookie.realName));
   }
 
   render() {

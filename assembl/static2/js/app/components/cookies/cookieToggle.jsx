@@ -8,7 +8,8 @@ import { KNOWN_COOKIES_NAMES } from '../../constants';
 export type CookieObject = {
   name: string,
   category: string,
-  accepted: boolean
+  accepted: boolean,
+  realName: string
 }
 
 type CookieToggleProps = {
