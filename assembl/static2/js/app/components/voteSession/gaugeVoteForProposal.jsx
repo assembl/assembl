@@ -1,7 +1,6 @@
 // @flow
 /* eslint-disable react/no-multi-comp */
 import * as React from 'react';
-import { Button } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
 import Slider from 'rc-slider';
 
@@ -111,9 +110,7 @@ class GaugeVoteForProposal extends React.Component<GaugeVoteForProposalProps> {
             onChange={this.handleChange}
             {...sliderProps}
           />
-          <Button onClick={this.reset}>
-            <span className="assembl-icon-delete grey" />
-          </Button>
+          <span className="assembl-icon-delete grey" onClick={this.reset} />
         </div>
       </React.Fragment>
     );

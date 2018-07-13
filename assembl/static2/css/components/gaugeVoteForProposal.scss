@@ -4,71 +4,76 @@
   }
 }
 
-.gauge-container {
-  display: flex;
-  align-items: center;
-
-  .btn-default {
-    margin: 0 0 20px 50px;
-  }
-}
-
 .gauge-vote-for-proposal,
 .number-gauge-vote-for-proposal {
-  width: 100%;
-  padding: 0 10px 20px 10px;
+  .gauge-container {
+    display: flex;
+    align-items: center;
 
-  p {
-    margin-bottom: 30px;
-    margin-left: -10px;
-  }
-
-  .rc-slider-disabled {
-    background-color: inherit;
-  }
-
-  .rc-slider {
-    height: 55px;
-    margin-top: 20px;
-    margin-bottom: 8px;
-
-    .rc-slider-track {
-      background-color: $first-color;
+    .assembl-icon-delete {
+      margin: 0 0 21px 30px;
+      cursor: pointer;
     }
 
-    .rc-slider-dot {
-      /* rc-slider dotStyle prop mysteriously does not work anymore */
-      background-color: #e6e5f4;
-      height: 12px;
-      top: 0;
-      width: 2px;
-      border: none;
-      border-radius: initial;
-      margin-left: 0;
+    width: 100%;
+    padding: 0 10px 20px 10px;
+
+    p {
+      margin-bottom: 30px;
+      margin-left: -10px;
     }
 
-    .rc-slider-dot:first-child,
-    .rc-slider-dot:last-child {
-      display: none;
-    }
+    .rc-slider-disabled {
+      background-color: inherit;
 
-    .rc-slider-mark-text {
-      margin-top: 7px;
-
-      &.rc-slider-mark-text-active {
-        color: $first-color;
-        font-weight: bold;
-        font-size: 110%;
+      span {
+        color: grey;
       }
     }
 
-    svg.pointer {
-      fill: $first-color;
-    }
+    .rc-slider {
+      height: 55px;
+      margin-top: 20px;
+      margin-bottom: 8px;
 
-    .rc-slider-handle.no-value {
+      .rc-slider-track {
+        background-color: $first-color;
+      }
+
+      .rc-slider-dot {
+        /* rc-slider dotStyle prop mysteriously does not work anymore */
+        background-color: #e6e5f4;
+        height: 12px;
+        top: 0;
+        width: 2px;
+        border: none;
+        border-radius: initial;
+        margin-left: 0;
+      }
+
+      .rc-slider-dot:first-child,
+      .rc-slider-dot:last-child {
+        display: none;
+      }
+
+      .rc-slider-mark-text {
+        margin-top: 7px;
+
+        &.rc-slider-mark-text-active {
+          color: $first-color;
+          font-weight: bold;
+          font-size: 110%;
+        }
+      }
+
       svg.pointer {
-        fill: $grey5;
+        fill: $first-color;
+      }
+
+      .rc-slider-handle.no-value {
+        svg.pointer {
+          fill: $grey5;
+        }
       }
     }
   }

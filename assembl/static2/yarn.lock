@@ -7012,7 +7012,7 @@ rc-slider@^8.3.1:
 
 rc-slider@assembl/slider#use-src-instead-of-es:
   version "8.6.1"
-  resolved "https://codeload.github.com/assembl/slider/tar.gz/6e28e22050b1f2ccbcd954c55d24f54336c71e4b"
+  resolved "https://codeload.github.com/assembl/slider/tar.gz/ffdac086ba99839b75c52bde7ef4db9ff54cfba3"
   dependencies:
     babel-runtime "6.x"
     classnames "^2.2.5"

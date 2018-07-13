@@ -1662,16 +1662,10 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
                 className="rc-slider-mark"
               />
             </div>
-            <button
-              className="btn btn-default"
-              disabled={false}
+            <span
+              className="assembl-icon-delete grey"
               onClick={[Function]}
-              type="button"
-            >
-              <span
-                className="assembl-icon-delete grey"
-              />
-            </button>
+            />
           </div>
         </div>
       </div>
