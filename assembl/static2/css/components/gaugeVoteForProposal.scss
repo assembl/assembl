@@ -4,6 +4,15 @@
   }
 }
 
+.gauge-container {
+  display: flex;
+  align-items: center;
+
+  .btn-default {
+    margin: 0 0 20px 50px;
+  }
+}
+
 .gauge-vote-for-proposal,
 .number-gauge-vote-for-proposal {
   width: 100%;

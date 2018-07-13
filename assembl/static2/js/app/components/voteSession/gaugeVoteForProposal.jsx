@@ -53,18 +53,6 @@ const railStyle = {
   height: gaugeHeight
 };
 
-/* dotStyle prop of rc-slider mysteriously does not work anymore, so we declare these rules in the SCSS file
-const dotStyle = {
-  backgroundColor: '#E6E5F4', // TODO: use theme colors
-  height: '20px',
-  top: '0',
-  width: '2px',
-  border: 'none',
-  borderRadius: 'initial',
-  marginLeft: '0'
-};
-*/
-
 const handleStyle = [
   {
     height: '0',
@@ -113,18 +101,20 @@ class GaugeVoteForProposal extends React.Component<GaugeVoteForProposalProps> {
     return (
       <React.Fragment>
         {instructions ? <p>{instructions}</p> : null}
-        <Slider
-          included={false}
-          trackStyle={trackStyle}
-          railStyle={railStyle}
-          handleStyle={handleStyle}
-          handle={handleIcon}
-          onChange={this.handleChange}
-          {...sliderProps}
-        />
-        <Button onClick={this.reset}>
-          <span className="assembl-icon-delete grey" />
-        </Button>
+        <div className="gauge-container">
+          <Slider
+            included={false}
+            trackStyle={trackStyle}
+            railStyle={railStyle}
+            handleStyle={handleStyle}
+            handle={handleIcon}
+            onChange={this.handleChange}
+            {...sliderProps}
+          />
+          <Button onClick={this.reset}>
+            <span className="assembl-icon-delete grey" />
+          </Button>
+        </div>
       </React.Fragment>
     );
   }
