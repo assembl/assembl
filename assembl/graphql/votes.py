@@ -191,11 +191,7 @@ class AddGaugeVote(graphene.Mutation):
 
         vote = models.GaugeIdeaVote.query.filter_by(
             vote_spec_id=vote_spec.id, tombstone_date=None, voter_id=user_id).first()
-        if isinstance(vote_spec, models.NumberGaugeVoteSpecification) and (vote_value == 0 or vote_value is None):
-            if vote is not None:
-                vote.is_tombstone = True
-        elif isinstance(vote_spec, models.GaugeVoteSpecification) and vote_value is None:
-            # we only to vote 0 for choice gauge
+        if vote_value is None:
             if vote is not None:
                 vote.is_tombstone = True
         else:
