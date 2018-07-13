@@ -1,5 +1,4 @@
 import React from 'react';
-import classnames from 'classnames';
 
 import { getDomElementOffset, computeDomElementOffset } from '../../../utils/globalFunctions';
 
@@ -46,7 +45,7 @@ class Nuggets extends React.Component {
   }
 
   render() {
-    const { extracts, isHarvesting } = this.props;
+    const { extracts } = this.props;
     const { top } = this.state;
     const importantExtracts = Array.isArray(extracts) && extracts.filter(({ important }) => important);
     return (
@@ -57,7 +56,7 @@ class Nuggets extends React.Component {
               ref={(node) => {
                 this.node = node;
               }}
-              className={classnames('extracts', 'extracts--is-not-harvesting', { hidden: isHarvesting })}
+              className="extracts"
               style={Nuggets.topToStyle(top)}
             >
               <div className="badges">

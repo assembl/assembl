@@ -23,7 +23,6 @@ class ColumnsView extends React.Component<$FlowFixMeProps> {
     const {
       messageColumns,
       posts,
-      isHarvesting,
       ideaId,
       lang,
       contentLocaleMapping,
@@ -75,7 +74,6 @@ class ColumnsView extends React.Component<$FlowFixMeProps> {
                 data={columnsArray[classifier]}
                 initialRowIndex={initialRowIndex}
                 noRowsRenderer={noRowsRenderer}
-                isHarvesting={isHarvesting}
                 ideaId={ideaId}
                 refetchIdea={refetchIdea}
                 identifier={identifier}

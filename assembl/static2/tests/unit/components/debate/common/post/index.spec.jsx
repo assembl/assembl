@@ -7,7 +7,6 @@ const handleEditClickSpy = jest.fn();
 const refetchIdeaSpy = jest.fn();
 export const postProps = {
   body: '<p>You can\'t index the port without programming the wireless HTTP program!</p>',
-  bodyMimeType: 'text/*',
   borderLeftColor: 'red',
   contentLocale: 'fr',
   creationDate: '11/11/2011',
@@ -24,6 +23,7 @@ export const postProps = {
       mySentiment: 'like',
       attachments: [],
       extracts: [],
+      bodyMimeType: 'text/html',
       bodyEntries: [
         {
           localeCode: 'en',
@@ -56,8 +56,8 @@ export const postProps = {
   refetchIdea: refetchIdeaSpy,
   rowIndex: 0,
   subject: 'open-source Associate',
+  timeline: [],
   handleEditClick: handleEditClickSpy,
-  multiColumns: false,
   nuggetsManager: null,
   routerParams: {
     phase: 'thread',

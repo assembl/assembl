@@ -24,7 +24,6 @@ type Props = {
   originalLocale: string,
   translate: boolean,
   translationEnabled: boolean,
-  isHarvesting: boolean,
   handleMouseUpWhileHarvesting?: Function, // eslint-disable-line react/require-default-props
   measureTreeHeight?: Function // eslint-disable-line react/require-default-props
 };
@@ -131,14 +130,12 @@ const PostBody = ({
   originalLocale,
   translate,
   translationEnabled,
-  isHarvesting,
   handleMouseUpWhileHarvesting,
   measureTreeHeight
 }: Props) => {
   const divClassNames = classNames('post-body', { 'post-body--is-harvestable': !translate });
   const htmlClassNames = classNames('post-body-content', 'body', {
-    'pre-wrap': bodyMimeType === 'text/plain',
-    'is-harvesting': isHarvesting
+    'pre-wrap': bodyMimeType === 'text/plain'
   });
   // Only non-special URLs (like Youtube or SketchFab) will be transformed
   // We need to add the URLs previews to the end of each post (See URLMetadataLoader)
@@ -178,10 +175,6 @@ const PostBody = ({
       )}
     </div>
   );
-};
-
-PostBody.defaultProps = {
-  isHarvesting: false
 };
 
 export default PostBody;

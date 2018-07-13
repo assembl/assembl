@@ -13,12 +13,13 @@ import HarvestingMenu from '../../../harvesting/harvestingMenu';
 import type { Props as PostProps } from './index';
 
 type Props = PostProps & {
-  timeline: Timeline,
   body: string,
-  subject: string,
   handleEditClick: Function,
+  isHarvesting: boolean,
   modifiedSubject: React.Element<any>,
-  isHarvesting: boolean
+  multiColumns: boolean,
+  subject: string,
+  timeline: Timeline
 };
 
 type State = {
@@ -32,6 +33,11 @@ class PostView extends React.PureComponent<Props, State> {
   answerTextarea: ?HTMLTextAreaElement;
 
   postView: ?HTMLElement;
+
+  static defaultProps = {
+    isHarvesting: false,
+    multiColumns: false
+  };
 
   constructor(props: Props) {
     super(props);
@@ -174,13 +180,7 @@ class PostView extends React.PureComponent<Props, State> {
         }}
       >
         {!multiColumns && (
-          <Nuggets
-            extracts={extracts}
-            postId={id}
-            nuggetsManager={nuggetsManager}
-            completeLevel={completeLevelArray.join('-')}
-            isHarvesting={isHarvesting}
-          />
+          <Nuggets extracts={extracts} postId={id} nuggetsManager={nuggetsManager} completeLevel={completeLevelArray.join('-')} />
         )}
         {isHarvesting && (
           <HarvestingMenu
@@ -222,7 +222,6 @@ class PostView extends React.PureComponent<Props, State> {
                 translate={translate}
                 translationEnabled={debateData.translationEnabled}
                 bodyDivRef={this.recomputeTreeHeightOnImagesLoad}
-                isHarvesting={isHarvesting}
                 measureTreeHeight={this.props.measureTreeHeight}
               />
 

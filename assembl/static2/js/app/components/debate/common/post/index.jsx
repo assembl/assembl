@@ -12,6 +12,7 @@ import withLoadingIndicator from '../../../common/withLoadingIndicator';
 import { DeletedPublicationStates, PublicationStates } from '../../../../constants';
 import hashLinkScroll from '../../../../utils/hashLinkScroll';
 import NuggetsManager from '../../../common/nuggetsManager';
+import { IsHarvestingContext } from '../../../../app';
 
 const getSubjectPrefixString = fullLevel =>
   fullLevel && (
@@ -41,6 +42,7 @@ export type Props = {
   dbId: number,
   ideaId: string,
   identifier: string,
+  isHarvesting: boolean,
   lang: string,
   measureTreeHeight: Function,
   multiColumns: boolean,
@@ -50,8 +52,7 @@ export type Props = {
   parentId: string,
   refetchIdea: Function,
   routerParams: RouterParams,
-  rowIndex: number,
-  isHarvesting: boolean
+  rowIndex: number
 };
 
 type State = {
@@ -62,6 +63,7 @@ type bodyAndSubject = { body: string, subject: string, originalBody: string, ori
 
 export class DumbPost extends React.PureComponent<Props, State> {
   static defaultProps = {
+    isHarvesting: false,
     multiColumns: false
   };
 
@@ -145,11 +147,11 @@ export class DumbPost extends React.PureComponent<Props, State> {
       contentLocale,
       fullLevel,
       id,
+      isHarvesting,
       multiColumns,
       originalLocale,
       parentId,
       refetchIdea,
-      isHarvesting,
       timeline
     } = this.props;
     const translate = contentLocale !== originalLocale;
@@ -197,11 +199,11 @@ export class DumbPost extends React.PureComponent<Props, State> {
         ) : (
           <PostView
             {...this.props}
+            isHarvesting={isHarvesting}
             body={body}
             subject={subject}
             handleEditClick={this.handleEditClick}
             modifiedSubject={modifiedSubject}
-            isHarvesting={isHarvesting}
             timeline={timeline}
           />
         )}
@@ -210,8 +212,14 @@ export class DumbPost extends React.PureComponent<Props, State> {
   }
 }
 
+const PostWithContext = props => (
+  <IsHarvestingContext.Consumer>
+    {isHarvesting => <DumbPost {...props} isHarvesting={isHarvesting} />}
+  </IsHarvestingContext.Consumer>
+);
+
 const withData: OperationComponent<Response> = graphql(PostQuery);
 
 // Absolutely don't use redux connect here to avoid performance issue.
 // Please pass the needed props from Tree component.
-export default compose(withData, withLoadingIndicator())(DumbPost);
+export default compose(withData, withLoadingIndicator())(PostWithContext);

@@ -7,7 +7,6 @@ exports[`Post component should render a PostView component and pass its props to
 >
   <PostView
     body="I'll bypass the online CSS bus, that should firewall the SAS monitor!"
-    bodyMimeType="text/*"
     borderLeftColor="red"
     contentLocale="fr"
     creationDate="11/11/2011"
@@ -21,6 +20,7 @@ exports[`Post component should render a PostView component and pass its props to
               "value": "I'll bypass the online CSS bus, that should firewall the SAS monitor!",
             },
           ],
+          "bodyMimeType": "text/html",
           "creator": Object {
             "displayName": "Dannie Treutel",
             "userId": "dannietreutel",
@@ -62,7 +62,7 @@ exports[`Post component should render a PostView component and pass its props to
         },
       ]
     }
-    isHarvesting={undefined}
+    isHarvesting={false}
     lang="fr"
     level={1}
     modifiedSubject={
@@ -90,7 +90,7 @@ exports[`Post component should render a PostView component and pass its props to
     }
     rowIndex={0}
     subject="We need to hack the solid state HTTP alarm!"
-    timeline={undefined}
+    timeline={Array []}
   />
 </div>
 `;
