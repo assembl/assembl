@@ -110,7 +110,7 @@ class GaugeVoteForProposal extends React.Component<GaugeVoteForProposalProps> {
             onChange={this.handleChange}
             {...sliderProps}
           />
-          <span className="assembl-icon-delete grey" onClick={this.reset} />
+          {!sliderProps.disabled && <span className="assembl-icon-delete grey" onClick={this.reset} />}
         </div>
       </React.Fragment>
     );
