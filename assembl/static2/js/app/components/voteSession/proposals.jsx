@@ -16,7 +16,8 @@ type Props = {
   userGaugeVotes: UserGaugeVotes,
   userTokenVotes: UserTokenVotes,
   voteForProposalToken: Function,
-  voteForProposalGauge: Function
+  voteForProposalGauge: Function,
+  onVoteChange: Function
 };
 
 const Proposals = (props: Props) => (
@@ -33,6 +34,7 @@ const Proposals = (props: Props) => (
         userGaugeVotes={props.userGaugeVotes}
         voteForProposalToken={props.voteForProposalToken}
         voteForProposalGauge={props.voteForProposalGauge}
+        onVoteChange={props.onVoteChange}
       />
     ))}
   </div>

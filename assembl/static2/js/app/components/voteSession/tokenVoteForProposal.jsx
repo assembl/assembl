@@ -25,7 +25,8 @@ type Props = {
   remainingTokensByCategory: RemainingTokensByCategory,
   tokenCategories: TokenCategories,
   userTokenVotesForProposal: UserTokenVotesForProposal,
-  voteForProposal: Function
+  voteForProposal: Function,
+  onVoteChange: Function
 };
 
 const TokenVoteForProposal = ({
@@ -36,7 +37,8 @@ const TokenVoteForProposal = ({
   remainingTokensByCategory,
   tokenCategories,
   userTokenVotesForProposal,
-  voteForProposal
+  voteForProposal,
+  onVoteChange
 }: Props) => (
   <div className="margin-m">
     <p>{instructions}</p>
@@ -66,7 +68,10 @@ const TokenVoteForProposal = ({
                       <Button
                         className="admin-icons"
                         disabled={disabled}
-                        onClick={() => voteForProposal(proposalId, moduleId, id, n + 1)}
+                        onClick={() => {
+                          voteForProposal(proposalId, moduleId, id, n + 1);
+                          onVoteChange();
+                        }}
                       >
                         <Circle size={28} strokeColor={color} fillColor={n + 1 <= currentVote ? color : undefined} />
                       </Button>
@@ -74,7 +79,11 @@ const TokenVoteForProposal = ({
                   );
                 })}
                 <OverlayTrigger placement="top" overlay={resetTokensTooltip}>
-                  <Button onClick={() => voteForProposal(proposalId, moduleId, id, 0)}>
+                  <Button onClick={() => {
+                    voteForProposal(proposalId, moduleId, id, 0);
+                    onVoteChange();
+                  }}
+                  >
                     <span className="assembl-icon-delete grey" />
                   </Button>
                 </OverlayTrigger>

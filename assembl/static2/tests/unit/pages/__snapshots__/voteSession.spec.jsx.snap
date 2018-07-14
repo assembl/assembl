@@ -127,6 +127,7 @@ exports[`VoteSession component should match VoteSession snapshot 1`] = `
           smOffset={1}
         >
           <Proposals
+            onVoteChange={[Function]}
             proposals={
               Array [
                 Object {
@@ -360,6 +361,7 @@ exports[`VoteSession component should match VoteSession snapshot with empty modu
           smOffset={1}
         >
           <Proposals
+            onVoteChange={[Function]}
             proposals={Array []}
             remainingTokensByCategory={
               Immutable.Map {

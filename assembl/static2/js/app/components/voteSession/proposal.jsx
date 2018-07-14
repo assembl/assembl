@@ -28,7 +28,8 @@ type Props = {
   userTokenVotes: UserTokenVotes,
   numParticipants: number,
   voteForProposalToken: Function,
-  voteForProposalGauge: Function
+  voteForProposalGauge: Function,
+  onVoteChange: Function
 };
 
 type State = {
@@ -61,7 +62,8 @@ class Proposal extends React.Component<Props, State> {
       userGaugeVotes,
       userTokenVotes,
       voteForProposalToken,
-      voteForProposalGauge
+      voteForProposalGauge,
+      onVoteChange
     } = this.props;
     const tokenVoteModule = modules ? findTokenVoteModule(modules) : null;
     return (
@@ -83,6 +85,7 @@ class Proposal extends React.Component<Props, State> {
                 userTokenVotesForProposal={userTokenVotes.getIn([id, tokenVoteModule.id], Map())}
                 voteForProposal={voteForProposalToken}
                 moduleId={tokenVoteModule.id}
+                onVoteChange={onVoteChange}
               />
             )}
 
@@ -94,6 +97,7 @@ class Proposal extends React.Component<Props, State> {
                   voteForProposal={voteForProposalGauge}
                   proposalId={id}
                   value={userGaugeVotes.getIn([id, module.id], null)}
+                  onVoteChange={onVoteChange}
                 />
               ))}
 
@@ -110,6 +114,7 @@ class Proposal extends React.Component<Props, State> {
                   voteForProposal={voteForProposalGauge}
                   proposalId={id}
                   value={userGaugeVotes.getIn([id, module.id], null)}
+                  onVoteChange={onVoteChange}
                 />
               ))}
           </Col>

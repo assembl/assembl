@@ -91,7 +91,8 @@ type State = {
   availableTokensSticky: boolean,
   userTokenVotes: UserTokenVotes,
   userGaugeVotes: UserGaugeVotes,
-  windowWidth: number
+  windowWidth: number,
+  hasChanged: boolean
 };
 
 // $FlowFixMe: if voteType === 'token_vote_specification', we know it is a TokenVoteSpecification
@@ -129,12 +130,14 @@ class DumbVoteSession extends React.Component<Props, State> {
     super(props);
     this.state = {
       submitting: true,
+      hasChanged: false,
       availableTokensSticky: false,
       userTokenVotes: Map(),
       userGaugeVotes: Map(),
       windowWidth: window.innerWidth
     };
   }
+
 
   componentWillMount() {
     window.addEventListener('resize', this.updateWindowWidth);
@@ -209,7 +212,7 @@ class DumbVoteSession extends React.Component<Props, State> {
     promptForLoginOr(setVote)();
   };
 
-  voteForProposalGauge = (proposalId: string, voteSpecificationId: string, value: number): void => {
+  voteForProposalGauge = (proposalId: string, voteSpecificationId: string, value: ?number): void => {
     const setVote = () =>
       this.setState({
         userGaugeVotes: this.state.userGaugeVotes.setIn([proposalId, voteSpecificationId], value),
@@ -241,19 +244,9 @@ class DumbVoteSession extends React.Component<Props, State> {
     this.availableTokensContainerRef = el;
   };
 
-  displaySubmitButton: void => boolean = () => {
-    const tokenVotesSum = this.state.userTokenVotes
-      .valueSeq()
-      .flatMap(v => v.valueSeq().flatMap(v2 => v2.valueSeq()))
-      .reduce((sum, x) => sum + x, 0);
-
-    const gaugeVotesSum = this.state.userGaugeVotes
-      .valueSeq()
-      .flatMap(v => v.valueSeq())
-      .reduce((sum, x) => sum + x, 0);
-
-    return tokenVotesSum > 0 || gaugeVotesSum > 0;
-  };
+  handleVoteChange = () => {
+    this.setState({ hasChanged: true });
+  }
 
   submitVotes = () => {
     const { addTokenVote, addGaugeVote, refetchVoteSession } = this.props;
@@ -335,7 +328,11 @@ class DumbVoteSession extends React.Component<Props, State> {
       isPhaseCompleted
     } = this.props;
 
-    const { availableTokensSticky, windowWidth } = this.state;
+    const {
+      availableTokensSticky,
+      windowWidth,
+      hasChanged
+    } = this.state;
 
     if (!title || title.length === 0) {
       return (
@@ -402,6 +399,7 @@ class DumbVoteSession extends React.Component<Props, State> {
                     userTokenVotes={this.state.userTokenVotes}
                     voteForProposalToken={this.voteForProposalToken}
                     voteForProposalGauge={this.voteForProposalGauge}
+                    onVoteChange={this.handleVoteChange}
                   />
                 ) : (
                   <ProposalsResults proposals={proposals} />
@@ -411,7 +409,7 @@ class DumbVoteSession extends React.Component<Props, State> {
             {!isPhaseCompleted ? (
               <Row className="form-actions center">
                 <Col mdOffset={1} md={10} smOffset={1} sm={10}>
-                  {this.displaySubmitButton() ? (
+                  {hasChanged ? (
                     <Button className="button-submit button-dark" onClick={this.submitVotes} disabled={this.state.submitting}>
                       <Translate value="debate.voteSession.submit" />
                     </Button>
