@@ -20,8 +20,7 @@ type SharedProps = {
   id: string, // the vote specification id
   instructions: ?string,
   proposalId: string,
-  voteForProposal?: Function,
-  onVoteChange?: Function
+  voteForProposal?: Function
 };
 
 type GaugeVoteForProposalProps = SharedProps & {
@@ -86,12 +85,10 @@ const handleIcon = (props) => {
 /* Base component that render the slider and handle the value / change */
 class GaugeVoteForProposal extends React.Component<GaugeVoteForProposalProps> {
   handleChange = (value: ?number) => {
-    const { id, proposalId, voteForProposal, onVoteChange } = this.props;
+    const { id, proposalId, voteForProposal } = this.props;
     if (voteForProposal) {
       voteForProposal(proposalId, id, value);
     }
-    // flow returns an error if we don't put a check
-    return onVoteChange && onVoteChange();
   };
 
   reset = () => {
@@ -130,7 +127,6 @@ export const ChoiceGaugeVoteForProposal = ({
   choices,
   disabled,
   value,
-  onVoteChange,
   ...rest
 }: ChoiceGaugeVoteForProposalProps) => {
   const marks = {};
@@ -172,7 +168,7 @@ export const ChoiceGaugeVoteForProposal = ({
 
   return (
     <div className="gauge-vote-for-proposal">
-      <GaugeVoteForProposal {...rest} sliderProps={sliderProps} onVoteChange={onVoteChange} />
+      <GaugeVoteForProposal {...rest} sliderProps={sliderProps} />
     </div>
   );
 };
@@ -197,7 +193,6 @@ export const NumberGaugeVoteForProposal = ({
   nbTicks,
   unit,
   value,
-  onVoteChange,
   ...rest
 }: NumberGaugeVoteForProposalProps) => {
   const marks = {};
@@ -254,7 +249,7 @@ export const NumberGaugeVoteForProposal = ({
 
   return (
     <div className="number-gauge-vote-for-proposal">
-      <GaugeVoteForProposal {...rest} sliderProps={sliderProps} onVoteChange={onVoteChange} />
+      <GaugeVoteForProposal {...rest} sliderProps={sliderProps} />
     </div>
   );
 };

@@ -207,7 +207,8 @@ class DumbVoteSession extends React.Component<Props, State> {
     const setVote = () =>
       this.setState({
         userTokenVotes: this.state.userTokenVotes.setIn([proposalId, tokenVoteModuleId, categoryId], value),
-        submitting: false
+        submitting: false,
+        hasChanged: true
       });
     promptForLoginOr(setVote)();
   };
@@ -216,7 +217,8 @@ class DumbVoteSession extends React.Component<Props, State> {
     const setVote = () =>
       this.setState({
         userGaugeVotes: this.state.userGaugeVotes.setIn([proposalId, voteSpecificationId], value),
-        submitting: false
+        submitting: false,
+        hasChanged: true
       });
     promptForLoginOr(setVote)();
   };
@@ -243,10 +245,6 @@ class DumbVoteSession extends React.Component<Props, State> {
   setAvailableTokensRef = (el: ?HTMLDivElement) => {
     this.availableTokensContainerRef = el;
   };
-
-  handleVoteChange = () => {
-    this.setState({ hasChanged: true });
-  }
 
   submitVotes = () => {
     const { addTokenVote, addGaugeVote, refetchVoteSession } = this.props;
@@ -399,7 +397,6 @@ class DumbVoteSession extends React.Component<Props, State> {
                     userTokenVotes={this.state.userTokenVotes}
                     voteForProposalToken={this.voteForProposalToken}
                     voteForProposalGauge={this.voteForProposalGauge}
-                    onVoteChange={this.handleVoteChange}
                   />
                 ) : (
                   <ProposalsResults proposals={proposals} />
