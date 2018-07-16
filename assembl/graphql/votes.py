@@ -122,7 +122,7 @@ class AddTokenVote(graphene.Mutation):
                     permissions=permissions, user_id=user_id)
                 vote.db.add(vote)
 
-        vote.db.flush()
+        proposal.db.flush()
         return AddTokenVote(vote_specification=vote_spec)
 
 
@@ -172,5 +172,5 @@ class AddGaugeVote(graphene.Mutation):
                 vote = vote.handle_duplication(
                     permissions=permissions, user_id=user_id)
                 vote.db.add(vote)
-        vote.db.flush()
+        proposal.db.flush()
         return AddGaugeVote(vote_specification=vote_spec)
