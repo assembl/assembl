@@ -5,7 +5,7 @@ import { Translate } from 'react-redux-i18n';
 import { Map } from 'immutable';
 
 import TokenVoteForProposal from './tokenVoteForProposal';
-import { GaugeVoteForProposal, NumberGaugeVoteForProposal } from './gaugeVoteForProposal';
+import { ChoiceGaugeVoteForProposal, NumberGaugeVoteForProposal } from './gaugeVoteForProposal';
 import VotesInProgress from './votesInProgress';
 import {
   findTokenVoteModule,
@@ -88,12 +88,12 @@ class Proposal extends React.Component<Props, State> {
 
             {modules &&
               filterGaugeVoteModules(modules).map(module => (
-                <GaugeVoteForProposal
+                <ChoiceGaugeVoteForProposal
                   key={`${id}-GaugeVoteForProposal-${module.id}`}
                   {...module}
                   voteForProposal={voteForProposalGauge}
                   proposalId={id}
-                  value={userGaugeVotes.getIn([id, module.id], 0)}
+                  value={userGaugeVotes.getIn([id, module.id], null)}
                 />
               ))}
 
@@ -109,7 +109,7 @@ class Proposal extends React.Component<Props, State> {
                   {...module}
                   voteForProposal={voteForProposalGauge}
                   proposalId={id}
-                  value={userGaugeVotes.getIn([id, module.id], 0)}
+                  value={userGaugeVotes.getIn([id, module.id], null)}
                 />
               ))}
           </Col>

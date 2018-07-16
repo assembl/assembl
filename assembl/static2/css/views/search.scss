@@ -34,7 +34,8 @@ $highlightColor: $first-color-light;
 @import "../../node_modules/searchkit/theming/components/numeric-refinement-list-filter.scss";
 @import "../../node_modules/searchkit/theming/components/refinement-list-filter.scss";
 @import "../../node_modules/searchkit/theming/components/selected-filters.scss";
-@import "../../node_modules/searchkit/theming/components/range-filter.scss";
+//@import "../../node_modules/searchkit/theming/components/range-filter.scss";
+// range-filter.scss includes "~rc-slider/assets/index.css"
 @import "../../node_modules/searchkit/theming/components/reset-filters.scss";
 @import "../../node_modules/searchkit/theming/components/menu-filter.scss";
 @import "../../node_modules/searchkit/theming/components/tag-filter.scss";

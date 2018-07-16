@@ -66,7 +66,9 @@ const TokenVoteForProposal = ({
                       <Button
                         className="admin-icons"
                         disabled={disabled}
-                        onClick={() => voteForProposal(proposalId, moduleId, id, n + 1)}
+                        onClick={() => {
+                          voteForProposal(proposalId, moduleId, id, n + 1);
+                        }}
                       >
                         <Circle size={28} strokeColor={color} fillColor={n + 1 <= currentVote ? color : undefined} />
                       </Button>
@@ -74,7 +76,10 @@ const TokenVoteForProposal = ({
                   );
                 })}
                 <OverlayTrigger placement="top" overlay={resetTokensTooltip}>
-                  <Button onClick={() => voteForProposal(proposalId, moduleId, id, 0)}>
+                  <Button onClick={() => {
+                    voteForProposal(proposalId, moduleId, id, 0);
+                  }}
+                  >
                     <span className="assembl-icon-delete grey" />
                   </Button>
                 </OverlayTrigger>

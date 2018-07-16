@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { Col, Row } from 'react-bootstrap';
 
-import { GaugeVoteForProposal, NumberGaugeVoteForProposal } from './gaugeVoteForProposal';
+import { ChoiceGaugeVoteForProposal, NumberGaugeVoteForProposal } from './gaugeVoteForProposal';
 import TokenVotesResults from './tokenVotesResults';
 import ParticipantsCount from './participantsCount';
 import {
@@ -47,7 +47,7 @@ class ProposalResults extends React.Component<Props> {
             {modules &&
               filterGaugeVoteModules(modules).map(module => (
                 <div key={`${id}-GaugeVoteForProposal-${module.id}`}>
-                  <GaugeVoteForProposal
+                  <ChoiceGaugeVoteForProposal
                     id={module.id}
                     disabled
                     instructions={module.instructions}

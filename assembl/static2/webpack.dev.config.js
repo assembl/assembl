@@ -89,6 +89,7 @@ module.exports = {
             },
             include: [
               path.join(__dirname, 'js'),
+              path.join(__dirname, 'node_modules/rc-slider')
             ]
         },
         {
