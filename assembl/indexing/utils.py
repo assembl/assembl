@@ -129,6 +129,13 @@ def get_data(content):
         data['idea_id'] = [link.idea_id
             for link in content.indirect_idea_content_links_without_cache()
             if link.__class__.__name__ == 'IdeaRelatedPostLink']
+        # The post is not associated to any idea, we can't generate an url from it, don't index it.
+        if not data['idea_id']:
+            return None, None
+
+        # If the idea is now in multi columns mode and the post was created before that, don't index it.
+        if Idea.get(data['idea_id'][0]).message_columns and content.message_classifier is None:
+            return None, None
 
         data['taxonomy_nature'] = [
             'taxonomy_nature.' + enum_entry.name
