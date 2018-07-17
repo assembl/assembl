@@ -14,7 +14,6 @@ type Props = {
   slug: string,
   logoSrc: string,
   connectedUserId: string,
-  currentPhaseIdentifier: string,
   helpUrl: string,
   location: string,
   logoLink: string
@@ -45,7 +44,7 @@ export default class BurgerNavbar extends React.PureComponent<Props, State> {
   };
 
   render() {
-    const { elements, slug, logoSrc, connectedUserId, currentPhaseIdentifier, helpUrl, location, logoLink } = this.props;
+    const { elements, slug, logoSrc, connectedUserId, helpUrl, location, logoLink } = this.props;
     const { shouldDisplayMenu } = this.state;
     return (
       <div className="burger-navbar">
@@ -61,13 +60,7 @@ export default class BurgerNavbar extends React.PureComponent<Props, State> {
         />
         <Logo slug={slug} src={logoSrc} url={logoLink} />
         <div className="right-part">
-          <UserMenu
-            helpUrl={helpUrl}
-            location={location}
-            connectedUserId={connectedUserId}
-            currentPhaseIdentifier={currentPhaseIdentifier}
-            remainingWidth={0}
-          />
+          <UserMenu helpUrl={helpUrl} location={location} connectedUserId={connectedUserId} remainingWidth={0} />
         </div>
       </div>
     );

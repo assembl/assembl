@@ -29,7 +29,6 @@ const IsHarvestingButton = ({ isActive, handleClick }: IsHarvestingButtonProps) 
 
 type UserMenuProps = {
   location: string,
-  currentPhaseIdentifier: string,
   helpUrl: string,
   remainingWidth?: number,
   isHarvesting: boolean,
@@ -42,23 +41,13 @@ const shouldShowUsername = (remainingWidth, breakPoint) =>
 
 const shouldShowExpertIcons = connectedUserIsExpert();
 
-const UserMenu = ({
-  location,
-  currentPhaseIdentifier,
-  helpUrl,
-  remainingWidth,
-  isHarvesting,
-  handleIsHarvestingButtonClick,
-  themeId
-}: UserMenuProps) => (
+const UserMenu = ({ location, helpUrl, remainingWidth, isHarvesting, handleIsHarvestingButtonClick, themeId }: UserMenuProps) => (
   <div className="navbar-icons">
     {shouldShowExpertIcons &&
       themeId && <IsHarvestingButton isActive={isHarvesting} handleClick={handleIsHarvestingButtonClick} />}
-    {currentPhaseIdentifier !== 'survey' && (
-      <div id="search">
-        <Search />
-      </div>
-    )}
+    <div id="search">
+      <Search />
+    </div>
     {getConnectedUserId() &&
       helpUrl && (
         <Link to={helpUrl} target="_blank">

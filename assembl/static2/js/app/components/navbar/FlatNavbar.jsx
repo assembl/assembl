@@ -11,7 +11,6 @@ type Props = {
   slug: string,
   logoSrc: string,
   connectedUserId: string,
-  currentPhaseIdentifier: string,
   helpUrl: string,
   location: string,
   style: Object,
@@ -53,7 +52,6 @@ export default class FlatNavbar extends React.PureComponent<Props, State> {
       slug,
       logoSrc,
       connectedUserId,
-      currentPhaseIdentifier,
       helpUrl,
       location,
       style,
@@ -79,7 +77,6 @@ export default class FlatNavbar extends React.PureComponent<Props, State> {
             helpUrl={helpUrl}
             location={location}
             connectedUserId={connectedUserId}
-            currentPhaseIdentifier={currentPhaseIdentifier}
             remainingWidth={maxWidth - this.state.leftWidth + this.state.languageMenuWidth}
             themeId={themeId}
           />
