@@ -29,6 +29,7 @@ class ExportSection extends React.Component<ExportSectionProps> {
   static defaultProps = {
     handleTranslationChange: undefined,
     handleExportLocaleChange: undefined,
+    handleAnonymousChange: undefined,
     languages: undefined,
     withLanguageOptions: false,
     exportLocale: undefined,
@@ -79,9 +80,9 @@ class ExportSection extends React.Component<ExportSectionProps> {
           annotation={I18n.t(`administration.export.${annotation}`)}
         />
         <div className="admin-content">
-          {withLanguageOptions && 
+          {withLanguageOptions &&
             handleTranslationChange &&
-            handleExportLocaleChange && 
+            handleExportLocaleChange &&
             handleAnonymousChange && (
               <FormGroup>
                 <Checkbox
@@ -113,7 +114,7 @@ class ExportSection extends React.Component<ExportSectionProps> {
                   )}
                 </Radio>
               </FormGroup>
-          )}
+            )}
 
           <br />
           <Link className="button-link button-dark margin-l" href={exportLink}>

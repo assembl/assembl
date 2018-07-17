@@ -18,7 +18,8 @@ type Props = {
 
 type State = {
   exportLocale: ?string,
-  translate: boolean
+  translate: boolean,
+  isAnonymous: boolean
 };
 
 class Step3 extends React.Component<Props, State> {
@@ -48,7 +49,8 @@ class Step3 extends React.Component<Props, State> {
     const { translate } = this.state;
     const exportLocale = this.state.exportLocale || (languages && languages[0].locale);
     const translation = translate && exportLocale ? `?lang=${exportLocale}` : '?'; // FIXME: using '' instead of '?' does not work
-    const anonymous = translation === '?' ? `anon=${isAnonymous}` : `&anon=${isAnonymous}`;
+    const { isAnonymous } = this.state;
+    const anonymous = translation === '?' ? `anon=${isAnonymous.toString()}` : `&anon=${isAnonymous.toString()}`;
     const exportLink = get('exportSurveyData', { debateId: debateId, translation: translation, anonymous: anonymous });
     return (
       <ExportSection

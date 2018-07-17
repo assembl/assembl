@@ -11,45 +11,6 @@ exports[`ExportSection component should render an ExportSection component with l
   <div
     className="admin-content"
   >
-    <FormGroup
-      bsClass="form-group"
-    >
-      <Checkbox
-        bsClass="checkbox"
-        disabled={false}
-        inline={false}
-        onChange={[Function]}
-        title=""
-      >
-        <Translate
-          value="administration.export.anonymous"
-        />
-      </Checkbox>
-      <Radio
-        bsClass="radio"
-        checked={true}
-        disabled={false}
-        inline={false}
-        onChange={[Function]}
-        title=""
-      >
-        <Translate
-          value="administration.export.noExportLanguage"
-        />
-      </Radio>
-      <Radio
-        bsClass="radio"
-        checked={false}
-        disabled={false}
-        inline={false}
-        onChange={[Function]}
-        title=""
-      >
-        <Translate
-          value="administration.export.translateTheMessagesIn"
-        />
-      </Radio>
-    </FormGroup>
     <br />
     <Link
       className="button-link button-dark margin-l"
