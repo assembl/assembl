@@ -1888,6 +1888,18 @@ class LanguagePreferenceCollection(object):
             req.lang_prefs = LanguagePreferenceCollectionWithDefault(locale)
         return req.lang_prefs
 
+    @classmethod
+    def setCurrent(cls, lang_pref_collection, req=None):
+        from pyramid.threadlocal import get_current_request
+        if req is None:
+            req = get_current_request()
+        assert req
+        req.lang_prefs = lang_pref_collection
+
+    @classmethod
+    def setCurrentFromLocale(cls, lang_code, req=None):
+        cls.setCurrent(LanguagePreferenceCollectionWithDefault(lang_code), req)
+
     @abstractmethod
     def default_locale_code(self):
         pass

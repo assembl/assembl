@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 import csv
-import re
 import tempfile
-import base64
 from cStringIO import StringIO
 from os import urandom
 from os.path import join, dirname
@@ -10,7 +8,6 @@ from collections import defaultdict
 from datetime import timedelta, datetime
 import isodate
 from assembl.lib.clean_input import sanitize_text
-#import pprint
 
 from sqlalchemy import (
     Column,
@@ -1383,12 +1380,29 @@ def convert_to_utf8(rowdict):
     return row
 
 
+def get_entries_locale_original(lang_string):
+    entries = lang_string.best_entries_in_request_with_originals()
+    if len(entries) == 1:
+        best = entries[0]
+        original = entries[0]
+    if len(entries) > 1:
+        best = entries[0]
+        original = entries[-1]
+    locale = best.locale.code
+    return {
+        "entry": best.value,
+        "original": original.value,
+        "locale": locale
+    }
+
+
 @view_config(context=InstanceContext, request_method='GET',
              ctx_instance_class=Discussion, permission=P_ADMIN_DISC,
              name="phase1_csv_export")
 def phase1_csv_export(request):
     """CSV export for phase 1."""
     from assembl.models import Locale, Idea
+    from assembl.models.auth import LanguagePreferenceCollection
     has_lang = 'lang' in request.GET
     has_anon = asbool(request.GET.get('anon', False))
     if has_lang:
@@ -1398,6 +1412,11 @@ def phase1_csv_export(request):
             language = u'fr'
     else:
         language = u'fr'
+
+    # This is required so that the langstring methods can operate using correct globals
+    # on the request object
+    LanguagePreferenceCollection.setCurrentFromLocale(language, req=request)
+
     discussion = request.context._instance
     discussion_id = discussion.id
     Idea.prepare_counters(discussion_id, True)
@@ -1405,6 +1424,8 @@ def phase1_csv_export(request):
     QUESTION_ID = u"Numéro de la question"
     QUESTION_TITLE = u"Intitulé de la question"
     POST_BODY = u"Réponse"
+    POST_ID = u"Numéro du post"
+    POST_LOCALE = u"Locale du post"
     POST_LIKE_COUNT = u"Nombre de \"J'aime\""
     POST_DISAGREE_COUNT = u"Nombre de \"En désaccord\""
     POST_CREATOR_NAME = u"Nom du contributeur"
@@ -1413,11 +1434,14 @@ def phase1_csv_export(request):
     SENTIMENT_ACTOR_NAME = u"Nom du votant"
     SENTIMENT_ACTOR_EMAIL = u"Adresse mail du votant"
     SENTIMENT_CREATION_DATE = u"Date/heure du vote"
+    POST_BODY_ORIGINAL = u"Original"
     fieldnames = [
         THEMATIC_NAME.encode('utf-8'),
         QUESTION_ID.encode('utf-8'),
         QUESTION_TITLE.encode('utf-8'),
         POST_BODY.encode('utf-8'),
+        POST_ID.encode('utf-8'),
+        POST_LOCALE.encode('utf-8'),
         POST_LIKE_COUNT.encode('utf-8'),
         POST_DISAGREE_COUNT.encode('utf-8'),
         POST_CREATOR_NAME.encode('utf-8'),
@@ -1426,6 +1450,7 @@ def phase1_csv_export(request):
         SENTIMENT_ACTOR_NAME.encode('utf-8'),
         SENTIMENT_ACTOR_EMAIL.encode('utf-8'),
         SENTIMENT_CREATION_DATE.encode('utf-8'),
+        POST_BODY_ORIGINAL.encode('utf-8')
     ]
 
     extra_columns_info = (None if 'no_extra_columns' in request.GET else
@@ -1440,23 +1465,22 @@ def phase1_csv_export(request):
     # include BOM for Excel to open the file in UTF-8 properly
     output.write(u'\ufeff'.encode('utf-8'))
     writer = csv.DictWriter(
-        output, dialect='excel', delimiter=';', fieldnames=fieldnames)
+        output, dialect='excel', delimiter=';', fieldnames=fieldnames, quoting=csv.QUOTE_ALL)
     writer.writeheader()
     thematics = get_thematics(discussion_id, 'survey')
     for thematic in thematics:
         row = {}
-        row[THEMATIC_NAME] = resolve_langstring(thematic.title, language)
+        row[THEMATIC_NAME] = get_entries_locale_original(thematic.title).get('entry')
         for question in thematic.get_children():
             row[QUESTION_ID] = question.id
-            row[QUESTION_TITLE] = resolve_langstring(question.title, language)
+            row[QUESTION_TITLE] = get_entries_locale_original(question.title).get('entry')
             posts = get_published_posts(question)
             for post in posts:
-                if has_lang:
-                    row[POST_BODY] = resolve_langstring(
-                        post.get_body_as_text(), language)
-                else:
-                    row[POST_BODY] = resolve_langstring(
-                        post.get_body_as_text(), None)
+                post_entries = get_entries_locale_original(post.body)
+                row[POST_BODY] = post_entries.get('entry')
+                row[POST_ID] = post.id
+                row[POST_LOCALE] = post_entries.get('locale')
+                row[POST_BODY_ORIGINAL] = post_entries.get('original')
                 row[POST_CREATOR_NAME] = post.creator.real_name(anonymous=has_anon)
                 row[POST_CREATOR_EMAIL] = post.creator.get_preferred_email(anonymous=has_anon)
                 row[POST_CREATION_DATE] = format_date(post.creation_date)
@@ -1478,8 +1502,7 @@ def phase1_csv_export(request):
                 for sentiment in post.sentiments:
                     row[SENTIMENT_ACTOR_NAME] = sentiment.actor.real_name(anonymous=has_anon)
                     row[SENTIMENT_ACTOR_EMAIL] = sentiment.actor.get_preferred_email(anonymous=has_anon)
-                    row[SENTIMENT_CREATION_DATE] = format_date(
-                        sentiment.creation_date)
+                    row[SENTIMENT_CREATION_DATE] = format_date(sentiment.creation_date)
                     writer.writerow(convert_to_utf8(row))
 
     output.seek(0)
@@ -1508,6 +1531,10 @@ def phase2_csv_export(request):
     else:
         language = u'fr'
 
+    # This is required so that the langstring methods can operate using correct globals
+    # on the request object
+    LanguagePreferenceCollection.setCurrentFromLocale(language, req=request)
+
     discussion = request.context._instance
     discussion_id = discussion.id
     Idea.prepare_counters(discussion_id, True)
@@ -1516,6 +1543,8 @@ def phase2_csv_export(request):
     IDEA_NAME = u"Nom de l'idée"
     POST_SUBJECT = u"Sujet"
     POST_BODY = u"Post"
+    POST_ID = u"Numéro du post"
+    POST_LOCALE = u"Locale du post"
     POST_LIKE_COUNT = u"Nombre de \"J'aime\""
     POST_DISAGREE_COUNT = u"Nombre de \"En désaccord\""
     POST_CREATOR_NAME = u"Nom du contributeur"
@@ -1524,11 +1553,14 @@ def phase2_csv_export(request):
     SENTIMENT_ACTOR_NAME = u"Nom du votant"
     SENTIMENT_ACTOR_EMAIL = u"Adresse mail du votant"
     SENTIMENT_CREATION_DATE = u"Date/heure du vote"
+    POST_BODY_ORIGINAL = u"Original"
     fieldnames = [
         IDEA_ID.encode('utf-8'),
         IDEA_NAME.encode('utf-8'),
         POST_SUBJECT.encode('utf-8'),
         POST_BODY.encode('utf-8'),
+        POST_ID.encode('utf-8'),
+        POST_LOCALE.encode('utf-8'),
         POST_LIKE_COUNT.encode('utf-8'),
         POST_DISAGREE_COUNT.encode('utf-8'),
         POST_CREATOR_NAME.encode('utf-8'),
@@ -1537,6 +1569,7 @@ def phase2_csv_export(request):
         SENTIMENT_ACTOR_NAME.encode('utf-8'),
         SENTIMENT_ACTOR_EMAIL.encode('utf-8'),
         SENTIMENT_CREATION_DATE.encode('utf-8'),
+        POST_BODY_ORIGINAL.encode('utf-8')
     ]
     extra_columns_info = (None if 'no_extra_columns' in request.GET else
                           load_social_columns_info(discussion, language))
@@ -1551,29 +1584,23 @@ def phase2_csv_export(request):
     # include BOM for Excel to open the file in UTF-8 properly
     output.write(u'\ufeff'.encode('utf-8'))
     writer = csv.DictWriter(
-        output, dialect='excel', delimiter=';', fieldnames=fieldnames)
+        output, dialect='excel', delimiter=';', fieldnames=fieldnames, quoting=csv.QUOTE_ALL)
     writer.writeheader()
     ideas = get_ideas(discussion_id, 'thread')
     for idea in ideas:
         row = {}
         row[IDEA_ID] = idea.id
-        row[IDEA_NAME] = resolve_langstring(idea.title, language)
+        row[IDEA_NAME] = get_entries_locale_original(idea.title).get('entry')
         posts = get_published_posts(idea)
         for post in posts:
-            if has_lang:
-                row[POST_SUBJECT] = resolve_langstring(
-                    post.subject, language)
-            else:
-                row[POST_SUBJECT] = resolve_langstring(
-                    post.subject, None)
+            subject = get_entries_locale_original(post.subject)
+            body = get_entries_locale_original(post.body)
 
-            if has_lang:
-                row[POST_BODY] = resolve_langstring(
-                    post.get_body_as_text(), language)
-            else:
-                row[POST_BODY] = resolve_langstring(
-                    post.get_body_as_text(), None)
-
+            row[POST_SUBJECT] = subject.get('entry')
+            row[POST_BODY] = body.get('entry')
+            row[POST_BODY_ORIGINAL] = body.get('original')
+            row[POST_ID] = post.id
+            row[POST_LOCALE] = body.get('locale') or subject.get('locale') or None
             row[POST_CREATOR_NAME] = post.creator.real_name(anonymous=has_anon)
             row[POST_CREATOR_EMAIL] = post.creator.get_preferred_email(anonymous=has_anon)
             row[POST_CREATION_DATE] = format_date(post.creation_date)
