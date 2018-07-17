@@ -42,7 +42,7 @@ def resolve_langstring(langstring, locale_code):
 
     except Exception:
         # Anything that goes wrong with clean_input, return the original
-        return langstring.first_original()
+        return langstring.first_original().value
 
 
 def resolve_langstring_entries(obj, attr):
