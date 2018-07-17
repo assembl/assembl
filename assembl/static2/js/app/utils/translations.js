@@ -368,7 +368,7 @@ const Translations = {
         showLess: "Fermer les votes de la communauté",
         participantsCount: "%{count} participants se sont exprimés !",
         participantsCount_0: "Aucun participant ne s'est encore exprimé",
-        participantsCount_1: "%{count} participant s'est voté",
+        participantsCount_1: "%{count} participant s'est exprimé",
         tokenTooltip: "%{count} jetons %{name}",
         notEnoughTokens: "Vous n'avez plus assez de jetons",
         exclusiveTokens: "Vous avez déjà voté pour une autre catégorie pour cette proposition",
