@@ -14,7 +14,7 @@ exports[`ParticipantsCount component should match ParticipantsCount snapshot 1`]
       className={undefined}
       style={undefined}
     >
-      666 participants voted!
+      666 participants have expressed themselves!
     </span>
   </div>
 </div>
