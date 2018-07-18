@@ -11,7 +11,9 @@ import withLoadingIndicator from '../../components/common/withLoadingIndicator';
 
 type TermsFormProps = {
   isChecked: boolean,
-  text: string,
+  isPrivacyPolicy: boolean,
+  termsAndConditionsText: string,
+  privacyPolicyText: string,
   handleAcceptButton: () => void,
   style: Object
 };
@@ -47,21 +49,25 @@ class DumbTermsForm extends React.Component<TermsFormProps, TermsFormState> {
     }
   };
 
-  handleSubmit = () => {
-    this.props.handleAcceptButton();
+  handleSubmit = (termFormType) => {
+    this.props.handleAcceptButton(termFormType);
     closeModal();
   };
 
   render() {
     const { isScrolled } = this.state;
-    const { isChecked, text, style = {} } = this.props;
+    const { isChecked, termsAndConditionsText, privacyPolicyText, isPrivacyPolicy, style = {} } = this.props;
     const termsBoxClasses = isChecked ? 'terms-box justify full-height' : 'terms-box justify';
 
     return (
       <div className="terms-form" style={style}>
         <Modal.Header closeButton>
           <Modal.Title>
-            <Translate value="termsAndConditions.headerTitle" />
+            {isPrivacyPolicy ? (
+              <Translate value="privacyPolicy.headerTitle" />
+            ) : (
+              <Translate value="termsAndConditions.headerTitle" />
+            )}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -70,7 +76,7 @@ class DumbTermsForm extends React.Component<TermsFormProps, TermsFormState> {
             ref={(box) => {
               this.box = box;
             }}
-            dangerouslySetInnerHTML={{ __html: text }}
+            dangerouslySetInnerHTML={isPrivacyPolicy ? { __html: privacyPolicyText } : { __html: termsAndConditionsText }}
           />
           {isScrolled &&
             !isChecked && (
@@ -78,7 +84,11 @@ class DumbTermsForm extends React.Component<TermsFormProps, TermsFormState> {
                 type="submit"
                 name="acceptTerms"
                 className="button-submit button-dark terms-submit right"
-                onClick={this.handleSubmit}
+                onClick={
+                  isPrivacyPolicy
+                    ? () => this.handleSubmit('privacyPolicyIsChecked')
+                    : () => this.handleSubmit('termsAndConditionsIsChecked')
+                }
               >
                 <Translate value="termsAndConditions.accept" />
               </Button>
@@ -96,10 +106,12 @@ type OutputProps = {
 export type Props = OutputProps & QueryProps & LegalContentsQuery;
 
 export const mapDataToProps = ({ data }: Object) => {
-  const text = get(data, 'legalContents.termsAndConditions', '');
+  const termsAndConditionsText = get(data, 'legalContents.termsAndConditions', '');
+  const privacyPolicyText = get(data, 'legalContents.privacyPolicy', '');
   return {
     ...data,
-    text: text
+    termsAndConditionsText: termsAndConditionsText,
+    privacyPolicyText: privacyPolicyText
   };
 };
 

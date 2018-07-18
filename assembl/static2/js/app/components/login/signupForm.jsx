@@ -18,6 +18,7 @@ import TextFieldsQuery from '../../graphql/TextFields.graphql';
 
 type SignupFormProps = {
   hasTermsAndConditions: boolean,
+  hasPrivacyPolicy: boolean,
   signUp: Function,
   lang: string,
   auth: Object,
@@ -25,7 +26,8 @@ type SignupFormProps = {
 };
 
 type SignupFormState = {
-  checked: boolean
+  privacyPolicyIsChecked: boolean,
+  termsAndConditionsIsChecked: boolean
 };
 
 class SignupForm extends React.Component<SignupFormProps, SignupFormState> {
@@ -40,7 +42,8 @@ class SignupForm extends React.Component<SignupFormProps, SignupFormState> {
   constructor(props) {
     super(props);
     this.state = {
-      checked: false
+      privacyPolicyIsChecked: false,
+      termsAndConditionsIsChecked: false
     };
 
     this.signupHandler = this.signupHandler.bind(this);
@@ -93,17 +96,17 @@ class SignupForm extends React.Component<SignupFormProps, SignupFormState> {
     }
   }
 
-  toggleCheck() {
-    this.setState({ checked: !this.state.checked });
-  }
+  toggleCheck = (termFormType) => {
+    this.setState({ [termFormType]: !this.state[termFormType] });
+  };
 
-  handleAcceptButton() {
-    this.setState({ checked: true });
+  handleAcceptButton(termFormType) {
+    this.setState({ [termFormType]: true });
   }
 
   render() {
     const slug = getDiscussionSlug();
-    const { hasTermsAndConditions, lang, textFields } = this.props;
+    const { hasTermsAndConditions, hasPrivacyPolicy, lang, textFields } = this.props;
     return (
       <div className="login-view">
         <div className="box-title">{I18n.t('login.createAccount')}</div>
@@ -150,18 +153,57 @@ class SignupForm extends React.Component<SignupFormProps, SignupFormState> {
               })}
             {hasTermsAndConditions && (
               <FormGroup className="left margin-left-2">
-                <Checkbox checked={this.state.checked} type="checkbox" onChange={this.toggleCheck} required inline>
+                <Checkbox
+                  checked={this.state.termsAndConditionsIsChecked}
+                  type="checkbox"
+                  onChange={() => this.toggleCheck('termsAndConditionsIsChecked')}
+                  required
+                  inline
+                >
                   <Translate value="termsAndConditions.iAccept" />
                   <a
                     onClick={(e) => {
                       e.preventDefault();
                       const Terms = (
-                        <TermsForm handleAcceptButton={this.handleAcceptButton} isChecked={this.state.checked} lang={lang} />
+                        <TermsForm
+                          handleAcceptButton={this.handleAcceptButton}
+                          isChecked={this.state.termsAndConditionsIsChecked}
+                          lang={lang}
+                        />
                       );
                       displayCustomModal(Terms, true, 'modal-large');
                     }}
                   >
                     <Translate value="termsAndConditions.link" className="terms-link" />
+                  </a>
+                </Checkbox>
+              </FormGroup>
+            )}
+            {hasPrivacyPolicy && (
+              <FormGroup className="left margin-left-2">
+                <Checkbox
+                  checked={this.state.privacyPolicyIsChecked}
+                  type="checkbox"
+                  onChange={() => this.toggleCheck('privacyPolicyIsChecked')}
+                  required
+                  inline
+                >
+                  <Translate value="privacyPolicy.iAccept" />
+                  <a
+                    onClick={(e) => {
+                      e.preventDefault();
+                      const Terms = (
+                        <TermsForm
+                          isPrivacyPolicy
+                          handleAcceptButton={this.handleAcceptButton}
+                          isChecked={this.state.privacyPolicyIsChecked}
+                          lang={lang}
+                        />
+                      );
+                      displayCustomModal(Terms, true, 'modal-large');
+                    }}
+                  >
+                    <Translate value="privacyPolicy.link" className="terms-link" />
                   </a>
                 </Checkbox>
               </FormGroup>
@@ -206,7 +248,8 @@ const mapDispatchToProps = dispatch => ({
 const withData = graphql(TabsConditionQuery, {
   props: ({ data }) => ({
     ...data,
-    hasTermsAndConditions: data.hasTermsAndConditions
+    hasTermsAndConditions: data.hasTermsAndConditions,
+    hasPrivacyPolicy: data.hasPrivacyPolicy
   })
 });
 

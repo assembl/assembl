@@ -84,10 +84,10 @@ les informations, notamment en ce qui concerne les impacts sociaux et environnem
     expect(rendered).toMatchSnapshot();
   });
   describe('mapDataToProps function', () => {
-    it('should pass Terms as text prop', () => {
+    it('should pass Terms as termsAndConditionsText prop', () => {
       const text = 'Random text';
       const data = { legalContents: { termsAndConditions: text } };
-      expect(mapDataToProps({ data: data }).text).toEqual(text);
+      expect(mapDataToProps({ data: data }).termsAndConditionsText).toEqual(text);
     });
   });
 });
