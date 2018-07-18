@@ -22,11 +22,17 @@ class Nuggets extends React.Component {
   }
 
   componentDidMount() {
-    if ('node' in this) this.props.nuggetsManager.add(this);
+    if (this.node) {
+      const nuggetsManager = this.props.nuggetsManager;
+      nuggetsManager.add(this);
+      this.removeFromNuggetsManager = () => nuggetsManager.remove(this);
+    }
   }
 
   componentWillUnmount() {
-    if ('node' in this) this.props.nuggetsManager.remove(this);
+    if (this.removeFromNuggetsManager) {
+      this.removeFromNuggetsManager();
+    }
   }
 
   updateTop = (previousNuggets) => {

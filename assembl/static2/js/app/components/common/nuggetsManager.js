@@ -4,8 +4,6 @@ import range from 'lodash/range';
 
 import Nuggets from '../debate/thread/nuggets';
 
-const indexNotFound = index => index === -1;
-
 class NuggetsManager {
   nuggetsList: Array<Nuggets>;
 
@@ -28,8 +26,9 @@ class NuggetsManager {
 
   remove(nuggets: Nuggets) {
     const index = this.nuggetsList.indexOf(nuggets);
-    if (indexNotFound(index)) {
-      throw new Error(`Tried to remove nuggets ${nuggets} that are not managed by this NuggetsManager`);
+    if (index === -1) {
+      // Tried to remove nuggets component that is not managed by this NuggetsManager, this shouldn't happen.
+      return;
     }
     delete this.nuggetsList[index];
   }
