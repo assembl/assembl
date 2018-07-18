@@ -556,7 +556,7 @@ export default compose(
         timeline: data.timeline
       };
     },
-    skip: props => isNotInDiscussionAdmin(props) || isNotInLandingPageAdmin(props)
+    skip: props => isNotInLandingPageAdmin(props) && isNotInDiscussionAdmin(props)
   }),
   graphql(landingPagePlugin.graphqlQuery, {
     options: landingPagePlugin.queryOptions,

@@ -29,8 +29,8 @@ export class DumbTimelineForm extends React.Component<TimelineFormProps, Timelin
   componentDidUpdate() {
     const { length } = this.props.phases;
     if (length === 0) {
-      range(4).forEach(() => {
-        this.props.handleCreatePhase(length);
+      range(4).forEach((number) => {
+        this.props.handleCreatePhase(number + 1);
       });
     }
   }

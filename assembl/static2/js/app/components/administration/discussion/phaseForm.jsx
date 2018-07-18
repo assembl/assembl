@@ -134,7 +134,7 @@ export const DumbPhaseForm = ({
 const mapStateToProps = (state, { phaseId }) => {
   const phase = state.admin.timeline.phasesById.get(phaseId);
   return {
-    identifier: phase && phase.get('identifier') || 'survey',
+    identifier: phase && phase.get('identifier'),
     start: phase ? phase.get('start') : null,
     end: phase ? phase.get('end') : null,
     hasConflictingDates: phase ? phase.get('hasConflictingDates') : null,

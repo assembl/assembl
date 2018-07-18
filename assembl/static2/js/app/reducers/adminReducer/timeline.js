@@ -54,7 +54,7 @@ type PhasesByIdReducer = (PhasesByIdState, ReduxAction<Action>) => PhasesByIdSta
 export const phasesById: PhasesByIdReducer = (state: PhasesByIdState = Map(), action: ReduxAction<Action>) => {
   switch (action.type) {
   case CREATE_PHASE:
-    return state.set(action.id, emptyPhase.set('id', action.id).set('order', action.order));
+    return state.set(action.id, emptyPhase.set('id', action.id).set('order', action.order).set('identifier', 'survey'));
   case DELETE_PHASE:
     return state.setIn([action.id, '_toDelete'], true);
   case UPDATE_PHASE_TITLE:
