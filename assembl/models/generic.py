@@ -22,7 +22,8 @@ from sqlalchemy.orm import relationship, backref, aliased
 from sqlalchemy.sql.functions import count
 
 import assembl.graphql.docstrings as docs
-from ..lib.sqla import (CrudOperation, get_model_watcher, Base)
+from ..lib.sqla import (CrudOperation, Base)
+from ..lib.model_watcher import get_model_watcher
 from . import DiscussionBoundBase
 from .langstrings import (LangString, LangStringEntry)
 from ..auth import (

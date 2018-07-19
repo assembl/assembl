@@ -34,7 +34,6 @@ from sqlalchemy.orm.session import object_session, Session
 from sqlalchemy.engine import strategies
 from zope.sqlalchemy import ZopeTransactionExtension
 from zope.sqlalchemy.datamanager import mark_changed as z_mark_changed
-from zope.component import getGlobalSiteManager
 from pyramid.httpexceptions import HTTPUnauthorized, HTTPBadRequest
 import transaction
 from graphene.relay import Node
@@ -1830,16 +1829,6 @@ def configure_engine(settings, zope_tr=True, autoflush=True, session_maker=None,
     event.listen(Session, 'after_rollback', session_rollback_listener)
     event.listen(engine, 'rollback', engine_rollback_listener)
     return engine
-
-
-def get_model_watcher():
-    """Get the global implementation of py:class:`assembl.lib.model_watcherIModelEventWatcher`
-    for this process.
-
-    Often set in :py:func:`assembl.lib.model_watcher.configure_model_watcher`.
-    """
-    from .model_watcher import IModelEventWatcher
-    return getGlobalSiteManager().queryUtility(IModelEventWatcher)
 
 
 def is_zopish():

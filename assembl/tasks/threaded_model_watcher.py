@@ -85,5 +85,5 @@ def includeme(config):
     from . import resolver
     class_name = config.get_settings().get(
         'assembl.threadedmodelwatcher',
-        "assembl.lib.model_watcher.ModelEventWatcherPrinter")
+        "assembl.lib.model_watcher.BaseModelEventWatcher")
     ThreadDispatcher.mw_class = resolver.resolve(class_name)

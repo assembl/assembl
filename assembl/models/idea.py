@@ -32,7 +32,8 @@ from .langstrings import LangString
 from ..auth import (
     CrudPermissions, P_READ, P_ADMIN_DISC, P_EDIT_IDEA,
     P_ADD_IDEA)
-from ..lib.sqla import (CrudOperation, get_model_watcher)
+from ..lib.sqla import CrudOperation
+from ..lib.model_watcher import get_model_watcher
 from assembl.views.traversal import (
     AbstractCollectionDefinition, CollectionDefinition)
 

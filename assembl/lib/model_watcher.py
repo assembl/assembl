@@ -32,8 +32,13 @@ Different scenarios are defined in ``production.ini``:
 
 
 from zope import interface
+from zope.component import getGlobalSiteManager
 from pyramid.path import DottedNameResolver
 
+from .logging import getLogger
+
+
+log = getLogger()
 resolver = DottedNameResolver(__package__)
 
 
@@ -67,36 +72,102 @@ class IModelEventWatcher(interface.Interface):
         pass
 
 
-class ModelEventWatcherPrinter(object):
+class BaseModelEventWatcher(object):
     """A dummy :py:class:`IModelEventWatcher` for testing purposes"""
     interface.implements(IModelEventWatcher)
 
     def processPostCreated(self, id):
-        print "processPostCreated", id
+        log.debug("processPostCreated: %d" % (id or 0))
 
     def processIdeaCreated(self, id):
-        print "processIdeaCreated", id
+        log.debug("processIdeaCreated: %d" % (id or 0))
 
     def processIdeaModified(self, id, version):
-        print "processIdeaModified", id, version
+        log.debug("processIdeaModified: %d %d" % (id or 0, version or -1))
 
     def processIdeaDeleted(self, id):
-        print "processIdeaDeleted", id
+        log.debug("processIdeaDeleted: %d" % (id or 0))
 
     def processExtractCreated(self, id):
-        print "processExtractCreated", id
+        log.debug("processExtractCreated: %d" % (id or 0))
 
     def processExtractModified(self, id, version):
-        print "processExtractModified", id, version
+        log.debug("processExtractModified: %d %d" % (id or 0, version or -1))
 
     def processExtractDeleted(self, id):
-        print "processExtractDeleted", id
+        log.debug("processExtractDeleted: %d" % (id or 0))
 
     def processAccountCreated(self, id):
-        print "processAccountCreated", id
+        log.debug("processAccountCreated: %d" % (id or 0))
 
     def processAccountModified(self, id):
-        print "processAccountModified", id
+        log.debug("processAccountModified: %d" % (id or 0))
+
+
+class CompositeModelEventWatcher(object):
+    """A dummy :py:class:`IModelEventWatcher` for testing purposes"""
+    interface.implements(IModelEventWatcher)
+
+    def __init__(self, *watchers):
+        self.watchers = watchers
+
+    def processPostCreated(self, id):
+        for watcher in self.watchers:
+            watcher.processPostCreated(id)
+
+    def processIdeaCreated(self, id):
+        for watcher in self.watchers:
+            watcher.processIdeaCreated(id)
+
+    def processIdeaModified(self, id, version):
+        for watcher in self.watchers:
+            watcher.processIdeaModified(id, version)
+
+    def processIdeaDeleted(self, id):
+        for watcher in self.watchers:
+            watcher.processIdeaDeleted(id)
+
+    def processExtractCreated(self, id):
+        for watcher in self.watchers:
+            watcher.processExtractCreated(id)
+
+    def processExtractModified(self, id, version):
+        for watcher in self.watchers:
+            watcher.processExtractModified(id, version)
+
+    def processExtractDeleted(self, id):
+        for watcher in self.watchers:
+            watcher.processExtractDeleted(id)
+
+    def processAccountCreated(self, id):
+        for watcher in self.watchers:
+            watcher.processAccountCreated(id)
+
+    def processAccountModified(self, id):
+        for watcher in self.watchers:
+            watcher.processAccountModified(id)
+
+
+_MODEL_WATCHER = None
+
+
+def get_model_watcher():
+    """Get the global implementation of py:class:`assembl.lib.model_watcherIModelEventWatcher`
+    for this process.
+
+    Often set in :py:func:`assembl.lib.model_watcher.configure_model_watcher`.
+    """
+    global _MODEL_WATCHER
+    if _MODEL_WATCHER is None:
+        watchers = list(
+            getGlobalSiteManager().getAllUtilitiesRegisteredFor(IModelEventWatcher))
+        if not len(watchers):
+            watchers = (BaseModelEventWatcher(),)
+        if len(watchers) == 1:
+            _MODEL_WATCHER = watchers[0]
+        else:
+            _MODEL_WATCHER = CompositeModelEventWatcher(*watchers)
+    return _MODEL_WATCHER
 
 
 def configure_model_watcher(registry, task_name):
@@ -104,8 +175,9 @@ def configure_model_watcher(registry, task_name):
     for this process according to ``local.ini``"""
     # This is a temporary hack.
     settings = registry.settings
-    class_name = settings.get(
+    class_names = settings.get(
         task_name + '.imodeleventwatcher',
-        '.model_watcher.ModelEventWatcherPrinter')
-    cls = resolver.resolve(class_name)
-    registry.registerUtility(cls(), IModelEventWatcher)
+        '.model_watcher.BaseModelEventWatcher').split()
+    for class_name in class_names:
+        cls = resolver.resolve(class_name)
+        registry.registerUtility(cls(), IModelEventWatcher, name=cls.__name__)

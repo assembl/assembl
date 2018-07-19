@@ -24,7 +24,6 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.orm.exc import DetachedInstanceError
-from zope import interface
 from pyramid.httpexceptions import HTTPUnauthorized, HTTPBadRequest
 from pyramid.i18n import TranslationStringFactory, make_localizer
 from pyramid_mailer.message import Message
@@ -32,7 +31,7 @@ from pyramid.security import Everyone
 from jinja2 import Environment, PackageLoader
 
 from . import Base, DiscussionBoundBase
-from ..lib.model_watcher import IModelEventWatcher
+from ..lib.model_watcher import BaseModelEventWatcher
 from ..lib.decl_enums import DeclEnum
 from ..lib.sqla import get_session_maker
 from ..lib.utils import waiting_get
@@ -707,15 +706,16 @@ class NotificationSubscriptionFollowOwnMessageDirectReplies(NotificationSubscrip
     }
 
 
-class ModelEventWatcherNotificationSubscriptionDispatcher(object):
+class ModelEventWatcherNotificationSubscriptionDispatcher(BaseModelEventWatcher):
     """Calls :py:meth:`NotificationSubscription.process` on the appropriate
     :py:class:`NotificationSubscription` subclass when a certain CRUD event
     is detected through the :py:class:`assembl.lib.model_watcher.IModelEventWatcher`
     protocol"""
-    interface.implements(IModelEventWatcher)
 
-    def processEvent(self, verb, objectClass, objectId):
+    def processPostCreated(self, objectId):
         from ..lib.utils import get_concrete_subclasses_recursive
+        verb = CrudVerbs.CREATE
+        objectClass = Content
         assert objectId
         objectInstance = waiting_get(objectClass, objectId)
         assert objectInstance
@@ -736,34 +736,6 @@ class ModelEventWatcherNotificationSubscriptionDispatcher(object):
                 if(len(applicableInstances) > 0):
                     applicableInstances.sort(cmp=lambda x, y: cmp(x.priority, y.priority))
                     applicableInstances[0].process(objectInstance.get_discussion_id(), verb, objectInstance, applicableInstances[1:])
-
-    def processPostCreated(self, id):
-        print "processPostCreated", id
-        self.processEvent(CrudVerbs.CREATE, Content, id)
-
-    def processIdeaCreated(self, id):
-        print "processIdeaCreated", id
-
-    def processIdeaModified(self, id, version):
-        print "processIdeaModified", id, version
-
-    def processIdeaDeleted(self, id):
-        print "processIdeaDeleted", id
-
-    def processExtractCreated(self, id):
-        print "processExtractCreated", id
-
-    def processExtractModified(self, id, version):
-        print "processExtractModified", id, version
-
-    def processExtractDeleted(self, id):
-        print "processExtractDeleted", id
-
-    def processAccountCreated(self, id):
-        print "processAccountCreated", id
-
-    def processAccountModified(self, id):
-        print "processAccountModified", id
 
 
 class NotificationPushMethodType(DeclEnum):

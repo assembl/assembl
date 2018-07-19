@@ -142,7 +142,7 @@ def init_from_celery(celery_app):
     from .threaded_model_watcher import ThreadDispatcher
     threaded_watcher_class_name = settings.get(
         '%s.threadedmodelwatcher' % (celery_app.main,),
-        "assembl.lib.model_watcher.ModelEventWatcherPrinter")
+        "assembl.lib.model_watcher.BaseModelEventWatcher")
     ThreadDispatcher.mw_class = resolver.resolve(threaded_watcher_class_name)
 
 
