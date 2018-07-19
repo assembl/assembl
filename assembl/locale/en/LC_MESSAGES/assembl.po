@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-06-06 11:14+0200\n"
+"POT-Creation-Date: 2018-07-19 10:31+0200\n"
 "PO-Revision-Date: 2014-07-24 17:38-0500\n"
 "Last-Translator: Benoit Grégoire <benoitg@coeus.ca>\n"
 "Language: en\n"
@@ -275,88 +275,114 @@ msgid ""
 msgstr ""
 
 #: assembl/models/preferences.py:746
-msgid "Show CI Dashboard"
+msgid "Whitelist on authentication service"
 msgstr ""
 
 #: assembl/models/preferences.py:749
-msgid "Show the CI Dashboard in the panel group window"
+msgid "Allow white list to be applied to the authentication service chosen"
 msgstr ""
 
 #: assembl/models/preferences.py:761
+msgid "Whitelist on standard registration"
+msgstr ""
+
+#: assembl/models/preferences.py:764
+msgid "Allow white list to be applied to the default login process"
+msgstr ""
+
+#: assembl/models/preferences.py:776
+msgid "Discussion administrators"
+msgstr ""
+
+#: assembl/models/preferences.py:779
+msgid ""
+"A list of discussion administrators, if different from the server "
+"administrator"
+msgstr ""
+
+#: assembl/models/preferences.py:792
+msgid "Show CI Dashboard"
+msgstr ""
+
+#: assembl/models/preferences.py:795
+msgid "Show the CI Dashboard in the panel group window"
+msgstr ""
+
+#: assembl/models/preferences.py:807
 msgid "URL of CI Dashboard"
 msgstr ""
 
-#: assembl/models/preferences.py:763
+#: assembl/models/preferences.py:809
 msgid "Configuration of the visualizations shown in the CI Dashboard"
 msgstr ""
 
-#: assembl/models/preferences.py:781
+#: assembl/models/preferences.py:827
 msgid "Catalyst Visualizations"
 msgstr ""
 
-#: assembl/models/preferences.py:784
+#: assembl/models/preferences.py:830
 msgid "A JSON description of available Catalyst visualizations"
 msgstr ""
 
-#: assembl/models/preferences.py:796
+#: assembl/models/preferences.py:842
 msgid "Navigation sections"
 msgstr ""
 
-#: assembl/models/preferences.py:799
+#: assembl/models/preferences.py:845
 msgid ""
 "A JSON specification of Catalyst visualizations to show in the navigation"
 " section"
 msgstr ""
 
-#: assembl/models/preferences.py:812
+#: assembl/models/preferences.py:858
 msgid "Catalyst translations"
 msgstr ""
 
-#: assembl/models/preferences.py:815
+#: assembl/models/preferences.py:861
 msgid "Translations applicable to Catalyst visualizations, in Jed (JSON) format"
 msgstr ""
 
-#: assembl/models/preferences.py:832
+#: assembl/models/preferences.py:878
 msgid "Default Table of Ideas Collapsed state"
 msgstr ""
 
-#: assembl/models/preferences.py:835
+#: assembl/models/preferences.py:881
 msgid ""
 "Default expanded/collapsed state of each idea in the table of ideas. A "
 "user can override it by opening/closing an idea"
 msgstr ""
 
-#: assembl/models/preferences.py:850
+#: assembl/models/preferences.py:896
 msgid "Preference data"
 msgstr ""
 
-#: assembl/models/preferences.py:853
+#: assembl/models/preferences.py:899
 msgid "The preference configuration; override only with care"
 msgstr ""
 
-#: assembl/models/preferences.py:865
+#: assembl/models/preferences.py:911
 msgid "Cookies banner"
 msgstr ""
 
-#: assembl/models/preferences.py:868
+#: assembl/models/preferences.py:914
 msgid "Show the banner offering to disable Piwik cookies"
 msgstr ""
 
-#: assembl/models/preferences.py:880
+#: assembl/models/preferences.py:926
 msgid "Custom HTML code on the landing page"
 msgstr ""
 
-#: assembl/models/preferences.py:883
+#: assembl/models/preferences.py:929
 msgid ""
 "Custom HTML code that will be integrated on the landing page of the "
 "debate, right after the <body> tag"
 msgstr ""
 
-#: assembl/models/preferences.py:893
+#: assembl/models/preferences.py:939
 msgid "Custom HTML code on the user registration page"
 msgstr ""
 
-#: assembl/models/preferences.py:896
+#: assembl/models/preferences.py:942
 msgid ""
 "Custom HTML code that will be integrated on the user registration page of"
 " the debate, right after the <body> tag"
@@ -1724,27 +1750,27 @@ msgstr ""
 msgid "This does not appear to be a URL"
 msgstr ""
 
-#: assembl/static/js/app/views/preferencesView.js:546
+#: assembl/static/js/app/views/preferencesView.js:547
 msgid "This does not appear to be an email"
 msgstr ""
 
-#: assembl/static/js/app/views/preferencesView.js:566
+#: assembl/static/js/app/views/preferencesView.js:567
 msgid "This does not appear to be a domain"
 msgstr ""
 
-#: assembl/static/js/app/views/preferencesView.js:901
+#: assembl/static/js/app/views/preferencesView.js:902
 msgid "The following settings were not saved: "
 msgstr ""
 
 #: assembl/static/js/app/views/admin/adminDiscussion.js:96
-#: assembl/static/js/app/views/preferencesView.js:904
+#: assembl/static/js/app/views/preferencesView.js:905
 #: assembl/static/js/app/views/sourceEditView.js:49
 #: assembl/static/js/app/views/user/account.js:126
 #: assembl/static/js/app/views/user/profile.js:66
 msgid "Your settings were saved!"
 msgstr ""
 
-#: assembl/static/js/app/views/preferencesView.js:910
+#: assembl/static/js/app/views/preferencesView.js:911
 msgid "Your settings are up-to-date."
 msgstr ""
 
@@ -4402,25 +4428,41 @@ msgstr ""
 msgid "This link has been used. Do you want us to send another?"
 msgstr ""
 
-#: assembl/views/api2/auth.py:443 assembl/views/auth/views.py:388
+#: assembl/views/api2/auth.py:437 assembl/views/auth/views.py:388
 msgid "Please use a name of at least 3 characters"
 msgstr ""
 
-#: assembl/views/api2/auth.py:452 assembl/views/auth/views.py:321
+#: assembl/views/api2/auth.py:446 assembl/views/auth/views.py:321
 #: assembl/views/auth/views.py:395
 msgid "This is not a valid email"
 msgstr ""
 
-#: assembl/views/api2/auth.py:460 assembl/views/auth/views.py:402
+#: assembl/views/api2/auth.py:454 assembl/views/auth/views.py:402
 msgid "We already have a user with this email."
 msgstr ""
 
-#: assembl/views/api2/auth.py:465
+#: assembl/views/api2/auth.py:459
 msgid "No email."
 msgstr ""
 
-#: assembl/views/api2/auth.py:471
+#: assembl/views/api2/auth.py:465
 msgid "We already have a user with this username."
+msgstr ""
+
+#: assembl/views/api2/auth.py:470
+msgid "The username must be less than 20 characters."
+msgstr ""
+
+#: assembl/views/api2/auth.py:484
+msgid ""
+"Your email domain has not been approved for registration. Please contact "
+"${emails} for support."
+msgstr ""
+
+#: assembl/views/api2/auth.py:485
+msgid ""
+"Your email domain has not been approved for registration. Please contact "
+"one of ${emails} for support."
 msgstr ""
 
 #: assembl/views/auth/views.py:294
