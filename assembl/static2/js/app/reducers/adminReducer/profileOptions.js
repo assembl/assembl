@@ -22,6 +22,7 @@ export const profileOptionsHasChanged: ProfileOptionsHasChangedReducer = (state 
   case actionTypes.UPDATE_SELECT_FIELD_OPTION_LABEL:
   case actionTypes.MOVE_SELECT_FIELD_OPTION_UP:
   case actionTypes.MOVE_SELECT_FIELD_OPTION_DOWN:
+  case actionTypes.TOGGLE_TEXT_FIELD_HIDDEN:
     return true;
   case actionTypes.UPDATE_TEXT_FIELDS:
     return false;
@@ -66,6 +67,7 @@ export const textFieldsById: TextFieldsByIdReducer = (state = initialTextFields,
         identifier: 'CUSTOM',
         order: state.size + 1.0,
         required: false,
+        hidden: false,
         titleEntries: List()
       })
     );
@@ -94,6 +96,8 @@ export const textFieldsById: TextFieldsByIdReducer = (state = initialTextFields,
       .setIn([action.id, '_hasChanged'], true);
   case actionTypes.TOGGLE_TEXT_FIELD_REQUIRED:
     return state.updateIn([action.id, 'required'], value => !value).setIn([action.id, '_hasChanged'], true);
+  case actionTypes.TOGGLE_TEXT_FIELD_HIDDEN:
+    return state.updateIn([action.id, 'hidden'], value => !value).setIn([action.id, '_hasChanged'], true);
   case actionTypes.MOVE_TEXT_FIELD_DOWN:
     return moveItemDown(state, action.id);
   case actionTypes.MOVE_TEXT_FIELD_UP:

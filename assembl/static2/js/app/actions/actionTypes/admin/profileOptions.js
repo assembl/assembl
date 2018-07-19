@@ -11,6 +11,7 @@ export const DELETE_SELECT_FIELD_OPTION: 'DELETE_SELECT_FIELD_OPTION' = 'DELETE_
 export const UPDATE_SELECT_FIELD_OPTION_LABEL: 'UPDATE_SELECT_FIELD_OPTION_LABEL' = 'UPDATE_SELECT_FIELD_OPTION_LABEL';
 export const MOVE_SELECT_FIELD_OPTION_UP: 'MOVE_SELECT_FIELD_OPTION_UP' = 'MOVE_SELECT_FIELD_OPTION_UP';
 export const MOVE_SELECT_FIELD_OPTION_DOWN: 'MOVE_SELECT_FIELD_OPTION_DOWN' = 'MOVE_SELECT_FIELD_OPTION_DOWN';
+export const TOGGLE_TEXT_FIELD_HIDDEN: 'TOGGLE_TEXT_FIELD_HIDDEN' = 'TOGGLE_TEXT_FIELD_HIDDEN';
 
 export type TextFields = Array<Object>; // TODO: use generated type
 export type UpdateTextFields = {
@@ -39,6 +40,11 @@ export type UpdateTextFieldTitle = {
 export type ToggleTextFieldRequired = {
   id: string,
   type: typeof TOGGLE_TEXT_FIELD_REQUIRED
+};
+
+export type ToggleTextFieldHidden = {
+  id: string,
+  type: typeof TOGGLE_TEXT_FIELD_HIDDEN
 };
 
 export type MoveTextFieldUp = {

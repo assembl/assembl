@@ -22,6 +22,7 @@ describe('profileOptionsHasChanged reducer', () => {
     actionTypes.UPDATE_TEXT_FIELD_TITLE,
     actionTypes.DELETE_TEXT_FIELD,
     actionTypes.TOGGLE_TEXT_FIELD_REQUIRED,
+    actionTypes.TOGGLE_TEXT_FIELD_HIDDEN,
     actionTypes.MOVE_TEXT_FIELD_DOWN,
     actionTypes.MOVE_TEXT_FIELD_UP,
     actionTypes.ADD_SELECT_FIELD_OPTION,
@@ -163,6 +164,7 @@ describe('textFieldsById reducer', () => {
         id: '189387',
         order: 1.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'First field' }), Map({ localeCode: 'fr', value: 'Premier champ' }))
       })
     });
@@ -174,6 +176,7 @@ describe('textFieldsById reducer', () => {
         id: '189387',
         order: 1.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'First field' }), Map({ localeCode: 'fr', value: 'Premier champ' }))
       }),
       '-134582': Map({
@@ -184,6 +187,7 @@ describe('textFieldsById reducer', () => {
         identifier: 'CUSTOM',
         order: 2.0,
         required: false,
+        hidden: false,
         titleEntries: List()
       })
     });
@@ -207,6 +211,7 @@ describe('textFieldsById reducer', () => {
         identifier: 'CUSTOM',
         order: 1.0,
         required: false,
+        hidden: false,
         titleEntries: List(),
         options: Map()
       })
@@ -261,6 +266,7 @@ describe('textFieldsById reducer', () => {
         id: '189387',
         order: 1.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'First field' }), Map({ localeCode: 'fr', value: 'Premier champ' }))
       })
     });
@@ -272,6 +278,7 @@ describe('textFieldsById reducer', () => {
         id: '189387',
         order: 1.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'New title' }), Map({ localeCode: 'fr', value: 'Premier champ' }))
       })
     });
@@ -292,6 +299,7 @@ describe('textFieldsById reducer', () => {
         id: '189387',
         order: 1.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'First field' }), Map({ localeCode: 'fr', value: 'Premier champ' }))
       })
     });
@@ -303,6 +311,43 @@ describe('textFieldsById reducer', () => {
         id: '189387',
         order: 1.0,
         required: false,
+        hidden: false,
+        titleEntries: List.of(Map({ localeCode: 'en', value: 'First field' }), Map({ localeCode: 'fr', value: 'Premier champ' }))
+      })
+    });
+    const actual = reducer(state, action);
+    expect(actual).toEqual(expected);
+
+    const actual2 = reducer(actual, action);
+    expect(actual2).toEqual(state.setIn(['189387', '_hasChanged'], true));
+  });
+
+  it('should handle the TOGGLE_TEXT_FIELD_HIDDEN action', () => {
+    const action = {
+      id: '189387',
+      type: actionTypes.TOGGLE_TEXT_FIELD_HIDDEN
+    };
+    const state = Map({
+      '189387': Map({
+        _hasChanged: false,
+        _isNew: true,
+        _toDelete: false,
+        id: '189387',
+        order: 1.0,
+        required: true,
+        hidden: false,
+        titleEntries: List.of(Map({ localeCode: 'en', value: 'First field' }), Map({ localeCode: 'fr', value: 'Premier champ' }))
+      })
+    });
+    const expected = Map({
+      '189387': Map({
+        _hasChanged: true,
+        _isNew: true,
+        _toDelete: false,
+        id: '189387',
+        order: 1.0,
+        required: true,
+        hidden: true,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'First field' }), Map({ localeCode: 'fr', value: 'Premier champ' }))
       })
     });
@@ -326,6 +371,7 @@ describe('textFieldsById reducer', () => {
         id: '111111',
         order: 1.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'First field' }))
       }),
       '189387': Map({
@@ -335,6 +381,7 @@ describe('textFieldsById reducer', () => {
         id: '189387',
         order: 2.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'Second field' }))
       }),
       '999999': Map({
@@ -344,6 +391,7 @@ describe('textFieldsById reducer', () => {
         id: '999999',
         order: 3.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'Third field' }))
       })
     });
@@ -355,6 +403,7 @@ describe('textFieldsById reducer', () => {
         id: '111111',
         order: 2.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'First field' }))
       }),
       '189387': Map({
@@ -364,6 +413,7 @@ describe('textFieldsById reducer', () => {
         id: '189387',
         order: 1.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'Second field' }))
       }),
       '999999': Map({
@@ -373,6 +423,7 @@ describe('textFieldsById reducer', () => {
         id: '999999',
         order: 3.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'Third field' }))
       })
     });
@@ -393,6 +444,7 @@ describe('textFieldsById reducer', () => {
         id: '111111',
         order: 1.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'First field' }))
       }),
       '222222': Map({
@@ -402,6 +454,7 @@ describe('textFieldsById reducer', () => {
         id: '222222',
         order: 2.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'First field' }))
       }),
       '189387': Map({
@@ -411,6 +464,7 @@ describe('textFieldsById reducer', () => {
         id: '189387',
         order: 2.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'Second field' }))
       }),
       '999999': Map({
@@ -420,6 +474,7 @@ describe('textFieldsById reducer', () => {
         id: '999999',
         order: 3.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'Third field' }))
       })
     });
@@ -431,6 +486,7 @@ describe('textFieldsById reducer', () => {
         id: '111111',
         order: 2.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'First field' }))
       }),
       '222222': Map({
@@ -440,6 +496,7 @@ describe('textFieldsById reducer', () => {
         id: '222222',
         order: 2.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'First field' }))
       }),
       '189387': Map({
@@ -449,6 +506,7 @@ describe('textFieldsById reducer', () => {
         id: '189387',
         order: 1.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'Second field' }))
       }),
       '999999': Map({
@@ -458,6 +516,7 @@ describe('textFieldsById reducer', () => {
         id: '999999',
         order: 3.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'Third field' }))
       })
     });
@@ -478,6 +537,7 @@ describe('textFieldsById reducer', () => {
         id: '111111',
         order: 1.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'First field' }))
       }),
       '189387': Map({
@@ -487,6 +547,7 @@ describe('textFieldsById reducer', () => {
         id: '189387',
         order: 2.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'Second field' }))
       }),
       '888888': Map({
@@ -496,6 +557,7 @@ describe('textFieldsById reducer', () => {
         id: '888888',
         order: 3.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'First field' }))
       }),
       '999999': Map({
@@ -505,6 +567,7 @@ describe('textFieldsById reducer', () => {
         id: '999999',
         order: 4.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'Third field' }))
       })
     });
@@ -516,6 +579,7 @@ describe('textFieldsById reducer', () => {
         id: '111111',
         order: 1.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'First field' }))
       }),
       '189387': Map({
@@ -525,6 +589,7 @@ describe('textFieldsById reducer', () => {
         id: '189387',
         order: 3.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'Second field' }))
       }),
       '888888': Map({
@@ -534,6 +599,7 @@ describe('textFieldsById reducer', () => {
         id: '888888',
         order: 3.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'First field' }))
       }),
       '999999': Map({
@@ -543,6 +609,7 @@ describe('textFieldsById reducer', () => {
         id: '999999',
         order: 2.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'Third field' }))
       })
     });
@@ -563,6 +630,7 @@ describe('textFieldsById reducer', () => {
         id: '111111',
         order: 1.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'First field' }))
       }),
       '189387': Map({
@@ -572,6 +640,7 @@ describe('textFieldsById reducer', () => {
         id: '189387',
         order: 2.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'Second field' }))
       }),
       '999999': Map({
@@ -581,6 +650,7 @@ describe('textFieldsById reducer', () => {
         id: '999999',
         order: 3.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'Third field' }))
       })
     });
@@ -592,6 +662,7 @@ describe('textFieldsById reducer', () => {
         id: '111111',
         order: 1.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'First field' }))
       }),
       '189387': Map({
@@ -601,6 +672,7 @@ describe('textFieldsById reducer', () => {
         id: '189387',
         order: 3.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'Second field' }))
       }),
       '999999': Map({
@@ -610,6 +682,7 @@ describe('textFieldsById reducer', () => {
         id: '999999',
         order: 2.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'Third field' }))
       })
     });
@@ -631,6 +704,7 @@ describe('textFieldsById reducer', () => {
         id: '111111',
         order: 1.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'First field' }))
       }),
       '189387': Map({
@@ -640,6 +714,7 @@ describe('textFieldsById reducer', () => {
         id: '189387',
         order: 2.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'Second field (select field)' })),
         options: Map()
       }),
@@ -650,6 +725,7 @@ describe('textFieldsById reducer', () => {
         id: '999999',
         order: 3.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'Third field' }))
       })
     });
@@ -661,6 +737,7 @@ describe('textFieldsById reducer', () => {
         id: '111111',
         order: 1.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'First field' }))
       }),
       '189387': Map({
@@ -670,6 +747,7 @@ describe('textFieldsById reducer', () => {
         id: '189387',
         order: 2.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'Second field (select field)' })),
         options: Map({
           '1': Map({
@@ -686,6 +764,7 @@ describe('textFieldsById reducer', () => {
         id: '999999',
         order: 3.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'Third field' }))
       })
     });
@@ -709,6 +788,7 @@ describe('textFieldsById reducer', () => {
         id: '111111',
         order: 1.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'First field' }))
       }),
       '189387': Map({
@@ -718,6 +798,7 @@ describe('textFieldsById reducer', () => {
         id: '189387',
         order: 2.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'Second field (select field)' })),
         options: Map({
           '1': Map({
@@ -734,6 +815,7 @@ describe('textFieldsById reducer', () => {
         id: '999999',
         order: 3.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'Third field' }))
       })
     });
@@ -745,6 +827,7 @@ describe('textFieldsById reducer', () => {
         id: '111111',
         order: 1.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'First field' }))
       }),
       '189387': Map({
@@ -754,6 +837,7 @@ describe('textFieldsById reducer', () => {
         id: '189387',
         order: 2.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'Second field (select field)' })),
         options: Map({
           '1': Map({
@@ -770,6 +854,7 @@ describe('textFieldsById reducer', () => {
         id: '999999',
         order: 3.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'Third field' }))
       })
     });
@@ -791,6 +876,7 @@ describe('textFieldsById reducer', () => {
         id: '111111',
         order: 1.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'First field' }))
       }),
       '189387': Map({
@@ -800,6 +886,7 @@ describe('textFieldsById reducer', () => {
         id: '189387',
         order: 2.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'Second field (select field)' })),
         options: Map({
           '1': Map({
@@ -826,6 +913,7 @@ describe('textFieldsById reducer', () => {
         id: '999999',
         order: 3.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'Third field' }))
       })
     });
@@ -837,6 +925,7 @@ describe('textFieldsById reducer', () => {
         id: '111111',
         order: 1.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'First field' }))
       }),
       '189387': Map({
@@ -846,6 +935,7 @@ describe('textFieldsById reducer', () => {
         id: '189387',
         order: 2.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'Second field (select field)' })),
         options: Map({
           '1': Map({
@@ -874,6 +964,7 @@ describe('textFieldsById reducer', () => {
         id: '999999',
         order: 3.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'Third field' }))
       })
     });
@@ -895,6 +986,7 @@ describe('textFieldsById reducer', () => {
         id: '111111',
         order: 1.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'First field' }))
       }),
       '189387': Map({
@@ -904,6 +996,7 @@ describe('textFieldsById reducer', () => {
         id: '189387',
         order: 2.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'Second field (select field)' })),
         options: Map({
           '1': Map({
@@ -930,6 +1023,7 @@ describe('textFieldsById reducer', () => {
         id: '999999',
         order: 3.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'Third field' }))
       })
     });
@@ -941,6 +1035,7 @@ describe('textFieldsById reducer', () => {
         id: '111111',
         order: 1.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'First field' }))
       }),
       '189387': Map({
@@ -950,6 +1045,7 @@ describe('textFieldsById reducer', () => {
         id: '189387',
         order: 2.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'Second field (select field)' })),
         options: Map({
           '1': Map({
@@ -978,6 +1074,7 @@ describe('textFieldsById reducer', () => {
         id: '999999',
         order: 3.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'Third field' }))
       })
     });
@@ -999,6 +1096,7 @@ describe('textFieldsById reducer', () => {
         id: '111111',
         order: 1.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'First field' }))
       }),
       '189387': Map({
@@ -1008,6 +1106,7 @@ describe('textFieldsById reducer', () => {
         id: '189387',
         order: 2.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'Second field (select field)' })),
         options: Map({
           '1': Map({
@@ -1034,6 +1133,7 @@ describe('textFieldsById reducer', () => {
         id: '999999',
         order: 3.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'Third field' }))
       })
     });
@@ -1045,6 +1145,7 @@ describe('textFieldsById reducer', () => {
         id: '111111',
         order: 1.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'First field' }))
       }),
       '189387': Map({
@@ -1054,6 +1155,7 @@ describe('textFieldsById reducer', () => {
         id: '189387',
         order: 2.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'Second field (select field)' })),
         options: Map({
           '1': Map({
@@ -1075,6 +1177,7 @@ describe('textFieldsById reducer', () => {
         id: '999999',
         order: 3.0,
         required: true,
+        hidden: false,
         titleEntries: List.of(Map({ localeCode: 'en', value: 'Third field' }))
       })
     });
