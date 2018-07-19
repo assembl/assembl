@@ -587,6 +587,20 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
             "default": False  # for development
         },
 
+        # Calculate Watson values
+        {
+            "id": "use_watson",
+            "name": _("Use IBM Watson"),
+            "value_type": "bool",
+            # "scalar_values": {value: "label"},
+            "description": _("Use Watson to identify concepts"),
+            "allow_user_override": None,
+            "modification_permission": P_ADMIN_DISC,
+            # "frontend_validator_function": func_name...?,
+            # "backend_validator_function": func_name...?,
+            "default": False  # for development
+        },
+
         {
             "id": "authorization_server_backend",
             "value_type": "scalar",
