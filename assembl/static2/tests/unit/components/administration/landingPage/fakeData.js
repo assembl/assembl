@@ -1,8 +1,9 @@
 import { List, Map } from 'immutable';
 
-const HEADER = Map({
+const abc123 = Map({
   enabled: true,
   moduleType: Map({
+    id: 'abc123',
     editableOrder: false,
     identifier: 'HEADER',
     required: true,
@@ -11,9 +12,10 @@ const HEADER = Map({
   order: 1.0
 });
 
-const INTRODUCTION = Map({
+const def456 = Map({
   enabled: false,
   moduleType: Map({
+    id: 'def456',
     editableOrder: true,
     identifier: 'INTRODUCTION',
     title: 'Introduction'
@@ -21,9 +23,10 @@ const INTRODUCTION = Map({
   order: 2.0
 });
 
-const VIDEO = Map({
+const ghi789 = Map({
   enabled: true,
   moduleType: Map({
+    id: 'ghi789',
     editableOrder: true,
     identifier: 'VIDEO',
     title: 'Video'
@@ -31,9 +34,10 @@ const VIDEO = Map({
   order: 5.0
 });
 
-const FOOTER = Map({
+const jkl865 = Map({
   enabled: true,
   moduleType: Map({
+    id: 'jkl865',
     editableOrder: false,
     identifier: 'FOOTER',
     required: true,
@@ -42,34 +46,38 @@ const FOOTER = Map({
   order: 99.0
 });
 
-export const modulesByIdentifier = Map({
-  HEADER: HEADER,
-  INTRODUCTION: INTRODUCTION,
-  VIDEO: VIDEO,
-  FOOTER: FOOTER
+export const modulesById = Map({
+  abc123: abc123,
+  def456: def456,
+  ghi789: ghi789,
+  jkl865: jkl865
 });
 
 export const modulesTypes = [
   {
+    id: 'abc123',
     identifier: 'HEADER',
     title: 'Header',
     required: true
   },
   {
+    id: 'def456',
     identifier: 'INTRODUCTION',
     title: 'Introduction',
     required: false
   },
   {
+    id: 'ghi789',
     identifier: 'VIDEO',
     title: 'Video',
     required: false
   },
   {
+    id: 'jkl865',
     identifier: 'FOOTER',
     title: 'Footer',
     required: true
   }
 ];
 
-export const enabledModulesInOrder = List.of(HEADER, VIDEO, FOOTER);
+export const enabledModulesInOrder = List.of(abc123, ghi789, jkl865);

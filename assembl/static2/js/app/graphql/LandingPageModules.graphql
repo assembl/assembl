@@ -16,6 +16,7 @@ query LandingPageModules($lang: String!) {
     id
     order
     moduleType {
+      id
       defaultOrder
       editableOrder
       identifier

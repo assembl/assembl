@@ -451,12 +451,12 @@ export type MoveProposalDown = {
 };
 
 export type toggleLandingPageModule = {
-  moduleTypeIdentifier: string,
+  id: string,
   type: typeof TOGGLE_LANDING_PAGE_MODULE
 };
 
 type LandingPageModuleInfo = {
-  identifier: string
+  id: string
 };
 export type LandingPageModules = Array<LandingPageModuleInfo>;
 export type UpdateLandingPageModules = {
@@ -506,24 +506,24 @@ export type UpdateLandingPageHeaderLogo = {
 };
 
 export type MoveLandingPageModuleUp = {
-  moduleTypeIdentifier: string,
+  id: string,
   type: typeof MOVE_LANDING_PAGE_MODULE_UP
 };
 
 export type MoveLandingPageModuleDown = {
-  moduleTypeIdentifier: string,
+  id: string,
   type: typeof MOVE_LANDING_PAGE_MODULE_DOWN
 };
 
 export type UpdateLandingPageModuleTitle = {
-  moduleTypeIdentifier: string,
+  id: string,
   locale: string,
   value: string,
   type: typeof UPDATE_LANDING_PAGE_MODULE_TITLE
 };
 
 export type UpdateLandingPageModuleSubtitle = {
-  moduleTypeIdentifier: string,
+  id: string,
   locale: string,
   value: string,
   type: typeof UPDATE_LANDING_PAGE_MODULE_SUBTITLE

@@ -16,12 +16,12 @@ const ModulesPreview = ({ modules, moveModuleDown, moveModuleUp }: Props) => {
   }
 
   const renderModuleBlock = (module) => {
-    const identifier = module.getIn(['moduleType', 'identifier']);
+    const id = module.getIn(['moduleType', 'id']);
     return (
       <ModuleBlock
-        key={identifier}
-        moveDown={() => moveModuleDown(identifier)}
-        moveUp={() => moveModuleUp(identifier)}
+        key={id}
+        moveDown={() => moveModuleDown(id)}
+        moveUp={() => moveModuleUp(id)}
         required={module.getIn(['moduleType', 'required'])}
         title={module.getIn(['moduleType', 'title'])}
         withArrows={module.getIn(['moduleType', 'editableOrder'])}

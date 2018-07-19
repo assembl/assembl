@@ -7,7 +7,7 @@ import LandingPageModuleTypes from '../../../graphql/LandingPageModuleTypes.grap
 import withoutLoadingIndicator from '../../common/withoutLoadingIndicator';
 import Helper from '../../common/helper';
 
-export const DumbSelectModulesForm = ({ hasErrors, modulesByIdentifier, moduleTypes, toggleModule }) => {
+export const DumbSelectModulesForm = ({ hasErrors, modulesById, moduleTypes, toggleModule }) => {
   if (hasErrors) {
     return null;
   }
@@ -16,13 +16,13 @@ export const DumbSelectModulesForm = ({ hasErrors, modulesByIdentifier, moduleTy
     <div className="select-modules-form">
       <FormGroup>
         {moduleTypes.map((moduleType) => {
-          const module = modulesByIdentifier.get(moduleType.identifier);
+          const module = modulesById.get(moduleType.id);
           const identifierLowerCase = moduleType.identifier.toLowerCase();
           return (
             <Checkbox
-              key={moduleType.identifier}
+              key={moduleType.id}
               checked={(module && module.get('enabled')) || moduleType.required}
-              onChange={() => (!moduleType.required ? toggleModule(moduleType.identifier) : null)}
+              onChange={() => (!moduleType.required ? toggleModule(moduleType.id) : null)}
             >
               <Helper
                 classname="margin-left-20"

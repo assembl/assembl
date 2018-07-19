@@ -14,22 +14,15 @@ import {
 } from '../../../actions/adminActions/landingPage';
 
 type Props = {
-  enabledModulesInOrder: List<Map>,
+  modules: List<Map>,
   locale: string,
-  modulesByIdentifier: Map<string, Map>,
+  modulesById: Map<string, Map>,
   moveModuleDown: Function,
   moveModuleUp: Function,
   toggleModule: Function
 };
 
-export const DumbManageModules = ({
-  enabledModulesInOrder,
-  locale,
-  modulesByIdentifier,
-  moveModuleDown,
-  moveModuleUp,
-  toggleModule
-}: Props) => (
+export const DumbManageModules = ({ modules, locale, modulesById, moveModuleDown, moveModuleUp, toggleModule }: Props) => (
   <div className="admin-box">
     <SectionTitle
       title={I18n.t('administration.landingPage.manageModules.title')}
@@ -41,10 +34,10 @@ export const DumbManageModules = ({
       </p>
       <div className="two-columns-admin">
         <div className="column-left">
-          <SelectModulesForm lang={locale} modulesByIdentifier={modulesByIdentifier} toggleModule={toggleModule} />
+          <SelectModulesForm lang={locale} modulesById={modulesById} toggleModule={toggleModule} />
         </div>
         <div className="column-right">
-          <ModulesPreview modules={enabledModulesInOrder} moveModuleDown={moveModuleDown} moveModuleUp={moveModuleUp} />
+          <ModulesPreview modules={modules} moveModuleDown={moveModuleDown} moveModuleUp={moveModuleUp} />
         </div>
       </div>
     </div>
@@ -52,17 +45,17 @@ export const DumbManageModules = ({
 );
 
 const mapStateToProps = (state) => {
-  const { enabledModulesInOrder, modulesByIdentifier } = state.admin.landingPage;
+  const { enabledModulesInOrder, modulesById } = state.admin.landingPage;
   return {
-    enabledModulesInOrder: enabledModulesInOrder.map(identifier => modulesByIdentifier.get(identifier)),
-    modulesByIdentifier: modulesByIdentifier
+    modules: enabledModulesInOrder.map(id => modulesById.get(id)),
+    modulesById: modulesById
   };
 };
 
 const mapDispatchToProps = dispatch => ({
-  moveModuleDown: identifier => dispatch(moveLandingPageModuleDown(identifier)),
-  moveModuleUp: identifier => dispatch(moveLandingPageModuleUp(identifier)),
-  toggleModule: identifier => dispatch(toggleLandingPageModule(identifier))
+  moveModuleDown: id => dispatch(moveLandingPageModuleDown(id)),
+  moveModuleUp: id => dispatch(moveLandingPageModuleUp(id)),
+  toggleModule: id => dispatch(toggleLandingPageModule(id))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(DumbManageModules);
