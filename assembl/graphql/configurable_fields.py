@@ -25,7 +25,6 @@ class ConfigurableFieldInterface(graphene.Interface):
     identifier = graphene.String(description=docs.ConfigurableFieldInterface.identifier)
     order = graphene.Float(description=docs.ConfigurableFieldInterface.identifier)
     required = graphene.Boolean(description=docs.ConfigurableFieldInterface.identifier)
-    hidden = graphene.Boolean(description=docs.ConfigurableFieldInterface.identifier)
     title = graphene.String(lang=graphene.String(description=docs.Default.required_language_input), description=docs.ConfigurableFieldInterface.identifier)
     title_entries = graphene.List(LangStringEntry, description=docs.ConfigurableFieldInterface.identifier)
 
