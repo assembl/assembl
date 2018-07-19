@@ -79,6 +79,17 @@ const ManageProfileOptionsForm = ({
     return displayModal(modalTitle, body, includeFooter, footer);
   };
 
+  const isNotHideable = (textField) => {
+    switch (textField.get('identifier')) {
+    case 'FULLNAME':
+    case 'EMAIL':
+    case 'PASSWORD':
+    case 'PASSWORD2':
+      return true;
+    default:
+      return false;
+    }
+  };
 
   return (
     <div className="admin-box">
@@ -96,7 +107,7 @@ const ManageProfileOptionsForm = ({
                     <Checkbox
                       className="textfield-checkbox"
                       checked={tf.get('hidden')}
-                      disabled={tf.get('required')}
+                      disabled={isNotHideable(tf)}
                       onChange={() => toggleTextFieldHidden(tf.get('id'))}
                     />
                   </OverlayTrigger>
