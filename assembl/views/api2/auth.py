@@ -466,6 +466,11 @@ def assembl_register_user(request):
                 "We already have a user with this username.")),
                 ErrorTypes.EXISTING_USERNAME,
                 HTTPConflict.code)
+        if len(username) > 20:
+            errors.add_error(localizer.translate(_(
+                "The username must be less than 20 characters.")),
+                ErrorTypes.USERNAME_TOO_LONG,
+                HTTPBadRequest.code)
     if discussion:
         check_subscription = discussion.preferences['whitelist_on_register']
         whitelist = discussion.preferences['require_email_domain']
