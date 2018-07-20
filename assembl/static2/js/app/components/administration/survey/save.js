@@ -80,7 +80,7 @@ export const createMutationsPromises = (client: ApolloClient) => (
 
   const allMutations = [];
 
-  const deleteMutations = idsToDelete.map(id =>
+  const deleteMutations = idsToDelete.map(id => () =>
     client.mutate({
       mutation: deleteThematicMutation,
       variables: { thematicId: id }
@@ -93,18 +93,20 @@ export const createMutationsPromises = (client: ApolloClient) => (
     const order = idx !== initialIds.indexOf(theme.id) ? idx + 1 : null;
     const variables = getVariables(theme, initialTheme, order);
     if (idsToCreate.indexOf(theme.id) > 0) {
-      return client.mutate({
-        mutation: createThematicMutation,
-        variables: variables
-      });
+      return () =>
+        client.mutate({
+          mutation: createThematicMutation,
+          variables: variables
+        });
     }
-    return client.mutate({
-      mutation: updateThematicMutation,
-      variables: {
-        id: theme.id,
-        ...variables
-      }
-    });
+    return () =>
+      client.mutate({
+        mutation: updateThematicMutation,
+        variables: {
+          id: theme.id,
+          ...variables
+        }
+      });
   });
   allMutations.push(...createUpdateMutations);
   return allMutations;

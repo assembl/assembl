@@ -4,6 +4,9 @@ import { Button } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
 
 export const runSerial = (tasks) => {
+  if (tasks.length > 0 && typeof tasks[0] !== 'function') {
+    throw new Error('runSerial takes an array of functions with each function returning a Promise');
+  }
   let result = Promise.resolve();
   tasks.forEach((task) => {
     result = result.then(task);
