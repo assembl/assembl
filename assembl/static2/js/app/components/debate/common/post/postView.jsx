@@ -114,6 +114,13 @@ class PostView extends React.PureComponent<Props, State> {
     window.getSelection().removeAllRanges();
   };
 
+  getNameToDisplay = ({ isDeleted, username, displayName }: Object) => {
+    if (isDeleted) {
+      return I18n.t('deletedUser');
+    }
+    return username || displayName;
+  }
+
   render() {
     const {
       bodyMimeType,
@@ -202,7 +209,7 @@ class PostView extends React.PureComponent<Props, State> {
               {creator && (
                 <ProfileLine
                   userId={creator.userId}
-                  userName={creator.isDeleted ? I18n.t('deletedUser') : creator.displayName}
+                  userName={this.getNameToDisplay(creator)}
                   creationDate={creationDate}
                   locale={lang}
                   modified={modificationDate !== null}
