@@ -325,7 +325,7 @@ msgstr ""
 #: assembl/models/preferences.py:776
 #, fuzzy
 msgid "Discussion administrators"
-msgstr "Statistiques de la discussion"
+msgstr "Administrateurs de la discussion"
 
 #: assembl/models/preferences.py:779
 msgid ""
@@ -4819,19 +4819,19 @@ msgstr "Nous avons déjà un utilisateur ayant ce nom d'utilisateur."
 #: assembl/views/api2/auth.py:470
 #, fuzzy
 msgid "The username must be less than 20 characters."
-msgstr "Veuillez emloyer un nom d’au moins trois caractères"
+msgstr "Veuillez emloyer un nom d'utilisateur de moins de 20 caractères"
 
 #: assembl/views/api2/auth.py:484
 msgid ""
 "Your email domain has not been approved for registration. Please contact "
 "${emails} for support."
-msgstr ""
+msgstr "Votre création de compte n'a pas été validée. Contactez ${emails}."
 
 #: assembl/views/api2/auth.py:485
 msgid ""
 "Your email domain has not been approved for registration. Please contact "
 "one of ${emails} for support."
-msgstr ""
+msgstr "Votre courriel n'a pas été approuvé pour "
 
 #: assembl/views/auth/views.py:294
 #, python-format

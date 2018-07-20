@@ -304,7 +304,7 @@ msgstr "Diensttyp für Authentifizierung"
 
 #: assembl/models/preferences.py:749
 msgid "Allow white list to be applied to the authentication service chosen"
-msgstr ""
+msgstr "Erlauben, dass die Whitelist auf den ausgewählten Authentifizierungsdienst angewendet wird"
 
 #: assembl/models/preferences.py:761
 msgid "Whitelist on standard registration"
@@ -4839,13 +4839,13 @@ msgstr "Wir haben schon einen Benutzer mit diesem Benutzernamen."
 #: assembl/views/api2/auth.py:470
 #, fuzzy
 msgid "The username must be less than 20 characters."
-msgstr "Bitte verwenden Sie einen Namen mit mindestens 3 Zeichen"
+msgstr "Bitte verwenden Sie einen Benutzernamen am meistens 20 Zeichen"
 
 #: assembl/views/api2/auth.py:484
 msgid ""
 "Your email domain has not been approved for registration. Please contact "
 "${emails} for support."
-msgstr ""
+msgstr "Ihre Email domain war nicht genehmigt für Registrierung. Bitte Kontaktieren Sie ${emails} für Unterstützen"
 
 #: assembl/views/api2/auth.py:485
 msgid ""
