@@ -28,7 +28,7 @@ def upgrade(pyramid_env):
         ids = [id for (id,) in ids]
         for pf in db.query(m.ProfileField).all():
 			if pf.id in ids:
-				pf.delete()
+				db.delete(pf)
 
 
 def downgrade(pyramid_env):
