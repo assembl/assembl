@@ -92,7 +92,7 @@ export const createMutationsPromises = (client: ApolloClient) => (
     const initialTheme = initialValues.themes.find(t => t.id === theme.id);
     const order = idx !== initialIds.indexOf(theme.id) ? idx + 1 : null;
     const variables = getVariables(theme, initialTheme, order);
-    if (idsToCreate.indexOf(theme.id) > 0) {
+    if (idsToCreate.indexOf(theme.id) > -1) {
       return () =>
         client.mutate({
           mutation: createThematicMutation,
