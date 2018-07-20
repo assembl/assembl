@@ -70,10 +70,10 @@ def get_login_context(request, force_show_providers=False):
     get_routes = create_get_route(request, discussion)
     providers = get_provider_data(get_routes)
     hide_registration = (discussion
-                         and not public_roles.intersection(set(roles_with_permissions(
-                             discussion, P_READ)))
-                         and not roles_with_permissions(
-                             discussion, P_SELF_REGISTER_REQUEST, P_SELF_REGISTER))
+        and not public_roles.intersection(set(roles_with_permissions(
+            discussion, P_READ)))
+        and not roles_with_permissions(
+            discussion, P_SELF_REGISTER_REQUEST, P_SELF_REGISTER))
     if not force_show_providers:
         hide_providers = aslist(request.registry.settings.get(
             'hide_login_providers', ()))
