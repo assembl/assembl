@@ -29,11 +29,29 @@ exports[`ManageModules component should render a form to manage the landing page
       <div
         className="column-left"
       >
-        <Apollo(Component)
+        <Unknown
           lang={undefined}
+          moduleTypes={undefined}
           modulesById={undefined}
           toggleModule={[Function]}
         />
+        <div
+          className="margin-xl"
+        >
+          <Button
+            active={false}
+            block={false}
+            bsClass="btn"
+            bsStyle="default"
+            className="button-submit button-dark"
+            disabled={false}
+            onClick={[Function]}
+          >
+            <Translate
+              value="administration.landingPage.manageModules.textAndMultimediaBtn"
+            />
+          </Button>
+        </div>
       </div>
       <div
         className="column-right"

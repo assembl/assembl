@@ -497,12 +497,14 @@
 
     .modules-preview {
       margin: 5px;
-      padding: 5px;
+      padding: 2px;
       background-color: $grey0;
       min-height: 400px;
       display: flex;
       flex-direction: column;
       justify-content: center;
+      font-size: 11px;
+      min-width: 300px;
 
       .inner {
         margin: auto;
@@ -534,7 +536,7 @@
 
           .module-block {
             margin: 7px;
-            padding: 15px 10px 15px 16px;
+            padding: 10px 5px 10px 11px;
             border: 0.8px solid $first-color;
             color: $first-color;
             background-color: $white;
@@ -545,6 +547,11 @@
               color: $first-color;
               padding: 0;
               width: 20px;
+            }
+
+            &:first-child, &:last-child {
+              opacity: 1;
+              text-align: left;
             }
           }
         }

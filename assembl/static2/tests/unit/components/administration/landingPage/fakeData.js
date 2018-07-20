@@ -53,7 +53,7 @@ export const modulesById = Map({
   jkl865: jkl865
 });
 
-export const modulesTypes = [
+export const moduleTypes = [
   {
     id: 'abc123',
     identifier: 'HEADER',

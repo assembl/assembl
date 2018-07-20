@@ -83,3 +83,9 @@ export const updateLandingPageModuleSubtitle = (
   value: value,
   type: actionTypes.UPDATE_LANDING_PAGE_MODULE_SUBTITLE
 });
+
+export const createLandingPageModules = (id: string, order: number): actionTypes.CreateLandingPageModules => ({
+  id: id,
+  order: order,
+  type: actionTypes.CREATE_LANDING_PAGE_MODULE
+});
