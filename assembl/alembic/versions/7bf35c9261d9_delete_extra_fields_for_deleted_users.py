@@ -22,6 +22,8 @@ def upgrade(pyramid_env):
     from assembl import models as m
     db = m.get_session_maker()()
     with transaction.manager:
+	# SQL Alchemy can't delete after a join operation, so we are getting the ids first
+	# and deleting the corresponding profile fields
         ids=db.query(m.ProfileField.id).join(m.User).filter(m.User.is_deleted==True).all()
         ids = [id for (id,) in ids]
         for pf in db.query(m.ProfileField).all():
