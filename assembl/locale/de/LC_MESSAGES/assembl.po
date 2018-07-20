@@ -4837,7 +4837,6 @@ msgid "We already have a user with this username."
 msgstr "Wir haben schon einen Benutzer mit diesem Benutzernamen."
 
 #: assembl/views/api2/auth.py:470
-#, fuzzy
 msgid "The username must be less than 20 characters."
 msgstr "Bitte verwenden Sie einen Benutzernamen am meistens 20 Zeichen"
 

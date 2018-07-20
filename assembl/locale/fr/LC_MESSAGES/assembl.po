@@ -184,9 +184,8 @@ msgid "Show the share button on posts and ideas"
 msgstr "Voir le bouton Partager sur les messages et le panneau Idée"
 
 #: assembl/models/preferences.py:507
-#, fuzzy
 msgid "Private social sharing"
-msgstr "Partage social"
+msgstr "Partage social privé"
 
 #: assembl/models/preferences.py:509
 msgid "Publicizing or privatizing social sharing"
@@ -323,7 +322,6 @@ msgid "Allow white list to be applied to the default login process"
 msgstr ""
 
 #: assembl/models/preferences.py:776
-#, fuzzy
 msgid "Discussion administrators"
 msgstr "Administrateurs de la discussion"
 
@@ -4817,7 +4815,6 @@ msgid "We already have a user with this username."
 msgstr "Nous avons déjà un utilisateur ayant ce nom d'utilisateur."
 
 #: assembl/views/api2/auth.py:470
-#, fuzzy
 msgid "The username must be less than 20 characters."
 msgstr "Veuillez emloyer un nom d'utilisateur de moins de 20 caractères"
 
