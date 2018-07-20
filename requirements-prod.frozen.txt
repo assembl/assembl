@@ -7,7 +7,7 @@
 -e git+https://github.com/assembl/Beaker.git@assembl#egg=Beaker
 -e git+https://github.com/maparent/cornice.git@master#egg=cornice
 -e git+https://github.com/pythonforfacebook/facebook-sdk.git@ddc911f54d6136e149c03d145fd3760751a7d50d#egg=facebook_sdk
--e git+https://github.com/ecreall/graphql-wsgi.git@7d7a2cf0a56f7303cc4508f8b7a464820b046293#egg=graphql-wsgi
+-e git+https://github.com/ecreall/graphql-wsgi.git@090df73f0184f20a643c3d3f413e55f3f4be3d45#egg=graphql-wsgi
 -e git+https://github.com/dgilland/hashfs.git@386ce3b8c69576007549ddf5122282099b87fe42#egg=hashfs
 -e git+https://github.com/benoitg/jwzthreading.git@master#egg=jwzthreading
 -e git+https://github.com/maparent/langdetect.git@no_sample#egg=langdetect
