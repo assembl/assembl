@@ -1118,7 +1118,7 @@ on your {assembl} account.</p>
 def send_change_password_email(
         request, profile, email=None, subject=None,
         text_body=None, html_body=None, discussion=None,
-        sender_name=None, welcome=False):
+        sender_name=None, welcome=False, immediate=False):
     mailer = get_mailer(request)
     localizer = request.localizer
     route_maker = create_get_route(request, discussion)
@@ -1168,4 +1168,7 @@ The {assembl} Team
         recipients=["%s <%s>" % (
             profile.name, email or profile.get_preferred_email())],
         body=text_body.format(**data), html=html_body.format(**data))
-    mailer.send(message)
+    if immediate:
+        mailer.send_immediately(message)
+    else:
+        mailer.send(message)
