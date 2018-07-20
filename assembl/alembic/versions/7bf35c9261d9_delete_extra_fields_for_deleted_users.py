@@ -24,11 +24,10 @@ def upgrade(pyramid_env):
     with transaction.manager:
 	# SQL Alchemy can't delete after a join operation, so we are getting the ids first
 	# and deleting the corresponding profile fields
-        ids=db.query(m.ProfileField.id).join(m.User).filter(m.User.is_deleted==True).all()
-        ids = [id for (id,) in ids]
-        for pf in db.query(m.ProfileField).all():
-			if pf.id in ids:
-				db.delete(pf)
+        ids_query=db.query(m.ProfileField.id).join(m.User).filter(m.User.is_deleted==True).all()
+        for (id,) in ids_query:
+            profile = m.ProfileField.get(id)
+            db.delete(profile)
 
 
 def downgrade(pyramid_env):
