@@ -131,24 +131,22 @@ class AgentProfile(Base):
                 return "@".join(map(lambda x: hash(x, 10), preferred_account.email.split("@"))) + ".com"
             return preferred_account.email
 
-    def _anonymize_name(self):
+    def anonymous_name(self):
         CHARACTER_COUNT = 10
         if self.name:
             return hash(self.name.encode('utf-8'), CHARACTER_COUNT)
         return hash("User_" + str(self.id), CHARACTER_COUNT)
 
-    def real_name(self, anonymous=False):
+    def real_name(self):
         if not self.name:
             for acc in self.identity_accounts:
                 name = acc.real_name()
                 if name:
                     self.name = name
                     break
-        if anonymous:
-            return self._anonymize_name()
         return self.name
 
-    def display_name(self, anonymous=False):
+    def display_name(self):
         # TODO: Prefer types?
         if self.name:
             return self.name
@@ -519,10 +517,8 @@ class EmailAccount(AbstractAgentAccount):
     }
     profile_e = relationship(AgentProfile, backref=backref('email_accounts'))
 
-    def display_name(self, anonymous=False):
+    def display_name(self):
         if self.verified:
-            if anonymous:
-                return self._faker.email()
             return self.email
 
     def signature(self):
@@ -914,9 +910,7 @@ class User(AgentProfile):
         return False
 
     def get_preferred_email(self, anonymous=False):
-        if anonymous:
-            return super(User, self).get_preferred_email(anonymous=anonymous)
-        if self.preferred_email:
+        if self.preferred_email and not anonymous:
             return self.preferred_email
         return super(User, self).get_preferred_email(anonymous=anonymous)
 
@@ -990,9 +984,7 @@ class User(AgentProfile):
         return super(User, self).avatar_url(
             size, app_url, email or self.preferred_email)
 
-    def display_name(self, anonymous=False):
-        if anonymous:
-            return self._faker.name()
+    def display_name(self):
         if self.name:
             return self.name
         if self.username:
