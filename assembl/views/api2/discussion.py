@@ -1380,6 +1380,11 @@ def convert_to_utf8(rowdict):
     return row
 
 
+def get_idea_parent_ids(idea):
+    # Filter the RootIdea, as it's never reported in the exports
+    return ", ".join([str(i.id) for i in idea.get_parents() if i.sqla_type != u'root_idea'])
+
+
 def get_entries_locale_original(lang_string):
     entries = lang_string.best_entries_in_request_with_originals()
     if len(entries) == 1:
@@ -1546,6 +1551,7 @@ def phase2_csv_export(request):
     Idea.prepare_counters(discussion_id, True)
 
     IDEA_ID = u"Numéro de l'idée"
+    IDEA_PARENT_ID = u"Les numéros des parent d'idée"
     IDEA_NAME = u"Nom de l'idée"
     POST_SUBJECT = u"Sujet"
     POST_BODY = u"Post"
@@ -1562,6 +1568,7 @@ def phase2_csv_export(request):
     POST_BODY_ORIGINAL = u"Original"
     fieldnames = [
         IDEA_ID.encode('utf-8'),
+        IDEA_PARENT_ID.encode('utf-8'),
         IDEA_NAME.encode('utf-8'),
         POST_SUBJECT.encode('utf-8'),
         POST_BODY.encode('utf-8'),
@@ -1596,6 +1603,7 @@ def phase2_csv_export(request):
     for idea in ideas:
         row = {}
         row[IDEA_ID] = idea.id
+        row[IDEA_PARENT_ID] = get_idea_parent_ids(idea)
         row[IDEA_NAME] = get_entries_locale_original(idea.title).get('entry')
         posts = get_published_posts(idea)
         for post in posts:
