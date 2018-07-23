@@ -124,10 +124,10 @@ class Query(graphene.ObjectType):
     timeline = graphene.List(DiscussionPhase, description=docs.Schema.timeline)
     posts = SQLAlchemyConnectionField(
         PostConnection,
-        start_date=graphene.String(description=docs.Schema.posts.start_date),
-        end_date=graphene.String(description=docs.Schema.posts.start_date),
-        identifiers=graphene.List(graphene.String, description=docs.Schema.posts.identifiers),
-        description=docs.Schema.posts)
+        start_date=graphene.String(description=docs.SchemaPosts.start_date),
+        end_date=graphene.String(description=docs.SchemaPosts.start_date),
+        identifiers=graphene.List(graphene.String, description=docs.SchemaPosts.identifiers),
+        description=docs.SchemaPosts.__doc__)
 
     def resolve_resources(self, args, context, info):
         model = models.Resource
@@ -504,6 +504,7 @@ class Mutations(graphene.ObjectType):
     create_discussion_phase = CreateDiscussionPhase.Field(description=docs.CreateDiscussionPhase.__doc__)
     update_discussion_phase = UpdateDiscussionPhase.Field(description=docs.CreateDiscussionPhase.__doc__)
     delete_discussion_phase = DeleteDiscussionPhase.Field(description=docs.DeleteDiscussionPhase.__doc__)
+
 
 Schema = graphene.Schema(query=Query, mutation=Mutations)
 

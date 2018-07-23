@@ -53,6 +53,13 @@ class Schema:
     timeline = """A list of DiscussionPhase objects, descriping the timeline objects on the debate."""
 
 
+class SchemaPosts:
+    __doc__ = """The list of posts contained in the phases with the specified identifiers and modified between specified start date and the specified end date"""
+    start_date = "A date representing a temporal filter. Only the posts modified after this date will be selected."
+    end_date = "A date representing a temporal filter. Only the posts modified before this date will be selected."
+    identifiers = "A list of phase identifiers. " + Default.phase_identifier
+
+
 class Discussion:
     __doc__ = """The Discussion object. This object describes certain parts of the core state of the debate."""
     id = Default.object_id % ("Discussion",)
@@ -191,10 +198,30 @@ class ExtractInterface:
         display_open_questions: A priviledged user should activate the Open Question view.\n
         display_bright_mirror: A priviledged user should activate the Bright Mirror view.\n
     """
+    extract_state = """A graphene Field containing the state of the extract. The options are:
+    SUBMITTED,\n
+    PUBLISHED\n"""
     text_fragment_identifiers = """A list of TextFragmentIdentifiers."""
     creation_date = """The date the Extract was created, in UTC timezone."""
     creator_id = """The id of the User who created the extract."""
     creator = """The AgentProfile object description of the creator."""
+
+
+class PostExtract:
+    post_id = Default.node_id % ("Post")
+    body = ExtractInterface.body
+    xpath_start = TextFragmentIdentifier.xpath_start
+    xpath_end = TextFragmentIdentifier.xpath_end
+    offset_start = TextFragmentIdentifier.offset_start
+    offset_end = TextFragmentIdentifier.offset_end
+
+
+class AddPostsExtract:
+    __doc__ = """A mutation to add a list of Extracts."""
+    extracts = """A list of PostExtract"""
+    extract_nature = ExtractInterface.extract_nature
+    extract_state = ExtractInterface.extract_state
+    status = """A Boolean of whether the extracts was successfully added or not."""
 
 
 class UpdateExtract:
@@ -210,6 +237,11 @@ class UpdateExtract:
 class DeleteExtract:
     extract_id = UpdateExtract.extract_id
     success = """A Boolean of whether the extract was successfully saved or not."""
+
+
+class ConfirmExtract:
+    extract_id = UpdateExtract.extract_id
+    success = """A Boolean of whether the extract was successfully confirmed or not."""
 
 
 class Locale:

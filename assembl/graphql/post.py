@@ -251,12 +251,12 @@ class PostConnection(graphene.Connection):
 
 
 class PostExtractEntryFields(graphene.AbstractType):
-    post_id = graphene.String(required=True)
-    offset_start = graphene.Int(required=True)
-    offset_end = graphene.Int(required=True)
-    xpath_start = graphene.String(required=True)
-    xpath_end = graphene.String(required=True)
-    body = graphene.String(required=True)
+    post_id = graphene.String(required=True, description=docs.PostExtract.post_id)
+    offset_start = graphene.Int(required=True, description=docs.PostExtract.offset_start)
+    offset_end = graphene.Int(required=True, description=docs.PostExtract.offset_end)
+    xpath_start = graphene.String(required=True, description=docs.PostExtract.xpath_start)
+    xpath_end = graphene.String(required=True, description=docs.PostExtract.xpath_end)
+    body = graphene.String(required=True, description=docs.PostExtract.body)
 
 
 class PostExtractEntry(graphene.ObjectType, PostExtractEntryFields):
@@ -725,11 +725,12 @@ class AddPostExtract(graphene.Mutation):
 # Used by the Bigdatext app
 class AddPostsExtract(graphene.Mutation):
     class Input:
-        extracts = graphene.List(PostExtractEntryInput, required=True)
-        extract_nature = graphene.String()
-        extract_state = graphene.String()
+        extracts = graphene.List(
+            PostExtractEntryInput, required=True, description=docs.AddPostsExtract.extracts)
+        extract_nature = graphene.String(description=docs.AddPostsExtract.extract_nature)
+        extract_state = graphene.String(description=docs.AddPostsExtract.extract_state)
 
-    status = graphene.Boolean()
+    status = graphene.Boolean(description=docs.AddPostsExtract.success)
 
     @staticmethod
     @abort_transaction_on_exception

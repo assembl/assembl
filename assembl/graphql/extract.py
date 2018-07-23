@@ -122,9 +122,9 @@ class DeleteExtract(graphene.Mutation):
 
 class ConfirmExtract(graphene.Mutation):
     class Input:
-        extract_id = graphene.ID(required=True)
+        extract_id = graphene.ID(required=True, description=docs.ConfirmExtract.extract_id)
 
-    success = graphene.Boolean()
+    success = graphene.Boolean(description=docs.ConfirmExtract.success)
 
     @staticmethod
     @abort_transaction_on_exception
