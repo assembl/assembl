@@ -9,4 +9,5 @@ fragment textField on TextField {
   title(lang: $lang)
   order
   required
+  hidden
 }
