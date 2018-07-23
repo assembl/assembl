@@ -23,10 +23,11 @@ class ConfigurableFieldInterface(graphene.Interface):
     __doc__ = docs.ConfigurableFieldInterface.__doc__
 
     identifier = graphene.String(description=docs.ConfigurableFieldInterface.identifier)
-    order = graphene.Float(description=docs.ConfigurableFieldInterface.identifier)
-    required = graphene.Boolean(description=docs.ConfigurableFieldInterface.identifier)
-    title = graphene.String(lang=graphene.String(description=docs.Default.required_language_input), description=docs.ConfigurableFieldInterface.identifier)
-    title_entries = graphene.List(LangStringEntry, description=docs.ConfigurableFieldInterface.identifier)
+    order = graphene.Float(description=docs.ConfigurableFieldInterface.order)
+    required = graphene.Boolean(description=docs.ConfigurableFieldInterface.required)
+    title = graphene.String(lang=graphene.String(description=docs.Default.required_language_input), description=docs.ConfigurableFieldInterface.title)
+    title_entries = graphene.List(LangStringEntry, description=docs.ConfigurableFieldInterface.title_entries)
+    hidden = graphene.Boolean(description=docs.ConfigurableFieldInterface.hidden)
 
     def resolve_title(self, args, context, info):
         return resolve_langstring(self.title, args.get('lang'))
