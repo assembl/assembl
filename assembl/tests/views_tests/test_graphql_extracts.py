@@ -221,15 +221,11 @@ mutation updateExtract(
 def test_mutation_add_extracts(graphql_request, top_post_in_thread_phase):
   post_db_id = int(from_global_id(top_post_in_thread_phase)[1])
   
-  contentLocale = u'fr'
-  message_title = u"Manger des choux à la crème"
   extract_body = u"manger des choux à la crème"
-  extract_author_name = u'Mr. Administrator'
   xpathStart = u"//div[@id='message-body-local:Content/%s']/" % post_db_id
   xpathEnd = xpathStart
   offsetStart = 17
   offsetEnd = 44
-  important = False
 
   variable_values = {
     "extracts": [

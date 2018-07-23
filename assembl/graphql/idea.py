@@ -61,6 +61,7 @@ class IdeaInterface(graphene.Interface):
     vote_specifications = graphene.List(
         'assembl.graphql.vote_session.VoteSpecificationUnion',
         required=True, description=docs.IdeaInterface.vote_specifications)
+    type = graphene.String(description=docs.IdeaInterface.type)
 
     def resolve_num_total_posts(self, args, context, info):
         if isinstance(self, models.RootIdea):
@@ -106,6 +107,9 @@ class IdeaInterface(graphene.Interface):
 
     def resolve_total_sentiments(self, args, context, info):
         return self.get_total_sentiments()
+
+    def resolve_type(self, args, context, info):
+        return self.__class__.__name__
 
 
 class IdeaAnnoucement(SecureObjectType, SQLAlchemyObjectType):
@@ -199,7 +203,6 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
     message_columns = graphene.List(lambda: IdeaMessageColumn, description=docs.Idea.message_columns)
     ancestors = graphene.List(graphene.ID, description=docs.Idea.ancestors)
     vote_results = graphene.Field(VoteResults, required=True, description=docs.Idea.vote_results)
-    type = graphene.String(description=docs.Idea.type)
 
     def resolve_vote_results(self, args, context, info):
         vote_specifications = self.criterion_for
@@ -341,9 +344,6 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
 
     def resolve_announcement(self, args, context, info):
         return self.get_applicable_announcement()
-
-    def resolve_type(self, args, context, info):
-        return self.__class__.__name__
 
 
 class Question(SecureObjectType, SQLAlchemyObjectType):

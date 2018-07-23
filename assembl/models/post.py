@@ -638,6 +638,9 @@ class AssemblPost(Post):
     def get_body_mime_type(self):
         return self.body_mime_type
 
+    def get_modification_date(self):
+        return self.modification_date or self.creation_date
+
 
 class SynthesisPost(AssemblPost):
     """

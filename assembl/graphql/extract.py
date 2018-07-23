@@ -57,9 +57,6 @@ class Extract(SecureObjectType, SQLAlchemyObjectType):
         if self.creator_id is not None:
             return models.AgentProfile.get(self.creator_id)
 
-    def resolve_extract_state(self, args, context, info):
-        return self.extract_state
-
 
 class UpdateExtract(graphene.Mutation):
     __doc__ = docs.UpdateExtract.__doc__

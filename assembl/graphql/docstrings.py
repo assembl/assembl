@@ -69,6 +69,7 @@ class Discussion:
     button_label = """The value inside of the participation button in the landing page."""
     header_image = Default.document % ("The file representing the header of the landing page. ", )
     logo_image = Default.document % ("The file representing the logo of the debate. ", )
+    slug = """A string used to form the URL of the discussion."""
 
 
 class UpdateDiscussion:
@@ -284,6 +285,7 @@ class IdeaInterface:
     message_view_override = """Use a non-standard view for this idea.\nCurrently only supporting "messageColumns"."""
     total_sentiments = "Total number of sentiments expressed by participants on posts related to that idea."
     vote_specifications = """The VoteSpecificationUnion placed on the Idea. This is the metadata describing the configuration of a VoteSession."""
+    type = """The type of the idea. The class name of the idea."""
 
 
 class IdeaAnnouncement:
@@ -521,6 +523,9 @@ class PostInterface:
     attachments = "List of attachements to the post."
     original_locale = Default.string_entry % ("Locale in which the original message was written.")
     publishes_synthesis = "Graphene Field modeling a relationship to a published synthesis."
+    type = """The type of the post. The class name of the post."""
+    discussion_id = """The database identifier of the Discussion."""
+    modified = """A boolean flag to say whether the post is modified or not."""
 
 
 class Post:
@@ -683,6 +688,7 @@ class AgentProfile:
     has_password = "A boolean flag describing if the User has a password."
     is_deleted = """A boolean flag that shows if the User is deleted.
     If True, the User information is cleansed from the system, and the User can no longer log in."""
+    is_machine = """A boolean flag describing if the User is a machine user or human user."""
 
 
 class UpdateUser:

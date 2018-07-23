@@ -230,7 +230,7 @@ class PostInterface(SQLAlchemyInterface):
         return self.__class__.__name__
 
     def resolve_modified(self, args, context, info):
-        return self.modification_date and self.creation_date > self.modification_date
+        return self.get_modification_date() > self.creation_date
 
 
 class Post(SecureObjectType, SQLAlchemyObjectType):
@@ -369,7 +369,6 @@ class CreatePost(graphene.Mutation):
                         subject_langstring = models.LangString.create(
                             new_subject, locale)
 
-            now = datetime.utcnow()
             new_post = cls(
                 discussion=discussion,
                 subject=subject_langstring,
@@ -377,8 +376,7 @@ class CreatePost(graphene.Mutation):
                 creator_id=user_id,
                 body_mime_type=u'text/html',
                 message_classifier=classifier,
-                creation_date=now,
-                modification_date=now,
+                creation_date=datetime.utcnow()
             )
             new_post.guess_languages()
             db = new_post.db
@@ -730,7 +728,7 @@ class AddPostsExtract(graphene.Mutation):
         extract_nature = graphene.String(description=docs.AddPostsExtract.extract_nature)
         extract_state = graphene.String(description=docs.AddPostsExtract.extract_state)
 
-    status = graphene.Boolean(description=docs.AddPostsExtract.success)
+    status = graphene.Boolean(description=docs.AddPostsExtract.status)
 
     @staticmethod
     @abort_transaction_on_exception
@@ -746,7 +744,11 @@ class AddPostsExtract(graphene.Mutation):
         for extract in extracts:
             post_id = extract.get('post_id')
             post_id = int(Node.from_global_id(post_id)[1])
-            post = models.Post.get(post_id)
+            post = models.Post.get(post_id) if post_id else None
+
+            if not post:
+                continue
+
             extract_nature = getattr(
                 models.ExtractNatureVocabulary.Enum, args.get('extract_nature', ''), None)
             extract_state = getattr(

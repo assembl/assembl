@@ -2,7 +2,6 @@ from datetime import datetime
 import os.path
 import pytz
 
-from enum import Enum
 from graphene.types.scalars import Scalar
 from graphql.language import ast
 from graphql.utils.ast_to_dict import ast_to_dict
@@ -10,20 +9,7 @@ from graphql.utils.ast_to_dict import ast_to_dict
 from .langstring import langstring_from_input_entries
 from assembl import models
 from assembl.utils import get_ideas
-
-
-class Phases(Enum):
-    survey = 'survey'
-    thread = 'thread'
-    multiColumns = 'multiColumns'
-    voteSession = 'voteSession'
-
-
-PHASES_WITH_POSTS = [
-    Phases.survey.value,
-    Phases.thread.value,
-    Phases.multiColumns.value
-]
+from assembl.models.timeline import Phases, PHASES_WITH_POSTS
 
 
 class DateTime(Scalar):
@@ -217,7 +203,7 @@ def get_posts_for_phases(discussion, identifiers):
         return None
 
     ideas = []
-    # If servey phase, we need the root thematic
+    # If survey phase, we need the root thematic
     if Phases.survey.value in identifiers_with_posts:
         root_thematic = get_root_thematic_for_phase(discussion, Phases.survey.value)
         if root_thematic:
