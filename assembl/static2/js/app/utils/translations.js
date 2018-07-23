@@ -392,6 +392,7 @@ const Translations = {
       changePassword: "Modifier mon mot de passe",
       passwordModifiedSuccess: "Votre mot de passe a été modifié avec succès",
       saveSuccess: "Votre profil a été mis à jour avec succès",
+      usernameInformations: "Si vous avez configuré un pseudonyme, ce dernier est utilisé lorsque vous postez un message ou votez. Si vous n'avez pas configuré un pseudonyme, le nom et prénom que vous avez configuré ci-dessus sont utilisés lorsque vous postez un message ou votez.",
       deleteMyAccount: "Supprimer mon compte",
       deleteMyAccountConfirmation: "Supprimer mon compte et l'ensemble de mes données",
       deleteMyAccountText:
@@ -1141,6 +1142,7 @@ const Translations = {
       save: "Save",
       password: "Password",
       changePassword: "Change my password",
+      usernameInformations: "If you configured a username, it will be used when you post a message or vote. If you haven't configured one, the full name that you configured will be used instead.",
       passwordModifiedSuccess: "Your password has been changed with success",
       saveSuccess: "Your profile is updated",
       deleteMyAccount: "Delete my account",
