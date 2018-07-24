@@ -217,13 +217,12 @@ class Post extends React.Component<Props> {
     let creatorName = '';
     let userCanDeleteThisMessage = false;
     if (post.creator) {
-      const { displayName, isDeleted, username } = post.creator;
-      const name = username || displayName;
+      const { displayName, isDeleted } = post.creator;
       const connectedUserId = getConnectedUserId();
       userCanDeleteThisMessage =
         (post.creator && (connectedUserId === String(post.creator.userId) && connectedUserCan(Permissions.DELETE_MY_POST))) ||
         connectedUserCan(Permissions.DELETE_POST);
-      creatorName = isDeleted ? I18n.t('deletedUser') : name;
+      creatorName = isDeleted ? I18n.t('deletedUser') : displayName;
     }
 
     const deleteButton = <DeletePostButton postId={post.id} refetchQueries={refetchQueries} linkClassName="overflow-action" />;

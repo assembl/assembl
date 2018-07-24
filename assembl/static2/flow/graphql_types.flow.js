@@ -436,7 +436,6 @@ export type PostQuery = {|
           id: string,
           userId: number,
           displayName: ?string,
-          username: ?string,
           isDeleted: ?boolean
         |},
         modificationDate: ?any,
@@ -461,7 +460,6 @@ export type PostQuery = {|
             id: string,
             userId: number,
             displayName: ?string,
-            username: ?string,
             isDeleted: ?boolean
           |}
         |}>,
@@ -1234,7 +1232,6 @@ export type VoteSessionQuery = {|
           id: string,
           userId: number,
           displayName: ?string,
-          username: ?string,
           isDeleted: ?boolean
         |}>
       |},
@@ -1509,7 +1506,6 @@ export type addPostExtractMutation = {|
         id: string,
         userId: number,
         displayName: ?string,
-        username: ?string,
         isDeleted: ?boolean
       |},
       modificationDate: ?any,
@@ -1534,7 +1530,6 @@ export type addPostExtractMutation = {|
           id: string,
           userId: number,
           displayName: ?string,
-          username: ?string,
           isDeleted: ?boolean
         |}
       |}>,
@@ -1764,7 +1759,6 @@ export type createPostMutation = {|
         id: string,
         userId: number,
         displayName: ?string,
-        username: ?string,
         isDeleted: ?boolean
       |},
       modificationDate: ?any,
@@ -1789,7 +1783,6 @@ export type createPostMutation = {|
           id: string,
           userId: number,
           displayName: ?string,
-          username: ?string,
           isDeleted: ?boolean
         |}
       |}>,
@@ -2288,7 +2281,6 @@ export type updateExtractMutation = {|
         id: string,
         userId: number,
         displayName: ?string,
-        username: ?string,
         isDeleted: ?boolean
       |}
     |}
@@ -2458,7 +2450,6 @@ export type updatePostMutation = {|
         id: string,
         userId: number,
         displayName: ?string,
-        username: ?string,
         isDeleted: ?boolean
       |},
       modificationDate: ?any,
@@ -2483,7 +2474,6 @@ export type updatePostMutation = {|
           id: string,
           userId: number,
           displayName: ?string,
-          username: ?string,
           isDeleted: ?boolean
         |}
       |}>,
@@ -2782,7 +2772,6 @@ export type UpdateUserMutation = {|
       name: ?string,
       username: ?string,
       displayName: ?string,
-      username: ?string,
       image: ?{|
         externalUrl: ?string
       |}
@@ -2871,7 +2860,6 @@ export type UserQuery = {|
         name: ?string,
         username: ?string,
         displayName: ?string,
-        username: ?string,
         email: ?string,
         creationDate: ?any,
         hasPassword: ?boolean,
@@ -3021,7 +3009,6 @@ export type AgentProfileInfoFragment = {|
   id: string,
   userId: number,
   displayName: ?string,
-  username: ?string,
   isDeleted: ?boolean
 |};
 
@@ -3063,7 +3050,6 @@ export type ExtractFragment = {|
     id: string,
     userId: number,
     displayName: ?string,
-    username: ?string,
     isDeleted: ?boolean
   |}
 |};
@@ -3138,7 +3124,6 @@ export type PostFragment = {|
     id: string,
     userId: number,
     displayName: ?string,
-    username: ?string,
     isDeleted: ?boolean
   |},
   modificationDate: ?any,
@@ -3163,7 +3148,6 @@ export type PostFragment = {|
       id: string,
       userId: number,
       displayName: ?string,
-      username: ?string,
       isDeleted: ?boolean
     |}
   |}>,
