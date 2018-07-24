@@ -5,6 +5,7 @@ import activeHtml from 'react-active-html';
 import classNames from 'classnames';
 import jQuery from 'jquery';
 import ARange from 'annotator_range'; // eslint-disable-line
+import { withRouter } from 'react-router';
 
 import { HARVESTABLE_PHASES } from '../../../../constants';
 import { getConnectedUserId } from '../../../../utils/globalFunctions';
@@ -31,6 +32,7 @@ type Props = {
   translate: boolean,
   translationEnabled: boolean,
   isHarvesting: boolean,
+  params: RouterParams,
   handleMouseUpWhileHarvesting?: Function, // eslint-disable-line react/require-default-props
   measureTreeHeight?: Function, // eslint-disable-line react/require-default-props
   updateHarvestingTranslation: Function
@@ -154,7 +156,8 @@ export const DumbPostBody = ({
   handleMouseUpWhileHarvesting,
   measureTreeHeight,
   updateHarvestingTranslation,
-  isHarvesting
+  isHarvesting,
+  params
 }: Props) => {
   const divClassNames = 'post-body post-body--is-harvestable';
   const htmlClassNames = classNames('post-body-content', 'body', {
@@ -177,7 +180,7 @@ export const DumbPostBody = ({
           translate={translate}
           afterLoad={afterLoad}
           onTranslate={(from, into) => {
-            const isHarvestablePhase = HARVESTABLE_PHASES.includes(getDisplayedPhaseIdentifier());
+            const isHarvestablePhase = HARVESTABLE_PHASES.includes(getDisplayedPhaseIdentifier(params));
             const connectedUserIdBase64 = getConnectedUserId(true);
             if (connectedUserIdBase64 && isHarvesting && isHarvestablePhase) {
               updateHarvestingTranslation({
@@ -216,6 +219,8 @@ export const DumbPostBody = ({
   );
 };
 
-export default graphql(UpdateHarvestingTranslationPreference, {
-  name: 'updateHarvestingTranslation'
-})(DumbPostBody);
+export default withRouter(
+  graphql(UpdateHarvestingTranslationPreference, {
+    name: 'updateHarvestingTranslation'
+  })(DumbPostBody)
+);
