@@ -1,12 +1,12 @@
 // @flow
 import * as React from 'react';
-import { compose, graphql } from 'react-apollo';
-import { connect } from 'react-redux';
+import { graphql } from 'react-apollo';
 import activeHtml from 'react-active-html';
 import classNames from 'classnames';
 import jQuery from 'jquery';
 import ARange from 'annotator_range'; // eslint-disable-line
 
+import { getConnectedUserId } from '../../../../utils/globalFunctions';
 import { isSpecialURL } from '../../../../utils/urlPreview';
 import { ExtractStates } from '../../../../constants';
 import { transformLinksInHtml /* getUrls */ } from '../../../../utils/linkify';
@@ -28,7 +28,6 @@ type Props = {
   originalLocale: string,
   translate: boolean,
   translationEnabled: boolean,
-  connectedUserIdBase64: string,
   handleMouseUpWhileHarvesting?: Function, // eslint-disable-line react/require-default-props
   measureTreeHeight?: Function, // eslint-disable-line react/require-default-props
   updateHarvestingTranslation: Function
@@ -151,7 +150,6 @@ export const DumbPostBody = ({
   translationEnabled,
   handleMouseUpWhileHarvesting,
   measureTreeHeight,
-  connectedUserIdBase64,
   updateHarvestingTranslation
 }: Props) => {
   const divClassNames = 'post-body post-body--is-harvestable';
@@ -175,6 +173,8 @@ export const DumbPostBody = ({
           translate={translate}
           afterLoad={afterLoad}
           onTranslate={(from, into) => {
+            const connectedUserId = getConnectedUserId();
+            const connectedUserIdBase64 = connectedUserId ? btoa(`AgentProfile:${connectedUserId}`) : null;
             if (connectedUserIdBase64) {
               updateHarvestingTranslation({
                 variables: {
@@ -212,13 +212,6 @@ export const DumbPostBody = ({
   );
 };
 
-const mapStateToProps = state => ({
-  connectedUserIdBase64: state.context.connectedUserIdBase64
-});
-
-export default compose(
-  connect(mapStateToProps),
-  graphql(UpdateHarvestingTranslationPreference, {
-    name: 'updateHarvestingTranslation'
-  })
-)(DumbPostBody);
+export default graphql(UpdateHarvestingTranslationPreference, {
+  name: 'updateHarvestingTranslation'
+})(DumbPostBody);

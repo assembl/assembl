@@ -136,7 +136,7 @@ exports[`PostView component should render a post in view mode 1`] = `
           userId="dannietreutel"
           userName="Dannie Treutel"
         />
-        <Connect(Apollo(Component))
+        <Apollo(Component)
           body="<p>You can't index the port without programming the wireless HTTP program!</p>"
           bodyDivRef={[Function]}
           bodyMimeType="text/html"
