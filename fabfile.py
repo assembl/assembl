@@ -626,6 +626,7 @@ def build_virtualenv_python3():
         run("brew upgrade")
         run("brew install python@2")
         run("brew install python")  # This installs python3
+        run("brew install libmagic")  # needed for python-magic
         run('pip3 install virtualenv')
 
     # Don't install this on travis
