@@ -111,7 +111,7 @@ class SignupForm extends React.Component<SignupFormProps, SignupFormState> {
           <form className="signup" onSubmit={this.signupHandler}>
             {textFields &&
               textFields.map((field) => {
-                if (field.__typename === 'TextField') {
+                if (field.__typename === 'TextField' && !field.hidden) {
                   return (
                     <FormGroup key={field.id}>
                       <FormControl

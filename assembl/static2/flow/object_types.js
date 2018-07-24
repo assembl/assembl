@@ -140,6 +140,7 @@ type ConfigurableField = {
   identifier: FieldIdentifier,
   order: number,
   required: boolean,
+  hidden: boolean,
   title: string,
   options?: Array<SelectFieldOption>,
   __typename: string
