@@ -333,16 +333,16 @@ class Query(graphene.ObjectType):
         module_types = get_query(models.LandingPageModuleType, context).order_by(models.LandingPageModuleType.default_order).all()
         modules = []
         for module_type in module_types:
-            saobj = query.filter(
+            module = query.filter(
                 model.discussion_id == discussion_id
             ).join(
                 model.module_type
             ).filter(
                 models.LandingPageModuleType.identifier == module_type.identifier
-            ).first()
+            ).all()
 
-            if saobj:
-                module = saobj
+            if module:
+                modules.extend(module)
             else:
                 # create the graphene object for this module type
                 module = LandingPageModule(
@@ -355,7 +355,7 @@ class Query(graphene.ObjectType):
                     subtitle=None
                 )
 
-            modules.append(module)
+                modules.append(module)
 
         return sorted(modules, key=attrgetter('order'))
 
