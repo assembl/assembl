@@ -822,10 +822,10 @@ class User(AgentProfile):
             size, app_url, email or self.preferred_email)
 
     def display_name(self):
-        if self.name:
-            return self.name
         if self.username:
             return self.username.username
+        if self.name:
+            return self.name
         return super(User, self).display_name()
 
     @property

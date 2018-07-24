@@ -27,7 +27,7 @@ class ConfigurableFieldInterface(graphene.Interface):
     required = graphene.Boolean(description=docs.ConfigurableFieldInterface.required)
     title = graphene.String(lang=graphene.String(description=docs.Default.required_language_input), description=docs.ConfigurableFieldInterface.title)
     title_entries = graphene.List(LangStringEntry, description=docs.ConfigurableFieldInterface.title_entries)
-    hidden = graphene.Boolean(description=docs.ConfigurableFieldInterface.hidden)
+    hidden = graphene.Boolean(required=True, description=docs.ConfigurableFieldInterface.hidden)
 
     def resolve_title(self, args, context, info):
         return resolve_langstring(self.title, args.get('lang'))

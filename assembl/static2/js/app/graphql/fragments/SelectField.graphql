@@ -13,6 +13,7 @@ fragment selectField on SelectField {
   options {
     id
     order
+    hidden
     label(lang: $lang)
     labelEntries {
       ...langStringEntry
