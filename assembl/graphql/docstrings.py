@@ -134,7 +134,7 @@ class UpdateLegalContents:
 
 class VisitsAnalytics:
     __doc__ = """This object describes the analytics data gathered on the debate throughout its total lifecycle. The analytics is carried out
-    by Mamoto (formerly known as Piwik), an open-source anaytics engine."""
+    by Matomo (formerly known as Piwik), an open-source anaytics engine."""
     sum_visits_length = """The total number of hours spent on the platform by all users."""
     nb_pageviews = """The total number of page views accumulated."""
     nb_uniq_pageviews = """The total number of unique page views."""
