@@ -50,6 +50,7 @@ mutation addPostExtract(
     xpathEnd: $xpathEnd
     offsetStart: $offsetStart
     offsetEnd: $offsetEnd
+    lang: $contentLocale
   ) {
     post {
       id
