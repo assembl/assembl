@@ -79,3 +79,40 @@ def test_case_insensitive_search_on_username(
     # a search on the lowercase version should return one result
     assert test_session.query(Username).filter(
         func.lower(Username.username) == 'test.username').count()
+
+
+def test_get_all_users_who_accepted_cookies(test_session, participant1_user, participant2_user, asid2):
+    from assembl.models import User
+    all_users_who_accepted_cookies = User.get_all_users_who_accepted_cookies()
+    assert participant2_user in all_users_who_accepted_cookies
+    assert participant1_user not in all_users_who_accepted_cookies
+
+
+def test_get_all_users_who_refused_cookies(test_session, participant1_user, participant2_user, asid2):
+    from assembl.models import User
+    all_users_who_refused_cookies = User.get_all_users_who_refused_cookies()
+    assert participant2_user not in all_users_who_refused_cookies
+    assert participant1_user in all_users_who_refused_cookies
+
+
+def test_read_cookies_json(test_session, asid2):
+    user_cookies = asid2.read_cookies()
+    cookies_list = "cookie1, cookie2, cookie3"
+    assert user_cookies == cookies_list
+    user_cookies = asid2.read_cookies()
+    assert user_cookies == cookies_list
+
+
+def test_update_cookies_json(test_session, asid2):
+    user_cookies = asid2.read_cookies()
+    asid2.update_cookies("cookie4")
+    user_cookies = asid2.read_cookies()
+    assert user_cookies == "cookie1,cookie2,cookie3,cookie4"
+
+
+def test_delete_cookie(test_session, participant1_user):
+    cookie = "cookie1"
+    participant1_user.delete_cookie(cookie)
+    user_cookies = participant1_user.read_cookies_json()
+    cookies_list = "cookie2,cookie3,cookie4"
+    assert user_cookies == cookies_list

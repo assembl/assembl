@@ -202,3 +202,19 @@ def moderator_user(request, test_session, discussion):
 
     request.addfinalizer(fin)
     return u
+
+@pytest.fixture(scope="function")
+def asid2(request, test_session, discussion, participant2_user):
+    """A fixture of agent status in discussion related to participant2_user"""
+    from assembl.models import AgentStatusInDiscussion
+    accepted_cookies = ""
+    asid2 = AgentStatusInDiscussion(discussion=discussion, agent_profile=participant2_user, accepted_cookies=accepted_cookies)
+    test_session.add(asid2)
+    test_session.flush()
+
+    def fin():
+        print 'Finalizer agent_status_in_discussion for participant2_user'
+        test_session.delete(asid2)
+        test_session.flush()
+    request.addfinalizer(fin)
+    return asid2

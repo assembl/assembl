@@ -25,7 +25,8 @@ from sqlalchemy import (
     event,
     Index,
     func,
-    UniqueConstraint
+    UniqueConstraint,
+    Text
 )
 from pyramid.httpexceptions import HTTPBadRequest, HTTPUnauthorized
 from sqlalchemy.orm import (
@@ -630,6 +631,29 @@ class AgentStatusInDiscussion(DiscussionBoundBase):
     first_subscribed = Column(DateTime)
     last_unsubscribed = Column(DateTime)
     user_created_on_this_discussion = Column(Boolean, server_default='0')
+    accepted_cookies = Column(Text())  # JSON blob
+
+    @property
+    def has_accepted_cookies(self):
+        user_accepted_cookies = self.accepted_cookies
+        return True if len(user_accepted_cookies) else False
+
+    def read_cookies(self):
+        """Returns the list of accepted_cookies in a long string."""
+        return self.accepted_cookies
+
+    def update_cookies(self, cookie):
+        """
+        @param: cookies: a string to be added to the list of accepted cookies.
+        """
+        if cookie not in self.accepted_cookies:
+            self.accepted_cookies.append(cookie + ',')
+
+    def delete_cookie(self, cookie):
+        """
+        @param: cookie to be removed from the list of accepted_cookies
+        """
+        self.accepted_cookies.replace(cookie + ',', "")
 
     def get_discussion_id(self):
         return self.discussion_id or self.discussion.id
@@ -682,6 +706,7 @@ class User(AgentProfile):
     social_accounts = relationship('SocialAuthAccount')
     is_deleted = Column(Boolean(), default=False)
     is_machine = Column(Boolean(), default=False)
+    last_accepted_cgu_date = Column(DateTime)
 
     def __init__(self, **kwargs):
         if kwargs.get('password', None) is not None:
@@ -951,6 +976,23 @@ class User(AgentProfile):
             self.db.delete(lur)
         # Set the AgentStatusInDiscussion
         self.update_agent_status_unsubscribe(discussion)
+
+    @classmethod
+    def get_all_users_who_accepted_cookies(cls, session=None):
+        from assembl import models as m
+        session = session or m.AgentStatusInDiscussion.default_db()
+        agent_status = session.query(m.AgentStatusInDiscussion).all()
+        ids = [agent.profile_id for agent in agent_status if agent.has_accepted_cookies]
+        users = session.query(m.User).filter(m.User.id.in_(ids)).all()
+        return users
+
+    @classmethod
+    def get_all_users_who_refused_cookies(cls, session=None):
+        from assembl import models as m
+        session = session or cls.default_db()
+        agent_status = session.query(m.AgentStatusInDiscussion).all()
+        ids = [agent.profile_id for agent in agent_status if not agent.has_accepted_cookies]
+        return session.query(User).filter(User.id.in_(ids)).all()
 
     @classmethod
     def extra_collections(cls):

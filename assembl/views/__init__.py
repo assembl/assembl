@@ -34,6 +34,7 @@ from assembl.models.auth import (
     User,
     Locale,
 )
+from assembl.models.discussion import Discussion
 
 
 default_context = {

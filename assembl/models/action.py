@@ -77,6 +77,38 @@ class Action(TombstonableMixin, DiscussionBoundBase):
         P_READ, P_SYSADMIN, P_SYSADMIN, P_SYSADMIN, P_READ, P_READ, P_READ)
 
 
+class ActionOnDiscussion(Action):
+    """An action whose target is a discussion"""
+    __tablename__ = 'action_on_discussion'
+    id = Column(Integer, ForeignKey(Action.id, ondelete="CASCADE", onupdate='CASCADE'),
+                primary_key=True)
+    discussion_id = Column(Integer, ForeignKey('discussion.id', ondelete="CASCADE", onupdate="CASCADE"),
+                           nullable=False, index=True)
+
+    discussion = relationship(Discussion, foreign_keys=(discussion_id), backref=backref("action_on_discussion", cascade="all"))
+
+
+class AcceptSessionOnDiscussion(ActionOnDiscussion):
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'discussion:acceptsession'
+    }
+
+
+class AcceptCGUOnDiscussion(ActionOnDiscussion):
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'discussion:acceptcgu'
+    }
+
+
+class AcceptTrackingOnDiscussion(ActionOnDiscussion):
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'discussion:accepttracking'
+    }
+
+
 class ActionOnPost(Action):
     """
     An action whose target is a post. (Mixin)
