@@ -138,3 +138,19 @@ def test_graphql_vote_results_number_gauge_average(graphql_participant1_request,
     )
     assert res.errors is None
     assert res.data['voteSession']['proposals'][0]['modules'][0]['averageResult'] == 40.0
+
+
+def test_graphql_vote_results_gauges_zero_votes(graphql_participant1_request, vote_session, vote_proposal, gauge_vote_specification_associated_to_proposal, number_gauge_vote_specification_associated_to_proposal, graphql_registry):
+    res = schema.execute(
+        graphql_registry['VoteSession'],
+        context_value=graphql_participant1_request,
+        variable_values={
+            "discussionPhaseId": vote_session.discussion_phase_id,
+            "lang": "en"
+        }
+    )
+    assert res.errors is None
+    assert res.data['voteSession']['proposals'][0]['voteResults']['numParticipants'] == 0
+    assert res.data['voteSession']['proposals'][0]['modules'][0]['averageLabel'] is None
+    assert res.data['voteSession']['proposals'][0]['modules'][0]['averageResult'] is None
+    assert res.data['voteSession']['proposals'][0]['modules'][0]['averageResult'] is None

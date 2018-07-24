@@ -70,7 +70,8 @@ const VotesInProgress = ({ modules, numParticipants }: Props) => {
       {textGauges.map((gauge) => {
         const colSize = columnSizes[index];
         index += 1;
-        const title = gauge.averageLabel || '';
+        const title =
+          gauge.averageLabel === null ? I18n.t('debate.voteSession.participantsCount', { count: 0 }) : gauge.averageLabel || '';
         return (
           <Col xs={12} md={colSize} key={gauge.id}>
             <GaugeVotesResults title={title} instructions={gauge.instructions} />
@@ -80,7 +81,10 @@ const VotesInProgress = ({ modules, numParticipants }: Props) => {
       {numberGauges.map((gauge) => {
         const colSize = columnSizes[index];
         index += 1;
-        const title = I18n.t('debate.voteSession.valueWithUnit', { num: gauge.averageResult, unit: gauge.unit || '' });
+        const title =
+          gauge.averageResult === null
+            ? I18n.t('debate.voteSession.participantsCount', { count: 0 })
+            : I18n.t('debate.voteSession.valueWithUnit', { num: gauge.averageResult, unit: gauge.unit || '' });
         return (
           <Col xs={12} md={colSize} key={gauge.id}>
             <GaugeVotesResults title={title} instructions={gauge.instructions} />

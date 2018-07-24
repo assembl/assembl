@@ -326,7 +326,7 @@ def global_vote_results_csv(request):
                     vote_cls = spec.get_vote_class()
                     avg_choice = get_avg_choice(spec)
                     if not avg_choice:
-                        label_avg = avg
+                        label_avg = '-'
                     else:
                         label_avg = avg_choice.label.best_lang(user_prefs).value.encode('utf-8')
                     row.append(label_avg)

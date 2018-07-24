@@ -311,7 +311,10 @@ def get_avg_choice(vote_spec):
         tombstone_date=None,
         idea_id=vote_spec.criterion_idea_id).first()
     # when there is no votes, query.first() equals (None,)
-    avg = voting_avg[0] or 0
+    avg = voting_avg[0]
+    if avg is None:
+        return None
+
     return vote_spec.get_closest_choice(avg)
 
 
@@ -325,7 +328,7 @@ class GaugeVoteSpecification(SecureObjectType, SQLAlchemyObjectType):
 
     choices = graphene.List(GaugeChoiceSpecification, description=docs.GaugeVoteSpecification.choices)
     average_label = graphene.String(lang=graphene.String(), description=docs.GaugeVoteSpecification.average_label)
-    average_result = graphene.Float(required=True, description=docs.GaugeVoteSpecification.average_result)
+    average_result = graphene.Float(description=docs.GaugeVoteSpecification.average_result)
 
     def resolve_average_label(self, args, context, info):
         avg_choice = get_avg_choice(self)
@@ -337,7 +340,7 @@ class GaugeVoteSpecification(SecureObjectType, SQLAlchemyObjectType):
     def resolve_average_result(self, args, context, info):
         avg_choice = get_avg_choice(self)
         if avg_choice is None:
-            return 0
+            return None
 
         return avg_choice.value
 
@@ -353,7 +356,7 @@ class NumberGaugeVoteSpecification(SecureObjectType, SQLAlchemyObjectType):
         interfaces = (Node, VoteSpecificationInterface)
         only_fields = ('id', 'minimum', 'maximum', 'nb_ticks', 'unit')
 
-    average_result = graphene.Float(required=True, description=docs.NumberGaugeVoteSpecification.average_result)
+    average_result = graphene.Float(description=docs.NumberGaugeVoteSpecification.average_result)
 
     def resolve_average_result(self, args, context, info):
         vote_cls = self.get_vote_class()
@@ -362,7 +365,7 @@ class NumberGaugeVoteSpecification(SecureObjectType, SQLAlchemyObjectType):
             tombstone_date=None,
             idea_id=self.criterion_idea_id).first()
         # when there is no votes, query.first() equals (None,)
-        avg = voting_avg[0] or 0
+        avg = voting_avg[0]
         return avg
 
 
