@@ -223,6 +223,7 @@ class PostView extends React.PureComponent<Props, State> {
                 translationEnabled={debateData.translationEnabled}
                 bodyDivRef={this.recomputeTreeHeightOnImagesLoad}
                 measureTreeHeight={this.props.measureTreeHeight}
+                isHarvesting={isHarvesting}
               />
 
               <Attachments attachments={attachments} />

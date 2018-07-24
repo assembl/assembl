@@ -6,7 +6,9 @@ import classNames from 'classnames';
 import jQuery from 'jquery';
 import ARange from 'annotator_range'; // eslint-disable-line
 
+import { HARVESTABLE_PHASES } from '../../../../constants';
 import { getConnectedUserId } from '../../../../utils/globalFunctions';
+import { getDisplayedPhaseIdentifier } from '../../../../utils/timeline';
 import { isSpecialURL } from '../../../../utils/urlPreview';
 import { ExtractStates } from '../../../../constants';
 import { transformLinksInHtml /* getUrls */ } from '../../../../utils/linkify';
@@ -28,6 +30,7 @@ type Props = {
   originalLocale: string,
   translate: boolean,
   translationEnabled: boolean,
+  isHarvesting: boolean,
   handleMouseUpWhileHarvesting?: Function, // eslint-disable-line react/require-default-props
   measureTreeHeight?: Function, // eslint-disable-line react/require-default-props
   updateHarvestingTranslation: Function
@@ -150,7 +153,8 @@ export const DumbPostBody = ({
   translationEnabled,
   handleMouseUpWhileHarvesting,
   measureTreeHeight,
-  updateHarvestingTranslation
+  updateHarvestingTranslation,
+  isHarvesting
 }: Props) => {
   const divClassNames = 'post-body post-body--is-harvestable';
   const htmlClassNames = classNames('post-body-content', 'body', {
@@ -173,9 +177,9 @@ export const DumbPostBody = ({
           translate={translate}
           afterLoad={afterLoad}
           onTranslate={(from, into) => {
-            const connectedUserId = getConnectedUserId();
-            const connectedUserIdBase64 = connectedUserId ? btoa(`AgentProfile:${connectedUserId}`) : null;
-            if (connectedUserIdBase64) {
+            const isHarvestablePhase = HARVESTABLE_PHASES.includes(getDisplayedPhaseIdentifier());
+            const connectedUserIdBase64 = getConnectedUserId(true);
+            if (connectedUserIdBase64 && isHarvesting && isHarvestablePhase) {
               updateHarvestingTranslation({
                 variables: {
                   id: connectedUserIdBase64,

@@ -145,6 +145,7 @@ exports[`PostView component should render a post in view mode 1`] = `
           extracts={Array []}
           handleMouseUpWhileHarvesting={[Function]}
           id="XYZ333"
+          isHarvesting={false}
           lang="fr"
           measureTreeHeight={undefined}
           originalLocale="fr"

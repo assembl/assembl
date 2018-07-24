@@ -1,3 +1,5 @@
+import { encodeUserIdBase64 } from '../utils/globalFunctions';
+
 const assemblVersionNode = document.getElementById('assemblVersion');
 const assemblVersion = assemblVersionNode ? assemblVersionNode.value : null;
 const initialState = {
@@ -18,7 +20,7 @@ const ContextReducer = (state = initialState, action) => {
       rootPath: action.rootPath,
       debateId: action.debateId,
       connectedUserId: action.connectedUserId,
-      connectedUserIdBase64: action.connectedUserId ? btoa(`AgentProfile:${action.connectedUserId}`) : null,
+      connectedUserIdBase64: encodeUserIdBase64(action.connectedUserId),
       connectedUserName: action.connectedUserName
     };
   case 'TOGGLE_HARVESTING':

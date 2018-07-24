@@ -1,6 +1,7 @@
 // @flow
 
 import { isDateExpired, getNumberOfDays, calculatePercentage } from './globalFunctions';
+import { PHASES } from '../constants';
 
 type Phase = {
   id: string,
@@ -187,4 +188,12 @@ export const getPhaseId = (_timeline: Timeline, identifier: string) => {
   const phase = timeline.find(p => p.identifier === identifier);
   const phaseId = phase && phase.id;
   return phaseId;
+};
+
+export const getDisplayedPhaseIdentifier = () => {
+  const phaseIdentifier = window.location.pathname.split('/')[3];
+  if (Object.values(PHASES).includes(phaseIdentifier)) {
+    return phaseIdentifier;
+  }
+  return null;
 };

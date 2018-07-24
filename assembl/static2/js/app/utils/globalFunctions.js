@@ -17,13 +17,15 @@ export const getDiscussionId = () => getInputValue('discussion-id');
 
 export const getDiscussionSlug = () => getInputValue('discussion-slug');
 
+export const encodeUserIdBase64 = (userId: string | null) => (userId ? btoa(`AgentProfile:${userId}`) : null);
+
 // cache userId to avoid accessing the dom at each permission check
 let userId;
-export const getConnectedUserId = () => {
+export const getConnectedUserId = (base64: boolean = false) => {
   if (userId === undefined) {
     userId = getInputValue('user-id');
   }
-  return userId;
+  return base64 ? encodeUserIdBase64(userId) : userId;
 };
 
 export const getConnectedUserName = () => getInputValue('user-displayname');

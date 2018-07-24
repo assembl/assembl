@@ -40,7 +40,8 @@ type Props = {
   originalLocale: string,
   questionId: string,
   screenWidth: number,
-  themeId: string
+  themeId: string,
+  isHarvesting: boolean
 };
 
 class Post extends React.Component<Props> {
@@ -152,7 +153,7 @@ class Post extends React.Component<Props> {
       return null;
     }
 
-    const { contentLocale, lang, screenWidth, originalLocale, questionId, themeId } = this.props;
+    const { contentLocale, lang, screenWidth, originalLocale, questionId, themeId, isHarvesting } = this.props;
     const { debateData } = this.props.debate;
     const translate = contentLocale !== originalLocale;
 
@@ -242,6 +243,7 @@ class Post extends React.Component<Props> {
             originalLocale={originalLocale}
             body={body}
             bodyMimeType={post.bodyMimeType}
+            isHarvesting={isHarvesting}
           />
           <div className="post-footer">
             <div className="sentiments">
@@ -315,7 +317,8 @@ const mapStateToProps = (state, { id }) => ({
   debate: state.debate,
   timeline: state.timeline,
   contentLocale: state.contentLocale.getIn([id, 'contentLocale']),
-  lang: state.i18n.locale
+  lang: state.i18n.locale,
+  isHarvesting: state.context.isHarvesting
 });
 
 export default compose(
