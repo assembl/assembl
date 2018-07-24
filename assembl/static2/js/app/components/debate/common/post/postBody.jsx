@@ -28,7 +28,7 @@ type Props = {
   originalLocale: string,
   translate: boolean,
   translationEnabled: boolean,
-  connectedUserId: string,
+  connectedUserIdBase64: string,
   handleMouseUpWhileHarvesting?: Function, // eslint-disable-line react/require-default-props
   measureTreeHeight?: Function, // eslint-disable-line react/require-default-props
   updateHarvestingTranslation: Function
@@ -151,7 +151,7 @@ export const DumbPostBody = ({
   translationEnabled,
   handleMouseUpWhileHarvesting,
   measureTreeHeight,
-  connectedUserId,
+  connectedUserIdBase64,
   updateHarvestingTranslation
 }: Props) => {
   const divClassNames = 'post-body post-body--is-harvestable';
@@ -175,10 +175,10 @@ export const DumbPostBody = ({
           translate={translate}
           afterLoad={afterLoad}
           onTranslate={(from, into) => {
-            if (connectedUserId) {
+            if (connectedUserIdBase64) {
               updateHarvestingTranslation({
                 variables: {
-                  id: connectedUserId,
+                  id: connectedUserIdBase64,
                   translation: {
                     localeFrom: from,
                     localeInto: into
@@ -213,7 +213,7 @@ export const DumbPostBody = ({
 };
 
 const mapStateToProps = state => ({
-  connectedUserId: btoa(`AgentProfile:${state.context.connectedUserId}`)
+  connectedUserIdBase64: state.context.connectedUserIdBase64
 });
 
 export default compose(

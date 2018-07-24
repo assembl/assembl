@@ -208,7 +208,7 @@ const mapStateToProps = ({ context, debate, i18n }, ownProps) => {
   return {
     slug: debate.debateData.slug,
     connectedUserId: context.connectedUserId,
-    id: btoa(`AgentProfile:${userId}`),
+    id: userId ? btoa(`AgentProfile:${userId}`) : null,
     lang: i18n.locale
   };
 };

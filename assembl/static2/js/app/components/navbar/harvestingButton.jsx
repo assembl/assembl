@@ -59,9 +59,9 @@ export class DumbHarvestingButton extends React.PureComponent<HarvestingButtonPr
   }
 }
 
-const mapStateToProps = state => ({
-  isActive: state.context.isHarvesting,
-  id: btoa(`AgentProfile:${state.context.connectedUserId}`)
+const mapStateToProps = ({ context: { isHarvesting, connectedUserIdBase64 } }) => ({
+  isActive: isHarvesting,
+  id: connectedUserIdBase64
 });
 
 const mapDispatchToProps = dispatch => ({

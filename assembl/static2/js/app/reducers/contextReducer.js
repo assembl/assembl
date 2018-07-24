@@ -1,6 +1,14 @@
 const assemblVersionNode = document.getElementById('assemblVersion');
 const assemblVersion = assemblVersionNode ? assemblVersionNode.value : null;
-const initialState = { assemblVersion: assemblVersion, isHarvesting: false };
+const initialState = {
+  assemblVersion: assemblVersion,
+  rootPath: null,
+  debateId: null,
+  connectedUserId: null,
+  connectedUserIdBase64: null,
+  connectedUserName: null,
+  isHarvesting: false
+};
 
 const ContextReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -10,6 +18,7 @@ const ContextReducer = (state = initialState, action) => {
       rootPath: action.rootPath,
       debateId: action.debateId,
       connectedUserId: action.connectedUserId,
+      connectedUserIdBase64: action.connectedUserId ? btoa(`AgentProfile:${action.connectedUserId}`) : null,
       connectedUserName: action.connectedUserName
     };
   case 'TOGGLE_HARVESTING':

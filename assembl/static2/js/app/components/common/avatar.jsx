@@ -74,7 +74,7 @@ class ProfileIcon extends React.Component {
 const mapStateToProps = ({ context, debate }) => ({
   slug: debate.debateData.slug,
   connectedUserId: context.connectedUserId,
-  id: btoa(`AgentProfile:${context.connectedUserId}`)
+  id: context.connectedUserIdBase64
 });
 
 export default compose(
