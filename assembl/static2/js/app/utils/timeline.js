@@ -191,9 +191,7 @@ export const getPhaseId = (_timeline: Timeline, identifier: string) => {
 };
 
 export const getDisplayedPhaseIdentifier = () => {
+  // TODO an other solution
   const phaseIdentifier = window.location.pathname.split('/')[3];
-  if (Object.values(PHASES).includes(phaseIdentifier)) {
-    return phaseIdentifier;
-  }
-  return null;
+  return Object.values(PHASES).includes(phaseIdentifier) ? phaseIdentifier : null;
 };
