@@ -45,6 +45,7 @@ const createVariablesForTextFieldMutation = textField => ({
   id: textField.id,
   order: textField.order,
   required: textField.required,
+  hidden: textField.hidden,
   titleEntries: textField.titleEntries,
   options: textField.options
 });

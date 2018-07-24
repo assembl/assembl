@@ -88,6 +88,7 @@ class CreateTextField(graphene.Mutation):
         title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.CreateTextField.title_entries)
         order = graphene.Float(description=docs.CreateTextField.order)
         required = graphene.Boolean(description=docs.CreateTextField.required)
+        hidden = graphene.Boolean(description=docs.CreateTextField.required)
         options = graphene.List(SelectFieldOptionInput, required=False, description=docs.CreateTextField.options)
 
     field = graphene.Field(lambda: ConfigurableFieldUnion)
@@ -141,6 +142,7 @@ class UpdateTextField(graphene.Mutation):
         title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.UpdateTextField.title_entries)
         order = graphene.Float(required=True, description=docs.UpdateTextField.order)
         required = graphene.Boolean(required=True, description=docs.UpdateTextField.required)
+        hidden = graphene.Boolean(required=True, description=docs.UpdateTextField.hidden)
         options = graphene.List(SelectFieldOptionInput, required=False, description=docs.UpdateTextField.options)
 
     field = graphene.Field(lambda: ConfigurableFieldUnion)
@@ -167,6 +169,7 @@ class UpdateTextField(graphene.Mutation):
             update_langstring_from_input_entries(field, 'title', title_entries)
             field.order = args['order']
             field.required = args['required']
+            field.hidden = args['hidden']
 
             if options is not None:
                 existing_options = {

@@ -22,7 +22,7 @@ def upgrade(pyramid_env):
     with context.begin_transaction():
         op.add_column(
         "configurable_field",
-        sa.Column("hidden", sa.Boolean, default=False)
+        sa.Column("hidden", sa.Boolean, server_default='0')
         )
 
 
