@@ -7,11 +7,12 @@ from .utils import abort_transaction_on_exception
 from assembl.auth.util import get_permissions
 from assembl import models
 from assembl.auth import Everyone, CrudPermissions
+import assembl.graphql.docstrings as docs
 
 
 class TranslationFields(graphene.AbstractType):
-    locale_from = graphene.String(required=False)
-    locale_into = graphene.String(required=True)
+    locale_from = graphene.String(required=True, description=docs.Translation.locale_from)
+    locale_into = graphene.String(required=True, description=docs.Translation.locale_into)
 
 
 class Translation(graphene.ObjectType, TranslationFields):
@@ -23,7 +24,8 @@ class TranslationInput(graphene.InputObjectType, TranslationFields):
 
 
 class Preferences(graphene.ObjectType):
-    harvesting_translation = graphene.Field(Translation)
+    harvesting_translation = graphene.Field(
+        Translation, description=docs.Preferences.harvesting_translation)
 
     def resolve_harvesting_translation(self, args, context, info):
         translation = self.get('harvesting_translation', None)
@@ -34,10 +36,13 @@ class Preferences(graphene.ObjectType):
 class UpdateHarvestingTranslationPreference(graphene.Mutation):
 
     class Input:
-        id = graphene.ID(required=True)
-        translation = TranslationInput(required=True)
+        id = graphene.ID(
+            required=True, description=docs.UpdateHarvestingTranslationPreference.id)
+        translation = TranslationInput(
+            required=True, description=docs.UpdateHarvestingTranslationPreference.translation)
 
-    preferences = graphene.Field(Preferences)
+    preferences = graphene.Field(
+        Preferences, description=docs.UpdateHarvestingTranslationPreference.preferences)
 
     @staticmethod
     @abort_transaction_on_exception

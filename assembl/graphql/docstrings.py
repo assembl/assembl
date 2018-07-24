@@ -678,8 +678,22 @@ class DeleteDiscussionPhase:
     id = Default.node_id % ("DiscussionPhase")
 
 
+class Translation:
+    __doc__ = "A translation from a locale into an other locale."
+    locale_from = "The source locale of the translation."
+    locale_into = "The target locale of the translation."
+
+
+class Preferences:
+    __doc__ = "The user preferences for a discussion"
+    harvesting_translation = "The harvesting Translation preference."
+
+
 class UpdateHarvestingTranslationPreference:
     __doc__ = "A mutation to save harversting translation preferences"
+    id = Default.object_id % ("User",)
+    translation = Translation.__doc__
+    preferences = Preferences.__doc__
 
 
 class AgentProfile:
