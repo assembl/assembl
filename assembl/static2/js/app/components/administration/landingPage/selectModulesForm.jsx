@@ -7,13 +7,13 @@ export const DumbSelectModulesForm = ({ modulesById, moduleTypes, toggleModule }
   <div className="select-modules-form">
     <FormGroup>
       {moduleTypes.map((moduleType) => {
-        const module = modulesById.get(moduleType.id);
+        const module = modulesById.get(moduleType.moduleId);
         const identifierLowerCase = moduleType.identifier.toLowerCase();
         return (
           <Checkbox
-            key={moduleType.id}
+            key={moduleType.moduleId}
             checked={(module && module.get('enabled')) || moduleType.required}
-            onChange={() => (!moduleType.required ? toggleModule(moduleType.id) : null)}
+            onChange={() => (!moduleType.required ? toggleModule(moduleType.moduleId) : null)}
           >
             <Helper
               classname="margin-left-20"

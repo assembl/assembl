@@ -42,7 +42,7 @@ type ModulesInOrderReducer = (ModulesInOrderState, ReduxAction<Action>) => Modul
 export const modulesInOrder: ModulesInOrderReducer = (state = List(), action) => {
   switch (action.type) {
   case UPDATE_LANDING_PAGE_MODULES:
-    return List(action.modules.map(module => module.moduleType.id));
+    return List(action.modules.map(module => module.id));
   case CREATE_LANDING_PAGE_MODULE:
     // insert at the end (just before FOOTER module)
     return state.insert(state.size - 1, action.id);
@@ -84,7 +84,7 @@ export const enabledModulesInOrder: EnabledModulesInOrderReducer = (state = List
     return state.insert(state.size - 1, id);
   }
   case UPDATE_LANDING_PAGE_MODULES:
-    return List(action.modules.filter(module => module.enabled).map(module => module.moduleType.id));
+    return List(action.modules.filter(module => module.enabled).map(module => module.id));
   default:
     return state;
   }
@@ -132,7 +132,7 @@ export const modulesById: ModulesByIdReducer = (state = initialState, action) =>
   case UPDATE_LANDING_PAGE_MODULES: {
     let newState = Map();
     action.modules.forEach((module) => {
-      newState = newState.set(module.moduleType.id, fromJS(module));
+      newState = newState.set(module.id, fromJS(module));
     });
     return newState;
   }

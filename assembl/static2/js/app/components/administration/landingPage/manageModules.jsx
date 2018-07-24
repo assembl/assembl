@@ -70,7 +70,8 @@ const mapStateToProps = (state) => {
     modulesById: modulesById,
     moduleTypes: modulesInOrder
       .map((id) => {
-        const module = modulesById.get(id);
+        let module = modulesById.get(id);
+        module = module.setIn(['moduleType', 'moduleId'], id);
         return module.get('moduleType');
       })
       .toJS()

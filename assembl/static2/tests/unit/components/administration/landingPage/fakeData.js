@@ -2,8 +2,9 @@ import { List, Map } from 'immutable';
 
 const abc123 = Map({
   enabled: true,
+  id: 'abc123',
   moduleType: Map({
-    id: 'abc123',
+    moduleId: 'abc123',
     editableOrder: false,
     identifier: 'HEADER',
     required: true,
@@ -14,8 +15,9 @@ const abc123 = Map({
 
 const def456 = Map({
   enabled: false,
+  id: 'def456',
   moduleType: Map({
-    id: 'def456',
+    moduleId: 'def456',
     editableOrder: true,
     identifier: 'INTRODUCTION',
     title: 'Introduction'
@@ -25,8 +27,9 @@ const def456 = Map({
 
 const ghi789 = Map({
   enabled: true,
+  id: 'ghi789',
   moduleType: Map({
-    id: 'ghi789',
+    moduleId: 'ghi789',
     editableOrder: true,
     identifier: 'VIDEO',
     title: 'Video'
@@ -36,8 +39,9 @@ const ghi789 = Map({
 
 const jkl865 = Map({
   enabled: true,
+  id: 'jkl865',
   moduleType: Map({
-    id: 'jkl865',
+    moduleId: 'jkl865',
     editableOrder: false,
     identifier: 'FOOTER',
     required: true,
@@ -55,25 +59,25 @@ export const modulesById = Map({
 
 export const moduleTypes = [
   {
-    id: 'abc123',
+    moduleId: 'abc123',
     identifier: 'HEADER',
     title: 'Header',
     required: true
   },
   {
-    id: 'def456',
+    moduleId: 'def456',
     identifier: 'INTRODUCTION',
     title: 'Introduction',
     required: false
   },
   {
-    id: 'ghi789',
+    moduleId: 'ghi789',
     identifier: 'VIDEO',
     title: 'Video',
     required: false
   },
   {
-    id: 'jkl865',
+    moduleId: 'jkl865',
     identifier: 'FOOTER',
     title: 'Footer',
     required: true

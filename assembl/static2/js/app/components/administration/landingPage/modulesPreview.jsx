@@ -16,7 +16,7 @@ const ModulesPreview = ({ modules, moveModuleDown, moveModuleUp }: Props) => {
   }
 
   const renderModuleBlock = (module) => {
-    const id = module.getIn(['moduleType', 'id']);
+    const id = module.get('id');
     const moduleTitle = module.getIn(['moduleType', 'title']);
     return (
       <ModuleBlock
