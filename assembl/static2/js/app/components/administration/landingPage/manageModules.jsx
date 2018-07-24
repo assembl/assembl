@@ -24,7 +24,7 @@ type Props = {
   moveModuleDown: Function,
   moveModuleUp: Function,
   toggleModule: Function,
-  createIntroductionModule: Function
+  createModule: Function
 };
 
 export const DumbManageModules = ({
@@ -35,7 +35,7 @@ export const DumbManageModules = ({
   moveModuleDown,
   moveModuleUp,
   toggleModule,
-  createIntroductionModule
+  createModule
 }: Props) => (
   <div className="admin-box">
     <SectionTitle
@@ -50,7 +50,7 @@ export const DumbManageModules = ({
         <div className="column-left">
           <SelectModulesForm lang={locale} moduleTypes={moduleTypes} modulesById={modulesById} toggleModule={toggleModule} />
           <div className="margin-xl">
-            <Button className="button-submit button-dark" onClick={() => createIntroductionModule(enabledModules.size - 2)}>
+            <Button className="button-submit button-dark" onClick={() => createModule(enabledModules.size - 2)}>
               <Translate value="administration.landingPage.manageModules.textAndMultimediaBtn" />
             </Button>
           </div>
@@ -82,9 +82,9 @@ const mapDispatchToProps = dispatch => ({
   moveModuleDown: id => dispatch(moveLandingPageModuleDown(id)),
   moveModuleUp: id => dispatch(moveLandingPageModuleUp(id)),
   toggleModule: id => dispatch(toggleLandingPageModule(id)),
-  createIntroductionModule: (nextOrder) => {
+  createModule: (nextOrder, identifier = 'INTRODUCTION') => {
     const newId = createRandomId();
-    return dispatch(createLandingPageModules(newId, nextOrder));
+    return dispatch(createLandingPageModules(newId, identifier, nextOrder));
   }
 });
 

@@ -467,6 +467,7 @@ export type UpdateLandingPageModules = {
 
 export type CreateLandingPageModules = {
   id: string,
+  identifier: string,
   order: number,
   type: typeof CREATE_LANDING_PAGE_MODULE
 };

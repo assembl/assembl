@@ -97,7 +97,6 @@ const defaultResource = Map({
   existsInDatabase: false,
   moduleType: Map({
     editableOrder: true,
-    identifier: 'INTRODUCTION',
     required: false
   })
 });
@@ -108,7 +107,13 @@ type ModulesByIdReducer = (ModulesByIdState, ReduxAction<Action>) => ModulesById
 export const modulesById: ModulesByIdReducer = (state = initialState, action) => {
   switch (action.type) {
   case CREATE_LANDING_PAGE_MODULE:
-    return state.set(action.id, defaultResource.setIn(['moduleType', 'id'], action.id).set('order', action.order));
+    return state.set(
+      action.id,
+      defaultResource
+        .setIn(['moduleType', 'id'], action.id)
+        .setIn(['moduleType', 'identifier'], action.identifier)
+        .set('order', action.order)
+    );
   case TOGGLE_LANDING_PAGE_MODULE: {
     const moduleType = action.id;
     return state.updateIn([moduleType, 'enabled'], v => !v).setIn([moduleType, '_hasChanged'], true);
