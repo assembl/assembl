@@ -111,8 +111,13 @@
   }
 
   .admin-menu-container {
-    height: 350px;
-    position: relative;
+    padding: 0 15px;
+    max-height: 500px;
+    max-width: 320px;
+    position: fixed;
+    overflow-y: auto;
+    z-index: 999;
+    background-color: $page-bkg-grey;
   }
 
   .no-box-shadow {
@@ -130,7 +135,6 @@
 
   .admin-menu {
     padding: 0;
-    position: fixed;
     list-style-type: none;
 
     li {
