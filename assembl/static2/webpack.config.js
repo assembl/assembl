@@ -20,13 +20,13 @@ function theme_entries() {
         name = 'theme_' + parts[parts.length - 2] + '_web';
         entries[name] = path;
     }
-    paths = glob.sync('./css/themes/**/*_notifications.scss');
-    for (i = 0; i < paths.length; i++) {
-        path = paths[i];
-        parts = path.split('/');
-        name = 'theme_' + parts[parts.length - 2] + '_notifications';
-        entries[name] = path;
-    }
+//    paths = glob.sync('./css/themes/**/*_notifications.scss');
+//    for (i = 0; i < paths.length; i++) {
+//        path = paths[i];
+//        parts = path.split('/');
+//        name = 'theme_' + parts[parts.length - 2] + '_notifications';
+//        entries[name] = path;
+//    }
     return entries;
 }
 
