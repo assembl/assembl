@@ -350,7 +350,9 @@ class Query(graphene.ObjectType):
                     id=randint(-100000, 0),
                     enabled=module_type.required,
                     module_type=module_type,
-                    order=module_type.default_order
+                    order=module_type.default_order,
+                    title=None,
+                    subtitle=None
                 )
 
             modules.append(module)
