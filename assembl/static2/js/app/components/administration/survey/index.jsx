@@ -27,7 +27,7 @@ const loading = <Loader />;
 
 const DumbSurveyAdminForm = ({ client, currentStep, debateId, editLocale, locale }: Props) => (
   <LoadSaveReinitializeForm
-    load={() => load(client)}
+    load={(fetchPolicy: FetchPolicy) => load(client, fetchPolicy)}
     loading={loading}
     postLoadFormat={postLoadFormat}
     createMutationsPromises={createMutationsPromises(client)}

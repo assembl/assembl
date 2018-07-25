@@ -18,7 +18,7 @@ type TOriginalValues = {| [string]: any |};
 type TInitialValues = { [string]: any };
 
 type Props = {
-  load: () => Promise<TOriginalValues>,
+  load: (fetchPolicy: FetchPolicy) => Promise<TOriginalValues>,
   loading: React.Node,
   postLoadFormat: ?(TOriginalValues) => TInitialValues,
   createMutationsPromises: (TInitialValues, TInitialValues) => MutationsPromises,
@@ -42,10 +42,10 @@ export default class LoadSaveReinitializeForm extends React.Component<Props, Sta
     this.load();
   }
 
-  load = async () => {
+  load = async (fetchPolicy: FetchPolicy = 'cache-first') => {
     const { load, postLoadFormat } = this.props;
     this.setState({ isLoading: true });
-    const originalValues = await load();
+    const originalValues = await load(fetchPolicy);
     const initialValues = postLoadFormat ? postLoadFormat(originalValues) : originalValues;
     this.setState({
       isLoading: false,
@@ -59,10 +59,8 @@ export default class LoadSaveReinitializeForm extends React.Component<Props, Sta
       const mutationPromises = createMutationsPromises(values, this.state.initialValues);
       const status = await save(mutationPromises);
       if (status === 'OK') {
-        // we trust the server, data should be in sync
-        this.setState({
-          initialValues: values
-        });
+        // we really need to do a refetch to have the correct new ids in values
+        await this.load('network-only');
       }
     }
   };

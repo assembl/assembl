@@ -8,10 +8,11 @@ import type { FileValue } from '../../form/types.flow';
 import { convertEntriesToRawContentState } from '../../../utils/draftjs';
 import type { MediaValue, SurveyAdminValues } from './types.flow';
 
-export const load = async (client: ApolloClient) => {
+export const load = async (client: ApolloClient, fetchPolicy: FetchPolicy) => {
   const { data } = await client.query({
     query: ThematicsQuery,
-    variables: { identifier: 'survey' }
+    variables: { identifier: 'survey' },
+    fetchPolicy: fetchPolicy
   });
   return data;
 };
