@@ -136,3 +136,6 @@ celerybeat.pid
 doc/er_diagram.svg
 local.ini.*
 /pyramid.log
+
+#vcode
+.vscode
