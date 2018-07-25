@@ -36,7 +36,7 @@ var general_entries = {
 };
 
 module.exports = {
-    devtool: '#cheap-module-source-map',  // http://webpack.github.io/docs/configuration.html#devtool
+    devtool: '#source-map', // https://webpack.js.org/configuration/devtool/
     entry: _.extend(theme_entries(), general_entries),
     output: {
         path: path.join(__dirname, 'build'),
