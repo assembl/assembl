@@ -3,3 +3,4 @@ assembl/static2/js/build/**
 assembl/static/js/build/**
 assembl/static/js/bower/**
 assembl/static/js/lib/**
+assembl/static2/graphql-documentation
