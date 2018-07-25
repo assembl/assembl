@@ -184,7 +184,8 @@ const Translations = {
       incorrectPasswordLogin:
         "Le mot de passe que vous avez entré ne correspond pas avec l’utilisateur saisi. Veuillez réessayer.",
       newPassword: "Nouveau mot de passe",
-      newPassword2: "Ré-entrez le nouveau mot de passe"
+      newPassword2: "Ré-entrez le nouveau mot de passe",
+      oldPasswordWarning: "Une remarque : le nouveau mot de passe doit être différent des 5 derniers mots de passe."
     },
     changePassword: {
       panelTitle: "Bienvenue dans la page changement de mot de passe d'Assembl"
@@ -931,7 +932,8 @@ const Translations = {
       emailNotFound: "The email you have entered was not found. Please try again.",
       incorrectPasswordLogin: "The password you have entered does not match with the entered user. Please try again.",
       newPassword: "New password",
-      newPassword2: "Re-enter new password"
+      newPassword2: "Re-enter new password",
+      oldPasswordWarning: "Note: The new password must be different than the last 5 passwords."
     },
     changePassword: {
       panelTitle: "Welcome to Assembl forgot password page"

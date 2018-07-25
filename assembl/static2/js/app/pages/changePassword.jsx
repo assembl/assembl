@@ -70,6 +70,9 @@ class ChangePassword extends React.Component {
           </div>
           <div className="box">
             <form>
+              <div className="warning-label">
+                <span className="warning"><Translate value="login.oldPasswordWarning" /></span>
+              </div>
               <FormGroup className="margin-m">
                 <FormControl
                   type="password"

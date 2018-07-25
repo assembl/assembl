@@ -16,6 +16,12 @@
       text-align: left;
       width: 100%;
     }
+
+    .warning {
+      font-size: $font-size-xs;
+      text-align: left;
+      color: $error;
+    }
   }
 
   .border-left {

@@ -19,6 +19,16 @@
   }
 }
 
+.warning-label {
+  margin: auto;
+  padding-left: 10px;
+
+  &.warning {
+    border-color: $orange !important;
+    border-width: 2px !important;
+  }
+}
+
 @media screen and (max-width: 420px) {
   .login-grid {
     margin: 0 0 15px;
