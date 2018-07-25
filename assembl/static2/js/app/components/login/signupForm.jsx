@@ -125,7 +125,7 @@ class SignupForm extends React.Component<SignupFormProps, SignupFormState> {
                   );
                 }
 
-                if (field.__typename === 'SelectField' && field.options) {
+                if (field.__typename === 'SelectField' && field.options && !field.hidden) {
                   return (
                     <FormControlWithLabel
                       componentClass="select"

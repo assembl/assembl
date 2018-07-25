@@ -10,10 +10,10 @@ fragment selectField on SelectField {
   title(lang: $lang)
   order
   required
+  hidden
   options {
     id
     order
-    hidden
     label(lang: $lang)
     labelEntries {
       ...langStringEntry
