@@ -110,9 +110,10 @@ export const modulesById: ModulesByIdReducer = (state = initialState, action) =>
     return state.set(
       action.id,
       defaultResource
-        .setIn(['moduleType', 'id'], action.id)
+        .setIn(['moduleType', 'moduleId'], action.id)
         .setIn(['moduleType', 'identifier'], action.identifier)
         .set('order', action.order)
+        .set('id', action.id)
     );
   case TOGGLE_LANDING_PAGE_MODULE: {
     const moduleType = action.id;
@@ -121,7 +122,7 @@ export const modulesById: ModulesByIdReducer = (state = initialState, action) =>
   case MOVE_LANDING_PAGE_MODULE_UP: {
     let newState = Map();
     state.forEach((module) => {
-      const id = module.getIn(['moduleType', 'id']);
+      const id = module.get('id');
       newState = newState.set(id, fromJS(module)).setIn([id, '_hasChanged'], true);
     });
     return state;
@@ -129,7 +130,7 @@ export const modulesById: ModulesByIdReducer = (state = initialState, action) =>
   case MOVE_LANDING_PAGE_MODULE_DOWN: {
     let newState = Map();
     state.forEach((module) => {
-      const id = module.getIn(['moduleType', 'id']);
+      const id = module.get('id');
       newState = newState.set(id, fromJS(module)).setIn([id, '_hasChanged'], true);
     });
     return state;

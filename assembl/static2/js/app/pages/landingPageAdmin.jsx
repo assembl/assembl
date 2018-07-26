@@ -196,7 +196,7 @@ const mapStateToProps = ({ admin: { editLocale, landingPage, timeline } }) => {
     landingPageModulesHasChanged: landingPage.modulesHasChanged,
     landingPageModules: landingPage.modulesById
       .map((module) => {
-        const id = module.getIn(['moduleType', 'id']);
+        const id = module.get('id');
         const idx = landingPage.enabledModulesInOrder.indexOf(id);
         return module
           .set('order', idx + 1)
