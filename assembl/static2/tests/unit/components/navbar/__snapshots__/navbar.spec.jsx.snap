@@ -20,7 +20,6 @@ exports[`AssemblNavbar component should render a BurgerNavbar and a hidden FlatN
             <SectionLink
               options={
                   Object {
-                      "displayRedirectionToV1": [Function],
                       "phase": "thread",
                       "phaseContext": "new",
                       "screenTooSmall": true,
@@ -50,7 +49,6 @@ exports[`AssemblNavbar component should render a BurgerNavbar and a hidden FlatN
             <SectionLink
               options={
                   Object {
-                      "displayRedirectionToV1": [Function],
                       "phase": "thread",
                       "phaseContext": "new",
                       "screenTooSmall": true,
@@ -110,7 +108,6 @@ exports[`AssemblNavbar component should render a FlatNavbar with a big screenWid
             <SectionLink
               options={
                   Object {
-                      "displayRedirectionToV1": [Function],
                       "phase": "thread",
                       "phaseContext": "new",
                       "screenTooSmall": false,

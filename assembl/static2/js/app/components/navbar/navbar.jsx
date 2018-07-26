@@ -15,7 +15,7 @@ import SectionsQuery from '../../graphql/SectionsQuery.graphql';
 import FlatNavbar from './FlatNavbar';
 import BurgerNavbar from './BurgerNavbar';
 import { APP_CONTAINER_MAX_WIDTH, APP_CONTAINER_PADDING } from '../../constants';
-import { getDiscussionSlug, snakeToCamel } from '../../utils/globalFunctions';
+import { snakeToCamel } from '../../utils/globalFunctions';
 import withoutLoadingIndicator from '../common/withoutLoadingIndicator';
 import DebateLink from '../debate/navigation/debateLink';
 import Logo from './Logo';
@@ -89,15 +89,9 @@ const SectionLink = ({ section, options }) => {
 };
 SectionLink.displayName = 'SectionLink';
 
-const createRedirectionToV1 = () => () => {
-  const slug = { slug: getDiscussionSlug() };
-  window.location = get('oldVote', slug);
-};
-
 type MapSectionOptions = {
   phase: string,
   phaseContext: string,
-  displayRedirectionToV1: () => mixed,
   slug: string,
   screenTooSmall: boolean
 };
@@ -142,7 +136,6 @@ export class AssemblNavbar extends React.PureComponent<AssemblNavbarProps, Assem
       slug: slug,
       phase: getCurrentPhaseIdentifier(timeline),
       phaseContext: phaseContext(timeline, phase),
-      displayRedirectionToV1: createRedirectionToV1(),
       screenTooSmall: screenTooSmall
     };
     const commonProps = {
