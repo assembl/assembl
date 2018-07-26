@@ -2,7 +2,7 @@ import { fromJS, List, Map } from 'immutable';
 
 import * as actionTypes from '../../../../js/app/actions/actionTypes';
 import * as reducers from '../../../../js/app/reducers/adminReducer/landingPage';
-import { modulesByIdentifier } from '../../components/administration/landingPage/fakeData';
+import { modulesById } from '../../components/administration/landingPage/fakeData';
 
 describe('Landing page enabledModulesInOrder reducer', () => {
   const reducer = reducers.enabledModulesInOrder;
@@ -20,74 +20,74 @@ describe('Landing page enabledModulesInOrder reducer', () => {
 
   it('should handle TOGGLE_LANDING_PAGE_MODULE action type', () => {
     const action = {
-      moduleTypeIdentifier: 'INTRODUCTION',
+      id: 'abc123',
       type: actionTypes.TOGGLE_LANDING_PAGE_MODULE
     };
-    const oldState = List.of('HEADER', 'INTRODUCTION', 'TIMELINE', 'FOOTER');
-    const expected = List.of('HEADER', 'TIMELINE', 'FOOTER');
+    const oldState = List.of('def456', 'abc123', 'ghi789', 'jkl135');
+    const expected = List.of('def456', 'ghi789', 'jkl135');
     const actual = reducer(oldState, action);
     expect(actual).toEqual(expected);
     const twice = reducer(actual, action);
-    const twiceExpected = List.of('HEADER', 'TIMELINE', 'INTRODUCTION', 'FOOTER');
+    const twiceExpected = List.of('def456', 'ghi789', 'abc123', 'jkl135');
     expect(twice).toEqual(twiceExpected);
   });
 
   it('should handle UPDATE_LANDING_PAGE_MODULES action type', () => {
     const action = {
-      modules: modulesByIdentifier.map(v => v.toJS()).toArray(),
+      modules: modulesById.map(v => v.toJS()).toArray(),
       type: actionTypes.UPDATE_LANDING_PAGE_MODULES
     };
     const oldState = List();
-    const expected = List.of('HEADER', 'VIDEO', 'FOOTER');
+    const expected = List.of('abc123', 'ghi789', 'jkl865');
     const actual = reducer(oldState, action);
     expect(actual).toEqual(expected);
   });
 
   it('should handle MOVE_LANDING_PAGE_MODULE_DOWN action type', () => {
     const action = {
-      moduleTypeIdentifier: 'INTRODUCTION',
+      id: 'abc123',
       type: actionTypes.MOVE_LANDING_PAGE_MODULE_DOWN
     };
-    const oldState = List.of('HEADER', 'INTRODUCTION', 'TIMELINE', 'FOOTER');
-    const expected = List.of('HEADER', 'TIMELINE', 'INTRODUCTION', 'FOOTER');
+    const oldState = List.of('def456', 'abc123', 'ghi789', 'jkl135');
+    const expected = List.of('def456', 'ghi789', 'abc123', 'jkl135');
     const actual = reducer(oldState, action);
     expect(actual).toEqual(expected);
   });
 
   it('should handle MOVE_LANDING_PAGE_MODULE_DOWN action type, no change if module is the last before FOOTER', () => {
     const action = {
-      moduleTypeIdentifier: 'TIMELINE',
+      id: 'abc123',
       type: actionTypes.MOVE_LANDING_PAGE_MODULE_DOWN
     };
-    const oldState = List.of('HEADER', 'INTRODUCTION', 'TIMELINE', 'FOOTER');
+    const oldState = List.of('def456', 'ghi789', 'abc123', 'jkl135');
     const actual = reducer(oldState, action);
     expect(actual).toEqual(oldState);
   });
 
   it('should handle MOVE_LANDING_PAGE_MODULE_UP action type', () => {
     const action = {
-      moduleTypeIdentifier: 'TIMELINE',
+      id: 'abc123',
       type: actionTypes.MOVE_LANDING_PAGE_MODULE_UP
     };
-    const oldState = List.of('HEADER', 'INTRODUCTION', 'TIMELINE', 'FOOTER');
-    const expected = List.of('HEADER', 'TIMELINE', 'INTRODUCTION', 'FOOTER');
+    const oldState = List.of('def456', 'ghi789', 'abc123', 'jkl135');
+    const expected = List.of('def456', 'abc123', 'ghi789', 'jkl135');
     const actual = reducer(oldState, action);
     expect(actual).toEqual(expected);
   });
 
   it('should handle MOVE_LANDING_PAGE_MODULE_UP action type, no change if module is the first after HEADER', () => {
     const action = {
-      moduleTypeIdentifier: 'INTRODUCTION',
+      id: 'abc123',
       type: actionTypes.MOVE_LANDING_PAGE_MODULE_UP
     };
-    const oldState = List.of('HEADER', 'INTRODUCTION', 'TIMELINE', 'FOOTER');
+    const oldState = List.of('def456', 'abc123', 'ghi789', 'jkl135');
     const actual = reducer(oldState, action);
     expect(actual).toEqual(oldState);
   });
 });
 
-describe('Landing page modulesByIdentifier reducer', () => {
-  const reducer = reducers.modulesByIdentifier;
+describe('Landing page modulesById reducer', () => {
+  const reducer = reducers.modulesById;
   it('it should return the initial state', () => {
     const action = {};
     const expected = Map();
@@ -97,21 +97,21 @@ describe('Landing page modulesByIdentifier reducer', () => {
   it('should return the current state for other actions', () => {
     const action = { type: 'FOOBAR' };
     const oldState = Map({
-      HEADER: Map({ identifier: 'HEADER', enabled: true, order: 1.0 })
+      abc123: Map({ identifier: 'HEADER', enabled: true, order: 1.0, id: 'abc123' })
     });
     expect(reducer(oldState, action)).toEqual(oldState);
   });
 
   it('should handle TOGGLE_LANDING_PAGE_MODULE action type', () => {
     const action = {
-      moduleTypeIdentifier: 'HEADER',
+      id: 'abc123',
       type: actionTypes.TOGGLE_LANDING_PAGE_MODULE
     };
     const oldState = Map({
-      HEADER: Map({ identifier: 'HEADER', enabled: true, order: 1.0 })
+      abc123: Map({ identifier: 'HEADER', enabled: true, order: 1.0, id: 'abc123', _hasChanged: true })
     });
     const expected = Map({
-      HEADER: Map({ identifier: 'HEADER', enabled: false, order: 1.0 })
+      abc123: Map({ identifier: 'HEADER', enabled: false, order: 1.0, id: 'abc123', _hasChanged: true })
     });
     const actual = reducer(oldState, action);
     expect(actual).toEqual(expected);
@@ -121,11 +121,11 @@ describe('Landing page modulesByIdentifier reducer', () => {
 
   it('should handle UPDATE_LANDING_PAGE_MODULES action type', () => {
     const action = {
-      modules: modulesByIdentifier.map(v => v.toJS()).toArray(),
+      modules: modulesById.map(v => v.toJS()).toArray(),
       type: actionTypes.UPDATE_LANDING_PAGE_MODULES
     };
     const oldState = Map();
-    const expected = modulesByIdentifier;
+    const expected = modulesById;
     const actual = reducer(oldState, action);
     expect(actual).toEqual(expected);
   });
@@ -147,7 +147,7 @@ describe('Landing page modulesHasChanged reducer', () => {
 
   it('should handle MOVE_LANDING_PAGE_MODULE_UP action type', () => {
     const action = {
-      moduleTypeIdentifier: 'INTRODUCTION',
+      id: 'abc123',
       type: actionTypes.MOVE_LANDING_PAGE_MODULE_UP
     };
     const oldState = false;
@@ -158,7 +158,7 @@ describe('Landing page modulesHasChanged reducer', () => {
 
   it('should handle MOVE_LANDING_PAGE_MODULE_DOWN action type', () => {
     const action = {
-      moduleTypeIdentifier: 'INTRODUCTION',
+      id: 'abc123',
       type: actionTypes.MOVE_LANDING_PAGE_MODULE_DOWN
     };
     const oldState = false;
@@ -169,7 +169,7 @@ describe('Landing page modulesHasChanged reducer', () => {
 
   it('should handle TOGGLE_LANDING_PAGE_MODULE action type', () => {
     const action = {
-      moduleTypeIdentifier: 'HEADER',
+      id: 'abc123',
       type: actionTypes.TOGGLE_LANDING_PAGE_MODULE
     };
     const oldState = false;
@@ -180,7 +180,7 @@ describe('Landing page modulesHasChanged reducer', () => {
 
   it('should handle UPDATE_LANDING_PAGE_MODULES action type', () => {
     const action = {
-      modules: modulesByIdentifier.map(v => v.toJS()).toArray(),
+      modules: modulesById.map(v => v.toJS()).toArray(),
       type: actionTypes.UPDATE_LANDING_PAGE_MODULES
     };
     const oldState = true;

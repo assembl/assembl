@@ -64,6 +64,7 @@ export const UPDATE_GAUGE_VOTE_CHOICE_LABEL: 'UPDATE_GAUGE_VOTE_CHOICE_LABEL' = 
 export const UPDATE_GAUGE_MINIMUM: 'UPDATE_GAUGE_MINIMUM' = 'UPDATE_GAUGE_MINIMUM';
 export const UPDATE_GAUGE_MAXIMUM: 'UPDATE_GAUGE_MAXIMUM' = 'UPDATE_GAUGE_MAXIMUM';
 export const UPDATE_GAUGE_UNIT: 'UPDATE_GAUGE_UNIT' = 'UPDATE_GAUGE_UNIT';
+export const CREATE_LANDING_PAGE_MODULE: 'CREATE_LANDING_PAGE_MODULE' = 'CREATE_LANDING_PAGE_MODULE';
 export const UPDATE_LANDING_PAGE_MODULES: 'UPDATE_LANDING_PAGE_MODULES' = 'UPDATE_LANDING_PAGE_MODULES';
 export const TOGGLE_LANDING_PAGE_MODULE: 'TOGGLE_LANDING_PAGE_MODULE' = 'TOGGLE_LANDING_PAGE_MODULE';
 export const MOVE_LANDING_PAGE_MODULE_UP: 'MOVE_LANDING_PAGE_MODULE_UP' = 'MOVE_LANDING_PAGE_MODULE_UP';
@@ -451,17 +452,24 @@ export type MoveProposalDown = {
 };
 
 export type toggleLandingPageModule = {
-  moduleTypeIdentifier: string,
+  id: string,
   type: typeof TOGGLE_LANDING_PAGE_MODULE
 };
 
 type LandingPageModuleInfo = {
-  identifier: string
+  id: string
 };
 export type LandingPageModules = Array<LandingPageModuleInfo>;
 export type UpdateLandingPageModules = {
   modules: LandingPageModules,
   type: typeof UPDATE_LANDING_PAGE_MODULES
+};
+
+export type CreateLandingPageModules = {
+  id: string,
+  identifier: string,
+  order: number,
+  type: typeof CREATE_LANDING_PAGE_MODULE
 };
 
 export type LandingPage = {
@@ -506,24 +514,24 @@ export type UpdateLandingPageHeaderLogo = {
 };
 
 export type MoveLandingPageModuleUp = {
-  moduleTypeIdentifier: string,
+  id: string,
   type: typeof MOVE_LANDING_PAGE_MODULE_UP
 };
 
 export type MoveLandingPageModuleDown = {
-  moduleTypeIdentifier: string,
+  id: string,
   type: typeof MOVE_LANDING_PAGE_MODULE_DOWN
 };
 
 export type UpdateLandingPageModuleTitle = {
-  moduleTypeIdentifier: string,
+  id: string,
   locale: string,
   value: string,
   type: typeof UPDATE_LANDING_PAGE_MODULE_TITLE
 };
 
 export type UpdateLandingPageModuleSubtitle = {
-  moduleTypeIdentifier: string,
+  id: string,
   locale: string,
   value: string,
   type: typeof UPDATE_LANDING_PAGE_MODULE_SUBTITLE

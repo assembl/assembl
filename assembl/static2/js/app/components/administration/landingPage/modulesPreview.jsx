@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import { List, Map } from 'immutable';
-
+import { I18n } from 'react-redux-i18n';
 import ModuleBlock from './moduleBlock';
 
 type Props = {
@@ -16,14 +16,15 @@ const ModulesPreview = ({ modules, moveModuleDown, moveModuleUp }: Props) => {
   }
 
   const renderModuleBlock = (module) => {
-    const identifier = module.getIn(['moduleType', 'identifier']);
+    const id = module.get('id');
+    const moduleTitle = module.getIn(['moduleType', 'title']);
     return (
       <ModuleBlock
-        key={identifier}
-        moveDown={() => moveModuleDown(identifier)}
-        moveUp={() => moveModuleUp(identifier)}
+        key={id}
+        moveDown={() => moveModuleDown(id)}
+        moveUp={() => moveModuleUp(id)}
         required={module.getIn(['moduleType', 'required'])}
-        title={module.getIn(['moduleType', 'title'])}
+        title={moduleTitle || I18n.t('administration.landingPage.manageModules.textAndMultimedia')}
         withArrows={module.getIn(['moduleType', 'editableOrder'])}
       />
     );

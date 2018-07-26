@@ -2,8 +2,8 @@
 import * as actionTypes from '../actionTypes';
 
 type toggleLandingPageModuleAction = string => actionTypes.toggleLandingPageModule;
-export const toggleLandingPageModule: toggleLandingPageModuleAction = moduleTypeIdentifier => ({
-  moduleTypeIdentifier: moduleTypeIdentifier,
+export const toggleLandingPageModule: toggleLandingPageModuleAction = id => ({
+  id: id,
   type: actionTypes.TOGGLE_LANDING_PAGE_MODULE
 });
 
@@ -14,14 +14,14 @@ export const updateLandingPageModules: updateLandingPageModulesAction = modules 
 });
 
 type moveLandingPageModuleUpAction = string => actionTypes.MoveLandingPageModuleUp;
-export const moveLandingPageModuleUp: moveLandingPageModuleUpAction = moduleTypeIdentifier => ({
-  moduleTypeIdentifier: moduleTypeIdentifier,
+export const moveLandingPageModuleUp: moveLandingPageModuleUpAction = id => ({
+  id: id,
   type: actionTypes.MOVE_LANDING_PAGE_MODULE_UP
 });
 
 type moveLandingPageModuleDownAction = string => actionTypes.MoveLandingPageModuleDown;
-export const moveLandingPageModuleDown: moveLandingPageModuleDownAction = moduleTypeIdentifier => ({
-  moduleTypeIdentifier: moduleTypeIdentifier,
+export const moveLandingPageModuleDown: moveLandingPageModuleDownAction = id => ({
+  id: id,
   type: actionTypes.MOVE_LANDING_PAGE_MODULE_DOWN
 });
 
@@ -63,23 +63,34 @@ export const updateLandingPageHeaderLogo = (value: File): actionTypes.UpdateLand
 });
 
 export const updateLandingPageModuleTitle = (
-  moduleTypeIdentifier: string,
+  id: string,
   locale: string,
   value: string
 ): actionTypes.UpdateLandingPageModuleTitle => ({
-  moduleTypeIdentifier: moduleTypeIdentifier,
+  id: id,
   locale: locale,
   value: value,
   type: actionTypes.UPDATE_LANDING_PAGE_MODULE_TITLE
 });
 
 export const updateLandingPageModuleSubtitle = (
-  moduleTypeIdentifier: string,
+  id: string,
   locale: string,
   value: string
 ): actionTypes.UpdateLandingPageModuleSubtitle => ({
-  moduleTypeIdentifier: moduleTypeIdentifier,
+  id: id,
   locale: locale,
   value: value,
   type: actionTypes.UPDATE_LANDING_PAGE_MODULE_SUBTITLE
+});
+
+export const createLandingPageModules = (
+  id: string,
+  identifier: string,
+  order: number
+): actionTypes.CreateLandingPageModules => ({
+  id: id,
+  identifier: identifier,
+  order: order,
+  type: actionTypes.CREATE_LANDING_PAGE_MODULE
 });

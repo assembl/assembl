@@ -3,6 +3,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { I18n, Translate } from 'react-redux-i18n';
 import type { List, Map } from 'immutable';
+import { Button } from 'react-bootstrap';
 
 import ModulesPreview from './modulesPreview';
 import SectionTitle from '../../administration/sectionTitle';
@@ -10,25 +11,31 @@ import SelectModulesForm from './selectModulesForm';
 import {
   toggleLandingPageModule,
   moveLandingPageModuleDown,
-  moveLandingPageModuleUp
+  moveLandingPageModuleUp,
+  createLandingPageModules
 } from '../../../actions/adminActions/landingPage';
+import { createRandomId } from '../../../utils/globalFunctions';
 
 type Props = {
-  enabledModulesInOrder: List<Map>,
+  enabledModules: List<Map>,
+  moduleTypes: Array<Object>,
   locale: string,
-  modulesByIdentifier: Map<string, Map>,
+  modulesById: Map<string, Map>,
   moveModuleDown: Function,
   moveModuleUp: Function,
-  toggleModule: Function
+  toggleModule: Function,
+  createModule: Function
 };
 
 export const DumbManageModules = ({
-  enabledModulesInOrder,
+  enabledModules,
+  moduleTypes,
   locale,
-  modulesByIdentifier,
+  modulesById,
   moveModuleDown,
   moveModuleUp,
-  toggleModule
+  toggleModule,
+  createModule
 }: Props) => (
   <div className="admin-box">
     <SectionTitle
@@ -41,10 +48,15 @@ export const DumbManageModules = ({
       </p>
       <div className="two-columns-admin">
         <div className="column-left">
-          <SelectModulesForm lang={locale} modulesByIdentifier={modulesByIdentifier} toggleModule={toggleModule} />
+          <SelectModulesForm lang={locale} moduleTypes={moduleTypes} modulesById={modulesById} toggleModule={toggleModule} />
+          <div className="margin-xl">
+            <Button className="button-submit button-dark" onClick={() => createModule(enabledModules.size - 2)}>
+              <Translate value="administration.landingPage.manageModules.textAndMultimediaBtn" />
+            </Button>
+          </div>
         </div>
         <div className="column-right">
-          <ModulesPreview modules={enabledModulesInOrder} moveModuleDown={moveModuleDown} moveModuleUp={moveModuleUp} />
+          <ModulesPreview modules={enabledModules} moveModuleDown={moveModuleDown} moveModuleUp={moveModuleUp} />
         </div>
       </div>
     </div>
@@ -52,17 +64,28 @@ export const DumbManageModules = ({
 );
 
 const mapStateToProps = (state) => {
-  const { enabledModulesInOrder, modulesByIdentifier } = state.admin.landingPage;
+  const { enabledModulesInOrder, modulesById, modulesInOrder } = state.admin.landingPage;
   return {
-    enabledModulesInOrder: enabledModulesInOrder.map(identifier => modulesByIdentifier.get(identifier)),
-    modulesByIdentifier: modulesByIdentifier
+    enabledModules: enabledModulesInOrder.map(id => modulesById.get(id)),
+    modulesById: modulesById,
+    moduleTypes: modulesInOrder
+      .map((id) => {
+        let module = modulesById.get(id);
+        module = module.setIn(['moduleType', 'moduleId'], id);
+        return module.get('moduleType');
+      })
+      .toJS()
   };
 };
 
 const mapDispatchToProps = dispatch => ({
-  moveModuleDown: identifier => dispatch(moveLandingPageModuleDown(identifier)),
-  moveModuleUp: identifier => dispatch(moveLandingPageModuleUp(identifier)),
-  toggleModule: identifier => dispatch(toggleLandingPageModule(identifier))
+  moveModuleDown: id => dispatch(moveLandingPageModuleDown(id)),
+  moveModuleUp: id => dispatch(moveLandingPageModuleUp(id)),
+  toggleModule: id => dispatch(toggleLandingPageModule(id)),
+  createModule: (nextOrder, identifier = 'INTRODUCTION') => {
+    const newId = createRandomId();
+    return dispatch(createLandingPageModules(newId, identifier, nextOrder));
+  }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(DumbManageModules);

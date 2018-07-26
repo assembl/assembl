@@ -194,11 +194,14 @@ const mapStateToProps = ({ admin: { editLocale, landingPage, timeline } }) => {
   const subtitle = getEntryValueForLocale(page.get('subtitleEntries'), editLocale, '');
   return {
     landingPageModulesHasChanged: landingPage.modulesHasChanged,
-    landingPageModules: landingPage.modulesByIdentifier
+    landingPageModules: landingPage.modulesById
       .map((module) => {
-        const identifier = module.getIn(['moduleType', 'identifier']);
-        const idx = landingPage.enabledModulesInOrder.indexOf(identifier);
-        return module.set('order', idx + 1).set('_isNew', !module.get('existsInDatabase'));
+        const id = module.get('id');
+        const idx = landingPage.enabledModulesInOrder.indexOf(id);
+        return module
+          .set('order', idx + 1)
+          .set('_hasChanged', true)
+          .set('_isNew', !module.get('existsInDatabase'));
       })
       .valueSeq()
       .toJS(),

@@ -6,10 +6,10 @@ describe('Landing page administration actions', () => {
     const { toggleLandingPageModule } = actions;
     it('should return a TOGGLE_LANDING_PAGE_MODULE action type', () => {
       const expected = {
-        moduleTypeIdentifier: 'VIDEO',
+        id: 'abc123',
         type: actionTypes.TOGGLE_LANDING_PAGE_MODULE
       };
-      const actual = toggleLandingPageModule('VIDEO');
+      const actual = toggleLandingPageModule('abc123');
       expect(actual).toEqual(expected);
     });
   });
@@ -34,10 +34,10 @@ describe('Landing page administration actions', () => {
     const { moveLandingPageModuleUp } = actions;
     it('should return a MOVE_LANDING_PAGE_MODULE_UP action type', () => {
       const expected = {
-        moduleTypeIdentifier: 'VIDEO',
+        id: 'abc123',
         type: actionTypes.MOVE_LANDING_PAGE_MODULE_UP
       };
-      const actual = moveLandingPageModuleUp('VIDEO');
+      const actual = moveLandingPageModuleUp('abc123');
       expect(actual).toEqual(expected);
     });
   });
@@ -46,10 +46,10 @@ describe('Landing page administration actions', () => {
     const { moveLandingPageModuleDown } = actions;
     it('should return a MOVE_LANDING_PAGE_MODULE_DOWN action type', () => {
       const expected = {
-        moduleTypeIdentifier: 'VIDEO',
+        id: 'abc123',
         type: actionTypes.MOVE_LANDING_PAGE_MODULE_DOWN
       };
-      const actual = moveLandingPageModuleDown('VIDEO');
+      const actual = moveLandingPageModuleDown('abc123');
       expect(actual).toEqual(expected);
     });
   });

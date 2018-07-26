@@ -697,7 +697,9 @@ const Translations = {
       landingPage: {
         manageModules: {
           title: "Administrer les modules",
-          helper: "Choisissez les modules que vous souhaitez voir apparaître dans la page d'accueil et leurs emplacements."
+          helper: "Choisissez les modules que vous souhaitez voir apparaître dans la page d'accueil et leurs emplacements.",
+          textAndMultimedia: "Texte & Multi-média",
+          textAndMultimediaBtn: "Ajouter un module Texte & Multi-media"
         },
         header: {
           title: "Header",
@@ -1435,7 +1437,9 @@ const Translations = {
       landingPage: {
         manageModules: {
           title: "Manage the modules",
-          helper: "Choose the modules you want to see in the landing page and their position."
+          helper: "Choose the modules you want to see in the landing page and their position.",
+          textAndMultimedia: "Text & Multi-media",
+          textAndMultimediaBtn: "Add a Text & Multi-media module"
         },
         header: {
           title: "Header",
