@@ -81,11 +81,10 @@ def test_case_insensitive_search_on_username(
         func.lower(Username.username) == 'test.username').count()
 
 
-def test_get_all_users_who_accepted_cookies(test_session, participant1_user, participant2_user, asid2):
+def test_all_cookie_accepted_agents(test_session, participant2_user, asid2, discussion):
     from assembl.models import User
-    all_users_who_accepted_cookies = User.get_all_users_who_accepted_cookies()
-    assert participant2_user in all_users_who_accepted_cookies
-    assert participant1_user not in all_users_who_accepted_cookies
+    assert participant2_user not in User.all_cookie_accepted_agents(discussion)
+    assert participant2_user in User.all_rejected_cookie_agents(discussion)
 
 
 def test_get_all_users_who_refused_cookies(test_session, participant1_user, participant2_user, asid2):
@@ -116,3 +115,48 @@ def test_delete_cookie(test_session, participant1_user):
     user_cookies = participant1_user.read_cookies_json()
     cookies_list = "cookie2,cookie3,cookie4"
     assert user_cookies == cookies_list
+
+
+def test_all_rejected_cookie_agents(test_session, participant2_user, asid3, discussion):
+    from assembl.models import User
+    assert participant2_user in User.all_cookie_accepted_agents(discussion)
+    assert participant2_user not in User.all_rejected_cookie_agents(discussion)
+
+def test_has_not_accepted_cookies(test_session, asid2):
+    assert not asid2.has_accepted_cookies
+
+def test_has_accepted_cookies(test_session, asid3):
+    assert asid3.has_accepted_cookies
+
+def test_read_empty_cookies(test_session, asid2):
+    """Test Read Cookies for a user who has not accepted cookies."""
+    assert asid2.read_cookies == []
+
+def test_read_cookies(test_session, asid3):
+    """Test Read cookies on a user who has accepted one cookie"""
+    from assembl.models.cookie_types import CookieTypes
+    assert asid3.read_cookies == [CookieTypes.ACCEPT_CGU]
+
+
+def test_update_cookies_2(test_session, asid2):
+    """Testing update cookies on a user who has not yet accepted cookies"""
+    from assembl.models.cookie_types import CookieTypes
+    asid2.update_cookies("ACCEPT_TRACKING_ON_DISCUSSION")
+    import pdb; pdb.set_trace()
+    assert asid2.read_cookies == [CookieTypes.ACCEPT_TRACKING_ON_DISCUSSION]
+
+def test_update_cookies_3(test_session, asid3):
+    """Testing update cookies on a user who has already accepted one cookie"""
+    from assembl.models.cookie_types import CookieTypes
+    asid3.update_cookies("ACCEPT_TRACKING_ON_DISCUSSION")
+    assert asid3.read_cookies == [CookieTypes.ACCEPT_CGU,CookieTypes.ACCEPT_TRACKING_ON_DISCUSSION]
+
+def test_delete_cookie(test_session, asid3):
+    """Testing delete cookie on a user who has accepted a cookie."""
+    asid3.delete_cookie("ACCEPT_CGU")
+    assert asid3.read_cookies == []
+
+def test_delete_cookie_2(test_session, asid2):
+    """Testing delete cookie on a user who has not accepted any cookie."""
+    asid2.delete_cookie("ACCEPT_CGU")
+    assert asid2.read_cookies == []

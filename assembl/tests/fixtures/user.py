@@ -16,6 +16,7 @@ def participant1_user(request, test_session, discussion):
     from assembl.models import User, UserRole, Role, EmailAccount
     u = User(name=u"A. Barking Loon", type="user", password="password",
              verified=True, last_assembl_login=datetime.utcnow())
+
     email = EmailAccount(email="abloon@gmail.com", profile=u, verified=True)
     test_session.add(u)
     r = Role.get_role(R_PARTICIPANT, test_session)
@@ -205,7 +206,7 @@ def moderator_user(request, test_session, discussion):
 
 @pytest.fixture(scope="function")
 def asid2(request, test_session, discussion, participant2_user):
-    """A fixture of agent status in discussion related to participant2_user"""
+    """A fixture of agent status in discussion related to participant2_user. The user has not accepted cookies."""
     from assembl.models import AgentStatusInDiscussion
     accepted_cookies = ""
     asid2 = AgentStatusInDiscussion(discussion=discussion, agent_profile=participant2_user, accepted_cookies=accepted_cookies)
@@ -218,3 +219,18 @@ def asid2(request, test_session, discussion, participant2_user):
         test_session.flush()
     request.addfinalizer(fin)
     return asid2
+
+@pytest.fixture(scope="function")
+def asid3(request, test_session, discussion, participant2_user):
+    from assembl.models import AgentStatusInDiscussion
+    accepted_cookies = "ACCEPT_CGU"
+    asid3 = AgentStatusInDiscussion(discussion=discussion, agent_profile=participant2_user, accepted_cookies=accepted_cookies)
+    test_session.add(asid3)
+    test_session.flush()
+
+    def fin():
+        print 'Finalizer agent_status_in_discussion for participant2_user'
+        test_session.delete(asid3)
+        test_session.flush()
+    request.addfinalizer(fin)
+    return asid3
