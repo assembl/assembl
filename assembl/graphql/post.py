@@ -705,9 +705,9 @@ class AddPostExtract(graphene.Mutation):
             discussion_id=discussion_id,
             body=args.get('body'),
             important=args.get('important', False),
-            content=post,
-            lang=args.get('lang')
+            content=post
         )
+        new_extract.lang = args.get('lang')
         post.db.add(new_extract)
         range = models.TextFragmentIdentifier(
             extract=new_extract,

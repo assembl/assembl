@@ -19,7 +19,9 @@ def upgrade(pyramid_env):
     with context.begin_transaction():
         op.add_column(
             'extract',
-            sa.Column('lang', sa.String(20), server_default=""))
+            sa.Column(
+                'locale_id', sa.Integer,
+                sa.ForeignKey('locale.id')))
 
     from assembl import models as m
     db = m.get_session_maker()()
@@ -30,9 +32,10 @@ def upgrade(pyramid_env):
             post = extract.get_post()
             if post:
                 entry = post.body.first_original()
-                extract.lang = entry.locale_code if entry else u''
+                if entry:
+                    extract.lang = entry.locale_code
 
 
 def downgrade(pyramid_env):
     with context.begin_transaction():
-        op.drop_column('extract', 'lang')
+        op.drop_column('extract', 'locale_id')
