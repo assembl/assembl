@@ -45,11 +45,6 @@ class SignupForm extends React.Component<SignupFormProps, SignupFormState> {
       privacyPolicyIsChecked: false,
       termsAndConditionsIsChecked: false
     };
-
-    this.signupHandler = this.signupHandler.bind(this);
-    this.handleInput = this.handleInput.bind(this);
-    this.toggleCheck = this.toggleCheck.bind(this);
-    this.handleAcceptButton = this.handleAcceptButton.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -76,7 +71,7 @@ class SignupForm extends React.Component<SignupFormProps, SignupFormState> {
     }
   }
 
-  handleInput(e) {
+  handleInput = (e) => {
     inputHandler(this, e);
   }
 
@@ -86,7 +81,7 @@ class SignupForm extends React.Component<SignupFormProps, SignupFormState> {
     this.setState(() => ({ [name]: value }));
   };
 
-  signupHandler(e) {
+  signupHandler = (e) => {
     e.preventDefault();
     const slug = getDiscussionSlug();
     if (slug) {
@@ -100,7 +95,7 @@ class SignupForm extends React.Component<SignupFormProps, SignupFormState> {
     this.setState({ [termFormType]: !this.state[termFormType] });
   };
 
-  handleAcceptButton(termFormType) {
+  handleAcceptButton = (termFormType) => {
     this.setState({ [termFormType]: true });
   }
 
