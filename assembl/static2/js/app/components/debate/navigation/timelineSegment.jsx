@@ -99,9 +99,10 @@ export class DumbTimelineSegment extends React.Component<TimelineSegmentProps, T
         goTo(get('debate', params));
         onDeselect();
       }
+    } else {
+      goTo(get('debate', params));
+      onDeselect();
     }
-    goTo(get('debate', params));
-    onDeselect();
   };
 
   render() {
@@ -145,7 +146,8 @@ export class DumbTimelineSegment extends React.Component<TimelineSegmentProps, T
 
 const mapStateToProps = state => ({
   locale: state.i18n.locale,
-  debate: state.debate
+  debate: state.debate,
+  timeline: state.timeline
 });
 
 // $FlowFixMe
