@@ -366,7 +366,13 @@ const mapStateToProps: MapStateToProps<ReduxState, *, *> = ({
     sections: sectionsById
       .map((section) => {
         const id = section.get('id');
-        return section.set('order', sectionsInOrder.indexOf(id));
+        const currentOrder = section.get('order');
+        const newOrder = sectionsInOrder.indexOf(id);
+        let newSection = section.set('order', newOrder);
+        if (currentOrder !== newOrder) {
+          newSection = newSection.set('_hasChanged', true);
+        }
+        return newSection;
       }) // fix order of sections
       .valueSeq() // convert to array of Map
       .toJS(), // convert to array of objects
