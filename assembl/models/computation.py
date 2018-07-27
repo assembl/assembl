@@ -19,6 +19,15 @@ class ComputationProcess(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String)
 
+    @classmethod
+    def by_name(cls, name, db=None):
+        db = db or cls.default_db
+        process = db.query(cls).filter_by(name=name).first()
+        if not process:
+            process = ComputationProcess(name=name)
+            db.add(process)
+        return process
+
 
 class Computation(DiscussionBoundBase):
     __tablename__ = 'computation'
