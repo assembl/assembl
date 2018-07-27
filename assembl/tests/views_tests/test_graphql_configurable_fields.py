@@ -21,7 +21,7 @@ def test_query_text_fields(graphql_request, graphql_registry, text_field):
     assert tf['titleEntries'][0]['value'] == u'My text field'
     assert tf['order'] == 1.0
     assert tf['required'] is True
-
+    assert tf['hidden'] is False
 
 def test_mutation_create_text_field(graphql_request, graphql_registry, test_session):
     from assembl.models.configurable_fields import TextField
@@ -34,12 +34,14 @@ def test_mutation_create_text_field(graphql_request, graphql_registry, test_sess
                 { "localeCode": "en", "value": u"My new field" }
             ],
             "order": 4.0,
-            "required": False
+            "required": False,
+            "hidden": False
         })
     assert res.errors is None
     assert 'createTextField' in res.data
     new_field = res.data['createTextField']['field']
     assert new_field[u'required'] is False
+    assert new_field[u'hidden'] is False
     assert new_field[u'order'] == 4.0
     title_entries = new_field['titleEntries']
     assert title_entries[0]['localeCode'] == u'en'
@@ -60,6 +62,7 @@ def test_mutation_create_select_field(graphql_request, graphql_registry, test_se
             ],
             "order": 4.0,
             "required": False,
+            "hidden": False,
             "options": [
                 {"labelEntries": [
                     {"value": u"Option un", "localeCode": "fr"},
@@ -79,6 +82,7 @@ def test_mutation_create_select_field(graphql_request, graphql_registry, test_se
     assert 'createTextField' in res.data
     new_field = res.data['createTextField']['field']
     assert new_field[u'required'] is False
+    assert new_field[u'hidden'] is False
     assert new_field[u'order'] == 4.0
     assert len(new_field[u'options']) == 2
     assert new_field[u'options'][0]['label'] == u'Option one'
@@ -103,12 +107,14 @@ def test_mutation_update_text_field(graphql_request, graphql_registry, text_fiel
                 { "localeCode": "be", "value": u"Mon nouveau titre" },
             ],
             "order": 8.0,
-            "required": False
+            "required": False,
+            "hidden": False
         })
     assert res.errors is None
     assert 'updateTextField' in res.data
     field = res.data['updateTextField']['field']
     assert field[u'required'] is False
+    assert field[u'hidden'] is False
     assert field[u'order'] == 8.0
     title_entries = field['titleEntries']
     assert title_entries[0]['localeCode'] == u'be'
@@ -131,6 +137,7 @@ def test_mutation_update_select_field(graphql_request, graphql_registry, select_
             ],
             "order": 8.0,
             "required": False,
+            "hidden": False,
             "options": [
                 {"labelEntries": [
                     {"value": u"Option un", "localeCode": "fr"},
@@ -150,6 +157,7 @@ def test_mutation_update_select_field(graphql_request, graphql_registry, select_
     assert 'updateTextField' in res.data
     field = res.data['updateTextField']['field']
     assert field[u'required'] is False
+    assert field[u'hidden'] is False
     assert field[u'order'] == 8.0
     assert len(field[u'options']) == 2
     title_entries = field['titleEntries']
@@ -194,6 +202,7 @@ def test_query_profile_fields(graphql_request, graphql_registry, text_field2, pr
     assert tf_with_value['configurableField']['fieldType'] == TextFieldsTypesEnum.TEXT.value
     assert tf_with_value['configurableField']['order'] == 1.0
     assert tf_with_value['configurableField']['required'] is True
+    assert tf_with_value['configurableField']['hidden'] is False
     assert tf_with_value['valueData'][u'value'] == u'Shayna_Howe@gmail.com'
 
     generated_tf = res.data['profileFields'][1]
@@ -202,6 +211,7 @@ def test_query_profile_fields(graphql_request, graphql_registry, text_field2, pr
     assert generated_tf['configurableField']['title'] == u'My other custom text field'
     assert generated_tf['configurableField']['order'] == 2.0
     assert generated_tf['configurableField']['required'] is False
+    assert generated_tf['configurableField']['hidden'] is False
     assert generated_tf['valueData'][u'value'] is None
 
 
