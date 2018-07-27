@@ -23,10 +23,11 @@ class ConfigurableFieldInterface(graphene.Interface):
     __doc__ = docs.ConfigurableFieldInterface.__doc__
 
     identifier = graphene.String(description=docs.ConfigurableFieldInterface.identifier)
-    order = graphene.Float(description=docs.ConfigurableFieldInterface.identifier)
-    required = graphene.Boolean(description=docs.ConfigurableFieldInterface.identifier)
-    title = graphene.String(lang=graphene.String(description=docs.Default.required_language_input), description=docs.ConfigurableFieldInterface.identifier)
-    title_entries = graphene.List(LangStringEntry, description=docs.ConfigurableFieldInterface.identifier)
+    order = graphene.Float(description=docs.ConfigurableFieldInterface.order)
+    required = graphene.Boolean(description=docs.ConfigurableFieldInterface.required)
+    title = graphene.String(lang=graphene.String(description=docs.Default.required_language_input), description=docs.ConfigurableFieldInterface.title)
+    title_entries = graphene.List(LangStringEntry, description=docs.ConfigurableFieldInterface.title_entries)
+    hidden = graphene.Boolean(required=True, description=docs.ConfigurableFieldInterface.hidden)
 
     def resolve_title(self, args, context, info):
         return resolve_langstring(self.title, args.get('lang'))
@@ -87,6 +88,7 @@ class CreateTextField(graphene.Mutation):
         title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.CreateTextField.title_entries)
         order = graphene.Float(description=docs.CreateTextField.order)
         required = graphene.Boolean(description=docs.CreateTextField.required)
+        hidden = graphene.Boolean(description=docs.CreateTextField.required)
         options = graphene.List(SelectFieldOptionInput, required=False, description=docs.CreateTextField.options)
 
     field = graphene.Field(lambda: ConfigurableFieldUnion)
@@ -140,6 +142,7 @@ class UpdateTextField(graphene.Mutation):
         title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.UpdateTextField.title_entries)
         order = graphene.Float(required=True, description=docs.UpdateTextField.order)
         required = graphene.Boolean(required=True, description=docs.UpdateTextField.required)
+        hidden = graphene.Boolean(required=True, description=docs.UpdateTextField.hidden)
         options = graphene.List(SelectFieldOptionInput, required=False, description=docs.UpdateTextField.options)
 
     field = graphene.Field(lambda: ConfigurableFieldUnion)
@@ -166,6 +169,7 @@ class UpdateTextField(graphene.Mutation):
             update_langstring_from_input_entries(field, 'title', title_entries)
             field.order = args['order']
             field.required = args['required']
+            field.hidden = args['hidden']
 
             if options is not None:
                 existing_options = {

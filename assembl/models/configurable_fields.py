@@ -86,6 +86,8 @@ class AbstractConfigurableField(DiscussionBoundBase):
 
     required = Column(Boolean(), default=False)
 
+    hidden = Column(Boolean(), default=False, server_default='0')
+
     def get_discussion_id(self):
         return self.discussion_id or self.discussion.id
 

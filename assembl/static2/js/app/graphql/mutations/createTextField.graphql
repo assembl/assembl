@@ -5,9 +5,17 @@ mutation createTextField(
   $titleEntries: [LangStringEntryInput]!
   $order: Float!
   $required: Boolean!
+  $hidden: Boolean!
   $options: [SelectFieldOptionInput]
 ) {
-  createTextField(lang: $lang, titleEntries: $titleEntries, order: $order, required: $required, options: $options) {
+  createTextField(
+    lang: $lang
+    titleEntries: $titleEntries
+    order: $order
+    required: $required
+    options: $options
+    hidden: $hidden
+  ) {
     field {
       ... on ConfigurableFieldInterface {
         titleEntries {
@@ -17,9 +25,11 @@ mutation createTextField(
         title(lang: $lang)
         order
         required
+        hidden
       }
       ... on SelectField {
         id
+
         options {
           id
           order

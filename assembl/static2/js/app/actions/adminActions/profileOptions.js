@@ -29,6 +29,11 @@ export const toggleTextFieldRequired = (id: string): actionTypes.ToggleTextField
   type: actionTypes.TOGGLE_TEXT_FIELD_REQUIRED
 });
 
+export const toggleTextFieldHidden = (id: string): actionTypes.ToggleTextFieldHidden => ({
+  id: id,
+  type: actionTypes.TOGGLE_TEXT_FIELD_HIDDEN
+});
+
 export const moveTextFieldUp = (id: string): actionTypes.MoveTextFieldUp => ({
   id: id,
   type: actionTypes.MOVE_TEXT_FIELD_UP

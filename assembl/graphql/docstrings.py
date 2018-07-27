@@ -991,7 +991,8 @@ class ConfigurableFieldInterface:
     __doc__ = """A ConfigurableField is a front-end text field that can be dymaically generated based on a set of configurations."""
     identifier = """The unique identifier of the field."""
     order = """The position (order) of the Field compared to other Fields."""
-    required = """A flag indicating if the Field is a requires an input or not."""
+    required = """A flag indicating if the Field requires an input or not."""
+    hidden = """A flag indicating if the Field is hidden for the user or not."""
     title = Default.string_entry % ("Text Field Label")
     title_entries = Default.langstring_entries % ("The label in multiple languaes.")
 
@@ -1030,6 +1031,7 @@ class CreateTextField:
     title_entries = ConfigurableFieldInterface.title_entries
     order = ConfigurableFieldInterface.order
     required = ConfigurableFieldInterface.required
+    hidden = ConfigurableFieldInterface.hidden
     options = "A list of SelectFieldOptions. If this is passed, the mutation will be creating a SelectField instead of a TextField."
 
 
@@ -1040,6 +1042,7 @@ class UpdateTextField:
     title_entries = ConfigurableFieldInterface.title_entries
     order = ConfigurableFieldInterface.order
     required = ConfigurableFieldInterface.required
+    hidden = ConfigurableFieldInterface.hidden
     options = "A list of SelectFieldOptions. If this is passed, the mutation will be updating a SelectField instead of a TextField."
 
 

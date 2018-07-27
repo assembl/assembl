@@ -167,6 +167,7 @@ class Profile extends React.PureComponent<ProfileProps, ProfileState> {
                           value={this.state.values[pf.id]}
                         />
                       ))}
+                    <Translate value="profile.usernameInformations" />
                     <Button className="button-submit button-dark margin-l" onClick={this.handleSaveClick}>
                       <Translate value="profile.save" />
                     </Button>

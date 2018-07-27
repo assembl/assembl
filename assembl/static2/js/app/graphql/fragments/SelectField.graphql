@@ -10,6 +10,7 @@ fragment selectField on SelectField {
   title(lang: $lang)
   order
   required
+  hidden
   options {
     id
     order

@@ -6,9 +6,18 @@ mutation updateTextField(
   $titleEntries: [LangStringEntryInput]!
   $order: Float!
   $required: Boolean!
+  $hidden: Boolean!
   $options: [SelectFieldOptionInput]
 ) {
-  updateTextField(id: $id, lang: $lang, titleEntries: $titleEntries, order: $order, required: $required, options: $options) {
+  updateTextField(
+    id: $id
+    lang: $lang
+    titleEntries: $titleEntries
+    order: $order
+    required: $required
+    hidden: $hidden
+    options: $options
+  ) {
     field {
       ... on ConfigurableFieldInterface {
         titleEntries {
@@ -18,6 +27,7 @@ mutation updateTextField(
         title(lang: $lang)
         order
         required
+        hidden
       }
       ... on SelectField {
         id

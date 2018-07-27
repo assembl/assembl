@@ -392,6 +392,7 @@ const Translations = {
       changePassword: "Modifier mon mot de passe",
       passwordModifiedSuccess: "Votre mot de passe a été modifié avec succès",
       saveSuccess: "Votre profil a été mis à jour avec succès",
+      usernameInformations: "Si vous avez configuré un pseudonyme, ce dernier est utilisé lorsque vous postez un message ou votez. Si vous n'avez pas configuré un pseudonyme, le nom et prénom que vous avez configuré ci-dessus sont utilisés lorsque vous postez un message ou votez.",
       deleteMyAccount: "Supprimer mon compte",
       deleteMyAccountConfirmation: "Supprimer mon compte et l'ensemble de mes données",
       deleteMyAccountText:
@@ -738,7 +739,8 @@ const Translations = {
           "Configurez les champs que vous souhaitez afficher dans le formulaire d'inscription. Renseignez les noms ainsi que la mention obligatoire/non obligatoire.",
         textFieldToggleOptional: "Rendre ce champ optionnel",
         textFieldToggleRequired: "Rendre ce champ obligatoire",
-        successSave: "Les options de profils ont été enregistrées avec succès !"
+        successSave: "Les options de profils ont été enregistrées avec succès !",
+        hideTextField: "Cacher ce champs pour l'utilisateur"
       }
     },
     unauthorizedAdministration: {
@@ -1140,6 +1142,7 @@ const Translations = {
       save: "Save",
       password: "Password",
       changePassword: "Change my password",
+      usernameInformations: "If you configured a username, it will be used when you post a message or vote. If you haven't configured one, the full name that you configured will be used instead.",
       passwordModifiedSuccess: "Your password has been changed with success",
       saveSuccess: "Your profile is updated",
       deleteMyAccount: "Delete my account",
@@ -1477,7 +1480,8 @@ const Translations = {
           "Configure the fields that you want to display in the registration form. Fill in the names and whether the fields are required or optional.",
         textFieldToggleOptional: "Make this field optional",
         textFieldToggleRequired: "Make this field required",
-        successSave: "The profile options has been saved with success!"
+        successSave: "The profile options has been saved with success!",
+        hideTextField: "Hide this field for the user"
       }
     },
     unauthorizedAdministration: {
