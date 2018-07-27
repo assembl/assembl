@@ -35,6 +35,7 @@ import VoteSessionAdmin from './pages/voteSessionAdmin';
 import ResourcesCenter from './pages/resourcesCenter';
 import LandingPageAdmin from './pages/landingPageAdmin';
 import ExportTaxonomies from './pages/exportTaxonomies';
+import BrightMirror from './pages/brightMirror';
 import { routeForRouter } from './utils/routeMap';
 
 const DebateHome = (props) => {
@@ -47,6 +48,8 @@ const DebateHome = (props) => {
     return <DebateThread {...props} />;
   case 'voteSession':
     return <VoteSession />;
+  case 'brightMirror':
+    return <BrightMirror />;
   default:
     return <Debate {...props} />;
   }
