@@ -69,13 +69,10 @@ const DumbManageTimeline = ({
   );
 };
 
-const mapStateToProps = (state, { editLocale }) => {
+const mapStateToProps = (state, { editLocale, timelineModuleId }) => {
   const { phasesById } = state.admin.timeline;
-  const { modulesById, modulesInOrder } = state.admin.landingPage;
-  const timelineModule = modulesInOrder.filter((id) => {
-    const module = modulesById.get(id);
-    return module.getIn(['moduleType', 'identifier']) === 'TIMELINE';
-  });
+  const { modulesById } = state.admin.landingPage;
+  const timelineModule = modulesById.get(timelineModuleId);
   return {
     sectionTitle: timelineModule ? getEntryValueForLocale(timelineModule.get('titleEntries'), editLocale, '') : null,
     sectionSubtitle: timelineModule ? getEntryValueForLocale(timelineModule.get('subtitleEntries'), editLocale, '') : null,
@@ -87,9 +84,9 @@ const mapStateToProps = (state, { editLocale }) => {
   };
 };
 
-const mapDispatchToProps = (dispatch, { editLocale }) => ({
-  handleTitleChange: e => dispatch(updateLandingPageModuleTitle('TIMELINE', editLocale, e.target.value)),
-  handleSubtitleChange: e => dispatch(updateLandingPageModuleSubtitle('TIMELINE', editLocale, e.target.value))
+const mapDispatchToProps = (dispatch, { editLocale, timelineModuleId }) => ({
+  handleTitleChange: e => dispatch(updateLandingPageModuleTitle(timelineModuleId, editLocale, e.target.value)),
+  handleSubtitleChange: e => dispatch(updateLandingPageModuleSubtitle(timelineModuleId, editLocale, e.target.value))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(DumbManageTimeline);

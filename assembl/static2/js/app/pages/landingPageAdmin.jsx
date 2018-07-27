@@ -192,6 +192,9 @@ class LandingPageAdmin extends React.Component<Props, State> {
 const mapStateToProps = ({ admin: { editLocale, landingPage, timeline } }) => {
   const { page } = landingPage;
   const subtitle = getEntryValueForLocale(page.get('subtitleEntries'), editLocale, '');
+  const timelineModule = landingPage.modulesById.find(module => module.getIn(['moduleType', 'identifier']) === 'TIMELINE');
+  // timelineModule can be undefined when modulesById is not loaded yet
+  const timelineModuleId = timelineModule ? timelineModule.get('id') : null;
   return {
     landingPageModulesHasChanged: landingPage.modulesHasChanged,
     landingPageModules: landingPage.modulesById
@@ -205,6 +208,7 @@ const mapStateToProps = ({ admin: { editLocale, landingPage, timeline } }) => {
       })
       .valueSeq()
       .toJS(),
+    timelineModuleId: timelineModuleId,
     header: {
       title: getEntryValueForLocale(page.get('titleEntries'), editLocale, ''),
       subtitle: subtitle && typeof subtitle !== 'string' ? subtitle.toJS() : null,
