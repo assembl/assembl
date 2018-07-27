@@ -145,14 +145,14 @@ def translate_content(
     return changed
 
 
-@translation_celery_app.task(ignore_result=True)
+@translation_celery_app.task(ignore_result=True, shared=False)
 def translate_content_task(content_id):
     from ..models import Content
     content = waiting_get(Content, content_id, True)
     translate_content(content)
 
 
-@translation_celery_app.task(ignore_result=True)
+@translation_celery_app.task(ignore_result=True, shared=False)
 def translate_discussion(
         discussion_id, translation_table=None,
         constrain_to_discussion_languages=True,

@@ -5,7 +5,7 @@ from . import config_celery_app, CeleryWithConfig
 imap_celery_app = CeleryWithConfig('celery_tasks.imap')
 
 
-@imap_celery_app.task(ignore_result=True)
+@imap_celery_app.task(ignore_result=True, shared=False)
 def import_mails(mbox_id, only_new=True):
     from ..models import IMAPMailbox
     # in case of previous issues

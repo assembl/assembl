@@ -11,7 +11,7 @@ from ..lib.model_watcher import get_model_watcher, BaseModelEventWatcher
 notif_dispatch_celery_app = CeleryWithConfig('celery_tasks.notification_dispatch')
 
 
-@notif_dispatch_celery_app.task()
+@notif_dispatch_celery_app.task(shared=False)
 def processPostCreatedTask(id):
     model_watcher = get_model_watcher()
     # we're inside the notification_dispatch task, so the model watcher should be
