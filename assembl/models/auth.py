@@ -734,7 +734,9 @@ class User(AgentProfile):
     is_deleted = Column(Boolean(), default=False)
     is_machine = Column(Boolean(), default=False)
     last_accepted_cgu_date = Column(DateTime)
-    last_accepted_privacy_policy = Column(DateTime)
+    last_accepted_privacy_policy_date = Column(DateTime)
+    last_rejected_cgu_date = Column(DateTime)
+    last_rejected_privacy_policy_date = Column(DateTime)
 
     def __init__(self, **kwargs):
         if kwargs.get('password', None) is not None:
@@ -804,6 +806,20 @@ class User(AgentProfile):
 
     def update_last_accepted_privacy_policy_date(self, date):
         self.last_accepted_privacy_policy_date = date
+
+    @property
+    def user_last_rejected_cgu_date(self):
+        self.last_rejected_cgu_date or False
+
+    def update_last_rejected_cgu_date(self, date):
+        self.last_rejected_cgu_date = date
+
+    @property
+    def user_last_rejected_privacy_policy_date(self):
+        self.last_rejected_privacy_policy_date or False
+
+    def update_last_rejected_privacy_policy_date(self, date):
+        self.last_rejected_privacy_policy_date = date
 
     @property
     def username_p(self):

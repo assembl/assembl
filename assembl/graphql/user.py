@@ -18,6 +18,7 @@ from assembl.auth.password import random_string
 from datetime import datetime
 from .permissions_helpers import require_cls_permission
 from .preferences import Preferences
+from assembl.models.cookie_types import CookieTypes
 
 _ = TranslationStringFactory('assembl')
 
@@ -41,12 +42,8 @@ class AgentProfile(SecureObjectType, SQLAlchemyObjectType):
     is_deleted = graphene.Boolean(description=docs.AgentProfile.is_deleted)
     is_machine = graphene.Boolean(description=docs.AgentProfile.is_machine)
     preferences = graphene.Field(Preferences, description=docs.AgentProfile.preferences)
-
-    def resolve_is_deleted(self, args, context, info):
-        return self.is_deleted or False
-
-    def resolve_user_id(self, args, context, info):
-        return self.id
+    last_accepted_cgu_date = DateTime()
+    last_accepted_privacy_policy = DateTime()
 
     def resolve_name(self, args, context, info):
         return self.real_name()
@@ -283,3 +280,84 @@ class DeleteUserInformation(graphene.Mutation):
 
             db.flush()
         return DeleteUserInformation(user=user)
+
+
+class UpdateAcceptedCookiesByUser(graphene.Mutation):
+
+    class Input:
+        id = graphene.ID(required=True)
+        action = graphene.String(required=True)
+
+    user = graphene.Field(lambda: AgentProfile)
+
+    @staticmethod
+    @abort_transaction_on_exception
+    def mutate(root, args, context, info):
+        cls = models.User
+        db = cls.default_db
+        global_id = args.get('id')
+        id_ = int(Node.from_global_id(global_id)[1])
+        action_type = args['action']
+        user = cls.get(id_)
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        permissions = get_permissions(user.id, discussion_id)
+        require_cls_permission(CrudPermissions.UPDATE, cls, context)
+        from assembl.models.action import AcceptCGUOnDiscussion, AcceptSessionOnDiscussion, AcceptTrackingOnDiscussion
+        with cls.default_db.no_autoflush as db:
+            asid = user.get_status_in_discussion(discussion_id)
+            asid.update_cookies(action_type)
+            if CookieTypes.ACCEPT_CGU.name == action_type:
+                action = AcceptCGUOnDiscussion(discussion=discussion, actor_id=user.id)
+                user.last_accepted_cgu_date = datetime.utcnow()
+            elif CookieTypes.ACCEPT_SESSION_ON_DISCUSSION.name == action_type:
+                action = AcceptSessionOnDiscussion(discussion=discussion, actor_id=user.id)
+                asid.update_cookies(action_type)
+            elif CookieTypes.ACCEPT_TRACKING_ON_DISCUSSION.name == action_type:
+                action = AcceptTrackingOnDiscussion(discussion=discussion, actor_id=user.id)
+                asid.update_cookies(action_type)
+
+            action = action.handle_duplication(permissions=permissions, user_id=user.id)
+            db.add(action)
+        return UpdateAcceptedCookiesByUser(user=user)
+
+
+class DeleteAcceptedCookiesByUser(graphene.Mutation):
+
+    class Input:
+        id = graphene.ID(required=True)
+        action = graphene.String(required=True)
+
+    user = graphene.Field(lambda: AgentProfile)
+
+    @staticmethod
+    @abort_transaction_on_exception
+    def mutate(root, args, context, info):
+        cls = models.User
+        db = cls.default_db
+        global_id = args.get('id')
+        id_ = int(Node.from_global_id(global_id)[1])
+        action_type = args['action']
+        user = cls.get(id_)
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        permissions = get_permissions(user.id, discussion_id)
+        require_cls_permission(CrudPermissions.DELETE, cls, context)
+        from assembl.models.action import RejectCGUOnDiscussion, RejectSessionOnDiscussion, RejectTrackingOnDiscussion
+        with cls.default_db.no_autoflush as db:
+            asid = user.get_status_in_discussion(discussion_id)
+            asid.delete_cookie(action_type)
+            if CookieTypes.ACCEPT_CGU.name == action_type:
+                action = RejectCGUOnDiscussion(discussion=discussion, actor_id=user.id)
+                user.update_last_rejected_cgu_date(datetime.utcnow())
+            elif CookieTypes.ACCEPT_SESSION_ON_DISCUSSION.name == action_type:
+                action = RejectSessionOnDiscussion(discussion=discussion, actor_id=user.id)
+                asid.delete_cookie(action_type)
+            elif CookieTypes.ACCEPT_TRACKING_ON_DISCUSSION.name == action_type:
+                action = RejectTrackingOnDiscussion(discussion=discussion, actor_id=user.id)
+                asid.delete_cookie(action_type)
+
+            action = action.handle_duplication(permissions=permissions, user_id=user.id)
+            db.add(action)
+
+        return UpdateAcceptedCookiesByUser(user=user)

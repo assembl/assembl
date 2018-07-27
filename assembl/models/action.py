@@ -87,6 +87,14 @@ class ActionOnDiscussion(Action):
 
     discussion = relationship(Discussion, foreign_keys=(discussion_id), backref=backref("action_on_discussion", cascade="all"))
 
+    def get_discussion_id(self):
+        return self.discussion_id
+
+    @classmethod
+    def get_discussion_conditions(cls, discussion_id, alias_maker=None):
+        return ((cls.id == Action.id),
+                (cls.discussion_id == discussion_id))
+
 
 class AcceptSessionOnDiscussion(ActionOnDiscussion):
 
@@ -106,6 +114,39 @@ class AcceptTrackingOnDiscussion(ActionOnDiscussion):
 
     __mapper_args__ = {
         'polymorphic_identity': 'discussion:accepttracking'
+    }
+
+
+class AcceptPrivacyPolicyOnDiscussion(ActionOnDiscussion):
+    __mapper_args__ = {
+        'polymorphic_identity': 'discussion:acceptprivacypolicy'
+    }
+
+
+class RejectSessionOnDiscussion(ActionOnDiscussion):
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'discussion:rejectsession'
+    }
+
+
+class RejectCGUOnDiscussion(ActionOnDiscussion):
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'discussion:rejectcgu'
+    }
+
+
+class RejectTrackingOnDiscussion(ActionOnDiscussion):
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'discussion:rejecttracking'
+    }
+
+
+class RejectPrivacyPolicyOnDiscussion(ActionOnDiscussion):
+    __mapper_args__ = {
+        'polymorphic_identity': 'discussion:rejectprivacypolicy'
     }
 
 

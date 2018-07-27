@@ -42,6 +42,51 @@ mutation DeleteUserInformation($id: ID!) {
 }
 """
 
+# GET_COOKIES_INFORMATION_QUERY = u"""
+# query GetAcceptedCookiesByUser($id: ID!) {
+#     GetAcceptedCookiesByUser(
+#     id: $id
+#     ) {
+#     user{
+#     ... on AgentProfile {
+#       id
+#       }
+#     }
+#   }
+# }
+# """
+
+UPDATE_COOKIES_INFORMATION_FOR_USER_MUTATION = u"""
+mutation UpdateAcceptedCookiesByUser($id: ID!, $action: String!) {
+    UpdateAcceptedCookiesByUser(
+    id: $id
+    action: $action
+    ) {
+    user{
+    ... on AgentProfile {
+      id
+      }
+    }
+  }
+}
+"""
+
+DELETE_COOKIES_INFORMATION_FOR_USER_MUTATION = u"""
+mutation DeleteAcceptedCookiesByUser($id: ID!, $action: String!) {
+    DeleteAcceptedCookiesByUser(
+    id: $id
+    action: $action
+    ) {
+    user{
+    ... on AgentProfile {
+      id
+      }
+    }
+  }
+}
+"""
+
+
 
 def test_graphql_get_profile(graphql_request, participant1_user):
     res = schema.execute(u"""
@@ -410,3 +455,25 @@ def test_graphql_delete_user_with_username(graphql_request, participant1_user, t
     assert res.errors is None
     username = test_session.query(m.Username).filter(m.Username.user_id == participant1_user.id).all()
     assert len(username) == 0
+
+def test_graphql_update_accepted_cookies_by_user(graphql_request, participant2_user, discussion, asid3, test_session):
+    from assembl import models as m
+    # import pdb; pdb.set_trace()
+    res = schema.execute(UPDATE_COOKIES_INFORMATION_FOR_USER_MUTATION, context_value=graphql_request, variable_values={
+        "id": to_global_id('AgentProfile', participant2_user.id), "action": "ACCEPT_TRACKING_ON_DISCUSSION"
+        })
+    import pdb; pdb.set_trace()
+    assert "ACCEPT_TRACKING_ON_DISCUSSION" in asid3.accepted_cookies
+    atod = test_session.query(m.ActionOnDiscussion).filter(m.ActionOnDiscussion.type=="discussion:accepttracking").first()
+    assert atod.actor_id == participant2_user.id
+    assert atod.discussion_id == discussion.id
+
+def test_graphql_delete_accepted_cookie_by_user(graphql_request, participant2_user, discussion, asid3, test_session):
+    from assembl import models as m
+    res = schema.execute(DELETE_COOKIES_INFORMATION_FOR_USER_MUTATION, context_value=graphql_request, variable_values={
+        "id": to_global_id('AgentProfile', participant2_user.id), "action": "ACCEPT_CGU_ON_DISCUSSION"
+        })
+    assert "ACCEPT_CGU_ON_DISCUSSION" not in asid3.accepted_cookies
+
+
+

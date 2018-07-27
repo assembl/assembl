@@ -39,7 +39,7 @@ from assembl.graphql.section import (CreateSection, DeleteSection, Section,
                                      UpdateSection)
 from assembl.graphql.sentiment import AddSentiment, DeleteSentiment
 from assembl.graphql.synthesis import Synthesis
-from assembl.graphql.user import UpdateUser, DeleteUserInformation
+from assembl.graphql.user import UpdateUser, DeleteUserInformation, UpdateAcceptedCookiesByUser, DeleteAcceptedCookiesByUser
 from .configurable_fields import ConfigurableFieldUnion, CreateTextField, UpdateTextField, DeleteTextField, ProfileField, UpdateProfileFields
 from assembl.graphql.timeline import DiscussionPhase, CreateDiscussionPhase, UpdateDiscussionPhase, DeleteDiscussionPhase
 from assembl.graphql.votes import AddTokenVote, AddGaugeVote
@@ -466,6 +466,8 @@ class Mutations(graphene.ObjectType):
     update_legal_contents = UpdateLegalContents.Field(description=docs.UpdateLegalContents.__doc__)
     update_user = UpdateUser.Field(description=docs.UpdateUser.__doc__)
     DeleteUserInformation = DeleteUserInformation.Field(description=docs.DeleteUserInformation.__doc__)
+    UpdateAcceptedCookiesByUser = UpdateAcceptedCookiesByUser.Field()
+    DeleteAcceptedCookiesByUser = DeleteAcceptedCookiesByUser.Field()
     update_vote_session = UpdateVoteSession.Field(description=docs.UpdateVoteSession.__doc__)
     create_token_vote_specification = CreateTokenVoteSpecification.Field(description=docs.CreateTokenVoteSpecification.__doc__)
     update_token_vote_specification = UpdateTokenVoteSpecification.Field(description=docs.UpdateTokenVoteSpecification.__doc__)

@@ -193,6 +193,13 @@ from .idea_msg_columns import (  # noqa: E402, F401
 )
 from .action import (  # noqa: E402, F401
     Action,
+    ActionOnDiscussion,
+    AcceptSessionOnDiscussion,
+    AcceptCGUOnDiscussion,
+    AcceptTrackingOnDiscussion,
+    RejectSessionOnDiscussion,
+    RejectCGUOnDiscussion,
+    RejectTrackingOnDiscussion,
     ActionOnIdea,
     ActionOnPost,
     CollapsePost,
