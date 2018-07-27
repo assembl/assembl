@@ -21,7 +21,7 @@ from assembl.lib import config
 def upgrade(pyramid_env):
     with context.begin_transaction():
     	op.add_column('agent_status_in_discussion', sa.Column("accepted_cookies", sa.Text()))
-    	op.add_column('user', sa.Column("last_accepted_cgu_date",sa.DateTime, default=None))
+        op.add_column('user', sa.Column("last_accepted_cgu_date",sa.DateTime, default=None))
         op.add_column('user', sa.Column("last_accepted_privacy_policy_date", sa.DateTime, default=None))
         op.create_table(
             "action_on_discussion",
