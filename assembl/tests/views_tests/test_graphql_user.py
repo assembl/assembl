@@ -122,7 +122,7 @@ def test_graphql_update_user(graphql_request, participant1_user):
     assert res.errors is None
     assert res.data['updateUser']['user']['name'] == u'M. Barking Loon'
     assert res.data['updateUser']['user']['username'] == u'Barking.Loon'
-    assert res.data['updateUser']['user']['displayName'] == u'M. Barking Loon'
+    assert res.data['updateUser']['user']['displayName'] == u'Barking.Loon'
     image = res.data['updateUser']['user']['image']
     assert '/documents/' in image['externalUrl']
 
@@ -336,7 +336,7 @@ def test_graphql_delete_sysadmin_user(discussion_sysadmin_user, graphql_request)
 
 def test_graphql_delete_admin_user_alone(discussion_admin_user, graphql_request):
     """
-    Testing if it is possible to delete an admin user 
+    Testing if it is possible to delete an admin user
     if he is the only admin user
     """
     res = schema.execute(DELETE_USER_INFORMATION_MUTATION, context_value=graphql_request, variable_values={
@@ -348,7 +348,7 @@ def test_graphql_delete_admin_user_alone(discussion_admin_user, graphql_request)
 
 def test_graphql_delete_admin_user_not_alone(discussion_admin_user, discussion_admin_user_2, graphql_request):
     """
-    Testing if is possible to delete an admin user when he is not the only admin 
+    Testing if is possible to delete an admin user when he is not the only admin
     """
     from assembl.auth.password import random_string
     user_password = discussion_admin_user.password_p
