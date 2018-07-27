@@ -1,25 +1,7 @@
+#import "./fragments/DiscussionPhase.graphql"
+
 query Timeline($lang: String!) {
   timeline {
-    id
-    identifier
-    isThematicsTable
-    title(lang: $lang)
-    titleEntries {
-      localeCode
-      value
-    }
-    start
-    end
-    order
-    image {
-      mimeType
-      title
-      externalUrl
-    }
-    description(lang: $lang)
-    descriptionEntries {
-      localeCode
-      value
-    }
+    ...discussionPhase
   }
 }

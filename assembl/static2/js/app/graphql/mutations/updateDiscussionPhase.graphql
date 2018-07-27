@@ -1,4 +1,5 @@
 #import "../fragments/LangString.graphql"
+#import "../fragments/DiscussionPhase.graphql"
 
 mutation updateDiscussionPhase(
   $id: ID!
@@ -25,23 +26,7 @@ mutation updateDiscussionPhase(
     order: $order
   ) {
     discussionPhase {
-      id
-      identifier
-      isThematicsTable
-      title(lang: $lang)
-      titleEntries {
-        ...langStringEntry
-      }
-      descriptionEntries {
-        ...langStringEntry
-      }
-      start
-      end
-      order
-      image {
-        externalUrl
-        mimeType
-      }
+      ...discussionPhase
     }
   }
 }

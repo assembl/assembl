@@ -20,22 +20,21 @@ import withLoadingIndicator from './components/common/withLoadingIndicator';
 export const IsHarvestingContext = React.createContext(false);
 
 class App extends React.Component {
-  constructor(props) {
-    super(props);
+  componentDidMount() {
     const debateId = getDiscussionId();
     const connectedUserId = getConnectedUserId();
     const connectedUserName = getConnectedUserName();
     this.props.fetchDebateData(debateId);
     this.props.addContext(this.props.route.path, debateId, connectedUserId, connectedUserName);
-  }
-
-  componentDidMount() {
     const { timeline, putTimelineInStore } = this.props;
     putTimelineInStore(timeline);
   }
 
-  componentDidUpdate() {
-    const { debate, location, params, timeline } = this.props;
+  componentDidUpdate(prevProps) {
+    const { debate, location, params, timeline, putTimelineInStore } = this.props;
+    if (timeline !== prevProps.timeline) {
+      putTimelineInStore(timeline);
+    }
     if (!params.phase && !debate.debateLoading && location.pathname.split('/').indexOf('debate') > -1) {
       const currentPhaseIdentifier = getCurrentPhaseIdentifier(timeline);
       browserHistory.push(get('debate', { slug: params.slug, phase: currentPhaseIdentifier }));

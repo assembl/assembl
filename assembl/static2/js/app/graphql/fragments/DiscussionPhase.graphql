@@ -1,0 +1,23 @@
+#import "./LangString.graphql"
+
+fragment discussionPhase on DiscussionPhase {
+  id
+  identifier
+  isThematicsTable
+  title(lang: $lang)
+  titleEntries {
+    ...langStringEntry
+  }
+  description(lang: $lang)
+  descriptionEntries {
+    ...langStringEntry
+  }
+  start
+  end
+  order
+  image {
+    mimeType
+    title
+    externalUrl
+  }
+}

@@ -1,4 +1,5 @@
 #import "../fragments/LangString.graphql"
+#import "../fragments/DiscussionPhase.graphql"
 
 mutation createDiscussionPhase(
   $lang: String!
@@ -19,16 +20,7 @@ mutation createDiscussionPhase(
     order: $order
   ) {
     discussionPhase {
-      id
-      identifier
-      isThematicsTable
-      title(lang: $lang)
-      titleEntries {
-        ...langStringEntry
-      }
-      start
-      end
-      order
+      ...discussionPhase
     }
   }
 }
