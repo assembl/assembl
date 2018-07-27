@@ -15,7 +15,6 @@ import Error from './components/common/error';
 import ChatFrame from './components/common/ChatFrame';
 import { browserHistory } from './router';
 import TimelineQuery from './graphql/Timeline.graphql';
-import withLoadingIndicator from './components/common/withLoadingIndicator';
 
 export const IsHarvestingContext = React.createContext(false);
 
@@ -26,16 +25,14 @@ class App extends React.Component {
     const connectedUserName = getConnectedUserName();
     this.props.fetchDebateData(debateId);
     this.props.addContext(this.props.route.path, debateId, connectedUserId, connectedUserName);
-    const { timeline, putTimelineInStore } = this.props;
-    putTimelineInStore(timeline);
   }
 
   componentDidUpdate(prevProps) {
-    const { debate, location, params, timeline, putTimelineInStore } = this.props;
-    if (timeline !== prevProps.timeline) {
+    const { timelineLoading, location, params, timeline, putTimelineInStore } = this.props;
+    if (!timelineLoading && timeline !== prevProps.timeline) {
       putTimelineInStore(timeline);
     }
-    if (!params.phase && !debate.debateLoading && location.pathname.split('/').indexOf('debate') > -1) {
+    if (!params.phase && !timelineLoading && location.pathname.split('/').indexOf('debate') > -1) {
       const currentPhaseIdentifier = getCurrentPhaseIdentifier(timeline);
       browserHistory.push(get('debate', { slug: params.slug, phase: currentPhaseIdentifier }));
     }
@@ -86,12 +83,12 @@ export default compose(
     props: ({ data }) => {
       if (data.loading) {
         return {
-          loading: true
+          timelineLoading: true
         };
       }
       if (data.error) {
         return {
-          loading: false,
+          timelineLoading: false,
           timeline: []
         };
       }
@@ -108,10 +105,9 @@ export default compose(
         description: phase.description
       }));
       return {
-        loading: data.loading,
+        timelineLoading: data.loading,
         timeline: phasesForStore
       };
     }
-  }),
-  withLoadingIndicator()
+  })
 )(App);

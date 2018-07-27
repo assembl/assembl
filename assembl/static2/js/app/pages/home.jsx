@@ -39,7 +39,11 @@ class Home extends React.Component {
     const { debateData } = this.props.debate;
     const { locale } = this.props.i18n;
     const { timeline } = this.props;
-    if (!timeline || timeline.length === 0) {
+    if (!timeline) {
+      // timeline is still loading
+      return null;
+    }
+    if (timeline.length === 0) {
       return <MessagePage title={I18n.t('home.assemblNotConfigured')} text={I18n.t('administration.noTimeline')} />;
     }
 
