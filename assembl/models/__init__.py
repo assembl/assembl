@@ -350,6 +350,14 @@ from .computation import (  # noqa: E402, F401
     ComputationOnIdea,
     ComputationOnPost,
 )
+from .nlp import (  # noqa: E402, F401
+    LocalizedUriConcept,
+    DBPediaConcept,
+    Tag,
+    PostKeywordAnalysis,
+    PostDBPediaConceptAnalysis,
+    PostWatsonV1SentimentAnalysis,
+)
 from .resource import Resource  # noqa: E402, F401
 
 from .section import Section  # noqa: E402, F401
