@@ -122,19 +122,26 @@ class DBPediaConcept(LocalizedUriConcept):
             if not concept:
                 concept = DBPediaConcept(
                     concept_uri=result, locale=Locale.get_or_create('en', db))
+                db.add(concept)
             self.english_concept = concept
         return self.english_concept
 
     def identify_languages(self, languages, db=None):
         db = db or self.db
-        concepts = []
         if not languages:
-            return concepts
+            return []
         locale = self.identify_locale()
         if locale.code != 'en':
             english = self.identify_english(db)
             db.flush()
             return english.identify_languages(languages, db)
+        existing = db.query(DBPediaConcept).filter_by(english_id=self.id).all()
+        existing.append(self)
+        existing_locales = {c.locale.code for c in existing}
+        missing_locales = set(languages) - existing_locales
+        concepts = [c for c in existing if c.locale.code in languages]
+        if not missing_locales:
+            return concepts
         sparql = u"SELECT ?o WHERE {<%s> <%s> ?o}" % (self.concept_uri, sameAs)
         result = requests.get('http://dbpedia.org/sparql', params={
             'query': sparql,
@@ -142,27 +149,23 @@ class DBPediaConcept(LocalizedUriConcept):
         if not result.ok:
             return False
         results = [x.strip('"') for x in result.content.split()[1:]]
-        if not len(results):
-            return False
-        if 'en' in languages:
-            concepts.append(self)
         for result in results:
             match = self._rel_re.match(result)
             if not match:
                 continue
-            locale = match.group(1).rstrip('.')
-            if locale in languages:
-                locale = Locale.get_or_create(locale, db)
-                concept = db.query(DBPediaConcept).filter_by(
-                    concept_uri=result, locale_id=locale.id).first()
-                if concept:
-                    concept.english_concept = self
-                else:
-                    concept = DBPediaConcept(
-                        concept_uri=result.decode('utf-8'),
-                        locale=locale, english_concept=self)
-                    db.add(concept)
-                concepts.append(concept)
+            locale = match.group(1)
+            if not locale:
+                continue
+            locale = locale.rstrip('.')
+            if locale not in missing_locales:
+                continue
+            concept = DBPediaConcept(
+                concept_uri=result.decode('utf-8'),
+                locale=Locale.get_or_create(locale, db), english_concept=self)
+            db.add(concept)
+            concepts.append(concept)
+            missing_locales.remove(locale)
+        db.flush()
         return concepts
 
 

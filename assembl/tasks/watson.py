@@ -13,7 +13,6 @@ from ..lib.model_watcher import BaseModelEventWatcher
 from ..lib.utils import waiting_get
 from ..lib import config
 
-
 API_ENDPOINTS = {}
 api_version = config.get("watson_api_version", "2018-03-16")
 
@@ -31,7 +30,15 @@ def get_endpoint(api_key):
 @celery.task()
 def process_post_created_task(id):
     from ..models.generic import Content
-    from ..models import Locale
+    from ..models.langstrings import Locale
+    from ..models.nlp import (
+        DBPediaConcept,
+        PostKeywordAnalysis,
+        PostDBPediaConceptAnalysis,
+        PostWatsonV1SentimentAnalysis,
+        Tag,
+    )
+
     post = waiting_get(Content, id)
     assert post
     api_key = config.get("watson_api_key")
@@ -41,18 +48,50 @@ def process_post_created_task(id):
         if computation.status == "pending":
             features = Features._from_dict(computation.parameters)
             try:
+                desired_locales = post.discussion.preferences['preferred_locales']
                 lse = post.body.first_original()
                 lang = lse.locale.code
                 result = endpoint.analyze(
                     html=lse.value,
                     language=lang if lang != Locale.UNDEFINED else None,
                     clean=False,
-                    return_analyzed_text=False,
+                    return_analyzed_text=True,
                     features=features)
                 if lang == Locale.UNDEFINED:
                     lse.locale = Locale.get_or_create(result['language'])
                 computation.result = result
                 computation.status = "success"
+                for keyword in result['keywords']:
+                    tag = Tag.getOrCreateTag(
+                        keyword['text'], lse.locale, post.db)
+                    post.db.add(PostKeywordAnalysis(
+                        post=post, source=computation,
+                        tag=tag, score=keyword['relevance']))
+                for category in result['categories']:
+                    tag = Tag.getOrCreateTag(
+                        category['label'], lse.locale, post.db)
+                    post.db.add(PostKeywordAnalysis(
+                        post=post, source=computation, category=True,
+                        tag=tag, score=category['score']))
+                for concept in result['concepts']:
+                    dbconcept = DBPediaConcept.get_or_create(
+                        concept['dbpedia_resource'], post.db)
+                    dbconcept.identify_languages(desired_locales, post.db)
+                    post.db.add(PostDBPediaConceptAnalysis(
+                        post=post, source=computation,
+                        value=dbconcept, score=keyword['relevance']))
+                emotion = result['emotion']['document']['emotion']
+                post.db.add(PostWatsonV1SentimentAnalysis(
+                    post=post,
+                    source=computation,
+                    text_length=len(result['analyzed_text']),
+                    sentiment=result['sentiment']['document']['score'],
+                    anger=emotion['anger'],
+                    disgust=emotion['disgust'],
+                    fear=emotion['fear'],
+                    joy=emotion['joy'],
+                    sadness=emotion['sadness'],
+                ))
             except Exception as e:
                 computation.result = str(e)
                 computation.status = "failure"
@@ -88,7 +127,7 @@ class ModelEventWatcherCelerySender(BaseModelEventWatcher):
                 concepts=ConceptsOptions(),
                 sentiment=SentimentOptions(),
                 emotion=EmotionOptions(),
-                keywords=KeywordsOptions(sentiment=True, emotion=True))
+                keywords=KeywordsOptions())  # sentiment=True, emotion=True
 
             get_or_create_computation_on_post(
                 post, "watson_" + api_version, features._to_dict())
