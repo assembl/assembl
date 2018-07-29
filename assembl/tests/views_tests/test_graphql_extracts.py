@@ -243,7 +243,7 @@ def test_mutation_add_extracts(graphql_request, top_post_in_thread_phase):
   }
 
   res = schema.execute(u"""
-mutation AddPostsExtract($extracts: [PostExtractEntryInput]!, $extractState: String, $extractNature: String) {
+mutation AddPostsExtract($extracts: [PostExtractEntryInput]!, $extractState: ExtractStates, $extractNature: ExtractNatures) {
   addPostsExtract(extracts: $extracts, extractState: $extractState, extractNature: $extractNature) {
     status
   }

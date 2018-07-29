@@ -16,7 +16,6 @@ from assembl.auth.util import get_permissions
 from assembl.lib.clean_input import sanitize_html, sanitize_text
 from assembl.models.auth import (LanguagePreferenceCollection,
                                  LanguagePreferenceCollectionWithDefault)
-from assembl.models.idea_content_link import ExtractStates
 from jwzthreading import restrip_pat
 
 import assembl.graphql.docstrings as docs
@@ -30,7 +29,7 @@ from .types import SecureObjectType, SQLAlchemyInterface
 from .user import AgentProfile
 from .utils import DateTime, abort_transaction_on_exception
 from .synthesis import Synthesis
-from .extract import Extract
+from .extract import Extract, ExtractStates, ExtractNatures
 
 
 _ = TranslationStringFactory('assembl')
@@ -725,8 +724,8 @@ class AddPostsExtract(graphene.Mutation):
     class Input:
         extracts = graphene.List(
             PostExtractEntryInput, required=True, description=docs.AddPostsExtract.extracts)
-        extract_nature = graphene.String(description=docs.AddPostsExtract.extract_nature)
-        extract_state = graphene.String(description=docs.AddPostsExtract.extract_state)
+        extract_nature = ExtractNatures(description=docs.AddPostsExtract.extract_nature)
+        extract_state = ExtractStates(description=docs.AddPostsExtract.extract_state)
 
     status = graphene.Boolean(description=docs.AddPostsExtract.status)
 
@@ -740,19 +739,17 @@ class AddPostsExtract(graphene.Mutation):
         user_id = context.authenticated_userid or Everyone
         extracts = args.get('extracts')
         status = True
+        extract_nature = args.get('extract_nature', None)
+        extract_nature = models.ExtractNatureVocabulary.Enum(extract_nature) if extract_nature else None
+        extract_state = args.get('extract_state', None)
         # Add all of extracts
         for extract in extracts:
             post_id = extract.get('post_id')
             post_id = int(Node.from_global_id(post_id)[1])
             post = models.Post.get(post_id) if post_id else None
-
             if not post:
                 continue
 
-            extract_nature = getattr(
-                models.ExtractNatureVocabulary.Enum, args.get('extract_nature', ''), None)
-            extract_state = getattr(
-                ExtractStates, args.get('extract_state', ''), None)
             new_extract = models.Extract(
                 creator_id=user_id,
                 owner_id=user_id,
@@ -761,7 +758,7 @@ class AddPostsExtract(graphene.Mutation):
                 important=extract.get('important', False),
                 content=post,
                 extract_nature=extract_nature,
-                extract_state=extract_state.value
+                extract_state=extract_state
             )
             post.db.add(new_extract)
             range = models.TextFragmentIdentifier(

@@ -13,9 +13,13 @@ from .types import SecureObjectType, SQLAlchemyInterface
 from .utils import abort_transaction_on_exception, DateTime
 from .user import AgentProfile
 
-extract_states_enum = PyEnum(
-    'ExtractStates', [(k.value, k.value) for k in models.ExtractStates.__members__.values()])
-ExtractStates = graphene.Enum.from_enum(extract_states_enum)
+
+ExtractStates = graphene.Enum.from_enum(models.ExtractStates)
+
+extract_natures_enum = PyEnum(
+    'ExtractNatures', [(k.name, k.value) for k in models.ExtractNatureVocabulary.Enum])
+
+ExtractNatures = graphene.Enum.from_enum(extract_natures_enum)
 
 
 class TextFragmentIdentifier(SecureObjectType, SQLAlchemyObjectType):
