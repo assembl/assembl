@@ -856,16 +856,26 @@ def get_robot_machine():
     """
     Return the configured robot machine: (the first configured machine)
     """
-    machines = env.get('machines', '').split('/')
+    # Retrive the list of registered machines
+    # Machines format: machine_id,machine_name,machine_password/...others
+    machines = env.get('machines', '')
     if machines:
-        robot = machines[0]
+        # Get the first machine
+        robot = machines.split('/')[0]
+        # Retrive the machine data
         robot_data = robot.split(',')
+        # We must find three data (identifier, name and password)
+        if len(robot_data) != 3:
+            print red("The data of the user machine are wrong! %s" % robot)
+            return None
+
         return {
             'identifier': robot_data[0].strip(),
             'name': robot_data[1].strip(),
             'password': robot_data[2].strip()
         }
 
+    print red("No user machine found!")
     return None
 
 
