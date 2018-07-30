@@ -160,6 +160,15 @@ exports[`PhaseForm component should render a form to update the dates and module
       >
         Vote module
       </MenuItem>
+      <MenuItem
+        bsClass="dropdown"
+        disabled={false}
+        divider={false}
+        eventKey="brightMirror"
+        header={false}
+      >
+        Bright Mirror module
+      </MenuItem>
     </SplitButton>
   </div>
   <div

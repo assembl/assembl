@@ -493,7 +493,8 @@ const Translations = {
         survey: "Module Questions",
         thread: "Module Threads",
         multiColumns: "Module Multi-colonnes",
-        voteSession: "Module de vote"
+        voteSession: "Module de vote",
+        brightMirror: "Module Bright Mirror"
       },
       noTimeline: "Aucune timeline n'a été configurée pour ce débat.",
       survey: {
@@ -1244,7 +1245,8 @@ const Translations = {
         survey: "Survey module",
         thread: "Thread module",
         multiColumns: "Multi-columns module",
-        voteSession: "Vote module"
+        voteSession: "Vote module",
+        brightMirror: "Bright Mirror module"
       },
       noTimeline: "No timeline has been configured yet",
       survey: {
