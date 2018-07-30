@@ -1,6 +1,5 @@
 // @flow
 import React from 'react';
-import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { I18n } from 'react-redux-i18n';
 import { type Route, type Router } from 'react-router';
