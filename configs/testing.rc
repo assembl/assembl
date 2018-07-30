@@ -2,6 +2,7 @@ _extends = ./base_env.rc
 _wsginame = dev.wsgi
 _urlhost = localhost
 _uses_nginx = false
+_uses_bluenove_actionable = false
 _gitbranch = develop
 _is_production_env = false
 _ini_file = testing.ini
