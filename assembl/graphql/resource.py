@@ -33,6 +33,7 @@ class Resource(SecureObjectType, SQLAlchemyObjectType):
     title_entries = graphene.List(LangStringEntry, description=docs.Resource.title_entries)
     text_entries = graphene.List(LangStringEntry, description=docs.Resource.title_entries)
     embed_code = graphene.String(description=docs.Resource.embed_code)
+    order = graphene.Float(description=docs.Resource.order)
     image = graphene.Field(Document, description=docs.Resource.image)
     doc = graphene.Field(Document, description=docs.Resource.doc)
 
@@ -69,11 +70,13 @@ class CreateResource(graphene.Mutation):
     class Input:
         # Careful, having required=True on a graphene.List only means
         # it can't be None, having an empty [] is perfectly valid.
+        lang = graphene.String(description=docs.CreateResource.lang)
         title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.CreateResource.title_entries)
         text_entries = graphene.List(LangStringEntryInput, description=docs.CreateResource.text_entries)
         embed_code = graphene.String(description=docs.CreateResource.embed_code)
         image = graphene.String(description=docs.CreateResource.image)
         doc = graphene.String(description=docs.CreateResource.doc)
+        order = graphene.Float(description=docs.CreateResource.order)
 
     resource = graphene.Field(lambda: Resource)
 
@@ -110,6 +113,7 @@ class CreateResource(graphene.Mutation):
                 kwargs['text'] = text_langstring
 
             kwargs['embed_code'] = args.get('embed_code')
+            kwargs['order'] = args.get('order')
             saobj = cls(
                 discussion_id=discussion_id,
                 title=title_langstring,
@@ -197,6 +201,7 @@ class UpdateResource(graphene.Mutation):
         embed_code = graphene.String(description=docs.UpdateResource.embed_code)
         image = graphene.String(description=docs.UpdateResource.image)
         doc = graphene.String(description=docs.UpdateResource.doc)
+        order = graphene.Float(description=docs.UpdateResource.order)
 
     resource = graphene.Field(lambda: Resource)
 
@@ -235,6 +240,7 @@ class UpdateResource(graphene.Mutation):
                 resource, 'text', args.get('text_entries'))
             kwargs = {}
             kwargs['embed_code'] = args.get('embed_code', None)
+            kwargs['order'] = args.get('order', None)
             for attr, value in kwargs.items():
                 setattr(resource, attr, value)
 

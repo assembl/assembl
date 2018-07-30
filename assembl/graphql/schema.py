@@ -132,8 +132,7 @@ class Query(graphene.ObjectType):
         model = models.Resource
         query = get_query(model, context)
         discussion_id = context.matchdict['discussion_id']
-        # order by id to always return resources in the order in which they have been created
-        return query.filter(model.discussion_id == discussion_id).order_by(model.id)
+        return query.filter(model.discussion_id == discussion_id).order_by(model.order)
 
     def resolve_has_resources_center(self, args, context, info):
         model = models.Resource

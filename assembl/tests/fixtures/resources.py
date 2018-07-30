@@ -9,7 +9,8 @@ def resource(request, discussion, test_session):
         discussion=discussion,
         title=LangString.create(u"a resource", "en"),
         text=LangString.create(u"Lorem ipsum dolor sit amet", "en"),
-        embed_code=u"<iframe ...>"
+        embed_code=u"<iframe ...>",
+        order=2.0
     )
 
     test_session.add(resource)
@@ -32,7 +33,8 @@ def resource_with_image_and_doc(request, discussion, moderator_user, simple_file
         discussion=discussion,
         title=LangString.create(u"another resource", "en"),
         text=LangString.create(u"Lorem ipsum dolor sit amet", "en"),
-        embed_code=u""
+        embed_code=u"",
+        order=1.0
     )
     resource_image = ResourceAttachment(
         discussion=discussion,

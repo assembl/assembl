@@ -1,5 +1,6 @@
 from sqlalchemy import (
     Column,
+    Float,
     Integer,
     String,
     UnicodeText,
@@ -10,6 +11,7 @@ from sqlalchemy.orm import relationship, backref
 from assembl.auth import CrudPermissions, P_MANAGE_RESOURCE, P_READ
 from . import DiscussionBoundBase
 from .langstrings import LangString
+import assembl.graphql.docstrings as docs
 
 
 class Resource(DiscussionBoundBase):
@@ -55,6 +57,9 @@ class Resource(DiscussionBoundBase):
         cascade="all, delete-orphan")
 
     embed_code = Column(UnicodeText)
+
+    order = Column(
+        Float, nullable=False, default=0.0, doc=docs.Resource.order)
 
     def get_discussion_id(self):
         return self.discussion_id or self.discussion.id

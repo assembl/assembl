@@ -1,22 +1,25 @@
+#import "../fragments/Resource.graphql"
+
 mutation createResource(
   $doc: String
   $embedCode: String
   $image: String
+  $lang: String
   $textEntries: [LangStringEntryInput]!
   $titleEntries: [LangStringEntryInput!]!
+  $order: Float
 ) {
-  createResource(doc: $doc, image: $image, titleEntries: $titleEntries, textEntries: $textEntries, embedCode: $embedCode) {
+  createResource(
+    doc: $doc
+    image: $image
+    lang: $lang
+    titleEntries: $titleEntries
+    textEntries: $textEntries
+    embedCode: $embedCode
+    order: $order
+  ) {
     resource {
-      doc {
-        externalUrl
-      }
-      embedCode
-      image {
-        externalUrl
-        mimeType
-      }
-      text
-      title
+      ...Resource
     }
   }
 }
