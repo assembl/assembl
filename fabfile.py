@@ -593,14 +593,8 @@ def build_virtualenv():
         return
     run('python2 -mvirtualenv --no-setuptools %(venvpath)s' % env)
     # create the virtualenv with --no-setuptools to avoid downgrading setuptools that may fail
-    if not exists("%(projectpath)s/../bluenove-actionable/" % env):
-        print cyan("Cloning git bluenove-actionable repository")
-        with cd("%(projectpath)s/.." % env):
-            # TODO We need an ssh access
-            run('git clone git://github.com/bluenove/bluenove-actionable.git')
-
-        with cd("%(projectpath)s/../bluenove-actionable/" % env):
-            run('docker-compose build', warn_only=True)
+    if env.uses_bluenove_actionable:
+        execute(install_bluenove_actionable)
 
     if env.mac:
         # Virtualenv does not reuse distutils.cfg from the homebrew python,
@@ -854,7 +848,8 @@ def updatemaincode(backup=False):
 
             venvcmd_py3('pip install -r ../url_metadata/requirements.txt')
 
-        execute(update_bluenove_actionable)
+        if env.uses_bluenove_actionable:
+            execute(update_bluenove_actionable)
 
 
 def get_robot_machine():
@@ -875,12 +870,24 @@ def get_robot_machine():
 
 
 @task
+def install_bluenove_actionable():
+    if not exists("%(projectpath)s/../bluenove-actionable/" % env):
+        print cyan("Cloning git bluenove-actionable repository")
+        with cd("%(projectpath)s/.." % env):
+            # We need an ssh access
+            run('git clone git://github.com/bluenove/bluenove-actionable.git')
+
+        with cd("%(projectpath)s/../bluenove-actionable/" % env):
+            run('docker-compose build', warn_only=True)
+
+
+@task
 def update_bluenove_actionable():
     path = join(env.projectpath, '..', 'bluenove-actionable')
     if exists(path):
         print(cyan('Updating bluenove-actionable Git repository'))
         with cd(path):
-            # TODO We need an ssh access
+            # We need an ssh access
             run('git pull', warn_only=True)
             execute(stop_bluenove_actionable)
             run('docker-compose build --no-cache', warn_only=True)
@@ -1056,7 +1063,10 @@ def webservers_reload():
         elif env.mac:
             sudo('killall -HUP nginx')
 
-    execute(restart_bluenove_actionable)
+    if env.uses_bluenove_actionable:
+        execute(restart_bluenove_actionable)
+    else:
+        execute(stop_bluenove_actionable)
 
 
 def webservers_stop():

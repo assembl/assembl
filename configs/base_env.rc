@@ -67,6 +67,7 @@ _uses_global_supervisor = false
 _uses_memcache = true
 _uses_nginx = true
 _uses_uwsgi = true
+_uses_bluenove_actionable = true
 _gitrepo = https://github.com/assembl/assembl.git
 _gitbranch = master
 _is_production_env = true

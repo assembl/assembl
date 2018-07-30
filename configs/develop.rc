@@ -57,6 +57,7 @@ supervisor__autostart_celery_imap = false
 supervisor__autostart_source_reader = false
 _uses_nginx = false
 _uses_uwsgi = false
+_uses_bluenove_actionable = false
 _is_production_env = false
 _wsginame = dev.wsgi
 
