@@ -1,4 +1,4 @@
-#import "../fragments/Resource.graphql"
+#import "./fragments/Resource.graphql"
 
 query ResourcesQuery($lang: String) {
   resources {
