@@ -101,7 +101,7 @@ def sanitize_env():
             "uses_memcache", "uses_uwsgi", "uses_apache",
             "uses_global_supervisor", "uses_apache",
             "uses_nginx", "mac", "is_production_env",
-            "build_docs", "can_test"):
+            "build_docs", "can_test", "uses_bluenove_actionable"):
         # Note that we use as_bool() instead of bool(),
         # so that a variable valued "False" in the .ini
         # file is recognized as boolean False
