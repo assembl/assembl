@@ -106,5 +106,5 @@ supervisor__autostart_urlmetadata = true
 
 # Machines format: machine_id,machine_name,machine_password/...others
 # The first machine is the Robot used for Bigdatext
-machines = robot,Robot,MachinePass
+machines =
 
