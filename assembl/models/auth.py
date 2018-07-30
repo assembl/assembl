@@ -703,7 +703,7 @@ class User(AgentProfile):
                 cls.is_machine == True  # noqa: E712
                 )
             # retrieve machines ids
-            all_machines_ids = [machine.username.username for machine in machines]
+            all_machines_ids = [machine.username_p for machine in machines]
             machines_data = [machine.split(',') for machine in machines_data.split('/')]
             machines_data = {machine[0].strip(): {'name': machine[1].strip(), 'password': machine[2].strip()}
                              for machine in machines_data}
