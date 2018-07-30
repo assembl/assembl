@@ -719,7 +719,8 @@ class User(AgentProfile):
                         machine.get('password'),
                         R_CATCHER,
                         username=machine_id,
-                        is_machine=True
+                        is_machine=True,
+                        flush=False
                     )
                 except Exception:
                     continue

@@ -495,7 +495,9 @@ def add_user(name, email, password, role, force=False, username=None,
     # Do this at login
     # if discussion:
     #     user.get_notification_subscriptions(discussion.id)
-    db.flush()
+    if kwargs.get('flush', True):
+        db.flush()
+
     return (user, created_user, created_localrole)
 
 
