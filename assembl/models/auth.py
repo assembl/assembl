@@ -795,30 +795,30 @@ class User(AgentProfile):
 
     @property
     def user_last_accepted_cgu_date(self):
-        return self.last_accepted_cgu_date or False
+        return self.last_accepted_cgu_date
 
-    def update_last_accepted_cgu_date(self, date):
+    def update_user_last_accepted_cgu_date(self, date):
         self.last_accepted_cgu_date = date
 
     @property
     def user_last_accepted_privacy_policy_date(self):
-        self.last_accepted_privacy_policy_date or False
+        self.last_accepted_privacy_policy_date
 
-    def update_last_accepted_privacy_policy_date(self, date):
+    def update_user_last_accepted_privacy_policy_date(self, date):
         self.last_accepted_privacy_policy_date = date
 
     @property
     def user_last_rejected_cgu_date(self):
-        self.last_rejected_cgu_date or False
+        self.last_rejected_cgu_date
 
-    def update_last_rejected_cgu_date(self, date):
+    def update_user_last_rejected_cgu_date(self, date):
         self.last_rejected_cgu_date = date
 
     @property
     def user_last_rejected_privacy_policy_date(self):
-        self.last_rejected_privacy_policy_date or False
+        self.last_rejected_privacy_policy_date
 
-    def update_last_rejected_privacy_policy_date(self, date):
+    def update_user_last_rejected_privacy_policy_date(self, date):
         self.last_rejected_privacy_policy_date = date
 
     @property

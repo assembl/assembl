@@ -19,6 +19,8 @@ def upgrade(pyramid_env):
         op.add_column('agent_status_in_discussion', sa.Column("accepted_cookies", sa.Text()))
         op.add_column('user', sa.Column("last_accepted_cgu_date",sa.DateTime, default=None))
         op.add_column('user', sa.Column("last_accepted_privacy_policy_date", sa.DateTime, default=None))
+        op.add_column('user', sa.Column("last_rejected_cgu_date",sa.DateTime, default=None))
+        op.add_column('user', sa.Column("last_rejected_privacy_policy_date", sa.DateTime, default=None))
         op.create_table(
             "action_on_discussion",
             sa.Column("id", sa.Integer, sa.ForeignKey('action.id', ondelete="CASCADE", onupdate='CASCADE'),
@@ -32,4 +34,6 @@ def downgrade(pyramid_env):
         op.drop_column('agent_status_in_discussion', 'accepted_cookies')
         op.drop_column('user', "last_accepted_cgu_date")
         op.drop_column('user', "last_accepted_privacy_policy_date")
+        op.drop_column('user', "last_rejected_cgu_date")
+        op.drop_column('user', "last_rejected_privacy_policy_date")
         op.drop_table('action_on_discussion')

@@ -29,7 +29,7 @@ class AgentProfile(SecureObjectType, SQLAlchemyObjectType):
     class Meta:
         model = models.AgentProfile
         interfaces = (Node, )
-        only_fields = ('id',)
+        only_fields = ('id', 'last_accepted_cgu_date', 'last_accepted_privacy_policy')
 
     user_id = graphene.Int(required=True, description=docs.AgentProfile.user_id)
     name = graphene.String(description=docs.AgentProfile.name)
@@ -282,10 +282,9 @@ class DeleteUserInformation(graphene.Mutation):
         return DeleteUserInformation(user=user)
 
 
-class UpdateAcceptedCookiesByUser(graphene.Mutation):
+class UpdateAcceptedCookies(graphene.Mutation):
 
     class Input:
-        id = graphene.ID(required=True)
         action = graphene.String(required=True)
 
     user = graphene.Field(lambda: AgentProfile)
@@ -295,9 +294,9 @@ class UpdateAcceptedCookiesByUser(graphene.Mutation):
     def mutate(root, args, context, info):
         cls = models.User
         db = cls.default_db
-        global_id = args.get('id')
-        id_ = int(Node.from_global_id(global_id)[1])
-        action_type = args['action']
+        # global_id = args.get('id')
+        id_ = context.authenticated_userid or Everyone
+        action_type = args.get('action')
         user = cls.get(id_)
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
@@ -306,10 +305,10 @@ class UpdateAcceptedCookiesByUser(graphene.Mutation):
         from assembl.models.action import AcceptCGUOnDiscussion, AcceptSessionOnDiscussion, AcceptTrackingOnDiscussion
         with cls.default_db.no_autoflush as db:
             asid = user.get_status_in_discussion(discussion_id)
-            asid.update_cookies(action_type)
+
             if CookieTypes.ACCEPT_CGU.name == action_type:
                 action = AcceptCGUOnDiscussion(discussion=discussion, actor_id=user.id)
-                user.last_accepted_cgu_date = datetime.utcnow()
+                user.update_user_last_accepted_cgu_date(datetime.utcnow())
             elif CookieTypes.ACCEPT_SESSION_ON_DISCUSSION.name == action_type:
                 action = AcceptSessionOnDiscussion(discussion=discussion, actor_id=user.id)
                 asid.update_cookies(action_type)
@@ -317,15 +316,15 @@ class UpdateAcceptedCookiesByUser(graphene.Mutation):
                 action = AcceptTrackingOnDiscussion(discussion=discussion, actor_id=user.id)
                 asid.update_cookies(action_type)
 
+            asid.update_cookies(action_type)
             action = action.handle_duplication(permissions=permissions, user_id=user.id)
             db.add(action)
-        return UpdateAcceptedCookiesByUser(user=user)
+        return UpdateAcceptedCookies(user=user)
 
 
-class DeleteAcceptedCookiesByUser(graphene.Mutation):
+class DeleteAcceptedCookies(graphene.Mutation):
 
     class Input:
-        id = graphene.ID(required=True)
         action = graphene.String(required=True)
 
     user = graphene.Field(lambda: AgentProfile)
@@ -335,8 +334,7 @@ class DeleteAcceptedCookiesByUser(graphene.Mutation):
     def mutate(root, args, context, info):
         cls = models.User
         db = cls.default_db
-        global_id = args.get('id')
-        id_ = int(Node.from_global_id(global_id)[1])
+        id_ = context.authenticated_userid or Everyone
         action_type = args['action']
         user = cls.get(id_)
         discussion_id = context.matchdict['discussion_id']
@@ -360,4 +358,4 @@ class DeleteAcceptedCookiesByUser(graphene.Mutation):
             action = action.handle_duplication(permissions=permissions, user_id=user.id)
             db.add(action)
 
-        return UpdateAcceptedCookiesByUser(user=user)
+        return DeleteAcceptedCookies(user=user)
