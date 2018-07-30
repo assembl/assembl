@@ -13,6 +13,10 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.ext.declarative import declared_attr
+from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.sql.functions import coalesce
+from sqlalchemy.sql.expression import case
+# from sqlalchemy.sql import func
 
 from . import Base, DiscussionBoundBase
 from .generic import Content
@@ -44,6 +48,14 @@ class LocalizedUriConcept(Base):
         'polymorphic_on': type,
         'with_polymorphic': '*'
     }
+
+    @hybrid_property
+    def english_id_calc(self):
+        return self.english_id if self.english_id else self.id
+
+    @english_id_calc.expression
+    def english_id_calc(self):
+        return coalesce(self.english_id, self.id)
 
     @classmethod
     def get_or_create(cls, concept_uri, db=None):
@@ -282,6 +294,11 @@ class PostKeywordAnalysis(PostKeywordAnalysisMixin, DiscussionBoundBase):
         Tag.id, ondelete="CASCADE"))
     value = relationship(Tag)
     category = Column(Boolean)
+    # db.query(PostKeywordAnalysis.value, func.sum(PostKeywordAnalysis.score)
+    #         ).filter_by(category=None
+    #         ).group_by(PostKeywordAnalysis.value
+    #         ).order_by(func.sum(PostKeywordAnalysis.score).desc()
+    #         ).limit(30).all()
 
 
 class PostDBPediaConceptAnalysis(
@@ -290,6 +307,14 @@ class PostDBPediaConceptAnalysis(
     concept_id = Column(Integer, ForeignKey(
         LocalizedUriConcept.id, ondelete="CASCADE"))
     value = relationship(LocalizedUriConcept)
+    # q=db.query(func.sum(PostDBPediaConceptAnalysis.score).label('score'),
+    #                     DBPediaConcept.english_id_calc.label('id')
+    #            ).join(DBPediaConcept
+    #            ).group_by(DBPediaConcept.english_id_calc
+    #            ).order_by(func.sum(PostDBPediaConceptAnalysis.score).desc()
+    #            ).limit(30).subquery()
+    # db.query(DBPediaConcept.concept_uri, q.c.score
+    #          ).join(q, DBPediaConcept.id==q.columns.id).all()
 
 
 class PostWatsonV1SentimentAnalysis(Base):
@@ -309,3 +334,21 @@ class PostWatsonV1SentimentAnalysis(Base):
     __table_args__ = (UniqueConstraint(source_id, post_id), )
     post = relationship(Content)
     source = relationship(Computation)
+
+    @hybrid_property
+    def positive_sentiment(self):
+        return max(0.0, self.sentiment)
+
+    @positive_sentiment.expression
+    def positive_sentiment(self):
+        return case([
+            (self.sentiment >= 0, self.sentiment)], else_=0)
+
+    @hybrid_property
+    def negative_sentiment(self):
+        return min(0.0, self.sentiment)
+
+    @negative_sentiment.expression
+    def negative_sentiment(self):
+        return case([
+            (self.sentiment < 0, self.sentiment)], else_=0)
