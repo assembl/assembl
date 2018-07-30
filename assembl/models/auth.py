@@ -712,18 +712,15 @@ class User(AgentProfile):
             # add the not existing machines
             for machine_id in machines_ids:
                 machine = machines_data[machine_id]
-                try:
-                    add_user(
-                        machine.get('name'),
-                        None,
-                        machine.get('password'),
-                        R_CATCHER,
-                        username=machine_id,
-                        is_machine=True,
-                        flush=False
-                    )
-                except Exception:
-                    continue
+                add_user(
+                    machine.get('name'),
+                    None,
+                    machine.get('password'),
+                    R_CATCHER,
+                    username=machine_id,
+                    is_machine=True,
+                    flush=False
+                )
 
     @property
     def real_name_p(self):
