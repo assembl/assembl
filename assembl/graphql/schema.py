@@ -125,7 +125,7 @@ class Query(graphene.ObjectType):
     posts = SQLAlchemyConnectionField(
         PostConnection,
         start_date=graphene.String(description=docs.SchemaPosts.start_date),
-        end_date=graphene.String(description=docs.SchemaPosts.start_date),
+        end_date=graphene.String(description=docs.SchemaPosts.end_date),
         identifiers=graphene.List(graphene.String, description=docs.SchemaPosts.identifiers),
         description=docs.SchemaPosts.__doc__)
 
