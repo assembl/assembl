@@ -871,6 +871,9 @@ def get_robot_machine():
 
 @task
 def install_bluenove_actionable():
+    """
+    Install the bluenove_actionable app.
+    """
     if not exists("%(projectpath)s/../bluenove-actionable/" % env):
         print cyan("Cloning git bluenove-actionable repository")
         with cd("%(projectpath)s/.." % env):
@@ -883,6 +886,9 @@ def install_bluenove_actionable():
 
 @task
 def update_bluenove_actionable():
+    """
+    Update the bluenove_actionable app. Updating the Git repository and building.
+    """
     path = join(env.projectpath, '..', 'bluenove-actionable')
     if exists(path):
         print(cyan('Updating bluenove-actionable Git repository'))
@@ -895,6 +901,9 @@ def update_bluenove_actionable():
 
 @task
 def stop_bluenove_actionable():
+    """
+    Stop the bluenove_actionable app.
+    """
     path = join(env.projectpath, '..', 'bluenove-actionable')
     if exists(path):
         print(cyan('stop bluenove-actionable'))
@@ -904,6 +913,15 @@ def stop_bluenove_actionable():
 
 @task
 def start_bluenove_actionable():
+    """
+    Start the bluenove_actionable app.
+    To start the application we need three environment variables:
+    - URL_INSTANCE: The URL of the Assembled Instance.
+    - ROBOT_IDENTIFIER: The identifier of the Robot user (a machine).
+    - ROBOT_PASSWORD: The password of the Robot user.
+    If the Robot user is not configured, we can't start the bluenove_actionable app.
+    For more information, see the docker-compose.yml file in the bluenove_actionable project.
+    """
     path = join(env.projectpath, '..', 'bluenove-actionable')
     robot = get_robot_machine()
     if exists(path) and robot:
@@ -919,6 +937,9 @@ def start_bluenove_actionable():
 
 @task
 def restart_bluenove_actionable():
+    """
+    Restart the bluenove_actionable app. Stop then start the app.
+    """
     execute(stop_bluenove_actionable)
     execute(start_bluenove_actionable)
 
