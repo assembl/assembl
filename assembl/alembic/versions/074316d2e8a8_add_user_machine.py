@@ -1,14 +1,14 @@
 """add_user_machine
 
-Revision ID: 5a6708ff9fae
-Revises: 7bf35c9261d9
-Create Date: 2018-07-23 16:29:47.790552
+Revision ID: 074316d2e8a8
+Revises: f8c765a3e0da
+Create Date: 2018-07-30 12:07:51.661130
 
 """
 
 # revision identifiers, used by Alembic.
-revision = '5a6708ff9fae'
-down_revision = '7bf35c9261d9'
+revision = '074316d2e8a8'
+down_revision = 'f8c765a3e0da'
 
 from alembic import context, op
 import sqlalchemy as sa
