@@ -212,6 +212,11 @@ def get_posts_for_phases(discussion, identifiers, include_deleted=False):
         identifiers_with_posts.remove(Phases.survey.value)
 
     if identifiers_with_posts:
+        # If we have both 'thread' and 'multiColumns' in identifiers_with_posts
+        # use get_ideas without filter (second param None) to get all ideas.
+        # If only 'multiColumns' in identifiers_with_posts, add the filter.
+        # Ideas from 'multiColumns' phase are a subset of the ideas
+        # from 'thread' phase
         is_multi_columns = Phases.multiColumns.value in identifiers_with_posts and \
             len(identifiers_with_posts) == 1
         ideas.extend(
