@@ -15,6 +15,7 @@ class Default:
     \"thread\"\n
     \"multiColumns\"\n
     \"voteSession\"\n
+    \"brightMirror\"\n
     """
     phase_identifier_id = "The database identifier relating to the discussion phase."
 
@@ -284,7 +285,7 @@ class IdeaInterface:
     img = Default.document % "Header image associated with the idea. "
     order = "The order of the Idea, Thematic, Question in the idea tree."
     live = """The IdeaUnion between an Idea or a Thematic. This can be used to query specific fields unique to the type of Idea."""
-    message_view_override = """Use a non-standard view for this idea.\nCurrently only supporting "messageColumns"."""
+    message_view_override = """Use a non-standard view for this idea.\nCurrently only supporting "messageColumns" and "brightMirror."""
     total_sentiments = "Total number of sentiments expressed by participants on posts related to that idea."
     vote_specifications = """The VoteSpecificationUnion placed on the Idea. This is the metadata describing the configuration of a VoteSession."""
     type = """The type of the idea. The class name of the idea."""
@@ -1133,3 +1134,21 @@ class UpdateProfileFields:
     __doc__ = "A mutation that enables an existing ProfileField to be updated."
     data = "The data to update the ProfileField with."
     lang = "The language of the data. Warning: `lang` is currently not used!"
+
+
+class BrightMirror:
+    __doc__ = """A BrightMirror metadata object is an abstraction of an Idea object and represents the configuration of the design fiction module."""
+    title_entries = Default.langstring_entries % ("This is the Bright Mirror title in multiple languages.",)
+    description_entries = """The subtitle contents shown on the header on the top page in multiple languages."""
+    image = Default.document % ("""Main image associated with this Bright Mirror.""",)
+    announcement = """The object Announcement containing the instructions title and body"""
+    order = """The order or positioning of the Bright mirror compared to other Bright Mirrors."""
+
+
+class CreateBrightMirror:
+    __doc__ = """A mutation to create a bright mirror."""
+    title_entries = BrightMirror.title_entries
+    description_entries = BrightMirror.description_entries
+    image = BrightMirror.image
+    announcement = BrightMirror.announcement
+    order = BrightMirror.order

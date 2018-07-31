@@ -588,3 +588,313 @@ query QuestionPosts($id: ID!, $first: Int!, $after: String!) {
     question_posts = result['question']['posts']['edges']
     assert len(question_posts) ==  len_proposals
     assert all(post['node']['id'] in proposals for post in question_posts)
+
+
+CREATE_BRIGHT_MIRROR_MUTATION = u"""
+mutation CreateBrightMirror($img:String!) {
+  createBrightMirror(
+    titleEntries: [
+            {value: "Comprendre les dynamiques et les enjeux", localeCode: "fr"},
+            {value: "Understanding the dynamics and issues", localeCode: "en"}
+            ],
+    descriptionEntries: [
+            {value: "Desc FR", localeCode: "fr"},
+            {value: "Desc EN", localeCode: "en"}
+            ],
+    image:$img,
+    announcement: {
+      titleEntries: [
+              {value: "Title FR announce", localeCode: "fr"},
+              {value: "Title EN announce", localeCode: "en"}
+              ],
+      bodyEntries: [
+              {value: "Body FR announce", localeCode: "fr"},
+              {value: "Body EN announce", localeCode: "en"}
+              ]
+    }
+  )
+  {
+    brightMirror {
+      title,
+      description,
+      img {
+          title
+      }
+      announcement {
+        title,
+        body
+      }
+      messageViewOverride
+    }
+  }
+}
+"""
+
+def test_graphql_create_bright_mirror(graphql_request, test_session):
+    import os
+    from io import BytesIO
+
+    class FieldStorage(object):
+        file = BytesIO(os.urandom(16))
+        filename = u'path/to/img.png'
+        type = 'image/png'
+
+    graphql_request.POST['variables.img'] = FieldStorage()
+
+    res = schema.execute(CREATE_BRIGHT_MIRROR_MUTATION,
+                         context_value=graphql_request,
+                         variable_values={"img": u"variables.img"})
+
+    assert res.errors is None
+    assert json.loads(json.dumps(res.data)) == {
+      u'createBrightMirror': {
+        u'brightMirror': {
+            u'title': u'Understanding the dynamics and issues',
+            u'description': u'Desc EN',
+            u'img': {
+              u'title': u'img.png'
+            },
+            u'announcement': {
+              u'title': u'Title EN announce',
+              u'body': u'Body EN announce'
+            },
+            u'messageViewOverride': u'brightMirror'
+        }}}
+
+
+def test_graphql_create_bright_mirror_no_title(graphql_request, test_session):
+    import os
+    from io import BytesIO
+
+    class FieldStorage(object):
+        file = BytesIO(os.urandom(16))
+        filename = u'path/to/img.png'
+        type = 'image/png'
+
+    graphql_request.POST['variables.img'] = FieldStorage()
+
+    res = schema.execute("""
+      mutation CreateBrightMirror($img:String!) {
+        createBrightMirror(
+          descriptionEntries: [
+                  {value: "Desc FR", localeCode: "fr"},
+                  {value: "Desc EN", localeCode: "en"}
+                  ],
+          image:$img,
+          announcement: {
+            titleEntries: [
+                    {value: "Title FR announce", localeCode: "fr"},
+                    {value: "Title EN announce", localeCode: "en"}
+                    ],
+            bodyEntries: [
+                    {value: "Body FR announce", localeCode: "fr"},
+                    {value: "Body EN announce", localeCode: "en"}
+                    ]
+          }
+        )
+        {
+          brightMirror {
+            title,
+            description,
+            img {
+                title
+            }
+            announcement {
+              title,
+              body
+            }
+            messageViewOverride
+          }
+        }
+      }""", context_value=graphql_request,
+            variable_values={"img": u"variables.img"})
+
+    assert """argument "titleEntries" of type "[LangStringEntryInput]!" is required but not provided""" in res.errors[0].args[0]
+
+
+def test_graphql_create_bright_mirror_empty_title(graphql_request, test_session):
+    import os
+    from io import BytesIO
+
+    class FieldStorage(object):
+        file = BytesIO(os.urandom(16))
+        filename = u'path/to/img.png'
+        type = 'image/png'
+
+    graphql_request.POST['variables.img'] = FieldStorage()
+
+    res = schema.execute("""
+      mutation CreateBrightMirror($img:String!) {
+        createBrightMirror(
+          titleEntries: [],
+          descriptionEntries: [
+                  {value: "Desc FR", localeCode: "fr"},
+                  {value: "Desc EN", localeCode: "en"}
+                  ],
+          image:$img,
+          announcement: {
+            titleEntries: [
+                    {value: "Title FR announce", localeCode: "fr"},
+                    {value: "Title EN announce", localeCode: "en"}
+                    ],
+            bodyEntries: [
+                    {value: "Body FR announce", localeCode: "fr"},
+                    {value: "Body EN announce", localeCode: "en"}
+                    ]
+          }
+        )
+        {
+          brightMirror {
+            title,
+            description,
+            img {
+                title
+            }
+            announcement {
+              title,
+              body
+            }
+            messageViewOverride
+          }
+        }
+      }""", context_value=graphql_request,
+            variable_values={"img": u"variables.img"})
+
+    assert "BrightMirror titleEntries needs at least one entry" in res.errors[0].args[0]
+
+
+def test_graphql_create_bright_mirror_no_image(graphql_request, test_session):
+    res = schema.execute("""
+      mutation CreateBrightMirror {
+        createBrightMirror(
+          titleEntries: [
+                  {value: "Comprendre les dynamiques et les enjeux", localeCode: "fr"},
+                  {value: "Understanding the dynamics and issues", localeCode: "en"}
+                  ],
+          descriptionEntries: [
+                  {value: "Desc FR", localeCode: "fr"},
+                  {value: "Desc EN", localeCode: "en"}
+                  ],
+          announcement: {
+            titleEntries: [
+                    {value: "Title FR announce", localeCode: "fr"},
+                    {value: "Title EN announce", localeCode: "en"}
+                    ],
+            bodyEntries: [
+                    {value: "Body FR announce", localeCode: "fr"},
+                    {value: "Body EN announce", localeCode: "en"}
+                    ]
+          }
+        )
+        {
+          brightMirror {
+            title,
+            description,
+            img {
+                title
+            }
+            announcement {
+              title,
+              body
+            }
+            messageViewOverride
+          }
+        }
+      }""", context_value=graphql_request)
+
+    assert """argument "image" of type "String!" is required but not provided""" in res.errors[0].args[0]
+
+
+def test_graphql_create_bright_mirror_no_announcement(graphql_request, test_session):
+    import os
+    from io import BytesIO
+
+    class FieldStorage(object):
+        file = BytesIO(os.urandom(16))
+        filename = u'path/to/img.png'
+        type = 'image/png'
+
+    graphql_request.POST['variables.img'] = FieldStorage()
+
+    res = schema.execute("""
+      mutation CreateBrightMirror($img:String!) {
+        createBrightMirror(
+          titleEntries: [
+                  {value: "Comprendre les dynamiques et les enjeux", localeCode: "fr"},
+                  {value: "Understanding the dynamics and issues", localeCode: "en"}
+                  ],
+          descriptionEntries: [
+                  {value: "Desc FR", localeCode: "fr"},
+                  {value: "Desc EN", localeCode: "en"}
+                  ],
+          image:$img
+        )
+        {
+          brightMirror {
+            title,
+            description,
+            img {
+                title
+            }
+            announcement {
+              title,
+              body
+            }
+            messageViewOverride
+          }
+        }
+      }""", context_value=graphql_request,
+            variable_values={"img": u"variables.img"})
+
+    assert """argument "announcement" of type "IdeaAnnouncementInput!" is required but not provided""" in res.errors[0].args[0]
+
+
+def test_graphql_create_bright_mirror_announcement_empty_title(graphql_request, test_session):
+    import os
+    from io import BytesIO
+
+    class FieldStorage(object):
+        file = BytesIO(os.urandom(16))
+        filename = u'path/to/img.png'
+        type = 'image/png'
+
+    graphql_request.POST['variables.img'] = FieldStorage()
+
+    res = schema.execute("""
+      mutation CreateBrightMirror($img:String!) {
+        createBrightMirror(
+          titleEntries: [
+                  {value: "Comprendre les dynamiques et les enjeux", localeCode: "fr"},
+                  {value: "Understanding the dynamics and issues", localeCode: "en"}
+                  ],
+          descriptionEntries: [
+                  {value: "Desc FR", localeCode: "fr"},
+                  {value: "Desc EN", localeCode: "en"}
+                  ],
+          image:$img,
+          announcement: {
+            titleEntries: [],
+            bodyEntries: [
+                    {value: "Body FR announce", localeCode: "fr"},
+                    {value: "Body EN announce", localeCode: "en"}
+                    ]
+          }
+        )
+        {
+          brightMirror {
+            title,
+            description,
+            img {
+                title
+            }
+            announcement {
+              title,
+              body
+            }
+            messageViewOverride
+          }
+        }
+      }""", context_value=graphql_request,
+            variable_values={"img": u"variables.img"})
+
+    assert "BrightMirror Announcement titleEntries needs at least one entry" in res.errors[0].args[0]

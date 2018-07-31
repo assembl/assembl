@@ -29,7 +29,7 @@ from .user import AgentProfile
 from .utils import (
     abort_transaction_on_exception, get_fields, get_root_thematic_for_phase,
     create_root_thematic, get_attachment_with_purpose, create_attachment,
-    update_attachment)
+    update_attachment, create_idea_announcement)
 import assembl.graphql.docstrings as docs
 
 
@@ -1000,3 +1000,114 @@ class DeleteThematic(graphene.Mutation):
             q.is_tombstone = True
         thematic.db.flush()
         return DeleteThematic(success=True)
+
+
+class IdeaAnnouncementInput(graphene.InputObjectType):
+    __doc__ = docs.IdeaAnnouncement.__doc__
+    title_entries = graphene.List(LangStringEntryInput, description=docs.IdeaAnnouncement.title)
+    body_entries = graphene.List(LangStringEntryInput, description=docs.IdeaAnnouncement.body)
+
+
+class CreateBrightMirror(graphene.Mutation):
+    __doc__ = docs.CreateBrightMirror.__doc__
+
+    class Input:
+        # Careful, having required=True on a graphene.List only means
+        # it can't be None, having an empty [] is perfectly valid.
+        title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.CreateBrightMirror.title_entries)
+        description_entries = graphene.List(LangStringEntryInput, description=docs.CreateBrightMirror.description_entries)
+        announcement = graphene.Argument(IdeaAnnouncementInput, required=True, description=docs.CreateBrightMirror.announcement)
+        image = graphene.String(required=True, description=docs.CreateBrightMirror.image)
+        order = graphene.Float(description=docs.CreateBrightMirror.order)
+        message_view_override = graphene.String(description=docs.IdeaInterface.message_view_override)
+
+    brightMirror = graphene.Field(lambda: Idea)
+
+    @staticmethod
+    @abort_transaction_on_exception
+    def mutate(root, args, context, info):
+        EMBED_ATTACHMENT = models.AttachmentPurpose.EMBED_ATTACHMENT.value
+        cls = models.Idea
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        user_id = context.authenticated_userid or Everyone
+
+        permissions = get_permissions(user_id, discussion_id)
+        allowed = cls.user_can_cls(
+            user_id, CrudPermissions.CREATE, permissions)
+        if not allowed or (allowed == IF_OWNED and user_id == Everyone):
+            raise HTTPUnauthorized()
+
+        with cls.default_db.no_autoflush:
+            title_entries = args.get('title_entries')
+            if len(title_entries) == 0:
+                raise Exception('BrightMirror titleEntries needs at least one entry')
+                # Better to have this message than
+                # 'NoneType' object has no attribute 'owner_object'
+                # when creating the saobj below if title=None
+
+            title_langstring = langstring_from_input_entries(title_entries)
+            description_langstring = langstring_from_input_entries(
+                args.get('description_entries'))
+            kwargs = {}
+            if description_langstring is not None:
+                kwargs['description'] = description_langstring
+
+            # BrightMirror, because it inherits from Idea, needs to be
+            # associated to the root idea of the discussion.
+            # We create a hidden root thematic, corresponding to the
+            # `identifier` phase, child of the root idea,
+            # and add our brightMirror object as a child of this root thematic.
+            identifier = "brightMirror"
+            root_thematic = get_root_thematic_for_phase(discussion, identifier)
+            if root_thematic is None:
+                root_thematic = create_root_thematic(discussion, identifier)
+
+            # Set flag to recognize BrightMirror instances from other ideas
+            kwargs['message_view_override'] = identifier
+
+            saobj = cls(
+                discussion_id=discussion_id,
+                title=title_langstring,
+                **kwargs)
+            db = saobj.db
+            db.add(saobj)
+            order = len(root_thematic.get_children()) + 1.0
+            db.add(
+                models.IdeaLink(source=root_thematic, target=saobj,
+                                order=args.get('order', order)))
+
+            # Create the idea announcement object which corresponds to the instructions
+            announcement = args.get('announcement')
+            if announcement is not None:
+                announcement_title_entries = announcement.get('title_entries')
+                if len(announcement_title_entries) == 0:
+                    raise Exception('BrightMirror Announcement titleEntries needs at least one entry')
+
+                announcement_title_langstring = langstring_from_input_entries(announcement_title_entries)
+                announcement_body_langstring = langstring_from_input_entries(announcement.get('body_entries', None))
+                saobj2 = create_idea_announcement(user_id, discussion, saobj, announcement_title_langstring, announcement_body_langstring)
+                db.add(saobj2)
+
+            # add uploaded image as an attachment to the idea
+            image = args.get('image')
+            if image is not None:
+                filename = os.path.basename(context.POST[image].filename)
+                mime_type = context.POST[image].type
+                document = models.File(
+                    discussion=discussion,
+                    mime_type=mime_type,
+                    title=filename)
+                document.add_file_data(context.POST[image].file)
+                db.add(models.IdeaAttachment(
+                    document=document,
+                    idea=saobj,
+                    discussion=discussion,
+                    creator_id=context.authenticated_userid,
+                    title=filename,
+                    attachmentPurpose=EMBED_ATTACHMENT
+                ))
+
+            db.flush()
+
+        return CreateBrightMirror(brightMirror=saobj)

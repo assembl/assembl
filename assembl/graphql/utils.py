@@ -244,3 +244,17 @@ def get_posts_for_phases(discussion, identifiers, include_deleted=False):
             model.publication_state == models.PublicationStates.PUBLISHED)
 
     return query
+
+
+def create_idea_announcement(user_id, discussion, idea, title_langstring, description_langstring):
+    """
+        Create an announcement with title and body for an idea.
+    """
+    idea_announcement = models.IdeaAnnouncement(
+        discussion=discussion,
+        idea=idea,
+        title=title_langstring,
+        body=description_langstring,
+        creator_id=user_id,
+        last_updated_by_id=user_id)
+    return idea_announcement

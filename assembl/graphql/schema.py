@@ -23,7 +23,7 @@ from assembl.graphql.discussion import (Discussion, UpdateDiscussion, Discussion
                                         UpdateResourcesCenter, VisitsAnalytics)
 from assembl.graphql.document import UploadDocument
 from assembl.graphql.idea import (CreateIdea, CreateThematic, DeleteThematic,
-                                  Idea, IdeaUnion, Thematic, UpdateThematic)
+                                  Idea, IdeaUnion, Thematic, UpdateThematic, CreateBrightMirror)
 from assembl.graphql.landing_page import (LandingPageModuleType, LandingPageModule, CreateLandingPageModule,
                                           UpdateLandingPageModule)
 from assembl.graphql.langstring import resolve_langstring
@@ -506,6 +506,7 @@ class Mutations(graphene.ObjectType):
     update_discussion_phase = UpdateDiscussionPhase.Field(description=docs.CreateDiscussionPhase.__doc__)
     delete_discussion_phase = DeleteDiscussionPhase.Field(description=docs.DeleteDiscussionPhase.__doc__)
     update_harvesting_translation_preference = UpdateHarvestingTranslationPreference.Field(description=docs.UpdateHarvestingTranslationPreference.__doc__)
+    create_bright_mirror = CreateBrightMirror.Field(description=docs.CreateBrightMirror.__doc__)
 
 
 Schema = graphene.Schema(query=Query, mutation=Mutations)
