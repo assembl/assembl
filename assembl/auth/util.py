@@ -465,13 +465,13 @@ def add_user(name, email, password, role, force=False, username=None,
             account.verified = True
             account.preferred = True
             break
-        else:
-            account = EmailAccount(
-                profile=user,
-                email=email,
-                preferred=True,
-                verified=True)
-            db.add(account)
+    else:
+        account = EmailAccount(
+            profile=user,
+            email=email,
+            preferred=True,
+            verified=True)
+        db.add(account)
 
     if role:
         role = all_roles[role]
