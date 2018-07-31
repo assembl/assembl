@@ -7,8 +7,9 @@
 */
 import React from 'react';
 import { type FieldRenderProps } from 'react-final-form';
-import { ControlLabel, FormGroup, FormControl, HelpBlock } from 'react-bootstrap';
+import { ControlLabel, FormGroup, FormControl } from 'react-bootstrap';
 
+import Error from './error';
 import { getValidationState } from './utils';
 
 type multilingualValue = { [string]: string };
@@ -34,8 +35,8 @@ const MultilingualTextFieldAdapter = ({
   required,
   ...rest
 }: Props) => {
+  const decoratedLabel = required ? `${label} *` : label;
   const valueInLocale = value ? value[editLocale] || '' : '';
-  const decoratedLabel = required ? `* ${label}` : label;
   return (
     <FormGroup controlId={name} validationState={getValidationState(error, touched)}>
       {valueInLocale ? <ControlLabel>{decoratedLabel}</ControlLabel> : null}
@@ -47,7 +48,7 @@ const MultilingualTextFieldAdapter = ({
         required={required}
         value={valueInLocale}
       />
-      {touched && error ? <HelpBlock>{error}</HelpBlock> : null}
+      <Error name={name} />
     </FormGroup>
   );
 };

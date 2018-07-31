@@ -1,9 +1,11 @@
 // @flow
 import React from 'react';
 import { type FieldRenderProps } from 'react-final-form';
-import { ControlLabel, FormGroup, HelpBlock } from 'react-bootstrap';
+import { ControlLabel, FormGroup } from 'react-bootstrap';
 
 import RichTextEditor from '../common/richTextEditor';
+import Error from './error';
+import { getValidationState } from './utils';
 
 type multilingualValue = { [string]: string };
 
@@ -29,7 +31,7 @@ const RichTextFieldAdapter = ({
   const valueInLocale = value[editLocale] || null;
   const key = valueInLocale ? 'notEmpty' : 'empty';
   return (
-    <FormGroup controlId={name}>
+    <FormGroup controlId={name} validationState={getValidationState(error, touched)}>
       {valueInLocale ? <ControlLabel>{label}</ControlLabel> : null}
       <RichTextEditor
         {...otherListeners}
@@ -41,7 +43,7 @@ const RichTextFieldAdapter = ({
         updateContentState={cs => onChange({ ...value, [editLocale]: cs })}
         withAttachmentButton={false}
       />
-      {touched && error ? <HelpBlock>{error}</HelpBlock> : null}
+      <Error name={name} />
     </FormGroup>
   );
 };

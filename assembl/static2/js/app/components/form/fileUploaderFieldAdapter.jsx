@@ -1,9 +1,10 @@
 // @flow
 import * as React from 'react';
 import { type FieldRenderProps } from 'react-final-form';
-import { ControlLabel, HelpBlock, FormGroup, Tooltip } from 'react-bootstrap';
+import { ControlLabel, FormGroup, Tooltip } from 'react-bootstrap';
 
 import FileUploader from '../common/fileUploader';
+import Error from './error';
 import { getValidationState } from './utils';
 
 type Props = {
@@ -33,7 +34,7 @@ const FileUploaderFieldAdapter = ({ deleteTooltip, input, label, meta: { error, 
         isAdminUploader
         onDeleteClick={() => input.onChange('')}
       />
-      {touched && error ? <HelpBlock>{error}</HelpBlock> : null}
+      <Error name={input.name} />
     </FormGroup>
   );
 };

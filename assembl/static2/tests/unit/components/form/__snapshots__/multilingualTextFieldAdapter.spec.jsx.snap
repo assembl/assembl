@@ -1,26 +1,36 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`MultilingualTextFieldAdapter component should render a text field 1`] = `
-<div
-  className="form-group"
+<form
+  onSubmit={[Function]}
 >
-  <label
-    className="control-label"
-    htmlFor="title"
+  <div
+    className="form-group"
   >
-    Title
-  </label>
-  <input
-    className="form-control"
-    id="title"
-    onChange={[Function]}
-    onFocus={[Function]}
-    placeholder="Title"
-    required={false}
-    type={undefined}
-    value="Bonjour"
-  />
-</div>
+    <label
+      className="control-label"
+      htmlFor="title"
+    >
+      Title
+    </label>
+    <input
+      className="form-control"
+      id="title"
+      onChange={[Function]}
+      onFocus={[Function]}
+      placeholder="Title"
+      required={false}
+      type={undefined}
+      value="Bonjour"
+    />
+  </div>
+  <button
+    disabled={true}
+    type="submit"
+  >
+    Submit
+  </button>
+</form>
 `;
 
 exports[`MultilingualTextFieldAdapter component should render a text field touched with error 1`] = `
@@ -37,11 +47,6 @@ exports[`MultilingualTextFieldAdapter component should render a text field touch
     type={undefined}
     value=""
   />
-  <span
-    className="help-block"
-  >
-    This field is required
-  </span>
 </div>
 `;
 
@@ -63,18 +68,28 @@ exports[`MultilingualTextFieldAdapter component should render a text field untou
 `;
 
 exports[`MultilingualTextFieldAdapter component should render a text field without value 1`] = `
-<div
-  className="form-group"
+<form
+  onSubmit={[Function]}
 >
-  <input
-    className="form-control"
-    id="title"
-    onChange={[Function]}
-    onFocus={[Function]}
-    placeholder="Title"
-    required={false}
-    type={undefined}
-    value=""
-  />
-</div>
+  <div
+    className="form-group"
+  >
+    <input
+      className="form-control"
+      id="title"
+      onChange={[Function]}
+      onFocus={[Function]}
+      placeholder="Title"
+      required={false}
+      type={undefined}
+      value=""
+    />
+  </div>
+  <button
+    disabled={true}
+    type="submit"
+  >
+    Submit
+  </button>
+</form>
 `;

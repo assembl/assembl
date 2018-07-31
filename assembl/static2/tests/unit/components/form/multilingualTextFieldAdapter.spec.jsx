@@ -1,6 +1,7 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
 
+import DummyForm from './dummyForm';
 import MultilingualTextFieldAdapter from '../../../../js/app/components/form/multilingualTextFieldAdapter';
 
 describe('MultilingualTextFieldAdapter component', () => {
@@ -25,7 +26,11 @@ describe('MultilingualTextFieldAdapter component', () => {
         touched: false
       }
     };
-    const component = renderer.create(<MultilingualTextFieldAdapter {...props} />);
+    const component = renderer.create(
+      <DummyForm>
+        <MultilingualTextFieldAdapter {...props} />
+      </DummyForm>
+    );
     const tree = component.toJSON();
     expect(tree).toMatchSnapshot();
   });
@@ -44,7 +49,11 @@ describe('MultilingualTextFieldAdapter component', () => {
         touched: false
       }
     };
-    const component = renderer.create(<MultilingualTextFieldAdapter {...props} />);
+    const component = renderer.create(
+      <DummyForm>
+        <MultilingualTextFieldAdapter {...props} />
+      </DummyForm>
+    );
     const tree = component.toJSON();
     expect(tree).toMatchSnapshot();
   });

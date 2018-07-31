@@ -1,6 +1,7 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
 
+import DummyForm from './dummyForm';
 import TextFieldAdapter from '../../../../js/app/components/form/textFieldAdapter';
 
 describe('TextFieldAdapter component', () => {
@@ -21,7 +22,11 @@ describe('TextFieldAdapter component', () => {
         touched: false
       }
     };
-    const component = renderer.create(<TextFieldAdapter {...props} />);
+    const component = renderer.create(
+      <DummyForm>
+        <TextFieldAdapter {...props} />
+      </DummyForm>
+    );
     const tree = component.toJSON();
     expect(tree).toMatchSnapshot();
   });
@@ -39,7 +44,11 @@ describe('TextFieldAdapter component', () => {
         touched: false
       }
     };
-    const component = renderer.create(<TextFieldAdapter {...props} />);
+    const component = renderer.create(
+      <DummyForm>
+        <TextFieldAdapter {...props} />
+      </DummyForm>
+    );
     const tree = component.toJSON();
     expect(tree).toMatchSnapshot();
   });
@@ -58,7 +67,11 @@ describe('TextFieldAdapter component', () => {
         touched: false
       }
     };
-    const component = renderer.create(<TextFieldAdapter {...props} />);
+    const component = renderer.create(
+      <DummyForm>
+        <TextFieldAdapter {...props} />
+      </DummyForm>
+    );
     const tree = component.toJSON();
     expect(tree).toMatchSnapshot();
   });
@@ -77,7 +90,11 @@ describe('TextFieldAdapter component', () => {
         touched: true
       }
     };
-    const component = renderer.create(<TextFieldAdapter {...props} />);
+    const component = renderer.create(
+      <DummyForm>
+        <TextFieldAdapter {...props} />
+      </DummyForm>
+    );
     const tree = component.toJSON();
     expect(tree).toMatchSnapshot();
   });

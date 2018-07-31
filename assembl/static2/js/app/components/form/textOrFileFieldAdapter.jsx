@@ -7,9 +7,10 @@ when a file is chosen, empty the text field
 import React from 'react';
 import { Translate } from 'react-redux-i18n';
 import { type FieldRenderProps } from 'react-final-form';
-import { ControlLabel, FormGroup, FormControl, HelpBlock } from 'react-bootstrap';
+import { ControlLabel, FormGroup, FormControl } from 'react-bootstrap';
 
 import FileUploader from '../common/fileUploader';
+import Error from './error';
 import { getValidationState } from './utils';
 
 type Props = {
@@ -79,7 +80,7 @@ const TextOrFileFieldAdapter = ({
           })
         }
       />
-      {touched && error ? <HelpBlock>{error}</HelpBlock> : null}
+      <Error name={name} />
     </FormGroup>
   );
 };
