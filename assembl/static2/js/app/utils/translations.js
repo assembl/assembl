@@ -1318,6 +1318,7 @@ const Translations = {
         title: "Title of the proposal",
         description: "Description",
         tokenVote: "Token vote",
+        edit: "Modify",
         gaugeSettings: "Edit settings",
         cancelCustomization: "Cancel settings",
         validationErrors: {
