@@ -194,7 +194,7 @@ def update_attachment(discussion, attachment_model, new_value, attachments, atta
         attachments.append(attachment)
 
 
-def get_posts_for_phases(discussion, identifiers):
+def get_posts_for_phases(discussion, identifiers, include_deleted=False):
     """Return related posts for the given phases `identifiers` on `discussion`.
     """
     # Retrieve the phases with posts
@@ -233,5 +233,9 @@ def get_posts_for_phases(discussion, identifiers):
             related, model.id == related.c.post_id
         )
         query = related_query if index == 0 else query.union(related_query)
+
+    if not include_deleted:
+        return query.filter(
+            model.publication_state == models.PublicationStates.PUBLISHED)
 
     return query

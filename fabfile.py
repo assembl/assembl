@@ -856,13 +856,13 @@ def get_robot_machine():
     """
     Return the configured robot machine: (the first configured machine)
     """
-    # Retrive the list of registered machines
+    # Retrieve the list of registered machines
     # Machines format: machine_id,machine_name,machine_password/...others
     machines = env.get('machines', '')
     if machines:
         # Get the first machine
         robot = machines.split('/')[0]
-        # Retrive the machine data
+        # Retrieve the machine data
         robot_data = robot.split(',')
         # We must find three data (identifier, name and password)
         if len(robot_data) != 3:
@@ -888,10 +888,10 @@ def install_bluenove_actionable():
         print cyan("Cloning git bluenove-actionable repository")
         with cd("%(projectpath)s/.." % env):
             # We need an ssh access
-            run('git clone git://github.com/bluenove/bluenove-actionable.git')
+            run('git clone git@github.com:bluenove/bluenove-actionable.git')
 
         with cd("%(projectpath)s/../bluenove-actionable/" % env):
-            run('docker-compose build', warn_only=True)
+            sudo('docker-compose build', warn_only=True)
 
 
 @task
@@ -905,7 +905,6 @@ def update_bluenove_actionable():
         with cd(path):
             # We need an ssh access
             run('git pull', warn_only=True)
-            execute(stop_bluenove_actionable)
             run('docker-compose build --no-cache', warn_only=True)
 
 
@@ -916,9 +915,9 @@ def stop_bluenove_actionable():
     """
     path = join(env.projectpath, '..', 'bluenove-actionable')
     if exists(path):
-        print(cyan('stop bluenove-actionable'))
+        print(cyan('Stop bluenove-actionable'))
         with cd(path):
-            fabsudo('docker kill bluenoveact', warn_only=True)
+            sudo('docker-compose down bluenoveact', warn_only=True)
 
 
 @task
@@ -926,7 +925,7 @@ def start_bluenove_actionable():
     """
     Start the bluenove_actionable app.
     To start the application we need three environment variables:
-    - URL_INSTANCE: The URL of the Assembled Instance.
+    - URL_INSTANCE: The URL of the Assembl Instance.
     - ROBOT_IDENTIFIER: The identifier of the Robot user (a machine).
     - ROBOT_PASSWORD: The password of the Robot user.
     If the Robot user is not configured, we can't start the bluenove_actionable app.
@@ -942,7 +941,7 @@ def start_bluenove_actionable():
                 ROBOT_IDENTIFIER=robot.get('identifier'),
                 ROBOT_PASSWORD=robot.get('password')
             ):
-                fabsudo('docker-compose up -d', warn_only=True)
+                sudo('docker-compose up -d', warn_only=True)
 
 
 @task

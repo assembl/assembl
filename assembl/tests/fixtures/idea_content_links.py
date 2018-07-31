@@ -219,7 +219,7 @@ def extract_with_range_submitted_in_reply_post_1(
     test_session.flush()
 
     def fin():
-        print "finalizer extract_with_range_in_reply_post_1"
+        print "finalizer extract_with_range_submitted_in_reply_post_1"
         test_session.delete(new_range)
         test_session.delete(new_extract)
         test_session.flush()
