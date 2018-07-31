@@ -2,23 +2,22 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { I18n } from 'react-redux-i18n';
-import { type Route, type Router } from 'react-router';
 import arrayMutators from 'final-form-arrays';
 import { type ApolloClient, compose, withApollo } from 'react-apollo';
+import { Field } from 'react-final-form';
+
+import FieldArrayWithActions from '../../form/fieldArrayWithActions';
+import FileUploaderFieldAdapter from '../../form/fileUploaderFieldAdapter';
+import MultilingualTextFieldAdapter from '../../form/multilingualTextFieldAdapter';
+import MultilingualRichTextFieldAdapter from '../../form/multilingualRichTextFieldAdapter';
+import TextFieldAdapter from '../../form/textFieldAdapter';
+import { createResourceTooltip, deleteResourceTooltip } from '../../common/tooltips';
 
 import LoadSaveReinitializeForm from '../../../components/form/LoadSaveReinitializeForm';
 import { load, postLoadFormat } from './load';
 import { createMutationsPromises, save } from './save';
 import validate from './validate';
 import Loader from '../../common/loader';
-
-
-import PageForm from '../../../components/administration/resourcesCenter/pageForm';
-import ManageResourcesForm from '../../../components/administration/resourcesCenter/manageResourcesForm';
-import createResourceMutation from '../../../graphql/mutations/createResource.graphql';
-import updateResourceMutation from '../../../graphql/mutations/updateResource.graphql';
-import deleteResourceMutation from '../../../graphql/mutations/deleteResource.graphql';
-import updateResourcesCenterMutation from '../../../graphql/mutations/updateResourcesCenter.graphql';
 import { convertEntriesToHTML } from '../../../utils/draftjs';
 import { displayAlert } from '../../../utils/utilityManager';
 import SaveButton, { getMutationsPromises, runSerial } from '../../../components/administration/saveButton';
@@ -34,6 +33,7 @@ const createVariablesForResourceMutation = resource => ({
 const createVariablesForDeleteResourceMutation = resource => ({ resourceId: resource.id });
 
 type Props = {
+  client: ApolloClient,
   editLocale: string,
   pageHasChanged: boolean,
   resourcesHaveChanged: boolean,
@@ -45,9 +45,7 @@ type Props = {
   updateResourcesCenter: Function,
   refetchTabsConditions: Function,
   refetchResources: Function,
-  refetchResourcesCenter: Function,
-  route: Route,
-  router: Router
+  refetchResourcesCenter: Function
 };
 
 type State = {
@@ -64,21 +62,21 @@ class ResourcesCenterAdminForm extends React.Component<Props, State> {
     };
   }
 
-  componentDidMount() {
-    this.props.router.setRouteLeaveHook(this.props.route, this.routerWillLeave);
-  }
+  // componentDidMount() {
+  //   this.props.router.setRouteLeaveHook(this.props.route, this.routerWillLeave);
+  // }
 
-  componentWillUnmount() {
-    this.props.router.setRouteLeaveHook(this.props.route, null);
-  }
+  // componentWillUnmount() {
+  //   this.props.router.setRouteLeaveHook(this.props.route, null);
+  // }
 
-  routerWillLeave = () => {
-    if (this.dataHaveChanged() && !this.state.refetching) {
-      return I18n.t('administration.confirmUnsavedChanges');
-    }
+  // routerWillLeave = () => {
+  //   if (this.dataHaveChanged() && !this.state.refetching) {
+  //     return I18n.t('administration.confirmUnsavedChanges');
+  //   }
 
-    return null;
-  };
+  //   return null;
+  // };
 
   dataHaveChanged = () => this.props.pageHasChanged || this.props.resourcesHaveChanged;
 
@@ -142,18 +140,9 @@ class ResourcesCenterAdminForm extends React.Component<Props, State> {
 
   render() {
     const { editLocale, client } = this.props;
-    // const saveDisabled = !this.dataHaveChanged();
-    // return (
-    //   <div className="resources-center-admin admin-box admin-content">
-    //     <SaveButton disabled={saveDisabled} saveAction={this.saveAction} />
-    //     <SectionTitle title={I18n.t('administration.resourcesCenter.title')} annotation={I18n.t('administration.annotation')} />
-    //     <PageForm editLocale={editLocale} />
-    //     <ManageResourcesForm editLocale={editLocale} />
-    //   </div>
-    // );
     return (
       <LoadSaveReinitializeForm
-        load={() => load(client)}
+        load={(fetchPolicy: FetchPolicy) => load(client, fetchPolicy)}
         loading={loading}
         postLoadFormat={postLoadFormat}
         createMutationsPromises={createMutationsPromises(client)}
@@ -162,12 +151,67 @@ class ResourcesCenterAdminForm extends React.Component<Props, State> {
         mutators={{
           ...arrayMutators
         }}
-        render={({ handleSubmit, pristine, submitting, values }) => (
+        render={({ handleSubmit, pristine, submitting }) => (
           <div className="admin-content">
             <form onSubmit={handleSubmit}>
               <SaveButton disabled={pristine || submitting} saveAction={handleSubmit} />
-              <PageForm editLocale={editLocale} />
-              <ManageResourcesForm editLocale={editLocale} values={values} />
+              <div className="form-container">
+                <Field
+                  editLocale={editLocale}
+                  name="pageTitle"
+                  component={MultilingualTextFieldAdapter}
+                  label={I18n.t('administration.resourcesCenter.pageTitleLabel')}
+                  required
+                />
+                <Field
+                  name="pageHeader"
+                  component={FileUploaderFieldAdapter}
+                  label={I18n.t('administration.resourcesCenter.imageLabel')}
+                />
+                <div className="separator" />
+              </div>
+
+              <FieldArrayWithActions
+                name="resources"
+                renderFields={({ name }) => (
+                  <React.Fragment>
+                    <Field
+                      editLocale={editLocale}
+                      name={`${name}.title`}
+                      component={MultilingualTextFieldAdapter}
+                      label={`${I18n.t('administration.resourcesCenter.titleLabel')} ${editLocale.toUpperCase()}`}
+                      required
+                    />
+                    <Field
+                      editLocale={editLocale}
+                      name={`${name}.text`}
+                      component={MultilingualRichTextFieldAdapter}
+                      label={`${I18n.t('administration.resourcesCenter.textLabel')} ${editLocale.toUpperCase()}`}
+                    />
+                    <Field
+                      componentClass="textarea"
+                      name={`${name}.embedCode`}
+                      component={TextFieldAdapter}
+                      label={I18n.t('administration.resourcesCenter.embedCodeLabel')}
+                    />
+                    <Field
+                      name={`${name}.img`}
+                      component={FileUploaderFieldAdapter}
+                      label={I18n.t('administration.resourcesCenter.imageLabel')}
+                    />
+                    <Field
+                      name={`${name}.doc`}
+                      component={FileUploaderFieldAdapter}
+                      label={I18n.t('administration.resourcesCenter.documentLabel')}
+                    />
+                  </React.Fragment>
+                )}
+                titleMsgId="administration.resourcesCenter.editResourceFormTitle"
+                tooltips={{
+                  addTooltip: createResourceTooltip,
+                  deleteTooltip: deleteResourceTooltip
+                }}
+              />
             </form>
           </div>
         )}
@@ -186,21 +230,5 @@ const mapStateToProps = ({ admin: { editLocale, resourcesCenter } }) => {
     resources: resourcesInOrder.map(id => resourcesById.get(id).toJS())
   };
 };
-
-// export default compose(
-//   connect(mapStateToProps),
-//   graphql(createResourceMutation, {
-//     name: 'createResource'
-//   }),
-//   graphql(updateResourceMutation, {
-//     name: 'updateResource'
-//   }),
-//   graphql(deleteResourceMutation, {
-//     name: 'deleteResource'
-//   }),
-//   graphql(updateResourcesCenterMutation, {
-//     name: 'updateResourcesCenter'
-//   })
-// )(ResourcesCenterAdminForm);
 
 export default compose(connect(mapStateToProps), withApollo)(ResourcesCenterAdminForm);

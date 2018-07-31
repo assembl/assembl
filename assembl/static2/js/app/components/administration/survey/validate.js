@@ -1,6 +1,6 @@
 import { I18n } from 'react-redux-i18n';
 
-function langstringIsEmpty(ls) {
+export function langstringIsEmpty(ls) {
   return !ls || Object.values(ls).every(s => s.length === 0);
 }
 

@@ -16,6 +16,7 @@ exports[`MultilingualTextFieldAdapter component should render a text field 1`] =
     onChange={[Function]}
     onFocus={[Function]}
     placeholder="Title"
+    required={false}
     type={undefined}
     value="Bonjour"
   />
@@ -32,6 +33,7 @@ exports[`MultilingualTextFieldAdapter component should render a text field touch
     onChange={[Function]}
     onFocus={[Function]}
     placeholder="Title"
+    required={false}
     type={undefined}
     value=""
   />
@@ -53,6 +55,7 @@ exports[`MultilingualTextFieldAdapter component should render a text field untou
     onChange={[Function]}
     onFocus={[Function]}
     placeholder="Title"
+    required={false}
     type={undefined}
     value=""
   />
@@ -69,6 +72,7 @@ exports[`MultilingualTextFieldAdapter component should render a text field witho
     onChange={[Function]}
     onFocus={[Function]}
     placeholder="Title"
+    required={false}
     type={undefined}
     value=""
   />

@@ -22,7 +22,8 @@ type Props = {
     onFocus: (?SyntheticFocusEvent<*>) => void,
     value: multilingualValue
   },
-  label: string
+  label: string,
+  required: boolean
 } & FieldRenderProps;
 
 const MultilingualTextFieldAdapter = ({
@@ -30,22 +31,29 @@ const MultilingualTextFieldAdapter = ({
   input: { name, onChange, value, ...otherListeners },
   label,
   meta: { error, touched },
+  required,
   ...rest
 }: Props) => {
   const valueInLocale = value ? value[editLocale] || '' : '';
+  const decoratedLabel = required ? `* ${label}` : label;
   return (
     <FormGroup controlId={name} validationState={getValidationState(error, touched)}>
-      {valueInLocale ? <ControlLabel>{label}</ControlLabel> : null}
+      {valueInLocale ? <ControlLabel>{decoratedLabel}</ControlLabel> : null}
       <FormControl
         {...otherListeners}
         {...rest}
         onChange={event => onChange({ ...value, [editLocale]: event.target.value })}
-        placeholder={label}
+        placeholder={decoratedLabel}
+        required={required}
         value={valueInLocale}
       />
       {touched && error ? <HelpBlock>{error}</HelpBlock> : null}
     </FormGroup>
   );
+};
+
+MultilingualTextFieldAdapter.defaultProps = {
+  required: false
 };
 
 export default MultilingualTextFieldAdapter;
