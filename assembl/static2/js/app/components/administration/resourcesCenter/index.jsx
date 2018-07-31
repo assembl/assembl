@@ -166,7 +166,7 @@ class ResourcesCenterAdminForm extends React.Component<Props, State> {
                 <Field
                   name="pageHeader"
                   component={FileUploaderFieldAdapter}
-                  label={I18n.t('administration.resourcesCenter.imageLabel')}
+                  label={I18n.t('administration.resourcesCenter.headerImageLabel')}
                 />
                 <div className="separator" />
               </div>
