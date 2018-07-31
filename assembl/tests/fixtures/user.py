@@ -204,8 +204,9 @@ def moderator_user(request, test_session, discussion):
     request.addfinalizer(fin)
     return u
 
+
 @pytest.fixture(scope="function")
-def asid2(request, test_session, discussion, participant2_user):
+def agent_status_in_discussion_2(request, test_session, discussion, participant2_user):
     """A fixture of agent status in discussion related to participant2_user. The user has not accepted cookies."""
     from assembl.models import AgentStatusInDiscussion
     accepted_cookies = ""
@@ -220,8 +221,9 @@ def asid2(request, test_session, discussion, participant2_user):
     request.addfinalizer(fin)
     return asid2
 
+
 @pytest.fixture(scope="function")
-def asid3(request, test_session, discussion, participant2_user):
+def agent_status_in_discussion_3(request, test_session, discussion, participant2_user):
     from assembl.models import AgentStatusInDiscussion
     accepted_cookies = "ACCEPT_CGU"
     asid3 = AgentStatusInDiscussion(discussion=discussion, agent_profile=participant2_user, accepted_cookies=accepted_cookies)
