@@ -204,6 +204,12 @@ export const harvestingTooltip = (
   </Tooltip>
 );
 
+export const deleteFileTooltip = (
+  <Tooltip id="deleteFileTooltip">
+    <Translate value="administration.deleteAssociatedFile" />
+  </Tooltip>
+);
+
 export const deleteThematicImageTooltip = (
   <Tooltip id="deleteThematicImageTooltip">
     <Translate value="administration.deleteThematicImage" />
