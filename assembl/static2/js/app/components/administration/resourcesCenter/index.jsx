@@ -183,6 +183,7 @@ class ResourcesCenterAdminForm extends React.Component<Props, State> {
                       required
                     />
                     <Field
+                      key={`${name}-text-${editLocale}`}
                       editLocale={editLocale}
                       name={`${name}.text`}
                       component={MultilingualRichTextFieldAdapter}
