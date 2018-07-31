@@ -18,50 +18,16 @@ import { load, postLoadFormat } from './load';
 import { createMutationsPromises, save } from './save';
 import validate from './validate';
 import Loader from '../../common/loader';
-import { convertEntriesToHTML } from '../../../utils/draftjs';
-import { displayAlert } from '../../../utils/utilityManager';
-import SaveButton, { getMutationsPromises, runSerial } from '../../../components/administration/saveButton';
-
-const createVariablesForResourceMutation = resource => ({
-  doc: resource.doc && typeof resource.doc.externalUrl === 'object' ? resource.doc.externalUrl : null,
-  embedCode: resource.embedCode,
-  image: resource.img && typeof resource.img.externalUrl === 'object' ? resource.img.externalUrl : null,
-  textEntries: convertEntriesToHTML(resource.textEntries),
-  titleEntries: resource.titleEntries
-});
-
-const createVariablesForDeleteResourceMutation = resource => ({ resourceId: resource.id });
+import SaveButton from '../../../components/administration/saveButton';
 
 type Props = {
   client: ApolloClient,
-  editLocale: string,
-  pageHasChanged: boolean,
-  resourcesHaveChanged: boolean,
-  resources: Array<Object>,
-  resourcesCenterPage: Object,
-  createResource: Function,
-  deleteResource: Function,
-  updateResource: Function,
-  updateResourcesCenter: Function,
-  refetchTabsConditions: Function,
-  refetchResources: Function,
-  refetchResourcesCenter: Function
-};
-
-type State = {
-  refetching: boolean
+  editLocale: string
 };
 
 const loading = <Loader />;
 
-class ResourcesCenterAdminForm extends React.Component<Props, State> {
-  constructor() {
-    super();
-    this.state = {
-      refetching: false
-    };
-  }
-
+class ResourcesCenterAdminForm extends React.Component<Props> {
   // componentDidMount() {
   //   this.props.router.setRouteLeaveHook(this.props.route, this.routerWillLeave);
   // }
@@ -77,66 +43,6 @@ class ResourcesCenterAdminForm extends React.Component<Props, State> {
 
   //   return null;
   // };
-
-  dataHaveChanged = () => this.props.pageHasChanged || this.props.resourcesHaveChanged;
-
-  saveAction = () => {
-    const {
-      pageHasChanged,
-      resourcesHaveChanged,
-      resources,
-      resourcesCenterPage,
-      createResource,
-      deleteResource,
-      updateResource,
-      updateResourcesCenter,
-      refetchTabsConditions,
-      refetchResources,
-      refetchResourcesCenter
-    } = this.props;
-    displayAlert('success', `${I18n.t('loading.wait')}...`);
-    if (pageHasChanged) {
-      const pageHeaderImage = resourcesCenterPage.get('headerImage').toJS();
-      const headerImage = typeof pageHeaderImage.externalUrl === 'object' ? pageHeaderImage.externalUrl : null;
-      const payload = {
-        variables: {
-          headerImage: headerImage,
-          titleEntries: resourcesCenterPage.get('titleEntries').toJS()
-        }
-      };
-      updateResourcesCenter(payload)
-        .then(() => {
-          this.setState({ refetching: true });
-          refetchResourcesCenter().then(() => this.setState({ refetching: false }));
-          displayAlert('success', I18n.t('administration.resourcesCenter.successSave'));
-        })
-        .catch((error) => {
-          displayAlert('danger', `${error}`, false, 30000);
-        });
-    }
-
-    if (resourcesHaveChanged) {
-      const mutationsPromises = getMutationsPromises({
-        items: resources,
-        variablesCreator: createVariablesForResourceMutation,
-        deleteVariablesCreator: createVariablesForDeleteResourceMutation,
-        createMutation: createResource,
-        deleteMutation: deleteResource,
-        updateMutation: updateResource
-      });
-
-      runSerial(mutationsPromises)
-        .then(() => {
-          this.setState({ refetching: true });
-          refetchTabsConditions().then(() => refetchResources().then(() => this.setState({ refetching: false })));
-
-          displayAlert('success', I18n.t('administration.resourcesCenter.successSave'));
-        })
-        .catch((error) => {
-          displayAlert('danger', `${error}`, false, 30000);
-        });
-    }
-  };
 
   render() {
     const { editLocale, client } = this.props;
