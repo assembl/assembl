@@ -1,5 +1,6 @@
 // @flow
 import difference from 'lodash/difference';
+import isEqual from 'lodash/isEqual';
 import type { ApolloClient } from 'react-apollo';
 import { I18n } from 'react-redux-i18n';
 
@@ -99,15 +100,23 @@ export const createMutationsPromises = (client: ApolloClient) => (
           variables: variables
         });
     }
-    return () =>
-      client.mutate({
-        mutation: updateThematicMutation,
-        variables: {
-          id: theme.id,
-          ...variables
-        }
-      });
+
+    const orderHasChanged = initialIds.indexOf(theme.id) !== currentIds.indexOf(theme.id);
+    const hasChanged = orderHasChanged || !isEqual(initialTheme, theme);
+    if (hasChanged) {
+      return () =>
+        client.mutate({
+          mutation: updateThematicMutation,
+          variables: {
+            id: theme.id,
+            ...variables
+          }
+        });
+    }
+
+    return () => new Promise(() => {});
   });
+
   allMutations.push(...createUpdateMutations);
   return allMutations;
 };
