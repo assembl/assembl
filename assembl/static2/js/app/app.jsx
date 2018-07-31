@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
+import isEqual from 'lodash/isEqual';
 import { compose, graphql } from 'react-apollo';
 import { filter } from 'graphql-anywhere';
 
@@ -29,7 +30,9 @@ class App extends React.Component {
 
   componentDidUpdate(prevProps) {
     const { timelineLoading, location, params, timeline, putTimelineInStore } = this.props;
-    if (!timelineLoading && timeline !== prevProps.timeline) {
+    // Don't do a timeline identity check (we are sure it's always different here) but use isEqual to be sure
+    // we don't change the redux store (and trigger a full rerendering) if timeline array didn't change.
+    if (!timelineLoading && !isEqual(timeline, prevProps.timeline)) {
       putTimelineInStore(timeline);
     }
     if (!params.phase && !timelineLoading && location.pathname.split('/').indexOf('debate') > -1) {
