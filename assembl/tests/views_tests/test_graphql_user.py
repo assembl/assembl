@@ -440,23 +440,22 @@ def test_graphql_delete_user_with_username(graphql_request, participant1_user, t
     username = test_session.query(m.Username).filter(m.Username.user_id == participant1_user.id).all()
     assert len(username) == 0
 
+
 def test_graphql_update_accepted_cookies_by_user(graphql_request, participant2_user, discussion, asid3, test_session):
     from assembl import models as m
-    res = schema.execute(UPDATE_COOKIES_INFORMATION_FOR_USER_MUTATION, context_value=graphql_request, variable_values={
+    schema.execute(UPDATE_COOKIES_INFORMATION_FOR_USER_MUTATION, context_value=graphql_request, variable_values={
         "action": "ACCEPT_TRACKING_ON_DISCUSSION"
-        })
-    import pdb; pdb.set_trace()
+    })
     assert "ACCEPT_TRACKING_ON_DISCUSSION" in asid3.accepted_cookies
-    atod = test_session.query(m.ActionOnDiscussion).filter(m.ActionOnDiscussion.type=="discussion.tracking:accept").first()
+    atod = test_session.query(m.ActionOnDiscussion).filter(m.ActionOnDiscussion.type == "discussion.tracking:accept").first()
     assert atod.actor_id == participant2_user.id
     assert atod.discussion_id == discussion.id
 
-def test_graphql_delete_accepted_cookie_by_user(graphql_request, participant2_user, discussion, asid3, test_session):
-    from assembl import models as m
-    res = schema.execute(DELETE_COOKIES_INFORMATION_FOR_USER_MUTATION, context_value=graphql_request, variable_values={
-        "action": "ACCEPT_CGU_ON_DISCUSSION"
-        })
-    assert "ACCEPT_CGU_ON_DISCUSSION" not in asid3.accepted_cookies
 
+def test_graphql_delete_accepted_cookie_by_user(graphql_request, participant2_user, discussion, asid3, test_session):
+    schema.execute(DELETE_COOKIES_INFORMATION_FOR_USER_MUTATION, context_value=graphql_request, variable_values={
+        "action": "ACCEPT_CGU_ON_DISCUSSION"
+    })
+    assert "ACCEPT_CGU_ON_DISCUSSION" not in asid3.accepted_cookies
 
 
