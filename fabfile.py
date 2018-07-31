@@ -848,9 +848,6 @@ def updatemaincode(backup=False):
 
             venvcmd_py3('pip install -r ../url_metadata/requirements.txt')
 
-        if env.uses_bluenove_actionable:
-            execute(update_bluenove_actionable)
-
 
 def get_robot_machine():
     """

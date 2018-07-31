@@ -2,7 +2,6 @@ import graphene
 from graphene.pyutils.enum import Enum as PyEnum
 from graphene.relay import Node
 from graphene_sqlalchemy import SQLAlchemyObjectType
-from pyramid.security import Everyone
 
 import assembl.graphql.docstrings as docs
 from assembl.auth import CrudPermissions
@@ -134,10 +133,7 @@ class ConfirmExtract(graphene.Mutation):
         extract_id = int(Node.from_global_id(extract_id)[1])
         extract = models.Extract.get(extract_id)
         require_instance_permission(CrudPermissions.UPDATE, extract, context)
-        user_id = context.authenticated_userid or Everyone
         # Publish the extract
         extract.extract_state = models.ExtractStates.PUBLISHED.value
-        extract.owner_id = user_id
-        extract.creator_id = user_id
         extract.db.flush()
         return ConfirmExtract(success=True)
