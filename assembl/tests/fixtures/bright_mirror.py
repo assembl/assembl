@@ -2,7 +2,7 @@
 import pytest
 
 @pytest.fixture(scope="function")
-def bright_mirror(graphql_request, test_session):
+def bright_mirror(graphql_request, graphql_registry, test_session):
     import os
     from io import BytesIO
     from assembl.graphql.schema import Schema as schema
@@ -15,46 +15,31 @@ def bright_mirror(graphql_request, test_session):
     graphql_request.POST['variables.img'] = FieldStorage()
 
     res = schema.execute(
-        u"""
-            mutation CreateBrightMirror($img:String!) {
-            createBrightMirror(
-                titleEntries: [
-                        {value: "Comprendre les dynamiques et les enjeux", localeCode: "fr"},
-                        {value: "Understanding the dynamics and issues", localeCode: "en"}
-                        ],
-                descriptionEntries: [
-                        {value: "Desc FR", localeCode: "fr"},
-                        {value: "Desc EN", localeCode: "en"}
-                        ],
-                image:$img,
-                announcement: {
-                titleEntries: [
-                        {value: "Title FR announce", localeCode: "fr"},
-                        {value: "Title EN announce", localeCode: "en"}
-                        ],
-                bodyEntries: [
-                        {value: "Body FR announce", localeCode: "fr"},
-                        {value: "Body EN announce", localeCode: "en"}
-                        ]
-                }
-            )
-            {
-                brightMirror {
-                    id
-                    title
-                    description
-                    img {
-                        title
-                    }
-                    announcement {
-                        title
-                        body
-                    }
-                    messageViewOverride
-                    }
-                }
+        graphql_registry['createThematic'],
+        context_value=graphql_request,
+        variable_values={
+            'identifier': 'brightMirror',
+            'messageViewOverride': 'brightMirror',
+            'titleEntries': [
+                {'value': u"Comprendre les dynamiques et les enjeux", 'localeCode': u"fr"},
+                {'value': u"Understanding the dynamics and issues", 'localeCode': u"en"}
+            ],
+            'descriptionEntries': [
+                {'value': u"Desc FR", 'localeCode': u"fr"},
+                {'value': u"Desc EN", 'localeCode': u"en"}
+            ],
+            'image': u'variables.img',
+            'announcement': {
+                'titleEntries': [
+                    {'value': u"Title FR announce", 'localeCode': u"fr"},
+                    {'value': u"Title EN announce", 'localeCode': u"en"}
+                ],
+                'bodyEntries': [
+                    {'value': u"Body FR announce", 'localeCode': u"fr"},
+                    {'value': u"Body EN announce", 'localeCode': u"en"}
+                ]
             }
-            """, context_value=graphql_request,
-                variable_values={"img": u"variables.img"})
-    bright_mirror_id = res.data['createBrightMirror']['brightMirror']['id']
+        })
+
+    bright_mirror_id = res.data['createThematic']['thematic']['id']
     return bright_mirror_id

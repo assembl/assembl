@@ -22,9 +22,8 @@ from assembl.graphql.discussion import (Discussion, UpdateDiscussion, Discussion
                                         UpdateDiscussionPreferences,
                                         UpdateResourcesCenter, VisitsAnalytics)
 from assembl.graphql.document import UploadDocument
-from assembl.graphql.idea import (CreateIdea, CreateThematic, DeleteThematic,
-                                  Idea, IdeaUnion, Thematic, UpdateThematic,
-                                  CreateBrightMirror, BrightMirror)
+from assembl.graphql.idea import (CreateThematic, DeleteThematic,
+                                  IdeaUnion, UpdateThematic)
 from assembl.graphql.landing_page import (LandingPageModuleType, LandingPageModule, CreateLandingPageModule,
                                           UpdateLandingPageModule)
 from assembl.graphql.langstring import resolve_langstring
@@ -83,9 +82,7 @@ class Query(graphene.ObjectType):
     root_idea = graphene.Field(
         IdeaUnion, identifier=graphene.String(description=docs.Default.phase_identifier), description=docs.Schema.root_idea)
     ideas = graphene.List(
-        Idea, identifier=graphene.String(required=True, description=docs.Default.phase_identifier), description=docs.Schema.ideas)
-    thematics = graphene.List(
-        Thematic, identifier=graphene.String(required=True, description=docs.Default.phase_identifier), description=docs.Schema.thematics)
+        IdeaUnion, identifier=graphene.String(required=True, description=docs.Default.phase_identifier), description=docs.Schema.ideas)
     syntheses = graphene.List(Synthesis, description=docs.Schema.syntheses)
     num_participants = graphene.Int(description=docs.Schema.num_participants)
     discussion_preferences = graphene.Field(DiscussionPreferences, description=docs.Schema.discussion_preferences)
@@ -130,7 +127,6 @@ class Query(graphene.ObjectType):
         end_date=graphene.String(description=docs.SchemaPosts.end_date),
         identifiers=graphene.List(graphene.String, description=docs.SchemaPosts.identifiers),
         description=docs.SchemaPosts.__doc__)
-    bright_mirrors = graphene.List(BrightMirror, description=docs.Schema.bright_mirrors)
 
     def resolve_resources(self, args, context, info):
         model = models.Resource
@@ -179,10 +175,18 @@ class Query(graphene.ObjectType):
         return vote_session
 
     def resolve_ideas(self, args, context, info):
-        model = models.Idea
-        query = get_query(model, context)
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
+        phase_identifier = args.get('identifier')
+        if phase_identifier in ('survey', 'brightMirror'):
+            root_thematic = get_root_thematic_for_phase(discussion, phase_identifier)
+            if root_thematic is None:
+                return []
+
+            return root_thematic.get_children()
+
+        model = models.Idea
+        query = get_query(model, context)
         descendants_query = discussion.root_idea.get_descendants_query(inclusive=False)
         query = query.outerjoin(
                 models.Idea.source_links
@@ -199,22 +203,12 @@ class Query(graphene.ObjectType):
 #                joinedload(models.Idea.synthesis_title).joinedload("entries"),
                 joinedload(models.Idea.description).joinedload("entries"),
             ).order_by(models.IdeaLink.order, models.Idea.creation_date)
-        if args.get('identifier') == 'multiColumns':
+        if phase_identifier == 'multiColumns':
             # Filter out ideas that don't have columns.
             query = query.filter(
                 models.Idea.message_view_override == 'messageColumns')
 
         return query
-
-    def resolve_thematics(self, args, context, info):
-        identifier = args.get('identifier', None)
-        discussion_id = context.matchdict['discussion_id']
-        discussion = models.Discussion.get(discussion_id)
-        root_thematic = get_root_thematic_for_phase(discussion, identifier)
-        if root_thematic is None:
-            return []
-
-        return root_thematic.get_children()
 
     def resolve_syntheses(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
@@ -452,15 +446,6 @@ class Query(graphene.ObjectType):
 
         return query.all()
 
-    def resolve_bright_mirrors(self, args, context, info):
-        discussion_id = context.matchdict['discussion_id']
-        discussion = models.Discussion.get(discussion_id)
-        root_thematic = get_root_thematic_for_phase(discussion, "brightMirror")
-        if root_thematic is None:
-            return []
-
-        return root_thematic.get_children()
-
 
 class Mutations(graphene.ObjectType):
 
@@ -468,7 +453,6 @@ class Mutations(graphene.ObjectType):
     create_thematic = CreateThematic.Field(description=docs.CreateThematic.__doc__)
     update_thematic = UpdateThematic.Field(description=docs.UpdateThematic.__doc__)
     delete_thematic = DeleteThematic.Field(description=docs.DeleteThematic.__doc__)
-    create_idea = CreateIdea.Field(description=docs.CreateIdea.__doc__)
     create_post = CreatePost.Field(description=docs.CreatePost.__doc__)
     update_post = UpdatePost.Field(description=docs.UpdatePost.__doc__)
     delete_post = DeletePost.Field(description=docs.DeletePost.__doc__)
@@ -517,7 +501,6 @@ class Mutations(graphene.ObjectType):
     update_discussion_phase = UpdateDiscussionPhase.Field(description=docs.CreateDiscussionPhase.__doc__)
     delete_discussion_phase = DeleteDiscussionPhase.Field(description=docs.DeleteDiscussionPhase.__doc__)
     update_harvesting_translation_preference = UpdateHarvestingTranslationPreference.Field(description=docs.UpdateHarvestingTranslationPreference.__doc__)
-    create_bright_mirror = CreateBrightMirror.Field(description=docs.CreateBrightMirror.__doc__)
 
 
 Schema = graphene.Schema(query=Query, mutation=Mutations)

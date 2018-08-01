@@ -539,14 +539,14 @@ query Question($lang: String!, $id: ID!) {
         "id": node_id,
         "lang": "en"
     })
-    
+
     assert json.loads(json.dumps(res.data)) == {
       u'question': {
           u'thematic': {
               u'id': thematic_and_question[0],
               u'img': None,
               u'title': u'Understanding the dynamics and issues'
-          }, 
+          },
           u'id': node_id,
           u'title': u"Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?"
       }
@@ -590,47 +590,7 @@ query QuestionPosts($id: ID!, $first: Int!, $after: String!) {
     assert all(post['node']['id'] in proposals for post in question_posts)
 
 
-CREATE_BRIGHT_MIRROR_MUTATION = u"""
-mutation CreateBrightMirror($img:String!) {
-  createBrightMirror(
-    titleEntries: [
-            {value: "Comprendre les dynamiques et les enjeux", localeCode: "fr"},
-            {value: "Understanding the dynamics and issues", localeCode: "en"}
-            ],
-    descriptionEntries: [
-            {value: "Desc FR", localeCode: "fr"},
-            {value: "Desc EN", localeCode: "en"}
-            ],
-    image:$img,
-    announcement: {
-      titleEntries: [
-              {value: "Title FR announce", localeCode: "fr"},
-              {value: "Title EN announce", localeCode: "en"}
-              ],
-      bodyEntries: [
-              {value: "Body FR announce", localeCode: "fr"},
-              {value: "Body EN announce", localeCode: "en"}
-              ]
-    }
-  )
-  {
-    brightMirror {
-      title,
-      description,
-      img {
-          title
-      }
-      announcement {
-        title,
-        body
-      }
-      messageViewOverride
-    }
-  }
-}
-"""
-
-def test_graphql_create_bright_mirror(graphql_request, test_session):
+def test_graphql_create_bright_mirror(graphql_request, graphql_registry, test_session):
     import os
     from io import BytesIO
 
@@ -641,289 +601,200 @@ def test_graphql_create_bright_mirror(graphql_request, test_session):
 
     graphql_request.POST['variables.img'] = FieldStorage()
 
-    res = schema.execute(CREATE_BRIGHT_MIRROR_MUTATION,
-                         context_value=graphql_request,
-                         variable_values={"img": u"variables.img"})
-
-    assert res.errors is None
-    assert json.loads(json.dumps(res.data)) == {
-      u'createBrightMirror': {
-        u'brightMirror': {
-            u'title': u'Understanding the dynamics and issues',
-            u'description': u'Desc EN',
-            u'img': {
-              u'title': u'img.png'
-            },
-            u'announcement': {
-              u'title': u'Title EN announce',
-              u'body': u'Body EN announce'
-            },
-            u'messageViewOverride': u'brightMirror'
-        }}}
-
-
-def test_graphql_create_bright_mirror_no_title(graphql_request, test_session):
-    import os
-    from io import BytesIO
-
-    class FieldStorage(object):
-        file = BytesIO(os.urandom(16))
-        filename = u'path/to/img.png'
-        type = 'image/png'
-
-    graphql_request.POST['variables.img'] = FieldStorage()
-
-    res = schema.execute("""
-      mutation CreateBrightMirror($img:String!) {
-        createBrightMirror(
-          descriptionEntries: [
-                  {value: "Desc FR", localeCode: "fr"},
-                  {value: "Desc EN", localeCode: "en"}
-                  ],
-          image:$img,
-          announcement: {
-            titleEntries: [
-                    {value: "Title FR announce", localeCode: "fr"},
-                    {value: "Title EN announce", localeCode: "en"}
-                    ],
-            bodyEntries: [
-                    {value: "Body FR announce", localeCode: "fr"},
-                    {value: "Body EN announce", localeCode: "en"}
-                    ]
-          }
-        )
-        {
-          brightMirror {
-            title,
-            description,
-            img {
-                title
-            }
-            announcement {
-              title,
-              body
-            }
-            messageViewOverride
-          }
-        }
-      }""", context_value=graphql_request,
-            variable_values={"img": u"variables.img"})
-
-    assert """argument "titleEntries" of type "[LangStringEntryInput]!" is required but not provided""" in res.errors[0].args[0]
-
-
-def test_graphql_create_bright_mirror_empty_title(graphql_request, test_session):
-    import os
-    from io import BytesIO
-
-    class FieldStorage(object):
-        file = BytesIO(os.urandom(16))
-        filename = u'path/to/img.png'
-        type = 'image/png'
-
-    graphql_request.POST['variables.img'] = FieldStorage()
-
-    res = schema.execute("""
-      mutation CreateBrightMirror($img:String!) {
-        createBrightMirror(
-          titleEntries: [],
-          descriptionEntries: [
-                  {value: "Desc FR", localeCode: "fr"},
-                  {value: "Desc EN", localeCode: "en"}
-                  ],
-          image:$img,
-          announcement: {
-            titleEntries: [
-                    {value: "Title FR announce", localeCode: "fr"},
-                    {value: "Title EN announce", localeCode: "en"}
-                    ],
-            bodyEntries: [
-                    {value: "Body FR announce", localeCode: "fr"},
-                    {value: "Body EN announce", localeCode: "en"}
-                    ]
-          }
-        )
-        {
-          brightMirror {
-            title,
-            description,
-            img {
-                title
-            }
-            announcement {
-              title,
-              body
-            }
-            messageViewOverride
-          }
-        }
-      }""", context_value=graphql_request,
-            variable_values={"img": u"variables.img"})
-
-    assert "BrightMirror titleEntries needs at least one entry" in res.errors[0].args[0]
-
-
-def test_graphql_create_bright_mirror_no_image(graphql_request, test_session):
-    res = schema.execute("""
-      mutation CreateBrightMirror {
-        createBrightMirror(
-          titleEntries: [
-                  {value: "Comprendre les dynamiques et les enjeux", localeCode: "fr"},
-                  {value: "Understanding the dynamics and issues", localeCode: "en"}
-                  ],
-          descriptionEntries: [
-                  {value: "Desc FR", localeCode: "fr"},
-                  {value: "Desc EN", localeCode: "en"}
-                  ],
-          announcement: {
-            titleEntries: [
-                    {value: "Title FR announce", localeCode: "fr"},
-                    {value: "Title EN announce", localeCode: "en"}
-                    ],
-            bodyEntries: [
-                    {value: "Body FR announce", localeCode: "fr"},
-                    {value: "Body EN announce", localeCode: "en"}
-                    ]
-          }
-        )
-        {
-          brightMirror {
-            title,
-            description,
-            img {
-                title
-            }
-            announcement {
-              title,
-              body
-            }
-            messageViewOverride
-          }
-        }
-      }""", context_value=graphql_request)
-
-    assert """argument "image" of type "String!" is required but not provided""" in res.errors[0].args[0]
-
-
-def test_graphql_create_bright_mirror_no_announcement(graphql_request, test_session):
-    import os
-    from io import BytesIO
-
-    class FieldStorage(object):
-        file = BytesIO(os.urandom(16))
-        filename = u'path/to/img.png'
-        type = 'image/png'
-
-    graphql_request.POST['variables.img'] = FieldStorage()
-
-    res = schema.execute("""
-      mutation CreateBrightMirror($img:String!) {
-        createBrightMirror(
-          titleEntries: [
-                  {value: "Comprendre les dynamiques et les enjeux", localeCode: "fr"},
-                  {value: "Understanding the dynamics and issues", localeCode: "en"}
-                  ],
-          descriptionEntries: [
-                  {value: "Desc FR", localeCode: "fr"},
-                  {value: "Desc EN", localeCode: "en"}
-                  ],
-          image:$img
-        )
-        {
-          brightMirror {
-            title,
-            description,
-            img {
-                title
-            }
-            announcement {
-              title,
-              body
-            }
-            messageViewOverride
-          }
-        }
-      }""", context_value=graphql_request,
-            variable_values={"img": u"variables.img"})
-
-    assert """argument "announcement" of type "IdeaAnnouncementInput!" is required but not provided""" in res.errors[0].args[0]
-
-
-def test_graphql_create_bright_mirror_announcement_empty_title(graphql_request, test_session):
-    import os
-    from io import BytesIO
-
-    class FieldStorage(object):
-        file = BytesIO(os.urandom(16))
-        filename = u'path/to/img.png'
-        type = 'image/png'
-
-    graphql_request.POST['variables.img'] = FieldStorage()
-
-    res = schema.execute("""
-      mutation CreateBrightMirror($img:String!) {
-        createBrightMirror(
-          titleEntries: [
-                  {value: "Comprendre les dynamiques et les enjeux", localeCode: "fr"},
-                  {value: "Understanding the dynamics and issues", localeCode: "en"}
-                  ],
-          descriptionEntries: [
-                  {value: "Desc FR", localeCode: "fr"},
-                  {value: "Desc EN", localeCode: "en"}
-                  ],
-          image:$img,
-          announcement: {
-            titleEntries: [],
-            bodyEntries: [
-                    {value: "Body FR announce", localeCode: "fr"},
-                    {value: "Body EN announce", localeCode: "en"}
-                    ]
-          }
-        )
-        {
-          brightMirror {
-            title,
-            description,
-            img {
-                title
-            }
-            announcement {
-              title,
-              body
-            }
-            messageViewOverride
-          }
-        }
-      }""", context_value=graphql_request,
-            variable_values={"img": u"variables.img"})
-
-    assert "BrightMirror Announcement titleEntries needs at least one entry" in res.errors[0].args[0]
-
-
-def test_graphql_get_bright_mirror(graphql_request, bright_mirror, test_session):
     res = schema.execute(
-        u'query { brightMirrors { title, description, img { title }, announcement { title, body } } }', context_value=graphql_request)
-
-    assert res.errors is None
-    assert json.loads(json.dumps(res.data)) == {
-        u'brightMirrors': [{
-            u'title': u'Understanding the dynamics and issues',
-            u'description': u'Desc EN',
-            u'img': {
-              u'title': u'img.png'
-            },
-            u'announcement': {
-              u'title': u'Title EN announce',
-              u'body': u'Body EN announce'
+        graphql_registry['createThematic'],
+        context_value=graphql_request,
+        variable_values={
+            'identifier': 'brightMirror',
+            'messageViewOverride': 'brightMirror',
+            'titleEntries': [
+                {'value': u"Comprendre les dynamiques et les enjeux", 'localeCode': u"fr"},
+                {'value': u"Understanding the dynamics and issues", 'localeCode': u"en"}
+            ],
+            'descriptionEntries': [
+                {'value': u"Desc FR", 'localeCode': u"fr"},
+                {'value': u"Desc EN", 'localeCode': u"en"}
+            ],
+            'image': u'variables.img',
+            'announcement': {
+                'titleEntries': [
+                    {'value': u"Title FR announce", 'localeCode': u"fr"},
+                    {'value': u"Title EN announce", 'localeCode': u"en"}
+                ],
+                'bodyEntries': [
+                    {'value': u"Body FR announce", 'localeCode': u"fr"},
+                    {'value': u"Body EN announce", 'localeCode': u"en"}
+                ]
             }
-          }]
-        }
-
-
-def test_graphql_get_bright_mirror_noresult(graphql_request):
-    res = schema.execute(
-        u'query { brightMirrors { title, description, img { title }, announcement { title, body } } }',
-        context_value=graphql_request)
+        })
 
     assert res.errors is None
-    assert json.loads(json.dumps(res.data)) == {u'brightMirrors': []}
+    idea = res.data['createThematic']['thematic']
+    assert idea['announcement'] == {
+        u'title': u'Title EN announce',
+        u'body': u'Body EN announce'
+    }
+    assert idea['title'] == u'Understanding the dynamics and issues'
+    assert idea['description'] == u'Desc EN'
+    assert idea['img'] is not None
+    assert 'externalUrl' in idea['img']
+    assert idea['messageViewOverride'] == u'brightMirror'
+    assert idea['order'] == 1.0
+
+
+def test_graphql_create_bright_mirror_no_title(graphql_request, graphql_registry, test_session):
+    import os
+    from io import BytesIO
+
+    class FieldStorage(object):
+        file = BytesIO(os.urandom(16))
+        filename = u'path/to/img.png'
+        type = 'image/png'
+
+    graphql_request.POST['variables.img'] = FieldStorage()
+
+    res = schema.execute(
+        graphql_registry['createThematic'],
+        context_value=graphql_request,
+        variable_values={
+            'identifier': 'brightMirror',
+            'messageViewOverride': 'brightMirror',
+            'titleEntries': None,
+            'descriptionEntries': [
+                {'value': u"Desc FR", 'localeCode': u"fr"},
+                {'value': u"Desc EN", 'localeCode': u"en"}
+            ],
+            'image': u'variables.img',
+            'announcement': {
+                'titleEntries': [
+                    {'value': u"Title FR announce", 'localeCode': u"fr"},
+                    {'value': u"Title EN announce", 'localeCode': u"en"}
+                ],
+                'bodyEntries': [
+                    {'value': u"Body FR announce", 'localeCode': u"fr"},
+                    {'value': u"Body EN announce", 'localeCode': u"en"}
+                ]
+            }
+        })
+
+    assert 'Variable "$titleEntries" of required type "[LangStringEntryInput]!" was not provided.' == res.errors[0].args[0]
+
+
+def test_graphql_create_bright_mirror_empty_title(graphql_request, graphql_registry, test_session):
+    import os
+    from io import BytesIO
+
+    class FieldStorage(object):
+        file = BytesIO(os.urandom(16))
+        filename = u'path/to/img.png'
+        type = 'image/png'
+
+    graphql_request.POST['variables.img'] = FieldStorage()
+
+    res = schema.execute(
+        graphql_registry['createThematic'],
+        context_value=graphql_request,
+        variable_values={
+            'identifier': 'brightMirror',
+            'messageViewOverride': 'brightMirror',
+            'titleEntries': [],
+            'descriptionEntries': [
+                {'value': u"Desc FR", 'localeCode': u"fr"},
+                {'value': u"Desc EN", 'localeCode': u"en"}
+            ],
+            'image': u'variables.img',
+            'announcement': {
+                'titleEntries': [
+                    {'value': u"Title FR announce", 'localeCode': u"fr"},
+                    {'value': u"Title EN announce", 'localeCode': u"en"}
+                ],
+                'bodyEntries': [
+                    {'value': u"Body FR announce", 'localeCode': u"fr"},
+                    {'value': u"Body EN announce", 'localeCode': u"en"}
+                ]
+            }
+        })
+
+    assert "titleEntries needs at least one entry" in res.errors[0].args[0]
+
+
+def test_graphql_create_bright_mirror_announcement_empty_title(graphql_request, graphql_registry, test_session):
+    import os
+    from io import BytesIO
+
+    class FieldStorage(object):
+        file = BytesIO(os.urandom(16))
+        filename = u'path/to/img.png'
+        type = 'image/png'
+
+    graphql_request.POST['variables.img'] = FieldStorage()
+
+    res = schema.execute(
+        graphql_registry['createThematic'],
+        context_value=graphql_request,
+        variable_values={
+            'identifier': 'brightMirror',
+            'messageViewOverride': 'brightMirror',
+            'titleEntries': [
+                {'value': u"Comprendre les dynamiques et les enjeux", 'localeCode': u"fr"},
+                {'value': u"Understanding the dynamics and issues", 'localeCode': u"en"}
+            ],
+            'descriptionEntries': [
+                {'value': u"Desc FR", 'localeCode': u"fr"},
+                {'value': u"Desc EN", 'localeCode': u"en"}
+            ],
+            'image': u'variables.img',
+            'announcement': {
+                'titleEntries': [],
+                'bodyEntries': [
+                    {'value': u"Body FR announce", 'localeCode': u"fr"},
+                    {'value': u"Body EN announce", 'localeCode': u"en"}
+                ]
+            }
+        })
+
+    assert "Announcement titleEntries needs at least one entry" in res.errors[0].args[0]
+
+
+def test_graphql_get_bright_mirror(graphql_request, graphql_registry, bright_mirror, test_session):
+    res = schema.execute(
+        graphql_registry['ThematicsQuery'],
+        context_value=graphql_request,
+        variable_values={'identifier': u'brightMirror'}
+        )
+
+    assert res.errors is None
+    assert len(res.data['thematics']) == 1
+    result = json.loads(json.dumps(res.data))
+    idea = result['thematics'][0]
+    assert sorted(idea['announcement']['titleEntries'], key=lambda e: e['localeCode']) == [
+        {'value': u"Title EN announce", 'localeCode': u"en"},
+        {'value': u"Title FR announce", 'localeCode': u"fr"}
+    ]
+    assert sorted(idea['announcement']['bodyEntries'], key=lambda e: e['localeCode']) == [
+        {'value': u"Body EN announce", 'localeCode': u"en"},
+        {'value': u"Body FR announce", 'localeCode': u"fr"}
+    ]
+    assert sorted(idea['titleEntries'], key=lambda e: e['localeCode']) == [
+        {'value': u"Understanding the dynamics and issues", 'localeCode': u"en"},
+        {'value': u"Comprendre les dynamiques et les enjeux", 'localeCode': u"fr"}
+    ]
+    assert sorted(idea['descriptionEntries'], key=lambda e: e['localeCode']) == [
+        {'value': u"Desc EN", 'localeCode': u"en"},
+        {'value': u"Desc FR", 'localeCode': u"fr"}
+    ]
+    assert idea['img'] is not None
+    assert 'externalUrl' in idea['img']
+    assert idea['messageViewOverride'] == u'brightMirror'
+    assert idea['order'] == 1.0
+
+
+def test_graphql_get_bright_mirror_noresult(graphql_request, graphql_registry):
+    res = schema.execute(
+        graphql_registry['ThematicsQuery'],
+        context_value=graphql_request,
+        variable_values={'identifier': u'brightMirror'}
+        )
+
+    assert res.errors is None
+    assert len(res.data['thematics']) == 0

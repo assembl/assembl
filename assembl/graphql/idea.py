@@ -1,4 +1,3 @@
-import os.path
 from collections import defaultdict
 from itertools import takewhile
 from random import sample as random_sample
@@ -49,6 +48,10 @@ class Video(graphene.ObjectType):
 
 class IdeaInterface(graphene.Interface):
     __doc__ = docs.IdeaInterface.__doc__
+    title = graphene.String(lang=graphene.String(), description=docs.IdeaInterface.title)
+    title_entries = graphene.List(LangStringEntry, description=docs.IdeaInterface.title_entries)
+    description = graphene.String(lang=graphene.String(), description=docs.IdeaInterface.description)
+    description_entries = graphene.List(LangStringEntry, description=docs.IdeaInterface.description_entries)
     num_posts = graphene.Int(description=docs.IdeaInterface.num_posts)
     num_total_posts = graphene.Int(description=docs.IdeaInterface.num_total_posts)
     num_contributors = graphene.Int(description=docs.IdeaInterface.num_contributors)
@@ -62,6 +65,21 @@ class IdeaInterface(graphene.Interface):
         'assembl.graphql.vote_session.VoteSpecificationUnion',
         required=True, description=docs.IdeaInterface.vote_specifications)
     type = graphene.String(description=docs.IdeaInterface.type)
+
+    def resolve_title(self, args, context, info):
+        return resolve_langstring(self.title, args.get('lang'))
+
+    def resolve_title_entries(self, args, context, info):
+        return resolve_langstring_entries(self, 'title')
+
+    def resolve_description(self, args, context, info):
+        description = resolve_langstring(self.description, args.get('lang'))
+        if not description:
+            description = self.get_definition_preview()
+        return description
+
+    def resolve_description_entries(self, args, context, info):
+        return resolve_langstring_entries(self, 'description')
 
     def resolve_num_total_posts(self, args, context, info):
         if isinstance(self, models.RootIdea):
@@ -112,7 +130,13 @@ class IdeaInterface(graphene.Interface):
         return self.__class__.__name__
 
 
-class IdeaAnnoucement(SecureObjectType, SQLAlchemyObjectType):
+class IdeaAnnouncementInput(graphene.InputObjectType):
+    __doc__ = docs.IdeaAnnouncement.__doc__
+    title_entries = graphene.List(LangStringEntryInput, description=docs.IdeaAnnouncement.title_entries)
+    body_entries = graphene.List(LangStringEntryInput, description=docs.IdeaAnnouncement.body_entries)
+
+
+class IdeaAnnouncement(SecureObjectType, SQLAlchemyObjectType):
     __doc__ = docs.IdeaAnnouncement.__doc__
 
     class Meta:
@@ -121,13 +145,21 @@ class IdeaAnnoucement(SecureObjectType, SQLAlchemyObjectType):
         only_fields = ('id',)
 
     title = graphene.String(lang=graphene.String(), description=docs.IdeaAnnouncement.title)
+    title_entries = graphene.List(LangStringEntry, description=docs.IdeaAnnouncement.title_entries)
     body = graphene.String(lang=graphene.String(), description=docs.IdeaAnnouncement.body)
+    body_entries = graphene.List(LangStringEntry, description=docs.IdeaAnnouncement.body_entries)
 
     def resolve_title(self, args, context, info):
         return resolve_langstring(self.title, args.get('lang'))
 
+    def resolve_title_entries(self, args, context, info):
+        return resolve_langstring_entries(self, 'title')
+
     def resolve_body(self, args, context, info):
         return resolve_langstring(self.body, args.get('lang'))
+
+    def resolve_body_entries(self, args, context, info):
+        return resolve_langstring_entries(self, 'body')
 
 
 class IdeaMessageColumn(SecureObjectType, SQLAlchemyObjectType):
@@ -187,19 +219,15 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
         interfaces = (Node, IdeaInterface)
         only_fields = ('id', )
 
-    title = graphene.String(lang=graphene.String(), description=docs.Idea.title)
-    title_entries = graphene.List(LangStringEntry, description=docs.Idea.title_entries)
     # TODO: Look into seperating synthesis_title from 'What you need to know',
     # they mean different things
     # This is the "What you need to know"
     synthesis_title = graphene.String(lang=graphene.String(), description=docs.Idea.synthesis_title)
-    description = graphene.String(lang=graphene.String(), description=docs.Idea.description)
-    description_entries = graphene.List(LangStringEntry, description=docs.Idea.description_entries)
     children = graphene.List(lambda: Idea, description=docs.Idea.children)
     parent_id = graphene.ID(description=docs.Idea.parent_id)
     posts = SQLAlchemyConnectionField('assembl.graphql.post.PostConnection', description=docs.Idea.posts)  # use dotted name to avoid circular import  # noqa: E501
     contributors = graphene.List(AgentProfile, description=docs.Idea.contributors)
-    announcement = graphene.Field(lambda: IdeaAnnoucement, description=docs.Idea.announcement)
+    announcement = graphene.Field(lambda: IdeaAnnouncement, description=docs.Idea.announcement)
     message_columns = graphene.List(lambda: IdeaMessageColumn, description=docs.Idea.message_columns)
     ancestors = graphene.List(graphene.ID, description=docs.Idea.ancestors)
     vote_results = graphene.Field(VoteResults, required=True, description=docs.Idea.vote_results)
@@ -245,23 +273,8 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
         # return isinstance(root, cls._meta.model)  # this was the original code  # noqa: E501
         return type(root) == cls._meta.model or type(root) == models.RootIdea
 
-    def resolve_title(self, args, context, info):
-        return resolve_langstring(self.title, args.get('lang'))
-
     def resolve_synthesis_title(self, args, context, info):
         return resolve_langstring(self.synthesis_title, args.get('lang'))
-
-    def resolve_title_entries(self, args, context, info):
-        return resolve_langstring_entries(self, 'title')
-
-    def resolve_description(self, args, context, info):
-        description = resolve_langstring(self.description, args.get('lang'))
-        if not description:
-            description = self.get_definition_preview()
-        return description
-
-    def resolve_description_entries(self, args, context, info):
-        return resolve_langstring_entries(self, 'description')
 
     def resolve_children(self, args, context, info):
         # filter on child.hidden to not include the root thematic in the children of root_idea  # noqa: E501
@@ -475,21 +488,8 @@ class Thematic(SecureObjectType, SQLAlchemyObjectType):
         interfaces = (Node, IdeaInterface)
         only_fields = ('id', 'identifier')
 
-    title = graphene.String(lang=graphene.String(), description=docs.Thematic.title)
-    title_entries = graphene.List(LangStringEntry, description=docs.Thematic.title_entries)
-    description = graphene.String(lang=graphene.String(), description=docs.Thematic.description)
     questions = graphene.List(Question, description=docs.Thematic.questions)
     video = graphene.Field(Video, lang=graphene.String(), description=docs.Thematic.video)
-
-    def resolve_title(self, args, context, info):
-        title = resolve_langstring(self.title, args.get('lang'))
-        return title
-
-    def resolve_title_entries(self, args, context, info):
-        return resolve_langstring_entries(self, 'title')
-
-    def resolve_description(self, args, context, info):
-        return resolve_langstring(self.description, args.get('lang'))
 
     def resolve_questions(self, args, context, info):
         return self.get_children()
@@ -567,111 +567,6 @@ class VideoInput(graphene.InputObjectType):
     media_file = graphene.String(description=docs.VideoInput.media_file)
 
 
-# Create an Idea to be used in a Thread phase
-# (and displayed in frontend version 1 or 2)
-# Maybe some of its logic should be factorized with CreateThematic
-# For now, we on purpose do not make use of an "identifier" input
-# (identifier of the phase this idea will be visible in) like we would
-# do in CreateThematic mutation, because behavior between frontend
-# v1 and v2 has not yet been completely clarified.
-class CreateIdea(graphene.Mutation):
-    __doc__ = docs.CreateIdea.__doc__
-
-    class Input:
-        # Careful, having required=True on a graphene.List only means
-        # it can't be None, having an empty [] is perfectly valid.
-        title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.CreateIdea.title_entries)
-        description_entries = graphene.List(LangStringEntryInput, description=docs.CreateIdea.description_entries)
-        # this is the identifier of the part in a multipart POST
-        image = graphene.String(description=docs.CreateIdea.image)
-        order = graphene.Float(description=docs.CreateIdea.order)
-        parent_id = graphene.ID(description=docs.CreateIdea.parent_id)
-
-    idea = graphene.Field(lambda: Idea)
-
-    @staticmethod
-    @abort_transaction_on_exception
-    def mutate(root, args, context, info):
-        EMBED_ATTACHMENT = models.AttachmentPurpose.EMBED_ATTACHMENT.value
-        cls = models.Idea
-        discussion_id = context.matchdict['discussion_id']
-        discussion = models.Discussion.get(discussion_id)
-        user_id = context.authenticated_userid or Everyone
-
-        permissions = get_permissions(user_id, discussion_id)
-        allowed = cls.user_can_cls(
-            user_id, CrudPermissions.CREATE, permissions)
-        if not allowed or (allowed == IF_OWNED and user_id == Everyone):
-            raise HTTPUnauthorized()
-
-        with cls.default_db.no_autoflush:
-            title_entries = args.get('title_entries')
-            if len(title_entries) == 0:
-                raise Exception('Idea titleEntries needs at least one entry')
-                # Better to have this message than
-                # 'NoneType' object has no attribute 'owner_object'
-                # when creating the saobj below if title=None
-
-            title_langstring = langstring_from_input_entries(title_entries)
-            description_langstring = langstring_from_input_entries(
-                args.get('description_entries'))
-            kwargs = {}
-            if description_langstring is not None:
-                kwargs['description'] = description_langstring
-
-            parent_idea_id = args.get('parent_id')
-            if parent_idea_id:
-                parent_idea_id = int(
-                    Node.from_global_id(parent_idea_id)[1])
-                if parent_idea_id:
-                    parent_idea = models.Idea.get(parent_idea_id)
-                    if not parent_idea:
-                        raise Exception('Parent Idea not found')
-                    if parent_idea.discussion != discussion:
-                        # No cross-debate references are allowed,
-                        # for security reasons
-                        raise Exception(
-                            'Parent Idea does not belong to this discussion')  # noqa: E501
-                else:
-                    raise Exception('Parent Idea not found')
-            if not parent_idea_id:
-                parent_idea = discussion.root_idea
-
-            saobj = cls(
-                discussion_id=discussion_id,
-                title=title_langstring,
-                **kwargs)
-            db = saobj.db
-            db.add(saobj)
-            order = len(parent_idea.get_children()) + 1.0
-            db.add(
-                models.IdeaLink(source=parent_idea, target=saobj,
-                                order=args.get('order', order)))
-
-            # add uploaded image as an attachment to the idea
-            image = args.get('image')
-            if image is not None:
-                filename = os.path.basename(context.POST[image].filename)
-                mime_type = context.POST[image].type
-                document = models.File(
-                    discussion=discussion,
-                    mime_type=mime_type,
-                    title=filename)
-                document.add_file_data(context.POST[image].file)
-                db.add(models.IdeaAttachment(
-                    document=document,
-                    idea=saobj,
-                    discussion=discussion,
-                    creator_id=context.authenticated_userid,
-                    title=filename,
-                    attachmentPurpose=EMBED_ATTACHMENT
-                ))
-
-            db.flush()
-
-        return CreateIdea(idea=saobj)
-
-
 # How the file upload works
 # With the https://github.com/jaydenseric/apollo-upload-client
 # networkInterface, if there is a File object in a graphql variable, the File
@@ -693,19 +588,26 @@ class CreateThematic(graphene.Mutation):
         description_entries = graphene.List(LangStringEntryInput, description=docs.Default.langstring_entries)
         identifier = graphene.String(required=True, description=docs.Default.required_language_input)
         video = graphene.Argument(VideoInput, description=docs.CreateThematic.video)
+        announcement = graphene.Argument(IdeaAnnouncementInput, description=docs.Idea.announcement)
         questions = graphene.List(QuestionInput, description=docs.CreateThematic.questions)
         # this is the identifier of the part in a multipart POST
         image = graphene.String(description=docs.Default.required_language_input)
         order = graphene.Float(description=docs.Default.float_entry)
+        message_view_override = graphene.String(description=docs.IdeaInterface.message_view_override)
+        parent_id = graphene.ID(description=docs.Idea.parent_id)
 
-    thematic = graphene.Field(lambda: Thematic)
+    thematic = graphene.Field(lambda: IdeaUnion)
 
     @staticmethod
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
         EMBED_ATTACHMENT = models.AttachmentPurpose.EMBED_ATTACHMENT.value
         MEDIA_ATTACHMENT = models.AttachmentPurpose.MEDIA_ATTACHMENT.value
-        cls = models.Thematic
+        cls = models.Idea
+        phase_identifier = args.get('identifier')
+        if phase_identifier == 'survey':
+            cls = models.Thematic
+
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
         user_id = context.authenticated_userid or Everyone
@@ -716,8 +618,7 @@ class CreateThematic(graphene.Mutation):
         if not allowed or (allowed == IF_OWNED and user_id == Everyone):
             raise HTTPUnauthorized()
 
-        identifier = args.get('identifier')
-        with cls.default_db.no_autoflush:
+        with cls.default_db.no_autoflush as db:
             title_entries = args.get('title_entries')
             if len(title_entries) == 0:
                 raise Exception(
@@ -732,6 +633,8 @@ class CreateThematic(graphene.Mutation):
             kwargs = {}
             if description_langstring is not None:
                 kwargs['description'] = description_langstring
+
+            kwargs['message_view_override'] = args.get('message_view_override')
 
             video = args.get('video')
             video_media = None
@@ -764,26 +667,58 @@ class CreateThematic(graphene.Mutation):
 
                 video_media = video.get('media_file', None)
 
-            # Our thematic, because it inherits from Idea, needs to be
-            # associated to the root idea of the discussion.
-            # We create a hidden root thematic, corresponding to the
-            # `identifier` phase, child of the root idea,
-            # and add our thematic as a child of this root thematic.
-            root_thematic = get_root_thematic_for_phase(discussion, identifier)
-            if root_thematic is None:
-                root_thematic = create_root_thematic(discussion, identifier)
+            parent_idea_id = args.get('parent_id')
+            if parent_idea_id:
+                parent_idea_id = int(
+                    Node.from_global_id(parent_idea_id)[1])
+                if parent_idea_id:
+                    parent_idea = models.Idea.get(parent_idea_id)
+                    if not parent_idea:
+                        raise Exception('Parent Idea not found')
+                    if parent_idea.discussion != discussion:
+                        # No cross-debate references are allowed,
+                        # for security reasons
+                        raise Exception(
+                            'Parent Idea does not belong to this discussion')  # noqa: E501
+                else:
+                    raise Exception('Parent Idea not found')
+            else:
+                if phase_identifier in ('thread', 'multiColumns'):
+                    parent_idea = discussion.root_idea
+                else:
+                    # Our thematic, because it inherits from Idea, needs to be
+                    # associated to the root idea of the discussion.
+                    # We create a hidden root thematic, corresponding to the
+                    # `identifier` phase, child of the root idea,
+                    # and add our thematic as a child of this root thematic.
+                    parent_idea = get_root_thematic_for_phase(discussion, phase_identifier)
+                    if parent_idea is None:
+                        parent_idea = create_root_thematic(discussion, phase_identifier)
 
             saobj = cls(
                 discussion_id=discussion_id,
                 title=title_langstring,
-                identifier=identifier,
                 **kwargs)
-            db = saobj.db
+            if cls == models.Thematic:
+                saobj.identifier = phase_identifier  # I don't think this is really used
+
             db.add(saobj)
-            order = len(root_thematic.get_children()) + 1.0
+            order = len(parent_idea.get_children()) + 1.0
             db.add(
-                models.IdeaLink(source=root_thematic, target=saobj,
+                models.IdeaLink(source=parent_idea, target=saobj,
                                 order=args.get('order', order)))
+
+            # Create the idea announcement object which corresponds to the instructions
+            announcement = args.get('announcement')
+            if announcement is not None:
+                announcement_title_entries = announcement.get('title_entries')
+                if len(announcement_title_entries) == 0:
+                    raise Exception('Announcement titleEntries needs at least one entry')
+
+                announcement_title_langstring = langstring_from_input_entries(announcement_title_entries)
+                announcement_body_langstring = langstring_from_input_entries(announcement.get('body_entries', None))
+                saobj2 = create_idea_announcement(user_id, discussion, saobj, announcement_title_langstring, announcement_body_langstring)
+                db.add(saobj2)
 
             # add uploaded image as an attachment to the idea
             image = args.get('image')
@@ -797,7 +732,6 @@ class CreateThematic(graphene.Mutation):
                 )
                 new_attachment.idea = saobj
                 db.add(new_attachment)
-                db.flush()
 
             # add uploaded image as an attachment to the idea
             if video_media is not None:
@@ -810,7 +744,6 @@ class CreateThematic(graphene.Mutation):
                 )
                 new_attachment.idea = saobj
                 db.add(new_attachment)
-                db.flush()
 
             questions_input = args.get('questions')
             if questions_input is not None:
@@ -824,8 +757,8 @@ class CreateThematic(graphene.Mutation):
                     db.add(
                         models.IdeaLink(source=saobj, target=question,
                                         order=idx + 1.0))
-                db.flush()
 
+        db.flush()
         return CreateThematic(thematic=saobj)
 
 
@@ -836,21 +769,22 @@ class UpdateThematic(graphene.Mutation):
         id = graphene.ID(required=True)
         title_entries = graphene.List(LangStringEntryInput, description=docs.Default.langstring_entries)
         description_entries = graphene.List(LangStringEntryInput, description=docs.Default.langstring_entries)
-        identifier = graphene.String(description=docs.Default.required_language_input)
         video = graphene.Argument(VideoInput, description=docs.UpdateThematic.video)
+        announcement = graphene.Argument(IdeaAnnouncementInput, description=docs.Idea.announcement)
         questions = graphene.List(QuestionInput, description=docs.UpdateThematic.questions)
         # this is the identifier of the part in a multipart POST
         image = graphene.String(description=docs.Default.required_language_input)
         order = graphene.Float(description=docs.Default.float_entry)
+        message_view_override = graphene.String(description=docs.IdeaInterface.message_view_override)
 
-    thematic = graphene.Field(lambda: Thematic)
+    thematic = graphene.Field(lambda: IdeaUnion)
 
     @staticmethod
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
         EMBED_ATTACHMENT = models.AttachmentPurpose.EMBED_ATTACHMENT.value
         MEDIA_ATTACHMENT = models.AttachmentPurpose.MEDIA_ATTACHMENT.value
-        cls = models.Thematic
+        cls = models.Idea
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
         user_id = context.authenticated_userid or Everyone
@@ -908,8 +842,7 @@ class UpdateThematic(graphene.Mutation):
                         context
                     )
 
-            if args.get('identifier') is not None:
-                kwargs['identifier'] = args.get('identifier')
+            kwargs['message_view_override'] = args.get('message_view_override')
 
             for attr, value in kwargs.items():
                 setattr(thematic, attr, value)
@@ -931,6 +864,18 @@ class UpdateThematic(graphene.Mutation):
                     db,
                     context
                 )
+
+            # Create the idea announcement object which corresponds to the instructions
+            announcement = args.get('announcement')
+            if announcement is not None:
+                announcement_title_entries = announcement.get('title_entries')
+                if len(announcement_title_entries) == 0:
+                    raise Exception('Announcement titleEntries needs at least one entry')
+
+                announcement_title_langstring = langstring_from_input_entries(announcement_title_entries)
+                announcement_body_langstring = langstring_from_input_entries(announcement.get('body_entries', None))
+                saobj2 = create_idea_announcement(user_id, discussion, thematic, announcement_title_langstring, announcement_body_langstring)
+                db.add(saobj2)
 
             questions_input = args.get('questions')
             existing_questions = {
@@ -985,7 +930,7 @@ class DeleteThematic(graphene.Mutation):
 
         thematic_id = args.get('thematic_id')
         thematic_id = int(Node.from_global_id(thematic_id)[1])
-        thematic = models.Thematic.get(thematic_id)
+        thematic = models.Idea.get(thematic_id)
 
         permissions = get_permissions(user_id, discussion_id)
         allowed = thematic.user_can(
@@ -998,147 +943,6 @@ class DeleteThematic(graphene.Mutation):
         # Tombstone all questions of the thematic as well
         for q in questions:
             q.is_tombstone = True
+        # TODO do it recursively for a normal idea
         thematic.db.flush()
         return DeleteThematic(success=True)
-
-
-class IdeaAnnouncementInput(graphene.InputObjectType):
-    __doc__ = docs.IdeaAnnouncement.__doc__
-    title_entries = graphene.List(LangStringEntryInput, description=docs.IdeaAnnouncement.title)
-    body_entries = graphene.List(LangStringEntryInput, description=docs.IdeaAnnouncement.body)
-
-
-class CreateBrightMirror(graphene.Mutation):
-    __doc__ = docs.CreateBrightMirror.__doc__
-
-    class Input:
-        # Careful, having required=True on a graphene.List only means
-        # it can't be None, having an empty [] is perfectly valid.
-        title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.CreateBrightMirror.title_entries)
-        description_entries = graphene.List(LangStringEntryInput, description=docs.CreateBrightMirror.description_entries)
-        announcement = graphene.Argument(IdeaAnnouncementInput, required=True, description=docs.CreateBrightMirror.announcement)
-        image = graphene.String(required=True, description=docs.CreateBrightMirror.image)
-        order = graphene.Float(description=docs.CreateBrightMirror.order)
-        message_view_override = graphene.String(description=docs.IdeaInterface.message_view_override)
-
-    brightMirror = graphene.Field(lambda: Idea)
-
-    @staticmethod
-    @abort_transaction_on_exception
-    def mutate(root, args, context, info):
-        EMBED_ATTACHMENT = models.AttachmentPurpose.EMBED_ATTACHMENT.value
-        cls = models.Idea
-        discussion_id = context.matchdict['discussion_id']
-        discussion = models.Discussion.get(discussion_id)
-        user_id = context.authenticated_userid or Everyone
-
-        permissions = get_permissions(user_id, discussion_id)
-        allowed = cls.user_can_cls(
-            user_id, CrudPermissions.CREATE, permissions)
-        if not allowed or (allowed == IF_OWNED and user_id == Everyone):
-            raise HTTPUnauthorized()
-
-        with cls.default_db.no_autoflush:
-            title_entries = args.get('title_entries')
-            if len(title_entries) == 0:
-                raise Exception('BrightMirror titleEntries needs at least one entry')
-                # Better to have this message than
-                # 'NoneType' object has no attribute 'owner_object'
-                # when creating the saobj below if title=None
-
-            title_langstring = langstring_from_input_entries(title_entries)
-            description_langstring = langstring_from_input_entries(
-                args.get('description_entries'))
-            kwargs = {}
-            if description_langstring is not None:
-                kwargs['description'] = description_langstring
-
-            # BrightMirror, because it inherits from Idea, needs to be
-            # associated to the root idea of the discussion.
-            # We create a hidden root thematic, corresponding to the
-            # `identifier` phase, child of the root idea,
-            # and add our brightMirror object as a child of this root thematic.
-            identifier = "brightMirror"
-            root_thematic = get_root_thematic_for_phase(discussion, identifier)
-            if root_thematic is None:
-                root_thematic = create_root_thematic(discussion, identifier)
-
-            # Set flag to recognize BrightMirror instances from other ideas
-            kwargs['message_view_override'] = identifier
-
-            saobj = cls(
-                discussion_id=discussion_id,
-                title=title_langstring,
-                **kwargs)
-            db = saobj.db
-            db.add(saobj)
-            order = len(root_thematic.get_children()) + 1.0
-            db.add(
-                models.IdeaLink(source=root_thematic, target=saobj,
-                                order=args.get('order', order)))
-
-            # Create the idea announcement object which corresponds to the instructions
-            announcement = args.get('announcement')
-            if announcement is not None:
-                announcement_title_entries = announcement.get('title_entries')
-                if len(announcement_title_entries) == 0:
-                    raise Exception('BrightMirror Announcement titleEntries needs at least one entry')
-
-                announcement_title_langstring = langstring_from_input_entries(announcement_title_entries)
-                announcement_body_langstring = langstring_from_input_entries(announcement.get('body_entries', None))
-                saobj2 = create_idea_announcement(user_id, discussion, saobj, announcement_title_langstring, announcement_body_langstring)
-                db.add(saobj2)
-
-            # add uploaded image as an attachment to the idea
-            image = args.get('image')
-            if image is not None:
-                filename = os.path.basename(context.POST[image].filename)
-                mime_type = context.POST[image].type
-                document = models.File(
-                    discussion=discussion,
-                    mime_type=mime_type,
-                    title=filename)
-                document.add_file_data(context.POST[image].file)
-                db.add(models.IdeaAttachment(
-                    document=document,
-                    idea=saobj,
-                    discussion=discussion,
-                    creator_id=context.authenticated_userid,
-                    title=filename,
-                    attachmentPurpose=EMBED_ATTACHMENT
-                ))
-
-            db.flush()
-
-        return CreateBrightMirror(brightMirror=saobj)
-
-
-class BrightMirror(SecureObjectType, SQLAlchemyObjectType):
-    __doc__ = docs.BrightMirror.__doc__
-
-    class Meta:
-        model = models.Idea
-        interfaces = (Node, IdeaInterface)
-        only_fields = ('id')
-
-    title = graphene.String(lang=graphene.String(), description=docs.BrightMirror.title)
-    title_entries = graphene.List(LangStringEntry, description=docs.BrightMirror.title_entries)
-    description = graphene.String(lang=graphene.String(), description=docs.BrightMirror.description)
-    description_entries = graphene.List(LangStringEntry, description=docs.BrightMirror.description_entries)
-    announcement = graphene.Field(lambda: IdeaAnnoucement, description=docs.Idea.announcement)
-
-    def resolve_title(self, args, context, info):
-        title = resolve_langstring(self.title, args.get('lang'))
-        return title
-
-    def resolve_title_entries(self, args, context, info):
-        return resolve_langstring_entries(self, 'title')
-
-    def resolve_description(self, args, context, info):
-        return resolve_langstring(self.description, args.get('lang'))
-
-    def resolve_description_entries(self, args, context, info):
-        return resolve_langstring_entries(self, 'description')
-
-    def resolve_announcement(self, args, context, info):
-        return self.get_applicable_announcement()

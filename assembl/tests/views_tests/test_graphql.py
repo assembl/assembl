@@ -20,7 +20,7 @@ def test_get_locales(graphql_request):
 
 def test_get_thematics_noresult(graphql_request):
     res = schema.execute(
-        u'query { thematics(identifier: "survey") { id, title, description, numPosts, numContributors, questions { title }, video {title, descriptionTop, descriptionBottom, htmlCode} } }', context_value=graphql_request)
+        u'query { thematics: ideas(identifier: "survey") { ... on Thematic { id, title, description, numPosts, numContributors, questions { title }, video {title, descriptionTop, descriptionBottom, htmlCode} } } }', context_value=graphql_request)
     assert json.loads(json.dumps(res.data)) == {u'thematics': []}
 
 
@@ -38,9 +38,9 @@ def test_get_thematics_no_video(discussion, graphql_request, test_session):
     thematic_gid = to_global_id('Thematic', thematic.id)
 
     res = schema.execute(
-        u'query { thematics(identifier: "survey") { id, title, description, numPosts, numContributors, totalSentiments, questions { title }, video {title, descriptionTop, descriptionBottom, descriptionSide, htmlCode} } }', context_value=graphql_request)
+        u'query { thematics: ideas(identifier: "survey") { ... on Thematic { id, title, description, numPosts, numContributors, totalSentiments, questions { title }, video {title, descriptionTop, descriptionBottom, descriptionSide, htmlCode} } } }', context_value=graphql_request)
     assert json.loads(json.dumps(res.data)) == {
-        u'thematics': [{u'description': None,
+        u'thematics': [{u'description': u'',
                         u'id': thematic_gid,
                         u'numContributors': 0,
                         u'numPosts': 0,
@@ -82,9 +82,9 @@ def test_get_thematics_with_video(discussion, graphql_request, test_session):
     thematic_gid = to_global_id('Thematic', thematic.id)
 
     res = schema.execute(
-        u'query { thematics(identifier: "survey") { id, title, description, numPosts, numContributors, questions { title }, video {title, descriptionTop, descriptionBottom, descriptionSide, htmlCode} } }', context_value=graphql_request)
+        u'query { thematics: ideas(identifier: "survey") { ... on Thematic { id, title, description, numPosts, numContributors, questions { title }, video {title, descriptionTop, descriptionBottom, descriptionSide, htmlCode} } } }', context_value=graphql_request)
     assert json.loads(json.dumps(res.data)) == {
-        u'thematics': [{u'description': None,
+        u'thematics': [{u'description': u'',
                         u'id': thematic_gid,
                         u'numContributors': 0,
                         u'numPosts': 0,
@@ -134,29 +134,31 @@ mutation myFirstMutation {
         },
         identifier: "survey") {
         thematic {
-            title
-            identifier
-            video {
+            ... on Thematic {
                 title
-                titleEntries {
-                    localeCode
-                    value
-                }
-                htmlCode
-                descriptionTop
-                descriptionBottom
-                descriptionSide
-                descriptionEntriesTop {
-                    localeCode
-                    value
-                },
-                descriptionEntriesBottom {
-                    localeCode
-                    value
-                }
-                descriptionEntriesSide {
-                    localeCode
-                    value
+                identifier
+                video {
+                    title
+                    titleEntries {
+                        localeCode
+                        value
+                    }
+                    htmlCode
+                    descriptionTop
+                    descriptionBottom
+                    descriptionSide
+                    descriptionEntriesTop {
+                        localeCode
+                        value
+                    },
+                    descriptionEntriesBottom {
+                        localeCode
+                        value
+                    }
+                    descriptionEntriesSide {
+                        localeCode
+                        value
+                    }
                 }
             }
         }
@@ -201,8 +203,10 @@ mutation myFirstMutation {
         {value: "Understanding the dynamics and issues", localeCode: "en"}
     ], identifier: "survey") {
         thematic {
-            title,
-            identifier
+            ... on Thematic {
+                title,
+                identifier
+            }
         }
     }
 }
@@ -224,8 +228,10 @@ mutation myFirstMutation {
         {value: "Comprendre les dynamiques et les enjeux", localeCode: "fr"},
     ], identifier: "survey") {
         thematic {
-            title,
-            identifier
+            ... on Thematic {
+                title,
+                identifier
+            }
         }
     }
 }
@@ -246,8 +252,10 @@ mutation myFirstMutation {
         {value: "Understanding the dynamics and issues", localeCode: "en"}
     ], identifier: "survey") {
         thematic {
-            title(lang: "fr"),
-            identifier
+            ... on Thematic {
+                title(lang: "fr"),
+                identifier
+            }
         }
     }
 }
@@ -268,8 +276,10 @@ mutation myFirstMutation {
         {value: "Understanding the dynamics and issues", localeCode: "en"}
     ], identifier: "survey") {
         thematic {
-            title(lang: "fr"),
-            identifier
+            ... on Thematic {
+                title(lang: "fr"),
+                identifier
+            }
         }
     }
 }
@@ -291,8 +301,10 @@ mutation myFirstMutation {
         {value:"Italian...", localeCode:"it"}
     ], identifier:"survey") {
         thematic {
-            title(lang:"fr"),
-            identifier
+            ... on Thematic {
+                title(lang:"fr"),
+                identifier
+            }
         }
     }
 }
@@ -326,12 +338,14 @@ mutation myFirstMutation($img:String) {
         image:$img
     ) {
         thematic {
-            id,
-            title(lang:"fr"),
-            identifier,
-            img {
-                externalUrl
-                mimeType
+            ... on Thematic {
+                id,
+                title(lang:"fr"),
+                identifier,
+                img {
+                    externalUrl
+                    mimeType
+                }
             }
         }
     }
@@ -371,15 +385,16 @@ mutation myFirstMutation($img:String, $thematicId:ID!) {
             {value:"Comprendre les dynamiques et les enjeux", localeCode:"fr"},
             {value:"Understanding the dynamics and issues", localeCode:"en"}
         ],
-        identifier:"survey",
         image:$img
     ) {
         thematic {
-            title(lang:"fr"),
-            identifier,
-            img {
-                externalUrl
-                mimeType
+            ... on Thematic {
+                title(lang:"fr"),
+                identifier,
+                img {
+                    externalUrl
+                    mimeType
+                }
             }
         }
     }
@@ -398,8 +413,10 @@ mutation myFirstMutation {
         {value:"Understanding the dynamics and issues", localeCode:"en"}
     ], identifier:"survey") {
         thematic {
-            title(lang:"en"),
-            identifier
+            ... on Thematic {
+                title(lang:"en"),
+                identifier
+            }
         }
     }
 }
@@ -417,8 +434,10 @@ def test_mutation_create_raise_if_no_title_entries(graphql_request):
 mutation myFirstMutation {
     createThematic(titleEntries:[], identifier:"survey") {
         thematic {
-            title(lang:"en"),
-            identifier
+            ... on Thematic {
+                title(lang:"en"),
+                identifier
+            }
         }
     }
 }
@@ -435,8 +454,10 @@ def test_mutation_create_thematic_no_permission(graphql_request):
 mutation myFirstMutation {
     createThematic(titleEntries:[{value:"Comprendre les dynamiques et les enjeux", localeCode:"fr"}], identifier:"survey") {
         thematic {
-            title,
-            identifier
+            ... on Thematic {
+                title,
+                identifier
+            }
         }
     }
 }
@@ -466,9 +487,11 @@ mutation myFirstMutation {
         identifier:"survey",
     ) {
         thematic {
-            title(lang:"fr"),
-            identifier
-            questions { title(lang:"fr") }
+            ... on Thematic {
+                title(lang:"fr"),
+                identifier
+                questions { title(lang:"fr") }
+            }
         }
     }
 }
@@ -499,7 +522,7 @@ mutation myFirstMutation {
 """ % thematic_id, context_value=graphql_request)
     assert True == res.data['deleteThematic']['success']
     res = schema.execute(
-        u'query { thematics(identifier:"survey") { id, title, description, numPosts, numContributors, questions { title }, video {title, descriptionTop, descriptionBottom, htmlCode} } }', context_value=graphql_request)
+        u'query { thematics: ideas(identifier:"survey") { ... on Thematic { id, title, description, numPosts, numContributors, questions { title }, video {title, descriptionTop, descriptionBottom, htmlCode} } } }', context_value=graphql_request)
     assert json.loads(json.dumps(res.data)) == {u'thematics': []}
 
 
@@ -585,13 +608,14 @@ mutation secondMutation {
              titleEntries:[
                 {value:"omment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?", localeCode:"fr"}
             ]},
-        ],
-        identifier:"urvey",
+        ]
     ) {
         thematic {
-            titleEntries { localeCode value },
-            identifier
-            questions { titleEntries { localeCode value } }
+            ... on Thematic {
+                titleEntries { localeCode value },
+                identifier
+                questions { titleEntries { localeCode value } }
+            }
         }
     }
 }
@@ -605,7 +629,7 @@ mutation secondMutation {
                     {u'value': u"omprendre les dynamiques et les enjeux",
                         u'localeCode': u"fr"}
                 ],
-                u'identifier': u'urvey',
+                u'identifier': u'survey',
                 u'questions': [
                     {u'titleEntries': [
                         {u'value': u"omment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?", u'localeCode': u"fr"}
@@ -626,12 +650,13 @@ mutation secondMutation {
         ],
         questions:[
         ],
-        identifier:"survey",
     ) {
         thematic {
-            titleEntries { localeCode value },
-            identifier
-            questions { titleEntries { localeCode value } }
+            ... on Thematic {
+                titleEntries { localeCode value },
+                identifier
+                questions { titleEntries { localeCode value } }
+            }
         }
     }
 }
@@ -661,35 +686,36 @@ mutation myMutation($thematicId:ID!) {
             {value:"Understanding the dynamics and issues", localeCode:"en"},
             {value:"Comprendre les dynamiques et les enjeux", localeCode:"fr"}
         ],
-        video:{},
-        identifier:"survey",
+        video:{}
     ) {
         thematic {
-            titleEntries { localeCode value },
-            identifier
-            questions { titleEntries { localeCode value } }
-            video {
-                titleEntries {
+            ... on Thematic {
+                titleEntries { localeCode value },
+                identifier
+                questions { titleEntries { localeCode value } }
+                video {
+                    titleEntries {
+                        localeCode,
+                        value
+                },
+                descriptionEntriesTop {
                     localeCode,
                     value
-            },
-            descriptionEntriesTop {
-                localeCode,
-                value
-            },
-            descriptionEntriesBottom {
-                localeCode,
-                value
-            },
-            descriptionEntriesSide {
-                localeCode,
-                value
-            },
-            title,
-            descriptionTop,
-            descriptionBottom,
-            descriptionSide,
-            htmlCode }
+                },
+                descriptionEntriesBottom {
+                    localeCode,
+                    value
+                },
+                descriptionEntriesSide {
+                    localeCode,
+                    value
+                },
+                title,
+                descriptionTop,
+                descriptionBottom,
+                descriptionSide,
+                htmlCode }
+            }
         }
     }
 }
@@ -732,13 +758,14 @@ mutation secondMutation {
              titleEntries:[
                 {value:"Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?", localeCode:"fr"}
             ]},
-        ],
-        identifier:"survey",
+        ]
     ) {
         thematic {
-            titleEntries { localeCode value },
-            identifier
-            questions { titleEntries { localeCode value } }
+            ... on Thematic {
+                titleEntries { localeCode value },
+                identifier
+                questions { titleEntries { localeCode value } }
+            }
         }
     }
 }
@@ -771,13 +798,14 @@ def test_update_thematic_delete_image(graphql_request, discussion, thematic_with
 mutation updateThematic($thematicId: ID!, $file: String!) {
     updateThematic(
         id:$thematicId,
-        identifier:"survey",
         image:$file
     ) {
         thematic {
-            identifier
-            img {
-                externalUrl
+            ... on Thematic {
+                identifier
+                img {
+                    externalUrl
+                }
             }
         }
     }
@@ -1516,7 +1544,7 @@ def test_get_proposals_random(graphql_request, thematic_and_question, proposals)
 def test_get_thematics_order(graphql_request, thematic_with_video_and_question, second_thematic_with_questions):
 
     res = schema.execute(
-        u'query { thematics(identifier: "survey") { title, order } }',
+        u'query { thematics: ideas(identifier: "survey") { ... on Thematic { title, order } } }',
         context_value=graphql_request)
     assert json.loads(json.dumps(res.data)) == {
         u'thematics': [
@@ -1535,7 +1563,9 @@ mutation myMutation($thematicId:ID!, $order:Float!) {
         order: $order
     ) {
         thematic {
-            order
+            ... on Thematic {
+                order
+            }
         }
     }
 }
@@ -1543,7 +1573,7 @@ mutation myMutation($thematicId:ID!, $order:Float!) {
                                                      "order": 3.0})
 
     res = schema.execute(
-        u'query { thematics(identifier:"survey") { title, order } }',
+        u'query { thematics: ideas(identifier: "survey") { ... on Thematic { title, order } } }',
         context_value=graphql_request)
     assert json.loads(json.dumps(res.data)) == {
         u'thematics': [
@@ -1564,14 +1594,16 @@ mutation myMutation {
         order: 1.5
     ) {
         thematic {
-            order
+            ... on Thematic {
+                order
+            }
         }
     }
 }
 """, context_value=graphql_request)
 
     res = schema.execute(
-        u'query { thematics(identifier:"survey") { title, order } }',
+        u'query { thematics: ideas(identifier: "survey") { ... on Thematic { title, order } } }',
         context_value=graphql_request)
     assert json.loads(json.dumps(res.data)) == {
         u'thematics': [

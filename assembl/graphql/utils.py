@@ -247,8 +247,7 @@ def get_posts_for_phases(discussion, identifiers, include_deleted=False):
 
 
 def create_idea_announcement(user_id, discussion, idea, title_langstring, description_langstring):
-    """
-        Create an announcement with title and body for an idea.
+    """Create an announcement with title and body for an idea.
     """
     idea_announcement = models.IdeaAnnouncement(
         discussion=discussion,
