@@ -473,7 +473,8 @@ const Translations = {
         legalContents: "Éditer les contenus juridiques",
         timeline: "Éditer les phases et modules",
         exportTaxonomies: "Exporter les taxonomies",
-        manageProfileOptions: "Options d'inscription"
+        manageProfileOptions: "Options d'inscription",
+        interfaceCustomization: "Personnaliser l'interface"
       },
       timelineAdmin: {
         phase: "Phase %{count}",
@@ -1231,7 +1232,8 @@ const Translations = {
         legalContents: "Edit legal content",
         timeline: "Edit the phases and modules",
         exportTaxonomies: "Export taxonomies",
-        manageProfileOptions: "Registration options"
+        manageProfileOptions: "Registration options",
+        interfaceCustomization: "Customize the interface"
       },
       timelineAdmin: {
         phase: "Phase %{count}",

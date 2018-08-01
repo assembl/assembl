@@ -52,6 +52,13 @@ class Menu extends React.Component {
                 </span>
               </Link>
             </li>
+            <li>
+              <Link to={`${get('administration', slug)}/discussion?section=6`} activeClassName="active">
+                <span>
+                  <Translate value="administration.menu.interfaceCustomization" />
+                </span>
+              </Link>
+            </li>
           </ul>
         </li>
         <li>
