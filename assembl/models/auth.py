@@ -29,6 +29,7 @@ from sqlalchemy import (
     Text
 )
 from pyramid.httpexceptions import HTTPBadRequest, HTTPUnauthorized
+from sqlalchemy import orm
 from sqlalchemy.orm import (
     relationship, backref, deferred)
 from sqlalchemy.orm.attributes import NO_VALUE
@@ -56,7 +57,7 @@ from ..auth import (
     SYSTEM_ROLES
 )
 from .langstrings import Locale
-
+from assembl.models.cookie_types import CookieTypes
 
 log = logging.getLogger('assembl')
 
@@ -635,17 +636,23 @@ class AgentStatusInDiscussion(DiscussionBoundBase):
 
     def __init__(self, *args, **kwargs):
         super(AgentStatusInDiscussion, self).__init__(*args, **kwargs)
-        self._convert_cookies_to_enums(self.accepted_cookies)
+        self._convert_cookies_to_enums()
 
-    def _convert_cookies_to_enums(self, cookies_input):
-        from assembl.models.cookie_types import CookieTypes
-        if not self.accepted_cookies:
-            self._accepted_cookies = list()
-        else:
-            self._accepted_cookies = map(
-                lambda c: CookieTypes(c),
-                map(lambda x: x.strip(), self.accepted_cookies.split(","))
-            )
+    @orm.reconstructor
+    def init_on_load(self):
+        self._convert_cookies_to_enums()
+
+    def _convert_cookies_to_enums(self):
+        # A private variable _accepted_cookies is used to track the Enum-list of cookies supported
+        if '_accepted_cookies' not in vars(self):
+            if not self.accepted_cookies:
+                self._accepted_cookies = list()
+            else:
+                self._accepted_cookies = map(
+                    lambda c: CookieTypes(c),
+                    map(lambda x: x.strip(), self.accepted_cookies.split(","))
+                )
+        return self._accepted_cookies
 
     @property
     def read_cookies(self):
@@ -662,7 +669,6 @@ class AgentStatusInDiscussion(DiscussionBoundBase):
         """
         @param: cookies: a CookieType to be added to the list of accepted cookies.
         """
-        from assembl.models.cookie_types import CookieTypes
         cookie = CookieTypes(cookie)
         if self._accepted_cookies:
             if cookie not in self._accepted_cookies:
@@ -677,7 +683,6 @@ class AgentStatusInDiscussion(DiscussionBoundBase):
         """
         @param: cookie to be removed from the list of accepted_cookies
         """
-        from assembl.models.cookie_types import CookieTypes
         cookie = CookieTypes(cookie)
         if cookie in self._accepted_cookies:
             self._accepted_cookies.pop(cookie)
