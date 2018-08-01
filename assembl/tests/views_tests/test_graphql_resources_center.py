@@ -44,9 +44,9 @@ def test_mutation_create_resource_no_permission(graphql_registry, graphql_reques
     res = schema.execute(
         graphql_registry['createResource'],
         variable_values={
-            "lang": "en",
+            "lang": u"en",
             "textEntries": [],
-            "titleEntries": [{"value": "Peu importe", "localeCode": "fr"}]
+            "titleEntries": [{"value": u"Peu importe", "localeCode": u"fr"}]
         },
         context_value=graphql_request
     )
@@ -56,22 +56,22 @@ def test_mutation_create_resource_no_permission(graphql_registry, graphql_reques
 def test_mutation_create_resource(graphql_registry, graphql_request):
     title_entries = [
         {
-            "value": "Première ressource",
-            "localeCode": "fr"
+            "value": u"Première ressource",
+            "localeCode": u"fr"
         },
         {
-            "value": "First resource",
-            "localeCode":"en"
+            "value": u"First resource",
+            "localeCode": u"en"
         }
     ]
     text_entries = [
         {
-            "value": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
-            "localeCode":"fr"
+            "value": u"Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+            "localeCode": u"fr"
         },
         {
-            "value": "Foobar",
-            "localeCode": "en"
+            "value": u"Foobar",
+            "localeCode": u"en"
         }
     ]
     embed_code = u'iframe foobar'
@@ -97,7 +97,7 @@ def test_mutation_create_resource(graphql_registry, graphql_request):
         variable_values={
             "image": u"variables.img",
             "doc": u"variables.doc",
-            "lang": "fr",
+            "lang": u"fr",
             "titleEntries": title_entries,
             "textEntries": text_entries,
             "embedCode": embed_code,
@@ -160,27 +160,27 @@ def test_update_resource(graphql_registry, graphql_request, resource_with_image_
             "id": resource_id,
             "image": u"variables.img",
             "doc": u"variables.doc",
-            "embedCode": "nothing",
-            "lang": "fr",
+            "embedCode": u"nothing",
+            "lang": u"fr",
             "order": 42.0,
             "titleEntries": [
                 {
-                    "value": "My resource",
-                    "localeCode": "en"
+                    "value": u"My resource",
+                    "localeCode": u"en"
                 },
                 {
-                    "value": "Ma ressource",
-                    "localeCode": "fr"
+                    "value": u"Ma ressource",
+                    "localeCode": u"fr"
                 }
             ],
             "textEntries": [
                 {
-                    "value": "Text in english",
-                    "localeCode": "en"
+                    "value": u"Text in english",
+                    "localeCode": u"en"
                 },
                 {
-                    "value": "Texte en français",
-                    "localeCode": "fr"
+                    "value": u"Texte en français",
+                    "localeCode": u"fr"
                 }
             ],
         }
