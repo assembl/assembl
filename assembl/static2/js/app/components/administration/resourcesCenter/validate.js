@@ -14,9 +14,8 @@ function validateResource(resource) {
 }
 
 export default function validate(values: ResourcesValues) {
-  // FIXME: pageTitle validation doesn't work
   return {
-    pageTitle: langstringIsEmpty(values.pageTitle) ? I18n.t('error.required') : '',
+    pageTitle: langstringIsEmpty(values.pageTitle) ? I18n.t('error.required') : undefined,
     resources: values.resources.map(validateResource)
   };
 }
