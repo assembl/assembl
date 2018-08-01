@@ -216,3 +216,69 @@ mutation updateExtract(
       }
     }
   }
+
+
+def test_mutation_add_extracts(graphql_request, top_post_in_thread_phase):
+  post_db_id = int(from_global_id(top_post_in_thread_phase)[1])
+  
+  extract_body = u"manger des choux à la crème"
+  xpathStart = u"//div[@id='message-body-local:Content/%s']/" % post_db_id
+  xpathEnd = xpathStart
+  offsetStart = 17
+  offsetEnd = 44
+
+  variable_values = {
+    "extracts": [
+      {
+        "postId": top_post_in_thread_phase,
+        "body": extract_body,
+        "xpathStart": xpathStart,  
+        "xpathEnd": xpathEnd,
+        "offsetStart": offsetStart,
+        "offsetEnd": offsetEnd
+      }
+    ],
+    "extractState": "SUBMITTED",
+    "extractNature": "actionable_solution" 
+  }
+
+  res = schema.execute(u"""
+mutation AddPostsExtract($extracts: [PostExtractEntryInput]!, $extractState: ExtractStates, $extractNature: ExtractNatures) {
+  addPostsExtract(extracts: $extracts, extractState: $extractState, extractNature: $extractNature) {
+    status
+  }
+}
+""", context_value=graphql_request, variable_values=variable_values)
+
+  assert json.loads(json.dumps(res.data)) == {
+    u'addPostsExtract': {
+      u'status': True
+    }
+  }
+
+
+def test_mutation_confirm_extract(graphql_request, extract_with_range_submitted_in_reply_post_1):
+  from assembl.models import ExtractStates
+  state = extract_with_range_submitted_in_reply_post_1.extract_state
+  assert ExtractStates.SUBMITTED.value == state
+  extract_graphql_db_id = to_global_id('Extract',extract_with_range_submitted_in_reply_post_1.id)
+
+  variable_values = {
+    "extractId": extract_graphql_db_id
+  }
+
+  res = schema.execute(u"""
+mutation confirmExtract($extractId: ID!) {
+  confirmExtract(extractId: $extractId) {
+    success
+  }
+}
+""", context_value=graphql_request, variable_values=variable_values)
+
+  assert json.loads(json.dumps(res.data)) == {
+    u'confirmExtract': {
+      u'success': True
+    }
+  }
+  state = extract_with_range_submitted_in_reply_post_1.extract_state
+  assert ExtractStates.PUBLISHED.value == state

@@ -72,6 +72,12 @@ export const PublicationStates = {
   DELETED_BY_ADMIN: 'DELETED_BY_ADMIN'
 };
 
+// Those states lists need to be kept in sync with models/idea_content_link.py
+export const ExtractStates = {
+  SUBMITTED: 'SUBMITTED',
+  PUBLISHED: 'PUBLISHED'
+};
+
 export const pickerColors = [
   '#B8E986',
   '#00AA7B',

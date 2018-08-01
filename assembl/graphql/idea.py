@@ -61,6 +61,7 @@ class IdeaInterface(graphene.Interface):
     vote_specifications = graphene.List(
         'assembl.graphql.vote_session.VoteSpecificationUnion',
         required=True, description=docs.IdeaInterface.vote_specifications)
+    type = graphene.String(description=docs.IdeaInterface.type)
 
     def resolve_num_total_posts(self, args, context, info):
         if isinstance(self, models.RootIdea):
@@ -106,6 +107,9 @@ class IdeaInterface(graphene.Interface):
 
     def resolve_total_sentiments(self, args, context, info):
         return self.get_total_sentiments()
+
+    def resolve_type(self, args, context, info):
+        return self.__class__.__name__
 
 
 class IdeaAnnoucement(SecureObjectType, SQLAlchemyObjectType):

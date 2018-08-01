@@ -4,7 +4,7 @@ exports[`harvestingMenu component should match harvestingMenu snapshot 1`] = `
 <div
   className="harvesting-container"
 >
-  <Connect(Apollo(Apollo(Apollo(Component))))
+  <Connect(Apollo(Apollo(Apollo(Apollo(Component)))))
     cancelHarvesting={undefined}
     displayHarvestingBox={undefined}
     extract={
@@ -36,7 +36,7 @@ exports[`harvestingMenu component should match harvestingMenu snapshot 1`] = `
     refetchPost={undefined}
     setHarvestingBoxDisplay={undefined}
   />
-  <Connect(Apollo(Apollo(Apollo(Component))))
+  <Connect(Apollo(Apollo(Apollo(Apollo(Component)))))
     cancelHarvesting={undefined}
     displayHarvestingBox={undefined}
     extract={

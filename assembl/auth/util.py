@@ -398,10 +398,14 @@ def add_user(name, email, password, role, force=False, username=None,
             discussion_ob = db.query(Discussion).get(discussion)
         discussion = discussion_ob
         assert discussion
-    existing_email = db.query(EmailAccount).filter(
-        EmailAccount.email_ci == email).first()
-    assert force or not existing_email,\
-        "User with email %s already exists" % (email,)
+
+    existing_email = None
+    if email:
+        existing_email = db.query(EmailAccount).filter(
+            EmailAccount.email_ci == email).first()
+        assert force or not existing_email,\
+            "User with email %s already exists" % (email,)
+
     if username:
         existing_username = db.query(Username).filter_by(
             username=username).first()
@@ -411,10 +415,12 @@ def add_user(name, email, password, role, force=False, username=None,
             existing_username.user == existing_email.profile,\
             "Two different users already exist with "\
             "username %s and email %s." % (username, email)
+
     if existing_email:
         user = existing_email.profile
     elif username and existing_username:
         user = existing_username.user
+
     old_user = isinstance(user, User)
     if old_user:
         user.preferred_email = email
@@ -438,7 +444,8 @@ def add_user(name, email, password, role, force=False, username=None,
                 User, None,
                 preferred_email=email,
                 verified=True,
-                creation_date=datetime.utcnow())
+                creation_date=datetime.utcnow(),
+                is_machine=kwargs.get('is_machine', False))
             if password is not None:
                 user.password_p = password
         else:
@@ -447,10 +454,12 @@ def add_user(name, email, password, role, force=False, username=None,
                 preferred_email=email,
                 verified=True,
                 password=password,
-                creation_date=datetime.utcnow())
+                creation_date=datetime.utcnow(),
+                is_machine=kwargs.get('is_machine', False))
             db.add(user)
         if username:
             db.add(Username(username=username, user=user))
+
     for account in user.accounts:
         if isinstance(account, EmailAccount) and account.email_ci == email:
             account.verified = True
@@ -463,6 +472,7 @@ def add_user(name, email, password, role, force=False, username=None,
             preferred=True,
             verified=True)
         db.add(account)
+
     if role:
         role = all_roles[role]
         ur = None
@@ -470,6 +480,7 @@ def add_user(name, email, password, role, force=False, username=None,
             ur = db.query(UserRole).filter_by(user=user, role=role).first()
         if not ur:
             db.add(UserRole(user=user, role=role))
+
     created_localrole = False
     if localrole:
         localrole = all_roles[localrole]
@@ -484,7 +495,9 @@ def add_user(name, email, password, role, force=False, username=None,
     # Do this at login
     # if discussion:
     #     user.get_notification_subscriptions(discussion.id)
-    db.flush()
+    if kwargs.get('flush', True):
+        db.flush()
+
     return (user, created_user, created_localrole)
 
 

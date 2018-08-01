@@ -28,7 +28,7 @@ exports[`Post component should render a PostView component and pass its props to
           "dbId": 124,
           "extracts": Array [],
           "id": "XYZ333",
-          "modificationDate": "12/12/2012",
+          "modified": true,
           "mySentiment": "like",
           "publicationState": "PUBLISHED",
           "sentimentCounts": 3,

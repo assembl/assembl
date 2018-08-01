@@ -1,5 +1,7 @@
 """Models for a timeline of the conversation. Unused as of yet."""
 
+from enum import Enum
+
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy import (
     Column,
@@ -17,6 +19,20 @@ from ..auth import CrudPermissions, P_READ, P_ADMIN_DISC
 from ..lib.sqla_types import URLString
 from .discussion import Discussion
 from .langstrings import LangString
+
+
+class Phases(Enum):
+    survey = 'survey'
+    thread = 'thread'
+    multiColumns = 'multiColumns'
+    voteSession = 'voteSession'
+
+
+PHASES_WITH_POSTS = [
+    Phases.survey.value,
+    Phases.thread.value,
+    Phases.multiColumns.value
+]
 
 
 class TimelineEvent(DiscussionBoundBase):

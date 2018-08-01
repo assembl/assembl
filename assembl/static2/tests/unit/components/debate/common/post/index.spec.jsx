@@ -18,7 +18,7 @@ export const postProps = {
       },
       id: 'XYZ333',
       dbId: 124,
-      modificationDate: '12/12/2012',
+      modified: true,
       sentimentCounts: 3,
       mySentiment: 'like',
       attachments: [],

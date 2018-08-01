@@ -53,11 +53,12 @@ def bootstrap_db_data(db, mark=True):
     # import after session to delay loading of BaseOps
     from assembl.models import (
         Permission, Role, IdentityProvider, Locale, LandingPageModuleType,
-        LocaleLabel, ExtractNatureVocabulary, ExtractActionVocabulary)
+        LocaleLabel, ExtractNatureVocabulary, ExtractActionVocabulary, User)
     from assembl.lib.database_functions import ensure_functions
     session = db()
     for cls in (Permission, Role, IdentityProvider, Locale, LocaleLabel,
-                LandingPageModuleType, ExtractNatureVocabulary, ExtractActionVocabulary):
+                LandingPageModuleType, ExtractNatureVocabulary, ExtractActionVocabulary,
+                User):
         cls.populate_db(session)
     ensure_functions(session)
     if mark:

@@ -11,6 +11,7 @@ import moment from 'moment';
 import addPostExtractMutation from '../../graphql/mutations/addPostExtract.graphql';
 import updateExtractMutation from '../../graphql/mutations/updateExtract.graphql';
 import deleteExtractMutation from '../../graphql/mutations/deleteExtract.graphql';
+import confirmExtractMutation from '../../graphql/mutations/confirmExtract.graphql';
 import withLoadingIndicator from '../../components/common/withLoadingIndicator';
 import { getConnectedUserId, getConnectedUserName } from '../../utils/globalFunctions';
 import AvatarImage from '../common/avatarImage';
@@ -19,6 +20,7 @@ import FormControlWithLabel from '../common/formControlWithLabel';
 import { displayAlert, displayModal, closeModal } from '../../utils/utilityManager';
 import { editExtractTooltip, deleteExtractTooltip, nuggetExtractTooltip, qualifyExtractTooltip } from '../common/tooltips';
 import { NatureIcons, ActionIcons } from '../../utils/extractQualifier';
+import { ExtractStates } from '../../constants';
 
 type Props = {
   extract: ?Extract,
@@ -29,6 +31,7 @@ type Props = {
   cancelHarvesting: Function,
   addPostExtract: Function,
   updateExtract: Function,
+  confirmExtract: Function,
   deleteExtract: Function,
   refetchPost: Function,
   harvestingDate?: string,
@@ -53,8 +56,16 @@ type Taxonomies = {
   action: ?string
 };
 
+const ACTIONS = {
+  create: 'create', // create a new extract
+  edit: 'edit', // edit an extract
+  confirm: 'confirm' // confirm a submitted extract
+};
+
 class DumbHarvestingBox extends React.Component<Props, State> {
   menu: any;
+
+  actions: any;
 
   static defaultProps = {
     harvestingDate: null,
@@ -63,7 +74,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
 
   constructor(props: Props) {
     super(props);
-    const { extract } = this.props;
+    const { extract, cancelHarvesting } = this.props;
     const isExtract = extract !== null;
     const isNugget = extract ? extract.important : false;
     this.state = {
@@ -77,6 +88,32 @@ class DumbHarvestingBox extends React.Component<Props, State> {
       showOverflowMenu: false,
       overflowMenu: null,
       overflowMenuTop: 25
+    };
+    // actions props
+    this.actions = {
+      [ACTIONS.create]: {
+        buttons: [
+          { id: 'cancel', title: 'debate.confirmDeletionButtonCancel', className: 'button-cancel', onClick: cancelHarvesting },
+          { id: 'validate', title: 'common.attachFileForm.submit', className: 'button-submit', onClick: this.validateHarvesting }
+        ]
+      },
+      [ACTIONS.edit]: {
+        buttons: [
+          { id: 'cancel', title: 'debate.confirmDeletionButtonCancel', className: 'button-cancel', onClick: this.setEditMode },
+          {
+            id: 'validate',
+            title: 'common.attachFileForm.submit',
+            className: 'button-submit',
+            onClick: this.updateHarvestingBody
+          }
+        ]
+      },
+      [ACTIONS.confirm]: {
+        buttons: [
+          { id: 'reject', title: 'harvesting.reject', className: 'button-cancel', onClick: this.deleteHarvesting },
+          { id: 'confirm', title: 'harvesting.confirm', className: 'button-submit', onClick: this.confirmHarvesting }
+        ]
+      }
     };
   }
 
@@ -239,6 +276,23 @@ class DumbHarvestingBox extends React.Component<Props, State> {
       });
   };
 
+  confirmHarvesting = (): void => {
+    const { extract, confirmExtract, refetchPost } = this.props;
+    const variables = {
+      extractId: extract ? extract.id : null
+    };
+    closeModal();
+    displayAlert('success', I18n.t('loading.wait'));
+    confirmExtract({ variables: variables })
+      .then(() => {
+        displayAlert('success', I18n.t('harvesting.harvestingConfirmed'));
+        refetchPost();
+      })
+      .catch((error) => {
+        displayAlert('danger', `${error}`);
+      });
+  };
+
   showValidatedHarvesting = (nature: ?string, action: ?string) => {
     if (nature && action) {
       return (
@@ -273,8 +327,27 @@ class DumbHarvestingBox extends React.Component<Props, State> {
     }
   };
 
+  renderFooter = () => {
+    const { extract } = this.props;
+    const { disabled, isEditable } = this.state;
+    const extractState = extract && extract.extractState;
+    const isSubmitted = extractState === ExtractStates.SUBMITTED;
+    const actionId = isEditable ? ACTIONS.edit : (disabled && ACTIONS.create) || (isSubmitted && ACTIONS.confirm);
+    if (!actionId) return null;
+    const action = this.actions[actionId];
+    return (
+      <div className="harvesting-box-footer">
+        {action.buttons.map(button => (
+          <Button key={button.id} className={`${button.className} button-dark`} onClick={button.onClick}>
+            {I18n.t(button.title)}
+          </Button>
+        ))}
+      </div>
+    );
+  };
+
   render() {
-    const { selection, cancelHarvesting, extract, contentLocale, harvestingDate, isAuthorAccountDeleted } = this.props;
+    const { selection, extract, contentLocale, harvestingDate, isAuthorAccountDeleted } = this.props;
     const {
       disabled,
       extractIsValidated,
@@ -290,10 +363,14 @@ class DumbHarvestingBox extends React.Component<Props, State> {
     const selectionText = selection ? selection.toString() : '';
     const harvesterUserName =
       extract && extract.creator && extract.creator.displayName ? extract.creator.displayName : getConnectedUserName();
+    const extractState = extract && extract.extractState;
+    const isSubmitted = extractState === ExtractStates.SUBMITTED;
     const userName = isAuthorAccountDeleted ? I18n.t('deletedUser') : harvesterUserName;
     const harvesterUserId = extract && extract.creator && extract.creator.userId ? extract.creator.userId : getConnectedUserId();
+    const menuDisabled = disabled || isSubmitted;
+    const hasFooter = disabled || isEditable || isSubmitted;
     return (
-      <div>
+      <div className={isSubmitted ? 'submitted-harvesting' : ''}>
         {(extractNature || extractAction) && (
           <div>
             <div className="box-icon">
@@ -308,7 +385,11 @@ class DumbHarvestingBox extends React.Component<Props, State> {
               )}
           </div>
         )}
-        <div className={classnames('theme-box', 'harvesting-box', { 'active-box': extractIsValidated })}>
+        <div
+          className={classnames('theme-box', 'harvesting-box', {
+            'active-box': extractIsValidated
+          })}
+        >
           <div className="harvesting-box-header">
             <div className="harvesting-status">
               {disabled ? (
@@ -322,34 +403,40 @@ class DumbHarvestingBox extends React.Component<Props, State> {
                   {extractNature || extractAction ? (
                     <div className="validated-harvesting">{this.showValidatedHarvesting(extractNature, extractAction)}</div>
                   ) : (
-                    <div className="validated-harvesting">
-                      <div className="harvesting-status-label">
-                        <Translate value="harvesting.validated" />
+                    !isSubmitted && (
+                      <div className="validated-harvesting">
+                        <div className="harvesting-status-label">
+                          <Translate value="harvesting.validated" />
+                        </div>
                       </div>
-                    </div>
+                    )
                   )}
                 </div>
               )}
             </div>
             <div className="button-bar">
               <OverlayTrigger placement="top" overlay={editExtractTooltip}>
-                <Button disabled={disabled} onClick={this.setEditMode} className={classnames({ active: isEditable })}>
+                <Button disabled={menuDisabled} onClick={this.setEditMode} className={classnames({ active: isEditable })}>
                   <span className="assembl-icon-edit grey" />
                 </Button>
               </OverlayTrigger>
               <OverlayTrigger placement="top" overlay={deleteExtractTooltip}>
-                <Button disabled={disabled} onClick={this.confirmHarvestingDeletion}>
+                <Button disabled={menuDisabled} onClick={this.confirmHarvestingDeletion}>
                   <span className="assembl-icon-delete grey" />
                 </Button>
               </OverlayTrigger>
               <OverlayTrigger placement="top" overlay={nuggetExtractTooltip}>
-                <Button disabled={disabled} onClick={this.updateHarvestingNugget} className={classnames({ active: isNugget })}>
+                <Button
+                  disabled={menuDisabled}
+                  onClick={this.updateHarvestingNugget}
+                  className={classnames({ active: isNugget })}
+                >
                   <span className="assembl-icon-pepite grey" />
                 </Button>
               </OverlayTrigger>
               <OverlayTrigger placement="top" overlay={qualifyExtractTooltip}>
                 <Button
-                  disabled={disabled}
+                  disabled={menuDisabled}
                   className="taxonomy-menu-btn"
                   onClick={() => {
                     this.setState({ showOverflowMenu: !showOverflowMenu });
@@ -393,6 +480,12 @@ class DumbHarvestingBox extends React.Component<Props, State> {
               </div>
             </div>
           </div>
+          {isSubmitted && (
+            <div className="harvesting-submitted-message">
+              <span className="confirm-harvest-button assembl-icon-catch" />
+              <Translate value="harvesting.harvestingSubmitted" />
+            </div>
+          )}
           <div className="harvesting-box-body">
             {isExtract && extract && !isEditable && <div>{extract.body}</div>}
             {isExtract &&
@@ -408,19 +501,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
               )}
             {!isExtract && <div>{selectionText}</div>}
           </div>
-          {(disabled || isEditable) && (
-            <div className="harvesting-box-footer">
-              <Button className="button-cancel button-dark" onClick={isEditable ? this.setEditMode : cancelHarvesting}>
-                <Translate value="debate.confirmDeletionButtonCancel" />
-              </Button>
-              <Button
-                className="button-submit button-dark"
-                onClick={isEditable ? this.updateHarvestingBody : this.validateHarvesting}
-              >
-                <Translate value="common.attachFileForm.submit" />
-              </Button>
-            </div>
-          )}
+          {hasFooter && this.renderFooter()}
         </div>
       </div>
     );
@@ -443,6 +524,9 @@ export default compose(
   }),
   graphql(deleteExtractMutation, {
     name: 'deleteExtract'
+  }),
+  graphql(confirmExtractMutation, {
+    name: 'confirmExtract'
   }),
   withLoadingIndicator()
 )(DumbHarvestingBox);

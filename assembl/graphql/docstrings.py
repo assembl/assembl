@@ -53,6 +53,13 @@ class Schema:
     timeline = """A list of DiscussionPhase objects, descriping the timeline objects on the debate."""
 
 
+class SchemaPosts:
+    __doc__ = """The list of posts contained in the phases with the specified identifiers and modified between specified start date and the specified end date"""
+    start_date = "A date representing a temporal filter. Only the posts modified after this date will be selected."
+    end_date = "A date representing a temporal filter. Only the posts modified before this date will be selected."
+    identifiers = "A list of phase identifiers. " + Default.phase_identifier
+
+
 class Discussion:
     __doc__ = """The Discussion object. This object describes certain parts of the core state of the debate."""
     id = Default.object_id % ("Discussion",)
@@ -62,6 +69,7 @@ class Discussion:
     button_label = """The value inside of the participation button in the landing page."""
     header_image = Default.document % ("The file representing the header of the landing page. ", )
     logo_image = Default.document % ("The file representing the logo of the debate. ", )
+    slug = """A string used to form the URL of the discussion."""
 
 
 class UpdateDiscussion:
@@ -191,10 +199,30 @@ class ExtractInterface:
         display_open_questions: A priviledged user should activate the Open Question view.\n
         display_bright_mirror: A priviledged user should activate the Bright Mirror view.\n
     """
+    extract_state = """A graphene Field containing the state of the extract. The options are:
+    SUBMITTED,\n
+    PUBLISHED\n"""
     text_fragment_identifiers = """A list of TextFragmentIdentifiers."""
     creation_date = """The date the Extract was created, in UTC timezone."""
     creator_id = """The id of the User who created the extract."""
     creator = """The AgentProfile object description of the creator."""
+
+
+class PostExtract:
+    post_id = Default.node_id % ("Post")
+    body = ExtractInterface.body
+    xpath_start = TextFragmentIdentifier.xpath_start
+    xpath_end = TextFragmentIdentifier.xpath_end
+    offset_start = TextFragmentIdentifier.offset_start
+    offset_end = TextFragmentIdentifier.offset_end
+
+
+class AddPostsExtract:
+    __doc__ = """A mutation to add a list of Extracts."""
+    extracts = """A list of PostExtract"""
+    extract_nature = ExtractInterface.extract_nature
+    extract_state = ExtractInterface.extract_state
+    status = """A Boolean of whether the extracts was successfully added or not."""
 
 
 class UpdateExtract:
@@ -210,6 +238,11 @@ class UpdateExtract:
 class DeleteExtract:
     extract_id = UpdateExtract.extract_id
     success = """A Boolean of whether the extract was successfully saved or not."""
+
+
+class ConfirmExtract:
+    extract_id = UpdateExtract.extract_id
+    success = """A Boolean of whether the extract was successfully confirmed or not."""
 
 
 class Locale:
@@ -252,6 +285,7 @@ class IdeaInterface:
     message_view_override = """Use a non-standard view for this idea.\nCurrently only supporting "messageColumns"."""
     total_sentiments = "Total number of sentiments expressed by participants on posts related to that idea."
     vote_specifications = """The VoteSpecificationUnion placed on the Idea. This is the metadata describing the configuration of a VoteSession."""
+    type = """The type of the idea. The class name of the idea."""
 
 
 class IdeaAnnouncement:
@@ -489,6 +523,9 @@ class PostInterface:
     attachments = "List of attachements to the post."
     original_locale = Default.string_entry % ("Locale in which the original message was written.")
     publishes_synthesis = "Graphene Field modeling a relationship to a published synthesis."
+    type = """The type of the post. The class name of the post."""
+    discussion_id = """The database identifier of the Discussion."""
+    modified = """A boolean flag to say whether the post is modified or not."""
 
 
 class Post:
@@ -651,6 +688,7 @@ class AgentProfile:
     has_password = "A boolean flag describing if the User has a password."
     is_deleted = """A boolean flag that shows if the User is deleted.
     If True, the User information is cleansed from the system, and the User can no longer log in."""
+    is_machine = """A boolean flag describing if the User is a machine user or human user."""
 
 
 class UpdateUser:

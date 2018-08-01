@@ -3039,6 +3039,7 @@ export type ExtractFragment = {|
   body: string,
   extractNature: ?string,
   extractAction: ?string,
+  extractState: ?string,
   textFragmentIdentifiers: ?Array<?{|
     xpathStart: ?string,
     xpathEnd: ?string,
@@ -3137,6 +3138,7 @@ export type PostFragment = {|
     body: string,
     extractNature: ?string,
     extractAction: ?string,
+    extractState: ?string,
     textFragmentIdentifiers: ?Array<?{|
       xpathStart: ?string,
       xpathEnd: ?string,

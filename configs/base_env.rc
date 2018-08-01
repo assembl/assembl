@@ -67,6 +67,7 @@ _uses_global_supervisor = false
 _uses_memcache = true
 _uses_nginx = true
 _uses_uwsgi = true
+_uses_bluenove_actionable = true
 _gitrepo = https://github.com/assembl/assembl.git
 _gitbranch = master
 _is_production_env = true
@@ -102,3 +103,8 @@ supervisor__autostart_metrics_server = false
 supervisor__autostart_edgesense_server = false
 supervisor__autostart_elasticsearch_server = true
 supervisor__autostart_urlmetadata = true
+
+# Machines format: machine_id,machine_name,machine_password/...others
+# The first machine is the Robot used for Bigdatext
+machines =
+

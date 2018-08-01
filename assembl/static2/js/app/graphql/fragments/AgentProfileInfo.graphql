@@ -3,4 +3,5 @@ fragment AgentProfileInfo on AgentProfile {
   userId
   displayName
   isDeleted
+  isMachine
 }

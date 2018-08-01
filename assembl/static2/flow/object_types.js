@@ -126,6 +126,7 @@ type Extract = {
   important: boolean,
   extractNature: string,
   extractAction: string,
+  extractState: string,
   body: string,
   creator: AgentProfileInfoFragment
 };

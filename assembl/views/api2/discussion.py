@@ -30,6 +30,7 @@ from sqlalchemy import (
 from sqlalchemy.orm import with_polymorphic, subqueryload
 from sqlalchemy.orm.util import aliased
 from sqlalchemy.sql.expression import literal
+from cornice import Service
 import transaction
 
 import simplejson as json
@@ -55,7 +56,7 @@ from assembl.auth import (
     P_READ, P_READ_PUBLIC_CIF, P_ADMIN_DISC, P_DISC_STATS, P_SYSADMIN,
     R_ADMINISTRATOR)
 from assembl.auth.password import verify_data_token, data_token, Validity
-from assembl.auth.util import get_permissions
+from assembl.auth.util import get_permissions, discussions_with_access
 from assembl.graphql.langstring import resolve_langstring
 from assembl.models import (Discussion, Permission)
 from assembl.utils import format_date, get_thematics, get_published_posts, get_ideas
@@ -65,6 +66,7 @@ from ..traversal import InstanceContext, ClassContext
 from . import (JSON_HEADER, FORM_HEADER, CreationResponse)
 from ..api.discussion import etalab_discussions, API_ETALAB_DISCUSSIONS_PREFIX
 from assembl.models import LanguagePreferenceCollection
+from assembl.models.idea_content_link import ExtractStates
 
 no_thematic_associated = "no thematic associated"
 
@@ -519,7 +521,7 @@ def extract_taxonomy_csv(request):
     extract_list = []
     user_prefs = LanguagePreferenceCollection.getCurrent()
     fieldnames = ["Thematic", "Message", "Content harvested", "Qualify by nature", "Qualify by action",
-                  "Owner of the message", "Published on", "Harvester", "Harvested on", "Nugget"]
+                  "Owner of the message", "Published on", "Harvester", "Harvested on", "Nugget", "State"]
     for extract in extracts:
         if extract.idea_id:
             thematic = db.query(m.Idea).get(extract.idea_id)
@@ -567,6 +569,7 @@ def extract_taxonomy_csv(request):
         harvester = db.query(m.User).filter(m.User.id == extract.owner_id).first().name
         harvested_on = unicode(extract.creation_date.replace(microsecond=0))
         nugget = "Yes" if extract.important else "No"
+        state = getattr(extract, 'extract_state', ExtractStates.PUBLISHED.value)
         extract_info = {
             "Thematic": thematic.encode('utf-8'),
             "Message": sanitize_text(message).encode('utf-8'),
@@ -578,6 +581,7 @@ def extract_taxonomy_csv(request):
             "Harvester": harvester.encode('utf-8'),
             "Harvested on": harvested_on.encode('utf-8'),
             "Nugget": nugget.encode('utf-8'),
+            "State": state.encode('utf-8')
         }
         extract_list.append(extract_info)
 
@@ -1612,6 +1616,21 @@ def update_notification_subscriptions(request):
     for user in participants:
         user.get_notification_subscriptions(discussion.id)
     return {'status': 'Notification subscriptions have been updated.'}
+
+
+discussions_slugs = Service(
+    name='discussions_slugs',
+    path='/discussions_slugs',
+    description="List of existing Discussion slugs",
+    renderer='json'
+)
+
+
+@discussions_slugs.get()
+def get_discussions_slugs(request):
+    user_id = request.authenticated_userid or Everyone
+    discussions = discussions_with_access(user_id)
+    return {'slugs': [discussion.slug for discussion in discussions]}
 
 
 def includeme(config):

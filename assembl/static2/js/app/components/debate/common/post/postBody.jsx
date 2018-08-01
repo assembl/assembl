@@ -10,6 +10,7 @@ import { transformLinksInHtml /* getUrls */ } from '../../../../utils/linkify';
 import Embed from '../../../common/urlPreview/embed';
 import URLMetadataLoader from '../../../common/urlPreview/urlMetadataLoader';
 import { isSpecialURL } from '../../../../utils/urlPreview';
+import { ExtractStates } from '../../../../constants';
 
 type Props = {
   body: ?string,
@@ -30,14 +31,23 @@ type Props = {
 
 type ExtractInPostProps = {
   id: string,
+  state: string,
   children: React.Node
 };
 
-const ExtractInPost = ({ id, children }: ExtractInPostProps) => (
-  <span className="extract-in-message" id={id}>
-    {children}
-  </span>
-);
+const ExtractInPost = ({ id, state, children }: ExtractInPostProps) => {
+  const isSubmitted = state === ExtractStates.SUBMITTED;
+  return (
+    <span
+      className={classNames('extract-in-message', {
+        submitted: isSubmitted
+      })}
+      id={id}
+    >
+      {children}
+    </span>
+  );
+};
 
 const postBodyReplacementComponents = afterLoad => ({
   iframe: attributes => (
@@ -54,7 +64,11 @@ const postBodyReplacementComponents = afterLoad => ({
     if (embeddedUrl) return origin;
     return [origin, <URLMetadataLoader key={`url-preview-${attributes.href}`} url={attributes.href} afterLoad={afterLoad} />];
   },
-  annotation: attributes => <ExtractInPost id={attributes.id}>{attributes.children}</ExtractInPost>
+  annotation: attributes => (
+    <ExtractInPost id={attributes.id} state={attributes['data-state']}>
+      {attributes.children}
+    </ExtractInPost>
+  )
 });
 
 const Html = (props) => {
@@ -78,10 +92,10 @@ const Html = (props) => {
     extracts.forEach((extract) => {
       if (extract) {
         const tfis = extract.textFragmentIdentifiers;
-        const wrapper = jQuery(`<annotation id="${extract.id}"></annotation>`);
+        const wrapper = jQuery(`<annotation id="${extract.id}" data-state="${extract.extractState || ''}"></annotation>`);
         if (tfis) {
           tfis.forEach((tfi) => {
-            if (tfi && tfi.xpathStart && tfi.offsetStart && tfi.xpathEnd && tfi.offsetEnd) {
+            if (tfi && tfi.xpathStart && tfi.offsetStart !== null && tfi.xpathEnd && tfi.offsetEnd !== null) {
               const range = new ARange.SerializedRange({
                 start: tfi.xpathStart,
                 startOffset: tfi.offsetStart,

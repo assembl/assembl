@@ -23,6 +23,7 @@ from fabric.contrib.files import (exists, is_link, append)
 from fabric.api import (
     abort, cd, env, execute, hide, prefix, settings, task as fab_task)
 from fabric.colors import yellow, cyan, red, green
+from fabric.context_managers import shell_env
 
 # import logging
 # import paramiko
@@ -100,7 +101,7 @@ def sanitize_env():
             "uses_memcache", "uses_uwsgi", "uses_apache",
             "uses_global_supervisor", "uses_apache",
             "uses_nginx", "mac", "is_production_env",
-            "build_docs", "can_test"):
+            "build_docs", "can_test", "uses_bluenove_actionable"):
         # Note that we use as_bool() instead of bool(),
         # so that a variable valued "False" in the .ini
         # file is recognized as boolean False
@@ -592,6 +593,9 @@ def build_virtualenv():
         return
     run('python2 -mvirtualenv --no-setuptools %(venvpath)s' % env)
     # create the virtualenv with --no-setuptools to avoid downgrading setuptools that may fail
+    if env.uses_bluenove_actionable:
+        execute(install_bluenove_actionable)
+
     if env.mac:
         # Virtualenv does not reuse distutils.cfg from the homebrew python,
         # and that sometimes precludes building python modules.
@@ -845,6 +849,107 @@ def updatemaincode(backup=False):
             venvcmd_py3('pip install -r ../url_metadata/requirements.txt')
 
 
+def get_robot_machine():
+    """
+    Return the configured robot machine: (the first configured machine)
+    """
+    # Retrieve the list of registered machines
+    # Machines format: machine_id,machine_name,machine_password/...others
+    machines = env.get('machines', '')
+    if machines:
+        # Get the first machine
+        robot = machines.split('/')[0]
+        # Retrieve the machine data
+        robot_data = robot.split(',')
+        # We must find three data (identifier, name and password)
+        if len(robot_data) != 3:
+            print red("The data of the user machine are wrong! %s" % robot)
+            return None
+
+        return {
+            'identifier': robot_data[0].strip(),
+            'name': robot_data[1].strip(),
+            'password': robot_data[2].strip()
+        }
+
+    print red("No user machine found!")
+    return None
+
+
+@task
+def install_bluenove_actionable():
+    """
+    Install the bluenove_actionable app.
+    """
+    if not exists("%(projectpath)s/../bluenove-actionable/" % env):
+        print cyan("Cloning git bluenove-actionable repository")
+        with cd("%(projectpath)s/.." % env):
+            # We need an ssh access
+            run('git clone git@github.com:bluenove/bluenove-actionable.git')
+
+        with cd("%(projectpath)s/../bluenove-actionable/" % env):
+            sudo('docker-compose build', warn_only=True)
+
+
+@task
+def update_bluenove_actionable():
+    """
+    Update the bluenove_actionable app. Updating the Git repository and building.
+    """
+    path = join(env.projectpath, '..', 'bluenove-actionable')
+    if exists(path):
+        print(cyan('Updating bluenove-actionable Git repository'))
+        with cd(path):
+            # We need an ssh access
+            run('git pull', warn_only=True)
+            run('docker-compose build --no-cache', warn_only=True)
+
+
+@task
+def stop_bluenove_actionable():
+    """
+    Stop the bluenove_actionable app.
+    """
+    path = join(env.projectpath, '..', 'bluenove-actionable')
+    if exists(path):
+        print(cyan('Stop bluenove-actionable'))
+        with cd(path):
+            sudo('docker-compose down bluenoveact', warn_only=True)
+
+
+@task
+def start_bluenove_actionable():
+    """
+    Start the bluenove_actionable app.
+    To start the application we need three environment variables:
+    - URL_INSTANCE: The URL of the Assembl Instance.
+    - ROBOT_IDENTIFIER: The identifier of the Robot user (a machine).
+    - ROBOT_PASSWORD: The password of the Robot user.
+    If the Robot user is not configured, we can't start the bluenove_actionable app.
+    For more information, see the docker-compose.yml file in the bluenove_actionable project.
+    """
+    path = join(env.projectpath, '..', 'bluenove-actionable')
+    robot = get_robot_machine()
+    if exists(path) and robot:
+        print(cyan('run bluenove-actionable'))
+        with cd(path):
+            with shell_env(
+                URL_INSTANCE=env.public_hostname,
+                ROBOT_IDENTIFIER=robot.get('identifier'),
+                ROBOT_PASSWORD=robot.get('password')
+            ):
+                sudo('docker-compose up -d', warn_only=True)
+
+
+@task
+def restart_bluenove_actionable():
+    """
+    Restart the bluenove_actionable app. Stop then start the app.
+    """
+    execute(stop_bluenove_actionable)
+    execute(start_bluenove_actionable)
+
+
 @task
 def app_setup():
     venvcmd('pip install -e ./')
@@ -984,6 +1089,11 @@ def webservers_reload():
             run('sudo /etc/init.d/nginx reload')
         elif env.mac:
             sudo('killall -HUP nginx')
+
+    if env.uses_bluenove_actionable:
+        execute(restart_bluenove_actionable)
+    else:
+        execute(stop_bluenove_actionable)
 
 
 def webservers_stop():

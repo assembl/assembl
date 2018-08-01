@@ -64,3 +64,26 @@ export const extract = {
     }
   ]
 };
+
+export const submittedExtract = {
+  body: 'Hello world!',
+  creationDate: '2018-03-29T16:28:27.324276+00:00',
+  creator: {
+    displayName: 'John Doe',
+    id: '1223456',
+    userId: 31
+  },
+  extractAction: null,
+  extractNature: null,
+  extractState: 'SUBMITTED',
+  id: '987643',
+  important: false,
+  textFragmentIdentifiers: [
+    {
+      offsetEnd: 988,
+      offsetStart: 973,
+      xpathEnd: '//div[@id=\'message-body-local:Content/3059\']/',
+      xpathStart: '//div[@id=\'message-body-local:Content/3059\']/'
+    }
+  ]
+};

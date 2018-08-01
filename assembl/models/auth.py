@@ -51,6 +51,7 @@ from ..auth import (
     P_SELF_REGISTER,
     P_SYSADMIN,
     R_PARTICIPANT,
+    R_CATCHER,
     SYSTEM_ROLES
 )
 from .langstrings import Locale
@@ -225,8 +226,11 @@ class AgentProfile(Base):
         ).one()
 
     def avatar_url(self, size=32, app_url=None, email=None):
-        default = config.get('avatar.default_image_url') or \
-            (app_url and app_url + '/static/img/icon/user.png')
+        is_machine = getattr(self, 'is_machine', False)
+        default_config = 'machine.default_image_url' if is_machine else 'avatar.default_image_url'
+        default_icon = 'machine.png' if is_machine else 'user.png'
+        default = config.get(default_config) or \
+            (app_url and app_url + '/static/img/icon/' + default_icon)
 
         offline_mode = config.get('offline_mode')
         if offline_mode == "true":
@@ -677,6 +681,7 @@ class User(AgentProfile):
         DateTime, nullable=False, default=datetime.utcnow)
     social_accounts = relationship('SocialAuthAccount')
     is_deleted = Column(Boolean(), default=False)
+    is_machine = Column(Boolean(), default=False)
 
     def __init__(self, **kwargs):
         if kwargs.get('password', None) is not None:
@@ -684,6 +689,38 @@ class User(AgentProfile):
             kwargs['password'] = hash_password(kwargs['password'])
 
         super(User, self).__init__(**kwargs)
+
+    @classmethod
+    def populate_db(cls, db=None):
+        default_config = config.get_config()
+        # retrieve the configured machines
+        machines_data = default_config.get('machines', '')
+        if machines_data:
+            from ..auth.util import add_user
+            db = db or cls.default_db()
+            # retrieve existing machines
+            machines = db.query(cls).filter(
+                cls.is_machine == True  # noqa: E712
+                )
+            # retrieve machines ids
+            all_machines_ids = [machine.username_p for machine in machines]
+            machines_data = [machine.split(',') for machine in machines_data.split('/')]
+            machines_data = {machine[0].strip(): {'name': machine[1].strip(), 'password': machine[2].strip()}
+                             for machine in machines_data}
+            # retrieve the not existing machines
+            machines_ids = [id for id in machines_data if id not in all_machines_ids]
+            # add the not existing machines
+            for machine_id in machines_ids:
+                machine = machines_data[machine_id]
+                add_user(
+                    machine.get('name'),
+                    None,
+                    machine.get('password'),
+                    R_CATCHER,
+                    username=machine_id,
+                    is_machine=True,
+                    flush=False
+                )
 
     @property
     def real_name_p(self):

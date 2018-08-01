@@ -1,0 +1,5 @@
+mutation confirmExtract($extractId: ID!) {
+  confirmExtract(extractId: $extractId) {
+    success
+  }
+}
