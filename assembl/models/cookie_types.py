@@ -1,4 +1,5 @@
 from enum import Enum
+# from assembl.lib.decl_enums import DeclEnum
 
 
 class CookieTypes(Enum):
@@ -6,3 +7,7 @@ class CookieTypes(Enum):
     ACCEPT_SESSION_ON_DISCUSSION = 'ACCEPT_SESSION_ON_DISCUSSION'
     ACCEPT_TRACKING_ON_DISCUSSION = 'ACCEPT_TRACKING_ON_DISCUSSION'
     ACCEPT_PRIVACY_POLICY_ON_DISCUSSION = 'ACCEPT_PRIVACY_POLICY_ON_DISCUSSION'
+
+    @classmethod
+    def values(cls):
+        return cls._member_names_

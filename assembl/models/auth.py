@@ -644,7 +644,8 @@ class AgentStatusInDiscussion(DiscussionBoundBase):
         else:
             self._accepted_cookies = map(
                 lambda c: CookieTypes(c),
-                self.accepted_cookies.split(","))
+                map(lambda x: x.strip(), self.accepted_cookies.split(","))
+            )
 
     @property
     def read_cookies(self):

@@ -70,6 +70,17 @@ mutation DeleteAcceptedCookies($action: String!) {
 }
 """
 
+QUERY_COOKIES_INFORMATION_FOR_USER = u"""
+query User($id: ID!) {
+  user: node(id: $id) {
+    ... on AgentProfile {
+      id
+      name
+      acceptedCookies
+    }
+  }
+}
+"""
 
 
 def test_graphql_get_profile(graphql_request, participant1_user):
@@ -452,12 +463,18 @@ def test_graphql_update_accepted_cookies_by_user(graphql_request, participant2_u
     assert atod.discussion_id == discussion.id
 
 
-def test_graphql_delete_accepted_cookie_by_user(graphql_request, participant2_user, discussion, agent_status_in_discussion_3, test_session):
+def test_graphql_delete_accepted_cookie_by_user(graphql_request, participant2_user, agent_status_in_discussion_3, test_session):
     schema.execute(DELETE_COOKIES_INFORMATION_FOR_USER_MUTATION, context_value=graphql_request, variable_values={
         "action": "ACCEPT_CGU_ON_DISCUSSION"
     })
     assert "ACCEPT_CGU_ON_DISCUSSION" not in agent_status_in_discussion_3.accepted_cookies
 
 
-def test_graphq_query_accepted_cookie_by_user(graphql_request, participant2_user, discussion, agent_status_in_discussion_3, test_session):
-    pass
+def test_graphq_query_accepted_cookie_by_user(graphql_request, participant2_user, agent_status_in_discussion_4, test_session):
+    from assembl.models.cookie_types import CookieTypes
+    resp = schema.execute(QUERY_COOKIES_INFORMATION_FOR_USER, context_value=graphql_request, variable_values={
+        "id": to_global_id("AgentProfile", participant2_user.id)
+    })
+    assert resp.errors is None
+    cookies_data = resp.data['user']['acceptedCookies']
+    assert CookieTypes.ACCEPT_CGU.value in cookies_data and CookieTypes.ACCEPT_SESSION_ON_DISCUSSION.value in cookies_data

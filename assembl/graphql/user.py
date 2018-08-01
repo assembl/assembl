@@ -3,6 +3,7 @@ import os
 import graphene
 from graphene.relay import Node
 from graphene_sqlalchemy import SQLAlchemyObjectType
+from graphene.pyutils.enum import Enum as PyEnum
 from pyramid.httpexceptions import HTTPUnauthorized
 from pyramid.i18n import TranslationStringFactory
 
@@ -18,9 +19,13 @@ from assembl.auth.password import random_string
 from datetime import datetime
 from .permissions_helpers import require_cls_permission
 from .preferences import Preferences
-from assembl.models.cookie_types import CookieTypes
+from assembl.models.cookie_types import CookieTypes as PyCookieTypes
 
 _ = TranslationStringFactory('assembl')
+
+cookie_type_enum = PyEnum(
+    'CookieTypes', [(k, k) for k in PyCookieTypes.values()])
+CookieTypes = graphene.Enum.from_enum(cookie_type_enum)
 
 
 class AgentProfile(SecureObjectType, SQLAlchemyObjectType):
@@ -42,8 +47,11 @@ class AgentProfile(SecureObjectType, SQLAlchemyObjectType):
     is_deleted = graphene.Boolean(description=docs.AgentProfile.is_deleted)
     is_machine = graphene.Boolean(description=docs.AgentProfile.is_machine)
     preferences = graphene.Field(Preferences, description=docs.AgentProfile.preferences)
+    accepted_cookies = graphene.List(CookieTypes)
     last_accepted_cgu_date = DateTime()
     last_accepted_privacy_policy = DateTime()
+    # last_rejected_cgu_date = Column(DateTime)
+    # last_rejected_privacy_policy_date = Column(DateTime)
 
     def resolve_name(self, args, context, info):
         return self.real_name()
@@ -79,6 +87,19 @@ class AgentProfile(SecureObjectType, SQLAlchemyObjectType):
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
         return self.get_preferences_for_discussion(discussion)
+
+    def resolve_accepted_cookies(self, args, context, info):
+        discussion_id = context.matchdict["discussion_id"]
+        user_id = self.id if self.id > 0 else Everyone
+        if user_id == Everyone:
+            return []
+        db = self.default_db
+        agent_status_in_discussion = db.query(
+            models.AgentStatusInDiscussion).filter_by(
+                profile_id=user_id, discussion_id=discussion_id).first()
+        if not agent_status_in_discussion:
+            return []
+        return map(lambda x: x.value, agent_status_in_discussion.read_cookies)
 
 
 class UpdateUser(graphene.Mutation):
