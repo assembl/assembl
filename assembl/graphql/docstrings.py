@@ -52,6 +52,7 @@ class Schema:
     text_fields = """A list of ConfigurableField union, where each text field represents a field on a bound entity."""
     profile_fields = """A list of ConfigurableField union, where each text field represents a field on a profile only."""
     timeline = """A list of DiscussionPhase objects, descriping the timeline objects on the debate."""
+    bright_mirrors = """A list of all Bright Mirrors on the debate. Bright Mirrors are a subset of Ideas."""
 
 
 class SchemaPosts:
@@ -1138,7 +1139,9 @@ class UpdateProfileFields:
 
 class BrightMirror:
     __doc__ = """A BrightMirror metadata object is an abstraction of an Idea object and represents the configuration of the design fiction module."""
+    title = Default.string_entry % "Title of the Bright Mirror"
     title_entries = Default.langstring_entries % ("This is the Bright Mirror title in multiple languages.",)
+    description = Default.string_entry % ("description") + " A description of the Bright Mirror is often shown in the header of the Bright Mirror."
     description_entries = """The subtitle contents shown on the header on the top page in multiple languages."""
     image = Default.document % ("""Main image associated with this Bright Mirror.""",)
     announcement = """The object Announcement containing the instructions title and body"""

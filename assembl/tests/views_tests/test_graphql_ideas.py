@@ -898,3 +898,32 @@ def test_graphql_create_bright_mirror_announcement_empty_title(graphql_request, 
             variable_values={"img": u"variables.img"})
 
     assert "BrightMirror Announcement titleEntries needs at least one entry" in res.errors[0].args[0]
+
+
+def test_graphql_get_bright_mirror(graphql_request, bright_mirror, test_session):
+    res = schema.execute(
+        u'query { brightMirrors { title, description, img { title }, announcement { title, body } } }', context_value=graphql_request)
+
+    assert res.errors is None
+    assert json.loads(json.dumps(res.data)) == {
+        u'brightMirrors': [{
+            u'title': u'Understanding the dynamics and issues',
+            u'description': u'Desc EN',
+            u'img': {
+              u'title': u'img.png'
+            },
+            u'announcement': {
+              u'title': u'Title EN announce',
+              u'body': u'Body EN announce'
+            }
+          }]
+        }
+
+
+def test_graphql_get_bright_mirror_noresult(graphql_request):
+    res = schema.execute(
+        u'query { brightMirrors { title, description, img { title }, announcement { title, body } } }',
+        context_value=graphql_request)
+
+    assert res.errors is None
+    assert json.loads(json.dumps(res.data)) == {u'brightMirrors': []}

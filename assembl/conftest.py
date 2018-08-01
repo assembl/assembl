@@ -31,6 +31,7 @@ from assembl.tests.fixtures.graphql_registry import *  # noqa: F401
 from assembl.tests.fixtures.actions import *  # noqa: F401
 from assembl.tests.fixtures.landing_page import *  # noqa: F401
 from assembl.tests.fixtures.configurable_fields import *  # noqa: F401
+from assembl.tests.fixtures.bright_mirror import *  # noqa: F401
 
 
 engine = None

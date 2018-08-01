@@ -23,7 +23,8 @@ from assembl.graphql.discussion import (Discussion, UpdateDiscussion, Discussion
                                         UpdateResourcesCenter, VisitsAnalytics)
 from assembl.graphql.document import UploadDocument
 from assembl.graphql.idea import (CreateIdea, CreateThematic, DeleteThematic,
-                                  Idea, IdeaUnion, Thematic, UpdateThematic, CreateBrightMirror)
+                                  Idea, IdeaUnion, Thematic, UpdateThematic,
+                                  CreateBrightMirror, BrightMirror)
 from assembl.graphql.landing_page import (LandingPageModuleType, LandingPageModule, CreateLandingPageModule,
                                           UpdateLandingPageModule)
 from assembl.graphql.langstring import resolve_langstring
@@ -129,6 +130,7 @@ class Query(graphene.ObjectType):
         end_date=graphene.String(description=docs.SchemaPosts.end_date),
         identifiers=graphene.List(graphene.String, description=docs.SchemaPosts.identifiers),
         description=docs.SchemaPosts.__doc__)
+    bright_mirrors = graphene.List(BrightMirror, description=docs.Schema.bright_mirrors)
 
     def resolve_resources(self, args, context, info):
         model = models.Resource
@@ -449,6 +451,15 @@ class Query(graphene.ObjectType):
             query = query.filter(model.modification_date <= end_date)
 
         return query.all()
+
+    def resolve_bright_mirrors(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        root_thematic = get_root_thematic_for_phase(discussion, "brightMirror")
+        if root_thematic is None:
+            return []
+
+        return root_thematic.get_children()
 
 
 class Mutations(graphene.ObjectType):

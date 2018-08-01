@@ -112,6 +112,7 @@ assembl-virtuoso-backup.bp
 #test
 junit.xml
 htmlcov/
+var/test_uploads
 
 #tox
 .tox

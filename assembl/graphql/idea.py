@@ -1111,3 +1111,34 @@ class CreateBrightMirror(graphene.Mutation):
             db.flush()
 
         return CreateBrightMirror(brightMirror=saobj)
+
+
+class BrightMirror(SecureObjectType, SQLAlchemyObjectType):
+    __doc__ = docs.BrightMirror.__doc__
+
+    class Meta:
+        model = models.Idea
+        interfaces = (Node, IdeaInterface)
+        only_fields = ('id')
+
+    title = graphene.String(lang=graphene.String(), description=docs.BrightMirror.title)
+    title_entries = graphene.List(LangStringEntry, description=docs.BrightMirror.title_entries)
+    description = graphene.String(lang=graphene.String(), description=docs.BrightMirror.description)
+    description_entries = graphene.List(LangStringEntry, description=docs.BrightMirror.description_entries)
+    announcement = graphene.Field(lambda: IdeaAnnoucement, description=docs.Idea.announcement)
+
+    def resolve_title(self, args, context, info):
+        title = resolve_langstring(self.title, args.get('lang'))
+        return title
+
+    def resolve_title_entries(self, args, context, info):
+        return resolve_langstring_entries(self, 'title')
+
+    def resolve_description(self, args, context, info):
+        return resolve_langstring(self.description, args.get('lang'))
+
+    def resolve_description_entries(self, args, context, info):
+        return resolve_langstring_entries(self, 'description')
+
+    def resolve_announcement(self, args, context, info):
+        return self.get_applicable_announcement()
