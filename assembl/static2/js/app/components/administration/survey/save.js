@@ -114,7 +114,7 @@ export const createMutationsPromises = (client: ApolloClient) => (
         });
     }
 
-    return () => new Promise(() => {});
+    return () => Promise.resolve();
   });
 
   allMutations.push(...createUpdateMutations);
