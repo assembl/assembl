@@ -17,6 +17,7 @@ from assembl import models
 from assembl.auth import IF_OWNED, CrudPermissions
 from assembl.auth.util import get_permissions
 from assembl.models.action import SentimentOfPost
+from assembl.models import Phases
 
 from .document import Document
 from .langstring import (LangStringEntry, LangStringEntryInput,
@@ -605,7 +606,7 @@ class CreateThematic(graphene.Mutation):
         MEDIA_ATTACHMENT = models.AttachmentPurpose.MEDIA_ATTACHMENT.value
         cls = models.Idea
         phase_identifier = args.get('identifier')
-        if phase_identifier == 'survey':
+        if phase_identifier == Phases.survey.value:
             cls = models.Thematic
 
         discussion_id = context.matchdict['discussion_id']
@@ -683,7 +684,7 @@ class CreateThematic(graphene.Mutation):
                 else:
                     raise Exception('Parent Idea not found')
             else:
-                if phase_identifier in ('thread', 'multiColumns'):
+                if phase_identifier in (Phases.thread.value, Phases.multiColumns.value):
                     parent_idea = discussion.root_idea
                 else:
                     # Our thematic, because it inherits from Idea, needs to be

@@ -252,6 +252,7 @@ from .timeline import (  # noqa: E402, F401
     DiscussionMilestone,
     DiscussionPhase,
     DiscussionSession,
+    Phases,
     TimelineEvent,
 )
 from .widgets import (  # noqa: E402, F401
