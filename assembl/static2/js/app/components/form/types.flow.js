@@ -7,6 +7,8 @@ export type FileValue = ?{
   title: string
 };
 
+export type FileVariable = string | FileValue | null;
+
 export type MutationsPromises = Array<() => Promise<*>>;
 
 export type SaveStatus = 'OK' | 'KO' | 'PENDING';

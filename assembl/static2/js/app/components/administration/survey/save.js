@@ -2,34 +2,13 @@
 import difference from 'lodash/difference';
 import isEqual from 'lodash/isEqual';
 import type { ApolloClient } from 'react-apollo';
-import { I18n } from 'react-redux-i18n';
 
 import { convertEntriesToHTML } from '../../../utils/draftjs';
-import { displayAlert } from '../../../utils/utilityManager';
-import { runSerial } from '../saveButton';
 import type { SurveyAdminValues } from './types.flow';
 import createThematicMutation from '../../../graphql/mutations/createThematic.graphql';
 import deleteThematicMutation from '../../../graphql/mutations/deleteThematic.graphql';
 import updateThematicMutation from '../../../graphql/mutations/updateThematic.graphql';
-import type { MutationsPromises, SaveStatus } from '../../form/types.flow';
-
-function convertToEntries(valuesByLocale) {
-  return Object.keys(valuesByLocale).map(locale => ({
-    localeCode: locale,
-    value: valuesByLocale[locale]
-  }));
-}
-
-function getImageVariable(img, initialImg) {
-  if (initialImg && !img) {
-    return 'TO_DELETE';
-  }
-
-  // If thematic.img.externalUrl is an object, it means it's a File.
-  // We need to send image: null if we didn't change the image.
-  const variab = img && typeof img.externalUrl === 'object' ? img.externalUrl : null;
-  return variab;
-}
+import { createSave, convertToEntries, getFileVariable } from '../../form/utils';
 
 function getVideoVariable(video, initialVideo) {
   if (!video || !video.present) {
@@ -39,7 +18,7 @@ function getVideoVariable(video, initialVideo) {
 
   const initialMediaFile = initialVideo && initialVideo.media && initialVideo.media.img;
   const mediaImg = video.media ? video.media.img : null;
-  const mediaFile = getImageVariable(mediaImg, initialMediaFile);
+  const mediaFile = getFileVariable(mediaImg, initialMediaFile);
 
   const videoV = {
     htmlCode: video.media ? video.media.htmlCode : '',
@@ -58,7 +37,7 @@ function getVariables(theme, initialTheme, order) {
   return {
     identifier: 'survey',
     titleEntries: convertToEntries(theme.title),
-    image: getImageVariable(theme.img, initialImg),
+    image: getFileVariable(theme.img, initialImg),
     video: getVideoVariable(theme.video, initialVideo),
     questions:
       theme.questions &&
@@ -121,17 +100,4 @@ export const createMutationsPromises = (client: ApolloClient) => (
   return allMutations;
 };
 
-export const save = async (mutationsPromises: MutationsPromises): Promise<SaveStatus> => {
-  let status = 'PENDING';
-  await runSerial(mutationsPromises)
-    .then(() => {
-      status = 'OK';
-      displayAlert('success', I18n.t('administration.successThemeCreation'));
-    })
-    .catch((error) => {
-      status = 'KO';
-      displayAlert('danger', error.message, false, 30000);
-    });
-
-  return status;
-};
+export const save = createSave('administration.successThemeCreation');
