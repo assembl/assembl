@@ -104,8 +104,8 @@ class DeleteMyAccount extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = ({ context: { connectedUserId } }) => ({
-  id: btoa(`AgentProfile:${connectedUserId}`)
+const mapStateToProps = ({ context: { connectedUserIdBase64 } }) => ({
+  id: connectedUserIdBase64
 });
 
 export default compose(

@@ -5,14 +5,15 @@ describe('Return context state changes', () => {
     expect(
       ContextReducer([], {
         type: 'ADD_CONTEXT',
-        rootPath: { data: 'data' },
-        debateId: { data: 'data' },
-        connectedUserId: { data: 'data' }
+        rootPath: undefined,
+        debateId: '7',
+        connectedUserId: '1403'
       })
     ).toEqual({
-      rootPath: { data: 'data' },
-      debateId: { data: 'data' },
-      connectedUserId: { data: 'data' }
+      rootPath: undefined,
+      debateId: '7',
+      connectedUserId: '1403',
+      connectedUserIdBase64: 'QWdlbnRQcm9maWxlOjE0MDM='
     });
   });
 });

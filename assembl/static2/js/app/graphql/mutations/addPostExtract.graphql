@@ -3,6 +3,7 @@
 
 mutation addPostExtract(
   $contentLocale: String!
+  $lang: String!
   $postId: ID!
   $body: String!
   $important: Boolean
@@ -14,6 +15,7 @@ mutation addPostExtract(
   addPostExtract(
     postId: $postId
     body: $body
+    lang: $lang
     important: $important
     xpathStart: $xpathStart
     xpathEnd: $xpathEnd

@@ -1,0 +1,14 @@
+#import "./fragments/Translation.graphql"
+
+query UserPreferences($id: ID!) {
+  user: node(id: $id) {
+    ... on AgentProfile {
+      id
+      preferences {
+        harvestingTranslation {
+          ...translation
+        }
+      }
+    }
+  }
+}

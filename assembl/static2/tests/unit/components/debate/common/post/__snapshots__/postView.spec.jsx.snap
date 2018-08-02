@@ -136,7 +136,7 @@ exports[`PostView component should render a post in view mode 1`] = `
           userId="dannietreutel"
           userName="Dannie Treutel"
         />
-        <PostBody
+        <withRouter(Apollo(Component))
           body="<p>You can't index the port without programming the wireless HTTP program!</p>"
           bodyDivRef={[Function]}
           bodyMimeType="text/html"
@@ -145,6 +145,7 @@ exports[`PostView component should render a post in view mode 1`] = `
           extracts={Array []}
           handleMouseUpWhileHarvesting={[Function]}
           id="XYZ333"
+          isHarvesting={false}
           lang="fr"
           measureTreeHeight={undefined}
           originalLocale="fr"

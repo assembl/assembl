@@ -206,6 +206,7 @@ class ExtractInterface:
     creation_date = """The date the Extract was created, in UTC timezone."""
     creator_id = """The id of the User who created the extract."""
     creator = """The AgentProfile object description of the creator."""
+    lang = """The lang of the extract."""
 
 
 class PostExtract:
@@ -215,6 +216,7 @@ class PostExtract:
     xpath_end = TextFragmentIdentifier.xpath_end
     offset_start = TextFragmentIdentifier.offset_start
     offset_end = TextFragmentIdentifier.offset_end
+    lang = """The lang of the extract."""
 
 
 class AddPostsExtract:
@@ -579,6 +581,7 @@ class AddPostExtract:
     post_id = Default.node_id % ("Post")
     body = "The body of text defined in this Extract on the Post."
     important = "An optional boolean to set the extract as a nugget. The default is False."
+    lang = """The lang of the extract."""
     xpath_start = TextFragmentIdentifier.xpath_start
     xpath_end = TextFragmentIdentifier.xpath_end
     offset_start = TextFragmentIdentifier.offset_start
@@ -676,6 +679,24 @@ class DeleteDiscussionPhase:
     id = Default.node_id % ("DiscussionPhase")
 
 
+class Translation:
+    __doc__ = "A translation from a locale into an other locale."
+    locale_from = "The source locale of the translation."
+    locale_into = "The target locale of the translation."
+
+
+class Preferences:
+    __doc__ = "The user preferences for a discussion"
+    harvesting_translation = "The harvesting Translation preference."
+
+
+class UpdateHarvestingTranslationPreference:
+    __doc__ = "A mutation to save harversting translation preferences"
+    id = Default.object_id % ("User",)
+    translation = Translation.__doc__
+    preferences = Preferences.__doc__
+
+
 class AgentProfile:
     __doc__ = "A meta-data object describing the characteristics of a User or AgentProfile."
     user_id = "The unique database identifier of the User."
@@ -689,6 +710,7 @@ class AgentProfile:
     is_deleted = """A boolean flag that shows if the User is deleted.
     If True, the User information is cleansed from the system, and the User can no longer log in."""
     is_machine = """A boolean flag describing if the User is a machine user or human user."""
+    preferences = """The preferences of the User."""
 
 
 class UpdateUser:

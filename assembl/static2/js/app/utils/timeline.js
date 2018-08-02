@@ -188,3 +188,6 @@ export const getPhaseId = (_timeline: Timeline, identifier: string) => {
   const phaseId = phase && phase.id;
   return phaseId;
 };
+
+// TODO an other solution... The solution must be independent
+export const getDisplayedPhaseIdentifier = (routerParams: RouterParams) => (routerParams ? routerParams.phase : null);

@@ -53,6 +53,7 @@ from assembl.graphql.vote_session import (
 from assembl.graphql.utils import (
     get_fields, get_root_thematic_for_phase,
     get_posts_for_phases)
+from assembl.graphql.preferences import UpdateHarvestingTranslationPreference
 from assembl.lib.locale import strip_country
 from assembl.lib.sqla_types import EmailString
 from assembl.models.action import SentimentOfPost
@@ -504,6 +505,7 @@ class Mutations(graphene.ObjectType):
     create_discussion_phase = CreateDiscussionPhase.Field(description=docs.CreateDiscussionPhase.__doc__)
     update_discussion_phase = UpdateDiscussionPhase.Field(description=docs.CreateDiscussionPhase.__doc__)
     delete_discussion_phase = DeleteDiscussionPhase.Field(description=docs.DeleteDiscussionPhase.__doc__)
+    update_harvesting_translation_preference = UpdateHarvestingTranslationPreference.Field(description=docs.UpdateHarvestingTranslationPreference.__doc__)
 
 
 Schema = graphene.Schema(query=Query, mutation=Mutations)

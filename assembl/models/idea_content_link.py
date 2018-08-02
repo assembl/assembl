@@ -23,6 +23,7 @@ from sqlalchemy import (
 from . import DiscussionBoundBase
 from ..lib.sqla import (CrudOperation, get_model_watcher)
 from ..lib.clean_input import sanitize_html
+from ..lib.locale import to_posix_string
 from .discussion import Discussion
 from .idea import Idea
 from .generic import Content
@@ -32,6 +33,7 @@ from ..auth import (
     CrudPermissions, P_READ, P_EDIT_IDEA,
     P_EDIT_EXTRACT, P_ADD_IDEA, P_ADD_EXTRACT,
     P_EDIT_MY_EXTRACT)
+from .langstrings import Locale
 
 
 class IdeaContentLink(DiscussionBoundBase):
@@ -326,6 +328,10 @@ class Extract(IdeaContentPositiveLink):
 
     important = Column('important', Boolean, server_default='0', doc=docs.ExtractInterface.important)
 
+    locale_id = Column(Integer, ForeignKey('locale.id'))
+
+    locale = relationship(Locale, foreign_keys=[locale_id])
+
     extract_nature = Column(
         'extract_nature', ExtractNatureVocabulary.pg_enum,
         ForeignKey(ExtractNatureVocabulary.id), doc=docs.ExtractInterface.extract_nature)
@@ -379,6 +385,21 @@ class Extract(IdeaContentPositiveLink):
         elif self.content.type == 'webpage':
             retval['url'] = self.content.url
         return retval
+
+    @property
+    def lang(self):
+        if self.locale_id:
+            return Locale.code_for_id(self.locale_id)
+
+        return self.locale.code
+
+    @lang.setter
+    def lang(self, code):
+        assert(code)
+        posix = to_posix_string(code)
+        locale = Locale.get_or_create(posix, self.db)
+        self.locale = locale
+        self.locale_id = locale.id
 
     def __repr__(self):
         r = super(Extract, self).__repr__()

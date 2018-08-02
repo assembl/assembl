@@ -2,13 +2,14 @@
 
 exports[`PostBody component should render a post body 1`] = `
 <div
-  className="post-body"
+  className="post-body post-body--is-harvestable"
 >
   <Apollo(Connect(Component))
     afterLoad={[Function]}
     contentLocale="fr"
     id="XYZ333"
     lang="fr"
+    onTranslate={[Function]}
     originalLocale="en"
     translate={true}
   />
@@ -23,6 +24,7 @@ exports[`PostBody component should render a post body 1`] = `
     className="post-body-content body"
   >
     <Html
+      contentLocale="fr"
       dbId={124}
       divRef={[Function]}
       extracts={Array []}

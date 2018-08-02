@@ -955,6 +955,16 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
             "allow_user_override": None,
             "modification_permission": P_ADMIN_DISC,
             "default": None
+        },
+        # Harvesting translation
+        {
+            "id": "harvesting_translation",
+            "name": _("Harvesting translation"),
+            "value_type": "dict_of_string_to_string",
+            "show_in_preferences": True,
+            "description": _("Harvesting translation"),
+            "allow_user_override": P_READ,
+            "default": None
         }
     ]
 

@@ -17,6 +17,7 @@ from .utils import DateTime, abort_transaction_on_exception
 from assembl.auth.password import random_string
 from datetime import datetime
 from .permissions_helpers import require_cls_permission
+from .preferences import Preferences
 
 _ = TranslationStringFactory('assembl')
 
@@ -39,6 +40,7 @@ class AgentProfile(SecureObjectType, SQLAlchemyObjectType):
     has_password = graphene.Boolean(description=docs.AgentProfile.has_password)
     is_deleted = graphene.Boolean(description=docs.AgentProfile.is_deleted)
     is_machine = graphene.Boolean(description=docs.AgentProfile.is_machine)
+    preferences = graphene.Field(Preferences, description=docs.AgentProfile.preferences)
 
     def resolve_is_deleted(self, args, context, info):
         return self.is_deleted or False
@@ -75,6 +77,11 @@ class AgentProfile(SecureObjectType, SQLAlchemyObjectType):
 
     def resolve_is_machine(self, args, context, info):
         return getattr(self, 'is_machine', False)
+
+    def resolve_preferences(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        return self.get_preferences_for_discussion(discussion)
 
 
 class UpdateUser(graphene.Mutation):

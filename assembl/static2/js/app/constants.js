@@ -57,9 +57,12 @@ export const PHASE_STATUS = {
 
 export const PHASES = {
   survey: 'survey',
+  thread: 'thread',
   multiColumns: 'multiColumns',
   voteSession: 'voteSession'
 };
+
+export const HARVESTABLE_PHASES = [PHASES.thread, PHASES.multiColumns];
 
 // Those states lists need to be kept in sync with models/post.py
 export const PublicationStates = {

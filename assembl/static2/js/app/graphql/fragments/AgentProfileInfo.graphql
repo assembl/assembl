@@ -1,7 +1,14 @@
+#import "./Translation.graphql"
+
 fragment AgentProfileInfo on AgentProfile {
   id
   userId
   displayName
   isDeleted
   isMachine
+  preferences {
+    harvestingTranslation {
+      ...translation
+    }
+  }
 }

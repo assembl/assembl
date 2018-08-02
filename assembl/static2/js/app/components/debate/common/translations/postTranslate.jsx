@@ -22,7 +22,8 @@ type PostTranslateProps = {
   translate: boolean,
   updateById: (value: string) => void,
   updateByOriginalLocale: (value: string) => void,
-  afterLoad: () => void
+  afterLoad: () => void,
+  onTranslate?: (from: string, into: string) => void
 };
 
 type PostTranslateState = {
@@ -78,7 +79,7 @@ class PostTranslate extends React.Component<PostTranslateProps, PostTranslateSta
   };
 
   openModal = () => {
-    const { data, id, lang, originalLocale, translate, updateById, updateByOriginalLocale } = this.props;
+    const { data, id, lang, originalLocale, translate, updateById, updateByOriginalLocale, onTranslate } = this.props;
     let content;
     if (!translate) {
       content = (
@@ -91,6 +92,7 @@ class PostTranslate extends React.Component<PostTranslateProps, PostTranslateSta
           translate={translate}
           updateById={updateById}
           updateByOriginalLocale={updateByOriginalLocale}
+          onTranslate={onTranslate}
         />
       );
     } else {

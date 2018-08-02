@@ -15,7 +15,8 @@ type ChooseContentLocaleFormProps = {
   originalLocale: string,
   originalLocaleLabel: string,
   updateById: (value: string) => void,
-  updateByOriginalLocale: (value: string) => void
+  updateByOriginalLocale: (value: string) => void,
+  onTranslate?: (from: string, into: string) => void
 };
 
 type Scope = 'local' | 'global' | null;
@@ -47,13 +48,14 @@ class ChooseContentLocaleForm extends React.Component<ChooseContentLocaleFormPro
   };
 
   handleSubmit = () => {
-    const { updateById, updateByOriginalLocale } = this.props;
+    const { updateById, updateByOriginalLocale, originalLocale, onTranslate } = this.props;
     const { scope, selectedLocale } = this.state;
     if (scope === 'local') {
       updateById(selectedLocale);
     } else if (scope === 'global') {
       updateByOriginalLocale(selectedLocale);
     }
+    if (onTranslate) onTranslate(originalLocale, selectedLocale);
     closeModal();
   };
 

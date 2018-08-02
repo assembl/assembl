@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
 import { Translate, I18n } from 'react-redux-i18n';
 import { Grid, Col, Button } from 'react-bootstrap';
+
 import Avatar from '../components/profile/avatar';
 import ModifyPasswordForm from '../components/profile/modifyPasswordForm';
 import DeleteMyAccount from '../components/profile/deleteMyAccount';
@@ -16,6 +17,7 @@ import UpdateUserMutation from '../graphql/mutations/updateUser.graphql';
 import UpdateProfileFieldsMutation from '../graphql/mutations/updateProfileFields.graphql';
 import { browserHistory } from '../router';
 import { displayAlert } from '../utils/utilityManager';
+import { encodeUserIdBase64 } from '../utils/globalFunctions';
 
 type ProfileProps = {
   connectedUserId: string,
@@ -208,7 +210,7 @@ const mapStateToProps = ({ context, debate, i18n }, ownProps) => {
   return {
     slug: debate.debateData.slug,
     connectedUserId: context.connectedUserId,
-    id: btoa(`AgentProfile:${userId}`),
+    id: encodeUserIdBase64(userId),
     lang: i18n.locale
   };
 };

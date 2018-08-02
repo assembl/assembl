@@ -5,6 +5,7 @@ fragment Extract on Extract {
   creationDate
   important
   body
+  lang
   extractNature
   extractAction
   extractState
