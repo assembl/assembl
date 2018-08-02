@@ -35,6 +35,34 @@ describe('MultilingualTextFieldAdapter component', () => {
     expect(tree).toMatchSnapshot();
   });
 
+  it('should render a required text field', () => {
+    const props = {
+      editLocale: 'fr',
+      input: {
+        name: 'title',
+        onChange: onChangeSpy,
+        onFocus: onFocusSpy,
+        value: {
+          en: 'Hello',
+          fr: 'Bonjour'
+        }
+      },
+      label: 'Title',
+      meta: {
+        error: '',
+        touched: false
+      },
+      required: true
+    };
+    const component = renderer.create(
+      <DummyForm>
+        <MultilingualTextFieldAdapter {...props} />
+      </DummyForm>
+    );
+    const tree = component.toJSON();
+    expect(tree).toMatchSnapshot();
+  });
+
   it('should render a text field without value', () => {
     const props = {
       editLocale: 'fr',
@@ -72,7 +100,11 @@ describe('MultilingualTextFieldAdapter component', () => {
         touched: false
       }
     };
-    const component = renderer.create(<MultilingualTextFieldAdapter {...props} />);
+    const component = renderer.create(
+      <DummyForm>
+        <MultilingualTextFieldAdapter {...props} />
+      </DummyForm>
+    );
     const tree = component.toJSON();
     expect(tree).toMatchSnapshot();
   });
@@ -91,7 +123,11 @@ describe('MultilingualTextFieldAdapter component', () => {
         touched: true
       }
     };
-    const component = renderer.create(<MultilingualTextFieldAdapter {...props} />);
+    const component = renderer.create(
+      <DummyForm>
+        <MultilingualTextFieldAdapter {...props} />
+      </DummyForm>
+    );
     const tree = component.toJSON();
     expect(tree).toMatchSnapshot();
   });
