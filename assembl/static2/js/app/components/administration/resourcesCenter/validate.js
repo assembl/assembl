@@ -1,12 +1,12 @@
 // @flow
 import { I18n } from 'react-redux-i18n';
 
-import { langstringIsEmpty } from '../survey/validate';
+import { i18nValueIsEmpty } from '../../form/utils';
 import type { ResourcesValues } from './types.flow';
 
 function validateResource(resource) {
   const errors = {};
-  if (langstringIsEmpty(resource.title)) {
+  if (i18nValueIsEmpty(resource.title)) {
     errors.title = I18n.t('error.required');
   }
 
@@ -15,7 +15,7 @@ function validateResource(resource) {
 
 export default function validate(values: ResourcesValues) {
   return {
-    pageTitle: langstringIsEmpty(values.pageTitle) ? I18n.t('error.required') : undefined,
+    pageTitle: i18nValueIsEmpty(values.pageTitle) ? I18n.t('error.required') : undefined,
     resources: values.resources.map(validateResource)
   };
 }

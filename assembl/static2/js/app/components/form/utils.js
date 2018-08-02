@@ -5,6 +5,15 @@ import type { I18nValue, FileValue, FileVariable, MutationsPromises, SaveStatus 
 import { displayAlert } from '../../utils/utilityManager';
 import { runSerial } from '../administration/saveButton';
 
+export function i18nValueIsEmpty(v: I18nValue): boolean {
+  return (
+    !v ||
+    Object.keys(v)
+      .map(key => v[key]) // flow doesn't treat Object.values as expected, see: https://github.com/facebook/flow/issues/2221
+      .every(s => s.length === 0)
+  );
+}
+
 export function convertEntries(_entries: LangstringEntries): I18nValue {
   const entries = _entries || [];
   return entries.reduce((result, item) => {
