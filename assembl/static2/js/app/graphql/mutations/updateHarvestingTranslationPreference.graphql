@@ -1,11 +1,10 @@
+#import "../fragments/Translation.graphql"
+
 mutation UpdateHarvestingTranslationPreference($id: ID!, $translation: TranslationInput!) {
   updateHarvestingTranslationPreference(id: $id, translation: $translation) {
     preferences {
       harvestingTranslation {
-        ... on Translation {
-          localeFrom
-          localeInto
-        }
+        ...translation
       }
     }
   }

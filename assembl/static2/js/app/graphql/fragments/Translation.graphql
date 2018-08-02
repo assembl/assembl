@@ -1,0 +1,4 @@
+fragment translation on Translation {
+  localeFrom
+  localeInto
+}

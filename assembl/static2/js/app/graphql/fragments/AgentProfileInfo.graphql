@@ -1,3 +1,5 @@
+#import "./Translation.graphql"
+
 fragment AgentProfileInfo on AgentProfile {
   id
   userId
@@ -5,6 +7,8 @@ fragment AgentProfileInfo on AgentProfile {
   isDeleted
   isMachine
   preferences {
-    harvestingLocale
+    harvestingTranslation {
+      ...translation
+    }
   }
 }
