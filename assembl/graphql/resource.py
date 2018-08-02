@@ -240,7 +240,7 @@ class UpdateResource(graphene.Mutation):
                 resource, 'text', args.get('text_entries'))
             kwargs = {}
             kwargs['embed_code'] = args.get('embed_code', None)
-            kwargs['order'] = args.get('order', None)
+            kwargs['order'] = args.get('order', resource.order)
             for attr, value in kwargs.items():
                 setattr(resource, attr, value)
 
