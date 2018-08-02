@@ -256,6 +256,7 @@ class PostExtractEntryFields(graphene.AbstractType):
     xpath_start = graphene.String(required=True, description=docs.PostExtract.xpath_start)
     xpath_end = graphene.String(required=True, description=docs.PostExtract.xpath_end)
     body = graphene.String(required=True, description=docs.PostExtract.body)
+    lang = graphene.String(required=True, description=docs.PostExtract.lang)
 
 
 class PostExtractEntry(graphene.ObjectType, PostExtractEntryFields):
@@ -762,6 +763,7 @@ class AddPostsExtract(graphene.Mutation):
                 extract_nature=extract_nature,
                 extract_state=extract_state
             )
+            new_extract.lang = extract.get('lang')
             post.db.add(new_extract)
             range = models.TextFragmentIdentifier(
                 extract=new_extract,

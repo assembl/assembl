@@ -216,6 +216,7 @@ class PostExtract:
     xpath_end = TextFragmentIdentifier.xpath_end
     offset_start = TextFragmentIdentifier.offset_start
     offset_end = TextFragmentIdentifier.offset_end
+    lang = """The lang of the extract."""
 
 
 class AddPostsExtract:

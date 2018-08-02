@@ -236,7 +236,8 @@ def test_mutation_add_extracts(graphql_request, top_post_in_thread_phase):
         "xpathStart": xpathStart,  
         "xpathEnd": xpathEnd,
         "offsetStart": offsetStart,
-        "offsetEnd": offsetEnd
+        "offsetEnd": offsetEnd,
+        "lang": "fr"
       }
     ],
     "extractState": "SUBMITTED",
