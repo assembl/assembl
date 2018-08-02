@@ -121,7 +121,7 @@ class FileUploader extends React.Component<FileUploaderProps, FileUploaderState>
     const mimeTypeIsImage = mimeType.startsWith('image/');
     const isToDelete = fileSrc === 'TO_DELETE';
     const isImage = fileIsImage || (mimeTypeIsImage && !isToDelete);
-    const title = isImage && imgTitle ? imgTitle : fileName;
+    const title = imgTitle || fileName;
     if (isAdminUploader) {
       return (
         <div>
