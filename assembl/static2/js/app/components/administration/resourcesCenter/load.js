@@ -15,7 +15,6 @@ export const load = async (client: ApolloClient, fetchPolicy: FetchPolicy) => {
 
   const { data: resourcesData } = await client.query({
     query: ResourcesQuery,
-    variables: { identifier: 'survey' },
     fetchPolicy: fetchPolicy
   });
 
