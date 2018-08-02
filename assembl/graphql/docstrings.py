@@ -619,9 +619,9 @@ class DiscussionPhase:
     survey: A divergence Phase, where Thematics are created, and Questions under each Thematic are asked\n
     thread: A second divergence Phase, where Ideas are created, and discussions occur under Ideas
     Under this phase, an Idea can be a regular threaded discussion, or an Idea under multi-columns\n
-    multiColumn: This is a convergence Phase, as there is one major Idea in the Phase, which is under multi-column\n
+    multiColumns: This is a convergence Phase, as there is one major Idea in the Phase, which is under multi-column\n
     voteSession: This is another convergence Phase, as there is one major Idea in the Phase, and the Idea is under a VoteSession."""
-    identifier = """Identifier of the Phase. There are four possible phase identifiers: \"survey\", \"thread\", \"multiColumn\", & \"voteSession\"."""
+    identifier = """Identifier of the Phase. Possible phase identifiers: \"survey\", \"thread\", \"multiColumns\", \"voteSession\", \"brightMirror\"."""
     is_thematics_table = "NOTE: THIS IS AN UNUSED VARIABLE CURRENTLY!"
     title = Default.string_entry % ("title of the Phase.")
     title_entries = Default.langstring_entries % ("These are the title of the phase in various languages.")
@@ -754,7 +754,7 @@ class VoteSpecificationInterface:
     vote_session_id = Default.node_id % "Vote Session"
     vote_spec_template_id = Default.node_id % "Vote Specification template" + \
         " A template is a VoteSpecification that this specification should template itself from. It is a form of inheritence for VoteSpecifications."
-    # TOOD: Give the list of types
+    # TODO: Give the list of types
     vote_type = "The type of the VoteSpecification."
     my_votes = "The list of Votes by a specific User."
     num_votes = "The total number of Voters for this Vote."
@@ -802,7 +802,7 @@ class NumberGaugeVoteSpecification:
     maximum = "The maximum value on the Gauge."
     nb_ticks = "The number of intervals between the minimum and maximum values."
     unit = """The unit used on the Gauge. This could be anything desired, like:\n
-    USD ($) or Euroes (€)\n
+    USD ($) or Euros (€)\n
     Months\n
     PPM (Parts per million)\n
     etc"""
