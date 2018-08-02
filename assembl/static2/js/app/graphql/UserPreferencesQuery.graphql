@@ -1,6 +1,6 @@
 #import "./fragments/Translation.graphql"
 
-query UserPrefernces($id: ID!) {
+query UserPreferences($id: ID!) {
   user: node(id: $id) {
     ... on AgentProfile {
       id

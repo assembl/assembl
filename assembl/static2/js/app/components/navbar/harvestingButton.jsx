@@ -4,30 +4,13 @@ import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { I18n } from 'react-redux-i18n';
 
-import UserPreferencesQuery from '../../graphql/UserPreferencesQuery.graphql';
+import PreferencesQuery from '../../graphql/UserPreferencesQuery.graphql';
 import withoutLoadingIndicator from '../common/withoutLoadingIndicator';
 import { updateContentLocaleByOriginalLocale } from '../../actions/contentLocaleActions';
 import { toggleHarvesting } from '../../actions/contextActions';
 
-// TODO generate the graphql_types.flow, I have an error :( and no time to resolve it
-type Translation = {
-  localeFrom: string,
-  localeInto: string
-};
-
-type PreferencesType = {
-  harvestingTranslation: Translation
-};
-
-type DataType = {
-  user: {
-    preferences: PreferencesType
-  }
-};
-// end
-
 type HarvestingButtonProps = {
-  data: DataType,
+  data: UserPreferencesQuery,
   isActive: boolean,
   onClick: Function,
   updateByOriginalLocale: (from: string, into: string) => void
@@ -36,7 +19,9 @@ type HarvestingButtonProps = {
 export class DumbHarvestingButton extends React.PureComponent<HarvestingButtonProps> {
   handleClick = () => {
     const { isActive, data, onClick, updateByOriginalLocale } = this.props;
-    const translation = data.user.preferences.harvestingTranslation;
+    // $FlowFixMe
+    const userPreferences = data.user && data.user.preferences;
+    const translation = userPreferences && userPreferences.harvestingTranslation;
     if (!isActive && translation) {
       updateByOriginalLocale(translation.localeFrom, translation.localeInto);
     }
@@ -73,7 +58,7 @@ const mapDispatchToProps = dispatch => ({
 
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
-  graphql(UserPreferencesQuery, {
+  graphql(PreferencesQuery, {
     options: () => ({ notifyOnNetworkStatusChange: true, fetchPolicy: 'network-only' })
   }),
   withoutLoadingIndicator()
