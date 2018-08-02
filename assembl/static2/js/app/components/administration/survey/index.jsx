@@ -4,9 +4,9 @@ import { type ApolloClient, compose, withApollo } from 'react-apollo';
 import { connect } from 'react-redux';
 import arrayMutators from 'final-form-arrays';
 
+import AdminForm from '../../form/adminForm';
 import LoadSaveReinitializeForm from '../../form/LoadSaveReinitializeForm';
 import Navbar from '../navbar';
-import SaveButton from '../saveButton';
 import Step1 from './step1';
 import Step2 from './step2';
 import Step3 from './step3';
@@ -39,12 +39,11 @@ const DumbSurveyAdminForm = ({ client, currentStep, debateId, editLocale, locale
     render={({ handleSubmit, pristine, submitting, values }) => (
       <React.Fragment>
         <div className="admin-content">
-          <form onSubmit={handleSubmit}>
-            <SaveButton disabled={pristine || submitting} saveAction={handleSubmit} />
+          <AdminForm handleSubmit={handleSubmit} pristine={pristine} submitting={submitting}>
             {currentStep === 1 && <Step1 editLocale={editLocale} />}
             {currentStep === 2 && <Step2 editLocale={editLocale} values={values} />}
             {currentStep === 3 && <Step3 debateId={debateId} locale={locale} />}
-          </form>
+          </AdminForm>
         </div>
         {!isNaN(currentStep) && (
           <Navbar

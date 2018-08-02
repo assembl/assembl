@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DumbAdminForm component should render an admin form 1`] = `
+<form
+  onSubmit={[Function]}
+>
+  <SaveButtonInPortal
+    disabled={false}
+    saveAction={[Function]}
+  />
+  nothing
+</form>
+`;
