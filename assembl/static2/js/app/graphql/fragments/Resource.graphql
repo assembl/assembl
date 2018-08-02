@@ -1,3 +1,5 @@
+#import "./LangString.graphql"
+
 fragment Resource on Resource {
   doc {
     externalUrl
@@ -14,12 +16,10 @@ fragment Resource on Resource {
   text(lang: $lang)
   title(lang: $lang)
   titleEntries {
-    localeCode
-    value
+    ...langStringEntry
   }
   textEntries {
-    localeCode
-    value
+    ...langStringEntry
   }
   order
 }
