@@ -22,7 +22,8 @@ import SaveButton from '../../../components/administration/saveButton';
 
 type Props = {
   client: ApolloClient,
-  editLocale: string
+  editLocale: string,
+  lang: string
 };
 
 const loading = <Loader />;
@@ -45,13 +46,13 @@ class ResourcesCenterAdminForm extends React.Component<Props> {
   // };
 
   render() {
-    const { editLocale, client } = this.props;
+    const { client, editLocale, lang } = this.props;
     return (
       <LoadSaveReinitializeForm
         load={(fetchPolicy: FetchPolicy) => load(client, fetchPolicy)}
         loading={loading}
         postLoadFormat={postLoadFormat}
-        createMutationsPromises={createMutationsPromises(client)}
+        createMutationsPromises={createMutationsPromises(client, lang)}
         save={save}
         validate={validate}
         mutators={{
@@ -127,15 +128,9 @@ class ResourcesCenterAdminForm extends React.Component<Props> {
   }
 }
 
-const mapStateToProps = ({ admin: { editLocale, resourcesCenter } }) => {
-  const { page, resourcesById, resourcesHaveChanged, resourcesInOrder } = resourcesCenter;
-  return {
-    editLocale: editLocale,
-    pageHasChanged: page.get('_hasChanged'),
-    resourcesCenterPage: page,
-    resourcesHaveChanged: resourcesHaveChanged,
-    resources: resourcesInOrder.map(id => resourcesById.get(id).toJS())
-  };
-};
+const mapStateToProps = ({ admin: { editLocale } }, i18n) => ({
+  editLocale: editLocale,
+  lang: i18n.locale
+});
 
 export default compose(connect(mapStateToProps), withApollo)(ResourcesCenterAdminForm);
