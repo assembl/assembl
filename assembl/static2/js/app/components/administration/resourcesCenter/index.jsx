@@ -13,12 +13,12 @@ import MultilingualRichTextFieldAdapter from '../../form/multilingualRichTextFie
 import TextFieldAdapter from '../../form/textFieldAdapter';
 import { createResourceTooltip, deleteResourceTooltip } from '../../common/tooltips';
 
+import AdminForm from '../../../components/form/adminForm';
 import LoadSaveReinitializeForm from '../../../components/form/LoadSaveReinitializeForm';
 import { load, postLoadFormat } from './load';
 import { createMutationsPromises, save } from './save';
 import validate from './validate';
 import Loader from '../../common/loader';
-import SaveButton from '../../../components/administration/saveButton';
 
 type Props = {
   client: ApolloClient,
@@ -29,22 +29,6 @@ type Props = {
 const loading = <Loader />;
 
 class ResourcesCenterAdminForm extends React.Component<Props> {
-  // componentDidMount() {
-  //   this.props.router.setRouteLeaveHook(this.props.route, this.routerWillLeave);
-  // }
-
-  // componentWillUnmount() {
-  //   this.props.router.setRouteLeaveHook(this.props.route, null);
-  // }
-
-  // routerWillLeave = () => {
-  //   if (this.dataHaveChanged() && !this.state.refetching) {
-  //     return I18n.t('administration.confirmUnsavedChanges');
-  //   }
-
-  //   return null;
-  // };
-
   render() {
     const { client, editLocale, lang } = this.props;
     return (
@@ -60,8 +44,7 @@ class ResourcesCenterAdminForm extends React.Component<Props> {
         }}
         render={({ handleSubmit, pristine, submitting }) => (
           <div className="admin-content">
-            <form onSubmit={handleSubmit}>
-              <SaveButton disabled={pristine || submitting} saveAction={handleSubmit} />
+            <AdminForm handleSubmit={handleSubmit} pristine={pristine} submitting={submitting}>
               <div className="form-container">
                 <Field
                   editLocale={editLocale}
@@ -120,7 +103,7 @@ class ResourcesCenterAdminForm extends React.Component<Props> {
                   deleteTooltip: deleteResourceTooltip
                 }}
               />
-            </form>
+            </AdminForm>
           </div>
         )}
       />
