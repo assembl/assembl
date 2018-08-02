@@ -133,8 +133,8 @@ class IdeaInterface(graphene.Interface):
 
 class IdeaAnnouncementInput(graphene.InputObjectType):
     __doc__ = docs.IdeaAnnouncement.__doc__
-    title_entries = graphene.List(LangStringEntryInput, description=docs.IdeaAnnouncement.title_entries)
-    body_entries = graphene.List(LangStringEntryInput, description=docs.IdeaAnnouncement.body_entries)
+    title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.IdeaAnnouncement.title_entries)
+    body_entries = graphene.List(LangStringEntryInput, required=True, description=docs.IdeaAnnouncement.body_entries)
 
 
 class IdeaAnnouncement(SecureObjectType, SQLAlchemyObjectType):
@@ -146,9 +146,9 @@ class IdeaAnnouncement(SecureObjectType, SQLAlchemyObjectType):
         only_fields = ('id',)
 
     title = graphene.String(lang=graphene.String(), description=docs.IdeaAnnouncement.title)
-    title_entries = graphene.List(LangStringEntry, description=docs.IdeaAnnouncement.title_entries)
+    title_entries = graphene.List(LangStringEntry, required=True, description=docs.IdeaAnnouncement.title_entries)
     body = graphene.String(lang=graphene.String(), description=docs.IdeaAnnouncement.body)
-    body_entries = graphene.List(LangStringEntry, description=docs.IdeaAnnouncement.body_entries)
+    body_entries = graphene.List(LangStringEntry, required=True, description=docs.IdeaAnnouncement.body_entries)
 
     def resolve_title(self, args, context, info):
         return resolve_langstring(self.title, args.get('lang'))
