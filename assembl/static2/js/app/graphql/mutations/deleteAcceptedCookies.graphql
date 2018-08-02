@@ -1,0 +1,7 @@
+mutation deleteAcceptedCookies($action: String!) {
+  deleteAcceptedCookies(action: $action) {
+    user {
+      acceptedCookies
+    }
+  }
+}
