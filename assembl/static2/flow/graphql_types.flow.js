@@ -63,6 +63,13 @@ export type VideoInput = {|
   mediaFile?: ?string
 |};
 
+export type IdeaAnnouncementInput = {|
+  // A list of possible languages of the entity as LangStringEntry objects. This is the title of announcement in multiple languages.
+  titleEntries: Array<?LangStringEntryInput>,
+  // A list of possible languages of the entity as LangStringEntry objects. This is the body of announcement in multiple languages.
+  bodyEntries: Array<?LangStringEntryInput>
+|};
+
 export type TokenCategorySpecificationInput = {|
   id?: ?string,
   // A list of possible languages of the entity as LangStringEntry objects. The title of the Token Category in various languages.
@@ -98,33 +105,35 @@ export type AllIdeasQueryQueryVariables = {|
 
 export type AllIdeasQueryQuery = {|
   // List of all ideas on the debate.
-  ideas: ?Array<?{|
-    // The ID of the object.
-    id: string,
-    // The title of the Idea, often shown in the Idea header itself.
-    title: ?string,
-    // The description of the Idea, often shown in the header of the Idea.
-    description: ?string,
-    // The total number of active posts on that idea (excludes deleted posts).
-    numPosts: ?number,
-    // The total number of users who contributed to the Idea/Thematic/Question.
-    //
-    // Contribution is counted as either as a sentiment set, a post created.
-    numContributors: ?number,
-    // The total number of children ideas (called "subideas") on the Idea or Thematic.
-    numChildren: ?number,
-    // Header image associated with the idea. A file metadata object, described by the Document object.
-    img: ?{|
-      // A url to an image or a document to be attached.
-      externalUrl: ?string
-    |},
-    // The order of the Idea, Thematic, Question in the idea tree.
-    order: ?number,
-    // The Relay.Node ID type of the Idea object.
-    parentId: ?string,
-    // A list of Relay.Node ID's representing the parents Ideas of the Idea.
-    ancestors: ?Array<?string>
-  |}>,
+  ideas: ?Array<?(
+    | {
+        // The ID of the object.
+        id: string,
+        // The title of the Idea, often shown in the Idea header itself.
+        title: ?string,
+        // The description of the Idea, often shown in the header of the Idea.
+        description: ?string,
+        // The total number of active posts on that idea (excludes deleted posts).
+        numPosts: ?number,
+        // The total number of users who contributed to the Idea/Thematic/Question.
+        //
+        // Contribution is counted as either as a sentiment set, a post created.
+        numContributors: ?number,
+        // The total number of children ideas (called "subideas") on the Idea or Thematic.
+        numChildren: ?number,
+        // Header image associated with the idea. A file metadata object, described by the Document object.
+        img: ?{|
+          // A url to an image or a document to be attached.
+          externalUrl: ?string
+        |},
+        // The order of the Idea, Thematic, Question in the idea tree.
+        order: ?number,
+        // The Relay.Node ID type of the Idea object.
+        parentId: ?string,
+        // A list of Relay.Node ID's representing the parents Ideas of the Idea.
+        ancestors: ?Array<?string>
+      }
+    | {})>,
   // An idea union between either an Idea type or a Thematic type.
   rootIdea: ?(
     | {
@@ -157,28 +166,30 @@ export type DebateThematicsQueryQueryVariables = {|
 |};
 
 export type DebateThematicsQueryQuery = {|
-  // A list of all thematics on the debate. Thematics are a subset of Ideas.
-  thematics: ?Array<?{|
-    // The ID of the object.
-    id: string,
-    // An identifier correspond to a specific phase.
-    identifier: ?string,
-    // A Title of the thematic in a given language.
-    title: ?string,
-    // A description in a given language. A description of the Thematic is often shown in the header of the Thematic.
-    description: ?string,
-    // The total number of active posts on that idea (excludes deleted posts).
-    numPosts: ?number,
-    // The total number of users who contributed to the Idea/Thematic/Question.
-    //
-    // Contribution is counted as either as a sentiment set, a post created.
-    numContributors: ?number,
-    // Header image associated with the idea. A file metadata object, described by the Document object.
-    img: ?{|
-      // A url to an image or a document to be attached.
-      externalUrl: ?string
-    |}
-  |}>
+  // List of all ideas on the debate.
+  thematics: ?Array<?(
+    | {}
+    | {
+        // The ID of the object.
+        id: string,
+        // An identifier correspond to a specific phase.
+        identifier: ?string,
+        // The title of the Idea, often shown in the Idea header itself.
+        title: ?string,
+        // The description of the Idea, often shown in the header of the Idea.
+        description: ?string,
+        // The total number of active posts on that idea (excludes deleted posts).
+        numPosts: ?number,
+        // The total number of users who contributed to the Idea/Thematic/Question.
+        //
+        // Contribution is counted as either as a sentiment set, a post created.
+        numContributors: ?number,
+        // Header image associated with the idea. A file metadata object, described by the Document object.
+        img: ?{|
+          // A url to an image or a document to be attached.
+          externalUrl: ?string
+        |}
+      })>
 |};
 
 export type DiscussionPreferencesQueryVariables = {|
@@ -226,9 +237,9 @@ export type IdeaQuery = {|
         |},
         // An Announcement object representing a summary of an Idea. This is often included in a header display of an Idea.
         announcement: ?{|
-          // A title of Announcement in a given language.
+          // A title of announcement in a given language.
           title: ?string,
-          // A body of Announcement in a given language.
+          // A body of announcement in a given language.
           body: ?string
         |}
       }
@@ -328,7 +339,7 @@ export type IdeaWithPostsQuery = {|
           title: ?string
         |}>,
         // Use a non-standard view for this idea.
-        // Currently only supporting "messageColumns".
+        // Currently only supporting "messageColumns" and "brightMirror".
         messageViewOverride: ?string,
         // A list of all Posts under the Idea. These include posts of the subIdeas.
         posts: ?{|
@@ -733,7 +744,7 @@ export type PostQuery = {|
             // The title of the Idea, often shown in the Idea header itself.
             title: ?string,
             // Use a non-standard view for this idea.
-            // Currently only supporting "messageColumns".
+            // Currently only supporting "messageColumns" and "brightMirror".
             messageViewOverride: ?string
           |}
         |}>,
@@ -1112,7 +1123,7 @@ export type QuestionQuery = {|
         thematic: ?{|
           // The ID of the object.
           id: string,
-          // A Title of the thematic in a given language.
+          // The title of the Idea, often shown in the Idea header itself.
           title: ?string,
           // Header image associated with the idea. A file metadata object, described by the Document object.
           img: ?{|
@@ -1475,7 +1486,7 @@ export type SynthesisQueryQuery = {|
                         title: ?string
                       |}>,
                       // Use a non-standard view for this idea.
-                      // Currently only supporting "messageColumns".
+                      // Currently only supporting "messageColumns" and "brightMirror".
                       messageViewOverride: ?string,
                       // Header image associated with the idea. A file metadata object, described by the Document object.
                       img: ?{|
@@ -1736,7 +1747,7 @@ export type ThematicQueryQuery = {|
     | {}
     | {}
     | {
-        // A Title of the thematic in a given language.
+        // The title of the Idea, often shown in the Idea header itself.
         title: ?string,
         // Header image associated with the idea. A file metadata object, described by the Document object.
         img: ?{|
@@ -1811,83 +1822,136 @@ export type ThematicsQueryQueryVariables = {|
 |};
 
 export type ThematicsQueryQuery = {|
-  // A list of all thematics on the debate. Thematics are a subset of Ideas.
-  thematics: ?Array<?{|
-    // The ID of the object.
-    id: string,
-    // The order of the Idea, Thematic, Question in the idea tree.
-    order: ?number,
-    // A list of possible languages of the entity as LangStringEntry objects. Title of the thematic in different languages.
-    titleEntries: ?Array<?{|
-      // The ISO 639-1 locale code of the language the content represents.
-      localeCode: string,
-      // The unicode encoded string representation of the content.
-      value: ?string
-    |}>,
-    // Header image associated with the idea. A file metadata object, described by the Document object.
-    img: ?{|
-      // A url to an image or a document to be attached.
-      externalUrl: ?string,
-      // The MIME-Type of the file uploaded.
-      mimeType: ?string,
-      // The filename title.
-      title: ?string
-    |},
-    // A Video objet that is often integrated to the header of a Thematic.
-    video: ?{|
-      // A list of possible languages of the entity as LangStringEntry objects. Title of the video in various languages.
-      titleEntries: ?Array<?{|
-        // The ISO 639-1 locale code of the language the content represents.
-        localeCode: string,
-        // The unicode encoded string representation of the content.
-        value: ?string
-      |}>,
-      // A list of possible languages of the entity as LangStringEntry objects. Description on the top of the video in various languages.
-      descriptionEntriesTop: ?Array<?{|
-        // The ISO 639-1 locale code of the language the content represents.
-        localeCode: string,
-        // The unicode encoded string representation of the content.
-        value: ?string
-      |}>,
-      // A list of possible languages of the entity as LangStringEntry objects. Description on the bottom of the video in various languages.
-      descriptionEntriesBottom: ?Array<?{|
-        // The ISO 639-1 locale code of the language the content represents.
-        localeCode: string,
-        // The unicode encoded string representation of the content.
-        value: ?string
-      |}>,
-      // A list of possible languages of the entity as LangStringEntry objects. Description on the side of the video in various languages.
-      descriptionEntriesSide: ?Array<?{|
-        // The ISO 639-1 locale code of the language the content represents.
-        localeCode: string,
-        // The unicode encoded string representation of the content.
-        value: ?string
-      |}>,
-      // HTML Code to add extra content in the video module section to be injected.
-      htmlCode: ?string,
-      // File (image or video) to use in the video module section.
-      mediaFile: ?{|
-        // A url to an image or a document to be attached.
-        externalUrl: ?string,
-        // The MIME-Type of the file uploaded.
-        mimeType: ?string,
-        // The filename title.
-        title: ?string
-      |}
-    |},
-    // A list of Question objects that are bound to the Thematic.
-    questions: ?Array<?{|
-      // The ID of the object.
-      id: string,
-      // A list of possible languages of the entity as LangStringEntry objects.
-      titleEntries: ?Array<?{|
-        // The ISO 639-1 locale code of the language the content represents.
-        localeCode: string,
-        // The unicode encoded string representation of the content.
-        value: ?string
-      |}>
-    |}>
-  |}>
+  // List of all ideas on the debate.
+  thematics: ?Array<?(
+    | {
+        // Use a non-standard view for this idea.
+        // Currently only supporting "messageColumns" and "brightMirror".
+        messageViewOverride: ?string,
+        // The order of the Idea, Thematic, Question in the idea tree.
+        order: ?number,
+        // A list of possible languages of the entity as LangStringEntry objects. This is the Idea title in multiple languages.
+        titleEntries: ?Array<?{|
+          // The ISO 639-1 locale code of the language the content represents.
+          localeCode: string,
+          // The unicode encoded string representation of the content.
+          value: ?string
+        |}>,
+        // Header image associated with the idea. A file metadata object, described by the Document object.
+        img: ?{|
+          // A url to an image or a document to be attached.
+          externalUrl: ?string,
+          // The MIME-Type of the file uploaded.
+          mimeType: ?string,
+          // The filename title.
+          title: ?string
+        |},
+        // The ID of the object.
+        id: string,
+        // A list of possible languages of the entity as LangStringEntry objects. This is the description of the Idea in multiple languages.
+        descriptionEntries: ?Array<?{|
+          // The ISO 639-1 locale code of the language the content represents.
+          localeCode: string,
+          // The unicode encoded string representation of the content.
+          value: ?string
+        |}>,
+        // An Announcement object representing a summary of an Idea. This is often included in a header display of an Idea.
+        announcement: ?{|
+          // A list of possible languages of the entity as LangStringEntry objects. This is the title of announcement in multiple languages.
+          titleEntries: Array<?{|
+            // The ISO 639-1 locale code of the language the content represents.
+            localeCode: string,
+            // The unicode encoded string representation of the content.
+            value: ?string
+          |}>,
+          // A list of possible languages of the entity as LangStringEntry objects. This is the body of announcement in multiple languages.
+          bodyEntries: Array<?{|
+            // The ISO 639-1 locale code of the language the content represents.
+            localeCode: string,
+            // The unicode encoded string representation of the content.
+            value: ?string
+          |}>
+        |}
+      }
+    | {
+        // Use a non-standard view for this idea.
+        // Currently only supporting "messageColumns" and "brightMirror".
+        messageViewOverride: ?string,
+        // The order of the Idea, Thematic, Question in the idea tree.
+        order: ?number,
+        // A list of possible languages of the entity as LangStringEntry objects. This is the Idea title in multiple languages.
+        titleEntries: ?Array<?{|
+          // The ISO 639-1 locale code of the language the content represents.
+          localeCode: string,
+          // The unicode encoded string representation of the content.
+          value: ?string
+        |}>,
+        // Header image associated with the idea. A file metadata object, described by the Document object.
+        img: ?{|
+          // A url to an image or a document to be attached.
+          externalUrl: ?string,
+          // The MIME-Type of the file uploaded.
+          mimeType: ?string,
+          // The filename title.
+          title: ?string
+        |},
+        // The ID of the object.
+        id: string,
+        // A Video objet that is often integrated to the header of a Thematic.
+        video: ?{|
+          // A list of possible languages of the entity as LangStringEntry objects. Title of the video in various languages.
+          titleEntries: ?Array<?{|
+            // The ISO 639-1 locale code of the language the content represents.
+            localeCode: string,
+            // The unicode encoded string representation of the content.
+            value: ?string
+          |}>,
+          // A list of possible languages of the entity as LangStringEntry objects. Description on the top of the video in various languages.
+          descriptionEntriesTop: ?Array<?{|
+            // The ISO 639-1 locale code of the language the content represents.
+            localeCode: string,
+            // The unicode encoded string representation of the content.
+            value: ?string
+          |}>,
+          // A list of possible languages of the entity as LangStringEntry objects. Description on the bottom of the video in various languages.
+          descriptionEntriesBottom: ?Array<?{|
+            // The ISO 639-1 locale code of the language the content represents.
+            localeCode: string,
+            // The unicode encoded string representation of the content.
+            value: ?string
+          |}>,
+          // A list of possible languages of the entity as LangStringEntry objects. Description on the side of the video in various languages.
+          descriptionEntriesSide: ?Array<?{|
+            // The ISO 639-1 locale code of the language the content represents.
+            localeCode: string,
+            // The unicode encoded string representation of the content.
+            value: ?string
+          |}>,
+          // HTML Code to add extra content in the video module section to be injected.
+          htmlCode: ?string,
+          // File (image or video) to use in the video module section.
+          mediaFile: ?{|
+            // A url to an image or a document to be attached.
+            externalUrl: ?string,
+            // The MIME-Type of the file uploaded.
+            mimeType: ?string,
+            // The filename title.
+            title: ?string
+          |}
+        |},
+        // A list of Question objects that are bound to the Thematic.
+        questions: ?Array<?{|
+          // The ID of the object.
+          id: string,
+          // A list of possible languages of the entity as LangStringEntry objects.
+          titleEntries: ?Array<?{|
+            // The ISO 639-1 locale code of the language the content represents.
+            localeCode: string,
+            // The unicode encoded string representation of the content.
+            value: ?string
+          |}>
+        |}>
+      })>
 |};
 
 export type TimelineQueryVariables = {|
@@ -1899,7 +1963,7 @@ export type TimelineQuery = {|
   timeline: ?Array<?{|
     // The ID of the object.
     id: string,
-    // Identifier of the Phase. There are four possible phase identifiers: "survey", "thread", "multiColumn", & "voteSession".
+    // Identifier of the Phase. Possible phase identifiers: "survey", "thread", "multiColumns", "voteSession", "brightMirror".
     identifier: ?string,
     // NOTE: THIS IS AN UNUSED VARIABLE CURRENTLY!
     isThematicsTable: ?boolean,
@@ -1925,7 +1989,7 @@ export type TimelineQuery = {|
     start: ?any,
     // An ISO 8601, UTC timezoned time representing the ending date of the phase.
     end: ?any,
-    // A Order of the phase in the Timeline.  as a float
+    // A Order of the phase in the Timeline. as a float
     order: ?number,
     // The image displayed on the phase.A file metadata object, described by the Document object.
     image: ?{|
@@ -2062,14 +2126,14 @@ export type VoteSessionQuery = {|
       title: ?string,
       // The description of the Idea, often shown in the header of the Idea.
       description: ?string,
-      // A list of possible languages of the entity as LangStringEntry objects. This is the Idea title in multiple langauges.
+      // A list of possible languages of the entity as LangStringEntry objects. This is the Idea title in multiple languages.
       titleEntries: ?Array<?{|
         // The ISO 639-1 locale code of the language the content represents.
         localeCode: string,
         // The unicode encoded string representation of the content.
         value: ?string
       |}>,
-      // A list of possible languages of the entity as LangStringEntry objects. The entity is the description of the Idea in multiple languages.
+      // A list of possible languages of the entity as LangStringEntry objects. This is the description of the Idea in multiple languages.
       descriptionEntries: ?Array<?{|
         // The ISO 639-1 locale code of the language the content represents.
         localeCode: string,
@@ -2228,7 +2292,7 @@ export type VoteSessionQuery = {|
             numVotes: number,
             // A The label of the average value for the Gauge in a given language.
             averageLabel: ?string,
-            // A The average value for the Gauge  as a float
+            // A The average value for the Gauge as a float
             averageResult: ?number
           }
         | {
@@ -2262,7 +2326,7 @@ export type VoteSessionQuery = {|
             nbTicks: ?number,
             // The unit used on the Gauge. This could be anything desired, like:
             //
-            // USD ($) or Euroes (€)
+            // USD ($) or Euros (€)
             //
             // Months
             //
@@ -2411,7 +2475,7 @@ export type VoteSessionQuery = {|
           nbTicks: ?number,
           // The unit used on the Gauge. This could be anything desired, like:
           //
-          // USD ($) or Euroes (€)
+          // USD ($) or Euros (€)
           //
           // Months
           //
@@ -2535,7 +2599,7 @@ export type addPostExtractMutation = {|
           // The title of the Idea, often shown in the Idea header itself.
           title: ?string,
           // Use a non-standard view for this idea.
-          // Currently only supporting "messageColumns".
+          // Currently only supporting "messageColumns" and "brightMirror".
           messageViewOverride: ?string
         |}
       |}>,
@@ -2809,7 +2873,7 @@ export type createDiscussionPhaseMutation = {|
     discussionPhase: ?{|
       // The ID of the object.
       id: string,
-      // Identifier of the Phase. There are four possible phase identifiers: "survey", "thread", "multiColumn", & "voteSession".
+      // Identifier of the Phase. Possible phase identifiers: "survey", "thread", "multiColumns", "voteSession", "brightMirror".
       identifier: ?string,
       // NOTE: THIS IS AN UNUSED VARIABLE CURRENTLY!
       isThematicsTable: ?boolean,
@@ -2835,7 +2899,7 @@ export type createDiscussionPhaseMutation = {|
       start: ?any,
       // An ISO 8601, UTC timezoned time representing the ending date of the phase.
       end: ?any,
-      // A Order of the phase in the Timeline.  as a float
+      // A Order of the phase in the Timeline. as a float
       order: ?number,
       // The image displayed on the phase.A file metadata object, described by the Document object.
       image: ?{|
@@ -3016,7 +3080,7 @@ export type createNumberGaugeVoteSpecificationMutation = {|
       nbTicks: ?number,
       // The unit used on the Gauge. This could be anything desired, like:
       //
-      // USD ($) or Euroes (€)
+      // USD ($) or Euros (€)
       //
       // Months
       //
@@ -3098,7 +3162,7 @@ export type createPostMutation = {|
           // The title of the Idea, often shown in the Idea header itself.
           title: ?string,
           // Use a non-standard view for this idea.
-          // Currently only supporting "messageColumns".
+          // Currently only supporting "messageColumns" and "brightMirror".
           messageViewOverride: ?string
         |}
       |}>,
@@ -3297,14 +3361,14 @@ export type createProposalMutation = {|
       id: string,
       // The order of the Idea, Thematic, Question in the idea tree.
       order: ?number,
-      // A list of possible languages of the entity as LangStringEntry objects. This is the Idea title in multiple langauges.
+      // A list of possible languages of the entity as LangStringEntry objects. This is the Idea title in multiple languages.
       titleEntries: ?Array<?{|
         // The ISO 639-1 locale code of the language the content represents.
         localeCode: string,
         // The unicode encoded string representation of the content.
         value: ?string
       |}>,
-      // A list of possible languages of the entity as LangStringEntry objects. The entity is the description of the Idea in multiple languages.
+      // A list of possible languages of the entity as LangStringEntry objects. This is the description of the Idea in multiple languages.
       descriptionEntries: ?Array<?{|
         // The ISO 639-1 locale code of the language the content represents.
         localeCode: string,
@@ -3459,54 +3523,92 @@ export type createThematicMutationVariables = {|
   identifier: string,
   image?: ?string,
   titleEntries: Array<?LangStringEntryInput>,
+  descriptionEntries?: ?Array<?LangStringEntryInput>,
   questions?: ?Array<?QuestionInput>,
   video?: ?VideoInput,
-  order?: ?number
+  announcement?: ?IdeaAnnouncementInput,
+  order?: ?number,
+  messageViewOverride?: ?string
 |};
 
 export type createThematicMutation = {|
   // A mutation to create a new thematic.
   createThematic: ?{|
-    thematic: ?{|
-      // The order of the Idea, Thematic, Question in the idea tree.
-      order: ?number,
-      // A Title of the thematic in a given language.
-      title: ?string,
-      // Header image associated with the idea. A file metadata object, described by the Document object.
-      img: ?{|
-        // A url to an image or a document to be attached.
-        externalUrl: ?string,
-        // The MIME-Type of the file uploaded.
-        mimeType: ?string
-      |},
-      // A Video objet that is often integrated to the header of a Thematic.
-      video: ?{|
-        // A Title of the video. in a given language.
-        title: ?string,
-        // A Description on top side of the video. in a given language.
-        descriptionTop: ?string,
-        // A Description on bottom side of the video. in a given language.
-        descriptionBottom: ?string,
-        // A Description on one of the sides of the video. in a given language.
-        descriptionSide: ?string,
-        // HTML Code to add extra content in the video module section to be injected.
-        htmlCode: ?string,
-        // File (image or video) to use in the video module section.
-        mediaFile: ?{|
-          // A url to an image or a document to be attached.
-          externalUrl: ?string,
-          // The MIME-Type of the file uploaded.
-          mimeType: ?string,
-          // The filename title.
-          title: ?string
-        |}
-      |},
-      // A list of Question objects that are bound to the Thematic.
-      questions: ?Array<?{|
-        // The Question to be asked itself, in the language given.
-        title: ?string
-      |}>
-    |}
+    thematic: ?(
+      | {
+          // Use a non-standard view for this idea.
+          // Currently only supporting "messageColumns" and "brightMirror".
+          messageViewOverride: ?string,
+          // The order of the Idea, Thematic, Question in the idea tree.
+          order: ?number,
+          // The title of the Idea, often shown in the Idea header itself.
+          title: ?string,
+          // Header image associated with the idea. A file metadata object, described by the Document object.
+          img: ?{|
+            // A url to an image or a document to be attached.
+            externalUrl: ?string,
+            // The MIME-Type of the file uploaded.
+            mimeType: ?string
+          |},
+          // The ID of the object.
+          id: string,
+          // The description of the Idea, often shown in the header of the Idea.
+          description: ?string,
+          // An Announcement object representing a summary of an Idea. This is often included in a header display of an Idea.
+          announcement: ?{|
+            // A title of announcement in a given language.
+            title: ?string,
+            // A body of announcement in a given language.
+            body: ?string
+          |}
+        }
+      | {
+          // Use a non-standard view for this idea.
+          // Currently only supporting "messageColumns" and "brightMirror".
+          messageViewOverride: ?string,
+          // The order of the Idea, Thematic, Question in the idea tree.
+          order: ?number,
+          // The title of the Idea, often shown in the Idea header itself.
+          title: ?string,
+          // Header image associated with the idea. A file metadata object, described by the Document object.
+          img: ?{|
+            // A url to an image or a document to be attached.
+            externalUrl: ?string,
+            // The MIME-Type of the file uploaded.
+            mimeType: ?string
+          |},
+          // The ID of the object.
+          id: string,
+          // A Video objet that is often integrated to the header of a Thematic.
+          video: ?{|
+            // A Title of the video. in a given language.
+            title: ?string,
+            // A Description on top side of the video. in a given language.
+            descriptionTop: ?string,
+            // A Description on bottom side of the video. in a given language.
+            descriptionBottom: ?string,
+            // A Description on one of the sides of the video. in a given language.
+            descriptionSide: ?string,
+            // HTML Code to add extra content in the video module section to be injected.
+            htmlCode: ?string,
+            // File (image or video) to use in the video module section.
+            mediaFile: ?{|
+              // A url to an image or a document to be attached.
+              externalUrl: ?string,
+              // The MIME-Type of the file uploaded.
+              mimeType: ?string,
+              // The filename title.
+              title: ?string
+            |}
+          |},
+          // A list of Question objects that are bound to the Thematic.
+          questions: ?Array<?{|
+            // The ID of the object.
+            id: string,
+            // The Question to be asked itself, in the language given.
+            title: ?string
+          |}>
+        })
   |}
 |};
 
@@ -3813,7 +3915,7 @@ export type updateDiscussionPhaseMutation = {|
     discussionPhase: ?{|
       // The ID of the object.
       id: string,
-      // Identifier of the Phase. There are four possible phase identifiers: "survey", "thread", "multiColumn", & "voteSession".
+      // Identifier of the Phase. Possible phase identifiers: "survey", "thread", "multiColumns", "voteSession", "brightMirror".
       identifier: ?string,
       // NOTE: THIS IS AN UNUSED VARIABLE CURRENTLY!
       isThematicsTable: ?boolean,
@@ -3839,7 +3941,7 @@ export type updateDiscussionPhaseMutation = {|
       start: ?any,
       // An ISO 8601, UTC timezoned time representing the ending date of the phase.
       end: ?any,
-      // A Order of the phase in the Timeline.  as a float
+      // A Order of the phase in the Timeline. as a float
       order: ?number,
       // The image displayed on the phase.A file metadata object, described by the Document object.
       image: ?{|
@@ -4209,7 +4311,7 @@ export type updateNumberGaugeVoteSpecificationMutation = {|
       nbTicks: ?number,
       // The unit used on the Gauge. This could be anything desired, like:
       //
-      // USD ($) or Euroes (€)
+      // USD ($) or Euros (€)
       //
       // Months
       //
@@ -4287,7 +4389,7 @@ export type updatePostMutation = {|
           // The title of the Idea, often shown in the Idea header itself.
           title: ?string,
           // Use a non-standard view for this idea.
-          // Currently only supporting "messageColumns".
+          // Currently only supporting "messageColumns" and "brightMirror".
           messageViewOverride: ?string
         |}
       |}>,
@@ -4566,14 +4668,14 @@ export type updateProposalMutation = {|
       id: string,
       // The order of the Idea, Thematic, Question in the idea tree.
       order: ?number,
-      // A list of possible languages of the entity as LangStringEntry objects. This is the Idea title in multiple langauges.
+      // A list of possible languages of the entity as LangStringEntry objects. This is the Idea title in multiple languages.
       titleEntries: ?Array<?{|
         // The ISO 639-1 locale code of the language the content represents.
         localeCode: string,
         // The unicode encoded string representation of the content.
         value: ?string
       |}>,
-      // A list of possible languages of the entity as LangStringEntry objects. The entity is the description of the Idea in multiple languages.
+      // A list of possible languages of the entity as LangStringEntry objects. This is the description of the Idea in multiple languages.
       descriptionEntries: ?Array<?{|
         // The ISO 639-1 locale code of the language the content represents.
         localeCode: string,
@@ -4755,57 +4857,94 @@ export type updateTextFieldMutation = {|
 
 export type updateThematicMutationVariables = {|
   id: string,
-  identifier: string,
   image?: ?string,
   titleEntries: Array<?LangStringEntryInput>,
+  descriptionEntries?: ?Array<?LangStringEntryInput>,
   questions?: ?Array<?QuestionInput>,
   video?: ?VideoInput,
-  order?: ?number
+  announcement?: ?IdeaAnnouncementInput,
+  order?: ?number,
+  messageViewOverride?: ?string
 |};
 
 export type updateThematicMutation = {|
   // A mutation to update a thematic.
   updateThematic: ?{|
-    thematic: ?{|
-      // The order of the Idea, Thematic, Question in the idea tree.
-      order: ?number,
-      // A Title of the thematic in a given language.
-      title: ?string,
-      // Header image associated with the idea. A file metadata object, described by the Document object.
-      img: ?{|
-        // A url to an image or a document to be attached.
-        externalUrl: ?string
-      |},
-      // A Video objet that is often integrated to the header of a Thematic.
-      video: ?{|
-        // A Title of the video. in a given language.
-        title: ?string,
-        // A Description on top side of the video. in a given language.
-        descriptionTop: ?string,
-        // A Description on bottom side of the video. in a given language.
-        descriptionBottom: ?string,
-        // A Description on one of the sides of the video. in a given language.
-        descriptionSide: ?string,
-        // HTML Code to add extra content in the video module section to be injected.
-        htmlCode: ?string,
-        // File (image or video) to use in the video module section.
-        mediaFile: ?{|
-          // A url to an image or a document to be attached.
-          externalUrl: ?string,
-          // The MIME-Type of the file uploaded.
-          mimeType: ?string,
-          // The filename title.
-          title: ?string
-        |}
-      |},
-      // A list of Question objects that are bound to the Thematic.
-      questions: ?Array<?{|
-        // The ID of the object.
-        id: string,
-        // The Question to be asked itself, in the language given.
-        title: ?string
-      |}>
-    |}
+    thematic: ?(
+      | {
+          // Use a non-standard view for this idea.
+          // Currently only supporting "messageColumns" and "brightMirror".
+          messageViewOverride: ?string,
+          // The order of the Idea, Thematic, Question in the idea tree.
+          order: ?number,
+          // The title of the Idea, often shown in the Idea header itself.
+          title: ?string,
+          // Header image associated with the idea. A file metadata object, described by the Document object.
+          img: ?{|
+            // A url to an image or a document to be attached.
+            externalUrl: ?string,
+            // The MIME-Type of the file uploaded.
+            mimeType: ?string
+          |},
+          // The ID of the object.
+          id: string,
+          // The description of the Idea, often shown in the header of the Idea.
+          description: ?string,
+          // An Announcement object representing a summary of an Idea. This is often included in a header display of an Idea.
+          announcement: ?{|
+            // A title of announcement in a given language.
+            title: ?string,
+            // A body of announcement in a given language.
+            body: ?string
+          |}
+        }
+      | {
+          // Use a non-standard view for this idea.
+          // Currently only supporting "messageColumns" and "brightMirror".
+          messageViewOverride: ?string,
+          // The order of the Idea, Thematic, Question in the idea tree.
+          order: ?number,
+          // The title of the Idea, often shown in the Idea header itself.
+          title: ?string,
+          // Header image associated with the idea. A file metadata object, described by the Document object.
+          img: ?{|
+            // A url to an image or a document to be attached.
+            externalUrl: ?string,
+            // The MIME-Type of the file uploaded.
+            mimeType: ?string
+          |},
+          // The ID of the object.
+          id: string,
+          // A Video objet that is often integrated to the header of a Thematic.
+          video: ?{|
+            // A Title of the video. in a given language.
+            title: ?string,
+            // A Description on top side of the video. in a given language.
+            descriptionTop: ?string,
+            // A Description on bottom side of the video. in a given language.
+            descriptionBottom: ?string,
+            // A Description on one of the sides of the video. in a given language.
+            descriptionSide: ?string,
+            // HTML Code to add extra content in the video module section to be injected.
+            htmlCode: ?string,
+            // File (image or video) to use in the video module section.
+            mediaFile: ?{|
+              // A url to an image or a document to be attached.
+              externalUrl: ?string,
+              // The MIME-Type of the file uploaded.
+              mimeType: ?string,
+              // The filename title.
+              title: ?string
+            |}
+          |},
+          // A list of Question objects that are bound to the Thematic.
+          questions: ?Array<?{|
+            // The ID of the object.
+            id: string,
+            // The Question to be asked itself, in the language given.
+            title: ?string
+          |}>
+        })
   |}
 |};
 
@@ -5130,7 +5269,7 @@ export type numberGaugeVoteSpecificationFragment = {|
   nbTicks: ?number,
   // The unit used on the Gauge. This could be anything desired, like:
   //
-  // USD ($) or Euroes (€)
+  // USD ($) or Euros (€)
   //
   // Months
   //
@@ -5216,7 +5355,7 @@ export type gaugeVoteSpecificationResultsFragment = {|
   numVotes: number,
   // A The label of the average value for the Gauge in a given language.
   averageLabel: ?string,
-  // A The average value for the Gauge  as a float
+  // A The average value for the Gauge as a float
   averageResult: ?number
 |};
 
@@ -5271,7 +5410,7 @@ export type AttachmentFragment = {|
 export type discussionPhaseFragment = {|
   // The ID of the object.
   id: string,
-  // Identifier of the Phase. There are four possible phase identifiers: "survey", "thread", "multiColumn", & "voteSession".
+  // Identifier of the Phase. Possible phase identifiers: "survey", "thread", "multiColumns", "voteSession", "brightMirror".
   identifier: ?string,
   // NOTE: THIS IS AN UNUSED VARIABLE CURRENTLY!
   isThematicsTable: ?boolean,
@@ -5297,7 +5436,7 @@ export type discussionPhaseFragment = {|
   start: ?any,
   // An ISO 8601, UTC timezoned time representing the ending date of the phase.
   end: ?any,
-  // A Order of the phase in the Timeline.  as a float
+  // A Order of the phase in the Timeline. as a float
   order: ?number,
   // The image displayed on the phase.A file metadata object, described by the Document object.
   image: ?{|
@@ -5439,7 +5578,7 @@ export type IdeaContentLinkFragment = {|
     // The title of the Idea, often shown in the Idea header itself.
     title: ?string,
     // Use a non-standard view for this idea.
-    // Currently only supporting "messageColumns".
+    // Currently only supporting "messageColumns" and "brightMirror".
     messageViewOverride: ?string
   |}
 |};
@@ -5556,7 +5695,7 @@ export type PostFragment = {|
       // The title of the Idea, often shown in the Idea header itself.
       title: ?string,
       // Use a non-standard view for this idea.
-      // Currently only supporting "messageColumns".
+      // Currently only supporting "messageColumns" and "brightMirror".
       messageViewOverride: ?string
     |}
   |}>,

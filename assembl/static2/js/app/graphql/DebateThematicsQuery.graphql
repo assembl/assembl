@@ -1,5 +1,5 @@
 query DebateThematicsQuery($lang: String!, $identifier: String!) {
-  thematics(identifier: $identifier) {
+  thematics: ideas(identifier: $identifier) {
     ... on Thematic {
       id
       identifier

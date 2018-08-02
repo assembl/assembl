@@ -1,8 +1,6 @@
 The graphql_types.flow.js was generated with the following commands:
 
-    assembl-pshell local.ini
-    from assembl.graphql.schema import generate_schema_json; generate_schema_json()
-    ctr+d
+    assembl-graphql-schema-json local.ini
     cd assembl/static2
     yarn add apollo-codegen@0.19.1
     ./node_modules/.bin/apollo-codegen generate js/app/graphql/*.graphql js/app/graphql/fragments/*.graphql js/app/graphql/mutations/*.graphql --schema /tmp/schema.json --target flow --output flow/graphql_types.flow.js

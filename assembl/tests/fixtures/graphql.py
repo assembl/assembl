@@ -32,20 +32,24 @@ def idea_in_thread_phase(graphql_request):
     from assembl.graphql.schema import Schema as schema
     res = schema.execute(u"""
 mutation myFirstMutation {
-    createIdea(
+    createThematic(
+        identifier: "thread",
         titleEntries:[
             {value:"Comprendre les dynamiques et les enjeux", localeCode:"fr"},
             {value:"Understanding the dynamics and issues", localeCode:"en"}
         ],
     ) {
-        idea {
-            id,
-            titleEntries { localeCode value }
+        thematic {
+            ... on Idea {
+                id
+                titleEntries { localeCode value }
+            }
         }
     }
 }
 """, context_value=graphql_request)
-    idea_id = res.data['createIdea']['idea']['id']
+    assert res.errors is None
+    idea_id = res.data['createThematic']['thematic']['id']
     return idea_id
 
 @pytest.fixture(scope="function")
@@ -53,20 +57,24 @@ def another_idea_in_thread_phase(graphql_request):
     from assembl.graphql.schema import Schema as schema
     res = schema.execute(u"""
 mutation myFirstMutation {
-    createIdea(
+    createThematic(
+        identifier: "thread",
         titleEntries:[
             {value:"Manger des pâtes", localeCode:"fr"},
             {value:"Eating pasta", localeCode:"en"}
         ],
     ) {
-        idea {
-            id,
-            titleEntries { localeCode value }
+        thematic {
+            ... on Idea {
+                id
+                titleEntries { localeCode value }
+            }
         }
     }
 }
 """, context_value=graphql_request)
-    idea_id = res.data['createIdea']['idea']['id']
+    assert res.errors is None
+    idea_id = res.data['createIdea']['thematic']['id']
     return idea_id
 
 
@@ -112,10 +120,12 @@ mutation myFirstMutation {
         identifier:"survey",
     ) {
         thematic {
-            id,
-            titleEntries { localeCode value },
-            identifier,
-            questions { id, titleEntries { localeCode value } }
+            ... on Thematic {
+                id,
+                titleEntries { localeCode value },
+                identifier,
+                questions { id, titleEntries { localeCode value } }
+            }
         }
     }
 }
@@ -162,10 +172,12 @@ mutation myMutation {
         identifier:"survey",
     ) {
         thematic {
-            id,
-            titleEntries { localeCode value },
-            identifier,
-            questions { id, titleEntries { localeCode value } }
+            ... on Thematic {
+                id,
+                titleEntries { localeCode value },
+                identifier,
+                questions { id, titleEntries { localeCode value } }
+            }
         }
     }
 }
@@ -208,11 +220,13 @@ mutation myMutation {
         identifier:"survey",
     ) {
         thematic {
-            id
-            order,
-            titleEntries { localeCode value },
-            identifier,
-            questions { id, titleEntries { localeCode value } }
+            ... on Thematic {
+                id
+                order,
+                titleEntries { localeCode value },
+                identifier,
+                questions { id, titleEntries { localeCode value } }
+            }
         }
     }
 }
@@ -245,9 +259,11 @@ mutation createThematicWithImage($file: String!) {
         image: $file
     ) {
         thematic {
-            id,
-            identifier,
-            img { externalUrl }
+            ... on Thematic {
+                id,
+                identifier,
+                img { externalUrl }
+            }
         }
     }
 }

@@ -26,6 +26,7 @@ class Phases(Enum):
     thread = 'thread'
     multiColumns = 'multiColumns'
     voteSession = 'voteSession'
+    brightMirror = 'brightMirror'
 
 
 PHASES_WITH_POSTS = [

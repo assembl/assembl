@@ -6,7 +6,7 @@ class Default:
     langstring_entries = """A list of possible languages of the entity as LangStringEntry objects. %s"""
     document = """%sA file metadata object, described by the Document object."""
     string_entry = """A %s in a given language."""
-    float_entry = """A %s  as a float"""
+    float_entry = """A %s as a float"""
     node_id = """The Relay.Node ID type of the %s object."""
     creation_date = "The date that the object was created, in UTC timezone, in ISO 8601 format."
     object_id = """The SQLALCHEMY ID of the %s object."""
@@ -15,6 +15,7 @@ class Default:
     \"thread\"\n
     \"multiColumns\"\n
     \"voteSession\"\n
+    \"brightMirror\"\n
     """
     phase_identifier_id = "The database identifier relating to the discussion phase."
 
@@ -24,7 +25,6 @@ class Schema:
     node = """A Relay node. Any entity that uses the Relay object structure, along with connections (edges), can be queried from Node."""
     root_idea = """An idea union between either an Idea type or a Thematic type."""
     ideas = """List of all ideas on the debate."""
-    thematics = """A list of all thematics on the debate. Thematics are a subset of Ideas."""
     syntheses = """A list of all syntheses on the debate."""
     num_participants = """The number of active participants on the debate with any form of contribution."""
     discussion_preferences = """
@@ -276,6 +276,10 @@ class VoteResults:
 class IdeaInterface:
     __doc__ = """An Idea or Thematic is an object describing a classification or cluster of discussions on a debate.
     Ideas, like Posts, can be based on each other."""
+    title = "The title of the Idea, often shown in the Idea header itself."
+    title_entries = Default.langstring_entries % ("This is the Idea title in multiple languages.",)
+    description = "The description of the Idea, often shown in the header of the Idea."
+    description_entries = Default.langstring_entries % ("This is the description of the Idea in multiple languages.",)
     num_posts = "The total number of active posts on that idea (excludes deleted posts)."
     num_total_posts = "The total number of posts on that idea and on all its children ideas."
     num_contributors = """The total number of users who contributed to the Idea/Thematic/Question.\n
@@ -284,17 +288,19 @@ class IdeaInterface:
     img = Default.document % "Header image associated with the idea. "
     order = "The order of the Idea, Thematic, Question in the idea tree."
     live = """The IdeaUnion between an Idea or a Thematic. This can be used to query specific fields unique to the type of Idea."""
-    message_view_override = """Use a non-standard view for this idea.\nCurrently only supporting "messageColumns"."""
+    message_view_override = """Use a non-standard view for this idea.\nCurrently only supporting "messageColumns" and "brightMirror"."""
     total_sentiments = "Total number of sentiments expressed by participants on posts related to that idea."
     vote_specifications = """The VoteSpecificationUnion placed on the Idea. This is the metadata describing the configuration of a VoteSession."""
     type = """The type of the idea. The class name of the idea."""
 
 
 class IdeaAnnouncement:
-    __doc__ = """The metadata object describing an announcement banner on an Idea or Thematic.
-    An Announcement is visible in the header of every Idea/Thematic."""
-    title = Default.string_entry % ("title of Announcement")
-    body = Default.string_entry % ("body of Announcement")
+    __doc__ = """The metadata object describing an announcement banner on an Idea.
+    An announcement is visible in the header of every Idea."""
+    title = Default.string_entry % ("title of announcement")
+    body = Default.string_entry % ("body of announcement")
+    title_entries = Default.langstring_entries % ("This is the title of announcement in multiple languages.",)
+    body_entries = Default.langstring_entries % ("This is the body of announcement in multiple languages.")
 
 
 class IdeaMessageColumn:
@@ -314,11 +320,7 @@ class Idea:
     __doc__ = """An Idea metadata object represents the configuration and classification of on idea that has grown from the debate.
     All ideas are currently created under a RootIdea, and Ideas can have subidea trees, Thematics and Questions associated to them."""
     id = Default.object_id % ("Idea",)
-    title = "The title of the Idea, often shown in the Idea header itself."
-    title_entries = Default.langstring_entries % ("This is the Idea title in multiple langauges.",)
     synthesis_title = Default.string_entry % ("Synthesis title",)
-    description = "The description of the Idea, often shown in the header of the Idea."
-    description_entries = Default.langstring_entries % ("The entity is the description of the Idea in multiple languages.",)
     children = """A list of all immediate child Ideas on the Idea, exluding any hidden Ideas. The RootIdea will not be shown here, for example.
     The subchildren of each subIdea is not shown here."""
     parent_id = Default.node_id % ("Idea",)
@@ -344,11 +346,6 @@ class Question:
     total_sentiments = """The count of total sentiments """
 
 
-class IdeaAnnoucement:
-    title = "The title of the announcement."
-    body = "The body of the announcement."
-
-
 class QuestionInput:
     id = """Id of the question input."""
     title_entries = Default.langstring_entries % ("Title of the question in various languages.")
@@ -363,31 +360,18 @@ class VideoInput:
     media_file = "File (image or video) to use in the video module section."
 
 
-class CreateIdea:
-    __doc__ = """A mutation to create an idea."""
-    title_entries = Idea.title_entries
-    description_entries = Idea.description_entries
-    image = Default.document % ("""Main image associated with this idea.""",)
-    order = """The order or positioning of the Idea/Thematic compared to other Ideas."""
-    parent_id = Idea.parent_id
-
-
 class Thematic:
     __doc__ = """A Thematic is an Idea that exists under the Survey Phase of a debate.
     Thematics differ slightly from Ideas because Thematics' subideas are Questions."""
     identifier = "The phase identifier of the Thematic."
-    title = Default.string_entry % "Title of the thematic"
-    title_entries = Default.langstring_entries % ("""Title of the thematic in different languages.""")
-    description = Default.string_entry % ("description") + " A description of the Thematic is often shown in the header of the Thematic."
-    description_entries = Default.langstring_entries % ("""Description of the thematic in different languages.""")
     questions = """A list of Question objects that are bound to the Thematic."""
     video = """A Video objet that is often integrated to the header of a Thematic."""
 
 
 class CreateThematic:
     __doc__ = """A mutation to create a new thematic."""
-    title_entries = Thematic.title_entries
-    description_entries = Thematic.description_entries
+    title_entries = IdeaInterface.title_entries
+    description_entries = IdeaInterface.description_entries
     identifier = Thematic.identifier
     video = Thematic.video
     questions = Thematic.questions
@@ -635,9 +619,9 @@ class DiscussionPhase:
     survey: A divergence Phase, where Thematics are created, and Questions under each Thematic are asked\n
     thread: A second divergence Phase, where Ideas are created, and discussions occur under Ideas
     Under this phase, an Idea can be a regular threaded discussion, or an Idea under multi-columns\n
-    multiColumn: This is a convergence Phase, as there is one major Idea in the Phase, which is under multi-column\n
+    multiColumns: This is a convergence Phase, as there is one major Idea in the Phase, which is under multi-column\n
     voteSession: This is another convergence Phase, as there is one major Idea in the Phase, and the Idea is under a VoteSession."""
-    identifier = """Identifier of the Phase. There are four possible phase identifiers: \"survey\", \"thread\", \"multiColumn\", & \"voteSession\"."""
+    identifier = """Identifier of the Phase. Possible phase identifiers: \"survey\", \"thread\", \"multiColumns\", \"voteSession\", \"brightMirror\"."""
     is_thematics_table = "NOTE: THIS IS AN UNUSED VARIABLE CURRENTLY!"
     title = Default.string_entry % ("title of the Phase.")
     title_entries = Default.langstring_entries % ("These are the title of the phase in various languages.")
@@ -770,7 +754,7 @@ class VoteSpecificationInterface:
     vote_session_id = Default.node_id % "Vote Session"
     vote_spec_template_id = Default.node_id % "Vote Specification template" + \
         " A template is a VoteSpecification that this specification should template itself from. It is a form of inheritence for VoteSpecifications."
-    # TOOD: Give the list of types
+    # TODO: Give the list of types
     vote_type = "The type of the VoteSpecification."
     my_votes = "The list of Votes by a specific User."
     num_votes = "The total number of Voters for this Vote."
@@ -818,7 +802,7 @@ class NumberGaugeVoteSpecification:
     maximum = "The maximum value on the Gauge."
     nb_ticks = "The number of intervals between the minimum and maximum values."
     unit = """The unit used on the Gauge. This could be anything desired, like:\n
-    USD ($) or Euroes (€)\n
+    USD ($) or Euros (€)\n
     Months\n
     PPM (Parts per million)\n
     etc"""
