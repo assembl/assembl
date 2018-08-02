@@ -19,9 +19,10 @@ def get_curl_query(query):
     auth = config.get('elastic_search_basic_auth', '')
     if auth:
         auth = '-u ' + auth
-    return "curl {} -XGET '{}:9200/_search?pretty' -d '{}'".format(
+    return "curl {} -XGET '{}:{}/_search?pretty' -d '{}'".format(
         auth,
         config.get('elasticsearch_host', 'localhost'),
+        config.get('elasticsearch_port', '9200'),
         json.dumps(query).replace("'", "\\u0027"))
 
 
