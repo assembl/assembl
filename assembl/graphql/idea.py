@@ -670,19 +670,15 @@ class CreateThematic(graphene.Mutation):
 
             parent_idea_id = args.get('parent_id')
             if parent_idea_id:
-                parent_idea_id = int(
-                    Node.from_global_id(parent_idea_id)[1])
-                if parent_idea_id:
-                    parent_idea = models.Idea.get(parent_idea_id)
-                    if not parent_idea:
-                        raise Exception('Parent Idea not found')
-                    if parent_idea.discussion != discussion:
-                        # No cross-debate references are allowed,
-                        # for security reasons
-                        raise Exception(
-                            'Parent Idea does not belong to this discussion')  # noqa: E501
-                else:
+                parent_idea_id = int(Node.from_global_id(parent_idea_id)[1])
+                parent_idea = models.Idea.get(parent_idea_id)
+                if not parent_idea:
                     raise Exception('Parent Idea not found')
+                if parent_idea.discussion != discussion:
+                    # No cross-debate references are allowed,
+                    # for security reasons
+                    raise Exception(
+                        'Parent Idea does not belong to this discussion')  # noqa: E501
             else:
                 if phase_identifier in (Phases.thread.value, Phases.multiColumns.value):
                     parent_idea = discussion.root_idea
