@@ -38,6 +38,11 @@ import ExportTaxonomies from './pages/exportTaxonomies';
 import BrightMirror from './pages/brightMirror';
 import { routeForRouter } from './utils/routeMap';
 
+// Page that is only used to display converted mockups to static pages
+import IntMainPage from './integration/index';
+import IntBrightMirrorIndex from './integration/brightMirror/index';
+import IntBrightMirrorShow from './integration/brightMirror/show';
+
 const DebateHome = (props) => {
   switch (props.params.phase) {
   case 'survey':
@@ -95,6 +100,11 @@ const AdminChild = (props) => {
 
 export default [
   <Route path="/" component={Root}>
+    {/* 'integration' route is only used for HTML/CSS integration purpose */}
+    <Route path={routeForRouter('integration', false, { preSlash: true })} component={IntMainPage} />
+    <Route path={routeForRouter('integrationBrightMirrorIndex', false, { preSlash: true })} component={IntBrightMirrorIndex} />
+    <Route path={routeForRouter('integrationBrightMirrorShow', false, { preSlash: true })} component={IntBrightMirrorShow} />
+    {/* once the integration workflow is mature, Styleguide component will be replaced by Storybook and thus can be removed */}
     <Route path={routeForRouter('styleguide', false, { preSlash: true })} component={Styleguide} />
     {/* Those login routes should be kept in synchrony with assembl.views.auth.__init__.py */}
     <Route path={routeForRouter('login', false, { preSlash: true })} component={Login} />
