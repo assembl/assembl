@@ -277,6 +277,16 @@ class LocalePreference(graphene.ObjectType):
 class DiscussionPreferences(graphene.ObjectType):
     __doc__ = docs.DiscussionPreferences.__doc__
     languages = graphene.List(LocalePreference, description=docs.DiscussionPreferences.languages)
+    tab_title = graphene.String(description=docs.DiscussionPreferences.languages)
+    favicon = graphene.Field(Document, description=docs.IdeaInterface.img)
+
+    def resolve_favicon(self, args, context, info):
+        FAVICON = models.AttachmentPurpose.FAVICON.value
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        for attachment in discussion.attachments:
+            if attachment.attachmentPurpose == FAVICON:
+                return attachment.document
 
 
 class ResourcesCenter(graphene.ObjectType):

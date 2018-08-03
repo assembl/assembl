@@ -236,7 +236,8 @@ class Query(graphene.ObjectType):
         prefs = discussion.settings_json
         locales = prefs.get('preferred_locales', [])
         return DiscussionPreferences(
-            languages=[LocalePreference(locale=x) for x in locales])
+            languages=[LocalePreference(locale=x) for x in locales],
+            tab_title=prefs.get('tab_title', 'Assembl'))
 
     def resolve_default_preferences(self, args, context, info):
         default = models.Preferences.get_default_preferences()

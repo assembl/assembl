@@ -474,7 +474,7 @@ const Translations = {
         timeline: "Éditer les phases et modules",
         exportTaxonomies: "Exporter les taxonomies",
         manageProfileOptions: "Options d'inscription",
-        interfaceCustomization: "Personnaliser l'interface"
+        personnaliseInterface: "Personnaliser l'interface"
       },
       timelineAdmin: {
         phase: "Phase %{count}",
@@ -643,7 +643,8 @@ const Translations = {
         "0": "Langues utilisées",
         "3": "Options d'inscription",
         "4": "Contenus juridiques",
-        "5": "Édition des phases et modules"
+        "5": "Édition des phases et modules",
+        "6": "Personnaliser l'interface"
       },
       languageChoice: "Sélection des langues du débat",
       ph: {
@@ -749,6 +750,11 @@ const Translations = {
         textFieldToggleRequired: "Rendre ce champ obligatoire",
         successSave: "Les options de profils ont été enregistrées avec succès !",
         hideTextField: "Cacher ce champs pour l'utilisateur"
+      },
+      personnaliseInterface: {
+        titleFormTitle: "Personnaliser l'intitulé de la page",
+        title: "Le titre de la page",
+        favicon: "La favicon"
       }
     },
     unauthorizedAdministration: {
@@ -1233,7 +1239,7 @@ const Translations = {
         timeline: "Edit the phases and modules",
         exportTaxonomies: "Export taxonomies",
         manageProfileOptions: "Registration options",
-        interfaceCustomization: "Customize the interface"
+        personnaliseInterface: "Personnalise the interface"
       },
       timelineAdmin: {
         phase: "Phase %{count}",
@@ -1396,7 +1402,8 @@ const Translations = {
         "0": "Languages of the Discussion",
         "3": "Registration options",
         "4": "Legal contents",
-        "5": "Edition of the phases and modules"
+        "5": "Edition of the phases and modules",
+        "6": "Personnalise the interface"
       },
       languageChoice: "Select desired languages below",
       ph: {
@@ -1499,6 +1506,11 @@ const Translations = {
         textFieldToggleRequired: "Make this field required",
         successSave: "The profile options has been saved with success!",
         hideTextField: "Hide this field for the user"
+      },
+      personnaliseInterface: {
+        titleFormTitle: "Personnalise the title of the page",
+        title: "The title of the page",
+        favicon: "The favicon"
       }
     },
     unauthorizedAdministration: {

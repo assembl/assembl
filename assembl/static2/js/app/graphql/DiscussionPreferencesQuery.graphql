@@ -1,0 +1,10 @@
+query DiscussionPreferences {
+  discussionPreferences {
+    tabTitle
+    favicon {
+      title
+      externalUrl
+      mimeType
+    }
+  }
+}

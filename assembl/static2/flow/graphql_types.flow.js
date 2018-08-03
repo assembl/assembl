@@ -192,11 +192,11 @@ export type DebateThematicsQueryQuery = {|
       })>
 |};
 
-export type DiscussionPreferencesQueryVariables = {|
+export type DiscussionPreferencesLanguageQueryVariables = {|
   inLocale: string
 |};
 
-export type DiscussionPreferencesQuery = {|
+export type DiscussionPreferencesLanguageQuery = {|
   //
   // The dicussion preferences of the debate.
   // These are configurations that characterize how the debate will behave, look, and act under certain conditions.
@@ -210,6 +210,25 @@ export type DiscussionPreferencesQuery = {|
       // The name of the locale, in the original language. Ex Français.
       nativeName: ?string
     |}>
+  |}
+|};
+
+export type DiscussionPreferencesQuery = {|
+  //
+  // The dicussion preferences of the debate.
+  // These are configurations that characterize how the debate will behave, look, and act under certain conditions.
+  discussionPreferences: ?{|
+    // A list of LocalePreference metadata objects on the discussion which describe the languages supported by the debate.
+    tabTitle: ?string,
+    // Header image associated with the idea. A file metadata object, described by the Document object.
+    favicon: ?{|
+      // The filename title.
+      title: ?string,
+      // A url to an image or a document to be attached.
+      externalUrl: ?string,
+      // The MIME-Type of the file uploaded.
+      mimeType: ?string
+    |}
   |}
 |};
 
