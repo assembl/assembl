@@ -39,10 +39,12 @@ def upgrade(pyramid_env):
                 server_default=ExtractStates.PUBLISHED.value),
                 schema=schema
             )
-    
+
     # Add the machine user
     db = m.get_session_maker()()
     with transaction.manager:
+        from assembl.indexing import join_transaction
+        join_transaction()
         m.User.populate_db(db)
 
 
