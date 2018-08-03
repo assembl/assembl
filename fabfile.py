@@ -888,7 +888,7 @@ def install_bluenove_actionable():
             run('git clone git@github.com:bluenove/bluenove-actionable.git')
 
         with cd("%(projectpath)s/../bluenove-actionable/" % env):
-            sudo('docker-compose build', warn_only=True)
+            run('docker-compose build', warn_only=True)
 
 
 @task
@@ -914,7 +914,7 @@ def stop_bluenove_actionable():
     if exists(path):
         print(cyan('Stop bluenove-actionable'))
         with cd(path):
-            sudo('docker-compose down bluenoveact', warn_only=True)
+            run('docker-compose down', warn_only=True)
 
 
 @task
@@ -938,7 +938,7 @@ def start_bluenove_actionable():
                 ROBOT_IDENTIFIER=robot.get('identifier'),
                 ROBOT_PASSWORD=robot.get('password')
             ):
-                sudo('docker-compose up -d', warn_only=True)
+                run('docker-compose up -d', warn_only=True)
 
 
 @task
