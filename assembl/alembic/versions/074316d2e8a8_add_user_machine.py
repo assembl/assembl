@@ -49,4 +49,5 @@ def upgrade(pyramid_env):
 def downgrade(pyramid_env):
     with context.begin_transaction():
         op.drop_column('user', 'is_machine')
+        op.drop_column('extract', 'extract_state')
         sa.Enum(name='extract_states').drop(op.get_bind(), checkfirst=False)
