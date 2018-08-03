@@ -43,7 +43,6 @@ elasticsearch index to sync it again with the postgres database.
 
 import logging
 import threading
-import os
 
 from transaction.interfaces import ISavepointDataManager, IDataManagerSavepoint
 from zope.interface import implementer

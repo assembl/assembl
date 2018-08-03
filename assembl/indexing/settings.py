@@ -1,7 +1,12 @@
 # -*- coding: utf-8 -*-
+from ..lib.config import get as _get
 from copy import deepcopy
 
-from . import index_languages
+
+def index_languages():
+    "Languages which have their own indexes"
+    return set(_get('elasticsearch_lang_indexes', 'en fr').split())
+
 
 BOOL = {
     'index': True,

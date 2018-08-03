@@ -1,5 +1,4 @@
 import json
-from pyramid.events import NewRequest
 from pyramid.httpexceptions import HTTPUnauthorized, HTTPServiceUnavailable
 from pyramid.security import Everyone
 from pyramid.view import view_config
@@ -8,7 +7,6 @@ from assembl.auth import CrudPermissions
 from assembl.auth.util import get_permissions
 from assembl.indexing.utils import connect
 from assembl.indexing.settings import get_index_settings
-from assembl.indexing.changes import get_changes
 from assembl.indexing import indexing_active
 from assembl import models
 from assembl.lib.sqla import get_session_maker
@@ -97,19 +95,5 @@ def search_endpoint(context, request):
     return result
 
 
-def join_transaction(event):
-    if indexing_active():
-        get_changes()._join()
-
-
 def includeme(config):
     config.add_route('search', '/_search')
-    # join ElasticChanges datamanager to the transaction at the beginning
-    # of the request to avoid joining when the status is Committing
-    # If I don't do that, the elasticsearch data manager may actually join
-    # the transaction when the transaction is committing, and this fail with an error.
-    # The after_insert sqlalchemy event that I use to index an object (and so the
-    # elasticsearch data manager join the transaction) is triggered via the session.flush()
-    # in the tcp_begin of sqlalchemy data manager. You can't add data managers to a
-    # transaction which is in a Committing state.
-    config.add_subscriber(join_transaction, NewRequest)

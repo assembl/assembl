@@ -1,4 +1,3 @@
-import os
 from collections import defaultdict
 
 from assembl.lib import config
@@ -6,8 +5,7 @@ from assembl.lib.locale import strip_country
 from assembl.lib.clean_input import unescape
 from elasticsearch.client import Elasticsearch
 
-from assembl.indexing.settings import get_index_settings, MAPPINGS
-from . import index_languages
+from assembl.indexing.settings import index_languages, get_index_settings, MAPPINGS
 
 
 _es = None
