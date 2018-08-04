@@ -16,7 +16,7 @@ import assembl.graphql.docstrings as docs
 from assembl import models
 
 from assembl.graphql.discussion import (Discussion, UpdateDiscussion, DiscussionPreferences,
-                                        LegalContents, LocalePreference,
+                                        LegalContents,
                                         UpdateLegalContents,
                                         ResourcesCenter,
                                         UpdateDiscussionPreferences,
@@ -233,17 +233,10 @@ class Query(graphene.ObjectType):
     def resolve_discussion_preferences(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
-        prefs = discussion.settings_json
-        locales = prefs.get('preferred_locales', [])
-        return DiscussionPreferences(
-            languages=[LocalePreference(locale=x) for x in locales],
-            tab_title=prefs.get('tab_title', 'Assembl'))
+        return discussion.preferences or models.Preferences.get_default_preferences()
 
     def resolve_default_preferences(self, args, context, info):
-        default = models.Preferences.get_default_preferences()
-        preferred_locales = default['preferred_locales'] or []
-        return DiscussionPreferences(
-            languages=[LocalePreference(locale=x) for x in preferred_locales])
+        return models.Preferences.get_default_preferences()
 
     def resolve_locales(self, args, context, info):
         locales = DummyGoogleTranslationService.target_localesC()

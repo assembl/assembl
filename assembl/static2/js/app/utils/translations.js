@@ -752,9 +752,11 @@ const Translations = {
         hideTextField: "Cacher ce champs pour l'utilisateur"
       },
       personnaliseInterface: {
+        success: "La personnalisation de l'interface a été sauvée avec succès !",
         titleFormTitle: "Personnaliser l'intitulé de la page",
         title: "Le titre de la page",
-        favicon: "La favicon"
+        favicon: "La favicon",
+        icoRequired: "Le favicon doit être un fichier .ico uniquement"
       }
     },
     unauthorizedAdministration: {
@@ -1508,9 +1510,11 @@ const Translations = {
         hideTextField: "Hide this field for the user"
       },
       personnaliseInterface: {
+        success: "The interface personalization has been saved with success!",
         titleFormTitle: "Personnalise the title of the page",
         title: "The title of the page",
-        favicon: "The favicon"
+        favicon: "The favicon",
+        icoRequired: "The favicon must be an .ico file only"
       }
     },
     unauthorizedAdministration: {

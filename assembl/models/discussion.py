@@ -159,6 +159,16 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
     def logo(self):
         return self.logo_url
 
+    @property
+    def favicon(self):
+        from .attachment import AttachmentPurpose
+        FAVICON = AttachmentPurpose.FAVICON.value
+        for attachment in self.attachments:
+            if attachment.attachmentPurpose == FAVICON:
+                return attachment.document
+
+        return None
+
     @logo.setter
     def logo(self, url):
         url = self.check_url_or_none(url)

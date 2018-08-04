@@ -99,6 +99,8 @@ class LocalePreference:
 class DiscussionPreferences:
     __doc__ = """A discussion can have many preferences. This metadata object describes these preferences."""
     languages = """A list of LocalePreference metadata objects on the discussion which describe the languages supported by the debate."""
+    tab_title = """The title in the tab."""
+    favicon = Default.document % ("""The favicon of the site.""",)
 
 
 class ResourcesCenter:
@@ -130,6 +132,8 @@ class UpdateResourcesCenter:
 class UpdateDiscussionPreferences:
     __doc__ = """A way to save Discussion Preferences on a debate."""
     languages = """The list of languages in ISO 639-1 locale code that the debate should support."""
+    tab_title = DiscussionPreferences.tab_title
+    favicon = DiscussionPreferences.favicon
 
 
 class UpdateLegalContents:

@@ -277,8 +277,15 @@ class LocalePreference(graphene.ObjectType):
 class DiscussionPreferences(graphene.ObjectType):
     __doc__ = docs.DiscussionPreferences.__doc__
     languages = graphene.List(LocalePreference, description=docs.DiscussionPreferences.languages)
-    tab_title = graphene.String(description=docs.DiscussionPreferences.languages)
-    favicon = graphene.Field(Document, description=docs.IdeaInterface.img)
+    tab_title = graphene.String(description=docs.DiscussionPreferences.tab_title)
+    favicon = graphene.Field(Document, description=docs.DiscussionPreferences.favicon)
+
+    def resolve_tab_title(self, args, context, info):
+        return self.get('tab_title', 'Assembl')
+
+    def resolve_languages(self, args, context, info):
+        locales = self.get('preferred_locales', [])
+        return [LocalePreference(locale=x) for x in locales]
 
     def resolve_favicon(self, args, context, info):
         FAVICON = models.AttachmentPurpose.FAVICON.value
@@ -460,7 +467,10 @@ class UpdateDiscussionPreferences(graphene.Mutation):
     __doc__ = docs.UpdateDiscussionPreferences.__doc__
 
     class Input:
-        languages = graphene.List(graphene.String, required=True, description=docs.UpdateDiscussionPreferences.languages)
+        languages = graphene.List(graphene.String, description=docs.UpdateDiscussionPreferences.languages)
+        tab_title = graphene.String(description=docs.UpdateDiscussionPreferences.tab_title)
+        # this is the identifier of the part in a multipart POST
+        favicon = graphene.String(description=docs.UpdateDiscussionPreferences.favicon)
 
     preferences = graphene.Field(lambda: DiscussionPreferences)
 
@@ -478,17 +488,54 @@ class UpdateDiscussionPreferences(graphene.Mutation):
             user_id, CrudPermissions.UPDATE, permissions)
         if not allowed or (allowed == IF_OWNED and user_id == Everyone):
             raise HTTPUnauthorized()
-        prefs_to_save = args.get('languages')
-        if not prefs_to_save:
+
+        db = discussion.db
+        prefs_to_save = args.get('languages', [])
+        tab_title = args.get('tab_title', None)
+        favicon = args.get('favicon', None)
+        if not prefs_to_save and not tab_title and not favicon:
             raise Exception("Must pass at least one preference to be saved")
 
-        discussion.discussion_locales = prefs_to_save
-        discussion.db.flush()
+        with cls.default_db.no_autoflush:
+            if prefs_to_save:
+                discussion.discussion_locales = prefs_to_save
 
-        discussion_pref = DiscussionPreferences(
-            languages=[LocalePreference(locale=x) for
-                       x in discussion.discussion_locales])
-        return UpdateDiscussionPreferences(preferences=discussion_pref)
+            if tab_title:
+                discussion.preferences['tab_title'] = tab_title
+
+            if favicon:
+                FAVICON = models.AttachmentPurpose.FAVICON.value
+                filename = os.path.basename(context.POST[favicon].filename)
+                mime_type = context.POST[favicon].type
+                document = models.File(
+                    discussion=discussion,
+                    mime_type=mime_type,
+                    title=filename)
+                document.add_file_data(context.POST[favicon].file)
+
+                # if there is already an IMAGE, remove it with the
+                # associated document
+                favicon_images = [
+                    att for att in discussion.attachments
+                    if att.attachmentPurpose == FAVICON
+                ]
+                if favicon_images:
+                    favicon_image = favicon_images[0]
+                    favicon_image.document.delete_file()
+                    db.delete(favicon_image.document)
+                    discussion.attachments.remove(favicon_image)
+
+                db.add(models.DiscussionAttachment(
+                    document=document,
+                    discussion=discussion,
+                    creator_id=context.authenticated_userid,
+                    title=filename,
+                    attachmentPurpose=FAVICON
+                ))
+
+        db.flush()
+
+        return UpdateDiscussionPreferences(preferences=discussion.preferences)
 
 
 class UpdateLegalContents(graphene.Mutation):

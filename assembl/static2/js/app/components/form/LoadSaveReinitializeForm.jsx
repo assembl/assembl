@@ -15,14 +15,15 @@ import type { MutationsPromises, SaveStatus } from './types.flow';
 
 type TOriginalValues = {| [string]: any |};
 
-type TInitialValues = { [string]: any };
+export type TInitialValues = { [string]: any };
 
 type Props = {
   load: (fetchPolicy: FetchPolicy) => Promise<TOriginalValues>,
   loading: React.Node,
   postLoadFormat: ?(TOriginalValues) => TInitialValues,
   createMutationsPromises: (TInitialValues, TInitialValues) => MutationsPromises,
-  save: MutationsPromises => Promise<SaveStatus>
+  save: MutationsPromises => Promise<SaveStatus>,
+  onSave?: TInitialValues => void
 };
 
 type State = {
@@ -54,13 +55,14 @@ export default class LoadSaveReinitializeForm extends React.Component<Props, Sta
   };
 
   save = async (values: TInitialValues) => {
-    const { createMutationsPromises, save } = this.props;
+    const { createMutationsPromises, save, onSave } = this.props;
     if (this.state.initialValues) {
       const mutationPromises = createMutationsPromises(values, this.state.initialValues);
       const status = await save(mutationPromises);
       if (status === 'OK') {
         // we really need to do a refetch to have the correct new ids in values
         await this.load('network-only');
+        if (onSave) onSave(values);
       }
     }
   };
