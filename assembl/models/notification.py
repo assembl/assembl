@@ -713,6 +713,10 @@ class ModelEventWatcherNotificationSubscriptionDispatcher(BaseModelEventWatcher)
     protocol"""
 
     def processPostCreated(self, objectId):
+        self.createNotifications(objectId)
+
+    @classmethod
+    def createNotifications(cls, objectId):
         from ..lib.utils import get_concrete_subclasses_recursive
         verb = CrudVerbs.CREATE
         objectClass = Content

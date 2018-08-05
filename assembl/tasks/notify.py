@@ -2,68 +2,19 @@
 import sys
 from time import sleep
 from datetime import datetime, timedelta
-from traceback import print_exc
 
 import transaction
-from pyramid_mailer import mailer_factory_from_settings
-from pyramid_mailer.message import Message
 
 from ..lib.raven_client import capture_exception
-from . import (config_celery_app, CeleryWithConfig)
 from ..lib.logging import getLogger
+from . import celery, SMTP_DOMAIN_DELAYS
 
 
-notify_process_mailer = None
-
-
-CELERYBEAT_SCHEDULE = {
-    'resend-every-10-minutes': {
-        'task': 'assembl.tasks.notify.process_pending_notifications',
-        'schedule': timedelta(seconds=600),
-        'options': {
-            'routing_key': 'notify',
-            'exchange': 'notify'
-        }
-    },
-}
-
-
-class NotifyCeleryApp(CeleryWithConfig):
-    def on_configure_with_settings(self, settings):
-        global notify_process_mailer
-        notify_process_mailer = mailer_factory_from_settings(settings)
-        # setup SETTINGS_SMTP_DELAY
-        for name, val in settings.iteritems():
-            if name.startswith(SETTINGS_SMTP_DELAY):
-                try:
-                    val = timedelta(seconds=float(val))
-                except ValueError:
-                    print "Not a valid value for %s: %s" % (name, val)
-                    continue
-                SMTP_DOMAIN_DELAYS[name[len(SETTINGS_SMTP_DELAY):]] = val
-        getLogger().info("SMTP_DOMAIN_DELAYS", delays=SMTP_DOMAIN_DELAYS)
-
-
-notify_celery_app = NotifyCeleryApp('celery_tasks.notify')
-notify_celery_app._preconf = {
-    "CELERYBEAT_SCHEDULE": CELERYBEAT_SCHEDULE
-}
-
+logger = getLogger()
 
 # When was a mail last sent by notifications to a given domain?
 # Propagates to superdomains.
 DOMAIN_LAST_SENT = {}
-
-# Minimum delay between emails sent to a domain.
-# For this to work, you need to have a SINGLE celery process for notification.
-SMTP_DOMAIN_DELAYS = {
-    '': timedelta(0)
-}
-
-# INI file values with this prefix will be used to populate SMTP_DOMAIN_DELAYS.
-# Anything after the last dot is a domain name (including empty).
-# Use seconds (float) as values.
-SETTINGS_SMTP_DELAY = "celery_tasks.notify.smtp_delay."
 
 
 def email_was_sent(email):
@@ -99,37 +50,36 @@ def process_notification(notification):
         MissingEmailException)
     import smtplib
     import socket
-    from assembl.lib import config
 
     assert notification
-    sys.stderr.write(
+    logger.debug(
         "process_notification called with notification %d, state was %s" % (
             notification.id, notification.delivery_state))
     if notification.delivery_state not in \
             NotificationDeliveryStateType.getRetryableDeliveryStates():
-        sys.stderr.write(
+        logger.warning(
             "Refusing to process notification %d because its delivery state is: %s" % (
                 notification.id, notification.delivery_state))
         return
     try:
         email = notification.render_to_message()
-        # sys.stderr.write(email_str)
+        # logger.debug(email_str)
         recipient = notification.get_to_email_address()
         wait_if_necessary(recipient)
-        notify_process_mailer.send_immediately(email, fail_silently=False)
+        celery.mailer.send_immediately(email, fail_silently=False)
 
         notification.delivery_state = \
             NotificationDeliveryStateType.DELIVERY_IN_PROGRESS
         email_was_sent(recipient)
     except UnverifiedEmailException as e:
         capture_exception()
-        getLogger().exception("Not sending to unverified email")
+        logger.exception("Not sending to unverified email")
         notification.db.rollback()
         notification.delivery_state = \
             NotificationDeliveryStateType.DELIVERY_TEMPORARY_FAILURE
     except MissingEmailException as e:
         capture_exception()
-        getLogger().exception("Missing email!")
+        logger.exception("Missing email!")
         notification.db.rollback()
         notification.delivery_state = \
             NotificationDeliveryStateType.DELIVERY_TEMPORARY_FAILURE
@@ -137,17 +87,17 @@ def process_notification(notification):
             socket.timeout, socket.error,
             smtplib.SMTPHeloError) as e:
         capture_exception()
-        getLogger().exception("Temporary failure")
+        logger.exception("Temporary failure")
         notification.db.rollback()
         notification.delivery_state = \
             NotificationDeliveryStateType.DELIVERY_TEMPORARY_FAILURE
     except smtplib.SMTPRecipientsRefused as e:
-        getLogger().exception("Recepients refused")
+        logger.exception("Recepients refused")
         notification.db.rollback()
         notification.delivery_state = \
             NotificationDeliveryStateType.DELIVERY_FAILURE
     except smtplib.SMTPSenderRefused as e:
-        getLogger().exception("Invalid configuration!")
+        logger.exception("Invalid configuration!")
         notification.db.rollback()
         notification.delivery_state = \
             NotificationDeliveryStateType.DELIVERY_TEMPORARY_FAILURE
@@ -155,46 +105,40 @@ def process_notification(notification):
         capture_exception()
         import traceback
         traceback.print_exc()
-        getLogger().exception("Unknown Exception!")
+        logger.exception("Unknown Exception!")
         notification.db.rollback()
         notification.delivery_state = \
             NotificationDeliveryStateType.DELIVERY_TEMPORARY_FAILURE
 
-    sys.stderr.write(
+    logger.debug(
         "process_notification finished processing %d, state is now %s"
         % (notification.id, notification.delivery_state))
 
 
-@notify_celery_app.task(shared=False)
+@celery.task(shared=False)
 def notify(id):
     """ Can be triggered by
     http://localhost:6543/data/Discussion/6/all_users/2/notifications/12/process_now """
     from ..models.notification import Notification, waiting_get
-    sys.stderr.write("notify called with "+str(id))
+    logger.debug("notify called with " + str(id))
     with transaction.manager:
         notification = waiting_get(Notification, id)
         assert notification
         process_notification(notification)
 
 
-@notify_celery_app.task(shared=False)
+@celery.task(shared=False)
 def process_pending_notifications():
     """ Can be triggered by http://localhost:6543/data/Notification/process_now """
     from ..models.notification import (
         Notification, NotificationDeliveryStateType)
-    sys.stderr.write("process_pending_notifications called")
+    logger.debug("process_pending_notifications called")
     retryable_notifications = Notification.default_db.query(Notification.id).filter(
         Notification.delivery_state.in_(
-        NotificationDeliveryStateType.getRetryableDeliveryStates()))
+            NotificationDeliveryStateType.getRetryableDeliveryStates()))
     for (notification_id,) in retryable_notifications:
         try:
             with transaction.manager:
                 process_notification(Notification.get(notification_id))
-        except:
+        except Exception as e:
             capture_exception()
-
-
-def includeme(config):
-    global notify_process_mailer
-    config_celery_app(notify_celery_app, config.registry.settings)
-    notify_process_mailer = mailer_factory_from_settings(config.registry.settings)

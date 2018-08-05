@@ -1,13 +1,9 @@
 """A celery process that translate messages as soon as they are created. Causes deadlocks, not used"""
-from collections import defaultdict
 from abc import abstractmethod
 
-from . import config_celery_app, CeleryWithConfig
+from . import celery
 from ..lib.utils import waiting_get
 from ..lib.raven_client import capture_exception
-
-# broker specified
-translation_celery_app = CeleryWithConfig('celery_tasks.translate')
 
 _services = {}
 
@@ -145,14 +141,14 @@ def translate_content(
     return changed
 
 
-@translation_celery_app.task(ignore_result=True, shared=False)
+@celery.task(ignore_result=True, shared=False)
 def translate_content_task(content_id):
     from ..models import Content
     content = waiting_get(Content, content_id, True)
     translate_content(content)
 
 
-@translation_celery_app.task(ignore_result=True, shared=False)
+@celery.task(ignore_result=True, shared=False)
 def translate_discussion(
         discussion_id, translation_table=None,
         constrain_to_discussion_languages=True,
@@ -171,7 +167,3 @@ def translate_discussion(
             post, translation_table, service,
             constrain_to_discussion_languages, send_to_changes)
     return changed
-
-
-def includeme(config):
-    config_celery_app(translation_celery_app, config.registry.settings)
