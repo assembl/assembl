@@ -523,6 +523,14 @@ const Translations = {
         "1": "Renseigner les questions",
         "2": "Exporter les données"
       },
+      brightMirrorSection: {
+        bannerSubtitleLabel: "Sous-titre dans le bandeau du haut de page",
+        bannerImagePickerLabel: "*Choisir l'image de fond du bandeau",
+        configureTitle: "Configurer Bright Mirror",
+        instructionLabel: "Consigne",
+        sectionTitleLabel: "*Titre de la section",
+        thematicTitleLabel: "*Titre de la thématique"
+      },
       voteSession: {
         "0": "Configuration de la page",
         "1": "Configurer le ou les modules de vote",
@@ -1304,6 +1312,14 @@ const Translations = {
         "0": "Set themes",
         "1": "Set questions",
         "2": "Export data"
+      },
+      brightMirrorSection: {
+        bannerSubtitleLabel: "Top banner subtitle",
+        bannerImagePickerLabel: "*Banner image",
+        configureTitle: "Configure Bright Mirror",
+        instructionLabel: "Instructions",
+        sectionTitleLabel: "*Section title",
+        thematicTitleLabel: "*Thematic title"
       },
       voteSession: {
         "0": "Page configuration",

@@ -36,6 +36,7 @@ import ResourcesCenter from './pages/resourcesCenter';
 import LandingPageAdmin from './pages/landingPageAdmin';
 import ExportTaxonomies from './pages/exportTaxonomies';
 import BrightMirror from './pages/brightMirror';
+import BrightMirrorAdmin from './pages/brightMirrorAdmin';
 import { routeForRouter } from './utils/routeMap';
 
 const DebateHome = (props) => {
@@ -76,6 +77,8 @@ const AdminChild = (props) => {
     return <DiscussionAdmin {...props} section={props.location.query.section} />;
   case 'survey':
     return <SurveyAdmin {...props} thematicId={props.location.query.thematic} section={props.location.query.section} />;
+  case 'brightMirror':
+    return <BrightMirrorAdmin {...props} />;
   case 'thread':
     return <ThreadAdmin {...props} section={props.location.query.section} />;
   case 'multiColumn':
