@@ -87,11 +87,8 @@ _projectname = assembl
 # on server
 ocsp_path =
 
-supervisor__autostart_celery_imap = true
+supervisor__autostart_celery = true
 supervisor__autostart_celery_notification_dispatch = true
-supervisor__autostart_celery_notify = true
-supervisor__autostart_celery_notify_beat = true
-supervisor__autostart_celery_translate = false
 supervisor__autostart_source_reader = true
 supervisor__autostart_changes_router = true
 supervisor__autostart_pserve = false

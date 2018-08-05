@@ -46,11 +46,8 @@ DEFAULTS = {
     'celery_tasks.notify.num_workers': '2',
     'celery_tasks.translate.num_workers': '2',
     # Sensible defaults
-    'autostart_celery_imap': 'false',
-    'autostart_celery_notification_dispatch': 'true',
-    'autostart_celery_notify': 'true',
+    'autostart_celery': 'true',
     'autostart_celery_notify_beat': 'true',
-    'autostart_celery_translate': 'false',
     'autostart_source_reader': 'true',
     'autostart_changes_router': 'true',
     'autostart_pserve': 'false',
@@ -105,20 +102,8 @@ def generate_ini_files(config, config_fname):
         has_edgesense_server = False
         edgesense_venv = '/tmp'  # innocuous
         edgesense_code_dir = ''
-    default_celery_broker = config.get(
+    celery_broker = config.get(
         SECTION, 'celery_tasks.broker')
-    imap_celery_broker = config.get(
-        SECTION, 'celery_tasks.imap.broker') or default_celery_broker
-    notif_dispatch_celery_broker = config.get(
-        SECTION, 'celery_tasks.notification_dispatch.broker'
-        ) or default_celery_broker
-    notify_celery_broker = config.get(
-        SECTION, 'celery_tasks.notify.broker') or default_celery_broker
-    translate_celery_broker = config.get(
-        SECTION, 'celery_tasks.translate.broker') or default_celery_broker
-    assert all((imap_celery_broker, notif_dispatch_celery_broker,
-                notify_celery_broker, translate_celery_broker)
-               ), "Define the celery broker"
     secure = config.getboolean(SECTION, 'require_secure_connection')
     public_hostname = config.get(SECTION, 'public_hostname')
     url = "http%s://%s" % ('s' if secure else '', public_hostname)
@@ -136,18 +121,9 @@ def generate_ini_files(config, config_fname):
     webpack_host = config.get(SECTION, 'webpack_host', public_hostname)
     webpack_url = "http://%s:%d" % (webpack_host, webpack_port)
     vars = {
-        'IMAP_CELERY_BROKER': imap_celery_broker,
-        'NOTIF_DISPATCH_CELERY_BROKER': notif_dispatch_celery_broker,
-        'NOTIFY_CELERY_BROKER': notify_celery_broker,
-        'TRANSLATE_CELERY_BROKER': translate_celery_broker,
-        'IMAP_CELERY_NUM_WORKERS': config.get(
-            SECTION, 'celery_tasks.imap.num_workers'),
-        'NOTIF_DISPATCH_CELERY_NUM_WORKERS': config.get(
-            SECTION, 'celery_tasks.notification_dispatch.num_workers'),
-        'NOTIFY_CELERY_NUM_WORKERS': config.get(
-            SECTION, 'celery_tasks.notify.num_workers'),
-        'TRANSLATE_CELERY_NUM_WORKERS': config.get(
-            SECTION, 'celery_tasks.translate.num_workers'),
+        'CELERY_BROKER': celery_broker,
+        'CELERY_NUM_WORKERS': config.get(
+            SECTION, 'celery_tasks.num_workers'),
         'here': dirname(abspath('supervisord.conf')),
         'CONFIG_FILE': config_fname,
         'autostart_metrics_server': (config.get(
@@ -165,11 +141,8 @@ def generate_ini_files(config, config_fname):
         'ASSEMBL_URL': url,
     }
     for var in (
-            'autostart_celery_imap',
-            'autostart_celery_notification_dispatch',
-            'autostart_celery_notify',
+            'autostart_celery',
             'autostart_celery_notify_beat',
-            'autostart_celery_translate',
             'autostart_source_reader',
             'autostart_changes_router',
             'autostart_pserve',

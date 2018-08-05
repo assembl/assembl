@@ -23,10 +23,10 @@ serverurl = unix:///%(here)s/var/run/supervisor.sock
 [rpcinterface:supervisor]
 supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface
 
-[program:celery_imap]
+[program:celery]
 directory = %(here)s
-command = %(VIRTUAL_ENV)s/bin/celery worker -E -l info -A assembl.tasks.imap -n imap -c %(IMAP_CELERY_NUM_WORKERS)s -b %(IMAP_CELERY_BROKER)s -Q imap
-autostart = %(autostart_celery_imap)s
+command = %(VIRTUAL_ENV)s/bin/celery worker -E -l info -A assembl.tasks.celery -c %(CELERY_NUM_WORKERS)s -b %(CELERY_BROKER)s
+autostart = %(autostart_celery)s
 autorestart = true
 startsecs = 2
 stopasgroup = false
@@ -45,46 +45,10 @@ stopasgroup = false
 stopwaitsecs = 60
 killasgroup = true
 
-[program:celery_notification_dispatch]
-directory = %(here)s
-command = %(VIRTUAL_ENV)s/bin/celery worker -E -l info -A assembl.tasks.notification_dispatch -n notification_dispatch -c %(NOTIF_DISPATCH_CELERY_NUM_WORKERS)s -b %(NOTIF_DISPATCH_CELERY_BROKER)s -Q notification_dispatch
-autostart = %(autostart_celery_notification_dispatch)s
-autorestart = true
-startsecs = 2
-stopasgroup = false
-stopwaitsecs = 60
-# If the process didn't kill it's children after 60 seconds, it's unlikely to
-# ever reap them, so kill them all
-killasgroup = true
-
-[program:celery_notify]
-directory = %(here)s
-command = %(VIRTUAL_ENV)s/bin/celery worker -E -l info -A assembl.tasks.notify -n notify -c %(NOTIFY_CELERY_NUM_WORKERS)s -b %(NOTIFY_CELERY_BROKER)s -Q notify
-autostart = %(autostart_celery_notify)s
-autorestart = true
-startsecs = 2
-stopasgroup = false
-stopwaitsecs = 60
-# If the process didn't kill it's children after 60 seconds, it's unlikely to
-# ever reap them, so kill them all
-killasgroup = true
-
 [program:celery_notify_beat]
 directory = %(here)s
-command = %(VIRTUAL_ENV)s/bin/celery -A assembl.tasks.notify beat -b %(NOTIFY_CELERY_BROKER)s
+command = %(VIRTUAL_ENV)s/bin/celery -A assembl.tasks.celery beat -b %(CELERY_BROKER)s
 autostart = %(autostart_celery_notify_beat)s
-autorestart = true
-startsecs = 2
-stopasgroup = false
-stopwaitsecs = 60
-# If the process didn't kill it's children after 60 seconds, it's unlikely to
-# ever reap them, so kill them all
-killasgroup = true
-
-[program:celery_translate]
-directory = %(here)s
-command = %(VIRTUAL_ENV)s/bin/celery worker -E -l info -A assembl.tasks.translate -n translate -c %(TRANSLATE_CELERY_NUM_WORKERS)s -b %(TRANSLATE_CELERY_BROKER)s -Q translate
-autostart = %(autostart_celery_translate)s
 autorestart = true
 startsecs = 2
 stopasgroup = false

@@ -49,17 +49,16 @@ changes.websocket.port = 8085
 changes.socket = ipc:///tmp/assembl_changes/0
 env.wsginame = dev.wsgi
 _gitbranch = develop
-supervisor__autostart_celery_notify = false
 supervisor__autostart_celery_notify_beat = false
 supervisor__autostart_webpack = true
 supervisor__autostart_uwsgi = false
-supervisor__autostart_celery_imap = false
 supervisor__autostart_source_reader = false
 _uses_nginx = false
 _uses_uwsgi = false
 _uses_bluenove_actionable = false
 _is_production_env = false
 _wsginame = dev.wsgi
+celery_tasks.num_workers = 3
 
 # If you want to see emails, run this in another console:
 # python -m smtpd -n -c DebuggingServer
