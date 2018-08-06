@@ -218,9 +218,9 @@ export type DiscussionPreferencesQuery = {|
   // The dicussion preferences of the debate.
   // These are configurations that characterize how the debate will behave, look, and act under certain conditions.
   discussionPreferences: ?{|
-    // A list of LocalePreference metadata objects on the discussion which describe the languages supported by the debate.
+    // The title in the tab.
     tabTitle: ?string,
-    // Header image associated with the idea. A file metadata object, described by the Document object.
+    // The favicon of the site.A file metadata object, described by the Document object.
     favicon: ?{|
       // The filename title.
       title: ?string,
@@ -1186,7 +1186,9 @@ export type ResourcesCenterPageQuery = {|
       // A url to an image or a document to be attached.
       externalUrl: ?string,
       // The MIME-Type of the file uploaded.
-      mimeType: ?string
+      mimeType: ?string,
+      // The filename title.
+      title: ?string
     |}
   |}
 |};
@@ -1198,10 +1200,31 @@ export type ResourcesQueryQueryVariables = {|
 export type ResourcesQueryQuery = {|
   // A list of Resource meta data on the debate.
   resources: ?Array<?{|
+    // A file attached to the ResourceA file metadata object, described by the Document object.
+    doc: ?{|
+      // A url to an image or a document to be attached.
+      externalUrl: ?string,
+      // The MIME-Type of the file uploaded.
+      mimeType: ?string,
+      // The filename title.
+      title: ?string
+    |},
+    // The URL for any i-frame based content that matches the Content-Security-Policy of the server.
+    // In effect, this is the "src" code inside of an iframe-based attachment to a Resource.
+    embedCode: ?string,
     // The ID of the object.
     id: string,
-    title: ?string,
+    // An image attached to the ResourceA file metadata object, described by the Document object.
+    image: ?{|
+      // A url to an image or a document to be attached.
+      externalUrl: ?string,
+      // The MIME-Type of the file uploaded.
+      mimeType: ?string,
+      // The filename title.
+      title: ?string
+    |},
     text: ?string,
+    title: ?string,
     // A list of possible languages of the entity as LangStringEntry objects. The title of the Resource in various languages.
     titleEntries: ?Array<?{|
       // The ISO 639-1 locale code of the language the content represents.
@@ -1216,25 +1239,8 @@ export type ResourcesQueryQuery = {|
       // The unicode encoded string representation of the content.
       value: ?string
     |}>,
-    // The URL for any i-frame based content that matches the Content-Security-Policy of the server.
-    // In effect, this is the "src" code inside of an iframe-based attachment to a Resource.
-    embedCode: ?string,
-    // A file attached to the ResourceA file metadata object, described by the Document object.
-    doc: ?{|
-      // A url to an image or a document to be attached.
-      externalUrl: ?string,
-      // The filename title.
-      title: ?string,
-      // The MIME-Type of the file uploaded.
-      mimeType: ?string
-    |},
-    // An image attached to the ResourceA file metadata object, described by the Document object.
-    image: ?{|
-      // A url to an image or a document to be attached.
-      externalUrl: ?string,
-      // The MIME-Type of the file uploaded.
-      mimeType: ?string
-    |}
+    // The order of the Resource on the Resources Center page.A file metadata object, described by the Document object.
+    order: ?number
   |}>
 |};
 
@@ -3402,8 +3408,10 @@ export type createResourceMutationVariables = {|
   doc?: ?string,
   embedCode?: ?string,
   image?: ?string,
+  lang?: ?string,
   textEntries: Array<?LangStringEntryInput>,
-  titleEntries: Array<LangStringEntryInput>
+  titleEntries: Array<LangStringEntryInput>,
+  order?: ?number
 |};
 
 export type createResourceMutation = {|
@@ -3413,20 +3421,44 @@ export type createResourceMutation = {|
       // A file attached to the ResourceA file metadata object, described by the Document object.
       doc: ?{|
         // A url to an image or a document to be attached.
-        externalUrl: ?string
+        externalUrl: ?string,
+        // The MIME-Type of the file uploaded.
+        mimeType: ?string,
+        // The filename title.
+        title: ?string
       |},
       // The URL for any i-frame based content that matches the Content-Security-Policy of the server.
       // In effect, this is the "src" code inside of an iframe-based attachment to a Resource.
       embedCode: ?string,
+      // The ID of the object.
+      id: string,
       // An image attached to the ResourceA file metadata object, described by the Document object.
       image: ?{|
         // A url to an image or a document to be attached.
         externalUrl: ?string,
         // The MIME-Type of the file uploaded.
-        mimeType: ?string
+        mimeType: ?string,
+        // The filename title.
+        title: ?string
       |},
       text: ?string,
-      title: ?string
+      title: ?string,
+      // A list of possible languages of the entity as LangStringEntry objects. The title of the Resource in various languages.
+      titleEntries: ?Array<?{|
+        // The ISO 639-1 locale code of the language the content represents.
+        localeCode: string,
+        // The unicode encoded string representation of the content.
+        value: ?string
+      |}>,
+      // A list of possible languages of the entity as LangStringEntry objects. The title of the Resource in various languages.
+      textEntries: ?Array<?{|
+        // The ISO 639-1 locale code of the language the content represents.
+        localeCode: string,
+        // The unicode encoded string representation of the content.
+        value: ?string
+      |}>,
+      // The order of the Resource on the Resources Center page.A file metadata object, described by the Document object.
+      order: ?number
     |}
   |}
 |};
@@ -3976,7 +4008,9 @@ export type updateDiscussionPhaseMutation = {|
 |};
 
 export type updateDiscussionPreferenceMutationVariables = {|
-  languages: Array<?string>
+  languages?: ?Array<?string>,
+  tabTitle?: ?string,
+  favicon?: ?string
 |};
 
 export type updateDiscussionPreferenceMutation = {|
@@ -4709,9 +4743,11 @@ export type updateResourceMutationVariables = {|
   doc?: ?string,
   id: string,
   image?: ?string,
+  lang?: ?string,
   titleEntries: Array<?LangStringEntryInput>,
   textEntries?: ?Array<?LangStringEntryInput>,
-  embedCode?: ?string
+  embedCode?: ?string,
+  order?: ?number
 |};
 
 export type updateResourceMutation = {|
@@ -4721,20 +4757,44 @@ export type updateResourceMutation = {|
       // A file attached to the ResourceA file metadata object, described by the Document object.
       doc: ?{|
         // A url to an image or a document to be attached.
-        externalUrl: ?string
+        externalUrl: ?string,
+        // The MIME-Type of the file uploaded.
+        mimeType: ?string,
+        // The filename title.
+        title: ?string
       |},
       // The URL for any i-frame based content that matches the Content-Security-Policy of the server.
       // In effect, this is the "src" code inside of an iframe-based attachment to a Resource.
       embedCode: ?string,
+      // The ID of the object.
+      id: string,
       // An image attached to the ResourceA file metadata object, described by the Document object.
       image: ?{|
         // A url to an image or a document to be attached.
         externalUrl: ?string,
         // The MIME-Type of the file uploaded.
-        mimeType: ?string
+        mimeType: ?string,
+        // The filename title.
+        title: ?string
       |},
       text: ?string,
-      title: ?string
+      title: ?string,
+      // A list of possible languages of the entity as LangStringEntry objects. The title of the Resource in various languages.
+      titleEntries: ?Array<?{|
+        // The ISO 639-1 locale code of the language the content represents.
+        localeCode: string,
+        // The unicode encoded string representation of the content.
+        value: ?string
+      |}>,
+      // A list of possible languages of the entity as LangStringEntry objects. The title of the Resource in various languages.
+      textEntries: ?Array<?{|
+        // The ISO 639-1 locale code of the language the content represents.
+        localeCode: string,
+        // The unicode encoded string representation of the content.
+        value: ?string
+      |}>,
+      // The order of the Resource on the Resources Center page.A file metadata object, described by the Document object.
+      order: ?number
     |}
   |}
 |};
@@ -5890,6 +5950,50 @@ export type PostFragment = {|
       avChecked: ?string
     |}
   |}>
+|};
+
+export type ResourceFragment = {|
+  // A file attached to the ResourceA file metadata object, described by the Document object.
+  doc: ?{|
+    // A url to an image or a document to be attached.
+    externalUrl: ?string,
+    // The MIME-Type of the file uploaded.
+    mimeType: ?string,
+    // The filename title.
+    title: ?string
+  |},
+  // The URL for any i-frame based content that matches the Content-Security-Policy of the server.
+  // In effect, this is the "src" code inside of an iframe-based attachment to a Resource.
+  embedCode: ?string,
+  // The ID of the object.
+  id: string,
+  // An image attached to the ResourceA file metadata object, described by the Document object.
+  image: ?{|
+    // A url to an image or a document to be attached.
+    externalUrl: ?string,
+    // The MIME-Type of the file uploaded.
+    mimeType: ?string,
+    // The filename title.
+    title: ?string
+  |},
+  text: ?string,
+  title: ?string,
+  // A list of possible languages of the entity as LangStringEntry objects. The title of the Resource in various languages.
+  titleEntries: ?Array<?{|
+    // The ISO 639-1 locale code of the language the content represents.
+    localeCode: string,
+    // The unicode encoded string representation of the content.
+    value: ?string
+  |}>,
+  // A list of possible languages of the entity as LangStringEntry objects. The title of the Resource in various languages.
+  textEntries: ?Array<?{|
+    // The ISO 639-1 locale code of the language the content represents.
+    localeCode: string,
+    // The unicode encoded string representation of the content.
+    value: ?string
+  |}>,
+  // The order of the Resource on the Resources Center page.A file metadata object, described by the Document object.
+  order: ?number
 |};
 
 export type selectFieldFragment = {|
