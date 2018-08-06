@@ -654,8 +654,12 @@ class AgentStatusInDiscussion(DiscussionBoundBase):
                 )
         return self._accepted_cookies
 
+    def _save_cookies(self):
+        if '_accepted_cookies' in vars(self):
+            self.accepted_cookies = ",".join([c.value for c in self._accepted_cookies])
+
     @property
-    def read_cookies(self):
+    def cookies(self):
         return self._accepted_cookies
 
     @property
@@ -665,28 +669,25 @@ class AgentStatusInDiscussion(DiscussionBoundBase):
         else:
             return False
 
-    def update_cookies(self, cookie):
+    def update_cookie(self, cookie):
         """
         @param: cookies: a CookieType to be added to the list of accepted cookies.
         """
-        cookie = CookieTypes(cookie)
-        if self._accepted_cookies:
-            if cookie not in self._accepted_cookies:
-                self._accepted_cookies.append(cookie)
-                self.accepted_cookies = ",".join([c._value_ for c in self._accepted_cookies])
-        else:
-            self._accepted_cookies = list()
+        if isinstance(cookie, basestring):
+            cookie = CookieTypes(cookie)
+        if cookie not in self._accepted_cookies:
             self._accepted_cookies.append(cookie)
-            self.accepted_cookies = ",".join([c._value_ for c in self._accepted_cookies])
+            self._save_cookies()
 
     def delete_cookie(self, cookie):
         """
         @param: cookie to be removed from the list of accepted_cookies
         """
-        cookie = CookieTypes(cookie)
+        if isinstance(cookie, basestring):
+            cookie = CookieTypes(cookie)
         if cookie in self._accepted_cookies:
             self._accepted_cookies.pop(cookie)
-            self.accepted_cookies = ",".join([c._value_ for c in self._accepted_cookies])
+            self._save_cookies()
 
     def get_discussion_id(self):
         return self.discussion_id or self.discussion.id
@@ -803,28 +804,36 @@ class User(AgentProfile):
     def user_last_accepted_cgu_date(self):
         return self.last_accepted_cgu_date
 
-    def update_user_last_accepted_cgu_date(self, date):
+    @user_last_accepted_cgu_date.setter
+    def user_last_accepted_cgu_date(self, date=None):
+        date = date or datetime.utcnow()
         self.last_accepted_cgu_date = date
 
     @property
     def user_last_accepted_privacy_policy_date(self):
         self.last_accepted_privacy_policy_date
 
-    def update_user_last_accepted_privacy_policy_date(self, date):
+    @user_last_accepted_privacy_policy_date.setter
+    def user_last_accepted_privacy_policy_date(self, date=None):
+        date = date or datetime.utcnow()
         self.last_accepted_privacy_policy_date = date
 
     @property
     def user_last_rejected_cgu_date(self):
         self.last_rejected_cgu_date
 
-    def update_user_last_rejected_cgu_date(self, date):
+    @user_last_rejected_cgu_date.setter
+    def user_last_rejected_cgu_date(self, date=None):
+        date = date or datetime.utcnow()
         self.last_rejected_cgu_date = date
 
     @property
     def user_last_rejected_privacy_policy_date(self):
         self.last_rejected_privacy_policy_date
 
-    def update_user_last_rejected_privacy_policy_date(self, date):
+    @user_last_rejected_privacy_policy_date.setter
+    def user_last_rejected_privacy_policy_date(self, date=None):
+        date = date or datetime.utcnow()
         self.last_rejected_privacy_policy_date = date
 
     @property
@@ -1041,6 +1050,7 @@ class User(AgentProfile):
         # Set the AgentStatusInDiscussion
         self.update_agent_status_unsubscribe(discussion)
 
+    # TODO make these bound to a cookieType, as there are multiple cookies that a user can accept and reject at same time
     @classmethod
     def all_cookie_accepted_agents(cls, discussion, session=None):
         from assembl import models as m

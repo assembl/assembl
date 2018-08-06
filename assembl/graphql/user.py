@@ -17,7 +17,7 @@ from .types import SecureObjectType
 from .utils import DateTime, abort_transaction_on_exception
 from assembl.auth.password import random_string
 from datetime import datetime
-from .permissions_helpers import require_cls_permission
+from .permissions_helpers import require_cls_permission, require_instance_permission
 from .preferences import Preferences
 from assembl.models.cookie_types import CookieTypes as PyCookieTypes
 
@@ -99,7 +99,7 @@ class AgentProfile(SecureObjectType, SQLAlchemyObjectType):
                 profile_id=user_id, discussion_id=discussion_id).first()
         if not agent_status_in_discussion:
             return []
-        return map(lambda x: x.value, agent_status_in_discussion.read_cookies)
+        return map(lambda x: x.value, agent_status_in_discussion.cookies)
 
 
 class UpdateUser(graphene.Mutation):
@@ -306,7 +306,7 @@ class DeleteUserInformation(graphene.Mutation):
 class UpdateAcceptedCookies(graphene.Mutation):
 
     class Input:
-        action = graphene.String(required=True)
+        actions = graphene.Argument(graphene.List(CookieTypes, required=True))
 
     user = graphene.Field(lambda: AgentProfile)
 
@@ -315,68 +315,62 @@ class UpdateAcceptedCookies(graphene.Mutation):
     def mutate(root, args, context, info):
         cls = models.User
         db = cls.default_db
-        # global_id = args.get('id')
-        id_ = context.authenticated_userid or Everyone
-        action_type = args.get('action')
-        user = cls.get(id_)
         discussion_id = context.matchdict['discussion_id']
-        discussion = models.Discussion.get(discussion_id)
-        permissions = get_permissions(user.id, discussion_id)
-        require_cls_permission(CrudPermissions.UPDATE, cls, context)
-        from assembl.models.action import AcceptCGUOnDiscussion, AcceptSessionOnDiscussion, AcceptTrackingOnDiscussion
+        user_id = context.authenticated_userid or Everyone
+        require_instance_permission(CrudPermissions.UPDATE, cls.get(user_id), context)
+
+        permissions = get_permissions(user_id, discussion_id)
+        from assembl.models.action import (
+            RejectCGUOnDiscussion, RejectSessionOnDiscussion, RejectTrackingOnDiscussion, RejectPrivacyPolicyOnDiscussion,
+            AcceptCGUOnDiscussion, AcceptSessionOnDiscussion, AcceptTrackingOnDiscussion, AcceptPrivacyPolicyOnDiscussion
+        )
         with cls.default_db.no_autoflush as db:
-            asid = user.get_status_in_discussion(discussion_id)
+            user = models.User.get(user_id)
+            actions = args.get('actions', [])
+            agent_status_in_discussion = user.get_status_in_discussion(discussion_id)
+            for action_type in actions:
+                action_type_enum = PyCookieTypes(action_type)
+                if action_type_enum is PyCookieTypes.ACCEPT_CGU:
+                    action = AcceptCGUOnDiscussion(discussion_id=discussion_id, actor_id=user_id)
+                    user.user_last_accepted_cgu_date = datetime.utcnow()
+                    agent_status_in_discussion.update_cookie(action_type)
 
-            if CookieTypes.ACCEPT_CGU.name == action_type:
-                action = AcceptCGUOnDiscussion(discussion=discussion, actor_id=user.id)
-                user.update_user_last_accepted_cgu_date(datetime.utcnow())
-            elif CookieTypes.ACCEPT_SESSION_ON_DISCUSSION.name == action_type:
-                action = AcceptSessionOnDiscussion(discussion=discussion, actor_id=user.id)
-                asid.update_cookies(action_type)
-            elif CookieTypes.ACCEPT_TRACKING_ON_DISCUSSION.name == action_type:
-                action = AcceptTrackingOnDiscussion(discussion=discussion, actor_id=user.id)
-                asid.update_cookies(action_type)
+                elif action_type_enum is PyCookieTypes.ACCEPT_SESSION_ON_DISCUSSION:
+                    action = AcceptSessionOnDiscussion(discussion_id=discussion_id, actor_id=user_id)
+                    agent_status_in_discussion.update_cookie(action_type_enum)
 
-            asid.update_cookies(action_type)
-            action = action.handle_duplication(permissions=permissions, user_id=user.id)
-            db.add(action)
+                elif action_type_enum is PyCookieTypes.ACCEPT_TRACKING_ON_DISCUSSION:
+                    action = AcceptTrackingOnDiscussion(discussion_id=discussion_id, actor_id=user_id)
+                    agent_status_in_discussion.update_cookie(action_type_enum)
+
+                elif action_type_enum is PyCookieTypes.ACCEPT_PRIVACY_POLICY_ON_DISCUSSION:
+                    action = AcceptPrivacyPolicyOnDiscussion(discussion_id=discussion_id, actor_id=user_id)
+                    user.user_last_accepted_privacy_policy_date = datetime.utcnow()
+                    agent_status_in_discussion.update_cookie(action_type_enum)
+
+                elif action_type_enum is PyCookieTypes.REJECT_CGU:
+                    action = RejectCGUOnDiscussion(discussion_id=discussion_id, actor_id=user_id)
+                    user.user_last_rejected_cgu_date = datetime.utcnow()
+                    agent_status_in_discussion.delete_cookie(PyCookieTypes.ACCEPT_CGU)
+                    agent_status_in_discussion.update_cookie(action_type_enum)
+
+                elif action_type_enum is PyCookieTypes.REJECT_SESSION_ON_DISCUSSION:
+                    action = RejectSessionOnDiscussion(discussion_id=discussion_id, actor_id=user_id)
+                    agent_status_in_discussion.delete_cookie(PyCookieTypes.ACCEPT_SESSION_ON_DISCUSSION)
+                    agent_status_in_discussion.update_cookie(action_type_enum)
+
+                elif action_type_enum is PyCookieTypes.REJECT_TRACKING_ON_DISCUSSION:
+                    action = RejectTrackingOnDiscussion(discussion_id=discussion_id, actor_id=user_id)
+                    agent_status_in_discussion.delete_cookie(PyCookieTypes.ACCEPT_TRACKING_ON_DISCUSSION)
+                    agent_status_in_discussion.update_cookie(action_type_enum)
+
+                elif action_type_enum is PyCookieTypes.REJECT_PRIVACY_POLICY_ON_DISCUSSION:
+                    action = RejectPrivacyPolicyOnDiscussion(discussion_id=discussion_id, actor_id=user_id)
+                    user.user_last_rejected_privacy_policy_date = datetime.utcnow()
+                    agent_status_in_discussion.delete_cookie(PyCookieTypes.ACCEPT_PRIVACY_POLICY_ON_DISCUSSION)
+                    agent_status_in_discussion.update_cookie(action_type_enum)
+
+                action = action.handle_duplication(permissions=permissions, user_id=user.id)
+                db.add(action)
+        db.flush()
         return UpdateAcceptedCookies(user=user)
-
-
-class DeleteAcceptedCookies(graphene.Mutation):
-
-    class Input:
-        action = graphene.String(required=True)
-
-    user = graphene.Field(lambda: AgentProfile)
-
-    @staticmethod
-    @abort_transaction_on_exception
-    def mutate(root, args, context, info):
-        cls = models.User
-        db = cls.default_db
-        id_ = context.authenticated_userid or Everyone
-        action_type = args['action']
-        user = cls.get(id_)
-        discussion_id = context.matchdict['discussion_id']
-        discussion = models.Discussion.get(discussion_id)
-        permissions = get_permissions(user.id, discussion_id)
-        require_cls_permission(CrudPermissions.DELETE, cls, context)
-        from assembl.models.action import RejectCGUOnDiscussion, RejectSessionOnDiscussion, RejectTrackingOnDiscussion
-        with cls.default_db.no_autoflush as db:
-            asid = user.get_status_in_discussion(discussion_id)
-            asid.delete_cookie(action_type)
-            if CookieTypes.ACCEPT_CGU.name == action_type:
-                action = RejectCGUOnDiscussion(discussion=discussion, actor_id=user.id)
-                user.update_last_rejected_cgu_date(datetime.utcnow())
-            elif CookieTypes.ACCEPT_SESSION_ON_DISCUSSION.name == action_type:
-                action = RejectSessionOnDiscussion(discussion=discussion, actor_id=user.id)
-                asid.delete_cookie(action_type)
-            elif CookieTypes.ACCEPT_TRACKING_ON_DISCUSSION.name == action_type:
-                action = RejectTrackingOnDiscussion(discussion=discussion, actor_id=user.id)
-                asid.delete_cookie(action_type)
-
-            action = action.handle_duplication(permissions=permissions, user_id=user.id)
-            db.add(action)
-
-        return DeleteAcceptedCookies(user=user)
