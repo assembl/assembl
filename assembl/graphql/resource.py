@@ -69,7 +69,6 @@ class CreateResource(graphene.Mutation):
     class Input:
         # Careful, having required=True on a graphene.List only means
         # it can't be None, having an empty [] is perfectly valid.
-        lang = graphene.String(description=docs.CreateResource.lang)
         title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.CreateResource.title_entries)
         text_entries = graphene.List(LangStringEntryInput, description=docs.CreateResource.text_entries)
         embed_code = graphene.String(description=docs.CreateResource.embed_code)

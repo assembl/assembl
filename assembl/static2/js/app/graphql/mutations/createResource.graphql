@@ -12,7 +12,6 @@ mutation createResource(
   createResource(
     doc: $doc
     image: $image
-    lang: $lang
     titleEntries: $titleEntries
     textEntries: $textEntries
     embedCode: $embedCode
