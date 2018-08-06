@@ -40,7 +40,7 @@ const PersonalizeInterface = ({ client }: Props) => (
             const pageTitle = head.getElementsByTagName('title')[0];
             if (pageTitle) pageTitle.text = values.title;
             // Update the favicon
-            const favisonLink = head.querySelectorAll('link[rel="icon"]')[0];
+            const favisonLink = head.querySelector('link[rel="icon"]');
             // Use the default favicon if favicon is null
             let faviconUrl = values.favicon ? values.favicon.externalUrl : DEFAUT_FAVICON;
             faviconUrl = typeof faviconUrl === 'object' ? window.URL.createObjectURL(faviconUrl) : faviconUrl;
