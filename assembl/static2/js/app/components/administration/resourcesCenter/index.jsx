@@ -63,6 +63,11 @@ class ResourcesCenterAdminForm extends React.Component<Props> {
 
               <FieldArrayWithActions
                 name="resources"
+                titleMsgId="administration.resourcesCenter.editResourceFormTitle"
+                tooltips={{
+                  addTooltip: createResourceTooltip,
+                  deleteTooltip: deleteResourceTooltip
+                }}
                 renderFields={({ name }) => (
                   <React.Fragment>
                     <Field
@@ -97,11 +102,6 @@ class ResourcesCenterAdminForm extends React.Component<Props> {
                     />
                   </React.Fragment>
                 )}
-                titleMsgId="administration.resourcesCenter.editResourceFormTitle"
-                tooltips={{
-                  addTooltip: createResourceTooltip,
-                  deleteTooltip: deleteResourceTooltip
-                }}
               />
             </AdminForm>
           </div>
