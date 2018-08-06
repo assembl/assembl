@@ -15,6 +15,7 @@ from pyramid.threadlocal import manager
 from assembl.lib.sqla import (
     configure_engine, get_session_maker,
     get_metadata, is_zopish, mark_changed)
+from assembl.auth import R_PARTICIPANT
 
 
 log = logging.getLogger('pytest.assembl')
@@ -178,3 +179,22 @@ class RecordingApp(object):
                 f.write(r.body)
             return r
         return appmethod
+
+
+def create_role_for_user(user, discussion, session=None, role=R_PARTICIPANT):
+    from assembl.models.auth import LocalUserRole, Role
+    session = session or Role.default_db
+    role = Role.get_role(role)
+    local_role = LocalUserRole(user_id=user.id, discussion_id=discussion.id, role_id=role.id)
+    session.add(local_role)
+    session.flush()
+    return local_role
+
+
+def delete_all_local_roles_for_user(user, discussion, session=None):
+    from assembl.models import LocalUserRole
+    session = session or LocalUserRole.default_db
+    session.query(LocalUserRole).filter(
+        LocalUserRole.discussion_id == discussion.id,
+        LocalUserRole.user_id == user.id).delete()
+    session.flush()
