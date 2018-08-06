@@ -99,54 +99,54 @@ class ActionOnDiscussion(Action):
 class AcceptSessionOnDiscussion(ActionOnDiscussion):
 
     __mapper_args__ = {
-        'polymorphic_identity': 'discussion.session:accept'
+        'polymorphic_identity': 'discussion:session:accept'
     }
 
 
 class AcceptCGUOnDiscussion(ActionOnDiscussion):
 
     __mapper_args__ = {
-        'polymorphic_identity': 'discussion.cgu:accept'
+        'polymorphic_identity': 'discussion:cgu:accept'
     }
 
 
 class AcceptTrackingOnDiscussion(ActionOnDiscussion):
 
     __mapper_args__ = {
-        'polymorphic_identity': 'discussion.tracking:accept'
+        'polymorphic_identity': 'discussion:tracking:accept'
     }
 
 
 class AcceptPrivacyPolicyOnDiscussion(ActionOnDiscussion):
     __mapper_args__ = {
-        'polymorphic_identity': 'discussion.privacypolicy:accept'
+        'polymorphic_identity': 'discussion:privacypolicy:accept'
     }
 
 
 class RejectSessionOnDiscussion(ActionOnDiscussion):
 
     __mapper_args__ = {
-        'polymorphic_identity': 'discussion.session:reject'
+        'polymorphic_identity': 'discussion:session:reject'
     }
 
 
 class RejectCGUOnDiscussion(ActionOnDiscussion):
 
     __mapper_args__ = {
-        'polymorphic_identity': 'discussion.cgu:reject'
+        'polymorphic_identity': 'discussion:cgu:reject'
     }
 
 
 class RejectTrackingOnDiscussion(ActionOnDiscussion):
 
     __mapper_args__ = {
-        'polymorphic_identity': 'discussion.tracking:reject'
+        'polymorphic_identity': 'discussion:tracking:reject'
     }
 
 
 class RejectPrivacyPolicyOnDiscussion(ActionOnDiscussion):
     __mapper_args__ = {
-        'polymorphic_identity': 'discussion.privacypolicy:reject'
+        'polymorphic_identity': 'discussion:privacypolicy:reject'
     }
 
 
