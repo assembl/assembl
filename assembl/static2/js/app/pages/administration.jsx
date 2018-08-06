@@ -73,7 +73,8 @@ class Administration extends React.Component {
       this.putLandingPageModulesInStore(nextProps.landingPageModules);
     }
 
-    const isHidden = nextProps.identifier === 'discussion' && nextProps.location.query.section === '1';
+    const isHidden =
+      nextProps.identifier === 'discussion' && SECTIONS_WITHOUT_LANGUAGEMENU.includes(nextProps.location.query.section);
     this.props.displayLanguageMenu(isHidden);
 
     if (nextProps.textFields !== this.props.textFields) {
