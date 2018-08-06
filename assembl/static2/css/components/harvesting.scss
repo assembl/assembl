@@ -192,7 +192,8 @@
       padding: 0 0 0 2px;
       background: none;
 
-      &:hover, &:focus {
+      &:hover,
+      &:focus {
         background: none !important;
       }
 
@@ -452,5 +453,15 @@
 
   .active-box {
     border-left-color: $harvesting-blue;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .is-harvesting-button {
+    display: none;
+  }
+
+  .harvesting-container {
+    display: none;
   }
 }
