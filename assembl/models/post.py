@@ -561,8 +561,8 @@ class Post(Content):
         return query.filter(cls.creator_id == user_id)
 
     def is_bright_mirror_fiction(self):
-        parent_idea = self.indirect_idea_content_links_without_cache()
-        return len(parent_idea) != 0 and parent_idea[0].idea.message_view_override == 'brightMirror'
+        parent_idea = [link.idea for link in self.indirect_idea_content_links_without_cache() if link.__class__.__name__ == 'IdeaRelatedPostLink']
+        return len(parent_idea) != 0 and parent_idea[0].message_view_override == 'brightMirror'
 
 
 def orm_insert_listener(mapper, connection, target):
