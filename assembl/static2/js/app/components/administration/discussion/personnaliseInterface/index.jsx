@@ -14,6 +14,7 @@ import { load, postLoadFormat } from './load';
 import { createMutationsPromises, save } from './save';
 import validate from './validate';
 import Loader from '../../../common/loader';
+import { DEFAUT_FAVICON } from '../../../../constants';
 
 type Props = {
   client: ApolloClient
@@ -32,12 +33,16 @@ const PersonnaliseInterface = ({ client }: Props) => (
         createMutationsPromises={createMutationsPromises(client)}
         save={save}
         onSave={(values: TInitialValues) => {
+          // Update the title and the favicon of the page
           const head = document.head;
           if (head) {
+            // Update the title
             const pageTitle = head.getElementsByTagName('title')[0];
             if (pageTitle) pageTitle.text = values.title;
+            // Update the favicon
             const favisonLink = head.querySelectorAll('link[rel="icon"]')[0];
-            let faviconUrl = values.favicon.externalUrl;
+            // Use the default favicon if favicon is null
+            let faviconUrl = values.favicon ? values.favicon.externalUrl : DEFAUT_FAVICON;
             faviconUrl = typeof faviconUrl === 'object' ? window.URL.createObjectURL(faviconUrl) : faviconUrl;
             if (favisonLink) favisonLink.setAttribute('href', faviconUrl);
           }

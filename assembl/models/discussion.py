@@ -156,10 +156,6 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
         self.homepage_url = url
 
     @property
-    def logo(self):
-        return self.logo_url
-
-    @property
     def favicon(self):
         from .attachment import AttachmentPurpose
         FAVICON = AttachmentPurpose.FAVICON.value
@@ -168,6 +164,10 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
                 return attachment.document
 
         return None
+
+    @property
+    def logo(self):
+        return self.logo_url
 
     @logo.setter
     def logo(self, url):

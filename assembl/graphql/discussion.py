@@ -505,14 +505,6 @@ class UpdateDiscussionPreferences(graphene.Mutation):
 
             if favicon:
                 FAVICON = models.AttachmentPurpose.FAVICON.value
-                filename = os.path.basename(context.POST[favicon].filename)
-                mime_type = context.POST[favicon].type
-                document = models.File(
-                    discussion=discussion,
-                    mime_type=mime_type,
-                    title=filename)
-                document.add_file_data(context.POST[favicon].file)
-
                 # if there is already an IMAGE, remove it with the
                 # associated document
                 favicon_images = [
@@ -525,13 +517,21 @@ class UpdateDiscussionPreferences(graphene.Mutation):
                     db.delete(favicon_image.document)
                     discussion.attachments.remove(favicon_image)
 
-                db.add(models.DiscussionAttachment(
-                    document=document,
-                    discussion=discussion,
-                    creator_id=context.authenticated_userid,
-                    title=filename,
-                    attachmentPurpose=FAVICON
-                ))
+                if favicon != 'TO_DELETE':
+                    filename = os.path.basename(context.POST[favicon].filename)
+                    mime_type = context.POST[favicon].type
+                    document = models.File(
+                        discussion=discussion,
+                        mime_type=mime_type,
+                        title=filename)
+                    document.add_file_data(context.POST[favicon].file)
+                    db.add(models.DiscussionAttachment(
+                        document=document,
+                        discussion=discussion,
+                        creator_id=context.authenticated_userid,
+                        title=filename,
+                        attachmentPurpose=FAVICON
+                    ))
 
         db.flush()
 

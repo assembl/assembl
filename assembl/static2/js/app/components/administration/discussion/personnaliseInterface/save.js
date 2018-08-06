@@ -8,25 +8,32 @@ import type { PersonnaliseInterfaceValues } from './types.flow';
 import updateDiscussionPreference from '../../../../graphql/mutations/updateDiscussionPreference.graphql';
 import type { MutationsPromises, SaveStatus } from '../../../form/types.flow';
 
-function getFaviconVariable(favicon) {
+function getFaviconVariable(favicon, initialFavicon) {
+  if (initialFavicon && !favicon) {
+    return 'TO_DELETE';
+  }
   // If favicon.externalUrl is an object, it means it's a File.
   // We need to send favicon: null if we didn't change the favicon.
   const variab = favicon && typeof favicon.externalUrl === 'object' ? favicon.externalUrl : null;
   return variab;
 }
 
-function getVariables(values) {
+function getVariables(values, initialValues) {
+  const initialFavicon = initialValues ? initialValues.favicon : null;
   return {
     tabTitle: values.title,
-    favicon: getFaviconVariable(values.favicon)
+    favicon: getFaviconVariable(values.favicon, initialFavicon)
   };
 }
 
-export const createMutationsPromises = (client: ApolloClient) => (values: PersonnaliseInterfaceValues) => {
+export const createMutationsPromises = (client: ApolloClient) => (
+  values: PersonnaliseInterfaceValues,
+  initialValues: PersonnaliseInterfaceValues
+) => {
   const updateMutation = () =>
     client.mutate({
       mutation: updateDiscussionPreference,
-      variables: getVariables(values)
+      variables: getVariables(values, initialValues)
     });
   return [updateMutation];
 };
