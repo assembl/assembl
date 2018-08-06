@@ -95,7 +95,8 @@ def reindex_content(content, action='update'):
             changes.unindex_content(content)
     elif isinstance(content, Post):
         if (content.publication_state == PublicationStates.PUBLISHED and
-                not content.hidden and content.tombstone_date is None):
+                not content.hidden and content.tombstone_date is None and
+                not content.is_bright_mirror_fiction()):
             changes.index_content(content)
         else:
             changes.unindex_content(content)

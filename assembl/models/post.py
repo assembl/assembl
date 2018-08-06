@@ -560,6 +560,10 @@ class Post(Content):
         "filter query according to object owners"
         return query.filter(cls.creator_id == user_id)
 
+    def is_bright_mirror_fiction(self):
+        parent_idea = self.indirect_idea_content_links_without_cache()
+        return len(parent_idea) != 0 and parent_idea[0].idea.message_view_override == 'brightMirror'
+
 
 def orm_insert_listener(mapper, connection, target):
     """ This is to allow the root idea to send update to "All posts",

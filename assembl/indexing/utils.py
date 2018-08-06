@@ -132,6 +132,10 @@ def get_data(content):
         if not data['idea_id']:
             return None, None
 
+        # If the post is a fiction for Bright Mirror, don't index it.
+        if Idea.get(data['idea_id'][0]).message_view_override == 'brightMirror':
+            return None, None
+
         # If the idea is now in multi columns mode and the post was created before that, don't index it.
         if Idea.get(data['idea_id'][0]).message_columns and content.message_classifier is None:
             return None, None
