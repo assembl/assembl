@@ -232,12 +232,21 @@ def get_posts_for_phases(discussion, identifiers, include_deleted=False):
     model = models.AssemblPost
     query = discussion.db.query(model)
     query_source = query
-    for index, idea in enumerate(ideas):
+    first_idea = ideas[0]
+    related = first_idea.get_related_posts_query(True)
+    query = query_source.join(
+        related, model.id == related.c.post_id
+    )
+    queries = []
+    for idea in ideas[1:]:
         related = idea.get_related_posts_query(True)
         related_query = query_source.join(
             related, model.id == related.c.post_id
         )
-        query = related_query if index == 0 else query.union(related_query)
+        queries.append(related_query)
+
+    if queries:
+        query = query.union_all(*queries)
 
     if not include_deleted:
         return query.filter(
