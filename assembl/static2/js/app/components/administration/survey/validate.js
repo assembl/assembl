@@ -1,12 +1,10 @@
 import { I18n } from 'react-redux-i18n';
 
-function langstringIsEmpty(ls) {
-  return !ls || Object.values(ls).every(s => s.length === 0);
-}
+import { i18nValueIsEmpty } from '../../form/utils';
 
 function validateVideo(video) {
   const errors = {};
-  if (video.present && langstringIsEmpty(video.title)) {
+  if (video.present && i18nValueIsEmpty(video.title)) {
     errors.title = I18n.t('error.required');
   }
 
@@ -15,7 +13,7 @@ function validateVideo(video) {
 
 function validateTheme(theme) {
   const errors = {};
-  if (langstringIsEmpty(theme.title)) {
+  if (i18nValueIsEmpty(theme.title)) {
     errors.title = I18n.t('error.required');
   }
 

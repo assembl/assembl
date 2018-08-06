@@ -8,6 +8,7 @@ query ResourcesCenterPage($lang: String) {
     headerImage {
       externalUrl
       mimeType
+      title
     }
   }
 }

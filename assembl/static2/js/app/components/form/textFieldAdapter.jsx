@@ -4,8 +4,9 @@
 */
 import React from 'react';
 import { type FieldRenderProps } from 'react-final-form';
-import { ControlLabel, FormGroup, FormControl, HelpBlock } from 'react-bootstrap';
+import { ControlLabel, FormGroup, FormControl } from 'react-bootstrap';
 
+import Error from './error';
 import { getValidationState } from './utils';
 
 type Props = {
@@ -34,7 +35,7 @@ const TextFieldAdapter = ({
       placeholder={label}
       value={value}
     />
-    {touched && error ? <HelpBlock>{error}</HelpBlock> : null}
+    <Error name={name} />
   </FormGroup>
 );
 

@@ -67,6 +67,17 @@ exports[`ManageModules component should render a page to manage the landing page
           />
         </label>
         <FileUploader
+          deleteFileTooltip={
+            <Tooltip
+              bsClass="tooltip"
+              id="deleteFileTooltip"
+              placement="right"
+            >
+              <Translate
+                value="administration.deleteAssociatedFile"
+              />
+            </Tooltip>
+          }
           fileOrUrl="img/headerImg.jpg"
           filename=""
           handleChange={[Function]}
@@ -112,6 +123,17 @@ exports[`ManageModules component should render a page to manage the landing page
           />
         </label>
         <FileUploader
+          deleteFileTooltip={
+            <Tooltip
+              bsClass="tooltip"
+              id="deleteFileTooltip"
+              placement="right"
+            >
+              <Translate
+                value="administration.deleteAssociatedFile"
+              />
+            </Tooltip>
+          }
           fileOrUrl="img/logoImg.jpg"
           filename=""
           handleChange={[Function]}

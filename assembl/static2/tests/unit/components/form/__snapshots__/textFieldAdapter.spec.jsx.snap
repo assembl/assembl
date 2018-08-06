@@ -1,88 +1,123 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`TextFieldAdapter component should render a text field 1`] = `
-<div
-  className="form-group"
+<form
+  onSubmit={[Function]}
 >
-  <label
-    className="control-label"
-    htmlFor="fullname"
+  <div
+    className="form-group"
   >
-    Full name
-  </label>
-  <input
-    className="form-control"
-    id="fullname"
-    onChange={[Function]}
-    onFocus={[Function]}
-    placeholder="Full name"
-    type={undefined}
-    value="Amber Zieme"
-  />
-</div>
+    <label
+      className="control-label"
+      htmlFor="fullname"
+    >
+      Full name
+    </label>
+    <input
+      className="form-control"
+      id="fullname"
+      onChange={[Function]}
+      onFocus={[Function]}
+      placeholder="Full name"
+      type={undefined}
+      value="Amber Zieme"
+    />
+  </div>
+  <button
+    disabled={true}
+    type="submit"
+  >
+    Submit
+  </button>
+</form>
 `;
 
 exports[`TextFieldAdapter component should render a text field touched with error 1`] = `
-<div
-  className="form-group has-error"
+<form
+  onSubmit={[Function]}
 >
-  <label
-    className="control-label"
-    htmlFor="fullname"
+  <div
+    className="form-group has-error"
   >
-    Full name
-  </label>
-  <input
-    className="form-control"
-    id="fullname"
-    onChange={[Function]}
-    onFocus={[Function]}
-    placeholder="Full name"
-    type={undefined}
-    value="Amber Zieme"
-  />
-  <span
-    className="help-block"
+    <label
+      className="control-label"
+      htmlFor="fullname"
+    >
+      Full name
+    </label>
+    <input
+      className="form-control"
+      id="fullname"
+      onChange={[Function]}
+      onFocus={[Function]}
+      placeholder="Full name"
+      type={undefined}
+      value="Amber Zieme"
+    />
+  </div>
+  <button
+    disabled={true}
+    type="submit"
   >
-    This field is required
-  </span>
-</div>
+    Submit
+  </button>
+</form>
 `;
 
 exports[`TextFieldAdapter component should render a text field untouched with error 1`] = `
-<div
-  className="form-group"
+<form
+  onSubmit={[Function]}
 >
-  <label
-    className="control-label"
-    htmlFor="fullname"
+  <div
+    className="form-group"
   >
-    Full name
-  </label>
-  <input
-    className="form-control"
-    id="fullname"
-    onChange={[Function]}
-    onFocus={[Function]}
-    placeholder="Full name"
-    type={undefined}
-    value="Amber Zieme"
-  />
-</div>
+    <label
+      className="control-label"
+      htmlFor="fullname"
+    >
+      Full name
+    </label>
+    <input
+      className="form-control"
+      id="fullname"
+      onChange={[Function]}
+      onFocus={[Function]}
+      placeholder="Full name"
+      type={undefined}
+      value="Amber Zieme"
+    />
+  </div>
+  <button
+    disabled={true}
+    type="submit"
+  >
+    Submit
+  </button>
+</form>
 `;
 
 exports[`TextFieldAdapter component should render a text field without value 1`] = `
-<div
-  className="form-group"
+<form
+  onSubmit={[Function]}
 >
-  <input
-    className="form-control"
-    id="fullname"
-    onChange={[Function]}
-    onFocus={[Function]}
-    placeholder="Full name"
-    type={undefined}
-    value={undefined}
-  />
-</div>
+  <div
+    className="form-group"
+  >
+    <input
+      className="form-control"
+      id="fullname"
+      onChange={[Function]}
+      onFocus={[Function]}
+      placeholder="Full name"
+      type={undefined}
+      value={undefined}
+    />
+  </div>
+  <button
+    disabled={true}
+    type="submit"
+  >
+    Submit
+  </button>
+</form>
 `;

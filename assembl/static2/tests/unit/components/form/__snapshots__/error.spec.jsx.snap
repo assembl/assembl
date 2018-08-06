@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Error component should render a field error 1`] = `
+<form
+  onSubmit={[Function]}
+>
+  <button
+    disabled={true}
+    type="submit"
+  >
+    Submit
+  </button>
+</form>
+`;

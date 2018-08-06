@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 
 import { displayLanguageMenu } from '../actions/adminActions';
-import { updateResources, updateResourcesCenterPage } from '../actions/adminActions/resourcesCenter';
 import { updateVoteSessionPage, updateVoteModules, updateVoteProposals } from '../actions/adminActions/voteSession';
 import { updatePhases } from '../actions/adminActions/timeline';
 import { updateSections } from '../actions/adminActions/adminSections';
@@ -17,10 +16,7 @@ import { updateTextFields } from '../actions/adminActions/profileOptions';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
 import Menu from '../components/administration/menu';
 import LanguageMenu from '../components/administration/languageMenu';
-import ResourcesQuery from '../graphql/ResourcesQuery.graphql';
-import ResourcesCenterPage from '../graphql/ResourcesCenterPage.graphql';
 import SectionsQuery from '../graphql/SectionsQuery.graphql';
-import TabsConditionQuery from '../graphql/TabsConditionQuery.graphql';
 import TextFields from '../graphql/TextFields.graphql';
 import LegalContentsQuery from '../graphql/LegalContents.graphql';
 import VoteSessionQuery from '../graphql/VoteSession.graphql';
@@ -33,7 +29,6 @@ import landingPagePlugin from '../utils/administration/landingPage';
 class Administration extends React.Component {
   constructor(props) {
     super(props);
-    this.putResourcesCenterInStore = this.putResourcesCenterInStore.bind(this);
     this.putLegalContentsInStore = this.putLegalContentsInStore.bind(this);
     this.putVoteSessionInStore = this.putVoteSessionInStore.bind(this);
     this.putLandingPageModulesInStore = this.putLandingPageModulesInStore.bind(this);
@@ -47,8 +42,6 @@ class Administration extends React.Component {
   componentDidMount() {
     // we need to use the redux store for administration data to be able to use a
     // "global" save button that will do all the mutations "at once"
-    this.putResourcesCenterInStore(this.props.resourcesCenter);
-    this.putResourcesInStore(this.props.resources);
     this.putSectionsInStore(this.props.sections);
     this.putLegalContentsInStore(this.props.legalContents);
     this.putVoteSessionInStore(this.props.voteSession);
@@ -63,10 +56,6 @@ class Administration extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.resources !== this.props.resources) {
-      this.putResourcesInStore(nextProps.resources);
-    }
-
     if (nextProps.sections !== this.props.sections) {
       this.putSectionsInStore(nextProps.sections);
     }
@@ -76,8 +65,6 @@ class Administration extends React.Component {
       this.putVoteModulesInStore(nextProps.voteSession);
       this.putVoteProposalsInStore(nextProps.voteSession);
     }
-
-    this.putResourcesCenterInStore(nextProps.resourcesCenter);
 
     if (nextProps.landingPageModules !== this.props.landingPageModules) {
       this.putLandingPageModulesInStore(nextProps.landingPageModules);
@@ -100,24 +87,6 @@ class Administration extends React.Component {
 
     if (nextProps.timeline !== this.props.timeline) {
       this.putTimelinePhasesInStore(nextProps.timeline);
-    }
-  }
-
-  putResourcesInStore(resources) {
-    if (resources) {
-      const filteredResources = filter(ResourcesQuery, { resources: resources });
-      const resourcesForStore = filteredResources.resources.map(resource => ({
-        ...resource,
-        textEntries: resource.textEntries ? convertEntriesToRawContentState(resource.textEntries) : null
-      }));
-      this.props.updateResources(resourcesForStore);
-    }
-  }
-
-  putResourcesCenterInStore(resourcesCenter) {
-    if (resourcesCenter) {
-      const filteredResourcesCenter = filter(ResourcesCenterPage, { resourcesCenter: resourcesCenter });
-      this.props.updateResourcesCenterPage(filteredResourcesCenter.resourcesCenter);
     }
   }
 
@@ -239,8 +208,6 @@ class Administration extends React.Component {
       children,
       i18n,
       params,
-      refetchResources,
-      refetchResourcesCenter,
       refetchTabsConditions,
       refetchSections,
       refetchLegalContents,
@@ -256,10 +223,8 @@ class Administration extends React.Component {
       React.cloneElement(child, {
         locale: i18n.locale,
         refetchTabsConditions: refetchTabsConditions,
-        refetchResources: refetchResources,
         refetchVoteSession: refetchVoteSession,
         refetchSections: refetchSections,
-        refetchResourcesCenter: refetchResourcesCenter,
         refetchLandingPageModules: refetchLandingPageModules,
         refetchLegalContents: refetchLegalContents,
         refetchTextFields: refetchTextFields,
@@ -316,11 +281,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  updateResources: resources => dispatch(updateResources(resources)),
   updateSections: sections => dispatch(updateSections(sections)),
-  updateResourcesCenterPage: ({ titleEntries, headerImage }) => {
-    dispatch(updateResourcesCenterPage(titleEntries, headerImage));
-  },
   updateVoteModules: voteModules => dispatch(updateVoteModules(voteModules)),
   updateVoteSessionPage: voteSession => dispatch(updateVoteSessionPage(voteSession)),
   updateVoteProposals: voteProposals => dispatch(updateVoteProposals(voteProposals)),
@@ -334,16 +295,10 @@ const mapDispatchToProps = dispatch => ({
 
 const mergeLoadingAndHasErrors = WrappedComponent => (props) => {
   const {
-    resourcesHasErrors,
-    resourcesCenterHasErrors,
-    resourcesLoading,
     voteSessionHasErrors,
     voteSessionLoading,
-    resourcesCenterLoading,
     sectionsHasErrors,
     sectionsLoading,
-    tabsConditionsLoading,
-    tabsConditionsHasErrors,
     legalContentsAreLoading,
     legalContentsHaveErrors,
     textFieldsLoading,
@@ -356,9 +311,6 @@ const mergeLoadingAndHasErrors = WrappedComponent => (props) => {
 
   const hasErrors =
     voteSessionHasErrors ||
-    resourcesHasErrors ||
-    resourcesCenterHasErrors ||
-    tabsConditionsHasErrors ||
     legalContentsHaveErrors ||
     landingPageHasErrors ||
     sectionsHasErrors ||
@@ -367,9 +319,6 @@ const mergeLoadingAndHasErrors = WrappedComponent => (props) => {
     timelineHasErrors;
   const loading =
     voteSessionLoading ||
-    resourcesLoading ||
-    resourcesCenterLoading ||
-    tabsConditionsLoading ||
     legalContentsAreLoading ||
     landingPageLoading ||
     sectionsLoading ||
@@ -383,34 +332,10 @@ const mergeLoadingAndHasErrors = WrappedComponent => (props) => {
 const isNotInAdminSection = adminSectionName => props => !props.router.getCurrentLocation().pathname.endsWith(adminSectionName);
 
 const isNotInDiscussionAdmin = isNotInAdminSection('discussion');
-const isNotInResourcesCenterAdmin = isNotInAdminSection('resourcesCenter');
 const isNotInLandingPageAdmin = isNotInAdminSection('landingPage');
 
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
-  graphql(TabsConditionQuery, {
-    options: ({ i18n }) => ({
-      variables: { lang: i18n.locale }
-    }),
-    // pass refetchTabsConditions to re-render navigation menu if there is a change in resources
-    props: ({ data }) => {
-      if (data.loading) {
-        return {
-          tabsConditionsLoading: true
-        };
-      }
-      if (data.error) {
-        return {
-          tabsConditionsHasErrors: true
-        };
-      }
-
-      return {
-        refetchTabsConditions: data.refetch
-      };
-    },
-    skip: isNotInResourcesCenterAdmin
-  }),
   graphql(VoteSessionQuery, {
     skip: ({ timeline }) => typeof getPhaseId(timeline, 'voteSession') !== 'string',
     options: ({ timeline, i18n }) => {
@@ -439,54 +364,6 @@ export default compose(
         refetchVoteSession: data.refetch
       };
     }
-  }),
-  graphql(ResourcesQuery, {
-    props: ({ data }) => {
-      if (data.loading) {
-        return {
-          resourcesLoading: true
-        };
-      }
-      if (data.error) {
-        return {
-          resourcesHasErrors: true
-        };
-      }
-
-      return {
-        resourcesLoading: data.loading,
-        resourcesHasErrors: data.error,
-        refetchResources: data.refetch,
-        resources: data.resources
-      };
-    },
-    skip: isNotInResourcesCenterAdmin
-  }),
-  graphql(ResourcesCenterPage, {
-    props: ({ data }) => {
-      if (data.loading) {
-        return {
-          resourcesCenterLoading: true
-        };
-      }
-      if (data.error) {
-        return {
-          resourcesCenterHasErrors: true
-        };
-      }
-
-      const { headerImage, titleEntries } = data.resourcesCenter;
-      return {
-        resourcesCenterLoading: data.loading,
-        resourcesCenterHasErrors: data.error,
-        refetchResourcesCenter: data.refetch,
-        resourcesCenter: {
-          headerImage: headerImage,
-          titleEntries: titleEntries
-        }
-      };
-    },
-    skip: isNotInResourcesCenterAdmin
   }),
   graphql(SectionsQuery, {
     props: ({ data }) => {

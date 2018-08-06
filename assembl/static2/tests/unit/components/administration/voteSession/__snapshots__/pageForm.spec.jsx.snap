@@ -93,6 +93,17 @@ exports[`Vote Session DumbPageForm component should render a form to update the 
              *
           </label>
           <FileUploader
+            deleteFileTooltip={
+              <Tooltip
+                bsClass="tooltip"
+                id="deleteFileTooltip"
+                placement="right"
+              >
+                <Translate
+                  value="administration.deleteAssociatedFile"
+                />
+              </Tooltip>
+            }
             fileOrUrl="http://www.example.com/documents/myimage/data"
             filename=""
             handleChange={[Function]}

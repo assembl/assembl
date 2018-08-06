@@ -1,5 +1,3 @@
-import os.path
-
 import graphene
 from graphene.relay import Node
 from graphene_sqlalchemy import SQLAlchemyObjectType
@@ -17,7 +15,8 @@ from .langstring import (
     resolve_langstring, resolve_langstring_entries,
     update_langstring_from_input_entries)
 from .types import SecureObjectType
-from .utils import abort_transaction_on_exception
+from .utils import (
+    abort_transaction_on_exception, get_attachment_with_purpose, create_attachment, update_attachment)
 
 
 class Resource(SecureObjectType, SQLAlchemyObjectType):
@@ -33,6 +32,7 @@ class Resource(SecureObjectType, SQLAlchemyObjectType):
     title_entries = graphene.List(LangStringEntry, description=docs.Resource.title_entries)
     text_entries = graphene.List(LangStringEntry, description=docs.Resource.title_entries)
     embed_code = graphene.String(description=docs.Resource.embed_code)
+    order = graphene.Float(description=docs.Resource.order)
     image = graphene.Field(Document, description=docs.Resource.image)
     doc = graphene.Field(Document, description=docs.Resource.doc)
 
@@ -52,15 +52,15 @@ class Resource(SecureObjectType, SQLAlchemyObjectType):
 
     def resolve_image(self, args, context, info):
         ATTACHMENT_PURPOSE_IMAGE = models.AttachmentPurpose.IMAGE.value
-        for attachment in self.attachments:
-            if attachment.attachmentPurpose == ATTACHMENT_PURPOSE_IMAGE:
-                return attachment.document
+        image_file = get_attachment_with_purpose(self.attachments, ATTACHMENT_PURPOSE_IMAGE)
+        if image_file:
+            return image_file.document
 
     def resolve_doc(self, args, context, info):
         ATTACHMENT_PURPOSE_DOCUMENT = models.AttachmentPurpose.DOCUMENT.value
-        for attachment in self.attachments:
-            if attachment.attachmentPurpose == ATTACHMENT_PURPOSE_DOCUMENT:
-                return attachment.document
+        doc_file = get_attachment_with_purpose(self.attachments, ATTACHMENT_PURPOSE_DOCUMENT)
+        if doc_file:
+            return doc_file.document
 
 
 class CreateResource(graphene.Mutation):
@@ -74,6 +74,7 @@ class CreateResource(graphene.Mutation):
         embed_code = graphene.String(description=docs.CreateResource.embed_code)
         image = graphene.String(description=docs.CreateResource.image)
         doc = graphene.String(description=docs.CreateResource.doc)
+        order = graphene.Float(description=docs.CreateResource.order)
 
     resource = graphene.Field(lambda: Resource)
 
@@ -110,6 +111,7 @@ class CreateResource(graphene.Mutation):
                 kwargs['text'] = text_langstring
 
             kwargs['embed_code'] = args.get('embed_code')
+            kwargs['order'] = args.get('order')
             saobj = cls(
                 discussion_id=discussion_id,
                 title=title_langstring,
@@ -119,39 +121,27 @@ class CreateResource(graphene.Mutation):
 
             image = args.get('image')
             if image is not None:
-                filename = os.path.basename(context.POST[image].filename)
-                mime_type = context.POST[image].type
-                document = models.File(
-                    discussion=discussion,
-                    mime_type=mime_type,
-                    title=filename)
-                document.add_file_data(context.POST[image].file)
-                db.add(models.ResourceAttachment(
-                    document=document,
-                    resource=saobj,
-                    discussion=discussion,
-                    creator_id=context.authenticated_userid,
-                    title=filename,
-                    attachmentPurpose=ATTACHMENT_PURPOSE_IMAGE
-                ))
+                new_attachment = create_attachment(
+                    discussion,
+                    models.ResourceAttachment,
+                    image,
+                    ATTACHMENT_PURPOSE_IMAGE,
+                    context
+                )
+                new_attachment.resource = saobj
+                db.add(new_attachment)
 
             doc = args.get('doc')
             if doc is not None:
-                filename = os.path.basename(context.POST[doc].filename)
-                mime_type = context.POST[doc].type
-                document = models.File(
-                    discussion=discussion,
-                    mime_type=mime_type,
-                    title=filename)
-                document.add_file_data(context.POST[doc].file)
-                db.add(models.ResourceAttachment(
-                    document=document,
-                    resource=saobj,
-                    discussion=discussion,
-                    creator_id=context.authenticated_userid,
-                    title=filename,
-                    attachmentPurpose=ATTACHMENT_PURPOSE_DOCUMENT
-                ))
+                new_attachment = create_attachment(
+                    discussion,
+                    models.ResourceAttachment,
+                    doc,
+                    ATTACHMENT_PURPOSE_DOCUMENT,
+                    context
+                )
+                new_attachment.resource = saobj
+                db.add(new_attachment)
 
             db.flush()
 
@@ -197,6 +187,7 @@ class UpdateResource(graphene.Mutation):
         embed_code = graphene.String(description=docs.UpdateResource.embed_code)
         image = graphene.String(description=docs.UpdateResource.image)
         doc = graphene.String(description=docs.UpdateResource.doc)
+        order = graphene.Float(description=docs.UpdateResource.order)
 
     resource = graphene.Field(lambda: Resource)
 
@@ -235,6 +226,7 @@ class UpdateResource(graphene.Mutation):
                 resource, 'text', args.get('text_entries'))
             kwargs = {}
             kwargs['embed_code'] = args.get('embed_code', None)
+            kwargs['order'] = args.get('order', resource.order)
             for attr, value in kwargs.items():
                 setattr(resource, attr, value)
 
@@ -243,62 +235,28 @@ class UpdateResource(graphene.Mutation):
             # add uploaded image as an attachment to the resource
             image = args.get('image')
             if image is not None:
-                filename = os.path.basename(context.POST[image].filename)
-                mime_type = context.POST[image].type
-                document = models.File(
-                    discussion=discussion,
-                    mime_type=mime_type,
-                    title=filename)
-                document.add_file_data(context.POST[image].file)
-                # if there is already an IMAGE, remove it with the
-                # associated document
-                images = [
-                    att for att in resource.attachments
-                    if att.attachmentPurpose == ATTACHMENT_PURPOSE_IMAGE]
-                if images:
-                    image = images[0]
-                    image.document.delete_file()
-                    db.delete(image.document)
-                    resource.attachments.remove(image)
+                update_attachment(
+                    discussion,
+                    models.ResourceAttachment,
+                    image,
+                    resource.attachments,
+                    ATTACHMENT_PURPOSE_IMAGE,
+                    db,
+                    context
+                )
 
-                db.add(models.ResourceAttachment(
-                    document=document,
-                    discussion=discussion,
-                    resource=resource,
-                    creator_id=context.authenticated_userid,
-                    title=filename,
-                    attachmentPurpose=ATTACHMENT_PURPOSE_IMAGE
-                ))
-
-        # add uploaded doc as an attachment to the resource
-        doc = args.get('doc')
-        if doc is not None:
-            filename = os.path.basename(context.POST[doc].filename)
-            mime_type = context.POST[doc].type
-            document = models.File(
-                discussion=discussion,
-                mime_type=mime_type,
-                title=filename)
-            document.add_file_data(context.POST[doc].file)
-            # if there is already a DOCUMENT, remove it with the
-            # associated document
-            docs = [
-                att for att in resource.attachments
-                if att.attachmentPurpose == ATTACHMENT_PURPOSE_DOCUMENT]
-            if docs:
-                doc = docs[0]
-                doc.document.delete_file()
-                db.delete(doc.document)
-                resource.attachments.remove(doc)
-
-            resource.db.add(models.ResourceAttachment(
-                document=document,
-                discussion=discussion,
-                resource=resource,
-                creator_id=context.authenticated_userid,
-                title=filename,
-                attachmentPurpose=ATTACHMENT_PURPOSE_DOCUMENT
-            ))
+            # add uploaded doc as an attachment to the resource
+            doc = args.get('doc')
+            if doc is not None:
+                update_attachment(
+                    discussion,
+                    models.ResourceAttachment,
+                    doc,
+                    resource.attachments,
+                    ATTACHMENT_PURPOSE_DOCUMENT,
+                    db,
+                    context
+                )
 
             db.flush()
 

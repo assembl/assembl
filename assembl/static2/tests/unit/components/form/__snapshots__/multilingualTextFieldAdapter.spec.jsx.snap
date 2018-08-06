@@ -1,76 +1,148 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`MultilingualTextFieldAdapter component should render a text field 1`] = `
-<div
-  className="form-group"
+exports[`MultilingualTextFieldAdapter component should render a required text field 1`] = `
+<form
+  onSubmit={[Function]}
 >
-  <label
-    className="control-label"
-    htmlFor="title"
+  <div
+    className="form-group"
   >
-    Title
-  </label>
-  <input
-    className="form-control"
-    id="title"
-    onChange={[Function]}
-    onFocus={[Function]}
-    placeholder="Title"
-    type={undefined}
-    value="Bonjour"
-  />
-</div>
+    <label
+      className="control-label"
+      htmlFor="title"
+    >
+      Title *
+    </label>
+    <input
+      className="form-control"
+      id="title"
+      onChange={[Function]}
+      onFocus={[Function]}
+      placeholder="Title *"
+      required={true}
+      type={undefined}
+      value="Bonjour"
+    />
+  </div>
+  <button
+    disabled={true}
+    type="submit"
+  >
+    Submit
+  </button>
+</form>
+`;
+
+exports[`MultilingualTextFieldAdapter component should render a text field 1`] = `
+<form
+  onSubmit={[Function]}
+>
+  <div
+    className="form-group"
+  >
+    <label
+      className="control-label"
+      htmlFor="title"
+    >
+      Title
+    </label>
+    <input
+      className="form-control"
+      id="title"
+      onChange={[Function]}
+      onFocus={[Function]}
+      placeholder="Title"
+      required={false}
+      type={undefined}
+      value="Bonjour"
+    />
+  </div>
+  <button
+    disabled={true}
+    type="submit"
+  >
+    Submit
+  </button>
+</form>
 `;
 
 exports[`MultilingualTextFieldAdapter component should render a text field touched with error 1`] = `
-<div
-  className="form-group has-error"
+<form
+  onSubmit={[Function]}
 >
-  <input
-    className="form-control"
-    id="title"
-    onChange={[Function]}
-    onFocus={[Function]}
-    placeholder="Title"
-    type={undefined}
-    value=""
-  />
-  <span
-    className="help-block"
+  <div
+    className="form-group has-error"
   >
-    This field is required
-  </span>
-</div>
+    <input
+      className="form-control"
+      id="title"
+      onChange={[Function]}
+      onFocus={[Function]}
+      placeholder="Title"
+      required={false}
+      type={undefined}
+      value=""
+    />
+  </div>
+  <button
+    disabled={true}
+    type="submit"
+  >
+    Submit
+  </button>
+</form>
 `;
 
 exports[`MultilingualTextFieldAdapter component should render a text field untouched with error 1`] = `
-<div
-  className="form-group"
+<form
+  onSubmit={[Function]}
 >
-  <input
-    className="form-control"
-    id="title"
-    onChange={[Function]}
-    onFocus={[Function]}
-    placeholder="Title"
-    type={undefined}
-    value=""
-  />
-</div>
+  <div
+    className="form-group"
+  >
+    <input
+      className="form-control"
+      id="title"
+      onChange={[Function]}
+      onFocus={[Function]}
+      placeholder="Title"
+      required={false}
+      type={undefined}
+      value=""
+    />
+  </div>
+  <button
+    disabled={true}
+    type="submit"
+  >
+    Submit
+  </button>
+</form>
 `;
 
 exports[`MultilingualTextFieldAdapter component should render a text field without value 1`] = `
-<div
-  className="form-group"
+<form
+  onSubmit={[Function]}
 >
-  <input
-    className="form-control"
-    id="title"
-    onChange={[Function]}
-    onFocus={[Function]}
-    placeholder="Title"
-    type={undefined}
-    value=""
-  />
-</div>
+  <div
+    className="form-group"
+  >
+    <input
+      className="form-control"
+      id="title"
+      onChange={[Function]}
+      onFocus={[Function]}
+      placeholder="Title"
+      required={false}
+      type={undefined}
+      value=""
+    />
+  </div>
+  <button
+    disabled={true}
+    type="submit"
+  >
+    Submit
+  </button>
+</form>
 `;

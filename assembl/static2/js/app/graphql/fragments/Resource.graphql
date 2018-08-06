@@ -1,0 +1,25 @@
+#import "./LangString.graphql"
+
+fragment Resource on Resource {
+  doc {
+    externalUrl
+    mimeType
+    title
+  }
+  embedCode
+  id
+  image {
+    externalUrl
+    mimeType
+    title
+  }
+  text(lang: $lang)
+  title(lang: $lang)
+  titleEntries {
+    ...langStringEntry
+  }
+  textEntries {
+    ...langStringEntry
+  }
+  order
+}

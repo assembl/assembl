@@ -1,10 +1,14 @@
+#import "../fragments/Resource.graphql"
+
 mutation updateResource(
   $doc: String
   $id: ID!
   $image: String
+  $lang: String
   $titleEntries: [LangStringEntryInput]!
   $textEntries: [LangStringEntryInput]
   $embedCode: String
+  $order: Float
 ) {
   updateResource(
     doc: $doc
@@ -13,18 +17,10 @@ mutation updateResource(
     titleEntries: $titleEntries
     textEntries: $textEntries
     embedCode: $embedCode
+    order: $order
   ) {
     resource {
-      doc {
-        externalUrl
-      }
-      embedCode
-      image {
-        externalUrl
-        mimeType
-      }
-      text
-      title
+      ...Resource
     }
   }
 }

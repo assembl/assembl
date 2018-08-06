@@ -7,8 +7,9 @@
 */
 import React from 'react';
 import { type FieldRenderProps } from 'react-final-form';
-import { ControlLabel, FormGroup, FormControl, HelpBlock } from 'react-bootstrap';
+import { ControlLabel, FormGroup, FormControl } from 'react-bootstrap';
 
+import Error from './error';
 import { getValidationState } from './utils';
 
 type multilingualValue = { [string]: string };
@@ -22,7 +23,8 @@ type Props = {
     onFocus: (?SyntheticFocusEvent<*>) => void,
     value: multilingualValue
   },
-  label: string
+  label: string,
+  required: boolean
 } & FieldRenderProps;
 
 const MultilingualTextFieldAdapter = ({
@@ -30,22 +32,29 @@ const MultilingualTextFieldAdapter = ({
   input: { name, onChange, value, ...otherListeners },
   label,
   meta: { error, touched },
+  required,
   ...rest
 }: Props) => {
+  const decoratedLabel = required ? `${label} *` : label;
   const valueInLocale = value ? value[editLocale] || '' : '';
   return (
     <FormGroup controlId={name} validationState={getValidationState(error, touched)}>
-      {valueInLocale ? <ControlLabel>{label}</ControlLabel> : null}
+      {valueInLocale ? <ControlLabel>{decoratedLabel}</ControlLabel> : null}
       <FormControl
         {...otherListeners}
         {...rest}
         onChange={event => onChange({ ...value, [editLocale]: event.target.value })}
-        placeholder={label}
+        placeholder={decoratedLabel}
+        required={required}
         value={valueInLocale}
       />
-      {touched && error ? <HelpBlock>{error}</HelpBlock> : null}
+      <Error name={name} />
     </FormGroup>
   );
+};
+
+MultilingualTextFieldAdapter.defaultProps = {
+  required: false
 };
 
 export default MultilingualTextFieldAdapter;

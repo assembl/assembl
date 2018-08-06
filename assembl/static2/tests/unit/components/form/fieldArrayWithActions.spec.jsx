@@ -1,12 +1,11 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import { Field, Form } from 'react-final-form';
-import arrayMutators from 'final-form-arrays';
+import { Field } from 'react-final-form';
 
+import DummyForm from './dummyForm';
 import FieldArrayWithActions from '../../../../js/app/components/form/fieldArrayWithActions';
 
 describe('FieldArrayWithActions component', () => {
-  const onSubmitSpy = jest.fn();
   const initialValues = {
     persons: [{ firstname: 'Rosalinda', lastname: 'Tillman' }, { firstname: 'Lavinia', lastname: 'Kunde' }]
   };
@@ -28,21 +27,9 @@ describe('FieldArrayWithActions component', () => {
       withSeparators: true
     };
     const component = renderer.create(
-      <Form
-        initialValues={initialValues}
-        mutators={{
-          ...arrayMutators
-        }}
-        onSubmit={onSubmitSpy}
-        render={({ handleSubmit, pristine }) => (
-          <form onSubmit={handleSubmit}>
-            <FieldArrayWithActions {...props} />
-            <button disabled={pristine} type="submit">
-              Submit
-            </button>
-          </form>
-        )}
-      />
+      <DummyForm initialValues={initialValues}>
+        <FieldArrayWithActions {...props} />
+      </DummyForm>
     );
     const tree = component.toJSON();
     expect(tree).toMatchSnapshot();
@@ -65,21 +52,9 @@ describe('FieldArrayWithActions component', () => {
       withSeparators: false
     };
     const component = renderer.create(
-      <Form
-        initialValues={initialValues}
-        mutators={{
-          ...arrayMutators
-        }}
-        onSubmit={onSubmitSpy}
-        render={({ handleSubmit, pristine }) => (
-          <form onSubmit={handleSubmit}>
-            <FieldArrayWithActions {...props} />
-            <button disabled={pristine} type="submit">
-              Submit
-            </button>
-          </form>
-        )}
-      />
+      <DummyForm initialValues={initialValues}>
+        <FieldArrayWithActions {...props} />
+      </DummyForm>
     );
     const tree = component.toJSON();
     expect(tree).toMatchSnapshot();

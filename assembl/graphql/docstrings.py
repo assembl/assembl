@@ -1005,15 +1005,18 @@ class Resource:
     In effect, this is the \"src\" code inside of an iframe-based attachment to a Resource."""
     image = Default.document % ("An image attached to the Resource",)
     doc = Default.document % ("A file attached to the Resource",)
+    order = Default.document % ("The order of the Resource on the Resources Center page.")
 
 
 class CreateResource:
     __doc__ = """A mutation that enables a Resource to be created."""
+    lang = "The language used for the response fields."
     title_entries = Resource.title_entries
     text_entries = Resource.text_entries
     embed_code = Resource.embed_code
     image = Resource.image
     doc = Resource.doc
+    order = Resource.order
 
 
 class DeleteResource:
@@ -1023,12 +1026,14 @@ class DeleteResource:
 
 class UpdateResource:
     __doc__ = """A mutation that enables existing Resources to be updated."""
+    lang = CreateResource.lang
     id = Default.node_id % ("Resource") + " This is the Resource identifier that must be updated."
     title_entries = Resource.title_entries
     text_entries = Resource.text_entries
     embed_code = Resource.embed_code
     image = Resource.image
     doc = Resource.doc
+    order = Resource.order
 
 
 class ConfigurableFieldInterface:
