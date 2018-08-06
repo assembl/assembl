@@ -722,7 +722,7 @@ const Translations = {
         title: "Exporter les données du débat",
         defaultSectionTitle: "Exporter les données",
         taxonomySectionTitle: "Exporter les taxonomies",
-        translateTheMessagesIn: "Traduire l'ensemble des messages en:",
+        translateTheMessagesIn: "Traduire l'ensemble des messages en :",
         anonymous: "Rendre les données anonymes"
       },
       step_x_total: "Section %{num} sur %{total}",

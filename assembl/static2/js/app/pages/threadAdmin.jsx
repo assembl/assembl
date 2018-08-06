@@ -34,7 +34,7 @@ class ThreadAdmin extends React.Component {
   };
 
   handleAnonymousChange = () => {
-    this.setState({ isAnonymous: !this.state.isAnonymous });
+    this.setState(prevState => ({ isAnonymous: !prevState.isAnonymous }));
   };
 
   render() {

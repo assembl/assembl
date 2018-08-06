@@ -41,7 +41,7 @@ class Step3 extends React.Component<Props, State> {
   };
 
   handleAnonymousChange = () => {
-    this.setState({ isAnonymous: !this.state.isAnonymous });
+    this.setState(prevState => ({ isAnonymous: !prevState.isAnonymous }));
   };
 
   render() {

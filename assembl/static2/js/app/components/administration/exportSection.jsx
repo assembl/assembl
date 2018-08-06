@@ -85,9 +85,7 @@ class ExportSection extends React.Component<ExportSectionProps> {
             handleExportLocaleChange &&
             handleAnonymousChange && (
               <FormGroup>
-                <Checkbox
-                  onChange={() => { handleAnonymousChange(); }}
-                >
+                <Checkbox onChange={handleAnonymousChange}>
                   <Translate value="administration.export.anonymous" />
                 </Checkbox>
                 <Radio
