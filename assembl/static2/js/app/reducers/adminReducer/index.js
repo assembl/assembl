@@ -6,7 +6,6 @@ import type ReduxAction from 'redux';
 import { type Action } from '../../actions/actionTypes';
 import legalContents from './legalContents';
 import timeline from './timeline';
-import resourcesCenter from './resourcesCenter';
 import sections from './adminSections';
 import voteSession from './voteSession';
 import landingPage from './landingPage';
@@ -81,7 +80,6 @@ const reducers = {
   discussionLanguagePreferences: languagePreferences,
   discussionLanguagePreferencesHasChanged: discussionLanguagePreferencesHasChanged,
   displayLanguageMenu: displayLanguageMenu,
-  resourcesCenter: resourcesCenter,
   sections: sections,
   voteSession: voteSession,
   legalContents: legalContents,
