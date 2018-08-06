@@ -16,10 +16,12 @@ type AdditionalProps = {
   headerTitle?: string
 };
 
-const CookiesPolicy = ({ text, headerTitle, debateData }) => [
-  <TextWithHeaderPage headerTitle={headerTitle} text={text} debateData={debateData} key="text-with-header" />,
-  <CookiesSelector key="cookies-selector" />
-];
+const CookiesPolicy = ({ text, headerTitle, debateData }) => (
+  <div className="cookies-policy">
+    <TextWithHeaderPage headerTitle={headerTitle} text={text} debateData={debateData} key="text-with-header" />
+    <CookiesSelector key="cookies-selector" />
+  </div>
+);
 
 export type Props = AdditionalProps & LegalContentsQuery & QueryProps;
 

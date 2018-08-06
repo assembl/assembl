@@ -74,25 +74,29 @@ class CookiesSelector extends React.Component<CookiesSelectorProps, CookiesSelec
   render() {
     const { activeKey, show, cookies } = this.state;
     return (
-      <div className="page-body">
-        <Translate value="cookiesPolicy.instructions" className="cookies-instructions" />
+      <React.Fragment>
         <div className="cookies-selector">
-          {Object.keys(cookies).map((category) => {
-            const isActiveKey = category === activeKey;
-            return (
-              <div key={`category-${category}`}>
-                <div
-                  className="cookies-category-selector"
-                  onClick={() => {
-                    this.setState({ activeKey: category, show: !show });
-                    return category !== activeKey && this.setState({ show: true });
-                  }}
-                >
-                  <span className={classnames('assembl-icon-right-dir', { 'active-arrow': isActiveKey })} />
-                  <Translate value={`cookiesPolicy.${category}`} className="dark-title-4" />
-                </div>
-                <div className="cookies-toggles">
-                  {isActiveKey && show &&
+          <h2 className="dark-title-2">
+            <Translate value="profile.cookies" />
+          </h2>
+          <Translate value="cookiesPolicy.instructions" className="cookies-instructions" />
+          <div className="cookies-categories">
+            {Object.keys(cookies).map((category) => {
+              const isActiveKey = category === activeKey;
+              return (
+                <div key={`category-${category}`}>
+                  <div
+                    className="cookies-category-selector"
+                    onClick={() => {
+                      this.setState({ activeKey: category, show: !show });
+                      return category !== activeKey && this.setState({ show: true });
+                    }}
+                  >
+                    <span className={classnames('assembl-icon-right-dir', { 'active-arrow': isActiveKey })} />
+                    <Translate value={`cookiesPolicy.${category}`} className="dark-title-3" />
+                  </div>
+                  <div className="cookies-toggles">
+                    {isActiveKey && show &&
               cookies[category].map(cookie => (
                 <CookieToggle
                   cookie={cookie}
@@ -100,15 +104,18 @@ class CookiesSelector extends React.Component<CookiesSelectorProps, CookiesSelec
                   handleToggle={this.handleToggle}
                 />
               ))}
+                  </div>
                 </div>
-              </div>
-            );
-          }) }
-          <Button onClick={this.saveChanges} className="button-submit button-dark">
-            <Translate value="profile.save" />
-          </Button>
+              );
+            }) }
+          </div>
+          <div className="submit-button-container">
+            <Button onClick={this.saveChanges} className="button-submit button-dark">
+              <Translate value="profile.save" />
+            </Button>
+          </div>
         </div>
-      </div>
+      </React.Fragment>
     );
   }
 }

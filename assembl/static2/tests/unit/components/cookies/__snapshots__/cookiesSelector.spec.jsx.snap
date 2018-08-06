@@ -2,129 +2,153 @@
 
 exports[`CookiesSelector component should render a list of cookieToggle components set in different categories 1`] = `
 <div
-  className="cookies-selector page-body"
+  className="cookies-selector"
 >
-  <div>
-    <div
-      className="cookies-category-selector"
-      onClick={[Function]}
-    >
-      <span
-        className="assembl-icon-right-dir active-arrow"
-      />
-      <span
-        className="dark-title-4"
-        style={undefined}
-      >
-        Essential
-      </span>
-    </div>
-    <div
-      className="cookies-toggles"
-    >
-      <div
-        className="cookie-toggle"
-      >
-        <span
-          className="cookie-title dark-title-3 ellipsis"
-        >
-          User Session
-        </span>
-        <div
-          className="rsbc-switch-button rsbc-mode-switch rsbc-switch-button-flat-round disabled"
-        >
-          <label
-            htmlFor="userSession"
-          >
-            Refuse
-          </label>
-          <input
-            checked={false}
-            disabled={true}
-            id="userSession"
-            name="userSession"
-            onChange={[Function]}
-            type="checkbox"
-            value="1"
-          />
-          <label
-            htmlFor="userSession"
-          />
-          <label
-            htmlFor="userSession"
-          >
-            Accept
-          </label>
-        </div>
-      </div>
-      <div
-        className="cookie-toggle"
-      >
-        <span
-          className="cookie-title dark-title-3 ellipsis"
-        >
-          Language
-        </span>
-        <div
-          className="rsbc-switch-button rsbc-mode-switch rsbc-switch-button-flat-round disabled"
-        >
-          <label
-            htmlFor="locale"
-          >
-            Refuse
-          </label>
-          <input
-            checked={false}
-            disabled={true}
-            id="locale"
-            name="locale"
-            onChange={[Function]}
-            type="checkbox"
-            value="1"
-          />
-          <label
-            htmlFor="locale"
-          />
-          <label
-            htmlFor="locale"
-          >
-            Accept
-          </label>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div>
-    <div
-      className="cookies-category-selector"
-      onClick={[Function]}
-    >
-      <span
-        className="assembl-icon-right-dir"
-      />
-      <span
-        className="dark-title-4"
-        style={undefined}
-      >
-        Analytique et personnalisation
-      </span>
-    </div>
-    <div
-      className="cookies-toggles"
-    />
-  </div>
-  <button
-    className="button-submit button-dark btn btn-default"
-    disabled={false}
-    onClick={[Function]}
-    type="button"
+  <h2
+    className="dark-title-2"
   >
     <span
       className={undefined}
       style={undefined}
     >
-      Save
+      Cookies configuration
     </span>
-  </button>
+  </h2>
+  <span
+    className="cookies-instructions"
+    style={undefined}
+  >
+    Select the cookies you wish to refuse below
+  </span>
+  <div
+    className="cookies-categories"
+  >
+    <div>
+      <div
+        className="cookies-category-selector"
+        onClick={[Function]}
+      >
+        <span
+          className="assembl-icon-right-dir active-arrow"
+        />
+        <span
+          className="dark-title-3"
+          style={undefined}
+        >
+          Essential
+        </span>
+      </div>
+      <div
+        className="cookies-toggles"
+      >
+        <div
+          className="cookie-toggle"
+        >
+          <span
+            className="cookie-title dark-title-3 ellipsis"
+          >
+            User Session
+          </span>
+          <div
+            className="rsbc-switch-button rsbc-mode-switch rsbc-switch-button-flat-round disabled"
+          >
+            <label
+              htmlFor="userSession"
+            >
+              Refuse
+            </label>
+            <input
+              checked={false}
+              disabled={true}
+              id="userSession"
+              name="userSession"
+              onChange={[Function]}
+              type="checkbox"
+              value="1"
+            />
+            <label
+              htmlFor="userSession"
+            />
+            <label
+              htmlFor="userSession"
+            >
+              Accept
+            </label>
+          </div>
+        </div>
+        <div
+          className="cookie-toggle"
+        >
+          <span
+            className="cookie-title dark-title-3 ellipsis"
+          >
+            Language
+          </span>
+          <div
+            className="rsbc-switch-button rsbc-mode-switch rsbc-switch-button-flat-round disabled"
+          >
+            <label
+              htmlFor="locale"
+            >
+              Refuse
+            </label>
+            <input
+              checked={false}
+              disabled={true}
+              id="locale"
+              name="locale"
+              onChange={[Function]}
+              type="checkbox"
+              value="1"
+            />
+            <label
+              htmlFor="locale"
+            />
+            <label
+              htmlFor="locale"
+            >
+              Accept
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div
+        className="cookies-category-selector"
+        onClick={[Function]}
+      >
+        <span
+          className="assembl-icon-right-dir"
+        />
+        <span
+          className="dark-title-3"
+          style={undefined}
+        >
+          Analytics and customization
+        </span>
+      </div>
+      <div
+        className="cookies-toggles"
+      />
+    </div>
+  </div>
+  <div
+    className="submit-button-container"
+  >
+    <button
+      className="button-submit button-dark btn btn-default"
+      disabled={false}
+      onClick={[Function]}
+      type="button"
+    >
+      <span
+        className={undefined}
+        style={undefined}
+      >
+        Save
+      </span>
+    </button>
+  </div>
 </div>
 `;

@@ -419,6 +419,7 @@ const Translations = {
       memberSince: "Membre depuis le %{date}",
       save: "Enregistrer",
       password: "Mot de passe",
+      cookies: "Paramétrage des cookies",
       changePassword: "Modifier mon mot de passe",
       passwordModifiedSuccess: "Votre mot de passe a été modifié avec succès",
       saveSuccess: "Votre profil a été mis à jour avec succès",
@@ -1231,6 +1232,7 @@ const Translations = {
       memberSince: "Member since %{date}",
       save: "Save",
       password: "Password",
+      cookies: "Cookies configuration",
       changePassword: "Change my password",
       usernameInformations:
         "If you configured a username, it will be used when you post a message or vote. If you haven't configured one, the full name that you configured will be used instead.",

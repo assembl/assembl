@@ -9,6 +9,7 @@ import Avatar from '../components/profile/avatar';
 import ModifyPasswordForm from '../components/profile/modifyPasswordForm';
 import DeleteMyAccount from '../components/profile/deleteMyAccount';
 import ConfiguredField, { type ConfiguredFieldType } from '../components/common/configuredField';
+import CookiesSelector from '../components/cookies/cookiesSelector';
 import { get, getContextual } from '../utils/routeMap';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
 import UserQuery from '../graphql/userQuery.graphql';
@@ -195,6 +196,9 @@ class Profile extends React.PureComponent<ProfileProps, ProfileState> {
                       </div>
                     </div>
                   )}
+                  <div className="profile-cookies-configuration">
+                    <CookiesSelector />
+                  </div>
                   <DeleteMyAccount />
                 </div>
               </Col>
