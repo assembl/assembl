@@ -33,6 +33,7 @@ from ..lib import config
 from .langstrings import LangString, LangStringEntry
 from assembl.views.traversal import AbstractCollectionDefinition
 import assembl.graphql.docstrings as docs
+from assembl.models.timeline import Phases
 
 log = logging.getLogger('assembl')
 
@@ -562,7 +563,7 @@ class Post(Content):
 
     def is_bright_mirror_fiction(self):
         parent_idea = [link.idea for link in self.indirect_idea_content_links_without_cache() if link.__class__.__name__ == 'IdeaRelatedPostLink']
-        return len(parent_idea) != 0 and parent_idea[0].message_view_override == 'brightMirror'
+        return len(parent_idea) != 0 and parent_idea[0].message_view_override == Phases.brightMirror.value
 
 
 def orm_insert_listener(mapper, connection, target):

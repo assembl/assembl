@@ -116,6 +116,7 @@ def get_data(content):
         return get_uid(content), data
 
     elif isinstance(content, Post):
+        from assembl.models.timeline import Phases
         data = {}
         data['_parent'] = 'user:{}'.format(content.creator_id)
         if content.parent_id is not None:
@@ -133,7 +134,7 @@ def get_data(content):
             return None, None
 
         # If the post is a fiction for Bright Mirror, don't index it.
-        if Idea.get(data['idea_id'][0]).message_view_override == 'brightMirror':
+        if Idea.get(data['idea_id'][0]).message_view_override == Phases.brightMirror.value:
             return None, None
 
         # If the idea is now in multi columns mode and the post was created before that, don't index it.
