@@ -5,6 +5,7 @@ from itertools import chain
 from collections import defaultdict
 from abc import ABCMeta, abstractmethod
 from datetime import datetime
+from enum import Enum
 
 from ..lib.clean_input import sanitize_text
 from sqlalchemy.orm import relationship, backref, aliased, contains_eager, column_property, with_polymorphic
@@ -39,6 +40,11 @@ from sqlalchemy.types import TIMESTAMP as Timestamp
 
 
 _ = TranslationStringFactory('assembl')
+
+
+class MessageView(Enum):
+    multiColumns = 'multiColumns'
+    brightMirror = 'brightMirror'
 
 
 class defaultdictlist(defaultdict):
