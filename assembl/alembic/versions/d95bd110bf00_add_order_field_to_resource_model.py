@@ -1,7 +1,7 @@
 """Add order field to Resource model
 
 Revision ID: d95bd110bf00
-Revises: f8c765a3e0da
+Revises: 134299d407b9
 Create Date: 2018-07-30 12:01:54.228306
 
 """
