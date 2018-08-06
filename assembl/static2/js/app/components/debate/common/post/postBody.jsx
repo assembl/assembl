@@ -7,10 +7,9 @@ import jQuery from 'jquery';
 import ARange from 'annotator_range'; // eslint-disable-line
 import { withRouter } from 'react-router';
 
-import { getConnectedUserId } from '../../../../utils/globalFunctions';
-import { getDisplayedPhaseIdentifier } from '../../../../utils/timeline';
+import { getConnectedUserId, isHarvestable } from '../../../../utils/globalFunctions';
 import { isSpecialURL } from '../../../../utils/urlPreview';
-import { ExtractStates, HARVESTABLE_PHASES } from '../../../../constants';
+import { ExtractStates } from '../../../../constants';
 import { transformLinksInHtml /* getUrls */ } from '../../../../utils/linkify';
 import UpdateHarvestingTranslationPreference from '../../../../graphql/mutations/updateHarvestingTranslationPreference.graphql';
 import PostTranslate from '../../common/translations/postTranslate';
@@ -179,9 +178,8 @@ export const DumbPostBody = ({
           translate={translate}
           afterLoad={afterLoad}
           onTranslate={(from, into) => {
-            const isHarvestablePhase = HARVESTABLE_PHASES.includes(getDisplayedPhaseIdentifier(params));
             const connectedUserIdBase64 = getConnectedUserId(true);
-            if (connectedUserIdBase64 && isHarvesting && isHarvestablePhase) {
+            if (connectedUserIdBase64 && isHarvesting && isHarvestable(params)) {
               updateHarvestingTranslation({
                 variables: {
                   id: connectedUserIdBase64,

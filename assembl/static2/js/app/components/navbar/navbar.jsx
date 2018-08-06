@@ -19,6 +19,7 @@ import { snakeToCamel } from '../../utils/globalFunctions';
 import withoutLoadingIndicator from '../common/withoutLoadingIndicator';
 import DebateLink from '../debate/navigation/debateLink';
 import Logo from './Logo';
+import UserMenu from './UserMenu';
 
 const filterSection = ({ sectionType }, { hasResourcesCenter, hasSyntheses }) => {
   switch (sectionType) {
@@ -123,11 +124,16 @@ export class AssemblNavbar extends React.PureComponent<AssemblNavbarProps, Assem
     this.setState({ flatWidth: newWidth });
   };
 
+  renderUserMenu = (remainingWidth: number) => {
+    const { debate: { debateData: { helpUrl } }, location } = this.props;
+    return <UserMenu helpUrl={helpUrl} location={location} remainingWidth={remainingWidth} />;
+  };
+
   render = () => {
-    const { screenWidth, debate, data, location, phase, timeline } = this.props;
+    const { screenWidth, debate, data, phase, timeline } = this.props;
     const sections = data.sections;
     const { debateData } = debate;
-    const { logo, slug, helpUrl, isLargeLogo } = debateData;
+    const { logo, slug, isLargeLogo } = debateData;
     const flatWidth = (this.state && this.state.flatWidth) || 0;
     const maxAppWidth = Math.min(APP_CONTAINER_MAX_WIDTH, screenWidth) - APP_CONTAINER_PADDING * 2;
     const screenTooSmall = flatWidth > maxAppWidth;
@@ -142,11 +148,9 @@ export class AssemblNavbar extends React.PureComponent<AssemblNavbarProps, Assem
       elements: filteredSections.map(bind(mapSectionToElement, null, bind.placeholder, mapOptions)),
       slug: slug,
       logoSrc: logo,
-      helpUrl: helpUrl,
-      location: location,
-      logoLink: sections.length > 0 ? sections.find(section => section && section.sectionType === 'HOMEPAGE').url : ''
+      logoLink: sections.length > 0 ? sections.find(section => section && section.sectionType === 'HOMEPAGE').url : '',
+      renderUserMenu: this.renderUserMenu
     };
-    const { themeId } = this.props;
     return (
       <div className="background-light">
         <Navbar fixedTop fluid className="no-padding">
@@ -163,7 +167,6 @@ export class AssemblNavbar extends React.PureComponent<AssemblNavbarProps, Assem
               setWidth={this.setFlatWidth}
               style={screenTooSmall ? { opacity: 0, position: 'absolute', top: '-200px' } : {}}
               maxWidth={maxAppWidth}
-              themeId={themeId}
               isLargeLogo={isLargeLogo}
             />
           </div>

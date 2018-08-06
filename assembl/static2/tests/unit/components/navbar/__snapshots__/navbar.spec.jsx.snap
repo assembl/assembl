@@ -37,10 +37,9 @@ exports[`AssemblNavbar component should render a BurgerNavbar and a hidden FlatN
           />,
           ]
         }
-        helpUrl={undefined}
-        location={undefined}
         logoLink="http://www.homesweethome.org"
         logoSrc={undefined}
+        renderUserMenu={[Function]}
         slug={undefined}
       />
       <FlatNavbar
@@ -66,12 +65,11 @@ exports[`AssemblNavbar component should render a BurgerNavbar and a hidden FlatN
           />,
           ]
         }
-        helpUrl={undefined}
         isLargeLogo={undefined}
-        location={undefined}
         logoLink="http://www.homesweethome.org"
         logoSrc={undefined}
         maxWidth={-20}
+        renderUserMenu={[Function]}
         setWidth={[Function]}
         slug={undefined}
         style={
@@ -81,7 +79,6 @@ exports[`AssemblNavbar component should render a BurgerNavbar and a hidden FlatN
             "top": "-200px",
           }
         }
-        themeId={undefined}
       />
     </div>
   </Uncontrolled(Navbar)>
@@ -125,16 +122,14 @@ exports[`AssemblNavbar component should render a FlatNavbar with a big screenWid
           />,
           ]
         }
-        helpUrl={undefined}
         isLargeLogo={undefined}
-        location={undefined}
         logoLink="http://www.homesweethome.org"
         logoSrc={undefined}
         maxWidth={1370}
+        renderUserMenu={[Function]}
         setWidth={[Function]}
         slug={undefined}
         style={Object {}}
-        themeId={undefined}
       />
     </div>
   </Uncontrolled(Navbar)>

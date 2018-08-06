@@ -11,8 +11,7 @@ import HarvestingButton from './harvestingButton';
 type UserMenuProps = {
   location: string,
   helpUrl: string,
-  remainingWidth?: number,
-  themeId?: string
+  remainingWidth?: number
 };
 
 const shouldShowUsername = (remainingWidth, breakPoint) =>
@@ -20,9 +19,9 @@ const shouldShowUsername = (remainingWidth, breakPoint) =>
 
 const shouldShowExpertIcons = connectedUserIsExpert();
 
-const UserMenu = ({ location, helpUrl, remainingWidth, themeId }: UserMenuProps) => (
+const UserMenu = ({ location, helpUrl, remainingWidth }: UserMenuProps) => (
   <div className="navbar-icons">
-    {shouldShowExpertIcons && themeId && <HarvestingButton />}
+    {shouldShowExpertIcons && <HarvestingButton />}
     <div id="search">
       <Search />
     </div>

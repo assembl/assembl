@@ -6,17 +6,14 @@ import classNames from 'classnames';
 import Logo from './Logo';
 import NavigationMenu from './navigationMenu';
 import LanguageMenu from './languageMenu';
-import UserMenu from './UserMenu';
 import { browserHistory } from '../../router';
 
 type Props = {
   elements: React.Node,
   slug: string,
   logoSrc: string,
-  connectedUserId: string,
-  helpUrl: string,
-  location: string,
-  logoLink: string
+  logoLink: string,
+  renderUserMenu: number => React.Node
 };
 
 type State = {
@@ -44,7 +41,7 @@ export default class BurgerNavbar extends React.PureComponent<Props, State> {
   };
 
   render() {
-    const { elements, slug, logoSrc, connectedUserId, helpUrl, location, logoLink } = this.props;
+    const { elements, slug, logoSrc, logoLink, renderUserMenu } = this.props;
     const { shouldDisplayMenu } = this.state;
     return (
       <div className="burger-navbar">
@@ -59,9 +56,7 @@ export default class BurgerNavbar extends React.PureComponent<Props, State> {
           className={classNames([`assembl-icon-${shouldDisplayMenu ? 'cancel' : 'menu-on'}`, 'burgermenu-icon', 'black'])}
         />
         <Logo slug={slug} src={logoSrc} url={logoLink} />
-        <div className="right-part">
-          <UserMenu helpUrl={helpUrl} location={location} connectedUserId={connectedUserId} remainingWidth={0} />
-        </div>
+        <div className="right-part">{renderUserMenu(0)}</div>
       </div>
     );
   }

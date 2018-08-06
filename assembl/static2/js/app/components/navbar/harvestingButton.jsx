@@ -3,17 +3,20 @@ import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { I18n } from 'react-redux-i18n';
+import { withRouter } from 'react-router';
 
 import PreferencesQuery from '../../graphql/UserPreferencesQuery.graphql';
 import withoutLoadingIndicator from '../common/withoutLoadingIndicator';
 import { updateContentLocaleByOriginalLocale } from '../../actions/contentLocaleActions';
 import { toggleHarvesting } from '../../actions/contextActions';
+import { isHarvestable } from '../../utils/globalFunctions';
 
 type HarvestingButtonProps = {
   data: UserPreferencesQuery,
   isActive: boolean,
   onClick: Function,
-  updateByOriginalLocale: (from: string, into: string) => void
+  updateByOriginalLocale: (from: string, into: string) => void,
+  params: RouterParams
 };
 
 export class DumbHarvestingButton extends React.PureComponent<HarvestingButtonProps> {
@@ -29,7 +32,11 @@ export class DumbHarvestingButton extends React.PureComponent<HarvestingButtonPr
   };
 
   render() {
-    const { isActive } = this.props;
+    const { isActive, params } = this.props;
+    if (!isHarvestable(params)) {
+      return null;
+    }
+
     return (
       <span
         className={`is-harvesting-button assembl-icon-expert ${isActive ? 'active' : ''}`}
@@ -61,5 +68,6 @@ export default compose(
   graphql(PreferencesQuery, {
     options: () => ({ notifyOnNetworkStatusChange: true, fetchPolicy: 'network-only' })
   }),
-  withoutLoadingIndicator()
+  withoutLoadingIndicator(),
+  withRouter
 )(DumbHarvestingButton);

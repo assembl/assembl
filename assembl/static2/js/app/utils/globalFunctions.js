@@ -1,6 +1,9 @@
 // @flow
 import { type Map } from 'immutable';
 
+import { getDisplayedPhaseIdentifier } from './timeline';
+import { HARVESTABLE_PHASES } from '../constants';
+
 const getInputValue = (id: string) => {
   const elem = document.getElementById(id);
   const value = elem instanceof HTMLInputElement ? elem.value : null;
@@ -247,3 +250,7 @@ export const moveItemDown = (itemsById: ItemsById, id: string): ItemsById => {
   });
   return newItemsById;
 };
+
+export function isHarvestable(params: RouterParams) {
+  return HARVESTABLE_PHASES.includes(getDisplayedPhaseIdentifier(params));
+}
