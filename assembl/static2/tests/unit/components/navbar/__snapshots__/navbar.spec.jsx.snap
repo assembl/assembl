@@ -81,7 +81,6 @@ exports[`AssemblNavbar component should render a BurgerNavbar and a hidden FlatN
             "top": "-200px",
           }
         }
-        themeId={undefined}
       />
     </div>
   </Uncontrolled(Navbar)>
@@ -134,7 +133,6 @@ exports[`AssemblNavbar component should render a FlatNavbar with a big screenWid
         setWidth={[Function]}
         slug={undefined}
         style={Object {}}
-        themeId={undefined}
       />
     </div>
   </Uncontrolled(Navbar)>

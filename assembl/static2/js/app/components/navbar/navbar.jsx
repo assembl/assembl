@@ -146,7 +146,6 @@ export class AssemblNavbar extends React.PureComponent<AssemblNavbarProps, Assem
       location: location,
       logoLink: sections.length > 0 ? sections.find(section => section && section.sectionType === 'HOMEPAGE').url : ''
     };
-    const { themeId } = this.props;
     return (
       <div className="background-light">
         <Navbar fixedTop fluid className="no-padding">
@@ -163,7 +162,6 @@ export class AssemblNavbar extends React.PureComponent<AssemblNavbarProps, Assem
               setWidth={this.setFlatWidth}
               style={screenTooSmall ? { opacity: 0, position: 'absolute', top: '-200px' } : {}}
               maxWidth={maxAppWidth}
-              themeId={themeId}
               isLargeLogo={isLargeLogo}
             />
           </div>
