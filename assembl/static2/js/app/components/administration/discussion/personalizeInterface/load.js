@@ -2,7 +2,7 @@
 import type { ApolloClient } from 'react-apollo';
 
 import AllDiscussionPreferences from '../../../../graphql/DiscussionPreferencesQuery.graphql';
-import type { PersonnaliseInterfaceValues } from './types.flow';
+import type { PersonalizeInterfaceValues } from './types.flow';
 
 export const load = async (client: ApolloClient, fetchPolicy: FetchPolicy) => {
   const { data } = await client.query({
@@ -12,7 +12,7 @@ export const load = async (client: ApolloClient, fetchPolicy: FetchPolicy) => {
   return data;
 };
 
-export function postLoadFormat(data: DiscussionPreferencesQuery): PersonnaliseInterfaceValues {
+export function postLoadFormat(data: DiscussionPreferencesQuery): PersonalizeInterfaceValues {
   const { discussionPreferences } = data;
   return {
     title: discussionPreferences && discussionPreferences.tabTitle,

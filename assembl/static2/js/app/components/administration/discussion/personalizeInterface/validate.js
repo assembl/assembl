@@ -4,7 +4,7 @@ const ICON_MIMETYPE = ['image/vnd.microsoft.icon', 'image/x-icon'];
 
 function validateFavicon(favicon) {
   if (favicon && !ICON_MIMETYPE.includes(favicon.mimeType)) {
-    return I18n.t('administration.personnaliseInterface.icoRequired');
+    return I18n.t('administration.personalizeInterface.icoRequired');
   }
 
   return null;

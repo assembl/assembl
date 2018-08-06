@@ -22,7 +22,7 @@ type Props = {
 
 const loading = <Loader />;
 
-const PersonnaliseInterface = ({ client }: Props) => (
+const PersonalizeInterface = ({ client }: Props) => (
   <div className="admin-box">
     <SectionTitle title={I18n.t('administration.discussion.6')} annotation={I18n.t('administration.annotation')} />
     <div className="admin-language-content">
@@ -54,15 +54,15 @@ const PersonnaliseInterface = ({ client }: Props) => (
         render={({ handleSubmit, pristine, submitting }) => (
           <React.Fragment>
             <div>
-              <Translate value="administration.personnaliseInterface.titleFormTitle" />
+              <Translate value="administration.personalizeInterface.titleFormTitle" />
             </div>
             <form className="language-list" onSubmit={handleSubmit}>
               <SaveButton disabled={pristine || submitting} saveAction={handleSubmit} />
-              <Field name="title" component={TextFieldAdapter} label={I18n.t('administration.personnaliseInterface.title')} />
+              <Field name="title" component={TextFieldAdapter} label={I18n.t('administration.personalizeInterface.title')} />
               <Field
                 name="favicon"
                 component={FileUploaderFieldAdapter}
-                label={I18n.t('administration.personnaliseInterface.favicon')}
+                label={I18n.t('administration.personalizeInterface.favicon')}
               />
             </form>
           </React.Fragment>
@@ -72,4 +72,4 @@ const PersonnaliseInterface = ({ client }: Props) => (
   </div>
 );
 
-export default withApollo(PersonnaliseInterface);
+export default withApollo(PersonalizeInterface);

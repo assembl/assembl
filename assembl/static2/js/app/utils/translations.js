@@ -474,7 +474,7 @@ const Translations = {
         timeline: "Éditer les phases et modules",
         exportTaxonomies: "Exporter les taxonomies",
         manageProfileOptions: "Options d'inscription",
-        personnaliseInterface: "Personnaliser l'interface"
+        personalizeInterface: "Personnaliser l'interface"
       },
       timelineAdmin: {
         phase: "Phase %{count}",
@@ -751,7 +751,7 @@ const Translations = {
         successSave: "Les options de profils ont été enregistrées avec succès !",
         hideTextField: "Cacher ce champs pour l'utilisateur"
       },
-      personnaliseInterface: {
+      personalizeInterface: {
         success: "La personnalisation de l'interface a été sauvée avec succès !",
         titleFormTitle: "Personnaliser l'intitulé de la page",
         title: "Le titre de la page",
@@ -1241,7 +1241,7 @@ const Translations = {
         timeline: "Edit the phases and modules",
         exportTaxonomies: "Export taxonomies",
         manageProfileOptions: "Registration options",
-        personnaliseInterface: "Personnalise the interface"
+        personalizeInterface: "Personalize the interface"
       },
       timelineAdmin: {
         phase: "Phase %{count}",
@@ -1405,7 +1405,7 @@ const Translations = {
         "3": "Registration options",
         "4": "Legal contents",
         "5": "Edition of the phases and modules",
-        "6": "Personnalise the interface"
+        "6": "Personalize the interface"
       },
       languageChoice: "Select desired languages below",
       ph: {
@@ -1509,9 +1509,9 @@ const Translations = {
         successSave: "The profile options has been saved with success!",
         hideTextField: "Hide this field for the user"
       },
-      personnaliseInterface: {
+      personalizeInterface: {
         success: "The interface personalization has been saved with success!",
-        titleFormTitle: "Personnalise the title of the page",
+        titleFormTitle: "Personalize the title of the page",
         title: "The title of the page",
         favicon: "The favicon",
         icoRequired: "The favicon must be an .ico file only"

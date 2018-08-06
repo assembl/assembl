@@ -13,7 +13,7 @@ import LegalContentsForm from '../components/administration/discussion/legalCont
 import TimelineForm from '../components/administration/discussion/timelineForm';
 import LanguageSection from '../components/administration/discussion/languageSection';
 import ManageProfileOptionsForm from '../components/administration/discussion/manageProfileOptionsForm';
-import PersonnaliseInterface from '../components/administration/discussion/personnaliseInterface';
+import PersonalizeInterface from '../components/administration/discussion/personalizeInterface';
 import { displayAlert } from '../utils/utilityManager';
 import { convertEntriesToHTML } from '../utils/draftjs';
 import SaveButton, { getMutationsPromises, runSerial } from '../components/administration/saveButton';
@@ -321,7 +321,7 @@ class DiscussionAdmin extends React.Component<Props, State> {
         {section === '3' && <ManageProfileOptionsForm />}
         {section === '4' && <LegalContentsForm {...this.props} />}
         {section === '5' && <TimelineForm {...this.props} />}
-        {section === '6' && <PersonnaliseInterface {...this.props} />}
+        {section === '6' && <PersonalizeInterface {...this.props} />}
       </div>
     );
   }

@@ -1,7 +1,7 @@
 // @flow
 import type { FileValue } from '../../../form/types.flow';
 
-export type PersonnaliseInterfaceValues = {
+export type PersonalizeInterfaceValues = {
   title: ?string,
   favicon: FileValue
 };

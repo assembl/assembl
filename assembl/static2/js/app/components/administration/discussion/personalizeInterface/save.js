@@ -4,7 +4,7 @@ import { I18n } from 'react-redux-i18n';
 
 import { displayAlert } from '../../../../utils/utilityManager';
 import { runSerial } from '../../saveButton';
-import type { PersonnaliseInterfaceValues } from './types.flow';
+import type { PersonalizeInterfaceValues } from './types.flow';
 import updateDiscussionPreference from '../../../../graphql/mutations/updateDiscussionPreference.graphql';
 import type { MutationsPromises, SaveStatus } from '../../../form/types.flow';
 
@@ -27,8 +27,8 @@ function getVariables(values, initialValues) {
 }
 
 export const createMutationsPromises = (client: ApolloClient) => (
-  values: PersonnaliseInterfaceValues,
-  initialValues: PersonnaliseInterfaceValues
+  values: PersonalizeInterfaceValues,
+  initialValues: PersonalizeInterfaceValues
 ) => {
   const updateMutation = () =>
     client.mutate({
@@ -43,7 +43,7 @@ export const save = async (mutationsPromises: MutationsPromises): Promise<SaveSt
   await runSerial(mutationsPromises)
     .then(() => {
       status = 'OK';
-      displayAlert('success', I18n.t('administration.personnaliseInterface.success'));
+      displayAlert('success', I18n.t('administration.personalizeInterface.success'));
     })
     .catch((error) => {
       status = 'KO';
