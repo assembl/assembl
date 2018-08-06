@@ -4,21 +4,17 @@ import * as React from 'react';
 import Logo from './Logo';
 import NavigationMenu from './navigationMenu';
 import LanguageMenu, { refWidthUpdate } from './languageMenu';
-import UserMenu from './UserMenu';
 
 type Props = {
   elements: React.Node,
   slug: string,
   logoSrc: string,
-  connectedUserId: string,
-  helpUrl: string,
-  location: string,
   style: Object,
   logoLink: string,
   maxWidth: number,
-  themeId: string,
   isLargeLogo: boolean,
-  setWidth: number => void
+  setWidth: number => void,
+  renderUserMenu: number => React.Node
 };
 
 type State = {
@@ -47,19 +43,8 @@ export default class FlatNavbar extends React.PureComponent<Props, State> {
   setLanguageMenuWidth = (width: number) => this.setState(() => ({ languageMenuWidth: width }));
 
   render = () => {
-    const {
-      elements,
-      slug,
-      logoSrc,
-      connectedUserId,
-      helpUrl,
-      location,
-      style,
-      logoLink,
-      maxWidth,
-      themeId,
-      isLargeLogo
-    } = this.props;
+    const { elements, slug, logoSrc, style, logoLink, maxWidth, isLargeLogo, renderUserMenu } = this.props;
+    const remainingWidth = maxWidth - this.state.leftWidth + this.state.languageMenuWidth;
     return (
       <div className="flat-navbar" style={style}>
         <div
@@ -73,13 +58,7 @@ export default class FlatNavbar extends React.PureComponent<Props, State> {
           className="right-part"
           ref={refWidthUpdate(newWidth => this.setState(() => ({ rightWidth: newWidth }), this.updateWidth))}
         >
-          <UserMenu
-            helpUrl={helpUrl}
-            location={location}
-            connectedUserId={connectedUserId}
-            remainingWidth={maxWidth - this.state.leftWidth + this.state.languageMenuWidth}
-            themeId={themeId}
-          />
+          {renderUserMenu(remainingWidth)}
           <LanguageMenu size="xs" className="navbar-language" setWidth={this.setLanguageMenuWidth} />
         </div>
       </div>
