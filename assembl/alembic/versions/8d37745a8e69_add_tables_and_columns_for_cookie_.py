@@ -17,17 +17,18 @@ import sqlalchemy as sa
 def upgrade(pyramid_env):
     with context.begin_transaction():
         op.add_column('agent_status_in_discussion', sa.Column("accepted_cookies", sa.Text()))
-        op.add_column('user', sa.Column("last_accepted_cgu_date",sa.DateTime, default=None))
+        op.add_column('user', sa.Column("last_accepted_cgu_date", sa.DateTime, default=None))
         op.add_column('user', sa.Column("last_accepted_privacy_policy_date", sa.DateTime, default=None))
-        op.add_column('user', sa.Column("last_rejected_cgu_date",sa.DateTime, default=None))
+        op.add_column('user', sa.Column("last_rejected_cgu_date", sa.DateTime, default=None))
         op.add_column('user', sa.Column("last_rejected_privacy_policy_date", sa.DateTime, default=None))
         op.create_table(
             "action_on_discussion",
             sa.Column("id", sa.Integer, sa.ForeignKey('action.id', ondelete="CASCADE", onupdate='CASCADE'),
-                primary_key=True),
+                      primary_key=True),
             sa.Column("discussion_id", sa.Integer, sa.ForeignKey('discussion.id', ondelete="CASCADE", onupdate="CASCADE"),
-            nullable=False, index=True)
-            )
+                      nullable=False, index=True)
+        )
+
 
 def downgrade(pyramid_env):
     with context.begin_transaction():
