@@ -18,8 +18,23 @@ type AdditionalProps = {
 
 const CookiesPolicy = ({ text, headerTitle, debateData }) => (
   <div className="cookies-policy">
-    <TextWithHeaderPage headerTitle={headerTitle} text={text} debateData={debateData} key="text-with-header" />
-    <CookiesSelector key="cookies-selector" />
+    <TextWithHeaderPage
+      headerTitle={headerTitle}
+      text={text}
+      debateData={debateData}
+      key="text-with-header"
+      renderPageBody={() => (
+        <div className="page-body">
+          <CookiesSelector key="cookies-selector" />
+          <div
+            className="ellipsis-content justify"
+            dangerouslySetInnerHTML={{
+              __html: text
+            }}
+          />
+        </div>
+      )}
+    />
   </div>
 );
 
