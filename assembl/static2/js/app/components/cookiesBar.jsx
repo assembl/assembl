@@ -21,13 +21,11 @@ type Props = {
 const discussionId = getDiscussionId();
 
 export const saveAcceptedCookies = (cookies: Array<string>, client: ApolloClient) => {
-  cookies.forEach((cookie) => {
-    client.mutate({
-      mutation: updateAcceptedCookies,
-      variables: {
-        action: cookie
-      }
-    });
+  client.mutate({
+    mutation: updateAcceptedCookies,
+    variables: {
+      actions: cookies
+    }
   });
 };
 

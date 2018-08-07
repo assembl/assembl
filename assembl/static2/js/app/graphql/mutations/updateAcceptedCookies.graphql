@@ -1,5 +1,5 @@
-mutation updateAcceptedCookies($action: String!) {
-  updateAcceptedCookies(action: $action) {
+mutation updateAcceptedCookies($actions: [CookieTypes]!) {
+  updateAcceptedCookies(actions: $actions) {
     user {
       acceptedCookies
     }
