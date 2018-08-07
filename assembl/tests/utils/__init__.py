@@ -11,6 +11,7 @@ from sqlalchemy.sql.functions import count
 from webtest import TestRequest
 from webob.request import environ_from_url
 from pyramid.threadlocal import manager
+from contextlib import contextmanager
 
 from assembl.lib.sqla import (
     configure_engine, get_session_maker,
@@ -181,7 +182,7 @@ class RecordingApp(object):
         return appmethod
 
 
-def create_role_for_user(user, discussion, session=None, role=R_PARTICIPANT):
+def _create_role_for_user(user, discussion, session=None, role=R_PARTICIPANT):
     from assembl.models.auth import LocalUserRole, Role
     session = session or Role.default_db
     role = Role.get_role(role)
@@ -191,10 +192,19 @@ def create_role_for_user(user, discussion, session=None, role=R_PARTICIPANT):
     return local_role
 
 
-def delete_all_local_roles_for_user(user, discussion, session=None):
+def _delete_all_local_roles_for_user(user, discussion, session=None):
     from assembl.models import LocalUserRole
     session = session or LocalUserRole.default_db
     session.query(LocalUserRole).filter(
         LocalUserRole.discussion_id == discussion.id,
         LocalUserRole.user_id == user.id).delete()
     session.flush()
+
+
+@contextmanager
+def give_user_role(user, discussion, role=R_PARTICIPANT, session=None):
+    """A usuable context manager to temporarily give a non-admin user a role within a discussion.
+    All testing can be done in the context of this higher role-based user."""
+    _create_role_for_user(user, discussion, session=session, role=role)
+    yield
+    _delete_all_local_roles_for_user(user, discussion, session=session)

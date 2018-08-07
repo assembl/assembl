@@ -2,7 +2,7 @@
 from graphql_relay.node.node import to_global_id
 
 from assembl.graphql.schema import Schema as schema
-from assembl.tests.utils import create_role_for_user, delete_all_local_roles_for_user
+from assembl.tests.utils import give_user_role
 
 UPDATE_USER_MUTATION = u"""
 mutation UpdateUser($id: ID!, $name: String, $username: String, $img: String, $oldPassword: String, $newPassword: String, $newPassword2: String) {
@@ -443,11 +443,11 @@ def test_graphql_update_accepted_cookies_by_user(graphql_request, participant2_u
     from assembl import models as m
     graphql_request.authenticated_userid = participant2_user.id
     # Create a role for the non-admin user to have permissions on the discussion
-    create_role_for_user(participant2_user, discussion_with_default_data)
-    resp = schema.execute(UPDATE_COOKIES_INFORMATION_FOR_USER_MUTATION, context_value=graphql_request, variable_values={
-        "actions": ["ACCEPT_TRACKING_ON_DISCUSSION"]
-    })
-    delete_all_local_roles_for_user(participant2_user, discussion_with_default_data)
+    resp = None
+    with give_user_role(participant2_user, discussion_with_default_data):
+        resp = schema.execute(UPDATE_COOKIES_INFORMATION_FOR_USER_MUTATION, context_value=graphql_request, variable_values={
+            "actions": ["ACCEPT_TRACKING_ON_DISCUSSION"]
+        })
     assert resp.errors is None
     assert "ACCEPT_TRACKING_ON_DISCUSSION" in agent_status_in_discussion_3.accepted_cookies
     atod = test_session.query(m.ActionOnDiscussion).filter(m.ActionOnDiscussion.type == "discussion:tracking:accept").first()
@@ -458,11 +458,11 @@ def test_graphql_update_accepted_cookies_by_user(graphql_request, participant2_u
 def test_graphql_delete_accepted_cookie_by_user(graphql_request, participant2_user, discussion_with_default_data, agent_status_in_discussion_3, test_session):
     graphql_request.authenticated_userid = participant2_user.id
     # Create a role for the non-admin user to have permissions on the discussion
-    create_role_for_user(participant2_user, discussion_with_default_data)
-    resp = schema.execute(UPDATE_COOKIES_INFORMATION_FOR_USER_MUTATION, context_value=graphql_request, variable_values={
-        "actions": ["REJECT_CGU"]
-    })
-    delete_all_local_roles_for_user(participant2_user, discussion_with_default_data)
+    resp = None
+    with give_user_role(participant2_user, discussion_with_default_data):
+        resp = schema.execute(UPDATE_COOKIES_INFORMATION_FOR_USER_MUTATION, context_value=graphql_request, variable_values={
+            "actions": ["REJECT_CGU"]
+        })
     assert resp.errors is None
     assert "ACCEPT_CGU" not in agent_status_in_discussion_3.accepted_cookies
     assert "REJECT_CGU" in agent_status_in_discussion_3.accepted_cookies

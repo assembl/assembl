@@ -686,7 +686,8 @@ class AgentStatusInDiscussion(DiscussionBoundBase):
         if isinstance(cookie, basestring):
             cookie = CookieTypes(cookie)
         if cookie in self._accepted_cookies:
-            self._accepted_cookies.pop(cookie)
+            i = self._accepted_cookies.index(cookie)
+            self._accepted_cookies.pop(i)
             self._save_cookies()
 
     def get_discussion_id(self):
