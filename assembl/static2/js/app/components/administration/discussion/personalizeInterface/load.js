@@ -1,12 +1,12 @@
 // @flow
 import type { ApolloClient } from 'react-apollo';
 
-import AllDiscussionPreferences from '../../../../graphql/DiscussionPreferencesQuery.graphql';
+import DiscussionPreferences from '../../../../graphql/DiscussionPreferencesQuery.graphql';
 import type { PersonalizeInterfaceValues } from './types.flow';
 
 export const load = async (client: ApolloClient, fetchPolicy: FetchPolicy) => {
   const { data } = await client.query({
-    query: AllDiscussionPreferences,
+    query: DiscussionPreferences,
     fetchPolicy: fetchPolicy
   });
   return data;
