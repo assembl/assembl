@@ -754,7 +754,7 @@ const Translations = {
       personalizeInterface: {
         success: "La personnalisation de l'interface a été sauvée avec succès !",
         titleFormTitle: "Personnaliser l'intitulé de la page",
-        title: "Titre de la page (1)",
+        title: "Titre de la page web (1)",
         favicon: "Favicon (2)",
         icoRequired: "Le favicon doit être un fichier .ico uniquement"
       }
