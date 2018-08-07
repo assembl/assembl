@@ -317,7 +317,8 @@ class UpdateAcceptedCookies(graphene.Mutation):
         db = cls.default_db
         discussion_id = context.matchdict['discussion_id']
         user_id = context.authenticated_userid or Everyone
-        require_instance_permission(CrudPermissions.UPDATE, cls.get(user_id), context)
+        instance = cls.get(user_id) if user_id != Everyone else None
+        require_instance_permission(CrudPermissions.UPDATE, instance, context)
 
         permissions = get_permissions(user_id, discussion_id)
         from assembl.models.action import (
