@@ -34,7 +34,7 @@ class AgentProfile(SecureObjectType, SQLAlchemyObjectType):
     class Meta:
         model = models.AgentProfile
         interfaces = (Node, )
-        only_fields = ('id', 'last_accepted_cgu_date', 'last_accepted_privacy_policy')
+        only_fields = ('id',)
 
     user_id = graphene.Int(required=True, description=docs.AgentProfile.user_id)
     name = graphene.String(description=docs.AgentProfile.name)
@@ -50,8 +50,14 @@ class AgentProfile(SecureObjectType, SQLAlchemyObjectType):
     accepted_cookies = graphene.List(CookieTypes)
     last_accepted_cgu_date = DateTime()
     last_accepted_privacy_policy = DateTime()
-    # last_rejected_cgu_date = Column(DateTime)
-    # last_rejected_privacy_policy_date = Column(DateTime)
+    last_rejected_cgu_date = DateTime()
+    last_rejected_privacy_policy_date = DateTime()
+
+    def resolve_is_deleted(self, args, context, info):
+        return self.is_deleted or False
+
+    def resolve_user_id(self, args, context, info):
+        return self.id
 
     def resolve_name(self, args, context, info):
         return self.real_name()
