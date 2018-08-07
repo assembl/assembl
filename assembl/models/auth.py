@@ -664,10 +664,9 @@ class AgentStatusInDiscussion(DiscussionBoundBase):
 
     @property
     def has_accepted_cookies(self):
-        if self.read_cookies:
-            return True if len(self.read_cookies) else False
-        else:
-            return False
+        if self.cookies:
+            return True if len(self.cookies) else False
+        return False
 
     def update_cookie(self, cookie):
         """
