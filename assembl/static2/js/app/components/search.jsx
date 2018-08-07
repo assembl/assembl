@@ -373,7 +373,8 @@ const calcQueryFields = () => {
     'name', // user
     'subject', // synthesis
     'introduction', // synthesis
-    'conclusion' // synthesis
+    'conclusion', // synthesis
+    'creator_display_name' // post
   ];
   const lsFields = [
     'announcement_title', // idea announcement

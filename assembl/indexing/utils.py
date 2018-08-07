@@ -126,6 +126,8 @@ def get_data(content):
                      'creator_id', 'sentiment_counts'):
             data[attr] = getattr(content, attr)
 
+        data['creator_display_name'] = AgentProfile.get(content.creator_id).display_name()
+
         data['idea_id'] = [link.idea_id
             for link in content.indirect_idea_content_links_without_cache()
             if link.__class__.__name__ == 'IdeaRelatedPostLink']
