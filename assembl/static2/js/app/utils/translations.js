@@ -708,7 +708,7 @@ const Translations = {
           helper: "Choisissez les modules que vous souhaitez voir apparaître dans la page d'accueil et leurs emplacements.",
           textAndMultimedia: "Texte & Multi-média",
           textAndMultimediaBtn: "Ajouter un module Texte & Multi-media",
-          confirmationModal: "Voulez vous ajouter un module Texte & Multimédia supplémentaire à la landing page ?"
+          confirmationModal: "Voulez-vous ajouter un module Texte & Multimédia supplémentaire à la landing page ?"
         },
         header: {
           title: "Header",
