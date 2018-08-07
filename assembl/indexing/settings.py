@@ -139,11 +139,28 @@ _IDEA_MAPPING = {
     }
 }
 
+_EXTRACT_MAPPING = {
+    'properties': {
+        'discussion_id': LONG,
+        'creation_date': DATE,
+        'id': LONG,
+        'post_id': LONG,
+        'creator_id': LONG,
+        'idea_id': LONG,
+        'phase_id': KEYWORD,
+        'body': TEXT,
+        'extract_nature': KEYWORD,
+        'extract_action': KEYWORD,
+        'extract_state': KEYWORD
+    }
+}
+
 MAPPINGS = {
     'post': _POST_MAPPING,
     'synthesis': _SYNTHESIS_MAPPING,
     'user': _USER_MAPPING,
     'idea': _IDEA_MAPPING,
+    'extract': _EXTRACT_MAPPING
 }
 
 
@@ -212,6 +229,7 @@ def get_mapping(doc_type):
 
 
 def includeme(config):
+    add_index_languages(_EXTRACT_MAPPING['properties'], ['subject'])
     add_index_languages(_POST_MAPPING['properties'], ['body', 'subject'])
     add_index_languages(_SYNTHESIS_MAPPING['properties'], ['ideas'])
     add_index_languages(_IDEA_MAPPING['properties'], [

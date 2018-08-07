@@ -121,6 +121,7 @@ def extract_post_1_to_subidea_1_1(
     """ Links reply_post_1 to subidea_1_1 """
 
     from assembl.models import Extract
+    from assembl.models.idea_content_link import ExtractNatureVocabulary, ExtractActionVocabulary
     e = Extract(
         body=u"body",
         creator=participant2_user,
@@ -128,7 +129,10 @@ def extract_post_1_to_subidea_1_1(
         content=reply_post_1,
         idea_id=subidea_1_1.id,  # strange bug: Using idea directly fails
         discussion=discussion,
-        extract_hash=u'extract_post_1_to_subidea_1_1')
+        extract_hash=u'extract_post_1_to_subidea_1_1',
+        extract_nature=ExtractNatureVocabulary.Enum.actionable_solution,
+        extract_action=ExtractActionVocabulary.Enum.give_examples
+    )
     test_session.add(e)
     test_session.flush()
 

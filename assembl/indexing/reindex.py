@@ -36,7 +36,7 @@ def intermediate_commit(contents):
 
 
 def get_indexable_contents(session):
-    from assembl.models import AgentProfile, Idea, Post
+    from assembl.models import AgentProfile, Extract, Idea, Post
     from assembl.models.post import PublicationStates
 
     query = session.query(Idea
@@ -67,6 +67,15 @@ def get_indexable_contents(session):
     for post in query:
         yield post
 
+    query = session.query(Extract
+        ).join(Extract.content
+        ).filter(Post.tombstone_condition()
+        ).filter(Post.hidden == False
+        ).filter(Post.publication_state == PublicationStates.PUBLISHED
+        )
+    for extract in query:
+        yield extract
+
 
 def reindex_content(content, action='update'):
     """Index, reindex or unindex content. This function is called
@@ -75,12 +84,12 @@ def reindex_content(content, action='update'):
     from assembl.models.post import PublicationStates
     from assembl.models import (
         AgentStatusInDiscussion, Post, AgentProfile, Idea,
-        IdeaContentLink, IdeaAnnouncement, SentimentOfPost)
+        IdeaContentLink, IdeaAnnouncement, SentimentOfPost, Extract)
 
     if not indexing_active():
         return
 
-    indexed_contents = (Post, AgentProfile, Idea)
+    indexed_contents = (Post, AgentProfile, Idea, Extract)
     changes = get_changes()
     if action == 'delete' and isinstance(content, indexed_contents):
         changes.unindex_content(content)
@@ -100,6 +109,9 @@ def reindex_content(content, action='update'):
             changes.index_content(content)
         else:
             changes.unindex_content(content)
+    elif isinstance(content, Extract):
+        # warning: should always be above isinstance(content, IdeaContentLink) block
+        changes.index_content(content)
     elif isinstance(content, IdeaContentLink):
         # A AssemblPost is indexed before any IdeaRelatedPostLink is created,
         # so be sure to reindex content.content if we have a IdeaContentLink

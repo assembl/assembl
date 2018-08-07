@@ -82,7 +82,7 @@ def populate_from_langstring_prop(content, data, propName, dataPropName=None):
 def get_data(content):
     """Return uid, dict of fields we want to index,
     return None if we don't index."""
-    from assembl.models import Idea, Post, PropositionPost, SynthesisPost, AgentProfile, LangString
+    from assembl.models import Idea, Post, PropositionPost, SynthesisPost, AgentProfile, LangString, Extract
     if type(content) == Idea:  # only index Idea, not Thematic or Question
         data = {}
         for attr in ('creation_date', 'id', 'discussion_id'):
@@ -143,14 +143,6 @@ def get_data(content):
         if Idea.get(data['idea_id'][0]).message_columns and content.message_classifier is None:
             return None, None
 
-        data['taxonomy_nature'] = [
-            'taxonomy_nature.' + enum_entry.name
-            for enum_entry in set([extract.extract_nature for extract in content.extracts
-                 if extract.extract_nature is not None])]
-        data['taxonomy_action'] = [
-            'taxonomy_action.' + enum_entry.name
-            for enum_entry in set([extract.extract_action for extract in content.extracts
-                 if extract.extract_action is not None])]
         data['sentiment_tags'] = [key for key in data['sentiment_counts']
                                   if data['sentiment_counts'][key] > 0]
         like = data['sentiment_counts']['like']
@@ -194,13 +186,44 @@ def get_data(content):
 
         return get_uid(content), data
 
+    elif isinstance(content, Extract):
+        data = {}
+        for attr in ('discussion_id', 'body', 'creation_date', 'id', 'creator_id', ):
+            data[attr] = getattr(content, attr)
+
+        data['post_id'] = content.content_id
+        post = Post.get(content.content_id)
+        populate_from_langstring_prop(post, data, 'subject')
+        if isinstance(post, PropositionPost):
+            data['phase_id'] = 'survey'
+        else:
+            data['phase_id'] = 'thread'
+
+        idea_id = content.idea_id
+        if not idea_id:
+            return None, None
+
+        data['idea_id'] = idea_id
+        data['extract_state'] = content.extract_state
+        if content.extract_nature:
+            data['extract_nature'] = 'taxonomy_nature.' + content.extract_nature.name
+
+        if content.extract_action:
+            data['extract_action'] = 'taxonomy_action.' + content.extract_action.name
+
+        data['creator_display_name'] = AgentProfile.get(content.creator_id).display_name()
+
+        return get_uid(content), data
+
     return None, None
 
 
 def get_uid(content):
     """Return a global unique identifier"""
-    from assembl.models import Idea, Post, SynthesisPost, AgentProfile
-    if isinstance(content, Idea):
+    from assembl.models import Extract, Idea, Post, SynthesisPost, AgentProfile
+    if isinstance(content, Extract):
+        doc_type = 'extract'
+    elif isinstance(content, Idea):
         doc_type = 'idea'
     elif isinstance(content, AgentProfile):
         doc_type = 'user'
