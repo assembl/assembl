@@ -18,6 +18,7 @@ const Step1 = ({ editLocale }: Props) => (
     renderFields={({ name }) => (
       <React.Fragment>
         <Field
+          required
           editLocale={editLocale}
           name={`${name}.title`}
           component={MultilingualTextFieldAdapter}

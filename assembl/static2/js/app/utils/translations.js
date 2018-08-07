@@ -648,7 +648,7 @@ const Translations = {
       },
       languageChoice: "Sélection des langues du débat",
       ph: {
-        title: "*Titre",
+        title: "Titre",
         quote: "Citation",
         descriptionTop: "Texte au-dessus de la vidéo",
         descriptionBottom: "Texte en-dessous de la vidéo",
@@ -754,8 +754,8 @@ const Translations = {
       personalizeInterface: {
         success: "La personnalisation de l'interface a été sauvée avec succès !",
         titleFormTitle: "Personnaliser l'intitulé de la page",
-        title: "Le titre de la page",
-        favicon: "La favicon",
+        title: "Titre de la page (1)",
+        favicon: "Favicon (2)",
         icoRequired: "Le favicon doit être un fichier .ico uniquement"
       }
     },
@@ -1409,7 +1409,7 @@ const Translations = {
       },
       languageChoice: "Select desired languages below",
       ph: {
-        title: "*Title",
+        title: "Title",
         quote: "Quote",
         descriptionTop: "Comments above video",
         descriptionBottom: "Comments below video",
@@ -1512,8 +1512,8 @@ const Translations = {
       personalizeInterface: {
         success: "The interface personalization has been saved with success!",
         titleFormTitle: "Personalize the title of the page",
-        title: "The title of the page",
-        favicon: "The favicon",
+        title: "Web page Title (1)",
+        favicon: "Favicon (2)",
         icoRequired: "The favicon must be an .ico file only"
       }
     },
