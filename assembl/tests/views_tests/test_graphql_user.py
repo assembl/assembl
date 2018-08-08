@@ -404,7 +404,7 @@ def test_graphql_delete_user_with_username(graphql_request, participant1_user, t
     """Testing to delete the username for participant1_user"""
     from assembl import models as m
     username = test_session.query(m.Username).filter(m.Username.user_id == participant1_user.id).first()
-    assert username.username == "test_username"
+    assert username.username == "Test.Username"
     res = schema.execute(DELETE_USER_INFORMATION_MUTATION, context_value=graphql_request, variable_values={
         "id": to_global_id('AgentProfile', participant1_user.id)})
     assert res.errors is None
