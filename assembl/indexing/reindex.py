@@ -67,15 +67,6 @@ def get_indexable_contents(session):
     for post in query:
         yield post
 
-    query = session.query(Extract
-        ).join(Extract.content
-        ).filter(Post.tombstone_condition()
-        ).filter(Post.hidden == False
-        ).filter(Post.publication_state == PublicationStates.PUBLISHED
-        )
-    for extract in query:
-        yield extract
-
 
 def reindex_content(content, action='update'):
     """Index, reindex or unindex content. This function is called
@@ -107,11 +98,12 @@ def reindex_content(content, action='update'):
                 not content.hidden and content.tombstone_date is None and
                 not content.is_bright_mirror_fiction()):
             changes.index_content(content)
+            for extract in content.extracts:
+                changes.index_content(extract)
         else:
             changes.unindex_content(content)
-    elif isinstance(content, Extract):
-        # warning: should always be above isinstance(content, IdeaContentLink) block
-        changes.index_content(content)
+            for extract in content.extracts:
+                changes.unindex_content(extract)
     elif isinstance(content, IdeaContentLink):
         # A AssemblPost is indexed before any IdeaRelatedPostLink is created,
         # so be sure to reindex content.content if we have a IdeaContentLink
