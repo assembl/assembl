@@ -99,8 +99,6 @@ COMMON_POST = {
         'id': LONG,
         'parent_id': {'type': 'long', 'null_value': 0},
         'idea_id': LONG,
-        'taxonomy_nature': KEYWORD,
-        'taxonomy_action': KEYWORD,
         'creator_id': LONG,
         'creator_display_name': TEXT,
         'parent_creator_id': LONG,
