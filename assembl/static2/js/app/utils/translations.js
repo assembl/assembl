@@ -76,6 +76,7 @@ const Translations = {
         to: "Au"
       },
       published_on: "Publié le",
+      harvested_on: "Attrapé le",
       member_since: "Membre depuis le",
       by: "par",
       search_come_from_what_you_need_to_know: "Recherche effectuée dans la section \"à retenir\" de cette discussion",
@@ -83,6 +84,7 @@ const Translations = {
       collapse_search: "Fermer la recherche",
       Categories: "Catégories",
       All: "Tout",
+      extract: "Extraits",
       post: "Messages",
       idea: "Idées",
       user: "Participants",

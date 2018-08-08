@@ -1,0 +1,58 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DumbExtractHit component should render an extract hit 1`] = `
+<div
+  className="div"
+>
+  <ImageType
+    className={
+      Object {
+        "mix": [Function],
+      }
+    }
+    type="extract"
+  />
+  <div
+    className={
+      Object {
+        "mix": [Function],
+      }
+    }
+  >
+    <Link
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "We need to quantify the optical HTTP panel!",
+        }
+      }
+      to={undefined}
+    />
+  </div>
+  <div
+    className={
+      Object {
+        "mix": [Function],
+      }
+    }
+  >
+    <p
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "We need to connect the multi-byte SQL interface!",
+        }
+      }
+    />
+  </div>
+  <PublishedInfo
+    className={
+      Object {
+        "mix": [Function],
+      }
+    }
+    date="2018-08-08"
+    publishedOnMsgId="search.harvested_on"
+    userId="foo"
+    userName="Jewell Pouros"
+  />
+</div>
+`;

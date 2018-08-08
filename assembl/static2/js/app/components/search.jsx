@@ -27,10 +27,9 @@ import {
   SearchBox,
   SearchkitManager,
   SearchkitProvider,
-  // SelectedFilters,
   SideBar,
-  TagFilterConfig,
   TagFilter,
+  TagFilterConfig,
   TermQuery,
   TopBar
 } from 'searchkit';
@@ -64,11 +63,30 @@ const highlightedTextOrTruncatedText = (hit, field) => {
   return text;
 };
 
-const slugElement = document.getElementById('discussion-slug');
-const slug = slugElement ? slugElement.value : '';
+function getPostUrl(ideaId, postId, phaseId, slug) {
+  if (!ideaId) {
+    return undefined;
+  }
+  const ideaBase64id = btoa(`Idea:${ideaId}`);
+  const postBase64id = btoa(`Post:${postId}`);
+  if (phaseId === 'thread') {
+    return getRoute('post', { slug: slug, phase: phaseId, themeId: ideaBase64id, element: postBase64id });
+  } else if (phaseId === 'survey') {
+    return getRoute('questionPost', {
+      slug: slug,
+      phase: phaseId,
+      questionId: ideaBase64id,
+      questionIndex: 1,
+      element: postBase64id
+    });
+  }
+  return undefined;
+}
+
 let Link;
 let getUrl;
-
+const slugElement = document.getElementById('discussion-slug');
+const slug = slugElement ? slugElement.value : '';
 // __resourceQuery is set by webpack, it is empty string or '?v=1' when this file is included from the searchv1.js bundle.
 // __resourceQuery is undefined in jest tests.
 const v1Interface = typeof __resourceQuery !== 'undefined' && __resourceQuery;
@@ -98,48 +116,36 @@ if (v1Interface) {
   Link = props => <a href={props.to} dangerouslySetInnerHTML={props.dangerouslySetInnerHTML} />;
   getUrl = (hit) => {
     const id = hit._source.id;
-    let ideaBase64id;
-    let postBase64id;
-    let ideaId;
     switch (hit._type) {
     case 'synthesis':
       return undefined;
     case 'user':
       return undefined;
-    case 'idea':
-      ideaBase64id = btoa(`Idea:${id}`);
+    case 'idea': {
+      const ideaBase64id = btoa(`Idea:${id}`);
       return `/${slug}/debate/thread/theme/${ideaBase64id}`;
+    }
+    case 'extract': {
+      const phaseId = hit._source.phase_id || 'thread';
+      const ideaId = hit._source.idea_id;
+      const postId = hit._source.post_id;
+      return getPostUrl(ideaId, postId, phaseId, slug);
+    }
     default: {
       // post
-      ideaId = hit._source.idea_id.length > 0 ? hit._source.idea_id[0] : null;
-      if (!ideaId) {
-        return undefined;
-      }
-      ideaBase64id = btoa(`Idea:${ideaId}`);
-      postBase64id = btoa(`Post:${id}`);
       const phaseId = hit._source.phase_id || 'thread';
-      if (phaseId === 'thread') {
-        return getRoute('post', { slug: slug, phase: phaseId, themeId: ideaBase64id, element: postBase64id });
-      } else if (phaseId === 'survey') {
-        return getRoute('questionPost', {
-          slug: slug,
-          phase: phaseId,
-          questionId: ideaBase64id,
-          questionIndex: 1,
-          element: postBase64id
-        });
-      }
-      return undefined;
+      const ideaId = hit._source.idea_id.length > 0 ? hit._source.idea_id[0] : null;
+      return getPostUrl(ideaId, id, phaseId, slug);
     }
     }
   };
 }
 
 const PublishedInfo = (props) => {
-  const { date, userId, userName, className } = props;
+  const { date, publishedOnMsgId, userId, userName, className } = props;
   return (
     <div className={className}>
-      <Translate value="search.published_on" /> <Localize value={date} dateFormat="date.format" /> <Translate value="search.by" />{' '}
+      <Translate value={publishedOnMsgId} /> <Localize value={date} dateFormat="date.format" /> <Translate value="search.by" />{' '}
       <TagFilter key={userId} field="creator_id" value={userId}>
         <ProfileLine userId={userId} userName={userName} />
       </TagFilter>
@@ -147,7 +153,12 @@ const PublishedInfo = (props) => {
   );
 };
 
+PublishedInfo.defaultProps = {
+  publishedOnMsgId: 'search.published_on'
+};
+
 const TYPE_TO_ICON = {
+  extract: 'discussion',
   user: 'profil',
   post: 'discussion',
   idea: 'idea',
@@ -199,6 +210,8 @@ const highlightedLSOrTruncatedLS = (hit, field, locale) => {
   return '';
 };
 
+const addLocaleToProps = connect(state => ({ locale: getLocale(state) }));
+
 const DumbPostHit = (props) => {
   const locale = props.locale;
   const source = props.result._source;
@@ -233,7 +246,35 @@ const DumbPostHit = (props) => {
   );
 };
 
-const PostHit = connect(state => ({ locale: getLocale(state) }))(DumbPostHit);
+const PostHit = addLocaleToProps(DumbPostHit);
+
+const DumbExtractHit = (props) => {
+  const locale = props.locale;
+  const source = props.result._source;
+  const subject = highlightedLSOrTruncatedLS(props.result, 'subject', locale);
+  const body = highlightedTextOrTruncatedText(props.result, 'body');
+
+  return (
+    <div className={props.bemBlocks.item().mix(props.bemBlocks.container('item'))}>
+      <ImageType type={props.result._type} className={props.bemBlocks.item('imgtype')} />
+      <div className={props.bemBlocks.item('title')}>
+        <Link to={getUrl(props.result)} dangerouslySetInnerHTML={{ __html: subject }} />
+      </div>
+      <div className={props.bemBlocks.item('content')}>
+        <p dangerouslySetInnerHTML={{ __html: body }} />
+      </div>
+      <PublishedInfo
+        className={props.bemBlocks.item('info')}
+        date={source.creation_date}
+        publishedOnMsgId="search.harvested_on"
+        userId={source.creator_id}
+        userName={source.creator_name}
+      />
+    </div>
+  );
+};
+
+const ExtractHit = addLocaleToProps(DumbExtractHit);
 
 const DumbSynthesisHit = (props) => {
   const locale = props.locale;
@@ -269,7 +310,7 @@ const DumbSynthesisHit = (props) => {
   );
 };
 
-const SynthesisHit = connect(state => ({ locale: getLocale(state) }))(DumbSynthesisHit);
+const SynthesisHit = addLocaleToProps(DumbSynthesisHit);
 
 const UserHit = (props) => {
   const source = props.result._source;
@@ -350,7 +391,7 @@ const DumbIdeaHit = (props) => {
   );
 };
 
-const IdeaHit = connect(state => ({ locale: getLocale(state) }))(DumbIdeaHit);
+const IdeaHit = addLocaleToProps(DumbIdeaHit);
 
 const HitItem = (props) => {
   switch (props.result._type) {
@@ -360,6 +401,8 @@ const HitItem = (props) => {
     return <UserHit {...props} />;
   case 'idea':
     return <IdeaHit {...props} />;
+  case 'extract':
+    return <ExtractHit {...props} />;
   default:
     // post
     return <PostHit {...props} />;
@@ -370,11 +413,12 @@ const NoPanel = props => <div>{props.children}</div>;
 
 const calcQueryFields = () => {
   const base = [
+    'body', // extract
     'name', // user
     'subject', // synthesis
     'introduction', // synthesis
     'conclusion', // synthesis
-    'creator_display_name' // post
+    'creator_display_name' // extract, post
   ];
   const lsFields = [
     'announcement_title', // idea announcement
@@ -700,4 +744,7 @@ const mapStateToProps = state => ({
 });
 
 const ConnectedSearch = connect(mapStateToProps)(SearchComponent);
+
+export { DumbExtractHit };
+
 export default ConnectedSearch;
