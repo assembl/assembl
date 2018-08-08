@@ -3,7 +3,7 @@ import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import type { OperationComponent, QueryProps } from 'react-apollo';
 import { connect } from 'react-redux';
-import { I18n } from 'react-redux-i18n';
+import { I18n, Translate } from 'react-redux-i18n';
 
 import TextWithHeaderPage from '../components/common/textWithHeaderPage';
 import CookiesSelector from '../components/cookies/cookiesSelector';
@@ -26,6 +26,9 @@ const CookiesPolicy = ({ text, headerTitle, debateData }) => (
       renderPageBody={() => (
         <div className="page-body">
           <CookiesSelector key="cookies-selector" />
+          <h2 className="dark-title-2">
+            <Translate value="cookiesPolicy.sectionTitle" />
+          </h2>
           <div
             className="ellipsis-content justify"
             dangerouslySetInnerHTML={{
