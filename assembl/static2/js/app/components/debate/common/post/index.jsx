@@ -160,7 +160,7 @@ export class DumbPost extends React.PureComponent<Props, State> {
     const modifiedSubject = (
       <span>
         {getSubjectPrefixString(fullLevel)}
-        {subject.replace('Re: ', '')}
+        {subject ? subject.replace('Re: ', '') : ''}
       </span>
     );
 
