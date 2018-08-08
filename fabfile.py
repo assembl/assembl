@@ -901,8 +901,10 @@ def update_bluenove_actionable():
         print(cyan('Updating bluenove-actionable Git repository'))
         with cd(path):
             # We need an ssh access
-            run('git pull', warn_only=True)
+            run('git pull')
+            run('docker system prune --volumes -f', warn_only=True)
             run('docker-compose build --no-cache', warn_only=True)
+            execute(restart_bluenove_actionable)
 
 
 @task
