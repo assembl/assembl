@@ -2,7 +2,7 @@
 import React from 'react';
 import { Translate } from 'react-redux-i18n';
 import { connect } from 'react-redux';
-import { compose, graphql, withApollo, type ApolloClient } from 'react-apollo';
+import { compose, graphql } from 'react-apollo';
 import { Link } from 'react-router';
 import { Button } from 'react-bootstrap';
 import classnames from 'classnames';
@@ -11,57 +11,42 @@ import { get } from '../utils/routeMap';
 import updateAcceptedCookies from '../graphql/mutations/updateAcceptedCookies.graphql';
 import acceptedCookiesQuery from '../graphql/acceptedCookiesQuery.graphql';
 import { COOKIE_TYPES } from '../constants';
+import withoutLoadingIndicator from './common/withoutLoadingIndicator';
 
 type State = {
   hide: ?boolean
 };
 
 type Props = {
-  client: ApolloClient,
-  acceptedCookies: Array<string>
+  acceptedCookies: Array<string>,
+  updateAcceptedCookies: Function
 };
 
 const discussionId = getDiscussionId();
 
 const formattedCookieNames = COOKIE_TYPES.map(cookie => discussionId && `${cookie}_${discussionId}`);
 
-export const saveAcceptedCookies = (cookies: Array<string>, client: ApolloClient) => {
-  client.mutate({
-    mutation: updateAcceptedCookies,
-    variables: {
-      actions: cookies
-    }
-  })
-  // If the user is not logged in the mutation will error
-    .catch(() => { formattedCookieNames.forEach(cookie => cookie && setCookieItem(cookie, 'true')); });
-};
 
 export class DumbCookiesBar extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = { hide: true };
-  }
-
-  componentWillReceiveProps({ acceptedCookies }: Props) {
-    if (acceptedCookies) {
-      // acceptedCookies from the query is only received if the user is logged in
-      const userHasConfiguredCookies = COOKIE_TYPES.some(cookie => acceptedCookies.includes(cookie));
-      this.setState({ hide: userHasConfiguredCookies });
-    } else {
-      // is the user is not logged in, we check in the browser instead of the backend
-      const hasConfiguredCookies = formattedCookieNames.some(cookie => cookie && getCookieItem(cookie) === 'true');
-      this.setState({ hide: hasConfiguredCookies });
-    }
+    const { acceptedCookies } = props;
+    const shouldHideBar = acceptedCookies ?
+      // acceptedCookies comes from the query and is only received if the user is logged in
+      COOKIE_TYPES.some(cookie => acceptedCookies.includes(cookie)) :
+      // if the user is not logged in, we check in the browser instead of the backend
+      formattedCookieNames.some(cookie => cookie && getCookieItem(cookie) === 'true');
+    this.state = { hide: shouldHideBar };
   }
 
   acceptAllCookies = () => {
-    const { client } = this.props;
-    saveAcceptedCookies(COOKIE_TYPES, client);
+    this.props.updateAcceptedCookies({ variables: { actions: COOKIE_TYPES } })
+      // If the user is not logged in the mutation will error
+      .catch(() => { formattedCookieNames.forEach(cookie => cookie && setCookieItem(cookie, 'true')); });
     this.setState({
       hide: true
     });
   }
-
 
   render() {
     const { hide } = this.state;
@@ -99,7 +84,7 @@ export default compose(
   graphql(acceptedCookiesQuery, {
     props: ({ data }) => {
       if (data.loading) {
-        return { laoding: true };
+        return { loading: true };
       }
       if (data.error) {
         return { error: data.error };
@@ -109,4 +94,4 @@ export default compose(
       };
     }
   }),
-  withApollo)(DumbCookiesBar);
+  withoutLoadingIndicator())(DumbCookiesBar);
