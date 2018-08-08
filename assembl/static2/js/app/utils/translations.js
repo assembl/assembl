@@ -525,11 +525,11 @@ const Translations = {
       },
       brightMirrorSection: {
         bannerSubtitleLabel: "Sous-titre dans le bandeau du haut de page",
-        bannerImagePickerLabel: "*Choisir l'image de fond du bandeau",
+        bannerImagePickerLabel: "Choisir l'image de fond du bandeau",
         configureTitle: "Configurer Bright Mirror",
         instructionLabel: "Consigne",
-        sectionTitleLabel: "*Titre de la section",
-        thematicTitleLabel: "*Titre de la thématique"
+        sectionTitleLabel: "Titre de la section",
+        thematicTitleLabel: "Titre de la thématique"
       },
       voteSession: {
         "0": "Configuration de la page",
@@ -1315,11 +1315,11 @@ const Translations = {
       },
       brightMirrorSection: {
         bannerSubtitleLabel: "Top banner subtitle",
-        bannerImagePickerLabel: "*Banner image",
+        bannerImagePickerLabel: "Banner image",
         configureTitle: "Configure Bright Mirror",
         instructionLabel: "Instructions",
-        sectionTitleLabel: "*Section title",
-        thematicTitleLabel: "*Thematic title"
+        sectionTitleLabel: "Section title",
+        thematicTitleLabel: "Thematic title"
       },
       voteSession: {
         "0": "Page configuration",

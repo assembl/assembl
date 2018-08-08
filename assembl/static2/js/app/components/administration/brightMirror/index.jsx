@@ -7,11 +7,12 @@ import { type ApolloClient, compose, withApollo } from 'react-apollo';
 import { Field } from 'react-final-form';
 
 // Components
+import AdminForm from '../../form/adminForm';
 import FileUploaderFieldAdapter from '../../form/fileUploaderFieldAdapter';
 import MultilingualTextFieldAdapter from '../../form/multilingualTextFieldAdapter';
 import MultilingualRichTextFieldAdapter from '../../form/multilingualRichTextFieldAdapter';
 import LoadSaveReinitializeForm from '../../../components/form/LoadSaveReinitializeForm';
-import SaveButton from '../../../components/administration/saveButton';
+import Navbar from '../navbar';
 import Loader from '../../common/loader';
 import Helper from '../../common/helper';
 
@@ -21,31 +22,43 @@ import { createMutationsPromises, save } from './save'; // Save file needs to be
 import validate from './validate'; // Save file needs to be updated according to bright mirror requirements
 
 type Props = {
+  currentStep: number,
   client: ApolloClient,
   editLocale: string
 };
 
+const name = 'themes[0]'; // We have only one thematic for BrightMirror
+
 const loading = <Loader />;
 
-class BrightMirrorAdminForm extends React.Component<Props> {
-  render() {
-    const { client, editLocale } = this.props;
-    const name = 'bright-mirror';
-    return (
-      <LoadSaveReinitializeForm
-        load={(fetchPolicy: FetchPolicy) => load(client, fetchPolicy)}
-        loading={loading}
-        postLoadFormat={postLoadFormat}
-        createMutationsPromises={createMutationsPromises(client)}
-        save={save}
-        validate={validate}
-        mutators={{
-          ...arrayMutators
-        }}
-        render={({ handleSubmit, pristine, submitting }) => (
+const BrightMirrorAdminForm = ({ client, currentStep, editLocale }: Props) => (
+  <LoadSaveReinitializeForm
+    load={(fetchPolicy: FetchPolicy) => load(client, fetchPolicy)}
+    loading={loading}
+    postLoadFormat={postLoadFormat}
+    createMutationsPromises={createMutationsPromises(client)}
+    save={save}
+    validate={validate}
+    mutators={{
+      ...arrayMutators
+    }}
+    render={({ handleSubmit, pristine, submitting }) => {
+      const upperCaseLocale = editLocale.toUpperCase();
+      const titleName = `${name}.title`;
+      const descriptionName = `${name}.description`;
+      const imageName = `${name}.img`;
+      const announcementTitleName = `${name}.announcement.title`;
+      const announcementBodyName = `${name}.announcement.body`;
+      const titleLabel = `${I18n.t('administration.brightMirrorSection.thematicTitleLabel')} ${upperCaseLocale}`;
+      const descriptionLabel = `${I18n.t('administration.brightMirrorSection.bannerSubtitleLabel')} ${upperCaseLocale}`;
+      const imageLabel = `${I18n.t('administration.brightMirrorSection.bannerImagePickerLabel')} ${upperCaseLocale}`;
+      const announcementTitleLabel = `${I18n.t('administration.brightMirrorSection.sectionTitleLabel')} ${upperCaseLocale}`;
+      const announcementBodyLabel = `${I18n.t('administration.brightMirrorSection.instructionLabel')} ${upperCaseLocale}`;
+
+      return (
+        <React.Fragment>
           <div className="admin-content">
-            <form onSubmit={handleSubmit}>
-              <SaveButton disabled={pristine || submitting} saveAction={handleSubmit} />
+            <AdminForm handleSubmit={handleSubmit} pristine={pristine} submitting={submitting}>
               <div className="form-container">
                 <Helper
                   label={I18n.t('administration.headerTitle')}
@@ -54,24 +67,21 @@ class BrightMirrorAdminForm extends React.Component<Props> {
                   classname="title"
                 />
                 <Field
+                  key={`${titleName}-${editLocale}`}
                   editLocale={editLocale}
-                  name={`${name}.title`}
+                  name={titleName}
+                  label={titleLabel}
                   component={MultilingualTextFieldAdapter}
-                  label={`${I18n.t('administration.brightMirrorSection.thematicTitleLabel')} ${editLocale.toUpperCase()}`}
                   required
                 />
                 <Field
+                  key={`${descriptionName}-${editLocale}`}
                   editLocale={editLocale}
-                  name={`${name}.title`}
+                  name={descriptionName}
                   component={MultilingualTextFieldAdapter}
-                  label={`${I18n.t('administration.brightMirrorSection.bannerSubtitleLabel')} ${editLocale.toUpperCase()}`}
-                  required
+                  label={descriptionLabel}
                 />
-                <Field
-                  name={`${name}.img`}
-                  component={FileUploaderFieldAdapter}
-                  label={I18n.t('administration.brightMirrorSection.bannerImagePickerLabel')}
-                />
+                <Field name={imageName} component={FileUploaderFieldAdapter} label={imageLabel} required />
                 <Helper
                   label={I18n.t('administration.instructions')}
                   helperUrl="/static2/img/helpers/helper2.jpg"
@@ -79,37 +89,39 @@ class BrightMirrorAdminForm extends React.Component<Props> {
                   classname="title"
                 />
                 <Field
+                  key={`${announcementTitleName}-${editLocale}`}
                   editLocale={editLocale}
-                  name={`${name}.title`}
+                  name={announcementTitleName}
+                  label={announcementTitleLabel}
                   component={MultilingualTextFieldAdapter}
-                  label={`${I18n.t('administration.brightMirrorSection.sectionTitleLabel')} ${editLocale.toUpperCase()}`}
                   required
                 />
                 <Field
-                  key={`${name}-text-${editLocale}`}
+                  key={`${announcementBodyName}-${editLocale}`}
                   editLocale={editLocale}
-                  name={`${name}.text`}
+                  name={announcementBodyName}
+                  label={announcementBodyLabel}
                   component={MultilingualRichTextFieldAdapter}
-                  label={`${I18n.t('administration.brightMirrorSection.instructionLabel')} ${editLocale.toUpperCase()}`}
                 />
               </div>
-            </form>
+            </AdminForm>
           </div>
-        )}
-      />
-    );
-  }
-}
+          {!isNaN(currentStep) && (
+            <Navbar
+              currentStep={currentStep}
+              totalSteps={1}
+              phaseIdentifier="brightMirror"
+              beforeChangeSection={() => (pristine || submitting) && handleSubmit()}
+            />
+          )}
+        </React.Fragment>
+      );
+    }}
+  />
+);
 
-const mapStateToProps = ({ admin: { editLocale, resourcesCenter } }) => {
-  const { page, resourcesById, resourcesHaveChanged, resourcesInOrder } = resourcesCenter;
-  return {
-    editLocale: editLocale,
-    pageHasChanged: page.get('_hasChanged'),
-    resourcesCenterPage: page,
-    resourcesHaveChanged: resourcesHaveChanged,
-    resources: resourcesInOrder.map(id => resourcesById.get(id).toJS())
-  };
-};
+const mapStateToProps = state => ({
+  editLocale: state.admin.editLocale
+});
 
 export default compose(connect(mapStateToProps), withApollo)(BrightMirrorAdminForm);
