@@ -62,8 +62,8 @@ const BrightMirrorAdminForm = ({ client, currentStep, editLocale }: Props) => (
               <div className="form-container">
                 <Helper
                   label={I18n.t('administration.headerTitle')}
-                  helperUrl="/static2/img/helpers/helper2.jpg"
-                  helperText="TO BE DEFINED and IMAGE TO BE CHANGED (translation to add in translation.js)"
+                  helperUrl="/static2/img/helpers/helper1.png"
+                  helperText={I18n.t('administration.brightMirrorSection.bannerHeader')}
                   classname="title"
                 />
                 <Field
@@ -84,8 +84,8 @@ const BrightMirrorAdminForm = ({ client, currentStep, editLocale }: Props) => (
                 <Field name={imageName} component={FileUploaderFieldAdapter} label={imageLabel} required />
                 <Helper
                   label={I18n.t('administration.instructions')}
-                  helperUrl="/static2/img/helpers/helper2.jpg"
-                  helperText="TO BE DEFINED and IMAGE TO BE CHANGED (translation to add in translation.js)"
+                  helperUrl="/static2/img/helpers/helper_BM_1.png"
+                  helperText={I18n.t('administration.brightMirrorSection.instructionHeader')}
                   classname="title"
                 />
                 <Field

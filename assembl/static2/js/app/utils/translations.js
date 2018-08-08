@@ -524,9 +524,13 @@ const Translations = {
         "2": "Exporter les données"
       },
       brightMirrorSection: {
+        bannerHeader:
+          "Le bandeau de haut de page comporte le titre de la thématique que vous avez défini en amont, ainsi qu’une image de fond et éventuellement un sous-titre.",
         bannerSubtitleLabel: "Sous-titre dans le bandeau du haut de page",
         bannerImagePickerLabel: "Choisir l'image de fond du bandeau",
         configureTitle: "Configurer Bright Mirror",
+        instructionHeader:
+          "La section Consigne comporte un titre et une consigne et un média (vidéo, slideshare ou image ) qui permettent de guider les participants dans leur contribution.",
         instructionLabel: "Consigne",
         sectionTitleLabel: "Titre de la section",
         thematicTitleLabel: "Titre de la thématique"
@@ -1314,10 +1318,14 @@ const Translations = {
         "2": "Export data"
       },
       brightMirrorSection: {
+        bannerHeader:
+          "Top banner must include the thematic title defined previously, a background image and eventually a subtitle.",
         bannerSubtitleLabel: "Top banner subtitle",
         bannerImagePickerLabel: "Banner image",
         configureTitle: "Configure Bright Mirror",
         instructionLabel: "Instructions",
+        instructionHeader:
+          "Instruction section include a title, an instruction and a media (video, slideshare or image) which guides users in their contribution.",
         sectionTitleLabel: "Section title",
         thematicTitleLabel: "Thematic title"
       },
