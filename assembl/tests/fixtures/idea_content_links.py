@@ -252,6 +252,37 @@ def extract_with_range_submitted_in_reply_post_1(
 
     return new_extract
 
+
+@pytest.fixture(scope="function")
+def extract_submitted_in_post_related_to_sub_idea_1_1_1(
+        request, participant2_user, post_related_to_sub_idea_1_1_1,
+        subidea_1_1, discussion, test_session):
+    """ Create an extract in a post related to an idea."""
+
+    from assembl.models import Extract, TextFragmentIdentifier
+    from assembl.models.idea_content_link import ExtractNatureVocabulary, ExtractActionVocabulary
+
+    new_extract = Extract(
+        discussion_id=discussion.id,
+        body=u"Commodi maiores magni rerum. Sint natus corporis in qui in ut dignissimos cumque repellendus. Reprehenderit nihil illum.",
+        creator=participant2_user,
+        owner=participant2_user,
+        content=post_related_to_sub_idea_1_1_1,
+        extract_nature=ExtractNatureVocabulary.Enum.actionable_solution,
+        extract_action=ExtractActionVocabulary.Enum.give_examples
+    )
+    test_session.add(new_extract)
+    test_session.flush()
+
+    def fin():
+        print "finalizer extract_with_range_submitted_in_reply_post_1"
+        test_session.delete(new_extract)
+        test_session.flush()
+    request.addfinalizer(fin)
+
+    return new_extract
+
+
 @pytest.fixture(scope="function")
 def jack_layton_linked_discussion(
         request, test_session, jack_layton_mailbox, subidea_1, subidea_1_1,

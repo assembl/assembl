@@ -79,6 +79,25 @@ def populate_from_langstring_prop(content, data, propName, dataPropName=None):
         populate_from_langstring(ls, data, dataPropName or propName)
 
 
+def get_idea_id_for_post(post):
+    from assembl.models.idea import Idea, MessageView
+    idea_id = [link.idea_id
+        for link in post.indirect_idea_content_links_without_cache()
+        if link.__class__.__name__ == 'IdeaRelatedPostLink']
+
+    if idea_id:
+        idea = Idea.get(idea_id[0])
+        # If the post is a fiction for Bright Mirror, don't index it.
+        if idea.message_view_override == MessageView.brightMirror.value:
+            return []
+
+        # If the idea is now in multi columns mode and the post was created before that, don't index it.
+        if idea.message_columns and post.message_classifier is None:
+            return []
+
+    return idea_id
+
+
 def get_data(content):
     """Return uid, dict of fields we want to index,
     return None if we don't index."""
@@ -116,7 +135,6 @@ def get_data(content):
         return get_uid(content), data
 
     elif isinstance(content, Post):
-        from assembl.models.idea import MessageView
         data = {}
         data['_parent'] = 'user:{}'.format(content.creator_id)
         if content.parent_id is not None:
@@ -128,20 +146,11 @@ def get_data(content):
 
         data['creator_display_name'] = AgentProfile.get(content.creator_id).display_name()
 
-        data['idea_id'] = [link.idea_id
-            for link in content.indirect_idea_content_links_without_cache()
-            if link.__class__.__name__ == 'IdeaRelatedPostLink']
-        # The post is not associated to any idea, we can't generate an url from it, don't index it.
-        if not data['idea_id']:
+        idea_id = get_idea_id_for_post(content)
+        if not idea_id:
             return None, None
 
-        # If the post is a fiction for Bright Mirror, don't index it.
-        if Idea.get(data['idea_id'][0]).message_view_override == MessageView.brightMirror.value:
-            return None, None
-
-        # If the idea is now in multi columns mode and the post was created before that, don't index it.
-        if Idea.get(data['idea_id'][0]).message_columns and content.message_classifier is None:
-            return None, None
+        data['idea_id'] = idea_id
 
         data['sentiment_tags'] = [key for key in data['sentiment_counts']
                                   if data['sentiment_counts'][key] > 0]
@@ -199,7 +208,7 @@ def get_data(content):
         else:
             data['phase_id'] = 'thread'
 
-        idea_id = content.idea_id
+        idea_id = get_idea_id_for_post(post)
         if not idea_id:
             return None, None
 
