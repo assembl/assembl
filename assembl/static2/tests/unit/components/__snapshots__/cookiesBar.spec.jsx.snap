@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`CookiesBar component should render a bar with 2 buttons to accept the cookies policy or read them 1`] = `
+exports[`CookiesBar component should render a bar with 2 buttons to accept the cookies policy or read them (bar is hidden by default) 1`] = `
 <div
-  className="cookies-bar show-cookies-bar"
+  className="cookies-bar hide-cookies-bar"
 >
   <span
     className="cookies-text"
