@@ -1202,6 +1202,8 @@ class Username(Base):
                      nullable=False, unique=True, index=True)
     username = Column(CoerceUnicode(20), primary_key=True)
     user = relationship(User, backref=backref('username', uselist=False, lazy="joined"))
+    __table_args__ = (
+        Index("ix_public_username_username_ci", func.lower(username), unique=True),)
 
     def get_id_as_str(self):
         return str(self.user_id)

@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
+from sqlalchemy import func
 
 from assembl.models.notification import (
     ModelEventWatcherNotificationSubscriptionDispatcher)
+from assembl.models import Username
 
 
 def test_subscribe_to_discussion(
@@ -69,3 +71,11 @@ def test_restricted_discussion_expiry_override(
     admin_user.last_assembl_login = long_ago
     admin_social_account.last_checked = now
     assert not admin_user.login_expired(closed_discussion)
+
+
+def test_case_insensitive_search_on_username(
+        test_session, discussion, participant1_username):
+    # participant1_username has 'Test.Username' as username
+    # a search on the lowercase version should return one result
+    assert test_session.query(Username).filter(
+        func.lower(Username.username) == 'test.username').count()

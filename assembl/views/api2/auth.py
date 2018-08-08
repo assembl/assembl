@@ -1,6 +1,7 @@
 from simplejson import dumps, loads
 from string import Template
 from datetime import datetime
+from sqlalchemy import func
 
 from pyramid.response import Response
 from pyramid.view import view_config
@@ -460,8 +461,8 @@ def assembl_register_user(request):
                          ErrorTypes.INVALID_EMAIL)
     username = json.get('username', None)
     if username:
-        if session.query(Username).filter_by(
-                username=username).count():
+        if session.query(Username).filter(
+                func.lower(Username.username) == username.lower()).count():
             errors.add_error(localizer.translate(_(
                 "We already have a user with this username.")),
                 ErrorTypes.EXISTING_USERNAME,

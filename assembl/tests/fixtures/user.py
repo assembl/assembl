@@ -36,7 +36,7 @@ def participant1_user(request, test_session, discussion):
 def participant1_username(request, test_session, participant1_user):
     """A username for participant1_user"""
     from assembl.models import Username
-    username = Username(user=participant1_user, username="test_username")
+    username = Username(user=participant1_user, username="Test.Username")
     test_session.add(username)
     test_session.flush()
 
