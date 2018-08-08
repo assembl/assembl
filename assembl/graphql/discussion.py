@@ -15,7 +15,9 @@ from .types import SecureObjectType
 from .langstring import (
     LangStringEntry, LangStringEntryInput, resolve_langstring,
     resolve_langstring_entries, update_langstring_from_input_entries)
-from .utils import abort_transaction_on_exception
+from .utils import (
+    abort_transaction_on_exception, update_attachment,
+    get_attachment_with_purpose)
 
 
 # Mostly fields related to the discussion title and landing page
@@ -288,12 +290,11 @@ class DiscussionPreferences(graphene.ObjectType):
         return [LocalePreference(locale=x) for x in locales]
 
     def resolve_favicon(self, args, context, info):
-        FAVICON = models.AttachmentPurpose.FAVICON.value
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
-        for attachment in discussion.attachments:
-            if attachment.attachmentPurpose == FAVICON:
-                return attachment.document
+        attachment = get_attachment_with_purpose(
+            discussion.attachments, models.AttachmentPurpose.FAVICON.value)
+        return attachment and attachment.document
 
 
 class ResourcesCenter(graphene.ObjectType):
@@ -504,34 +505,15 @@ class UpdateDiscussionPreferences(graphene.Mutation):
                 discussion.preferences['tab_title'] = tab_title
 
             if favicon:
-                FAVICON = models.AttachmentPurpose.FAVICON.value
-                # if there is already an IMAGE, remove it with the
-                # associated document
-                favicon_images = [
-                    att for att in discussion.attachments
-                    if att.attachmentPurpose == FAVICON
-                ]
-                if favicon_images:
-                    favicon_image = favicon_images[0]
-                    favicon_image.document.delete_file()
-                    db.delete(favicon_image.document)
-                    discussion.attachments.remove(favicon_image)
-
-                if favicon != 'TO_DELETE':
-                    filename = os.path.basename(context.POST[favicon].filename)
-                    mime_type = context.POST[favicon].type
-                    document = models.File(
-                        discussion=discussion,
-                        mime_type=mime_type,
-                        title=filename)
-                    document.add_file_data(context.POST[favicon].file)
-                    db.add(models.DiscussionAttachment(
-                        document=document,
-                        discussion=discussion,
-                        creator_id=context.authenticated_userid,
-                        title=filename,
-                        attachmentPurpose=FAVICON
-                    ))
+                update_attachment(
+                    discussion,
+                    models.DiscussionAttachment,
+                    favicon,
+                    discussion.attachments,
+                    models.AttachmentPurpose.FAVICON.value,
+                    db,
+                    context
+                )
 
         db.flush()
 

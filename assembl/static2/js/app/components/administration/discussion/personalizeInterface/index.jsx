@@ -1,7 +1,6 @@
 // @flow
 import React from 'react';
 import { type ApolloClient, withApollo } from 'react-apollo';
-import arrayMutators from 'final-form-arrays';
 import { I18n, Translate } from 'react-redux-i18n';
 import { Field } from 'react-final-form';
 
@@ -14,7 +13,7 @@ import { load, postLoadFormat } from './load';
 import { createMutationsPromises, save } from './save';
 import validate from './validate';
 import Loader from '../../../common/loader';
-import { DEFAUT_FAVICON } from '../../../../constants';
+import { DEFAULT_FAVICON } from '../../../../constants';
 
 type Props = {
   client: ApolloClient
@@ -32,7 +31,7 @@ const PersonalizeInterface = ({ client }: Props) => (
         postLoadFormat={postLoadFormat}
         createMutationsPromises={createMutationsPromises(client)}
         save={save}
-        onSave={(values: TInitialValues) => {
+        afterSave={(values: TInitialValues) => {
           // Update the title and the favicon of the page
           const head = document.head;
           if (head) {
@@ -40,17 +39,14 @@ const PersonalizeInterface = ({ client }: Props) => (
             const pageTitle = head.getElementsByTagName('title')[0];
             if (pageTitle) pageTitle.text = values.title;
             // Update the favicon
-            const favisonLink = head.querySelector('link[rel="icon"]');
+            const faviconLink = head.querySelector('link[rel="icon"]');
             // Use the default favicon if favicon is null
-            let faviconUrl = values.favicon ? values.favicon.externalUrl : DEFAUT_FAVICON;
+            let faviconUrl = values.favicon ? values.favicon.externalUrl : DEFAULT_FAVICON;
             faviconUrl = typeof faviconUrl === 'object' ? window.URL.createObjectURL(faviconUrl) : faviconUrl;
-            if (favisonLink) favisonLink.setAttribute('href', faviconUrl);
+            if (faviconLink) faviconLink.setAttribute('href', faviconUrl);
           }
         }}
         validate={validate}
-        mutators={{
-          ...arrayMutators
-        }}
         render={({ handleSubmit, pristine, submitting }) => (
           <React.Fragment>
             <div>

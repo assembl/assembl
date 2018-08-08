@@ -100,7 +100,7 @@ class DiscussionPreferences:
     __doc__ = """A discussion can have many preferences. This metadata object describes these preferences."""
     languages = """A list of LocalePreference metadata objects on the discussion which describe the languages supported by the debate."""
     tab_title = """The title in the tab."""
-    favicon = Default.document % ("""The favicon of the site.""",)
+    favicon = Default.document % ("""The site favicon.""",)
 
 
 class ResourcesCenter:

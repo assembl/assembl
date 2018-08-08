@@ -23,7 +23,7 @@ type Props = {
   postLoadFormat: ?(TOriginalValues) => TInitialValues,
   createMutationsPromises: (TInitialValues, TInitialValues) => MutationsPromises,
   save: MutationsPromises => Promise<SaveStatus>,
-  onSave?: TInitialValues => void
+  afterSave?: TInitialValues => void
 };
 
 type State = {
@@ -55,14 +55,14 @@ export default class LoadSaveReinitializeForm extends React.Component<Props, Sta
   };
 
   save = async (values: TInitialValues) => {
-    const { createMutationsPromises, save, onSave } = this.props;
+    const { createMutationsPromises, save, afterSave } = this.props;
     if (this.state.initialValues) {
       const mutationPromises = createMutationsPromises(values, this.state.initialValues);
       const status = await save(mutationPromises);
       if (status === 'OK') {
         // we really need to do a refetch to have the correct new ids in values
         await this.load('network-only');
-        if (onSave) onSave(values);
+        if (afterSave) afterSave(values);
       }
     }
   };

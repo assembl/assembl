@@ -158,12 +158,10 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
     @property
     def favicon(self):
         from .attachment import AttachmentPurpose
-        FAVICON = AttachmentPurpose.FAVICON.value
-        for attachment in self.attachments:
-            if attachment.attachmentPurpose == FAVICON:
-                return attachment.document
-
-        return None
+        from ..graphql.utils import get_attachment_with_purpose
+        attachment = get_attachment_with_purpose(
+            self.attachments, AttachmentPurpose.FAVICON.value)
+        return attachment and attachment.document
 
     @property
     def logo(self):
