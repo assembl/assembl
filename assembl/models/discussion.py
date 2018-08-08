@@ -156,6 +156,14 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
         self.homepage_url = url
 
     @property
+    def favicon(self):
+        from .attachment import AttachmentPurpose
+        from ..graphql.utils import get_attachment_with_purpose
+        attachment = get_attachment_with_purpose(
+            self.attachments, AttachmentPurpose.FAVICON.value)
+        return attachment and attachment.document
+
+    @property
     def logo(self):
         return self.logo_url
 

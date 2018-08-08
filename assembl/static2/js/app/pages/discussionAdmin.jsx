@@ -13,6 +13,7 @@ import LegalContentsForm from '../components/administration/discussion/legalCont
 import TimelineForm from '../components/administration/discussion/timelineForm';
 import LanguageSection from '../components/administration/discussion/languageSection';
 import ManageProfileOptionsForm from '../components/administration/discussion/manageProfileOptionsForm';
+import PersonalizeInterface from '../components/administration/discussion/personalizeInterface';
 import { displayAlert } from '../utils/utilityManager';
 import { convertEntriesToHTML } from '../utils/draftjs';
 import SaveButton, { getMutationsPromises, runSerial } from '../components/administration/saveButton';
@@ -311,14 +312,16 @@ class DiscussionAdmin extends React.Component<Props, State> {
   render() {
     const { section } = this.props;
     const saveDisabled = !this.dataHaveChanged();
+    // @TODO use final-form logic
     return (
       <div className="discussion-admin">
-        <SaveButton disabled={saveDisabled} saveAction={this.saveAction} />
+        {section !== '6' && <SaveButton disabled={saveDisabled} saveAction={this.saveAction} />}
         {section === '1' && <LanguageSection {...this.props} />}
         {section === '2' && <ManageSectionsForm {...this.props} />}
         {section === '3' && <ManageProfileOptionsForm />}
         {section === '4' && <LegalContentsForm {...this.props} />}
         {section === '5' && <TimelineForm {...this.props} />}
+        {section === '6' && <PersonalizeInterface {...this.props} />}
       </div>
     );
   }

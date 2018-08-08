@@ -2,9 +2,9 @@
 export type I18nValue = { [string]: string };
 
 export type FileValue = ?{
-  externalUrl: string,
-  mimeType: string,
-  title: string
+  externalUrl: ?string,
+  mimeType: ?string,
+  title: ?string
 };
 
 export type FileVariable = string | FileValue | null;

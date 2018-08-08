@@ -44,8 +44,12 @@
         {% endif %} 
     {% endblock meta_tags_public %}
 
+    {% if discussion.favicon %}
+      <link rel="icon" href="{{discussion.favicon.external_url}}" type="image/x-icon">
+    {% else %}
+      <link rel="icon" href="/static/img/icon/infinite-1.png" type="image/x-icon">
+    {% endif %}
 
-    {#<link rel="icon" href="/static/img/icon/infinite-1.png" type="image/x-icon">#}
     <link href='//fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'>
 
     {% block main_css %}

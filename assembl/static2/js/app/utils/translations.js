@@ -473,7 +473,8 @@ const Translations = {
         legalContents: "Éditer les contenus juridiques",
         timeline: "Éditer les phases et modules",
         exportTaxonomies: "Exporter les taxonomies",
-        manageProfileOptions: "Options d'inscription"
+        manageProfileOptions: "Options d'inscription",
+        personalizeInterface: "Personnaliser l'interface"
       },
       timelineAdmin: {
         phase: "Phase %{count}",
@@ -642,11 +643,12 @@ const Translations = {
         "0": "Langues utilisées",
         "3": "Options d'inscription",
         "4": "Contenus juridiques",
-        "5": "Édition des phases et modules"
+        "5": "Édition des phases et modules",
+        "6": "Personnaliser l'interface"
       },
       languageChoice: "Sélection des langues du débat",
       ph: {
-        title: "*Titre",
+        title: "Titre",
         quote: "Citation",
         descriptionTop: "Texte au-dessus de la vidéo",
         descriptionBottom: "Texte en-dessous de la vidéo",
@@ -749,6 +751,13 @@ const Translations = {
         textFieldToggleRequired: "Rendre ce champ obligatoire",
         successSave: "Les options de profils ont été enregistrées avec succès !",
         hideTextField: "Cacher ce champs pour l'utilisateur"
+      },
+      personalizeInterface: {
+        success: "La personnalisation de l'interface a été enregistées avec succès !",
+        titleFormTitle: "Personnaliser l'intitulé de la page",
+        title: "Titre de la page web (1)",
+        favicon: "Favicon (2)",
+        icoRequired: "Le favicon doit être un fichier .ico uniquement"
       }
     },
     unauthorizedAdministration: {
@@ -1232,7 +1241,8 @@ const Translations = {
         legalContents: "Edit legal content",
         timeline: "Edit the phases and modules",
         exportTaxonomies: "Export taxonomies",
-        manageProfileOptions: "Registration options"
+        manageProfileOptions: "Registration options",
+        personalizeInterface: "Personalize the interface"
       },
       timelineAdmin: {
         phase: "Phase %{count}",
@@ -1395,11 +1405,12 @@ const Translations = {
         "0": "Languages of the Discussion",
         "3": "Registration options",
         "4": "Legal contents",
-        "5": "Edition of the phases and modules"
+        "5": "Edition of the phases and modules",
+        "6": "Personalize the interface"
       },
       languageChoice: "Select desired languages below",
       ph: {
-        title: "*Title",
+        title: "Title",
         quote: "Quote",
         descriptionTop: "Comments above video",
         descriptionBottom: "Comments below video",
@@ -1499,6 +1510,13 @@ const Translations = {
         textFieldToggleRequired: "Make this field required",
         successSave: "The profile options has been saved with success!",
         hideTextField: "Hide this field for the user"
+      },
+      personalizeInterface: {
+        success: "The interface personalization has been saved with success!",
+        titleFormTitle: "Personalize the title of the page",
+        title: "Web page Title (1)",
+        favicon: "Favicon (2)",
+        icoRequired: "The favicon must be an .ico file only"
       }
     },
     unauthorizedAdministration: {

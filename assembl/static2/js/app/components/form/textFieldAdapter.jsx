@@ -17,6 +17,7 @@ type Props = {
     onFocus: (?SyntheticFocusEvent<*>) => void,
     value: string
   },
+  required: boolean,
   label: string
 } & FieldRenderProps;
 
@@ -24,10 +25,11 @@ const TextFieldAdapter = ({
   input: { name, onChange, value, ...otherListeners },
   label,
   meta: { error, touched },
+  required,
   ...rest
 }: Props) => (
   <FormGroup controlId={name} validationState={getValidationState(error, touched)}>
-    {value ? <ControlLabel>{label}</ControlLabel> : null}
+    {value ? <ControlLabel>{required ? `${label} *` : label}</ControlLabel> : null}
     <FormControl
       {...otherListeners}
       {...rest}

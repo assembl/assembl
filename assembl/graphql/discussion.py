@@ -15,7 +15,9 @@ from .types import SecureObjectType
 from .langstring import (
     LangStringEntry, LangStringEntryInput, resolve_langstring,
     resolve_langstring_entries, update_langstring_from_input_entries)
-from .utils import abort_transaction_on_exception
+from .utils import (
+    abort_transaction_on_exception, update_attachment,
+    get_attachment_with_purpose)
 
 
 # Mostly fields related to the discussion title and landing page
@@ -277,6 +279,22 @@ class LocalePreference(graphene.ObjectType):
 class DiscussionPreferences(graphene.ObjectType):
     __doc__ = docs.DiscussionPreferences.__doc__
     languages = graphene.List(LocalePreference, description=docs.DiscussionPreferences.languages)
+    tab_title = graphene.String(description=docs.DiscussionPreferences.tab_title)
+    favicon = graphene.Field(Document, description=docs.DiscussionPreferences.favicon)
+
+    def resolve_tab_title(self, args, context, info):
+        return self.get('tab_title', 'Assembl')
+
+    def resolve_languages(self, args, context, info):
+        locales = self.get('preferred_locales', [])
+        return [LocalePreference(locale=x) for x in locales]
+
+    def resolve_favicon(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        attachment = get_attachment_with_purpose(
+            discussion.attachments, models.AttachmentPurpose.FAVICON.value)
+        return attachment and attachment.document
 
 
 class ResourcesCenter(graphene.ObjectType):
@@ -450,7 +468,10 @@ class UpdateDiscussionPreferences(graphene.Mutation):
     __doc__ = docs.UpdateDiscussionPreferences.__doc__
 
     class Input:
-        languages = graphene.List(graphene.String, required=True, description=docs.UpdateDiscussionPreferences.languages)
+        languages = graphene.List(graphene.String, description=docs.UpdateDiscussionPreferences.languages)
+        tab_title = graphene.String(description=docs.UpdateDiscussionPreferences.tab_title)
+        # this is the identifier of the part in a multipart POST
+        favicon = graphene.String(description=docs.UpdateDiscussionPreferences.favicon)
 
     preferences = graphene.Field(lambda: DiscussionPreferences)
 
@@ -468,17 +489,35 @@ class UpdateDiscussionPreferences(graphene.Mutation):
             user_id, CrudPermissions.UPDATE, permissions)
         if not allowed or (allowed == IF_OWNED and user_id == Everyone):
             raise HTTPUnauthorized()
-        prefs_to_save = args.get('languages')
-        if not prefs_to_save:
+
+        db = discussion.db
+        prefs_to_save = args.get('languages', [])
+        tab_title = args.get('tab_title', None)
+        favicon = args.get('favicon', None)
+        if not prefs_to_save and not tab_title and not favicon:
             raise Exception("Must pass at least one preference to be saved")
 
-        discussion.discussion_locales = prefs_to_save
-        discussion.db.flush()
+        with cls.default_db.no_autoflush:
+            if prefs_to_save:
+                discussion.discussion_locales = prefs_to_save
 
-        discussion_pref = DiscussionPreferences(
-            languages=[LocalePreference(locale=x) for
-                       x in discussion.discussion_locales])
-        return UpdateDiscussionPreferences(preferences=discussion_pref)
+            if tab_title:
+                discussion.preferences['tab_title'] = tab_title
+
+            if favicon:
+                update_attachment(
+                    discussion,
+                    models.DiscussionAttachment,
+                    favicon,
+                    discussion.attachments,
+                    models.AttachmentPurpose.FAVICON.value,
+                    db,
+                    context
+                )
+
+        db.flush()
+
+        return UpdateDiscussionPreferences(preferences=discussion.preferences)
 
 
 class UpdateLegalContents(graphene.Mutation):

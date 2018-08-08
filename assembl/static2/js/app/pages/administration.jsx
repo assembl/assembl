@@ -26,6 +26,8 @@ import { convertEntriesToRawContentState } from '../utils/draftjs';
 import { getPhaseId } from '../utils/timeline';
 import landingPagePlugin from '../utils/administration/landingPage';
 
+const SECTIONS_WITHOUT_LANGUAGEMENU = ['1', '6'];
+
 class Administration extends React.Component {
   constructor(props) {
     super(props);
@@ -47,7 +49,8 @@ class Administration extends React.Component {
     this.putVoteSessionInStore(this.props.voteSession);
     this.putVoteModulesInStore(this.props.voteSession);
     this.putVoteProposalsInStore(this.props.voteSession);
-    const isHidden = this.props.identifier === 'discussion' && this.props.location.query.section === '1';
+    const isHidden =
+      this.props.identifier === 'discussion' && SECTIONS_WITHOUT_LANGUAGEMENU.includes(this.props.location.query.section);
     this.props.displayLanguageMenu(isHidden);
     this.putLandingPageModulesInStore(this.props.landingPageModules);
     this.putTextFieldsInStore(this.props.textFields);
@@ -70,7 +73,8 @@ class Administration extends React.Component {
       this.putLandingPageModulesInStore(nextProps.landingPageModules);
     }
 
-    const isHidden = nextProps.identifier === 'discussion' && nextProps.location.query.section === '1';
+    const isHidden =
+      nextProps.identifier === 'discussion' && SECTIONS_WITHOUT_LANGUAGEMENU.includes(nextProps.location.query.section);
     this.props.displayLanguageMenu(isHidden);
 
     if (nextProps.textFields !== this.props.textFields) {
