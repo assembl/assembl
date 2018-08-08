@@ -248,7 +248,7 @@ class PostView extends React.PureComponent<Props, State> {
                 numChildren={numChildren}
                 routerParams={routerParams}
                 debateData={debateData}
-                postSubject={subject.replace('Re: ', '')}
+                postSubject={subject ? subject.replace('Re: ', '') : ''}
                 identifier={identifier}
                 timeline={timeline}
               />
