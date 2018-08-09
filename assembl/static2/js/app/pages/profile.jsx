@@ -162,6 +162,7 @@ class Profile extends React.PureComponent<ProfileProps, ProfileState> {
                   <div className="profile-form center">
                     {profileFields &&
                       profileFields.map(pf => (
+                        !pf.configurableField.hidden &&
                         <ConfiguredField
                           key={pf.id}
                           configurableField={pf.configurableField}
