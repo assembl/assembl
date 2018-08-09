@@ -8,6 +8,7 @@ export const DumbSelectModulesForm = ({ modulesById, moduleTypes, toggleModule }
     <FormGroup>
       {moduleTypes.map((moduleType) => {
         const module = modulesById.get(moduleType.moduleId);
+        const helperLabel = moduleType.title || I18n.t('administration.landingPage.manageModules.textAndMultimedia');
         const identifierLowerCase = moduleType.identifier.toLowerCase();
         return (
           <Checkbox
@@ -17,7 +18,7 @@ export const DumbSelectModulesForm = ({ modulesById, moduleTypes, toggleModule }
           >
             <Helper
               classname="margin-left-20"
-              label={moduleType.title || I18n.t('administration.landingPage.manageModules.textAndMultimedia')}
+              label={helperLabel}
               helperUrl={`/static2/img/helpers/landing_page_admin/${identifierLowerCase}.png`}
               helperText={I18n.t(`administration.helpers.landingPage.${identifierLowerCase}`)}
             />

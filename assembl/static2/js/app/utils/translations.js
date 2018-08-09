@@ -603,8 +603,8 @@ const Translations = {
         sectionsTitle: "Renseigner les rubriques"
       },
       helpers: {
-        timelinePhases: "Choisissez une description et une image pour chaque phase du débat visible dans la landing page",
-        timelineTitle: "Configurez le titre et le sous-titre de la section timeline visible dans la landing page",
+        timelinePhases: "Choisissez une description et une image pour chaque phase du débat visible dans la page d'accueil",
+        timelineTitle: "Configurez le titre et le sous-titre de la section timeline visible dans la page d'accueil",
         voteSessionHeader: "Le bandeau de haut de page doit contenir une image et un titre. Le sous-titre est optionnel.",
         voteSessionInstructions:
           "La section consigne comporte un titre et une consigne qui permettent de guider les participants dans leur contribution.",
@@ -708,9 +708,9 @@ const Translations = {
         manageModules: {
           title: "Administrer les modules",
           helper: "Choisissez les modules que vous souhaitez voir apparaître dans la page d'accueil et leurs emplacements.",
-          textAndMultimedia: "Texte & Multi-média",
-          textAndMultimediaBtn: "Ajouter un module Texte & Multi-media",
-          confirmationModal: "Voulez-vous ajouter un module Texte & Multimédia supplémentaire à la landing page ?"
+          textAndMultimedia: "Texte & Multimédia",
+          textAndMultimediaBtn: "Ajouter un module Texte & Multimédia",
+          confirmationModal: "Voulez-vous ajouter un module Texte & Multimédia supplémentaire à la page d'accueil ?"
         },
         header: {
           title: "Header",
@@ -1468,8 +1468,8 @@ const Translations = {
         manageModules: {
           title: "Manage the modules",
           helper: "Choose the modules you want to see in the landing page and their position.",
-          textAndMultimedia: "Text & Multi-media",
-          textAndMultimediaBtn: "Add a Text & Multi-media module",
+          textAndMultimedia: "Text & Multimedia",
+          textAndMultimediaBtn: "Add a Text & Multimedia module",
           confirmationModal: "Are you sure you want to add a Text & Multimedia module to the landing page?"
         },
         header: {

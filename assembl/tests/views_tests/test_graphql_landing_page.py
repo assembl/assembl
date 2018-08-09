@@ -27,7 +27,7 @@ def test_query_landing_page_module_types(graphql_request):
     assert len(res.data['landingPageModuleTypes']) == MODULES_COUNT
     for module_type in res.data['landingPageModuleTypes']:
         if module_type['identifier'] == 'INTRODUCTION':
-            assert module_type['title'] == u'Text & Multi-media'
+            assert module_type['title'] == u'Text & Multimedia'
             assert module_type['defaultOrder'] == 2.0
             assert module_type['editableOrder'] is True
             assert module_type['required'] is False

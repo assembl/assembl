@@ -32,8 +32,8 @@ module_types = [
     {
         u'identifier': 'INTRODUCTION',
         u'title': {
-            u'en': u'Text & Multi-media',
-            u'fr': u'Texte & Multi-média'
+            u'en': u'Text & Multimedia',
+            u'fr': u'Texte & Multimédia'
         },
         u'default_order': 2.0,
         u'editable_order': True,
