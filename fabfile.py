@@ -936,9 +936,12 @@ def start_bluenove_actionable():
     robot = get_robot_machine()
     if exists(path) and robot:
         print(cyan('run bluenove-actionable'))
+        url_instance = env.public_hostname
+        if url_instance == 'localhost':
+            url_instance = 'http://localhost:{}'.format(env.public_port)
         with cd(path):
             with shell_env(
-                URL_INSTANCE=env.public_hostname,
+                URL_INSTANCE=url_instance,
                 ROBOT_IDENTIFIER=robot.get('identifier'),
                 ROBOT_PASSWORD=robot.get('password')
             ):
