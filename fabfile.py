@@ -938,7 +938,8 @@ def start_bluenove_actionable():
         print(cyan('run bluenove-actionable'))
         url_instance = env.public_hostname
         if url_instance == 'localhost':
-            url_instance = 'http://localhost:{}'.format(env.public_port)
+            ip = run("/sbin/ip -o -4 addr list eth0 | awk '{print $4}' | cut -d/ -f1")
+            url_instance = 'http://{}:{}'.format(ip, env.public_port)
         with cd(path):
             with shell_env(
                 URL_INSTANCE=url_instance,
