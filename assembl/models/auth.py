@@ -57,7 +57,7 @@ from ..auth import (
     SYSTEM_ROLES
 )
 from .langstrings import Locale
-from assembl.models.cookie_types import CookieTypes
+from assembl.models.cookie_types import CookieTypes, AcceptedCookies, RejectedCookies
 
 log = logging.getLogger('assembl')
 
@@ -648,10 +648,7 @@ class AgentStatusInDiscussion(DiscussionBoundBase):
             if not self.accepted_cookies:
                 self._accepted_cookies = list()
             else:
-                self._accepted_cookies = map(
-                    lambda c: CookieTypes(c),
-                    map(lambda x: x.strip(), self.accepted_cookies.split(","))
-                )
+                self._accepted_cookies = [CookieTypes(c.strip()) for c in self.accepted_cookies.split(",")]
         return self._accepted_cookies
 
     def _save_cookies(self):
@@ -663,9 +660,28 @@ class AgentStatusInDiscussion(DiscussionBoundBase):
         return self._accepted_cookies
 
     @property
-    def has_accepted_cookies(self):
-        if self.cookies:
-            return True if len(self.cookies) else False
+    def has_any_accepted_cookies(self):
+        if self.cookies and len(self.cookies) > 0:
+            for cookie in self.cookies:
+                if cookie in AcceptedCookies:
+                    return True
+            return False
+        return False
+
+    @property
+    def has_any_rejected_cookies(self):
+        if self.cookies and len(self.cookies) > 0:
+            for cookie in self.cookies:
+                if cookie in RejectedCookies:
+                    return True
+            return False
+        return False
+
+    def has_cookie(self, cookie):
+        if isinstance(cookie, basestring):
+            cookie = CookieTypes(cookie)
+        if self.cookies and len(self.cookies) > 0:
+            return cookie in self.cookies
         return False
 
     def update_cookie(self, cookie):
@@ -1050,22 +1066,35 @@ class User(AgentProfile):
         # Set the AgentStatusInDiscussion
         self.update_agent_status_unsubscribe(discussion)
 
-    # TODO make these bound to a cookieType, as there are multiple cookies that a user can accept and reject at same time
     @classmethod
-    def all_cookie_accepted_agents(cls, discussion, session=None):
+    def any_cookie_accepted_agents(cls, discussion, session=None):
+        """A utility method to find all agents in a debate who has accepted ANY types of cookies"""
         from assembl import models as m
         session = session or m.AgentStatusInDiscussion.default_db()
         agent_status = session.query(m.AgentStatusInDiscussion).filter(m.AgentStatusInDiscussion.discussion_id == discussion.id).all()
-        ids = [agent.profile_id for agent in agent_status if agent.has_accepted_cookies]
+        ids = [agent.profile_id for agent in agent_status if agent.has_any_accepted_cookies]
         users = session.query(m.User).filter(m.User.id.in_(ids)).all()
         return users
 
     @classmethod
-    def all_rejected_cookie_agents(cls, discussion, session=None):
+    def any_cookie_rejected_agents(cls, discussion, session=None):
+        """A utility method to find all agents in a debate who has rejected ANY types of cookies"""
         from assembl import models as m
         session = session or cls.default_db()
         agent_status = session.query(m.AgentStatusInDiscussion).filter(m.AgentStatusInDiscussion.discussion_id == discussion.id).all()
-        ids = [agent.profile_id for agent in agent_status if not agent.has_accepted_cookies]
+        ids = [agent.profile_id for agent in agent_status if agent.has_any_rejected_cookies]
+        return session.query(User).filter(User.id.in_(ids)).all()
+
+    @classmethod
+    def all_agents_with_cookie(cls, discussion, cookie, session=None):
+        """A utlity method to find all agents in a debate who has a particialar type of cookie
+
+        :param CookieType|string cookie: The specific cookie requested
+        """
+        from assembl import models as m
+        session = session or cls.default_db()
+        agent_status = session.query(m.AgentStatusInDiscussion).filter(m.AgentStatusInDiscussion.discussion_id == discussion.id).all()
+        ids = [agent.profile_id for agent in agent_status if agent.has_cookie(cookie)]
         return session.query(User).filter(User.id.in_(ids)).all()
 
     @classmethod

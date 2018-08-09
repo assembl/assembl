@@ -797,8 +797,6 @@ const Translations = {
       accept: "I agree",
       seeCookiesPolicy: "See more"
     },
-    redirectToV1:
-      "You will be redirected to the %{phaseName} phase in a few seconds. Assembl is being improved, please excuse us for the interface change. If nothing happens, click on the button.",
     harvesting: {
       enableHarvestingMode: "Enable harvesting mode",
       disableHarvestingMode: "Disable harvesting mode",

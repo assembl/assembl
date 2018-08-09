@@ -16,3 +16,22 @@ class CookieTypes(Enum):
     @classmethod
     def values(cls):
         return cls._member_names_
+
+
+# A list of cookies that are ACCEPTed
+AcceptedCookies = {
+    CookieTypes.ACCEPT_CGU,
+    CookieTypes.ACCEPT_SESSION_ON_DISCUSSION,
+    CookieTypes.ACCEPT_TRACKING_ON_DISCUSSION,
+    CookieTypes.ACCEPT_PRIVACY_POLICY_ON_DISCUSSION,
+    CookieTypes.ACCEPT_LOCALE
+}
+
+# A list of cookies that are REJECTed
+RejectedCookies = {
+    CookieTypes.REJECT_LOCALE,
+    CookieTypes.REJECT_CGU,
+    CookieTypes.REJECT_SESSION_ON_DISCUSSION,
+    CookieTypes.REJECT_TRACKING_ON_DISCUSSION,
+    CookieTypes.REJECT_PRIVACY_POLICY_ON_DISCUSSION
+}

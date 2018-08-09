@@ -83,22 +83,22 @@ def test_case_insensitive_search_on_username(
 
 def test_all_cookie_accepted_agents(test_session, participant2_user, agent_status_in_discussion_2, discussion):
     from assembl.models import User
-    assert participant2_user not in User.all_cookie_accepted_agents(discussion)
-    assert participant2_user in User.all_rejected_cookie_agents(discussion)
+    assert participant2_user not in User.any_cookie_accepted_agents(discussion)
+    assert participant2_user not in User.any_cookie_rejected_agents(discussion)
 
 
 def test_all_rejected_cookie_agents(test_session, participant2_user, agent_status_in_discussion_3, discussion):
     from assembl.models import User
-    assert participant2_user in User.all_cookie_accepted_agents(discussion)
-    assert participant2_user not in User.all_rejected_cookie_agents(discussion)
+    assert participant2_user in User.any_cookie_accepted_agents(discussion)
+    assert participant2_user not in User.any_cookie_rejected_agents(discussion)
 
 
 def test_has_not_accepted_cookies(test_session, agent_status_in_discussion_2):
-    assert not agent_status_in_discussion_2.has_accepted_cookies
+    assert not agent_status_in_discussion_2.has_any_accepted_cookies
 
 
 def test_has_accepted_cookies(test_session, agent_status_in_discussion_3):
-    assert agent_status_in_discussion_3.has_accepted_cookies
+    assert agent_status_in_discussion_3.has_any_accepted_cookies
 
 
 def test_read_empty_cookies(test_session, agent_status_in_discussion_2):

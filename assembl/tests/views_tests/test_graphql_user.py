@@ -4,30 +4,6 @@ from graphql_relay.node.node import to_global_id
 from assembl.graphql.schema import Schema as schema
 from assembl.tests.utils import give_user_role
 
-UPDATE_USER_MUTATION = u"""
-mutation UpdateUser($id: ID!, $name: String, $username: String, $img: String, $oldPassword: String, $newPassword: String, $newPassword2: String) {
-  updateUser(
-    id: $id
-    name: $name
-    username: $username
-    image: $img,
-    oldPassword: $oldPassword,
-    newPassword: $newPassword,
-    newPassword2: $newPassword2
-  ) {
-    user {
-      ... on AgentProfile {
-        id
-        name
-        username
-        displayName
-        image { externalUrl }
-      }
-    }
-  }
-}
-"""
-
 DELETE_USER_INFORMATION_MUTATION = u"""
 mutation deleteUserInformation($id: ID!) {
     deleteUserInformation(
@@ -37,33 +13,6 @@ mutation deleteUserInformation($id: ID!) {
     ... on AgentProfile {
       id
       }
-    }
-  }
-}
-"""
-
-UPDATE_COOKIES_INFORMATION_FOR_USER_MUTATION = u"""
-mutation updateAcceptedCookies($actions: [CookieTypes]!) {
-    updateAcceptedCookies(
-    actions: $actions
-    ) {
-    user{
-    ... on AgentProfile {
-      id
-      acceptedCookies
-      }
-    }
-  }
-}
-"""
-
-QUERY_COOKIES_INFORMATION_FOR_USER = u"""
-query User($id: ID!) {
-  user: node(id: $id) {
-    ... on AgentProfile {
-      id
-      name
-      acceptedCookies
     }
   }
 }
@@ -125,7 +74,7 @@ query User($id: ID!) {
     assert res.data['user']['email'] is None
 
 
-def test_graphql_update_user(graphql_request, participant1_user):
+def test_graphql_update_user(graphql_request, participant1_user, graphql_registry):
     import os
     from io import BytesIO
 
@@ -139,7 +88,7 @@ def test_graphql_update_user(graphql_request, participant1_user):
     graphql_request.POST['variables.img'] = FieldStorage(
         u'path/to/new-img.png', 'image/png')
 
-    res = schema.execute(UPDATE_USER_MUTATION,
+    res = schema.execute(graphql_registry["updateUser"],
                          context_value=graphql_request, variable_values={
         "id": to_global_id('AgentProfile', participant1_user.id),
         "name": u"M. Barking Loon",
@@ -157,10 +106,10 @@ def test_graphql_update_user(graphql_request, participant1_user):
     participant1_user.username_p = None
 
 
-def test_graphql_update_user_check_username_uniqueness(graphql_request, participant1_user, participant2_user):
+def test_graphql_update_user_check_username_uniqueness(graphql_request, participant1_user, participant2_user, graphql_registry):
     participant2_user.username_p = u"Barking.Loon"
     participant2_user.db.flush()
-    res = schema.execute(UPDATE_USER_MUTATION,
+    res = schema.execute(graphql_registry["updateUser"],
                          context_value=graphql_request, variable_values={
         "id": to_global_id('AgentProfile', participant1_user.id),
         "name": u"M. Barking Loon",
@@ -173,10 +122,10 @@ def test_graphql_update_user_check_username_uniqueness(graphql_request, particip
     participant2_user.username_p = None
 
 
-def test_graphql_update_user_modify_password(graphql_request, participant1_user):
+def test_graphql_update_user_modify_password(graphql_request, participant1_user, graphql_registry):
     graphql_request.authenticated_userid = participant1_user.id
     old_password = participant1_user.password
-    res = schema.execute(UPDATE_USER_MUTATION,
+    res = schema.execute(graphql_registry["updateUser"],
                          context_value=graphql_request, variable_values={
         "id": to_global_id('AgentProfile', participant1_user.id),
         "oldPassword": "password",
@@ -193,10 +142,11 @@ def test_graphql_update_user_modify_password(graphql_request, participant1_user)
     assert new_password != old_password
 
 
-def test_graphql_update_user_modify_password_refused_because_not_owner(graphql_request, discussion_with_default_data, participant1_user, participant2_user):
+def test_graphql_update_user_modify_password_refused_because_not_owner(graphql_request, discussion_with_default_data, participant1_user, participant2_user,
+                                                                       graphql_registry):
     # participant2_user can't modify the password of participant1_user
     graphql_request.authenticated_userid = participant2_user.id
-    res = schema.execute(UPDATE_USER_MUTATION,
+    res = schema.execute(graphql_registry["updateUser"],
                          context_value=graphql_request, variable_values={
         "id": to_global_id('AgentProfile', participant1_user.id),
         "oldPassword": "password",
@@ -207,9 +157,9 @@ def test_graphql_update_user_modify_password_refused_because_not_owner(graphql_r
     assert res.errors[0].message == u"The authenticated user can't update this user"
 
 
-def test_graphql_update_user_modify_password_wrong_password(graphql_request, participant1_user):
+def test_graphql_update_user_modify_password_wrong_password(graphql_request, participant1_user, graphql_registry):
     graphql_request.authenticated_userid = participant1_user.id
-    res = schema.execute(UPDATE_USER_MUTATION,
+    res = schema.execute(graphql_registry["updateUser"],
                          context_value=graphql_request, variable_values={
         "id": to_global_id('AgentProfile', participant1_user.id),
         "oldPassword": "passwrd",  # wrong password
@@ -220,9 +170,9 @@ def test_graphql_update_user_modify_password_wrong_password(graphql_request, par
     assert res.errors[0].message == u"002: The entered password doesn't match your current password."
 
 
-def test_graphql_update_user_modify_password_passwords_mismatch(graphql_request, participant1_user):
+def test_graphql_update_user_modify_password_passwords_mismatch(graphql_request, participant1_user, graphql_registry):
     graphql_request.authenticated_userid = participant1_user.id
-    res = schema.execute(UPDATE_USER_MUTATION,
+    res = schema.execute(graphql_registry["updateUser"],
                          context_value=graphql_request, variable_values={
         "id": to_global_id('AgentProfile', participant1_user.id),
         "oldPassword": "password",
@@ -233,9 +183,9 @@ def test_graphql_update_user_modify_password_passwords_mismatch(graphql_request,
     assert res.errors[0].message == u"003: You entered two different passwords."
 
 
-def test_graphql_update_user_modify_password_needs_to_be_different(graphql_request, participant1_user):
+def test_graphql_update_user_modify_password_needs_to_be_different(graphql_request, participant1_user, graphql_registry):
     graphql_request.authenticated_userid = participant1_user.id
-    res = schema.execute(UPDATE_USER_MUTATION,
+    res = schema.execute(graphql_registry["updateUser"],
                          context_value=graphql_request, variable_values={
         "id": to_global_id('AgentProfile', participant1_user.id),
         "oldPassword": "password",
@@ -246,11 +196,11 @@ def test_graphql_update_user_modify_password_needs_to_be_different(graphql_reque
     assert res.errors[0].message == u"004: The new password has to be different than the current password."
 
 
-def test_graphql_update_user_modify_password_needs_to_be_different_from_previous_5_passwords_1(graphql_request, participant1_user):
+def test_graphql_update_user_modify_password_needs_to_be_different_from_previous_5_passwords_1(graphql_request, participant1_user, graphql_registry):
     graphql_request.authenticated_userid = participant1_user.id
     participant1_user.password_p = "password2"
     participant1_user.db.flush()
-    res = schema.execute(UPDATE_USER_MUTATION,
+    res = schema.execute(graphql_registry["updateUser"],
                          context_value=graphql_request, variable_values={
         "id": to_global_id('AgentProfile', participant1_user.id),
         "oldPassword": "password2",
@@ -261,12 +211,12 @@ def test_graphql_update_user_modify_password_needs_to_be_different_from_previous
     assert res.errors[0].message == u"005: The new password has to be different than the last 5 passwords you set."
 
 
-def test_graphql_update_user_modify_password_needs_to_be_different_from_previous_5_passwords_2(graphql_request, participant1_user):
+def test_graphql_update_user_modify_password_needs_to_be_different_from_previous_5_passwords_2(graphql_request, participant1_user, graphql_registry):
     graphql_request.authenticated_userid = participant1_user.id
     participant1_user.password_p = "password2"
     participant1_user.password_p = "password3"
     participant1_user.db.flush()
-    res = schema.execute(UPDATE_USER_MUTATION,
+    res = schema.execute(graphql_registry["updateUser"],
                          context_value=graphql_request, variable_values={
         "id": to_global_id('AgentProfile', participant1_user.id),
         "oldPassword": "password3",
@@ -277,13 +227,13 @@ def test_graphql_update_user_modify_password_needs_to_be_different_from_previous
     assert res.errors[0].message == u"005: The new password has to be different than the last 5 passwords you set."
 
 
-def test_graphql_update_user_modify_password_needs_to_be_different_from_previous_5_passwords_3(graphql_request, participant1_user):
+def test_graphql_update_user_modify_password_needs_to_be_different_from_previous_5_passwords_3(graphql_request, participant1_user, graphql_registry):
     graphql_request.authenticated_userid = participant1_user.id
     participant1_user.password_p = "password2"
     participant1_user.password_p = "password3"
     participant1_user.password_p = "password4"
     participant1_user.db.flush()
-    res = schema.execute(UPDATE_USER_MUTATION,
+    res = schema.execute(graphql_registry["updateUser"],
                          context_value=graphql_request, variable_values={
         "id": to_global_id('AgentProfile', participant1_user.id),
         "oldPassword": "password4",
@@ -294,14 +244,14 @@ def test_graphql_update_user_modify_password_needs_to_be_different_from_previous
     assert res.errors[0].message == u"005: The new password has to be different than the last 5 passwords you set."
 
 
-def test_graphql_update_user_modify_password_needs_to_be_different_from_previous_5_passwords_4(graphql_request, participant1_user):
+def test_graphql_update_user_modify_password_needs_to_be_different_from_previous_5_passwords_4(graphql_request, participant1_user, graphql_registry):
     graphql_request.authenticated_userid = participant1_user.id
     participant1_user.password_p = "password2"
     participant1_user.password_p = "password3"
     participant1_user.password_p = "password4"
     participant1_user.password_p = "password5"
     participant1_user.db.flush()
-    res = schema.execute(UPDATE_USER_MUTATION,
+    res = schema.execute(graphql_registry["updateUser"],
                          context_value=graphql_request, variable_values={
         "id": to_global_id('AgentProfile', participant1_user.id),
         "oldPassword": "password5",
@@ -312,7 +262,7 @@ def test_graphql_update_user_modify_password_needs_to_be_different_from_previous
     assert res.errors[0].message == u"005: The new password has to be different than the last 5 passwords you set."
 
 
-def test_graphql_update_user_modify_password_can_reuse_the_old_6th_password_set(graphql_request, participant1_user):
+def test_graphql_update_user_modify_password_can_reuse_the_old_6th_password_set(graphql_request, participant1_user, graphql_registry):
     graphql_request.authenticated_userid = participant1_user.id
     participant1_user.password_p = "password2"
     participant1_user.password_p = "password3"
@@ -321,7 +271,7 @@ def test_graphql_update_user_modify_password_can_reuse_the_old_6th_password_set(
     participant1_user.db.flush()
     participant1_user.password_p = "password6"
     participant1_user.db.flush()
-    res = schema.execute(UPDATE_USER_MUTATION,
+    res = schema.execute(graphql_registry["updateUser"],
                          context_value=graphql_request, variable_values={
                              "id": to_global_id('AgentProfile', participant1_user.id),
                              "oldPassword": "password6",
@@ -439,13 +389,14 @@ def test_graphql_delete_user_with_username(graphql_request, participant1_user, t
     assert len(username) == 0
 
 
-def test_graphql_update_accepted_cookies_by_user(graphql_request, participant2_user, discussion_with_default_data, agent_status_in_discussion_3, test_session):
+def test_graphql_update_accepted_cookies_by_user(graphql_request, participant2_user, discussion_with_default_data, agent_status_in_discussion_3, test_session,
+                                                 graphql_registry):
     from assembl import models as m
     graphql_request.authenticated_userid = participant2_user.id
     # Create a role for the non-admin user to have permissions on the discussion
     resp = None
     with give_user_role(participant2_user, discussion_with_default_data):
-        resp = schema.execute(UPDATE_COOKIES_INFORMATION_FOR_USER_MUTATION, context_value=graphql_request, variable_values={
+        resp = schema.execute(graphql_registry["updateAcceptedCookies"], context_value=graphql_request, variable_values={
             "actions": ["ACCEPT_TRACKING_ON_DISCUSSION"]
         })
     assert resp.errors is None
@@ -455,12 +406,13 @@ def test_graphql_update_accepted_cookies_by_user(graphql_request, participant2_u
     assert atod.discussion_id == discussion_with_default_data.id
 
 
-def test_graphql_delete_accepted_cookie_by_user(graphql_request, participant2_user, discussion_with_default_data, agent_status_in_discussion_3, test_session):
+def test_graphql_delete_accepted_cookie_by_user(graphql_request, participant2_user, discussion_with_default_data, agent_status_in_discussion_3, test_session,
+                                                graphql_registry):
     graphql_request.authenticated_userid = participant2_user.id
     # Create a role for the non-admin user to have permissions on the discussion
     resp = None
     with give_user_role(participant2_user, discussion_with_default_data):
-        resp = schema.execute(UPDATE_COOKIES_INFORMATION_FOR_USER_MUTATION, context_value=graphql_request, variable_values={
+        resp = schema.execute(graphql_registry["updateAcceptedCookies"], context_value=graphql_request, variable_values={
             "actions": ["REJECT_CGU"]
         })
     assert resp.errors is None
@@ -468,9 +420,9 @@ def test_graphql_delete_accepted_cookie_by_user(graphql_request, participant2_us
     assert "REJECT_CGU" in agent_status_in_discussion_3.accepted_cookies
 
 
-def test_graphq_query_accepted_cookie_by_user(graphql_request, participant2_user, agent_status_in_discussion_4, test_session):
+def test_graphq_query_accepted_cookie_by_user(graphql_request, participant2_user, agent_status_in_discussion_4, test_session, graphql_registry):
     from assembl.models.cookie_types import CookieTypes
-    resp = schema.execute(QUERY_COOKIES_INFORMATION_FOR_USER, context_value=graphql_request, variable_values={
+    resp = schema.execute(graphql_registry["acceptedCookiesQuery"], context_value=graphql_request, variable_values={
         "id": to_global_id("AgentProfile", participant2_user.id)
     })
     assert resp.errors is None

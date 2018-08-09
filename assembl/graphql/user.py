@@ -105,7 +105,7 @@ class AgentProfile(SecureObjectType, SQLAlchemyObjectType):
                 profile_id=user_id, discussion_id=discussion_id).first()
         if not agent_status_in_discussion:
             return []
-        return map(lambda x: x.value, agent_status_in_discussion.cookies)
+        return [x.value for x in agent_status_in_discussion.cookies]
 
 
 class UpdateUser(graphene.Mutation):
@@ -337,41 +337,41 @@ class UpdateAcceptedCookies(graphene.Mutation):
             agent_status_in_discussion = user.get_status_in_discussion(discussion_id)
             for action_type in actions:
                 action_type_enum = PyCookieTypes(action_type)
-                if action_type_enum is PyCookieTypes.ACCEPT_CGU:
+                if action_type_enum == PyCookieTypes.ACCEPT_CGU:
                     action = AcceptCGUOnDiscussion(discussion_id=discussion_id, actor_id=user_id)
                     user.user_last_accepted_cgu_date = datetime.utcnow()
-                    agent_status_in_discussion.update_cookie(action_type)
+                    agent_status_in_discussion.update_cookie(action_type_enum)
 
-                elif action_type_enum is PyCookieTypes.ACCEPT_SESSION_ON_DISCUSSION:
+                elif action_type_enum == PyCookieTypes.ACCEPT_SESSION_ON_DISCUSSION:
                     action = AcceptSessionOnDiscussion(discussion_id=discussion_id, actor_id=user_id)
                     agent_status_in_discussion.update_cookie(action_type_enum)
 
-                elif action_type_enum is PyCookieTypes.ACCEPT_TRACKING_ON_DISCUSSION:
+                elif action_type_enum == PyCookieTypes.ACCEPT_TRACKING_ON_DISCUSSION:
                     action = AcceptTrackingOnDiscussion(discussion_id=discussion_id, actor_id=user_id)
                     agent_status_in_discussion.update_cookie(action_type_enum)
 
-                elif action_type_enum is PyCookieTypes.ACCEPT_PRIVACY_POLICY_ON_DISCUSSION:
+                elif action_type_enum == PyCookieTypes.ACCEPT_PRIVACY_POLICY_ON_DISCUSSION:
                     action = AcceptPrivacyPolicyOnDiscussion(discussion_id=discussion_id, actor_id=user_id)
                     user.user_last_accepted_privacy_policy_date = datetime.utcnow()
                     agent_status_in_discussion.update_cookie(action_type_enum)
 
-                elif action_type_enum is PyCookieTypes.REJECT_CGU:
+                elif action_type_enum == PyCookieTypes.REJECT_CGU:
                     action = RejectCGUOnDiscussion(discussion_id=discussion_id, actor_id=user_id)
                     user.user_last_rejected_cgu_date = datetime.utcnow()
                     agent_status_in_discussion.delete_cookie(PyCookieTypes.ACCEPT_CGU)
                     agent_status_in_discussion.update_cookie(action_type_enum)
 
-                elif action_type_enum is PyCookieTypes.REJECT_SESSION_ON_DISCUSSION:
+                elif action_type_enum == PyCookieTypes.REJECT_SESSION_ON_DISCUSSION:
                     action = RejectSessionOnDiscussion(discussion_id=discussion_id, actor_id=user_id)
                     agent_status_in_discussion.delete_cookie(PyCookieTypes.ACCEPT_SESSION_ON_DISCUSSION)
                     agent_status_in_discussion.update_cookie(action_type_enum)
 
-                elif action_type_enum is PyCookieTypes.REJECT_TRACKING_ON_DISCUSSION:
+                elif action_type_enum == PyCookieTypes.REJECT_TRACKING_ON_DISCUSSION:
                     action = RejectTrackingOnDiscussion(discussion_id=discussion_id, actor_id=user_id)
                     agent_status_in_discussion.delete_cookie(PyCookieTypes.ACCEPT_TRACKING_ON_DISCUSSION)
                     agent_status_in_discussion.update_cookie(action_type_enum)
 
-                elif action_type_enum is PyCookieTypes.REJECT_PRIVACY_POLICY_ON_DISCUSSION:
+                elif action_type_enum == PyCookieTypes.REJECT_PRIVACY_POLICY_ON_DISCUSSION:
                     action = RejectPrivacyPolicyOnDiscussion(discussion_id=discussion_id, actor_id=user_id)
                     user.user_last_rejected_privacy_policy_date = datetime.utcnow()
                     agent_status_in_discussion.delete_cookie(PyCookieTypes.ACCEPT_PRIVACY_POLICY_ON_DISCUSSION)
