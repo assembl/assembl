@@ -47,11 +47,11 @@ class AgentProfile(SecureObjectType, SQLAlchemyObjectType):
     is_deleted = graphene.Boolean(description=docs.AgentProfile.is_deleted)
     is_machine = graphene.Boolean(description=docs.AgentProfile.is_machine)
     preferences = graphene.Field(Preferences, description=docs.AgentProfile.preferences)
-    accepted_cookies = graphene.List(CookieTypes)
-    last_accepted_cgu_date = DateTime()
-    last_accepted_privacy_policy = DateTime()
-    last_rejected_cgu_date = DateTime()
-    last_rejected_privacy_policy_date = DateTime()
+    accepted_cookies = graphene.List(CookieTypes, description=docs.AgentProfile.accepted_cookies)
+    last_accepted_cgu_date = DateTime(description=docs.AgentProfile.last_accepted_cgu_date)
+    last_accepted_privacy_policy = DateTime(description=docs.AgentProfile.last_accepted_privacy_policy)
+    last_rejected_cgu_date = DateTime(description=docs.AgentProfile.last_rejected_cgu_date)
+    last_rejected_privacy_policy_date = DateTime(description=docs.AgentProfile.last_rejected_privacy_policy_date)
 
     def resolve_is_deleted(self, args, context, info):
         return self.is_deleted or False
@@ -310,9 +310,10 @@ class DeleteUserInformation(graphene.Mutation):
 
 
 class UpdateAcceptedCookies(graphene.Mutation):
+    __doc__ = docs.UpdateAcceptedCookies.__doc__
 
     class Input:
-        actions = graphene.Argument(graphene.List(CookieTypes, required=True))
+        actions = graphene.Argument(graphene.List(CookieTypes, required=True), description=docs.UpdateAcceptedCookies.actions)
 
     user = graphene.Field(lambda: AgentProfile)
 
