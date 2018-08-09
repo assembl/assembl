@@ -466,7 +466,7 @@ class Mutations(graphene.ObjectType):
     update_legal_contents = UpdateLegalContents.Field(description=docs.UpdateLegalContents.__doc__)
     update_user = UpdateUser.Field(description=docs.UpdateUser.__doc__)
     delete_user_information = DeleteUserInformation.Field(description=docs.DeleteUserInformation.__doc__)
-    update_accepted_cookies = UpdateAcceptedCookies.Field()
+    update_accepted_cookies = UpdateAcceptedCookies.Field(description=docs.UpdateAcceptedCookies.__doc__)
     update_vote_session = UpdateVoteSession.Field(description=docs.UpdateVoteSession.__doc__)
     create_token_vote_specification = CreateTokenVoteSpecification.Field(description=docs.CreateTokenVoteSpecification.__doc__)
     update_token_vote_specification = UpdateTokenVoteSpecification.Field(description=docs.UpdateTokenVoteSpecification.__doc__)
