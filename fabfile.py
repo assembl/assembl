@@ -888,6 +888,7 @@ def install_bluenove_actionable():
             run('git clone git@github.com:bluenove/bluenove-actionable.git')
 
         with cd("%(projectpath)s/../bluenove-actionable/" % env):
+            run('mkdir -p data && chmod o+rwx data')
             run('docker-compose build', warn_only=True)
 
 
@@ -903,6 +904,7 @@ def update_bluenove_actionable():
             # We need an ssh access
             run('git pull')
             run('docker system prune --volumes -f', warn_only=True)
+            run('mkdir -p data && chmod o+rwx data')
             run('docker-compose build --no-cache', warn_only=True)
             execute(restart_bluenove_actionable)
 
