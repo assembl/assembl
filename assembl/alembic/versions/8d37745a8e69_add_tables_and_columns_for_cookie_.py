@@ -1,14 +1,14 @@
 """Add tables and columns for cookie_storage
 
 Revision ID: 8d37745a8e69
-Revises: d95bd110bf00
+Revises: dd47fed731f8
 Create Date: 2018-07-19 19:07:59.770479
 
 """
 
 # revision identifiers, used by Alembic.
 revision = '8d37745a8e69'
-down_revision = 'd95bd110bf00'
+down_revision = 'dd47fed731f8'
 
 from alembic import context, op
 import sqlalchemy as sa
