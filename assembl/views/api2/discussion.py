@@ -1630,7 +1630,7 @@ discussions_slugs = Service(
 def get_discussions_slugs(request):
     user_id = request.authenticated_userid or Everyone
     discussions = discussions_with_access(user_id)
-    return {'slugs': [discussion.slug for discussion in discussions]}
+    return {'discussions': [{'id': discussion.id, 'slug': discussion.slug} for discussion in discussions]}
 
 
 def includeme(config):
