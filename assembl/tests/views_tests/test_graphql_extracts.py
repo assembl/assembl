@@ -262,14 +262,14 @@ mutation AddPostsExtract($extracts: [PostExtractEntryInput]!, $extractState: Ext
   }
 }
 """, context_value=graphql_request, variable_values=variable_values)
-  
+
   assert json.loads(json.dumps(res.data)) == {
     u'addPostsExtract': {
       u'status': True
     }
   }
   assert len(get_extracts()) == 1
-  
+
   # add the same extract
   res = schema.execute(u"""
 mutation AddPostsExtract($extracts: [PostExtractEntryInput]!, $extractState: ExtractStates, $extractNature: ExtractNatures) {
