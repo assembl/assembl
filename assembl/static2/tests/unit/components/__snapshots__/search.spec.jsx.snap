@@ -25,6 +25,9 @@ exports[`DumbExtractHit component should render an extract hit 1`] = `
           "__html": "We need to quantify the optical HTTP panel!",
         }
       }
+      onClick={[Function]}
+      onlyActiveOnIndex={false}
+      style={Object {}}
       to={undefined}
     />
   </div>

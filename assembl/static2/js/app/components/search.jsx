@@ -43,6 +43,7 @@ import { getConnectedUserId, getDebateId, getLocale } from '../reducers/contextR
 import { connectedUserIsExpert } from '../utils/permissions';
 import { get as getRoute } from '../utils/routeMap';
 import UserMessagesTagFilter from './search/UserMessagesTagFilter';
+import { toggleHarvesting } from '../actions/contextActions';
 
 const FRAGMENT_SIZE = 400;
 const elasticsearchLangIndexesElement = document.getElementById('elasticsearchLangIndexes');
@@ -113,8 +114,7 @@ if (v1Interface) {
   };
   // }
 } else {
-  // Link = require('react-router').Link; // eslint-disable-line
-  Link = props => <a href={props.to} dangerouslySetInnerHTML={props.dangerouslySetInnerHTML} />;
+  Link = require('react-router').Link; // eslint-disable-line
   getUrl = (hit) => {
     const id = hit._source.id;
     switch (hit._type) {
@@ -211,18 +211,20 @@ const highlightedLSOrTruncatedLS = (hit, field, locale) => {
   return '';
 };
 
-const addLocaleToProps = connect(state => ({ locale: getLocale(state) }));
+const mapLocaleToProps = state => ({ locale: getLocale(state) });
+const addLocaleToProps = connect(mapLocaleToProps);
 
 const DumbPostHit = (props) => {
   const locale = props.locale;
   const source = props.result._source;
   const subject = highlightedLSOrTruncatedLS(props.result, 'subject', locale);
   const body = highlightedLSOrTruncatedLS(props.result, 'body', locale);
+  const onLinkClick = props.collapseSearch;
   return (
     <div className={props.bemBlocks.item().mix(props.bemBlocks.container('item'))}>
       <ImageType type={props.result._type} className={props.bemBlocks.item('imgtype')} />
       <div className={props.bemBlocks.item('title')}>
-        <Link to={getUrl(props.result)} dangerouslySetInnerHTML={{ __html: subject }} />
+        <Link onClick={onLinkClick} to={getUrl(props.result)} dangerouslySetInnerHTML={{ __html: subject }} />
       </div>
       <div className={props.bemBlocks.item('content')}>
         <p dangerouslySetInnerHTML={{ __html: body }} />
@@ -254,12 +256,17 @@ const DumbExtractHit = (props) => {
   const source = props.result._source;
   const subject = highlightedLSOrTruncatedLS(props.result, 'subject', locale);
   const body = highlightedTextOrTruncatedText(props.result, 'body');
-
+  const onLinkClick = () => {
+    if (!props.isHarvesting) {
+      props.toggleHarvesting();
+    }
+    props.collapseSearch();
+  };
   return (
     <div className={props.bemBlocks.item().mix(props.bemBlocks.container('item'))}>
       <ImageType type={props.result._type} className={props.bemBlocks.item('imgtype')} />
       <div className={props.bemBlocks.item('title')}>
-        <Link to={getUrl(props.result)} dangerouslySetInnerHTML={{ __html: subject }} />
+        <Link onClick={onLinkClick} to={getUrl(props.result)} dangerouslySetInnerHTML={{ __html: subject }} />
       </div>
       <div className={props.bemBlocks.item('content')}>
         <p dangerouslySetInnerHTML={{ __html: body }} />
@@ -275,17 +282,27 @@ const DumbExtractHit = (props) => {
   );
 };
 
-const ExtractHit = addLocaleToProps(DumbExtractHit);
+const mapStateToExtractHitProps = state => ({
+  isHarvesting: state.context.isHarvesting,
+  locale: getLocale(state)
+});
+const mapDispatchToExtractHitProps = dispatch => ({
+  toggleHarvesting: () => dispatch(toggleHarvesting())
+});
+
+const ExtractHit = connect(mapStateToExtractHitProps, mapDispatchToExtractHitProps)(DumbExtractHit);
 
 const DumbSynthesisHit = (props) => {
   const locale = props.locale;
   const source = props.result._source;
   const ideas = highlightedLSOrTruncatedLS(props.result, 'ideas', locale);
+  const onLinkClick = props.collapseSearch;
   return (
     <div className={props.bemBlocks.item().mix(props.bemBlocks.container('item'))}>
       <ImageType type={props.result._type} className={props.bemBlocks.item('imgtype')} />
       <div className={props.bemBlocks.item('title')}>
         <Link
+          onClick={onLinkClick}
           to={getUrl(props.result)}
           dangerouslySetInnerHTML={{ __html: highlightedTextOrTruncatedText(props.result, 'subject') }}
         />
@@ -318,12 +335,13 @@ const UserHit = (props) => {
   const url = getUrl(props.result);
   const fullname = get(props.result, 'highlight.name', props.result._source.name);
   const userId = props.result._source.id;
+  const onLinkClick = props.collapseSearch;
   return (
     <div className={props.bemBlocks.item().mix(props.bemBlocks.container('item'))}>
       <ImageType type={props.result._type} className={props.bemBlocks.item('imgtype')} />
       <div className={props.bemBlocks.item('title')}>
         {url ? (
-          <Link to={getUrl(props.result)} dangerouslySetInnerHTML={{ __html: fullname }} />
+          <Link onClick={onLinkClick} to={getUrl(props.result)} dangerouslySetInnerHTML={{ __html: fullname }} />
         ) : (
           <p dangerouslySetInnerHTML={{ __html: fullname }} />
         )}
@@ -353,12 +371,12 @@ const DumbIdeaHit = (props) => {
   // long title missing?
   const announceTitle = highlightedLSOrTruncatedLS(props.result, 'announcement_title', locale);
   const announceBody = highlightedLSOrTruncatedLS(props.result, 'announcement_body', locale);
-
+  const onLinkClick = props.collapseSearch;
   return (
     <div className={props.bemBlocks.item().mix(props.bemBlocks.container('item'))}>
       <ImageType type={props.result._type} className={props.bemBlocks.item('imgtype')} />
       <div className={props.bemBlocks.item('title')}>
-        <Link to={getUrl(props.result)} dangerouslySetInnerHTML={{ __html: shortTitle }} />
+        <Link onClick={onLinkClick} to={getUrl(props.result)} dangerouslySetInnerHTML={{ __html: shortTitle }} />
       </div>
       <div className={props.bemBlocks.item('content')}>
         {definition ? (
@@ -510,6 +528,13 @@ export class SearchComponent extends React.Component {
     this.searchkit.translateFunction = key => translate(`search.${key}`);
     this.state = { show: false, queryString: null };
   }
+
+  collapseSearch = () => {
+    this.setState({ show: false }, () => {
+      this.searchbox.accessor.setQueryString(null);
+      this.searchbox.forceUpdate();
+    });
+  };
 
   render() {
     const { isExpert, connectedUserId, discussionId } = this.props;
@@ -718,16 +743,7 @@ export class SearchComponent extends React.Component {
             </SideBar>
             <LayoutResults>
               <ActionBar>
-                <button
-                  className="btn btn-default btn-sm right"
-                  id="search-expand"
-                  onClick={() => {
-                    this.setState({ show: false }, () => {
-                      this.searchbox.accessor.setQueryString(null);
-                      this.searchbox.forceUpdate();
-                    });
-                  }}
-                >
+                <button className="btn btn-default btn-sm right" id="search-expand" onClick={this.collapseSearch}>
                   <Translate value="search.collapse_search" />
                 </button>
                 <ActionBarRow>
@@ -738,7 +754,7 @@ export class SearchComponent extends React.Component {
                 hitsPerPage={5}
                 highlightFields={queryFields}
                 customHighlight={customHighlight}
-                itemComponent={HitItem}
+                itemComponent={props => <HitItem collapseSearch={this.collapseSearch} {...props} />}
                 mod="sk-hits-list"
               />
               <InitialLoader />
