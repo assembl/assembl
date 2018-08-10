@@ -29,7 +29,7 @@ def upgrade(pyramid_env):
         model = m.Extract
         query = db.query(model)
         for extract in query:
-        	extract.update_extract_hash()
+            extract.update_extract_hash()
 
 
 def downgrade(pyramid_env):
