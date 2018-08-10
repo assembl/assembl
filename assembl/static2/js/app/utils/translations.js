@@ -760,8 +760,8 @@ const Translations = {
       personalizeInterface: {
         success: "La personnalisation de l'interface a été enregistées avec succès !",
         titleFormTitle: "Personnaliser l'intitulé de la page",
-        title: "Titre de la page web (visual 1)",
-        favicon: "Favicon (visual 2)",
+        title: "Titre de la page web (1)",
+        favicon: "Favicon (2)",
         icoRequired: "Le favicon doit être un fichier .ico uniquement"
       }
     },
@@ -1524,8 +1524,8 @@ const Translations = {
       personalizeInterface: {
         success: "The interface personalization has been saved with success!",
         titleFormTitle: "Personalize the title of the page",
-        title: "Web page Title (visuel 1)",
-        favicon: "Favicon (visuel 2)",
+        title: "Web page Title (1)",
+        favicon: "Favicon (2)",
         icoRequired: "The favicon must be an .ico file only"
       }
     },
