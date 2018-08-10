@@ -211,10 +211,7 @@ const highlightedLSOrTruncatedLS = (hit, field, locale) => {
   return '';
 };
 
-const mapLocaleToProps = state => ({ locale: getLocale(state) });
-const addLocaleToProps = connect(mapLocaleToProps);
-
-const DumbPostHit = (props) => {
+const PostHit = (props) => {
   const locale = props.locale;
   const source = props.result._source;
   const subject = highlightedLSOrTruncatedLS(props.result, 'subject', locale);
@@ -249,8 +246,6 @@ const DumbPostHit = (props) => {
   );
 };
 
-const PostHit = addLocaleToProps(DumbPostHit);
-
 const DumbExtractHit = (props) => {
   const locale = props.locale;
   const source = props.result._source;
@@ -283,8 +278,7 @@ const DumbExtractHit = (props) => {
 };
 
 const mapStateToExtractHitProps = state => ({
-  isHarvesting: state.context.isHarvesting,
-  locale: getLocale(state)
+  isHarvesting: state.context.isHarvesting
 });
 const mapDispatchToExtractHitProps = dispatch => ({
   toggleHarvesting: () => dispatch(toggleHarvesting())
@@ -292,7 +286,7 @@ const mapDispatchToExtractHitProps = dispatch => ({
 
 const ExtractHit = connect(mapStateToExtractHitProps, mapDispatchToExtractHitProps)(DumbExtractHit);
 
-const DumbSynthesisHit = (props) => {
+const SynthesisHit = (props) => {
   const locale = props.locale;
   const source = props.result._source;
   const ideas = highlightedLSOrTruncatedLS(props.result, 'ideas', locale);
@@ -328,8 +322,6 @@ const DumbSynthesisHit = (props) => {
   );
 };
 
-const SynthesisHit = addLocaleToProps(DumbSynthesisHit);
-
 const UserHit = (props) => {
   const source = props.result._source;
   const url = getUrl(props.result);
@@ -363,7 +355,7 @@ const UserHit = (props) => {
   );
 };
 
-const DumbIdeaHit = (props) => {
+const IdeaHit = (props) => {
   const locale = props.locale;
   const source = props.result._source;
   const shortTitle = highlightedLSOrTruncatedLS(props.result, 'title', locale);
@@ -413,9 +405,7 @@ const DumbIdeaHit = (props) => {
   );
 };
 
-const IdeaHit = addLocaleToProps(DumbIdeaHit);
-
-const HitItem = (props) => {
+const DumbHitItem = (props) => {
   switch (props.result._type) {
   case 'synthesis':
     return <SynthesisHit {...props} />;
@@ -430,6 +420,9 @@ const HitItem = (props) => {
     return <PostHit {...props} />;
   }
 };
+
+const mapLocaleToProps = state => ({ locale: getLocale(state) });
+const HitItem = connect(mapLocaleToProps)(DumbHitItem);
 
 const NoPanel = props => <div>{props.children}</div>;
 
