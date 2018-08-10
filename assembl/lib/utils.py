@@ -139,6 +139,6 @@ def snake_to_camel(string):
 
 def get_hash(*args):
     hasher = sha256()
-    hasher.update("".join([str(a) for a in args]))
+    hasher.update(u''.join([unicode(a) for a in args]))
     return hasher.hexdigest()
     
