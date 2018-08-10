@@ -42,6 +42,7 @@ import ProfileLine from './common/profileLine';
 import { getConnectedUserId, getDebateId, getLocale } from '../reducers/contextReducer';
 import { connectedUserIsExpert } from '../utils/permissions';
 import { get as getRoute } from '../utils/routeMap';
+import UserMessagesTagFilter from './search/UserMessagesTagFilter';
 
 const FRAGMENT_SIZE = 400;
 const elasticsearchLangIndexesElement = document.getElementById('elasticsearchLangIndexes');
@@ -316,6 +317,7 @@ const UserHit = (props) => {
   const source = props.result._source;
   const url = getUrl(props.result);
   const fullname = get(props.result, 'highlight.name', props.result._source.name);
+  const userId = props.result._source.id;
   return (
     <div className={props.bemBlocks.item().mix(props.bemBlocks.container('item'))}>
       <ImageType type={props.result._type} className={props.bemBlocks.item('imgtype')} />
@@ -327,10 +329,12 @@ const UserHit = (props) => {
         )}
       </div>
       <div className={props.bemBlocks.item('info')}>
-        {source.num_posts}
-        <span className={props.bemBlocks.item('assembl-icon-message')}>
-          <span className="assembl-icon-message" title="Number of contributions" />
-        </span>
+        <UserMessagesTagFilter value={userId}>
+          {source.num_posts}
+          <span className={props.bemBlocks.item('assembl-icon-message')}>
+            <span className="assembl-icon-message" title="Number of contributions" />
+          </span>
+        </UserMessagesTagFilter>
         {source.creation_date ? (
           <span>
             <Translate value="search.member_since" /> <Localize value={source.creation_date} dateFormat="date.format" />
