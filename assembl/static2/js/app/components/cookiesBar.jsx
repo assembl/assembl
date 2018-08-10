@@ -40,9 +40,9 @@ export class DumbCookiesBar extends React.Component<Props, State> {
   }
 
   acceptAllCookies = () => {
-    this.props.updateAcceptedCookies({ variables: { actions: COOKIE_TYPES } })
-      // If the user is not logged in the mutation will error
-      .catch(() => { formattedCookieNames.forEach(cookie => cookie && setCookieItem(cookie, 'true')); });
+    // acceptedCookies are stored both on the user model and in the browser
+    this.props.updateAcceptedCookies({ variables: { actions: COOKIE_TYPES } });
+    formattedCookieNames.forEach(cookie => cookie && setCookieItem(cookie, 'true'));
     this.setState({
       hide: true
     });
