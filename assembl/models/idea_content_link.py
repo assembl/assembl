@@ -24,6 +24,7 @@ from . import DiscussionBoundBase
 from ..lib.sqla import (CrudOperation, get_model_watcher)
 from ..lib.clean_input import sanitize_html
 from ..lib.locale import to_posix_string
+from ..lib.utils import get_hash
 from .discussion import Discussion
 from .idea import Idea
 from .generic import Content
@@ -349,6 +350,9 @@ class Extract(IdeaContentPositiveLink):
         default=ExtractStates.PUBLISHED.value,
         server_default=ExtractStates.PUBLISHED.value)
 
+    extract_hash = Column(
+        String, nullable=False, unique=True)
+
     @property
     def extract_nature_name(self):
         if self.extract_nature is not None:
@@ -479,6 +483,31 @@ class Extract(IdeaContentPositiveLink):
     def restrict_to_owners(cls, query, user_id):
         "filter query according to object owners"
         return query.filter(cls.owner_id == user_id)
+
+    @classmethod
+    def get_extract_hash(cls, lang, xpath_start, xpath_end, offset_start, offset_end, post_id, extract_nature):
+        "Return a hash for the extract values"
+        return get_hash(
+            lang,
+            xpath_start,
+            xpath_end,
+            offset_start,
+            offset_end,
+            post_id,
+            extract_nature
+        )
+
+    def update_hash(self):
+        tfi = self.text_fragment_identifiers
+        self.extract_hash = self.get_extract_hash(
+            self.lang,
+            tfi.xpath_start,
+            tfi.xpath_end,
+            tfi.offset_start,
+            tfi.offset_end,
+            self.content.id,
+            self.extract_nature
+        )
 
     crud_permissions = CrudPermissions(
         P_ADD_EXTRACT, P_READ, P_EDIT_EXTRACT, P_EDIT_EXTRACT, P_EDIT_MY_EXTRACT, P_EDIT_MY_EXTRACT)

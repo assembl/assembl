@@ -93,6 +93,8 @@ class UpdateExtract(graphene.Mutation):
         if args.get('idea_id'):
             idea_id = int(Node.from_global_id(args.get('idea_id'))[1])
             extract.idea_id = idea_id
+
+        extract.update_hash()
         extract.db.flush()
 
         return UpdateExtract(extract=extract)

@@ -9,6 +9,7 @@ from pyramid.httpexceptions import HTTPUnauthorized
 from pyramid.i18n import TranslationStringFactory
 from pyramid.security import Everyone
 from sqlalchemy.orm import joinedload
+from sqlalchemy import exists
 
 from assembl import models
 from assembl.auth import P_DELETE_MY_POST, P_DELETE_POST, CrudPermissions
@@ -709,6 +710,7 @@ class AddPostExtract(graphene.Mutation):
             content=post
         )
         new_extract.lang = args.get('lang')
+        new_extract.update_hash()
         post.db.add(new_extract)
         range = models.TextFragmentIdentifier(
             extract=new_extract,
@@ -753,25 +755,37 @@ class AddPostsExtract(graphene.Mutation):
             if not post:
                 continue
 
-            new_extract = models.Extract(
-                creator_id=user_id,
-                owner_id=user_id,
-                discussion_id=discussion_id,
-                body=extract.get('body'),
-                important=extract.get('important', False),
-                content=post,
-                extract_nature=extract_nature,
-                extract_state=extract_state
-            )
-            new_extract.lang = extract.get('lang')
-            post.db.add(new_extract)
-            range = models.TextFragmentIdentifier(
-                extract=new_extract,
-                xpath_start=extract.get('xpath_start'),
-                offset_start=extract.get('offset_start'),
-                xpath_end=extract.get('xpath_end'),
-                offset_end=extract.get('offset_end'))
-            post.db.add(range)
-            post.db.flush()
+            db = post.db
+            extract_hash = models.Extract.get_extract_hash(
+                extract.get('lang'),
+                extract.get('xpath_start'),
+                extract.get('xpath_end'),
+                extract.get('offset_start'),
+                extract.get('offset_end'),
+                post_id,
+                extract_nature)
+            exist = db.query(exists().where(models.Extract.extract_hash == extract_hash)).scalar()
+            if not exist:
+                new_extract = models.Extract(
+                    creator_id=user_id,
+                    owner_id=user_id,
+                    discussion_id=discussion_id,
+                    body=extract.get('body'),
+                    important=extract.get('important', False),
+                    content=post,
+                    extract_nature=extract_nature,
+                    extract_state=extract_state,
+                    extract_hash=extract_hash
+                )
+                new_extract.lang = extract.get('lang')
+                db.add(new_extract)
+                range = models.TextFragmentIdentifier(
+                    extract=new_extract,
+                    xpath_start=extract.get('xpath_start'),
+                    offset_start=extract.get('offset_start'),
+                    xpath_end=extract.get('xpath_end'),
+                    offset_end=extract.get('offset_end'))
+                db.add(range)
+                db.flush()
 
         return AddPostsExtract(status=status)

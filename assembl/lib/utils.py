@@ -4,6 +4,7 @@ import unidecode
 import inspect
 from time import sleep
 from StringIO import StringIO
+from hashlib import sha256
 
 from pyramid.settings import asbool
 from urlparse import urlparse
@@ -134,3 +135,10 @@ def snake_to_camel(string):
     # We capitalize the first letter of each component except the first one
     # with the 'title' method and join them together.
     return components[0] + "".join(x.title() for x in components[1:])
+
+
+def get_hash(*args):
+    hasher = sha256()
+    hasher.update("".join([str(a) for a in args]))
+    return hasher.hexdigest()
+    
