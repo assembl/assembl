@@ -25,9 +25,11 @@ from sqlalchemy import (
     event,
     Index,
     func,
-    UniqueConstraint
+    UniqueConstraint,
+    Text
 )
 from pyramid.httpexceptions import HTTPBadRequest, HTTPUnauthorized
+from sqlalchemy import orm
 from sqlalchemy.orm import (
     relationship, backref, deferred)
 from sqlalchemy.orm.attributes import NO_VALUE
@@ -55,7 +57,7 @@ from ..auth import (
     SYSTEM_ROLES
 )
 from .langstrings import Locale
-
+from assembl.models.cookie_types import CookieTypes, AcceptedCookies, RejectedCookies
 
 log = logging.getLogger('assembl')
 
@@ -630,6 +632,78 @@ class AgentStatusInDiscussion(DiscussionBoundBase):
     first_subscribed = Column(DateTime)
     last_unsubscribed = Column(DateTime)
     user_created_on_this_discussion = Column(Boolean, server_default='0')
+    accepted_cookies = Column(Text())  # JSON blob
+
+    def __init__(self, *args, **kwargs):
+        super(AgentStatusInDiscussion, self).__init__(*args, **kwargs)
+        self._convert_cookies_to_enums()
+
+    @orm.reconstructor
+    def init_on_load(self):
+        self._convert_cookies_to_enums()
+
+    def _convert_cookies_to_enums(self):
+        # A private variable _accepted_cookies is used to track the Enum-list of cookies supported
+        if '_accepted_cookies' not in vars(self):
+            if not self.accepted_cookies:
+                self._accepted_cookies = list()
+            else:
+                self._accepted_cookies = [CookieTypes(c.strip()) for c in self.accepted_cookies.split(",")]
+        return self._accepted_cookies
+
+    def _save_cookies(self):
+        if '_accepted_cookies' in vars(self):
+            self.accepted_cookies = ",".join([c.value for c in self._accepted_cookies])
+
+    @property
+    def cookies(self):
+        return self._accepted_cookies
+
+    @property
+    def has_any_accepted_cookies(self):
+        if self.cookies and len(self.cookies) > 0:
+            for cookie in self.cookies:
+                if cookie in AcceptedCookies:
+                    return True
+            return False
+        return False
+
+    @property
+    def has_any_rejected_cookies(self):
+        if self.cookies and len(self.cookies) > 0:
+            for cookie in self.cookies:
+                if cookie in RejectedCookies:
+                    return True
+            return False
+        return False
+
+    def has_cookie(self, cookie):
+        if isinstance(cookie, basestring):
+            cookie = CookieTypes(cookie)
+        if self.cookies and len(self.cookies) > 0:
+            return cookie in self.cookies
+        return False
+
+    def update_cookie(self, cookie):
+        """
+        @param: cookies: a CookieType to be added to the list of accepted cookies.
+        """
+        if isinstance(cookie, basestring):
+            cookie = CookieTypes(cookie)
+        if cookie not in self._accepted_cookies:
+            self._accepted_cookies.append(cookie)
+            self._save_cookies()
+
+    def delete_cookie(self, cookie):
+        """
+        @param: cookie to be removed from the list of accepted_cookies
+        """
+        if isinstance(cookie, basestring):
+            cookie = CookieTypes(cookie)
+        if cookie in self._accepted_cookies:
+            i = self._accepted_cookies.index(cookie)
+            self._accepted_cookies.pop(i)
+            self._save_cookies()
 
     def get_discussion_id(self):
         return self.discussion_id or self.discussion.id
@@ -682,6 +756,10 @@ class User(AgentProfile):
     social_accounts = relationship('SocialAuthAccount')
     is_deleted = Column(Boolean(), default=False)
     is_machine = Column(Boolean(), default=False)
+    last_accepted_cgu_date = Column(DateTime)
+    last_accepted_privacy_policy_date = Column(DateTime)
+    last_rejected_cgu_date = Column(DateTime)
+    last_rejected_privacy_policy_date = Column(DateTime)
 
     def __init__(self, **kwargs):
         if kwargs.get('password', None) is not None:
@@ -737,6 +815,42 @@ class User(AgentProfile):
                 self.name = name
         else:
             self.name = name
+
+    @property
+    def user_last_accepted_cgu_date(self):
+        return self.last_accepted_cgu_date
+
+    @user_last_accepted_cgu_date.setter
+    def user_last_accepted_cgu_date(self, date=None):
+        date = date or datetime.utcnow()
+        self.last_accepted_cgu_date = date
+
+    @property
+    def user_last_accepted_privacy_policy_date(self):
+        self.last_accepted_privacy_policy_date
+
+    @user_last_accepted_privacy_policy_date.setter
+    def user_last_accepted_privacy_policy_date(self, date=None):
+        date = date or datetime.utcnow()
+        self.last_accepted_privacy_policy_date = date
+
+    @property
+    def user_last_rejected_cgu_date(self):
+        self.last_rejected_cgu_date
+
+    @user_last_rejected_cgu_date.setter
+    def user_last_rejected_cgu_date(self, date=None):
+        date = date or datetime.utcnow()
+        self.last_rejected_cgu_date = date
+
+    @property
+    def user_last_rejected_privacy_policy_date(self):
+        self.last_rejected_privacy_policy_date
+
+    @user_last_rejected_privacy_policy_date.setter
+    def user_last_rejected_privacy_policy_date(self, date=None):
+        date = date or datetime.utcnow()
+        self.last_rejected_privacy_policy_date = date
 
     @property
     def username_p(self):
@@ -953,6 +1067,37 @@ class User(AgentProfile):
         self.update_agent_status_unsubscribe(discussion)
 
     @classmethod
+    def any_cookie_accepted_agents(cls, discussion, session=None):
+        """A utility method to find all agents in a debate who has accepted ANY types of cookies"""
+        from assembl import models as m
+        session = session or m.AgentStatusInDiscussion.default_db()
+        agent_status = session.query(m.AgentStatusInDiscussion).filter(m.AgentStatusInDiscussion.discussion_id == discussion.id).all()
+        ids = [agent.profile_id for agent in agent_status if agent.has_any_accepted_cookies]
+        users = session.query(m.User).filter(m.User.id.in_(ids)).all()
+        return users
+
+    @classmethod
+    def any_cookie_rejected_agents(cls, discussion, session=None):
+        """A utility method to find all agents in a debate who has rejected ANY types of cookies"""
+        from assembl import models as m
+        session = session or cls.default_db()
+        agent_status = session.query(m.AgentStatusInDiscussion).filter(m.AgentStatusInDiscussion.discussion_id == discussion.id).all()
+        ids = [agent.profile_id for agent in agent_status if agent.has_any_rejected_cookies]
+        return session.query(User).filter(User.id.in_(ids)).all()
+
+    @classmethod
+    def all_agents_with_cookie(cls, discussion, cookie, session=None):
+        """A utlity method to find all agents in a debate who has a particialar type of cookie
+
+        :param CookieType|string cookie: The specific cookie requested
+        """
+        from assembl import models as m
+        session = session or cls.default_db()
+        agent_status = session.query(m.AgentStatusInDiscussion).filter(m.AgentStatusInDiscussion.discussion_id == discussion.id).all()
+        ids = [agent.profile_id for agent in agent_status if agent.has_cookie(cookie)]
+        return session.query(User).filter(User.id.in_(ids)).all()
+
+    @classmethod
     def extra_collections(cls):
         from assembl.views.traversal import (
             CollectionDefinition, AbstractCollectionDefinition,
@@ -961,6 +1106,7 @@ class User(AgentProfile):
         from .user_key_values import UserPreferenceCollection
 
         class NotificationSubscriptionCollection(CollectionDefinition):
+
             def __init__(self, cls):
                 super(NotificationSubscriptionCollection, self).__init__(
                     cls, User.notification_subscriptions.property)
@@ -997,6 +1143,7 @@ class User(AgentProfile):
                 return "extended"
 
         class LocalRoleCollection(CollectionDefinition):
+
             def __init__(self, cls):
                 super(LocalRoleCollection, self).__init__(
                     cls, User.local_roles.property)
@@ -1027,6 +1174,7 @@ class User(AgentProfile):
                 return "default"
 
         class PreferencePseudoCollection(AbstractCollectionDefinition):
+
             def __init__(self):
                 super(PreferencePseudoCollection, self).__init__(
                     cls, UserPreferenceCollection)

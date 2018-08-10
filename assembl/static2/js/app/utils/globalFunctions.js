@@ -176,6 +176,12 @@ export const getCookieItem = (sKey: string) => {
   );
 };
 
+export function setCookieItem(name: string, value: any) {
+  const date = new Date();
+  date.setMonth(date.getMonth() + 13);
+  document.cookie = `${name}=${value}; path=/;expires=${date.toString()}`;
+}
+
 export const createRandomId = (): string => Math.round(Math.random() * -1000000).toString();
 
 export const isOrContains = (n: any, c: any) => {

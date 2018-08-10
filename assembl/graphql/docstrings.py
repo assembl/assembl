@@ -699,6 +699,17 @@ class AgentProfile:
     If True, the User information is cleansed from the system, and the User can no longer log in."""
     is_machine = """A boolean flag describing if the User is a machine user or human user."""
     preferences = """The preferences of the User."""
+    accepted_cookies = """The list of cookies accepted by the agent."""
+    last_accepted_cgu_date = """The last time that the CGU was accepted by the user.
+    Normally, this matches the sign-up date, but if the CGU was changed after a debate has started, then the user must agree to a CGU change,
+    altering this date."""
+    last_accepted_privacy_policy = """The last time that the Privacy Policy was accepted by the user.
+    Normally, this matches the sign-up date, but if the Privacy Policy was changed after a debate has started, then the user must agree to a Policy change,
+    altering this date."""
+    last_rejected_cgu_date = """The last time that the CGU was rejected by the user. A user cannot sign up without accepting the CGU.
+    However, if the CGU is changed after the debate has started, a user could reject the new rules, and alter this date."""
+    last_rejected_privacy_policy_date = """The last time that the Privacy Policy was rejected by the user. A user cannot sign up without accepting the Privacy Policy.
+    However, if the Policy is changed after the debate has started, a user could reject the new policy, and alter this date."""
 
 
 class UpdateUser:
@@ -717,6 +728,22 @@ class DeleteUserInformation:
     __doc__ = """A mutation allowing a user to delete all his information according to article 17 of GDPR.
     All vital information regarding the User acrosst the database is cleansed."""
     id = Default.node_id % ("User")
+
+
+class UpdateAcceptedCookies:
+    __doc__ = """A mutation that allows the addition of accepted and rejected list of cookies by a registered user."""
+    actions = """The list of cookies that the user has chosen to accept. The current accepted list of cookies are:\n
+    ACCEPT_CGU,\n
+    ACCEPT_SESSION_ON_DISCUSSION,\n
+    ACCEPT_TRACKING_ON_DISCUSSION,\n
+    ACCEPT_PRIVACY_POLICY_ON_DISCUSSION,\n
+    ACCEPT_LOCALE,\n
+    REJECT_LOCALE,\n
+    REJECT_CGU,\n
+    REJECT_SESSION_ON_DISCUSSION,\n
+    REJECT_TRACKING_ON_DISCUSSION,\n
+    REJECT_PRIVACY_POLICY_ON_DISCUSSION,\n
+    """
 
 
 class VoteSession:

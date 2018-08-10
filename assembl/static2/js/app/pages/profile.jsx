@@ -242,12 +242,13 @@ export default compose(
         // this is needed to properly redirect to home page in case of error
         return { error: data.error };
       }
+      const { creationDate, email, hasPassword, name, username } = data.user;
       return {
-        creationDate: data.user.creationDate,
-        email: data.user.email,
-        hasPassword: data.user.hasPassword,
-        name: data.user.name,
-        username: data.user.username
+        creationDate: creationDate,
+        email: email,
+        hasPassword: hasPassword,
+        name: name,
+        username: username
       };
     }
   }),

@@ -79,3 +79,60 @@ def test_case_insensitive_search_on_username(
     # a search on the lowercase version should return one result
     assert test_session.query(Username).filter(
         func.lower(Username.username) == 'test.username').count()
+
+
+def test_all_cookie_accepted_agents(test_session, participant2_user, agent_status_in_discussion_2, discussion):
+    from assembl.models import User
+    assert participant2_user not in User.any_cookie_accepted_agents(discussion)
+    assert participant2_user not in User.any_cookie_rejected_agents(discussion)
+
+
+def test_all_rejected_cookie_agents(test_session, participant2_user, agent_status_in_discussion_3, discussion):
+    from assembl.models import User
+    assert participant2_user in User.any_cookie_accepted_agents(discussion)
+    assert participant2_user not in User.any_cookie_rejected_agents(discussion)
+
+
+def test_has_not_accepted_cookies(test_session, agent_status_in_discussion_2):
+    assert not agent_status_in_discussion_2.has_any_accepted_cookies
+
+
+def test_has_accepted_cookies(test_session, agent_status_in_discussion_3):
+    assert agent_status_in_discussion_3.has_any_accepted_cookies
+
+
+def test_read_empty_cookies(test_session, agent_status_in_discussion_2):
+    """Test Read Cookies for a user who has not accepted cookies."""
+    assert agent_status_in_discussion_2.cookies == []
+
+
+def test_read_cookies(test_session, agent_status_in_discussion_3):
+    """Test Read cookies on a user who has accepted one cookie"""
+    from assembl.models.cookie_types import CookieTypes
+    assert agent_status_in_discussion_3.cookies == [CookieTypes.ACCEPT_CGU]
+
+
+def test_update_cookies_2(test_session, agent_status_in_discussion_2):
+    """Testing update cookies on a user who has not yet accepted cookies"""
+    from assembl.models.cookie_types import CookieTypes
+    agent_status_in_discussion_2.update_cookie("ACCEPT_TRACKING_ON_DISCUSSION")
+    assert agent_status_in_discussion_2.cookies == [CookieTypes.ACCEPT_TRACKING_ON_DISCUSSION]
+
+
+def test_update_cookies_3(test_session, agent_status_in_discussion_3):
+    """Testing update cookies on a user who has already accepted one cookie"""
+    from assembl.models.cookie_types import CookieTypes
+    agent_status_in_discussion_3.update_cookie("ACCEPT_TRACKING_ON_DISCUSSION")
+    assert agent_status_in_discussion_3.cookies == [CookieTypes.ACCEPT_CGU, CookieTypes.ACCEPT_TRACKING_ON_DISCUSSION]
+
+
+def test_delete_cookie(test_session, agent_status_in_discussion_3):
+    """Testing delete cookie on a user who has accepted a cookie."""
+    agent_status_in_discussion_3.delete_cookie("ACCEPT_CGU")
+    assert agent_status_in_discussion_3.cookies == []
+
+
+def test_delete_cookie_2(test_session, agent_status_in_discussion_2):
+    """Testing delete cookie on a user who has not accepted any cookie."""
+    agent_status_in_discussion_2.delete_cookie("ACCEPT_CGU")
+    assert agent_status_in_discussion_2.cookies == []

@@ -1,0 +1,7 @@
+query AcceptedCookies($id: ID!) {
+  user: node(id: $id) {
+    ... on AgentProfile {
+      acceptedCookies
+    }
+  }
+}

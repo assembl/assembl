@@ -13,7 +13,7 @@ import simplejson as json
 from pyramid.view import view_config
 from pyramid.response import Response
 from pyramid.httpexceptions import (
-    HTTPException, HTTPInternalServerError, HTTPMovedPermanently, HTTPError,
+    HTTPInternalServerError, HTTPMovedPermanently, HTTPError,
     HTTPBadRequest, HTTPFound, HTTPTemporaryRedirect as HTTPTemporaryRedirectP)
 from pyramid.i18n import TranslationStringFactory
 from pyramid.security import Everyone
@@ -27,7 +27,6 @@ from assembl.lib.locale import (
     get_language, get_country, to_posix_string, strip_country)
 from assembl.lib.utils import get_global_base_url
 from assembl.lib.raven_client import capture_exception
-from assembl.auth import R_PARTICIPANT
 from assembl.models.auth import (
     UserLanguagePreference,
     LanguagePreferenceOrder,
@@ -58,14 +57,17 @@ def backbone_include(config):
     config.add_route('styleguide', '/styleguide')
     config.add_route('test', '/test')
 
+
 def legacy_backbone_include(config):
     FrontendUrls.register_legacy_routes(config)
+
 
 def get_theme_base_path(frontend_version=1):
     frontend_folder = 'static2' if frontend_version == 2 else 'static'
     theme_base_path = os.path.join(os.path.dirname(os.path.dirname(__file__)),
-                              frontend_folder, 'css', 'themes')
+                                   frontend_folder, 'css', 'themes')
     return theme_base_path
+
 
 def find_theme(theme_name, frontend_version=1):
     """
@@ -78,7 +80,7 @@ def find_theme(theme_name, frontend_version=1):
     walk_results = os.walk(theme_base_path, followlinks=True)
     for (dirpath, dirnames, filenames) in walk_results:
         if '_theme.scss' in filenames:
-            #print repr(dirpath), repr(dirnames) , repr(filenames)
+            # print repr(dirpath), repr(dirnames) , repr(filenames)
             relpath = os.path.relpath(dirpath, theme_base_path)
             (head, name) = os.path.split(dirpath)
             print name, relpath
@@ -86,6 +88,7 @@ def find_theme(theme_name, frontend_version=1):
                 return relpath
 
     return None
+
 
 def get_theme_info(discussion, frontend_version=1):
     """
@@ -219,9 +222,7 @@ def get_default_context(request, **kwargs):
     websocket_port = None if socket_proxied \
         else config.get('changes.websocket.port')
     secure_socket = socket_proxied and (
-        asbool(config.get("require_secure_connection"))
-        or (asbool(config.get("accept_secure_connection"))
-            and request.url.startswith('https:')))
+        asbool(config.get("require_secure_connection")) or (asbool(config.get("accept_secure_connection")) and request.url.startswith('https:')))
     application_url = get_global_base_url()
     socket_url = get_global_base_url(
         secure_socket, websocket_port) + config.get('changes.prefix')
@@ -241,8 +242,7 @@ def get_default_context(request, **kwargs):
     web_analytics_piwik_script = config.get(
         'web_analytics_piwik_script') or False
     discussion = get_current_discussion()
-    if (web_analytics_piwik_script and discussion
-            and discussion.web_analytics_piwik_id_site):
+    if (web_analytics_piwik_script and discussion and discussion.web_analytics_piwik_id_site):
         web_analytics_piwik_script = web_analytics_piwik_script % (
             discussion.web_analytics_piwik_id_site,
             discussion.web_analytics_piwik_id_site)
@@ -260,9 +260,9 @@ def get_default_context(request, **kwargs):
         help_url = help_url % localizer.locale_name
 
     first_login_after_auto_subscribe_to_notifications = False
-    if (user and discussion and discussion.id and user.is_first_visit
-            and discussion.subscribe_to_notifications_on_signup
-            and user.is_participant(discussion.id)):
+    if (user and discussion and discussion.id and user.is_first_visit and
+        discussion.subscribe_to_notifications_on_signup and
+            user.is_participant(discussion.id)):
         first_login_after_auto_subscribe_to_notifications = True
     locales = config.get('available_languages').split()
     countries_for_locales = defaultdict(set)
@@ -282,11 +282,10 @@ def get_default_context(request, **kwargs):
     assert os.path.exists(jedfilename)
 
     from ..models.facebook_integration import language_sdk_existance
-    fb_lang_exists, fb_locale = language_sdk_existance(get_language(localizer.locale_name),
-                                                    countries_for_locales)
+    fb_lang_exists, fb_locale = language_sdk_existance(
+        get_language(localizer.locale_name), countries_for_locales)
 
     def process_export_list(ls):
-        import string
         return map(lambda s: s.strip(), ls.split(","))
 
     social_settings = {
@@ -631,8 +630,8 @@ def csrf_error_view(exc, request):
                 # And return a page that will reload the same request, NOT through a 303.
                 # Also add a "reload" parameter to avoid doing it twice if it failed.
                 template = ('<html><head><script>document.location = "' +
-                    request.path_info + '?' + request.query_string +
-                    '&reload=true"</script></head></html>')
+                            request.path_info + '?' + request.query_string +
+                            '&reload=true"</script></head></html>')
                 return Response(template, content_type='text/html')
             else:
                 # The hack failed. Tell the user what to do.
@@ -641,17 +640,17 @@ def csrf_error_view(exc, request):
                     in the Privacy tab of preferences is too restrictive;
                     use "Allow from websites I visit" and try again. Simply reloading may work.""")
         return HTTPBadRequest(explanation="Missing cookies", detail=repr(request.exception))
-    return  HTTPBadRequest(explanation="CSRF error", detail=repr(request.exception))
+    return HTTPBadRequest(explanation="CSRF error", detail=repr(request.exception))
 
 
 def error_view(exc, request):
     # from traceback import format_exc
     from datetime import datetime
     capture_exception(getattr(request, "exc_info", None))
+    # format_exc(request.exception))
     return HTTPInternalServerError(
         explanation="Sorry, Assembl had an internal issue and you have to reload. Please send this to a discussion administrator.",
-        detail=datetime.utcnow().isoformat()+"\n"+repr(request.exception))
-        # format_exc(request.exception))
+        detail=datetime.utcnow().isoformat() + "\n" + repr(request.exception))
 
 
 def redirector(request):
@@ -671,13 +670,12 @@ def includeme(config):
     if default_discussion:
         config.add_route('discussion_list', '/discussions')
         config.add_view(
-            lambda req: HTTPFound('/'+default_discussion),
+            lambda req: HTTPFound('/' + default_discussion),
             route_name='default_disc_redirect')
 
         config.add_route('default_disc_redirect', '/')
     else:
         config.add_route('discussion_list', '/')
-
 
     config.include(backbone_include, route_prefix='/debate/{discussion_slug}')
     config.include(legacy_backbone_include, route_prefix='/{discussion_slug}')

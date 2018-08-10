@@ -77,6 +77,79 @@ class Action(TombstonableMixin, DiscussionBoundBase):
         P_READ, P_SYSADMIN, P_SYSADMIN, P_SYSADMIN, P_READ, P_READ, P_READ)
 
 
+class ActionOnDiscussion(Action):
+    """An action whose target is a discussion"""
+    __tablename__ = 'action_on_discussion'
+    id = Column(Integer, ForeignKey(Action.id, ondelete="CASCADE", onupdate='CASCADE'),
+                primary_key=True)
+    discussion_id = Column(Integer, ForeignKey('discussion.id', ondelete="CASCADE", onupdate="CASCADE"),
+                           nullable=False, index=True)
+
+    discussion = relationship(Discussion, foreign_keys=(discussion_id), backref=backref("action_on_discussion", cascade="all"))
+
+    def get_discussion_id(self):
+        return self.discussion_id
+
+    @classmethod
+    def get_discussion_conditions(cls, discussion_id, alias_maker=None):
+        return ((cls.id == Action.id),
+                (cls.discussion_id == discussion_id))
+
+
+class AcceptSessionOnDiscussion(ActionOnDiscussion):
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'discussion:session:accept'
+    }
+
+
+class AcceptCGUOnDiscussion(ActionOnDiscussion):
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'discussion:cgu:accept'
+    }
+
+
+class AcceptTrackingOnDiscussion(ActionOnDiscussion):
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'discussion:tracking:accept'
+    }
+
+
+class AcceptPrivacyPolicyOnDiscussion(ActionOnDiscussion):
+    __mapper_args__ = {
+        'polymorphic_identity': 'discussion:privacypolicy:accept'
+    }
+
+
+class RejectSessionOnDiscussion(ActionOnDiscussion):
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'discussion:session:reject'
+    }
+
+
+class RejectCGUOnDiscussion(ActionOnDiscussion):
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'discussion:cgu:reject'
+    }
+
+
+class RejectTrackingOnDiscussion(ActionOnDiscussion):
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'discussion:tracking:reject'
+    }
+
+
+class RejectPrivacyPolicyOnDiscussion(ActionOnDiscussion):
+    __mapper_args__ = {
+        'polymorphic_identity': 'discussion:privacypolicy:reject'
+    }
+
+
 class ActionOnPost(Action):
     """
     An action whose target is a post. (Mixin)

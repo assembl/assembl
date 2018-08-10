@@ -1,0 +1,7 @@
+mutation updateAcceptedCookies($actions: [CookieTypes]!) {
+  updateAcceptedCookies(actions: $actions) {
+    user {
+      acceptedCookies
+    }
+  }
+}

@@ -3,6 +3,7 @@ import os
 import graphene
 from graphene.relay import Node
 from graphene_sqlalchemy import SQLAlchemyObjectType
+from graphene.pyutils.enum import Enum as PyEnum
 from pyramid.httpexceptions import HTTPUnauthorized
 from pyramid.i18n import TranslationStringFactory
 
@@ -16,10 +17,15 @@ from .types import SecureObjectType
 from .utils import DateTime, abort_transaction_on_exception
 from assembl.auth.password import random_string
 from datetime import datetime
-from .permissions_helpers import require_cls_permission
+from .permissions_helpers import require_cls_permission, require_instance_permission
 from .preferences import Preferences
+from assembl.models.cookie_types import CookieTypes as PyCookieTypes
 
 _ = TranslationStringFactory('assembl')
+
+cookie_type_enum = PyEnum(
+    'CookieTypes', [(k, k) for k in PyCookieTypes.values()])
+CookieTypes = graphene.Enum.from_enum(cookie_type_enum)
 
 
 class AgentProfile(SecureObjectType, SQLAlchemyObjectType):
@@ -41,6 +47,11 @@ class AgentProfile(SecureObjectType, SQLAlchemyObjectType):
     is_deleted = graphene.Boolean(description=docs.AgentProfile.is_deleted)
     is_machine = graphene.Boolean(description=docs.AgentProfile.is_machine)
     preferences = graphene.Field(Preferences, description=docs.AgentProfile.preferences)
+    accepted_cookies = graphene.List(CookieTypes, description=docs.AgentProfile.accepted_cookies)
+    last_accepted_cgu_date = DateTime(description=docs.AgentProfile.last_accepted_cgu_date)
+    last_accepted_privacy_policy = DateTime(description=docs.AgentProfile.last_accepted_privacy_policy)
+    last_rejected_cgu_date = DateTime(description=docs.AgentProfile.last_rejected_cgu_date)
+    last_rejected_privacy_policy_date = DateTime(description=docs.AgentProfile.last_rejected_privacy_policy_date)
 
     def resolve_is_deleted(self, args, context, info):
         return self.is_deleted or False
@@ -82,6 +93,19 @@ class AgentProfile(SecureObjectType, SQLAlchemyObjectType):
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
         return self.get_preferences_for_discussion(discussion)
+
+    def resolve_accepted_cookies(self, args, context, info):
+        discussion_id = context.matchdict["discussion_id"]
+        user_id = self.id if self.id > 0 else Everyone
+        if user_id == Everyone:
+            return []
+        db = self.default_db
+        agent_status_in_discussion = db.query(
+            models.AgentStatusInDiscussion).filter_by(
+                profile_id=user_id, discussion_id=discussion_id).first()
+        if not agent_status_in_discussion:
+            return []
+        return [x.value for x in agent_status_in_discussion.cookies]
 
 
 class UpdateUser(graphene.Mutation):
@@ -283,3 +307,78 @@ class DeleteUserInformation(graphene.Mutation):
 
             db.flush()
         return DeleteUserInformation(user=user)
+
+
+class UpdateAcceptedCookies(graphene.Mutation):
+    __doc__ = docs.UpdateAcceptedCookies.__doc__
+
+    class Input:
+        actions = graphene.Argument(graphene.List(CookieTypes, required=True), description=docs.UpdateAcceptedCookies.actions)
+
+    user = graphene.Field(lambda: AgentProfile)
+
+    @staticmethod
+    @abort_transaction_on_exception
+    def mutate(root, args, context, info):
+        cls = models.User
+        db = cls.default_db
+        discussion_id = context.matchdict['discussion_id']
+        user_id = context.authenticated_userid or Everyone
+        instance = cls.get(user_id) if user_id != Everyone else None
+        require_instance_permission(CrudPermissions.UPDATE, instance, context)
+
+        permissions = get_permissions(user_id, discussion_id)
+        from assembl.models.action import (
+            RejectCGUOnDiscussion, RejectSessionOnDiscussion, RejectTrackingOnDiscussion, RejectPrivacyPolicyOnDiscussion,
+            AcceptCGUOnDiscussion, AcceptSessionOnDiscussion, AcceptTrackingOnDiscussion, AcceptPrivacyPolicyOnDiscussion
+        )
+        with cls.default_db.no_autoflush as db:
+            user = models.User.get(user_id)
+            actions = args.get('actions', [])
+            agent_status_in_discussion = user.get_status_in_discussion(discussion_id)
+            for action_type in actions:
+                action_type_enum = PyCookieTypes(action_type)
+                if action_type_enum == PyCookieTypes.ACCEPT_CGU:
+                    action = AcceptCGUOnDiscussion(discussion_id=discussion_id, actor_id=user_id)
+                    user.user_last_accepted_cgu_date = datetime.utcnow()
+                    agent_status_in_discussion.update_cookie(action_type_enum)
+
+                elif action_type_enum == PyCookieTypes.ACCEPT_SESSION_ON_DISCUSSION:
+                    action = AcceptSessionOnDiscussion(discussion_id=discussion_id, actor_id=user_id)
+                    agent_status_in_discussion.update_cookie(action_type_enum)
+
+                elif action_type_enum == PyCookieTypes.ACCEPT_TRACKING_ON_DISCUSSION:
+                    action = AcceptTrackingOnDiscussion(discussion_id=discussion_id, actor_id=user_id)
+                    agent_status_in_discussion.update_cookie(action_type_enum)
+
+                elif action_type_enum == PyCookieTypes.ACCEPT_PRIVACY_POLICY_ON_DISCUSSION:
+                    action = AcceptPrivacyPolicyOnDiscussion(discussion_id=discussion_id, actor_id=user_id)
+                    user.user_last_accepted_privacy_policy_date = datetime.utcnow()
+                    agent_status_in_discussion.update_cookie(action_type_enum)
+
+                elif action_type_enum == PyCookieTypes.REJECT_CGU:
+                    action = RejectCGUOnDiscussion(discussion_id=discussion_id, actor_id=user_id)
+                    user.user_last_rejected_cgu_date = datetime.utcnow()
+                    agent_status_in_discussion.delete_cookie(PyCookieTypes.ACCEPT_CGU)
+                    agent_status_in_discussion.update_cookie(action_type_enum)
+
+                elif action_type_enum == PyCookieTypes.REJECT_SESSION_ON_DISCUSSION:
+                    action = RejectSessionOnDiscussion(discussion_id=discussion_id, actor_id=user_id)
+                    agent_status_in_discussion.delete_cookie(PyCookieTypes.ACCEPT_SESSION_ON_DISCUSSION)
+                    agent_status_in_discussion.update_cookie(action_type_enum)
+
+                elif action_type_enum == PyCookieTypes.REJECT_TRACKING_ON_DISCUSSION:
+                    action = RejectTrackingOnDiscussion(discussion_id=discussion_id, actor_id=user_id)
+                    agent_status_in_discussion.delete_cookie(PyCookieTypes.ACCEPT_TRACKING_ON_DISCUSSION)
+                    agent_status_in_discussion.update_cookie(action_type_enum)
+
+                elif action_type_enum == PyCookieTypes.REJECT_PRIVACY_POLICY_ON_DISCUSSION:
+                    action = RejectPrivacyPolicyOnDiscussion(discussion_id=discussion_id, actor_id=user_id)
+                    user.user_last_rejected_privacy_policy_date = datetime.utcnow()
+                    agent_status_in_discussion.delete_cookie(PyCookieTypes.ACCEPT_PRIVACY_POLICY_ON_DISCUSSION)
+                    agent_status_in_discussion.update_cookie(action_type_enum)
+
+                action = action.handle_duplication(permissions=permissions, user_id=user.id)
+                db.add(action)
+        db.flush()
+        return UpdateAcceptedCookies(user=user)
