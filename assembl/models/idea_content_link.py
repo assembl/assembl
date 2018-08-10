@@ -498,13 +498,14 @@ class Extract(IdeaContentPositiveLink):
         )
 
     def update_hash(self):
-        tfi = self.text_fragment_identifiers
+        tfis = self.text_fragment_identifiers
+        tfi = tfis[0] if tfis else None
         self.extract_hash = self.get_extract_hash(
             self.lang,
-            tfi.xpath_start,
-            tfi.xpath_end,
-            tfi.offset_start,
-            tfi.offset_end,
+            getattr(tfi, 'xpath_start', ''),
+            getattr(tfi, 'xpath_end', ''),
+            getattr(tfi, 'offset_start', ''),
+            getattr(tfi, 'offset_end', ''),
             self.content.id,
             self.extract_nature
         )

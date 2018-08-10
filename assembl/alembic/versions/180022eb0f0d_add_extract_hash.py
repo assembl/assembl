@@ -1,14 +1,14 @@
 """add_extract_hash
 
 Revision ID: 180022eb0f0d
-Revises: dd47fed731f8
+Revises: 8d37745a8e69
 Create Date: 2018-08-09 23:18:03.815496
 
 """
 
 # revision identifiers, used by Alembic.
 revision = '180022eb0f0d'
-down_revision = 'dd47fed731f8'
+down_revision = '8d37745a8e69'
 
 from alembic import context, op
 import sqlalchemy as sa
@@ -21,7 +21,7 @@ def upgrade(pyramid_env):
             'extract',
             sa.Column(
                 'extract_hash', sa.String,
-                unique=True, nullable=False, server_default=''))
+                nullable=False, server_default=''))
 
     from assembl import models as m
     db = m.get_session_maker()()

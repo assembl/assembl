@@ -3,6 +3,7 @@ import json
 import pytest
 
 from graphql_relay.node.node import to_global_id, from_global_id
+from sqlalchemy.orm import joinedload
 
 from assembl import models
 from assembl.graphql.schema import Schema as schema
@@ -244,6 +245,16 @@ def test_mutation_add_extracts(graphql_request, top_post_in_thread_phase):
     "extractNature": "actionable_solution" 
   }
 
+  post = models.AssemblPost.get(post_db_id)
+  db = post.db
+  def get_extracts():
+      return db.query(
+        models.Extract
+        ).join(
+        models.Content, models.Extract.content == post
+        ).options(joinedload(models.Extract.text_fragment_identifiers)).all()
+
+  assert len(get_extracts()) == 0
   res = schema.execute(u"""
 mutation AddPostsExtract($extracts: [PostExtractEntryInput]!, $extractState: ExtractStates, $extractNature: ExtractNatures) {
   addPostsExtract(extracts: $extracts, extractState: $extractState, extractNature: $extractNature) {
@@ -251,12 +262,24 @@ mutation AddPostsExtract($extracts: [PostExtractEntryInput]!, $extractState: Ext
   }
 }
 """, context_value=graphql_request, variable_values=variable_values)
-
+  
   assert json.loads(json.dumps(res.data)) == {
     u'addPostsExtract': {
       u'status': True
     }
   }
+  assert len(get_extracts()) == 1
+  
+  # add the same extract
+  res = schema.execute(u"""
+mutation AddPostsExtract($extracts: [PostExtractEntryInput]!, $extractState: ExtractStates, $extractNature: ExtractNatures) {
+  addPostsExtract(extracts: $extracts, extractState: $extractState, extractNature: $extractNature) {
+    status
+  }
+}
+""", context_value=graphql_request, variable_values=variable_values)
+  # The extract must be ignored
+  assert len(get_extracts()) == 1
 
 
 def test_mutation_confirm_extract(graphql_request, extract_with_range_submitted_in_reply_post_1):
