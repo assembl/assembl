@@ -513,12 +513,14 @@ export class SearchComponent extends React.Component {
 
   render() {
     const { isExpert, connectedUserId, discussionId } = this.props;
+    let extractsSelected = false;
     let messagesSelected = false;
     let usersSelected = false;
     let selectedCategory = 'All';
     if (this.searchkit.state && this.searchkit.state.type) {
       messagesSelected = this.searchkit.state.type.indexOf('post') >= 0;
       usersSelected = this.searchkit.state.type.indexOf('user') >= 0;
+      extractsSelected = this.searchkit.state.type.indexOf('extract') >= 0;
       if (this.searchkit.state.type.length > 0) {
         selectedCategory = this.searchkit.state.type[0];
       }
@@ -629,19 +631,27 @@ export class SearchComponent extends React.Component {
                     />
                   </div>
                 ) : null}
+              </Panel>
+              <Panel title={I18n.t('search.Extracts')} className={extractsSelected ? null : 'hidden'}>
                 {!v1Interface &&
                   isExpert && (
                     <div className="sk-panel">
                       <MenuFilter
                         listComponent={CheckboxItemList}
-                        field="taxonomy_nature"
-                        id="taxonomy_nature"
+                        field="extract_state"
+                        id="extract_state"
+                        title={I18n.t('search.State')}
+                      />
+                      <MenuFilter
+                        listComponent={CheckboxItemList}
+                        field="extract_nature"
+                        id="extract_nature"
                         title={I18n.t('search.Nature')}
                       />
                       <MenuFilter
                         listComponent={CheckboxItemList}
-                        field="taxonomy_action"
-                        id="taxonomy_action"
+                        field="extract_action"
+                        id="extract_action"
                         title={I18n.t('search.Action')}
                       />
                     </div>
