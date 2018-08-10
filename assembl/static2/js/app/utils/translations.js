@@ -16,7 +16,8 @@ const Translations = {
       tooltip: "Assemb'Bot"
     },
     cookiesBar: {
-      cookiesNotice: "Assembl utilise les cookies afin de vous offrir la meilleure expérience possible. Pour utiliser Assembl, vous devez accepter la politique d'utilisation des cookies du débat.",
+      cookiesNotice:
+        "Assembl utilise les cookies afin de vous offrir la meilleure expérience possible. Pour utiliser Assembl, vous devez accepter la politique d'utilisation des cookies du débat.",
       accept: "J'accepte",
       seeCookiesPolicy: "En savoir plus"
     },
@@ -760,8 +761,8 @@ const Translations = {
       personalizeInterface: {
         success: "La personnalisation de l'interface a été enregistées avec succès !",
         titleFormTitle: "Personnaliser l'intitulé de la page",
-        title: "Titre de la page web (1)",
-        favicon: "Favicon (2)",
+        title: "Titre de la page web (visuel 1)",
+        favicon: "Favicon (visuel 2)",
         icoRequired: "Le favicon doit être un fichier .ico uniquement"
       }
     },
@@ -793,7 +794,8 @@ const Translations = {
       tooltip: "Assemb'Bot"
     },
     cookiesBar: {
-      cookiesNotice: "Assembl uses cookies to offer you the best possible experience. To use Assembl, you have to agree to the cookies policy of the debate.",
+      cookiesNotice:
+        "Assembl uses cookies to offer you the best possible experience. To use Assembl, you have to agree to the cookies policy of the debate.",
       accept: "I agree",
       seeCookiesPolicy: "See more"
     },
@@ -1524,8 +1526,8 @@ const Translations = {
       personalizeInterface: {
         success: "The interface personalization has been saved with success!",
         titleFormTitle: "Personalize the title of the page",
-        title: "Web page Title (1)",
-        favicon: "Favicon (2)",
+        title: "Web page Title (visual 1)",
+        favicon: "Favicon (visual 2)",
         icoRequired: "The favicon must be an .ico file only"
       }
     },
