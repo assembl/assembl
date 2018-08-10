@@ -768,6 +768,6 @@ const mapStateToProps = state => ({
 
 const ConnectedSearch = connect(mapStateToProps)(SearchComponent);
 
-export { DumbExtractHit };
+export { DumbExtractHit, PostHit };
 
 export default ConnectedSearch;

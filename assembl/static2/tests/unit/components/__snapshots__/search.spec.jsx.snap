@@ -1,16 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`DumbExtractHit component should render an extract hit 1`] = `
+exports[`Hits components DumbExtractHit component should render an extract hit 1`] = `
 <div
-  className="div"
+  className="div__item"
 >
-  <ImageType
-    className={
-      Object {
-        "mix": [Function],
-      }
-    }
-    type="extract"
+  <span
+    className="[object Object] assembl-icon-discussion"
   />
   <div
     className={
@@ -18,19 +13,7 @@ exports[`DumbExtractHit component should render an extract hit 1`] = `
         "mix": [Function],
       }
     }
-  >
-    <Link
-      dangerouslySetInnerHTML={
-        Object {
-          "__html": "We need to quantify the optical HTTP panel!",
-        }
-      }
-      onClick={[Function]}
-      onlyActiveOnIndex={false}
-      style={Object {}}
-      to={undefined}
-    />
-  </div>
+  />
   <div
     className={
       Object {
@@ -46,16 +29,191 @@ exports[`DumbExtractHit component should render an extract hit 1`] = `
       }
     />
   </div>
-  <PublishedInfo
+  <div
     className={
       Object {
         "mix": [Function],
       }
     }
-    date="2018-08-08"
-    publishedOnMsgId="search.harvested_on"
-    userId="foo"
-    userName="Jewell Pouros"
+  >
+    <span
+      className={undefined}
+      style={undefined}
+    >
+      Harvested on
+    </span>
+     
+    <span
+      className={undefined}
+      style={undefined}
+    >
+      August 8th, 2018
+    </span>
+     
+    <span
+      className={undefined}
+      style={undefined}
+    >
+      by
+    </span>
+     
+    <div
+      className="sk-tag-filter"
+      onClick={[Function]}
+    >
+      <div
+        className="profileLine"
+      >
+        <div
+          className="inline"
+        >
+          <img
+            alt="Jewell Pouros"
+            height="30"
+            onError={[Function]}
+            src="/user/id/foo/avatar/30"
+            width="30"
+          />
+        </div>
+        <div
+          className="user"
+        >
+          <div
+            className="creator"
+          >
+            Jewell Pouros
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Hits components PostHit component should render a post hit 1`] = `
+<div
+  className="div__item"
+>
+  <span
+    className="[object Object] assembl-icon-discussion"
   />
+  <div
+    className={
+      Object {
+        "mix": [Function],
+      }
+    }
+  />
+  <div
+    className={
+      Object {
+        "mix": [Function],
+      }
+    }
+  >
+    <p
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "We need to connect the multi-byte SQL interface!",
+        }
+      }
+    />
+    <div>
+      <div
+        className="emoticon LikeSentimentOfPost"
+        title="Like"
+      />
+      <div
+        className="emoticonValue"
+      >
+        2
+      </div>
+      <div
+        className="emoticon DisagreeSentimentOfPost"
+        title="Disagree"
+      />
+      <div
+        className="emoticonValue"
+      >
+        3
+      </div>
+      <div
+        className="emoticon DontUnderstandSentimentOfPost"
+        title="Did not get it"
+      />
+      <div
+        className="emoticonValue"
+      >
+        3
+      </div>
+      <div
+        className="emoticon MoreInfoSentimentOfPost"
+        title="More info please?"
+      />
+      <div
+        className="emoticonValue"
+      >
+        1
+      </div>
+    </div>
+  </div>
+  <div
+    className={
+      Object {
+        "mix": [Function],
+      }
+    }
+  >
+    <span
+      className={undefined}
+      style={undefined}
+    >
+      Published on
+    </span>
+     
+    <span
+      className={undefined}
+      style={undefined}
+    >
+      August 8th, 2018
+    </span>
+     
+    <span
+      className={undefined}
+      style={undefined}
+    >
+      by
+    </span>
+     
+    <div
+      className="sk-tag-filter"
+      onClick={[Function]}
+    >
+      <div
+        className="profileLine"
+      >
+        <div
+          className="inline"
+        >
+          <img
+            alt="Paxton Pouros"
+            height="30"
+            onError={[Function]}
+            src="/user/id/foo/avatar/30"
+            width="30"
+          />
+        </div>
+        <div
+          className="user"
+        >
+          <div
+            className="creator"
+          >
+            Paxton Pouros
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 `;
