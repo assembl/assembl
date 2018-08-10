@@ -16,7 +16,7 @@ from sqlalchemy import text
 
 def upgrade(pyramid_env):
     with context.begin_transaction():
-        op.create_index('ix_public_username_username_ci', 'username', [text('lower(username)')], unique=True)
+        op.create_index('ix_public_username_username_ci', 'username', [text('lower(username)')])
 
 
 def downgrade(pyramid_env):
