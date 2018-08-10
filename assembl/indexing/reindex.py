@@ -65,6 +65,9 @@ def get_indexable_contents(session):
             joinedload(AllPost.body).joinedload("entries")
         )
     for post in query:
+        for extract in post.extracts:
+            yield extract
+
         yield post
 
 
@@ -104,6 +107,9 @@ def reindex_content(content, action='update'):
             changes.unindex_content(content)
             for extract in content.extracts:
                 changes.unindex_content(extract)
+    elif isinstance(content, Extract):
+        # warning: should always be above isinstance(content, IdeaContentLink) block
+        changes.index_content(content)
     elif isinstance(content, IdeaContentLink):
         # A AssemblPost is indexed before any IdeaRelatedPostLink is created,
         # so be sure to reindex content.content if we have a IdeaContentLink
