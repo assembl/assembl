@@ -213,7 +213,7 @@ def get_data(content):
             return None, None
 
         data['idea_id'] = idea_id
-        data['extract_state'] = content.extract_state
+        data['extract_state'] = 'taxonomy_state.' + content.extract_state
         if content.extract_nature:
             data['extract_nature'] = 'taxonomy_nature.' + content.extract_nature.name
 
