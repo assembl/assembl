@@ -701,25 +701,38 @@ class AddPostExtract(graphene.Mutation):
         post_id = args.get('post_id')
         post_id = int(Node.from_global_id(post_id)[1])
         post = models.Post.get(post_id)
+        extract_hash = models.Extract.get_extract_hash(
+            args.get('lang'),
+            args.get('xpath_start'),
+            args.get('xpath_end'),
+            args.get('offset_start'),
+            args.get('offset_end'),
+            post_id
+        )
+        db = post.db
+        exist = db.query(exists().where(models.Extract.extract_hash == extract_hash)).scalar()
+        if exist:
+            raise Exception("Extract already exists!")
+
         new_extract = models.Extract(
             creator_id=user_id,
             owner_id=user_id,
             discussion_id=discussion_id,
             body=args.get('body'),
             important=args.get('important', False),
-            content=post
+            content=post,
+            extract_hash=extract_hash
         )
         new_extract.lang = args.get('lang')
-        new_extract.update_hash()
-        post.db.add(new_extract)
+        db.add(new_extract)
         range = models.TextFragmentIdentifier(
             extract=new_extract,
             xpath_start=args.get('xpath_start'),
             offset_start=args.get('offset_start'),
             xpath_end=args.get('xpath_end'),
             offset_end=args.get('offset_end'))
-        post.db.add(range)
-        post.db.flush()
+        db.add(range)
+        db.flush()
 
         return AddPostExtract(post=post)
 
@@ -762,8 +775,7 @@ class AddPostsExtract(graphene.Mutation):
                 extract.get('xpath_end'),
                 extract.get('offset_start'),
                 extract.get('offset_end'),
-                post_id,
-                extract_nature)
+                post_id)
             exist = db.query(exists().where(models.Extract.extract_hash == extract_hash)).scalar()
             if not exist:
                 new_extract = models.Extract(

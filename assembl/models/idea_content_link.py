@@ -485,7 +485,7 @@ class Extract(IdeaContentPositiveLink):
         return query.filter(cls.owner_id == user_id)
 
     @classmethod
-    def get_extract_hash(cls, lang, xpath_start, xpath_end, offset_start, offset_end, post_id, extract_nature):
+    def get_extract_hash(cls, lang, xpath_start, xpath_end, offset_start, offset_end, post_id):
         "Return a hash for the extract values"
         return get_hash(
             lang,
@@ -493,11 +493,10 @@ class Extract(IdeaContentPositiveLink):
             xpath_end,
             offset_start,
             offset_end,
-            post_id,
-            extract_nature
+            post_id
         )
 
-    def update_hash(self):
+    def update_extract_hash(self):
         tfis = self.text_fragment_identifiers
         tfi = tfis[0] if tfis else None
         self.extract_hash = self.get_extract_hash(
@@ -506,8 +505,7 @@ class Extract(IdeaContentPositiveLink):
             getattr(tfi, 'xpath_end', ''),
             getattr(tfi, 'offset_start', ''),
             getattr(tfi, 'offset_end', ''),
-            self.content.id,
-            self.extract_nature
+            self.content.id
         )
 
     crud_permissions = CrudPermissions(

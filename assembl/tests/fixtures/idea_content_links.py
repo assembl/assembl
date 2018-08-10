@@ -152,15 +152,25 @@ def extract_with_range_in_reply_post_1(
     xpathEnd = xpathStart
     offsetStart = 314
     offsetEnd = 958
-
+    lang = 'en'
+    extract_hash = Extract.get_extract_hash(
+        lang,
+        xpathStart,
+        xpathEnd,
+        offsetStart,
+        offsetEnd,
+        reply_post_1.id
+    )
     new_extract = Extract(
         creator_id=discussion_admin_user.id,
         owner_id=discussion_admin_user.id,
         discussion_id=discussion.id,
         body=extract_body,
         important=True,
-        content=reply_post_1
+        content=reply_post_1,
+        extract_hash=extract_hash
     )
+    new_extract.lang = lang
     test_session.add(new_extract)
 
     new_range = TextFragmentIdentifier(

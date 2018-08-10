@@ -32,7 +32,7 @@ def test_mutation_add_extract(graphql_request, top_post_in_thread_phase):
     "offsetEnd": offsetEnd
   }
 
-  res = schema.execute(u"""
+  mutation = u"""
 mutation addPostExtract(
   $contentLocale: String!
   $postId: ID!
@@ -80,7 +80,8 @@ mutation addPostExtract(
     }
   }
 }
-""", context_value=graphql_request, variable_values=variable_values)
+"""
+  res = schema.execute(mutation, context_value=graphql_request, variable_values=variable_values)
 
   assert json.loads(json.dumps(res.data)) == {
     u'addPostExtract': {
@@ -117,6 +118,9 @@ mutation addPostExtract(
       }
     }
   }
+
+  res = schema.execute(mutation, context_value=graphql_request, variable_values=variable_values)
+  assert res.errors and res.errors[0].message == "Extract already exists!"
 
 
 def test_mutation_delete_extract(graphql_request, extract_with_range_in_reply_post_1):
