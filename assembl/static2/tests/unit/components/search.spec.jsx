@@ -1,6 +1,6 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import { SearchkitManager, SearchkitProvider } from 'searchkit';
+import { ArrayState, SearchkitManager, SearchkitProvider, StatefulAccessor } from 'searchkit';
 import { Router } from 'react-router';
 
 import * as search from '../../../js/app/components/search';
@@ -8,12 +8,25 @@ import * as search from '../../../js/app/components/search';
 jest.mock('react-router');
 jest.mock('../../../js/app/router');
 
+class CreatorIdAccessor extends StatefulAccessor {
+  state = new ArrayState();
+}
+
 const fakeBemBlocks = {
   container: name => name,
-  item: name => ({
-    mix: otherName => (name ? `div__${name}__${otherName}` : `div__${otherName}`)
-  })
+  item: (name) => {
+    if (name) {
+      return name.toUpperCase();
+    }
+
+    // no arg
+    return {
+      mix: otherName => (name ? `div__${name}__${otherName}` : `div__${otherName}`)
+    };
+  }
 };
+
+const collapseSearchSpy = jest.fn();
 
 describe('Hits components', () => {
   let context;
@@ -24,6 +37,8 @@ describe('Hits components', () => {
       router: new Router()
     };
     searchkit = SearchkitManager.mock();
+    const creatorIdAccessor = new CreatorIdAccessor('creator_id');
+    searchkit.addAccessor(creatorIdAccessor);
   });
 
   afterEach(() => {
@@ -61,6 +76,115 @@ describe('Hits components', () => {
       const component = renderer.create(
         <SearchkitProvider searchkit={searchkit}>
           <PostHit {...props} />
+        </SearchkitProvider>,
+        {
+          context: context
+        }
+      );
+      const tree = component.toJSON();
+      expect(tree).toMatchSnapshot();
+    });
+  });
+
+  describe('IdeaHit component', () => {
+    const { IdeaHit } = search;
+
+    it('should render an idea hit', () => {
+      const props = {
+        bemBlocks: fakeBemBlocks,
+        collapseSearch: collapseSearchSpy,
+        locale: 'en',
+        result: {
+          highlight: {
+            definition: 'foobar'
+          },
+          _type: 'idea',
+          _source: {
+            title_en: 'Rerum asperiores inventore veniam',
+            description_en: 'Mollitia quis perspiciatis ut nobis molestias necessitatibus pariatur impedit ut.',
+            announcement_title_en: 'You can\'t reboot the circuit without parsing the wireless GB feed!',
+            announcement_body_en: 'backing up the microchip won\'t do anything!',
+            num_posts: 544,
+            num_contributors: 42
+          }
+        }
+      };
+
+      const component = renderer.create(
+        <SearchkitProvider searchkit={searchkit}>
+          <IdeaHit {...props} />
+        </SearchkitProvider>,
+        {
+          context: context
+        }
+      );
+      const tree = component.toJSON();
+      expect(tree).toMatchSnapshot();
+    });
+  });
+
+  describe('SynthesisHit component', () => {
+    const { SynthesisHit } = search;
+
+    it('should render a synthesis hit', () => {
+      const props = {
+        bemBlocks: fakeBemBlocks,
+        collapseSearch: collapseSearchSpy,
+        locale: 'en',
+        result: {
+          _type: 'synthesis',
+          _source: {
+            creation_date: '2018-08-08',
+            creator_id: 'foo',
+            creator_name: 'Annabelle Olson',
+            ideas_en: [
+              'Try to hack the THX sensor, maybe it will parse the open-source firewall!',
+              'The JSON microchip is down, hack the open-source driver so we can program the HDD bandwidth!'
+            ],
+            subject_en: 'Maybe it will transmit the optical application!!',
+            introduction_en: 'I\'ll bypass the online PCI card, that should matrix the USB firewall!',
+            conclusion: 'Try to parse the COM card, maybe it will calculate the neural monitor!'
+          }
+        }
+      };
+
+      const component = renderer.create(
+        <SearchkitProvider searchkit={searchkit}>
+          <SynthesisHit {...props} />
+        </SearchkitProvider>,
+        {
+          context: context
+        }
+      );
+      const tree = component.toJSON();
+      expect(tree).toMatchSnapshot();
+    });
+  });
+
+  describe('UserHit component', () => {
+    const { UserHit } = search;
+
+    it('should render a user hit', () => {
+      const props = {
+        bemBlocks: fakeBemBlocks,
+        collapseSearch: collapseSearchSpy,
+        locale: 'en',
+        result: {
+          highlight: {
+            name: 'Gertrude Effertz'
+          },
+          _type: 'user',
+          _source: {
+            id: 'SD83SG',
+            num_posts: 33,
+            creation_date: '2016-07-07'
+          }
+        }
+      };
+
+      const component = renderer.create(
+        <SearchkitProvider searchkit={searchkit}>
+          <UserHit {...props} />
         </SearchkitProvider>,
         {
           context: context
