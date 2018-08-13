@@ -10,6 +10,16 @@ const index = () => (
     </Row>
     <Row>
       <Col xs={12}>
+        <h2>Instruction page</h2>
+        <ListGroup componentClass="ul">
+          <li>
+            <a href="/integration/101/index">HTML/CSS/React components integration 101</a>
+          </li>
+        </ListGroup>
+      </Col>
+    </Row>
+    <Row>
+      <Col xs={12}>
         <h2>Bright Mirror pages</h2>
         <ListGroup componentClass="ul">
           <li>

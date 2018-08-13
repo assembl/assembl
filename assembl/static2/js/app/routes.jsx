@@ -40,6 +40,7 @@ import { routeForRouter } from './utils/routeMap';
 
 // Page that is only used to display converted mockups to static pages
 import IntMainPage from './integration/index';
+import Int101Page from './integration/101/index';
 import IntBrightMirrorIndex from './integration/brightMirror/index';
 import IntBrightMirrorShow from './integration/brightMirror/show';
 
@@ -102,6 +103,7 @@ export default [
   <Route path="/" component={Root}>
     {/* 'integration' route is only used for HTML/CSS integration purpose */}
     <Route path={routeForRouter('integration', false, { preSlash: true })} component={IntMainPage} />
+    <Route path={routeForRouter('integration101Page', false, { preSlash: true })} component={Int101Page} />
     <Route path={routeForRouter('integrationBrightMirrorIndex', false, { preSlash: true })} component={IntBrightMirrorIndex} />
     <Route path={routeForRouter('integrationBrightMirrorShow', false, { preSlash: true })} component={IntBrightMirrorShow} />
     {/* once the integration workflow is mature, Styleguide component will be replaced by Storybook and thus can be removed */}

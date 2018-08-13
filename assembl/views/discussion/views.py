@@ -465,6 +465,7 @@ def register_react_views(config, routes, view=react_view):
 
 def includeme(config):
     config.add_route('integration', '/integration')
+    config.add_route('integration_101', '/integration/101/index')
     config.add_route('integration_bright_mirror_index', '/integration/bright-mirror/index')
     config.add_route('integration_bright_mirror_show', '/integration/bright-mirror/show')
 
@@ -489,6 +490,7 @@ def includeme(config):
         "new_styleguide",
 
         "integration",
+        "integration_101",
         "integration_bright_mirror_index",
         "integration_bright_mirror_show",
 

@@ -51,6 +51,7 @@
   "landingPageTimelineAdmin": "${slug}/administration/landingPage?section=3",
 
   "integration": "integration",
+  "integration101Page": "integration/101/index",
   "integrationBrightMirrorIndex": "integration/bright-mirror/index",
   "integrationBrightMirrorShow": "integration/bright-mirror/show"
 }
