@@ -61,8 +61,9 @@ describe('Hits components', () => {
             creator_name: 'Paxton Pouros',
             subject_en: 'We need to quantify the optical HTTP panel!',
             body_en: 'We need to connect the multi-byte SQL interface!',
-            idea_id: 'fakeIdeaId',
-            post_id: 'fakePostId',
+            idea_id: ['fakeIdeaId', 'otherFakeIdeaId'],
+            phase_id: 'thread',
+            id: 'fakePostId',
             sentiment_counts: {
               like: 2,
               disagree: 3,
@@ -141,7 +142,7 @@ describe('Hits components', () => {
               'Try to hack the THX sensor, maybe it will parse the open-source firewall!',
               'The JSON microchip is down, hack the open-source driver so we can program the HDD bandwidth!'
             ],
-            subject_en: 'Maybe it will transmit the optical application!!',
+            subject: 'Maybe it will transmit the optical application!!',
             introduction_en: 'I\'ll bypass the online PCI card, that should matrix the USB firewall!',
             conclusion: 'Try to parse the COM card, maybe it will calculate the neural monitor!'
           }
@@ -208,7 +209,10 @@ describe('Hits components', () => {
             creator_id: 'foo',
             creator_name: 'Jewell Pouros',
             subject_en: 'We need to quantify the optical HTTP panel!',
-            body: 'We need to connect the multi-byte SQL interface!'
+            body: 'We need to connect the multi-byte SQL interface!',
+            idea_id: 'fakeIdeaId',
+            phase_id: 'thread',
+            post_id: 'fakePostId'
           }
         }
       };

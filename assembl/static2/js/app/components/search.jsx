@@ -43,7 +43,7 @@ import { getConnectedUserId, getDebateId, getLocale } from '../reducers/contextR
 import { connectedUserIsExpert } from '../utils/permissions';
 import { get as getRoute } from '../utils/routeMap';
 import UserMessagesTagFilter from './search/UserMessagesTagFilter';
-import { toggleHarvesting } from '../actions/contextActions';
+import { toggleHarvesting as toggleHarvestingAction } from '../actions/contextActions';
 
 const FRAGMENT_SIZE = 400;
 const elasticsearchLangIndexesElement = document.getElementById('elasticsearchLangIndexes');
@@ -143,14 +143,14 @@ if (v1Interface) {
 }
 
 const PublishedInfo = (props) => {
-  const { date, publishedOnMsgId, userId, userName, className } = props;
+  const { date, publishedOnMsgId, userId, userName } = props;
   return (
-    <div className={className}>
+    <React.Fragment>
       <Translate value={publishedOnMsgId} /> <Localize value={date} dateFormat="date.format" /> <Translate value="search.by" />{' '}
       <TagFilter key={userId} field="creator_id" value={userId}>
         <ProfileLine userId={userId} userName={userName} />
       </TagFilter>
-    </div>
+    </React.Fragment>
   );
 };
 
@@ -211,69 +211,77 @@ const highlightedLSOrTruncatedLS = (hit, field, locale) => {
   return '';
 };
 
-const PostHit = (props) => {
-  const locale = props.locale;
-  const source = props.result._source;
-  const subject = highlightedLSOrTruncatedLS(props.result, 'subject', locale);
-  const body = highlightedLSOrTruncatedLS(props.result, 'body', locale);
-  const onLinkClick = props.collapseSearch;
-  return (
-    <div className={props.bemBlocks.item().mix(props.bemBlocks.container('item'))}>
-      <ImageType type={props.result._type} className={props.bemBlocks.item('imgtype')} />
-      <div className={props.bemBlocks.item('title')}>
-        <Link onClick={onLinkClick} to={getUrl(props.result)} dangerouslySetInnerHTML={{ __html: subject }} />
-      </div>
-      <div className={props.bemBlocks.item('content')}>
-        <p dangerouslySetInnerHTML={{ __html: body }} />
-        <div>
-          <div title={I18n.t('search.like')} className="emoticon LikeSentimentOfPost" />
-          <div className="emoticonValue">{source.sentiment_counts.like}</div>
-          <div title={I18n.t('search.disagree')} className="emoticon DisagreeSentimentOfPost" />
-          <div className="emoticonValue">{source.sentiment_counts.disagree}</div>
-          <div title={I18n.t('search.dont_understand')} className="emoticon DontUnderstandSentimentOfPost" />
-          <div className="emoticonValue">{source.sentiment_counts.dont_understand}</div>
-          <div title={I18n.t('search.more_info')} className="emoticon MoreInfoSentimentOfPost" />
-          <div className="emoticonValue">{source.sentiment_counts.more_info}</div>
-        </div>
-      </div>
-      <PublishedInfo
-        className={props.bemBlocks.item('info')}
-        date={source.creation_date}
-        userId={source.creator_id}
-        userName={source.creator_name}
-      />
+const BaseHit = ({ bemBlocks, imageType, onLinkClick, title, url, renderBody, renderFooter }) => (
+  <div className={bemBlocks.item().mix(bemBlocks.container('item'))}>
+    <ImageType type={imageType} className={bemBlocks.item('imgtype')} />
+    <div className={bemBlocks.item('title')}>
+      {url ? <Link onClick={onLinkClick} to={url} dangerouslySetInnerHTML={{ __html: title }} /> : <p dangerouslySetInnerHTML={{ __html: title }} />}
     </div>
+    {renderBody && <div className={bemBlocks.item('content')}>{renderBody()}</div>}
+    <div className={bemBlocks.item('info')}>{renderFooter()}</div>
+  </div>
+);
+
+const PostHit = ({ bemBlocks, collapseSearch, locale, result }) => {
+  const source = result._source;
+  const subject = highlightedLSOrTruncatedLS(result, 'subject', locale);
+  const body = highlightedLSOrTruncatedLS(result, 'body', locale);
+  const published = {};
+  return (
+    <BaseHit
+      bemBlocks={bemBlocks}
+      imageType={result._type}
+      title={subject}
+      url={getUrl(result)}
+      onLinkClick={collapseSearch}
+      published={published}
+      renderBody={() => (
+        <React.Fragment>
+          <p dangerouslySetInnerHTML={{ __html: body }} />
+          <div>
+            <div title={I18n.t('search.like')} className="emoticon LikeSentimentOfPost" />
+            <div className="emoticonValue">{source.sentiment_counts.like}</div>
+            <div title={I18n.t('search.disagree')} className="emoticon DisagreeSentimentOfPost" />
+            <div className="emoticonValue">{source.sentiment_counts.disagree}</div>
+            <div title={I18n.t('search.dont_understand')} className="emoticon DontUnderstandSentimentOfPost" />
+            <div className="emoticonValue">{source.sentiment_counts.dont_understand}</div>
+            <div title={I18n.t('search.more_info')} className="emoticon MoreInfoSentimentOfPost" />
+            <div className="emoticonValue">{source.sentiment_counts.more_info}</div>
+          </div>
+        </React.Fragment>
+      )}
+      renderFooter={() => <PublishedInfo date={source.creation_date} userId={source.creator_id} userName={source.creator_name} />}
+    />
   );
 };
 
-const DumbExtractHit = (props) => {
-  const locale = props.locale;
-  const source = props.result._source;
-  const subject = highlightedLSOrTruncatedLS(props.result, 'subject', locale);
-  const body = highlightedTextOrTruncatedText(props.result, 'body');
+const DumbExtractHit = ({ bemBlocks, collapseSearch, isHarvesting, locale, toggleHarvesting, result }) => {
+  const source = result._source;
+  const subject = highlightedLSOrTruncatedLS(result, 'subject', locale);
+  const body = highlightedTextOrTruncatedText(result, 'body');
   const onLinkClick = () => {
-    if (!props.isHarvesting) {
-      props.toggleHarvesting();
+    if (!isHarvesting) {
+      toggleHarvesting();
     }
-    props.collapseSearch();
+    collapseSearch();
   };
   return (
-    <div className={props.bemBlocks.item().mix(props.bemBlocks.container('item'))}>
-      <ImageType type={props.result._type} className={props.bemBlocks.item('imgtype')} />
-      <div className={props.bemBlocks.item('title')}>
-        <Link onClick={onLinkClick} to={getUrl(props.result)} dangerouslySetInnerHTML={{ __html: subject }} />
-      </div>
-      <div className={props.bemBlocks.item('content')}>
-        <p dangerouslySetInnerHTML={{ __html: body }} />
-      </div>
-      <PublishedInfo
-        className={props.bemBlocks.item('info')}
-        date={source.creation_date}
-        publishedOnMsgId="search.harvested_on"
-        userId={source.creator_id}
-        userName={source.creator_name}
-      />
-    </div>
+    <BaseHit
+      bemBlocks={bemBlocks}
+      imageType={result._type}
+      title={subject}
+      url={getUrl(result)}
+      onLinkClick={onLinkClick}
+      renderBody={() => <p dangerouslySetInnerHTML={{ __html: body }} />}
+      renderFooter={() => (
+        <PublishedInfo
+          date={source.creation_date}
+          userId={source.creator_id}
+          userName={source.creator_name}
+          publishedOnMsgId="search.harvested_on"
+        />
+      )}
+    />
   );
 };
 
@@ -281,127 +289,121 @@ const mapStateToExtractHitProps = state => ({
   isHarvesting: state.context.isHarvesting
 });
 const mapDispatchToExtractHitProps = dispatch => ({
-  toggleHarvesting: () => dispatch(toggleHarvesting())
+  toggleHarvesting: () => dispatch(toggleHarvestingAction())
 });
 
 const ExtractHit = connect(mapStateToExtractHitProps, mapDispatchToExtractHitProps)(DumbExtractHit);
 
-const SynthesisHit = (props) => {
-  const locale = props.locale;
-  const source = props.result._source;
-  const ideas = highlightedLSOrTruncatedLS(props.result, 'ideas', locale);
-  const onLinkClick = props.collapseSearch;
+const SynthesisHit = ({ bemBlocks, collapseSearch, locale, result }) => {
+  const source = result._source;
+  const subject = highlightedTextOrTruncatedText(result, 'subject');
+  const ideas = highlightedLSOrTruncatedLS(result, 'ideas', locale);
   return (
-    <div className={props.bemBlocks.item().mix(props.bemBlocks.container('item'))}>
-      <ImageType type={props.result._type} className={props.bemBlocks.item('imgtype')} />
-      <div className={props.bemBlocks.item('title')}>
-        <Link
-          onClick={onLinkClick}
-          to={getUrl(props.result)}
-          dangerouslySetInnerHTML={{ __html: highlightedTextOrTruncatedText(props.result, 'subject') }}
-        />
-      </div>
-      <div className={props.bemBlocks.item('content')}>
-        <p
-          style={{ backgroundColor: '#f4f4f4' }}
-          dangerouslySetInnerHTML={{ __html: highlightedTextOrTruncatedText(props.result, 'introduction') }}
-        />
-        {ideas ? <p style={{ paddingLeft: '1em', marginTop: '1em' }} dangerouslySetInnerHTML={{ __html: ideas }} /> : null}
-        <p
-          style={{ backgroundColor: '#f4f4f4', marginTop: '1em' }}
-          dangerouslySetInnerHTML={{ __html: highlightedTextOrTruncatedText(props.result, 'conclusion') }}
-        />
-      </div>
-      <PublishedInfo
-        className={props.bemBlocks.item('info')}
-        date={source.creation_date}
-        userId={source.creator_id}
-        userName={source.creator_name}
-      />
-    </div>
+    <BaseHit
+      bemBlocks={bemBlocks}
+      imageType={result._type}
+      title={subject}
+      url={getUrl(result)}
+      onLinkClick={collapseSearch}
+      renderBody={() => (
+        <React.Fragment>
+          <p
+            style={{ backgroundColor: '#f4f4f4' }}
+            dangerouslySetInnerHTML={{ __html: highlightedTextOrTruncatedText(result, 'introduction') }}
+          />
+          {ideas ? <p style={{ paddingLeft: '1em', marginTop: '1em' }} dangerouslySetInnerHTML={{ __html: ideas }} /> : null}
+          <p
+            style={{ backgroundColor: '#f4f4f4', marginTop: '1em' }}
+            dangerouslySetInnerHTML={{ __html: highlightedTextOrTruncatedText(result, 'conclusion') }}
+          />
+        </React.Fragment>
+      )}
+      renderFooter={() => <PublishedInfo date={source.creation_date} userId={source.creator_id} userName={source.creator_name} />}
+    />
   );
 };
 
-const UserHit = (props) => {
-  const source = props.result._source;
-  const url = getUrl(props.result);
-  const fullname = get(props.result, 'highlight.name', props.result._source.name);
-  const userId = props.result._source.id;
-  const onLinkClick = props.collapseSearch;
+const UserHit = ({ bemBlocks, collapseSearch, result }) => {
+  const source = result._source;
+  const fullname = get(result, 'highlight.name', result._source.name);
+  const userId = result._source.id;
   return (
-    <div className={props.bemBlocks.item().mix(props.bemBlocks.container('item'))}>
-      <ImageType type={props.result._type} className={props.bemBlocks.item('imgtype')} />
-      <div className={props.bemBlocks.item('title')}>
-        {url ? (
-          <Link onClick={onLinkClick} to={getUrl(props.result)} dangerouslySetInnerHTML={{ __html: fullname }} />
-        ) : (
-          <p dangerouslySetInnerHTML={{ __html: fullname }} />
-        )}
-      </div>
-      <div className={props.bemBlocks.item('info')}>
-        <UserMessagesTagFilter value={userId}>
+    <BaseHit
+      bemBlocks={bemBlocks}
+      imageType={result._type}
+      title={fullname}
+      url={getUrl(result)}
+      onLinkClick={collapseSearch}
+      renderBody={null}
+      renderFooter={() => (
+        <React.Fragment>
+          <UserMessagesTagFilter value={userId}>
+            {source.num_posts}
+            <span className={bemBlocks.item('assembl-icon-message')}>
+              <span className="assembl-icon-message" title="Number of contributions" />
+            </span>
+          </UserMessagesTagFilter>
+          {source.creation_date ? (
+            <span>
+              <Translate value="search.member_since" /> <Localize value={source.creation_date} dateFormat="date.format" />
+            </span>
+          ) : null}
+        </React.Fragment>
+      )}
+    />
+  );
+};
+
+const IdeaHit = ({ bemBlocks, collapseSearch, locale, result }) => {
+  const source = result._source;
+  const shortTitle = highlightedLSOrTruncatedLS(result, 'title', locale);
+  const definition = highlightedLSOrTruncatedLS(result, 'description', locale);
+  // long title missing?
+  const announceTitle = highlightedLSOrTruncatedLS(result, 'announcement_title', locale);
+  const announceBody = highlightedLSOrTruncatedLS(result, 'announcement_body', locale);
+  return (
+    <BaseHit
+      bemBlocks={bemBlocks}
+      imageType={result._type}
+      title={shortTitle}
+      url={getUrl(result)}
+      onLinkClick={collapseSearch}
+      renderBody={() => (
+        <React.Fragment>
+          {definition ? (
+            <div>
+              <p dangerouslySetInnerHTML={{ __html: definition }} />
+              {get(result, 'highlight.definition') && (
+                <p>
+                  <Translate value="search.search_come_from_what_you_need_to_know" />
+                </p>
+              )}
+            </div>
+          ) : null}
+          {get(result, 'highlight.title') || get(result, 'highlight.body') ? (
+            <div>
+              <p dangerouslySetInnerHTML={{ __html: announceTitle }} />
+              <p dangerouslySetInnerHTML={{ __html: announceBody }} />
+              <p>
+                <Translate value="search.search_come_from_announcement" />
+              </p>
+            </div>
+          ) : null}
+        </React.Fragment>
+      )}
+      renderFooter={() => (
+        <React.Fragment>
           {source.num_posts}
-          <span className={props.bemBlocks.item('assembl-icon-message')}>
+          <span className={bemBlocks.item('assembl-icon-message')}>
             <span className="assembl-icon-message" title="Number of contributions" />
           </span>
-        </UserMessagesTagFilter>
-        {source.creation_date ? (
-          <span>
-            <Translate value="search.member_since" /> <Localize value={source.creation_date} dateFormat="date.format" />
+          {source.num_contributors}
+          <span className={bemBlocks.item('assembl-icon-avatar')}>
+            <span className="assembl-icon-profil" title="Number of users" />
           </span>
-        ) : null}
-      </div>
-    </div>
-  );
-};
-
-const IdeaHit = (props) => {
-  const locale = props.locale;
-  const source = props.result._source;
-  const shortTitle = highlightedLSOrTruncatedLS(props.result, 'title', locale);
-  const definition = highlightedLSOrTruncatedLS(props.result, 'description', locale);
-  // long title missing?
-  const announceTitle = highlightedLSOrTruncatedLS(props.result, 'announcement_title', locale);
-  const announceBody = highlightedLSOrTruncatedLS(props.result, 'announcement_body', locale);
-  const onLinkClick = props.collapseSearch;
-  return (
-    <div className={props.bemBlocks.item().mix(props.bemBlocks.container('item'))}>
-      <ImageType type={props.result._type} className={props.bemBlocks.item('imgtype')} />
-      <div className={props.bemBlocks.item('title')}>
-        <Link onClick={onLinkClick} to={getUrl(props.result)} dangerouslySetInnerHTML={{ __html: shortTitle }} />
-      </div>
-      <div className={props.bemBlocks.item('content')}>
-        {definition ? (
-          <div>
-            <p dangerouslySetInnerHTML={{ __html: definition }} />
-            {get(props.result, 'highlight.definition') && (
-              <p>
-                <Translate value="search.search_come_from_what_you_need_to_know" />
-              </p>
-            )}
-          </div>
-        ) : null}
-        {get(props.result, 'highlight.title') || get(props.result, 'highlight.body') ? (
-          <div>
-            <p dangerouslySetInnerHTML={{ __html: announceTitle }} />
-            <p dangerouslySetInnerHTML={{ __html: announceBody }} />
-            <p>
-              <Translate value="search.search_come_from_announcement" />
-            </p>
-          </div>
-        ) : null}
-      </div>
-      <div className={props.bemBlocks.item('info')}>
-        {source.num_posts}
-        <span className={props.bemBlocks.item('assembl-icon-message')}>
-          <span className="assembl-icon-message" title="Number of contributions" />
-        </span>
-        {source.num_contributors}
-        <span className={props.bemBlocks.item('assembl-icon-avatar')}>
-          <span className="assembl-icon-profil" title="Number of users" />
-        </span>
-      </div>
-    </div>
+        </React.Fragment>
+      )}
+    />
   );
 };
 

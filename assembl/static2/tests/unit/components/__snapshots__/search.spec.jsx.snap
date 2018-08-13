@@ -259,7 +259,15 @@ exports[`Hits components SynthesisHit component should render a synthesis hit 1`
   />
   <div
     className="TITLE"
-  />
+  >
+    <p
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "Maybe it will transmit the optical application!!",
+        }
+      }
+    />
+  </div>
   <div
     className="CONTENT"
   >
