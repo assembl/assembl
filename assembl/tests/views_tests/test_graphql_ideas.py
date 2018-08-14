@@ -433,10 +433,12 @@ def test_extracts_on_post(admin_user, graphql_request, discussion, top_post_in_t
     post = Post.get(raw_id)
     post.extracts.append(
         Extract(body=u"super quote", important=False,
-                creator=admin_user, owner=admin_user, discussion=discussion))
+                creator=admin_user, owner=admin_user, discussion=discussion,
+                extract_hash=u"extract1"))
     post.extracts.append(
         Extract(body=u"super important quote", important=True,
-                creator=admin_user, owner=admin_user, discussion=discussion))
+                creator=admin_user, owner=admin_user, discussion=discussion,
+                extract_hash=u"extract2"))
     post.db.flush()
     res = schema.execute(u"""
 query Post($id: ID!) {
