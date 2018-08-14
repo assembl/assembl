@@ -127,7 +127,8 @@ def extract_post_1_to_subidea_1_1(
         owner=participant2_user,
         content=reply_post_1,
         idea_id=subidea_1_1.id,  # strange bug: Using idea directly fails
-        discussion=discussion)
+        discussion=discussion,
+        extract_hash=u'extract_post_1_to_subidea_1_1')
     test_session.add(e)
     test_session.flush()
 
@@ -206,7 +207,15 @@ def extract_with_range_submitted_in_reply_post_1(
     xpathEnd = xpathStart
     offsetStart = 314
     offsetEnd = 958
-
+    lang = 'en'
+    extract_hash = Extract.get_extract_hash(
+        lang,
+        xpathStart,
+        xpathEnd,
+        offsetStart,
+        offsetEnd,
+        reply_post_1.id
+    )
     new_extract = Extract(
         creator_id=discussion_admin_user.id,
         owner_id=discussion_admin_user.id,
@@ -214,8 +223,10 @@ def extract_with_range_submitted_in_reply_post_1(
         body=extract_body,
         important=True,
         content=reply_post_1,
-        extract_state=ExtractStates.SUBMITTED.value
+        extract_state=ExtractStates.SUBMITTED.value,
+        extract_hash=extract_hash
     )
+    new_extract.lang = lang
     test_session.add(new_extract)
 
     new_range = TextFragmentIdentifier(

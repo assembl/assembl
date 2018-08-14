@@ -395,7 +395,7 @@ class Extract(IdeaContentPositiveLink):
         if self.locale_id:
             return Locale.code_for_id(self.locale_id)
 
-        return self.locale.code
+        return self.locale and self.locale.code
 
     @lang.setter
     def lang(self, code):
