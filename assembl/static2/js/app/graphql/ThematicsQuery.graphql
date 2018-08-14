@@ -2,7 +2,7 @@
 #import "./fragments/IdeaData.graphql"
 
 query ThematicsQuery($identifier: String!) {
-  thematics: ideas(identifier: $identifier) {
+  thematics: ideasById(identifier: $identifier) {
     ... on IdeaInterface {
       ...ideaData
     }

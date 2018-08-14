@@ -86,7 +86,14 @@ const AdminChild = (props) => {
   case 'discussion':
     return <DiscussionAdmin {...props} section={props.location.query.section} />;
   case 'survey':
-    return <SurveyAdmin {...props} thematicId={props.location.query.thematicId} section={props.location.query.section} />;
+    return (
+      <SurveyAdmin
+        {...props}
+        phaseId={props.location.query.phaseId}
+        thematicId={props.location.query.thematicId}
+        section={props.location.query.section}
+      />
+    );
   case 'brightMirror':
     return <BrightMirrorAdmin {...props} />;
   case 'thread':
@@ -160,7 +167,7 @@ export default [
         />
         <Route path={routeForRouter('unauthorizedAdministration')} component={UnauthorizedAdministration} />
         <Route path={routeForRouter('administrationRoot')} component={Administration}>
-          <Route path={routeForRouter('adminPhase', false, { phase: ':phase' })} component={AdminChild} />
+          <Route path={routeForRouter('adminPhase', false, { phase: ':phase', phaseId: ':phaseId' })} component={AdminChild} />
         </Route>
       </Route>
     </Route>

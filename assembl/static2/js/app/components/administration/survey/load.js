@@ -10,10 +10,10 @@ import { PHASES } from '../../../constants';
 import type { MediaValue, SurveyAdminValues, ThemeValue } from './types.flow';
 import { getTree } from '../../../utils/tree';
 
-export const load = async (client: ApolloClient, fetchPolicy: FetchPolicy, locale: string) => {
+export const load = async (client: ApolloClient, fetchPolicy: FetchPolicy, phaseId: string, locale: string) => {
   const { data } = await client.query({
     query: ThematicsQuery,
-    variables: { identifier: PHASES.survey },
+    variables: { id: phaseId },
     fetchPolicy: fetchPolicy
   });
   // Prefetch the ThematicsDataQuery for the admin menu

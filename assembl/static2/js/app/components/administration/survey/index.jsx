@@ -21,6 +21,7 @@ type Props = {
   section: string,
   thematicId: string,
   debateId: string,
+  phaseId: string,
   editLocale: string,
   locale: string
 };
@@ -29,9 +30,9 @@ const loading = <Loader />;
 
 const steps = ['1', '2', '3'];
 
-const DumbSurveyAdminForm = ({ client, section, thematicId, debateId, editLocale, locale }: Props) => (
+const DumbSurveyAdminForm = ({ client, section, thematicId, phaseId, debateId, editLocale, locale }: Props) => (
   <LoadSaveReinitializeForm
-    load={(fetchPolicy: FetchPolicy) => load(client, fetchPolicy, locale)}
+    load={(fetchPolicy: FetchPolicy) => load(client, fetchPolicy, phaseId, locale)}
     loading={loading}
     postLoadFormat={postLoadFormat}
     createMutationsPromises={createMutationsPromises(client)}

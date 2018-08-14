@@ -12,6 +12,10 @@ type Props = {
   thematicId: string
 };
 
+type SurveyAdminProps = {
+  phaseId: string
+} & Props;
+
 const getSectionTitle = (section: string, thematicId: string): string | null => {
   if (PHASES_ADMIN_MENU.survey.subMenu.configThematics && thematicId) {
     return 'administration.survey.configThematic';
@@ -35,14 +39,14 @@ const SectionHelper = ({ section, thematicId }: Props) => {
   }
 };
 
-const SurveyAdmin = ({ section, thematicId }: Props) => {
+const SurveyAdmin = ({ section, thematicId, phaseId }: SurveyAdminProps) => {
   const sectionTitleMsgId = getSectionTitle(section, thematicId);
   return (
     <div className="survey-admin">
       <div className="admin-box">
         <SectionTitle title={I18n.t(sectionTitleMsgId)} annotation={I18n.t('administration.annotation')} />
         <SectionHelper section={section} thematicId={thematicId} />
-        <SurveyAdminForm section={section} thematicId={thematicId} />
+        <SurveyAdminForm section={section} thematicId={thematicId} phaseId={phaseId} />
       </div>
     </div>
   );

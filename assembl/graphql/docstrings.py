@@ -380,7 +380,7 @@ class CreateThematic:
     __doc__ = """A mutation to create a new thematic."""
     title_entries = IdeaInterface.title_entries
     description_entries = IdeaInterface.description_entries
-    identifier = Thematic.identifier
+    discussion_phase_id = "The database identifier of the DiscussionPhase."
     video = Thematic.video
     questions = Thematic.questions
     image = Default.document % ("An Image to be shown in the Thematic. ")
@@ -392,7 +392,7 @@ class UpdateThematic:
     id = Default.node_id % ("Thematic") + " The identifier of the Thematic to be updated."
     title_entries = CreateThematic.title_entries
     description_entries = CreateThematic.description_entries
-    identifier = CreateThematic.identifier
+    identifier = CreateThematic.discussion_phase_id
     video = CreateThematic.video
     questions = CreateThematic.questions
     image = CreateThematic.image

@@ -590,7 +590,7 @@ class CreateThematic(graphene.Mutation):
         # it can't be None, having an empty [] is perfectly valid.
         title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.Default.langstring_entries)
         description_entries = graphene.List(LangStringEntryInput, description=docs.Default.langstring_entries)
-        identifier = graphene.String(required=True, description=docs.Default.required_language_input)
+        discussion_phase_id = graphene.ID(required=True, description=docs.CreateThematic.discussion_phase_id)
         video = graphene.Argument(VideoInput, description=docs.CreateThematic.video)
         announcement = graphene.Argument(IdeaAnnouncementInput, description=docs.Idea.announcement)
         questions = graphene.List(QuestionInput, description=docs.CreateThematic.questions)
@@ -608,7 +608,10 @@ class CreateThematic(graphene.Mutation):
         EMBED_ATTACHMENT = models.AttachmentPurpose.EMBED_ATTACHMENT.value
         MEDIA_ATTACHMENT = models.AttachmentPurpose.MEDIA_ATTACHMENT.value
         cls = models.Idea
-        phase_identifier = args.get('identifier')
+        phase_id = args.get('discussion_phase_id')
+        phase_id = int(Node.from_global_id(phase_id)[1])
+        phase = models.DiscussionPhase.get(phase_id)
+        phase_identifier = phase.identifier
         if phase_identifier == Phases.survey.value:
             cls = models.Thematic
 
