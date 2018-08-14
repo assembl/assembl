@@ -14,6 +14,7 @@ function getVariables(theme, initialTheme, order) {
   const initialImg = initialTheme ? initialTheme.img : null;
   return {
     identifier: 'brightMirror',
+    messageViewOverride: 'brightMirror',
     titleEntries: convertToEntries(theme.title),
     descriptionEntries: convertToEntries(theme.description),
     image: getFileVariable(theme.img, initialImg),

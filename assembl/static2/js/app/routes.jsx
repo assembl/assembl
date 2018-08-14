@@ -50,7 +50,7 @@ const DebateHome = (props) => {
   case 'voteSession':
     return <VoteSession />;
   case 'brightMirror':
-    return <BrightMirror />;
+    return <BrightMirror {...props} />;
   default:
     return <Debate {...props} />;
   }

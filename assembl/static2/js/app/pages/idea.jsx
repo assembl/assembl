@@ -16,6 +16,7 @@ import ColumnsView from '../components/debate/multiColumns/columnsView';
 import ThreadView from '../components/debate/thread/threadView';
 import { DeletedPublicationStates } from '../constants';
 import HeaderStatistics, { statContributions, statMessages, statParticipants } from '../components/common/headerStatistics';
+import BrightMirrorInstructionView from '../components/debate/brightMirror/brightMirrorInstructionView';
 
 const deletedPublicationStates = Object.keys(DeletedPublicationStates);
 
@@ -196,6 +197,7 @@ class Idea extends React.Component {
     }
     const { announcement, id, headerImgUrl, synthesisTitle, title } = this.props;
     const isMultiColumns = ideaWithPostsData.loading ? false : ideaWithPostsData.idea.messageViewOverride === 'messageColumns';
+    const isBrightMirror = ideaWithPostsData.loading ? false : ideaWithPostsData.idea.messageViewOverride === 'brightMirror';
     const messageColumns = ideaWithPostsData.loading
       ? undefined
       : [...ideaWithPostsData.idea.messageColumns].sort((a, b) => {
@@ -225,7 +227,16 @@ class Idea extends React.Component {
         ? undefined
         : this.getInitialRowIndex(topPosts, ideaWithPostsData.idea.posts.edges)
     };
-    const view = isMultiColumns ? <ColumnsView {...childProps} routerParams={routerParams} /> : <ThreadView {...childProps} />;
+
+    let view;
+    if (isMultiColumns) {
+      view = <ColumnsView {...childProps} routerParams={routerParams} />;
+    } else if (isBrightMirror) {
+      view = <BrightMirrorInstructionView {...childProps} announcementContent={announcement} />;
+    } else {
+      view = <ThreadView {...childProps} />;
+    }
+
     let statElements = [];
     if (ideaWithPostsData.idea) {
       const numPosts = ideaWithPostsData.idea.numPosts;
@@ -253,7 +264,7 @@ class Idea extends React.Component {
         </Header>
         <section className="post-section">
           {!ideaWithPostsData.loading &&
-            announcement && (
+            !isBrightMirror && announcement && (
               <Grid fluid className="background-light">
                 <div className="max-container">
                   <div className="content-section">
