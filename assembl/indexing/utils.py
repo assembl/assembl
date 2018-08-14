@@ -197,7 +197,7 @@ def get_data(content):
 
     elif isinstance(content, Extract):
         data = {}
-        for attr in ('discussion_id', 'body', 'creation_date', 'id', 'creator_id', ):
+        for attr in ('discussion_id', 'body', 'creation_date', 'id', 'creator_id'):
             data[attr] = getattr(content, attr)
 
         data['post_id'] = content.content_id
