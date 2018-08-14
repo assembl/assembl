@@ -82,9 +82,7 @@ class Query(graphene.ObjectType):
     root_idea = graphene.Field(
         IdeaUnion, identifier=graphene.String(description=docs.Default.phase_identifier), description=docs.Schema.root_idea)
     ideas = graphene.List(
-        IdeaUnion,
-        identifier=graphene.String(required=True, description=docs.Default.phase_identifier),
-        description=docs.Schema.ideas)
+        IdeaUnion, discussion_phase_id=graphene.Int(required=True, description=docs.Default.phase_identifier_id), description=docs.Schema.ideas)
     syntheses = graphene.List(Synthesis, description=docs.Schema.syntheses)
     num_participants = graphene.Int(description=docs.Schema.num_participants)
     discussion_preferences = graphene.Field(DiscussionPreferences, description=docs.Schema.discussion_preferences)
@@ -181,7 +179,9 @@ class Query(graphene.ObjectType):
     def resolve_ideas(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
-        phase_identifier = args.get('identifier')
+        phase_id = args.get('discussion_phase_id')
+        phase = models.DiscussionPhase.get(phase_id)
+        phase_identifier = phase.identifier
         if phase_identifier in ('survey', 'brightMirror'):
             root_thematic = get_root_thematic_for_phase(discussion, phase_identifier)
             if root_thematic is None:

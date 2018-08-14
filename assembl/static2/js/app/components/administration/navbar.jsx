@@ -12,7 +12,8 @@ type Props = {
   steps: Array<string>,
   currentStep: string,
   phaseIdentifier: string,
-  beforeChangeSection: Function
+  beforeChangeSection: Function,
+  queryArgs: Object
 };
 
 type State = {
@@ -22,7 +23,8 @@ type State = {
 
 class Navbar extends React.Component<Props, State> {
   static defaultProps = {
-    beforeChangeSection: () => {}
+    beforeChangeSection: () => {},
+    queryArgs: {}
   };
 
   constructor(props: Props) {
@@ -44,8 +46,8 @@ class Navbar extends React.Component<Props, State> {
   goToSection = (stepNb: number) => {
     const slug = { slug: getDiscussionSlug() };
     const stepId = this.state.steps[stepNb - 1];
-    const { phaseIdentifier } = this.props;
-    browserHistory.push(`${get('administration', { ...slug, id: phaseIdentifier })}?section=${stepId}`);
+    const { phaseIdentifier, queryArgs } = this.props;
+    browserHistory.push(`${get('administration', { ...slug, id: phaseIdentifier }, { section: stepNb, ...queryArgs })}`);
     this.setState({
       currentStep: stepId
     });

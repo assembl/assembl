@@ -43,11 +43,11 @@ const getChildrenVariables = (thematic, initialTheme) =>
     })
     : []);
 
-function getVariables(theme, initialTheme, order) {
+function getVariables(theme, initialTheme, order, discussionPhaseId) {
   const initialImg = initialTheme ? initialTheme.img : null;
   const initialVideo = initialTheme ? initialTheme.video : null;
   return {
-    identifier: 'survey',
+    discussionPhaseId: discussionPhaseId,
     titleEntries: convertToEntries(theme.title),
     image: getFileVariable(theme.img, initialImg),
     video: getVideoVariable(theme.video, initialVideo),
@@ -62,7 +62,7 @@ function getVariables(theme, initialTheme, order) {
   };
 }
 
-export const createMutationsPromises = (client: ApolloClient) => (
+export const createMutationsPromises = (client: ApolloClient, discussionPhaseId: ?string) => (
   values: SurveyAdminValues,
   initialValues: SurveyAdminValues
 ) => {
@@ -84,7 +84,7 @@ export const createMutationsPromises = (client: ApolloClient) => (
   const createUpdateMutations = values.themes.map((theme, idx) => {
     const initialTheme = initialValues.themes.find(t => t.id === theme.id);
     const order = idx !== initialIds.indexOf(theme.id) ? idx + 1 : null;
-    const variables = getVariables(theme, initialTheme, order);
+    const variables = getVariables(theme, initialTheme, order, discussionPhaseId);
     if (idsToCreate.indexOf(theme.id) > -1) {
       return () =>
         client.mutate({

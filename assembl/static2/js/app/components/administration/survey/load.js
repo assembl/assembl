@@ -6,20 +6,19 @@ import ThematicsQuery from '../../../graphql/ThematicsQuery.graphql';
 import { convertEntriesToI18nValue, convertEntriesToI18nRichText } from '../../form/utils';
 import ThematicsDataQuery from '../../../graphql/ThematicsDataQuery.graphql';
 import type { FileValue } from '../../form/types.flow';
-import { PHASES } from '../../../constants';
 import type { MediaValue, SurveyAdminValues, ThemeValue } from './types.flow';
 import { getTree } from '../../../utils/tree';
 
-export const load = async (client: ApolloClient, fetchPolicy: FetchPolicy, phaseId: string, locale: string) => {
+export const load = async (client: ApolloClient, fetchPolicy: FetchPolicy, discussionPhaseId: ?string, locale: string) => {
   const { data } = await client.query({
     query: ThematicsQuery,
-    variables: { id: phaseId },
+    variables: { discussionPhaseId: discussionPhaseId },
     fetchPolicy: fetchPolicy
   });
   // Prefetch the ThematicsDataQuery for the admin menu
   client.query({
     query: ThematicsDataQuery,
-    variables: { identifier: PHASES.survey, lang: locale }
+    variables: { discussionPhaseId: discussionPhaseId, lang: locale }
   });
   return data;
 };

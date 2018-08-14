@@ -30,41 +30,44 @@ const loading = <Loader />;
 
 const steps = ['1', '2', '3'];
 
-const DumbSurveyAdminForm = ({ client, section, thematicId, phaseId, debateId, editLocale, locale }: Props) => (
-  <LoadSaveReinitializeForm
-    load={(fetchPolicy: FetchPolicy) => load(client, fetchPolicy, phaseId, locale)}
-    loading={loading}
-    postLoadFormat={postLoadFormat}
-    createMutationsPromises={createMutationsPromises(client)}
-    save={save}
-    validate={validate}
-    mutators={{
-      ...arrayMutators
-    }}
-    render={({ handleSubmit, pristine, submitting, values }) => (
-      <React.Fragment>
-        <div className="admin-content">
-          <AdminForm handleSubmit={handleSubmit} pristine={pristine} submitting={submitting}>
-            {section === '1' && <Step1 editLocale={editLocale} locale={locale} />}
-            {section === 'configThematics' && (
-              <ConfigureThematicForm thematicId={thematicId} editLocale={editLocale} values={values} />
-            )}
-            {section === '2' && <Step2 editLocale={editLocale} values={values} />}
-            {section === '3' && <Step3 debateId={debateId} locale={locale} />}
-          </AdminForm>
-        </div>
-        {steps.includes(section) && (
-          <Navbar
-            currentStep={section}
-            steps={steps}
-            phaseIdentifier="survey"
-            beforeChangeSection={() => (pristine || submitting) && handleSubmit()}
-          />
-        )}
-      </React.Fragment>
-    )}
-  />
-);
+const DumbSurveyAdminForm = ({ client, section, thematicId, phaseId, debateId, editLocale, locale }: Props) => {
+  const discussionPhaseId = phaseId ? atob(phaseId).split(':')[1] : null;
+  return (
+    <LoadSaveReinitializeForm
+      load={(fetchPolicy: FetchPolicy) => load(client, fetchPolicy, discussionPhaseId, locale)}
+      loading={loading}
+      postLoadFormat={postLoadFormat}
+      createMutationsPromises={createMutationsPromises(client, discussionPhaseId)}
+      save={save}
+      validate={validate}
+      mutators={{
+        ...arrayMutators
+      }}
+      render={({ handleSubmit, pristine, submitting, values }) => (
+        <React.Fragment>
+          <div className="admin-content">
+            <AdminForm handleSubmit={handleSubmit} pristine={pristine} submitting={submitting}>
+              {section === '1' && <Step1 editLocale={editLocale} locale={locale} />}
+              {section === 'configThematics' && (
+                <ConfigureThematicForm thematicId={thematicId} editLocale={editLocale} values={values} />
+              )}
+              {section === '2' && <Step2 editLocale={editLocale} values={values} />}
+              {section === '3' && <Step3 debateId={debateId} locale={locale} />}
+            </AdminForm>
+          </div>
+          {steps.includes(section) && (
+            <Navbar
+              currentStep={section}
+              steps={steps}
+              phaseIdentifier="survey"
+              beforeChangeSection={() => (pristine || submitting) && handleSubmit()}
+            />
+          )}
+        </React.Fragment>
+      )}
+    />
+  );
+};
 
 const mapStateToProps = state => ({
   debateId: state.context.debateId,

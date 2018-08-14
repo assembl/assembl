@@ -1,8 +1,8 @@
 #import "./fragments/LangString.graphql"
 #import "./fragments/IdeaData.graphql"
 
-query ThematicsQuery($identifier: String!) {
-  thematics: ideasById(identifier: $identifier) {
+query ThematicsQuery($discussionPhaseId: Int!) {
+  thematics: ideas(discussionPhaseId: $discussionPhaseId) {
     ... on IdeaInterface {
       ...ideaData
     }

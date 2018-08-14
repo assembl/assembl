@@ -1,5 +1,5 @@
 mutation createThematic(
-  $discussionPhaseId: ID!
+  $discussionPhaseId: Int!
   $image: String
   $titleEntries: [LangStringEntryInput]!
   $descriptionEntries: [LangStringEntryInput]

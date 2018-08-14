@@ -119,7 +119,10 @@ export const DumbPhaseForm = ({
       </div>
       <div className="text-xs configure-module-text">
         <Translate value="administration.timelineAdmin.configureModule" />
-        <Link to={`${get('administration', { ...slug, id: identifier })}?section=1`} className="configure-module-link">
+        <Link
+          to={`${get('administration', { ...slug, id: identifier }, { section: 1, phaseId: phaseId })}`}
+          className="configure-module-link"
+        >
           <Translate value="administration.timelineAdmin.configureModuleLink" count={phaseNumber} />
         </Link>
       </div>
