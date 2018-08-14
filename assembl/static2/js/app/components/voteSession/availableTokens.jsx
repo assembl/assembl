@@ -73,10 +73,10 @@ const AvailableTokens = ({ remainingTokensByCategory, sticky, tokenCategories, w
                         style={
                           (sticky && tokenCategories.length % 2 !== 0 && tokenCategories.length > 2) || windowWidth < 400
                             ? { maxWidth: '210px' }
-                            : { minWidth: '250px' }
+                            : { minWidth: '220px' }
                         }
                       >
-                        <h2 className="dark-title-2">{title}</h2>
+                        <h2 className="dark-title-3">{title}</h2>
                         <Translate value="debate.voteSession.remainingTokens" count={remaining} />
                       </div>
                       <div
@@ -88,7 +88,7 @@ const AvailableTokens = ({ remainingTokensByCategory, sticky, tokenCategories, w
                         }
                       >
                         {range(totalNumber).map(n => (
-                          <Circle key={n + 1} size={28} strokeColor={color} fillColor={n + 1 <= remaining ? color : undefined} />
+                          <Circle key={n + 1} size={24} strokeColor={color} fillColor={n + 1 <= remaining ? color : undefined} />
                         ))}
                       </div>
                     </div>

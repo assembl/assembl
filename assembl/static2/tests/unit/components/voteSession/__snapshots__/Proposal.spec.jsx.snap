@@ -54,20 +54,20 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
             >
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="none"
-                  r={13}
+                  r={11}
                   stroke="#226622"
                   strokeWidth={2}
                 />
@@ -85,20 +85,20 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
             >
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="none"
-                  r={13}
+                  r={11}
                   stroke="#226622"
                   strokeWidth={2}
                 />
@@ -116,20 +116,20 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
             >
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="none"
-                  r={13}
+                  r={11}
                   stroke="#226622"
                   strokeWidth={2}
                 />
@@ -147,20 +147,20 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
             >
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="none"
-                  r={13}
+                  r={11}
                   stroke="#226622"
                   strokeWidth={2}
                 />
@@ -178,20 +178,20 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
             >
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="none"
-                  r={13}
+                  r={11}
                   stroke="#226622"
                   strokeWidth={2}
                 />
@@ -209,20 +209,20 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
             >
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="none"
-                  r={13}
+                  r={11}
                   stroke="#226622"
                   strokeWidth={2}
                 />
@@ -240,20 +240,20 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
             >
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="none"
-                  r={13}
+                  r={11}
                   stroke="#226622"
                   strokeWidth={2}
                 />
@@ -271,20 +271,20 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
             >
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="none"
-                  r={13}
+                  r={11}
                   stroke="#226622"
                   strokeWidth={2}
                 />
@@ -302,20 +302,20 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
             >
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="none"
-                  r={13}
+                  r={11}
                   stroke="#226622"
                   strokeWidth={2}
                 />
@@ -333,20 +333,20 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
             >
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="none"
-                  r={13}
+                  r={11}
                   stroke="#226622"
                   strokeWidth={2}
                 />
@@ -364,20 +364,20 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
             >
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="none"
-                  r={13}
+                  r={11}
                   stroke="#226622"
                   strokeWidth={2}
                 />
@@ -395,20 +395,20 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
             >
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="none"
-                  r={13}
+                  r={11}
                   stroke="#226622"
                   strokeWidth={2}
                 />
@@ -451,20 +451,20 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
             >
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="none"
-                  r={13}
+                  r={11}
                   stroke="#771122"
                   strokeWidth={2}
                 />
@@ -482,20 +482,20 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
             >
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="none"
-                  r={13}
+                  r={11}
                   stroke="#771122"
                   strokeWidth={2}
                 />
@@ -513,20 +513,20 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
             >
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="none"
-                  r={13}
+                  r={11}
                   stroke="#771122"
                   strokeWidth={2}
                 />
@@ -544,20 +544,20 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
             >
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="none"
-                  r={13}
+                  r={11}
                   stroke="#771122"
                   strokeWidth={2}
                 />
@@ -575,20 +575,20 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
             >
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="none"
-                  r={13}
+                  r={11}
                   stroke="#771122"
                   strokeWidth={2}
                 />
@@ -606,20 +606,20 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
             >
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="none"
-                  r={13}
+                  r={11}
                   stroke="#771122"
                   strokeWidth={2}
                 />
@@ -637,20 +637,20 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
             >
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="none"
-                  r={13}
+                  r={11}
                   stroke="#771122"
                   strokeWidth={2}
                 />
@@ -668,20 +668,20 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
             >
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="none"
-                  r={13}
+                  r={11}
                   stroke="#771122"
                   strokeWidth={2}
                 />
@@ -699,20 +699,20 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
             >
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="none"
-                  r={13}
+                  r={11}
                   stroke="#771122"
                   strokeWidth={2}
                 />
@@ -730,20 +730,20 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
             >
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="none"
-                  r={13}
+                  r={11}
                   stroke="#771122"
                   strokeWidth={2}
                 />
