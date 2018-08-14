@@ -68,6 +68,15 @@ class Index extends Component<Props> {
             <p className="text-center">
               <Button101 buttonTappedHandler={this.buttonTappedHandler} />
             </p>
+
+            <h2>Instruction to create unit test on components</h2>
+            <p>The instruction below uses `static2/js/app/integration/101/components/button101.spec.jsx` example</p>
+            <ol>
+              <li>Create a new component spec file in `static2/tests/unit/components`</li>
+              <li>In the spec file, import the dummy data created from the stories file instead of creating or duplicating a set of data</li>
+              <li>Write your spec to only test component inputs and outputs</li>
+              <li>Run `yarn test static2/tests/unit/components/[your_spec_file]` to validate your unit tests</li>
+            </ol>
           </Col>
         </Row>
       </Grid>

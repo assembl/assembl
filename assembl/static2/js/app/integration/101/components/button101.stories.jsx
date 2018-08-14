@@ -7,16 +7,16 @@ import { action } from '@storybook/addon-actions';
 
 import Button101 from './button101';
 
-const dangerButtonWithCustomLabel = {
+export const dangerButtonWithCustomLabel = {
   buttonLabel: 'Custom label',
   buttonType: 'danger'
 };
 
-const disabledButton = {
+export const disabledButton = {
   buttonIsDisabled: true
 };
 
-const actions = {
+export const actions = {
   defaultButtonTappedHandler: action('defaultButtonTappedHandlers'),
   dangerButtonTappedHandler: action('dangerButtonTappedHandler')
 };
