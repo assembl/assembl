@@ -60,7 +60,8 @@ export const PHASES = {
   survey: 'survey',
   thread: 'thread',
   multiColumns: 'multiColumns',
-  voteSession: 'voteSession'
+  voteSession: 'voteSession',
+  brightMirror: 'brightMirror'
 };
 
 export const HARVESTABLE_PHASES = [PHASES.thread, PHASES.multiColumns];

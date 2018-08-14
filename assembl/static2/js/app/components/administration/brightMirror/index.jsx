@@ -2,7 +2,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { I18n } from 'react-redux-i18n';
-import arrayMutators from 'final-form-arrays';
 import { type ApolloClient, compose, withApollo } from 'react-apollo';
 import { Field } from 'react-final-form';
 
@@ -12,7 +11,6 @@ import FileUploaderFieldAdapter from '../../form/fileUploaderFieldAdapter';
 import MultilingualTextFieldAdapter from '../../form/multilingualTextFieldAdapter';
 import MultilingualRichTextFieldAdapter from '../../form/multilingualRichTextFieldAdapter';
 import LoadSaveReinitializeForm from '../../../components/form/LoadSaveReinitializeForm';
-import Navbar from '../navbar';
 import Loader from '../../common/loader';
 import Helper from '../../common/helper';
 
@@ -22,7 +20,6 @@ import { createMutationsPromises, save } from './save'; // Save file needs to be
 import validate from './validate'; // Save file needs to be updated according to bright mirror requirements
 
 type Props = {
-  currentStep: number,
   client: ApolloClient,
   editLocale: string
 };
@@ -31,7 +28,7 @@ const name = 'themes[0]'; // We have only one thematic for BrightMirror
 
 const loading = <Loader />;
 
-const BrightMirrorAdminForm = ({ client, currentStep, editLocale }: Props) => (
+const BrightMirrorAdminForm = ({ client, editLocale }: Props) => (
   <LoadSaveReinitializeForm
     load={(fetchPolicy: FetchPolicy) => load(client, fetchPolicy)}
     loading={loading}
@@ -39,9 +36,6 @@ const BrightMirrorAdminForm = ({ client, currentStep, editLocale }: Props) => (
     createMutationsPromises={createMutationsPromises(client)}
     save={save}
     validate={validate}
-    mutators={{
-      ...arrayMutators
-    }}
     render={({ handleSubmit, pristine, submitting }) => {
       const upperCaseLocale = editLocale.toUpperCase();
       const titleName = `${name}.title`;
@@ -106,14 +100,6 @@ const BrightMirrorAdminForm = ({ client, currentStep, editLocale }: Props) => (
               </div>
             </AdminForm>
           </div>
-          {!isNaN(currentStep) && (
-            <Navbar
-              currentStep={currentStep}
-              totalSteps={1}
-              phaseIdentifier="brightMirror"
-              beforeChangeSection={() => (pristine || submitting) && handleSubmit()}
-            />
-          )}
         </React.Fragment>
       );
     }}

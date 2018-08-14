@@ -4,17 +4,22 @@ import { i18nValueIsEmpty } from '../../form/utils';
 import type { BrightMirrorAdminValues } from './types.flow';
 
 function validateTheme(thematic) {
+  const {
+    title,
+    img,
+    announcement
+  } = thematic;
   const errors = {};
   errors.announcement = {};
-  if (i18nValueIsEmpty(thematic.title)) {
+  if (i18nValueIsEmpty(title)) {
     errors.title = I18n.t('error.required');
   }
-  if (!thematic.img) {
+  if (!img) {
     errors.img = I18n.t('error.required');
   }
-  if (!thematic.announcement) {
+  if (!announcement) {
     errors.announcement = I18n.t('error.required');
-  } else if (i18nValueIsEmpty(thematic.announcement.title)) {
+  } else if (i18nValueIsEmpty(announcement.title)) {
     errors.announcement.title = I18n.t('error.required');
   }
   return errors;

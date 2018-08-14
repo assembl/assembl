@@ -5,6 +5,7 @@ import ThematicsQuery from '../graphql/ThematicsQuery.graphql';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
 import { browserHistory } from '../router';
 import { get } from '../utils/routeMap';
+import { displayAlert } from '../utils/utilityManager';
 
 class BrightMirror extends React.Component {
   componentDidMount() {
@@ -18,9 +19,13 @@ class BrightMirror extends React.Component {
   }
 
   render() {
-    const { identifier, loading, children, params } = this.props;
-    const isParentRoute = !params.themeId || false;
-    if (isParentRoute) {
+    const { data, hasErrors, identifier, loading, children, params } = this.props;
+    const isParentRoute = !!params.themeId || false;
+    if (hasErrors) {
+      displayAlert('danger', `${data.error}`);
+      return <div />;
+    }
+    if (isParentRoute && loading) {
       return (
         <div className="debate">
           {loading && isParentRoute && <Loader color="black" />}
@@ -53,6 +58,7 @@ export default compose(
       if (data.error) {
         return {
           hasErrors: true,
+          data: data,
           loading: false
         };
       }

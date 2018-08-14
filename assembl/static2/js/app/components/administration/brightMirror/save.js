@@ -3,6 +3,7 @@ import difference from 'lodash/difference';
 import isEqual from 'lodash/isEqual';
 import type { ApolloClient } from 'react-apollo';
 import type { BrightMirrorAdminValues } from './types.flow';
+import { PHASES } from '../../../constants';
 
 import createThematicMutation from '../../../graphql/mutations/createThematic.graphql';
 import deleteThematicMutation from '../../../graphql/mutations/deleteThematic.graphql';
@@ -13,8 +14,8 @@ import { convertEntriesToHTML } from '../../../utils/draftjs';
 function getVariables(theme, initialTheme, order) {
   const initialImg = initialTheme ? initialTheme.img : null;
   return {
-    identifier: 'brightMirror',
-    messageViewOverride: 'brightMirror',
+    identifier: PHASES.brightMirror,
+    messageViewOverride: PHASES.brightMirror,
     titleEntries: convertToEntries(theme.title),
     descriptionEntries: convertToEntries(theme.description),
     image: getFileVariable(theme.img, initialImg),
