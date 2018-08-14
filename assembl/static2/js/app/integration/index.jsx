@@ -2,7 +2,7 @@ import React from 'react';
 import { Grid, Row, Col, ListGroup } from 'react-bootstrap';
 
 const index = () => (
-  <Grid className="integration">
+  <Grid>
     <Row>
       <Col xs={12}>
         <h1>Integration page</h1>
