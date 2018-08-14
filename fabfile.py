@@ -362,10 +362,17 @@ def supervisor_restart():
     "Restart supervisor itself."
     with hide('running', 'stdout'):
         venvcmd("supervisorctl shutdown")
-    # Another supervisor,upstart, etc may be watching it, give it a little while
-    # Ideally we should wait, but I didn't have time to code it.
-    sleep(30)
-    # If supervisor is already started, this will do nothing
+    while True:
+        sleep(5)
+        result = venvcmd("supervisorctl status", warn_only=True)
+        if not result.failed:
+            break
+        # otherwise still in shutdown mode
+    # Another supervisor, upstart, etc may be watching it, give it more time
+    sleep(5)
+    result = venvcmd("supervisorctl status")
+    if "no such file" in result:
+        venvcmd("supervisord")
 
 
 def is_supervisor_running():
