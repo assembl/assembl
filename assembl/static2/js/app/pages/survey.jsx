@@ -169,9 +169,7 @@ class Survey extends React.Component<SurveyProps, SurveyState> {
                 <div className="max-container">
                   <div className="question-title">
                     <div className="title-hyphen">&nbsp;</div>
-                    <h1 className="dark-title-1">
-                      <Translate value="debate.survey.proposalsTitle" />
-                    </h1>
+                    <h1 className="dark-title-1">{numPosts > 0 ? <Translate value="debate.survey.proposalsTitle" /> : null}</h1>
                   </div>
                   <div className="center">
                     {questions &&
