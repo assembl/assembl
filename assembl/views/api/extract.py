@@ -170,7 +170,15 @@ def post_extract(request):
     else:
         idea = None
 
-
+    ranges = extract_data.get('ranges', [])
+    extract_hash = Extract.get_extract_hash(
+        None,
+        u"".join([r['start'] for r in ranges]),
+        u"".join([r['end'] for r in ranges]),
+        u"".join([r['startOffset'] for r in ranges]),
+        u"".join([r['endOffset'] for r in ranges]),
+        content.id
+        )
     new_extract = Extract(
         creator_id=user_id,
         owner_id=user_id,
@@ -179,11 +187,11 @@ def post_extract(request):
         idea=idea,
         important=important,
         annotation_text=annotation_text,
-        content=content
+        content=content,
+        extract_hash=extract_hash
     )
     Extract.default_db.add(new_extract)
-
-    for range_data in extract_data.get('ranges', []):
+    for range_data in ranges:
         range = TextFragmentIdentifier(
             extract=new_extract,
             xpath_start=range_data['start'],
@@ -191,6 +199,7 @@ def post_extract(request):
             xpath_end=range_data['end'],
             offset_end=range_data['endOffset'])
         TextFragmentIdentifier.default_db.add(range)
+
     Extract.default_db.flush()
 
     return {'ok': True, '@id': new_extract.uri()}
