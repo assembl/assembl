@@ -3,21 +3,24 @@ import React from 'react';
 import { Button } from 'react-bootstrap';
 
 type Props = {
-  buttonLabel: String, // Possible values: any strings
-  buttonType: String, // Possible types: 'info', 'danger'
-  buttonTappedHandler: Function
+  buttonLabel?: string, // Optional possible values: any strings
+  buttonType?: string, // Optional possible types: 'info', 'danger'
+  buttonTappedHandler: Function, // Required onClick function
+  buttonIsDisabled?: boolean // Optional flag to enable the button
 };
 
 const button101 = ({
   buttonLabel,
   buttonType,
-  buttonTappedHandler
+  buttonTappedHandler,
+  buttonIsDisabled
 }: Props) => (
   <Button
     bsStyle={buttonType}
     bsSize="large"
     className="integration"
     onClick={buttonTappedHandler}
+    disabled={buttonIsDisabled}
   >
     {buttonLabel}
   </Button>
@@ -25,7 +28,8 @@ const button101 = ({
 
 button101.defaultProps = {
   buttonLabel: 'Bluenove',
-  buttonType: 'info'
+  buttonType: 'info',
+  buttonIsDisabled: false
 };
 
 export default button101;
