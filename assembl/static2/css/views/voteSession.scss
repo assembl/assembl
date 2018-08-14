@@ -20,6 +20,10 @@
 
     .category-available-tokens {
       display: flex;
+<<<<<<< HEAD
+=======
+      padding: 0 0 15px;
+>>>>>>> improve token session front
       max-width: 780px;
       margin-left: -5px;
 
@@ -34,6 +38,10 @@
 
       .text {
         margin: 0;
+      }
+
+      span {
+        font-size: $font-size-s;
       }
 
       span {
@@ -116,6 +124,10 @@
     }
 
     .tokens-line {
+<<<<<<< HEAD
+=======
+      margin-top: 14px;
+>>>>>>> improve token session front
       margin-bottom: 0;
 
       p {

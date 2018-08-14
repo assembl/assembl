@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`AvailableTokens component should match AvailableTokens snapshot (non sticky version with more than 2 categories) 1`] = `
+exports['AvailableTokens component should match AvailableTokens snapshot (non sticky version with more than 2 categories) 1'] = `
 <div
   className="available-tokens"
 >
@@ -23,7 +23,7 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (non st
               className="text"
               style={
                 Object {
-                  "minWidth": "160px",
+                  "minWidth": "220px",
                 }
               }
             >
@@ -62,7 +62,11 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (non st
               className="text"
               style={
                 Object {
+<<<<<<< HEAD
                   "minWidth": "160px",
+=======
+                  "minWidth": "220px",
+>>>>>>> improve token session front
                 }
               }
             >
@@ -101,7 +105,11 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (non st
               className="text"
               style={
                 Object {
+<<<<<<< HEAD
                   "minWidth": "160px",
+=======
+                  "minWidth": "220px",
+>>>>>>> improve token session front
                 }
               }
             >
@@ -140,7 +148,11 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (non st
               className="text"
               style={
                 Object {
+<<<<<<< HEAD
                   "minWidth": "160px",
+=======
+                  "minWidth": "220px",
+>>>>>>> improve token session front
                 }
               }
             >
@@ -172,7 +184,7 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (non st
 </div>
 `;
 
-exports[`AvailableTokens component should match AvailableTokens snapshot (non sticky version) 1`] = `
+exports['AvailableTokens component should match AvailableTokens snapshot (non sticky version) 1'] = `
 <div
   className="available-tokens"
 >
@@ -195,7 +207,11 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (non st
               className="text"
               style={
                 Object {
+<<<<<<< HEAD
                   "minWidth": "160px",
+=======
+                  "minWidth": "220px",
+>>>>>>> improve token session front
                 }
               }
             >
@@ -475,7 +491,11 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (non st
               className="text"
               style={
                 Object {
+<<<<<<< HEAD
                   "minWidth": "160px",
+=======
+                  "minWidth": "220px",
+>>>>>>> improve token session front
                 }
               }
             >
@@ -708,7 +728,7 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (non st
 </div>
 `;
 
-exports[`AvailableTokens component should match AvailableTokens snapshot (sticky version) 1`] = `
+exports['AvailableTokens component should match AvailableTokens snapshot (sticky version) 1'] = `
 <div
   className="available-tokens-sticky box"
 >
@@ -731,7 +751,11 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (sticky
               className="text"
               style={
                 Object {
+<<<<<<< HEAD
                   "minWidth": "160px",
+=======
+                  "minWidth": "220px",
+>>>>>>> improve token session front
                 }
               }
             >
@@ -1011,7 +1035,11 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (sticky
               className="text"
               style={
                 Object {
+<<<<<<< HEAD
                   "minWidth": "160px",
+=======
+                  "minWidth": "220px",
+>>>>>>> improve token session front
                 }
               }
             >

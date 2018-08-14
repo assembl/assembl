@@ -73,7 +73,11 @@ const AvailableTokens = ({ remainingTokensByCategory, sticky, tokenCategories, w
                         style={
                           (sticky && tokenCategories.length % 2 !== 0 && tokenCategories.length > 2) || windowWidth < 400
                             ? { maxWidth: '210px' }
+<<<<<<< HEAD
                             : { minWidth: '160px' }
+=======
+                            : { minWidth: '220px' }
+>>>>>>> improve token session front
                         }
                       >
                         <h2 className="dark-title-3">{title}</h2>
