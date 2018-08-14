@@ -1,6 +1,8 @@
 import React from 'react';
+/* eslint-disable */
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
+/* eslint-enable */
 
 import Button101 from './button101';
 

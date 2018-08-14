@@ -28,7 +28,9 @@
   "author": "Bluenove",
   "license": "AGPL-3.0",
   "devDependencies": {
-    "@storybook/react": "^3.4.2",
+    "@storybook/addon-actions": "^3.4.10",
+    "@storybook/addon-centered": "^3.4.10",
+    "@storybook/react": "^3.4.10",
     "apollo-test-utils": "^0.3.0",
     "babel-core": "^6.26.0",
     "babel-eslint": "^7.1.1",

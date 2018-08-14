@@ -1,7 +1,11 @@
 import React from 'react';
-import { configure } from '@storybook/react';
+import { configure, addDecorator } from '@storybook/react';
+import centered from '@storybook/addon-centered'; // Library used to center H and V a component
+
 import 'bootstrap/dist/css/bootstrap.css';
 import '../css/themes/default/assembl_web.scss';
+
+addDecorator(centered);
 
 function loadStories() {
   require('../js/app/integration/101/components/button101.stories.jsx');
