@@ -15,7 +15,14 @@ const convertToContextualName = (name) => {
   return base + workingName;
 };
 const maybePrependSlash = (pre, s) => (pre ? `/${s}` : s);
-export const get = (name, args) => {
+
+export const getQuery = (query) => {
+  if (!query) return '';
+  const entries = Object.keys(query).map(key => `${key}=${query[key]}`);
+  return `?${entries.join('&')}`;
+};
+
+export const get = (name, args, query) => {
   const newArgs = args || {};
   const pre = 'preSlash' in newArgs ? newArgs.preSlash : true;
   const isCtx = 'ctx' in newArgs ? newArgs.ctx : false;
@@ -26,8 +33,9 @@ export const get = (name, args) => {
   let literal = routes[newName];
   literal = maybePrependSlash(pre, literal);
   const a = parse(literal, newArgs);
-  return a;
+  return a + getQuery(query);
 };
+
 const basePath = () => `${window.location.protocol}//${window.location.host}`;
 export const getFullPath = (name, args) => {
   const rel = get(name, { ...args, preSlash: false });
