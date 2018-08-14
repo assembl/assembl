@@ -361,7 +361,7 @@ def migrate_local_ini():
 def supervisor_restart():
     "Restart supervisor itself."
     with hide('running', 'stdout'):
-        venvcmd("supervisorctl restart")
+        venvcmd("supervisorctl shutdown")
     # Another supervisor,upstart, etc may be watching it, give it a little while
     # Ideally we should wait, but I didn't have time to code it.
     sleep(30)
