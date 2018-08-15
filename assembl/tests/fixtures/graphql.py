@@ -2,6 +2,7 @@
 import pytest
 
 
+
 @pytest.fixture(scope="function")
 def graphql_request(request, test_adminuser_webrequest, discussion):
     """ A graphql request fixture with an ADMIN user authenticated """
@@ -28,12 +29,19 @@ def graphql_participant1_request(request, test_participant1_webrequest, discussi
 
 
 @pytest.fixture(scope="function")
-def idea_in_thread_phase(graphql_request):
+def phases(timeline_phase2_interface_v2, test_session):
+    from assembl import models
+    phases = test_session.query(models.DiscussionPhase).all()
+    return {p.identifier: p for p in phases}
+
+
+@pytest.fixture(scope="function")
+def idea_in_thread_phase(phases, graphql_request):
     from assembl.graphql.schema import Schema as schema
     res = schema.execute(u"""
 mutation myFirstMutation {
     createThematic(
-        identifier: "thread",
+        discussionPhaseId: """+unicode(phases['thread'].id)+u""",
         titleEntries:[
             {value:"Comprendre les dynamiques et les enjeux", localeCode:"fr"},
             {value:"Understanding the dynamics and issues", localeCode:"en"}
@@ -53,12 +61,12 @@ mutation myFirstMutation {
     return idea_id
 
 @pytest.fixture(scope="function")
-def another_idea_in_thread_phase(graphql_request):
+def another_idea_in_thread_phase(phases, graphql_request):
     from assembl.graphql.schema import Schema as schema
     res = schema.execute(u"""
 mutation myFirstMutation {
     createThematic(
-        identifier: "thread",
+        discussionPhaseId: """+unicode(phases['thread'].id)+u""",
         titleEntries:[
             {value:"Manger des pâtes", localeCode:"fr"},
             {value:"Eating pasta", localeCode:"en"}
@@ -103,7 +111,7 @@ mutation myFirstMutation {
 
 
 @pytest.fixture(scope="function")
-def thematic_and_question(graphql_request):
+def thematic_and_question(phases, graphql_request):
     from assembl.graphql.schema import Schema as schema
     res = schema.execute(u"""
 mutation myFirstMutation {
@@ -117,7 +125,7 @@ mutation myFirstMutation {
                 {value:"Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?", localeCode:"fr"}
             ]},
         ],
-        identifier:"survey",
+        discussionPhaseId: """+unicode(phases['survey'].id)+u""",
     ) {
         thematic {
             ... on Thematic {
@@ -136,7 +144,7 @@ mutation myFirstMutation {
 
 
 @pytest.fixture(scope="function")
-def thematic_with_video_and_question(graphql_request):
+def thematic_with_video_and_question(phases, graphql_request):
     from assembl.graphql.schema import Schema as schema
     res = schema.execute(u"""
 mutation myMutation {
@@ -169,7 +177,7 @@ mutation myMutation {
             ],
             htmlCode:"https://something.com"
         },
-        identifier:"survey",
+        discussionPhaseId: """+unicode(phases['survey'].id)+u""",
     ) {
         thematic {
             ... on Thematic {
@@ -188,7 +196,7 @@ mutation myMutation {
 
 
 @pytest.fixture(scope="function")
-def second_thematic_with_questions(graphql_request):
+def second_thematic_with_questions(phases, graphql_request):
     from assembl.graphql.schema import Schema as schema
     res = schema.execute(u"""
 mutation myMutation {
@@ -217,7 +225,7 @@ mutation myMutation {
             ]
             htmlCode:"https://www.youtube.com/embed/GJM1TlHML4E?list=PL1HxVG_mcuktmbRELCxOiQlZLCFKzhBcJ"
         },
-        identifier:"survey",
+        discussionPhaseId: """+unicode(phases['survey'].id)+u""",
     ) {
         thematic {
             ... on Thematic {
@@ -238,7 +246,7 @@ mutation myMutation {
 
 
 @pytest.fixture(scope="function")
-def thematic_with_image(graphql_request):
+def thematic_with_image(phases, graphql_request):
     from assembl.graphql.schema import Schema as schema
     import os
     from io import BytesIO
@@ -255,7 +263,7 @@ mutation createThematicWithImage($file: String!) {
         titleEntries:[
             {value:"You can't program the card without transmitting the wireless AGP card!", localeCode:"en"}
         ],
-        identifier:"survey",
+        discussionPhaseId: """+unicode(phases['survey'].id)+u""",
         image: $file
     ) {
         thematic {
