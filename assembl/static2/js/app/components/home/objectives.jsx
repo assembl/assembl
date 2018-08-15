@@ -4,9 +4,10 @@ import { Grid, Row, Col } from 'react-bootstrap';
 
 import { get } from '../../utils/routeMap';
 import { getDiscussionSlug } from '../../utils/globalFunctions';
-import { getCurrentPhaseIdentifier } from '../../utils/timeline';
+import { getCurrentPhase } from '../../utils/timeline';
 import { browserHistory } from '../../router';
 import ParticipateButton from '../common/participateButton';
+import { PHASES } from '../../constants';
 
 class Objectives extends React.Component {
   constructor(props) {
@@ -17,8 +18,10 @@ class Objectives extends React.Component {
   displayPhase() {
     const slug = { slug: getDiscussionSlug() };
     const { timeline } = this.props;
-    const currentPhaseIdentifier = getCurrentPhaseIdentifier(timeline);
-    browserHistory.push(get('debate', { ...slug, phase: currentPhaseIdentifier }));
+    const currentPhase = getCurrentPhase(timeline);
+    const currentPhaseIdentifier = currentPhase ? currentPhase.identifier : PHASES.thread;
+    const currentPhaseId = currentPhase ? currentPhase.id : null;
+    browserHistory.push(get('debate', { ...slug, phase: currentPhaseIdentifier, phaseId: currentPhaseId }));
   }
 
   render() {

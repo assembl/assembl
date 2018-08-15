@@ -20,6 +20,7 @@ type NavigationParams = {
 };
 
 type QuestionProps = {
+  phaseId: string,
   hasErrors: boolean,
   title: string,
   numContributors: number,
@@ -37,15 +38,15 @@ export function DumbQuestion(props: QuestionProps) {
     displayAlert('danger', I18n.t('error.loading'));
     return null;
   }
-  const { imgUrl, title, numContributors, numPosts, thematicTitle, thematicId, params, slug, totalSentiments } = props;
-  const link = `${getRoute('idea', { slug: slug, phase: 'survey', themeId: thematicId })}`;
+  const { phaseId, imgUrl, title, numContributors, numPosts, thematicTitle, thematicId, params, slug, totalSentiments } = props;
+  const link = `${getRoute('idea', { slug: slug, phase: 'survey', phaseId: phaseId, themeId: thematicId })}`;
   let statElements = [];
   const numContributions = numPosts + totalSentiments;
   statElements = [statMessages(numPosts), statContributions(numContributions), statParticipants(numContributors)];
   return (
     <div className="question">
       <div className="relative">
-        <Header title={thematicTitle} imgUrl={imgUrl} identifier="survey">
+        <Header title={thematicTitle} imgUrl={imgUrl} phaseId={phaseId}>
           <HeaderStatistics statElements={statElements} />
         </Header>
         <div className="background-light proposals">
@@ -66,7 +67,7 @@ export function DumbQuestion(props: QuestionProps) {
                 <h3 className="collapsed-title">
                   <span>{`${params.questionIndex}/ ${title}`}</span>
                 </h3>
-                <Posts questionId={params.questionId} themeId={thematicId} />
+                <Posts questionId={params.questionId} themeId={thematicId} phaseId={phaseId} />
                 <div className="back-btn-container">
                   <Link to={link} className="button-submit button-dark">
                     <Translate value="debate.question.backToQuestions" />

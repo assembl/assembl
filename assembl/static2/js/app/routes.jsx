@@ -56,7 +56,7 @@ const DebateHome = (props) => {
   case 'multiColumns':
     return <DebateThread {...props} />;
   case 'voteSession':
-    return <VoteSession />;
+    return <VoteSession {...props} />;
   case 'brightMirror':
     return <BrightMirror {...props} />;
   default:
@@ -67,17 +67,41 @@ const DebateHome = (props) => {
 const DebateChild = (props) => {
   switch (props.params.phase) {
   case 'survey':
-    return <Survey id={props.id} identifier={props.identifier} />;
+    return <Survey id={props.id} identifier={props.identifier} phaseId={props.phaseId} />;
   case 'thread':
-    return <Idea id={props.id} identifier={props.identifier} routerParams={props.params} additionalFields={false} />;
+    return (
+      <Idea
+        id={props.id}
+        identifier={props.identifier}
+        phaseId={props.phaseId}
+        routerParams={props.params}
+        additionalFields={false}
+      />
+    );
   case 'multiColumns':
-    return <Idea id={props.id} identifier={props.identifier} routerParams={props.params} additionalFields={false} />;
+    return (
+      <Idea
+        id={props.id}
+        identifier={props.identifier}
+        phaseId={props.phaseId}
+        routerParams={props.params}
+        additionalFields={false}
+      />
+    );
   case 'voteSession':
     return <NotFound />;
   case 'brightMirror':
     return <Idea id={props.id} identifier={props.identifier} routerParams={props.params} additionalFields />;
   default:
-    return <Idea id={props.id} identifier={props.identifier} routerParams={props.params} additionalFields={false} />;
+    return (
+      <Idea
+        id={props.id}
+        identifier={props.identifier}
+        phaseId={props.phaseId}
+        routerParams={props.params}
+        additionalFields={false}
+      />
+    );
   }
 };
 
@@ -154,7 +178,7 @@ export default [
         <Route path={routeForRouter('terms')} component={TermsAndConditions} />
         <Route path={routeForRouter('community')} component={Community} />
         <Route path={routeForRouter('rootDebate')} />
-        <Route path={routeForRouter('debate', false, { phase: ':phase' })} component={DebateHome}>
+        <Route path={routeForRouter('debate', false, { phase: ':phase', phaseId: ':phaseId' })} component={DebateHome}>
           <Route path={routeForRouter('theme', false, { themeId: ':themeId' })} component={DebateChild} />
           <Route
             path={routeForRouter('question', false, { questionId: ':questionId', questionIndex: ':questionIndex' })}

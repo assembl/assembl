@@ -22,6 +22,7 @@ describe('SurveyTable component', () => {
     };
     const props = {
       identifier: 'survey',
+      phaseId: 'phaseFoo',
       data: data
     };
     const renderer = new ShallowRenderer();

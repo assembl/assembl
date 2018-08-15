@@ -6,7 +6,7 @@ import Tree from '../../../components/common/tree';
 import Post from '../common/post';
 import FoldedPost from '../common/post/foldedPost';
 import InfiniteSeparator from '../../../components/common/infiniteSeparator';
-import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
+import { getIfPhaseCompletedById } from '../../../utils/timeline';
 
 class ThreadView extends React.Component {
   render() {
@@ -20,9 +20,10 @@ class ThreadView extends React.Component {
       posts,
       initialRowIndex,
       identifier,
+      phaseId,
       timeline
     } = this.props;
-    const isPhaseCompleted = getIfPhaseCompletedByIdentifier(timeline, identifier);
+    const isPhaseCompleted = getIfPhaseCompletedById(timeline, phaseId);
     return (
       <div className="overflow-x">
         {(!isUserConnected || connectedUserCan(Permissions.ADD_POST)) && !isPhaseCompleted ? (
@@ -41,6 +42,7 @@ class ThreadView extends React.Component {
                 noRowsRenderer={noRowsRenderer}
                 SeparatorComponent={InfiniteSeparator}
                 identifier={identifier}
+                phaseId={phaseId}
               />
             </div>
           </div>

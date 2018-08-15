@@ -12,6 +12,7 @@ describe('DumbTimelineSegmentMenu component', () => {
       startDate: 'date1',
       endDate: 'date2',
       phaseIdentifier: 'foo',
+      phaseId: 'phaseFoo',
       locale: 'en'
     };
     const renderer = new ShallowRenderer();

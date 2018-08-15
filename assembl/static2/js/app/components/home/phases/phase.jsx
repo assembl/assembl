@@ -14,9 +14,9 @@ class Phase extends React.Component {
   }
 
   displayPhase() {
-    const { identifier, startDate, endDate, title, timeline } = this.props;
+    const { phaseId, identifier, startDate, endDate, title, timeline } = this.props;
     const { debateData } = this.props.debate;
-    const params = { slug: debateData.slug, phase: identifier };
+    const params = { slug: debateData.slug, phase: identifier, phaseId: phaseId };
     const isSeveralPhases = isSeveralIdentifiers(timeline);
     const phaseStatus = getPhaseStatus(startDate, endDate);
     if (isSeveralPhases) {

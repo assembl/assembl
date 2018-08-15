@@ -17,6 +17,7 @@ type MenuListProps = {
   items: Array<ItemNode>,
   rootItem: string,
   identifier: string,
+  phaseId: string,
   className: string,
   onMenuItemClick: Function
 };
@@ -57,7 +58,7 @@ class MenuList extends React.Component<MenuListProps, MenuListState> {
   };
 
   render() {
-    const { subMenu, items, rootItem, identifier, className, onMenuItemClick } = this.props;
+    const { subMenu, items, rootItem, identifier, phaseId, className, onMenuItemClick } = this.props;
     const { selected } = this.state;
     const rootItems = this.getItemChildren(rootItem);
     if (rootItems.length === 0) return null;
@@ -83,13 +84,21 @@ class MenuList extends React.Component<MenuListProps, MenuListState> {
                 onClick={onMenuItemClick}
                 onMouseOver={this.onItemOver}
                 identifier={identifier}
+                phaseId={phaseId}
                 item={item}
               />
             ))}
           </Scrollbars>
         </div>
         {selected && (
-          <MenuList subMenu onMenuItemClick={onMenuItemClick} items={items} rootItem={selected} identifier={identifier} />
+          <MenuList
+            subMenu
+            onMenuItemClick={onMenuItemClick}
+            items={items}
+            rootItem={selected}
+            identifier={identifier}
+            phaseId={phaseId}
+          />
         )}
       </div>
     ];

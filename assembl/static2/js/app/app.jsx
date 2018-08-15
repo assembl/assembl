@@ -7,7 +7,7 @@ import { filter } from 'graphql-anywhere';
 
 import { get } from './utils/routeMap';
 import { getDiscussionId, getConnectedUserId, getConnectedUserName } from './utils/globalFunctions';
-import { getCurrentPhaseIdentifier } from './utils/timeline';
+import { getCurrentPhase } from './utils/timeline';
 import { fetchDebateData } from './actions/debateActions';
 import { addContext } from './actions/contextActions';
 import { updateTimeline } from './actions/timelineActions';
@@ -16,6 +16,7 @@ import Error from './components/common/error';
 import ChatFrame from './components/common/ChatFrame';
 import { browserHistory } from './router';
 import TimelineQuery from './graphql/Timeline.graphql';
+import { PHASES } from './constants';
 
 export const IsHarvestingContext = React.createContext(false);
 
@@ -36,8 +37,10 @@ class App extends React.Component {
       putTimelineInStore(timeline);
     }
     if (!params.phase && !timelineLoading && location.pathname.split('/').indexOf('debate') > -1) {
-      const currentPhaseIdentifier = getCurrentPhaseIdentifier(timeline);
-      browserHistory.push(get('debate', { slug: params.slug, phase: currentPhaseIdentifier }));
+      const currentPhase = getCurrentPhase(timeline);
+      const currentPhaseIdentifier = currentPhase ? currentPhase.identifier : PHASES.thread;
+      const currentPhaseId = currentPhase ? currentPhase.id : null;
+      browserHistory.push(get('debate', { slug: params.slug, phase: currentPhaseIdentifier, phaseId: currentPhaseId }));
     }
   }
 

@@ -12,11 +12,13 @@ type TimelineSegmentMenuProps = {
   startDate: string,
   endDate: string,
   phaseIdentifier: string,
+  phaseId: string,
   onMenuItemClick: Function
 };
 
 export function DumbTimelineSegmentMenu({
   phaseIdentifier,
+  phaseId,
   onMenuItemClick,
   startDate,
   endDate,
@@ -37,7 +39,7 @@ export function DumbTimelineSegmentMenu({
   const ignoreMenu = phasesToIgnore.includes(phaseIdentifier);
   return !ignoreMenu ? (
     <div className="menu-container">
-      <MenuTable identifier={phaseIdentifier} onMenuItemClick={onMenuItemClick} />
+      <MenuTable identifier={phaseIdentifier} phaseId={phaseId} onMenuItemClick={onMenuItemClick} />
     </div>
   ) : null;
 }

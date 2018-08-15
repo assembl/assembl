@@ -11,6 +11,7 @@ import { APP_CONTAINER_PADDING } from '../../../constants';
 type Props = {
   ideas: Array<Idea>,
   identifier: string,
+  phaseId: string,
   ideaLevel: number,
   nbLevel: number,
   selectedIdeasId: Array<string>,
@@ -55,7 +56,7 @@ class IdeasLevelMobile extends React.Component<Props, State> {
   };
 
   render() {
-    const { ideas, identifier, ideaLevel, nbLevel, selectedIdeasId, setSelectedIdeas } = this.props;
+    const { ideas, identifier, phaseId, ideaLevel, nbLevel, selectedIdeasId, setSelectedIdeas } = this.props;
     const { sliderWidth, thumbnailsSliderWidth, previewWidth, thumbnailsWidth } = this.state;
     const slug = getDiscussionSlug();
     const isSubLevel = nbLevel > 1 && ideaLevel < nbLevel;
@@ -98,7 +99,7 @@ class IdeasLevelMobile extends React.Component<Props, State> {
                   numPosts={idea.numPosts}
                   numContributors={idea.numContributors}
                   numChildren={idea.numChildren}
-                  link={`${getRoute('idea', { slug: slug, phase: identifier, themeId: idea.id })}`}
+                  link={`${getRoute('idea', { slug: slug, phase: identifier, phaseId: phaseId, themeId: idea.id })}`}
                   title={truncate(idea.title, {
                     length: stringMaxLength(ideaLevel),
                     separator: ' ',

@@ -12,7 +12,10 @@ const queries = {
   default: AllIdeasQuery
 };
 
-export function prefetchMenuQuery(client: ApolloClient, variables: Object) {
+export function prefetchMenuQuery(
+  client: ApolloClient,
+  variables: { identifier: string, discussionPhaseId: string, lang: string }
+) {
   const query = queries[variables.identifier];
   client.query({
     query: query || queries.default,
@@ -21,17 +24,20 @@ export function prefetchMenuQuery(client: ApolloClient, variables: Object) {
 }
 
 type MenuTableProps = {
-  identifier: string
+  identifier: string,
+  phaseId: string
 };
 
 function MenuTable(props: MenuTableProps) {
-  switch (props.identifier) {
+  const { identifier, phaseId } = props;
+  const discussionPhaseId = phaseId ? atob(phaseId).split(':')[1] : null;
+  switch (identifier) {
   case PHASES.survey:
-    return <SurveyTable {...props} />;
+    return <SurveyTable {...props} discussionPhaseId={discussionPhaseId} />;
   case PHASES.voteSession:
     return null;
   default:
-    return <IdeasTable {...props} />;
+    return <IdeasTable {...props} discussionPhaseId={discussionPhaseId} />;
   }
 }
 

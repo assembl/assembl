@@ -17,7 +17,8 @@ describe('Question page', () => {
         questionIndex: 'Index',
         questionId: 'FooInd'
       },
-      slug: 'FooSlug'
+      slug: 'FooSlug',
+      phaseId: 'phaseFoo'
     };
     const renderer = new ShallowRenderer();
     renderer.render(<DumbQuestion {...props} />);

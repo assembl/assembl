@@ -56,7 +56,7 @@ class IdeaInterface(graphene.Interface):
     num_posts = graphene.Int(description=docs.IdeaInterface.num_posts)
     num_total_posts = graphene.Int(description=docs.IdeaInterface.num_total_posts)
     num_contributors = graphene.Int(description=docs.IdeaInterface.num_contributors)
-    num_children = graphene.Int(identifier=graphene.String(), description=docs.IdeaInterface.num_children)
+    num_children = graphene.Int(discussion_phase_id=graphene.Int(), description=docs.IdeaInterface.num_children)
     img = graphene.Field(Document, description=docs.IdeaInterface.img)
     order = graphene.Float(description=docs.IdeaInterface.order)
     live = graphene.Field(lambda: IdeaUnion, description=docs.IdeaInterface.live)
@@ -105,8 +105,9 @@ class IdeaInterface(graphene.Interface):
         return self.get_order_from_first_parent()
 
     def resolve_num_children(self, args, context, info):
-        phase = args.get('identifier', '')
-        if phase == 'multiColumns':
+        phase_id = args.get('discussion_phase_id')
+        phase = models.DiscussionPhase.get(phase_id)
+        if phase.identifier == 'multiColumns':
             _it = models.Idea.__table__
             _ilt = models.IdeaLink.__table__
             _target_it = models.Idea.__table__.alias()

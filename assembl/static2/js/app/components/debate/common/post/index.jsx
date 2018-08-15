@@ -42,6 +42,7 @@ export type Props = {
   dbId: number,
   ideaId: string,
   identifier: string,
+  phaseId: string,
   isHarvesting: boolean,
   lang: string,
   measureTreeHeight: Function,

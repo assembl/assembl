@@ -1,12 +1,12 @@
-query AllIdeasQuery($lang: String!, $identifier: String!) {
-  ideas(identifier: $identifier) {
+query AllIdeasQuery($lang: String!, $discussionPhaseId: Int!) {
+  ideas(discussionPhaseId: $discussionPhaseId) {
     ... on Idea {
       id
       title(lang: $lang)
       description(lang: $lang)
       numPosts
       numContributors
-      numChildren(identifier: $identifier)
+      numChildren(discussionPhaseId: $discussionPhaseId)
       img {
         externalUrl
       }

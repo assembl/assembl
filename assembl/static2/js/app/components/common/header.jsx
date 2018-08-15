@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import { connect } from 'react-redux';
 import { Grid, Row } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
-import { getPhaseName, getIfPhaseCompletedByIdentifier } from '../../utils/timeline';
+import { getPhaseName, getIfPhaseCompletedById } from '../../utils/timeline';
 import WhatYouNeedToKnow from '../debate/common/whatYouNeedToKnow';
 import HeaderActions from '../debate/common/headerActions';
 import { type DebateType } from '../debate/navigation/timelineSegment';
@@ -14,7 +14,7 @@ type Props = {
   title: string,
   subtitle: string,
   imgUrl: ?string,
-  identifier: string,
+  phaseId: string,
   synthesisTitle?: string,
   additionalHeaderClasses: string,
   type: string,
@@ -24,10 +24,10 @@ type Props = {
 
 class Header extends React.Component<Props> {
   render() {
-    const { children, title, subtitle, imgUrl, identifier, synthesisTitle, additionalHeaderClasses, type, timeline } = this.props;
+    const { children, title, subtitle, imgUrl, phaseId, synthesisTitle, additionalHeaderClasses, type, timeline } = this.props;
     const { debateData } = this.props.debate;
-    const isPhaseCompleted = getIfPhaseCompletedByIdentifier(timeline, identifier);
-    const closedPhaseName = getPhaseName(timeline, identifier).toLowerCase();
+    const isPhaseCompleted = getIfPhaseCompletedById(timeline, phaseId);
+    const closedPhaseName = getPhaseName(timeline, phaseId).toLowerCase();
     const titleClassNames = classnames([additionalHeaderClasses], 'light-title-7');
     return (
       <div className="header-section-container">
@@ -42,7 +42,7 @@ class Header extends React.Component<Props> {
                 </h6>
               )}
             </div>
-            {type ? <HeaderActions identifier={identifier} useSocialMedia={debateData.useSocialMedia} type={type} /> : null}
+            {type ? <HeaderActions useSocialMedia={debateData.useSocialMedia} type={type} /> : null}
           </Grid>
           <Grid fluid>
             <Row>

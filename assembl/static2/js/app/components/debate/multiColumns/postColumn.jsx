@@ -16,6 +16,7 @@ type Props = {
   data: Array<Post>,
   ideaId: string,
   identifier: string,
+  phaseId: string,
   initialRowIndex: number,
   lang: string,
   noRowsRenderer: Function,
@@ -33,6 +34,7 @@ const PostColumn = ({
   data,
   ideaId,
   identifier,
+  phaseId,
   initialRowIndex,
   lang,
   noRowsRenderer,
@@ -59,6 +61,7 @@ const PostColumn = ({
           InnerComponentFolded={FoldedPost}
           SeparatorComponent={Separator}
           identifier={identifier}
+          phaseId={phaseId}
         />
       ) : (
         noRowsRenderer()

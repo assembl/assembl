@@ -95,6 +95,7 @@ export class DumbDebateLink extends React.Component<DebateLinkProps, DebateLinkS
             {activeSegmentPhase && (
               <TimelineSegmentMenu
                 phaseIdentifier={activeSegmentPhase.identifier}
+                phaseId={activeSegmentPhase.id}
                 title={activeSegmentPhase.title}
                 onMenuItemClick={this.hideMenu}
                 startDate={activeSegmentPhase.start}

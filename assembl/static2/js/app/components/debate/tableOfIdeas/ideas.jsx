@@ -10,7 +10,8 @@ import { SMALL_SCREEN_WIDTH } from '../../../constants';
 type Props = {
   rootIdeaId: string,
   ideas: Array<Idea>,
-  identifier: string
+  identifier: string,
+  phaseId: string
 };
 
 type State = {
@@ -83,7 +84,7 @@ class Ideas extends React.Component<Props, State> {
 
   render() {
     const isMobile = window.innerWidth < SMALL_SCREEN_WIDTH;
-    const { identifier } = this.props;
+    const { identifier, phaseId } = this.props;
     const { ideaLevel, selectedIdeasId, selectedIdeaIndex, goBack } = this.state;
     return (
       <section className={classnames('themes-section', 'ideas-section', { 'mobile-ideas-section': isMobile })}>
@@ -104,6 +105,7 @@ class Ideas extends React.Component<Props, State> {
                     key={`ideas-level-${index}`}
                     ideas={this.getIdeaChildren(ideaId)}
                     identifier={identifier}
+                    phaseId={phaseId}
                     setSelectedIdeas={this.setSelectedIdeas}
                     nbLevel={selectedIdeasId.length}
                     ideaLevel={index + 1}
@@ -116,6 +118,7 @@ class Ideas extends React.Component<Props, State> {
                     key={`ideas-level-${index}`}
                     ideas={goBack ? this.getIdeaParents(index) : this.getIdeaChildren(ideaId)}
                     identifier={identifier}
+                    phaseId={phaseId}
                     setSelectedIdeas={this.setSelectedIdeas}
                     ideaLevel={index + 1}
                     selectedIdeasId={selectedIdeasId}

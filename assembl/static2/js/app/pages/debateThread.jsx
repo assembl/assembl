@@ -8,12 +8,14 @@ import AllIdeasQuery from '../graphql/AllIdeasQuery.graphql';
 
 const DebateThread = ({ identifier, data, params, children }) => {
   const { loading, ideas, rootIdea } = data;
-  const isParentRoute = !params.themeId || false;
+  const phaseId = params.phaseId || null;
   const themeId = params.themeId || null;
+  const isParentRoute = !themeId || false;
   const childrenElm = React.Children.map(children, child =>
     React.cloneElement(child, {
       id: themeId,
-      identifier: identifier
+      identifier: identifier,
+      phaseId: phaseId
     })
   );
 
@@ -22,7 +24,9 @@ const DebateThread = ({ identifier, data, params, children }) => {
       {loading && isParentRoute && <Loader color="black" />}
       {!loading &&
         ideas &&
-        isParentRoute && <Ideas ideas={ideas} rootIdeaId={rootIdea.id} identifier={identifier} key={identifier} />}
+        isParentRoute && (
+          <Ideas ideas={ideas} rootIdeaId={rootIdea.id} identifier={identifier} key={identifier} phaseId={phaseId} />
+        )}
       {!isParentRoute && <section className="debate-section">{childrenElm}</section>}
     </div>
   );

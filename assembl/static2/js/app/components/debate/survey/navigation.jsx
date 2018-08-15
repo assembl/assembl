@@ -3,7 +3,7 @@ import { Grid, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
 import { getDomElementOffset, calculatePercentage } from '../../../utils/globalFunctions';
-import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
+import { getIfPhaseCompletedById } from '../../../utils/timeline';
 import { SMALL_SCREEN_WIDTH } from '../../../constants';
 import { withScreenDimensions } from '../../common/screenDimensions';
 
@@ -74,8 +74,8 @@ class Navigation extends React.Component {
     const limitToHide = getDomElementOffset(firstTextarea).top + firstTextarea.clientHeight;
     const limitToShow = limitToHide + document.getElementById('nav').clientHeight;
     const windowOffset = window.pageYOffset + this.props.screenHeight;
-    const { timeline } = this.props;
-    const isPhaseCompleted = getIfPhaseCompletedByIdentifier(timeline, 'survey');
+    const { timeline, phaseId } = this.props;
+    const isPhaseCompleted = getIfPhaseCompletedById(timeline, phaseId);
     if (windowOffset < limitToHide && !isPhaseCompleted) {
       this.setState({
         isHidden: true

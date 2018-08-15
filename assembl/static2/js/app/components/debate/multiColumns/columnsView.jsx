@@ -5,7 +5,7 @@ import { I18n } from 'react-redux-i18n';
 
 import PostColumn from './postColumn';
 import { orderPostsByMessageClassifier } from './utils';
-import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
+import { getIfPhaseCompletedById } from '../../../utils/timeline';
 import TabbedColumns from './tabbedColumns';
 import MultiColumns from './multiColumns';
 import hashLinkScroll from '../../../utils/hashLinkScroll';
@@ -35,13 +35,14 @@ class ColumnsView extends React.Component<$FlowFixMeProps> {
       refetchIdea,
       routerParams,
       identifier,
+      phaseId,
       debateData,
       timeline
     } = this.props;
     if (!Array.isArray(messageColumns)) return null;
     const showSynthesis = messageColumns.some(column => !!get(column, 'columnSynthesis.body'));
     const columnsArray = orderPostsByMessageClassifier(messageColumns, posts);
-    const isPhaseCompleted = getIfPhaseCompletedByIdentifier(timeline, identifier);
+    const isPhaseCompleted = getIfPhaseCompletedById(timeline, phaseId);
     let ColumnsComponent;
     if (this.shouldShowTabs(messageColumns.length)) {
       ColumnsComponent = TabbedColumns;
@@ -56,6 +57,7 @@ class ColumnsView extends React.Component<$FlowFixMeProps> {
             const synthesisProps = showSynthesis && {
               classifier: classifier,
               debateData: debateData,
+              phaseId: phaseId,
               identifier: identifier,
               mySentiment: get(col, 'columnSynthesis.mySentiment', null),
               routerParams: routerParams,
@@ -81,6 +83,7 @@ class ColumnsView extends React.Component<$FlowFixMeProps> {
                 ideaId={ideaId}
                 refetchIdea={refetchIdea}
                 identifier={identifier}
+                phaseId={phaseId}
                 withColumnHeader={!isPhaseCompleted}
               />
             );

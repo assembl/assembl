@@ -6,20 +6,12 @@ import TimelineSegment from './timelineSegment';
 type TimelineProps = {
   timeline: Timeline,
   showNavigation: boolean,
-  identifier: string,
   activeSegment: number,
   onItemSelect: Function,
   onItemDeselect: Function
 };
 
-export function DumbTimeline({
-  timeline,
-  activeSegment,
-  showNavigation,
-  identifier,
-  onItemSelect,
-  onItemDeselect
-}: TimelineProps) {
+export function DumbTimeline({ timeline, activeSegment, showNavigation, onItemSelect, onItemDeselect }: TimelineProps) {
   return (
     <div className="timeline-container">
       {timeline &&
@@ -32,8 +24,8 @@ export function DumbTimeline({
             barPercent={getBarPercent(timeline[index])}
             isCurrentPhase={isCurrentPhase(timeline[index])}
             showNavigation={showNavigation}
-            identifier={identifier}
             phaseIdentifier={phase.identifier}
+            phaseId={phase.id}
             startDate={phase.start}
             endDate={phase.end}
             isStepCompleted={isStepCompleted(phase)}

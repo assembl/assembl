@@ -14,7 +14,7 @@ import { convertContentStateToHTML, editorStateIsEmpty } from '../../../utils/dr
 import RichTextEditor from '../../common/richTextEditor';
 import attachmentsPlugin from '../../common/richTextEditor/attachmentsPlugin';
 import { BODY_MAX_LENGTH } from '../common/topPostForm';
-import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
+import { getIfPhaseCompletedById } from '../../../utils/timeline';
 import { scrollToPost } from '../../../utils/hashLinkScroll';
 
 type AnswerFormProps = {
@@ -27,7 +27,7 @@ type AnswerFormProps = {
   textareaRef: Function,
   uploadDocument: Function,
   timeline: Timeline,
-  identifier: string,
+  phaseId: string,
   handleAnswerClick: Function
 };
 
@@ -48,8 +48,8 @@ class AnswerForm extends React.PureComponent<AnswerFormProps, AnswerFormState> {
   }
 
   componentWillMount() {
-    const { identifier, timeline } = this.props;
-    const isPhaseCompleted = getIfPhaseCompletedByIdentifier(timeline, identifier);
+    const { phaseId, timeline } = this.props;
+    const isPhaseCompleted = getIfPhaseCompletedById(timeline, phaseId);
     if (isPhaseCompleted) this.setState({ isHidden: true });
   }
 

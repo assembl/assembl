@@ -13,7 +13,7 @@ import Header from '../components/common/header';
 import Question from '../components/debate/survey/question';
 import Navigation from '../components/debate/survey/navigation';
 import Proposals from '../components/debate/survey/proposals';
-import { getIfPhaseCompletedByIdentifier } from '../utils/timeline';
+import { getIfPhaseCompletedById } from '../utils/timeline';
 import ThematicQuery from '../graphql/ThematicQuery.graphql';
 import { displayAlert } from '../utils/utilityManager';
 import { get as getRoute } from '../utils/routeMap';
@@ -35,6 +35,7 @@ type QuestionType = {
 };
 
 type SurveyProps = {
+  phaseId: string,
   timeline: Timeline,
   defaultContentLocaleMapping: Map,
   hasErrors: boolean,
@@ -128,17 +129,18 @@ class Survey extends React.Component<SurveyProps, SurveyState> {
       title,
       slug,
       totalSentiments,
-      timeline
+      timeline,
+      phaseId
     } = this.props;
-    const isPhaseCompleted = getIfPhaseCompletedByIdentifier(timeline, 'survey');
-    const phaseUrl = `${getRoute('debate', { slug: slug, phase: 'survey' })}`;
+    const isPhaseCompleted = getIfPhaseCompletedById(timeline, phaseId);
+    const phaseUrl = `${getRoute('debate', { slug: slug, phase: 'survey', phaseId: phaseId })}`;
     let statElements = [];
     const numContributions = numPosts + totalSentiments;
     statElements = [statMessages(numPosts), statContributions(numContributions), statParticipants(numContributors)];
     return (
       <div className="survey">
         <div className="relative">
-          <Header title={title} imgUrl={imgUrl} identifier="survey" type="idea">
+          <Header title={title} imgUrl={imgUrl} phaseId={phaseId} type="idea">
             <HeaderStatistics statElements={statElements} />
           </Header>
           {media && <Media {...media} />}
@@ -146,6 +148,7 @@ class Survey extends React.Component<SurveyProps, SurveyState> {
             {questions &&
               questions.map((question, index) => (
                 <Question
+                  phaseId={phaseId}
                   title={question.title}
                   index={index + 1}
                   key={index}
@@ -161,6 +164,7 @@ class Survey extends React.Component<SurveyProps, SurveyState> {
               questionIndex={this.state.questionIndex}
               isScroll={this.state.isScroll}
               scrollToQuestion={this.scrollToQuestion}
+              phaseId={phaseId}
             />
           )}
           <div className="proposals" style={{ minHeight: '100px' }}>
@@ -186,6 +190,7 @@ class Survey extends React.Component<SurveyProps, SurveyState> {
                             posts={question.posts.edges}
                             questionIndex={index + 1}
                             questionId={question.id}
+                            phaseId={phaseId}
                             phaseUrl={phaseUrl}
                             key={index}
                           />

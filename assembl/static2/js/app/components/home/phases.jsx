@@ -37,6 +37,7 @@ class Phases extends React.Component {
                       title={phase.title}
                       description={phase.description}
                       identifier={phase.identifier}
+                      phaseId={phase.id}
                     />
                   </Col>
                 ))}

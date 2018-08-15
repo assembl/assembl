@@ -7,7 +7,7 @@ import { Grid, Col, Button } from 'react-bootstrap';
 import { EditorState } from 'draft-js';
 
 import { getConnectedUserId } from '../../../utils/globalFunctions';
-import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
+import { getIfPhaseCompletedById } from '../../../utils/timeline';
 import { inviteUserToLogin, displayAlert } from '../../../utils/utilityManager';
 import createPostMutation from '../../../graphql/mutations/createPost.graphql';
 import { SMALL_SCREEN_WIDTH, MINIMUM_BODY_LENGTH } from '../../../constants';
@@ -20,6 +20,7 @@ type QuestionProps = {
   timeline: Timeline,
   contentLocale: string,
   questionId: string,
+  phaseId: string,
   scrollToQuestion: Function,
   index: number,
   refetchTheme: Function,
@@ -92,7 +93,7 @@ class Question extends React.Component<QuestionProps, QuestionState> {
   };
 
   render() {
-    const { index, title, screenWidth, screenHeight } = this.props;
+    const { phaseId, index, title, screenWidth, screenHeight } = this.props;
     let height = screenHeight;
     const timelineElm = document && document.getElementById('timeline');
     // This is necessary to bypass an issue with Flow
@@ -100,7 +101,7 @@ class Question extends React.Component<QuestionProps, QuestionState> {
       height = screenHeight - timelineElm.clientHeight;
     }
     const { timeline } = this.props;
-    const isPhaseCompleted = getIfPhaseCompletedByIdentifier(timeline, 'survey');
+    const isPhaseCompleted = getIfPhaseCompletedById(timeline, phaseId);
     return (
       <section
         className={isPhaseCompleted ? 'hidden' : 'questions-section'}
