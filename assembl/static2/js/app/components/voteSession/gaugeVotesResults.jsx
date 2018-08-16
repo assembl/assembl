@@ -14,7 +14,7 @@ const GaugeVotesResult = ({ title, instructions }: GaugeVotesResultProps) => (
       <div className="margin-s">
         <Translate value="debate.voteSession.estimate" />
       </div>
-      <div className="margin-s">{title}</div>
+      <span className="margin-s">{title}</span>
     </div>
   </div>
 );

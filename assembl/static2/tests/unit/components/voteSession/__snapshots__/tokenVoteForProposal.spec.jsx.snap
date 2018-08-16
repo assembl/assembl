@@ -10,7 +10,9 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
   <div
     className="tokens-line"
   >
-    <p>
+    <p
+      className="text"
+    >
       Positive
     </p>
     <div
@@ -523,7 +525,9 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
   <div
     className="tokens-line"
   >
-    <p>
+    <p
+      className="text"
+    >
       Negative
     </p>
     <div
@@ -962,7 +966,9 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
   <div
     className="tokens-line"
   >
-    <p>
+    <p
+      className="text"
+    >
       Positive
     </p>
     <div
@@ -1475,7 +1481,9 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
   <div
     className="tokens-line"
   >
-    <p>
+    <p
+      className="text"
+    >
       Negative
     </p>
     <div

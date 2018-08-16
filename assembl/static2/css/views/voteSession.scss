@@ -4,7 +4,7 @@
   }
 
   .vote-instructions {
-    padding: 0 20px;
+    padding: 0 10px;
     font-size: $font-size-m;
     font-family: $font-family4;
     max-width: 780px;
@@ -20,18 +20,21 @@
 
     .category-available-tokens {
       display: flex;
-      padding: 0 0 15px;
       max-width: 780px;
       margin-left: -5px;
 
+      h2 {
+        margin-top: 7px;
+      }
+
       .tokens {
         padding-left: 10px;
-        padding-top: 25px;
+        padding-top: 9px;
       }
 
       .text {
         width: 340px;
-        padding: 0 0 0 10px;
+        margin: 0;
       }
 
       span {
@@ -242,7 +245,7 @@
     .box {
       border: 1px solid $grey5;
       margin-top: 30px;
-      height: 120px;
+      height: 140px;
     }
 
     .tokens-box {
@@ -285,7 +288,7 @@
   }
 
   .gauge-box__instructions {
-    font-size: $font-size-xs;
+    font-size: $font-size-s;
   }
 
   .gauge-box__estimate {
@@ -295,6 +298,7 @@
   .separator {
     border-bottom: 1px $btn-dark-border-style $grey5;
     max-width: 745px;
+    margin-left: -5px;
   }
 }
 
@@ -317,7 +321,7 @@
     }
 
     .tokens-box {
-      padding: 10px 0 0;
+      padding: 19px 0 0;
     }
   }
 }

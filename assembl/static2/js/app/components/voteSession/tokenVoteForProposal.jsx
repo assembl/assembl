@@ -52,7 +52,7 @@ const TokenVoteForProposal = ({
 
           return (
             <div key={id} className="tokens-line">
-              <p>{title}</p>
+              <p className="text">{title}</p>
               <div className="tokens">
                 {range(totalNumber).map((n) => {
                   const notEnoughTokens = n + 1 > currentVote + remainingTokensByCategory.get(id);

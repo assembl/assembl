@@ -83,7 +83,7 @@ const AvailableTokens = ({ remainingTokensByCategory, sticky, tokenCategories, w
                         className="tokens"
                         style={
                           (sticky && tokenCategories.length % 2 !== 0 && tokenCategories.length > 2) || windowWidth < 400
-                            ? { maxWidth: '160px' }
+                            ? { maxWidth: '300px' }
                             : { minWidth: '360px' }
                         }
                       >

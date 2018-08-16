@@ -36,7 +36,9 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
         <div
           className="tokens-line"
         >
-          <p>
+          <p
+            className="text"
+          >
             Positive
           </p>
           <div
@@ -433,7 +435,9 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
         <div
           className="tokens-line"
         >
-          <p>
+          <p
+            className="text"
+          >
             Negative
           </p>
           <div
