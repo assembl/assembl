@@ -102,6 +102,7 @@ def get_data(content):
     """Return uid, dict of fields we want to index,
     return None if we don't index."""
     from assembl.models import Idea, Post, PropositionPost, SynthesisPost, AgentProfile, LangString, Extract
+    from assembl.models.timeline import Phases
     if type(content) == Idea:  # only index Idea, not Thematic or Question
         data = {}
         for attr in ('creation_date', 'id', 'discussion_id'):
@@ -167,9 +168,9 @@ def get_data(content):
 #        data['publishes_synthesis_id'] = getattr(
 #            content, 'publishes_synthesis_id', None)
         if isinstance(content, PropositionPost):
-            data['phase_id'] = 'survey'
+            data['phase_id'] = Phases.survey.value
         else:
-            data['phase_id'] = 'thread'
+            data['phase_id'] = Phases.thread.value
 
         if isinstance(content, SynthesisPost):
             populate_from_langstring_prop(content.publishes_synthesis,
@@ -204,9 +205,9 @@ def get_data(content):
         post = Post.get(content.content_id)
         populate_from_langstring_prop(post, data, 'subject')
         if isinstance(post, PropositionPost):
-            data['phase_id'] = 'survey'
+            data['phase_id'] = Phases.survey.value
         else:
-            data['phase_id'] = 'thread'
+            data['phase_id'] = Phases.thread.value
 
         idea_id = get_idea_id_for_post(post)
         if not idea_id:
