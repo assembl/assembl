@@ -758,7 +758,7 @@ class AddPostsExtract(graphene.Mutation):
         extracts = args.get('extracts')
         status = True
         extract_nature = args.get('extract_nature', None)
-        extract_nature = models.ExtractNatureVocabulary.Enum[extract_nature] if extract_nature else None
+        extract_nature = models.ExtractNatureVocabulary.Enum(extract_nature) if extract_nature else None
         extract_state = args.get('extract_state', None)
         # Add all of extracts
         for extract in extracts:
