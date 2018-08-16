@@ -16,7 +16,7 @@ def test_get_data_for_extract(extract_submitted_in_post_related_to_sub_idea_1_1_
     assert data['phase_id'] == u'thread'
     assert data['body'] == u"Commodi maiores magni rerum. Sint natus corporis in qui in ut dignissimos cumque repellendus. Reprehenderit nihil illum."
     assert data['extract_state'] == u'taxonomy_state.PUBLISHED'
-    assert data['creation_date'].date() == datetime.date(2018, 8, 7)
+    assert data['creation_date'].date() == datetime.date.today()
     assert data['extract_nature'] == 'taxonomy_nature.actionable_solution'
     assert data['extract_action'] == 'taxonomy_action.give_examples'
     assert data['creator_display_name'] == u'James T. Expert'
