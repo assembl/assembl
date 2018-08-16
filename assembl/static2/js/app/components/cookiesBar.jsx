@@ -26,12 +26,13 @@ export class DumbCookiesBar extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     const { acceptedCookies } = props;
-    const cookiesFromBrowser = getCookieItem('cookies_configuration').split(',');
+    const cookiesFromBrowser = getCookieItem('cookies_configuration');
+
     const shouldHideBar = acceptedCookies ?
       // acceptedCookies comes from the query and is only received if the user is logged in
       COOKIE_TYPES.some(cookie => acceptedCookies.includes(cookie)) :
       // if the user is not logged in, we check in the browser instead of the backend
-      COOKIE_TYPES.some(cookie => cookiesFromBrowser.includes(cookie));
+      COOKIE_TYPES.some(cookie => cookiesFromBrowser && cookiesFromBrowser.split(',').includes(cookie));
     this.state = { hide: shouldHideBar };
   }
 

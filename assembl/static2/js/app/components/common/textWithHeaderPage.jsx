@@ -14,7 +14,7 @@ type State = {};
 
 class DumbTextWithHeaderPage extends React.Component<TextWithHeaderPageProps, State> {
   static defaultProps = {
-    renderPageBody: text => (<div
+    renderPageBody: (text: string) => (<div
       className="ellipsis-content justify"
       dangerouslySetInnerHTML={{
         __html: text

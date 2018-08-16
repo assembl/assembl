@@ -2,14 +2,15 @@
 import React from 'react';
 import { I18n } from 'react-redux-i18n';
 import SwitchButton from '../common/switchButton';
-import { COOKIE_TYPES } from '../../constants';
+import { COOKIE_TRANSLATION_KEYS } from '../../constants';
 
 
 export type CookieObject = {
   name: string,
   category: string,
   accepted: boolean,
-  realName: string
+  cookieType: string,
+  hasChanged: boolean
 }
 
 type CookieToggleProps = {
@@ -26,7 +27,7 @@ const CookieToggle = ({ handleToggle, cookie }: CookieToggleProps) => {
 
   const { name, category, accepted } = cookie;
 
-  const cookieName = COOKIE_TYPES.includes(name) ? I18n.t(`cookies.${name}`) : name;
+  const cookieName = COOKIE_TRANSLATION_KEYS.includes(name) ? I18n.t(`cookies.${name}`) : name;
 
   return (
     <div className="cookie-toggle">

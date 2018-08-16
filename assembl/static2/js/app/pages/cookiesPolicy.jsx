@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { I18n, Translate } from 'react-redux-i18n';
 
 import TextWithHeaderPage from '../components/common/textWithHeaderPage';
-import CookiesSelector from '../components/cookies/cookiesSelector';
+import CookiesSelectorContainer from '../components/cookies/cookiesSelectorContainer';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
 import LegalContents from '../graphql/LegalContents.graphql';
 import type { State } from '../reducers/rootReducer';
@@ -25,7 +25,7 @@ const CookiesPolicy = ({ text, headerTitle, debateData }) => (
       key="text-with-header"
       renderPageBody={() => (
         <div className="page-body">
-          <CookiesSelector key="cookies-selector" />
+          <CookiesSelectorContainer key="cookies-selector" />
           <h2 className="dark-title-2">
             <Translate value="cookiesPolicy.sectionTitle" />
           </h2>

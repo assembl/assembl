@@ -65,11 +65,18 @@ export const PHASES = {
 };
 
 export const HARVESTABLE_PHASES = [PHASES.thread, PHASES.multiColumns];
+
 export const COOKIE_TYPES = [
   'ACCEPT_TRACKING_ON_DISCUSSION',
   'ACCEPT_SESSION_ON_DISCUSSION',
   'REJECT_TRACKING_ON_DISCUSSION',
   'REJECT_SESSION_ON_DISCUSSION'
+];
+
+export const COOKIE_TRANSLATION_KEYS = [
+  'userSession',
+  'locale',
+  'piwik'
 ];
 
 // Those states lists need to be kept in sync with models/post.py
