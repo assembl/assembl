@@ -13,4 +13,7 @@ storiesOf('Checkbox101', module)
   ))
   .add('checked', () => (
     <Checkbox101 checked />
+  ))
+  .add('custom label', () => (
+    <Checkbox101 label="Custom Label" />
   ));

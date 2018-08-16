@@ -18,11 +18,19 @@ describe('<Checkbox101 /> - with shallow', () => {
 
   it('should render one checkbox', () => {
     expect(wrapper.find('input [type=\'checkbox\']')).toHaveLength(1);
+    expect(wrapper.contains('Default')).toBe(true);
   });
 
   it('should render one checked checkbox', () => {
     wrapper.setProps({ checked: true });
 
     expect(wrapper.find('input [type=\'checkbox\'] [checked=true]')).toHaveLength(1);
+  });
+
+  it('should render one checkbox with a custom label', () => {
+    const customLabel = 'Custom Label';
+    wrapper.setProps({ label: customLabel });
+
+    expect(wrapper.contains(customLabel)).toBe(true);
   });
 });

@@ -146,6 +146,47 @@ exports[`Storyshots Checkbox101 checked 1`] = `
 </div>
 `;
 
+exports[`Storyshots Checkbox101 custom label 1`] = `
+<div
+  style={
+    Object {
+      "alignItems": "center",
+      "bottom": 0,
+      "display": "flex",
+      "left": 0,
+      "overflow": "auto",
+      "position": "fixed",
+      "right": 0,
+      "top": 0,
+    }
+  }
+>
+  <div
+    style={
+      Object {
+        "margin": "auto",
+        "maxHeight": "100%",
+      }
+    }
+  >
+    <div
+      className="integration checkbox"
+    >
+      <input
+        checked={false}
+        id="checkbox"
+        type="checkbox"
+      />
+      <label
+        htmlFor="checkbox"
+      >
+        Custom Label
+      </label>
+    </div>
+  </div>
+</div>
+`;
+
 exports[`Storyshots Checkbox101 default 1`] = `
 <div
   style={
