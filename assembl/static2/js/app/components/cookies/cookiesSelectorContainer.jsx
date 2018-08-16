@@ -12,6 +12,7 @@ import updateAcceptedCookies from '../../graphql/mutations/updateAcceptedCookies
 import withLoadingIndicator from '../common/withLoadingIndicator';
 
 import type { CookieObject } from './cookieToggle';
+import { COOKIE_TRANSLATION_KEYS } from '../../constants';
 
 type Props = {
   updateAcceptedCookies: Function,
@@ -61,13 +62,13 @@ class CookiesSelectorContainer extends React.Component<Props, State> {
 
   getCookieObject = (cookie: string) => {
     if (cookie.includes('SESSION_ON_DISCUSSION')) {
-      return { category: 'other', name: 'userSession', hasChanged: false };
+      return { category: 'other', name: COOKIE_TRANSLATION_KEYS.userSession, hasChanged: false };
     }
     if (cookie.includes('LOCALE_ON_DISCUSSION')) {
-      return { category: 'essential', name: 'locale', hasChanged: false };
+      return { category: 'essential', name: COOKIE_TRANSLATION_KEYS.locale, hasChanged: false };
     }
     if (cookie.includes('TRACKING_ON_DISCUSSION')) {
-      return { category: 'analytics', name: 'piwik', hasChanged: false };
+      return { category: 'analytics', name: COOKIE_TRANSLATION_KEYS.piwik, hasChanged: false };
     }
     return { category: 'other', name: cookie, hasChanged: false };
   };

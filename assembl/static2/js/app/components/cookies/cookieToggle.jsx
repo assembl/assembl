@@ -27,7 +27,7 @@ const CookieToggle = ({ handleToggle, cookie }: CookieToggleProps) => {
 
   const { name, category, accepted } = cookie;
 
-  const cookieName = COOKIE_TRANSLATION_KEYS.includes(name) ? I18n.t(`cookies.${name}`) : name;
+  const cookieName = Object.keys(COOKIE_TRANSLATION_KEYS).includes(name) ? I18n.t(`cookies.${name}`) : name;
 
   return (
     <div className="cookie-toggle">

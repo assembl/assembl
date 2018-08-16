@@ -73,11 +73,12 @@ export const COOKIE_TYPES = [
   'REJECT_SESSION_ON_DISCUSSION'
 ];
 
-export const COOKIE_TRANSLATION_KEYS = [
-  'userSession',
-  'locale',
-  'piwik'
-];
+export const COOKIE_TRANSLATION_KEYS = {
+  userSession: 'userSession',
+  locale: 'locale',
+  piwik: 'piwik'
+};
+
 
 // Those states lists need to be kept in sync with models/post.py
 export const PublicationStates = {
