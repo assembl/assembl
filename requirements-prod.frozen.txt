@@ -56,8 +56,8 @@ first==2.0.1              # via pip-tools
 flaky==3.1.1
 funcsigs==1.0.2
 future==0.15.2
-gnureadline==6.3.8        # via ipython
 futures==3.2.0            # via s3transfer
+gnureadline==6.3.8        # via ipython
 google-api-python-client==1.6.6
 graphene-sqlalchemy==1.1.1
 graphene==1.4.1
@@ -158,10 +158,12 @@ uwsgitop==0.9
 venusian==1.1.0           # via pyramid
 verboselogs==1.7
 vine==1.1.4               # via amqp
+watson_developer_cloud==2.4.1
 webob==1.6.1
+websocket-client==0.47.0  # via watson-developer-cloud
 werkzeug==0.11.10
 zope.component==4.2.2
 zope.deprecation==4.3.0   # via pyramid, pyramid-jinja2
 zope.event==4.3.0         # via zope.component
-zope.interface==4.2.0
+zope.interface==4.5.0
 zope.sqlalchemy==0.7.7

@@ -198,11 +198,13 @@ verboselogs==1.7
 vine==1.1.4               # via amqp
 virtualenv==15.2.0        # via pre-commit
 waitress==1.1.0           # via webtest
+watson_developer_cloud==2.4.1
 webob==1.6.1
+websocket-client==0.47.0  # via watson-developer-cloud
 webtest==2.0.21
 werkzeug==0.11.10
 zope.component==4.2.2
 zope.deprecation==4.3.0   # via pyramid, pyramid-jinja2
 zope.event==4.3.0         # via zope.component
-zope.interface==4.2.0
+zope.interface==4.5.0
 zope.sqlalchemy==0.7.7
