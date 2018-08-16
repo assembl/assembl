@@ -182,6 +182,13 @@ export function setCookieItem(name: string, value: any) {
   document.cookie = `${name}=${value}; path=/;expires=${date.toString()}`;
 }
 
+export function deleteCookieItem(name: string, path: string) {
+  if (getCookieItem(name)) {
+    // Set an expiration date in the past to delete the cookie in the browser
+    document.cookie = `${name}=;path=${path};expires=Thu, 28 Aug 1993 00:00:01 GTM;`;
+  }
+}
+
 export const createRandomId = (): string => Math.round(Math.random() * -1000000).toString();
 
 export const isOrContains = (n: any, c: any) => {
