@@ -1,6 +1,5 @@
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import Loader from '../components/common/loader';
 import ThematicsQuery from '../graphql/ThematicsQuery.graphql';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
 import { browserHistory } from '../router';
@@ -9,28 +8,20 @@ import { displayAlert } from '../utils/utilityManager';
 
 class BrightMirror extends React.Component {
   componentDidMount() {
-    const { data, params } = this.props;
-    const isParentRoute = !params.themeId || false;
+    const { thematics, params } = this.props;
+    const isParentRoute = !params.themeId;
     // After fetching thematics, redirect to the only BM thematic
-    if (isParentRoute && data.thematics.length > 0) {
-      const themeId = data.thematics[0].id;
+    if (isParentRoute && thematics.length > 0) {
+      const themeId = thematics[0].id;
       browserHistory.push(`${get('idea', { slug: params.slug, phase: params.phase, themeId: themeId })}`);
     }
   }
 
   render() {
-    const { data, hasErrors, identifier, loading, children, params } = this.props;
-    const isParentRoute = !!params.themeId || false;
-    if (hasErrors) {
-      displayAlert('danger', `${data.error}`);
+    const { errors, identifier, children, params } = this.props;
+    if (errors) {
+      displayAlert('danger', `${errors}`);
       return <div />;
-    }
-    if (isParentRoute && loading) {
-      return (
-        <div className="debate">
-          {loading && isParentRoute && <Loader color="black" />}
-        </div>
-      );
     }
     const childrenElm = React.Children.map(children, child =>
       React.cloneElement(child, {
@@ -57,15 +48,13 @@ export default compose(
 
       if (data.error) {
         return {
-          hasErrors: true,
-          data: data,
+          errors: data.error,
           loading: false
         };
       }
 
       return {
-        hasErrors: false,
-        data: data,
+        thematics: data.thematics,
         loading: false
       };
     }

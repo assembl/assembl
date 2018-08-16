@@ -16,7 +16,7 @@ import ColumnsView from '../components/debate/multiColumns/columnsView';
 import ThreadView from '../components/debate/thread/threadView';
 import { DeletedPublicationStates } from '../constants';
 import HeaderStatistics, { statContributions, statMessages, statParticipants } from '../components/common/headerStatistics';
-import BrightMirrorInstructionView from '../components/debate/brightMirror/brightMirrorInstructionView';
+import InstructionView from '../components/debate/brightMirror/InstructionView';
 
 const deletedPublicationStates = Object.keys(DeletedPublicationStates);
 
@@ -232,7 +232,7 @@ class Idea extends React.Component {
     if (isMultiColumns) {
       view = <ColumnsView {...childProps} routerParams={routerParams} />;
     } else if (isBrightMirror) {
-      view = <BrightMirrorInstructionView {...childProps} announcementContent={announcement} />;
+      view = <InstructionView {...childProps} announcementContent={announcement} />;
     } else {
       view = <ThreadView {...childProps} />;
     }

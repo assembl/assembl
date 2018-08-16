@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactTestRenderer from 'react-test-renderer';
 
-import BrightMirrorInstructionView from '../../../js/app/components/debate/brightMirror/brightMirrorInstructionView';
+import InstructionView from '../../../../../js/app/components/debate/brightMirror/InstructionView';
 
 describe('Bright Mirror page', () => {
   it('should match BrightMirror instruction snapshot', () => {
@@ -11,7 +11,7 @@ describe('Bright Mirror page', () => {
         body: 'Participez à la création de fiction'
       }
     };
-    const rendered = ReactTestRenderer.create(<BrightMirrorInstructionView {...props} />).toJSON();
+    const rendered = ReactTestRenderer.create(<InstructionView {...props} />).toJSON();
     expect(rendered).toMatchSnapshot();
   });
 });
