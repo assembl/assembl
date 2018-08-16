@@ -6,7 +6,7 @@ import { compose, graphql } from 'react-apollo';
 import { Link } from 'react-router';
 import { Button } from 'react-bootstrap';
 import classnames from 'classnames';
-import { getCookieItem, setCookieItem, getDiscussionSlug, getDiscussionId } from '../utils/globalFunctions';
+import { getCookieItem, setCookieItem, getDiscussionSlug } from '../utils/globalFunctions';
 import { get } from '../utils/routeMap';
 import updateAcceptedCookies from '../graphql/mutations/updateAcceptedCookies.graphql';
 import acceptedCookiesQuery from '../graphql/acceptedCookiesQuery.graphql';
@@ -22,27 +22,24 @@ type Props = {
   updateAcceptedCookies: Function
 };
 
-const discussionId = getDiscussionId();
-
-const formattedCookieNames = COOKIE_TYPES.map(cookie => discussionId && `${cookie}_${discussionId}`);
-
-
 export class DumbCookiesBar extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     const { acceptedCookies } = props;
+    const cookiesFromBrowser = getCookieItem('cookies_configuration').split(',');
     const shouldHideBar = acceptedCookies ?
       // acceptedCookies comes from the query and is only received if the user is logged in
       COOKIE_TYPES.some(cookie => acceptedCookies.includes(cookie)) :
       // if the user is not logged in, we check in the browser instead of the backend
-      formattedCookieNames.some(cookie => cookie && getCookieItem(cookie) === 'true');
+      COOKIE_TYPES.some(cookie => cookiesFromBrowser.includes(cookie));
     this.state = { hide: shouldHideBar };
   }
 
   acceptAllCookies = () => {
+    const acceptCookiesTypes = COOKIE_TYPES.filter(cookie => cookie.includes('ACCEPT'));
     // acceptedCookies are stored both on the user model and in the browser
-    this.props.updateAcceptedCookies({ variables: { actions: COOKIE_TYPES } });
-    formattedCookieNames.forEach(cookie => cookie && setCookieItem(cookie, 'true'));
+    this.props.updateAcceptedCookies({ variables: { actions: acceptCookiesTypes } });
+    setCookieItem('cookies_configuration', acceptCookiesTypes);
     this.setState({
       hide: true
     });
