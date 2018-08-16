@@ -439,8 +439,8 @@ msgid ""
 msgstr "Code HTML personnalisé qui sera intégré sur la page d'inscription du débat, après le tag <body>"
 
 #: assembl/models/preferences.py:968 assembl/models/preferences.py:971
-msgid "Catalyst translations"
-msgstr "Traduction Catalyst"
+msgid "Harvesting translation"
+msgstr "Traduction d'attrapage"
 
 #: assembl/models/preferences.py:979
 msgid "Valid CORS paths for GraphQL API calls"
