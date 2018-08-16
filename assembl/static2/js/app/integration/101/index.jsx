@@ -5,7 +5,7 @@ import { Grid, Row, Col } from 'react-bootstrap';
 // Components for the main project should be created in the component folder in static2/js/app/components
 // Stories for the main project should be created in the stories folder in static2/js/app/stories
 // The import path used below is only used as an example for instruction purpose
-import Button101 from './components/button101';
+import Button101 from './components/button101/button101';
 
 type Props = {};
 
