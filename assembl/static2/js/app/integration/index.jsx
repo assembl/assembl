@@ -16,6 +16,9 @@ const index = () => (
           <li>
             <a href="/integration/101/index">HTML/CSS/React components integration 101</a>
           </li>
+          <li>
+            <a href="/integration/101/form-builder">Form builder example</a>
+          </li>
         </ListGroup>
       </Col>
     </Row>
