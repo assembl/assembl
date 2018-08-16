@@ -268,6 +268,7 @@ def extract_submitted_in_post_related_to_sub_idea_1_1_1(
         creator=participant2_user,
         owner=participant2_user,
         content=post_related_to_sub_idea_1_1_1,
+        extract_hash=u'extract_submitted_in_post_related_to_sub_idea_1_1_1',
         extract_nature=ExtractNatureVocabulary.Enum.actionable_solution,
         extract_action=ExtractActionVocabulary.Enum.give_examples
     )
