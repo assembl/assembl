@@ -19,4 +19,10 @@ describe('<Checkbox101 /> - with shallow', () => {
   it('should render one checkbox', () => {
     expect(wrapper.find('input [type=\'checkbox\']')).toHaveLength(1);
   });
+
+  it('should render one checked checkbox', () => {
+    wrapper.setProps({ checked: true });
+
+    expect(wrapper.find('input [type=\'checkbox\'] [checked=true]')).toHaveLength(1);
+  });
 });
