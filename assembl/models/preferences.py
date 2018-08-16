@@ -13,11 +13,11 @@ from sqlalchemy import (
     ForeignKey,
 )
 from sqlalchemy.orm import relationship
-from ..lib.sqla_types import CoerceUnicode
+from assembl.lib.sqla_types import CoerceUnicode
 from pyramid.httpexceptions import HTTPUnauthorized
 
 from . import Base, DeclarativeAbstractMeta, NamedClassMixin
-from ..auth import (
+from assembl.auth import (
     ASSEMBL_PERMISSIONS,
     Authenticated,
     CrudPermissions,
@@ -51,9 +51,10 @@ from ..auth import (
     R_PARTICIPANT,
     SYSTEM_ROLES
 )
-from ..lib.abc import classproperty
-from ..lib.locale import _, strip_country
-from ..lib import config
+from assembl.lib.abc import classproperty
+from assembl.lib.locale import _, strip_country
+from assembl.lib.utils import is_valid_ipv4_address
+from assembl.lib import config
 
 
 def merge_json(base, patch):
@@ -289,8 +290,12 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
                     "value not allowed: " + value)
             elif data_type == "url":
                 from urlparse import urlparse
-                assert urlparse(value).scheme in (
-                    'http', 'https'), "Not a HTTP URL"
+                result = urlparse(value).scheme in (
+                    'http', 'https')
+                if not result:
+                    # Check if it's an IP address
+                    result = is_valid_ipv4_address(value)
+                assert result, "Not a valid address"
             elif data_type == "email":
                 from pyisemail import is_email
                 assert is_email(value), "Not an email"
@@ -956,6 +961,7 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
             "modification_permission": P_ADMIN_DISC,
             "default": None
         },
+
         # Harvesting translation
         {
             "id": "harvesting_translation",
@@ -965,7 +971,20 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
             "description": _("Harvesting translation"),
             "allow_user_override": P_READ,
             "default": None
-        }
+        },
+
+        # Valid CORS paths
+        {
+            "id": "graphql_valid_cors",
+            "name": _("Valid CORS paths for GraphQL API calls"),
+            "value_type": "list_of_url",
+            "show_in_preferences": True,
+            "description": _("A list of valid URLs or IP addresses that are allowed to make CORS api calls to the GraphQL API"),
+            "allow_user_override": False,
+            "default": [],
+            "item_default": ""
+        },
+
     ]
 
     # Precompute, this is not mutable.

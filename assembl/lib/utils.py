@@ -2,6 +2,7 @@
 import re
 import unidecode
 import inspect
+import socket
 from time import sleep
 from StringIO import StringIO
 from hashlib import sha256
@@ -141,4 +142,12 @@ def get_hash(*args):
     hasher = sha256()
     hasher.update(u''.join([unicode(a) for a in args]))
     return hasher.hexdigest()
-    
+
+
+def is_valid_ipv4_address(address):
+    try:
+        # Checks if is valid IPv4
+        socket.inet_aton(address)
+        return True
+    except socket.error:
+        return False
