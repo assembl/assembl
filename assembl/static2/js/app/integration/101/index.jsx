@@ -40,14 +40,14 @@ const index = () => (
         </ol>
 
         <h2>Instruction to follow when creating a component</h2>
-        <p>The instruction below uses `static2/js/app/integration/101/components/button101.jsx` example</p>
+        <p>The instruction below uses `static2/js/app/integration/101/components/button101` example</p>
         <ol>
           <li>Create the new component in `static2/js/app/components` (e.g. button101.jsx)</li>
-          <li>Display the new component in a page (created in the previous section for instance)</li>
           <li>Create or update its SCSS style from `static2/css/components`</li>
           <li>Create the new story in `static2/js/app/stories` (e.g. button101.stories.jsx)</li>
-          <li>Edit config.js in `static2/.storybook` and add the new story in `loadStories` </li>
-          <li>Display the component in the page</li>
+          <li>Edit config.js in `static2/.storybook` and add the new story in `loadStories`</li>
+          <li>Open localhost:9001 to display the component</li>
+          <li>Display the component in a page (created in the previous section for instance)</li>
           <li>Run `yarn test storybook.test.js` to snapshot the different component stories</li>
         </ol>
 

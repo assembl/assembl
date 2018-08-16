@@ -9,6 +9,7 @@ addDecorator(centered);
 
 function loadStories() {
   require('../js/app/integration/101/components/button101/button101.stories.jsx');
+  require('../js/app/integration/101/components/checkbox101/checkbox101.stories.jsx');
 
   // TODO: To clean ?
   // require('../js/app/stories/components/common/common.jsx');

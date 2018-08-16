@@ -104,3 +104,43 @@ exports[`Storyshots Button101 disabled 1`] = `
   </div>
 </div>
 `;
+
+exports[`Storyshots Checkbox101 default 1`] = `
+<div
+  style={
+    Object {
+      "alignItems": "center",
+      "bottom": 0,
+      "display": "flex",
+      "left": 0,
+      "overflow": "auto",
+      "position": "fixed",
+      "right": 0,
+      "top": 0,
+    }
+  }
+>
+  <div
+    style={
+      Object {
+        "margin": "auto",
+        "maxHeight": "100%",
+      }
+    }
+  >
+    <div
+      className="integration checkbox"
+    >
+      <input
+        id="checkbox"
+        type="checkbox"
+      />
+      <label
+        htmlFor="checkbox"
+      >
+        Default
+      </label>
+    </div>
+  </div>
+</div>
+`;
