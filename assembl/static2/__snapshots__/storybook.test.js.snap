@@ -24,7 +24,7 @@ exports[`Storyshots Button101 danger 1`] = `
     }
   >
     <button
-      className="integration btn btn-lg btn-danger"
+      className="integration button btn btn-lg btn-danger"
       disabled={false}
       onClick={[Function]}
       type="button"
@@ -59,7 +59,7 @@ exports[`Storyshots Button101 default 1`] = `
     }
   >
     <button
-      className="integration btn btn-lg btn-info"
+      className="integration button btn btn-lg btn-info"
       disabled={false}
       onClick={[Function]}
       type="button"
@@ -94,7 +94,7 @@ exports[`Storyshots Button101 disabled 1`] = `
     }
   >
     <button
-      className="integration btn btn-lg btn-info"
+      className="integration button btn btn-lg btn-info"
       disabled={true}
       onClick={[Function]}
       type="button"

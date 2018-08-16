@@ -18,7 +18,7 @@ const button101 = ({
   <Button
     bsStyle={buttonType}
     bsSize="large"
-    className="integration"
+    className="integration button"
     onClick={buttonTappedHandler}
     disabled={buttonIsDisabled}
   >
