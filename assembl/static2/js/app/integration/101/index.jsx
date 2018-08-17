@@ -39,6 +39,14 @@ const index = () => (
           </li>
         </ol>
 
+        <h2>Instruction to create unit test on containers/pages</h2>
+        <p>The instruction below uses `static2/js/app/integration/101/containers/formBuilder101.spec.jsx` example.</p>
+        <ol>
+          <li>Create a new component spec file in `static2/tests/unit/pages` (e.g. brightMirrorIndexPage_int.spec.jsx)</li>
+          <li>Write your specs to test the component display</li>
+          <li>Run `yarn test:watch` or `yarn test static2/tests/unit/pages/[your_spec_file]` to validate your unit tests</li>
+        </ol>
+
         <h2>Instruction to follow when creating a component</h2>
         <p>The instruction below uses `static2/js/app/integration/101/components/button101` example</p>
         <ol>
@@ -55,7 +63,7 @@ const index = () => (
         <p>The instruction below uses `static2/js/app/integration/101/components/button101.spec.jsx` example</p>
         <ol>
           <li>Create a new component spec file in `static2/tests/unit/components`</li>
-          <li>Write your spec to only test component inputs and outputs</li>
+          <li>Write your specs to only test component inputs and outputs</li>
           <li>Run `yarn test:watch` or `yarn test static2/tests/unit/components/[your_spec_file]` to validate your unit tests</li>
         </ol>
       </Col>
