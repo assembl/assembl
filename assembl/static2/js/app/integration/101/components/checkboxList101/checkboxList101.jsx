@@ -4,8 +4,10 @@ import React, { Fragment } from 'react';
 import Checkbox101 from '../checkbox101/checkbox101';
 
 type Props = {
-  checkboxes: Array<Checkbox101>, // List of checkboxes to display
-  onChangeHandler: Function // Required onChangeHandler function
+  /** List of checkboxes to display */
+  checkboxes: Array<Checkbox101>,
+  /** Required onChangeHandler function */
+  onChangeHandler: Function
 };
 
 const checkboxList101 = ({

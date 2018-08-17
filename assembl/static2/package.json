@@ -31,6 +31,7 @@
   "devDependencies": {
     "@storybook/addon-actions": "^3.4.10",
     "@storybook/addon-centered": "^3.4.10",
+    "@storybook/addon-info": "^3.4.10",
     "@storybook/addon-storyshots": "^3.4.10",
     "@storybook/react": "^3.4.10",
     "apollo-test-utils": "^0.3.0",

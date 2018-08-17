@@ -3,6 +3,7 @@ import React from 'react';
 /* eslint-disable */
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
+import { withInfo } from '@storybook/addon-info';
 /* eslint-enable */
 
 import CheckboxList101 from './checkboxList101';
@@ -20,15 +21,15 @@ const listOfcheckboxes = [
 const onChangeHandler = action('onChangeHandler');
 
 storiesOf('CheckboxList101', module)
-  .add('List of 5', () => (
+  .add('List of 5', withInfo()(() => (
     <CheckboxList101
       checkboxes={listOfcheckboxes}
       onChangeHandler={onChangeHandler}
     />
-  ))
-  .add('Empty list', () => (
+  )))
+  .add('Empty list', withInfo()(() => (
     <CheckboxList101
       checkboxes={listOfNone}
       onChangeHandler={onChangeHandler}
     />
-  ));
+  )));

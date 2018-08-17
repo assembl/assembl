@@ -2,9 +2,12 @@
 import React from 'react';
 
 type Props = {
-  label?: string, // Optional checkbox label
-  isDone?: boolean, // Optional checkbox state
-  onChangeHandler: Function // Required onChange function
+  /**  Optional checkbox label */
+  label?: string,
+  /** Optional checkbox state */
+  isDone?: boolean,
+  /** Required onChange function */
+  onChangeHandler: Function
 };
 
 const checkbox101 = ({

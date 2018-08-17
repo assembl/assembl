@@ -3,10 +3,14 @@ import React from 'react';
 import { Button } from 'react-bootstrap';
 
 type Props = {
-  label?: string, // Optional possible values: any strings
-  type?: string, // Optional possible types: 'info', 'danger'
-  onClickHandler: Function, // Required onClick function
-  isDisabled?: boolean // Optional flag to enable the button
+  /** Optional possible values: any strings */
+  label?: string,
+  /** Optional possible types: 'info', 'danger' */
+  type?: string,
+  /** Optional flag to enable the button */
+  isDisabled?: boolean,
+  /** Required onClick function */
+  onClickHandler: Function
 };
 
 const button101 = ({
