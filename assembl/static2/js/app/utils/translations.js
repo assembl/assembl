@@ -76,6 +76,7 @@ const Translations = {
         to: "Au"
       },
       published_on: "Publié le",
+      harvested_on: "Attrapé le",
       member_since: "Membre depuis le",
       by: "par",
       search_come_from_what_you_need_to_know: "Recherche effectuée dans la section \"à retenir\" de cette discussion",
@@ -83,10 +84,12 @@ const Translations = {
       collapse_search: "Fermer la recherche",
       Categories: "Catégories",
       All: "Tout",
+      extract: "Attrapages",
       post: "Messages",
       idea: "Idées",
       user: "Participants",
       synthesis: "Synthèse",
+      Extracts: "Attrapages",
       Messages: "Messages",
       Participants: "Participants",
       like: "J'aime",
@@ -116,6 +119,11 @@ const Translations = {
         display_tokens: "Activer le vote",
         display_open_questions: "Activer les questions ouvertes",
         display_bright_mirror: "Activer le Design Fiction"
+      },
+      State: "État",
+      taxonomy_state: {
+        SUBMITTED: "À valider",
+        PUBLISHED: "Publié"
       },
       Sort: "Trier",
       "By relevance": "Par pertinence",
@@ -854,15 +862,18 @@ const Translations = {
       search_come_from_what_you_need_to_know: "Search done in the \"What you need to know\" section of this discussion",
       search_come_from_announcement: "Search done in the \"announcement\" section of this discussion",
       published_on: "Published on",
+      harvested_on: "Harvested on",
       member_since: "Member since",
       by: "by",
       collapse_search: "Close search",
       Categories: "Categories",
       All: "All",
+      extract: "Extracts",
       post: "Messages",
       idea: "Ideas",
       user: "Participants",
       synthesis: "Synthesis",
+      Extracts: "Extracts",
       Messages: "Messages",
       Participants: "Participants",
       like: "Like",
@@ -892,6 +903,11 @@ const Translations = {
         display_tokens: "Display tokens",
         display_open_questions: "Display Open questions",
         display_bright_mirror: "Display Design Fiction"
+      },
+      State: "State",
+      taxonomy_state: {
+        SUBMITTED: "To validate",
+        PUBLISHED: "Published"
       },
       Sort: "Sort",
       "By relevance": "By relevance",

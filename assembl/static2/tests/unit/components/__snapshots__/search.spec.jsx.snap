@@ -1,0 +1,422 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Hits components DumbExtractHit component should render an extract hit 1`] = `
+<div
+  className="div__item"
+>
+  <span
+    className="IMGTYPE assembl-icon-discussion"
+  />
+  <div
+    className="TITLE"
+  />
+  <div
+    className="CONTENT"
+  >
+    <p
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "We need to connect the multi-byte SQL interface!",
+        }
+      }
+    />
+  </div>
+  <div
+    className="INFO"
+  >
+    <span
+      className={undefined}
+      style={undefined}
+    >
+      Harvested on
+    </span>
+     
+    <span
+      className={undefined}
+      style={undefined}
+    >
+      August 8th, 2018
+    </span>
+     
+    <span
+      className={undefined}
+      style={undefined}
+    >
+      by
+    </span>
+     
+    <div
+      className="sk-tag-filter"
+      onClick={[Function]}
+    >
+      <div
+        className="profileLine"
+      >
+        <div
+          className="inline"
+        >
+          <img
+            alt="Jewell Pouros"
+            height="30"
+            onError={[Function]}
+            src="/user/id/foo/avatar/30"
+            width="30"
+          />
+        </div>
+        <div
+          className="user"
+        >
+          <div
+            className="creator"
+          >
+            Jewell Pouros
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Hits components IdeaHit component should render an idea hit 1`] = `
+<div
+  className="div__item"
+>
+  <span
+    className="IMGTYPE assembl-icon-idea"
+  />
+  <div
+    className="TITLE"
+  />
+  <div
+    className="CONTENT"
+  >
+    <div>
+      <p
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": "Mollitia quis perspiciatis ut nobis molestias necessitatibus pariatur impedit ut.",
+          }
+        }
+      />
+      <p>
+        <span
+          className={undefined}
+          style={undefined}
+        >
+          Search done in the "What you need to know" section of this discussion
+        </span>
+      </p>
+    </div>
+  </div>
+  <div
+    className="INFO"
+  >
+    544
+    <span
+      className="ASSEMBL-ICON-MESSAGE"
+    >
+      <span
+        className="assembl-icon-message"
+        title="Number of contributions"
+      />
+    </span>
+    42
+    <span
+      className="ASSEMBL-ICON-AVATAR"
+    >
+      <span
+        className="assembl-icon-profil"
+        title="Number of users"
+      />
+    </span>
+  </div>
+</div>
+`;
+
+exports[`Hits components PostHit component should render a post hit 1`] = `
+<div
+  className="div__item"
+>
+  <span
+    className="IMGTYPE assembl-icon-discussion"
+  />
+  <div
+    className="TITLE"
+  />
+  <div
+    className="CONTENT"
+  >
+    <p
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "We need to connect the multi-byte SQL interface!",
+        }
+      }
+    />
+    <div>
+      <div
+        className="emoticon LikeSentimentOfPost"
+        title="Like"
+      />
+      <div
+        className="emoticonValue"
+      >
+        2
+      </div>
+      <div
+        className="emoticon DisagreeSentimentOfPost"
+        title="Disagree"
+      />
+      <div
+        className="emoticonValue"
+      >
+        3
+      </div>
+      <div
+        className="emoticon DontUnderstandSentimentOfPost"
+        title="Did not get it"
+      />
+      <div
+        className="emoticonValue"
+      >
+        3
+      </div>
+      <div
+        className="emoticon MoreInfoSentimentOfPost"
+        title="More info please?"
+      />
+      <div
+        className="emoticonValue"
+      >
+        1
+      </div>
+    </div>
+  </div>
+  <div
+    className="INFO"
+  >
+    <span
+      className={undefined}
+      style={undefined}
+    >
+      Published on
+    </span>
+     
+    <span
+      className={undefined}
+      style={undefined}
+    >
+      August 8th, 2018
+    </span>
+     
+    <span
+      className={undefined}
+      style={undefined}
+    >
+      by
+    </span>
+     
+    <div
+      className="sk-tag-filter"
+      onClick={[Function]}
+    >
+      <div
+        className="profileLine"
+      >
+        <div
+          className="inline"
+        >
+          <img
+            alt="Paxton Pouros"
+            height="30"
+            onError={[Function]}
+            src="/user/id/foo/avatar/30"
+            width="30"
+          />
+        </div>
+        <div
+          className="user"
+        >
+          <div
+            className="creator"
+          >
+            Paxton Pouros
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Hits components SynthesisHit component should render a synthesis hit 1`] = `
+<div
+  className="div__item"
+>
+  <span
+    className="IMGTYPE assembl-icon-synthesis"
+  />
+  <div
+    className="TITLE"
+  >
+    <p
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "Maybe it will transmit the optical application!!",
+        }
+      }
+    />
+  </div>
+  <div
+    className="CONTENT"
+  >
+    <p
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "",
+        }
+      }
+      style={
+        Object {
+          "backgroundColor": "#f4f4f4",
+        }
+      }
+    />
+    <p
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "Try to hack the THX sensor, maybe it will parse the open-source firewall!,The JSON microchip is down, hack the open-source driver so we can program the HDD bandwidth!",
+        }
+      }
+      style={
+        Object {
+          "marginTop": "1em",
+          "paddingLeft": "1em",
+        }
+      }
+    />
+    <p
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "Try to parse the COM card, maybe it will calculate the neural monitor!",
+        }
+      }
+      style={
+        Object {
+          "backgroundColor": "#f4f4f4",
+          "marginTop": "1em",
+        }
+      }
+    />
+  </div>
+  <div
+    className="INFO"
+  >
+    <span
+      className={undefined}
+      style={undefined}
+    >
+      Published on
+    </span>
+     
+    <span
+      className={undefined}
+      style={undefined}
+    >
+      August 8th, 2018
+    </span>
+     
+    <span
+      className={undefined}
+      style={undefined}
+    >
+      by
+    </span>
+     
+    <div
+      className="sk-tag-filter"
+      onClick={[Function]}
+    >
+      <div
+        className="profileLine"
+      >
+        <div
+          className="inline"
+        >
+          <img
+            alt="Annabelle Olson"
+            height="30"
+            onError={[Function]}
+            src="/user/id/foo/avatar/30"
+            width="30"
+          />
+        </div>
+        <div
+          className="user"
+        >
+          <div
+            className="creator"
+          >
+            Annabelle Olson
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Hits components UserHit component should render a user hit 1`] = `
+<div
+  className="div__item"
+>
+  <span
+    className="IMGTYPE assembl-icon-profil"
+  />
+  <div
+    className="TITLE"
+  >
+    <p
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "Gertrude Effertz",
+        }
+      }
+    />
+  </div>
+  <div
+    className="INFO"
+  >
+    <div
+      className="sk-tag-filter"
+      onClick={[Function]}
+    >
+      33
+      <span
+        className="ASSEMBL-ICON-MESSAGE"
+      >
+        <span
+          className="assembl-icon-message"
+          title="Number of contributions"
+        />
+      </span>
+    </div>
+    <span>
+      <span
+        className={undefined}
+        style={undefined}
+      >
+        Member since
+      </span>
+       
+      <span
+        className={undefined}
+        style={undefined}
+      >
+        July 7th, 2016
+      </span>
+    </span>
+  </div>
+</div>
+`;
