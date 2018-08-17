@@ -42,4 +42,14 @@ describe('<Checkbox101 /> - with shallow', () => {
 
     expect(onChangeHandler).toHaveBeenCalledTimes(1);
   });
+
+  it('should render one unchecked checkbox by default', () => {
+    expect(wrapper.find('input [checked=false]')).toHaveLength(1);
+  });
+
+  it('should render one checked checkbox when state is DONE', () => {
+    wrapper.setProps({ isDone: true });
+
+    expect(wrapper.find('input [checked=true]')).toHaveLength(1);
+  });
 });

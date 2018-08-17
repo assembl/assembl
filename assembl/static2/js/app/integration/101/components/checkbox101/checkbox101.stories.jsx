@@ -15,6 +15,12 @@ storiesOf('Checkbox101', module)
       onChangeHandler={onChangeHandler}
     />
   ))
+  .add('checked', () => (
+    <Checkbox101
+      isDone
+      onChangeHandler={onChangeHandler}
+    />
+  ))
   .add('custom label', () => (
     <Checkbox101
       label="Custom Label"
