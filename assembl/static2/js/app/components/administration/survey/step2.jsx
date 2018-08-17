@@ -6,7 +6,6 @@ import { Field } from 'react-final-form';
 import FieldArrayWithActions from '../../form/fieldArrayWithActions';
 import TabbedContent, { type Tab } from '../../common/tabbedContent';
 
-import CheckboxFieldAdapter from '../../form/checkboxFieldAdapter';
 import MultilingualTextFieldAdapter from '../../form/multilingualTextFieldAdapter';
 import MultilingualRichTextFieldAdapter from '../../form/multilingualRichTextFieldAdapter';
 import TextOrFileFieldAdapter from '../../form/textOrFileFieldAdapter';
@@ -29,6 +28,7 @@ type Props = {
 
 const Step2 = ({ editLocale, values }: Props) => (
   <TabbedContent
+    type="thematic"
     bodyRowClassName="margin-xl"
     tabs={values && values.themes ? getTabsFromThemes(values.themes, editLocale) : []}
     renderBody={(tab, idx) => {
@@ -43,50 +43,41 @@ const Step2 = ({ editLocale, values }: Props) => (
       const descriptionBottomName = `themes[${idx}].video.descriptionBottom`;
       return (
         <div className="form-container">
-          <Field
-            name={`themes[${idx}].video.present`}
-            label={I18n.t('administration.announcementModule')}
-            component={CheckboxFieldAdapter}
-            type="checkbox"
-          />
-          {values && values.themes[idx].video &&
-            values.themes[idx].video.present && (
-              <div className="box video-fields">
-                <Field
-                  editLocale={editLocale}
-                  label={titlePh}
-                  name={`themes[${idx}].video.title`}
-                  component={MultilingualTextFieldAdapter}
-                />
-                <Field
-                  key={`${descriptionTopName}-${editLocale}`}
-                  editLocale={editLocale}
-                  label={descriptionTopPh}
-                  name={descriptionTopName}
-                  component={MultilingualRichTextFieldAdapter}
-                />
-                <Field
-                  key={`${descriptionSideName}-${editLocale}`}
-                  editLocale={editLocale}
-                  label={descriptionSidePh}
-                  name={descriptionSideName}
-                  component={MultilingualRichTextFieldAdapter}
-                />
-                <Field
-                  key={`${descriptionBottomName}-${editLocale}`}
-                  editLocale={editLocale}
-                  label={descriptionBottomPh}
-                  name={descriptionBottomName}
-                  component={MultilingualRichTextFieldAdapter}
-                />
-                <Field
-                  label={mediaLinkPh}
-                  fileFieldLabel={I18n.t('administration.ph.orAttachPicture')}
-                  name={`themes[${idx}].video.media`}
-                  component={TextOrFileFieldAdapter}
-                />
-              </div>
-            )}
+          <div className="box video-fields">
+            <Field
+              editLocale={editLocale}
+              label={titlePh}
+              name={`themes[${idx}].video.title`}
+              component={MultilingualTextFieldAdapter}
+            />
+            <Field
+              key={`${descriptionTopName}-${editLocale}`}
+              editLocale={editLocale}
+              label={descriptionTopPh}
+              name={descriptionTopName}
+              component={MultilingualRichTextFieldAdapter}
+            />
+            <Field
+              key={`${descriptionSideName}-${editLocale}`}
+              editLocale={editLocale}
+              label={descriptionSidePh}
+              name={descriptionSideName}
+              component={MultilingualRichTextFieldAdapter}
+            />
+            <Field
+              key={`${descriptionBottomName}-${editLocale}`}
+              editLocale={editLocale}
+              label={descriptionBottomPh}
+              name={descriptionBottomName}
+              component={MultilingualRichTextFieldAdapter}
+            />
+            <Field
+              label={mediaLinkPh}
+              fileFieldLabel={I18n.t('administration.ph.orAttachPicture')}
+              name={`themes[${idx}].video.media`}
+              component={TextOrFileFieldAdapter}
+            />
+          </div>
           <div className="separator" />
           <FieldArrayWithActions
             name={`themes[${idx}].questions`}

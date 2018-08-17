@@ -111,6 +111,7 @@ exports[`TimelineForm component should render a form to create, delete and edit 
         },
       ]
     }
+    type="phase"
   />
 </div>
 `;

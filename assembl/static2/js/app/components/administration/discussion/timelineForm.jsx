@@ -84,16 +84,15 @@ export class DumbTimelineForm extends React.Component<TimelineFormProps, Timelin
 
         {phases && (
           <TabbedContent
+            type="phase"
             divClassName="admin-content"
             tabs={phases.map((id, index) => {
               const tabTitle = `${I18n.t('administration.timelineAdmin.phase', { count: index + 1 })}*`;
-              return ({
+              return {
                 id: id,
                 title: tabTitle
-              });
-            }
-
-            )}
+              };
+            })}
             renderBody={tab => (
               <PhaseForm
                 key={`phase-form-${tab.id}-${editLocale}`}

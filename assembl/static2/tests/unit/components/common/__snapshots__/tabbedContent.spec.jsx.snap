@@ -12,9 +12,18 @@ exports[`TabbedContent component should match snapshot 1`] = `
     >
       <a
         className="tab-title-active ellipsis"
+        onBlur={[Function]}
         onClick={[Function]}
+        onFocus={[Function]}
+        onMouseOut={[Function]}
+        onMouseOver={[Function]}
       >
-        One
+        <span
+          className={undefined}
+          style={undefined}
+        >
+          Phase 1
+        </span>
       </a>
     </div>
     <div
@@ -22,9 +31,18 @@ exports[`TabbedContent component should match snapshot 1`] = `
     >
       <a
         className="tab-title ellipsis"
+        onBlur={[Function]}
         onClick={[Function]}
+        onFocus={[Function]}
+        onMouseOut={[Function]}
+        onMouseOver={[Function]}
       >
-        Two
+        <span
+          className={undefined}
+          style={undefined}
+        >
+          Phase 2
+        </span>
       </a>
     </div>
     <div
@@ -32,9 +50,18 @@ exports[`TabbedContent component should match snapshot 1`] = `
     >
       <a
         className="tab-title ellipsis"
+        onBlur={[Function]}
         onClick={[Function]}
+        onFocus={[Function]}
+        onMouseOut={[Function]}
+        onMouseOver={[Function]}
       >
-        Three
+        <span
+          className={undefined}
+          style={undefined}
+        >
+          Phase 3
+        </span>
       </a>
     </div>
   </div>
@@ -70,9 +97,18 @@ exports[`TabbedContent component should match snapshot with bodyRowClassName 1`]
     >
       <a
         className="tab-title-active ellipsis"
+        onBlur={[Function]}
         onClick={[Function]}
+        onFocus={[Function]}
+        onMouseOut={[Function]}
+        onMouseOver={[Function]}
       >
-        One
+        <span
+          className={undefined}
+          style={undefined}
+        >
+          Phase 1
+        </span>
       </a>
     </div>
     <div
@@ -80,9 +116,18 @@ exports[`TabbedContent component should match snapshot with bodyRowClassName 1`]
     >
       <a
         className="tab-title ellipsis"
+        onBlur={[Function]}
         onClick={[Function]}
+        onFocus={[Function]}
+        onMouseOut={[Function]}
+        onMouseOver={[Function]}
       >
-        Two
+        <span
+          className={undefined}
+          style={undefined}
+        >
+          Phase 2
+        </span>
       </a>
     </div>
     <div
@@ -90,9 +135,18 @@ exports[`TabbedContent component should match snapshot with bodyRowClassName 1`]
     >
       <a
         className="tab-title ellipsis"
+        onBlur={[Function]}
         onClick={[Function]}
+        onFocus={[Function]}
+        onMouseOut={[Function]}
+        onMouseOver={[Function]}
       >
-        Three
+        <span
+          className={undefined}
+          style={undefined}
+        >
+          Phase 3
+        </span>
       </a>
     </div>
   </div>
@@ -128,9 +182,18 @@ exports[`TabbedContent component should match snapshot with divClassName 1`] = `
     >
       <a
         className="tab-title-active ellipsis"
+        onBlur={[Function]}
         onClick={[Function]}
+        onFocus={[Function]}
+        onMouseOut={[Function]}
+        onMouseOver={[Function]}
       >
-        One
+        <span
+          className={undefined}
+          style={undefined}
+        >
+          Phase 1
+        </span>
       </a>
     </div>
     <div
@@ -138,9 +201,18 @@ exports[`TabbedContent component should match snapshot with divClassName 1`] = `
     >
       <a
         className="tab-title ellipsis"
+        onBlur={[Function]}
         onClick={[Function]}
+        onFocus={[Function]}
+        onMouseOut={[Function]}
+        onMouseOver={[Function]}
       >
-        Two
+        <span
+          className={undefined}
+          style={undefined}
+        >
+          Phase 2
+        </span>
       </a>
     </div>
     <div
@@ -148,9 +220,18 @@ exports[`TabbedContent component should match snapshot with divClassName 1`] = `
     >
       <a
         className="tab-title ellipsis"
+        onBlur={[Function]}
         onClick={[Function]}
+        onFocus={[Function]}
+        onMouseOut={[Function]}
+        onMouseOver={[Function]}
       >
-        Three
+        <span
+          className={undefined}
+          style={undefined}
+        >
+          Phase 3
+        </span>
       </a>
     </div>
   </div>

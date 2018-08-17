@@ -1,7 +1,9 @@
 // @flow
 import classNames from 'classnames';
 import * as React from 'react';
-import { Col, Row } from 'react-bootstrap';
+import { Col, Row, OverlayTrigger } from 'react-bootstrap';
+import { Translate } from 'react-redux-i18n';
+import { thematicTooltip } from './tooltips';
 
 export type Tab = {
   id: string,
@@ -12,7 +14,8 @@ type Props = {
   bodyRowClassName: string,
   divClassName: string,
   renderBody: (Tab, number) => React.Node,
-  tabs: Array<Tab>
+  tabs: Array<Tab>,
+  type: string
 };
 
 type State = {
@@ -30,23 +33,29 @@ class TabbedContent extends React.Component<Props, State> {
   };
 
   renderTabs() {
-    const { tabs } = this.props;
+    const { tabs, type } = this.props;
     return tabs.map((tab, idx) => (
       <Col xs={12} md={Math.round(12 / tabs.length)} key={tab.id}>
-        <a
-          className={classNames(
-            {
-              'tab-title-active': idx === this.state.activeIdx,
-              'tab-title': idx !== this.state.activeIdx
-            },
-            'ellipsis'
-          )}
-          onClick={() => {
-            this.setState({ activeIdx: idx });
-          }}
-        >
-          {tab.title}
-        </a>
+        <OverlayTrigger placement="top" overlay={thematicTooltip(tab.title)}>
+          <a
+            className={classNames(
+              {
+                'tab-title-active': idx === this.state.activeIdx,
+                'tab-title': idx !== this.state.activeIdx
+              },
+              'ellipsis'
+            )}
+            onClick={() => {
+              this.setState({ activeIdx: idx });
+            }}
+          >
+            {type === 'thematic' ? (
+              <Translate count={idx + 1} value="debate.survey.thematicNumerotation" />
+            ) : (
+              <Translate count={idx + 1} value="administration.timelineAdmin.phase" />
+            )}
+          </a>
+        </OverlayTrigger>
       </Col>
     ));
   }
