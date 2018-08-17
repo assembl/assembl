@@ -1,9 +1,16 @@
 import React from 'react';
+import { setOptions } from '@storybook/addon-options';
 import { configure, addDecorator } from '@storybook/react';
 import centered from '@storybook/addon-centered'; // Library used to center H and V a component
 
 import 'bootstrap/dist/css/bootstrap.css';
 import '../css/themes/default/assembl_web.scss';
+
+// Option defaults:
+setOptions({
+  name: 'Assembl',
+  url: '#'
+});
 
 addDecorator(centered);
 
