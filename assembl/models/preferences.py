@@ -288,29 +288,32 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
             elif data_type == "scalar":
                 assert value in pref_data.get("scalar_values", ()), (
                     "value not allowed: " + value)
-            elif data_type == "address":
+            elif data_type == "url":
+                # Whilst not an address, requested feature
                 condition = False
+                parsed_val = urlparse(value)
+                val = parsed_val.netloc
                 while not condition:
-                    if not value.strip():
-                        # No empty strings allowed
-                        break
-                    # Whilst not an address, requested feature
                     if value in ("*",):
                         condition = True
                         break
-                    elif is_valid_ipv4_address(value):
+                    elif not bool(parsed_val.scheme):
+                        # Must have a scheme, as defined a definition of a URI
+                        break
+                    elif not val.strip():
+                        # No empty strings allowed
+                        break
+                    elif is_valid_ipv4_address(val):
                         condition = True
                         break
-                    elif is_valid_ipv6_address(value):
+                    elif is_valid_ipv6_address(val):
                         condition = True
                         break
                     else:
-                        condition = bool(urlparse(value).scheme)
+                        # Must be a regular URL then. TODO: Check that the location has a DNS record
+                        condition = True
                         break
-                assert condition, "Not a valid address. Must be a valid IP address, or a URI with a valid scheme"
-            elif data_type == "url":
-                assert urlparse(value).scheme in (
-                    'http', 'https'), "Not a valid URL"
+                assert condition, "Not a valid URL. Must follow the specification of a URI."
             elif data_type == "email":
                 from pyisemail import is_email
                 assert is_email(value), "Not an email"
@@ -992,7 +995,7 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
         {
             "id": "graphql_valid_cors",
             "name": _("Valid CORS paths for GraphQL API calls"),
-            "value_type": "list_of_address",
+            "value_type": "list_of_url",
             "show_in_preferences": True,
             "description": _("A list of valid domain names or IP addresses that are allowed to make CORS api calls to the GraphQL API"),
             "allow_user_override": False,

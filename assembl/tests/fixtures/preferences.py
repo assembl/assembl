@@ -40,10 +40,10 @@ def non_standard_preference(request, test_session):
                 "default": None
             },
             {
-                "id": "test_address",
-                "value_type": "address",
-                "name": "An address",
-                "description": "IPv4, IPv6, or a URI",
+                "id": "test_url",
+                "value_type": "url",
+                "name": "A URI",
+                "description": "A URI, must have a scheme. Can be followed by a domain or an IP address",
                 "allow_user_override": None,
                 "default": ""
             },
