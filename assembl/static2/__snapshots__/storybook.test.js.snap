@@ -147,48 +147,6 @@ exports[`Storyshots Checkbox101 checked 1`] = `
 </div>
 `;
 
-exports[`Storyshots Checkbox101 checked 1`] = `
-<div
-  style={
-    Object {
-      "alignItems": "center",
-      "bottom": 0,
-      "display": "flex",
-      "left": 0,
-      "overflow": "auto",
-      "position": "fixed",
-      "right": 0,
-      "top": 0,
-    }
-  }
->
-  <div
-    style={
-      Object {
-        "margin": "auto",
-        "maxHeight": "100%",
-      }
-    }
-  >
-    <div
-      className="integration checkbox"
-    >
-      <input
-        checked={true}
-        id="checkbox"
-        onChange={[Function]}
-        type="checkbox"
-      />
-      <label
-        htmlFor="checkbox"
-      >
-        Default
-      </label>
-    </div>
-  </div>
-</div>
-`;
-
 exports[`Storyshots Checkbox101 custom label 1`] = `
 <div
   style={
@@ -267,6 +225,136 @@ exports[`Storyshots Checkbox101 default 1`] = `
         htmlFor="checkbox"
       >
         Default
+      </label>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Storyshots CheckboxList101 Empty list 1`] = `
+<div
+  style={
+    Object {
+      "alignItems": "center",
+      "bottom": 0,
+      "display": "flex",
+      "left": 0,
+      "overflow": "auto",
+      "position": "fixed",
+      "right": 0,
+      "top": 0,
+    }
+  }
+>
+  <div
+    style={
+      Object {
+        "margin": "auto",
+        "maxHeight": "100%",
+      }
+    }
+  >
+    Nothing to display
+  </div>
+</div>
+`;
+
+exports[`Storyshots CheckboxList101 List of 5 1`] = `
+<div
+  style={
+    Object {
+      "alignItems": "center",
+      "bottom": 0,
+      "display": "flex",
+      "left": 0,
+      "overflow": "auto",
+      "position": "fixed",
+      "right": 0,
+      "top": 0,
+    }
+  }
+>
+  <div
+    style={
+      Object {
+        "margin": "auto",
+        "maxHeight": "100%",
+      }
+    }
+  >
+    <div
+      className="integration checkbox"
+    >
+      <input
+        checked={false}
+        id="checkbox"
+        onChange={[Function]}
+        type="checkbox"
+      />
+      <label
+        htmlFor="checkbox"
+      >
+        AAA
+      </label>
+    </div>
+    <div
+      className="integration checkbox"
+    >
+      <input
+        checked={false}
+        id="checkbox"
+        onChange={[Function]}
+        type="checkbox"
+      />
+      <label
+        htmlFor="checkbox"
+      >
+        BBB
+      </label>
+    </div>
+    <div
+      className="integration checkbox"
+    >
+      <input
+        checked={true}
+        id="checkbox"
+        onChange={[Function]}
+        type="checkbox"
+      />
+      <label
+        htmlFor="checkbox"
+      >
+        CCC
+      </label>
+    </div>
+    <div
+      className="integration checkbox"
+    >
+      <input
+        checked={false}
+        id="checkbox"
+        onChange={[Function]}
+        type="checkbox"
+      />
+      <label
+        htmlFor="checkbox"
+      >
+        DDD
+      </label>
+    </div>
+    <div
+      className="integration checkbox"
+    >
+      <input
+        checked={false}
+        id="checkbox"
+        onChange={[Function]}
+        type="checkbox"
+      />
+      <label
+        htmlFor="checkbox"
+      >
+        EEE
       </label>
     </div>
   </div>

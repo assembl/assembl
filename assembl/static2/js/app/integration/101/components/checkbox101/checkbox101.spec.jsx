@@ -47,7 +47,7 @@ describe('<Checkbox101 /> - with shallow', () => {
     expect(wrapper.find('input [checked=false]')).toHaveLength(1);
   });
 
-  it('should render one checked checkbox when state is DONE', () => {
+  it('should render one checked checkbox when isDone is true', () => {
     wrapper.setProps({ isDone: true });
 
     expect(wrapper.find('input [checked=true]')).toHaveLength(1);
