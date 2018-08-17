@@ -56,13 +56,24 @@ def phases(request, test_session, discussion):
         image_url = u'https://example.net/image.jpg'
     )
 
+    multiColumns = DiscussionPhase(
+        discussion = discussion,
+        identifier = 'multiColumns',
+        title = LangString.create(u"multiColumns phase title fixture", "en"),
+        description = LangString.create(u"multiColumns phase description fixture", "en"),
+        start = datetime(2018, 3, 16, 9, 0, 0),
+        end = datetime(2018, 4, 15, 9, 0, 0),
+        interface_v1 = False,
+        image_url = u'https://example.net/image.jpg'
+    )
+
     voteSession = DiscussionPhase(
         discussion = discussion,
         identifier = 'voteSession',
         title = LangString.create(u"voteSession phase title fixture", "en"),
         description = LangString.create(u"voteSession phase description fixture", "en"),
-        start = datetime(2018, 3, 16, 9, 0, 0),
-        end = datetime(2018, 4, 15, 9, 0, 0),
+        start = datetime(2018, 4, 16, 9, 0, 0),
+        end = datetime(2018, 5, 15, 9, 0, 0),
         interface_v1 = False,
         image_url = u'https://example.net/image.jpg'
     )
@@ -72,8 +83,8 @@ def phases(request, test_session, discussion):
         identifier = 'brightMirror',
         title = LangString.create(u"brightMirror phase title fixture", "en"),
         description = LangString.create(u"brightMirror phase description fixture", "en"),
-        start = datetime(2018, 4, 16, 9, 0, 0),
-        end = datetime(2018, 5, 15, 9, 0, 0),
+        start = datetime(2018, 6, 16, 9, 0, 0),
+        end = datetime(2018, 7, 15, 9, 0, 0),
         interface_v1 = False,
         image_url = u'https://example.net/image.jpg'
     )
@@ -81,6 +92,7 @@ def phases(request, test_session, discussion):
     # Create the phase
     test_session.add(survey)
     test_session.add(thread)
+    test_session.add(multiColumns)
     test_session.add(voteSession)
     test_session.add(brightMirror)
     test_session.flush()
@@ -89,6 +101,7 @@ def phases(request, test_session, discussion):
         print "finalizer timeline"
         test_session.delete(survey)
         test_session.delete(thread)
+        test_session.delete(multiColumns)
         test_session.delete(voteSession)
         test_session.delete(brightMirror)
         test_session.flush()
