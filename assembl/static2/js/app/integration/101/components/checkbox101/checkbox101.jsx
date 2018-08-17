@@ -2,16 +2,16 @@
 import React from 'react';
 
 type Props = {
-  checked?: boolean, // Optional flag to check the checkbox
-  label?: string // Optional checkbox label
+  label?: string, // Optional checkbox label
+  onChangeHandler: Function // Required onChange function
 };
 
 const checkbox101 = ({
-  checked,
-  label
+  label,
+  onChangeHandler
 }: Props) => (
   <div className="integration checkbox">
-    <input id="checkbox" type="checkbox" checked={checked} />
+    <input id="checkbox" type="checkbox" onChange={onChangeHandler} />
     <label htmlFor="checkbox">
       {label}
     </label>
@@ -19,7 +19,6 @@ const checkbox101 = ({
 );
 
 checkbox101.defaultProps = {
-  checked: false,
   label: 'Default'
 };
 

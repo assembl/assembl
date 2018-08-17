@@ -11,26 +11,35 @@ configure({ adapter: new Adapter() });
 
 describe('<Checkbox101 /> - with shallow', () => {
   let wrapper;
+  let onChangeHandler;
 
   beforeEach(() => {
-    wrapper = shallow(<Checkbox101 />);
+    // Mock actions
+    onChangeHandler = jest.fn();
+
+    wrapper = shallow(<Checkbox101
+      onChangeHandler={onChangeHandler}
+    />);
   });
 
-  it('should render one checkbox', () => {
+  it('should render one checkbox with a default label', () => {
+    const defaultLabel = 'Default';
+
     expect(wrapper.find('input [type=\'checkbox\']')).toHaveLength(1);
-    expect(wrapper.contains('Default')).toBe(true);
-  });
-
-  it('should render one checked checkbox', () => {
-    wrapper.setProps({ checked: true });
-
-    expect(wrapper.find('input [type=\'checkbox\'] [checked=true]')).toHaveLength(1);
+    expect(wrapper.find('label').text()).toEqual(defaultLabel);
   });
 
   it('should render one checkbox with a custom label', () => {
     const customLabel = 'Custom Label';
     wrapper.setProps({ label: customLabel });
 
-    expect(wrapper.contains(customLabel)).toBe(true);
+    expect(wrapper.find('input [type=\'checkbox\']')).toHaveLength(1);
+    expect(wrapper.find('label').text()).toEqual(customLabel);
+  });
+
+  it('should render one checkbox that can be checked', () => {
+    wrapper.find('input [type=\'checkbox\']').simulate('change');
+
+    expect(onChangeHandler).toHaveBeenCalledTimes(1);
   });
 });

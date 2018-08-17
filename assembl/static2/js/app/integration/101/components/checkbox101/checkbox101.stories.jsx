@@ -7,13 +7,17 @@ import { action } from '@storybook/addon-actions';
 
 import Checkbox101 from './checkbox101';
 
+const onChangeHandler = action('onChangeHandler');
+
 storiesOf('Checkbox101', module)
   .add('default', () => (
-    <Checkbox101 />
-  ))
-  .add('checked', () => (
-    <Checkbox101 checked />
+    <Checkbox101
+      onChangeHandler={onChangeHandler}
+    />
   ))
   .add('custom label', () => (
-    <Checkbox101 label="Custom Label" />
+    <Checkbox101
+      label="Custom Label"
+      onChangeHandler={onChangeHandler}
+    />
   ));
