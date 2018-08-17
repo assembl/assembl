@@ -326,7 +326,7 @@ msgstr "Whitelist sur les inscriptions standards"
 
 #: assembl/models/preferences.py:780
 msgid "Allow white list to be applied to the default login process"
-msgstr "Autoriser la white list à être appliqué à la procédure d'authentification"
+msgstr "Autoriser la white list à être appliquée à la procédure d'authentification"
 
 #: assembl/models/preferences.py:792
 msgid "Discussion administrators"
