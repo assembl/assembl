@@ -8,7 +8,7 @@ from assembl import models
 from assembl.graphql.schema import Schema as schema
 
 
-def test_graphql_numPosts_of_sub_idea_1(graphql_request, root_idea, subidea_1, subidea_1_1,
+def test_graphql_numPosts_of_sub_idea_1(phases, graphql_request, root_idea, subidea_1, subidea_1_1,
                                              subidea_1_1_1,
                                              idea_message_column_positive_on_subidea_1_1,
                                              idea_message_column_negative_on_subidea_1_1,
@@ -20,11 +20,10 @@ def test_graphql_numPosts_of_sub_idea_1(graphql_request, root_idea, subidea_1, s
     subidea_1_1.message_view_override = 'messageColumns'
     subidea_1_1.messages_in_parent = False
     subidea_1_1.db.flush()
-
     # This test verify that we don't care about messages_in_parent to count posts.
     res = schema.execute(
-        u"""query AllIdeasQuery ($identifier: String!){
-            ideas (identifier: $identifier) {
+        u"""query AllIdeasQuery ($discussionPhaseId: Int!){
+            ideas (discussionPhaseId: $discussionPhaseId) {
               ... on Idea {
                 id
                 numPosts
@@ -37,7 +36,7 @@ def test_graphql_numPosts_of_sub_idea_1(graphql_request, root_idea, subidea_1, s
               }
             }
         }
-        """, context_value=graphql_request, variable_values={"identifier": u"thread"})
+        """, context_value=graphql_request, variable_values={"discussionPhaseId": phases['thread'].id})
     assert res.errors is None
     root_idea = res.data['rootIdea']
 
@@ -55,12 +54,12 @@ def test_graphql_numPosts_of_sub_idea_1(graphql_request, root_idea, subidea_1, s
     assert grand_child_idea['numPosts'] == 1
 
 
-def test_graphql_get_all_ideas(graphql_request,
+def test_graphql_get_all_ideas(phases, graphql_request,
                                user_language_preference_en_cookie,
                                subidea_1_1_1):
     res = schema.execute(
-        u"""query AllIdeasQuery($lang: String!, $identifier: String!) {
-            ideas(identifier: $identifier) {
+        u"""query AllIdeasQuery($lang: String!, $discussionPhaseId: Int!) {
+            ideas(discussionPhaseId: $discussionPhaseId) {
               ... on Idea {
                 id
                 title(lang: $lang)
@@ -69,7 +68,7 @@ def test_graphql_get_all_ideas(graphql_request,
                 numPosts
                 numContributors
                 totalSentiments
-                numChildren(identifier: $identifier)
+                numChildren(discussionPhaseId: $discussionPhaseId)
                 parentId
                 order
                 posts(first:10) {
@@ -88,7 +87,7 @@ def test_graphql_get_all_ideas(graphql_request,
             }
         }
         """, context_value=graphql_request,
-        variable_values={"identifier": u"thread", "lang": u"en"})
+        variable_values={"discussionPhaseId": phases['thread'].id, "lang": u"en"})
     root_idea = res.data['rootIdea']
     assert root_idea['id'] is not None
     assert len(res.data['ideas']) == 3
@@ -114,7 +113,7 @@ def test_graphql_get_all_ideas(graphql_request,
     assert res.errors is None
 
 
-def test_graphql_get_all_ideas_multiColumns_phase(graphql_request,
+def test_graphql_get_all_ideas_multiColumns_phase(phases, graphql_request,
                                                   user_language_preference_en_cookie,
                                                   subidea_1,
                                                   subidea_1_1_1,
@@ -127,8 +126,8 @@ def test_graphql_get_all_ideas_multiColumns_phase(graphql_request,
     # the ideas query should return only subidea_1
     # We have a column on subidea_1_1, but messageColumns is not enabled on it.
     res = schema.execute(
-        u"""query AllIdeasQuery($lang: String!, $identifier: String!) {
-            ideas(identifier: $identifier) {
+        u"""query AllIdeasQuery($lang: String!, $discussionPhaseId: Int!) {
+            ideas(discussionPhaseId: $discussionPhaseId) {
               ... on Idea {
                 id
                 title(lang: $lang)
@@ -136,7 +135,7 @@ def test_graphql_get_all_ideas_multiColumns_phase(graphql_request,
                 messageViewOverride
                 numPosts
                 numContributors
-                numChildren(identifier: $identifier)
+                numChildren(discussionPhaseId: $discussionPhaseId)
                 parentId
                 order
                 posts(first:10) {
@@ -155,7 +154,7 @@ def test_graphql_get_all_ideas_multiColumns_phase(graphql_request,
             }
         }
         """, context_value=graphql_request,
-        variable_values={"identifier": u"multiColumns", "lang": u"en"})
+        variable_values={"discussionPhaseId": phases['multiColumns'].id, "lang": u"en"})
     root_idea = res.data['rootIdea']
     assert root_idea['id'] is not None
     assert len(res.data['ideas']) == 1
@@ -171,19 +170,19 @@ def test_graphql_get_all_ideas_multiColumns_phase(graphql_request,
     subidea_1.db.flush()
 
 
-def test_graphql_get_all_ideas_with_modified_order(graphql_request,
+def test_graphql_get_all_ideas_with_modified_order(phases, graphql_request,
                                user_language_preference_en_cookie,
                                subidea_1_1_1_1_1, subidea_1_1_1_1_2):
     res = schema.execute(
-        u"""query AllIdeasQuery($lang: String!, $identifier: String!) {
-            ideas(identifier: $identifier) {
+        u"""query AllIdeasQuery($lang: String!, $discussionPhaseId: Int!) {
+            ideas(discussionPhaseId: $discussionPhaseId) {
               ... on Idea {
                 id
                 title(lang: $lang)
                 titleEntries { value, localeCode }
                 numPosts
                 numContributors
-                numChildren(identifier: $identifier)
+                numChildren(discussionPhaseId: $discussionPhaseId)
                 parentId
                 order
                 posts(first:10) {
@@ -202,7 +201,7 @@ def test_graphql_get_all_ideas_with_modified_order(graphql_request,
             }
         }
         """, context_value=graphql_request,
-        variable_values={"identifier": u"thread", "lang": u"en"})
+        variable_values={"discussionPhaseId": phases['thread'].id, "lang": u"en"})
     assert [idea['title'] for idea in res.data['ideas']] == [
         u'Favor economic growth',
         u'Lower taxes',
@@ -216,15 +215,15 @@ def test_graphql_get_all_ideas_with_modified_order(graphql_request,
     subidea_1_1_1_1_1.source_links[0].order = 2.0
     subidea_1_1_1_1_1.db.flush()
     res = schema.execute(
-        u"""query AllIdeasQuery($lang: String!, $identifier: String!) {
-            ideas(identifier: $identifier) {
+        u"""query AllIdeasQuery($lang: String!, $discussionPhaseId: Int!) {
+            ideas(discussionPhaseId: $discussionPhaseId) {
               ... on Idea {
                 id
                 title(lang: $lang)
                 titleEntries { value, localeCode }
                 numPosts
                 numContributors
-                numChildren(identifier: $identifier)
+                numChildren(discussionPhaseId: $discussionPhaseId)
                 parentId
                 order
                 posts(first:10) {
@@ -243,7 +242,7 @@ def test_graphql_get_all_ideas_with_modified_order(graphql_request,
             }
         }
         """, context_value=graphql_request,
-        variable_values={"identifier": u"thread", "lang": u"en"})
+        variable_values={"discussionPhaseId": phases['thread'].id, "lang": u"en"})
     assert [idea['title'] for idea in res.data['ideas']] == [
         u'Favor economic growth',
         u'Lower taxes',
@@ -592,7 +591,7 @@ query QuestionPosts($id: ID!, $first: Int!, $after: String!) {
     assert all(post['node']['id'] in proposals for post in question_posts)
 
 
-def test_graphql_create_bright_mirror(graphql_request, graphql_registry, test_session):
+def test_graphql_create_bright_mirror(phases, graphql_request, graphql_registry, test_session):
     import os
     from io import BytesIO
 
@@ -607,7 +606,7 @@ def test_graphql_create_bright_mirror(graphql_request, graphql_registry, test_se
         graphql_registry['createThematic'],
         context_value=graphql_request,
         variable_values={
-            'identifier': 'brightMirror',
+            'discussionPhaseId': phases['brightMirror'].id,
             'messageViewOverride': 'brightMirror',
             'titleEntries': [
                 {'value': u"Comprendre les dynamiques et les enjeux", 'localeCode': u"fr"},
@@ -644,7 +643,7 @@ def test_graphql_create_bright_mirror(graphql_request, graphql_registry, test_se
     assert idea['order'] == 1.0
 
 
-def test_graphql_create_bright_mirror_no_title(graphql_request, graphql_registry, test_session):
+def test_graphql_create_bright_mirror_no_title(phases, graphql_request, graphql_registry, test_session):
     import os
     from io import BytesIO
 
@@ -659,7 +658,7 @@ def test_graphql_create_bright_mirror_no_title(graphql_request, graphql_registry
         graphql_registry['createThematic'],
         context_value=graphql_request,
         variable_values={
-            'identifier': 'brightMirror',
+            'discussionPhaseId': phases['brightMirror'].id,
             'messageViewOverride': 'brightMirror',
             'titleEntries': None,
             'descriptionEntries': [
@@ -682,7 +681,7 @@ def test_graphql_create_bright_mirror_no_title(graphql_request, graphql_registry
     assert 'Variable "$titleEntries" of required type "[LangStringEntryInput]!" was not provided.' == res.errors[0].args[0]
 
 
-def test_graphql_create_bright_mirror_empty_title(graphql_request, graphql_registry, test_session):
+def test_graphql_create_bright_mirror_empty_title(phases, graphql_request, graphql_registry, test_session):
     import os
     from io import BytesIO
 
@@ -697,7 +696,7 @@ def test_graphql_create_bright_mirror_empty_title(graphql_request, graphql_regis
         graphql_registry['createThematic'],
         context_value=graphql_request,
         variable_values={
-            'identifier': 'brightMirror',
+            'discussionPhaseId': phases['brightMirror'].id,
             'messageViewOverride': 'brightMirror',
             'titleEntries': [],
             'descriptionEntries': [
@@ -720,7 +719,7 @@ def test_graphql_create_bright_mirror_empty_title(graphql_request, graphql_regis
     assert "titleEntries needs at least one entry" in res.errors[0].args[0]
 
 
-def test_graphql_create_bright_mirror_announcement_empty_title(graphql_request, graphql_registry, test_session):
+def test_graphql_create_bright_mirror_announcement_empty_title(phases, graphql_request, graphql_registry, test_session):
     import os
     from io import BytesIO
 
@@ -735,7 +734,7 @@ def test_graphql_create_bright_mirror_announcement_empty_title(graphql_request, 
         graphql_registry['createThematic'],
         context_value=graphql_request,
         variable_values={
-            'identifier': 'brightMirror',
+            'discussionPhaseId': phases['brightMirror'].id,
             'messageViewOverride': 'brightMirror',
             'titleEntries': [
                 {'value': u"Comprendre les dynamiques et les enjeux", 'localeCode': u"fr"},

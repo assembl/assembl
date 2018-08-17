@@ -552,7 +552,7 @@ def test_get_thematic_via_node_query(graphql_request, thematic_and_question):
     }""" % thematic_id, context_value=graphql_request)
     assert json.loads(json.dumps(res.data)) == {
         u'node': {u"__typename": u"Thematic",
-                  u"title": u"Comprendre les dynamiques et les enjeux"}}
+                  u"title": u"Understanding the dynamics and issues"}}
 
 
 def test_get_question_via_node_query(graphql_request, thematic_and_question):
@@ -1588,7 +1588,7 @@ mutation myMutation {
         titleEntries: [
             {value: "AI for the common good", localeCode: "en"}
         ],
-        identifier: "survey",
+        discussionPhaseId: """+unicode(phases['survey'].id)+u""",
         order: 1.5
     ) {
         thematic {
