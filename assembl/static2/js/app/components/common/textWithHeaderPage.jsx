@@ -6,7 +6,7 @@ import Header from './header';
 export type TextWithHeaderPageProps = {
   headerTitle: string,
   text: string,
-  debateData: Object,
+  debateData: DebateData,
   renderPageBody: Function
 };
 

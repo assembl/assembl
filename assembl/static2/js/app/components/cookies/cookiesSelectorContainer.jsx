@@ -42,7 +42,7 @@ class CookiesSelectorContainer extends React.Component<Props, State> {
       : cookiesFromBrowser && cookiesFromBrowser.split(',');
 
     const cookiesArray = cookiesList && cookiesList.map(
-      cookie => ({ ...this.getCookieObject(cookie), accepted: this.isCookieAccepted(cookie), cookieType: cookie })
+      cookie => ({ ...this.getCookieObjectData(cookie), accepted: this.isCookieAccepted(cookie), cookieType: cookie })
     );
     const cookiesByCategory = cookiesArray && this.getCookiesObjectFromArray(cookiesArray);
 
@@ -53,14 +53,14 @@ class CookiesSelectorContainer extends React.Component<Props, State> {
     };
   }
 
-  isCookieAccepted = (cookie: string) => {
+  isCookieAccepted = (cookie: string): boolean => {
     if (cookie.startsWith('ACCEPT')) {
       return true;
     }
     return false;
   }
 
-  getCookieObject = (cookie: string) => {
+  getCookieObjectData = (cookie: string) => {
     if (cookie.includes('SESSION_ON_DISCUSSION')) {
       return { category: 'other', name: COOKIE_TRANSLATION_KEYS.userSession, hasChanged: false };
     }
@@ -89,6 +89,7 @@ class CookiesSelectorContainer extends React.Component<Props, State> {
   handleToggle = (updatedCookie: CookieObject) => {
     const { cookies } = this.state;
     // Flow bugs with Object.values
+    // see https://github.com/facebook/flow/issues/2221
     // $FlowFixMe
     const cookiesArray:Array<CookieObject> = cookies && Object.values(cookies)
       .reduce((flat, next) => flat.concat(next), []);
@@ -98,20 +99,19 @@ class CookiesSelectorContainer extends React.Component<Props, State> {
     this.setState({ cookies: updatedCookiesByCategory });
   }
 
-  toggleCookieType = (cookie: string) =>
+  toggleCookieType = (cookie: string): string =>
     (cookie.startsWith('ACCEPT') ? cookie.replace('ACCEPT', 'REJECT') : cookie.replace('REJECT', 'ACCEPT'));
 
 
   saveChanges = () => {
     const { cookies } = this.state;
     // Flow bugs with Object.values
+    // see https://github.com/facebook/flow/issues/2221
     // $FlowFixMe
     const cookiesArray:Array<CookieObject> = cookies && Object.values(cookies)
       .reduce((flat, next) => flat.concat(next), []);
-    const changedCookies = cookiesArray.filter((cookie: CookieObject) => cookie.hasChanged);
-    const changedCookiesNewNames = changedCookies.map(cookie => this.toggleCookieType(cookie.cookieType));
-    const newCookiesList = cookiesArray.filter((cookie: CookieObject) => !cookie.hasChanged).map(cookie => cookie.cookieType);
-    changedCookiesNewNames.forEach((cookie) => { newCookiesList.push(cookie); });
+    const newCookiesList = cookiesArray.map(c => (c.hasChanged ? this.toggleCookieType(c.cookieType) : c.cookieType));
+
     // Update the cookies in the back
     this.props.updateAcceptedCookies({ variables: { actions: newCookiesList } });
     // Update the cookies in the browser

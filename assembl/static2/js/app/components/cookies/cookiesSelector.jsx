@@ -1,5 +1,4 @@
 // @flow
-// eslint-disable
 import React from 'react';
 import { Translate } from 'react-redux-i18n';
 import { Button } from 'react-bootstrap';
@@ -39,10 +38,10 @@ const CookiesSelector = ({ activeKey, show, cookies, handleCategorySelection, ha
               </div>
               <div className="cookies-toggles">
                 {isActiveKey && show && cookies[category] &&
-                    cookies[category].map((cookie, index) => (
+                    cookies[category].map(cookie => (
                       <CookieToggle
                         cookie={cookie}
-                        key={`${cookie.name}-${index}`}
+                        key={cookie.name}
                         handleToggle={handleToggle}
                       />
                     ))}
