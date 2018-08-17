@@ -148,6 +148,14 @@ def is_valid_ipv4_address(address):
     try:
         # Checks if is valid IPv4
         socket.inet_aton(address)
+    except socket.error:
+        return False
+    return address.count('.') == 3
+
+
+def is_valid_ipv6_address(address):
+    try:
+        socket.inet_pton(socket.AF_INET6, address)
         return True
     except socket.error:
         return False

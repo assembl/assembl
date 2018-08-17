@@ -4,7 +4,7 @@
 May be defined at the user, Discussion or server level."""
 from itertools import chain
 from collections import MutableMapping
-
+from urlparse import urlparse
 import simplejson as json
 from sqlalchemy import (
     Column,
@@ -53,7 +53,7 @@ from assembl.auth import (
 )
 from assembl.lib.abc import classproperty
 from assembl.lib.locale import _, strip_country
-from assembl.lib.utils import is_valid_ipv4_address
+from assembl.lib.utils import is_valid_ipv4_address, is_valid_ipv6_address
 from assembl.lib import config
 
 
@@ -288,14 +288,29 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
             elif data_type == "scalar":
                 assert value in pref_data.get("scalar_values", ()), (
                     "value not allowed: " + value)
+            elif data_type == "address":
+                condition = False
+                while not condition:
+                    if not value.strip():
+                        # No empty strings allowed
+                        break
+                    # Whilst not an address, requested feature
+                    if value in ("*",):
+                        condition = True
+                        break
+                    elif is_valid_ipv4_address(value):
+                        condition = True
+                        break
+                    elif is_valid_ipv6_address(value):
+                        condition = True
+                        break
+                    else:
+                        condition = bool(urlparse(value).scheme)
+                        break
+                assert condition, "Not a valid address. Must be a valid IP address, or a URI with a valid scheme"
             elif data_type == "url":
-                from urlparse import urlparse
-                result = urlparse(value).scheme in (
-                    'http', 'https')
-                if not result:
-                    # Check if it's an IP address
-                    result = is_valid_ipv4_address(value)
-                assert result, "Not a valid address"
+                assert urlparse(value).scheme in (
+                    'http', 'https'), "Not a valid URL"
             elif data_type == "email":
                 from pyisemail import is_email
                 assert is_email(value), "Not an email"
@@ -371,7 +386,7 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
     # name (for interface)
     # description (for interface, hover help)
     # value_type: given by the following grammar:
-    #       base_type = (bool|json|int|string|text|scalar|url|email|domain|locale|langstr|permission|role)
+    #       base_type = (bool|json|int|string|text|scalar|address|url|email|domain|locale|langstr|permission|role)
     #       type = base_type|list_of_(type)|dict_of_(base_type)_to_(type)
     #   more types may be added, but need to be added to both frontend and backend
     # show_in_preferences: Do we always hide this preference?
@@ -977,7 +992,7 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
         {
             "id": "graphql_valid_cors",
             "name": _("Valid CORS paths for GraphQL API calls"),
-            "value_type": "list_of_url",
+            "value_type": "list_of_address",
             "show_in_preferences": True,
             "description": _("A list of valid domain names or IP addresses that are allowed to make CORS api calls to the GraphQL API"),
             "allow_user_override": False,
