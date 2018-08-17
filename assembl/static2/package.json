@@ -33,6 +33,7 @@
     "@storybook/addon-centered": "^3.4.10",
     "@storybook/addon-info": "^3.4.10",
     "@storybook/addon-storyshots": "^3.4.10",
+    "@storybook/addon-viewport": "^3.4.10",
     "@storybook/react": "^3.4.10",
     "apollo-test-utils": "^0.3.0",
     "babel-core": "^6.26.0",
