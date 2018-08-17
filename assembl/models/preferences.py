@@ -4,7 +4,7 @@
 May be defined at the user, Discussion or server level."""
 from itertools import chain
 from collections import MutableMapping
-
+from urlparse import urlparse
 import simplejson as json
 from sqlalchemy import (
     Column,
@@ -13,11 +13,11 @@ from sqlalchemy import (
     ForeignKey,
 )
 from sqlalchemy.orm import relationship
-from ..lib.sqla_types import CoerceUnicode
+from assembl.lib.sqla_types import CoerceUnicode
 from pyramid.httpexceptions import HTTPUnauthorized
 
 from . import Base, DeclarativeAbstractMeta, NamedClassMixin
-from ..auth import (
+from assembl.auth import (
     ASSEMBL_PERMISSIONS,
     Authenticated,
     CrudPermissions,
@@ -51,9 +51,10 @@ from ..auth import (
     R_PARTICIPANT,
     SYSTEM_ROLES
 )
-from ..lib.abc import classproperty
-from ..lib.locale import _, strip_country
-from ..lib import config
+from assembl.lib.abc import classproperty
+from assembl.lib.locale import _, strip_country
+from assembl.lib.utils import is_valid_ipv4_address, is_valid_ipv6_address
+from assembl.lib import config
 
 
 def merge_json(base, patch):
@@ -288,9 +289,31 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
                 assert value in pref_data.get("scalar_values", ()), (
                     "value not allowed: " + value)
             elif data_type == "url":
-                from urlparse import urlparse
-                assert urlparse(value).scheme in (
-                    'http', 'https'), "Not a HTTP URL"
+                # Whilst not an address, requested feature
+                condition = False
+                parsed_val = urlparse(value)
+                val = parsed_val.netloc
+                while not condition:
+                    if value in ("*",):
+                        condition = True
+                        break
+                    elif not bool(parsed_val.scheme):
+                        # Must have a scheme, as defined a definition of a URI
+                        break
+                    elif not val.strip():
+                        # No empty strings allowed
+                        break
+                    elif is_valid_ipv4_address(val):
+                        condition = True
+                        break
+                    elif is_valid_ipv6_address(val):
+                        condition = True
+                        break
+                    else:
+                        # Must be a regular URL then. TODO: Check that the location has a DNS record
+                        condition = True
+                        break
+                assert condition, "Not a valid URL. Must follow the specification of a URI."
             elif data_type == "email":
                 from pyisemail import is_email
                 assert is_email(value), "Not an email"
@@ -366,7 +389,7 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
     # name (for interface)
     # description (for interface, hover help)
     # value_type: given by the following grammar:
-    #       base_type = (bool|json|int|string|text|scalar|url|email|domain|locale|langstr|permission|role)
+    #       base_type = (bool|json|int|string|text|scalar|address|url|email|domain|locale|langstr|permission|role)
     #       type = base_type|list_of_(type)|dict_of_(base_type)_to_(type)
     #   more types may be added, but need to be added to both frontend and backend
     # show_in_preferences: Do we always hide this preference?
@@ -956,6 +979,7 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
             "modification_permission": P_ADMIN_DISC,
             "default": None
         },
+
         # Harvesting translation
         {
             "id": "harvesting_translation",
@@ -965,7 +989,20 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
             "description": _("Harvesting translation"),
             "allow_user_override": P_READ,
             "default": None
-        }
+        },
+
+        # Valid CORS paths
+        {
+            "id": "graphql_valid_cors",
+            "name": _("Valid CORS paths for GraphQL API calls"),
+            "value_type": "list_of_url",
+            "show_in_preferences": True,
+            "description": _("A list of valid domain names or IP addresses that are allowed to make CORS api calls to the GraphQL API"),
+            "allow_user_override": False,
+            "default": [],
+            "item_default": ""
+        },
+
     ]
 
     # Precompute, this is not mutable.
