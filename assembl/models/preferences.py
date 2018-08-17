@@ -979,7 +979,7 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
             "name": _("Valid CORS paths for GraphQL API calls"),
             "value_type": "list_of_url",
             "show_in_preferences": True,
-            "description": _("A list of valid URLs or IP addresses that are allowed to make CORS api calls to the GraphQL API"),
+            "description": _("A list of valid domain names or IP addresses that are allowed to make CORS api calls to the GraphQL API"),
             "allow_user_override": False,
             "default": [],
             "item_default": ""

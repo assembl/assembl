@@ -67,19 +67,18 @@ def graphql_api(request):
     cors_pref = discussion.preferences['graphql_valid_cors']
     has_cors = cors_pref and len(cors_pref) > 0
     cors_string = ",".join(cors_pref)
-
+    cors_headers = [
+        ('Access-Control-Allow-Origin', cors_string),
+        ('Access-Control-Allow-Headers', 'Content-Type, Cookie'),
+        ('Access-Control-Allow-Methods', 'POST, OPTIONS')
+    ]
     # Response for preflight-CORS requests
     # No authentication needed
     if has_cors:
         if request.method == 'OPTIONS':
             response = Response(status=200, body=b'')
             response.headerlist = []
-            response.headerlist.extend(
-                (
-                    ('Access-Control-Allow-Origin', cors_string),
-                    ('Access-Control-Allow-Headers', 'Content-Type'),
-                )
-            )
+            response.headerlist.extend(cors_headers)
             return response
 
     discussion_id = discussion.id
@@ -102,8 +101,5 @@ def graphql_api(request):
     solver = graphql_wsgi_wrapper(Schema)  # , middleware=[LoggingMiddleware()])
     response = solver(request)
     if has_cors:
-        response.headerlist.append(
-            ('Access-Control-Allow-Origin', cors_string)
-        )
-
+        response.headerlist.extend(cors_headers)
     return response

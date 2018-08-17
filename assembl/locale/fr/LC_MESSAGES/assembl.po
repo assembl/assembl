@@ -169,11 +169,11 @@ msgstr "URL d'un vidéo présentant la discussion"
 
 #: assembl/models/preferences.py:487
 msgid "Tab title"
-msgstr "Titres seulement"
+msgstr "Titre de l'onglet"
 
 #: assembl/models/preferences.py:489
 msgid "Title which appears on the tab, by default assembl"
-msgstr "Le titre qui apparait dans l'onglet par default"
+msgstr "Le titre qui apparait dans l'onglet, assembl par default"
 
 #: assembl/models/preferences.py:498
 msgid "Video description"
@@ -197,7 +197,7 @@ msgstr "Partage social privé"
 
 #: assembl/models/preferences.py:525
 msgid "Publicizing or privatizing social sharing"
-msgstr "Partager en privée ou en public sur les réseaux sociaux"
+msgstr "Rendre le partage social public ou privé"
 
 #: assembl/models/preferences.py:534
 msgid "Extra data for CSV reports"
@@ -318,7 +318,7 @@ msgstr "Whitelist sur le service d'authentification"
 
 #: assembl/models/preferences.py:765
 msgid "Allow white list to be applied to the authentication service chosen"
-msgstr "Autoriser la white list à être appliqué au service d'authentification sélectionné"
+msgstr "Autoriser la white list à être appliquée au service d'authentification sélectionné"
 
 #: assembl/models/preferences.py:777
 msgid "Whitelist on standard registration"
@@ -336,7 +336,7 @@ msgstr "Administrateurs de la discussion"
 msgid ""
 "A list of discussion administrators, if different from the server "
 "administrator"
-msgstr "Une liste d'admnistrateurs de discussion, si différent du serveur admnistrateur"
+msgstr "Une liste d'administrateurs de discussion, si différent du serveur administrateur"
 
 #: assembl/models/preferences.py:808
 msgid "Show CI Dashboard"
