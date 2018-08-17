@@ -3,33 +3,33 @@ import React from 'react';
 import { Button } from 'react-bootstrap';
 
 type Props = {
-  buttonLabel?: string, // Optional possible values: any strings
-  buttonType?: string, // Optional possible types: 'info', 'danger'
-  buttonTappedHandler: Function, // Required onClick function
-  buttonIsDisabled?: boolean // Optional flag to enable the button
+  label?: string, // Optional possible values: any strings
+  type?: string, // Optional possible types: 'info', 'danger'
+  onClickHandler: Function, // Required onClick function
+  isDisabled?: boolean // Optional flag to enable the button
 };
 
 const button101 = ({
-  buttonLabel,
-  buttonType,
-  buttonTappedHandler,
-  buttonIsDisabled
+  label,
+  type,
+  onClickHandler,
+  isDisabled
 }: Props) => (
   <Button
-    bsStyle={buttonType}
+    bsStyle={type}
     bsSize="large"
     className="integration button"
-    onClick={buttonTappedHandler}
-    disabled={buttonIsDisabled}
+    onClick={onClickHandler}
+    disabled={isDisabled}
   >
-    {buttonLabel}
+    {label}
   </Button>
 );
 
 button101.defaultProps = {
-  buttonLabel: 'Bluenove',
-  buttonType: 'info',
-  buttonIsDisabled: false
+  label: 'Bluenove',
+  type: 'info',
+  isDisabled: false
 };
 
 export default button101;

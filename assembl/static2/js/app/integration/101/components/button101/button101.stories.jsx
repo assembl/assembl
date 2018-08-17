@@ -7,36 +7,35 @@ import { action } from '@storybook/addon-actions';
 
 import Button101 from './button101';
 
-export const dangerButtonWithCustomLabel = {
-  buttonLabel: 'Custom label',
-  buttonType: 'danger'
+const dangerButtonWithCustomLabel = {
+  label: 'Custom label',
+  type: 'danger'
 };
 
-export const disabledButton = {
-  buttonIsDisabled: true
+const disabledButton = {
+  isDisabled: true
 };
 
-export const actions = {
-  defaultButtonTappedHandler: action('defaultButtonTappedHandlers'),
-  dangerButtonTappedHandler: action('dangerButtonTappedHandler')
+const actions = {
+  onClickHandler: action('onClickHandler')
 };
 
 storiesOf('Button101', module)
   .add('default', () => (
     <Button101
-      buttonTappedHandler={actions.defaultButtonTappedHandler}
+      onClickHandler={actions.onClickHandler}
     />
   ))
   .add('disabled', () => (
     <Button101
-      buttonIsDisabled={disabledButton.buttonIsDisabled}
-      buttonTappedHandler={actions.defaultButtonTappedHandler}
+      isDisabled={disabledButton.isDisabled}
+      onClickHandler={actions.onClickHandler}
     />
   ))
   .add('danger', () => (
     <Button101
-      buttonLabel={dangerButtonWithCustomLabel.buttonLabel}
-      buttonType={dangerButtonWithCustomLabel.buttonType}
-      buttonTappedHandler={actions.dangerButtonTappedHandler}
+      label={dangerButtonWithCustomLabel.label}
+      type={dangerButtonWithCustomLabel.type}
+      onClickHandler={actions.onClickHandler}
     />
   ));
