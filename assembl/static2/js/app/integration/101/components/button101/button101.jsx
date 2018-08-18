@@ -16,8 +16,8 @@ type Props = {
 const button101 = ({
   label,
   type,
-  onClickHandler,
-  isDisabled
+  isDisabled,
+  onClickHandler
 }: Props) => (
   <Button
     bsStyle={type}

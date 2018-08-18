@@ -4,6 +4,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import { withInfo } from '@storybook/addon-info';
+import { withKnobs, object } from '@storybook/addon-knobs';
 /* eslint-enable */
 
 import CheckboxList101 from './checkboxList101';
@@ -18,18 +19,27 @@ const listOfcheckboxes = [
   { label: 'EEE', isDone: false }
 ];
 
-const onChangeHandler = action('onChangeHandler');
+const actions = {
+  onChangeHandler: action('onChangeHandler')
+};
 
 storiesOf('CheckboxList101', module)
+  .addDecorator(withKnobs)
   .add('List of 5', withInfo()(() => (
     <CheckboxList101
       checkboxes={listOfcheckboxes}
-      onChangeHandler={onChangeHandler}
+      onChangeHandler={actions.onChangeHandler}
     />
   )))
   .add('Empty list', withInfo()(() => (
     <CheckboxList101
       checkboxes={listOfNone}
-      onChangeHandler={onChangeHandler}
+      onChangeHandler={actions.onChangeHandler}
+    />
+  )))
+  .add('playground', withInfo()(() => (
+    <CheckboxList101
+      checkboxes={object('checkboxes', listOfcheckboxes)}
+      onChangeHandler={actions.onChangeHandler}
     />
   )));

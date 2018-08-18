@@ -1,6 +1,5 @@
 // @flow
 import React, { Fragment } from 'react';
-
 import Checkbox101 from '../checkbox101/checkbox101';
 
 type Props = {

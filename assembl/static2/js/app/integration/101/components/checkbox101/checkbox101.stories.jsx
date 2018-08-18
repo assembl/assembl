@@ -4,27 +4,43 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import { withInfo } from '@storybook/addon-info';
+import { withKnobs, text, boolean } from '@storybook/addon-knobs';
 /* eslint-enable */
 
 import Checkbox101 from './checkbox101';
 
-const onChangeHandler = action('onChangeHandler');
+const playgroundButton = {
+  label: 'Playground label',
+  isDone: true
+};
+
+const actions = {
+  onChangeHandler: action('onChangeHandler')
+};
 
 storiesOf('Checkbox101', module)
+  .addDecorator(withKnobs)
   .add('default', withInfo()(() => (
     <Checkbox101
-      onChangeHandler={onChangeHandler}
+      onChangeHandler={actions.onChangeHandler}
     />
   )))
   .add('checked', withInfo()(() => (
     <Checkbox101
       isDone
-      onChangeHandler={onChangeHandler}
+      onChangeHandler={actions.onChangeHandler}
     />
   )))
   .add('custom label', withInfo()(() => (
     <Checkbox101
       label="Custom Label"
-      onChangeHandler={onChangeHandler}
+      onChangeHandler={actions.onChangeHandler}
+    />
+  )))
+  .add('playground', withInfo()(() => (
+    <Checkbox101
+      label={text('label', playgroundButton.label)}
+      isDone={boolean('isDone', playgroundButton.isDone)}
+      onChangeHandler={actions.onChangeHandler}
     />
   )));
