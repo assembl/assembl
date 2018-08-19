@@ -18,7 +18,7 @@ def bright_mirror(phases, graphql_request, graphql_registry, test_session):
         graphql_registry['createThematic'],
         context_value=graphql_request,
         variable_values={
-            'discussionPhaseId': phases['brightMirror'],
+            'discussionPhaseId': phases['brightMirror'].id,
             'messageViewOverride': 'brightMirror',
             'titleEntries': [
                 {'value': u"Comprendre les dynamiques et les enjeux", 'localeCode': u"fr"},

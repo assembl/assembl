@@ -316,7 +316,7 @@ mutation myFirstMutation {
             }}}
 
 
-def test_mutation_create_thematic_upload_file(phases, graphql_request):
+def test_mutation_create_thematic_upload_file(graphql_request, phases):
     # create thematic
     import os
     from io import BytesIO
