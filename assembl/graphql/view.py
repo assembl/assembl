@@ -66,7 +66,7 @@ def graphql_api(request):
     # Check if this discussion has CORS enabled
     cors_pref = discussion.preferences['graphql_valid_cors']
     has_cors = cors_pref and len(cors_pref) > 0
-    cors_string = ",".join(cors_pref)
+    cors_string = str(",".join(cors_pref))
     cors_headers = [
         ('Access-Control-Allow-Origin', cors_string),
         ('Access-Control-Allow-Headers', 'Content-Type, Cookie'),
