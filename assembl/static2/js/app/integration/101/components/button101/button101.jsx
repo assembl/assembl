@@ -6,7 +6,7 @@ type Props = {
   /** Optional possible values: any strings */
   label?: string,
   /** Optional possible types: 'info', 'danger' */
-  type?: string,
+  type?: 'info' | 'danger',
   /** Optional flag to enable the button */
   isDisabled?: boolean,
   /** Required onClick function */
