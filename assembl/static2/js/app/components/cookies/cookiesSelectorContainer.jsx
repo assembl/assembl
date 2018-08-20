@@ -31,7 +31,7 @@ type State = {
   cookies: ?CookiesObject
 };
 
-class CookiesSelectorContainer extends React.Component<Props, State> {
+export class DumbCookiesSelectorContainer extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     const cookiesFromBrowser = getCookieItem('cookies_configuration');
@@ -62,15 +62,15 @@ class CookiesSelectorContainer extends React.Component<Props, State> {
 
   getCookieObjectData = (cookie: string) => {
     if (cookie.includes('SESSION_ON_DISCUSSION')) {
-      return { category: 'other', name: COOKIE_TRANSLATION_KEYS.userSession, hasChanged: false };
+      return { category: 'other', name: COOKIE_TRANSLATION_KEYS.userSession };
     }
     if (cookie.includes('LOCALE_ON_DISCUSSION')) {
-      return { category: 'essential', name: COOKIE_TRANSLATION_KEYS.locale, hasChanged: false };
+      return { category: 'essential', name: COOKIE_TRANSLATION_KEYS.locale };
     }
     if (cookie.includes('TRACKING_ON_DISCUSSION')) {
-      return { category: 'analytics', name: COOKIE_TRANSLATION_KEYS.piwik, hasChanged: false };
+      return { category: 'analytics', name: COOKIE_TRANSLATION_KEYS.piwik };
     }
-    return { category: 'other', name: cookie, hasChanged: false };
+    return { category: 'other', name: cookie };
   };
 
   getCookiesObjectFromArray = (cookiesArray: Array<CookieObject>) => {
@@ -94,14 +94,16 @@ class CookiesSelectorContainer extends React.Component<Props, State> {
     const cookiesArray:Array<CookieObject> = cookies && Object.values(cookies)
       .reduce((flat, next) => flat.concat(next), []);
     const updatedCookiesArray = cookiesArray.map(
-      (cookie: CookieObject) => (cookie.name === updatedCookie.name ? { ...updatedCookie, hasChanged: true } : cookie));
+      (cookie: CookieObject) => (cookie.name === updatedCookie.name ?
+        { ...updatedCookie, cookieType: this.toggleCookieType(cookie.cookieType) } :
+        cookie
+      ));
     const updatedCookiesByCategory = this.getCookiesObjectFromArray(updatedCookiesArray);
     this.setState({ cookies: updatedCookiesByCategory });
   }
 
   toggleCookieType = (cookie: string): string =>
     (cookie.startsWith('ACCEPT') ? cookie.replace('ACCEPT', 'REJECT') : cookie.replace('REJECT', 'ACCEPT'));
-
 
   saveChanges = () => {
     const { cookies } = this.state;
@@ -110,8 +112,7 @@ class CookiesSelectorContainer extends React.Component<Props, State> {
     // $FlowFixMe
     const cookiesArray:Array<CookieObject> = cookies && Object.values(cookies)
       .reduce((flat, next) => flat.concat(next), []);
-    const newCookiesList = cookiesArray.map(c => (c.hasChanged ? this.toggleCookieType(c.cookieType) : c.cookieType));
-
+    const newCookiesList = cookiesArray.map(c => c.cookieType);
     // Update the cookies in the back
     this.props.updateAcceptedCookies({ variables: { actions: newCookiesList } });
     // Update the cookies in the browser
@@ -134,6 +135,7 @@ class CookiesSelectorContainer extends React.Component<Props, State> {
         handleSave={this.saveChanges}
         handleToggle={this.handleToggle}
         handleCategorySelection={this.handleCategorySelection}
+        toggleCookieType={this.toggleCookieType}
       />
     );
   }
@@ -159,4 +161,4 @@ export default compose(connect(mapStateToProps),
         cookiesList: data.user.acceptedCookies
       };
     }
-  }), withLoadingIndicator())(CookiesSelectorContainer);
+  }), withLoadingIndicator())(DumbCookiesSelectorContainer);

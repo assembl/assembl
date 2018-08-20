@@ -9,8 +9,7 @@ export type CookieObject = {
   name: string,
   category: string,
   accepted: boolean,
-  cookieType: string,
-  hasChanged: boolean
+  cookieType: string
 }
 
 type CookieToggleProps = {
@@ -19,9 +18,10 @@ type CookieToggleProps = {
 };
 
 
-const CookieToggle = ({ handleToggle, cookie }: CookieToggleProps) => {
+const CookieToggle = ({ handleToggle, cookie, toggleCookieType }: CookieToggleProps) => {
   const toggleSwitch = () => {
-    const updatedCookie = { ...cookie, accepted: !cookie.accepted };
+    const { accepted, cookieType } = cookie;
+    const updatedCookie = { ...cookie, accepted: !accepted, cookieType: toggleCookieType(cookieType) };
     handleToggle(updatedCookie);
   };
 

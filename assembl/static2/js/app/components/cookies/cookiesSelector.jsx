@@ -12,10 +12,19 @@ type Props = {
   cookies: ?CookiesObject,
   handleCategorySelection: Function,
   handleSave: Function,
-  handleToggle: Function
+  handleToggle: Function,
+  toggleCookieType: Function
 }
 
-const CookiesSelector = ({ activeKey, show, cookies, handleCategorySelection, handleSave, handleToggle }: Props) => (
+const CookiesSelector = ({
+  activeKey,
+  show,
+  cookies,
+  handleCategorySelection,
+  handleSave,
+  handleToggle,
+  toggleCookieType }: Props
+) => (
   <React.Fragment>
     <div className="cookies-selector">
       <h2 className="dark-title-2">
@@ -43,6 +52,7 @@ const CookiesSelector = ({ activeKey, show, cookies, handleCategorySelection, ha
                         cookie={cookie}
                         key={cookie.name}
                         handleToggle={handleToggle}
+                        toggleCookieType={toggleCookieType}
                       />
                     ))}
               </div>
