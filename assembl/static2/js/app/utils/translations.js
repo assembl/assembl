@@ -359,6 +359,11 @@ const Translations = {
         seeSubIdeas_1: "Voir le sous-thème",
         announcement: "Consigne"
       },
+      brightMirror: {
+        startFictionLabel: "Je partage ma fiction",
+        fillBodyLabel: "Ecrivez votre fiction",
+        postSuccessMsg: "Merci pour votre participation. Votre fiction a bien été enregistrée !"
+      },
       themes: "Thèmes",
       notStarted: "La phase %{phaseName} n'a pas encore commencé. Merci de revenir à partir du ",
       isCompleted: "Cette phase est terminée. Vous ne pouvez plus voter.",
@@ -1153,6 +1158,11 @@ const Translations = {
         seeSubIdeas: "See %{count} sub-thematics",
         seeSubIdeas_1: "See sub-thematic",
         announcement: "Announcement"
+      },
+      brightMirror: {
+        startFictionLabel: "Share a fiction",
+        fillBodyLabel: "Write your fiction",
+        postSuccessMsg: "Thanks for your participation. Your fiction has been saved!"
       },
       themes: "Themes",
       notStarted: "The %{phaseName} phase has not started. Please come back from ",

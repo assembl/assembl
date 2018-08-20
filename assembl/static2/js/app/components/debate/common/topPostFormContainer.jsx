@@ -12,7 +12,11 @@ type TopPostFormContainerProps = {
   isColumnViewInline: boolean,
   ideaId: string,
   refetchIdea: Function,
-  topPostsCount: number
+  topPostsCount: number,
+  instructionLabel: string,
+  fillBodyLabel: string,
+  postSuccessMsg: string
+
 };
 
 type TopPostFormContainerState = {
@@ -79,10 +83,13 @@ class TopPostFormContainer extends React.Component<TopPostFormContainerProps, To
   }
 
   render() {
-    const { ideaId, refetchIdea, messageColumns = [], isColumnViewInline, topPostsCount } = this.props;
+    const { ideaId, refetchIdea, messageColumns = [], isColumnViewInline, topPostsCount,
+      instructionLabel, fillBodyLabel, postSuccessMsg } = this.props;
     const columnsInfos = this.getColumnsInfos();
     const { sticky } = this.state;
     const containerClassNames = sticky && messageColumns.length <= 1 && topPostsCount >= 1 ? 'top-post-sticky' : '';
+    const instructionLabelVal = instructionLabel || 'debate.thread.startDiscussion';
+
     return (
       <div id="top-post-form" ref={this.setFormContainerRef} className={containerClassNames}>
         <Grid fluid className={messageColumns.length > 1 ? '' : 'background-color'}>
@@ -119,7 +126,7 @@ class TopPostFormContainer extends React.Component<TopPostFormContainerProps, To
                               }
                             >
                               <h3 className="dark-title-3 no-margin">
-                                {messageColumns.length > 1 ? column.name : <Translate value="debate.thread.startDiscussion" />}
+                                {messageColumns.length > 1 ? column.name : <Translate value={instructionLabelVal} />}
                               </h3>
                             </div>
                           </div>
@@ -139,6 +146,8 @@ class TopPostFormContainer extends React.Component<TopPostFormContainerProps, To
                             refetchIdea={refetchIdea}
                             ideaOnColumn={messageColumns.length > 1}
                             messageClassifier={column.messageClassifier || null}
+                            fillBodyLabel={fillBodyLabel}
+                            postSuccessMsg={postSuccessMsg}
                           />
                         </Col>
                       </Row>

@@ -28,7 +28,9 @@ type TopPostFormProps = {
   ideaOnColumn: boolean,
   messageClassifier: string,
   scrollOffset: number,
-  onDisplayForm: Function
+  onDisplayForm: Function,
+  fillBodyLabel: string,
+  postSuccessMsg: string
 };
 
 type TopPostFormState = {
@@ -78,10 +80,13 @@ class TopPostForm extends React.Component<TopPostFormProps, TopPostFormState> {
   };
 
   createTopPost = () => {
-    const { contentLocale, createPost, ideaId, refetchIdea, uploadDocument, messageClassifier, ideaOnColumn } = this.props;
+    const { contentLocale, createPost, ideaId, refetchIdea, uploadDocument, messageClassifier,
+      ideaOnColumn, fillBodyLabel, postSuccessMsg } = this.props;
     const { body, subject } = this.state;
     this.setState({ submitting: true });
     const bodyIsEmpty = !body || rawContentStateIsEmpty(body);
+    const fillBodyLabelVal = fillBodyLabel || 'debate.thread.fillBody';
+    const postSuccessMsgVal = postSuccessMsg || 'debate.thread.postSuccess';
     if ((subject || this.props.ideaOnColumn) && !bodyIsEmpty) {
       displayAlert('success', I18n.t('loading.wait'));
 
@@ -101,7 +106,7 @@ class TopPostForm extends React.Component<TopPostFormProps, TopPostFormState> {
         createPost({ variables: variables })
           .then(() => {
             refetchIdea();
-            displayAlert('success', I18n.t('debate.thread.postSuccess'));
+            displayAlert('success', I18n.t(postSuccessMsgVal));
             this.resetForm();
             this.setState({ submitting: false });
           })
@@ -114,7 +119,7 @@ class TopPostForm extends React.Component<TopPostFormProps, TopPostFormState> {
       displayAlert('warning', I18n.t('debate.thread.fillSubject'));
       this.setState({ submitting: false });
     } else if (bodyIsEmpty) {
-      displayAlert('warning', I18n.t('debate.thread.fillBody'));
+      displayAlert('warning', I18n.t(fillBodyLabelVal));
       this.setState({ submitting: false });
     }
   };
@@ -172,7 +177,7 @@ class TopPostForm extends React.Component<TopPostFormProps, TopPostFormState> {
                 rawContentState={this.state.body}
                 handleInputFocus={this.handleInputFocus}
                 maxLength={TEXT_AREA_MAX_LENGTH}
-                placeholder={I18n.t('debate.insert')}
+                placeholder={I18n.t(this.props.fillBodyLabel || 'debate.insert')}
                 updateContentState={this.updateBody}
                 withAttachmentButton
               />

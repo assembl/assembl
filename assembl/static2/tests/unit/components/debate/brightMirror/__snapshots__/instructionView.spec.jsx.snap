@@ -1,29 +1,158 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Bright Mirror page should match BrightMirror instruction snapshot 1`] = `
-<div
-  className="announcement"
->
+<div>
   <div
-    className="announcement-title"
+    className="announcement"
   >
     <div
-      className="title-hyphen"
+      className="announcement-title"
     >
-       
+      <div
+        className="title-hyphen"
+      >
+         
+      </div>
+      <h3
+        className="announcement-title-text dark-title-1"
+      >
+        Instruction
+      </h3>
     </div>
-    <h3
-      className="announcement-title-text dark-title-1"
+    <Col
+      bsClass="col"
+      className="announcement-media col-md-push-4"
+      componentClass="div"
+      md={8}
+      xs={12}
     >
-      Instruction
-    </h3>
+      <div>
+        Participez à la création de fiction
+      </div>
+    </Col>
   </div>
   <div
-    className="announcement-media col-md-push-4 col-md-8 col-xs-12"
+    className="overflow-x"
   >
-    <div>
-      Participez à la création de fiction
-    </div>
+    <TopPostFormContainer
+      fillBodyLabel="debate.brightMirror.fillBodyLabel"
+      ideaId={0}
+      instructionLabel="debate.brightMirror.startFictionLabel"
+      postSuccessMsg="debate.brightMirror.postSuccessMsg"
+      refetchIdea={[Function]}
+      topPostsCount={0}
+    />
   </div>
+</div>
+`;
+
+exports[`Bright Mirror page timeline is over 1`] = `
+<div>
+  <div
+    className="announcement"
+  >
+    <div
+      className="announcement-title"
+    >
+      <div
+        className="title-hyphen"
+      >
+         
+      </div>
+      <h3
+        className="announcement-title-text dark-title-1"
+      >
+        Instruction
+      </h3>
+    </div>
+    <Col
+      bsClass="col"
+      className="announcement-media col-md-push-4"
+      componentClass="div"
+      md={8}
+      xs={12}
+    >
+      <div>
+        Participez à la création de fiction
+      </div>
+    </Col>
+  </div>
+  <div
+    className="overflow-x"
+  />
+</div>
+`;
+
+exports[`Bright Mirror page user cannot post 1`] = `
+<div>
+  <div
+    className="announcement"
+  >
+    <div
+      className="announcement-title"
+    >
+      <div
+        className="title-hyphen"
+      >
+         
+      </div>
+      <h3
+        className="announcement-title-text dark-title-1"
+      >
+        Instruction
+      </h3>
+    </div>
+    <Col
+      bsClass="col"
+      className="announcement-media col-md-push-4"
+      componentClass="div"
+      md={8}
+      xs={12}
+    >
+      <div>
+        Participez à la création de fiction
+      </div>
+    </Col>
+  </div>
+  <div
+    className="overflow-x"
+  />
+</div>
+`;
+
+exports[`Bright Mirror page user is not connected 1`] = `
+<div>
+  <div
+    className="announcement"
+  >
+    <div
+      className="announcement-title"
+    >
+      <div
+        className="title-hyphen"
+      >
+         
+      </div>
+      <h3
+        className="announcement-title-text dark-title-1"
+      >
+        Instruction
+      </h3>
+    </div>
+    <Col
+      bsClass="col"
+      className="announcement-media col-md-push-4"
+      componentClass="div"
+      md={8}
+      xs={12}
+    >
+      <div>
+        Participez à la création de fiction
+      </div>
+    </Col>
+  </div>
+  <div
+    className="overflow-x"
+  />
 </div>
 `;
