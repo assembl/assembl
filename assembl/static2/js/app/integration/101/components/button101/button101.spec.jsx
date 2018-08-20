@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-/* eslint-disable */
+/* eslint-disable import/no-extraneous-dependencies */
 import initStoryshots from '@storybook/addon-storyshots';
 import { configure, shallow, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
