@@ -15,6 +15,7 @@ import { load, postLoadFormat } from './load';
 import { createMutationsPromises, save } from './save';
 import validate from './validate';
 import Loader from '../../common/loader';
+import { PHASES } from '../../../constants';
 
 type Props = {
   client: ApolloClient,
@@ -57,9 +58,10 @@ const DumbSurveyAdminForm = ({ client, section, thematicId, phaseId, debateId, e
           </div>
           {steps.includes(section) && (
             <Navbar
+              queryArgs={{ phaseId: phaseId }}
               currentStep={section}
-              steps={steps}
-              phaseIdentifier="survey"
+              totalSteps={3}
+              phaseIdentifier={PHASES.survey}
               beforeChangeSection={() => (pristine || submitting) && handleSubmit()}
             />
           )}

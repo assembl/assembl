@@ -27,7 +27,6 @@ import createProposalMutation from '../graphql/mutations/createProposal.graphql'
 import updateProposalMutation from '../graphql/mutations/updateProposal.graphql';
 import deleteProposalMutation from '../graphql/mutations/deleteProposal.graphql';
 import { convertEntriesToHTML, convertImmutableEntriesToJS } from '../utils/draftjs';
-import { getPhaseId } from '../utils/timeline';
 import { get } from '../utils/routeMap';
 import { displayAlert, displayCustomModal, closeModal } from '../utils/utilityManager';
 import { getDiscussionSlug } from '../utils/globalFunctions';
@@ -166,7 +165,6 @@ type Props = {
   modulesOrProposalsHaveChanged: boolean,
   refetchVoteSession: Function,
   section: string,
-  timeline: Timeline,
   voteProposals: List<VoteProposalMap>,
   voteModules: List,
   voteSessionPage: Map<string, *>,
@@ -185,7 +183,8 @@ type Props = {
   voteSessionId: string,
   debateId: string,
   route: Route,
-  router: Router
+  router: Router,
+  phaseId: string
 };
 
 type State = {
@@ -320,7 +319,6 @@ class VoteSessionAdmin extends React.Component<Props, State> {
       i18n,
       modulesOrProposalsHaveChanged,
       refetchVoteSession,
-      timeline,
       voteModules,
       voteSessionPage,
       voteProposals,
@@ -334,7 +332,8 @@ class VoteSessionAdmin extends React.Component<Props, State> {
       updateVoteSession,
       createProposal,
       updateProposal,
-      deleteProposal
+      deleteProposal,
+      phaseId
     } = this.props;
 
     if (voteSessionPage.get('_hasChanged')) {
@@ -347,7 +346,6 @@ class VoteSessionAdmin extends React.Component<Props, State> {
       const propositionsSectionTitleEntries = voteSessionPage.get('propositionsSectionTitleEntries').toJS();
       const pageHeaderImage = voteSessionPage.get('headerImage').toJS();
       const headerImage = typeof pageHeaderImage.externalUrl === 'object' ? pageHeaderImage.externalUrl : null;
-      const phaseId = timeline ? getPhaseId(timeline, 'voteSession') : null;
       const discussionPhaseId = phaseId ? atob(phaseId).split(':')[1] : null;
       const payload = {
         variables: {

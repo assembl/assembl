@@ -31,7 +31,6 @@ def get_frontend_urls():
     """
     Get all V2 routes from source of truth
     """
-
     current = dirname(__file__)
     route_path = join(current, '..', 'static2/routes.json')
     if not exists(route_path):
@@ -44,6 +43,7 @@ def get_frontend_urls():
     py_routes = {}
     for name, route in routes.items():
         py_routes[name] = route.replace('${', '{')
+
     return py_routes
 
 
@@ -286,6 +286,7 @@ class FrontendUrls(object):
                 thematic = post.get_closest_thematic()
                 route = self.get_frontend_url('post', **{
                     'phase': phase.identifier,
+                    'phaseId': Node.to_global_id('DiscussionPhase', phase.id),
                     'themeId': thematic.graphene_id(),
                     'element': ''
                 })
@@ -293,6 +294,7 @@ class FrontendUrls(object):
             if not route:
                 route = self.get_frontend_url('post', **{
                     'phase': phase.identifier,
+                    'phaseId': Node.to_global_id('DiscussionPhase', phase.id),
                     'themeId': Node.to_global_id('Idea', first_idea.id),
                     'element': Node.to_global_id('Post', post.id)
                 })

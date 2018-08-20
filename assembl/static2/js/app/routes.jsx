@@ -125,7 +125,7 @@ const AdminChild = (props) => {
   case 'multiColumns':
     return <MultiColumnsAdmin {...props} section={props.location.query.section} />;
   case 'voteSession':
-    return <VoteSessionAdmin {...props} section={props.location.query.section} />;
+    return <VoteSessionAdmin {...props} section={props.location.query.section} phaseId={props.location.query.phaseId} />;
   case 'resourcesCenter':
     return <ResourcesCenterAdmin {...props} />;
   case 'landingPage':

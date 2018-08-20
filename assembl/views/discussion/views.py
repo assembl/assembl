@@ -3,6 +3,7 @@ import json
 import os
 import os.path
 import pkg_resources
+from graphene.relay import Node
 
 from pyramid.view import view_config
 from pyramid.request import Request
@@ -403,6 +404,7 @@ def purl_post(request):
                 furl.get_frontend_url(
                     'post',
                     phase=phase.identifier,
+                    phaseId=Node.to_global_id('DiscussionPhase', phase.id),
                     themeId=idea.graphene_id(),
                     element=post.graphene_id()))
         )
@@ -442,6 +444,7 @@ def purl_ideas(request):
                 furl.get_frontend_url(
                     'idea',
                     phase=phase.identifier,
+                    phaseId=Node.to_global_id('DiscussionPhase', phase.id),
                     themeId=idea.graphene_id())
             )
         )

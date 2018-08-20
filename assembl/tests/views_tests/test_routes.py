@@ -1,6 +1,7 @@
 import pytest
 
 from urllib import quote_plus, unquote
+from graphene.relay import Node
 
 backbone_prefix = "/debate/"
 react_prefix = "/"
@@ -298,10 +299,10 @@ def test_route_discussion_idea_legacy(discussion, root_post_1, subidea_1,
 
 def test_route_discussion_post_v2(
         test_app, discussion_with_2_phase_interface_v2,
-        timeline_phase2_interface_v2,
-        post_related_to_sub_idea_1, subidea_1):
+        post_related_to_sub_idea_1, subidea_1, test_session):
 
     from assembl.lib.frontend_urls import FrontendUrls
+    from assembl import models
     slug = discussion_with_2_phase_interface_v2.slug
     route = "/%s/posts/%s" % (
         slug, quote_plus(post_related_to_sub_idea_1.uri()))
@@ -309,13 +310,15 @@ def test_route_discussion_post_v2(
     resp = test_app.get(route)
     assert resp.status_int == 303
 
+    thread_phase = test_session.query(models.DiscussionPhase).all()[1]
     headers = get_response_headers(resp)
     furl = FrontendUrls(discussion_with_2_phase_interface_v2)
     idea_id = subidea_1.graphene_id()
-    phase_id = timeline_phase2_interface_v2['identifier']
+    phase_identifier = thread_phase.identifier
+    phase_id = Node.to_global_id('DiscussionPhase', thread_phase.id)
     post_id = post_related_to_sub_idea_1.graphene_id()
     expected_path = furl.get_frontend_url(
-        'post', phase=phase_id, themeId=idea_id, element=post_id)
+        'post', phase=phase_identifier, themeId=idea_id, phaseId=phase_id, element=post_id)
 
     assert expected_path in headers['Location']
 
@@ -343,9 +346,11 @@ def test_route_discussion_idea(discussion, root_post_1, subidea_1, test_app):
 # @pytest.mark.xfail(reason="The feature is not complete yet")
 def test_route_discussion_idea_v2(
     test_app, discussion_with_2_phase_interface_v2,
-    timeline_phase2_interface_v2, post_related_to_sub_idea_1,
-    subidea_1):
+    post_related_to_sub_idea_1,
+    subidea_1, test_session):
 
+    from assembl.lib.frontend_urls import FrontendUrls
+    from assembl import models
     slug = discussion_with_2_phase_interface_v2.slug
     route = "/debate/%s/idea/%s" % (
         slug, quote_plus(subidea_1.uri()))
@@ -353,13 +358,14 @@ def test_route_discussion_idea_v2(
     resp = test_app.get(route)
     assert resp.status_int == 303
 
-    from assembl.lib.frontend_urls import FrontendUrls
+    thread_phase = test_session.query(models.DiscussionPhase).all()[1]
     furl = FrontendUrls(discussion_with_2_phase_interface_v2)
     headers = get_response_headers(resp)
-    phase_id = timeline_phase2_interface_v2['identifier']
+    phase_identifier = thread_phase.identifier
+    phase_id = Node.to_global_id('DiscussionPhase', thread_phase.id)
     idea_id = subidea_1.graphene_id()
     expected_path = furl.get_frontend_url(
-        'idea', phase=phase_id, themeId=idea_id)
+        'idea', phase=phase_identifier, phaseId=phase_id, themeId=idea_id)
     assert expected_path in headers['Location']
 
 
@@ -427,7 +433,6 @@ def test_url_to_synthesis_post_with_timeline(discussion, synthesis_post_1,
         get_current_phase_identifier,
         current_phase_use_v1_interface
     )
-    from graphene.relay import Node
     frontend_urls = FrontendUrls(discussion)
     assert get_current_phase_identifier(discussion.timeline_events) ==\
         u'thread'
@@ -461,31 +466,37 @@ def test_url_to_post_v1_without_timeline(discussion, root_post_1):
 
 
 def test_url_to_post_v2(discussion, root_post_en_under_positive_column_of_idea,
-                        timeline_phase2_interface_v2):
+                        timeline_phase2_interface_v2, test_session):
     from assembl.lib.frontend_urls import (
         FrontendUrls,
         get_current_phase_identifier,
         current_phase_use_v1_interface
     )
+    from assembl import models
+    thread_phase = test_session.query(models.DiscussionPhase).all()[-1]
+    phase_id = Node.to_global_id('DiscussionPhase', thread_phase.id)
     assert get_current_phase_identifier(discussion.timeline_events) ==\
         u'thread'
     assert current_phase_use_v1_interface(discussion.timeline_events) is False
     frontend_urls = FrontendUrls(discussion)
-    assert 'jacklayton2/debate/thread/theme/' in \
+    assert 'jacklayton2/debate/thread/{}/theme/'.format(phase_id) in \
         frontend_urls.get_post_url(root_post_en_under_positive_column_of_idea)
 
 
 def test_url_to_post_v2_proposal(discussion, proposals_en_fr,
-                                 timeline_phase2_interface_v2):
+                                 timeline_phase2_interface_v2, test_session):
     from assembl.lib.frontend_urls import (
         FrontendUrls,
         get_current_phase_identifier,
         current_phase_use_v1_interface
     )
+    from assembl import models
+    thread_phase = test_session.query(models.DiscussionPhase).all()[-1]
+    phase_id = Node.to_global_id('DiscussionPhase', thread_phase.id)
     assert get_current_phase_identifier(discussion.timeline_events) ==\
         u'thread'
     assert current_phase_use_v1_interface(discussion.timeline_events) is False
     frontend_urls = FrontendUrls(discussion)
-    expected = 'jacklayton2/debate/thread/theme/'
+    expected = 'jacklayton2/debate/thread/{}/theme/'.format(phase_id)
     actual = frontend_urls.get_post_url(proposals_en_fr[0])
     assert expected in actual
