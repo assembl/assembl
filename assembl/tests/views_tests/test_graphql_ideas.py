@@ -280,10 +280,10 @@ def test_graphql_get_direct_ideas_from_root_idea(graphql_request, subidea_1_1_1)
     assert res.data['rootIdea']['children'][0]['title'] == u'Favor economic growth'
 
 
-def test_graphql_discussion_counters_survey_phase_no_thematic(graphql_request):
+def test_graphql_discussion_counters_survey_phase_no_thematic(graphql_request, phases):
     res = schema.execute(
-        u"""query RootIdeaStats($identifier: String) {
-              rootIdea(identifier: $identifier) {
+        u"""query RootIdeaStats($discussionPhaseId: Int) {
+              rootIdea(discussionPhaseId: $discussionPhaseId) {
                 ... on Node {
                   id
                 }
@@ -293,15 +293,15 @@ def test_graphql_discussion_counters_survey_phase_no_thematic(graphql_request):
               }
               numParticipants
             }
-        """, context_value=graphql_request, variable_values={'identifier': 'survey'})
+        """, context_value=graphql_request, variable_values={'discussionPhaseId': phases['survey'].id})
     assert res.data['rootIdea'] is None
     assert res.data['numParticipants'] == 1
 
 
-def test_graphql_discussion_counters_survey_phase_with_proposals(graphql_request, proposals):
+def test_graphql_discussion_counters_survey_phase_with_proposals(graphql_request, proposals, phases):
     res = schema.execute(
-        u"""query RootIdeaStats($identifier: String) {
-              rootIdea(identifier: $identifier) {
+        u"""query RootIdeaStats($discussionPhaseId: Int) {
+              rootIdea(discussionPhaseId: $discussionPhaseId) {
                 ... on Node {
                   id
                 }
@@ -312,16 +312,16 @@ def test_graphql_discussion_counters_survey_phase_with_proposals(graphql_request
               }
               numParticipants
             }
-        """, context_value=graphql_request, variable_values={'identifier': 'survey'})
+        """, context_value=graphql_request, variable_values={'discussionPhaseId': phases['survey'].id})
     assert res.data['rootIdea']['numTotalPosts'] == 15  # all posts
     assert res.data['rootIdea']['numPosts'] == 15  # phase 1 posts
     assert res.data['numParticipants'] == 1
 
 
-def test_graphql_discussion_counters_thread_phase(graphql_request, proposals):
+def test_graphql_discussion_counters_thread_phase(graphql_request, proposals, phases):
     res = schema.execute(
-        u"""query RootIdeaStats($identifier: String) {
-              rootIdea(identifier: $identifier) {
+        u"""query RootIdeaStats($discussionPhaseId: Int) {
+              rootIdea(discussionPhaseId: $discussionPhaseId) {
                 ... on Node {
                   id
                 }
@@ -332,13 +332,13 @@ def test_graphql_discussion_counters_thread_phase(graphql_request, proposals):
               }
               numParticipants
             }
-        """, context_value=graphql_request, variable_values={'identifier': 'thread'})
+        """, context_value=graphql_request, variable_values={'discussionPhaseId': phases['thread'].id})
     assert res.data['rootIdea']['numTotalPosts'] == 15  # all posts
     assert res.data['rootIdea']['numPosts'] == 15  # phase 1+2 posts counted when current phase is thread
     assert res.data['numParticipants'] == 1
 
 
-def test_graphql_discussion_counters_thread_phase_deleted_thematic(graphql_request, thematic_and_question, proposals):
+def test_graphql_discussion_counters_thread_phase_deleted_thematic(graphql_request, thematic_and_question, proposals, phases):
     thematic_id, first_question_id = thematic_and_question
     res = schema.execute(
         u"""mutation DeleteThematic($id: ID!) {
@@ -350,8 +350,8 @@ def test_graphql_discussion_counters_thread_phase_deleted_thematic(graphql_reque
     assert res.errors is None
     assert res.data['deleteThematic']['success'] is True
     res = schema.execute(
-        u"""query RootIdeaStats($identifier: String) {
-              rootIdea(identifier: $identifier) {
+        u"""query RootIdeaStats($discussionPhaseId: Int) {
+              rootIdea(discussionPhaseId: $discussionPhaseId) {
                 ... on Node {
                   id
                 }
@@ -362,17 +362,17 @@ def test_graphql_discussion_counters_thread_phase_deleted_thematic(graphql_reque
               }
               numParticipants
             }
-        """, context_value=graphql_request, variable_values={'identifier': 'thread'})
+        """, context_value=graphql_request, variable_values={'discussionPhaseId': phases['thread'].id})
     assert res.data['rootIdea']['numTotalPosts'] == 15  # all posts
     # But the posts are not bound anymore
     assert res.data['rootIdea']['numPosts'] == 0
     assert res.data['numParticipants'] == 1
 
 
-def test_graphql_discussion_counters_thread_phase_with_posts(graphql_request, proposals, top_post_in_thread_phase):
+def test_graphql_discussion_counters_thread_phase_with_posts(graphql_request, proposals, top_post_in_thread_phase, phases):
     res = schema.execute(
-        u"""query RootIdeaStats($identifier: String) {
-              rootIdea(identifier: $identifier) {
+        u"""query RootIdeaStats($discussionPhaseId: Int) {
+              rootIdea(discussionPhaseId: $discussionPhaseId) {
                 ... on Node {
                   id
                 }
@@ -383,7 +383,7 @@ def test_graphql_discussion_counters_thread_phase_with_posts(graphql_request, pr
               }
               numParticipants
             }
-        """, context_value=graphql_request, variable_values={'identifier': 'thread'})
+        """, context_value=graphql_request, variable_values={'discussionPhaseId': phases['thread'].id})
     assert res.data['rootIdea']['numTotalPosts'] == 16  # all posts
     assert res.data['rootIdea']['numPosts'] == 16  # phase 1+2 posts counted when current phase is thread
     assert res.data['numParticipants'] == 1

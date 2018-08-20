@@ -80,7 +80,7 @@ log = logging.getLogger('assembl')
 class Query(graphene.ObjectType):
     node = Node.Field(description=docs.Schema.node)
     root_idea = graphene.Field(
-        IdeaUnion, identifier=graphene.String(description=docs.Default.phase_identifier), description=docs.Schema.root_idea)
+        IdeaUnion, discussion_phase_id=graphene.Int(description=docs.Default.phase_identifier), description=docs.Schema.root_idea)
     ideas = graphene.List(
         IdeaUnion, discussion_phase_id=graphene.Int(required=True, description=docs.Default.phase_identifier_id), description=docs.Schema.ideas)
     syntheses = graphene.List(Synthesis, description=docs.Schema.syntheses)
@@ -160,11 +160,13 @@ class Query(graphene.ObjectType):
     def resolve_root_idea(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
-        identifier = args.get('identifier')
-        if identifier is None or identifier == 'thread':
+        discussion_phase_id = args.get('discussion_phase_id')
+        discussion_phase = discussion_phase_id and models.DiscussionPhase.get(discussion_phase_id)
+        if discussion_phase is None or discussion_phase.identifier == 'thread':
             return discussion.root_idea
 
-        root_thematic = get_root_thematic_for_phase(discussion, identifier)
+        root_thematic = get_root_thematic_for_phase(
+            discussion, discussion_phase.identifier)
         return root_thematic
 
     def resolve_vote_session(self, args, context, info):

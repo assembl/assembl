@@ -472,9 +472,8 @@ def test_url_to_post_v2(discussion, root_post_en_under_positive_column_of_idea,
         get_current_phase_identifier,
         current_phase_use_v1_interface
     )
-    from assembl import models
-    thread_phase = test_session.query(models.DiscussionPhase).all()[-1]
-    phase_id = Node.to_global_id('DiscussionPhase', thread_phase.id)
+    phase = root_post_en_under_positive_column_of_idea.get_created_phase()
+    phase_id = Node.to_global_id('DiscussionPhase', phase.id)
     assert get_current_phase_identifier(discussion.timeline_events) ==\
         u'thread'
     assert current_phase_use_v1_interface(discussion.timeline_events) is False
@@ -490,7 +489,6 @@ def test_url_to_post_v2_proposal(discussion, proposals_en_fr,
         get_current_phase_identifier,
         current_phase_use_v1_interface
     )
-    from assembl import models
     proposal = proposals_en_fr[0]
     phase = proposal.get_created_phase()
     phase_id = Node.to_global_id('DiscussionPhase', phase.id)
