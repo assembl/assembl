@@ -89,6 +89,15 @@ def test_preference_address_good_url(test_session, non_standard_preference):
         assert False, "An error should NOT have been raised"
 
 
+def test_preference_address_good_url_with_port(test_session, non_standard_preference):
+    try:
+        key = 'test_url'
+        non_standard_preference[key] = "http://localhost:9000"
+        assert True
+    except:
+        assert False, "An error should NOT have been raised"
+
+
 def test_preference_address_good_ipv4(test_session, non_standard_preference):
     try:
         key = 'test_url'

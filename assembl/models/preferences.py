@@ -289,11 +289,11 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
                 assert value in pref_data.get("scalar_values", ()), (
                     "value not allowed: " + value)
             elif data_type == "url":
-                # Whilst not an address, requested feature
                 condition = False
                 parsed_val = urlparse(value)
                 val = parsed_val.netloc
                 while not condition:
+                    # Whilst not an address, requested feature
                     if value in ("*",):
                         condition = True
                         break
