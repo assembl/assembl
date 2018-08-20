@@ -30,7 +30,6 @@ describe('CookiesSelectorContainer component', () => {
         category: 'other',
         name: COOKIE_TRANSLATION_KEYS.userSession,
         hasChanged: false
-      });
     });
   });
   describe('getCookiesObjectFromArray method', () => {
@@ -38,13 +37,11 @@ describe('CookiesSelectorContainer component', () => {
       expect(JSON.stringify(instance.getCookiesObjectFromArray([{
         category: 'other',
         name: COOKIE_TRANSLATION_KEYS.userSession,
-        hasChanged: false,
         accepted: true
       }]))).toEqual(JSON.stringify({
         other: [{
           category: 'other',
           name: COOKIE_TRANSLATION_KEYS.userSession,
-          hasChanged: false,
           accepted: true
         }]
       }));
@@ -82,7 +79,6 @@ describe('CookiesSelectorContainer component', () => {
       const updatedCookie = {
         category: 'other',
         name: COOKIE_TRANSLATION_KEYS.userSession,
-        hasChanged: true,
         accepted: false,
         cookieType: 'REJECT_SESSION_ON_DISCUSSION'
       };
@@ -92,7 +88,6 @@ describe('CookiesSelectorContainer component', () => {
         other: [{
           category: 'other',
           name: COOKIE_TRANSLATION_KEYS.userSession,
-          hasChanged: true,
           accepted: false,
           cookieType: 'REJECT_SESSION_ON_DISCUSSION'
         }] }
