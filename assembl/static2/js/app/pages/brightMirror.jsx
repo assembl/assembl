@@ -30,7 +30,7 @@ class BrightMirror extends React.Component {
       })
     );
     return (
-      <div>
+      <div className="debate">
         <section className="debate-section">{childrenElm}</section>
       </div>
     );

@@ -9,7 +9,7 @@ import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
 
 
 const InstructionView = ({ isUserConnected, ideaId, refetchIdea, posts, announcementContent, timeline, identifier }) => (
-  <div>
+  <div className="overflow-x">
     <div className="announcement">
       <div className="announcement-title">
         <div className="title-hyphen">&nbsp;</div>
@@ -21,18 +21,16 @@ const InstructionView = ({ isUserConnected, ideaId, refetchIdea, posts, announce
         <div>{ activeHtml(announcementContent.body, postBodyReplacementComponents()) }</div>
       </Col>
     </div>
-    <div className="overflow-x">
-      {isUserConnected && connectedUserCan(Permissions.ADD_POST) && !getIfPhaseCompletedByIdentifier(timeline, identifier) ? (
-        <TopPostFormContainer
-          ideaId={ideaId}
-          refetchIdea={refetchIdea}
-          topPostsCount={posts.length}
-          instructionLabel="debate.brightMirror.startFictionLabel"
-          fillBodyLabel="debate.brightMirror.fillBodyLabel"
-          postSuccessMsg="debate.brightMirror.postSuccessMsg"
-        />
-      ) : null}
-    </div>
+    {isUserConnected && connectedUserCan(Permissions.ADD_POST) && !getIfPhaseCompletedByIdentifier(timeline, identifier) ? (
+      <TopPostFormContainer
+        ideaId={ideaId}
+        refetchIdea={refetchIdea}
+        topPostsCount={posts.length}
+        instructionLabel="debate.brightMirror.startFictionLabel"
+        fillBodyLabel="debate.brightMirror.fillBodyLabel"
+        postSuccessMsg="debate.brightMirror.postSuccessMsg"
+      />
+    ) : null}
   </div>
 );
 
