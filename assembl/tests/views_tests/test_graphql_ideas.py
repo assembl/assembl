@@ -591,7 +591,7 @@ query QuestionPosts($id: ID!, $first: Int!, $after: String!) {
     assert all(post['node']['id'] in proposals for post in question_posts)
 
 
-def test_graphql_create_bright_mirror(phases, graphql_request, graphql_registry, test_session):
+def test_graphql_create_bright_mirror(graphql_request, graphql_registry, test_session, phases):
     import os
     from io import BytesIO
 
@@ -757,11 +757,11 @@ def test_graphql_create_bright_mirror_announcement_empty_title(phases, graphql_r
     assert "Announcement titleEntries needs at least one entry" in res.errors[0].args[0]
 
 
-def test_graphql_get_bright_mirror(phases, graphql_request, graphql_registry, bright_mirror, test_session):
+def test_graphql_get_bright_mirror(graphql_request, graphql_registry, bright_mirror, test_session, phases):
     res = schema.execute(
         graphql_registry['ThematicsQuery'],
         context_value=graphql_request,
-        variable_values={'discussionPhaseId': phases['brightMirror']}
+        variable_values={'discussionPhaseId': phases['brightMirror'].id}
         )
 
     assert res.errors is None
@@ -794,7 +794,7 @@ def test_graphql_get_bright_mirror_noresult(phases, graphql_request, graphql_reg
     res = schema.execute(
         graphql_registry['ThematicsQuery'],
         context_value=graphql_request,
-        variable_values={'discussionPhaseId': phases['brightMirror']}
+        variable_values={'discussionPhaseId': phases['brightMirror'].id}
         )
 
     assert res.errors is None
