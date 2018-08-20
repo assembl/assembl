@@ -1,11 +1,18 @@
 // @flow
 import React from 'react';
 /* eslint-disable */
+import initStoryshots from '@storybook/addon-storyshots';
 import { configure, shallow, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 /* eslint-enable */
 
 import Button101 from './button101';
+
+// Separate the snapshots in directories next to each component
+// Name should match with the story name
+initStoryshots({
+  storyKindRegex: /^Button101$/
+});
 
 configure({ adapter: new Adapter() });
 
