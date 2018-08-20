@@ -97,6 +97,8 @@
     "classnames": "^2.2.5",
     "draft-convert": "^2",
     "draft-js": "^0.10.1",
+    "enzyme": "^3.4.4",
+    "enzyme-adapter-react-16": "^1.2.0",
     "final-form": "^4.8.2",
     "final-form-arrays": "^1.0.4",
     "graphql": "^0.10.5",

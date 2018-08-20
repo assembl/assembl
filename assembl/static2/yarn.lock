@@ -335,8 +335,8 @@
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.106.tgz#6093e9a02aa567ddecfe9afadca89e53e5dce4dd"
 
 "@types/node@*":
-  version "10.7.0"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.7.0.tgz#d384b2c8625414ab2aa18fdf989c288d6a7a8202"
+  version "10.7.1"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.7.1.tgz#b704d7c259aa40ee052eec678758a68d07132a2e"
 
 abab@^1.0.3:
   version "1.0.3"
@@ -3249,9 +3249,9 @@ enzyme-adapter-utils@^1.5.0:
     object.assign "^4.1.0"
     prop-types "^15.6.2"
 
-enzyme@^3.4.1:
-  version "3.4.1"
-  resolved "https://registry.yarnpkg.com/enzyme/-/enzyme-3.4.1.tgz#d305af5bdb30b8aca56d199110421588c670ea0e"
+enzyme@^3.4.4:
+  version "3.4.4"
+  resolved "https://registry.yarnpkg.com/enzyme/-/enzyme-3.4.4.tgz#92c7c6b9e59d4ef0c3d36a75dccc0e41a5c14d21"
   dependencies:
     array.prototype.flat "^1.2.1"
     cheerio "^1.0.0-rc.2"
@@ -8750,7 +8750,11 @@ selfsigned@^1.9.1:
   version "5.4.1"
   resolved "https://registry.yarnpkg.com/semver/-/semver-5.4.1.tgz#e059c09d8571f0540823733433505d3a2f00b18e"
 
-semver@^5.4.1, semver@^5.5.0:
+semver@^5.4.1:
+  version "5.5.1"
+  resolved "https://registry.yarnpkg.com/semver/-/semver-5.5.1.tgz#7dfdd8814bdb7cabc7be0fb1d734cfb66c940477"
+
+semver@^5.5.0:
   version "5.5.0"
   resolved "https://registry.yarnpkg.com/semver/-/semver-5.5.0.tgz#dc4bbc7a6ca9d916dee5d43516f0092b58f7b8ab"
 
