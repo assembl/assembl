@@ -10,7 +10,7 @@ from assembl.auth import Everyone, CrudPermissions
 import assembl.graphql.docstrings as docs
 
 
-class TranslationFields(graphene.AbstractType):
+class TranslationFields(object):
     locale_from = graphene.String(required=True, description=docs.Translation.locale_from)
     locale_into = graphene.String(required=True, description=docs.Translation.locale_into)
 

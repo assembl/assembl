@@ -250,7 +250,7 @@ class PostConnection(graphene.Connection):
         node = Post
 
 
-class PostExtractEntryFields(graphene.AbstractType):
+class PostExtractEntryFields(object):
     post_id = graphene.String(required=True, description=docs.PostExtract.post_id)
     offset_start = graphene.Int(required=True, description=docs.PostExtract.offset_start)
     offset_end = graphene.Int(required=True, description=docs.PostExtract.offset_end)

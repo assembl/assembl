@@ -276,7 +276,7 @@ class ProfileField(SecureObjectType, SQLAlchemyObjectType):
         return getattr(self, 'value_data', {u'value': None})
 
 
-class FieldData(graphene.AbstractType):
+class FieldData(object):
     __doc__ = docs.FieldData.__doc__
 
     configurable_field_id = graphene.ID(required=True, description=docs.FieldData.configurable_field_id)
@@ -284,7 +284,7 @@ class FieldData(graphene.AbstractType):
     value_data = GenericScalar(required=True, description=docs.FieldData.value_data)
 
 
-class FieldDataInput(graphene.InputObjectType, FieldData):
+class FieldDataInput(FieldData, graphene.InputObjectType):
     pass
 
 

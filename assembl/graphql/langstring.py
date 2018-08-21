@@ -149,7 +149,7 @@ def update_langstring_from_input_entries(obj, attr, entries):
     langstring.db.flush()
 
 
-class LangStringEntryFields(graphene.AbstractType):
+class LangStringEntryFields(object):
     value = graphene.String(required=False, description=docs.LangString.value)
     locale_code = graphene.String(required=True, description=docs.LangString.locale_code)
 
