@@ -27,8 +27,19 @@ describe('RichTextEditor component', () => {
   });
 
   describe('getCharCount method', () => {
-    xit('should return 0 if the editorState content is empty', () => {});
-    xit('should return the number of characters in the editorState', () => {});
+    it('should return 0 if the editorState content is empty', () => {
+      const rawContentState = convertToRaw(ContentState.createFromText(''));
+      const rte = new RichTextEditor({ rawContentState: rawContentState });
+      const actual = rte.getCharCount(rte.state.editorState);
+      expect(actual).toEqual(0);
+    });
+
+    it('should return the number of characters in the editorState', () => {
+      const rawContentState = convertToRaw(ContentState.createFromText('Hello world'));
+      const rte = new RichTextEditor({ rawContentState: rawContentState });
+      const actual = rte.getCharCount(rte.state.editorState);
+      expect(actual).toEqual(11);
+    });
   });
 
   describe('shouldHidePlaceholder method', () => {

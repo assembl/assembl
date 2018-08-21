@@ -120,6 +120,7 @@ class TopPostForm extends React.Component<TopPostFormProps, TopPostFormState> {
       displayAlert('success', I18n.t('loading.wait'));
 
       // first, we upload each attachment
+      // $FlowFixMe we know that body is not empty
       const uploadDocumentsPromise = attachmentsPlugin.uploadNewAttachments(body, uploadDocument);
       uploadDocumentsPromise.then((result) => {
         const variables = {

@@ -76,6 +76,7 @@ class AnswerForm extends React.PureComponent<AnswerFormProps, AnswerFormState> {
     const bodyIsEmpty = !body || editorStateIsEmpty(body);
     if (!bodyIsEmpty) {
       // first we upload the new documents
+      // $FlowFixMe we know that body is not null as we checked bodyIsEmpty
       const uploadDocumentsPromise = attachmentsPlugin.uploadNewAttachments(body, uploadDocument);
       uploadDocumentsPromise.then((result) => {
         if (!result.contentState) {

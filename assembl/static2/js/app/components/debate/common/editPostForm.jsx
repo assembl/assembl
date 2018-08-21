@@ -71,8 +71,8 @@ class EditPostForm extends React.PureComponent<EditPostFormProps, EditPostFormSt
     this.setState({ subject: e.target.value });
   };
 
-  updateBody = (rawBody: EditorState): void => {
-    this.setState({ body: rawBody });
+  updateBody = (body: EditorState): void => {
+    this.setState({ body: body });
   };
 
   handleCancel = (): void => {

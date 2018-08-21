@@ -4,6 +4,8 @@ import { type ContentBlock, ContentState, EditorState, EntityInstance, Modifier,
 import type { Attachment } from '../editAttachments';
 import { getExtension, getIconPath } from '../documentExtensionIcon';
 
+type DraftEntityType = typeof Entity;
+
 const ENTITY_TYPE = 'document';
 const BLOCK_TYPE = 'atomic';
 

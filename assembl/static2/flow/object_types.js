@@ -1,6 +1,16 @@
 /* @flow */
 /* eslint-disable */
 import { type EditorState } from 'draft-js';
+import Immutable from 'immutable';
+
+/* temporary dummy types */
+type RawDraftContentState = {
+  blocks: Array<Object>,
+  entityMap: { [key: string]: Object }
+};
+type DraftBlockType = string;
+type DraftInlineStyle = Immutable.OrderedSet<string>;
+/* end temporary dummy types */
 
 export type IdeaMessageColumns = Array<IdeaMessageColumnFragment>;
 

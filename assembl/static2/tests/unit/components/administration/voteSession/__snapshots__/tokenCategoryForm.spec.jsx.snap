@@ -42,7 +42,7 @@ exports[`tokenTypeForm component should render a TokenCategoryForm component 1`]
       label="Number of tokens per participant"
       labelAlwaysVisible={false}
       name={undefined}
-      onChange={undefined}
+      onChange={[Function]}
       required={true}
       type="number"
       validationErrors={undefined}
