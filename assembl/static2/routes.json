@@ -48,5 +48,11 @@
   "exportVoteSessionData": "data/Discussion/${debateId}/widgets/${voteSessionId}/vote_results_csv",
   "exportTaxonomiesData": "data/Discussion/${debateId}/extract_csv_taxonomy",
   "discussionTimelineAdmin": "${slug}/administration/discussion?section=5",
-  "landingPageTimelineAdmin": "${slug}/administration/landingPage?section=3"
+  "landingPageTimelineAdmin": "${slug}/administration/landingPage?section=3",
+
+  "integrationPage": "integration",
+  "integration101Page": "integration/101/index",
+  "integration101FormBuilderPage": "integration/101/form-builder",
+  "integrationBrightMirrorIndex": "integration/bright-mirror/index",
+  "integrationBrightMirrorShow": "integration/bright-mirror/show"
 }

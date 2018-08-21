@@ -39,6 +39,13 @@ import BrightMirror from './pages/brightMirror';
 import BrightMirrorAdmin from './pages/brightMirrorAdmin';
 import { routeForRouter } from './utils/routeMap';
 
+// Page that is only used to display converted mockups to static pages
+import IntMainPage from './integration/index';
+import Int101Page from './integration/101/index';
+import Int101FormBuilderPage from './integration/101/containers/formBuilder101/formBuilder101';
+import IntBrightMirrorIndex from './integration/brightMirror/index';
+import IntBrightMirrorShow from './integration/brightMirror/show';
+
 const DebateHome = (props) => {
   switch (props.params.phase) {
   case 'survey':
@@ -98,6 +105,13 @@ const AdminChild = (props) => {
 
 export default [
   <Route path="/" component={Root}>
+    {/* 'integration' route is only used for HTML/CSS integration purpose */}
+    <Route path={routeForRouter('integrationPage', false, { preSlash: true })} component={IntMainPage} />
+    <Route path={routeForRouter('integration101Page', false, { preSlash: true })} component={Int101Page} />
+    <Route path={routeForRouter('integration101FormBuilderPage', false, { preSlash: true })} component={Int101FormBuilderPage} />
+    <Route path={routeForRouter('integrationBrightMirrorIndex', false, { preSlash: true })} component={IntBrightMirrorIndex} />
+    <Route path={routeForRouter('integrationBrightMirrorShow', false, { preSlash: true })} component={IntBrightMirrorShow} />
+    {/* once the integration workflow is mature, Styleguide component will be replaced by Storybook and thus can be removed */}
     <Route path={routeForRouter('styleguide', false, { preSlash: true })} component={Styleguide} />
     {/* Those login routes should be kept in synchrony with assembl.views.auth.__init__.py */}
     <Route path={routeForRouter('login', false, { preSlash: true })} component={Login} />
