@@ -40,8 +40,12 @@ from assembl.graphql.section import (CreateSection, DeleteSection, Section,
 from assembl.graphql.sentiment import AddSentiment, DeleteSentiment
 from assembl.graphql.synthesis import Synthesis
 from assembl.graphql.user import UpdateUser, DeleteUserInformation, UpdateAcceptedCookies
-from .configurable_fields import ConfigurableFieldUnion, CreateTextField, UpdateTextField, DeleteTextField, ProfileField, UpdateProfileFields
-from assembl.graphql.timeline import DiscussionPhase, CreateDiscussionPhase, UpdateDiscussionPhase, DeleteDiscussionPhase
+from .configurable_fields import (
+    ConfigurableFieldUnion, CreateTextField, UpdateTextField,
+    DeleteTextField, ProfileField, UpdateProfileFields)
+from assembl.graphql.timeline import (
+    DiscussionPhase, CreateDiscussionPhase,
+    UpdateDiscussionPhase, DeleteDiscussionPhase)
 from assembl.graphql.votes import AddTokenVote, AddGaugeVote
 from assembl.graphql.vote_session import (
     VoteSession, UpdateVoteSession, CreateTokenVoteSpecification,
@@ -58,6 +62,7 @@ from assembl.lib.locale import strip_country
 from assembl.lib.sqla_types import EmailString
 from assembl.models.action import SentimentOfPost
 from assembl.models.post import countable_publication_states
+from assembl.models import Phases
 from assembl.nlp.translation_service import DummyGoogleTranslationService
 from assembl.graphql.permissions_helpers import require_instance_permission
 from assembl.auth import CrudPermissions
@@ -162,7 +167,7 @@ class Query(graphene.ObjectType):
         discussion = models.Discussion.get(discussion_id)
         discussion_phase_id = args.get('discussion_phase_id')
         discussion_phase = discussion_phase_id and models.DiscussionPhase.get(discussion_phase_id)
-        if discussion_phase is None or discussion_phase.identifier == 'thread':
+        if discussion_phase is None or discussion_phase.identifier == Phases.thread.value:
             return discussion.root_idea
 
         root_thematic = get_root_thematic_for_phase(
@@ -184,7 +189,7 @@ class Query(graphene.ObjectType):
         phase_id = args.get('discussion_phase_id')
         phase = models.DiscussionPhase.get(phase_id)
         phase_identifier = phase.identifier
-        if phase_identifier in ('survey', 'brightMirror'):
+        if phase_identifier in (Phases.survey.value, Phases.brightMirror.value):
             root_thematic = get_root_thematic_for_phase(discussion, phase_identifier)
             if root_thematic is None:
                 return []
@@ -209,7 +214,7 @@ class Query(graphene.ObjectType):
 #                joinedload(models.Idea.synthesis_title).joinedload("entries"),
                 joinedload(models.Idea.description).joinedload("entries"),
             ).order_by(models.IdeaLink.order, models.Idea.creation_date)
-        if phase_identifier == 'multiColumns':
+        if phase_identifier == Phases.multiColumns.value:
             # Filter out ideas that don't have columns.
             query = query.filter(
                 models.Idea.message_view_override == 'messageColumns')

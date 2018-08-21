@@ -107,7 +107,7 @@ class IdeaInterface(graphene.Interface):
     def resolve_num_children(self, args, context, info):
         phase_id = args.get('discussion_phase_id')
         phase = models.DiscussionPhase.get(phase_id)
-        if phase.identifier == 'multiColumns':
+        if phase.identifier == Phases.multiColumns.value:
             _it = models.Idea.__table__
             _ilt = models.IdeaLink.__table__
             _target_it = models.Idea.__table__.alias()
