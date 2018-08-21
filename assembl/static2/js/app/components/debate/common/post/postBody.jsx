@@ -56,12 +56,12 @@ const ExtractInPost = ({ id, state, children }: ExtractInPostProps) => {
   );
 };
 
-const postBodyReplacementComponents = afterLoad => ({
-  iframe: attributes => (
+export const postBodyReplacementComponents = (afterLoad: Function) => ({
+  iframe: (attributes: Object) => (
     // the src iframe url is different from the resource url
     <Embed url={attributes['data-source-url'] || attributes.src} defaultEmbed={<iframe title="post-embed" {...attributes} />} />
   ),
-  a: (attributes) => {
+  a: (attributes: Object) => {
     const embeddedUrl = isSpecialURL(attributes.href);
     const origin = (
       <a key={`url-link-${attributes.href}`} href={attributes.href} className="linkified" target="_blank">
@@ -71,7 +71,7 @@ const postBodyReplacementComponents = afterLoad => ({
     if (embeddedUrl) return origin;
     return [origin, <URLMetadataLoader key={`url-preview-${attributes.href}`} url={attributes.href} afterLoad={afterLoad} />];
   },
-  annotation: attributes => (
+  annotation: (attributes: Object) => (
     <ExtractInPost id={attributes.id} state={attributes['data-state']}>
       {attributes.children}
     </ExtractInPost>

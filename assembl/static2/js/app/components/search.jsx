@@ -27,10 +27,9 @@ import {
   SearchBox,
   SearchkitManager,
   SearchkitProvider,
-  // SelectedFilters,
   SideBar,
-  TagFilterConfig,
   TagFilter,
+  TagFilterConfig,
   TermQuery,
   TopBar
 } from 'searchkit';
@@ -43,6 +42,8 @@ import ProfileLine from './common/profileLine';
 import { getConnectedUserId, getDebateId, getLocale } from '../reducers/contextReducer';
 import { connectedUserIsExpert } from '../utils/permissions';
 import { get as getRoute } from '../utils/routeMap';
+import UserMessagesTagFilter from './search/UserMessagesTagFilter';
+import { toggleHarvesting as toggleHarvestingAction } from '../actions/contextActions';
 
 const FRAGMENT_SIZE = 400;
 const elasticsearchLangIndexesElement = document.getElementById('elasticsearchLangIndexes');
@@ -64,11 +65,30 @@ const highlightedTextOrTruncatedText = (hit, field) => {
   return text;
 };
 
-const slugElement = document.getElementById('discussion-slug');
-const slug = slugElement ? slugElement.value : '';
+function getPostUrl(ideaId, postId, phaseId, slug) {
+  if (!ideaId) {
+    return undefined;
+  }
+  const ideaBase64id = btoa(`Idea:${ideaId}`);
+  const postBase64id = btoa(`Post:${postId}`);
+  if (phaseId === 'thread') {
+    return getRoute('post', { slug: slug, phase: phaseId, themeId: ideaBase64id, element: postBase64id });
+  } else if (phaseId === 'survey') {
+    return getRoute('questionPost', {
+      slug: slug,
+      phase: phaseId,
+      questionId: ideaBase64id,
+      questionIndex: 1,
+      element: postBase64id
+    });
+  }
+  return undefined;
+}
+
 let Link;
 let getUrl;
-
+const slugElement = document.getElementById('discussion-slug');
+const slug = slugElement ? slugElement.value : '';
 // __resourceQuery is set by webpack, it is empty string or '?v=1' when this file is included from the searchv1.js bundle.
 // __resourceQuery is undefined in jest tests.
 const v1Interface = typeof __resourceQuery !== 'undefined' && __resourceQuery;
@@ -94,60 +114,52 @@ if (v1Interface) {
   };
   // }
 } else {
-  // Link = require('react-router').Link; // eslint-disable-line
-  Link = props => <a href={props.to} dangerouslySetInnerHTML={props.dangerouslySetInnerHTML} />;
+  Link = require('react-router').Link; // eslint-disable-line
   getUrl = (hit) => {
     const id = hit._source.id;
-    let ideaBase64id;
-    let postBase64id;
-    let ideaId;
     switch (hit._type) {
     case 'synthesis':
       return undefined;
     case 'user':
       return undefined;
-    case 'idea':
-      ideaBase64id = btoa(`Idea:${id}`);
+    case 'idea': {
+      const ideaBase64id = btoa(`Idea:${id}`);
       return `/${slug}/debate/thread/theme/${ideaBase64id}`;
+    }
+    case 'extract': {
+      const phaseId = hit._source.phase_id || 'thread';
+      const ideaId = hit._source.idea_id;
+      const postId = hit._source.post_id;
+      return getPostUrl(ideaId, postId, phaseId, slug);
+    }
     default: {
       // post
-      ideaId = hit._source.idea_id.length > 0 ? hit._source.idea_id[0] : null;
-      if (!ideaId) {
-        return undefined;
-      }
-      ideaBase64id = btoa(`Idea:${ideaId}`);
-      postBase64id = btoa(`Post:${id}`);
       const phaseId = hit._source.phase_id || 'thread';
-      if (phaseId === 'thread') {
-        return getRoute('post', { slug: slug, phase: phaseId, themeId: ideaBase64id, element: postBase64id });
-      } else if (phaseId === 'survey') {
-        return getRoute('questionPost', {
-          slug: slug,
-          phase: phaseId,
-          questionId: ideaBase64id,
-          questionIndex: 1,
-          element: postBase64id
-        });
-      }
-      return undefined;
+      const ideaId = hit._source.idea_id.length > 0 ? hit._source.idea_id[0] : null;
+      return getPostUrl(ideaId, id, phaseId, slug);
     }
     }
   };
 }
 
 const PublishedInfo = (props) => {
-  const { date, userId, userName, className } = props;
+  const { date, publishedOnMsgId, userId, userName } = props;
   return (
-    <div className={className}>
-      <Translate value="search.published_on" /> <Localize value={date} dateFormat="date.format" /> <Translate value="search.by" />{' '}
+    <React.Fragment>
+      <Translate value={publishedOnMsgId} /> <Localize value={date} dateFormat="date.format" /> <Translate value="search.by" />{' '}
       <TagFilter key={userId} field="creator_id" value={userId}>
         <ProfileLine userId={userId} userName={userName} />
       </TagFilter>
-    </div>
+    </React.Fragment>
   );
 };
 
+PublishedInfo.defaultProps = {
+  publishedOnMsgId: 'search.published_on'
+};
+
 const TYPE_TO_ICON = {
+  extract: 'discussion',
   user: 'profil',
   post: 'discussion',
   idea: 'idea',
@@ -199,160 +211,203 @@ const highlightedLSOrTruncatedLS = (hit, field, locale) => {
   return '';
 };
 
-const DumbPostHit = (props) => {
-  const locale = props.locale;
-  const source = props.result._source;
-  const subject = highlightedLSOrTruncatedLS(props.result, 'subject', locale);
-  const body = highlightedLSOrTruncatedLS(props.result, 'body', locale);
-  return (
-    <div className={props.bemBlocks.item().mix(props.bemBlocks.container('item'))}>
-      <ImageType type={props.result._type} className={props.bemBlocks.item('imgtype')} />
-      <div className={props.bemBlocks.item('title')}>
-        <Link to={getUrl(props.result)} dangerouslySetInnerHTML={{ __html: subject }} />
-      </div>
-      <div className={props.bemBlocks.item('content')}>
-        <p dangerouslySetInnerHTML={{ __html: body }} />
-        <div>
-          <div title={I18n.t('search.like')} className="emoticon LikeSentimentOfPost" />
-          <div className="emoticonValue">{source.sentiment_counts.like}</div>
-          <div title={I18n.t('search.disagree')} className="emoticon DisagreeSentimentOfPost" />
-          <div className="emoticonValue">{source.sentiment_counts.disagree}</div>
-          <div title={I18n.t('search.dont_understand')} className="emoticon DontUnderstandSentimentOfPost" />
-          <div className="emoticonValue">{source.sentiment_counts.dont_understand}</div>
-          <div title={I18n.t('search.more_info')} className="emoticon MoreInfoSentimentOfPost" />
-          <div className="emoticonValue">{source.sentiment_counts.more_info}</div>
-        </div>
-      </div>
-      <PublishedInfo
-        className={props.bemBlocks.item('info')}
-        date={source.creation_date}
-        userId={source.creator_id}
-        userName={source.creator_name}
-      />
+const BaseHit = ({ bemBlocks, imageType, onLinkClick, title, url, renderBody, renderFooter }) => (
+  <div className={bemBlocks.item().mix(bemBlocks.container('item'))}>
+    <ImageType type={imageType} className={bemBlocks.item('imgtype')} />
+    <div className={bemBlocks.item('title')}>
+      {url ? <Link onClick={onLinkClick} to={url} dangerouslySetInnerHTML={{ __html: title }} /> : <p dangerouslySetInnerHTML={{ __html: title }} />}
     </div>
+    {renderBody && <div className={bemBlocks.item('content')}>{renderBody()}</div>}
+    <div className={bemBlocks.item('info')}>{renderFooter()}</div>
+  </div>
+);
+
+const PostHit = ({ bemBlocks, collapseSearch, locale, result }) => {
+  const source = result._source;
+  const subject = highlightedLSOrTruncatedLS(result, 'subject', locale);
+  const body = highlightedLSOrTruncatedLS(result, 'body', locale);
+  const published = {};
+  return (
+    <BaseHit
+      bemBlocks={bemBlocks}
+      imageType={result._type}
+      title={subject}
+      url={getUrl(result)}
+      onLinkClick={collapseSearch}
+      published={published}
+      renderBody={() => (
+        <React.Fragment>
+          <p dangerouslySetInnerHTML={{ __html: body }} />
+          <div>
+            <div title={I18n.t('search.like')} className="emoticon LikeSentimentOfPost" />
+            <div className="emoticonValue">{source.sentiment_counts.like}</div>
+            <div title={I18n.t('search.disagree')} className="emoticon DisagreeSentimentOfPost" />
+            <div className="emoticonValue">{source.sentiment_counts.disagree}</div>
+            <div title={I18n.t('search.dont_understand')} className="emoticon DontUnderstandSentimentOfPost" />
+            <div className="emoticonValue">{source.sentiment_counts.dont_understand}</div>
+            <div title={I18n.t('search.more_info')} className="emoticon MoreInfoSentimentOfPost" />
+            <div className="emoticonValue">{source.sentiment_counts.more_info}</div>
+          </div>
+        </React.Fragment>
+      )}
+      renderFooter={() => <PublishedInfo date={source.creation_date} userId={source.creator_id} userName={source.creator_name} />}
+    />
   );
 };
 
-const PostHit = connect(state => ({ locale: getLocale(state) }))(DumbPostHit);
-
-const DumbSynthesisHit = (props) => {
-  const locale = props.locale;
-  const source = props.result._source;
-  const ideas = highlightedLSOrTruncatedLS(props.result, 'ideas', locale);
+const DumbExtractHit = ({ bemBlocks, collapseSearch, isHarvesting, locale, toggleHarvesting, result }) => {
+  const source = result._source;
+  const subject = highlightedLSOrTruncatedLS(result, 'subject', locale);
+  const body = highlightedTextOrTruncatedText(result, 'body');
+  const onLinkClick = () => {
+    if (!isHarvesting) {
+      toggleHarvesting();
+    }
+    collapseSearch();
+  };
   return (
-    <div className={props.bemBlocks.item().mix(props.bemBlocks.container('item'))}>
-      <ImageType type={props.result._type} className={props.bemBlocks.item('imgtype')} />
-      <div className={props.bemBlocks.item('title')}>
-        <Link
-          to={getUrl(props.result)}
-          dangerouslySetInnerHTML={{ __html: highlightedTextOrTruncatedText(props.result, 'subject') }}
+    <BaseHit
+      bemBlocks={bemBlocks}
+      imageType={result._type}
+      title={subject}
+      url={getUrl(result)}
+      onLinkClick={onLinkClick}
+      renderBody={() => <p dangerouslySetInnerHTML={{ __html: body }} />}
+      renderFooter={() => (
+        <PublishedInfo
+          date={source.creation_date}
+          userId={source.creator_id}
+          userName={source.creator_name}
+          publishedOnMsgId="search.harvested_on"
         />
-      </div>
-      <div className={props.bemBlocks.item('content')}>
-        <p
-          style={{ backgroundColor: '#f4f4f4' }}
-          dangerouslySetInnerHTML={{ __html: highlightedTextOrTruncatedText(props.result, 'introduction') }}
-        />
-        {ideas ? <p style={{ paddingLeft: '1em', marginTop: '1em' }} dangerouslySetInnerHTML={{ __html: ideas }} /> : null}
-        <p
-          style={{ backgroundColor: '#f4f4f4', marginTop: '1em' }}
-          dangerouslySetInnerHTML={{ __html: highlightedTextOrTruncatedText(props.result, 'conclusion') }}
-        />
-      </div>
-      <PublishedInfo
-        className={props.bemBlocks.item('info')}
-        date={source.creation_date}
-        userId={source.creator_id}
-        userName={source.creator_name}
-      />
-    </div>
+      )}
+    />
   );
 };
 
-const SynthesisHit = connect(state => ({ locale: getLocale(state) }))(DumbSynthesisHit);
+const mapStateToExtractHitProps = state => ({
+  isHarvesting: state.context.isHarvesting
+});
+const mapDispatchToExtractHitProps = dispatch => ({
+  toggleHarvesting: () => dispatch(toggleHarvestingAction())
+});
 
-const UserHit = (props) => {
-  const source = props.result._source;
-  const url = getUrl(props.result);
-  const fullname = get(props.result, 'highlight.name', props.result._source.name);
+const ExtractHit = connect(mapStateToExtractHitProps, mapDispatchToExtractHitProps)(DumbExtractHit);
+
+const SynthesisHit = ({ bemBlocks, collapseSearch, locale, result }) => {
+  const source = result._source;
+  const subject = highlightedTextOrTruncatedText(result, 'subject');
+  const ideas = highlightedLSOrTruncatedLS(result, 'ideas', locale);
   return (
-    <div className={props.bemBlocks.item().mix(props.bemBlocks.container('item'))}>
-      <ImageType type={props.result._type} className={props.bemBlocks.item('imgtype')} />
-      <div className={props.bemBlocks.item('title')}>
-        {url ? (
-          <Link to={getUrl(props.result)} dangerouslySetInnerHTML={{ __html: fullname }} />
-        ) : (
-          <p dangerouslySetInnerHTML={{ __html: fullname }} />
-        )}
-      </div>
-      <div className={props.bemBlocks.item('info')}>
-        {source.num_posts}
-        <span className={props.bemBlocks.item('assembl-icon-message')}>
-          <span className="assembl-icon-message" title="Number of contributions" />
-        </span>
-        {source.creation_date ? (
-          <span>
-            <Translate value="search.member_since" /> <Localize value={source.creation_date} dateFormat="date.format" />
-          </span>
-        ) : null}
-      </div>
-    </div>
+    <BaseHit
+      bemBlocks={bemBlocks}
+      imageType={result._type}
+      title={subject}
+      url={getUrl(result)}
+      onLinkClick={collapseSearch}
+      renderBody={() => (
+        <React.Fragment>
+          <p
+            style={{ backgroundColor: '#f4f4f4' }}
+            dangerouslySetInnerHTML={{ __html: highlightedTextOrTruncatedText(result, 'introduction') }}
+          />
+          {ideas ? <p style={{ paddingLeft: '1em', marginTop: '1em' }} dangerouslySetInnerHTML={{ __html: ideas }} /> : null}
+          <p
+            style={{ backgroundColor: '#f4f4f4', marginTop: '1em' }}
+            dangerouslySetInnerHTML={{ __html: highlightedTextOrTruncatedText(result, 'conclusion') }}
+          />
+        </React.Fragment>
+      )}
+      renderFooter={() => <PublishedInfo date={source.creation_date} userId={source.creator_id} userName={source.creator_name} />}
+    />
   );
 };
 
-const DumbIdeaHit = (props) => {
-  const locale = props.locale;
-  const source = props.result._source;
-  const shortTitle = highlightedLSOrTruncatedLS(props.result, 'title', locale);
-  const definition = highlightedLSOrTruncatedLS(props.result, 'description', locale);
+const UserHit = ({ bemBlocks, collapseSearch, result }) => {
+  const source = result._source;
+  const fullname = get(result, 'highlight.name', result._source.name);
+  const userId = result._source.id;
+  return (
+    <BaseHit
+      bemBlocks={bemBlocks}
+      imageType={result._type}
+      title={fullname}
+      url={getUrl(result)}
+      onLinkClick={collapseSearch}
+      renderBody={null}
+      renderFooter={() => (
+        <React.Fragment>
+          <UserMessagesTagFilter value={userId}>
+            {source.num_posts}
+            <span className={bemBlocks.item('assembl-icon-message')}>
+              <span className="assembl-icon-message" title="Number of contributions" />
+            </span>
+          </UserMessagesTagFilter>
+          {source.creation_date ? (
+            <span>
+              <Translate value="search.member_since" /> <Localize value={source.creation_date} dateFormat="date.format" />
+            </span>
+          ) : null}
+        </React.Fragment>
+      )}
+    />
+  );
+};
+
+const IdeaHit = ({ bemBlocks, collapseSearch, locale, result }) => {
+  const source = result._source;
+  const shortTitle = highlightedLSOrTruncatedLS(result, 'title', locale);
+  const definition = highlightedLSOrTruncatedLS(result, 'description', locale);
   // long title missing?
-  const announceTitle = highlightedLSOrTruncatedLS(props.result, 'announcement_title', locale);
-  const announceBody = highlightedLSOrTruncatedLS(props.result, 'announcement_body', locale);
-
+  const announceTitle = highlightedLSOrTruncatedLS(result, 'announcement_title', locale);
+  const announceBody = highlightedLSOrTruncatedLS(result, 'announcement_body', locale);
   return (
-    <div className={props.bemBlocks.item().mix(props.bemBlocks.container('item'))}>
-      <ImageType type={props.result._type} className={props.bemBlocks.item('imgtype')} />
-      <div className={props.bemBlocks.item('title')}>
-        <Link to={getUrl(props.result)} dangerouslySetInnerHTML={{ __html: shortTitle }} />
-      </div>
-      <div className={props.bemBlocks.item('content')}>
-        {definition ? (
-          <div>
-            <p dangerouslySetInnerHTML={{ __html: definition }} />
-            {get(props.result, 'highlight.definition') && (
+    <BaseHit
+      bemBlocks={bemBlocks}
+      imageType={result._type}
+      title={shortTitle}
+      url={getUrl(result)}
+      onLinkClick={collapseSearch}
+      renderBody={() => (
+        <React.Fragment>
+          {definition ? (
+            <div>
+              <p dangerouslySetInnerHTML={{ __html: definition }} />
+              {get(result, 'highlight.definition') && (
+                <p>
+                  <Translate value="search.search_come_from_what_you_need_to_know" />
+                </p>
+              )}
+            </div>
+          ) : null}
+          {get(result, 'highlight.title') || get(result, 'highlight.body') ? (
+            <div>
+              <p dangerouslySetInnerHTML={{ __html: announceTitle }} />
+              <p dangerouslySetInnerHTML={{ __html: announceBody }} />
               <p>
-                <Translate value="search.search_come_from_what_you_need_to_know" />
+                <Translate value="search.search_come_from_announcement" />
               </p>
-            )}
-          </div>
-        ) : null}
-        {get(props.result, 'highlight.title') || get(props.result, 'highlight.body') ? (
-          <div>
-            <p dangerouslySetInnerHTML={{ __html: announceTitle }} />
-            <p dangerouslySetInnerHTML={{ __html: announceBody }} />
-            <p>
-              <Translate value="search.search_come_from_announcement" />
-            </p>
-          </div>
-        ) : null}
-      </div>
-      <div className={props.bemBlocks.item('info')}>
-        {source.num_posts}
-        <span className={props.bemBlocks.item('assembl-icon-message')}>
-          <span className="assembl-icon-message" title="Number of contributions" />
-        </span>
-        {source.num_contributors}
-        <span className={props.bemBlocks.item('assembl-icon-avatar')}>
-          <span className="assembl-icon-profil" title="Number of users" />
-        </span>
-      </div>
-    </div>
+            </div>
+          ) : null}
+        </React.Fragment>
+      )}
+      renderFooter={() => (
+        <React.Fragment>
+          {source.num_posts}
+          <span className={bemBlocks.item('assembl-icon-message')}>
+            <span className="assembl-icon-message" title="Number of contributions" />
+          </span>
+          {source.num_contributors}
+          <span className={bemBlocks.item('assembl-icon-avatar')}>
+            <span className="assembl-icon-profil" title="Number of users" />
+          </span>
+        </React.Fragment>
+      )}
+    />
   );
 };
 
-const IdeaHit = connect(state => ({ locale: getLocale(state) }))(DumbIdeaHit);
-
-const HitItem = (props) => {
+const DumbHitItem = (props) => {
   switch (props.result._type) {
   case 'synthesis':
     return <SynthesisHit {...props} />;
@@ -360,20 +415,27 @@ const HitItem = (props) => {
     return <UserHit {...props} />;
   case 'idea':
     return <IdeaHit {...props} />;
+  case 'extract':
+    return <ExtractHit {...props} />;
   default:
     // post
     return <PostHit {...props} />;
   }
 };
 
+const mapLocaleToProps = state => ({ locale: getLocale(state) });
+const HitItem = connect(mapLocaleToProps)(DumbHitItem);
+
 const NoPanel = props => <div>{props.children}</div>;
 
 const calcQueryFields = () => {
   const base = [
+    'body', // extract
     'name', // user
     'subject', // synthesis
     'introduction', // synthesis
-    'conclusion' // synthesis
+    'conclusion', // synthesis
+    'creator_display_name' // extract, post
   ];
   const lsFields = [
     'announcement_title', // idea announcement
@@ -462,14 +524,23 @@ export class SearchComponent extends React.Component {
     this.state = { show: false, queryString: null };
   }
 
+  collapseSearch = () => {
+    this.setState({ show: false }, () => {
+      this.searchbox.accessor.setQueryString(null);
+      this.searchbox.forceUpdate();
+    });
+  };
+
   render() {
     const { isExpert, connectedUserId, discussionId } = this.props;
+    let extractsSelected = false;
     let messagesSelected = false;
     let usersSelected = false;
     let selectedCategory = 'All';
     if (this.searchkit.state && this.searchkit.state.type) {
       messagesSelected = this.searchkit.state.type.indexOf('post') >= 0;
       usersSelected = this.searchkit.state.type.indexOf('user') >= 0;
+      extractsSelected = this.searchkit.state.type.indexOf('extract') >= 0;
       if (this.searchkit.state.type.length > 0) {
         selectedCategory = this.searchkit.state.type[0];
       }
@@ -580,19 +651,27 @@ export class SearchComponent extends React.Component {
                     />
                   </div>
                 ) : null}
+              </Panel>
+              <Panel title={I18n.t('search.Extracts')} className={extractsSelected ? null : 'hidden'}>
                 {!v1Interface &&
                   isExpert && (
                     <div className="sk-panel">
                       <MenuFilter
                         listComponent={CheckboxItemList}
-                        field="taxonomy_nature"
-                        id="taxonomy_nature"
+                        field="extract_state"
+                        id="extract_state"
+                        title={I18n.t('search.State')}
+                      />
+                      <MenuFilter
+                        listComponent={CheckboxItemList}
+                        field="extract_nature"
+                        id="extract_nature"
                         title={I18n.t('search.Nature')}
                       />
                       <MenuFilter
                         listComponent={CheckboxItemList}
-                        field="taxonomy_action"
-                        id="taxonomy_action"
+                        field="extract_action"
+                        id="extract_action"
                         title={I18n.t('search.Action')}
                       />
                     </div>
@@ -659,16 +738,7 @@ export class SearchComponent extends React.Component {
             </SideBar>
             <LayoutResults>
               <ActionBar>
-                <button
-                  className="btn btn-default btn-sm right"
-                  id="search-expand"
-                  onClick={() => {
-                    this.setState({ show: false }, () => {
-                      this.searchbox.accessor.setQueryString(null);
-                      this.searchbox.forceUpdate();
-                    });
-                  }}
-                >
+                <button className="btn btn-default btn-sm right" id="search-expand" onClick={this.collapseSearch}>
                   <Translate value="search.collapse_search" />
                 </button>
                 <ActionBarRow>
@@ -679,7 +749,7 @@ export class SearchComponent extends React.Component {
                 hitsPerPage={5}
                 highlightFields={queryFields}
                 customHighlight={customHighlight}
-                itemComponent={HitItem}
+                itemComponent={props => <HitItem collapseSearch={this.collapseSearch} {...props} />}
                 mod="sk-hits-list"
               />
               <InitialLoader />
@@ -699,4 +769,7 @@ const mapStateToProps = state => ({
 });
 
 const ConnectedSearch = connect(mapStateToProps)(SearchComponent);
+
+export { DumbExtractHit, IdeaHit, PostHit, SynthesisHit, UserHit };
+
 export default ConnectedSearch;

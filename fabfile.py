@@ -18,7 +18,7 @@ from functools import wraps
 from tempfile import NamedTemporaryFile
 
 from fabric.operations import (
-    local, put, get, sudo as fabsudo, run)
+    local, put, get, run, sudo as fabsudo)
 from fabric.contrib.files import (exists, is_link, append)
 from fabric.api import (
     abort, cd, env, execute, hide, prefix, settings, task as fab_task)
@@ -47,7 +47,8 @@ def running_locally(hosts=None):
 
 def sudo(*args, **kwargs):
     sudoer = env.get("sudoer", None) or env.get("user")
-    with settings(user=sudoer):
+    with settings(user=sudoer,
+                  sudo_prefix='sudo -i -S -p \'{}\''.format(env.sudo_prompt)):
         if sudoer == "root":
             run(*args, **kwargs)
         else:
@@ -1100,7 +1101,9 @@ def webservers_reload():
         # Nginx (sudo is part of command line here because we don't have full
         # sudo access
         print(cyan("Reloading nginx"))
-        if exists('/etc/init.d/nginx'):
+        if (env.get('sudo_user'), None) and exists('/etc/init.d/nginx'):
+            sudo('/etc/init.d/nginx reload')
+        elif exists('/etc/init.d/nginx'):
             run('sudo /etc/init.d/nginx reload')
         elif env.mac:
             sudo('killall -HUP nginx')

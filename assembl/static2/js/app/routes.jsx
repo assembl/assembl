@@ -36,6 +36,7 @@ import ResourcesCenter from './pages/resourcesCenter';
 import LandingPageAdmin from './pages/landingPageAdmin';
 import ExportTaxonomies from './pages/exportTaxonomies';
 import BrightMirror from './pages/brightMirror';
+import BrightMirrorAdmin from './pages/brightMirrorAdmin';
 import { routeForRouter } from './utils/routeMap';
 
 // Page that is only used to display converted mockups to static pages
@@ -56,7 +57,7 @@ const DebateHome = (props) => {
   case 'voteSession':
     return <VoteSession />;
   case 'brightMirror':
-    return <BrightMirror />;
+    return <BrightMirror {...props} />;
   default:
     return <Debate {...props} />;
   }
@@ -83,6 +84,8 @@ const AdminChild = (props) => {
     return <DiscussionAdmin {...props} section={props.location.query.section} />;
   case 'survey':
     return <SurveyAdmin {...props} thematicId={props.location.query.thematic} section={props.location.query.section} />;
+  case 'brightMirror':
+    return <BrightMirrorAdmin {...props} />;
   case 'thread':
     return <ThreadAdmin {...props} section={props.location.query.section} />;
   case 'multiColumn':

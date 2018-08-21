@@ -165,6 +165,17 @@
 "@storybook/components@3.4.10":
   version "3.4.10"
   resolved "https://registry.yarnpkg.com/@storybook/components/-/components-3.4.10.tgz#9af0bba14234d10f14a37656ac5982ec640cfcc8"
+<<<<<<< HEAD
+=======
+  dependencies:
+    glamor "^2.20.40"
+    glamorous "^4.12.1"
+    prop-types "^15.6.1"
+
+"@storybook/components@3.4.2":
+  version "3.4.2"
+  resolved "https://registry.yarnpkg.com/@storybook/components/-/components-3.4.2.tgz#1124cf22a54e36aa07c291608c652746919cf375"
+>>>>>>> develop
   dependencies:
     glamor "^2.20.40"
     glamorous "^4.12.1"

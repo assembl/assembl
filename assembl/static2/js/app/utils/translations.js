@@ -76,6 +76,7 @@ const Translations = {
         to: "Au"
       },
       published_on: "Publié le",
+      harvested_on: "Attrapé le",
       member_since: "Membre depuis le",
       by: "par",
       search_come_from_what_you_need_to_know: "Recherche effectuée dans la section \"à retenir\" de cette discussion",
@@ -83,10 +84,12 @@ const Translations = {
       collapse_search: "Fermer la recherche",
       Categories: "Catégories",
       All: "Tout",
+      extract: "Attrapages",
       post: "Messages",
       idea: "Idées",
       user: "Participants",
       synthesis: "Synthèse",
+      Extracts: "Attrapages",
       Messages: "Messages",
       Participants: "Participants",
       like: "J'aime",
@@ -116,6 +119,11 @@ const Translations = {
         display_tokens: "Activer le vote",
         display_open_questions: "Activer les questions ouvertes",
         display_bright_mirror: "Activer le Design Fiction"
+      },
+      State: "État",
+      taxonomy_state: {
+        SUBMITTED: "À valider",
+        PUBLISHED: "Publié"
       },
       Sort: "Trier",
       "By relevance": "Par pertinence",
@@ -515,6 +523,18 @@ const Translations = {
         "1": "Renseigner les questions",
         "2": "Exporter les données"
       },
+      brightMirrorSection: {
+        bannerHeader:
+          "Le bandeau de haut de page comporte le titre de la thématique que vous avez défini en amont, ainsi qu’une image de fond et éventuellement un sous-titre.",
+        bannerSubtitleLabel: "Sous-titre dans le bandeau du haut de page",
+        bannerImagePickerLabel: "Choisir l'image de fond du bandeau",
+        configureTitle: "Configurer Bright Mirror",
+        instructionHeader:
+          "La section Consigne comporte un titre et une consigne et un média (vidéo, slideshare ou image ) qui permettent de guider les participants dans leur contribution.",
+        instructionLabel: "Consigne",
+        sectionTitleLabel: "Titre de la section",
+        thematicTitleLabel: "Titre de la thématique"
+      },
       voteSession: {
         "0": "Configuration de la page",
         "1": "Configurer le ou les modules de vote",
@@ -854,15 +874,18 @@ const Translations = {
       search_come_from_what_you_need_to_know: "Search done in the \"What you need to know\" section of this discussion",
       search_come_from_announcement: "Search done in the \"announcement\" section of this discussion",
       published_on: "Published on",
+      harvested_on: "Harvested on",
       member_since: "Member since",
       by: "by",
       collapse_search: "Close search",
       Categories: "Categories",
       All: "All",
+      extract: "Extracts",
       post: "Messages",
       idea: "Ideas",
       user: "Participants",
       synthesis: "Synthesis",
+      Extracts: "Extracts",
       Messages: "Messages",
       Participants: "Participants",
       like: "Like",
@@ -892,6 +915,11 @@ const Translations = {
         display_tokens: "Display tokens",
         display_open_questions: "Display Open questions",
         display_bright_mirror: "Display Design Fiction"
+      },
+      State: "State",
+      taxonomy_state: {
+        SUBMITTED: "To validate",
+        PUBLISHED: "Published"
       },
       Sort: "Sort",
       "By relevance": "By relevance",
@@ -1288,6 +1316,18 @@ const Translations = {
         "0": "Set themes",
         "1": "Set questions",
         "2": "Export data"
+      },
+      brightMirrorSection: {
+        bannerHeader:
+          "Top banner must include the thematic title defined previously, a background image and eventually a subtitle.",
+        bannerSubtitleLabel: "Top banner subtitle",
+        bannerImagePickerLabel: "Banner image",
+        configureTitle: "Configure Bright Mirror",
+        instructionLabel: "Instructions",
+        instructionHeader:
+          "Instruction section include a title, an instruction and a media (video, slideshare or image) which guides users in their contribution.",
+        sectionTitleLabel: "Section title",
+        thematicTitleLabel: "Thematic title"
       },
       voteSession: {
         "0": "Page configuration",

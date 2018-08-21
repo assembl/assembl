@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Bright Mirror page should match BrightMirror instruction snapshot 1`] = `
+<div
+  className="announcement"
+>
+  <div
+    className="announcement-title"
+  >
+    <div
+      className="title-hyphen"
+    >
+       
+    </div>
+    <h3
+      className="announcement-title-text dark-title-1"
+    >
+      Instruction
+    </h3>
+  </div>
+  <div
+    className="announcement-media col-md-push-4 col-md-8 col-xs-12"
+  >
+    <div>
+      Participez à la création de fiction
+    </div>
+  </div>
+</div>
+`;
