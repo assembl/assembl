@@ -30,7 +30,13 @@
   "license": "AGPL-3.0",
   "devDependencies": {
     "@storybook/addon-actions": "^3.4.10",
-    "@storybook/react": "^3.4.2",
+    "@storybook/addon-centered": "^3.4.10",
+    "@storybook/addon-info": "^3.4.10",
+    "@storybook/addon-knobs": "^3.4.10",
+    "@storybook/addon-options": "^3.4.10",
+    "@storybook/addon-storyshots": "^3.4.10",
+    "@storybook/addon-viewport": "^3.4.10",
+    "@storybook/react": "^3.4.10",
     "apollo-test-utils": "^0.3.0",
     "babel-core": "^6.26.0",
     "babel-eslint": "^7.1.1",
@@ -83,7 +89,6 @@
   },
   "dependencies": {
     "@2fd/graphdoc": "^2.4.0",
-    "@storybook/addon-options": "^3.4.10",
     "apollo-upload-client": "^5.1.1",
     "babel-polyfill": "^6.26.0",
     "babel-preset-flow": "^6.23.0",
