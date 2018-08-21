@@ -83,7 +83,7 @@ class SelectField(SecureObjectType, SQLAlchemyObjectType):
 class CreateTextField(graphene.Mutation):
     __doc__ = docs.CreateTextField.__doc__
 
-    class Input:
+    class Arguments:
         lang = graphene.String(description=docs.CreateTextField.lang)
         title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.CreateTextField.title_entries)
         order = graphene.Float(description=docs.CreateTextField.order)
@@ -93,9 +93,9 @@ class CreateTextField(graphene.Mutation):
 
     field = graphene.Field(lambda: ConfigurableFieldUnion)
 
-    @staticmethod
     @abort_transaction_on_exception
-    def mutate(root, args, context, info):
+    def mutate(self, info, **args):
+        context = info.context
         options = args.get('options')
         if options is not None:
             cls = models.SelectField
@@ -136,7 +136,7 @@ class CreateTextField(graphene.Mutation):
 class UpdateTextField(graphene.Mutation):
     __doc__ = docs.UpdateTextField.__doc__
 
-    class Input:
+    class Arguments:
         id = graphene.ID(required=True, description=docs.UpdateTextField.id)
         lang = graphene.String(required=True, description=docs.UpdateTextField.lang)
         title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.UpdateTextField.title_entries)
@@ -147,9 +147,9 @@ class UpdateTextField(graphene.Mutation):
 
     field = graphene.Field(lambda: ConfigurableFieldUnion)
 
-    @staticmethod
     @abort_transaction_on_exception
-    def mutate(root, args, context, info):
+    def mutate(self, info, **args):
+        context = info.context
         options = args.get('options')
         if options is not None:
             cls = models.SelectField
@@ -207,14 +207,14 @@ class UpdateTextField(graphene.Mutation):
 class DeleteTextField(graphene.Mutation):
     __doc__ = docs.DeleteTextField.__doc__
 
-    class Input:
+    class Arguments:
         id = graphene.ID(required=True, description=docs.DeleteTextField.id)
 
     success = graphene.Boolean()
 
-    @staticmethod
     @abort_transaction_on_exception
-    def mutate(root, args, context, info):
+    def mutate(self, info, **args):
+        context = info.context
         cls = models.AbstractConfigurableField
         field_id = args.get('id')
         field_id = int(Node.from_global_id(field_id)[1])
@@ -291,15 +291,15 @@ class FieldDataInput(graphene.InputObjectType, FieldData):
 class UpdateProfileFields(graphene.Mutation):
     __doc__ = docs.UpdateProfileFields.__doc__
 
-    class Input:
+    class Arguments:
         data = graphene.List(FieldDataInput, required=True, description=docs.UpdateProfileFields.data)
         lang = graphene.String(required=True, description=docs.UpdateProfileFields.lang)
 
     profile_fields = graphene.List(ProfileField)
 
-    @staticmethod
     @abort_transaction_on_exception
-    def mutate(root, args, context, info):
+    def mutate(self, info, **args):
+        context = info.context
         cls = models.ProfileField
         discussion_id = context.matchdict['discussion_id']
         user_id = context.authenticated_userid

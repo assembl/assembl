@@ -88,7 +88,7 @@ class LandingPageModule(SecureObjectType, SQLAlchemyObjectType):
 class CreateLandingPageModule(graphene.Mutation):
     __doc__ = docs.CreateLandingPageModule.__doc__
 
-    class Input:
+    class Arguments:
         type_identifier = graphene.String(description=docs.CreateLandingPageModule.type_identifier)
         enabled = graphene.Boolean(description=docs.CreateLandingPageModule.enabled)
         order = graphene.Float(description=docs.CreateLandingPageModule.order)
@@ -98,9 +98,9 @@ class CreateLandingPageModule(graphene.Mutation):
 
     landing_page_module = graphene.Field(lambda: LandingPageModule, description=docs.CreateLandingPageModule.landing_page_module)
 
-    @staticmethod
     @abort_transaction_on_exception
-    def mutate(root, args, context, info):
+    def mutate(self, info, **args):
+        context = info.context
         cls = models.LandingPageModule
         discussion_id = context.matchdict['discussion_id']
         require_cls_permission(CrudPermissions.CREATE, cls, context)
@@ -134,7 +134,7 @@ class CreateLandingPageModule(graphene.Mutation):
 class UpdateLandingPageModule(graphene.Mutation):
     __doc__ = docs.UpdateLandingPageModule.__doc__
 
-    class Input:
+    class Arguments:
         id = graphene.ID(required=True, description=docs.UpdateLandingPageModule.id)
         enabled = graphene.Boolean(description=docs.UpdateLandingPageModule.enabled)
         order = graphene.Float(description=docs.UpdateLandingPageModule.order)
@@ -144,9 +144,9 @@ class UpdateLandingPageModule(graphene.Mutation):
 
     landing_page_module = graphene.Field(lambda: LandingPageModule, description=docs.UpdateLandingPageModule.landing_page_module)
 
-    @staticmethod
     @abort_transaction_on_exception
-    def mutate(root, args, context, info):
+    def mutate(self, info, **args):
+        context = info.context
         cls = models.LandingPageModule
         configuration = args.get('configuration')
         order = args.get('order')

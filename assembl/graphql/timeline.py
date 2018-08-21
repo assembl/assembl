@@ -61,7 +61,7 @@ class DiscussionPhase(SecureObjectType, SQLAlchemyObjectType):
 class CreateDiscussionPhase(graphene.Mutation):
     __doc__ = docs.CreateDiscussionPhase.__doc__
 
-    class Input:
+    class Arguments:
         lang = graphene.String(required=True, description=docs.CreateDiscussionPhase.lang)
         identifier = graphene.String(required=True, description=docs.CreateDiscussionPhase.identifier)
         is_thematics_table = graphene.Boolean(description=docs.CreateDiscussionPhase.is_thematics_table)
@@ -72,9 +72,9 @@ class CreateDiscussionPhase(graphene.Mutation):
 
     discussion_phase = graphene.Field(lambda: DiscussionPhase)
 
-    @staticmethod
     @abort_transaction_on_exception
-    def mutate(root, args, context, info):
+    def mutate(self, info, **args):
+        context = info.context
         cls = models.DiscussionPhase
         require_cls_permission(CrudPermissions.CREATE, cls, context)
         discussion_id = context.matchdict['discussion_id']
@@ -103,7 +103,7 @@ class CreateDiscussionPhase(graphene.Mutation):
 class UpdateDiscussionPhase(graphene.Mutation):
     __doc__ = docs.UpdateDiscussionPhase.__doc__
 
-    class Input:
+    class Arguments:
         id = graphene.ID(required=True, description=docs.UpdateDiscussionPhase.id)
         is_thematics_table = graphene.Boolean(description=docs.UpdateDiscussionPhase.is_thematics_table)
         lang = graphene.String(required=True, description=docs.UpdateDiscussionPhase.lang)
@@ -117,9 +117,9 @@ class UpdateDiscussionPhase(graphene.Mutation):
 
     discussion_phase = graphene.Field(lambda: DiscussionPhase)
 
-    @staticmethod
     @abort_transaction_on_exception
-    def mutate(root, args, context, info):
+    def mutate(self, info, **args):
+        context = info.context
         cls = models.DiscussionPhase
         phase_id = args.get('id')
         phase_id = int(Node.from_global_id(phase_id)[1])
@@ -186,14 +186,14 @@ class UpdateDiscussionPhase(graphene.Mutation):
 class DeleteDiscussionPhase(graphene.Mutation):
     __doc__ = docs.DeleteDiscussionPhase.__doc__
 
-    class Input:
+    class Arguments:
         id = graphene.ID(required=True, description=docs.DeleteDiscussionPhase.id)
 
     success = graphene.Boolean()
 
-    @staticmethod
     @abort_transaction_on_exception
-    def mutate(root, args, context, info):
+    def mutate(self, info, **args):
+        context = info.context
         cls = models.DiscussionPhase
         phase_id = args.get('id')
         phase_id = int(Node.from_global_id(phase_id)[1])

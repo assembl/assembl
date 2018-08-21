@@ -72,7 +72,7 @@ class VoteUnion(SQLAlchemyUnion):
 class AddTokenVote(graphene.Mutation):
     __doc__ = docs.AddTokenVote.__doc__
 
-    class Input:
+    class Arguments:
         proposal_id = graphene.ID(required=True)
         token_category_id = graphene.ID(required=True)
         vote_spec_id = graphene.ID(required=True)
@@ -80,9 +80,9 @@ class AddTokenVote(graphene.Mutation):
 
     vote_specification = graphene.Field(lambda: TokenVoteSpecification)
 
-    @staticmethod
     @abort_transaction_on_exception
-    def mutate(root, args, context, info):
+    def mutate(self, info, **args):
+        context = info.context
         require_cls_permission(CrudPermissions.CREATE, models.TokenIdeaVote, context)
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
@@ -129,16 +129,16 @@ class AddTokenVote(graphene.Mutation):
 class AddGaugeVote(graphene.Mutation):
     __doc__ = docs.AddGaugeVote.__doc__
 
-    class Input:
+    class Arguments:
         proposal_id = graphene.ID(required=True)
         vote_spec_id = graphene.ID(required=True)
         vote_value = graphene.Float(required=False)
 
     vote_specification = graphene.Field(lambda: VoteSpecificationUnion)  # need to match GaugeVoteSpecification / NumberGaugeVoteSpecification
 
-    @staticmethod
     @abort_transaction_on_exception
-    def mutate(root, args, context, info):
+    def mutate(self, info, **args):
+        context = info.context
         require_cls_permission(CrudPermissions.CREATE, models.TokenIdeaVote, context)
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)

@@ -96,18 +96,18 @@ class VoteSession(SecureObjectType, SQLAlchemyObjectType):
 class UpdateVoteSession(graphene.Mutation):
     __doc__ = docs.UpdateVoteSession.__doc__
 
-    class Input:
+    class Arguments:
         discussion_phase_id = graphene.Int(required=True, description=docs.UpdateVoteSession.discussion_phase_id)
         header_image = graphene.String(description=docs.UpdateVoteSession.header_image)
         see_current_votes = graphene.Boolean(description=docs.UpdateVoteSession.see_current_votes)
 
-    add_langstrings_input_attrs(Input, langstrings_defs.keys())
+    add_langstrings_input_attrs(Arguments, langstrings_defs.keys())
 
     vote_session = graphene.Field(VoteSession)
 
-    @staticmethod
     @abort_transaction_on_exception
-    def mutate(root, args, context, info):
+    def mutate(self, info, **args):
+        context = info.context
         discussion_phase_id = args.get('discussion_phase_id')
         discussion_phase = models.DiscussionPhase.get(discussion_phase_id)
         discussion_id = context.matchdict["discussion_id"]
@@ -406,7 +406,7 @@ class GaugeChoiceSpecificationInput(graphene.InputObjectType):
 class CreateTokenVoteSpecification(graphene.Mutation):
     __doc__ = docs.CreateTokenVoteSpecification.__doc__
 
-    class Input:
+    class Arguments:
         vote_session_id = graphene.ID(required=True, description=docs.CreateTokenVoteSpecification.vote_session_id)
         proposal_id = graphene.ID(description=docs.CreateTokenVoteSpecification.proposal_id)
         title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.CreateTokenVoteSpecification.title_entries)
@@ -418,9 +418,9 @@ class CreateTokenVoteSpecification(graphene.Mutation):
 
     vote_specification = graphene.Field(lambda: TokenVoteSpecification)
 
-    @staticmethod
     @abort_transaction_on_exception
-    def mutate(root, args, context, info):
+    def mutate(self, info, **args):
+        context = info.context
         cls = models.TokenVoteSpecification
         require_cls_permission(CrudPermissions.CREATE, cls, context)
         vote_session_id = args.get('vote_session_id')
@@ -477,7 +477,7 @@ class CreateTokenVoteSpecification(graphene.Mutation):
 class UpdateTokenVoteSpecification(graphene.Mutation):
     __doc__ = docs.UpdateTokenVoteSpecification.__doc__
 
-    class Input:
+    class Arguments:
         id = graphene.ID(required=True, description=docs.UpdateTokenVoteSpecification.id)
         title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.UpdateTokenVoteSpecification.title_entries)
         instructions_entries = graphene.List(LangStringEntryInput, required=True, description=docs.UpdateTokenVoteSpecification.instructions_entries)
@@ -487,9 +487,9 @@ class UpdateTokenVoteSpecification(graphene.Mutation):
 
     vote_specification = graphene.Field(lambda: TokenVoteSpecification)
 
-    @staticmethod
     @abort_transaction_on_exception
-    def mutate(root, args, context, info):
+    def mutate(self, info, **args):
+        context = info.context
         cls = models.TokenVoteSpecification
         vote_spec_id = args.get('id')
         vote_spec_id = int(Node.from_global_id(vote_spec_id)[1])
@@ -547,14 +547,14 @@ class UpdateTokenVoteSpecification(graphene.Mutation):
 class DeleteVoteSpecification(graphene.Mutation):
     __doc__ = docs.DeleteVoteSpecification.__doc__
 
-    class Input:
+    class Arguments:
         id = graphene.ID(required=True, description=docs.DeleteVoteSpecification.id)
 
     success = graphene.Boolean()
 
-    @staticmethod
     @abort_transaction_on_exception
-    def mutate(root, args, context, info):
+    def mutate(self, info, **args):
+        context = info.context
         cls = models.votes.AbstractVoteSpecification
         vote_spec_id = args.get('id')
         vote_spec_id = int(Node.from_global_id(vote_spec_id)[1])
@@ -577,7 +577,7 @@ class DeleteVoteSpecification(graphene.Mutation):
 class CreateGaugeVoteSpecification(graphene.Mutation):
     __doc__ = docs.CreateGaugeVoteSpecification.__doc__
 
-    class Input:
+    class Arguments:
         vote_session_id = graphene.ID(required=True, description=docs.CreateGaugeVoteSpecification.vote_session_id)
         proposal_id = graphene.ID(description=docs.CreateGaugeVoteSpecification.proposal_id)
         title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.CreateGaugeVoteSpecification.title_entries)
@@ -588,9 +588,9 @@ class CreateGaugeVoteSpecification(graphene.Mutation):
 
     vote_specification = graphene.Field(lambda: GaugeVoteSpecification)
 
-    @staticmethod
     @abort_transaction_on_exception
-    def mutate(root, args, context, info):
+    def mutate(self, info, **args):
+        context = info.context
         cls = models.GaugeVoteSpecification
         require_cls_permission(CrudPermissions.CREATE, cls, context)
         vote_session_id = args.get('vote_session_id')
@@ -638,7 +638,7 @@ class CreateGaugeVoteSpecification(graphene.Mutation):
 class UpdateGaugeVoteSpecification(graphene.Mutation):
     __doc__ = docs.UpdateGaugeVoteSpecification.__doc__
 
-    class Input:
+    class Arguments:
         id = graphene.ID(required=True, description=docs.UpdateGaugeVoteSpecification.id)
         title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.UpdateGaugeVoteSpecification.title_entries)
         instructions_entries = graphene.List(LangStringEntryInput, required=True, description=docs.UpdateGaugeVoteSpecification.instructions_entries)
@@ -647,9 +647,9 @@ class UpdateGaugeVoteSpecification(graphene.Mutation):
 
     vote_specification = graphene.Field(lambda: GaugeVoteSpecification)
 
-    @staticmethod
     @abort_transaction_on_exception
-    def mutate(root, args, context, info):
+    def mutate(self, info, **args):
+        context = info.context
         cls = models.GaugeVoteSpecification
         vote_spec_id = args.get('id')
         vote_spec_id = int(Node.from_global_id(vote_spec_id)[1])
@@ -700,7 +700,7 @@ class UpdateGaugeVoteSpecification(graphene.Mutation):
 class CreateNumberGaugeVoteSpecification(graphene.Mutation):
     __doc__ = docs.CreateNumberGaugeVoteSpecification.__doc__
 
-    class Input:
+    class Arguments:
         vote_session_id = graphene.ID(required=True, description=docs.CreateNumberGaugeVoteSpecification.vote_session_id)
         proposal_id = graphene.ID(description=docs.CreateNumberGaugeVoteSpecification.proposal_id)
         title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.CreateNumberGaugeVoteSpecification.title_entries)
@@ -714,9 +714,9 @@ class CreateNumberGaugeVoteSpecification(graphene.Mutation):
 
     vote_specification = graphene.Field(lambda: NumberGaugeVoteSpecification)
 
-    @staticmethod
     @abort_transaction_on_exception
-    def mutate(root, args, context, info):
+    def mutate(self, info, **args):
+        context = info.context
         cls = models.NumberGaugeVoteSpecification
         require_cls_permission(CrudPermissions.CREATE, cls, context)
         vote_session_id = args.get('vote_session_id')
@@ -758,7 +758,7 @@ class CreateNumberGaugeVoteSpecification(graphene.Mutation):
 class UpdateNumberGaugeVoteSpecification(graphene.Mutation):
     __doc__ = docs.UpdateNumberGaugeVoteSpecification.__doc__
 
-    class Input:
+    class Arguments:
         id = graphene.ID(required=True)
         title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.UpdateNumberGaugeVoteSpecification.title_entries)
         instructions_entries = graphene.List(LangStringEntryInput, required=True, description=docs.UpdateNumberGaugeVoteSpecification.instructions_entries)
@@ -770,9 +770,9 @@ class UpdateNumberGaugeVoteSpecification(graphene.Mutation):
 
     vote_specification = graphene.Field(lambda: NumberGaugeVoteSpecification)
 
-    @staticmethod
     @abort_transaction_on_exception
-    def mutate(root, args, context, info):
+    def mutate(self, info, **args):
+        context = info.context
         cls = models.NumberGaugeVoteSpecification
         vote_spec_id = args.get('id')
         vote_spec_id = int(Node.from_global_id(vote_spec_id)[1])
@@ -799,7 +799,7 @@ class UpdateNumberGaugeVoteSpecification(graphene.Mutation):
 class CreateProposal(graphene.Mutation):
     __doc__ = docs.CreateProposal.__doc__
 
-    class Input:
+    class Arguments:
         vote_session_id = graphene.ID(required=True)
         title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.CreateProposal.title_entries)
         description_entries = graphene.List(LangStringEntryInput, required=True, description=docs.CreateProposal.description_entries)
@@ -807,9 +807,9 @@ class CreateProposal(graphene.Mutation):
 
     proposal = graphene.Field(lambda: Idea)
 
-    @staticmethod
     @abort_transaction_on_exception
-    def mutate(root, args, context, info):
+    def mutate(self, info, **args):
+        context = info.context
         cls = models.Idea
         require_cls_permission(CrudPermissions.CREATE, cls, context)
         vote_session_id = args.get('vote_session_id')
@@ -846,7 +846,7 @@ class CreateProposal(graphene.Mutation):
 class UpdateProposal(graphene.Mutation):
     __doc__ = docs.UpdateProposal.__doc__
 
-    class Input:
+    class Arguments:
         id = graphene.ID(required=True)
         title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.UpdateProposal.title_entries)
         description_entries = graphene.List(LangStringEntryInput, required=True, description=docs.UpdateProposal.description_entries)
@@ -854,9 +854,9 @@ class UpdateProposal(graphene.Mutation):
 
     proposal = graphene.Field(lambda: Idea)
 
-    @staticmethod
     @abort_transaction_on_exception
-    def mutate(root, args, context, info):
+    def mutate(self, info, **args):
+        context = info.context
         cls = models.Idea
         proposal_id = args.get('id')
         proposal_id = int(Node.from_global_id(proposal_id)[1])
@@ -884,14 +884,14 @@ class UpdateProposal(graphene.Mutation):
 class DeleteProposal(graphene.Mutation):
     __doc__ = docs.DeleteProposal.__doc__
 
-    class Input:
+    class Arguments:
         id = graphene.ID(required=True, description=docs.DeleteProposal.id)
 
     success = graphene.Boolean()
 
-    @staticmethod
     @abort_transaction_on_exception
-    def mutate(root, args, context, info):
+    def mutate(self, info, **args):
+        context = info.context
         proposal_id = args.get('id')
         proposal_id = int(Node.from_global_id(proposal_id)[1])
         proposal = models.Idea.get(proposal_id)

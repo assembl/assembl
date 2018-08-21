@@ -111,7 +111,7 @@ class AgentProfile(SecureObjectType, SQLAlchemyObjectType):
 class UpdateUser(graphene.Mutation):
     __doc__ = docs.UpdateUser.__doc__
 
-    class Input:
+    class Arguments:
         id = graphene.ID(required=True, description=docs.UpdateUser.id)
         name = graphene.String(description=docs.UpdateUser.name)
         username = graphene.String(description=docs.UpdateUser.username)
@@ -123,9 +123,9 @@ class UpdateUser(graphene.Mutation):
 
     user = graphene.Field(lambda: AgentProfile)
 
-    @staticmethod
     @abort_transaction_on_exception
-    def mutate(root, args, context, info):
+    def mutate(self, info, **args):
+        context = info.context
         PROFILE_PICTURE = models.AttachmentPurpose.PROFILE_PICTURE.value
         cls = models.User
         discussion_id = context.matchdict['discussion_id']
@@ -225,14 +225,14 @@ class UpdateUser(graphene.Mutation):
 class DeleteUserInformation(graphene.Mutation):
     __doc__ = docs.DeleteUserInformation.__doc__
 
-    class Input:
+    class Arguments:
         id = graphene.ID(required=True, description=docs.UpdateUser.id)
 
     user = graphene.Field(lambda: AgentProfile)
 
-    @staticmethod
     @abort_transaction_on_exception
-    def mutate(root, args, context, info):
+    def mutate(self, info, **args):
+        context = info.context
         cls = models.User
         db = cls.default_db
         global_id = args.get('id')
@@ -312,14 +312,14 @@ class DeleteUserInformation(graphene.Mutation):
 class UpdateAcceptedCookies(graphene.Mutation):
     __doc__ = docs.UpdateAcceptedCookies.__doc__
 
-    class Input:
+    class Arguments:
         actions = graphene.Argument(graphene.List(CookieTypes, required=True), description=docs.UpdateAcceptedCookies.actions)
 
     user = graphene.Field(lambda: AgentProfile)
 
-    @staticmethod
     @abort_transaction_on_exception
-    def mutate(root, args, context, info):
+    def mutate(self, info, **args):
+        context = info.context
         cls = models.User
         db = cls.default_db
         discussion_id = context.matchdict['discussion_id']

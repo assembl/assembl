@@ -35,7 +35,7 @@ class SentimentCounts(graphene.ObjectType):
 class AddSentiment(graphene.Mutation):
     __doc__ = docs.AddSentiment.__doc__
 
-    class Input:
+    class Arguments:
         post_id = graphene.ID(required=True, description=docs.AddSentiment.post_id)
         type = graphene.Argument(
             type=SentimentTypes,
@@ -44,9 +44,9 @@ class AddSentiment(graphene.Mutation):
 
     post = graphene.Field('assembl.graphql.post.Post')
 
-    @staticmethod
     @abort_transaction_on_exception
-    def mutate(root, args, context, info):
+    def mutate(self, info, **args):
+        context = info.context
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
 
@@ -86,14 +86,14 @@ class AddSentiment(graphene.Mutation):
 class DeleteSentiment(graphene.Mutation):
     __doc__ = docs.DeleteSentiment.__doc__
 
-    class Input:
+    class Arguments:
         post_id = graphene.ID(required=True, description=docs.DeleteSentiment.post_id)
 
     post = graphene.Field('assembl.graphql.post.Post')
 
-    @staticmethod
     @abort_transaction_on_exception
-    def mutate(root, args, context, info):
+    def mutate(self, info, **args):
+        context = info.context
         discussion_id = context.matchdict['discussion_id']
         user_id = context.authenticated_userid or Everyone
 

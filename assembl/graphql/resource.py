@@ -66,7 +66,7 @@ class Resource(SecureObjectType, SQLAlchemyObjectType):
 class CreateResource(graphene.Mutation):
     __doc__ = docs.CreateResource.__doc__
 
-    class Input:
+    class Arguments:
         # Careful, having required=True on a graphene.List only means
         # it can't be None, having an empty [] is perfectly valid.
         title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.CreateResource.title_entries)
@@ -78,9 +78,9 @@ class CreateResource(graphene.Mutation):
 
     resource = graphene.Field(lambda: Resource)
 
-    @staticmethod
     @abort_transaction_on_exception
-    def mutate(root, args, context, info):
+    def mutate(self, info, **args):
+        context = info.context
         ATTACHMENT_PURPOSE_IMAGE = models.AttachmentPurpose.IMAGE.value
         ATTACHMENT_PURPOSE_DOCUMENT = models.AttachmentPurpose.DOCUMENT.value
         cls = models.Resource
@@ -151,14 +151,14 @@ class CreateResource(graphene.Mutation):
 class DeleteResource(graphene.Mutation):
     __doc__ = docs.DeleteResource.__doc__
 
-    class Input:
+    class Arguments:
         resource_id = graphene.ID(required=True, description=docs.DeleteResource.resource_id)
 
     success = graphene.Boolean()
 
-    @staticmethod
     @abort_transaction_on_exception
-    def mutate(root, args, context, info):
+    def mutate(self, info, **args):
+        context = info.context
         discussion_id = context.matchdict['discussion_id']
         user_id = context.authenticated_userid or Everyone
 
@@ -180,7 +180,7 @@ class DeleteResource(graphene.Mutation):
 class UpdateResource(graphene.Mutation):
     __doc__ = docs.UpdateResource.__doc__
 
-    class Input:
+    class Arguments:
         id = graphene.ID(required=True)
         title_entries = graphene.List(LangStringEntryInput, description=docs.UpdateResource.title_entries)
         text_entries = graphene.List(LangStringEntryInput, description=docs.UpdateResource.text_entries)
@@ -191,9 +191,9 @@ class UpdateResource(graphene.Mutation):
 
     resource = graphene.Field(lambda: Resource)
 
-    @staticmethod
     @abort_transaction_on_exception
-    def mutate(root, args, context, info):
+    def mutate(self, info, **args):
+        context = info.context
         ATTACHMENT_PURPOSE_IMAGE = models.AttachmentPurpose.IMAGE.value
         ATTACHMENT_PURPOSE_DOCUMENT = models.AttachmentPurpose.DOCUMENT.value
         cls = models.Resource

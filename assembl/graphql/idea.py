@@ -582,7 +582,7 @@ class VideoInput(graphene.InputObjectType):
 class CreateThematic(graphene.Mutation):
     __doc__ = docs.CreateThematic.__doc__
 
-    class Input:
+    class Arguments:
         # Careful, having required=True on a graphene.List only means
         # it can't be None, having an empty [] is perfectly valid.
         title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.Default.langstring_entries)
@@ -599,9 +599,9 @@ class CreateThematic(graphene.Mutation):
 
     thematic = graphene.Field(lambda: IdeaUnion)
 
-    @staticmethod
     @abort_transaction_on_exception
-    def mutate(root, args, context, info):
+    def mutate(self, info, **args):
+        context = info.context
         EMBED_ATTACHMENT = models.AttachmentPurpose.EMBED_ATTACHMENT.value
         MEDIA_ATTACHMENT = models.AttachmentPurpose.MEDIA_ATTACHMENT.value
         cls = models.Idea
@@ -762,7 +762,7 @@ class CreateThematic(graphene.Mutation):
 class UpdateThematic(graphene.Mutation):
     __doc__ = docs.UpdateThematic.__doc__
 
-    class Input:
+    class Arguments:
         id = graphene.ID(required=True)
         title_entries = graphene.List(LangStringEntryInput, description=docs.Default.langstring_entries)
         description_entries = graphene.List(LangStringEntryInput, description=docs.Default.langstring_entries)
@@ -776,9 +776,9 @@ class UpdateThematic(graphene.Mutation):
 
     thematic = graphene.Field(lambda: IdeaUnion)
 
-    @staticmethod
     @abort_transaction_on_exception
-    def mutate(root, args, context, info):
+    def mutate(self, info, **args):
+        context = info.context
         EMBED_ATTACHMENT = models.AttachmentPurpose.EMBED_ATTACHMENT.value
         MEDIA_ATTACHMENT = models.AttachmentPurpose.MEDIA_ATTACHMENT.value
         cls = models.Idea
@@ -914,14 +914,14 @@ class UpdateThematic(graphene.Mutation):
 class DeleteThematic(graphene.Mutation):
     __doc__ = docs.DeleteThematic.__doc__
 
-    class Input:
+    class Arguments:
         thematic_id = graphene.ID(required=True, description=docs.DeleteThematic.thematic_id)
 
     success = graphene.Boolean()
 
-    @staticmethod
     @abort_transaction_on_exception
-    def mutate(root, args, context, info):
+    def mutate(self, info, **args):
+        context = info.context
         discussion_id = context.matchdict['discussion_id']
         user_id = context.authenticated_userid or Everyone
 

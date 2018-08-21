@@ -35,7 +35,7 @@ class Preferences(graphene.ObjectType):
 
 class UpdateHarvestingTranslationPreference(graphene.Mutation):
 
-    class Input:
+    class Arguments:
         id = graphene.ID(
             required=True, description=docs.UpdateHarvestingTranslationPreference.id)
         translation = TranslationInput(
@@ -44,9 +44,9 @@ class UpdateHarvestingTranslationPreference(graphene.Mutation):
     preferences = graphene.Field(
         Preferences, description=docs.UpdateHarvestingTranslationPreference.preferences)
 
-    @staticmethod
     @abort_transaction_on_exception
-    def mutate(root, args, context, info):
+    def mutate(self, info, **args):
+        context = info.context
         model = models.User
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)

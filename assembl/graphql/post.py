@@ -271,7 +271,7 @@ class PostExtractEntryInput(graphene.InputObjectType, PostExtractEntryFields):
 class CreatePost(graphene.Mutation):
     __doc__ = docs.CreatePost.__doc__
 
-    class Input:
+    class Arguments:
         subject = graphene.String(description=docs.CreatePost.subject)
         body = graphene.String(required=True, description=docs.CreatePost.body)
         idea_id = graphene.ID(required=True, description=docs.CreatePost.idea_id)
@@ -283,9 +283,9 @@ class CreatePost(graphene.Mutation):
 
     post = graphene.Field(lambda: Post)
 
-    @staticmethod
     @abort_transaction_on_exception
-    def mutate(root, args, context, info):
+    def mutate(self, info, **args):
+        context = info.context
         EMBED_ATTACHMENT = models.AttachmentPurpose.EMBED_ATTACHMENT.value
         discussion_id = context.matchdict['discussion_id']
 
@@ -417,7 +417,7 @@ class CreatePost(graphene.Mutation):
 class UpdatePost(graphene.Mutation):
     __doc__ = docs.UpdatePost.__doc__
 
-    class Input:
+    class Arguments:
         post_id = graphene.ID(required=True, description=docs.UpdatePost.post_id)
         subject = graphene.String(description=docs.UpdatePost.subject)
         body = graphene.String(required=True, description=docs.UpdatePost.body)
@@ -425,9 +425,9 @@ class UpdatePost(graphene.Mutation):
 
     post = graphene.Field(lambda: Post)
 
-    @staticmethod
     @abort_transaction_on_exception
-    def mutate(root, args, context, info):
+    def mutate(self, info, **args):
+        context = info.context
         EMBED_ATTACHMENT = models.AttachmentPurpose.EMBED_ATTACHMENT.value
         discussion_id = context.matchdict['discussion_id']
 
@@ -520,14 +520,14 @@ class UpdatePost(graphene.Mutation):
 class DeletePost(graphene.Mutation):
     __doc__ = docs.DeletePost.__doc__
 
-    class Input:
+    class Arguments:
         post_id = graphene.ID(required=True, description=docs.DeletePost.post_id)
 
     post = graphene.Field(lambda: Post)
 
-    @staticmethod
     @abort_transaction_on_exception
-    def mutate(root, args, context, info):
+    def mutate(self, info, **args):
+        context = info.context
         discussion_id = context.matchdict['discussion_id']
 
         user_id = context.authenticated_userid or Everyone
@@ -560,14 +560,14 @@ class DeletePost(graphene.Mutation):
 class UndeletePost(graphene.Mutation):
     __doc__ = docs.UndeletePost.__doc__
 
-    class Input:
+    class Arguments:
         post_id = graphene.ID(required=True, description=docs.UndeletePost.post_id)
 
     post = graphene.Field(lambda: Post)
 
-    @staticmethod
     @abort_transaction_on_exception
-    def mutate(root, args, context, info):
+    def mutate(self, info, **args):
+        context = info.context
         discussion_id = context.matchdict['discussion_id']
         user_id = context.authenticated_userid or Everyone
         post_id = args.get('post_id')
@@ -586,7 +586,7 @@ class UndeletePost(graphene.Mutation):
 class AddPostAttachment(graphene.Mutation):
     __doc__ = docs.AddPostAttachment.__doc__
 
-    class Input:
+    class Arguments:
         post_id = graphene.ID(required=True, description=docs.AddPostAttachment.post_id)
         file = graphene.String(
             required=True, description=docs.AddPostAttachment.file
@@ -594,9 +594,9 @@ class AddPostAttachment(graphene.Mutation):
 
     post = graphene.Field(lambda: Post)
 
-    @staticmethod
     @abort_transaction_on_exception
-    def mutate(root, args, context, info):
+    def mutate(self, info, **args):
+        context = info.context
         EMBED_ATTACHMENT = models.AttachmentPurpose.EMBED_ATTACHMENT.value
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
@@ -642,15 +642,15 @@ class AddPostAttachment(graphene.Mutation):
 class DeletePostAttachment(graphene.Mutation):
     __doc__ = docs.DeletePostAttachment.__doc__
 
-    class Input:
+    class Arguments:
         post_id = graphene.ID(required=True, description=docs.DeletePostAttachment.post_id)
         attachment_id = graphene.Int(required=True, description=docs.DeletePostAttachment.attachment_id)
 
     post = graphene.Field(lambda: Post)
 
-    @staticmethod
     @abort_transaction_on_exception
-    def mutate(root, args, context, info):
+    def mutate(self, info, **args):
+        context = info.context
         discussion_id = context.matchdict['discussion_id']
         user_id = context.authenticated_userid or Everyone
         post_id = args.get('post_id')
@@ -678,7 +678,7 @@ class DeletePostAttachment(graphene.Mutation):
 class AddPostExtract(graphene.Mutation):
     __doc__ = docs.AddPostExtract.__doc__
 
-    class Input:
+    class Arguments:
         post_id = graphene.ID(required=True, description=docs.AddPostExtract.post_id)
         body = graphene.String(required=True, description=docs.AddPostExtract.body)
         important = graphene.Boolean(description=docs.AddPostExtract.important)
@@ -690,9 +690,9 @@ class AddPostExtract(graphene.Mutation):
 
     post = graphene.Field(lambda: Post)
 
-    @staticmethod
     @abort_transaction_on_exception
-    def mutate(root, args, context, info):
+    def mutate(self, info, **args):
+        context = info.context
         require_cls_permission(CrudPermissions.CREATE, models.Extract, context)
         discussion_id = context.matchdict['discussion_id']
 
@@ -739,7 +739,7 @@ class AddPostExtract(graphene.Mutation):
 
 # Used by the Bigdatext app
 class AddPostsExtract(graphene.Mutation):
-    class Input:
+    class Arguments:
         extracts = graphene.List(
             PostExtractEntryInput, required=True, description=docs.AddPostsExtract.extracts)
         extract_nature = ExtractNatures(description=docs.AddPostsExtract.extract_nature)
@@ -747,9 +747,9 @@ class AddPostsExtract(graphene.Mutation):
 
     status = graphene.Boolean(description=docs.AddPostsExtract.status)
 
-    @staticmethod
     @abort_transaction_on_exception
-    def mutate(root, args, context, info):
+    def mutate(self, info, **args):
+        context = info.context
         status = False
         require_cls_permission(CrudPermissions.CREATE, models.Extract, context)
         discussion_id = context.matchdict['discussion_id']

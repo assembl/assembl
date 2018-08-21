@@ -44,7 +44,7 @@ class Section(SecureObjectType, SQLAlchemyObjectType):
 class CreateSection(graphene.Mutation):
     __doc__ = docs.CreateSection.__doc__
 
-    class Input:
+    class Arguments:
         title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.CreateSection.title_entries)
         section_type = graphene.Argument(SectionTypes, description=docs.CreateSection.section_type)
         url = graphene.String(description=docs.CreateSection.url)
@@ -52,9 +52,9 @@ class CreateSection(graphene.Mutation):
 
     section = graphene.Field(lambda: Section)
 
-    @staticmethod
     @abort_transaction_on_exception
-    def mutate(root, args, context, info):
+    def mutate(self, info, **args):
+        context = info.context
         cls = models.Section
         discussion_id = context.matchdict['discussion_id']
         user_id = context.authenticated_userid or Everyone
@@ -92,13 +92,14 @@ class CreateSection(graphene.Mutation):
 class DeleteSection(graphene.Mutation):
     __doc__ = docs.DeleteSection.__doc__
 
-    class Input:
+    class Arguments:
         section_id = graphene.ID(required=True, description=docs.DeleteSection.section_id)
 
     success = graphene.Boolean()
 
-    @staticmethod
-    def mutate(root, args, context, info):
+    @abort_transaction_on_exception
+    def mutate(self, info, **args):
+        context = info.context
         discussion_id = context.matchdict['discussion_id']
         user_id = context.authenticated_userid or Everyone
 
@@ -122,7 +123,7 @@ class DeleteSection(graphene.Mutation):
 class UpdateSection(graphene.Mutation):
     __doc__ = docs.UpdateSection.__doc__
 
-    class Input:
+    class Arguments:
         id = graphene.ID(required=True, description=docs.UpdateSection.id)
         title_entries = graphene.List(LangStringEntryInput, description=docs.UpdateSection.title_entries)
         url = graphene.String(description=docs.UpdateSection.url)
@@ -130,8 +131,9 @@ class UpdateSection(graphene.Mutation):
 
     section = graphene.Field(lambda: Section)
 
-    @staticmethod
-    def mutate(root, args, context, info):
+    @abort_transaction_on_exception
+    def mutate(self, info, **args):
+        context = info.context
         cls = models.Section
         discussion_id = context.matchdict['discussion_id']
         user_id = context.authenticated_userid or Everyone

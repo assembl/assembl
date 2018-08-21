@@ -79,10 +79,10 @@ def update_langstrings(model, langstrings_defs, args):
         )
 
 
-def add_langstrings_input_attrs(Input, langstrings_names):
+def add_langstrings_input_attrs(Arguments, langstrings_names):
     for langstring_name in langstrings_names:
         setattr(
-            Input,
+            Arguments,
             langstring_name + entries_suffix,
             graphene.List(LangStringEntryInput)
         )

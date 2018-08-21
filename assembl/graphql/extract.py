@@ -65,7 +65,7 @@ class Extract(SecureObjectType, SQLAlchemyObjectType):
 class UpdateExtract(graphene.Mutation):
     __doc__ = docs.UpdateExtract.__doc__
 
-    class Input:
+    class Arguments:
         extract_id = graphene.ID(required=True, description=docs.UpdateExtract.extract_id)
         idea_id = graphene.ID(description=docs.UpdateExtract.idea_id)
         important = graphene.Boolean(description=docs.UpdateExtract.important)
@@ -75,9 +75,9 @@ class UpdateExtract(graphene.Mutation):
 
     extract = graphene.Field(lambda: Extract)
 
-    @staticmethod
     @abort_transaction_on_exception
-    def mutate(root, args, context, info):
+    def mutate(self, info, **args):
+        context = info.context
         extract_id = args.get('extract_id')
         extract_id = int(Node.from_global_id(extract_id)[1])
         extract = models.Extract.get(extract_id)
@@ -102,14 +102,14 @@ class UpdateExtract(graphene.Mutation):
 class DeleteExtract(graphene.Mutation):
     __doc__ = docs.DeleteExtract.__doc__
 
-    class Input:
+    class Arguments:
         extract_id = graphene.ID(required=True, description=docs.DeleteExtract.extract_id)
 
     success = graphene.Boolean(description=docs.DeleteExtract.success)
 
-    @staticmethod
     @abort_transaction_on_exception
-    def mutate(root, args, context, info):
+    def mutate(self, info, **args):
+        context = info.context
         extract_id = args.get('extract_id')
         extract_id = int(Node.from_global_id(extract_id)[1])
         extract = models.Extract.get(extract_id)
@@ -123,14 +123,14 @@ class DeleteExtract(graphene.Mutation):
 
 
 class ConfirmExtract(graphene.Mutation):
-    class Input:
+    class Arguments:
         extract_id = graphene.ID(required=True, description=docs.ConfirmExtract.extract_id)
 
     success = graphene.Boolean(description=docs.ConfirmExtract.success)
 
-    @staticmethod
     @abort_transaction_on_exception
-    def mutate(root, args, context, info):
+    def mutate(self, info, **args):
+        context = info.context
         extract_id = args.get('extract_id')
         extract_id = int(Node.from_global_id(extract_id)[1])
         extract = models.Extract.get(extract_id)

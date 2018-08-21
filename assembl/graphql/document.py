@@ -29,7 +29,7 @@ class Document(SecureObjectType, SQLAlchemyObjectType):
 class UploadDocument(graphene.Mutation):
     __doc__ = docs.UploadDocument.__doc__
 
-    class Input:
+    class Arguments:
         file = graphene.String(
             required=True,
             description=docs.UploadDocument.file
@@ -37,9 +37,9 @@ class UploadDocument(graphene.Mutation):
 
     document = graphene.Field(lambda: Document)
 
-    @staticmethod
     @abort_transaction_on_exception
-    def mutate(root, args, context, info):
+    def mutate(self, info, **args):
+        context = info.context
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
 

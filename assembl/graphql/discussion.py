@@ -112,7 +112,7 @@ class Discussion(SecureObjectType, SQLAlchemyObjectType):
 class UpdateDiscussion(graphene.Mutation):
     __doc__ = docs.UpdateDiscussion.__doc__
 
-    class Input:
+    class Arguments:
         title_entries = graphene.List(LangStringEntryInput, description=docs.UpdateDiscussion.title_entries)
         subtitle_entries = graphene.List(LangStringEntryInput, description=docs.UpdateDiscussion.subtitle_entries)
         button_label_entries = graphene.List(LangStringEntryInput, description=docs.UpdateDiscussion.button_label_entries)
@@ -121,9 +121,9 @@ class UpdateDiscussion(graphene.Mutation):
 
     discussion = graphene.Field(lambda: Discussion)
 
-    @staticmethod
     @abort_transaction_on_exception
-    def mutate(root, args, context, info):
+    def mutate(self, info, **args):
+        context = info.context
         cls = models.Discussion
         discussion_id = context.matchdict['discussion_id']
         discussion = cls.get(discussion_id)
@@ -394,15 +394,15 @@ class LegalContents(graphene.ObjectType):
 class UpdateResourcesCenter(graphene.Mutation):
     __doc__ = docs.UpdateResourcesCenter.__doc__
 
-    class Input:
+    class Arguments:
         title_entries = graphene.List(LangStringEntryInput, description=docs.UpdateResourcesCenter.title_entries)
         header_image = graphene.String(description=docs.UpdateResourcesCenter.header_image)
 
     resources_center = graphene.Field(lambda: ResourcesCenter)
 
-    @staticmethod
     @abort_transaction_on_exception
-    def mutate(root, args, context, info):
+    def mutate(self, info, **args):
+        context = info.context
         RESOURCES_CENTER_HEADER_IMAGE = models.AttachmentPurpose.RESOURCES_CENTER_HEADER_IMAGE.value
         cls = models.Discussion
         discussion_id = context.matchdict['discussion_id']
@@ -467,7 +467,7 @@ class UpdateResourcesCenter(graphene.Mutation):
 class UpdateDiscussionPreferences(graphene.Mutation):
     __doc__ = docs.UpdateDiscussionPreferences.__doc__
 
-    class Input:
+    class Arguments:
         languages = graphene.List(graphene.String, description=docs.UpdateDiscussionPreferences.languages)
         tab_title = graphene.String(description=docs.UpdateDiscussionPreferences.tab_title)
         # this is the identifier of the part in a multipart POST
@@ -475,9 +475,9 @@ class UpdateDiscussionPreferences(graphene.Mutation):
 
     preferences = graphene.Field(lambda: DiscussionPreferences)
 
-    @staticmethod
     @abort_transaction_on_exception
-    def mutate(root, args, context, info):
+    def mutate(self, info, **args):
+        context = info.context
         cls = models.Preferences
         discussion_id = context.matchdict['discussion_id']
 
@@ -523,7 +523,7 @@ class UpdateDiscussionPreferences(graphene.Mutation):
 class UpdateLegalContents(graphene.Mutation):
     __doc__ = docs.UpdateLegalContents.__doc__
 
-    class Input:
+    class Arguments:
         legal_notice_entries = graphene.List(LangStringEntryInput, description=docs.UpdateLegalContents.legal_notice_entries)
         terms_and_conditions_entries = graphene.List(LangStringEntryInput, description=docs.UpdateLegalContents.terms_and_conditions_entries)
         cookies_policy_entries = graphene.List(LangStringEntryInput, description=docs.UpdateLegalContents.cookies_policy_entries)
@@ -531,9 +531,9 @@ class UpdateLegalContents(graphene.Mutation):
 
     legal_contents = graphene.Field(lambda: LegalContents)
 
-    @staticmethod
     @abort_transaction_on_exception
-    def mutate(root, args, context, info):
+    def mutate(self, info, **args):
+        context = info.context
         cls = models.Discussion
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
