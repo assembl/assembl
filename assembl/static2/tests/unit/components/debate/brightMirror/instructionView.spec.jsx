@@ -36,7 +36,7 @@ describe('Bright Mirror page', () => {
     expect(result).toMatchSnapshot();
   });
 
-  it('timeline is over', () => {
+  it('should hide fiction creation section if timeline is over', () => {
     const timeline = [
       {
         identifier: 'brightMirror',
@@ -63,7 +63,7 @@ describe('Bright Mirror page', () => {
     expect(result).toMatchSnapshot();
   });
 
-  it('user cannot post', () => {
+  it('should hide fiction creation section if user is not allowed post', () => {
     connectedUserCan.mockImplementation(() => false);
 
     const timeline = [
@@ -92,7 +92,7 @@ describe('Bright Mirror page', () => {
     expect(result).toMatchSnapshot();
   });
 
-  it('user is not connected', () => {
+  it('should hide fiction creation section if user is not connected', () => {
     const timeline = [
       {
         identifier: 'brightMirror',
