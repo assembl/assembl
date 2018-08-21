@@ -34,6 +34,7 @@ exports[`Bright Mirror page should match BrightMirror instruction snapshot 1`] =
     </Col>
   </div>
   <TopPostFormContainer
+    bodyPlaceholder="debate.brightMirror.fillBodyLabel"
     fillBodyLabel="debate.brightMirror.fillBodyLabel"
     ideaId={0}
     instructionLabel="debate.brightMirror.startFictionLabel"

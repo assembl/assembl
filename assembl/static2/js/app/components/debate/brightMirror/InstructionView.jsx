@@ -28,6 +28,7 @@ const InstructionView = ({ isUserConnected, ideaId, refetchIdea, posts, announce
         topPostsCount={posts.length}
         instructionLabel="debate.brightMirror.startFictionLabel"
         fillBodyLabel="debate.brightMirror.fillBodyLabel"
+        bodyPlaceholder="debate.brightMirror.fillBodyLabel"
         postSuccessMsg="debate.brightMirror.postSuccessMsg"
       />
     ) : null}

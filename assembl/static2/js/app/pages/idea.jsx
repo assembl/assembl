@@ -14,7 +14,7 @@ import { getConnectedUserId } from '../utils/globalFunctions';
 import Announcement, { getSentimentsCount } from './../components/debate/common/announcement';
 import ColumnsView from '../components/debate/multiColumns/columnsView';
 import ThreadView from '../components/debate/thread/threadView';
-import { DeletedPublicationStates } from '../constants';
+import { DeletedPublicationStates, PHASES } from '../constants';
 import HeaderStatistics, { statContributions, statMessages, statParticipants } from '../components/common/headerStatistics';
 import InstructionView from '../components/debate/brightMirror/InstructionView';
 
@@ -197,7 +197,7 @@ class Idea extends React.Component {
     }
     const { announcement, id, headerImgUrl, synthesisTitle, title } = this.props;
     const isMultiColumns = ideaWithPostsData.loading ? false : ideaWithPostsData.idea.messageViewOverride === 'messageColumns';
-    const isBrightMirror = ideaWithPostsData.loading ? false : ideaWithPostsData.idea.messageViewOverride === 'brightMirror';
+    const isBrightMirror = ideaWithPostsData.loading ? false : ideaWithPostsData.idea.messageViewOverride === PHASES.brightMirror;
     const messageColumns = ideaWithPostsData.loading
       ? undefined
       : [...ideaWithPostsData.idea.messageColumns].sort((a, b) => {

@@ -15,8 +15,8 @@ type TopPostFormContainerProps = {
   topPostsCount: number,
   instructionLabel: string,
   fillBodyLabel: string,
+  bodyPlaceholder: string,
   postSuccessMsg: string
-
 };
 
 type TopPostFormContainerState = {
@@ -31,6 +31,10 @@ class TopPostFormContainer extends React.Component<TopPostFormContainerProps, To
   setFormPosition: () => void;
 
   topPostFormContainer: () => void;
+
+  static defaultProps = {
+    instructionLabel: 'debate.thread.startDiscussion'
+  };
 
   constructor(props: TopPostFormContainerProps) {
     super(props);
@@ -84,11 +88,10 @@ class TopPostFormContainer extends React.Component<TopPostFormContainerProps, To
 
   render() {
     const { ideaId, refetchIdea, messageColumns = [], isColumnViewInline, topPostsCount,
-      instructionLabel, fillBodyLabel, postSuccessMsg } = this.props;
+      instructionLabel, fillBodyLabel, bodyPlaceholder, postSuccessMsg } = this.props;
     const columnsInfos = this.getColumnsInfos();
     const { sticky } = this.state;
     const containerClassNames = sticky && messageColumns.length <= 1 && topPostsCount >= 1 ? 'top-post-sticky' : '';
-    const instructionLabelVal = instructionLabel || 'debate.thread.startDiscussion';
 
     return (
       <div id="top-post-form" ref={this.setFormContainerRef} className={containerClassNames}>
@@ -126,7 +129,7 @@ class TopPostFormContainer extends React.Component<TopPostFormContainerProps, To
                               }
                             >
                               <h3 className="dark-title-3 no-margin">
-                                {messageColumns.length > 1 ? column.name : <Translate value={instructionLabelVal} />}
+                                {messageColumns.length > 1 ? column.name : <Translate value={instructionLabel} />}
                               </h3>
                             </div>
                           </div>
@@ -147,6 +150,7 @@ class TopPostFormContainer extends React.Component<TopPostFormContainerProps, To
                             ideaOnColumn={messageColumns.length > 1}
                             messageClassifier={column.messageClassifier || null}
                             fillBodyLabel={fillBodyLabel}
+                            bodyPlaceholder={bodyPlaceholder}
                             postSuccessMsg={postSuccessMsg}
                           />
                         </Col>
