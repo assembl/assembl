@@ -2,9 +2,11 @@
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
+import { I18n } from 'react-redux-i18n';
 
 import CookiesSelector from './cookiesSelector';
 import { getCookieItem, setCookieItem } from '../../utils/globalFunctions';
+import { displayAlert } from '../../utils/utilityManager';
 
 // graphql
 import acceptedCookiesQuery from '../../graphql/acceptedCookiesQuery.graphql';
@@ -117,6 +119,7 @@ export class DumbCookiesSelectorContainer extends React.Component<Props, State> 
     this.props.updateAcceptedCookies({ variables: { actions: newCookiesList } });
     // Update the cookies in the browser
     setCookieItem('cookies_configuration', newCookiesList);
+    displayAlert('success', I18n.t('cookiesPolicy.success'));
   }
 
   handleCategorySelection = (category: string) => {

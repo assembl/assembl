@@ -14,7 +14,8 @@ export type CookieObject = {
 
 type CookieToggleProps = {
   handleToggle: Function,
-  cookie: CookieObject
+  cookie: CookieObject,
+  toggleCookieType: Function
 };
 
 
