@@ -392,7 +392,6 @@ class UpdateThematic:
     id = Default.node_id % ("Thematic") + " The identifier of the Thematic to be updated."
     title_entries = CreateThematic.title_entries
     description_entries = CreateThematic.description_entries
-    identifier = CreateThematic.discussion_phase_id
     video = CreateThematic.video
     questions = CreateThematic.questions
     image = CreateThematic.image
