@@ -136,9 +136,14 @@ class SQLAlchemyUnion(six.with_metaclass(SQLAlchemyUnionMeta, Union)):
 
 
 class SecureObjectType(object):
+    """
+    A Mixin allowing to utilize the relay Node features on ObjectTypes.
+    Note: Graphene V2.0 upgrade, this can only be used on ObjectType
+    """
 
     @classmethod
-    def get_node(cls, id, context, info):
+    def get_node(cls, info, id):
+        context = info.context
         try:
             result = cls.get_query(context).get(id)
         except NoResultFound:
