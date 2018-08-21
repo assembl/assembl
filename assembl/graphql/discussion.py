@@ -45,64 +45,64 @@ class Discussion(SecureObjectType, SQLAlchemyObjectType):
     logo_image = graphene.Field(Document, description=docs.Discussion.logo_image)
     slug = graphene.String(description=docs.Discussion.slug)
 
-    def resolve_homepage_url(self, args, context, info):
+    def resolve_homepage_url(self, info, **args):
         # TODO: Remove this resolver and add URLString to
         # the Graphene SQLA converters list
         return self.homepage_url
 
-    def resolve_title(self, args, context, info):
+    def resolve_title(self, info, **args):
         """Title value in given locale."""
-        discussion_id = context.matchdict['discussion_id']
+        discussion_id = info.context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
         return resolve_langstring(discussion.title, args.get('lang'))
 
-    def resolve_title_entries(self, args, context, info):
-        discussion_id = context.matchdict['discussion_id']
+    def resolve_title_entries(self, info, **args):
+        discussion_id = info.context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
         if discussion.title:
             return resolve_langstring_entries(discussion, 'title')
 
         return []
 
-    def resolve_subtitle(self, args, context, info):
+    def resolve_subtitle(self, info, **args):
         """Subtitle value in given locale."""
-        discussion_id = context.matchdict['discussion_id']
+        discussion_id = info.context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
         return resolve_langstring(discussion.subtitle, args.get('lang'))
 
-    def resolve_subtitle_entries(self, args, context, info):
-        discussion_id = context.matchdict['discussion_id']
+    def resolve_subtitle_entries(self, info, **args):
+        discussion_id = info.context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
         if discussion.subtitle:
             return resolve_langstring_entries(discussion, 'subtitle')
 
         return []
 
-    def resolve_button_label(self, args, context, info):
+    def resolve_button_label(self, info, **args):
         """Button label value in given locale."""
-        discussion_id = context.matchdict['discussion_id']
+        discussion_id = info.context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
         return resolve_langstring(discussion.button_label, args.get('lang'))
 
-    def resolve_button_label_entries(self, args, context, info):
-        discussion_id = context.matchdict['discussion_id']
+    def resolve_button_label_entries(self, info, **args):
+        discussion_id = info.context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
         if discussion.subtitle:
             return resolve_langstring_entries(discussion, 'button_label')
 
         return []
 
-    def resolve_header_image(self, args, context, info):
+    def resolve_header_image(self, info, **args):
         LANDING_PAGE_HEADER_IMAGE = models.AttachmentPurpose.LANDING_PAGE_HEADER_IMAGE.value
-        discussion_id = context.matchdict['discussion_id']
+        discussion_id = info.context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
         for attachment in discussion.attachments:
             if attachment.attachmentPurpose == LANDING_PAGE_HEADER_IMAGE:
                 return attachment.document
 
-    def resolve_logo_image(self, args, context, info):
+    def resolve_logo_image(self, info, **args):
         LANDING_PAGE_LOGO_IMAGE = models.AttachmentPurpose.LANDING_PAGE_LOGO_IMAGE.value
-        discussion_id = context.matchdict['discussion_id']
+        discussion_id = info.context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
         for attachment in discussion.attachments:
             if attachment.attachmentPurpose == LANDING_PAGE_LOGO_IMAGE:
@@ -245,7 +245,7 @@ class LocalePreference(graphene.ObjectType):
     name = graphene.String(in_locale=graphene.String(required=True), description=docs.LocalePreference.name)
     native_name = graphene.String(description=docs.LocalePreference.native_name)
 
-    def resolve_name(self, args, context, info):
+    def resolve_name(self, info, **args):
         in_locale = args.get('in_locale') or None
         locale_model = models.Locale.get_or_create(in_locale)
 
@@ -259,7 +259,7 @@ class LocalePreference(graphene.ObjectType):
 
         return name[self.locale]
 
-    def resolve_native_name(self, args, context, info):
+    def resolve_native_name(self, info, **args):
         locale = self.locale
         if locale == 'zh_Hans':  # we have the native name only for zh
             locale = 'zh'
@@ -282,15 +282,15 @@ class DiscussionPreferences(graphene.ObjectType):
     tab_title = graphene.String(description=docs.DiscussionPreferences.tab_title)
     favicon = graphene.Field(Document, description=docs.DiscussionPreferences.favicon)
 
-    def resolve_tab_title(self, args, context, info):
+    def resolve_tab_title(self, info, **args):
         return self.get('tab_title', 'Assembl')
 
-    def resolve_languages(self, args, context, info):
+    def resolve_languages(self, info, **args):
         locales = self.get('preferred_locales', [])
         return [LocalePreference(locale=x) for x in locales]
 
-    def resolve_favicon(self, args, context, info):
-        discussion_id = context.matchdict['discussion_id']
+    def resolve_favicon(self, info, **args):
+        discussion_id = info.context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
         attachment = get_attachment_with_purpose(
             discussion.attachments, models.AttachmentPurpose.FAVICON.value)
@@ -303,20 +303,20 @@ class ResourcesCenter(graphene.ObjectType):
     title_entries = graphene.List(LangStringEntry, description=docs.ResourcesCenter.title_entries)
     header_image = graphene.Field(Document, description=docs.ResourcesCenter.header_image)
 
-    def resolve_title(self, args, context, info):
-        discussion_id = context.matchdict['discussion_id']
+    def resolve_title(self, info, **args):
+        discussion_id = info.context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
         return resolve_langstring(
             discussion.resources_center_title, args.get('lang'))
 
-    def resolve_title_entries(self, args, context, info):
-        discussion_id = context.matchdict['discussion_id']
+    def resolve_title_entries(self, info, **args):
+        discussion_id = info.context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
         return resolve_langstring_entries(discussion, 'resources_center_title')
 
-    def resolve_header_image(self, args, context, info):
+    def resolve_header_image(self, info, **args):
         RESOURCES_CENTER_HEADER_IMAGE = models.AttachmentPurpose.RESOURCES_CENTER_HEADER_IMAGE.value
-        discussion_id = context.matchdict['discussion_id']
+        discussion_id = info.context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
         for attachment in discussion.attachments:
             if attachment.attachmentPurpose == RESOURCES_CENTER_HEADER_IMAGE:
@@ -334,56 +334,56 @@ class LegalContents(graphene.ObjectType):
     cookies_policy_entries = graphene.List(LangStringEntry, description=docs.LegalContents.cookies_policy_entries)
     privacy_policy_entries = graphene.List(LangStringEntry, description=docs.LegalContents.privacy_policy_entries)
 
-    def resolve_legal_notice(self, args, context, info):
+    def resolve_legal_notice(self, info, **args):
         """Legal notice value in given locale."""
-        discussion_id = context.matchdict['discussion_id']
+        discussion_id = info.context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
         return resolve_langstring(discussion.legal_notice, args.get('lang'))
 
-    def resolve_terms_and_conditions(self, args, context, info):
+    def resolve_terms_and_conditions(self, info, **args):
         """Terms and conditions value in given locale."""
-        discussion_id = context.matchdict['discussion_id']
+        discussion_id = info.context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
         return resolve_langstring(discussion.terms_and_conditions, args.get('lang'))
 
-    def resolve_legal_notice_entries(self, args, context, info):
-        discussion_id = context.matchdict['discussion_id']
+    def resolve_legal_notice_entries(self, info, **args):
+        discussion_id = info.context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
         if discussion.legal_notice:
             return resolve_langstring_entries(discussion, 'legal_notice')
 
         return []
 
-    def resolve_terms_and_conditions_entries(self, args, context, info):
-        discussion_id = context.matchdict['discussion_id']
+    def resolve_terms_and_conditions_entries(self, info, **args):
+        discussion_id = info.context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
         if discussion.terms_and_conditions:
             return resolve_langstring_entries(discussion, 'terms_and_conditions')
 
         return []
 
-    def resolve_cookies_policy(self, args, context, info):
+    def resolve_cookies_policy(self, info, **args):
         """Cookies policy value in given locale."""
-        discussion_id = context.matchdict['discussion_id']
+        discussion_id = info.context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
         return resolve_langstring(discussion.cookies_policy, args.get('lang'))
 
-    def resolve_privacy_policy(self, args, context, info):
+    def resolve_privacy_policy(self, info, **args):
         """Privacy policy value in given locale."""
-        discussion_id = context.matchdict['discussion_id']
+        discussion_id = info.context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
         return resolve_langstring(discussion.privacy_policy, args.get('lang'))
 
-    def resolve_cookies_policy_entries(self, args, context, info):
-        discussion_id = context.matchdict['discussion_id']
+    def resolve_cookies_policy_entries(self, info, **args):
+        discussion_id = info.context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
         if discussion.cookies_policy:
             return resolve_langstring_entries(discussion, 'cookies_policy')
 
         return []
 
-    def resolve_privacy_policy_entries(self, args, context, info):
-        discussion_id = context.matchdict['discussion_id']
+    def resolve_privacy_policy_entries(self, info, **args):
+        discussion_id = info.context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
         if discussion.privacy_policy:
             return resolve_langstring_entries(discussion, 'privacy_policy')
@@ -598,8 +598,9 @@ class VisitsAnalytics(graphene.ObjectType):
     nb_uniq_pageviews = graphene.Int(description=docs.VisitsAnalytics.nb_uniq_pageviews)
 
     @classmethod
-    def query_analytics(cls, args, context, info, single_metric=None):
-        discussion_id = context.matchdict['discussion_id']
+    def query_analytics(cls, info, **args):
+        single_metric = args.get('single_metric', None)
+        discussion_id = info.context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
         start = args.get('start_date') or None
         end = args.get('end_date') or None
@@ -612,18 +613,19 @@ class VisitsAnalytics(graphene.ObjectType):
         except ValueError:
             return None
         except Exception:
-            context.logger().exception('Error with Matomo request')
+            info.context.logger().exception('Error with Matomo request')
             return None
 
-    def generic_resolver(self, args, context, info, field_name):
+    def generic_resolver(self, info, field_name, **args):
         val = getattr(self, field_name, None)
         if val is not None:
             return val
-        return VisitsAnalytics.query_analytics(args, context, info, field_name)
+        args['single_metric'] = field_name
+        return VisitsAnalytics.query_analytics(info, **args)
 
     @classmethod
-    def build_from_full_query(cls, args, context, info):
-        data = VisitsAnalytics.query_analytics(args, context, info)
+    def build_from_full_query(cls, info, **args):
+        data = VisitsAnalytics.query_analytics(info, **args)
         if not data:
             return VisitsAnalytics(sum_visits_length=None, nb_pageviews=None, nb_uniq_pageviews=None)
         sum_visits_length = data.get('sum_visits_length', None)
@@ -631,11 +633,11 @@ class VisitsAnalytics(graphene.ObjectType):
         nb_uniq_pageviews = data.get('nb_uniq_pageviews', None)
         return VisitsAnalytics(sum_visits_length=sum_visits_length, nb_pageviews=nb_pageviews, nb_uniq_pageviews=nb_uniq_pageviews)
 
-    def resolve_sum_visits_length(self, args, context, info):
-        return self.generic_resolver(args, context, info, "sum_visits_length")
+    def resolve_sum_visits_length(self, info, **args):
+        return self.generic_resolver(info, "sum_visits_length", **args)
 
-    def resolve_nb_pageviews(self, args, context, info):
-        return self.generic_resolver(args, context, info, "nb_pageviews")
+    def resolve_nb_pageviews(self, info, **args):
+        return self.generic_resolver(info, "nb_pageviews", **args)
 
-    def resolve_nb_uniq_pageviews(self, args, context, info):
-        return self.generic_resolver(args, context, info, "nb_uniq_pageviews")
+    def resolve_nb_uniq_pageviews(self, info, **args):
+        return self.generic_resolver(info, "nb_uniq_pageviews", **args)

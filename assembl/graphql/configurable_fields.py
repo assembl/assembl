@@ -29,10 +29,10 @@ class ConfigurableFieldInterface(graphene.Interface):
     title_entries = graphene.List(LangStringEntry, description=docs.ConfigurableFieldInterface.title_entries)
     hidden = graphene.Boolean(required=True, description=docs.ConfigurableFieldInterface.hidden)
 
-    def resolve_title(self, args, context, info):
+    def resolve_title(self, info, **args):
         return resolve_langstring(self.title, args.get('lang'))
 
-    def resolve_title_entries(self, args, context, info):
+    def resolve_title_entries(self, info, **args):
         return resolve_langstring_entries(self, 'title')
 
 
@@ -56,10 +56,10 @@ class SelectFieldOption(SecureObjectType, SQLAlchemyObjectType):
     label = graphene.String(lang=graphene.String(description=docs.Default.required_language_input), description=docs.SelectFieldOption.label)
     label_entries = graphene.List(LangStringEntry, description=docs.SelectFieldOption.label_entries)
 
-    def resolve_label(self, args, context, info):
+    def resolve_label(self, info, **args):
         return resolve_langstring(self.label, args.get('lang'))
 
-    def resolve_label_entries(self, args, context, info):
+    def resolve_label_entries(self, info, **args):
         return resolve_langstring_entries(self, 'label')
 
 
@@ -238,7 +238,7 @@ class ConfigurableFieldUnion(SQLAlchemyUnion):
         model = models.AbstractConfigurableField
 
     @classmethod
-    def resolve_type(cls, instance, context, info):
+    def resolve_type(cls, instance, info):
         if isinstance(instance, graphene.ObjectType):
             return type(instance)
         elif isinstance(instance, models.TextField):
@@ -259,7 +259,7 @@ class ProfileField(SecureObjectType, SQLAlchemyObjectType):
     configurable_field = graphene.Field(lambda: ConfigurableFieldUnion, required=True, description=docs.ProfileField.configurable_field)
     value_data = GenericScalar(description=docs.ProfileField.value_data)
 
-    def resolve_id(self, args, context, info):
+    def resolve_id(self, info, **args):
         if self.id < 0:
             # this is a temporary object we created manually in resolve_profile_fields
             return self.id
@@ -272,7 +272,7 @@ class ProfileField(SecureObjectType, SQLAlchemyObjectType):
                 return self.__mapper__.primary_key_from_instance(self)[0]
             return getattr(self, graphene_type._meta.id, None)
 
-    def resolve_value_data(self, args, context, info):
+    def resolve_value_data(self, info, **args):
         return getattr(self, 'value_data', {u'value': None})
 
 

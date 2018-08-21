@@ -20,13 +20,13 @@ class VoteInterface(graphene.Interface):
     vote_spec_id = graphene.ID(required=True)
     proposal_id = graphene.ID(required=True)
 
-    def resolve_voter_id(self, args, context, info):
+    def resolve_voter_id(self, info, **args):
         return Node.to_global_id('AgentProfile', self.voter_id)
 
-    def resolve_vote_spec_id(self, args, context, info):
+    def resolve_vote_spec_id(self, info, **args):
         return Node.to_global_id(self.vote_spec.__class__.__name__, self.vote_spec_id)
 
-    def resolve_proposal_id(self, args, context, info):
+    def resolve_proposal_id(self, info, **args):
         return Node.to_global_id('Idea', self.idea_id)
 
 
@@ -40,7 +40,7 @@ class TokenVote(SecureObjectType, SQLAlchemyObjectType):
 
     token_category_id = graphene.ID(required=True)
 
-    def resolve_token_category_id(self, args, context, info):
+    def resolve_token_category_id(self, info, **args):
         return Node.to_global_id('TokenCategorySpecification', self.token_category_id)
 
 
@@ -60,7 +60,7 @@ class VoteUnion(SQLAlchemyUnion):
         model = models.AbstractIdeaVote
 
     @classmethod
-    def resolve_type(cls, instance, context, info):
+    def resolve_type(cls, instance, info):
         if isinstance(instance, graphene.ObjectType):
             return type(instance)
         elif isinstance(instance, models.TokenIdeaVote):

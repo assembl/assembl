@@ -33,11 +33,11 @@ class Section(SecureObjectType, SQLAlchemyObjectType):
     title_entries = graphene.List(LangStringEntry, description=docs.Section.title_entries)
     url = graphene.String(description=docs.Section.url)
 
-    def resolve_title(self, args, context, info):
+    def resolve_title(self, info, **args):
         title = resolve_langstring(self.title, args.get('lang'))
         return title
 
-    def resolve_title_entries(self, args, context, info):
+    def resolve_title_entries(self, info, **args):
         return resolve_langstring_entries(self, 'title')
 
 

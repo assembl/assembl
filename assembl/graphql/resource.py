@@ -36,27 +36,27 @@ class Resource(SecureObjectType, SQLAlchemyObjectType):
     image = graphene.Field(Document, description=docs.Resource.image)
     doc = graphene.Field(Document, description=docs.Resource.doc)
 
-    def resolve_title(self, args, context, info):
+    def resolve_title(self, info, **args):
         title = resolve_langstring(self.title, args.get('lang'))
         return title
 
-    def resolve_title_entries(self, args, context, info):
+    def resolve_title_entries(self, info, **args):
         return resolve_langstring_entries(self, 'title')
 
-    def resolve_text(self, args, context, info):
+    def resolve_text(self, info, **args):
         text = resolve_langstring(self.text, args.get('lang'))
         return text
 
-    def resolve_text_entries(self, args, context, info):
+    def resolve_text_entries(self, info, **args):
         return resolve_langstring_entries(self, 'text')
 
-    def resolve_image(self, args, context, info):
+    def resolve_image(self, info, **args):
         ATTACHMENT_PURPOSE_IMAGE = models.AttachmentPurpose.IMAGE.value
         image_file = get_attachment_with_purpose(self.attachments, ATTACHMENT_PURPOSE_IMAGE)
         if image_file:
             return image_file.document
 
-    def resolve_doc(self, args, context, info):
+    def resolve_doc(self, info, **args):
         ATTACHMENT_PURPOSE_DOCUMENT = models.AttachmentPurpose.DOCUMENT.value
         doc_file = get_attachment_with_purpose(self.attachments, ATTACHMENT_PURPOSE_DOCUMENT)
         if doc_file:

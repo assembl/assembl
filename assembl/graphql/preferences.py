@@ -27,7 +27,7 @@ class Preferences(graphene.ObjectType):
     harvesting_translation = graphene.Field(
         Translation, description=docs.Preferences.harvesting_translation)
 
-    def resolve_harvesting_translation(self, args, context, info):
+    def resolve_harvesting_translation(self, info, **args):
         translation = self.get('harvesting_translation', None)
         if translation:
             return Translation(**translation)

@@ -31,32 +31,32 @@ class Synthesis(SecureObjectType, SQLAlchemyObjectType):
     creation_date = DateTime(description=docs.Synthesis.creation_date)
     post = graphene.Field("assembl.graphql.post.Post", description=docs.Synthesis.post)
 
-    def resolve_subject(self, args, context, info):
+    def resolve_subject(self, info, **args):
         return resolve_langstring(self.subject, args.get('lang'))
 
-    def resolve_subject_entries(self, args, context, info):
+    def resolve_subject_entries(self, info, **args):
         return resolve_langstring_entries(self, 'subject')
 
-    def resolve_introduction(self, args, context, info):
+    def resolve_introduction(self, info, **args):
         return resolve_langstring(self.introduction, args.get('lang'))
 
-    def resolve_introduction_entries(self, args, context, info):
+    def resolve_introduction_entries(self, info, **args):
         return resolve_langstring_entries(self, 'introduction')
 
-    def resolve_conclusion(self, args, context, info):
+    def resolve_conclusion(self, info, **args):
         return resolve_langstring(self.conclusion, args.get('lang'))
 
-    def resolve_conclusion_entries(self, args, context, info):
+    def resolve_conclusion_entries(self, info, **args):
         return resolve_langstring_entries(self, 'conclusion')
 
-    def resolve_ideas(self, args, context, info):
+    def resolve_ideas(self, info, **args):
         return self.get_ideas()
 
-    def resolve_img(self, args, context, info):
+    def resolve_img(self, info, **args):
         ideas = self.get_ideas()
         last_idea = ideas[-1].live if ideas else None
         if last_idea.attachments:
             return last_idea.attachments[0].document
 
-    def resolve_post(self, args, context, info):
+    def resolve_post(self, info, **args):
         return self.published_in_post

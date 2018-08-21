@@ -67,28 +67,28 @@ class IdeaInterface(graphene.Interface):
         required=True, description=docs.IdeaInterface.vote_specifications)
     type = graphene.String(description=docs.IdeaInterface.type)
 
-    def resolve_title(self, args, context, info):
+    def resolve_title(self, info, **args):
         return resolve_langstring(self.title, args.get('lang'))
 
-    def resolve_title_entries(self, args, context, info):
+    def resolve_title_entries(self, info, **args):
         return resolve_langstring_entries(self, 'title')
 
-    def resolve_description(self, args, context, info):
+    def resolve_description(self, info, **args):
         description = resolve_langstring(self.description, args.get('lang'))
         if not description:
             description = self.get_definition_preview()
         return description
 
-    def resolve_description_entries(self, args, context, info):
+    def resolve_description_entries(self, info, **args):
         return resolve_langstring_entries(self, 'description')
 
-    def resolve_num_total_posts(self, args, context, info):
+    def resolve_num_total_posts(self, info, **args):
         if isinstance(self, models.RootIdea):
             return self.num_posts
         else:
             return self.discussion.root_idea.num_posts
 
-    def resolve_num_posts(self, args, context, info):
+    def resolve_num_posts(self, info, **args):
         # Return the number of posts bound to this idea.
         # Special case for root: do not count all posts, but only those bound to an idea.
         # TODO: Find a way to get all posts of a given phase.
@@ -97,14 +97,14 @@ class IdeaInterface(graphene.Interface):
         else:
             return self.num_posts
 
-    def resolve_img(self, args, context, info):
+    def resolve_img(self, info, **args):
         if self.attachments:
             return self.attachments[0].document
 
-    def resolve_order(self, args, context, info):
+    def resolve_order(self, info, **args):
         return self.get_order_from_first_parent()
 
-    def resolve_num_children(self, args, context, info):
+    def resolve_num_children(self, info, **args):
         phase = args.get('identifier', '')
         if phase == 'multiColumns':
             _it = models.Idea.__table__
@@ -121,13 +121,13 @@ class IdeaInterface(graphene.Interface):
 
         return self.num_children
 
-    def resolve_vote_specifications(self, args, context, info):
+    def resolve_vote_specifications(self, info, **args):
         return self.criterion_for
 
-    def resolve_total_sentiments(self, args, context, info):
+    def resolve_total_sentiments(self, info, **args):
         return self.get_total_sentiments()
 
-    def resolve_type(self, args, context, info):
+    def resolve_type(self, info, **args):
         return self.__class__.__name__
 
 
@@ -150,16 +150,16 @@ class IdeaAnnouncement(SecureObjectType, SQLAlchemyObjectType):
     body = graphene.String(lang=graphene.String(), description=docs.IdeaAnnouncement.body)
     body_entries = graphene.List(LangStringEntry, required=True, description=docs.IdeaAnnouncement.body_entries)
 
-    def resolve_title(self, args, context, info):
+    def resolve_title(self, info, **args):
         return resolve_langstring(self.title, args.get('lang'))
 
-    def resolve_title_entries(self, args, context, info):
+    def resolve_title_entries(self, info, **args):
         return resolve_langstring_entries(self, 'title')
 
-    def resolve_body(self, args, context, info):
+    def resolve_body(self, info, **args):
         return resolve_langstring(self.body, args.get('lang'))
 
-    def resolve_body_entries(self, args, context, info):
+    def resolve_body_entries(self, info, **args):
         return resolve_langstring_entries(self, 'body')
 
 
@@ -178,20 +178,20 @@ class IdeaMessageColumn(SecureObjectType, SQLAlchemyObjectType):
     column_synthesis = graphene.Field('assembl.graphql.post.Post', description=docs.IdeaMessageColumn.column_synthesis)
     num_posts = graphene.Int(description=docs.IdeaMessageColumn.num_posts)
 
-    def resolve_idea(self, args, context, info):
+    def resolve_idea(self, info, **args):
         if self.idea:
             return self.idea
 
-    def resolve_name(self, args, context, info):
+    def resolve_name(self, info, **args):
         return resolve_langstring(self.name, args.get('lang'))
 
-    def resolve_title(self, args, context, info):
+    def resolve_title(self, info, **args):
         return resolve_langstring(self.title, args.get('lang'))
 
-    def resolve_column_synthesis(self, args, context, info):
+    def resolve_column_synthesis(self, info, **args):
         return self.get_column_synthesis()
 
-    def resolve_num_posts(self, args, context, info):
+    def resolve_num_posts(self, info, **args):
         related = self.idea.get_related_posts_query(
             partial=True, include_deleted=False)
         return models.Post.query.join(
@@ -200,7 +200,7 @@ class IdeaMessageColumn(SecureObjectType, SQLAlchemyObjectType):
             models.Content.message_classifier == self.message_classifier
         ).count()
 
-    def resolve_index(self, args, context, info):
+    def resolve_index(self, info, **args):
         count = self.get_positional_index()
         return count
 
@@ -233,7 +233,7 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
     ancestors = graphene.List(graphene.ID, description=docs.Idea.ancestors)
     vote_results = graphene.Field(VoteResults, required=True, description=docs.Idea.vote_results)
 
-    def resolve_vote_results(self, args, context, info):
+    def resolve_vote_results(self, info, **args):
         vote_specifications = self.criterion_for
         if not vote_specifications:
             return VoteResults(num_participants=0, participants=[])
@@ -250,7 +250,7 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
             participants=participants)
 
     @classmethod
-    def is_type_of(cls, root, context, info):
+    def is_type_of(cls, root, info):
         # This is the method defined in SQLAlchemyObjectType where
         # we changed the isinstance by a type comparison.
         # For a node query, graphql in
@@ -274,26 +274,26 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
         # return isinstance(root, cls._meta.model)  # this was the original code  # noqa: E501
         return type(root) == cls._meta.model or type(root) == models.RootIdea
 
-    def resolve_synthesis_title(self, args, context, info):
+    def resolve_synthesis_title(self, info, **args):
         return resolve_langstring(self.synthesis_title, args.get('lang'))
 
-    def resolve_children(self, args, context, info):
+    def resolve_children(self, info, **args):
         # filter on child.hidden to not include the root thematic in the children of root_idea  # noqa: E501
         return [child for child in self.get_children() if not child.hidden]
 
-    def resolve_parent_id(self, args, context, info):
+    def resolve_parent_id(self, info, **args):
         parents = self.get_parents()
         if not parents:
             return None
 
         return Node.to_global_id('Idea', parents[0].id)
 
-    def resolve_ancestors(self, args, context, info):
+    def resolve_ancestors(self, info, **args):
         return [Node.to_global_id('Idea', id)
                 for id in self.get_all_ancestors(id_only=True)]
 
-    def resolve_posts(self, args, context, info):
-        discussion_id = context.matchdict['discussion_id']
+    def resolve_posts(self, info, **args):
+        discussion_id = info.context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
         # include_deleted=None means all posts (live and tombstoned)
         related = self.get_related_posts_query(
@@ -336,7 +336,7 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
                 ] = sentiment_count
             # set sentiment_counts_by_post_id on the request to use it
             # in Post's resolve_sentiment_counts
-            context.sentiment_counts_by_post_id = sentiment_counts_by_post_id
+            info.context.sentiment_counts_by_post_id = sentiment_counts_by_post_id
 
         if sentiments_only:
             from .post import Post
@@ -350,13 +350,13 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
 
         return query
 
-    def resolve_contributors(self, args, context, info):
+    def resolve_contributors(self, info, **args):
         contributor_ids = [cid for (cid,) in self.get_contributors_query()]
         contributors = [models.AgentProfile.get(
             cid) for cid in contributor_ids]
         return contributors
 
-    def resolve_announcement(self, args, context, info):
+    def resolve_announcement(self, info, **args):
         return self.get_applicable_announcement()
 
 
@@ -380,21 +380,21 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
     thematic = graphene.Field(lambda: Thematic, description=docs.Question.thematic)
     total_sentiments = graphene.Int(required=True, description=docs.Question.total_sentiments)
 
-    def resolve_thematic(self, args, context, info):
+    def resolve_thematic(self, info, **args):
         parents = self.get_parents()
         if not parents:
             return None
         return parents[0]
 
-    def resolve_title(self, args, context, info):
+    def resolve_title(self, info, **args):
         title = resolve_langstring(self.title, args.get('lang'))
         return title
 
-    def resolve_title_entries(self, args, context, info):
+    def resolve_title_entries(self, info, **args):
         return resolve_langstring_entries(self, 'title')
 
-    def resolve_posts(self, args, context, info):
-        discussion_id = context.matchdict['discussion_id']
+    def resolve_posts(self, info, **args):
+        discussion_id = info.context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
         random = args.get('random', False)
         Post = models.Post
@@ -403,7 +403,7 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
         # created by the user, then the remaining ones are in random order.
         # If random is False, return all the posts in creation_date desc order.
         if random:
-            user_id = context.authenticated_userid
+            user_id = info.context.authenticated_userid
             if user_id is None:
                 first_post = None
             else:
@@ -477,7 +477,7 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
         # pagination is done after that, no need to do it ourself
         return query
 
-    def resolve_total_sentiments(self, args, context, info):
+    def resolve_total_sentiments(self, info, **args):
         return self.get_total_sentiments()
 
 
@@ -492,10 +492,10 @@ class Thematic(SecureObjectType, SQLAlchemyObjectType):
     questions = graphene.List(Question, description=docs.Thematic.questions)
     video = graphene.Field(Video, lang=graphene.String(), description=docs.Thematic.video)
 
-    def resolve_questions(self, args, context, info):
+    def resolve_questions(self, info, **args):
         return self.get_children()
 
-    def resolve_video(self, args, context, info):
+    def resolve_video(self, info, **args):
         title = resolve_langstring(self.video_title, args.get('lang'))
         title_entries = resolve_langstring_entries(self, 'video_title')
         description_top = resolve_langstring(self.video_description_top,
@@ -543,7 +543,7 @@ class IdeaUnion(SQLAlchemyUnion):
         model = models.Idea
 
     @classmethod
-    def resolve_type(cls, instance, context, info):
+    def resolve_type(cls, instance, info):
         if isinstance(instance, graphene.ObjectType):
             return type(instance)
         elif isinstance(instance, models.Thematic):  # must be above Idea

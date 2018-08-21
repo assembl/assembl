@@ -72,15 +72,15 @@ class VoteSession(SecureObjectType, SQLAlchemyObjectType):
     proposals = graphene.List(lambda: Idea, required=True, description=docs.VoteSession.proposals)
     see_current_votes = graphene.Boolean(required=True, description=docs.VoteSession.see_current_votes)
 
-    def resolve_header_image(self, args, context, info):
+    def resolve_header_image(self, info, **args):
         ATTACHMENT_PURPOSE_IMAGE = models.AttachmentPurpose.IMAGE.value
         for attachment in self.attachments:
             if attachment.attachmentPurpose == ATTACHMENT_PURPOSE_IMAGE:
                 return attachment.document
 
-    def resolve_proposals(self, args, context, info):
+    def resolve_proposals(self, info, **args):
         identifier = 'voteSession{}'.format(self.id)
-        discussion_id = context.matchdict["discussion_id"]
+        discussion_id = info.context.matchdict["discussion_id"]
         discussion = models.Discussion.get(discussion_id)
         root_thematic = get_root_thematic_for_phase(discussion, identifier)
         if root_thematic is None:
@@ -88,7 +88,7 @@ class VoteSession(SecureObjectType, SQLAlchemyObjectType):
 
         return root_thematic.get_children()
 
-    def resolve_vote_specifications(self, args, context, info):
+    def resolve_vote_specifications(self, info, **args):
         # return only vote specifications not associated to a proposal
         return [vote_spec for vote_spec in self.vote_specifications if vote_spec.criterion_idea_id is None]
 
@@ -187,37 +187,37 @@ class VoteSpecificationInterface(graphene.Interface):
     my_votes = graphene.List('assembl.graphql.votes.VoteUnion', required=True, description=docs.VoteSpecificationInterface.my_votes)
     num_votes = graphene.Int(required=True, description=docs.VoteSpecificationInterface.num_votes)
 
-    def resolve_title(self, args, context, info):
+    def resolve_title(self, info, **args):
         return resolve_langstring(self.title, args.get('lang'))
 
-    def resolve_title_entries(self, args, context, info):
+    def resolve_title_entries(self, info, **args):
         return resolve_langstring_entries(self, 'title')
 
-    def resolve_instructions(self, args, context, info):
+    def resolve_instructions(self, info, **args):
         return resolve_langstring(self.instructions, args.get('lang'))
 
-    def resolve_instructions_entries(self, args, context, info):
+    def resolve_instructions_entries(self, info, **args):
         return resolve_langstring_entries(self, 'instructions')
 
-    def resolve_is_custom(self, args, context, info):
+    def resolve_is_custom(self, info, **args):
         return False if self.is_custom is None else self.is_custom
 
-    def resolve_vote_session_id(self, args, context, info):
+    def resolve_vote_session_id(self, info, **args):
         return Node.to_global_id('VoteSession', self.widget_id)
 
-    def resolve_vote_spec_template_id(self, args, context, info):
+    def resolve_vote_spec_template_id(self, info, **args):
         if self.vote_spec_template_id:
             return Node.to_global_id(self.__class__.__name__, self.vote_spec_template_id)
 
-    def resolve_vote_type(self, args, context, info):
+    def resolve_vote_type(self, info, **args):
         return self.type
 
-    def resolve_my_votes(self, args, context, info):
-        user_id = context.authenticated_userid
+    def resolve_my_votes(self, info, **args):
+        user_id = info.context.authenticated_userid
         return self.db.query(models.AbstractIdeaVote).filter_by(
             vote_spec_id=self.id, tombstone_date=None, voter_id=user_id, idea_id=self.criterion_idea_id).all()
 
-    def resolve_num_votes(self, args, context, info):
+    def resolve_num_votes(self, info, **args):
         res = self.db.query(
             getattr(self.get_vote_class(), "voter_id")).filter_by(
             vote_spec_id=self.id,
@@ -238,10 +238,10 @@ class TokenCategorySpecification(SecureObjectType, SQLAlchemyObjectType):
     title = graphene.String(lang=graphene.String(), description=docs.TokenCategorySpecification.title)
     title_entries = graphene.List(LangStringEntry, description=docs.TokenCategorySpecification.title_entries)
 
-    def resolve_title(self, args, context, info):
+    def resolve_title(self, info, **args):
         return resolve_langstring(self.name, args.get('lang'))
 
-    def resolve_title_entries(self, args, context, info):
+    def resolve_title_entries(self, info, **args):
         return resolve_langstring_entries(self, 'name')
 
 
@@ -262,7 +262,7 @@ class TokenVoteSpecification(SecureObjectType, SQLAlchemyObjectType):
     token_categories = graphene.List(TokenCategorySpecification, required=True, description=docs.TokenVoteSpecification.token_categories)
     token_votes = graphene.List(VotesByCategory, required=True, description=docs.TokenVoteSpecification.token_votes)
 
-    def resolve_token_votes(self, args, context, info):
+    def resolve_token_votes(self, info, **args):
         votes = []
         for token_category in self.get_token_categories():
             query = self.db.query(
@@ -282,7 +282,7 @@ class TokenVoteSpecification(SecureObjectType, SQLAlchemyObjectType):
 
         return votes
 
-    def resolve_token_categories(self, args, context, info):
+    def resolve_token_categories(self, info, **args):
         return self.get_token_categories()
 
 
@@ -297,10 +297,10 @@ class GaugeChoiceSpecification(SecureObjectType, SQLAlchemyObjectType):
     label = graphene.String(lang=graphene.String(), description=docs.GaugeChoiceSpecification.label)
     label_entries = graphene.List(LangStringEntry, description=docs.GaugeChoiceSpecification.label_entries)
 
-    def resolve_label(self, args, context, info):
+    def resolve_label(self, info, **args):
         return resolve_langstring(self.label, args.get('lang'))
 
-    def resolve_label_entries(self, args, context, info):
+    def resolve_label_entries(self, info, **args):
         return resolve_langstring_entries(self, 'label')
 
 
@@ -330,21 +330,21 @@ class GaugeVoteSpecification(SecureObjectType, SQLAlchemyObjectType):
     average_label = graphene.String(lang=graphene.String(), description=docs.GaugeVoteSpecification.average_label)
     average_result = graphene.Float(description=docs.GaugeVoteSpecification.average_result)
 
-    def resolve_average_label(self, args, context, info):
+    def resolve_average_label(self, info, **args):
         avg_choice = get_avg_choice(self)
         if avg_choice is None:
             return None
 
         return resolve_langstring(avg_choice.label, args.get('lang'))
 
-    def resolve_average_result(self, args, context, info):
+    def resolve_average_result(self, info, **args):
         avg_choice = get_avg_choice(self)
         if avg_choice is None:
             return None
 
         return avg_choice.value
 
-    def resolve_choices(self, args, context, info):
+    def resolve_choices(self, info, **args):
         return self.get_choices()
 
 
@@ -358,7 +358,7 @@ class NumberGaugeVoteSpecification(SecureObjectType, SQLAlchemyObjectType):
 
     average_result = graphene.Float(description=docs.NumberGaugeVoteSpecification.average_result)
 
-    def resolve_average_result(self, args, context, info):
+    def resolve_average_result(self, info, **args):
         vote_cls = self.get_vote_class()
         voting_avg = self.db.query(func.avg(getattr(vote_cls, 'vote_value'))).filter_by(
             vote_spec_id=self.id,
@@ -376,7 +376,7 @@ class VoteSpecificationUnion(SQLAlchemyUnion):
         model = models.AbstractVoteSpecification
 
     @classmethod
-    def resolve_type(cls, instance, context, info):
+    def resolve_type(cls, instance, info):
         if isinstance(instance, graphene.ObjectType):
             return type(instance)
         elif isinstance(instance, models.TokenVoteSpecification):

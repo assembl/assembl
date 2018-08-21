@@ -53,49 +53,49 @@ class AgentProfile(SecureObjectType, SQLAlchemyObjectType):
     last_rejected_cgu_date = DateTime(description=docs.AgentProfile.last_rejected_cgu_date)
     last_rejected_privacy_policy_date = DateTime(description=docs.AgentProfile.last_rejected_privacy_policy_date)
 
-    def resolve_is_deleted(self, args, context, info):
+    def resolve_is_deleted(self, info, **args):
         return self.is_deleted or False
 
-    def resolve_user_id(self, args, context, info):
+    def resolve_user_id(self, info, **args):
         return self.id
 
-    def resolve_name(self, args, context, info):
+    def resolve_name(self, info, **args):
         return self.real_name()
 
-    def resolve_username(self, args, context, info):
+    def resolve_username(self, info, **args):
         if self.username:
             return self.username.username
 
-    def resolve_display_name(self, args, context, info):
+    def resolve_display_name(self, info, **args):
         return self.display_name()
 
-    def resolve_email(self, args, context, info):
-        user_id = context.authenticated_userid or Everyone
-        discussion_id = context.matchdict['discussion_id']
+    def resolve_email(self, info, **args):
+        user_id = info.context.authenticated_userid or Everyone
+        discussion_id = info.context.matchdict['discussion_id']
         permissions = get_permissions(user_id, discussion_id)
         include_emails = P_ADMIN_DISC in permissions or P_SYSADMIN in permissions
         if include_emails or self.id == user_id:
             return self.get_preferred_email()
 
-    def resolve_image(self, args, context, info):
+    def resolve_image(self, info, **args):
         PROFILE_PICTURE = models.AttachmentPurpose.PROFILE_PICTURE.value
         for attachment in self.profile_attachments:
             if attachment.attachmentPurpose == PROFILE_PICTURE:
                 return attachment.document
 
-    def resolve_has_password(self, args, context, info):
+    def resolve_has_password(self, info, **args):
         return self.password is not None
 
-    def resolve_is_machine(self, args, context, info):
+    def resolve_is_machine(self, info, **args):
         return getattr(self, 'is_machine', False)
 
-    def resolve_preferences(self, args, context, info):
-        discussion_id = context.matchdict['discussion_id']
+    def resolve_preferences(self, info, **args):
+        discussion_id = info.context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
         return self.get_preferences_for_discussion(discussion)
 
-    def resolve_accepted_cookies(self, args, context, info):
-        discussion_id = context.matchdict["discussion_id"]
+    def resolve_accepted_cookies(self, info, **args):
+        discussion_id = info.context.matchdict["discussion_id"]
         user_id = self.id if self.id > 0 else Everyone
         if user_id == Everyone:
             return []
@@ -287,8 +287,11 @@ class DeleteUserInformation(graphene.Mutation):
             # First, we will make sure that the user has no notification with status
             # If there are, we will put them in the state obsoleted
             # Then the notification state will be unsubscribed by user
-            ids = db.query(models.Notification.id).join(models.NotificationSubscription).filter(models.NotificationSubscription.user_id ==
-                                                                                                user.id, models.Notification.delivery_state == models.NotificationDeliveryStateType.getRetryableDeliveryStates()).all()
+            ids = db.query(models.Notification.id).\
+                join(models.NotificationSubscription).\
+                filter(
+                    models.NotificationSubscription.user_id == user.id, models.Notification.delivery_state == models.NotificationDeliveryStateType.getRetryableDeliveryStates()).\
+                all()
 
             ids = [id for (id,) in ids]
             db.query(models.Notification).filter(models.Notification.id.in_(ids)).update(

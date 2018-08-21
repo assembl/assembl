@@ -62,18 +62,18 @@ class IdeaContentLink(graphene.ObjectType):
     creator = graphene.Field(lambda: AgentProfile, description=docs.IdeaContentLink.creator)
     creation_date = DateTime(description=docs.IdeaContentLink.creation_date)
 
-    def resolve_idea(self, args, context, info):
+    def resolve_idea(self, info, **args):
         if self.idea_id is not None:
             idea = models.Idea.get(self.idea_id)
             # only resolve if it's an Idea, not a Question
             if type(idea) == models.Idea:
                 return idea
 
-    def resolve_post(self, args, context, info):
+    def resolve_post(self, info, **args):
         if self.post_id is not None:
             return models.Post.get(self.post_id)
 
-    def resolve_creator(self, args, context, info):
+    def resolve_creator(self, info, **args):
         if self.creator_id is not None:
             return models.AgentProfile.get(self.creator_id)
 
@@ -108,23 +108,23 @@ class PostInterface(SQLAlchemyInterface):
     discussion_id = graphene.String(description=docs.PostInterface.discussion_id)
     modified = graphene.Boolean(description=docs.PostInterface.modified)
 
-    def resolve_db_id(self, args, context, info):
+    def resolve_db_id(self, info, **args):
         return self.id
 
-    def resolve_extracts(self, args, context, info):
+    def resolve_extracts(self, info, **args):
         return self.db.query(models.Extract
                              ).join(models.Content, models.Extract.content == self
                                     ).options(joinedload(models.Extract.text_fragment_identifiers)
                                               ).order_by(models.Extract.creation_date
                                                          ).all()
 
-    def resolve_subject(self, args, context, info):
+    def resolve_subject(self, info, **args):
         # Use self.subject and not self.get_subject() because we still
         # want the subject even when the post is deleted.
         subject = resolve_langstring(self.subject, args.get('lang'))
         return subject
 
-    def resolve_body(self, args, context, info):
+    def resolve_body(self, info, **args):
         body = resolve_langstring(self.get_body(), args.get('lang'))
         return body
 
@@ -147,24 +147,24 @@ class PostInterface(SQLAlchemyInterface):
             if not ls.closest_entry(target_locale):
                 post.maybe_translate(lpc)
 
-    def resolve_subject_entries(self, args, context, info):
+    def resolve_subject_entries(self, info, **args):
         # Use self.subject and not self.get_subject() because we still
         # want the subject even when the post is deleted.
-        PostInterface._maybe_translate(self, args.get('lang'), context)
+        PostInterface._maybe_translate(self, args.get('lang'), info.context)
         subject = resolve_best_langstring_entries(
             self.subject, args.get('lang'))
         return subject
 
-    def resolve_body_entries(self, args, context, info):
-        PostInterface._maybe_translate(self, args.get('lang'), context)
+    def resolve_body_entries(self, info, **args):
+        PostInterface._maybe_translate(self, args.get('lang'), info.context)
         body = resolve_best_langstring_entries(
             self.get_body(), args.get('lang'))
         return body
 
-    def resolve_sentiment_counts(self, args, context, info):
+    def resolve_sentiment_counts(self, info, **args):
         # get the sentiment counts from the cache if it exists instead of
         # tiggering a sql query
-        cache = getattr(context, 'sentiment_counts_by_post_id', None)
+        cache = getattr(info.context, 'sentiment_counts_by_post_id', None)
         if cache is not None:
             sentiment_counts = {
                 name: 0 for name in models.SentimentOfPost.all_sentiments
@@ -180,14 +180,14 @@ class PostInterface(SQLAlchemyInterface):
             more_info=sentiment_counts['more_info'],
         )
 
-    def resolve_my_sentiment(self, args, context, info):
+    def resolve_my_sentiment(self, info, **args):
         my_sentiment = self.my_sentiment
         if my_sentiment is None:
             return None
 
         return my_sentiment.name.upper()
 
-    def resolve_indirect_idea_content_links(self, args, context, info):
+    def resolve_indirect_idea_content_links(self, info, **args):
         # example:
         #  {'@id': 'local:IdeaContentLink/101',
         #   '@type': 'Extract',
@@ -207,29 +207,29 @@ class PostInterface(SQLAlchemyInterface):
         # only return links with the IdeaRelatedPostLink type
         return [link for link in links if link.type == 'IdeaRelatedPostLink']
 
-    def resolve_parent_id(self, args, context, info):
+    def resolve_parent_id(self, info, **args):
         if self.parent_id is None:
             return None
 
         return Node.to_global_id('Post', self.parent_id)
 
-    def resolve_body_mime_type(self, args, context, info):
+    def resolve_body_mime_type(self, info, **args):
         return self.get_body_mime_type()
 
-    def resolve_publication_state(self, args, context, info):
+    def resolve_publication_state(self, info, **args):
         return self.publication_state.name
 
-    def resolve_original_locale(self, args, context, info):
+    def resolve_original_locale(self, info, **args):
         entry = self.body.first_original()
         if entry:
             return entry.locale_code
 
         return u''
 
-    def resolve_type(self, args, context, info):
+    def resolve_type(self, info, **args):
         return self.__class__.__name__
 
-    def resolve_modified(self, args, context, info):
+    def resolve_modified(self, info, **args):
         return self.get_modification_date() > self.creation_date
 
 

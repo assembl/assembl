@@ -41,19 +41,19 @@ class DiscussionPhase(SecureObjectType, SQLAlchemyObjectType):
     image = graphene.Field(Document, description=docs.DiscussionPhase.image)
     order = graphene.Float(description=docs.DiscussionPhase.order)
 
-    def resolve_title(self, args, context, info):
+    def resolve_title(self, info, **args):
         return resolve_langstring(self.title, args.get('lang'))
 
-    def resolve_title_entries(self, args, context, info):
+    def resolve_title_entries(self, info, **args):
         return resolve_langstring_entries(self, 'title')
 
-    def resolve_description(self, args, context, info):
+    def resolve_description(self, info, **args):
         return resolve_langstring(self.description, args.get('lang'))
 
-    def resolve_description_entries(self, args, context, info):
+    def resolve_description_entries(self, info, **args):
         return resolve_langstring_entries(self, 'description')
 
-    def resolve_image(self, args, context, info):
+    def resolve_image(self, info, **args):
         if self.attachments:
             return self.attachments[0].document
 

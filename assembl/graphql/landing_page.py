@@ -26,10 +26,10 @@ class LandingPageModuleType(SecureObjectType, SQLAlchemyObjectType):
     title = graphene.String(lang=graphene.String(), description=docs.LandingPageModuleType.title)
     title_entries = graphene.List(LangStringEntry, description=docs.LandingPageModuleType.title_entries)
 
-    def resolve_title(self, args, context, info):
+    def resolve_title(self, info, **args):
         return resolve_langstring(self.title, args.get('lang'))
 
-    def resolve_title_entries(self, args, context, info):
+    def resolve_title_entries(self, info, **args):
         return resolve_langstring_entries(self, 'title')
 
 
@@ -48,10 +48,10 @@ class LandingPageModule(SecureObjectType, SQLAlchemyObjectType):
     subtitle = graphene.String(lang=graphene.String())
     subtitle_entries = graphene.List(LangStringEntry)
 
-    def resolve_exists_in_database(self, args, context, info):
+    def resolve_exists_in_database(self, info, **args):
         return self.id > 0
 
-    def resolve_id(self, args, context, info):
+    def resolve_id(self, info, **args):
         if self.id < 0:
             # this is a temporary object we created manually in resolve_landing_page_modules
             return self.id
@@ -64,21 +64,21 @@ class LandingPageModule(SecureObjectType, SQLAlchemyObjectType):
                 return self.__mapper__.primary_key_from_instance(self)[0]
             return getattr(self, graphene_type._meta.id, None)
 
-    def resolve_title(self, args, context, info):
+    def resolve_title(self, info, **args):
         """Title value in given locale."""
         return resolve_langstring(self.title, args.get('lang'))
 
-    def resolve_title_entries(self, args, context, info):
+    def resolve_title_entries(self, info, **args):
         if self.title:
             return resolve_langstring_entries(self, 'title')
 
         return []
 
-    def resolve_subtitle(self, args, context, info):
+    def resolve_subtitle(self, info, **args):
         """Subtitle value in given locale."""
         return resolve_langstring(self.subtitle, args.get('lang'))
 
-    def resolve_subtitle_entries(self, args, context, info):
+    def resolve_subtitle_entries(self, info, **args):
         if self.subtitle:
             return resolve_langstring_entries(self, 'subtitle')
 

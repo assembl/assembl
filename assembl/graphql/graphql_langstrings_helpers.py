@@ -10,7 +10,7 @@ entries_suffix = "_entries"
 
 
 def make_langstring_resolver(langstring_name, langstring_def):
-    def langstring_resolver(self, args, context, info):
+    def langstring_resolver(self, info, **args):
         parent = self
         if 'relation_name' in langstring_def:
             parent = getattr(self, langstring_def['relation_name'])
@@ -22,7 +22,7 @@ def make_langstring_resolver(langstring_name, langstring_def):
 
 
 def make_entries_resolver(langstring_name, langstring_def):
-    def entries_resolver(self, args, context, info):
+    def entries_resolver(self, info, **args):
         parent = self
         if 'relation_name' in langstring_def:
             parent = getattr(self, langstring_def['relation_name'])
