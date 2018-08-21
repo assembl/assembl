@@ -14,7 +14,7 @@ from assembl.lib.logging import getLogger
 
 
 class LoggingMiddleware(object):
-    def resolve(self, next, source, gargs, context, info, *args, **kwargs):
+    def resolve(self, next, source, info, *args, **gargs):
         if source is None:
             modified_variables = {}
             for key, value in info.variable_values.items():
@@ -26,7 +26,7 @@ class LoggingMiddleware(object):
             getLogger().debug(
                 'graphql', op=info.operation.operation,
                 opname=info.operation.name.value, vars=modified_variables)
-        return next(source, gargs, context, info, *args, **kwargs)
+        return next(source, info, info, *args, **gargs)
 
 
 def get_graphql_params(request, data):
