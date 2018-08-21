@@ -30,6 +30,7 @@
   "community": "${slug}/community",
   "terms": "${slug}/terms",
   "theme": "theme/${themeId}",
+  "brightMirrorFiction": "theme/${themeId}/fictions/${postId}",
   "question": "question/${questionId}/${questionIndex}",
   "questionPost": "${slug}/debate/${phase}/question/${questionId}/${questionIndex}/#${element}",
   "administration": "${slug}/administration",

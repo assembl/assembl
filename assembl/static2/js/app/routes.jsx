@@ -37,6 +37,7 @@ import ResourcesCenter from './pages/resourcesCenter';
 import LandingPageAdmin from './pages/landingPageAdmin';
 import ExportTaxonomies from './pages/exportTaxonomies';
 import BrightMirror from './pages/brightMirror';
+import BrightMirrorFiction from './pages/brightMirrorFiction';
 import BrightMirrorAdmin from './pages/brightMirrorAdmin';
 import { routeForRouter } from './utils/routeMap';
 
@@ -144,10 +145,8 @@ export default [
         <Route path={routeForRouter('rootDebate')} />
         <Route path={routeForRouter('debate', false, { phase: ':phase' })} component={DebateHome}>
           <Route path={routeForRouter('theme', false, { themeId: ':themeId' })} component={DebateChild} />
-          <Route
-            path={routeForRouter('question', false, { questionId: ':questionId', questionIndex: ':questionIndex' })}
-            component={Question}
-          />
+          <Route path={routeForRouter('brightMirrorFiction', false, { themeId: ':themeId', postId: ':themeId' })} component={BrightMirrorFiction} />
+          <Route path={routeForRouter('question', false, { questionId: ':questionId', questionIndex: ':questionIndex' })} component={Question} />
         </Route>
         <Route path={routeForRouter('unauthorizedAdministration')} component={UnauthorizedAdministration} />
         <Route path={routeForRouter('administration')} component={Administration}>
