@@ -40,7 +40,6 @@ export const DumbPhaseForm = ({
   const startDatePickerPlaceholder = I18n.t('administration.timelineAdmin.selectStart', { count: phaseNumber });
   const endDatePickerPlaceholder = I18n.t('administration.timelineAdmin.selectEnd', { count: phaseNumber });
 
-
   const splitButtonTitle = I18n.t(`administration.modules.${identifier}`);
 
   const slug = { slug: getDiscussionSlug() };

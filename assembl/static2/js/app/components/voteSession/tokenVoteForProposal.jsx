@@ -76,9 +76,10 @@ const TokenVoteForProposal = ({
                   );
                 })}
                 <OverlayTrigger placement="top" overlay={resetTokensTooltip}>
-                  <Button onClick={() => {
-                    voteForProposal(proposalId, moduleId, id, 0);
-                  }}
+                  <Button
+                    onClick={() => {
+                      voteForProposal(proposalId, moduleId, id, 0);
+                    }}
                   >
                     <span className="assembl-icon-delete grey" />
                   </Button>
