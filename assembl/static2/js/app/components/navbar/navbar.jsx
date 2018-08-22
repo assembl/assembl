@@ -7,7 +7,7 @@ import { Navbar } from 'react-bootstrap';
 import { compose, graphql } from 'react-apollo';
 import bind from 'lodash/bind';
 
-import { getCurrentPhaseIdentifier } from '../../utils/timeline';
+import { getCurrentPhase } from '../../utils/timeline';
 import { get } from '../../utils/routeMap';
 import { withScreenWidth } from '../common/screenDimensions';
 import { connectedUserIsAdmin } from '../../utils/permissions';
@@ -15,7 +15,7 @@ import SectionsQuery from '../../graphql/SectionsQuery.graphql';
 import DiscussionQuery from '../../graphql/DiscussionQuery.graphql';
 import FlatNavbar from './FlatNavbar';
 import BurgerNavbar from './BurgerNavbar';
-import { APP_CONTAINER_MAX_WIDTH, APP_CONTAINER_PADDING } from '../../constants';
+import { APP_CONTAINER_MAX_WIDTH, APP_CONTAINER_PADDING, PHASES } from '../../constants';
 import { snakeToCamel } from '../../utils/globalFunctions';
 import withoutLoadingIndicator from '../common/withoutLoadingIndicator';
 import DebateLink from '../debate/navigation/debateLink';
@@ -47,7 +47,7 @@ const sectionSlug = sectionType => snakeToCamel(sectionType === 'HOMEPAGE' ? 'HO
 const sectionURL = ({ sectionType, url }, options) => {
   if (sectionType === 'ADMINISTRATION') {
     const defaultAdminPhase = 'discussion';
-    return `${get(sectionSlug(sectionType), { ...options, id: defaultAdminPhase })}?section=1`;
+    return `${get(sectionSlug(sectionType), { ...options, id: defaultAdminPhase }, { section: 1 })}`;
   }
 
   // url may be defined for non-custom sections (i.e. HOMEPAGE section)
@@ -84,6 +84,7 @@ SectionLink.displayName = 'SectionLink';
 
 type MapSectionOptions = {
   phase: string,
+  phaseId: string,
   phaseContext: string,
   slug: string,
   screenTooSmall: boolean
@@ -134,9 +135,11 @@ export class AssemblNavbar extends React.PureComponent<AssemblNavbarProps, Assem
     const maxAppWidth = Math.min(APP_CONTAINER_MAX_WIDTH, screenWidth) - APP_CONTAINER_PADDING * 2;
     const screenTooSmall = flatWidth > maxAppWidth;
     const filteredSections = sections.filter(sectionFilter(sectionData)).sort((a, b) => a.order - b.order);
+    const currentPhase = getCurrentPhase(timeline);
     const mapOptions = {
       slug: slug,
-      phase: getCurrentPhaseIdentifier(timeline),
+      phase: currentPhase ? currentPhase.identifier : PHASES.thread,
+      phaseId: currentPhase ? currentPhase.id : null,
       phaseContext: phaseContext(timeline, phase),
       screenTooSmall: screenTooSmall
     };
