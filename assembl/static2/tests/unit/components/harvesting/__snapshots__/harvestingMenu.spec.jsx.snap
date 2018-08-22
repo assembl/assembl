@@ -32,10 +32,10 @@ exports[`harvestingMenu component should match harvestingMenu snapshot 1`] = `
     }
     harvestingBoxPosition={null}
     isAuthorAccountDeleted={undefined}
-    isMultiColumns={undefined}
     postId="1234"
     refetchPost={undefined}
     setHarvestingBoxDisplay={undefined}
+    showNuggetAction={undefined}
   />
   <Connect(Apollo(Apollo(Apollo(Apollo(Component)))))
     cancelHarvesting={undefined}
@@ -65,15 +65,15 @@ exports[`harvestingMenu component should match harvestingMenu snapshot 1`] = `
     }
     harvestingBoxPosition={null}
     isAuthorAccountDeleted={undefined}
-    isMultiColumns={undefined}
     postId="1234"
     refetchPost={undefined}
     setHarvestingBoxDisplay={undefined}
+    showNuggetAction={undefined}
   />
 </div>
 `;
 
-exports[`harvestingMenu component should match multiColumns harvestingMenu snapshot 1`] = `
+exports[`harvestingMenu component should match harvestingMenu without nugget action snapshot 1`] = `
 <div
   className="harvesting-container"
 >
@@ -105,10 +105,10 @@ exports[`harvestingMenu component should match multiColumns harvestingMenu snaps
     }
     harvestingBoxPosition={null}
     isAuthorAccountDeleted={undefined}
-    isMultiColumns={true}
     postId="1234"
     refetchPost={undefined}
     setHarvestingBoxDisplay={undefined}
+    showNuggetAction={false}
   />
   <Connect(Apollo(Apollo(Apollo(Apollo(Component)))))
     cancelHarvesting={undefined}
@@ -138,10 +138,10 @@ exports[`harvestingMenu component should match multiColumns harvestingMenu snaps
     }
     harvestingBoxPosition={null}
     isAuthorAccountDeleted={undefined}
-    isMultiColumns={true}
     postId="1234"
     refetchPost={undefined}
     setHarvestingBoxDisplay={undefined}
+    showNuggetAction={false}
   />
 </div>
 `;

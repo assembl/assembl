@@ -194,7 +194,7 @@ class PostView extends React.PureComponent<Props, State> {
             setHarvestingBoxDisplay={this.setHarvestingBoxDisplay}
             handleClickAnchor={this.handleClickAnchor}
             cancelHarvesting={this.cancelHarvesting}
-            isMultiColumns={multiColumns}
+            showNuggetAction={!multiColumns}
           />
         )}
         <div className="box" style={boxStyle}>

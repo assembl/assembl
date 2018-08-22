@@ -37,7 +37,7 @@ type Props = {
   refetchPost: Function,
   harvestingDate?: string,
   isAuthorAccountDeleted?: boolean,
-  isMultiColumns?: boolean
+  showNuggetAction?: boolean
 };
 
 type State = {
@@ -71,7 +71,8 @@ class DumbHarvestingBox extends React.Component<Props, State> {
 
   static defaultProps = {
     harvestingDate: null,
-    isAuthorAccountDeleted: false
+    isAuthorAccountDeleted: false,
+    showNuggetAction: true
   };
 
   constructor(props: Props) {
@@ -350,7 +351,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
   };
 
   render() {
-    const { selection, extract, contentLocale, harvestingDate, isAuthorAccountDeleted, isMultiColumns } = this.props;
+    const { selection, extract, contentLocale, harvestingDate, isAuthorAccountDeleted, showNuggetAction } = this.props;
     const {
       disabled,
       extractIsValidated,
@@ -428,7 +429,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
                   <span className="assembl-icon-delete grey" />
                 </Button>
               </OverlayTrigger>
-              {!isMultiColumns && (
+              {showNuggetAction && (
                 <OverlayTrigger placement="top" overlay={nuggetExtractTooltip}>
                   <Button
                     disabled={menuDisabled}

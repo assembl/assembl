@@ -23,13 +23,13 @@ describe('harvestingMenu component', () => {
     const result = shallowRenderer.getRenderOutput();
     expect(result).toMatchSnapshot();
   });
-  it('should match multiColumns harvestingMenu snapshot', () => {
+  it('should match harvestingMenu without nugget action snapshot', () => {
     const { extracts } = fakeData;
     const props = {
       extracts: extracts,
       postId: '1234',
       isHarvesting: true,
-      isMultiColumns: true,
+      showNuggetAction: false,
       harvestingAnchorPosition: { x: 100, y: 200 }
     };
     const shallowRenderer = new ShallowRenderer();
