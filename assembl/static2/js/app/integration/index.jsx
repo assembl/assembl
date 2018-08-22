@@ -28,10 +28,7 @@ const index = () => (
         <h2>Bright Mirror pages</h2>
         <ListGroup componentClass="ul">
           <li>
-            <Link to="/integration/bright-mirror/index">Index page</Link>
-          </li>
-          <li>
-            <Link to="/integration/bright-mirror/show">Show page</Link>
+            <Link to="/integration/bright-mirror/bright-mirror-fiction">Fiction page</Link>
           </li>
         </ListGroup>
       </Col>

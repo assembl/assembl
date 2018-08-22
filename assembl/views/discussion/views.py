@@ -469,8 +469,7 @@ def includeme(config):
     config.add_route('integration_page', '/integration')
     config.add_route('integration_101_page', '/integration/101/index')
     config.add_route('integration_101_form_builder_page', '/integration/101/form-builder')
-    config.add_route('integration_bright_mirror_index', '/integration/bright-mirror/index')
-    config.add_route('integration_bright_mirror_show', '/integration/bright-mirror/show')
+    config.add_route('integration_bright_mirror_fiction', '/integration/bright-mirror/bright-mirror-fiction')
 
     config.add_route('new_styleguide', '/styleguide')
     config.add_route('test_error_view', '/{discussion_slug}/test/*type')
@@ -495,8 +494,7 @@ def includeme(config):
         "integration_page",
         "integration_101_page",
         "integration_101_form_builder_page",
-        "integration_bright_mirror_index",
-        "integration_bright_mirror_show",
+        "integration_bright_mirror_fiction",
 
         "react_general_page"
     ]
