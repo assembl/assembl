@@ -7,7 +7,7 @@ from graphql_relay.connection.arrayconnection import offset_to_cursor
 import graphene
 from graphene.relay import Node
 from graphene_sqlalchemy import SQLAlchemyConnectionField, SQLAlchemyObjectType
-from graphene_sqlalchemy.utils import is_mapped
+from graphene_sqlalchemy.utils import is_mapped_instance
 from pyramid.httpexceptions import HTTPUnauthorized
 from pyramid.security import Everyone
 from sqlalchemy import desc, func, join, select
@@ -267,7 +267,7 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
         # inherits from models.Idea doesn't return true
         if isinstance(root, cls):
             return True
-        if not is_mapped(type(root)):
+        if not is_mapped_instance(root):
             raise Exception((
                 'Received incompatible instance "{}".'
             ).format(root))

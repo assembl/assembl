@@ -9,7 +9,7 @@ from graphene.types.utils import get_field_as, merge, yank_fields_from_attrs
 from graphene.utils.is_base_type import is_base_type
 from graphene_sqlalchemy.registry import Registry, get_global_registry
 from graphene_sqlalchemy.types import construct_fields
-from graphene_sqlalchemy.utils import is_mapped
+from graphene_sqlalchemy.utils import is_mapped_instance
 from pyramid.httpexceptions import HTTPUnauthorized
 from pyramid.security import Everyone
 from sqlalchemy.orm.exc import NoResultFound
@@ -67,7 +67,7 @@ class SQLAlchemyInterfaceMeta(InterfaceMeta):
             'The attribute registry in {}.Meta needs to be an'
             ' instance of Registry, received "{}".'
         ).format(name, options.registry)
-        assert is_mapped(options.model), (
+        assert is_mapped_instance(options.model), (
             'You need to pass a valid SQLAlchemy Model in '
             '{}.Meta, received "{}".'
         ).format(name, options.model)
