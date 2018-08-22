@@ -11,13 +11,17 @@ import MultiColumns from './multiColumns';
 import hashLinkScroll from '../../../utils/hashLinkScroll';
 import { MIN_WIDTH_COLUMN, APP_CONTAINER_MAX_WIDTH } from '../../../constants';
 import { withScreenWidth } from '../../common/screenDimensions';
+import { IsHarvestingContext } from '../../../app';
 
 class ColumnsView extends React.Component<$FlowFixMeProps> {
   componentDidMount() {
     hashLinkScroll();
   }
 
-  shouldShowTabs = columnsCount => columnsCount * MIN_WIDTH_COLUMN > Math.min(this.props.screenWidth, APP_CONTAINER_MAX_WIDTH);
+  shouldShowTabs = (columnsCount) => {
+    const { isHarvesting } = this.props;
+    return isHarvesting || columnsCount * MIN_WIDTH_COLUMN > Math.min(this.props.screenWidth, APP_CONTAINER_MAX_WIDTH);
+  };
 
   render = () => {
     const {
@@ -87,4 +91,10 @@ class ColumnsView extends React.Component<$FlowFixMeProps> {
   };
 }
 
-export default withScreenWidth(ColumnsView);
+const ColumnsViewWithContext = props => (
+  <IsHarvestingContext.Consumer>
+    {isHarvesting => <ColumnsView {...props} isHarvesting={isHarvesting} />}
+  </IsHarvestingContext.Consumer>
+);
+
+export default withScreenWidth(ColumnsViewWithContext);

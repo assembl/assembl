@@ -17,7 +17,8 @@ type Props = {
   handleClickAnchor: Function,
   cancelHarvesting: Function,
   refetchPost: Function,
-  isAuthorAccountDeleted: boolean
+  isAuthorAccountDeleted: boolean,
+  showNuggetAction: boolean
 };
 
 class HarvestingMenu extends React.Component<Props> {
@@ -39,6 +40,7 @@ class HarvestingMenu extends React.Component<Props> {
       refetchPost,
       cancelHarvesting,
       isAuthorAccountDeleted,
+      showNuggetAction,
       lang
     } = this.props;
     const selection = window.getSelection();
@@ -56,6 +58,7 @@ class HarvestingMenu extends React.Component<Props> {
               refetchPost={refetchPost}
               cancelHarvesting={cancelHarvesting}
               setHarvestingBoxDisplay={setHarvestingBoxDisplay}
+              showNuggetAction={showNuggetAction}
             />
           ))
           : null}
@@ -69,6 +72,7 @@ class HarvestingMenu extends React.Component<Props> {
             refetchPost={refetchPost}
             cancelHarvesting={cancelHarvesting}
             setHarvestingBoxDisplay={setHarvestingBoxDisplay}
+            showNuggetAction={showNuggetAction}
           />
         )}
         {displayHarvestingAnchor &&
