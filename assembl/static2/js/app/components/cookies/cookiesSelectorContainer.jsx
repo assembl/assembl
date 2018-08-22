@@ -93,7 +93,7 @@ export class DumbCookiesSelectorContainer extends React.Component<Props, State> 
     // Flow bugs with Object.values
     // see https://github.com/facebook/flow/issues/2221
     // $FlowFixMe
-    const cookiesArray:Array<CookieObject> = cookies && Object.values(cookies)
+    const cookiesArray:Array<CookieObject> = cookies && Object.keys(cookies).map(cookie => cookies[cookie])
       .reduce((flat, next) => flat.concat(next), []);
     const updatedCookiesArray = cookiesArray.map(
       (cookie: CookieObject) => (cookie.name === updatedCookie.name ?
@@ -112,7 +112,7 @@ export class DumbCookiesSelectorContainer extends React.Component<Props, State> 
     // Flow bugs with Object.values
     // see https://github.com/facebook/flow/issues/2221
     // $FlowFixMe
-    const cookiesArray:Array<CookieObject> = cookies && Object.values(cookies)
+    const cookiesArray:Array<CookieObject> = cookies && Object.keys(cookies).map(cookie => cookies[cookie])
       .reduce((flat, next) => flat.concat(next), []);
     const newCookiesList = cookiesArray.map(c => c.cookieType);
     // Update the cookies in the back
