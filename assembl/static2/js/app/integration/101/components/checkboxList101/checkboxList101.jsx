@@ -9,10 +9,7 @@ type Props = {
   onChangeHandler: Function
 };
 
-const checkboxList101 = ({
-  checkboxes,
-  onChangeHandler
-}: Props) => {
+const checkboxList101 = ({ checkboxes, onChangeHandler }: Props) => {
   if (checkboxes.length === 0) {
     return <Fragment>Nothing to display</Fragment>;
   }

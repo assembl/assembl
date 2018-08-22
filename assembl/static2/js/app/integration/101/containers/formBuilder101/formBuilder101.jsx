@@ -23,7 +23,7 @@ class FormBuilder101 extends Component<Props> {
     /* eslint-disable */
     console.log(`It's working !`);
     /* eslint-enable */
-  }
+  };
 
   logCheckboxHandler = (event: SyntheticEvent<HTMLInputElement>) => {
     const target = event.currentTarget;
@@ -31,7 +31,7 @@ class FormBuilder101 extends Component<Props> {
     /* eslint-disable */
     console.log(`It's working ! ${isChecked.toString()}`);
     /* eslint-enable */
-  }
+  };
 
   render() {
     return (
@@ -39,13 +39,17 @@ class FormBuilder101 extends Component<Props> {
         <Row>
           <Col xs={12}>
             <h1>Form builder example</h1>
-            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+            <p>
+              Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry
+              standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a
+              type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting,
+              remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing
+              Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of
+              Lorem Ipsum.
+            </p>
           </Col>
           <Button101 onClickHandler={this.logButtonHandler} />
-          <CheckboxList101
-            checkboxes={listOfcheckboxes}
-            onChangeHandler={this.logCheckboxHandler}
-          />
+          <CheckboxList101 checkboxes={listOfcheckboxes} onChangeHandler={this.logCheckboxHandler} />
         </Row>
       </Grid>
     );

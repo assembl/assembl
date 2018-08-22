@@ -24,9 +24,7 @@ describe('<Button101 /> - with shallow', () => {
     // Mock actions
     onClickHandler = jest.fn();
 
-    wrapper = shallow(<Button101
-      onClickHandler={onClickHandler}
-    />);
+    wrapper = shallow(<Button101 onClickHandler={onClickHandler} />);
   });
 
   it('should render one info Button with default values', () => {
@@ -58,9 +56,7 @@ describe('<Button101 /> - with mount', () => {
     // Mock actions
     onClickHandler = jest.fn();
 
-    wrapper = mount(<Button101
-      onClickHandler={onClickHandler}
-    />);
+    wrapper = mount(<Button101 onClickHandler={onClickHandler} />);
   });
 
   it('should render one Button that can be clicked', () => {

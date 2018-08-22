@@ -25,21 +25,11 @@ const actions = {
 
 storiesOf('CheckboxList101', module)
   .addDecorator(withKnobs)
-  .add('List of 5', withInfo()(() => (
-    <CheckboxList101
-      checkboxes={listOfcheckboxes}
-      onChangeHandler={actions.onChangeHandler}
-    />
-  )))
-  .add('Empty list', withInfo()(() => (
-    <CheckboxList101
-      checkboxes={listOfNone}
-      onChangeHandler={actions.onChangeHandler}
-    />
-  )))
-  .add('playground', withInfo()(() => (
-    <CheckboxList101
-      checkboxes={object('checkboxes', listOfcheckboxes)}
-      onChangeHandler={actions.onChangeHandler}
-    />
-  )));
+  .add('List of 5', withInfo()(() => <CheckboxList101 checkboxes={listOfcheckboxes} onChangeHandler={actions.onChangeHandler} />))
+  .add('Empty list', withInfo()(() => <CheckboxList101 checkboxes={listOfNone} onChangeHandler={actions.onChangeHandler} />))
+  .add(
+    'playground',
+    withInfo()(() => (
+      <CheckboxList101 checkboxes={object('checkboxes', listOfcheckboxes)} onChangeHandler={actions.onChangeHandler} />
+    ))
+  );

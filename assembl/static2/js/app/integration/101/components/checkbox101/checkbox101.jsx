@@ -10,21 +10,10 @@ type Props = {
   onChangeHandler: Function
 };
 
-const checkbox101 = ({
-  label,
-  isDone,
-  onChangeHandler
-}: Props) => (
+const checkbox101 = ({ label, isDone, onChangeHandler }: Props) => (
   <div className="integration checkbox">
-    <input
-      id="checkbox"
-      type="checkbox"
-      onChange={onChangeHandler}
-      checked={isDone}
-    />
-    <label htmlFor="checkbox">
-      {label}
-    </label>
+    <input id="checkbox" type="checkbox" onChange={onChangeHandler} checked={isDone} />
+    <label htmlFor="checkbox">{label}</label>
   </div>
 );
 

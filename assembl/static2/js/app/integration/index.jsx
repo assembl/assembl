@@ -15,14 +15,10 @@ const index = () => (
         <h2>Instruction page</h2>
         <ListGroup componentClass="ul">
           <li>
-            <Link to="/integration/101/index">
-              HTML/CSS/React components integration 101
-            </Link>
+            <Link to="/integration/101/index">HTML/CSS/React components integration 101</Link>
           </li>
           <li>
-            <Link to="/integration/101/form-builder">
-              Form builder example
-            </Link>
+            <Link to="/integration/101/form-builder">Form builder example</Link>
           </li>
         </ListGroup>
       </Col>
@@ -32,14 +28,10 @@ const index = () => (
         <h2>Bright Mirror pages</h2>
         <ListGroup componentClass="ul">
           <li>
-            <Link to="/integration/bright-mirror/index">
-              Index page
-            </Link>
+            <Link to="/integration/bright-mirror/index">Index page</Link>
           </li>
           <li>
-            <Link to="/integration/bright-mirror/show">
-              Show page
-            </Link>
+            <Link to="/integration/bright-mirror/show">Show page</Link>
           </li>
         </ListGroup>
       </Col>

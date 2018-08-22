@@ -34,10 +34,7 @@ describe('<CheckboxList101 /> - with shallow', () => {
     // Mock actions
     onChangeHandler = jest.fn();
 
-    wrapper = shallow(<CheckboxList101
-      checkboxes={checkboxes}
-      onChangeHandler={onChangeHandler}
-    />);
+    wrapper = shallow(<CheckboxList101 checkboxes={checkboxes} onChangeHandler={onChangeHandler} />);
   });
 
   it('should render one list of 5 checkboxes', () => {

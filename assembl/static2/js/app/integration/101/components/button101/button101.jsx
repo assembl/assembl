@@ -13,19 +13,8 @@ type Props = {
   onClickHandler: Function
 };
 
-const button101 = ({
-  label,
-  type,
-  isDisabled,
-  onClickHandler
-}: Props) => (
-  <Button
-    bsStyle={type}
-    bsSize="large"
-    className="integration button"
-    onClick={onClickHandler}
-    disabled={isDisabled}
-  >
+const button101 = ({ label, type, isDisabled, onClickHandler }: Props) => (
+  <Button bsStyle={type} bsSize="large" className="integration button" onClick={onClickHandler} disabled={isDisabled}>
     {label}
   </Button>
 );

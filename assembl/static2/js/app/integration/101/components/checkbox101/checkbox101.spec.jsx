@@ -24,9 +24,7 @@ describe('<Checkbox101 /> - with shallow', () => {
     // Mock actions
     onChangeHandler = jest.fn();
 
-    wrapper = shallow(<Checkbox101
-      onChangeHandler={onChangeHandler}
-    />);
+    wrapper = shallow(<Checkbox101 onChangeHandler={onChangeHandler} />);
   });
 
   it('should render one checkbox with a default label', () => {
