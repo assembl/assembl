@@ -16,10 +16,12 @@ describe('CookiesSelectorContainer component', () => {
   let instance;
   beforeEach(() => {
     updateAcceptedCookiesSpy = jest.fn();
-    wrapper = mount(<DumbCookiesSelectorContainer
-      updateAcceptedCookies={updateAcceptedCookiesSpy}
-      cookiesList={['ACCEPT_TRACKING_ON_DISCUSSION']}
-    />);
+    wrapper = mount(
+      <DumbCookiesSelectorContainer
+        updateAcceptedCookies={updateAcceptedCookiesSpy}
+        cookiesList={['ACCEPT_TRACKING_ON_DISCUSSION']}
+      />
+    );
     instance = wrapper.instance();
   });
   it('should render a Cookies Selector', () => {
@@ -28,24 +30,32 @@ describe('CookiesSelectorContainer component', () => {
 
   describe('getCookieObjectData method', () => {
     it('should return a certain object for a given cookie string', () => {
-      expect(JSON.stringify(instance.getCookieObjectData('ACCEPT_SESSION_ON_DISCUSSION'))).toBe(JSON.stringify({
-        category: 'other',
-        name: COOKIE_TRANSLATION_KEYS.userSession
-      }));
+      expect(JSON.stringify(instance.getCookieObjectData('ACCEPT_SESSION_ON_DISCUSSION'))).toBe(
+        JSON.stringify({
+          category: 'other',
+          name: COOKIE_TRANSLATION_KEYS.userSession
+        })
+      );
     });
   });
   describe('getCookiesObjectFromArray method', () => {
     it('should return an object with every cookie ordered by category', () => {
-      expect(instance.getCookiesObjectFromArray([{
-        category: 'other',
-        name: COOKIE_TRANSLATION_KEYS.userSession,
-        accepted: true
-      }])).toEqual({
-        other: [{
-          category: 'other',
-          name: COOKIE_TRANSLATION_KEYS.userSession,
-          accepted: true
-        }]
+      expect(
+        instance.getCookiesObjectFromArray([
+          {
+            category: 'other',
+            name: COOKIE_TRANSLATION_KEYS.userSession,
+            accepted: true
+          }
+        ])
+      ).toEqual({
+        other: [
+          {
+            category: 'other',
+            name: COOKIE_TRANSLATION_KEYS.userSession,
+            accepted: true
+          }
+        ]
       });
     });
   });
@@ -83,14 +93,18 @@ describe('CookiesSelectorContainer component', () => {
       };
 
       wrapper.instance().handleToggle(updatedCookie);
-      expect(JSON.stringify(wrapper.state('cookies'))).toBe(JSON.stringify({
-        analytics: [{
-          category: 'analytics',
-          name: COOKIE_TRANSLATION_KEYS.piwik,
-          accepted: false,
-          cookieType: 'REJECT_TRACKING_ON_DISCUSSION'
-        }] }
-      ));
+      expect(JSON.stringify(wrapper.state('cookies'))).toBe(
+        JSON.stringify({
+          analytics: [
+            {
+              category: 'analytics',
+              name: COOKIE_TRANSLATION_KEYS.piwik,
+              accepted: false,
+              cookieType: 'REJECT_TRACKING_ON_DISCUSSION'
+            }
+          ]
+        })
+      );
     });
   });
   describe('saveChanges method', () => {

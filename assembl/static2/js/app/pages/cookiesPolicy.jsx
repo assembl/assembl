@@ -43,19 +43,16 @@ const CookiesPolicy = ({ text, headerTitle, debateData }) => (
 
 export type Props = AdditionalProps & LegalContentsQuery & QueryProps;
 
-const withData: OperationComponent<LegalContentsQuery, LegalContentsQueryVariables, Props> = graphql(
-  LegalContents,
-  {
-    props: ({ data }) => {
-      const text = data.legalContents ? data.legalContents.cookiesPolicy : '';
-      return {
-        ...data,
-        text: text,
-        headerTitle: I18n.t('cookiesPolicy.headerTitle')
-      };
-    }
+const withData: OperationComponent<LegalContentsQuery, LegalContentsQueryVariables, Props> = graphql(LegalContents, {
+  props: ({ data }) => {
+    const text = data.legalContents ? data.legalContents.cookiesPolicy : '';
+    return {
+      ...data,
+      text: text,
+      headerTitle: I18n.t('cookiesPolicy.headerTitle')
+    };
   }
-);
+});
 
 export const mapStateToProps: State => LegalContentsQueryVariables = state => ({
   lang: state.i18n.locale

@@ -79,7 +79,6 @@ export const COOKIE_TRANSLATION_KEYS = {
   piwik: 'piwik'
 };
 
-
 // Those states lists need to be kept in sync with models/post.py
 export const PublicationStates = {
   DRAFT: 'DRAFT',

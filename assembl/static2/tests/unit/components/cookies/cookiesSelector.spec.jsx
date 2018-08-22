@@ -10,20 +10,24 @@ describe('CookiesSelector component', () => {
   it('should render a list of cookieToggle components set in different categories', () => {
     const props = {
       cookies: {
-        essential: [{
-          category: 'essential',
-          name: 'locale',
-          hasChanged: false,
-          accepted: true,
-          cookieType: 'ACCEPT_LOCALE_ON_SESSION'
-        }],
-        analytics: [{
-          category: 'analytics',
-          name: 'piwik',
-          hasChanged: false,
-          accepted: false,
-          cookieType: 'REJECT_TRACKING_ON_DISCUSSION'
-        }]
+        essential: [
+          {
+            category: 'essential',
+            name: 'locale',
+            hasChanged: false,
+            accepted: true,
+            cookieType: 'ACCEPT_LOCALE_ON_SESSION'
+          }
+        ],
+        analytics: [
+          {
+            category: 'analytics',
+            name: 'piwik',
+            hasChanged: false,
+            accepted: false,
+            cookieType: 'REJECT_TRACKING_ON_DISCUSSION'
+          }
+        ]
       },
       activeKey: 'essential',
       show: true,

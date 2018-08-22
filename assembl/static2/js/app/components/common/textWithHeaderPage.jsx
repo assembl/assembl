@@ -14,22 +14,22 @@ type State = {};
 
 class DumbTextWithHeaderPage extends React.Component<TextWithHeaderPageProps, State> {
   static defaultProps = {
-    renderPageBody: (text: string) => (<div
-      className="ellipsis-content justify"
-      dangerouslySetInnerHTML={{
-        __html: text
-      }}
-    />)
-  }
+    renderPageBody: (text: string) => (
+      <div
+        className="ellipsis-content justify"
+        dangerouslySetInnerHTML={{
+          __html: text
+        }}
+      />
+    )
+  };
 
   render() {
     const { headerTitle, debateData, renderPageBody, text } = this.props;
     return (
       <div className="text-with-header">
         <Header title={headerTitle} imgUrl={debateData.headerBackgroundUrl} />
-        <div className="max-container margin-xxl">
-          { renderPageBody(text) }
-        </div>
+        <div className="max-container margin-xxl">{renderPageBody(text)}</div>
       </div>
     );
   }

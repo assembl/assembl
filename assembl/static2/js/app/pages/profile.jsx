@@ -162,15 +162,17 @@ class Profile extends React.PureComponent<ProfileProps, ProfileState> {
                   </h2>
                   <div className="profile-form center">
                     {profileFields &&
-                      profileFields.map(pf => (
-                        !pf.configurableField.hidden &&
-                        <ConfiguredField
-                          key={pf.id}
-                          configurableField={pf.configurableField}
-                          handleValueChange={value => this.handleFieldValueChange(pf.id, value)}
-                          value={this.state.values[pf.id]}
-                        />
-                      ))}
+                      profileFields.map(
+                        pf =>
+                          !pf.configurableField.hidden && (
+                            <ConfiguredField
+                              key={pf.id}
+                              configurableField={pf.configurableField}
+                              handleValueChange={value => this.handleFieldValueChange(pf.id, value)}
+                              value={this.state.values[pf.id]}
+                            />
+                          )
+                      )}
                     <Translate value="profile.usernameInformations" />
                     <Button className="button-submit button-dark margin-l" onClick={this.handleSaveClick}>
                       <Translate value="profile.save" />

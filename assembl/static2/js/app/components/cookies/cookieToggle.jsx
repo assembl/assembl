@@ -4,20 +4,18 @@ import { I18n } from 'react-redux-i18n';
 import SwitchButton from '../common/switchButton';
 import { COOKIE_TRANSLATION_KEYS } from '../../constants';
 
-
 export type CookieObject = {
   name: string,
   category: string,
   accepted: boolean,
   cookieType: string
-}
+};
 
 type CookieToggleProps = {
   handleToggle: Function,
   cookie: CookieObject,
   toggleCookieType: Function
 };
-
 
 const CookieToggle = ({ handleToggle, cookie, toggleCookieType }: CookieToggleProps) => {
   const toggleSwitch = () => {

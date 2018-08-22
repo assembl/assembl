@@ -37,15 +37,19 @@ export class DumbCookiesSelectorContainer extends React.Component<Props, State> 
   constructor(props: Props) {
     super(props);
     const cookiesFromBrowser = getCookieItem('cookies_configuration');
-    const cookiesList = props.cookiesList ?
-      // if the user is logged in, we get the cookiesList from the query
+    const cookiesList = props.cookiesList
+      ? // if the user is logged in, we get the cookiesList from the query
       props.cookiesList
-      // otherwise, we take it from the browser
-      : cookiesFromBrowser && cookiesFromBrowser.split(',');
+      : // otherwise, we take it from the browser
+      cookiesFromBrowser && cookiesFromBrowser.split(',');
 
-    const cookiesArray = cookiesList && cookiesList.map(
-      cookie => ({ ...this.getCookieObjectData(cookie), accepted: this.isCookieAccepted(cookie), cookieType: cookie })
-    );
+    const cookiesArray =
+      cookiesList &&
+      cookiesList.map(cookie => ({
+        ...this.getCookieObjectData(cookie),
+        accepted: this.isCookieAccepted(cookie),
+        cookieType: cookie
+      }));
     const cookiesByCategory = cookiesArray && this.getCookiesObjectFromArray(cookiesArray);
 
     this.state = {
@@ -60,7 +64,7 @@ export class DumbCookiesSelectorContainer extends React.Component<Props, State> 
       return true;
     }
     return false;
-  }
+  };
 
   getCookieObjectData = (cookie: string) => {
     if (cookie.includes('SESSION_ON_DISCUSSION')) {
@@ -77,7 +81,8 @@ export class DumbCookiesSelectorContainer extends React.Component<Props, State> 
 
   getCookiesObjectFromArray = (cookiesArray: Array<CookieObject>) => {
     const cookiesObject = {};
-    cookiesArray.forEach(function(cookie) { // eslint-disable-line
+    cookiesArray.forEach((cookie) => {
+      // eslint-disable-line
       const { category } = cookie;
       if (cookiesObject[category]) {
         cookiesObject[category] = [...cookiesObject[category], cookie];
@@ -86,23 +91,25 @@ export class DumbCookiesSelectorContainer extends React.Component<Props, State> 
       }
     });
     return cookiesObject;
-  }
+  };
 
   handleToggle = (updatedCookie: CookieObject) => {
     const { cookies } = this.state;
     // Flow bugs with Object.values
     // see https://github.com/facebook/flow/issues/2221
     // $FlowFixMe
-    const cookiesArray:Array<CookieObject> = cookies && Object.keys(cookies).map(cookie => cookies[cookie])
-      .reduce((flat, next) => flat.concat(next), []);
+    const cookiesArray: Array<CookieObject> =
+      cookies &&
+      Object.keys(cookies)
+        .map(cookie => cookies[cookie])
+        .reduce((flat, next) => flat.concat(next), []);
     const updatedCookiesArray = cookiesArray.map(
-      (cookie: CookieObject) => (cookie.name === updatedCookie.name ?
-        { ...updatedCookie, cookieType: this.toggleCookieType(cookie.cookieType) } :
-        cookie
-      ));
+      (cookie: CookieObject) =>
+        (cookie.name === updatedCookie.name ? { ...updatedCookie, cookieType: this.toggleCookieType(cookie.cookieType) } : cookie)
+    );
     const updatedCookiesByCategory = this.getCookiesObjectFromArray(updatedCookiesArray);
     this.setState({ cookies: updatedCookiesByCategory });
-  }
+  };
 
   toggleCookieType = (cookie: string): string =>
     (cookie.startsWith('ACCEPT') ? cookie.replace('ACCEPT', 'REJECT') : cookie.replace('REJECT', 'ACCEPT'));
@@ -112,21 +119,24 @@ export class DumbCookiesSelectorContainer extends React.Component<Props, State> 
     // Flow bugs with Object.values
     // see https://github.com/facebook/flow/issues/2221
     // $FlowFixMe
-    const cookiesArray:Array<CookieObject> = cookies && Object.keys(cookies).map(cookie => cookies[cookie])
-      .reduce((flat, next) => flat.concat(next), []);
+    const cookiesArray: Array<CookieObject> =
+      cookies &&
+      Object.keys(cookies)
+        .map(cookie => cookies[cookie])
+        .reduce((flat, next) => flat.concat(next), []);
     const newCookiesList = cookiesArray.map(c => c.cookieType);
     // Update the cookies in the back
     this.props.updateAcceptedCookies({ variables: { actions: newCookiesList } });
     // Update the cookies in the browser
     setCookieItem('cookies_configuration', newCookiesList);
     displayAlert('success', I18n.t('cookiesPolicy.success'));
-  }
+  };
 
   handleCategorySelection = (category: string) => {
     const { show, activeKey } = this.state;
     this.setState({ activeKey: category, show: !show });
     return category !== activeKey && this.setState({ show: true });
-  }
+  };
 
   render() {
     const { cookies, show, activeKey } = this.state;
@@ -148,7 +158,8 @@ const mapStateToProps = ({ context }) => ({
   id: context.connectedUserIdBase64
 });
 
-export default compose(connect(mapStateToProps),
+export default compose(
+  connect(mapStateToProps),
   graphql(updateAcceptedCookies, {
     name: 'updateAcceptedCookies'
   }),
@@ -164,4 +175,6 @@ export default compose(connect(mapStateToProps),
         cookiesList: data.user.acceptedCookies
       };
     }
-  }), withLoadingIndicator())(DumbCookiesSelectorContainer);
+  }),
+  withLoadingIndicator()
+)(DumbCookiesSelectorContainer);

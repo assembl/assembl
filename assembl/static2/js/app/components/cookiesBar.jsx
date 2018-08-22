@@ -28,10 +28,10 @@ export class DumbCookiesBar extends React.Component<Props, State> {
     const { acceptedCookies } = props;
     const cookiesFromBrowser = getCookieItem('cookies_configuration');
 
-    const shouldHideBar = acceptedCookies ?
-      // acceptedCookies comes from the query and is only received if the user is logged in
-      COOKIE_TYPES.some(cookie => acceptedCookies.includes(cookie)) :
-      // if the user is not logged in, we check in the browser instead of the backend
+    const shouldHideBar = acceptedCookies
+      ? // acceptedCookies comes from the query and is only received if the user is logged in
+      COOKIE_TYPES.some(cookie => acceptedCookies.includes(cookie))
+      : // if the user is not logged in, we check in the browser instead of the backend
       COOKIE_TYPES.some(cookie => cookiesFromBrowser && cookiesFromBrowser.split(',').includes(cookie));
     this.state = { hide: shouldHideBar };
   }
@@ -44,19 +44,17 @@ export class DumbCookiesBar extends React.Component<Props, State> {
     this.setState({
       hide: true
     });
-  }
+  };
 
   render() {
     const { hide } = this.state;
     const cookiesBarClassnames = classnames('cookies-bar', { 'show-cookies-bar': !hide, 'hide-cookies-bar': hide });
     const slug = getDiscussionSlug();
     return (
-      <div
-        className={cookiesBarClassnames}
-      >
+      <div className={cookiesBarClassnames}>
         <Translate value="cookiesBar.cookiesNotice" className="cookies-text" />
         <div className="cookies-buttons-container">
-          <Button onClick={this.acceptAllCookies} className="button-submit button-dark cookies-button" >
+          <Button onClick={this.acceptAllCookies} className="button-submit button-dark cookies-button">
             <Translate value="cookiesBar.accept" />
           </Button>
           <Link to={get('cookiesPolicy', { slug: slug })}>
@@ -92,4 +90,5 @@ export default compose(
       };
     }
   }),
-  withoutLoadingIndicator())(DumbCookiesBar);
+  withoutLoadingIndicator()
+)(DumbCookiesBar);
