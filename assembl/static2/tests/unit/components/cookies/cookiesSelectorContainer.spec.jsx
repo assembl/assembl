@@ -4,8 +4,11 @@ import Adapter from 'enzyme-adapter-react-16';
 import { DumbCookiesSelectorContainer } from '../../../../js/app/components/cookies/cookiesSelectorContainer';
 import CookiesSelector from '../../../../js/app/components/cookies/cookiesSelector';
 import { COOKIE_TRANSLATION_KEYS } from '../../../../js/app/constants';
+import { displayAlert } from '../../../../js/app/utils/utilityManager';
 
 configure({ adapter: new Adapter() });
+
+jest.mock('../../../../js/app/utils/utilityManager');
 
 describe('CookiesSelectorContainer component', () => {
   let wrapper;
@@ -90,10 +93,14 @@ describe('CookiesSelectorContainer component', () => {
       ));
     });
   });
-  // describe('saveChanges method', () => {
-  //   it('should call the updateAcceptedCookies function', () => {
-  //     instance.saveChanges();
-  //     expect(instance.updateAcceptedCookies).toHaveBeenCalledTimes(1);
-  //   });
-  // });
+  describe('saveChanges method', () => {
+    it('should call the updateAcceptedCookies function and set document.cookie with a new value', () => {
+      displayAlert.mockImplementation(() => {});
+      instance.saveChanges();
+      expect(updateAcceptedCookiesSpy.mock.calls.length).toBe(1);
+      const date = new Date();
+      date.setMonth(date.getMonth() + 13);
+      expect(document.cookie).toBe(`cookies_configuration=ACCEPT_TRACKING_ON_DISCUSSION; path=/;expires=${date}`);
+    });
+  });
 });
