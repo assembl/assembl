@@ -36,7 +36,8 @@ type Props = {
   deleteExtract: Function,
   refetchPost: Function,
   harvestingDate?: string,
-  isAuthorAccountDeleted?: boolean
+  isAuthorAccountDeleted?: boolean,
+  isMultiColumns?: boolean
 };
 
 type State = {
@@ -349,7 +350,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
   };
 
   render() {
-    const { selection, extract, contentLocale, harvestingDate, isAuthorAccountDeleted } = this.props;
+    const { selection, extract, contentLocale, harvestingDate, isAuthorAccountDeleted, isMultiColumns } = this.props;
     const {
       disabled,
       extractIsValidated,
@@ -427,15 +428,17 @@ class DumbHarvestingBox extends React.Component<Props, State> {
                   <span className="assembl-icon-delete grey" />
                 </Button>
               </OverlayTrigger>
-              <OverlayTrigger placement="top" overlay={nuggetExtractTooltip}>
-                <Button
-                  disabled={menuDisabled}
-                  onClick={this.updateHarvestingNugget}
-                  className={classnames({ active: isNugget })}
-                >
-                  <span className="assembl-icon-pepite grey" />
-                </Button>
-              </OverlayTrigger>
+              {!isMultiColumns && (
+                <OverlayTrigger placement="top" overlay={nuggetExtractTooltip}>
+                  <Button
+                    disabled={menuDisabled}
+                    onClick={this.updateHarvestingNugget}
+                    className={classnames({ active: isNugget })}
+                  >
+                    <span className="assembl-icon-pepite grey" />
+                  </Button>
+                </OverlayTrigger>
+              )}
               <OverlayTrigger placement="top" overlay={qualifyExtractTooltip}>
                 <Button
                   disabled={menuDisabled}
