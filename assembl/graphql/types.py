@@ -145,7 +145,7 @@ class SecureObjectType(object):
     def get_node(cls, info, id):
         context = info.context
         try:
-            result = cls.get_query(context).get(id)
+            result = cls.get_query(info).get(id)
         except NoResultFound:
             return None
 
