@@ -38,6 +38,7 @@ export const DumbLegalContentsForm = ({
   const tacLabel = I18n.t('administration.legalContents.termsAndConditionsLabel');
   const cookiesPolicyLabel = I18n.t('administration.legalContents.cookiesPolicyLabel');
   const privacyPolicyLabel = I18n.t('administration.legalContents.privacyPolicyLabel');
+  const userGuidelinesLabel = I18n.t('administration.legalContents.userGuidelinesLabel');
   return (
     <div className="admin-box">
       <SectionTitle title={I18n.t('administration.discussion.4')} annotation={I18n.t('administration.annotation')} />
@@ -82,6 +83,16 @@ export const DumbLegalContentsForm = ({
               required
               type="rich-text"
               value={privacyPolicy}
+            />
+            <div className="separator" />
+            <FormControlWithLabel
+              id="user-guidelines"
+              key={`user-guidelines-${editLocale}`}
+              label={userGuidelinesLabel}
+              onChange={() => {}} // fix
+              required
+              type="rich-text"
+              value={null} // fix
             />
           </div>
         </Row>

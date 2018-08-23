@@ -734,6 +734,7 @@ const Translations = {
         termsAndConditionsLabel: "Conditions générales d'utilisation",
         cookiesPolicyLabel: "Information sur les cookies",
         privacyPolicyLabel: "Politique de protection des données personnelles",
+        userGuidelinesLabel: "Charte de participation",
         successSave: "Les contenus juridiques ont été enregistrés avec succès !"
       },
       landingPage: {
@@ -1526,6 +1527,7 @@ const Translations = {
         termsAndConditionsLabel: "Terms and conditions",
         cookiesPolicyLabel: "Information on cookies",
         privacyPolicyLabel: "Privacy policy",
+        userGuidelinesLabel: "User guidelines",
         successSave: "The legal contents have been saved with success!"
       },
       landingPage: {

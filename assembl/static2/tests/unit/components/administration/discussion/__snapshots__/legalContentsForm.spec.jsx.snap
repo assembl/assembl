@@ -91,6 +91,25 @@ exports[`LegalContentsForm dumb component should render a form to edit legal not
           validationErrors={undefined}
           value=""
         />
+        <div
+          className="separator"
+        />
+        <FormControlWithLabel
+          componentClass={undefined}
+          disabled={undefined}
+          formControlProps={undefined}
+          helperText=""
+          helperUrl=""
+          id="user-guidelines"
+          label="User guidelines"
+          labelAlwaysVisible={false}
+          name={undefined}
+          onChange={[Function]}
+          required={true}
+          type="rich-text"
+          validationErrors={undefined}
+          value={null}
+        />
       </div>
     </Row>
   </div>
