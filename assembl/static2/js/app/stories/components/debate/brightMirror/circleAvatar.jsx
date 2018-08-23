@@ -6,7 +6,7 @@ import { withInfo } from '@storybook/addon-info';
 import { withKnobs, text, select } from '@storybook/addon-knobs';
 /* eslint-enable */
 
-import CircleAvatar from '../../../components/debate/brightMirror/circleAvatar';
+import CircleAvatar from '../../../../components/debate/brightMirror/circleAvatar';
 
 const customCircleAvatar = {
   src: 'https://loremflickr.com/300/300'
