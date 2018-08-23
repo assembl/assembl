@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import CircleAvatar from '../../../components/common/circleAvatar';
 
 class BrightMirrorFiction extends Component {
   render() {
@@ -6,7 +7,7 @@ class BrightMirrorFiction extends Component {
       <ul>
         <li>
           <ul>
-            <li>Profile icon</li>
+            <li><CircleAvatar src="https://loremflickr.com/300/300" /></li>
             <li>First name and last name of the creator</li>
             <li>Creation date</li>
           </ul>
