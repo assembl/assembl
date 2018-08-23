@@ -72,9 +72,9 @@ class IModelEventWatcher(interface.Interface):
         pass
 
 
+@interface.implementer(IModelEventWatcher)
 class BaseModelEventWatcher(object):
     """A dummy :py:class:`IModelEventWatcher` for testing purposes"""
-    interface.implements(IModelEventWatcher)
 
     def processPostCreated(self, id):
         log.debug("processPostCreated: %d" % (id or 0))
@@ -104,9 +104,9 @@ class BaseModelEventWatcher(object):
         log.debug("processAccountModified: %d" % (id or 0))
 
 
+@interface.implementer(IModelEventWatcher)
 class CompositeModelEventWatcher(object):
     """A dummy :py:class:`IModelEventWatcher` for testing purposes"""
-    interface.implements(IModelEventWatcher)
 
     def __init__(self, *watchers):
         self.watchers = watchers

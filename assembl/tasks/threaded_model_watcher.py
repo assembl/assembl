@@ -45,10 +45,10 @@ class ThreadDispatcher(Thread):
         cls.get_instance()
 
 
+@interface.implementer(IModelEventWatcher)
 class ThreadedModelEventWatcher(object):
     """A IModelEventWatcher that will dispatch events to its
     :py:class:`ThreadDispatcher`"""
-    interface.implements(IModelEventWatcher)
 
     def __init__(self):
         self.queue = ThreadDispatcher.get_instance().queue
