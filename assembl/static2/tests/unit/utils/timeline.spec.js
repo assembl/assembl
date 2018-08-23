@@ -1,4 +1,4 @@
-import { getCurrentPhaseIdentifier, getIsDebateStarted } from '../../../js/app/utils/timeline';
+import { getCurrentPhaseData, getIsDebateStarted } from '../../../js/app/utils/timeline';
 
 describe('getCurrentPhaseIdentifier timeline behavior', () => {
   it('should return last phase identifier when all phases closed', () => {
@@ -16,7 +16,7 @@ describe('getCurrentPhaseIdentifier timeline behavior', () => {
         title: { entries: [{ en: 'Bar' }] }
       }
     ];
-    const identifier = getCurrentPhaseIdentifier(timeline);
+    const identifier = getCurrentPhaseData(timeline).currentPhaseIdentifier;
     expect(identifier).toEqual('bar');
   });
 

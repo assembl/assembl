@@ -57,9 +57,18 @@ export const getCurrentPhase = (_timeline: Timeline) => {
   return sortedTimeline[sortedTimeline.length - 1];
 };
 
-export const getCurrentPhaseIdentifier = (_timeline: Timeline) => {
+export const getCurrentPhaseData = (_timeline: Timeline) => {
   const currentPhase = getCurrentPhase(_timeline);
-  return currentPhase ? currentPhase.identifier : PHASES.thread;
+  if (currentPhase) {
+    return {
+      currentPhaseIdentifier: currentPhase.identifier,
+      currentPhaseId: currentPhase.id
+    };
+  }
+  return {
+    currentPhaseIdentifier: PHASES.thread,
+    currentPhaseId: ''
+  };
 };
 
 export const isPhaseStarted = (_timeline: Timeline, _identifier: string) => {
@@ -142,7 +151,7 @@ export const getPhaseName = (_timeline: Timeline, _id: string) => {
   let phaseName = '';
   if (!phaseId || !timeline) return phaseName;
   timeline.forEach((phase) => {
-    if (phase.identifier === phaseId) {
+    if (phase.id === phaseId) {
       phaseName = phase.title;
     }
   });

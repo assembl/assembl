@@ -1,4 +1,5 @@
 import urljoin from 'url-join';
+import { stringify } from 'query-string';
 
 import parse from './literalStringParser';
 import { capitalize } from './globalFunctions';
@@ -16,12 +17,6 @@ const convertToContextualName = (name) => {
 };
 const maybePrependSlash = (pre, s) => (pre ? `/${s}` : s);
 
-export const getQuery = (query) => {
-  if (!query) return '';
-  const entries = Object.keys(query).map(key => `${key}=${query[key]}`);
-  return `?${entries.join('&')}`;
-};
-
 export const get = (name, args, query) => {
   const newArgs = args || {};
   const pre = 'preSlash' in newArgs ? newArgs.preSlash : true;
@@ -33,7 +28,8 @@ export const get = (name, args, query) => {
   let literal = routes[newName];
   literal = maybePrependSlash(pre, literal);
   const a = parse(literal, newArgs);
-  return a + getQuery(query);
+  if (query) return `${a}?${stringify(query)}`;
+  return a;
 };
 
 const basePath = () => `${window.location.protocol}//${window.location.host}`;

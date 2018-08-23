@@ -24,6 +24,7 @@ import TimelineQuery from '../graphql/Timeline.graphql';
 import { convertEntriesToEditorState } from '../utils/draftjs';
 import { getPhaseId } from '../utils/timeline';
 import landingPagePlugin from '../utils/administration/landingPage';
+import { fromGlobalId } from '../utils/globalFunctions';
 
 const SECTIONS_WITHOUT_LANGUAGEMENU = ['1', '6'];
 
@@ -314,7 +315,7 @@ export default compose(
     skip: ({ timeline }) => typeof getPhaseId(timeline, 'voteSession') !== 'string',
     options: ({ locale, location }) => {
       const phaseId = location.query.phaseId;
-      const discussionPhaseId = phaseId ? atob(phaseId).split(':')[1] : null;
+      const discussionPhaseId = fromGlobalId(phaseId);
       return {
         variables: { discussionPhaseId: discussionPhaseId, lang: locale }
       };

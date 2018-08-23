@@ -9,7 +9,7 @@ import { prefetchMenuQuery } from './menuTable';
 import { getPhaseStatus, isSeveralIdentifiers } from '../../../utils/timeline';
 import { displayModal } from '../../../utils/utilityManager';
 import { get, goTo } from '../../../utils/routeMap';
-import { isMobile } from '../../../utils/globalFunctions';
+import { isMobile, fromGlobalId } from '../../../utils/globalFunctions';
 import { PHASE_STATUS, PHASES } from '../../../constants';
 
 export const phasesToIgnore = [PHASES.voteSession];
@@ -55,9 +55,10 @@ export class DumbTimelineSegment extends React.Component<TimelineSegmentProps, T
     const ignore = phasesToIgnore.includes(phaseIdentifier);
     this.ignoreMenu = ignore && !notStarted;
     this.phaseName = title;
-    const discussionPhaseId = phaseId ? atob(phaseId).split(':')[1] : null;
+    const discussionPhaseId = fromGlobalId(phaseId);
     if (discussionPhaseId && !ignore && !notStarted) {
-      // don't prefetch if we're not going to use it
+      // Check discussionPhaseId for flow to be happy, phaseId can't be null, but fromGlobalId can return null.
+      // Don't prefetch query if we're not going to use it.
       prefetchMenuQuery(client, {
         lang: locale,
         identifier: phaseIdentifier,

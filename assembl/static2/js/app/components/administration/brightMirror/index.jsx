@@ -13,6 +13,7 @@ import MultilingualRichTextFieldAdapter from '../../form/multilingualRichTextFie
 import LoadSaveReinitializeForm from '../../../components/form/LoadSaveReinitializeForm';
 import Loader from '../../common/loader';
 import Helper from '../../common/helper';
+import { fromGlobalId } from '../../../utils/globalFunctions';
 
 // Functions
 import { load, postLoadFormat } from './load'; // Load file needs to be updated according to bright mirror requirements
@@ -30,7 +31,7 @@ const name = 'themes[0]'; // We have only one thematic for BrightMirror
 const loading = <Loader />;
 
 const BrightMirrorAdminForm = ({ client, editLocale, phaseId }: Props) => {
-  const discussionPhaseId = phaseId ? atob(phaseId).split(':')[1] : null;
+  const discussionPhaseId = fromGlobalId(phaseId);
   return (
     <LoadSaveReinitializeForm
       load={(fetchPolicy: FetchPolicy) => load(client, fetchPolicy, discussionPhaseId)}

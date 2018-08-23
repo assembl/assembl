@@ -79,7 +79,7 @@ exports[`Post component should render a PostView component and pass its props to
     nuggetsManager={null}
     numChildren={3}
     originalLocale="fr"
-    phaseId="phaseFoo"
+    phaseId="DEF345"
     publicationState="PUBLISHED"
     refetchIdea={[Function]}
     routerParams={
@@ -188,7 +188,7 @@ exports[`PostView component should render a post in view mode 1`] = `
           handleEditClick={[Function]}
           mySentiment="like"
           numChildren={3}
-          phaseId="phaseFoo"
+          phaseId="DEF345"
           postId="XYZ333"
           postSubject="open-source Associate"
           routerParams={
@@ -212,7 +212,7 @@ exports[`PostView component should render a post in view mode 1`] = `
       hideAnswerForm={[Function]}
       ideaId="ABC123"
       parentId="XYZ333"
-      phaseId="phaseFoo"
+      phaseId="DEF345"
       refetchIdea={[Function]}
       textareaRef={[Function]}
     />

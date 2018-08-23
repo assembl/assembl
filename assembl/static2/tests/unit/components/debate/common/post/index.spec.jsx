@@ -47,7 +47,7 @@ export const postProps = {
   id: 'XYZ333',
   ideaId: 'ABC123',
   identifier: 'thread',
-  phaseId: 'phaseFoo',
+  phaseId: 'DEF345',
   indirectIdeaContentLinks: [{ idea: { id: 'foo', title: 'Foo' } }],
   lang: 'fr',
   level: 1,

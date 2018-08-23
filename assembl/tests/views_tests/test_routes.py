@@ -300,7 +300,6 @@ def test_route_discussion_idea_legacy(discussion, root_post_1, subidea_1,
 def test_route_discussion_post_v2(
         test_app, discussion_with_2_phase_interface_v2,
         post_related_to_sub_idea_1, subidea_1, test_session):
-
     from assembl.lib.frontend_urls import FrontendUrls
     from assembl import models
     slug = discussion_with_2_phase_interface_v2.slug
@@ -310,7 +309,8 @@ def test_route_discussion_post_v2(
     resp = test_app.get(route)
     assert resp.status_int == 303
 
-    thread_phase = test_session.query(models.DiscussionPhase).all()[1]
+    thread_phase = test_session.query(models.DiscussionPhase).filter(
+        models.DiscussionPhase.identifier == "thread").all()[0]
     headers = get_response_headers(resp)
     furl = FrontendUrls(discussion_with_2_phase_interface_v2)
     idea_id = subidea_1.graphene_id()

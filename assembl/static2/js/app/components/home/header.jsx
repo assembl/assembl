@@ -6,10 +6,9 @@ import { Grid, Row } from 'react-bootstrap';
 import Statistic from './header/statistic';
 import ParticipateButton from '../common/participateButton';
 import { get } from '../../utils/routeMap';
-import { getCurrentPhase } from '../../utils/timeline';
+import { getCurrentPhaseData } from '../../utils/timeline';
 import { getDiscussionSlug } from '../../utils/globalFunctions';
 import { browserHistory } from '../../router';
-import { PHASES } from '../../constants';
 
 class Header extends React.Component {
   constructor(props) {
@@ -20,9 +19,7 @@ class Header extends React.Component {
   displayPhase() {
     const slug = { slug: getDiscussionSlug() };
     const { timeline } = this.props;
-    const currentPhase = getCurrentPhase(timeline);
-    const currentPhaseIdentifier = currentPhase ? currentPhase.identifier : PHASES.thread;
-    const currentPhaseId = currentPhase ? currentPhase.id : null;
+    const { currentPhaseIdentifier, currentPhaseId } = getCurrentPhaseData(timeline);
     browserHistory.push(get('debate', { ...slug, phase: currentPhaseIdentifier, phaseId: currentPhaseId }));
   }
 

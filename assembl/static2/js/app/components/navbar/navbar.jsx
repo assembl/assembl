@@ -7,7 +7,7 @@ import { Navbar } from 'react-bootstrap';
 import { compose, graphql } from 'react-apollo';
 import bind from 'lodash/bind';
 
-import { getCurrentPhase } from '../../utils/timeline';
+import { getCurrentPhaseData } from '../../utils/timeline';
 import { get } from '../../utils/routeMap';
 import { withScreenWidth } from '../common/screenDimensions';
 import { connectedUserIsAdmin } from '../../utils/permissions';
@@ -15,7 +15,7 @@ import SectionsQuery from '../../graphql/SectionsQuery.graphql';
 import DiscussionQuery from '../../graphql/DiscussionQuery.graphql';
 import FlatNavbar from './FlatNavbar';
 import BurgerNavbar from './BurgerNavbar';
-import { APP_CONTAINER_MAX_WIDTH, APP_CONTAINER_PADDING, PHASES } from '../../constants';
+import { APP_CONTAINER_MAX_WIDTH, APP_CONTAINER_PADDING } from '../../constants';
 import { snakeToCamel } from '../../utils/globalFunctions';
 import withoutLoadingIndicator from '../common/withoutLoadingIndicator';
 import DebateLink from '../debate/navigation/debateLink';
@@ -134,12 +134,17 @@ export class AssemblNavbar extends React.PureComponent<AssemblNavbarProps, Assem
     const flatWidth = (this.state && this.state.flatWidth) || 0;
     const maxAppWidth = Math.min(APP_CONTAINER_MAX_WIDTH, screenWidth) - APP_CONTAINER_PADDING * 2;
     const screenTooSmall = flatWidth > maxAppWidth;
+<<<<<<< HEAD
     const filteredSections = sections.filter(sectionFilter(sectionData)).sort((a, b) => a.order - b.order);
     const currentPhase = getCurrentPhase(timeline);
+=======
+    const filteredSections = sections.filter(sectionFilter(data)).sort((a, b) => a.order - b.order);
+    const { currentPhaseIdentifier, currentPhaseId } = getCurrentPhaseData(timeline);
+>>>>>>> refactoring and cleanup
     const mapOptions = {
       slug: slug,
-      phase: currentPhase ? currentPhase.identifier : PHASES.thread,
-      phaseId: currentPhase ? currentPhase.id : null,
+      phase: currentPhaseIdentifier,
+      phaseId: currentPhaseId,
       phaseContext: phaseContext(timeline, phase),
       screenTooSmall: screenTooSmall
     };

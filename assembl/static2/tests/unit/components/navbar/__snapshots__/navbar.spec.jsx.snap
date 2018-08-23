@@ -22,7 +22,7 @@ exports[`AssemblNavbar component should render a BurgerNavbar and a hidden FlatN
                   Object {
                       "phase": "thread",
                       "phaseContext": "new",
-                      "phaseId": null,
+                      "phaseId": "",
                       "screenTooSmall": true,
                       "slug": undefined,
                     }
@@ -51,7 +51,7 @@ exports[`AssemblNavbar component should render a BurgerNavbar and a hidden FlatN
                   Object {
                       "phase": "thread",
                       "phaseContext": "new",
-                      "phaseId": null,
+                      "phaseId": "",
                       "screenTooSmall": true,
                       "slug": undefined,
                     }
@@ -109,7 +109,7 @@ exports[`AssemblNavbar component should render a FlatNavbar with a big screenWid
                   Object {
                       "phase": "thread",
                       "phaseContext": "new",
-                      "phaseId": null,
+                      "phaseId": "",
                       "screenTooSmall": false,
                       "slug": undefined,
                     }

@@ -181,7 +181,7 @@ exports[`PhaseForm component should render a form to update the dates and module
       className="configure-module-link"
       onlyActiveOnIndex={false}
       style={Object {}}
-      to="/\${slug}/administration/survey?section=1&phaseId=1234"
+      to="/\${slug}/administration/survey?phaseId=1234&section=1"
     >
       <Translate
         count={1}

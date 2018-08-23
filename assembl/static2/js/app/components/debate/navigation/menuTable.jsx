@@ -6,6 +6,7 @@ import { SurveyTable, IdeasTable } from './tables';
 import AllIdeasQuery from '../../../graphql/AllIdeasQuery.graphql';
 import DebateThematicsQuery from '../../../graphql/DebateThematicsQuery.graphql';
 import { PHASES } from '../../../constants';
+import { fromGlobalId } from '../../../utils/globalFunctions';
 
 const queries = {
   [PHASES.survey]: DebateThematicsQuery,
@@ -30,7 +31,7 @@ type MenuTableProps = {
 
 function MenuTable(props: MenuTableProps) {
   const { identifier, phaseId } = props;
-  const discussionPhaseId = phaseId ? atob(phaseId).split(':')[1] : null;
+  const discussionPhaseId = fromGlobalId(phaseId);
   switch (identifier) {
   case PHASES.survey:
     return <SurveyTable {...props} discussionPhaseId={discussionPhaseId} />;
