@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import CircleAvatar from '../../../components/common/circleAvatar';
+import CircleAvatar from '../../../components/debate/brightMirror/circleAvatar';
 
 class BrightMirrorFiction extends Component {
   render() {

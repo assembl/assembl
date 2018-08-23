@@ -6,7 +6,7 @@ import { configure, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 /* eslint-enable */
 
-import CircleAvatar from '../../../../js/app/components/common/circleAvatar';
+import CircleAvatar from '../../../../../js/app/components/debate/brightMirror/circleAvatar';
 
 // Separate the snapshots in directories next to each component
 // Name should match with the story name
