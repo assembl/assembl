@@ -64,3 +64,5 @@ celery_tasks.num_workers = 3
 # python -m smtpd -n -c DebuggingServer
 mail.port = 8025
 mail.host = localhost
+
+disable_notification = true
