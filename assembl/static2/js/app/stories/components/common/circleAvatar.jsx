@@ -21,7 +21,7 @@ const playgroundButton = {
 storiesOf('CircleAvatar', module)
   .addDecorator(withKnobs)
   .add('default', withInfo()(() => <CircleAvatar />))
-  .add('custom image', withInfo()(() => <CircleAvatar src={customCircleAvatar.src} />))
+  .add('custom image', withInfo()(() => <CircleAvatar {...customCircleAvatar} />))
   .add('playground', withInfo()(() => (
     <CircleAvatar
       size={text('size', playgroundButton.size)}
