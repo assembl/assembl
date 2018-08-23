@@ -4,20 +4,23 @@ import { Field } from 'react-final-form';
 import { I18n, Translate } from 'react-redux-i18n';
 
 import FieldArrayWithActions from '../../form/fieldArrayWithActions';
-import FileUploaderFieldAdapter from '../../form/fileUploaderFieldAdapter';
 import MultilingualTextFieldAdapter from '../../form/multilingualTextFieldAdapter';
-import { addThematicTooltip, deleteThematicTooltip, deleteThematicImageTooltip } from '../../common/tooltips';
+import { addThematicTooltip, deleteThematicTooltip } from '../../common/tooltips';
 
 type Props = {
-  editLocale: string
+  editLocale: string,
+  fieldName: string,
+  isSubTree: boolean
 };
 
-const Step1 = ({ editLocale }: Props) => (
+const Step1 = ({ editLocale, fieldName, isSubTree }: Props) => (
   <FieldArrayWithActions
-    confirmDeletion
-    name="themes"
+    className={isSubTree ? 'form-branche' : 'form-tree'}
+    isTree
+    isRoot={!isSubTree}
+    name={fieldName}
     renderFields={({ name }) => (
-      <React.Fragment>
+      <div className="form-tree-item">
         <Field
           required
           editLocale={editLocale}
@@ -25,15 +28,9 @@ const Step1 = ({ editLocale }: Props) => (
           component={MultilingualTextFieldAdapter}
           label={`${I18n.t('administration.ph.title')} ${editLocale.toUpperCase()}`}
         />
-        <Field
-          deleteTooltip={deleteThematicImageTooltip}
-          name={`${name}.img`}
-          component={FileUploaderFieldAdapter}
-          label={I18n.t('administration.voteSessionHeaderLabel')}
-        />
-      </React.Fragment>
+        <Step1 editLocale={editLocale} fieldName={`${name}.children`} isSubTree />
+      </div>
     )}
-    titleMsgId="administration.themeNum"
     tooltips={{
       addTooltip: addThematicTooltip,
       deleteTooltip: deleteThematicTooltip
@@ -46,5 +43,10 @@ const Step1 = ({ editLocale }: Props) => (
     }}
   />
 );
+
+Step1.defaultProps = {
+  fieldName: 'themes',
+  isSubTree: false
+};
 
 export default Step1;

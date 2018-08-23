@@ -4,7 +4,9 @@ exports[`FieldArrayWithActions component should render an array of fields with d
 <form
   onSubmit={[Function]}
 >
-  <div>
+  <div
+    className=""
+  >
     <div
       className="form-container"
     >
@@ -173,7 +175,9 @@ exports[`FieldArrayWithActions component should render an array of fields with d
 <form
   onSubmit={[Function]}
 >
-  <div>
+  <div
+    className=""
+  >
     <div
       className="form-container"
     >

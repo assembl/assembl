@@ -271,6 +271,88 @@ input.placeholder, textarea.placeholder {
   top: 131px;
 }
 
+.form-tree > .form-container > .form-tree-item {
+  &::after,
+  &::before {
+    display: none;
+  }
+}
+
+.form-tree {
+  .form-container:first-child > .form-tree-item::before {
+    display: none;
+  }
+
+  .form-container:first-child > .form-tree-item::after {
+    border-radius: 5px 0 0 0;
+  }
+
+  .plus.form-tree-item:last-child::after,
+  .form-container:last-child > .form-tree-item::after {
+    display: none;
+  }
+
+  .plus.form-tree-item:last-child::before,
+  .form-container:last-child > .form-tree-item::before {
+    border-radius: 0 0 0 5px;
+  }
+
+  .form-container {
+    .form-group {
+      margin-bottom: 10px !important;
+    }
+
+    .form-tree-item {
+      position: relative;
+
+      &.plus {
+        margin: initial;
+        height: 15px;
+        width: 15px;
+        font-size: 12px;
+      }
+    }
+
+    .form-tree-item::after {
+      position: absolute;
+      content: "";
+      top: 18px;
+      left: -15px;
+      border-left: 1px solid #ccc;
+      border-top: 1px solid #ccc;
+      border-radius: 0 0 0 0;
+      width: 15px;
+      height: 100%;
+    }
+
+    .form-tree-item.plus::after {
+      top: 8px;
+    }
+
+    .form-tree-item::before {
+      content: "";
+      position: absolute;
+      top: -26px;
+      left: -15px;
+      border-left: 1px solid #ccc;
+      border-bottom: 1px solid #ccc;
+      border-radius: 0 0 0 0;
+      width: 15px;
+      height: 45px;
+    }
+
+    .form-tree-item.plus::before {
+      height: 19px;
+      top: -10px;
+    }
+  }
+
+  .form-branche {
+    margin-left: 25px;
+    padding-right: 25px;
+  }
+}
+
 .capitalized {
   text-transform: capitalize;
 }
