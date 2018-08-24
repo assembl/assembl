@@ -1,0 +1,27 @@
+.header {
+  align-items: center;
+  display: flex;
+  margin: 30px auto 10px auto;
+
+  .meta {
+    color: $black;
+    font-size: $font-size-xxs;
+    padding-left: 15px;
+    flex-grow: 1;
+  }
+
+  .author {
+    margin-bottom: 4px;
+  }
+
+  .date-time {
+    font-size: $font-size-xxxs;
+    margin-bottom: 0;
+  }
+}
+
+hr {
+  margin-top: 10px;
+  margin-bottom: 60px;
+  border-top-color: $greyish-brown;
+}

@@ -12,6 +12,7 @@ $grey8: #8b8b8b;
 $grey9: #efefef;
 $grey10: #f7f8fc;
 $grey-shadow: #d0d0d0;
+$greyish-brown: #4c4c4c;
 $orange: #ffd58f;
 $orange2: #ff6a00;
 $error: #a94442;
@@ -25,20 +26,20 @@ $yellow: #f0ab2b;
 $cyan: #0095b2;
 $cyan-light: #d1eef6;
 $opacity-blue: rgba(53, 66, 105, 0.5);
-$min-opacity-blue: rgba(53, 66, 105, .1);
+$min-opacity-blue: rgba(53, 66, 105, 0.1);
 $like-color: #46d38d;
 $disagree-color: #f75959;
 $more-info-color: #ffb704;
 $dont-understand-color: #faaf3f;
 $harvesting-yellow: #fff8c0;
 $harvesting-green: #7ed321;
-$harvesting-green-light: rgba(126, 211, 33, .6);
+$harvesting-green-light: rgba(126, 211, 33, 0.6);
 $harvesting-blue: #00b6ff;
 $harvesting-blue-light: rgba(0, 182, 255, 0.4);
 
-$opacity-purple: rgba(84, 4, 215, .5);
-$opacity-cyan: rgba(0, 140, 166, .5);
-$min-opacity-cyan: rgba(0, 140, 166, .1);
+$opacity-purple: rgba(84, 4, 215, 0.5);
+$opacity-cyan: rgba(0, 140, 166, 0.5);
+$min-opacity-cyan: rgba(0, 140, 166, 0.1);
 $linear-gradient: linear-gradient(90deg, $grey6, $white);
 
 $first-color: $cyan;
@@ -67,64 +68,72 @@ $margin-section-xxxs: 60px;
 $margin-section-xxxxs: 50px;
 $margin-section-tiny: 30px;
 
-$fonts-dir: '/static2/fonts';
-$img-dir: '/static2/img';
+$fonts-dir: "/static2/fonts";
+$img-dir: "/static2/img";
 
 @font-face {
-  font-family: 'latoRegular';
-  src: url('#{$fonts-dir}/Lato-Regular.eot');
-  src: local('☺'), url('#{$fonts-dir}/Lato-Regular.woff') format('woff'), url('#{$fonts-dir}/Lato-Regular.ttf') format('truetype');
+  font-family: "latoRegular";
+  src: url("#{$fonts-dir}/Lato-Regular.eot");
+  src: local("☺"), url("#{$fonts-dir}/Lato-Regular.woff") format("woff"),
+    url("#{$fonts-dir}/Lato-Regular.ttf") format("truetype");
 }
 
 @font-face {
-  font-family: 'LatoMedium';
-  src: url('#{$fonts-dir}/Lato-Medium.eot');
-  src: local('☺'), url('#{$fonts-dir}/Lato-Medium.woff') format('woff'), url('#{$fonts-dir}/Lato-Medium.ttf') format('truetype');
+  font-family: "LatoMedium";
+  src: url("#{$fonts-dir}/Lato-Medium.eot");
+  src: local("☺"), url("#{$fonts-dir}/Lato-Medium.woff") format("woff"),
+    url("#{$fonts-dir}/Lato-Medium.ttf") format("truetype");
 }
 
 @font-face {
-  font-family: 'LatoBold';
-  src: url('#{$fonts-dir}/Lato-Bold.eot');
-  src: local('☺'), url('#{$fonts-dir}/Lato-Bold.woff') format('woff'), url('#{$fonts-dir}/Lato-Bold.ttf') format('truetype');
+  font-family: "LatoBold";
+  src: url("#{$fonts-dir}/Lato-Bold.eot");
+  src: local("☺"), url("#{$fonts-dir}/Lato-Bold.woff") format("woff"),
+    url("#{$fonts-dir}/Lato-Bold.ttf") format("truetype");
 }
 
 @font-face {
-  font-family: 'LatoLight';
-  src: url('#{$fonts-dir}/Lato-Light.eot');
-  src: local('☺'), url('#{$fonts-dir}/Lato-Light.woff') format('woff'), url('#{$fonts-dir}/Lato-Light.ttf') format('truetype');
+  font-family: "LatoLight";
+  src: url("#{$fonts-dir}/Lato-Light.eot");
+  src: local("☺"), url("#{$fonts-dir}/Lato-Light.woff") format("woff"),
+    url("#{$fonts-dir}/Lato-Light.ttf") format("truetype");
 }
 
 @font-face {
-  font-family: 'LatoSemiBold';
-  src: url('#{$fonts-dir}/Lato-Semibold.eot');
-  src: local('☺'), url('#{$fonts-dir}/Lato-Semibold.woff') format('woff'), url('#{$fonts-dir}/Lato-Semibold.ttf') format('truetype');
+  font-family: "LatoSemiBold";
+  src: url("#{$fonts-dir}/Lato-Semibold.eot");
+  src: local("☺"), url("#{$fonts-dir}/Lato-Semibold.woff") format("woff"),
+    url("#{$fonts-dir}/Lato-Semibold.ttf") format("truetype");
 }
 
 @font-face {
-  font-family: 'LatoItalic';
-  src: url('#{$fonts-dir}/Lato-Italic.eot');
-  src: local('☺'), url('#{$fonts-dir}/Lato-Italic.woff') format('woff'), url('#{$fonts-dir}/Lato-Italic.ttf') format('truetype');
+  font-family: "LatoItalic";
+  src: url("#{$fonts-dir}/Lato-Italic.eot");
+  src: local("☺"), url("#{$fonts-dir}/Lato-Italic.woff") format("woff"),
+    url("#{$fonts-dir}/Lato-Italic.ttf") format("truetype");
 }
 
 @font-face {
-  font-family: 'LatoLightItalic';
-  src: url('#{$fonts-dir}/Lato-LightItalic.eot');
-  src: local('☺'), url('#{$fonts-dir}/Lato-LightItalic.woff') format('woff'), url('#{$fonts-dir}/Lato-LightItalic.ttf') format('truetype');
+  font-family: "LatoLightItalic";
+  src: url("#{$fonts-dir}/Lato-LightItalic.eot");
+  src: local("☺"), url("#{$fonts-dir}/Lato-LightItalic.woff") format("woff"),
+    url("#{$fonts-dir}/Lato-LightItalic.ttf") format("truetype");
 }
 
 @font-face {
-  font-family: 'LatoHairline';
-  src: url('#{$fonts-dir}/Lato-Hairline.eot');
-  src: local('☺'), url('#{$fonts-dir}/Lato-Hairline.woff') format('woff'), url('#{$fonts-dir}/Lato-Hairline.ttf') format('truetype');
+  font-family: "LatoHairline";
+  src: url("#{$fonts-dir}/Lato-Hairline.eot");
+  src: local("☺"), url("#{$fonts-dir}/Lato-Hairline.woff") format("woff"),
+    url("#{$fonts-dir}/Lato-Hairline.ttf") format("truetype");
 }
 
-$font-family: 'latoRegular';
-$font-family2: 'LatoMedium';
-$font-family3: 'LatoBold';
-$font-family4: 'LatoLight';
-$font-family5: 'LatoSemiBold';
-$font-family6: 'LatoItalic';
-$font-family7: 'LatoLightItalic';
+$font-family: "latoRegular";
+$font-family2: "LatoMedium";
+$font-family3: "LatoBold";
+$font-family4: "LatoLight";
+$font-family5: "LatoSemiBold";
+$font-family6: "LatoItalic";
+$font-family7: "LatoLightItalic";
 
 $font-size-xxxs: 8px;
 $font-size-xxs: 10px;
