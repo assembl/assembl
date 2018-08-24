@@ -29,6 +29,7 @@ function loadStories() {
   require('../js/app/stories/components/debate/brightMirror/instructionsText.stories.jsx');
   require('../js/app/stories/components/debate/brightMirror/circleAvatar.jsx');
   require('../js/app/stories/components/debate/brightMirror/fictionHeader.jsx');
+  require('../js/app/stories/components/debate/brightMirror/fictionBody.jsx');
 
   // TODO: To clean ?
   // require('../js/app/stories/components/common/common.jsx');

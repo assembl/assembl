@@ -1,0 +1,41 @@
+@import "components/circleAvatar";
+@import "components/fictionHeader";
+@import "components/fictionBody";
+
+// Varibles
+// Bright Mirror background colors
+$light-khaki: #f1fbe5;
+$duck-egg-blue: #b7f4f0;
+
+// Mixins
+// Dynamic background color for Bright Mirror
+@mixin set-background($theme) {
+  @if $theme == default {
+    background-image:
+      radial-gradient(
+        circle at 49% 95%,
+        $light-khaki,
+        $duck-egg-blue
+      );
+  }
+}
+
+.bright-mirror {
+  padding: 30px 18px 70px 18px;
+}
+
+.background-fiction-default {
+  @include set-background(default);
+}
+
+@media screen and (min-width: $screen-sm-min) {
+  .bright-mirror {
+    padding: 90px 54px;
+  }
+}
+
+@media screen and (min-width: $screen-xl-min) {
+  .bright-mirror {
+    padding: 130px 285px 90px 295px;
+  }
+}

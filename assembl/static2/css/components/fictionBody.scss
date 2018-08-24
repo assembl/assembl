@@ -1,0 +1,23 @@
+.fiction-title {
+  color: $black;
+  font-size: $font-size-ml;
+  letter-spacing: 0.5px;
+}
+
+.fiction-content {
+  color: $black;
+  line-height: 1.7;
+  letter-spacing: 0.9px;
+}
+
+@media screen and (min-width: $screen-sm-min) {
+  .fiction-title {
+    font-size: $font-size-xll;
+    letter-spacing: 2.4px;
+  }
+
+  .fiction-content {
+    font-size: $font-size-mll;
+    letter-spacing: 1.1px;
+  }
+}
