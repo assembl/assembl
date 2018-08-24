@@ -9,7 +9,7 @@ import moment from 'moment';
 
 import { languagePreferencesHasChanged, updateEditLocale } from '../actions/adminActions';
 import ManageSectionsForm from '../components/administration/discussion/manageSectionsForm';
-import LegalContentsForm from '../components/administration/discussion/legalContentsForm';
+import LegalContentsForm from '../components/administration/legalContents/index';
 import TimelineForm from '../components/administration/discussion/timelineForm';
 import LanguageSection from '../components/administration/discussion/languageSection';
 import ManageProfileOptionsForm from '../components/administration/discussion/manageProfileOptionsForm';
