@@ -173,5 +173,9 @@
     "globals": {
       "globalAnalytics": {}
     }
-  }
+  },
+  "private": true,
+  "workspaces": [
+    "workspaces/*"
+  ]
 }
