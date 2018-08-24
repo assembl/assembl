@@ -60,7 +60,7 @@ const TextOrFileFieldAdapter = ({
   return (
     <FormGroup validationState={getValidationState(error, touched)}>
       {value.htmlCode ? <ControlLabel htmlFor={name}>{label}</ControlLabel> : null}
-      <FormControl {...otherListeners} {...rest} onChange={onTextChange} placeholder={label} value={value.htmlCode} />
+      <FormControl {...otherListeners} {...rest} onChange={onTextChange} placeholder={label} value={value.htmlCode || ''} />
       <div className="admin-help">
         <Translate value="administration.videoHelp" />
       </div>

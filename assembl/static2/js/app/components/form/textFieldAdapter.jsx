@@ -35,7 +35,7 @@ const TextFieldAdapter = ({
       {...rest}
       onChange={event => onChange(event.target.value)}
       placeholder={label}
-      value={value}
+      value={value || ''}
     />
     <Error name={name} />
   </FormGroup>
