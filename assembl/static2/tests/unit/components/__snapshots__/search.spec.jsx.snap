@@ -13,7 +13,7 @@ exports[`Hits components DumbExtractHit component should render an extract hit 1
   <div
     className="CONTENT"
   >
-    <p
+    <div
       dangerouslySetInnerHTML={
         Object {
           "__html": "We need to connect the multi-byte SQL interface!",
@@ -91,23 +91,13 @@ exports[`Hits components IdeaHit component should render an idea hit 1`] = `
   <div
     className="CONTENT"
   >
-    <div>
-      <p
-        dangerouslySetInnerHTML={
-          Object {
-            "__html": "Mollitia quis perspiciatis ut nobis molestias necessitatibus pariatur impedit ut.",
-          }
+    <div
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "molestias necessitatibus",
         }
-      />
-      <p>
-        <span
-          className={undefined}
-          style={undefined}
-        >
-          Search done in the "What you need to know" section of this discussion
-        </span>
-      </p>
-    </div>
+      }
+    />
   </div>
   <div
     className="INFO"
@@ -147,7 +137,7 @@ exports[`Hits components PostHit component should render a post hit 1`] = `
   <div
     className="CONTENT"
   >
-    <p
+    <div
       dangerouslySetInnerHTML={
         Object {
           "__html": "We need to connect the multi-byte SQL interface!",
@@ -259,22 +249,14 @@ exports[`Hits components SynthesisHit component should render a synthesis hit 1`
   />
   <div
     className="TITLE"
-  >
-    <p
-      dangerouslySetInnerHTML={
-        Object {
-          "__html": "Maybe it will transmit the optical application!!",
-        }
-      }
-    />
-  </div>
+  />
   <div
     className="CONTENT"
   >
-    <p
+    <div
       dangerouslySetInnerHTML={
         Object {
-          "__html": "",
+          "__html": "I'll bypass the online PCI card, that should matrix the USB firewall!",
         }
       }
       style={
@@ -286,7 +268,7 @@ exports[`Hits components SynthesisHit component should render a synthesis hit 1`
     <p
       dangerouslySetInnerHTML={
         Object {
-          "__html": "Try to hack the THX sensor, maybe it will parse the open-source firewall!,The JSON microchip is down, hack the open-source driver so we can program the HDD bandwidth!",
+          "__html": "First idea Second idea",
         }
       }
       style={
@@ -296,7 +278,7 @@ exports[`Hits components SynthesisHit component should render a synthesis hit 1`
         }
       }
     />
-    <p
+    <div
       dangerouslySetInnerHTML={
         Object {
           "__html": "Try to parse the COM card, maybe it will calculate the neural monitor!",

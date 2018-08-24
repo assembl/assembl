@@ -118,8 +118,10 @@ if (v1Interface) {
   getUrl = (hit) => {
     const id = hit._source.id;
     switch (hit._type) {
-    case 'synthesis':
-      return undefined;
+    case 'synthesis': {
+      const postBase64id = btoa(`Post:${id}`);
+      return getRoute('synthesis', { slug: slug, synthesisId: postBase64id });
+    }
     case 'user':
       return undefined;
     case 'idea': {
@@ -171,7 +173,7 @@ const ImageType = props => <span className={`${props.className} assembl-icon-${T
 const getFieldAnyLang = (source, prop, locale) => {
   let result;
   if (!source) {
-    // Why does this happen?
+    // when source is hit.highlight, can be undefined
     return result;
   }
   if (source[`${prop}_${locale}`]) {
@@ -194,13 +196,18 @@ const getFieldAnyLang = (source, prop, locale) => {
   return result;
 };
 
-const highlightedLSOrTruncatedLS = (hit, field, locale) => {
+const highlightedLS = (hit, field, locale) => {
   let text = getFieldAnyLang(hit.highlight, field, locale);
+  if (Array.isArray(text)) {
+    // take the first highlight fragment
+    text = text[0];
+  }
+  return text;
+};
+
+const highlightedLSOrTruncatedLS = (hit, field, locale) => {
+  let text = highlightedLS(hit, field, locale);
   if (text) {
-    if (Array.isArray(text)) {
-      // take the first highlight fragment
-      text = text[0];
-    }
     return text;
   }
 
@@ -237,7 +244,7 @@ const PostHit = ({ bemBlocks, collapseSearch, locale, result }) => {
       published={published}
       renderBody={() => (
         <React.Fragment>
-          <p dangerouslySetInnerHTML={{ __html: body }} />
+          <div dangerouslySetInnerHTML={{ __html: body }} />
           <div>
             <div title={I18n.t('search.like')} className="emoticon LikeSentimentOfPost" />
             <div className="emoticonValue">{source.sentiment_counts.like}</div>
@@ -272,7 +279,7 @@ const DumbExtractHit = ({ bemBlocks, collapseSearch, isHarvesting, locale, toggl
       title={subject}
       url={getUrl(result)}
       onLinkClick={onLinkClick}
-      renderBody={() => <p dangerouslySetInnerHTML={{ __html: body }} />}
+      renderBody={() => <div dangerouslySetInnerHTML={{ __html: body }} />}
       renderFooter={() => (
         <PublishedInfo
           date={source.creation_date}
@@ -296,8 +303,10 @@ const ExtractHit = connect(mapStateToExtractHitProps, mapDispatchToExtractHitPro
 
 const SynthesisHit = ({ bemBlocks, collapseSearch, locale, result }) => {
   const source = result._source;
-  const subject = highlightedTextOrTruncatedText(result, 'subject');
+  const subject = highlightedLSOrTruncatedLS(result, 'subject', locale);
   const ideas = highlightedLSOrTruncatedLS(result, 'ideas', locale);
+  const introduction = highlightedLSOrTruncatedLS(result, 'introduction', locale);
+  const conclusion = highlightedLSOrTruncatedLS(result, 'conclusion', locale);
   return (
     <BaseHit
       bemBlocks={bemBlocks}
@@ -307,15 +316,9 @@ const SynthesisHit = ({ bemBlocks, collapseSearch, locale, result }) => {
       onLinkClick={collapseSearch}
       renderBody={() => (
         <React.Fragment>
-          <p
-            style={{ backgroundColor: '#f4f4f4' }}
-            dangerouslySetInnerHTML={{ __html: highlightedTextOrTruncatedText(result, 'introduction') }}
-          />
+          <div style={{ backgroundColor: '#f4f4f4' }} dangerouslySetInnerHTML={{ __html: introduction }} />
           {ideas ? <p style={{ paddingLeft: '1em', marginTop: '1em' }} dangerouslySetInnerHTML={{ __html: ideas }} /> : null}
-          <p
-            style={{ backgroundColor: '#f4f4f4', marginTop: '1em' }}
-            dangerouslySetInnerHTML={{ __html: highlightedTextOrTruncatedText(result, 'conclusion') }}
-          />
+          <div style={{ backgroundColor: '#f4f4f4', marginTop: '1em' }} dangerouslySetInnerHTML={{ __html: conclusion }} />
         </React.Fragment>
       )}
       renderFooter={() => <PublishedInfo date={source.creation_date} userId={source.creator_id} userName={source.creator_name} />}
@@ -356,34 +359,33 @@ const UserHit = ({ bemBlocks, collapseSearch, result }) => {
 
 const IdeaHit = ({ bemBlocks, collapseSearch, locale, result }) => {
   const source = result._source;
-  const shortTitle = highlightedLSOrTruncatedLS(result, 'title', locale);
-  const definition = highlightedLSOrTruncatedLS(result, 'description', locale);
-  // long title missing?
-  const announceTitle = highlightedLSOrTruncatedLS(result, 'announcement_title', locale);
+  const title = highlightedLSOrTruncatedLS(result, 'title', locale);
+  const description = highlightedLSOrTruncatedLS(result, 'description', locale);
+  const synthesisTitle = highlightedLSOrTruncatedLS(result, 'synthesis_title', locale);
+  // const announceTitle = highlightedLSOrTruncatedLS(result, 'announcement_title', locale);
   const announceBody = highlightedLSOrTruncatedLS(result, 'announcement_body', locale);
   return (
     <BaseHit
       bemBlocks={bemBlocks}
       imageType={result._type}
-      title={shortTitle}
+      title={title}
       url={getUrl(result)}
       onLinkClick={collapseSearch}
       renderBody={() => (
         <React.Fragment>
-          {definition ? (
+          {description ? <div dangerouslySetInnerHTML={{ __html: description }} /> : null}
+          {highlightedLS(result, 'synthesis_title', locale) ? (
             <div>
-              <p dangerouslySetInnerHTML={{ __html: definition }} />
-              {get(result, 'highlight.definition') && (
-                <p>
-                  <Translate value="search.search_come_from_what_you_need_to_know" />
-                </p>
-              )}
+              <div dangerouslySetInnerHTML={{ __html: synthesisTitle }} />
+              <p>
+                <Translate value="search.search_come_from_what_you_need_to_know" />
+              </p>
             </div>
           ) : null}
-          {get(result, 'highlight.title') || get(result, 'highlight.body') ? (
+          {highlightedLS(result, 'announcement_title', locale) || highlightedLS(result, 'announcement_body', locale) ? (
             <div>
-              <p dangerouslySetInnerHTML={{ __html: announceTitle }} />
-              <p dangerouslySetInnerHTML={{ __html: announceBody }} />
+              {/* <div dangerouslySetInnerHTML={{ __html: announceTitle }} /> */}
+              <div dangerouslySetInnerHTML={{ __html: announceBody }} />
               <p>
                 <Translate value="search.search_come_from_announcement" />
               </p>
@@ -432,9 +434,6 @@ const calcQueryFields = () => {
   const base = [
     'body', // extract
     'name', // user
-    'subject', // synthesis
-    'introduction', // synthesis
-    'conclusion', // synthesis
     'creator_display_name' // extract, post
   ];
   const lsFields = [
@@ -443,9 +442,11 @@ const calcQueryFields = () => {
     'title', // idea
     'description', // idea
     'synthesis_title', // idea
-    'ideas', // synthesis
-    'subject', // post
-    'body' // post
+    'body', // post
+    'subject', // post & synthesis
+    'introduction', // synthesis
+    'conclusion', // synthesis
+    'ideas' // synthesis
   ];
   const langs = elasticsearchLangIndexes.slice();
   langs.push('other');
