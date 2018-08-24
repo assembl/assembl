@@ -9,7 +9,7 @@ import LoadSaveReinitializeForm from '../../form/LoadSaveReinitializeForm';
 import MultilingualRichTextFieldAdapter from '../../form/multilingualRichTextFieldAdapter';
 import { load, postLoadFormat } from './load';
 import Loader from '../../common/loader';
-// import validate from './validate';
+import validate from './validate';
 // import { save, createMutationsPromises } from './save';
 import AdminForm from '../../../components/form/adminForm';
 import { getEntryValueForLocale } from '../../../utils/i18n';
@@ -36,7 +36,7 @@ const DumbLegalContentsForm = ({ client, editLocale, lang }: Props) => {
       postLoadFormat={postLoadFormat}
       createMutationsPromises={() => {}}
       save={() => {}}
-      validate={() => {}}
+      validate={validate}
       mutators={{
         ...arrayMutators
       }}
