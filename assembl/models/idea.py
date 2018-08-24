@@ -522,6 +522,18 @@ class Idea(HistoryMixin, DiscussionBoundBase):
             q = q.add_columns(Locale.code)
         return q.all()
 
+    def sentiments(self):
+        from .nlp import PostWatsonV1SentimentAnalysis
+
+        return self.db.query(
+            func.sum(PostWatsonV1SentimentAnalysis.positive_sentiment),
+            func.sum(PostWatsonV1SentimentAnalysis.negative_sentiment),
+            func.count(PostWatsonV1SentimentAnalysis.id)
+        ).filter(
+            PostWatsonV1SentimentAnalysis.post_id.in_(
+                self.get_related_posts_query(True))
+        ).first()
+
     @classmethod
     def get_discussion_data(cls, discussion_id):
         from pyramid.threadlocal import get_current_request
