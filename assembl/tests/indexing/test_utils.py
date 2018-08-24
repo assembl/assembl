@@ -4,7 +4,7 @@ import datetime
 from assembl.indexing.utils import get_data
 
 
-def test_get_data_for_extract(extract_submitted_in_post_related_to_sub_idea_1_1_1, participant2_user, post_related_to_sub_idea_1_1_1, subidea_1_1_1):
+def test_get_data_for_extract(phases, extract_submitted_in_post_related_to_sub_idea_1_1_1, participant2_user, post_related_to_sub_idea_1_1_1, subidea_1_1_1):
     extract = extract_submitted_in_post_related_to_sub_idea_1_1_1
     uid, data = get_data(extract)
     assert uid == 'extract:{}'.format(extract.id)
@@ -13,7 +13,8 @@ def test_get_data_for_extract(extract_submitted_in_post_related_to_sub_idea_1_1_
     assert data['creator_id'] == participant2_user.id
     assert data['discussion_id'] == extract.discussion.id
     assert data['idea_id'] == [subidea_1_1_1.id]
-    assert data['phase_id'] == u'thread'
+    assert data['phase_id'] == phases['thread'].id
+    assert data['phase_identifier'] == u'thread'
     assert data['body'] == u"Commodi maiores magni rerum. Sint natus corporis in qui in ut dignissimos cumque repellendus. Reprehenderit nihil illum."
     assert data['extract_state'] == u'taxonomy_state.PUBLISHED'
     assert data['creation_date'].date() == datetime.date.today()
@@ -23,7 +24,7 @@ def test_get_data_for_extract(extract_submitted_in_post_related_to_sub_idea_1_1_
     assert data['subject_other'] == u'A post subject related to sub_idea_1_1_1'
 
 
-def test_get_data_for_post(admin_user, post_related_to_sub_idea_1_1_1, subidea_1_1_1):
+def test_get_data_for_post(phases, admin_user, post_related_to_sub_idea_1_1_1, subidea_1_1_1):
     post = post_related_to_sub_idea_1_1_1
     uid, data = get_data(post)
     assert uid == 'post:{}'.format(post.id)
@@ -33,7 +34,8 @@ def test_get_data_for_post(admin_user, post_related_to_sub_idea_1_1_1, subidea_1
     assert data['_parent'] == 'user:{}'.format(admin_user.id)
     assert data['discussion_id'] == post.discussion.id
     assert data['idea_id'] == [subidea_1_1_1.id]
-    assert data['phase_id'] == u'thread'
+    assert data['phase_id'] == phases['thread'].id
+    assert data['phase_identifier'] == u'thread'
     assert data['creation_date'] == datetime.datetime(2018, 2, 17, 9, 0)
     assert data['creator_display_name'] == u'Mr. Administrator'
     assert data['sentiment_counts'] == {
@@ -50,7 +52,7 @@ def test_get_data_for_post(admin_user, post_related_to_sub_idea_1_1_1, subidea_1
     assert data['type'] == 'post'
 
 
-def test_get_data_for_synthesis_post(participant1_user, synthesis_post_1):
+def test_get_data_for_synthesis_post(phases, participant1_user, synthesis_post_1):
     post = synthesis_post_1
     uid, data = get_data(post)
     assert uid == 'synthesis:{}'.format(post.id)
@@ -65,6 +67,8 @@ def test_get_data_for_synthesis_post(participant1_user, synthesis_post_1):
     assert data['_parent'] == 'user:{}'.format(participant1_user.id)
     assert data['parent_id'] is None
     assert data['discussion_id'] == post.discussion.id
+    assert 'phase_id' not in data
+    assert 'phase_identifier' not in data
     assert data['creation_date'] == datetime.datetime(2020, 1, 3, 0, 0)
     assert data['creator_display_name'] == u'A. Barking Loon'
     assert data['sentiment_counts'] == {

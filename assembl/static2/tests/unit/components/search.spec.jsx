@@ -62,7 +62,8 @@ describe('Hits components', () => {
             subject_en: 'We need to quantify the optical HTTP panel!',
             body_en: 'We need to connect the multi-byte SQL interface!',
             idea_id: ['fakeIdeaId', 'otherFakeIdeaId'],
-            phase_id: 'thread',
+            phase_id: '1',
+            phase_identifier: 'thread',
             id: 'fakePostId',
             sentiment_counts: {
               like: 2,
@@ -208,7 +209,8 @@ describe('Hits components', () => {
             subject_en: 'We need to quantify the optical HTTP panel!',
             body: 'We need to connect the multi-byte SQL interface!',
             idea_id: 'fakeIdeaId',
-            phase_id: 'thread',
+            phase_id: '1',
+            phase_identifier: 'thread',
             post_id: 'fakePostId'
           }
         }

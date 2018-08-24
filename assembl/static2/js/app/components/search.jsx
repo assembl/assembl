@@ -65,18 +65,25 @@ const highlightedTextOrTruncatedText = (hit, field) => {
   return text;
 };
 
-function getPostUrl(ideaId, postId, phaseId, slug) {
-  if (!ideaId) {
+function getPostUrl(ideaId, postId, phaseIdentifier, phaseId, slug) {
+  if (!ideaId || !phaseIdentifier || !phaseId) {
     return undefined;
   }
   const ideaBase64id = btoa(`Idea:${ideaId}`);
   const postBase64id = btoa(`Post:${postId}`);
-  if (phaseId === 'thread') {
-    return getRoute('post', { slug: slug, phase: phaseId, themeId: ideaBase64id, element: postBase64id });
+  if (phaseIdentifier === 'thread') {
+    return getRoute('post', {
+      slug: slug,
+      phase: phaseIdentifier,
+      phaseId: phaseId,
+      themeId: ideaBase64id,
+      element: postBase64id
+    });
   } else if (phaseId === 'survey') {
     return getRoute('questionPost', {
       slug: slug,
-      phase: phaseId,
+      phase: phaseIdentifier,
+      phaseId: phaseId,
       questionId: ideaBase64id,
       questionIndex: 1,
       element: postBase64id
@@ -129,16 +136,18 @@ if (v1Interface) {
       return `/${slug}/debate/thread/theme/${ideaBase64id}`;
     }
     case 'extract': {
-      const phaseId = hit._source.phase_id || 'thread';
+      const phaseIdentifier = hit._source.phase_identifier;
+      const phaseId = hit._source.phase_id;
       const ideaId = hit._source.idea_id;
       const postId = hit._source.post_id;
-      return getPostUrl(ideaId, postId, phaseId, slug);
+      return getPostUrl(ideaId, postId, phaseIdentifier, phaseId, slug);
     }
     default: {
       // post
-      const phaseId = hit._source.phase_id || 'thread';
+      const phaseIdentifier = hit._source.phase_identifier;
+      const phaseId = btoa(`DiscussionPhase:${hit._source.phase_id}`);
       const ideaId = hit._source.idea_id.length > 0 ? hit._source.idea_id[0] : null;
-      return getPostUrl(ideaId, id, phaseId, slug);
+      return getPostUrl(ideaId, id, phaseIdentifier, phaseId, slug);
     }
     }
   };
@@ -225,7 +234,7 @@ const BaseHit = ({ bemBlocks, imageType, onLinkClick, title, url, renderBody, re
       {url ? (
         <Link onClick={onLinkClick} to={url} dangerouslySetInnerHTML={{ __html: title }} />
       ) : (
-        <p dangerouslySetInnerHTML={{ __html: title }} />
+        <div dangerouslySetInnerHTML={{ __html: title }} />
       )}
     </div>
     {renderBody && <div className={bemBlocks.item('content')}>{renderBody()}</div>}
