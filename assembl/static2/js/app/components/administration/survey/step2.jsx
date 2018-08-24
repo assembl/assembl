@@ -9,7 +9,7 @@ import TabbedContent, { type Tab } from '../../common/tabbedContent';
 import MultilingualTextFieldAdapter from '../../form/multilingualTextFieldAdapter';
 import MultilingualRichTextFieldAdapter from '../../form/multilingualRichTextFieldAdapter';
 import TextOrFileFieldAdapter from '../../form/textOrFileFieldAdapter';
-import { addQuestionTooltip, deleteQuestionTooltip } from '../../common/tooltips';
+import { addQuestionTooltip, deleteQuestionTooltip, thematicTooltip } from '../../common/tooltips';
 import type { SurveyAdminValues, ThemesValue } from './types.flow';
 
 export function getTabsFromThemes(themes: ThemesValue, editLocale: string): Array<Tab> {
@@ -30,7 +30,9 @@ const Step2 = ({ editLocale, values }: Props) => (
   <TabbedContent
     type="thematic"
     bodyRowClassName="margin-xl"
+    tabTitleMsgId="debate.survey.thematicNumerotation"
     tabs={values && values.themes ? getTabsFromThemes(values.themes, editLocale) : []}
+    renderTooltip={thematicTooltip}
     renderBody={(tab, idx) => {
       const upperCaseLocale = editLocale.toUpperCase();
       const titlePh = `${I18n.t('administration.ph.title')} ${upperCaseLocale}`;

@@ -95,6 +95,8 @@ exports[`TimelineForm component should render a form to create, delete and edit 
     bodyRowClassName=""
     divClassName="admin-content"
     renderBody={[Function]}
+    renderTooltip={[Function]}
+    tabTitleMsgId="administration.timelineAdmin.phase"
     tabs={
       Array [
         Object {

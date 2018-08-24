@@ -22,7 +22,7 @@ exports[`TabbedContent component should match snapshot 1`] = `
           className={undefined}
           style={undefined}
         >
-          Phase 1
+          Thematic 1
         </span>
       </a>
     </div>
@@ -41,7 +41,7 @@ exports[`TabbedContent component should match snapshot 1`] = `
           className={undefined}
           style={undefined}
         >
-          Phase 2
+          Thematic 2
         </span>
       </a>
     </div>
@@ -60,7 +60,7 @@ exports[`TabbedContent component should match snapshot 1`] = `
           className={undefined}
           style={undefined}
         >
-          Phase 3
+          Thematic 3
         </span>
       </a>
     </div>
@@ -107,7 +107,7 @@ exports[`TabbedContent component should match snapshot with bodyRowClassName 1`]
           className={undefined}
           style={undefined}
         >
-          Phase 1
+          Thematic 1
         </span>
       </a>
     </div>
@@ -126,7 +126,7 @@ exports[`TabbedContent component should match snapshot with bodyRowClassName 1`]
           className={undefined}
           style={undefined}
         >
-          Phase 2
+          Thematic 2
         </span>
       </a>
     </div>
@@ -145,7 +145,7 @@ exports[`TabbedContent component should match snapshot with bodyRowClassName 1`]
           className={undefined}
           style={undefined}
         >
-          Phase 3
+          Thematic 3
         </span>
       </a>
     </div>
