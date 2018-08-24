@@ -30,6 +30,19 @@ function getVideoVariable(video, initialVideo) {
   return videoV;
 }
 
+const getChildrenVariables = (thematic, initialTheme) =>
+  (thematic.children
+    ? thematic.children.map((t) => {
+      const initialChild = initialTheme && initialTheme.children.find(theme => t.id === theme.id);
+      const initialImg = initialChild ? initialChild.img : null;
+      return {
+        titleEntries: convertToEntries(t.title),
+        image: getFileVariable(t.img, initialImg),
+        children: getChildrenVariables(t, initialChild)
+      };
+    })
+    : []);
+
 function getVariables(theme, initialTheme, order) {
   const initialImg = initialTheme ? initialTheme.img : null;
   const initialVideo = initialTheme ? initialTheme.video : null;
@@ -44,7 +57,8 @@ function getVariables(theme, initialTheme, order) {
         id: q.id.startsWith('-') ? null : q.id,
         titleEntries: convertToEntries(q.title)
       })),
-    order: order
+    order: order,
+    children: getChildrenVariables(theme, initialTheme)
   };
 }
 

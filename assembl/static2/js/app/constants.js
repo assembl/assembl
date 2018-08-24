@@ -24,6 +24,8 @@ export const MINIMUM_BODY_LENGTH = 10;
 
 export const ANCHOR_SIZE = 44;
 
+export const MAX_TREE_FORM_LEVEL = 4;
+
 export const APOLLO_NETWORK_STATUS = {
   /**
    * The query has never been run before and the query is now currently running. A query will still

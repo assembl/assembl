@@ -8,6 +8,7 @@ import classNames from 'classnames';
 import { displayModal, closeModal } from '../../utils/utilityManager';
 import { upTooltip, downTooltip } from '../common/tooltips';
 import { createRandomId } from '../../utils/globalFunctions';
+import { MAX_TREE_FORM_LEVEL } from '../../constants';
 
 type ConfirmationMessageType = {
   field: Object,
@@ -23,9 +24,10 @@ type Props = {
     deleteTooltip: React.Node
   },
   withSeparators: boolean,
+  subFieldName?: string,
   isTree: boolean,
-  isRoot: boolean,
-  className: string
+  level: number,
+  maxLevel: number
 };
 
 function confirmDeletionModal(title: React.Node, body: React.Node, remove: () => void) {
@@ -49,29 +51,35 @@ function confirmDeletionModal(title: React.Node, body: React.Node, remove: () =>
 
 const FieldArrayWithActions = ({
   name,
+  subFieldName,
   renderFields,
   titleMsgId,
   tooltips: { addTooltip, deleteTooltip },
   withSeparators,
   isTree,
-  isRoot,
-  className
+  level,
+  maxLevel
 }: Props) => (
   <FieldArray name={name}>
     {({ fields }) => {
-      const addBtn = (
-        <OverlayTrigger placement="top" overlay={addTooltip}>
-          <div
-            onClick={() => fields.push({ id: createRandomId() })}
-            className={classNames('plus margin-l', { 'form-tree-item': isTree })}
-          >
-            +
-          </div>
-        </OverlayTrigger>
-      );
+      const addBtn =
+        !isTree ||
+        (isTree &&
+          level < maxLevel && (
+            <OverlayTrigger placement="top" overlay={addTooltip}>
+              <div
+                onClick={() => fields.push({ id: createRandomId() })}
+                className={classNames('plus margin-l', { 'form-tree-item': isTree })}
+              >
+                +
+              </div>
+            </OverlayTrigger>
+          ));
+      const isRoot = level === 0;
       const addBtnTop = isTree && !isRoot;
+      const className = level > 0 ? 'form-branch' : 'form-tree';
       return (
-        <div className={className}>
+        <div className={classNames({ [className]: isTree })}>
           {addBtnTop && addBtn}
           {fields.map((fieldname, idx) => {
             const displaySeparator = !isTree || (isRoot && idx === fields.length - 1);
@@ -107,12 +115,27 @@ const FieldArrayWithActions = ({
                   </div>
                 </div>
                 <div className="clear" />
-                {renderFields({ name: fieldname, idx: idx })}
+                <div className={classNames({ 'form-tree-item': isTree })}>
+                  {renderFields({ name: fieldname, idx: idx })}
+                  {isTree &&
+                    subFieldName && (
+                      <FieldArrayWithActions
+                        isTree
+                        name={`${fieldname}.${subFieldName}`}
+                        subFieldName={subFieldName}
+                        renderFields={renderFields}
+                        titleMsgId={titleMsgId}
+                        tooltips={{ addTooltip: addTooltip, deleteTooltip: deleteTooltip }}
+                        withSeparators={withSeparators}
+                        level={level + 1}
+                        maxLevel={maxLevel}
+                      />
+                    )}
+                </div>
                 {displaySeparator && withSeparators && <div className="separator" />}
               </div>
             );
           })}
-
           {!addBtnTop && addBtn}
         </div>
       );
@@ -122,9 +145,10 @@ const FieldArrayWithActions = ({
 
 FieldArrayWithActions.defaultProps = {
   withSeparators: true,
+  subFieldName: '',
   isTree: false,
-  isRoot: true,
-  className: ''
+  level: 0,
+  maxLevel: MAX_TREE_FORM_LEVEL
 };
 
 export default FieldArrayWithActions;

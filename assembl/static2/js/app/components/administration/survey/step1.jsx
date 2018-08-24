@@ -8,28 +8,22 @@ import MultilingualTextFieldAdapter from '../../form/multilingualTextFieldAdapte
 import { addThematicTooltip, deleteThematicTooltip } from '../../common/tooltips';
 
 type Props = {
-  editLocale: string,
-  fieldName: string,
-  isSubTree: boolean
+  editLocale: string
 };
 
-const Step1 = ({ editLocale, fieldName, isSubTree }: Props) => (
+const Step1 = ({ editLocale }: Props) => (
   <FieldArrayWithActions
-    className={isSubTree ? 'form-branche' : 'form-tree'}
     isTree
-    isRoot={!isSubTree}
-    name={fieldName}
+    name="themes"
+    subFieldName="children"
     renderFields={({ name }) => (
-      <div className="form-tree-item">
-        <Field
-          required
-          editLocale={editLocale}
-          name={`${name}.title`}
-          component={MultilingualTextFieldAdapter}
-          label={`${I18n.t('administration.ph.title')} ${editLocale.toUpperCase()}`}
-        />
-        <Step1 editLocale={editLocale} fieldName={`${name}.children`} isSubTree />
-      </div>
+      <Field
+        required
+        editLocale={editLocale}
+        name={`${name}.title`}
+        component={MultilingualTextFieldAdapter}
+        label={`${I18n.t('administration.ph.title')} ${editLocale.toUpperCase()}`}
+      />
     )}
     tooltips={{
       addTooltip: addThematicTooltip,
@@ -43,10 +37,5 @@ const Step1 = ({ editLocale, fieldName, isSubTree }: Props) => (
     }}
   />
 );
-
-Step1.defaultProps = {
-  fieldName: 'themes',
-  isSubTree: false
-};
 
 export default Step1;
