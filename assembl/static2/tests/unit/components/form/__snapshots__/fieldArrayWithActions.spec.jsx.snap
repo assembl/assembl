@@ -159,6 +159,16 @@ exports[`FieldArrayWithActions component should render an array of fields with d
         className="separator"
       />
     </div>
+    <div
+      className="plus margin-l"
+      onBlur={[Function]}
+      onClick={[Function]}
+      onFocus={[Function]}
+      onMouseOut={[Function]}
+      onMouseOver={[Function]}
+    >
+      +
+    </div>
   </div>
   <button
     disabled={true}
@@ -321,6 +331,16 @@ exports[`FieldArrayWithActions component should render an array of fields with d
           value="Kunde"
         />
       </div>
+    </div>
+    <div
+      className="plus margin-l"
+      onBlur={[Function]}
+      onClick={[Function]}
+      onFocus={[Function]}
+      onMouseOut={[Function]}
+      onMouseOver={[Function]}
+    >
+      +
     </div>
   </div>
   <button

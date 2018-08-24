@@ -16,13 +16,14 @@ const Step1 = ({ editLocale }: Props) => (
     isTree
     name="themes"
     subFieldName="children"
-    renderFields={({ name }) => (
+    minItems={1}
+    renderFields={({ name, fieldIndex }) => (
       <Field
         required
         editLocale={editLocale}
         name={`${name}.title`}
         component={MultilingualTextFieldAdapter}
-        label={`${I18n.t('administration.ph.title')} ${editLocale.toUpperCase()}`}
+        label={`${I18n.t('administration.tableOfThematics.thematicTitle')} ${fieldIndex} ${editLocale.toUpperCase()}`}
       />
     )}
     tooltips={{

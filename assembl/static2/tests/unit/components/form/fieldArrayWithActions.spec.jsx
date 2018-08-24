@@ -21,8 +21,8 @@ describe('FieldArrayWithActions component', () => {
       ),
       titleMsgId: 'profile.panelTitle',
       tooltips: {
-        addTooltip: <div>Add</div>,
-        deleteTooltip: <div>Delete</div>
+        addTooltip: () => <div>Add</div>,
+        deleteTooltip: () => <div>Delete</div>
       },
       withSeparators: true
     };
@@ -46,8 +46,8 @@ describe('FieldArrayWithActions component', () => {
       ),
       titleMsgId: 'profile.panelTitle',
       tooltips: {
-        addTooltip: <div>Add</div>,
-        deleteTooltip: <div>Delete</div>
+        addTooltip: () => <div>Add</div>,
+        deleteTooltip: () => <div>Delete</div>
       },
       withSeparators: false
     };
