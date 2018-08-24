@@ -1,0 +1,10 @@
+#!/bin/bash
+# alert if / has less than 7.2G available
+
+#available=$(df /home|grep /home|awk '{ print $4 }')
+available=$(df /dev/root|grep /dev/root|awk '{ print $4 }')
+if [ $available -le 7460500 ]; then
+    human_available=$(df -h /dev/root|grep /dev/root|awk '{ print $4 " in " $6 }')
+    echo "Alert $HOSTNAME: Almost out of disk space. Available space: $human_available"
+    exit 1
+fi

@@ -1958,6 +1958,40 @@ def set_ssl_certificates():
 
 
 @task
+def create_backup_script():
+    """
+    Generates backup script that stores the backup on a remote borg repository.
+    Sets a cron job for it.
+    """
+    from jinja2 import Environment, FileSystemLoader
+    if env.backup_machine_address:
+        jenv = Environment(loader=FileSystemLoader('doc/'), autoescape=lambda t: False)
+        backup_template = jenv.get_template('backup_template.jinja2')
+        with open('backup_all_assembl.sh', 'w') as f:
+            f.write(backup_template.render(backup_machine_address=env.backup_machine_address))
+        run('chmod +x backup_all_assembl.sh')
+        cron_command = "15 3 * * * /home/assembl_user/backup_all_assembl.sh"
+        sudo(create_add_to_crontab_command(cron_command))
+    else:
+        print(red("Can't generate backup script, env.backup_machine_address is not set"))
+
+
+@task
+def create_alert_disk_space_disk():
+    """Generates the script to alert on disk space limit and sets cron job for it."""
+    from jinja2 import Environment, FileSystemLoader
+    jenv = Environment(loader=FileSystemLoader('doc/'), autoescape=lambda t: False)
+    alert_disk_space_template = jenv.get_template('alert_disk_space_template.jinja2')
+    with open('alert_disk_space.sh', 'w') as f:
+        f.write(alert_disk_space_template.render())
+    run('chmod +x alert_disk_space.sh')
+    cron_command = "MAILTO=mohamed.zayed@bluenove.com"
+    sudo(create_add_to_crontab_command(cron_command))
+    cron_command = "0 5 * * * /home/assembl_user/alert_disk_space.sh"
+    sudo(create_add_to_crontab_command(cron_command))
+
+
+@task
 def reindex_elasticsearch(bg=False):
     cmd = "assembl-reindex-all-contents " + env.ini_file
     if bg:
