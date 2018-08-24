@@ -294,11 +294,6 @@ class PostKeywordAnalysis(PostKeywordAnalysisMixin, DiscussionBoundBase):
         Tag.id, ondelete="CASCADE"))
     value = relationship(Tag)
     category = Column(Boolean)
-    # db.query(PostKeywordAnalysis.value, func.sum(PostKeywordAnalysis.score)
-    #         ).filter_by(category=None
-    #         ).group_by(PostKeywordAnalysis.value
-    #         ).order_by(func.sum(PostKeywordAnalysis.score).desc()
-    #         ).limit(30).all()
 
 
 class PostDBPediaConceptAnalysis(

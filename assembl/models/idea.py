@@ -472,6 +472,56 @@ class Idea(HistoryMixin, DiscussionBoundBase):
                 cls.default_db(), discussion_id, counters.user_id, Content,
                 include_deleted=include_deleted)
 
+    def top_keywords(
+            self, limit=30, group=True, display_lang='en', filter_lang=None):
+        from .nlp import PostKeywordAnalysis, Tag
+        from .langstrings import LangStringEntry, Locale
+
+        group = group and not filter_lang  # Cannot filter and group
+
+        if group:
+            tag_col = Tag.group_id
+        else:
+            tag_col = Tag.id
+
+        sq = self.db.query(
+            func.sum(PostKeywordAnalysis.score).label('score'),
+            tag_col.label('id')
+        ).filter_by(
+            category=None
+        ).join(Tag).filter(
+            PostKeywordAnalysis.post_id.in_(self.get_related_posts_query(True))
+        )
+
+        if filter_lang:
+            sq = sq.join(Locale).filter(Locale.code == filter_lang)
+        sq = sq.group_by(
+            tag_col
+        ).order_by(func.sum(PostKeywordAnalysis.score).desc())
+        if limit:
+            sq = sq.limit(limit)
+        sq = sq.subquery()
+
+        if display_lang is None:
+            display_lang = filter_lang
+
+        if display_lang is None:
+            label_cond = Locale.code.notlike('%-x-mtfrom-%')
+        else:
+            label_cond = (Locale.code == display_lang) \
+                | (Locale.code.like(display_lang + '-x-mtfrom-%'))
+
+        q = self.db.query(
+            LangStringEntry.value, sq.c.score
+        ).join(Locale).filter(
+            label_cond
+        ).join(
+            Tag, Tag.label_id == LangStringEntry.langstring_id
+        ).join(sq, sq.c.id == Tag.id)
+        if not group:
+            q = q.add_columns(Locale.code)
+        return q.all()
+
     @classmethod
     def get_discussion_data(cls, discussion_id):
         from pyramid.threadlocal import get_current_request

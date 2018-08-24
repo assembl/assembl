@@ -457,6 +457,57 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
     def get_user_permissions_preload(self, user_id):
         return json.dumps(self.get_user_permissions(user_id))
 
+    def top_keywords(
+            self, limit=30, group=True, display_lang='en', filter_lang=None):
+        from .nlp import PostKeywordAnalysis, Tag
+        from .langstrings import LangStringEntry, Locale
+        from .generic import Content
+
+        group = group and not filter_lang  # Cannot filter and group
+
+        if group:
+            tag_col = Tag.group_id
+        else:
+            tag_col = Tag.id
+
+        sq = self.db.query(
+            func.sum(PostKeywordAnalysis.score).label('score'),
+            tag_col.label('id')
+        ).filter_by(
+            category=None
+        ).join(Tag).join(Content).filter(
+            Content.discussion_id == self.id
+        )
+
+        if filter_lang:
+            sq = sq.join(Locale).filter(Locale.code == filter_lang)
+        sq = sq.group_by(
+            tag_col
+        ).order_by(func.sum(PostKeywordAnalysis.score).desc())
+        if limit:
+            sq = sq.limit(limit)
+        sq = sq.subquery()
+
+        if display_lang is None:
+            display_lang = filter_lang
+
+        if display_lang is None:
+            label_cond = Locale.code.notlike('%-x-mtfrom-%')
+        else:
+            label_cond = (Locale.code == display_lang) \
+                | (Locale.code.like(display_lang + '-x-mtfrom-%'))
+
+        q = self.db.query(
+            LangStringEntry.value, sq.c.score
+        ).join(Locale).filter(
+            label_cond
+        ).join(
+            Tag, Tag.label_id == LangStringEntry.langstring_id
+        ).join(sq, sq.c.id == Tag.id)
+        if not group:
+            q = q.add_columns(Locale.code)
+        return q.all()
+
     def get_base_url(self, require_secure=None):
         """Get the base URL of this server
 
