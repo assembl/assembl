@@ -13,7 +13,7 @@ smtp_host = localhost
 imap_host = localhost
 piwik_host = localhost
 *sentry_scheme = https
-*sentry_host = sentry.bluenove.com
+*sentry_host = localhost
 _sentry_db_host = localhost
 # _sentry_db_password =
 # Replace with your admin email if necessary
