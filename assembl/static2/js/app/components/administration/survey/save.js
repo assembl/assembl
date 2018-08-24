@@ -11,7 +11,7 @@ import updateThematicMutation from '../../../graphql/mutations/updateThematic.gr
 import { createSave, convertToEntries, getFileVariable } from '../../form/utils';
 
 function getVideoVariable(video, initialVideo) {
-  if (!video || !video.present) {
+  if (!video) {
     // pass {} to remove all video fields on server side
     return {};
   }

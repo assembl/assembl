@@ -12,7 +12,6 @@ export type MediaValue = {|
 |};
 
 type VideoValue = {
-  present: boolean,
   media: ?MediaValue,
   title: I18nValue,
   descriptionBottom: I18nValue,

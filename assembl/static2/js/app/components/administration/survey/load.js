@@ -40,7 +40,6 @@ export function postLoadFormat(data: ThematicsQueryQuery): SurveyAdminValues {
         })) || [],
       title: convertEntries(t.titleEntries),
       video: {
-        present: Boolean(t.video),
         media: t.video ? convertMedia(t.video) : null,
         title: t.video ? convertEntries(t.video.titleEntries) : {},
         descriptionBottom: t.video ? convertEntries(convertEntriesToRawContentState(t.video.descriptionEntriesBottom)) : {},
