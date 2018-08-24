@@ -29,6 +29,7 @@ from .auth import (DiscussionPermission, LocalUserRole, Permission, Role, User,
                    UserRole, UserTemplate)
 from .langstrings import LangString
 from .preferences import Preferences
+from assembl.graphql import visit_analytics_region
 
 resolver = DottedNameResolver(__package__)
 log = logging.getLogger('assembl')
@@ -1013,6 +1014,7 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
             end = datetime.now()
         return (start, end)
 
+    @visit_analytics_region.cache_on_arguments(expiration_time=3600)
     def get_visits_time_series_analytics(self, start_date=None, end_date=None, only_fields=None):
         """
         Fetches visits analytics from bound piwik site.
