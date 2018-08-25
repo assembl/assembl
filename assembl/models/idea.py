@@ -510,6 +510,21 @@ class Idea(HistoryMixin, DiscussionBoundBase):
         else:
             label_cond = (Locale.code == display_lang) \
                 | (Locale.code.like(display_lang + '-x-mtfrom-%'))
+            if display_lang != 'en':
+                untranslated = self.db.query(
+                    LangString
+                ).join(
+                    Tag, LangString.id == Tag.label_id
+                ).filter(
+                    Tag.id.in_(sq)
+                ).outerjoin(
+                    LangStringEntry,
+                    LangStringEntry.langstring_id == Tag.label_id
+                ).filter(LangStringEntry.id == None).all()  # noqa: E711
+                if untranslated:
+                    translator = self.discussion.translation_service()
+                    for t in untranslated:
+                        t.ensure_translations([display_lang], translator)
 
         q = self.db.query(
             LangStringEntry.value, sq.c.score
