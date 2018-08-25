@@ -183,7 +183,7 @@ class AbstractTranslationService(LanguageIdentificationService):
         return {"translation_notice": "Machine-translated",
                 "idiosyncrasies": {}}
 
-    def canTranslate(self, source, target):
+    def canTranslate(self, source, target, really=False):
         return False
 
     def target_locales(self):
@@ -331,8 +331,8 @@ class AbstractTranslationService(LanguageIdentificationService):
 
 
 class DummyTranslationServiceTwoSteps(AbstractTranslationService):
-    def canTranslate(cls, source, target):
-        return True
+    def canTranslate(cls, source, target, really=False):
+        return not really
 
     def translate(self, text, target, is_html=False, source=None, db=None):
         if not text:
@@ -445,7 +445,7 @@ class DummyGoogleTranslationService(AbstractTranslationService):
         return super(DummyGoogleTranslationService, self).get_mt_name(
             self.asPosixLocale(source_name), self.asPosixLocale(target_name))
 
-    def canTranslate(self, source, target):
+    def canTranslate(self, source, target, really=False):
         return ((source == Locale.UNDEFINED or
                  self.asKnownLocale(source)) and
                 self.asKnownLocale(target))

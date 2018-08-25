@@ -587,19 +587,53 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
             "default": False  # for development
         },
 
-        # Calculate Watson values
+        # Various Watson values
         {
-            "id": "use_watson",
-            "name": _("Use IBM Watson"),
+            "id": "watson_keywords",
+            "name": _("Get keywords from Watson"),
             "value_type": "bool",
-            # "scalar_values": {value: "label"},
+            "description": _("Use Watson to identify keywords"),
+            "allow_user_override": None,
+            "modification_permission": P_ADMIN_DISC,
+            "default": False  # for development
+        },
+        {
+            "id": "watson_concepts",
+            "name": _("Get concepts from Watson"),
+            "value_type": "bool",
             "description": _("Use Watson to identify concepts"),
             "allow_user_override": None,
             "modification_permission": P_ADMIN_DISC,
-            # "frontend_validator_function": func_name...?,
-            # "backend_validator_function": func_name...?,
             "default": False  # for development
         },
+        {
+            "id": "watson_categories",
+            "name": _("Get concepts from Watson"),
+            "value_type": "bool",
+            "description": _("Use Watson to identify categories"),
+            "allow_user_override": None,
+            "modification_permission": P_ADMIN_DISC,
+            "default": False  # for development
+        },
+        {
+            "id": "watson_sentiment",
+            "name": _("Get concepts from Watson"),
+            "value_type": "bool",
+            "description": _("Use Watson to identify sentiments"),
+            "allow_user_override": None,
+            "modification_permission": P_ADMIN_DISC,
+            "default": False  # for development
+        },
+        {
+            "id": "watson_emotion",
+            "name": _("Get concepts from Watson"),
+            "value_type": "bool",
+            "description": _("Use Watson to identify emotions"),
+            "allow_user_override": None,
+            "modification_permission": P_ADMIN_DISC,
+            "default": False  # for development
+        },
+
 
         {
             "id": "authorization_server_backend",

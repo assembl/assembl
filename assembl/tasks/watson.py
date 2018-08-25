@@ -12,9 +12,29 @@ from . import celery
 from ..lib.model_watcher import BaseModelEventWatcher
 from ..lib.utils import waiting_get
 from ..lib import config
+from ..lib import logging
 
 API_ENDPOINTS = {}
 api_version = config.get("watson_api_version", "2018-03-16")
+log = logging.getLogger('assembl')
+
+
+# From https://www.ibm.com/watson/developercloud/natural-language-understanding/api/v1/
+watson_languages = {
+    "categories": ["ar", "en", "fr", "de", "it", "ja", "ko", "pt", "es"],
+    "concepts": ["en", "fr", "de", "ja", "ko", "es"],
+    "emotion": ["en"],
+    "keywords": ["en", "fr", "de", "it", "ja", "ko", "pt", "ru", "es", "sv"],
+    "sentiment": ["ar", "en", "fr", "de", "it", "ja", "ko", "pt", "ru", "es"],
+}
+
+watson_feature_classes = {
+    "categories": CategoriesOptions,
+    "concepts": ConceptsOptions,
+    "emotion": EmotionOptions,
+    "keywords": KeywordsOptions,
+    "sentiment": SentimentOptions,
+}
 
 
 def get_endpoint(api_key):
@@ -41,6 +61,13 @@ def process_post_created_task(id):
 
     post = waiting_get(Content, id)
     assert post
+    discussion = post.discussion
+    desired_locales = set(discussion.discussion_locales)
+    desired_locales.add('en')  # always translate tags to english
+    translator = discussion.translation_service()
+    source_locale = post.body.first_original().locale.code
+    if not translator.canTranslate(source_locale.code, "en", True):
+        log.error("Not a real translation service")
     api_key = config.get("watson_api_key")
     assert api_key
     endpoint = get_endpoint(api_key)
@@ -48,7 +75,6 @@ def process_post_created_task(id):
         if computation.status == "pending":
             features = Features._from_dict(computation.parameters)
             try:
-                desired_locales = post.discussion.preferences['preferred_locales']
                 lse = post.body.first_original()
                 lang = lse.locale.code
                 result = endpoint.analyze(
@@ -61,37 +87,47 @@ def process_post_created_task(id):
                     lse.locale = Locale.get_or_create(result['language'])
                 computation.result = result
                 computation.status = "success"
-                for keyword in result['keywords']:
+                for keyword in result.get('keywords', ()):
                     tag = Tag.getOrCreateTag(
                         keyword['text'], lse.locale, post.db)
+                    tag.simplistic_unify(translator)
                     post.db.add(PostKeywordAnalysis(
                         post=post, source=computation,
                         tag=tag, score=keyword['relevance']))
-                for category in result['categories']:
+                for category in result.get('categories', ()):
                     tag = Tag.getOrCreateTag(
                         category['label'], lse.locale, post.db)
+                    tag.simplistic_unify(translator)
                     post.db.add(PostKeywordAnalysis(
                         post=post, source=computation, category=True,
                         tag=tag, score=category['score']))
-                for concept in result['concepts']:
+                for concept in result.get('concepts', ()):
                     dbconcept = DBPediaConcept.get_or_create(
                         concept['dbpedia_resource'], post.db)
                     dbconcept.identify_languages(desired_locales, post.db)
                     post.db.add(PostDBPediaConceptAnalysis(
                         post=post, source=computation,
                         value=dbconcept, score=keyword['relevance']))
-                emotion = result['emotion']['document']['emotion']
-                post.db.add(PostWatsonV1SentimentAnalysis(
-                    post=post,
-                    source=computation,
-                    text_length=len(result['analyzed_text']),
-                    sentiment=result['sentiment']['document']['score'],
-                    anger=emotion['anger'],
-                    disgust=emotion['disgust'],
-                    fear=emotion['fear'],
-                    joy=emotion['joy'],
-                    sadness=emotion['sadness'],
-                ))
+                sentiments = {}
+                if result.get('emotion', None):
+                    emotion = result['emotion']['document']['emotion']
+                    sentiments.update(dict(
+                        anger=emotion['anger'],
+                        disgust=emotion['disgust'],
+                        fear=emotion['fear'],
+                        joy=emotion['joy'],
+                        sadness=emotion['sadness'],
+                    ))
+                if result.get('sentiment', None):
+                    sentiments['sentiment'] = \
+                        result['sentiment']['document']['score']
+                if sentiments:
+                    post.db.add(PostWatsonV1SentimentAnalysis(
+                        post=post,
+                        source=computation,
+                        text_length=len(result['analyzed_text']),
+                        **sentiments
+                    ))
             except Exception as e:
                 computation.result = str(e)
                 computation.status = "failure"
@@ -118,16 +154,21 @@ class ModelEventWatcherCelerySender(BaseModelEventWatcher):
     def processPostCreated(self, id):
         from assembl.models import Content
         post = Content.get(id)
-        active = post.discussion.preferences['use_watson']
-        if active:
+        active = any([post.discussion.preferences['watson_' + x]
+                      for x in watson_languages.keys()])
+        if active and post.body:
             api_version = config.get("watson_api_version", "2018-03-16")
-            # TODO: make this configurable
-            features = Features(
-                categories=CategoriesOptions(),
-                concepts=ConceptsOptions(),
-                sentiment=SentimentOptions(),
-                emotion=EmotionOptions(),
-                keywords=KeywordsOptions())  # sentiment=True, emotion=True
+            features = {}
+            post_loc = post.body.first_original().locale.extract_root_locale()
+            for feature_name, langs in watson_languages.entries():
+                if not post.discussion.preferences['watson_' + feature_name]:
+                    continue
+                if post_loc not in langs:
+                    continue
+                features[feature_name] = watson_feature_classes[feature_name]()
+            if not features:
+                return
+            features = Features(**features)
 
             get_or_create_computation_on_post(
                 post, "watson_" + api_version, features._to_dict())
