@@ -852,6 +852,18 @@ class LangString(Base):
             return [(original, not pref.translate_to)]
             # return [original]
 
+    def ensure_translations(self, languages, translation_service):
+        existing = [lse.locale.base_locale for lse in self.entries]
+        first_original = self.first_original()
+        added = False
+        for lang in languages:
+            if lang not in existing:
+                translation_service.translate_lse(
+                    first_original, Locale.get_or_create(lang))
+                added = True
+        if added:
+            self.db.expire(self, ['entries'])
+
     def remove_translations(self, forget_identification=True):
         for entry in list(self.entries):
             if Locale.locale_is_machine_translated(entry.locale_code):

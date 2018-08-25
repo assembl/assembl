@@ -11,7 +11,7 @@ from sqlalchemy import (
     Boolean,
     UniqueConstraint,
 )
-from sqlalchemy.orm import relationship, backref
+from sqlalchemy.orm import relationship, backref, aliased
 from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.sql.functions import coalesce
@@ -238,13 +238,39 @@ class Tag(Base):
 
     def simplistic_unify(self, translator):
         if self.locale.code == 'en':
-            return
-        target = Locale.get_or_create('en')
-        en_translation = translator.translate_lse(
-            self.label_string_entry, target)
-        if en_translation:
-            self.reference_tag = self.getOrCreateTag(
-                en_translation.value, target)
+            if not self.id:
+                self.db.flush()
+            taglocale = aliased(Locale)
+            lselocale = aliased(Locale)
+            sq = self.db.query(
+                Tag.id
+            ).join(
+                taglocale
+            ).filter(
+                taglocale.code != 'en'
+            ).outerjoin(
+                LangStringEntry, LangStringEntry.langstring_id == Tag.label_id
+            ).filter(
+                LangStringEntry.value == self.original_label
+            ).outerjoin(
+                lselocale
+            ).filter(
+                lselocale.code.like('en-x-mtfrom-%')
+            ).filter(
+                lselocale.id == None  # noqa: E711
+            ).subquery()
+            self.db.query(Tag).filter(Tag.id.in_(sq)).update(
+                {"base_tag_id": self.id}, synchronize_session=False)
+        else:
+            self.label.ensure_translations(['en'], translator)
+            en_translations = [lse for lse in self.label.entries
+                               if lse.locale.root_locale == 'en']
+            if en_translations:
+                label = en_translations[0].value
+                self.reference_tag = self.db.query(Tag).join(Locale).filter(
+                    Locale.code == 'en').join(
+                    Tag.label_string_entry).filter(
+                    LangStringEntry.value == label).first()
 
 
 LangString.setup_ownership_load_event(Tag, ['label'])
