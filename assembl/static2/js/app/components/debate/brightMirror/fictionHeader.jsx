@@ -2,17 +2,18 @@
 import React, { Fragment } from 'react';
 
 import CircleAvatar from './circleAvatar';
+import type { CircleAvatarType } from './circleAvatar';
 
-type Props = {
+type FictionHeader = {
   /** Optional author fullname */
   authorFullname?: string,
   /** Optional article published date */
   publishedDate?: string,
   /** Optional circle avatar props */
-  circleAvatar?: CircleAvatar
+  circleAvatar?: CircleAvatarType
 };
 
-const FictionHeader = ({ authorFullname, publishedDate, circleAvatar }: Props) => {
+const fictionHeader = ({ authorFullname, publishedDate, circleAvatar }: FictionHeader) => {
   // $FlowFixMe Cannot call `publishedDate.split` because property `split` is missing in undefined
   const formattedPublishedDate = publishedDate
     .split('-')
@@ -38,10 +39,10 @@ const FictionHeader = ({ authorFullname, publishedDate, circleAvatar }: Props) =
   );
 };
 
-FictionHeader.defaultProps = {
+fictionHeader.defaultProps = {
   authorFullname: 'no author specified',
   publishedDate: 'no published date specified',
   circleAvatar: {}
 };
 
-export default FictionHeader;
+export default fictionHeader;

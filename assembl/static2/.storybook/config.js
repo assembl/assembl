@@ -27,9 +27,9 @@ function loadStories() {
   require('../js/app/stories/components/debate/brightMirror/fictionPreview.stories.jsx');
   require('../js/app/stories/components/debate/brightMirror/fictionsList.stories.jsx');
   require('../js/app/stories/components/debate/brightMirror/instructionsText.stories.jsx');
-  require('../js/app/stories/components/debate/brightMirror/circleAvatar.jsx');
-  require('../js/app/stories/components/debate/brightMirror/fictionHeader.jsx');
-  require('../js/app/stories/components/debate/brightMirror/fictionBody.jsx');
+  require('../js/app/stories/components/debate/brightMirror/circleAvatar.stories.jsx');
+  require('../js/app/stories/components/debate/brightMirror/fictionHeader.stories.jsx');
+  require('../js/app/stories/components/debate/brightMirror/fictionBody.stories.jsx');
 
   // TODO: To clean ?
   // require('../js/app/stories/components/common/common.jsx');

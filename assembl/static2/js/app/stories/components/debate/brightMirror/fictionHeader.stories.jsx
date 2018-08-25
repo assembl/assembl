@@ -9,7 +9,7 @@ import { withKnobs, text, object } from '@storybook/addon-knobs';
 import FictionHeader from '../../../../components/debate/brightMirror/fictionHeader';
 
 // import existing storybook data
-import { customCircleAvatar } from './circleAvatar';
+import { customCircleAvatar } from './circleAvatar.stories';
 
 export const customFictionHeader = {
   authorFullname: 'Helen Aguilar',

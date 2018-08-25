@@ -35,7 +35,7 @@ describe('<FictionHeader /> - with shallow', () => {
   it('should render one CircleAvatar with custom value', () => {
     const circleAvatarProps = { src: 'https://loremflickr.com/300/300' };
     wrapper.setProps({ circleAvatar: { ...circleAvatarProps } });
-    expect(wrapper.find('CircleAvatar [src="https://loremflickr.com/300/300"]')).toHaveLength(1);
+    expect(wrapper.find('circleAvatar [src="https://loremflickr.com/300/300"]')).toHaveLength(1);
   });
 
   it('should display "no author specified" as a default author value', () => {

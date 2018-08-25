@@ -189,7 +189,7 @@ exports[`Storyshots CircleAvatar custom image 1`] = `
                       }
                     >
                       &lt;
-                      CircleAvatar
+                      circleAvatar
                     </span>
                     <span>
                       <span>
@@ -277,7 +277,7 @@ exports[`Storyshots CircleAvatar custom image 1`] = `
                   }
                 >
                   "
-                  CircleAvatar
+                  circleAvatar
                   " Component
                 </h2>
                 <table
@@ -622,7 +622,7 @@ exports[`Storyshots CircleAvatar default 1`] = `
                       }
                     >
                       &lt;
-                      CircleAvatar
+                      circleAvatar
                     </span>
                     <span />
                     <span
@@ -681,7 +681,7 @@ exports[`Storyshots CircleAvatar default 1`] = `
                   }
                 >
                   "
-                  CircleAvatar
+                  circleAvatar
                   " Component
                 </h2>
                 <table
@@ -1026,7 +1026,7 @@ exports[`Storyshots CircleAvatar playground 1`] = `
                       }
                     >
                       &lt;
-                      CircleAvatar
+                      circleAvatar
                     </span>
                     <span>
                       <span>
@@ -1114,7 +1114,7 @@ exports[`Storyshots CircleAvatar playground 1`] = `
                   }
                 >
                   "
-                  CircleAvatar
+                  circleAvatar
                   " Component
                 </h2>
                 <table
