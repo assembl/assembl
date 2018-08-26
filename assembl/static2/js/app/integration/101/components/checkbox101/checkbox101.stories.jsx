@@ -8,21 +8,36 @@ import { withKnobs, text, boolean } from '@storybook/addon-knobs';
 /* eslint-enable */
 
 import Checkbox101 from './checkbox101';
+import type { Checkbox101Type } from './checkbox101';
 
-const playgroundButton = {
+const actions: { [name: string]: Function } = {
+  onChangeHandler: action('onChangeHandler')
+};
+
+export const defaultCheckbox: Checkbox101Type = {
+  onChangeHandler: actions.onChangeHandler
+};
+
+const checkedCheckbox: Checkbox101Type = {
+  ...defaultCheckbox,
+  isDone: true
+};
+
+const customLabelCheckbox: Checkbox101Type = {
+  ...defaultCheckbox,
+  label: 'Custom Label'
+};
+
+const playgroundButton: Object = {
   label: 'Playground label',
   isDone: true
 };
 
-const actions = {
-  onChangeHandler: action('onChangeHandler')
-};
-
 storiesOf('Checkbox101', module)
   .addDecorator(withKnobs)
-  .add('default', withInfo()(() => <Checkbox101 onChangeHandler={actions.onChangeHandler} />))
-  .add('checked', withInfo()(() => <Checkbox101 isDone onChangeHandler={actions.onChangeHandler} />))
-  .add('custom label', withInfo()(() => <Checkbox101 label="Custom Label" onChangeHandler={actions.onChangeHandler} />))
+  .add('default', withInfo()(() => <Checkbox101 {...defaultCheckbox} />))
+  .add('checked', withInfo()(() => <Checkbox101 {...checkedCheckbox} />))
+  .add('custom label', withInfo()(() => <Checkbox101 {...customLabelCheckbox} />))
   .add(
     'playground',
     withInfo()(() => (

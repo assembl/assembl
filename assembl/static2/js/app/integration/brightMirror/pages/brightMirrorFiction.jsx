@@ -4,8 +4,8 @@ import FictionHeader from '../../../components/debate/brightMirror/fictionHeader
 import FictionBody from '../../../components/debate/brightMirror/fictionBody';
 
 // import existing storybook data
-import { customFictionHeader } from '../../../stories/components/debate/brightMirror/fictionHeader';
-import { customFictionBody } from '../../../stories/components/debate/brightMirror/fictionBody';
+import { customFictionHeader } from '../../../stories/components/debate/brightMirror/fictionHeader.stories';
+import { customFictionBody } from '../../../stories/components/debate/brightMirror/fictionBody.stories';
 
 class BrightMirrorFiction extends Component {
   render() {

@@ -7,6 +7,7 @@ import Adapter from 'enzyme-adapter-react-16';
 /* eslint-enable */
 
 import Checkbox101 from './checkbox101';
+import type { Checkbox101Type } from './checkbox101';
 
 // Separate the snapshots in directories next to each component
 // Name should match with the story name
@@ -16,15 +17,17 @@ initStoryshots({
 
 configure({ adapter: new Adapter() });
 
+const defaultCheckbox: Checkbox101Type = {
+  onChangeHandler: jest.fn()
+};
+
 describe('<Checkbox101 /> - with shallow', () => {
-  let wrapper;
-  let onChangeHandler;
+  let wrapper: any;
+  let checkbox: Checkbox101Type;
 
   beforeEach(() => {
-    // Mock actions
-    onChangeHandler = jest.fn();
-
-    wrapper = shallow(<Checkbox101 onChangeHandler={onChangeHandler} />);
+    checkbox = { ...defaultCheckbox };
+    wrapper = shallow(<Checkbox101 {...checkbox} />);
   });
 
   it('should render one checkbox with a default label', () => {
@@ -44,8 +47,7 @@ describe('<Checkbox101 /> - with shallow', () => {
 
   it('should render one checkbox that can be checked', () => {
     wrapper.find('input [type=\'checkbox\']').simulate('change');
-
-    expect(onChangeHandler).toHaveBeenCalledTimes(1);
+    expect(checkbox.onChangeHandler).toHaveBeenCalledTimes(1);
   });
 
   it('should render one unchecked checkbox by default', () => {
@@ -54,7 +56,6 @@ describe('<Checkbox101 /> - with shallow', () => {
 
   it('should render one checked checkbox when isDone is true', () => {
     wrapper.setProps({ isDone: true });
-
     expect(wrapper.find('input [checked=true]')).toHaveLength(1);
   });
 });

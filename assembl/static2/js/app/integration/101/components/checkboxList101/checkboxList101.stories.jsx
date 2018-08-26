@@ -8,28 +8,28 @@ import { withKnobs, object } from '@storybook/addon-knobs';
 /* eslint-enable */
 
 import CheckboxList101 from './checkboxList101';
+import { defaultCheckbox } from '../checkbox101/checkbox101.stories';
+import type { CheckboxList101Type } from './checkboxList101';
+import type { Checkbox101Type } from '../checkbox101/checkbox101';
 
-const listOfNone = [];
-
-const listOfcheckboxes = [
-  { label: 'AAA', isDone: false },
-  { label: 'BBB', isDone: false },
-  { label: 'CCC', isDone: true },
-  { label: 'DDD', isDone: false },
-  { label: 'EEE', isDone: false }
+const listOfcheckboxes: Array<Checkbox101Type> = [
+  { ...defaultCheckbox, label: 'AAA', isDone: false },
+  { ...defaultCheckbox, label: 'BBB', isDone: false },
+  { ...defaultCheckbox, label: 'CCC', isDone: true },
+  { ...defaultCheckbox, label: 'DDD', isDone: false },
+  { ...defaultCheckbox, label: 'EEE', isDone: false }
 ];
 
-const actions = {
-  onChangeHandler: action('onChangeHandler')
+const listOf5Checkboxes: CheckboxList101Type = {
+  checkboxes: listOfcheckboxes
+};
+
+const emptyListOfCheckboxes: CheckboxList101Type = {
+  checkboxes: []
 };
 
 storiesOf('CheckboxList101', module)
   .addDecorator(withKnobs)
-  .add('List of 5', withInfo()(() => <CheckboxList101 checkboxes={listOfcheckboxes} onChangeHandler={actions.onChangeHandler} />))
-  .add('Empty list', withInfo()(() => <CheckboxList101 checkboxes={listOfNone} onChangeHandler={actions.onChangeHandler} />))
-  .add(
-    'playground',
-    withInfo()(() => (
-      <CheckboxList101 checkboxes={object('checkboxes', listOfcheckboxes)} onChangeHandler={actions.onChangeHandler} />
-    ))
-  );
+  .add('List of 5', withInfo()(() => <CheckboxList101 {...listOf5Checkboxes} />))
+  .add('Empty list', withInfo()(() => <CheckboxList101 {...emptyListOfCheckboxes} />))
+  .add('playground', withInfo()(() => <CheckboxList101 checkboxes={object('checkboxes', listOfcheckboxes)} />));

@@ -8,31 +8,38 @@ import { Grid, Row, Col } from 'react-bootstrap';
 import Button101 from '../../components/button101/button101';
 import CheckboxList101 from '../../components/checkboxList101/checkboxList101';
 
-type Props = {};
+import type { Button101Type } from '../../components/button101/button101';
+import type { Checkbox101Type } from '../../components/checkbox101/checkbox101';
+import type { CheckboxList101Type } from '../../components/checkboxList101/checkboxList101';
 
-const listOfcheckboxes = [
-  { label: 'AAA', isDone: false },
-  { label: 'BBB', isDone: false },
-  { label: 'CCC', isDone: true },
-  { label: 'DDD', isDone: false },
-  { label: 'EEE', isDone: false }
-];
+type FormBuilder101Type = {};
 
-class FormBuilder101 extends Component<Props> {
-  logButtonHandler = () => {
-    /* eslint-disable */
-    console.log(`It's working !`);
-    /* eslint-enable */
-  };
+const defaultButton: Button101Type = {
+  label: 'Custom label',
+  isDisabled: false,
+  type: 'info',
+  /* eslint-disable */
+  onClickHandler: () => console.log('button tapped')
+  /* eslint-enable */
+};
 
-  logCheckboxHandler = (event: SyntheticEvent<HTMLInputElement>) => {
-    const target = event.currentTarget;
-    const isChecked = target.checked;
-    /* eslint-disable */
-    console.log(`It's working ! ${isChecked.toString()}`);
-    /* eslint-enable */
-  };
+const defaultCheckbox: Checkbox101Type = {
+  /* eslint-disable */
+  onChangeHandler: () => console.log('checkbox changed')
+  /* eslint-enable */
+};
 
+const defaultCheckboxList: CheckboxList101Type = {
+  checkboxes: [
+    { ...defaultCheckbox, label: 'AAA', isDone: false },
+    { ...defaultCheckbox, label: 'BBB', isDone: false },
+    { ...defaultCheckbox, label: 'CCC', isDone: true },
+    { ...defaultCheckbox, label: 'DDD', isDone: false },
+    { ...defaultCheckbox, label: 'EEE', isDone: false }
+  ]
+};
+
+class FormBuilder101 extends Component<FormBuilder101Type> {
   render() {
     return (
       <Grid>
@@ -48,8 +55,8 @@ class FormBuilder101 extends Component<Props> {
               Lorem Ipsum.
             </p>
           </Col>
-          <Button101 onClickHandler={this.logButtonHandler} />
-          <CheckboxList101 checkboxes={listOfcheckboxes} onChangeHandler={this.logCheckboxHandler} />
+          <Button101 {...defaultButton} />
+          <CheckboxList101 {...defaultCheckboxList} />
         </Row>
       </Grid>
     );

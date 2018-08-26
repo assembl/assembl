@@ -9,7 +9,6 @@
   "scripts": {
     "test": "jest",
     "test:watch": "npm test -- --watch",
-    "test:storybook": "jest storybook.test.js",
     "build": "webpack --progress --colors",
     "coverage": "jest --coverage",
     "dev": "webpack -d --watch",

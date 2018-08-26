@@ -1,15 +1,14 @@
 // @flow
 import React, { Fragment } from 'react';
 import Checkbox101 from '../checkbox101/checkbox101';
+import type { Checkbox101Type } from '../checkbox101/checkbox101';
 
-type Props = {
+export type CheckboxList101Type = {
   /** List of checkboxes to display */
-  checkboxes: Array<Checkbox101>,
-  /** Required onChangeHandler function */
-  onChangeHandler: Function
+  checkboxes: Array<Checkbox101Type>
 };
 
-const checkboxList101 = ({ checkboxes, onChangeHandler }: Props) => {
+const checkboxList101 = ({ checkboxes }: CheckboxList101Type) => {
   if (checkboxes.length === 0) {
     return <Fragment>Nothing to display</Fragment>;
   }
@@ -18,19 +17,16 @@ const checkboxList101 = ({ checkboxes, onChangeHandler }: Props) => {
     <Fragment>
       {checkboxes.map(checkbox => (
         <Checkbox101
-          // $FlowFixMe
-          key={checkbox.label}
-          // $FlowFixMe
+          key={Math.random()
+            .toString(36)
+            .substring(7)}
           label={checkbox.label}
-          // $FlowFixMe
           isDone={checkbox.isDone}
-          onChangeHandler={onChangeHandler}
+          onChangeHandler={checkbox.onChangeHandler}
         />
       ))}
     </Fragment>
   );
 };
-
-checkboxList101.defaultProps = {};
 
 export default checkboxList101;

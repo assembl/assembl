@@ -205,14 +205,6 @@ exports[`Storyshots Checkbox101 checked 1`] = `
                         <span
                           style={Object {}}
                         >
-                          isDone
-                        </span>
-                      </span>
-                      <span>
-                         
-                        <span
-                          style={Object {}}
-                        >
                           onChangeHandler
                         </span>
                         <span>
@@ -232,6 +224,14 @@ exports[`Storyshots Checkbox101 checked 1`] = `
                             </span>
                             }
                           </span>
+                        </span>
+                      </span>
+                      <span>
+                         
+                        <span
+                          style={Object {}}
+                        >
+                          isDone
                         </span>
                          
                       </span>
@@ -616,6 +616,32 @@ exports[`Storyshots Checkbox101 custom label 1`] = `
                         <span
                           style={Object {}}
                         >
+                          onChangeHandler
+                        </span>
+                        <span>
+                          =
+                          <span
+                            style={Object {}}
+                          >
+                            {
+                            <span
+                              style={
+                                Object {
+                                  "color": "#170",
+                                }
+                              }
+                            >
+                              onChangeHandler
+                            </span>
+                            }
+                          </span>
+                        </span>
+                      </span>
+                      <span>
+                         
+                        <span
+                          style={Object {}}
+                        >
                           label
                         </span>
                         <span>
@@ -635,32 +661,6 @@ exports[`Storyshots Checkbox101 custom label 1`] = `
                               Custom Label
                             </span>
                             "
-                          </span>
-                        </span>
-                      </span>
-                      <span>
-                         
-                        <span
-                          style={Object {}}
-                        >
-                          onChangeHandler
-                        </span>
-                        <span>
-                          =
-                          <span
-                            style={Object {}}
-                          >
-                            {
-                            <span
-                              style={
-                                Object {
-                                  "color": "#170",
-                                }
-                              }
-                            >
-                              onChangeHandler
-                            </span>
-                            }
                           </span>
                         </span>
                          

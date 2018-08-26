@@ -1,16 +1,16 @@
 // @flow
 import React from 'react';
 
-type Props = {
-  /**  Optional checkbox label */
+export type Checkbox101Type = {
+  /**  Checkbox label */
   label?: string,
-  /** Optional checkbox state */
+  /** Checkbox state */
   isDone?: boolean,
-  /** Required onChange function */
+  /** onChange function */
   onChangeHandler: Function
 };
 
-const checkbox101 = ({ label, isDone, onChangeHandler }: Props) => (
+const checkbox101 = ({ label, isDone, onChangeHandler }: Checkbox101Type) => (
   <div className="integration checkbox">
     <input id="checkbox" type="checkbox" onChange={onChangeHandler} checked={isDone} />
     <label htmlFor="checkbox">{label}</label>

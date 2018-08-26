@@ -212,32 +212,6 @@ exports[`Storyshots CheckboxList101 Empty list 1`] = `
                             }
                           </span>
                         </span>
-                      </span>
-                      <span>
-                         
-                        <span
-                          style={Object {}}
-                        >
-                          onChangeHandler
-                        </span>
-                        <span>
-                          =
-                          <span
-                            style={Object {}}
-                          >
-                            {
-                            <span
-                              style={
-                                Object {
-                                  "color": "#170",
-                                }
-                              }
-                            >
-                              onChangeHandler
-                            </span>
-                            }
-                          </span>
-                        </span>
                          
                       </span>
                     </span>
@@ -616,6 +590,28 @@ exports[`Storyshots CheckboxList101 List of 5 1`] = `
                                         }
                                       }
                                     >
+                                      onChangeHandler
+                                    </span>
+                                  </span>
+                                  : 
+                                  <span
+                                    style={
+                                      Object {
+                                        "color": "#170",
+                                      }
+                                    }
+                                  >
+                                    onChangeHandler
+                                  </span>
+                                  ,
+                                  <span>
+                                    <span
+                                      style={
+                                        Object {
+                                          "color": "#666",
+                                        }
+                                      }
+                                    >
                                       label
                                     </span>
                                   </span>
@@ -670,6 +666,28 @@ exports[`Storyshots CheckboxList101 List of 5 1`] = `
                                   }
                                 >
                                   {
+                                  <span>
+                                    <span
+                                      style={
+                                        Object {
+                                          "color": "#666",
+                                        }
+                                      }
+                                    >
+                                      onChangeHandler
+                                    </span>
+                                  </span>
+                                  : 
+                                  <span
+                                    style={
+                                      Object {
+                                        "color": "#170",
+                                      }
+                                    }
+                                  >
+                                    onChangeHandler
+                                  </span>
+                                  ,
                                   <span>
                                     <span
                                       style={
@@ -740,6 +758,28 @@ exports[`Storyshots CheckboxList101 List of 5 1`] = `
                                         }
                                       }
                                     >
+                                      onChangeHandler
+                                    </span>
+                                  </span>
+                                  : 
+                                  <span
+                                    style={
+                                      Object {
+                                        "color": "#170",
+                                      }
+                                    }
+                                  >
+                                    onChangeHandler
+                                  </span>
+                                  ,
+                                  <span>
+                                    <span
+                                      style={
+                                        Object {
+                                          "color": "#666",
+                                        }
+                                      }
+                                    >
                                       label
                                     </span>
                                   </span>
@@ -793,32 +833,6 @@ exports[`Storyshots CheckboxList101 List of 5 1`] = `
                                   
                               </span>
                               ]
-                            </span>
-                            }
-                          </span>
-                        </span>
-                      </span>
-                      <span>
-                         
-                        <span
-                          style={Object {}}
-                        >
-                          onChangeHandler
-                        </span>
-                        <span>
-                          =
-                          <span
-                            style={Object {}}
-                          >
-                            {
-                            <span
-                              style={
-                                Object {
-                                  "color": "#170",
-                                }
-                              }
-                            >
-                              onChangeHandler
                             </span>
                             }
                           </span>
@@ -1201,6 +1215,28 @@ exports[`Storyshots CheckboxList101 playground 1`] = `
                                         }
                                       }
                                     >
+                                      onChangeHandler
+                                    </span>
+                                  </span>
+                                  : 
+                                  <span
+                                    style={
+                                      Object {
+                                        "color": "#170",
+                                      }
+                                    }
+                                  >
+                                    onChangeHandler
+                                  </span>
+                                  ,
+                                  <span>
+                                    <span
+                                      style={
+                                        Object {
+                                          "color": "#666",
+                                        }
+                                      }
+                                    >
                                       label
                                     </span>
                                   </span>
@@ -1255,6 +1291,28 @@ exports[`Storyshots CheckboxList101 playground 1`] = `
                                   }
                                 >
                                   {
+                                  <span>
+                                    <span
+                                      style={
+                                        Object {
+                                          "color": "#666",
+                                        }
+                                      }
+                                    >
+                                      onChangeHandler
+                                    </span>
+                                  </span>
+                                  : 
+                                  <span
+                                    style={
+                                      Object {
+                                        "color": "#170",
+                                      }
+                                    }
+                                  >
+                                    onChangeHandler
+                                  </span>
+                                  ,
                                   <span>
                                     <span
                                       style={
@@ -1325,6 +1383,28 @@ exports[`Storyshots CheckboxList101 playground 1`] = `
                                         }
                                       }
                                     >
+                                      onChangeHandler
+                                    </span>
+                                  </span>
+                                  : 
+                                  <span
+                                    style={
+                                      Object {
+                                        "color": "#170",
+                                      }
+                                    }
+                                  >
+                                    onChangeHandler
+                                  </span>
+                                  ,
+                                  <span>
+                                    <span
+                                      style={
+                                        Object {
+                                          "color": "#666",
+                                        }
+                                      }
+                                    >
                                       label
                                     </span>
                                   </span>
@@ -1378,32 +1458,6 @@ exports[`Storyshots CheckboxList101 playground 1`] = `
                                   
                               </span>
                               ]
-                            </span>
-                            }
-                          </span>
-                        </span>
-                      </span>
-                      <span>
-                         
-                        <span
-                          style={Object {}}
-                        >
-                          onChangeHandler
-                        </span>
-                        <span>
-                          =
-                          <span
-                            style={Object {}}
-                          >
-                            {
-                            <span
-                              style={
-                                Object {
-                                  "color": "#170",
-                                }
-                              }
-                            >
-                              onChangeHandler
                             </span>
                             }
                           </span>

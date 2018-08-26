@@ -6,8 +6,10 @@ import { configure, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 /* eslint-enable */
 
-import Checkbox101 from '../checkbox101/checkbox101';
 import CheckboxList101 from './checkboxList101';
+import Checkbox101 from '../checkbox101/checkbox101';
+import type { CheckboxList101Type } from './checkboxList101';
+import type { Checkbox101Type } from '../checkbox101/checkbox101';
 
 // Separate the snapshots in directories next to each component
 // Name should match with the story name
@@ -17,24 +19,27 @@ initStoryshots({
 
 configure({ adapter: new Adapter() });
 
+const defaultCheckbox: Checkbox101Type = {
+  onChangeHandler: jest.fn()
+};
+
+const defaultCheckboxList: CheckboxList101Type = {
+  checkboxes: [
+    { ...defaultCheckbox },
+    { ...defaultCheckbox },
+    { ...defaultCheckbox },
+    { ...defaultCheckbox },
+    { ...defaultCheckbox }
+  ]
+};
+
 describe('<CheckboxList101 /> - with shallow', () => {
-  let checkboxes;
-  let onChangeHandler;
-  let wrapper;
+  let wrapper: any;
+  let checkboxes: CheckboxList101Type;
 
   beforeEach(() => {
-    checkboxes = [
-      { label: 'AAA', isDone: false },
-      { label: 'BBB', isDone: false },
-      { label: 'CCC', isDone: true },
-      { label: 'DDD', isDone: false },
-      { label: 'EEE', isDone: false }
-    ];
-
-    // Mock actions
-    onChangeHandler = jest.fn();
-
-    wrapper = shallow(<CheckboxList101 checkboxes={checkboxes} onChangeHandler={onChangeHandler} />);
+    checkboxes = { ...defaultCheckboxList };
+    wrapper = shallow(<CheckboxList101 {...checkboxes} />);
   });
 
   it('should render one list of 5 checkboxes', () => {
