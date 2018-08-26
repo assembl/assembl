@@ -4,32 +4,33 @@ import React, { Fragment } from 'react';
 import CircleAvatar from './circleAvatar';
 import type { CircleAvatarType } from './circleAvatar';
 
-type FictionHeader = {
-  /** Optional author fullname */
-  authorFullname?: string,
-  /** Optional article published date */
-  publishedDate?: string,
-  /** Optional circle avatar props */
-  circleAvatar?: CircleAvatarType
+export type FictionHeaderType = {
+  /** Author fullname */
+  authorFullname: string,
+  /** Article published date, format is yyyy-mm-dd */
+  publishedDate: Date,
+  /** Circle avatar props */
+  circleAvatar: CircleAvatarType
 };
 
-const fictionHeader = ({ authorFullname, publishedDate, circleAvatar }: FictionHeader) => {
-  // $FlowFixMe Cannot call `publishedDate.split` because property `split` is missing in undefined
-  const formattedPublishedDate = publishedDate
-    .split('-')
-    .reverse()
-    .join('/');
+const noAuthorMessage: string = 'no author specified';
+
+const fictionHeader = ({ authorFullname, publishedDate, circleAvatar }: FictionHeaderType) => {
+  const formattedPublishedDate = publishedDate.toISOString().slice(0, 10);
 
   return (
     <Fragment>
       <header className="header">
         <CircleAvatar {...circleAvatar} />
         <div className="meta">
-          <p className="author">{authorFullname}</p>
+          <p className="author">{authorFullname || noAuthorMessage}</p>
           <p className="date-time">
             Le{' '}
-            <time dateTime={publishedDate} pubdate>
-              {formattedPublishedDate}
+            <time dateTime={formattedPublishedDate} pubdate>
+              {formattedPublishedDate
+                .split('-')
+                .reverse()
+                .join('/')}
             </time>
           </p>
         </div>
@@ -37,12 +38,6 @@ const fictionHeader = ({ authorFullname, publishedDate, circleAvatar }: FictionH
       <hr />
     </Fragment>
   );
-};
-
-fictionHeader.defaultProps = {
-  authorFullname: 'no author specified',
-  publishedDate: 'no published date specified',
-  circleAvatar: {}
 };
 
 export default fictionHeader;

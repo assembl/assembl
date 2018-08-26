@@ -7,8 +7,9 @@ import { withKnobs, text } from '@storybook/addon-knobs';
 /* eslint-enable */
 
 import FictionBody from '../../../../components/debate/brightMirror/fictionBody';
+import type { FictionBodyType } from '../../../../components/debate/brightMirror/fictionBody';
 
-export const customFictionBody = {
+export const defaultFictionBody: FictionBodyType = {
   title: 'Les émotifs',
   content: `
     <p>15 janvier 2050 : je suis assis paisiblement chez moi en train de lire un épisode de la série « Ceux qui restent »
@@ -31,12 +32,18 @@ export const customFictionBody = {
   `
 };
 
-const playgroundFictionBody = { ...customFictionBody };
+const noFictionBody: FictionBodyType = {
+  ...defaultFictionBody,
+  title: '',
+  content: ''
+};
+
+const playgroundFictionBody = { ...defaultFictionBody };
 
 storiesOf('FictionBody', module)
   .addDecorator(withKnobs)
-  .add('default', withInfo()(() => <FictionBody />))
-  .add('custom body ', withInfo()(() => <FictionBody {...customFictionBody} />))
+  .add('default', withInfo()(() => <FictionBody {...defaultFictionBody} />))
+  .add('no content ', withInfo()(() => <FictionBody {...noFictionBody} />))
   .add(
     'playground',
     withInfo()(() => (

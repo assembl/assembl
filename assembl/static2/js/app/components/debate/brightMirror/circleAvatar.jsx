@@ -2,22 +2,21 @@
 import React from 'react';
 
 export type CircleAvatarType = {
-  /** Optional avatar size (identical width and height) */
-  size?: string,
-  /** Optional username related to the avatar */
-  username?: string,
-  /** Optional source of the image */
-  src?: string
+  /** Username related to the avatar */
+  username: string,
+  /** Source of the image */
+  src: string
 };
 
-const circleAvatar = ({ size, username, src }: CircleAvatarType) => (
-  <img className="circle-avatar" src={src} width={size} height={size} alt={`${(username: any)}-avatar`} />
+const noUsernameAlt: string = 'no-username';
+const noUsernameAvatarSrc: string = '/static2/img/icons/avatar.png';
+
+const circleAvatar = ({ username, src }: CircleAvatarType) => (
+  <img
+    className="circle-avatar"
+    src={username ? src : noUsernameAvatarSrc}
+    alt={username ? `${username}-avatar` : `${noUsernameAlt}-avatar`}
+  />
 );
-
-circleAvatar.defaultProps = {
-  size: '34',
-  username: 'no-username',
-  src: '/static2/img/icons/avatar.png'
-};
 
 export default circleAvatar;

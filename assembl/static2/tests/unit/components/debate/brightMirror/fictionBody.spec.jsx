@@ -7,6 +7,7 @@ import Adapter from 'enzyme-adapter-react-16';
 /* eslint-enable */
 
 import FictionBody from '../../../../../js/app/components/debate/brightMirror/fictionBody';
+import type { FictionBodyType } from '../../../../../js/app/components/debate/brightMirror/fictionBody';
 
 // Separate the snapshots in directories next to each component
 // Name should match with the story name
@@ -16,11 +17,21 @@ initStoryshots({
 
 configure({ adapter: new Adapter() });
 
+const defaultTitle: string = 'Fugit veritatis nemo';
+const defaultContent: string = 'Vero et ut et quia quo. Molestiae ut cupiditate odio numquam veniam esse cumque modi.';
+
+const defaultFictionBody: FictionBodyType = {
+  title: defaultTitle,
+  content: defaultContent
+};
+
 describe('<FictionBody /> - with shallow', () => {
   let wrapper;
+  let fictionBody: FictionBodyType;
 
   beforeEach(() => {
-    wrapper = shallow(<FictionBody />);
+    fictionBody = { ...defaultFictionBody };
+    wrapper = shallow(<FictionBody {...fictionBody} />);
   });
 
   it('should render one h1 title and one p content', () => {
@@ -28,26 +39,21 @@ describe('<FictionBody /> - with shallow', () => {
     expect(wrapper.find('div [className="fiction-content"]')).toHaveLength(1);
   });
 
-  it('should display "no title specified" as a default title value', () => {
-    expect(wrapper.contains('no title specified')).toBe(true);
-  });
-
   it('should display the fiction title', () => {
-    const customTitle = 'sed sit repellat';
-    wrapper.setProps({ title: customTitle });
-    expect(wrapper.contains(customTitle)).toBe(true);
-  });
-
-  it('should display "no content specified" as a default content value', () => {
-    expect(wrapper.contains('no content specified')).toBe(true);
+    expect(wrapper.contains(defaultTitle)).toBe(true);
   });
 
   it('should display the fiction content', () => {
-    const customContent = `
-      Dicta sit ipsam modi aut et. Quae et repellat qui illo velit. Quibusdam accusantium minima.
-      Molestiae consequatur rerum sit ipsa.
-    `;
-    wrapper.setProps({ content: customContent });
-    expect(wrapper.contains(customContent)).toBe(true);
+    expect(wrapper.contains(defaultContent)).toBe(true);
+  });
+
+  it('should display "no title specified" as a default title value', () => {
+    wrapper.setProps({ title: '' });
+    expect(wrapper.contains('no title specified')).toBe(true);
+  });
+
+  it('should display "no content specified" as a default content value', () => {
+    wrapper.setProps({ content: '' });
+    expect(wrapper.contains('no content specified')).toBe(true);
   });
 });

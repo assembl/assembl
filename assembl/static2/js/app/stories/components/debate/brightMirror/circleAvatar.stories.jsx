@@ -7,28 +7,33 @@ import { withKnobs, text, select } from '@storybook/addon-knobs';
 /* eslint-enable */
 
 import CircleAvatar from '../../../../components/debate/brightMirror/circleAvatar';
+import type { CircleAvatarType } from '../../../../components/debate/brightMirror/circleAvatar';
 
-export const customCircleAvatar = {
+export const defaultCircleAvatar: CircleAvatarType = {
+  username: 'taryn-treutel',
   src: 'https://loremflickr.com/300/300'
 };
 
+const customCircleAvatar: CircleAvatarType = {
+  ...defaultCircleAvatar,
+  username: ''
+};
+
 const playgroundButton = {
-  size: '34',
-  username: 'bright-mirror-author',
-  src: ['/static2/img/icons/avatar.png', 'https://loremflickr.com/300/300']
+  username: 'taryn-treutel',
+  src: ['https://loremflickr.com/300/300', '/static2/img/icons/avatar.png']
 };
 
 storiesOf('CircleAvatar', module)
   .addDecorator(withKnobs)
-  .add('default', withInfo()(() => <CircleAvatar />))
-  .add('custom image', withInfo()(() => <CircleAvatar {...customCircleAvatar} />))
+  .add('default', withInfo()(() => <CircleAvatar {...defaultCircleAvatar} />))
+  .add('no username', withInfo()(() => <CircleAvatar {...customCircleAvatar} />))
   .add(
     'playground',
     withInfo()(() => (
       <CircleAvatar
-        size={text('size', playgroundButton.size)}
         username={text('username', playgroundButton.username)}
-        src={select('src', playgroundButton.src)}
+        src={select('src', playgroundButton.src, playgroundButton.src[0])}
       />
     ))
   );
