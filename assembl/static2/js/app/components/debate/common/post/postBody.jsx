@@ -59,7 +59,11 @@ const ExtractInPost = ({ id, state, children }: ExtractInPostProps) => {
 export const postBodyReplacementComponents = (afterLoad: Function) => ({
   iframe: (attributes: Object) => (
     // the src iframe url is different from the resource url
-    <Embed url={attributes['data-source-url'] || attributes.src} defaultEmbed={<iframe title="post-embed" {...attributes} />} />
+    <Embed
+      key={attributes.key}
+      url={attributes['data-source-url'] || attributes.src}
+      defaultEmbed={<iframe title="post-embed" {...attributes} />}
+    />
   ),
   a: (attributes: Object) => {
     const embeddedUrl = isSpecialURL(attributes.href);
@@ -72,7 +76,7 @@ export const postBodyReplacementComponents = (afterLoad: Function) => ({
     return [origin, <URLMetadataLoader key={`url-preview-${attributes.href}`} url={attributes.href} afterLoad={afterLoad} />];
   },
   annotation: (attributes: Object) => (
-    <ExtractInPost id={attributes.id} state={attributes['data-state']}>
+    <ExtractInPost key={attributes.key} id={attributes.id} state={attributes['data-state']}>
       {attributes.children}
     </ExtractInPost>
   )
