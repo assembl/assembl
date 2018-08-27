@@ -163,15 +163,9 @@
       "\\.coffee$": "jest-coffee-preprocessor",
       "\\.(js|jsx)$": "babel-jest"
     },
-<<<<<<< HEAD
-    "setupFiles": [
-      "<rootDir>/tests/setupTests.js"
-    ],
+    "setupFiles": ["<rootDir>/tests/setupTests.js"],
     "globals": {
       "globalAnalytics": {}
     }
-=======
-    "setupFiles": ["<rootDir>/tests/setupTests.js"]
->>>>>>> bug fixes, refactor 101 integration examples with flow
   }
 }
