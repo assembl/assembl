@@ -21,6 +21,10 @@ function validateTheme(theme) {
     errors.video = validateVideo(theme.video);
   }
 
+  if (theme.children) {
+    const children = theme.children.map(validateTheme);
+    errors.children = children;
+  }
   return errors;
 }
 

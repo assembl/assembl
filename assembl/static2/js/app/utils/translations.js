@@ -1367,7 +1367,7 @@ const Translations = {
       confirmTextFieldDeletion: "Are you sure that you want to delete this field?",
       confirmSelectFieldOptionDeletionTitle: "Delete this item",
       confirmSelectFieldOptionDeletion: "Are you sure that you want to delete this item?",
-      addThematic: "Add a level %{level} thematic",
+      addThematic: "Add a level %{level} theme",
       addQuestion: "Add a question",
       anErrorOccured: "An error occured during save. Please check that you filled all the required fields.",
       deleteThematic: "Delete the theme",

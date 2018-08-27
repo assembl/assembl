@@ -4,7 +4,7 @@ import * as React from 'react';
 import { Tooltip } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
 
-type TooletipProps = {
+type TooltipProps = {
   level: number
 };
 
@@ -44,7 +44,7 @@ export const downTooltip = (
   </Tooltip>
 );
 
-export const addThematicTooltip = ({ level }: TooletipProps) => (
+export const addThematicTooltip = ({ level }: TooltipProps) => (
   <Tooltip id="addThematicTooltip">
     <Translate value="administration.addThematic" level={level} />
   </Tooltip>
