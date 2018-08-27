@@ -209,8 +209,9 @@ def post_related_to_sub_idea_1_1_1(
     idea = subidea_1_1_1
     p = Post(
         discussion=discussion, creator=admin_user,
-        subject=LangString.create(u"A post related to sub_idea_1_1_1 "),
-        body=LangString.create(u"A post related to sub_idea_1_1_1"),
+        subject=LangString.create(u"A post subject related to sub_idea_1_1_1"),
+        body=LangString.create(u"A post body related to sub_idea_1_1_1"),
+        creation_date=datetime(2018, 2, 17, 9, 0, 0),  # in the thread phase date range (see phases fixture)
         type='post', message_id="msg3@example3.com")
 
     idc = IdeaRelatedPostLink(

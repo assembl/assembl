@@ -97,7 +97,7 @@ describe('Hits components', () => {
         locale: 'en',
         result: {
           highlight: {
-            definition: 'foobar'
+            description_en: 'molestias necessitatibus'
           },
           _type: 'idea',
           _source: {
@@ -138,13 +138,10 @@ describe('Hits components', () => {
             creation_date: '2018-08-08',
             creator_id: 'foo',
             creator_name: 'Annabelle Olson',
-            ideas_en: [
-              'Try to hack the THX sensor, maybe it will parse the open-source firewall!',
-              'The JSON microchip is down, hack the open-source driver so we can program the HDD bandwidth!'
-            ],
-            subject: 'Maybe it will transmit the optical application!!',
+            ideas_en: 'First idea Second idea',
+            subject_en: 'Maybe it will transmit the optical application!!',
             introduction_en: 'I\'ll bypass the online PCI card, that should matrix the USB firewall!',
-            conclusion: 'Try to parse the COM card, maybe it will calculate the neural monitor!'
+            conclusion_en: 'Try to parse the COM card, maybe it will calculate the neural monitor!'
           }
         }
       };

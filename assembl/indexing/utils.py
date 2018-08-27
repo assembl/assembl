@@ -148,13 +148,6 @@ def get_data(content):
             data[attr] = getattr(content, attr)
 
         data['creator_display_name'] = AgentProfile.get(content.creator_id).display_name()
-
-        idea_id = get_idea_id_for_post(content)
-        if not idea_id:
-            return None, None
-
-        data['idea_id'] = idea_id
-
         data['sentiment_tags'] = [key for key in data['sentiment_counts']
                                   if data['sentiment_counts'][key] > 0]
         like = data['sentiment_counts']['like']
@@ -193,6 +186,11 @@ def get_data(content):
                 ls.add_value(' '.join(values), locale)
             populate_from_langstring(ls, data, 'ideas')
         else:
+            idea_id = get_idea_id_for_post(content)
+            if not idea_id:
+                return None, None
+
+            data['idea_id'] = idea_id
             populate_from_langstring_prop(content, data, 'body')
             populate_from_langstring_prop(content, data, 'subject')
 
