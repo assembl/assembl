@@ -1,0 +1,41 @@
+query ThematicsDataQuery($identifier: String!, $lang: String) {
+  thematics: ideas(identifier: $identifier) {
+    ... on IdeaInterface {
+      order
+      title(lang: $lang)
+    }
+    ... on Thematic {
+      id
+    }
+    ... on Idea {
+      id
+      children {
+        ... on IdeaInterface {
+          order
+          title(lang: $lang)
+        }
+        ... on Idea {
+          id
+          children {
+            ... on IdeaInterface {
+              order
+              title(lang: $lang)
+            }
+            ... on Idea {
+              id
+              children {
+                ... on IdeaInterface {
+                  order
+                  title(lang: $lang)
+                }
+                ... on Idea {
+                  id
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

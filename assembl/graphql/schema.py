@@ -82,7 +82,9 @@ class Query(graphene.ObjectType):
     root_idea = graphene.Field(
         IdeaUnion, identifier=graphene.String(description=docs.Default.phase_identifier), description=docs.Schema.root_idea)
     ideas = graphene.List(
-        IdeaUnion, identifier=graphene.String(required=True, description=docs.Default.phase_identifier), description=docs.Schema.ideas)
+        IdeaUnion,
+        identifier=graphene.String(required=True, description=docs.Default.phase_identifier),
+        description=docs.Schema.ideas)
     syntheses = graphene.List(Synthesis, description=docs.Schema.syntheses)
     num_participants = graphene.Int(description=docs.Schema.num_participants)
     discussion_preferences = graphene.Field(DiscussionPreferences, description=docs.Schema.discussion_preferences)
