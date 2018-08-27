@@ -1,5 +1,5 @@
 // @flow
-import type { FileValue, I18nValue } from '../../form/types.flow';
+import type { I18nValue } from '../../form/types.flow';
 
 export type LegalContentsFormValues = {
   legalNotice: I18nValue,

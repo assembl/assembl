@@ -313,9 +313,10 @@ class DiscussionAdmin extends React.Component<Props, State> {
     const { section } = this.props;
     const saveDisabled = !this.dataHaveChanged();
     // @TODO use final-form logic
+    const showSaveButton = section !== '6' && section !== '4';
     return (
       <div className="discussion-admin">
-        {section !== '6' && <SaveButton disabled={saveDisabled} saveAction={this.saveAction} />}
+        {showSaveButton && <SaveButton disabled={saveDisabled} saveAction={this.saveAction} />}
         {section === '1' && <LanguageSection {...this.props} />}
         {section === '2' && <ManageSectionsForm {...this.props} />}
         {section === '3' && <ManageProfileOptionsForm />}

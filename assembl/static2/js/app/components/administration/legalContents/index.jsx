@@ -10,7 +10,7 @@ import MultilingualRichTextFieldAdapter from '../../form/multilingualRichTextFie
 import { load, postLoadFormat } from './load';
 import Loader from '../../common/loader';
 import validate from './validate';
-// import { save, createMutationsPromises } from './save';
+import { save, createMutationsPromises } from './save';
 import AdminForm from '../../../components/form/adminForm';
 import { getEntryValueForLocale } from '../../../utils/i18n';
 
@@ -34,8 +34,8 @@ const DumbLegalContentsForm = ({ client, editLocale, lang }: Props) => {
       load={(fetchPolicy: fetchPolicy) => load(client, fetchPolicy, lang)}
       loading={loading}
       postLoadFormat={postLoadFormat}
-      createMutationsPromises={() => {}}
-      save={() => {}}
+      createMutationsPromises={createMutationsPromises(client, lang)}
+      save={save}
       validate={validate}
       mutators={{
         ...arrayMutators
