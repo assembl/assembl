@@ -2,13 +2,21 @@ import React from 'react';
 import { configure, addDecorator } from '@storybook/react';
 import { setOptions } from '@storybook/addon-options';
 import { I18n } from 'react-i18nify';
-import centered from '@storybook/addon-centered'; // Library used to center H and V a component
+import { Grid, Row, Col } from 'react-bootstrap';
 import messages from '../js/app/utils/translations';
 
 import 'bootstrap/dist/css/bootstrap.css';
 import '../css/themes/default/assembl_web.scss';
 
-addDecorator(centered);
+// Uncomment the lines below if you want to check your component out in a bootstrap grid system
+// const bootstrapWrapperDecorator = storyFn => (
+//   <Grid fluid>
+//     <Row>
+//       <Col xs={12}>{storyFn()}</Col>
+//     </Row>
+//   </Grid>
+// );
+// addDecorator(bootstrapWrapperDecorator);
 
 // Option defaults:
 setOptions({

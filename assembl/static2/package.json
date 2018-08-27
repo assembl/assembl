@@ -30,7 +30,6 @@
   "devDependencies": {
     "@2fd/graphdoc": "^2.4.0",
     "@storybook/addon-actions": "^3.4.10",
-    "@storybook/addon-centered": "^3.4.10",
     "@storybook/addon-info": "^3.4.10",
     "@storybook/addon-knobs": "^3.4.10",
     "@storybook/addon-options": "^3.4.10",
@@ -166,9 +165,13 @@
     },
     "setupFiles": [
       "<rootDir>/tests/setupTests.js"
+<<<<<<< HEAD
     ],
     "globals": {
       "globalAnalytics": {}
     }
+=======
+    ]
+>>>>>>> remove @storybook/addon-centered
   }
 }
