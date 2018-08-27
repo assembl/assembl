@@ -69,7 +69,8 @@ export class DumbDebateLink extends React.Component<DebateLinkProps, DebateLinkS
   render() {
     const { identifier, children, to, className, activeClassName, dataText, screenTooSmall, timeline } = this.props;
     const { timeLineActive, activeSegment } = this.state;
-    const activeSegmentPhase = timeline[activeSegment];
+    // timeline can still be null (loading) if Sections query returned before Timeline query
+    const activeSegmentPhase = timeline ? timeline[activeSegment] : undefined;
     // The first touch show the menu and the second activate the link
     const isTouchScreenDevice = isMobile.any();
     const touchActive = isTouchScreenDevice && !timeLineActive;
