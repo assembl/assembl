@@ -79,7 +79,7 @@ export const postBodyReplacementComponents = (afterLoad: Function) => ({
 });
 
 const Html = (props) => {
-  const { extracts, rawHtml, divRef, dbId, replacementComponents, contentLocale } = props;
+  const { extracts, rawHtml, divRef, dbId, replacementComponents, contentLocale, ...containerProps } = props;
   /*
    * The activeHtml() function will parse the raw html,
    * replace specified tags with provided components
@@ -124,12 +124,6 @@ const Html = (props) => {
     html = html.children;
   }
   const nodes = activeHtml(html, replacementComponents);
-  const containerProps = { ...props };
-  delete containerProps.rawHtml;
-  delete containerProps.divRef;
-  delete containerProps.replacementComponents;
-  delete containerProps.extracts;
-  delete containerProps.dbId;
   // add a key to to fix a render issue with react 16 with duplicate texts after harvesting
   return (
     <div ref={divRef} {...containerProps} key={extracts ? extracts.length : 0}>
