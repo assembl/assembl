@@ -531,7 +531,7 @@ export class SearchComponent extends React.Component {
 
   collapseSearch = () => {
     this.setState({ show: false }, () => {
-      this.searchbox.accessor.setQueryString(null);
+      this.resetFilters.accessor.performReset();
       this.searchbox.forceUpdate();
     });
   };
@@ -627,7 +627,11 @@ export class SearchComponent extends React.Component {
           </TopBar>
           <LayoutBody className={!this.state.show ? 'hidden' : null}>
             <SideBar>
-              <ResetFilters />
+              <ResetFilters
+                ref={(el) => {
+                  this.resetFilters = el;
+                }}
+              />
               {/* <SelectedFilters /> */}
               <MenuFilter listComponent={CheckboxItemList} field="_type" id="type" title={I18n.t('search.Categories')} />
               <Panel title={I18n.t('search.Messages')} className={messagesSelected ? null : 'hidden'}>
