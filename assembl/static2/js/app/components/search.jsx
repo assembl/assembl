@@ -12,7 +12,6 @@ import {
   CheckboxFilter,
   CheckboxItemList,
   HasChildQuery,
-  Hits,
   HitsStats,
   InitialLoader,
   Layout,
@@ -37,6 +36,7 @@ import get from 'lodash/get';
 import truncate from 'lodash/truncate';
 
 import DateRangeFilter from './search/DateRangeFilter';
+import HitsWithScrollTop from './search/HitsWithScrollTop';
 import FilteredSortingSelector from './search/SortingSelector';
 import ProfileLine from './common/profileLine';
 import { getConnectedUserId, getDebateId, getLocale } from '../reducers/contextReducer';
@@ -222,7 +222,11 @@ const BaseHit = ({ bemBlocks, imageType, onLinkClick, title, url, renderBody, re
   <div className={bemBlocks.item().mix(bemBlocks.container('item'))}>
     <ImageType type={imageType} className={bemBlocks.item('imgtype')} />
     <div className={bemBlocks.item('title')}>
-      {url ? <Link onClick={onLinkClick} to={url} dangerouslySetInnerHTML={{ __html: title }} /> : <p dangerouslySetInnerHTML={{ __html: title }} />}
+      {url ? (
+        <Link onClick={onLinkClick} to={url} dangerouslySetInnerHTML={{ __html: title }} />
+      ) : (
+        <p dangerouslySetInnerHTML={{ __html: title }} />
+      )}
     </div>
     {renderBody && <div className={bemBlocks.item('content')}>{renderBody()}</div>}
     <div className={bemBlocks.item('info')}>{renderFooter()}</div>
@@ -746,7 +750,7 @@ export class SearchComponent extends React.Component {
                   <HitsStats />
                 </ActionBarRow>
               </ActionBar>
-              <Hits
+              <HitsWithScrollTop
                 hitsPerPage={5}
                 highlightFields={queryFields}
                 customHighlight={customHighlight}
