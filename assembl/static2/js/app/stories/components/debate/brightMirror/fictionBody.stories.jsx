@@ -19,6 +19,8 @@ export const defaultFictionBody: FictionBodyType = {
     suis là, dans l’histoire, dans la vie des personnages, dans leur tête, dans leur âme. J’entre en introspection
     // pour sonder puis ranger dans les tiroirs de mon esprit les nouvelles émotions que je découvre.</p>
 
+    <div class="fiction-image" style="background-image: url(&quot;https://loremflickr.com/1200/800/paris&quot;);"></div>
+
     <p>Maintenant, avec les sous-titres c’est plus facile pour moi de regarder une vidéo : « Confusion indice 5 + Honte
     indice 1 » ; ou « Joie indice 3 + Nostalgie indice 2 » ; ou encore « Colère indice 8 + Amour indice 9 + Regret
     indice 4 » Ces idéogrammes qui apparaissent à chaque scène que je parcours du doigt, je sais les lire couramment

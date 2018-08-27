@@ -2,7 +2,7 @@
 import React from 'react';
 /* eslint-disable import/no-extraneous-dependencies */
 import initStoryshots from '@storybook/addon-storyshots';
-import { configure, shallow } from 'enzyme';
+import { configure, shallow, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 /* eslint-enable */
 
@@ -34,7 +34,7 @@ describe('<FictionBody /> - with shallow', () => {
     wrapper = shallow(<FictionBody {...fictionBody} />);
   });
 
-  it('should render one h1 title and one p content', () => {
+  it('should render one h1 title and one div content', () => {
     expect(wrapper.find('h1 [className="fiction-title"]')).toHaveLength(1);
     expect(wrapper.find('div [className="fiction-content"]')).toHaveLength(1);
   });
@@ -43,17 +43,29 @@ describe('<FictionBody /> - with shallow', () => {
     expect(wrapper.contains(defaultTitle)).toBe(true);
   });
 
-  it('should display the fiction content', () => {
-    expect(wrapper.contains(defaultContent)).toBe(true);
-  });
-
-  it('should display "no title specified" as a default title value', () => {
+  it('should display "no title specified" when title is set to null', () => {
     wrapper.setProps({ title: '' });
     expect(wrapper.contains('no title specified')).toBe(true);
   });
+});
 
-  it('should display "no content specified" as a default content value', () => {
+describe('<FictionBody /> - with shallow', () => {
+  let wrapper;
+  let fictionBody: FictionBodyType;
+
+  beforeEach(() => {
+    fictionBody = { ...defaultFictionBody };
+    wrapper = mount(<FictionBody {...fictionBody} />);
+  });
+
+  it('should display the fiction content', () => {
+    const fictionContent: string = wrapper.find('div [className="fiction-content"]').text();
+    expect(fictionContent).toEqual(defaultContent);
+  });
+
+  it('should display "no content specified" when content is set to null', () => {
     wrapper.setProps({ content: '' });
-    expect(wrapper.contains('no content specified')).toBe(true);
+    const fictionContent: string = wrapper.find('div [className="fiction-content"]').text();
+    expect(fictionContent).toEqual('no content specified');
   });
 });
