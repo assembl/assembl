@@ -8,17 +8,11 @@
   color: $black;
   line-height: 1.7;
   letter-spacing: 0.9px;
-}
 
-.fiction-image {
-  display: block;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  height: 162px;
-  margin-bottom: 30px;
-  margin-top: 25px;
-  width: 100%;
+  .attachment-image {
+    margin-bottom: 20px;
+    margin-top: 15px;
+  }
 }
 
 @media screen and (min-width: $screen-sm-min) {
@@ -30,19 +24,19 @@
   .fiction-content {
     font-size: $font-size-mll;
     letter-spacing: 1.1px;
-  }
 
-  .fiction-image {
-    height: 323px;
-    margin-bottom: 45px;
-    margin-top: 45px;
+    .attachment-image {
+      margin-bottom: 35px;
+      margin-top: 35px;
+    }
   }
 }
 
 @media screen and (min-width: $screen-xl-min) {
-  .fiction-image {
-    height: 350px;
-    margin-bottom: 35px;
-    margin-top: 55px;
+  .fiction-content {
+    .attachment-image {
+      margin-bottom: 25px;
+      margin-top: 45px;
+    }
   }
 }
