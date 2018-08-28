@@ -9,8 +9,8 @@ const getVariables = values => ({
   legalNoticeEntries: convertEntriesToHTML(convertToEntries(values.legalNotice)),
   termsAndConditionsEntries: convertEntriesToHTML(convertToEntries(values.termsAndConditions)),
   privacyPolicyEntries: convertEntriesToHTML(convertToEntries(values.privacyPolicy)),
-  cookiesPolicyEntries: convertEntriesToHTML(convertToEntries(values.cookiesPolicy))
-  // userGuidelinesEntries: convertToEntries(values.userGuidelines)
+  cookiesPolicyEntries: convertEntriesToHTML(convertToEntries(values.cookiesPolicy)),
+  userGuidelinesEntries: convertToEntries(values.userGuidelines)
 });
 
 export const createMutationsPromises = (client: ApolloClient, lang: string) => (

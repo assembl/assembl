@@ -3,12 +3,14 @@ mutation UpdateLegalContents(
   $termsAndConditionsEntries: [LangStringEntryInput]!
   $cookiesPolicyEntries: [LangStringEntryInput]!
   $privacyPolicyEntries: [LangStringEntryInput]!
+  $userGuidelinesEntries: [LangStringEntryInput]!
 ) {
   updateLegalContents(
     legalNoticeEntries: $legalNoticeEntries
     termsAndConditionsEntries: $termsAndConditionsEntries
     cookiesPolicyEntries: $cookiesPolicyEntries
     privacyPolicyEntries: $privacyPolicyEntries
+    userGuidelinesEntries: $userGuidelinesEntries
   ) {
     legalContents {
       legalNoticeEntries {
@@ -25,6 +27,10 @@ mutation UpdateLegalContents(
       }
       privacyPolicyEntries {
         localeCode
+        value
+      }
+      userGuidelinesEntries {
+        localCode
         value
       }
     }

@@ -49,7 +49,6 @@ const DumbLegalContentsForm = ({ client, editLocale, lang }: Props) => {
                 editLocale={editLocale}
                 name="termsAndConditions"
                 component={MultilingualRichTextFieldAdapter}
-                required
                 label={tacLabel}
               />
               <Field
@@ -57,7 +56,6 @@ const DumbLegalContentsForm = ({ client, editLocale, lang }: Props) => {
                 editLocale={editLocale}
                 name="legalNotice"
                 component={MultilingualRichTextFieldAdapter}
-                required
                 label={legalNoticeLabel}
               />
               <Field
@@ -65,7 +63,6 @@ const DumbLegalContentsForm = ({ client, editLocale, lang }: Props) => {
                 editLocale={editLocale}
                 name="cookiesPolicy"
                 component={MultilingualRichTextFieldAdapter}
-                required
                 label={cookiesPolicyLabel}
               />
               <Field
@@ -73,7 +70,6 @@ const DumbLegalContentsForm = ({ client, editLocale, lang }: Props) => {
                 editLocale={editLocale}
                 name="privacyPolicy"
                 component={MultilingualRichTextFieldAdapter}
-                required
                 label={privacyPolicyLabel}
               />
               <Field
@@ -81,7 +77,6 @@ const DumbLegalContentsForm = ({ client, editLocale, lang }: Props) => {
                 editLocale={editLocale}
                 name="userGuidelines"
                 component={MultilingualRichTextFieldAdapter}
-                required
                 label={userGuidelinesLabel}
               />
             </div>

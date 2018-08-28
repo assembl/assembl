@@ -114,6 +114,9 @@ class Query(graphene.ObjectType):
     has_privacy_policy = graphene.Boolean(
         lang=graphene.String(required=True, description=docs.Default.required_language_input),
         description=docs.Schema.has_privacy_policy)
+    has_user_guidelines = graphene.Boolean(
+        lang=graphene.String(required=True, description=docs.Default.required_language_input),
+        description=docs.Schema.has_user_guidelines)
     visits_analytics = graphene.Field(lambda: VisitsAnalytics, description=docs.Schema.visits_analytics)
     discussion = graphene.Field(Discussion, description=docs.Schema.discussion)
     landing_page_module_types = graphene.List(LandingPageModuleType, description=docs.Schema.landing_page_module_types)
@@ -273,7 +276,7 @@ class Query(graphene.ObjectType):
         return query.filter(model.discussion_id == discussion_id).order_by(model.order)
 
     def resolve_legal_contents(self, args, context, info):
-        """Legal notice,terms and conditions, cookies and privacy policy entries (e.g. for admin form)."""
+        """Legal notice,terms and conditions, cookies, privacy policy and user guidelines entries (e.g. for admin form)."""
         return LegalContents()
 
     def resolve_has_legal_notice(self, args, context, info):
@@ -304,6 +307,14 @@ class Query(graphene.ObjectType):
         discussion = models.Discussion.get(discussion_id)
         text = resolve_langstring(
             discussion.privacy_policy, args.get('lang'))
+        # if the field is empty in the admin section, it will contain html markup (u'<p></p>')
+        return text and len(text) > 10
+
+    def resolve_has_user_guidelines(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        text = resolve_langstring(
+            discussion.user_guidelines, args.get('lang'))
         # if the field is empty in the admin section, it will contain html markup (u'<p></p>')
         return text and len(text) > 10
 

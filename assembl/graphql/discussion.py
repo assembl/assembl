@@ -333,6 +333,8 @@ class LegalContents(graphene.ObjectType):
     privacy_policy = graphene.String(lang=graphene.String(), description=docs.LegalContents.privacy_policy)
     cookies_policy_entries = graphene.List(LangStringEntry, description=docs.LegalContents.cookies_policy_entries)
     privacy_policy_entries = graphene.List(LangStringEntry, description=docs.LegalContents.privacy_policy_entries)
+    user_guidelines = graphene.String(lang=graphene.String(), description=docs.LegalContents.user_guidelines)
+    user_guidelines_entries = graphene.List(LangStringEntry, description=docs.LegalContents.user_guidelines_entries)
 
     def resolve_legal_notice(self, args, context, info):
         """Legal notice value in given locale."""
@@ -387,6 +389,20 @@ class LegalContents(graphene.ObjectType):
         discussion = models.Discussion.get(discussion_id)
         if discussion.privacy_policy:
             return resolve_langstring_entries(discussion, 'privacy_policy')
+
+        return []
+
+    def resolve_user_guidelines(self, args, context, info):
+        """User guidelines value in given locale."""
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        return resolve_langstring(discussion.user_guidelines, args.get('lang'))
+
+    def resolve_user_guidelines_entries(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        if discussion.user_guidelines:
+            return resolve_langstring_entries(discussion, 'user_guidelines')
 
         return []
 
@@ -528,6 +544,7 @@ class UpdateLegalContents(graphene.Mutation):
         terms_and_conditions_entries = graphene.List(LangStringEntryInput, description=docs.UpdateLegalContents.terms_and_conditions_entries)
         cookies_policy_entries = graphene.List(LangStringEntryInput, description=docs.UpdateLegalContents.cookies_policy_entries)
         privacy_policy_entries = graphene.List(LangStringEntryInput, description=docs.UpdateLegalContents.privacy_policy_entries)
+        user_guidelines_entries = graphene.List(LangStringEntryInput, description=docs.UpdateLegalContents.user_guidelines_entries)
 
     legal_contents = graphene.Field(lambda: LegalContents)
 
@@ -585,6 +602,16 @@ class UpdateLegalContents(graphene.Mutation):
 
             update_langstring_from_input_entries(
                 discussion, 'privacy_policy', privacy_policy_entries)
+
+            user_guidelines_entries = args.get('user_guidelines_entries')
+            if user_guidelines_entries is not None and len(user_guidelines_entries) == 0:
+                raise Exception(
+                    'User guidelines entries need to be at least one entry'
+                )
+
+            update_langstring_from_input_entries(
+                discussion, 'user_guidelines', user_guidelines_entries
+            )
 
         db.flush()
         legal_contents = LegalContents()
