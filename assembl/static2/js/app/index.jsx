@@ -22,7 +22,14 @@ const renderAssembl = (routes) => {
     <AppContainer>
       <ApolloProvider store={store} client={client}>
         <ScreenDimensionsProvider>
-          <Router history={browserHistory} routes={routes} onUpdate={hashLinkScroll} />
+          <Router
+            history={browserHistory}
+            routes={routes}
+            onUpdate={() => {
+              window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+              hashLinkScroll();
+            }}
+          />
         </ScreenDimensionsProvider>
       </ApolloProvider>
     </AppContainer>,
