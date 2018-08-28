@@ -87,7 +87,6 @@ def base_registry(request):
     config.setup_registry(
         settings=get_config(), root_factory=root_factory)
     configure_logging(config)
-    config.include('assembl.lib.caching')
     configure_tasks(registry, 'assembl')
     config.add_tween('assembl.tests.utils.committing_session_tween_factory')
     return registry
