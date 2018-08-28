@@ -171,6 +171,15 @@
     }
   }
 
+  .admin-sub-menu {
+    padding: 0 0 15px 10px;
+    list-style-type: none;
+
+    .loader {
+      position: initial;
+    }
+  }
+
   .language-menu {
     position: fixed;
     background-color: $white;

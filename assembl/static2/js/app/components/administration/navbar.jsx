@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import { Translate } from 'react-redux-i18n';
 import { Col, OverlayTrigger } from 'react-bootstrap';
@@ -7,49 +8,62 @@ import { get } from '../../utils/routeMap';
 import { nextStepTooltip, previousStepTooltip } from '../common/tooltips';
 import { browserHistory } from '../../router';
 
-class Navbar extends React.Component {
+type Props = {
+  steps: Array<string>,
+  currentStep: string,
+  phaseIdentifier: string,
+  beforeChangeSection: Function
+};
+
+type State = {
+  steps: Array<string>,
+  currentStep: string
+};
+
+class Navbar extends React.Component<Props, State> {
   static defaultProps = {
     beforeChangeSection: () => {}
   };
 
-  constructor(props) {
+  constructor(props: Props) {
     super(props);
-    const { currentStep, totalSteps } = this.props;
+    const { currentStep, steps } = this.props;
     this.state = {
       currentStep: currentStep,
-      totalSteps: totalSteps
+      steps: steps
     };
-    this.goToSection = this.goToSection.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: Props) {
     this.setState({
       currentStep: nextProps.currentStep,
-      totalSteps: nextProps.totalSteps
+      steps: nextProps.steps
     });
   }
 
-  goToSection(stepNb) {
+  goToSection = (stepNb: number) => {
     const slug = { slug: getDiscussionSlug() };
+    const stepId = this.state.steps[stepNb - 1];
     const { phaseIdentifier } = this.props;
     browserHistory.push(
-      `${get('administration', slug)}${get('adminPhase', { ...slug, phase: phaseIdentifier })}?section=${stepNb}`
+      `${get('administration', slug)}${get('adminPhase', { ...slug, phase: phaseIdentifier })}?section=${stepId}`
     );
     this.setState({
-      currentStep: stepNb
+      currentStep: stepId
     });
-  }
+  };
 
   render() {
-    const { currentStep, totalSteps } = this.state;
+    const { currentStep, steps } = this.state;
     const { beforeChangeSection } = this.props;
-    const barWidth = calculatePercentage(currentStep, totalSteps);
+    const indexCurrentStep = steps.indexOf(currentStep) + 1;
+    const barWidth = calculatePercentage(indexCurrentStep, steps.length);
     return (
       <div className="admin-navbar">
         <Col xs={6} md={6}>
           <div className="step-numbers">
             <div className="txt">
-              <Translate value="administration.step_x_total" num={currentStep} total={totalSteps} />
+              <Translate value="administration.step_x_total" num={indexCurrentStep} total={steps.length} />
             </div>
             <div className="bar" style={{ width: `${barWidth}%` }}>
               &nbsp;
@@ -59,12 +73,12 @@ class Navbar extends React.Component {
         </Col>
         <Col xs={6} md={6}>
           <div className="arrow-container">
-            {currentStep < totalSteps && (
+            {indexCurrentStep < steps.length && (
               <OverlayTrigger placement="top" overlay={nextStepTooltip}>
                 <div
                   onClick={() => {
                     beforeChangeSection();
-                    this.goToSection(currentStep + 1);
+                    this.goToSection(indexCurrentStep + 1);
                   }}
                   className="arrow right"
                 >
@@ -72,12 +86,12 @@ class Navbar extends React.Component {
                 </div>
               </OverlayTrigger>
             )}
-            {currentStep > 1 && (
+            {indexCurrentStep > 1 && (
               <OverlayTrigger placement="top" overlay={previousStepTooltip}>
                 <div
                   onClick={() => {
                     beforeChangeSection();
-                    this.goToSection(currentStep - 1);
+                    this.goToSection(indexCurrentStep - 1);
                   }}
                   className="arrow right"
                 >

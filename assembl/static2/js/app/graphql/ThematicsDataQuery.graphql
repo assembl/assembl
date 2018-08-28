@@ -1,8 +1,7 @@
-query ThematicsDataQuery($identifier: String!, $lang: String) {
+query ThematicsDataQuery($identifier: String!) {
   thematics: ideas(identifier: $identifier) {
     ... on IdeaInterface {
       order
-      title(lang: $lang)
     }
     ... on Thematic {
       id
@@ -12,21 +11,18 @@ query ThematicsDataQuery($identifier: String!, $lang: String) {
       children {
         ... on IdeaInterface {
           order
-          title(lang: $lang)
         }
         ... on Idea {
           id
           children {
             ... on IdeaInterface {
               order
-              title(lang: $lang)
             }
             ... on Idea {
               id
               children {
                 ... on IdeaInterface {
                   order
-                  title(lang: $lang)
                 }
                 ... on Idea {
                   id

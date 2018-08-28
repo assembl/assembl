@@ -10,6 +10,7 @@ import Navbar from '../navbar';
 import Step1 from './step1';
 import Step2 from './step2';
 import Step3 from './step3';
+import ConfigureThematicForm from './configureThematicForm';
 import { load, postLoadFormat } from './load';
 import { createMutationsPromises, save } from './save';
 import validate from './validate';
@@ -17,7 +18,8 @@ import Loader from '../../common/loader';
 
 type Props = {
   client: ApolloClient,
-  currentStep: number,
+  section: string,
+  thematicId: string,
   debateId: string,
   editLocale: string,
   locale: string
@@ -25,7 +27,9 @@ type Props = {
 
 const loading = <Loader />;
 
-const DumbSurveyAdminForm = ({ client, currentStep, debateId, editLocale, locale }: Props) => (
+const steps = ['1', '2', '3'];
+
+const DumbSurveyAdminForm = ({ client, section, thematicId, debateId, editLocale, locale }: Props) => (
   <LoadSaveReinitializeForm
     load={(fetchPolicy: FetchPolicy) => load(client, fetchPolicy)}
     loading={loading}
@@ -40,15 +44,18 @@ const DumbSurveyAdminForm = ({ client, currentStep, debateId, editLocale, locale
       <React.Fragment>
         <div className="admin-content">
           <AdminForm handleSubmit={handleSubmit} pristine={pristine} submitting={submitting}>
-            {currentStep === 1 && <Step1 editLocale={editLocale} />}
-            {currentStep === 2 && <Step2 editLocale={editLocale} values={values} />}
-            {currentStep === 3 && <Step3 debateId={debateId} locale={locale} />}
+            {section === '1' && <Step1 editLocale={editLocale} />}
+            {section === 'configThematics' && (
+              <ConfigureThematicForm thematicId={thematicId} editLocale={editLocale} values={values} />
+            )}
+            {section === '2' && <Step2 editLocale={editLocale} values={values} />}
+            {section === '3' && <Step3 debateId={debateId} locale={locale} />}
           </AdminForm>
         </div>
-        {!isNaN(currentStep) && (
+        {steps.includes(section) && (
           <Navbar
-            currentStep={currentStep}
-            totalSteps={3}
+            currentStep={section}
+            steps={steps}
             phaseIdentifier="survey"
             beforeChangeSection={() => (pristine || submitting) && handleSubmit()}
           />

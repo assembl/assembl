@@ -542,7 +542,8 @@ const Translations = {
         timeline: "Éditer les phases et modules",
         exportTaxonomies: "Exporter les taxonomies",
         manageProfileOptions: "Options d'inscription",
-        personalizeInterface: "Personnaliser l'interface"
+        personalizeInterface: "Personnaliser l'interface",
+        configureThematic: "Configurer la thématique %{index}"
       },
       timelineAdmin: {
         phase: "Phase %{count}",
@@ -573,9 +574,10 @@ const Translations = {
       },
       noTimeline: "Aucune timeline n'a été configurée pour ce débat.",
       survey: {
-        "0": "Renseigner les thématiques",
-        "1": "Renseigner les questions",
-        "2": "Exporter les données"
+        "1": "Renseigner les thématiques",
+        "2": "Renseigner les questions",
+        "3": "Exporter les données",
+        configThematics: "Configurer la thématique"
       },
       brightMirrorSection: {
         bannerHeader:
@@ -1395,7 +1397,8 @@ const Translations = {
         timeline: "Edit the phases and modules",
         exportTaxonomies: "Export taxonomies",
         manageProfileOptions: "Registration options",
-        personalizeInterface: "Personalize the interface"
+        personalizeInterface: "Personalize the interface",
+        configureThematic: "Configure the theme %{index}"
       },
       timelineAdmin: {
         phase: "Phase %{count}",
@@ -1426,9 +1429,10 @@ const Translations = {
       },
       noTimeline: "No timeline has been configured yet",
       survey: {
-        "0": "Set themes",
-        "1": "Set questions",
-        "2": "Export data"
+        "1": "Set themes",
+        "2": "Set questions",
+        "3": "Export data",
+        configThematics: "Configure the theme"
       },
       brightMirrorSection: {
         bannerHeader:

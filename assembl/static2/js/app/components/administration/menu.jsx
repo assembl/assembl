@@ -1,26 +1,38 @@
+// @flow
 import React from 'react';
 import { Link } from 'react-router';
 import { Translate } from 'react-redux-i18n';
 import { get } from '../../utils/routeMap';
 import { getDiscussionSlug } from '../../utils/globalFunctions';
+import { type MenuItem } from '../../utils/administration/menu';
 import PhaseMenu from './phaseMenu';
 import { ADMIN_MENU } from '../../constants';
 
-class Menu extends React.PureComponent {
-  renderMenuItem = (id, menuItem, slug, isRoot = true) => {
+type Props = {
+  requestedPhase: string,
+  i18n: { locale: string },
+  timeline: Timeline
+};
+
+class Menu extends React.PureComponent<Props> {
+  renderMenuItem = (id: string, menuItem: MenuItem, slug: { slug: string | null }, rootSection: string = '') => {
     const { requestedPhase } = this.props;
     const { title, sectionId, subMenu } = menuItem;
-    const sectionQuery = sectionId ? `?section=${sectionId}` : '';
+    const isRoot = !rootSection;
+    const sectionIndex = rootSection ? `${rootSection}.${sectionId}` : sectionId;
+    const sectionQuery = sectionId ? `?section=${sectionIndex}` : '';
+    const subMenuIds = subMenu ? Object.keys(subMenu) : [];
+    const hasSubMenu = subMenuIds.length;
     return (
       <li key={sectionId} className={isRoot ? 'menu-item' : ''}>
         <Link to={`${get('administration', slug)}/${id}${sectionQuery}`} activeClassName="active">
           <Translate value={title} />
         </Link>
-        {subMenu ? (
+        {subMenu && hasSubMenu ? (
           <ul className={requestedPhase === id ? 'shown admin-menu2' : 'hidden admin-menu2'}>
-            {Object.keys(subMenu).map((subKey) => {
+            {subMenuIds.map((subKey) => {
               const subMenuItem = subMenu[subKey];
-              return this.renderMenuItem(id, subMenuItem, slug, false);
+              return this.renderMenuItem(id, subMenuItem, slug, sectionIndex);
             })}
           </ul>
         ) : null}
@@ -36,11 +48,11 @@ class Menu extends React.PureComponent {
       <ul className="admin-menu">
         {Object.keys(ADMIN_MENU).map(key => this.renderMenuItem(key, ADMIN_MENU[key], slug))}
         {timeline
-          ? timeline.map((phase, phaseIndex) => (
+          ? timeline.map((phase, index) => (
             <PhaseMenu
-              key={phaseIndex}
+              key={phase.id}
               slug={slug}
-              index={phaseIndex}
+              index={index}
               phase={phase}
               isActive={phase.identifier === requestedPhase}
               locale={locale}

@@ -1,40 +1,49 @@
+// @flow
 import React from 'react';
 import { Link } from 'react-router';
 import { Translate } from 'react-redux-i18n';
 
 import { get } from '../../utils/routeMap';
 import { PHASES_ADMIN_MENU } from '../../constants';
+import { type MenuItem } from '../../utils/administration/menu';
 
-class PhaseMenu extends React.Component {
-  renderMenuItem = (menuItem) => {
-    const { phase, slug, locale } = this.props;
+type Props = {
+  index: number,
+  isActive: boolean,
+  slug: { slug: string | null },
+  phase: Phase
+};
+
+class PhaseMenu extends React.PureComponent<Props> {
+  renderSubMenuItem = (menuItem: MenuItem, rootSection: string = '') => {
+    const { phase, slug } = this.props;
     const { sectionId, subMenu, title, component } = menuItem;
     if (component) {
       const MenuItemComponent = component;
       return (
-        <ul key={sectionId} className="shown admin-menu2">
-          <MenuItemComponent section={menuItem} slug={slug} phase={phase} locale={locale} />
+        <ul key={sectionId} className="shown admin-sub-menu">
+          <MenuItemComponent rootSection={rootSection} section={menuItem} slug={slug} phase={phase} />
         </ul>
       );
     }
-    const sectionQuery = sectionId ? `?section=${sectionId}` : '';
+    const sectionIndex = rootSection ? `${rootSection}.${sectionId}` : sectionId;
+    const sectionQuery = sectionId ? `?section=${sectionIndex}` : '';
+    const subMenuIds = subMenu ? Object.keys(subMenu) : [];
+    const hasSubMenu = subMenuIds.length;
     return (
       <li key={sectionId}>
         <Link
           to={`${get('administration', slug)}${get('adminPhase', {
             ...slug,
             phase: phase.identifier
-          })}?section=${sectionQuery}`}
+          })}${sectionQuery}`}
           activeClassName="active"
         >
           <Translate value={title} />
         </Link>
-        {subMenu ? (
-          <ul className="shown admin-menu2">
-            {Object.keys(subMenu).map((subKey) => {
-              const subMenuItem = subMenu[subKey];
-              return this.renderMenuItem(subMenuItem);
-            })}
+        {subMenu && hasSubMenu ? (
+          <ul className="shown admin-sub-menu">
+            {subMenuIds.map(subKey => this.renderSubMenuItem(subMenu[subKey], sectionQuery))}
           </ul>
         ) : null}
       </li>
@@ -46,19 +55,24 @@ class PhaseMenu extends React.Component {
     const menuItem = PHASES_ADMIN_MENU[phase.identifier];
     const { sectionId, subMenu } = menuItem;
     const sectionQuery = sectionId ? `?section=${sectionId}` : '';
+    const subMenuIds = subMenu ? Object.keys(subMenu) : [];
+    const hasSubMenu = subMenuIds.length;
     return (
       <li className="menu-item">
         <Link
-          to={`${get('administration', slug)}${get('adminPhase', { ...slug, phase: phase.identifier })}${sectionQuery}`}
+          to={`${get('administration', slug)}${get('adminPhase', {
+            ...slug,
+            phase: phase.identifier
+          })}${sectionQuery}`}
           activeClassName="active"
         >
           <Translate value="administration.menu.phase" count={index + 1} description={phase.title} />
         </Link>
-        {subMenu && (
+        {hasSubMenu ? (
           <ul className={isActive ? 'shown admin-menu2' : 'hidden admin-menu2'}>
-            {Object.keys(subMenu).map(key => this.renderMenuItem(subMenu[key]))}
+            {subMenuIds.map(key => this.renderSubMenuItem(subMenu[key]))}
           </ul>
-        )}
+        ) : null}
       </li>
     );
   }

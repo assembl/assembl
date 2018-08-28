@@ -115,124 +115,126 @@ export const COOKIES_CATEGORIES = {
 export const ADMIN_MENU = {
   discussion: {
     title: 'administration.edition',
-    sectionId: 1,
+    sectionId: '1',
     subMenu: {
       language: {
         title: 'administration.menu.language',
-        sectionId: 1
+        sectionId: '1'
       },
       sections: {
         title: 'administration.menu.sections',
-        sectionId: 2
+        sectionId: '2'
       },
       manageProfileOptions: {
         title: 'administration.menu.manageProfileOptions',
-        sectionId: 3
+        sectionId: '3'
       },
       legalContents: {
         title: 'administration.menu.legalContents',
-        sectionId: 4
+        sectionId: '4'
       },
       timeline: {
         title: 'administration.menu.timeline',
-        sectionId: 5
+        sectionId: '5'
       },
       personalizeInterface: {
         title: 'administration.menu.personalizeInterface',
-        sectionId: 6
+        sectionId: '6'
       }
     }
   },
   exportTaxonomies: {
-    title: 'administration.menu.exportTaxonomies'
+    title: 'administration.menu.exportTaxonomies',
+    sectionId: ''
   },
   landingPage: {
     title: 'administration.landingpage',
-    sectionId: 1,
+    sectionId: '1',
     subMenu: {
       manageModules: {
         title: 'administration.landingPage.manageModules.title',
-        sectionId: 1
+        sectionId: '1'
       },
       header: {
         title: 'administration.landingPage.header.title',
-        sectionId: 2
+        sectionId: '2'
       },
       timeline: {
         title: 'administration.landingPage.timeline.title',
-        sectionId: 3
+        sectionId: '3'
       }
     }
   },
   resourcesCenter: {
-    title: 'administration.resourcesCenter.menuTitle'
+    title: 'administration.resourcesCenter.menuTitle',
+    sectionId: ''
   }
 };
 
 export const PHASES_ADMIN_MENU = {
   survey: {
-    sectionId: 1,
+    sectionId: '1',
     subMenu: {
       setThemes: {
-        title: 'administration.survey.0',
-        sectionId: 1
+        title: 'administration.survey.1',
+        sectionId: '1'
       },
       configThematics: {
+        title: 'administration.survey.configThematics',
         sectionId: 'configThematics',
         component: ThematicsMenu
       },
       setQuestions: {
-        title: 'administration.survey.1',
-        sectionId: 2
+        title: 'administration.survey.2',
+        sectionId: '2'
       },
       exportData: {
-        title: 'administration.survey.2',
-        sectionId: 3
+        title: 'administration.survey.3',
+        sectionId: '3'
       }
     }
   },
   voteSession: {
-    sectionId: 1,
+    sectionId: '1',
     subMenu: {
       pageConfiguration: {
         title: 'administration.voteSession.0',
-        sectionId: 1
+        sectionId: '1'
       },
       configureVotingModules: {
         title: 'administration.voteSession.1',
-        sectionId: 2
+        sectionId: '2'
       },
       configureVotingProposals: {
         title: 'administration.voteSession.2',
-        sectionId: 3
+        sectionId: '3'
       },
       exportData: {
         title: 'administration.voteSession.3',
-        sectionId: 4
+        sectionId: '4'
       }
     }
   },
   thread: {
-    sectionId: 1,
+    sectionId: '1',
     subMenu: {
       exportData: {
         title: 'administration.thread.0',
-        sectionId: 1
+        sectionId: '1'
       }
     }
   },
   multiColumns: {
-    sectionId: 1,
+    sectionId: '1',
     subMenu: {
       exportData: {
-        title: 'administration.multiColumns.0',
-        sectionId: 1
+        title: 'administration.multiColumn.0',
+        sectionId: '1'
       }
     }
   },
   brightMirror: {
-    sectionId: 1,
-    subMenu: {}
+    sectionId: '1'
   }
 };
 

@@ -17,6 +17,7 @@ const Step1 = ({ editLocale }: Props) => (
     name="themes"
     subFieldName="children"
     minItems={1}
+    maxLevel={1}
     renderFields={({ name, fieldIndex }) => (
       <Field
         required

@@ -184,7 +184,6 @@ class LandingPageAdmin extends React.Component<Props, State> {
 
   render() {
     const { editLocale, header, section } = this.props;
-    const currentStep = parseInt(section, 10);
     const saveDisabled = !this.dataHaveChanged();
     return (
       <div className="landing-page-admin">
@@ -192,7 +191,7 @@ class LandingPageAdmin extends React.Component<Props, State> {
         {section === '1' && <ManageModules {...this.props} />}
         {section === '2' && <CustomizeHeader editLocale={editLocale} header={header} />}
         {section === '3' && <ManageTimeline editLocale={editLocale} />}
-        {!isNaN(currentStep) && <Navbar currentStep={currentStep} totalSteps={3} phaseIdentifier="landingPage" />}
+        {section && <Navbar currentStep={section} steps={['1', '2', '3']} phaseIdentifier="landingPage" />}
       </div>
     );
   }
