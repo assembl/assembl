@@ -46,7 +46,7 @@ def running_locally(hosts=None):
 
 
 def sudo(*args, **kwargs):
-    sudoer = env.get("sudoer", None) or env.get("user")
+    sudoer = env.get("sudo_user", None) or env.get("user")
     with settings(user=sudoer,
                   sudo_prefix='sudo -i -S -p \'{}\''.format(env.sudo_prompt)):
         if sudoer == "root":
