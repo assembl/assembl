@@ -18,7 +18,7 @@ export const defaultFictionBody: FictionBodyType = {
     electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of
     Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus
     PageMaker including versions of Lorem Ipsum.</p><p></p><p></p><div class="atomic-block" data-blocktype="atomic">
-    <img class="attachment-image" src="http://localhost:6543/data/Discussion/2/documents/2417/data" alt=""
+    <img class="attachment-image" src="https://loremflickr.com/g/1100/400/paris" alt=""
     title="one-piece-unlimited-cruise-sp-banner.jpg" data-id="2417" data-mimetype="image/jpeg"></div><p></p><p>
     <strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been
     the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled
@@ -31,7 +31,7 @@ export const defaultFictionBody: FictionBodyType = {
     typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing
     Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem
     Ipsum.</p><p></p><p></p><div class="atomic-block" data-blocktype="atomic"><img class="attachment-image"
-    src="http://localhost:6543/data/Discussion/2/documents/2418/data" alt="" title="one-piece-unlimited-cruise-sp-banner.jpg"
+    src="https://loremflickr.com/g/1100/400/brazil,rio" alt="" title="one-piece-unlimited-cruise-sp-banner.jpg"
     data-id="2418" data-mimetype="image/jpeg"></div><p></p><p><strong>Lorem Ipsum</strong> is simply dummy text of the printing
     and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown
     printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but
