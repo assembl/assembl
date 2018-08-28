@@ -26,6 +26,7 @@
   "synthesis": "${slug}/syntheses/${synthesisId}",
   "synthesisIdea": "${slug}/syntheses/${synthesisId}/#${ideaId}",
   "debate": "${slug}/debate/${phase}/${phaseId}",
+  "debateWithoutPhaseId": "${slug}/debate/${phase}",
   "rootDebate": "${slug}/debate",
   "community": "${slug}/community",
   "terms": "${slug}/terms",

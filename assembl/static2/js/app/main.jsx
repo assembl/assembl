@@ -1,9 +1,8 @@
 // @flow
-
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-import { getCurrentPhaseData } from './utils/timeline';
+import { getCurrentPhaseData, getPhaseId } from './utils/timeline';
 import Navbar from './components/navbar/navbar';
 import Footer from './components/common/footer';
 import CookiesBar from './components/cookiesBar';
@@ -11,52 +10,37 @@ import { fromGlobalId } from './utils/globalFunctions';
 
 type Props = {
   timeline: Timeline,
-  params: { phase: string, phaseId: string, themeId: ?string },
-  location: { query: { phase: string, phaseId: string }, pathname: string },
+  params: { phase?: string, phaseId?: string, themeId?: string },
+  location: { pathname: string },
   children: React.Node
 };
 
-type State = { identifier: string, phaseId: string, location: string };
-
-class Main extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = this.getNewState(this.props);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.setState(this.getNewState(nextProps));
-    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-  }
-
-  getNewState = (props: Props): State => {
-    const { timeline } = this.props;
-    const { location, params } = props;
-    const { currentPhaseIdentifier, currentPhaseId } = getCurrentPhaseData(timeline);
-    const paramsIdentifier = params.phase || currentPhaseIdentifier;
-    const queryIdentifier = location.query.phase || paramsIdentifier;
-    const paramsPhaseId = params.phaseId || currentPhaseId;
-    const queryPhaseId = location.query.phaseId || paramsPhaseId;
-    return {
-      identifier: queryIdentifier,
-      phaseId: queryPhaseId,
-      location: location.pathname
-    };
-  };
-
+class Main extends React.Component<Props> {
   render() {
-    const { themeId } = this.props.params;
-    const { identifier, phaseId } = this.state;
-    const discussionPhaseId = fromGlobalId(phaseId);
+    const { params, timeline } = this.props;
+    const { themeId } = params;
+    const { currentPhaseIdentifier, currentPhaseId } = getCurrentPhaseData(timeline);
+    let identifier = params.phase || null;
+    let phaseId = params.phaseId || null;
+    if (!identifier) {
+      identifier = currentPhaseIdentifier;
+      phaseId = currentPhaseId;
+    }
+    if (!phaseId && identifier) {
+      // keep old shared urls working
+      phaseId = getPhaseId(timeline, identifier);
+    }
+    const discussionPhaseId = phaseId ? fromGlobalId(phaseId) : null;
     const children = React.Children.map(this.props.children, child =>
       React.cloneElement(child, {
         identifier: identifier,
+        phaseId: phaseId,
         discussionPhaseId: discussionPhaseId
       })
     );
     return (
       <div className="main">
-        <Navbar location={this.state.location} themeId={themeId} />
+        <Navbar location={this.props.location.pathname} themeId={themeId} />
         <div className="app-content">{children}</div>
         <CookiesBar />
         <Footer />
