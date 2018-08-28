@@ -4,18 +4,15 @@ import { Translate } from 'react-redux-i18n';
 import { EditorState, RichUtils } from 'draft-js';
 import Editor from 'draft-js-plugins-editor';
 import classNames from 'classnames';
-import punycode from 'punycode';
-import createToolbarPlugin, { Separator } from 'draft-js-static-toolbar-plugin';
+import createToolbarPlugin from 'draft-js-static-toolbar-plugin';
 import { ItalicButton, BoldButton, UnorderedListButton } from 'draft-js-buttons';
+import createCounterPlugin from 'draft-js-counter-plugin';
 
 import AtomicBlockRenderer from './atomicBlockRenderer';
 import EditAttachments from '../editAttachments';
 import attachmentsPlugin from './attachmentsPlugin';
 
-const staticToolbarPlugin = createToolbarPlugin({
-  structure: [BoldButton, ItalicButton, Separator, UnorderedListButton, Separator]
-});
-const { Toolbar } = staticToolbarPlugin;
+type DraftPlugin = any;
 
 type Props = {
   editorState: EditorState,
@@ -24,13 +21,19 @@ type Props = {
   onChange: Function,
   placeholder?: string,
   textareaRef?: Function,
-  toolbarPosition: string,
-  withAttachmentButton: boolean
+  toolbarPosition: string
+  // withAttachmentButton: boolean
 };
 
 type State = {
   editorHasFocus: boolean
 };
+
+const RemainingCharsCounter = ({ count }) => (
+  <div className="annotation margin-xs">
+    <Translate value="debate.remaining_x_characters" nbCharacters={count} />
+  </div>
+);
 
 function customBlockRenderer(block) {
   if (block.getType() === 'atomic') {
@@ -43,8 +46,14 @@ function customBlockRenderer(block) {
   return null;
 }
 
+const ToolbarSeparator = () => <span className="separator" />;
+
 export default class RichTextEditor extends React.Component<Props, State> {
   editor: ?Editor;
+
+  plugins: Array<DraftPlugin>;
+
+  components: { [string]: React.ComponentType<*> };
 
   static defaultProps = {
     handleInputFocus: undefined,
@@ -55,6 +64,31 @@ export default class RichTextEditor extends React.Component<Props, State> {
 
   constructor(props: Props): void {
     super(props);
+    const counterPlugin = createCounterPlugin();
+    const staticToolbarPlugin = createToolbarPlugin({
+      structure: [BoldButton, ItalicButton, UnorderedListButton, ToolbarSeparator],
+      // we need this for toolbar plugin to add css classes to buttons and toolbar
+      theme: {
+        buttonStyles: {
+          active: 'active',
+          button: 'btn btn-default',
+          buttonWrapper: 'btn-group'
+        },
+        toolbarStyles: {
+          toolbar: 'editor-toolbar'
+        }
+      }
+    });
+
+    this.plugins = [counterPlugin, staticToolbarPlugin];
+
+    const { CustomCounter } = counterPlugin;
+    const { Toolbar } = staticToolbarPlugin;
+    this.components = {
+      CustomCounter: CustomCounter,
+      Toolbar: Toolbar
+    };
+
     this.state = {
       editorHasFocus: false
     };
@@ -70,40 +104,11 @@ export default class RichTextEditor extends React.Component<Props, State> {
     );
   };
 
-  // getToolbarButtons(): Array<ButtonConfigType> {
-  //   const bold = {
-  //     id: 'bold',
-  //     icon: 'text-bold',
-  //     label: I18n.t('common.editor.bold'),
-  //     type: 'style',
-  //     style: 'BOLD'
-  //   };
-  //   const italic = {
-  //     id: 'italic',
-  //     icon: 'text-italics',
-  //     label: I18n.t('common.editor.italic'),
-  //     type: 'style',
-  //     style: 'ITALIC'
-  //   };
-  //   const bullets = {
-  //     id: 'bullets',
-  //     icon: 'text-bullets',
-  //     label: I18n.t('common.editor.bulletList'),
-  //     type: 'block-type',
-  //     style: 'unordered-list-item'
-  //   };
-  //   const buttons = [bold, italic, bullets];
-  //   return buttons;
-  // }
-
-  getCharCount(editorState: EditorState): number {
-    // this code is "borrowed" from the draft-js counter plugin
-    const decodeUnicode = str => punycode.ucs2.decode(str); // func to handle unicode characters
-    const plainText = editorState.getCurrentContent().getPlainText('');
+  countRemainingChars = (plainText: string): number => {
     const regex = /(?:\r\n|\r|\n)/g; // new line, carriage return, line feed
     const cleanString = plainText.replace(regex, '').trim(); // replace above characters w/ nothing
-    return decodeUnicode(cleanString).length;
-  }
+    return this.props.maxLength - cleanString.length;
+  };
 
   shouldHidePlaceholder(): boolean {
     // don't display placeholder if user changes the block type (to bullet list) before to type anything
@@ -161,44 +166,26 @@ export default class RichTextEditor extends React.Component<Props, State> {
     onChange(EditorState.createWithContent(newContentState));
   };
 
-  renderToolbar = () => {
-    const { editorState, onChange, withAttachmentButton } = this.props;
-    return (
-      <Toolbar
-        buttonsConfig={this.getToolbarButtons()}
-        editorState={editorState}
-        focusEditor={this.focusEditor}
-        onChange={onChange}
-        withAttachmentButton={withAttachmentButton}
-      />
-    );
-  };
-
-  renderToolbar = () => (
-    // const withAttachmentButton = this.props.withAttachmentButton;
-    <Toolbar />
-  );
-
   render() {
-    const plugins = [staticToolbarPlugin];
     const { editorState, maxLength, onChange, placeholder, textareaRef, toolbarPosition } = this.props;
     const divClassName = classNames('rich-text-editor', { hidePlaceholder: this.shouldHidePlaceholder() });
     const attachments = attachmentsPlugin.getAttachments(editorState);
+    const { CustomCounter, Toolbar } = this.components;
     return (
       <div className={divClassName} ref={textareaRef}>
         <div className="editor-header">
           {editorState.getCurrentContent().hasText() ? <div className="editor-label form-label">{placeholder}</div> : null}
-          {toolbarPosition === 'top' ? this.renderToolbar() : null}
+          {toolbarPosition === 'top' ? <Toolbar /> : null}
           <div className="clear" />
         </div>
-        <div onClick={this.focusEditor}>
+        <div>
           <Editor
             blockRendererFn={customBlockRenderer}
             editorState={editorState}
             onChange={onChange}
             onFocus={this.handleEditorFocus}
             placeholder={placeholder}
-            plugins={plugins}
+            plugins={this.plugins}
             ref={(e) => {
               this.editor = e;
             }}
@@ -206,8 +193,10 @@ export default class RichTextEditor extends React.Component<Props, State> {
             spellCheck
           />
         </div>
-        {maxLength ? this.renderRemainingChars() : null}
-        {toolbarPosition === 'bottom' ? this.renderToolbar() : null}
+        {maxLength ? (
+          <CustomCounter component={RemainingCharsCounter} limit={maxLength} countFunction={this.countRemainingChars} />
+        ) : null}
+        {toolbarPosition === 'bottom' ? <Toolbar /> : null}
 
         <EditAttachments attachments={attachments} onDelete={this.deleteAttachment} />
       </div>

@@ -26,22 +26,6 @@ describe('RichTextEditor component', () => {
     expect(result).toMatchSnapshot();
   });
 
-  describe('getCharCount method', () => {
-    it('should return 0 if the editorState content is empty', () => {
-      const rawContentState = convertToRaw(ContentState.createFromText(''));
-      const rte = new RichTextEditor({ rawContentState: rawContentState });
-      const actual = rte.getCharCount(rte.state.editorState);
-      expect(actual).toEqual(0);
-    });
-
-    it('should return the number of characters in the editorState', () => {
-      const rawContentState = convertToRaw(ContentState.createFromText('Hello world'));
-      const rte = new RichTextEditor({ rawContentState: rawContentState });
-      const actual = rte.getCharCount(rte.state.editorState);
-      expect(actual).toEqual(11);
-    });
-  });
-
   describe('shouldHidePlaceholder method', () => {
     it('should return true if the content is empty and the block type is not unstyled', () => {
       let editorState = EditorState.createWithContent(ContentState.createFromText(''));
