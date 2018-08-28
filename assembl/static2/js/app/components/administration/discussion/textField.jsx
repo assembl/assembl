@@ -48,7 +48,7 @@ const TextField = ({
   <FormGroup bsClass="margin-s profile-options-field">
     <div className="flex">
       <FormControl type="text" onChange={e => updateTitle(e.target.value)} value={title} />
-      {identifier === 'CUSTOM' && (
+      {identifier === 'CUSTOM' || identifier === 'USERNAME' && (
         <OverlayTrigger placement="top" overlay={required ? textFieldToggleOptionalTooltip : textFieldToggleRequiredTooltip}>
           {/* overlaytrigger does not seem to work with SwitchButton so we add a span... */}
           <span>
