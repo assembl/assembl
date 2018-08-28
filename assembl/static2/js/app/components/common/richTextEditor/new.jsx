@@ -8,6 +8,10 @@ import createToolbarPlugin from 'draft-js-static-toolbar-plugin';
 import { ItalicButton, BoldButton, UnorderedListButton } from 'draft-js-buttons';
 import createCounterPlugin from 'draft-js-counter-plugin';
 
+// from our workspaces
+// eslint-disable-next-line import/no-extraneous-dependencies
+import createLinkPlugin from 'draft-js-link-plugin';
+
 import AtomicBlockRenderer from './atomicBlockRenderer';
 import EditAttachments from '../editAttachments';
 import attachmentsPlugin from './attachmentsPlugin';
@@ -51,6 +55,8 @@ const ToolbarSeparator = () => <span className="separator" />;
 export default class RichTextEditor extends React.Component<Props, State> {
   editor: ?Editor;
 
+  modal: ?{ current: null | React.ElementRef<any> };
+
   plugins: Array<DraftPlugin>;
 
   components: { [string]: React.ComponentType<*> };
@@ -64,9 +70,12 @@ export default class RichTextEditor extends React.Component<Props, State> {
 
   constructor(props: Props): void {
     super(props);
+    this.modal = React.createRef();
     const counterPlugin = createCounterPlugin();
+    const linkPlugin = createLinkPlugin({ modal: this.modal });
+    const { LinkButton } = linkPlugin;
     const staticToolbarPlugin = createToolbarPlugin({
-      structure: [BoldButton, ItalicButton, UnorderedListButton, ToolbarSeparator],
+      structure: [BoldButton, ItalicButton, UnorderedListButton, ToolbarSeparator, LinkButton],
       // we need this for toolbar plugin to add css classes to buttons and toolbar
       theme: {
         buttonStyles: {
@@ -80,7 +89,7 @@ export default class RichTextEditor extends React.Component<Props, State> {
       }
     });
 
-    this.plugins = [counterPlugin, staticToolbarPlugin];
+    this.plugins = [counterPlugin, linkPlugin, staticToolbarPlugin];
 
     const { CustomCounter } = counterPlugin;
     const { Toolbar } = staticToolbarPlugin;
@@ -178,6 +187,7 @@ export default class RichTextEditor extends React.Component<Props, State> {
           {toolbarPosition === 'top' ? <Toolbar /> : null}
           <div className="clear" />
         </div>
+        <div ref={this.modal} />
         <div>
           <Editor
             blockRendererFn={customBlockRenderer}

@@ -298,7 +298,16 @@ const Translations = {
         attachment: "Joindre un fichier",
         bold: "Gras",
         italic: "Italique",
-        bulletList: "Liste de puces"
+        bulletList: "Liste de puces",
+        linkPlugin: {
+          addLinkForm: {
+            close: "Fermer",
+            title: "Insérer/Modifier un lien"
+          },
+          submit: "Valider",
+          text: "Texte du lien",
+          url: "Adresse web"
+        }
       },
       uploadButton: "Choisissez un fichier",
       goUp: "Remonter"
@@ -1180,7 +1189,16 @@ const Translations = {
         attachment: "Add a file",
         bold: "Bold",
         italic: "Italic",
-        bulletList: "Bullet list"
+        bulletList: "Bullet list",
+        linkPlugin: {
+          addLinkForm: {
+            close: "Close",
+            title: "Insert/Edit a link"
+          },
+          submit: "Validate",
+          text: "Link text",
+          url: "URL"
+        }
       },
       uploadButton: "Choose a file to upload",
       goUp: "Back to top"
