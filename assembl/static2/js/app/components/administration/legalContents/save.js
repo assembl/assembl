@@ -10,10 +10,10 @@ const getVariables = values => ({
   termsAndConditionsEntries: convertEntriesToHTML(convertToEntries(values.termsAndConditions)),
   privacyPolicyEntries: convertEntriesToHTML(convertToEntries(values.privacyPolicy)),
   cookiesPolicyEntries: convertEntriesToHTML(convertToEntries(values.cookiesPolicy)),
-  userGuidelinesEntries: convertToEntries(values.userGuidelines)
+  userGuidelinesEntries: convertEntriesToHTML(convertToEntries(values.userGuidelines))
 });
 
-export const createMutationsPromises = (client: ApolloClient, lang: string) => (
+export const createMutationsPromises = (client: ApolloClient, locale: string) => (
   values: LegalContentsFormValues
 ) => {
   const allMutations = [];
@@ -23,7 +23,7 @@ export const createMutationsPromises = (client: ApolloClient, lang: string) => (
     client.mutate({
       mutation: updateLegalContents,
       variables: {
-        lang: lang,
+        locale: locale,
         ...variables
       }
     }));

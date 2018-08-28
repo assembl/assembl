@@ -12,17 +12,16 @@ import Loader from '../../common/loader';
 import validate from './validate';
 import { save, createMutationsPromises } from './save';
 import AdminForm from '../../../components/form/adminForm';
-import { getEntryValueForLocale } from '../../../utils/i18n';
 
 const loading = <Loader />;
 
 type Props = {
   client: ApolloClient,
   editLocale: string,
-  lang: string
+  locale: string
 };
 
-const DumbLegalContentsForm = ({ client, editLocale, lang }: Props) => {
+const DumbLegalContentsForm = ({ client, editLocale, locale }: Props) => {
   const legalNoticeLabel = I18n.t('administration.legalContents.legalNoticeLabel');
   const tacLabel = I18n.t('administration.legalContents.termsAndConditionsLabel');
   const cookiesPolicyLabel = I18n.t('administration.legalContents.cookiesPolicyLabel');
@@ -31,10 +30,10 @@ const DumbLegalContentsForm = ({ client, editLocale, lang }: Props) => {
 
   return (
     <LoadSaveReinitializeForm
-      load={(fetchPolicy: fetchPolicy) => load(client, fetchPolicy, lang)}
+      load={(fetchPolicy: FetchPolicy) => load(client, fetchPolicy, locale)}
       loading={loading}
       postLoadFormat={postLoadFormat}
-      createMutationsPromises={createMutationsPromises(client, lang)}
+      createMutationsPromises={createMutationsPromises(client, locale)}
       save={save}
       validate={validate}
       mutators={{
@@ -87,18 +86,9 @@ const DumbLegalContentsForm = ({ client, editLocale, lang }: Props) => {
   );
 };
 
-const mapStateToProps = (state: State, { editLocale }: LegalContentsFormProps) => {
-  const legalContents = state.admin.legalContents;
-  const legalNotice = getEntryValueForLocale(legalContents.get('legalNoticeEntries'), editLocale);
-  const termsAndConditions = getEntryValueForLocale(legalContents.get('termsAndConditionsEntries'), editLocale);
-  const cookiesPolicy = getEntryValueForLocale(legalContents.get('cookiesPolicyEntries'), editLocale);
-  const privacyPolicy = getEntryValueForLocale(legalContents.get('privacyPolicyEntries'), editLocale);
-  return {
-    legalNotice: legalNotice && typeof legalNotice !== 'string' ? legalNotice.toJS() : null,
-    termsAndConditions: termsAndConditions && typeof termsAndConditions !== 'string' ? termsAndConditions.toJS() : null,
-    cookiesPolicy: cookiesPolicy && typeof cookiesPolicy !== 'string' ? cookiesPolicy.toJS() : null,
-    privacyPolicy: privacyPolicy && typeof privacyPolicy !== 'string' ? privacyPolicy.toJS() : null
-  };
-};
+const mapStateToProps = state => ({
+  editLocale: state.admin.editLocale,
+  locale: state.i18n.locale
+});
 
 export default compose(connect(mapStateToProps), withApollo)(DumbLegalContentsForm);

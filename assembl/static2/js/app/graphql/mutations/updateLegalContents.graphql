@@ -30,7 +30,7 @@ mutation UpdateLegalContents(
         value
       }
       userGuidelinesEntries {
-        localCode
+        localeCode
         value
       }
     }
