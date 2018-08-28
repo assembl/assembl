@@ -54,10 +54,13 @@ export class DumbTimelineSegment extends React.Component<TimelineSegmentProps, T
     const ignore = phasesToIgnore.includes(phaseIdentifier);
     this.ignoreMenu = ignore && !inProgress;
     this.phaseName = title;
-    prefetchMenuQuery(client, {
-      lang: locale,
-      identifier: phaseIdentifier
-    });
+    if (!this.ignoreMenu) {
+      // don't prefetch if we're not going to use it
+      prefetchMenuQuery(client, {
+        lang: locale,
+        identifier: phaseIdentifier
+      });
+    }
   }
 
   phaseStatus = null;
