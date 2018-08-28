@@ -33,7 +33,6 @@
       }
 
       .text {
-        width: 340px;
         margin: 0;
       }
 
@@ -101,7 +100,7 @@
   }
 
   .proposal.row {
-    margin: 90px 10px 30px;
+    margin: 90px 10px 10px;
 
     .proposal-title {
       font-family: $font-family;
@@ -113,11 +112,10 @@
     }
 
     .proposal-vote-modules {
-      padding-top: 25px;
+      padding-top: 20px;
     }
 
     .tokens-line {
-      margin-top: 14px;
       margin-bottom: 0;
 
       p {
@@ -240,11 +238,16 @@
 
   .votes-in-progress {
     margin: 0 40px;
-    padding: 0 15px 30px;
+    padding: 0 15px 15px;
+
+    .padding-s {
+      padding-left: 5px;
+      padding-right: 5px;
+    }
 
     .box {
       border: 1px solid $grey5;
-      margin-top: 30px;
+      margin-top: 10px;
       height: 140px;
     }
 
@@ -280,7 +283,7 @@
   }
 
   .expand-result {
-    padding-bottom: 40px;
+    padding-bottom: 20px;
   }
 
   .gauge-box {
@@ -313,7 +316,7 @@
 @media screen and (min-width: 768px) {
   .votesession-page {
     .proposal.row {
-      padding: 30px 25px 0 25px;
+      padding: 15px 5px 0 0;
     }
 
     .participants-count {

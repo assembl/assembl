@@ -23,7 +23,7 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (non st
               className="text"
               style={
                 Object {
-                  "minWidth": "220px",
+                  "minWidth": "160px",
                 }
               }
             >
@@ -62,7 +62,7 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (non st
               className="text"
               style={
                 Object {
-                  "minWidth": "220px",
+                  "minWidth": "160px",
                 }
               }
             >
@@ -101,7 +101,7 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (non st
               className="text"
               style={
                 Object {
-                  "minWidth": "220px",
+                  "minWidth": "160px",
                 }
               }
             >
@@ -140,7 +140,7 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (non st
               className="text"
               style={
                 Object {
-                  "minWidth": "220px",
+                  "minWidth": "160px",
                 }
               }
             >
@@ -195,7 +195,7 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (non st
               className="text"
               style={
                 Object {
-                  "minWidth": "220px",
+                  "minWidth": "160px",
                 }
               }
             >
@@ -475,7 +475,7 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (non st
               className="text"
               style={
                 Object {
-                  "minWidth": "220px",
+                  "minWidth": "160px",
                 }
               }
             >
@@ -731,7 +731,7 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (sticky
               className="text"
               style={
                 Object {
-                  "minWidth": "220px",
+                  "minWidth": "160px",
                 }
               }
             >
@@ -1011,7 +1011,7 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (sticky
               className="text"
               style={
                 Object {
-                  "minWidth": "220px",
+                  "minWidth": "160px",
                 }
               }
             >

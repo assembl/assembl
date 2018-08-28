@@ -73,7 +73,7 @@ const AvailableTokens = ({ remainingTokensByCategory, sticky, tokenCategories, w
                         style={
                           (sticky && tokenCategories.length % 2 !== 0 && tokenCategories.length > 2) || windowWidth < 400
                             ? { maxWidth: '210px' }
-                            : { minWidth: '220px' }
+                            : { minWidth: '160px' }
                         }
                       >
                         <h2 className="dark-title-3">{title}</h2>
