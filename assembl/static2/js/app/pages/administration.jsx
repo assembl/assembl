@@ -22,7 +22,7 @@ import VoteSessionQuery from '../graphql/VoteSession.graphql';
 import LandingPageQuery from '../graphql/LandingPage.graphql';
 import TimelineQuery from '../graphql/Timeline.graphql';
 import { convertEntriesToEditorState } from '../utils/draftjs';
-import { getPhaseId } from '../utils/timeline';
+import { getPhaseById } from '../utils/timeline';
 import landingPagePlugin from '../utils/administration/landingPage';
 import { fromGlobalId } from '../utils/globalFunctions';
 
@@ -312,7 +312,16 @@ const isNotInLandingPageAdmin = isNotInAdminSection('landingPage');
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   graphql(VoteSessionQuery, {
-    skip: ({ timeline }) => typeof getPhaseId(timeline, 'voteSession') !== 'string',
+    skip: ({ location, timeline }) => {
+      if (!location.query.phaseId) {
+        return true;
+      }
+      const phase = getPhaseById(timeline, location.query.phaseId);
+      if (!phase) {
+        return true;
+      }
+      return phase.identifier !== 'voteSession';
+    },
     options: ({ locale, location }) => {
       const phaseId = location.query.phaseId;
       const discussionPhaseId = fromGlobalId(phaseId);
