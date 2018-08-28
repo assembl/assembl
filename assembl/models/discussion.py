@@ -29,10 +29,11 @@ from .auth import (DiscussionPermission, LocalUserRole, Permission, Role, User,
                    UserRole, UserTemplate)
 from .langstrings import LangString
 from .preferences import Preferences
-from assembl.graphql import visit_analytics_region
+from assembl.lib.caching import create_analytics_region
 
 resolver = DottedNameResolver(__package__)
 log = logging.getLogger('assembl')
+visit_analytics_region = create_analytics_region()
 
 
 class Discussion(DiscussionBoundBase, NamedClassMixin):

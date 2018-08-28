@@ -9,7 +9,7 @@ from assembl import models
 from assembl.graphql.schema import Schema as schema
 from assembl.graphql.utils import create_root_thematic
 
-from assembl.graphql import visit_analytics_region
+from assembl.lib.caching import create_analytics_region
 
 
 def test_get_locales(graphql_request):
@@ -2625,7 +2625,9 @@ def test_get_all_posts(graphql_request, proposition_id):
     assert proposition_id == first_post['id']
     return res
 
+
 def test_dogpile_cache():
+    visit_analytics_region = create_analytics_region()
     # mock object
     mock_o = mock.MagicMock(return_value=1)
     # wrap in function, because dogpile really wants functions

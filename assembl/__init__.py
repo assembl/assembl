@@ -73,6 +73,7 @@ def main(global_config, **settings):
     config.include('.models')
     config.include('.indexing')
     config.include('.lib.logging')
+    config.include('.lib.caching')
     # Tasks first, because it includes ZCA registration (for now)
     config.include('.tasks')
 
