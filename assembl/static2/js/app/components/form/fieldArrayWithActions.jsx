@@ -33,7 +33,11 @@ type Props = {
 };
 
 type FieldsProps = {
-  fields: FieldArrayRenderProps
+  fields: FieldArrayRenderProps,
+  onAdd?: (id: string) => void,
+  onRemove?: (id: string) => void,
+  onUp?: (id: string) => void,
+  onDown?: (id: string) => void
 } & Props;
 
 type FieldArrayProps = {
@@ -51,6 +55,42 @@ export class Fields extends React.PureComponent<FieldsProps> {
     const fieldsLength = fields.initial ? fields.initial.length : 0;
     if (level === 0 && fieldsLength < minItems) {
       range(0, minItems - fieldsLength).forEach(() => fields.push({ id: createRandomId() }));
+    }
+  };
+
+  down = (index: number) => {
+    const { fields, onDown } = this.props;
+    fields.swap(index, index + 1);
+    if (onDown) {
+      const fieldValue = fields.value[index];
+      onDown(fieldValue.id);
+    }
+  };
+
+  up = (index: number) => {
+    const { fields, onUp } = this.props;
+    fields.swap(index, index - 1);
+    if (onUp) {
+      const fieldValue = fields.value[index];
+      onUp(fieldValue.id);
+    }
+  };
+
+  remove = (index: number) => {
+    const { fields, onRemove } = this.props;
+    fields.remove(index);
+    if (onRemove) {
+      const fieldValue = fields.value[index];
+      onRemove(fieldValue.id);
+    }
+  };
+
+  add = () => {
+    const { fields, onAdd } = this.props;
+    const id = createRandomId();
+    fields.push({ id: id });
+    if (onAdd) {
+      onAdd(id);
     }
   };
 
@@ -74,10 +114,7 @@ export class Fields extends React.PureComponent<FieldsProps> {
     const displayAddBtn = !isTree || (isTree && level < maxLevel);
     const addBtn = displayAddBtn ? (
       <OverlayTrigger placement="top" overlay={addTooltip({ level: level + 1 })}>
-        <div
-          onClick={() => fields.push({ id: createRandomId() })}
-          className={classNames('plus margin-l', { 'form-tree-item': isTree })}
-        >
+        <div onClick={this.add} className={classNames('plus margin-l', { 'form-tree-item': isTree })}>
           +
         </div>
       </OverlayTrigger>
@@ -104,21 +141,21 @@ export class Fields extends React.PureComponent<FieldsProps> {
                 <div className="inline">
                   {idx < fields.length - 1 ? (
                     <OverlayTrigger placement="top" overlay={downTooltip}>
-                      <Button onClick={() => fields.swap(idx, idx + 1)} className="admin-icons">
+                      <Button onClick={() => this.down(idx)} className="admin-icons">
                         <span className="assembl-icon-down-bold grey" />
                       </Button>
                     </OverlayTrigger>
                   ) : null}
                   {idx > 0 ? (
                     <OverlayTrigger placement="top" overlay={upTooltip}>
-                      <Button onClick={() => fields.swap(idx, idx - 1)} className="admin-icons">
+                      <Button onClick={() => this.up(idx)} className="admin-icons">
                         <span className="assembl-icon-up-bold grey" />
                       </Button>
                     </OverlayTrigger>
                   ) : null}
                   {displayDeleteBtn ? (
                     <OverlayTrigger placement="top" overlay={deleteTooltip()}>
-                      <Button onClick={() => fields.remove(idx)} className="admin-icons">
+                      <Button onClick={() => this.remove(idx)} className="admin-icons">
                         <span className="assembl-icon-delete grey" />
                       </Button>
                     </OverlayTrigger>
