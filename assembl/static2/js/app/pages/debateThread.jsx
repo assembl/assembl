@@ -25,7 +25,7 @@ const DebateThread = ({ identifier, data, params, children }) => {
       {!loading &&
         ideas &&
         isParentRoute && (
-          <Ideas ideas={ideas} rootIdeaId={rootIdea.id} identifier={identifier} key={identifier} phaseId={phaseId} />
+          <Ideas ideas={ideas} rootIdeaId={rootIdea.id} identifier={identifier} phaseId={phaseId} />
         )}
       {!isParentRoute && <section className="debate-section">{childrenElm}</section>}
     </div>
