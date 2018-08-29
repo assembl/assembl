@@ -341,19 +341,23 @@ class UpdateAcceptedCookies(graphene.Mutation):
                 if action_type_enum == PyCookieTypes.ACCEPT_CGU:
                     action = AcceptCGUOnDiscussion(discussion_id=discussion_id, actor_id=user_id)
                     user.user_last_accepted_cgu_date = datetime.utcnow()
+                    agent_status_in_discussion.delete_cookie(PyCookieTypes.REJECT_CGU)
                     agent_status_in_discussion.update_cookie(action_type_enum)
 
                 elif action_type_enum == PyCookieTypes.ACCEPT_SESSION_ON_DISCUSSION:
                     action = AcceptSessionOnDiscussion(discussion_id=discussion_id, actor_id=user_id)
+                    agent_status_in_discussion.delete_cookie(PyCookieTypes.REJECT_SESSION_ON_DISCUSSION)
                     agent_status_in_discussion.update_cookie(action_type_enum)
 
                 elif action_type_enum == PyCookieTypes.ACCEPT_TRACKING_ON_DISCUSSION:
                     action = AcceptTrackingOnDiscussion(discussion_id=discussion_id, actor_id=user_id)
+                    agent_status_in_discussion.delete_cookie(PyCookieTypes.REJECT_TRACKING_ON_DISCUSSION)
                     agent_status_in_discussion.update_cookie(action_type_enum)
 
                 elif action_type_enum == PyCookieTypes.ACCEPT_PRIVACY_POLICY_ON_DISCUSSION:
                     action = AcceptPrivacyPolicyOnDiscussion(discussion_id=discussion_id, actor_id=user_id)
                     user.user_last_accepted_privacy_policy_date = datetime.utcnow()
+                    agent_status_in_discussion.delete_cookie(PyCookieTypes.REJECT_PRIVACY_POLICY_ON_DISCUSSION)
                     agent_status_in_discussion.update_cookie(action_type_enum)
 
                 elif action_type_enum == PyCookieTypes.REJECT_CGU:

@@ -203,9 +203,7 @@ def react_admin_view(request):
 
 def react_view(request, required_permission=P_READ):
     """
-    Asbolutely basic view. Nothing more.
-    Must add user authentication, permission, etc.
-    Basic view for the homepage
+    The view rendered by any react-based URL requested
     """
     bare_route = bare_route_name(request.matched_route.name)
     if is_login_route(bare_route):
@@ -224,7 +222,7 @@ def react_view(request, required_permission=P_READ):
         "REACT_URL": old_context['REACT_URL'],
         "NODE_ENV": node_env,
         "assembl_version": pkg_resources.get_distribution("assembl").version,
-        "elasticsearch_lang_indexes" : old_context['elasticsearch_lang_indexes'],
+        "elasticsearch_lang_indexes": old_context['elasticsearch_lang_indexes'],
         "web_analytics": old_context['web_analytics'],
         "under_test": old_context['under_test']
     }
@@ -299,6 +297,10 @@ def react_view(request, required_permission=P_READ):
             if user:
                 get_locale_from_request(request)
                 user.is_visiting_discussion(discussion.id)
+                agent = user.get_agent_status(discussion.id)
+                if agent:
+                    # Check if the user has accepted GDPR cookies
+                    agent.load_cookies_from_request(request)
     else:
         context = get_login_context(request)
         context.update(common_context)

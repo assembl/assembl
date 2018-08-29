@@ -717,6 +717,18 @@ class AgentStatusInDiscussion(DiscussionBoundBase):
             self._accepted_cookies.pop(i)
             self._save_cookies()
 
+    def load_cookies_from_request(self, request, first_visit=True):
+        cookies = request.cookies
+        if not cookies or (not first_visit and len(self.cookies) > 0):
+            return
+        for cookie, value in cookies.iteritems():
+            try:
+                cookie = CookieTypes(cookie)
+                self.update_cookie(cookie)
+            except ValueError:
+                # Not a cookie of concern. Don't load.
+                pass
+
     def get_discussion_id(self):
         return self.discussion_id or self.discussion.id
 
@@ -1002,6 +1014,10 @@ class User(AgentProfile):
     def get_permissions(self, discussion_id):
         from ..auth.util import get_permissions
         return get_permissions(self.id, discussion_id)
+
+    def get_agent_status(self, discussion_id):
+        return self.db.query(
+            AgentStatusInDiscussion).filter_by(discussion_id=discussion_id, profile_id=self.id).first()
 
     def get_all_permissions(self):
         from ..auth.util import get_permissions
