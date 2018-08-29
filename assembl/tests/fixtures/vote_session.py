@@ -8,7 +8,7 @@ from graphql_relay.node.node import to_global_id
 def vote_session(request, test_session, discussion, timeline_vote_session,
                  simple_file, admin_user):
     from assembl.graphql.utils import create_root_thematic
-    from assembl.models import Thematic, VoteSession, VoteSessionAttachment, LangString
+    from assembl.models import VoteSession, VoteSessionAttachment, LangString
     vote_session = VoteSession(
         discussion=discussion,
         discussion_phase=timeline_vote_session,
