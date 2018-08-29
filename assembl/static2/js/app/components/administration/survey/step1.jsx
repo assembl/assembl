@@ -17,7 +17,7 @@ const Step1 = ({ editLocale }: Props) => (
     name="themes"
     subFieldName="children"
     minItems={1}
-    maxLevel={1}
+    // maxLevel={1}
     onRemove={() => {
       // @TODO
       // console.log(`Remove the menu item (update the ThematicsDataQuery): ${index}`);

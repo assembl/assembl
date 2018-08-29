@@ -12,7 +12,13 @@ import ThematicsDataQuery from '../../graphql/ThematicsDataQuery.graphql';
 type Thematic = {
   id: string,
   order: number,
+  parentId: string | null,
   children: Array<Thematic>
+};
+
+type Data = {
+  thematics: Array<Thematic>,
+  rootIdea: { id: string }
 };
 
 type Props = {
@@ -20,31 +26,31 @@ type Props = {
   section: { sectionId: string },
   slug: { slug: string | null },
   phase: Phase,
-  data: { thematics: Array<Thematic> }
+  data: Data
 };
 
 class ThematicsMenu extends React.PureComponent<Props> {
-  flatThematics = (thematics, parents = []) => {
+  flatThematics = (thematics: Array<Thematic>, parents: Array<number> = []) => {
     const resultThematics = [];
-    if (thematics) {
-      sortBy(thematics, 'order').forEach((thematic, index) => {
-        const { children, ...thematicData } = thematic;
-        const indexes = [...parents];
-        indexes.push(index + 1);
-        const newThematic = {
-          ...thematicData,
-          title: <Translate value="administration.menu.configureThematic" index={indexes.join('.')} />
-        };
-        resultThematics.push(newThematic);
-        resultThematics.push(...this.flatThematics(children, indexes));
-      });
-    }
+    sortBy(thematics, 'order').forEach((thematic, index) => {
+      const { children, ...thematicData } = thematic;
+      const indexes = [...parents];
+      indexes.push(index + 1);
+      const newThematic = {
+        ...thematicData,
+        title: <Translate value="administration.menu.configureThematic" index={indexes.join('.')} />
+      };
+      resultThematics.push(newThematic);
+      resultThematics.push(...this.flatThematics(children, indexes));
+    });
     return resultThematics;
   };
 
   render() {
-    const { rootSection, section: { sectionId }, slug, phase, data: { thematics } } = this.props;
-    const flatThematics = this.flatThematics(thematics);
+    const { rootSection, section: { sectionId }, slug, phase, data: { thematics, rootIdea } } = this.props;
+    const rootThematics =
+      rootIdea && thematics ? thematics.filter(t => !t.parentId || (t.parentId && t.parentId === rootIdea.id)) : [];
+    const flatThematics = this.flatThematics(rootThematics);
     const sectionIndex = rootSection ? `${rootSection}.${sectionId}` : sectionId;
     const sectionQuery = `?section=${sectionIndex}`;
     return flatThematics.map(thematic => (

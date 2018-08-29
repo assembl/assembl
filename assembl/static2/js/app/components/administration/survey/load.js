@@ -5,12 +5,13 @@ import type { ApolloClient } from 'react-apollo';
 import ThematicsQuery from '../../../graphql/ThematicsQuery.graphql';
 import { convertEntriesToI18nValue, convertEntriesToI18nRichText } from '../../form/utils';
 import type { FileValue } from '../../form/types.flow';
+import { PHASES } from '../../../constants';
 import type { MediaValue, SurveyAdminValues } from './types.flow';
 
 export const load = async (client: ApolloClient, fetchPolicy: FetchPolicy) => {
   const { data } = await client.query({
     query: ThematicsQuery,
-    variables: { identifier: 'survey' },
+    variables: { identifier: PHASES.survey },
     fetchPolicy: fetchPolicy
   });
   return data;
@@ -36,8 +37,12 @@ const getChildren = thematic =>
   }));
 
 export function postLoadFormat(data: ThematicsQueryQuery): SurveyAdminValues {
+  const { rootIdea, thematics } = data;
+  const rootThematics =
+    // $FlowFixMe
+    rootIdea && thematics ? thematics.filter(t => !t.parentId || (t.parentId && t.parentId === rootIdea.id)) : [];
   return {
-    themes: sortBy(data.thematics, 'order').map(t => ({
+    themes: sortBy(rootThematics, 'order').map(t => ({
       id: t.id,
       img: t.img,
       questions:
