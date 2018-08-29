@@ -56,7 +56,7 @@ from assembl.auth.password import verify_data_token, data_token, Validity
 from assembl.auth.util import get_permissions, discussions_with_access
 from assembl.graphql.langstring import resolve_langstring
 from assembl.models import (Discussion, Permission)
-from assembl.utils import format_date, get_thematics, get_published_posts, get_ideas
+from assembl.utils import format_date, get_published_posts, get_ideas
 from assembl.models.social_data_extraction import (
     get_social_columns_from_user, load_social_columns_info, get_provider_id_for_discussion)
 from ..traversal import InstanceContext, ClassContext
@@ -64,6 +64,7 @@ from . import (JSON_HEADER, FORM_HEADER, CreationResponse)
 from ..api.discussion import etalab_discussions, API_ETALAB_DISCUSSIONS_PREFIX
 from assembl.models import LanguagePreferenceCollection
 from assembl.models.idea_content_link import ExtractStates
+from assembl.models.timeline import Phases, get_phase_by_identifier
 
 no_thematic_associated = "no thematic associated"
 
@@ -1472,7 +1473,8 @@ def phase1_csv_export(request):
     writer = csv.DictWriter(
         output, dialect='excel', delimiter=';', fieldnames=fieldnames, quoting=csv.QUOTE_ALL)
     writer.writeheader()
-    thematics = get_thematics(discussion_id, 'survey')
+    survey_phase = get_phase_by_identifier(discussion, Phases.survey.value)
+    thematics = get_ideas(survey_phase)
     for thematic in thematics:
         row = {}
         row[THEMATIC_NAME] = get_entries_locale_original(thematic.title).get('entry')

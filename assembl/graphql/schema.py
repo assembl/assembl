@@ -10,7 +10,7 @@ from graphene_sqlalchemy import SQLAlchemyConnectionField
 from graphene_sqlalchemy.converter import (convert_column_to_string,
                                            convert_sqlalchemy_type)
 from graphene_sqlalchemy.utils import get_query
-from sqlalchemy.orm import contains_eager, joinedload, subqueryload
+from sqlalchemy.orm import subqueryload
 
 import assembl.graphql.docstrings as docs
 from assembl import models
@@ -54,18 +54,16 @@ from assembl.graphql.vote_session import (
     UpdateTokenVoteSpecification, DeleteVoteSpecification,
     CreateProposal, UpdateProposal, DeleteProposal
 )
-from assembl.graphql.utils import (
-    get_fields, get_root_thematic_for_phase,
-    get_posts_for_phases)
+from assembl.graphql.utils import get_fields, get_root_thematic_for_phase
 from assembl.graphql.preferences import UpdateHarvestingTranslationPreference
 from assembl.lib.locale import strip_country
 from assembl.lib.sqla_types import EmailString
 from assembl.models.action import SentimentOfPost
 from assembl.models.post import countable_publication_states
-from assembl.models import Phases
 from assembl.nlp.translation_service import DummyGoogleTranslationService
 from assembl.graphql.permissions_helpers import require_instance_permission
 from assembl.auth import CrudPermissions
+from assembl.utils import get_ideas, get_posts_for_phases
 
 
 convert_sqlalchemy_type.register(EmailString)(convert_column_to_string)
@@ -183,42 +181,11 @@ class Query(graphene.ObjectType):
         return vote_session
 
     def resolve_ideas(self, args, context, info):
-        discussion_id = context.matchdict['discussion_id']
-        discussion = models.Discussion.get(discussion_id)
         phase_id = args.get('discussion_phase_id')
         phase = models.DiscussionPhase.get(phase_id)
-        phase_identifier = phase.identifier
-        root_thematic = get_root_thematic_for_phase(phase)
-        if root_thematic is None:
-            return []
-
-        if discussion.root_idea != root_thematic:
-            return root_thematic.get_children()
-
-        model = models.Idea
-        query = get_query(model, context)
-        descendants_query = discussion.root_idea.get_descendants_query(inclusive=False)
-        query = query.outerjoin(
-                models.Idea.source_links
-            ).filter(model.id.in_(descendants_query)
-            ).filter(
-                model.hidden == False,  # noqa: E712
-                model.sqla_type == 'idea',
-                model.tombstone_date == None  # noqa: E711
-            ).options(
-                contains_eager(models.Idea.source_links),
-                subqueryload(models.Idea.attachments).joinedload("document"),
-#                subqueryload(models.Idea.message_columns),
-                joinedload(models.Idea.title).joinedload("entries"),
-#                joinedload(models.Idea.synthesis_title).joinedload("entries"),
-                joinedload(models.Idea.description).joinedload("entries"),
-            ).order_by(models.IdeaLink.order, models.Idea.creation_date)
-        if phase_identifier == Phases.multiColumns.value:
-            # Filter out ideas that don't have columns.
-            query = query.filter(
-                models.Idea.message_view_override == 'messageColumns')
-
-        return query
+        return get_ideas(
+            phase,
+            options=[subqueryload(models.Idea.attachments).joinedload("document")])
 
     def resolve_syntheses(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']

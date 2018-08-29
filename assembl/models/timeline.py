@@ -36,6 +36,15 @@ PHASES_WITH_POSTS = [
 ]
 
 
+def get_phase_by_identifier(discussion, identifier):
+    filtered_phases = [phase for phase in discussion.timeline_events
+                       if phase.identifier == identifier]
+    if not filtered_phases:
+        return None
+
+    return filtered_phases[0]
+
+
 class TimelineEvent(DiscussionBoundBase):
     """Abstract event that will be shown in the timeline."""
     __tablename__ = 'timeline_event'

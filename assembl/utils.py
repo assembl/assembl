@@ -3,23 +3,13 @@ from sqlalchemy import desc
 from sqlalchemy.orm import contains_eager, joinedload, subqueryload
 
 from assembl import models
+from assembl.models.timeline import (
+    Phases, PHASES_WITH_POSTS, get_phase_by_identifier)
+from assembl.graphql.utils import get_root_thematic_for_phase
 
 
 def format_date(datetime_to_format):
     return datetime_to_format.strftime('%d/%m/%Y %H:%M')
-
-
-def get_thematics(discussion_id, phase_id):
-    """Get thematics."""
-    model = models.Thematic
-    query = model.query.filter(
-        model.discussion_id == discussion_id
-        ).filter(model.identifier == phase_id
-        ).filter(model.hidden == False  # noqa: E712
-        ).filter(model.tombstone_date == None
-        ).order_by(model.id)
-
-    return query
 
 
 def get_published_posts(idea):
@@ -36,12 +26,19 @@ def get_published_posts(idea):
     return query
 
 
-def get_ideas(discussion_id, phase_id):
+def get_ideas(phase, options=None):
+    phase_identifier = phase.identifier
+    root_thematic = get_root_thematic_for_phase(phase)
+    discussion = phase.discussion
+    if root_thematic is None:
+        return []
+
+    if discussion.root_idea != root_thematic:
+        return root_thematic.get_children()
+
     model = models.Idea
     query = model.query
-    discussion = models.Discussion.get(discussion_id)
-    descendants_query = discussion.root_idea.get_descendants_query(
-        inclusive=False)
+    descendants_query = discussion.root_idea.get_descendants_query(inclusive=False)
     query = query.outerjoin(
             models.Idea.source_links
         ).filter(model.id.in_(descendants_query)
@@ -54,8 +51,69 @@ def get_ideas(discussion_id, phase_id):
             joinedload(models.Idea.title).joinedload("entries"),
             joinedload(models.Idea.description).joinedload("entries"),
         ).order_by(models.IdeaLink.order, models.Idea.creation_date)
-    if phase_id == 'multiColumns':
+    if options is not None:
+        query = query.options(*options)
+
+    if phase_identifier == Phases.multiColumns.value:
         # Filter out ideas that don't have columns.
         query = query.filter(
             models.Idea.message_view_override == 'messageColumns')
+
+    return query
+
+
+def get_posts_for_phases(discussion, identifiers, include_deleted=False):
+    """Return related posts for the given phases `identifiers` on `discussion`.
+    """
+    # Retrieve the phases with posts
+    identifiers_with_posts = [i for i in identifiers if i in PHASES_WITH_POSTS]
+    if not discussion or not identifiers_with_posts:
+        return None
+
+    ideas = []
+    # If survey phase, we need the root thematic
+    if Phases.survey.value in identifiers_with_posts:
+        survey_phase = get_phase_by_identifier(discussion, Phases.survey.value)
+        if survey_phase:
+            root_thematic = get_root_thematic_for_phase(survey_phase)
+            if root_thematic:
+                ideas.append(root_thematic)
+
+        identifiers_with_posts.remove(Phases.survey.value)
+
+    if identifiers_with_posts:
+        # If we have both 'thread' and 'multiColumns' in identifiers_with_posts
+        # use get_ideas with 'thread' phase to get all ideas.
+        # If only 'multiColumns' in identifiers_with_posts, use 'multiColumns' phase.
+        # Ideas from 'multiColumns' phase are a subset of the ideas
+        # from 'thread' phase
+        is_multi_columns = Phases.multiColumns.value in identifiers_with_posts and \
+            len(identifiers_with_posts) == 1
+        if is_multi_columns:
+            multi_columns_phase = get_phase_by_identifier(discussion, Phases.multiColumns.value)
+            if multi_columns_phase:
+                ideas.extend(get_ideas(multi_columns_phase).all())
+        else:
+            thread_phase = get_phase_by_identifier(discussion, Phases.thread.value)
+            if thread_phase:
+                ideas.extend(get_ideas(thread_phase).all())
+
+    if not ideas:
+        return None
+
+    model = models.AssemblPost
+    query = discussion.db.query(model)
+    queries = []
+    for idea in ideas:
+        related = idea.get_related_posts_query(True)
+        related_query = query.join(
+            related, model.id == related.c.post_id
+        )
+        queries.append(related_query)
+
+    query = queries[0].union_all(*queries[1:])
+    if not include_deleted:
+        return query.filter(
+            model.publication_state == models.PublicationStates.PUBLISHED)
+
     return query

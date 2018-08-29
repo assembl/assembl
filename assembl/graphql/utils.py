@@ -8,8 +8,7 @@ from graphql.utils.ast_to_dict import ast_to_dict
 
 from .langstring import langstring_from_input_entries
 from assembl import models
-from assembl.utils import get_ideas
-from assembl.models.timeline import Phases, PHASES_WITH_POSTS
+from assembl.models.timeline import Phases
 
 
 class DateTime(Scalar):
@@ -204,62 +203,6 @@ def update_attachment(discussion, attachment_model, new_value, attachments, atta
             attachmentPurpose=attachment_purpose
         )
         attachments.append(attachment)
-
-
-def get_posts_for_phases(discussion, identifiers, include_deleted=False):
-    """Return related posts for the given phases `identifiers` on `discussion`.
-    """
-    # Retrieve the phases with posts
-    identifiers_with_posts = [i for i in identifiers if i in PHASES_WITH_POSTS]
-    if not discussion or not identifiers_with_posts:
-        return None
-
-    ideas = []
-    # If survey phase, we need the root thematic
-    if Phases.survey.value in identifiers_with_posts:
-        survey_phase = [phase for phase in discussion.timeline_events
-                        if phase.identifier == Phases.survey.value]
-        if survey_phase:
-            root_thematic = get_root_thematic_for_phase(survey_phase[0])
-            if root_thematic:
-                ideas.append(root_thematic)
-
-        identifiers_with_posts.remove(Phases.survey.value)
-
-    if identifiers_with_posts:
-        # If we have both 'thread' and 'multiColumns' in identifiers_with_posts
-        # use get_ideas without filter (second param None) to get all ideas.
-        # If only 'multiColumns' in identifiers_with_posts, add the filter.
-        # Ideas from 'multiColumns' phase are a subset of the ideas
-        # from 'thread' phase
-        is_multi_columns = Phases.multiColumns.value in identifiers_with_posts and \
-            len(identifiers_with_posts) == 1
-        ideas.extend(
-            get_ideas(
-                discussion.id,
-                Phases.multiColumns.value if is_multi_columns else None
-            ).all()
-        )
-
-    if not ideas:
-        return None
-
-    model = models.AssemblPost
-    query = discussion.db.query(model)
-    queries = []
-    for idea in ideas:
-        related = idea.get_related_posts_query(True)
-        related_query = query.join(
-            related, model.id == related.c.post_id
-        )
-        queries.append(related_query)
-
-    query = queries[0].union_all(*queries[1:])
-    if not include_deleted:
-        return query.filter(
-            model.publication_state == models.PublicationStates.PUBLISHED)
-
-    return query
 
 
 def create_idea_announcement(user_id, discussion, idea, title_langstring, description_langstring):
