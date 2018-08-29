@@ -519,7 +519,7 @@ def extract_taxonomy_csv(request):
     extracts = db.query(m.Extract).filter(m.Extract.discussion_id == discussion.id)
     extract_list = []
     user_prefs = LanguagePreferenceCollection.getCurrent()
-    fieldnames = ["Thematic", "Message", "Content harvested", "Qualify by nature", "Qualify by action",
+    fieldnames = ["Thematic", "Message", "Content harvested",  "Content locale", "Original message", "Original locale", "Qualify by nature", "Qualify by action",
                   "Owner of the message", "Published on", "Harvester", "Harvested on", "Nugget", "State"]
     for extract in extracts:
         if extract.idea_id:
@@ -533,9 +533,15 @@ def extract_taxonomy_csv(request):
                 thematic = no_thematic_associated
         else:
             thematic = no_thematic_associated
+        if extract.locale_id:
+            extract_locale = extract.locale.code
+        else:
+            extract_locale = "no extract locale"
         query = db.query(m.Post).filter(m.Post.id == extract.content_id).first()
         if query:
             if query.body:
+                original_message = query.body.first_original().value
+                original_locale = query.body.first_original().locale.code
                 message = query.body.best_lang(user_prefs).value
             else:
                 message = "no message"
@@ -573,6 +579,9 @@ def extract_taxonomy_csv(request):
             "Thematic": thematic.encode('utf-8'),
             "Message": sanitize_text(message).encode('utf-8'),
             "Content harvested": content_harvested.encode('utf-8'),
+            "Content locale": extract_locale.encode('utf-8'),
+            "Original message": sanitize_text(original_message).encode('utf-8'),
+            "Original locale": original_locale.encode('utf-8'),
             "Qualify by nature": qualify_by_nature.encode('utf-8'),
             "Qualify by action": qualify_by_action.encode('utf-8'),
             "Owner of the message": owner_of_the_message.encode('utf-8'),
