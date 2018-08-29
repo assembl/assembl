@@ -5,7 +5,7 @@ import { Grid, Row, Col, Button } from 'react-bootstrap';
 
 import { get } from '../../utils/routeMap';
 import { getDiscussionSlug } from '../../utils/globalFunctions';
-import { getCurrentPhaseIdentifier } from '../../utils/timeline';
+import { getCurrentPhaseIdentifier, getIfDebateIsStarted } from '../../utils/timeline';
 import { browserHistory } from '../../router';
 
 class Objectives extends React.Component {
@@ -23,10 +23,12 @@ class Objectives extends React.Component {
 
   render() {
     const { debateData } = this.props.debate;
+    const { timeline } = this.props;
     let { locale } = this.props.i18n;
     if (locale === 'zh-CN') {
       locale = 'zh_CN';
     }
+    const isDebateStarted = getIfDebateIsStarted(timeline);
     return (
       <section className="home-section objectives-section">
         <Grid fluid>
@@ -76,11 +78,13 @@ class Objectives extends React.Component {
                   )}
                 </Row>
               </div>
-              <div className="center inline full-size margin-xxl">
-                <Button onClick={this.displayPhase} className="button-submit button-dark">
-                  <Translate value="home.accessButton" />
-                </Button>
-              </div>
+              {isDebateStarted && (
+                <div className="center inline full-size margin-xxl">
+                  <Button onClick={this.displayPhase} className="button-submit button-dark">
+                    <Translate value="home.accessButton" />
+                  </Button>
+                </div>
+              )}
             </div>
           </div>
         </Grid>

@@ -24,6 +24,22 @@ const dateComparator = (phase1, phase2) => {
   return 1;
 };
 
+export const getIfDebateIsStarted = (_timeline: Timeline) => {
+  let isDebateStarted = false;
+  let timeline = _timeline;
+  if (!timeline) {
+    timeline = [];
+  }
+  const currentDate = new Date();
+  timeline.forEach((phase) => {
+    const startDate = new Date(phase.start);
+    if (currentDate >= startDate) {
+      isDebateStarted = true;
+    }
+  });
+  return isDebateStarted;
+};
+
 export const getCurrentPhaseIdentifier = (_timeline: Timeline) => {
   let timeline = _timeline;
   if (!timeline) {
