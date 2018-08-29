@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 import Masonry from 'react-masonry-component';
+import Animated from 'react-animated-transitions';
 
 import { Grid } from 'react-bootstrap';
 import { Translate, I18n } from 'react-redux-i18n';
@@ -46,13 +47,15 @@ const FictionsList = (props: FictionsListType) => {
   const slug = getDiscussionSlug();
 
   const childElements = posts.map(post => (
-    <FictionPreview
-      link={`${get('post', { slug: slug, phase: identifier, postId: post.id })}`} // TODO: change route to fiction route
-      title={post.subject}
-      creationDate={I18n.l(post.creationDate, { dateFormat: 'date.format3' })}
-      authorName={post.creator.isDeleted ? I18n.t('deletedUser') : post.creator.displayName}
-      color={getRandomColor()}
-    />
+    <Animated key={post.id} preset="scalein">
+      <FictionPreview
+        link={`${get('post', { slug: slug, phase: identifier, postId: post.id })}`} // TODO: change route to fiction route
+        title={post.subject}
+        creationDate={I18n.l(post.creationDate, { dateFormat: 'date.format3' })}
+        authorName={post.creator.isDeleted ? I18n.t('deletedUser') : post.creator.displayName}
+        color={getRandomColor()}
+      />
+    </Animated>
   ));
 
   return (
