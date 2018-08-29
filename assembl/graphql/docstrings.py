@@ -371,7 +371,6 @@ class VideoInput:
 class Thematic:
     __doc__ = """A Thematic is an Idea that exists under the Survey Phase of a debate.
     Thematics differ slightly from Ideas because Thematics' subideas are Questions."""
-    identifier = "The phase identifier of the Thematic."
     questions = """A list of Question objects that are bound to the Thematic."""
     video = """A Video objet that is often integrated to the header of a Thematic."""
 

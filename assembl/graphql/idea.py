@@ -491,7 +491,7 @@ class Thematic(SecureObjectType, SQLAlchemyObjectType):
     class Meta:
         model = models.Thematic
         interfaces = (Node, IdeaInterface)
-        only_fields = ('id', 'identifier')
+        only_fields = ('id', )
 
     questions = graphene.List(Question, description=docs.Thematic.questions)
     video = graphene.Field(Video, lang=graphene.String(), description=docs.Thematic.video)
@@ -702,9 +702,6 @@ class CreateThematic(graphene.Mutation):
                 discussion_id=discussion_id,
                 title=title_langstring,
                 **kwargs)
-            if cls == models.Thematic:
-                saobj.identifier = phase_identifier  # I don't think this is really used
-
             db.add(saobj)
             order = len(parent_idea.get_children()) + 1.0
             db.add(

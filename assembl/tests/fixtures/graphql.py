@@ -207,7 +207,6 @@ mutation myFirstMutation {
             ... on Thematic {
                 id,
                 titleEntries { localeCode value },
-                identifier,
                 questions { id, titleEntries { localeCode value } }
             }
         }
@@ -259,7 +258,6 @@ mutation myMutation {
             ... on Thematic {
                 id,
                 titleEntries { localeCode value },
-                identifier,
                 questions { id, titleEntries { localeCode value } }
             }
         }
@@ -308,7 +306,6 @@ mutation myMutation {
                 id
                 order,
                 titleEntries { localeCode value },
-                identifier,
                 questions { id, titleEntries { localeCode value } }
             }
         }
@@ -345,7 +342,6 @@ mutation createThematicWithImage($file: String!) {
         thematic {
             ... on Thematic {
                 id,
-                identifier,
                 img { externalUrl }
             }
         }

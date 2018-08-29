@@ -30,8 +30,7 @@ def test_get_thematics_no_video(discussion, phases, graphql_request, test_sessio
     root_thematic = create_root_thematic(discussion, "survey")
     thematic = models.Thematic(
         discussion_id=discussion.id,
-        title=title,
-        identifier="survey")
+        title=title)
     test_session.add(
         models.IdeaLink(source=root_thematic, target=thematic, order=1.0))
     test_session.commit()
@@ -69,7 +68,6 @@ def test_get_thematics_with_video(discussion, phases, graphql_request, test_sess
     thematic = models.Thematic(
         discussion_id=discussion.id,
         title=title,
-        identifier="survey",
         video_title=video_title,
         video_description_top=video_desc_top,
         video_description_bottom=video_desc_bottom,
@@ -135,7 +133,6 @@ mutation myFirstMutation {
         thematic {
             ... on Thematic {
                 title
-                identifier
                 video {
                     title
                     titleEntries {
@@ -168,7 +165,6 @@ mutation myFirstMutation {
         u'createThematic': {
             u'thematic': {
                 u'title': u'Understanding the dynamics and issues',
-                u'identifier': 'survey',
                 u'video': {u'title': u"Laurent Alexandre, chirurgien et expert en intelligence artificielle nous livre ses prédictions pour le 21e siècle.",
                            u'titleEntries': [{
                                u'value': u"Laurent Alexandre, chirurgien et expert en intelligence artificielle nous livre ses prédictions pour le 21e siècle.",
@@ -204,7 +200,6 @@ mutation myFirstMutation {
         thematic {
             ... on Thematic {
                 title,
-                identifier
             }
         }
     }
@@ -214,7 +209,6 @@ mutation myFirstMutation {
         u'createThematic': {
             u'thematic': {
                 u'title': u'Understanding the dynamics and issues',
-                u'identifier': u'survey'
             }}}
 
 
@@ -228,8 +222,7 @@ mutation myFirstMutation {
     ], discussionPhaseId: """+unicode(phases['survey'].id)+u""") {
         thematic {
             ... on Thematic {
-                title,
-                identifier
+                title
             }
         }
     }
@@ -238,8 +231,7 @@ mutation myFirstMutation {
     assert json.loads(json.dumps(res.data)) == {
         u'createThematic': {
             u'thematic': {
-                u'title': u'Comprendre les dynamiques et les enjeux',
-                u'identifier': u'survey'
+                u'title': u'Comprendre les dynamiques et les enjeux'
             }}}
 
 
@@ -252,8 +244,7 @@ mutation myFirstMutation {
     ], discussionPhaseId: """+unicode(phases['survey'].id)+u""") {
         thematic {
             ... on Thematic {
-                title(lang: "fr"),
-                identifier
+                title(lang: "fr")
             }
         }
     }
@@ -262,8 +253,7 @@ mutation myFirstMutation {
     assert json.loads(json.dumps(res.data)) == {
         u'createThematic': {
             u'thematic': {
-                u'title': u'Comprendre les dynamiques et les enjeux',
-                u'identifier': u'survey'
+                u'title': u'Comprendre les dynamiques et les enjeux'
             }}}
 
 
@@ -276,8 +266,7 @@ mutation myFirstMutation {
     ], discussionPhaseId: """+unicode(phases['survey'].id)+u""") {
         thematic {
             ... on Thematic {
-                title(lang: "fr"),
-                identifier
+                title(lang: "fr")
             }
         }
     }
@@ -286,8 +275,7 @@ mutation myFirstMutation {
     assert json.loads(json.dumps(res.data)) == {
         u'createThematic': {
             u'thematic': {
-                u'title': u'Understanding the dynamics and issues',
-                u'identifier': u'survey'
+                u'title': u'Understanding the dynamics and issues'
             }}}
 
 
@@ -301,8 +289,7 @@ mutation myFirstMutation {
     ], discussionPhaseId: """+unicode(phases['survey'].id)+u""") {
         thematic {
             ... on Thematic {
-                title(lang:"fr"),
-                identifier
+                title(lang:"fr")
             }
         }
     }
@@ -311,8 +298,7 @@ mutation myFirstMutation {
     assert json.loads(json.dumps(res.data)) == {
         u'createThematic': {
             u'thematic': {
-                u'title': u'Understanding the dynamics and issues',
-                u'identifier': u'survey'
+                u'title': u'Understanding the dynamics and issues'
             }}}
 
 
@@ -340,7 +326,6 @@ mutation myFirstMutation($img:String) {
             ... on Thematic {
                 id,
                 title(lang:"fr"),
-                identifier,
                 img {
                     externalUrl
                     mimeType
@@ -360,7 +345,6 @@ mutation myFirstMutation($img:String) {
 #        u'createThematic': {
 #            u'thematic': {
 #                u'title': u'Comprendre les dynamiques et les enjeux',
-#                u'identifier': u'survey',
 #                u'imgUrl': u'http://localhost:6543/data/Discussion/8/documents/1/data'
 #    }}}
 #    just assert we have the ends correct:
@@ -388,8 +372,7 @@ mutation myFirstMutation($img:String, $thematicId:ID!) {
     ) {
         thematic {
             ... on Thematic {
-                title(lang:"fr"),
-                identifier,
+                title(lang:"fr")
                 img {
                     externalUrl
                     mimeType
@@ -413,8 +396,7 @@ mutation myFirstMutation {
     ], discussionPhaseId: """+unicode(phases['survey'].id)+u""") {
         thematic {
             ... on Thematic {
-                title(lang:"en"),
-                identifier
+                title(lang:"en")
             }
         }
     }
@@ -423,8 +405,7 @@ mutation myFirstMutation {
     assert json.loads(json.dumps(res.data)) == {
         u'createThematic': {
             u'thematic': {
-                u'title': u'Understanding the dynamics and issues',
-                u'identifier': 'survey'
+                u'title': u'Understanding the dynamics and issues'
             }}}
 
 
@@ -434,8 +415,7 @@ mutation myFirstMutation {
     createThematic(titleEntries:[], discussionPhaseId: """+unicode(phases['survey'].id)+u""") {
         thematic {
             ... on Thematic {
-                title(lang:"en"),
-                identifier
+                title(lang:"en")
             }
         }
     }
@@ -454,8 +434,7 @@ mutation myFirstMutation {
     createThematic(titleEntries:[{value:"Comprendre les dynamiques et les enjeux", localeCode:"fr"}], discussionPhaseId: """+unicode(phases['survey'].id)+u""") {
         thematic {
             ... on Thematic {
-                title,
-                identifier
+                title
             }
         }
     }
@@ -487,8 +466,7 @@ mutation myFirstMutation {
     ) {
         thematic {
             ... on Thematic {
-                title(lang:"fr"),
-                identifier
+                title(lang:"fr")
                 questions { title(lang:"fr") }
             }
         }
@@ -499,7 +477,6 @@ mutation myFirstMutation {
         u'createThematic': {
             u'thematic': {
                 u'title': u'Comprendre les dynamiques et les enjeux',
-                u'identifier': u'survey',
                 u'questions': [
                     {u'title': u"Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?"},
                     {u'title': u"Seconde question ?"},
@@ -612,7 +589,6 @@ mutation secondMutation {
         thematic {
             ... on Thematic {
                 titleEntries { localeCode value },
-                identifier
                 questions { titleEntries { localeCode value } }
             }
         }
@@ -628,7 +604,6 @@ mutation secondMutation {
                     {u'value': u"omprendre les dynamiques et les enjeux",
                         u'localeCode': u"fr"}
                 ],
-                u'identifier': u'survey',
                 u'questions': [
                     {u'titleEntries': [
                         {u'value': u"omment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?", u'localeCode': u"fr"}
@@ -653,7 +628,6 @@ mutation secondMutation {
         thematic {
             ... on Thematic {
                 titleEntries { localeCode value },
-                identifier
                 questions { titleEntries { localeCode value } }
             }
         }
@@ -669,7 +643,6 @@ mutation secondMutation {
                     {u'value': u"Comprendre les dynamiques et les enjeux",
                         u'localeCode': u"fr"}
                 ],
-                u'identifier': u'survey',
                 u'questions': [
                 ]
             }}}
@@ -690,7 +663,6 @@ mutation myMutation($thematicId:ID!) {
         thematic {
             ... on Thematic {
                 titleEntries { localeCode value },
-                identifier
                 questions { titleEntries { localeCode value } }
                 video {
                     titleEntries {
@@ -728,7 +700,6 @@ mutation myMutation($thematicId:ID!) {
                     {u'value': u"Comprendre les dynamiques et les enjeux",
                         u'localeCode': u"fr"}
                 ],
-                u'identifier': u'survey',
                 u'questions': [
                     {u'titleEntries': [
                         {u'value': u"Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?", u'localeCode': u"fr"}
@@ -762,7 +733,6 @@ mutation secondMutation {
         thematic {
             ... on Thematic {
                 titleEntries { localeCode value },
-                identifier
                 questions { titleEntries { localeCode value } }
             }
         }
@@ -778,7 +748,6 @@ mutation secondMutation {
                     {u'value': u"Comprendre les dynamiques et les enjeux",
                         u'localeCode': u"fr"}
                 ],
-                u'identifier': u'survey',
                 u'questions': [
                     {u'titleEntries': [
                         {u'value': u"Seconde question mais en premier !",
@@ -801,7 +770,6 @@ mutation updateThematic($thematicId: ID!, $file: String!) {
     ) {
         thematic {
             ... on Thematic {
-                identifier
                 img {
                     externalUrl
                 }
@@ -814,7 +782,6 @@ mutation updateThematic($thematicId: ID!, $file: String!) {
     assert json.loads(json.dumps(res.data)) == {
         u'updateThematic': {
             u'thematic': {
-                u'identifier': u'survey',
                 u'img': None
             }}}
 
