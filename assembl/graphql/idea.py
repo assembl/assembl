@@ -91,7 +91,6 @@ class IdeaInterface(graphene.Interface):
     def resolve_num_posts(self, args, context, info):
         # Return the number of posts bound to this idea.
         # Special case for root: do not count all posts, but only those bound to an idea.
-        # TODO: Find a way to get all posts of a given phase.
         if isinstance(self, models.RootIdea):
             return self.num_posts - self.num_orphan_posts
         else:

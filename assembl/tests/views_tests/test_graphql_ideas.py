@@ -386,6 +386,27 @@ def test_graphql_discussion_counters_thread_phase_with_posts(graphql_request, pr
         """, context_value=graphql_request, variable_values={'discussionPhaseId': phases['thread'].id})
     assert res.data['rootIdea']['numTotalPosts'] == 16  # all posts
     assert res.data['rootIdea']['numPosts'] == 16  # phase 1+2 posts counted when current phase is thread
+    # 16 because thread phase is on discussion.root_idea and survey phase is a sub root idea of it.
+    assert res.data['numParticipants'] == 1
+
+
+def test_graphql_discussion_counters_all_phases(graphql_request, proposals, top_post_in_thread_phase, phases):
+    res = schema.execute(
+        u"""query RootIdeaStats($discussionPhaseId: Int) {
+              rootIdea(discussionPhaseId: $discussionPhaseId) {
+                ... on Node {
+                  id
+                }
+                ... on IdeaInterface {
+                  numPosts,
+                  numTotalPosts
+                }
+              }
+              numParticipants
+            }
+        """, context_value=graphql_request, variable_values={'discussionPhaseId': None})
+    assert res.data['rootIdea']['numTotalPosts'] == 16  # all posts
+    assert res.data['rootIdea']['numPosts'] == 16  # phase 1+2 posts counted because all posts come from discussion.root_idea
     assert res.data['numParticipants'] == 1
 
 
