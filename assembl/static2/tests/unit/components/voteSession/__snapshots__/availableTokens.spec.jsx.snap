@@ -1005,7 +1005,7 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (sticky
           className="center col-md-6 col-xs-12"
         >
           <div
-            className="category-available-tokens right"
+            className="category-available-tokens left"
           >
             <div
               className="text"
