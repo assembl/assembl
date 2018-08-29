@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Link component should render a link 1`] = `
+<a
+  className="link"
+  href="https://en.wikipedia.org/wiki/Portable_Network_Graphics"
+  rel="noopener noreferrer"
+  target="_blank"
+  title="My link"
+>
+  PNG
+</a>
+`;

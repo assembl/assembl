@@ -3,6 +3,8 @@ import * as React from 'react';
 import decorateComponentWithProps from 'decorate-component-with-props';
 import { type EditorState } from 'draft-js';
 
+import linkStrategy, { matchesEntityType } from './linkStrategy';
+import Link from './components/Link';
 import LinkButton from './components/LinkButton';
 
 type GetEditorState = void => EditorState;
@@ -36,6 +38,14 @@ export default (config: Config = {}) => {
       store.getEditorState = getEditorState;
       store.setEditorState = setEditorState;
     },
+
+    decorators: [
+      {
+        strategy: linkStrategy,
+        matchesEntityType: matchesEntityType,
+        component: Link
+      }
+    ],
 
     LinkButton: decorateComponentWithProps(LinkButton, {
       modal: modal,
