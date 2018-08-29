@@ -1015,7 +1015,14 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
             end = datetime.now()
         return (start, end)
 
-    @visit_analytics_region.cache_on_arguments(expiration_time=3600)
+    def generate_redis_key(namespace, fn):
+
+        def generate_key(*arg):
+            return id + '_' + namespace
+
+        return generate_key
+
+    @visit_analytics_region.cache_on_arguments(namespace="visits_time_series_analytics", function_key_generator=generate_redis_key)
     def get_visits_time_series_analytics(self, start_date=None, end_date=None, only_fields=None):
         """
         Fetches visits analytics from bound piwik site.

@@ -4,6 +4,14 @@ import mock
 from assembl.lib.caching import create_analytics_region
 
 
+def my_key_generator(namespace, fn, **kw):
+
+    def generate_key(*arg):
+        return namespace
+
+    return generate_key
+
+
 def test_dogpile_cache():
     visit_analytics_region = create_analytics_region()
     # mock object
@@ -11,7 +19,7 @@ def test_dogpile_cache():
     # wrap in function, because dogpile really wants functions
     mock_f = lambda x: mock_o(x)
     # wrap in dogpile
-    dogMock = visit_analytics_region.cache_on_arguments(expiration_time=10)(mock_f)
+    dogMock = visit_analytics_region.cache_on_arguments(expiration_time=10, function_key_generator=my_key_generator, namespace="test_dogpile.cache")(mock_f)
     # invalidate from previous tests
     dogMock.invalidate(1)
     # call twice
