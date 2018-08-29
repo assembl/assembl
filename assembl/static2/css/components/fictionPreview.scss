@@ -13,7 +13,7 @@
   .light-title-3,
   p,
   .author,
-  .published_date {
+  .published-date {
     font-family: 'LatoRegular';
     font-weight: normal;
     font-style: normal;
@@ -51,9 +51,9 @@
           font-size: $font-size-xxs;
         }
 
-        .published_date {
+        .published-date {
           font-family: 'LatoLight';
-          font-size: $font-size-xxxs;
+          font-size: $font-size-xxs;
           font-weight: 300;
         }
       }
@@ -86,7 +86,7 @@
             font-size: $font-size-xs;
           }
 
-          .published_date {
+          .published-date {
             font-size: $font-size-xxs;
           }
         }
