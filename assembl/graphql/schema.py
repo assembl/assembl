@@ -85,9 +85,9 @@ log = logging.getLogger('assembl')
 class Query(graphene.ObjectType):
     node = Node.Field(description=docs.Schema.node)
     root_idea = graphene.Field(
-        IdeaUnion, discussion_phase_id=graphene.Int(description=docs.Default.phase_identifier), description=docs.Schema.root_idea)
+        IdeaUnion, discussion_phase_id=graphene.Int(description=docs.Default.discussion_phase_id), description=docs.Schema.root_idea)
     ideas = graphene.List(
-        IdeaUnion, discussion_phase_id=graphene.Int(required=True, description=docs.Default.phase_identifier_id), description=docs.Schema.ideas)
+        IdeaUnion, discussion_phase_id=graphene.Int(required=True, description=docs.Default.discussion_phase_id), description=docs.Schema.ideas)
     syntheses = graphene.List(Synthesis, description=docs.Schema.syntheses)
     num_participants = graphene.Int(description=docs.Schema.num_participants)
     discussion_preferences = graphene.Field(DiscussionPreferences, description=docs.Schema.discussion_preferences)
@@ -100,7 +100,7 @@ class Query(graphene.ObjectType):
     has_syntheses = graphene.Boolean(description=docs.Schema.has_syntheses)
     vote_session = graphene.Field(
         VoteSession,
-        discussion_phase_id=graphene.Int(required=True, description=docs.Default.phase_identifier_id),
+        discussion_phase_id=graphene.Int(required=True, description=docs.Default.discussion_phase_id),
         description=docs.Schema.vote_session)
     resources = graphene.List(Resource, description=docs.Schema.resources)
     resources_center = graphene.Field(lambda: ResourcesCenter, description=docs.Schema.resources_center)

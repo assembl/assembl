@@ -17,7 +17,7 @@ class Default:
     \"voteSession\"\n
     \"brightMirror\"\n
     """
-    phase_identifier_id = "The database identifier relating to the discussion phase."
+    discussion_phase_id = "The database id of a discussion phase."
 
 
 class Schema:
@@ -379,7 +379,7 @@ class CreateThematic:
     __doc__ = """A mutation to create a new thematic."""
     title_entries = IdeaInterface.title_entries
     description_entries = IdeaInterface.description_entries
-    discussion_phase_id = Default.phase_identifier_id
+    discussion_phase_id = Default.discussion_phase_id
     video = Thematic.video
     questions = Thematic.questions
     image = Default.document % ("An Image to be shown in the Thematic. ")
