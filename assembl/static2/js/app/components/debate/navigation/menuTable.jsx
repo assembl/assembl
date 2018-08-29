@@ -20,7 +20,8 @@ export function prefetchMenuQuery(
   const query = queries[variables.identifier];
   client.query({
     query: query || queries.default,
-    variables: variables
+    variables: { lang: variables.lang, discussionPhaseId: variables.discussionPhaseId }
+    // need the same variables order than the query for deduplication to work
   });
 }
 
