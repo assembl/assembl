@@ -78,7 +78,7 @@ def test_mutation_update_discussion_phase(graphql_request, discussion_with_2_pha
         variable_values={
             "id": phase1_id,
             "lang": u"en",
-            "identifier": u"multiColumn",
+            "identifier": u"multiColumns",
             "isThematicsTable": True,
             "titleEntries": [
                 { "localeCode": "en", "value": u"My new title" }
@@ -95,7 +95,7 @@ def test_mutation_update_discussion_phase(graphql_request, discussion_with_2_pha
     assert res.errors is None
     phase1_updated = res.data['updateDiscussionPhase']['discussionPhase']
     assert phase1_updated['id'] == phase1_id
-    assert phase1_updated['identifier'] == 'multiColumn'
+    assert phase1_updated['identifier'] == 'multiColumns'
     assert phase1_updated['isThematicsTable'] is True
     assert phase1_updated['title'] == u'My new title'
     assert phase1_updated['titleEntries'][0]['localeCode'] == u'en'
