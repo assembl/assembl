@@ -147,7 +147,7 @@ def test_graphql_update_vote_session(graphql_request, vote_session, test_app, gr
 
 def test_graphql_delete_vote_session_cascade(graphql_request, vote_session, test_app, graphql_registry):
     db = vote_session.db;
-    image_id = image_from_vote_session(vote_session).id
+    # image_id = image_from_vote_session(vote_session).id
     attachment_id = vote_session.attachments[0].id
     db.delete(vote_session)
     db.flush()
