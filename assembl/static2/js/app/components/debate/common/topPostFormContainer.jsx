@@ -8,8 +8,8 @@ import { hexToRgb } from '../../../utils/globalFunctions';
 import { MIN_WIDTH_COLUMN, SMALL_SCREEN_HEIGHT } from '../../../constants';
 
 type TopPostFormContainerProps = {
-  messageColumns: Object,
-  isColumnViewInline: boolean,
+  messageColumns?: Object,
+  isColumnViewInline?: boolean,
   ideaId: string,
   refetchIdea: Function,
   topPostsCount: number,

@@ -123,6 +123,26 @@ export const pickerColors = [
   '#000000'
 ];
 
+export const fictionBackgroundColors = [
+  '#ffcdd2',
+  '#e1bee7',
+  '#d1c4e9',
+  '#c5cae9',
+  '#bbdefb',
+  '#b3e5fc',
+  '#b2ebf2',
+  '#b2dfdb',
+  '#c8e6c9',
+  '#dcedc8',
+  '#f0f4c3',
+  '#fff9c4',
+  '#ffecb3',
+  '#ffe0b2',
+  '#ffccbc',
+  '#d7ccc8',
+  '#cfd8dc'
+];
+
 export const modulesTranslationKeys = ['survey', 'thread', 'multiColumns', 'voteSession', 'brightMirror'];
 
 export const BlockingPublicationStates = {};

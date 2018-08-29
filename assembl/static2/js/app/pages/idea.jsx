@@ -16,7 +16,7 @@ import ColumnsView from '../components/debate/multiColumns/columnsView';
 import ThreadView from '../components/debate/thread/threadView';
 import { DeletedPublicationStates, PHASES } from '../constants';
 import HeaderStatistics, { statContributions, statMessages, statParticipants } from '../components/common/headerStatistics';
-import InstructionView from '../components/debate/brightMirror/InstructionView';
+import InstructionView from '../components/debate/brightMirror/instructionView';
 
 const deletedPublicationStates = Object.keys(DeletedPublicationStates);
 

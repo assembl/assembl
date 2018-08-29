@@ -2,7 +2,7 @@ import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 import { connectedUserCan } from '../../../../../js/app/utils/permissions';
 
-import InstructionView from '../../../../../js/app/components/debate/brightMirror/InstructionView';
+import InstructionView from '../../../../../js/app/components/debate/brightMirror/instructionView';
 
 jest.mock('../../../../../js/app/utils/permissions');
 

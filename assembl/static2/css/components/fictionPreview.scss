@@ -1,0 +1,117 @@
+.fiction-preview {
+  border-bottom: solid 2px $theme-local-blue;
+  box-shadow: 0 2px 3px 0 #d0d0d0;
+  width: 149px;
+  height: 200px;
+  margin: 4px;
+
+  &:hover {
+    transition: all 0.3s ease-out;
+    transform: scale(1.02);
+  }
+
+  .light-title-3,
+  p,
+  .author,
+  .published_date {
+    font-family: 'LatoRegular';
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    color: $black;
+    letter-spacing: normal;
+    line-height: 1.19;
+    text-transform: none;
+    text-align: left;
+  }
+
+  .light-title-3 {
+    font-size: $font-size-sm;
+    margin-bottom: 17px;
+  }
+
+  .content-box {
+    display: block;
+    text-align: center;
+    cursor: pointer;
+    height: 100%;
+    width: 100%;
+    position: relative;
+
+    .inner-box {
+      position: absolute;
+      bottom: 0;
+      margin: 0 7px;
+
+      .info {
+        margin-bottom: 7px;
+
+        .author {
+          font-family: 'LatoRegular';
+          font-size: $font-size-xxs;
+        }
+
+        .published_date {
+          font-family: 'LatoLight';
+          font-size: $font-size-xxxs;
+          font-weight: 300;
+        }
+      }
+    }
+  }
+
+  @media (min-width: $screen-xxs-max) {
+    margin: 13px;
+    width: 200px;
+    height: 268px;
+  }
+
+  @media (min-width: $screen-sm-min) {
+    border-bottom: solid 3px $theme-local-blue;
+    width: 336px;
+    height: 456px;
+
+    .light-title-3 {
+      font-size: $font-size-l;
+    }
+
+    .content-box {
+      .inner-box {
+        margin: 0 17px;
+
+        .info {
+          margin-bottom: 36px;
+
+          .author {
+            font-size: $font-size-xs;
+          }
+
+          .published_date {
+            font-size: $font-size-xxs;
+          }
+        }
+      }
+    }
+  }
+
+  @media (min-width: $screen-md-min) {
+    width: 368px;
+    height: 499px;
+    border-bottom: solid 3px $theme-local-blue;
+
+    .light-title-3 {
+      font-size: $font-size-l;
+      margin-bottom: 20px;
+    }
+
+    .content-box {
+      .inner-box {
+        margin: 0 19px;
+
+        .info {
+          margin-bottom: 41px;
+        }
+      }
+    }
+  }
+}

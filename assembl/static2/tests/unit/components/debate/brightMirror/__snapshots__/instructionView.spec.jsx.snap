@@ -2,153 +2,89 @@
 
 exports[`Bright Mirror page should hide fiction creation section if timeline is over 1`] = `
 <div
-  className="overflow-x"
+  className="instruction-view"
 >
+  <InstructionsText
+    body="Participez à la création de fiction"
+    title="Instruction"
+  />
   <div
-    className="announcement"
+    className="overflow-x"
   >
-    <div
-      className="announcement-title"
-    >
-      <div
-        className="title-hyphen"
-      >
-         
-      </div>
-      <h3
-        className="announcement-title-text dark-title-1"
-      >
-        Instruction
-      </h3>
-    </div>
-    <Col
-      bsClass="col"
-      className="announcement-media col-md-push-4"
-      componentClass="div"
-      md={8}
-      xs={12}
-    >
-      <div>
-        Participez à la création de fiction
-      </div>
-    </Col>
+    <FictionsList
+      identifier="brightMirror"
+      lang={undefined}
+      posts={Array []}
+    />
   </div>
 </div>
 `;
 
 exports[`Bright Mirror page should hide fiction creation section if user is not allowed post 1`] = `
 <div
-  className="overflow-x"
+  className="instruction-view"
 >
+  <InstructionsText
+    body="Participez à la création de fiction"
+    title="Instruction"
+  />
   <div
-    className="announcement"
+    className="overflow-x"
   >
-    <div
-      className="announcement-title"
-    >
-      <div
-        className="title-hyphen"
-      >
-         
-      </div>
-      <h3
-        className="announcement-title-text dark-title-1"
-      >
-        Instruction
-      </h3>
-    </div>
-    <Col
-      bsClass="col"
-      className="announcement-media col-md-push-4"
-      componentClass="div"
-      md={8}
-      xs={12}
-    >
-      <div>
-        Participez à la création de fiction
-      </div>
-    </Col>
+    <FictionsList
+      identifier="brightMirror"
+      lang={undefined}
+      posts={Array []}
+    />
   </div>
 </div>
 `;
 
 exports[`Bright Mirror page should hide fiction creation section if user is not connected 1`] = `
 <div
-  className="overflow-x"
+  className="instruction-view"
 >
+  <InstructionsText
+    body="Participez à la création de fiction"
+    title="Instruction"
+  />
   <div
-    className="announcement"
+    className="overflow-x"
   >
-    <div
-      className="announcement-title"
-    >
-      <div
-        className="title-hyphen"
-      >
-         
-      </div>
-      <h3
-        className="announcement-title-text dark-title-1"
-      >
-        Instruction
-      </h3>
-    </div>
-    <Col
-      bsClass="col"
-      className="announcement-media col-md-push-4"
-      componentClass="div"
-      md={8}
-      xs={12}
-    >
-      <div>
-        Participez à la création de fiction
-      </div>
-    </Col>
+    <FictionsList
+      identifier="brightMirror"
+      lang={undefined}
+      posts={Array []}
+    />
   </div>
 </div>
 `;
 
 exports[`Bright Mirror page should match BrightMirror instruction snapshot 1`] = `
 <div
-  className="overflow-x"
+  className="instruction-view"
 >
-  <div
-    className="announcement"
-  >
-    <div
-      className="announcement-title"
-    >
-      <div
-        className="title-hyphen"
-      >
-         
-      </div>
-      <h3
-        className="announcement-title-text dark-title-1"
-      >
-        Instruction
-      </h3>
-    </div>
-    <Col
-      bsClass="col"
-      className="announcement-media col-md-push-4"
-      componentClass="div"
-      md={8}
-      xs={12}
-    >
-      <div>
-        Participez à la création de fiction
-      </div>
-    </Col>
-  </div>
-  <TopPostFormContainer
-    bodyPlaceholder="debate.brightMirror.fillBodyLabel"
-    fillBodyLabel="debate.brightMirror.fillBodyLabel"
-    ideaId={0}
-    instructionLabel="debate.brightMirror.startFictionLabel"
-    postSuccessMsg="debate.brightMirror.postSuccessMsg"
-    refetchIdea={[Function]}
-    topPostsCount={0}
+  <InstructionsText
+    body="Participez à la création de fiction"
+    title="Instruction"
   />
+  <div
+    className="overflow-x"
+  >
+    <TopPostFormContainer
+      bodyPlaceholder="debate.brightMirror.fillBodyLabel"
+      fillBodyLabel="debate.brightMirror.fillBodyLabel"
+      ideaId={0}
+      instructionLabel="debate.brightMirror.startFictionLabel"
+      postSuccessMsg="debate.brightMirror.postSuccessMsg"
+      refetchIdea={[Function]}
+      topPostsCount={0}
+    />
+    <FictionsList
+      identifier="brightMirror"
+      lang={undefined}
+      posts={Array []}
+    />
+  </div>
 </div>
 `;

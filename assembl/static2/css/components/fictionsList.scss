@@ -1,0 +1,50 @@
+.fictions-section {
+  .content-section {
+    padding-top: 50px;
+  }
+
+  .fictions-list {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-content: stretch;
+    width: 100%;
+    margin: auto;
+
+    .fiction-preview {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-content: stretch;
+      flex-grow: 1;
+
+      &:nth-child(3n + 2) {
+        height: 220px;
+      }
+
+      @media (min-width: $screen-xxs-max) {
+        margin: 13px;
+
+        &:nth-child(3n + 2) {
+          height: 295px;
+        }
+      }
+
+      @media (min-width: $screen-sm-min) {
+        margin: 15px;
+
+        &:nth-child(3n + 2) {
+          height: 499px;
+        }
+      }
+
+      @media (min-width: $screen-md-min) {
+        margin: 16px;
+
+        &:nth-child(3n + 2) {
+          height: 546px;
+        }
+      }
+    }
+  }
+}

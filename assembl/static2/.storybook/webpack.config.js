@@ -1,6 +1,13 @@
 const path = require('path');
 
 module.exports = {
+  resolve: {
+    extensions: ['.js', '.jsx', '.coffee'],
+    alias: {
+      annotator_range$: path.join(__dirname, '../node_modules/hypothesis/src/annotator/anchoring/range.coffee'),
+      jquery$: path.join(__dirname, '../node_modules/jquery/dist/jquery.slim.min.js')
+    }
+  },
   module: {
     rules: [
       {
@@ -20,6 +27,17 @@ module.exports = {
         test: /\.(graphql|gql)$/,
         exclude: /node_modules/,
         use: 'graphql-tag/loader'
+      },
+      {
+        test: /\.coffee$/,
+        use: [
+          {
+            loader: 'coffee-loader',
+            options: {
+              transpile: true
+            }
+          }
+        ]
       }
     ]
   }

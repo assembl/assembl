@@ -56,7 +56,7 @@ const ExtractInPost = ({ id, state, children }: ExtractInPostProps) => {
   );
 };
 
-export const postBodyReplacementComponents = (afterLoad: Function) => ({
+export const postBodyReplacementComponents = (afterLoad?: Function) => ({
   iframe: (attributes: Object) => (
     // the src iframe url is different from the resource url
     <Embed
