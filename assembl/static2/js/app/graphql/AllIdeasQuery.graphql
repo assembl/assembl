@@ -15,7 +15,7 @@ query AllIdeasQuery($lang: String!, $discussionPhaseId: Int!) {
       ancestors
     }
   }
-  rootIdea {
+  rootIdea(discussionPhaseId: $discussionPhaseId) {
     ... on Idea {
       id
     }

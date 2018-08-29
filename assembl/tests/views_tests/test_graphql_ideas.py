@@ -22,14 +22,14 @@ def test_graphql_numPosts_of_sub_idea_1(phases, graphql_request, root_idea, subi
     subidea_1_1.db.flush()
     # This test verify that we don't care about messages_in_parent to count posts.
     res = schema.execute(
-        u"""query AllIdeasQuery ($discussionPhaseId: Int!){
-            ideas (discussionPhaseId: $discussionPhaseId) {
+        u"""query AllIdeasQuery($discussionPhaseId: Int!){
+            ideas(discussionPhaseId: $discussionPhaseId) {
               ... on Idea {
                 id
                 numPosts
               }
             }
-            rootIdea {
+            rootIdea(discussionPhaseId: $discussionPhaseId) {
               ... on Idea {
                 id
                 numPosts
@@ -80,7 +80,7 @@ def test_graphql_get_all_ideas(phases, graphql_request,
                 }
               }
             }
-            rootIdea {
+            rootIdea(discussionPhaseId: $discussionPhaseId) {
               ... on Idea {
                 id
               }
@@ -147,7 +147,7 @@ def test_graphql_get_all_ideas_multiColumns_phase(phases, graphql_request,
                 }
               }
             }
-            rootIdea {
+            rootIdea(discussionPhaseId: $discussionPhaseId) {
               ... on Idea {
                 id
               }
@@ -194,7 +194,7 @@ def test_graphql_get_all_ideas_with_modified_order(phases, graphql_request,
                 }
               }
             }
-            rootIdea {
+            rootIdea(discussionPhaseId: $discussionPhaseId) {
               ... on Idea {
                 id
               }
@@ -235,7 +235,7 @@ def test_graphql_get_all_ideas_with_modified_order(phases, graphql_request,
                 }
               }
             }
-            rootIdea {
+            rootIdea(discussionPhaseId: $discussionPhaseId) {
               ... on Idea {
                 id
               }
