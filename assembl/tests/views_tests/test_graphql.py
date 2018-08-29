@@ -27,7 +27,7 @@ def test_get_thematics_noresult(phases, graphql_request):
 def test_get_thematics_no_video(discussion, phases, graphql_request, test_session):
     title = u"Comprendre les dynamiques et les enjeux"
     title = models.LangString.create(title, locale_code="fr")
-    root_thematic = create_root_thematic(discussion, "survey")
+    root_thematic = create_root_thematic(phases['survey'])
     thematic = models.Thematic(
         discussion_id=discussion.id,
         title=title)
@@ -64,7 +64,7 @@ def test_get_thematics_with_video(discussion, phases, graphql_request, test_sess
     video_desc_side = models.LangString.create(
         u"Putain",
         locale_code="fr")
-    root_thematic = create_root_thematic(discussion, "survey")
+    root_thematic = create_root_thematic(phases['survey'])
     thematic = models.Thematic(
         discussion_id=discussion.id,
         title=title,

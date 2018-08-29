@@ -166,12 +166,11 @@ class Query(graphene.ObjectType):
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
         discussion_phase_id = args.get('discussion_phase_id')
-        discussion_phase = discussion_phase_id and models.DiscussionPhase.get(discussion_phase_id)
-        if discussion_phase is None or discussion_phase.identifier == Phases.thread.value:
+        if not discussion_phase_id:
             return discussion.root_idea
 
-        root_thematic = get_root_thematic_for_phase(
-            discussion, discussion_phase.identifier)
+        discussion_phase = models.DiscussionPhase.get(discussion_phase_id)
+        root_thematic = get_root_thematic_for_phase(discussion_phase)
         return root_thematic
 
     def resolve_vote_session(self, args, context, info):
@@ -189,11 +188,11 @@ class Query(graphene.ObjectType):
         phase_id = args.get('discussion_phase_id')
         phase = models.DiscussionPhase.get(phase_id)
         phase_identifier = phase.identifier
-        if phase_identifier in (Phases.survey.value, Phases.brightMirror.value):
-            root_thematic = get_root_thematic_for_phase(discussion, phase_identifier)
-            if root_thematic is None:
-                return []
+        root_thematic = get_root_thematic_for_phase(phase)
+        if root_thematic is None:
+            return []
 
+        if discussion.root_idea != root_thematic:
             return root_thematic.get_children()
 
         model = models.Idea

@@ -103,27 +103,39 @@ def get_fields(info):
     return fields
 
 
-def get_root_thematic_for_phase(discussion, identifier):
-    """Return root thematic for the given phase `identifier` on `discussion`.
+def get_root_thematic_for_phase(phase):
+    """Return root thematic for the given phase `phase`.
     """
+    if phase.identifier in (Phases.thread.value, Phases.multiColumns.value):
+        return phase.discussion.root_idea
+
+    if phase.identifier == Phases.voteSession.value:
+        identifier = 'voteSession{}'.format(phase.vote_session.id)
+    else:
+        identifier = phase.identifier
+
     root_thematic = [idea
-                     for idea in discussion.root_idea.get_children()
+                     for idea in phase.discussion.root_idea.get_children()
                      if getattr(idea, 'identifier', '') == identifier]
     return root_thematic[0] if root_thematic else None
 
 
-def create_root_thematic(discussion, identifier):
-    """Create the root thematic (hidden) for the given phase `identifier`
-    on `discussion`.
+def create_root_thematic(phase):
+    """Create the root thematic (hidden) for the given phase `phase`.
     """
-    short_title = u'Phase {}'.format(identifier)
+    if phase.identifier == Phases.voteSession.value:
+        identifier = 'voteSession{}'.format(phase.vote_session.id)
+    else:
+        identifier = phase.identifier
+
+    title = u'Phase {}'.format(identifier)
     root_thematic = models.Thematic(
-        discussion_id=discussion.id,
+        discussion_id=phase.discussion.id,
         title=langstring_from_input_entries(
-            [{'locale_code': 'en', 'value': short_title}]),
+            [{'locale_code': 'en', 'value': title}]),
         identifier=identifier,
         hidden=True)
-    discussion.root_idea.children.append(root_thematic)
+    phase.discussion.root_idea.children.append(root_thematic)
     return root_thematic
 
 
@@ -205,9 +217,12 @@ def get_posts_for_phases(discussion, identifiers, include_deleted=False):
     ideas = []
     # If survey phase, we need the root thematic
     if Phases.survey.value in identifiers_with_posts:
-        root_thematic = get_root_thematic_for_phase(discussion, Phases.survey.value)
-        if root_thematic:
-            ideas.append(root_thematic)
+        survey_phase = [phase for phase in discussion.timeline_events
+                        if phase.identifier == Phases.survey.value]
+        if survey_phase:
+            root_thematic = get_root_thematic_for_phase(survey_phase[0])
+            if root_thematic:
+                ideas.append(root_thematic)
 
         identifiers_with_posts.remove(Phases.survey.value)
 

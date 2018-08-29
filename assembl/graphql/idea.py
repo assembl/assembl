@@ -685,17 +685,14 @@ class CreateThematic(graphene.Mutation):
                     raise Exception(
                         'Parent Idea does not belong to this discussion')  # noqa: E501
             else:
-                if phase_identifier in (Phases.thread.value, Phases.multiColumns.value):
-                    parent_idea = discussion.root_idea
-                else:
-                    # Our thematic, because it inherits from Idea, needs to be
-                    # associated to the root idea of the discussion.
-                    # We create a hidden root thematic, corresponding to the
-                    # `identifier` phase, child of the root idea,
-                    # and add our thematic as a child of this root thematic.
-                    parent_idea = get_root_thematic_for_phase(discussion, phase_identifier)
-                    if parent_idea is None:
-                        parent_idea = create_root_thematic(discussion, phase_identifier)
+                # Our thematic, because it inherits from Idea, needs to be
+                # associated to the root idea of the discussion.
+                # We create a hidden root thematic, corresponding to the
+                # phase, child of the root idea,
+                # and add our thematic as a child of this root thematic.
+                parent_idea = get_root_thematic_for_phase(phase)
+                if parent_idea is None:
+                    parent_idea = create_root_thematic(phase)
 
             saobj = cls(
                 discussion_id=discussion_id,
