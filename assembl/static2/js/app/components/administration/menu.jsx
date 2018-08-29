@@ -15,24 +15,29 @@ type Props = {
 };
 
 class Menu extends React.PureComponent<Props> {
-  renderMenuItem = (id: string, menuItem: MenuItem, slug: { slug: string | null }, rootSection: string = '') => {
+  renderMenuItem = (
+    id: string,
+    menuItem: MenuItem,
+    slug: { slug: string | null },
+    rootSection: string = '',
+    isRoot: boolean = true
+  ) => {
     const { requestedPhase } = this.props;
     const { title, sectionId, subMenu } = menuItem;
-    const isRoot = !rootSection;
     const sectionIndex = rootSection ? `${rootSection}.${sectionId}` : sectionId;
     const sectionQuery = sectionId ? `?section=${sectionIndex}` : '';
     const subMenuIds = subMenu ? Object.keys(subMenu) : [];
-    const hasSubMenu = subMenuIds.length;
+    const newRootSection = !isRoot ? sectionIndex : '';
     return (
-      <li key={sectionId} className={isRoot ? 'menu-item' : ''}>
+      <li key={sectionIndex} className={isRoot ? 'menu-item' : ''}>
         <Link to={`${get('administration', slug)}/${id}${sectionQuery}`} activeClassName="active">
           <Translate value={title} />
         </Link>
-        {subMenu && hasSubMenu ? (
+        {subMenu && subMenuIds.length > 0 ? (
           <ul className={requestedPhase === id ? 'shown admin-menu2' : 'hidden admin-menu2'}>
             {subMenuIds.map((subKey) => {
               const subMenuItem = subMenu[subKey];
-              return this.renderMenuItem(id, subMenuItem, slug, sectionIndex);
+              return this.renderMenuItem(id, subMenuItem, slug, newRootSection, false);
             })}
           </ul>
         ) : null}

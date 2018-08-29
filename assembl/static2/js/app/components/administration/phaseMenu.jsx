@@ -29,7 +29,6 @@ class PhaseMenu extends React.PureComponent<Props> {
     const sectionIndex = rootSection ? `${rootSection}.${sectionId}` : sectionId;
     const sectionQuery = sectionId ? `?section=${sectionIndex}` : '';
     const subMenuIds = subMenu ? Object.keys(subMenu) : [];
-    const hasSubMenu = subMenuIds.length;
     return (
       <li key={sectionId}>
         <Link
@@ -41,7 +40,7 @@ class PhaseMenu extends React.PureComponent<Props> {
         >
           <Translate value={title} />
         </Link>
-        {subMenu && hasSubMenu ? (
+        {subMenu && subMenuIds.length > 0 ? (
           <ul className="shown admin-sub-menu">
             {subMenuIds.map(subKey => this.renderSubMenuItem(subMenu[subKey], sectionQuery))}
           </ul>
@@ -56,7 +55,6 @@ class PhaseMenu extends React.PureComponent<Props> {
     const { sectionId, subMenu } = menuItem;
     const sectionQuery = sectionId ? `?section=${sectionId}` : '';
     const subMenuIds = subMenu ? Object.keys(subMenu) : [];
-    const hasSubMenu = subMenuIds.length;
     return (
       <li className="menu-item">
         <Link
@@ -68,7 +66,7 @@ class PhaseMenu extends React.PureComponent<Props> {
         >
           <Translate value="administration.menu.phase" count={index + 1} description={phase.title} />
         </Link>
-        {hasSubMenu ? (
+        {subMenuIds.length > 0 ? (
           <ul className={isActive ? 'shown admin-menu2' : 'hidden admin-menu2'}>
             {subMenuIds.map(key => this.renderSubMenuItem(subMenu[key]))}
           </ul>
