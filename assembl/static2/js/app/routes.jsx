@@ -24,6 +24,7 @@ import TermsAndConditions from './pages/termsAndConditions';
 import LegalNotice from './pages/legalNotice';
 import PrivacyPolicy from './pages/privacyPolicy';
 import CookiesPolicy from './pages/cookiesPolicy';
+import UserGuidelines from './pages/userGuidelines';
 import Administration from './pages/administration';
 import UnauthorizedAdministration from './pages/unauthorizedAdministration';
 import ResourcesCenterAdmin from './pages/resourcesCenterAdmin';
@@ -135,6 +136,7 @@ export default [
         <Route path={routeForRouter('legalNotice')} component={LegalNotice} />
         <Route path={routeForRouter('privacyPolicy')} component={PrivacyPolicy} />
         <Route path={routeForRouter('cookiesPolicy')} component={CookiesPolicy} />
+        <Route path={routeForRouter('userGuidelines')} component={UserGuidelines} />
         <Route path={routeForRouter('terms')} component={TermsAndConditions} />
         <Route path={routeForRouter('community')} component={Community} />
         <Route path={routeForRouter('rootDebate')} />

@@ -18,6 +18,7 @@ class Footer extends React.Component {
       hasTermsAndConditions,
       hasCookiesPolicy,
       hasPrivacyPolicy,
+      hasUserGuidelines,
       lang
     } = this.props;
     const { socialMedias, footerLinks } = debateData;
@@ -92,6 +93,14 @@ class Footer extends React.Component {
                   <div className="privacy-policy">
                     <Link to={`${get('privacyPolicy', slug)}`}>
                       <Translate value="footer.privacyPolicy" />
+                    </Link>
+                  </div>
+                )}
+                {hasPrivacyPolicy && hasUserGuidelines && <span className="small-hyphen-padding"> &mdash; </span>}
+                {hasUserGuidelines && (
+                  <div className="user-guidelines">
+                    <Link to={`${get('userGuidelines', slug)}`}>
+                      <Translate value="footer.userGuidelines" />
                     </Link>
                   </div>
                 )}
