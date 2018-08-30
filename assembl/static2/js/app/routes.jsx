@@ -131,6 +131,7 @@ export default [
     <Route path={routeForRouter('signup', true)} component={Signup} />
     <Route path={routeForRouter('changePassword', true)} component={ChangePassword} />
     <Route path={routeForRouter('requestPasswordChange', true)} component={RequestPasswordChange} />
+    {/* TODO: eventually refactor Main into App */}
     <Route component={App}>
       <Route component={Main}>
         <Redirect from={routeForRouter('homeBare')} to={routeForRouter('home')} />

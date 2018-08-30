@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import Modal from './components/common/modal';
 import Alert from './components/common/alert';
@@ -40,7 +40,7 @@ const DebateCustomHTMLCode = ({ currentRoute, debateData }) => {
   to exist in every context should be placed here. Eg. Alert, Modal, etc.
 */
 const Root = ({ children, routes, debateData }) => (
-  <div>
+  <Fragment>
     <DebateCustomHTMLCode currentRoute={routes[routes.length - 1].path} debateData={debateData} />
     <Modal
       ref={(modalComponent) => {
@@ -54,7 +54,7 @@ const Root = ({ children, routes, debateData }) => (
       }}
     />
     <div className="root-child">{children}</div>
-  </div>
+  </Fragment>
 );
 
 const mapStateToProps = state => ({
