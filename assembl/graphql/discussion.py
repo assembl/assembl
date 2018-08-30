@@ -21,6 +21,11 @@ from .utils import (
     get_attachment_with_purpose)
 
 
+class URLMeta(graphene.ObjectType):
+    local = graphene.Boolean()
+    route = graphene.String(required=True)
+
+
 # Mostly fields related to the discussion title and landing page
 class Discussion(SecureObjectType, SQLAlchemyObjectType):
     __doc__ = docs.Discussion.__doc__
@@ -46,6 +51,7 @@ class Discussion(SecureObjectType, SQLAlchemyObjectType):
     logo_image = graphene.Field(Document, description=docs.Discussion.logo_image)
     slug = graphene.String(description=docs.Discussion.slug)
     login_url = graphene.String(next_view=graphene.String(required=False))
+    login_data = URLMeta(next_view=graphene.String(required=False))
 
     def resolve_homepage_url(self, args, context, info):
         # TODO: Remove this resolver and add URLString to
@@ -110,7 +116,7 @@ class Discussion(SecureObjectType, SQLAlchemyObjectType):
             if attachment.attachmentPurpose == LANDING_PAGE_LOGO_IMAGE:
                 return attachment.document
 
-    def resolve_login_url(self, args, context, info):
+    def resolve_login_data(self, args, context, info):
         # if the debate is public, but has an SSO set and a prefernece to redirect publically
         # this URL would be used
         discussion_id = context.matchdict['discussion_id']
@@ -122,13 +128,15 @@ class Discussion(SecureObjectType, SQLAlchemyObjectType):
         if auth_backend and landing_page:
             from assembl.views.auth.views import get_social_autologin
             route = get_social_autologin(context, discussion, next_view)
+            local = False
         else:
             # Just a regular discussion login
             if not next_view:
                 next_view = context.route_url("new_home", discussion_slug=discussion.slug)
             route = context.route_url(
                 "contextual_react_login", discussion_slug=discussion.slug, _query={"next": next_view})
-        return urljoin(discussion.get_base_url(), route)
+            local = True
+        return URLMeta(local=local, route=urljoin(discussion.get_base_url(), route))
 
 
 class UpdateDiscussion(graphene.Mutation):
