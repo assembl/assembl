@@ -12,6 +12,7 @@ import { get } from '../../utils/routeMap';
 import { withScreenWidth } from '../common/screenDimensions';
 import { connectedUserIsAdmin } from '../../utils/permissions';
 import SectionsQuery from '../../graphql/SectionsQuery.graphql';
+import DiscussionQuery from '../../graphql/DiscussionQuery.graphql';
 import FlatNavbar from './FlatNavbar';
 import BurgerNavbar from './BurgerNavbar';
 import { APP_CONTAINER_MAX_WIDTH, APP_CONTAINER_PADDING } from '../../constants';
@@ -119,8 +120,13 @@ export class AssemblNavbar extends React.PureComponent<AssemblNavbarProps, Assem
   };
 
   renderUserMenu = (remainingWidth: number) => {
-    const { debate: { debateData: { helpUrl } }, location } = this.props;
-    return <UserMenu helpUrl={helpUrl} location={location} remainingWidth={remainingWidth} />;
+    const { debate: { debateData: { helpUrl } }, location, data: { discussion: { loginData } } = this.props;
+    return <UserMenu
+      helpUrl={helpUrl}
+      location={location}
+      remainingWidth={remainingWidth}
+      loginData={loginData}
+    />;
   };
 
   render = () => {
@@ -184,6 +190,7 @@ export default compose(
       }
     })
   }),
+  graphql(DiscussionQuery),
   withoutLoadingIndicator(),
   withScreenWidth
 )(AssemblNavbar);
