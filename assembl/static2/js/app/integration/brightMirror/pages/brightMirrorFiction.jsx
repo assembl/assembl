@@ -20,16 +20,18 @@ type BrightMirrorFictionType = {};
 class BrightMirrorFiction extends Component<BrightMirrorFictionType> {
   render() {
     return (
-      <Grid fluid className="bright-mirror background-fiction-default">
-        <Row>
-          <Col xs={12}>
-            <article>
-              <FictionHeader {...defaultFictionHeader} />
-              <FictionBody {...defaultFictionBody} />
-            </article>
-          </Col>
-        </Row>
-      </Grid>
+      <div className="bright-mirror">
+        <Grid fluid className="bright-mirror-fiction background-fiction-default">
+          <Row>
+            <Col xs={12}>
+              <article>
+                <FictionHeader {...defaultFictionHeader} />
+                <FictionBody {...defaultFictionBody} />
+              </article>
+            </Col>
+          </Row>
+        </Grid>
+      </div>
     );
   }
 }

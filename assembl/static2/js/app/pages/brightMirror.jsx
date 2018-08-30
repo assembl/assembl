@@ -29,11 +29,7 @@ class BrightMirror extends React.Component {
         identifier: identifier
       })
     );
-    return (
-      <div className="debate">
-        <section className="debate-section">{childrenElm}</section>
-      </div>
-    );
+    return <div className="bright-mirror">{childrenElm}</div>;
   }
 }
 

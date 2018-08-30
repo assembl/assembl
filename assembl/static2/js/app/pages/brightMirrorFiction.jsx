@@ -1,5 +1,5 @@
 // @flow
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Grid, Row, Col } from 'react-bootstrap';
 // Graphql imports
 import { compose, graphql } from 'react-apollo';
@@ -47,16 +47,18 @@ class BrightMirrorFiction extends Component<BrightMirrorFictionType> {
     };
 
     return (
-      <Grid fluid className="bright-mirror background-fiction-default">
-        <Row>
-          <Col xs={12}>
-            <article>
-              <FictionHeader {...fictionHeaderProps} />
-              <FictionBody {...fictionBodyProps} />
-            </article>
-          </Col>
-        </Row>
-      </Grid>
+      <Fragment>
+        <Grid fluid className="bright-mirror-fiction background-fiction-default">
+          <Row>
+            <Col xs={12}>
+              <article>
+                <FictionHeader {...fictionHeaderProps} />
+                <FictionBody {...fictionBodyProps} />
+              </article>
+            </Col>
+          </Row>
+        </Grid>
+      </Fragment>
     );
   }
 }

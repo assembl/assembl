@@ -20,7 +20,7 @@ $duck-egg-blue: #b7f4f0;
   }
 }
 
-.bright-mirror {
+.bright-mirror-fiction {
   padding: 30px 18px 70px 18px;
 }
 
@@ -29,13 +29,13 @@ $duck-egg-blue: #b7f4f0;
 }
 
 @media screen and (min-width: $screen-sm-min) {
-  .bright-mirror {
+  .bright-mirror-fiction {
     padding: 90px 54px;
   }
 }
 
 @media screen and (min-width: $screen-xl-min) {
-  .bright-mirror {
+  .bright-mirror-fiction {
     padding: 130px 285px 90px 295px;
   }
 }
