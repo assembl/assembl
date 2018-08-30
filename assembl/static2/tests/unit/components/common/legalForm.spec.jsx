@@ -1,13 +1,13 @@
 import React from 'react';
 import ReactTestUtils from 'react-dom/test-utils';
 import ShallowRenderer from 'react-test-renderer/shallow';
-import { DumbTermsForm, mapDataToProps } from '../../../../js/app/components/common/termsForm';
+import LegalForm from '../../../../js/app/components/login/legalForm';
 
 import { closeModal } from '../../../../js/app/utils/utilityManager';
 
 jest.mock('../../../../js/app/utils/utilityManager');
 
-describe('TermsForm component', () => {
+describe('LegalForm component', () => {
   const { renderIntoDocument, findRenderedDOMComponentWithClass, Simulate } = ReactTestUtils;
   const fakeTerms = `Armelle Le Comte (Oxfam). Les pays émergents représentent une grande diversité.
 Un pays comme l’Inde a encore des centaines de millions d’habitants qui vivent
@@ -32,14 +32,14 @@ les informations, notamment en ce qui concerne les impacts sociaux et environnem
 
   it('should not render an Accept Button when terms are not scrolled down', () => {
     const renderer = new ShallowRenderer();
-    const component = renderer.render(<DumbTermsForm />);
+    const component = renderer.render(<LegalForm />);
     const findButton = () => {
       findRenderedDOMComponentWithClass(component, 'button-submit button-dark terms-submit');
     };
     expect(findButton).toThrow();
   });
   it('should render an Accept Button when terms are scrolled down and checkbox not checked in SignupForm', () => {
-    const component = renderIntoDocument(<DumbTermsForm text={fakeTerms} style={style} />);
+    const component = renderIntoDocument(<LegalForm text={fakeTerms} style={style} />);
 
     const box = findRenderedDOMComponentWithClass(component, 'terms-box justify');
     box.scrollTop = box.clientHeight;
@@ -48,7 +48,7 @@ les informations, notamment en ce qui concerne les impacts sociaux et environnem
   });
   it('should render an Accept Button and clicking on it should call handleAcceptButton and closeModal', () => {
     const handleAcceptButton = jest.fn();
-    const component = renderIntoDocument(<DumbTermsForm handleAcceptButton={handleAcceptButton} />);
+    const component = renderIntoDocument(<LegalForm handleAcceptButton={handleAcceptButton} />);
     const box = findRenderedDOMComponentWithClass(component, 'terms-box justify');
     box.scrollTop = box.clientHeight;
     box.dispatchEvent(new window.UIEvent('scroll', { detail: 0 }));
@@ -58,7 +58,7 @@ les informations, notamment en ce qui concerne les impacts sociaux et environnem
     expect(closeModal).toBeCalled();
   });
   it('should not render an Accept Button when terms are partially scrolled down and checkbox not checked in SignupForm', () => {
-    const component = renderIntoDocument(<DumbTermsForm text={fakeTerms} style={style} />);
+    const component = renderIntoDocument(<LegalForm text={fakeTerms} style={style} />);
     const box = findRenderedDOMComponentWithClass(component, 'terms-box justify');
     box.scrollTop = 10;
     box.dispatchEvent(new window.UIEvent('scroll', { detail: 0 }));
@@ -68,7 +68,7 @@ les informations, notamment en ce qui concerne les impacts sociaux et environnem
     expect(findButton).toThrow();
   });
   it('should not render an Accept Button when terms are scrolled down and checkbox is already checked in SignupForm', () => {
-    const component = renderIntoDocument(<DumbTermsForm isChecked />);
+    const component = renderIntoDocument(<LegalForm checked />);
     const box = findRenderedDOMComponentWithClass(component, 'terms-box justify');
     box.dispatchEvent(new window.UIEvent('scroll', { detail: 0 }));
     const findButton = () => {
@@ -79,15 +79,8 @@ les informations, notamment en ce qui concerne les impacts sociaux et environnem
 
   it('should match snapshot', () => {
     const renderer = new ShallowRenderer();
-    renderer.render(<DumbTermsForm />);
+    renderer.render(<LegalForm />);
     const rendered = renderer.getRenderOutput();
     expect(rendered).toMatchSnapshot();
-  });
-  describe('mapDataToProps function', () => {
-    it('should pass Terms as termsAndConditionsText prop', () => {
-      const text = 'Random text';
-      const data = { legalContents: { termsAndConditions: text } };
-      expect(mapDataToProps({ data: data }).termsAndConditionsText).toEqual(text);
-    });
   });
 });

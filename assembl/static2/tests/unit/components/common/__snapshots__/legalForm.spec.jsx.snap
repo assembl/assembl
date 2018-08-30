@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`TermsForm component should match snapshot 1`] = `
+exports[`LegalForm component should match snapshot 1`] = `
 <div
   className="terms-form"
   style={Object {}}
@@ -15,7 +15,7 @@ exports[`TermsForm component should match snapshot 1`] = `
       componentClass="h4"
     >
       <Translate
-        value="termsAndConditions.headerTitle"
+        value="undefined.headerTitle"
       />
     </ModalTitle>
   </ModalHeader>
