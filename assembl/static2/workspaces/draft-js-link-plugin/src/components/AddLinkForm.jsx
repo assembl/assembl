@@ -8,7 +8,7 @@ const FormControlAdapter = ({ input: { name, onChange, value, ...otherListeners 
   <FormControl {...otherListeners} {...rest} onChange={event => onChange(event.target.value)} value={value || ''} />
 );
 
-const CheckboxAdapter = ({ children }) => <Checkbox>{children}</Checkbox>;
+const CheckboxAdapter = ({ children, input }) => <Checkbox {...input}>{children}</Checkbox>;
 
 type Props = {
   defaultText: string,
@@ -42,7 +42,7 @@ const AddLinkForm = ({ defaultText, onSubmit }: Props) => (
           </FormGroup>
           <FormGroup controlId="openInNewTab">
             <Col smOffset={2} sm={10}>
-              <Field name="openInNewTab" component={CheckboxAdapter}>
+              <Field name="openInNewTab" component={CheckboxAdapter} type="checkbox">
                 <Translate value="common.editor.linkPlugin.openInNewTab" />
               </Field>
             </Col>

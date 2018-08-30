@@ -113,8 +113,14 @@ exports[`AddLinkForm component should render a form to add a link 1`] = `
           title=""
         >
           <input
+            checked={false}
             disabled={false}
+            name="openInNewTab"
+            onBlur={[Function]}
+            onChange={[Function]}
+            onFocus={[Function]}
             type="checkbox"
+            value=""
           />
           <span
             className={undefined}
