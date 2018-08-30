@@ -4,6 +4,7 @@ import graphene
 from graphene_sqlalchemy import SQLAlchemyObjectType
 from pyramid.httpexceptions import HTTPUnauthorized
 from pyramid.security import Everyone
+from urlparse import urljoin
 
 from assembl import models
 from assembl.auth import IF_OWNED, CrudPermissions
@@ -44,6 +45,7 @@ class Discussion(SecureObjectType, SQLAlchemyObjectType):
     header_image = graphene.Field(Document, description=docs.Discussion.header_image)
     logo_image = graphene.Field(Document, description=docs.Discussion.logo_image)
     slug = graphene.String(description=docs.Discussion.slug)
+    login_url = graphene.String(next_view=graphene.String(required=False))
 
     def resolve_homepage_url(self, args, context, info):
         # TODO: Remove this resolver and add URLString to
@@ -107,6 +109,26 @@ class Discussion(SecureObjectType, SQLAlchemyObjectType):
         for attachment in discussion.attachments:
             if attachment.attachmentPurpose == LANDING_PAGE_LOGO_IMAGE:
                 return attachment.document
+
+    def resolve_login_url(self, args, context, info):
+        # if the debate is public, but has an SSO set and a prefernece to redirect publically
+        # this URL would be used
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        prefs = discussion.preferences
+        next_view = args.get('next_view', None)
+        auth_backend = prefs.get('authorization_server_backend', None)
+        landing_page = prefs.get('landing_page', False)
+        if auth_backend and landing_page:
+            from assembl.views.auth.views import get_social_autologin
+            route = get_social_autologin(context, discussion, next_view)
+        else:
+            # Just a regular discussion login
+            if not next_view:
+                next_view = context.route_url("new_home", discussion_slug=discussion.slug)
+            route = context.route_url(
+                "contextual_react_login", discussion_slug=discussion.slug, _query={"next": next_view})
+        return urljoin(discussion.get_base_url(), route)
 
 
 class UpdateDiscussion(graphene.Mutation):
