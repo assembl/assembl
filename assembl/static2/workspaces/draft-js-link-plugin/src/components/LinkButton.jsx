@@ -1,8 +1,11 @@
 // @flow
 import * as React from 'react';
-import EditorUtils from 'draft-js-plugins-utils';
 import ReactDOM from 'react-dom';
 import { I18n } from 'react-redux-i18n';
+
+// from workspaces
+// eslint-disable-next-line import/no-extraneous-dependencies
+import EditorUtils from 'assembl-editor-utils';
 
 import AddLinkForm from './AddLinkForm';
 import PluginModal from './PluginModal';
@@ -18,6 +21,12 @@ type State = {
   showModal: boolean
 };
 
+type FormValues = {
+  openInNewTab: boolean,
+  text: string,
+  url: string
+};
+
 export default class LinkButton extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
@@ -30,13 +39,17 @@ export default class LinkButton extends React.Component<Props, State> {
     event.preventDefault();
   };
 
-  addLink = (values: { text: string, url: string }) => {
+  addLink = (values: FormValues) => {
     if (this.props.store) {
       const { getEditorState, setEditorState } = this.props.store;
       if (getEditorState && setEditorState) {
-        const { url } = values;
-        // TODO: handle openInNewTab in createLinkAtSelection
-        setEditorState(EditorUtils.createLinkAtSelection(getEditorState(), url));
+        const data = {
+          target: values.openInNewTab ? '_blank' : null,
+          text: values.text,
+          title: values.text,
+          url: values.url
+        };
+        setEditorState(EditorUtils.createLinkAtSelection(getEditorState(), data));
         this.setState({ showModal: false });
       }
     }

@@ -1,0 +1,11 @@
+{
+  "name": "assembl-editor-utils",
+  "version": "1.0.0",
+  "description": "DraftJS utils for Assembl",
+  "main": "src/index.js",
+  "author": "Bluenove",
+  "license": "MIT",
+  "dependencies": {
+    "draft-js": "^0.10.5"
+  }
+}

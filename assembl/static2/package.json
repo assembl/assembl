@@ -161,7 +161,7 @@
       "jsx"
     ],
     "transformIgnorePatterns": [
-      "/node_modules/(?!(draft-js-link-plugin|hypothesis)/)"
+      "/node_modules/(?!(assembl-editor-utils|draft-js-link-plugin|hypothesis)/)"
     ],
     "transform": {
       "\\.(gql|graphql)$": "jest-transform-graphql",
