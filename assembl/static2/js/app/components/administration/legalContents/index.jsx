@@ -15,13 +15,13 @@ import AdminForm from '../../../components/form/adminForm';
 
 const loading = <Loader />;
 
-type Props = {
+type LegalContentsFormProps = {
   client: ApolloClient,
   editLocale: string,
   locale: string
 };
 
-const DumbLegalContentsForm = ({ client, editLocale, locale }: Props) => {
+const DumbLegalContentsForm = ({ client, editLocale, locale }: LegalContentsFormProps) => {
   const legalNoticeLabel = I18n.t('administration.legalContents.legalNoticeLabel');
   const tacLabel = I18n.t('administration.legalContents.termsAndConditionsLabel');
   const cookiesPolicyLabel = I18n.t('administration.legalContents.cookiesPolicyLabel');
