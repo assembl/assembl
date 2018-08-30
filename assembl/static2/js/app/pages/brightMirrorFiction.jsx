@@ -1,6 +1,7 @@
 // @flow
 import React, { Component, Fragment } from 'react';
 import { Grid, Row, Col } from 'react-bootstrap';
+import { I18n } from 'react-redux-i18n';
 // Graphql imports
 import { compose, graphql } from 'react-apollo';
 import BrightMirrorFictionQuery from '../graphql/BrightMirrorFictionQuery.graphql';
@@ -37,7 +38,8 @@ class BrightMirrorFiction extends Component<BrightMirrorFictionType> {
 
     const fictionHeaderProps: FictionHeaderType = {
       authorFullname: fiction.creator.name,
-      publishedDate: new Date(fiction.creationDate),
+      publishedDate: I18n.l(fiction.creationDate, { dateFormat: 'date.formatHTML5' }),
+      displayedPublishedDate: I18n.l(fiction.creationDate, { dateFormat: 'date.format' }),
       circleAvatar: { ...circleAvatarProps }
     };
 

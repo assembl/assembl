@@ -10,6 +10,9 @@ import FictionHeader from '../../../../../js/app/components/debate/brightMirror/
 import CircleAvatar from '../../../../../js/app/components/debate/brightMirror/circleAvatar';
 import type { FictionHeaderType } from '../../../../../js/app/components/debate/brightMirror/fictionHeader';
 
+// Import existing storybook data
+import { defaultFictionHeader } from '../../../../../js/app/stories/components/debate/brightMirror/fictionHeader.stories';
+
 // Separate the snapshots in directories next to each component
 // Name should match with the story name
 initStoryshots({
@@ -18,18 +21,9 @@ initStoryshots({
 
 configure({ adapter: new Adapter() });
 
-const defaultFictionHeader: FictionHeaderType = {
-  authorFullname: 'Taryn Treutel',
-  publishedDate: new Date('2018-08-08'),
-  circleAvatar: {
-    username: 'taryn-treutel',
-    src: 'https://loremflickr.com/300/300'
-  }
-};
-
 describe('<FictionHeader /> - with shallow', () => {
   let wrapper;
-  let fictionHeader;
+  let fictionHeader: FictionHeaderType;
 
   beforeEach(() => {
     fictionHeader = { ...defaultFictionHeader };
@@ -45,7 +39,7 @@ describe('<FictionHeader /> - with shallow', () => {
   });
 
   it('should display the article author fullname', () => {
-    expect(wrapper.contains('Taryn Treutel')).toBe(true);
+    expect(wrapper.contains(defaultFictionHeader.authorFullname)).toBe(true);
   });
 
   it('should display "no author specified" when authorFullname is null', () => {
@@ -54,7 +48,7 @@ describe('<FictionHeader /> - with shallow', () => {
   });
 
   it('should display the article published date', () => {
-    expect(wrapper.find('time [dateTime="2018-08-08"]')).toHaveLength(1);
-    expect(wrapper.contains('08/08/2018')).toBe(true);
+    expect(wrapper.find(`time [dateTime="${defaultFictionHeader.publishedDate}"]`)).toHaveLength(1);
+    expect(wrapper.contains(defaultFictionHeader.displayedPublishedDate)).toBe(true);
   });
 });

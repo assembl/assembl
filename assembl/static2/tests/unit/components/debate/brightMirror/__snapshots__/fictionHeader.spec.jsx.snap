@@ -29,13 +29,11 @@ exports[`Storyshots FictionHeader default 1`] = `
         <p
           className="date-time"
         >
-          Le
-           
           <time
             dateTime="2018-07-09"
             pubdate="true"
           >
-            09/07/2018
+            August 8th, 2018
           </time>
         </p>
       </div>
@@ -195,7 +193,10 @@ exports[`Storyshots FictionHeader default 1`] = `
                 </span>
                 <span>
                   <span>
-                     
+                    <span>
+                      <br />
+                        
+                    </span>
                     <span
                       style={Object {}}
                     >
@@ -222,7 +223,10 @@ exports[`Storyshots FictionHeader default 1`] = `
                     </span>
                   </span>
                   <span>
-                     
+                    <span>
+                      <br />
+                        
+                    </span>
                     <span
                       style={Object {}}
                     >
@@ -233,23 +237,56 @@ exports[`Storyshots FictionHeader default 1`] = `
                       <span
                         style={Object {}}
                       >
-                        {
+                        "
                         <span
                           style={
                             Object {
-                              "color": "#666",
+                              "color": "#22a",
+                              "wordBreak": "break-word",
                             }
                           }
                         >
-                          {
-                          }
+                          2018-07-09
                         </span>
-                        }
+                        "
                       </span>
                     </span>
                   </span>
                   <span>
-                     
+                    <span>
+                      <br />
+                        
+                    </span>
+                    <span
+                      style={Object {}}
+                    >
+                      displayedPublishedDate
+                    </span>
+                    <span>
+                      =
+                      <span
+                        style={Object {}}
+                      >
+                        "
+                        <span
+                          style={
+                            Object {
+                              "color": "#22a",
+                              "wordBreak": "break-word",
+                            }
+                          }
+                        >
+                          August 8th, 2018
+                        </span>
+                        "
+                      </span>
+                    </span>
+                  </span>
+                  <span>
+                    <span>
+                      <br />
+                        
+                    </span>
                     <span
                       style={Object {}}
                     >
@@ -319,7 +356,7 @@ exports[`Storyshots FictionHeader default 1`] = `
                         }
                       </span>
                     </span>
-                     
+                    <br />
                   </span>
                 </span>
                 <span
@@ -421,13 +458,11 @@ exports[`Storyshots FictionHeader playground 1`] = `
         <p
           className="date-time"
         >
-          Le
-           
           <time
             dateTime="2018-07-09"
             pubdate="true"
           >
-            09/07/2018
+            August 8th, 2018
           </time>
         </p>
       </div>
@@ -587,7 +622,10 @@ exports[`Storyshots FictionHeader playground 1`] = `
                 </span>
                 <span>
                   <span>
-                     
+                    <span>
+                      <br />
+                        
+                    </span>
                     <span
                       style={Object {}}
                     >
@@ -614,7 +652,10 @@ exports[`Storyshots FictionHeader playground 1`] = `
                     </span>
                   </span>
                   <span>
-                     
+                    <span>
+                      <br />
+                        
+                    </span>
                     <span
                       style={Object {}}
                     >
@@ -625,23 +666,56 @@ exports[`Storyshots FictionHeader playground 1`] = `
                       <span
                         style={Object {}}
                       >
-                        {
+                        "
                         <span
                           style={
                             Object {
-                              "color": "#666",
+                              "color": "#22a",
+                              "wordBreak": "break-word",
                             }
                           }
                         >
-                          {
-                          }
+                          2018-07-09
                         </span>
-                        }
+                        "
                       </span>
                     </span>
                   </span>
                   <span>
-                     
+                    <span>
+                      <br />
+                        
+                    </span>
+                    <span
+                      style={Object {}}
+                    >
+                      displayedPublishedDate
+                    </span>
+                    <span>
+                      =
+                      <span
+                        style={Object {}}
+                      >
+                        "
+                        <span
+                          style={
+                            Object {
+                              "color": "#22a",
+                              "wordBreak": "break-word",
+                            }
+                          }
+                        >
+                          August 8th, 2018
+                        </span>
+                        "
+                      </span>
+                    </span>
+                  </span>
+                  <span>
+                    <span>
+                      <br />
+                        
+                    </span>
                     <span
                       style={Object {}}
                     >
@@ -711,7 +785,7 @@ exports[`Storyshots FictionHeader playground 1`] = `
                         }
                       </span>
                     </span>
-                     
+                    <br />
                   </span>
                 </span>
                 <span
