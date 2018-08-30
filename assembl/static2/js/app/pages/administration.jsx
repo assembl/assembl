@@ -10,7 +10,6 @@ import { displayLanguageMenu } from '../actions/adminActions';
 import { updateVoteSessionPage, updateVoteModules, updateVoteProposals } from '../actions/adminActions/voteSession';
 import { updatePhases } from '../actions/adminActions/timeline';
 import { updateSections } from '../actions/adminActions/adminSections';
-import { updateLegalContents } from '../actions/adminActions/legalContents';
 import { updateLandingPageModules, updateLandingPage } from '../actions/adminActions/landingPage';
 import { updateTextFields } from '../actions/adminActions/profileOptions';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
@@ -31,7 +30,6 @@ const SECTIONS_WITHOUT_LANGUAGEMENU = ['1', '6'];
 class Administration extends React.Component {
   constructor(props) {
     super(props);
-    this.putLegalContentsInStore = this.putLegalContentsInStore.bind(this);
     this.putVoteSessionInStore = this.putVoteSessionInStore.bind(this);
     this.putLandingPageModulesInStore = this.putLandingPageModulesInStore.bind(this);
     this.putTextFieldsInStore = this.putTextFieldsInStore.bind(this);
@@ -45,7 +43,6 @@ class Administration extends React.Component {
     // we need to use the redux store for administration data to be able to use a
     // "global" save button that will do all the mutations "at once"
     this.putSectionsInStore(this.props.sections);
-    this.putLegalContentsInStore(this.props.legalContents);
     this.putVoteSessionInStore(this.props.voteSession);
     this.putVoteModulesInStore(this.props.voteSession);
     this.putVoteProposalsInStore(this.props.voteSession);
@@ -79,10 +76,6 @@ class Administration extends React.Component {
 
     if (nextProps.textFields !== this.props.textFields) {
       this.putTextFieldsInStore(nextProps.textFields);
-    }
-
-    if (nextProps.legalContents !== this.props.legalContents) {
-      this.putLegalContentsInStore(nextProps.legalContents);
     }
 
     if (nextProps.landingPage !== this.props.landingPage) {
@@ -155,28 +148,6 @@ class Administration extends React.Component {
         sections: sections.filter(section => section.sectionType !== 'ADMINISTRATION')
       });
       this.props.updateSections(filteredSections.sections);
-    }
-  }
-
-  putLegalContentsInStore(legalContents) {
-    if (legalContents) {
-      const filtered = filter(LegalContentsQuery, { legalContents: legalContents });
-      const filteredLegalContents = filtered.legalContents;
-      const convertedLegalContents = {
-        legalNoticeEntries: filteredLegalContents.legalNoticeEntries
-          ? convertEntriesToRawContentState(filteredLegalContents.legalNoticeEntries)
-          : null,
-        termsAndConditionsEntries: filteredLegalContents.termsAndConditionsEntries
-          ? convertEntriesToRawContentState(filteredLegalContents.termsAndConditionsEntries)
-          : null,
-        cookiesPolicyEntries: filteredLegalContents.cookiesPolicyEntries
-          ? convertEntriesToRawContentState(filteredLegalContents.cookiesPolicyEntries)
-          : null,
-        privacyPolicyEntries: filteredLegalContents.privacyPolicyEntries
-          ? convertEntriesToRawContentState(filteredLegalContents.privacyPolicyEntries)
-          : null
-      };
-      this.props.updateLegalContents(convertedLegalContents);
     }
   }
 
@@ -289,7 +260,6 @@ const mapDispatchToProps = dispatch => ({
   updateVoteModules: voteModules => dispatch(updateVoteModules(voteModules)),
   updateVoteSessionPage: voteSession => dispatch(updateVoteSessionPage(voteSession)),
   updateVoteProposals: voteProposals => dispatch(updateVoteProposals(voteProposals)),
-  updateLegalContents: legalContents => dispatch(updateLegalContents(legalContents)),
   displayLanguageMenu: isHidden => dispatch(displayLanguageMenu(isHidden)),
   updateLandingPageModules: landingPageModules => dispatch(updateLandingPageModules(landingPageModules)),
   updateTextFields: textFields => dispatch(updateTextFields(textFields)),

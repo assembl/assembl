@@ -4,7 +4,6 @@ import { connect, type Dispatch, type MapStateToProps } from 'react-redux';
 import { type Route, type Router } from 'react-router';
 import { type ApolloClient, compose, graphql, withApollo } from 'react-apollo';
 import { I18n } from 'react-redux-i18n';
-import { type Map } from 'immutable';
 import moment from 'moment';
 
 import { languagePreferencesHasChanged, updateEditLocale } from '../actions/adminActions';
@@ -15,12 +14,10 @@ import LanguageSection from '../components/administration/discussion/languageSec
 import ManageProfileOptionsForm from '../components/administration/discussion/manageProfileOptionsForm';
 import PersonalizeInterface from '../components/administration/discussion/personalizeInterface';
 import { displayAlert } from '../utils/utilityManager';
-import { convertEntriesToHTML } from '../utils/draftjs';
 import SaveButton, { getMutationsPromises, runSerial } from '../components/administration/saveButton';
 import createSectionMutation from '../graphql/mutations/createSection.graphql';
 import updateSectionMutation from '../graphql/mutations/updateSection.graphql';
 import deleteSectionMutation from '../graphql/mutations/deleteSection.graphql';
-import updateLegalContentsMutation from '../graphql/mutations/updateLegalContents.graphql';
 import updateDiscussionPreferenceQuery from '../graphql/mutations/updateDiscussionPreference.graphql';
 import getDiscussionPreferenceLanguage from '../graphql/DiscussionPreferenceLanguage.graphql';
 import ProfileFieldsQuery from '../graphql/ProfileFields.graphql';
@@ -84,10 +81,7 @@ type Props = {
     translations: { [string]: string }
   },
   languagePreferenceHasChanged: boolean,
-  legalContents: Map,
-  legalContentsHaveChanged: boolean,
   preferences: LanguagePreferencesState,
-  refetchLegalContents: Function,
   refetchSections: Function,
   resetLanguagePreferenceChanged: Function,
   route: Route,
@@ -96,7 +90,6 @@ type Props = {
   sections: Array<Section>,
   sectionsHaveChanged: boolean,
   updateDiscussionPreference: Function,
-  updateLegalContents: Function,
   updateSection: Function,
   debateId: string,
   createTextField: Function,
@@ -145,7 +138,6 @@ class DiscussionAdmin extends React.Component<Props, State> {
     this.props.languagePreferenceHasChanged ||
     this.props.sectionsHaveChanged ||
     this.props.profileOptionsHasChanged ||
-    this.props.legalContentsHaveChanged ||
     this.props.phasesHaveChanged;
 
   saveAction = () => {
@@ -156,16 +148,12 @@ class DiscussionAdmin extends React.Component<Props, State> {
       deleteSection,
       i18n,
       languagePreferenceHasChanged,
-      legalContents,
-      legalContentsHaveChanged,
       preferences,
-      refetchLegalContents,
       refetchSections,
       resetLanguagePreferenceChanged,
       sections,
       sectionsHaveChanged,
       updateDiscussionPreference,
-      updateLegalContents,
       updateSection,
       createTextField,
       updateTextField,
@@ -252,33 +240,6 @@ class DiscussionAdmin extends React.Component<Props, State> {
         });
     }
 
-    if (legalContentsHaveChanged) {
-      const legalNoticeEntries = legalContents.get('legalNoticeEntries').toJS();
-      const termsAndConditionsEntries = legalContents.get('termsAndConditionsEntries').toJS();
-      const cookiesPolicyEntries = legalContents.get('cookiesPolicyEntries').toJS();
-      const privacyPolicyEntries = legalContents.get('privacyPolicyEntries').toJS();
-      const payload = {
-        variables: {
-          legalNoticeEntries: convertEntriesToHTML(legalNoticeEntries),
-          termsAndConditionsEntries: convertEntriesToHTML(termsAndConditionsEntries),
-          cookiesPolicyEntries: convertEntriesToHTML(cookiesPolicyEntries),
-          privacyPolicyEntries: convertEntriesToHTML(privacyPolicyEntries)
-        }
-      };
-      updateLegalContents(payload)
-        .then(() => {
-          this.setState({ refetching: true }, () => {
-            refetchLegalContents().then(() => {
-              displayAlert('success', I18n.t('administration.legalContents.successSave'));
-              this.setState({ refetching: false });
-            });
-          });
-        })
-        .catch((error) => {
-          displayAlert('danger', `${error}`, false, 30000);
-        });
-    }
-
     if (profileOptionsHasChanged) {
       const mutationsPromises = getMutationsPromises({
         items: textFields,
@@ -333,7 +294,6 @@ const mapStateToProps: MapStateToProps<ReduxState, *, *> = ({
     discussionLanguagePreferences,
     discussionLanguagePreferencesHasChanged,
     editLocale,
-    legalContents,
     sections,
     profileOptions,
     timeline
@@ -381,8 +341,6 @@ const mapStateToProps: MapStateToProps<ReduxState, *, *> = ({
       }) // fix order of sections
       .valueSeq() // convert to array of Map
       .toJS(), // convert to array of objects
-    legalContents: legalContents,
-    legalContentsHaveChanged: legalContents.get('_hasChanged'),
     profileOptionsHasChanged: profileOptionsHasChanged,
     textFields: textFields,
     phases: phasesById
@@ -415,9 +373,6 @@ export default compose(
   }),
   graphql(updateDiscussionPreferenceQuery, {
     name: 'updateDiscussionPreference'
-  }),
-  graphql(updateLegalContentsMutation, {
-    name: 'updateLegalContents'
   }),
   graphql(createDiscussionPhaseMutation, {
     name: 'createDiscussionPhase'
