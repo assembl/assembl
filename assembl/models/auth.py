@@ -721,7 +721,9 @@ class AgentStatusInDiscussion(DiscussionBoundBase):
         cookies = request.cookies
         if not cookies or (not first_visit and len(self.cookies) > 0):
             return
-        for cookie, value in cookies.iteritems():
+        cookie_list = cookies.get('cookies_configuration', "")
+        cookie_list = [c.strip() for c in cookie_list.split(",") if c]
+        for cookie in cookie_list:
             try:
                 cookie = CookieTypes(cookie)
                 self.update_cookie(cookie)
