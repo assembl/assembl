@@ -66,7 +66,6 @@ export class DumbDebateLink extends React.Component<DebateLinkProps, DebateLinkS
     const activeSegmentPhase = timeline ? timeline[activeSegment] : undefined;
     // The first touch show the menu and the second activate the link
     const isTouchScreenDevice = isMobile.any();
-    const linkActive = window.location.pathname;
     return (
       <div
         ref={(debateNode) => {
@@ -76,7 +75,7 @@ export class DumbDebateLink extends React.Component<DebateLinkProps, DebateLinkS
         onMouseOver={!isTouchScreenDevice && !screenTooSmall ? this.showMenu : null}
         onMouseLeave={!isTouchScreenDevice && !screenTooSmall ? this.hideMenu : null}
       >
-        <div className={classNames(className, { [activeClassName]: linkActive })} data-text={dataText}>
+        <div className={classNames(className, activeClassName)} data-text={dataText}>
           {children}
         </div>
         {!screenTooSmall && (
