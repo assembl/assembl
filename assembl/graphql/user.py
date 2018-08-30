@@ -360,6 +360,12 @@ class UpdateAcceptedCookies(graphene.Mutation):
                     agent_status_in_discussion.delete_cookie(PyCookieTypes.REJECT_PRIVACY_POLICY_ON_DISCUSSION)
                     agent_status_in_discussion.update_cookie(action_type_enum)
 
+                elif action_type_enum == PyCookieTypes.ACCEPT_LOCALE:
+                    action = AcceptPrivacyPolicyOnDiscussion(discussion_id=discussion_id, actor_id=user_id)
+                    user.user_last_accepted_privacy_policy_date = datetime.utcnow()
+                    agent_status_in_discussion.delete_cookie(PyCookieTypes.REJECT_LOCALE)
+                    agent_status_in_discussion.update_cookie(action_type_enum)
+
                 elif action_type_enum == PyCookieTypes.REJECT_CGU:
                     action = RejectCGUOnDiscussion(discussion_id=discussion_id, actor_id=user_id)
                     user.user_last_rejected_cgu_date = datetime.utcnow()
@@ -380,6 +386,12 @@ class UpdateAcceptedCookies(graphene.Mutation):
                     action = RejectPrivacyPolicyOnDiscussion(discussion_id=discussion_id, actor_id=user_id)
                     user.user_last_rejected_privacy_policy_date = datetime.utcnow()
                     agent_status_in_discussion.delete_cookie(PyCookieTypes.ACCEPT_PRIVACY_POLICY_ON_DISCUSSION)
+                    agent_status_in_discussion.update_cookie(action_type_enum)
+
+                elif action_type_enum == PyCookieTypes.REJECT_LOCALE:
+                    action = AcceptPrivacyPolicyOnDiscussion(discussion_id=discussion_id, actor_id=user_id)
+                    user.user_last_accepted_privacy_policy_date = datetime.utcnow()
+                    agent_status_in_discussion.delete_cookie(PyCookieTypes.ACCEPT_LOCALE)
                     agent_status_in_discussion.update_cookie(action_type_enum)
 
                 action = action.handle_duplication(permissions=permissions, user_id=user.id)
