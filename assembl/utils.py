@@ -26,6 +26,28 @@ def get_published_posts(idea):
     return query
 
 
+def get_all_phase_root_ideas(discussion):
+    # TODO replace this with phases having a root_idea foreign key
+    # instead of getting all hidden children of discussion.root_idea
+    root_ideas = []
+    for idea in discussion.root_idea.get_children():
+        if idea.hidden:
+            root_ideas.append(idea)
+
+    return root_ideas
+
+
+def get_descendants(ideas):
+    if not ideas:
+        return []
+
+    descendants = []
+    for idea in ideas:
+        descendants.extend(idea.get_all_descendants(id_only=True, inclusive=True))
+
+    return descendants
+
+
 def get_ideas(phase, options=None):
     phase_identifier = phase.identifier
     root_thematic = get_root_thematic_for_phase(phase)
@@ -33,18 +55,24 @@ def get_ideas(phase, options=None):
     if root_thematic is None:
         return []
 
-    if discussion.root_idea != root_thematic:
-        return root_thematic.get_children()
-
     model = models.Idea
     query = model.query
-    descendants_query = discussion.root_idea.get_descendants_query(inclusive=False)
+    if discussion.root_idea == root_thematic:
+        # thread phase is directly on discussion.root_idea,
+        # we need to remove all descendants of all the other phases
+        descendants_to_ignore = get_descendants(get_all_phase_root_ideas(discussion))
+        descendants = root_thematic.get_all_descendants(id_only=True, inclusive=False)
+        descendants = set(descendants) - set(descendants_to_ignore)
+        query = query.filter(model.id.in_(descendants))
+    else:
+        descendants_query = root_thematic.get_descendants_query(inclusive=False)
+        query = query.filter(model.id.in_(descendants_query))
+
     query = query.outerjoin(
             models.Idea.source_links
-        ).filter(model.id.in_(descendants_query)
         ).filter(
+            model.sqla_type != 'question',
             model.hidden == False,  # noqa: E712
-            model.sqla_type == 'idea',
             model.tombstone_date == None  # noqa: E711
         ).options(
             contains_eager(models.Idea.source_links),

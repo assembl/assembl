@@ -172,6 +172,32 @@ def test_graphql_get_all_ideas_multiColumns_phase(phases, graphql_request,
     subidea_1.db.flush()
 
 
+def test_graphql_get_all_ideas_thread_without_vote_proposals(phases, graphql_request,
+                               user_language_preference_en_cookie,
+                               subidea_1_1_1, vote_proposal):
+    # proposals of vote session is attached to a root idea of the vote session phase, child
+    # of discussion.root_idea. Those proposals shouldn't be returned.
+    res = schema.execute(
+        u"""query AllIdeasQuery($lang: String!, $discussionPhaseId: Int!) {
+            ideas(discussionPhaseId: $discussionPhaseId) {
+              ... on Idea {
+                id
+                title(lang: $lang)
+              }
+            }
+            rootIdea(discussionPhaseId: $discussionPhaseId) {
+              ... on Node {
+                id
+              }
+            }
+        }
+        """, context_value=graphql_request,
+        variable_values={"discussionPhaseId": phases['thread'].id, "lang": u"en"})
+    root_idea = res.data['rootIdea']
+    assert root_idea['id'] is not None
+    assert len(res.data['ideas']) == 3
+
+
 def test_graphql_get_all_ideas_with_modified_order(phases, graphql_request,
                                user_language_preference_en_cookie,
                                subidea_1_1_1_1_1, subidea_1_1_1_1_2):
