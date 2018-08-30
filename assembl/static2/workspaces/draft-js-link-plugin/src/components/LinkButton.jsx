@@ -1,4 +1,5 @@
 // @flow
+import classNames from 'classnames';
 import * as React from 'react';
 import ReactDOM from 'react-dom';
 import { I18n } from 'react-redux-i18n';
@@ -14,7 +15,8 @@ import type { DraftJSPluginStore, Theme } from '../index';
 type Props = {
   modal: ?{ current: null | React.ElementRef<any> },
   store: DraftJSPluginStore,
-  theme: Theme
+  theme: Theme,
+  onRemoveLinkAtSelection: () => void
 };
 
 type State = {
@@ -85,8 +87,11 @@ export default class LinkButton extends React.Component<Props, State> {
   };
 
   render() {
-    const { modal, theme } = this.props;
+    const { modal, onRemoveLinkAtSelection, store, theme } = this.props;
+    const hasLinkSelected = (store.getEditorState && EditorUtils.hasEntity(store.getEditorState(), 'LINK')) || false;
     const modalContainer = modal && modal.current;
+    const buttonClassName = classNames(theme.button, { active: hasLinkSelected });
+    const handleClick = hasLinkSelected ? onRemoveLinkAtSelection : this.openModal;
     return (
       <React.Fragment>
         {modalContainer &&
@@ -102,7 +107,7 @@ export default class LinkButton extends React.Component<Props, State> {
             modalContainer
           )}
         <div className={theme.buttonWrapper} onMouseDown={this.onMouseDown}>
-          <button className={theme.button} onClick={this.openModal} type="button">
+          <button className={buttonClassName} onClick={handleClick} type="button">
             <span className="assembl-icon-text-link" />
           </button>
         </div>

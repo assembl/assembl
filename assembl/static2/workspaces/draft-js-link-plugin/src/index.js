@@ -3,6 +3,9 @@ import * as React from 'react';
 import decorateComponentWithProps from 'decorate-component-with-props';
 import { type EditorState } from 'draft-js';
 
+// from our workspaces
+import EditorUtils from 'assembl-editor-utils';
+
 import linkStrategy, { matchesEntityType } from './linkStrategy';
 import Link from './components/Link';
 import LinkButton from './components/LinkButton';
@@ -50,7 +53,13 @@ export default (config: Config = {}) => {
     LinkButton: decorateComponentWithProps(LinkButton, {
       modal: modal,
       ownTheme: theme,
-      store: store
+      store: store,
+      onRemoveLinkAtSelection: () => {
+        const { getEditorState, setEditorState } = store;
+        if (getEditorState && setEditorState) {
+          setEditorState(EditorUtils.removeLinkAtSelection(getEditorState()));
+        }
+      }
     })
   };
 };

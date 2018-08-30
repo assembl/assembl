@@ -1,5 +1,6 @@
 // @flow
 import { EditorState, Modifier, RichUtils } from 'draft-js';
+import DraftJSPluginsUtils from 'draft-js-plugins-utils';
 
 type LinkData = {
   target: ?string,
@@ -8,7 +9,11 @@ type LinkData = {
   url: string
 };
 
+const { collapseToEnd, getCurrentEntity, getCurrentEntityKey, hasEntity, removeLinkAtSelection } = DraftJSPluginsUtils;
+
 export default {
+  collapseToEnd: collapseToEnd,
+
   createLinkAtSelection: function (editorState: EditorState, data: LinkData): EditorState {
     const { text, ...rest } = data;
     const contentState = editorState.getCurrentContent().createEntity('LINK', 'MUTABLE', rest);
@@ -21,5 +26,13 @@ export default {
       withLink = RichUtils.toggleLink(editorState, editorState.getSelection(), entityKey);
     }
     return EditorState.forceSelection(withLink, editorState.getSelection());
-  }
+  },
+
+  getCurrentEntityKey: getCurrentEntityKey,
+
+  getCurrentEntity: getCurrentEntity,
+
+  hasEntity: hasEntity,
+
+  removeLinkAtSelection: removeLinkAtSelection
 };

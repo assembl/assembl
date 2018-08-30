@@ -16,3 +16,20 @@ exports[`LinkButton component should render a link button 1`] = `
   </button>
 </div>
 `;
+
+exports[`LinkButton component should render an active LinkButton if selection is on a link 1`] = `
+<div
+  className="btn-group"
+  onMouseDown={[Function]}
+>
+  <button
+    className="btn active"
+    onClick={[Function]}
+    type="button"
+  >
+    <span
+      className="assembl-icon-text-link"
+    />
+  </button>
+</div>
+`;

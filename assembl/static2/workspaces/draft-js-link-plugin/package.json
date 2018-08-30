@@ -7,6 +7,7 @@
   "license": "MIT",
   "dependencies": {
     "assembl-editor-utils": "^1.0.0",
+    "classnames": "^2.2.5",
     "decorate-component-with-props": "^1.1.0",
     "draft-js": "^0.10.5",
     "draft-js-plugins-utils": "^2.0.3",
