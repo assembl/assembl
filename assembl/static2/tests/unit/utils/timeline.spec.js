@@ -1,4 +1,4 @@
-import { getCurrentPhaseIdentifier } from '../../../js/app/utils/timeline';
+import { getCurrentPhaseIdentifier, getIsDebateStarted } from '../../../js/app/utils/timeline';
 
 describe('getCurrentPhaseIdentifier timeline behavior', () => {
   it('should return last phase identifier when all phases closed', () => {
@@ -18,5 +18,31 @@ describe('getCurrentPhaseIdentifier timeline behavior', () => {
     ];
     const identifier = getCurrentPhaseIdentifier(timeline);
     expect(identifier).toEqual('bar');
+  });
+
+  it('should return that the debate is not started', () => {
+    const timeline = [];
+    const isDebateStarted = getIsDebateStarted(timeline);
+    expect(isDebateStarted).toEqual(false);
+  });
+
+  it('should return that the debate is not started', () => {
+    const timeline = [
+      { start: '2032-08-15T20:00:00+00:00' },
+      { start: '2032-09-16T09:00:00+00:00' },
+      { start: '2032-10-01T00:00:00+00:00' }
+    ];
+    const isDebateStarted = getIsDebateStarted(timeline);
+    expect(isDebateStarted).toEqual(false);
+  });
+
+  it('should return that the debate is started', () => {
+    const timeline = [
+      { start: '2016-08-15T20:00:00+00:00' },
+      { start: '2032-09-16T09:00:00+00:00' },
+      { start: '2032-10-01T00:00:00+00:00' }
+    ];
+    const isDebateStarted = getIsDebateStarted(timeline);
+    expect(isDebateStarted).toEqual(true);
   });
 });

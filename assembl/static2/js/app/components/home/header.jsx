@@ -1,11 +1,12 @@
 import React from 'react';
 import { Translate, I18n } from 'react-redux-i18n';
 import { connect } from 'react-redux';
-import { Grid, Row, Button } from 'react-bootstrap';
+import { Grid, Row } from 'react-bootstrap';
 
 import Statistic from './header/statistic';
+import ParticipateButton from '../common/participateButton';
 import { get } from '../../utils/routeMap';
-import { getCurrentPhaseIdentifier, getIfDebateIsStarted } from '../../utils/timeline';
+import { getCurrentPhaseIdentifier } from '../../utils/timeline';
 import { getDiscussionSlug } from '../../utils/globalFunctions';
 import { browserHistory } from '../../router';
 
@@ -26,7 +27,6 @@ class Header extends React.Component {
     const { debateData } = this.props.debate;
     const { locale } = this.props.i18n;
     const { timeline } = this.props;
-    const isDebateStarted = getIfDebateIsStarted(timeline);
     return (
       <section className="home-section header-section">
         <Grid fluid className="max-container">
@@ -46,11 +46,9 @@ class Header extends React.Component {
                   </div>
                 )}
               </h4>
-              {isDebateStarted && (
-                <Button onClick={this.displayPhase} className="button-submit button-light margin-l">
-                  <Translate value="home.accessButton" />
-                </Button>
-              )}
+              <div className="margin-l">
+                <ParticipateButton displayPhase={this.displayPhase} timeline={timeline} btnClass="light" />
+              </div>
             </div>
           </div>
         </Grid>

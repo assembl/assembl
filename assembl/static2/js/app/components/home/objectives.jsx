@@ -1,12 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Translate } from 'react-redux-i18n';
-import { Grid, Row, Col, Button } from 'react-bootstrap';
+import { Grid, Row, Col } from 'react-bootstrap';
 
 import { get } from '../../utils/routeMap';
 import { getDiscussionSlug } from '../../utils/globalFunctions';
-import { getCurrentPhaseIdentifier, getIfDebateIsStarted } from '../../utils/timeline';
+import { getCurrentPhaseIdentifier } from '../../utils/timeline';
 import { browserHistory } from '../../router';
+import ParticipateButton from '../common/participateButton';
 
 class Objectives extends React.Component {
   constructor(props) {
@@ -28,7 +28,6 @@ class Objectives extends React.Component {
     if (locale === 'zh-CN') {
       locale = 'zh_CN';
     }
-    const isDebateStarted = getIfDebateIsStarted(timeline);
     return (
       <section className="home-section objectives-section">
         <Grid fluid>
@@ -78,13 +77,9 @@ class Objectives extends React.Component {
                   )}
                 </Row>
               </div>
-              {isDebateStarted && (
-                <div className="center inline full-size margin-xxl">
-                  <Button onClick={this.displayPhase} className="button-submit button-dark">
-                    <Translate value="home.accessButton" />
-                  </Button>
-                </div>
-              )}
+              <div className="center inline full-size margin-xxl">
+                <ParticipateButton displayPhase={this.displayPhase} timeline={timeline} btnClass="dark" />
+              </div>
             </div>
           </div>
         </Grid>
