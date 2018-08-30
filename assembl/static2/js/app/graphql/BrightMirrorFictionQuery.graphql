@@ -1,0 +1,7 @@
+#import "./fragments/BrightMirrorFiction.graphql"
+
+query BrightMirrorFiction($contentLocale: String!, $id: ID!) {
+  fiction: node(id: $id) {
+    ...BrightMirrorFiction
+  }
+}

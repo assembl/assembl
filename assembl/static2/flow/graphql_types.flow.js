@@ -5719,6 +5719,26 @@ export type langStringEntryFragment = {|
   value: ?string
 |};
 
+export type BrightMirrorFictionFragment = {|
+  // The subject of the post (BM fiction) in a given language.
+  subject: string,
+  // The Body of the post (BM fiction) in a given language.
+  body: string,
+  // The date that the post (BM fiction) was created, in UTC timezone, in ISO 8601 format.
+  creationDate: Date,
+  creator: {|
+    // The name of the User.
+    name: string,
+    // The user name of the User. This field is unique throughout the server.
+    username: string,
+    // Image appearing on the avatar of the User. A file metadata object, described by the Document object.
+    image: ?{|
+      // A url to an image or a document to be attached.
+      externalUrl: ?string
+    |},
+  |},
+|};
+
 export type PostFragment = {|
   // The ID of the object.
   id: string,

@@ -11,12 +11,12 @@ $duck-egg-blue: #b7f4f0;
 // Dynamic background color for Bright Mirror
 @mixin set-background($theme) {
   @if $theme == default {
-    background-image:
-      radial-gradient(
-        circle at 49% 95%,
-        $light-khaki,
-        $duck-egg-blue
-      );
+    /* stylelint-disable-next-line declaration-colon-newline-after */
+    background-image: radial-gradient(
+      circle at 49% 95%,
+      $light-khaki,
+      $duck-egg-blue
+    );
   }
 }
 

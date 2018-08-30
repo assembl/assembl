@@ -26,7 +26,7 @@ const fictionHeader = ({ authorFullname, publishedDate, circleAvatar }: FictionH
           <p className="author">{authorFullname || noAuthorMessage}</p>
           <p className="date-time">
             Le{' '}
-            <time dateTime={formattedPublishedDate} pubdate>
+            <time dateTime={formattedPublishedDate} pubdate="true">
               {formattedPublishedDate
                 .split('-')
                 .reverse()

@@ -106,6 +106,9 @@ const AdminChild = (props) => {
   }
 };
 
+// TODO: fix temp patch below
+const AZERTY = () => <BrightMirrorFiction id="UG9zdDozNzEw" contentLocale="fr" />;
+
 export default [
   <Route path="/" component={Root}>
     {/* 'integration' route is only used for HTML/CSS integration purpose */}
@@ -147,8 +150,8 @@ export default [
         <Route path={routeForRouter('debate', false, { phase: ':phase' })} component={DebateHome}>
           <Route path={routeForRouter('theme', false, { themeId: ':themeId' })} component={DebateChild} />
           <Route
-            path={routeForRouter('brightMirrorFiction', false, { themeId: ':themeId', postId: ':themeId' })}
-            component={BrightMirrorFiction}
+            path={routeForRouter('brightMirrorFiction', false, { themeId: ':themeId', postId: ':postId' })}
+            component={AZERTY}
           />
           <Route
             path={routeForRouter('question', false, { questionId: ':questionId', questionIndex: ':questionIndex' })}

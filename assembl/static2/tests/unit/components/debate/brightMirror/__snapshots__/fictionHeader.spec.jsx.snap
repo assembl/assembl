@@ -33,7 +33,7 @@ exports[`Storyshots FictionHeader default 1`] = `
            
           <time
             dateTime="2018-07-09"
-            pubdate={true}
+            pubdate="true"
           >
             09/07/2018
           </time>
@@ -425,7 +425,7 @@ exports[`Storyshots FictionHeader playground 1`] = `
            
           <time
             dateTime="2018-07-09"
-            pubdate={true}
+            pubdate="true"
           >
             09/07/2018
           </time>
