@@ -34,7 +34,7 @@ export function DumbTimelineSegmentMenu({
       </div>
     );
   }
-  const ignoreMenu = phasesToIgnore.includes(phaseIdentifier) && phaseStatus !== PHASE_STATUS.inProgress;
+  const ignoreMenu = phasesToIgnore.includes(phaseIdentifier);
   return !ignoreMenu ? (
     <div className="menu-container">
       <MenuTable identifier={phaseIdentifier} onMenuItemClick={onMenuItemClick} />

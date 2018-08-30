@@ -50,11 +50,11 @@ export class DumbTimelineSegment extends React.Component<TimelineSegmentProps, T
     const { phaseIdentifier, title, startDate, endDate, locale, client } = this.props;
     this.isTouchScreenDevice = isMobile.any();
     this.phaseStatus = getPhaseStatus(startDate, endDate);
-    const inProgress = this.phaseStatus === PHASE_STATUS.inProgress;
+    const notStarted = this.phaseStatus === PHASE_STATUS.notStarted;
     const ignore = phasesToIgnore.includes(phaseIdentifier);
-    this.ignoreMenu = ignore && !inProgress;
+    this.ignoreMenu = ignore && !notStarted;
     this.phaseName = title;
-    if (!this.ignoreMenu) {
+    if (!ignore && !notStarted) {
       // don't prefetch if we're not going to use it
       prefetchMenuQuery(client, {
         lang: locale,
