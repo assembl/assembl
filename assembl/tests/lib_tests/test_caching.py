@@ -1,15 +1,8 @@
 import pytest
 import mock
+from assembl.models import Discussion
 
 from assembl.lib.caching import create_analytics_region
-
-
-def my_key_generator(namespace, fn, **kw):
-
-    def generate_key(*arg):
-        return namespace
-
-    return generate_key
 
 
 def test_dogpile_cache():
@@ -19,7 +12,7 @@ def test_dogpile_cache():
     # wrap in function, because dogpile really wants functions
     mock_f = lambda x: mock_o(x)
     # wrap in dogpile
-    dogMock = visit_analytics_region.cache_on_arguments(expiration_time=10, function_key_generator=my_key_generator, namespace="test_dogpile.cache")(mock_f)
+    dogMock = visit_analytics_region.cache_on_arguments(expiration_time=10)(mock_f)
     # invalidate from previous tests
     dogMock.invalidate(1)
     # call twice
@@ -27,3 +20,15 @@ def test_dogpile_cache():
     dogMock(1)
     # underlying mock should be called once
     assert mock_o.call_count == 1
+
+
+def test_cache_key(test_session):
+    d = Discussion(
+        topic=u"John Doe", slug="johndoe",
+        subscribe_to_notifications_on_signup=False,
+        creator=None,
+        session=test_session)
+    fn = test_cache_key
+    result = d.generate_redis_key(fn) 
+    expected_result = "test_cache_key_" + str(d.id) + "_21_42"
+    assert result(d, 21, 42) == expected_result
