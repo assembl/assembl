@@ -1,5 +1,5 @@
 query ThematicsDataQuery($identifier: String!) {
-  thematics: ideas(identifier: $identifier) {
+  thematicsData: ideas(identifier: $identifier) {
     ... on IdeaInterface {
       order
     }
@@ -8,36 +8,7 @@ query ThematicsDataQuery($identifier: String!) {
     }
     ... on Idea {
       id
-      parentId
-      children {
-        ... on IdeaInterface {
-          order
-        }
-        ... on Idea {
-          id
-          children {
-            ... on IdeaInterface {
-              order
-            }
-            ... on Idea {
-              id
-              children {
-                ... on IdeaInterface {
-                  order
-                }
-                ... on Idea {
-                  id
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-  rootIdea {
-    ... on Idea {
-      id
+      ancestors
     }
   }
 }

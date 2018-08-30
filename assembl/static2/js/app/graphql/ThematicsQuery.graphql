@@ -8,7 +8,7 @@ query ThematicsQuery($identifier: String!) {
     }
     ... on Idea {
       id
-      parentId
+      ancestors
       descriptionEntries {
         ...langStringEntry
       }
@@ -18,30 +18,6 @@ query ThematicsQuery($identifier: String!) {
         }
         bodyEntries {
           ...langStringEntry
-        }
-      }
-      children {
-        ... on IdeaInterface {
-          ...ideaData
-        }
-        ... on Idea {
-          id
-          children {
-            ... on IdeaInterface {
-              ...ideaData
-            }
-            ... on Idea {
-              id
-              children {
-                ... on IdeaInterface {
-                  ...ideaData
-                }
-                ... on Idea {
-                  id
-                }
-              }
-            }
-          }
         }
       }
     }
@@ -73,11 +49,6 @@ query ThematicsQuery($identifier: String!) {
           ...langStringEntry
         }
       }
-    }
-  }
-  rootIdea {
-    ... on Idea {
-      id
     }
   }
 }

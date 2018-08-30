@@ -29,12 +29,13 @@ type Props = {
   level: number,
   maxLevel: number,
   minItems: number,
-  parents: Array<number>
+  parents: Array<number>,
+  parentId: string
 };
 
 type FieldsProps = {
   fields: FieldArrayRenderProps,
-  onAdd?: (id: string) => void,
+  onAdd?: (id: string, parentId: string, order: number) => void,
   onRemove?: (id: string) => void,
   onUp?: (id: string) => void,
   onDown?: (id: string) => void
@@ -60,38 +61,38 @@ export class Fields extends React.PureComponent<FieldsProps> {
 
   down = (index: number) => {
     const { fields, onDown } = this.props;
-    fields.swap(index, index + 1);
     if (onDown) {
       const fieldValue = fields.value[index];
       onDown(fieldValue.id);
     }
+    fields.swap(index, index + 1);
   };
 
   up = (index: number) => {
     const { fields, onUp } = this.props;
-    fields.swap(index, index - 1);
     if (onUp) {
       const fieldValue = fields.value[index];
       onUp(fieldValue.id);
     }
+    fields.swap(index, index - 1);
   };
 
   remove = (index: number) => {
     const { fields, onRemove } = this.props;
-    fields.remove(index);
     if (onRemove) {
       const fieldValue = fields.value[index];
       onRemove(fieldValue.id);
     }
+    fields.remove(index);
   };
 
   add = () => {
-    const { fields, onAdd } = this.props;
+    const { fields, onAdd, parentId } = this.props;
     const id = createRandomId();
-    fields.push({ id: id });
     if (onAdd) {
-      onAdd(id);
+      onAdd(id, parentId, fields.length || 0);
     }
+    fields.push({ id: id });
   };
 
   render() {
@@ -106,7 +107,11 @@ export class Fields extends React.PureComponent<FieldsProps> {
       level,
       maxLevel,
       minItems,
-      parents
+      parents,
+      onAdd,
+      onRemove,
+      onUp,
+      onDown
     } = this.props;
     const isRoot = level === 0;
     const className = level > 0 ? 'form-branch' : 'form-tree';
@@ -179,7 +184,12 @@ export class Fields extends React.PureComponent<FieldsProps> {
                     withSeparators={withSeparators}
                     level={level + 1}
                     maxLevel={maxLevel}
+                    parentId={fieldValue.id}
                     parents={indexes}
+                    onAdd={onAdd}
+                    onRemove={onRemove}
+                    onUp={onUp}
+                    onDown={onDown}
                   />
                 ) : null}
               </div>
@@ -206,7 +216,8 @@ FieldArrayWithActions.defaultProps = {
   level: 0,
   minItems: -1,
   maxLevel: MAX_TREE_FORM_LEVEL,
-  parents: []
+  parents: [],
+  parentId: ''
 };
 
 export default FieldArrayWithActions;

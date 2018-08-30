@@ -1,27 +1,29 @@
 // @flow
 import React from 'react';
 import { Field } from 'react-final-form';
-import { I18n, Translate } from 'react-redux-i18n';
+import { I18n } from 'react-redux-i18n';
+import { type ApolloClient, withApollo } from 'react-apollo';
 
 import FieldArrayWithActions from '../../form/fieldArrayWithActions';
 import MultilingualTextFieldAdapter from '../../form/multilingualTextFieldAdapter';
 import { addThematicTooltip, deleteThematicTooltip } from '../../common/tooltips';
+import { removeMenuItem, addMenuItem } from '../thematicsMenu';
+import { PHASES } from '../../../constants';
 
 type Props = {
-  editLocale: string
+  editLocale: string,
+  client: ApolloClient
 };
 
-const Step1 = ({ editLocale }: Props) => (
+const Step1 = ({ editLocale, client }: Props) => (
   <FieldArrayWithActions
     isTree
     name="themes"
     subFieldName="children"
     minItems={1}
     // maxLevel={1}
-    onRemove={() => {
-      // @TODO
-      // console.log(`Remove the menu item (update the ThematicsDataQuery): ${index}`);
-    }}
+    onRemove={id => removeMenuItem(id, client, PHASES.survey)}
+    onAdd={(id, parentId, order) => addMenuItem(id, parentId, order, client, PHASES.survey)}
     renderFields={({ name, fieldIndex }) => (
       <Field
         required
@@ -44,4 +46,4 @@ const Step1 = ({ editLocale }: Props) => (
   />
 );
 
-export default Step1;
+export default withApollo(Step1);
