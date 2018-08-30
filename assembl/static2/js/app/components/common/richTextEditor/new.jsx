@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { Translate } from 'react-redux-i18n';
+import { I18n } from 'react-redux-i18n';
 import { EditorState, RichUtils } from 'draft-js';
 import Editor from 'draft-js-plugins-editor';
 import classNames from 'classnames';
@@ -32,12 +32,6 @@ type Props = {
 type State = {
   editorHasFocus: boolean
 };
-
-const RemainingCharsCounter = ({ count }) => (
-  <div className="annotation margin-xs">
-    <Translate value="debate.remaining_x_characters" nbCharacters={count} />
-  </div>
-);
 
 function customBlockRenderer(block) {
   if (block.getType() === 'atomic') {
@@ -113,10 +107,11 @@ export default class RichTextEditor extends React.Component<Props, State> {
     );
   };
 
-  countRemainingChars = (plainText: string): number => {
+  countRemainingChars = (plainText: string): string => {
     const regex = /(?:\r\n|\r|\n)/g; // new line, carriage return, line feed
     const cleanString = plainText.replace(regex, '').trim(); // replace above characters w/ nothing
-    return this.props.maxLength - cleanString.length;
+    const count = this.props.maxLength - cleanString.length;
+    return I18n.t('debate.remaining_x_characters', { nbCharacters: count });
   };
 
   shouldHidePlaceholder(): boolean {
@@ -143,17 +138,6 @@ export default class RichTextEditor extends React.Component<Props, State> {
         this.editor.focus();
       }
     }, 50);
-  };
-
-  renderRemainingChars = (): React.Element<any> => {
-    const { editorState, maxLength } = this.props;
-    const charCount = this.getCharCount(editorState);
-    const remainingChars = maxLength - charCount;
-    return (
-      <div className="annotation margin-xs">
-        <Translate value="debate.remaining_x_characters" nbCharacters={remainingChars < 10000 ? remainingChars : maxLength} />
-      </div>
-    );
   };
 
   handleReturn = (e: SyntheticKeyboardEvent<*>): 'handled' | 'not-handled' => {
@@ -204,7 +188,9 @@ export default class RichTextEditor extends React.Component<Props, State> {
           />
         </div>
         {maxLength ? (
-          <CustomCounter component={RemainingCharsCounter} limit={maxLength} countFunction={this.countRemainingChars} />
+          <div className="annotation margin-xs">
+            <CustomCounter limit={maxLength} countFunction={this.countRemainingChars} />
+          </div>
         ) : null}
         {toolbarPosition === 'bottom' ? <Toolbar /> : null}
 
