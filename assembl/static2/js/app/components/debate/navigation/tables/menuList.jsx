@@ -92,6 +92,7 @@ class MenuList extends React.Component<MenuListProps, MenuListState> {
         </div>
         {selected && (
           <MenuList
+            key="menulist"
             subMenu
             onMenuItemClick={onMenuItemClick}
             items={items}
