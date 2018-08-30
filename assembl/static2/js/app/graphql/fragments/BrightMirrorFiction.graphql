@@ -3,8 +3,8 @@ fragment BrightMirrorFiction on Post {
   body(lang: $contentLocale)
   creationDate
   creator {
-    name
-    username
+    displayName
+    isDeleted
     image {
       externalUrl
     }

@@ -13,6 +13,18 @@ export type PublicationStates =
   | 'SUBMITTED_IN_EDIT_GRACE_PERIOD'
   | 'WIDGET_SCOPED';
 
+export type CookieTypes =
+  | 'ACCEPT_CGU'
+  | 'ACCEPT_LOCALE'
+  | 'ACCEPT_PRIVACY_POLICY_ON_DISCUSSION'
+  | 'ACCEPT_SESSION_ON_DISCUSSION'
+  | 'ACCEPT_TRACKING_ON_DISCUSSION'
+  | 'REJECT_CGU'
+  | 'REJECT_LOCALE'
+  | 'REJECT_PRIVACY_POLICY_ON_DISCUSSION'
+  | 'REJECT_SESSION_ON_DISCUSSION'
+  | 'REJECT_TRACKING_ON_DISCUSSION';
+
 export type ExtractStates = 'PUBLISHED' | 'SUBMITTED';
 
 export type SentimentTypes = 'DISAGREE' | 'DONT_UNDERSTAND' | 'LIKE' | 'MORE_INFO';
@@ -160,6 +172,62 @@ export type AllLanguagePreferencesQuery = {|
   |}
 |};
 
+export type BrightMirrorFictionQueryVariables = {|
+  contentLocale: string,
+  id: string
+|};
+
+export type BrightMirrorFictionQuery = {|
+  // The ID of the object
+  fiction: ?(
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {
+        // A Subject of the post in a given language.
+        subject: ?string,
+        // A Body of the post (the main content of the post). in a given language.
+        body: ?string,
+        // The date that the object was created, in UTC timezone, in ISO 8601 format.
+        creationDate: ?any,
+        creator: ?{|
+          // How the User is represented throughout the debate. If a user-name exists, this will be chosen. If it does not, the name is determined.
+          displayName: ?string,
+          // A boolean flag that shows if the User is deleted.
+          // If True, the User information is cleansed from the system, and the User can no longer log in.
+          isDeleted: ?boolean,
+          // Image appearing on the avatar of the User. A file metadata object, described by the Document object.
+          image: ?{|
+            // A url to an image or a document to be attached.
+            externalUrl: ?string
+          |}
+        |}
+      }
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {})
+|};
+
 export type DebateThematicsQueryQueryVariables = {|
   lang: string,
   identifier: string
@@ -220,7 +288,7 @@ export type DiscussionPreferencesQuery = {|
   discussionPreferences: ?{|
     // The title in the tab.
     tabTitle: ?string,
-    // The favicon of the site.A file metadata object, described by the Document object.
+    // The site favicon.A file metadata object, described by the Document object.
     favicon: ?{|
       // The filename title.
       title: ?string,
@@ -2516,6 +2584,45 @@ export type VoteSessionQuery = {|
   |}
 |};
 
+export type AcceptedCookiesQueryVariables = {|
+  id: string
+|};
+
+export type AcceptedCookiesQuery = {|
+  // The ID of the object
+  user: ?(
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {
+        // The list of cookies accepted by the agent.
+        acceptedCookies: ?Array<?CookieTypes>
+      }
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {})
+|};
+
 export type addGaugeVoteMutationVariables = {|
   proposalId: string,
   voteSpecId: string,
@@ -3870,14 +3977,14 @@ export type deleteThematicMutation = {|
   |}
 |};
 
-export type DeleteUserInformationMutationVariables = {|
+export type deleteUserInformationMutationVariables = {|
   id: string
 |};
 
-export type DeleteUserInformationMutation = {|
+export type deleteUserInformationMutation = {|
   // A mutation allowing a user to delete all his information according to article 17 of GDPR.
   // All vital information regarding the User acrosst the database is cleansed.
-  DeleteUserInformation: ?{|
+  deleteUserInformation: ?{|
     user: ?{|
       // The ID of the object.
       id: string
@@ -3893,6 +4000,20 @@ export type deleteVoteSpecificationMutation = {|
   // A mutation enabling an existing VoteSpecification to be deleted.
   deleteVoteSpecification: ?{|
     success: ?boolean
+  |}
+|};
+
+export type updateAcceptedCookiesMutationVariables = {|
+  actions: Array<?CookieTypes>
+|};
+
+export type updateAcceptedCookiesMutation = {|
+  // A mutation that allows the addition of accepted and rejected list of cookies by a registered user.
+  updateAcceptedCookies: ?{|
+    user: ?{|
+      // The list of cookies accepted by the agent.
+      acceptedCookies: ?Array<?CookieTypes>
+    |}
   |}
 |};
 
@@ -5486,6 +5607,27 @@ export type AttachmentFragment = {|
   |}
 |};
 
+export type BrightMirrorFictionFragment = {|
+  // A Subject of the post in a given language.
+  subject: ?string,
+  // A Body of the post (the main content of the post). in a given language.
+  body: ?string,
+  // The date that the object was created, in UTC timezone, in ISO 8601 format.
+  creationDate: ?any,
+  creator: ?{|
+    // How the User is represented throughout the debate. If a user-name exists, this will be chosen. If it does not, the name is determined.
+    displayName: ?string,
+    // A boolean flag that shows if the User is deleted.
+    // If True, the User information is cleansed from the system, and the User can no longer log in.
+    isDeleted: ?boolean,
+    // Image appearing on the avatar of the User. A file metadata object, described by the Document object.
+    image: ?{|
+      // A url to an image or a document to be attached.
+      externalUrl: ?string
+    |}
+  |}
+|};
+
 export type discussionPhaseFragment = {|
   // The ID of the object.
   id: string,
@@ -5717,26 +5859,6 @@ export type langStringEntryFragment = {|
   localeCode: string,
   // The unicode encoded string representation of the content.
   value: ?string
-|};
-
-export type BrightMirrorFictionFragment = {|
-  // The subject of the post (BM fiction) in a given language.
-  subject: string,
-  // The Body of the post (BM fiction) in a given language.
-  body: string,
-  // The date that the post (BM fiction) was created, in UTC timezone, in ISO 8601 format.
-  creationDate: Date,
-  creator: {|
-    // The name of the User.
-    name: string,
-    // The user name of the User. This field is unique throughout the server.
-    username: string,
-    // Image appearing on the avatar of the User. A file metadata object, described by the Document object.
-    image: ?{|
-      // A url to an image or a document to be attached.
-      externalUrl: ?string
-    |},
-  |},
 |};
 
 export type PostFragment = {|

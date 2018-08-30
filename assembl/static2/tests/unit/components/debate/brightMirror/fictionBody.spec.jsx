@@ -49,7 +49,7 @@ describe('<FictionBody /> - with shallow', () => {
   });
 });
 
-describe('<FictionBody /> - with shallow', () => {
+describe('<FictionBody /> - with mount', () => {
   let wrapper;
   let fictionBody: FictionBodyType;
 

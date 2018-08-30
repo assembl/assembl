@@ -26,26 +26,24 @@ class BrightMirrorFiction extends Component<BrightMirrorFictionType> {
   render() {
     // const { contentLocale } = this.props;
     const { fiction } = this.props.data;
+    const displayName = fiction.creator && fiction.creator.displayName ? fiction.creator.displayName : '';
 
     // Define components props
     const circleAvatarProps: CircleAvatarType = {
-      username: fiction.creator.username,
-      src:
-        fiction.creator.image && fiction.creator.image.externalUrl
-          ? fiction.creator.image.externalUrl
-          : '/static2/img/icons/avatar.png'
+      username: displayName,
+      src: fiction.creator && fiction.creator.image && fiction.creator.image.externalUrl ? fiction.creator.image.externalUrl : ''
     };
 
     const fictionHeaderProps: FictionHeaderType = {
-      authorFullname: fiction.creator.name,
+      authorFullname: displayName,
       publishedDate: I18n.l(fiction.creationDate, { dateFormat: 'date.formatHTML5' }),
       displayedPublishedDate: I18n.l(fiction.creationDate, { dateFormat: 'date.format' }),
       circleAvatar: { ...circleAvatarProps }
     };
 
     const fictionBodyProps: FictionBodyType = {
-      title: fiction.subject,
-      content: fiction.body
+      title: fiction.subject ? fiction.subject : '',
+      content: fiction.body ? fiction.body : ''
     };
 
     return (
