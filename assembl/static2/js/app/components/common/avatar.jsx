@@ -14,6 +14,7 @@ class ProfileIcon extends React.Component {
   constructor(props) {
     super(props);
     this.setCurrentView = this.setCurrentView.bind(this);
+    this.handleLoginClick = this.handleLoginClick.bind(this);
   }
 
   componentWillMount() {
@@ -33,8 +34,17 @@ class ProfileIcon extends React.Component {
     });
   }
 
+  handleLoginClick(e) {
+    const { loginData } = this.props;
+    if (loginData && ('local' in loginData) && !loginData.local) {
+      e.preventDefault();
+      browserHistory.push(loginData.route);
+    }
+  }
+
   render() {
-    const { slug, connectedUserId, displayName, showUsername } = this.props;
+    const { slug, connectedUserId, displayName, showUsername, loginData } = this.props;
+    const loginUrl = loginData ? loginData.loginUrl : `${getContextual('login', { slug: slug })}?next=${this.state.next}`;
     const dropdownUser = (
       <div className="inline">
         <span className="assembl-icon-profil grey" />
@@ -43,8 +53,8 @@ class ProfileIcon extends React.Component {
     );
     return (
       <div className="right avatar">
-        {!connectedUserId && (
-          <Link to={`${getContextual('login', { slug: slug })}?next=${this.state.next}`}>
+        {!connectedUserId && !loginUrl && (
+          <Link to={loginUrl} onClick={this.handleLoginClick} >
             <div className="connection">
               <Translate value="navbar.connection" />
             </div>

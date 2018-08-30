@@ -34,7 +34,8 @@ type UserMenuProps = {
   remainingWidth?: number,
   isHarvesting: boolean,
   themeId: ?string,
-  handleIsHarvestingButtonClick: Function
+  handleIsHarvestingButtonClick: Function,
+  loginData: ?Object
 };
 
 const shouldShowUsername = (remainingWidth, breakPoint) =>
@@ -49,7 +50,8 @@ const UserMenu = ({
   remainingWidth,
   isHarvesting,
   handleIsHarvestingButtonClick,
-  themeId
+  themeId,
+  loginData
 }: UserMenuProps) => (
   <div className="navbar-icons">
     {shouldShowExpertIcons &&
@@ -65,7 +67,11 @@ const UserMenu = ({
           <span className="assembl-icon-faq grey" />
         </Link>
       )}
-    <Avatar location={location} showUsername={shouldShowUsername(remainingWidth, 450)} />
+    <Avatar
+      location={location}
+      showUsername={shouldShowUsername(remainingWidth, 450)}
+      loginData={loginData}
+    />
   </div>
 );
 

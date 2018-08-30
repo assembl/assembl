@@ -12,6 +12,7 @@ import { get } from '../../utils/routeMap';
 import { withScreenWidth } from '../common/screenDimensions';
 import { connectedUserIsAdmin } from '../../utils/permissions';
 import SectionsQuery from '../../graphql/SectionsQuery.graphql';
+import DiscussionQuery from '../../graphql/DiscussionQuery.graphql';
 import FlatNavbar from './FlatNavbar';
 import BurgerNavbar from './BurgerNavbar';
 import { APP_CONTAINER_MAX_WIDTH, APP_CONTAINER_PADDING } from '../../constants';
@@ -161,6 +162,7 @@ export class AssemblNavbar extends React.PureComponent {
   render = () => {
     const { screenWidth, debate, data, location, phase } = this.props;
     const sections = data.sections;
+    const discussionData = data.discussion;
     const { debateData } = debate;
     const { timeline, logo, slug, helpUrl, isLargeLogo } = debateData;
     const flatWidth = (this.state && this.state.flatWidth) || 0;
@@ -180,7 +182,8 @@ export class AssemblNavbar extends React.PureComponent {
       logoSrc: logo,
       helpUrl: helpUrl,
       location: location,
-      logoLink: sections.length > 0 ? sections.find(section => section && section.sectionType === 'HOMEPAGE').url : ''
+      logoLink: sections.length > 0 ? sections.find(section => section && section.sectionType === 'HOMEPAGE').url : '',
+      loginData: discussionData.loginData
     };
     const { themeId } = this.props;
     return (
@@ -222,6 +225,7 @@ export default compose(
       }
     })
   }),
+  graphql(DiscussionQuery),
   withoutLoadingIndicator(),
   withScreenWidth
 )(AssemblNavbar);

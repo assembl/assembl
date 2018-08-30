@@ -35,7 +35,7 @@ export default class BurgerNavbar extends React.PureComponent {
 
   render() {
     const { state, props, toggleMenu } = this;
-    const { elements, slug, logoSrc, connectedUserId, currentPhaseIdentifier, helpUrl, location, logoLink } = props;
+    const { elements, slug, logoSrc, connectedUserId, currentPhaseIdentifier, helpUrl, location, logoLink, loginData } = props;
     const { shouldDisplayMenu } = state;
     return (
       <div className="burger-navbar">
@@ -57,6 +57,7 @@ export default class BurgerNavbar extends React.PureComponent {
             connectedUserId={connectedUserId}
             currentPhaseIdentifier={currentPhaseIdentifier}
             remainingWidth={0}
+            loginData={loginData}
           />
         </div>
       </div>
