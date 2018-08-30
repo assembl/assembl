@@ -25,14 +25,13 @@ const CookiesSelector = ({
   handleToggle,
   toggleCookieType
 }: Props) => (
-  <React.Fragment>
-    <div className="cookies-selector">
-      <h2 className="dark-title-2">
-        <Translate value="profile.cookies" />
-      </h2>
-      <Translate value="cookiesPolicy.instructions" className="cookies-instructions" />
-      <div className="cookies-categories">
-        {cookies &&
+  <div className="cookies-selector">
+    <h2 className="dark-title-2">
+      <Translate value="profile.cookies" />
+    </h2>
+    <Translate value="cookiesPolicy.instructions" className="cookies-instructions" />
+    <div className="cookies-categories">
+      {cookies &&
           Object.keys(cookies).map((category) => {
             const isActiveKey = category === activeKey;
             return (
@@ -62,14 +61,13 @@ const CookiesSelector = ({
               </div>
             );
           })}
-      </div>
-      <div className="submit-button-container">
-        <Button onClick={handleSave} className="button-submit button-dark">
-          <Translate value="profile.save" />
-        </Button>
-      </div>
     </div>
-  </React.Fragment>
+    <div className="submit-button-container">
+      <Button onClick={handleSave} className="button-submit button-dark">
+        <Translate value="profile.save" />
+      </Button>
+    </div>
+  </div>
 );
 
 export default CookiesSelector;

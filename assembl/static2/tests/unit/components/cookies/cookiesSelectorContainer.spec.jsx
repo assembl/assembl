@@ -32,7 +32,7 @@ describe('CookiesSelectorContainer component', () => {
     it('should return a certain object for a given cookie string', () => {
       expect(JSON.stringify(instance.getCookieObjectData('ACCEPT_SESSION_ON_DISCUSSION'))).toBe(
         JSON.stringify({
-          category: 'other',
+          category: 'essential',
           name: COOKIE_TRANSLATION_KEYS.userSession
         })
       );
@@ -43,15 +43,15 @@ describe('CookiesSelectorContainer component', () => {
       expect(
         instance.getCookiesObjectFromArray([
           {
-            category: 'other',
+            category: 'essential',
             name: COOKIE_TRANSLATION_KEYS.userSession,
             accepted: true
           }
         ])
       ).toEqual({
-        other: [
+        essential: [
           {
-            category: 'other',
+            category: 'essential',
             name: COOKIE_TRANSLATION_KEYS.userSession,
             accepted: true
           }

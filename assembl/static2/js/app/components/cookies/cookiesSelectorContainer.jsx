@@ -14,7 +14,7 @@ import updateAcceptedCookies from '../../graphql/mutations/updateAcceptedCookies
 import withLoadingIndicator from '../common/withLoadingIndicator';
 
 import type { CookieObject } from './cookieToggle';
-import { COOKIE_TRANSLATION_KEYS } from '../../constants';
+import { COOKIE_TRANSLATION_KEYS, COOKIE_TYPES } from '../../constants';
 
 type Props = {
   updateAcceptedCookies: Function,
@@ -36,13 +36,16 @@ type State = {
 export class DumbCookiesSelectorContainer extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    const cookiesFromBrowser = getCookieItem('cookies_configuration');
-    const cookiesList = props.cookiesList
+    // @$FlowFixMe flow does not see that getCookieItem has been checked as non null
+    const cookiesFromBrowser = getCookieItem('cookies_configuration') && getCookieItem('cookies_configuration').split(',');
+    const initialCookiesList = COOKIE_TYPES.filter(cookie => cookie.includes('ACCEPT'));
+    const cookiesList = props.cookiesList && props.cookiesList.length > 0
       ? // if the user is logged in, we get the cookiesList from the query
       props.cookiesList
       : // otherwise, we take it from the browser
-      cookiesFromBrowser && cookiesFromBrowser.split(',');
-
+      cookiesFromBrowser ||
+      // if browser cookies are empty aswell, we take the initial configuration list
+      initialCookiesList;
     const cookiesArray =
       cookiesList &&
       cookiesList.map(cookie => ({
@@ -68,13 +71,19 @@ export class DumbCookiesSelectorContainer extends React.Component<Props, State> 
 
   getCookieObjectData = (cookie: string) => {
     if (cookie.includes('SESSION_ON_DISCUSSION')) {
-      return { category: 'other', name: COOKIE_TRANSLATION_KEYS.userSession };
+      return { category: 'essential', name: COOKIE_TRANSLATION_KEYS.userSession };
     }
-    if (cookie.includes('LOCALE_ON_DISCUSSION')) {
+    if (cookie.includes('LOCALE')) {
       return { category: 'essential', name: COOKIE_TRANSLATION_KEYS.locale };
     }
     if (cookie.includes('TRACKING_ON_DISCUSSION')) {
       return { category: 'analytics', name: COOKIE_TRANSLATION_KEYS.piwik };
+    }
+    if (cookie.includes('PRIVACY_POLICY_ON_DISCUSSION')) {
+      return { category: 'essential', name: COOKIE_TRANSLATION_KEYS.privacyPolicy };
+    }
+    if (cookie.includes('CGU')) {
+      return { category: 'essential', name: COOKIE_TRANSLATION_KEYS.cgu };
     }
     return { category: 'other', name: cookie };
   };

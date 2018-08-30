@@ -18,19 +18,18 @@ type State = {
 };
 
 type Props = {
-  acceptedCookies: Array<string>,
+  cookiesList: Array<string>,
   updateAcceptedCookies: Function
 };
 
 export class DumbCookiesBar extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    const { acceptedCookies } = props;
+    const { cookiesList } = props;
     const cookiesFromBrowser = getCookieItem('cookies_configuration');
-
-    const shouldHideBar = acceptedCookies
-      ? // acceptedCookies comes from the query and is only received if the user is logged in
-      COOKIE_TYPES.some(cookie => acceptedCookies.includes(cookie))
+    const shouldHideBar = cookiesList && cookiesList.length > 0
+      ? // cookiesList comes from the query and is only received if the user is logged in
+      COOKIE_TYPES.some(cookie => cookiesList.includes(cookie))
       : // if the user is not logged in, we check in the browser instead of the backend
       COOKIE_TYPES.some(cookie => cookiesFromBrowser && cookiesFromBrowser.split(',').includes(cookie));
     this.state = { hide: shouldHideBar };
@@ -58,7 +57,7 @@ export class DumbCookiesBar extends React.Component<Props, State> {
             <Translate value="cookiesBar.accept" />
           </Button>
           <Link to={get('cookiesPolicy', { slug: slug })}>
-            <Button className="button-submit button-dark cookies-button">
+            <Button className="button-submit button-dark cookies-button" onClick={() => { this.setState({ hide: true }); }} >
               <Translate value="cookiesBar.seeCookiesPolicy" />
             </Button>
           </Link>
@@ -86,7 +85,7 @@ export default compose(
         return { error: data.error };
       }
       return {
-        acceptedCookies: data.user.acceptedCookies
+        cookiesList: data.user.acceptedCookies
       };
     }
   }),

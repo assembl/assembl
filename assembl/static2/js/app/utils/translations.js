@@ -51,7 +51,9 @@ const Translations = {
     cookies: {
       userSession: "Session utilisateur",
       locale: "Langue",
-      piwik: "Piwik"
+      piwik: "Piwik",
+      privacyPolicy: "Politique de confidentialité",
+      cgu: "Conditions générales d'utilisation"
     },
     search: {
       reset: {
@@ -867,7 +869,9 @@ const Translations = {
     cookies: {
       userSession: "User Session",
       locale: "Language",
-      piwik: "Piwik"
+      piwik: "Piwik",
+      cgu: "Terms and conditions",
+      privacyPolicy: "Privacy policy"
     },
     search: {
       reset: {
