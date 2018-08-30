@@ -1,7 +1,10 @@
 import { ContentState, Modifier } from 'draft-js';
 
-import { createSelectionState } from './utils';
+import { TestEditorUtils } from 'assembl-editor-utils';
+
 import strategy, { matchesEntityType } from '../linkStrategy';
+
+const { createSelectionState } = TestEditorUtils;
 
 describe('matchesEntityType function', () => {
   it('should return true only if type is LINK', () => {

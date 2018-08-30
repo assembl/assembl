@@ -2,8 +2,11 @@ import { ContentState, EditorState, Modifier } from 'draft-js';
 import React from 'react';
 import renderer from 'react-test-renderer';
 
+import { TestEditorUtils } from 'assembl-editor-utils';
+
 import LinkButton from '../LinkButton';
-import { createSelectionState } from '../../__test__/utils';
+
+const { createSelectionState } = TestEditorUtils;
 
 describe('LinkButton component', () => {
   it('should render a link button', () => {

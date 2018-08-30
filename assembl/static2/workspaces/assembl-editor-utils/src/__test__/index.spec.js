@@ -1,7 +1,9 @@
 import { ContentState, EditorState } from 'draft-js';
 
 import EditorUtils from '../index';
-import { createSelectionState } from './utils';
+import TestUtils from '../TestUtils';
+
+const { createSelectionState } = TestUtils;
 
 describe('EditorUtils', () => {
   describe('createLinkAtSelection function', () => {

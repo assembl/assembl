@@ -2,6 +2,8 @@
 import { EditorState, Modifier, RichUtils } from 'draft-js';
 import DraftJSPluginsUtils from 'draft-js-plugins-utils';
 
+import TestUtils from './TestUtils';
+
 type LinkData = {
   target: ?string,
   text: ?string,
@@ -10,6 +12,8 @@ type LinkData = {
 };
 
 const { collapseToEnd, getCurrentEntity, getCurrentEntityKey, hasEntity, removeLinkAtSelection } = DraftJSPluginsUtils;
+
+export const TestEditorUtils = TestUtils;
 
 export default {
   collapseToEnd: collapseToEnd,
