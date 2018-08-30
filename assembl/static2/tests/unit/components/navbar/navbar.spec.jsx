@@ -24,7 +24,13 @@ const data = {
       title: 'My section',
       url: 'http://www.gnu.org'
     }
-  ]
+  ],
+  discussion: {
+    loginData: {
+      route: 'http://www.mycoolsite.com/login',
+      local: false
+    }
+  }
 };
 
 describe('AssemblNavbar component', () => {

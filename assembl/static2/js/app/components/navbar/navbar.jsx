@@ -120,7 +120,8 @@ export class AssemblNavbar extends React.PureComponent<AssemblNavbarProps, Assem
   };
 
   renderUserMenu = (remainingWidth: number) => {
-    const { debate: { debateData: { helpUrl } }, location, data: { discussion: { loginData } } = this.props;
+    const { debate: { debateData: { helpUrl } }, location, data } = this.props;
+    const { discussion: { loginData } } = data;
     return <UserMenu
       helpUrl={helpUrl}
       location={location}
