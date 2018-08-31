@@ -69,13 +69,15 @@ const DebateChild = (props) => {
   case 'survey':
     return <Survey id={props.id} identifier={props.identifier} />;
   case 'thread':
-    return <Idea id={props.id} identifier={props.identifier} routerParams={props.params} />;
+    return <Idea id={props.id} identifier={props.identifier} routerParams={props.params} additionalFields={false} />;
   case 'multiColumns':
-    return <Idea id={props.id} identifier={props.identifier} routerParams={props.params} />;
+    return <Idea id={props.id} identifier={props.identifier} routerParams={props.params} additionalFields={false} />;
   case 'voteSession':
     return <NotFound />;
+  case 'brightMirror':
+    return <Idea id={props.id} identifier={props.identifier} routerParams={props.params} additionalFields />;
   default:
-    return <Idea id={props.id} identifier={props.identifier} routerParams={props.params} />;
+    return <Idea id={props.id} identifier={props.identifier} routerParams={props.params} additionalFields={false} />;
   }
 };
 

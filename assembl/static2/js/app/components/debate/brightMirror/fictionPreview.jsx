@@ -3,8 +3,7 @@ import * as React from 'react';
 import { Link } from 'react-router';
 import truncate from 'lodash/truncate';
 
-const TITLE_MAX_CHAR = 60;
-const NAME_MAX_CHAR = 20;
+import { FICTION_PREVIEW_TITLE_MAX_CHAR, FICTION_PREVIEW_NAME_MAX_CHAR } from '../../../constants';
 
 export type FictionPreviewProps = {
   /** Fiction title */
@@ -25,7 +24,7 @@ const FictionPreview = ({ title, authorName, creationDate, link, color }: Fictio
       <div className="inner-box">
         <h3>
           {truncate(title, {
-            length: TITLE_MAX_CHAR,
+            length: FICTION_PREVIEW_TITLE_MAX_CHAR,
             separator: ' ',
             omission: '...'
           })}
@@ -33,7 +32,7 @@ const FictionPreview = ({ title, authorName, creationDate, link, color }: Fictio
         <p className="info">
           <span className="author">
             {truncate(authorName, {
-              length: NAME_MAX_CHAR,
+              length: FICTION_PREVIEW_NAME_MAX_CHAR,
               separator: ' ',
               omission: '...'
             })}{' '}

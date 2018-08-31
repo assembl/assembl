@@ -6,7 +6,7 @@ import { customInstructionsText } from '../../stories/components/debate/brightMi
 import InstructionView from '../../components/debate/brightMirror/instructionView';
 import type { InstructionViewProps } from '../../components/debate/brightMirror/instructionView';
 
-const timeline = [
+const customTimeline: Timeline = [
   {
     identifier: 'brightMirror',
     start: '1900-01-01T02:00:00Z',
@@ -14,16 +14,17 @@ const timeline = [
     title: 'brightMirror'
   }
 ];
+
 const props: InstructionViewProps = {
   isUserConnected: true,
   ideaId: '0',
   refetchIdea: Function,
-  timeline: timeline,
+  timeline: customTimeline,
   announcementContent: customInstructionsText,
   lang: 'en',
   ...customFictionsList
 };
 
-const index = () => <InstructionView {...props} />;
+const Index = () => <InstructionView {...props} />;
 
-export default index;
+export default Index;
