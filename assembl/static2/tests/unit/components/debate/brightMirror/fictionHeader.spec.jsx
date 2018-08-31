@@ -8,7 +8,7 @@ import Adapter from 'enzyme-adapter-react-16';
 
 import FictionHeader from '../../../../../js/app/components/debate/brightMirror/fictionHeader';
 import CircleAvatar from '../../../../../js/app/components/debate/brightMirror/circleAvatar';
-import type { FictionHeaderType } from '../../../../../js/app/components/debate/brightMirror/fictionHeader';
+import type { FictionHeaderProps } from '../../../../../js/app/components/debate/brightMirror/fictionHeader';
 
 // Import existing storybook data
 import { defaultFictionHeader } from '../../../../../js/app/stories/components/debate/brightMirror/fictionHeader.stories';
@@ -23,7 +23,7 @@ configure({ adapter: new Adapter() });
 
 describe('<FictionHeader /> - with shallow', () => {
   let wrapper;
-  let fictionHeader: FictionHeaderType;
+  let fictionHeader: FictionHeaderProps;
 
   beforeEach(() => {
     fictionHeader = { ...defaultFictionHeader };

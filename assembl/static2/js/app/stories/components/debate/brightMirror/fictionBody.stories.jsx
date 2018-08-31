@@ -7,9 +7,9 @@ import { withKnobs, text } from '@storybook/addon-knobs';
 /* eslint-enable */
 
 import FictionBody from '../../../../components/debate/brightMirror/fictionBody';
-import type { FictionBodyType } from '../../../../components/debate/brightMirror/fictionBody';
+import type { FictionBodyProps } from '../../../../components/debate/brightMirror/fictionBody';
 
-export const defaultFictionBody: FictionBodyType = {
+export const defaultFictionBody: FictionBodyProps = {
   title: 'Les émotifs',
   content: `
     <p><strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
@@ -41,7 +41,7 @@ export const defaultFictionBody: FictionBodyType = {
   `
 };
 
-const noFictionBody: FictionBodyType = {
+const noFictionBody: FictionBodyProps = {
   ...defaultFictionBody,
   title: '',
   content: ''

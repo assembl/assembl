@@ -2,9 +2,9 @@
 import React, { Fragment } from 'react';
 
 import CircleAvatar from './circleAvatar';
-import type { CircleAvatarType } from './circleAvatar';
+import type { CircleAvatarProps } from './circleAvatar';
 
-export type FictionHeaderType = {
+export type FictionHeaderProps = {
   /** Author fullname */
   authorFullname: string,
   /** Article published date */
@@ -12,12 +12,12 @@ export type FictionHeaderType = {
   /** Article displayed published date */
   displayedPublishedDate: string,
   /** Circle avatar props */
-  circleAvatar: CircleAvatarType
+  circleAvatar: CircleAvatarProps
 };
 
 const noAuthorMessage: string = 'no author specified';
 
-const fictionHeader = ({ authorFullname, publishedDate, displayedPublishedDate, circleAvatar }: FictionHeaderType) => (
+const fictionHeader = ({ authorFullname, publishedDate, displayedPublishedDate, circleAvatar }: FictionHeaderProps) => (
   <Fragment>
     <header className="header">
       <CircleAvatar {...circleAvatar} />

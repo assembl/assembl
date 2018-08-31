@@ -7,7 +7,7 @@ import Adapter from 'enzyme-adapter-react-16';
 /* eslint-enable */
 
 import CircleAvatar from '../../../../../js/app/components/debate/brightMirror/circleAvatar';
-import type { CircleAvatarType } from '../../../../../js/app/components/debate/brightMirror/circleAvatar';
+import type { CircleAvatarProps } from '../../../../../js/app/components/debate/brightMirror/circleAvatar';
 
 // Separate the snapshots in directories next to each component
 // Name should match with the story name
@@ -17,7 +17,7 @@ initStoryshots({
 
 configure({ adapter: new Adapter() });
 
-const defaultCircleAvatar: CircleAvatarType = {
+const defaultCircleAvatar: CircleAvatarProps = {
   username: 'taryn-treutel',
   src: 'https://loremflickr.com/300/300'
 };

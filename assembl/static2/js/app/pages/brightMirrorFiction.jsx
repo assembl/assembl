@@ -11,9 +11,9 @@ import withLoadingIndicator from '../components/common/withLoadingIndicator';
 import FictionHeader from '../components/debate/brightMirror/fictionHeader';
 import FictionBody from '../components/debate/brightMirror/fictionBody';
 // Type imports
-import type { CircleAvatarType } from '../components/debate/brightMirror/circleAvatar';
-import type { FictionHeaderType } from '../components/debate/brightMirror/fictionHeader';
-import type { FictionBodyType } from '../components/debate/brightMirror/fictionBody';
+import type { CircleAvatarProps } from '../components/debate/brightMirror/circleAvatar';
+import type { FictionHeaderProps } from '../components/debate/brightMirror/fictionHeader';
+import type { FictionBodyProps } from '../components/debate/brightMirror/fictionBody';
 
 // TODO: add data.error check when displaying the page
 
@@ -31,19 +31,19 @@ const brightMirrorFiction = ({ data }: BrightMirrorFictionType) => {
   const displayName = fiction.creator && fiction.creator.isDeleted ? I18n.t('deletedUser') : getDisplayName();
 
   // Define components props
-  const circleAvatarProps: CircleAvatarType = {
+  const circleAvatarProps: CircleAvatarProps = {
     username: displayName,
     src: fiction.creator && fiction.creator.image && fiction.creator.image.externalUrl ? fiction.creator.image.externalUrl : ''
   };
 
-  const fictionHeaderProps: FictionHeaderType = {
+  const fictionHeaderProps: FictionHeaderProps = {
     authorFullname: displayName,
     publishedDate: I18n.l(fiction.creationDate, { dateFormat: 'date.formatHTML5' }),
     displayedPublishedDate: I18n.l(fiction.creationDate, { dateFormat: 'date.format' }),
     circleAvatar: { ...circleAvatarProps }
   };
 
-  const fictionBodyProps: FictionBodyType = {
+  const fictionBodyProps: FictionBodyProps = {
     title: fiction.subject ? fiction.subject : '',
     content: fiction.body ? fiction.body : ''
   };

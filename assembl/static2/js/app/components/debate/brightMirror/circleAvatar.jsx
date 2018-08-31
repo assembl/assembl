@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 
-export type CircleAvatarType = {
+export type CircleAvatarProps = {
   /** Username related to the avatar */
   username: string,
   /** Source of the image */
@@ -11,7 +11,7 @@ export type CircleAvatarType = {
 const noUsernameAlt: string = 'no-username';
 const noUsernameAvatarSrc: string = '/static2/img/icons/avatar.png';
 
-const circleAvatar = ({ username, src }: CircleAvatarType) => (
+const circleAvatar = ({ username, src }: CircleAvatarProps) => (
   <img
     className="circle-avatar"
     src={src || noUsernameAvatarSrc}

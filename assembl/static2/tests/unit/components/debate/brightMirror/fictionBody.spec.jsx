@@ -7,7 +7,7 @@ import Adapter from 'enzyme-adapter-react-16';
 /* eslint-enable */
 
 import FictionBody from '../../../../../js/app/components/debate/brightMirror/fictionBody';
-import type { FictionBodyType } from '../../../../../js/app/components/debate/brightMirror/fictionBody';
+import type { FictionBodyProps } from '../../../../../js/app/components/debate/brightMirror/fictionBody';
 
 // Separate the snapshots in directories next to each component
 // Name should match with the story name
@@ -20,14 +20,14 @@ configure({ adapter: new Adapter() });
 const defaultTitle: string = 'Fugit veritatis nemo';
 const defaultContent: string = 'Vero et ut et quia quo. Molestiae ut cupiditate odio numquam veniam esse cumque modi.';
 
-const defaultFictionBody: FictionBodyType = {
+const defaultFictionBody: FictionBodyProps = {
   title: defaultTitle,
   content: defaultContent
 };
 
 describe('<FictionBody /> - with shallow', () => {
   let wrapper;
-  let fictionBody: FictionBodyType;
+  let fictionBody: FictionBodyProps;
 
   beforeEach(() => {
     fictionBody = { ...defaultFictionBody };
@@ -51,7 +51,7 @@ describe('<FictionBody /> - with shallow', () => {
 
 describe('<FictionBody /> - with mount', () => {
   let wrapper;
-  let fictionBody: FictionBodyType;
+  let fictionBody: FictionBodyProps;
 
   beforeEach(() => {
     fictionBody = { ...defaultFictionBody };
