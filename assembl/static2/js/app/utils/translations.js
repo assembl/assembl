@@ -302,11 +302,12 @@ const Translations = {
         linkPlugin: {
           addLinkForm: {
             close: "Fermer",
-            title: "Insérer/Modifier un lien"
+            title: "Insérer un lien"
           },
           submit: "Valider",
           text: "Texte du lien",
-          url: "Adresse web"
+          url: "Adresse web",
+          openInNewTab: "Ouvrir le lien dans un nouvel onglet"
         }
       },
       uploadButton: "Choisissez un fichier",
@@ -1193,11 +1194,12 @@ const Translations = {
         linkPlugin: {
           addLinkForm: {
             close: "Close",
-            title: "Insert/Edit a link"
+            title: "Insert a link"
           },
           submit: "Validate",
           text: "Link text",
-          url: "URL"
+          url: "URL",
+          openInNewTab: "Open link in new tab"
         }
       },
       uploadButton: "Choose a file to upload",

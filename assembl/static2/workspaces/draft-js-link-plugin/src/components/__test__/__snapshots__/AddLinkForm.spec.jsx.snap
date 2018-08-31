@@ -126,7 +126,7 @@ exports[`AddLinkForm component should render a form to add a link 1`] = `
             className={undefined}
             style={undefined}
           >
-            Missing translation: common.editor.linkPlugin.openInNewTab
+            Open link in new tab
           </span>
         </label>
       </div>
