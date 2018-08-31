@@ -26,7 +26,8 @@ class BrightMirrorFiction extends Component<BrightMirrorFictionType> {
   render() {
     // const { contentLocale } = this.props;
     const { fiction } = this.props.data;
-    const displayName = fiction.creator && fiction.creator.displayName ? fiction.creator.displayName : '';
+    const getDisplayName = () => (fiction.creator && fiction.creator.displayName ? fiction.creator.displayName : '');
+    const displayName = fiction.creator && fiction.creator.isDeleted ? I18n.t('deletedUser') : getDisplayName();
 
     // Define components props
     const circleAvatarProps: CircleAvatarType = {
