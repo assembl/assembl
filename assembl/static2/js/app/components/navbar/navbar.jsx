@@ -73,13 +73,7 @@ const SectionLink = ({ section, options }) => {
     .includes(sectionName);
   const linkClassNames = isActiveUrl ? 'navbar-menu-item pointer active' : 'navbar-menu-item pointer';
   return sectionType === 'DEBATE' ? (
-    <DebateLink
-      to={sectionURL(section, options)}
-      identifier={options.phase}
-      className={linkClassNames}
-      dataText={title}
-      screenTooSmall={options.screenTooSmall}
-    >
+    <DebateLink identifier={options.phase} className={linkClassNames} dataText={title} screenTooSmall={options.screenTooSmall}>
       {title}
     </DebateLink>
   ) : (
