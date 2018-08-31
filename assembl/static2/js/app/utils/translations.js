@@ -837,8 +837,7 @@ const Translations = {
     },
     date: {
       format: "D MMMM YYYY",
-      format2: "DD-MM-YYYY",
-      formatHTML5: "YYYY-MM-DD"
+      format2: "DD-MM-YYYY"
     },
     duration: {
       format: "h [h]"

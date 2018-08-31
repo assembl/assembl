@@ -38,7 +38,7 @@ const brightMirrorFiction = ({ data }: BrightMirrorFictionType) => {
 
   const fictionHeaderProps: FictionHeaderProps = {
     authorFullname: displayName,
-    publishedDate: I18n.l(fiction.creationDate, { dateFormat: 'date.formatHTML5' }),
+    publishedDate: fiction.creationDate ? fiction.creationDate.toString() : '',
     displayedPublishedDate: I18n.l(fiction.creationDate, { dateFormat: 'date.format' }),
     circleAvatar: { ...circleAvatarProps }
   };
