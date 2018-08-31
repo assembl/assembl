@@ -4,6 +4,7 @@ query LegalContents($lang: String) {
     termsAndConditions(lang: $lang)
     cookiesPolicy(lang: $lang)
     privacyPolicy(lang: $lang)
+    userGuidelines(lang: $lang)
     legalNoticeEntries {
       localeCode
       value
@@ -17,6 +18,10 @@ query LegalContents($lang: String) {
       value
     }
     privacyPolicyEntries {
+      localeCode
+      value
+    }
+    userGuidelinesEntries {
       localeCode
       value
     }

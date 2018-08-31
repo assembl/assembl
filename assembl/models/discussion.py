@@ -113,6 +113,11 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
         LangString, lazy="select", single_parent=True, primaryjoin=privacy_policy_id == LangString.id,
         backref=backref("discussion_from_privacy_policy", lazy="dynamic"), cascade="all, delete-orphan")
 
+    user_guidelines_id = Column(Integer(), ForeignKey(LangString.id))
+    user_guidelines = relationship(
+        LangString, lazy="select", single_parent=True, primaryjoin=user_guidelines_id == LangString.id,
+        backref=backref("discussion_from_user_guidelines", lazy="dynamic"), cascade="all, delete-orphan")
+
     @classmethod
     def get_naming_column_name(cls):
         return "slug"
@@ -1108,4 +1113,4 @@ def slugify_topic_if_slug_is_empty(discussion, topic, oldvalue, initiator):
 
 event.listen(Discussion.topic, 'set', slugify_topic_if_slug_is_empty)
 LangString.setup_ownership_load_event(Discussion, [
-    'resources_center_title', 'terms_and_conditions', 'legal_notice', 'cookies_policy', 'privacy_policy', 'title', 'subtitle', 'button_label'])
+    'resources_center_title', 'terms_and_conditions', 'legal_notice', 'cookies_policy', 'privacy_policy', 'user_guidelines', 'title', 'subtitle', 'button_label'])

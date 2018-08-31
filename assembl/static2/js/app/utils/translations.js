@@ -164,7 +164,8 @@ const Translations = {
       legalNotice: "Mentions légales",
       cookiePolicy: "Information sur les cookies",
       privacyPolicy: "Politique de protection des données personnelles",
-      socialMedias: "Suivez-nous sur"
+      socialMedias: "Suivez-nous sur",
+      userGuidelines: "Charte de participation"
     },
     login: {
       loginModalBody: "Vous devez être connecté pour participer.",
@@ -459,6 +460,9 @@ const Translations = {
     privacyPolicy: {
       headerTitle: "Politique de protection des données personnelles"
     },
+    userGuidelines: {
+      headerTitle: "Charte de participation"
+    },
     administration: {
       confirmTextFieldDeletionTitle: "Supprimer le champ",
       confirmTextFieldDeletion: "Êtes-vous certain de vouloir supprimer ce champ ?",
@@ -734,6 +738,7 @@ const Translations = {
         termsAndConditionsLabel: "Conditions générales d'utilisation",
         cookiesPolicyLabel: "Information sur les cookies",
         privacyPolicyLabel: "Politique de protection des données personnelles",
+        userGuidelinesLabel: "Charte de participation",
         successSave: "Les contenus juridiques ont été enregistrés avec succès !"
       },
       landingPage: {
@@ -966,7 +971,8 @@ const Translations = {
       legalNotice: "Legal Notice",
       cookiePolicy: "Cookies",
       privacyPolicy: "Privacy Policy",
-      socialMedias: "Follow us"
+      socialMedias: "Follow us",
+      userGuidelines: "User guidelines"
     },
     login: {
       loginModalBody: "You have to be connected to participate.",
@@ -1260,6 +1266,9 @@ const Translations = {
     privacyPolicy: {
       headerTitle: "Privacy policy"
     },
+    userGuidelines: {
+      headerTitle: "User guidelines"
+    },
     administration: {
       confirmTextFieldDeletionTitle: "Delete the field",
       confirmTextFieldDeletion: "Are you sure that you want to delete this field?",
@@ -1526,6 +1535,7 @@ const Translations = {
         termsAndConditionsLabel: "Terms and conditions",
         cookiesPolicyLabel: "Information on cookies",
         privacyPolicyLabel: "Privacy policy",
+        userGuidelinesLabel: "User guidelines",
         successSave: "The legal contents have been saved with success!"
       },
       landingPage: {
