@@ -45,10 +45,12 @@ export default class LinkButton extends React.Component<Props, State> {
     if (this.props.store) {
       const { getEditorState, setEditorState } = this.props.store;
       if (getEditorState && setEditorState) {
+        const text = values.text ? values.text : values.url;
+        const title = text;
         const data = {
           target: values.openInNewTab ? '_blank' : null,
-          text: values.text,
-          title: values.text,
+          text: text,
+          title: title,
           url: values.url
         };
         setEditorState(EditorUtils.createLinkAtSelection(getEditorState(), data));
