@@ -11,7 +11,7 @@ type Props = {
   btnClass: string
 };
 
-export const ParticipateButton = ({ displayPhase, timeline, btnClass }: Props) => (
+const ParticipateButton = ({ displayPhase, timeline, btnClass }: Props) => (
   <div>
     {getIsDebateStarted(timeline) ? (
       <Button onClick={displayPhase} className={`button-submit button-${btnClass}`}>
