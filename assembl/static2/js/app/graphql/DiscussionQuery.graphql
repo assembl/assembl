@@ -2,7 +2,7 @@ query DiscussionData($nextView: String) {
   discussion {
     loginData(nextView: $nextView) {
       local
-      route
+      url
     }
   }
 }

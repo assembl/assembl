@@ -20,7 +20,7 @@ from .utils import abort_transaction_on_exception
 
 class URLMeta(graphene.ObjectType):
     local = graphene.Boolean()
-    route = graphene.String(required=True)
+    url = graphene.String(required=True)
 
 
 class Discussion(SecureObjectType, SQLAlchemyObjectType):
@@ -29,7 +29,7 @@ class Discussion(SecureObjectType, SQLAlchemyObjectType):
         only_fields = ('id',)
 
     homepage_url = graphene.String()
-    login_data = URLMeta(next_view=graphene.String(required=False))
+    login_data = graphene.Field(URLMeta, next_view=graphene.String(required=False))
 
     def resolve_homepage_url(self, args, context, info):
         # TODO: Remove this resolver and add URLString to
@@ -56,7 +56,7 @@ class Discussion(SecureObjectType, SQLAlchemyObjectType):
             route = context.route_url(
                 "contextual_react_login", discussion_slug=discussion.slug, _query={"next": next_view})
             local = True
-        return URLMeta(local=local, route=urljoin(discussion.get_base_url(), route))
+        return URLMeta(local=local, url=urljoin(discussion.get_base_url(), route))
 
 
 class LocalePreference(graphene.ObjectType):
