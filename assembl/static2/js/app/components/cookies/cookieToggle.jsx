@@ -30,7 +30,7 @@ const CookieToggle = ({ handleToggle, cookie, toggleCookieType, locale }: Cookie
   const cookieName = Object.keys(COOKIE_TRANSLATION_KEYS).includes(name) ? I18n.t(`cookies.${name}`) : name;
   const cookieIsPiwik = name === 'piwik';
   return (
-    <div className={!cookieIsPiwik && 'cookie-toggle'}>
+    <div className={cookieIsPiwik ? '' : 'cookie-toggle'}>
       <span className="cookie-title dark-title-3 ellipsis">{cookieName}</span>
       {cookieIsPiwik ? <a
         // if the piwik website is not available in the locale it falls back to english
