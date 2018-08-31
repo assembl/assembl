@@ -106,7 +106,7 @@ const AdminChild = (props) => {
   }
 };
 
-// TODO: fix temp patch below
+// TODO: WIP merge 1726-1730
 const AZERTY = () => <BrightMirrorFiction id="UG9zdDozNzEw" contentLocale="fr" />;
 
 export default [
