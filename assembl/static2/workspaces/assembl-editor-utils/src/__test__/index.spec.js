@@ -1,9 +1,10 @@
 import { ContentState, EditorState } from 'draft-js';
 
-import EditorUtils from '../index';
-import TestUtils from '../TestUtils';
+import TestEditorUtils from 'assembl-test-editor-utils';
 
-const { createSelectionState } = TestUtils;
+import EditorUtils from '../index';
+
+const { createSelectionState } = TestEditorUtils;
 
 describe('EditorUtils', () => {
   describe('createLinkAtSelection function', () => {

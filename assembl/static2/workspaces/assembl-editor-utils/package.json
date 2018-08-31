@@ -8,5 +8,8 @@
   "dependencies": {
     "draft-js": "^0.10.5",
     "draft-js-plugins-utils": "^2.0.3"
+  },
+  "devDependencies": {
+    "assembl-test-editor-utils": "1.0.0"
   }
 }

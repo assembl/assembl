@@ -1,0 +1,10 @@
+{
+  "name": "assembl-test-editor-utils",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "author": "Bluenove",
+  "license": "MIT",
+  "dependencies": {
+    "draft-js": "^0.10.5"
+  }
+}

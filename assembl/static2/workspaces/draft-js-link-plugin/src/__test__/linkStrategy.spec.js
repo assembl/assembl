@@ -1,6 +1,6 @@
 import { ContentState, Modifier } from 'draft-js';
 
-import { TestEditorUtils } from 'assembl-editor-utils';
+import TestEditorUtils from 'assembl-test-editor-utils';
 
 import strategy, { matchesEntityType } from '../linkStrategy';
 
