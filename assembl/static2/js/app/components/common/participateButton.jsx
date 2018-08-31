@@ -5,13 +5,13 @@ import { Button } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
 import { getIsDebateStarted } from '../../utils/timeline';
 
-type participateButtonProps = {
+type Props = {
   displayPhase: Function,
   timeline: Timeline,
   btnClass: string
 };
 
-export const participateButton = ({ displayPhase, timeline, btnClass }: participateButtonProps) => (
+export const ParticipateButton = ({ displayPhase, timeline, btnClass }: Props) => (
   <div>
     {getIsDebateStarted(timeline) ? (
       <Button onClick={displayPhase} className={`button-submit button-${btnClass}`}>
@@ -21,4 +21,4 @@ export const participateButton = ({ displayPhase, timeline, btnClass }: particip
   </div>
 );
 
-export default participateButton;
+export default ParticipateButton;
