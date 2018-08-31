@@ -68,3 +68,4 @@ _requirement_inputs = requirements.in requirements-doc.in requirements-tests.in
 frozen_requirements = requirements-tests.frozen.txt
 _build_docs = false
 _can_test = true
+ini_files = production.ini RANDOM:random.ini.tmpl:saml_random.ini.tmpl configs/saml_test.ini RC_DATA
