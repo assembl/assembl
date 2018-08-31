@@ -723,6 +723,7 @@ class AgentStatusInDiscussion(DiscussionBoundBase):
             return
         if len(self.cookies) == 0 or force_read:
             cookie_list = cookies.get('cookies_configuration', "")
+            cookie_piwik = cookies.get('piwik_ignore', "")
             cookie_list = [c.strip() for c in cookie_list.split(",") if c]
             for cookie in cookie_list:
                 try:
@@ -731,6 +732,8 @@ class AgentStatusInDiscussion(DiscussionBoundBase):
                 except ValueError:
                     # Not a cookie of concern. Don't load.
                     pass
+            if cookie_piwik:
+                self.update_cookie('REJECT_TRACKING_ON_DISCUSSION')
 
     def get_discussion_id(self):
         return self.discussion_id or self.discussion.id

@@ -874,7 +874,7 @@ const Translations = {
       piwik: "Piwik",
       cgu: "Terms and conditions",
       privacyPolicy: "Privacy policy",
-      piwikSettings: "To modify this cookie's setting please here"
+      piwikSettings: "To modify this cookie's setting please click here"
     },
     search: {
       reset: {
