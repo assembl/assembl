@@ -1,32 +1,76 @@
-import { ContentState, EditorState, Modifier } from 'draft-js';
+import { configure, mount } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import renderer from 'react-test-renderer';
 
-import { TestEditorUtils } from 'assembl-editor-utils';
+import EditorUtils from 'assembl-editor-utils';
 
 import LinkButton from '../LinkButton';
 
-const { createSelectionState } = TestEditorUtils;
+configure({ adapter: new Adapter() });
+
+jest.mock('assembl-editor-utils');
+
+const store = {
+  getEditorState: jest.fn(),
+  setEditorState: jest.fn()
+};
+
+const theme = {
+  button: 'btn',
+  buttonWrapper: 'btn-group'
+};
+
+describe('addLink method', () => {
+  let wrapper;
+
+  beforeEach(() => {
+    store.getEditorState.mockReturnValue('DUMMY_EDITOR_STATE');
+    wrapper = mount(<LinkButton store={store} theme={theme} />);
+  });
+
+  it('should use create a link at selection with target/text/title/url', () => {
+    const values = {
+      openInNewTab: true,
+      text: 'GNU is not Unix',
+      url: 'http://www.gnu.org'
+    };
+    wrapper.instance().addLink(values);
+    const expectedData = {
+      target: '_blank',
+      text: 'GNU is not Unix',
+      title: 'GNU is not Unix',
+      url: 'http://www.gnu.org'
+    };
+    expect(EditorUtils.createLinkAtSelection).toHaveBeenCalledWith('DUMMY_EDITOR_STATE', expectedData);
+  });
+
+  it('should use url for text and title if these are not set', () => {
+    const values = {
+      url: 'http://www.gnu.org'
+    };
+    wrapper.instance().addLink(values);
+    const expectedData = {
+      target: null,
+      text: 'http://www.gnu.org',
+      title: 'http://www.gnu.org',
+      url: 'http://www.gnu.org'
+    };
+    expect(EditorUtils.createLinkAtSelection).toHaveBeenCalledWith('DUMMY_EDITOR_STATE', expectedData);
+  });
+});
 
 describe('LinkButton component', () => {
   it('should render a link button', () => {
-    const editorState = EditorState.createEmpty();
-    const getEditorStateMock = () => editorState;
-    const setEditorStateSpy = jest.fn();
+    EditorUtils.hasEntity.mockReturnValue(false);
     const onRemoveLinkAtSelectionSpy = jest.fn();
     const props = {
       modal: {
         current: null
       },
       onRemoveLinkAtSelection: onRemoveLinkAtSelectionSpy,
-      store: {
-        getEditorState: getEditorStateMock,
-        setEditorState: setEditorStateSpy
-      },
-      theme: {
-        button: 'btn',
-        buttonWrapper: 'btn-group'
-      }
+      store: store,
+      theme: theme
     };
     const component = renderer.create(<LinkButton {...props} />);
     const tree = component.toJSON();
@@ -34,34 +78,15 @@ describe('LinkButton component', () => {
   });
 
   it('should render an active LinkButton if selection is on a link', () => {
-    let contentState = ContentState.createFromText('I will input the solid state PNG port');
-    contentState = contentState.createEntity('LINK', 'MUTABLE', {
-      target: '_blank',
-      title: 'My link',
-      url: 'https://en.wikipedia.org/wiki/Portable_Network_Graphics'
-    });
-    const contentBlock = contentState.getFirstBlock();
-    const blockKey = contentBlock.getKey();
-    const selection = createSelectionState(blockKey, '0', '4');
-    const linkEntityKey = contentState.getLastCreatedEntityKey();
-    contentState = Modifier.applyEntity(contentState, selection, linkEntityKey);
-    const editorState = EditorState.createWithContent(contentState);
-    const getEditorStateMock = () => editorState;
-    const setEditorStateSpy = jest.fn();
+    EditorUtils.hasEntity.mockReturnValue(true);
     const onRemoveLinkAtSelectionSpy = jest.fn();
     const props = {
       modal: {
         current: null
       },
       onRemoveLinkAtSelection: onRemoveLinkAtSelectionSpy,
-      store: {
-        getEditorState: getEditorStateMock,
-        setEditorState: setEditorStateSpy
-      },
-      theme: {
-        button: 'btn',
-        buttonWrapper: 'btn-group'
-      }
+      store: store,
+      theme: theme
     };
     const component = renderer.create(<LinkButton {...props} />);
     const tree = component.toJSON();
