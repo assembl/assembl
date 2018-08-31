@@ -1,5 +1,5 @@
 // @flow
-import React, { Component } from 'react';
+import React from 'react';
 import { Grid, Row, Col } from 'react-bootstrap';
 import FictionHeader from '../../../components/debate/brightMirror/fictionHeader';
 import FictionBody from '../../../components/debate/brightMirror/fictionBody';
@@ -8,25 +8,19 @@ import FictionBody from '../../../components/debate/brightMirror/fictionBody';
 import { defaultFictionHeader } from '../../../stories/components/debate/brightMirror/fictionHeader.stories';
 import { defaultFictionBody } from '../../../stories/components/debate/brightMirror/fictionBody.stories';
 
-type BrightMirrorFictionType = {};
+const brightMirrorFiction = () => (
+  <div className="bright-mirror">
+    <Grid fluid className="bright-mirror-fiction background-fiction-default">
+      <Row>
+        <Col xs={12}>
+          <article>
+            <FictionHeader {...defaultFictionHeader} />
+            <FictionBody {...defaultFictionBody} />
+          </article>
+        </Col>
+      </Row>
+    </Grid>
+  </div>
+);
 
-class BrightMirrorFiction extends Component<BrightMirrorFictionType> {
-  render() {
-    return (
-      <div className="bright-mirror">
-        <Grid fluid className="bright-mirror-fiction background-fiction-default">
-          <Row>
-            <Col xs={12}>
-              <article>
-                <FictionHeader {...defaultFictionHeader} />
-                <FictionBody {...defaultFictionBody} />
-              </article>
-            </Col>
-          </Row>
-        </Grid>
-      </div>
-    );
-  }
-}
-
-export default BrightMirrorFiction;
+export default brightMirrorFiction;
