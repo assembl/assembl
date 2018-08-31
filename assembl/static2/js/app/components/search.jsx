@@ -633,7 +633,13 @@ export class SearchComponent extends React.Component {
                 }}
               />
               {/* <SelectedFilters /> */}
-              <MenuFilter listComponent={CheckboxItemList} field="_type" id="type" title={I18n.t('search.Categories')} />
+              <MenuFilter
+                listComponent={CheckboxItemList}
+                field="_type"
+                id="type"
+                title={I18n.t('search.Categories')}
+                exclude={!v1Interface && isExpert ? '' : 'extract'}
+              />
               <Panel title={I18n.t('search.Messages')} className={messagesSelected ? null : 'hidden'}>
                 <MenuFilter
                   containerComponent={NoPanel}
