@@ -2,8 +2,12 @@
 
 type NodeType = {
   id: string,
-  ancestors: Array<string>,
-  [string]: any
+  ancestors: Array<string>
+};
+
+type TreeNodeType = {
+  id: string,
+  parentId: string
 };
 
 type TreeType<T> = {
@@ -38,23 +42,31 @@ export function getPartialTree<T: NodeType>(nodes: Array<T>): TreeType<T> {
 }
 
 /**
- * @param {T: NodeType} The type of the nodes
+ * @param {T: TreeNodeType} The type of the nodes
+ * @param {Array<T>} An array of nodes.
+ * @returns {{roots: Array<T>, descendants: Array<T>}} Returns the partial tree composed of all the root nodes and their children.
+ */
+export function getPartialTreeByParentId<T: TreeNodeType>(rootId: string, nodes: Array<T>): TreeType<T> {
+  const result = {
+    roots: [],
+    descendants: []
+  };
+  if (nodes.length === 0) return result;
+  const roots = rootId ? nodes.filter(item => !item.parentId || item.parentId === rootId) : nodes;
+  if (roots.length === 0) return result;
+  result.roots = roots;
+  const rootsIds = roots.map(item => item.id);
+  result.descendants = nodes.filter(item => !rootsIds.includes(item.id));
+  return result;
+}
+
+/**
+ * @param {T: TreeNodeType} The type of the nodes
  * @param {Array<T>} An array of nodes.
  * @returns {Array<T>} Returns the tree composed of all the root nodes and their children.
  */
-export function getTree<T: NodeType>(nodes: Array<T>, childrenName: string = 'children'): Array<T> {
-  const { roots, descendants } = getPartialTree(nodes);
-  let tree = roots;
-  if (descendants.length > 0) {
-    const treeRoots = getTree(descendants);
-    tree = roots.map((item) => {
-      const newItem = { ...item, [childrenName]: [] };
-      // $FlowFixMe
-      newItem.children = getChildren(item, treeRoots);
-      return newItem;
-    });
-  } else {
-    tree = roots.map(item => ({ ...item, [childrenName]: [] }));
-  }
-  return tree;
+export function getTree<T: TreeNodeType>(rootId: string, nodes: Array<T>, childrenName: string = 'children'): Array<T> {
+  const { roots, descendants } = getPartialTreeByParentId(rootId, nodes);
+  if (roots.length === 0) return [];
+  return roots.map(item => ({ ...item, [childrenName]: getTree(item.id, descendants, childrenName) }));
 }

@@ -12,6 +12,21 @@ type Props = {
   thematicId: string
 };
 
+const SectionHlper = ({ section, thematicId }: Props) => {
+  if (thematicId) return null;
+  switch (section) {
+  case '1':
+    return (
+      <div className="sction-hlper">
+        <h4 className="section-helper-title">{I18n.t('administration.survey.configThematicsHlperTitle')}</h4>
+        <div className="section-helper-description">{I18n.t('administration.survey.configThematicsHlperDescription')}</div>
+      </div>
+    );
+  default:
+    return null;
+  }
+};
+
 const SurveyAdmin = ({ section, thematicId }: Props) => {
   const menuItem = getAdminMenuSection(section, PHASES_ADMIN_MENU.survey.subMenu);
   const sectionTitleMsgId = menuItem && menuItem.title;
@@ -19,6 +34,7 @@ const SurveyAdmin = ({ section, thematicId }: Props) => {
     <div className="survey-admin">
       <div className="admin-box">
         <SectionTitle title={I18n.t(sectionTitleMsgId)} annotation={I18n.t('administration.annotation')} />
+        <SectionHlper section={section} thematicId={thematicId} />
         <SurveyAdminForm section={section} thematicId={thematicId} />
       </div>
     </div>

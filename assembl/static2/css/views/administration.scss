@@ -751,3 +751,28 @@
     max-width: 100%;
   }
 }
+
+.form-title {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 400px;
+  text-align: initial;
+  font-size: 16px;
+  font-weight: bold;
+  color: $title3-dark-color;
+}
+
+.sction-hlper {
+  margin-left: 49px;
+  margin-top: 37px;
+
+  .section-helper-title {
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  .section-helper-description {
+    font-size: 14px;
+    font-family: $font-family4;
+  }
+}

@@ -574,10 +574,12 @@ const Translations = {
       },
       noTimeline: "Aucune timeline n'a été configurée pour ce débat.",
       survey: {
-        "1": "Renseigner les thématiques",
+        "1": "Créer la table des thématiques",
         "2": "Renseigner les questions",
         "3": "Exporter les données",
-        configThematics: "Configurer la thématique"
+        configThematics: "Configurer la thématique",
+        configThematicsHlperTitle: "Vous avez choisie de configurer une table de thématiques.",
+        configThematicsHlperDescription: "Pour modifier votre choix, retourner au paramétrage générale du débat."
       },
       brightMirrorSection: {
         bannerHeader:
@@ -1429,10 +1431,12 @@ const Translations = {
       },
       noTimeline: "No timeline has been configured yet",
       survey: {
-        "1": "Set themes",
+        "1": "Create the themes table ",
         "2": "Set questions",
         "3": "Export data",
-        configThematics: "Configure the theme"
+        configThematics: "Configure the theme",
+        configThematicsHlperTitle: "You have chosen to configure a themes table.",
+        configThematicsHlperDescription: "To change your choice, return to the general setting of the debate."
       },
       brightMirrorSection: {
         bannerHeader:

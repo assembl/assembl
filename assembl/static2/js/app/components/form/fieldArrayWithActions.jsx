@@ -35,10 +35,10 @@ type Props = {
 
 type FieldsProps = {
   fields: FieldArrayRenderProps,
-  onAdd?: (id: string, parentId: string, order: number) => void,
+  onAdd?: (id: string, parentId: string, index: number) => void,
   onRemove?: (id: string) => void,
-  onUp?: (id: string) => void,
-  onDown?: (id: string) => void
+  onUp?: (id: string, parentId: string, index: number, targetIndex: number) => void,
+  onDown?: (id: string, parentId: string, index: number, targetIndex: number) => void
 } & Props;
 
 type FieldArrayProps = {
@@ -60,30 +60,33 @@ export class Fields extends React.PureComponent<FieldsProps> {
   };
 
   down = (index: number) => {
-    const { fields, onDown } = this.props;
+    const { fields, onDown, parentId } = this.props;
     if (onDown) {
       const fieldValue = fields.value[index];
-      onDown(fieldValue.id);
+      onDown(fieldValue.id, parentId, index, index + 1);
     }
     fields.swap(index, index + 1);
   };
 
   up = (index: number) => {
-    const { fields, onUp } = this.props;
+    const { fields, onUp, parentId } = this.props;
     if (onUp) {
       const fieldValue = fields.value[index];
-      onUp(fieldValue.id);
+      onUp(fieldValue.id, parentId, index, index - 1);
     }
     fields.swap(index, index - 1);
   };
 
   remove = (index: number) => {
-    const { fields, onRemove } = this.props;
-    if (onRemove) {
-      const fieldValue = fields.value[index];
-      onRemove(fieldValue.id);
+    const { fields, onRemove, isTree, subFieldName } = this.props;
+    const fieldValue = fields.value[index];
+    const children = subFieldName && isTree && fieldValue[subFieldName];
+    if (!children || children.length === 0) {
+      if (onRemove) {
+        onRemove(fieldValue.id);
+      }
+      fields.remove(index);
     }
-    fields.remove(index);
   };
 
   add = () => {

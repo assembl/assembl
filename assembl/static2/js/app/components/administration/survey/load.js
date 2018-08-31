@@ -43,9 +43,9 @@ const getChildren = thematic =>
   }));
 
 export function postLoadFormat(data: ThematicsQueryQuery): SurveyAdminValues {
-  const { thematics } = data;
+  const { rootIdea, thematics } = data;
   // $FlowFixMe
-  const tree = thematics ? getTree(thematics) : [];
+  const tree = thematics ? getTree(rootIdea && rootIdea.id, thematics) : [];
   return {
     themes: sortBy(tree, 'order').map(t => ({
       id: t.id,

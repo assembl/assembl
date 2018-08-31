@@ -8,7 +8,15 @@ query ThematicsDataQuery($identifier: String!) {
     }
     ... on Idea {
       id
-      ancestors
+      parentId
+    }
+  }
+  rootIdea {
+    ... on Idea {
+      id
+    }
+    ... on Thematic {
+      id
     }
   }
 }

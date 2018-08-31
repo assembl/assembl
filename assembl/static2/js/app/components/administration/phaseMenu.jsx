@@ -15,18 +15,18 @@ type Props = {
 };
 
 class PhaseMenu extends React.PureComponent<Props> {
-  renderSubMenuItem = (menuItem: MenuItem, rootSection: string = '') => {
+  renderSubMenuItem = (menuItem: MenuItem, rootSectionId: string = '') => {
     const { phase, slug } = this.props;
     const { sectionId, subMenu, title, component } = menuItem;
     if (component) {
       const MenuItemComponent = component;
       return (
         <ul key={sectionId} className="shown admin-sub-menu">
-          <MenuItemComponent rootSection={rootSection} section={menuItem} slug={slug} phase={phase} />
+          <MenuItemComponent rootSectionId={rootSectionId} menuItem={menuItem} slug={slug} phase={phase} />
         </ul>
       );
     }
-    const sectionIndex = rootSection ? `${rootSection}.${sectionId}` : sectionId;
+    const sectionIndex = rootSectionId ? `${rootSectionId}.${sectionId}` : sectionId;
     const sectionQuery = sectionId ? `?section=${sectionIndex}` : '';
     const subMenuIds = subMenu ? Object.keys(subMenu) : [];
     return (

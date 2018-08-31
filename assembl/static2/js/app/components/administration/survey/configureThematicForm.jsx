@@ -6,8 +6,13 @@ import { Field } from 'react-final-form';
 import MultilingualTextFieldAdapter from '../../form/multilingualTextFieldAdapter';
 import FileUploaderFieldAdapter from '../../form/fileUploaderFieldAdapter';
 import { deleteThematicImageTooltip } from '../../common/tooltips';
-
 import type { SurveyAdminValues, ThemesValue } from './types.flow';
+
+type Props = {
+  editLocale: string,
+  thematicId: string,
+  values: ?SurveyAdminValues
+};
 
 export function getFieldName(themeId: string, values: ThemesValue, fieldName: string): string {
   let result = '';
@@ -24,12 +29,6 @@ export function getFieldName(themeId: string, values: ThemesValue, fieldName: st
   });
   return result;
 }
-
-type Props = {
-  editLocale: string,
-  thematicId: string,
-  values: ?SurveyAdminValues
-};
 
 const ConfigureThematicForm = ({ editLocale, values, thematicId }: Props) => {
   const name = getFieldName(thematicId, values ? values.themes : [], 'themes');
