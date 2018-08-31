@@ -6,7 +6,7 @@ import truncate from 'lodash/truncate';
 const TITLE_MAX_CHAR = 60;
 const NAME_MAX_CHAR = 20;
 
-export type FictionPreviewType = {
+export type FictionPreviewProps = {
   /** Fiction title */
   title: string,
   /** Author fullname */
@@ -19,12 +19,12 @@ export type FictionPreviewType = {
   color: string
 };
 
-const FictionPreview = (props: FictionPreviewType) => (
-  <div className="fiction-preview" style={{ backgroundColor: props.color }}>
-    <Link className="content-box" to={props.link}>
+const FictionPreview = ({ title, authorName, creationDate, link, color }: FictionPreviewProps) => (
+  <div className="fiction-preview" style={{ backgroundColor: color }}>
+    <Link className="content-box" to={link}>
       <div className="inner-box">
-        <h3 className="light-title-3 center">
-          {truncate(props.title, {
+        <h3>
+          {truncate(title, {
             length: TITLE_MAX_CHAR,
             separator: ' ',
             omission: '...'
@@ -32,22 +32,18 @@ const FictionPreview = (props: FictionPreviewType) => (
         </h3>
         <p className="info">
           <span className="author">
-            {truncate(props.authorName, {
+            {truncate(authorName, {
               length: NAME_MAX_CHAR,
               separator: ' ',
               omission: '...'
             })}{' '}
             -{' '}
           </span>
-          <span className="published-date">{props.creationDate}</span>
+          <span className="published-date">{creationDate}</span>
         </p>
       </div>
     </Link>
   </div>
 );
-
-FictionPreview.defaultProps = {
-  new: false
-};
 
 export default FictionPreview;

@@ -27,7 +27,7 @@ describe('<FictionPreview /> - with shallow', () => {
   });
 
   it('should render title', () => {
-    expect(wrapper.find('h3 [className="light-title-3 center"]')).toHaveLength(1);
+    expect(wrapper.find('h3')).toHaveLength(1);
   });
 
   it('should render author name', () => {

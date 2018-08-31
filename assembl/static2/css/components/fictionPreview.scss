@@ -1,31 +1,26 @@
 .fiction-preview {
   border-bottom: solid 2px $theme-local-blue;
-  box-shadow: 0 2px 3px 0 #d0d0d0;
+  box-shadow: 0 2px 3px 0 $grey-shadow;
   width: 149px;
   height: 200px;
   margin: 4px;
 
   &:hover {
     transition: all 0.3s ease-out;
-    transform: scale(1.02);
+    transform: scale($card-popin);
   }
 
-  .light-title-3,
+  h3,
   p,
   .author,
   .published-date {
-    font-family: 'LatoRegular';
-    font-weight: normal;
-    font-style: normal;
-    font-stretch: normal;
     color: $black;
     letter-spacing: normal;
     line-height: 1.19;
-    text-transform: none;
     text-align: left;
   }
 
-  .light-title-3 {
+  h3 {
     font-size: $font-size-sm;
     margin-bottom: 17px;
   }
@@ -47,12 +42,11 @@
         margin-bottom: 7px;
 
         .author {
-          font-family: 'LatoRegular';
           font-size: $font-size-xxs;
         }
 
         .published-date {
-          font-family: 'LatoLight';
+          font-family: $font-family4;
           font-size: $font-size-xxs;
           font-weight: 300;
         }
@@ -71,7 +65,7 @@
     width: 336px;
     height: 456px;
 
-    .light-title-3 {
+    h3 {
       font-size: $font-size-l;
     }
 
@@ -99,7 +93,7 @@
     height: 499px;
     border-bottom: solid 3px $theme-local-blue;
 
-    .light-title-3 {
+    h3 {
       font-size: $font-size-l;
       margin-bottom: 20px;
     }

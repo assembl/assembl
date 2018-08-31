@@ -6,9 +6,9 @@ import { withInfo } from '@storybook/addon-info';
 /* eslint-enable */
 
 import FictionsList from '../../../../components/debate/brightMirror/fictionsList';
-import type { FictionsListType } from '../../../../components/debate/brightMirror/fictionsList';
+import type { FictionsListProps } from '../../../../components/debate/brightMirror/fictionsList';
 
-export const customFictionsList: FictionsListType = {
+export const customFictionsList: FictionsListProps = {
   posts: [
     {
       id: 0,

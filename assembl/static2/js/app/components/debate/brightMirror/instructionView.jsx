@@ -17,7 +17,7 @@ type Post = {
   }
 };
 
-type Props = {
+export type InstructionViewProps = {
   isUserConnected: boolean,
   ideaId: string,
   refetchIdea: Function,
@@ -31,28 +31,35 @@ type Props = {
   lang: string
 };
 
-const InstructionView = (props: Props) => {
+const InstructionView = ({
+  isUserConnected,
+  ideaId,
+  refetchIdea,
+  posts,
+  announcementContent,
+  timeline,
+  identifier,
+  lang
+}: InstructionViewProps) => {
   const canPost =
-    props.isUserConnected &&
-    connectedUserCan(Permissions.ADD_POST) &&
-    !getIfPhaseCompletedByIdentifier(props.timeline, props.identifier);
+    isUserConnected && connectedUserCan(Permissions.ADD_POST) && !getIfPhaseCompletedByIdentifier(timeline, identifier);
 
   return (
     <div className="instruction-view">
-      <InstructionsText title={props.announcementContent.title} body={props.announcementContent.body} />
+      <InstructionsText title={announcementContent.title} body={announcementContent.body} />
       <div className="overflow-x">
         {canPost ? (
           <TopPostFormContainer
-            ideaId={props.ideaId}
-            refetchIdea={props.refetchIdea}
-            topPostsCount={props.posts.length}
+            ideaId={ideaId}
+            refetchIdea={refetchIdea}
+            topPostsCount={posts.length}
             instructionLabel="debate.brightMirror.startFictionLabel"
             fillBodyLabel="debate.brightMirror.fillBodyLabel"
             bodyPlaceholder="debate.brightMirror.fillBodyLabel"
             postSuccessMsg="debate.brightMirror.postSuccessMsg"
           />
         ) : null}
-        <FictionsList posts={props.posts} identifier={props.identifier} lang={props.lang} />
+        <FictionsList posts={posts} identifier={identifier} lang={lang} />
       </div>
     </div>
   );

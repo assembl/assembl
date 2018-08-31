@@ -7,9 +7,9 @@ import { withKnobs, text } from '@storybook/addon-knobs';
 /* eslint-enable */
 
 import InstructionsText from '../../../../components/debate/brightMirror/instructionsText';
-import type { InstructionsTextType } from '../../../../components/debate/brightMirror/instructionsText';
+import type { InstructionsTextProps } from '../../../../components/debate/brightMirror/instructionsText';
 
-export const customInstructionsText: InstructionsTextType = {
+export const customInstructionsText: InstructionsTextProps = {
   title: 'Instructions',
   body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis tincidunt dolor.'
 };

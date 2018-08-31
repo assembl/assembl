@@ -27,7 +27,7 @@ type Post = {
   }
 };
 
-export type FictionsListType = {
+export type FictionsListProps = {
   /** All fictions */
   posts: Array<Post>,
   /** Bright Mirror identifier */
@@ -42,8 +42,7 @@ const masonryOptions = {
 
 const getRandomColor = () => fictionBackgroundColors[Math.floor(Math.random() * fictionBackgroundColors.length)];
 
-const FictionsList = (props: FictionsListType) => {
-  const { posts, identifier } = props;
+const FictionsList = ({ posts, identifier }: FictionsListProps) => {
   const slug = getDiscussionSlug();
 
   const childElements = posts.map(post => (
@@ -51,7 +50,7 @@ const FictionsList = (props: FictionsListType) => {
       <FictionPreview
         link={`${get('post', { slug: slug, phase: identifier, postId: post.id })}`} // TODO: change route to fiction route
         title={post.subject}
-        creationDate={I18n.l(post.creationDate, { dateFormat: 'date.format3' })}
+        creationDate={I18n.l(post.creationDate, { dateFormat: 'date.format2' })}
         authorName={post.creator.isDeleted ? I18n.t('deletedUser') : post.creator.displayName}
         color={getRandomColor()}
       />

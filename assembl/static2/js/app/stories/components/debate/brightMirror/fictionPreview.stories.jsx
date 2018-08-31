@@ -7,9 +7,9 @@ import { withKnobs, text } from '@storybook/addon-knobs';
 /* eslint-enable */
 
 import FictionPreview from '../../../../components/debate/brightMirror/fictionPreview';
-import type { FictionPreviewType } from '../../../../components/debate/brightMirror/fictionPreview';
+import type { FictionPreviewProps } from '../../../../components/debate/brightMirror/fictionPreview';
 
-export const customFictionPreview: FictionPreviewType = {
+export const customFictionPreview: FictionPreviewProps = {
   title: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis tincidunt dolor.',
   authorName: 'John Doe',
   creationDate: '01/01/2018',
@@ -17,7 +17,7 @@ export const customFictionPreview: FictionPreviewType = {
   color: '#b3e5fc'
 };
 
-const playgroundFictionPreview: FictionPreviewType = {
+const playgroundFictionPreview: FictionPreviewProps = {
   title: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis tincidunt dolor.',
   authorName: 'John Doe',
   creationDate: '01/01/2018',

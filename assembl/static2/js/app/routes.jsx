@@ -44,7 +44,7 @@ import { routeForRouter } from './utils/routeMap';
 import IntMainPage from './integration/index';
 import Int101Page from './integration/101/index';
 import Int101FormBuilderPage from './integration/101/containers/formBuilder101/formBuilder101';
-import IntBrightMirrorIndex from './integration/brightMirror/index';
+import IntBrightMirrorIndex from './integration/brightMirror';
 import IntBrightMirrorShow from './integration/brightMirror/show';
 
 const DebateHome = (props) => {

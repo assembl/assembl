@@ -52,5 +52,5 @@
 .scalein-appear-active,
 .scalein-enter-active {
   transition: all 0.3s ease-out;
-  transform: scale(1.02);
+  transform: scale($card-popin);
 }
