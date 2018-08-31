@@ -16,7 +16,8 @@ export const defaultCircleAvatar: CircleAvatarType = {
 
 const customCircleAvatar: CircleAvatarType = {
   ...defaultCircleAvatar,
-  username: ''
+  username: '',
+  src: ''
 };
 
 const playgroundButton = {

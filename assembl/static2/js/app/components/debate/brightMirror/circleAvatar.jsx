@@ -14,7 +14,7 @@ const noUsernameAvatarSrc: string = '/static2/img/icons/avatar.png';
 const circleAvatar = ({ username, src }: CircleAvatarType) => (
   <img
     className="circle-avatar"
-    src={username ? src : noUsernameAvatarSrc}
+    src={src || noUsernameAvatarSrc}
     alt={username ? `${username}-avatar` : `${noUsernameAlt}-avatar`}
   />
 );

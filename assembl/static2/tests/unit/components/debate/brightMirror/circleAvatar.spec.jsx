@@ -44,7 +44,7 @@ describe('<CircleAvatar /> - with shallow', () => {
   });
 
   it('should render one image with a default alt tag set to no-username-avatar', () => {
-    wrapper.setProps({ username: '' });
+    wrapper.setProps({ username: '', src: '' });
     expect(wrapper.find('img [alt="no-username-avatar"] [src="/static2/img/icons/avatar.png"]')).toHaveLength(1);
   });
 });
