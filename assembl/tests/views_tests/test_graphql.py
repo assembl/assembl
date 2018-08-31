@@ -2495,3 +2495,51 @@ query { discussion { homepageUrl }  }
 """
     res = schema.execute(query, context_value=graphql_request)
     assert res.data['discussion']['homepageUrl'] == url
+
+
+def test_query_discussion_login_url_default(graphql_request, discussion, test_session):
+    query = u"""
+query { discussion { loginData { url, local } } }"""
+    res = schema.execute(query, context_value=graphql_request)
+    next_view = graphql_request.route_url("new_home", discussion_slug=discussion.slug)
+    expected_url = graphql_request.route_url(
+        "contextual_react_login", discussion_slug=discussion.slug, _query={"next": next_view})
+    assert expected_url in res.data['discussion']['loginData']['url']
+    assert res.data['discussion']['loginData']['local'], "The default login URL is local"
+
+
+def test_query_discussion_login_url_different_nextview(graphql_request, discussion, test_session):
+    query = u"""
+query { discussion { loginData { url, local } } }"""
+    next_view = '/my/next/site'
+    res = schema.execute(query, context_value=graphql_request, variable_values={'nextView': next_view})
+    expected_url = graphql_request.route_url(
+        "contextual_react_login", discussion_slug=discussion.slug, _query={"next": next_view})
+    assert expected_url in res.data['discussion']['loginData']['url']
+    assert res.data['discussion']['loginData']['local'], "The default login URL is local"
+
+
+def test_query_discussion_login_url_non_local(graphql_request, discussion, test_session):
+    preferences = discussion.preferences
+    old_pref_auth = preferences['authorization_server_backend']
+    old_pref_landing_page = preferences['landing_page']
+    # Ensure testing.ini has the a fake shibboleth saml providor in  SOCIAL_AUTH_SAML_ENABLED_IDPS
+    preferences['authorization_server_backend'] = preferences.preference_data['authorization_server_backend']['scalar_values']['saml:test_shib']
+    preferences['landing_page'] = True
+    test_session.flush()
+
+    query = u"""
+query { discussion { loginData { url, local } } }"""
+    next_view = graphql_request.route_url("new_home", discussion_slug=discussion.slug)
+    res = schema.execute(query, context_value=graphql_request, variable_values={'nextView': next_view})
+    _query = {'idp': 'test_shib'}
+    expected_url = graphql_request.route_url(
+        "contextual_social.auth",
+        discussion_slug=discussion.slug,
+        backend='saml',
+        _query=_query)
+    assert expected_url in res.data['discussion']['loginData']['url']
+    assert not res.data['discussion']['loginData']['local'], "A remote SAML login should not be a local URL"
+    preferences['authorization_server_backend'] = old_pref_auth
+    preferences['landing_page'] = old_pref_landing_page
+    test_session.flush()
