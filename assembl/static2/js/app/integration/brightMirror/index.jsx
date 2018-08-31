@@ -8,10 +8,13 @@ import type { InstructionViewProps } from '../../components/debate/brightMirror/
 
 const customTimeline: Timeline = [
   {
+    id: '0',
     identifier: 'brightMirror',
     start: '1900-01-01T02:00:00Z',
     end: '2200-01-01T00:00:00Z',
-    title: 'brightMirror'
+    title: 'brightMirror',
+    description: 'BrightMirror phase',
+    isThematicsTable: false
   }
 ];
 

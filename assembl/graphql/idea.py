@@ -307,7 +307,7 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
         )
 
         if 'creator' in fields.get('edges', {}).get('node', {}):
-            query.options(joinedload(models.Post.creator))
+            query = query.options(joinedload(models.Post.creator))
 
         if not sentiments_only:
             Post = models.Post
