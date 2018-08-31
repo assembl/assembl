@@ -1,8 +1,8 @@
 // @flow
 import React from 'react';
-import { I18n } from 'react-redux-i18n';
+import { I18n, Translate } from 'react-redux-i18n';
 import SwitchButton from '../common/switchButton';
-import { COOKIE_TRANSLATION_KEYS } from '../../constants';
+import { COOKIE_TRANSLATION_KEYS, piwikOptOutLink } from '../../constants';
 
 export type CookieObject = {
   name: string,
@@ -14,10 +14,11 @@ export type CookieObject = {
 type CookieToggleProps = {
   handleToggle: Function,
   cookie: CookieObject,
-  toggleCookieType: Function
+  toggleCookieType: Function,
+  locale: string
 };
 
-const CookieToggle = ({ handleToggle, cookie, toggleCookieType }: CookieToggleProps) => {
+const CookieToggle = ({ handleToggle, cookie, toggleCookieType, locale }: CookieToggleProps) => {
   const toggleSwitch = () => {
     const { accepted, cookieType } = cookie;
     const updatedCookie = { ...cookie, accepted: !accepted, cookieType: toggleCookieType(cookieType) };
@@ -27,18 +28,27 @@ const CookieToggle = ({ handleToggle, cookie, toggleCookieType }: CookieTogglePr
   const { name, category, accepted } = cookie;
 
   const cookieName = Object.keys(COOKIE_TRANSLATION_KEYS).includes(name) ? I18n.t(`cookies.${name}`) : name;
-
+  const cookieIsPiwik = name === 'piwik';
   return (
-    <div className="cookie-toggle">
+    <div className={!cookieIsPiwik && 'cookie-toggle'}>
       <span className="cookie-title dark-title-3 ellipsis">{cookieName}</span>
-      <SwitchButton
-        label={I18n.t('refuse')}
-        labelRight={I18n.t('accept')}
-        onChange={toggleSwitch}
-        checked={!accepted}
-        disabled={category === 'essential'}
-        name={name}
-      />
+      {cookieIsPiwik ? <a
+        // if the piwik website is not available in the locale it falls back to english
+        href={`${piwikOptOutLink}${locale}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="piwik-settings-link"
+      >
+        <Translate value="cookies.piwikSettings" />
+      </a>
+        : <SwitchButton
+          label={I18n.t('refuse')}
+          labelRight={I18n.t('accept')}
+          onChange={toggleSwitch}
+          checked={!accepted}
+          disabled={category === 'essential'}
+          name={name}
+        />}
     </div>
   );
 };

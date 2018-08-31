@@ -13,7 +13,8 @@ type Props = {
   handleCategorySelection: Function,
   handleSave: Function,
   handleToggle: Function,
-  toggleCookieType: Function
+  toggleCookieType: Function,
+  locale: string
 };
 
 const CookiesSelector = ({
@@ -23,7 +24,8 @@ const CookiesSelector = ({
   handleCategorySelection,
   handleSave,
   handleToggle,
-  toggleCookieType
+  toggleCookieType,
+  locale
 }: Props) => (
   <div className="cookies-selector">
     <h2 className="dark-title-2">
@@ -55,6 +57,7 @@ const CookiesSelector = ({
                         key={cookie.name}
                         handleToggle={handleToggle}
                         toggleCookieType={toggleCookieType}
+                        locale={locale}
                       />
                     ))}
                 </div>

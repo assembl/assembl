@@ -53,7 +53,9 @@ const Translations = {
       locale: "Langue",
       piwik: "Piwik",
       privacyPolicy: "Politique de confidentialité",
-      cgu: "Conditions générales d'utilisation"
+      cgu: "Conditions générales d'utilisation",
+      piwikSettings: "Pour modifier les paramètres de ce cookie veuillez cliquer ici"
+
     },
     search: {
       reset: {
@@ -871,7 +873,8 @@ const Translations = {
       locale: "Language",
       piwik: "Piwik",
       cgu: "Terms and conditions",
-      privacyPolicy: "Privacy policy"
+      privacyPolicy: "Privacy policy",
+      piwikSettings: "To modify this cookie's setting please here"
     },
     search: {
       reset: {

@@ -35,10 +35,13 @@
     font-size: $font-size-sm;
   }
 
+  .piwik-settings-link {
+    margin-left: 100px;
+  }
+
   .cookie-toggle {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     margin: 5px;
 
     .cookie-title {

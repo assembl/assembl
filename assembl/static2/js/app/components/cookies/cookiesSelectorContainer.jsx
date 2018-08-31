@@ -18,7 +18,8 @@ import { COOKIE_TRANSLATION_KEYS, COOKIE_TYPES } from '../../constants';
 
 type Props = {
   updateAcceptedCookies: Function,
-  cookiesList: Array<string>
+  cookiesList: Array<string>,
+  locale: string
 };
 
 export type CookiesObject = {
@@ -158,13 +159,15 @@ export class DumbCookiesSelectorContainer extends React.Component<Props, State> 
         handleToggle={this.handleToggle}
         handleCategorySelection={this.handleCategorySelection}
         toggleCookieType={this.toggleCookieType}
+        locale={this.props.locale}
       />
     );
   }
 }
 
-const mapStateToProps = ({ context }) => ({
-  id: context.connectedUserIdBase64
+const mapStateToProps = state => ({
+  id: state.context.connectedUserIdBase64,
+  locale: state.i18n.locale
 });
 
 export default compose(
