@@ -23,7 +23,7 @@ from .utils import (
 
 class URLMeta(graphene.ObjectType):
     local = graphene.Boolean()
-    route = graphene.String(required=True)
+    url = graphene.String(required=True)
 
 
 # Mostly fields related to the discussion title and landing page
@@ -50,8 +50,7 @@ class Discussion(SecureObjectType, SQLAlchemyObjectType):
     header_image = graphene.Field(Document, description=docs.Discussion.header_image)
     logo_image = graphene.Field(Document, description=docs.Discussion.logo_image)
     slug = graphene.String(description=docs.Discussion.slug)
-    login_url = graphene.String(next_view=graphene.String(required=False))
-    login_data = URLMeta(next_view=graphene.String(required=False))
+    login_data = graphene.Field(URLMeta, next_view=graphene.String(required=False))
 
     def resolve_homepage_url(self, args, context, info):
         # TODO: Remove this resolver and add URLString to
@@ -136,7 +135,7 @@ class Discussion(SecureObjectType, SQLAlchemyObjectType):
             route = context.route_url(
                 "contextual_react_login", discussion_slug=discussion.slug, _query={"next": next_view})
             local = True
-        return URLMeta(local=local, route=urljoin(discussion.get_base_url(), route))
+        return URLMeta(local=local, url=urljoin(discussion.get_base_url(), route))
 
 
 class UpdateDiscussion(graphene.Mutation):
