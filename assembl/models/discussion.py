@@ -528,9 +528,9 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
         from .generic import Content
 
         return self.db.query(
-            func.sum(PostWatsonV1SentimentAnalysis.positive_sentiment),
-            func.sum(PostWatsonV1SentimentAnalysis.negative_sentiment),
-            func.count(PostWatsonV1SentimentAnalysis.id)
+            func.sum(PostWatsonV1SentimentAnalysis.positive_sentiment).label("positive"),
+            func.sum(PostWatsonV1SentimentAnalysis.negative_sentiment).label("negative"),
+            func.count(PostWatsonV1SentimentAnalysis.id).label("count")
         ).join(Content).filter(Content.discussion_id == self.id).first()
 
     def get_base_url(self, require_secure=None):

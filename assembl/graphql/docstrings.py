@@ -71,6 +71,8 @@ class Discussion:
     header_image = Default.document % ("The file representing the header of the landing page. ", )
     logo_image = Default.document % ("The file representing the logo of the debate. ", )
     slug = """A string used to form the URL of the discussion."""
+    top_keywords = "Keywords most often found in the discussion"
+    nlp_sentiment = "The aggregated sentiment analysis on the posts"
 
 
 class UpdateDiscussion:
@@ -282,6 +284,19 @@ class VoteResults:
     participants = """The list of users who participated on the vote session. The length of the list matches the number of participants."""
 
 
+class TagResult:
+    __doc__ = "A tag assigned to a post, with its scoring value"
+    score = "The score associated with the tag"
+    value = "The tag keyword"
+
+
+class SentimentAnalysisResult:
+    __doc__ = "Sentiment analysis total"
+    positive = "The sum of positive scores"
+    negative = "The sum of negative scores"
+    count = "The number of posts analyzed"
+
+
 class IdeaInterface:
     __doc__ = """An Idea or Thematic is an object describing a classification or cluster of discussions on a debate.
     Ideas, like Posts, can be based on each other."""
@@ -289,6 +304,8 @@ class IdeaInterface:
     title_entries = Default.langstring_entries % ("This is the Idea title in multiple languages.",)
     description = "The description of the Idea, often shown in the header of the Idea."
     description_entries = Default.langstring_entries % ("This is the description of the Idea in multiple languages.",)
+    top_keywords = "The list of top keywords found in messages associated to this idea"
+    nlp_sentiment = "The aggregated sentiment analysis on the posts"
     num_posts = "The total number of active posts on that idea (excludes deleted posts)."
     num_total_posts = "The total number of posts on that idea and on all its children ideas."
     num_contributors = """The total number of users who contributed to the Idea/Thematic/Question.\n
@@ -514,6 +531,8 @@ class PostInterface:
     DELETED_BY_ADMIN,\n
     WIDGET_SCOPED\n"""
     attachments = "List of attachements to the post."
+    keywords = "Keywords associated with the post."
+    nlp_sentiment = "Sentiment analysis results"
     original_locale = Default.string_entry % ("Locale in which the original message was written.")
     publishes_synthesis = "Graphene Field modeling a relationship to a published synthesis."
     type = """The type of the post. The class name of the post."""

@@ -33,6 +33,19 @@ from .utils import (
 import assembl.graphql.docstrings as docs
 
 
+class TagResult(graphene.ObjectType):
+    __doc__ = docs.TagResult.__doc__
+    score = graphene.Float(description=docs.TagResult.score)
+    value = graphene.String(description=docs.TagResult.value)
+
+
+class SentimentAnalysisResult(graphene.ObjectType):
+    __doc__ = docs.SentimentAnalysisResult.__doc__
+    positive = graphene.Float(description=docs.SentimentAnalysisResult.positive)
+    negative = graphene.Float(description=docs.SentimentAnalysisResult.negative)
+    count = graphene.Int(description=docs.SentimentAnalysisResult.count)
+
+
 class Video(graphene.ObjectType):
     __doc__ = docs.Video.__doc__
     title = graphene.String(description=docs.Video.title)
@@ -53,6 +66,8 @@ class IdeaInterface(graphene.Interface):
     title_entries = graphene.List(LangStringEntry, description=docs.IdeaInterface.title_entries)
     description = graphene.String(lang=graphene.String(), description=docs.IdeaInterface.description)
     description_entries = graphene.List(LangStringEntry, description=docs.IdeaInterface.description_entries)
+    top_keywords = graphene.List(TagResult, description=docs.IdeaInterface.top_keywords)
+    nlp_sentiment = graphene.Field(SentimentAnalysisResult, description=docs.IdeaInterface.nlp_sentiment)
     num_posts = graphene.Int(description=docs.IdeaInterface.num_posts)
     num_total_posts = graphene.Int(description=docs.IdeaInterface.num_total_posts)
     num_contributors = graphene.Int(description=docs.IdeaInterface.num_contributors)
@@ -83,6 +98,14 @@ class IdeaInterface(graphene.Interface):
 
     def resolve_description_entries(self, args, context, info):
         return resolve_langstring_entries(self, 'description')
+
+    def resolve_top_keywords(self, args, context, info):
+        result = self.top_keywords()
+        return [TagResult(score=r.score, value=r.value) for r in result]
+
+    def resolve_nlp_sentiment(self, args, context, info):
+        result = self.sentiments()
+        return SentimentAnalysisResult(**result._asdict())
 
     def resolve_num_total_posts(self, args, context, info):
         if isinstance(self, models.RootIdea):

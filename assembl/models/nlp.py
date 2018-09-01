@@ -353,7 +353,7 @@ class PostWatsonV1SentimentAnalysis(Base):
     joy = Column(Float)
     sadness = Column(Float)
     __table_args__ = (UniqueConstraint(source_id, post_id), )
-    post = relationship(Content)
+    post = relationship(Content, backref="watson_sentiments")
     source = relationship(Computation)
 
     @hybrid_property

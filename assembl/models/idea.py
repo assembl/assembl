@@ -541,9 +541,9 @@ class Idea(HistoryMixin, DiscussionBoundBase):
         from .nlp import PostWatsonV1SentimentAnalysis
 
         return self.db.query(
-            func.sum(PostWatsonV1SentimentAnalysis.positive_sentiment),
-            func.sum(PostWatsonV1SentimentAnalysis.negative_sentiment),
-            func.count(PostWatsonV1SentimentAnalysis.id)
+            func.sum(PostWatsonV1SentimentAnalysis.positive_sentiment).label("positive"),
+            func.sum(PostWatsonV1SentimentAnalysis.negative_sentiment).label("negative"),
+            func.count(PostWatsonV1SentimentAnalysis.id).label("count")
         ).filter(
             PostWatsonV1SentimentAnalysis.post_id.in_(
                 self.get_related_posts_query(True))
