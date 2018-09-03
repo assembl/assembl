@@ -160,15 +160,26 @@ export class AssemblNavbar extends React.PureComponent {
   };
 
   render = () => {
-    const { screenWidth, debate, data, location, phase } = this.props;
-    const sections = data.sections;
-    const discussionData = data.discussion;
+    const {
+      screenWidth,
+      location,
+      debate,
+      phase,
+      sectionLoading,
+      discussionLoading,
+      sectionData,
+      discussionData
+    } = this.props;
+    if (sectionLoading || discussionLoading || !(sectionData) || !(discussionData)) {
+      return null;
+    }
+    const sections = sectionData.sections;
     const { debateData } = debate;
     const { timeline, logo, slug, helpUrl, isLargeLogo } = debateData;
     const flatWidth = (this.state && this.state.flatWidth) || 0;
     const maxAppWidth = Math.min(APP_CONTAINER_MAX_WIDTH, screenWidth) - APP_CONTAINER_PADDING * 2;
     const screenTooSmall = flatWidth > maxAppWidth;
-    const filteredSections = sections.filter(sectionFilter(data)).sort((a, b) => a.order - b.order);
+    const filteredSections = sections.filter(sectionFilter(sectionData)).sort((a, b) => a.order - b.order);
     const mapOptions = {
       slug: slug,
       phase: getCurrentPhaseIdentifier(timeline),
@@ -218,14 +229,41 @@ export default compose(
     phase: state.phase,
     i18n: state.i18n
   })),
+  graphql(DiscussionQuery, {
+    props: ({ data }) => {
+      if (data.loading) {
+        return { discussionLoading: true, discussionData: null };
+      }
+      if (data.error) {
+        return { discussionLoading: false, discussionData: null };
+      }
+
+      return {
+        discussionLoading: false,
+        discussionData: data.discussion
+      };
+    }
+  }),
   graphql(SectionsQuery, {
     options: ({ i18n }) => ({
       variables: {
         lang: i18n.locale
       }
-    })
+    }),
+    props: ({ data }) => {
+      if (data.loading) {
+        return { sectionloading: true, sectionData: null };
+      }
+      if (data.error) {
+        return { sectionLoading: false, sectionData: { sections: [] } };
+      }
+
+      return {
+        sectionLoading: false,
+        sectionData: data
+      };
+    }
   }),
-  graphql(DiscussionQuery),
   withoutLoadingIndicator(),
   withScreenWidth
 )(AssemblNavbar);

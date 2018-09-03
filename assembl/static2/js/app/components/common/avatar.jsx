@@ -44,7 +44,7 @@ class ProfileIcon extends React.Component {
 
   render() {
     const { slug, connectedUserId, displayName, showUsername, loginData } = this.props;
-    const loginUrl = loginData ? loginData.loginUrl : `${getContextual('login', { slug: slug })}?next=${this.state.next}`;
+    const loginUrl = loginData ? loginData.url : `${getContextual('login', { slug: slug })}?next=${this.state.next}`;
     const dropdownUser = (
       <div className="inline">
         <span className="assembl-icon-profil grey" />
@@ -53,7 +53,7 @@ class ProfileIcon extends React.Component {
     );
     return (
       <div className="right avatar">
-        {!connectedUserId && !loginUrl && (
+        {!connectedUserId && loginUrl && (
           <Link to={loginUrl} onClick={this.handleLoginClick} >
             <div className="connection">
               <Translate value="navbar.connection" />

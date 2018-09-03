@@ -12,26 +12,32 @@ describe('mapSectionToElement function', () => {
 });
 
 const data = {
-  sections: [
-    {
-      id: 'home',
-      sectionType: 'HOMEPAGE',
-      title: 'Home',
-      url: 'http://www.homesweethome.org'
-    },
-    {
-      id: 'mysection',
-      sectionType: 'CUSTOM',
-      title: 'My section',
-      url: 'http://www.gnu.org'
-    }
-  ],
-  discussion: {
+  sectionData: {
+    hasResourcesCenter: false,
+    hasSyntheses: false,
+    sections: [
+      {
+        id: 'home',
+        sectionType: 'HOMEPAGE',
+        title: 'Home',
+        url: 'http://www.homesweethome.org'
+      },
+      {
+        id: 'mysection',
+        sectionType: 'CUSTOM',
+        title: 'My section',
+        url: 'http://www.gnu.org'
+      }
+    ]
+  },
+  discussionData: {
     loginData: {
       route: 'http://www.mycoolsite.com/login',
       local: false
     }
-  }
+  },
+  discussionLoading: false,
+  sectionloading: false
 };
 
 describe('AssemblNavbar component', () => {
@@ -42,7 +48,7 @@ describe('AssemblNavbar component', () => {
         screenWidth={2000}
         phase={{ isRedirectionToV1: false }}
         debate={{ debateData: { timeline: [] } }}
-        data={data}
+        {...data}
       />
     );
     const result = renderer.getRenderOutput();
@@ -56,7 +62,7 @@ describe('AssemblNavbar component', () => {
         phase={{ isRedirectionToV1: false }}
         screenWidth={10}
         debate={{ debateData: { timeline: [] } }}
-        data={data}
+        {...data}
       />
     );
     const result = renderer.getRenderOutput();
