@@ -306,7 +306,8 @@ def get_default_context(request, **kwargs):
 
     if analytics_settings.get('enabled', False):
         analytics_settings['piwik'] = {
-            'script': web_analytics_piwik_script
+            'script': web_analytics_piwik_script,
+            'host': config.get('piwik_host')
         }
 
     analytics_url = config.get('web_analytics_piwik_url', None)
