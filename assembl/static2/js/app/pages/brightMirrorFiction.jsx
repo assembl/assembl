@@ -85,4 +85,8 @@ export default compose(
     })
   }),
   withLoadingIndicator()
+<<<<<<< HEAD
 )(BrightMirrorFiction);
+=======
+)(brightMirrorFiction);
+>>>>>>> merge 1726-1730: list bm fictions, read bm fictions
