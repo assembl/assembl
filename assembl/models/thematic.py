@@ -2,7 +2,6 @@ from sqlalchemy.orm import relationship, backref
 from sqlalchemy import (
     Column,
     Integer,
-    String,
     UnicodeText,
     ForeignKey
 )
@@ -26,8 +25,6 @@ class Thematic(Idea):
         ondelete='CASCADE',
         onupdate='CASCADE'
     ), primary_key=True)
-
-    identifier = Column(String(60), doc="An identifier correspond to a specific phase.")
 
     video_title_id = Column(
         Integer(), ForeignKey(LangString.id))

@@ -707,6 +707,7 @@ def test_mutation_create_proposal_no_root_thematic(graphql_request, discussion, 
     mutation = graphql_registry['createProposal']
     vote_session_id = to_global_id("VoteSession", vote_session.id)
     root_thematic = get_root_thematic_for_phase(vote_session.discussion_phase)
+    vote_session.discussion_phase.root_idea = None
     root_thematic.delete()
     root_thematic.db.flush()
 

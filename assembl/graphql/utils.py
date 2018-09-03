@@ -8,7 +8,6 @@ from graphql.utils.ast_to_dict import ast_to_dict
 
 from .langstring import langstring_from_input_entries
 from assembl import models
-from assembl.models.timeline import Phases
 
 
 class DateTime(Scalar):
@@ -105,36 +104,24 @@ def get_fields(info):
 def get_root_thematic_for_phase(phase):
     """Return root thematic for the given phase `phase`.
     """
-    if phase.identifier in (Phases.thread.value, Phases.multiColumns.value):
-        return phase.discussion.root_idea
+    if phase.is_thematics_table:
+        return phase.root_idea
 
-    if phase.identifier == Phases.voteSession.value:
-        identifier = 'voteSession{}'.format(phase.vote_session.id)
-    else:
-        identifier = phase.identifier
-
-    root_thematic = [idea
-                     for idea in phase.discussion.root_idea.get_children()
-                     if getattr(idea, 'identifier', '') == identifier]
-    return root_thematic[0] if root_thematic else None
+    return phase.discussion.root_idea
 
 
 def create_root_thematic(phase):
     """Create the root thematic (hidden) for the given phase `phase`.
     """
-    if phase.identifier == Phases.voteSession.value:
-        identifier = 'voteSession{}'.format(phase.vote_session.id)
-    else:
-        identifier = phase.identifier
-
-    title = u'Phase {}'.format(identifier)
+    title = u'Phase {}'.format(phase.identifier)
     root_thematic = models.Thematic(
         discussion_id=phase.discussion.id,
         title=langstring_from_input_entries(
             [{'locale_code': 'en', 'value': title}]),
-        identifier=identifier,
         hidden=True)
     phase.discussion.root_idea.children.append(root_thematic)
+    phase.is_thematics_table = True
+    phase.root_idea = root_thematic
     return root_thematic
 
 

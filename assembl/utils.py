@@ -27,12 +27,10 @@ def get_published_posts(idea):
 
 
 def get_all_phase_root_ideas(discussion):
-    # TODO replace this with phases having a root_idea foreign key
-    # instead of getting all hidden children of discussion.root_idea
     root_ideas = []
-    for idea in discussion.root_idea.get_children():
-        if idea.hidden:
-            root_ideas.append(idea)
+    for phase in discussion.timeline_phases:
+        if phase.root_idea:
+            root_ideas.append(phase.root_idea)
 
     return root_ideas
 

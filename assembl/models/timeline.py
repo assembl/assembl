@@ -18,6 +18,7 @@ from . import DiscussionBoundBase
 from ..auth import CrudPermissions, P_READ, P_ADMIN_DISC
 from ..lib.sqla_types import URLString
 from .discussion import Discussion
+from .idea import Idea
 from .langstrings import LangString
 
 
@@ -188,6 +189,13 @@ class DiscussionPhase(TimelineEvent):
     }
 
     interface_v1 = Column(Boolean, server_default='false', default=False)
+    root_idea_id = Column(
+        Integer,
+        ForeignKey('idea.id', onupdate="CASCADE", ondelete="SET NULL"))
+    root_idea = relationship(
+        Idea,
+        backref=backref('discussion_phase', uselist=False),
+    )
 
 
 Discussion.timeline_phases = relationship(
