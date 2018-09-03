@@ -78,7 +78,7 @@ export class DumbCookiesSelectorContainer extends React.Component<Props, State> 
       return { category: 'essential', name: COOKIE_TRANSLATION_KEYS.locale };
     }
     if (cookie.includes('TRACKING_ON_DISCUSSION')) {
-      return { category: 'analytics', name: COOKIE_TRANSLATION_KEYS.piwik };
+      return { category: 'analytics', name: COOKIE_TRANSLATION_KEYS.matomo };
     }
     if (cookie.includes('PRIVACY_POLICY_ON_DISCUSSION')) {
       return { category: 'essential', name: COOKIE_TRANSLATION_KEYS.privacyPolicy };

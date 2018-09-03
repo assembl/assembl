@@ -82,7 +82,7 @@ export const COOKIE_TYPES = [
 export const COOKIE_TRANSLATION_KEYS = {
   userSession: 'userSession',
   locale: 'locale',
-  piwik: 'piwik',
+  matomo: 'matomo',
   privacyPolicy: 'privacyPolicy',
   cgu: 'cgu'
 };
@@ -117,7 +117,7 @@ export const pickerColors = [
   '#000000'
 ];
 
-export const piwikOptOutLink = 'https://stats.bluenove.com/index.php?module=CoreAdminHome&action=optOut&language=';
+export const matomoOptOutLink = 'https://stats.bluenove.com/index.php?module=CoreAdminHome&action=optOut&language=';
 
 export const modulesTranslationKeys = ['survey', 'thread', 'multiColumns', 'voteSession', 'brightMirror'];
 

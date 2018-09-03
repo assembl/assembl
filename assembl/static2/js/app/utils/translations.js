@@ -51,10 +51,10 @@ const Translations = {
     cookies: {
       userSession: "Session utilisateur",
       locale: "Langue",
-      piwik: "Piwik",
+      matomo: "Matomo",
       privacyPolicy: "Politique de confidentialité",
       cgu: "Conditions générales d'utilisation",
-      piwikSettings: "Pour modifier les paramètres de ce cookie veuillez cliquer ici"
+      matomoSettings: "Pour modifier les paramètres de ce cookie veuillez cliquer ici"
 
     },
     search: {
@@ -871,10 +871,10 @@ const Translations = {
     cookies: {
       userSession: "User Session",
       locale: "Language",
-      piwik: "Piwik",
+      matomo: "Matomo",
       cgu: "Terms and conditions",
       privacyPolicy: "Privacy policy",
-      piwikSettings: "To modify this cookie's setting please click here"
+      matomoSettings: "To modify this cookie's setting please click here"
     },
     search: {
       reset: {

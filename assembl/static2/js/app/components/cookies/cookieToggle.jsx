@@ -2,7 +2,7 @@
 import React from 'react';
 import { I18n, Translate } from 'react-redux-i18n';
 import SwitchButton from '../common/switchButton';
-import { COOKIE_TRANSLATION_KEYS, piwikOptOutLink } from '../../constants';
+import { COOKIE_TRANSLATION_KEYS, matomoOptOutLink } from '../../constants';
 
 export type CookieObject = {
   name: string,
@@ -28,18 +28,18 @@ const CookieToggle = ({ handleToggle, cookie, toggleCookieType, locale }: Cookie
   const { name, category, accepted } = cookie;
 
   const cookieName = Object.keys(COOKIE_TRANSLATION_KEYS).includes(name) ? I18n.t(`cookies.${name}`) : name;
-  const cookieIsPiwik = name === 'piwik';
+  const cookieIsPiwik = name === 'matomo';
   return (
     <div className={cookieIsPiwik ? '' : 'cookie-toggle'}>
       <span className="cookie-title dark-title-3 ellipsis">{cookieName}</span>
       {cookieIsPiwik ? <a
-        // if the piwik website is not available in the locale it falls back to english
-        href={`${piwikOptOutLink}${locale}`}
+        // if the matomo website is not available in the locale it falls back to english
+        href={`${matomoOptOutLink}${locale}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="piwik-settings-link"
+        className="matomo-settings-link"
       >
-        <Translate value="cookies.piwikSettings" />
+        <Translate value="cookies.matomoSettings" />
       </a>
         : <SwitchButton
           label={I18n.t('refuse')}

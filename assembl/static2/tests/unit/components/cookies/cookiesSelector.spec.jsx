@@ -22,7 +22,7 @@ describe('CookiesSelector component', () => {
         analytics: [
           {
             category: 'analytics',
-            name: 'piwik',
+            name: 'matomo',
             hasChanged: false,
             accepted: false,
             cookieType: 'REJECT_TRACKING_ON_DISCUSSION'

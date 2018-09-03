@@ -87,7 +87,7 @@ describe('CookiesSelectorContainer component', () => {
     it('should update the cookies in the state', () => {
       const updatedCookie = {
         category: 'analytics',
-        name: COOKIE_TRANSLATION_KEYS.piwik,
+        name: COOKIE_TRANSLATION_KEYS.matomo,
         accepted: false,
         cookieType: 'REJECT_TRACKING_ON_DISCUSSION'
       };
@@ -98,7 +98,7 @@ describe('CookiesSelectorContainer component', () => {
           analytics: [
             {
               category: 'analytics',
-              name: COOKIE_TRANSLATION_KEYS.piwik,
+              name: COOKIE_TRANSLATION_KEYS.matomo,
               accepted: false,
               cookieType: 'REJECT_TRACKING_ON_DISCUSSION'
             }
