@@ -121,21 +121,25 @@ class Discussion(SecureObjectType, SQLAlchemyObjectType):
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
         prefs = discussion.preferences
-        next_view = args.get('next_view', None)
-        auth_backend = prefs.get('authorization_server_backend', None)
-        landing_page = prefs.get('landing_page', False)
+        next_view = args.get('next_view') or None
+        auth_backend = prefs.get('authorization_server_backend') or None
+        landing_page = prefs.get('landing_page') or False
         if auth_backend and landing_page:
             from assembl.views.auth.views import get_social_autologin
             route = get_social_autologin(context, discussion, next_view)
             local = False
+            url = urljoin(discussion.get_base_url(), route)
         else:
-            # Just a regular discussion login
+            # Just a regular discussion login, but a route from perspective of React-Router
+            from assembl.lib.frontend_urls import FrontendUrls
             if not next_view:
                 next_view = context.route_url("new_home", discussion_slug=discussion.slug)
-            route = context.route_url(
-                "contextual_react_login", discussion_slug=discussion.slug, _query={"next": next_view})
+            furl = FrontendUrls(discussion)
+            route = furl.get_frontend_url('login')
+            route = furl.append_query_string(route, next=next_view)
             local = True
-        return URLMeta(local=local, url=urljoin(discussion.get_base_url(), route))
+            url = route
+        return URLMeta(local=local, url=url)
 
 
 class UpdateDiscussion(graphene.Mutation):
