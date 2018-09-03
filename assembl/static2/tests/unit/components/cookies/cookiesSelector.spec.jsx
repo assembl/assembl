@@ -33,7 +33,8 @@ describe('CookiesSelector component', () => {
       show: true,
       handleCategorySelection: handleCategorySelectionSpy,
       handleSave: handleSaveSpy,
-      handleToggle: handleToggleSpy
+      handleToggle: handleToggleSpy,
+      settingsHaveChanged: true
     };
     const rendered = renderer.create(<CookiesSelector {...props} />);
     expect(rendered).toMatchSnapshot();

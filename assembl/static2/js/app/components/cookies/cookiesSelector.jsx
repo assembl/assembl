@@ -14,7 +14,8 @@ type Props = {
   handleSave: Function,
   handleToggle: Function,
   toggleCookieType: Function,
-  locale: string
+  locale: string,
+  settingsHaveChanged: boolean
 };
 
 const CookiesSelector = ({
@@ -25,7 +26,8 @@ const CookiesSelector = ({
   handleSave,
   handleToggle,
   toggleCookieType,
-  locale
+  locale,
+  settingsHaveChanged
 }: Props) => (
   <div className="cookies-selector">
     <h2 className="dark-title-2">
@@ -66,7 +68,7 @@ const CookiesSelector = ({
           })}
     </div>
     <div className="submit-button-container">
-      <Button onClick={handleSave} className="button-submit button-dark">
+      <Button onClick={handleSave} className={settingsHaveChanged ? 'button-submit button-dark' : 'hidden'}>
         <Translate value="profile.save" />
       </Button>
     </div>

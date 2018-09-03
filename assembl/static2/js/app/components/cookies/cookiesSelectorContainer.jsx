@@ -31,7 +31,8 @@ export type CookiesObject = {
 type State = {
   activeKey: ?string,
   show: boolean,
-  cookies: ?CookiesObject
+  cookies: ?CookiesObject,
+  settingsHaveChanged: boolean
 };
 
 export class DumbCookiesSelectorContainer extends React.Component<Props, State> {
@@ -59,7 +60,8 @@ export class DumbCookiesSelectorContainer extends React.Component<Props, State> 
     this.state = {
       activeKey: 'essential',
       show: true,
-      cookies: cookiesByCategory
+      cookies: cookiesByCategory,
+      settingsHaveChanged: false
     };
   }
 
@@ -118,7 +120,7 @@ export class DumbCookiesSelectorContainer extends React.Component<Props, State> 
         (cookie.name === updatedCookie.name ? { ...updatedCookie, cookieType: this.toggleCookieType(cookie.cookieType) } : cookie)
     );
     const updatedCookiesByCategory = this.getCookiesObjectFromArray(updatedCookiesArray);
-    this.setState({ cookies: updatedCookiesByCategory });
+    this.setState({ cookies: updatedCookiesByCategory, settingsHaveChanged: true });
   };
 
   toggleCookieType = (cookie: string): string =>
@@ -149,7 +151,7 @@ export class DumbCookiesSelectorContainer extends React.Component<Props, State> 
   };
 
   render() {
-    const { cookies, show, activeKey } = this.state;
+    const { cookies, show, activeKey, settingsHaveChanged } = this.state;
     return (
       <CookiesSelector
         cookies={cookies}
@@ -160,6 +162,7 @@ export class DumbCookiesSelectorContainer extends React.Component<Props, State> 
         handleCategorySelection={this.handleCategorySelection}
         toggleCookieType={this.toggleCookieType}
         locale={this.props.locale}
+        settingsHaveChanged={settingsHaveChanged}
       />
     );
   }
