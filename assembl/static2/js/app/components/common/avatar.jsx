@@ -44,7 +44,9 @@ class ProfileIcon extends React.Component {
 
   render() {
     const { slug, connectedUserId, displayName, showUsername, loginData } = this.props;
-    const loginUrl = loginData ? loginData.url : `${getContextual('login', { slug: slug })}?next=${this.state.next}`;
+    const loginUrl = loginData ?
+      `${loginData.url}?next=${this.state.next}` :
+      `${getContextual('login', { slug: slug })}?next=${this.state.next}`;
     const dropdownUser = (
       <div className="inline">
         <span className="assembl-icon-profil grey" />
