@@ -272,9 +272,7 @@ class FrontendUrls(object):
                     self.discussion.get_base_url(),
                     route)
             first_idea = None
-            ideas = [link.idea
-                     for link in post.indirect_idea_content_links_without_cache()
-                     if link.__class__.__name__ == 'IdeaRelatedPostLink']
+            ideas = post.get_ideas()
             if ideas:
                 first_idea = ideas[0]
             else:

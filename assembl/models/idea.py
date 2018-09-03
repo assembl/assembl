@@ -372,6 +372,19 @@ class Idea(HistoryMixin, DiscussionBoundBase):
         else:
             return self.db.query(Idea).filter(Idea.id.in_(query)).all()
 
+    def get_associated_phase(self):
+        from .timeline import Phases, get_phase_by_identifier
+        query = self.get_ancestors_query(
+            tombstone_date=self.tombstone_date, subquery=True)
+        res = self.db.query(Idea).filter(Idea.id.in_(query)
+            ).join(Idea.discussion_phase
+            ).options(contains_eager(Idea.discussion_phase)).all()
+        root_idea = res[0] if res else None
+        if root_idea:
+            return root_idea.discussion_phase
+
+        return get_phase_by_identifier(self.discussion, Phases.thread.value)
+
     def get_applicable_announcement(self):
         from .announcement import IdeaAnnouncement
         if self.announcement:

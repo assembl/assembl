@@ -80,13 +80,10 @@ def populate_from_langstring_prop(content, data, propName, dataPropName=None):
 
 
 def get_idea_id_for_post(post):
-    from assembl.models.idea import Idea, MessageView
-    idea_ids = [link.idea_id
-        for link in post.indirect_idea_content_links_without_cache()
-        if link.__class__.__name__ == 'IdeaRelatedPostLink']
+    from assembl.models.idea import MessageView
+    ideas = post.get_ideas()
 
-    def index_idea(idea_id):
-        idea = Idea.get(idea_id)
+    def index_idea(idea):
         # If the post is a fiction for Bright Mirror, don't index it.
         if idea.message_view_override == MessageView.brightMirror.value:
             return False
@@ -97,7 +94,7 @@ def get_idea_id_for_post(post):
 
         return True
 
-    return filter(index_idea, idea_ids)
+    return [idea.id for idea in ideas if index_idea(idea)]
 
 
 def get_data(content):
