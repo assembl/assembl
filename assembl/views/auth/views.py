@@ -137,7 +137,11 @@ def maybe_contextual_route(request, route_name, **args):
 
 
 def get_social_autologin(request, discussion=None, next_view=None):
-    """Look for a mandatory social login"""
+    """Look for a mandatory social login
+
+    :param discussion: The discussion object
+    :param next_view: None|Boolean|string The potential next_view to be appended
+    """
     discussion = discussion or discussion_from_request(request)
     if discussion:
         preferences = discussion.preferences
@@ -147,15 +151,21 @@ def get_social_autologin(request, discussion=None, next_view=None):
     landing_page = preferences['landing_page']
     if not auto_login_backend:
         return None
+    use_next_view = True
+    if next_view is False:
+        use_next_view = False
     next_view = next_view or request.params.get('next', None)
-    if discussion and not next_view:
+    if discussion and not next_view and use_next_view:
         if landing_page:
             next_view = request.route_path('new_home',
                                            discussion_slug=discussion.slug)
         else:
             next_view = request.route_path('home',
                                            discussion_slug=discussion.slug)
-    query = {"next": next_view}
+    if use_next_view:
+        query = {"next": next_view}
+    else:
+        query = {}
     if ":" in auto_login_backend:
         auto_login_backend, provider = auto_login_backend.split(":", 1)
         query['idp'] = provider

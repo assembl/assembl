@@ -42,7 +42,7 @@ class Discussion(SecureObjectType, SQLAlchemyObjectType):
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
         prefs = discussion.preferences
-        next_view = args.get('next_view') or None
+        next_view = args.get('next_view') or False
         auth_backend = prefs.get('authorization_server_backend') or None
         landing_page = prefs.get('landing_page') or False
         if auth_backend and landing_page:
@@ -52,12 +52,12 @@ class Discussion(SecureObjectType, SQLAlchemyObjectType):
             url = urljoin(discussion.get_base_url(), route)
         else:
             # Just a regular discussion login, but a route from perspective of React-Router
+            # Do not pass any next view by default. It's responsibility of the caller
             from assembl.lib.frontend_urls import FrontendUrls
-            if not next_view:
-                next_view = context.route_url("new_home", discussion_slug=discussion.slug)
             furl = FrontendUrls(discussion)
-            route = furl.get_frontend_url('login')
-            route = furl.append_query_string(route, next=next_view)
+            route = furl.get_frontend_url('ctxLogin')
+            if next_view:
+                route = furl.append_query_string(route, next=next_view)
             local = True
             url = route
         return URLMeta(local=local, url=url)
