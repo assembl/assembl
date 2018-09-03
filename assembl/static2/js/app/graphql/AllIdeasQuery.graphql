@@ -16,7 +16,10 @@ query AllIdeasQuery($lang: String!, $discussionPhaseId: Int!) {
     }
   }
   rootIdea(discussionPhaseId: $discussionPhaseId) {
-    ... on Node {
+    ... on Idea {
+      id
+    }
+    ... on Thematic {
       id
     }
   }
