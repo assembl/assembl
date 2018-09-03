@@ -117,8 +117,6 @@ export const pickerColors = [
   '#000000'
 ];
 
-export const matomoOptOutLink = 'https://stats.bluenove.com/index.php?module=CoreAdminHome&action=optOut&language=';
-
 export const modulesTranslationKeys = ['survey', 'thread', 'multiColumns', 'voteSession', 'brightMirror'];
 
 export const BlockingPublicationStates = {};

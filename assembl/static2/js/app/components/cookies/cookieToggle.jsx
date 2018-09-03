@@ -1,8 +1,9 @@
 // @flow
+/* global globalAnalytics */
 import React from 'react';
 import { I18n, Translate } from 'react-redux-i18n';
 import SwitchButton from '../common/switchButton';
-import { COOKIE_TRANSLATION_KEYS, matomoOptOutLink } from '../../constants';
+import { COOKIE_TRANSLATION_KEYS } from '../../constants';
 
 export type CookieObject = {
   name: string,
@@ -18,6 +19,9 @@ type CookieToggleProps = {
   locale: string
 };
 
+// @$FlowFixMe globalAnalytics is a global variable
+const matomoHost = globalAnalytics.piwik ? globalAnalytics.piwik.host : null;
+
 const CookieToggle = ({ handleToggle, cookie, toggleCookieType, locale }: CookieToggleProps) => {
   const toggleSwitch = () => {
     const { accepted, cookieType } = cookie;
@@ -29,12 +33,15 @@ const CookieToggle = ({ handleToggle, cookie, toggleCookieType, locale }: Cookie
 
   const cookieName = Object.keys(COOKIE_TRANSLATION_KEYS).includes(name) ? I18n.t(`cookies.${name}`) : name;
   const cookieIsPiwik = name === 'matomo';
+  const matomoOptOutLink = matomoHost ?
+    `https://${matomoHost}/index.php?module=CoreAdminHome&action=optOut&language=${locale}`
+    : null;
   return (
-    <div className={cookieIsPiwik ? '' : 'cookie-toggle'}>
+    <div className={cookieIsPiwik && matomoOptOutLink ? '' : 'cookie-toggle'}>
       <span className="cookie-title dark-title-3 ellipsis">{cookieName}</span>
-      {cookieIsPiwik ? <a
+      {cookieIsPiwik && matomoOptOutLink ? <a
         // if the matomo website is not available in the locale it falls back to english
-        href={`${matomoOptOutLink}${locale}`}
+        href={matomoOptOutLink}
         target="_blank"
         rel="noopener noreferrer"
         className="matomo-settings-link"

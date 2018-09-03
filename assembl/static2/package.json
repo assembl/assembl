@@ -169,6 +169,9 @@
     },
     "setupFiles": [
       "<rootDir>/tests/setupTests.js"
-    ]
+    ],
+    "globals": {
+      "globalAnalytics": {}
+    }
   }
 }
