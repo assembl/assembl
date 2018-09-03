@@ -106,8 +106,7 @@ const AdminChild = (props) => {
   }
 };
 
-// TODO: WIP merge 1726-1730
-const AZERTY = () => <BrightMirrorFiction id="UG9zdDozNzEw" contentLocale="fr" />;
+const buildBrightMirrorFiction = props => <BrightMirrorFiction id={props.params.fictionId} />;
 
 export default [
   <Route path="/" component={Root}>
@@ -151,14 +150,14 @@ export default [
         <Route path={routeForRouter('debate', false, { phase: ':phase' })} component={DebateHome}>
           <Route path={routeForRouter('theme', false, { themeId: ':themeId' })} component={DebateChild} />
           <Route
-            path={routeForRouter('brightMirrorFiction', false, { themeId: ':themeId', postId: ':postId' })}
-            component={AZERTY}
-          />
-          <Route
             path={routeForRouter('question', false, { questionId: ':questionId', questionIndex: ':questionIndex' })}
             component={Question}
           />
         </Route>
+        <Route
+          path={routeForRouter('brightMirrorFiction', false, { phase: ':phase', themeId: ':themeId', fictionId: ':fictionId' })}
+          component={buildBrightMirrorFiction}
+        />
         <Route path={routeForRouter('unauthorizedAdministration')} component={UnauthorizedAdministration} />
         <Route path={routeForRouter('administration')} component={Administration}>
           <Route path={routeForRouter('adminPhase', false, { phase: ':phase' })} component={AdminChild} />

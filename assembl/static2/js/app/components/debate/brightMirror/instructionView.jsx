@@ -27,8 +27,7 @@ export type InstructionViewProps = {
     body: string
   },
   timeline: Timeline,
-  identifier: string,
-  lang: string
+  identifier: string
 };
 
 const InstructionView = ({
@@ -38,8 +37,7 @@ const InstructionView = ({
   posts,
   announcementContent,
   timeline,
-  identifier,
-  lang
+  identifier
 }: InstructionViewProps) => {
   const canPost =
     isUserConnected && connectedUserCan(Permissions.ADD_POST) && !getIfPhaseCompletedByIdentifier(timeline, identifier);
@@ -59,7 +57,7 @@ const InstructionView = ({
             postSuccessMsg="debate.brightMirror.postSuccessMsg"
           />
         ) : null}
-        <FictionsList posts={posts} identifier={identifier} lang={lang} />
+        <FictionsList posts={posts} identifier={identifier} themeId={ideaId} />
       </div>
     </div>
   );

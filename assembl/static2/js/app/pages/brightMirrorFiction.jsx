@@ -1,6 +1,7 @@
 // @flow
 import React, { Fragment } from 'react';
 import { Grid, Row, Col } from 'react-bootstrap';
+import { connect } from 'react-redux';
 import { I18n } from 'react-redux-i18n';
 // Graphql imports
 import { compose, graphql } from 'react-apollo';
@@ -10,22 +11,26 @@ import withLoadingIndicator from '../components/common/withLoadingIndicator';
 // Components imports
 import FictionHeader from '../components/debate/brightMirror/fictionHeader';
 import FictionBody from '../components/debate/brightMirror/fictionBody';
+import { displayAlert } from '../utils/utilityManager';
 // Type imports
 import type { CircleAvatarProps } from '../components/debate/brightMirror/circleAvatar';
 import type { FictionHeaderProps } from '../components/debate/brightMirror/fictionHeader';
 import type { FictionBodyProps } from '../components/debate/brightMirror/fictionBody';
 
-// TODO: add data.error check when displaying the page
-
 type BrightMirrorFictionType = {
-  // contentLocale: string,
   data: {
-    fiction: BrightMirrorFictionFragment
+    fiction: BrightMirrorFictionFragment,
+    error: any
   }
 };
 
 const brightMirrorFiction = ({ data }: BrightMirrorFictionType) => {
-  // const { contentLocale } = this.props;
+  // Handle fetching error
+  if (data.error) {
+    displayAlert('danger', I18n.t('error.loading'));
+    return null;
+  }
+
   const { fiction } = data;
   const getDisplayName = () => (fiction.creator && fiction.creator.displayName ? fiction.creator.displayName : '');
   const displayName = fiction.creator && fiction.creator.isDeleted ? I18n.t('deletedUser') : getDisplayName();
@@ -64,4 +69,20 @@ const brightMirrorFiction = ({ data }: BrightMirrorFictionType) => {
   );
 };
 
-export default compose(graphql(BrightMirrorFictionQuery), withLoadingIndicator())(brightMirrorFiction);
+const mapStateToProps = state => ({
+  contentLocale: state.i18n.locale
+});
+
+export default compose(
+  connect(mapStateToProps),
+  graphql(BrightMirrorFictionQuery, {
+    // GraphQL needed input variables
+    options: ({ id, contentLocale }) => ({
+      variables: {
+        id: id,
+        contentLocale: contentLocale
+      }
+    })
+  }),
+  withLoadingIndicator()
+)(brightMirrorFiction);

@@ -31,7 +31,9 @@ export type FictionsListProps = {
   /** All fictions */
   posts: Array<Post>,
   /** Bright Mirror identifier */
-  identifier: string
+  identifier: string,
+  /** Theme identifier */
+  themeId: string
 };
 
 const masonryOptions = {
@@ -42,13 +44,13 @@ const masonryOptions = {
 
 const getRandomColor = () => fictionBackgroundColors[Math.floor(Math.random() * fictionBackgroundColors.length)];
 
-const FictionsList = ({ posts, identifier }: FictionsListProps) => {
+const FictionsList = ({ posts, identifier, themeId }: FictionsListProps) => {
   const slug = getDiscussionSlug();
 
   const childElements = posts.map(post => (
     <Animated key={post.id} preset="scalein">
       <FictionPreview
-        link={`${get('post', { slug: slug, phase: identifier, postId: post.id })}`} // TODO: change route to fiction route
+        link={`${get('brightMirrorFiction', { slug: slug, phase: identifier, themeId: themeId, fictionId: post.id })}`}
         title={post.subject}
         creationDate={I18n.l(post.creationDate, { dateFormat: 'date.format2' })}
         authorName={post.creator.isDeleted ? I18n.t('deletedUser') : post.creator.displayName}

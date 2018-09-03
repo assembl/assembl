@@ -13,8 +13,8 @@ exports[`Bright Mirror page should hide fiction creation section if timeline is 
   >
     <FictionsList
       identifier="brightMirror"
-      lang={undefined}
       posts={Array []}
+      themeId={0}
     />
   </div>
 </div>
@@ -33,8 +33,8 @@ exports[`Bright Mirror page should hide fiction creation section if user is not 
   >
     <FictionsList
       identifier="brightMirror"
-      lang={undefined}
       posts={Array []}
+      themeId={0}
     />
   </div>
 </div>
@@ -53,8 +53,8 @@ exports[`Bright Mirror page should hide fiction creation section if user is not 
   >
     <FictionsList
       identifier="brightMirror"
-      lang={undefined}
       posts={Array []}
+      themeId={0}
     />
   </div>
 </div>
@@ -82,8 +82,8 @@ exports[`Bright Mirror page should match BrightMirror instruction snapshot 1`] =
     />
     <FictionsList
       identifier="brightMirror"
-      lang={undefined}
       posts={Array []}
+      themeId={0}
     />
   </div>
 </div>

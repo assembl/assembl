@@ -38,7 +38,8 @@ export const customFictionsList: FictionsListProps = {
       }
     }
   ],
-  identifier: 'brightMirror'
+  identifier: 'brightMirror',
+  themeId: 'themeId'
 };
 
 storiesOf('FictionsList', module).add('default', withInfo()(() => <FictionsList {...customFictionsList} />));
