@@ -2,19 +2,18 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
 import { Translate } from 'react-redux-i18n';
-import { Link } from 'react-router';
 import { NavDropdown, MenuItem } from 'react-bootstrap';
 
 import { getContextual, get } from '../../utils/routeMap';
 import UserQuery from '../../graphql/userQuery.graphql';
 import withoutLoadingIndicator from './withoutLoadingIndicator';
 import { browserHistory } from '../../router';
+import { localAwareLink } from '../../utils/utilityManager';
 
 class ProfileIcon extends React.Component {
   constructor(props) {
     super(props);
     this.setCurrentView = this.setCurrentView.bind(this);
-    this.handleLoginClick = this.handleLoginClick.bind(this);
   }
 
   componentWillMount() {
@@ -34,33 +33,30 @@ class ProfileIcon extends React.Component {
     });
   }
 
-  handleLoginClick(e) {
-    const { loginData } = this.props;
-    if (loginData && ('local' in loginData) && !loginData.local) {
-      e.preventDefault();
-      browserHistory.push(loginData.url);
-    }
-  }
-
   render() {
     const { slug, connectedUserId, displayName, showUsername, loginData } = this.props;
-    const loginUrl = loginData ?
-      `${loginData.url}?next=${this.state.next}` :
-      `${getContextual('login', { slug: slug })}?next=${this.state.next}`;
+    let loginUrl = `${getContextual('login', { slug: slug })}?next=${this.state.next}`;
+    if (loginData && loginData.url) {
+      loginUrl = loginData.url.includes('?') ?
+        `${loginData.url}&next=${this.state.next}` : `${loginData.url}?next=${this.state.next}`;
+    }
     const dropdownUser = (
       <div className="inline">
         <span className="assembl-icon-profil grey" />
         {showUsername && <span className="username">{displayName}</span>}
       </div>
     );
+    const LoginAnchor = () => (
+      <div className="connection">
+        <Translate value="navbar.connection" />
+      </div>
+    );
+    const LocalAwareAnchor = localAwareLink(LoginAnchor);
+    const urlData = { url: loginUrl, local: loginData.local };
     return (
       <div className="right avatar">
         {!connectedUserId && loginUrl && (
-          <Link to={loginUrl} onClick={this.handleLoginClick} >
-            <div className="connection">
-              <Translate value="navbar.connection" />
-            </div>
-          </Link>
+          <LocalAwareAnchor urlData={urlData} />
         )}
         {connectedUserId && (
           <ul className="dropdown-xs">
