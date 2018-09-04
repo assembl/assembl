@@ -8,7 +8,7 @@ import { Translate } from 'react-redux-i18n';
 import { displayModal, closeModal } from '../../../utils/utilityManager';
 import deletePostMutation from '../../../graphql/mutations/deletePost.graphql';
 
-function confirmModal(deletePost, postId, refetchQueries) {
+function confirmModal(deletePost, postId, refetchQueries, onDeleteCallback) {
   const title = <Translate value="debate.confirmDeletionTitle" />;
   const body = <Translate value="debate.confirmDeletionBody" />;
   const footer = [
@@ -23,6 +23,9 @@ function confirmModal(deletePost, postId, refetchQueries) {
           variables: { postId: postId }
         });
         closeModal();
+        if (onDeleteCallback) {
+          onDeleteCallback();
+        }
       }}
       className="button-submit button-dark"
     >
@@ -38,21 +41,29 @@ type RefetchQuery = {
   variables: TVariables
 };
 
-type Props = {
+export type DeletePostButtonProps = {
+  /** Mutation function name issued with deletePostMutation */
   deletePost: Function,
-  linkClassName: ?string,
+  /** Class that is applied to the Link component  */
+  linkClassName?: string,
+  /** Post identifier */
   postId: string,
-  refetchQueries: Array<RefetchQuery>
+  /** Array of refetch Queries */
+  refetchQueries?: Array<RefetchQuery>,
+  /** callback function handled by the parent component */
+  onDeleteCallback?: Function
 };
 
-const DeletePostButton = ({ deletePost, linkClassName, postId, refetchQueries }: Props) => (
-  <Link className={linkClassName} onClick={() => confirmModal(deletePost, postId, refetchQueries)}>
+const DeletePostButton = ({ deletePost, linkClassName, postId, refetchQueries, onDeleteCallback }: DeletePostButtonProps) => (
+  <Link className={linkClassName} onClick={() => confirmModal(deletePost, postId, refetchQueries, onDeleteCallback)}>
     <span className="assembl-icon-delete" />
   </Link>
 );
 
 DeletePostButton.defaultProps = {
-  refetchQueries: []
+  linkClassName: '',
+  refetchQueries: [],
+  onDeleteCallback: null
 };
 
 export default graphql(deletePostMutation, { name: 'deletePost' })(DeletePostButton);

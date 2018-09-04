@@ -18,11 +18,13 @@ describe('<BrightMirrorFiction /> - with shallow', () => {
     wrapper = shallow(<BrightMirrorFiction />);
   });
 
-  it('should render a Button101', () => {
+  it('should render a FictionHeader', () => {
     expect(wrapper.find(FictionHeader)).toHaveLength(1);
   });
 
-  it('should render a CheckboxList101', () => {
+  xit('should render a FictionToolbar');
+
+  it('should render a FictionBody', () => {
     expect(wrapper.find(FictionBody)).toHaveLength(1);
   });
 });

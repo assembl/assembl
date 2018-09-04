@@ -6,34 +6,47 @@ import { I18n } from 'react-redux-i18n';
 // Graphql imports
 import { compose, graphql } from 'react-apollo';
 import BrightMirrorFictionQuery from '../graphql/BrightMirrorFictionQuery.graphql';
+// Route helpers imports
+import { browserHistory } from '../router';
+import { get } from '../utils/routeMap';
 // HOC imports
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
 // Components imports
 import FictionHeader from '../components/debate/brightMirror/fictionHeader';
+import FictionToolbar from '../components/debate/brightMirror/fictionToobar';
 import FictionBody from '../components/debate/brightMirror/fictionBody';
 import { displayAlert } from '../utils/utilityManager';
 // Type imports
 import type { CircleAvatarProps } from '../components/debate/brightMirror/circleAvatar';
 import type { FictionHeaderProps } from '../components/debate/brightMirror/fictionHeader';
+import type { FictionToolbarProps } from '../components/debate/brightMirror/fictionToobar';
 import type { FictionBodyProps } from '../components/debate/brightMirror/fictionBody';
 
-type BrightMirrorFictionType = {
+type BrightMirrorFictionProps = {
   data: {
     fiction: BrightMirrorFictionFragment,
     error: Object
   }
 };
 
-const BrightMirrorFiction = ({ data }: BrightMirrorFictionType) => {
+const BrightMirrorFiction = ({ data }: BrightMirrorFictionProps) => {
   // Handle fetching error
   if (data.error) {
     displayAlert('danger', I18n.t('error.loading'));
     return null;
   }
 
-  const { fiction } = data;
+  // Define variables
+  const { fiction, variables } = data;
   const getDisplayName = () => (fiction.creator && fiction.creator.displayName ? fiction.creator.displayName : '');
   const displayName = fiction.creator && fiction.creator.isDeleted ? I18n.t('deletedUser') : getDisplayName();
+
+  // Define callback functions
+  const deleteFiction = () => {
+    // Route to fiction list page
+    const fictionListURL = get('idea', { slug: 'TO_SET', phase: 'TO_SET', themeId: 'TO_SET' });
+    browserHistory.push(fictionListURL);
+  };
 
   // Define components props
   const circleAvatarProps: CircleAvatarProps = {
@@ -48,6 +61,11 @@ const BrightMirrorFiction = ({ data }: BrightMirrorFictionType) => {
     circleAvatar: { ...circleAvatarProps }
   };
 
+  const fictionToolbarProps: FictionToolbarProps = {
+    fictionId: variables.id,
+    onDeleteCallback: deleteFiction
+  };
+
   const fictionBodyProps: FictionBodyProps = {
     title: fiction.subject || '',
     content: fiction.body || ''
@@ -60,6 +78,7 @@ const BrightMirrorFiction = ({ data }: BrightMirrorFictionType) => {
           <Col xs={12}>
             <article>
               <FictionHeader {...fictionHeaderProps} />
+              <FictionToolbar {...fictionToolbarProps} />
               <FictionBody {...fictionBodyProps} />
             </article>
           </Col>
@@ -85,8 +104,4 @@ export default compose(
     })
   }),
   withLoadingIndicator()
-<<<<<<< HEAD
 )(BrightMirrorFiction);
-=======
-)(brightMirrorFiction);
->>>>>>> merge 1726-1730: list bm fictions, read bm fictions
