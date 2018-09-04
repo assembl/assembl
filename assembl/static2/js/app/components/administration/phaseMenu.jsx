@@ -38,9 +38,7 @@ class PhaseMenu extends React.PureComponent<Props> {
           <Translate value={title} />
         </Link>
         {subMenu && subMenuIds.length > 0 ? (
-          <ul className="shown admin-sub-menu">
-            {subMenuIds.map(subKey => this.renderSubMenuItem(subMenu[subKey], sectionQuery))}
-          </ul>
+          <ul className="admin-sub-menu">{subMenuIds.map(subKey => this.renderSubMenuItem(subMenu[subKey], sectionQuery))}</ul>
         ) : null}
       </li>
     );

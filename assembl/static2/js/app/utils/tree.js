@@ -87,3 +87,38 @@ export function getAncestors<T: TreeNodeType>(item: T | null, nodes: Array<T>): 
   }
   return result;
 }
+
+/**
+ * @param {T: TreeNodeType} The type of the nodes
+ * @param {T | null} The item.
+ * @param {Array<T>} An array of nodes.
+ * @param {(items: Array<T>) => Array<T>} A sorter.
+ * @returns {Array<T>} Returns the path of the item.
+ */
+export function getPath<T: TreeNodeType>(
+  item: T | null,
+  nodes: Array<T>,
+  sortItems: (items: Array<T>) => Array<T>
+): Array<number> {
+  const ancestors: Array<T> = getAncestors(item, nodes);
+  const path = [];
+  const nodesIds = nodes.map(n => n.id);
+  const roots = nodes.filter(n => !nodesIds.includes(n.parentId));
+  if (ancestors.length === 0) {
+    if (roots.includes(item)) {
+      path.push(sortItems(roots).indexOf(item));
+    }
+  } else {
+    let node = item;
+    ancestors.forEach((ancestor) => {
+      let children = nodes.filter(n => n.parentId === ancestor.id);
+      children = sortItems ? sortItems(children) : children;
+      path.push(children.indexOf(node));
+      node = ancestor;
+    });
+    if (roots.includes(node)) {
+      path.push(sortItems(roots).indexOf(node));
+    }
+  }
+  return path.reverse();
+}

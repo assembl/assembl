@@ -172,7 +172,7 @@
     list-style-type: none;
     padding: 15px 0 0 30px;
 
-    li {
+    > li {
       &:last-child {
         padding: 0;
       }
