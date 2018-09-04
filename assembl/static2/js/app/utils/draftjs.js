@@ -14,14 +14,24 @@ type Entry = {
   value: string | EditorState
 };
 
+const ATTACHMENT_ENTITY = 'document';
+
 const customConvertFromHTML = convertFromHTML({
   htmlToBlock: attachmentsPlugin.htmlToBlock,
-  htmlToEntity: attachmentsPlugin.htmlToEntity
+  htmlToEntity: function (nodeName: string, node: HTMLAnchorElement, createEntity: Function): EntityInstance | null {
+    return attachmentsPlugin.htmlToEntity(nodeName, node, createEntity);
+  }
 });
 
 const customConvertToHTML = convertToHTML({
   blockToHTML: attachmentsPlugin.blockToHTML,
-  entityToHTML: attachmentsPlugin.entityToHTML
+  entityToHTML: (entity: EntityInstance, originalText: string): string => {
+    if (entity.type === ATTACHMENT_ENTITY) {
+      return attachmentsPlugin.entityToHTML(entity);
+    }
+
+    return originalText;
+  }
 });
 
 export function convertEntries(converter: Function): Function {

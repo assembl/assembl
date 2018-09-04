@@ -1,10 +1,8 @@
 // @flow
 /* draft-js plugin for attachment management */
-import { type ContentBlock, ContentState, EditorState, EntityInstance, Modifier, SelectionState } from 'draft-js';
+import { type ContentBlock, ContentState, EditorState, type EntityInstance, Modifier, SelectionState } from 'draft-js';
 import type { Attachment } from '../editAttachments';
 import { getExtension, getIconPath } from '../documentExtensionIcon';
-
-type DraftEntityType = typeof Entity;
 
 const ENTITY_TYPE = 'document';
 const BLOCK_TYPE = 'atomic';
@@ -20,31 +18,26 @@ const plugin = {
 
     return undefined;
   },
-  entityToHTML: (entity: { data: DocumentFragment }, originalText: string): string => {
-    // $FlowFixMe property `type` is missing in object type
-    if (entity.type === ENTITY_TYPE) {
-      const { id } = entity.data;
-      const externalUrl = entity.data.externalUrl ? entity.data.externalUrl : '';
-      const mimeType = entity.data.mimeType ? entity.data.mimeType : '';
-      const title = entity.data.title ? entity.data.title : '';
-      if (mimeType.startsWith('image')) {
-        return (
-          `<img class="attachment-image" src="${externalUrl}" alt="" title="${title}" ` +
-          `data-id="${id}" data-mimetype="${mimeType}" />`
-        );
-      }
-
-      const extension = getExtension(title);
-      const iconPath = getIconPath(extension);
+  entityToHTML: (entity: EntityInstance): string => {
+    const { id } = entity.data;
+    const externalUrl = entity.data.externalUrl ? entity.data.externalUrl : '';
+    const mimeType = entity.data.mimeType ? entity.data.mimeType : '';
+    const title = entity.data.title ? entity.data.title : '';
+    if (mimeType.startsWith('image')) {
       return (
-        `<a href="${externalUrl}" title="${title}">` +
-        `<img class="attachment-icon" alt="${extension}" src="${iconPath}" data-id="${id}" data-mimetype="${mimeType}"` +
-        ` data-title="${title}" data-externalurl="${externalUrl}" />` +
-        '</a>'
+        `<img class="attachment-image" src="${externalUrl}" alt="" title="${title}" ` +
+        `data-id="${id}" data-mimetype="${mimeType}" />`
       );
     }
 
-    return originalText;
+    const extension = getExtension(title);
+    const iconPath = getIconPath(extension);
+    return (
+      `<a href="${externalUrl}" title="${title}">` +
+      `<img class="attachment-icon" alt="${extension}" src="${iconPath}" data-id="${id}" data-mimetype="${mimeType}"` +
+      ` data-title="${title}" data-externalurl="${externalUrl}" />` +
+      '</a>'
+    );
   },
   htmlToBlock: (nodeName: string, node: NodeType, lastList: *, inBlock: string): void | string => {
     const isAtomicBlock = nodeName === 'div' && node.dataset.blocktype === BLOCK_TYPE;
@@ -54,7 +47,7 @@ const plugin = {
 
     return undefined;
   },
-  htmlToEntity: (nodeName: string, node: NodeType, createEntity: Function): EntityInstance | void => {
+  htmlToEntity: (nodeName: string, node: NodeType, createEntity: Function): EntityInstance | null => {
     const defaultImageMimeType = 'image/*';
     const isNotAtomicBlockNode = n => n && n.dataset && n.dataset.blocktype !== BLOCK_TYPE;
     const isLegacyImage =
@@ -97,7 +90,7 @@ const plugin = {
       });
     }
 
-    return undefined;
+    return null;
   },
 
   getAttachments: (editorState: EditorState): Array<Attachment> => {

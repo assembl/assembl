@@ -103,14 +103,6 @@ describe('attachmentsPlugin', () => {
 
   describe('entityToHTML function', () => {
     const { entityToHTML } = plugin;
-    it('should return originalText for other entities', () => {
-      const entity = {
-        type: 'foobar'
-      };
-      const result = entityToHTML(entity, 'My original text');
-      expect(result).toEqual('My original text');
-    });
-
     it('should return an img tag for images', () => {
       const entity = {
         data: {
