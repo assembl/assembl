@@ -7,6 +7,10 @@ import { type ContentState, EditorState } from 'draft-js';
 import { convertFromHTML, convertToHTML } from 'draft-convert';
 import { type List, type Map } from 'immutable';
 
+// from our workspaces
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { converters as linkConverters } from 'draft-js-link-plugin';
+
 import attachmentsPlugin from '../components/common/richTextEditor/attachmentsPlugin';
 
 type Entry = {
@@ -15,10 +19,16 @@ type Entry = {
 };
 
 const ATTACHMENT_ENTITY = 'document';
+const LINK_ENTITY = 'LINK';
 
 const customConvertFromHTML = convertFromHTML({
   htmlToBlock: attachmentsPlugin.htmlToBlock,
-  htmlToEntity: function (nodeName: string, node: HTMLAnchorElement, createEntity: Function): EntityInstance | null {
+  htmlToEntity: function (nodeName: string, node: HTMLElement, createEntity: Function): EntityInstance | null {
+    if (nodeName === 'a') {
+      // $FlowFixMe: if nodeName is 'a', node should be an HTMLAnchorElement
+      return linkConverters.htmlToEntity(nodeName, node, createEntity);
+    }
+
     return attachmentsPlugin.htmlToEntity(nodeName, node, createEntity);
   }
 });
@@ -28,6 +38,8 @@ const customConvertToHTML = convertToHTML({
   entityToHTML: (entity: EntityInstance, originalText: string): string => {
     if (entity.type === ATTACHMENT_ENTITY) {
       return attachmentsPlugin.entityToHTML(entity);
+    } else if (entity.type === LINK_ENTITY) {
+      return linkConverters.entityToHTML(entity, originalText);
     }
 
     return originalText;

@@ -6,6 +6,7 @@ import { type EditorState } from 'draft-js';
 // from our workspaces
 import EditorUtils from 'assembl-editor-utils';
 
+import linkConverters from './converters';
 import linkStrategy, { matchesEntityType } from './linkStrategy';
 import Link from './components/Link';
 import LinkButton from './components/LinkButton';
@@ -27,6 +28,8 @@ type Config = {
   modal?: ?{ current: null | React.ElementRef<any> },
   theme?: Theme
 };
+
+export const converters = linkConverters;
 
 export default (config: Config = {}) => {
   const { modal, theme } = config;
