@@ -21,7 +21,8 @@ type Props = {
   titleMsgId?: string, // eslint-disable-line react/require-default-props
   tooltips: {
     addTooltip: (props: any) => React.Node,
-    deleteTooltip: (props: any) => React.Node
+    deleteTooltip: (props: any) => React.Node,
+    deleteDisabled?: (props: any) => React.Node
   },
   withSeparators: boolean,
   subFieldName?: string,
@@ -104,7 +105,7 @@ export class Fields extends React.PureComponent<FieldsProps> {
       subFieldName,
       renderFields,
       titleMsgId,
-      tooltips: { addTooltip, deleteTooltip },
+      tooltips: { addTooltip, deleteTooltip, deleteDisabled },
       withSeparators,
       isTree,
       level,
@@ -133,7 +134,8 @@ export class Fields extends React.PureComponent<FieldsProps> {
         {fields.map((fieldname, idx) => {
           const fieldValue = fields.value[idx];
           const hasChildren = fieldValue.children && fieldValue.children.length;
-          const displayDeleteBtn = fields.length > minItems && ((isTree && !hasChildren) || !isTree);
+          const enableDeleteBtn = fields.length > minItems && ((isTree && !hasChildren) || !isTree);
+          const hideDeleteBtn = isRoot && !enableDeleteBtn;
           const displaySeparator = withSeparators && (!isTree || (isRoot && idx === fields.length - 1));
           const indexes = [...parents];
           indexes.push(idx + 1);
@@ -161,9 +163,12 @@ export class Fields extends React.PureComponent<FieldsProps> {
                       </Button>
                     </OverlayTrigger>
                   ) : null}
-                  {displayDeleteBtn ? (
-                    <OverlayTrigger placement="top" overlay={deleteTooltip()}>
-                      <Button onClick={() => this.remove(idx)} className="admin-icons">
+                  {!hideDeleteBtn ? (
+                    <OverlayTrigger
+                      placement="top"
+                      overlay={!enableDeleteBtn && deleteDisabled ? deleteDisabled() : deleteTooltip()}
+                    >
+                      <Button disabled={!enableDeleteBtn} onClick={() => this.remove(idx)} className="admin-icons">
                         <span className="assembl-icon-delete grey" />
                       </Button>
                     </OverlayTrigger>
@@ -182,7 +187,8 @@ export class Fields extends React.PureComponent<FieldsProps> {
                     titleMsgId={titleMsgId}
                     tooltips={{
                       addTooltip: addTooltip,
-                      deleteTooltip: deleteTooltip
+                      deleteTooltip: deleteTooltip,
+                      deleteDisabled: deleteDisabled
                     }}
                     withSeparators={withSeparators}
                     level={level + 1}

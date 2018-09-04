@@ -68,6 +68,14 @@ export const deleteThematicTooltip = () => (
   </Tooltip>
 );
 
+export const deleteSubThematicDisabledTooltip = () => (
+  <Tooltip id="deleteSubThematicDisabledTooltip">
+    <Translate value="administration.deleteSubThematicDisabled" />
+  </Tooltip>
+);
+
+export const thematicTitle = (title: string) => <Tooltip id="thematicTitle">{title}</Tooltip>;
+
 export const languageTooltip = (
   <Tooltip id="languageTooltip">
     <Translate value="administration.changeLanguage" />

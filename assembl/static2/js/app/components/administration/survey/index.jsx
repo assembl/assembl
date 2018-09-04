@@ -44,7 +44,7 @@ const DumbSurveyAdminForm = ({ client, section, thematicId, debateId, editLocale
       <React.Fragment>
         <div className="admin-content">
           <AdminForm handleSubmit={handleSubmit} pristine={pristine} submitting={submitting}>
-            {section === '1' && <Step1 editLocale={editLocale} />}
+            {section === '1' && <Step1 editLocale={editLocale} locale={locale} />}
             {section === 'configThematics' && (
               <ConfigureThematicForm thematicId={thematicId} editLocale={editLocale} values={values} />
             )}

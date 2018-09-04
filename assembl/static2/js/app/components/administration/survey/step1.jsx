@@ -6,16 +6,17 @@ import { type ApolloClient, withApollo } from 'react-apollo';
 
 import FieldArrayWithActions from '../../form/fieldArrayWithActions';
 import MultilingualTextFieldAdapter from '../../form/multilingualTextFieldAdapter';
-import { addThematicTooltip, deleteThematicTooltip } from '../../common/tooltips';
+import { addThematicTooltip, deleteThematicTooltip, deleteSubThematicDisabledTooltip } from '../../common/tooltips';
 import { removeMenuItem, addMenuItem, swapMenuItem } from '../thematicsMenu';
 import { PHASES } from '../../../constants';
 
 type Props = {
   editLocale: string,
+  locale: string,
   client: ApolloClient
 };
 
-const Step1 = ({ editLocale, client }: Props) => (
+const Step1 = ({ editLocale, locale, client }: Props) => (
   <React.Fragment>
     <div className="form-title">{I18n.t('administration.survey.1')}</div>
     <FieldArrayWithActions
@@ -23,11 +24,11 @@ const Step1 = ({ editLocale, client }: Props) => (
       name="themes"
       subFieldName="children"
       minItems={1}
-      maxLevel={1}
-      onRemove={id => removeMenuItem(id, client, PHASES.survey)}
-      onAdd={(id, parentId, index) => addMenuItem(id, parentId, index, client, PHASES.survey)}
-      onUp={(id, parentId, index, targetIndex) => swapMenuItem(id, parentId, index, targetIndex, client, PHASES.survey)}
-      onDown={(id, parentId, index, targetIndex) => swapMenuItem(id, parentId, index, targetIndex, client, PHASES.survey)}
+      // maxLevel={1}
+      onRemove={id => removeMenuItem(id, client, PHASES.survey, locale)}
+      onAdd={(id, parentId, index) => addMenuItem(id, parentId, index, client, PHASES.survey, locale)}
+      onUp={(id, parentId, index, targetIndex) => swapMenuItem(id, parentId, index, targetIndex, client, PHASES.survey, locale)}
+      onDown={(id, parentId, index, targetIndex) => swapMenuItem(id, parentId, index, targetIndex, client, PHASES.survey, locale)}
       renderFields={({ name, fieldIndex }) => (
         <Field
           required
@@ -39,7 +40,8 @@ const Step1 = ({ editLocale, client }: Props) => (
       )}
       tooltips={{
         addTooltip: addThematicTooltip,
-        deleteTooltip: deleteThematicTooltip
+        deleteTooltip: deleteThematicTooltip,
+        deleteDisabled: deleteSubThematicDisabledTooltip
       }}
     />
   </React.Fragment>

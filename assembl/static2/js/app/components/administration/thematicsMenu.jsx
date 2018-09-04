@@ -1,14 +1,17 @@
 // @flow
 import React from 'react';
 import sortBy from 'lodash/sortBy';
-import { Link } from 'react-router';
+import classNames from 'classnames';
+import { Link, withRouter } from 'react-router';
+import { OverlayTrigger } from 'react-bootstrap';
 import { compose, graphql, type ApolloClient } from 'react-apollo';
 import { Translate } from 'react-redux-i18n';
 
 import withLoadingIndicator from '../common/withLoadingIndicator';
-import { get } from '../../utils/routeMap';
-import { getPartialTreeByParentId } from '../../utils/tree';
+import { get, goTo } from '../../utils/routeMap';
+import { getPartialTreeByParentId, getAncestors } from '../../utils/tree';
 import ThematicsDataQuery from '../../graphql/ThematicsDataQuery.graphql';
+import { thematicTitle } from '../common/tooltips';
 
 type Thematic = {
   /* The thematic id */
@@ -16,26 +19,51 @@ type Thematic = {
   /* The id of the thematic's parent */
   parentId: string,
   /* The order Thematic in the idea tree. */
-  order: number
+  order: number,
+  /* The Thematic title. */
+  title: string
+};
+
+type RootIdea = {
+  id: string
 };
 
 type Data = {
   /* A liste of thematics */
   thematicsData: Array<Thematic>,
   /* The root Idea of the idea tree */
-  rootIdea: { id: string }
+  rootIdea: RootIdea
 };
 
-type Props = {
+type ThematicsMenuProps = {
   /* The root sction id */
   rootSectionId: string,
-  /* The menu item that calls this component. See constants/PHASES_ADMIN_MENU */
-  menuItem: { sectionId: string },
   /* The slug for the composition of the url */
   slug: { slug: string | null },
-  phase: Phase,
-  /* The result returned by ThematicsDataQuery */
-  data: Data
+  phase: Phase
+};
+
+type ThematicsMenuItemProps = {
+  /* A liste of thematics */
+  descendants: Array<Thematic>,
+  /* The root Idea of the idea tree */
+  roots: Array<Thematic>,
+  /* The roots parents indexes */
+  parents: Array<number>,
+  /* The liste of traversed thematics */
+  activeThematics: Array<string>,
+  /* The menu section query */
+  sectionQuery: string,
+  className: string
+} & ThematicsMenuProps;
+
+type Props = {
+  /* The menu item that calls this component. See constants/PHASES_ADMIN_MENU */
+  menuItem: { sectionId: string, title: string },
+  /* The ThematicsDataQuery result */
+  data: Data,
+  /* The router location */
+  location: { query: { section: string, thematicId: string } }
 };
 
 /**
@@ -44,8 +72,8 @@ type Props = {
  * @param {string} The phase identifier.
  * Remove the thematic with id equal to id from the result of the ThematicsDataQuery query.
  */
-export const removeMenuItem = (id: string, client: ApolloClient, identifier: string) => {
-  const query = { query: ThematicsDataQuery, variables: { identifier: identifier } };
+export const removeMenuItem = (id: string, client: ApolloClient, identifier: string, locale: string) => {
+  const query = { query: ThematicsDataQuery, variables: { identifier: identifier, lang: locale } };
   const data = client.readQuery(query);
   client.writeQuery({
     ...query,
@@ -63,13 +91,21 @@ export const removeMenuItem = (id: string, client: ApolloClient, identifier: str
  * @param {string} The phase identifier.
  * Add a new thematic to the result of the ThematicsDataQuery query.
  */
-export const addMenuItem = (id: string, parentId: string, index: number, client: ApolloClient, identifier: string) => {
-  const query = { query: ThematicsDataQuery, variables: { identifier: identifier } };
+export const addMenuItem = (
+  id: string,
+  parentId: string,
+  index: number,
+  client: ApolloClient,
+  identifier: string,
+  locale: string
+) => {
+  const query = { query: ThematicsDataQuery, variables: { identifier: identifier, lang: locale } };
   const data = client.readQuery(query);
   const newMenuItem = {
     id: id,
     order: index + 1,
     parentId: parentId,
+    title: '',
     __typename: 'Idea'
   };
   client.writeQuery({
@@ -95,9 +131,10 @@ export const swapMenuItem = (
   index: number,
   targetIndex: number,
   client: ApolloClient,
-  identifier: string
+  identifier: string,
+  locale: string
 ) => {
-  const query = { query: ThematicsDataQuery, variables: { identifier: identifier } };
+  const query = { query: ThematicsDataQuery, variables: { identifier: identifier, lang: locale } };
   const data = client.readQuery(query);
   const isDown = targetIndex - index > 0;
   const newThematics = data.thematicsData.map((thematic) => {
@@ -125,47 +162,150 @@ export const swapMenuItem = (
   });
 };
 
-class ThematicsMenu extends React.PureComponent<Props> {
-  renderMenu = (rootItem: string, thematics: Array<Thematic>, sectionQuery: string, parents: Array<string> = []) => {
-    const { roots, descendants } = getPartialTreeByParentId(rootItem, thematics);
-    if (roots.length === 0) return null;
-    const { slug, phase } = this.props;
-    return sortBy(roots, 'order').map((thematic, index) => {
-      const indexes = [...parents];
-      indexes.push(index + 1);
-      return (
-        <React.Fragment>
-          <li key={thematic.id}>
-            <Link
-              to={`${get('administration', slug)}${get('adminPhase', {
-                ...slug,
-                phase: phase.identifier
-              })}${sectionQuery}&thematicId=${thematic.id}`}
-              activeClassName="active"
-            >
-              <Translate value="administration.menu.configureThematic" index={indexes.join('.')} />
-            </Link>
-          </li>
-          {this.renderMenu(thematic.id, descendants, sectionQuery, indexes)}
-        </React.Fragment>
-      );
-    });
+type State = {
+  openedThematic: ?string
+};
+
+class ThematicsMenuItems extends React.Component<ThematicsMenuItemProps, State> {
+  static defaultProps = {
+    parents: [],
+    className: 'admin-sub-menu-n'
+  };
+
+  static getDerivedStateFromProps(props) {
+    const { roots, activeThematics } = props;
+    const activeThematic = roots.find(thematic => activeThematics.includes(thematic.id));
+    return {
+      openedThematic: activeThematic ? activeThematic.id : null
+    };
+  }
+
+  state = {
+    openedThematic: null
+  };
+
+  toggle = (id) => {
+    this.setState(prevState => ({ openedThematic: prevState.openedThematic !== id ? id : null }));
   };
 
   render() {
-    const { rootSectionId, menuItem: { sectionId }, data: { thematicsData, rootIdea } } = this.props;
-    if (!thematicsData) return null;
-    const sectionIndex = rootSectionId ? `${rootSectionId}.${sectionId}` : sectionId;
-    const sectionQuery = `?section=${sectionIndex}`;
-    return this.renderMenu(rootIdea && rootIdea.id, thematicsData, sectionQuery);
+    const { className, activeThematics, rootSectionId, roots, descendants, slug, phase, parents, sectionQuery } = this.props;
+    const { openedThematic } = this.state;
+    return (
+      <ul className={className}>
+        {sortBy(roots, 'order').map((thematic, index) => {
+          const indexes = [...parents];
+          indexes.push(index + 1);
+          const subMenuTree = getPartialTreeByParentId(thematic.id, descendants);
+          const hasSubMenu = subMenuTree.roots.length > 0;
+          const opened = openedThematic === thematic.id;
+          return (
+            <React.Fragment>
+              <li>
+                <div className="admin-menu-item">
+                  {hasSubMenu ? (
+                    <span
+                      className={classNames('arrow', {
+                        'assembl-icon-up-open': opened,
+                        'assembl-icon-down-open': !opened
+                      })}
+                      onClick={() => this.toggle(thematic.id)}
+                    />
+                  ) : null}
+                  <OverlayTrigger placement="top" overlay={thematicTitle(thematic.title)}>
+                    <Link
+                      to={`${get('administration', slug)}${get('adminPhase', {
+                        ...slug,
+                        phase: phase.identifier
+                      })}${sectionQuery}&thematicId=${thematic.id}`}
+                      activeClassName="active"
+                    >
+                      <Translate value="administration.menu.configureThematic" index={indexes.join('.')} />
+                    </Link>
+                  </OverlayTrigger>
+                </div>
+              </li>
+              {opened && hasSubMenu ? (
+                <li>
+                  <ThematicsMenuItems
+                    slug={slug}
+                    phase={phase}
+                    descendants={subMenuTree.descendants}
+                    roots={subMenuTree.roots}
+                    rootSectionId={rootSectionId}
+                    sectionQuery={sectionQuery}
+                    parents={indexes}
+                    activeThematics={activeThematics}
+                  />
+                </li>
+              ) : null}
+            </React.Fragment>
+          );
+        })}
+      </ul>
+    );
   }
 }
 
+const ThematicsMenu = ({
+  slug,
+  phase,
+  rootSectionId,
+  menuItem,
+  data: { rootIdea, thematicsData },
+  location
+}: ThematicsMenuProps & Props) => {
+  if (!thematicsData) return null;
+  const sectionIndex = rootSectionId ? `${rootSectionId}.${menuItem.sectionId}` : menuItem.sectionId;
+  const sectionQuery = `?section=${sectionIndex}`;
+  const { roots, descendants } = getPartialTreeByParentId(rootIdea && rootIdea.id, thematicsData);
+  if (roots.length === 0) return null;
+  const firstThematics = sortBy(roots, 'order')[0];
+  const { section, thematicId } = location.query;
+  const requestThematic = thematicsData.find(t => t.id === thematicId) || null;
+  const activeThematics = getAncestors(requestThematic, thematicsData).map(t => t.id);
+  activeThematics.push(thematicId);
+  const opened = sectionIndex === section;
+  const to = `${get('administration', slug)}${get('adminPhase', {
+    ...slug,
+    phase: phase.identifier
+  })}${sectionQuery}&thematicId=${firstThematics.id}`;
+  return (
+    <li>
+      <div className="admin-menu-item">
+        <span
+          className={classNames('arrow', {
+            'assembl-icon-up-open': opened,
+            'assembl-icon-down-open': !opened
+          })}
+          onClick={() => goTo(to)}
+        />
+        <Link to={to} activeClassName="active">
+          <Translate value={menuItem.title} />
+        </Link>
+      </div>
+      {opened ? (
+        <ThematicsMenuItems
+          className="admin-sub-menu"
+          slug={slug}
+          phase={phase}
+          descendants={descendants}
+          roots={roots}
+          rootSectionId={rootSectionId}
+          sectionQuery={sectionQuery}
+          activeThematics={activeThematics}
+        />
+      ) : null}
+    </li>
+  );
+};
+
 export default compose(
   graphql(ThematicsDataQuery, {
-    options: ({ phase }) => ({
-      variables: { identifier: phase.identifier }
+    options: ({ phase, locale }) => ({
+      variables: { identifier: phase.identifier, lang: locale }
     })
   }),
-  withLoadingIndicator({ textHidden: true })
+  withLoadingIndicator({ textHidden: true }),
+  withRouter
 )(ThematicsMenu);

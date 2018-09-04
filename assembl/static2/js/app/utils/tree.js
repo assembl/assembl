@@ -70,3 +70,20 @@ export function getTree<T: TreeNodeType>(rootId: string, nodes: Array<T>, childr
   if (roots.length === 0) return [];
   return roots.map(item => ({ ...item, [childrenName]: getTree(item.id, descendants, childrenName) }));
 }
+
+/**
+ * @param {T: TreeNodeType} The type of the nodes
+ * @param {Array<T>} The item.
+ * @param {Array<T>} An array of nodes.
+ * @returns {Array<T>} Returns the ancestors included in nodes of the item.
+ */
+export function getAncestors<T: TreeNodeType>(item: T | null, nodes: Array<T>): Array<T> {
+  const result = [];
+  if (!item || !item.parentId) return result;
+  const parent = nodes.find(node => item && node.id === item.parentId);
+  if (parent) {
+    result.push(parent);
+    result.push(...getAncestors(parent, nodes));
+  }
+  return result;
+}
