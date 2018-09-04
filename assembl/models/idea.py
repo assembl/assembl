@@ -1180,6 +1180,10 @@ class RootIdea(Idea):
 
     crud_permissions = CrudPermissions(P_ADMIN_DISC)
 
+    @classmethod
+    def graphene_type(cls):
+        return 'Idea'
+
 
 class IdeaLink(HistoryMixin, DiscussionBoundBase):
     """

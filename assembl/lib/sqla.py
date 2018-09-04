@@ -436,9 +436,12 @@ class BaseOps(object):
         return cls.base_polymorphic_class().external_typename()
 
     @classmethod
+    def graphene_type(cls):
+        return cls.__name__
+
+    @classmethod
     def graphene_id_for(cls, id):
-        from graphene.relay import Node
-        return Node.to_global_id(cls.external_typename_with_inheritance(), id)
+        return Node.to_global_id(cls.graphene_type(), id)
 
     def graphene_id(self):
         return self.graphene_id_for(self.id)

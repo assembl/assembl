@@ -4,6 +4,7 @@ import uuid
 import logging
 from abc import ABCMeta, abstractmethod
 import simplejson as json
+
 from sqlalchemy import (
     Column,
     UniqueConstraint,
@@ -582,6 +583,10 @@ class Post(Content):
 
         first_idea = ideas[0]
         return first_idea.get_associated_phase()
+
+    @classmethod
+    def graphene_type(cls):
+        return 'Post'
 
 
 def orm_insert_listener(mapper, connection, target):

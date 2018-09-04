@@ -10,6 +10,21 @@ from assembl.graphql.schema import Schema as schema
 from assembl.graphql.utils import create_root_thematic
 
 
+def test_graphene_id():
+    assert models.RootIdea.graphene_type() == 'Idea'
+    assert models.Idea.graphene_type() == 'Idea'
+    assert models.Thematic.graphene_type() == 'Thematic'
+    assert models.Question.graphene_type() == 'Question'
+    assert models.AgentProfile.graphene_type() == 'AgentProfile'
+    assert models.User.graphene_type() == 'AgentProfile'
+    assert models.Post.graphene_type() == 'Post'
+    assert models.AssemblPost.graphene_type() == 'Post'
+    assert models.PropositionPost.graphene_type() == 'Post'
+    assert models.VoteSession.graphene_type() == 'VoteSession'
+    assert models.TokenCategorySpecification.graphene_type() == 'TokenCategorySpecification'
+    assert models.DiscussionPhase.graphene_type() == 'DiscussionPhase'
+
+
 def test_get_locales(graphql_request):
     res = schema.execute(
         u'query { locales(lang: "fr") { localeCode, label } }', context_value=graphql_request)

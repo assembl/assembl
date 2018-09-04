@@ -198,6 +198,38 @@ def test_graphql_get_all_ideas_thread_without_vote_proposals(phases, graphql_req
     assert len(res.data['ideas']) == 3
 
 
+def test_graphql_get_all_ideas_survey_phase(phases, graphql_request,
+                               user_language_preference_en_cookie,
+                               thematic_and_question):
+    res = schema.execute(
+        u"""query AllIdeasQuery($lang: String!, $discussionPhaseId: Int!) {
+              ideas(discussionPhaseId: $discussionPhaseId) {
+                ... on Thematic {
+                  id
+                  title(lang: $lang)
+                  parentId
+                  ancestors
+                }
+              }
+              rootIdea(discussionPhaseId: $discussionPhaseId) {
+                ... on Thematic {
+                  id
+                }
+              }
+            }
+        """,
+        context_value=graphql_request,
+        variable_values={"discussionPhaseId": phases['survey'].id, "lang": u"en"})
+    assert res.errors is None
+    root_idea = res.data['rootIdea']
+    assert root_idea['id'] is not None
+    assert len(res.data['ideas']) == 1
+    first_idea = res.data['ideas'][0]
+    assert first_idea['title'] == u'Understanding the dynamics and issues'
+    assert first_idea['parentId'] == root_idea['id']
+    assert root_idea['id'] in first_idea['ancestors']
+
+
 def test_graphql_get_all_ideas_with_modified_order(phases, graphql_request,
                                user_language_preference_en_cookie,
                                subidea_1_1_1_1_1, subidea_1_1_1_1_2):

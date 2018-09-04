@@ -66,6 +66,8 @@ class IdeaInterface(graphene.Interface):
         'assembl.graphql.vote_session.VoteSpecificationUnion',
         required=True, description=docs.IdeaInterface.vote_specifications)
     type = graphene.String(description=docs.IdeaInterface.type)
+    parent_id = graphene.ID(description=docs.Idea.parent_id)
+    ancestors = graphene.List(graphene.ID, description=docs.Idea.ancestors)
 
     def resolve_title(self, args, context, info):
         return resolve_langstring(self.title, args.get('lang'))
@@ -129,6 +131,18 @@ class IdeaInterface(graphene.Interface):
 
     def resolve_type(self, args, context, info):
         return self.__class__.__name__
+
+    def resolve_parent_id(self, args, context, info):
+        if not self.parents:
+            return None
+
+        return self.parents[0].graphene_id()
+
+    def resolve_ancestors(self, args, context, info):
+        # We use id_only=True and models.Idea.get on purpose, to
+        # use a simpler ancestors query and use Idea identity map.
+        return [models.Idea.get(id).graphene_id()
+                for id in self.get_all_ancestors(id_only=True)]
 
 
 class IdeaAnnouncementInput(graphene.InputObjectType):
@@ -225,12 +239,10 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
     # This is the "What you need to know"
     synthesis_title = graphene.String(lang=graphene.String(), description=docs.Idea.synthesis_title)
     children = graphene.List(lambda: Idea, description=docs.Idea.children)
-    parent_id = graphene.ID(description=docs.Idea.parent_id)
     posts = SQLAlchemyConnectionField('assembl.graphql.post.PostConnection', description=docs.Idea.posts)  # use dotted name to avoid circular import  # noqa: E501
     contributors = graphene.List(AgentProfile, description=docs.Idea.contributors)
     announcement = graphene.Field(lambda: IdeaAnnouncement, description=docs.Idea.announcement)
     message_columns = graphene.List(lambda: IdeaMessageColumn, description=docs.Idea.message_columns)
-    ancestors = graphene.List(graphene.ID, description=docs.Idea.ancestors)
     vote_results = graphene.Field(VoteResults, required=True, description=docs.Idea.vote_results)
 
     def resolve_vote_results(self, args, context, info):
@@ -280,16 +292,6 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
     def resolve_children(self, args, context, info):
         # filter on child.hidden to not include the root thematic in the children of root_idea  # noqa: E501
         return [child for child in self.get_children() if not child.hidden]
-
-    def resolve_parent_id(self, args, context, info):
-        if not self.source_links:
-            return None
-
-        return Node.to_global_id('Idea', self.source_links[0].source_id)
-
-    def resolve_ancestors(self, args, context, info):
-        return [Node.to_global_id('Idea', id)
-                for id in self.get_all_ancestors(id_only=True)]
 
     def resolve_posts(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
