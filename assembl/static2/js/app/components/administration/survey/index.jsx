@@ -31,7 +31,7 @@ const steps = ['1', '2', '3'];
 
 const DumbSurveyAdminForm = ({ client, section, thematicId, debateId, editLocale, locale }: Props) => (
   <LoadSaveReinitializeForm
-    load={(fetchPolicy: FetchPolicy) => load(client, fetchPolicy)}
+    load={(fetchPolicy: FetchPolicy) => load(client, fetchPolicy, locale)}
     loading={loading}
     postLoadFormat={postLoadFormat}
     createMutationsPromises={createMutationsPromises(client)}

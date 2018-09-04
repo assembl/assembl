@@ -165,22 +165,29 @@ const ThematicsMenuItems = ({ roots, descendants, slug, phase, indexes, sectionQ
     subIndexes.push(index + 1);
     const subMenuTree = getPartialTreeByParentId(thematic.id, descendants);
     const hasSubMenu = subMenuTree.roots.length > 0;
+    const link = (
+      <Link
+        to={`${get('administration', slug)}${get('adminPhase', {
+          ...slug,
+          phase: phase.identifier
+        })}${sectionQuery}&thematicId=${thematic.id}`}
+        activeClassName="active"
+      >
+        <Translate value="administration.menu.configureThematic" index={subIndexes.join('.')} />
+      </Link>
+    );
     return (
       <MenuItem
         {...menuProps}
         id={index}
         title={
-          <OverlayTrigger placement="top" overlay={thematicTitle(thematic.title)}>
-            <Link
-              to={`${get('administration', slug)}${get('adminPhase', {
-                ...slug,
-                phase: phase.identifier
-              })}${sectionQuery}&thematicId=${thematic.id}`}
-              activeClassName="active"
-            >
-              <Translate value="administration.menu.configureThematic" index={subIndexes.join('.')} />
-            </Link>
-          </OverlayTrigger>
+          thematic.title ? (
+            <OverlayTrigger placement="top" overlay={thematicTitle(thematic.title)}>
+              {link}
+            </OverlayTrigger>
+          ) : (
+            link
+          )
         }
       >
         {hasSubMenu ? (
@@ -253,7 +260,8 @@ const ThematicsMenu = ({
 export default compose(
   graphql(ThematicsDataQuery, {
     options: ({ phase, locale }) => ({
-      variables: { identifier: phase.identifier, lang: locale }
+      variables: { identifier: phase.identifier, lang: locale },
+      fetchPolicy: 'cache-first'
     })
   }),
   withLoadingIndicator({ textHidden: true }),

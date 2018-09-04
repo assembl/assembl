@@ -12,6 +12,14 @@ type Props = {
   thematicId: string
 };
 
+const getSectionTitle = (section: string, thematicId: string): string | null => {
+  if (PHASES_ADMIN_MENU.survey.subMenu.configThematics && thematicId) {
+    return 'administration.survey.configThematic';
+  }
+  const menuItem = getAdminMenuSection(section, PHASES_ADMIN_MENU.survey.subMenu);
+  return (menuItem && menuItem.title) || null;
+};
+
 const SectionHlper = ({ section, thematicId }: Props) => {
   if (thematicId) return null;
   switch (section) {
@@ -28,8 +36,7 @@ const SectionHlper = ({ section, thematicId }: Props) => {
 };
 
 const SurveyAdmin = ({ section, thematicId }: Props) => {
-  const menuItem = getAdminMenuSection(section, PHASES_ADMIN_MENU.survey.subMenu);
-  const sectionTitleMsgId = menuItem && menuItem.title;
+  const sectionTitleMsgId = getSectionTitle(section, thematicId);
   return (
     <div className="survey-admin">
       <div className="admin-box">

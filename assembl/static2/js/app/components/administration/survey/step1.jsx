@@ -24,7 +24,7 @@ const Step1 = ({ editLocale, locale, client }: Props) => (
       name="themes"
       subFieldName="children"
       minItems={1}
-      // maxLevel={1}
+      maxLevel={1}
       onRemove={id => removeMenuItem(id, client, PHASES.survey, locale)}
       onAdd={(id, parentId, index) => addMenuItem(id, parentId, index, client, PHASES.survey, locale)}
       onUp={(id, parentId, index, targetIndex) => swapMenuItem(id, parentId, index, targetIndex, client, PHASES.survey, locale)}
