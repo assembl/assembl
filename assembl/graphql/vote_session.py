@@ -199,11 +199,11 @@ class VoteSpecificationInterface(graphene.Interface):
         return False if self.is_custom is None else self.is_custom
 
     def resolve_vote_session_id(self, args, context, info):
-        return Node.to_global_id('VoteSession', self.widget_id)
+        return models.VoteSession.graphene_id_for(self.widget_id)
 
     def resolve_vote_spec_template_id(self, args, context, info):
         if self.vote_spec_template_id:
-            return Node.to_global_id(self.__class__.__name__, self.vote_spec_template_id)
+            return self.graphene_id_for(self.vote_spec_template_id)
 
     def resolve_vote_type(self, args, context, info):
         return self.type

@@ -1,6 +1,4 @@
 # -*- coding=utf-8 -*-
-from graphql_relay.node.node import from_global_id, to_global_id
-
 from assembl.graphql.schema import Schema as schema
 
 
@@ -71,7 +69,7 @@ def test_mutation_update_discussion_phase(graphql_request, discussion_with_2_pha
 
     graphql_request.POST['variables.image'] = FieldStorage()
     phase1 = discussion_with_2_phase_interface_v2.timeline_events[0]
-    phase1_id = to_global_id('DiscussionPhase', phase1.id)
+    phase1_id = phase1.graphene_id()
     res = schema.execute(
         graphql_registry['updateDiscussionPhase'],
         context_value=graphql_request,
@@ -107,9 +105,10 @@ def test_mutation_update_discussion_phase(graphql_request, discussion_with_2_pha
     assert phase1_updated['image']['mimeType'] == 'image/png'
     assert phase1_updated['order'] == 1.0
 
+
 def test_mutation_delete_discussion_phase(graphql_request, discussion_with_2_phase_interface_v2, timeline_phase2_interface_v2, graphql_registry):
     phase1 = discussion_with_2_phase_interface_v2.timeline_events[0]
-    phase1_id = to_global_id('DiscussionPhase', phase1.id)
+    phase1_id = phase1.graphene_id()
     res = schema.execute(
         graphql_registry['deleteDiscussionPhase'],
         context_value=graphql_request,

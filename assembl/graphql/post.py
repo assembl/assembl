@@ -211,7 +211,7 @@ class PostInterface(SQLAlchemyInterface):
         if self.parent_id is None:
             return None
 
-        return Node.to_global_id('Post', self.parent_id)
+        return models.Post.graphene_id_for(self.parent_id)
 
     def resolve_body_mime_type(self, args, context, info):
         return self.get_body_mime_type()

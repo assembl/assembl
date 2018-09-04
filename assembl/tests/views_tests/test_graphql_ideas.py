@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
 import json
-import pytest
 
-from graphql_relay.node.node import to_global_id, from_global_id
+from graphql_relay.node.node import from_global_id
 
-from assembl import models
 from assembl.graphql.schema import Schema as schema
 
 
@@ -551,9 +549,7 @@ query Post($id: ID!) {
 
 
 def test_announcement_on_idea(graphql_request, announcement_en_fr):
-    from graphene.relay import Node
-    idea_id = announcement_en_fr.idea.id
-    node_id = Node.to_global_id('Idea', idea_id)
+    node_id = announcement_en_fr.idea.graphene_id()
     res = schema.execute(u"""
 query Idea($id: ID!, $lang: String!){
     idea: node(id: $id) {
@@ -579,9 +575,7 @@ query Idea($id: ID!, $lang: String!){
 
 
 def test_no_announcement_on_ideas(graphql_request, idea_with_en_fr):
-    from graphene.relay import Node
-    idea_id = idea_with_en_fr.id
-    node_id = Node.to_global_id('Idea', idea_id)
+    node_id = idea_with_en_fr.graphene_id()
     res = schema.execute(u"""
 query Idea($id: ID!, $lang: String!){
     idea: node(id: $id) {

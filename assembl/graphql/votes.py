@@ -21,13 +21,13 @@ class VoteInterface(graphene.Interface):
     proposal_id = graphene.ID(required=True)
 
     def resolve_voter_id(self, args, context, info):
-        return Node.to_global_id('AgentProfile', self.voter_id)
+        return models.AgentProfile.graphene_id_for(self.voter_id)
 
     def resolve_vote_spec_id(self, args, context, info):
-        return Node.to_global_id(self.vote_spec.__class__.__name__, self.vote_spec_id)
+        return self.vote_spec.graphene_id()
 
     def resolve_proposal_id(self, args, context, info):
-        return Node.to_global_id('Idea', self.idea_id)
+        return models.Idea.graphene_id_for(self.idea_id)
 
 
 class TokenVote(SecureObjectType, SQLAlchemyObjectType):
@@ -41,7 +41,7 @@ class TokenVote(SecureObjectType, SQLAlchemyObjectType):
     token_category_id = graphene.ID(required=True)
 
     def resolve_token_category_id(self, args, context, info):
-        return Node.to_global_id('TokenCategorySpecification', self.token_category_id)
+        return self.token_category.graphene_id()
 
 
 class GaugeVote(SecureObjectType, SQLAlchemyObjectType):

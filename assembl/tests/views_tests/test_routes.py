@@ -1,7 +1,6 @@
 import pytest
 
 from urllib import quote_plus, unquote
-from graphene.relay import Node
 
 backbone_prefix = "/debate/"
 react_prefix = "/"
@@ -315,7 +314,7 @@ def test_route_discussion_post_v2(
     furl = FrontendUrls(discussion_with_2_phase_interface_v2)
     idea_id = subidea_1.graphene_id()
     phase_identifier = thread_phase.identifier
-    phase_id = Node.to_global_id('DiscussionPhase', thread_phase.id)
+    phase_id = thread_phase.graphene_id()
     post_id = post_related_to_sub_idea_1.graphene_id()
     expected_path = furl.get_frontend_url(
         'post', phase=phase_identifier, themeId=idea_id, phaseId=phase_id, element=post_id)
@@ -362,7 +361,7 @@ def test_route_discussion_idea_v2(
     furl = FrontendUrls(discussion_with_2_phase_interface_v2)
     headers = get_response_headers(resp)
     phase_identifier = thread_phase.identifier
-    phase_id = Node.to_global_id('DiscussionPhase', thread_phase.id)
+    phase_id = thread_phase.graphene_id()
     idea_id = subidea_1.graphene_id()
     expected_path = furl.get_frontend_url(
         'idea', phase=phase_identifier, phaseId=phase_id, themeId=idea_id)
@@ -437,7 +436,7 @@ def test_url_to_synthesis_post_with_timeline(discussion, synthesis_post_1,
     assert get_current_phase_identifier(discussion.timeline_events) ==\
         u'thread'
     assert current_phase_use_v1_interface(discussion.timeline_events) is False
-    post_id = Node.to_global_id('Post', synthesis_post_1.id)
+    post_id = synthesis_post_1.graphene_id()
     assert '/syntheses/{id}'.format(id=post_id)\
         in frontend_urls.get_post_url(synthesis_post_1)
 
@@ -473,7 +472,7 @@ def test_url_to_post_v2(discussion, root_post_en_under_positive_column_of_idea,
         current_phase_use_v1_interface
     )
     phase = root_post_en_under_positive_column_of_idea.get_created_phase()
-    phase_id = Node.to_global_id('DiscussionPhase', phase.id)
+    phase_id = phase.graphene_id()
     assert get_current_phase_identifier(discussion.timeline_events) ==\
         u'thread'
     assert current_phase_use_v1_interface(discussion.timeline_events) is False
@@ -491,7 +490,7 @@ def test_url_to_post_v2_proposal(discussion, proposals_en_fr,
     )
     proposal = proposals_en_fr[0]
     phase = proposal.get_created_phase()
-    phase_id = Node.to_global_id('DiscussionPhase', phase.id)
+    phase_id = phase.graphene_id()
     assert get_current_phase_identifier(discussion.timeline_events) ==\
         u'thread'
     assert current_phase_use_v1_interface(discussion.timeline_events) is False
