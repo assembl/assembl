@@ -1,0 +1,15 @@
+.action-buttons {
+  margin-bottom: 85px;
+  text-align: right;
+
+  .assembl-icon-delete {
+    color: $black;
+    font-size: $fiction-toolbar-icon-size;
+  }
+}
+
+@media screen and (min-width: $screen-sm-min) {
+  .action-buttons {
+    margin-bottom: 65px;
+  }
+}

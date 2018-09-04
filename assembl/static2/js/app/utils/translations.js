@@ -393,7 +393,9 @@ const Translations = {
         postSuccessMsg: "Merci pour votre participation. Votre fiction a bien été enregistrée !",
         allFictions: "Fictions déjà parues",
         editFiction: "Editez votre fiction",
-        fiction: "Fiction"
+        deleteFiction: "Supprimez votre fiction",
+        fiction: "Fiction",
+        deleteFictionSuccessMsg: "Votre fiction a été supprimée"
       },
       themes: "Thèmes",
       notStarted: "La phase %{phaseName} n'a pas encore commencé. Merci de revenir à partir du ",
@@ -1242,7 +1244,9 @@ const Translations = {
         postSuccessMsg: "Thanks for your participation. Your fiction has been saved!",
         allFictions: "Published fictions",
         editFiction: "Edit your fiction",
-        fiction: "Fiction"
+        deleteFiction: "Delete your fiction",
+        fiction: "Fiction",
+        deleteFictionSuccessMsg: "Your fiction was deleted"
       },
       themes: "Themes",
       notStarted: "The %{phaseName} phase has not started. Please come back from ",

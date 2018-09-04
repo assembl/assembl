@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 /* eslint-disable import/no-extraneous-dependencies */
-// import initStoryshots from '@storybook/addon-storyshots';
+import initStoryshots from '@storybook/addon-storyshots';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 /* eslint-enable */
@@ -10,14 +10,11 @@ import Adapter from 'enzyme-adapter-react-16';
 import DeletePostButton from '../../../../../../js/app/components/debate/common/deletePostButton';
 import type { DeletePostButtonProps } from '../../../../../../js/app/components/debate/common/deletePostButton';
 
-// Import existing storybook data
-// import { defaultFictionHeader } from '../../../../../js/app/stories/components/debate/brightMirror/fictionHeader.stories';
-
 // Separate the snapshots in directories next to each component
 // Name should match with the story name
-// initStoryshots({
-//   storyKindRegex: /^DeletePostButton$/
-// });
+initStoryshots({
+  storyKindRegex: /^DeletePostButton$/
+});
 
 configure({ adapter: new Adapter() });
 

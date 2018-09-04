@@ -54,6 +54,29 @@ exports[`Storyshots FictionPreview default 1`] = `
               </div>
             </div>
           </li>
+          <li>
+            <div
+              className="custom-overlay"
+            >
+              <div
+                onBlur={[Function]}
+                onClick={null}
+                onFocus={[Function]}
+                onMouseOut={[Function]}
+                onMouseOver={[Function]}
+              >
+                <a
+                  className=""
+                  onClick={[Function]}
+                  style={Object {}}
+                >
+                  <span
+                    className="assembl-icon-delete"
+                  />
+                </a>
+              </div>
+            </div>
+          </li>
         </ul>
         <a
           className="link"
@@ -520,6 +543,17 @@ exports[`Storyshots FictionPreview default 1`] = `
                     >
                       userCanEdit
                     </span>
+                  </span>
+                  <span>
+                    <span>
+                      <br />
+                        
+                    </span>
+                    <span
+                      style={Object {}}
+                    >
+                      userCanDelete
+                    </span>
                     <br />
                   </span>
                 </span>
@@ -642,6 +676,29 @@ exports[`Storyshots FictionPreview playground 1`] = `
                 >
                   <span
                     className="assembl-icon-edit"
+                  />
+                </a>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div
+              className="custom-overlay"
+            >
+              <div
+                onBlur={[Function]}
+                onClick={null}
+                onFocus={[Function]}
+                onMouseOut={[Function]}
+                onMouseOver={[Function]}
+              >
+                <a
+                  className=""
+                  onClick={[Function]}
+                  style={Object {}}
+                >
+                  <span
+                    className="assembl-icon-delete"
                   />
                 </a>
               </div>
@@ -1112,6 +1169,17 @@ exports[`Storyshots FictionPreview playground 1`] = `
                       style={Object {}}
                     >
                       userCanEdit
+                    </span>
+                  </span>
+                  <span>
+                    <span>
+                      <br />
+                        
+                    </span>
+                    <span
+                      style={Object {}}
+                    >
+                      userCanDelete
                     </span>
                     <br />
                   </span>

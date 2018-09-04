@@ -196,6 +196,8 @@ export type BrightMirrorFictionQuery = {|
         // The date that the object was created, in UTC timezone, in ISO 8601 format.
         creationDate: ?any,
         creator: ?{|
+          // The unique database identifier of the User.
+          userId: number,
           // How the User is represented throughout the debate. If a user-name exists, this will be chosen. If it does not, the name is determined.
           displayName: ?string,
           // A boolean flag that shows if the User is deleted.
@@ -5674,6 +5676,8 @@ export type BrightMirrorFictionFragment = {|
   // The date that the object was created, in UTC timezone, in ISO 8601 format.
   creationDate: ?any,
   creator: ?{|
+    // The unique database identifier of the User.
+    userId: number,
     // How the User is represented throughout the debate. If a user-name exists, this will be chosen. If it does not, the name is determined.
     displayName: ?string,
     // A boolean flag that shows if the User is deleted.

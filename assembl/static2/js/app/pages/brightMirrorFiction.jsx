@@ -13,23 +13,37 @@ import { get } from '../utils/routeMap';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
 // Components imports
 import FictionHeader from '../components/debate/brightMirror/fictionHeader';
-import FictionToolbar from '../components/debate/brightMirror/fictionToobar';
+import FictionToolbar from '../components/debate/brightMirror/fictionToolbar';
 import FictionBody from '../components/debate/brightMirror/fictionBody';
+// Utils imports
 import { displayAlert } from '../utils/utilityManager';
-import Permissions, { connectedUserCan } from '../utils/permissions';
 import { getConnectedUserId } from '../utils/globalFunctions';
-
+import Permissions, { connectedUserCan } from '../utils/permissions';
 // Type imports
 import type { CircleAvatarProps } from '../components/debate/brightMirror/circleAvatar';
 import type { FictionHeaderProps } from '../components/debate/brightMirror/fictionHeader';
-import type { FictionToolbarProps } from '../components/debate/brightMirror/fictionToobar';
+import type { FictionToolbarProps } from '../components/debate/brightMirror/fictionToolbar';
 import type { FictionBodyProps } from '../components/debate/brightMirror/fictionBody';
 
+// Define types
+type BrightMirrorFictionData = {
+  /** Fiction object formatted through GraphQL  */
+  fiction: BrightMirrorFictionFragment,
+  /** GraphQL error object used to handle fetching errors */
+  error: Object
+};
+
 type BrightMirrorFictionProps = {
-  data: {
-    fiction: BrightMirrorFictionFragment,
-    error: Object
-  }
+  /** Fiction data information fetched from GraphQL */
+  data: BrightMirrorFictionData,
+  /** URL slug */
+  slug: string,
+  /** Fiction phase */
+  phase: string,
+  /** Fiction theme identifier */
+  themeId: string,
+  /** Fiction identifier */
+  fictionId: string
 };
 
 type BrightMirrorFictionState = {
@@ -46,8 +60,11 @@ class BrightMirrorFiction extends Component<BrightMirrorFictionProps, BrightMirr
     };
   }
 
+  // WIP: display success message when deleting a fiction
+  // displayAlert('success', I18n.t('debate.brightMirror.deleteFictionSuccessMsg'));
+
   render() {
-    const { data } = this.props;
+    const { data, slug, phase, themeId } = this.props;
     // Handle fetching error
     if (data.error) {
       displayAlert('danger', I18n.t('error.loading'));
@@ -55,20 +72,25 @@ class BrightMirrorFiction extends Component<BrightMirrorFictionProps, BrightMirr
     }
 
     // Define variables
-    const { fiction, variables } = data;
+    const { fiction } = data;
     const getDisplayName = () => (fiction.creator && fiction.creator.displayName ? fiction.creator.displayName : '');
     const displayName = fiction.creator && fiction.creator.isDeleted ? I18n.t('deletedUser') : getDisplayName();
 
+    // Define user permission
+    const userCanDelete =
+      (getConnectedUserId() === String(fiction.creator.userId) && connectedUserCan(Permissions.DELETE_MY_POST)) ||
+      connectedUserCan(Permissions.DELETE_POST);
     const userCanEdit = getConnectedUserId() === String(fiction.creator.userId) && connectedUserCan(Permissions.EDIT_MY_POST);
 
     // Define callback functions
-    const deleteFiction = () => {
+    const deleteFictionCallback = () => {
       // Route to fiction list page
-      const fictionListURL = get('idea', { slug: 'TO_SET', phase: 'TO_SET', themeId: 'TO_SET' });
+      const fictionListParams = { slug: slug, phase: phase, themeId: themeId };
+      const fictionListURL = get('idea', fictionListParams);
       browserHistory.push(fictionListURL);
     };
 
-    const onModifyCallback = (subject, body) => {
+    const modifyFictionCallback = (subject, body) => {
       this.setState({ title: subject, content: body });
     };
 
@@ -86,13 +108,14 @@ class BrightMirrorFiction extends Component<BrightMirrorFictionProps, BrightMirr
     };
 
     const fictionToolbarProps: FictionToolbarProps = {
-      fictionId: variables.id,
-      onDeleteCallback: deleteFiction,
-      userCanEdit: userCanEdit,
+      fictionId: id,
       title: this.state.title,
       originalBody: this.state.content,
-      onModifyCallback: onModifyCallback,
-      lang: variables.contentLocale
+      lang: contentLocale,
+      userCanEdit: userCanEdit,
+      userCanDelete: userCanDelete,
+      onModifyCallback: modifyFictionCallback,
+      onDeleteCallback: deleteFictionCallback
     };
 
     const fictionBodyProps: FictionBodyProps = {
@@ -126,9 +149,9 @@ export default compose(
   connect(mapStateToProps),
   graphql(BrightMirrorFictionQuery, {
     // GraphQL needed input variables
-    options: ({ id, contentLocale }) => ({
+    options: ({ fictionId, contentLocale }) => ({
       variables: {
-        id: id,
+        id: fictionId,
         contentLocale: contentLocale
       }
     })

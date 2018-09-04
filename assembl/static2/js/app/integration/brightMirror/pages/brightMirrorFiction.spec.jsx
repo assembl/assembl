@@ -7,6 +7,7 @@ import Adapter from 'enzyme-adapter-react-16';
 
 import BrightMirrorFiction from './brightMirrorFiction';
 import FictionHeader from '../../../components/debate/brightMirror/fictionHeader';
+import FictionToolbar from '../../../components/debate/brightMirror/fictionToolbar';
 import FictionBody from '../../../components/debate/brightMirror/fictionBody';
 
 configure({ adapter: new Adapter() });
@@ -22,7 +23,9 @@ describe('<BrightMirrorFiction /> - with shallow', () => {
     expect(wrapper.find(FictionHeader)).toHaveLength(1);
   });
 
-  xit('should render a FictionToolbar');
+  it('should render a FictionToolbar', () => {
+    expect(wrapper.find(FictionToolbar)).toHaveLength(1);
+  });
 
   it('should render a FictionBody', () => {
     expect(wrapper.find(FictionBody)).toHaveLength(1);

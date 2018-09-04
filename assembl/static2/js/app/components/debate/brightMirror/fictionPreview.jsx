@@ -1,14 +1,18 @@
 // @flow
 import * as React from 'react';
+import { I18n } from 'react-redux-i18n';
 import { Link } from 'react-router';
 import truncate from 'lodash/truncate';
-
+// Constant imports
 import { FICTION_PREVIEW_TITLE_MAX_CHAR, FICTION_PREVIEW_NAME_MAX_CHAR } from '../../../constants';
+// Components imports
 import EditPostForm from '../common/editPostForm';
-import { displayCustomModal, closeModal } from '../../../utils/utilityManager';
 import EditPostButton from '../common/editPostButton';
+import DeletePostButton from '../common/deletePostButton';
 import ResponsiveOverlayTrigger from '../../common/responsiveOverlayTrigger';
-import { editFictionTooltip } from '../../common/tooltips';
+import { editFictionTooltip, deleteFictionTooltip } from '../../common/tooltips';
+// Utils imports
+import { displayCustomModal, closeModal, displayAlert } from '../../../utils/utilityManager';
 
 export type FictionPreviewProps = {
   /** ID */
@@ -30,7 +34,9 @@ export type FictionPreviewProps = {
   /** Original locale */
   lang: string,
   /** Boolean to tell if user can edit */
-  userCanEdit: boolean
+  userCanEdit: boolean,
+  /** Boolean to tell if user can delete */
+  userCanDelete: boolean
 };
 
 const FictionPreview = ({
@@ -43,8 +49,15 @@ const FictionPreview = ({
   originalBody,
   refetchIdea,
   lang,
-  userCanEdit
+  userCanEdit,
+  userCanDelete
 }: FictionPreviewProps) => {
+  // Define callback functions
+  const deleteFictionHandler = () => {
+    displayAlert('success', I18n.t('debate.brightMirror.deleteFictionSuccessMsg'));
+  };
+
+  // Define components
   const openPostModal = () => {
     const content = (
       <div className="fiction-edit-modal">
@@ -67,20 +80,31 @@ const FictionPreview = ({
     return displayCustomModal(content, true);
   };
 
-  const editButton = (
+  const editButton = userCanEdit ? (
     <li>
       <ResponsiveOverlayTrigger placement="left" tooltip={editFictionTooltip}>
         <EditPostButton handleClick={openPostModal} linkClassName="edit" />
       </ResponsiveOverlayTrigger>
     </li>
-  );
+  ) : null;
+
+  const deleteButton = userCanDelete ? (
+    <li>
+      <ResponsiveOverlayTrigger placement="left" tooltip={deleteFictionTooltip}>
+        <DeletePostButton postId={id} onDeleteCallback={deleteFictionHandler} />
+      </ResponsiveOverlayTrigger>
+    </li>
+  ) : null;
 
   const name = authorName || '';
 
   return (
     <div className="fiction-preview" style={{ backgroundColor: color }}>
       <div className="content-box">
-        <ul className="actions hidden-xs">{userCanEdit ? editButton : null}</ul>
+        <ul className="actions hidden-xs">
+          {editButton}
+          {deleteButton}
+        </ul>
         <Link className="link" to={link}>
           <div className="inner-box">
             <h3>

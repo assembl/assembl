@@ -2,10 +2,12 @@
 @import 'components/fictionHeader';
 @import 'components/fictionBody';
 
-// Varibles
+// Variables
 // Bright Mirror background colors
 $light-khaki: #f1fbe5;
 $duck-egg-blue: #b7f4f0;
+
+$fiction-toolbar-icon-size: 17px;
 
 // Mixins
 // Dynamic background color for Bright Mirror
@@ -20,6 +22,7 @@ $duck-egg-blue: #b7f4f0;
   }
 }
 
+// Bright mirror global style
 .bright-mirror-fiction {
   padding: 30px 18px 70px 18px;
 }
@@ -39,3 +42,9 @@ $duck-egg-blue: #b7f4f0;
     padding: 130px 285px 90px 295px;
   }
 }
+
+// Component imports
+@import 'components/circleAvatar';
+@import 'components/fictionHeader';
+@import 'components/fictionToolbar';
+@import 'components/fictionBody';

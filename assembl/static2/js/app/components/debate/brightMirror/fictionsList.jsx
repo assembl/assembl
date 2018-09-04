@@ -39,15 +39,17 @@ const FictionsList = ({ posts, identifier, refetchIdea, lang, themeId }: Fiction
   const connectedUserId = getConnectedUserId();
 
   const childElements = posts.map((post) => {
+    // Define user permissions
     let authorName = '';
-    let userCanEdit;
+    let userCanEdit = false;
+    let userCanDelete = false;
     if (post.creator) {
       const { userId, displayName, isDeleted } = post.creator;
       authorName = isDeleted ? I18n.t('deletedUser') : displayName;
       userCanEdit = connectedUserId === String(userId) && connectedUserCan(Permissions.EDIT_MY_POST);
-    } else {
-      authorName = '';
-      userCanEdit = false;
+      userCanDelete =
+        (connectedUserId === String(userId) && connectedUserCan(Permissions.DELETE_MY_POST)) ||
+        connectedUserCan(Permissions.DELETE_POST);
     }
 
     return (
@@ -64,6 +66,7 @@ const FictionsList = ({ posts, identifier, refetchIdea, lang, themeId }: Fiction
           originalBody={post.body}
           refetchIdea={refetchIdea}
           userCanEdit={userCanEdit}
+          userCanDelete={userCanDelete}
           lang={lang}
         />
       </Animated>
