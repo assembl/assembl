@@ -1,5 +1,6 @@
 import React from 'react';
 import { I18n } from 'react-redux-i18n';
+import { Link } from 'react-router';
 import { getCurrentView, getContextual, getFullPath } from '../utils/routeMap';
 import { getConnectedUserId, getDiscussionSlug } from '../utils/globalFunctions';
 import SocialShare from '../components/common/socialShare';
@@ -120,4 +121,27 @@ export const promptForLoginOr = action => () => {
   } else {
     action();
   }
+};
+
+
+export const defaultAnchorAttributes = {
+  rel: 'noopener no-referrer',
+  target: '_blank'
+};
+
+/*
+  An HOC that can be used when unclear whether to use Link or a tag (internal react-router
+  or external url)
+  @params AnchorComponent   Component : The component within the link
+  @params urlData           Object : An object that has 'url' and 'local', describing whether link is internal or not
+  @params anchorAttributes  Object: All attributes desired to be passed to the Link or a tag
+  @params props             Object: All props desired to be passed to the AnchorComponent
+*/
+export const localAwareLink = AnchorComponent => ({ urlData, anchorAttributes, props }) => {
+  const attrs = anchorAttributes || null;
+  const componentProps = props || null;
+  if (!urlData.local) {
+    return (<a href={urlData.url} {...attrs} ><AnchorComponent {...componentProps} /></a>);
+  }
+  return (<Link to={urlData.url} {...attrs}><AnchorComponent {...componentProps} /></Link>);
 };
