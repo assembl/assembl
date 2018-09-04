@@ -65,7 +65,27 @@ export const PHASES = {
 };
 
 export const HARVESTABLE_PHASES = [PHASES.thread, PHASES.multiColumns];
-export const COOKIE_TYPES = ['ACCEPT_TRACKING_ON_DISCUSSION', 'ACCEPT_SESSION_ON_DISCUSSION', 'ACCEPT_LOCALE'];
+
+export const COOKIE_TYPES = [
+  'ACCEPT_TRACKING_ON_DISCUSSION',
+  'ACCEPT_SESSION_ON_DISCUSSION',
+  'REJECT_TRACKING_ON_DISCUSSION',
+  'REJECT_SESSION_ON_DISCUSSION',
+  'ACCEPT_LOCALE',
+  'REJECT_LOCALE',
+  'ACCEPT_PRIVACY_POLICY_ON_DISCUSSION',
+  'REJECT_PRIVACY_POLICY_ON_DISCUSSION',
+  'ACCEPT_CGU',
+  'REJECT_CGU'
+];
+
+export const COOKIE_TRANSLATION_KEYS = {
+  userSession: 'userSession',
+  locale: 'locale',
+  matomo: 'matomo',
+  privacyPolicy: 'privacyPolicy',
+  cgu: 'cgu'
+};
 
 // Those states lists need to be kept in sync with models/post.py
 export const PublicationStates = {

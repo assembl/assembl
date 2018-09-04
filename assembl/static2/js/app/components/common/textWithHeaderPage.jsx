@@ -6,27 +6,34 @@ import Header from './header';
 export type TextWithHeaderPageProps = {
   headerTitle: string,
   text: string,
-  debateData: Object
+  debateData: DebateData,
+  renderPageBody: Function
 };
 
-const DumbTextWithHeaderPage = (props: TextWithHeaderPageProps) => {
-  const { headerTitle, text, debateData } = props;
-  return (
-    <div className="text-with-header">
-      <Header title={headerTitle} imgUrl={debateData.headerBackgroundUrl} />
-      <div className="max-container margin-xxl">
-        <div className="page-body">
-          <div
-            className="ellipsis-content justify"
-            dangerouslySetInnerHTML={{
-              __html: text
-            }}
-          />
-        </div>
+type State = {};
+
+class DumbTextWithHeaderPage extends React.Component<TextWithHeaderPageProps, State> {
+  static defaultProps = {
+    renderPageBody: (text: string) => (
+      <div
+        className="ellipsis-content justify"
+        dangerouslySetInnerHTML={{
+          __html: text
+        }}
+      />
+    )
+  };
+
+  render() {
+    const { headerTitle, debateData, renderPageBody, text } = this.props;
+    return (
+      <div className="text-with-header">
+        <Header title={headerTitle} imgUrl={debateData.headerBackgroundUrl} />
+        <div className="max-container margin-xxl">{renderPageBody(text)}</div>
       </div>
-    </div>
-  );
-};
+    );
+  }
+}
 
 const mapStateToProps = state => ({
   debateData: state.debate.debateData

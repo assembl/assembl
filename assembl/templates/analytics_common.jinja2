@@ -5,6 +5,7 @@
         {{ web_analytics['piwik']['script']|safe }}
         <script type="text/javascript">
             globalAnalytics.piwik = {
+                host: "{{ web_analytics['piwik']['host'] }}",
                 isActive: true 
             };
         </script>

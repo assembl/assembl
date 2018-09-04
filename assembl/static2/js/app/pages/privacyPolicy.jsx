@@ -20,18 +20,15 @@ type AdditionalProps = {
 
 export type Props = AdditionalProps & LegalContentsQuery & QueryProps;
 
-const withData: OperationComponent<LegalContentsQuery, LegalContentsQueryVariables, Props> = graphql(
-  LegalContents,
-  {
-    props: ({ data }) => {
-      const text = data.legalContents ? data.legalContents.privacyPolicy : '';
-      return {
-        ...data,
-        text: text,
-        headerTitle: I18n.t('privacyPolicy.headerTitle')
-      };
-    }
+const withData: OperationComponent<LegalContentsQuery, LegalContentsQueryVariables, Props> = graphql(LegalContents, {
+  props: ({ data }) => {
+    const text = data.legalContents ? data.legalContents.privacyPolicy : '';
+    return {
+      ...data,
+      text: text,
+      headerTitle: I18n.t('privacyPolicy.headerTitle')
+    };
   }
-);
+});
 
 export default compose(connect(mapStateToProps), withData, withLoadingIndicator())(TextWithHeaderPage);

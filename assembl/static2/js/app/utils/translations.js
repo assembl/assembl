@@ -6,6 +6,8 @@ const Translations = {
     no: "non",
     "Number of contributions": "Nombre de messages",
     "Number of users": "Nombre de contributeurs",
+    accept: "Accepter",
+    refuse: "Refuser",
     cancel: "Annuler",
     validate: "Valider",
     delete: "Supprimer",
@@ -45,6 +47,19 @@ const Translations = {
       move: "Déplacer",
       qualifyNature: "Qualifier par nature",
       qualifyAction: "Qualifier par action"
+    },
+    cookies: {
+      userSession: "Session utilisateur",
+      locale: "Langue",
+      matomo: "Matomo",
+      privacyPolicy: "Politique de confidentialité",
+      cgu: "Conditions générales d'utilisation",
+      matomoSettings: "Pour modifier les paramètres de ce cookie veuillez cliquer ici",
+      userSessionHelper: "Ce cookie est nécessaire pour vous maintenir connecté sur Assembl.",
+      localeHelper: "Ce cookie est nécessaire afin d'afficher les textes dans la langue de votre nagigateur ou bien celle que vous avez sélectionné dans la barre de navigation.",
+      privacyPolicyHelper: "Ce cookie permet d'enregistrer que vous avez accepté la politique de confidentialité de la consultation.",
+      cguHelper: "Ce cookie permet d'enregistrer que vous avez accepté les conditions générales d'utilisation.",
+      matomoHelper: "Ce cookie est utilisé à des fins statistiques concernant les participants à la consultation."
     },
     search: {
       reset: {
@@ -413,6 +428,7 @@ const Translations = {
       memberSince: "Membre depuis le %{date}",
       save: "Enregistrer",
       password: "Mot de passe",
+      cookies: "Paramétrage des cookies",
       changePassword: "Modifier mon mot de passe",
       passwordModifiedSuccess: "Votre mot de passe a été modifié avec succès",
       saveSuccess: "Votre profil a été mis à jour avec succès",
@@ -455,7 +471,13 @@ const Translations = {
       headerTitle: "Mentions légales"
     },
     cookiesPolicy: {
-      headerTitle: "Information sur les cookies"
+      headerTitle: "Cookies",
+      sectionTitle: "Information sur les cookies",
+      essential: "Essentiel",
+      analytics: "Analytique et personnalisation",
+      other: "Autre",
+      instructions: "Sélectionnez les cookies que vous souhaitez refuser ci-dessous",
+      success: "Votre configuration des cookies a bien été sauvegardée"
     },
     privacyPolicy: {
       headerTitle: "Politique de protection des données personnelles"
@@ -814,6 +836,8 @@ const Translations = {
     yes: "yes",
     no: "no",
     cancel: "Cancel",
+    accept: "Accept",
+    refuse: "Refuse",
     validate: "Validate",
     introduction: "Introduction",
     conclusion: "Conclusion",
@@ -852,6 +876,19 @@ const Translations = {
       move: "Move",
       qualifyNature: "Qualify by nature",
       qualifyAction: "Qualify by action"
+    },
+    cookies: {
+      userSession: "User Session",
+      locale: "Language",
+      matomo: "Matomo",
+      cgu: "Terms and conditions",
+      privacyPolicy: "Privacy policy",
+      matomoSettings: "To modify this cookie's setting please click here",
+      userSessionHelper: "This cookie is necessary to maintain the user connected on Assembl.",
+      localeHelper: "This cookie is necessary to display the texts in the language of your browser or the one you selected in the navigation bar.",
+      privacyPolicyHelper: "This cookie registers that you have accepted the privacy policy of the consultation.",
+      cguHelper: "This cookie registers that you have accepted the terms and conditions of the consultation.",
+      matomoHelper: "This cookie is used for stasticial purposes regarding the participants of the consultation."
     },
     search: {
       reset: {
@@ -1219,6 +1256,7 @@ const Translations = {
       memberSince: "Member since %{date}",
       save: "Save",
       password: "Password",
+      cookies: "Cookies configuration",
       changePassword: "Change my password",
       usernameInformations:
         "If you configured a username, it will be used when you post a message or vote. If you haven't configured one, the full name that you configured will be used instead.",
@@ -1261,7 +1299,13 @@ const Translations = {
       headerTitle: "Legal Notice"
     },
     cookiesPolicy: {
-      headerTitle: "Cookies"
+      headerTitle: "Cookies",
+      sectionTitle: "Cookies policy",
+      essential: "Essential",
+      analytics: "Analytics and customization",
+      other: "Other",
+      instructions: "Select the cookies you wish to refuse below",
+      success: "Your cookies configuration has been saved"
     },
     privacyPolicy: {
       headerTitle: "Privacy policy"
