@@ -41,6 +41,18 @@
   .editor-toolbar {
     margin-bottom: 5px;
   }
+
+  .start-discussion {
+    display: inline-block;
+    padding: 2px 0 0 10px;
+    max-width: 150px;
+  }
+
+  .start-discussion-icon {
+    display: inline-block;
+    padding: 3px 0 0 0;
+    vertical-align: top;
+  }
 }
 
 .rich-text-editor {
