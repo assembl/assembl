@@ -17,6 +17,7 @@ query IdeaWithPosts($id: ID!, $lang: String, $additionalFields: Boolean!) {
             ... on Post {
               id
               subject(lang: $lang) @include(if: $additionalFields)
+              body(lang: $lang) @include(if: $additionalFields)
               parentId
               creationDate
               publicationState

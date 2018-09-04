@@ -25,8 +25,13 @@ export type InstructionViewProps = {
   },
   /** Timeline data */
   timeline: Timeline,
+<<<<<<< HEAD
   /** Bright Mirror identifier */
   identifier: string
+=======
+  identifier: string,
+  lang: string
+>>>>>>> Devas1696: add modify btn on list of fictions and modal to modify fiction
 };
 
 const InstructionView = ({
@@ -36,7 +41,8 @@ const InstructionView = ({
   posts,
   announcementContent,
   timeline,
-  identifier
+  identifier,
+  lang
 }: InstructionViewProps) => {
   const canPost =
     isUserConnected && connectedUserCan(Permissions.ADD_POST) && !getIfPhaseCompletedByIdentifier(timeline, identifier);
@@ -56,7 +62,7 @@ const InstructionView = ({
             postSuccessMsg="debate.brightMirror.postSuccessMsg"
           />
         ) : null}
-        <FictionsList posts={posts} identifier={identifier} themeId={ideaId} />
+        <FictionsList posts={posts} identifier={identifier} themeId={ideaId} refetchIdea={refetchIdea} lang={lang} />
       </div>
     </div>
   );

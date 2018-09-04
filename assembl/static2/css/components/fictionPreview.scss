@@ -25,6 +25,30 @@
     margin-bottom: 17px;
   }
 
+  .actions {
+    position: absolute;
+    top: 0;
+    right: 0;
+    list-style: none;
+    margin: 20px 18px;
+
+    li {
+      width: 35.7px;
+      height: 35.7px;
+      background-color: $white;
+      border-radius: 50%;
+      margin-bottom: 13.7px;
+
+      a {
+        display: block;
+        width: 100%;
+        height: 100%;
+        font-size: 17px;
+        padding: 5px 5px;
+      }
+    }
+  }
+
   .content-box {
     display: block;
     text-align: center;
@@ -32,32 +56,22 @@
     height: 100%;
     width: 100%;
     position: relative;
+    padding: 0 7px;
 
     .inner-box {
       position: absolute;
       bottom: 0;
-      margin: 0 7px;
 
       .info {
         margin-bottom: 7px;
 
         .author {
-<<<<<<< HEAD
           font-size: $font-size-xxs;
         }
 
         .published-date {
           font-family: $font-family4;
           font-size: $font-size-xxs;
-=======
-          font-family: 'LatoRegular';
-          font-size: $font-size-xxs;
-        }
-
-        .published_date {
-          font-family: 'LatoLight';
-          font-size: $font-size-xxxs;
->>>>>>> DEVAS1730: BM Add fiction list component in storybook, integration and associated style and animation
           font-weight: 300;
         }
       }
@@ -75,18 +89,14 @@
     width: 336px;
     height: 456px;
 
-<<<<<<< HEAD
     h3 {
-=======
-    .light-title-3 {
->>>>>>> DEVAS1730: BM Add fiction list component in storybook, integration and associated style and animation
       font-size: $font-size-l;
     }
 
     .content-box {
-      .inner-box {
-        margin: 0 17px;
+      padding: 0 17px;
 
+      .inner-box {
         .info {
           margin-bottom: 36px;
 
@@ -94,11 +104,7 @@
             font-size: $font-size-xs;
           }
 
-<<<<<<< HEAD
           .published-date {
-=======
-          .published_date {
->>>>>>> DEVAS1730: BM Add fiction list component in storybook, integration and associated style and animation
             font-size: $font-size-xxs;
           }
         }
@@ -111,19 +117,30 @@
     height: 499px;
     border-bottom: solid 3px $theme-local-blue;
 
-<<<<<<< HEAD
     h3 {
-=======
-    .light-title-3 {
->>>>>>> DEVAS1730: BM Add fiction list component in storybook, integration and associated style and animation
       font-size: $font-size-l;
       margin-bottom: 20px;
     }
 
-    .content-box {
-      .inner-box {
-        margin: 0 19px;
+    .actions {
+      margin: 22px 20px;
 
+      li {
+        width: 39px;
+        height: 39px;
+        margin-bottom: 14px;
+
+        a {
+          font-size: 18px;
+          padding: 7px 7px;
+        }
+      }
+    }
+
+    .content-box {
+      padding: 0 19px;
+
+      .inner-box {
         .info {
           margin-bottom: 41px;
         }

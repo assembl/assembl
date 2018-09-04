@@ -26,7 +26,12 @@ type EditPostFormProps = {
   goBackToViewMode: Function,
   client: Object,
   uploadDocument: Function,
-  updatePost: Function
+  updatePost: Function,
+  onSuccess: Function,
+  postSuccessMsg?: string,
+  editTitle?: string,
+  bodyDescription?: string,
+  childrenUpdate?: boolean
 };
 
 type EditPostFormState = {
@@ -35,6 +40,14 @@ type EditPostFormState = {
 };
 
 class EditPostForm extends React.PureComponent<EditPostFormProps, EditPostFormState> {
+  static defaultProps = {
+    postSuccessMsg: 'debate.thread.postSuccess',
+    editTitle: 'debate.edit.title',
+    bodyDescription: 'debate.edit.body',
+    childrenUpdate: true,
+    onSuccess: () => {}
+  };
+
   constructor(props: EditPostFormProps) {
     super(props);
     const { subject } = props;
@@ -65,7 +78,7 @@ class EditPostForm extends React.PureComponent<EditPostFormProps, EditPostFormSt
   };
 
   handleSubmit = (): void => {
-    const { uploadDocument, updatePost } = this.props;
+    const { uploadDocument, updatePost, postSuccessMsg, childrenUpdate } = this.props;
     const { body } = this.state;
     const subjectIsEmpty = this.state.subject && this.state.subject.length === 0;
     const bodyIsEmpty = editorStateIsEmpty(body);
@@ -88,9 +101,10 @@ class EditPostForm extends React.PureComponent<EditPostFormProps, EditPostFormSt
         const oldSubject = this.props.subject;
         updatePost({ variables: variables })
           .then(() => {
-            displayAlert('success', I18n.t('debate.thread.postSuccess'));
+            displayAlert('success', I18n.t(postSuccessMsg));
             this.props.goBackToViewMode();
-            if (oldSubject !== this.state.subject) {
+            this.props.onSuccess();
+            if (childrenUpdate && oldSubject !== this.state.subject) {
               // If we edited the subject, we need to reload all descendants posts,
               // we do this by refetch all Post queries.
               // Descendants are actually a subset of Post queries, so we overfetch here.
@@ -117,7 +131,7 @@ class EditPostForm extends React.PureComponent<EditPostFormProps, EditPostFormSt
       <Row>
         <Col xs={12} md={12}>
           <div className="color margin-left-9">
-            <span className="assembl-icon-edit" />&nbsp;<Translate value="debate.edit.title" className="sm-title" />
+            <span className="assembl-icon-edit" />&nbsp;<Translate value={this.props.editTitle} className="sm-title" />
           </div>
         </Col>
         <Col xs={12} md={12}>
@@ -140,7 +154,7 @@ class EditPostForm extends React.PureComponent<EditPostFormProps, EditPostFormSt
             <FormGroup>
               <RichTextEditor
                 editorState={this.state.body}
-                placeholder={I18n.t('debate.edit.body')}
+                placeholder={I18n.t(this.props.bodyDescription)}
                 onChange={this.updateBody}
                 maxLength={TEXT_AREA_MAX_LENGTH}
                 withAttachmentButton

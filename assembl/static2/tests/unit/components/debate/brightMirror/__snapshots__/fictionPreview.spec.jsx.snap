@@ -18,34 +18,75 @@ exports[`Storyshots FictionPreview default 1`] = `
         }
       }
     >
-      <a
+      <div
         className="content-box"
-        onClick={[Function]}
-        style={Object {}}
       >
-        <div
-          className="inner-box"
+        <ul
+          className="actions hidden-xs"
         >
-          <h3>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit....
-          </h3>
-          <p
-            className="info"
-          >
-            <span
-              className="author"
+          <li>
+            <div
+              className="custom-overlay"
             >
+<<<<<<< HEAD
               John Doe
             </span>
              - 
             <span
               className="published-date"
+=======
+              <div
+                onBlur={[Function]}
+                onClick={null}
+                onFocus={[Function]}
+                onMouseOut={[Function]}
+                onMouseOver={[Function]}
+              >
+                <a
+                  className="edit"
+                  onClick={[Function]}
+                  style={Object {}}
+                >
+                  <span
+                    className="assembl-icon-edit"
+                  />
+                </a>
+              </div>
+            </div>
+          </li>
+        </ul>
+        <a
+          className="link"
+          onClick={[Function]}
+          style={Object {}}
+        >
+          <div
+            className="inner-box"
+          >
+            <h3>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit....
+            </h3>
+            <p
+              className="info"
+>>>>>>> Devas1696: add modify btn on list of fictions and modal to modify fiction
             >
-              01/01/2018
-            </span>
-          </p>
-        </div>
-      </a>
+              <span
+                className="author"
+              >
+                John Doe
+                 
+                -
+                 
+              </span>
+              <span
+                className="published-date"
+              >
+                01/01/2018
+              </span>
+            </p>
+          </div>
+        </a>
+      </div>
     </div>
   </div>
   <button
@@ -208,6 +249,36 @@ exports[`Storyshots FictionPreview default 1`] = `
                     <span
                       style={Object {}}
                     >
+                      id
+                    </span>
+                    <span>
+                      =
+                      <span
+                        style={Object {}}
+                      >
+                        "
+                        <span
+                          style={
+                            Object {
+                              "color": "#22a",
+                              "wordBreak": "break-word",
+                            }
+                          }
+                        >
+                          0
+                        </span>
+                        "
+                      </span>
+                    </span>
+                  </span>
+                  <span>
+                    <span>
+                      <br />
+                        
+                    </span>
+                    <span
+                      style={Object {}}
+                    >
                       title
                     </span>
                     <span>
@@ -349,6 +420,106 @@ exports[`Storyshots FictionPreview default 1`] = `
                         "
                       </span>
                     </span>
+                  </span>
+                  <span>
+                    <span>
+                      <br />
+                        
+                    </span>
+                    <span
+                      style={Object {}}
+                    >
+                      originalBody
+                    </span>
+                    <span>
+                      =
+                      <span
+                        style={Object {}}
+                      >
+                        "
+                        <span
+                          style={
+                            Object {
+                              "color": "#22a",
+                              "wordBreak": "break-word",
+                            }
+                          }
+                        >
+                          Origin body
+                        </span>
+                        "
+                      </span>
+                    </span>
+                  </span>
+                  <span>
+                    <span>
+                      <br />
+                        
+                    </span>
+                    <span
+                      style={Object {}}
+                    >
+                      refetchIdea
+                    </span>
+                    <span>
+                      =
+                      <span
+                        style={Object {}}
+                      >
+                        {
+                        <span
+                          style={
+                            Object {
+                              "color": "#170",
+                            }
+                          }
+                        >
+                          Function
+                        </span>
+                        }
+                      </span>
+                    </span>
+                  </span>
+                  <span>
+                    <span>
+                      <br />
+                        
+                    </span>
+                    <span
+                      style={Object {}}
+                    >
+                      lang
+                    </span>
+                    <span>
+                      =
+                      <span
+                        style={Object {}}
+                      >
+                        "
+                        <span
+                          style={
+                            Object {
+                              "color": "#22a",
+                              "wordBreak": "break-word",
+                            }
+                          }
+                        >
+                          fr
+                        </span>
+                        "
+                      </span>
+                    </span>
+                  </span>
+                  <span>
+                    <span>
+                      <br />
+                        
+                    </span>
+                    <span
+                      style={Object {}}
+                    >
+                      userCanEditThisMessage
+                    </span>
                     <br />
                   </span>
                 </span>
@@ -440,34 +611,75 @@ exports[`Storyshots FictionPreview playground 1`] = `
         }
       }
     >
-      <a
+      <div
         className="content-box"
-        onClick={[Function]}
-        style={Object {}}
       >
-        <div
-          className="inner-box"
+        <ul
+          className="actions hidden-xs"
         >
-          <h3>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit....
-          </h3>
-          <p
-            className="info"
-          >
-            <span
-              className="author"
+          <li>
+            <div
+              className="custom-overlay"
             >
+<<<<<<< HEAD
               John Doe
             </span>
              - 
             <span
               className="published-date"
+=======
+              <div
+                onBlur={[Function]}
+                onClick={null}
+                onFocus={[Function]}
+                onMouseOut={[Function]}
+                onMouseOver={[Function]}
+              >
+                <a
+                  className="edit"
+                  onClick={[Function]}
+                  style={Object {}}
+                >
+                  <span
+                    className="assembl-icon-edit"
+                  />
+                </a>
+              </div>
+            </div>
+          </li>
+        </ul>
+        <a
+          className="link"
+          onClick={[Function]}
+          style={Object {}}
+        >
+          <div
+            className="inner-box"
+          >
+            <h3>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit....
+            </h3>
+            <p
+              className="info"
+>>>>>>> Devas1696: add modify btn on list of fictions and modal to modify fiction
             >
-              01/01/2018
-            </span>
-          </p>
-        </div>
-      </a>
+              <span
+                className="author"
+              >
+                John Doe
+                 
+                -
+                 
+              </span>
+              <span
+                className="published-date"
+              >
+                01/01/2018
+              </span>
+            </p>
+          </div>
+        </a>
+      </div>
     </div>
   </div>
   <button
@@ -630,6 +842,36 @@ exports[`Storyshots FictionPreview playground 1`] = `
                     <span
                       style={Object {}}
                     >
+                      id
+                    </span>
+                    <span>
+                      =
+                      <span
+                        style={Object {}}
+                      >
+                        "
+                        <span
+                          style={
+                            Object {
+                              "color": "#22a",
+                              "wordBreak": "break-word",
+                            }
+                          }
+                        >
+                          0
+                        </span>
+                        "
+                      </span>
+                    </span>
+                  </span>
+                  <span>
+                    <span>
+                      <br />
+                        
+                    </span>
+                    <span
+                      style={Object {}}
+                    >
                       title
                     </span>
                     <span>
@@ -770,6 +1012,106 @@ exports[`Storyshots FictionPreview playground 1`] = `
                         </span>
                         "
                       </span>
+                    </span>
+                  </span>
+                  <span>
+                    <span>
+                      <br />
+                        
+                    </span>
+                    <span
+                      style={Object {}}
+                    >
+                      originalBody
+                    </span>
+                    <span>
+                      =
+                      <span
+                        style={Object {}}
+                      >
+                        "
+                        <span
+                          style={
+                            Object {
+                              "color": "#22a",
+                              "wordBreak": "break-word",
+                            }
+                          }
+                        >
+                          Origin body
+                        </span>
+                        "
+                      </span>
+                    </span>
+                  </span>
+                  <span>
+                    <span>
+                      <br />
+                        
+                    </span>
+                    <span
+                      style={Object {}}
+                    >
+                      refetchIdea
+                    </span>
+                    <span>
+                      =
+                      <span
+                        style={Object {}}
+                      >
+                        {
+                        <span
+                          style={
+                            Object {
+                              "color": "#170",
+                            }
+                          }
+                        >
+                          Function
+                        </span>
+                        }
+                      </span>
+                    </span>
+                  </span>
+                  <span>
+                    <span>
+                      <br />
+                        
+                    </span>
+                    <span
+                      style={Object {}}
+                    >
+                      lang
+                    </span>
+                    <span>
+                      =
+                      <span
+                        style={Object {}}
+                      >
+                        "
+                        <span
+                          style={
+                            Object {
+                              "color": "#22a",
+                              "wordBreak": "break-word",
+                            }
+                          }
+                        >
+                          fr
+                        </span>
+                        "
+                      </span>
+                    </span>
+                  </span>
+                  <span>
+                    <span>
+                      <br />
+                        
+                    </span>
+                    <span
+                      style={Object {}}
+                    >
+                      userCanEditThisMessage
                     </span>
                     <br />
                   </span>

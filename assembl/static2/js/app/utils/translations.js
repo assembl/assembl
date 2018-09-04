@@ -391,7 +391,9 @@ const Translations = {
         startFictionLabel: "Je partage ma fiction",
         fillBodyLabel: "Ecrivez votre fiction",
         postSuccessMsg: "Merci pour votre participation. Votre fiction a bien été enregistrée !",
-        allFictions: "Fictions déjà parues"
+        allFictions: "Fictions déjà parues",
+        editFiction: "Editez votre fiction",
+        fiction: "Fiction"
       },
       themes: "Thèmes",
       notStarted: "La phase %{phaseName} n'a pas encore commencé. Merci de revenir à partir du ",
@@ -1238,7 +1240,9 @@ const Translations = {
         startFictionLabel: "Share a fiction",
         fillBodyLabel: "Write your fiction",
         postSuccessMsg: "Thanks for your participation. Your fiction has been saved!",
-        allFictions: "Published fictions"
+        allFictions: "Published fictions",
+        editFiction: "Edit your fiction",
+        fiction: "Fiction"
       },
       themes: "Themes",
       notStarted: "The %{phaseName} phase has not started. Please come back from ",

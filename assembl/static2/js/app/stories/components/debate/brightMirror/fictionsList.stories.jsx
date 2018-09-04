@@ -1,48 +1,50 @@
-// @flow
+// Flow removed due to many errors in different post attributes
 import React from 'react';
-/* eslint-disable import/no-extraneous-dependencies */
 import { storiesOf } from '@storybook/react';
 import { withInfo } from '@storybook/addon-info';
-/* eslint-enable */
 
 import FictionsList from '../../../../components/debate/brightMirror/fictionsList';
-import type { FictionsListProps } from '../../../../components/debate/brightMirror/fictionsList';
 
-export const customFictionsList: FictionsListProps = {
+export const customFictionsList = {
   posts: [
     {
       id: '0',
       subject: 'Red is dead',
-      body: 'test',
-      creationDate: new Date('2018-01-26T09:19:01.492406+00:00'),
+      creationDate: '2018-01-26T09:19:01.492406+00:00',
       creator: {
+        userId: '1',
         displayName: 'Odile DeRaie',
         isDeleted: false
-      }
+      },
+      body: 'Oh non c\'est affreux'
     },
     {
       id: '1',
       subject: 'Red is dead 2',
-      body: 'test',
-      creationDate: new Date('2018-01-26T09:19:01.492406+00:00'),
+      creationDate: '2018-01-26T09:19:01.492406+00:00',
       creator: {
+        userId: '1',
         displayName: 'Odile DeRaie',
         isDeleted: false
-      }
+      },
+      body: 'Oh non c\'est affreux'
     },
     {
       id: '2',
       subject: 'Red is dead 3',
-      body: 'test',
-      creationDate: new Date('2018-01-26T09:19:01.492406+00:00'),
+      creationDate: '2018-01-26T09:19:01.492406+00:00',
       creator: {
+        userId: '1',
         displayName: 'Odile DeRaie',
         isDeleted: false
-      }
+      },
+      body: 'Oh non c\'est affreux'
     }
   ],
   identifier: 'brightMirror',
-  themeId: 'themeId'
+  themeId: 'themeId',
+  refetchIdea: Function,
+  contentLocale: 'en'
 };
 
 storiesOf('FictionsList', module).add('default', withInfo()(() => <FictionsList {...customFictionsList} />));

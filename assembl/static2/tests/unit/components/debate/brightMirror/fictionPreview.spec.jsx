@@ -37,4 +37,8 @@ describe('<FictionPreview /> - with shallow', () => {
   it('should render creation date', () => {
     expect(wrapper.find('span [className="published-date"]')).toHaveLength(1);
   });
+
+  it('should render edit button', () => {
+    expect(wrapper.find('EditPostButton [linkClassName="edit"]')).toHaveLength(1);
+  });
 });

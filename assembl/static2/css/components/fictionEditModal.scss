@@ -1,0 +1,30 @@
+.fiction-edit-modal {
+  background-color: $first-color-light;
+  padding: 40px;
+
+  .assembl-icon-back-arrow {
+    &:before {
+      font-size: $font-size-s;
+    }
+  }
+
+  .answer-form-inner {
+    margin: 13px;
+
+    .editor-label {
+      padding-top: 16px;
+    }
+  }
+
+  .button-container {
+    margin: 25px 0 0;
+  }
+
+  .assembl-icon-back-arrow {
+    padding-left: 10px;
+  }
+
+  .btn {
+    margin: 3px 0 8px;
+  }
+}
