@@ -1,6 +1,6 @@
 #!/bin/bash
 
 export PATH=$PATH:/usr/local/bin
-export ASSEMBL_PATH=/home/assembl_user/assembl
-export REPOSITORY=ubuntu@{{backup_machine_address}}:/home/ubuntu/backups.borg
+export ASSEMBL_PATH={{project_path}}
+export REPOSITORY={{backup_folder}}
 bash ${ASSEMBL_PATH}/doc/borg_backup_script/assembl_borg_backup.sh > $ASSEMBL_PATH/var/log/assembl_backup.log 2>&1

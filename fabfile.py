@@ -1968,10 +1968,10 @@ def create_backup_script():
         jenv = Environment(loader=FileSystemLoader('doc/'), autoescape=lambda t: False)
         backup_template = jenv.get_template('backup_template.jinja2')
         with open('backup_all_assembl.sh', 'w') as f:
-            f.write(backup_template.render(backup_machine_address=env.backup_machine_address))
+            f.write(backup_template.render(backup_folder=env.backup_folder, project_path=env._projectpath))
         run('chmod +x backup_all_assembl.sh')
-        cron_command = "15 3 * * * /home/assembl_user/backup_all_assembl.sh"
-        sudo(create_add_to_crontab_command(cron_command))
+        cron_command = "15 3 * * * /home/" + env._user + "/backup_all_assembl.sh"
+        create_add_to_crontab_command(cron_command)
     else:
         print(red("Can't generate backup script, env.backup_machine_address is not set"))
 
@@ -1984,11 +1984,38 @@ def create_alert_disk_space_disk():
     alert_disk_space_template = jenv.get_template('alert_disk_space_template.jinja2')
     with open('alert_disk_space.sh', 'w') as f:
         f.write(alert_disk_space_template.render())
-    run('chmod +x alert_disk_space.sh')
-    cron_command = "MAILTO=mohamed.zayed@bluenove.com"
-    sudo(create_add_to_crontab_command(cron_command))
-    cron_command = "0 5 * * * /home/assembl_user/alert_disk_space.sh"
-    sudo(create_add_to_crontab_command(cron_command))
+    run('cp ' + env._projectpath + '/doc/alert_disk_space.sh /home/' + env._user + '/')
+    run('chmod +x /home/' + env._user + '/alert_disk_space.sh')
+    if env.administrator_email:
+        cron_command = "MAILTO=" + env.administrator_email
+    else:
+        cron_command = "MAILTO=assembl.admin@bluenove.com"
+    run(create_add_to_crontab_command(cron_command))
+    cron_command = "0 5 * * * /home/" + env._user + "/alert_disk_space.sh"
+    run(create_add_to_crontab_command(cron_command))
+
+
+@task
+def create_ssh_keys_for_user():
+    """Creates ssh keys for assembl_user"""
+    # run("ssh-keygen ")
+    run("ssh-keygen -t rsa -b 4096 -f /home/%s/.ssh/id_rsa -q -P \"%s\" -C \" %s @ %s \" " % (env._user, env.rsa_password, env._user, env.public_hostname))
+    run("cat id_rsa.pub >> /home/" + env._user + "/.ssh/authorized_keys")
+
+
+@task
+def install_ncftp_client():
+    """Installs ncftp_client. This client is used to move borg repositories from the
+    local machine to the ftp backup machine or object storage."""
+    sudo("apt-get update")
+    sudo("apt-get install ncftp")
+
+
+@task
+def backup_borg_repository():
+    """Moves borg backup folder to the bac"""
+    cron_command = "0 5 * * * ncftpput -R -v -u \"%s\" -p \"%s\" %s / %s" % (env.ftp_backup_user, env.ftp_backup_password, env.ftp_backup_endpoint, env.ftp_backup_folder)
+    run(create_add_to_crontab_command(cron_command))
 
 
 @task
