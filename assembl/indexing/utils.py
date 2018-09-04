@@ -114,6 +114,11 @@ def get_data(content):
             populate_from_langstring_prop(announcement, data, 'title', 'announcement_title')
             populate_from_langstring_prop(announcement, data, 'body', 'announcement_body')
 
+        phase = content.get_associated_phase()
+        if phase:
+            data['phase_id'] = phase.id
+            data['phase_identifier'] = phase.identifier
+
         return get_uid(content), data
 
     elif isinstance(content, AgentProfile):

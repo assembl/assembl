@@ -130,6 +130,8 @@ _IDEA_MAPPING = {
         'discussion_id': LONG,
         'creation_date': DATE,
         'id': LONG,
+        'phase_identifier': KEYWORD,
+        'phase_id': KEYWORD,
     }
 }
 

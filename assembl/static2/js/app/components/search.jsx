@@ -71,11 +71,12 @@ function getPostUrl(ideaId, postId, phaseIdentifier, phaseId, slug) {
   }
   const ideaBase64id = btoa(`Idea:${ideaId}`);
   const postBase64id = btoa(`Post:${postId}`);
+  const phaseIdBase64 = btoa(`DiscussionPhase:${phaseId}`);
   if (phaseIdentifier === 'thread') {
     return getRoute('post', {
       slug: slug,
       phase: phaseIdentifier,
-      phaseId: phaseId,
+      phaseId: phaseIdBase64,
       themeId: ideaBase64id,
       element: postBase64id
     });
@@ -83,13 +84,27 @@ function getPostUrl(ideaId, postId, phaseIdentifier, phaseId, slug) {
     return getRoute('questionPost', {
       slug: slug,
       phase: phaseIdentifier,
-      phaseId: phaseId,
+      phaseId: phaseIdBase64,
       questionId: ideaBase64id,
       questionIndex: 1,
       element: postBase64id
     });
   }
   return undefined;
+}
+
+function getIdeaUrl(ideaId, phaseIdentifier, phaseId, slug) {
+  if (!ideaId || !phaseIdentifier || !phaseId) {
+    return undefined;
+  }
+  const ideaBase64id = btoa(`Idea:${ideaId}`);
+  const phaseIdBase64 = btoa(`DiscussionPhase:${phaseId}`);
+  return getRoute('idea', {
+    slug: slug,
+    phase: phaseIdentifier,
+    phaseId: phaseIdBase64,
+    themeId: ideaBase64id
+  });
 }
 
 let Link;
@@ -132,21 +147,23 @@ if (v1Interface) {
     case 'user':
       return undefined;
     case 'idea': {
-      const ideaBase64id = btoa(`Idea:${id}`);
-      return `/${slug}/debate/thread/theme/${ideaBase64id}`;
+      const phaseIdentifier = hit._source.phase_identifier;
+      const phaseId = hit._source.phase_id;
+      const ideaId = id;
+      return getIdeaUrl(ideaId, phaseIdentifier, phaseId, slug);
     }
     case 'extract': {
       const phaseIdentifier = hit._source.phase_identifier;
       const phaseId = hit._source.phase_id;
-      const ideaId = hit._source.idea_id;
+      const ideaId = hit._source.idea_id[0];
       const postId = hit._source.post_id;
       return getPostUrl(ideaId, postId, phaseIdentifier, phaseId, slug);
     }
     default: {
       // post
       const phaseIdentifier = hit._source.phase_identifier;
-      const phaseId = btoa(`DiscussionPhase:${hit._source.phase_id}`);
-      const ideaId = hit._source.idea_id.length > 0 ? hit._source.idea_id[0] : null;
+      const phaseId = hit._source.phase_id;
+      const ideaId = hit._source.idea_id[0];
       return getPostUrl(ideaId, id, phaseIdentifier, phaseId, slug);
     }
     }
