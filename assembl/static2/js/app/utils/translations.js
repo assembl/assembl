@@ -54,8 +54,12 @@ const Translations = {
       matomo: "Matomo",
       privacyPolicy: "Politique de confidentialité",
       cgu: "Conditions générales d'utilisation",
-      matomoSettings: "Pour modifier les paramètres de ce cookie veuillez cliquer ici"
-
+      matomoSettings: "Pour modifier les paramètres de ce cookie veuillez cliquer ici",
+      userSessionHelper: "Ce cookie est nécessaire pour vous maintenir connecté sur Assembl.",
+      localeHelper: "Ce cookie est nécessaire afin d'afficher les textes dans la langue de votre nagigateur ou bien celle que vous avez sélectionné dans la barre de navigation.",
+      privacyPolicyHelper: "Ce cookie permet d'enregistrer que vous avez accepté la politique de confidentialité de la consultation.",
+      cguHelper: "Ce cookie permet d'enregistrer que vous avez accepté les conditions générales d'utilisation.",
+      matomoHelper: "Ce cookie est utilisé à des fins statistiques concernant les participants à la consultation."
     },
     search: {
       reset: {
@@ -874,7 +878,12 @@ const Translations = {
       matomo: "Matomo",
       cgu: "Terms and conditions",
       privacyPolicy: "Privacy policy",
-      matomoSettings: "To modify this cookie's setting please click here"
+      matomoSettings: "To modify this cookie's setting please click here",
+      userSessionHelper: "This cookie is necessary to maintain the user connected on Assembl.",
+      localeHelper: "This cookie is necessary to display the texts in the language of your browser or the one you selected in the navigation bar.",
+      privacyPolicyHelper: "This cookie registers that you have accepted the privacy policy of the consultation.",
+      cguHelper: "This cookie registers that you have accepted the terms and conditions of the consultation.",
+      matomoHelper: "This cookie is used for stasticial purposes regarding the participants of the consultation."
     },
     search: {
       reset: {

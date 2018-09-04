@@ -4,11 +4,29 @@ exports[`CookieToggle component should render a cookie's name with a toggle to c
 <div
   className="cookie-toggle"
 >
-  <span
-    className="cookie-title dark-title-3 ellipsis"
+  <div
+    className="cookie-title"
   >
-    User Session
-  </span>
+    <span
+      className="dark-title-3 ellipsis"
+    >
+      User Session
+    </span>
+    <div
+      className="cookie-helper"
+    >
+      
+       
+      <span
+        className="assembl-icon-faq grey pointer"
+        onBlur={[Function]}
+        onClick={null}
+        onFocus={[Function]}
+        onMouseOut={[Function]}
+        onMouseOver={[Function]}
+      />
+    </div>
+  </div>
   <div
     className="rsbc-switch-button rsbc-mode-switch rsbc-switch-button-flat-round disabled"
   >

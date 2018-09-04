@@ -2,7 +2,11 @@
 /* global globalAnalytics */
 import React from 'react';
 import { I18n, Translate } from 'react-redux-i18n';
+
+// Components
 import SwitchButton from '../common/switchButton';
+import Helper from '../common/helper';
+
 import { COOKIE_TRANSLATION_KEYS } from '../../constants';
 
 export type CookieObject = {
@@ -38,7 +42,13 @@ const CookieToggle = ({ handleToggle, cookie, toggleCookieType, locale }: Cookie
     : null;
   return (
     <div className={cookieIsPiwik && matomoOptOutLink ? '' : 'cookie-toggle'}>
-      <span className="cookie-title dark-title-3 ellipsis">{cookieName}</span>
+      <div className="cookie-title">
+        <span className="dark-title-3 ellipsis">{cookieName}</span>
+        <Helper
+          helperText={I18n.t(`cookies.${name}Helper`)}
+          classname="cookie-helper"
+        />
+      </div>
       {cookieIsPiwik && matomoOptOutLink ? <a
         // if the matomo website is not available in the locale it falls back to english
         href={matomoOptOutLink}

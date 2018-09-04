@@ -44,11 +44,29 @@ exports[`CookiesSelector component should render a list of cookieToggle componen
         <div
           className="cookie-toggle"
         >
-          <span
-            className="cookie-title dark-title-3 ellipsis"
+          <div
+            className="cookie-title"
           >
-            Language
-          </span>
+            <span
+              className="dark-title-3 ellipsis"
+            >
+              Language
+            </span>
+            <div
+              className="cookie-helper"
+            >
+              
+               
+              <span
+                className="assembl-icon-faq grey pointer"
+                onBlur={[Function]}
+                onClick={null}
+                onFocus={[Function]}
+                onMouseOut={[Function]}
+                onMouseOver={[Function]}
+              />
+            </div>
+          </div>
           <div
             className="rsbc-switch-button rsbc-mode-switch rsbc-switch-button-flat-round disabled"
           >
