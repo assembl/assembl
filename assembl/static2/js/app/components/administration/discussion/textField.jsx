@@ -48,14 +48,14 @@ const TextField = ({
   <FormGroup bsClass="margin-s profile-options-field">
     <div className="flex">
       <FormControl type="text" onChange={e => updateTitle(e.target.value)} value={title} />
-      {identifier === 'CUSTOM' || identifier === 'USERNAME' && (
+      {identifier === 'CUSTOM' || identifier === 'USERNAME' ? (
         <OverlayTrigger placement="top" overlay={required ? textFieldToggleOptionalTooltip : textFieldToggleRequiredTooltip}>
           {/* overlaytrigger does not seem to work with SwitchButton so we add a span... */}
           <span>
             <SwitchButton name={`required-switch-${id}`} checked={required} onChange={toggleRequired} />
           </span>
         </OverlayTrigger>
-      )}
+      ) : null}
       <div className="flex">
         {!isLast ? (
           <OverlayTrigger placement="top" overlay={downTooltip}>
