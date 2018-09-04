@@ -87,8 +87,17 @@ class TopPostFormContainer extends React.Component<TopPostFormContainerProps, To
   }
 
   render() {
-    const { ideaId, refetchIdea, messageColumns = [], isColumnViewInline, topPostsCount,
-      instructionLabel, fillBodyLabel, bodyPlaceholder, postSuccessMsg } = this.props;
+    const {
+      ideaId,
+      refetchIdea,
+      messageColumns = [],
+      isColumnViewInline,
+      topPostsCount,
+      instructionLabel,
+      fillBodyLabel,
+      bodyPlaceholder,
+      postSuccessMsg
+    } = this.props;
     const columnsInfos = this.getColumnsInfos();
     const { sticky } = this.state;
     const containerClassNames = sticky && messageColumns.length <= 1 && topPostsCount >= 1 ? 'top-post-sticky' : '';

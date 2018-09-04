@@ -9,7 +9,6 @@ import withLoadingIndicator from '../components/common/withLoadingIndicator';
 import LegalContents from '../graphql/LegalContents.graphql';
 import type { State } from '../reducers/rootReducer';
 
-
 type AdditionalProps = {
   text?: string,
   headerTitle?: string
@@ -17,19 +16,16 @@ type AdditionalProps = {
 
 export type Props = AdditionalProps & LegalContentsQuery & QueryProps;
 
-const withData: OperationComponent<LegalContentsQuery, LegalContentsQueryVariables, Props> = graphql(
-  LegalContents,
-  {
-    props: ({ data }) => {
-      const text = data.legalContents ? data.legalContents.userGuidelines : '';
-      return {
-        ...data,
-        text: text,
-        headerTitle: I18n.t('userGuidelines.headerTitle')
-      };
-    }
+const withData: OperationComponent<LegalContentsQuery, LegalContentsQueryVariables, Props> = graphql(LegalContents, {
+  props: ({ data }) => {
+    const text = data.legalContents ? data.legalContents.userGuidelines : '';
+    return {
+      ...data,
+      text: text,
+      headerTitle: I18n.t('userGuidelines.headerTitle')
+    };
   }
-);
+});
 
 export const mapStateToProps: State => LegalContentsQueryVariables = state => ({
   lang: state.i18n.locale

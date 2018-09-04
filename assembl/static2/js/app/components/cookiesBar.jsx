@@ -27,11 +27,12 @@ export class DumbCookiesBar extends React.Component<Props, State> {
     super(props);
     const { cookiesList } = props;
     const cookiesFromBrowser = getCookieItem('cookies_configuration');
-    const shouldHideBar = cookiesList && cookiesList.length > 0
-      ? // cookiesList comes from the query and is only received if the user is logged in
-      COOKIE_TYPES.some(cookie => cookiesList.includes(cookie))
-      : // if the user is not logged in, we check in the browser instead of the backend
-      COOKIE_TYPES.some(cookie => cookiesFromBrowser && cookiesFromBrowser.split(',').includes(cookie));
+    const shouldHideBar =
+      cookiesList && cookiesList.length > 0
+        ? // cookiesList comes from the query and is only received if the user is logged in
+        COOKIE_TYPES.some(cookie => cookiesList.includes(cookie))
+        : // if the user is not logged in, we check in the browser instead of the backend
+        COOKIE_TYPES.some(cookie => cookiesFromBrowser && cookiesFromBrowser.split(',').includes(cookie));
     this.state = { hide: shouldHideBar };
   }
 
@@ -57,7 +58,12 @@ export class DumbCookiesBar extends React.Component<Props, State> {
             <Translate value="cookiesBar.accept" />
           </Button>
           <Link to={get('cookiesPolicy', { slug: slug })}>
-            <Button className="button-submit button-dark cookies-button" onClick={() => { this.setState({ hide: true }); }} >
+            <Button
+              className="button-submit button-dark cookies-button"
+              onClick={() => {
+                this.setState({ hide: true });
+              }}
+            >
               <Translate value="cookiesBar.seeCookiesPolicy" />
             </Button>
           </Link>

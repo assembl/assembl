@@ -37,35 +37,35 @@ const CookieToggle = ({ handleToggle, cookie, toggleCookieType, locale }: Cookie
 
   const cookieName = Object.keys(COOKIE_TRANSLATION_KEYS).includes(name) ? I18n.t(`cookies.${name}`) : name;
   const cookieIsPiwik = name === 'matomo';
-  const matomoOptOutLink = matomoHost ?
-    `https://${matomoHost}/index.php?module=CoreAdminHome&action=optOut&language=${locale}`
+  const matomoOptOutLink = matomoHost
+    ? `https://${matomoHost}/index.php?module=CoreAdminHome&action=optOut&language=${locale}`
     : null;
   return (
     <div className={cookieIsPiwik && matomoOptOutLink ? '' : 'cookie-toggle'}>
       <div className="cookie-title">
         <span className="dark-title-3 ellipsis">{cookieName}</span>
-        <Helper
-          helperText={I18n.t(`cookies.${name}Helper`)}
-          classname="cookie-helper"
-        />
+        <Helper helperText={I18n.t(`cookies.${name}Helper`)} classname="cookie-helper" />
       </div>
-      {cookieIsPiwik && matomoOptOutLink ? <a
-        // if the matomo website is not available in the locale it falls back to english
-        href={matomoOptOutLink}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="matomo-settings-link"
-      >
-        <Translate value="cookies.matomoSettings" />
-      </a>
-        : <SwitchButton
+      {cookieIsPiwik && matomoOptOutLink ? (
+        <a
+          // if the matomo website is not available in the locale it falls back to english
+          href={matomoOptOutLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="matomo-settings-link"
+        >
+          <Translate value="cookies.matomoSettings" />
+        </a>
+      ) : (
+        <SwitchButton
           label={I18n.t('refuse')}
           labelRight={I18n.t('accept')}
           onChange={toggleSwitch}
           checked={!accepted}
           disabled={category === 'essential'}
           name={name}
-        />}
+        />
+      )}
     </div>
   );
 };

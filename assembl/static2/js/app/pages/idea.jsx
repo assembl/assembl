@@ -264,7 +264,8 @@ class Idea extends React.Component {
         </Header>
         <section className="post-section">
           {!ideaWithPostsData.loading &&
-            !isBrightMirror && announcement && (
+            !isBrightMirror &&
+            announcement && (
               <Grid fluid className="background-light">
                 <div className="max-container">
                   <div className="content-section">

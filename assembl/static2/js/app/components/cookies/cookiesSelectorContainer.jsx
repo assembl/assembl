@@ -41,13 +41,14 @@ export class DumbCookiesSelectorContainer extends React.Component<Props, State> 
     // @$FlowFixMe flow does not see that getCookieItem has been checked as non null
     const cookiesFromBrowser = getCookieItem('cookies_configuration') && getCookieItem('cookies_configuration').split(',');
     const initialCookiesList = COOKIE_TYPES.filter(cookie => cookie.includes('ACCEPT'));
-    const cookiesList = props.cookiesList && props.cookiesList.length > 0
-      ? // if the user is logged in, we get the cookiesList from the query
-      props.cookiesList
-      : // otherwise, we take it from the browser
-      cookiesFromBrowser ||
-      // if browser cookies are empty aswell, we take the initial configuration list
-      initialCookiesList;
+    const cookiesList =
+      props.cookiesList && props.cookiesList.length > 0
+        ? // if the user is logged in, we get the cookiesList from the query
+        props.cookiesList
+        : // otherwise, we take it from the browser
+        cookiesFromBrowser ||
+          // if browser cookies are empty aswell, we take the initial configuration list
+          initialCookiesList;
     const cookiesArray =
       cookiesList &&
       cookiesList.map(cookie => ({

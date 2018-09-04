@@ -103,12 +103,9 @@ export const mapDataToProps = ({ data }: Object) => {
   };
 };
 
-const withData: OperationComponent<LegalContentsQuery, LegalContentsQueryVariables, Props> = graphql(
-  LegalContents,
-  {
-    props: mapDataToProps
-  }
-);
+const withData: OperationComponent<LegalContentsQuery, LegalContentsQueryVariables, Props> = graphql(LegalContents, {
+  props: mapDataToProps
+});
 
 export { DumbTermsForm };
 
