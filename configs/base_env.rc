@@ -105,3 +105,4 @@ supervisor__autostart_urlmetadata = true
 # The first machine is the Robot used for Bigdatext
 machines =
 
+visit_analytics_region_redis_expiration_time = 3600

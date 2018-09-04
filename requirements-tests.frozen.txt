@@ -45,6 +45,7 @@ defusedxml==0.4.1         # via python-saml
 dm.xmlsec.binding==1.3.2  # via python-saml
 dnspython==1.15.0         # via pyisemail
 docutils==0.14            # via sphinx
+dogpile.cache==0.6.7
 elasticsearch==5.1.0
 enum34==1.1.6
 et-xmlfile==1.0.1         # via openpyxl
