@@ -81,8 +81,14 @@ export const postBodyReplacementComponents = (afterLoad?: Function) => ({
   a: (attributes: Object) => {
     const embeddedUrl = isSpecialURL(attributes.href);
     const origin = (
-      <a key={`url-link-${attributes.href}`} href={attributes.href} className="linkified" target="_blank">
-        {attributes.href}
+      <a
+        key={`url-link-${attributes.href}`}
+        href={attributes.href}
+        className="linkified"
+        target={attributes.target}
+        title={attributes.title}
+      >
+        {attributes.children}
       </a>
     );
     if (embeddedUrl) return origin;
