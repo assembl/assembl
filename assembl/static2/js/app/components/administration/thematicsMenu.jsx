@@ -260,8 +260,7 @@ const ThematicsMenu = ({
 export default compose(
   graphql(ThematicsDataQuery, {
     options: ({ phase, locale }) => ({
-      variables: { identifier: phase.identifier, lang: locale },
-      fetchPolicy: 'cache-first'
+      variables: { identifier: phase.identifier, lang: locale }
     })
   }),
   withLoadingIndicator({ textHidden: true }),

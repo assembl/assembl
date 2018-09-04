@@ -11,15 +11,15 @@ import type { MediaValue, SurveyAdminValues, ThemeValue } from './types.flow';
 import { getTree } from '../../../utils/tree';
 
 export const load = async (client: ApolloClient, fetchPolicy: FetchPolicy, locale: string) => {
-  // Prefetch the ThematicsDataQuery for the admin menu
-  client.query({
-    query: ThematicsDataQuery,
-    variables: { identifier: PHASES.survey, lang: locale }
-  });
   const { data } = await client.query({
     query: ThematicsQuery,
     variables: { identifier: PHASES.survey },
     fetchPolicy: fetchPolicy
+  });
+  // Prefetch the ThematicsDataQuery for the admin menu
+  client.query({
+    query: ThematicsDataQuery,
+    variables: { identifier: PHASES.survey, lang: locale }
   });
   return data;
 };
