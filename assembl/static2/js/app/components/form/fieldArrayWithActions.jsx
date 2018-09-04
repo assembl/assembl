@@ -63,8 +63,7 @@ export class Fields extends React.PureComponent<FieldsProps> {
   down = (index: number) => {
     const { fields, onDown, parentId } = this.props;
     if (onDown) {
-      const fieldValue = fields.value[index];
-      onDown(fieldValue.id, parentId, index, index + 1);
+      onDown(fields.value[index].id, parentId, index, index + 1);
     }
     fields.swap(index, index + 1);
   };
@@ -72,8 +71,7 @@ export class Fields extends React.PureComponent<FieldsProps> {
   up = (index: number) => {
     const { fields, onUp, parentId } = this.props;
     if (onUp) {
-      const fieldValue = fields.value[index];
-      onUp(fieldValue.id, parentId, index, index - 1);
+      onUp(fields.value[index].id, parentId, index, index - 1);
     }
     fields.swap(index, index - 1);
   };

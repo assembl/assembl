@@ -22,8 +22,7 @@ function validateTheme(theme) {
   }
 
   if (theme.children) {
-    const children = theme.children.map(validateTheme);
-    errors.children = children;
+    errors.children = theme.children.map(validateTheme);
   }
   return errors;
 }

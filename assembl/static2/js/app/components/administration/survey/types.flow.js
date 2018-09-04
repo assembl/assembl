@@ -25,7 +25,7 @@ export type ThemeValue = {
   questions: Array<QuestionValue>,
   title: I18nValue,
   video: VideoValue,
-  children: Array<*>
+  children: Array<ThemeValue>
 };
 
 export type ThemesValue = Array<ThemeValue>;

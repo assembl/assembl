@@ -2,6 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { Translate } from 'react-redux-i18n';
+import classNames from 'classnames';
 
 import { get } from '../../utils/routeMap';
 import { PHASES_ADMIN_MENU } from '../../constants';
@@ -62,7 +63,7 @@ class PhaseMenu extends React.PureComponent<Props> {
           <Translate value="administration.menu.phase" count={index + 1} description={phase.title} />
         </Link>
         {subMenuIds.length > 0 ? (
-          <ul className={isActive ? 'shown admin-menu2' : 'hidden admin-menu2'}>
+          <ul className={classNames('admin-menu2', { shown: isActive, hidden: !isActive })}>
             {subMenuIds.map(key => this.renderSubMenuItem(subMenu[key]))}
           </ul>
         ) : null}

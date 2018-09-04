@@ -2,6 +2,8 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { Translate } from 'react-redux-i18n';
+import classNames from 'classnames';
+
 import { get } from '../../utils/routeMap';
 import { getDiscussionSlug } from '../../utils/globalFunctions';
 import { type MenuItem } from '../../utils/administration/menu';
@@ -28,13 +30,14 @@ class Menu extends React.PureComponent<Props> {
     const sectionQuery = sectionId ? `?section=${sectionIndex}` : '';
     const subMenuIds = subMenu ? Object.keys(subMenu) : [];
     const newRootSection = !isRoot ? sectionIndex : '';
+    const isActive = requestedPhase === id;
     return (
       <li key={sectionIndex} className={isRoot ? 'menu-item' : ''}>
         <Link to={`${get('administration', slug)}/${id}${sectionQuery}`} activeClassName="active">
           <Translate value={title} />
         </Link>
         {subMenu && subMenuIds.length > 0 ? (
-          <ul className={requestedPhase === id ? 'shown admin-menu2' : 'hidden admin-menu2'}>
+          <ul className={classNames('admin-menu2', { shown: isActive, hidden: !isActive })}>
             {subMenuIds.map((subKey) => {
               const subMenuItem = subMenu[subKey];
               return this.renderMenuItem(id, subMenuItem, slug, newRootSection, false);
