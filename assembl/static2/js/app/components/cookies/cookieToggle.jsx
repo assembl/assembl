@@ -40,8 +40,9 @@ const CookieToggle = ({ handleToggle, cookie, toggleCookieType, locale }: Cookie
   const matomoOptOutLink = matomoHost
     ? `https://${matomoHost}/index.php?module=CoreAdminHome&action=optOut&language=${locale}`
     : null;
+
   return (
-    <div className={cookieIsPiwik && matomoOptOutLink ? '' : 'cookie-toggle'}>
+    <div className={cookieIsPiwik && matomoOptOutLink ? 'cookie-with-link' : 'cookie-toggle'}>
       <div className="cookie-title">
         <span className="dark-title-3 ellipsis">{cookieName}</span>
         <Helper helperText={I18n.t(`cookies.${name}Helper`)} classname="cookie-helper" />

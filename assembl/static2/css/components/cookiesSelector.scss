@@ -31,20 +31,25 @@
     font-size: $font-size-sm;
   }
 
-  .matomo-settings-link {
-    margin-left: 100px;
+  .cookie-title {
+    width: 50%;
+    margin-left: 20px;
+    display: flex;
+  }
+
+  .cookie-with-link {
+    display: flex;
+    width: 60%;
+
+    .matomo-settings-link {
+      width: 100%;
+    }
   }
 
   .cookie-toggle {
     display: flex;
     align-items: center;
     margin: 5px;
-
-    .cookie-title {
-      width: 50%;
-      margin-left: 20px;
-      display: flex;
-    }
 
     .cookie-helper {
       margin-top: 3px;
