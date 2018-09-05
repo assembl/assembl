@@ -1,57 +1,30 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`CookieToggle component should render a cookie's name with a toggle to change its setting 1`] = `
+exports[`CookieSwitch component should render a cookie's name with a toggle to change its setting 1`] = `
 <div
-  className="cookie-toggle"
+  className="rsbc-switch-button rsbc-mode-switch rsbc-switch-button-flat-round"
 >
-  <div
-    className="cookie-title"
+  <label
+    htmlFor="switch-button"
   >
-    <span
-      className="dark-title-3 ellipsis"
-    >
-      User Session
-    </span>
-    <div
-      className="cookie-helper"
-    >
-      
-       
-      <span
-        className="assembl-icon-faq grey pointer"
-        onBlur={[Function]}
-        onClick={null}
-        onFocus={[Function]}
-        onMouseOut={[Function]}
-        onMouseOver={[Function]}
-      />
-    </div>
-  </div>
-  <div
-    className="rsbc-switch-button rsbc-mode-switch rsbc-switch-button-flat-round disabled"
+    Refuse
+  </label>
+  <input
+    checked={true}
+    disabled={false}
+    id="switch-button"
+    name="switch-button"
+    onChange={[Function]}
+    type="checkbox"
+    value="1"
+  />
+  <label
+    htmlFor="switch-button"
+  />
+  <label
+    htmlFor="switch-button"
   >
-    <label
-      htmlFor="userSession"
-    >
-      Refuse
-    </label>
-    <input
-      checked={false}
-      disabled={true}
-      id="userSession"
-      name="userSession"
-      onChange={[Function]}
-      type="checkbox"
-      value="1"
-    />
-    <label
-      htmlFor="userSession"
-    />
-    <label
-      htmlFor="userSession"
-    >
-      Accept
-    </label>
-  </div>
+    Accept
+  </label>
 </div>
 `;

@@ -3,7 +3,7 @@ import React from 'react';
 import { Translate } from 'react-redux-i18n';
 import { Button } from 'react-bootstrap';
 import classnames from 'classnames';
-import CookieToggle from './cookieToggle';
+import CookieSetter from './cookieSetter';
 import type { CookiesObject } from './cookiesSelectorContainer';
 
 type Props = {
@@ -36,36 +36,36 @@ const CookiesSelector = ({
     <Translate value="cookiesPolicy.instructions" className="cookies-instructions" />
     <div className="cookies-categories">
       {cookies &&
-        Object.keys(cookies).map((category) => {
-          const isActiveKey = category === activeKey;
-          return (
-            <div key={`category-${category}`}>
-              <div
-                className="cookies-category-selector"
-                onClick={() => {
-                  handleCategorySelection(category);
-                }}
-              >
-                <span className={classnames('assembl-icon-right-dir', { 'active-arrow': isActiveKey })} />
-                <Translate value={`cookiesPolicy.${category}`} className="dark-title-3" />
+          Object.keys(cookies).map((category) => {
+            const isActiveKey = category === activeKey;
+            return (
+              <div key={`category-${category}`}>
+                <div
+                  className="cookies-category-selector"
+                  onClick={() => {
+                    handleCategorySelection(category);
+                  }}
+                >
+                  <span className={classnames('assembl-icon-right-dir', { 'active-arrow': isActiveKey })} />
+                  <Translate value={`cookiesPolicy.${category}`} className="dark-title-3" />
+                </div>
+                <div className="cookies-toggles">
+                  {isActiveKey &&
+                    show &&
+                    cookies[category] &&
+                    cookies[category].map(cookie => (
+                      <CookieSetter
+                        cookie={cookie}
+                        key={cookie.name}
+                        handleToggle={handleToggle}
+                        toggleCookieType={toggleCookieType}
+                        locale={locale}
+                      />
+                    ))}
+                </div>
               </div>
-              <div className="cookies-toggles">
-                {isActiveKey &&
-                  show &&
-                  cookies[category] &&
-                  cookies[category].map(cookie => (
-                    <CookieToggle
-                      cookie={cookie}
-                      key={cookie.name}
-                      handleToggle={handleToggle}
-                      toggleCookieType={toggleCookieType}
-                      locale={locale}
-                    />
-                  ))}
-              </div>
-            </div>
-          );
-        })}
+            );
+          })}
     </div>
     <div className="submit-button-container">
       <Button onClick={handleSave} className={settingsHaveChanged ? 'button-submit button-dark' : 'hidden'}>

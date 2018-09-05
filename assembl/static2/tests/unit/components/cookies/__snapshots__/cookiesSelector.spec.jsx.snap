@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`CookiesSelector component should render a list of cookieToggle components set in different categories 1`] = `
+exports[`CookiesSelector component should render a list of cookieSetter components set in different categories 1`] = `
 <div
   className="cookies-selector"
 >
@@ -42,7 +42,7 @@ exports[`CookiesSelector component should render a list of cookieToggle componen
         className="cookies-toggles"
       >
         <div
-          className="cookie-toggle"
+          className="cookie-with-link"
         >
           <div
             className="cookie-title"
@@ -67,32 +67,12 @@ exports[`CookiesSelector component should render a list of cookieToggle componen
               />
             </div>
           </div>
-          <div
-            className="rsbc-switch-button rsbc-mode-switch rsbc-switch-button-flat-round disabled"
+          <span
+            className={undefined}
+            style={undefined}
           >
-            <label
-              htmlFor="locale"
-            >
-              Refuse
-            </label>
-            <input
-              checked={false}
-              disabled={true}
-              id="locale"
-              name="locale"
-              onChange={[Function]}
-              type="checkbox"
-              value="1"
-            />
-            <label
-              htmlFor="locale"
-            />
-            <label
-              htmlFor="locale"
-            >
-              Accept
-            </label>
-          </div>
+            This cookie is required for Assembl to work properly
+          </span>
         </div>
       </div>
     </div>

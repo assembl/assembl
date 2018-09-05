@@ -13,7 +13,7 @@ import acceptedCookiesQuery from '../../graphql/acceptedCookiesQuery.graphql';
 import updateAcceptedCookies from '../../graphql/mutations/updateAcceptedCookies.graphql';
 import withLoadingIndicator from '../common/withLoadingIndicator';
 
-import type { CookieObject } from './cookieToggle';
+import type { CookieObject } from './cookieSetter';
 import { COOKIE_TRANSLATION_KEYS, COOKIE_TYPES } from '../../constants';
 
 type Props = {
