@@ -12,13 +12,17 @@ exports[`TextWithHeaderPage component should render the header with a title and 
     className="max-container margin-xxl"
   >
     <div
-      className="ellipsis-content justify"
-      dangerouslySetInnerHTML={
-        Object {
-          "__html": "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium dolore",
+      className="page-body"
+    >
+      <div
+        className="ellipsis-content justify"
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium dolore",
+          }
         }
-      }
-    />
+      />
+    </div>
   </div>
 </div>
 `;
