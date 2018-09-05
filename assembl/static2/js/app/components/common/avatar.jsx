@@ -38,7 +38,7 @@ class ProfileIcon extends React.Component {
     const { loginData } = this.props;
     if (loginData && ('local' in loginData) && !loginData.local) {
       e.preventDefault();
-      browserHistory.push(loginData.route);
+      browserHistory.push(loginData.url);
     }
   }
 
