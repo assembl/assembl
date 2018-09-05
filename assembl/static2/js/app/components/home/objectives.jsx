@@ -17,8 +17,8 @@ class Objectives extends React.Component {
   displayPhase() {
     const slug = { slug: getDiscussionSlug() };
     const { timeline } = this.props;
-    const { currentPhaseIdentifier, currentPhaseId } = getCurrentPhaseData(timeline);
-    browserHistory.push(get('debate', { ...slug, phase: currentPhaseIdentifier, phaseId: currentPhaseId }));
+    const { currentPhaseIdentifier } = getCurrentPhaseData(timeline);
+    browserHistory.push(get('debate', { ...slug, phase: currentPhaseIdentifier }));
   }
 
   render() {

@@ -13,9 +13,7 @@ class BrightMirror extends React.Component {
     // After fetching thematics, redirect to the only BM thematic
     if (isParentRoute && thematics.length > 0) {
       const themeId = thematics[0].id;
-      browserHistory.push(
-        `${get('idea', { slug: params.slug, phase: params.phase, phaseId: params.phaseId, themeId: themeId })}`
-      );
+      browserHistory.push(`${get('idea', { slug: params.slug, phase: params.phase, themeId: themeId })}`);
     }
   }
 

@@ -10,17 +10,18 @@ def test_get_frontend_route_post(phases, discussion, idea_with_en_fr, reply_post
     idea_id = to_global_id('Idea', idea_with_en_fr.id)
     element = to_global_id('Post', reply_post_1)
     thread = phases['thread']
-    thread_id = to_global_id('DiscussionPhase', thread),
     options = {
         'slug': discussion.slug,
         'phase': thread.identifier,
-        'phaseId': thread_id,
         'themeId': idea_id,
         'element': element
     }
     resp = furl.get_frontend_url(route_name, **options)
-    expected = "/{slug}/debate/thread/{phaseId}/theme/{themeId}/#{element}".format(
-        slug=discussion.slug, themeId=idea_id, phaseId=thread_id, element=element)
+    expected = "/{slug}/debate/{phase}/theme/{themeId}/#{element}".format(
+        slug=discussion.slug,
+        phase=thread.identifier,
+        themeId=idea_id,
+        element=element)
     assert resp == expected
 
 
@@ -66,19 +67,16 @@ def test_get_route_react_frontend_post(phases, discussion, test_webrequest,
     idea_id = to_global_id('Idea', idea_with_en_fr.id)
     element = to_global_id('Post', reply_post_1)
     thread = phases['thread']
-    thread_id = to_global_id('DiscussionPhase', thread),
     options = {
         'phase': thread.identifier,
-        'phaseId': thread_id,
         'themeId': idea_id,
         'element': element
     }
 
-    expected = "/{slug}/debate/{phase}/{phaseId}/theme/{theme_id}/#{element}"\
+    expected = "/{slug}/debate/{phase}/theme/{theme_id}/#{element}"\
         .format(
             slug=discussion.slug,
             phase=thread.identifier,
-            phaseId=thread_id,
             theme_id=idea_id,
             element=element
         )
@@ -91,19 +89,16 @@ def test_get_route_react_frontend_post_no_element(
     get_route = create_get_route(test_webrequest, discussion)
     idea_id = to_global_id('Idea', idea_with_en_fr.id)
     thread = phases['thread']
-    thread_id = to_global_id('DiscussionPhase', thread),
     options = {
         'phase': thread.identifier,
-        'phaseId': thread_id,
         'themeId': idea_id,
         'element': ''
     }
 
-    expected = "/{slug}/debate/{phase}/{phaseId}/theme/{theme_id}/#{element}"\
+    expected = "/{slug}/debate/{phase}/theme/{theme_id}/#{element}"\
         .format(
             slug=discussion.slug,
             phase=thread.identifier,
-            phaseId=thread_id,
             theme_id=idea_id,
             element=""
         )

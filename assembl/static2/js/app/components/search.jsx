@@ -65,26 +65,23 @@ const highlightedTextOrTruncatedText = (hit, field) => {
   return text;
 };
 
-function getPostUrl(ideaId, postId, phaseIdentifier, phaseId, slug) {
-  if (!ideaId || !phaseIdentifier || !phaseId) {
+function getPostUrl(ideaId, postId, phaseIdentifier, slug) {
+  if (!ideaId || !phaseIdentifier) {
     return undefined;
   }
   const ideaBase64id = btoa(`Idea:${ideaId}`);
   const postBase64id = btoa(`Post:${postId}`);
-  const phaseIdBase64 = btoa(`DiscussionPhase:${phaseId}`);
   if (phaseIdentifier === 'thread') {
     return getRoute('post', {
       slug: slug,
       phase: phaseIdentifier,
-      phaseId: phaseIdBase64,
       themeId: ideaBase64id,
       element: postBase64id
     });
-  } else if (phaseId === 'survey') {
+  } else if (phaseIdentifier === 'survey') {
     return getRoute('questionPost', {
       slug: slug,
       phase: phaseIdentifier,
-      phaseId: phaseIdBase64,
       questionId: ideaBase64id,
       questionIndex: 1,
       element: postBase64id
@@ -93,16 +90,14 @@ function getPostUrl(ideaId, postId, phaseIdentifier, phaseId, slug) {
   return undefined;
 }
 
-function getIdeaUrl(ideaId, phaseIdentifier, phaseId, slug) {
-  if (!ideaId || !phaseIdentifier || !phaseId) {
+function getIdeaUrl(ideaId, phaseIdentifier, slug) {
+  if (!ideaId || !phaseIdentifier) {
     return undefined;
   }
   const ideaBase64id = btoa(`Idea:${ideaId}`);
-  const phaseIdBase64 = btoa(`DiscussionPhase:${phaseId}`);
   return getRoute('idea', {
     slug: slug,
     phase: phaseIdentifier,
-    phaseId: phaseIdBase64,
     themeId: ideaBase64id
   });
 }
@@ -148,23 +143,20 @@ if (v1Interface) {
       return undefined;
     case 'idea': {
       const phaseIdentifier = hit._source.phase_identifier;
-      const phaseId = hit._source.phase_id;
       const ideaId = id;
-      return getIdeaUrl(ideaId, phaseIdentifier, phaseId, slug);
+      return getIdeaUrl(ideaId, phaseIdentifier, slug);
     }
     case 'extract': {
       const phaseIdentifier = hit._source.phase_identifier;
-      const phaseId = hit._source.phase_id;
       const ideaId = hit._source.idea_id[0];
       const postId = hit._source.post_id;
-      return getPostUrl(ideaId, postId, phaseIdentifier, phaseId, slug);
+      return getPostUrl(ideaId, postId, phaseIdentifier, slug);
     }
     default: {
       // post
       const phaseIdentifier = hit._source.phase_identifier;
-      const phaseId = hit._source.phase_id;
       const ideaId = hit._source.idea_id[0];
-      return getPostUrl(ideaId, id, phaseIdentifier, phaseId, slug);
+      return getPostUrl(ideaId, id, phaseIdentifier, slug);
     }
     }
   };

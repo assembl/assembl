@@ -402,7 +402,6 @@ def purl_post(request):
                 furl.get_frontend_url(
                     'post',
                     phase=phase.identifier,
-                    phaseId=phase.graphene_id(),
                     themeId=idea.graphene_id(),
                     element=post.graphene_id()))
         )
@@ -442,7 +441,6 @@ def purl_ideas(request):
                 furl.get_frontend_url(
                     'idea',
                     phase=phase.identifier,
-                    phaseId=phase.graphene_id(),
                     themeId=idea.graphene_id())
             )
         )

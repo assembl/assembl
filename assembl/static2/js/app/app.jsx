@@ -36,8 +36,8 @@ class App extends React.Component {
       putTimelineInStore(timeline);
     }
     if (!params.phase && !timelineLoading && location.pathname.split('/').indexOf('debate') > -1) {
-      const { currentPhaseIdentifier, currentPhaseId } = getCurrentPhaseData(timeline);
-      browserHistory.push(get('debate', { slug: params.slug, phase: currentPhaseIdentifier, phaseId: currentPhaseId }));
+      const { currentPhaseIdentifier } = getCurrentPhaseData(timeline);
+      browserHistory.push(get('debate', { slug: params.slug, phase: currentPhaseIdentifier }));
     }
   }
 

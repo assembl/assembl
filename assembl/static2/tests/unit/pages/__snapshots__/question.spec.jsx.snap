@@ -55,7 +55,7 @@ exports[`Question page should match Question with data snapshot 1`] = `
             className="button-diamond-dark button-submit button-dark"
             onlyActiveOnIndex={false}
             style={Object {}}
-            to="/FooSlug/debate/survey/phaseFoo/theme/ThematicId"
+            to="/FooSlug/debate/survey/theme/ThematicId"
           >
             <Translate
               value="debate.question.backToQuestions"
@@ -102,7 +102,7 @@ exports[`Question page should match Question with data snapshot 1`] = `
                 className="button-submit button-dark"
                 onlyActiveOnIndex={false}
                 style={Object {}}
-                to="/FooSlug/debate/survey/phaseFoo/theme/ThematicId"
+                to="/FooSlug/debate/survey/theme/ThematicId"
               >
                 <Translate
                   value="debate.question.backToQuestions"

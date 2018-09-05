@@ -472,12 +472,11 @@ def test_url_to_post_v2(discussion, root_post_en_under_positive_column_of_idea,
         current_phase_use_v1_interface
     )
     phase = root_post_en_under_positive_column_of_idea.get_created_phase()
-    phase_id = phase.graphene_id()
     assert get_current_phase_identifier(discussion.timeline_events) ==\
         u'thread'
     assert current_phase_use_v1_interface(discussion.timeline_events) is False
     frontend_urls = FrontendUrls(discussion)
-    assert 'jacklayton2/debate/thread/{}/theme/'.format(phase_id) in \
+    assert 'jacklayton2/debate/{}/theme/'.format(phase.identifier) in \
         frontend_urls.get_post_url(root_post_en_under_positive_column_of_idea)
 
 
@@ -490,11 +489,10 @@ def test_url_to_post_v2_proposal(discussion, proposals_en_fr,
     )
     proposal = proposals_en_fr[0]
     phase = proposal.get_created_phase()
-    phase_id = phase.graphene_id()
     assert get_current_phase_identifier(discussion.timeline_events) ==\
         u'thread'
     assert current_phase_use_v1_interface(discussion.timeline_events) is False
     frontend_urls = FrontendUrls(discussion)
-    expected = 'jacklayton2/debate/survey/{}/theme/'.format(phase_id)
+    expected = 'jacklayton2/debate/{}/theme/'.format(phase.identifier)
     actual = frontend_urls.get_post_url(proposals_en_fr[0])
     assert expected in actual
