@@ -8,7 +8,7 @@ import classnames from 'classnames';
 import Helper from '../common/helper';
 import CookieSwitch from './cookieSwitch';
 
-import { COOKIE_TRANSLATION_KEYS } from '../../constants';
+import { COOKIE_TRANSLATION_KEYS, COOKIES_CATEGORIES } from '../../constants';
 
 export type CookieObject = {
   name: string,
@@ -37,12 +37,12 @@ const cookieSetter = ({ handleToggle, cookie, toggleCookieType, locale }: cookie
   const { name, category, accepted } = cookie;
 
   const cookieName = Object.keys(COOKIE_TRANSLATION_KEYS).includes(name) ? I18n.t(`cookies.${name}`) : name;
-  const cookieIsMatomo = name === 'matomo';
+  const cookieIsMatomo = name === COOKIE_TRANSLATION_KEYS.matomo;
   const matomoOptOutLink = matomoHost ?
     `https://${matomoHost}/index.php?module=CoreAdminHome&action=optOut&language=${locale}`
     : null;
 
-  const required = category === 'essential';
+  const required = category === COOKIES_CATEGORIES.essential;
 
   return (
     <div

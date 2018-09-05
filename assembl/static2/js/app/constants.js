@@ -87,6 +87,12 @@ export const COOKIE_TRANSLATION_KEYS = {
   cgu: 'cgu'
 };
 
+export const COOKIES_CATEGORIES = {
+  essential: 'essential',
+  analytics: 'analytics',
+  other: 'other'
+};
+
 // Those states lists need to be kept in sync with models/post.py
 export const PublicationStates = {
   DRAFT: 'DRAFT',
