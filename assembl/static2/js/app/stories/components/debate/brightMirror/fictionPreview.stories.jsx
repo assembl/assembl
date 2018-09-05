@@ -19,7 +19,7 @@ export const customFictionPreview: FictionPreviewProps = {
   originalBody: 'Origin body',
   refetchIdea: Function,
   lang: 'fr',
-  userCanEditThisMessage: true
+  userCanEdit: true
 };
 
 storiesOf('FictionPreview', module)
@@ -38,7 +38,7 @@ storiesOf('FictionPreview', module)
         originalBody={text('original body', customFictionPreview.originalBody)}
         refetchIdea={customFictionPreview.refetchIdea}
         lang={text('original locale', customFictionPreview.lang)}
-        userCanEditThisMessage={boolean('User can edit', customFictionPreview.userCanEditThisMessage)}
+        userCanEdit={boolean('User can edit', customFictionPreview.userCanEdit)}
       />
     ))
   );

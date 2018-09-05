@@ -40,14 +40,14 @@ const FictionsList = ({ posts, identifier, refetchIdea, lang, themeId }: Fiction
 
   const childElements = posts.map((post) => {
     let authorName = '';
-    let userCanEditThisMessage;
+    let userCanEdit;
     if (post.creator) {
       const { userId, displayName, isDeleted } = post.creator;
       authorName = isDeleted ? I18n.t('deletedUser') : displayName;
-      userCanEditThisMessage = connectedUserId === String(userId) && connectedUserCan(Permissions.EDIT_MY_POST);
+      userCanEdit = connectedUserId === String(userId) && connectedUserCan(Permissions.EDIT_MY_POST);
     } else {
       authorName = '';
-      userCanEditThisMessage = false;
+      userCanEdit = false;
     }
 
     return (
@@ -63,7 +63,7 @@ const FictionsList = ({ posts, identifier, refetchIdea, lang, themeId }: Fiction
           // $FlowFixMe body is fetch localized
           originalBody={post.body}
           refetchIdea={refetchIdea}
-          userCanEditThisMessage={userCanEditThisMessage}
+          userCanEdit={userCanEdit}
           lang={lang}
         />
       </Animated>

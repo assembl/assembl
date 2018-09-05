@@ -518,7 +518,7 @@ exports[`Storyshots FictionPreview default 1`] = `
                     <span
                       style={Object {}}
                     >
-                      userCanEditThisMessage
+                      userCanEdit
                     </span>
                     <br />
                   </span>
@@ -1111,7 +1111,7 @@ exports[`Storyshots FictionPreview playground 1`] = `
                     <span
                       style={Object {}}
                     >
-                      userCanEditThisMessage
+                      userCanEdit
                     </span>
                     <br />
                   </span>

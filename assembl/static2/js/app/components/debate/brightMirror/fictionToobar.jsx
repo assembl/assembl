@@ -9,13 +9,22 @@ import EditPostForm from '../common/editPostForm';
 export type FictionToolbarProps = {
   fictionId: string,
   onDeleteCallback: Function,
+  userCanEdit: boolean,
   originalBody: string,
   title: string,
   onModifyCallback: Function,
   lang: string
 };
 
-const fictionToolbar = ({ fictionId, onDeleteCallback, title, originalBody, onModifyCallback, lang }: FictionToolbarProps) => {
+const fictionToolbar = ({
+  fictionId,
+  onDeleteCallback,
+  userCanEdit,
+  title,
+  originalBody,
+  onModifyCallback,
+  lang
+}: FictionToolbarProps) => {
   const openPostModal = () => {
     const content = (
       <div className="fiction-edit-modal">
@@ -41,7 +50,7 @@ const fictionToolbar = ({ fictionId, onDeleteCallback, title, originalBody, onMo
   return (
     <div className="action-buttons">
       <DeletePostButton postId={fictionId} onDeleteCallback={onDeleteCallback} />
-      <EditPostButton handleClick={openPostModal} linkClassName="edit" />
+      {userCanEdit ? <EditPostButton handleClick={openPostModal} linkClassName="edit" /> : null}
     </div>
   );
 };

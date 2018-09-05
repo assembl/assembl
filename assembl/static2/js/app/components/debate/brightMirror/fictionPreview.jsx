@@ -30,7 +30,7 @@ export type FictionPreviewProps = {
   /** Original locale */
   lang: string,
   /** Boolean to tell if user can edit */
-  userCanEditThisMessage: boolean
+  userCanEdit: boolean
 };
 
 const FictionPreview = ({
@@ -43,7 +43,7 @@ const FictionPreview = ({
   originalBody,
   refetchIdea,
   lang,
-  userCanEditThisMessage
+  userCanEdit
 }: FictionPreviewProps) => {
   const openPostModal = () => {
     const content = (
@@ -80,7 +80,7 @@ const FictionPreview = ({
   return (
     <div className="fiction-preview" style={{ backgroundColor: color }}>
       <div className="content-box">
-        <ul className="actions hidden-xs">{userCanEditThisMessage ? editButton : null}</ul>
+        <ul className="actions hidden-xs">{userCanEdit ? editButton : null}</ul>
         <Link className="link" to={link}>
           <div className="inner-box">
             <h3>

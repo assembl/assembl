@@ -16,6 +16,9 @@ import FictionHeader from '../components/debate/brightMirror/fictionHeader';
 import FictionToolbar from '../components/debate/brightMirror/fictionToobar';
 import FictionBody from '../components/debate/brightMirror/fictionBody';
 import { displayAlert } from '../utils/utilityManager';
+import Permissions, { connectedUserCan } from '../utils/permissions';
+import { getConnectedUserId } from '../utils/globalFunctions';
+
 // Type imports
 import type { CircleAvatarProps } from '../components/debate/brightMirror/circleAvatar';
 import type { FictionHeaderProps } from '../components/debate/brightMirror/fictionHeader';
@@ -56,6 +59,8 @@ class BrightMirrorFiction extends Component<BrightMirrorFictionProps, BrightMirr
     const getDisplayName = () => (fiction.creator && fiction.creator.displayName ? fiction.creator.displayName : '');
     const displayName = fiction.creator && fiction.creator.isDeleted ? I18n.t('deletedUser') : getDisplayName();
 
+    const userCanEdit = getConnectedUserId() === String(fiction.creator.userId) && connectedUserCan(Permissions.EDIT_MY_POST);
+
     // Define callback functions
     const deleteFiction = () => {
       // Route to fiction list page
@@ -83,6 +88,7 @@ class BrightMirrorFiction extends Component<BrightMirrorFictionProps, BrightMirr
     const fictionToolbarProps: FictionToolbarProps = {
       fictionId: variables.id,
       onDeleteCallback: deleteFiction,
+      userCanEdit: userCanEdit,
       title: this.state.title,
       originalBody: this.state.content,
       onModifyCallback: onModifyCallback,

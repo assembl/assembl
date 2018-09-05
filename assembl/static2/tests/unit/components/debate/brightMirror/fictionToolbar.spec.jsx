@@ -16,6 +16,7 @@ import type { FictionToolbarProps } from '../../../../../js/app/components/debat
 const defaultFictionHeader = {
   fictionId: 'azertyuiop',
   onDeleteCallback: jest.fn(),
+  userCanEdit: true,
   originalBody: 'Vous ne voulez pas un whisky d abord?',
   title: 'Red is dead',
   onModifyCallback: jest.fn(),
@@ -43,7 +44,21 @@ describe('<FictionToolbar /> - with shallow', () => {
     expect(wrapper.find(DeletePostButton)).toHaveLength(1);
   });
 
-  it('should render one EditPostButton', () => {
+  xit('should render one EditPostButton', () => {
     expect(wrapper.find(EditPostButton)).toHaveLength(1);
+  });
+
+  it('should not render EditPostButton if cannot edit', () => {
+    const fictionToolbarProps = {
+      fictionId: 'azertyuiop',
+      onDeleteCallback: jest.fn(),
+      userCanEdit: false,
+      originalBody: 'Vous ne voulez pas un whisky d abord?',
+      title: 'Red is dead',
+      onModifyCallback: jest.fn(),
+      lang: 'fr'
+    };
+    wrapper = shallow(<FictionToolbar {...fictionToolbarProps} />);
+    expect(wrapper.find(EditPostButton)).toHaveLength(0);
   });
 });
