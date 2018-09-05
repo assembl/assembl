@@ -31,7 +31,7 @@ function loadStories() {
   require('../js/app/integration/101/components/button101/button101.stories.jsx');
   require('../js/app/integration/101/components/checkbox101/checkbox101.stories.jsx');
   require('../js/app/integration/101/components/checkboxList101/checkboxList101.stories.jsx');
-  require('../js/app/integration/101/components/menu/menu.stories.jsx');
+  require('../js/app/stories/components/common/menu/menu.stories.jsx');
 
   require('../js/app/stories/components/debate/brightMirror/fictionPreview.stories.jsx');
   require('../js/app/stories/components/debate/brightMirror/fictionsList.stories.jsx');
