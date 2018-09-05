@@ -103,7 +103,7 @@ class EditPostForm extends React.PureComponent<EditPostFormProps, EditPostFormSt
           .then(() => {
             displayAlert('success', I18n.t(postSuccessMsg));
             this.props.goBackToViewMode();
-            this.props.onSuccess();
+            this.props.onSuccess(variables.subject, variables.body);
             if (childrenUpdate && oldSubject !== this.state.subject) {
               // If we edited the subject, we need to reload all descendants posts,
               // we do this by refetch all Post queries.

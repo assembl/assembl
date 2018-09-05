@@ -8,13 +8,18 @@ import Adapter from 'enzyme-adapter-react-16';
 
 import FictionToolbar from '../../../../../js/app/components/debate/brightMirror/fictionToobar';
 import DeletePostButton from '../../../../../js/app/components/debate/common/deletePostButton';
+import EditPostButton from '../../../../../js/app/components/debate/common/editPostButton';
 import type { FictionToolbarProps } from '../../../../../js/app/components/debate/brightMirror/fictionToobar';
 
 // Import existing storybook data
 // import { defaultFictionHeader } from '../../../../../js/app/stories/components/debate/brightMirror/fictionHeader.stories';
 const defaultFictionHeader = {
   fictionId: 'azertyuiop',
-  onDeleteCallback: jest.fn()
+  onDeleteCallback: jest.fn(),
+  originalBody: 'Vous ne voulez pas un whisky d abord?',
+  title: 'Red is dead',
+  onModifyCallback: jest.fn(),
+  lang: 'fr'
 };
 
 // Separate the snapshots in directories next to each component
@@ -36,5 +41,9 @@ describe('<FictionToolbar /> - with shallow', () => {
 
   it('should render one DeletePostButton', () => {
     expect(wrapper.find(DeletePostButton)).toHaveLength(1);
+  });
+
+  it('should render one EditPostButton', () => {
+    expect(wrapper.find(EditPostButton)).toHaveLength(1);
   });
 });

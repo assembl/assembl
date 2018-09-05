@@ -1,5 +1,5 @@
 // @flow
-import React, { Fragment } from 'react';
+import React, { Fragment, Component } from 'react';
 import { Grid, Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { I18n } from 'react-redux-i18n';
@@ -29,64 +29,88 @@ type BrightMirrorFictionProps = {
   }
 };
 
-const BrightMirrorFiction = ({ data }: BrightMirrorFictionProps) => {
-  // Handle fetching error
-  if (data.error) {
-    displayAlert('danger', I18n.t('error.loading'));
-    return null;
+type BrightMirrorFictionState = {
+  title: string,
+  content: string
+};
+
+class BrightMirrorFiction extends Component<BrightMirrorFictionProps, BrightMirrorFictionState> {
+  constructor(props) {
+    super(props);
+    this.state = {
+      title: this.props.data.fiction.subject ? this.props.data.fiction.subject : '',
+      content: this.props.data.fiction.body ? this.props.data.fiction.body : ''
+    };
   }
 
-  // Define variables
-  const { fiction, variables } = data;
-  const getDisplayName = () => (fiction.creator && fiction.creator.displayName ? fiction.creator.displayName : '');
-  const displayName = fiction.creator && fiction.creator.isDeleted ? I18n.t('deletedUser') : getDisplayName();
+  render() {
+    const { data } = this.props;
+    // Handle fetching error
+    if (data.error) {
+      displayAlert('danger', I18n.t('error.loading'));
+      return null;
+    }
 
-  // Define callback functions
-  const deleteFiction = () => {
-    // Route to fiction list page
-    const fictionListURL = get('idea', { slug: 'TO_SET', phase: 'TO_SET', themeId: 'TO_SET' });
-    browserHistory.push(fictionListURL);
-  };
+    // Define variables
+    const { fiction, variables } = data;
+    const getDisplayName = () => (fiction.creator && fiction.creator.displayName ? fiction.creator.displayName : '');
+    const displayName = fiction.creator && fiction.creator.isDeleted ? I18n.t('deletedUser') : getDisplayName();
 
-  // Define components props
-  const circleAvatarProps: CircleAvatarProps = {
-    username: displayName,
-    src: fiction.creator && fiction.creator.image && fiction.creator.image.externalUrl ? fiction.creator.image.externalUrl : ''
-  };
+    // Define callback functions
+    const deleteFiction = () => {
+      // Route to fiction list page
+      const fictionListURL = get('idea', { slug: 'TO_SET', phase: 'TO_SET', themeId: 'TO_SET' });
+      browserHistory.push(fictionListURL);
+    };
 
-  const fictionHeaderProps: FictionHeaderProps = {
-    authorFullname: displayName,
-    publishedDate: fiction.creationDate ? fiction.creationDate.toString() : '',
-    displayedPublishedDate: I18n.l(fiction.creationDate, { dateFormat: 'date.format' }),
-    circleAvatar: { ...circleAvatarProps }
-  };
+    const onModifyCallback = (subject, body) => {
+      this.setState({ title: subject, content: body });
+    };
 
-  const fictionToolbarProps: FictionToolbarProps = {
-    fictionId: variables.id,
-    onDeleteCallback: deleteFiction
-  };
+    // Define components props
+    const circleAvatarProps: CircleAvatarProps = {
+      username: displayName,
+      src: fiction.creator && fiction.creator.image && fiction.creator.image.externalUrl ? fiction.creator.image.externalUrl : ''
+    };
 
-  const fictionBodyProps: FictionBodyProps = {
-    title: fiction.subject || '',
-    content: fiction.body || ''
-  };
+    const fictionHeaderProps: FictionHeaderProps = {
+      authorFullname: displayName,
+      publishedDate: fiction.creationDate ? fiction.creationDate.toString() : '',
+      displayedPublishedDate: I18n.l(fiction.creationDate, { dateFormat: 'date.format' }),
+      circleAvatar: { ...circleAvatarProps }
+    };
 
-  return (
-    <Fragment>
-      <Grid fluid className="bright-mirror-fiction background-fiction-default">
-        <Row>
-          <Col xs={12}>
-            <article>
-              <FictionHeader {...fictionHeaderProps} />
-              <FictionToolbar {...fictionToolbarProps} />
-              <FictionBody {...fictionBodyProps} />
-            </article>
-          </Col>
-        </Row>
-      </Grid>
-    </Fragment>
-  );
-};
+    const fictionToolbarProps: FictionToolbarProps = {
+      fictionId: variables.id,
+      onDeleteCallback: deleteFiction,
+      title: this.state.title,
+      originalBody: this.state.content,
+      onModifyCallback: onModifyCallback,
+      lang: variables.contentLocale
+    };
+
+    const fictionBodyProps: FictionBodyProps = {
+      title: this.state.title,
+      content: this.state.content
+    };
+
+    return (
+      <Fragment>
+        <Grid fluid className="bright-mirror-fiction background-fiction-default">
+          <Row>
+            <Col xs={12}>
+              <article>
+                <FictionHeader {...fictionHeaderProps} />
+                <FictionToolbar {...fictionToolbarProps} />
+                <FictionBody {...fictionBodyProps} />
+              </article>
+            </Col>
+          </Row>
+        </Grid>
+      </Fragment>
+    );
+  }
+}
 
 const mapStateToProps = state => ({
   contentLocale: state.i18n.locale
