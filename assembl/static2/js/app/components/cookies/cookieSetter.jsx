@@ -24,7 +24,6 @@ type CookieSetterProps = {
   locale: string
 };
 
-// @$FlowFixMe globalAnalytics is a global variable
 const matomoHost = globalAnalytics.piwik ? globalAnalytics.piwik.host : null;
 
 const CookieSetter = ({ handleToggle, cookie, toggleCookieType, locale }: CookieSetterProps) => {
