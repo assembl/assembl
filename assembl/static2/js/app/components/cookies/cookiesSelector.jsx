@@ -39,7 +39,7 @@ const CookiesSelector = ({
           Object.keys(cookies).map((category) => {
             const isActiveKey = category === activeKey;
             return (
-              <div key={`category-${category}`}>
+              <div key={category}>
                 <div
                   className="cookies-category-selector"
                   onClick={() => {

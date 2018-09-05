@@ -17,7 +17,7 @@ export type CookieObject = {
   cookieType: string
 };
 
-type cookieSetterProps = {
+type CookieSetterProps = {
   handleToggle: Function,
   cookie: CookieObject,
   toggleCookieType: Function,
@@ -27,7 +27,7 @@ type cookieSetterProps = {
 // @$FlowFixMe globalAnalytics is a global variable
 const matomoHost = globalAnalytics.piwik ? globalAnalytics.piwik.host : null;
 
-const cookieSetter = ({ handleToggle, cookie, toggleCookieType, locale }: cookieSetterProps) => {
+const CookieSetter = ({ handleToggle, cookie, toggleCookieType, locale }: CookieSetterProps) => {
   const toggleSwitch = () => {
     const { accepted, cookieType } = cookie;
     const updatedCookie = { ...cookie, accepted: !accepted, cookieType: toggleCookieType(cookieType) };
@@ -69,4 +69,4 @@ const cookieSetter = ({ handleToggle, cookie, toggleCookieType, locale }: cookie
   );
 };
 
-export default cookieSetter;
+export default CookieSetter;
