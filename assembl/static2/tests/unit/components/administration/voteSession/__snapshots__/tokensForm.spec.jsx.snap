@@ -35,6 +35,7 @@ exports[`tokensForm component should render a form to configure a token vote wit
         helperText="Select the number of different token types for this vote"
         helperUrl="/static2/img/helpers/helper2.jpg"
         label=""
+        popOverClass=""
       />
     </div>
     <div>
@@ -155,6 +156,7 @@ exports[`tokensForm component should render a form to configure a token vote wit
         helperText="You can decide wether the participant can distribute a single type of token (exclusive) or several types of token per proposal."
         helperUrl=""
         label=""
+        popOverClass=""
       />
       <SplitButton
         className="admin-dropdown"
@@ -251,6 +253,7 @@ exports[`tokensForm component should render a form to configure a token vote wit
         helperText="Select the number of different token types for this vote"
         helperUrl="/static2/img/helpers/helper2.jpg"
         label=""
+        popOverClass=""
       />
     </div>
     <div>

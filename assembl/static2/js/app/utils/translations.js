@@ -54,7 +54,7 @@ const Translations = {
       matomo: "Matomo",
       privacyPolicy: "Politique de confidentialité",
       cgu: "Conditions générales d'utilisation",
-      matomoSettings: "Pour modifier les paramètres de ce cookie veuillez cliquer ici",
+      matomoSettings: "Pour modifier les paramètres de ce cookie, veuillez cliquer ici",
       userSessionHelper: "Ce cookie est nécessaire pour vous maintenir connecté sur Assembl.",
       localeHelper: "Ce cookie est nécessaire afin d'afficher les textes dans la langue de votre nagigateur ou bien celle que vous avez sélectionné dans la barre de navigation.",
       privacyPolicyHelper: "Ce cookie permet d'enregistrer que vous avez accepté la politique de confidentialité de la consultation.",

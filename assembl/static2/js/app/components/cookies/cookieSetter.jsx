@@ -53,6 +53,7 @@ const CookieSetter = ({ handleToggle, cookie, toggleCookieType, locale }: Cookie
         <span className="dark-title-3 ellipsis">{cookieName}</span>
         <Helper
           helperText={I18n.t(`cookies.${name}Helper`)}
+          popOverClass="cookie-helper-popover"
           classname="cookie-helper"
         />
       </div>

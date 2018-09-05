@@ -6,7 +6,7 @@ import classnames from 'classnames';
 import CookieSetter from './cookieSetter';
 import type { CookiesObject } from './cookiesSelectorContainer';
 
-type Props = {
+type CookiesSelectorProps = {
   activeKey: ?string,
   show: boolean,
   cookies: ?CookiesObject,
@@ -28,7 +28,7 @@ const CookiesSelector = ({
   toggleCookieType,
   locale,
   settingsHaveChanged
-}: Props) => (
+}: CookiesSelectorProps) => (
   <div className="cookies-selector">
     <h2 className="dark-title-2">
       <Translate value="profile.cookies" />

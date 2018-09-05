@@ -31,6 +31,11 @@
     font-size: $font-size-sm;
   }
 
+  .helper-popover {
+    min-width: 320px !important;
+    padding: 0 0 0 10px !important;
+  }
+
   .cookie-title {
     width: 40%;
     margin-left: 20px;
@@ -53,6 +58,11 @@
 
     .cookie-helper {
       margin-top: 3px;
+    }
+
+    .cookie-helper-popover {
+      width: 320px;
+      padding-bottom: 10px;
     }
 
     .rsbc-switch-button {

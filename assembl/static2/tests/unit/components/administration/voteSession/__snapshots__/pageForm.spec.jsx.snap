@@ -48,6 +48,7 @@ exports[`Vote Session DumbPageForm component should render a form to update the 
           helperText="The top page header must contain an image and a title. The subtitle is optional."
           helperUrl="/static2/img/helpers/helper1.png"
           label="Top page Header configuration"
+          popOverClass=""
         />
         <FormControlWithLabel
           componentClass={undefined}
@@ -128,6 +129,7 @@ exports[`Vote Session DumbPageForm component should render a form to update the 
         helperText="The instructions section must contain a title and a description that will guide the participants for their contribution."
         helperUrl="/static2/img/helpers/helper2.jpg"
         label="Instructions section configuration"
+        popOverClass=""
       />
       <FormControlWithLabel
         componentClass={undefined}
@@ -185,6 +187,7 @@ exports[`Vote Session DumbPageForm component should render a form to update the 
         helperText="The proposals section is introduced by a title. You define the title based on the proposal content."
         helperUrl="/static2/img/helpers/helper3.png"
         label="Proposal section title configuration"
+        popOverClass=""
       />
       <FormControlWithLabel
         componentClass={undefined}
