@@ -22,13 +22,22 @@ class PhaseMenu extends React.PureComponent<Props> {
     const { sectionId, subMenu, title, component } = menuItem;
     if (component) {
       const MenuItemComponent = component;
-      return <MenuItemComponent rootSectionId={rootSectionId} menuItem={menuItem} slug={slug} phase={phase} locale={locale} />;
+      return (
+        <MenuItemComponent
+          key={phase.id + sectionId}
+          rootSectionId={rootSectionId}
+          menuItem={menuItem}
+          slug={slug}
+          phase={phase}
+          locale={locale}
+        />
+      );
     }
     const sectionIndex = rootSectionId ? `${rootSectionId}.${sectionId}` : sectionId;
     const sectionQuery = sectionId ? `?section=${sectionIndex}` : '';
     const subMenuIds = subMenu ? Object.keys(subMenu) : [];
     return (
-      <li key={sectionId}>
+      <li key={phase.id + sectionId}>
         <Link
           to={`${get('administration', slug)}${get('adminPhase', {
             ...slug,

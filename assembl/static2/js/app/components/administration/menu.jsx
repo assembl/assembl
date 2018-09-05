@@ -32,7 +32,7 @@ class Menu extends React.PureComponent<Props> {
     const newRootSection = !isRoot ? sectionIndex : '';
     const isActive = requestedPhase === id;
     return (
-      <li key={sectionIndex} className={isRoot ? 'menu-item' : ''}>
+      <li key={id + sectionIndex} className={isRoot ? 'menu-item' : ''}>
         <Link to={`${get('administration', slug)}/${id}${sectionQuery}`} activeClassName="active">
           <Translate value={title} />
         </Link>

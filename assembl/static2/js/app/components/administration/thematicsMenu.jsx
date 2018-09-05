@@ -178,6 +178,7 @@ const ThematicsMenuItems = ({ roots, descendants, slug, phase, indexes, sectionQ
     );
     return (
       <MenuItem
+        key={thematic.id}
         {...menuProps}
         id={index}
         title={

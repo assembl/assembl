@@ -25,7 +25,7 @@ const SectionHlper = ({ section, thematicId }: Props) => {
   switch (section) {
   case '1':
     return (
-      <div className="section-hlper">
+      <div className="section-helper">
         <h4 className="section-helper-title">{I18n.t('administration.survey.configThematicsHlperTitle')}</h4>
         <div className="section-helper-description">{I18n.t('administration.survey.configThematicsHlperDescription')}</div>
       </div>

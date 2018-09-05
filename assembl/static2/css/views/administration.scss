@@ -179,23 +179,9 @@
     }
   }
 
-  .admin-sub-menu-n {
-    padding: 0;
-    list-style-type: none;
-  }
-
   .admin-sub-menu {
     padding: 10px 0 0 10px;
     list-style-type: none;
-
-    .loader {
-      position: initial;
-    }
-  }
-
-  .admin-menu-item {
-    display: flex;
-    align-items: center;
   }
 
   .language-menu {
@@ -781,7 +767,7 @@
   color: $title3-dark-color;
 }
 
-.section-hlper {
+.section-helper {
   margin-left: 49px;
   margin-top: 37px;
 

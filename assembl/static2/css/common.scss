@@ -318,8 +318,8 @@ input.placeholder, textarea.placeholder {
       content: "";
       top: 18px;
       left: -15px;
-      border-left: 1px solid #ccc;
-      border-top: 1px solid #ccc;
+      border-left: 1px solid $grey11;
+      border-top: 1px solid $grey11;
       border-radius: 0 0 0 0;
       width: 15px;
       height: 100%;
@@ -334,8 +334,8 @@ input.placeholder, textarea.placeholder {
       position: absolute;
       top: -26px;
       left: -15px;
-      border-left: 1px solid #ccc;
-      border-bottom: 1px solid #ccc;
+      border-left: 1px solid $grey11;
+      border-bottom: 1px solid $grey11;
       border-radius: 0 0 0 0;
       width: 15px;
       height: 45px;
