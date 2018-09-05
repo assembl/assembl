@@ -5,18 +5,18 @@ import classNames from 'classnames';
 type Props = {
   id?: number,
   title: React.Node,
-  className: string,
-  parents: Array<number>,
-  openedPath: Array<number>,
-  children: React.Node,
-  openedItem: ?number,
+  className?: string,
+  parents?: Array<number>,
+  openedPath?: Array<number>,
+  children?: React.Node,
+  openedItem?: ?number,
   toggle: ?(id: number | void) => void
 };
 
 const MenuItem = ({ id, parents, title, toggle, className, openedItem, openedPath, children }: Props) => {
   const active = openedItem === id;
   const childrenElm = React.Children.map(children, (child) => {
-    const indexes = [...parents, id];
+    const indexes = [...(parents || []), id];
     return React.cloneElement(child, {
       parents: indexes,
       openedPath: openedPath,
@@ -43,6 +43,7 @@ const MenuItem = ({ id, parents, title, toggle, className, openedItem, openedPat
 };
 
 MenuItem.defaultProps = {
+  children: null,
   id: 0,
   parents: [],
   openedPath: [],

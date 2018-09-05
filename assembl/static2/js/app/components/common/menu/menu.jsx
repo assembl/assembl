@@ -3,11 +3,11 @@ import * as React from 'react';
 import classNames from 'classnames';
 
 type Props = {
-  className: string,
-  parents: Array<number>,
-  openedPath: Array<number>,
   children: React.Node,
-  isSubMenu: boolean
+  className?: string,
+  parents?: Array<number>,
+  openedPath?: Array<number>,
+  isSubMenu?: boolean
 };
 
 type State = {
@@ -41,9 +41,9 @@ class Menu extends React.Component<Props, State> {
     const { className, isSubMenu, parents, openedPath, children } = this.props;
     const { openedItem } = this.state;
     const childrenElm = React.Children.map(children, (child, index) => {
-      const spreadPath = openedItem !== null && openedPath[0] === openedItem;
+      const spreadPath = openedItem !== null && openedPath && openedPath[0] === openedItem;
       return React.cloneElement(child, {
-        openedPath: spreadPath && openedPath.slice(1),
+        openedPath: spreadPath && openedPath && openedPath.slice(1),
         parents: parents,
         id: index,
         openedItem: openedItem,
