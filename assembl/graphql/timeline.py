@@ -17,7 +17,7 @@ from .langstring import (
     langstring_from_input_entries,
     update_langstring_from_input_entries
 )
-from assembl.models.timeline import Phases, get_phase_by_identifier
+from assembl.models.timeline import Phases
 from .permissions_helpers import require_cls_permission, require_instance_permission
 from .types import SecureObjectType
 from .utils import DateTime, abort_transaction_on_exception
@@ -81,14 +81,11 @@ class CreateDiscussionPhase(graphene.Mutation):
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
         identifier = args.get('identifier')
-        is_thematics_table = args.get('is_thematics_table')
-        if identifier in (Phases.voteSession.value, Phases.survey.value, Phases.brightMirror.value):
-            # force is_thematics_table to True for those phases
-            is_thematics_table = True
-        elif identifier == Phases.thread.value:
-            # if there is an existing thread phase, the second thread phase use a phase.root_idea
-            if get_phase_by_identifier(discussion, Phases.thread.value) is not None:
-                is_thematics_table = True
+        is_thematics_table = True
+        if identifier in (Phases.multiColumns.value, Phases.thread.value):
+            # force is_thematics_table to False
+            is_thematics_table = False
+
         with cls.default_db.no_autoflush as db:
             title_entries = args.get('title_entries')
             if len(title_entries) == 0:

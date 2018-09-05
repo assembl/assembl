@@ -114,7 +114,7 @@ def test_mutation_create_discussion_phase_force_phase_root_idea(graphql_request,
     assert res.errors is None
     phase = res.data['createDiscussionPhase']['discussionPhase']
     assert phase['isThematicsTable'] is False
-    # first thread phase should use discussion.root_idea
+    # thread phase should use discussion.root_idea
     res = schema.execute(
         graphql_registry['createDiscussionPhase'],
         context_value=graphql_request,
@@ -133,13 +133,12 @@ def test_mutation_create_discussion_phase_force_phase_root_idea(graphql_request,
     assert res.errors is None
     phase = res.data['createDiscussionPhase']['discussionPhase']
     assert phase['isThematicsTable'] is False
-    # second thread phase, should be using a phase.root_idea (isThematicsTable=True)
     res = schema.execute(
         graphql_registry['createDiscussionPhase'],
         context_value=graphql_request,
         variable_values={
             "lang": u"en",
-            "identifier": u"thread",
+            "identifier": u"decouverte",
             "isThematicsTable": False,  # shouldn't taken in account
             "titleEntries": [
                 { "localeCode": "en", "value": u"My new phase" }
