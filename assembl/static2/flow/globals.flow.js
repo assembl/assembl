@@ -1,5 +1,3 @@
 // @flow
 
-declare var globalAnalytics: { piwik?: { host: string },
-                               isActive?: boolean
-                             }
+declare var globalAnalytics: { piwik?: { host: string, isActive: boolean }}
