@@ -1,8 +1,8 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import CookieToggle from '../../../../js/app/components/cookies/cookieToggle';
+import CookieSwitch from '../../../../js/app/components/cookies/cookieSwitch';
 
-describe('CookieToggle component', () => {
+describe('CookieSwitch component', () => {
   const handleToggleSpy = jest.fn(() => {});
   it('should render a cookie\'s name with a toggle to change its setting', () => {
     const props = {
@@ -13,7 +13,7 @@ describe('CookieToggle component', () => {
       },
       handleToggle: handleToggleSpy
     };
-    const rendered = renderer.create(<CookieToggle {...props} />);
+    const rendered = renderer.create(<CookieSwitch {...props} />);
     expect(rendered).toMatchSnapshot();
   });
 });

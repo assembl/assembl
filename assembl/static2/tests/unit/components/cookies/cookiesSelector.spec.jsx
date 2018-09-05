@@ -7,7 +7,7 @@ describe('CookiesSelector component', () => {
   const handleSaveSpy = jest.fn(() => {});
   const handleToggleSpy = jest.fn(() => {});
 
-  it('should render a list of cookieToggle components set in different categories', () => {
+  it('should render a list of cookieSetter components set in different categories', () => {
     const props = {
       cookies: {
         essential: [

@@ -13,8 +13,8 @@ import acceptedCookiesQuery from '../../graphql/acceptedCookiesQuery.graphql';
 import updateAcceptedCookies from '../../graphql/mutations/updateAcceptedCookies.graphql';
 import withLoadingIndicator from '../common/withLoadingIndicator';
 
-import type { CookieObject } from './cookieToggle';
-import { COOKIE_TRANSLATION_KEYS, COOKIE_TYPES } from '../../constants';
+import type { CookieObject } from './cookieSetter';
+import { COOKIE_TRANSLATION_KEYS, COOKIE_TYPES, COOKIES_CATEGORIES } from '../../constants';
 
 type Props = {
   updateAcceptedCookies: Function,
@@ -34,6 +34,9 @@ type State = {
   cookies: ?CookiesObject,
   settingsHaveChanged: boolean
 };
+
+const { userSession, locale, matomo, privacyPolicy, cgu } = COOKIE_TRANSLATION_KEYS;
+const { essential, analytics, other } = COOKIES_CATEGORIES;
 
 export class DumbCookiesSelectorContainer extends React.Component<Props, State> {
   constructor(props: Props) {
@@ -75,21 +78,21 @@ export class DumbCookiesSelectorContainer extends React.Component<Props, State> 
 
   getCookieObjectData = (cookie: string) => {
     if (cookie.includes('SESSION_ON_DISCUSSION')) {
-      return { category: 'essential', name: COOKIE_TRANSLATION_KEYS.userSession };
+      return { category: essential, name: userSession };
     }
     if (cookie.includes('LOCALE')) {
-      return { category: 'essential', name: COOKIE_TRANSLATION_KEYS.locale };
+      return { category: essential, name: locale };
     }
     if (cookie.includes('TRACKING_ON_DISCUSSION')) {
-      return { category: 'analytics', name: COOKIE_TRANSLATION_KEYS.matomo };
+      return { category: analytics, name: matomo };
     }
     if (cookie.includes('PRIVACY_POLICY_ON_DISCUSSION')) {
-      return { category: 'essential', name: COOKIE_TRANSLATION_KEYS.privacyPolicy };
+      return { category: essential, name: privacyPolicy };
     }
     if (cookie.includes('CGU')) {
-      return { category: 'essential', name: COOKIE_TRANSLATION_KEYS.cgu };
+      return { category: essential, name: cgu };
     }
-    return { category: 'other', name: cookie };
+    return { category: other, name: cookie };
   };
 
   getCookiesObjectFromArray = (cookiesArray: Array<CookieObject>) => {
