@@ -1387,6 +1387,12 @@ def get_idea_parent_ids(idea):
 
 
 def get_entries_locale_original(lang_string):
+    if lang_string is None:
+        return {
+            "entry": '',
+            "original": '',
+            "locale": ''
+        }
     entries = lang_string.best_entries_in_request_with_originals()
     if len(entries) == 1:
         best = entries[0]
@@ -1601,7 +1607,8 @@ def phase2_csv_export(request):
     writer = csv.DictWriter(
         output, dialect='excel', delimiter=';', fieldnames=fieldnames, quoting=csv.QUOTE_ALL)
     writer.writeheader()
-    ideas = get_ideas(discussion_id, 'thread')
+    thread_phase = get_phase_by_identifier(discussion, Phases.thread.value)
+    ideas = get_ideas(thread_phase)
     for idea in ideas:
         row = {}
         row[IDEA_ID] = idea.id
