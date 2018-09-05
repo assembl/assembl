@@ -4,7 +4,8 @@ import {
   getBasename,
   hexToRgb,
   encodeUserIdBase64,
-  isHarvestable
+  isHarvestable,
+  moveElementToFirstPosition
 } from '../../../js/app/utils/globalFunctions';
 
 describe('This test concern GlobalFunctions Class', () => {
@@ -124,5 +125,13 @@ describe('isHarvestable function', () => {
       phase: 'multiColumns'
     };
     expect(isHarvestable(params)).toBeTruthy();
+  });
+});
+
+describe('moveElementToFirstPosition function', () => {
+  it('should put bar as the first element of the array', () => {
+    const array = ['foo', 'bar', 'baz'];
+    const element = 'bar';
+    expect(moveElementToFirstPosition(array, element)).toEqual(['bar', 'foo', 'baz']);
   });
 });

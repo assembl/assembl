@@ -5,6 +5,7 @@ import { Button } from 'react-bootstrap';
 import classnames from 'classnames';
 import CookieSetter from './cookieSetter';
 import type { CookiesObject } from './cookiesSelectorContainer';
+import { moveElementToFirstPosition } from '../../utils/globalFunctions';
 
 type CookiesSelectorProps = {
   activeKey: ?string,
@@ -28,15 +29,18 @@ const CookiesSelector = ({
   toggleCookieType,
   locale,
   settingsHaveChanged
-}: CookiesSelectorProps) => (
-  <div className="cookies-selector">
-    <h2 className="dark-title-2">
-      <Translate value="profile.cookies" />
-    </h2>
-    <Translate value="cookiesPolicy.instructions" className="cookies-instructions" />
-    <div className="cookies-categories">
-      {cookies &&
-          Object.keys(cookies).map((category) => {
+}: CookiesSelectorProps) => {
+  // putting 'essential' as the first element of the array
+  const categoriesArray = cookies && moveElementToFirstPosition(Object.keys(cookies), 'essential');
+  return (
+    <div className="cookies-selector">
+      <h2 className="dark-title-2">
+        <Translate value="profile.cookies" />
+      </h2>
+      <Translate value="cookiesPolicy.instructions" className="cookies-instructions" />
+      <div className="cookies-categories">
+        {categoriesArray &&
+          categoriesArray.map((category) => {
             const isActiveKey = category === activeKey;
             return (
               <div key={category}>
@@ -52,6 +56,7 @@ const CookiesSelector = ({
                 <div className="cookies-toggles">
                   {isActiveKey &&
                     show &&
+                    cookies &&
                     cookies[category] &&
                     cookies[category].map(cookie => (
                       <CookieSetter
@@ -66,13 +71,14 @@ const CookiesSelector = ({
               </div>
             );
           })}
+      </div>
+      <div className="submit-button-container">
+        <Button onClick={handleSave} className={settingsHaveChanged ? 'button-submit button-dark' : 'hidden'}>
+          <Translate value="profile.save" />
+        </Button>
+      </div>
     </div>
-    <div className="submit-button-container">
-      <Button onClick={handleSave} className={settingsHaveChanged ? 'button-submit button-dark' : 'hidden'}>
-        <Translate value="profile.save" />
-      </Button>
-    </div>
-  </div>
-);
+  );
+};
 
 export default CookiesSelector;

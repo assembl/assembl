@@ -33,6 +33,11 @@ export const getConnectedUserId = (base64: boolean = false) => {
 
 export const getConnectedUserName = () => getInputValue('user-displayname');
 
+export const moveElementToFirstPosition = (array: Array<any>, targetElement: any) => {
+  const others = array.filter(elelement => elelement !== targetElement);
+  return [targetElement, ...others];
+};
+
 // cache permissions to avoid accessing the dom at each permission check
 let permissions;
 export const getConnectedUserPermissions = () => {
