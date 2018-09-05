@@ -580,8 +580,8 @@ const Translations = {
         "3": "Exporter les données",
         configThematic: "Configurer la thématique",
         configThematics: "Configurer les thématiques",
-        configThematicsHlperTitle: "Vous avez choisie de configurer une table de thématiques.",
-        configThematicsHlperDescription: "Pour modifier votre choix, retourner au paramétrage générale du débat."
+        configThematicsHelperTitle: "Vous avez choisi de configurer une table de thématiques.",
+        configThematicsHelperDescription: "Pour modifier votre choix, retourner au paramétrage générale du débat."
       },
       brightMirrorSection: {
         bannerHeader:
@@ -749,7 +749,8 @@ const Translations = {
         descriptionPhase: "Description de la phase"
       },
       tableOfThematics: {
-        thematicTitle: "Titre de la Thématique"
+        thematicTitle: "Titre de la Thématique",
+        headerLabel: "Choisir l'image de fond du bandeau"
       },
       resourcesCenter: {
         createResource: "Ajouter un média",
@@ -1439,8 +1440,8 @@ const Translations = {
         "3": "Export data",
         configThematic: "Configure the theme",
         configThematics: "Configure the themes",
-        configThematicsHlperTitle: "You have chosen to configure a themes table.",
-        configThematicsHlperDescription: "To change your choice, return to the general setting of the debate."
+        configThematicsHelperTitle: "You have chosen to configure a themes table.",
+        configThematicsHelperDescription: "To change your choice, return to the general setting of the debate."
       },
       brightMirrorSection: {
         bannerHeader:
@@ -1602,7 +1603,8 @@ const Translations = {
         descriptionPhase: "Description phase"
       },
       tableOfThematics: {
-        thematicTitle: "Thematic title"
+        thematicTitle: "Thematic title",
+        headerLabel: "Choose the header background image"
       },
       resourcesCenter: {
         createResource: "Add a media",

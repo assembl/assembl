@@ -16,35 +16,37 @@ type Props = {
   client: ApolloClient
 };
 
-const Step1 = ({ editLocale, locale, client }: Props) => (
-  <React.Fragment>
-    <div className="form-title">{I18n.t('administration.survey.1')}</div>
-    <FieldArrayWithActions
-      isTree
-      name="themes"
-      subFieldName="children"
-      minItems={1}
-      maxLevel={1}
-      onRemove={id => removeMenuItem(id, client, PHASES.survey, locale)}
-      onAdd={(id, parentId, index) => addMenuItem(id, parentId, index, client, PHASES.survey, locale)}
-      onUp={(id, parentId, index, targetIndex) => swapMenuItem(id, parentId, index, targetIndex, client, PHASES.survey, locale)}
-      onDown={(id, parentId, index, targetIndex) => swapMenuItem(id, parentId, index, targetIndex, client, PHASES.survey, locale)}
-      renderFields={({ name, fieldIndex }) => (
-        <Field
-          required
-          editLocale={editLocale}
-          name={`${name}.title`}
-          component={MultilingualTextFieldAdapter}
-          label={`${I18n.t('administration.tableOfThematics.thematicTitle')} ${fieldIndex} ${editLocale.toUpperCase()}`}
-        />
-      )}
-      tooltips={{
-        addTooltip: addThematicTooltip,
-        deleteTooltip: deleteThematicTooltip,
-        deleteDisabled: deleteSubThematicDisabledTooltip
-      }}
-    />
-  </React.Fragment>
-);
-
+const Step1 = ({ editLocale, locale, client }: Props) => {
+  const queryVariables = { identifier: PHASES.survey, lang: locale };
+  return (
+    <React.Fragment>
+      <div className="form-title">{I18n.t('administration.survey.1')}</div>
+      <FieldArrayWithActions
+        isTree
+        name="themes"
+        subFieldName="children"
+        minItems={1}
+        maxLevel={1}
+        onRemove={id => removeMenuItem(id, client, queryVariables)}
+        onAdd={(id, parentId, index) => addMenuItem(id, parentId, index, client, queryVariables)}
+        onUp={(id, parentId, index, targetIndex) => swapMenuItem(id, parentId, index, targetIndex, client, queryVariables)}
+        onDown={(id, parentId, index, targetIndex) => swapMenuItem(id, parentId, index, targetIndex, client, queryVariables)}
+        renderFields={({ name, fieldIndex }) => (
+          <Field
+            required
+            editLocale={editLocale}
+            name={`${name}.title`}
+            component={MultilingualTextFieldAdapter}
+            label={`${I18n.t('administration.tableOfThematics.thematicTitle')} ${fieldIndex} ${editLocale.toUpperCase()}`}
+          />
+        )}
+        tooltips={{
+          addTooltip: addThematicTooltip,
+          deleteTooltip: deleteThematicTooltip,
+          deleteDisabled: deleteSubThematicDisabledTooltip
+        }}
+      />
+    </React.Fragment>
+  );
+};
 export default withApollo(Step1);

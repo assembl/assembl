@@ -12,7 +12,7 @@ import { ADMIN_MENU } from '../../constants';
 
 type Props = {
   requestedPhase: string,
-  i18n: { locale: string },
+  locale: string,
   timeline: Timeline
 };
 
@@ -51,7 +51,7 @@ class Menu extends React.PureComponent<Props> {
   render() {
     const slug = { slug: getDiscussionSlug() };
     const { timeline } = this.props;
-    const { requestedPhase, i18n: { locale } } = this.props;
+    const { requestedPhase, locale } = this.props;
     return (
       <ul className="admin-menu">
         {Object.keys(ADMIN_MENU).map(key => this.renderMenuItem(key, ADMIN_MENU[key], slug))}

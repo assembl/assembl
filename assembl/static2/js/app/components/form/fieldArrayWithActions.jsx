@@ -135,8 +135,7 @@ export class Fields extends React.PureComponent<FieldsProps> {
           const enableDeleteBtn = fields.length > minItems && ((isTree && !hasChildren) || !isTree);
           const hideDeleteBtn = isRoot && !enableDeleteBtn;
           const displaySeparator = withSeparators && (!isTree || (isRoot && idx === fields.length - 1));
-          const indexes = [...parents];
-          indexes.push(idx + 1);
+          const indexes = [...parents, idx + 1];
           const fieldIndex = indexes.join('.');
           return (
             <div className="form-container" key={fieldname}>

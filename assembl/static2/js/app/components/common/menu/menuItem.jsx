@@ -16,8 +16,7 @@ type Props = {
 const MenuItem = ({ id, parents, title, toggle, className, openedItem, openedPath, children }: Props) => {
   const active = openedItem === id;
   const childrenElm = React.Children.map(children, (child) => {
-    const indexes = [...parents];
-    indexes.push(id);
+    const indexes = [...parents, id];
     return React.cloneElement(child, {
       parents: indexes,
       openedPath: openedPath,

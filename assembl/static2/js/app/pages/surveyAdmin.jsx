@@ -20,14 +20,14 @@ const getSectionTitle = (section: string, thematicId: string): string | null => 
   return (menuItem && menuItem.title) || null;
 };
 
-const SectionHlper = ({ section, thematicId }: Props) => {
+const SectionHelper = ({ section, thematicId }: Props) => {
   if (thematicId) return null;
   switch (section) {
   case '1':
     return (
       <div className="section-helper">
-        <h4 className="section-helper-title">{I18n.t('administration.survey.configThematicsHlperTitle')}</h4>
-        <div className="section-helper-description">{I18n.t('administration.survey.configThematicsHlperDescription')}</div>
+        <h4 className="section-helper-title">{I18n.t('administration.survey.configThematicsHelperTitle')}</h4>
+        <div className="section-helper-description">{I18n.t('administration.survey.configThematicsHelperDescription')}</div>
       </div>
     );
   default:
@@ -41,7 +41,7 @@ const SurveyAdmin = ({ section, thematicId }: Props) => {
     <div className="survey-admin">
       <div className="admin-box">
         <SectionTitle title={I18n.t(sectionTitleMsgId)} annotation={I18n.t('administration.annotation')} />
-        <SectionHlper section={section} thematicId={thematicId} />
+        <SectionHelper section={section} thematicId={thematicId} />
         <SurveyAdminForm section={section} thematicId={thematicId} />
       </div>
     </div>

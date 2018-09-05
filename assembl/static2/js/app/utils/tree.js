@@ -95,21 +95,19 @@ export function getAncestors<T: TreeNodeType>(item: T | null, nodes: Array<T>): 
  * @param {(items: Array<T>) => Array<T>} A sorter.
  * @returns {Array<T>} Returns the path of the item.
  */
-export function getPath<T: TreeNodeType>(
-  item: T | null,
-  nodes: Array<T>,
-  sortItems: (items: Array<T>) => Array<T>
-): Array<number> {
-  const ancestors: Array<T> = getAncestors(item, nodes);
+export function getPath<T: TreeNodeType>(item: T, nodes: Array<T>, sortItems: (items: Array<T>) => Array<T>): Array<number> {
+  const originalItem = nodes.find(n => n.id === item.id);
+  if (!originalItem) return [];
+  const ancestors: Array<T> = getAncestors(originalItem, nodes);
   const path = [];
   const nodesIds = nodes.map(n => n.id);
   const roots = nodes.filter(n => !nodesIds.includes(n.parentId));
   if (ancestors.length === 0) {
-    if (roots.includes(item)) {
-      path.push(sortItems(roots).indexOf(item));
+    if (roots.includes(originalItem)) {
+      path.push(sortItems(roots).indexOf(originalItem));
     }
   } else {
-    let node = item;
+    let node = originalItem;
     ancestors.forEach((ancestor) => {
       let children = nodes.filter(n => n.parentId === ancestor.id);
       children = sortItems ? sortItems(children) : children;

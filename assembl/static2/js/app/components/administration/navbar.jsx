@@ -56,14 +56,14 @@ class Navbar extends React.Component<Props, State> {
   render() {
     const { currentStep, steps } = this.state;
     const { beforeChangeSection } = this.props;
-    const indexCurrentStep = steps.indexOf(currentStep) + 1;
-    const barWidth = calculatePercentage(indexCurrentStep, steps.length);
+    const currentStepIndex = steps.indexOf(currentStep) + 1;
+    const barWidth = calculatePercentage(currentStepIndex, steps.length);
     return (
       <div className="admin-navbar">
         <Col xs={6} md={6}>
           <div className="step-numbers">
             <div className="txt">
-              <Translate value="administration.step_x_total" num={indexCurrentStep} total={steps.length} />
+              <Translate value="administration.step_x_total" num={currentStepIndex} total={steps.length} />
             </div>
             <div className="bar" style={{ width: `${barWidth}%` }}>
               &nbsp;
@@ -73,12 +73,12 @@ class Navbar extends React.Component<Props, State> {
         </Col>
         <Col xs={6} md={6}>
           <div className="arrow-container">
-            {indexCurrentStep < steps.length && (
+            {currentStepIndex < steps.length && (
               <OverlayTrigger placement="top" overlay={nextStepTooltip}>
                 <div
                   onClick={() => {
                     beforeChangeSection();
-                    this.goToSection(indexCurrentStep + 1);
+                    this.goToSection(currentStepIndex + 1);
                   }}
                   className="arrow right"
                 >
@@ -86,12 +86,12 @@ class Navbar extends React.Component<Props, State> {
                 </div>
               </OverlayTrigger>
             )}
-            {indexCurrentStep > 1 && (
+            {currentStepIndex > 1 && (
               <OverlayTrigger placement="top" overlay={previousStepTooltip}>
                 <div
                   onClick={() => {
                     beforeChangeSection();
-                    this.goToSection(indexCurrentStep - 1);
+                    this.goToSection(currentStepIndex - 1);
                   }}
                   className="arrow right"
                 >

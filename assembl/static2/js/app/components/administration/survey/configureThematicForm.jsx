@@ -45,7 +45,7 @@ const ConfigureThematicForm = ({ editLocale, values, thematicId }: Props) => {
         deleteTooltip={deleteThematicImageTooltip}
         name={`${name}.img`}
         component={FileUploaderFieldAdapter}
-        label={I18n.t('administration.voteSessionHeaderLabel')}
+        label={I18n.t('administration.tableOfThematics.headerLabel')}
       />
     </div>
   );

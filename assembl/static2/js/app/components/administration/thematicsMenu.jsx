@@ -63,14 +63,18 @@ type Props = {
   location: { query: { section: string, thematicId: string } }
 };
 
+type QueryVariablesType = {
+  identifier: string,
+  lang: string
+};
 /**
  * @param {string} The id of the removed thematic.
  * @param {ApolloClient} The apollo client.
- * @param {string} The phase identifier.
+ * @param {QueryVariablesType} The ThematicsDataQuery variables.
  * Remove the thematic with id equal to id from the result of the ThematicsDataQuery query.
  */
-export const removeMenuItem = (id: string, client: ApolloClient, identifier: string, locale: string) => {
-  const query = { query: ThematicsDataQuery, variables: { identifier: identifier, lang: locale } };
+export const removeMenuItem = (id: string, client: ApolloClient, variables: QueryVariablesType) => {
+  const query = { query: ThematicsDataQuery, variables: variables };
   const data = client.readQuery(query);
   client.writeQuery({
     ...query,
@@ -83,20 +87,13 @@ export const removeMenuItem = (id: string, client: ApolloClient, identifier: str
 /**
  * @param {string} The id of the added thematic.
  * @param {string} The parent id of the added thematic.
- * @param {string} The index of the added thematic.
+ * @param {number} The index of the added thematic.
  * @param {ApolloClient} The apollo client.
- * @param {string} The phase identifier.
+ * @param {QueryVariablesType} The ThematicsDataQuery variables.
  * Add a new thematic to the result of the ThematicsDataQuery query.
  */
-export const addMenuItem = (
-  id: string,
-  parentId: string,
-  index: number,
-  client: ApolloClient,
-  identifier: string,
-  locale: string
-) => {
-  const query = { query: ThematicsDataQuery, variables: { identifier: identifier, lang: locale } };
+export const addMenuItem = (id: string, parentId: string, index: number, client: ApolloClient, variables: QueryVariablesType) => {
+  const query = { query: ThematicsDataQuery, variables: variables };
   const data = client.readQuery(query);
   const newMenuItem = {
     id: id,
@@ -116,10 +113,10 @@ export const addMenuItem = (
 /**
  * @param {string} The id of the added item.
  * @param {string} The parent id of the added item.
- * @param {string} The source index of the thematic.
- * @param {string} The target index of the thematic.
+ * @param {number} The source index of the thematic.
+ * @param {number} The target index of the thematic.
  * @param {ApolloClient} The apollo client.
- * @param {string} The phase identifier.
+ * @param {QueryVariablesType} The ThematicsDataQuery variables.
  * Change the order of a themeatic to targetIndex.
  */
 export const swapMenuItem = (
@@ -128,10 +125,9 @@ export const swapMenuItem = (
   index: number,
   targetIndex: number,
   client: ApolloClient,
-  identifier: string,
-  locale: string
+  variables: QueryVariablesType
 ) => {
-  const query = { query: ThematicsDataQuery, variables: { identifier: identifier, lang: locale } };
+  const query = { query: ThematicsDataQuery, variables: variables };
   const data = client.readQuery(query);
   const isDown = targetIndex - index > 0;
   const newThematics = data.thematicsData.map((thematic) => {
@@ -236,9 +232,11 @@ const ThematicsMenu = ({
   const { section, thematicId } = location.query;
   const openedPath = [];
   if (sectionIndex === section) {
-    const requestThematic = thematicsData.find(t => t.id === thematicId) || null;
     openedPath.push(0);
-    openedPath.push(...getPath(requestThematic, thematicsData, sortThematics));
+    const requestThematic = thematicsData.find(t => t.id === thematicId) || null;
+    if (requestThematic) {
+      openedPath.push(...getPath(requestThematic, thematicsData, sortThematics));
+    }
   }
   return (
     <Menu openedPath={openedPath}>
