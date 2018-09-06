@@ -16,7 +16,9 @@ type Props = {
 
 export function getFieldName(themeId: string, values: ThemesValue, fieldName: string): string {
   let result = '';
-  values.some((value, index) => {
+  let index = 0;
+  let value = values[index];
+  while (!result && value) {
     if (value.id === themeId) {
       result = `${fieldName}[${index}]`;
     } else if (value.children) {
@@ -25,8 +27,9 @@ export function getFieldName(themeId: string, values: ThemesValue, fieldName: st
         result = `${fieldName}[${index}].${childrenResult}`;
       }
     }
-    return result;
-  });
+    index += 1;
+    value = values[index];
+  }
   return result;
 }
 
