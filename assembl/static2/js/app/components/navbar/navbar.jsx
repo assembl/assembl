@@ -122,16 +122,11 @@ export class AssemblNavbar extends React.PureComponent<AssemblNavbarProps, Assem
   renderUserMenu = (remainingWidth: number) => {
     const { debate: { debateData: { helpUrl } }, location, discussionData } = this.props;
     const { loginData } = discussionData;
-    return <UserMenu
-      helpUrl={helpUrl}
-      location={location}
-      remainingWidth={remainingWidth}
-      loginData={loginData}
-    />;
+    return <UserMenu helpUrl={helpUrl} location={location} remainingWidth={remainingWidth} loginData={loginData} />;
   };
 
   render = () => {
-    const { screenWidth, debate, data, phase, timeline, sectionLoading, discussionLoading, sectionData, discussionData } = this.props;
+    const { screenWidth, debate, phase, timeline, sectionLoading, discussionLoading, sectionData, discussionData } = this.props;
     if (sectionLoading || discussionLoading || !sectionData || !discussionData) {
       return null;
     }

@@ -20,12 +20,7 @@ const shouldShowUsername = (remainingWidth, breakPoint) =>
 
 const shouldShowExpertIcons = connectedUserIsExpert();
 
-const UserMenu = ({
-  location,
-  helpUrl,
-  remainingWidth,
-  loginData
-}: UserMenuProps) => (
+const UserMenu = ({ location, helpUrl, remainingWidth, loginData }: UserMenuProps) => (
   <div className="navbar-icons">
     {shouldShowExpertIcons && <HarvestingButton />}
     <div id="search">
@@ -37,16 +32,12 @@ const UserMenu = ({
           <span className="assembl-icon-faq grey" />
         </Link>
       )}
-    <Avatar
-      location={location}
-      showUsername={shouldShowUsername(remainingWidth, 450)}
-      loginData={loginData}
-    />
+    <Avatar location={location} showUsername={shouldShowUsername(remainingWidth, 450)} loginData={loginData} />
   </div>
 );
 
 UserMenu.defaultProps = {
-  remainingWidth: null,
+  remainingWidth: null
 };
 
 export default UserMenu;
