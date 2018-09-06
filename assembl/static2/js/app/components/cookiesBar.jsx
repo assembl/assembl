@@ -23,7 +23,7 @@ type CookiesBarProps = {
 };
 
 export class DumbCookiesBar extends React.Component<CookiesBarProps, CookiesBarState> {
-  constructor(props: Props) {
+  constructor(props: CookiesBarProps) {
     super(props);
     const { cookiesList } = props;
     const cookiesFromBrowser = getCookieItem('cookies_configuration');

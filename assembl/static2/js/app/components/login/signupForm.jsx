@@ -276,7 +276,7 @@ export default compose(
         return { loading: true };
       }
       if (data.error) {
-        return { error: data.error };
+        return { error: data.error, loading: false };
       }
 
       return {
