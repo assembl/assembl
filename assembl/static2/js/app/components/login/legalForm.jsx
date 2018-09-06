@@ -4,34 +4,32 @@ import { Translate } from 'react-redux-i18n';
 import { Modal, Button } from 'react-bootstrap';
 import { closeModal } from '../../utils/utilityManager';
 
-type Props = {
+type LegalFormProps = {
   checked: boolean,
   handleAcceptButton: () => void,
-  style: Object
+  style?: Object
 };
 
-type State = {
+type LegalFormState = {
   isScrolled: boolean
 };
 
-class LegalForm extends React.Component<Props, State> {
+class LegalForm extends React.Component<LegalFormProps, LegalFormState> {
   box: ?HTMLElement;
 
-  handleSubmit: () => void;
+  static defaultProps = {
+    style: {}
+  };
 
-  constructor() {
-    super();
-    this.state = {
-      isScrolled: false
-    };
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
+  state = {
+    isScrolled: false
+  };
 
   componentDidMount() {
     this.box.addEventListener('scroll', this.trackScrolling);
   }
 
-  trackScrolling = (): void => {
+  trackScrolling = () => {
     const wrappedElement = this.box;
     if (wrappedElement.scrollHeight - wrappedElement.scrollTop === wrappedElement.clientHeight) {
       this.setState({
@@ -48,7 +46,7 @@ class LegalForm extends React.Component<Props, State> {
 
   render() {
     const { isScrolled } = this.state;
-    const { checked, text, style = {}, legalContentsType } = this.props;
+    const { checked, text, style, legalContentsType } = this.props;
     const boxClasses = checked ? 'terms-box justify full-height' : 'terms-box justify';
 
     return (
