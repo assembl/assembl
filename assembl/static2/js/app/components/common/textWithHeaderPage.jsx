@@ -30,9 +30,7 @@ class DumbTextWithHeaderPage extends React.Component<TextWithHeaderPageProps, St
       <div className="text-with-header">
         <Header title={headerTitle} imgUrl={debateData.headerBackgroundUrl} />
         <div className="max-container margin-xxl">
-          <div className="page-body">
-            {renderPageBody(text)}
-          </div>
+          <div className="page-body">{renderPageBody(text)}</div>
         </div>
       </div>
     );

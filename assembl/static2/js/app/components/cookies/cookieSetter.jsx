@@ -37,8 +37,8 @@ const CookieSetter = ({ handleToggle, cookie, toggleCookieType, locale }: Cookie
 
   const cookieName = Object.keys(COOKIE_TRANSLATION_KEYS).includes(name) ? I18n.t(`cookies.${name}`) : name;
   const cookieIsMatomo = name === COOKIE_TRANSLATION_KEYS.matomo;
-  const matomoOptOutLink = matomoHost ?
-    `https://${matomoHost}/index.php?module=CoreAdminHome&action=optOut&language=${locale}`
+  const matomoOptOutLink = matomoHost
+    ? `https://${matomoHost}/index.php?module=CoreAdminHome&action=optOut&language=${locale}`
     : null;
 
   const required = category === COOKIES_CATEGORIES.essential;
@@ -47,15 +47,12 @@ const CookieSetter = ({ handleToggle, cookie, toggleCookieType, locale }: Cookie
     <div
       className={classnames({
         'cookie-with-link': (cookieIsMatomo && matomoOptOutLink) || required,
-        'cookie-toggle': !required && !matomoOptOutLink })}
+        'cookie-toggle': !required && !matomoOptOutLink
+      })}
     >
       <div className="cookie-title">
         <span className="dark-title-3 ellipsis">{cookieName}</span>
-        <Helper
-          helperText={I18n.t(`cookies.${name}Helper`)}
-          popOverClass="cookie-helper-popover"
-          classname="cookie-helper"
-        />
+        <Helper helperText={I18n.t(`cookies.${name}Helper`)} popOverClass="cookie-helper-popover" classname="cookie-helper" />
       </div>
       <CookieSwitch
         cookieIsMatomo={cookieIsMatomo}

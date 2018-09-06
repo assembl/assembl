@@ -11,7 +11,7 @@ type CookieSwitchProps = {
   accepted: boolean,
   name: string,
   required: boolean
-}
+};
 
 const CookieSwitch = ({ cookieIsMatomo, matomoOptOutLink, toggleSwitch, accepted, name, required }: CookieSwitchProps) => {
   if (cookieIsMatomo && matomoOptOutLink) {
