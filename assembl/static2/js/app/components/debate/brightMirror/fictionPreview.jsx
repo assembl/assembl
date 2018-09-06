@@ -101,7 +101,7 @@ const FictionPreview = ({
   return (
     <div className="fiction-preview" style={{ backgroundColor: color }}>
       <div className="content-box">
-        <ul className="actions hidden-xs">
+        <ul className="actions">
           {editButton}
           {deleteButton}
         </ul>

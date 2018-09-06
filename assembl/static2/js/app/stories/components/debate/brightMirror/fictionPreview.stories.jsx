@@ -2,6 +2,7 @@
 import React from 'react';
 /* eslint-disable import/no-extraneous-dependencies */
 import { storiesOf } from '@storybook/react';
+import { action } from '@storybook/addon-actions';
 import { withInfo } from '@storybook/addon-info';
 import { withKnobs, text, boolean } from '@storybook/addon-knobs';
 /* eslint-enable */
@@ -17,7 +18,7 @@ export const customFictionPreview: FictionPreviewProps = {
   link: '/url/preview',
   color: '#b3e5fc',
   originalBody: 'Origin body',
-  refetchIdea: Function,
+  refetchIdea: action('refetchIdea'),
   lang: 'fr',
   userCanEdit: true,
   userCanDelete: true

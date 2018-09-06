@@ -43,11 +43,15 @@ type BrightMirrorFictionProps = {
   /** Fiction theme identifier */
   themeId: string,
   /** Fiction identifier */
-  fictionId: string
+  fictionId: string,
+  /** Fiction locale */
+  contentLocale: string
 };
 
 type BrightMirrorFictionState = {
+  /** Fiction title */
   title: string,
+  /** Fiction content */
   content: string
 };
 
@@ -60,11 +64,9 @@ class BrightMirrorFiction extends Component<BrightMirrorFictionProps, BrightMirr
     };
   }
 
-  // WIP: display success message when deleting a fiction
-  // displayAlert('success', I18n.t('debate.brightMirror.deleteFictionSuccessMsg'));
-
   render() {
-    const { data, slug, phase, themeId } = this.props;
+    const { data, slug, phase, themeId, fictionId, contentLocale } = this.props;
+    const { title, content } = this.state;
     // Handle fetching error
     if (data.error) {
       displayAlert('danger', I18n.t('error.loading'));
@@ -77,10 +79,12 @@ class BrightMirrorFiction extends Component<BrightMirrorFictionProps, BrightMirr
     const displayName = fiction.creator && fiction.creator.isDeleted ? I18n.t('deletedUser') : getDisplayName();
 
     // Define user permission
+    const USER_ID_NOT_FOUND = -9999;
+    const userId = fiction.creator ? fiction.creator.userId : USER_ID_NOT_FOUND;
     const userCanDelete =
-      (getConnectedUserId() === String(fiction.creator.userId) && connectedUserCan(Permissions.DELETE_MY_POST)) ||
+      (getConnectedUserId() === String(userId) && connectedUserCan(Permissions.DELETE_MY_POST)) ||
       connectedUserCan(Permissions.DELETE_POST);
-    const userCanEdit = getConnectedUserId() === String(fiction.creator.userId) && connectedUserCan(Permissions.EDIT_MY_POST);
+    const userCanEdit = getConnectedUserId() === String(userId) && connectedUserCan(Permissions.EDIT_MY_POST);
 
     // Define callback functions
     const deleteFictionCallback = () => {
@@ -108,9 +112,9 @@ class BrightMirrorFiction extends Component<BrightMirrorFictionProps, BrightMirr
     };
 
     const fictionToolbarProps: FictionToolbarProps = {
-      fictionId: id,
-      title: this.state.title,
-      originalBody: this.state.content,
+      fictionId: fictionId,
+      title: title,
+      originalBody: content,
       lang: contentLocale,
       userCanEdit: userCanEdit,
       userCanDelete: userCanDelete,
@@ -119,8 +123,8 @@ class BrightMirrorFiction extends Component<BrightMirrorFictionProps, BrightMirr
     };
 
     const fictionBodyProps: FictionBodyProps = {
-      title: this.state.title,
-      content: this.state.content
+      title: title,
+      content: content
     };
 
     return (

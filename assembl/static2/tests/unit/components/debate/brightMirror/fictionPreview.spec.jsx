@@ -40,7 +40,7 @@ describe('<FictionPreview /> - with shallow', () => {
     expect(wrapper.find('span [className="published-date"]')).toHaveLength(1);
   });
 
-  it('should render edit button when userCanEditThisMessage is true', () => {
+  it('should render edit button when userCanEdit is true', () => {
     expect(wrapper.find(EditPostButton)).toHaveLength(1);
   });
 
@@ -48,8 +48,8 @@ describe('<FictionPreview /> - with shallow', () => {
     expect(wrapper.find(DeletePostButton)).toHaveLength(1);
   });
 
-  it('should not render edit button when userCanEditThisMessage is false', () => {
-    wrapper.setProps({ userCanEditThisMessage: false });
+  it('should not render edit button when userCanEdit is false', () => {
+    wrapper.setProps({ userCanEdit: false });
     expect(wrapper.find(EditPostButton)).toHaveLength(0);
   });
 

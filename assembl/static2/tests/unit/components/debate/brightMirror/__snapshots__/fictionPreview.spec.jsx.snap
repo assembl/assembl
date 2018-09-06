@@ -22,7 +22,7 @@ exports[`Storyshots FictionPreview default 1`] = `
         className="content-box"
       >
         <ul
-          className="actions hidden-xs"
+          className="actions"
         >
           <li>
             <div
@@ -497,7 +497,7 @@ exports[`Storyshots FictionPreview default 1`] = `
                             }
                           }
                         >
-                          Function
+                          refetchIdea
                         </span>
                         }
                       </span>
@@ -649,7 +649,7 @@ exports[`Storyshots FictionPreview playground 1`] = `
         className="content-box"
       >
         <ul
-          className="actions hidden-xs"
+          className="actions"
         >
           <li>
             <div
@@ -1124,7 +1124,7 @@ exports[`Storyshots FictionPreview playground 1`] = `
                             }
                           }
                         >
-                          Function
+                          refetchIdea
                         </span>
                         }
                       </span>

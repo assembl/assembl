@@ -454,6 +454,8 @@ export type IdeaWithPostsQuery = {|
               id: string,
               // A Subject of the post in a given language.
               subject: ?string,
+              // A Body of the post (the main content of the post). in a given language.
+              body: ?string,
               // The parent of a Post, if the Post is a reply to an existing Post. The Relay.Node ID type of the Post object.
               parentId: ?string,
               // The date that the object was created, in UTC timezone, in ISO 8601 format.

@@ -31,17 +31,19 @@ describe('<FictionToolbar /> - with shallow', () => {
     wrapper = shallow(<FictionToolbar {...fictionToolbar} />);
   });
 
-  it('should render one DeletePostButton when userCanDelete is true', () => {
-    wrapper.setProps({ userCanDelete: true });
-    expect(wrapper.find(DeletePostButton)).toHaveLength(1);
-  });
-
-  it('should render one EditPostButton', () => {
+  it('should render one EditPostButton when userCanEdit is true', () => {
+    wrapper.setProps({ userCanEdit: true });
     expect(wrapper.find(EditPostButton)).toHaveLength(1);
   });
 
-  it('should not render EditPostButton if cannot edit', () => {
+  it('should not render EditPostButton when userCanEdit is false', () => {
+    wrapper.setProps({ userCanEdit: false });
     expect(wrapper.find(EditPostButton)).toHaveLength(0);
+  });
+
+  it('should render one DeletePostButton when userCanDelete is true', () => {
+    wrapper.setProps({ userCanDelete: true });
+    expect(wrapper.find(DeletePostButton)).toHaveLength(1);
   });
 
   it('should not render DeletePostButton when userCanDelete is false', () => {
