@@ -71,7 +71,7 @@ exports[`CookiesSelector component should render a list of cookieSetter componen
             className={undefined}
             style={undefined}
           >
-            This cookie is required for Assembl to work properly
+            This cookie is required
           </span>
         </div>
       </div>

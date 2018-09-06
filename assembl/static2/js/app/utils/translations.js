@@ -60,7 +60,7 @@ const Translations = {
       privacyPolicyHelper: "Ce cookie permet d'enregistrer que vous avez accepté la politique de confidentialité de la consultation.",
       cguHelper: "Ce cookie permet d'enregistrer que vous avez accepté les conditions générales d'utilisation.",
       matomoHelper: "Ce cookie est utilisé à des fins statistiques concernant les participants à la consultation.",
-      required: "Ce cookie est requis pour le bon fonctionnement d'Assembl"
+      required: "Ce cookie est requis"
     },
     search: {
       reset: {
@@ -890,7 +890,7 @@ const Translations = {
       privacyPolicyHelper: "This cookie registers that you have accepted the privacy policy of the consultation.",
       cguHelper: "This cookie registers that you have accepted the terms and conditions of the consultation.",
       matomoHelper: "This cookie is used for stasticial purposes regarding the participants of the consultation.",
-      required: "This cookie is required for Assembl to work properly"
+      required: "This cookie is required"
     },
     search: {
       reset: {
