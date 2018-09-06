@@ -16,7 +16,8 @@ type TopPostFormContainerProps = {
   instructionLabel: string,
   fillBodyLabel: string,
   bodyPlaceholder: string,
-  postSuccessMsg: string
+  postSuccessMsg: string,
+  textareaNoMaxLength?: boolean
 };
 
 type TopPostFormContainerState = {
@@ -33,7 +34,8 @@ class TopPostFormContainer extends React.Component<TopPostFormContainerProps, To
   topPostFormContainer: () => void;
 
   static defaultProps = {
-    instructionLabel: 'debate.thread.startDiscussion'
+    instructionLabel: 'debate.thread.startDiscussion',
+    textareaNoMaxLength: false
   };
 
   constructor(props: TopPostFormContainerProps) {
@@ -96,7 +98,8 @@ class TopPostFormContainer extends React.Component<TopPostFormContainerProps, To
       instructionLabel,
       fillBodyLabel,
       bodyPlaceholder,
-      postSuccessMsg
+      postSuccessMsg,
+      textareaNoMaxLength
     } = this.props;
     const columnsInfos = this.getColumnsInfos();
     const { sticky } = this.state;
@@ -161,6 +164,7 @@ class TopPostFormContainer extends React.Component<TopPostFormContainerProps, To
                             fillBodyLabel={fillBodyLabel}
                             bodyPlaceholder={bodyPlaceholder}
                             postSuccessMsg={postSuccessMsg}
+                            textareaNoMaxLength={textareaNoMaxLength}
                           />
                         </Col>
                       </Row>

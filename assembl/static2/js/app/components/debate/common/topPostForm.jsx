@@ -31,7 +31,8 @@ type TopPostFormProps = {
   onDisplayForm: Function,
   fillBodyLabel: string,
   bodyPlaceholder: string,
-  postSuccessMsg: string
+  postSuccessMsg: string,
+  textareaNoMaxLength?: boolean
 };
 
 type TopPostFormState = {
@@ -49,7 +50,8 @@ class TopPostForm extends React.Component<TopPostFormProps, TopPostFormState> {
     onDisplayForm: () => {},
     fillBodyLabel: 'debate.thread.fillBody',
     bodyPlaceholder: 'debate.insert',
-    postSuccessMsg: 'debate.thread.postSuccess'
+    postSuccessMsg: 'debate.thread.postSuccess',
+    textareaNoMaxLength: false
   };
 
   constructor() {

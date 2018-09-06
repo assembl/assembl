@@ -84,6 +84,7 @@ exports[`Bright Mirror page should match BrightMirror instruction snapshot 1`] =
       instructionLabel="debate.brightMirror.startFictionLabel"
       postSuccessMsg="debate.brightMirror.postSuccessMsg"
       refetchIdea={[Function]}
+      textareaNoMaxLength={true}
       topPostsCount={0}
     />
     <FictionsList

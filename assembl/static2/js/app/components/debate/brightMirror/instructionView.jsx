@@ -60,6 +60,7 @@ const InstructionView = ({
             fillBodyLabel="debate.brightMirror.fillBodyLabel"
             bodyPlaceholder="debate.brightMirror.fillBodyLabel"
             postSuccessMsg="debate.brightMirror.postSuccessMsg"
+            textareaNoMaxLength
           />
         ) : null}
         <FictionsList posts={posts} identifier={identifier} themeId={ideaId} refetchIdea={refetchIdea} lang={lang} />

@@ -74,6 +74,7 @@ const FictionPreview = ({
           editTitle="debate.brightMirror.editFiction"
           bodyDescription="debate.brightMirror.fiction"
           childrenUpdate={false}
+          textareaNoMaxLength
         />
       </div>
     );
