@@ -38,13 +38,7 @@ class PhaseMenu extends React.PureComponent<Props> {
     const subMenuIds = subMenu ? Object.keys(subMenu) : [];
     return (
       <li key={phase.id + sectionId}>
-        <Link
-          to={`${get('administration', slug)}${get('adminPhase', {
-            ...slug,
-            phase: phase.identifier
-          })}${sectionQuery}`}
-          activeClassName="active"
-        >
+        <Link to={`${get('administration', { ...slug, id: phase.identifier })}${sectionQuery}`} activeClassName="active">
           <Translate value={title} />
         </Link>
         {subMenu && subMenuIds.length > 0 ? (
@@ -62,13 +56,7 @@ class PhaseMenu extends React.PureComponent<Props> {
     const subMenuIds = subMenu ? Object.keys(subMenu) : [];
     return (
       <li className="menu-item">
-        <Link
-          to={`${get('administration', slug)}${get('adminPhase', {
-            ...slug,
-            phase: phase.identifier
-          })}${sectionQuery}`}
-          activeClassName="active"
-        >
+        <Link to={`${get('administration', { ...slug, id: phase.identifier })}${sectionQuery}`} activeClassName="active">
           <Translate value="administration.menu.phase" count={index + 1} description={phase.title} />
         </Link>
         {subMenuIds.length > 0 ? (

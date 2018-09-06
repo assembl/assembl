@@ -31,6 +31,7 @@ import { getPhaseId } from '../utils/timeline';
 import { get } from '../utils/routeMap';
 import { displayAlert, displayCustomModal, closeModal } from '../utils/utilityManager';
 import { getDiscussionSlug } from '../utils/globalFunctions';
+import { PHASES } from '../constants';
 
 type VoteModule = {
   choices?: Array<VoteChoice>,
@@ -515,7 +516,7 @@ class VoteSessionAdmin extends React.Component<Props, State> {
         {section === '2' && <ModulesSection />}
         {section === '3' && <VoteProposalsSection />}
         {section === '4' && <ExportSection exportLink={exportLink} annotation="voteSessionAnnotation" />}
-        {section && <Navbar currentStep={section} steps={['1', '2', '3', '4']} phaseIdentifier="voteSession" />}
+        {section && <Navbar currentStep={section} steps={['1', '2', '3', '4']} phaseIdentifier={PHASES.voteSession} />}
       </div>
     );
   }

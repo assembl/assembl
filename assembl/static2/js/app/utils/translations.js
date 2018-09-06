@@ -1380,7 +1380,7 @@ const Translations = {
       addQuestion: "Add a question",
       anErrorOccured: "An error occured during save. Please check that you filled all the required fields.",
       deleteThematic: "Delete the theme",
-      deleteSubThematicDisabled: "You can't delete a theme with sub-thematics.",
+      deleteSubThematicDisabled: "You cannot delete a theme with sub-thematics.",
       confirmDeleteThematicTitle: "Confirm deletion",
       confirmDeleteThematic: "Are you sure you want to delete this theme?",
       confirmUnsavedChanges: "You have unsaved changes. Are you sure you want to leave this page?",

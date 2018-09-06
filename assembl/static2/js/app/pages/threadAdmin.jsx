@@ -2,6 +2,7 @@ import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { get } from '../utils/routeMap';
+import { PHASES } from '../constants';
 import ExportSection from '../components/administration/exportSection';
 import Navbar from '../components/administration/navbar';
 import DiscussionPreferenceLanguageQuery from '../graphql/DiscussionPreferenceLanguage.graphql';
@@ -61,7 +62,7 @@ class ThreadAdmin extends React.Component {
             annotation="threadAnnotation"
           />
         )}
-        {section && <Navbar currentStep={section} steps={['1']} phaseIdentifier="thread" />}
+        {section && <Navbar currentStep={section} steps={['1']} phaseIdentifier={PHASES.thread} />}
       </div>
     );
   }

@@ -29,9 +29,7 @@ type RootIdea = {
 };
 
 type Data = {
-  /* A liste of thematics */
   thematicsData: Array<Thematic>,
-  /* The root Idea of the idea tree */
   rootIdea: RootIdea
 };
 
@@ -42,9 +40,9 @@ type ThematicsMenuProps = {
 };
 
 type ThematicsMenuItemProps = {
-  /* A liste of thematics */
+  /* A list of thematics */
   descendants: Array<Thematic>,
-  /* The root Idea of the idea tree */
+  /* The roots Ideas of the sub idea tree */
   roots: Array<Thematic>,
   /* The roots parents indexes */
   indexes: Array<number>,
@@ -55,11 +53,9 @@ type ThematicsMenuItemProps = {
 type Props = {
   /* The menu item that calls this component. See constants/PHASES_ADMIN_MENU */
   menuItem: { sectionId: string, title: string },
-  /* The root sction id */
   rootSectionId: string,
   /* The ThematicsDataQuery result */
   data: Data,
-  /* The router location */
   location: { query: { section: string, thematicId: string } }
 };
 
@@ -68,9 +64,9 @@ type QueryVariablesType = {
   lang: string
 };
 /**
- * @param {string} The id of the removed thematic.
- * @param {ApolloClient} The apollo client.
- * @param {QueryVariablesType} The ThematicsDataQuery variables.
+ * @param {string} id - The id of the removed thematic.
+ * @param {ApolloClient} client - The apollo client.
+ * @param {QueryVariablesType} variables - The ThematicsDataQuery variables.
  * Remove the thematic with id equal to id from the result of the ThematicsDataQuery query.
  */
 export const removeMenuItem = (id: string, client: ApolloClient, variables: QueryVariablesType) => {
@@ -85,11 +81,11 @@ export const removeMenuItem = (id: string, client: ApolloClient, variables: Quer
 };
 
 /**
- * @param {string} The id of the added thematic.
- * @param {string} The parent id of the added thematic.
- * @param {number} The index of the added thematic.
- * @param {ApolloClient} The apollo client.
- * @param {QueryVariablesType} The ThematicsDataQuery variables.
+ * @param {string} id - The id of the added thematic.
+ * @param {string} parentId - The parent id of the added thematic.
+ * @param {number} index - The index of the added thematic.
+ * @param {ApolloClient} client - The apollo client.
+ * @param {QueryVariablesType} variables - The ThematicsDataQuery variables.
  * Add a new thematic to the result of the ThematicsDataQuery query.
  */
 export const addMenuItem = (id: string, parentId: string, index: number, client: ApolloClient, variables: QueryVariablesType) => {
@@ -111,12 +107,12 @@ export const addMenuItem = (id: string, parentId: string, index: number, client:
 };
 
 /**
- * @param {string} The id of the added item.
- * @param {string} The parent id of the added item.
- * @param {number} The source index of the thematic.
- * @param {number} The target index of the thematic.
- * @param {ApolloClient} The apollo client.
- * @param {QueryVariablesType} The ThematicsDataQuery variables.
+ * @param {string} id - The id of the added item.
+ * @param {string} parentId - The parent id of the added item.
+ * @param {number} index - The source index of the thematic.
+ * @param {number} targetIndex - The target index of the thematic.
+ * @param {ApolloClient} client - The apollo client.
+ * @param {QueryVariablesType} variables - The ThematicsDataQuery variables.
  * Change the order of a themeatic to targetIndex.
  */
 export const swapMenuItem = (
@@ -129,14 +125,14 @@ export const swapMenuItem = (
 ) => {
   const query = { query: ThematicsDataQuery, variables: variables };
   const data = client.readQuery(query);
-  const isDown = targetIndex - index > 0;
+  const isDownAction = targetIndex - index > 0;
   const newThematics = data.thematicsData.map((thematic) => {
     if (parentId && thematic.parentId !== parentId) return thematic;
     // if it's the swapped thematic
     if (thematic.id === id) return { ...thematic, order: targetIndex + 1 };
     // the item index in the array
     const itemIndex = thematic.order - 1;
-    if (isDown) {
+    if (isDownAction) {
       if (itemIndex >= index + 1 && itemIndex <= targetIndex) {
         // order to order -1
         return { ...thematic, order: itemIndex };
@@ -163,10 +159,7 @@ const ThematicsMenuItems = ({ roots, descendants, slug, phase, indexes, sectionQ
     const hasSubMenu = subMenuTree.roots.length > 0;
     const link = (
       <Link
-        to={`${get('administration', slug)}${get('adminPhase', {
-          ...slug,
-          phase: phase.identifier
-        })}${sectionQuery}&thematicId=${thematic.id}`}
+        to={`${get('administration', { ...slug, id: phase.identifier })}${sectionQuery}&thematicId=${thematic.id}`}
         activeClassName="active"
       >
         <Translate value="administration.menu.configureThematic" index={subIndexes.join('.')} />
@@ -207,9 +200,7 @@ ThematicsMenuItems.defaultProps = {
   indexes: []
 };
 
-function sortThematics(items) {
-  return sortBy(items, 'order');
-}
+const sortThematics = (items: Array<Thematic>): Array<Thematic> => sortBy(items, 'order');
 
 const ThematicsMenu = ({
   slug,
@@ -224,11 +215,11 @@ const ThematicsMenu = ({
   const sectionQuery = `?section=${sectionIndex}`;
   const { roots, descendants } = getPartialTreeByParentId(rootIdea && rootIdea.id, thematicsData);
   if (roots.length === 0) return null;
-  const firstThematics = sortBy(roots, 'order')[0];
-  const to = `${get('administration', slug)}${get('adminPhase', {
-    ...slug,
-    phase: phase.identifier
-  })}${sectionQuery}&thematicId=${firstThematics.id}`;
+  const firstThematic = sortBy(roots, 'order')[0];
+  // TODO use the query argument for section and thematicId
+  const firstThematicLink = `${get('administration', { ...slug, id: phase.identifier })}${sectionQuery}&thematicId=${
+    firstThematic.id
+  }`;
   const { section, thematicId } = location.query;
   const openedPath = [];
   if (sectionIndex === section) {
@@ -243,7 +234,7 @@ const ThematicsMenu = ({
       <MenuItem
         className="thematics-menu-item"
         title={
-          <Link to={to} activeClassName="active">
+          <Link to={firstThematicLink} activeClassName="active">
             <Translate value={menuItem.title} />
           </Link>
         }

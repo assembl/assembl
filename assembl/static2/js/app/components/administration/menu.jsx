@@ -33,7 +33,7 @@ class Menu extends React.PureComponent<Props> {
     const isActive = requestedPhase === id;
     return (
       <li key={id + sectionIndex} className={isRoot ? 'menu-item' : ''}>
-        <Link to={`${get('administration', slug)}/${id}${sectionQuery}`} activeClassName="active">
+        <Link to={`${get('administration', { ...slug, id: id })}${sectionQuery}`} activeClassName="active">
           <Translate value={title} />
         </Link>
         {subMenu && subMenuIds.length > 0 ? (

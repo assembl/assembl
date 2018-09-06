@@ -45,9 +45,7 @@ class Navbar extends React.Component<Props, State> {
     const slug = { slug: getDiscussionSlug() };
     const stepId = this.state.steps[stepNb - 1];
     const { phaseIdentifier } = this.props;
-    browserHistory.push(
-      `${get('administration', slug)}${get('adminPhase', { ...slug, phase: phaseIdentifier })}?section=${stepId}`
-    );
+    browserHistory.push(`${get('administration', { ...slug, id: phaseIdentifier })}?section=${stepId}`);
     this.setState({
       currentStep: stepId
     });
