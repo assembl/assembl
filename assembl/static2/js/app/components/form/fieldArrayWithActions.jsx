@@ -20,9 +20,9 @@ type Props = {
   renderFields: Function,
   titleMsgId?: string, // eslint-disable-line react/require-default-props
   tooltips: {
-    addTooltip: (props: any) => React.Node,
-    deleteTooltip: (props: any) => React.Node,
-    deleteDisabled?: (props: any) => React.Node
+    addTooltip: (props: { level: number }) => React.Node,
+    deleteTooltip: () => React.Node,
+    deleteDisabled?: () => React.Node
   },
   withSeparators: boolean,
   subFieldName?: string,
@@ -31,7 +31,12 @@ type Props = {
   maxLevel: number,
   minItems: number,
   parents: Array<number>,
-  parentId: string
+  parentId: string,
+  confirmDeletion: boolean,
+  confirmDeletionMessages: {
+    confirmDeletionTitle: (props: ConfirmationMessageType) => React.Node,
+    confirmDeletionBody: (props: ConfirmationMessageType) => React.Node
+  }
 };
 
 type FieldsProps = {
@@ -45,6 +50,25 @@ type FieldsProps = {
 type FieldArrayProps = {
   name: string
 } & Props;
+
+function confirmDeletionModal(title: React.Node, body: React.Node, remove: () => void) {
+  const footer = [
+    <Button key="cancel" onClick={closeModal} className="button-cancel button-dark">
+      <Translate value="cancel" />
+    </Button>,
+    <Button
+      key="delete"
+      onClick={() => {
+        remove();
+        closeModal();
+      }}
+      className="button-submit button-dark"
+    >
+      <Translate value="delete" />
+    </Button>
+  ];
+  return displayModal(title, body, true, footer);
+}
 
 export class Fields extends React.PureComponent<FieldsProps> {
   constructor(props: FieldsProps) {
@@ -100,16 +124,18 @@ export class Fields extends React.PureComponent<FieldsProps> {
   render() {
     const {
       fields,
-      subFieldName,
       renderFields,
       titleMsgId,
-      tooltips: { addTooltip, deleteTooltip, deleteDisabled },
-      withSeparators,
       isTree,
       level,
+      subFieldName,
       maxLevel,
       minItems,
+      withSeparators,
+      confirmDeletion,
       parents,
+      tooltips: { addTooltip, deleteTooltip, deleteDisabled },
+      confirmDeletionMessages: { confirmDeletionTitle, confirmDeletionBody },
       onAdd,
       onRemove,
       onUp,
@@ -137,6 +163,16 @@ export class Fields extends React.PureComponent<FieldsProps> {
           const displaySeparator = withSeparators && (!isTree || (isRoot && idx === fields.length - 1));
           const indexes = [...parents, idx + 1];
           const fieldIndex = indexes.join('.');
+          const removeField = () => this.remove(idx);
+          const removeConfirmationData = { field: fieldValue, index: fieldIndex };
+          const removeWithConfirmation = confirmDeletion
+            ? () =>
+              confirmDeletionModal(
+                confirmDeletionTitle(removeConfirmationData),
+                confirmDeletionBody(removeConfirmationData),
+                removeField
+              )
+            : removeField;
           return (
             <div className="form-container" key={fieldname}>
               {titleMsgId ? (
@@ -165,7 +201,7 @@ export class Fields extends React.PureComponent<FieldsProps> {
                       placement="top"
                       overlay={!enableDeleteBtn && deleteDisabled ? deleteDisabled() : deleteTooltip()}
                     >
-                      <Button disabled={!enableDeleteBtn} onClick={() => this.remove(idx)} className="admin-icons">
+                      <Button disabled={!enableDeleteBtn} onClick={removeWithConfirmation} className="admin-icons">
                         <span className="assembl-icon-delete grey" />
                       </Button>
                     </OverlayTrigger>
@@ -192,6 +228,11 @@ export class Fields extends React.PureComponent<FieldsProps> {
                     maxLevel={maxLevel}
                     parentId={fieldValue.id}
                     parents={indexes}
+                    confirmDeletion={confirmDeletion}
+                    confirmDeletionMessages={{
+                      confirmDeletionTitle: confirmDeletionTitle,
+                      confirmDeletionBody: confirmDeletionBody
+                    }}
                     onAdd={onAdd}
                     onRemove={onRemove}
                     onUp={onUp}
@@ -223,7 +264,12 @@ FieldArrayWithActions.defaultProps = {
   minItems: -1,
   maxLevel: MAX_TREE_FORM_LEVEL,
   parents: [],
-  parentId: ''
+  parentId: '',
+  confirmDeletion: false,
+  confirmDeletionMessages: {
+    confirmDeletionTitle: () => <Translate value="deleteConfirmation.confirmDeletionTitle" />,
+    confirmDeletionBody: () => <Translate value="deleteConfirmation.confirmDeletionBody" />
+  }
 };
 
 export default FieldArrayWithActions;

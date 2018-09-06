@@ -750,7 +750,9 @@ const Translations = {
       },
       tableOfThematics: {
         thematicTitle: "Titre de la Thématique",
-        headerLabel: "Choisir l'image de fond du bandeau"
+        headerLabel: "Choisir l'image de fond du bandeau",
+        confirmDeletionTitle: "Supprimer la thématique %{title}",
+        confirmDeletionBody: "Etes-vous certain de vouloir supprimer cette thématique ?"
       },
       resourcesCenter: {
         createResource: "Ajouter un média",
@@ -1604,7 +1606,9 @@ const Translations = {
       },
       tableOfThematics: {
         thematicTitle: "Thematic title",
-        headerLabel: "Choose the header background image"
+        headerLabel: "Choose the header background image",
+        confirmDeletionTitle: "Delete %{title} theme",
+        confirmDeletionBody: "Are you sure that you wish to delete this theme?"
       },
       resourcesCenter: {
         createResource: "Add a media",

@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import { Field } from 'react-final-form';
-import { I18n } from 'react-redux-i18n';
+import { I18n, Translate } from 'react-redux-i18n';
 import { type ApolloClient, withApollo } from 'react-apollo';
 
 import FieldArrayWithActions from '../../form/fieldArrayWithActions';
@@ -23,6 +23,7 @@ const Step1 = ({ editLocale, locale, client }: Props) => {
       <div className="form-title">{I18n.t('administration.survey.1')}</div>
       <FieldArrayWithActions
         isTree
+        confirmDeletion
         name="themes"
         subFieldName="children"
         minItems={1}
@@ -44,6 +45,14 @@ const Step1 = ({ editLocale, locale, client }: Props) => {
           addTooltip: addThematicTooltip,
           deleteTooltip: deleteThematicTooltip,
           deleteDisabled: deleteSubThematicDisabledTooltip
+        }}
+        confirmDeletionMessages={{
+          confirmDeletionTitle: ({ index }) => (
+            <Translate value="administration.tableOfThematics.confirmDeletionTitle" title={index} />
+          ),
+          confirmDeletionBody: ({ index }) => (
+            <Translate value="administration.tableOfThematics.confirmDeletionBody" title={index} />
+          )
         }}
       />
     </React.Fragment>
