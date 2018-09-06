@@ -117,6 +117,35 @@ def make_saml_cert(key, country=None, state=None, locality=None, org=None,
     return (builder_text, builder)
 
 
+def get_cert_expiry(cert):
+    if not cert.startswith("-----BEGIN CERTIFICATE-----"):
+        cert = "-----BEGIN CERTIFICATE-----\n%s\n-----END CERTIFICATE-----\n" % (cert,)
+    cert = x509.load_pem_x509_certificate(cert, default_backend())
+    return cert.not_valid_after
+
+
+def check_saml_certificate(interval=datetime.timedelta(days=30)):
+    from ..lib.config import get
+    cert = get("SOCIAL_AUTH_SAML_SP_PUBLIC_CERT", None)
+    message = None
+    if cert:
+        expiry = get_cert_expiry(cert)
+        time_to_expiry = expiry - datetime.datetime.utcnow()
+        if time_to_expiry < interval:
+            message = "Certificate expires in %d days" % (time_to_expiry.days,)
+    else:
+        message = "Missing certificate"
+    if message:
+        # use raven if available
+        if get("raven_url", None):
+            from ..lib.raven_client import capture_message
+            capture_message(message)
+        else:
+            pass
+            # recipient = get("saml_email", None) or get("admin_email", None)
+            # ... no request so no mailer...
+
+
 if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser(description='Process some integers.')
