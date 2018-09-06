@@ -47,10 +47,7 @@ const sectionSlug = sectionType => snakeToCamel(sectionType === 'HOMEPAGE' ? 'HO
 const sectionURL = ({ sectionType, url }, options) => {
   if (sectionType === 'ADMINISTRATION') {
     const defaultAdminPhase = 'discussion';
-    return `${get(sectionSlug(sectionType), options)}${get('adminPhase', {
-      ...options,
-      phase: defaultAdminPhase
-    })}?section=1`;
+    return `${get(sectionSlug(sectionType), { ...options, id: defaultAdminPhase })}?section=1`;
   }
 
   // url may be defined for non-custom sections (i.e. HOMEPAGE section)
