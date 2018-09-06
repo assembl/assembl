@@ -13,10 +13,10 @@ export type Button101Type = {
   onClickHandler: Function
 };
 
-const button101 = ({ label, type, isDisabled, onClickHandler }: Button101Type) => (
+const Button101 = ({ label, type, isDisabled, onClickHandler }: Button101Type) => (
   <Button bsStyle={type} bsSize="large" className="integration button" onClick={onClickHandler} disabled={isDisabled}>
     {label}
   </Button>
 );
 
-export default button101;
+export default Button101;

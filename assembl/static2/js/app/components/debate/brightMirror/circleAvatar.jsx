@@ -11,7 +11,7 @@ export type CircleAvatarProps = {
 const noUsernameAlt: string = 'no-username';
 const noUsernameAvatarSrc: string = '/static2/img/icons/avatar.png';
 
-const circleAvatar = ({ username, src }: CircleAvatarProps) => (
+const CircleAvatar = ({ username, src }: CircleAvatarProps) => (
   <img
     className="circle-avatar"
     src={src || noUsernameAvatarSrc}
@@ -19,4 +19,4 @@ const circleAvatar = ({ username, src }: CircleAvatarProps) => (
   />
 );
 
-export default circleAvatar;
+export default CircleAvatar;

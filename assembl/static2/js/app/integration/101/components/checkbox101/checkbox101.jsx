@@ -10,16 +10,16 @@ export type Checkbox101Type = {
   onChangeHandler: Function
 };
 
-const checkbox101 = ({ label, isDone, onChangeHandler }: Checkbox101Type) => (
+const Checkbox101 = ({ label, isDone, onChangeHandler }: Checkbox101Type) => (
   <div className="integration checkbox">
     <input id="checkbox" type="checkbox" onChange={onChangeHandler} checked={isDone} />
     <label htmlFor="checkbox">{label}</label>
   </div>
 );
 
-checkbox101.defaultProps = {
+Checkbox101.defaultProps = {
   label: 'Default',
   isDone: false
 };
 
-export default checkbox101;
+export default Checkbox101;

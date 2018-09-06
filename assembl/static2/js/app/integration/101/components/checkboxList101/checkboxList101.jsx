@@ -8,7 +8,7 @@ export type CheckboxList101Type = {
   checkboxes: Array<Checkbox101Type>
 };
 
-const checkboxList101 = ({ checkboxes }: CheckboxList101Type) => {
+const CheckboxList101 = ({ checkboxes }: CheckboxList101Type) => {
   if (checkboxes.length === 0) {
     return <Fragment>Nothing to display</Fragment>;
   }
@@ -29,4 +29,4 @@ const checkboxList101 = ({ checkboxes }: CheckboxList101Type) => {
   );
 };
 
-export default checkboxList101;
+export default CheckboxList101;

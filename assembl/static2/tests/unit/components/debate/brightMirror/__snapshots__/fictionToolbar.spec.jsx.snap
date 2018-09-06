@@ -182,7 +182,7 @@ exports[`Storyshots FictionToolbar default 1`] = `
                   }
                 >
                   &lt;
-                  fictionToolbar
+                  FictionToolbar
                 </span>
                 <span>
                   <span>
@@ -443,7 +443,7 @@ exports[`Storyshots FictionToolbar default 1`] = `
               }
             >
               "
-              fictionToolbar
+              FictionToolbar
               " Component
             </h2>
             <table

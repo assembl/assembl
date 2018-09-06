@@ -168,7 +168,7 @@ exports[`Storyshots Button101 danger 1`] = `
                   }
                 >
                   &lt;
-                  button101
+                  Button101
                 </span>
                 <span>
                   <span>
@@ -347,7 +347,7 @@ exports[`Storyshots Button101 danger 1`] = `
               }
             >
               "
-              button101
+              Button101
               " Component
             </h2>
             <small>
@@ -529,7 +529,7 @@ exports[`Storyshots Button101 default 1`] = `
                   }
                 >
                   &lt;
-                  button101
+                  Button101
                 </span>
                 <span>
                   <span>
@@ -708,7 +708,7 @@ exports[`Storyshots Button101 default 1`] = `
               }
             >
               "
-              button101
+              Button101
               " Component
             </h2>
             <small>
@@ -890,7 +890,7 @@ exports[`Storyshots Button101 disabled 1`] = `
                   }
                 >
                   &lt;
-                  button101
+                  Button101
                 </span>
                 <span>
                   <span>
@@ -1051,7 +1051,7 @@ exports[`Storyshots Button101 disabled 1`] = `
               }
             >
               "
-              button101
+              Button101
               " Component
             </h2>
             <small>
@@ -1233,7 +1233,7 @@ exports[`Storyshots Button101 playground 1`] = `
                   }
                 >
                   &lt;
-                  button101
+                  Button101
                 </span>
                 <span>
                   <span>
@@ -1412,7 +1412,7 @@ exports[`Storyshots Button101 playground 1`] = `
               }
             >
               "
-              button101
+              Button101
               " Component
             </h2>
             <small>

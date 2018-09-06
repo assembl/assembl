@@ -26,7 +26,7 @@ export type FictionToolbarProps = {
   onDeleteCallback?: () => void
 };
 
-const fictionToolbar = ({
+const FictionToolbar = ({
   fictionId,
   title,
   originalBody,
@@ -72,9 +72,9 @@ const fictionToolbar = ({
   );
 };
 
-fictionToolbar.defaultProps = {
+FictionToolbar.defaultProps = {
   onModifyCallback: null,
   onDeleteCallback: null
 };
 
-export default fictionToolbar;
+export default FictionToolbar;

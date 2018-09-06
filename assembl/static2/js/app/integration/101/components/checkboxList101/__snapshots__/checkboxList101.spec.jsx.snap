@@ -161,7 +161,7 @@ exports[`Storyshots CheckboxList101 Empty list 1`] = `
                   }
                 >
                   &lt;
-                  checkboxList101
+                  CheckboxList101
                 </span>
                 <span>
                   <span>
@@ -249,7 +249,7 @@ exports[`Storyshots CheckboxList101 Empty list 1`] = `
               }
             >
               "
-              checkboxList101
+              CheckboxList101
               " Component
             </h2>
             <small>
@@ -498,7 +498,7 @@ exports[`Storyshots CheckboxList101 List of 5 1`] = `
                   }
                 >
                   &lt;
-                  checkboxList101
+                  CheckboxList101
                 </span>
                 <span>
                   <span>
@@ -850,7 +850,7 @@ exports[`Storyshots CheckboxList101 List of 5 1`] = `
               }
             >
               "
-              checkboxList101
+              CheckboxList101
               " Component
             </h2>
             <small>
@@ -1099,7 +1099,7 @@ exports[`Storyshots CheckboxList101 playground 1`] = `
                   }
                 >
                   &lt;
-                  checkboxList101
+                  CheckboxList101
                 </span>
                 <span>
                   <span>
@@ -1451,7 +1451,7 @@ exports[`Storyshots CheckboxList101 playground 1`] = `
               }
             >
               "
-              checkboxList101
+              CheckboxList101
               " Component
             </h2>
             <small>
