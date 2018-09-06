@@ -11,7 +11,8 @@ import HarvestingButton from './harvestingButton';
 type UserMenuProps = {
   location: string,
   helpUrl: string,
-  remainingWidth?: number
+  remainingWidth?: number,
+  loginData: ?Object
 };
 
 const shouldShowUsername = (remainingWidth, breakPoint) =>
@@ -19,7 +20,7 @@ const shouldShowUsername = (remainingWidth, breakPoint) =>
 
 const shouldShowExpertIcons = connectedUserIsExpert();
 
-const UserMenu = ({ location, helpUrl, remainingWidth }: UserMenuProps) => (
+const UserMenu = ({ location, helpUrl, remainingWidth, loginData }: UserMenuProps) => (
   <div className="navbar-icons">
     {shouldShowExpertIcons && <HarvestingButton />}
     <div id="search">
@@ -31,13 +32,12 @@ const UserMenu = ({ location, helpUrl, remainingWidth }: UserMenuProps) => (
           <span className="assembl-icon-faq grey" />
         </Link>
       )}
-    <Avatar location={location} showUsername={shouldShowUsername(remainingWidth, 450)} />
+    <Avatar location={location} showUsername={shouldShowUsername(remainingWidth, 450)} loginData={loginData} />
   </div>
 );
 
 UserMenu.defaultProps = {
-  remainingWidth: null,
-  themeId: ''
+  remainingWidth: null
 };
 
 export default UserMenu;

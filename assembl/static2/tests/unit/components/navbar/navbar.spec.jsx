@@ -11,33 +11,45 @@ describe('mapSectionToElement function', () => {
 });
 
 const data = {
-  sections: [
-    {
-      id: 'home',
-      sectionType: 'HOMEPAGE',
-      title: 'Home',
-      url: 'http://www.homesweethome.org'
-    },
-    {
-      id: 'mysection',
-      sectionType: 'CUSTOM',
-      title: 'My section',
-      url: 'http://www.gnu.org'
+  sectionData: {
+    hasResourcesCenter: false,
+    hasSyntheses: false,
+    sections: [
+      {
+        id: 'home',
+        sectionType: 'HOMEPAGE',
+        title: 'Home',
+        url: 'http://www.homesweethome.org'
+      },
+      {
+        id: 'mysection',
+        sectionType: 'CUSTOM',
+        title: 'My section',
+        url: 'http://www.gnu.org'
+      }
+    ]
+  },
+  discussionData: {
+    loginData: {
+      route: 'http://www.mycoolsite.com/login',
+      local: false
     }
-  ]
+  },
+  discussionLoading: false,
+  sectionloading: false
 };
 
 describe('AssemblNavbar component', () => {
   it('should render a FlatNavbar with a big screenWidth', () => {
     const renderer = new ShallowRenderer();
-    renderer.render(<AssemblNavbar screenWidth={2000} phase={{}} debate={{ debateData: { timeline: [] } }} data={data} />);
+    renderer.render(<AssemblNavbar screenWidth={2000} phase={{}} debate={{ debateData: { timeline: [] } }} {...data} />);
     const result = renderer.getRenderOutput();
     expect(result).toMatchSnapshot();
   });
 
   it('should render a BurgerNavbar and a hidden FlatNavbar with a tiny screenWidth', () => {
     const renderer = new ShallowRenderer();
-    renderer.render(<AssemblNavbar phase={{}} screenWidth={10} debate={{ debateData: { timeline: [] } }} data={data} />);
+    renderer.render(<AssemblNavbar phase={{}} screenWidth={10} debate={{ debateData: { timeline: [] } }} {...data} />);
     const result = renderer.getRenderOutput();
     expect(result).toMatchSnapshot();
   });
