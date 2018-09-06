@@ -76,7 +76,7 @@ class SignupForm extends React.Component<SignupFormProps, SignupFormState> {
 
   handleInput = (e) => {
     inputHandler(this, e);
-  }
+  };
 
   handleSelectChange = (e) => {
     const name = e.target.name;
@@ -92,7 +92,7 @@ class SignupForm extends React.Component<SignupFormProps, SignupFormState> {
     } else {
       this.props.signUp(this.state);
     }
-  }
+  };
 
   toggleCheck = (legalContentsType: string) => {
     this.setState(prevState => ({ [`${legalContentsType}IsChecked`]: !prevState[`${legalContentsType}IsChecked`] }));
@@ -100,17 +100,11 @@ class SignupForm extends React.Component<SignupFormProps, SignupFormState> {
 
   handleAcceptButton = (legalContentsType: string) => {
     this.setState({ [`${legalContentsType}IsChecked`]: true });
-  }
+  };
 
   render() {
     const slug = getDiscussionSlug();
-    const {
-      hasTermsAndConditions,
-      hasPrivacyPolicy,
-      textFields,
-      termsAndConditionsText,
-      privacyPolicyText
-    } = this.props;
+    const { hasTermsAndConditions, hasPrivacyPolicy, textFields, termsAndConditionsText, privacyPolicyText } = this.props;
     const { privacyPolicyIsChecked, termsAndConditionsIsChecked } = this.state;
     return (
       <div className="login-view">

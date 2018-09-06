@@ -13,16 +13,16 @@ import acceptedCookiesQuery from '../graphql/acceptedCookiesQuery.graphql';
 import { COOKIE_TYPES } from '../constants';
 import withoutLoadingIndicator from './common/withoutLoadingIndicator';
 
-type State = {
+type CookiesBarState = {
   hide: ?boolean
 };
 
-type Props = {
+type CookiesBarProps = {
   cookiesList: Array<string>,
   updateAcceptedCookies: Function
 };
 
-export class DumbCookiesBar extends React.Component<Props, State> {
+export class DumbCookiesBar extends React.Component<CookiesBarProps, CookiesBarState> {
   constructor(props: Props) {
     super(props);
     const { cookiesList } = props;

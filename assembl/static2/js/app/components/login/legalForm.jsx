@@ -27,7 +27,6 @@ class LegalForm extends React.Component<Props, State> {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-
   componentDidMount() {
     this.box.addEventListener('scroll', this.trackScrolling);
   }
@@ -73,7 +72,9 @@ class LegalForm extends React.Component<Props, State> {
                 type="submit"
                 name="acceptTerms"
                 className="button-submit button-dark terms-submit right"
-                onClick={() => { this.handleSubmit(legalContentsType); }}
+                onClick={() => {
+                  this.handleSubmit(legalContentsType);
+                }}
               >
                 <Translate value="termsAndConditions.accept" />
               </Button>
@@ -83,6 +84,5 @@ class LegalForm extends React.Component<Props, State> {
     );
   }
 }
-
 
 export default LegalForm;
