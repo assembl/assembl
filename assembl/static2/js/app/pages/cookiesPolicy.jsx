@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import React, { Fragment } from 'react';
 import { compose, graphql } from 'react-apollo';
 import type { OperationComponent, QueryProps } from 'react-apollo';
 import { connect } from 'react-redux';
@@ -24,7 +24,7 @@ const CookiesPolicy = ({ text, headerTitle, debateData }) => (
       debateData={debateData}
       key="text-with-header"
       renderPageBody={() => (
-        <div className="page-body">
+        <Fragment>
           <CookiesSelectorContainer key="cookies-selector" />
           <h2 className="dark-title-2">
             <Translate value="cookiesPolicy.sectionTitle" />
@@ -35,7 +35,7 @@ const CookiesPolicy = ({ text, headerTitle, debateData }) => (
               __html: text
             }}
           />
-        </div>
+        </Fragment>
       )}
     />
   </div>
