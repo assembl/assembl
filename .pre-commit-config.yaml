@@ -25,11 +25,11 @@
     entry: bash -c "cd assembl/static2/; npm test"
     language: system
     files: ".*/static2/.*jsx?$"
-#  - id: prettier-js
-#    name: prettier-js (If this fails, please git add prettier changes and commit again.)
-#    entry: bash -c "./assembl/static2/node_modules/.bin/prettier-eslint --write `git diff --name-only --diff-filter=d --cached -- '*.jsx' '*.js'|grep static2` 2>&1 |grep -qv success"
-#    language: system
-#    files: ".*/static2/.*jsx?$"
+  - id: prettier-js
+    name: prettier-js (If this fails, please git add prettier changes and commit again.)
+    entry: bash -c "./assembl/static2/scripts/prettier-eslint.py --write `git diff --name-only --diff-filter=d --cached -- '*.jsx' '*.js'|grep static2`"
+    language: system
+    files: ".*/static2/.*jsx?$"
   - id: prettier-graphql
     name: prettier-graphql (If this fails, please git add prettier changes and commit again.)
     entry: bash -c "./assembl/static2/node_modules/.bin/prettier --print-width 130 -l `git diff --name-only --diff-filter=d --cached -- '*.graphql'`; RES=$?; ./assembl/static2/node_modules/.bin/prettier --print-width 130 --write `git diff --name-only --cached -- '*.graphql'` > /dev/null; exit $RES"
