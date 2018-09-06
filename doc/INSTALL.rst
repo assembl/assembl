@@ -326,6 +326,30 @@ If you have not added this user to the www-data group as advised previously (or 
 If you do not have an SSL certificate, then you have to set ``accept_secure_connection = false`` and ``require_secure_connection = false`` (because if you set ``accept_secure_connection = true``, then the login page on assembl will try to show using https, which will not work).
 
 
+You should setup ssh keys for root user and assembl_user
+
+As root:
+
+.. code:: sh
+    ssh-keygen -b 2048 -t rsa -C "root@servername"
+
+Copy your newly created public key to authorized_keys:
+
+.. code:: sh
+    cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys
+
+Add new identity:
+
+.. code:: sh
+    eval `ssh-agent -s`
+
+You will then be prompted for your rsa key password:
+
+.. code:: sh
+
+    ssh-add
+
+You should also create a keypair for assembl_user.
 
 .. code:: sh
 
