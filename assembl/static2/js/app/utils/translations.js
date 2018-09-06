@@ -395,6 +395,7 @@ const Translations = {
         editFiction: "Editez votre fiction",
         deleteFiction: "Supprimez votre fiction",
         fiction: "Fiction",
+        deleteFictionModalBody: "Êtes-vous sûr de vouloir supprimer cette fiction ?",
         deleteFictionSuccessMsg: "Votre fiction a été supprimée"
       },
       themes: "Thèmes",
@@ -1246,6 +1247,7 @@ const Translations = {
         editFiction: "Edit your fiction",
         deleteFiction: "Delete your fiction",
         fiction: "Fiction",
+        deleteFictionModalBody: "Are you sure you want to delete this fiction?",
         deleteFictionSuccessMsg: "Your fiction was deleted"
       },
       themes: "Themes",

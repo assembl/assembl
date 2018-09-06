@@ -61,7 +61,13 @@ const fictionToolbar = ({
   return (
     <div className="action-buttons">
       {userCanEdit ? <EditPostButton handleClick={openPostModal} linkClassName="edit" /> : null}
-      {userCanDelete ? <DeletePostButton postId={fictionId} onDeleteCallback={onDeleteCallback} /> : null}
+      {userCanDelete ? (
+        <DeletePostButton
+          postId={fictionId}
+          modalBodyMessage="debate.brightMirror.deleteFictionModalBody"
+          onDeleteCallback={onDeleteCallback}
+        />
+      ) : null}
     </div>
   );
 };

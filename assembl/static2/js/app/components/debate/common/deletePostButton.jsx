@@ -8,9 +8,9 @@ import { Translate } from 'react-redux-i18n';
 import { displayModal, closeModal } from '../../../utils/utilityManager';
 import deletePostMutation from '../../../graphql/mutations/deletePost.graphql';
 
-function confirmModal(deletePost, postId, refetchQueries, onDeleteCallback) {
+function confirmModal(deletePost, postId, refetchQueries, modalBodyMessage, onDeleteCallback) {
   const title = <Translate value="debate.confirmDeletionTitle" />;
-  const body = <Translate value="debate.confirmDeletionBody" />;
+  const body = <Translate value={modalBodyMessage} />;
   const footer = [
     <Button key="cancel" onClick={closeModal} className="button-cancel button-dark">
       <Translate value="debate.confirmDeletionButtonCancel" />
@@ -50,12 +50,24 @@ export type DeletePostButtonProps = {
   postId: string,
   /** Array of refetch Queries */
   refetchQueries?: Array<RefetchQuery>,
+  /** Modal custom message */
+  modalBodyMessage?: string,
   /** callback function handled by the parent component */
   onDeleteCallback?: Function
 };
 
-const DeletePostButton = ({ deletePost, linkClassName, postId, refetchQueries, onDeleteCallback }: DeletePostButtonProps) => (
-  <Link className={linkClassName} onClick={() => confirmModal(deletePost, postId, refetchQueries, onDeleteCallback)}>
+const DeletePostButton = ({
+  deletePost,
+  linkClassName,
+  postId,
+  refetchQueries,
+  modalBodyMessage,
+  onDeleteCallback
+}: DeletePostButtonProps) => (
+  <Link
+    className={linkClassName}
+    onClick={() => confirmModal(deletePost, postId, refetchQueries, modalBodyMessage, onDeleteCallback)}
+  >
     <span className="assembl-icon-delete" />
   </Link>
 );
@@ -63,6 +75,7 @@ const DeletePostButton = ({ deletePost, linkClassName, postId, refetchQueries, o
 DeletePostButton.defaultProps = {
   linkClassName: '',
   refetchQueries: [],
+  modalBodyMessage: 'debate.confirmDeletionBody',
   onDeleteCallback: null
 };
 

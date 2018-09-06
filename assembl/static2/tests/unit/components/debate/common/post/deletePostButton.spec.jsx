@@ -3,7 +3,7 @@ import React from 'react';
 import { Link } from 'react-router';
 /* eslint-disable import/no-extraneous-dependencies */
 import initStoryshots from '@storybook/addon-storyshots';
-import { configure, mount } from 'enzyme';
+import { configure, shallow, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 /* eslint-enable */
 
@@ -17,6 +17,22 @@ initStoryshots({
 });
 
 configure({ adapter: new Adapter() });
+
+describe('<DeletePostButton /> - with shallow', () => {
+  let wrapper;
+
+  beforeEach(() => {
+    const deletePostButton: DeletePostButtonProps = {
+      deletePost: jest.fn(),
+      postId: '1234567890'
+    };
+    wrapper = shallow(<DeletePostButton {...deletePostButton} />);
+  });
+
+  it('should have a modal delete message set to "debate.confirmDeletionBody" as default', () => {
+    expect(wrapper.prop('modalBodyMessage')).toEqual('debate.confirmDeletionBody');
+  });
+});
 
 describe('<DeletePostButton /> - with mount', () => {
   let wrapper;

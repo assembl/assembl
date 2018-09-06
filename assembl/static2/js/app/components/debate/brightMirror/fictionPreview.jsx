@@ -91,7 +91,11 @@ const FictionPreview = ({
   const deleteButton = userCanDelete ? (
     <li>
       <ResponsiveOverlayTrigger placement="left" tooltip={deleteFictionTooltip}>
-        <DeletePostButton postId={id} onDeleteCallback={deleteFictionHandler} />
+        <DeletePostButton
+          postId={id}
+          modalBodyMessage="debate.brightMirror.deleteFictionModalBody"
+          onDeleteCallback={deleteFictionHandler}
+        />
       </ResponsiveOverlayTrigger>
     </li>
   ) : null;
