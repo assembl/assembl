@@ -124,6 +124,11 @@
     border-bottom: 1px solid $grey1;
   }
 
+  .extracts-nb-msg {
+    font-size: $font-size-xxs;
+    padding-bottom: 10px;
+  }
+
   .harvesting-status {
     display: inline-block;
     font-size: $font-size-xs;
@@ -397,7 +402,7 @@
   }
 
   .harvesting-box-body {
-    padding: 20px;
+    padding: 20px 5px 10px;
     font-size: $font-size-xs;
     color: $grey3;
     word-wrap: break-word;
@@ -418,11 +423,45 @@
         border: 1px solid $grey1;
       }
     }
+
+    .body-container {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+
+      .previous-extract {
+        cursor: pointer;
+        margin-top: -20px;
+        font-size: 10px;
+        flex-basis: 30px;
+        flex-shrink: 0;
+
+        .assembl-icon-down-open {
+          &:before {
+            transform: rotate(90deg) scaleX(2.5);
+          }
+        }
+      }
+
+      .next-extract {
+        cursor: pointer;
+        margin-top: 20px;
+        font-size: 10px;
+        flex-basis: 30px;
+        flex-shrink: 0;
+        padding-left: 15px;
+
+        .assembl-icon-down-open {
+          &:before {
+            transform: rotate(-90deg) scaleX(2.5);
+          }
+        }
+      }
+    }
   }
 
   .harvesting-box-footer {
     text-align: center;
-    padding: 20px 0;
     background-color: $grey1;
     display: flex;
     justify-content: space-around;
@@ -438,6 +477,13 @@
     .button-cancel {
       padding: 8px 16px;
     }
+  }
+
+  .extracts-numbering {
+    text-align: right;
+    padding-right: 20px;
+    padding-bottom: 20px;
+    font-size: $font-size-xxs;
   }
 }
 
