@@ -633,7 +633,8 @@ def build_virtualenv_python3():
     """
     if env.mac and not exists('/usr/local/bin/python3'):
         # update brew
-        run('ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"')
+        if not exists('/usr/local/bin/brew'):
+            run('ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"')
         run("brew update")
         run("brew upgrade")
         run("brew install python@2")
@@ -2427,3 +2428,29 @@ def generate_graphql_documentation():
     venvcmd('assembl-graphql-schema-json local.ini')
     with cd(env.projectpath + "/assembl/static2"):
         venvcmd("npm run documentation", chdir=False)
+
+
+@task
+def install_docker():
+    if env.mac:
+        print(green("Docker can be installed from https://store.docker.com/editions/community/docker-ce-desktop-mac"))
+    else:
+        if not exists('/usr/bin/docker'):
+            sudo('apt-get update')
+            sudo('apt-get install apt-transport-https ca-certificates curl software-properties-common')
+            sudo('curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -')
+            sudo('add-apt-repository -y "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"')
+            sudo('apt-get update; apt-get install -y docker-ce')
+            gitpath = 'https://github.com/docker/compose/releases/download/1.22.0/docker-compose-$(uname -s)-$(uname -m)'
+            run('curl -L %s -o /usr/local/bin/docker-compose' % gitpath)
+            sudo('chmod +x /usr/local/bin/docker-compose')
+            execute(add_user_to_group, env.user, 'docker')
+
+
+@task
+def add_user_to_group(user, group):
+    if env.mac:
+        # usually local
+        fabsudo("dseditgroup -o edit -a %s -t user %s" % (user, group))
+    else:
+        sudo("usermod -a -G %s %s" % (group, user))
