@@ -1,5 +1,5 @@
 // @flow
 
-const validate = () => {};
+const validate = () => ({});
 
 export default validate;

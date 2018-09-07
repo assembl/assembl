@@ -73,6 +73,7 @@ const plugin = {
     const isImage =
       isAtomicBlock &&
       node.firstChild &&
+      node.firstChild.dataset &&
       node.firstChild.dataset.mimetype &&
       node.firstChild.dataset.mimetype.startsWith('image');
     if (isImage) {
