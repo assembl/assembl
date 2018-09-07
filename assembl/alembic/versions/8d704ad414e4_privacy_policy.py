@@ -20,9 +20,6 @@ from assembl.lib import config
 
 def upgrade(pyramid_env):
     with context.begin_transaction():
-        pass
-
-    with transaction.manager:
         op.add_column(
             'discussion', sa.Column('cookies_policy_id', sa.Integer(), sa.ForeignKey('langstring.id')))
         op.add_column(

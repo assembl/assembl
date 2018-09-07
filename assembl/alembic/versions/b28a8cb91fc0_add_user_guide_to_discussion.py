@@ -1,4 +1,4 @@
-"""empty message
+"""Add user guide to discussion
 
 Revision ID: b28a8cb91fc0
 Revises: 180022eb0f0d
@@ -20,9 +20,6 @@ from assembl.lib import config
 
 def upgrade(pyramid_env):
     with context.begin_transaction():
-        pass
-
-    with transaction.manager:
         op.add_column(
             'discussion', sa.Column('user_guidelines_id', sa.Integer(), sa.ForeignKey('langstring.id')))
 
