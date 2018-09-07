@@ -33,6 +33,11 @@ export const getConnectedUserId = (base64: boolean = false) => {
 
 export const getConnectedUserName = () => getInputValue('user-displayname');
 
+export const moveElementToFirstPosition = (array: Array<any>, targetElement: any) => {
+  const others = array.filter(elelement => elelement !== targetElement);
+  return [targetElement, ...others];
+};
+
 // cache permissions to avoid accessing the dom at each permission check
 let permissions;
 export const getConnectedUserPermissions = () => {
@@ -180,6 +185,13 @@ export function setCookieItem(name: string, value: any) {
   const date = new Date();
   date.setMonth(date.getMonth() + 13);
   document.cookie = `${name}=${value}; path=/;expires=${date.toString()}`;
+}
+
+export function deleteCookieItem(name: string, path: string) {
+  if (getCookieItem(name)) {
+    // Set an expiration date in the past to delete the cookie in the browser
+    document.cookie = `${name}=;path=${path};expires=Thu, 28 Aug 1993 00:00:01 GTM;`;
+  }
 }
 
 export const createRandomId = (): string => Math.round(Math.random() * -1000000).toString();

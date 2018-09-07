@@ -103,7 +103,11 @@ class ModifyPasswordForm extends React.Component<Props, State> {
           required
           value={newPassword2}
         />
-        <div><span className="warning"><Translate value="login.oldPasswordWarning" /></span></div>
+        <div>
+          <span className="warning">
+            <Translate value="login.oldPasswordWarning" />
+          </span>
+        </div>
         <Button
           disabled={this.state.disabled}
           id="save-new-password"

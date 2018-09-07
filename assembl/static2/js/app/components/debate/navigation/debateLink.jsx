@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 import TimelineCpt from './timeline';
 import TimelineSegmentMenu from './timelineSegmentMenu';
 import { isMobile } from '../../../utils/globalFunctions';
-import { goTo } from '../../../utils/routeMap';
 
 type DebateLinkProps = {
   timeline: Timeline,
@@ -14,7 +13,6 @@ type DebateLinkProps = {
   className: string,
   activeClassName: string,
   children: React.Node,
-  to: string,
   dataText: string,
   screenTooSmall: boolean
 };
@@ -57,24 +55,17 @@ export class DumbDebateLink extends React.Component<DebateLinkProps, DebateLinkS
     }
   };
 
-  onLinkClick = () => {
-    this.hideMenu();
-    goTo(this.props.to);
-  };
-
   showSegmentMenu = (index: number) => {
     this.setState({ activeSegment: index });
   };
 
   render() {
-    const { identifier, children, to, className, activeClassName, dataText, screenTooSmall, timeline } = this.props;
+    const { identifier, children, className, activeClassName, dataText, screenTooSmall, timeline } = this.props;
     const { timeLineActive, activeSegment } = this.state;
-    const activeSegmentPhase = timeline[activeSegment];
+    // timeline can still be null (loading) if Sections query returned before Timeline query
+    const activeSegmentPhase = timeline ? timeline[activeSegment] : undefined;
     // The first touch show the menu and the second activate the link
     const isTouchScreenDevice = isMobile.any();
-    const touchActive = isTouchScreenDevice && !timeLineActive;
-    const onLinkClick = touchActive ? this.showMenu : this.onLinkClick;
-    const linkActive = window.location.pathname === to;
     return (
       <div
         ref={(debateNode) => {
@@ -84,7 +75,7 @@ export class DumbDebateLink extends React.Component<DebateLinkProps, DebateLinkS
         onMouseOver={!isTouchScreenDevice && !screenTooSmall ? this.showMenu : null}
         onMouseLeave={!isTouchScreenDevice && !screenTooSmall ? this.hideMenu : null}
       >
-        <div onClick={onLinkClick} className={classNames(className, { [activeClassName]: linkActive })} data-text={dataText}>
+        <div className={classNames(className, activeClassName)} data-text={dataText}>
           {children}
         </div>
         {!screenTooSmall && (

@@ -477,7 +477,13 @@ def test_api_get_posts_from_idea(
         "target": {
             "@type": Email.external_typename(),
             "@id": None
-        }
+        },
+        "ranges": [{
+            "start": "//div1",
+            "end": "//div2",
+            "startOffset": "1",
+            "endOffset": "2"
+        }]
     }
     # Create extract
     extract_data = base_extract_data.copy()
@@ -507,6 +513,12 @@ def test_api_get_posts_from_idea(
     extract_data["idIdea"] = subidea_1_1.uri()
     extract_data["target"]['@id'] = reply_post_1.uri()
     extract_data["text"] = "Let's lower taxes to fav 2",
+    extract_data["ranges"] = [{
+            "start": "//div1/div2",
+            "end": "//div2/div3",
+            "startOffset": "3",
+            "endOffset": "4"
+        }]
     res = test_app.post(base_extract_url, json.dumps(extract_data))
     assert res.status_code == 200
     res_data = json.loads(res.body)

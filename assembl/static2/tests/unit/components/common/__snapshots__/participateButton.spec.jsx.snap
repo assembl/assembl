@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ParticipateButton component should render a button to navigate to the phase of a debate that is not hidden 1`] = `
+<div>
+  <button
+    className="button-submit button-dark btn btn-default"
+    disabled={false}
+    onClick={[Function]}
+    type="button"
+  >
+    <span
+      className={undefined}
+      style={undefined}
+    >
+      I want to participate
+    </span>
+  </button>
+</div>
+`;

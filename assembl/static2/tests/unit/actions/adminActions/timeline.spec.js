@@ -59,7 +59,7 @@ describe('Timeline administration actions', () => {
       isThematicsTable: false,
       start: moment('2014-12-27T09:00:00+00:00'),
       end: moment('2014-12-31T09:00:00+00:00'),
-      titleEntries: [{ localCode: 'en', value: 'Cool title' }]
+      titleEntries: [{ localeCode: 'en', value: 'Cool title' }]
     }];
     const expected = { phases: phases, type: actionTypes.UPDATE_PHASES };
     const actual = updatePhases(phases);

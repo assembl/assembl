@@ -37,7 +37,8 @@ from sqlalchemy.sql.functions import count
 
 from ..lib import config
 from ..lib.locale import to_posix_string
-from ..lib.sqla import CrudOperation, get_model_watcher, PrivateObjectMixin
+from ..lib.model_watcher import get_model_watcher
+from ..lib.sqla import CrudOperation, PrivateObjectMixin
 from ..lib.sqla_types import (
     URLString, EmailString, EmailUnicode, CaseInsensitiveWord, CoerceUnicode)
 from ..lib.raven_client import capture_exception
@@ -77,6 +78,10 @@ def maxN(a, b):
     if b is None:
         return a
     return max(a, b)
+
+
+def hash(content, size):
+    return hashlib.md5(content).hexdigest()[-size:]
 
 
 class AgentProfile(Base):
@@ -120,10 +125,18 @@ class AgentProfile(Base):
             if accounts:
                 return accounts[0]
 
-    def get_preferred_email(self):
+    def get_preferred_email(self, anonymous=False):
         preferred_account = self.get_preferred_email_account()
         if preferred_account is not None:
+            if anonymous:
+                return "@".join(map(lambda x: hash(x, 10), preferred_account.email.split("@"))) + ".com"
             return preferred_account.email
+
+    def anonymous_name(self):
+        CHARACTER_COUNT = 10
+        if self.name:
+            return hash(self.name.encode('utf-8'), CHARACTER_COUNT)
+        return hash("User_" + str(self.id), CHARACTER_COUNT)
 
     def real_name(self):
         if not self.name:
@@ -705,6 +718,24 @@ class AgentStatusInDiscussion(DiscussionBoundBase):
             self._accepted_cookies.pop(i)
             self._save_cookies()
 
+    def load_cookies_from_request(self, request, force_read=False):
+        cookies = request.cookies
+        if not cookies:
+            return
+        if len(self.cookies) == 0 or force_read:
+            cookie_list = cookies.get('cookies_configuration', "")
+            cookie_piwik = cookies.get('piwik_ignore', "")
+            cookie_list = [c.strip() for c in cookie_list.split(",") if c]
+            for cookie in cookie_list:
+                try:
+                    cookie = CookieTypes(cookie)
+                    self.update_cookie(cookie)
+                except ValueError:
+                    # Not a cookie of concern. Don't load.
+                    pass
+            if cookie_piwik:
+                self.update_cookie('REJECT_TRACKING_ON_DISCUSSION')
+
     def get_discussion_id(self):
         return self.discussion_id or self.discussion.id
 
@@ -897,10 +928,10 @@ class User(AgentProfile):
             return verify_password(password, self.password)
         return False
 
-    def get_preferred_email(self):
-        if self.preferred_email:
+    def get_preferred_email(self, anonymous=False):
+        if self.preferred_email and not anonymous:
             return self.preferred_email
-        return super(User, self).get_preferred_email()
+        return super(User, self).get_preferred_email(anonymous=anonymous)
 
     def merge(self, other_user):
         """Merge another user on this one, because they are the same entity.
@@ -990,6 +1021,10 @@ class User(AgentProfile):
     def get_permissions(self, discussion_id):
         from ..auth.util import get_permissions
         return get_permissions(self.id, discussion_id)
+
+    def get_agent_status(self, discussion_id):
+        return self.db.query(
+            AgentStatusInDiscussion).filter_by(discussion_id=discussion_id, profile_id=self.id).first()
 
     def get_all_permissions(self):
         from ..auth.util import get_permissions
@@ -1865,6 +1900,18 @@ class LanguagePreferenceCollection(object):
             locale = req.locale_name
             req.lang_prefs = LanguagePreferenceCollectionWithDefault(locale)
         return req.lang_prefs
+
+    @classmethod
+    def setCurrent(cls, lang_pref_collection, req=None):
+        from pyramid.threadlocal import get_current_request
+        if req is None:
+            req = get_current_request()
+        assert req
+        req.lang_prefs = lang_pref_collection
+
+    @classmethod
+    def setCurrentFromLocale(cls, lang_code, req=None):
+        cls.setCurrent(LanguagePreferenceCollectionWithDefault(lang_code), req)
 
     @abstractmethod
     def default_locale_code(self):

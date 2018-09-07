@@ -66,6 +66,23 @@ class Locale(Base):
                 break
             self = self.get_or_create(ancestor)
 
+    @staticmethod
+    def is_right_to_left_code(code):
+        # Good enough approximation
+        parts = code.split("_")
+        if len(parts) > 1:
+            if parts[1] in {
+                    "Arab", "Hebr", "Syrc", "Thaa", "Samr",
+                    "Mand", "Mend", "Nkoo", "Adlm"}:
+                return True
+            elif parts[1] in {"Latn", "Cyrl", "Deva", "Guru"}:
+                return False
+        return parts[0] in {"ar", "he", "az", "dv", "ku", "fa", "ur"}
+
+    @property
+    def is_rtl(self):
+        return self.is_right_to_left_code(self.code)
+
     @classmethod
     def create_mt_code(self, source_code, target_code):
         return "%s-x-mtfrom-%s" % (target_code, source_code)
@@ -267,13 +284,30 @@ class Locale(Base):
             locale_object_cache[locale_code] = locale
             return locale
         # create it.
-        locale = Locale(code=locale_code)
+        locale = Locale(
+            code=locale_code, rtl=cls.is_right_to_left_code(locale_code))
         db.add(locale)
         db.flush()
         cls._locale_uncommitted.append(locale)
         cls.reset_cache()
         locale_object_cache[locale_code] = locale
         return locale
+
+    @classmethod
+    def bulk_get_or_create(cls, locale_codes, db=None):
+        db = db or cls.default_db
+        db.execute("lock table %s in exclusive mode" % cls.__table__.name)
+        existing = db.query(cls.code).all()
+        missing = set(locale_codes) - {x for (x,) in existing}
+        if not missing:
+            return
+        stmt = cls.__table__.insert().values([
+            {
+                "code": code,
+                "rtl": cls.is_right_to_left_code(code)
+            } for code in missing
+        ])
+        db.execute(stmt)
 
     @classproperty
     def UNDEFINED_LOCALEID(cls):
@@ -287,10 +321,8 @@ class Locale(Base):
 
     @classmethod
     def populate_db(cls, db=None):
-        db.execute("lock table %s in exclusive mode" % cls.__table__.name)
-        for loc_code in (
-                cls.UNDEFINED, cls.MULTILINGUAL, cls.NON_LINGUISTIC):
-            cls.get_or_create(loc_code, db=db)
+        cls.bulk_get_or_create([
+            cls.UNDEFINED, cls.MULTILINGUAL, cls.NON_LINGUISTIC], db)
 
 
 @event.listens_for(Locale, 'after_insert', propagate=True)
@@ -374,24 +406,29 @@ class LocaleLabel(Base):
         """Populate the locale_label table."""
         from os.path import dirname, join
         db = db or cls.default_db
-        db.execute("lock table %s in exclusive mode" % cls.__table__.name)
         fname = join(dirname(dirname(__file__)),
                      'nlp/data/language-names.json')
         with open(fname) as f:
             names = json.load(f)
         locales = {x[0] for x in names}.union({x[1] for x in names})
-        for l in locales:
-            db.add(Locale.get_or_create(l))
+        Locale.bulk_get_or_create(locales, db)
         db.flush()
         Locale.reset_cache()
-        existing = set(db.query(cls.named_locale_id, cls.locale_id_of_label).all())
+        db.execute("lock table %s in exclusive mode" % cls.__table__.name)
+        existing = set(db.query(
+            cls.named_locale_id, cls.locale_id_of_label).all())
         c = Locale.locale_collection
+        values = []
         for (lcode, tcode, name) in names:
             l, t = c[lcode], c[tcode]
             if (l, t) not in existing:
-                cls.default_db.add(cls(
-                    named_locale_id=l, locale_id_of_label=t, name=name))
-        db.flush()
+                values.append({
+                    'named_locale_id': l,
+                    'locale_id_of_label': t,
+                    'name': name})
+        if values:
+            db.execute(cls.__table__.insert().values(values))
+            db.flush()
 
     @classmethod
     def populate_db(cls, db=None):

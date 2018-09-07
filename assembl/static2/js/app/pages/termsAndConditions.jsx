@@ -10,18 +10,15 @@ import LegalContents from '../graphql/LegalContents.graphql';
 import { mapStateToProps } from './legalNotice';
 import type { Props } from './legalNotice';
 
-const withData: OperationComponent<LegalContentsQuery, LegalContentsQueryVariables, Props> = graphql(
-  LegalContents,
-  {
-    props: ({ data }) => {
-      const text = data.legalContents ? data.legalContents.termsAndConditions : '';
-      return {
-        ...data,
-        text: text,
-        headerTitle: I18n.t('termsAndConditions.headerTitle')
-      };
-    }
+const withData: OperationComponent<LegalContentsQuery, LegalContentsQueryVariables, Props> = graphql(LegalContents, {
+  props: ({ data }) => {
+    const text = data.legalContents ? data.legalContents.termsAndConditions : '';
+    return {
+      ...data,
+      text: text,
+      headerTitle: I18n.t('termsAndConditions.headerTitle')
+    };
   }
-);
+});
 
 export default compose(connect(mapStateToProps), withData, withLoadingIndicator())(TextWithHeaderPage);

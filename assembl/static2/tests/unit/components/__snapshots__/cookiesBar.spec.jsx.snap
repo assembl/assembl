@@ -33,6 +33,7 @@ exports[`CookiesBar component should render a bar with 2 buttons to accept the c
       <button
         className="button-submit button-dark cookies-button btn btn-default"
         disabled={false}
+        onClick={[Function]}
         type="button"
       >
         <span
@@ -80,6 +81,7 @@ exports[`CookiesBar component should render a hidden bar if all or some cookies 
       <button
         className="button-submit button-dark cookies-button btn btn-default"
         disabled={false}
+        onClick={[Function]}
         type="button"
       >
         <span

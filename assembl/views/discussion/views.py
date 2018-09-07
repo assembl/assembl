@@ -203,9 +203,7 @@ def react_admin_view(request):
 
 def react_view(request, required_permission=P_READ):
     """
-    Asbolutely basic view. Nothing more.
-    Must add user authentication, permission, etc.
-    Basic view for the homepage
+    The view rendered by any react-based URL requested
     """
     bare_route = bare_route_name(request.matched_route.name)
     if is_login_route(bare_route):
@@ -224,7 +222,7 @@ def react_view(request, required_permission=P_READ):
         "REACT_URL": old_context['REACT_URL'],
         "NODE_ENV": node_env,
         "assembl_version": pkg_resources.get_distribution("assembl").version,
-        "elasticsearch_lang_indexes" : old_context['elasticsearch_lang_indexes'],
+        "elasticsearch_lang_indexes": old_context['elasticsearch_lang_indexes'],
         "web_analytics": old_context['web_analytics'],
         "under_test": old_context['under_test']
     }
@@ -299,6 +297,10 @@ def react_view(request, required_permission=P_READ):
             if user:
                 get_locale_from_request(request)
                 user.is_visiting_discussion(discussion.id)
+                agent = user.get_agent_status(discussion.id)
+                if agent:
+                    # Check if the user has accepted GDPR cookies
+                    agent.load_cookies_from_request(request)
     else:
         context = get_login_context(request)
         context.update(common_context)
@@ -464,6 +466,12 @@ def register_react_views(config, routes, view=react_view):
 
 
 def includeme(config):
+    config.add_route('integration_page', '/integration')
+    config.add_route('integration_101_page', '/integration/101/index')
+    config.add_route('integration_101_form_builder_page', '/integration/101/form-builder')
+    config.add_route('integration_bright_mirror_index', '/integration/bright-mirror/index')
+    config.add_route('integration_bright_mirror_show', '/integration/bright-mirror/show')
+
     config.add_route('new_styleguide', '/styleguide')
     config.add_route('test_error_view', '/{discussion_slug}/test/*type')
     config.add_route('new_home', '/{discussion_slug}/home')
@@ -483,6 +491,13 @@ def includeme(config):
         "new_home",
         "bare_slug",
         "new_styleguide",
+
+        "integration_page",
+        "integration_101_page",
+        "integration_101_form_builder_page",
+        "integration_bright_mirror_index",
+        "integration_bright_mirror_show",
+
         "react_general_page"
     ]
 

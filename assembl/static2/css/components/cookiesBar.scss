@@ -37,3 +37,28 @@
   opacity: 0;
   z-index: -1;
 }
+
+@media screen and (max-width: 820px) {
+  .cookies-bar {
+    flex-direction: column;
+
+    .cookies-text {
+      font-size: $font-size-xs;
+      width: 100%;
+    }
+
+    .cookies-buttons-container {
+      width: 100%;
+      justify-content: flex-start;
+      margin: 0;
+    }
+
+    .cookies-button {
+      margin-right: 12px;
+    }
+
+    .button-submit {
+      padding: 10px 18px;
+    }
+  }
+}

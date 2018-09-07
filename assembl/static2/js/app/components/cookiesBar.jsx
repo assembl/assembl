@@ -6,7 +6,7 @@ import { compose, graphql } from 'react-apollo';
 import { Link } from 'react-router';
 import { Button } from 'react-bootstrap';
 import classnames from 'classnames';
-import { getCookieItem, setCookieItem, getDiscussionSlug, getDiscussionId } from '../utils/globalFunctions';
+import { getCookieItem, setCookieItem, getDiscussionSlug } from '../utils/globalFunctions';
 import { get } from '../utils/routeMap';
 import updateAcceptedCookies from '../graphql/mutations/updateAcceptedCookies.graphql';
 import acceptedCookiesQuery from '../graphql/acceptedCookiesQuery.graphql';
@@ -18,51 +18,52 @@ type State = {
 };
 
 type Props = {
-  acceptedCookies: Array<string>,
+  cookiesList: Array<string>,
   updateAcceptedCookies: Function
 };
-
-const discussionId = getDiscussionId();
-
-const formattedCookieNames = COOKIE_TYPES.map(cookie => discussionId && `${cookie}_${discussionId}`);
-
 
 export class DumbCookiesBar extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    const { acceptedCookies } = props;
-    const shouldHideBar = acceptedCookies ?
-      // acceptedCookies comes from the query and is only received if the user is logged in
-      COOKIE_TYPES.some(cookie => acceptedCookies.includes(cookie)) :
-      // if the user is not logged in, we check in the browser instead of the backend
-      formattedCookieNames.some(cookie => cookie && getCookieItem(cookie) === 'true');
+    const { cookiesList } = props;
+    const cookiesFromBrowser = getCookieItem('cookies_configuration');
+    const shouldHideBar =
+      cookiesList && cookiesList.length > 0
+        ? // cookiesList comes from the query and is only received if the user is logged in
+        COOKIE_TYPES.some(cookie => cookiesList.includes(cookie))
+        : // if the user is not logged in, we check in the browser instead of the backend
+        COOKIE_TYPES.some(cookie => cookiesFromBrowser && cookiesFromBrowser.split(',').includes(cookie));
     this.state = { hide: shouldHideBar };
   }
 
   acceptAllCookies = () => {
+    const acceptCookiesTypes = COOKIE_TYPES.filter(cookie => cookie.includes('ACCEPT'));
     // acceptedCookies are stored both on the user model and in the browser
-    this.props.updateAcceptedCookies({ variables: { actions: COOKIE_TYPES } });
-    formattedCookieNames.forEach(cookie => cookie && setCookieItem(cookie, 'true'));
+    this.props.updateAcceptedCookies({ variables: { actions: acceptCookiesTypes } });
+    setCookieItem('cookies_configuration', acceptCookiesTypes);
     this.setState({
       hide: true
     });
-  }
+  };
 
   render() {
     const { hide } = this.state;
     const cookiesBarClassnames = classnames('cookies-bar', { 'show-cookies-bar': !hide, 'hide-cookies-bar': hide });
     const slug = getDiscussionSlug();
     return (
-      <div
-        className={cookiesBarClassnames}
-      >
+      <div className={cookiesBarClassnames}>
         <Translate value="cookiesBar.cookiesNotice" className="cookies-text" />
         <div className="cookies-buttons-container">
-          <Button onClick={this.acceptAllCookies} className="button-submit button-dark cookies-button" >
+          <Button onClick={this.acceptAllCookies} className="button-submit button-dark cookies-button">
             <Translate value="cookiesBar.accept" />
           </Button>
           <Link to={get('cookiesPolicy', { slug: slug })}>
-            <Button className="button-submit button-dark cookies-button">
+            <Button
+              className="button-submit button-dark cookies-button"
+              onClick={() => {
+                this.setState({ hide: true });
+              }}
+            >
               <Translate value="cookiesBar.seeCookiesPolicy" />
             </Button>
           </Link>
@@ -90,8 +91,9 @@ export default compose(
         return { error: data.error };
       }
       return {
-        acceptedCookies: data.user.acceptedCookies
+        cookiesList: data.user.acceptedCookies
       };
     }
   }),
-  withoutLoadingIndicator())(DumbCookiesBar);
+  withoutLoadingIndicator()
+)(DumbCookiesBar);

@@ -138,7 +138,6 @@ class DumbVoteSession extends React.Component<Props, State> {
     };
   }
 
-
   componentWillMount() {
     window.addEventListener('resize', this.updateWindowWidth);
     if (!this.props.isPhaseCompleted) {
@@ -326,11 +325,7 @@ class DumbVoteSession extends React.Component<Props, State> {
       isPhaseCompleted
     } = this.props;
 
-    const {
-      availableTokensSticky,
-      windowWidth,
-      hasChanged
-    } = this.state;
+    const { availableTokensSticky, windowWidth, hasChanged } = this.state;
 
     if (!title || title.length === 0) {
       return (

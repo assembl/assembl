@@ -14,7 +14,8 @@ describe('harvestingBox component', () => {
       previousExtractId: '876876876',
       harvestingAnchorPosition: { x: 100, y: 200 },
       contentLocale: 'fr',
-      harvestingDate: 'il y a 5 jours'
+      harvestingDate: 'il y a 5 jours',
+      showNuggetAction: true
     };
     const shallowRenderer = new ShallowRenderer();
     shallowRenderer.render(<DumbHarvestingBox {...props} />);
@@ -30,7 +31,25 @@ describe('harvestingBox component', () => {
       previousExtractId: '876876876',
       harvestingAnchorPosition: { x: 100, y: 200 },
       contentLocale: 'fr',
-      harvestingDate: 'il y a 5 jours'
+      harvestingDate: 'il y a 5 jours',
+      showNuggetAction: true
+    };
+    const shallowRenderer = new ShallowRenderer();
+    shallowRenderer.render(<DumbHarvestingBox {...props} />);
+    const result = shallowRenderer.getRenderOutput();
+    expect(result).toMatchSnapshot();
+  });
+  it('should match submitted harvestingBox without nugget action snapshot', () => {
+    const { submittedExtract } = fakeData;
+    const props = {
+      postId: '12345',
+      extract: submittedExtract,
+      index: 0,
+      previousExtractId: '876876876',
+      harvestingAnchorPosition: { x: 100, y: 200 },
+      contentLocale: 'fr',
+      harvestingDate: 'il y a 5 jours',
+      showNuggetAction: false
     };
     const shallowRenderer = new ShallowRenderer();
     shallowRenderer.render(<DumbHarvestingBox {...props} />);

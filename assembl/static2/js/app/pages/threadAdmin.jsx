@@ -12,7 +12,8 @@ class ThreadAdmin extends React.Component {
     this.state = {
       exportLocale: null,
       refetching: false,
-      translate: false
+      translate: false,
+      isAnonymous: false
     };
   }
 
@@ -32,12 +33,18 @@ class ThreadAdmin extends React.Component {
     this.setState({ translate: shouldTranslate });
   };
 
+  handleAnonymousChange = () => {
+    this.setState(prevState => ({ isAnonymous: !prevState.isAnonymous }));
+  };
+
   render() {
     const { section, languages, debateId } = this.props;
     const { translate } = this.state;
     const exportLocale = this.state.exportLocale || (languages && languages[0].locale);
     const translation = translate && exportLocale ? `?lang=${exportLocale}` : '?'; // FIXME: using '' instead of '?' does not work
-    const exportLink = get('exportThreadMulticolumnData', { debateId: debateId, translation: translation });
+    const { isAnonymous } = this.state;
+    const anonymous = translation === '?' ? `anon=${isAnonymous.toString()}` : `&anon=${isAnonymous.toString()}`;
+    const exportLink = get('exportThreadMulticolumnData', { debateId: debateId, translation: translation, anonymous: anonymous });
     const currentStep = parseInt(section, 10);
     return (
       <div className="thread-admin">
@@ -47,6 +54,7 @@ class ThreadAdmin extends React.Component {
             withLanguageOptions
             handleExportLocaleChange={this.handleExportLocaleChange}
             handleTranslationChange={this.handleTranslationChange}
+            handleAnonymousChange={this.handleAnonymousChange}
             exportLink={exportLink}
             translate={translate}
             exportLocale={exportLocale}

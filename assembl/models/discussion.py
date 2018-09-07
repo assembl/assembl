@@ -29,9 +29,11 @@ from .auth import (DiscussionPermission, LocalUserRole, Permission, Role, User,
                    UserRole, UserTemplate)
 from .langstrings import LangString
 from .preferences import Preferences
+from assembl.lib.caching import create_analytics_region
 
 resolver = DottedNameResolver(__package__)
 log = logging.getLogger('assembl')
+visit_analytics_region = create_analytics_region()
 
 
 class Discussion(DiscussionBoundBase, NamedClassMixin):
@@ -112,6 +114,11 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
     privacy_policy = relationship(
         LangString, lazy="select", single_parent=True, primaryjoin=privacy_policy_id == LangString.id,
         backref=backref("discussion_from_privacy_policy", lazy="dynamic"), cascade="all, delete-orphan")
+
+    user_guidelines_id = Column(Integer(), ForeignKey(LangString.id))
+    user_guidelines = relationship(
+        LangString, lazy="select", single_parent=True, primaryjoin=user_guidelines_id == LangString.id,
+        backref=backref("discussion_from_user_guidelines", lazy="dynamic"), cascade="all, delete-orphan")
 
     @classmethod
     def get_naming_column_name(cls):
@@ -1013,6 +1020,15 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
             end = datetime.now()
         return (start, end)
 
+    def generate_redis_key(namespace, fn):
+        fname = fn.__name__
+
+        def generate_key(*args):
+            return fname + "_" + str(args[0].id) + "_" + "_".join(str(s) for s in args[1:])
+
+        return generate_key
+
+    @visit_analytics_region.cache_on_arguments(function_key_generator=generate_redis_key)
     def get_visits_time_series_analytics(self, start_date=None, end_date=None, only_fields=None):
         """
         Fetches visits analytics from bound piwik site.
@@ -1108,4 +1124,4 @@ def slugify_topic_if_slug_is_empty(discussion, topic, oldvalue, initiator):
 
 event.listen(Discussion.topic, 'set', slugify_topic_if_slug_is_empty)
 LangString.setup_ownership_load_event(Discussion, [
-    'resources_center_title', 'terms_and_conditions', 'legal_notice', 'cookies_policy', 'privacy_policy', 'title', 'subtitle', 'button_label'])
+    'resources_center_title', 'terms_and_conditions', 'legal_notice', 'cookies_policy', 'privacy_policy', 'user_guidelines', 'title', 'subtitle', 'button_label'])

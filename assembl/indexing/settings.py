@@ -99,9 +99,8 @@ COMMON_POST = {
         'id': LONG,
         'parent_id': {'type': 'long', 'null_value': 0},
         'idea_id': LONG,
-        'taxonomy_nature': KEYWORD,
-        'taxonomy_action': KEYWORD,
         'creator_id': LONG,
+        'creator_display_name': TEXT,
         'parent_creator_id': LONG,
     #    'publishes_synthesis_id': KEYWORD,
         'type': KEYWORD,
@@ -115,11 +114,6 @@ _POST_MAPPING = deepcopy(COMMON_POST)
 
 
 _SYNTHESIS_MAPPING = deepcopy(COMMON_POST)
-_SYNTHESIS_MAPPING['properties'].update({
-    'subject': TEXT,
-    'introduction': TEXT,
-    'conclusion': TEXT,
-})
 
 _USER_MAPPING = {
     'properties': {
@@ -138,11 +132,28 @@ _IDEA_MAPPING = {
     }
 }
 
+_EXTRACT_MAPPING = {
+    'properties': {
+        'discussion_id': LONG,
+        'creation_date': DATE,
+        'id': LONG,
+        'post_id': LONG,
+        'creator_id': LONG,
+        'idea_id': LONG,
+        'phase_id': KEYWORD,
+        'body': TEXT,
+        'extract_nature': KEYWORD,
+        'extract_action': KEYWORD,
+        'extract_state': KEYWORD
+    }
+}
+
 MAPPINGS = {
     'post': _POST_MAPPING,
     'synthesis': _SYNTHESIS_MAPPING,
     'user': _USER_MAPPING,
     'idea': _IDEA_MAPPING,
+    'extract': _EXTRACT_MAPPING
 }
 
 
@@ -211,8 +222,9 @@ def get_mapping(doc_type):
 
 
 def includeme(config):
+    add_index_languages(_EXTRACT_MAPPING['properties'], ['subject'])
     add_index_languages(_POST_MAPPING['properties'], ['body', 'subject'])
-    add_index_languages(_SYNTHESIS_MAPPING['properties'], ['ideas'])
+    add_index_languages(_SYNTHESIS_MAPPING['properties'], ['subject', 'introduction', 'conclusion', 'ideas'])
     add_index_languages(_IDEA_MAPPING['properties'], [
         'title', 'synthesis_title', 'description', 'announcement_title',
         'announcement_body'])

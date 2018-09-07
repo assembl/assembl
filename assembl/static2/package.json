@@ -9,6 +9,7 @@
   "scripts": {
     "test": "jest",
     "test:watch": "npm test -- --watch",
+    "test:storybook": "jest storybook.test.js",
     "build": "webpack --progress --colors",
     "coverage": "jest --coverage",
     "dev": "webpack -d --watch",
@@ -22,13 +23,20 @@
     "format": "prettier-eslint --write 'js/**/*.js?' 'tests/**/*.js?' '*.js'",
     "i18n:export": "node ./scripts/translations2messages.js && rip json2pot messages.json -k id -o ../locale/assembl-v2.pot && ./scripts/merge_po_files.bash",
     "i18n:import": "rip po2json '../locale/assembl-v2/*.po' -m messages.json -k id -o './translations'",
-    "storybook": "start-storybook -p 9001 -c .storybook",
+    "storybook": "start-storybook -p 9001 -c .storybook -s ..",
     "documentation": "graphdoc -s /tmp/schema.json -o ./graphql-documentation --force"
   },
   "author": "Bluenove",
   "license": "AGPL-3.0",
   "devDependencies": {
-    "@storybook/react": "^3.4.2",
+    "@storybook/addon-actions": "^3.4.10",
+    "@storybook/addon-centered": "^3.4.10",
+    "@storybook/addon-info": "^3.4.10",
+    "@storybook/addon-knobs": "^3.4.10",
+    "@storybook/addon-options": "^3.4.10",
+    "@storybook/addon-storyshots": "^3.4.10",
+    "@storybook/addon-viewport": "^3.4.10",
+    "@storybook/react": "^3.4.10",
     "apollo-test-utils": "^0.3.0",
     "babel-core": "^6.26.0",
     "babel-eslint": "^7.1.1",
@@ -45,6 +53,8 @@
     "coffeescript": "^1.12.5",
     "css-loader": "0.14.5",
     "empty": "^0.10.1",
+    "enzyme": "^3.4.1",
+    "enzyme-adapter-react-16": "^1.2.0",
     "eslint": "^4.6.1",
     "eslint-config-airbnb": "^15.1.0",
     "eslint-friendly-formatter": "^3.0.0",
@@ -55,6 +65,7 @@
     "extract-text-webpack-plugin": "^3.0.0",
     "file-loader": "^0.11.2",
     "flow-bin": "0.71.0",
+    "flow-typed": "^2.5.1",
     "glob": "^7.1.2",
     "graphql-tools": "^1.1.0",
     "identity-obj-proxy": "^3.0.0",
@@ -128,7 +139,7 @@
     "reselect": "^3.0.1",
     "searchkit": "^2.3.0",
     "smoothscroll-polyfill": "^0.3.6",
-    "url-join": "^2.0.0"
+    "url-join": "^1.1.0"
   },
   "//": "See https://facebook.github.io/jest/docs/webpack.html for more info",
   "jest": {
@@ -156,6 +167,9 @@
     },
     "setupFiles": [
       "<rootDir>/tests/setupTests.js"
-    ]
+    ],
+    "globals": {
+      "globalAnalytics": {}
+    }
   }
 }

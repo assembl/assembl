@@ -24,6 +24,7 @@ import TermsAndConditions from './pages/termsAndConditions';
 import LegalNotice from './pages/legalNotice';
 import PrivacyPolicy from './pages/privacyPolicy';
 import CookiesPolicy from './pages/cookiesPolicy';
+import UserGuidelines from './pages/userGuidelines';
 import Administration from './pages/administration';
 import UnauthorizedAdministration from './pages/unauthorizedAdministration';
 import ResourcesCenterAdmin from './pages/resourcesCenterAdmin';
@@ -36,7 +37,15 @@ import ResourcesCenter from './pages/resourcesCenter';
 import LandingPageAdmin from './pages/landingPageAdmin';
 import ExportTaxonomies from './pages/exportTaxonomies';
 import BrightMirror from './pages/brightMirror';
+import BrightMirrorAdmin from './pages/brightMirrorAdmin';
 import { routeForRouter } from './utils/routeMap';
+
+// Page that is only used to display converted mockups to static pages
+import IntMainPage from './integration/index';
+import Int101Page from './integration/101/index';
+import Int101FormBuilderPage from './integration/101/containers/formBuilder101/formBuilder101';
+import IntBrightMirrorIndex from './integration/brightMirror/index';
+import IntBrightMirrorShow from './integration/brightMirror/show';
 
 const DebateHome = (props) => {
   switch (props.params.phase) {
@@ -49,7 +58,7 @@ const DebateHome = (props) => {
   case 'voteSession':
     return <VoteSession />;
   case 'brightMirror':
-    return <BrightMirror />;
+    return <BrightMirror {...props} />;
   default:
     return <Debate {...props} />;
   }
@@ -76,6 +85,8 @@ const AdminChild = (props) => {
     return <DiscussionAdmin {...props} section={props.location.query.section} />;
   case 'survey':
     return <SurveyAdmin {...props} thematicId={props.location.query.thematic} section={props.location.query.section} />;
+  case 'brightMirror':
+    return <BrightMirrorAdmin {...props} />;
   case 'thread':
     return <ThreadAdmin {...props} section={props.location.query.section} />;
   case 'multiColumn':
@@ -95,6 +106,13 @@ const AdminChild = (props) => {
 
 export default [
   <Route path="/" component={Root}>
+    {/* 'integration' route is only used for HTML/CSS integration purpose */}
+    <Route path={routeForRouter('integrationPage', false, { preSlash: true })} component={IntMainPage} />
+    <Route path={routeForRouter('integration101Page', false, { preSlash: true })} component={Int101Page} />
+    <Route path={routeForRouter('integration101FormBuilderPage', false, { preSlash: true })} component={Int101FormBuilderPage} />
+    <Route path={routeForRouter('integrationBrightMirrorIndex', false, { preSlash: true })} component={IntBrightMirrorIndex} />
+    <Route path={routeForRouter('integrationBrightMirrorShow', false, { preSlash: true })} component={IntBrightMirrorShow} />
+    {/* once the integration workflow is mature, Styleguide component will be replaced by Storybook and thus can be removed */}
     <Route path={routeForRouter('styleguide', false, { preSlash: true })} component={Styleguide} />
     {/* Those login routes should be kept in synchrony with assembl.views.auth.__init__.py */}
     <Route path={routeForRouter('login', false, { preSlash: true })} component={Login} />
@@ -118,6 +136,7 @@ export default [
         <Route path={routeForRouter('legalNotice')} component={LegalNotice} />
         <Route path={routeForRouter('privacyPolicy')} component={PrivacyPolicy} />
         <Route path={routeForRouter('cookiesPolicy')} component={CookiesPolicy} />
+        <Route path={routeForRouter('userGuidelines')} component={UserGuidelines} />
         <Route path={routeForRouter('terms')} component={TermsAndConditions} />
         <Route path={routeForRouter('community')} component={Community} />
         <Route path={routeForRouter('rootDebate')} />

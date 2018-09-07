@@ -45,10 +45,10 @@ class ThreadDispatcher(Thread):
         cls.get_instance()
 
 
+@interface.implementer(IModelEventWatcher)
 class ThreadedModelEventWatcher(object):
     """A IModelEventWatcher that will dispatch events to its
     :py:class:`ThreadDispatcher`"""
-    interface.implements(IModelEventWatcher)
 
     def __init__(self):
         self.queue = ThreadDispatcher.get_instance().queue
@@ -85,5 +85,5 @@ def includeme(config):
     from . import resolver
     class_name = config.get_settings().get(
         'assembl.threadedmodelwatcher',
-        "assembl.lib.model_watcher.ModelEventWatcherPrinter")
+        "assembl.lib.model_watcher.BaseModelEventWatcher")
     ThreadDispatcher.mw_class = resolver.resolve(class_name)

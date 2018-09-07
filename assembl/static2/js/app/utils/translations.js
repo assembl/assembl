@@ -6,9 +6,15 @@ const Translations = {
     no: "non",
     "Number of contributions": "Nombre de messages",
     "Number of users": "Nombre de contributeurs",
+    accept: "Accepter",
+    refuse: "Refuser",
     cancel: "Annuler",
     validate: "Valider",
     delete: "Supprimer",
+    deleteConfirmation: {
+      confirmDeletionTitle: "Supprimer un élément",
+      confirmDeletionBody: "Etes-vous certain de vouloir supprimer cet élément ?"
+    },
     accountDeleted: "Votre compte a été supprimé avec succès",
     deletedUser: "Compte utilisateur supprimé",
     chatframe: {
@@ -46,6 +52,22 @@ const Translations = {
       qualifyNature: "Qualifier par nature",
       qualifyAction: "Qualifier par action"
     },
+    cookies: {
+      userSession: "Session utilisateur",
+      locale: "Langue",
+      matomo: "Matomo",
+      privacyPolicy: "Politique de confidentialité",
+      cgu: "Conditions générales d'utilisation",
+      matomoSettings: "Pour modifier les paramètres de ce cookie, veuillez cliquer ici",
+      userSessionHelper: "Ce cookie est nécessaire pour vous maintenir connecté sur Assembl.",
+      localeHelper:
+        "Ce cookie est nécessaire afin d'afficher les textes dans la langue de votre nagigateur ou bien celle que vous avez sélectionné dans la barre de navigation.",
+      privacyPolicyHelper:
+        "Ce cookie permet d'enregistrer que vous avez accepté la politique de confidentialité de la consultation.",
+      cguHelper: "Ce cookie permet d'enregistrer que vous avez accepté les conditions générales d'utilisation.",
+      matomoHelper: "Ce cookie est utilisé à des fins statistiques concernant les participants à la consultation.",
+      required: "Ce cookie est requis"
+    },
     search: {
       reset: {
         clear_all: "Effacer tous les filtres"
@@ -76,6 +98,7 @@ const Translations = {
         to: "Au"
       },
       published_on: "Publié le",
+      harvested_on: "Attrapé le",
       member_since: "Membre depuis le",
       by: "par",
       search_come_from_what_you_need_to_know: "Recherche effectuée dans la section \"à retenir\" de cette discussion",
@@ -83,10 +106,12 @@ const Translations = {
       collapse_search: "Fermer la recherche",
       Categories: "Catégories",
       All: "Tout",
+      extract: "Attrapages",
       post: "Messages",
       idea: "Idées",
       user: "Participants",
-      synthesis: "Synthèse",
+      synthesis: "Synthèses",
+      Extracts: "Attrapages",
       Messages: "Messages",
       Participants: "Participants",
       like: "J'aime",
@@ -116,6 +141,11 @@ const Translations = {
         display_tokens: "Activer le vote",
         display_open_questions: "Activer les questions ouvertes",
         display_bright_mirror: "Activer le Design Fiction"
+      },
+      State: "État",
+      taxonomy_state: {
+        SUBMITTED: "À valider",
+        PUBLISHED: "Publié"
       },
       Sort: "Trier",
       "By relevance": "Par pertinence",
@@ -156,7 +186,8 @@ const Translations = {
       legalNotice: "Mentions légales",
       cookiePolicy: "Information sur les cookies",
       privacyPolicy: "Politique de protection des données personnelles",
-      socialMedias: "Suivez-nous sur"
+      socialMedias: "Suivez-nous sur",
+      userGuidelines: "Charte de participation"
     },
     login: {
       loginModalBody: "Vous devez être connecté pour participer.",
@@ -353,6 +384,11 @@ const Translations = {
         seeSubIdeas_1: "Voir le sous-thème",
         announcement: "Consigne"
       },
+      brightMirror: {
+        startFictionLabel: "Je partage ma fiction",
+        fillBodyLabel: "Ecrivez votre fiction",
+        postSuccessMsg: "Merci pour votre participation. Votre fiction a bien été enregistrée !"
+      },
       themes: "Thèmes",
       notStarted: "La phase %{phaseName} n'a pas encore commencé. Merci de revenir à partir du ",
       isCompleted: "Cette phase est terminée. Vous ne pouvez plus voter.",
@@ -401,6 +437,7 @@ const Translations = {
       memberSince: "Membre depuis le %{date}",
       save: "Enregistrer",
       password: "Mot de passe",
+      cookies: "Paramétrage des cookies",
       changePassword: "Modifier mon mot de passe",
       passwordModifiedSuccess: "Votre mot de passe a été modifié avec succès",
       saveSuccess: "Votre profil a été mis à jour avec succès",
@@ -443,10 +480,19 @@ const Translations = {
       headerTitle: "Mentions légales"
     },
     cookiesPolicy: {
-      headerTitle: "Information sur les cookies"
+      headerTitle: "Cookies",
+      sectionTitle: "Information sur les cookies",
+      essential: "Essentiel",
+      analytics: "Analytique et personnalisation",
+      other: "Autre",
+      instructions: "Sélectionnez les cookies que vous souhaitez refuser ci-dessous",
+      success: "Votre configuration des cookies a bien été sauvegardée"
     },
     privacyPolicy: {
       headerTitle: "Politique de protection des données personnelles"
+    },
+    userGuidelines: {
+      headerTitle: "Charte de participation"
     },
     administration: {
       confirmTextFieldDeletionTitle: "Supprimer le champ",
@@ -516,6 +562,18 @@ const Translations = {
         "0": "Renseigner les thématiques",
         "1": "Renseigner les questions",
         "2": "Exporter les données"
+      },
+      brightMirrorSection: {
+        bannerHeader:
+          "Le bandeau de haut de page comporte le titre de la thématique que vous avez défini en amont, ainsi qu’une image de fond et éventuellement un sous-titre.",
+        bannerSubtitleLabel: "Sous-titre dans le bandeau du haut de page",
+        bannerImagePickerLabel: "Choisir l'image de fond du bandeau",
+        configureTitle: "Configurer Bright Mirror",
+        instructionHeader:
+          "La section Consigne comporte un titre et une consigne et un média (vidéo, slideshare ou image ) qui permettent de guider les participants dans leur contribution.",
+        instructionLabel: "Consigne",
+        sectionTitleLabel: "Titre de la section",
+        thematicTitleLabel: "Titre de la thématique"
       },
       voteSession: {
         "0": "Configuration de la page",
@@ -670,6 +728,10 @@ const Translations = {
         propositionSectionSubtitle: "Sous-titre de la section",
         descriptionPhase: "Description de la phase"
       },
+      tableOfThematics: {
+        confirmDeletionTitle: "Supprimer la thématique %{title}",
+        confirmDeletionBody: "Etes-vous certain de vouloir supprimer cette thématique ?"
+      },
       resourcesCenter: {
         createResource: "Ajouter un média",
         menuTitle: "Éditer le centre de ressources",
@@ -699,7 +761,8 @@ const Translations = {
         title: "Exporter les données du débat",
         defaultSectionTitle: "Exporter les données",
         taxonomySectionTitle: "Exporter les taxonomies",
-        translateTheMessagesIn: "Traduire l'ensemble des messages en:"
+        translateTheMessagesIn: "Traduire l'ensemble des messages en :",
+        anonymous: "Rendre les données anonymes"
       },
       step_x_total: "Section %{num} sur %{total}",
       saveThemes: "Sauvegarder",
@@ -710,6 +773,7 @@ const Translations = {
         termsAndConditionsLabel: "Conditions générales d'utilisation",
         cookiesPolicyLabel: "Information sur les cookies",
         privacyPolicyLabel: "Politique de protection des données personnelles",
+        userGuidelinesLabel: "Charte de participation",
         successSave: "Les contenus juridiques ont été enregistrés avec succès !"
       },
       landingPage: {
@@ -785,10 +849,16 @@ const Translations = {
     yes: "yes",
     no: "no",
     cancel: "Cancel",
+    accept: "Accept",
+    refuse: "Refuse",
     validate: "Validate",
     introduction: "Introduction",
     conclusion: "Conclusion",
     delete: "Delete",
+    deleteConfirmation: {
+      confirmDeletionTitle: "Delete an item",
+      confirmDeletionBody: "Are you sure that you wish to delete this item?"
+    },
     accountDeleted: "Your account has been successfully deleted",
     deletedUser: "Deleted user account",
     chatframe: {
@@ -824,6 +894,21 @@ const Translations = {
       qualifyNature: "Qualify by nature",
       qualifyAction: "Qualify by action"
     },
+    cookies: {
+      userSession: "User Session",
+      locale: "Language",
+      matomo: "Matomo",
+      cgu: "Terms and conditions",
+      privacyPolicy: "Privacy policy",
+      matomoSettings: "To modify this cookie's setting please click here",
+      userSessionHelper: "This cookie is necessary to maintain the user connected on Assembl.",
+      localeHelper:
+        "This cookie is necessary to display the texts in the language of your browser or the one you selected in the navigation bar.",
+      privacyPolicyHelper: "This cookie registers that you have accepted the privacy policy of the consultation.",
+      cguHelper: "This cookie registers that you have accepted the terms and conditions of the consultation.",
+      matomoHelper: "This cookie is used for stasticial purposes regarding the participants of the consultation.",
+      required: "This cookie is required"
+    },
     search: {
       reset: {
         clear_all: "Clear All Filters"
@@ -856,15 +941,18 @@ const Translations = {
       search_come_from_what_you_need_to_know: "Search done in the \"What you need to know\" section of this discussion",
       search_come_from_announcement: "Search done in the \"announcement\" section of this discussion",
       published_on: "Published on",
+      harvested_on: "Harvested on",
       member_since: "Member since",
       by: "by",
       collapse_search: "Close search",
       Categories: "Categories",
       All: "All",
+      extract: "Extracts",
       post: "Messages",
       idea: "Ideas",
       user: "Participants",
-      synthesis: "Synthesis",
+      synthesis: "Syntheses",
+      Extracts: "Extracts",
       Messages: "Messages",
       Participants: "Participants",
       like: "Like",
@@ -894,6 +982,11 @@ const Translations = {
         display_tokens: "Display tokens",
         display_open_questions: "Display Open questions",
         display_bright_mirror: "Display Design Fiction"
+      },
+      State: "State",
+      taxonomy_state: {
+        SUBMITTED: "To validate",
+        PUBLISHED: "Published"
       },
       Sort: "Sort",
       "By relevance": "By relevance",
@@ -934,7 +1027,8 @@ const Translations = {
       legalNotice: "Legal Notice",
       cookiePolicy: "Cookies",
       privacyPolicy: "Privacy Policy",
-      socialMedias: "Follow us"
+      socialMedias: "Follow us",
+      userGuidelines: "User guidelines"
     },
     login: {
       loginModalBody: "You have to be connected to participate.",
@@ -1130,6 +1224,11 @@ const Translations = {
         seeSubIdeas_1: "See sub-thematic",
         announcement: "Announcement"
       },
+      brightMirror: {
+        startFictionLabel: "Share a fiction",
+        fillBodyLabel: "Write your fiction",
+        postSuccessMsg: "Thanks for your participation. Your fiction has been saved!"
+      },
       themes: "Themes",
       notStarted: "The %{phaseName} phase has not started. Please come back from ",
       isCompleted: "This phase is closed. You can no longer vote.",
@@ -1178,6 +1277,7 @@ const Translations = {
       memberSince: "Member since %{date}",
       save: "Save",
       password: "Password",
+      cookies: "Cookies configuration",
       changePassword: "Change my password",
       usernameInformations:
         "If you configured a username, it will be used when you post a message or vote. If you haven't configured one, the full name that you configured will be used instead.",
@@ -1220,10 +1320,19 @@ const Translations = {
       headerTitle: "Legal Notice"
     },
     cookiesPolicy: {
-      headerTitle: "Cookies"
+      headerTitle: "Cookies",
+      sectionTitle: "Cookies policy",
+      essential: "Essential",
+      analytics: "Analytics and customization",
+      other: "Other",
+      instructions: "Select the cookies you wish to refuse below",
+      success: "Your cookies configuration has been saved"
     },
     privacyPolicy: {
       headerTitle: "Privacy policy"
+    },
+    userGuidelines: {
+      headerTitle: "User guidelines"
     },
     administration: {
       confirmTextFieldDeletionTitle: "Delete the field",
@@ -1292,6 +1401,18 @@ const Translations = {
         "0": "Set themes",
         "1": "Set questions",
         "2": "Export data"
+      },
+      brightMirrorSection: {
+        bannerHeader:
+          "Top banner must include the thematic title defined previously, a background image and eventually a subtitle.",
+        bannerSubtitleLabel: "Top banner subtitle",
+        bannerImagePickerLabel: "Banner image",
+        configureTitle: "Configure Bright Mirror",
+        instructionLabel: "Instructions",
+        instructionHeader:
+          "Instruction section include a title, an instruction and a media (video, slideshare or image) which guides users in their contribution.",
+        sectionTitleLabel: "Section title",
+        thematicTitleLabel: "Thematic title"
       },
       voteSession: {
         "0": "Page configuration",
@@ -1440,6 +1561,10 @@ const Translations = {
         propositionSectionSubtitle: "Section subtitle",
         descriptionPhase: "Description phase"
       },
+      tableOfThematics: {
+        confirmDeletionTitle: "Delete %{title} theme",
+        confirmDeletionBody: "Are you sure that you wish to delete this theme?"
+      },
       resourcesCenter: {
         createResource: "Add a media",
         menuTitle: "Edit the resources center",
@@ -1467,7 +1592,8 @@ const Translations = {
         title: "Export the debate data",
         defaultSectionTitle: "Export data",
         taxonomySectionTitle: "Export taxonomy",
-        translateTheMessagesIn: "Translate the messages in:"
+        translateTheMessagesIn: "Translate the messages in:",
+        anonymous: "Make the data anonymous"
       },
       step_x_total: "Section %{num} on %{total}",
       saveThemes: "Save",
@@ -1478,6 +1604,7 @@ const Translations = {
         termsAndConditionsLabel: "Terms and conditions",
         cookiesPolicyLabel: "Information on cookies",
         privacyPolicyLabel: "Privacy policy",
+        userGuidelinesLabel: "User guidelines",
         successSave: "The legal contents have been saved with success!"
       },
       landingPage: {

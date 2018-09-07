@@ -15,6 +15,11 @@ module.exports = {
       {
         test: /\.(eot|woff|woff2|ttf|svg|png|jpe?g|gif)(\?\S*)?$/,
         use: 'url-loader?limit=100000&name=[name].[ext]'
+      },
+      {
+        test: /\.(graphql|gql)$/,
+        exclude: /node_modules/,
+        use: 'graphql-tag/loader'
       }
     ]
   }

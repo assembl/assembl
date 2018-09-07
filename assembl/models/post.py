@@ -1,10 +1,8 @@
 """Posts are a kind of :py:class:`assembl.models.generic.Content` that has an author, and reply to some other content."""
 from datetime import datetime
-from abc import ABCMeta, abstractmethod
 import uuid
 import logging
-
-from ..lib.clean_input import sanitize_text
+from abc import ABCMeta, abstractmethod
 import simplejson as json
 from sqlalchemy import (
     Column,
@@ -24,6 +22,7 @@ from sqlalchemy import (
 from sqlalchemy.orm import (
     relationship, backref, deferred, column_property, with_polymorphic)
 
+from ..lib.clean_input import sanitize_text
 from ..lib.sqla import CrudOperation
 from ..lib.decl_enums import DeclEnum
 from ..lib.sqla_types import CoerceUnicode

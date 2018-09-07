@@ -12,6 +12,7 @@ import { get } from '../../utils/routeMap';
 import { withScreenWidth } from '../common/screenDimensions';
 import { connectedUserIsAdmin } from '../../utils/permissions';
 import SectionsQuery from '../../graphql/SectionsQuery.graphql';
+import DiscussionQuery from '../../graphql/DiscussionQuery.graphql';
 import FlatNavbar from './FlatNavbar';
 import BurgerNavbar from './BurgerNavbar';
 import { APP_CONTAINER_MAX_WIDTH, APP_CONTAINER_PADDING } from '../../constants';
@@ -73,13 +74,7 @@ const SectionLink = ({ section, options }) => {
     .includes(sectionName);
   const linkClassNames = isActiveUrl ? 'navbar-menu-item pointer active' : 'navbar-menu-item pointer';
   return sectionType === 'DEBATE' ? (
-    <DebateLink
-      to={sectionURL(section, options)}
-      identifier={options.phase}
-      className={linkClassNames}
-      dataText={title}
-      screenTooSmall={options.screenTooSmall}
-    >
+    <DebateLink identifier={options.phase} className={linkClassNames} dataText={title} screenTooSmall={options.screenTooSmall}>
       {title}
     </DebateLink>
   ) : (
@@ -125,19 +120,23 @@ export class AssemblNavbar extends React.PureComponent<AssemblNavbarProps, Assem
   };
 
   renderUserMenu = (remainingWidth: number) => {
-    const { debate: { debateData: { helpUrl } }, location } = this.props;
-    return <UserMenu helpUrl={helpUrl} location={location} remainingWidth={remainingWidth} />;
+    const { debate: { debateData: { helpUrl } }, location, discussionData } = this.props;
+    const { loginData } = discussionData;
+    return <UserMenu helpUrl={helpUrl} location={location} remainingWidth={remainingWidth} loginData={loginData} />;
   };
 
   render = () => {
-    const { screenWidth, debate, data, phase, timeline } = this.props;
-    const sections = data.sections;
+    const { screenWidth, debate, phase, timeline, sectionLoading, discussionLoading, sectionData, discussionData } = this.props;
+    if (sectionLoading || discussionLoading || !sectionData || !discussionData) {
+      return null;
+    }
+    const sections = sectionData.sections;
     const { debateData } = debate;
     const { logo, slug, isLargeLogo } = debateData;
     const flatWidth = (this.state && this.state.flatWidth) || 0;
     const maxAppWidth = Math.min(APP_CONTAINER_MAX_WIDTH, screenWidth) - APP_CONTAINER_PADDING * 2;
     const screenTooSmall = flatWidth > maxAppWidth;
-    const filteredSections = sections.filter(sectionFilter(data)).sort((a, b) => a.order - b.order);
+    const filteredSections = sections.filter(sectionFilter(sectionData)).sort((a, b) => a.order - b.order);
     const mapOptions = {
       slug: slug,
       phase: getCurrentPhaseIdentifier(timeline),
@@ -183,12 +182,40 @@ export default compose(
     i18n: state.i18n,
     timeline: state.timeline
   })),
+  graphql(DiscussionQuery, {
+    props: ({ data }) => {
+      if (data.loading) {
+        return { discussionLoading: true, discussionData: null };
+      }
+      if (data.error) {
+        return { discussionLoading: false, discussionData: null };
+      }
+
+      return {
+        discussionLoading: false,
+        discussionData: data.discussion
+      };
+    }
+  }),
   graphql(SectionsQuery, {
     options: ({ i18n }) => ({
       variables: {
         lang: i18n.locale
       }
-    })
+    }),
+    props: ({ data }) => {
+      if (data.loading) {
+        return { sectionloading: true, sectionData: null };
+      }
+      if (data.error) {
+        return { sectionLoading: false, sectionData: { sections: [] } };
+      }
+
+      return {
+        sectionLoading: false,
+        sectionData: data
+      };
+    }
   }),
   withoutLoadingIndicator(),
   withScreenWidth

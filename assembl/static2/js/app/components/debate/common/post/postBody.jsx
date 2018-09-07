@@ -56,12 +56,16 @@ const ExtractInPost = ({ id, state, children }: ExtractInPostProps) => {
   );
 };
 
-const postBodyReplacementComponents = afterLoad => ({
-  iframe: attributes => (
+export const postBodyReplacementComponents = (afterLoad: Function) => ({
+  iframe: (attributes: Object) => (
     // the src iframe url is different from the resource url
-    <Embed url={attributes['data-source-url'] || attributes.src} defaultEmbed={<iframe title="post-embed" {...attributes} />} />
+    <Embed
+      key={attributes.key}
+      url={attributes['data-source-url'] || attributes.src}
+      defaultEmbed={<iframe title="post-embed" {...attributes} />}
+    />
   ),
-  a: (attributes) => {
+  a: (attributes: Object) => {
     const embeddedUrl = isSpecialURL(attributes.href);
     const origin = (
       <a key={`url-link-${attributes.href}`} href={attributes.href} className="linkified" target="_blank">
@@ -71,15 +75,15 @@ const postBodyReplacementComponents = afterLoad => ({
     if (embeddedUrl) return origin;
     return [origin, <URLMetadataLoader key={`url-preview-${attributes.href}`} url={attributes.href} afterLoad={afterLoad} />];
   },
-  annotation: attributes => (
-    <ExtractInPost id={attributes.id} state={attributes['data-state']}>
+  annotation: (attributes: Object) => (
+    <ExtractInPost key={attributes.key} id={attributes.id} state={attributes['data-state']}>
       {attributes.children}
     </ExtractInPost>
   )
 });
 
 const Html = (props) => {
-  const { extracts, rawHtml, divRef, dbId, replacementComponents, contentLocale } = props;
+  const { extracts, rawHtml, divRef, dbId, replacementComponents, contentLocale, ...containerProps } = props;
   /*
    * The activeHtml() function will parse the raw html,
    * replace specified tags with provided components
@@ -124,12 +128,6 @@ const Html = (props) => {
     html = html.children;
   }
   const nodes = activeHtml(html, replacementComponents);
-  const containerProps = { ...props };
-  delete containerProps.rawHtml;
-  delete containerProps.divRef;
-  delete containerProps.replacementComponents;
-  delete containerProps.extracts;
-  delete containerProps.dbId;
   // add a key to to fix a render issue with react 16 with duplicate texts after harvesting
   return (
     <div ref={divRef} {...containerProps} key={extracts ? extracts.length : 0}>

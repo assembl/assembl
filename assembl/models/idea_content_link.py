@@ -21,7 +21,8 @@ from sqlalchemy import (
 )
 
 from . import DiscussionBoundBase
-from ..lib.sqla import (CrudOperation, get_model_watcher)
+from ..lib.sqla import CrudOperation
+from ..lib.model_watcher import get_model_watcher
 from ..lib.clean_input import sanitize_html
 from ..lib.locale import to_posix_string
 from ..lib.utils import get_hash
@@ -395,7 +396,7 @@ class Extract(IdeaContentPositiveLink):
         if self.locale_id:
             return Locale.code_for_id(self.locale_id)
 
-        return self.locale.code
+        return self.locale and self.locale.code
 
     @lang.setter
     def lang(self, code):

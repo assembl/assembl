@@ -8,20 +8,21 @@ type HelperProps = {
   helperUrl?: string,
   helperText: string,
   classname?: string,
-  additionalTextClasses?: string
+  additionalTextClasses?: string,
+  popOverClass?: string
 };
 
-const overflowMenu = (helperUrl, helperText, additionalTextClasses) => {
+const overflowMenu = (helperUrl, helperText, additionalTextClasses, popOverClass) => {
   const helperTextClasses = classnames([additionalTextClasses], 'helper-text');
   return (
-    <Popover id="admin-title-helper" className="helper-popover">
+    <Popover id="admin-title-helper" className={popOverClass || 'helper-popover'}>
       {helperUrl && <img src={helperUrl} width="300" height="auto" alt="admin-helper" />}
       <div className={helperTextClasses}>{helperText}</div>
     </Popover>
   );
 };
 
-const Helper = ({ label, helperUrl, helperText, classname, additionalTextClasses }: HelperProps) => (
+const Helper = ({ label, helperUrl, helperText, classname, additionalTextClasses, popOverClass }: HelperProps) => (
   <div className={classname}>
     {label && label}
     &nbsp;
@@ -29,7 +30,7 @@ const Helper = ({ label, helperUrl, helperText, classname, additionalTextClasses
       trigger={['hover', 'focus']}
       rootClose
       placement="right"
-      overlay={overflowMenu(helperUrl, helperText, additionalTextClasses)}
+      overlay={overflowMenu(helperUrl, helperText, additionalTextClasses, popOverClass)}
     >
       <span className="assembl-icon-faq grey pointer" />
     </OverlayTrigger>
@@ -40,7 +41,8 @@ Helper.defaultProps = {
   label: '',
   helperUrl: '',
   classname: '',
-  additionalTextClasses: ''
+  additionalTextClasses: '',
+  popOverClass: ''
 };
 
 export default Helper;

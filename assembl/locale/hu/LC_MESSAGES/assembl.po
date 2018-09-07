@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 2.8.9\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-07-19 10:31+0200\n"
+"POT-Creation-Date: 2018-08-16 18:33+0200\n"
 "PO-Revision-Date: 2018-05-18 16:14+0200\n"
 "Last-Translator: \n"
 "Language: hu\n"
@@ -21,16 +21,16 @@ msgstr ""
 msgid "Your session has expired, you need to login again"
 msgstr "A munkamenet lejárt, jelentkezzen be újra"
 
-#: assembl/auth/util.py:504
+#: assembl/auth/util.py:517
 msgid "The CSV file must have two columns"
 msgstr "A CSV fájlnak két oszlopból kell állnia"
 
-#: assembl/auth/util.py:511
+#: assembl/auth/util.py:524
 #, python-format
 msgid "Not an email: <%s> at line %d"
 msgstr "Nincs e-mail cím: <%s> at line %d"
 
-#: assembl/auth/util.py:514
+#: assembl/auth/util.py:527
 #, python-format
 msgid "Name too short: <%s> at line %d"
 msgstr "Név túl rövid: <%s> at line %d"
@@ -47,7 +47,7 @@ msgstr "${val} nem egy karakterlánc: ${err}"
 msgid "Unknown User ${uid}"
 msgstr "Ismeretlen felhasználó ${uid}"
 
-#: assembl/models/idea.py:263 assembl/static/js/app/views/ideaPanel.js:211
+#: assembl/models/idea.py:269 assembl/static/js/app/views/ideaPanel.js:211
 msgid "Idea"
 msgstr "Ötlet"
 
@@ -67,23 +67,23 @@ msgstr "Valaki közvetlenül az Ön üzenetére válaszol"
 msgid "SYNTHESIS: "
 msgstr "ÖSSZEFOGLALÓ:"
 
-#: assembl/models/preferences.py:114 assembl/models/preferences.py:548
+#: assembl/models/preferences.py:115 assembl/models/preferences.py:564
 msgid "No special authentication"
 msgstr "Nincs speciális hitelesítés"
 
-#: assembl/models/preferences.py:386
+#: assembl/models/preferences.py:391
 msgid "Languages used"
 msgstr "Használt nyelvek"
 
-#: assembl/models/preferences.py:387
+#: assembl/models/preferences.py:392
 msgid "All languages expected in the discussion"
 msgstr "A beszélgetésben várható nyelvek"
 
-#: assembl/models/preferences.py:397
+#: assembl/models/preferences.py:402
 msgid "Use landing page"
 msgstr "Céloldal használata"
 
-#: assembl/models/preferences.py:398
+#: assembl/models/preferences.py:403
 msgid ""
 "Are users directed to the landing page and phases at login, or diretly to"
 " the debate"
@@ -91,119 +91,129 @@ msgstr ""
 "A felhasználók közvetlenül a céloldalra és a bejelentkezési fázisokhoz "
 "kerülnek átirányításra, vagy közvetlenül a vitához"
 
-#: assembl/models/preferences.py:406 assembl/models/preferences.py:420
+#: assembl/models/preferences.py:411 assembl/models/preferences.py:425
 msgid "Translation service"
 msgstr "Fordítói szolgáltatás"
 
-#: assembl/models/preferences.py:409
+#: assembl/models/preferences.py:414
 msgid "No translation"
 msgstr "Nincs fordítás"
 
-#: assembl/models/preferences.py:411
+#: assembl/models/preferences.py:416
 msgid "Dummy translation service (two steps)"
 msgstr "Dummy translation service (two steps)"
 
-#: assembl/models/preferences.py:413
+#: assembl/models/preferences.py:418
 msgid "Dummy translation service (one step)"
 msgstr "Dummy translation service (one step)"
 
-#: assembl/models/preferences.py:415
+#: assembl/models/preferences.py:420
 msgid "Dummy translation service (two steps) with errors"
 msgstr "Dummy translation service (two steps) with errors"
 
-#: assembl/models/preferences.py:417
+#: assembl/models/preferences.py:422
 msgid "Dummy translation service (one step) with errors"
 msgstr "Dummy translation service (one step) with errors"
 
-#: assembl/models/preferences.py:419
+#: assembl/models/preferences.py:424
 msgid "Google Translate"
 msgstr "Google fordító"
 
-#: assembl/models/preferences.py:432
+#: assembl/models/preferences.py:437
 msgid "Panel order in simple view"
 msgstr "Panelelrendezés egyszerű nézetben"
 
-#: assembl/models/preferences.py:435
+#: assembl/models/preferences.py:440
 msgid "Navigation, Idea, Messages"
 msgstr "Navigáció, Ötlet, Üzenetek"
 
-#: assembl/models/preferences.py:436
+#: assembl/models/preferences.py:441
 msgid "Navigation, Messages, Idea"
 msgstr "Navigáció, Üzenetek, Ötlet"
 
-#: assembl/models/preferences.py:437
+#: assembl/models/preferences.py:442
 msgid "Order of panels"
 msgstr "Panelek sorrendje"
 
-#: assembl/models/preferences.py:449
+#: assembl/models/preferences.py:454
 msgid "Extra JSON parameters"
 msgstr "Extra JSON paraméterek"
 
-#: assembl/models/preferences.py:451
+#: assembl/models/preferences.py:456
 msgid "Parameters for quick frontend settings"
 msgstr "Paraméterek a kezelőfelület gyors beállításaihoz"
 
-#: assembl/models/preferences.py:460
+#: assembl/models/preferences.py:465
 msgid "Terms of use URL"
 msgstr "URL használati feltételek"
 
-#: assembl/models/preferences.py:462
+#: assembl/models/preferences.py:467
 msgid "URL of a document presenting terms of use for the discussion"
 msgstr "A beszélgetés használati feltételeit bemutató dokumentum URL"
 
-#: assembl/models/preferences.py:471
+#: assembl/models/preferences.py:476
 msgid "Video URL"
 msgstr "Videó URL"
 
-#: assembl/models/preferences.py:473
+#: assembl/models/preferences.py:478
 msgid "URL of a video presenting the discussion"
 msgstr "A beszélgetést bemutató videó URL"
 
-#: assembl/models/preferences.py:482
+#: assembl/models/preferences.py:487
+#, fuzzy
+#| msgid "Message titles"
+msgid "Tab title"
+msgstr "Üzenetcímek"
+
+#: assembl/models/preferences.py:489
+msgid "Title which appears on the tab, by default assembl"
+msgstr ""
+
+#: assembl/models/preferences.py:498
 msgid "Video description"
 msgstr "Videó leírása"
 
-#: assembl/models/preferences.py:484
+#: assembl/models/preferences.py:500
 msgid "Description of the video presenting the discussion"
 msgstr "A beszélgetést bemutató videó leírása"
 
-#: assembl/models/preferences.py:493
+#: assembl/models/preferences.py:509
 msgid "Social sharing"
 msgstr "Közösségi megosztás"
 
-#: assembl/models/preferences.py:496
+#: assembl/models/preferences.py:512
 msgid "Show the share button on posts and ideas"
 msgstr "Megosztás gomb megjelenítése a bejegyzéseknél és ötleteknél"
 
-#: assembl/models/preferences.py:507
+#: assembl/models/preferences.py:523
 msgid "Private social sharing"
 msgstr "Privát közösségi megosztás"
 
-#: assembl/models/preferences.py:509
+#: assembl/models/preferences.py:525
 msgid "Publicizing or privatizing social sharing"
 msgstr "Nyilvános vagy privát közösségi megosztás"
 
-#: assembl/models/preferences.py:518
+#: assembl/models/preferences.py:534
 msgid "Extra data for CSV reports"
 msgstr "Extra adatok a CSV jelentésekhez"
 
-#: assembl/models/preferences.py:521
+#: assembl/models/preferences.py:537
 msgid "data taken from social_auth's extra_data to add to CSV reports"
 msgstr "adatok a social_auth's extra_data-ból, hozzáadása a CSV jelentésekhez"
 
-#: assembl/models/preferences.py:533
+#: assembl/models/preferences.py:549
 msgid "Require anti-virus check"
 msgstr "Vírusellenőrzés szükséges"
 
-#: assembl/models/preferences.py:536
+#: assembl/models/preferences.py:552
 msgid "Run an anti-virus on file attachments"
 msgstr "Vírusellenőrzés futtatása a fájl mellékletekben"
 
-#: assembl/models/preferences.py:550
+#: assembl/models/preferences.py:566
 msgid "Authentication service type"
 msgstr "Hitelesítési szolgáltatás típusa"
 
-#: assembl/models/preferences.py:552
+#: assembl/models/preferences.py:568
 msgid ""
 "A primary authentication server for this discussion, defined as a python-"
 "social-auth backend. Participants will be auto-logged in to that server, "
@@ -216,21 +226,21 @@ msgstr ""
 "beszélgetés auto-feliratkozása egy felhasználói fiókot kér ettől a "
 "háttéralkalmazástól."
 
-#: assembl/models/preferences.py:567
+#: assembl/models/preferences.py:583
 msgid "Allow access to moderated text"
 msgstr "Hozzáférés engedélyezése a szöveg moderálásához"
 
-#: assembl/models/preferences.py:570
+#: assembl/models/preferences.py:586
 msgid "Are moderated posts simply hidden or made inaccessible by default?"
 msgstr ""
 "A moderált bejegyzések szimplán elrejtésre kerülnek vagy alapértelmezés "
 "szerint elérhetetlenek lesznek?"
 
-#: assembl/models/preferences.py:583
+#: assembl/models/preferences.py:599
 msgid "Idea panel opens automatically"
 msgstr "Az ötletpanel automatikusan megnyílik"
 
-#: assembl/models/preferences.py:586
+#: assembl/models/preferences.py:602
 msgid ""
 "Does the Idea panel automatically open when an idea is clicked ? (and "
 "close when a special section is clicked)"
@@ -238,27 +248,27 @@ msgstr ""
 "Az ötletpanel automatikusan megnyílik, ha egy ötletre rákattintanak? (és "
 "bezárásra kerül, ha egy speciális szakaszra rákattintanak)"
 
-#: assembl/models/preferences.py:598
+#: assembl/models/preferences.py:614
 msgid "Ids of columns in column view"
 msgstr "Oszlopazonosítók oszlop nézetben"
 
-#: assembl/models/preferences.py:600
+#: assembl/models/preferences.py:616
 msgid "What are (ordered) identifiers of columns in multi-column views?"
 msgstr "Melyek az oszlopok (hozzárendelt) azonosítói többoszlopos nézetben?"
 
-#: assembl/models/preferences.py:613
+#: assembl/models/preferences.py:629
 msgid "Default colors of columns in column view"
 msgstr "Alapértelmezett oszlopszínek oszlop nézetben"
 
-#: assembl/models/preferences.py:615
+#: assembl/models/preferences.py:631
 msgid "What are (default) theme colors of columns in multi-column views?"
 msgstr "Melyek az oszlopok (alapértelmezett) színei többoszlopos nézetben?"
 
-#: assembl/models/preferences.py:627
+#: assembl/models/preferences.py:643
 msgid "Names of columns in column view"
 msgstr "Oszlopnevek oszlop nézetben"
 
-#: assembl/models/preferences.py:629
+#: assembl/models/preferences.py:645
 msgid ""
 "What are (default) names of columns in multi-column views, in each "
 "discussion language?"
@@ -266,19 +276,19 @@ msgstr ""
 "Melyek az (alapértelmezett) oszlopnevek többoszlopos nézetben, az egyes "
 "nyelveknél?"
 
-#: assembl/models/preferences.py:642
+#: assembl/models/preferences.py:658
 msgid "Default permissions"
 msgstr "Alapértelmezett engedélyek"
 
-#: assembl/models/preferences.py:645
+#: assembl/models/preferences.py:661
 msgid "The basic permissions for a new discussion"
 msgstr "Egy új beszélgetés alapszintű engedélyei"
 
-#: assembl/models/preferences.py:727
+#: assembl/models/preferences.py:743
 msgid "Require Email Domain"
 msgstr "e-mail domain szükséges"
 
-#: assembl/models/preferences.py:730
+#: assembl/models/preferences.py:746
 msgid ""
 "List of domain names of user email address required for self-"
 "registration. Only accounts with at least an email from those domains can"
@@ -290,63 +300,63 @@ msgstr ""
 " self-register to this discussion. Anyone can self-register if this is "
 "empty."
 
-#: assembl/models/preferences.py:746
+#: assembl/models/preferences.py:762
 #, fuzzy
 msgid "Whitelist on authentication service"
 msgstr "Hitelesítési szolgáltatás típusa"
 
-#: assembl/models/preferences.py:749
+#: assembl/models/preferences.py:765
 msgid "Allow white list to be applied to the authentication service chosen"
 msgstr ""
 
-#: assembl/models/preferences.py:761
+#: assembl/models/preferences.py:777
 msgid "Whitelist on standard registration"
 msgstr ""
 
-#: assembl/models/preferences.py:764
+#: assembl/models/preferences.py:780
 msgid "Allow white list to be applied to the default login process"
 msgstr ""
 
-#: assembl/models/preferences.py:776
+#: assembl/models/preferences.py:792
 #, fuzzy
 msgid "Discussion administrators"
 msgstr "Beszélgetés statisztikák"
 
-#: assembl/models/preferences.py:779
+#: assembl/models/preferences.py:795
 msgid ""
 "A list of discussion administrators, if different from the server "
 "administrator"
 msgstr ""
 
-#: assembl/models/preferences.py:792
+#: assembl/models/preferences.py:808
 msgid "Show CI Dashboard"
 msgstr "CI irányítópult megjelenítése"
 
-#: assembl/models/preferences.py:795
+#: assembl/models/preferences.py:811
 msgid "Show the CI Dashboard in the panel group window"
 msgstr "CI irányítópult megjelenítése a panelcsoport ablakban"
 
-#: assembl/models/preferences.py:807
+#: assembl/models/preferences.py:823
 msgid "URL of CI Dashboard"
 msgstr "CI irányítópult URL"
 
-#: assembl/models/preferences.py:809
+#: assembl/models/preferences.py:825
 msgid "Configuration of the visualizations shown in the CI Dashboard"
 msgstr "A CI irányítópulton megjelenített vizualizáció konfigurációja"
 
-#: assembl/models/preferences.py:827
+#: assembl/models/preferences.py:843
 msgid "Catalyst Visualizations"
 msgstr "Catalyst vizualizáció"
 
-#: assembl/models/preferences.py:830
+#: assembl/models/preferences.py:846
 msgid "A JSON description of available Catalyst visualizations"
 msgstr "Az elérhető Catalyst vizualizáció JSON leírása"
 
-#: assembl/models/preferences.py:842
+#: assembl/models/preferences.py:858
 msgid "Navigation sections"
 msgstr "Navigációs részek"
 
-#: assembl/models/preferences.py:845
+#: assembl/models/preferences.py:861
 msgid ""
 "A JSON specification of Catalyst visualizations to show in the navigation"
 " section"
@@ -354,19 +364,19 @@ msgstr ""
 "A Catalyst vizualizáció JSON leírása, amely a navigációs részen "
 "megjelenítésre kerül"
 
-#: assembl/models/preferences.py:858
+#: assembl/models/preferences.py:874
 msgid "Catalyst translations"
 msgstr "Catalyst fordítások"
 
-#: assembl/models/preferences.py:861
+#: assembl/models/preferences.py:877
 msgid "Translations applicable to Catalyst visualizations, in Jed (JSON) format"
 msgstr "A Catalyst vizualizációra vonatkozó fordítások Jed (JSON) formátumban"
 
-#: assembl/models/preferences.py:878
+#: assembl/models/preferences.py:894
 msgid "Default Table of Ideas Collapsed state"
 msgstr "Alapértelmezett ötletlista összecsukott állapot"
 
-#: assembl/models/preferences.py:881
+#: assembl/models/preferences.py:897
 msgid ""
 "Default expanded/collapsed state of each idea in the table of ideas. A "
 "user can override it by opening/closing an idea"
@@ -374,40 +384,56 @@ msgstr ""
 "Az ötletlista egyes elemeinek alapértelmezett kibontott/összecsukott "
 "állapota. A felhasználó felülírhatja az ötlet megnyitásával/bezárásával"
 
-#: assembl/models/preferences.py:896
+#: assembl/models/preferences.py:912
 msgid "Preference data"
 msgstr "Beállítások adatai"
 
-#: assembl/models/preferences.py:899
+#: assembl/models/preferences.py:915
 msgid "The preference configuration; override only with care"
 msgstr "A beállítások konfigurációja; felülírás csak körültekintéssel"
 
-#: assembl/models/preferences.py:911
+#: assembl/models/preferences.py:927
 msgid "Cookies banner"
 msgstr "Sütik alkalmazásszalag"
 
-#: assembl/models/preferences.py:914
+#: assembl/models/preferences.py:930
 msgid "Show the banner offering to disable Piwik cookies"
 msgstr "A Piwik sütik letiltását felajánló alkalmazásszalag megjelenítése"
 
-#: assembl/models/preferences.py:926
+#: assembl/models/preferences.py:942
 msgid "Custom HTML code on the landing page"
 msgstr ""
 
-#: assembl/models/preferences.py:929
+#: assembl/models/preferences.py:945
 msgid ""
 "Custom HTML code that will be integrated on the landing page of the "
 "debate, right after the <body> tag"
 msgstr ""
 
-#: assembl/models/preferences.py:939
+#: assembl/models/preferences.py:955
 msgid "Custom HTML code on the user registration page"
 msgstr ""
 
-#: assembl/models/preferences.py:942
+#: assembl/models/preferences.py:958
 msgid ""
 "Custom HTML code that will be integrated on the user registration page of"
 " the debate, right after the <body> tag"
+msgstr ""
+
+#: assembl/models/preferences.py:968 assembl/models/preferences.py:971
+#, fuzzy
+#| msgid "Catalyst translations"
+msgid "Harvesting translation"
+msgstr "Catalyst fordítások"
+
+#: assembl/models/preferences.py:979
+msgid "Valid CORS paths for GraphQL API calls"
+msgstr ""
+
+#: assembl/models/preferences.py:982
+msgid ""
+"A list of valid URLs or IP addresses that are allowed to make CORS api "
+"calls to the GraphQL API"
 msgstr ""
 
 #: assembl/static/js/app/routeManager.js:416
@@ -4719,73 +4745,73 @@ msgstr "Az olvasott bejegyzés megtekintéséhez be kell jelentkeznie"
 msgid "Your message is empty"
 msgstr "Az Ön üzenete üres"
 
-#: assembl/views/api2/auth.py:346
+#: assembl/views/api2/auth.py:347
 msgid "The user does not exist"
 msgstr "A felhasználó nem létezik"
 
-#: assembl/views/api2/auth.py:357
+#: assembl/views/api2/auth.py:358
 msgid "This email does not exist"
 msgstr "Az e-mail nem létezik"
 
-#: assembl/views/api2/auth.py:362
+#: assembl/views/api2/auth.py:363
 msgid "Please give an identifier"
 msgstr "Kérjük, adjon meg egy azonosítót"
 
-#: assembl/views/api2/auth.py:367
+#: assembl/views/api2/auth.py:368
 msgid "This user has no email"
 msgstr "A felhasználónak nincs e-mail címe"
 
-#: assembl/views/api2/auth.py:370
+#: assembl/views/api2/auth.py:371
 msgid "This is not a user"
 msgstr "Ez nem egy felhasználó"
 
-#: assembl/views/api2/auth.py:391
+#: assembl/views/api2/auth.py:392
 msgid "The passwords that were entered are mismatched!"
 msgstr "A megadott jelszavak nem egyeznek!"
 
-#: assembl/views/api2/auth.py:405 assembl/views/auth/views.py:964
+#: assembl/views/api2/auth.py:406 assembl/views/auth/views.py:964
 #: assembl/views/auth/views.py:1032
 msgid "This link is not valid. Do you want us to send another?"
 msgstr "A hivatkozás nem érvényes. Szeretne egy másikat küldeni?"
 
-#: assembl/views/api2/auth.py:408 assembl/views/auth/views.py:967
+#: assembl/views/api2/auth.py:409 assembl/views/auth/views.py:967
 #: assembl/views/auth/views.py:1035
 msgid "This link has been used. Do you want us to send another?"
 msgstr "A hivatkozás már használatban. Szeretne egy másikat küldeni?"
 
-#: assembl/views/api2/auth.py:437 assembl/views/auth/views.py:388
+#: assembl/views/api2/auth.py:438 assembl/views/auth/views.py:388
 msgid "Please use a name of at least 3 characters"
 msgstr "Kérjük, használjon egy legalább 3 karakterből álló nevet"
 
-#: assembl/views/api2/auth.py:446 assembl/views/auth/views.py:321
+#: assembl/views/api2/auth.py:447 assembl/views/auth/views.py:321
 #: assembl/views/auth/views.py:395
 msgid "This is not a valid email"
 msgstr "Ez nem egy érvényes e-mail cím"
 
-#: assembl/views/api2/auth.py:454 assembl/views/auth/views.py:402
+#: assembl/views/api2/auth.py:455 assembl/views/auth/views.py:402
 msgid "We already have a user with this email."
 msgstr "Már létezik felhasználó ezzel az e-mail címmel."
 
-#: assembl/views/api2/auth.py:459
+#: assembl/views/api2/auth.py:460
 msgid "No email."
 msgstr "Nincs e-mail cím."
 
-#: assembl/views/api2/auth.py:465
+#: assembl/views/api2/auth.py:466
 msgid "We already have a user with this username."
 msgstr "Már létezik felhasználó ezzel a felhasználónévvel."
 
-#: assembl/views/api2/auth.py:470
+#: assembl/views/api2/auth.py:471
 #, fuzzy
 msgid "The username must be less than 20 characters."
 msgstr "Kérjük, használjon egy legalább 3 karakterből álló nevet"
 
-#: assembl/views/api2/auth.py:484
+#: assembl/views/api2/auth.py:485
 msgid ""
 "Your email domain has not been approved for registration. Please contact "
 "${emails} for support."
 msgstr ""
 
-#: assembl/views/api2/auth.py:485
+#: assembl/views/api2/auth.py:486
 msgid ""
 "Your email domain has not been approved for registration. Please contact "
 "one of ${emails} for support."

@@ -913,14 +913,15 @@ class TestPhase1Export(object):
     QUESTION_ID = 1
     QUESTION_TITLE = 2
     POST_BODY = 3
-    POST_LIKE_COUNT = 4
-    POST_DISAGREE_COUNT = 5
-    POST_CREATOR_NAME = 6
-    POST_CREATOR_EMAIL = 7
-    POST_CREATION_DATE = 8
-    SENTIMENT_ACTOR_NAME = 9
-    SENTIMENT_ACTOR_EMAIL = 10
-    SENTIMENT_CREATION_DATE = 11
+    POST_LIKE_COUNT = 6
+    POST_DISAGREE_COUNT = 7
+    POST_CREATOR_NAME = 8
+    POST_CREATOR_EMAIL = 9
+    POST_CREATION_DATE = 10
+    SENTIMENT_ACTOR_NAME = 11
+    SENTIMENT_ACTOR_EMAIL = 12
+    SENTIMENT_CREATION_DATE = 13
+    POST_BODY_ORIGINAL = 14
 
     def _get(self, app, discussion_id, lang=None):
         base_req = '/data/Discussion/{}/phase1_csv_export'.format(discussion_id)
@@ -938,8 +939,7 @@ class TestPhase1Export(object):
         result = csv.reader(csv_file, dialect='excel', delimiter=';')
         return list(result)
 
-    def test_base(self, proposals_with_sentiments, discussion,
-                           test_app):
+    def test_base(self, proposals_with_sentiments, discussion, test_app):
         result = self.get_result(test_app, discussion.id)
 
         header = result[0]
@@ -968,16 +968,14 @@ class TestPhase1Export(object):
         assert last_row[TestPhase1Export.POST_DISAGREE_COUNT] == b'0'
         assert last_row[TestPhase1Export.SENTIMENT_ACTOR_NAME] == b'Mr. Administrator'
 
-    def test_en(self, proposals_en_fr, discussion, test_app,
-                              en_locale):
+    def test_en(self, proposals_en_fr, discussion, test_app, en_locale):
         lang = en_locale.root_locale
         result = self.get_result(test_app, discussion.id, lang=lang)
 
         first_row = result[1]
         assert first_row[TestPhase1Export.POST_BODY] == b'English Proposition 14'
 
-    def test_fr(self, proposals_en_fr, discussion, test_app,
-                              fr_locale):
+    def test_fr(self, proposals_en_fr, discussion, test_app, fr_locale):
         lang = fr_locale.root_locale
         result = self.get_result(test_app, discussion.id, lang=lang)
 

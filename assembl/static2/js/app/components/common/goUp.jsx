@@ -18,7 +18,11 @@ class GoUp extends React.Component {
   }
 
   displayButton() {
-    const footerHeight = document.getElementById('footer').offsetHeight;
+    const footer = document.getElementById('footer');
+    if (!footer) {
+      return;
+    }
+    const footerHeight = footer.offsetHeight;
     const { screenHeight } = this.props;
     const threshold = document.body.scrollHeight - screenHeight - footerHeight;
     if (window.pageYOffset > screenHeight && window.pageYOffset < threshold) {

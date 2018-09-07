@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CookieSwitch component should render a cookie's name with a toggle to change its setting 1`] = `
+<div
+  className="rsbc-switch-button rsbc-mode-switch rsbc-switch-button-flat-round"
+>
+  <label
+    htmlFor="switch-button"
+  >
+    Refuse
+  </label>
+  <input
+    checked={true}
+    disabled={false}
+    id="switch-button"
+    name="switch-button"
+    onChange={[Function]}
+    type="checkbox"
+    value="1"
+  />
+  <label
+    htmlFor="switch-button"
+  />
+  <label
+    htmlFor="switch-button"
+  >
+    Accept
+  </label>
+</div>
+`;

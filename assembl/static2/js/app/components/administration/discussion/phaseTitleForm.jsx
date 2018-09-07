@@ -20,7 +20,7 @@ type PhaseTitleFormProps = {
   phaseIndex: number,
   numberOfPhases: number,
   hasConflictingDates: boolean
-}
+};
 
 export const DumbPhaseTitleForm = ({
   id,

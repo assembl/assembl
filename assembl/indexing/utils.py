@@ -79,10 +79,32 @@ def populate_from_langstring_prop(content, data, propName, dataPropName=None):
         populate_from_langstring(ls, data, dataPropName or propName)
 
 
+def get_idea_id_for_post(post):
+    from assembl.models.idea import Idea, MessageView
+    idea_ids = [link.idea_id
+        for link in post.indirect_idea_content_links_without_cache()
+        if link.__class__.__name__ == 'IdeaRelatedPostLink']
+
+    def index_idea(idea_id):
+        idea = Idea.get(idea_id)
+        # If the post is a fiction for Bright Mirror, don't index it.
+        if idea.message_view_override == MessageView.brightMirror.value:
+            return False
+
+        # If the idea is now in multi columns mode and the post was created before that, don't index it.
+        if idea.message_columns and post.message_classifier is None:
+            return False
+
+        return True
+
+    return filter(index_idea, idea_ids)
+
+
 def get_data(content):
     """Return uid, dict of fields we want to index,
     return None if we don't index."""
-    from assembl.models import Idea, Post, PropositionPost, SynthesisPost, AgentProfile, LangString
+    from assembl.models import Idea, Post, PropositionPost, SynthesisPost, AgentProfile, LangString, Extract
+    from assembl.models.timeline import Phases
     if type(content) == Idea:  # only index Idea, not Thematic or Question
         data = {}
         for attr in ('creation_date', 'id', 'discussion_id'):
@@ -116,7 +138,6 @@ def get_data(content):
         return get_uid(content), data
 
     elif isinstance(content, Post):
-        from assembl.models.idea import MessageView
         data = {}
         data['_parent'] = 'user:{}'.format(content.creator_id)
         if content.parent_id is not None:
@@ -126,29 +147,7 @@ def get_data(content):
                      'creator_id', 'sentiment_counts'):
             data[attr] = getattr(content, attr)
 
-        data['idea_id'] = [link.idea_id
-            for link in content.indirect_idea_content_links_without_cache()
-            if link.__class__.__name__ == 'IdeaRelatedPostLink']
-        # The post is not associated to any idea, we can't generate an url from it, don't index it.
-        if not data['idea_id']:
-            return None, None
-
-        # If the post is a fiction for Bright Mirror, don't index it.
-        if Idea.get(data['idea_id'][0]).message_view_override == MessageView.brightMirror.value:
-            return None, None
-
-        # If the idea is now in multi columns mode and the post was created before that, don't index it.
-        if Idea.get(data['idea_id'][0]).message_columns and content.message_classifier is None:
-            return None, None
-
-        data['taxonomy_nature'] = [
-            'taxonomy_nature.' + enum_entry.name
-            for enum_entry in set([extract.extract_nature for extract in content.extracts
-                 if extract.extract_nature is not None])]
-        data['taxonomy_action'] = [
-            'taxonomy_action.' + enum_entry.name
-            for enum_entry in set([extract.extract_action for extract in content.extracts
-                 if extract.extract_action is not None])]
+        data['creator_display_name'] = AgentProfile.get(content.creator_id).display_name()
         data['sentiment_tags'] = [key for key in data['sentiment_counts']
                                   if data['sentiment_counts'][key] > 0]
         like = data['sentiment_counts']['like']
@@ -164,9 +163,9 @@ def get_data(content):
 #        data['publishes_synthesis_id'] = getattr(
 #            content, 'publishes_synthesis_id', None)
         if isinstance(content, PropositionPost):
-            data['phase_id'] = 'survey'
+            data['phase_id'] = Phases.survey.value
         else:
-            data['phase_id'] = 'thread'
+            data['phase_id'] = Phases.thread.value
 
         if isinstance(content, SynthesisPost):
             populate_from_langstring_prop(content.publishes_synthesis,
@@ -187,8 +186,42 @@ def get_data(content):
                 ls.add_value(' '.join(values), locale)
             populate_from_langstring(ls, data, 'ideas')
         else:
+            idea_id = get_idea_id_for_post(content)
+            if not idea_id:
+                return None, None
+
+            data['idea_id'] = idea_id
             populate_from_langstring_prop(content, data, 'body')
             populate_from_langstring_prop(content, data, 'subject')
+
+        return get_uid(content), data
+
+    elif isinstance(content, Extract):
+        data = {}
+        for attr in ('discussion_id', 'body', 'creation_date', 'id', 'creator_id'):
+            data[attr] = getattr(content, attr)
+
+        data['post_id'] = content.content_id
+        post = Post.get(content.content_id)
+        populate_from_langstring_prop(post, data, 'subject')
+        if isinstance(post, PropositionPost):
+            data['phase_id'] = Phases.survey.value
+        else:
+            data['phase_id'] = Phases.thread.value
+
+        idea_id = get_idea_id_for_post(post)
+        if not idea_id:
+            return None, None
+
+        data['idea_id'] = idea_id
+        data['extract_state'] = 'taxonomy_state.' + content.extract_state
+        if content.extract_nature:
+            data['extract_nature'] = 'taxonomy_nature.' + content.extract_nature.name
+
+        if content.extract_action:
+            data['extract_action'] = 'taxonomy_action.' + content.extract_action.name
+
+        data['creator_display_name'] = AgentProfile.get(content.creator_id).display_name()
 
         return get_uid(content), data
 
@@ -197,8 +230,10 @@ def get_data(content):
 
 def get_uid(content):
     """Return a global unique identifier"""
-    from assembl.models import Idea, Post, SynthesisPost, AgentProfile
-    if isinstance(content, Idea):
+    from assembl.models import Extract, Idea, Post, SynthesisPost, AgentProfile
+    if isinstance(content, Extract):
+        doc_type = 'extract'
+    elif isinstance(content, Idea):
         doc_type = 'idea'
     elif isinstance(content, AgentProfile):
         doc_type = 'user'

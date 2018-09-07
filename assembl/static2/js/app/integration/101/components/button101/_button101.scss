@@ -1,0 +1,19 @@
+.integration.button {
+  &.btn {
+    font-weight: bold;
+    letter-spacing: 2px;
+    border: none;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease-out;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  &.btn-lg {
+    padding: 15px 20px;
+    font-size: 15px;
+    border-radius: 40px;
+  }
+}

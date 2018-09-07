@@ -18,7 +18,8 @@ type Props = {
 
 type State = {
   exportLocale: ?string,
-  translate: boolean
+  translate: boolean,
+  isAnonymous: boolean
 };
 
 class Step3 extends React.Component<Props, State> {
@@ -26,7 +27,8 @@ class Step3 extends React.Component<Props, State> {
     super();
     this.state = {
       exportLocale: null,
-      translate: false
+      translate: false,
+      isAnonymous: false
     };
   }
 
@@ -38,17 +40,24 @@ class Step3 extends React.Component<Props, State> {
     this.setState({ translate: shouldTranslate });
   };
 
+  handleAnonymousChange = () => {
+    this.setState(prevState => ({ isAnonymous: !prevState.isAnonymous }));
+  };
+
   render() {
     const { debateId, languages } = this.props;
     const { translate } = this.state;
     const exportLocale = this.state.exportLocale || (languages && languages[0].locale);
     const translation = translate && exportLocale ? `?lang=${exportLocale}` : '?'; // FIXME: using '' instead of '?' does not work
-    const exportLink = get('exportSurveyData', { debateId: debateId, translation: translation });
+    const { isAnonymous } = this.state;
+    const anonymous = translation === '?' ? `anon=${isAnonymous.toString()}` : `&anon=${isAnonymous.toString()}`;
+    const exportLink = get('exportSurveyData', { debateId: debateId, translation: translation, anonymous: anonymous });
     return (
       <ExportSection
         withLanguageOptions
         handleExportLocaleChange={this.handleExportLocaleChange}
         handleTranslationChange={this.handleTranslationChange}
+        handleAnonymousChange={this.handleAnonymousChange}
         exportLink={exportLink}
         translate={translate}
         exportLocale={exportLocale}

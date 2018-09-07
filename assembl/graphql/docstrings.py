@@ -41,9 +41,10 @@ class Schema:
     sections = """A list of Section meta data on the discussion."""
     legal_contents = """The legal contents metadata representing the data."""
     has_legal_notice = """A boolean flag of whether a debate has set a legal notice."""
-    has_terms_and_conditions = """A boolean flag of whether a debate has set a terms and conditions page."""
-    has_cookies_policy = """A boolean flag of whether a debate has set a cookie policy page."""
-    has_privacy_policy = """A boolean flag of whether a debate has set a privacy policy page."""
+    has_terms_and_conditions = """A boolean flag of whether a debate has set terms and conditions."""
+    has_cookies_policy = """A boolean flag of whether a debate has set a cookie policy."""
+    has_privacy_policy = """A boolean flag of whether a debate has set a privacy policy."""
+    has_user_guidelines = """A boolean flag of whether a debate has set user guidelines."""
     visits_analytics = """The object containing the summary data of analytics on the page, based on time-series analysis of analytics engine data."""
     discussion = """The discussion object metadata."""
     landing_page_module_types = """The metadata object for LandingPageModule object."""
@@ -121,6 +122,8 @@ class LegalContents:
     privacy_policy = Default.string_entry % ("Privacy Policy",)
     cookies_policy_entries = Default.langstring_entries % ("",)
     privacy_policy_entries = Default.langstring_entries % ("",)
+    user_guidelines = Default.string_entry % ("User Guidelines",)
+    user_guidelines_entries = Default.langstring_entries % ("",)
 
 
 class UpdateResourcesCenter:
@@ -142,6 +145,7 @@ class UpdateLegalContents:
     terms_and_conditions_entries = Default.langstring_entries % ("This is the list of all Terms and Conditions in various languages.",)
     cookies_policy_entries = Default.langstring_entries % ("This is the list of all Cookie Policies in various languages.",)
     privacy_policy_entries = Default.langstring_entries % ("This is the list of all Privay Policies in various languages.",)
+    user_guidelines_entries = Default.langstring_entries % ("This is the list of all User Guidelines in various languages.",)
 
 
 class VisitsAnalytics:

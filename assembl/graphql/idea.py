@@ -282,11 +282,10 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
         return [child for child in self.get_children() if not child.hidden]
 
     def resolve_parent_id(self, args, context, info):
-        parents = self.get_parents()
-        if not parents:
+        if not self.source_links:
             return None
 
-        return Node.to_global_id('Idea', parents[0].id)
+        return Node.to_global_id('Idea', self.source_links[0].source_id)
 
     def resolve_ancestors(self, args, context, info):
         return [Node.to_global_id('Idea', id)

@@ -4,6 +4,7 @@ import graphene
 from graphene_sqlalchemy import SQLAlchemyObjectType
 from pyramid.httpexceptions import HTTPUnauthorized
 from pyramid.security import Everyone
+from urlparse import urljoin
 
 from assembl import models
 from assembl.auth import IF_OWNED, CrudPermissions
@@ -18,6 +19,11 @@ from .langstring import (
 from .utils import (
     abort_transaction_on_exception, update_attachment,
     get_attachment_with_purpose)
+
+
+class URLMeta(graphene.ObjectType):
+    local = graphene.Boolean()
+    url = graphene.String(required=True)
 
 
 # Mostly fields related to the discussion title and landing page
@@ -44,6 +50,7 @@ class Discussion(SecureObjectType, SQLAlchemyObjectType):
     header_image = graphene.Field(Document, description=docs.Discussion.header_image)
     logo_image = graphene.Field(Document, description=docs.Discussion.logo_image)
     slug = graphene.String(description=docs.Discussion.slug)
+    login_data = graphene.Field(URLMeta, next_view=graphene.String(required=False))
 
     def resolve_homepage_url(self, args, context, info):
         # TODO: Remove this resolver and add URLString to
@@ -107,6 +114,32 @@ class Discussion(SecureObjectType, SQLAlchemyObjectType):
         for attachment in discussion.attachments:
             if attachment.attachmentPurpose == LANDING_PAGE_LOGO_IMAGE:
                 return attachment.document
+
+    def resolve_login_data(self, args, context, info):
+        # if the debate is public, but has an SSO set and a prefernece to redirect publically
+        # this URL would be used
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        prefs = discussion.preferences
+        next_view = args.get('next_view') or False
+        auth_backend = prefs.get('authorization_server_backend') or None
+        landing_page = prefs.get('landing_page') or False
+        if auth_backend and landing_page:
+            from assembl.views.auth.views import get_social_autologin
+            route = get_social_autologin(context, discussion, next_view)
+            local = False
+            url = urljoin(discussion.get_base_url(), route)
+        else:
+            # Just a regular discussion login, but a route from perspective of React-Router
+            # Do not pass any next view by default. It's responsibility of the caller
+            from assembl.lib.frontend_urls import FrontendUrls
+            furl = FrontendUrls(discussion)
+            route = furl.get_frontend_url('ctxLogin')
+            if next_view:
+                route = furl.append_query_string(route, next=next_view)
+            local = True
+            url = route
+        return URLMeta(local=local, url=url)
 
 
 class UpdateDiscussion(graphene.Mutation):
@@ -333,6 +366,8 @@ class LegalContents(graphene.ObjectType):
     privacy_policy = graphene.String(lang=graphene.String(), description=docs.LegalContents.privacy_policy)
     cookies_policy_entries = graphene.List(LangStringEntry, description=docs.LegalContents.cookies_policy_entries)
     privacy_policy_entries = graphene.List(LangStringEntry, description=docs.LegalContents.privacy_policy_entries)
+    user_guidelines = graphene.String(lang=graphene.String(), description=docs.LegalContents.user_guidelines)
+    user_guidelines_entries = graphene.List(LangStringEntry, description=docs.LegalContents.user_guidelines_entries)
 
     def resolve_legal_notice(self, args, context, info):
         """Legal notice value in given locale."""
@@ -387,6 +422,20 @@ class LegalContents(graphene.ObjectType):
         discussion = models.Discussion.get(discussion_id)
         if discussion.privacy_policy:
             return resolve_langstring_entries(discussion, 'privacy_policy')
+
+        return []
+
+    def resolve_user_guidelines(self, args, context, info):
+        """User guidelines value in given locale."""
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        return resolve_langstring(discussion.user_guidelines, args.get('lang'))
+
+    def resolve_user_guidelines_entries(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        if discussion.user_guidelines:
+            return resolve_langstring_entries(discussion, 'user_guidelines')
 
         return []
 
@@ -528,6 +577,7 @@ class UpdateLegalContents(graphene.Mutation):
         terms_and_conditions_entries = graphene.List(LangStringEntryInput, description=docs.UpdateLegalContents.terms_and_conditions_entries)
         cookies_policy_entries = graphene.List(LangStringEntryInput, description=docs.UpdateLegalContents.cookies_policy_entries)
         privacy_policy_entries = graphene.List(LangStringEntryInput, description=docs.UpdateLegalContents.privacy_policy_entries)
+        user_guidelines_entries = graphene.List(LangStringEntryInput, description=docs.UpdateLegalContents.user_guidelines_entries)
 
     legal_contents = graphene.Field(lambda: LegalContents)
 
@@ -585,6 +635,16 @@ class UpdateLegalContents(graphene.Mutation):
 
             update_langstring_from_input_entries(
                 discussion, 'privacy_policy', privacy_policy_entries)
+
+            user_guidelines_entries = args.get('user_guidelines_entries')
+            if user_guidelines_entries is not None and len(user_guidelines_entries) == 0:
+                raise Exception(
+                    'User guidelines entries need to be at least one entry'
+                )
+
+            update_langstring_from_input_entries(
+                discussion, 'user_guidelines', user_guidelines_entries
+            )
 
         db.flush()
         legal_contents = LegalContents()

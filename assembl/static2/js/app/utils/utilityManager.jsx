@@ -1,8 +1,11 @@
 import React from 'react';
-import { I18n } from 'react-redux-i18n';
-import { getCurrentView, getContextual, getFullPath } from '../utils/routeMap';
-import { getConnectedUserId, getDiscussionSlug } from '../utils/globalFunctions';
+import { I18n, Translate } from 'react-redux-i18n';
+import { Link } from 'react-router';
+import { getFullPath } from '../utils/routeMap';
+import { getConnectedUserId } from '../utils/globalFunctions';
 import SocialShare from '../components/common/socialShare';
+import LoginButton from '../components/common/loginButton';
+
 /*
   Singleton object that will contain the AlertManager, ModalManager which will
   be used to show/hide/manipulate the alert/modal system
@@ -101,15 +104,13 @@ export const openShareModal = (options) => {
 };
 
 export const inviteUserToLogin = () => {
-  const slug = getDiscussionSlug();
-  const next = getCurrentView();
-  const modalBody = I18n.t('login.loginModalBody');
-  const button = {
-    link: `${getContextual('login', slug)}?next=${next}`,
-    label: I18n.t('login.loginModalFooter'),
-    internalLink: true
-  };
-  displayModal(null, modalBody, true, null, button, true);
+  const body = (
+    <div>
+      <p><Translate value="login.loginModalBody" /></p><br />
+      <LoginButton label={I18n.t('login.loginModalFooter')} />
+    </div>
+  );
+  displayModal(null, body, true, null, null, true);
 };
 
 /* if user is not connected, ask for login, else, execute given action */
@@ -120,4 +121,27 @@ export const promptForLoginOr = action => () => {
   } else {
     action();
   }
+};
+
+
+export const defaultAnchorAttributes = {
+  rel: 'noopener no-referrer',
+  target: '_blank'
+};
+
+/*
+  An HOC that can be used when unclear whether to use Link or a tag (internal react-router
+  or external url)
+  @params AnchorComponent   Component : The component within the link
+  @params urlData           Object : An object that has 'url' and 'local', describing whether link is internal or not
+  @params anchorAttributes  Object: All attributes desired to be passed to the Link or a tag
+  @params props             Object: All props desired to be passed to the AnchorComponent
+*/
+export const localAwareLink = AnchorComponent => ({ urlData, anchorAttributes, props }) => {
+  const attrs = anchorAttributes || null;
+  const componentProps = props || null;
+  if (!urlData.local) {
+    return (<a href={urlData.url} {...attrs} ><AnchorComponent {...componentProps} /></a>);
+  }
+  return (<Link to={urlData.url} {...attrs}><AnchorComponent {...componentProps} /></Link>);
 };

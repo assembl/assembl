@@ -123,12 +123,7 @@ type ChoiceGaugeVoteForProposalProps = SharedProps & {
   value: ?number
 };
 
-export const ChoiceGaugeVoteForProposal = ({
-  choices,
-  disabled,
-  value,
-  ...rest
-}: ChoiceGaugeVoteForProposalProps) => {
+export const ChoiceGaugeVoteForProposal = ({ choices, disabled, value, ...rest }: ChoiceGaugeVoteForProposalProps) => {
   const marks = {};
   let maximum = null;
   let minimum = null;

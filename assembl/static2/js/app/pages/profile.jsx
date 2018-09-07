@@ -9,6 +9,7 @@ import Avatar from '../components/profile/avatar';
 import ModifyPasswordForm from '../components/profile/modifyPasswordForm';
 import DeleteMyAccount from '../components/profile/deleteMyAccount';
 import ConfiguredField, { type ConfiguredFieldType } from '../components/common/configuredField';
+import CookiesSelectorContainer from '../components/cookies/cookiesSelectorContainer';
 import { get, getContextual } from '../utils/routeMap';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
 import UserQuery from '../graphql/userQuery.graphql';
@@ -161,15 +162,17 @@ class Profile extends React.PureComponent<ProfileProps, ProfileState> {
                   </h2>
                   <div className="profile-form center">
                     {profileFields &&
-                      profileFields.map(pf => (
-                        !pf.configurableField.hidden &&
-                        <ConfiguredField
-                          key={pf.id}
-                          configurableField={pf.configurableField}
-                          handleValueChange={value => this.handleFieldValueChange(pf.id, value)}
-                          value={this.state.values[pf.id]}
-                        />
-                      ))}
+                      profileFields.map(
+                        pf =>
+                          !pf.configurableField.hidden && (
+                            <ConfiguredField
+                              key={pf.id}
+                              configurableField={pf.configurableField}
+                              handleValueChange={value => this.handleFieldValueChange(pf.id, value)}
+                              value={this.state.values[pf.id]}
+                            />
+                          )
+                      )}
                     <Translate value="profile.usernameInformations" />
                     <Button className="button-submit button-dark margin-l" onClick={this.handleSaveClick}>
                       <Translate value="profile.save" />
@@ -195,6 +198,9 @@ class Profile extends React.PureComponent<ProfileProps, ProfileState> {
                       </div>
                     </div>
                   )}
+                  <div className="profile-cookies-configuration">
+                    <CookiesSelectorContainer />
+                  </div>
                   <DeleteMyAccount />
                 </div>
               </Col>
