@@ -22,7 +22,7 @@ import {
 import { getDiscussionSlug } from '../../../utils/globalFunctions';
 import { get } from '../../../utils/routeMap';
 
-type PageFormProps = {
+type Props = {
   headerTitle: string,
   headerSubtitle: string,
   headerImgUrl: string,
@@ -54,7 +54,7 @@ const DumbPageForm = ({
   handleInstructionsTitleChange,
   handleInstructionsContentChange,
   handlePropositionSectionTitleChange
-}: PageFormProps) => {
+}: Props) => {
   const editLocaleInUppercase = editLocale.toUpperCase();
   const headerTitlePh = `${I18n.t('administration.ph.headerTitle')} ${editLocaleInUppercase}`;
   const headerSubtitlePh = `${I18n.t('administration.ph.headerSubtitle')} ${editLocaleInUppercase}`;

@@ -157,7 +157,7 @@ export const createVariablesForProposalsMutation = (proposal: VoteProposal): Var
   descriptionEntries: convertEntriesToHTML(proposal.descriptionEntries)
 });
 
-type VoteSessionAdminProps = {
+type Props = {
   editLocale: string,
   i18n: {
     locale: string
@@ -187,7 +187,7 @@ type VoteSessionAdminProps = {
   router: Router
 };
 
-type VoteSessionAdminState = {
+type State = {
   firstWarningDisplayed: boolean,
   secondWarningDisplayed: boolean,
   refetching: boolean
@@ -216,8 +216,8 @@ export const getProposalValidationErrors = (p: VoteProposalMap, editLocale: stri
   return errors;
 };
 
-class VoteSessionAdmin extends React.Component<VoteSessionAdminProps, VoteSessionAdminState> {
-  constructor(props: VoteSessionAdminProps) {
+class VoteSessionAdmin extends React.Component<Props, State> {
+  constructor(props: Props) {
     super(props);
     this.state = {
       firstWarningDisplayed: false,
