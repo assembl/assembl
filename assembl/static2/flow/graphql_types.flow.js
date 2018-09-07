@@ -189,6 +189,8 @@ export type BrightMirrorFictionQuery = {|
     | {}
     | {}
     | {
+        // The ID of the object.
+        id: string,
         // A Subject of the post in a given language.
         subject: ?string,
         // A Body of the post (the main content of the post). in a given language.
@@ -300,6 +302,20 @@ export type DiscussionPreferencesQuery = {|
   |}
 |};
 
+export type DiscussionDataQueryVariables = {|
+  nextView?: ?string
+|};
+
+export type DiscussionDataQuery = {|
+  // The discussion object metadata.
+  discussion: ?{|
+    loginData: ?{|
+      local: ?boolean,
+      url: string
+    |}
+  |}
+|};
+
 export type IdeaQueryVariables = {|
   lang: string,
   id: string
@@ -360,7 +376,8 @@ export type IdeaQuery = {|
 
 export type IdeaWithPostsQueryVariables = {|
   id: string,
-  lang?: ?string
+  lang?: ?string,
+  additionalFields: boolean
 |};
 
 export type IdeaWithPostsQuery = {|
@@ -435,6 +452,8 @@ export type IdeaWithPostsQuery = {|
             node: ?{|
               // The ID of the object.
               id: string,
+              // A Subject of the post in a given language.
+              subject: ?string,
               // The parent of a Post, if the Post is a reply to an existing Post. The Relay.Node ID type of the Post object.
               parentId: ?string,
               // The date that the object was created, in UTC timezone, in ISO 8601 format.
@@ -486,6 +505,29 @@ export type IdeaWithPostsQuery = {|
                 dontUnderstand: ?number,
                 // The number of Sentiments requesting "more_info" on the post.
                 moreInfo: ?number
+              |},
+              creator: ?{|
+                // The ID of the object.
+                id: string,
+                // The unique database identifier of the User.
+                userId: number,
+                // How the User is represented throughout the debate. If a user-name exists, this will be chosen. If it does not, the name is determined.
+                displayName: ?string,
+                // A boolean flag that shows if the User is deleted.
+                // If True, the User information is cleansed from the system, and the User can no longer log in.
+                isDeleted: ?boolean,
+                // A boolean flag describing if the User is a machine user or human user.
+                isMachine: ?boolean,
+                // The preferences of the User.
+                preferences: ?{|
+                  // The harvesting Translation preference.
+                  harvestingTranslation: ?{|
+                    // The source locale of the translation.
+                    localeFrom: string,
+                    // The target locale of the translation.
+                    localeInto: string
+                  |}
+                |}
               |}
             |}
           |}>
@@ -715,6 +757,8 @@ export type LegalContentsQuery = {|
     cookiesPolicy: ?string,
     // A Privacy Policy in a given language.
     privacyPolicy: ?string,
+    // A User Guidelines in a given language.
+    userGuidelines: ?string,
     // A list of possible languages of the entity as LangStringEntry objects.
     legalNoticeEntries: ?Array<?{|
       // The ISO 639-1 locale code of the language the content represents.
@@ -738,6 +782,13 @@ export type LegalContentsQuery = {|
     |}>,
     // A list of possible languages of the entity as LangStringEntry objects.
     privacyPolicyEntries: ?Array<?{|
+      // The ISO 639-1 locale code of the language the content represents.
+      localeCode: string,
+      // The unicode encoded string representation of the content.
+      value: ?string
+    |}>,
+    // A list of possible languages of the entity as LangStringEntry objects.
+    userGuidelinesEntries: ?Array<?{|
       // The ISO 639-1 locale code of the language the content represents.
       localeCode: string,
       // The unicode encoded string representation of the content.
@@ -1729,12 +1780,14 @@ export type TabsConditionQuery = {|
   hasSyntheses: ?boolean,
   // A boolean flag of whether a debate has set a legal notice.
   hasLegalNotice: ?boolean,
-  // A boolean flag of whether a debate has set a terms and conditions page.
+  // A boolean flag of whether a debate has set terms and conditions.
   hasTermsAndConditions: ?boolean,
-  // A boolean flag of whether a debate has set a cookie policy page.
+  // A boolean flag of whether a debate has set a cookie policy.
   hasCookiesPolicy: ?boolean,
-  // A boolean flag of whether a debate has set a privacy policy page.
+  // A boolean flag of whether a debate has set a privacy policy.
   hasPrivacyPolicy: ?boolean,
+  // A boolean flag of whether a debate has set user guidelines.
+  hasUserGuidelines: ?boolean,
   // The discussion object metadata.
   discussion: ?{|
     // A URL for the homepage (optional). Often placed on the logo.
@@ -4403,7 +4456,8 @@ export type UpdateLegalContentsMutationVariables = {|
   legalNoticeEntries: Array<?LangStringEntryInput>,
   termsAndConditionsEntries: Array<?LangStringEntryInput>,
   cookiesPolicyEntries: Array<?LangStringEntryInput>,
-  privacyPolicyEntries: Array<?LangStringEntryInput>
+  privacyPolicyEntries: Array<?LangStringEntryInput>,
+  userGuidelinesEntries: Array<?LangStringEntryInput>
 |};
 
 export type UpdateLegalContentsMutation = {|
@@ -4433,6 +4487,13 @@ export type UpdateLegalContentsMutation = {|
       |}>,
       // A list of possible languages of the entity as LangStringEntry objects.
       privacyPolicyEntries: ?Array<?{|
+        // The ISO 639-1 locale code of the language the content represents.
+        localeCode: string,
+        // The unicode encoded string representation of the content.
+        value: ?string
+      |}>,
+      // A list of possible languages of the entity as LangStringEntry objects.
+      userGuidelinesEntries: ?Array<?{|
         // The ISO 639-1 locale code of the language the content represents.
         localeCode: string,
         // The unicode encoded string representation of the content.
@@ -5608,6 +5669,8 @@ export type AttachmentFragment = {|
 |};
 
 export type BrightMirrorFictionFragment = {|
+  // The ID of the object.
+  id: string,
   // A Subject of the post in a given language.
   subject: ?string,
   // A Body of the post (the main content of the post). in a given language.

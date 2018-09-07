@@ -1,4 +1,5 @@
 fragment BrightMirrorFiction on Post {
+  id
   subject(lang: $contentLocale)
   body(lang: $contentLocale)
   creationDate
