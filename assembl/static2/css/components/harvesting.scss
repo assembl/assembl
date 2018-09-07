@@ -7,6 +7,7 @@
   position: absolute;
   left: 0;
   z-index: 99;
+  padding-top: 10px;
 }
 
 .left-side-harvesting-button {
@@ -85,6 +86,26 @@
 
   svg {
     margin: 4px 0 0 4px;
+  }
+}
+
+.harvesting-close-button {
+  position: absolute;
+  right: -9px;
+  top: 2px;
+  border: 1px solid $grey2;
+  border-radius: 50%;
+  background-color: $white;
+  height: 17px;
+  font-size: 11px;
+  line-height: 13px;
+  padding-left: 1px;
+  cursor: pointer;
+
+  .assembl-icon-cancel {
+    &:before {
+      font-size: 10px;
+    }
   }
 }
 

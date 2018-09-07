@@ -375,6 +375,11 @@ class DumbHarvestingBox extends React.Component<Props, State> {
     const hasFooter = disabled || isEditable || isSubmitted;
     return (
       <div className={isSubmitted ? 'submitted-harvesting' : ''}>
+        <div>
+          <div className="harvesting-close-button">
+            <span className="assembl-icon-cancel grey" />
+          </div>
+        </div>
         {(extractNature || extractAction) && (
           <div>
             <div className="box-icon">

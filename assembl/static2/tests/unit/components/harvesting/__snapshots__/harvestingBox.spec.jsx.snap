@@ -4,6 +4,15 @@ exports[`harvestingBox component should match harvestingBox snapshot 1`] = `
 <div
   className=""
 >
+  <div>
+    <div
+      className="harvesting-close-button"
+    >
+      <span
+        className="assembl-icon-cancel grey"
+      />
+    </div>
+  </div>
   <div
     className="theme-box harvesting-box active-box"
   >
@@ -209,6 +218,15 @@ exports[`harvestingBox component should match submitted harvestingBox snapshot 1
 <div
   className="submitted-harvesting"
 >
+  <div>
+    <div
+      className="harvesting-close-button"
+    >
+      <span
+        className="assembl-icon-cancel grey"
+      />
+    </div>
+  </div>
   <div
     className="theme-box harvesting-box active-box"
   >
@@ -438,6 +456,15 @@ exports[`harvestingBox component should match submitted harvestingBox without nu
 <div
   className="submitted-harvesting"
 >
+  <div>
+    <div
+      className="harvesting-close-button"
+    >
+      <span
+        className="assembl-icon-cancel grey"
+      />
+    </div>
+  </div>
   <div
     className="theme-box harvesting-box active-box"
   >
