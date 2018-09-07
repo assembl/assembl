@@ -92,7 +92,7 @@
     "bootstrap": "^3.3.7",
     "classnames": "^2.2.5",
     "draft-convert": "^2",
-    "draft-js": "^0.10.1",
+    "draft-js": "^0.10.5",
     "final-form": "^4.8.2",
     "final-form-arrays": "^1.0.4",
     "graphql": "^0.10.5",
