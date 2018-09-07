@@ -15,7 +15,7 @@ const signupGeneralError = error => ({
 export const signupAction = payload => dispatch =>
   signUp(payload)
     .then(() => {
-      const relevantCookies = COOKIE_TYPES.filter(c => c === 'ACCEPT_CGU' || c === 'ACCEPT_PRIVACY_ON_DISCUSSION');
+      const relevantCookies = COOKIE_TYPES.filter(c => c === 'ACCEPT_CGU' || c === 'ACCEPT_PRIVACY_POLICY_ON_DISCUSSION');
       setCookieItem('cookies_configuration', relevantCookies);
       dispatch(signupSuccess());
     })
