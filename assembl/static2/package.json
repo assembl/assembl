@@ -139,7 +139,7 @@
     "reselect": "^3.0.1",
     "searchkit": "^2.3.0",
     "smoothscroll-polyfill": "^0.3.6",
-    "url-join": "^2.0.0"
+    "url-join": "^1.1.0"
   },
   "//": "See https://facebook.github.io/jest/docs/webpack.html for more info",
   "jest": {
