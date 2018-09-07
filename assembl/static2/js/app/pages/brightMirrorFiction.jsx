@@ -26,14 +26,14 @@ import type { FictionToolbarProps } from '../components/debate/brightMirror/fict
 import type { FictionBodyProps } from '../components/debate/brightMirror/fictionBody';
 
 // Define types
-type BrightMirrorFictionData = {
+export type BrightMirrorFictionData = {
   /** Fiction object formatted through GraphQL  */
   fiction: BrightMirrorFictionFragment,
   /** GraphQL error object used to handle fetching errors */
   error: Object
 };
 
-type BrightMirrorFictionProps = {
+export type BrightMirrorFictionProps = {
   /** Fiction data information fetched from GraphQL */
   data: BrightMirrorFictionData,
   /** URL slug */
@@ -55,12 +55,14 @@ type BrightMirrorFictionState = {
   content: string
 };
 
-class BrightMirrorFiction extends Component<BrightMirrorFictionProps, BrightMirrorFictionState> {
-  constructor(props) {
+const EMPTY_STRING = '';
+
+export class BrightMirrorFiction extends Component<BrightMirrorFictionProps, BrightMirrorFictionState> {
+  constructor(props: BrightMirrorFictionProps) {
     super(props);
     this.state = {
-      title: this.props.data.fiction.subject ? this.props.data.fiction.subject : '',
-      content: this.props.data.fiction.body ? this.props.data.fiction.body : ''
+      title: props.data.fiction.subject ? props.data.fiction.subject : EMPTY_STRING,
+      content: props.data.fiction.body ? props.data.fiction.body : EMPTY_STRING
     };
   }
 
@@ -75,7 +77,7 @@ class BrightMirrorFiction extends Component<BrightMirrorFictionProps, BrightMirr
 
     // Define variables
     const { fiction } = data;
-    const getDisplayName = () => (fiction.creator && fiction.creator.displayName ? fiction.creator.displayName : '');
+    const getDisplayName = () => (fiction.creator && fiction.creator.displayName ? fiction.creator.displayName : EMPTY_STRING);
     const displayName = fiction.creator && fiction.creator.isDeleted ? I18n.t('deletedUser') : getDisplayName();
 
     // Define user permission
@@ -101,12 +103,15 @@ class BrightMirrorFiction extends Component<BrightMirrorFictionProps, BrightMirr
     // Define components props
     const circleAvatarProps: CircleAvatarProps = {
       username: displayName,
-      src: fiction.creator && fiction.creator.image && fiction.creator.image.externalUrl ? fiction.creator.image.externalUrl : ''
+      src:
+        fiction.creator && fiction.creator.image && fiction.creator.image.externalUrl
+          ? fiction.creator.image.externalUrl
+          : EMPTY_STRING
     };
 
     const fictionHeaderProps: FictionHeaderProps = {
       authorFullname: displayName,
-      publishedDate: fiction.creationDate ? fiction.creationDate.toString() : '',
+      publishedDate: fiction.creationDate ? fiction.creationDate.toString() : EMPTY_STRING,
       displayedPublishedDate: I18n.l(fiction.creationDate, { dateFormat: 'date.format' }),
       circleAvatar: { ...circleAvatarProps }
     };

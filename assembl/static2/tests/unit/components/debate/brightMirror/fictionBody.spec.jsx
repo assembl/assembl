@@ -1,10 +1,8 @@
 // @flow
 import React from 'react';
-/* eslint-disable import/no-extraneous-dependencies */
 import initStoryshots from '@storybook/addon-storyshots';
 import { configure, shallow, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-/* eslint-enable */
 
 import FictionBody from '../../../../../js/app/components/debate/brightMirror/fictionBody';
 import type { FictionBodyProps } from '../../../../../js/app/components/debate/brightMirror/fictionBody';

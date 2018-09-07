@@ -1,10 +1,8 @@
 // @flow
 import React from 'react';
-/* eslint-disable import/no-extraneous-dependencies */
 import initStoryshots from '@storybook/addon-storyshots';
 import { configure, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-/* eslint-enable */
 
 import InstructionsText from '../../../../../js/app/components/debate/brightMirror/instructionsText';
 import { customInstructionsText } from '../../../../../js/app/stories/components/debate/brightMirror/instructionsText.stories';

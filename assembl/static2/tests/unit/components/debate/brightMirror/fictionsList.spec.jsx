@@ -1,9 +1,7 @@
 // @flow
 import React from 'react';
-/* eslint-disable import/no-extraneous-dependencies */
 import { configure, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-/* eslint-enable */
 
 import FictionsList from '../../../../../js/app/components/debate/brightMirror/fictionsList';
 import { customFictionsList } from '../../../../../js/app/stories/components/debate/brightMirror/fictionsList.stories';

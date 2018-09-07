@@ -1,10 +1,8 @@
 // @flow
 import React from 'react';
-/* eslint-disable import/no-extraneous-dependencies */
 import initStoryshots from '@storybook/addon-storyshots';
 import { configure, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-/* eslint-enable */
 
 import FictionPreview from '../../../../../js/app/components/debate/brightMirror/fictionPreview';
 import EditPostButton from '../../../../../js/app/components/debate/common/editPostButton';
