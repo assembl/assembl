@@ -3,12 +3,11 @@ import difference from 'lodash/difference';
 import isEqual from 'lodash/isEqual';
 import type { ApolloClient } from 'react-apollo';
 
-import { convertEntriesToHTML } from '../../../utils/draftjs';
 import type { SurveyAdminValues } from './types.flow';
 import createThematicMutation from '../../../graphql/mutations/createThematic.graphql';
 import deleteThematicMutation from '../../../graphql/mutations/deleteThematic.graphql';
 import updateThematicMutation from '../../../graphql/mutations/updateThematic.graphql';
-import { createSave, convertToEntries, getFileVariable } from '../../form/utils';
+import { createSave, convertToEntries, convertRichTextToEntries, getFileVariable } from '../../form/utils';
 
 function getVideoVariable(video, initialVideo) {
   if (!video) {
@@ -24,9 +23,9 @@ function getVideoVariable(video, initialVideo) {
     htmlCode: video.media ? video.media.htmlCode : '',
     mediaFile: mediaFile,
     titleEntries: video.title ? convertToEntries(video.title) : null,
-    descriptionEntriesBottom: video.descriptionBottom ? convertEntriesToHTML(convertToEntries(video.descriptionBottom)) : null,
-    descriptionEntriesSide: video.descriptionSide ? convertEntriesToHTML(convertToEntries(video.descriptionSide)) : null,
-    descriptionEntriesTop: video.descriptionTop ? convertEntriesToHTML(convertToEntries(video.descriptionTop)) : null
+    descriptionEntriesBottom: video.descriptionBottom ? convertRichTextToEntries(video.descriptionBottom) : null,
+    descriptionEntriesSide: video.descriptionSide ? convertRichTextToEntries(video.descriptionSide) : null,
+    descriptionEntriesTop: video.descriptionTop ? convertRichTextToEntries(video.descriptionTop) : null
   };
   return videoV;
 }

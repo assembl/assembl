@@ -1,5 +1,5 @@
 // @flow
-import type { FileValue, I18nValue } from '../../form/types.flow';
+import type { FileValue, I18nValue, I18nRichTextValue } from '../../form/types.flow';
 
 type ThemeValue = {
   id: string,
@@ -9,7 +9,7 @@ type ThemeValue = {
   identifier: string,
   announcement: {
     title: I18nValue,
-    body: I18nValue
+    body: I18nRichTextValue
   }
 };
 

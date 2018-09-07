@@ -93,8 +93,8 @@ export const getAvailableLocales = (locale: string, translations: { [string]: an
     @returns {function} Updater function (see immutable-js) that updates the value of the
     entry with given locale by the given value
 */
-// Map<string, any> in case of rich text (raw content state converted to immutable)
-type LangstringValue = string | Map<string, any>;
+// EditorState in case of rich text
+type LangstringValue = string | EditorState;
 type LangstringEntriesList = List<Map<string, LangstringValue>>;
 export const updateInLangstringEntries = (locale: string, value: LangstringValue) => (
   entries: LangstringEntriesList = List()

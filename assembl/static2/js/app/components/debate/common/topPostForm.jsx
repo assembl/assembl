@@ -5,11 +5,11 @@ import { compose, graphql } from 'react-apollo';
 import { FormGroup, Button } from 'react-bootstrap';
 import { I18n, Translate } from 'react-redux-i18n';
 import classNames from 'classnames';
-import type { RawContentState } from 'draft-js';
+import { EditorState } from 'draft-js';
 
 import createPostMutation from '../../../graphql/mutations/createPost.graphql';
 import uploadDocumentMutation from '../../../graphql/mutations/uploadDocument.graphql';
-import { convertRawContentStateToHTML, rawContentStateIsEmpty } from '../../../utils/draftjs';
+import { convertContentStateToHTML, editorStateIsEmpty } from '../../../utils/draftjs';
 import { getDomElementOffset } from '../../../utils/globalFunctions';
 import { displayAlert, promptForLoginOr } from '../../../utils/utilityManager';
 import { TextInputWithRemainingChars } from '../../common/textInputWithRemainingChars';
@@ -35,7 +35,7 @@ type TopPostFormProps = {
 };
 
 type TopPostFormState = {
-  body: null | RawContentState,
+  body: EditorState,
   isActive: boolean,
   subject: string,
   submitting: boolean
@@ -55,7 +55,7 @@ class TopPostForm extends React.Component<TopPostFormProps, TopPostFormState> {
   constructor() {
     super();
     this.state = {
-      body: null,
+      body: EditorState.createEmpty(),
       isActive: false,
       subject: '',
       submitting: false
@@ -80,7 +80,7 @@ class TopPostForm extends React.Component<TopPostFormProps, TopPostFormState> {
   resetForm = () => {
     this.displayForm(false);
     this.setState({ subject: '' });
-    this.setState({ body: null });
+    this.setState({ body: EditorState.createEmpty() });
   };
 
   createTopPost = () => {
@@ -97,7 +97,7 @@ class TopPostForm extends React.Component<TopPostFormProps, TopPostFormState> {
     } = this.props;
     const { body, subject } = this.state;
     this.setState({ submitting: true });
-    const bodyIsEmpty = !body || rawContentStateIsEmpty(body);
+    const bodyIsEmpty = editorStateIsEmpty(body);
     if ((subject || this.props.ideaOnColumn) && !bodyIsEmpty) {
       displayAlert('success', I18n.t('loading.wait'));
 
@@ -110,7 +110,7 @@ class TopPostForm extends React.Component<TopPostFormProps, TopPostFormState> {
           subject: subject || null,
           messageClassifier: messageClassifier || null,
           // use the updated content state with new entities
-          body: convertRawContentStateToHTML(result.contentState),
+          body: convertContentStateToHTML(result.contentState),
           attachments: result.documentIds
         };
 
@@ -184,12 +184,11 @@ class TopPostForm extends React.Component<TopPostFormProps, TopPostFormState> {
           {this.state.isActive || this.props.ideaOnColumn ? (
             <div className="margin-m">
               <RichTextEditor
-                key={this.state.body ? 'notEmpty' : 'empty'}
-                rawContentState={this.state.body}
+                editorState={this.state.body}
                 handleInputFocus={this.handleInputFocus}
                 maxLength={TEXT_AREA_MAX_LENGTH}
+                onChange={this.updateBody}
                 placeholder={I18n.t(this.props.bodyPlaceholder)}
-                updateContentState={this.updateBody}
                 withAttachmentButton
               />
               {!this.props.ideaOnColumn ? (

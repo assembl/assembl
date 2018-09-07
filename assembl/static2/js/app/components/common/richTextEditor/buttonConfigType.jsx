@@ -1,10 +1,8 @@
 // @flow
-import { DraftBlockType, DraftInlineStyle } from 'draft-js';
-
 export type ButtonConfigType = {
   icon: string,
   id: string,
   label: string,
-  style?: DraftBlockType | DraftInlineStyle,
+  style?: string,
   type: 'block-type' | 'style' | 'insert-component'
 };

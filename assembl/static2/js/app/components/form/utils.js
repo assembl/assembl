@@ -1,7 +1,8 @@
 // @flow
 import { I18n } from 'react-redux-i18n';
 
-import type { I18nValue, FileValue, FileVariable, MutationsPromises, SaveStatus } from './types.flow';
+import type { I18nValue, FileValue, FileVariable, MutationsPromises, I18nRichTextValue, SaveStatus } from './types.flow';
+import { convertEditorStateToHTML, convertEntriesToEditorState } from '../../utils/draftjs';
 import { displayAlert } from '../../utils/utilityManager';
 import { runSerial } from '../administration/saveButton';
 
@@ -14,7 +15,22 @@ export function i18nValueIsEmpty(v: I18nValue): boolean {
   );
 }
 
-export function convertEntries(_entries: LangstringEntries): I18nValue {
+export function richTextI18nValueIsEmpty(v: I18nRichTextValue): boolean {
+  return (
+    !v ||
+    Object.keys(v)
+      .map(key => v[key]) // flow doesn't treat Object.values as expected, see: https://github.com/facebook/flow/issues/2221
+      .every(es => !es || !es.getCurrentContent().hasText())
+  );
+}
+
+// [{ localeCode: 'fr', value: 'foo' }] => { fr: 'foo' }
+export function convertEntriesToI18nValue<T>(
+  _entries: Array<{
+    localeCode: string,
+    value: T
+  }>
+): { [string]: T } {
   const entries = _entries || [];
   return entries.reduce((result, item) => {
     const { localeCode, value } = item;
@@ -23,6 +39,10 @@ export function convertEntries(_entries: LangstringEntries): I18nValue {
       [localeCode]: value
     };
   }, {});
+}
+
+export function convertEntriesToI18nRichText(entries: RichTextLangstringEntries): I18nRichTextValue {
+  return convertEntriesToI18nValue(convertEntriesToEditorState(entries));
 }
 
 export function getValidationState(error: ?string, touched: ?boolean): ?string {
@@ -51,13 +71,20 @@ export function convertToEntries(valuesByLocale: I18nValue): LangstringEntries {
   }));
 }
 
-export function getFileVariable(img: FileValue, initialImg: FileValue): FileVariable {
+export function convertRichTextToEntries(valuesByLocale: I18nRichTextValue): LangstringEntries {
+  return Object.keys(valuesByLocale).map(locale => ({
+    localeCode: locale,
+    value: convertEditorStateToHTML(valuesByLocale[locale])
+  }));
+}
+
+export function getFileVariable(img: FileValue, initialImg: ?FileValue): FileVariable {
   if (initialImg && !img) {
     return 'TO_DELETE';
   }
 
-  // If thematic.img.externalUrl is an object, it means it's a File.
-  // We need to send image: null if we didn't change the image.
-  const variab = img && typeof img.externalUrl === 'object' ? img.externalUrl : null;
+  // If thematic.img.externalUrl is a File,
+  // we need to send image: null if we didn't change the image.
+  const variab = img && img.externalUrl instanceof File ? img.externalUrl : null;
   return variab;
 }

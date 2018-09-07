@@ -16,6 +16,6 @@ export function postLoadFormat(data: DiscussionPreferencesQuery): PersonalizeInt
   const { discussionPreferences } = data;
   return {
     title: discussionPreferences && discussionPreferences.tabTitle,
-    favicon: discussionPreferences ? discussionPreferences.favicon : null
+    favicon: (discussionPreferences && discussionPreferences.favicon) || null
   };
 }

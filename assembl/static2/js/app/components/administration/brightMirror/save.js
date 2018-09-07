@@ -8,8 +8,7 @@ import { PHASES } from '../../../constants';
 import createThematicMutation from '../../../graphql/mutations/createThematic.graphql';
 import deleteThematicMutation from '../../../graphql/mutations/deleteThematic.graphql';
 import updateThematicMutation from '../../../graphql/mutations/updateThematic.graphql';
-import { createSave, convertToEntries, getFileVariable } from '../../form/utils';
-import { convertEntriesToHTML } from '../../../utils/draftjs';
+import { createSave, convertRichTextToEntries, convertToEntries, getFileVariable } from '../../form/utils';
 
 function getVariables(theme, initialTheme, order) {
   const initialImg = initialTheme ? initialTheme.img : null;
@@ -21,7 +20,7 @@ function getVariables(theme, initialTheme, order) {
     image: getFileVariable(theme.img, initialImg),
     announcement: {
       titleEntries: convertToEntries(theme.announcement.title),
-      bodyEntries: convertEntriesToHTML(convertToEntries(theme.announcement.body))
+      bodyEntries: convertRichTextToEntries(theme.announcement.body)
     },
     order: order
   };

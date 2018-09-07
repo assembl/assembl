@@ -1,4 +1,5 @@
 // @flow
+import { EditorState } from 'draft-js';
 import React from 'react';
 import { type FieldRenderProps } from 'react-final-form';
 import { ControlLabel, FormGroup } from 'react-bootstrap';
@@ -7,7 +8,7 @@ import RichTextEditor from '../common/richTextEditor';
 import Error from './error';
 import { getValidationState } from './utils';
 
-type multilingualValue = { [string]: string };
+type multilingualValue = { [string]: EditorState };
 
 type Props = {
   editLocale: string,
@@ -23,24 +24,22 @@ type Props = {
 
 const RichTextFieldAdapter = ({
   editLocale,
-  input: { name, onChange, value, ...otherListeners },
+  input: { name, onBlur, onChange, value, ...otherListeners },
   label,
   meta: { error, touched },
   ...rest
 }: Props) => {
-  const valueInLocale = value[editLocale] || null;
-  const key = valueInLocale ? 'notEmpty' : 'empty';
+  const valueInLocale = value[editLocale] || EditorState.createEmpty();
   return (
     <FormGroup controlId={name} validationState={getValidationState(error, touched)}>
       {valueInLocale ? <ControlLabel>{label}</ControlLabel> : null}
       <RichTextEditor
         {...otherListeners}
         {...rest}
-        key={key}
-        rawContentState={valueInLocale}
+        editorState={valueInLocale}
         placeholder={label}
         toolbarPosition="bottom"
-        updateContentState={cs => onChange({ ...value, [editLocale]: cs })}
+        onChange={es => onChange({ ...value, [editLocale]: es })}
         withAttachmentButton={false}
       />
       <Error name={name} />

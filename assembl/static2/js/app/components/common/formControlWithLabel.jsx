@@ -8,14 +8,14 @@
 import * as React from 'react';
 import { ControlLabel, FormGroup, FormControl, HelpBlock } from 'react-bootstrap';
 import { I18n } from 'react-redux-i18n';
-import { type RawContentState } from 'draft-js';
+import { EditorState } from 'draft-js';
 
 import RichTextEditor from './richTextEditor';
 import { getValidationState } from '../administration/voteSession/voteProposalForm';
 import Helper from './helper';
 
 type FormControlWithLabelProps = {
-  value: ?(string | RawContentState),
+  value: ?(string | EditorState),
   required: boolean,
   onChange: Function,
   type: string,
@@ -82,7 +82,14 @@ class FormControlWithLabel extends React.Component<FormControlWithLabelProps, Fo
     const { value, required } = this.props;
     let errorMessage = '';
     let validationState = null;
-    const valueSize = value ? value.length : 0;
+    let valueSize = 0;
+    if (value) {
+      if (typeof value === 'string') {
+        valueSize = value.length;
+      } else {
+        valueSize = value.getCurrentContent().getPlainText().length;
+      }
+    }
     if (required && valueSize === 0) {
       errorMessage = I18n.t('error.required');
       validationState = 'error';
@@ -98,14 +105,13 @@ class FormControlWithLabel extends React.Component<FormControlWithLabelProps, Fo
 
   renderRichTextEditor = () => {
     const { onChange, value } = this.props;
-    const key = value ? 'notEmpty' : 'empty';
+    const editorState = (typeof value !== 'string' && value) || EditorState.createEmpty();
     return (
       <RichTextEditor
-        key={key}
-        rawContentState={value}
+        editorState={editorState}
         placeholder={this.getLabel()}
         toolbarPosition="bottom"
-        updateContentState={cs => onChange(cs)}
+        onChange={onChange}
         withAttachmentButton={false}
       />
     );

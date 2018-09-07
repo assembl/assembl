@@ -4,13 +4,13 @@ import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
 import { Row, Col, FormGroup, Button } from 'react-bootstrap';
 import { Translate, I18n } from 'react-redux-i18n';
-import type { RawContentState } from 'draft-js';
+import { EditorState } from 'draft-js';
 import classNames from 'classnames';
 
 import createPostMutation from '../../../graphql/mutations/createPost.graphql';
 import uploadDocumentMutation from '../../../graphql/mutations/uploadDocument.graphql';
 import { displayAlert, promptForLoginOr } from '../../../utils/utilityManager';
-import { convertRawContentStateToHTML, rawContentStateIsEmpty } from '../../../utils/draftjs';
+import { convertContentStateToHTML, editorStateIsEmpty } from '../../../utils/draftjs';
 import RichTextEditor from '../../common/richTextEditor';
 import attachmentsPlugin from '../../common/richTextEditor/attachmentsPlugin';
 import { TEXT_AREA_MAX_LENGTH } from '../common/topPostForm';
@@ -32,7 +32,7 @@ type AnswerFormProps = {
 };
 
 type AnswerFormState = {
-  body: null | RawContentState,
+  body: EditorState,
   submitting: boolean,
   isHidden: boolean
 };
@@ -41,7 +41,7 @@ class AnswerForm extends React.PureComponent<AnswerFormProps, AnswerFormState> {
   constructor() {
     super();
     this.state = {
-      body: null,
+      body: EditorState.createEmpty(),
       submitting: false,
       isHidden: false
     };
@@ -55,7 +55,7 @@ class AnswerForm extends React.PureComponent<AnswerFormProps, AnswerFormState> {
 
   handleCancel = () => {
     const { hideAnswerForm } = this.props;
-    this.setState({ body: null }, hideAnswerForm);
+    this.setState({ body: EditorState.createEmpty() }, hideAnswerForm);
   };
 
   updateBody = (newValue) => {
@@ -73,7 +73,7 @@ class AnswerForm extends React.PureComponent<AnswerFormProps, AnswerFormState> {
     const { createPost, contentLocale, parentId, ideaId, refetchIdea, hideAnswerForm, uploadDocument } = this.props;
     const { body } = this.state;
     this.setState({ submitting: true });
-    const bodyIsEmpty = !body || rawContentStateIsEmpty(body);
+    const bodyIsEmpty = !body || editorStateIsEmpty(body);
     if (!bodyIsEmpty) {
       // first we upload the new documents
       const uploadDocumentsPromise = attachmentsPlugin.uploadNewAttachments(body, uploadDocument);
@@ -86,14 +86,14 @@ class AnswerForm extends React.PureComponent<AnswerFormProps, AnswerFormState> {
           contentLocale: contentLocale,
           ideaId: ideaId,
           parentId: parentId,
-          body: convertRawContentStateToHTML(result.contentState),
+          body: convertContentStateToHTML(result.contentState),
           attachments: result.documentIds
         };
         displayAlert('success', I18n.t('loading.wait'));
         createPost({ variables: variables })
           .then((res) => {
             const postId = res.data.createPost.post.id;
-            this.setState({ submitting: false, body: null }, () => {
+            this.setState({ submitting: false, body: EditorState.createEmpty() }, () => {
               hideAnswerForm();
               // Execute refetchIdea after the setState otherwise we can get a
               // warning setState called on unmounted component.
@@ -137,12 +137,11 @@ class AnswerForm extends React.PureComponent<AnswerFormProps, AnswerFormState> {
             <div className="answer-form-inner">
               <FormGroup>
                 <RichTextEditor
-                  key={this.state.body ? 'notEmpty' : 'empty'}
-                  rawContentState={this.state.body}
+                  editorState={this.state.body}
                   handleInputFocus={this.handleInputFocus}
                   maxLength={TEXT_AREA_MAX_LENGTH}
                   placeholder={I18n.t('debate.toAnswer')}
-                  updateContentState={this.updateBody}
+                  onChange={this.updateBody}
                   textareaRef={textareaRef}
                   withAttachmentButton
                 />

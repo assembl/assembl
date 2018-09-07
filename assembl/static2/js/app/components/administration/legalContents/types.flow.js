@@ -1,10 +1,10 @@
 // @flow
-import type { I18nValue } from '../../form/types.flow';
+import type { I18nRichTextValue } from '../../form/types.flow';
 
 export type LegalContentsFormValues = {
-  legalNotice: I18nValue,
-  termsAndConditions: I18nValue,
-  cookiesPolicy: I18nValue,
-  privacyPolicy: I18nValue,
-  userGuidelines: I18nValue
+  legalNotice: I18nRichTextValue,
+  termsAndConditions: I18nRichTextValue,
+  cookiesPolicy: I18nRichTextValue,
+  privacyPolicy: I18nRichTextValue,
+  userGuidelines: I18nRichTextValue
 };

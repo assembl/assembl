@@ -1,8 +1,7 @@
 // @flow
 import type { ApolloClient } from 'react-apollo';
 import LegalContentsQuery from '../../../graphql/LegalContents.graphql';
-import { convertEntriesToRawContentState } from '../../../utils/draftjs';
-import { convertEntries } from '../../form/utils';
+import { convertEntriesToI18nRichText } from '../../form/utils';
 
 import type { LegalContentsFormValues } from './types.flow';
 
@@ -24,12 +23,10 @@ export const postLoadFormat = (data: LegalContentsQuery): LegalContentsFormValue
     userGuidelinesEntries
   } = data.legalContents;
   return {
-    legalNotice: legalNoticeEntries ? convertEntries(convertEntriesToRawContentState(legalNoticeEntries)) : {},
-    termsAndConditions: termsAndConditionsEntries
-      ? convertEntries(convertEntriesToRawContentState(termsAndConditionsEntries))
-      : {},
-    cookiesPolicy: cookiesPolicyEntries ? convertEntries(convertEntriesToRawContentState(cookiesPolicyEntries)) : {},
-    privacyPolicy: privacyPolicyEntries ? convertEntries(convertEntriesToRawContentState(privacyPolicyEntries)) : {},
-    userGuidelines: userGuidelinesEntries ? convertEntries(convertEntriesToRawContentState(userGuidelinesEntries)) : {}
+    legalNotice: legalNoticeEntries ? convertEntriesToI18nRichText(legalNoticeEntries) : {},
+    termsAndConditions: termsAndConditionsEntries ? convertEntriesToI18nRichText(termsAndConditionsEntries) : {},
+    cookiesPolicy: cookiesPolicyEntries ? convertEntriesToI18nRichText(cookiesPolicyEntries) : {},
+    privacyPolicy: privacyPolicyEntries ? convertEntriesToI18nRichText(privacyPolicyEntries) : {},
+    userGuidelines: userGuidelinesEntries ? convertEntriesToI18nRichText(userGuidelinesEntries) : {}
   };
 };

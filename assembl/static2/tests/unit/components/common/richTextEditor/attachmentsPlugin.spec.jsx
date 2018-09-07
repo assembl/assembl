@@ -1,4 +1,4 @@
-import { convertFromRaw, convertToRaw, ContentState, Entity } from 'draft-js';
+import { convertFromRaw, convertToRaw, ContentState, EditorState, Entity } from 'draft-js';
 
 import plugin from '../../../../../js/app/components/common/richTextEditor/attachmentsPlugin';
 
@@ -74,6 +74,8 @@ const rcs = {
     }
   }
 };
+
+const es = EditorState.createWithContent(convertFromRaw(rcs));
 
 describe('attachmentsPlugin', () => {
   describe('blockToHTML function', () => {
@@ -214,7 +216,7 @@ describe('attachmentsPlugin', () => {
         }
       };
       const result = htmlToEntity(nodeName, node, createEntity);
-      const expected = '1';
+      const expected = '3';
       expect(result).toEqual(expected);
     });
   });
@@ -222,7 +224,7 @@ describe('attachmentsPlugin', () => {
   describe('getAttachments function', () => {
     const { getAttachments } = plugin;
     it('should return the list of all attachments ids', () => {
-      const result = getAttachments(rcs);
+      const result = getAttachments(es);
       // FIXME: entityKey values is quite unstable here. It seems that there is a side effect
       const expected = [
         { entityKey: '2', document: { id: '1234', title: 'Foobar', mimeType: 'application/pdf' } },
@@ -236,7 +238,7 @@ describe('attachmentsPlugin', () => {
   describe('getAttachmentsDocumentIds function', () => {
     const { getAttachmentsDocumentIds } = plugin;
     it('should return the list of all attachments ids', () => {
-      const result = getAttachmentsDocumentIds(rcs);
+      const result = getAttachmentsDocumentIds(es);
       const expected = ['1234', '1236'];
       expect(result).toEqual(expected);
     });

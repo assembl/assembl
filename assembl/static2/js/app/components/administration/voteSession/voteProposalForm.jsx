@@ -3,7 +3,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { I18n, Translate } from 'react-redux-i18n';
 import { OverlayTrigger, Button, Checkbox, FormGroup, HelpBlock } from 'react-bootstrap';
-import { type RawContentState } from 'draft-js';
+import { EditorState } from 'draft-js';
 
 import FormControlWithLabel from '../../common/formControlWithLabel';
 import { getEntryValueForLocale } from '../../../utils/i18n';
@@ -20,14 +20,14 @@ import {
   undeleteModule
 } from '../../../actions/adminActions/voteSession';
 import { displayCustomModal, displayModal, closeModal } from '../../../utils/utilityManager';
-import { rawContentStateIsEmpty } from '../../../utils/draftjs';
+import { editorStateIsEmpty } from '../../../utils/draftjs';
 import { createRandomId } from '../../../utils/globalFunctions';
 import CustomizeGaugeForm from './customizeGaugeForm';
 
 type VoteProposalFormProps = {
   index: number,
   title: string,
-  description: RawContentState,
+  description: EditorState,
   _toDelete: boolean,
   markAsToDelete: Function,
   updateTitle: Function,
@@ -115,7 +115,7 @@ const DumbVoteProposalForm = ({
 
   const isTitleEmpty = title === '' || title === null;
 
-  const isDescriptionEmpty = description === null || rawContentStateIsEmpty(description);
+  const isDescriptionEmpty = description === null || editorStateIsEmpty(description);
   const areFieldsEmpty = isDescriptionEmpty && isTitleEmpty;
 
   return (
@@ -250,7 +250,7 @@ const mapStateToProps = ({ admin }, { id, editLocale }) => {
     _toDelete: proposal.get('_toDelete', false),
     validationErrors: proposal.get('_validationErrors'),
     title: getEntryValueForLocale(proposal.get('titleEntries'), editLocale),
-    description: description && typeof description !== 'string' ? description.toJS() : null,
+    description: description || EditorState.createEmpty(),
     order: proposal.get('order'),
     proposalModules: proposal.get('modules').map(moduleId => modulesById.get(moduleId)),
     tokenModules: modulesInOrder.filter(
