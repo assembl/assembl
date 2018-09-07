@@ -249,7 +249,14 @@ Start as a user with sudo access
     sudo addgroup assembl_group
     sudo adduser assembl_user
     sudo usermod -G www-data -G assembl_group assembl_user
+    sudo adduser assembl_sudo_user
+    sudo usermod -aG sudo username
 
+After creating assembl_sudo_user, you should add two environement variables in you .rc file:
+
+.. code:: sh
+    _sudo_user = assembl_sudo_user
+    _sudo_password = assembl_sudo_user_password
 
 By default, postgres will not use passwords from postgres users who connect through the Unix socket domain (versus a network connection).
 So if you want to make your database to be safer and ask for password anyway, edit your /etc/postgresql/9.1/main/pg_hba.conf file and
