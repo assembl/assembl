@@ -3,12 +3,15 @@ import { mount, configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { DumbCookiesSelectorContainer } from '../../../../js/app/components/cookies/cookiesSelectorContainer';
 import CookiesSelector from '../../../../js/app/components/cookies/cookiesSelector';
-import { COOKIE_TRANSLATION_KEYS } from '../../../../js/app/constants';
+import { COOKIE_TRANSLATION_KEYS, COOKIES_CATEGORIES } from '../../../../js/app/constants';
 import { displayAlert } from '../../../../js/app/utils/utilityManager';
 
 configure({ adapter: new Adapter() });
 
 jest.mock('../../../../js/app/utils/utilityManager');
+
+const { userSession, matomo, privacyPolicy, cgu, locale } = COOKIE_TRANSLATION_KEYS;
+const { essential, analytics } = COOKIES_CATEGORIES;
 
 describe('CookiesSelectorContainer component', () => {
   let wrapper;
@@ -33,7 +36,7 @@ describe('CookiesSelectorContainer component', () => {
       expect(JSON.stringify(instance.getCookieObjectData('ACCEPT_SESSION_ON_DISCUSSION'))).toBe(
         JSON.stringify({
           category: 'essential',
-          name: COOKIE_TRANSLATION_KEYS.userSession
+          name: userSession
         })
       );
     });
@@ -44,7 +47,7 @@ describe('CookiesSelectorContainer component', () => {
         instance.getCookiesObjectFromArray([
           {
             category: 'essential',
-            name: COOKIE_TRANSLATION_KEYS.userSession,
+            name: userSession,
             accepted: true
           }
         ])
@@ -52,7 +55,7 @@ describe('CookiesSelectorContainer component', () => {
         essential: [
           {
             category: 'essential',
-            name: COOKIE_TRANSLATION_KEYS.userSession,
+            name: userSession,
             accepted: true
           }
         ]
@@ -86,8 +89,8 @@ describe('CookiesSelectorContainer component', () => {
   describe('handleToggle method', () => {
     it('should update the cookies in the state', () => {
       const updatedCookie = {
-        category: 'analytics',
-        name: COOKIE_TRANSLATION_KEYS.matomo,
+        category: analytics,
+        name: matomo,
         accepted: false,
         cookieType: 'REJECT_TRACKING_ON_DISCUSSION'
       };
@@ -97,10 +100,36 @@ describe('CookiesSelectorContainer component', () => {
         JSON.stringify({
           analytics: [
             {
-              category: 'analytics',
-              name: COOKIE_TRANSLATION_KEYS.matomo,
+              category: analytics,
+              name: matomo,
               accepted: false,
               cookieType: 'REJECT_TRACKING_ON_DISCUSSION'
+            }
+          ],
+          essential: [
+            {
+              category: essential,
+              name: userSession,
+              accepted: true,
+              cookieType: 'ACCEPT_SESSION_ON_DISCUSSION'
+            },
+            {
+              category: essential,
+              name: locale,
+              accepted: true,
+              cookieType: 'ACCEPT_LOCALE'
+            },
+            {
+              category: essential,
+              name: privacyPolicy,
+              accepted: true,
+              cookieType: 'ACCEPT_PRIVACY_POLICY_ON_DISCUSSION'
+            },
+            {
+              category: essential,
+              name: cgu,
+              accepted: true,
+              cookieType: 'ACCEPT_CGU'
             }
           ]
         })
@@ -114,7 +143,10 @@ describe('CookiesSelectorContainer component', () => {
       expect(updateAcceptedCookiesSpy.mock.calls.length).toBe(1);
       const date = new Date();
       date.setMonth(date.getMonth() + 13);
-      expect(document.cookie).toBe(`cookies_configuration=ACCEPT_TRACKING_ON_DISCUSSION; path=/;expires=${date}`);
+      expect(document.cookie).toBe(
+        // ignore the line length warning, this string has to be in one line
+        `cookies_configuration=ACCEPT_TRACKING_ON_DISCUSSION,ACCEPT_SESSION_ON_DISCUSSION,ACCEPT_LOCALE,ACCEPT_PRIVACY_POLICY_ON_DISCUSSION,ACCEPT_CGU; path=/;expires=${date}`
+      );
     });
   });
 });
