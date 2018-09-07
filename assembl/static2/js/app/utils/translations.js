@@ -11,6 +11,10 @@ const Translations = {
     cancel: "Annuler",
     validate: "Valider",
     delete: "Supprimer",
+    deleteConfirmation: {
+      confirmDeletionTitle: "Supprimer un élément",
+      confirmDeletionBody: "Etes-vous certain de vouloir supprimer cet élément ?"
+    },
     accountDeleted: "Votre compte a été supprimé avec succès",
     deletedUser: "Compte utilisateur supprimé",
     chatframe: {
@@ -56,8 +60,10 @@ const Translations = {
       cgu: "Conditions générales d'utilisation",
       matomoSettings: "Pour modifier les paramètres de ce cookie, veuillez cliquer ici",
       userSessionHelper: "Ce cookie est nécessaire pour vous maintenir connecté sur Assembl.",
-      localeHelper: "Ce cookie est nécessaire afin d'afficher les textes dans la langue de votre nagigateur ou bien celle que vous avez sélectionné dans la barre de navigation.",
-      privacyPolicyHelper: "Ce cookie permet d'enregistrer que vous avez accepté la politique de confidentialité de la consultation.",
+      localeHelper:
+        "Ce cookie est nécessaire afin d'afficher les textes dans la langue de votre nagigateur ou bien celle que vous avez sélectionné dans la barre de navigation.",
+      privacyPolicyHelper:
+        "Ce cookie permet d'enregistrer que vous avez accepté la politique de confidentialité de la consultation.",
       cguHelper: "Ce cookie permet d'enregistrer que vous avez accepté les conditions générales d'utilisation.",
       matomoHelper: "Ce cookie est utilisé à des fins statistiques concernant les participants à la consultation.",
       required: "Ce cookie est requis"
@@ -720,6 +726,10 @@ const Translations = {
         propositionSectionSubtitle: "Sous-titre de la section",
         descriptionPhase: "Description de la phase"
       },
+      tableOfThematics: {
+        confirmDeletionTitle: "Supprimer la thématique %{title}",
+        confirmDeletionBody: "Etes-vous certain de vouloir supprimer cette thématique ?"
+      },
       resourcesCenter: {
         createResource: "Ajouter un média",
         menuTitle: "Éditer le centre de ressources",
@@ -843,6 +853,10 @@ const Translations = {
     introduction: "Introduction",
     conclusion: "Conclusion",
     delete: "Delete",
+    deleteConfirmation: {
+      confirmDeletionTitle: "Delete an item",
+      confirmDeletionBody: "Are you sure that you wish to delete this item?"
+    },
     accountDeleted: "Your account has been successfully deleted",
     deletedUser: "Deleted user account",
     chatframe: {
@@ -886,7 +900,8 @@ const Translations = {
       privacyPolicy: "Privacy policy",
       matomoSettings: "To modify this cookie's setting please click here",
       userSessionHelper: "This cookie is necessary to maintain the user connected on Assembl.",
-      localeHelper: "This cookie is necessary to display the texts in the language of your browser or the one you selected in the navigation bar.",
+      localeHelper:
+        "This cookie is necessary to display the texts in the language of your browser or the one you selected in the navigation bar.",
       privacyPolicyHelper: "This cookie registers that you have accepted the privacy policy of the consultation.",
       cguHelper: "This cookie registers that you have accepted the terms and conditions of the consultation.",
       matomoHelper: "This cookie is used for stasticial purposes regarding the participants of the consultation.",
@@ -1541,6 +1556,10 @@ const Translations = {
         propositionSectionTitle: "Section title",
         propositionSectionSubtitle: "Section subtitle",
         descriptionPhase: "Description phase"
+      },
+      tableOfThematics: {
+        confirmDeletionTitle: "Delete %{title} theme",
+        confirmDeletionBody: "Are you sure that you wish to delete this theme?"
       },
       resourcesCenter: {
         createResource: "Add a media",

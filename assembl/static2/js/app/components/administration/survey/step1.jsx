@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import { Field } from 'react-final-form';
-import { I18n } from 'react-redux-i18n';
+import { I18n, Translate } from 'react-redux-i18n';
 
 import FieldArrayWithActions from '../../form/fieldArrayWithActions';
 import FileUploaderFieldAdapter from '../../form/fileUploaderFieldAdapter';
@@ -14,6 +14,7 @@ type Props = {
 
 const Step1 = ({ editLocale }: Props) => (
   <FieldArrayWithActions
+    confirmDeletion
     name="themes"
     renderFields={({ name }) => (
       <React.Fragment>
@@ -36,6 +37,12 @@ const Step1 = ({ editLocale }: Props) => (
     tooltips={{
       addTooltip: addThematicTooltip,
       deleteTooltip: deleteThematicTooltip
+    }}
+    confirmDeletionMessages={{
+      confirmDeletionTitle: ({ index }) => (
+        <Translate value="administration.tableOfThematics.confirmDeletionTitle" title={index} />
+      ),
+      confirmDeletionBody: ({ index }) => <Translate value="administration.tableOfThematics.confirmDeletionBody" title={index} />
     }}
   />
 );
