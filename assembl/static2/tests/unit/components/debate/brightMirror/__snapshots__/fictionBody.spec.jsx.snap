@@ -200,7 +200,7 @@ exports[`Storyshots FictionBody default 1`] = `
                   }
                 >
                   &lt;
-                  fictionBody
+                  FictionBody
                 </span>
                 <span>
                   <span>
@@ -316,7 +316,7 @@ exports[`Storyshots FictionBody default 1`] = `
               }
             >
               "
-              fictionBody
+              FictionBody
               " Component
             </h2>
             <small>
@@ -503,7 +503,7 @@ exports[`Storyshots FictionBody no content  1`] = `
                   }
                 >
                   &lt;
-                  fictionBody
+                  FictionBody
                 </span>
                 <span>
                   <span>
@@ -618,7 +618,7 @@ exports[`Storyshots FictionBody no content  1`] = `
               }
             >
               "
-              fictionBody
+              FictionBody
               " Component
             </h2>
             <small>
@@ -832,7 +832,7 @@ exports[`Storyshots FictionBody playground 1`] = `
                   }
                 >
                   &lt;
-                  fictionBody
+                  FictionBody
                 </span>
                 <span>
                   <span>
@@ -948,7 +948,7 @@ exports[`Storyshots FictionBody playground 1`] = `
               }
             >
               "
-              fictionBody
+              FictionBody
               " Component
             </h2>
             <small>

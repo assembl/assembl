@@ -24,7 +24,7 @@ type BrightMirrorFictionType = {
   }
 };
 
-const brightMirrorFiction = ({ data }: BrightMirrorFictionType) => {
+const BrightMirrorFiction = ({ data }: BrightMirrorFictionType) => {
   // Handle fetching error
   if (data.error) {
     displayAlert('danger', I18n.t('error.loading'));
@@ -49,8 +49,8 @@ const brightMirrorFiction = ({ data }: BrightMirrorFictionType) => {
   };
 
   const fictionBodyProps: FictionBodyProps = {
-    title: fiction.subject ? fiction.subject : '',
-    content: fiction.body ? fiction.body : ''
+    title: fiction.subject || '',
+    content: fiction.body || ''
   };
 
   return (
@@ -85,4 +85,4 @@ export default compose(
     })
   }),
   withLoadingIndicator()
-)(brightMirrorFiction);
+)(BrightMirrorFiction);

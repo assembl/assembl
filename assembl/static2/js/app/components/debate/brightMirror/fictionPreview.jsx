@@ -35,8 +35,7 @@ const FictionPreview = ({ title, authorName, creationDate, link, color }: Fictio
               length: FICTION_PREVIEW_NAME_MAX_CHAR,
               separator: ' ',
               omission: '...'
-            })}{' '}
-            -{' '}
+            })}
           </span>
           <span className="published-date">{creationDate}</span>
         </p>

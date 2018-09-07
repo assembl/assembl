@@ -2,6 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { Grid, Row, Col, ListGroup } from 'react-bootstrap';
+import { get } from '../utils/routeMap';
 
 const index = () => (
   <Grid>
@@ -15,10 +16,10 @@ const index = () => (
         <h2>Instruction page</h2>
         <ListGroup componentClass="ul">
           <li>
-            <Link to="/integration/101/index">HTML/CSS/React components integration 101</Link>
+            <Link to={`${get('integration101Page')}`}>HTML/CSS/React components integration 101</Link>
           </li>
           <li>
-            <Link to="/integration/101/form-builder">Form builder example</Link>
+            <Link to={`${get('integration101FormBuilderPage')}`}>Form builder example</Link>
           </li>
         </ListGroup>
       </Col>
@@ -28,7 +29,7 @@ const index = () => (
         <h2>Bright Mirror pages</h2>
         <ListGroup componentClass="ul">
           <li>
-            <Link to="/integration/bright-mirror/bright-mirror-fiction">Fiction page</Link>
+            <Link to={`${get('integrationBrightMirrorFiction')}`}>Fiction page</Link>
           </li>
         </ListGroup>
       </Col>

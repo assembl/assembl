@@ -17,7 +17,7 @@ export type FictionHeaderProps = {
 
 const noAuthorMessage: string = 'no author specified';
 
-const fictionHeader = ({ authorFullname, publishedDate, displayedPublishedDate, circleAvatar }: FictionHeaderProps) => (
+const FictionHeader = ({ authorFullname, publishedDate, displayedPublishedDate, circleAvatar }: FictionHeaderProps) => (
   <Fragment>
     <header className="header">
       <CircleAvatar {...circleAvatar} />
@@ -34,4 +34,4 @@ const fictionHeader = ({ authorFullname, publishedDate, displayedPublishedDate, 
   </Fragment>
 );
 
-export default fictionHeader;
+export default FictionHeader;

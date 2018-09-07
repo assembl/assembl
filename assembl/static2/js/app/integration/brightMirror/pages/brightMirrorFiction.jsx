@@ -8,7 +8,7 @@ import FictionBody from '../../../components/debate/brightMirror/fictionBody';
 import { defaultFictionHeader } from '../../../stories/components/debate/brightMirror/fictionHeader.stories';
 import { defaultFictionBody } from '../../../stories/components/debate/brightMirror/fictionBody.stories';
 
-const brightMirrorFiction = () => (
+const BrightMirrorFiction = () => (
   <div className="bright-mirror">
     <Grid fluid className="bright-mirror-fiction background-fiction-default">
       <Row>
@@ -23,4 +23,4 @@ const brightMirrorFiction = () => (
   </div>
 );
 
-export default brightMirrorFiction;
+export default BrightMirrorFiction;

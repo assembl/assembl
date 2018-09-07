@@ -106,7 +106,7 @@ const AdminChild = (props) => {
   }
 };
 
-const buildBrightMirrorFiction = props => <BrightMirrorFiction id={props.params.fictionId} />;
+const BuildBrightMirrorFiction = props => <BrightMirrorFiction id={props.params.fictionId} />;
 
 export default [
   <Route path="/" component={Root}>
@@ -156,7 +156,7 @@ export default [
         </Route>
         <Route
           path={routeForRouter('brightMirrorFiction', false, { phase: ':phase', themeId: ':themeId', fictionId: ':fictionId' })}
-          component={buildBrightMirrorFiction}
+          component={BuildBrightMirrorFiction}
         />
         <Route path={routeForRouter('unauthorizedAdministration')} component={UnauthorizedAdministration} />
         <Route path={routeForRouter('administration')} component={Administration}>

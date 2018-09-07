@@ -165,13 +165,9 @@
     },
     "setupFiles": [
       "<rootDir>/tests/setupTests.js"
-<<<<<<< HEAD
     ],
     "globals": {
       "globalAnalytics": {}
     }
-=======
-    ]
->>>>>>> remove @storybook/addon-centered
   }
 }

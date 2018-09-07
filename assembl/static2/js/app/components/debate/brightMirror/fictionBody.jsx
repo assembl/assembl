@@ -11,11 +11,11 @@ export type FictionBodyProps = {
 const noTitleMessage: string = 'no title specified';
 const noContentMessage: string = 'no content specified';
 
-const fictionBody = ({ title, content }: FictionBodyProps) => (
+const FictionBody = ({ title, content }: FictionBodyProps) => (
   <Fragment>
     <h1 className="fiction-title">{title || noTitleMessage}</h1>
     <div className="fiction-content" dangerouslySetInnerHTML={{ __html: content || noContentMessage }} />
   </Fragment>
 );
 
-export default fictionBody;
+export default FictionBody;

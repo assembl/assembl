@@ -189,7 +189,7 @@ exports[`Storyshots FictionHeader default 1`] = `
                   }
                 >
                   &lt;
-                  fictionHeader
+                  FictionHeader
                 </span>
                 <span>
                   <span>
@@ -415,7 +415,7 @@ exports[`Storyshots FictionHeader default 1`] = `
               }
             >
               "
-              fictionHeader
+              FictionHeader
               " Component
             </h2>
             <small>
@@ -618,7 +618,7 @@ exports[`Storyshots FictionHeader playground 1`] = `
                   }
                 >
                   &lt;
-                  fictionHeader
+                  FictionHeader
                 </span>
                 <span>
                   <span>
@@ -844,7 +844,7 @@ exports[`Storyshots FictionHeader playground 1`] = `
               }
             >
               "
-              fictionHeader
+              FictionHeader
               " Component
             </h2>
             <small>
