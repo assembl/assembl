@@ -51,7 +51,7 @@ export const createMutationsPromises = (client: ApolloClient, lang: string) => (
   const deleteMutations = idsToDelete.map(id => () =>
     client.mutate({
       mutation: deleteResourceMutation,
-      variables: { thematicId: id }
+      variables: { resourceId: id }
     })
   );
   allMutations.push(...deleteMutations);
