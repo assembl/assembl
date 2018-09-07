@@ -7,21 +7,11 @@ import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
 import FictionsList from './fictionsList';
 import InstructionsText from './instructionsText';
 
-type Post = {
-  id: number,
-  subject: string,
-  creationDate: Date,
-  creator: {
-    displayName: string,
-    isDeleted: boolean
-  }
-};
-
 export type InstructionViewProps = {
   isUserConnected: boolean,
   ideaId: string,
   refetchIdea: Function,
-  posts: Array<Post>,
+  posts: Array<FictionPostPreview>,
   announcementContent: {
     title: string,
     body: string

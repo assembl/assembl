@@ -23,6 +23,17 @@ type Post = PostFragment & {
   parentId: number
 };
 
+type FictionPostPreview = {
+  id: string,
+  subject: ?string,
+  body: ?string,
+  creationDate: ?any,
+  creator: ?{|
+    displayName: ?string,
+    isDeleted: ?boolean
+  |}
+};
+
 type EditableDocument = DocumentFragment & {
   file?: File
 };

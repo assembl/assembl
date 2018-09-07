@@ -11,8 +11,9 @@ import type { FictionsListProps } from '../../../../components/debate/brightMirr
 export const customFictionsList: FictionsListProps = {
   posts: [
     {
-      id: 0,
+      id: '0',
       subject: 'Red is dead',
+      body: 'test',
       creationDate: new Date('2018-01-26T09:19:01.492406+00:00'),
       creator: {
         displayName: 'Odile DeRaie',
@@ -20,8 +21,9 @@ export const customFictionsList: FictionsListProps = {
       }
     },
     {
-      id: 1,
+      id: '1',
       subject: 'Red is dead 2',
+      body: 'test',
       creationDate: new Date('2018-01-26T09:19:01.492406+00:00'),
       creator: {
         displayName: 'Odile DeRaie',
@@ -29,8 +31,9 @@ export const customFictionsList: FictionsListProps = {
       }
     },
     {
-      id: 2,
+      id: '2',
       subject: 'Red is dead 3',
+      body: 'test',
       creationDate: new Date('2018-01-26T09:19:01.492406+00:00'),
       creator: {
         displayName: 'Odile DeRaie',

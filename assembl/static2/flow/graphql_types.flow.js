@@ -189,8 +189,6 @@ export type BrightMirrorFictionQuery = {|
     | {}
     | {}
     | {
-        // The ID of the object.
-        id: string,
         // A Subject of the post in a given language.
         subject: ?string,
         // A Body of the post (the main content of the post). in a given language.
@@ -5669,8 +5667,6 @@ export type AttachmentFragment = {|
 |};
 
 export type BrightMirrorFictionFragment = {|
-  // The ID of the object.
-  id: string,
   // A Subject of the post in a given language.
   subject: ?string,
   // A Body of the post (the main content of the post). in a given language.

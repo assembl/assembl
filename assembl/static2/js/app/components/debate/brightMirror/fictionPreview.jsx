@@ -7,9 +7,9 @@ import { FICTION_PREVIEW_TITLE_MAX_CHAR, FICTION_PREVIEW_NAME_MAX_CHAR } from '.
 
 export type FictionPreviewProps = {
   /** Fiction title */
-  title: string,
+  title: ?string,
   /** Author fullname */
-  authorName: string,
+  authorName: ?string,
   /** Creation date */
   creationDate: string,
   /** Url to fiction */
@@ -37,6 +37,7 @@ const FictionPreview = ({ title, authorName, creationDate, link, color }: Fictio
               omission: '...'
             })}
           </span>
+          {' - '}
           <span className="published-date">{creationDate}</span>
         </p>
       </div>

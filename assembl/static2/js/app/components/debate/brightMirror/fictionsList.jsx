@@ -11,25 +11,9 @@ import { getDiscussionSlug } from '../../../utils/globalFunctions';
 import FictionPreview from './fictionPreview';
 import { fictionBackgroundColors } from '../../../constants';
 
-type Post = {
-  /** Post id */
-  id: number,
-  /** Subject/Title */
-  subject: string,
-  /** Creation date */
-  creationDate: Date,
-  /** Author */
-  creator: {
-    /** Author display name */
-    displayName: string,
-    /** True if user deleted */
-    isDeleted: boolean
-  }
-};
-
 export type FictionsListProps = {
   /** All fictions */
-  posts: Array<Post>,
+  posts: Array<FictionPostPreview>,
   /** Bright Mirror identifier */
   identifier: string,
   /** Theme identifier */
@@ -46,14 +30,15 @@ const getRandomColor = () => fictionBackgroundColors[Math.floor(Math.random() * 
 
 const FictionsList = ({ posts, identifier, themeId }: FictionsListProps) => {
   const slug = getDiscussionSlug();
-
   const childElements = posts.map(post => (
     <Animated key={post.id} preset="scalein">
       <FictionPreview
         link={`${get('brightMirrorFiction', { slug: slug, phase: identifier, themeId: themeId, fictionId: post.id })}`}
         title={post.subject}
         creationDate={I18n.l(post.creationDate, { dateFormat: 'date.format2' })}
-        authorName={post.creator.isDeleted ? I18n.t('deletedUser') : post.creator.displayName}
+        authorName={
+          post.creator && post.creator.isDeleted ? I18n.t('deletedUser') : (post.creator && post.creator.displayName) || ''
+        }
         color={getRandomColor()}
       />
     </Animated>
