@@ -20,7 +20,7 @@ const AtomicBlockRenderer = ({ block, contentState }: { block: ContentBlock, con
     }
 
     return (
-      <div className="atomic-block" data-blockType="atomic">
+      <div className="atomic-block" data-blocktype="atomic">
         {innerContent}
       </div>
     );
