@@ -46,22 +46,20 @@ class HarvestingMenu extends React.Component<Props> {
     const selection = window.getSelection();
     return (
       <div className="harvesting-container">
-        {extracts && extracts.length > 0
-          ? extracts.map(extract => (
-            <HarvestingBox
-              postId={postId}
-              key={extract.id}
-              extract={extract}
-              isAuthorAccountDeleted={isAuthorAccountDeleted}
-              displayHarvestingBox={displayHarvestingBox}
-              harvestingBoxPosition={null}
-              refetchPost={refetchPost}
-              cancelHarvesting={cancelHarvesting}
-              setHarvestingBoxDisplay={setHarvestingBoxDisplay}
-              showNuggetAction={showNuggetAction}
-            />
-          ))
-          : null}
+        {extracts && extracts.length > 0 ? (
+          <HarvestingBox
+            postId={postId}
+            key={`extracts-${postId}`}
+            extracts={extracts}
+            isAuthorAccountDeleted={isAuthorAccountDeleted}
+            displayHarvestingBox={displayHarvestingBox}
+            harvestingBoxPosition={null}
+            refetchPost={refetchPost}
+            cancelHarvesting={cancelHarvesting}
+            setHarvestingBoxDisplay={setHarvestingBoxDisplay}
+            showNuggetAction={showNuggetAction}
+          />
+        ) : null}
         {displayHarvestingBox && (
           <HarvestingBox
             postId={postId}

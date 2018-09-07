@@ -23,7 +23,7 @@ import { NatureIcons, ActionIcons } from '../../utils/extractQualifier';
 import { ExtractStates } from '../../constants';
 
 type Props = {
-  extract: ?Extract,
+  extracts: ?Array<Extract>,
   postId: string,
   contentLocale: string,
   lang?: string,
@@ -41,6 +41,7 @@ type Props = {
 };
 
 type State = {
+  extract: ?Extract,
   disabled: boolean,
   extractIsValidated: boolean,
   isNugget: boolean,
@@ -77,10 +78,12 @@ class DumbHarvestingBox extends React.Component<Props, State> {
 
   constructor(props: Props) {
     super(props);
-    const { extract, cancelHarvesting } = this.props;
-    const isExtract = extract !== null;
+    const { extracts, cancelHarvesting } = this.props;
+    const isExtract = extracts ? extracts.length > 0 : false;
+    const extract = extracts && extracts.length > 0 ? extracts[0] : null;
     const isNugget = extract ? extract.important : false;
     this.state = {
+      extract: extract,
       disabled: !isExtract,
       extractIsValidated: isExtract,
       isNugget: isNugget,
@@ -140,7 +143,8 @@ class DumbHarvestingBox extends React.Component<Props, State> {
   qualifyExtract = (taxonomies: Taxonomies): void => {
     this.setState({ showOverflowMenu: false });
     const { nature, action } = taxonomies;
-    const { extract, updateExtract, refetchPost } = this.props;
+    const { updateExtract, refetchPost } = this.props;
+    const { extract } = this.state;
     const { isNugget } = this.state;
     const variables = {
       extractId: extract ? extract.id : null,
@@ -161,8 +165,8 @@ class DumbHarvestingBox extends React.Component<Props, State> {
   };
 
   updateHarvestingNugget = (): void => {
-    const { extract, updateExtract, refetchPost } = this.props;
-    const { isNugget, extractNature, extractAction } = this.state;
+    const { updateExtract, refetchPost } = this.props;
+    const { isNugget, extractNature, extractAction, extract } = this.state;
     const variables = {
       extractId: extract ? extract.id : null,
       important: !isNugget,
@@ -184,8 +188,8 @@ class DumbHarvestingBox extends React.Component<Props, State> {
   };
 
   updateHarvestingBody = (): void => {
-    const { extract, updateExtract, refetchPost } = this.props;
-    const { editableExtract, isNugget, extractNature, extractAction } = this.state;
+    const { updateExtract, refetchPost } = this.props;
+    const { editableExtract, isNugget, extractNature, extractAction, extract } = this.state;
     const variables = {
       extractId: extract ? extract.id : null,
       body: editableExtract,
@@ -223,7 +227,8 @@ class DumbHarvestingBox extends React.Component<Props, State> {
   };
 
   deleteHarvesting = (): void => {
-    const { extract, deleteExtract, refetchPost } = this.props;
+    const { deleteExtract, refetchPost } = this.props;
+    const { extract } = this.state;
     const variables = {
       extractId: extract ? extract.id : null
     };
@@ -281,7 +286,8 @@ class DumbHarvestingBox extends React.Component<Props, State> {
   };
 
   confirmHarvesting = (): void => {
-    const { extract, confirmExtract, refetchPost } = this.props;
+    const { confirmExtract, refetchPost } = this.props;
+    const { extract } = this.state;
     const variables = {
       extractId: extract ? extract.id : null
     };
@@ -332,8 +338,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
   };
 
   renderFooter = () => {
-    const { extract } = this.props;
-    const { disabled, isEditable } = this.state;
+    const { disabled, isEditable, extract } = this.state;
     const extractState = extract && extract.extractState;
     const isSubmitted = extractState === ExtractStates.SUBMITTED;
     const actionId = isEditable ? ACTIONS.edit : (disabled && ACTIONS.create) || (isSubmitted && ACTIONS.confirm);
@@ -351,7 +356,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
   };
 
   render() {
-    const { selection, extract, contentLocale, harvestingDate, isAuthorAccountDeleted, showNuggetAction } = this.props;
+    const { selection, contentLocale, harvestingDate, isAuthorAccountDeleted, showNuggetAction } = this.props;
     const {
       disabled,
       extractIsValidated,
@@ -361,7 +366,8 @@ class DumbHarvestingBox extends React.Component<Props, State> {
       extractNature,
       extractAction,
       showOverflowMenu,
-      overflowMenuTop
+      overflowMenuTop,
+      extract
     } = this.state;
     const isExtract = extract !== null;
     const selectionText = selection ? selection.toString() : '';
