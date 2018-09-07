@@ -408,7 +408,7 @@ const Translations = {
         },
         postSuccess:
           "Merci pour votre participation ! Votre vote a bien été pris en compte. Vous pouvez le modifier à tout moment jusqu’à la fermeture de la session de vote.",
-        remainingTokens: "Il vous reste %{count} jetons disponibles.",
+        remainingTokens: "%{count} jetons disponibles",
         resetTokens: "Supprimer mon vote",
         submit: "Soumettre le vote",
         showVotesInProgress: "Ouvrir les votes de la communauté",
@@ -1246,7 +1246,7 @@ const Translations = {
         },
         postSuccess:
           "Thank you for your participation! Your vote has been set. You can modify this vote during the entire duration of the vote session.",
-        remainingTokens: "You have %{count} tokens remaining.",
+        remainingTokens: "%{count} tokens remaining",
         resetTokens: "Reset my vote",
         submit: "Submit vote",
         showVotesInProgress: "Show votes of the community",

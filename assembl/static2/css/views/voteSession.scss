@@ -1,6 +1,10 @@
 .votesession-page {
+  h1,h2,h3 {
+    margin-bottom: 0;
+  }
+
   .vote-instructions {
-    padding: 0 20px;
+    padding: 0 10px;
     font-size: $font-size-m;
     font-family: $font-family4;
     max-width: 780px;
@@ -16,18 +20,24 @@
 
     .category-available-tokens {
       display: flex;
-      padding: 0 0 30px;
       max-width: 780px;
       margin-left: -5px;
 
+      h2 {
+        margin-top: 7px;
+      }
+
       .tokens {
         padding-left: 10px;
-        padding-top: 25px;
+        padding-top: 9px;
       }
 
       .text {
-        width: 340px;
-        padding: 0 0 0 10px;
+        margin: 0;
+      }
+
+      span {
+        font-size: $font-size-s;
       }
     }
   }
@@ -65,6 +75,7 @@
 
         .dark-title-2 {
           font-size: $font-size-s;
+          line-height: 18px;
         }
 
         span {
@@ -89,7 +100,7 @@
   }
 
   .proposal.row {
-    margin: 90px 10px 30px;
+    margin: 90px 10px 10px;
 
     .proposal-title {
       font-family: $font-family;
@@ -101,12 +112,15 @@
     }
 
     .proposal-vote-modules {
-      padding-top: 25px;
+      padding-top: 20px;
     }
 
     .tokens-line {
-      margin-top: 14px;
-      margin-bottom: 30px;
+      margin-bottom: 0;
+
+      p {
+        margin: 0;
+      }
 
       .tokens {
         margin-left: -5px;
@@ -224,12 +238,17 @@
 
   .votes-in-progress {
     margin: 0 40px;
-    padding: 0 15px 30px;
+    padding: 0 15px 15px;
+
+    .padding-s {
+      padding-left: 5px;
+      padding-right: 5px;
+    }
 
     .box {
       border: 1px solid $grey5;
-      margin-top: 30px;
-      height: 120px;
+      margin-top: 10px;
+      height: 140px;
     }
 
     .tokens-box {
@@ -264,7 +283,7 @@
   }
 
   .expand-result {
-    padding-bottom: 40px;
+    padding-bottom: 20px;
   }
 
   .gauge-box {
@@ -272,7 +291,7 @@
   }
 
   .gauge-box__instructions {
-    font-size: $font-size-xs;
+    font-size: $font-size-s;
   }
 
   .gauge-box__estimate {
@@ -282,6 +301,7 @@
   .separator {
     border-bottom: 1px $btn-dark-border-style $grey5;
     max-width: 745px;
+    margin-left: -5px;
   }
 }
 
@@ -296,7 +316,7 @@
 @media screen and (min-width: 768px) {
   .votesession-page {
     .proposal.row {
-      padding: 30px 25px 0 25px;
+      padding: 15px 5px 0 0;
     }
 
     .participants-count {
@@ -304,7 +324,7 @@
     }
 
     .tokens-box {
-      padding: 10px 0 0;
+      padding: 19px 0 0;
     }
   }
 }

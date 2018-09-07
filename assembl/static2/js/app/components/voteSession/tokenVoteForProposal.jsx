@@ -52,7 +52,7 @@ const TokenVoteForProposal = ({
 
           return (
             <div key={id} className="tokens-line">
-              <p>{title}</p>
+              <p className="text">{title}</p>
               <div className="tokens">
                 {range(totalNumber).map((n) => {
                   const notEnoughTokens = n + 1 > currentVote + remainingTokensByCategory.get(id);
@@ -70,7 +70,7 @@ const TokenVoteForProposal = ({
                           voteForProposal(proposalId, moduleId, id, n + 1);
                         }}
                       >
-                        <Circle size={28} strokeColor={color} fillColor={n + 1 <= currentVote ? color : undefined} />
+                        <Circle size={24} strokeColor={color} fillColor={n + 1 <= currentVote ? color : undefined} />
                       </Button>
                     </OverlayTrigger>
                   );

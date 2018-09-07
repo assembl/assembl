@@ -10,7 +10,9 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
   <div
     className="tokens-line"
   >
-    <p>
+    <p
+      className="text"
+    >
       Positive
     </p>
     <div
@@ -50,7 +52,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
         >
           <Circle
             fillColor="#226622"
-            size={28}
+            size={24}
             strokeColor="#226622"
           />
         </Button>
@@ -89,7 +91,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
         >
           <Circle
             fillColor="#226622"
-            size={28}
+            size={24}
             strokeColor="#226622"
           />
         </Button>
@@ -128,7 +130,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
         >
           <Circle
             fillColor="none"
-            size={28}
+            size={24}
             strokeColor="#226622"
           />
         </Button>
@@ -167,7 +169,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
         >
           <Circle
             fillColor="none"
-            size={28}
+            size={24}
             strokeColor="#226622"
           />
         </Button>
@@ -206,7 +208,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
         >
           <Circle
             fillColor="none"
-            size={28}
+            size={24}
             strokeColor="#226622"
           />
         </Button>
@@ -245,7 +247,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
         >
           <Circle
             fillColor="none"
-            size={28}
+            size={24}
             strokeColor="#226622"
           />
         </Button>
@@ -284,7 +286,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
         >
           <Circle
             fillColor="none"
-            size={28}
+            size={24}
             strokeColor="#226622"
           />
         </Button>
@@ -323,7 +325,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
         >
           <Circle
             fillColor="none"
-            size={28}
+            size={24}
             strokeColor="#226622"
           />
         </Button>
@@ -362,7 +364,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
         >
           <Circle
             fillColor="none"
-            size={28}
+            size={24}
             strokeColor="#226622"
           />
         </Button>
@@ -401,7 +403,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
         >
           <Circle
             fillColor="none"
-            size={28}
+            size={24}
             strokeColor="#226622"
           />
         </Button>
@@ -440,7 +442,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
         >
           <Circle
             fillColor="none"
-            size={28}
+            size={24}
             strokeColor="#226622"
           />
         </Button>
@@ -479,7 +481,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
         >
           <Circle
             fillColor="none"
-            size={28}
+            size={24}
             strokeColor="#226622"
           />
         </Button>
@@ -523,7 +525,9 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
   <div
     className="tokens-line"
   >
-    <p>
+    <p
+      className="text"
+    >
       Negative
     </p>
     <div
@@ -563,7 +567,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
         >
           <Circle
             fillColor="none"
-            size={28}
+            size={24}
             strokeColor="#771122"
           />
         </Button>
@@ -602,7 +606,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
         >
           <Circle
             fillColor="none"
-            size={28}
+            size={24}
             strokeColor="#771122"
           />
         </Button>
@@ -641,7 +645,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
         >
           <Circle
             fillColor="none"
-            size={28}
+            size={24}
             strokeColor="#771122"
           />
         </Button>
@@ -680,7 +684,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
         >
           <Circle
             fillColor="none"
-            size={28}
+            size={24}
             strokeColor="#771122"
           />
         </Button>
@@ -718,7 +722,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
         >
           <Circle
             fillColor="none"
-            size={28}
+            size={24}
             strokeColor="#771122"
           />
         </Button>
@@ -756,7 +760,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
         >
           <Circle
             fillColor="none"
-            size={28}
+            size={24}
             strokeColor="#771122"
           />
         </Button>
@@ -794,7 +798,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
         >
           <Circle
             fillColor="none"
-            size={28}
+            size={24}
             strokeColor="#771122"
           />
         </Button>
@@ -832,7 +836,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
         >
           <Circle
             fillColor="none"
-            size={28}
+            size={24}
             strokeColor="#771122"
           />
         </Button>
@@ -870,7 +874,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
         >
           <Circle
             fillColor="none"
-            size={28}
+            size={24}
             strokeColor="#771122"
           />
         </Button>
@@ -908,7 +912,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
         >
           <Circle
             fillColor="none"
-            size={28}
+            size={24}
             strokeColor="#771122"
           />
         </Button>
@@ -962,7 +966,9 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
   <div
     className="tokens-line"
   >
-    <p>
+    <p
+      className="text"
+    >
       Positive
     </p>
     <div
@@ -1002,7 +1008,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
         >
           <Circle
             fillColor="#226622"
-            size={28}
+            size={24}
             strokeColor="#226622"
           />
         </Button>
@@ -1041,7 +1047,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
         >
           <Circle
             fillColor="#226622"
-            size={28}
+            size={24}
             strokeColor="#226622"
           />
         </Button>
@@ -1080,7 +1086,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
         >
           <Circle
             fillColor="none"
-            size={28}
+            size={24}
             strokeColor="#226622"
           />
         </Button>
@@ -1119,7 +1125,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
         >
           <Circle
             fillColor="none"
-            size={28}
+            size={24}
             strokeColor="#226622"
           />
         </Button>
@@ -1158,7 +1164,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
         >
           <Circle
             fillColor="none"
-            size={28}
+            size={24}
             strokeColor="#226622"
           />
         </Button>
@@ -1197,7 +1203,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
         >
           <Circle
             fillColor="none"
-            size={28}
+            size={24}
             strokeColor="#226622"
           />
         </Button>
@@ -1236,7 +1242,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
         >
           <Circle
             fillColor="none"
-            size={28}
+            size={24}
             strokeColor="#226622"
           />
         </Button>
@@ -1275,7 +1281,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
         >
           <Circle
             fillColor="none"
-            size={28}
+            size={24}
             strokeColor="#226622"
           />
         </Button>
@@ -1314,7 +1320,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
         >
           <Circle
             fillColor="none"
-            size={28}
+            size={24}
             strokeColor="#226622"
           />
         </Button>
@@ -1353,7 +1359,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
         >
           <Circle
             fillColor="none"
-            size={28}
+            size={24}
             strokeColor="#226622"
           />
         </Button>
@@ -1392,7 +1398,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
         >
           <Circle
             fillColor="none"
-            size={28}
+            size={24}
             strokeColor="#226622"
           />
         </Button>
@@ -1431,7 +1437,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
         >
           <Circle
             fillColor="none"
-            size={28}
+            size={24}
             strokeColor="#226622"
           />
         </Button>
@@ -1475,7 +1481,9 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
   <div
     className="tokens-line"
   >
-    <p>
+    <p
+      className="text"
+    >
       Negative
     </p>
     <div
@@ -1514,7 +1522,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
         >
           <Circle
             fillColor="none"
-            size={28}
+            size={24}
             strokeColor="#771122"
           />
         </Button>
@@ -1552,7 +1560,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
         >
           <Circle
             fillColor="none"
-            size={28}
+            size={24}
             strokeColor="#771122"
           />
         </Button>
@@ -1590,7 +1598,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
         >
           <Circle
             fillColor="none"
-            size={28}
+            size={24}
             strokeColor="#771122"
           />
         </Button>
@@ -1628,7 +1636,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
         >
           <Circle
             fillColor="none"
-            size={28}
+            size={24}
             strokeColor="#771122"
           />
         </Button>
@@ -1666,7 +1674,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
         >
           <Circle
             fillColor="none"
-            size={28}
+            size={24}
             strokeColor="#771122"
           />
         </Button>
@@ -1704,7 +1712,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
         >
           <Circle
             fillColor="none"
-            size={28}
+            size={24}
             strokeColor="#771122"
           />
         </Button>
@@ -1742,7 +1750,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
         >
           <Circle
             fillColor="none"
-            size={28}
+            size={24}
             strokeColor="#771122"
           />
         </Button>
@@ -1780,7 +1788,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
         >
           <Circle
             fillColor="none"
-            size={28}
+            size={24}
             strokeColor="#771122"
           />
         </Button>
@@ -1818,7 +1826,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
         >
           <Circle
             fillColor="none"
-            size={28}
+            size={24}
             strokeColor="#771122"
           />
         </Button>
@@ -1856,7 +1864,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
         >
           <Circle
             fillColor="none"
-            size={28}
+            size={24}
             strokeColor="#771122"
           />
         </Button>

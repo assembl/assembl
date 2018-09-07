@@ -36,7 +36,7 @@ const getClassNames: Function = (numberCategoriesToDisplay) => {
   case 1:
     return ['left'];
   case 2:
-    return ['left', 'right'];
+    return ['left', 'left'];
   case 3:
     return ['left', '', 'right'];
   case 4:
@@ -73,22 +73,22 @@ const AvailableTokens = ({ remainingTokensByCategory, sticky, tokenCategories, w
                         style={
                           (sticky && tokenCategories.length % 2 !== 0 && tokenCategories.length > 2) || windowWidth < 400
                             ? { maxWidth: '210px' }
-                            : { minWidth: '250px' }
+                            : { minWidth: '160px' }
                         }
                       >
-                        <h2 className="dark-title-2">{title}</h2>
+                        <h2 className="dark-title-3">{title}</h2>
                         <Translate value="debate.voteSession.remainingTokens" count={remaining} />
                       </div>
                       <div
                         className="tokens"
                         style={
                           (sticky && tokenCategories.length % 2 !== 0 && tokenCategories.length > 2) || windowWidth < 400
-                            ? { maxWidth: '160px' }
+                            ? { maxWidth: '300px' }
                             : { minWidth: '360px' }
                         }
                       >
                         {range(totalNumber).map(n => (
-                          <Circle key={n + 1} size={28} strokeColor={color} fillColor={n + 1 <= remaining ? color : undefined} />
+                          <Circle key={n + 1} size={24} strokeColor={color} fillColor={n + 1 <= remaining ? color : undefined} />
                         ))}
                       </div>
                     </div>

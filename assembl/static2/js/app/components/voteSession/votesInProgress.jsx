@@ -53,12 +53,12 @@ const VotesInProgress = ({ modules, numParticipants }: Props) => {
   let index = tokenVoteModule ? 2 : 0;
   return (
     <Row className="votes-in-progress background-grey">
-      <Col xs={12} md={columnSizes[0]}>
+      <Col className="padding-s" xs={12} md={columnSizes[0]}>
         <ParticipantsCount count={numParticipants} />
       </Col>
       {tokenVoteModule &&
         tokenCategories.length > 0 && (
-          <Col xs={12} md={columnSizes[1]}>
+          <Col className="padding-s" xs={12} md={columnSizes[1]}>
             <TokenVotesResults
               categories={tokenCategories}
               tokenVotes={tokenVoteModule.tokenVotes}
@@ -73,7 +73,7 @@ const VotesInProgress = ({ modules, numParticipants }: Props) => {
         const title =
           gauge.averageLabel === null ? I18n.t('debate.voteSession.participantsCount', { count: 0 }) : gauge.averageLabel || '';
         return (
-          <Col xs={12} md={colSize} key={gauge.id}>
+          <Col className="padding-s" xs={12} md={colSize} key={gauge.id}>
             <GaugeVotesResults title={title} instructions={gauge.instructions} />
           </Col>
         );
@@ -86,7 +86,7 @@ const VotesInProgress = ({ modules, numParticipants }: Props) => {
             ? I18n.t('debate.voteSession.participantsCount', { count: 0 })
             : I18n.t('debate.voteSession.valueWithUnit', { num: gauge.averageResult, unit: gauge.unit || '' });
         return (
-          <Col xs={12} md={colSize} key={gauge.id}>
+          <Col className="padding-s" xs={12} md={colSize} key={gauge.id}>
             <GaugeVotesResults title={title} instructions={gauge.instructions} />
           </Col>
         );

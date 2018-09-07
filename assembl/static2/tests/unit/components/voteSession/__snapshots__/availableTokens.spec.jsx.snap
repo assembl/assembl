@@ -23,12 +23,12 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (non st
               className="text"
               style={
                 Object {
-                  "minWidth": "250px",
+                  "minWidth": "160px",
                 }
               }
             >
               <h2
-                className="dark-title-2"
+                className="dark-title-3"
               >
                 One
               </h2>
@@ -36,7 +36,7 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (non st
                 className={undefined}
                 style={undefined}
               >
-                You have 3 tokens remaining.
+                3 tokens remaining
               </span>
             </div>
             <div
@@ -62,12 +62,12 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (non st
               className="text"
               style={
                 Object {
-                  "minWidth": "250px",
+                  "minWidth": "160px",
                 }
               }
             >
               <h2
-                className="dark-title-2"
+                className="dark-title-3"
               >
                 Two
               </h2>
@@ -75,7 +75,7 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (non st
                 className={undefined}
                 style={undefined}
               >
-                You have 6 tokens remaining.
+                6 tokens remaining
               </span>
             </div>
             <div
@@ -101,12 +101,12 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (non st
               className="text"
               style={
                 Object {
-                  "minWidth": "250px",
+                  "minWidth": "160px",
                 }
               }
             >
               <h2
-                className="dark-title-2"
+                className="dark-title-3"
               >
                 Three
               </h2>
@@ -114,7 +114,7 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (non st
                 className={undefined}
                 style={undefined}
               >
-                You have 4 tokens remaining.
+                4 tokens remaining
               </span>
             </div>
             <div
@@ -140,12 +140,12 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (non st
               className="text"
               style={
                 Object {
-                  "minWidth": "250px",
+                  "minWidth": "160px",
                 }
               }
             >
               <h2
-                className="dark-title-2"
+                className="dark-title-3"
               >
                 Four
               </h2>
@@ -153,7 +153,7 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (non st
                 className={undefined}
                 style={undefined}
               >
-                You have 10 tokens remaining.
+                10 tokens remaining
               </span>
             </div>
             <div
@@ -195,12 +195,12 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (non st
               className="text"
               style={
                 Object {
-                  "minWidth": "250px",
+                  "minWidth": "160px",
                 }
               }
             >
               <h2
-                className="dark-title-2"
+                className="dark-title-3"
               >
                 Positive
               </h2>
@@ -208,7 +208,7 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (non st
                 className={undefined}
                 style={undefined}
               >
-                You have 3 tokens remaining.
+                3 tokens remaining
               </span>
             </div>
             <div
@@ -221,240 +221,240 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (non st
             >
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="#226622"
-                  r={13}
+                  r={11}
                   stroke="#226622"
                   strokeWidth={2}
                 />
               </svg>
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="#226622"
-                  r={13}
+                  r={11}
                   stroke="#226622"
                   strokeWidth={2}
                 />
               </svg>
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="#226622"
-                  r={13}
+                  r={11}
                   stroke="#226622"
                   strokeWidth={2}
                 />
               </svg>
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="none"
-                  r={13}
+                  r={11}
                   stroke="#226622"
                   strokeWidth={2}
                 />
               </svg>
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="none"
-                  r={13}
+                  r={11}
                   stroke="#226622"
                   strokeWidth={2}
                 />
               </svg>
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="none"
-                  r={13}
+                  r={11}
                   stroke="#226622"
                   strokeWidth={2}
                 />
               </svg>
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="none"
-                  r={13}
+                  r={11}
                   stroke="#226622"
                   strokeWidth={2}
                 />
               </svg>
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="none"
-                  r={13}
+                  r={11}
                   stroke="#226622"
                   strokeWidth={2}
                 />
               </svg>
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="none"
-                  r={13}
+                  r={11}
                   stroke="#226622"
                   strokeWidth={2}
                 />
               </svg>
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="none"
-                  r={13}
+                  r={11}
                   stroke="#226622"
                   strokeWidth={2}
                 />
               </svg>
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="none"
-                  r={13}
+                  r={11}
                   stroke="#226622"
                   strokeWidth={2}
                 />
               </svg>
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="none"
-                  r={13}
+                  r={11}
                   stroke="#226622"
                   strokeWidth={2}
                 />
@@ -475,12 +475,12 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (non st
               className="text"
               style={
                 Object {
-                  "minWidth": "250px",
+                  "minWidth": "160px",
                 }
               }
             >
               <h2
-                className="dark-title-2"
+                className="dark-title-3"
               >
                 Negative
               </h2>
@@ -488,7 +488,7 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (non st
                 className={undefined}
                 style={undefined}
               >
-                You have 10 tokens remaining.
+                10 tokens remaining
               </span>
             </div>
             <div
@@ -501,200 +501,200 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (non st
             >
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="#771122"
-                  r={13}
+                  r={11}
                   stroke="#771122"
                   strokeWidth={2}
                 />
               </svg>
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="#771122"
-                  r={13}
+                  r={11}
                   stroke="#771122"
                   strokeWidth={2}
                 />
               </svg>
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="#771122"
-                  r={13}
+                  r={11}
                   stroke="#771122"
                   strokeWidth={2}
                 />
               </svg>
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="#771122"
-                  r={13}
+                  r={11}
                   stroke="#771122"
                   strokeWidth={2}
                 />
               </svg>
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="#771122"
-                  r={13}
+                  r={11}
                   stroke="#771122"
                   strokeWidth={2}
                 />
               </svg>
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="#771122"
-                  r={13}
+                  r={11}
                   stroke="#771122"
                   strokeWidth={2}
                 />
               </svg>
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="#771122"
-                  r={13}
+                  r={11}
                   stroke="#771122"
                   strokeWidth={2}
                 />
               </svg>
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="#771122"
-                  r={13}
+                  r={11}
                   stroke="#771122"
                   strokeWidth={2}
                 />
               </svg>
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="#771122"
-                  r={13}
+                  r={11}
                   stroke="#771122"
                   strokeWidth={2}
                 />
               </svg>
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="#771122"
-                  r={13}
+                  r={11}
                   stroke="#771122"
                   strokeWidth={2}
                 />
@@ -731,12 +731,12 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (sticky
               className="text"
               style={
                 Object {
-                  "minWidth": "250px",
+                  "minWidth": "160px",
                 }
               }
             >
               <h2
-                className="dark-title-2"
+                className="dark-title-3"
               >
                 Positive
               </h2>
@@ -744,7 +744,7 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (sticky
                 className={undefined}
                 style={undefined}
               >
-                You have 3 tokens remaining.
+                3 tokens remaining
               </span>
             </div>
             <div
@@ -757,240 +757,240 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (sticky
             >
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="#226622"
-                  r={13}
+                  r={11}
                   stroke="#226622"
                   strokeWidth={2}
                 />
               </svg>
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="#226622"
-                  r={13}
+                  r={11}
                   stroke="#226622"
                   strokeWidth={2}
                 />
               </svg>
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="#226622"
-                  r={13}
+                  r={11}
                   stroke="#226622"
                   strokeWidth={2}
                 />
               </svg>
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="none"
-                  r={13}
+                  r={11}
                   stroke="#226622"
                   strokeWidth={2}
                 />
               </svg>
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="none"
-                  r={13}
+                  r={11}
                   stroke="#226622"
                   strokeWidth={2}
                 />
               </svg>
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="none"
-                  r={13}
+                  r={11}
                   stroke="#226622"
                   strokeWidth={2}
                 />
               </svg>
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="none"
-                  r={13}
+                  r={11}
                   stroke="#226622"
                   strokeWidth={2}
                 />
               </svg>
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="none"
-                  r={13}
+                  r={11}
                   stroke="#226622"
                   strokeWidth={2}
                 />
               </svg>
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="none"
-                  r={13}
+                  r={11}
                   stroke="#226622"
                   strokeWidth={2}
                 />
               </svg>
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="none"
-                  r={13}
+                  r={11}
                   stroke="#226622"
                   strokeWidth={2}
                 />
               </svg>
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="none"
-                  r={13}
+                  r={11}
                   stroke="#226622"
                   strokeWidth={2}
                 />
               </svg>
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="none"
-                  r={13}
+                  r={11}
                   stroke="#226622"
                   strokeWidth={2}
                 />
@@ -1005,18 +1005,18 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (sticky
           className="center col-md-6 col-xs-12"
         >
           <div
-            className="category-available-tokens right"
+            className="category-available-tokens left"
           >
             <div
               className="text"
               style={
                 Object {
-                  "minWidth": "250px",
+                  "minWidth": "160px",
                 }
               }
             >
               <h2
-                className="dark-title-2"
+                className="dark-title-3"
               >
                 Negative
               </h2>
@@ -1024,7 +1024,7 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (sticky
                 className={undefined}
                 style={undefined}
               >
-                You have 10 tokens remaining.
+                10 tokens remaining
               </span>
             </div>
             <div
@@ -1037,200 +1037,200 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (sticky
             >
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="#771122"
-                  r={13}
+                  r={11}
                   stroke="#771122"
                   strokeWidth={2}
                 />
               </svg>
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="#771122"
-                  r={13}
+                  r={11}
                   stroke="#771122"
                   strokeWidth={2}
                 />
               </svg>
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="#771122"
-                  r={13}
+                  r={11}
                   stroke="#771122"
                   strokeWidth={2}
                 />
               </svg>
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="#771122"
-                  r={13}
+                  r={11}
                   stroke="#771122"
                   strokeWidth={2}
                 />
               </svg>
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="#771122"
-                  r={13}
+                  r={11}
                   stroke="#771122"
                   strokeWidth={2}
                 />
               </svg>
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="#771122"
-                  r={13}
+                  r={11}
                   stroke="#771122"
                   strokeWidth={2}
                 />
               </svg>
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="#771122"
-                  r={13}
+                  r={11}
                   stroke="#771122"
                   strokeWidth={2}
                 />
               </svg>
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="#771122"
-                  r={13}
+                  r={11}
                   stroke="#771122"
                   strokeWidth={2}
                 />
               </svg>
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="#771122"
-                  r={13}
+                  r={11}
                   stroke="#771122"
                   strokeWidth={2}
                 />
               </svg>
               <svg
                 aria-hidden="true"
-                height={28}
+                height={24}
                 role="img"
                 version="1.1"
-                viewBox="0 0 28 28"
-                width={28}
+                viewBox="0 0 24 24"
+                width={24}
                 x="0"
                 xmlSpace="preserve"
                 y="0"
               >
                 <circle
-                  cx={14}
-                  cy={14}
+                  cx={12}
+                  cy={12}
                   fill="#771122"
-                  r={13}
+                  r={11}
                   stroke="#771122"
                   strokeWidth={2}
                 />
