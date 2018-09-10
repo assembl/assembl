@@ -37,7 +37,7 @@ import ResourcesCenter from './pages/resourcesCenter';
 import LandingPageAdmin from './pages/landingPageAdmin';
 import ExportTaxonomies from './pages/exportTaxonomies';
 import BrightMirror from './pages/brightMirror';
-import BrightMirrorFiction from './pages/brightMirrorFiction';
+import BrightMirrorFiction from './pages/brightMirrorFiction'; // eslint-disable-line import/no-named-as-default
 import BrightMirrorAdmin from './pages/brightMirrorAdmin';
 import { routeForRouter } from './utils/routeMap';
 

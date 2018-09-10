@@ -1,8 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Translate } from 'react-redux-i18n';
+import { Translate, I18n } from 'react-redux-i18n';
 import { compose, graphql } from 'react-apollo';
 import { Grid } from 'react-bootstrap';
+import { withRouter } from 'react-router';
 
 import { updateContentLocale } from '../actions/contentLocaleActions';
 import Header from '../components/common/header';
@@ -14,9 +15,11 @@ import { getConnectedUserId } from '../utils/globalFunctions';
 import Announcement, { getSentimentsCount } from './../components/debate/common/announcement';
 import ColumnsView from '../components/debate/multiColumns/columnsView';
 import ThreadView from '../components/debate/thread/threadView';
-import { DeletedPublicationStates, PHASES } from '../constants';
+import { DeletedPublicationStates, PHASES, FICTION_DELETE_CALLBACK } from '../constants';
 import HeaderStatistics, { statContributions, statMessages, statParticipants } from '../components/common/headerStatistics';
 import InstructionView from '../components/debate/brightMirror/instructionView';
+// Utils imports
+import { displayAlert } from '../utils/utilityManager';
 
 const deletedPublicationStates = Object.keys(DeletedPublicationStates);
 
@@ -112,6 +115,10 @@ class Idea extends React.Component {
     this.getTopPosts = this.getTopPosts.bind(this);
   }
 
+  componentWillMount() {
+    this.displayBrightMirrorDeleteFictionMessage();
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.ideaWithPostsData.idea !== this.props.ideaWithPostsData.idea) {
       this.updateContentLocaleMappingFromProps(nextProps);
@@ -174,6 +181,14 @@ class Idea extends React.Component {
       debateData: debateData
     });
     return topPosts;
+  }
+
+  displayBrightMirrorDeleteFictionMessage() {
+    // Location state is set in brightMirrorFiction.jsx > deleteFictionCallback
+    const locationState = this.props.location.state;
+    if (locationState && locationState.callback === FICTION_DELETE_CALLBACK) {
+      displayAlert('success', I18n.t('debate.brightMirror.deleteFictionSuccessMsg'));
+    }
   }
 
   render() {
@@ -328,4 +343,4 @@ export default compose(
       };
     }
   })
-)(Idea);
+)(withRouter(Idea));

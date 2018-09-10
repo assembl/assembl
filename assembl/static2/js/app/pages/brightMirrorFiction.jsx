@@ -19,6 +19,8 @@ import FictionBody from '../components/debate/brightMirror/fictionBody';
 import { displayAlert } from '../utils/utilityManager';
 import { getConnectedUserId } from '../utils/globalFunctions';
 import Permissions, { connectedUserCan } from '../utils/permissions';
+// Constant imports
+import { FICTION_DELETE_CALLBACK } from '../constants';
 // Type imports
 import type { CircleAvatarProps } from '../components/debate/brightMirror/circleAvatar';
 import type { FictionHeaderProps } from '../components/debate/brightMirror/fictionHeader';
@@ -85,10 +87,10 @@ export class BrightMirrorFiction extends Component<BrightMirrorFictionProps, Bri
       // Route to fiction list page
       const fictionListParams = { slug: slug, phase: phase, themeId: themeId };
       const fictionListURL = get('idea', fictionListParams);
-      // browserHistory.push(fictionListURL);
+      // Set a callback state in order to display a delete fiction confirmation message
       browserHistory.push({
         pathname: fictionListURL,
-        state: { callback: 'deletefictionok' }
+        state: { callback: FICTION_DELETE_CALLBACK }
       });
     };
     const modifyFictionCallback = (subject, body) => {
