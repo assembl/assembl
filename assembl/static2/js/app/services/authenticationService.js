@@ -16,7 +16,16 @@ export const postChangePassword = (payload) => {
 };
 
 export const signUp = (payload) => {
-  const { checked, discussionSlug, email, fullname, password, password2, username, ...rest } = payload;
+  const {
+    privacyPolicyIsChecked,
+    termsAndConditionsIsChecked,
+    discussionSlug, email,
+    fullname,
+    password,
+    password2,
+    username,
+    ...rest
+  } = payload;
 
   if (password !== password2) {
     return Promise.reject(new PasswordMismatchError('Passwords do not match!'));

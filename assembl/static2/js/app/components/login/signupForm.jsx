@@ -5,30 +5,35 @@ import { connect } from 'react-redux';
 import { Translate, I18n } from 'react-redux-i18n';
 import { form, FormGroup, FormControl, Button, Checkbox } from 'react-bootstrap';
 import { Link } from 'react-router';
+import * as lodashGet from 'lodash/get';
 import { signupAction } from '../../actions/authenticationActions';
 import { getDiscussionSlug } from '../../utils/globalFunctions';
 import { get, getContextual } from '../../utils/routeMap';
 import inputHandler from '../../utils/inputHandler';
 import { displayAlert, displayCustomModal } from '../../utils/utilityManager';
 import FormControlWithLabel from '../common/formControlWithLabel';
-import TermsForm from '../common/termsForm';
 import withoutLoadingIndicator from '../../components/common/withoutLoadingIndicator';
 import TabsConditionQuery from '../../graphql/TabsConditionQuery.graphql';
 import TextFieldsQuery from '../../graphql/TextFields.graphql';
+import LegalContentsQuery from '../../graphql/LegalContents.graphql';
+import LegalForm from './legalForm';
 
-type SignupFormProps = {
+type Props = {
   hasTermsAndConditions: boolean,
+  hasPrivacyPolicy: boolean,
   signUp: Function,
-  lang: string,
   auth: Object,
-  textFields: Array<ConfigurableField>
+  textFields: Array<ConfigurableField>,
+  privacyPolicyText: string,
+  termsAndConditionsText: string
 };
 
-type SignupFormState = {
-  checked: boolean
+type State = {
+  privacyPolicyIsChecked: boolean,
+  termsAndConditionsIsChecked: boolean
 };
 
-class SignupForm extends React.Component<SignupFormProps, SignupFormState> {
+class SignupForm extends React.Component<Props, State> {
   signupHandler: (SyntheticEvent<>) => void;
 
   handleInput: (SyntheticInputEvent<HTMLInputElement>) => void;
@@ -40,13 +45,9 @@ class SignupForm extends React.Component<SignupFormProps, SignupFormState> {
   constructor(props) {
     super(props);
     this.state = {
-      checked: false
+      privacyPolicyIsChecked: false,
+      termsAndConditionsIsChecked: false
     };
-
-    this.signupHandler = this.signupHandler.bind(this);
-    this.handleInput = this.handleInput.bind(this);
-    this.toggleCheck = this.toggleCheck.bind(this);
-    this.handleAcceptButton = this.handleAcceptButton.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -73,9 +74,9 @@ class SignupForm extends React.Component<SignupFormProps, SignupFormState> {
     }
   }
 
-  handleInput(e) {
+  handleInput = (e) => {
     inputHandler(this, e);
-  }
+  };
 
   handleSelectChange = (e) => {
     const name = e.target.name;
@@ -83,7 +84,7 @@ class SignupForm extends React.Component<SignupFormProps, SignupFormState> {
     this.setState(() => ({ [name]: value }));
   };
 
-  signupHandler(e) {
+  signupHandler = (e) => {
     e.preventDefault();
     const slug = getDiscussionSlug();
     if (slug) {
@@ -91,19 +92,32 @@ class SignupForm extends React.Component<SignupFormProps, SignupFormState> {
     } else {
       this.props.signUp(this.state);
     }
-  }
+  };
 
-  toggleCheck() {
-    this.setState({ checked: !this.state.checked });
-  }
+  toggleCheck = (legalContentsType: string) => {
+    this.setState(prevState => ({ [`${legalContentsType}IsChecked`]: !prevState[`${legalContentsType}IsChecked`] }));
+  };
 
-  handleAcceptButton() {
-    this.setState({ checked: true });
-  }
+  handleAcceptButton = (legalContentsType: string) => {
+    this.setState({ [`${legalContentsType}IsChecked`]: true });
+  };
+
+  displayLegalFormModal = (checked: boolean, text: string, legalContentsType: string) => {
+    const modalContent = (
+      <LegalForm
+        handleAcceptButton={this.handleAcceptButton}
+        checked={checked}
+        text={text}
+        legalContentsType={legalContentsType}
+      />
+    );
+    displayCustomModal(modalContent, true, 'modal-large');
+  };
 
   render() {
     const slug = getDiscussionSlug();
-    const { hasTermsAndConditions, lang, textFields } = this.props;
+    const { hasTermsAndConditions, hasPrivacyPolicy, textFields, termsAndConditionsText, privacyPolicyText } = this.props;
+    const { privacyPolicyIsChecked, termsAndConditionsIsChecked } = this.state;
     return (
       <div className="login-view">
         <div className="box-title">{I18n.t('login.createAccount')}</div>
@@ -150,15 +164,18 @@ class SignupForm extends React.Component<SignupFormProps, SignupFormState> {
               })}
             {hasTermsAndConditions && (
               <FormGroup className="left margin-left-2">
-                <Checkbox checked={this.state.checked} type="checkbox" onChange={this.toggleCheck} required inline>
+                <Checkbox
+                  checked={termsAndConditionsIsChecked}
+                  type="checkbox"
+                  onChange={() => this.toggleCheck('termsAndConditions')}
+                  required
+                  inline
+                >
                   <Translate value="termsAndConditions.iAccept" />
                   <a
                     onClick={(e) => {
                       e.preventDefault();
-                      const Terms = (
-                        <TermsForm handleAcceptButton={this.handleAcceptButton} isChecked={this.state.checked} lang={lang} />
-                      );
-                      displayCustomModal(Terms, true, 'modal-large');
+                      this.displayLegalFormModal(termsAndConditionsIsChecked, termsAndConditionsText, 'termsAndConditions');
                     }}
                   >
                     <Translate value="termsAndConditions.link" className="terms-link" />
@@ -166,14 +183,30 @@ class SignupForm extends React.Component<SignupFormProps, SignupFormState> {
                 </Checkbox>
               </FormGroup>
             )}
+            {hasPrivacyPolicy && (
+              <FormGroup className="left margin-left-2">
+                <Checkbox
+                  checked={privacyPolicyIsChecked}
+                  type="checkbox"
+                  onChange={() => this.toggleCheck('privacyPolicy')}
+                  required
+                  inline
+                >
+                  <Translate value="privacyPolicy.iAccept" />
+                  <a
+                    onClick={(e) => {
+                      e.preventDefault();
+                      this.displayLegalFormModal(privacyPolicyIsChecked, privacyPolicyText, 'privacyPolicy');
+                    }}
+                  >
+                    <Translate value="privacyPolicy.link" className="terms-link" />
+                  </a>
+                </Checkbox>
+              </FormGroup>
+            )}
             <div className="center">
               <FormGroup>
-                <Button
-                  type="submit"
-                  name="register"
-                  value={I18n.t('login.signUp')}
-                  className="button-submit button-dark margin-m"
-                >
+                <Button type="submit" name="register" value={I18n.t('login.signUp')} className="button-submit button-dark">
                   <Translate value="login.signUp" />
                 </Button>
               </FormGroup>
@@ -206,7 +239,8 @@ const mapDispatchToProps = dispatch => ({
 const withData = graphql(TabsConditionQuery, {
   props: ({ data }) => ({
     ...data,
-    hasTermsAndConditions: data.hasTermsAndConditions
+    hasTermsAndConditions: data.hasTermsAndConditions,
+    hasPrivacyPolicy: data.hasPrivacyPolicy
   })
 });
 
@@ -224,6 +258,22 @@ export default compose(
 
       return {
         textFields: data.textFields
+      };
+    }
+  }),
+  graphql(LegalContentsQuery, {
+    props: ({ data }) => {
+      if (data.loading) {
+        return { loading: true };
+      }
+      if (data.error) {
+        return { error: data.error, loading: false };
+      }
+
+      return {
+        ...data,
+        termsAndConditionsText: lodashGet(data, 'legalContents.termsAndConditions', ''),
+        privacyPolicyText: lodashGet(data, 'legalContents.privacyPolicy', '')
       };
     }
   }),

@@ -489,7 +489,9 @@ const Translations = {
       success: "Votre configuration des cookies a bien été sauvegardée"
     },
     privacyPolicy: {
-      headerTitle: "Politique de protection des données personnelles"
+      headerTitle: "Politique de protection des données personnelles",
+      iAccept: "J'ai lu et j'accepte la ",
+      link: "politique de protection des données personnelles"
     },
     userGuidelines: {
       headerTitle: "Charte de participation"
@@ -1329,7 +1331,9 @@ const Translations = {
       success: "Your cookies configuration has been saved"
     },
     privacyPolicy: {
-      headerTitle: "Privacy policy"
+      headerTitle: "Privacy policy",
+      iAccept: "I have read and I accept the ",
+      link: "Privacy Policy"
     },
     userGuidelines: {
       headerTitle: "User guidelines"

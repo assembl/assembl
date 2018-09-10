@@ -1,4 +1,6 @@
 import { signUp, changePasswordRequest } from '../services/authenticationService';
+import { setCookieItem } from '../../app/utils/globalFunctions';
+import { COOKIE_TYPES } from '../../app/constants';
 
 const signupSuccess = () => ({
   type: 'SIGNUP_SUCCESS'
@@ -13,6 +15,8 @@ const signupGeneralError = error => ({
 export const signupAction = payload => dispatch =>
   signUp(payload)
     .then(() => {
+      const relevantCookies = COOKIE_TYPES.filter(c => c === 'ACCEPT_CGU' || c === 'ACCEPT_PRIVACY_POLICY_ON_DISCUSSION');
+      setCookieItem('cookies_configuration', relevantCookies);
       dispatch(signupSuccess());
     })
     .catch((error) => {
