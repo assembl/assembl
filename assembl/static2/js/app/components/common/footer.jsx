@@ -96,7 +96,8 @@ class Footer extends React.Component {
                     </Link>
                   </div>
                 )}
-                {hasPrivacyPolicy && hasUserGuidelines && <span className="small-hyphen-padding"> &mdash; </span>}
+                {(hasPrivacyPolicy && hasUserGuidelines) ||
+                  (hasCookiesPolicy && <span className="small-hyphen-padding"> &mdash; </span>)}
                 {hasUserGuidelines && (
                   <div className="user-guidelines">
                     <Link to={`${get('userGuidelines', slug)}`}>
