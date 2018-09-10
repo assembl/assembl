@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import range from 'lodash/range';
 
-import { addPhaseTooltip } from '../../common/tooltips';
+import { addPhaseTooltip, phaseTooltip } from '../../common/tooltips';
 import TabbedContent from '../../common/tabbedContent';
 import SectionTitle from '../sectionTitle';
 import PhaseForm from './phaseForm';
@@ -84,7 +84,9 @@ export class DumbTimelineForm extends React.Component<TimelineFormProps, Timelin
 
         {phases && (
           <TabbedContent
+            type="phase"
             divClassName="admin-content"
+            tabTitleMsgId="administration.timelineAdmin.phase"
             tabs={phases.map((id, index) => {
               const tabTitle = `${I18n.t('administration.timelineAdmin.phase', { count: index + 1 })}*`;
               return {
@@ -92,6 +94,7 @@ export class DumbTimelineForm extends React.Component<TimelineFormProps, Timelin
                 title: tabTitle
               };
             })}
+            renderTooltip={phaseTooltip}
             renderBody={tab => (
               <PhaseForm
                 key={`phase-form-${tab.id}-${editLocale}`}

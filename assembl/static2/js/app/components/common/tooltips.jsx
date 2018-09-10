@@ -269,4 +269,8 @@ export const deletePhaseTooltip = (
   </Tooltip>
 );
 
+export const phaseTooltip = (phaseTitle: string) => <Tooltip id="phaseTooltip">{phaseTitle}</Tooltip>;
+
+export const thematicTooltip = (thematicTitle: string) => <Tooltip id="thematicTooltip">{thematicTitle}</Tooltip>;
+
 export const fileNameTooltip = (fileName?: string) => <Tooltip id="fileNameTooltip">{fileName}</Tooltip>;

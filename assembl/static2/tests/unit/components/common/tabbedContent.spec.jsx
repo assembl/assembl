@@ -26,17 +26,37 @@ describe('TabbedContent component', () => {
     </div>
   );
   it('should match snapshot', () => {
-    const rendered = renderer.create(<TabbedContent tabs={tabs} renderBody={renderBody} />).toJSON();
+    const rendered = renderer
+      .create(<TabbedContent tabTitleMsgId="debate.survey.thematicNumerotation" tabs={tabs} renderBody={renderBody} />)
+      .toJSON();
     expect(rendered).toMatchSnapshot();
   });
 
   it('should match snapshot with divClassName', () => {
-    const rendered = renderer.create(<TabbedContent divClassName="right" tabs={tabs} renderBody={renderBody} />).toJSON();
+    const rendered = renderer
+      .create(
+        <TabbedContent
+          tabTitleMsgId="administration.timelineAdmin.phase"
+          divClassName="right"
+          tabs={tabs}
+          renderBody={renderBody}
+        />
+      )
+      .toJSON();
     expect(rendered).toMatchSnapshot();
   });
 
   it('should match snapshot with bodyRowClassName', () => {
-    const rendered = renderer.create(<TabbedContent bodyRowClassName="right" tabs={tabs} renderBody={renderBody} />).toJSON();
+    const rendered = renderer
+      .create(
+        <TabbedContent
+          bodyRowClassName="right"
+          tabTitleMsgId="debate.survey.thematicNumerotation"
+          tabs={tabs}
+          renderBody={renderBody}
+        />
+      )
+      .toJSON();
     expect(rendered).toMatchSnapshot();
   });
 });

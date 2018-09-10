@@ -11,7 +11,7 @@ import updateThematicMutation from '../../../graphql/mutations/updateThematic.gr
 import { createSave, convertToEntries, getFileVariable } from '../../form/utils';
 
 function getVideoVariable(video, initialVideo) {
-  if (!video || !video.present) {
+  if (!video) {
     // pass {} to remove all video fields on server side
     return {};
   }
@@ -56,7 +56,7 @@ export const createMutationsPromises = (client: ApolloClient) => (
   const initialIds = initialValues.themes.map(t => t.id);
   const currentIds = values.themes.map(t => t.id);
   const idsToDelete = difference(initialIds, currentIds);
-  const idsToCreate = difference(currentIds, initialIds);
+  const idsToCreate = currentIds.filter(id => parseInt(id, 10) && parseInt(id, 10) < 0);
 
   const allMutations = [];
 

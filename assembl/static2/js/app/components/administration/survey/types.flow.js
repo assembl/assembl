@@ -12,7 +12,6 @@ export type MediaValue = {|
 |};
 
 type VideoValue = {
-  present: boolean,
   media: ?MediaValue,
   title: I18nValue,
   descriptionBottom: I18nValue,
@@ -20,7 +19,7 @@ type VideoValue = {
   descriptionTop: I18nValue
 };
 
-type ThemeValue = {
+export type ThemeValue = {
   id: string,
   img: FileValue,
   questions: Array<QuestionValue>,

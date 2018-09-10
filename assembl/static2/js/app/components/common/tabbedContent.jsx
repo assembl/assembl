@@ -1,7 +1,9 @@
 // @flow
 import classNames from 'classnames';
 import * as React from 'react';
-import { Col, Row } from 'react-bootstrap';
+import { Col, Row, OverlayTrigger } from 'react-bootstrap';
+import { Translate } from 'react-redux-i18n';
+import { hiddenTooltip } from './tooltips';
 
 export type Tab = {
   id: string,
@@ -12,6 +14,8 @@ type Props = {
   bodyRowClassName: string,
   divClassName: string,
   renderBody: (Tab, number) => React.Node,
+  renderTooltip: string => React.Node,
+  tabTitleMsgId: string,
   tabs: Array<Tab>
 };
 
@@ -22,31 +26,36 @@ type State = {
 class TabbedContent extends React.Component<Props, State> {
   static defaultProps = {
     bodyRowClassName: '',
-    divClassName: ''
+    divClassName: '',
+    renderTooltip: () => hiddenTooltip
   };
 
   state = {
     activeIdx: 0
   };
 
+  renderOverlay = (tab: Tab) => (tab.title ? this.props.renderTooltip(tab.title) : hiddenTooltip);
+
   renderTabs() {
-    const { tabs } = this.props;
+    const { tabTitleMsgId, tabs } = this.props;
     return tabs.map((tab, idx) => (
       <Col xs={12} md={Math.round(12 / tabs.length)} key={tab.id}>
-        <a
-          className={classNames(
-            {
-              'tab-title-active': idx === this.state.activeIdx,
-              'tab-title': idx !== this.state.activeIdx
-            },
-            'ellipsis'
-          )}
-          onClick={() => {
-            this.setState({ activeIdx: idx });
-          }}
-        >
-          {tab.title}
-        </a>
+        <OverlayTrigger placement="top" overlay={this.renderOverlay(tab)}>
+          <a
+            className={classNames(
+              {
+                'tab-title-active': idx === this.state.activeIdx,
+                'tab-title': idx !== this.state.activeIdx
+              },
+              'ellipsis'
+            )}
+            onClick={() => {
+              this.setState({ activeIdx: idx });
+            }}
+          >
+            <Translate count={idx + 1} value={tabTitleMsgId} />
+          </a>
+        </OverlayTrigger>
       </Col>
     ));
   }

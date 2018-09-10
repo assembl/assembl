@@ -110,7 +110,7 @@ exports[`TextFieldAdapter component should render a text field without value 1`]
       onFocus={[Function]}
       placeholder="Full name"
       type={undefined}
-      value={undefined}
+      value=""
     />
   </div>
   <button
