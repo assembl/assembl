@@ -20,7 +20,7 @@ import type { FictionBodyProps } from '../components/debate/brightMirror/fiction
 type BrightMirrorFictionType = {
   data: {
     fiction: BrightMirrorFictionFragment,
-    error: any
+    error: Object
   }
 };
 
