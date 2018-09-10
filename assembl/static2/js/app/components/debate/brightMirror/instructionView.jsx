@@ -25,13 +25,8 @@ export type InstructionViewProps = {
   },
   /** Timeline data */
   timeline: Timeline,
-<<<<<<< HEAD
-  /** Bright Mirror identifier */
-  identifier: string
-=======
   identifier: string,
   lang: string
->>>>>>> Devas1696: add modify btn on list of fictions and modal to modify fiction
 };
 
 const InstructionView = ({

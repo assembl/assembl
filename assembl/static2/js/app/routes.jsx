@@ -106,7 +106,7 @@ const AdminChild = (props) => {
   }
 };
 
-const BuildBrightMirrorFiction = props => <BrightMirrorFiction id={props.params.fictionId} />;
+const BuildBrightMirrorFiction = props => <BrightMirrorFiction {...props.params} />;
 
 export default [
   <Route path="/" component={Root}>

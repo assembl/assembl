@@ -24,15 +24,13 @@ import type { CircleAvatarProps } from '../components/debate/brightMirror/circle
 import type { FictionHeaderProps } from '../components/debate/brightMirror/fictionHeader';
 import type { FictionToolbarProps } from '../components/debate/brightMirror/fictionToolbar';
 import type { FictionBodyProps } from '../components/debate/brightMirror/fictionBody';
-
 // Define types
 export type BrightMirrorFictionData = {
   /** Fiction object formatted through GraphQL  */
   fiction: BrightMirrorFictionFragment,
   /** GraphQL error object used to handle fetching errors */
-  error: Object
+  error: any
 };
-
 export type BrightMirrorFictionProps = {
   /** Fiction data information fetched from GraphQL */
   data: BrightMirrorFictionData,
@@ -47,16 +45,13 @@ export type BrightMirrorFictionProps = {
   /** Fiction locale */
   contentLocale: string
 };
-
 type BrightMirrorFictionState = {
   /** Fiction title */
   title: string,
   /** Fiction content */
   content: string
 };
-
 const EMPTY_STRING = '';
-
 export class BrightMirrorFiction extends Component<BrightMirrorFictionProps, BrightMirrorFictionState> {
   constructor(props: BrightMirrorFictionProps) {
     super(props);
@@ -74,12 +69,10 @@ export class BrightMirrorFiction extends Component<BrightMirrorFictionProps, Bri
       displayAlert('danger', I18n.t('error.loading'));
       return null;
     }
-
     // Define variables
     const { fiction } = data;
     const getDisplayName = () => (fiction.creator && fiction.creator.displayName ? fiction.creator.displayName : EMPTY_STRING);
     const displayName = fiction.creator && fiction.creator.isDeleted ? I18n.t('deletedUser') : getDisplayName();
-
     // Define user permission
     const USER_ID_NOT_FOUND = -9999;
     const userId = fiction.creator ? fiction.creator.userId : USER_ID_NOT_FOUND;
@@ -87,19 +80,20 @@ export class BrightMirrorFiction extends Component<BrightMirrorFictionProps, Bri
       (getConnectedUserId() === String(userId) && connectedUserCan(Permissions.DELETE_MY_POST)) ||
       connectedUserCan(Permissions.DELETE_POST);
     const userCanEdit = getConnectedUserId() === String(userId) && connectedUserCan(Permissions.EDIT_MY_POST);
-
     // Define callback functions
     const deleteFictionCallback = () => {
       // Route to fiction list page
       const fictionListParams = { slug: slug, phase: phase, themeId: themeId };
       const fictionListURL = get('idea', fictionListParams);
-      browserHistory.push(fictionListURL);
+      // browserHistory.push(fictionListURL);
+      browserHistory.push({
+        pathname: fictionListURL,
+        state: { callback: 'deletefictionok' }
+      });
     };
-
     const modifyFictionCallback = (subject, body) => {
       this.setState({ title: subject, content: body });
     };
-
     // Define components props
     const circleAvatarProps: CircleAvatarProps = {
       username: displayName,
@@ -108,14 +102,12 @@ export class BrightMirrorFiction extends Component<BrightMirrorFictionProps, Bri
           ? fiction.creator.image.externalUrl
           : EMPTY_STRING
     };
-
     const fictionHeaderProps: FictionHeaderProps = {
       authorFullname: displayName,
       publishedDate: fiction.creationDate ? fiction.creationDate.toString() : EMPTY_STRING,
       displayedPublishedDate: I18n.l(fiction.creationDate, { dateFormat: 'date.format' }),
       circleAvatar: { ...circleAvatarProps }
     };
-
     const fictionToolbarProps: FictionToolbarProps = {
       fictionId: fictionId,
       title: title,
@@ -126,12 +118,10 @@ export class BrightMirrorFiction extends Component<BrightMirrorFictionProps, Bri
       onModifyCallback: modifyFictionCallback,
       onDeleteCallback: deleteFictionCallback
     };
-
     const fictionBodyProps: FictionBodyProps = {
       title: title,
       content: content
     };
-
     return (
       <Fragment>
         <Grid fluid className="bright-mirror-fiction background-fiction-default">
@@ -149,11 +139,9 @@ export class BrightMirrorFiction extends Component<BrightMirrorFictionProps, Bri
     );
   }
 }
-
 const mapStateToProps = state => ({
   contentLocale: state.i18n.locale
 });
-
 export default compose(
   connect(mapStateToProps),
   graphql(BrightMirrorFictionQuery, {

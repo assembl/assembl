@@ -29,6 +29,7 @@ type FictionPostPreview = {
   body: ?string,
   creationDate: ?any,
   creator: ?{|
+    userId: string,
     displayName: ?string,
     isDeleted: ?boolean
   |}

@@ -14,7 +14,7 @@ export const defaultCircleAvatar: CircleAvatarProps = {
   src: 'https://loremflickr.com/300/300'
 };
 
-const customCircleAvatar: CircleAvatarProps = {
+export const customCircleAvatar: CircleAvatarProps = {
   ...defaultCircleAvatar,
   username: '',
   src: ''

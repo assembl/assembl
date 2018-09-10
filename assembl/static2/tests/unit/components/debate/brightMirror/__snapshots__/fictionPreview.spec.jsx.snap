@@ -28,13 +28,6 @@ exports[`Storyshots FictionPreview default 1`] = `
             <div
               className="custom-overlay"
             >
-<<<<<<< HEAD
-              John Doe
-            </span>
-             - 
-            <span
-              className="published-date"
-=======
               <div
                 onBlur={[Function]}
                 onClick={null}
@@ -91,7 +84,6 @@ exports[`Storyshots FictionPreview default 1`] = `
             </h3>
             <p
               className="info"
->>>>>>> Devas1696: add modify btn on list of fictions and modal to modify fiction
             >
               <span
                 className="author"
@@ -655,13 +647,6 @@ exports[`Storyshots FictionPreview playground 1`] = `
             <div
               className="custom-overlay"
             >
-<<<<<<< HEAD
-              John Doe
-            </span>
-             - 
-            <span
-              className="published-date"
-=======
               <div
                 onBlur={[Function]}
                 onClick={null}
@@ -718,7 +703,6 @@ exports[`Storyshots FictionPreview playground 1`] = `
             </h3>
             <p
               className="info"
->>>>>>> Devas1696: add modify btn on list of fictions and modal to modify fiction
             >
               <span
                 className="author"

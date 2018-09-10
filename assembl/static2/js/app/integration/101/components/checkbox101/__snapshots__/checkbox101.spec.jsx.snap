@@ -585,7 +585,7 @@ exports[`Storyshots Checkbox101 custom label 1`] = `
                             }
                           }
                         >
-                          Custom Label
+                          onChangeHandler
                         </span>
                         }
                       </span>
