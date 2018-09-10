@@ -102,6 +102,18 @@ class SignupForm extends React.Component<SignupFormProps, SignupFormState> {
     this.setState({ [`${legalContentsType}IsChecked`]: true });
   };
 
+  displayLegalFormModal = (checked: boolean, text: string, legalContentsType: string) => {
+    const modalContent = (
+      <LegalForm
+        handleAcceptButton={this.handleAcceptButton}
+        checked={checked}
+        text={text}
+        legalContentsType={legalContentsType}
+      />
+    );
+    displayCustomModal(modalContent, true, 'modal-large');
+  };
+
   render() {
     const slug = getDiscussionSlug();
     const { hasTermsAndConditions, hasPrivacyPolicy, textFields, termsAndConditionsText, privacyPolicyText } = this.props;
@@ -163,15 +175,7 @@ class SignupForm extends React.Component<SignupFormProps, SignupFormState> {
                   <a
                     onClick={(e) => {
                       e.preventDefault();
-                      const content = (
-                        <LegalForm
-                          handleAcceptButton={this.handleAcceptButton}
-                          checked={termsAndConditionsIsChecked}
-                          text={termsAndConditionsText}
-                          legalContentsType="termsAndConditions"
-                        />
-                      );
-                      displayCustomModal(content, true, 'modal-large');
+                      this.displayLegalFormModal(termsAndConditionsIsChecked, termsAndConditionsText, 'termsAndConditions');
                     }}
                   >
                     <Translate value="termsAndConditions.link" className="terms-link" />
@@ -192,15 +196,7 @@ class SignupForm extends React.Component<SignupFormProps, SignupFormState> {
                   <a
                     onClick={(e) => {
                       e.preventDefault();
-                      const content = (
-                        <LegalForm
-                          text={privacyPolicyText}
-                          handleAcceptButton={this.handleAcceptButton}
-                          checked={privacyPolicyIsChecked}
-                          legalContentsType="privacyPolicy"
-                        />
-                      );
-                      displayCustomModal(content, true, 'modal-large');
+                      this.displayLegalFormModal(privacyPolicyIsChecked, privacyPolicyText, 'privacyPolicy');
                     }}
                   >
                     <Translate value="privacyPolicy.link" className="terms-link" />
