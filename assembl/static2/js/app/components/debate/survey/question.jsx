@@ -83,8 +83,9 @@ class Question extends React.Component<QuestionProps, QuestionState> {
   };
 
   getPostBodyCharCount = () => {
-    if (this.state.postBody) {
-      return this.state.postBody.getCurrentContent().getPlainText().length;
+    const { postBody } = this.state;
+    if (postBody) {
+      return postBody.getCurrentContent().getPlainText().length;
     }
 
     return 0;
