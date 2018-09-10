@@ -38,7 +38,7 @@ const FictionToolbar = ({
 }: FictionToolbarProps) => {
   const openPostModal = () => {
     const content = (
-      <div className="fiction-edit-modal">
+      <div className="fiction-edit-modal-inner">
         <EditPostForm
           id={fictionId}
           body={originalBody}
@@ -56,7 +56,7 @@ const FictionToolbar = ({
         />
       </div>
     );
-    return displayCustomModal(content, true);
+    return displayCustomModal(content, true, 'fiction-edit-modal');
   };
 
   return (

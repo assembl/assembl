@@ -60,7 +60,7 @@ const FictionPreview = ({
   // Define components
   const openPostModal = () => {
     const content = (
-      <div className="fiction-edit-modal">
+      <div className="fiction-edit-modal-inner">
         <EditPostForm
           id={id}
           body={originalBody}
@@ -78,7 +78,7 @@ const FictionPreview = ({
         />
       </div>
     );
-    return displayCustomModal(content, true);
+    return displayCustomModal(content, true, 'fiction-edit-modal');
   };
 
   const editButton = userCanEdit ? (

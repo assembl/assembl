@@ -1,30 +1,61 @@
 .fiction-edit-modal {
-  background-color: $first-color-light;
-  padding: 40px;
+  .modal-dialog {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
 
-  .assembl-icon-back-arrow {
-    &:before {
-      font-size: $font-size-s;
+  .modal-content {
+    height: auto;
+    min-height: 100%;
+    border-radius: 0;
+    background-color: $first-color-light;
+  }
+
+  .fiction-edit-modal-inner {
+    padding: 40px;
+
+    .assembl-icon-back-arrow {
+      &:before {
+        font-size: $font-size-s;
+      }
     }
-  }
 
-  .answer-form-inner {
-    margin: 13px;
+    .answer-form-inner {
+      margin: 13px;
 
-    .editor-label {
-      padding-top: 16px;
+      .editor-label {
+        padding-top: 16px;
+      }
     }
-  }
 
-  .button-container {
-    margin: 25px 0 0;
-  }
+    .button-container {
+      margin: 25px 0 0;
+    }
 
-  .assembl-icon-back-arrow {
-    padding-left: 10px;
-  }
+    .assembl-icon-back-arrow {
+      padding-left: 10px;
+    }
 
-  .btn {
-    margin: 3px 0 8px;
+    .btn {
+      margin: 3px 0 8px;
+    }
+
+    .rich-text-editor .public-DraftEditor-content {
+      height: 300px;
+    }
+
+    @media screen and (min-width: $screen-sm-min) {
+      .rich-text-editor .public-DraftEditor-content {
+        height: 400px;
+      }
+    }
+
+    @media screen and (min-width: $screen-xl-min) {
+      .rich-text-editor .public-DraftEditor-content {
+        height: 800px;
+      }
+    }
   }
 }
