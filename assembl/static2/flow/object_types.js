@@ -1,6 +1,6 @@
 /* @flow */
 /* eslint-disable */
-import { type RawContentState } from 'draft-js';
+import { type EditorState } from 'draft-js';
 
 export type IdeaMessageColumns = Array<IdeaMessageColumnFragment>;
 
@@ -47,7 +47,7 @@ type LangstringEntries = Array<LangstringEntry>;
 
 type RichTextLangstringEntry = {
   localeCode: string,
-  value: RawContentState
+  value: EditorState
 };
 type RichTextLangstringEntries = Array<RichTextLangstringEntry>;
 

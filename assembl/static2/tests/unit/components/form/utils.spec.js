@@ -1,10 +1,62 @@
+// @flow
+import { EditorState } from 'draft-js';
+
+import { createEditorStateFromText } from '../../../helpers/draftjs';
 import * as utils from '../../../../js/app/components/form/utils';
 import { displayAlert } from '../../../../js/app/utils/utilityManager';
 
 jest.mock('../../../../js/app/utils/utilityManager');
 
-describe('convertEntries function', () => {
-  const { convertEntries } = utils;
+describe('i18nValueIsEmpty function', () => {
+  const { i18nValueIsEmpty } = utils;
+  it('should return true is value is empty', () => {
+    const value = {
+      en: '',
+      fr: ''
+    };
+    const actual = i18nValueIsEmpty(value);
+    expect(actual).toBeTruthy();
+  });
+
+  it('should return false is value is not empty', () => {
+    const value = {
+      en: 'hello',
+      fr: 'bonjour'
+    };
+    const actual = i18nValueIsEmpty(value);
+    expect(actual).toBeFalsy();
+  });
+});
+
+describe('richTextI18nValueIsEmpty function', () => {
+  const { richTextI18nValueIsEmpty } = utils;
+  it('should return true if value contains only empty editor states', () => {
+    const value = {
+      en: EditorState.createEmpty(),
+      fr: createEditorStateFromText('')
+    };
+    const actual = richTextI18nValueIsEmpty(value);
+    expect(actual).toBeTruthy();
+  });
+
+  it('should return true if value contains no entry', () => {
+    const value = {};
+    const actual = richTextI18nValueIsEmpty(value);
+    expect(actual).toBeTruthy();
+  });
+
+  it('should return false if value is not empty', () => {
+    const value = {
+      en: EditorState.createEmpty(),
+      fr: createEditorStateFromText('Bonjour')
+    };
+    const actual = richTextI18nValueIsEmpty(value);
+    expect(actual).toBeFalsy();
+  });
+});
+
+describe('convertEntriesToI18nValue function', () => {
+  const { convertEntriesToI18nValue } = utils;
   it('should convert langstring entries to an i18n value for forms', () => {
     const input = [
       { localeCode: 'en', value: 'Hello' },
@@ -16,7 +68,22 @@ describe('convertEntries function', () => {
       es: 'Hola',
       fr: 'Salut'
     };
-    expect(convertEntries(input)).toEqual(expected);
+    expect(convertEntriesToI18nValue(input)).toEqual(expected);
+  });
+});
+
+describe('convertEntriesToI18nRichText function', () => {
+  const { convertEntriesToI18nRichText } = utils;
+  it('should convert langstring entries to an i18n value for forms', () => {
+    const input = [
+      { localeCode: 'en', value: '<p>Hello</p>' },
+      { localeCode: 'es', value: '<p>Hola</p>' },
+      { localeCode: 'fr', value: '<p>Salut</p>' }
+    ];
+    const actual = convertEntriesToI18nRichText(input);
+    expect(actual.en.getCurrentContent().getPlainText()).toEqual('Hello');
+    expect(actual.fr.getCurrentContent().getPlainText()).toEqual('Salut');
+    expect(actual.es.getCurrentContent().getPlainText()).toEqual('Hola');
   });
 });
 
@@ -67,10 +134,23 @@ describe('convertToEntries function', () => {
   });
 });
 
+describe('convertRichTextToEntries function', () => {
+  const { convertRichTextToEntries } = utils;
+  it('should convert a rich text i18n value in langstring entries', () => {
+    const input = {
+      en: createEditorStateFromText('Hello'),
+      fr: createEditorStateFromText('Bonjour')
+    };
+    const actual = convertRichTextToEntries(input);
+    const expected = [{ localeCode: 'en', value: '<p>Hello</p>' }, { localeCode: 'fr', value: '<p>Bonjour</p>' }];
+    expect(actual).toEqual(expected);
+  });
+});
+
 describe('getFileVariable function', () => {
   const { getFileVariable } = utils;
   it('should return a file variable from a file value', () => {
-    const file = new File([''], 'foo.jpg', { type: 'image/jpeg' });
+    const file: File = new File([''], 'foo.jpg', { type: 'image/jpeg' });
     const input = {
       externalUrl: file,
       mimeType: 'image/jpeg',
@@ -82,7 +162,7 @@ describe('getFileVariable function', () => {
   });
 
   it('should return \'TO_DELETE\' if file has been removed', () => {
-    const file = new File([''], 'foo.jpg', { type: 'image/jpeg' });
+    const file: File = new File([''], 'foo.jpg', { type: 'image/jpeg' });
     const img = '';
     const initialImg = {
       externalUrl: file,

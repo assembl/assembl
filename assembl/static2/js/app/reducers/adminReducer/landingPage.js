@@ -185,7 +185,7 @@ export const page: LandingPageReducer = (state = initialPage, action) => {
     }
     newState = newState
       .set('titleEntries', fromJS(action.page.titleEntries))
-      .set('subtitleEntries', fromJS(action.page.subtitleEntries))
+      .set('subtitleEntries', List(action.page.subtitleEntries.map(entry => Map(entry))))
       .set('buttonLabelEntries', fromJS(action.page.buttonLabelEntries));
     return newState.set('_hasChanged', false);
   }
@@ -194,9 +194,7 @@ export const page: LandingPageReducer = (state = initialPage, action) => {
       .update('titleEntries', updateInLangstringEntries(action.locale, fromJS(action.value)))
       .set('_hasChanged', true);
   case UPDATE_LANDING_PAGE_HEADER_SUBTITLE:
-    return state
-      .update('subtitleEntries', updateInLangstringEntries(action.locale, fromJS(action.value)))
-      .set('_hasChanged', true);
+    return state.update('subtitleEntries', updateInLangstringEntries(action.locale, action.value)).set('_hasChanged', true);
   case UPDATE_LANDING_PAGE_HEADER_BUTTON_LABEL:
     return state
       .update('buttonLabelEntries', updateInLangstringEntries(action.locale, fromJS(action.value)))

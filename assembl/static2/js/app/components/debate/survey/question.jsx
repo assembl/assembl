@@ -4,6 +4,7 @@ import { graphql, compose } from 'react-apollo';
 import { connect } from 'react-redux';
 import { Translate, I18n } from 'react-redux-i18n';
 import { Grid, Col, Button } from 'react-bootstrap';
+import { EditorState } from 'draft-js';
 
 import { getConnectedUserId } from '../../../utils/globalFunctions';
 import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
@@ -12,7 +13,7 @@ import createPostMutation from '../../../graphql/mutations/createPost.graphql';
 import { SMALL_SCREEN_WIDTH, MINIMUM_BODY_LENGTH } from '../../../constants';
 import { withScreenDimensions } from '../../common/screenDimensions';
 import RichTextEditor from '../../common/richTextEditor';
-import { convertRawContentStateToHTML } from '../../../utils/draftjs';
+import { convertEditorStateToHTML } from '../../../utils/draftjs';
 
 type QuestionProps = {
   title: string,
@@ -29,8 +30,7 @@ type QuestionProps = {
 
 type QuestionState = {
   buttonDisabled: boolean,
-  postBody: ?string,
-  charCount: number
+  postBody: EditorState
 };
 
 class Question extends React.Component<QuestionProps, QuestionState> {
@@ -38,8 +38,7 @@ class Question extends React.Component<QuestionProps, QuestionState> {
     super(props);
     this.state = {
       buttonDisabled: false,
-      postBody: '',
-      charCount: 0
+      postBody: EditorState.createEmpty()
     };
   }
 
@@ -48,13 +47,13 @@ class Question extends React.Component<QuestionProps, QuestionState> {
     const body = this.state.postBody;
     this.setState({ buttonDisabled: true }, () =>
       this.props
-        .mutate({ variables: { contentLocale: contentLocale, ideaId: questionId, body: convertRawContentStateToHTML(body) } })
+        .mutate({ variables: { contentLocale: contentLocale, ideaId: questionId, body: convertEditorStateToHTML(body) } })
         .then(() => {
           scrollToQuestion(true, index + 1);
           displayAlert('success', I18n.t('debate.survey.postSuccess'));
           refetchTheme();
           this.setState({
-            postBody: null,
+            postBody: EditorState.createEmpty(),
             buttonDisabled: false
           });
         })
@@ -83,8 +82,13 @@ class Question extends React.Component<QuestionProps, QuestionState> {
     }
   };
 
-  updateCharCount = (newValue) => {
-    this.setState({ charCount: newValue });
+  getPostBodyCharCount = () => {
+    const { postBody } = this.state;
+    if (postBody) {
+      return postBody.getCurrentContent().getPlainText().length;
+    }
+
+    return 0;
   };
 
   render() {
@@ -111,14 +115,13 @@ class Question extends React.Component<QuestionProps, QuestionState> {
             </div>
             <Col xs={12} md={9} className="col-centered">
               <RichTextEditor
-                rawContentState={this.state.postBody}
+                editorState={this.state.postBody}
                 maxLength={1000}
+                onChange={this.updateBody}
                 placeHolder={I18n.t('debate.survey.txtAreaPh')}
-                updateContentState={this.updateBody}
                 handleInputFocus={this.redirectToLogin}
-                handleCharCountChange={this.updateCharCount}
               />
-              {this.state.charCount > MINIMUM_BODY_LENGTH && (
+              {this.getPostBodyCharCount() > MINIMUM_BODY_LENGTH && (
                 <Button
                   onClick={this.createPost}
                   disabled={this.state.buttonDisabled}

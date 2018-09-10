@@ -4,8 +4,7 @@ import type { ApolloClient } from 'react-apollo';
 import { PHASES } from '../../../constants';
 
 import ThematicsQuery from '../../../graphql/ThematicsQuery.graphql';
-import { convertEntries } from '../../form/utils';
-import { convertEntriesToRawContentState } from '../../../utils/draftjs';
+import { convertEntriesToI18nValue, convertEntriesToI18nRichText } from '../../form/utils';
 import type { BrightMirrorAdminValues } from './types.flow';
 
 export const load = async (client: ApolloClient, fetchPolicy: FetchPolicy) => {
@@ -22,11 +21,11 @@ export function postLoadFormat(data: ThematicsQueryQuery): BrightMirrorAdminValu
     themes: sortBy(data.thematics, 'order').map(t => ({
       id: t.id,
       img: t.img,
-      title: convertEntries(t.titleEntries),
-      description: convertEntries(t.descriptionEntries),
+      title: convertEntriesToI18nValue(t.titleEntries),
+      description: convertEntriesToI18nValue(t.descriptionEntries),
       announcement: {
-        title: convertEntries(t.announcement.titleEntries),
-        body: convertEntries(convertEntriesToRawContentState(t.announcement.bodyEntries))
+        title: convertEntriesToI18nValue(t.announcement.titleEntries),
+        body: convertEntriesToI18nRichText(t.announcement.bodyEntries)
       }
     }))
   };

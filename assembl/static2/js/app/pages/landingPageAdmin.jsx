@@ -4,8 +4,11 @@ import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { type Route, type Router } from 'react-router';
 import { I18n } from 'react-redux-i18n';
+import { EditorState } from 'draft-js';
+import { List, Map } from 'immutable';
 import moment from 'moment';
-import { convertEntriesToHTML } from '../utils/draftjs';
+
+import { convertEntriesToHTML, convertImmutableEntriesToJS } from '../utils/draftjs';
 import { getEntryValueForLocale } from '../utils/i18n';
 import ManageModules from '../components/administration/landingPage/manageModules';
 import CustomizeHeader from '../components/administration/landingPage/customizeHeader';
@@ -28,7 +31,7 @@ type Props = {
   editLocale: string,
   header: {
     title: string,
-    subtitle: ?string,
+    subtitle: EditorState,
     buttonLabel: string,
     headerImgMimeType: string,
     headerImgUrl: string,
@@ -39,7 +42,7 @@ type Props = {
   },
   pageHasChanged: boolean,
   phasesHaveChanged: boolean,
-  page: Object,
+  page: Map<string, any>,
   updateDiscussion: Function,
   updateDiscussionPhase: Function,
   discussionPhases: Array<Object>,
@@ -129,13 +132,19 @@ class LandingPageAdmin extends React.Component<Props, State> {
     }
 
     if (pageHasChanged) {
+      // $FlowFixMe flow doesn't seem to know the second param of Map.get()
+      const subtitleEntries = convertImmutableEntriesToJS(page.get('subtitleEntries', List()));
       updateDiscussion({
         variables: {
-          titleEntries: page.titleEntries,
-          subtitleEntries: convertEntriesToHTML(page.subtitleEntries),
-          buttonLabelEntries: page.buttonLabelEntries,
-          headerImage: this.getImageVariable(page.headerImage),
-          logoImage: this.getImageVariable(page.logoImage)
+          // $FlowFixMe flow doesn't seem to know the second param of Map.get()
+          titleEntries: page.get('titleEntries', List()).toJS(),
+          subtitleEntries: convertEntriesToHTML(subtitleEntries),
+          // $FlowFixMe flow doesn't seem to know the second param of Map.get()
+          buttonLabelEntries: page.get('buttonLabelEntries', List()).toJS(),
+          // $FlowFixMe flow doesn't seem to know the second param of Map.get()
+          headerImage: this.getImageVariable(page.get('headerImage', Map()).toJS()),
+          // $FlowFixMe flow doesn't seem to know the second param of Map.get()
+          logoImage: this.getImageVariable(page.get('logoImage', Map()).toJS())
         }
       })
         .then(() => {
@@ -174,15 +183,15 @@ class LandingPageAdmin extends React.Component<Props, State> {
     this.props.landingPageModulesHasChanged || this.props.pageHasChanged || this.props.phasesHaveChanged;
 
   render() {
-    const { section } = this.props;
+    const { editLocale, header, section } = this.props;
     const currentStep = parseInt(section, 10);
     const saveDisabled = !this.dataHaveChanged();
     return (
       <div className="landing-page-admin">
         <SaveButton disabled={saveDisabled} saveAction={this.saveAction} />
         {section === '1' && <ManageModules {...this.props} />}
-        {section === '2' && <CustomizeHeader {...this.props} />}
-        {section === '3' && <ManageTimeline {...this.props} />}
+        {section === '2' && <CustomizeHeader editLocale={editLocale} header={header} />}
+        {section === '3' && <ManageTimeline editLocale={editLocale} />}
         {!isNaN(currentStep) && <Navbar currentStep={currentStep} totalSteps={3} phaseIdentifier="landingPage" />}
       </div>
     );
@@ -191,7 +200,7 @@ class LandingPageAdmin extends React.Component<Props, State> {
 
 const mapStateToProps = ({ admin: { editLocale, landingPage, timeline } }) => {
   const { page } = landingPage;
-  const subtitle = getEntryValueForLocale(page.get('subtitleEntries'), editLocale, '');
+  const subtitle = getEntryValueForLocale(page.get('subtitleEntries'), editLocale, EditorState.createEmpty());
   const timelineModule = landingPage.modulesById.find(module => module.getIn(['moduleType', 'identifier']) === 'TIMELINE');
   // timelineModule can be undefined when modulesById is not loaded yet
   const timelineModuleId = timelineModule ? timelineModule.get('id') : null;
@@ -211,7 +220,7 @@ const mapStateToProps = ({ admin: { editLocale, landingPage, timeline } }) => {
     timelineModuleId: timelineModuleId,
     header: {
       title: getEntryValueForLocale(page.get('titleEntries'), editLocale, ''),
-      subtitle: subtitle && typeof subtitle !== 'string' ? subtitle.toJS() : null,
+      subtitle: subtitle,
       buttonLabel: getEntryValueForLocale(page.get('buttonLabelEntries'), editLocale, ''),
       headerImgMimeType: page.getIn(['headerImage', 'mimeType']),
       headerImgUrl: page.getIn(['headerImage', 'externalUrl']),
@@ -220,7 +229,7 @@ const mapStateToProps = ({ admin: { editLocale, landingPage, timeline } }) => {
       logoImgUrl: page.getIn(['logoImage', 'externalUrl']),
       logoImgTitle: page.getIn(['logoImage', 'title'])
     },
-    page: landingPage.page.toJS(),
+    page: landingPage.page,
     pageHasChanged: landingPage.pageHasChanged,
     editLocale: editLocale,
     phasesHaveChanged: timeline.phasesHaveChanged,

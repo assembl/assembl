@@ -1,5 +1,5 @@
 // @flow
-import type { FileValue, I18nValue } from '../../form/types.flow';
+import type { FileValue, I18nValue, I18nRichTextValue } from '../../form/types.flow';
 
 type QuestionValue = {
   id: string,
@@ -14,9 +14,9 @@ export type MediaValue = {|
 type VideoValue = {
   media: ?MediaValue,
   title: I18nValue,
-  descriptionBottom: I18nValue,
-  descriptionSide: I18nValue,
-  descriptionTop: I18nValue
+  descriptionBottom: I18nRichTextValue,
+  descriptionSide: I18nRichTextValue,
+  descriptionTop: I18nRichTextValue
 };
 
 export type ThemeValue = {

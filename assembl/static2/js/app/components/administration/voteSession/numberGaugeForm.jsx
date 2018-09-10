@@ -25,14 +25,14 @@ const DumbNumberGaugeForm = ({
     <FormGroup>
       <FormControlWithLabel
         onChange={handleMinChange}
-        value={minimum}
+        value={minimum ? minimum.toString() : ''}
         label={I18n.t('administration.minValue')}
         required
         type="number"
       />
       <FormControlWithLabel
         onChange={handleMaxChange}
-        value={maximum}
+        value={maximum ? maximum.toString() : ''}
         label={I18n.t('administration.maxValue')}
         required
         type="number"

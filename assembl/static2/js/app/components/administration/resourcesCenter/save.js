@@ -3,9 +3,8 @@ import difference from 'lodash/difference';
 import isEqual from 'lodash/isEqual';
 import type { ApolloClient } from 'react-apollo';
 
-import { convertEntriesToHTML } from '../../../utils/draftjs';
 import type { ResourcesValues } from './types.flow';
-import { createSave, convertToEntries, getFileVariable } from '../../form/utils';
+import { createSave, convertRichTextToEntries, convertToEntries, getFileVariable } from '../../form/utils';
 import createResourceMutation from '../../../graphql/mutations/createResource.graphql';
 import updateResourceMutation from '../../../graphql/mutations/updateResource.graphql';
 import deleteResourceMutation from '../../../graphql/mutations/deleteResource.graphql';
@@ -25,7 +24,7 @@ function getResourceVariables(resource, initialResource, order) {
     doc: getFileVariable(resource.doc, initialDoc),
     embedCode: resource.embedCode,
     image: getFileVariable(resource.img, initialImg),
-    textEntries: convertEntriesToHTML(convertToEntries(resource.text)),
+    textEntries: convertRichTextToEntries(resource.text),
     titleEntries: convertToEntries(resource.title),
     order: order
   };

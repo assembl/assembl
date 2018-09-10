@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { I18n, Translate } from 'react-redux-i18n';
 import { FormGroup } from 'react-bootstrap';
-import { type RawContentState } from 'draft-js';
+import { type EditorState } from 'draft-js';
 
 import SectionTitle from '../sectionTitle';
 import FormControlWithLabel from '../../common/formControlWithLabel';
@@ -22,13 +22,13 @@ import {
 import { getDiscussionSlug } from '../../../utils/globalFunctions';
 import { get } from '../../../utils/routeMap';
 
-type PageFormProps = {
+type Props = {
   headerTitle: string,
   headerSubtitle: string,
   headerImgUrl: string,
   headerImgMimeType: string,
   instructionsTitle: string,
-  instructionsContent: RawContentState,
+  instructionsContent: EditorState,
   propositionSectionTitle: string,
   editLocale: string,
   handleHeaderTitleChange: Function,
@@ -54,7 +54,7 @@ const DumbPageForm = ({
   handleInstructionsTitleChange,
   handleInstructionsContentChange,
   handlePropositionSectionTitleChange
-}: PageFormProps) => {
+}: Props) => {
   const editLocaleInUppercase = editLocale.toUpperCase();
   const headerTitlePh = `${I18n.t('administration.ph.headerTitle')} ${editLocaleInUppercase}`;
   const headerSubtitlePh = `${I18n.t('administration.ph.headerSubtitle')} ${editLocaleInUppercase}`;
@@ -160,7 +160,7 @@ const mapStateToProps = (state, { editLocale }) => {
     headerTitle: getEntryValueForLocale(voteSession.get('titleEntries'), editLocale),
     headerSubtitle: getEntryValueForLocale(voteSession.get('subTitleEntries'), editLocale),
     instructionsTitle: getEntryValueForLocale(voteSession.get('instructionsSectionTitleEntries'), editLocale),
-    instructionsContent: instructionsContent && typeof instructionsContent !== 'string' ? instructionsContent.toJS() : null,
+    instructionsContent: instructionsContent,
     propositionSectionTitle: getEntryValueForLocale(voteSession.get('propositionsSectionTitleEntries'), editLocale),
     headerImgUrl: voteSession.getIn(['headerImage', 'externalUrl']),
     headerImgMimeType: voteSession.getIn(['headerImage', 'mimeType'])

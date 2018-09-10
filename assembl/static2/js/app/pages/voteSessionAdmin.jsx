@@ -26,7 +26,7 @@ import updateNumberGaugeVoteSpecificationMutation from '../graphql/mutations/upd
 import createProposalMutation from '../graphql/mutations/createProposal.graphql';
 import updateProposalMutation from '../graphql/mutations/updateProposal.graphql';
 import deleteProposalMutation from '../graphql/mutations/deleteProposal.graphql';
-import { convertEntriesToHTML } from '../utils/draftjs';
+import { convertEntriesToHTML, convertImmutableEntriesToJS } from '../utils/draftjs';
 import { getPhaseId } from '../utils/timeline';
 import { get } from '../utils/routeMap';
 import { displayAlert, displayCustomModal, closeModal } from '../utils/utilityManager';
@@ -157,7 +157,7 @@ export const createVariablesForProposalsMutation = (proposal: VoteProposal): Var
   descriptionEntries: convertEntriesToHTML(proposal.descriptionEntries)
 });
 
-type VoteSessionAdminProps = {
+type Props = {
   editLocale: string,
   i18n: {
     locale: string
@@ -187,7 +187,7 @@ type VoteSessionAdminProps = {
   router: Router
 };
 
-type VoteSessionAdminState = {
+type State = {
   firstWarningDisplayed: boolean,
   secondWarningDisplayed: boolean,
   refetching: boolean
@@ -216,8 +216,8 @@ export const getProposalValidationErrors = (p: VoteProposalMap, editLocale: stri
   return errors;
 };
 
-class VoteSessionAdmin extends React.Component<VoteSessionAdminProps, VoteSessionAdminState> {
-  constructor(props: VoteSessionAdminProps) {
+class VoteSessionAdmin extends React.Component<Props, State> {
+  constructor(props: Props) {
     super(props);
     this.state = {
       firstWarningDisplayed: false,
@@ -341,7 +341,9 @@ class VoteSessionAdmin extends React.Component<VoteSessionAdminProps, VoteSessio
       const titleEntries = voteSessionPage.get('titleEntries').toJS();
       const subTitleEntries = voteSessionPage.get('subTitleEntries').toJS();
       const instructionsSectionTitleEntries = voteSessionPage.get('instructionsSectionTitleEntries').toJS();
-      const instructionsSectionContentEntries = voteSessionPage.get('instructionsSectionContentEntries').toJS();
+      const instructionsSectionContentEntries = convertImmutableEntriesToJS(
+        voteSessionPage.get('instructionsSectionContentEntries')
+      );
       const propositionsSectionTitleEntries = voteSessionPage.get('propositionsSectionTitleEntries').toJS();
       const pageHeaderImage = voteSessionPage.get('headerImage').toJS();
       const headerImage = typeof pageHeaderImage.externalUrl === 'object' ? pageHeaderImage.externalUrl : null;
@@ -434,8 +436,12 @@ class VoteSessionAdmin extends React.Component<VoteSessionAdminProps, VoteSessio
         }
 
         const items = [];
-        voteProposals.forEach((t) => {
-          items.push({ ...t.toJS(), voteSessionId: voteSessionPageId });
+        voteProposals.forEach((vp) => {
+          items.push({
+            ...vp.toJS(),
+            descriptionEntries: convertImmutableEntriesToJS(vp.get('descriptionEntries')),
+            voteSessionId: voteSessionPageId
+          });
         });
         const proposalsToDeleteOrUpdate = items.filter(item => !item._isNew);
         let mutationsPromises: Array<() => Promise<*>> = [];
@@ -569,7 +575,7 @@ const mapStateToProps = ({ admin: { editLocale, voteSession }, i18n, context, ti
     voteModules: voteModules,
     voteSessionPage: voteSession.page,
     debateId: context.debateId,
-    voteSessionId: page.toJS().id,
+    voteSessionId: page.get('id'),
     voteProposals: voteProposalsById
       .map((proposal) => {
         const pModules = proposal

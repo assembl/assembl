@@ -3,9 +3,8 @@ import sortBy from 'lodash/sortBy';
 import type { ApolloClient } from 'react-apollo';
 
 import ThematicsQuery from '../../../graphql/ThematicsQuery.graphql';
-import { convertEntries } from '../../form/utils';
+import { convertEntriesToI18nValue, convertEntriesToI18nRichText } from '../../form/utils';
 import type { FileValue } from '../../form/types.flow';
-import { convertEntriesToRawContentState } from '../../../utils/draftjs';
 import { createRandomId } from '../../../utils/globalFunctions';
 import type { MediaValue, SurveyAdminValues, ThemeValue } from './types.flow';
 
@@ -59,15 +58,15 @@ export function postLoadFormat(data: ThematicsQueryQuery): SurveyAdminValues {
       questions:
         t.questions.map(q => ({
           id: q.id,
-          title: convertEntries(q.titleEntries)
+          title: convertEntriesToI18nValue(q.titleEntries)
         })) || [],
-      title: convertEntries(t.titleEntries),
+      title: convertEntriesToI18nValue(t.titleEntries),
       video: {
         media: t.video ? convertMedia(t.video) : null,
-        title: t.video ? convertEntries(t.video.titleEntries) : {},
-        descriptionBottom: t.video ? convertEntries(convertEntriesToRawContentState(t.video.descriptionEntriesBottom)) : {},
-        descriptionSide: t.video ? convertEntries(convertEntriesToRawContentState(t.video.descriptionEntriesSide)) : {},
-        descriptionTop: t.video ? convertEntries(convertEntriesToRawContentState(t.video.descriptionEntriesTop)) : {}
+        title: t.video ? convertEntriesToI18nValue(t.video.titleEntries) : {},
+        descriptionBottom: t.video ? convertEntriesToI18nRichText(t.video.descriptionEntriesBottom) : {},
+        descriptionSide: t.video ? convertEntriesToI18nRichText(t.video.descriptionEntriesSide) : {},
+        descriptionTop: t.video ? convertEntriesToI18nRichText(t.video.descriptionEntriesTop) : {}
       }
     }))
   };

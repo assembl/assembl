@@ -46,7 +46,7 @@ exports[`tokenTypeForm component should render a TokenCategoryForm component 1`]
       required={true}
       type="number"
       validationErrors={undefined}
-      value={12}
+      value="12"
     />
     <label
       htmlFor="color-picker-1"

@@ -1,21 +1,18 @@
 // @flow
 import type { ApolloClient } from 'react-apollo';
-import { convertEntriesToHTML } from '../../../utils/draftjs';
 import updateLegalContents from '../../../graphql/mutations/updateLegalContents.graphql';
 import type { LegalContentsFormValues } from './types.flow';
-import { createSave, convertToEntries } from '../../form/utils';
+import { createSave, convertRichTextToEntries } from '../../form/utils';
 
 const getVariables = values => ({
-  legalNoticeEntries: convertEntriesToHTML(convertToEntries(values.legalNotice)),
-  termsAndConditionsEntries: convertEntriesToHTML(convertToEntries(values.termsAndConditions)),
-  privacyPolicyEntries: convertEntriesToHTML(convertToEntries(values.privacyPolicy)),
-  cookiesPolicyEntries: convertEntriesToHTML(convertToEntries(values.cookiesPolicy)),
-  userGuidelinesEntries: convertEntriesToHTML(convertToEntries(values.userGuidelines))
+  legalNoticeEntries: convertRichTextToEntries(values.legalNotice),
+  termsAndConditionsEntries: convertRichTextToEntries(values.termsAndConditions),
+  privacyPolicyEntries: convertRichTextToEntries(values.privacyPolicy),
+  cookiesPolicyEntries: convertRichTextToEntries(values.cookiesPolicy),
+  userGuidelinesEntries: convertRichTextToEntries(values.userGuidelines)
 });
 
-export const createMutationsPromises = (client: ApolloClient, locale: string) => (
-  values: LegalContentsFormValues
-) => {
+export const createMutationsPromises = (client: ApolloClient, locale: string) => (values: LegalContentsFormValues) => {
   const allMutations = [];
   const variables = getVariables(values);
 
@@ -26,7 +23,8 @@ export const createMutationsPromises = (client: ApolloClient, locale: string) =>
         locale: locale,
         ...variables
       }
-    }));
+    })
+  );
 
   return allMutations;
 };

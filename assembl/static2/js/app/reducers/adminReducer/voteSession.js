@@ -85,7 +85,7 @@ export const voteSessionPage: VoteSessionPageReducer = (state = initialPage, act
       .set('_hasChanged', true);
   case UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_CONTENT:
     return state
-      .update('instructionsSectionContentEntries', updateInLangstringEntries(action.locale, fromJS(action.value)))
+      .update('instructionsSectionContentEntries', updateInLangstringEntries(action.locale, action.value))
       .set('_hasChanged', true);
   case UPDATE_VOTE_SESSION_PAGE_PROPOSITIONS_TITLE:
     return state
@@ -112,7 +112,7 @@ export const voteSessionPage: VoteSessionPageReducer = (state = initialPage, act
       seeCurrentVotes: action.seeCurrentVotes,
       subTitleEntries: fromJS(action.subTitleEntries),
       instructionsSectionTitleEntries: fromJS(action.instructionsSectionTitleEntries),
-      instructionsSectionContentEntries: fromJS(action.instructionsSectionContentEntries),
+      instructionsSectionContentEntries: List(action.instructionsSectionContentEntries.map(entry => Map(entry))),
       propositionsSectionTitleEntries: fromJS(action.propositionsSectionTitleEntries),
       headerImage: headerImage
     });
@@ -506,16 +506,18 @@ export const voteProposalsById = (state: Map<string, Map> = Map(), action: Redux
   case UPDATE_VOTE_PROPOSALS: {
     let newState = Map();
     action.voteProposals.forEach((proposal) => {
-      const proposalInfo = fromJS({
+      const proposalInfo = Map({
         _isNew: false,
         _toDelete: false,
         _hasChanged: false,
-        _validationErrors: [],
+        _validationErrors: List(),
         order: proposal.order,
         id: proposal.id,
-        titleEntries: proposal.titleEntries,
-        descriptionEntries: proposal.descriptionEntries,
-        modules: proposal.modules ? proposal.modules.map(m => m.id) : []
+        titleEntries: fromJS(proposal.titleEntries),
+        descriptionEntries: List(proposal.descriptionEntries.map(
+          entry => Map(entry)
+        )),
+        modules: fromJS(proposal.modules ? proposal.modules.map(m => m.id) : [])
       });
       newState = newState.set(proposal.id, proposalInfo);
     });
@@ -541,7 +543,7 @@ export const voteProposalsById = (state: Map<string, Map> = Map(), action: Redux
       .setIn([action.id, '_hasChanged'], true);
   case UPDATE_VOTE_PROPOSAL_DESCRIPTION:
     return state
-      .updateIn([action.id, 'descriptionEntries'], updateInLangstringEntries(action.locale, fromJS(action.value)))
+      .updateIn([action.id, 'descriptionEntries'], updateInLangstringEntries(action.locale, action.value))
       .setIn([action.id, '_hasChanged'], true);
   case ADD_MODULE_TO_PROPOSAL:
     return state

@@ -21,7 +21,7 @@ import LegalContentsQuery from '../graphql/LegalContents.graphql';
 import VoteSessionQuery from '../graphql/VoteSession.graphql';
 import LandingPageQuery from '../graphql/LandingPage.graphql';
 import TimelineQuery from '../graphql/Timeline.graphql';
-import { convertEntriesToRawContentState } from '../utils/draftjs';
+import { convertEntriesToEditorState } from '../utils/draftjs';
 import { getPhaseId } from '../utils/timeline';
 import landingPagePlugin from '../utils/administration/landingPage';
 
@@ -108,7 +108,7 @@ class Administration extends React.Component {
     const voteSessionForStore = {
       ...filteredVoteSession.voteSession,
       instructionsSectionContentEntries: filteredVoteSession.voteSession.instructionsSectionContentEntries
-        ? convertEntriesToRawContentState(filteredVoteSession.voteSession.instructionsSectionContentEntries)
+        ? convertEntriesToEditorState(filteredVoteSession.voteSession.instructionsSectionContentEntries)
         : null
     };
     this.props.updateVoteSessionPage(voteSessionForStore);
@@ -137,7 +137,7 @@ class Administration extends React.Component {
     const proposals = voteSession ? filter(VoteSessionQuery, { voteSession: voteSession }).voteSession.proposals : [];
     const proposalsForStore = proposals.map(proposal => ({
       ...proposal,
-      descriptionEntries: proposal.descriptionEntries ? convertEntriesToRawContentState(proposal.descriptionEntries) : null
+      descriptionEntries: proposal.descriptionEntries ? convertEntriesToEditorState(proposal.descriptionEntries) : null
     }));
     this.props.updateVoteProposals(proposalsForStore);
   }
@@ -171,7 +171,7 @@ class Administration extends React.Component {
       const dataForStore = {
         ...filtered.discussion,
         subtitleEntries: filtered.discussion.subtitleEntries
-          ? convertEntriesToRawContentState(filtered.discussion.subtitleEntries)
+          ? convertEntriesToEditorState(filtered.discussion.subtitleEntries)
           : null
       };
       this.props.updateLandingPage(dataForStore);

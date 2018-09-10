@@ -3,13 +3,13 @@ import * as React from 'react';
 import { compose, graphql, withApollo } from 'react-apollo';
 import { Row, Col, FormGroup, Button } from 'react-bootstrap';
 import { Translate, I18n } from 'react-redux-i18n';
-import { RawContentState } from 'draft-js';
+import { EditorState } from 'draft-js';
 
 import uploadDocumentMutation from '../../../graphql/mutations/uploadDocument.graphql';
 import updatePostMutation from '../../../graphql/mutations/updatePost.graphql';
 import { displayAlert, inviteUserToLogin } from '../../../utils/utilityManager';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
-import { convertToRawContentState, convertRawContentStateToHTML, rawContentStateIsEmpty } from '../../../utils/draftjs';
+import { convertToEditorState, convertContentStateToHTML, editorStateIsEmpty } from '../../../utils/draftjs';
 import RichTextEditor from '../../common/richTextEditor';
 import attachmentsPlugin from '../../common/richTextEditor/attachmentsPlugin';
 import type { UploadNewAttachmentsPromiseResult } from '../../common/richTextEditor/attachmentsPlugin';
@@ -31,7 +31,7 @@ type EditPostFormProps = {
 
 type EditPostFormState = {
   subject: string,
-  body: RawContentState
+  body: EditorState
 };
 
 class EditPostForm extends React.PureComponent<EditPostFormProps, EditPostFormState> {
@@ -40,7 +40,7 @@ class EditPostForm extends React.PureComponent<EditPostFormProps, EditPostFormSt
     const { subject } = props;
     const body = props.body || '';
     this.state = {
-      body: convertToRawContentState(body),
+      body: convertToEditorState(body),
       subject: subject
     };
   }
@@ -49,7 +49,7 @@ class EditPostForm extends React.PureComponent<EditPostFormProps, EditPostFormSt
     this.setState({ subject: e.target.value });
   };
 
-  updateBody = (rawBody: RawContentState): void => {
+  updateBody = (rawBody: EditorState): void => {
     this.setState({ body: rawBody });
   };
 
@@ -68,7 +68,7 @@ class EditPostForm extends React.PureComponent<EditPostFormProps, EditPostFormSt
     const { uploadDocument, updatePost } = this.props;
     const { body } = this.state;
     const subjectIsEmpty = this.state.subject && this.state.subject.length === 0;
-    const bodyIsEmpty = rawContentStateIsEmpty(body);
+    const bodyIsEmpty = editorStateIsEmpty(body);
     if (!subjectIsEmpty && !bodyIsEmpty) {
       // first we upload the new documents
       const uploadDocumentsPromise = attachmentsPlugin.uploadNewAttachments(body, uploadDocument);
@@ -81,7 +81,7 @@ class EditPostForm extends React.PureComponent<EditPostFormProps, EditPostFormSt
           contentLocale: this.props.originalLocale,
           postId: this.props.id,
           subject: this.state.subject || '',
-          body: convertRawContentStateToHTML(result.contentState),
+          body: convertContentStateToHTML(result.contentState),
           attachments: result.documentIds
         };
         displayAlert('success', I18n.t('loading.wait'));
@@ -139,9 +139,9 @@ class EditPostForm extends React.PureComponent<EditPostFormProps, EditPostFormSt
               ))}
             <FormGroup>
               <RichTextEditor
-                rawContentState={this.state.body}
+                editorState={this.state.body}
                 placeholder={I18n.t('debate.edit.body')}
-                updateContentState={this.updateBody}
+                onChange={this.updateBody}
                 maxLength={TEXT_AREA_MAX_LENGTH}
                 withAttachmentButton
               />

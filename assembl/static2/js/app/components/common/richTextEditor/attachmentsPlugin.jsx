@@ -1,7 +1,6 @@
 // @flow
 /* draft-js plugin for attachment management */
-import { convertFromRaw, convertToRaw, Entity, Modifier, RawContentState, SelectionState } from 'draft-js';
-import type { ContentBlock, ContentState } from 'draft-js';
+import { type ContentBlock, ContentState, EditorState, EntityInstance, Modifier, SelectionState } from 'draft-js';
 import type { Attachment } from '../editAttachments';
 import { getExtension, getIconPath } from '../documentExtensionIcon';
 
@@ -53,7 +52,7 @@ const plugin = {
 
     return undefined;
   },
-  htmlToEntity: (nodeName: string, node: NodeType, createEntity: Function): Entity | void => {
+  htmlToEntity: (nodeName: string, node: NodeType, createEntity: Function): EntityInstance | void => {
     const defaultImageMimeType = 'image/*';
     const isNotAtomicBlockNode = n => n && n.dataset && n.dataset.blocktype !== BLOCK_TYPE;
     const isLegacyImage =
@@ -99,12 +98,12 @@ const plugin = {
     return undefined;
   },
 
-  getAttachments: (rawContentState: RawContentState): Array<Attachment> => {
-    if (!rawContentState) {
+  getAttachments: (editorState: EditorState): Array<Attachment> => {
+    if (!editorState) {
       return [];
     }
 
-    const contentState = convertFromRaw(rawContentState);
+    const contentState = editorState.getCurrentContent();
     const attachments = [];
     contentState.getBlockMap().forEach((block) => {
       if (block.type === 'atomic') {
@@ -138,8 +137,8 @@ const plugin = {
 
     return attachments;
   },
-  getAttachmentsDocumentIds: (rawContentState: RawContentState): Array<String> => {
-    const contentState = convertFromRaw(rawContentState);
+  getAttachmentsDocumentIds: (editorState: EditorState): Array<String> => {
+    const contentState = editorState.getCurrentContent();
     const attachments = [];
     contentState.getBlockMap().forEach((block) => {
       if (block.type === 'atomic') {
@@ -187,12 +186,17 @@ const plugin = {
       newContentState = newContentState.set('blockMap', newContentState.get('blockMap').delete(targetBlock.key));
 
       // also remove next block if it is empty and unstyled
-      if (nextBlock.getType() === 'unstyled' && !nextBlock.getLength()) {
+      if (nextBlock && nextBlock.getType() === 'unstyled' && !nextBlock.getLength()) {
         newContentState = newContentState.set('blockMap', newContentState.get('blockMap').delete(nextBlock.getKey()));
       }
 
       // if the previous block is not the last block, remove it too
-      if (newContentState.getBlocksAsArray().length > 1 && previousBlock.getType() === 'unstyled' && !previousBlock.getLength()) {
+      if (
+        newContentState.getBlocksAsArray().length > 1 &&
+        previousBlock &&
+        previousBlock.getType() === 'unstyled' &&
+        !previousBlock.getLength()
+      ) {
         newContentState = newContentState.set('blockMap', newContentState.get('blockMap').delete(previousBlock.getKey()));
       }
 
@@ -202,15 +206,9 @@ const plugin = {
     return contentState;
   },
 
-  uploadNewAttachments: (rawContentState: RawContentState, uploadDocument: Function): Promise<*> => {
-    if (!rawContentState) {
-      return new Promise((resolve) => {
-        resolve({ contentState: null, documentIds: [] });
-      });
-    }
-
+  uploadNewAttachments: (editorState: EditorState, uploadDocument: Function): Promise<*> => {
     const documentIds = [];
-    let contentState = convertFromRaw(rawContentState);
+    let contentState = editorState.getCurrentContent();
     const entities = [];
     contentState.getBlockMap().forEach((block) => {
       if (block.type === 'atomic') {
@@ -262,7 +260,7 @@ const plugin = {
       () =>
         new Promise((resolve) => {
           resolve({
-            contentState: convertToRaw(contentState),
+            contentState: contentState,
             documentIds: documentIds
           });
         })
@@ -271,7 +269,7 @@ const plugin = {
 };
 
 export type UploadNewAttachmentsPromiseResult = {
-  contentState: RawContentState,
+  contentState: ?ContentState,
   documentIds: Array<string>
 };
 

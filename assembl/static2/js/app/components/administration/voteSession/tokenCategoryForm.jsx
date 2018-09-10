@@ -50,7 +50,7 @@ const DumbTokenCategoryForm = ({
         required
         type="number"
         onChange={handleNumberChange}
-        value={totalNumber}
+        value={totalNumber.toString()}
         formControlProps={{
           min: '1'
         }}

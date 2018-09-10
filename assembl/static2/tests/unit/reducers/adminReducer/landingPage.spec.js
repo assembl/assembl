@@ -1,5 +1,6 @@
 import { fromJS, List, Map } from 'immutable';
 
+import { createEditorStateFromText } from '../../../helpers/draftjs';
 import * as actionTypes from '../../../../js/app/actions/actionTypes';
 import * as reducers from '../../../../js/app/reducers/adminReducer/landingPage';
 import { modulesById } from '../../components/administration/landingPage/fakeData';
@@ -192,38 +193,47 @@ describe('Landing page modulesHasChanged reducer', () => {
 
 describe('page reducer', () => {
   const reducer = reducers.page;
-  it('should handle UPDATE_LANDING_PAGE_HEADER_TITLE action type', () => {
-    const oldState = fromJS({
+  let oldState;
+  const enSubtitle = createEditorStateFromText('in english');
+  const frSubtitle = createEditorStateFromText('en français');
+  beforeEach(() => {
+    oldState = Map({
       _hasChanged: false,
-      titleEntries: [{ localeCode: 'fr', value: 'en français' }, { localeCode: 'en', value: 'in english' }],
-      subtitleEntries: [{ localeCode: 'fr', value: 'en français' }, { localeCode: 'en', value: 'in english' }],
-      buttonLabelEntries: [{ localeCode: 'fr', value: 'en français' }, { localeCode: 'en', value: 'in english' }],
-      headerImage: {
+      titleEntries: fromJS([{ localeCode: 'fr', value: 'en français' }, { localeCode: 'en', value: 'in english' }]),
+      subtitleEntries: List.of(Map({ localeCode: 'fr', value: frSubtitle }), Map({ localeCode: 'en', value: enSubtitle })),
+      buttonLabelEntries: fromJS([{ localeCode: 'fr', value: 'en français' }, { localeCode: 'en', value: 'in english' }]),
+      headerImage: fromJS({
         externalUrl: '',
         mimeType: '',
         title: ''
-      },
-      logoImage: {
+      }),
+      logoImage: fromJS({
         externalUrl: '',
         mimeType: '',
         title: ''
-      }
+      })
     });
-    const expected = fromJS({
+  });
+
+  it('should handle UPDATE_LANDING_PAGE_HEADER_TITLE action type', () => {
+    const expected = Map({
       _hasChanged: true,
-      titleEntries: [{ localeCode: 'fr', value: 'nouvelle valeur en français' }, { localeCode: 'en', value: 'in english' }],
-      subtitleEntries: [{ localeCode: 'fr', value: 'en français' }, { localeCode: 'en', value: 'in english' }],
-      buttonLabelEntries: [{ localeCode: 'fr', value: 'en français' }, { localeCode: 'en', value: 'in english' }],
-      headerImage: {
+      titleEntries: fromJS([
+        { localeCode: 'fr', value: 'nouvelle valeur en français' },
+        { localeCode: 'en', value: 'in english' }
+      ]),
+      subtitleEntries: List.of(Map({ localeCode: 'fr', value: frSubtitle }), Map({ localeCode: 'en', value: enSubtitle })),
+      buttonLabelEntries: fromJS([{ localeCode: 'fr', value: 'en français' }, { localeCode: 'en', value: 'in english' }]),
+      headerImage: fromJS({
         externalUrl: '',
         mimeType: '',
         title: ''
-      },
-      logoImage: {
+      }),
+      logoImage: fromJS({
         externalUrl: '',
         mimeType: '',
         title: ''
-      }
+      })
     });
     const action = {
       locale: 'fr',
@@ -234,78 +244,59 @@ describe('page reducer', () => {
   });
 
   it('should handle UPDATE_LANDING_PAGE_HEADER_SUBTITLE action type', () => {
-    const oldState = fromJS({
-      _hasChanged: false,
-      titleEntries: [{ localeCode: 'fr', value: 'en français' }, { localeCode: 'en', value: 'in english' }],
-      subtitleEntries: [{ localeCode: 'fr', value: 'en français' }, { localeCode: 'en', value: 'in english' }],
-      buttonLabelEntries: [{ localeCode: 'fr', value: 'en français' }, { localeCode: 'en', value: 'in english' }],
-      headerImage: {
-        externalUrl: '',
-        mimeType: '',
-        title: ''
-      },
-      logoImage: {
-        externalUrl: '',
-        mimeType: '',
-        title: ''
-      }
-    });
-    const expected = fromJS({
+    const newFrSubtitle = createEditorStateFromText('nouvelle valeur en français');
+    const expected = Map({
       _hasChanged: true,
-      titleEntries: [{ localeCode: 'fr', value: 'en français' }, { localeCode: 'en', value: 'in english' }],
-      subtitleEntries: [{ localeCode: 'fr', value: 'nouvelle valeur en français' }, { localeCode: 'en', value: 'in english' }],
-      buttonLabelEntries: [{ localeCode: 'fr', value: 'en français' }, { localeCode: 'en', value: 'in english' }],
-      headerImage: {
+      titleEntries: fromJS([{ localeCode: 'fr', value: 'en français' }, { localeCode: 'en', value: 'in english' }]),
+      subtitleEntries: List.of(
+        Map({
+          localeCode: 'fr',
+          value: newFrSubtitle
+        }),
+        Map({ localeCode: 'en', value: enSubtitle })
+      ),
+      buttonLabelEntries: fromJS([{ localeCode: 'fr', value: 'en français' }, { localeCode: 'en', value: 'in english' }]),
+      headerImage: fromJS({
         externalUrl: '',
         mimeType: '',
         title: ''
-      },
-      logoImage: {
+      }),
+      logoImage: fromJS({
         externalUrl: '',
         mimeType: '',
         title: ''
-      }
+      })
     });
     const action = {
       locale: 'fr',
-      value: 'nouvelle valeur en français',
+      value: newFrSubtitle,
       type: actionTypes.UPDATE_LANDING_PAGE_HEADER_SUBTITLE
     };
     expect(reducer(oldState, action)).toEqual(expected);
   });
 
   it('should handle UPDATE_LANDING_PAGE_HEADER_BUTTON_LABEL action type', () => {
-    const oldState = fromJS({
-      _hasChanged: false,
-      titleEntries: [{ localeCode: 'fr', value: 'en français' }, { localeCode: 'en', value: 'in english' }],
-      subtitleEntries: [{ localeCode: 'fr', value: 'en français' }, { localeCode: 'en', value: 'in english' }],
-      buttonLabelEntries: [{ localeCode: 'fr', value: 'en français' }, { localeCode: 'en', value: 'in english' }],
-      headerImage: {
-        externalUrl: '',
-        mimeType: '',
-        title: ''
-      },
-      logoImage: {
-        externalUrl: '',
-        mimeType: '',
-        title: ''
-      }
-    });
-    const expected = fromJS({
+    const expected = Map({
       _hasChanged: true,
-      titleEntries: [{ localeCode: 'fr', value: 'en français' }, { localeCode: 'en', value: 'in english' }],
-      subtitleEntries: [{ localeCode: 'fr', value: 'en français' }, { localeCode: 'en', value: 'in english' }],
-      buttonLabelEntries: [{ localeCode: 'fr', value: 'nouvelle valeur en français' }, { localeCode: 'en', value: 'in english' }],
-      headerImage: {
+      titleEntries: fromJS([
+        { localeCode: 'fr', value: 'en français' },
+        { localeCode: 'en', value: 'in english' }
+      ]),
+      subtitleEntries: List.of(Map({ localeCode: 'fr', value: frSubtitle }), Map({ localeCode: 'en', value: enSubtitle })),
+      buttonLabelEntries: fromJS([
+        { localeCode: 'fr', value: 'nouvelle valeur en français' },
+        { localeCode: 'en', value: 'in english' }
+      ]),
+      headerImage: fromJS({
         externalUrl: '',
         mimeType: '',
         title: ''
-      },
-      logoImage: {
+      }),
+      logoImage: fromJS({
         externalUrl: '',
         mimeType: '',
         title: ''
-      }
+      })
     });
     const action = {
       locale: 'fr',
@@ -316,86 +307,60 @@ describe('page reducer', () => {
   });
 
   it('should handle UPDATE_LANDING_PAGE_HEADER_IMAGE action type', () => {
-    const oldState = fromJS({
-      _hasChanged: true,
-      titleEntries: [],
-      subtitleEntries: [],
-      buttonLabelEntries: [],
-      headerImage: {
-        externalUrl: '',
-        mimeType: '',
-        title: ''
-      },
-      logoImage: {
-        externalUrl: '',
-        mimeType: '',
-        title: ''
-      }
-    });
     const file = new File([''], 'foo.jpg', { name: 'foo.jpg', type: 'image/jpeg' });
-    const expected = {
+    const expected = Map({
       _hasChanged: true,
-      titleEntries: [],
-      subtitleEntries: [],
-      buttonLabelEntries: [],
-      headerImage: {
-        title: '',
+      titleEntries: fromJS([
+        { localeCode: 'fr', value: 'en français' },
+        { localeCode: 'en', value: 'in english' }
+      ]),
+      subtitleEntries: List.of(Map({ localeCode: 'fr', value: frSubtitle }), Map({ localeCode: 'en', value: enSubtitle })),
+      buttonLabelEntries: fromJS([{ localeCode: 'fr', value: 'en français' }, { localeCode: 'en', value: 'in english' }]),
+      headerImage: Map({
         externalUrl: file,
-        mimeType: 'image/jpeg'
-      },
-      logoImage: {
+        mimeType: 'image/jpeg',
+        title: ''
+      }),
+      logoImage: Map({
         externalUrl: '',
         mimeType: '',
         title: ''
-      }
-    };
+      })
+    });
     const action = {
       value: file,
       type: actionTypes.UPDATE_LANDING_PAGE_HEADER_IMAGE
     };
     const actual = reducer(oldState, action);
-    expect(actual.toJS()).toEqual(expected);
+    expect(actual).toEqual(expected);
   });
 
   it('should handle UPDATE_LANDING_PAGE_HEADER_LOGO action type', () => {
-    const oldState = fromJS({
-      _hasChanged: true,
-      titleEntries: [],
-      subtitleEntries: [],
-      buttonLabelEntries: [],
-      headerImage: {
-        externalUrl: '',
-        mimeType: '',
-        title: ''
-      },
-      logoImage: {
-        externalUrl: '',
-        mimeType: '',
-        title: ''
-      }
-    });
     const file = new File([''], 'foo.jpg', { name: 'foo.jpg', type: 'image/jpeg' });
-    const expected = {
+    const expected = Map({
       _hasChanged: true,
-      titleEntries: [],
-      subtitleEntries: [],
-      buttonLabelEntries: [],
-      headerImage: {
-        title: '',
+      titleEntries: fromJS([
+        { localeCode: 'fr', value: 'en français' },
+        { localeCode: 'en', value: 'in english' }
+      ]),
+      subtitleEntries: List.of(Map({ localeCode: 'fr', value: frSubtitle }), Map({ localeCode: 'en', value: enSubtitle })),
+      buttonLabelEntries: fromJS([{ localeCode: 'fr', value: 'en français' }, { localeCode: 'en', value: 'in english' }]),
+      headerImage: Map({
         externalUrl: '',
-        mimeType: ''
-      },
-      logoImage: {
+        mimeType: '',
+        title: ''
+      }),
+      logoImage: Map({
         externalUrl: file,
         mimeType: 'image/jpeg',
         title: ''
-      }
-    };
+      })
+    });
     const action = {
       value: file,
       type: actionTypes.UPDATE_LANDING_PAGE_HEADER_LOGO
     };
     const actual = reducer(oldState, action);
-    expect(actual.toJS()).toEqual(expected);
+    expect(actual).toEqual(expected);
   });
 });

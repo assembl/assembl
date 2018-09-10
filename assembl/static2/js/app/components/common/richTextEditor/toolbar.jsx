@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import { graphql } from 'react-apollo';
-import { AtomicBlockUtils, DraftBlockType, DraftInlineStyle, RichUtils } from 'draft-js';
+import { AtomicBlockUtils, RichUtils } from 'draft-js';
 import { I18n } from 'react-redux-i18n';
 
 import uploadDocumentMutation from '../../../graphql/mutations/uploadDocument.graphql';
@@ -25,9 +25,9 @@ type ToolbarState = {
 };
 
 class Toolbar extends React.Component<ToolbarProps, ToolbarState> {
-  currentStyle: DraftInlineStyle;
+  currentStyle: string;
 
-  currentBlockType: DraftBlockType;
+  currentBlockType: string;
 
   constructor() {
     super();
@@ -43,7 +43,7 @@ class Toolbar extends React.Component<ToolbarProps, ToolbarState> {
     });
   };
 
-  getCurrentBlockType(): DraftBlockType {
+  getCurrentBlockType(): string {
     const { editorState } = this.props;
     const selection = editorState.getSelection();
     return editorState
@@ -52,7 +52,7 @@ class Toolbar extends React.Component<ToolbarProps, ToolbarState> {
       .getType();
   }
 
-  toggleBlockType(blockType: DraftBlockType): void {
+  toggleBlockType(blockType: string): void {
     const { editorState, focusEditor, onChange } = this.props;
     onChange(RichUtils.toggleBlockType(editorState, blockType));
     focusEditor();
@@ -69,6 +69,7 @@ class Toolbar extends React.Component<ToolbarProps, ToolbarState> {
     let onToggle;
     switch (config.type) {
     case 'style': {
+      // $FlowFixMe
       isActive = this.currentStyle.contains(config.style);
       onToggle = () => {
         if (config.style) {
@@ -81,7 +82,7 @@ class Toolbar extends React.Component<ToolbarProps, ToolbarState> {
     }
     case 'block-type': {
       isActive = config.style === this.currentBlockType;
-      onToggle = () => this.toggleBlockType(config.style);
+      onToggle = () => this.toggleBlockType(config.style || '');
       break;
     }
     default:

@@ -1,5 +1,5 @@
 // @flow
-import type { FileValue, I18nValue } from '../../form/types.flow';
+import type { FileValue, I18nValue, I18nRichTextValue } from '../../form/types.flow';
 
 export type ResourceValue = {
   doc: FileValue,
@@ -7,7 +7,7 @@ export type ResourceValue = {
   id: string,
   img: FileValue,
   title: I18nValue,
-  text: I18nValue
+  text: I18nRichTextValue
 };
 
 export type ResourcesValues = {

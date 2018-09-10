@@ -3,8 +3,9 @@
 
   @flow
 */
-import { convertToRaw, convertFromRaw, ContentState, EditorState, RawContentState } from 'draft-js';
+import { type ContentState, EditorState } from 'draft-js';
 import { convertFromHTML, convertToHTML } from 'draft-convert';
+import { type List, type Map } from 'immutable';
 
 import attachmentsPlugin from '../components/common/richTextEditor/attachmentsPlugin';
 
@@ -23,20 +24,6 @@ const customConvertToHTML = convertToHTML({
   entityToHTML: attachmentsPlugin.entityToHTML
 });
 
-export function createEmptyEditorState(): EditorState {
-  return EditorState.createEmpty();
-}
-
-export function createEmptyRawContentState(): RawContentState {
-  return convertToRaw(ContentState.createFromText(''));
-}
-
-export const textToRawContentState = (text: string): RawContentState => convertToRaw(ContentState.createFromText(text));
-
-export function convertToRawContentState(value: string): RawContentState {
-  return convertToRaw(customConvertFromHTML(value));
-}
-
 export function convertEntries(converter: Function): Function {
   return function (entries: Array<Entry>): Array<Entry> {
     return entries.map(entry => ({
@@ -46,12 +33,28 @@ export function convertEntries(converter: Function): Function {
   };
 }
 
-export const convertEntriesToRawContentState = convertEntries(convertToRawContentState);
-export const convertRawContentStateToHTML = (cs: RawContentState): string => customConvertToHTML(convertFromRaw(cs));
-export const convertEntriesToHTML = convertEntries(convertRawContentStateToHTML);
+export function convertToEditorState(value: string): EditorState {
+  if (value) {
+    return EditorState.createWithContent(customConvertFromHTML(value));
+  }
 
-export function rawContentStateIsEmpty(rawContentState: RawContentState): boolean {
-  const contentState = convertFromRaw(rawContentState);
+  return EditorState.createEmpty();
+}
+
+export const convertEntriesToEditorState = convertEntries(convertToEditorState);
+
+export const convertContentStateToHTML = (cs: ContentState): string => customConvertToHTML(cs);
+
+export const convertEditorStateToHTML = (es: EditorState): string => convertContentStateToHTML(es.getCurrentContent());
+
+export function convertImmutableEntriesToJS(entries: List<Map<string, any>>): Array<Object> {
+  return entries.map(entry => entry.toObject()).toArray();
+}
+
+export const convertEntriesToHTML = convertEntries(convertEditorStateToHTML);
+
+export function editorStateIsEmpty(editorState: EditorState): boolean {
+  const contentState = editorState.getCurrentContent();
   const containAtomicBlock = blockMap => blockMap.some(b => b.type === 'atomic');
   if (contentState.getPlainText().length === 0 && !containAtomicBlock(contentState.getBlockMap())) {
     return true;

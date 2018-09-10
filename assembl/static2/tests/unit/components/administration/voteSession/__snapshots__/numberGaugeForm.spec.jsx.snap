@@ -19,7 +19,7 @@ exports[`DumbNumberGaugeForm component should render a form to set up a numeral 
       required={true}
       type="number"
       validationErrors={undefined}
-      value={2}
+      value="2"
     />
     <FormControlWithLabel
       componentClass={undefined}
@@ -35,7 +35,7 @@ exports[`DumbNumberGaugeForm component should render a form to set up a numeral 
       required={true}
       type="number"
       validationErrors={undefined}
-      value={11}
+      value="11"
     />
     <FormControlWithLabel
       componentClass={undefined}
