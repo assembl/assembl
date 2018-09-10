@@ -1,4 +1,4 @@
-// @noflow
+// @flow
 import * as React from 'react';
 import { Translate } from 'react-redux-i18n';
 import { Modal, Button } from 'react-bootstrap';
@@ -6,8 +6,10 @@ import { closeModal } from '../../utils/utilityManager';
 
 type LegalFormProps = {
   checked: boolean,
-  handleAcceptButton: () => void,
-  style?: Object
+  handleAcceptButton: Function,
+  style?: Object,
+  legalContentsType: string,
+  text: string
 };
 
 type LegalFormState = {
@@ -15,7 +17,7 @@ type LegalFormState = {
 };
 
 class LegalForm extends React.Component<LegalFormProps, LegalFormState> {
-  box: ?HTMLElement;
+  box: ?HTMLDivElement;
 
   static defaultProps = {
     style: {}
@@ -26,16 +28,18 @@ class LegalForm extends React.Component<LegalFormProps, LegalFormState> {
   };
 
   componentDidMount() {
-    this.box.addEventListener('scroll', this.trackScrolling);
+    return this.box && this.box.addEventListener('scroll', this.trackScrolling);
   }
 
   trackScrolling = () => {
     const wrappedElement = this.box;
-    if (wrappedElement.scrollHeight - wrappedElement.scrollTop === wrappedElement.clientHeight) {
+    if (wrappedElement && wrappedElement.scrollHeight - wrappedElement.scrollTop === wrappedElement.clientHeight) {
       this.setState({
         isScrolled: true
       });
-      wrappedElement.removeEventListener('scroll', this.trackScrolling);
+      if (wrappedElement) {
+        wrappedElement.removeEventListener('scroll', this.trackScrolling);
+      }
     }
   };
 
