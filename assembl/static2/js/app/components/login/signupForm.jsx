@@ -210,12 +210,7 @@ class SignupForm extends React.Component<SignupFormProps, SignupFormState> {
             )}
             <div className="center">
               <FormGroup>
-                <Button
-                  type="submit"
-                  name="register"
-                  value={I18n.t('login.signUp')}
-                  className="button-submit button-dark margin-m"
-                >
+                <Button type="submit" name="register" value={I18n.t('login.signUp')} className="button-submit button-dark">
                   <Translate value="login.signUp" />
                 </Button>
               </FormGroup>
