@@ -4,7 +4,7 @@ import { Translate, I18n } from 'react-redux-i18n';
 
 import SwitchButton from '../common/switchButton';
 
-type CookieSwitchProps = {
+type Props = {
   cookieIsMatomo: boolean,
   matomoOptOutLink: ?string,
   toggleSwitch: Function,
@@ -13,7 +13,7 @@ type CookieSwitchProps = {
   required: boolean
 };
 
-const CookieSwitch = ({ cookieIsMatomo, matomoOptOutLink, toggleSwitch, accepted, name, required }: CookieSwitchProps) => {
+const CookieSwitch = ({ cookieIsMatomo, matomoOptOutLink, toggleSwitch, accepted, name, required }: Props) => {
   if (cookieIsMatomo && matomoOptOutLink) {
     return (
       <a

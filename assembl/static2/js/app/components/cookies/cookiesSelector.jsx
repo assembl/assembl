@@ -7,7 +7,7 @@ import CookieSetter from './cookieSetter';
 import type { CookiesObject } from './cookiesSelectorContainer';
 import { moveElementToFirstPosition } from '../../utils/globalFunctions';
 
-type CookiesSelectorProps = {
+type Props = {
   activeKey: ?string,
   show: boolean,
   cookies: ?CookiesObject,
@@ -29,7 +29,7 @@ const CookiesSelector = ({
   toggleCookieType,
   locale,
   settingsHaveChanged
-}: CookiesSelectorProps) => {
+}: Props) => {
   // putting 'essential' as the first element of the array
   const categoriesArray = cookies && moveElementToFirstPosition(Object.keys(cookies), 'essential');
   return (

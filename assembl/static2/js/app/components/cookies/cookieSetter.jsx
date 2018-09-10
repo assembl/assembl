@@ -17,7 +17,7 @@ export type CookieObject = {
   cookieType: string
 };
 
-type CookieSetterProps = {
+type Props = {
   handleToggle: Function,
   cookie: CookieObject,
   toggleCookieType: Function,
@@ -26,7 +26,7 @@ type CookieSetterProps = {
 
 const matomoHost = globalAnalytics.piwik ? globalAnalytics.piwik.host : null;
 
-const CookieSetter = ({ handleToggle, cookie, toggleCookieType, locale }: CookieSetterProps) => {
+const CookieSetter = ({ handleToggle, cookie, toggleCookieType, locale }: Props) => {
   const toggleSwitch = () => {
     const { accepted, cookieType } = cookie;
     const updatedCookie = { ...cookie, accepted: !accepted, cookieType: toggleCookieType(cookieType) };

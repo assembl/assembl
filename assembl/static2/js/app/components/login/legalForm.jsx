@@ -4,7 +4,7 @@ import { Translate } from 'react-redux-i18n';
 import { Modal, Button } from 'react-bootstrap';
 import { closeModal } from '../../utils/utilityManager';
 
-type LegalFormProps = {
+type Props = {
   checked: boolean,
   handleAcceptButton: Function,
   style?: Object,
@@ -12,11 +12,11 @@ type LegalFormProps = {
   text: string
 };
 
-type LegalFormState = {
+type State = {
   isScrolled: boolean
 };
 
-class LegalForm extends React.Component<LegalFormProps, LegalFormState> {
+class LegalForm extends React.Component<Props, State> {
   box: ?HTMLDivElement;
 
   static defaultProps = {

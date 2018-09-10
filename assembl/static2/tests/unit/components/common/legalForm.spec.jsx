@@ -29,17 +29,24 @@ Cela étant dit, les bailleurs doivent améliorer la transparence des projets qu
 sur le terrain. L’Agence française de développement, par exemple, ne donne pas toujours toutes
 les informations, notamment en ce qui concerne les impacts sociaux et environnementaux.`;
   const style = { height: '350px', width: '440px' };
+  const handleAcceptButtonSpy = jest.fn(() => {});
+  const props = {
+    style: style,
+    text: fakeTerms,
+    handleAcceptButton: handleAcceptButtonSpy,
+    legalContentsType: 'termsAndConditions'
+  };
 
   it('should not render an Accept Button when terms are not scrolled down', () => {
     const renderer = new ShallowRenderer();
-    const component = renderer.render(<LegalForm />);
+    const component = renderer.render(<LegalForm {...props} />);
     const findButton = () => {
       findRenderedDOMComponentWithClass(component, 'button-submit button-dark terms-submit');
     };
     expect(findButton).toThrow();
   });
   it('should render an Accept Button when terms are scrolled down and checkbox not checked in SignupForm', () => {
-    const component = renderIntoDocument(<LegalForm text={fakeTerms} style={style} />);
+    const component = renderIntoDocument(<LegalForm {...props} />);
 
     const box = findRenderedDOMComponentWithClass(component, 'terms-box justify');
     box.scrollTop = box.clientHeight;
@@ -47,18 +54,17 @@ les informations, notamment en ce qui concerne les impacts sociaux et environnem
     findRenderedDOMComponentWithClass(component, 'button-submit button-dark terms-submit');
   });
   it('should render an Accept Button and clicking on it should call handleAcceptButton and closeModal', () => {
-    const handleAcceptButton = jest.fn();
-    const component = renderIntoDocument(<LegalForm handleAcceptButton={handleAcceptButton} />);
+    const component = renderIntoDocument(<LegalForm {...props} />);
     const box = findRenderedDOMComponentWithClass(component, 'terms-box justify');
     box.scrollTop = box.clientHeight;
     box.dispatchEvent(new window.UIEvent('scroll', { detail: 0 }));
     const button = findRenderedDOMComponentWithClass(component, 'button-submit button-dark terms-submit');
     Simulate.click(button);
-    expect(handleAcceptButton).toBeCalled();
+    expect(handleAcceptButtonSpy).toBeCalled();
     expect(closeModal).toBeCalled();
   });
   it('should not render an Accept Button when terms are partially scrolled down and checkbox not checked in SignupForm', () => {
-    const component = renderIntoDocument(<LegalForm text={fakeTerms} style={style} />);
+    const component = renderIntoDocument(<LegalForm {...props} />);
     const box = findRenderedDOMComponentWithClass(component, 'terms-box justify');
     box.scrollTop = 10;
     box.dispatchEvent(new window.UIEvent('scroll', { detail: 0 }));
@@ -68,7 +74,7 @@ les informations, notamment en ce qui concerne les impacts sociaux et environnem
     expect(findButton).toThrow();
   });
   it('should not render an Accept Button when terms are scrolled down and checkbox is already checked in SignupForm', () => {
-    const component = renderIntoDocument(<LegalForm checked />);
+    const component = renderIntoDocument(<LegalForm {...props} checked />);
     const box = findRenderedDOMComponentWithClass(component, 'terms-box justify');
     box.dispatchEvent(new window.UIEvent('scroll', { detail: 0 }));
     const findButton = () => {
@@ -79,7 +85,7 @@ les informations, notamment en ce qui concerne les impacts sociaux et environnem
 
   it('should match snapshot', () => {
     const renderer = new ShallowRenderer();
-    renderer.render(<LegalForm />);
+    renderer.render(<LegalForm {...props} />);
     const rendered = renderer.getRenderOutput();
     expect(rendered).toMatchSnapshot();
   });
