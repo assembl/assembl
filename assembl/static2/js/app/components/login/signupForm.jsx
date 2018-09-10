@@ -18,7 +18,7 @@ import TextFieldsQuery from '../../graphql/TextFields.graphql';
 import LegalContentsQuery from '../../graphql/LegalContents.graphql';
 import LegalForm from './legalForm';
 
-type SignupFormProps = {
+type Props = {
   hasTermsAndConditions: boolean,
   hasPrivacyPolicy: boolean,
   signUp: Function,
@@ -28,12 +28,12 @@ type SignupFormProps = {
   termsAndConditionsText: string
 };
 
-type SignupFormState = {
+type State = {
   privacyPolicyIsChecked: boolean,
   termsAndConditionsIsChecked: boolean
 };
 
-class SignupForm extends React.Component<SignupFormProps, SignupFormState> {
+class SignupForm extends React.Component<Props, State> {
   signupHandler: (SyntheticEvent<>) => void;
 
   handleInput: (SyntheticInputEvent<HTMLInputElement>) => void;
