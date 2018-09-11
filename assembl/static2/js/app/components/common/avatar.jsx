@@ -34,7 +34,7 @@ class ProfileIcon extends React.Component {
   }
 
   render() {
-    const { slug, connectedUserId, displayName, showUsername, loginData } = this.props;
+    const { slug, connectedUserId, loginData } = this.props;
     let loginUrl = `${getContextual('login', { slug: slug })}?next=${this.state.next}`;
     if (loginData && loginData.url) {
       loginUrl = loginData.url.includes('?') ?
@@ -43,7 +43,7 @@ class ProfileIcon extends React.Component {
     const dropdownUser = (
       <div className="inline">
         <span className="assembl-icon-profil grey" />
-        {showUsername && <span className="username">{displayName}</span>}
+        <span className="user-account"><Translate value="profile.panelTitle" /></span>
       </div>
     );
     const LoginAnchor = () => (
@@ -66,7 +66,7 @@ class ProfileIcon extends React.Component {
                   browserHistory.push(get('profile', { slug: slug, userId: connectedUserId }));
                 }}
               >
-                <Translate value="navbar.profile" />
+                <Translate value="profile.panelTitle" />
               </MenuItem>
               <MenuItem href={`${getContextual('oldLogout', { slug: slug })}?next=${get('home', { slug: slug })}`}>
                 <Translate value="navbar.logout" />
