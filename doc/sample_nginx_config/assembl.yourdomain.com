@@ -45,7 +45,7 @@ server {
 
     server_tokens off;
     # Optional for extra security
-    # add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' data: piwik_server.example.com *.facebook.net *.twimg.com *.twitter.com ; frame-src 'self' *.youtube.com *.facebook.com embed.ted.com *.twitter.com twitter.com player.vimeo.com *.motion.ai *.slideshare.net sketchfab.com; connect-src 'self' wss://assembl.yourdomain.com piwik_server.example.com sentry_server.example.com *.twitter.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com *.twimg.com *.twitter.com; font-src 'self' data: fonts.gstatic.com; img-src 'self' data: piwik_server.example.com www.gravatar.com *.googleusercontent.com *.facebook.com *.twimg.com *.twitter.com framapic.org *.cloudfront.net";
+    # add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' data: stats.bluenove.com *.facebook.net *.twimg.com *.twitter.com ; frame-src 'self' *.youtube.com *.facebook.com embed.ted.com *.twitter.com twitter.com player.vimeo.com *.motion.ai *.slideshare.net sketchfab.com; connect-src 'self' wss://assembl.yourdomain.com stats.bluenove.com sentry.bluenove.com *.twitter.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com *.twimg.com *.twitter.com; font-src 'self' data: fonts.gstatic.com; img-src 'self' data: stats.bluenove.com www.gravatar.com *.googleusercontent.com *.facebook.com *.twimg.com *.twitter.com framapic.org *.cloudfront.net";
 
     location /.well-known {
         #This is for domain verification with let's encrypt
