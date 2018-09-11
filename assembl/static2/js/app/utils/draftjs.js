@@ -3,7 +3,7 @@
 
   @flow
 */
-import { type ContentState, EditorState } from 'draft-js';
+import { type ContentState, EditorState, type EntityInstance } from 'draft-js';
 import { convertFromHTML, convertToHTML } from 'draft-convert';
 import { type List, type Map } from 'immutable';
 

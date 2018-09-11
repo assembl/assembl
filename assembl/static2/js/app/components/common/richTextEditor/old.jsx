@@ -9,10 +9,9 @@
 
 import * as React from 'react';
 import { Translate, I18n } from 'react-redux-i18n';
-import { convertFromRaw, convertToRaw, Editor, EditorState, RichUtils } from 'draft-js';
+import { Editor, EditorState, RichUtils } from 'draft-js';
 import classNames from 'classnames';
 import punycode from 'punycode';
-import throttle from 'lodash/throttle';
 
 import AtomicBlockRenderer from './atomicBlockRenderer';
 import Toolbar from './toolbar';
@@ -20,20 +19,18 @@ import type { ButtonConfigType } from './buttonConfigType';
 import EditAttachments from '../editAttachments';
 import attachmentsPlugin from './attachmentsPlugin';
 
-type RichTextEditorProps = {
-  rawContentState: RawDraftContentState,
+type Props = {
+  editorState: EditorState,
   handleInputFocus?: Function,
   maxLength: number,
+  onChange: Function,
   placeholder?: string,
   textareaRef?: Function,
   toolbarPosition: string,
-  updateContentState: Function,
-  withAttachmentButton: boolean,
-  handleCharCountChange: Function
+  withAttachmentButton: boolean
 };
 
 type RichTextEditorState = {
-  editorState: EditorState,
   editorHasFocus: boolean
 };
 
@@ -48,53 +45,22 @@ function customBlockRenderer(block) {
   return null;
 }
 
-export default class RichTextEditor extends React.Component<RichTextEditorProps, RichTextEditorState> {
-  editor: ?HTMLDivElement;
+export default class RichTextEditor extends React.Component<Props, RichTextEditorState> {
+  editor: ?Editor;
 
   static defaultProps = {
     handleInputFocus: undefined,
     maxLength: 0,
     toolbarPosition: 'top',
-    withAttachmentButton: false,
-    handleCharCountChange: () => {}
+    withAttachmentButton: false
   };
 
-  constructor(props: RichTextEditorProps): void {
+  constructor(props: Props): void {
     super(props);
-    const editorState = props.rawContentState
-      ? EditorState.createWithContent(convertFromRaw(props.rawContentState))
-      : EditorState.createEmpty();
     this.state = {
-      editorState: editorState,
       editorHasFocus: false
     };
   }
-
-  getCurrentRawContentState = () => convertToRaw(this.state.editorState.getCurrentContent());
-
-  onBlur = () => {
-    this.setState(
-      {
-        editorHasFocus: false
-      },
-      () => {
-        this.props.updateContentState(this.getCurrentRawContentState());
-      }
-    );
-  };
-
-  onChange = (newEditorState: EditorState): void => {
-    this.setState(
-      {
-        editorState: newEditorState
-      },
-      throttle(() => {
-        this.props.updateContentState(this.getCurrentRawContentState());
-        const charCount = this.getCharCount(newEditorState);
-        this.props.handleCharCountChange(charCount);
-      }, 300)
-    );
-  };
 
   handleEditorFocus = (): void => {
     const { handleInputFocus } = this.props;
@@ -143,7 +109,7 @@ export default class RichTextEditor extends React.Component<RichTextEditorProps,
 
   shouldHidePlaceholder(): boolean {
     // don't display placeholder if user changes the block type (to bullet list) before to type anything
-    const contentState = this.state.editorState.getCurrentContent();
+    const contentState = this.props.editorState.getCurrentContent();
     if (!contentState.hasText()) {
       if (
         contentState
@@ -168,8 +134,7 @@ export default class RichTextEditor extends React.Component<RichTextEditorProps,
   };
 
   renderRemainingChars = (): React.Element<any> => {
-    const { maxLength } = this.props;
-    const editorState = this.state.editorState;
+    const { editorState, maxLength } = this.props;
     const charCount = this.getCharCount(editorState);
     const remainingChars = maxLength - charCount;
     return (
@@ -179,55 +144,46 @@ export default class RichTextEditor extends React.Component<RichTextEditorProps,
     );
   };
 
-  handleReturn = (e: KeyboardEvent): string => {
+  handleReturn = (e: SyntheticKeyboardEvent<*>): 'handled' | 'not-handled' => {
     // Pressing shift-enter keys creates a new line (<br/>) instead of an new paragraph (<p>)
     // See https://github.com/HubSpot/draft-convert/issues/83
     // For example, this enables to create line returns inside a list item.
-    const { editorState } = this.state;
+    const { editorState, onChange } = this.props;
     if (e.shiftKey) {
-      this.setState({ editorState: RichUtils.insertSoftNewline(editorState) });
+      onChange(RichUtils.insertSoftNewline(editorState));
       return 'handled';
     }
     return 'not-handled';
   };
 
   deleteAttachment = (documentId: string): void => {
-    const contentState = this.state.editorState.getCurrentContent();
+    const { editorState, onChange } = this.props;
+    const contentState = editorState.getCurrentContent();
     const newContentState = attachmentsPlugin.removeAttachment(contentState, documentId);
-    this.setState(
-      {
-        editorState: EditorState.createWithContent(newContentState)
-      },
-      () => {
-        this.props.updateContentState(convertToRaw(newContentState));
-      }
-    );
+    onChange(EditorState.createWithContent(newContentState));
   };
 
   renderToolbar = () => {
-    const withAttachmentButton = this.props.withAttachmentButton;
+    const { editorState, onChange, withAttachmentButton } = this.props;
     return (
       <Toolbar
         buttonsConfig={this.getToolbarButtons()}
-        editorState={this.state.editorState}
+        editorState={editorState}
         focusEditor={this.focusEditor}
-        onChange={this.onChange}
+        onChange={onChange}
         withAttachmentButton={withAttachmentButton}
       />
     );
   };
 
   render() {
-    const { maxLength, placeholder, textareaRef, toolbarPosition } = this.props;
-    const { editorState } = this.state;
+    const { editorState, maxLength, onChange, placeholder, textareaRef, toolbarPosition } = this.props;
     const divClassName = classNames('rich-text-editor', { hidePlaceholder: this.shouldHidePlaceholder() });
-    const attachments = attachmentsPlugin.getAttachments(this.getCurrentRawContentState());
+    const attachments = attachmentsPlugin.getAttachments(editorState);
     return (
       <div className={divClassName} ref={textareaRef}>
         <div className="editor-header">
-          {this.state.editorState.getCurrentContent().hasText() ? (
-            <div className="editor-label form-label">{placeholder}</div>
-          ) : null}
+          {editorState.getCurrentContent().hasText() ? <div className="editor-label form-label">{placeholder}</div> : null}
           {toolbarPosition === 'top' ? this.renderToolbar() : null}
           <div className="clear" />
         </div>
@@ -235,14 +191,13 @@ export default class RichTextEditor extends React.Component<RichTextEditorProps,
           <Editor
             blockRendererFn={customBlockRenderer}
             editorState={editorState}
-            handleReturn={this.handleReturn}
-            onBlur={this.onBlur}
-            onChange={this.onChange}
+            onChange={onChange}
             onFocus={this.handleEditorFocus}
             placeholder={placeholder}
             ref={(e) => {
               this.editor = e;
             }}
+            handleReturn={this.handleReturn}
             spellCheck
           />
         </div>
