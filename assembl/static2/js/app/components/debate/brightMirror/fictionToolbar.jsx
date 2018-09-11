@@ -1,5 +1,7 @@
 // @flow
 import React from 'react';
+// Constant imports
+import { NO_BODY_LENGTH } from '../common/topPostForm';
 // Utils imports
 import { displayCustomModal, closeModal } from '../../../utils/utilityManager';
 // Components imports
@@ -48,11 +50,11 @@ const FictionToolbar = ({
           readOnly={false}
           modifiedOriginalSubject={null}
           originalLocale={lang}
-          postSuccessMsg="debate.brightMirror.postSuccessMsg"
-          editTitle="debate.brightMirror.editFiction"
-          bodyDescription="debate.brightMirror.fiction"
+          postSuccessMsgId="debate.brightMirror.postSuccessMsg"
+          editTitleLabelMsgId="debate.brightMirror.editFiction"
+          bodyDescriptionMsgId="debate.brightMirror.fiction"
           childrenUpdate={false}
-          textareaNoMaxLength
+          bodyMaxLength={NO_BODY_LENGTH}
         />
       </div>
     );

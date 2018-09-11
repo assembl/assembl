@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
-
+// Constant imports
+import { NO_BODY_LENGTH } from '../common/topPostForm';
 import Permissions, { connectedUserCan } from '../../../utils/permissions';
 import TopPostFormContainer from '../common/topPostFormContainer';
 import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
@@ -25,7 +26,9 @@ export type InstructionViewProps = {
   },
   /** Timeline data */
   timeline: Timeline,
+  /** Bright Mirror identifier */
   identifier: string,
+  /** Bright Mirror lang */
   lang: string
 };
 
@@ -51,11 +54,11 @@ const InstructionView = ({
             ideaId={ideaId}
             refetchIdea={refetchIdea}
             topPostsCount={posts.length}
-            instructionLabel="debate.brightMirror.startFictionLabel"
-            fillBodyLabel="debate.brightMirror.fillBodyLabel"
-            bodyPlaceholder="debate.brightMirror.fillBodyLabel"
-            postSuccessMsg="debate.brightMirror.postSuccessMsg"
-            textareaNoMaxLength
+            instructionLabelMsgId="debate.brightMirror.startFictionLabel"
+            fillBodyLabelMsgId="debate.brightMirror.fillBodyLabel"
+            bodyPlaceholderMsgId="debate.brightMirror.fillBodyLabel"
+            postSuccessMsgId="debate.brightMirror.postSuccessMsg"
+            bodyMaxLength={NO_BODY_LENGTH}
           />
         ) : null}
         <FictionsList posts={posts} identifier={identifier} themeId={ideaId} refetchIdea={refetchIdea} lang={lang} />

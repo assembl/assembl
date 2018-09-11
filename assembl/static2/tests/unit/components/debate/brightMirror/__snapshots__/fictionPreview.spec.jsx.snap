@@ -88,10 +88,7 @@ exports[`Storyshots FictionPreview default 1`] = `
               <span
                 className="author"
               >
-                John Doe
-                 
-                -
-                 
+                John Doe - 
               </span>
               <span
                 className="published-date"
@@ -707,10 +704,7 @@ exports[`Storyshots FictionPreview playground 1`] = `
               <span
                 className="author"
               >
-                John Doe
-                 
-                -
-                 
+                John Doe - 
               </span>
               <span
                 className="published-date"

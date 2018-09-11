@@ -5,6 +5,7 @@ import { Link } from 'react-router';
 import truncate from 'lodash/truncate';
 // Constant imports
 import { FICTION_PREVIEW_TITLE_MAX_CHAR, FICTION_PREVIEW_NAME_MAX_CHAR } from '../../../constants';
+import { NO_BODY_LENGTH } from '../common/topPostForm';
 // Components imports
 import EditPostForm from '../common/editPostForm';
 import EditPostButton from '../common/editPostButton';
@@ -70,11 +71,11 @@ const FictionPreview = ({
           readOnly={false}
           modifiedOriginalSubject={null}
           originalLocale={lang}
-          postSuccessMsg="debate.brightMirror.postSuccessMsg"
-          editTitle="debate.brightMirror.editFiction"
-          bodyDescription="debate.brightMirror.fiction"
+          postSuccessMsgId="debate.brightMirror.postSuccessMsg"
+          editTitleLabelMsgId="debate.brightMirror.editFiction"
+          bodyDescriptionMsgId="debate.brightMirror.fiction"
           childrenUpdate={false}
-          textareaNoMaxLength
+          bodyMaxLength={NO_BODY_LENGTH}
         />
       </div>
     );
@@ -101,7 +102,13 @@ const FictionPreview = ({
     </li>
   ) : null;
 
+  // Format author name
   const name = authorName || '';
+  const author = `${truncate(name, {
+    length: FICTION_PREVIEW_NAME_MAX_CHAR,
+    separator: ' ',
+    omission: '...'
+  })} - `;
 
   return (
     <div className="fiction-preview" style={{ backgroundColor: color }}>
@@ -120,14 +127,7 @@ const FictionPreview = ({
               })}
             </h3>
             <p className="info">
-              <span className="author">
-                {truncate(name, {
-                  length: FICTION_PREVIEW_NAME_MAX_CHAR,
-                  separator: ' ',
-                  omission: '...'
-                })}{' '}
-                -{' '}
-              </span>
+              <span className="author">{author}</span>
               <span className="published-date">{creationDate}</span>
             </p>
           </div>

@@ -272,14 +272,15 @@ export const deletePhaseTooltip = (
 export const phaseTooltip = (phaseTitle: string) => <Tooltip id="phaseTooltip">{phaseTitle}</Tooltip>;
 
 export const thematicTooltip = (thematicTitle: string) => <Tooltip id="thematicTooltip">{thematicTitle}</Tooltip>;
+
 export const editFictionTooltip = (
-  <Tooltip id="editMessageTooltip">
+  <Tooltip id="editFictionTooltip">
     <Translate value="debate.brightMirror.editFiction" />
   </Tooltip>
 );
 
 export const deleteFictionTooltip = (
-  <Tooltip id="deleteMessageTooltip">
+  <Tooltip id="deleteFictionTooltip">
     <Translate value="debate.brightMirror.deleteFiction" />
   </Tooltip>
 );

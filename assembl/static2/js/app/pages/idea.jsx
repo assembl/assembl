@@ -115,7 +115,7 @@ class Idea extends React.Component {
     this.getTopPosts = this.getTopPosts.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.displayBrightMirrorDeleteFictionMessage();
   }
 

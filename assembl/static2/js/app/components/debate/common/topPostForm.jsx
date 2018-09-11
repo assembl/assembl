@@ -17,7 +17,8 @@ import RichTextEditor from '../../common/richTextEditor';
 import attachmentsPlugin from '../../common/richTextEditor/attachmentsPlugin';
 
 export const TEXT_INPUT_MAX_LENGTH = 140;
-export const TEXT_AREA_MAX_LENGTH = 3000;
+export const NO_BODY_LENGTH = 0;
+export const BODY_MAX_LENGTH = 3000;
 
 type TopPostFormProps = {
   contentLocale: string,
@@ -29,10 +30,10 @@ type TopPostFormProps = {
   messageClassifier: string,
   scrollOffset: number,
   onDisplayForm: Function,
-  fillBodyLabel: string,
-  bodyPlaceholder: string,
-  postSuccessMsg: string,
-  textareaNoMaxLength?: boolean
+  fillBodyLabelMsgId: string,
+  bodyPlaceholderMsgId: string,
+  postSuccessMsgId: string,
+  bodyMaxLength?: number
 };
 
 type TopPostFormState = {
@@ -48,10 +49,10 @@ class TopPostForm extends React.Component<TopPostFormProps, TopPostFormState> {
   static defaultProps = {
     scrollOffset: 125,
     onDisplayForm: () => {},
-    fillBodyLabel: 'debate.thread.fillBody',
-    bodyPlaceholder: 'debate.insert',
-    postSuccessMsg: 'debate.thread.postSuccess',
-    textareaNoMaxLength: false
+    fillBodyLabelMsgId: 'debate.thread.fillBody',
+    bodyPlaceholderMsgId: 'debate.insert',
+    postSuccessMsgId: 'debate.thread.postSuccess',
+    bodyMaxLength: BODY_MAX_LENGTH
   };
 
   constructor() {
@@ -94,8 +95,8 @@ class TopPostForm extends React.Component<TopPostFormProps, TopPostFormState> {
       uploadDocument,
       messageClassifier,
       ideaOnColumn,
-      fillBodyLabel,
-      postSuccessMsg
+      fillBodyLabelMsgId,
+      postSuccessMsgId
     } = this.props;
     const { body, subject } = this.state;
     this.setState({ submitting: true });
@@ -119,7 +120,7 @@ class TopPostForm extends React.Component<TopPostFormProps, TopPostFormState> {
         createPost({ variables: variables })
           .then(() => {
             refetchIdea();
-            displayAlert('success', I18n.t(postSuccessMsg));
+            displayAlert('success', I18n.t(postSuccessMsgId));
             this.resetForm();
             this.setState({ submitting: false });
           })
@@ -132,7 +133,7 @@ class TopPostForm extends React.Component<TopPostFormProps, TopPostFormState> {
       displayAlert('warning', I18n.t('debate.thread.fillSubject'));
       this.setState({ submitting: false });
     } else if (bodyIsEmpty) {
-      displayAlert('warning', I18n.t(fillBodyLabel));
+      displayAlert('warning', I18n.t(fillBodyLabelMsgId));
       this.setState({ submitting: false });
     }
   };
@@ -188,9 +189,9 @@ class TopPostForm extends React.Component<TopPostFormProps, TopPostFormState> {
               <RichTextEditor
                 editorState={this.state.body}
                 handleInputFocus={this.handleInputFocus}
-                maxLength={TEXT_AREA_MAX_LENGTH}
+                maxLength={this.props.bodyMaxLength}
                 onChange={this.updateBody}
-                placeholder={I18n.t(this.props.bodyPlaceholder)}
+                placeholder={I18n.t(this.props.bodyPlaceholderMsgId)}
                 withAttachmentButton
               />
               {!this.props.ideaOnColumn ? (

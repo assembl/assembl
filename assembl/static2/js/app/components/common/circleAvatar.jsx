@@ -1,5 +1,6 @@
 // @flow
 import React from 'react';
+import { EMPTY_STRING } from '../../constants';
 
 type Props = {
   /** Optional avatar size (identical width and height) */
@@ -11,14 +12,7 @@ type Props = {
 };
 
 const CircleAvatar = ({ size, username, src }: Props) => (
-  <img
-    className="circle-avatar"
-    src={src}
-    width={size}
-    height={size}
-    // $FlowFixMe Cannot coerce `username` to string because undefined [1] should not be coerced
-    alt={`${username}-avatar`}
-  />
+  <img className="circle-avatar" src={src} width={size} height={size} alt={username ? `${username}-avatar` : EMPTY_STRING} />
 );
 
 CircleAvatar.defaultProps = {

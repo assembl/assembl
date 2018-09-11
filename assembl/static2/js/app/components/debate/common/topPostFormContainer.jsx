@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Grid, Row, Col } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
 import classNames from 'classnames';
-import TopPostForm from './topPostForm';
+import TopPostForm, { BODY_MAX_LENGTH } from './topPostForm';
 import { hexToRgb } from '../../../utils/globalFunctions';
 import { MIN_WIDTH_COLUMN, SMALL_SCREEN_HEIGHT } from '../../../constants';
 
@@ -13,11 +13,11 @@ type TopPostFormContainerProps = {
   ideaId: string,
   refetchIdea: Function,
   topPostsCount: number,
-  instructionLabel: string,
-  fillBodyLabel: string,
-  bodyPlaceholder: string,
-  postSuccessMsg: string,
-  textareaNoMaxLength?: boolean
+  instructionLabelMsgId: string,
+  fillBodyLabelMsgId: string,
+  bodyPlaceholderMsgId: string,
+  postSuccessMsgId: string,
+  bodyMaxLength?: number
 };
 
 type TopPostFormContainerState = {
@@ -34,8 +34,8 @@ class TopPostFormContainer extends React.Component<TopPostFormContainerProps, To
   topPostFormContainer: () => void;
 
   static defaultProps = {
-    instructionLabel: 'debate.thread.startDiscussion',
-    textareaNoMaxLength: false
+    instructionLabelMsgId: 'debate.thread.startDiscussion',
+    bodyMaxLength: BODY_MAX_LENGTH
   };
 
   constructor(props: TopPostFormContainerProps) {
@@ -95,11 +95,11 @@ class TopPostFormContainer extends React.Component<TopPostFormContainerProps, To
       messageColumns = [],
       isColumnViewInline,
       topPostsCount,
-      instructionLabel,
-      fillBodyLabel,
-      bodyPlaceholder,
-      postSuccessMsg,
-      textareaNoMaxLength
+      instructionLabelMsgId,
+      fillBodyLabelMsgId,
+      bodyPlaceholderMsgId,
+      postSuccessMsgId,
+      bodyMaxLength
     } = this.props;
     const columnsInfos = this.getColumnsInfos();
     const { sticky } = this.state;
@@ -141,7 +141,7 @@ class TopPostFormContainer extends React.Component<TopPostFormContainerProps, To
                               }
                             >
                               <h3 className="dark-title-3 no-margin">
-                                {messageColumns.length > 1 ? column.name : <Translate value={instructionLabel} />}
+                                {messageColumns.length > 1 ? column.name : <Translate value={instructionLabelMsgId} />}
                               </h3>
                             </div>
                           </div>
@@ -161,10 +161,10 @@ class TopPostFormContainer extends React.Component<TopPostFormContainerProps, To
                             refetchIdea={refetchIdea}
                             ideaOnColumn={messageColumns.length > 1}
                             messageClassifier={column.messageClassifier || null}
-                            fillBodyLabel={fillBodyLabel}
-                            bodyPlaceholder={bodyPlaceholder}
-                            postSuccessMsg={postSuccessMsg}
-                            textareaNoMaxLength={textareaNoMaxLength}
+                            fillBodyLabelMsgId={fillBodyLabelMsgId}
+                            bodyPlaceholderMsgId={bodyPlaceholderMsgId}
+                            postSuccessMsgId={postSuccessMsgId}
+                            bodyMaxLength={bodyMaxLength}
                           />
                         </Col>
                       </Row>

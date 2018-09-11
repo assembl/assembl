@@ -78,13 +78,13 @@ exports[`Bright Mirror page should match BrightMirror instruction snapshot 1`] =
     className="overflow-x"
   >
     <TopPostFormContainer
-      bodyPlaceholder="debate.brightMirror.fillBodyLabel"
-      fillBodyLabel="debate.brightMirror.fillBodyLabel"
+      bodyMaxLength={0}
+      bodyPlaceholderMsgId="debate.brightMirror.fillBodyLabel"
+      fillBodyLabelMsgId="debate.brightMirror.fillBodyLabel"
       ideaId={0}
-      instructionLabel="debate.brightMirror.startFictionLabel"
-      postSuccessMsg="debate.brightMirror.postSuccessMsg"
+      instructionLabelMsgId="debate.brightMirror.startFictionLabel"
+      postSuccessMsgId="debate.brightMirror.postSuccessMsg"
       refetchIdea={[Function]}
-      textareaNoMaxLength={true}
       topPostsCount={0}
     />
     <FictionsList

@@ -14,6 +14,7 @@ export const MIN_WIDTH_COLUMN = 400;
 export const COLUMN_OPACITY_GAIN = 0.5;
 
 // Bright mirror
+export const EMPTY_STRING = '';
 export const FICTION_PREVIEW_TITLE_MAX_CHAR = 60;
 export const FICTION_PREVIEW_NAME_MAX_CHAR = 20;
 export const FICTION_DELETE_CALLBACK = 'FICTION_DELETE_CALLBACK';

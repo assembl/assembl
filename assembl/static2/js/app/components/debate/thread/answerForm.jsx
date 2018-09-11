@@ -13,7 +13,7 @@ import { displayAlert, promptForLoginOr } from '../../../utils/utilityManager';
 import { convertContentStateToHTML, editorStateIsEmpty } from '../../../utils/draftjs';
 import RichTextEditor from '../../common/richTextEditor';
 import attachmentsPlugin from '../../common/richTextEditor/attachmentsPlugin';
-import { TEXT_AREA_MAX_LENGTH } from '../common/topPostForm';
+import { BODY_MAX_LENGTH } from '../common/topPostForm';
 import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
 import { scrollToPost } from '../../../utils/hashLinkScroll';
 
@@ -139,7 +139,7 @@ class AnswerForm extends React.PureComponent<AnswerFormProps, AnswerFormState> {
                 <RichTextEditor
                   editorState={this.state.body}
                   handleInputFocus={this.handleInputFocus}
-                  maxLength={TEXT_AREA_MAX_LENGTH}
+                  maxLength={BODY_MAX_LENGTH}
                   placeholder={I18n.t('debate.toAnswer')}
                   onChange={this.updateBody}
                   textareaRef={textareaRef}

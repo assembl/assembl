@@ -35,10 +35,10 @@ class Index extends Component {
               ideaId={props.ideaId}
               refetchIdea={props.refetchIdea}
               topPostsCount={props.posts.length}
-              instructionLabel="debate.brightMirror.startFictionLabel"
-              fillBodyLabel="debate.brightMirror.fillBodyLabel"
-              bodyPlaceholder="debate.brightMirror.fillBodyLabel"
-              postSuccessMsg="debate.brightMirror.postSuccessMsg"
+              instructionLabelMsgId="debate.brightMirror.startFictionLabel"
+              fillBodyLabelMsgId="debate.brightMirror.fillBodyLabel"
+              bodyPlaceholderMsgId="debate.brightMirror.fillBodyLabel"
+              postSuccessMsgId="debate.brightMirror.postSuccessMsg"
             />
             <FictionsList {...customFictionsList} />
           </div>

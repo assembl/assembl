@@ -14,7 +14,7 @@ import RichTextEditor from '../../common/richTextEditor';
 import attachmentsPlugin from '../../common/richTextEditor/attachmentsPlugin';
 import type { UploadNewAttachmentsPromiseResult } from '../../common/richTextEditor/attachmentsPlugin';
 import { TextInputWithRemainingChars } from '../../common/textInputWithRemainingChars';
-import { TEXT_INPUT_MAX_LENGTH, TEXT_AREA_MAX_LENGTH } from './topPostForm';
+import { TEXT_INPUT_MAX_LENGTH, BODY_MAX_LENGTH } from './topPostForm';
 
 type EditPostFormProps = {
   originalLocale: string,
@@ -28,11 +28,11 @@ type EditPostFormProps = {
   uploadDocument: Function,
   updatePost: Function,
   onSuccess: Function,
-  postSuccessMsg?: string,
-  editTitle?: string,
-  bodyDescription?: string,
+  postSuccessMsgId?: string,
+  editTitleLabelMsgId?: string,
+  bodyDescriptionMsgId?: string,
   childrenUpdate?: boolean,
-  textareaNoMaxLength?: boolean
+  bodyMaxLength?: number
 };
 
 type EditPostFormState = {
@@ -42,11 +42,11 @@ type EditPostFormState = {
 
 class EditPostForm extends React.PureComponent<EditPostFormProps, EditPostFormState> {
   static defaultProps = {
-    postSuccessMsg: 'debate.thread.postSuccess',
-    editTitle: 'debate.edit.title',
-    bodyDescription: 'debate.edit.body',
+    postSuccessMsgId: 'debate.thread.postSuccess',
+    editTitleLabelMsgId: 'debate.edit.title',
+    bodyDescriptionMsgId: 'debate.edit.body',
     childrenUpdate: true,
-    textareaNoMaxLength: false,
+    bodyMaxLength: BODY_MAX_LENGTH,
     onSuccess: () => {}
   };
 
@@ -80,7 +80,7 @@ class EditPostForm extends React.PureComponent<EditPostFormProps, EditPostFormSt
   };
 
   handleSubmit = (): void => {
-    const { uploadDocument, updatePost, postSuccessMsg, childrenUpdate } = this.props;
+    const { uploadDocument, updatePost, postSuccessMsgId, childrenUpdate } = this.props;
     const { body } = this.state;
     const subjectIsEmpty = this.state.subject && this.state.subject.length === 0;
     const bodyIsEmpty = editorStateIsEmpty(body);
@@ -103,7 +103,7 @@ class EditPostForm extends React.PureComponent<EditPostFormProps, EditPostFormSt
         const oldSubject = this.props.subject;
         updatePost({ variables: variables })
           .then(() => {
-            displayAlert('success', I18n.t(postSuccessMsg));
+            displayAlert('success', I18n.t(postSuccessMsgId));
             this.props.goBackToViewMode();
             this.props.onSuccess(variables.subject, variables.body);
             if (childrenUpdate && oldSubject !== this.state.subject) {
@@ -133,7 +133,7 @@ class EditPostForm extends React.PureComponent<EditPostFormProps, EditPostFormSt
       <Row>
         <Col xs={12} md={12}>
           <div className="color margin-left-9">
-            <span className="assembl-icon-edit" />&nbsp;<Translate value={this.props.editTitle} className="sm-title" />
+            <span className="assembl-icon-edit" />&nbsp;<Translate value={this.props.editTitleLabelMsgId} className="sm-title" />
           </div>
         </Col>
         <Col xs={12} md={12}>
@@ -155,9 +155,9 @@ class EditPostForm extends React.PureComponent<EditPostFormProps, EditPostFormSt
             <FormGroup>
               <RichTextEditor
                 editorState={this.state.body}
-                placeholder={I18n.t(this.props.bodyDescription)}
+                placeholder={I18n.t(this.props.bodyDescriptionMsgId)}
                 onChange={this.updateBody}
-                maxLength={TEXT_AREA_MAX_LENGTH}
+                maxLength={this.props.bodyMaxLength}
                 withAttachmentButton
               />
 
