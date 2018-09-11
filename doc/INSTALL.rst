@@ -337,6 +337,17 @@ If you do not have an SSL certificate, then you have to set ``accept_secure_conn
     cd /home/assembl_user/assembl
     fab -c configs/develop.rc bootstrap_from_checkout
     source venv/bin/activate
+
+Open a pshell and then exit it:
+
+.. code:: sh
+    assembl-pshell local.ini
+    exit
+
+Add a sysadmin user
+
+.. code:: sh
+
     assembl-add-user --email your_email@email.com --name "Your Name" --username desiredusername --password yourpassword local.ini
 
 Copy the content of ``doc/sample_nginx_config/assembl.yourdomain.com`` into a new nginx config file, at ``/etc/nginx/sites-available/{{assembl.yourdomain.com}}`` (and replace its filename by your own domain):
