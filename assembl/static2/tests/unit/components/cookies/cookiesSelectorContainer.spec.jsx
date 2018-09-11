@@ -144,8 +144,8 @@ describe('CookiesSelectorContainer component', () => {
       const date = new Date();
       date.setMonth(date.getMonth() + 13);
       expect(document.cookie).toBe(
-        // ignore the line length warning, this string has to be in one line
-        `cookies_configuration=ACCEPT_TRACKING_ON_DISCUSSION,ACCEPT_SESSION_ON_DISCUSSION,ACCEPT_LOCALE,ACCEPT_PRIVACY_POLICY_ON_DISCUSSION,ACCEPT_CGU; path=/;expires=${date}`
+        'cookies_configuration=ACCEPT_TRACKING_ON_DISCUSSION,ACCEPT_SESSION_ON_DISCUSSION,ACCEPT_LOCALE,' +
+          `ACCEPT_PRIVACY_POLICY_ON_DISCUSSION,ACCEPT_CGU; path=/;expires=${date}`
       );
     });
   });
