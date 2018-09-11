@@ -23,7 +23,13 @@ const AddLinkForm = ({ defaultText, onSubmit }: Props) => (
       }}
       onSubmit={onSubmit}
       render={({ handleSubmit }) => (
-        <BootstrapForm horizontal onSubmit={handleSubmit}>
+        <BootstrapForm
+          horizontal
+          onSubmit={(e) => {
+            e.stopPropagation();
+            handleSubmit();
+          }}
+        >
           <FormGroup controlId="url">
             <Col componentClass={ControlLabel} sm={2}>
               <Translate value="common.editor.linkPlugin.url" />
