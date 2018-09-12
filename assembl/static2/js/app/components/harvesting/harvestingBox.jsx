@@ -589,11 +589,12 @@ class DumbHarvestingBox extends React.Component<Props, State> {
               )}
             {!isExtract && <div>{selectionText}</div>}
           </div>
-          {extracts && (
-            <div className="extracts-numbering">
-              {extractIndex + 1}/{extracts.length}
-            </div>
-          )}
+          {extracts &&
+            extracts.length > 1 && (
+              <div className="extracts-numbering">
+                {extractIndex + 1}/{extracts.length}
+              </div>
+            )}
           {hasFooter && this.renderFooter()}
         </div>
       </div>
