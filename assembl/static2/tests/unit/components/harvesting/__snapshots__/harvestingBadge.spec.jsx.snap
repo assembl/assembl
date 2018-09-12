@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`harvestingBadge component should match harvestingBadge snapshot 1`] = `
+<div
+  className="harvesting-anchor"
+  onClick={[Function]}
+>
+  <div>
+    5
+  </div>
+  <div
+    className="left-side-harvesting-button"
+  >
+    <div
+      className="left-side-harvesting-button__button"
+    >
+      <div
+        className="left-side-harvesting-button__button__inside"
+      >
+        <span
+          className="confirm-harvest-button assembl-icon-catch"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;

@@ -5,6 +5,7 @@ import { DumbHarvestingBox } from '../../../../js/app/components/harvesting/harv
 import * as fakeData from './fakeData';
 
 describe('harvestingBox component', () => {
+  const setExtractsBoxDisplaySpy = jest.fn(() => {});
   it('should match harvestingBox snapshot', () => {
     const { extract } = fakeData;
     const props = {
@@ -15,7 +16,8 @@ describe('harvestingBox component', () => {
       harvestingAnchorPosition: { x: 100, y: 200 },
       contentLocale: 'fr',
       harvestingDate: 'il y a 5 jours',
-      showNuggetAction: true
+      showNuggetAction: true,
+      setExtractsBoxDisplay: setExtractsBoxDisplaySpy
     };
     const shallowRenderer = new ShallowRenderer();
     shallowRenderer.render(<DumbHarvestingBox {...props} />);
@@ -32,7 +34,8 @@ describe('harvestingBox component', () => {
       harvestingAnchorPosition: { x: 100, y: 200 },
       contentLocale: 'fr',
       harvestingDate: 'il y a 5 jours',
-      showNuggetAction: true
+      showNuggetAction: true,
+      setExtractsBoxDisplay: setExtractsBoxDisplaySpy
     };
     const shallowRenderer = new ShallowRenderer();
     shallowRenderer.render(<DumbHarvestingBox {...props} />);
@@ -49,7 +52,8 @@ describe('harvestingBox component', () => {
       harvestingAnchorPosition: { x: 100, y: 200 },
       contentLocale: 'fr',
       harvestingDate: 'il y a 5 jours',
-      showNuggetAction: false
+      showNuggetAction: false,
+      setExtractsBoxDisplay: setExtractsBoxDisplaySpy
     };
     const shallowRenderer = new ShallowRenderer();
     shallowRenderer.render(<DumbHarvestingBox {...props} />);

@@ -35,6 +35,7 @@ type Props = {
   confirmExtract: Function,
   deleteExtract: Function,
   refetchPost: Function,
+  setExtractsBoxDisplay: ?Function,
   harvestingDate?: string,
   isAuthorAccountDeleted?: boolean,
   showNuggetAction?: boolean
@@ -380,7 +381,15 @@ class DumbHarvestingBox extends React.Component<Props, State> {
   };
 
   render() {
-    const { selection, contentLocale, harvestingDate, isAuthorAccountDeleted, showNuggetAction, extracts } = this.props;
+    const {
+      selection,
+      contentLocale,
+      harvestingDate,
+      isAuthorAccountDeleted,
+      showNuggetAction,
+      extracts,
+      setExtractsBoxDisplay
+    } = this.props;
     const {
       disabled,
       extractIsValidated,
@@ -407,7 +416,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
     return (
       <div className={isSubmitted ? 'submitted-harvesting' : ''}>
         <div>
-          <div className="harvesting-close-button">
+          <div className="harvesting-close-button" onClick={setExtractsBoxDisplay}>
             <span className="assembl-icon-cancel grey" />
           </div>
         </div>

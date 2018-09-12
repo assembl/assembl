@@ -4,61 +4,9 @@ exports[`harvestingMenu component should match harvestingMenu snapshot 1`] = `
 <div
   className="harvesting-container"
 >
-  <Connect(Apollo(Apollo(Apollo(Apollo(Component)))))
-    cancelHarvesting={undefined}
-    displayHarvestingBox={undefined}
-    extracts={
-      Array [
-        Object {
-          "body": "Hello world!",
-          "creationDate": "2018-03-29T16:28:27.324276+00:00",
-          "creator": Object {
-            "displayName": "John Doe",
-            "id": "1223456",
-            "userId": 31,
-          },
-          "extractAction": null,
-          "extractNature": null,
-          "id": "987643",
-          "important": false,
-          "textFragmentIdentifiers": Array [
-            Object {
-              "offsetEnd": 988,
-              "offsetStart": 973,
-              "xpathEnd": "//div[@id='message-body-local:Content/3059']/",
-              "xpathStart": "//div[@id='message-body-local:Content/3059']/",
-            },
-          ],
-        },
-        Object {
-          "body": "Hello everybody!",
-          "creationDate": "2018-04-29T16:28:27.324276+00:00",
-          "creator": Object {
-            "displayName": "Alice Thomas",
-            "id": "78965",
-            "userId": 29,
-          },
-          "extractAction": null,
-          "extractNature": null,
-          "id": "75432",
-          "important": false,
-          "textFragmentIdentifiers": Array [
-            Object {
-              "offsetEnd": 123,
-              "offsetStart": 22,
-              "xpathEnd": "//div[@id='message-body-local:Content/3050']/",
-              "xpathStart": "//div[@id='message-body-local:Content/3050']/",
-            },
-          ],
-        },
-      ]
-    }
-    harvestingBoxPosition={null}
-    isAuthorAccountDeleted={undefined}
-    postId="1234"
-    refetchPost={undefined}
-    setHarvestingBoxDisplay={undefined}
-    showNuggetAction={undefined}
+  <harvestingBadge
+    extractsNumber={2}
+    setExtractsBoxDisplay={[Function]}
   />
 </div>
 `;
@@ -67,61 +15,9 @@ exports[`harvestingMenu component should match harvestingMenu without nugget act
 <div
   className="harvesting-container"
 >
-  <Connect(Apollo(Apollo(Apollo(Apollo(Component)))))
-    cancelHarvesting={undefined}
-    displayHarvestingBox={undefined}
-    extracts={
-      Array [
-        Object {
-          "body": "Hello world!",
-          "creationDate": "2018-03-29T16:28:27.324276+00:00",
-          "creator": Object {
-            "displayName": "John Doe",
-            "id": "1223456",
-            "userId": 31,
-          },
-          "extractAction": null,
-          "extractNature": null,
-          "id": "987643",
-          "important": false,
-          "textFragmentIdentifiers": Array [
-            Object {
-              "offsetEnd": 988,
-              "offsetStart": 973,
-              "xpathEnd": "//div[@id='message-body-local:Content/3059']/",
-              "xpathStart": "//div[@id='message-body-local:Content/3059']/",
-            },
-          ],
-        },
-        Object {
-          "body": "Hello everybody!",
-          "creationDate": "2018-04-29T16:28:27.324276+00:00",
-          "creator": Object {
-            "displayName": "Alice Thomas",
-            "id": "78965",
-            "userId": 29,
-          },
-          "extractAction": null,
-          "extractNature": null,
-          "id": "75432",
-          "important": false,
-          "textFragmentIdentifiers": Array [
-            Object {
-              "offsetEnd": 123,
-              "offsetStart": 22,
-              "xpathEnd": "//div[@id='message-body-local:Content/3050']/",
-              "xpathStart": "//div[@id='message-body-local:Content/3050']/",
-            },
-          ],
-        },
-      ]
-    }
-    harvestingBoxPosition={null}
-    isAuthorAccountDeleted={undefined}
-    postId="1234"
-    refetchPost={undefined}
-    setHarvestingBoxDisplay={undefined}
-    showNuggetAction={false}
+  <harvestingBadge
+    extractsNumber={2}
+    setExtractsBoxDisplay={[Function]}
   />
 </div>
 `;

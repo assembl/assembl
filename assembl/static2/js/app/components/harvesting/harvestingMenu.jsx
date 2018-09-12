@@ -5,6 +5,7 @@ import updateExtractMutation from '../../graphql/mutations/updateExtract.graphql
 import deleteExtractMutation from '../../graphql/mutations/deleteExtract.graphql'; // eslint-disable-line
 import HarvestingAnchor from './harvestingAnchor';
 import HarvestingBox from './harvestingBox';
+import HarvestingBadge from './harvestingBadge';
 
 type Props = {
   extracts: Array<Extract>,
@@ -21,11 +22,26 @@ type Props = {
   showNuggetAction: boolean
 };
 
-class HarvestingMenu extends React.Component<Props> {
+type State = {
+  displayExtractsBox: boolean
+};
+
+class HarvestingMenu extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      displayExtractsBox: false
+    };
+  }
+
   handleMouseDown = (event: SyntheticMouseEvent<>) => {
     // This would otherwise clear the selection
     event.preventDefault();
     return false;
+  };
+
+  setExtractsBoxDisplay = (): void => {
+    this.setState(prevState => ({ displayExtractsBox: !prevState.displayExtractsBox }));
   };
 
   render() {
@@ -44,9 +60,10 @@ class HarvestingMenu extends React.Component<Props> {
       lang
     } = this.props;
     const selection = window.getSelection();
+    const { displayExtractsBox } = this.state;
     return (
       <div className="harvesting-container">
-        {extracts && extracts.length > 0 ? (
+        {displayExtractsBox && extracts && extracts.length > 0 ? (
           <HarvestingBox
             postId={postId}
             key={`extracts-${postId}`}
@@ -58,8 +75,12 @@ class HarvestingMenu extends React.Component<Props> {
             cancelHarvesting={cancelHarvesting}
             setHarvestingBoxDisplay={setHarvestingBoxDisplay}
             showNuggetAction={showNuggetAction}
+            setExtractsBoxDisplay={this.setExtractsBoxDisplay}
           />
         ) : null}
+        {!displayExtractsBox && (
+          <HarvestingBadge setExtractsBoxDisplay={this.setExtractsBoxDisplay} extractsNumber={extracts.length} />
+        )}
         {displayHarvestingBox && (
           <HarvestingBox
             postId={postId}
