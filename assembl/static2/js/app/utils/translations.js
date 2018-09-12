@@ -27,6 +27,7 @@ const Translations = {
     conclusion: "Conclusion",
     harvesting: {
       harvestedExtractNumber: "%{extractNumber} extraits attrapés sur ce message",
+      harvestedExtractNumber_1: "%{extractNumber} extrait attrapé sur ce message",
       enableHarvestingMode: "Activer le mode attrapage",
       disableHarvestingMode: "Désactiver le mode attrapage",
       harvesting: "Attrapage",
@@ -860,6 +861,7 @@ const Translations = {
     },
     harvesting: {
       harvestedExtractNumber: "%{extractNumber} extracts harvested on this message",
+      harvestedExtractNumber_1: "%{extractNumber} extract harvested on this message",
       enableHarvestingMode: "Enable harvesting mode",
       disableHarvestingMode: "Disable harvesting mode",
       inProgress: "Harvesting in progress",
