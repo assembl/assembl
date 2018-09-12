@@ -496,7 +496,7 @@ const Translations = {
     userGuidelines: {
       headerTitle: "Charte de participation",
       iAccept: "J'ai lu et j'accepte la ",
-      link: "Charte de participation"
+      link: "charte de participation"
     },
     administration: {
       confirmTextFieldDeletionTitle: "Supprimer le champ",
@@ -1338,7 +1338,9 @@ const Translations = {
       link: "Privacy Policy"
     },
     userGuidelines: {
-      headerTitle: "User guidelines"
+      headerTitle: "User guidelines",
+      iAccept: "I have read and I accept the ",
+      link: "user guidelines"
     },
     administration: {
       confirmTextFieldDeletionTitle: "Delete the field",
