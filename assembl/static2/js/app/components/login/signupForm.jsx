@@ -21,16 +21,19 @@ import LegalForm from './legalForm';
 type Props = {
   hasTermsAndConditions: boolean,
   hasPrivacyPolicy: boolean,
+  hasUserGuidelines: boolean,
   signUp: Function,
   auth: Object,
   textFields: Array<ConfigurableField>,
   privacyPolicyText: string,
-  termsAndConditionsText: string
+  termsAndConditionsText: string,
+  userGuidelinesText: string
 };
 
 type State = {
   privacyPolicyIsChecked: boolean,
-  termsAndConditionsIsChecked: boolean
+  termsAndConditionsIsChecked: boolean,
+  userGuidelinesIsChecked: boolean
 };
 
 class SignupForm extends React.Component<Props, State> {
@@ -46,7 +49,8 @@ class SignupForm extends React.Component<Props, State> {
     super(props);
     this.state = {
       privacyPolicyIsChecked: false,
-      termsAndConditionsIsChecked: false
+      termsAndConditionsIsChecked: false,
+      userGuidelinesIsChecked: false
     };
   }
 
@@ -116,8 +120,16 @@ class SignupForm extends React.Component<Props, State> {
 
   render() {
     const slug = getDiscussionSlug();
-    const { hasTermsAndConditions, hasPrivacyPolicy, textFields, termsAndConditionsText, privacyPolicyText } = this.props;
-    const { privacyPolicyIsChecked, termsAndConditionsIsChecked } = this.state;
+    const {
+      hasTermsAndConditions,
+      hasPrivacyPolicy,
+      hasUserGuidelines,
+      textFields,
+      termsAndConditionsText,
+      privacyPolicyText,
+      userGuidelinesText
+    } = this.props;
+    const { privacyPolicyIsChecked, termsAndConditionsIsChecked, userGuidelinesIsChecked } = this.state;
     return (
       <div className="login-view">
         <div className="box-title">{I18n.t('login.createAccount')}</div>
@@ -204,6 +216,27 @@ class SignupForm extends React.Component<Props, State> {
                 </Checkbox>
               </FormGroup>
             )}
+            {hasUserGuidelines && (
+              <FormGroup className="left margin-left-2">
+                <Checkbox
+                  checked={userGuidelinesIsChecked}
+                  type="checkbox"
+                  onChange={() => this.toggleCheck('userGuidelines')}
+                  required
+                  inline
+                >
+                  <Translate value="privacyPolicy.iAccept" />
+                  <a
+                    onClick={(e) => {
+                      e.preventDefault();
+                      this.displayLegalFormModal(userGuidelinesIsChecked, userGuidelinesText, 'userGuidelines');
+                    }}
+                  >
+                    <Translate value="privacyPolicy.link" className="terms-link" />
+                  </a>
+                </Checkbox>
+              </FormGroup>
+            )}
             <div className="center">
               <FormGroup>
                 <Button
@@ -245,7 +278,8 @@ const withData = graphql(TabsConditionQuery, {
   props: ({ data }) => ({
     ...data,
     hasTermsAndConditions: data.hasTermsAndConditions,
-    hasPrivacyPolicy: data.hasPrivacyPolicy
+    hasPrivacyPolicy: data.hasPrivacyPolicy,
+    hasUserGuidelines: data.hasUserGuidelines
   })
 });
 
@@ -278,7 +312,8 @@ export default compose(
       return {
         ...data,
         termsAndConditionsText: lodashGet(data, 'legalContents.termsAndConditions', ''),
-        privacyPolicyText: lodashGet(data, 'legalContents.privacyPolicy', '')
+        privacyPolicyText: lodashGet(data, 'legalContents.privacyPolicy', ''),
+        userGuidelinesText: lodashGet(data, 'legalContents.userGuidelines', '')
       };
     }
   }),
