@@ -41,7 +41,7 @@ type Props = {
 };
 
 type State = {
-  extractNumber: number,
+  extractIndex: number,
   disabled: boolean,
   extractIsValidated: boolean,
   isNugget: boolean,
@@ -83,7 +83,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
     const extract = extracts && extracts.length > 0 ? extracts[0] : null;
     const isNugget = extract ? extract.important : false;
     this.state = {
-      extractNumber: 0,
+      extractIndex: 0,
       disabled: !isExtract,
       extractIsValidated: isExtract,
       isNugget: isNugget,
@@ -144,8 +144,8 @@ class DumbHarvestingBox extends React.Component<Props, State> {
     this.setState({ showOverflowMenu: false });
     const { nature, action } = taxonomies;
     const { updateExtract, refetchPost, extracts } = this.props;
-    const { extractNumber } = this.state;
-    const extract = extracts && extracts.length > 0 ? extracts[extractNumber] : null;
+    const { extractIndex } = this.state;
+    const extract = extracts && extracts.length > 0 ? extracts[extractIndex] : null;
     const { isNugget } = this.state;
     const variables = {
       extractId: extract ? extract.id : null,
@@ -167,8 +167,8 @@ class DumbHarvestingBox extends React.Component<Props, State> {
 
   updateHarvestingNugget = (): void => {
     const { updateExtract, refetchPost, extracts } = this.props;
-    const { isNugget, extractNature, extractAction, extractNumber } = this.state;
-    const extract = extracts && extracts.length > 0 ? extracts[extractNumber] : null;
+    const { isNugget, extractNature, extractAction, extractIndex } = this.state;
+    const extract = extracts && extracts.length > 0 ? extracts[extractIndex] : null;
     const variables = {
       extractId: extract ? extract.id : null,
       important: !isNugget,
@@ -191,8 +191,8 @@ class DumbHarvestingBox extends React.Component<Props, State> {
 
   updateHarvestingBody = (): void => {
     const { updateExtract, refetchPost, extracts } = this.props;
-    const { editableExtract, isNugget, extractNature, extractAction, extractNumber } = this.state;
-    const extract = extracts && extracts.length > 0 ? extracts[extractNumber] : null;
+    const { editableExtract, isNugget, extractNature, extractAction, extractIndex } = this.state;
+    const extract = extracts && extracts.length > 0 ? extracts[extractIndex] : null;
     const variables = {
       extractId: extract ? extract.id : null,
       body: editableExtract,
@@ -231,8 +231,8 @@ class DumbHarvestingBox extends React.Component<Props, State> {
 
   deleteHarvesting = (): void => {
     const { deleteExtract, refetchPost, extracts } = this.props;
-    const { extractNumber } = this.state;
-    const extract = extracts && extracts.length > 0 ? extracts[extractNumber] : null;
+    const { extractIndex } = this.state;
+    const extract = extracts && extracts.length > 0 ? extracts[extractIndex] : null;
     const variables = {
       extractId: extract ? extract.id : null
     };
@@ -240,8 +240,10 @@ class DumbHarvestingBox extends React.Component<Props, State> {
     displayAlert('success', I18n.t('loading.wait'));
     deleteExtract({ variables: variables })
       .then(() => {
-        displayAlert('success', I18n.t('harvesting.harvestingDeleted'));
-        refetchPost();
+        refetchPost().then(() => {
+          displayAlert('success', I18n.t('harvesting.harvestingDeleted'));
+          this.setCurrentExtractState();
+        });
       })
       .catch((error) => {
         displayAlert('danger', `${error}`);
@@ -291,8 +293,8 @@ class DumbHarvestingBox extends React.Component<Props, State> {
 
   confirmHarvesting = (): void => {
     const { confirmExtract, refetchPost, extracts } = this.props;
-    const { extractNumber } = this.state;
-    const extract = extracts && extracts.length > 0 ? extracts[extractNumber] : null;
+    const { extractIndex } = this.state;
+    const extract = extracts && extracts.length > 0 ? extracts[extractIndex] : null;
     const variables = {
       extractId: extract ? extract.id : null
     };
@@ -342,10 +344,25 @@ class DumbHarvestingBox extends React.Component<Props, State> {
     }
   };
 
+  setCurrentExtractState = (count: ?number): void => {
+    const { extractIndex } = this.state;
+    const { extracts } = this.props;
+    const idx = count ? extractIndex + count : 0;
+    const extract = extracts && extracts.length > 0 ? extracts[idx] : null;
+    const isNugget = extract ? extract.important : false;
+    this.setState(prevState => ({
+      extractIndex: count ? prevState.extractIndex + count : 0,
+      isNugget: isNugget,
+      extractNature: extract && extract.extractNature ? extract.extractNature.split('.')[1] : null,
+      extractAction: extract && extract.extractAction ? extract.extractAction.split('.')[1] : null,
+      editableExtract: extract ? extract.body : ''
+    }));
+  };
+
   renderFooter = () => {
     const { extracts } = this.props;
-    const { disabled, isEditable, extractNumber } = this.state;
-    const extract = extracts && extracts.length > 0 ? extracts[extractNumber] : null;
+    const { disabled, isEditable, extractIndex } = this.state;
+    const extract = extracts && extracts.length > 0 ? extracts[extractIndex] : null;
     const extractState = extract && extract.extractState;
     const isSubmitted = extractState === ExtractStates.SUBMITTED;
     const actionId = isEditable ? ACTIONS.edit : (disabled && ACTIONS.create) || (isSubmitted && ACTIONS.confirm);
@@ -362,12 +379,6 @@ class DumbHarvestingBox extends React.Component<Props, State> {
     );
   };
 
-  setExtractNumber = (value: number): void => {
-    const { extractNumber } = this.state;
-    const count = extractNumber + value;
-    this.setState({ extractNumber: count });
-  };
-
   render() {
     const { selection, contentLocale, harvestingDate, isAuthorAccountDeleted, showNuggetAction, extracts } = this.props;
     const {
@@ -380,9 +391,9 @@ class DumbHarvestingBox extends React.Component<Props, State> {
       extractAction,
       showOverflowMenu,
       overflowMenuTop,
-      extractNumber
+      extractIndex
     } = this.state;
-    const extract = extracts && extracts.length > 0 ? extracts[extractNumber] : null;
+    const extract = extracts && extracts.length > 0 ? extracts[extractIndex] : null;
     const isExtract = extract !== null;
     const selectionText = selection ? selection.toString() : '';
     const harvesterUserName =
@@ -528,10 +539,10 @@ class DumbHarvestingBox extends React.Component<Props, State> {
               !isEditable && (
                 <div className="body-container">
                   <div className="previous-extract">
-                    {extractNumber > 0 && (
+                    {extractIndex > 0 && (
                       <div
                         onClick={() => {
-                          this.setExtractNumber(-1);
+                          this.setCurrentExtractState(-1);
                         }}
                       >
                         <span className="assembl-icon-down-open grey" />
@@ -541,10 +552,10 @@ class DumbHarvestingBox extends React.Component<Props, State> {
                   <div>{extract.body}</div>
                   <div className="next-extract">
                     {extracts &&
-                      extractNumber < extracts.length - 1 && (
+                      extractIndex < extracts.length - 1 && (
                         <div
                           onClick={() => {
-                            this.setExtractNumber(1);
+                            this.setCurrentExtractState(1);
                           }}
                         >
                           <span className="assembl-icon-down-open grey" />
@@ -568,7 +579,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
           </div>
           {extracts && (
             <div className="extracts-numbering">
-              {extractNumber + 1}/{extracts.length}
+              {extractIndex + 1}/{extracts.length}
             </div>
           )}
           {hasFooter && this.renderFooter()}
