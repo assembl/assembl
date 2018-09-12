@@ -225,14 +225,14 @@ class SignupForm extends React.Component<Props, State> {
                   required
                   inline
                 >
-                  <Translate value="privacyPolicy.iAccept" />
+                  <Translate value="userGuidelines.iAccept" />
                   <a
                     onClick={(e) => {
                       e.preventDefault();
                       this.displayLegalFormModal(userGuidelinesIsChecked, userGuidelinesText, 'userGuidelines');
                     }}
                   >
-                    <Translate value="privacyPolicy.link" className="terms-link" />
+                    <Translate value="userGuidelines.link" className="terms-link" />
                   </a>
                 </Checkbox>
               </FormGroup>

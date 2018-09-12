@@ -494,7 +494,9 @@ const Translations = {
       link: "politique de protection des données personnelles"
     },
     userGuidelines: {
-      headerTitle: "Charte de participation"
+      headerTitle: "Charte de participation",
+      iAccept: "J'ai lu et j'accepte la ",
+      link: "Charte de participation"
     },
     administration: {
       confirmTextFieldDeletionTitle: "Supprimer le champ",
