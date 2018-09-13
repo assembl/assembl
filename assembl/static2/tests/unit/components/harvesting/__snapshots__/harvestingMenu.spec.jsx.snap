@@ -4,7 +4,7 @@ exports[`harvestingMenu component should match harvestingMenu snapshot 1`] = `
 <div>
   <harvestingBadge
     extractsNumber={2}
-    setExtractsBoxDisplay={[Function]}
+    toggleExtractsBox={[Function]}
   />
   <div
     className="harvesting-container"
@@ -18,7 +18,7 @@ exports[`harvestingMenu component should match harvestingMenu without nugget act
 <div>
   <harvestingBadge
     extractsNumber={2}
-    setExtractsBoxDisplay={[Function]}
+    toggleExtractsBox={[Function]}
   />
   <div
     className="harvesting-container"

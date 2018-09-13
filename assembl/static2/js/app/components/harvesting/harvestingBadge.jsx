@@ -2,13 +2,13 @@
 import * as React from 'react';
 
 type Props = {
-  setExtractsBoxDisplay: Function,
+  toggleExtractsBox: Function,
   extractsNumber: number
 };
 
-const harvestingBadge = ({ setExtractsBoxDisplay, extractsNumber }: Props) => (
+const harvestingBadge = ({ toggleExtractsBox, extractsNumber }: Props) => (
   <div className="relative">
-    <div className="harvesting-badge" onClick={setExtractsBoxDisplay}>
+    <div className="harvesting-badge" onClick={toggleExtractsBox}>
       <div className="badge-total">{extractsNumber}</div>
       <div className="left-side-harvesting-button">
         <div className="left-side-harvesting-button__button">

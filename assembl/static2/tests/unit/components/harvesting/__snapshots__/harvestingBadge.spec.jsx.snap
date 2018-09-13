@@ -6,7 +6,7 @@ exports[`harvestingBadge component should match harvestingBadge snapshot 1`] = `
 >
   <div
     className="harvesting-badge"
-    onClick={[Function]}
+    onClick={undefined}
   >
     <div
       className="badge-total"

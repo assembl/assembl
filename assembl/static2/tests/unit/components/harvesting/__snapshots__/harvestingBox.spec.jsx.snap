@@ -7,7 +7,7 @@ exports[`harvestingBox component should match harvestingBox snapshot 1`] = `
   <div>
     <div
       className="harvesting-close-button"
-      onClick={[Function]}
+      onClick={undefined}
     >
       <span
         className="assembl-icon-cancel grey"
@@ -245,7 +245,7 @@ exports[`harvestingBox component should match submitted harvestingBox snapshot 1
   <div>
     <div
       className="harvesting-close-button"
-      onClick={[Function]}
+      onClick={undefined}
     >
       <span
         className="assembl-icon-cancel grey"
@@ -483,7 +483,7 @@ exports[`harvestingBox component should match submitted harvestingBox without nu
   <div>
     <div
       className="harvesting-close-button"
-      onClick={[Function]}
+      onClick={undefined}
     >
       <span
         className="assembl-icon-cancel grey"

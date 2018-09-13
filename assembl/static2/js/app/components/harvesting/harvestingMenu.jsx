@@ -40,7 +40,7 @@ class HarvestingMenu extends React.Component<Props, State> {
     return false;
   };
 
-  setExtractsBoxDisplay = (): void => {
+  toggleExtractsBox = (): void => {
     this.setState(prevState => ({ displayExtractsBox: !prevState.displayExtractsBox }));
   };
 
@@ -65,9 +65,7 @@ class HarvestingMenu extends React.Component<Props, State> {
       <div>
         {!displayExtractsBox &&
           extracts &&
-          extracts.length > 0 && (
-            <HarvestingBadge setExtractsBoxDisplay={this.setExtractsBoxDisplay} extractsNumber={extracts.length} />
-          )}
+          extracts.length > 0 && <HarvestingBadge toggleExtractsBox={this.toggleExtractsBox} extractsNumber={extracts.length} />}
         <div className="harvesting-container">
           {displayExtractsBox && extracts && extracts.length > 0 ? (
             <HarvestingBox
@@ -81,7 +79,7 @@ class HarvestingMenu extends React.Component<Props, State> {
               cancelHarvesting={cancelHarvesting}
               setHarvestingBoxDisplay={setHarvestingBoxDisplay}
               showNuggetAction={showNuggetAction}
-              setExtractsBoxDisplay={this.setExtractsBoxDisplay}
+              toggleExtractsBox={this.toggleExtractsBox}
             />
           ) : null}
           {displayHarvestingBox && (
