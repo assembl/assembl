@@ -587,7 +587,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
                   onChange={e => this.editExtract(e.target.value)}
                 />
               )}
-            {!isExtract && <div>{selectionText}</div>}
+            {!isExtract && <div className="selection-body">{selectionText}</div>}
           </div>
           {extracts &&
             extracts.length > 1 && (

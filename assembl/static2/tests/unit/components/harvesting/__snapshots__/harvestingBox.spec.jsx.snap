@@ -204,7 +204,9 @@ exports[`harvestingBox component should match harvestingBox snapshot 1`] = `
     <div
       className="harvesting-box-body"
     >
-      <div />
+      <div
+        className="selection-body"
+      />
     </div>
     <div
       className="harvesting-box-footer"
@@ -440,7 +442,9 @@ exports[`harvestingBox component should match submitted harvestingBox snapshot 1
     <div
       className="harvesting-box-body"
     >
-      <div />
+      <div
+        className="selection-body"
+      />
     </div>
     <div
       className="harvesting-box-footer"
@@ -641,7 +645,9 @@ exports[`harvestingBox component should match submitted harvestingBox without nu
     <div
       className="harvesting-box-body"
     >
-      <div />
+      <div
+        className="selection-body"
+      />
     </div>
     <div
       className="harvesting-box-footer"

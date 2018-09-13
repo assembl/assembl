@@ -1,23 +1,29 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`harvestingMenu component should match harvestingMenu snapshot 1`] = `
-<div
-  className="harvesting-container"
->
+<div>
   <harvestingBadge
     extractsNumber={2}
     setExtractsBoxDisplay={[Function]}
   />
+  <div
+    className="harvesting-container"
+  >
+    
+  </div>
 </div>
 `;
 
 exports[`harvestingMenu component should match harvestingMenu without nugget action snapshot 1`] = `
-<div
-  className="harvesting-container"
->
+<div>
   <harvestingBadge
     extractsNumber={2}
     setExtractsBoxDisplay={[Function]}
   />
+  <div
+    className="harvesting-container"
+  >
+    
+  </div>
 </div>
 `;

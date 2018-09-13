@@ -3,6 +3,41 @@
   z-index: 1000;
 }
 
+.harvesting-badge {
+  position: absolute;
+  left: -50px;
+  top: 45px;
+
+  .badge-total {
+    position: absolute;
+    top: 0;
+    left: -5px;
+    background-color: $white;
+    border-radius: 50%;
+    width: 14px;
+    height: 14px;
+    font-size: $font-size-xxs;
+    box-shadow: 2px 2px 4px 0 #ccc;
+    padding: 0 0 0 4px;
+  }
+
+  .left-side-harvesting-button {
+    .left-side-harvesting-button__button {
+      width: 27px;
+      height: 27px;
+    }
+  }
+
+  .confirm-harvest-button {
+    padding: 0;
+    margin-top: -9px;
+
+    &:before {
+      font-size: $font-size-xs;
+    }
+  }
+}
+
 .harvesting-container {
   position: absolute;
   left: 0;
@@ -411,6 +446,10 @@
       margin: 0;
     }
 
+    .selection-body {
+      padding: 0 20px 20px;
+    }
+
     textarea {
       border: 1px solid $grey1;
       margin: -20px 0 0;
@@ -427,7 +466,6 @@
     .body-container {
       display: inline-flex;
       align-items: center;
-      justify-content: center;
 
       .previous-extract {
         cursor: pointer;
@@ -465,6 +503,7 @@
     background-color: $grey1;
     display: flex;
     justify-content: space-around;
+    padding: 20px 0;
 
     .btn-default {
       margin: 0 22px;

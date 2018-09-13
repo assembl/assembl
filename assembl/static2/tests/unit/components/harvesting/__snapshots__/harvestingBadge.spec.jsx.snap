@@ -2,24 +2,30 @@
 
 exports[`harvestingBadge component should match harvestingBadge snapshot 1`] = `
 <div
-  className="harvesting-anchor"
-  onClick={[Function]}
+  className="relative"
 >
-  <div>
-    5
-  </div>
   <div
-    className="left-side-harvesting-button"
+    className="harvesting-badge"
+    onClick={[Function]}
   >
     <div
-      className="left-side-harvesting-button__button"
+      className="badge-total"
+    >
+      5
+    </div>
+    <div
+      className="left-side-harvesting-button"
     >
       <div
-        className="left-side-harvesting-button__button__inside"
+        className="left-side-harvesting-button__button"
       >
-        <span
-          className="confirm-harvest-button assembl-icon-catch"
-        />
+        <div
+          className="left-side-harvesting-button__button__inside"
+        >
+          <span
+            className="confirm-harvest-button assembl-icon-catch"
+          />
+        </div>
       </div>
     </div>
   </div>

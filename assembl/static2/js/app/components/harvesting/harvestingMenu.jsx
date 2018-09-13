@@ -62,47 +62,51 @@ class HarvestingMenu extends React.Component<Props, State> {
     const selection = window.getSelection();
     const { displayExtractsBox } = this.state;
     return (
-      <div className="harvesting-container">
-        {displayExtractsBox && extracts && extracts.length > 0 ? (
-          <HarvestingBox
-            postId={postId}
-            key={`extracts-${postId}`}
-            extracts={extracts}
-            isAuthorAccountDeleted={isAuthorAccountDeleted}
-            displayHarvestingBox={displayHarvestingBox}
-            harvestingBoxPosition={null}
-            refetchPost={refetchPost}
-            cancelHarvesting={cancelHarvesting}
-            setHarvestingBoxDisplay={setHarvestingBoxDisplay}
-            showNuggetAction={showNuggetAction}
-            setExtractsBoxDisplay={this.setExtractsBoxDisplay}
-          />
-        ) : null}
-        {!displayExtractsBox && (
-          <HarvestingBadge setExtractsBoxDisplay={this.setExtractsBoxDisplay} extractsNumber={extracts.length} />
-        )}
-        {displayHarvestingBox && (
-          <HarvestingBox
-            postId={postId}
-            selection={selection}
-            lang={lang}
-            extract={null}
-            displayHarvestingBox={displayHarvestingBox}
-            refetchPost={refetchPost}
-            cancelHarvesting={cancelHarvesting}
-            setHarvestingBoxDisplay={setHarvestingBoxDisplay}
-            showNuggetAction={showNuggetAction}
-          />
-        )}
-        {displayHarvestingAnchor &&
-          selection.toString().length > 0 && (
-            <HarvestingAnchor
+      <div>
+        {!displayExtractsBox &&
+          extracts &&
+          extracts.length > 0 && (
+            <HarvestingBadge setExtractsBoxDisplay={this.setExtractsBoxDisplay} extractsNumber={extracts.length} />
+          )}
+        <div className="harvesting-container">
+          {displayExtractsBox && extracts && extracts.length > 0 ? (
+            <HarvestingBox
+              postId={postId}
+              key={`extracts-${postId}`}
+              extracts={extracts}
+              isAuthorAccountDeleted={isAuthorAccountDeleted}
               displayHarvestingBox={displayHarvestingBox}
-              handleMouseDown={this.handleMouseDown}
-              anchorPosition={harvestingAnchorPosition}
-              handleClickAnchor={handleClickAnchor}
+              harvestingBoxPosition={null}
+              refetchPost={refetchPost}
+              cancelHarvesting={cancelHarvesting}
+              setHarvestingBoxDisplay={setHarvestingBoxDisplay}
+              showNuggetAction={showNuggetAction}
+              setExtractsBoxDisplay={this.setExtractsBoxDisplay}
+            />
+          ) : null}
+          {displayHarvestingBox && (
+            <HarvestingBox
+              postId={postId}
+              selection={selection}
+              lang={lang}
+              extract={null}
+              displayHarvestingBox={displayHarvestingBox}
+              refetchPost={refetchPost}
+              cancelHarvesting={cancelHarvesting}
+              setHarvestingBoxDisplay={setHarvestingBoxDisplay}
+              showNuggetAction={showNuggetAction}
             />
           )}
+          {displayHarvestingAnchor &&
+            selection.toString().length > 0 && (
+              <HarvestingAnchor
+                displayHarvestingBox={displayHarvestingBox}
+                handleMouseDown={this.handleMouseDown}
+                anchorPosition={harvestingAnchorPosition}
+                handleClickAnchor={handleClickAnchor}
+              />
+            )}
+        </div>
       </div>
     );
   }
