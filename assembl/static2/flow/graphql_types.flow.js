@@ -195,6 +195,26 @@ export type BrightMirrorFictionQuery = {|
         body: ?string,
         // The date that the object was created, in UTC timezone, in ISO 8601 format.
         creationDate: ?any,
+        // A graphene Field containing the state of the publication of a certain post. The options are:
+        // DRAFT,
+        //
+        // SUBMITTED_IN_EDIT_GRACE_PERIOD,
+        //
+        // SUBMITTED_AWAITING_MODERATION,
+        //
+        // PUBLISHED,
+        //
+        // MODERATED_TEXT_ON_DEMAND,
+        //
+        // MODERATED_TEXT_NEVER_AVAILABLE,
+        //
+        // DELETED_BY_USER,
+        //
+        // DELETED_BY_ADMIN,
+        //
+        // WIDGET_SCOPED
+        //
+        publicationState: ?PublicationStates,
         creator: ?{|
           // The unique database identifier of the User.
           userId: number,
@@ -3432,7 +3452,8 @@ export type createPostMutationVariables = {|
   body: string,
   messageClassifier?: ?string,
   parentId?: ?string,
-  attachments?: ?Array<?string>
+  attachments?: ?Array<?string>,
+  publicationState?: ?string
 |};
 
 export type createPostMutation = {|
@@ -4709,7 +4730,8 @@ export type updatePostMutationVariables = {|
   postId: string,
   subject?: ?string,
   body: string,
-  attachments?: ?Array<?string>
+  attachments?: ?Array<?string>,
+  publicationState?: ?string
 |};
 
 export type updatePostMutation = {|
@@ -5821,6 +5843,26 @@ export type BrightMirrorFictionFragment = {|
   body: ?string,
   // The date that the object was created, in UTC timezone, in ISO 8601 format.
   creationDate: ?any,
+  // A graphene Field containing the state of the publication of a certain post. The options are:
+  // DRAFT,
+  //
+  // SUBMITTED_IN_EDIT_GRACE_PERIOD,
+  //
+  // SUBMITTED_AWAITING_MODERATION,
+  //
+  // PUBLISHED,
+  //
+  // MODERATED_TEXT_ON_DEMAND,
+  //
+  // MODERATED_TEXT_NEVER_AVAILABLE,
+  //
+  // DELETED_BY_USER,
+  //
+  // DELETED_BY_ADMIN,
+  //
+  // WIDGET_SCOPED
+  //
+  publicationState: ?PublicationStates,
   creator: ?{|
     // The unique database identifier of the User.
     userId: number,

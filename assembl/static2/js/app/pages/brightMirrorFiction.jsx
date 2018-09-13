@@ -20,12 +20,13 @@ import { displayAlert } from '../utils/utilityManager';
 import { getConnectedUserId } from '../utils/globalFunctions';
 import Permissions, { connectedUserCan } from '../utils/permissions';
 // Constant imports
-import { FICTION_DELETE_CALLBACK } from '../constants';
+import { FICTION_DELETE_CALLBACK, PublicationStates } from '../constants';
 // Type imports
 import type { CircleAvatarProps } from '../components/debate/brightMirror/circleAvatar';
 import type { FictionHeaderProps } from '../components/debate/brightMirror/fictionHeader';
 import type { FictionToolbarProps } from '../components/debate/brightMirror/fictionToolbar';
 import type { FictionBodyProps } from '../components/debate/brightMirror/fictionBody';
+
 // Define types
 export type BrightMirrorFictionData = {
   /** Fiction object formatted through GraphQL  */
@@ -33,6 +34,7 @@ export type BrightMirrorFictionData = {
   /** GraphQL error object used to handle fetching errors */
   error: any
 };
+
 export type BrightMirrorFictionProps = {
   /** Fiction data information fetched from GraphQL */
   data: BrightMirrorFictionData,
@@ -47,25 +49,31 @@ export type BrightMirrorFictionProps = {
   /** Fiction locale */
   contentLocale: string
 };
+
 type BrightMirrorFictionState = {
   /** Fiction title */
   title: string,
   /** Fiction content */
-  content: string
+  content: string,
+  /** Fiction publication state */
+  publicationState: string
 };
+
 const EMPTY_STRING = '';
+
 export class BrightMirrorFiction extends Component<BrightMirrorFictionProps, BrightMirrorFictionState> {
   constructor(props: BrightMirrorFictionProps) {
     super(props);
     this.state = {
       title: props.data.fiction.subject ? props.data.fiction.subject : EMPTY_STRING,
-      content: props.data.fiction.body ? props.data.fiction.body : EMPTY_STRING
+      content: props.data.fiction.body ? props.data.fiction.body : EMPTY_STRING,
+      publicationState: props.data.fiction.publicationState ? props.data.fiction.publicationState : PublicationStates.PUBLISHED
     };
   }
 
   render() {
     const { data, slug, phase, themeId, fictionId, contentLocale } = this.props;
-    const { title, content } = this.state;
+    const { title, content, publicationState } = this.state;
     // Handle fetching error
     if (data.error) {
       displayAlert('danger', I18n.t('error.loading'));
@@ -93,8 +101,8 @@ export class BrightMirrorFiction extends Component<BrightMirrorFictionProps, Bri
         state: { callback: FICTION_DELETE_CALLBACK }
       });
     };
-    const modifyFictionCallback = (subject, body) => {
-      this.setState({ title: subject, content: body });
+    const modifyFictionCallback = (subject, body, state) => {
+      this.setState({ title: subject, content: body, publicationState: state });
     };
     // Define components props
     const circleAvatarProps: CircleAvatarProps = {
@@ -115,6 +123,7 @@ export class BrightMirrorFiction extends Component<BrightMirrorFictionProps, Bri
       title: title,
       originalBody: content,
       lang: contentLocale,
+      publicationState: publicationState,
       userCanEdit: userCanEdit,
       userCanDelete: userCanDelete,
       onModifyCallback: modifyFictionCallback,

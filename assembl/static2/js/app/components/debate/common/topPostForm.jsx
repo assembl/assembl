@@ -6,6 +6,7 @@ import { FormGroup, Button } from 'react-bootstrap';
 import { I18n, Translate } from 'react-redux-i18n';
 import classNames from 'classnames';
 import { EditorState } from 'draft-js';
+import { PublicationStates } from '../../../constants';
 
 import createPostMutation from '../../../graphql/mutations/createPost.graphql';
 import uploadDocumentMutation from '../../../graphql/mutations/uploadDocument.graphql';
@@ -33,7 +34,9 @@ type TopPostFormProps = {
   fillBodyLabelMsgId: string,
   bodyPlaceholderMsgId: string,
   postSuccessMsgId: string,
-  bodyMaxLength?: number
+  bodyMaxLength?: number,
+  draftable?: boolean,
+  draftSuccessMsgId?: string
 };
 
 type TopPostFormState = {
@@ -52,7 +55,9 @@ class TopPostForm extends React.Component<TopPostFormProps, TopPostFormState> {
     fillBodyLabelMsgId: 'debate.thread.fillBody',
     bodyPlaceholderMsgId: 'debate.insert',
     postSuccessMsgId: 'debate.thread.postSuccess',
-    bodyMaxLength: BODY_MAX_LENGTH
+    bodyMaxLength: BODY_MAX_LENGTH,
+    draftable: false,
+    draftSuccessMsgId: null
   };
 
   constructor() {
@@ -86,7 +91,7 @@ class TopPostForm extends React.Component<TopPostFormProps, TopPostFormState> {
     this.setState({ body: EditorState.createEmpty() });
   };
 
-  createTopPost = () => {
+  createTopPost = (publicationState) => {
     const {
       contentLocale,
       createPost,
@@ -96,7 +101,8 @@ class TopPostForm extends React.Component<TopPostFormProps, TopPostFormState> {
       messageClassifier,
       ideaOnColumn,
       fillBodyLabelMsgId,
-      postSuccessMsgId
+      postSuccessMsgId,
+      draftSuccessMsgId
     } = this.props;
     const { body, subject } = this.state;
     this.setState({ submitting: true });
@@ -114,13 +120,15 @@ class TopPostForm extends React.Component<TopPostFormProps, TopPostFormState> {
           messageClassifier: messageClassifier || null,
           // use the updated content state with new entities
           body: convertContentStateToHTML(result.contentState),
-          attachments: result.documentIds
+          attachments: result.documentIds,
+          publicationState: publicationState
         };
 
         createPost({ variables: variables })
           .then(() => {
             refetchIdea();
-            displayAlert('success', I18n.t(postSuccessMsgId));
+            const successMsgId = publicationState === PublicationStates.DRAFT ? draftSuccessMsgId : postSuccessMsgId;
+            displayAlert('success', I18n.t(successMsgId));
             this.resetForm();
             this.setState({ submitting: false });
           })
@@ -201,12 +209,21 @@ class TopPostForm extends React.Component<TopPostFormProps, TopPostFormState> {
               ) : null}
               <Button
                 className={this.getClassNames()}
-                onClick={this.createTopPost}
+                onClick={() => this.createTopPost(PublicationStates.PUBLISHED)}
                 style={{ marginBottom: '30px' }}
                 disabled={this.state.submitting}
               >
                 <Translate value="debate.post" />
               </Button>
+              {this.props.draftable ? (
+                <Button
+                  className={`${this.getClassNames()} btn-draft`}
+                  onClick={() => this.createTopPost(PublicationStates.DRAFT)}
+                  disabled={this.state.submitting}
+                >
+                  <Translate value="debate.brightMirror.save" />
+                </Button>
+              ) : null}
             </div>
           ) : null}
         </FormGroup>

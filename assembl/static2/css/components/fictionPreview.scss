@@ -13,7 +13,8 @@
   h3,
   p,
   .author,
-  .published-date {
+  .published-date,
+  .draft {
     color: $black;
     letter-spacing: normal;
     line-height: 1.19;
@@ -23,6 +24,13 @@
   h3 {
     font-size: $font-size-sm;
     margin-bottom: 17px;
+  }
+
+  .draft {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 6px 0 0 8px;
   }
 
   .actions {
@@ -103,6 +111,10 @@
       font-size: $font-size-l;
     }
 
+    .draft {
+      margin: 20px 0 0 17px;
+    }
+
     .actions {
       margin-top: 20px;
       margin-right: 18px;
@@ -145,6 +157,10 @@
     h3 {
       font-size: $font-size-l;
       margin-bottom: 20px;
+    }
+
+    .draft {
+      margin: 22px 0 0 19px;
     }
 
     .actions {

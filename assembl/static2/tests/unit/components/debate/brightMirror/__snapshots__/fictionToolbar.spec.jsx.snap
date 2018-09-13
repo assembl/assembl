@@ -384,6 +384,36 @@ exports[`Storyshots FictionToolbar default 1`] = `
                         }
                       </span>
                     </span>
+                  </span>
+                  <span>
+                    <span>
+                      <br />
+                        
+                    </span>
+                    <span
+                      style={Object {}}
+                    >
+                      publicationState
+                    </span>
+                    <span>
+                      =
+                      <span
+                        style={Object {}}
+                      >
+                        "
+                        <span
+                          style={
+                            Object {
+                              "color": "#22a",
+                              "wordBreak": "break-word",
+                            }
+                          }
+                        >
+                          PUBLISHED
+                        </span>
+                        "
+                      </span>
+                    </span>
                     <br />
                   </span>
                 </span>

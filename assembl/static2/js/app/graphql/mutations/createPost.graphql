@@ -8,6 +8,7 @@ mutation createPost(
   $messageClassifier: String
   $parentId: ID
   $attachments: [String]
+  $publicationState: String
 ) {
   createPost(
     ideaId: $ideaId
@@ -16,6 +17,7 @@ mutation createPost(
     messageClassifier: $messageClassifier
     parentId: $parentId
     attachments: $attachments
+    publicationState: $publicationState
   ) {
     post {
       ...Post

@@ -8,6 +8,7 @@ import FictionPreview from '../../../../../js/app/components/debate/brightMirror
 import EditPostButton from '../../../../../js/app/components/debate/common/editPostButton';
 import DeletePostButton from '../../../../../js/app/components/debate/common/deletePostButton';
 import { customFictionPreview } from '../../../../../js/app/stories/components/debate/brightMirror/fictionPreview.stories';
+import { PublicationStates } from '../../../../../js/app/constants';
 
 // Separate the snapshots in directories next to each component
 // Name should match with the story name
@@ -54,5 +55,15 @@ describe('<FictionPreview /> - with shallow', () => {
   it('should not render delete button when userCanDelete is false', () => {
     wrapper.setProps({ userCanDelete: false });
     expect(wrapper.find(DeletePostButton)).toHaveLength(0);
+  });
+
+  it('should render draft label when publication state is draft', () => {
+    wrapper.setProps({ publicationState: PublicationStates.DRAFT });
+    expect(wrapper.find('span [className="draft"]')).toHaveLength(1);
+  });
+
+  it('should not render draft label when publication state is published', () => {
+    wrapper.setProps({ publicationState: PublicationStates.PUBLISHED });
+    expect(wrapper.find('span [className="draft"]')).toHaveLength(0);
   });
 });

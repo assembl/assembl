@@ -12,6 +12,7 @@ import FictionHeader from '../../../js/app/components/debate/brightMirror/fictio
 import FictionToolbar from '../../../js/app/components/debate/brightMirror/fictionToolbar';
 import FictionBody from '../../../js/app/components/debate/brightMirror/fictionBody';
 // Type imports
+import { PublicationStates } from '../../../js/app/constants';
 import type { BrightMirrorFictionData, BrightMirrorFictionProps } from '../../../js/app/pages/brightMirrorFiction';
 
 configure({ adapter: new Adapter() });
@@ -24,6 +25,7 @@ const brightMirrorFictionData: BrightMirrorFictionData = {
     subject: 'Hic quia eveniet cupiditate placeat laboriosam.',
     body: 'Odit mollitia natus ea iusto voluptatibus omnis pariatur tempore ipsum.',
     creationDate: new Date(),
+    publicationState: PublicationStates.PUBLISHED,
     creator: {
       userId: 99999999,
       displayName: 'Wendy Quigley',

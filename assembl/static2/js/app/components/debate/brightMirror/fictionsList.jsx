@@ -9,7 +9,7 @@ import { get } from '../../../utils/routeMap';
 
 import { getDiscussionSlug, getConnectedUserId } from '../../../utils/globalFunctions';
 import FictionPreview from './fictionPreview';
-import { fictionBackgroundColors } from '../../../constants';
+import { fictionBackgroundColors, PublicationStates } from '../../../constants';
 import Permissions, { connectedUserCan } from '../../../utils/permissions';
 import { displayAlert } from '../../../utils/utilityManager';
 
@@ -41,11 +41,13 @@ const FictionsList = ({ posts, identifier, refetchIdea, lang, themeId }: Fiction
 
   const connectedUserId = getConnectedUserId();
 
-  const childElements = posts.map((post) => {
+  const childElements = posts.reduce((result, post) => {
     // Define user permissions
     let authorName = '';
     let userCanEdit = false;
     let userCanDelete = false;
+    let isVisible = true;
+
     if (post.creator) {
       const { userId, displayName, isDeleted } = post.creator;
       authorName = isDeleted ? I18n.t('deletedUser') : displayName;
@@ -53,34 +55,36 @@ const FictionsList = ({ posts, identifier, refetchIdea, lang, themeId }: Fiction
       userCanDelete =
         (connectedUserId === String(userId) && connectedUserCan(Permissions.DELETE_MY_POST)) ||
         connectedUserCan(Permissions.DELETE_POST);
+      isVisible =
+        post.publicationState === PublicationStates.PUBLISHED ||
+        (post.publicationState === PublicationStates.DRAFT && connectedUserId === String(userId));
     }
 
-    return (
-      <Animated key={post.id} preset="scalein">
-        <FictionPreview
-          id={post.id}
-          link={`${get('brightMirrorFiction', {
-            slug: slug,
-            phase: identifier,
-            themeId: themeId,
-            fictionId: post.id
-          })}`}
-          // $FlowFixMe subject is fetch localized
-          title={post.subject}
-          creationDate={I18n.l(post.creationDate, { dateFormat: 'date.format2' })}
-          authorName={authorName}
-          color={getRandomColor()}
-          // $FlowFixMe body is fetch localized
-          originalBody={post.body}
-          refetchIdea={refetchIdea}
-          userCanEdit={userCanEdit}
-          userCanDelete={userCanDelete}
-          lang={lang}
-          deleteFictionHandler={deleteFictionHandler}
-        />
-      </Animated>
-    );
-  });
+    if (isVisible) {
+      result.push(
+        <Animated key={post.id} preset="scalein">
+          <FictionPreview
+            id={post.id}
+            link={`${get('brightMirrorFiction', { slug: slug, phase: identifier, themeId: themeId, fictionId: post.id })}`}
+            // $FlowFixMe subject is fetch localized
+            title={post.subject}
+            creationDate={I18n.l(post.creationDate, { dateFormat: 'date.format2' })}
+            authorName={authorName}
+            color={getRandomColor()}
+            // $FlowFixMe body is fetch localized
+            originalBody={post.body}
+            refetchIdea={refetchIdea}
+            userCanEdit={userCanEdit}
+            userCanDelete={userCanDelete}
+            lang={lang}
+            publicationState={post.publicationState}
+            deleteFictionHandler={deleteFictionHandler}
+          />
+        </Animated>
+      );
+    }
+    return result;
+  }, []);
 
   return (
     <section className="fictions-section">

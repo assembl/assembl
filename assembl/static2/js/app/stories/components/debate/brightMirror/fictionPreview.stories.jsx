@@ -4,9 +4,10 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import { withInfo } from '@storybook/addon-info';
-import { withKnobs, text, boolean } from '@storybook/addon-knobs';
+import { withKnobs, text, boolean, select } from '@storybook/addon-knobs';
 /* eslint-enable */
 
+import { PublicationStates } from '../../../../constants';
 import FictionPreview from '../../../../components/debate/brightMirror/fictionPreview';
 import type { FictionPreviewProps } from '../../../../components/debate/brightMirror/fictionPreview';
 
@@ -22,7 +23,8 @@ export const customFictionPreview: FictionPreviewProps = {
   lang: 'fr',
   userCanEdit: true,
   userCanDelete: true,
-  deleteFictionHandler: action('deleteFictionHandler')
+  deleteFictionHandler: action('deleteFictionHandler'),
+  publicationState: PublicationStates.PUBLISHED
 };
 
 storiesOf('FictionPreview', module)
@@ -44,6 +46,7 @@ storiesOf('FictionPreview', module)
         userCanEdit={boolean('User can edit', customFictionPreview.userCanEdit)}
         userCanDelete={boolean('User can delete', customFictionPreview.userCanDelete)}
         deleteFictionHandler={customFictionPreview.deleteFictionHandler}
+        publicationState={select('publicationState', PublicationStates, PublicationStates.PUBLISHED)}
       />
     ))
   );

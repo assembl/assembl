@@ -3,7 +3,12 @@ import * as React from 'react';
 import { Link } from 'react-router';
 import truncate from 'lodash/truncate';
 // Constant imports
-import { FICTION_PREVIEW_TITLE_MAX_CHAR, FICTION_PREVIEW_NAME_MAX_CHAR } from '../../../constants';
+import {
+  FICTION_PREVIEW_TITLE_MAX_CHAR,
+  FICTION_PREVIEW_NAME_MAX_CHAR,
+  PublicationStates,
+  FICTION_DRAFT_OPACITY
+} from '../../../constants';
 import { NO_BODY_LENGTH } from '../common/topPostForm';
 // Components imports
 import EditPostForm from '../common/editPostForm';
@@ -28,7 +33,8 @@ export type FictionPreviewProps = {
   lang: string,
   userCanEdit: boolean,
   userCanDelete: boolean,
-  deleteFictionHandler: Function
+  deleteFictionHandler: Function,
+  publicationState: string
 };
 
 const ellipsis = (text, length) =>
@@ -50,7 +56,8 @@ const FictionPreview = ({
   lang,
   userCanEdit,
   userCanDelete,
-  deleteFictionHandler
+  deleteFictionHandler,
+  publicationState
 }: FictionPreviewProps) => {
   // Define components
   const openPostModal = () => {
@@ -68,8 +75,11 @@ const FictionPreview = ({
           postSuccessMsgId="debate.brightMirror.postSuccessMsg"
           editTitleLabelMsgId="debate.brightMirror.editFiction"
           bodyDescriptionMsgId="debate.brightMirror.fiction"
+          fillBodyLabelMsgId="debate.brightMirror.fillBodyLabel"
+          draftSuccessMsgId="debate.brightMirror.draftSuccessMsg"
           childrenUpdate={false}
           bodyMaxLength={NO_BODY_LENGTH}
+          draftable={publicationState === PublicationStates.DRAFT}
         />
       </div>
     );
@@ -100,9 +110,12 @@ const FictionPreview = ({
   const name = authorName || '';
   const author = `${ellipsis(name, FICTION_PREVIEW_NAME_MAX_CHAR)} - `;
 
+  const backgroundColor = color + (publicationState === PublicationStates.DRAFT ? FICTION_DRAFT_OPACITY : '');
+
   return (
-    <div className="fiction-preview" style={{ backgroundColor: color }}>
+    <div className="fiction-preview" style={{ backgroundColor: backgroundColor }}>
       <div className="content-box">
+        {publicationState === PublicationStates.DRAFT ? <span className="draft">{PublicationStates.DRAFT}</span> : null}
         <ul className="actions">
           {editButton}
           {deleteButton}

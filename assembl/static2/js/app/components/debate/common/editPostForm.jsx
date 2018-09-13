@@ -4,6 +4,7 @@ import { compose, graphql, withApollo } from 'react-apollo';
 import { Row, Col, FormGroup, Button } from 'react-bootstrap';
 import { Translate, I18n } from 'react-redux-i18n';
 import { EditorState } from 'draft-js';
+import { PublicationStates } from '../../../constants';
 
 import uploadDocumentMutation from '../../../graphql/mutations/uploadDocument.graphql';
 import updatePostMutation from '../../../graphql/mutations/updatePost.graphql';
@@ -31,8 +32,11 @@ type EditPostFormProps = {
   postSuccessMsgId?: string,
   editTitleLabelMsgId?: string,
   bodyDescriptionMsgId?: string,
+  fillBodyLabelMsgId?: string,
   childrenUpdate?: boolean,
-  bodyMaxLength?: number
+  bodyMaxLength?: number,
+  draftable?: boolean,
+  draftSuccessMsgId?: string
 };
 
 type EditPostFormState = {
@@ -45,9 +49,12 @@ class EditPostForm extends React.PureComponent<EditPostFormProps, EditPostFormSt
     postSuccessMsgId: 'debate.thread.postSuccess',
     editTitleLabelMsgId: 'debate.edit.title',
     bodyDescriptionMsgId: 'debate.edit.body',
+    fillBodyLabelMsgId: 'debate.thread.fillBody',
     childrenUpdate: true,
     bodyMaxLength: BODY_MAX_LENGTH,
-    onSuccess: () => {}
+    onSuccess: () => {},
+    draftable: false,
+    draftSuccessMsgId: null
   };
 
   constructor(props: EditPostFormProps) {
@@ -79,10 +86,10 @@ class EditPostForm extends React.PureComponent<EditPostFormProps, EditPostFormSt
     }
   };
 
-  handleSubmit = (): void => {
-    const { uploadDocument, updatePost, postSuccessMsgId, childrenUpdate } = this.props;
+  handleSubmit = (publicationState) => {
+    const { uploadDocument, updatePost, postSuccessMsgId, childrenUpdate, draftSuccessMsgId, fillBodyLabelMsgId } = this.props;
     const { body } = this.state;
-    const subjectIsEmpty = this.state.subject && this.state.subject.length === 0;
+    const subjectIsEmpty = this.state.subject.length === 0;
     const bodyIsEmpty = editorStateIsEmpty(body);
     if (!subjectIsEmpty && !bodyIsEmpty) {
       // first we upload the new documents
@@ -97,15 +104,17 @@ class EditPostForm extends React.PureComponent<EditPostFormProps, EditPostFormSt
           postId: this.props.id,
           subject: this.state.subject || '',
           body: convertContentStateToHTML(result.contentState),
-          attachments: result.documentIds
+          attachments: result.documentIds,
+          publicationState: publicationState
         };
         displayAlert('success', I18n.t('loading.wait'));
         const oldSubject = this.props.subject;
         updatePost({ variables: variables })
           .then(() => {
-            displayAlert('success', I18n.t(postSuccessMsgId));
+            const successMsgId = publicationState === PublicationStates.DRAFT ? draftSuccessMsgId : postSuccessMsgId;
+            displayAlert('success', I18n.t(successMsgId));
             this.props.goBackToViewMode();
-            this.props.onSuccess(variables.subject, variables.body);
+            this.props.onSuccess(variables.subject, variables.body, variables.publicationState);
             if (childrenUpdate && oldSubject !== this.state.subject) {
               // If we edited the subject, we need to reload all descendants posts,
               // we do this by refetch all Post queries.
@@ -124,7 +133,7 @@ class EditPostForm extends React.PureComponent<EditPostFormProps, EditPostFormSt
     } else if (subjectIsEmpty) {
       displayAlert('warning', I18n.t('debate.thread.fillSubject'));
     } else if (bodyIsEmpty) {
-      displayAlert('warning', I18n.t('debate.thread.fillBody'));
+      displayAlert('warning', I18n.t(fillBodyLabelMsgId));
     }
   };
 
@@ -165,9 +174,20 @@ class EditPostForm extends React.PureComponent<EditPostFormProps, EditPostFormSt
                 <Button className="button-cancel button-dark btn btn-default left" onClick={this.handleCancel}>
                   <Translate value="cancel" />
                 </Button>
-                <Button className="button-submit button-dark btn btn-default right" onClick={this.handleSubmit}>
+                <Button
+                  className="button-submit button-dark btn btn-default right"
+                  onClick={() => this.handleSubmit(PublicationStates.PUBLISHED)}
+                >
                   <Translate value="debate.post" />
                 </Button>
+                {this.props.draftable ? (
+                  <Button
+                    className="button-submit button-dark btn btn-default right btn-draft"
+                    onClick={() => this.handleSubmit(PublicationStates.DRAFT)}
+                  >
+                    <Translate value="debate.brightMirror.save" />
+                  </Button>
+                ) : null}
               </div>
             </FormGroup>
           </div>

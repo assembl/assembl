@@ -288,6 +288,8 @@ export const fictionBackgroundColors = [
   '#cfd8dc'
 ];
 
+export const FICTION_DRAFT_OPACITY = '70';
+
 export const modulesTranslationKeys = ['survey', 'thread', 'multiColumns', 'voteSession', 'brightMirror'];
 
 export const BlockingPublicationStates = {};

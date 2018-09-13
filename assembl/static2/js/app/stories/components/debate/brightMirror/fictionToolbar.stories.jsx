@@ -8,6 +8,7 @@ import { withKnobs } from '@storybook/addon-knobs';
 /* eslint-enable */
 
 import FictionToolbar from '../../../../components/debate/brightMirror/fictionToolbar';
+import { PublicationStates } from '../../../../constants';
 import type { FictionToolbarProps } from '../../../../components/debate/brightMirror/fictionToolbar';
 
 export const defaultFictionToolbar: FictionToolbarProps = {
@@ -18,7 +19,8 @@ export const defaultFictionToolbar: FictionToolbarProps = {
   userCanEdit: true,
   userCanDelete: true,
   onModifyCallback: action('onModifyCallback'),
-  onDeleteCallback: action('onDeleteCallback')
+  onDeleteCallback: action('onDeleteCallback'),
+  publicationState: PublicationStates.PUBLISHED
 };
 
 storiesOf('FictionToolbar', module)

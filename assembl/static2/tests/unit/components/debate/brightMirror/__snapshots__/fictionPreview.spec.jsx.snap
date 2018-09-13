@@ -553,6 +553,7 @@ exports[`Storyshots FictionPreview default 1`] = `
                       style={Object {}}
                     >
                       deleteFictionHandler
+                      publicationState
                     </span>
                     <span>
                       =
@@ -570,6 +571,18 @@ exports[`Storyshots FictionPreview default 1`] = `
                           deleteFictionHandler
                         </span>
                         }
+                        "
+                        <span
+                          style={
+                            Object {
+                              "color": "#22a",
+                              "wordBreak": "break-word",
+                            }
+                          }
+                        >
+                          PUBLISHED
+                        </span>
+                        "
                       </span>
                     </span>
                     <br />
@@ -1198,6 +1211,7 @@ exports[`Storyshots FictionPreview playground 1`] = `
                       style={Object {}}
                     >
                       deleteFictionHandler
+                      publicationState
                     </span>
                     <span>
                       =
@@ -1215,6 +1229,18 @@ exports[`Storyshots FictionPreview playground 1`] = `
                           deleteFictionHandler
                         </span>
                         }
+                        "
+                        <span
+                          style={
+                            Object {
+                              "color": "#22a",
+                              "wordBreak": "break-word",
+                            }
+                          }
+                        >
+                          PUBLISHED
+                        </span>
+                        "
                       </span>
                     </span>
                     <br />

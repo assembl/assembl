@@ -391,13 +391,15 @@ const Translations = {
       brightMirror: {
         startFictionLabel: "Je partage ma fiction",
         fillBodyLabel: "Ecrivez votre fiction",
-        postSuccessMsg: "Merci pour votre participation. Votre fiction a bien été enregistrée !",
+        postSuccessMsg: "Merci pour votre participation. Votre fiction a bien été publiée !",
         allFictions: "Fictions déjà parues",
         editFiction: "Editez votre fiction",
         deleteFiction: "Supprimez votre fiction",
         fiction: "Fiction",
         deleteFictionModalBody: "Êtes-vous sûr de vouloir supprimer cette fiction ?",
-        deleteFictionSuccessMsg: "Votre fiction a été supprimée"
+        deleteFictionSuccessMsg: "Votre fiction a été supprimée",
+        save: "Sauvegarder",
+        draftSuccessMsg: "Votre fiction a bien été enregistrée."
       },
       themes: "Thèmes",
       notStarted: "La phase %{phaseName} n'a pas encore commencé. Merci de revenir à partir du ",
@@ -1254,13 +1256,15 @@ const Translations = {
       brightMirror: {
         startFictionLabel: "Share a fiction",
         fillBodyLabel: "Write your fiction",
-        postSuccessMsg: "Thanks for your participation. Your fiction has been saved!",
+        postSuccessMsg: "Thanks for your participation. Your fiction has been published successfully.",
         allFictions: "Published fictions",
         editFiction: "Edit your fiction",
         deleteFiction: "Delete your fiction",
         fiction: "Fiction",
         deleteFictionModalBody: "Are you sure you want to delete this fiction?",
-        deleteFictionSuccessMsg: "Your fiction was deleted"
+        deleteFictionSuccessMsg: "Your fiction was deleted",
+        save: "Save",
+        draftSuccessMsg: "Your fiction has been saved successfully."
       },
       themes: "Themes",
       notStarted: "The %{phaseName} phase has not started. Please come back from ",

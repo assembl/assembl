@@ -8,12 +8,15 @@ import { displayCustomModal, closeModal } from '../../../utils/utilityManager';
 import EditPostButton from '../common/editPostButton';
 import EditPostForm from '../common/editPostForm';
 import DeletePostButton from '../common/deletePostButton';
+import { PublicationStates } from '../../../constants';
 
 export type FictionToolbarProps = {
   fictionId: string,
   title: string,
   originalBody: string,
   lang: string,
+  /** Publication State */
+  publicationState: string,
   userCanEdit: boolean,
   /** Edit fiction callback, should only be set when current user is the author of the fiction */
   onModifyCallback?: () => void,
@@ -28,6 +31,7 @@ const FictionToolbar = ({
   originalBody,
   lang,
   userCanEdit,
+  publicationState,
   onModifyCallback,
   userCanDelete,
   onDeleteCallback
@@ -47,8 +51,11 @@ const FictionToolbar = ({
           postSuccessMsgId="debate.brightMirror.postSuccessMsg"
           editTitleLabelMsgId="debate.brightMirror.editFiction"
           bodyDescriptionMsgId="debate.brightMirror.fiction"
+          fillBodyLabelMsgId="debate.brightMirror.fillBodyLabel"
+          draftSuccessMsgId="debate.brightMirror.draftSuccessMsg"
           childrenUpdate={false}
           bodyMaxLength={NO_BODY_LENGTH}
+          draftable={publicationState === PublicationStates.DRAFT}
         />
       </div>
     );
