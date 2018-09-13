@@ -26,8 +26,9 @@ const Translations = {
     introduction: "Introduction",
     conclusion: "Conclusion",
     harvesting: {
-      harvestedExtractNumber: "%{extractNumber} extraits attrapés sur ce message",
-      harvestedExtractNumber_1: "%{extractNumber} extrait attrapé sur ce message",
+      harvestedExtractNumbers: "%{extractNumber} extraits attrapés sur ce message",
+      harvestedExtractNumbers_0: "%{extractNumber} extrait attrapé sur ce message",
+      harvestedExtractNumbers_1: "%{extractNumber} extrait attrapé sur ce message",
       enableHarvestingMode: "Activer le mode attrapage",
       disableHarvestingMode: "Désactiver le mode attrapage",
       harvesting: "Attrapage",
@@ -860,8 +861,9 @@ const Translations = {
       seeCookiesPolicy: "See more"
     },
     harvesting: {
-      harvestedExtractNumber: "%{extractNumber} extracts harvested on this message",
-      harvestedExtractNumber_1: "%{extractNumber} extract harvested on this message",
+      harvestedExtractNumbers: "%{extractNumber} extracts harvested on this message",
+      harvestedExtractNumbers_0: "%{extractNumber} extract harvested on this message",
+      harvestedExtractNumbers_1: "%{extractNumber} extract harvested on this message",
       enableHarvestingMode: "Enable harvesting mode",
       disableHarvestingMode: "Disable harvesting mode",
       inProgress: "Harvesting in progress",

@@ -445,10 +445,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
           <div className="harvesting-box-header">
             {extracts && (
               <div className="extracts-nb-msg">
-                <Translate
-                  value={extracts.length > 1 ? 'harvesting.harvestedExtractNumber' : 'harvesting.harvestedExtractNumber_1'}
-                  extractNumber={extracts.length}
-                />
+                <Translate count={extracts.length} value="harvesting.harvestedExtractNumbers" extractNumber={extracts.length} />
               </div>
             )}
             <div className="harvesting-status">
