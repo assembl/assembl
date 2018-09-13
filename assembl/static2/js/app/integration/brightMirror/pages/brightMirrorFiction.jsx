@@ -5,11 +5,13 @@ import FictionHeader from '../../../components/debate/brightMirror/fictionHeader
 import FictionToolbar from '../../../components/debate/brightMirror/fictionToolbar';
 import FictionBody from '../../../components/debate/brightMirror/fictionBody';
 import BackButton, { type Props as BackButtonProps } from '../../../components/debate/common/backButton';
+import FictionComment from '../../../components/debate/brightMirror/fictionComment';
 
 // Import existing storybook data
 import { defaultFictionHeader } from '../../../stories/components/debate/brightMirror/fictionHeader.stories';
 import { defaultFictionToolbar } from '../../../stories/components/debate/brightMirror/fictionToolbar.stories';
 import { defaultFictionBody } from '../../../stories/components/debate/brightMirror/fictionBody.stories';
+import { defaultFictionComment } from '../../../stories/components/debate/brightMirror/fictionComment.stories';
 
 const defaultBackBtnProps: BackButtonProps = {
   handleClick: Function,
@@ -32,6 +34,13 @@ const BrightMirrorFiction = () => (
         </Row>
       </Grid>
     </div>
+    <Grid fluid className="bright-mirror-comment">
+      <Row>
+        <Col xs={12}>
+          <FictionComment {...defaultFictionComment} />
+        </Col>
+      </Row>
+    </Grid>
   </div>
 );
 
