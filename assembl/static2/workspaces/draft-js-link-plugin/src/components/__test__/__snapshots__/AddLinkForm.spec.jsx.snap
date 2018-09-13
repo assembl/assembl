@@ -1,9 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`AddLinkForm component should render a form to add a link 1`] = `
-<form
+<div
   className="form-horizontal"
-  onSubmit={[Function]}
 >
   <div
     className="form-group"
@@ -79,7 +78,7 @@ exports[`AddLinkForm component should render a form to add a link 1`] = `
             "dirty": false,
             "dirtySinceLastSubmit": false,
             "error": undefined,
-            "initial": undefined,
+            "initial": "driver",
             "invalid": false,
             "pristine": true,
             "submitError": undefined,
@@ -95,7 +94,7 @@ exports[`AddLinkForm component should render a form to add a link 1`] = `
         onFocus={[Function]}
         render={undefined}
         type={undefined}
-        value=""
+        value="driver"
       />
     </div>
   </div>
@@ -141,6 +140,7 @@ exports[`AddLinkForm component should render a form to add a link 1`] = `
       <button
         className="btn btn-default"
         disabled={false}
+        onClick={[Function]}
         type="submit"
       >
         <span
@@ -152,5 +152,5 @@ exports[`AddLinkForm component should render a form to add a link 1`] = `
       </button>
     </div>
   </div>
-</form>
+</div>
 `;

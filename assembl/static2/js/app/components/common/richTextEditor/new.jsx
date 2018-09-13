@@ -9,8 +9,10 @@ import { ItalicButton, BoldButton, UnorderedListButton } from 'draft-js-buttons'
 import createCounterPlugin from 'draft-js-counter-plugin';
 
 // from our workspaces
-// eslint-disable-next-line import/no-extraneous-dependencies
+/* eslint-disable import/no-extraneous-dependencies */
 import createLinkPlugin from 'draft-js-link-plugin';
+import createModalPlugin from 'draft-js-modal-plugin';
+/* eslint-enable import/no-extraneous-dependencies */
 
 import AtomicBlockRenderer from './atomicBlockRenderer';
 import EditAttachments from '../editAttachments';
@@ -64,9 +66,13 @@ export default class RichTextEditor extends React.Component<Props, State> {
 
   constructor(props: Props): void {
     super(props);
-    this.modal = React.createRef();
+    const modalPlugin = createModalPlugin();
+    const { closeModal, setModalContent, Modal } = modalPlugin;
     const counterPlugin = createCounterPlugin();
-    const linkPlugin = createLinkPlugin({ modal: this.modal });
+    const linkPlugin = createLinkPlugin({
+      closeModal: closeModal,
+      setModalContent: setModalContent
+    });
     const { LinkButton } = linkPlugin;
     const staticToolbarPlugin = createToolbarPlugin({
       structure: [BoldButton, ItalicButton, UnorderedListButton, ToolbarSeparator, LinkButton],
@@ -89,6 +95,7 @@ export default class RichTextEditor extends React.Component<Props, State> {
     const { Toolbar } = staticToolbarPlugin;
     this.components = {
       CustomCounter: CustomCounter,
+      Modal: Modal,
       Toolbar: Toolbar
     };
 
@@ -163,7 +170,7 @@ export default class RichTextEditor extends React.Component<Props, State> {
     const { editorState, maxLength, onChange, placeholder, textareaRef, toolbarPosition } = this.props;
     const divClassName = classNames('rich-text-editor', { hidePlaceholder: this.shouldHidePlaceholder() });
     const attachments = attachmentsPlugin.getAttachments(editorState);
-    const { CustomCounter, Toolbar } = this.components;
+    const { CustomCounter, Modal, Toolbar } = this.components;
     return (
       <div className={divClassName} ref={textareaRef}>
         <div className="editor-header">
@@ -171,8 +178,8 @@ export default class RichTextEditor extends React.Component<Props, State> {
           {toolbarPosition === 'top' ? <Toolbar /> : null}
           <div className="clear" />
         </div>
-        <div ref={this.modal} />
-        <div>
+        <Modal />
+        <div onClick={this.focusEditor}>
           <Editor
             blockRendererFn={customBlockRenderer}
             editorState={editorState}

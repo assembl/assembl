@@ -5,31 +5,38 @@ import { Button, Checkbox, Col, ControlLabel, Form as BootstrapForm, FormControl
 import { Form, Field } from 'react-final-form';
 
 const FormControlAdapter = ({ input: { name, onChange, value, ...otherListeners }, ...rest }) => (
-  <FormControl {...otherListeners} {...rest} onChange={event => onChange(event.target.value)} value={value || ''} />
+  <FormControl
+    {...otherListeners}
+    {...rest}
+    onChange={(e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      onChange(e.target.value);
+    }}
+    value={value || ''}
+  />
 );
 
 const CheckboxAdapter = ({ children, input }) => <Checkbox {...input}>{children}</Checkbox>;
 
+export type FormValues = {
+  openInNewTab?: boolean,
+  text?: string,
+  url?: string
+};
+
 type Props = {
-  defaultText: string,
+  initialValues: FormValues,
   onSubmit: Function
 };
 
-const AddLinkForm = ({ defaultText, onSubmit }: Props) => (
+const AddLinkForm = ({ initialValues, onSubmit }: Props) => (
   <React.Fragment>
     <Form
-      initialValues={{
-        text: defaultText
-      }}
+      initialValues={initialValues}
       onSubmit={onSubmit}
       render={({ handleSubmit }) => (
-        <BootstrapForm
-          horizontal
-          onSubmit={(e) => {
-            e.stopPropagation();
-            handleSubmit();
-          }}
-        >
+        <BootstrapForm componentClass="div" horizontal>
           <FormGroup controlId="url">
             <Col componentClass={ControlLabel} sm={2}>
               <Translate value="common.editor.linkPlugin.url" />
@@ -55,7 +62,14 @@ const AddLinkForm = ({ defaultText, onSubmit }: Props) => (
           </FormGroup>
           <FormGroup>
             <Col smOffset={2} sm={10}>
-              <Button type="submit">
+              <Button
+                type="submit"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  handleSubmit();
+                }}
+              >
                 <Translate value="common.editor.linkPlugin.submit" />
               </Button>
             </Col>

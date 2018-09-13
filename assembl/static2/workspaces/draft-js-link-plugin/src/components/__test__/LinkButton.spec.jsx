@@ -1,15 +1,18 @@
-import { configure, mount } from 'enzyme';
+import { configure, mount, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import renderer from 'react-test-renderer';
+import { EditorState } from 'draft-js';
 
 import EditorUtils from 'assembl-editor-utils';
 
 import LinkButton from '../LinkButton';
+import AddLinkForm from '../AddLinkForm';
 
 configure({ adapter: new Adapter() });
 
 jest.mock('assembl-editor-utils');
+jest.mock('../AddLinkForm', () => 'AddLinkForm');
 
 const store = {
   getEditorState: jest.fn(),
@@ -23,10 +26,19 @@ const theme = {
 
 describe('addLink method', () => {
   let wrapper;
+  const closeModalSpy = jest.fn();
+  const setModalContentSpy = jest.fn();
 
   beforeEach(() => {
     store.getEditorState.mockReturnValue('DUMMY_EDITOR_STATE');
-    wrapper = mount(<LinkButton store={store} theme={theme} />);
+    wrapper = mount(<LinkButton closeModal={closeModalSpy} setModalContent={setModalContentSpy} store={store} theme={theme} />);
+  });
+
+  it('should only close modal if no url is provided', () => {
+    const values = { text: 'Foo' };
+    wrapper.instance().addLink(values);
+    expect(EditorUtils.createLinkAtSelection).not.toHaveBeenCalled();
+    expect(closeModalSpy).toHaveBeenCalled();
   });
 
   it('should use create a link at selection with target/text/title/url', () => {
@@ -60,7 +72,31 @@ describe('addLink method', () => {
   });
 });
 
+describe('getSelectedText method', () => {
+  it('should get selected text');
+});
+
 describe('LinkButton component', () => {
+  it('should open a modal that contains AddLinkForm on click', () => {
+    const closeModalSpy = jest.fn();
+    const setModalContentSpy = jest.fn();
+    store.getEditorState.mockReturnValue(EditorState.createEmpty());
+    const wrapper = shallow(
+      <LinkButton closeModal={closeModalSpy} setModalContent={setModalContentSpy} store={store} theme={theme} />
+    );
+    const eventMock = {
+      preventDefault: jest.fn(),
+      stopPropagation: jest.fn()
+    };
+    wrapper.find('button').simulate('click', eventMock);
+    expect(eventMock.preventDefault).toHaveBeenCalled();
+    expect(eventMock.stopPropagation).toHaveBeenCalled();
+    expect(setModalContentSpy).toHaveBeenCalledWith(
+      <AddLinkForm initialValues={{ text: '' }} onSubmit={wrapper.instance().addLink} />,
+      'Insert a link'
+    );
+  });
+
   it('should render a link button', () => {
     EditorUtils.hasEntity.mockReturnValue(false);
     const onRemoveLinkAtSelectionSpy = jest.fn();
@@ -92,7 +128,4 @@ describe('LinkButton component', () => {
     const tree = component.toJSON();
     expect(tree).toMatchSnapshot();
   });
-
-  // TODO: test that modal is rendered in portal
-  it('should render a link button with an opened modal');
 });

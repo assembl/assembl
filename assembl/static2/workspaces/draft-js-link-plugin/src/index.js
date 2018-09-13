@@ -1,5 +1,4 @@
 // @flow
-import * as React from 'react';
 import decorateComponentWithProps from 'decorate-component-with-props';
 import { type EditorState } from 'draft-js';
 
@@ -25,14 +24,15 @@ export type Theme = {
 };
 
 type Config = {
-  modal?: ?{ current: null | React.ElementRef<any> },
+  closeModal?: Function,
+  setModalContent?: Function,
   theme?: Theme
 };
 
 export const converters = linkConverters;
 
 export default (config: Config = {}) => {
-  const { modal, theme } = config;
+  const { closeModal, setModalContent, theme } = config;
 
   const store = {
     getEditorState: undefined,
@@ -49,13 +49,17 @@ export default (config: Config = {}) => {
       {
         strategy: linkStrategy,
         matchesEntityType: matchesEntityType,
-        component: Link
+        component: decorateComponentWithProps(Link, {
+          closeModal: closeModal,
+          setModalContent: setModalContent
+        })
       }
     ],
 
     LinkButton: decorateComponentWithProps(LinkButton, {
-      modal: modal,
       ownTheme: theme,
+      closeModal: closeModal,
+      setModalContent: setModalContent,
       store: store,
       onRemoveLinkAtSelection: () => {
         const { getEditorState, setEditorState } = store;
