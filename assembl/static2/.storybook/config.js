@@ -40,6 +40,7 @@ function loadStories() {
   require('../js/app/stories/components/debate/brightMirror/fictionHeader.stories.jsx');
   require('../js/app/stories/components/debate/brightMirror/fictionToolbar.stories.jsx');
   require('../js/app/stories/components/debate/brightMirror/fictionBody.stories.jsx');
+  require('../js/app/stories/components/debate/brightMirror/fictionComment.stories.jsx');
 
   // TODO: To clean ?
   // require('../js/app/stories/components/common/common.jsx');

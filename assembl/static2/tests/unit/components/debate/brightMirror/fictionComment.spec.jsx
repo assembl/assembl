@@ -6,6 +6,7 @@ import Adapter from 'enzyme-adapter-react-16';
 
 import FictionComment from '../../../../../js/app/components/debate/brightMirror/fictionComment';
 import CircleAvatar from '../../../../../js/app/components/debate/brightMirror/circleAvatar';
+import ToggleCommentButton from '../../../../../js/app/components/debate/common/toggleCommentButton';
 import ReplyToCommentButton from '../../../../../js/app/components/debate/common/replyToCommentButton';
 import type { FictionCommentProps } from '../../../../../js/app/components/debate/brightMirror/fictionComment';
 
@@ -53,6 +54,10 @@ describe('<FictionComment /> - with shallow', () => {
 
   it('should display the number of child comments', () => {
     expect(wrapper.contains(defaultFictionComment.numberOfChildComments)).toBe(true);
+  });
+
+  it('should display a "toggle comment" button', () => {
+    expect(wrapper.find(ToggleCommentButton)).toHaveLength(1);
   });
 
   it('should display a "reply to comment" button', () => {

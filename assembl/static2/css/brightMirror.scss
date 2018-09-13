@@ -1,7 +1,3 @@
-@import 'components/circleAvatar';
-@import 'components/fictionHeader';
-@import 'components/fictionBody';
-
 // Variables
 // Bright Mirror background colors
 $light-khaki: #f1fbe5;
@@ -65,7 +61,8 @@ $fiction-toolbar-icon-size: 17px;
 }
 
 // Component imports
-@import 'components/circleAvatar';
-@import 'components/fictionHeader';
-@import 'components/fictionToolbar';
-@import 'components/fictionBody';
+@import "components/circleAvatar";
+@import "components/fictionHeader";
+@import "components/fictionToolbar";
+@import "components/fictionBody";
+@import "components/fictionComment";

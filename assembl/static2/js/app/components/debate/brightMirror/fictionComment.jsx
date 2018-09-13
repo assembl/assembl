@@ -1,7 +1,8 @@
 // @flow
-import React, { Fragment } from 'react';
+import React from 'react';
 // Components imports
 import CircleAvatar from './circleAvatar';
+import ToggleCommentButton from '../common/toggleCommentButton';
 import ReplyToCommentButton from '../common/replyToCommentButton';
 // Constant imports
 import { NO_AUTHOR_SPECIFIED } from '../../../constants';
@@ -31,24 +32,27 @@ const FictionComment = ({
   numberOfChildComments,
   circleAvatar
 }: FictionCommentProps) => (
-  <Fragment>
-    <ul>
-      <li>
-        <CircleAvatar {...circleAvatar} />
-      </li>
-      <li>{authorFullname || NO_AUTHOR_SPECIFIED}</li>
-      <li>
-        <time dateTime={publishedDate} pubdate="true">
-          {displayedPublishedDate}
-        </time>
-      </li>
-      <li>{commentContent}</li>
-      <li>{numberOfChildComments}</li>
-      <li>
+  <article className="comment-container">
+    <CircleAvatar {...circleAvatar} />
+    <div className="content">
+      <header className="meta">
+        <p>
+          <strong>{authorFullname || NO_AUTHOR_SPECIFIED}</strong>
+        </p>
+        <p className="published-date">
+          <time dateTime={publishedDate} pubdate="true">
+            &nbsp;-&nbsp;{displayedPublishedDate}
+          </time>
+        </p>
+      </header>
+      <p className="comment">{commentContent}</p>
+      <footer className="toolbar">
+        <p>{numberOfChildComments} answers</p>
+        <ToggleCommentButton />
         <ReplyToCommentButton />
-      </li>
-    </ul>
-  </Fragment>
+      </footer>
+    </div>
+  </article>
 );
 
 export default FictionComment;
