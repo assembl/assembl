@@ -1,7 +1,10 @@
 // @flow
 import React, { Fragment } from 'react';
-
+// Components imports
 import CircleAvatar from './circleAvatar';
+// Constant imports
+import { NO_AUTHOR_SPECIFIED } from '../../../constants';
+// Types imports
 import type { CircleAvatarProps } from './circleAvatar';
 
 export type FictionHeaderProps = {
@@ -11,14 +14,12 @@ export type FictionHeaderProps = {
   circleAvatar: CircleAvatarProps
 };
 
-const noAuthorMessage: string = 'no author specified';
-
 const FictionHeader = ({ authorFullname, publishedDate, displayedPublishedDate, circleAvatar }: FictionHeaderProps) => (
   <Fragment>
     <header className="header">
       <CircleAvatar {...circleAvatar} />
       <div className="meta">
-        <p className="author">{authorFullname || noAuthorMessage}</p>
+        <p className="author">{authorFullname || NO_AUTHOR_SPECIFIED}</p>
         <p className="date-time">
           <time dateTime={publishedDate} pubdate="true">
             {displayedPublishedDate}
