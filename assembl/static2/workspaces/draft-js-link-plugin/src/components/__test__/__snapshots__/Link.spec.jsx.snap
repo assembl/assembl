@@ -4,6 +4,7 @@ exports[`Link component should render a link 1`] = `
 <a
   className="link"
   href="https://en.wikipedia.org/wiki/Portable_Network_Graphics"
+  onClick={[Function]}
   rel="noopener noreferrer"
   target="_blank"
   title="My link"

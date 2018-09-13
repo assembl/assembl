@@ -1,10 +1,8 @@
 import { ContentState, Modifier } from 'draft-js';
 
-import TestEditorUtils from 'assembl-test-editor-utils';
+import { createSelectionState } from 'assembl-editor-utils';
 
 import strategy, { matchesEntityType } from '../linkStrategy';
-
-const { createSelectionState } = TestEditorUtils;
 
 describe('matchesEntityType function', () => {
   it('should return true only if type is LINK', () => {
@@ -28,7 +26,6 @@ describe('linkStrategy', () => {
     let selection = createSelectionState(blockKey, '0', '4');
     const linkEntityKey = contentState.getLastCreatedEntityKey();
     contentState = Modifier.applyEntity(contentState, selection, linkEntityKey);
-
     contentState = contentState.createEntity('MENTION', 'MUTABLE', {
       name: 'johann'
     });
