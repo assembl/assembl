@@ -30,6 +30,9 @@ const Translations = {
     introduction: "Introduction",
     conclusion: "Conclusion",
     harvesting: {
+      harvestedExtractNumbers: "%{extractNumber} extraits attrapés sur ce message",
+      harvestedExtractNumbers_0: "%{extractNumber} extrait attrapé sur ce message",
+      harvestedExtractNumbers_1: "%{extractNumber} extrait attrapé sur ce message",
       enableHarvestingMode: "Activer le mode attrapage",
       disableHarvestingMode: "Désactiver le mode attrapage",
       harvesting: "Attrapage",
@@ -41,6 +44,7 @@ const Translations = {
       harvestingSuccess: "L'extrait a été mis à jour avec succès.",
       harvestingDeleted: "L'extrait a été supprimé avec succès.",
       harvestingConfirmed: "L'extrait a été confirmé avec succès.",
+      harvestingValidated: "L'extrait a été validé avec succès.",
       harvestingSubmitted: "L'extrait est en attente de validation.",
       deleteExtract: "Supprimer l'extrait attrapé",
       confirmDeleteExtract: "Etes-vous certain de vouloir supprimer cet extrait ?",
@@ -874,6 +878,9 @@ const Translations = {
       seeCookiesPolicy: "See more"
     },
     harvesting: {
+      harvestedExtractNumbers: "%{extractNumber} extracts harvested on this message",
+      harvestedExtractNumbers_0: "%{extractNumber} extract harvested on this message",
+      harvestedExtractNumbers_1: "%{extractNumber} extract harvested on this message",
       enableHarvestingMode: "Enable harvesting mode",
       disableHarvestingMode: "Disable harvesting mode",
       inProgress: "Harvesting in progress",
@@ -885,6 +892,7 @@ const Translations = {
       harvestingSuccess: "The extract was updated successfully.",
       harvestingDeleted: "The extract was deleted successfully.",
       harvestingConfirmed: "The extract was confirmed successfully.",
+      harvestingValidated: "The extract was validated successfully.",
       harvestingSubmitted: "The extract is waiting for validation.",
       deleteExtract: "Delete the extract",
       confirmDeleteExtract: "Are you sure that you wish to delete this extract?",

@@ -5,6 +5,7 @@ import updateExtractMutation from '../../graphql/mutations/updateExtract.graphql
 import deleteExtractMutation from '../../graphql/mutations/deleteExtract.graphql'; // eslint-disable-line
 import HarvestingAnchor from './harvestingAnchor';
 import HarvestingBox from './harvestingBox';
+import HarvestingBadge from './harvestingBadge';
 
 type Props = {
   extracts: Array<Extract>,
@@ -21,11 +22,26 @@ type Props = {
   showNuggetAction: boolean
 };
 
-class HarvestingMenu extends React.Component<Props> {
+type State = {
+  displayExtractsBox: boolean
+};
+
+class HarvestingMenu extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      displayExtractsBox: false
+    };
+  }
+
   handleMouseDown = (event: SyntheticMouseEvent<>) => {
     // This would otherwise clear the selection
     event.preventDefault();
     return false;
+  };
+
+  toggleExtractsBox = (): void => {
+    this.setState(prevState => ({ displayExtractsBox: !prevState.displayExtractsBox }));
   };
 
   render() {
@@ -44,39 +60,43 @@ class HarvestingMenu extends React.Component<Props> {
       lang
     } = this.props;
     const selection = window.getSelection();
+    const { displayExtractsBox } = this.state;
+    const showHarvestingBadge = !displayExtractsBox && extracts && extracts.length > 0;
+    const showBoxWithExtracts = displayExtractsBox && extracts && extracts.length > 0 && !displayHarvestingBox;
+    const showBoxInHarvestingMode = displayHarvestingBox && selection.toString().length > 0;
+    const showHarvestingAnchor = displayHarvestingAnchor && selection.toString().length > 0;
     return (
-      <div className="harvesting-container">
-        {extracts && extracts.length > 0
-          ? extracts.map(extract => (
+      <div>
+        {showHarvestingBadge && <HarvestingBadge toggleExtractsBox={this.toggleExtractsBox} extractsNumber={extracts.length} />}
+        <div className="harvesting-container">
+          {showBoxWithExtracts && (
             <HarvestingBox
               postId={postId}
-              key={extract.id}
-              extract={extract}
+              key={`extracts-${postId}`}
+              extracts={extracts}
               isAuthorAccountDeleted={isAuthorAccountDeleted}
               displayHarvestingBox={displayHarvestingBox}
-              harvestingBoxPosition={null}
+              refetchPost={refetchPost}
+              cancelHarvesting={cancelHarvesting}
+              setHarvestingBoxDisplay={setHarvestingBoxDisplay}
+              showNuggetAction={showNuggetAction}
+              toggleExtractsBox={this.toggleExtractsBox}
+            />
+          )}
+          {showBoxInHarvestingMode && (
+            <HarvestingBox
+              postId={postId}
+              key={`harvesting-${postId}`}
+              selection={selection}
+              lang={lang}
+              displayHarvestingBox={displayHarvestingBox}
               refetchPost={refetchPost}
               cancelHarvesting={cancelHarvesting}
               setHarvestingBoxDisplay={setHarvestingBoxDisplay}
               showNuggetAction={showNuggetAction}
             />
-          ))
-          : null}
-        {displayHarvestingBox && (
-          <HarvestingBox
-            postId={postId}
-            selection={selection}
-            lang={lang}
-            extract={null}
-            displayHarvestingBox={displayHarvestingBox}
-            refetchPost={refetchPost}
-            cancelHarvesting={cancelHarvesting}
-            setHarvestingBoxDisplay={setHarvestingBoxDisplay}
-            showNuggetAction={showNuggetAction}
-          />
-        )}
-        {displayHarvestingAnchor &&
-          selection.toString().length > 0 && (
+          )}
+          {showHarvestingAnchor && (
             <HarvestingAnchor
               displayHarvestingBox={displayHarvestingBox}
               handleMouseDown={this.handleMouseDown}
@@ -84,6 +104,7 @@ class HarvestingMenu extends React.Component<Props> {
               handleClickAnchor={handleClickAnchor}
             />
           )}
+        </div>
       </div>
     );
   }

@@ -3,10 +3,46 @@
   z-index: 1000;
 }
 
+.harvesting-badge {
+  position: absolute;
+  left: -50px;
+  top: 45px;
+
+  .badge-total {
+    position: absolute;
+    top: 0;
+    left: -5px;
+    background-color: $white;
+    border-radius: 50%;
+    width: 14px;
+    height: 14px;
+    font-size: $font-size-xxs;
+    box-shadow: 2px 2px 4px 0 #ccc;
+    padding: 0 0 0 4px;
+  }
+
+  .left-side-harvesting-button {
+    .left-side-harvesting-button__button {
+      width: 27px;
+      height: 27px;
+    }
+  }
+
+  .confirm-harvest-button {
+    padding: 0;
+    margin-top: -9px;
+
+    &:before {
+      font-size: $font-size-xs;
+    }
+  }
+}
+
 .harvesting-container {
   position: absolute;
   left: 0;
   z-index: 99;
+  padding-top: 10px;
 }
 
 .left-side-harvesting-button {
@@ -88,6 +124,26 @@
   }
 }
 
+.harvesting-close-button {
+  position: absolute;
+  right: -9px;
+  top: 2px;
+  border: 1px solid $grey2;
+  border-radius: 50%;
+  background-color: $white;
+  height: 17px;
+  font-size: 11px;
+  line-height: 13px;
+  padding-left: 1px;
+  cursor: pointer;
+
+  .assembl-icon-cancel {
+    &:before {
+      font-size: 10px;
+    }
+  }
+}
+
 .box-icon-2 {
   margin-top: 40px;
   z-index: 2;
@@ -101,6 +157,11 @@
   .harvesting-box-header {
     padding: 16px 20px 15px 20px;
     border-bottom: 1px solid $grey1;
+  }
+
+  .extracts-nb-msg {
+    font-size: $font-size-xxs;
+    padding-bottom: 10px;
   }
 
   .harvesting-status {
@@ -376,13 +437,21 @@
   }
 
   .harvesting-box-body {
-    padding: 20px;
+    padding: 20px 5px 10px;
     font-size: $font-size-xs;
     color: $grey3;
     word-wrap: break-word;
 
+    .extract-body {
+      min-width: 220px;
+    }
+
     .form-group {
       margin: 0;
+    }
+
+    .selection-body {
+      padding: 0 20px 20px;
     }
 
     textarea {
@@ -397,14 +466,48 @@
         border: 1px solid $grey1;
       }
     }
+
+    .body-container {
+      display: inline-flex;
+      align-items: center;
+
+      .previous-extract {
+        cursor: pointer;
+        margin-top: -20px;
+        font-size: 10px;
+        flex-basis: 30px;
+        flex-shrink: 0;
+
+        .assembl-icon-down-open {
+          &:before {
+            transform: rotate(90deg) scaleX(2.5);
+          }
+        }
+      }
+
+      .next-extract {
+        cursor: pointer;
+        margin-top: 20px;
+        font-size: 10px;
+        flex-basis: 30px;
+        flex-shrink: 0;
+        padding-left: 15px;
+
+        .assembl-icon-down-open {
+          &:before {
+            transform: rotate(-90deg) scaleX(2.5);
+          }
+        }
+      }
+    }
   }
 
   .harvesting-box-footer {
     text-align: center;
-    padding: 20px 0;
     background-color: $grey1;
     display: flex;
     justify-content: space-around;
+    padding: 20px 0;
 
     .btn-default {
       margin: 0 22px;
@@ -417,6 +520,13 @@
     .button-cancel {
       padding: 8px 16px;
     }
+  }
+
+  .extracts-numbering {
+    text-align: right;
+    padding-right: 20px;
+    padding-bottom: 20px;
+    font-size: $font-size-xxs;
   }
 }
 
