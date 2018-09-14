@@ -37,26 +37,29 @@ const InstructionView = ({
   phaseId,
   lang
 }: InstructionViewProps) => {
+  // Check permission
   const canPost = isUserConnected && connectedUserCan(Permissions.ADD_POST) && !getIfPhaseCompletedById(timeline, phaseId);
+
+  const topPostFormContainer = canPost ? (
+    <TopPostFormContainer
+      ideaId={ideaId}
+      refetchIdea={refetchIdea}
+      topPostsCount={posts.length}
+      instructionLabelMsgId="debate.brightMirror.startFictionLabel"
+      fillBodyLabelMsgId="debate.brightMirror.fillBodyLabel"
+      bodyPlaceholderMsgId="debate.brightMirror.fillBodyLabel"
+      postSuccessMsgId="debate.brightMirror.postSuccessMsg"
+      bodyMaxLength={NO_BODY_LENGTH}
+      draftable
+      draftSuccessMsgId="debate.brightMirror.draftSuccessMsg"
+    />
+  ) : null;
 
   return (
     <div className="instruction-view">
       <InstructionsText title={announcementContent.title} body={announcementContent.body} />
       <div className="overflow-x">
-        {canPost ? (
-          <TopPostFormContainer
-            ideaId={ideaId}
-            refetchIdea={refetchIdea}
-            topPostsCount={posts.length}
-            instructionLabelMsgId="debate.brightMirror.startFictionLabel"
-            fillBodyLabelMsgId="debate.brightMirror.fillBodyLabel"
-            bodyPlaceholderMsgId="debate.brightMirror.fillBodyLabel"
-            postSuccessMsgId="debate.brightMirror.postSuccessMsg"
-            bodyMaxLength={NO_BODY_LENGTH}
-            draftable
-            draftSuccessMsgId="debate.brightMirror.draftSuccessMsg"
-          />
-        ) : null}
+        {topPostFormContainer}
         <FictionsList posts={posts} identifier={identifier} themeId={ideaId} refetchIdea={refetchIdea} lang={lang} />
       </div>
     </div>

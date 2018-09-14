@@ -2,16 +2,17 @@
 import * as React from 'react';
 import Masonry from 'react-masonry-component';
 import Animated from 'react-animated-transitions';
-
 import { Grid } from 'react-bootstrap';
 import { Translate, I18n } from 'react-redux-i18n';
+// Route helpers imports
 import { get } from '../../../utils/routeMap';
-
+// Utils imports
 import { getDiscussionSlug, getConnectedUserId } from '../../../utils/globalFunctions';
 import FictionPreview from './fictionPreview';
-import { fictionBackgroundColors } from '../../../constants';
 import Permissions, { connectedUserCan } from '../../../utils/permissions';
 import { displayAlert } from '../../../utils/utilityManager';
+// Constant imports
+import { fictionBackgroundColors, EMPTY_STRING } from '../../../constants';
 
 export type Props = {
   posts: Array<FictionPostPreview>,
@@ -55,19 +56,24 @@ const FictionsList = ({ posts, identifier, refetchIdea, lang, themeId }: Props) 
         (connectedUserId === String(userId) && connectedUserCan(Permissions.DELETE_MY_POST)) ||
         connectedUserCan(Permissions.DELETE_POST);
     }
+    // Define bright mirror fiction props
+    const brightMirrorFictionProps = {
+      slug: slug,
+      phase: identifier,
+      themeId: themeId,
+      fictionId: post.id
+    };
 
     result.push(
       <Animated key={post.id} preset="scalein">
         <FictionPreview
           id={post.id}
-          link={`${get('brightMirrorFiction', { slug: slug, phase: identifier, themeId: themeId, fictionId: post.id })}`}
-          // $FlowFixMe subject is fetch localized
+          link={`${get('brightMirrorFiction', brightMirrorFictionProps)}`}
           title={post.subject}
           creationDate={I18n.l(post.creationDate, { dateFormat: 'date.format2' })}
           authorName={authorName}
           color={getRandomColor()}
-          // $FlowFixMe body is fetch localized
-          originalBody={post.body}
+          originalBody={post.body ? post.body : EMPTY_STRING}
           refetchIdea={refetchIdea}
           userCanEdit={userCanEdit}
           userCanDelete={userCanDelete}

@@ -16,13 +16,12 @@ import FictionHeader from '../components/debate/brightMirror/fictionHeader';
 import FictionToolbar from '../components/debate/brightMirror/fictionToolbar';
 import FictionBody from '../components/debate/brightMirror/fictionBody';
 import BackButton from '../components/debate/common/backButton';
-
 // Utils imports
 import { displayAlert } from '../utils/utilityManager';
 import { getConnectedUserId } from '../utils/globalFunctions';
 import Permissions, { connectedUserCan } from '../utils/permissions';
 // Constant imports
-import { FICTION_DELETE_CALLBACK, PublicationStates } from '../constants';
+import { FICTION_DELETE_CALLBACK, EMPTY_STRING, PublicationStates } from '../constants';
 // Type imports
 import type { CircleAvatarProps } from '../components/debate/brightMirror/circleAvatar';
 import type { FictionHeaderProps } from '../components/debate/brightMirror/fictionHeader';
@@ -48,8 +47,10 @@ export type Props = {
   themeId: string,
   /** Fiction identifier */
   fictionId: string,
-  /** Fiction locale */
+  /** Fiction locale fetched from mapStateToProps */
   contentLocale: string
+  /** Fiction locale mapping fetched from mapStateToProps - should be moved out in tree props */
+  // contentLocaleMapping: string
 };
 
 type State = {
@@ -61,10 +62,8 @@ type State = {
   publicationState: string
 };
 
-const EMPTY_STRING = '';
-
-export class BrightMirrorFiction extends Component<Props, State> {
-  constructor(props: Props) {
+export class BrightMirrorFiction extends Component<BrightMirrorFictionProps, BrightMirrorFictionState> {
+  constructor(props: BrightMirrorFictionProps) {
     super(props);
     this.state = {
       title: props.data.fiction.subject || EMPTY_STRING,
@@ -81,10 +80,12 @@ export class BrightMirrorFiction extends Component<Props, State> {
       displayAlert('danger', I18n.t('error.loading'));
       return null;
     }
+
     // Define variables
     const { fiction } = data;
     const getDisplayName = () => (fiction.creator && fiction.creator.displayName ? fiction.creator.displayName : EMPTY_STRING);
     const displayName = fiction.creator && fiction.creator.isDeleted ? I18n.t('deletedUser') : getDisplayName();
+
     // Define user permission
     const USER_ID_NOT_FOUND = -9999;
     const userId = fiction.creator ? fiction.creator.userId : USER_ID_NOT_FOUND;
@@ -92,6 +93,7 @@ export class BrightMirrorFiction extends Component<Props, State> {
       (getConnectedUserId() === String(userId) && connectedUserCan(Permissions.DELETE_MY_POST)) ||
       connectedUserCan(Permissions.DELETE_POST);
     const userCanEdit = getConnectedUserId() === String(userId) && connectedUserCan(Permissions.EDIT_MY_POST);
+
     // Define callback functions
     const deleteFictionCallback = () => {
       // Route to fiction list page
@@ -138,6 +140,13 @@ export class BrightMirrorFiction extends Component<Props, State> {
       title: title,
       content: content
     };
+    // const treeProps: TreeProps = {
+    //   contentLocaleMapping: contentLocaleMapping
+    // };
+    // const fictionThreadViewProps: FictionThreadViewProps = {
+    //   treeProps: treeProps
+    // };
+
     return (
       <Fragment>
         <div className="bright-mirror-fiction background-fiction-default">
