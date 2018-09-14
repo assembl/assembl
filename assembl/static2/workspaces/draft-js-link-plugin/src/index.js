@@ -1,4 +1,5 @@
 // @flow
+import * as React from 'react';
 import decorateComponentWithProps from 'decorate-component-with-props';
 import { type EditorState } from 'draft-js';
 
@@ -24,14 +25,14 @@ export type Theme = {
 };
 
 type Config = {
-  closeModal?: Function,
-  setModalContent?: Function,
+  closeModal: void => void,
+  setModalContent: (React.Node, string) => void,
   theme?: Theme
 };
 
 export const converters = linkConverters;
 
-export default (config: Config = {}) => {
+export default (config: Config) => {
   const { closeModal, setModalContent, theme } = config;
 
   const store = {
