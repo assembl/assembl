@@ -791,6 +791,8 @@ class User(AgentProfile):
     last_accepted_privacy_policy_date = Column(DateTime)
     last_rejected_cgu_date = Column(DateTime)
     last_rejected_privacy_policy_date = Column(DateTime)
+    last_accepted_user_guideline_date = Column(DateTime)
+    last_rejected_user_guideline_date = Column(DateTime)
 
     def __init__(self, **kwargs):
         if kwargs.get('password', None) is not None:
@@ -866,6 +868,15 @@ class User(AgentProfile):
         self.last_accepted_privacy_policy_date = date
 
     @property
+    def user_last_accepted_user_guideline_date(self):
+        self.last_accepted_user_guideline_date
+
+    @user_last_accepted_user_guideline_date.setter
+    def user_last_accepted_user_guideline_date(self, date=None):
+        date = date or datetime.utcnow()
+        self.last_accepted_user_guideline_date = date
+
+    @property
     def user_last_rejected_cgu_date(self):
         self.last_rejected_cgu_date
 
@@ -882,6 +893,15 @@ class User(AgentProfile):
     def user_last_rejected_privacy_policy_date(self, date=None):
         date = date or datetime.utcnow()
         self.last_rejected_privacy_policy_date = date
+
+    @property
+    def user_last_rejected_user_guideline_date(self):
+        self.last_rejected_user_guideline_date
+
+    @user_last_rejected_user_guideline_date.setter
+    def user_last_rejected_user_guideline_date(self, date=None):
+        date = date or datetime.utcnow()
+        self.last_rejected_user_guideline_date = date
 
     @property
     def username_p(self):

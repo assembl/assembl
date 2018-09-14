@@ -714,6 +714,11 @@ class AgentProfile:
     However, if the CGU is changed after the debate has started, a user could reject the new rules, and alter this date."""
     last_rejected_privacy_policy_date = """The last time that the Privacy Policy was rejected by the user. A user cannot sign up without accepting the Privacy Policy.
     However, if the Policy is changed after the debate has started, a user could reject the new policy, and alter this date."""
+    last_accepted_user_guideline_date = """The last time that the User Guideline were accepted by the user.
+    Normally, this matches the sign-up date, but if the User Guideline was changed after a debate has started, then the user must agree to a User Guideline change,
+    altering this date."""
+    last_rejected_user_guideline_date = """The last time that the User Guideline was rejected by the user. A user cannot sign up without accepting the User Guideline.
+    However, if the User Guideline is changed after the debate has started, a user could reject the new guideline, and alter this date."""
 
 
 class UpdateUser:
