@@ -369,10 +369,10 @@ class UpdateAcceptedCookies(graphene.Mutation):
                     agent_status_in_discussion.delete_cookie(PyCookieTypes.REJECT_LOCALE)
                     agent_status_in_discussion.update_cookie(action_type_enum)
 
-                elif action_type_enum == PyCookieTypes.ACCEPT_USER_GUIDELINE:
+                elif action_type_enum == PyCookieTypes.ACCEPT_USER_GUIDELINE_ON_DISCUSSION:
                     action = AcceptUserGuidelineOnDiscussion(discussion_id=discussion_id, actor_id=user_id)
                     user.last_accepted_user_guideline_date = datetime.utcnow()
-                    agent_status_in_discussion.delete_cookie(PyCookieTypes.REJECT_USER_GUIDELINE)
+                    agent_status_in_discussion.delete_cookie(PyCookieTypes.REJECT_USER_GUIDELINE_ON_DISCUSSION)
                     agent_status_in_discussion.update_cookie(action_type_enum)
 
                 elif action_type_enum == PyCookieTypes.REJECT_CGU:
@@ -403,10 +403,10 @@ class UpdateAcceptedCookies(graphene.Mutation):
                     agent_status_in_discussion.delete_cookie(PyCookieTypes.ACCEPT_LOCALE)
                     agent_status_in_discussion.update_cookie(action_type_enum)
 
-                elif action_type_enum == PyCookieTypes.REJECT_USER_GUIDELINE:
+                elif action_type_enum == PyCookieTypes.REJECT_USER_GUIDELINE_ON_DISCUSSION:
                     action = RejectUserGuidelineOnDiscussion(discussion_id=discussion_id, actor_id=user_id)
                     user.last_rejected_user_guideline_date = datetime.utcnow()
-                    agent_status_in_discussion.delete_cookie(PyCookieTypes.ACCEPT_USER_GUIDELINE)
+                    agent_status_in_discussion.delete_cookie(PyCookieTypes.ACCEPT_USER_GUIDELINE_ON_DISCUSSION)
                     agent_status_in_discussion.update_cookie(action_type_enum)
 
                 action = action.handle_duplication(permissions=permissions, user_id=user.id)
