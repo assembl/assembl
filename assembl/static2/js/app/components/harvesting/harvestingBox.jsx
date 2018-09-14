@@ -23,11 +23,15 @@ import { NatureIcons, ActionIcons } from '../../utils/extractQualifier';
 import { ExtractStates } from '../../constants';
 
 type Props = {
-  extracts: ?Array<Extract>,
+  extracts?: Array<Extract>,
   postId: string,
   contentLocale: string,
   lang?: string,
   selection: ?Object,
+  harvestingDate?: string,
+  isAuthorAccountDeleted?: boolean,
+  showNuggetAction?: boolean,
+  displayHarvestingBox: boolean,
   setHarvestingBoxDisplay: Function,
   cancelHarvesting: Function,
   addPostExtract: Function,
@@ -35,10 +39,7 @@ type Props = {
   confirmExtract: Function,
   deleteExtract: Function,
   refetchPost: Function,
-  toggleExtractsBox: ?Function,
-  harvestingDate?: string,
-  isAuthorAccountDeleted?: boolean,
-  showNuggetAction?: boolean
+  toggleExtractsBox?: Function
 };
 
 type State = {
@@ -290,6 +291,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
         });
         setHarvestingBoxDisplay();
         window.getSelection().removeAllRanges();
+        displayAlert('success', I18n.t('harvesting.harvestingValidated'));
         refetchPost();
       })
       .catch((error) => {
@@ -391,7 +393,9 @@ class DumbHarvestingBox extends React.Component<Props, State> {
       isAuthorAccountDeleted,
       showNuggetAction,
       extracts,
-      toggleExtractsBox
+      toggleExtractsBox,
+      displayHarvestingBox,
+      cancelHarvesting
     } = this.props;
     const {
       disabled,
@@ -419,7 +423,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
     return (
       <div className={isSubmitted ? 'submitted-harvesting' : ''}>
         <div>
-          <div className="harvesting-close-button" onClick={toggleExtractsBox}>
+          <div className="harvesting-close-button" onClick={displayHarvestingBox ? cancelHarvesting : toggleExtractsBox}>
             <span className="assembl-icon-cancel grey" />
           </div>
         </div>
@@ -561,7 +565,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
                       </div>
                     )}
                   </div>
-                  <div>{extract.body}</div>
+                  <div className="extract-body">{extract.body}</div>
                   <div className="next-extract">
                     {extracts &&
                       extractIndex < extracts.length - 1 && (

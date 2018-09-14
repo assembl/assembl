@@ -442,6 +442,10 @@
     color: $grey3;
     word-wrap: break-word;
 
+    .extract-body {
+      min-width: 220px;
+    }
+
     .form-group {
       margin: 0;
     }

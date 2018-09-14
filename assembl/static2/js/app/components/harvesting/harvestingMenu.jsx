@@ -61,33 +61,34 @@ class HarvestingMenu extends React.Component<Props, State> {
     } = this.props;
     const selection = window.getSelection();
     const { displayExtractsBox } = this.state;
+    const showHarvestingBadge = !displayExtractsBox && extracts && extracts.length > 0;
+    const showBoxWithExtracts = displayExtractsBox && extracts && extracts.length > 0 && !displayHarvestingBox;
+    const showBoxInHarvestingMode = displayHarvestingBox && selection.toString().length > 0;
+    const showHarvestingAnchor = displayHarvestingAnchor && selection.toString().length > 0;
     return (
       <div>
-        {!displayExtractsBox &&
-          extracts &&
-          extracts.length > 0 && <HarvestingBadge toggleExtractsBox={this.toggleExtractsBox} extractsNumber={extracts.length} />}
+        {showHarvestingBadge && <HarvestingBadge toggleExtractsBox={this.toggleExtractsBox} extractsNumber={extracts.length} />}
         <div className="harvesting-container">
-          {displayExtractsBox && extracts && extracts.length > 0 ? (
+          {showBoxWithExtracts && (
             <HarvestingBox
               postId={postId}
               key={`extracts-${postId}`}
               extracts={extracts}
               isAuthorAccountDeleted={isAuthorAccountDeleted}
               displayHarvestingBox={displayHarvestingBox}
-              harvestingBoxPosition={null}
               refetchPost={refetchPost}
               cancelHarvesting={cancelHarvesting}
               setHarvestingBoxDisplay={setHarvestingBoxDisplay}
               showNuggetAction={showNuggetAction}
               toggleExtractsBox={this.toggleExtractsBox}
             />
-          ) : null}
-          {displayHarvestingBox && (
+          )}
+          {showBoxInHarvestingMode && (
             <HarvestingBox
               postId={postId}
+              key={`harvesting-${postId}`}
               selection={selection}
               lang={lang}
-              extract={null}
               displayHarvestingBox={displayHarvestingBox}
               refetchPost={refetchPost}
               cancelHarvesting={cancelHarvesting}
@@ -95,15 +96,14 @@ class HarvestingMenu extends React.Component<Props, State> {
               showNuggetAction={showNuggetAction}
             />
           )}
-          {displayHarvestingAnchor &&
-            selection.toString().length > 0 && (
-              <HarvestingAnchor
-                displayHarvestingBox={displayHarvestingBox}
-                handleMouseDown={this.handleMouseDown}
-                anchorPosition={harvestingAnchorPosition}
-                handleClickAnchor={handleClickAnchor}
-              />
-            )}
+          {showHarvestingAnchor && (
+            <HarvestingAnchor
+              displayHarvestingBox={displayHarvestingBox}
+              handleMouseDown={this.handleMouseDown}
+              anchorPosition={harvestingAnchorPosition}
+              handleClickAnchor={handleClickAnchor}
+            />
+          )}
         </div>
       </div>
     );
