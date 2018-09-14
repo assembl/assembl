@@ -287,10 +287,6 @@ const Translations = {
       tableOfContents: "Sommaire"
     },
     common: {
-      attachFileForm: {
-        label: "Insérer une pièce jointe",
-        submit: "Valider"
-      },
       attachments: {
         download: "Télécharger"
       },
@@ -300,6 +296,10 @@ const Translations = {
         italic: "Italique",
         bulletList: "Liste de puces",
         closeModal: "Fermer",
+        attachmentPlugin: {
+          title: "Insérer une pièce jointe",
+          submit: "Valider"
+        },
         linkPlugin: {
           openInNewTab: "Ouvrir le lien dans un nouvel onglet",
           submit: "Valider",
@@ -1177,10 +1177,6 @@ const Translations = {
       panelTitle: "Welcome to Assembl community page"
     },
     common: {
-      attachFileForm: {
-        label: "Add an attachment",
-        submit: "Submit"
-      },
       attachments: {
         download: "Download"
       },
@@ -1190,6 +1186,10 @@ const Translations = {
         italic: "Italic",
         bulletList: "Bullet list",
         closeModal: "Close",
+        attachmentPlugin: {
+          title: "Add an attachment",
+          submit: "Submit"
+        },
         linkPlugin: {
           openInNewTab: "Open link in new tab",
           submit: "Submit",

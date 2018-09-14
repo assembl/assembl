@@ -1,0 +1,25 @@
+{
+  "name": "draft-js-attachment-plugin",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "author": "Bluenove",
+  "license": "MIT",
+  "dependencies": {
+    "assembl-editor-utils": "^1.0.0",
+    "assembl-test-editor-utils": "^1.0.0",
+    "classnames": "^2.2.5",
+    "decorate-component-with-props": "^1.1.0",
+    "draft-js": "^0.10.5",
+    "lodash": "^4.17.4",
+    "react": "^16.3.1",
+    "react-bootstrap": "^0.31.2",
+    "react-final-form": "^3.6.2",
+    "react-redux": "^5.0.6",
+    "react-redux-i18n": "1.9.1"
+  },
+  "devDependencies": {
+    "enzyme": "^3.4.1",
+    "enzyme-adapter-react-16": "^1.2.0",
+    "react-test-renderer": "^16.3.1"
+  }
+}
