@@ -31,53 +31,51 @@ type Props = {
 };
 
 const AddLinkForm = ({ initialValues, onSubmit }: Props) => (
-  <React.Fragment>
-    <Form
-      initialValues={initialValues}
-      onSubmit={onSubmit}
-      render={({ handleSubmit }) => (
-        <BootstrapForm componentClass="div" horizontal>
-          <FormGroup controlId="url">
-            <Col componentClass={ControlLabel} sm={2}>
-              <Translate value="common.editor.linkPlugin.url" />
-            </Col>
-            <Col sm={10}>
-              <Field name="url" component={FormControlAdapter} />
-            </Col>
-          </FormGroup>
-          <FormGroup controlId="text">
-            <Col componentClass={ControlLabel} sm={2}>
-              <Translate value="common.editor.linkPlugin.text" />
-            </Col>
-            <Col sm={10}>
-              <Field name="text" component={FormControlAdapter} />
-            </Col>
-          </FormGroup>
-          <FormGroup controlId="openInNewTab">
-            <Col smOffset={2} sm={10}>
-              <Field name="openInNewTab" component={CheckboxAdapter} type="checkbox">
-                <Translate value="common.editor.linkPlugin.openInNewTab" />
-              </Field>
-            </Col>
-          </FormGroup>
-          <FormGroup>
-            <Col smOffset={2} sm={10}>
-              <Button
-                type="submit"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  handleSubmit();
-                }}
-              >
-                <Translate value="common.editor.linkPlugin.submit" />
-              </Button>
-            </Col>
-          </FormGroup>
-        </BootstrapForm>
-      )}
-    />
-  </React.Fragment>
+  <Form
+    initialValues={initialValues}
+    onSubmit={onSubmit}
+    render={({ handleSubmit }) => (
+      <BootstrapForm componentClass="div" horizontal>
+        <FormGroup controlId="url">
+          <Col componentClass={ControlLabel} sm={2}>
+            <Translate value="common.editor.linkPlugin.url" />
+          </Col>
+          <Col sm={10}>
+            <Field name="url" component={FormControlAdapter} />
+          </Col>
+        </FormGroup>
+        <FormGroup controlId="text">
+          <Col componentClass={ControlLabel} sm={2}>
+            <Translate value="common.editor.linkPlugin.text" />
+          </Col>
+          <Col sm={10}>
+            <Field name="text" component={FormControlAdapter} />
+          </Col>
+        </FormGroup>
+        <FormGroup controlId="openInNewTab">
+          <Col smOffset={2} sm={10}>
+            <Field name="openInNewTab" component={CheckboxAdapter} type="checkbox">
+              <Translate value="common.editor.linkPlugin.openInNewTab" />
+            </Field>
+          </Col>
+        </FormGroup>
+        <FormGroup>
+          <Col smOffset={2} sm={10}>
+            <Button
+              type="submit"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                handleSubmit();
+              }}
+            >
+              <Translate value="common.editor.linkPlugin.submit" />
+            </Button>
+          </Col>
+        </FormGroup>
+      </BootstrapForm>
+    )}
+  />
 );
 
 export default AddLinkForm;

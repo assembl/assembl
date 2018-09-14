@@ -75,13 +75,11 @@ export default class LinkButton extends React.Component<Props> {
     const buttonClassName = classNames(theme.button, { active: hasLinkSelected });
     const handleClick = hasLinkSelected ? onRemoveLinkAtSelection : this.openModal;
     return (
-      <React.Fragment>
-        <div className={theme.buttonWrapper} onMouseDown={this.onMouseDown}>
-          <button className={buttonClassName} onClick={handleClick} type="button">
-            <span className="assembl-icon-text-link" />
-          </button>
-        </div>
-      </React.Fragment>
+      <div className={theme.buttonWrapper} onMouseDown={this.onMouseDown}>
+        <button className={buttonClassName} onClick={handleClick} type="button">
+          <span className="assembl-icon-text-link" />
+        </button>
+      </div>
     );
   }
 }
