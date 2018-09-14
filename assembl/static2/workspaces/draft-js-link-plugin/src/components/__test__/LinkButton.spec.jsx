@@ -101,9 +101,6 @@ describe('LinkButton component', () => {
     EditorUtils.hasEntity.mockReturnValue(false);
     const onRemoveLinkAtSelectionSpy = jest.fn();
     const props = {
-      modal: {
-        current: null
-      },
       onRemoveLinkAtSelection: onRemoveLinkAtSelectionSpy,
       store: store,
       theme: theme
@@ -117,9 +114,6 @@ describe('LinkButton component', () => {
     EditorUtils.hasEntity.mockReturnValue(true);
     const onRemoveLinkAtSelectionSpy = jest.fn();
     const props = {
-      modal: {
-        current: null
-      },
       onRemoveLinkAtSelection: onRemoveLinkAtSelectionSpy,
       store: store,
       theme: theme
