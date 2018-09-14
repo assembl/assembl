@@ -299,15 +299,13 @@ const Translations = {
         bold: "Gras",
         italic: "Italique",
         bulletList: "Liste de puces",
+        closeModal: "Fermer",
         linkPlugin: {
-          addLinkForm: {
-            close: "Fermer",
-            title: "Insérer un lien"
-          },
+          openInNewTab: "Ouvrir le lien dans un nouvel onglet",
           submit: "Valider",
           text: "Texte du lien",
-          url: "Adresse web",
-          openInNewTab: "Ouvrir le lien dans un nouvel onglet"
+          title: "Insérer un lien",
+          url: "Adresse web"
         }
       },
       uploadButton: "Choisissez un fichier",
@@ -1191,15 +1189,13 @@ const Translations = {
         bold: "Bold",
         italic: "Italic",
         bulletList: "Bullet list",
+        closeModal: "Close",
         linkPlugin: {
-          addLinkForm: {
-            close: "Close",
-            title: "Insert a link"
-          },
-          submit: "Validate",
+          openInNewTab: "Open link in new tab",
+          submit: "Submit",
           text: "Link text",
-          url: "URL",
-          openInNewTab: "Open link in new tab"
+          title: "Insert a link",
+          url: "URL"
         }
       },
       uploadButton: "Choose a file to upload",

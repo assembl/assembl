@@ -147,7 +147,7 @@ exports[`AddLinkForm component should render a form to add a link 1`] = `
           className={undefined}
           style={undefined}
         >
-          Validate
+          Submit
         </span>
       </button>
     </div>

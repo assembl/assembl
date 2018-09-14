@@ -48,7 +48,7 @@ export default class LinkButton extends React.Component<Props> {
     e.preventDefault();
     e.stopPropagation();
     const body = <AddLinkForm initialValues={{ text: this.getSelectedText() }} onSubmit={this.addLink} />;
-    const title = I18n.t('common.editor.linkPlugin.addLinkForm.title');
+    const title = I18n.t('common.editor.linkPlugin.title');
     this.props.setModalContent(body, title);
   };
 
