@@ -1,6 +1,16 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`harvestingMenu component should match harvestingMenu snapshot 1`] = `
+exports[`harvestingMenu component should match harvestingMenu snapshot when extracts is undefined 1`] = `
+<div>
+  <div
+    className="harvesting-container"
+  >
+    
+  </div>
+</div>
+`;
+
+exports[`harvestingMenu component should match harvestingMenu snapshot when nugget action is visible 1`] = `
 <div>
   <harvestingBadge
     extractsNumber={2}
@@ -14,12 +24,87 @@ exports[`harvestingMenu component should match harvestingMenu snapshot 1`] = `
 </div>
 `;
 
-exports[`harvestingMenu component should match harvestingMenu without nugget action snapshot 1`] = `
+exports[`harvestingMenu component should match harvestingMenu snapshot when the anchor to harvest is visible 1`] = `
 <div>
   <harvestingBadge
     extractsNumber={2}
     toggleExtractsBox={[Function]}
   />
+  <div
+    className="harvesting-container"
+  >
+    <HarvestingAnchor
+      anchorPosition={
+        Object {
+          "x": 10,
+          "y": 10,
+        }
+      }
+      displayHarvestingBox={false}
+      handleClickAnchor={[Function]}
+      handleMouseDown={[Function]}
+    />
+  </div>
+</div>
+`;
+
+exports[`harvestingMenu component should match harvestingMenu snapshot when the author account is deleted 1`] = `
+<div>
+  <harvestingBadge
+    extractsNumber={2}
+    toggleExtractsBox={[Function]}
+  />
+  <div
+    className="harvesting-container"
+  >
+    
+  </div>
+</div>
+`;
+
+exports[`harvestingMenu component should match harvestingMenu snapshot when the harvesting box is visible 1`] = `
+<div>
+  <harvestingBadge
+    extractsNumber={2}
+    toggleExtractsBox={[Function]}
+  />
+  <div
+    className="harvesting-container"
+  >
+    <Connect(Apollo(Apollo(Apollo(Apollo(Component)))))
+      cancelHarvesting={[Function]}
+      displayHarvestingBox={true}
+      lang="fr"
+      postId="123456"
+      refetchPost={[Function]}
+      selection={
+        Object {
+          "removeAllRanges": [Function],
+        }
+      }
+      setHarvestingBoxDisplay={[Function]}
+      showNuggetAction={false}
+    />
+  </div>
+</div>
+`;
+
+exports[`harvestingMenu component should match harvestingMenu snapshot when there are extracts 1`] = `
+<div>
+  <harvestingBadge
+    extractsNumber={2}
+    toggleExtractsBox={[Function]}
+  />
+  <div
+    className="harvesting-container"
+  >
+    
+  </div>
+</div>
+`;
+
+exports[`harvestingMenu component should match harvestingMenu snapshot when there are no extracts 1`] = `
+<div>
   <div
     className="harvesting-container"
   >

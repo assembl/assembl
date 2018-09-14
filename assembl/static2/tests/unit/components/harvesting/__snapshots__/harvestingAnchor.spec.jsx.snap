@@ -36,8 +36,112 @@ exports[`harvestingAnchor component should match harvestingAnchor snapshot 1`] =
     >
       <div
         className="left-side-harvesting-button__button"
-        onClick={undefined}
-        onMouseDown={undefined}
+        onClick={[Function]}
+        onMouseDown={[Function]}
+      >
+        <div
+          className="left-side-harvesting-button__button__inside"
+        >
+          <span
+            className="confirm-harvest-button assembl-icon-catch"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</OverlayTrigger>
+`;
+
+exports[`harvestingAnchor component should match harvestingAnchor snapshot when anchorPosition is empty 1`] = `
+<OverlayTrigger
+  defaultOverlayShown={false}
+  overlay={
+    <Tooltip
+      bsClass="tooltip"
+      id="harvestingTooltip"
+      placement="right"
+    >
+      <Translate
+        value="harvesting.harvesting"
+      />
+    </Tooltip>
+  }
+  placement="top"
+  trigger={
+    Array [
+      "hover",
+      "focus",
+    ]
+  }
+>
+  <div
+    className="harvesting-anchor"
+    style={
+      Object {
+        "left": "NaNpx",
+        "top": "NaNpx",
+      }
+    }
+  >
+    <div
+      className="left-side-harvesting-button"
+    >
+      <div
+        className="left-side-harvesting-button__button"
+        onClick={[Function]}
+        onMouseDown={[Function]}
+      >
+        <div
+          className="left-side-harvesting-button__button__inside"
+        >
+          <span
+            className="confirm-harvest-button assembl-icon-catch"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</OverlayTrigger>
+`;
+
+exports[`harvestingAnchor component should match harvestingAnchor snapshot when anchorPosition is undefined 1`] = `
+<OverlayTrigger
+  defaultOverlayShown={false}
+  overlay={
+    <Tooltip
+      bsClass="tooltip"
+      id="harvestingTooltip"
+      placement="right"
+    >
+      <Translate
+        value="harvesting.harvesting"
+      />
+    </Tooltip>
+  }
+  placement="top"
+  trigger={
+    Array [
+      "hover",
+      "focus",
+    ]
+  }
+>
+  <div
+    className="harvesting-anchor"
+    style={
+      Object {
+        "left": "0px",
+        "top": "0px",
+      }
+    }
+  >
+    <div
+      className="left-side-harvesting-button"
+    >
+      <div
+        className="left-side-harvesting-button__button"
+        onClick={[Function]}
+        onMouseDown={[Function]}
       >
         <div
           className="left-side-harvesting-button__button__inside"

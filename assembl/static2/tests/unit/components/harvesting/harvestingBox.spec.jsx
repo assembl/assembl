@@ -5,55 +5,190 @@ import { DumbHarvestingBox } from '../../../../js/app/components/harvesting/harv
 import * as fakeData from './fakeData';
 
 describe('harvestingBox component', () => {
-  const setExtractsBoxDisplaySpy = jest.fn(() => {});
-  it('should match harvestingBox snapshot', () => {
-    const { extract } = fakeData;
+  const { extracts } = fakeData;
+  const setHarvestingBoxDisplaySpy = jest.fn(() => {});
+  const cancelHarvestingSpy = jest.fn(() => {});
+  const addPostExtractSpy = jest.fn(() => {});
+  const updateExtractSpy = jest.fn(() => {});
+  const confirmExtractSpy = jest.fn(() => {});
+  const deleteExtractSpy = jest.fn(() => {});
+  const refetchPostSpy = jest.fn(() => {});
+  const toggleExtractsBoxSpy = jest.fn(() => {});
+  it('should match harvestingBox snapshot when there are no extracts', () => {
     const props = {
-      postId: '12345',
-      extract: extract,
-      index: 0,
-      previousExtractId: '876876876',
-      harvestingAnchorPosition: { x: 100, y: 200 },
+      extracts: [],
+      postId: '123456',
       contentLocale: 'fr',
-      harvestingDate: 'il y a 5 jours',
-      showNuggetAction: true,
-      setExtractsBoxDisplay: setExtractsBoxDisplaySpy
-    };
-    const shallowRenderer = new ShallowRenderer();
-    shallowRenderer.render(<DumbHarvestingBox {...props} />);
-    const result = shallowRenderer.getRenderOutput();
-    expect(result).toMatchSnapshot();
-  });
-  it('should match submitted harvestingBox snapshot', () => {
-    const { submittedExtract } = fakeData;
-    const props = {
-      postId: '12345',
-      extract: submittedExtract,
-      index: 0,
-      previousExtractId: '876876876',
-      harvestingAnchorPosition: { x: 100, y: 200 },
-      contentLocale: 'fr',
-      harvestingDate: 'il y a 5 jours',
-      showNuggetAction: true,
-      setExtractsBoxDisplay: setExtractsBoxDisplaySpy
-    };
-    const shallowRenderer = new ShallowRenderer();
-    shallowRenderer.render(<DumbHarvestingBox {...props} />);
-    const result = shallowRenderer.getRenderOutput();
-    expect(result).toMatchSnapshot();
-  });
-  it('should match submitted harvestingBox without nugget action snapshot', () => {
-    const { submittedExtract } = fakeData;
-    const props = {
-      postId: '12345',
-      extract: submittedExtract,
-      index: 0,
-      previousExtractId: '876876876',
-      harvestingAnchorPosition: { x: 100, y: 200 },
-      contentLocale: 'fr',
-      harvestingDate: 'il y a 5 jours',
+      lang: 'fr',
+      selection: {},
+      harvestingDate: '2018-04-29T16:28:27.324276+00:00',
+      isAuthorAccountDeleted: false,
       showNuggetAction: false,
-      setExtractsBoxDisplay: setExtractsBoxDisplaySpy
+      displayHarvestingBox: false,
+      setHarvestingBoxDisplay: setHarvestingBoxDisplaySpy,
+      cancelHarvesting: cancelHarvestingSpy,
+      addPostExtract: addPostExtractSpy,
+      updateExtract: updateExtractSpy,
+      confirmExtract: confirmExtractSpy,
+      deleteExtract: deleteExtractSpy,
+      refetchPost: refetchPostSpy,
+      toggleExtractsBox: toggleExtractsBoxSpy
+    };
+    const shallowRenderer = new ShallowRenderer();
+    shallowRenderer.render(<DumbHarvestingBox {...props} />);
+    const result = shallowRenderer.getRenderOutput();
+    expect(result).toMatchSnapshot();
+  });
+
+  it('should match harvestingBox snapshot when there are extracts', () => {
+    const props = {
+      extracts: extracts,
+      postId: '123456',
+      contentLocale: 'fr',
+      lang: 'fr',
+      selection: {},
+      harvestingDate: '2018-04-29T16:28:27.324276+00:00',
+      isAuthorAccountDeleted: false,
+      showNuggetAction: false,
+      displayHarvestingBox: false,
+      setHarvestingBoxDisplay: setHarvestingBoxDisplaySpy,
+      cancelHarvesting: cancelHarvestingSpy,
+      addPostExtract: addPostExtractSpy,
+      updateExtract: updateExtractSpy,
+      confirmExtract: confirmExtractSpy,
+      deleteExtract: deleteExtractSpy,
+      refetchPost: refetchPostSpy,
+      toggleExtractsBox: toggleExtractsBoxSpy
+    };
+    const shallowRenderer = new ShallowRenderer();
+    shallowRenderer.render(<DumbHarvestingBox {...props} />);
+    const result = shallowRenderer.getRenderOutput();
+    expect(result).toMatchSnapshot();
+  });
+
+  it('should match harvestingBox snapshot when extracts is undefined', () => {
+    const props = {
+      extracts: undefined,
+      postId: '123456',
+      contentLocale: 'fr',
+      lang: 'fr',
+      selection: {},
+      harvestingDate: '2018-04-29T16:28:27.324276+00:00',
+      isAuthorAccountDeleted: false,
+      showNuggetAction: false,
+      displayHarvestingBox: false,
+      setHarvestingBoxDisplay: setHarvestingBoxDisplaySpy,
+      cancelHarvesting: cancelHarvestingSpy,
+      addPostExtract: addPostExtractSpy,
+      updateExtract: updateExtractSpy,
+      confirmExtract: confirmExtractSpy,
+      deleteExtract: deleteExtractSpy,
+      refetchPost: refetchPostSpy,
+      toggleExtractsBox: toggleExtractsBoxSpy
+    };
+    const shallowRenderer = new ShallowRenderer();
+    shallowRenderer.render(<DumbHarvestingBox {...props} />);
+    const result = shallowRenderer.getRenderOutput();
+    expect(result).toMatchSnapshot();
+  });
+
+  it('should match harvestingBox snapshot when selection is undefined', () => {
+    const props = {
+      extracts: extracts,
+      postId: '123456',
+      contentLocale: 'fr',
+      lang: 'fr',
+      selection: undefined,
+      harvestingDate: '2018-04-29T16:28:27.324276+00:00',
+      isAuthorAccountDeleted: false,
+      showNuggetAction: false,
+      displayHarvestingBox: false,
+      setHarvestingBoxDisplay: setHarvestingBoxDisplaySpy,
+      cancelHarvesting: cancelHarvestingSpy,
+      addPostExtract: addPostExtractSpy,
+      updateExtract: updateExtractSpy,
+      confirmExtract: confirmExtractSpy,
+      deleteExtract: deleteExtractSpy,
+      refetchPost: refetchPostSpy,
+      toggleExtractsBox: toggleExtractsBoxSpy
+    };
+    const shallowRenderer = new ShallowRenderer();
+    shallowRenderer.render(<DumbHarvestingBox {...props} />);
+    const result = shallowRenderer.getRenderOutput();
+    expect(result).toMatchSnapshot();
+  });
+
+  it('should match harvestingBox snapshot when author account is deleted', () => {
+    const props = {
+      extracts: extracts,
+      postId: '123456',
+      contentLocale: 'fr',
+      lang: 'fr',
+      selection: {},
+      harvestingDate: '2018-04-29T16:28:27.324276+00:00',
+      isAuthorAccountDeleted: true,
+      showNuggetAction: false,
+      displayHarvestingBox: false,
+      setHarvestingBoxDisplay: setHarvestingBoxDisplaySpy,
+      cancelHarvesting: cancelHarvestingSpy,
+      addPostExtract: addPostExtractSpy,
+      updateExtract: updateExtractSpy,
+      confirmExtract: confirmExtractSpy,
+      deleteExtract: deleteExtractSpy,
+      refetchPost: refetchPostSpy,
+      toggleExtractsBox: toggleExtractsBoxSpy
+    };
+    const shallowRenderer = new ShallowRenderer();
+    shallowRenderer.render(<DumbHarvestingBox {...props} />);
+    const result = shallowRenderer.getRenderOutput();
+    expect(result).toMatchSnapshot();
+  });
+
+  it('should match harvestingBox snapshot when nugget action is visible', () => {
+    const props = {
+      extracts: extracts,
+      postId: '123456',
+      contentLocale: 'fr',
+      lang: 'fr',
+      selection: {},
+      harvestingDate: '2018-04-29T16:28:27.324276+00:00',
+      isAuthorAccountDeleted: false,
+      showNuggetAction: true,
+      displayHarvestingBox: false,
+      setHarvestingBoxDisplay: setHarvestingBoxDisplaySpy,
+      cancelHarvesting: cancelHarvestingSpy,
+      addPostExtract: addPostExtractSpy,
+      updateExtract: updateExtractSpy,
+      confirmExtract: confirmExtractSpy,
+      deleteExtract: deleteExtractSpy,
+      refetchPost: refetchPostSpy,
+      toggleExtractsBox: toggleExtractsBoxSpy
+    };
+    const shallowRenderer = new ShallowRenderer();
+    shallowRenderer.render(<DumbHarvestingBox {...props} />);
+    const result = shallowRenderer.getRenderOutput();
+    expect(result).toMatchSnapshot();
+  });
+
+  it('should match harvestingBox snapshot when the component is in harvesting mode', () => {
+    const props = {
+      extracts: extracts,
+      postId: '123456',
+      contentLocale: 'fr',
+      lang: 'fr',
+      selection: {},
+      harvestingDate: '2018-04-29T16:28:27.324276+00:00',
+      isAuthorAccountDeleted: false,
+      showNuggetAction: false,
+      displayHarvestingBox: true,
+      setHarvestingBoxDisplay: setHarvestingBoxDisplaySpy,
+      cancelHarvesting: cancelHarvestingSpy,
+      addPostExtract: addPostExtractSpy,
+      updateExtract: updateExtractSpy,
+      confirmExtract: confirmExtractSpy,
+      deleteExtract: deleteExtractSpy,
+      refetchPost: refetchPostSpy,
+      toggleExtractsBox: toggleExtractsBoxSpy
     };
     const shallowRenderer = new ShallowRenderer();
     shallowRenderer.render(<DumbHarvestingBox {...props} />);

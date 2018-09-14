@@ -1,6 +1,36 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`harvestingBadge component should match harvestingBadge snapshot 1`] = `
+exports[`harvestingBadge component should match harvestingBadge snapshot when extracts number is undefined 1`] = `
+<div
+  className="relative"
+>
+  <div
+    className="harvesting-badge"
+    onClick={undefined}
+  >
+    <div
+      className="badge-total"
+    />
+    <div
+      className="left-side-harvesting-button"
+    >
+      <div
+        className="left-side-harvesting-button__button"
+      >
+        <div
+          className="left-side-harvesting-button__button__inside"
+        >
+          <span
+            className="confirm-harvest-button assembl-icon-catch"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`harvestingBadge component should match harvestingBadge snapshot with extracts number 1`] = `
 <div
   className="relative"
 >
