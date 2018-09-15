@@ -16,6 +16,7 @@ import FictionHeader from '../components/debate/brightMirror/fictionHeader';
 import FictionToolbar from '../components/debate/brightMirror/fictionToolbar';
 import FictionBody from '../components/debate/brightMirror/fictionBody';
 import BackButton from '../components/debate/common/backButton';
+import FictionThreadView from '../components/debate/brightMirror/fictionThreadView';
 // Utils imports
 import { displayAlert } from '../utils/utilityManager';
 import { getConnectedUserId } from '../utils/globalFunctions';
@@ -72,6 +73,18 @@ export class BrightMirrorFiction extends Component<BrightMirrorFictionProps, Bri
     };
   }
 
+  submitCommentHandler = (callbackResult: FictionCommentFormResultType) => {
+    // const { post, error } = callbackResult;
+    const { error } = callbackResult;
+
+    if (error !== undefined) {
+      displayAlert('success', I18n.t('debate.thread.postSuccess'));
+      // Update UI
+    } else {
+      displayAlert('danger', `${error}`);
+    }
+  };
+
   render() {
     const { data, slug, phase, themeId, fictionId, contentLocale } = this.props;
     const { title, content, publicationState } = this.state;
@@ -94,7 +107,7 @@ export class BrightMirrorFiction extends Component<BrightMirrorFictionProps, Bri
       connectedUserCan(Permissions.DELETE_POST);
     const userCanEdit = getConnectedUserId() === String(userId) && connectedUserCan(Permissions.EDIT_MY_POST);
 
-    // Define callback functions
+    // Define callback functions - TODO: move the logic out of render
     const deleteFictionCallback = () => {
       // Route to fiction list page
       const fictionListParams = { slug: slug, phase: phase, themeId: themeId };
@@ -146,6 +159,13 @@ export class BrightMirrorFiction extends Component<BrightMirrorFictionProps, Bri
     // const fictionThreadViewProps: FictionThreadViewProps = {
     //   treeProps: treeProps
     // };
+
+    const fictionThreadViewProps: FictionThreadViewProps = {
+      contentLocale: contentLocale,
+      ideaId: themeId,
+      parentId: fictionId,
+      onSubmitCommentCallback: this.submitCommentHandler
+    };
 
     return (
       <Fragment>
