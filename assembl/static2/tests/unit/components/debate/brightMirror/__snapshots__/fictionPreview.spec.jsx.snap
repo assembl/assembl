@@ -553,7 +553,6 @@ exports[`Storyshots FictionPreview default 1`] = `
                       style={Object {}}
                     >
                       deleteFictionHandler
-                      publicationState
                     </span>
                     <span>
                       =
@@ -571,6 +570,24 @@ exports[`Storyshots FictionPreview default 1`] = `
                           deleteFictionHandler
                         </span>
                         }
+                      </span>
+                    </span>
+                  </span>
+                  <span>
+                    <span>
+                      <br />
+                        
+                    </span>
+                    <span
+                      style={Object {}}
+                    >
+                      publicationState
+                    </span>
+                    <span>
+                      =
+                      <span
+                        style={Object {}}
+                      >
                         "
                         <span
                           style={
@@ -1211,7 +1228,6 @@ exports[`Storyshots FictionPreview playground 1`] = `
                       style={Object {}}
                     >
                       deleteFictionHandler
-                      publicationState
                     </span>
                     <span>
                       =
@@ -1229,6 +1245,24 @@ exports[`Storyshots FictionPreview playground 1`] = `
                           deleteFictionHandler
                         </span>
                         }
+                      </span>
+                    </span>
+                  </span>
+                  <span>
+                    <span>
+                      <br />
+                        
+                    </span>
+                    <span
+                      style={Object {}}
+                    >
+                      publicationState
+                    </span>
+                    <span>
+                      =
+                      <span
+                        style={Object {}}
+                      >
                         "
                         <span
                           style={
