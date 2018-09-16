@@ -1,6 +1,5 @@
 // @flow
 import * as React from 'react';
-import { I18n } from 'react-redux-i18n';
 import { Link } from 'react-router';
 import truncate from 'lodash/truncate';
 // Constant imports
@@ -13,32 +12,31 @@ import DeletePostButton from '../common/deletePostButton';
 import ResponsiveOverlayTrigger from '../../common/responsiveOverlayTrigger';
 import { editFictionTooltip, deleteFictionTooltip } from '../../common/tooltips';
 // Utils imports
-import { displayCustomModal, closeModal, displayAlert } from '../../../utils/utilityManager';
+import { displayCustomModal, closeModal } from '../../../utils/utilityManager';
 
 export type FictionPreviewProps = {
-  /** ID */
   id: string,
-  /** Fiction title */
   title: ?string,
-  /** Author fullname */
   authorName: ?string,
-  /** Creation date */
   creationDate: string,
-  /** Url to fiction */
   link: string,
   /** Background color */
   color: string,
-  /** original body */
   originalBody: string,
   /** Function to refresh idea */
   refetchIdea: Function,
-  /** Original locale */
   lang: string,
-  /** Boolean to tell if user can edit */
   userCanEdit: boolean,
-  /** Boolean to tell if user can delete */
-  userCanDelete: boolean
+  userCanDelete: boolean,
+  deleteFictionHandler: Function
 };
+
+const ellipsis = (text, length) =>
+  `${truncate(text, {
+    length: length,
+    separator: ' ',
+    omission: '...'
+  })}`;
 
 const FictionPreview = ({
   id,
@@ -51,13 +49,9 @@ const FictionPreview = ({
   refetchIdea,
   lang,
   userCanEdit,
-  userCanDelete
+  userCanDelete,
+  deleteFictionHandler
 }: FictionPreviewProps) => {
-  // Define callback functions
-  const deleteFictionHandler = () => {
-    displayAlert('success', I18n.t('debate.brightMirror.deleteFictionSuccessMsg'));
-  };
-
   // Define components
   const openPostModal = () => {
     const content = (
@@ -104,11 +98,7 @@ const FictionPreview = ({
 
   // Format author name
   const name = authorName || '';
-  const author = `${truncate(name, {
-    length: FICTION_PREVIEW_NAME_MAX_CHAR,
-    separator: ' ',
-    omission: '...'
-  })} - `;
+  const author = `${ellipsis(name, FICTION_PREVIEW_NAME_MAX_CHAR)} - `;
 
   return (
     <div className="fiction-preview" style={{ backgroundColor: color }}>
@@ -119,13 +109,7 @@ const FictionPreview = ({
         </ul>
         <Link className="link" to={link}>
           <div className="inner-box">
-            <h3>
-              {truncate(title, {
-                length: FICTION_PREVIEW_TITLE_MAX_CHAR,
-                separator: ' ',
-                omission: '...'
-              })}
-            </h3>
+            <h3>{ellipsis(title, FICTION_PREVIEW_TITLE_MAX_CHAR)}</h3>
             <p className="info">
               <span className="author">{author}</span>
               <span className="published-date">{creationDate}</span>

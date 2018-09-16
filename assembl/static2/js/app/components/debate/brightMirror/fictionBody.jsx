@@ -2,9 +2,7 @@
 import React, { Fragment } from 'react';
 
 export type FictionBodyProps = {
-  /** Fiction title */
   title: string,
-  /** Fiction content */
   content: string
 };
 

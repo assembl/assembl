@@ -21,7 +21,8 @@ export const customFictionPreview: FictionPreviewProps = {
   refetchIdea: action('refetchIdea'),
   lang: 'fr',
   userCanEdit: true,
-  userCanDelete: true
+  userCanDelete: true,
+  deleteFictionHandler: action('deleteFictionHandler')
 };
 
 storiesOf('FictionPreview', module)
@@ -42,6 +43,7 @@ storiesOf('FictionPreview', module)
         lang={text('original locale', customFictionPreview.lang)}
         userCanEdit={boolean('User can edit', customFictionPreview.userCanEdit)}
         userCanDelete={boolean('User can delete', customFictionPreview.userCanDelete)}
+        deleteFictionHandler={customFictionPreview.deleteFictionHandler}
       />
     ))
   );

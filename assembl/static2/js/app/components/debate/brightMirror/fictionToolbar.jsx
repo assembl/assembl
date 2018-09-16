@@ -10,19 +10,13 @@ import EditPostForm from '../common/editPostForm';
 import DeletePostButton from '../common/deletePostButton';
 
 export type FictionToolbarProps = {
-  /** Fiction identifier */
   fictionId: string,
-  /** Fiction title */
   title: string,
-  /** Fiction content */
   originalBody: string,
-  /** Fiction locale */
   lang: string,
-  /** Boolean to tell if user can edit */
   userCanEdit: boolean,
   /** Edit fiction callback, should only be set when current user is the author of the fiction */
   onModifyCallback?: () => void,
-  /** Boolean to tell if user can delete */
   userCanDelete: boolean,
   /** Delete fiction callback, should only be set when current user is either the author of the fiction or an admin */
   onDeleteCallback?: () => void

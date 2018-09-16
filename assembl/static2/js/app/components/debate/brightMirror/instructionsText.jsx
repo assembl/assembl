@@ -5,9 +5,7 @@ import activeHtml from 'react-active-html';
 import { postBodyReplacementComponents } from '../common/post/postBody';
 
 export type InstructionsTextProps = {
-  /** Instruction title */
   title: string,
-  /** Instruction body */
   body: string
 };
 

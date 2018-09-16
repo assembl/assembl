@@ -11,17 +11,15 @@ import { getDiscussionSlug, getConnectedUserId } from '../../../utils/globalFunc
 import FictionPreview from './fictionPreview';
 import { fictionBackgroundColors } from '../../../constants';
 import Permissions, { connectedUserCan } from '../../../utils/permissions';
+import { displayAlert } from '../../../utils/utilityManager';
 
 export type FictionsListProps = {
-  /** All fictions */
   posts: Array<FictionPostPreview>,
   /** Bright Mirror identifier */
   identifier: string,
-  /** Theme identifier */
   themeId: string,
   /** Function to refetch idea */
   refetchIdea: Function,
-  /** Content locale */
   lang: string
 };
 
@@ -29,6 +27,11 @@ const masonryOptions = {
   transitionDuration: 0,
   fitWidth: true,
   horizontalOrder: true
+};
+
+// Define callback functions
+const deleteFictionHandler = () => {
+  displayAlert('success', I18n.t('debate.brightMirror.deleteFictionSuccessMsg'));
 };
 
 const getRandomColor = () => fictionBackgroundColors[Math.floor(Math.random() * fictionBackgroundColors.length)];
@@ -68,6 +71,7 @@ const FictionsList = ({ posts, identifier, refetchIdea, lang, themeId }: Fiction
           userCanEdit={userCanEdit}
           userCanDelete={userCanDelete}
           lang={lang}
+          deleteFictionHandler={deleteFictionHandler}
         />
       </Animated>
     );

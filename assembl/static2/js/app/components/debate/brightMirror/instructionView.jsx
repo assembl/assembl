@@ -9,26 +9,19 @@ import FictionsList from './fictionsList';
 import InstructionsText from './instructionsText';
 
 export type InstructionViewProps = {
-  /** User connected */
   isUserConnected: boolean,
-  /** Id */
   ideaId: string,
   /** Function to refetch idea */
   refetchIdea: Function,
-  /** List of fictions */
   posts: Array<FictionPostPreview>,
   /** Instructions */
   announcementContent: {
-    /** Instruction title */
     title: string,
-    /** Instruction body */
     body: string
   },
-  /** Timeline data */
   timeline: Timeline,
   /** Bright Mirror identifier */
   identifier: string,
-  /** Bright Mirror lang */
   lang: string
 };
 

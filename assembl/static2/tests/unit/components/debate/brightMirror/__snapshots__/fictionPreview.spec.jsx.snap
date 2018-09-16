@@ -543,6 +543,35 @@ exports[`Storyshots FictionPreview default 1`] = `
                     >
                       userCanDelete
                     </span>
+                  </span>
+                  <span>
+                    <span>
+                      <br />
+                        
+                    </span>
+                    <span
+                      style={Object {}}
+                    >
+                      deleteFictionHandler
+                    </span>
+                    <span>
+                      =
+                      <span
+                        style={Object {}}
+                      >
+                        {
+                        <span
+                          style={
+                            Object {
+                              "color": "#170",
+                            }
+                          }
+                        >
+                          deleteFictionHandler
+                        </span>
+                        }
+                      </span>
+                    </span>
                     <br />
                   </span>
                 </span>
@@ -1158,6 +1187,35 @@ exports[`Storyshots FictionPreview playground 1`] = `
                       style={Object {}}
                     >
                       userCanDelete
+                    </span>
+                  </span>
+                  <span>
+                    <span>
+                      <br />
+                        
+                    </span>
+                    <span
+                      style={Object {}}
+                    >
+                      deleteFictionHandler
+                    </span>
+                    <span>
+                      =
+                      <span
+                        style={Object {}}
+                      >
+                        {
+                        <span
+                          style={
+                            Object {
+                              "color": "#170",
+                            }
+                          }
+                        >
+                          deleteFictionHandler
+                        </span>
+                        }
+                      </span>
                     </span>
                     <br />
                   </span>

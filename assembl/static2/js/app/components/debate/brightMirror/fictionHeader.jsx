@@ -5,13 +5,9 @@ import CircleAvatar from './circleAvatar';
 import type { CircleAvatarProps } from './circleAvatar';
 
 export type FictionHeaderProps = {
-  /** Author fullname */
   authorFullname: string,
-  /** Article published date */
   publishedDate: string,
-  /** Article displayed published date */
   displayedPublishedDate: string,
-  /** Circle avatar props */
   circleAvatar: CircleAvatarProps
 };
 
