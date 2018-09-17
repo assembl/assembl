@@ -14,6 +14,7 @@ import FictionHeader from '../components/debate/brightMirror/fictionHeader';
 import FictionToolbar from '../components/debate/brightMirror/fictionToolbar';
 import FictionBody from '../components/debate/brightMirror/fictionBody';
 import BackButton from '../components/debate/common/backButton';
+import FictionCommentForm from '../components/debate/brightMirror/fictionCommentForm';
 // Utils imports
 import { displayAlert } from '../utils/utilityManager';
 import { getConnectedUserId } from '../utils/globalFunctions';
@@ -25,7 +26,8 @@ import type { CircleAvatarProps } from '../components/debate/brightMirror/circle
 import type { FictionHeaderProps } from '../components/debate/brightMirror/fictionHeader';
 import type { FictionToolbarProps } from '../components/debate/brightMirror/fictionToolbar';
 import type { FictionBodyProps } from '../components/debate/brightMirror/fictionBody';
-import type { FictionCommentFormResultType } from '../components/debate/brightMirror/fictionCommentForm';
+import type { FictionCommentFormProps } from '../components/debate/brightMirror/fictionCommentForm';
+// import type { FictionCommentFormResultType } from '../components/debate/brightMirror/fictionCommentForm';
 
 // Define types
 export type BrightMirrorFictionProps = {
@@ -96,17 +98,17 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
   }
 
   // Define callback functions
-  submitCommentHandler = (callbackResult: FictionCommentFormResultType) => {
-    // const { post, error } = callbackResult;
-    const { error } = callbackResult;
+  // submitCommentHandler = (callbackResult: FictionCommentFormResultType) => {
+  //   // const { post, error } = callbackResult;
+  //   const { error } = callbackResult;
 
-    if (error !== undefined) {
-      displayAlert('success', I18n.t('debate.thread.postSuccess'));
-      // Update UI
-    } else {
-      displayAlert('danger', `${error}`);
-    }
-  };
+  //   if (error !== undefined) {
+  //     displayAlert('success', I18n.t('debate.thread.postSuccess'));
+  //     // Update UI
+  //   } else {
+  //     displayAlert('danger', `${error}`);
+  //   }
+  // };
 
   render() {
     const { title, content, loading, publicationState } = this.state;
@@ -183,6 +185,11 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
       content: content
     };
 
+    const fictionCommentFormProps: FictionCommentFormProps = {
+      onCancelCommentCallback: undefined,
+      onSubmitCommentCallback: undefined
+    };
+
     // const fictionThreadViewProps: FictionThreadViewProps = {
     //   contentLocale: contentLocale,
     //   ideaId: themeId,
@@ -210,7 +217,7 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
           <Row>
             <Col xs={12}>
               <article>
-                <p>FictionCommentForm</p>
+                <FictionCommentForm {...fictionCommentFormProps} />
                 <p>FictionCommentList</p>
               </article>
             </Col>

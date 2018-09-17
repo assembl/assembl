@@ -390,17 +390,19 @@ const Translations = {
         announcement: "Consigne"
       },
       brightMirror: {
-        startFictionLabel: "Je partage ma fiction",
-        fillBodyLabel: "Ecrivez votre fiction",
-        postSuccessMsg: "Merci pour votre participation. Votre fiction a bien été publiée !",
         allFictions: "Fictions déjà parues",
-        editFiction: "Editez votre fiction",
+        commentFictionLabel: "Commentaires",
+        commentFictionPlaceholder: "Rejoins le débat...",
+        commentFictionCancel: "Annuler",
+        commentFictionSubmit: "Commenter",
         deleteFiction: "Supprimez votre fiction",
-        fiction: "Fiction",
         deleteFictionModalBody: "Êtes-vous sûr de vouloir supprimer cette fiction ?",
         deleteFictionSuccessMsg: "Votre fiction a été supprimée",
-        saveDraft: "Sauvegarder",
-        draftSuccessMsg: "Votre fiction a bien été enregistrée."
+        editFiction: "Editez votre fiction",
+        fiction: "Fiction",
+        fillBodyLabel: "Ecrivez votre fiction",
+        postSuccessMsg: "Merci pour votre participation. Votre fiction a bien été enregistrée !",
+        startFictionLabel: "Je partage ma fiction"
       },
       themes: "Thèmes",
       notStarted: "La phase %{phaseName} n'a pas encore commencé. Merci de revenir à partir du ",
@@ -1260,17 +1262,19 @@ const Translations = {
         announcement: "Announcement"
       },
       brightMirror: {
-        startFictionLabel: "Share a fiction",
-        fillBodyLabel: "Write your fiction",
-        postSuccessMsg: "Thanks for your participation. Your fiction has been published successfully.",
         allFictions: "Published fictions",
-        editFiction: "Edit your fiction",
+        commentFictionLabel: "Comments",
+        commentFictionPlaceholder: "Join the debate...",
+        commentFictionCancel: "Cancel",
+        commentFictionSubmit: "Comment",
         deleteFiction: "Delete your fiction",
-        fiction: "Fiction",
         deleteFictionModalBody: "Are you sure you want to delete this fiction?",
         deleteFictionSuccessMsg: "Your fiction was deleted",
-        saveDraft: "Save",
-        draftSuccessMsg: "Your fiction has been saved successfully."
+        editFiction: "Edit your fiction",
+        fiction: "Fiction",
+        fillBodyLabel: "Write your fiction",
+        postSuccessMsg: "Thanks for your participation. Your fiction has been saved!",
+        startFictionLabel: "Share a fiction"
       },
       themes: "Themes",
       notStarted: "The %{phaseName} phase has not started. Please come back from ",
