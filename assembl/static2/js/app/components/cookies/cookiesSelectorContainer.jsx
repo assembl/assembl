@@ -35,7 +35,7 @@ type State = {
   settingsHaveChanged: boolean
 };
 
-const { userSession, locale, matomo, privacyPolicy, cgu } = COOKIE_TRANSLATION_KEYS;
+const { userSession, locale, matomo, privacyPolicy, userGuideline, cgu } = COOKIE_TRANSLATION_KEYS;
 const { essential, analytics, other } = COOKIES_CATEGORIES;
 
 export class DumbCookiesSelectorContainer extends React.Component<Props, State> {
@@ -91,6 +91,9 @@ export class DumbCookiesSelectorContainer extends React.Component<Props, State> 
     }
     if (cookie.includes('PRIVACY_POLICY_ON_DISCUSSION')) {
       return { category: essential, name: privacyPolicy };
+    }
+    if (cookie.includes('USER_GUIDELINE_ON_DISCUSSION')) {
+      return { category: essential, name: userGuideline };
     }
     if (cookie.includes('CGU')) {
       return { category: essential, name: cgu };
