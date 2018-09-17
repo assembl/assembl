@@ -11,16 +11,25 @@ import { BrightMirrorFiction } from '../../../js/app/pages/brightMirrorFiction';
 import FictionHeader from '../../../js/app/components/debate/brightMirror/fictionHeader';
 import FictionToolbar from '../../../js/app/components/debate/brightMirror/fictionToolbar';
 import FictionBody from '../../../js/app/components/debate/brightMirror/fictionBody';
-// Type imports
+// Constant imports
 import { PublicationStates } from '../../../js/app/constants';
-import type { Data, Props } from '../../../js/app/pages/brightMirrorFiction';
+// Type imports
+import type { BrightMirrorFictionProps, BrightMirrorFictionData } from '../../../js/app/pages/brightMirrorFiction';
 
 configure({ adapter: new Adapter() });
 
 // Mock utils functions
 jest.mock('../../../js/app/utils/utilityManager', () => ({ displayAlert: jest.fn() }));
 
-const brightMirrorFictionData: Data = {
+const brightMirrorFictionPropsTemplate = {
+  slug: 'voluptatem-veritatis-ea',
+  phase: 'hic',
+  themeId: 'nihil',
+  fictionId: 'deleniti',
+  contentLocale: 'en'
+};
+
+const brightMirrorFictionDataTemplate = {
   fiction: {
     subject: 'Hic quia eveniet cupiditate placeat laboriosam.',
     body: 'Odit mollitia natus ea iusto voluptatibus omnis pariatur tempore ipsum.',
@@ -34,52 +43,134 @@ const brightMirrorFictionData: Data = {
         externalUrl: 'http://tyrese.info'
       }
     }
-  },
-  error: null
+  }
 };
 
 describe('<BrightMirrorFiction /> - with mount', () => {
   let wrapper;
   let mocks;
-  let brightMirrorFictionProps: Props;
+  let brightMirrorFictionData: BrightMirrorFictionData;
+  let brightMirrorFictionProps: BrightMirrorFictionProps;
 
-  beforeEach(() => {
-    // Define props
-    brightMirrorFictionProps = {
-      data: brightMirrorFictionData,
-      slug: 'voluptatem-veritatis-ea',
-      phase: 'hic',
-      themeId: 'nihil',
-      fictionId: 'deleniti',
-      contentLocale: 'en'
-    };
+  const displayNothing = () => {
+    expect(wrapper.find(FictionBody)).toHaveLength(0);
+    expect(wrapper.find(FictionToolbar)).toHaveLength(0);
+    expect(wrapper.find(FictionBody)).toHaveLength(0);
+  };
 
-    // Mock Apollo
-    mocks = [
-      {
-        request: { query: BrightMirrorFictionQuery },
-        result: {
-          data: brightMirrorFictionData
+  describe('when loading is done without error', () => {
+    beforeEach(() => {
+      // Define props
+      brightMirrorFictionData = {
+        ...brightMirrorFictionDataTemplate,
+        loading: false,
+        error: null
+      };
+
+      brightMirrorFictionProps = {
+        brightMirrorFictionData: brightMirrorFictionData,
+        ...brightMirrorFictionPropsTemplate
+      };
+
+      // Mock Apollo
+      mocks = [
+        {
+          request: { query: BrightMirrorFictionQuery },
+          result: {
+            data: brightMirrorFictionData
+          }
         }
-      }
-    ];
+      ];
 
-    wrapper = mount(
-      <MockedProvider mocks={mocks}>
-        <BrightMirrorFiction {...brightMirrorFictionProps} />
-      </MockedProvider>
-    );
+      wrapper = mount(
+        <MockedProvider mocks={mocks}>
+          <BrightMirrorFiction {...brightMirrorFictionProps} />
+        </MockedProvider>
+      );
+    });
+
+    it('should render a FictionHeader', () => {
+      expect(wrapper.find(FictionHeader)).toHaveLength(1);
+    });
+
+    it('should render a FictionToolbar', () => {
+      expect(wrapper.find(FictionToolbar)).toHaveLength(1);
+    });
+
+    it('should render a FictionBody', () => {
+      expect(wrapper.find(FictionBody)).toHaveLength(1);
+    });
   });
 
-  it('should render a FictionHeader', () => {
-    expect(wrapper.find(FictionHeader)).toHaveLength(1);
+  describe('when loading is not done', () => {
+    beforeEach(() => {
+      // Define props
+      brightMirrorFictionData = {
+        ...brightMirrorFictionDataTemplate,
+        loading: true, // set loading to true
+        error: null
+      };
+
+      brightMirrorFictionProps = {
+        brightMirrorFictionData: brightMirrorFictionData,
+        ...brightMirrorFictionPropsTemplate
+      };
+
+      // Mock Apollo
+      mocks = [
+        {
+          request: { query: BrightMirrorFictionQuery },
+          result: {
+            data: brightMirrorFictionData
+          }
+        }
+      ];
+
+      wrapper = mount(
+        <MockedProvider mocks={mocks}>
+          <BrightMirrorFiction {...brightMirrorFictionProps} />
+        </MockedProvider>
+      );
+    });
+
+    it('should display nothing', () => {
+      displayNothing();
+    });
   });
 
-  it('should render a FictionToolbar', () => {
-    expect(wrapper.find(FictionToolbar)).toHaveLength(1);
-  });
+  describe('when there is a loading error', () => {
+    beforeEach(() => {
+      // Define props
+      brightMirrorFictionData = {
+        ...brightMirrorFictionDataTemplate,
+        loading: false,
+        error: { dummy: 'error' } // set loading error
+      };
 
-  it('should render a FictionBody', () => {
-    expect(wrapper.find(FictionBody)).toHaveLength(1);
+      brightMirrorFictionProps = {
+        brightMirrorFictionData: brightMirrorFictionData,
+        ...brightMirrorFictionPropsTemplate
+      };
+
+      // Mock Apollo
+      mocks = [
+        {
+          request: { query: BrightMirrorFictionQuery },
+          result: {
+            data: brightMirrorFictionData
+          }
+        }
+      ];
+
+      wrapper = mount(
+        <MockedProvider mocks={mocks}>
+          <BrightMirrorFiction {...brightMirrorFictionProps} />
+        </MockedProvider>
+      );
+    });
+
+    it('should display nothing', () => {
+      displayNothing();
+    });
   });
 });
