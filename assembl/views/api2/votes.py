@@ -370,17 +370,21 @@ def extract_voters(request):
     fieldnames = ["Nom du contributeur", "Adresse mail du contributeur", "Date/heure du vote", "Proposition"]
     ideas = widget.db.query(Idea).join(AbstractVoteSpecification).filter(AbstractVoteSpecification.widget_id == widget.id).distinct().all()
     votes = widget.db.query(AbstractIdeaVote).filter(AbstractVoteSpecification.widget_id==widget.id).all()
+    votes.sort(key=lambda x: x.vote_spec_id, reverse=True)
     users = widget.db.query(User).all()
     vote_specs = widget.db.query(AbstractVoteSpecification).filter(AbstractVoteSpecification.widget_id == widget.id).all()
-    #token_category_specifications = widget.db.query(TokenCategorySpecification).filter(TokenCategorySpecification.widget_id == widget.id).all()
 
-    for vote in votes:
+    for k,vote in enumerate(votes):
         voter = m.User.get(vote.voter_id)
         contributor = voter.name or ""
         contributor_mail = voter.preferred_email or ""
         vote_date = vote.vote_date or ""
         proposition = m.Idea.get(vote.idea_id).title.best_lang(user_prefs).value or ""
         vote_value = vote.vote_value
+
+        if votes[k].vote_spec_id != votes[k-1].vote_spec_id:
+            vote_spec = m.AbstractVoteSpecification.get(votes[k].vote_spec_id)
+            fieldnames.append("  ")
 
         extract_info = {
             "Nom du contributeur": contributor.encode('utf-8'),
@@ -399,14 +403,14 @@ def extract_voters(request):
             vote_spec = m.AbstractVoteSpecification.get(vote.vote_spec_id)
             if vote_spec.type == u'number_gauge_vote_specification':
                 options = list(np.arange(vote_spec.minimum, vote_spec.maximum, vote_spec.maximum/vote_spec.nb_ticks))
-                # options_without_unit = options
+
                 for option in options:
                     if vote_value == option:
                         choice = str(option).encode('utf-8')
                     option = str(option) + " " + vote_spec.unit
                     if option not in fieldnames: 
                         fieldnames.append(option.encode('utf-8'))
-                extract_info.update({choice : 1})                        
+                extract_info.update({choice : "1"})                        
 
         extract_list.append(extract_info)
 
