@@ -23,8 +23,14 @@ class AttachmentButton extends React.Component<Props> {
   addAttachment = (values: AddAttachmentFormValues) => {
     const { closeModal, store } = this.props;
     const { getEditorState, setEditorState } = store;
-    if (getEditorState && setEditorState) {
-      setEditorState(addAttachment(getEditorState(), values));
+    if (getEditorState && setEditorState && values.file) {
+      setEditorState(
+        addAttachment(getEditorState(), {
+          mimeType: values.file.mimeType,
+          src: values.file.externalUrl,
+          title: values.file.imgTitle
+        })
+      );
     }
     closeModal();
   };

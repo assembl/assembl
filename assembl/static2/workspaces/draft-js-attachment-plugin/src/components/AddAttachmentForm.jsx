@@ -7,7 +7,11 @@ import { Translate } from 'react-redux-i18n';
 import FileUploaderFieldAdapter from '../../../../js/app/components/form/fileUploaderFieldAdapter';
 
 export type AddAttachmentFormValues = {
-  externalUrl: string
+  file: {
+    externalUrl: string,
+    imgTitle: string,
+    mimeType: string
+  }
 };
 
 type Props = {

@@ -8,11 +8,13 @@ import EditorUtils from 'assembl-editor-utils';
 
 import AttachmentButton from '../AttachmentButton';
 import AddAttachmentForm from '../AddAttachmentForm';
+import addAttachment from '../../modifiers/addAttachment';
 
 configure({ adapter: new Adapter() });
 
 jest.mock('assembl-editor-utils');
 jest.mock('../AddAttachmentForm', () => 'AddAttachmentForm');
+jest.mock('../../modifiers/addAttachment');
 
 const store = {
   getEditorState: jest.fn(),
@@ -36,41 +38,29 @@ describe('addAttachment method', () => {
     );
   });
 
-  it('should only close modal if no url is provided', () => {
-    const values = { text: 'Foo' };
+  it('should only close modal if no file is provided', () => {
+    const values = { file: null };
     wrapper.instance().addAttachment(values);
-    expect(EditorUtils.createAttachmentAtSelection).not.toHaveBeenCalled();
+    expect(addAttachment).not.toHaveBeenCalled();
     expect(closeModalSpy).toHaveBeenCalled();
   });
 
-  it('should use create a link at selection with target/text/title/url', () => {
+  it('should add an attachment', () => {
     const values = {
-      openInNewTab: true,
-      text: 'GNU is not Unix',
-      url: 'http://www.gnu.org'
+      file: {
+        externalUrl: 'my_file.jpg',
+        mimeType: 'image/jpeg',
+        imgTitle: 'My file'
+      }
     };
     wrapper.instance().addAttachment(values);
     const expectedData = {
-      target: '_blank',
-      text: 'GNU is not Unix',
-      title: 'GNU is not Unix',
-      url: 'http://www.gnu.org'
+      mimeType: 'image/jpeg',
+      src: 'my_file.jpg',
+      title: 'My file'
     };
-    expect(EditorUtils.createAttachmentAtSelection).toHaveBeenCalledWith('DUMMY_EDITOR_STATE', expectedData);
-  });
-
-  it('should use url for text and title if these are not set', () => {
-    const values = {
-      url: 'http://www.gnu.org'
-    };
-    wrapper.instance().addAttachment(values);
-    const expectedData = {
-      target: null,
-      text: 'http://www.gnu.org',
-      title: 'http://www.gnu.org',
-      url: 'http://www.gnu.org'
-    };
-    expect(EditorUtils.createAttachmentAtSelection).toHaveBeenCalledWith('DUMMY_EDITOR_STATE', expectedData);
+    expect(addAttachment).toHaveBeenCalledWith('DUMMY_EDITOR_STATE', expectedData);
+    expect(closeModalSpy).toHaveBeenCalled();
   });
 });
 
