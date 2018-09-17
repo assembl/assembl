@@ -1,4 +1,5 @@
 // @flow
+import { AtomicBlockUtils, ContentState, EditorState } from 'draft-js';
 import React from 'react';
 import { configure, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
@@ -6,6 +7,9 @@ import Adapter from 'enzyme-adapter-react-16';
 import createAttachmentPlugin from '../index';
 
 configure({ adapter: new Adapter() });
+
+jest.mock('../components/DocumentIcon', () => 'DummyDocumentIcon');
+jest.mock('../components/Image', () => 'DummyImage');
 
 describe('createAttachmentPlugin function', () => {
   it('should create a decorated attachment button', () => {
@@ -44,6 +48,76 @@ describe('createAttachmentPlugin function', () => {
     expect(wrapper.props().ownTheme).toEqual({
       button: 'my-btn',
       buttonWrapper: 'my-btn-wrapper'
+    });
+  });
+
+  describe('blockRendererFn function', () => {
+    let plugin;
+
+    beforeEach(() => {
+      const closeModalSpy = jest.fn();
+      const setModalContentSpy = jest.fn();
+      plugin = createAttachmentPlugin({
+        closeModal: closeModalSpy,
+        setModalContent: setModalContentSpy
+      });
+    });
+
+    it('should return null for non atomic blocks', () => {
+      const contentState = ContentState.createFromText('foo');
+      const editorState = EditorState.createWithContent(contentState);
+      const args = {
+        getEditorState: () => editorState,
+        setEditorState: jest.fn()
+      };
+      const block = contentState.getFirstBlock();
+      const output = plugin.blockRendererFn(block, args);
+      expect(output).toBeNull();
+    });
+
+    it('should render an atomic block with an image', () => {
+      let contentState = ContentState.createFromText('');
+      contentState = contentState.createEntity('IMAGE', 'IMMUTABLE', { src: 'my-img.png' });
+      const entityKey = contentState.getLastCreatedEntityKey();
+      let editorState = EditorState.createWithContent(contentState);
+      editorState = AtomicBlockUtils.insertAtomicBlock(editorState, entityKey, ' ');
+      contentState = editorState.getCurrentContent();
+      const blocks = contentState.getBlocksAsArray();
+      const atomicBlock = blocks[1];
+
+      const args = {
+        getEditorState: () => editorState,
+        setEditorState: jest.fn()
+      };
+      const output = plugin.blockRendererFn(atomicBlock, args);
+      expect(output).not.toBeNull();
+      if (output) {
+        expect(output.editable).toBeFalsy();
+        expect(output.component).toEqual('DummyImage');
+      }
+    });
+
+    it('should render an atomic block with a document', () => {
+      let contentState = ContentState.createFromText('');
+      // $FlowFixMe DraftEntityType is too restrictive in DraftJS (see https://github.com/facebook/draft-js/issues/868 )
+      contentState = contentState.createEntity('DOCUMENT', 'IMMUTABLE', { src: 'my-img.png' });
+      const entityKey = contentState.getLastCreatedEntityKey();
+      let editorState = EditorState.createWithContent(contentState);
+      editorState = AtomicBlockUtils.insertAtomicBlock(editorState, entityKey, ' ');
+      contentState = editorState.getCurrentContent();
+      const blocks = contentState.getBlocksAsArray();
+      const atomicBlock = blocks[1];
+
+      const args = {
+        getEditorState: () => editorState,
+        setEditorState: jest.fn()
+      };
+      const output = plugin.blockRendererFn(atomicBlock, args);
+      expect(output).not.toBeNull();
+      if (output) {
+        expect(output.editable).toBeFalsy();
+        expect(output.component).toEqual('DummyDocumentIcon');
+      }
     });
   });
 });

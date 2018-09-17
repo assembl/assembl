@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DocumentIcon component should render a document icon 1`] = `
+<div
+  className="atomic-block"
+  data-blocktype="atomic"
+>
+  <img
+    alt="unknown"
+    className="attachment-icon"
+    src="/static2/img/icons/black/doc.svg"
+  />
+</div>
+`;
