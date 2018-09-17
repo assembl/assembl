@@ -27,7 +27,9 @@ const brightMirrorFictionPropsTemplate = {
   phase: 'hic',
   themeId: 'nihil',
   fictionId: 'deleniti',
-  contentLocale: 'en'
+  contentLocale: 'en',
+  // Mutation function
+  createComment: undefined
 };
 
 const brightMirrorFictionDataTemplate = {

@@ -6,6 +6,7 @@ import { I18n } from 'react-redux-i18n';
 // Graphql imports
 import { compose, graphql } from 'react-apollo';
 import BrightMirrorFictionQuery from '../graphql/BrightMirrorFictionQuery.graphql';
+import CreatePostMutation from '../graphql/mutations/createPost.graphql';
 // Route helpers imports
 import { browserHistory } from '../router';
 import { get } from '../utils/routeMap';
@@ -27,7 +28,6 @@ import type { FictionHeaderProps } from '../components/debate/brightMirror/ficti
 import type { FictionToolbarProps } from '../components/debate/brightMirror/fictionToolbar';
 import type { FictionBodyProps } from '../components/debate/brightMirror/fictionBody';
 import type { FictionCommentFormProps } from '../components/debate/brightMirror/fictionCommentForm';
-// import type { FictionCommentFormResultType } from '../components/debate/brightMirror/fictionCommentForm';
 
 // Define types
 export type BrightMirrorFictionProps = {
@@ -58,7 +58,21 @@ export type BrightMirrorFictionData = {
 
 type BrightMirrorFictionGraphQLProps = {
   /** Fiction data information fetched from GraphQL */
-  brightMirrorFictionData: BrightMirrorFictionData
+  brightMirrorFictionData: BrightMirrorFictionData,
+  /** Create comment mutation from GraphQL */
+  createComment: Function
+};
+
+// Type use for creating a Bright Mirror comment with CreateCommentMutation
+type CreateCommentInputs = {
+  /** Comment body content */
+  body: string,
+  /** Comment content locale */
+  contentLocale: string,
+  /** Comment idea identifier */
+  ideaId: string,
+  /** Comment parent identifier */
+  parentId: string
 };
 
 type LocalBrightMirrorFictionProps = BrightMirrorFictionProps & BrightMirrorFictionReduxProps & BrightMirrorFictionGraphQLProps;
@@ -79,8 +93,6 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
   constructor(props: LocalBrightMirrorFictionProps) {
     super(props);
     this.state = {
-      // title: props.brightMirrorFictionData.fiction.subject ? props.brightMirrorFictionData.fiction.subject : EMPTY_STRING,
-      // content: props.brightMirrorFictionData.fiction.body ? props.brightMirrorFictionData.fiction.body : EMPTY_STRING
       title: EMPTY_STRING,
       content: EMPTY_STRING,
       loading: props.brightMirrorFictionData.loading
@@ -98,17 +110,29 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
   }
 
   // Define callback functions
-  // submitCommentHandler = (callbackResult: FictionCommentFormResultType) => {
-  //   // const { post, error } = callbackResult;
-  //   const { error } = callbackResult;
+  submitCommentHandler = (comment: string) => {
+    displayAlert('success', I18n.t('loading.wait'));
 
-  //   if (error !== undefined) {
-  //     displayAlert('success', I18n.t('debate.thread.postSuccess'));
-  //     // Update UI
-  //   } else {
-  //     displayAlert('danger', `${error}`);
-  //   }
-  // };
+    // Define variables
+    const { contentLocale, themeId, fictionId, createComment } = this.props;
+    const createPostInputs: CreateCommentInputs = {
+      body: comment,
+      contentLocale: contentLocale,
+      ideaId: themeId,
+      parentId: fictionId
+    };
+
+    // Call the mutation function to create a comment
+    createComment({ variables: createPostInputs })
+      .then(() => {
+        // If needed post result can be fetch with `result.data.createPost.post`
+        displayAlert('success', I18n.t('debate.thread.postSuccess'));
+        // Set state here to update UI
+      })
+      .catch((error) => {
+        displayAlert('danger', `${error}`);
+      });
+  };
 
   render() {
     const { title, content, loading, publicationState } = this.state;
@@ -186,16 +210,8 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
     };
 
     const fictionCommentFormProps: FictionCommentFormProps = {
-      onCancelCommentCallback: undefined,
-      onSubmitCommentCallback: undefined
+      onSubmitCommentCallback: this.submitCommentHandler
     };
-
-    // const fictionThreadViewProps: FictionThreadViewProps = {
-    //   contentLocale: contentLocale,
-    //   ideaId: themeId,
-    //   parentId: fictionId,
-    //   onSubmitCommentCallback: this.submitCommentHandler
-    // };
 
     return (
       <Fragment>
@@ -241,5 +257,6 @@ export default compose(
         contentLocale: contentLocale
       }
     })
-  })
+  }),
+  graphql(CreatePostMutation, { name: 'createComment' })
 )(BrightMirrorFiction);
