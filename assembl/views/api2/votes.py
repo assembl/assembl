@@ -21,6 +21,7 @@ from assembl.models import (
     NumberGaugeVoteSpecification, TokenVoteSpecification, LanguagePreferenceCollection)
 from assembl.lib.sqla import get_named_class
 from . import (FORM_HEADER, JSON_HEADER, check_permissions)
+from assembl.views.api2.discussion import csv_response, CSV_MIMETYPE
 
 
 # Votes are private
@@ -349,3 +350,65 @@ def global_vote_results_csv(request):
         csvw.writerow(row)
     output.seek(0)
     return Response(body_file=output, content_type='text/csv', content_disposition='attachment; filename="vote_results.csv')
+
+
+@view_config(context=InstanceContext, name="extract_csv_voters",
+             ctx_instance_class=VotingWidget, request_method='GET',
+             permission=P_DISC_STATS)
+def extract_voters(request):
+    import assembl.models as m
+    import numpy as np
+    extract_list = []
+    ctx = request.context
+    widget = ctx._instance
+    if widget.activity_state != "ended":
+        permissions = get_permissions(user_id, ctx.get_discussion_id())
+        if P_ADMIN_DISC not in permissions:
+            raise HTTPUnauthorized()
+    user_prefs = LanguagePreferenceCollection.getCurrent()
+    db = widget.db
+    fieldnames = ["Nom du contributeur", "Adresse mail du contributeur", "Date/heure du vote", "Proposition"]
+    ideas = widget.db.query(Idea).join(AbstractVoteSpecification).filter(AbstractVoteSpecification.widget_id == widget.id).distinct().all()
+    votes = widget.db.query(AbstractIdeaVote).filter(AbstractVoteSpecification.widget_id==widget.id).all()
+    users = widget.db.query(User).all()
+    vote_specs = widget.db.query(AbstractVoteSpecification).filter(AbstractVoteSpecification.widget_id == widget.id).all()
+    #token_category_specifications = widget.db.query(TokenCategorySpecification).filter(TokenCategorySpecification.widget_id == widget.id).all()
+
+    for vote in votes:
+        voter = m.User.get(vote.voter_id)
+        contributor = voter.name or ""
+        contributor_mail = voter.preferred_email or ""
+        vote_date = vote.vote_date or ""
+        proposition = m.Idea.get(vote.idea_id).title.best_lang(user_prefs).value or ""
+        vote_value = vote.vote_value
+
+        extract_info = {
+            "Nom du contributeur": contributor.encode('utf-8'),
+            "Adresse mail du contributeur": contributor_mail.encode('utf-8'),
+            "Date/heure du vote": str(vote_date).encode('utf-8'),
+            "Proposition": proposition.encode('utf-8'),
+        }
+
+        if vote.type == u'token_idea_vote':
+            token_category = m.TokenCategorySpecification.get(vote.token_category_id).name.best_lang(user_prefs).value or ""
+            if token_category not in fieldnames:
+                fieldnames.append(token_category.encode('utf-8'))
+            extract_info.update({token_category : str(vote_value).encode('utf-8')})
+
+        if vote.type == u'gauge_idea_vote':
+            vote_spec = m.AbstractVoteSpecification.get(vote.vote_spec_id)
+            if vote_spec.type == u'number_gauge_vote_specification':
+                options = list(np.arange(vote_spec.minimum, vote_spec.maximum, vote_spec.maximum/vote_spec.nb_ticks))
+                # options_without_unit = options
+                for option in options:
+                    if vote_value == option:
+                        choice = str(option).encode('utf-8')
+                    option = str(option) + " " + vote_spec.unit
+                    if option not in fieldnames: 
+                        fieldnames.append(option.encode('utf-8'))
+                extract_info.update({choice : 1})                        
+
+        extract_list.append(extract_info)
+
+    return csv_response(extract_list, CSV_MIMETYPE, fieldnames)
+
