@@ -10,12 +10,12 @@ import createCounterPlugin from 'draft-js-counter-plugin';
 
 // from our workspaces
 /* eslint-disable import/no-extraneous-dependencies */
+import createAttachmentPlugin from 'draft-js-attachment-plugin';
 import createLinkPlugin from 'draft-js-link-plugin';
 import createModalPlugin from 'draft-js-modal-plugin';
 /* eslint-enable import/no-extraneous-dependencies */
 
-import AtomicBlockRenderer from './atomicBlockRenderer';
-import EditAttachments from '../editAttachments';
+// import EditAttachments from '../editAttachments';
 import attachmentsPlugin from './attachmentsPlugin';
 
 type DraftPlugin = any;
@@ -27,31 +27,18 @@ type Props = {
   onChange: Function,
   placeholder?: string,
   textareaRef?: Function,
-  toolbarPosition: string
-  // withAttachmentButton: boolean
+  toolbarPosition: string,
+  withAttachmentButton: boolean
 };
 
 type State = {
   editorHasFocus: boolean
 };
 
-function customBlockRenderer(block) {
-  if (block.getType() === 'atomic') {
-    return {
-      component: AtomicBlockRenderer,
-      editable: false
-    };
-  }
-
-  return null;
-}
-
 const ToolbarSeparator = () => <span className="separator" />;
 
 export default class RichTextEditor extends React.Component<Props, State> {
   editor: ?Editor;
-
-  modal: ?{ current: null | React.ElementRef<any> };
 
   plugins: Array<DraftPlugin>;
 
@@ -69,13 +56,28 @@ export default class RichTextEditor extends React.Component<Props, State> {
     const modalPlugin = createModalPlugin();
     const { closeModal, setModalContent, Modal } = modalPlugin;
     const counterPlugin = createCounterPlugin();
-    const linkPlugin = createLinkPlugin({
+    const modalConfig = {
       closeModal: closeModal,
       setModalContent: setModalContent
+    };
+    const linkPlugin = createLinkPlugin({
+      ...modalConfig
     });
     const { LinkButton } = linkPlugin;
+
+    const toolbarStructure = [BoldButton, ItalicButton, UnorderedListButton, ToolbarSeparator, LinkButton, ToolbarSeparator];
+    const plugins = [counterPlugin, linkPlugin];
+    if (props.withAttachmentButton) {
+      const attachmentPlugin = createAttachmentPlugin({
+        ...modalConfig
+      });
+      const { AttachmentButton } = attachmentPlugin;
+      toolbarStructure.push(AttachmentButton);
+      plugins.push(attachmentPlugin);
+    }
+
     const staticToolbarPlugin = createToolbarPlugin({
-      structure: [BoldButton, ItalicButton, UnorderedListButton, ToolbarSeparator, LinkButton],
+      structure: toolbarStructure,
       // we need this for toolbar plugin to add css classes to buttons and toolbar
       theme: {
         buttonStyles: {
@@ -88,9 +90,9 @@ export default class RichTextEditor extends React.Component<Props, State> {
         }
       }
     });
+    plugins.push(staticToolbarPlugin);
 
-    this.plugins = [counterPlugin, linkPlugin, staticToolbarPlugin];
-
+    this.plugins = plugins;
     const { CustomCounter } = counterPlugin;
     const { Toolbar } = staticToolbarPlugin;
     this.components = {
@@ -169,7 +171,6 @@ export default class RichTextEditor extends React.Component<Props, State> {
   render() {
     const { editorState, maxLength, onChange, placeholder, textareaRef, toolbarPosition } = this.props;
     const divClassName = classNames('rich-text-editor', { hidePlaceholder: this.shouldHidePlaceholder() });
-    const attachments = attachmentsPlugin.getAttachments(editorState);
     const { CustomCounter, Modal, Toolbar } = this.components;
     return (
       <div className={divClassName} ref={textareaRef}>
@@ -181,10 +182,8 @@ export default class RichTextEditor extends React.Component<Props, State> {
         <Modal />
         <div onClick={this.focusEditor}>
           <Editor
-            blockRendererFn={customBlockRenderer}
             editorState={editorState}
             onChange={onChange}
-            onFocus={this.handleEditorFocus}
             placeholder={placeholder}
             plugins={this.plugins}
             ref={(e) => {
@@ -200,8 +199,6 @@ export default class RichTextEditor extends React.Component<Props, State> {
           </div>
         ) : null}
         {toolbarPosition === 'bottom' ? <Toolbar /> : null}
-
-        <EditAttachments attachments={attachments} onDelete={this.deleteAttachment} />
       </div>
     );
   }
