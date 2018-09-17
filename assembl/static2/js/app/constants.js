@@ -85,6 +85,8 @@ export const COOKIE_TYPES = [
   'REJECT_CGU'
 ];
 
+export const TO_ACCEPT = ['ACCEPT_CGU', 'ACCEPT_PRIVACY_POLICY_ON_DISCUSSION', 'ACCEPT_USER_GUIDELINE_ON_DISCUSSION'];
+
 export const COOKIE_TRANSLATION_KEYS = {
   userSession: 'userSession',
   locale: 'locale',
