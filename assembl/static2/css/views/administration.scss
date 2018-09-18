@@ -190,7 +190,7 @@
     background-color: $white;
 
     .dark-title-3 {
-      font-size: 20px;
+      font-size: 18px;
       padding: 40px 50px 0;
       font-weight: bold;
     }
@@ -281,7 +281,11 @@
 
     .form-control {
       font-size: 12px;
-      padding-left: 8px;
+    }
+
+    .form-control::placeholder {
+      font-size: 12px;
+      font-family: $font-family6;
     }
   }
 
@@ -446,8 +450,8 @@
   }
 
   label {
-    font-family: $font-family4;
-    font-size: $font-size-xs;
+    font-family: $font-family7;
+    font-size: 11px;
     margin: 0 0 5px 5px;
   }
 
@@ -569,7 +573,7 @@
       display: flex;
       flex-direction: column;
       padding: 0 45px;
-      font-size: $font-size-xs;
+      font-size: $font-size-s;
       color: $grey3;
       font-family: $font-family4;
 
@@ -620,6 +624,7 @@
     .phase-side-title {
       margin-left: -70px;
       margin-top: 30px;
+      font-size: 12px;
     }
 
     .phase-side-title-low {
