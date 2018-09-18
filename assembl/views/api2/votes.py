@@ -374,7 +374,7 @@ def extract_voters(request):
     users = widget.db.query(User).all()
     vote_specs = widget.db.query(AbstractVoteSpecification).filter(AbstractVoteSpecification.widget_id == widget.id).all()
 
-    for k,vote in enumerate(votes):
+    for count,vote in enumerate(votes):
         voter = m.User.get(vote.voter_id)
         contributor = voter.name or ""
         contributor_mail = voter.preferred_email or ""
@@ -382,8 +382,8 @@ def extract_voters(request):
         proposition = m.Idea.get(vote.idea_id).title.best_lang(user_prefs).value or ""
         vote_value = vote.vote_value
 
-        if votes[k].vote_spec_id != votes[k-1].vote_spec_id:
-            vote_spec = m.AbstractVoteSpecification.get(votes[k].vote_spec_id)
+        if votes[count].vote_spec_id != votes[count-1].vote_spec_id:
+            vote_spec = m.AbstractVoteSpecification.get(votes[count].vote_spec_id)
             fieldnames.append("  ")
 
         extract_info = {
