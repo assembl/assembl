@@ -15,7 +15,7 @@ const DocumentIcon = ({ block, contentState }: { block: ContentBlock, contentSta
     const extension = getFileExtension(data.title);
     const iconPath = getDocumentIconPath(extension);
     return (
-      <div className="atomic-block" data-blocktype="atomic">
+      <div className="atomic-block" data-blocktype="atomic" title={data.title}>
         <img className="attachment-icon" src={iconPath} alt={extension} />
       </div>
     );

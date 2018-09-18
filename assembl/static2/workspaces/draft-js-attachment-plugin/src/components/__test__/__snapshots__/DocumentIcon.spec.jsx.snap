@@ -4,6 +4,7 @@ exports[`DocumentIcon component should render a document icon 1`] = `
 <div
   className="atomic-block"
   data-blocktype="atomic"
+  title="My file"
 >
   <img
     alt="unknown"
