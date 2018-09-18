@@ -5,14 +5,16 @@ import { configure, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 
 import createAttachmentPlugin from '../index';
+import removeAttachment from '../modifiers/removeAttachment';
 
 configure({ adapter: new Adapter() });
 
 jest.mock('../components/DocumentIcon', () => 'DummyDocumentIcon');
 jest.mock('../components/Image', () => 'DummyImage');
+jest.mock('../modifiers/removeAttachment');
 
 describe('createAttachmentPlugin function', () => {
-  it('should create a decorated attachment button', () => {
+  it('should provides a decorated attachment button', () => {
     const closeModalSpy = jest.fn();
     const setModalContentSpy = jest.fn();
     const plugin = createAttachmentPlugin({
@@ -49,6 +51,29 @@ describe('createAttachmentPlugin function', () => {
       button: 'my-btn',
       buttonWrapper: 'my-btn-wrapper'
     });
+  });
+
+  it('should provides a decorated Attachments component', () => {
+    const plugin = createAttachmentPlugin({
+      closeModal: jest.fn(),
+      setModalContent: jest.fn(),
+      theme: {
+        button: 'my-btn',
+        buttonWrapper: 'my-btn-wrapper'
+      }
+    });
+    const getEditorStateSpy = jest.fn();
+    const setEditorStateSpy = jest.fn();
+    plugin.initialize({
+      getEditorState: getEditorStateSpy,
+      setEditorState: setEditorStateSpy
+    });
+    const DecoratedAttachments = plugin.Attachments;
+    const wrapper = shallow(<DecoratedAttachments />);
+    wrapper.props().store.getEditorState();
+    expect(getEditorStateSpy).toHaveBeenCalled();
+    wrapper.props().removeAttachment({ blockKey: 'block', entityKey: '0' });
+    expect(removeAttachment).toHaveBeenCalledWith({ blockKey: 'block', entityKey: '0' });
   });
 
   describe('blockRendererFn function', () => {

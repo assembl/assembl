@@ -15,7 +15,6 @@ import createLinkPlugin from 'draft-js-link-plugin';
 import createModalPlugin from 'draft-js-modal-plugin';
 /* eslint-enable import/no-extraneous-dependencies */
 
-// import EditAttachments from '../editAttachments';
 import attachmentsPlugin from './attachmentsPlugin';
 
 type DraftPlugin = any;
@@ -65,15 +64,17 @@ export default class RichTextEditor extends React.Component<Props, State> {
     });
     const { LinkButton } = linkPlugin;
 
+    const components = {};
     const toolbarStructure = [BoldButton, ItalicButton, UnorderedListButton, ToolbarSeparator, LinkButton, ToolbarSeparator];
     const plugins = [counterPlugin, linkPlugin];
     if (props.withAttachmentButton) {
       const attachmentPlugin = createAttachmentPlugin({
         ...modalConfig
       });
-      const { AttachmentButton } = attachmentPlugin;
+      const { AttachmentButton, Attachments } = attachmentPlugin;
       toolbarStructure.push(AttachmentButton);
       plugins.push(attachmentPlugin);
+      components.Attachments = Attachments;
     }
 
     const staticToolbarPlugin = createToolbarPlugin({
@@ -98,7 +99,8 @@ export default class RichTextEditor extends React.Component<Props, State> {
     this.components = {
       CustomCounter: CustomCounter,
       Modal: Modal,
-      Toolbar: Toolbar
+      Toolbar: Toolbar,
+      ...components
     };
 
     this.state = {
@@ -171,7 +173,7 @@ export default class RichTextEditor extends React.Component<Props, State> {
   render() {
     const { editorState, maxLength, onChange, placeholder, textareaRef, toolbarPosition } = this.props;
     const divClassName = classNames('rich-text-editor', { hidePlaceholder: this.shouldHidePlaceholder() });
-    const { CustomCounter, Modal, Toolbar } = this.components;
+    const { Attachments, CustomCounter, Modal, Toolbar } = this.components;
     return (
       <div className={divClassName} ref={textareaRef}>
         <div className="editor-header">
@@ -199,6 +201,7 @@ export default class RichTextEditor extends React.Component<Props, State> {
           </div>
         ) : null}
         {toolbarPosition === 'bottom' ? <Toolbar /> : null}
+        {Attachments ? <Attachments /> : null}
       </div>
     );
   }

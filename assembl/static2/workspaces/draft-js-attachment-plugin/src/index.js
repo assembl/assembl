@@ -6,8 +6,10 @@ import get from 'lodash/get';
 
 import linkConverters from './converters';
 import AttachmentButton from './components/AttachmentButton';
+import Attachments from './components/Attachments';
 import DocumentIcon from './components/DocumentIcon';
 import Image from './components/Image';
+import removeAttachment from './modifiers/removeAttachment';
 
 type GetEditorState = void => EditorState;
 type SetEditorState = EditorState => void;
@@ -73,6 +75,11 @@ export default (config: Config) => {
       closeModal: closeModal,
       setModalContent: setModalContent,
       ownTheme: theme,
+      store: store
+    }),
+
+    Attachments: decorateComponentWithProps(Attachments, {
+      removeAttachment: removeAttachment,
       store: store
     })
   };
