@@ -860,7 +860,7 @@ class User(AgentProfile):
 
     @property
     def user_last_accepted_privacy_policy_date(self):
-        self.last_accepted_privacy_policy_date
+        return self.last_accepted_privacy_policy_date
 
     @user_last_accepted_privacy_policy_date.setter
     def user_last_accepted_privacy_policy_date(self, date=None):
@@ -869,7 +869,7 @@ class User(AgentProfile):
 
     @property
     def user_last_accepted_user_guideline_date(self):
-        self.last_accepted_user_guideline_date
+        return self.last_accepted_user_guideline_date
 
     @user_last_accepted_user_guideline_date.setter
     def user_last_accepted_user_guideline_date(self, date=None):
@@ -878,7 +878,7 @@ class User(AgentProfile):
 
     @property
     def user_last_rejected_cgu_date(self):
-        self.last_rejected_cgu_date
+        return self.last_rejected_cgu_date
 
     @user_last_rejected_cgu_date.setter
     def user_last_rejected_cgu_date(self, date=None):
@@ -887,7 +887,7 @@ class User(AgentProfile):
 
     @property
     def user_last_rejected_privacy_policy_date(self):
-        self.last_rejected_privacy_policy_date
+        return self.last_rejected_privacy_policy_date
 
     @user_last_rejected_privacy_policy_date.setter
     def user_last_rejected_privacy_policy_date(self, date=None):
@@ -896,7 +896,7 @@ class User(AgentProfile):
 
     @property
     def user_last_rejected_user_guideline_date(self):
-        self.last_rejected_user_guideline_date
+        return self.last_rejected_user_guideline_date
 
     @user_last_rejected_user_guideline_date.setter
     def user_last_rejected_user_guideline_date(self, date=None):
