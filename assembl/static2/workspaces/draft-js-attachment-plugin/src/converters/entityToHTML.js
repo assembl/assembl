@@ -1,7 +1,8 @@
 // @flow
 import { type EntityInstance } from 'draft-js';
 
-import { getExtension, getIconPath } from '../utils';
+import getDocumentIconPath from '../utils/getDocumentIconPath';
+import getFileExtension from '../utils/getFileExtension';
 
 export default function entityToHTML(entity: EntityInstance): string {
   const { id } = entity.data;
@@ -15,8 +16,8 @@ export default function entityToHTML(entity: EntityInstance): string {
     );
   }
 
-  const extension = getExtension(title);
-  const iconPath = getIconPath(extension);
+  const extension = getFileExtension(title);
+  const iconPath = getDocumentIconPath(extension);
   return (
     `<a href="${externalUrl}" title="${title}">` +
     `<img class="attachment-icon" alt="${extension}" src="${iconPath}" data-id="${id}" data-mimetype="${mimeType}"` +
