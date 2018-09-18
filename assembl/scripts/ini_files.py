@@ -9,7 +9,7 @@ from ConfigParser import (
 from argparse import ArgumentParser, FileType
 import logging
 
-from fabfile import combine_rc
+from ..fabfile import combine_rc
 
 # global umask so ini files are unreadable by others
 os.umask(0o027)
