@@ -22,7 +22,7 @@ from assembl.models import (
 from assembl.lib.sqla import get_named_class
 from . import (FORM_HEADER, JSON_HEADER, check_permissions)
 from assembl.views.api2.discussion import csv_response, CSV_MIMETYPE
-
+from assembl.views.api2.utils import frange
 
 # Votes are private
 @view_config(context=CollectionContext, renderer='json',
@@ -382,8 +382,7 @@ def extract_voters(request):
         proposition = m.Idea.get(vote.idea_id).title.best_lang(user_prefs).value or ""
         vote_value = vote.vote_value
 
-        if votes[count].vote_spec_id != votes[count-1].vote_spec_id:
-            vote_spec = m.AbstractVoteSpecification.get(votes[count].vote_spec_id)
+        if votes[count].vote_spec_id != votes[count-1].vote_spec_id and fieldnames[-1] != "  ":
             fieldnames.append("  ")
 
         extract_info = {
@@ -402,7 +401,7 @@ def extract_voters(request):
         if vote.type == u'gauge_idea_vote':
             vote_spec = m.AbstractVoteSpecification.get(vote.vote_spec_id)
             if vote_spec.type == u'number_gauge_vote_specification':
-                options = list(np.arange(vote_spec.minimum, vote_spec.maximum, vote_spec.maximum/vote_spec.nb_ticks))
+                options = list(frange(vote_spec.minimum, vote_spec.maximum, vote_spec.maximum/vote_spec.nb_ticks))
 
                 for option in options:
                     if vote_value == option:
