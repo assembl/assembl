@@ -12,6 +12,7 @@ describe('Bright Mirror page', () => {
 
     const timeline = [
       {
+        id: 'RGlzY3Vzc2lvblBoYXNlOjI=',
         identifier: 'brightMirror',
         start: '1900-01-01T02:00:00Z',
         end: '2200-01-01T00:00:00Z',
@@ -28,7 +29,8 @@ describe('Bright Mirror page', () => {
       refetchIdea: Function,
       posts: [],
       timeline: timeline,
-      identifier: 'brightMirror'
+      identifier: 'brightMirror',
+      phaseId: 'RGlzY3Vzc2lvblBoYXNlOjI='
     };
     const shallowRenderer = new ShallowRenderer();
     shallowRenderer.render(<InstructionView {...props} />);
@@ -39,6 +41,7 @@ describe('Bright Mirror page', () => {
   it('should hide fiction creation section if timeline is over', () => {
     const timeline = [
       {
+        id: 'RGlzY3Vzc2lvblBoYXNlOjI=',
         identifier: 'brightMirror',
         start: '1900-01-01T02:00:00Z',
         end: '2000-01-01T00:00:00Z',
@@ -55,7 +58,8 @@ describe('Bright Mirror page', () => {
       refetchIdea: Function,
       posts: [],
       timeline: timeline,
-      identifier: 'brightMirror'
+      identifier: 'brightMirror',
+      phaseId: 'RGlzY3Vzc2lvblBoYXNlOjI='
     };
     const shallowRenderer = new ShallowRenderer();
     shallowRenderer.render(<InstructionView {...props} />);
@@ -68,6 +72,7 @@ describe('Bright Mirror page', () => {
 
     const timeline = [
       {
+        id: 'RGlzY3Vzc2lvblBoYXNlOjI=',
         identifier: 'brightMirror',
         start: '1900-01-01T02:00:00Z',
         end: '2200-01-01T00:00:00Z',
@@ -84,7 +89,8 @@ describe('Bright Mirror page', () => {
       refetchIdea: Function,
       posts: [],
       timeline: timeline,
-      identifier: 'brightMirror'
+      identifier: 'brightMirror',
+      phaseId: 'RGlzY3Vzc2lvblBoYXNlOjI='
     };
     const shallowRenderer = new ShallowRenderer();
     shallowRenderer.render(<InstructionView {...props} />);
@@ -95,6 +101,7 @@ describe('Bright Mirror page', () => {
   it('should hide fiction creation section if user is not connected', () => {
     const timeline = [
       {
+        id: 'RGlzY3Vzc2lvblBoYXNlOjI=',
         identifier: 'brightMirror',
         start: '1900-01-01T02:00:00Z',
         end: '2000-01-01T00:00:00Z',
@@ -111,7 +118,8 @@ describe('Bright Mirror page', () => {
       refetchIdea: Function,
       posts: [],
       timeline: timeline,
-      identifier: 'brightMirror'
+      identifier: 'brightMirror',
+      phaseId: 'RGlzY3Vzc2lvblBoYXNlOjI='
     };
     const shallowRenderer = new ShallowRenderer();
     shallowRenderer.render(<InstructionView {...props} />);

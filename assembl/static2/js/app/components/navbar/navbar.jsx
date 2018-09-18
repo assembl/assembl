@@ -134,13 +134,8 @@ export class AssemblNavbar extends React.PureComponent<AssemblNavbarProps, Assem
     const flatWidth = (this.state && this.state.flatWidth) || 0;
     const maxAppWidth = Math.min(APP_CONTAINER_MAX_WIDTH, screenWidth) - APP_CONTAINER_PADDING * 2;
     const screenTooSmall = flatWidth > maxAppWidth;
-<<<<<<< HEAD
     const filteredSections = sections.filter(sectionFilter(sectionData)).sort((a, b) => a.order - b.order);
-    const currentPhase = getCurrentPhase(timeline);
-=======
-    const filteredSections = sections.filter(sectionFilter(data)).sort((a, b) => a.order - b.order);
     const { currentPhaseIdentifier, currentPhaseId } = getCurrentPhaseData(timeline);
->>>>>>> refactoring and cleanup
     const mapOptions = {
       slug: slug,
       phase: currentPhaseIdentifier,
