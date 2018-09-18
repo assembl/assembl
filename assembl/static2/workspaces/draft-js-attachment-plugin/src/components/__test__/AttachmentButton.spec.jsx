@@ -116,19 +116,4 @@ describe('AttachmentButton component', () => {
     const tree = component.toJSON();
     expect(tree).toMatchSnapshot();
   });
-
-  // it('should render an active AttachmentButton if selection is on a link', () => {
-  //   EditorUtils.hasEntity.mockReturnValue(true);
-  //   const props = {
-  //     modal: {
-  //       current: null
-  //     },
-  //     // onRemoveLinkAtSelection: onRemoveLinkAtSelectionSpy,
-  //     store: store,
-  //     theme: theme
-  //   };
-  //   const component = renderer.create(<LinkButton {...props} />);
-  //   const tree = component.toJSON();
-  //   expect(tree).toMatchSnapshot();
-  // });
 });
