@@ -31,17 +31,17 @@ before_install:
  - ssh-keygen -P '' -f ~/.ssh/id_rsa && cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
  - echo -e "_extends = ./testing.rc\n_gitbranch = $TRAVIS_COMMIT\nsqlalchemy.echo = False" > configs/travis.rc
  # The following line produces warning "uses weak digest algorithm" during its `apt-get update`
- - fab -c configs/travis.rc install_assembl_server_deps
- - fab -c configs/travis.rc install_redis
- - fab -c configs/travis.rc install_memcached
+ - fab -f assembl/fabfile.py -c configs/travis.rc install_assembl_server_deps
+ - fab -f assembl/fabfile.py -c configs/travis.rc install_redis
+ - fab -f assembl/fabfile.py -f assembl/fabfile.py -c configs/travis.rc install_memcached
 install:
  # The set_file_permissions fabric command needs to be encapsulated into this sudo su command, because in before_install we have added $USER in www-data group but have not logged out and logged in again for changes to take effect in this terminal
- - sudo -E su $USER -c 'fab -c configs/travis.rc set_file_permissions'
+ - sudo -E su $USER -c 'fab -f assembl/fabfile.py -c configs/travis.rc set_file_permissions'
  # TODO: fix fabfile's check_and_create_database_user command which produces an error when run by travis. For now we instead run the following command
  - pip install psycopg2
  - python2 $PWD/assembl/scripts/pypsql.py -u postgres -n localhost  "CREATE USER assembl_test WITH CREATEDB ENCRYPTED PASSWORD 'assembl_test'; COMMIT;"
  # The following command runs lots of sub-commands. After the following line has completed, approximately 10min have elapsed from the very beginning of the build
- - fab -c configs/travis.rc bootstrap_from_checkout
+ - fab -f assembl/fabfile.py -c configs/travis.rc bootstrap_from_checkout
 #before_script:
   #- source $VIRTUAL_ENV/bin/activate
   # In jenkins, we were running the following commented steps at each build, in order to correctly update the already existing instance of Assembl (it was not built from zero each time). So should we do this for travis if we use more travis caching?
