@@ -43,7 +43,7 @@ describe('ExportSection component', () => {
     const props = {
       voteSessionId: '123',
       debateId: '7',
-      exportLink: [{ msgId: 'vote.vote_results_csv', url: 'foo.com' }, { msgId: 'vote.extract_csv_voters', url: 'bar.org' }]
+      exportLink: [{ msgId: 'vote.voteResultsCsv', url: 'foo.com' }, { msgId: 'vote.extractCsvVoters', url: 'bar.org' }]
     };
     const component = renderer.create(<ExportSection {...props} />);
     const tree = component.toJSON();
@@ -56,11 +56,11 @@ describe('ExportSection component', () => {
       debateId: '7',
       exportLink: [
         {
-          msgId: 'vote.vote_results_csv',
+          msgId: 'vote.voteResultsCsv',
           url: 'http://url/to/vote_results_csv'
         },
         {
-          msgId: 'vote.extract_csv_voters',
+          msgId: 'vote.extractCsvVoters',
           url: 'http://url/to/extract_csv_voters'
         }
       ]

@@ -786,8 +786,8 @@ const Translations = {
         translateTheMessagesIn: "Traduire l'ensemble des messages en :",
         anonymous: "Rendre les données anonymes",
         vote: {
-          vote_results_csv: "Exporter les données générales du module de vote",
-          extract_csv_voters: "Exporter les détails de vote de chaque utilisateur"
+          voteResultsCsv: "Exporter les données générales du module de vote",
+          extractCsvVoters: "Exporter les détails de vote de chaque utilisateur"
         }
       },
       step_x_total: "Section %{num} sur %{total}",
@@ -1644,8 +1644,8 @@ const Translations = {
         translateTheMessagesIn: "Translate the messages in:",
         anonymous: "Make the data anonymous",
         vote: {
-          vote_results_csv: "Export general data for the vote module",
-          extract_csv_voters: "Export vote details for each user"
+          voteResultsCsv: "Export general data for the vote module",
+          extractCsvVoters: "Export vote details for each user"
         }
       },
       step_x_total: "Section %{num} on %{total}",
