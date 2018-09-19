@@ -145,8 +145,9 @@ def generate_ini_files(config, config_fname):
                 vars[name] = val
 
     for fname in ('supervisord.conf',):
+        templateloc = join(dirname(dirname(__file__)), 'templates', 'system', fname + '.tmpl')
         print fname
-        with open(fname + '.tmpl') as tmpl, open(fname, 'w') as inifile:
+        with open(templateloc) as tmpl, open(fname, 'w') as inifile:
             inifile.write(tmpl.read() % vars)
 
 
@@ -218,6 +219,8 @@ def populate_random(random_file, random_templates=None, saml_info=None):
     base = Parser()
     assert random_templates, "Please give one or more templates"
     for template in random_templates:
+        if (not exists(template)):
+            template = join(dirname(dirname(__file__)), 'templates', 'system', template)
         assert exists(template), "Cannot find template " + template
         base.read(template)
     existing = Parser()
