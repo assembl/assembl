@@ -3,7 +3,7 @@ file=%(here)s/var/run/supervisor.sock
 chmod=0700
 
 [supervisord]
-logfile = %(here)s/var/log/supervisord.log
+logfile = %(log_dir)s/supervisord.log
 logfile_maxbytes = 50MB
 logfile_backups=10
 loglevel = info
@@ -14,7 +14,7 @@ minprocs = 200
 umask = 022
 identifier = supervisor
 nocleanup = true
-childlogdir = /tmp
+childlogdir = %(log_dir)s
 environment = VIRTUAL_ENV="%(VIRTUAL_ENV)s",PATH="%(VIRTUAL_ENV)s/bin:%%(ENV_PATH)s"
 
 [supervisorctl]
@@ -34,6 +34,12 @@ stopwaitsecs = 60
 # If the process didn't kill it's children after 60 seconds, it's unlikely to
 # ever reap them, so kill them all
 killasgroup = true
+stdout_logfile = %(log_dir)s/celery.log
+stdout_logfile_maxbytes = %(sup_log_size_celery_out)s
+stdout_logfile_backups = %(sup_log_backups_celery_out)s
+stderr_logfile = %(log_dir)s/celery.err
+stderr_logfile_maxbytes = %(sup_log_size_celery_err)s
+stderr_logfile_backups = %(sup_log_backups_celery_err)s
 
 [program:source_reader]
 directory = %(here)s
@@ -44,6 +50,12 @@ startsecs = 2
 stopasgroup = false
 stopwaitsecs = 60
 killasgroup = true
+stdout_logfile = %(log_dir)s/source_reader.log
+stdout_logfile_maxbytes = %(sup_log_size_source_reader_out)s
+stdout_logfile_backups = %(sup_log_backups_source_reader_out)s
+stderr_logfile = %(log_dir)s/source_reader.err
+stderr_logfile_maxbytes = %(sup_log_size_source_reader_err)s
+stderr_logfile_backups = %(sup_log_backups_source_reader_err)s
 
 [program:celery_notify_beat]
 directory = %(here)s
@@ -56,6 +68,12 @@ stopwaitsecs = 60
 # If the process didn't kill it's children after 60 seconds, it's unlikely to
 # ever reap them, so kill them all
 killasgroup = true
+stdout_logfile = %(log_dir)s/celery_beat.log
+stdout_logfile_maxbytes = %(sup_log_size_celery_notify_beat_out)s
+stdout_logfile_backups = %(sup_log_backups_celery_notify_beat_out)s
+stderr_logfile = %(log_dir)s/celery_beat.err
+stderr_logfile_maxbytes = %(sup_log_size_celery_notify_beat_err)s
+stderr_logfile_backups = %(sup_log_backups_celery_notify_beat_err)s
 
 [program:changes_router]
 directory = %(here)s
@@ -66,6 +84,12 @@ stopasgroup = false
 stopwaitsecs = 5
 startretries = 3
 startsecs = 5
+stdout_logfile = %(log_dir)s/changes_router.log
+stdout_logfile_maxbytes = %(sup_log_size_changes_router_out)s
+stdout_logfile_backups = %(sup_log_backups_changes_router_out)s
+stderr_logfile = %(log_dir)s/changes_router.err
+stderr_logfile_maxbytes = %(sup_log_size_changes_router_err)s
+stderr_logfile_backups = %(sup_log_backups_changes_router_err)s
 
 [group:dev]
 programs = pserve, gulp, webpack
@@ -79,12 +103,24 @@ command = %(VIRTUAL_ENV)s/bin/pserve --reload %(CONFIG_FILE)s
 autostart = %(autostart_pserve)s
 autorestart = false
 environment = NODE_ENV=development
+stdout_logfile = %(log_dir)s/pserve.log
+stdout_logfile_maxbytes = %(sup_log_size_pserve_out)s
+stdout_logfile_backups = %(sup_log_backups_pserve_out)s
+stderr_logfile = %(log_dir)s/pserve.err
+stderr_logfile_maxbytes = %(sup_log_size_pserve_err)s
+stderr_logfile_backups = %(sup_log_backups_pserve_err)s
 
 [program:gulp]
 directory = %(here)s/assembl/static/js
 command = %(VIRTUAL_ENV)s/bin/node %(here)s/assembl/static/js/node_modules/.bin/gulp
 autostart = %(autostart_gulp)s
 autorestart = true
+stdout_logfile = %(log_dir)s/gulp.log
+stdout_logfile_maxbytes = %(sup_log_size_gulp_out)s
+stdout_logfile_backups = %(sup_log_backups_gulp_out)s
+stderr_logfile = %(log_dir)s/gulp.err
+stderr_logfile_maxbytes = %(sup_log_size_gulp_err)s
+stderr_logfile_backups = %(sup_log_backups_gulp_err)s
 
 [program:webpack]
 directory = %(here)s/assembl/static2
@@ -92,6 +128,12 @@ command = %(VIRTUAL_ENV)s/bin/node %(here)s/assembl/static2/node_modules/.bin/we
 autostart = %(autostart_webpack)s
 autorestart = true
 environment = VIRTUAL_ENV="%(VIRTUAL_ENV)s",PATH="%(VIRTUAL_ENV)s/bin:%%(ENV_PATH)s",ASSEMBL_URL="%(ASSEMBL_URL)s",WEBPACK_URL="%(WEBPACK_URL)s"
+stdout_logfile = %(log_dir)s/webpack.log
+stdout_logfile_maxbytes = %(sup_log_size_webpack_out)s
+stdout_logfile_backups = %(sup_log_backups_webpack_out)s
+stderr_logfile = %(log_dir)s/webpack.err
+stderr_logfile_maxbytes = %(sup_log_size_webpack_err)s
+stderr_logfile_backups = %(sup_log_backups_webpack_err)s
 
 [program:uwsgi]
 directory = %(here)s
@@ -100,12 +142,24 @@ umask=002
 autostart = %(autostart_uwsgi)s
 autorestart = true
 #user=www-data
+stdout_logfile = %(log_dir)s/uwsgi.log
+stdout_logfile_maxbytes = %(sup_log_size_uwsgi_out)s
+stdout_logfile_backups = %(sup_log_backups_uwsgi_out)s
+stderr_logfile = %(log_dir)s/uwsgi.err
+stderr_logfile_maxbytes = %(sup_log_size_uwsgi_err)s
+stderr_logfile_backups = %(sup_log_backups_uwsgi_err)s
 
 [program:urlmetadata]
 directory = %(here)s/../url_metadata
 command = %(VIRTUAL_ENV)spy3/bin/python main.py
 autostart = %(autostart_urlmetadata)s
 autorestart = true
+stdout_logfile = %(log_dir)s/urlmetadata.log
+stdout_logfile_maxbytes = %(sup_log_size_urlmetadata_out)s
+stdout_logfile_backups = %(sup_log_backups_urlmetadata_out)s
+stderr_logfile = %(log_dir)s/urlmetadata.err
+stderr_logfile_maxbytes = %(sup_log_size_urlmetadata_err)s
+stderr_logfile_backups = %(sup_log_backups_urlmetadata_err)s
 
 [program:maintenance_uwsgi]
 directory = %(here)s
@@ -113,28 +167,22 @@ command=uwsgi --die-on-term --ini maintenance.ini
 umask=002
 autostart = false
 autorestart = true
-
-[program:metrics]
-directory = %(metrics_code_dir)s
-command=%(metrics_cl)s -l %(metrics_code_dir)s/metrics-startup.lisp
-autostart = %(autostart_metrics_server)s
-autorestart = true
-
-[program:metrics_py]
-directory = %(metrics_code_dir)s
-command= %(metrics_code_dir)s/startup.py
-autostart = %(autostart_metrics_server)s
-autorestart = true
-
-[program:edgesense]
-directory = %(edgesense_code_dir)s
-command=%(edgesense_venv)s/bin/edgesense_catalyst_server
-autostart = %(autostart_edgesense_server)s
-autorestart = true
+stdout_logfile = %(log_dir)s/maintenance.log
+stdout_logfile_maxbytes = %(sup_log_size_maintenance_out)s
+stdout_logfile_backups = %(sup_log_backups_maintenance_out)s
+stderr_logfile = %(log_dir)s/maintenance.err
+stderr_logfile_maxbytes = %(sup_log_size_maintenance_err)s
+stderr_logfile_backups = %(sup_log_backups_maintenance_err)s
 
 [program:elasticsearch]
 directory = %(here)s
-command = %(here)s/var/elasticsearch/bin/elasticsearch -Ecluster.name="assembl" -Epath.data="%(here)s/var/esdata" -Epath.logs="%(here)s/var/log/elasticsearch"
-autostart = %(autostart_elasticsearch_server)s
+command = %(here)s/var/elasticsearch/bin/elasticsearch -Ecluster.name="assembl" -Epath.data="%(here)s/var/esdata" -Epath.logs="%(log_dir)s/elasticsearch"
+autostart = %(autostart_elasticsearch)s
 autorestart = true
 environment = ES_JAVA_OPTS="-Xms1g -Xmx1g"
+stdout_logfile = %(log_dir)s/elasticsearch.log
+stdout_logfile_maxbytes = %(sup_log_size_elasticsearch_out)s
+stdout_logfile_backups = %(sup_log_backups_elasticsearch_out)s
+stderr_logfile = %(log_dir)s/elasticsearch.err
+stderr_logfile_maxbytes = %(sup_log_size_elasticsearch_err)s
+stderr_logfile_backups = %(sup_log_backups_elasticsearch_err)s
