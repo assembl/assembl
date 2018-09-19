@@ -56,7 +56,7 @@ pyramid-jinja2==2.6.2
 pyramid-mailer==0.14.1
 pyramid-tm==0.12.1
 python-json-logger==0.1.8
-python-saml==2.2.0
+python-saml==2.4.2
 pytz==2016.4
 raven==6.9.0
 redis==2.10.5
