@@ -1,0 +1,91 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ExportVotesSection component should render an export section for votes 1`] = `
+<div
+  className="admin-box admin-export-section"
+>
+  <div>
+    <h3
+      className="dark-title-3"
+    >
+      Export data
+    </h3>
+    <div
+      className="box-hyphen"
+    />
+    <div
+      className="annotation"
+    >
+      You can export all the vote session data by clicking on the Export button
+    </div>
+  </div>
+  <div
+    className="admin-content"
+  >
+    <div
+      className="form-group"
+    >
+      <div
+        className="radio"
+        style={undefined}
+      >
+        <label
+          title=""
+        >
+          <input
+            checked={true}
+            disabled={false}
+            name="exportLink"
+            onChange={[Function]}
+            type="radio"
+            value="vote_results_csv"
+          />
+          <span
+            className={undefined}
+            style={undefined}
+          >
+            Export general data for the vote module
+          </span>
+        </label>
+      </div>
+      <div
+        className="radio"
+        style={undefined}
+      >
+        <label
+          title=""
+        >
+          <input
+            checked={false}
+            disabled={false}
+            name="exportLink"
+            onChange={[Function]}
+            type="radio"
+            value="extract_csv_voters"
+          />
+          <span
+            className={undefined}
+            style={undefined}
+          >
+            Export vote details for each user
+          </span>
+        </label>
+      </div>
+    </div>
+    <br />
+    <a
+      className="button-link button-dark margin-l"
+      href="/data/Discussion/my-debate/widgets/my-vote-session/vote_results_csv"
+      onClick={[Function]}
+      style={Object {}}
+    >
+      <span
+        className={undefined}
+        style={undefined}
+      >
+        Export
+      </span>
+    </a>
+  </div>
+</div>
+`;

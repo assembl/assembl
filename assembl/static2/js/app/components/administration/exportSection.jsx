@@ -16,6 +16,7 @@ type ExportSectionProps = {
   exportLocale?: string,
   translate?: boolean,
   annotation: string,
+  renderAdditionalFields: void => React.Node,
   sectionTitle: string
 };
 
@@ -35,6 +36,7 @@ class ExportSection extends React.Component<ExportSectionProps> {
     exportLocale: undefined,
     translate: false,
     annotation: 'defaultAnnotation',
+    renderAdditionalFields: () => null,
     sectionTitle: 'defaultSectionTitle'
   };
 
@@ -70,6 +72,7 @@ class ExportSection extends React.Component<ExportSectionProps> {
       translate,
       exportLocale,
       annotation,
+      renderAdditionalFields,
       sectionTitle
     } = this.props;
 
@@ -113,7 +116,7 @@ class ExportSection extends React.Component<ExportSectionProps> {
                 </Radio>
               </FormGroup>
             )}
-
+          {renderAdditionalFields()}
           <br />
           <Link className="button-link button-dark margin-l" href={exportLink}>
             <Translate value="administration.export.link" />

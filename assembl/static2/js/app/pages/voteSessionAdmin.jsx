@@ -12,7 +12,6 @@ import PageForm from '../components/administration/voteSession/pageForm';
 import { type VoteChoice } from '../components/administration/voteSession/gaugeForm';
 import ModulesSection from '../components/administration/voteSession/modulesSection';
 import VoteProposalsSection from '../components/administration/voteSession/voteProposalsSection';
-import ExportSection from '../components/administration/exportSection';
 import Navbar from '../components/administration/navbar';
 import SaveButton, { getMutationsPromises, runSerial } from '../components/administration/saveButton';
 import updateVoteSessionMutation from '../graphql/mutations/updateVoteSession.graphql';
@@ -31,6 +30,8 @@ import { get } from '../utils/routeMap';
 import { displayAlert, displayCustomModal, closeModal } from '../utils/utilityManager';
 import { getDiscussionSlug, fromGlobalId } from '../utils/globalFunctions';
 import { PHASES } from '../constants';
+import { getDiscussionSlug } from '../utils/globalFunctions';
+import ExportVotesSection from '../components/administration/voteSession/exportVotesSection';
 
 type VoteModule = {
   choices?: Array<VoteChoice>,
@@ -505,7 +506,6 @@ class VoteSessionAdmin extends React.Component<Props, State> {
 
   render() {
     const { editLocale, section, debateId, voteSessionId } = this.props;
-    const exportLink = get('exportVoteSessionData', { debateId: debateId, voteSessionId: voteSessionId });
     const saveDisabled = !this.dataHaveChanged();
     return (
       <div className="token-vote-admin">
