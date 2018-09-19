@@ -38,11 +38,7 @@
       }
 
       span {
-        font-size: $font-size-s;
-      }
-
-      span {
-        font-size: $font-size-s;
+        font-size: $font-size-xs;
       }
     }
   }
@@ -306,7 +302,7 @@
 
   .separator {
     border-bottom: 1px $btn-dark-border-style $grey5;
-    max-width: 745px;
+    max-width: 605px;
     margin-left: -5px;
   }
 }
