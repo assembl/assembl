@@ -62,11 +62,7 @@ exports['AvailableTokens component should match AvailableTokens snapshot (non st
               className="text"
               style={
                 Object {
-<<<<<<< HEAD
-                  "minWidth": "160px",
-=======
                   "minWidth": "220px",
->>>>>>> improve token session front
                 }
               }
             >
@@ -105,11 +101,7 @@ exports['AvailableTokens component should match AvailableTokens snapshot (non st
               className="text"
               style={
                 Object {
-<<<<<<< HEAD
-                  "minWidth": "160px",
-=======
                   "minWidth": "220px",
->>>>>>> improve token session front
                 }
               }
             >
@@ -148,11 +140,7 @@ exports['AvailableTokens component should match AvailableTokens snapshot (non st
               className="text"
               style={
                 Object {
-<<<<<<< HEAD
-                  "minWidth": "160px",
-=======
                   "minWidth": "220px",
->>>>>>> improve token session front
                 }
               }
             >
@@ -207,11 +195,7 @@ exports['AvailableTokens component should match AvailableTokens snapshot (non st
               className="text"
               style={
                 Object {
-<<<<<<< HEAD
-                  "minWidth": "160px",
-=======
                   "minWidth": "220px",
->>>>>>> improve token session front
                 }
               }
             >
@@ -491,11 +475,7 @@ exports['AvailableTokens component should match AvailableTokens snapshot (non st
               className="text"
               style={
                 Object {
-<<<<<<< HEAD
-                  "minWidth": "160px",
-=======
                   "minWidth": "220px",
->>>>>>> improve token session front
                 }
               }
             >
@@ -751,11 +731,7 @@ exports['AvailableTokens component should match AvailableTokens snapshot (sticky
               className="text"
               style={
                 Object {
-<<<<<<< HEAD
-                  "minWidth": "160px",
-=======
                   "minWidth": "220px",
->>>>>>> improve token session front
                 }
               }
             >
@@ -1035,11 +1011,7 @@ exports['AvailableTokens component should match AvailableTokens snapshot (sticky
               className="text"
               style={
                 Object {
-<<<<<<< HEAD
-                  "minWidth": "160px",
-=======
                   "minWidth": "220px",
->>>>>>> improve token session front
                 }
               }
             >
