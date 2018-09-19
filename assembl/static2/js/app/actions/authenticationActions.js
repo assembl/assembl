@@ -1,6 +1,6 @@
 import { signUp, changePasswordRequest } from '../services/authenticationService';
 import { setCookieItem } from '../../app/utils/globalFunctions';
-import { TO_ACCEPT, COOKIE_TYPES } from '../../app/constants';
+import { ESSENTIAL_SIGNUP_COOKIES, COOKIE_TYPES } from '../../app/constants';
 
 const signupSuccess = () => ({
   type: 'SIGNUP_SUCCESS'
@@ -15,7 +15,7 @@ const signupGeneralError = error => ({
 export const signupAction = payload => dispatch =>
   signUp(payload)
     .then(() => {
-      const relevantCookies = COOKIE_TYPES.filter(c => TO_ACCEPT.includes(c));
+      const relevantCookies = COOKIE_TYPES.filter(c => ESSENTIAL_SIGNUP_COOKIES.includes(c));
       setCookieItem('cookies_configuration', relevantCookies);
       dispatch(signupSuccess());
     })
