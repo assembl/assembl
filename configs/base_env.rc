@@ -99,6 +99,8 @@ supervisor__autostart_uwsgi = true
 supervisor__autostart_elasticsearch = true
 supervisor__autostart_urlmetadata = true
 
+alembic__script_location = %(code_root)s/assembl/alembic
+
 # Machines format: machine_id,machine_name,machine_password/...others
 # The first machine is the Robot used for Bigdatext
 machines =
