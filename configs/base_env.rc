@@ -96,9 +96,7 @@ supervisor__autostart_nodesass = false
 supervisor__autostart_gulp = false
 supervisor__autostart_webpack = false
 supervisor__autostart_uwsgi = true
-supervisor__autostart_metrics_server = false
-supervisor__autostart_edgesense_server = false
-supervisor__autostart_elasticsearch_server = true
+supervisor__autostart_elasticsearch = true
 supervisor__autostart_urlmetadata = true
 
 # Machines format: machine_id,machine_name,machine_password/...others

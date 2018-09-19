@@ -3,9 +3,9 @@
 
 import sys
 import os
-from os.path import exists, join, dirname, abspath
+from os.path import exists, dirname, abspath, join
 from ConfigParser import (
-    NoSectionError, SafeConfigParser, RawConfigParser as Parser)
+    NoSectionError, SafeConfigParser, NoOptionError, RawConfigParser as Parser)
 from argparse import ArgumentParser, FileType
 import logging
 
@@ -55,8 +55,8 @@ DEFAULTS = {
     'autostart_webpack': 'false',
     'autostart_uwsgi': 'false',
     'autostart_elasticsearch_server': 'false',
-    'autostart_metrics_server': 'false',
-    'autostart_edgesense_server': 'false',
+    'sup_log_size': '1000000',  # in bytes, ~1Mb
+    'sup_log_backups': '10',
 }
 
 
@@ -81,27 +81,6 @@ def ensureSection(config, section):
 def generate_ini_files(config, config_fname):
     """Generate the supervisor.conf from its template and .ini file."""
     # TODO: Use .rc file instead of .ini file.
-    try:
-        metrics_code_dir = config.get('metrics', 'metrics_code_dir')
-        metrics_cl = config.get('metrics', 'metrics_cl')
-        has_metrics_server = (
-            metrics_code_dir and exists(metrics_code_dir) and
-            exists(metrics_cl.split()[0]))
-    except NoSectionError:
-        has_metrics_server = False
-        metrics_cl = '/bin/ls'  # innocuous
-        metrics_code_dir = ''
-    try:
-        edgesense_code_dir = config.get('edgesense', 'edgesense_code_dir')
-        edgesense_venv = config.get('edgesense', 'venv')
-        has_edgesense_server = (
-            edgesense_code_dir and exists(edgesense_code_dir) and
-            exists(join(
-                edgesense_venv, 'bin', 'edgesense_catalyst_server')))
-    except NoSectionError:
-        has_edgesense_server = False
-        edgesense_venv = '/tmp'  # innocuous
-        edgesense_code_dir = ''
     celery_broker = config.get(
         SECTION, 'celery_tasks.broker')
     secure = config.getboolean(SECTION, 'require_secure_connection')
@@ -120,38 +99,50 @@ def generate_ini_files(config, config_fname):
         webpack_port = config.getint(SECTION, 'webpack_port')
     webpack_host = config.get(SECTION, 'webpack_host', public_hostname)
     webpack_url = "http://%s:%d" % (webpack_host, webpack_port)
+    here = dirname(abspath('supervisord.conf'))
+    if config.has_option('supervisor', 'sup_log_dir'):
+        log_dir = config.get('supervisor', 'sup_log_dir')
+    else:
+        log_dir = join(here, 'var', 'log')
     vars = {
         'CELERY_BROKER': celery_broker,
         'CELERY_NUM_WORKERS': config.get(
             SECTION, 'celery_tasks.num_workers'),
-        'here': dirname(abspath('supervisord.conf')),
+        'here': here,
+        'log_dir': log_dir,
         'CONFIG_FILE': config_fname,
-        'autostart_metrics_server': (config.get(
-            'supervisor', 'autostart_metrics_server')
-            if has_metrics_server else 'false'),
-        'metrics_code_dir': metrics_code_dir,
-        'metrics_cl': metrics_cl,
-        'autostart_edgesense_server': (config.get(
-            'supervisor', 'autostart_edgesense_server')
-            if has_edgesense_server else 'false'),
-        'edgesense_venv': edgesense_venv,
         'VIRTUAL_ENV': os.environ['VIRTUAL_ENV'],
-        'edgesense_code_dir': edgesense_code_dir,
         'WEBPACK_URL': webpack_url,
         'ASSEMBL_URL': url,
     }
-    for var in (
-            'autostart_celery',
-            'autostart_celery_notify_beat',
-            'autostart_source_reader',
-            'autostart_changes_router',
-            'autostart_pserve',
-            'autostart_gulp',
-            'autostart_webpack',
-            'autostart_elasticsearch_server',
-            'autostart_urlmetadata',
-            'autostart_uwsgi'):
-        vars[var] = config.get('supervisor', var)
+    for procname in (
+            'celery',
+            'celery_notify_beat',
+            'source_reader',
+            'changes_router',
+            'pserve',
+            'gulp',
+            'webpack',
+            'elasticsearch',
+            'urlmetadata',
+            'maintenance',
+            'uwsgi'):
+        name = 'autostart_' + procname
+        vars[name] = config.get('supervisor', name)
+        for component in ('size', 'backups'):
+            for stream in ('err', 'out'):
+                name0 = 'sup_log_' + component
+                name1 = '_'.join((name0, procname))
+                name = '_'.join((name1, stream))
+                try:
+                    val = config.get('supervisor', name)
+                except NoOptionError:
+                    try:
+                        val = config.get('supervisor', name1)
+                    except NoOptionError:
+                        # Fallbacks to value from DEFAULTS
+                        val = config.get('supervisor', name0)
+                vars[name] = val
 
     for fname in ('supervisord.conf',):
         print fname
