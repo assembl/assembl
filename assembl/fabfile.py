@@ -11,7 +11,7 @@ from time import sleep, strftime, time
 from ConfigParser import ConfigParser, SafeConfigParser
 from StringIO import StringIO
 # Importing the "safe" os.path commands
-from os.path import join, dirname, split, normpath
+from os.path import join, dirname, split, normpath, realpath
 # Other calls to os.path rarely mostly don't work remotely. Use locally only.
 import os.path
 from functools import wraps
@@ -38,6 +38,7 @@ from fabric.context_managers import shell_env
 
 
 DEFAULT_SECTION = "DEFAULT"
+code_root = dirname(dirname(realpath(__file__)))
 
 
 def running_locally(hosts=None):
@@ -79,6 +80,7 @@ def combine_rc(rc_filename, overlay=None):
         service_config.update(overlay)
     service_config.pop('_extends', None)
     service_config.pop('', None)
+    service_config['*code_root'] = code_root
     return service_config
 
 

@@ -3,7 +3,7 @@
 
 import sys
 import os
-from os.path import exists, dirname, abspath, join
+from os.path import exists, dirname, abspath, join, realpath
 from ConfigParser import (
     NoSectionError, SafeConfigParser, NoOptionError, RawConfigParser as Parser)
 from argparse import ArgumentParser, FileType
@@ -21,6 +21,8 @@ logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
 # Case sensitive options
 Parser.optionxform = str
 
+
+code_root = dirname(dirname(realpath(__file__)))
 
 SECTION = 'app:assembl'
 RANDOM_FILE = 'random.ini'
@@ -145,7 +147,7 @@ def generate_ini_files(config, config_fname):
                 vars[name] = val
 
     for fname in ('supervisord.conf',):
-        templateloc = join(dirname(dirname(__file__)), 'templates', 'system', fname + '.tmpl')
+        templateloc = join(code_root, 'templates', 'system', fname + '.tmpl')
         print fname
         with open(templateloc) as tmpl, open(fname, 'w') as inifile:
             inifile.write(tmpl.read() % vars)
@@ -220,7 +222,7 @@ def populate_random(random_file, random_templates=None, saml_info=None):
     assert random_templates, "Please give one or more templates"
     for template in random_templates:
         if (not exists(template)):
-            template = join(dirname(dirname(__file__)), 'templates', 'system', template)
+            template = join(code_root, 'templates', 'system', template)
         assert exists(template), "Cannot find template " + template
         base.read(template)
     existing = Parser()
