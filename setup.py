@@ -78,7 +78,6 @@ setup(name='assembl',
           ]
       },
       data_files=[('share/assembl', [
-          'odbc.ini.tmpl',
           'random.ini.tmpl',
           'random_docker.ini.tmpl',
           'saml_random.ini.tmpl',

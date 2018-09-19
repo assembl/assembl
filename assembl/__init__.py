@@ -13,9 +13,6 @@ This is the startup module, which sets up the various components:
 
 """
 
-from os import putenv
-from os.path import dirname, join
-
 import transaction
 from pyramid.config import Configurator
 from pyramid.authorization import ACLAuthorizationPolicy
@@ -30,9 +27,6 @@ from .lib.locale import locale_negotiator as my_locale_negotiator
 from .lib.config import set_config
 
 # Do not import models here, it will break tests.
-
-# Use a local odbc.ini
-putenv('ODBCINI', join(dirname(dirname(__file__)), 'odbc.ini'))
 
 resolver = DottedNameResolver(__package__)
 
