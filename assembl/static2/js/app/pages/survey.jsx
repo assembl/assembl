@@ -163,35 +163,38 @@ class Survey extends React.Component<SurveyProps, SurveyState> {
               scrollToQuestion={this.scrollToQuestion}
             />
           )}
-          <div className="proposals">
+          <div className="proposals" style={{ minHeight: '100px' }}>
             <section className={isPhaseCompleted ? 'shown' : 'proposals-section'} id="proposals">
               <Grid fluid className="background-light">
-                <div className="max-container">
-                  <div className="question-title">
-                    <div className="title-hyphen">&nbsp;</div>
-                    {numPosts > 0 ? (
+                {numPosts > 0 ? (
+                  <div className="max-container">
+                    <div className="question-title">
+                      <div className="title-hyphen">&nbsp;</div>
+
                       <h1 className="dark-title-1">
                         <Translate value="debate.survey.proposalsTitle" />
                       </h1>
-                    ) : null}
+                    </div>
+
+                    <div className="center">
+                      {questions &&
+                        questions.map((question, index) => (
+                          <Proposals
+                            nbPostsToShow={3}
+                            themeId={id}
+                            title={question.title}
+                            posts={question.posts.edges}
+                            questionIndex={index + 1}
+                            questionId={question.id}
+                            phaseUrl={phaseUrl}
+                            key={index}
+                          />
+                        ))}
+                    </div>
+
+                    <div className="margin-xl">&nbsp;</div>
                   </div>
-                  <div className="center">
-                    {questions &&
-                      questions.map((question, index) => (
-                        <Proposals
-                          nbPostsToShow={3}
-                          themeId={id}
-                          title={question.title}
-                          posts={question.posts.edges}
-                          questionIndex={index + 1}
-                          questionId={question.id}
-                          phaseUrl={phaseUrl}
-                          key={index}
-                        />
-                      ))}
-                  </div>
-                  <div className="margin-xl">&nbsp;</div>
-                </div>
+                ) : null}
               </Grid>
             </section>
           </div>
