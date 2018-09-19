@@ -10,7 +10,7 @@ configure({ adapter: new Adapter() });
 
 jest.mock('../../../../js/app/utils/utilityManager');
 
-const { userSession, matomo, privacyPolicy, cgu, locale } = COOKIE_TRANSLATION_KEYS;
+const { userSession, matomo, privacyPolicy, userGuideline, cgu, locale } = COOKIE_TRANSLATION_KEYS;
 const { essential, analytics } = COOKIES_CATEGORIES;
 
 describe('CookiesSelectorContainer component', () => {
@@ -127,6 +127,12 @@ describe('CookiesSelectorContainer component', () => {
             },
             {
               category: essential,
+              name: userGuideline,
+              accepted: true,
+              cookieType: 'ACCEPT_USER_GUIDELINE_ON_DISCUSSION'
+            },
+            {
+              category: essential,
               name: cgu,
               accepted: true,
               cookieType: 'ACCEPT_CGU'
@@ -145,7 +151,7 @@ describe('CookiesSelectorContainer component', () => {
       date.setMonth(date.getMonth() + 13);
       expect(document.cookie).toBe(
         'cookies_configuration=ACCEPT_TRACKING_ON_DISCUSSION,ACCEPT_SESSION_ON_DISCUSSION,ACCEPT_LOCALE,' +
-          `ACCEPT_PRIVACY_POLICY_ON_DISCUSSION,ACCEPT_CGU; path=/;expires=${date}`
+          `ACCEPT_PRIVACY_POLICY_ON_DISCUSSION,ACCEPT_USER_GUIDELINE_ON_DISCUSSION,ACCEPT_CGU; path=/;expires=${date}`
       );
     });
   });

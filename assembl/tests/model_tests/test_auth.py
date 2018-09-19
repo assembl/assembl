@@ -123,7 +123,8 @@ def test_update_cookies_3(test_session, agent_status_in_discussion_3):
     """Testing update cookies on a user who has already accepted one cookie"""
     from assembl.models.cookie_types import CookieTypes
     agent_status_in_discussion_3.update_cookie("ACCEPT_TRACKING_ON_DISCUSSION")
-    assert agent_status_in_discussion_3.cookies == [CookieTypes.ACCEPT_CGU, CookieTypes.ACCEPT_TRACKING_ON_DISCUSSION]
+    agent_status_in_discussion_3.update_cookie("ACCEPT_USER_GUIDELINE_ON_DISCUSSION")
+    assert agent_status_in_discussion_3.cookies == [CookieTypes.ACCEPT_CGU, CookieTypes.ACCEPT_TRACKING_ON_DISCUSSION, CookieTypes.ACCEPT_USER_GUIDELINE_ON_DISCUSSION]
 
 
 def test_delete_cookie(test_session, agent_status_in_discussion_3):

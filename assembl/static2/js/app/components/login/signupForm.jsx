@@ -3,7 +3,7 @@ import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { Translate, I18n } from 'react-redux-i18n';
-import { form, FormGroup, FormControl, Button, Checkbox } from 'react-bootstrap';
+import { form, FormGroup, FormControl, Button } from 'react-bootstrap';
 import { Link } from 'react-router';
 import * as lodashGet from 'lodash/get';
 import { signupAction } from '../../actions/authenticationActions';
@@ -17,20 +17,24 @@ import TabsConditionQuery from '../../graphql/TabsConditionQuery.graphql';
 import TextFieldsQuery from '../../graphql/TextFields.graphql';
 import LegalContentsQuery from '../../graphql/LegalContents.graphql';
 import LegalForm from './legalForm';
+import SignupCheckbox from './signupCheckbox';
 
 type Props = {
   hasTermsAndConditions: boolean,
   hasPrivacyPolicy: boolean,
+  hasUserGuidelines: boolean,
   signUp: Function,
   auth: Object,
   textFields: Array<ConfigurableField>,
   privacyPolicyText: string,
-  termsAndConditionsText: string
+  termsAndConditionsText: string,
+  userGuidelinesText: string
 };
 
 type State = {
   privacyPolicyIsChecked: boolean,
-  termsAndConditionsIsChecked: boolean
+  termsAndConditionsIsChecked: boolean,
+  userGuidelinesIsChecked: boolean
 };
 
 class SignupForm extends React.Component<Props, State> {
@@ -46,7 +50,8 @@ class SignupForm extends React.Component<Props, State> {
     super(props);
     this.state = {
       privacyPolicyIsChecked: false,
-      termsAndConditionsIsChecked: false
+      termsAndConditionsIsChecked: false,
+      userGuidelinesIsChecked: false
     };
   }
 
@@ -116,8 +121,23 @@ class SignupForm extends React.Component<Props, State> {
 
   render() {
     const slug = getDiscussionSlug();
-    const { hasTermsAndConditions, hasPrivacyPolicy, textFields, termsAndConditionsText, privacyPolicyText } = this.props;
-    const { privacyPolicyIsChecked, termsAndConditionsIsChecked } = this.state;
+    const {
+      hasTermsAndConditions,
+      hasPrivacyPolicy,
+      hasUserGuidelines,
+      textFields,
+      termsAndConditionsText,
+      privacyPolicyText,
+      userGuidelinesText
+    } = this.props;
+    const { privacyPolicyIsChecked, termsAndConditionsIsChecked, userGuidelinesIsChecked } = this.state;
+
+    const legalContentsType = {
+      termsAndConditions: 'termsAndConditions',
+      privacyPolicy: 'privacyPolicy',
+      userGuidelines: 'userGuidelines'
+    };
+
     return (
       <div className="login-view">
         <div className="box-title">{I18n.t('login.createAccount')}</div>
@@ -163,46 +183,31 @@ class SignupForm extends React.Component<Props, State> {
                 return null;
               })}
             {hasTermsAndConditions && (
-              <FormGroup className="left margin-left-2">
-                <Checkbox
-                  checked={termsAndConditionsIsChecked}
-                  type="checkbox"
-                  onChange={() => this.toggleCheck('termsAndConditions')}
-                  required
-                  inline
-                >
-                  <Translate value="termsAndConditions.iAccept" />
-                  <a
-                    onClick={(e) => {
-                      e.preventDefault();
-                      this.displayLegalFormModal(termsAndConditionsIsChecked, termsAndConditionsText, 'termsAndConditions');
-                    }}
-                  >
-                    <Translate value="termsAndConditions.link" className="terms-link" />
-                  </a>
-                </Checkbox>
-              </FormGroup>
+              <SignupCheckbox
+                checked={termsAndConditionsIsChecked}
+                toggleCheck={this.toggleCheck}
+                legalContentsType={legalContentsType.termsAndConditions}
+                displayLegalFormModal={this.displayLegalFormModal}
+                text={termsAndConditionsText}
+              />
             )}
             {hasPrivacyPolicy && (
-              <FormGroup className="left margin-left-2">
-                <Checkbox
-                  checked={privacyPolicyIsChecked}
-                  type="checkbox"
-                  onChange={() => this.toggleCheck('privacyPolicy')}
-                  required
-                  inline
-                >
-                  <Translate value="privacyPolicy.iAccept" />
-                  <a
-                    onClick={(e) => {
-                      e.preventDefault();
-                      this.displayLegalFormModal(privacyPolicyIsChecked, privacyPolicyText, 'privacyPolicy');
-                    }}
-                  >
-                    <Translate value="privacyPolicy.link" className="terms-link" />
-                  </a>
-                </Checkbox>
-              </FormGroup>
+              <SignupCheckbox
+                checked={privacyPolicyIsChecked}
+                toggleCheck={this.toggleCheck}
+                legalContentsType={legalContentsType.privacyPolicy}
+                displayLegalFormModal={this.displayLegalFormModal}
+                text={privacyPolicyText}
+              />
+            )}
+            {hasUserGuidelines && (
+              <SignupCheckbox
+                checked={userGuidelinesIsChecked}
+                toggleCheck={this.toggleCheck}
+                legalContentsType={legalContentsType.userGuidelines}
+                displayLegalFormModal={this.displayLegalFormModal}
+                text={userGuidelinesText}
+              />
             )}
             <div className="center">
               <FormGroup>
@@ -245,7 +250,8 @@ const withData = graphql(TabsConditionQuery, {
   props: ({ data }) => ({
     ...data,
     hasTermsAndConditions: data.hasTermsAndConditions,
-    hasPrivacyPolicy: data.hasPrivacyPolicy
+    hasPrivacyPolicy: data.hasPrivacyPolicy,
+    hasUserGuidelines: data.hasUserGuidelines
   })
 });
 
@@ -278,7 +284,8 @@ export default compose(
       return {
         ...data,
         termsAndConditionsText: lodashGet(data, 'legalContents.termsAndConditions', ''),
-        privacyPolicyText: lodashGet(data, 'legalContents.privacyPolicy', '')
+        privacyPolicyText: lodashGet(data, 'legalContents.privacyPolicy', ''),
+        userGuidelinesText: lodashGet(data, 'legalContents.userGuidelines', '')
       };
     }
   }),

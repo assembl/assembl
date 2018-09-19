@@ -42,7 +42,6 @@ const CookieSetter = ({ handleToggle, cookie, toggleCookieType, locale }: Props)
     : null;
 
   const required = category === COOKIES_CATEGORIES.essential;
-
   return (
     <div
       className={classnames({

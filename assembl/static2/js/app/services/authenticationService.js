@@ -19,7 +19,8 @@ export const signUp = (payload) => {
   const {
     privacyPolicyIsChecked,
     termsAndConditionsIsChecked,
-    discussionSlug, email,
+    discussionSlug,
+    email,
     fullname,
     password,
     password2,

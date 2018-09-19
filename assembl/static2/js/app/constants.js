@@ -81,8 +81,16 @@ export const COOKIE_TYPES = [
   'REJECT_LOCALE',
   'ACCEPT_PRIVACY_POLICY_ON_DISCUSSION',
   'REJECT_PRIVACY_POLICY_ON_DISCUSSION',
+  'ACCEPT_USER_GUIDELINE_ON_DISCUSSION',
+  'REJECT_USER_GUIDELINE_ON_DISCUSSION',
   'ACCEPT_CGU',
   'REJECT_CGU'
+];
+
+export const ESSENTIAL_SIGNUP_COOKIES = [
+  'ACCEPT_CGU',
+  'ACCEPT_PRIVACY_POLICY_ON_DISCUSSION',
+  'ACCEPT_USER_GUIDELINE_ON_DISCUSSION'
 ];
 
 export const COOKIE_TRANSLATION_KEYS = {
@@ -90,6 +98,7 @@ export const COOKIE_TRANSLATION_KEYS = {
   locale: 'locale',
   matomo: 'matomo',
   privacyPolicy: 'privacyPolicy',
+  userGuideline: 'userGuideline',
   cgu: 'cgu'
 };
 

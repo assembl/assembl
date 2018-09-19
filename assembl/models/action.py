@@ -123,6 +123,12 @@ class AcceptPrivacyPolicyOnDiscussion(ActionOnDiscussion):
     }
 
 
+class AcceptUserGuidelineOnDiscussion(ActionOnDiscussion):
+    __mapper_args__ = {
+        'polymorphic_identity': 'discussion:userguideline:accept'
+    }
+
+
 class RejectSessionOnDiscussion(ActionOnDiscussion):
 
     __mapper_args__ = {
@@ -147,6 +153,12 @@ class RejectTrackingOnDiscussion(ActionOnDiscussion):
 class RejectPrivacyPolicyOnDiscussion(ActionOnDiscussion):
     __mapper_args__ = {
         'polymorphic_identity': 'discussion:privacypolicy:reject'
+    }
+
+
+class RejectUserGuidelineOnDiscussion(ActionOnDiscussion):
+    __mapper_args__ = {
+        'polymorphic_identity': 'discussion:userguideline:reject'
     }
 
 

@@ -61,6 +61,7 @@ const Translations = {
       locale: "Langue",
       matomo: "Matomo",
       privacyPolicy: "Politique de confidentialité",
+      userGuideline: "Charte de participation",
       cgu: "Conditions générales d'utilisation",
       matomoSettings: "Pour modifier les paramètres de ce cookie, veuillez cliquer ici",
       userSessionHelper: "Ce cookie est nécessaire pour vous maintenir connecté sur Assembl.",
@@ -68,6 +69,7 @@ const Translations = {
         "Ce cookie est nécessaire afin d'afficher les textes dans la langue de votre nagigateur ou bien celle que vous avez sélectionné dans la barre de navigation.",
       privacyPolicyHelper:
         "Ce cookie permet d'enregistrer que vous avez accepté la politique de confidentialité de la consultation.",
+      userGuidelineHelper: "Ce cookie permet d'enregistrer que vous avez accepté la charte de participation de la consultation.",
       cguHelper: "Ce cookie permet d'enregistrer que vous avez accepté les conditions générales d'utilisation.",
       matomoHelper: "Ce cookie est utilisé à des fins statistiques concernant les participants à la consultation.",
       required: "Ce cookie est requis"
@@ -502,7 +504,9 @@ const Translations = {
       link: "politique de protection des données personnelles"
     },
     userGuidelines: {
-      headerTitle: "Charte de participation"
+      headerTitle: "Charte de participation",
+      iAccept: "J'ai lu et j'accepte la ",
+      link: "charte de participation"
     },
     administration: {
       confirmTextFieldDeletionTitle: "Supprimer le champ",
@@ -915,11 +919,13 @@ const Translations = {
       matomo: "Matomo",
       cgu: "Terms and conditions",
       privacyPolicy: "Privacy policy",
+      userGuideline: "User Guidelines",
       matomoSettings: "To modify this cookie's setting please click here",
       userSessionHelper: "This cookie is necessary to maintain the user connected on Assembl.",
       localeHelper:
         "This cookie is necessary to display the texts in the language of your browser or the one you selected in the navigation bar.",
       privacyPolicyHelper: "This cookie registers that you have accepted the privacy policy of the consultation.",
+      userGuidelineHelper: "This cookie registers that you have accepted the user guidelines of the consultation.",
       cguHelper: "This cookie registers that you have accepted the terms and conditions of the consultation.",
       matomoHelper: "This cookie is used for stasticial purposes regarding the participants of the consultation.",
       required: "This cookie is required"
@@ -1353,7 +1359,9 @@ const Translations = {
       link: "Privacy Policy"
     },
     userGuidelines: {
-      headerTitle: "User guidelines"
+      headerTitle: "User guidelines",
+      iAccept: "I have read and I accept the ",
+      link: "user guidelines"
     },
     administration: {
       confirmTextFieldDeletionTitle: "Delete the field",
