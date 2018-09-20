@@ -6,6 +6,7 @@
 -e git+https://github.com/assembl/jwzthreading.git@a5a5af7ec260b21a7d25db83cad9874a3a5af90b#egg=jwzthreading
 -e git+https://github.com/assembl/langdetect.git@49a67668866fffd99a2978aec81d1e759cc0511e#egg=langdetect
 -e git+https://github.com/assembl/pyramid_beaker.git@1677e82555ec09449f5bc97a843062e3c1226b34#egg=pyramid_beaker
+-e git+https://github.com/conversence/social-core.git@saml_cert_multi#egg=social-auth-core
 PyStemmer==1.3.0
 alembic==0.8.6
 anyjson==0.3.3
@@ -65,7 +66,6 @@ rotate-backups==4.4
 sentry-sdk==0.5.3
 simplejson==3.8.2
 six==1.10.0
-social-auth-core==2.0.0
 social-auth-app-pyramid==1.0.0
 social-auth-storage-sqlalchemy==1.1.0
 SQLAlchemy==1.2.2
