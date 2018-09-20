@@ -8,6 +8,7 @@ Note that Assembl is a `hybrid app`_, and combines routes and :py:mod:`traversal
 import os.path
 import io
 from collections import defaultdict
+from urlparse import urlparse
 
 import simplejson as json
 from pyramid.view import view_config
@@ -672,6 +673,24 @@ def error_view(exc, request):
 def redirector(request):
     return HTTPMovedPermanently(request.route_url(
         'home', discussion_slug=request.matchdict.get('discussion_slug')))
+
+
+def sanitize_next_view(next_view):
+    if next_view and ':/' in next_view:
+        parsed = urlparse(next_view)
+        if not parsed:
+            return None
+        if parsed.netloc != config.get("public_hostname"):
+            return None
+        if parsed.scheme == 'http':
+            if asbool(config.get("require_secure_connection")):
+                return None
+        elif parsed.scheme == 'https':
+            if not asbool(config.get("accept_secure_connection")):
+                return None
+        else:
+            return None
+    return next_view
 
 
 def includeme(config):
