@@ -11,6 +11,7 @@ from time import sleep, strftime, time
 from ConfigParser import ConfigParser, SafeConfigParser
 from StringIO import StringIO
 # Importing the "safe" os.path commands
+from os import getcwd
 from os.path import join, dirname, split, normpath, realpath
 # Other calls to os.path rarely mostly don't work remotely. Use locally only.
 import os.path
@@ -38,11 +39,22 @@ from fabric.context_managers import shell_env
 
 
 DEFAULT_SECTION = "DEFAULT"
-code_root = dirname(dirname(realpath(__file__)))
+local_code_root = dirname(dirname(realpath(__file__)))
 
 
-def running_locally(hosts=None):
-    hosts = hosts or env.hosts
+def sanitize_hosts(alt_env=None):
+    alt_env = alt_env or env
+    if not alt_env.get('hosts', None):
+        public_hostname = alt_env.get("public_hostname", "localhost")
+        alt_env['hosts'] = [public_hostname]
+    elif not isinstance(alt_env['hosts'], list):
+        alt_env['hosts'] = alt_env['hosts'].split()
+
+
+def running_locally(hosts=None, alt_env=None):
+    alt_env = alt_env or env
+    # make sure sanitize_hosts has been called when reaching here
+    hosts = hosts or alt_env['hosts']
     return set(hosts) - set(['localhost', '127.0.0.1']) == set()
 
 
@@ -54,6 +66,38 @@ def sudo(*args, **kwargs):
             run(*args, **kwargs)
         else:
             fabsudo(*args, **kwargs)
+
+
+def get_prefixed(key, alt_env=None, default=None):
+    alt_env = alt_env or env
+    for prefx in ('', '_', '*'):
+        val = alt_env.get(prefx + key, None)
+        if val:
+            return val
+    return default
+
+
+def venv_path(alt_env=None):
+    alt_env = alt_env or env
+    path = alt_env.get('venvpath', None)
+    if path:
+        return path
+    if running_locally(alt_env=alt_env):
+        # Trust VIRTUAL_ENV, important for Jenkins case.
+        return getenv('VIRTUAL_ENV', None)
+    return join(get_prefixed('projectpath', alt_env, getcwd()), 'venv')
+
+
+def code_root(alt_env=None):
+    alt_env = alt_env or env
+    sanitize_hosts(alt_env)
+    if running_locally(alt_env=alt_env):
+        return local_code_root
+    else:
+        if (as_bool(get_prefixed('package_install', alt_env, False))):
+            return os.path.join(venv_path(alt_env), 'lib', 'python2.7', 'site-packages')
+        else:
+            return get_prefixed('projectpath', alt_env, getcwd())
 
 
 def combine_rc(rc_filename, overlay=None):
@@ -69,7 +113,7 @@ def combine_rc(rc_filename, overlay=None):
         # We want fname to be usable both on host and target.
         # Use project-path-relative names to that effect.
         if fname.startswith('~/'):
-            path = dirname(dirname(__file__))
+            path = local_code_root
             if not running_locally([env.host_string]):
                 path = env.get('projectpath', path)
             fname = join(path, fname[2:])
@@ -80,7 +124,6 @@ def combine_rc(rc_filename, overlay=None):
         service_config.update(overlay)
     service_config.pop('_extends', None)
     service_config.pop('', None)
-    service_config['*code_root'] = code_root
     return service_config
 
 
@@ -109,11 +152,7 @@ def sanitize_env():
         # so that a variable valued "False" in the .ini
         # file is recognized as boolean False
         setattr(env, name, as_bool(getattr(env, name, False)))
-    public_hostname = env.get("public_hostname", "localhost")
-    if not env.get('hosts', None):
-        env.hosts = [public_hostname]
-    elif not isinstance(env.hosts, list):
-        env.hosts = env.hosts.split()
+    sanitize_hosts()
     # Note: normally, fab would set host_string from hosts.
     # But since we use the private name _hosts, and fallback
     # at this stage within task execution, neither env.hosts
@@ -121,13 +160,10 @@ def sanitize_env():
     if not env.get('host_string', None):
         env.host_string = env.hosts[0]
 
-    env.projectpath = env.get('projectpath', dirname(dirname(__file__)))
+    env.projectpath = env.get('projectpath', getcwd())
     if not env.get('venvpath', None):
-        if running_locally():
-            # Trust VIRTUAL_ENV, important for Jenkins case.
-            env.venvpath = getenv('VIRTUAL_ENV', None)
-        if not env.get('venvpath', None):
-            env.venvpath = join(env.projectpath, 'venv')
+        env.venvpath = venv_path()
+    env.code_root = code_root()
     env.random_file = env.get('random_file', 'random.ini')
     env.dbdumps_dir = env.get('dbdumps_dir', join(
         env.projectpath, '%s_dumps' % env.get("projectname", 'assembl')))
@@ -146,6 +182,7 @@ def load_rcfile_config():
     env.update(filter_global_names(env))
     env.update(filter_global_names(combine_rc(rc_file)))
     sanitize_env()
+    env.code_root = code_root()
 
 
 def task(func):
