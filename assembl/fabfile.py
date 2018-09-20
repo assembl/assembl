@@ -1471,6 +1471,21 @@ def install_memcached():
             print(red("Make sure that memcached is running"))
 
 
+def chgrp_rec(path, group, upto=None):
+    parts = path.split("/")
+    success = False
+    for i in range(len(parts), 1, -1):
+        path = "/".join(parts[:i])
+        if path == upto:
+            break
+        if not run('chgrp {group} {path}'.format(group=group, path=path), warn_only=True).succeeded:
+            break
+        if not run('chmod g+x {path}'.format(path=path), warn_only=True).succeeded:
+            break
+        success = True
+    assert success  # At least the full path
+
+
 @task
 def set_file_permissions():
     """Set file permissions for an isolated platform environment"""
@@ -1490,20 +1505,30 @@ def set_file_permissions():
                 usermod=usermod_path, webgrp=webgrp, user=env.user))
     with cd(env.projectpath):
         upload_dir = get_upload_dir()
-        run('chmod -R o-rwx .')
-        run('chmod -R g-rw .')
-        run('chgrp {webgrp} . assembl var var/run'.format(webgrp=webgrp))
-        run('chgrp -R {webgrp} assembl/static assembl/static2'.format(webgrp=webgrp))
+        project_path = env.projectpath
+        code_path = code_root()
+        run('chmod -R o-rwx ' + project_path)
+        run('chmod -R g-rw ' + project_path)
+        chgrp_rec(project_path, webgrp)
+        chgrp_rec(upload_dir, webgrp, project_path)
+
+        if not (code_path.startswith(project_path)):
+            run('chmod -R o-rwx ' + code_path)
+            run('chmod -R g-rw ' + code_path)
+            chgrp_rec(code_path, webgrp)
+
+        run('chgrp {webgrp} . {path}/var {path}/var/run'.format(webgrp=webgrp, path=project_path))
+        run('chgrp -R {webgrp} {path}/assembl/static {path}/assembl/static2'.format(webgrp=webgrp, path=code_path))
         run('chgrp -R {webgrp} {uploads}'.format(webgrp=webgrp, uploads=upload_dir))
-        run('chmod -R g+rxs var/run')
+        run('chmod -R g+rxs {path}/var/run'.format(path=project_path))
         run('chmod -R g+rxs ' + upload_dir)
-        run('find assembl/static -type d -print0 |xargs -0 chmod g+rxs')
-        run('find assembl/static -type f -print0 |xargs -0 chmod g+r')
-        run('find assembl/static2 -type d -print0 |xargs -0 chmod g+rxs')
-        run('find assembl/static2 -type f -print0 |xargs -0 chmod g+r')
+        run('find {path}/assembl/static -type d -print0 |xargs -0 chmod g+rxs'.format(path=code_path))
+        run('find {path}/assembl/static -type f -print0 |xargs -0 chmod g+r'.format(path=code_path))
+        run('find {path}/assembl/static2 -type d -print0 |xargs -0 chmod g+rxs'.format(path=code_path))
+        run('find {path}/assembl/static2 -type f -print0 |xargs -0 chmod g+r'.format(path=code_path))
         # allow postgres user to use pypsql
-        run('chmod go+x . assembl assembl/scripts')
-        run('chmod go+r assembl/scripts/pypsql.py')
+        run('chmod go+x {path}/assembl/scripts'.format(path=code_path))
+        run('chmod go+r {path}/assembl/scripts/pypsql.py'.format(path=code_path))
 
 
 @task
