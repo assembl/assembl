@@ -1,0 +1,82 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Menu component should match Menu snapshot 1`] = `
+<ul
+  className="menu"
+>
+  <li
+    className="menu-item"
+  >
+    <div
+      className="menu-item-title"
+    >
+      <span
+        className="arrow assembl-icon-down-open"
+        onClick={[Function]}
+      />
+      <span>
+        Foo
+      </span>
+    </div>
+  </li>
+  <li
+    className="menu-item"
+  >
+    <div
+      className="menu-item-title"
+    >
+      <span>
+        Bar
+      </span>
+    </div>
+  </li>
+</ul>
+`;
+
+exports[`Menu component should match opened Menu snapshot 1`] = `
+<ul
+  className="menu"
+>
+  <li
+    className="menu-item active"
+  >
+    <div
+      className="menu-item-title"
+    >
+      <span
+        className="arrow assembl-icon-up-open"
+        onClick={[Function]}
+      />
+      <span>
+        Foo
+      </span>
+    </div>
+    <ul
+      className="sub-menu"
+    >
+      <li
+        className="menu-item active"
+      >
+        <div
+          className="menu-item-title"
+        >
+          <span>
+            Sub Foo
+          </span>
+        </div>
+      </li>
+    </ul>
+  </li>
+  <li
+    className="menu-item"
+  >
+    <div
+      className="menu-item-title"
+    >
+      <span>
+        Bar
+      </span>
+    </div>
+  </li>
+</ul>
+`;

@@ -4,15 +4,22 @@ import type { ApolloClient } from 'react-apollo';
 
 import ThematicsQuery from '../../../graphql/ThematicsQuery.graphql';
 import { convertEntriesToI18nValue, convertEntriesToI18nRichText } from '../../form/utils';
+import ThematicsDataQuery from '../../../graphql/ThematicsDataQuery.graphql';
 import type { FileValue } from '../../form/types.flow';
-import { createRandomId } from '../../../utils/globalFunctions';
+import { PHASES } from '../../../constants';
 import type { MediaValue, SurveyAdminValues, ThemeValue } from './types.flow';
+import { getTree } from '../../../utils/tree';
 
-export const load = async (client: ApolloClient, fetchPolicy: FetchPolicy) => {
+export const load = async (client: ApolloClient, fetchPolicy: FetchPolicy, locale: string) => {
   const { data } = await client.query({
     query: ThematicsQuery,
-    variables: { identifier: 'survey' },
+    variables: { identifier: PHASES.survey },
     fetchPolicy: fetchPolicy
+  });
+  // Prefetch the ThematicsDataQuery for the admin menu
+  client.query({
+    query: ThematicsDataQuery,
+    variables: { identifier: PHASES.survey, lang: locale }
   });
   return data;
 };
@@ -21,6 +28,11 @@ type Video = {
   htmlCode: ?string,
   mediaFile: ?FileValue
 };
+
+type ThemeValueWithChildren = {
+  children: ThemeValueWithChildren
+} & ThemeValue;
+
 export function convertMedia(video: Video): MediaValue {
   return {
     htmlCode: video.htmlCode || '',
@@ -28,38 +40,29 @@ export function convertMedia(video: Video): MediaValue {
   };
 }
 
-export function getEmptyThematic(): ThemeValue {
-  return {
-    id: createRandomId(),
-    img: null,
-    questions: [],
-    title: {},
-    video: {
-      media: null,
-      title: {},
-      descriptionBottom: {},
-      descriptionSide: {},
-      descriptionTop: {}
-    }
-  };
-}
+const getChildren = thematic =>
+  sortBy(thematic.children, 'order').map(t => ({
+    id: t.id,
+    title: convertEntriesToI18nValue(t.titleEntries),
+    img: t.img,
+    children: getChildren(t)
+  }));
 
 export function postLoadFormat(data: ThematicsQueryQuery): SurveyAdminValues {
-  if (!data.thematics || data.thematics.length === 0) {
-    return {
-      themes: [getEmptyThematic()]
-    };
-  }
-
+  const { rootIdea, thematics } = data;
+  // $FlowFixMe
+  const tree = thematics ? getTree(rootIdea && rootIdea.id, thematics) : [];
   return {
-    themes: sortBy(data.thematics, 'order').map(t => ({
+    themes: sortBy(tree, 'order').map(t => ({
       id: t.id,
       img: t.img,
       questions:
-        t.questions.map(q => ({
-          id: q.id,
-          title: convertEntriesToI18nValue(q.titleEntries)
-        })) || [],
+        (t.questions &&
+          t.questions.map(q => ({
+            id: q.id,
+            title: convertEntriesToI18nValue(q.titleEntries)
+          }))) ||
+        [],
       title: convertEntriesToI18nValue(t.titleEntries),
       video: {
         media: t.video ? convertMedia(t.video) : null,
@@ -67,7 +70,8 @@ export function postLoadFormat(data: ThematicsQueryQuery): SurveyAdminValues {
         descriptionBottom: t.video ? convertEntriesToI18nRichText(t.video.descriptionEntriesBottom) : {},
         descriptionSide: t.video ? convertEntriesToI18nRichText(t.video.descriptionEntriesSide) : {},
         descriptionTop: t.video ? convertEntriesToI18nRichText(t.video.descriptionEntriesTop) : {}
-      }
+      },
+      children: getChildren(t)
     }))
   };
 }

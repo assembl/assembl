@@ -1,21 +1,14 @@
 #import "./fragments/LangString.graphql"
+#import "./fragments/IdeaData.graphql"
 
 query ThematicsQuery($identifier: String!) {
   thematics: ideas(identifier: $identifier) {
     ... on IdeaInterface {
-      messageViewOverride
-      order
-      titleEntries {
-        ...langStringEntry
-      }
-      img {
-        externalUrl
-        mimeType
-        title
-      }
+      ...ideaData
     }
     ... on Idea {
       id
+      parentId
       descriptionEntries {
         ...langStringEntry
       }
@@ -56,6 +49,14 @@ query ThematicsQuery($identifier: String!) {
           ...langStringEntry
         }
       }
+    }
+  }
+  rootIdea {
+    ... on Idea {
+      id
+    }
+    ... on Thematic {
+      id
     }
   }
 }

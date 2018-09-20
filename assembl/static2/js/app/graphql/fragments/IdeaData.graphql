@@ -1,0 +1,14 @@
+#import "./LangString.graphql"
+
+fragment ideaData on IdeaInterface {
+  messageViewOverride
+  order
+  titleEntries {
+    ...langStringEntry
+  }
+  img {
+    externalUrl
+    mimeType
+    title
+  }
+}

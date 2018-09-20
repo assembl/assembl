@@ -513,11 +513,12 @@ const Translations = {
       confirmTextFieldDeletion: "Êtes-vous certain de vouloir supprimer ce champ ?",
       confirmSelectFieldOptionDeletionTitle: "Supprimer cet item",
       confirmSelectFieldOptionDeletion: "Êtes-vous certain de vouloir supprimer cet item ?",
-      addThematic: "Ajouter une thématique",
+      addThematic: "Ajouter une thématique de niveau %{level}",
       addQuestion: "Ajouter une question",
       anErrorOccured:
         "Il y a eu une erreur lors de la sauvegarde, veuillez vérifier que vous avez bien renseigné tous les champs requis.",
       deleteThematic: "Supprimer la thématique",
+      deleteSubThematicDisabled: "Vous ne pouvez pas supprimer une thématique ayant des sous-thématiques.",
       confirmDeleteThematicTitle: "Confirmer la suppression",
       confirmDeleteThematic: "Êtes-vous sûr de vouloir supprimer cette thématique ?",
       confirmUnsavedChanges: "Vous avez des changements non sauvegardés. Êtes-vous sûr de vouloir quitter cette page ?",
@@ -542,7 +543,8 @@ const Translations = {
         timeline: "Éditer les phases et modules",
         exportTaxonomies: "Exporter les taxonomies",
         manageProfileOptions: "Options d'inscription",
-        personalizeInterface: "Personnaliser l'interface"
+        personalizeInterface: "Personnaliser l'interface",
+        configureThematic: "Configurer la thématique %{index}"
       },
       timelineAdmin: {
         phase: "Phase %{count}",
@@ -573,9 +575,13 @@ const Translations = {
       },
       noTimeline: "Aucune timeline n'a été configurée pour ce débat.",
       survey: {
-        "0": "Renseigner les thématiques",
-        "1": "Renseigner les questions",
-        "2": "Exporter les données"
+        "1": "Créer la table des thématiques",
+        "2": "Renseigner les questions",
+        "3": "Exporter les données",
+        configThematic: "Configurer la thématique",
+        configThematics: "Configurer les thématiques",
+        configThematicsHelperTitle: "Vous avez choisi de configurer une table de thématiques.",
+        configThematicsHelperDescription: "Pour modifier votre choix, retourner au paramétrage générale du débat."
       },
       brightMirrorSection: {
         bannerHeader:
@@ -743,6 +749,8 @@ const Translations = {
         descriptionPhase: "Description de la phase"
       },
       tableOfThematics: {
+        thematicTitle: "Titre de la Thématique",
+        headerLabel: "Choisir l'image de fond du bandeau",
         confirmDeletionTitle: "Supprimer la thématique %{title}",
         confirmDeletionBody: "Etes-vous certain de vouloir supprimer cette thématique ?"
       },
@@ -1368,10 +1376,11 @@ const Translations = {
       confirmTextFieldDeletion: "Are you sure that you want to delete this field?",
       confirmSelectFieldOptionDeletionTitle: "Delete this item",
       confirmSelectFieldOptionDeletion: "Are you sure that you want to delete this item?",
-      addThematic: "Add a theme",
+      addThematic: "Add a level %{level} theme",
       addQuestion: "Add a question",
       anErrorOccured: "An error occured during save. Please check that you filled all the required fields.",
       deleteThematic: "Delete the theme",
+      deleteSubThematicDisabled: "You cannot delete a theme with sub-thematics.",
       confirmDeleteThematicTitle: "Confirm deletion",
       confirmDeleteThematic: "Are you sure you want to delete this theme?",
       confirmUnsavedChanges: "You have unsaved changes. Are you sure you want to leave this page?",
@@ -1396,7 +1405,8 @@ const Translations = {
         timeline: "Edit the phases and modules",
         exportTaxonomies: "Export taxonomies",
         manageProfileOptions: "Registration options",
-        personalizeInterface: "Personalize the interface"
+        personalizeInterface: "Personalize the interface",
+        configureThematic: "Configure the theme %{index}"
       },
       timelineAdmin: {
         phase: "Phase %{count}",
@@ -1427,9 +1437,13 @@ const Translations = {
       },
       noTimeline: "No timeline has been configured yet",
       survey: {
-        "0": "Set themes",
-        "1": "Set questions",
-        "2": "Export data"
+        "1": "Create the themes table ",
+        "2": "Set questions",
+        "3": "Export data",
+        configThematic: "Configure the theme",
+        configThematics: "Configure the themes",
+        configThematicsHelperTitle: "You have chosen to configure a themes table.",
+        configThematicsHelperDescription: "To change your choice, return to the general setting of the debate."
       },
       brightMirrorSection: {
         bannerHeader:
@@ -1591,6 +1605,8 @@ const Translations = {
         descriptionPhase: "Description phase"
       },
       tableOfThematics: {
+        thematicTitle: "Thematic title",
+        headerLabel: "Choose the header background image",
         confirmDeletionTitle: "Delete %{title} theme",
         confirmDeletionBody: "Are you sure that you wish to delete this theme?"
       },

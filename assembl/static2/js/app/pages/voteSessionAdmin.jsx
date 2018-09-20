@@ -31,6 +31,7 @@ import { getPhaseId } from '../utils/timeline';
 import { get } from '../utils/routeMap';
 import { displayAlert, displayCustomModal, closeModal } from '../utils/utilityManager';
 import { getDiscussionSlug } from '../utils/globalFunctions';
+import { PHASES } from '../constants';
 
 type VoteModule = {
   choices?: Array<VoteChoice>,
@@ -233,7 +234,6 @@ class VoteSessionAdmin extends React.Component<Props, State> {
   componentWillReceiveProps(nextProps) {
     const { section, voteSessionPage, voteModules } = nextProps;
     const { firstWarningDisplayed, secondWarningDisplayed } = this.state;
-    const currentStep = parseInt(section, 10);
     const slug = { slug: getDiscussionSlug() };
     const showModal = (message1, message2, buttonMessage, stepNumber) => {
       setTimeout(() => {
@@ -258,14 +258,14 @@ class VoteSessionAdmin extends React.Component<Props, State> {
     };
 
     if (!this.state.refetching) {
-      if ((currentStep === 2 || currentStep === 3) && !voteSessionPage.get('id') && !firstWarningDisplayed) {
+      if ((section === '2' || section === '3') && !voteSessionPage.get('id') && !firstWarningDisplayed) {
         showModal('administration.configureVoteSession', 'administration.saveFirstStep', 'administration.backToPreviousStep', 1);
         this.setState({ firstWarningDisplayed: true });
       }
-      if (currentStep === 3 && !voteSessionPage.get('id') && !secondWarningDisplayed) {
+      if (section === '3' && !voteSessionPage.get('id') && !secondWarningDisplayed) {
         showModal('administration.configureVoteSession', 'administration.saveFirstStep', 'administration.backToPreviousStep', 1);
         this.setState({ secondWarningDisplayed: true });
-      } else if (currentStep === 3 && voteModules.size < 1 && !secondWarningDisplayed) {
+      } else if (section === '3' && voteModules.size < 1 && !secondWarningDisplayed) {
         showModal('administration.configureVoteModules', 'administration.saveSecondStep', 'administration.backToPreviousStep', 2);
         this.setState({ secondWarningDisplayed: true });
       }
@@ -509,7 +509,6 @@ class VoteSessionAdmin extends React.Component<Props, State> {
     const { editLocale, section, debateId, voteSessionId } = this.props;
     const exportLink = get('exportVoteSessionData', { debateId: debateId, voteSessionId: voteSessionId });
     const saveDisabled = !this.dataHaveChanged();
-    const currentStep = parseInt(section, 10);
     return (
       <div className="token-vote-admin">
         <SaveButton disabled={saveDisabled} saveAction={this.saveAction} />
@@ -517,7 +516,7 @@ class VoteSessionAdmin extends React.Component<Props, State> {
         {section === '2' && <ModulesSection />}
         {section === '3' && <VoteProposalsSection />}
         {section === '4' && <ExportSection exportLink={exportLink} annotation="voteSessionAnnotation" />}
-        {!isNaN(currentStep) && <Navbar currentStep={currentStep} totalSteps={4} phaseIdentifier="voteSession" />}
+        {section && <Navbar currentStep={section} steps={['1', '2', '3', '4']} phaseIdentifier={PHASES.voteSession} />}
       </div>
     );
   }

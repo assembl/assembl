@@ -1,0 +1,47 @@
+
+.menu {
+  padding: 0;
+  list-style-type: none;
+
+  li.menu-item {
+    padding: 0 0 15px;
+
+    a {
+      color: $grey2;
+
+      &:hover {
+        color: $first-color;
+      }
+    }
+
+    .arrow {
+      color: $grey2;
+      font-size: 6px;
+      margin-right: 10px;
+      margin-left: -19px;
+      cursor: pointer;
+    }
+
+    .menu-item-title {
+      display: flex;
+      align-items: center;
+    }
+
+    .sub-menu {
+      padding: 10px 0 0 10px;
+      list-style-type: none;
+
+      > li.menu-item:last-child {
+        padding: 0 !important;
+      }
+    }
+
+    &.active {
+      > .menu-item-title {
+        > .arrow, > a {
+          color: $first-color;
+        }
+      }
+    }
+  }
+}

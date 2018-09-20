@@ -4,6 +4,10 @@ import * as React from 'react';
 import { Tooltip } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
 
+type TooltipProps = {
+  level: number
+};
+
 export const addSectionTooltip = (
   <Tooltip id="addSectionTooltip">
     <Translate value="administration.sections.addSection" />
@@ -40,29 +44,37 @@ export const downTooltip = (
   </Tooltip>
 );
 
-export const addThematicTooltip = (
+export const addThematicTooltip = ({ level }: TooltipProps) => (
   <Tooltip id="addThematicTooltip">
-    <Translate value="administration.addThematic" />
+    <Translate value="administration.addThematic" level={level} />
   </Tooltip>
 );
 
-export const addQuestionTooltip = (
+export const addQuestionTooltip = () => (
   <Tooltip id="addQuestionTooltip">
     <Translate value="administration.addQuestion" />
   </Tooltip>
 );
 
-export const deleteQuestionTooltip = (
+export const deleteQuestionTooltip = () => (
   <Tooltip id="deleteQuestionTooltip">
     <Translate value="administration.deleteQuestion" />
   </Tooltip>
 );
 
-export const deleteThematicTooltip = (
+export const deleteThematicTooltip = () => (
   <Tooltip id="deleteThematicTooltip">
     <Translate value="administration.deleteThematic" />
   </Tooltip>
 );
+
+export const deleteSubThematicDisabledTooltip = () => (
+  <Tooltip id="deleteSubThematicDisabledTooltip">
+    <Translate value="administration.deleteSubThematicDisabled" />
+  </Tooltip>
+);
+
+export const thematicTitle = (title: string) => <Tooltip id="thematicTitle">{title}</Tooltip>;
 
 export const languageTooltip = (
   <Tooltip id="languageTooltip">
@@ -124,13 +136,13 @@ export const editMessageTooltip = (
   </Tooltip>
 );
 
-export const createResourceTooltip = (
+export const createResourceTooltip = () => (
   <Tooltip id="createResourceTooltip">
     <Translate value="administration.resourcesCenter.createResource" />
   </Tooltip>
 );
 
-export const deleteResourceTooltip = (
+export const deleteResourceTooltip = () => (
   <Tooltip id="deleteResourceTooltip">
     <Translate value="administration.resourcesCenter.deleteResource" />
   </Tooltip>
@@ -271,7 +283,7 @@ export const deletePhaseTooltip = (
 
 export const phaseTooltip = (phaseTitle: string) => <Tooltip id="phaseTooltip">{phaseTitle}</Tooltip>;
 
-export const thematicTooltip = (thematicTitle: string) => <Tooltip id="thematicTooltip">{thematicTitle}</Tooltip>;
+export const thematicTooltip = (title: string) => <Tooltip id="thematicTooltip">{title}</Tooltip>;
 
 export const editFictionTooltip = (
   <Tooltip id="editFictionTooltip">

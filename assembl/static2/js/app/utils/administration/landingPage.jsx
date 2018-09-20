@@ -11,8 +11,8 @@ const landingPagePlugin = {
   graphqlQuery: LandingPageModules,
   loading: 'landingPageLoading',
   hasErrors: 'landingPageHasErrors',
-  queryOptions: ({ i18n }) => ({
-    variables: { lang: i18n.locale }
+  queryOptions: ({ locale }) => ({
+    variables: { lang: locale }
   }),
   dataToProps: ({ data }) => {
     if (data.loading) {

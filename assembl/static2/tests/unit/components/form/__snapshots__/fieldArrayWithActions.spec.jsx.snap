@@ -4,7 +4,9 @@ exports[`FieldArrayWithActions component should render an array of fields with d
 <form
   onSubmit={[Function]}
 >
-  <div>
+  <div
+    className=""
+  >
     <div
       className="form-container"
     >
@@ -57,22 +59,26 @@ exports[`FieldArrayWithActions component should render an array of fields with d
       <div
         className="clear"
       />
-      <input
-        label="Firstname"
-        name="persons[0].firstname"
-        onBlur={[Function]}
-        onChange={[Function]}
-        onFocus={[Function]}
-        value="Rosalinda"
-      />
-      <input
-        label="Firstname"
-        name="persons[0].lastname"
-        onBlur={[Function]}
-        onChange={[Function]}
-        onFocus={[Function]}
-        value="Tillman"
-      />
+      <div
+        className=""
+      >
+        <input
+          label="Firstname"
+          name="persons[0].firstname"
+          onBlur={[Function]}
+          onChange={[Function]}
+          onFocus={[Function]}
+          value="Rosalinda"
+        />
+        <input
+          label="Firstname"
+          name="persons[0].lastname"
+          onBlur={[Function]}
+          onChange={[Function]}
+          onFocus={[Function]}
+          value="Tillman"
+        />
+      </div>
       <div
         className="separator"
       />
@@ -129,22 +135,26 @@ exports[`FieldArrayWithActions component should render an array of fields with d
       <div
         className="clear"
       />
-      <input
-        label="Firstname"
-        name="persons[1].firstname"
-        onBlur={[Function]}
-        onChange={[Function]}
-        onFocus={[Function]}
-        value="Lavinia"
-      />
-      <input
-        label="Firstname"
-        name="persons[1].lastname"
-        onBlur={[Function]}
-        onChange={[Function]}
-        onFocus={[Function]}
-        value="Kunde"
-      />
+      <div
+        className=""
+      >
+        <input
+          label="Firstname"
+          name="persons[1].firstname"
+          onBlur={[Function]}
+          onChange={[Function]}
+          onFocus={[Function]}
+          value="Lavinia"
+        />
+        <input
+          label="Firstname"
+          name="persons[1].lastname"
+          onBlur={[Function]}
+          onChange={[Function]}
+          onFocus={[Function]}
+          value="Kunde"
+        />
+      </div>
       <div
         className="separator"
       />
@@ -173,7 +183,9 @@ exports[`FieldArrayWithActions component should render an array of fields with d
 <form
   onSubmit={[Function]}
 >
-  <div>
+  <div
+    className=""
+  >
     <div
       className="form-container"
     >
@@ -226,22 +238,26 @@ exports[`FieldArrayWithActions component should render an array of fields with d
       <div
         className="clear"
       />
-      <input
-        label="Firstname"
-        name="persons[0].firstname"
-        onBlur={[Function]}
-        onChange={[Function]}
-        onFocus={[Function]}
-        value="Rosalinda"
-      />
-      <input
-        label="Firstname"
-        name="persons[0].lastname"
-        onBlur={[Function]}
-        onChange={[Function]}
-        onFocus={[Function]}
-        value="Tillman"
-      />
+      <div
+        className=""
+      >
+        <input
+          label="Firstname"
+          name="persons[0].firstname"
+          onBlur={[Function]}
+          onChange={[Function]}
+          onFocus={[Function]}
+          value="Rosalinda"
+        />
+        <input
+          label="Firstname"
+          name="persons[0].lastname"
+          onBlur={[Function]}
+          onChange={[Function]}
+          onFocus={[Function]}
+          value="Tillman"
+        />
+      </div>
     </div>
     <div
       className="form-container"
@@ -295,22 +311,26 @@ exports[`FieldArrayWithActions component should render an array of fields with d
       <div
         className="clear"
       />
-      <input
-        label="Firstname"
-        name="persons[1].firstname"
-        onBlur={[Function]}
-        onChange={[Function]}
-        onFocus={[Function]}
-        value="Lavinia"
-      />
-      <input
-        label="Firstname"
-        name="persons[1].lastname"
-        onBlur={[Function]}
-        onChange={[Function]}
-        onFocus={[Function]}
-        value="Kunde"
-      />
+      <div
+        className=""
+      >
+        <input
+          label="Firstname"
+          name="persons[1].firstname"
+          onBlur={[Function]}
+          onChange={[Function]}
+          onFocus={[Function]}
+          value="Lavinia"
+        />
+        <input
+          label="Firstname"
+          name="persons[1].lastname"
+          onBlur={[Function]}
+          onChange={[Function]}
+          onFocus={[Function]}
+          value="Kunde"
+        />
+      </div>
     </div>
     <div
       className="plus margin-l"

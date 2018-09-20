@@ -181,7 +181,7 @@ class Administration extends React.Component {
   render() {
     const {
       children,
-      i18n,
+      locale,
       params,
       refetchTabsConditions,
       refetchSections,
@@ -196,7 +196,7 @@ class Administration extends React.Component {
     const { phase } = params;
     const childrenWithProps = React.Children.map(children, child =>
       React.cloneElement(child, {
-        locale: i18n.locale,
+        locale: locale,
         refetchTabsConditions: refetchTabsConditions,
         refetchVoteSession: refetchVoteSession,
         refetchSections: refetchSections,
@@ -228,7 +228,7 @@ class Administration extends React.Component {
             <Row>
               <Col xs={12} md={3}>
                 <div className="admin-menu-container">
-                  <Menu timeline={timeline} i18n={i18n} requestedPhase={phase} />
+                  <Menu timeline={timeline} locale={locale} requestedPhase={phase} />
                 </div>
               </Col>
               <Col xs={12} md={8}>
@@ -252,7 +252,7 @@ class Administration extends React.Component {
 
 const mapStateToProps = state => ({
   timeline: state.timeline,
-  i18n: state.i18n
+  locale: state.i18n.locale
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -312,11 +312,11 @@ export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   graphql(VoteSessionQuery, {
     skip: ({ timeline }) => typeof getPhaseId(timeline, 'voteSession') !== 'string',
-    options: ({ timeline, i18n }) => {
+    options: ({ timeline, locale }) => {
       const id = timeline ? getPhaseId(timeline, 'voteSession') : null;
       const discussionPhaseId = id ? atob(id).split(':')[1] : null;
       return {
-        variables: { discussionPhaseId: discussionPhaseId, lang: i18n.locale }
+        variables: { discussionPhaseId: discussionPhaseId, lang: locale }
       };
     },
     props: ({ data }) => {
@@ -385,7 +385,7 @@ export default compose(
     skip: isNotInDiscussionAdmin
   }),
   graphql(TimelineQuery, {
-    options: ({ i18n: { locale } }) => ({
+    options: ({ locale }) => ({
       variables: { lang: locale }
     }),
     props: ({ data }) => {
@@ -415,8 +415,8 @@ export default compose(
     skip: isNotInLandingPageAdmin
   }),
   graphql(TextFields, {
-    options: ({ i18n }) => ({
-      variables: { lang: i18n.locale }
+    options: ({ locale }) => ({
+      variables: { lang: locale }
     }),
     props: ({ data }) => {
       if (data.loading) {
@@ -441,8 +441,8 @@ export default compose(
     skip: props => isNotInDiscussionAdmin(props) || props.router.getCurrentLocation().search !== '?section=3'
   }),
   graphql(LandingPageQuery, {
-    options: ({ i18n }) => ({
-      variables: { lang: i18n.locale }
+    options: ({ locale }) => ({
+      variables: { lang: locale }
     }),
     props: ({ data }) => {
       if (data.loading) {

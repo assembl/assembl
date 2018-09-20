@@ -2,6 +2,7 @@ import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { get } from '../utils/routeMap';
+import { PHASES } from '../constants';
 import ExportSection from '../components/administration/exportSection';
 import Navbar from '../components/administration/navbar';
 import DiscussionPreferenceLanguageQuery from '../graphql/DiscussionPreferenceLanguage.graphql';
@@ -45,7 +46,6 @@ class ThreadAdmin extends React.Component {
     const { isAnonymous } = this.state;
     const anonymous = translation === '?' ? `anon=${isAnonymous.toString()}` : `&anon=${isAnonymous.toString()}`;
     const exportLink = get('exportThreadMulticolumnData', { debateId: debateId, translation: translation, anonymous: anonymous });
-    const currentStep = parseInt(section, 10);
     return (
       <div className="thread-admin">
         {section === '1' && (
@@ -62,7 +62,7 @@ class ThreadAdmin extends React.Component {
             annotation="threadAnnotation"
           />
         )}
-        {!isNaN(currentStep) && <Navbar currentStep={currentStep} totalSteps={1} phaseIdentifier="thread" />}
+        {section && <Navbar currentStep={section} steps={['1']} phaseIdentifier={PHASES.thread} />}
       </div>
     );
   }

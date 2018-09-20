@@ -86,12 +86,12 @@ const AdminChild = (props) => {
   case 'discussion':
     return <DiscussionAdmin {...props} section={props.location.query.section} />;
   case 'survey':
-    return <SurveyAdmin {...props} thematicId={props.location.query.thematic} section={props.location.query.section} />;
+    return <SurveyAdmin {...props} thematicId={props.location.query.thematicId} section={props.location.query.section} />;
   case 'brightMirror':
     return <BrightMirrorAdmin {...props} />;
   case 'thread':
     return <ThreadAdmin {...props} section={props.location.query.section} />;
-  case 'multiColumn':
+  case 'multiColumns':
     return <MultiColumnsAdmin {...props} section={props.location.query.section} />;
   case 'voteSession':
     return <VoteSessionAdmin {...props} section={props.location.query.section} />;
@@ -159,7 +159,7 @@ export default [
           component={BuildBrightMirrorFiction}
         />
         <Route path={routeForRouter('unauthorizedAdministration')} component={UnauthorizedAdministration} />
-        <Route path={routeForRouter('administration')} component={Administration}>
+        <Route path={routeForRouter('administrationRoot')} component={Administration}>
           <Route path={routeForRouter('adminPhase', false, { phase: ':phase' })} component={AdminChild} />
         </Route>
       </Route>

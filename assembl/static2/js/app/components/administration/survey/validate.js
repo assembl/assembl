@@ -21,6 +21,9 @@ function validateTheme(theme) {
     errors.video = validateVideo(theme.video);
   }
 
+  if (theme.children) {
+    errors.children = theme.children.map(validateTheme);
+  }
   return errors;
 }
 
