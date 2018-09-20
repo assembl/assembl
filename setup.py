@@ -43,7 +43,8 @@ setup(name='assembl',
       url='http://assembl.org/',
       license='AGPLv3',
       keywords='web wsgi pyramid',
-      packages=find_packages(),
+      # find_packages misses alembic somehow.
+      packages=find_packages() + ['assembl.alembic', 'assembl.alembic.versions'],
       # scripts=['fabfile.py'],
       package_data={
           'assembl': [
