@@ -10,6 +10,7 @@ and :py:mod:`changes_router`.
 """
 from __future__ import absolute_import
 
+from os import getcwd
 from os.path import join, dirname, realpath, exists
 import ConfigParser
 
@@ -94,10 +95,17 @@ class CeleryWithConfig(Celery):
         # A task is called through celery, so it may not have basic
         # configuration setup. Go through that setup the first time.
         global _settings, SMTP_DOMAIN_DELAYS
-        rootdir = dirname(dirname(dirname(realpath(__file__))))
+        rootdir = getcwd()
         settings_file = join(rootdir, 'local.ini')
         if not exists(settings_file):
             settings_file = join(rootdir, 'production.ini')
+        if not exists(settings_file):
+            rootdir = dirname(dirname(dirname(realpath(__file__))))
+            settings_file = join(rootdir, 'local.ini')
+        if not exists(settings_file):
+            settings_file = join(rootdir, 'production.ini')
+        if not exists(settings_file):
+            raise RuntimeError("Missing settings file")
         _settings = settings = get_appsettings(settings_file, 'assembl')
         configure_zmq(settings['changes.socket'], False)
         config = ConfigParser.SafeConfigParser()
