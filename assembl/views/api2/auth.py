@@ -42,7 +42,7 @@ from ..auth.views import (
 
 
 _ = TranslationStringFactory('assembl')
-
+generic_error_message = "This username and password combination is not valid."
 
 @view_config(
     context=ClassContext, request_method="PATCH",
@@ -343,9 +343,14 @@ def reset_password(request):
     if user_id:
         user = AgentProfile.get(int(user_id))
         if not user:
-            raise JSONError(
-                localizer.translate(_("The user does not exist")),
-                code=HTTPNotFound.code)
+            if not discussion.preferences['generic_auth_errors']:
+                raise JSONError(
+                    localizer.translate(_("The user does not exist")),
+                    code=HTTPNotFound.code)
+            else:
+                raise JSONError(
+                    localizer.translate(_(generic_error_message)),
+                    code=HTTPNotFound.code)
         if identifier:
             for account in user.accounts:
                 if identifier == account.email:
@@ -354,9 +359,14 @@ def reset_password(request):
     elif identifier:
         user, account = from_identifier(identifier)
         if not user:
-            raise JSONError(
-                localizer.translate(_("This email does not exist")),
-                code=HTTPNotFound.code)
+            if not discussion.preferences['generic_auth_errors']:
+                raise JSONError(
+                    localizer.translate(_("This email does not exist")),
+                    code=HTTPNotFound.code)
+            else:
+                raise JSONError(
+                    localizer.translate(_(generic_error_message)),
+                    code=HTTPNotFound.code)
         if account:
             email = account.email
     else:
@@ -365,10 +375,16 @@ def reset_password(request):
     if not email:
         email = user.get_preferred_email()
         if not email:
-            error = localizer.translate(_("This user has no email"))
+            if not discussion.preferences['generic_auth_errors']:
+                error = localizer.translate(_("This user has no email"))
+            else:
+                error = localizer.translate(_(generic_error_message))
             raise JSONError(error, code=HTTPPreconditionFailed.code)
     if not isinstance(user, User):
-        error = localizer.translate(_("This is not a user"))
+        if not discussion.preferences['generic_auth_errors']:
+            error = localizer.translate(_("This is not a user"))
+        else:
+            error = localizer.translate(_(geneirc_error_message))
         raise JSONError(error, code=HTTPPreconditionFailed.code)
     send_change_password_email(request, user, email, discussion=discussion)
     return HTTPOk()
@@ -452,10 +468,16 @@ def assembl_register_user(request):
         # Find agent account to avoid duplicates!
         if session.query(AbstractAgentAccount).filter_by(
                 email_ci=email).count():
-            errors.add_error(localizer.translate(_(
-                "We already have a user with this email.")),
-                ErrorTypes.EXISTING_EMAIL,
-                HTTPConflict.code)
+            if not discussion.preferences['generic_auth_errors']:
+                errors.add_error(localizer.translate(_(
+                    "We already have a user with this email.")),
+                    ErrorTypes.EXISTING_EMAIL,
+                    HTTPConflict.code)
+            else:
+                errors.add_error(localizer.translate(_(
+                    generic_error_message)),
+                    ErrorTypes.EXISTING_EMAIL,
+                    HTTPConflict.code)
     if not email:
         errors.add_error(localizer.translate(_("No email.")),
                          ErrorTypes.INVALID_EMAIL)
@@ -463,10 +485,16 @@ def assembl_register_user(request):
     if username:
         if session.query(Username).filter(
                 func.lower(Username.username) == username.lower()).count():
-            errors.add_error(localizer.translate(_(
-                "We already have a user with this username.")),
-                ErrorTypes.EXISTING_USERNAME,
-                HTTPConflict.code)
+            if not discussion.preferences['generic_auth_errors']:
+                errors.add_error(localizer.translate(_(
+                    "We already have a user with this username.")),
+                    ErrorTypes.EXISTING_USERNAME,
+                    HTTPConflict.code)
+            else:
+                errors.add_error(localizer.translate(_(
+                    generic_error_message)),
+                    ErrorTypes.EXISTING_USERNAME,
+                    HTTPConflict.code)
         if len(username) > 20:
             errors.add_error(localizer.translate(_(
                 "The username must be less than 20 characters.")),

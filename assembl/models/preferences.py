@@ -546,6 +546,17 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
             "default": True,
         },
 
+        # Show different messages in case of a failed registration
+        {
+            "id": "generic_auth_errors",
+            "name": _("Generic Auth Errors"),
+            "value_type": "bool",
+            "description": _("Display a generic error message in case of bad authentication"),
+            "allow_user_override": None,
+            "modification_permission": P_ADMIN_DISC,
+            "default": config.get_config().get('assembl.generic_auth_errors'),
+        },
+
         # Extra data from social fields to put in CSV reports
         {
             "id": "extra_csv_data",
