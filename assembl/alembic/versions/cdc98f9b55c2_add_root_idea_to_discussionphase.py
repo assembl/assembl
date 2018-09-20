@@ -1,14 +1,14 @@
 """Add root_idea to DiscussionPhase
 
 Revision ID: cdc98f9b55c2
-Revises: b28a8cb91fc0
+Revises: fad90e3f18b4
 Create Date: 2018-09-03 11:29:10.171065
 
 """
 
 # revision identifiers, used by Alembic.
 revision = 'cdc98f9b55c2'
-down_revision = 'b28a8cb91fc0'
+down_revision = 'fad90e3f18b4'
 
 from alembic import context, op
 import sqlalchemy as sa
