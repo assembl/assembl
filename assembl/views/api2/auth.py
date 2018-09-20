@@ -39,6 +39,7 @@ from assembl.lib.sqla import ObjectNotUniqueError
 from ..auth.views import (
     send_change_password_email, from_identifier, send_confirmation_email,
     maybe_auto_subscribe)
+from assembl.lib import logging
 
 
 _ = TranslationStringFactory('assembl')
@@ -332,6 +333,7 @@ def reset_password(request):
     identifier = request.json_body.get('identifier')
     user_id = request.json_body.get('user_id')
     slug = request.json_body.get('discussion_slug')
+    logger = logging.getLogger('assembl.auth')
     discussion = None
     if slug:
         discussion = Discussion.default_db.query(
@@ -351,6 +353,7 @@ def reset_password(request):
                 raise JSONError(
                     localizer.translate(_(generic_error_message)),
                     code=HTTPNotFound.code)
+                logger.error("The user does not exist.")
         if identifier:
             for account in user.accounts:
                 if identifier == account.email:
@@ -367,6 +370,7 @@ def reset_password(request):
                 raise JSONError(
                     localizer.translate(_(generic_error_message)),
                     code=HTTPNotFound.code)
+                logger.error("This email does not exist.")
         if account:
             email = account.email
     else:
@@ -379,12 +383,14 @@ def reset_password(request):
                 error = localizer.translate(_("This user has no email"))
             else:
                 error = localizer.translate(_(generic_error_message))
+                logger.error("This user has no email.")
             raise JSONError(error, code=HTTPPreconditionFailed.code)
     if not isinstance(user, User):
         if not discussion.preferences['generic_auth_errors']:
             error = localizer.translate(_("This is not a user"))
         else:
-            error = localizer.translate(_(geneirc_error_message))
+            error = localizer.translate(_(generic_error_message))
+            logger.error("This is not a user.")
         raise JSONError(error, code=HTTPPreconditionFailed.code)
     send_change_password_email(request, user, email, discussion=discussion)
     return HTTPOk()
@@ -444,6 +450,7 @@ def assembl_register_user(request):
     localizer = request.localizer
     session = AgentProfile.default_db
     json = request.json
+    logger = logging.getLogger('assembl.auth')
     discussion = discussion_from_request(request)
     permissions = get_permissions(
         Everyone, discussion.id if discussion else None)
@@ -478,6 +485,8 @@ def assembl_register_user(request):
                     generic_error_message)),
                     ErrorTypes.EXISTING_EMAIL,
                     HTTPConflict.code)
+                logger.error("We already have a user with this email %s" % email)
+
     if not email:
         errors.add_error(localizer.translate(_("No email.")),
                          ErrorTypes.INVALID_EMAIL)
@@ -495,6 +504,7 @@ def assembl_register_user(request):
                     generic_error_message)),
                     ErrorTypes.EXISTING_USERNAME,
                     HTTPConflict.code)
+                logger.error("We already have a user with this username" % username)
         if len(username) > 20:
             errors.add_error(localizer.translate(_(
                 "The username must be less than 20 characters.")),
