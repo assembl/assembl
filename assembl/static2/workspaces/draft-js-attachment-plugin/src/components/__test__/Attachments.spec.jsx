@@ -1,5 +1,5 @@
 // @flow
-import { configure, shallow } from 'enzyme';
+import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import type { JestMockT } from 'jest';
 import React from 'react';
@@ -47,6 +47,7 @@ describe('Attachments component', () => {
   });
 
   it('should render a list of attachments', () => {
+    const editorState = EditorState.createEmpty();
     const myfile = new File(['foo'], 'my-img.jpg');
     mock(getAttachments).mockImplementation(() => [
       { blockKey: 'block1', entityKey: '1', src: 'my-file.pdf', title: 'My pdf' },
@@ -56,7 +57,7 @@ describe('Attachments component', () => {
     const props = {
       removeAttachment: removeAttachmentSpy,
       store: {
-        getEditorState: jest.fn(),
+        getEditorState: jest.fn(() => editorState),
         setEditorState: jest.fn()
       }
     };
@@ -65,23 +66,21 @@ describe('Attachments component', () => {
     expect(tree).toMatchSnapshot();
   });
 
-  it('should call removeAttachment when user clicks on delete button', () => {
+  it('should remove an attachment when user clicks on delete icon', () => {
     mock(getAttachments).mockImplementation(() => [{ blockKey: 'block1', entityKey: '1', src: 'my-file.pdf', title: 'My pdf' }]);
+    const editorState = EditorState.createEmpty();
     const removeAttachmentSpy = jest.fn();
+    const setEditorStateSpy = jest.fn();
     const props = {
       removeAttachment: removeAttachmentSpy,
       store: {
-        getEditorState: jest.fn(),
-        setEditorState: jest.fn()
+        getEditorState: jest.fn(() => editorState),
+        setEditorState: setEditorStateSpy
       }
     };
-    const wrapper = shallow(<Attachments {...props} />);
+    const wrapper = mount(<Attachments {...props} />);
     wrapper.find('span.assembl-icon-delete').simulate('click');
-    expect(removeAttachmentSpy).toHaveBeenCalledWith({
-      blockKey: 'block1',
-      entityKey: '1',
-      src: 'my-file.pdf',
-      title: 'My pdf'
-    });
+    expect(setEditorStateSpy).toHaveBeenCalled();
+    expect(removeAttachmentSpy).toHaveBeenCalledWith(editorState, 'block1');
   });
 });
