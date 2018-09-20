@@ -96,7 +96,7 @@ class Footer extends React.Component {
                     </Link>
                   </div>
                 )}
-                {(hasPrivacyPolicy && hasUserGuidelines) ||
+                {(hasPrivacyPolicy && hasUserGuidelines && <span className="small-hyphen-padding"> &mdash; </span>) ||
                   (hasCookiesPolicy && <span className="small-hyphen-padding"> &mdash; </span>)}
                 {hasUserGuidelines && (
                   <div className="user-guidelines">
