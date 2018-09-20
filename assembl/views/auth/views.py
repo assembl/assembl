@@ -51,7 +51,7 @@ from assembl.lib.sqla_types import EmailString
 from assembl.lib.utils import normalize_email_name, get_global_base_url
 from .. import (
     get_default_context, JSONError, get_provider_data,
-    HTTPTemporaryRedirect, create_get_route)
+    HTTPTemporaryRedirect, create_get_route, sanitize_next_view)
 
 _ = TranslationStringFactory('assembl')
 log = logging.getLogger('assembl')
@@ -105,7 +105,7 @@ def _get_route_from_path(request, path):
 
 
 def handle_next_view(request, consume=False, default_suffix='home'):
-    next_value = request.params.get('next', None)
+    next_value = sanitize_next_view(request.params.get('next', None))
     if next_value:
         return next_value
     else:
@@ -154,7 +154,7 @@ def get_social_autologin(request, discussion=None, next_view=None):
     use_next_view = True
     if next_view is False:
         use_next_view = False
-    next_view = next_view or request.params.get('next', None)
+    next_view = sanitize_next_view(next_view or request.params.get('next', None))
     if discussion and not next_view and use_next_view:
         if landing_page:
             next_view = request.route_path('new_home',

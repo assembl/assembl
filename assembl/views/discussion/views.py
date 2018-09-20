@@ -34,7 +34,7 @@ from ...models import (
 
 from .. import (
     HTTPTemporaryRedirect, get_default_context as base_default_context,
-    get_locale_from_request, get_theme_info)
+    get_locale_from_request, get_theme_info, sanitize_next_view)
 from ...nlp.translation_service import DummyGoogleTranslationService
 from ..auth.views import get_social_autologin, get_login_context
 
@@ -97,7 +97,7 @@ def home_view(request):
         # that is the next view. If not stated, the referer takes
         # precedence. In case of failure, login redirects to the
         # discussion which is its context.
-        next_view = request.params.get('next', None)
+        next_view = sanitize_next_view(request.params.get('next', None))
         if not next_view and discussion:
             # If referred here from a post url, want to be able to
             # send the user back. Usually, Assembl will send the user
@@ -249,7 +249,7 @@ def react_view(request, required_permission=P_READ):
                 return context
 
             # otherwise redirect to login page
-            next_view = request.params.get('next', None)
+            next_view = sanitize_next_view(request.params.get('next', None))
             if not next_view:
                 # TODO: check it's a valid v2 page using frontend_urls
                 if canUseReact and request.matched_route.name in (
