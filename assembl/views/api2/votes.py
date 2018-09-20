@@ -406,10 +406,16 @@ def extract_voters(request):
                 for option in options:
                     if vote_value == option:
                         choice = str(option).encode('utf-8')
-                    option = str(option) + " " + vote_spec.unit
-                    if option not in fieldnames: 
-                        fieldnames.append(option.encode('utf-8'))
-                extract_info.update({choice : "1"})                        
+                        option = str(option) + " " + vote_spec.unit
+                        if option not in fieldnames:
+                            fieldnames.append(option.encode('utf-8'))
+                            extract_info.update({choice : "1"})
+                    else:
+                        choice = str(option).encode('utf-8')
+                        option = str(option) + " " + vote_spec.unit
+                        if option not in fieldnames:
+                            fieldnames.append(option.encode('utf-8'))
+                            extract_info.update({choice : "0"})
 
         extract_list.append(extract_info)
 
