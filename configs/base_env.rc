@@ -76,6 +76,9 @@ _wsginame = prod.wsgi
 _ini_file = local.ini
 _projectname = assembl
 
+# Is assembl installed as a python package in the venv, or as a development package
+_package_install = false
+
 # Those need to be overridden in the server-specific file
 # _postgres_db_password
 # _user
