@@ -20,6 +20,7 @@
 
     .category-available-tokens {
       display: flex;
+      padding: 0 0 15px;
       max-width: 780px;
       margin-left: -5px;
 
@@ -28,7 +29,7 @@
       }
 
       .tokens {
-        padding-left: 10px;
+        padding-left: 100px;
         padding-top: 9px;
       }
 
@@ -37,7 +38,7 @@
       }
 
       span {
-        font-size: $font-size-s;
+        font-size: $font-size-xs;
       }
     }
   }
@@ -300,7 +301,7 @@
 
   .separator {
     border-bottom: 1px $btn-dark-border-style $grey5;
-    max-width: 745px;
+    max-width: 605px;
     margin-left: -5px;
   }
 }
