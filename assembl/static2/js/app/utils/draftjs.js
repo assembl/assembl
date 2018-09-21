@@ -3,7 +3,7 @@
 
   @flow
 */
-import { type ContentState, EditorState, type EntityInstance } from 'draft-js';
+import { type ContentBlock, type ContentState, EditorState, type EntityInstance } from 'draft-js';
 import { convertFromHTML, convertToHTML } from 'draft-convert';
 import { type List, type Map } from 'immutable';
 
@@ -12,8 +12,6 @@ import { type List, type Map } from 'immutable';
 import { converters as linkConverters } from 'draft-js-link-plugin';
 import { converters as attachmentsConverters } from 'draft-js-attachment-plugin';
 /* eslint-enable import/no-extraneous-dependencies */
-
-import attachmentsPlugin from '../components/common/richTextEditor/attachmentsPlugin';
 
 type Entry = {
   localeCode: string,
@@ -24,8 +22,25 @@ const IMAGE_ENTITY = 'IMAGE';
 const DOCUMENT_ENTITY = 'DOCUMENT';
 const LINK_ENTITY = 'LINK';
 
+export function blockToHTML(block: ContentBlock): { start: string, end: string } | void {
+  if (block.type === 'atomic') {
+    return { start: '<div class="atomic-block" data-blocktype="atomic">', end: '</div>' };
+  }
+
+  return undefined;
+}
+
+export function htmlToBlock(nodeName: string, node: HTMLElement, lastList: *, inBlock: string): void | string {
+  const isAtomicBlock = nodeName === 'div' && node.dataset.blocktype === 'atomic';
+  if (isAtomicBlock || (nodeName === 'img' && inBlock !== 'atomic')) {
+    return 'atomic';
+  }
+
+  return undefined;
+}
+
 const customConvertFromHTML = convertFromHTML({
-  htmlToBlock: attachmentsPlugin.htmlToBlock,
+  htmlToBlock: htmlToBlock,
   htmlToEntity: function (nodeName: string, node: HTMLElement, createEntity: Function): EntityInstance | null {
     if (nodeName === 'a') {
       // $FlowFixMe: if nodeName is 'a', node should be an HTMLAnchorElement
@@ -37,7 +52,7 @@ const customConvertFromHTML = convertFromHTML({
 });
 
 const customConvertToHTML = convertToHTML({
-  blockToHTML: attachmentsPlugin.blockToHTML,
+  blockToHTML: blockToHTML,
   entityToHTML: (entity: EntityInstance, originalText: string): string => {
     if (entity.type === DOCUMENT_ENTITY || entity.type === IMAGE_ENTITY) {
       return attachmentsConverters.entityToHTML(entity);

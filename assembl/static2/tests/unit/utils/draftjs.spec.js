@@ -5,6 +5,78 @@ import { createEditorStateFromText } from '../../helpers/draftjs';
 import * as draftjs from '../../../js/app/utils/draftjs';
 
 describe('draftjs utils', () => {
+  describe('blockToHTML function', () => {
+    const { blockToHTML } = draftjs;
+    it('should return undefined for non atomic block', () => {
+      const block = {
+        type: 'unstyled'
+      };
+      const result = blockToHTML(block);
+      expect(result).toBeUndefined();
+    });
+
+    it('should convert atomic block to a div', () => {
+      const block = {
+        type: 'atomic'
+      };
+      const result = blockToHTML(block);
+      const expected = {
+        start: '<div class="atomic-block" data-blocktype="atomic">',
+        end: '</div>'
+      };
+      expect(result).toEqual(expected);
+    });
+  });
+
+  describe('htmlToBlock function', () => {
+    const { htmlToBlock } = draftjs;
+    it('should create an atomic block if the node is an img tag', () => {
+      const nodeName = 'img';
+      const node = {};
+      const lastList = null;
+      const inBlock = 'unstyled';
+      const result = htmlToBlock(nodeName, node, lastList, inBlock);
+      const expected = 'atomic';
+      expect(result).toEqual(expected);
+    });
+
+    it('should create an atomic block if the node is an atomic block (image)', () => {
+      const node = document.createElement('div');
+      node.dataset = { blocktype: 'atomic' };
+      const child = document.createElement('img');
+      child.dataset = {
+        id: 'foobar',
+        mimeType: 'image/png'
+      };
+      node.appendChild(child);
+      const lastList = null;
+      const inBlock = 'atomic';
+      const result = htmlToBlock('div', node, lastList, inBlock);
+      const expected = 'atomic';
+      expect(result).toEqual(expected);
+    });
+
+    it('should create an atomic block if the node is an atomic block (non image)', () => {
+      const node = document.createElement('div');
+      node.dataset = { blocktype: 'atomic' };
+      const child = document.createElement('a');
+      const grandchild = document.createElement('img');
+      grandchild.dataset = {
+        externalurl: 'http://www.example.com/mydoc.pdf',
+        id: 'foobar',
+        mimetype: 'application/pdf'
+      };
+      child.appendChild(grandchild);
+      node.appendChild(child);
+
+      const lastList = null;
+      const inBlock = 'atomic';
+      const result = htmlToBlock('div', node, lastList, inBlock);
+      const expected = 'atomic';
+      expect(result).toEqual(expected);
+    });
+  });
+
   // describe('convertEntries function');
   describe('convertToEditorState function', () => {
     const { convertToEditorState } = draftjs;
