@@ -293,6 +293,7 @@
         "subscribe_to_notifications_on_signup": true,
         "web_analytics_piwik_id_site": true,
         "help_url": true,
+        "require_secure_connection": true,
         "logo": true,
         "homepage": true,
         "translation_service_class": true,

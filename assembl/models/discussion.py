@@ -9,6 +9,7 @@ import simplejson as json
 from pyramid.httpexceptions import HTTPUnauthorized
 from pyramid.path import DottedNameResolver
 from pyramid.security import ALL_PERMISSIONS, Allow
+from pyramid.settings import asbool
 from pyramid.threadlocal import get_current_registry
 from sqlalchemy import (Boolean, Column, DateTime, ForeignKey, Integer,
                         UnicodeText, event, func)
@@ -16,7 +17,7 @@ from sqlalchemy.orm import (backref, join, relationship, subqueryload,
                             with_polymorphic)
 from sqlalchemy.sql.expression import distinct, literal
 
-from assembl.lib.config import get_config
+from assembl.lib.config import get
 from assembl.lib.utils import full_class_name, get_global_base_url, slugify
 
 from . import DiscussionBoundBase, NamedClassMixin
@@ -156,6 +157,10 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
     @property
     def homepage(self):
         return self.homepage_url
+
+    @property
+    def require_secure_connection(self):
+        return asbool(get('require_secure_connection'))
 
     @homepage.setter
     def homepage(self, url):
@@ -514,7 +519,7 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
             return admin_emails
         # If no discussion admin is set, use the server administrator
         # This field MUST be set, else Assembl will throw error at startup
-        return (get_config().get('assembl.admin_email'),)
+        return (get('assembl.admin_email'),)
 
     @property
     def widget_collection_url(self):
@@ -929,7 +934,7 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
         if locales:
             return locales
         # Use installation settings otherwise.
-        return [strip_country(l) for l in get_config().get(
+        return [strip_country(l) for l in get(
             'available_languages', 'fr en').split()]
 
     @discussion_locales.setter
@@ -1047,11 +1052,8 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
         if not piwik_id_site:
             raise ValueError("This discussion is not bound to a Piwik site")
 
-        config = get_config()
-        piwik_url = config.get(
-            'web_analytics_piwik_url')
-        piwik_api_token = config.get(
-            'web_analytics_piwik_api_token')
+        piwik_url = get('web_analytics_piwik_url')
+        piwik_api_token = get('web_analytics_piwik_api_token')
         missing_variables = []
         if not piwik_url:
             missing_variables.append("piwik_url")
