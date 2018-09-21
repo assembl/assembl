@@ -83,6 +83,11 @@ def ensureSection(config, section):
 def generate_ini_files(config, config_fname):
     """Generate the supervisor.conf from its template and .ini file."""
     # TODO: Use .rc file instead of .ini file.
+    def get_default(key, default=None, section=SECTION):
+        if config.has_option(section, key):
+            return config.get(section, key)
+        return default
+
     celery_broker = config.get(
         SECTION, 'celery_tasks.broker')
     secure = config.getboolean(SECTION, 'require_secure_connection')
@@ -102,10 +107,14 @@ def generate_ini_files(config, config_fname):
     webpack_host = config.get(SECTION, 'webpack_host', public_hostname)
     webpack_url = "http://%s:%d" % (webpack_host, webpack_port)
     here = dirname(abspath('supervisord.conf'))
-    if config.has_option('supervisor', 'sup_log_dir'):
-        log_dir = config.get('supervisor', 'sup_log_dir')
-    else:
-        log_dir = join(here, 'var', 'log')
+    log_dir = get_default('sup_log_dir', join(here, 'var', 'log'), 'supervisor')
+    elasticsearch_path = get_default(
+        'elasticsearch_path', join(
+            here, "var", "elasticsearch", "bin", "elasticsearch"))
+    elasticsearch_config = get_default(
+        'elasticsearch_config', join(
+            here, "var", "elasticsearch", "config"))
+
     vars = {
         'CELERY_BROKER': celery_broker,
         'CELERY_NUM_WORKERS': config.get(
@@ -116,6 +125,8 @@ def generate_ini_files(config, config_fname):
         'VIRTUAL_ENV': os.environ['VIRTUAL_ENV'],
         'WEBPACK_URL': webpack_url,
         'ASSEMBL_URL': url,
+        'elasticsearch_path': elasticsearch_path,
+        'elasticsearch_config': elasticsearch_config,
         'code_root': config.get(SECTION, 'code_root'),
     }
     for procname in (
