@@ -83,6 +83,129 @@ msgstr "${val} ne peut être sérialisé: ${err}"
 msgid "${val} is not a string: ${err}"
 msgstr "${val} n’est pas une chaîne: ${err}"
 
+#: assembl/models/auth.py:634
+msgid "Straight rows of keys are easy to guess."
+msgstr "Les séquence de touches du clavier sont faciles à deviner."
+
+#: assembl/models/auth.py:635
+msgid "Short keyboard patterns are easy to guess."
+msgstr "De courtes séquences de clavier sont faciles à deviner."
+
+#: assembl/models/auth.py:636
+msgid "Repeats like \"aaa\" are easy to guess."
+msgstr "Des caractères répétés comme \"aaa\" sont faciles à deviner."
+
+#: assembl/models/auth.py:637
+msgid "Repeats like \"abcabcabc\" are only slightly harder to guess than \"abc\"."
+msgstr "Des caractères répétés comme \"abcabcabc\" sont à peine plus difficiles à"
+" deviner que \"abc\"."
+
+#: assembl/models/auth.py:638
+msgid "Sequences like abc or 6543 are easy to guess."
+msgstr "Des séquences comme abc ou 6543  sont faciles à deviner."
+
+#: assembl/models/auth.py:639
+msgid "Recent years are easy to guess."
+msgstr "Les années récentes sont faciles à deviner."
+
+#: assembl/models/auth.py:640
+msgid "Dates are often easy to guess."
+msgstr "Les dates sont souvent faciles à deviner."
+
+#: assembl/models/auth.py:641
+msgid "This is a top-10 common password."
+msgstr "C'est un des 10 mots de passe les plus communs."
+
+#: assembl/models/auth.py:642
+msgid "This is a top-100 common password."
+msgstr "C'est un des 100 mots de passe les plus communs."
+
+#: assembl/models/auth.py:643
+msgid "This is a very common password."
+msgstr "C'est un mot de passe très commun."
+
+#: assembl/models/auth.py:644
+msgid "This is similar to a commonly used password."
+msgstr "Ça ressemble à un mot de passe commun."
+
+#: assembl/models/auth.py:645
+msgid "A word by itself is easy to guess."
+msgstr "Il est trop facile de deviner un simple mot."
+
+#: assembl/models/auth.py:646
+msgid "Names and surnames by themselves are easy to guess."
+msgstr "Les noms est prénoms seuls sont faciles à deviner."
+
+#: assembl/models/auth.py:647
+msgid "Common names and surnames are easy to guess."
+msgstr "Les noms est prénoms courants sont faciles à deviner."
+
+#: assembl/models/auth.py:648
+msgid "Use a few words, avoid common phrases."
+msgstr "Utilisez quelques mots, évitez les locutions courantes."
+
+#: assembl/models/auth.py:649
+msgid "No need for symbols, digits, or uppercase letters."
+msgstr "Pas besoin de symboles, chiffres ou majuscules."
+
+#: assembl/models/auth.py:650
+msgid "Add another word or two. Uncommon words are better."
+msgstr "Ajoutez quelques mots, rares de préférence."
+
+#: assembl/models/auth.py:651
+msgid "Use a longer keyboard pattern with more turns."
+msgstr "Utilisez une forme plus complexe sur le clavier."
+
+#: assembl/models/auth.py:652
+msgid "Avoid repeated words and characters."
+msgstr "Évitez les mots et caractères répétés."
+
+#: assembl/models/auth.py:653
+msgid "Avoid sequences."
+msgstr "Évitez les séquences."
+
+#: assembl/models/auth.py:654
+msgid "Avoid recent years."
+msgstr "Évitez les années récentes."
+
+#: assembl/models/auth.py:655
+msgid "Avoid years that are associated with you."
+msgstr "Évitez les années associées à vous."
+
+#: assembl/models/auth.py:656
+msgid "Avoid dates and years that are associated with you."
+msgstr "Évitez les dates et années associées à vous."
+
+#: assembl/models/auth.py:657
+msgid "Capitalization doesn't help very much."
+msgstr "Les majuscules n'aident pas beaucoup."
+
+#: assembl/models/auth.py:658
+msgid "All-uppercase is almost as easy to guess as all-lowercase."
+msgstr "Les mots en majuscules sont presque aussi faciles à deviner que ceux en "
+"minuscules."
+
+#: assembl/models/auth.py:659
+msgid "Reversed words aren't much harder to guess."
+msgstr "Les mots renversés ne sont pas beaucoup plus difficiles à deviner."
+
+#: assembl/models/auth.py:660
+msgid "Predictable substitutions like '@' instead of 'a' don't help very much."
+msgstr "Les substitutions prévisibles, telles le '@' au lieu de 'a', n'aident pas"
+" beaucoup."
+
+#: assembl/models/auth.py:952
+msgid "Password shorter than ${minlen} characters"
+msgstr "Mot de passe de moins de ${minlen} caractères"
+
+#: assembl/models/auth.py:963
+msgid "Your password should include at least a ${class}"
+msgstr "Votre mot de passe doit inclure au moins ${class}"
+
+#: assembl/models/auth.py:976
+msgid "Please do not repeat an older password."
+msgstr "Veuillez ne pas répéter un ancien mot de passe."
+
 #: assembl/models/edgesense_drupal.py:173
 msgid "Unknown User ${uid}"
 msgstr "Utilisateur non-identifié ${uid}"
@@ -205,7 +328,7 @@ msgstr "Titre de l'onglet"
 
 #: assembl/models/preferences.py:508
 msgid "Title which appears on the tab, by default assembl"
-msgstr "Le titre qui apparait dans l'onglet, assembl par default"
+msgstr "Titre qui apparaît sur l'onglet, assembl par défaut"
 
 #: assembl/models/preferences.py:516
 msgid "Mandatory legal contents validation"
@@ -404,7 +527,7 @@ msgstr ""
 
 #: assembl/models/preferences.py:854
 msgid "Whitelist on authentication service"
-msgstr "Whitelist sur le service d'authentification"
+msgstr "Liste blanche pour le service d'identification"
 
 #: assembl/models/preferences.py:857
 msgid "Allow white list to be applied to the authentication service chosen"
@@ -414,23 +537,22 @@ msgstr ""
 
 #: assembl/models/preferences.py:869
 msgid "Whitelist on standard registration"
-msgstr "Whitelist sur les inscriptions standards"
+msgstr "Liste blanche pour l'abonnement normal"
 
 #: assembl/models/preferences.py:872
 msgid "Allow white list to be applied to the default login process"
-msgstr "Autoriser la white list à être appliquée à la procédure d'authentification"
+msgstr "Permettre à la liste blanche de s'appliquer à l'abonnement via assembl"
 
 #: assembl/models/preferences.py:884
 msgid "Discussion administrators"
-msgstr "Administrateurs de la discussion"
+msgstr "Adminstrateurs de la discussion"
 
 #: assembl/models/preferences.py:887
 msgid ""
 "A list of discussion administrators, if different from the server "
 "administrator"
 msgstr ""
-"Une liste d'administrateurs de discussion, si différent du serveur "
-"administrateur"
+"Une liste d'administrateurs de discussion, si distincts des administrateurs du serveur "
 
 #: assembl/models/preferences.py:900
 msgid "Show CI Dashboard"
@@ -514,43 +636,38 @@ msgstr "Afficher le bandeau qui permet de désactiver les cookies Piwik"
 
 #: assembl/models/preferences.py:1034
 msgid "Custom HTML code on the landing page"
-msgstr "Code HTML personnalisé sur la page de d'accueil"
+msgstr "Code HTML sur mesure pour la page d'accueil"
 
 #: assembl/models/preferences.py:1037
 msgid ""
 "Custom HTML code that will be integrated on the landing page of the "
 "debate, right after the <body> tag"
-msgstr ""
-"Code HTML personnalisé qui sera intégré sur la page d'accueil du débat, "
-"après le tag <body>"
+msgstr "Code HTML sur mesure qui sera intégré à la page d'accueil du débat, immédiatement après la balise <body>"
 
 #: assembl/models/preferences.py:1047
 msgid "Custom HTML code on the user registration page"
-msgstr "Code HTML personnalisé sur la page d'inscription"
+msgstr "Code HTML sur mesure pour la page d'inscription"
 
 #: assembl/models/preferences.py:1050
 msgid ""
 "Custom HTML code that will be integrated on the user registration page of"
 " the debate, right after the <body> tag"
-msgstr ""
-"Code HTML personnalisé qui sera intégré sur la page d'inscription du "
-"débat, après le tag <body>"
+msgstr "Code HTML sur mesure qui sera intégré à la page d'inscription du débat, immédiatement après la balise <body>"
 
 #: assembl/models/preferences.py:1060 assembl/models/preferences.py:1063
 msgid "Harvesting translation"
-msgstr "Traduction d'attrapage"
+msgstr "Traduction du moissonnage"
 
 #: assembl/models/preferences.py:1071
 msgid "Valid CORS paths for GraphQL API calls"
-msgstr "Chemins CORS valides pour les appels API GraphQL"
+msgstr "Chemins CORS valides pour les appels d'API GraphQL"
 
 #: assembl/models/preferences.py:1074
 msgid ""
 "A list of valid domain names or IP addresses that are allowed to make "
 "CORS api calls to the GraphQL API"
 msgstr ""
-"Liste des adresses URLs ou IP qui seront autorisées pour faire lesappels "
-"API CORS à l'API GraphQL"
+"Liste de noms de domaines ou addresses IP qui seront autorisées à faire des appels API CORS à l'API GraphQL"
 
 #: assembl/models/preferences.py:1084
 msgid "Use moderation"
@@ -924,6 +1041,7 @@ msgstr ""
 "pour vous aider à rejoindre les échanges en cours."
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:37
+#: assembl/templates/join0.jinja2:6
 msgid "Join the discussion"
 msgstr "Rejoindre la discussion"
 
@@ -2528,6 +2646,18 @@ msgstr "Par"
 #: assembl/templates/idea_in_synthesis.jinja2:16
 msgid "See the conversation around this idea"
 msgstr "Voir la conversation autour de cette idée"
+
+#: assembl/templates/join0.jinja2:7
+msgid "This is you first visit to the discussion '%s'."
+msgstr "C'est votre première visite à la discussion '%s'."
+
+#: assembl/templates/join0.jinja2:9
+msgid "By entering, you agree to receive the following notifications:"
+msgstr "En rejoignant la discussion, vous acceptez de recevoir les notifications suivantes:"
+
+#: assembl/templates/join0.jinja2:17
+msgid "join"
+msgstr "rejoindre"
 
 #: assembl/templates/login.jinja2:30
 #, python-format
@@ -4967,13 +5097,13 @@ msgstr "Pas d'adresse e-mail."
 msgid ""
 "Your email domain has not been approved for registration. Please contact "
 "${emails} for support."
-msgstr "Votre création de compte n'a pas été validée. Contactez ${emails}."
+msgstr "Votre domaine de courriel n'a pas été approuvé pour inscription. Veuillez contacter ${emails} pour obtenir du support."
 
 #: assembl/views/api2/auth.py:526
 msgid ""
 "Your email domain has not been approved for registration. Please contact "
 "one of ${emails} for support."
-msgstr "Votre courriel n'a pas été approuvé pour "
+msgstr "Votre domaine de courriel n'a pas été approuvé pour inscription. Veuillez contacter quelqu'un parmi ${emails} pour obtenir du support."
 
 #: assembl/views/auth/views.py:298
 #, python-format
@@ -5244,5 +5374,4 @@ msgstr ""
 #: assembl/views/discussion/views.py:56
 #, python-format
 msgid "No discussion found for slug=%s"
-msgstr "Aucune discussion trouvée avec l’id=%s"
-
+msgstr "Nous n’avons pas de discussion sous le code=%s"
