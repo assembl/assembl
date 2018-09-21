@@ -18,7 +18,7 @@ _sentry_db_host = localhost
 # _sentry_db_password =
 # Replace with your admin email if necessary
 assembl.admin_email = webmaster@%(public_hostname)s
-assembl.generic_auth_errors = false
+assembl.generic_errors = false
 memcached_host = localhost
 mysql_host=localhost
 webpack_host=localhost
