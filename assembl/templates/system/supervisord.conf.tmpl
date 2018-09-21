@@ -77,7 +77,7 @@ stderr_logfile_backups = %(sup_log_backups_celery_notify_beat_err)s
 
 [program:changes_router]
 directory = %(here)s
-command = python assembl/tasks/changes_router.py %(CONFIG_FILE)s
+command = python %(code_root)s/assembl/tasks/changes_router.py %(CONFIG_FILE)s
 autostart = %(autostart_changes_router)s
 autorestart = true
 stopasgroup = false

@@ -9,7 +9,7 @@ from ConfigParser import (
 from argparse import ArgumentParser, FileType
 import logging
 
-from ..fabfile import combine_rc, code_root
+from ..fabfile import combine_rc, code_root, venv_path
 
 # global umask so ini files are unreadable by others
 os.umask(0o027)
@@ -116,6 +116,7 @@ def generate_ini_files(config, config_fname):
         'VIRTUAL_ENV': os.environ['VIRTUAL_ENV'],
         'WEBPACK_URL': webpack_url,
         'ASSEMBL_URL': url,
+        'code_root': config.get(SECTION, 'code_root'),
     }
     for procname in (
             'celery',
@@ -386,6 +387,7 @@ def compose(rc_filename, random_file=None):
     """Compose local.ini from the given .rc file"""
     rc_info = combine_rc(rc_filename)
     rc_info['*code_root'] = code_root(rc_info)
+    rc_info['*venvpath'] = venv_path(rc_info)
     ini_sequence = rc_info.get('ini_files', None)
     assert ini_sequence, "Define ini_files"
     ini_sequence = ini_sequence.split()
