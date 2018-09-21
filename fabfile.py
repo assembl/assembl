@@ -1093,6 +1093,12 @@ def app_compile_nodbupdate():
 
 
 @task
+def generate_dh_group():
+    """Generate Diffie-Hellman Group"""
+    sudo("openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048")
+
+
+@task
 def webservers_reload():
     """
     Reload the webserver stack.

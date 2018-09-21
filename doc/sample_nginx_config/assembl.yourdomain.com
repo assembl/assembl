@@ -42,7 +42,7 @@ server {
     add_header x-xss-protection "1; mode=block" always;
     add_header x-frame-options "SAMEORIGIN" always;
     add_header X-Content-Type-Options "nosniff" always;
-
+    ssl_dhparam /etc/ssl/certs/dhparam.pem;
     server_tokens off;
     # Optional for extra security
     # add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' data: piwik_server.example.com *.facebook.net *.twimg.com *.twitter.com ; frame-src 'self' *.youtube.com *.facebook.com embed.ted.com *.twitter.com twitter.com player.vimeo.com *.motion.ai *.slideshare.net sketchfab.com; connect-src 'self' wss://assembl.yourdomain.com piwik_server.example.com sentry_server.example.com *.twitter.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com *.twimg.com *.twitter.com; font-src 'self' data: fonts.gstatic.com; img-src 'self' data: piwik_server.example.com www.gravatar.com *.googleusercontent.com *.facebook.com *.twimg.com *.twitter.com framapic.org *.cloudfront.net";
