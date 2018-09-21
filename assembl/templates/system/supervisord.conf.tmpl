@@ -176,7 +176,7 @@ stderr_logfile_backups = %(sup_log_backups_maintenance_err)s
 
 [program:elasticsearch]
 directory = %(here)s
-command = %(here)s/var/elasticsearch/bin/elasticsearch -Ecluster.name="assembl" -Epath.data="%(here)s/var/esdata" -Epath.logs="%(log_dir)s/elasticsearch"
+command = %(elasticsearch_path)s -p %(here)s/var/run/elasticsearch.pid -Ecluster.name="assembl" -Epath.data="%(here)s/var/esdata" -Epath.logs="%(log_dir)s/elasticsearch" -Epath.conf=%(elasticsearch_config)s
 autostart = %(autostart_elasticsearch)s
 autorestart = true
 environment = ES_JAVA_OPTS="-Xms1g -Xmx1g"
