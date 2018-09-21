@@ -82,7 +82,6 @@ _package_install = false
 # Those need to be overridden in the server-specific file
 # _postgres_db_password
 # _user
-# _venvpath
 # _projectpath
 # _dbdumps_dir
 
@@ -103,6 +102,8 @@ supervisor__autostart_elasticsearch = true
 supervisor__autostart_urlmetadata = true
 
 alembic__script_location = %(code_root)s/assembl/alembic
+
+uwsgi__virtualenv = %(venvpath)
 
 # Machines format: machine_id,machine_name,machine_password/...others
 # The first machine is the Robot used for Bigdatext

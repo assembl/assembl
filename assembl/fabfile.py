@@ -1585,7 +1585,7 @@ def check_and_create_database_user(host=None, user=None, password=None):
     host = host or env.db_host
     user = user or env.db_user
     password = password or env.db_password
-    pypsql = join(env.projectpath, 'assembl', 'scripts', 'pypsql.py')
+    pypsql = join(code_root(), 'assembl', 'scripts', 'pypsql.py')
     with settings(warn_only=True):
         checkUser = run('python2 {pypsql} -1 -u {user} -p {password} -n {host} "{command}"'.format(
             command="SELECT 1 FROM pg_roles WHERE rolname='%s'" % (user),
