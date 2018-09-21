@@ -104,3 +104,6 @@ supervisor__autostart_urlmetadata = true
 machines =
 
 visit_analytics_region_redis_expiration_time = 3600
+
+# Show errors on exception views
+visibile_errors = false
