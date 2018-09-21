@@ -71,9 +71,9 @@ class Footer extends React.Component {
                     </Link>
                   </div>
                 )}
-                {hasTermsAndConditions && hasLegalNotice && <span className="small-hyphen-padding"> &mdash; </span>}
                 {hasLegalNotice && (
                   <div className="legal-notice">
+                    {hasTermsAndConditions ? <span className="small-hyphen-padding"> &mdash; </span> : null}
                     <Link to={`${get('legalNotice', slug)}`}>
                       <Translate value="footer.legalNotice" />
                     </Link>
@@ -88,18 +88,17 @@ class Footer extends React.Component {
                     </Link>
                   </div>
                 )}
-                {hasCookiesPolicy && hasPrivacyPolicy && <span className="small-hyphen-padding"> &mdash; </span>}
                 {hasPrivacyPolicy && (
                   <div className="privacy-policy">
+                    {hasCookiesPolicy ? <span className="small-hyphen-padding"> &mdash; </span> : null}
                     <Link to={`${get('privacyPolicy', slug)}`}>
                       <Translate value="footer.privacyPolicy" />
                     </Link>
                   </div>
                 )}
-                {(hasPrivacyPolicy && hasUserGuidelines && <span className="small-hyphen-padding"> &mdash; </span>) ||
-                  (hasCookiesPolicy && <span className="small-hyphen-padding"> &mdash; </span>)}
                 {hasUserGuidelines && (
                   <div className="user-guidelines">
+                    {hasPrivacyPolicy || hasCookiesPolicy ? <span className="small-hyphen-padding"> &mdash; </span> : null}
                     <Link to={`${get('userGuidelines', slug)}`}>
                       <Translate value="footer.userGuidelines" />
                     </Link>
