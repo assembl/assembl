@@ -1,0 +1,19 @@
+{% extends 'index_react.jinja2' %}
+
+{% block meta_tags_public %}
+{% endblock %}
+
+{% block main_css %}
+{% endblock %}
+
+{% block body %}
+    <body>
+        <h1>This is the error page</h1>
+
+        {% block for_testing %}
+            {% if under_test %}
+                <div id="under-test" class="hidden">V2</div>
+            {%- endif %}
+        {% endblock %}
+    </body>
+{% endblock%}

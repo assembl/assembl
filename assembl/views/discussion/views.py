@@ -70,6 +70,15 @@ def get_styleguide_components():
 
     return views
 
+# import pyramid.httpexceptions as exc
+
+# @view_config(route_name='error_test', request_method='GET',
+#             renderer='assembl:templates/error_page.jinja2')
+# def error_test(request):
+#     raise exc.HTTPInternalServerError()
+#     # context = get_default_context(request)
+#     # return context
+
 
 @view_config(route_name='home', request_method='GET', http_cache=60)
 def home_view(request):
