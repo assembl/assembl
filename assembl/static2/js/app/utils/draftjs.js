@@ -102,3 +102,69 @@ export function editorStateIsEmpty(editorState: EditorState): boolean {
 
   return false;
 }
+
+export function uploadNewAttachments(editorState: EditorState, uploadDocument: Function): Promise<*> {
+  const documentIds = [];
+  let contentState = editorState.getCurrentContent();
+  const entities = [];
+  contentState.getBlockMap().forEach((block) => {
+    if (block.type === 'atomic') {
+      block.findEntityRanges((entityRange) => {
+        const entityKey = entityRange.entity;
+        if (entityKey) {
+          const entity = contentState.getEntity(entityKey);
+          if (entity) {
+            entities.push({
+              entityKey: entityKey,
+              entity: entity
+            });
+          }
+        }
+      });
+    }
+  });
+
+  let uploadDocumentsPromise = Promise.resolve();
+  entities.forEach((entityInfo) => {
+    const { entity, entityKey } = entityInfo;
+    if (entity.data.src instanceof File) {
+      // this is a new document, add a promise to create it and modify its entity
+      const variables = {
+        file: entity.data.src
+      };
+      uploadDocumentsPromise = uploadDocumentsPromise.then(() =>
+        uploadDocument({ variables: variables }).then((res) => {
+          if (res && res.data) {
+            const doc = res.data.uploadDocument.document;
+            documentIds.push(doc.id);
+            // update entity
+            const { externalUrl, id, mimeType, title } = doc;
+            contentState = contentState.replaceEntityData(entityKey, {
+              id: id,
+              externalUrl: externalUrl,
+              title: title,
+              mimeType: mimeType
+            });
+          }
+        })
+      );
+    } else {
+      documentIds.push(entity.data.id);
+    }
+  });
+
+  return uploadDocumentsPromise.then(
+    () =>
+      new Promise((resolve) => {
+        resolve({
+          contentState: contentState,
+          documentIds: documentIds
+        });
+      })
+  );
+}
+
+export type UploadNewAttachmentsPromiseResult = {
+  contentState: ?ContentState,
+  documentIds: Array<string>
+};

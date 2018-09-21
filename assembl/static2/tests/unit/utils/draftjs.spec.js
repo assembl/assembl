@@ -1,6 +1,10 @@
 import { ContentState, EditorState } from 'draft-js';
 import { List, Map } from 'immutable';
 
+/* eslint-disable import/no-extraneous-dependencies */
+import TestUtils from 'assembl-test-editor-utils';
+/* eslint-enable import/no-extraneous-dependencies */
+
 import { createEditorStateFromText } from '../../helpers/draftjs';
 import * as draftjs from '../../../js/app/utils/draftjs';
 
@@ -215,6 +219,41 @@ describe('draftjs utils', () => {
     it('should return false if rawContentState is not empty', () => {
       const es = createEditorStateFromText('foo');
       expect(editorStateIsEmpty(es)).toBeFalsy();
+    });
+  });
+
+  describe('uploadNewAttachments function', () => {
+    const { uploadNewAttachments } = draftjs;
+    it('should upload new attachments and return a promise with updated content state and the document ids', async () => {
+      const fileB64 = window.btoa('gimme some base64');
+      const myFile = new File([fileB64], 'my-file.pdf');
+      const uploadDocumentSpy = jest.fn();
+      const fakeResponse = {
+        data: {
+          uploadDocument: {
+            document: {
+              externalUrl: '/data/my-doc.pdf',
+              id: 'my-doc-id',
+              mimeType: 'application/pdf',
+              title: 'My document'
+            }
+          }
+        }
+      };
+      uploadDocumentSpy.mockImplementationOnce(() => Promise.resolve(fakeResponse));
+      const editorState = TestUtils.createEditorStateWithTwoAttachments('my-img.jpg', myFile);
+      const promise = uploadNewAttachments(editorState, uploadDocumentSpy);
+      const result = await promise;
+      const updatedContentState = result.contentState;
+      const updatedEntityData = updatedContentState.getEntity('2').getData();
+      expect(updatedEntityData).toEqual({
+        externalUrl: '/data/my-doc.pdf',
+        id: 'my-doc-id',
+        mimeType: 'application/pdf',
+        title: 'My document'
+      });
+      expect(result.documentIds).toEqual(['my-img-id', 'my-doc-id']);
+      expect(uploadDocumentSpy).toHaveBeenCalledWith({ variables: { file: myFile } });
     });
   });
 });
