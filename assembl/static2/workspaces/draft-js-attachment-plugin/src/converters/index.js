@@ -1,8 +1,8 @@
 // @flow
 import entityToHTML from './entityToHTML';
-// import htmlToEntity from './htmlToEntity';
+import htmlToEntity from './htmlToEntity';
 
 export default {
-  entityToHTML: entityToHTML
-  // htmlToEntity: htmlToEntity
+  entityToHTML: entityToHTML,
+  htmlToEntity: htmlToEntity
 };

@@ -8,8 +8,10 @@ import { convertFromHTML, convertToHTML } from 'draft-convert';
 import { type List, type Map } from 'immutable';
 
 // from our workspaces
-// eslint-disable-next-line import/no-extraneous-dependencies
+/* eslint-disable import/no-extraneous-dependencies */
 import { converters as linkConverters } from 'draft-js-link-plugin';
+import { converters as attachmentsConverters } from 'draft-js-attachment-plugin';
+/* eslint-enable import/no-extraneous-dependencies */
 
 import attachmentsPlugin from '../components/common/richTextEditor/attachmentsPlugin';
 
@@ -18,7 +20,8 @@ type Entry = {
   value: string | EditorState
 };
 
-const ATTACHMENT_ENTITY = 'document';
+const IMAGE_ENTITY = 'IMAGE';
+const DOCUMENT_ENTITY = 'DOCUMENT';
 const LINK_ENTITY = 'LINK';
 
 const customConvertFromHTML = convertFromHTML({
@@ -29,15 +32,15 @@ const customConvertFromHTML = convertFromHTML({
       return linkConverters.htmlToEntity(nodeName, node, createEntity);
     }
 
-    return attachmentsPlugin.htmlToEntity(nodeName, node, createEntity);
+    return attachmentsConverters.htmlToEntity(nodeName, node, createEntity);
   }
 });
 
 const customConvertToHTML = convertToHTML({
   blockToHTML: attachmentsPlugin.blockToHTML,
   entityToHTML: (entity: EntityInstance, originalText: string): string => {
-    if (entity.type === ATTACHMENT_ENTITY) {
-      return attachmentsPlugin.entityToHTML(entity);
+    if (entity.type === DOCUMENT_ENTITY || entity.type === IMAGE_ENTITY) {
+      return attachmentsConverters.entityToHTML(entity);
     } else if (entity.type === LINK_ENTITY) {
       return linkConverters.entityToHTML(entity, originalText);
     }
