@@ -18,3 +18,4 @@ class ErrorTypes(Enum):
     PASSWORD = 5
     INVALID_USERNAME = 6
     USERNAME_TOO_LONG = 7
+    GENERIC = 8

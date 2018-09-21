@@ -43,7 +43,7 @@ from assembl.lib import logging
 
 
 _ = TranslationStringFactory('assembl')
-generic_error_message = "This username and password combination is not valid."
+generic_error_message = _("The provided input combination is not valid.")
 
 @view_config(
     context=ClassContext, request_method="PATCH",
@@ -351,9 +351,9 @@ def reset_password(request):
                     code=HTTPNotFound.code)
             else:
                 raise JSONError(
-                    localizer.translate(_(generic_error_message)),
+                    localizer.translate(generic_error_message),
                     code=HTTPNotFound.code)
-                logger.error("The user does not exist.")
+                logger.error("[Password reset] The user with the identifier %s does not exist" % (identifier))
         if identifier:
             for account in user.accounts:
                 if identifier == account.email:
@@ -450,7 +450,7 @@ def assembl_register_user(request):
     localizer = request.localizer
     session = AgentProfile.default_db
     json = request.json
-    logger = logging.getLogger('assembl.auth')
+    logger = logging.getLogger('assembl')
     discussion = discussion_from_request(request)
     permissions = get_permissions(
         Everyone, discussion.id if discussion else None)
@@ -481,11 +481,11 @@ def assembl_register_user(request):
                     ErrorTypes.EXISTING_EMAIL,
                     HTTPConflict.code)
             else:
-                errors.add_error(localizer.translate(_(
-                    generic_error_message)),
-                    ErrorTypes.EXISTING_EMAIL,
+                errors.add_error(localizer.translate(
+                    generic_error_message),
+                    ErrorTypes.GENERIC,
                     HTTPConflict.code)
-                logger.error("We already have a user with this email %s" % email)
+                logger.error("[User creation]: We already have a user with this email %s" % email)
 
     if not email:
         errors.add_error(localizer.translate(_("No email.")),
@@ -500,9 +500,9 @@ def assembl_register_user(request):
                     ErrorTypes.EXISTING_USERNAME,
                     HTTPConflict.code)
             else:
-                errors.add_error(localizer.translate(_(
-                    generic_error_message)),
-                    ErrorTypes.EXISTING_USERNAME,
+                errors.add_error(localizer.translate(
+                    generic_error_message),
+                    ErrorTypes.GENERIC,
                     HTTPConflict.code)
                 logger.error("We already have a user with this username" % username)
         if len(username) > 20:
