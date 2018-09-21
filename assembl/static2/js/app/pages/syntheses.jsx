@@ -74,7 +74,12 @@ export default compose(
       if (data.loading) {
         return { loading: true };
       }
+      if (data.error) {
+        console.error(data.error); // eslint-disable-line
+        return { loading: false };
+      }
       return {
+        loading: false,
         syntheses: data.syntheses,
         hasSyntheses: data.syntheses.length > 0
       };
