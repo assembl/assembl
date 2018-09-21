@@ -397,6 +397,7 @@ def extract_voters(request):
             if token_category not in fieldnames:
                 fieldnames.append(token_category.encode('utf-8'))
             extract_info.update({token_category : str(vote_value).encode('utf-8')})
+            extract_list.append(extract_info)
 
         if vote.type == u'gauge_idea_vote':
             vote_spec = m.AbstractVoteSpecification.get(vote.vote_spec_id)
@@ -409,15 +410,15 @@ def extract_voters(request):
                         option = str(option) + " " + vote_spec.unit
                         if option not in fieldnames:
                             fieldnames.append(option.encode('utf-8'))
-                            extract_info.update({choice : "1"})
+                            extract_info.update({option : "1"})
                     else:
                         choice = str(option).encode('utf-8')
                         option = str(option) + " " + vote_spec.unit
                         if option not in fieldnames:
                             fieldnames.append(option.encode('utf-8'))
-                            extract_info.update({choice : "0"})
+                            extract_info.update({option : "0"})
 
-        extract_list.append(extract_info)
+            extract_list.append(extract_info)
 
     return csv_response(extract_list, CSV_MIMETYPE, fieldnames)
 
