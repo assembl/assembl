@@ -39,14 +39,14 @@ web_analytics_piwik_script=
 # 8085 thru 8087: reserved for development
 # 8088 thru 8089: reserved for automated testing
 # 8090-: production
-changes.websocket.port = 8085
+changes_websocket_port = 8085
 # ZMQ model changes local socket (backend will connect to this)
 # UNIQUE_PER_SERVER
 # Convention:
 # /0 thru /2: reserved for development
 # /3 thru /4: reserved for automated testing
 # /5-: production
-changes.socket = ipc:///tmp/assembl_changes/0
+changes_socket = ipc:///tmp/assembl_changes/0
 env.wsginame = dev.wsgi
 _gitbranch = develop
 supervisor__autostart_celery_notify_beat = false
@@ -59,6 +59,7 @@ _uses_bluenove_actionable = false
 _is_production_env = false
 _wsginame = dev.wsgi
 celery_tasks.num_workers = 3
+use_letsencrypt = false
 
 # If you want to see emails, run this in another console:
 # python -m smtpd -n -c DebuggingServer

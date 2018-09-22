@@ -80,6 +80,34 @@ def ensureSection(config, section):
         config.add_section(section)
 
 
+def fill_template(template, config, output=None):
+    if not exists(template):
+        template = join(local_code_root, 'templates', 'system', template)
+    if not exists(template):
+        raise RuntimeError("Missing template")
+    config['here'] = config.get('here', os.getcwd())
+    if template.endswith('.tmpl'):
+        with open(template) as tmpl:
+            result = tmpl.read() % config
+    elif template.endswith('.jinja2'):
+        from jinja2 import Environment
+        env = Environment()
+        with open(template) as tmpl:
+            tmpl = env.from_string(tmpl.read())
+        # Boolean overloading
+        for (k, v) in config.items():
+            if str(v).lower() == 'false':
+                config[k] = False
+        result = tmpl.render(config)
+    else:
+        raise RuntimeError("Unknown template type")
+    if hasattr(output, 'write'):
+        output.write(result)
+    else:
+        with open(output, 'w') as out:
+            out.write(result)
+
+
 def generate_ini_files(config, config_fname):
     """Generate the supervisor.conf from its template and .ini file."""
     # TODO: Use .rc file instead of .ini file.
@@ -517,6 +545,14 @@ def main():
     parser_diff.add_argument('second', type=FileType('r'),
                              help='Second ini file')
 
+    # template from rc file
+    parser_random = subparsers.add_parser(
+        'template', help=short_help(populate_random))
+    parser_random.add_argument('--output', '-o', type=FileType('w'),
+                               default=sys.stdout, help='The output file')
+    parser_random.add_argument('input', help='Input rc file')
+    parser_random.add_argument('template', help='template file (python or jinja2)')
+
     args = parser.parse_args()
     if args.command == 'populate':
         config = SafeConfigParser(defaults=DEFAULTS)
@@ -553,6 +589,9 @@ def main():
         diff.write(args.output)
     if args.command == 'dump':
         dump(args.ini)
+    if args.command == 'template':
+        rc_info = combine_rc(args.input)
+        fill_template(args.template, rc_info, args.output)
 
 
 if __name__ == '__main__':
