@@ -107,7 +107,7 @@ class CeleryWithConfig(Celery):
         if not exists(settings_file):
             raise RuntimeError("Missing settings file")
         _settings = settings = get_appsettings(settings_file, 'assembl')
-        configure_zmq(settings['changes.socket'], False)
+        configure_zmq(settings['changes_socket'], False)
         config = ConfigParser.SafeConfigParser()
         config.read(settings_file)
         registry = getGlobalSiteManager()

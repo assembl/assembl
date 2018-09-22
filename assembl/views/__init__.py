@@ -219,14 +219,14 @@ def get_default_context(request, **kwargs):
         react_url = 'http://%s:%d' % (
             webpack_host,
             int(config.get('webpack_port', 8000)))
-    socket_proxied = asbool(config.get('changes.websocket.proxied'))
+    socket_proxied = asbool(config.get('changes_websocket_proxied'))
     websocket_port = None if socket_proxied \
-        else config.get('changes.websocket.port')
+        else config.get('changes_websocket_port')
     secure_socket = socket_proxied and (
         asbool(config.get("require_secure_connection")) or (asbool(config.get("accept_secure_connection")) and request.url.startswith('https:')))
     application_url = get_global_base_url()
     socket_url = get_global_base_url(
-        secure_socket, websocket_port) + config.get('changes.prefix')
+        secure_socket, websocket_port) + config.get('changes_prefix')
 
     localizer = request.localizer
     _ = TranslationStringFactory('assembl')

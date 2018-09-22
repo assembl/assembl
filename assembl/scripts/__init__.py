@@ -16,7 +16,7 @@ def boostrap_configuration(config):
     env = bootstrap(config)
     settings = get_appsettings(config, 'assembl')
     set_config(settings)
-    configure_zmq(settings['changes.socket'], False)
+    configure_zmq(settings['changes_socket'], False)
     configure_model_watcher(env['registry'], 'assembl')
     configure_engine(settings, True)
     configure_indexing()

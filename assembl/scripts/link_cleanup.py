@@ -42,7 +42,7 @@ if __name__ == '__main__':
     settings = get_appsettings(configuration, 'assembl')
     set_config(settings)
     logging.config.fileConfig(configuration)
-    configure_zmq(settings['changes.socket'], False)
+    configure_zmq(settings['changes_socket'], False)
     configure_indexing()
     configure_engine(settings, True)
     session = get_session_maker()()

@@ -32,12 +32,12 @@ if len(sys.argv) != 2:
 
 SECTION = 'app:assembl'
 
-settings = ConfigParser.ConfigParser({'changes.prefix': ''})
+settings = ConfigParser.ConfigParser({'changes_prefix': ''})
 settings.read(sys.argv[-1])
-CHANGES_SOCKET = settings.get(SECTION, 'changes.socket')
-CHANGES_PREFIX = settings.get(SECTION, 'changes.prefix')
+CHANGES_SOCKET = settings.get(SECTION, 'changes_socket')
+CHANGES_PREFIX = settings.get(SECTION, 'changes_prefix')
 TOKEN_SECRET = settings.get(SECTION, 'session.secret')
-WEBSERVER_PORT = settings.getint(SECTION, 'changes.websocket.port')
+WEBSERVER_PORT = settings.getint(SECTION, 'changes_websocket_port')
 # NOTE: Not sure those are always what we want.
 SERVER_HOST = settings.get(SECTION, 'public_hostname')
 SERVER_PORT = settings.getint(SECTION, 'public_port')

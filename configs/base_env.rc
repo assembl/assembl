@@ -12,6 +12,20 @@ _postgres_db_password =
 smtp_host = localhost
 imap_host = localhost
 piwik_host = localhost
+url_metadata_host = localhost
+changes_websocket_host = localhost
+# The port to use for the websocket (client frontends will connect to this)
+# In prod, your firewall needs to allow this through or proxy it through nginx
+# UNIQUE_PER_SERVER
+# Convention:
+# 8085 thru 8087: reserved for development
+# 8088 thru 8089: reserved for automated testing
+# 8090-: production
+changes_websocket_port = 8090
+# Whether the websocket is proxied by nginx, and exposed through the public_port
+changes_websocket_proxied = true
+changes_prefix = /socket
+
 *sentry_scheme = https
 *sentry_host = localhost
 _sentry_db_host = localhost
@@ -22,6 +36,10 @@ assembl.generic_errors = false
 memcached_host = localhost
 mysql_host=localhost
 webpack_host=localhost
+nginx_ipv6 = true
+use_letsencrypt = true
+csp_header = default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' data: %(piwik_host)s *.facebook.net *.twimg.com *.twitter.com ; frame-src 'self' www.youtube.com *.facebook.com embed.ted.com *.twitter.com twitter.com player.vimeo.com; connect-src 'self' wss://%(public_hostname)s %(sentry_host)s %(piwik_host)s *.twitter.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com *.twimg.com *.twitter.com ; font-src 'self' data: fonts.gstatic.com; img-src 'self' data: %(piwik_host)s *.facebook.com www.gravatar.com *.googleusercontent.com *.twimg.com *.twitter.com framapic.org *.cloudfront.net
+ssl_dhparam = /etc/ssl/certs/dhparam.pem
 
 elasticsearch_version=5.6.2
 elasticsearch_host=localhost
@@ -52,14 +70,15 @@ redis_socket = 5
 # 8085 thru 8087: reserved for development
 # 8088 thru 8089: reserved for automated testing
 # 8090-: production
-changes.websocket.port = 8090
+changes_websocket_port = 8090
 # ZMQ model changes local socket (backend will connect to this)
 # UNIQUE_PER_SERVER
 # Convention:
 # /0 thru /2: reserved for development
 # /3 thru /4: reserved for automated testing
 # /5-: production
-changes.socket = ipc:///tmp/assembl_changes/5
+changes_socket = ipc:///tmp/assembl_changes/5
+disallow_robots = false
 
 _mac = false
 # We now use systemd instead of a global supervisor
@@ -104,6 +123,9 @@ supervisor__autostart_urlmetadata = true
 alembic__script_location = %(code_root)s/assembl/alembic
 
 uwsgi__virtualenv = %(venvpath)
+# Use socket if not defined
+uwsgi_port =
+uwsgi_host = localhost
 
 # Machines format: machine_id,machine_name,machine_password/...others
 # The first machine is the Robot used for Bigdatext

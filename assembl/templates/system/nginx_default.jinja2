@@ -1,22 +1,31 @@
-{% if docker_https %}
+{% if require_secure_connection %}
 server {
     listen   80;
-    {% if docker_ipv6 %}
+    {% if nginx_ipv6 %}
       listen   [::]:80;
     {% endif %}
-    server_name {{public_hostname_}};
+    server_name {{public_hostname}};
     return 301 https://$host$request_uri;
 }
 {% endif %}
 
+{% if url_metadata_host %}
+upstream urlmetadata {
+    server {{url_metadata_host}}:5000;
+}
+{% endif %}
+
 server {
-  {% if docker_https %}
-      listen 443 ssl http2;
-          {% if docker_ipv6 %}
-              listen   [::]:443 ssl http2;
-          {% endif %}
-      ssl_certificate     /etc/letsencrypt/live/{{public_hostname_}}/fullchain.pem;
-      ssl_certificate_key /etc/letsencrypt/live/{{public_hostname_}}/privkey.pem;
+  {% if accept_secure_connection %}
+    listen 443 ssl http2;
+    {% if nginx_ipv6 %}
+        listen   [::]:443 ssl http2;
+    {% endif %}
+    
+    {% if use_letsencrypt %}
+      ssl_certificate     /etc/letsencrypt/live/{{public_hostname}}/fullchain.pem;
+      ssl_certificate_key /etc/letsencrypt/live/{{public_hostname}}/privkey.pem;
+    {% endif %}
 
     ssl_session_timeout 1d;
     ssl_session_cache shared:SSL:50m;
@@ -29,12 +38,15 @@ server {
     ssl_stapling on;
     ssl_stapling_verify on;
     {% if ocsp_path %}
-    ssl_trusted_certificate {{ ocsp_path }};
+      ssl_trusted_certificate {{ ocsp_path }};
+    {% endif %}
+    {% if ssl_dhparam %}
+      ssl_dhparam {{ ssl_dhparam }};
     {% endif %}
 
   {% else %}
     listen    80;
-    {% if docker_ipv6 %}
+    {% if nginx_ipv6 %}
         listen   [::]:80;
     {% endif %}
   {% endif %}
@@ -44,43 +56,78 @@ server {
   add_header X-Content-Type-Options "nosniff" always;
 
   server_tokens off;
-  add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' data: {{ docker_piwik }} *.facebook.net *.twimg.com *.twitter.com ; frame-src 'self' www.youtube.com *.facebook.com embed.ted.com *.twitter.com twitter.com player.vimeo.com; connect-src 'self' wss://{{public_hostname_}} {{ docker_sentry }} {{ docker_piwik }} *.twitter.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com *.twimg.com *.twitter.com ; font-src 'self' data: fonts.gstatic.com; img-src 'self' data: {{ docker_piwik }} *.facebook.com www.gravatar.com *.googleusercontent.com *.twimg.com *.twitter.com framapic.org *.cloudfront.net";
-
-  # This is the server name, if you're running multiple servers
-  server_name {{public_hostname_}};
-
-  {% if disallow_robots %}
-      location /robots.txt {
-          return 200 "User-agent: *\nDisallow: /";
-      }
+  {% if csp_header %}
+    add_header Content-Security-Policy "{{ csp_header }}";
   {% endif %}
 
+  # This is the server name, if you're running multiple servers
+  server_name {{public_hostname}};
+
+  {% if disallow_robots %}
+    location /robots.txt {
+        return 200 "User-agent: *\nDisallow: /";
+    }
+  {% endif %}
+
+  {% if use_letsencrypt %}
   location /.well-known {
       #This is for domain verification
       alias /var/www/html/.well-known;
   }
+  {% endif %}
 
-  location /socket {
-      proxy_pass http://assembl{{ assembl_index }}:8090/socket;
-      proxy_http_version 1.1;
-      proxy_set_header Upgrade $http_upgrade;
-      proxy_set_header Connection "upgrade";
-  }
+  {% if changes_websocket_proxied %}
+    location /socket {
+        proxy_pass http://{{changes_websocket_host}}:{{changes_websocket_port}}/{{changes_prefix}};
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+    }
+  {% endif %}
+
+  {% if url_metadata_host %}
+    location /urlmetadata/ {
+        proxy_http_version 1.1;
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Port $server_port;
+        proxy_set_header X-Request-Start $msec;
+        # we don't want nginx trying to do something clever with
+        # redirects, we set the Host: header above already.
+        proxy_redirect off;
+        rewrite    /urlmetadata/(.*) /$1 break;
+        proxy_pass http://urlmetadata;
+    }
+  {% endif %}
 
   location /static {
-      autoindex off;
-      # This match static2 too, bundle.js is served directly by nginx, the request doesn't go through uwsgi.
-      # ETag and Last-Modified headers are set by nginx, but we need Cache-Control max-age
-      # so the browser check back for changes with If-Modified-Since or If-None-Match header after 1h
+      #Do NOT put something like "expires modified +1h;" here, it WILL cause problems when deploying a new version.
+      #Nor will it help your performance after the first hour...
       add_header Cache-Control "public, max-age=3600";
-      alias /opt/assembl_static/static;
+      alias {{code_root}}/assembl/static;
+  }
+
+  location /static2 {
+      #Do NOT put something like "expires modified +1h;" here, it WILL cause problems when deploying a new version.
+      #Nor will it help your performance after the first hour...
+      add_header Cache-Control "public, max-age=3600";
+      alias {{code_root}}/assembl/static2;
+  }
+
+  location /private_uploads {
+    internal;
+    alias {{ here }}/var/uploads;
   }
 
   location / {
-
       include uwsgi_params;
       uwsgi_read_timeout 5m;
-      uwsgi_pass uwsgi://assembl{{ assembl_index }}:{{ 9000 + assembl_index }};
+      {% if uwsgi_port %}
+        uwsgi_pass uwsgi://{{ uwsgi_host }}:{{ uwsgi_port }};
+      {% else %}
+        uwsgi_pass unix://{{ here }}/var/run/uwsgi.sock;
+      {% endif %}
   }
 
   # So files uploaded to the database are not artificailly limited by nginx

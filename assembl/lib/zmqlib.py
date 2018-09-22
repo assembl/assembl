@@ -76,5 +76,5 @@ def configure_zmq(sockdef, multiplex):
 
 def includeme(config):
     settings = config.registry.settings
-    configure_zmq(settings['changes.socket'],
-                  settings['changes.multiplex'])
+    configure_zmq(settings['changes_socket'],
+                  settings['changes_multiplex'])

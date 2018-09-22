@@ -32,7 +32,7 @@ if __name__ == '__main__':
     env = bootstrap(args.configuration)
     settings = get_appsettings(args.configuration, 'assembl')
     set_config(settings)
-    configure_zmq(settings['changes.socket'], False)
+    configure_zmq(settings['changes_socket'], False)
     configure_model_watcher(env['registry'], 'assembl')
     engine = configure_engine(settings, True)
     make_graph(args.o, args.dot)

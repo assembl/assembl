@@ -106,7 +106,7 @@ def engine_from_settings(config, full_config=False):
     session = None
     if full_config:
         env = bootstrap(config)
-        configure_zmq(settings['changes.socket'], False)
+        configure_zmq(settings['changes_socket'], False)
         configure_indexing()
         configure_model_watcher(env['registry'], 'assembl')
         logging.config.fileConfig(config)

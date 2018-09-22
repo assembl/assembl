@@ -24,7 +24,7 @@ _config = config.file_config._sections['app:assembl']
 _config['in_migration'] = True
 set_config(_config)
 pyramid_env = bootstrap(config.config_file_name)
-configure_zmq(pyramid_env['registry'].settings['changes.socket'], False)
+configure_zmq(pyramid_env['registry'].settings['changes_socket'], False)
 configure_engine(pyramid_env['registry'].settings, False)
 configure_indexing()
 
