@@ -150,8 +150,8 @@ stderr_logfile_maxbytes = %(sup_log_size_uwsgi_err)s
 stderr_logfile_backups = %(sup_log_backups_uwsgi_err)s
 
 [program:urlmetadata]
-directory = %(here)s/../url_metadata
-command = %(VIRTUAL_ENV)spy3/bin/python main.py
+directory = %(here)s
+command = %(VIRTUAL_ENV)spy3/bin/python3 -murl_metadata
 autostart = %(autostart_urlmetadata)s
 autorestart = true
 stdout_logfile = %(log_dir)s/urlmetadata.log
