@@ -5,6 +5,10 @@ _extends = {{docker_base_rc}}
 *db_user = assembl{{ assembl_index }}
 elasticsearch_index=assembl{{ assembl_index }}
 
+changes_websocket_host = assembl{{ assembl_index }}
+uwsgi_host = assembl{{ assembl_index }}
+uwsgi_port = {{ 9000 + assembl_index }}
+
 public_hostname = {{ public_hostname_ }}
 
 first_admin_email = admin@{{ public_hostname_ }}

@@ -44,7 +44,8 @@ server {
       ssl_dhparam {{ ssl_dhparam }};
     {% endif %}
 
-  {% else %}
+  {% endif %}
+  {% if not require_secure_connection %}
     listen    80;
     {% if nginx_ipv6 %}
         listen   [::]:80;
@@ -117,7 +118,7 @@ server {
 
   location /private_uploads {
     internal;
-    alias {{ here }}/var/uploads;
+    alias {{ projectpath }}/var/uploads;
   }
 
   location / {
@@ -126,7 +127,7 @@ server {
       {% if uwsgi_port %}
         uwsgi_pass uwsgi://{{ uwsgi_host }}:{{ uwsgi_port }};
       {% else %}
-        uwsgi_pass unix://{{ here }}/var/run/uwsgi.sock;
+        uwsgi_pass unix://{{ projectpath }}/var/run/uwsgi.sock;
       {% endif %}
   }
 
