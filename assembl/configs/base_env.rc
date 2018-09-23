@@ -124,7 +124,6 @@ supervisor__autostart_urlmetadata = true
 
 alembic__script_location = %(code_root)s/assembl/alembic
 
-uwsgi__virtualenv = %(venvpath)
 # Use socket if not defined
 uwsgi_port =
 uwsgi_host = localhost
