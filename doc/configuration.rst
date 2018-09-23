@@ -15,11 +15,11 @@ The name of the ``local.ini`` file itself is given in the ``.rc`` variable ``ini
 The enriched .rc file format
 ----------------------------
 
-``.rc`` file, in the ``configs`` directory, are a series of ``key=value`` pairs, with some keys having special meaning for fabric only. The ``_extends`` key, if present, gives the relative path of another ``.rc`` file, whose values will be injected in the fabfile's ``env``, unless overridden by the current ``.rc`` file; this is done in :py:func:`fabfile.combine_rc`, called through the ``@task`` decorator. The keys are further filtered so ``*`` and ``_`` prefixes are eliminated from keys, and so are values of ``__delete_key__``. So, for example, if we have the following two files:
+``.rc`` file, in the ``assembl/configs`` directory, are a series of ``key=value`` pairs, with some keys having special meaning for fabric only. The ``_extends`` key, if present, gives the relative path of another ``.rc`` file, whose values will be injected in the fabfile's ``env``, unless overridden by the current ``.rc`` file; this is done in :py:func:`fabfile.combine_rc`, called through the ``@task`` decorator. It looks for files first in the same directory as the calling ``.rc`` file, second in the ``assembl/config`` directory. The keys are further filtered so ``*`` and ``_`` prefixes are eliminated from keys, and so are values of ``__delete_key__``. So, for example, if we have the following two files:
 
 .. code:: ini
 
-    # configs/instance.rc
+    # assembl/configs/instance.rc
     _extends = base_env.rc
     _user = assembl
     *db_user = assembl_user
@@ -27,7 +27,7 @@ The enriched .rc file format
     *db_password = __delete_key__
     _projectpath = /home/assembl_user/assembl
 
-    # configs/base_env.rc
+    # assembl/configs/base_env.rc
     ini_file = local.ini
     ini_files = production.ini RANDOM:random.ini.tmpl RC_DATA
     random_file = random.ini
@@ -36,7 +36,7 @@ The enriched .rc file format
     *db_password = assembl
     supervisor__autostart_changes_router = true
 
-And fabric is called with ``fab -c configs/instance.rc``, then its ``env`` would contain the following:
+And fabric is called with ``fab -c assembl/configs/instance.rc``, then its ``env`` would contain the following:
 
 .. code:: py
 
@@ -51,13 +51,11 @@ And fabric is called with ``fab -c configs/instance.rc``, then its ``env`` would
       "supervisor__autostart_changes_router": "true",
     }
 
-The same dictionary composition method is used to compose the ``local.ini`` file, in :py:func:`assembl.scripts.ini_files.compose`. The basis is the ``ini_files`` variable: each ``.ini`` file mentioned (path relative to project root) is combined in turn, with values overriding the previous one in the sequence, and the resulting combination file is written out to ``local.ini`` in the ``create_local_ini`` fab task. There are two magic values that can be used in the ``ini_files`` list: ``RANDOM:...`` and ``RC_DATA``. Those are mostly useful when creating the ``local.ini`` file used by pyramid.
-
-In some cases, especially with docker, we want the ``.ini`` file components in ``ini_files`` to refer to both local and remote files. In that case, we cannot take the (current, remote) project root as a basis. Prefix such paths with ``~``, which will mean either project-root relative (remotely) or fabfile-relative (locally).
+The same dictionary composition method is used to compose the ``local.ini`` file, in :py:func:`assembl.scripts.ini_files.compose`. The basis is the ``ini_files`` variable: each ``.ini`` file mentioned is combined in turn, with values overriding the previous one in the sequence, and the resulting combination file is written out to ``local.ini`` in the ``create_local_ini`` fab task. Relative files paths are looked for in this order: first relative to the current directory, second relative to the calling rc file directory, third in ``assembl/config``. There are two magic values that can be used in the ``ini_files`` list: ``RANDOM:...`` and ``RC_DATA``. Those are mostly useful when creating the ``local.ini`` file used by pyramid.
 
 ``RC_DATA`` corresponds to the data from the `.rc` files itself. Key-value pairs will be in the ``app:assembl`` section by default. A key-value pair can be assigned to any section if the key follows the ``section_name__key_name`` format. If the key was preceded by a ``_``, it is not injected in the ``.ini`` file at all (they are fabric-only values). Similarly, if the value is ``__delete_key__``, it is not injected in the ``.ini`` file (This can allow to mask a value from an inherited ``.rc`` file, and use the value from the ``.ini`` file that precedes the ``RC_DATA`` step in the ``ini_files`` chain). If the key was preceded by a ``*``, it goes in the ``DEFAULT`` section, and its value is available in all sections. This is useful for cross-section variable interpolation, as described in :py:mod:`ConfigParser`.
 
-``RANDOM:...`` will use data from the ``random_file`` (usually ``random.ini``), but will first ensure that it is populated with random values generated with the ``assembl-ini-files random ...rc`` subcommand. If it does not exist, that subcommand will first generate the ``random_file`` file by combining the template files mentioned after ``RANDOM:`` (project-relative paths, separated by further ``:``). If a value is already set, it is preserved, but missing (new) values will still be added. The codes for random generation are the following: ``{random66}``, for example, will create a random string of length (4/3)66 (rounded up). ``{saml_key}`` will create a X509 key (without its armour) and ``{saml_crt}`` will create a self-signed certificate using data from ``saml_...`` keys and the ``public_hostname``. Those have to be set in keys following the ``XXX_PRIVATE_KEY`` and ``XXX_PUBLIC_CERT`` pattern respectively.
+``RANDOM:...`` will use data from the ``random_file`` (usually ``random.ini``), but will first ensure that it is populated with random values generated with the ``assembl-ini-files random ...rc`` subcommand. (The fab commands involving random files will fetch and push the remote ``random.ini``, but the ini_files utility is not aware of this.) If it does not exist, that subcommand will first generate the ``random_file`` file by combining the template files mentioned after ``RANDOM:`` (template files are found either relative to current directory, or to ``assembl/template/system``. Multiple templates are separated by further ``:``). If a value is already set, it is preserved, but missing (new) values will still be added. The codes for random generation are the following: ``{random66}``, for example, will create a random string of length (4/3)66 (rounded up). ``{saml_key}`` will create a X509 key (without its armour) and ``{saml_crt}`` will create a self-signed certificate using data from ``saml_...`` keys and the ``public_hostname``. Those have to be set in keys following the ``XXX_PRIVATE_KEY`` and ``XXX_PUBLIC_CERT`` pattern respectively.
 
 
 Key .rc and .ini Files
@@ -230,7 +228,7 @@ Migrating to the new configuration system
 
 If you have a hand-written ``local.ini`` on a server, and you want to make sure that you do not lose information when generating a new one, here is how to proceed:
 
-1. If the local.ini file is on a remote server, create a skeleton ``configs/myinstance.rc`` file with at least the following information:
+1. If the local.ini file is on a remote server, create a skeleton ``myinstance.rc`` file with at least the following information:
 
 .. code:: ini
 
@@ -241,7 +239,7 @@ If you have a hand-written ``local.ini`` on a server, and you want to make sure 
 
 Note that you can extend another ``.rc`` file, with more specific information, such as company information in _saml keys.
 
-If upgrading a local development environment, you would probably name your file ``configs/local.rc`` instead of ``configs/myinstance.rc``, and start with a one-line seed file:
+If upgrading a local development environment, you would probably name your file ``local.rc`` instead of ``myinstance.rc``, and start with a one-line seed file:
 
 .. code:: ini
 
@@ -249,9 +247,9 @@ If upgrading a local development environment, you would probably name your file 
 
 (Do not set hosts or _user.)
 
-2. run ``fab -c configs/myinstance.rc migrate_local_ini`` locally. (Or ``develop.rc`` appropriately.)
+2. run ``fab -c myinstance.rc migrate_local_ini`` locally. (Or ``develop.rc`` appropriately.)
 
-This will create a remote ``random_file`` file with information pulled from the remote ``local.ini`` file, and create a ``configs/myinstance.rc.NNNNNNN`` file (where NNNNNN is a timestamp), containing any value that diverges between your current remote ``local.ini`` file and the one that would be automatically generated using the specifications in ``configs/myinstance.rc``. There will be warnings about multi-line values; they will be made single-line in the generated ``.rc`` file, but that is not always appropriate. In some cases, it is worth creating a new ``.ini`` file for those multi-line values, and add them in the stack in a local ``ini_files`` value in your ``.rc`` file.
+This will create a remote ``random_file`` file with information pulled from the remote ``local.ini`` file, and create a ``myinstance.rc.NNNNNNN`` file (where NNNNNN is a timestamp), containing any value that diverges between your current remote ``local.ini`` file and the one that would be automatically generated using the specifications in ``myinstance.rc``. There will be warnings about multi-line values; they will be made single-line in the generated ``.rc`` file, but that is not always appropriate. In some cases, it is worth creating a new ``.ini`` file for those multi-line values, and add them in the stack in a local ``ini_files`` value in your ``.rc`` file.
 
 3. Some of the lines in the resulting ``.rc.NNNNNNN`` file will reflect historical artefacts in the construction of your ``local.ini`` file; exercice judgement, migrate key-value pairs to your ``myinstance.rc`` file and repeat the migration step until the contents of the migration-generated file are insignificant.
 

@@ -60,7 +60,7 @@ To fix it, you can reexecute:
 
 .. code:: sh
 
-    fab -c configs/local.rc app_compile
+    fab -c assembl/configs/local.rc app_compile
 
 or simply:
 
@@ -78,7 +78,7 @@ If you have local code changes, you may have to edit `assembl/static2/flow/objec
 
 For the moment, we use flow version 0.52 which has this issue https://github.com/facebook/flow/issues/3528 . As of today, latest version is 0.67, but we have not updated it yet, because 0.53 introduces some breaking changes.
 
-Sometimes the issue is also fixed after a `fab -c configs/local.rc app_compile` or a reboot.
+Sometimes the issue is also fixed after a `fab -c assembl/configs/local.rc app_compile` or a reboot.
 
 A working solution is to run flow from a docker container:
 

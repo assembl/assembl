@@ -3,17 +3,17 @@ How to upgrade to version with elasticsearch indexing
 
 You need to run again::
 
-    fab -c configs/develop.rc app_compile
+    fab -c assembl/configs/develop.rc app_compile
 
 to rebuild supervisord.conf from supervisord.conf.tmpl and install
 additional pip dependencies (elasticsearch-py).
 
 install elasticsearch with::
 
-    fab -c configs/develop.rc install_elasticsearch
+    fab -c assembl/configs/develop.rc install_elasticsearch
 
 (If later you want to upgrade elasticsearch, modify the ELASTICSEARCH_VERSION
-in `fabfile.py` and run the ``fab -c configs/develop.rc upgrade_elasticsearch`` command.)
+in `fabfile.py` and run the ``fab -c assembl/configs/develop.rc upgrade_elasticsearch`` command.)
 
 Reload supervisord config and start the elasticsearch process with::
 
