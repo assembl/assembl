@@ -1,6 +1,6 @@
 _extends = base_env.rc
 public_hostname = localhost
-ini_files = production.ini configs/no_sentry.ini develop_overlay.ini RANDOM:random.ini.tmpl RC_DATA
+ini_files = production.ini no_sentry.ini develop_overlay.ini RANDOM:random.ini.tmpl RC_DATA
 # ZMQ model changes local socket (backend will connect to this)
 # UNIQUE_PER_SERVER
 # Convention:

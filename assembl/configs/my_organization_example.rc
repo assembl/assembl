@@ -1,7 +1,7 @@
 # This is an example of what information you would set at an organization-wide level, possibly in a private repository under configs.
 # Individual servers would extend this file.
-_extends=../base_env.rc
-ini_files = production.ini configs/bluenove-server-configs/saml.ini RANDOM:random.ini.tmpl:saml_random.ini.tmpl RC_DATA
+_extends=base_env.rc
+ini_files = production.ini saml.ini RANDOM:random.ini.tmpl:saml_random.ini.tmpl RC_DATA
 piwik_host = stats.my_organization.org
 *sentry_host = sentry.my_organization.org
 

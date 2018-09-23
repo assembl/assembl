@@ -46,14 +46,14 @@ updating, etc.). It needs to be run before any translation work:
 
 ::
 
-    fab -c configs/develop.rc make_messages
+    fab -c assembl/configs/develop.rc make_messages
 
 The second generates the runtime files and needs to be run before you
 can see the actual translations in the application:
 
 ::
 
-    fab -c configs/develop.rc compile_messages
+    fab -c assembl/configs/develop.rc compile_messages
 
 The translation workflow
 ------------------------
@@ -74,7 +74,7 @@ The translation workflow
 
    ::
 
-       fab -c configs/develop.rc make_messages
+       fab -c assembl/configs/develop.rc make_messages
 
 3. Mandatory: Push the pot file back to transifex:
 

@@ -5,7 +5,7 @@ import sys
 import os
 from os.path import exists, dirname, abspath, join, realpath
 from ConfigParser import (
-    NoSectionError, SafeConfigParser, NoOptionError, RawConfigParser as Parser)
+    SafeConfigParser, NoOptionError, RawConfigParser as Parser)
 from argparse import ArgumentParser, FileType
 import logging
 
@@ -62,13 +62,26 @@ DEFAULTS = {
 }
 
 
+def find_ini_file(fname, *locs):
+    if exists(fname):
+        return fname
+    locs = list(locs)
+    locs.append(join(local_code_root, 'configs'))
+    for loc in locs:
+        name = join(loc, fname)
+        if exists(name):
+            return name
+
+
 def asParser(fob, cls=Parser):
     """ConfigParser from a .ini filename or open file object. Idempotent."""
     if isinstance(fob, cls):
         return fob
     parser = cls()
     if isinstance(fob, (str, unicode)):
-        parser.read(fob)
+        fob2 = find_ini_file(fob)
+        assert fob2, "Cannot find " + fob
+        parser.read(fob2)
     else:
         parser.readfp(fob)
     return parser
@@ -439,6 +452,9 @@ def compose(rc_filename, random_file=None):
             templates = overlay.split(':')[1:]
             overlay = populate_random(
                 random_file, templates, extract_saml_info(rc_info))
+        else:
+            overlay = find_ini_file(overlay, dirname(rc_filename))
+            assert overlay, "Cannot find " + overlay
         combine_ini(base, overlay)
     return base
 

@@ -21,8 +21,8 @@ Installation prerequisites
 
 .. code-block:: sh
 
-    fab -c configs/develop.rc install_dovecot_vmm
-    fab -c configs/develop.rc install_postfix
+    fab -c assembl/configs/develop.rc install_dovecot_vmm
+    fab -c assembl/configs/develop.rc install_postfix
 
 If the postgres database is local, and that step has not been done:
 

@@ -110,16 +110,13 @@ def combine_rc(rc_filename, overlay=None):
     service_config = load_settings(rc_filename)
     if '_extends' in service_config:
         fname = service_config['_extends']
-        # We want fname to be usable both on host and target.
-        # Use project-path-relative names to that effect.
-        if fname.startswith('~/'):
-            path = local_code_root
-            if not running_locally([env.host_string]):
-                path = env.get('projectpath', path)
-            fname = join(path, fname[2:])
-        else:
-            fname = join(dirname(rc_filename), fname)
-        service_config = combine_rc(fname, service_config)
+        # fname is either relative to the current rc_file,
+        # or to the config directory, in that order.
+        loc = os.path.join(dirname(rc_filename), fname)
+        if not os.path.exists(loc):
+            loc = os.path.join(local_code_root, 'assembl', 'configs', fname)
+        assert os.path.exists(loc), "Can't find " + fname
+        service_config = combine_rc(loc, service_config)
     if overlay is not None:
         service_config.update(overlay)
     service_config.pop('_extends', None)

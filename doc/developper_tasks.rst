@@ -12,10 +12,10 @@ Download a copy of a remote database to develop locally
 
 .. code:: sh
 
-    fab -c configs/{config_of_remote_instance}.rc database_download
-    fab -c configs/develop.rc database_restore
+    fab -c assembl/configs/{config_of_remote_instance}.rc database_download
+    fab -c assembl/configs/develop.rc database_restore
     # Make sure the database username and passwords in local.ini match the ones of the database you just downloaded
-    fab -c configs/develop.rc app_compile #(To make sure the database schema is up to date and restore.  You can also use app_compile_noupdate if you are in a hurry)
+    fab -c assembl/configs/develop.rc app_compile #(To make sure the database schema is up to date and restore.  You can also use app_compile_noupdate if you are in a hurry)
     # Grab a coffee...
     exit
     supervisorctl restart dev:
@@ -33,10 +33,10 @@ Only the first time you run it:
     # On Mac OS X, you can omit sudo -u postgres
     sudo -u postgres createuser --createdb --no-createrole --no-superuser assembl_test --pwprompt  # Enter assembl_test as password at the prompt
     PGPASSWORD=assembl_test createdb --host localhost -U assembl_test assembl_test
-    fab -c configs/testing.rc create_local_ini
+    fab -c assembl/configs/testing.rc create_local_ini
     assembl-db-manage testing.ini bootstrap
 
-Note that the ``fab -c configs/testing.rc create_local_ini`` command should be repeated whenever ``production.ini``, ``configs/base_env.rc`` or ``configs/testing.ini`` changes.
+Note that the ``fab -c assembl/configs/testing.rc create_local_ini`` command should be repeated whenever ``production.ini``, ``assembl/configs/base_env.rc`` or ``assembl/configs/testing.ini`` changes.
 
 Thereafter:
 
