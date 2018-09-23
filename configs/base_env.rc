@@ -25,6 +25,8 @@ changes_websocket_port = 8090
 # Whether the websocket is proxied by nginx, and exposed through the public_port
 changes_websocket_proxied = true
 changes_prefix = /socket
+accept_secure_connection = true
+require_secure_connection = true
 
 *sentry_scheme = https
 *sentry_host = localhost

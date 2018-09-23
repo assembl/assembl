@@ -9,7 +9,7 @@ from ConfigParser import (
 from argparse import ArgumentParser, FileType
 import logging
 
-from ..fabfile import combine_rc, code_root, venv_path
+from ..fabfile import combine_rc, code_root, venv_path, filter_global_names
 
 # global umask so ini files are unreadable by others
 os.umask(0o027)
@@ -590,7 +590,7 @@ def main():
     if args.command == 'dump':
         dump(args.ini)
     if args.command == 'template':
-        rc_info = combine_rc(args.input)
+        rc_info = filter_global_names(combine_rc(args.input))
         fill_template(args.template, rc_info, args.output)
 
 
