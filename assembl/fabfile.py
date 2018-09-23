@@ -1137,6 +1137,17 @@ def app_compile_nodbupdate():
 
 
 @task
+def app_create_wheel():
+    """Create a wheel for assembl. Should be run locally."""
+    execute(update_npm_requirements)
+    execute(compile_stylesheets)
+    execute(compile_messages)
+    execute(compile_javascript)
+    run("rm -rf dist build assembl.egg-info")
+    venvcmd("python setup.py bdist_wheel")
+
+
+@task
 def generate_dh_group():
     """Generate Diffie-Hellman Group"""
     sudo("openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048")
