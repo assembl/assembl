@@ -439,7 +439,8 @@ def compose(rc_filename, random_file=None):
     """Compose local.ini from the given .rc file"""
     rc_info = combine_rc(rc_filename)
     rc_info['*code_root'] = code_root(rc_info)
-    rc_info['*venvpath'] = venv_path(rc_info)
+    # Special case: uwsgi does not do internal computations.
+    rc_info['uwsgi__virtualenv'] = venv_path(rc_info)
     ini_sequence = rc_info.get('ini_files', None)
     assert ini_sequence, "Define ini_files"
     ini_sequence = ini_sequence.split()
