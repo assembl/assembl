@@ -63,7 +63,7 @@ You can run either:
 
 .. code:: sh
 
-    wget https://raw.github.com/assembl/assembl/develop/fabfile.py
+    wget https://raw.github.com/assembl/assembl/develop/assembl/fabfile.py
     fab install_single_server
     fab bootstrap:projectpath=~/assembl
     cd ~/assembl
@@ -74,8 +74,8 @@ or:
 
     git clone https://github.com/assembl/assembl.git
     cd assembl
-    fab -c configs/develop.rc install_single_server
-    fab -c configs/develop.rc bootstrap_from_checkout
+    fab -f assembl/fabfile.py -c configs/develop.rc install_single_server
+    fab -f assembl/fabfile.py -c configs/develop.rc bootstrap_from_checkout
 
 
 Note: If on Mac: replace ``configs/develop.rc`` with ``configs/mac.rc``.
