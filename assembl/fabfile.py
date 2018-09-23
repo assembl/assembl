@@ -297,6 +297,7 @@ def ensure_pip_compile():
 
 @task
 def generate_new_requirements():
+    "Generate frozen requirements.txt file (with name taken from environment)."
     ensure_pip_compile()
     target = env.frozen_requirements or 'requirements.txt'
     venvcmd(" ".join(("pip-compile --output-file", target, env.requirement_inputs)))
@@ -304,6 +305,7 @@ def generate_new_requirements():
 
 @task
 def ensure_requirements():
+    "Copy the appropriate frozen requirements file into requirements.txt"
     target = env.frozen_requirements
     if target:
         with cd(env.projectpath):
@@ -316,6 +318,7 @@ def ensure_requirements():
 
 @task
 def generate_frozen_requirements():
+    "Generate all frozen requirements file"
     local_venv = env.get("local_venv", "./venv")
     with settings(host_string="localhost", venvpath=local_venv,
                   user=getuser(), projectpath=os.getcwd()):
@@ -1008,6 +1011,7 @@ def restart_bluenove_actionable():
 
 @task
 def app_setup():
+    "Setup the environment so the application can run"
     venvcmd('pip install -e ./')
     execute(setup_var_directory)
     if not exists(env.ini_file):
@@ -1613,6 +1617,7 @@ def check_and_create_database_user(host=None, user=None, password=None):
 
 @task
 def check_and_create_sentry_database_user():
+    "Create a database user for sentry database"
     user = env.sentry_db_user
     password = env.sentry_db_password
     host = env.get("sentry_db_host", None)
@@ -1982,6 +1987,7 @@ def as_rc(ini_filename):
 
 @task
 def docker_compose():
+    "Create configuration files needed by docker_compose"
     from jinja2 import Environment, FileSystemLoader
     assert env.docker_assembl_hosts, "Define docker_assembl_hosts"
     if not os.path.exists("./docker/build"):
@@ -2021,6 +2027,7 @@ def docker_compose():
 
 @task
 def set_ssl_certificates():
+    "Create stapled SSL certificates"
     if env.ocsp_path:
         root_certificate = run('curl https://letsencrypt.org/certs/isrgrootx1.pem.txt')
         intermediate_certificate_1 = run('curl https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem.txt')
@@ -2035,6 +2042,7 @@ def set_ssl_certificates():
 
 @task
 def reindex_elasticsearch(bg=False):
+    "Rebuild the elasticsearch index"
     cmd = "assembl-reindex-all-contents " + env.ini_file
     if bg:
         cmd += "&"
@@ -2080,6 +2088,7 @@ def docker_startup():
 
 @task
 def create_first_admin_user():
+    "Create a user with admin rights, email given in env. as first_admin_email"
     email = env.get("first_admin_email", None)
     assert email, "Please set the first_admin_email in the .rc environment"
     venvcmd("assembl-add-user -m %s -u admin -n Admin -p admin --bypass-password %s" % (
@@ -2208,6 +2217,7 @@ def install_elasticsearch():
 
 @task
 def upgrade_elasticsearch():
+    "Upgrade elasticsearch to the appropriate version"
     if getenv("IN_DOCKER"):
         return
 
