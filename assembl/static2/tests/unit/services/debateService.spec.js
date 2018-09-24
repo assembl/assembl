@@ -4,7 +4,8 @@ const mockDiscussion = {
   translation_service_class: 'assembl.nlp.translation_service.GoogleTranslationService',
   help_url: 'help.fr',
   logo: 'logo.jpg',
-  slug: 'sandbox'
+  slug: 'sandbox',
+  require_secure_connection: true
 };
 
 const mockPreferences = {
@@ -105,6 +106,7 @@ describe('This test concern debate Service', () => {
       translationEnabled: true,
       slug: 'sandbox',
       logo: 'logo.jpg',
+      requireSecureConnection: true,
       topic: {
         titleEntries: {
           fr: '',

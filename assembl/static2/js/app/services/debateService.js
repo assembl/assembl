@@ -16,6 +16,7 @@ export const buildDebateData = (debateData, prefs, socialShare) => {
   const socialMedias = prefs.extra_json && prefs.extra_json.socialMedias ? prefs.extra_json.socialMedias : null;
   const footerLinks = prefs.extra_json && prefs.extra_json.footerLinks ? prefs.extra_json.footerLinks : null;
   const isLargeLogo = prefs.extra_json && prefs.extra_json.isLargeLogo ? prefs.extra_json.isLargeLogo : null;
+  const requireSecureConnection = debateData.require_secure_connection ? debateData.require_secure_connection : null;
 
   const customHtmlCodeLandingPage = prefs.custom_html_code_landing_page ? prefs.custom_html_code_landing_page : null;
   const customHtmlCodeRegistrationPage = prefs.custom_html_code_user_registration_page
@@ -44,7 +45,8 @@ export const buildDebateData = (debateData, prefs, socialShare) => {
     useSocialMedia: socialShare,
     customHtmlCodeLandingPage: customHtmlCodeLandingPage,
     customHtmlCodeRegistrationPage: customHtmlCodeRegistrationPage,
-    footerLinks: footerLinks
+    footerLinks: footerLinks,
+    requireSecureConnection: requireSecureConnection
   };
 };
 
