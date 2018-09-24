@@ -2562,3 +2562,41 @@ def add_user_to_group(user, group):
         fabsudo("dseditgroup -o edit -a %s -t user %s" % (user, group))
     else:
         sudo("usermod -a -G %s %s" % (group, user))
+
+
+@task
+def set_fail2ban_configurations():
+    """Utilize configurations to populate and push fail2ban configs, must be done as a sudo user"""
+    if exists('/etc/fail2ban'):
+        from jinja2 import Environment, FileSystemLoader
+        jenv = Environment(
+            loader=FileSystemLoader('./docker'),
+            autoescape=lambda t: False)
+        # This is done locally
+        tempalte_folder = os.path.join(dirname(__file__), 'docker')
+        filters = [f for f in os.listdir(tempalte_folder) if f.startswith('filter-')]
+        filters.append('jail.local.jinja2')
+        filters_to_file = {}
+        for f in filters:
+            with NamedTemporaryFile(delete=False) as f2:
+                filters_to_file[f] = f2.name
+        try:
+            # populate jail and/or filters
+            print("Generating template files")
+            for (template_name, temp_path) in filters_to_file.items():
+                with open(temp_path, 'w') as f:
+                    filter_template = jenv.get_template(template_name)
+                    f.write(filter_template.render(**env))
+
+                final_name = template_name[:-7]  # remove .jinja2 extension
+                final_path = '/etc/fail2ban/'
+                if final_name.startswith('filter-'):
+                    final_name = final_name[7:]  # Remove filter-
+                    final_name += '.conf'  # add extension
+                    final_path += 'filter.d/'
+                final_path = join(final_path, final_name)
+                put(temp_path, final_path)
+
+        finally:
+            for path in filters_to_file.values():
+                os.unlink(path)
