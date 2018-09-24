@@ -51,7 +51,7 @@ query ThematicsQuery($discussionPhaseId: Int!) {
       }
     }
   }
-  rootIdea {
+  rootIdea(discussionPhaseId: $discussionPhaseId) {
     ... on Idea {
       id
     }

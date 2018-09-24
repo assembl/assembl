@@ -34,8 +34,7 @@ class PhaseMenu extends React.PureComponent<Props> {
       );
     }
     const sectionIndex = rootSectionId ? `${rootSectionId}.${sectionId}` : sectionId;
-    const query = { phaseId: phase.id };
-    const sectionQuery = sectionIndex ? { section: sectionIndex, ...query } : query;
+    const sectionQuery = sectionIndex ? { section: sectionIndex } : {};
     const subMenuIds = subMenu ? Object.keys(subMenu) : [];
     return (
       <li key={phase.id + sectionId}>
@@ -53,8 +52,7 @@ class PhaseMenu extends React.PureComponent<Props> {
     const { index, isActive, slug, phase } = this.props;
     const menuItem = PHASES_ADMIN_MENU[phase.identifier];
     const { sectionId, subMenu } = menuItem;
-    const query = { phaseId: phase.id };
-    const sectionQuery = sectionId ? { section: sectionId, ...query } : query;
+    const sectionQuery = sectionId ? { section: sectionId } : {};
     const subMenuIds = subMenu ? Object.keys(subMenu) : [];
     return (
       <li className="menu-item">

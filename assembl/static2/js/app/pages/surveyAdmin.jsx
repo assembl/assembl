@@ -13,7 +13,7 @@ type Props = {
 };
 
 type SurveyAdminProps = {
-  phaseId: string
+  discussionPhaseId: string
 } & Props;
 
 const getSectionTitle = (section: string, thematicId: string): string | null => {
@@ -39,14 +39,14 @@ const SectionHelper = ({ section, thematicId }: Props) => {
   }
 };
 
-const SurveyAdmin = ({ section, thematicId, phaseId }: SurveyAdminProps) => {
+const SurveyAdmin = ({ section, thematicId, discussionPhaseId }: SurveyAdminProps) => {
   const sectionTitleMsgId = getSectionTitle(section, thematicId);
   return (
     <div className="survey-admin">
       <div className="admin-box">
         <SectionTitle title={I18n.t(sectionTitleMsgId)} annotation={I18n.t('administration.annotation')} />
         <SectionHelper section={section} thematicId={thematicId} />
-        <SurveyAdminForm section={section} thematicId={thematicId} phaseId={phaseId} />
+        <SurveyAdminForm section={section} thematicId={thematicId} discussionPhaseId={discussionPhaseId} />
       </div>
     </div>
   );

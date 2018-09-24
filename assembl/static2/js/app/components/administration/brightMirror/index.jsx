@@ -13,7 +13,6 @@ import MultilingualRichTextFieldAdapter from '../../form/multilingualRichTextFie
 import LoadSaveReinitializeForm from '../../../components/form/LoadSaveReinitializeForm';
 import Loader from '../../common/loader';
 import Helper from '../../common/helper';
-import { fromGlobalId } from '../../../utils/globalFunctions';
 
 // Functions
 import { load, postLoadFormat } from './load'; // Load file needs to be updated according to bright mirror requirements
@@ -23,15 +22,17 @@ import validate from './validate'; // Save file needs to be updated according to
 type Props = {
   client: ApolloClient,
   editLocale: string,
-  phaseId: string
+  discussionPhaseId: string
 };
 
 const name = 'themes[0]'; // We have only one thematic for BrightMirror
 
 const loading = <Loader />;
 
-const BrightMirrorAdminForm = ({ client, editLocale, phaseId }: Props) => {
-  const discussionPhaseId = fromGlobalId(phaseId);
+const BrightMirrorAdminForm = ({ client, editLocale, discussionPhaseId }: Props) => {
+  if (!discussionPhaseId) {
+    return loading;
+  }
   return (
     <LoadSaveReinitializeForm
       load={(fetchPolicy: FetchPolicy) => load(client, fetchPolicy, discussionPhaseId)}

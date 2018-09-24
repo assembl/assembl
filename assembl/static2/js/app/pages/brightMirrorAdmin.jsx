@@ -6,7 +6,7 @@ import SectionTitle from '../components/administration/sectionTitle';
 import BrightMirrorAdminForm from '../components/administration/brightMirror/index';
 
 type Props = {
-  phaseId: string
+  discussionPhaseId: string
 };
 
 const BrightMirrorAdmin = (props: Props) => (

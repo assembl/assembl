@@ -9,6 +9,7 @@ import { Translate } from 'react-redux-i18n';
 import withoutLoadingIndicator from '../common/withoutLoadingIndicator';
 import { get } from '../../utils/routeMap';
 import { getPartialTreeByParentId, getPath } from '../../utils/tree';
+import { fromGlobalId } from '../../utils/globalFunctions';
 import ThematicsDataQuery from '../../graphql/ThematicsDataQuery.graphql';
 import { thematicTitle } from '../common/tooltips';
 import { Menu, MenuItem } from '../common/menu';
@@ -47,7 +48,7 @@ type ThematicsMenuItemProps = {
   /* The roots parents indexes */
   indexes: Array<number>,
   /* The menu section query */
-  sectionQuery: string
+  sectionQuery: { section: string }
 } & ThematicsMenuProps;
 
 type Props = {
@@ -60,7 +61,7 @@ type Props = {
 };
 
 type QueryVariablesType = {
-  identifier: string,
+  discussionPhaseId: string,
   lang: string
 };
 /**
@@ -159,7 +160,7 @@ const ThematicsMenuItems = ({ roots, descendants, slug, phase, indexes, sectionQ
     const hasSubMenu = subMenuTree.roots.length > 0;
     const link = (
       <Link
-        to={`${get('administration', { ...slug, id: phase.identifier })}${sectionQuery}&thematicId=${thematic.id}`}
+        to={`${get('administration', { ...slug, id: phase.identifier }, { ...sectionQuery, thematicId: thematic.id })}`}
         activeClassName="active"
       >
         <Translate value="administration.menu.configureThematic" index={subIndexes.join('.')} />
@@ -212,14 +213,15 @@ const ThematicsMenu = ({
 }: ThematicsMenuProps & Props) => {
   if (!thematicsData) return null;
   const sectionIndex = rootSectionId ? `${rootSectionId}.${menuItem.sectionId}` : menuItem.sectionId;
-  const sectionQuery = `?section=${sectionIndex}`;
+  const sectionQuery = { section: sectionIndex };
   const { roots, descendants } = getPartialTreeByParentId(rootIdea && rootIdea.id, thematicsData);
   if (roots.length === 0) return null;
   const firstThematic = sortBy(roots, 'order')[0];
-  // TODO use the query argument for section and thematicId
-  const firstThematicLink = `${get('administration', { ...slug, id: phase.identifier })}${sectionQuery}&thematicId=${
-    firstThematic.id
-  }`;
+  const firstThematicLink = `${get(
+    'administration',
+    { ...slug, id: phase.identifier },
+    { ...sectionQuery, thematicId: firstThematic.id }
+  )}`;
   const { section, thematicId } = location.query;
   const openedPath = [];
   if (sectionIndex === section) {
@@ -250,7 +252,7 @@ const ThematicsMenu = ({
 export default compose(
   graphql(ThematicsDataQuery, {
     options: ({ phase, locale }) => ({
-      variables: { identifier: phase.identifier, lang: locale }
+      variables: { discussionPhaseId: fromGlobalId(phase.id), lang: locale }
     })
   }),
   withoutLoadingIndicator(),

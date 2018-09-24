@@ -1,5 +1,5 @@
-query ThematicsDataQuery($identifier: String!, $lang: String!) {
-  thematicsData: ideas(identifier: $identifier) {
+query ThematicsDataQuery($discussionPhaseId: Int!, $lang: String!) {
+  thematicsData: ideas(discussionPhaseId: $discussionPhaseId) {
     ... on IdeaInterface {
       order
     }
@@ -13,7 +13,7 @@ query ThematicsDataQuery($identifier: String!, $lang: String!) {
       title(lang: $lang)
     }
   }
-  rootIdea {
+  rootIdea(discussionPhaseId: $discussionPhaseId) {
     ... on Idea {
       id
     }

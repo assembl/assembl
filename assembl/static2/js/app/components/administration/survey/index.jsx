@@ -16,14 +16,13 @@ import { createMutationsPromises, save } from './save';
 import validate from './validate';
 import Loader from '../../common/loader';
 import { PHASES } from '../../../constants';
-import { fromGlobalId } from '../../../utils/globalFunctions';
 
 type Props = {
   client: ApolloClient,
   section: string,
   thematicId: string,
   debateId: string,
-  phaseId: string,
+  discussionPhaseId: string,
   editLocale: string,
   locale: string
 };
@@ -32,8 +31,10 @@ const loading = <Loader />;
 
 const steps = ['1', '2', '3'];
 
-const DumbSurveyAdminForm = ({ client, section, thematicId, phaseId, debateId, editLocale, locale }: Props) => {
-  const discussionPhaseId = fromGlobalId(phaseId);
+const DumbSurveyAdminForm = ({ client, section, thematicId, discussionPhaseId, debateId, editLocale, locale }: Props) => {
+  if (!discussionPhaseId) {
+    return loading;
+  }
   return (
     <LoadSaveReinitializeForm
       load={(fetchPolicy: FetchPolicy) => load(client, fetchPolicy, discussionPhaseId, locale)}
@@ -49,7 +50,7 @@ const DumbSurveyAdminForm = ({ client, section, thematicId, phaseId, debateId, e
         <React.Fragment>
           <div className="admin-content">
             <AdminForm handleSubmit={handleSubmit} pristine={pristine} submitting={submitting}>
-              {section === '1' && <Step1 editLocale={editLocale} locale={locale} />}
+              {section === '1' && <Step1 editLocale={editLocale} locale={locale} discussionPhaseId={discussionPhaseId} />}
               {section === 'configThematics' && (
                 <ConfigureThematicForm thematicId={thematicId} editLocale={editLocale} values={values} />
               )}
@@ -60,7 +61,6 @@ const DumbSurveyAdminForm = ({ client, section, thematicId, phaseId, debateId, e
           {steps.includes(section) && (
             <Navbar
               steps={steps}
-              queryArgs={{ phaseId: phaseId }}
               currentStep={section}
               totalSteps={3}
               phaseIdentifier={PHASES.survey}
