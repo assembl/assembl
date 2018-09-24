@@ -138,3 +138,12 @@ visit_analytics_region_redis_expiration_time = 3600
 
 # Show errors on exception views
 visible_errors = false
+
+# Fail2ban configurations
+
+# Time in seconds to be banned
+bantime = 3600
+# Time in seconds that is the window in which a filter occurs
+findtime = 60
+# Number of matches of a filter in the findtime window
+maxretry = 10
