@@ -114,7 +114,7 @@ describe('CookiesSelectorContainer component', () => {
       expect(updateAcceptedCookiesSpy.mock.calls.length).toBe(1);
       const date = new Date();
       date.setMonth(date.getMonth() + 13);
-      expect(document.cookie).toBe(`cookies_configuration=ACCEPT_TRACKING_ON_DISCUSSION; path=/;expires=${date}`);
+      expect(document.cookie).toBe(`cookies_configuration=ACCEPT_TRACKING_ON_DISCUSSION;path=/;expires=${date}`);
     });
   });
 });
