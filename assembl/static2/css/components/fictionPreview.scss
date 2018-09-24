@@ -21,9 +21,17 @@
     text-align: left;
   }
 
+  h3,
+  .author {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
   h3 {
     font-size: $font-size-sm;
     margin-bottom: 17px;
+    width: 130px;
   }
 
   .draft {
@@ -85,6 +93,9 @@
 
         .author {
           font-size: $font-size-xxs;
+          width: 70px;
+          display: inline-block;
+          line-height: 8px;
         }
 
         .published-date {
@@ -100,6 +111,20 @@
     margin: 13px;
     width: 200px;
     height: 268px;
+
+    h3 {
+      width: 170px;
+    }
+
+    .content-box {
+      .inner-box {
+        .info {
+          .author {
+            width: 120px;
+          }
+        }
+      }
+    }
   }
 
   @media (min-width: $screen-sm-min) {
@@ -109,6 +134,7 @@
 
     h3 {
       font-size: $font-size-l;
+      width: 300px;
     }
 
     .draft {
@@ -139,6 +165,7 @@
 
           .author {
             font-size: $font-size-xs;
+            width: 230px;
           }
 
           .published-date {
@@ -157,6 +184,7 @@
     h3 {
       font-size: $font-size-l;
       margin-bottom: 20px;
+      width: 320px;
     }
 
     .draft {
@@ -184,6 +212,10 @@
 
         .info {
           margin-bottom: 41px;
+
+          .author {
+            width: 260px;
+          }
         }
       }
     }

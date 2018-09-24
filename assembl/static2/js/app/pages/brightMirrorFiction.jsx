@@ -28,16 +28,16 @@ import type { FictionToolbarProps } from '../components/debate/brightMirror/fict
 import type { FictionBodyProps } from '../components/debate/brightMirror/fictionBody';
 
 // Define types
-export type BrightMirrorFictionData = {
+export type Data = {
   /** Fiction object formatted through GraphQL  */
   fiction: BrightMirrorFictionFragment,
   /** GraphQL error object used to handle fetching errors */
   error: any
 };
 
-export type BrightMirrorFictionProps = {
+export type Props = {
   /** Fiction data information fetched from GraphQL */
-  data: BrightMirrorFictionData,
+  data: Data,
   /** URL slug */
   slug: string,
   /** Fiction phase */
@@ -50,7 +50,7 @@ export type BrightMirrorFictionProps = {
   contentLocale: string
 };
 
-type BrightMirrorFictionState = {
+type State = {
   /** Fiction title */
   title: string,
   /** Fiction content */
@@ -61,13 +61,13 @@ type BrightMirrorFictionState = {
 
 const EMPTY_STRING = '';
 
-export class BrightMirrorFiction extends Component<BrightMirrorFictionProps, BrightMirrorFictionState> {
-  constructor(props: BrightMirrorFictionProps) {
+export class BrightMirrorFiction extends Component<Props, State> {
+  constructor(props: Props) {
     super(props);
     this.state = {
-      title: props.data.fiction.subject ? props.data.fiction.subject : EMPTY_STRING,
-      content: props.data.fiction.body ? props.data.fiction.body : EMPTY_STRING,
-      publicationState: props.data.fiction.publicationState ? props.data.fiction.publicationState : PublicationStates.PUBLISHED
+      title: props.data.fiction.subject || EMPTY_STRING,
+      content: props.data.fiction.body || EMPTY_STRING,
+      publicationState: props.data.fiction.publicationState || PublicationStates.PUBLISHED
     };
   }
 

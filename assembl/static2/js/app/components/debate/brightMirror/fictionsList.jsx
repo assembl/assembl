@@ -13,7 +13,7 @@ import { fictionBackgroundColors, PublicationStates } from '../../../constants';
 import Permissions, { connectedUserCan } from '../../../utils/permissions';
 import { displayAlert } from '../../../utils/utilityManager';
 
-export type FictionsListProps = {
+export type Props = {
   posts: Array<FictionPostPreview>,
   /** Bright Mirror identifier */
   identifier: string,
@@ -36,7 +36,7 @@ const deleteFictionHandler = () => {
 
 const getRandomColor = () => fictionBackgroundColors[Math.floor(Math.random() * fictionBackgroundColors.length)];
 
-const FictionsList = ({ posts, identifier, refetchIdea, lang, themeId }: FictionsListProps) => {
+const FictionsList = ({ posts, identifier, refetchIdea, lang, themeId }: Props) => {
   const slug = getDiscussionSlug();
 
   const connectedUserId = getConnectedUserId();

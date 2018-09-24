@@ -3,9 +3,8 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { withInfo } from '@storybook/addon-info';
 
-import FictionsList from '../../../../components/debate/brightMirror/fictionsList';
 import { PublicationStates } from '../../../../constants';
-import type { FictionsListProps } from '../../../../components/debate/brightMirror/fictionsList';
+import FictionsList, { type Props as FictionsListProps } from '../../../../components/debate/brightMirror/fictionsList';
 
 export const customFictionsList: FictionsListProps = {
   posts: [

@@ -179,30 +179,33 @@ class TopPostForm extends React.Component<TopPostFormProps, TopPostFormState> {
   };
 
   render() {
+    const { bodyMaxLength, ideaOnColumn, bodyPlaceholderMsgId, draftable } = this.props;
+    const { subject, body, isActive, submitting } = this.state;
+
     return (
       <div className="form-container" ref={this.setFormContainerRef}>
         <FormGroup>
-          {!this.props.ideaOnColumn ? (
+          {!ideaOnColumn ? (
             <TextInputWithRemainingChars
-              value={this.state.subject}
+              value={subject}
               label={I18n.t('debate.subject')}
               maxLength={TEXT_INPUT_MAX_LENGTH}
               handleTxtChange={this.handleSubjectChange}
               handleInputFocus={this.handleInputFocus}
-              isActive={this.state.isActive}
+              isActive={isActive}
             />
           ) : null}
-          {this.state.isActive || this.props.ideaOnColumn ? (
+          {isActive || ideaOnColumn ? (
             <div className="margin-m">
               <RichTextEditor
-                editorState={this.state.body}
+                editorState={body}
                 handleInputFocus={this.handleInputFocus}
-                maxLength={this.props.bodyMaxLength}
+                maxLength={bodyMaxLength}
                 onChange={this.updateBody}
-                placeholder={I18n.t(this.props.bodyPlaceholderMsgId)}
+                placeholder={I18n.t(bodyPlaceholderMsgId)}
                 withAttachmentButton
               />
-              {!this.props.ideaOnColumn ? (
+              {!ideaOnColumn ? (
                 <Button className="button-cancel button-dark btn btn-default left margin-l" onClick={this.resetForm}>
                   <Translate value="cancel" />
                 </Button>
@@ -211,15 +214,15 @@ class TopPostForm extends React.Component<TopPostFormProps, TopPostFormState> {
                 className={this.getClassNames()}
                 onClick={() => this.createTopPost(PublicationStates.PUBLISHED)}
                 style={{ marginBottom: '30px' }}
-                disabled={this.state.submitting}
+                disabled={submitting}
               >
                 <Translate value="debate.post" />
               </Button>
-              {this.props.draftable ? (
+              {draftable ? (
                 <Button
                   className={`${this.getClassNames()} btn-draft`}
                   onClick={() => this.createTopPost(PublicationStates.DRAFT)}
-                  disabled={this.state.submitting}
+                  disabled={submitting}
                 >
                   <Translate value="debate.brightMirror.save" />
                 </Button>

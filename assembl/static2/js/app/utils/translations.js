@@ -398,7 +398,7 @@ const Translations = {
         fiction: "Fiction",
         deleteFictionModalBody: "Êtes-vous sûr de vouloir supprimer cette fiction ?",
         deleteFictionSuccessMsg: "Votre fiction a été supprimée",
-        save: "Sauvegarder",
+        saveDraft: "Sauvegarder",
         draftSuccessMsg: "Votre fiction a bien été enregistrée."
       },
       themes: "Thèmes",
@@ -1263,7 +1263,7 @@ const Translations = {
         fiction: "Fiction",
         deleteFictionModalBody: "Are you sure you want to delete this fiction?",
         deleteFictionSuccessMsg: "Your fiction was deleted",
-        save: "Save",
+        saveDraft: "Save",
         draftSuccessMsg: "Your fiction has been saved successfully."
       },
       themes: "Themes",

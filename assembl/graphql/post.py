@@ -514,11 +514,11 @@ class UpdatePost(graphene.Mutation):
 
         publication_state = models.PublicationStates.from_string(args.get('publication_state')) if args.get('publication_state') in models.PublicationStates.values() else None
         if publication_state and publication_state != post.publication_state:
+            post.publication_state = publication_state
+            changed = True
             # Update the creation date when switching from draft to published
             if post.publication_state == models.PublicationStates.DRAFT and publication_state == models.PublicationStates.PUBLISHED:
                 post.creation_date = datetime.utcnow()
-            post.publication_state = publication_state
-            changed = True
 
         if changed:
             post.modification_date = datetime.utcnow()

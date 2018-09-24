@@ -17,9 +17,9 @@ type TopPostFormContainerProps = {
   fillBodyLabelMsgId: string,
   bodyPlaceholderMsgId: string,
   postSuccessMsgId: string,
-  bodyMaxLength?: number,
-  draftable?: boolean,
-  draftSuccessMsgId?: string
+  bodyMaxLength: number,
+  draftable: boolean,
+  draftSuccessMsgId: string
 };
 
 type TopPostFormContainerState = {
