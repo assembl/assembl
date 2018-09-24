@@ -1332,6 +1332,7 @@ def install_assembl_server_deps():
     """
     execute(install_yarn)
     execute(upgrade_yarn_crontab)
+    execute(install_server_deps)
     execute(install_assembl_deps)
 
 
@@ -1342,6 +1343,14 @@ def install_assembl_deps():
     """
     execute(install_basetools)
     execute(install_builddeps)
+
+
+@task
+def install_server_deps():
+    """
+    Tools needed by server in order to operate securely and cleanly, but not related to Assembl
+    """
+    execute(install_fail2ban)
 
 
 @task
@@ -1495,6 +1504,13 @@ def install_memcached():
             sudo('/etc/init.d/memcached start')
         else:
             print(red("Make sure that memcached is running"))
+
+
+@task
+def install_fail2ban():
+    print(cyan('Installing fail2ban'))
+    if not env.mac:
+        sudo('apt-get install -y fail2ban')
 
 
 def chgrp_rec(path, group, upto=None):
