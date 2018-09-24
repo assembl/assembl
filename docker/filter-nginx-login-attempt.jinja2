@@ -1,0 +1,7 @@
+[Definition]
+
+failregex = ^<HOST> \- \- \[\] "POST (/\w+)*/(login|signup|requestPasswordChange)\b
+           	^<HOST> \- \- \[\] "POST /data/(User|AgentProfile)(/(do_password_change|password_reset))?\b
+           	^<HOST> \- \- \[\] "POST /data/\w+/(all_users|all_participants|simple_participants|creator)(/(do_password_change|password_reset|((\-|\d+)/(verify_password|verify))))?\b
+
+ignoreregex =

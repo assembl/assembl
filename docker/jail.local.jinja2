@@ -1,0 +1,10 @@
+# Configurations for reducing brute-force hacking
+
+[nginx-login-attempt]
+
+port    = http,https
+logpath = %(nginx_access_log)s
+enabled = true
+bantime = {{ bantime }}
+maxretry = {{ maxretry }}
+findtime  = {{ findtime }}
