@@ -33,7 +33,7 @@ before_install:
  # The following line produces warning "uses weak digest algorithm" during its `apt-get update`
  - fab -f assembl/fabfile.py -c travis.rc install_assembl_server_deps
  - fab -f assembl/fabfile.py -c travis.rc install_redis
- - fab -f assembl/fabfile.py -f assembl/fabfile.py -c travis.rc install_memcached
+ - fab -f assembl/fabfile.py -c travis.rc install_memcached
 install:
  # The set_file_permissions fabric command needs to be encapsulated into this sudo su command, because in before_install we have added $USER in www-data group but have not logged out and logged in again for changes to take effect in this terminal
  - sudo -E su $USER -c 'fab -f assembl/fabfile.py -c travis.rc set_file_permissions'

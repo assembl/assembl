@@ -1,5 +1,17 @@
 #!/bin/env python2
 # -*- coding:utf-8 -*-
+"""
+This file specifies how to do a number of installation tasks for Assembl.
+It uses the Fabric_ (1.13) remote executor. In most projects, it is
+separate from the code package, but many tasks need to be executed
+in an environment when only the assembl package is available.
+Some of the tasks also need to be executed before assembl is installed.
+The fab command can take a path to this file with the -f flag, and this
+file can also work well if invoked through a symbolic link.
+
+.. _Fabric: http://www.fabfile.org/installing-1.x.html
+"""
+
 from __future__ import with_statement
 
 from os import getenv
