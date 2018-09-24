@@ -122,6 +122,8 @@ supervisor__autostart_uwsgi = true
 supervisor__autostart_elasticsearch = true
 supervisor__autostart_urlmetadata = true
 
+# The base in production.ini uses 'here' so it can works without .rc file;
+# but if we have a .rc file, we can be more precise.
 alembic__script_location = %(code_root)s/assembl/alembic
 
 # Use socket if not defined
