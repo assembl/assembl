@@ -17,6 +17,7 @@ describe('MenuList component', () => {
     ];
     const props = {
       identifier: 'survey',
+      phaseId: 'phaseFoo',
       className: 'debate-class',
       rootItem: 'root',
       items: items
@@ -40,6 +41,7 @@ describe('MenuList component', () => {
     const props = {
       subMenu: true,
       identifier: 'survey',
+      phaseId: 'phaseFoo',
       className: 'debate-class',
       rootItem: 'root',
       items: items

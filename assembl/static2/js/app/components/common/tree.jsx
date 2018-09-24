@@ -140,7 +140,8 @@ class Child extends React.PureComponent {
       nuggetsManager,
       listRef,
       cache,
-      identifier
+      identifier,
+      phaseId
     } = this.props;
     const cssClasses = () => {
       let cls = `level level-${level}`;
@@ -217,6 +218,7 @@ class Child extends React.PureComponent {
                 listRef={listRef}
                 cache={cache}
                 identifier={identifier}
+                phaseId={phaseId}
               />
             );
           })
@@ -307,7 +309,8 @@ class Tree extends React.Component {
       InnerComponent, // component that will be rendered in the child
       InnerComponentFolded, // component that will be used to render the children when folded
       SeparatorComponent, // separator component between first level children
-      identifier
+      identifier,
+      phaseId
     } = this.props;
 
     const childData = data[index];
@@ -328,6 +331,7 @@ class Tree extends React.Component {
             listRef={this.listRef}
             cache={this.cache}
             identifier={identifier}
+            phaseId={phaseId}
           />
         </div>
       </CellMeasurer>

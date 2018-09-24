@@ -20,6 +20,7 @@ type ItemNode = {
 type MenuItemProps = {
   item: ItemNode,
   identifier: string,
+  phaseId: string,
   selected: boolean,
   hasSubItems: boolean,
   slug: string,
@@ -40,9 +41,9 @@ export class DumbMenuItem extends React.Component<MenuItemProps> {
   };
 
   onLinkClick = () => {
-    const { identifier, item, slug, onClick } = this.props;
+    const { identifier, phaseId, item, slug, onClick } = this.props;
     if (onClick) onClick();
-    goTo(get('idea', { slug: slug, phase: identifier, themeId: item.id }));
+    goTo(get('idea', { slug: slug, phase: identifier, phaseId: phaseId, themeId: item.id }));
   };
 
   render() {

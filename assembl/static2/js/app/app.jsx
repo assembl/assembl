@@ -7,7 +7,7 @@ import { filter } from 'graphql-anywhere';
 
 import { get } from './utils/routeMap';
 import { getDiscussionId, getConnectedUserId, getConnectedUserName } from './utils/globalFunctions';
-import { getCurrentPhaseIdentifier } from './utils/timeline';
+import { getCurrentPhaseData } from './utils/timeline';
 import { fetchDebateData } from './actions/debateActions';
 import { addContext } from './actions/contextActions';
 import { updateTimeline } from './actions/timelineActions';
@@ -36,7 +36,7 @@ class App extends React.Component {
       putTimelineInStore(timeline);
     }
     if (!params.phase && !timelineLoading && location.pathname.split('/').indexOf('debate') > -1) {
-      const currentPhaseIdentifier = getCurrentPhaseIdentifier(timeline);
+      const { currentPhaseIdentifier } = getCurrentPhaseData(timeline);
       browserHistory.push(get('debate', { slug: params.slug, phase: currentPhaseIdentifier }));
     }
   }

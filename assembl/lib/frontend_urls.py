@@ -4,7 +4,6 @@ import dateutil
 import urllib
 import simplejson as json
 from urlparse import urljoin
-from graphene.relay import Node
 from os.path import dirname, join, exists
 from ..models import Discussion
 
@@ -31,7 +30,6 @@ def get_frontend_urls():
     """
     Get all V2 routes from source of truth
     """
-
     current = dirname(__file__)
     route_path = join(current, '..', 'static2/routes.json')
     if not exists(route_path):
@@ -44,6 +42,7 @@ def get_frontend_urls():
     py_routes = {}
     for name, route in routes.items():
         py_routes[name] = route.replace('${', '{')
+
     return py_routes
 
 
@@ -264,7 +263,7 @@ class FrontendUrls(object):
             # The created post must be created within an associated phase
             assert phase
             if post.__class__.__name__ == 'SynthesisPost':
-                synthesis_id = Node.to_global_id('Post', post.id)
+                synthesis_id = post.graphene_id()
                 route = self.get_frontend_url('synthesis',
                                               slug=self.discussion.slug,
                                               synthesisId=synthesis_id)
@@ -272,9 +271,7 @@ class FrontendUrls(object):
                     self.discussion.get_base_url(),
                     route)
             first_idea = None
-            ideas = [link.idea
-                     for link in post.indirect_idea_content_links_without_cache()
-                     if link.__class__.__name__ == 'IdeaRelatedPostLink']
+            ideas = post.get_ideas()
             if ideas:
                 first_idea = ideas[0]
             else:
@@ -286,6 +283,7 @@ class FrontendUrls(object):
                 thematic = post.get_closest_thematic()
                 route = self.get_frontend_url('post', **{
                     'phase': phase.identifier,
+                    'phaseId': phase.graphene_id(),
                     'themeId': thematic.graphene_id(),
                     'element': ''
                 })
@@ -293,8 +291,9 @@ class FrontendUrls(object):
             if not route:
                 route = self.get_frontend_url('post', **{
                     'phase': phase.identifier,
-                    'themeId': Node.to_global_id('Idea', first_idea.id),
-                    'element': Node.to_global_id('Post', post.id)
+                    'phaseId': phase.graphene_id(),
+                    'themeId': first_idea.graphene_id(),
+                    'element': post.graphene_id()
                 })
 
             return urljoin(self.discussion.get_base_url(), route)

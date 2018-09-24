@@ -79,6 +79,7 @@ exports[`Post component should render a PostView component and pass its props to
     nuggetsManager={null}
     numChildren={3}
     originalLocale="fr"
+    phaseId="DEF345"
     publicationState="PUBLISHED"
     refetchIdea={[Function]}
     routerParams={

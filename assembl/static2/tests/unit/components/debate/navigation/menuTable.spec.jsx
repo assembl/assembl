@@ -6,7 +6,8 @@ import MenuTable from '../../../../../js/app/components/debate/navigation/menuTa
 describe('MenuTable component', () => {
   it('should match the survey table', () => {
     const props = {
-      identifier: 'survey'
+      identifier: 'survey',
+      phaseId: 'RGlzY3Vzc2lvblBoYXNlOjI='
     };
     const renderer = new ShallowRenderer();
     renderer.render(<MenuTable {...props} />);
@@ -16,7 +17,8 @@ describe('MenuTable component', () => {
 
   it('should match the default table (ideas table)', () => {
     const props = {
-      identifier: 'foo'
+      identifier: 'foo',
+      phaseId: 'RGlzY3Vzc2lvblBoYXNlOjI='
     };
     const renderer = new ShallowRenderer();
     renderer.render(<MenuTable {...props} />);

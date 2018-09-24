@@ -259,7 +259,7 @@ def extract_submitted_in_post_related_to_sub_idea_1_1_1(
         subidea_1_1, discussion, test_session):
     """ Create an extract in a post related to an idea."""
 
-    from assembl.models import Extract, TextFragmentIdentifier
+    from assembl.models import Extract
     from assembl.models.idea_content_link import ExtractNatureVocabulary, ExtractActionVocabulary
 
     new_extract = Extract(

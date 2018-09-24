@@ -140,14 +140,13 @@ def delete_vote_session(vote_session):
 
 def test_graphql_update_vote_session(graphql_request, vote_session, test_app, graphql_registry):
     mutate_and_assert(graphql_request, vote_session.discussion_phase_id, test_app, graphql_registry)
-    identifier = 'voteSession{}'.format(vote_session.id)
-    root_thematic = get_root_thematic_for_phase(vote_session.discussion, identifier)
+    root_thematic = get_root_thematic_for_phase(vote_session.discussion_phase)
     assert root_thematic is not None
 
 
 def test_graphql_delete_vote_session_cascade(graphql_request, vote_session, test_app, graphql_registry):
     db = vote_session.db;
-    image_id = image_from_vote_session(vote_session).id
+    # image_id = image_from_vote_session(vote_session).id
     attachment_id = vote_session.attachments[0].id
     db.delete(vote_session)
     db.flush()
@@ -680,8 +679,7 @@ def test_mutation_create_proposal(graphql_request, discussion, vote_session, gra
         ]
     })
     assert res.errors is None
-    identifier = 'voteSession{}'.format(vote_session.id)
-    root_thematic = get_root_thematic_for_phase(discussion, identifier)
+    root_thematic = get_root_thematic_for_phase(vote_session.discussion_phase)
     proposal = root_thematic.children[0]
     proposal_id = to_global_id("Idea", proposal.id)
     assert json.loads(json.dumps(res.data)) == {
@@ -708,8 +706,8 @@ u'createProposal': {
 def test_mutation_create_proposal_no_root_thematic(graphql_request, discussion, vote_session, graphql_registry):
     mutation = graphql_registry['createProposal']
     vote_session_id = to_global_id("VoteSession", vote_session.id)
-    identifier = 'voteSession{}'.format(vote_session.id)
-    root_thematic = get_root_thematic_for_phase(discussion, identifier)
+    root_thematic = get_root_thematic_for_phase(vote_session.discussion_phase)
+    vote_session.discussion_phase.root_idea = None
     root_thematic.delete()
     root_thematic.db.flush()
 

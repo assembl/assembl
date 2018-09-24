@@ -79,10 +79,7 @@ class VoteSession(SecureObjectType, SQLAlchemyObjectType):
                 return attachment.document
 
     def resolve_proposals(self, args, context, info):
-        identifier = 'voteSession{}'.format(self.id)
-        discussion_id = context.matchdict["discussion_id"]
-        discussion = models.Discussion.get(discussion_id)
-        root_thematic = get_root_thematic_for_phase(discussion, identifier)
+        root_thematic = get_root_thematic_for_phase(self.discussion_phase)
         if root_thematic is None:
             return []
 
@@ -165,10 +162,9 @@ class UpdateVoteSession(graphene.Mutation):
         db.add(vote_session)
 
         # create the root thematic on which we will attach all proposals for this vote session
-        identifier = 'voteSession{}'.format(vote_session.id)
-        root_thematic = get_root_thematic_for_phase(discussion, identifier)
+        root_thematic = get_root_thematic_for_phase(discussion_phase)
         if root_thematic is None:
-            root_thematic = create_root_thematic(discussion, identifier)
+            root_thematic = create_root_thematic(discussion_phase)
 
         db.flush()
         return UpdateVoteSession(vote_session=vote_session)
@@ -203,11 +199,11 @@ class VoteSpecificationInterface(graphene.Interface):
         return False if self.is_custom is None else self.is_custom
 
     def resolve_vote_session_id(self, args, context, info):
-        return Node.to_global_id('VoteSession', self.widget_id)
+        return models.VoteSession.graphene_id_for(self.widget_id)
 
     def resolve_vote_spec_template_id(self, args, context, info):
         if self.vote_spec_template_id:
-            return Node.to_global_id(self.__class__.__name__, self.vote_spec_template_id)
+            return self.graphene_id_for(self.vote_spec_template_id)
 
     def resolve_vote_type(self, args, context, info):
         return self.type
@@ -814,10 +810,10 @@ class CreateProposal(graphene.Mutation):
         require_cls_permission(CrudPermissions.CREATE, cls, context)
         vote_session_id = args.get('vote_session_id')
         vote_session_id = int(Node.from_global_id(vote_session_id)[1])
+        vote_session = models.VoteSession.get(vote_session_id)
         title_entries = args.get('title_entries')
         description_entries = args.get('description_entries')
         discussion_id = context.matchdict['discussion_id']
-        discussion = models.Discussion.get(discussion_id)
 
         with cls.default_db.no_autoflush as db:
             title_ls = langstring_from_input_entries(title_entries)
@@ -828,8 +824,8 @@ class CreateProposal(graphene.Mutation):
                 description=description_ls
             )
             db.add(proposal)
-            identifier = 'voteSession{}'.format(vote_session_id)
-            root_thematic = get_root_thematic_for_phase(discussion, identifier)
+            phase = vote_session.discussion_phase
+            root_thematic = get_root_thematic_for_phase(phase)
             if root_thematic is None:
                 raise Exception(
                     "There is no root thematic for this vote session.")

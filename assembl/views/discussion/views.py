@@ -5,7 +5,6 @@ import os.path
 import pkg_resources
 
 from pyramid.view import view_config
-from pyramid.request import Request
 from pyramid.response import Response
 from pyramid.renderers import render_to_response
 from pyramid.security import Everyone, forget

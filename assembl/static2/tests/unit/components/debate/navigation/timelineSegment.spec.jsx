@@ -27,6 +27,7 @@ describe('DumbTimeline component', () => {
       startDate: 'date1',
       endDate: 'date2',
       phaseIdentifier: 'foo',
+      phaseId: 'phaseFoo',
       barPercent: 20,
       locale: 'en',
       debate: {
@@ -65,6 +66,7 @@ describe('DumbTimeline component', () => {
       startDate: 'date1',
       endDate: 'date2',
       phaseIdentifier: 'foo',
+      phaseId: 'phaseFoo',
       barPercent: 20,
       locale: 'en',
       debate: {

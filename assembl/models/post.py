@@ -4,6 +4,7 @@ import uuid
 import logging
 from abc import ABCMeta, abstractmethod
 import simplejson as json
+
 from sqlalchemy import (
     Column,
     UniqueConstraint,
@@ -561,8 +562,31 @@ class Post(Content):
         return query.filter(cls.creator_id == user_id)
 
     def is_bright_mirror_fiction(self):
-        parent_idea = [link.idea for link in self.indirect_idea_content_links_without_cache() if link.__class__.__name__ == 'IdeaRelatedPostLink']
-        return len(parent_idea) != 0 and parent_idea[0].message_view_override == MessageView.brightMirror.value
+        parent_ideas = self.get_ideas()
+        if not parent_ideas:
+            return False
+
+        return parent_ideas[0].message_view_override == MessageView.brightMirror.value
+
+    def get_ideas(self):
+        ideas = [
+            link.idea for link in self.indirect_idea_content_links_without_cache()
+            if link.__class__.__name__ == 'IdeaRelatedPostLink']
+        return ideas
+
+    def get_created_phase(self):
+        from assembl.lib.frontend_urls import get_timeline_for_date
+        ideas = self.get_ideas()
+        if not ideas:
+            # orphan post
+            return get_timeline_for_date(self.discussion, self.creation_date)
+
+        first_idea = ideas[0]
+        return first_idea.get_associated_phase()
+
+    @classmethod
+    def graphene_type(cls):
+        return 'Post'
 
 
 def orm_insert_listener(mapper, connection, target):
@@ -685,6 +709,10 @@ class SynthesisPost(AssemblPost):
 
     def as_html(self, jinja_env):
         return self.publishes_synthesis.as_html(jinja_env)
+
+    def get_created_phase(self):
+        from assembl.lib.frontend_urls import get_timeline_for_date
+        return get_timeline_for_date(self.discussion, self.creation_date)
 
 
 class PropositionPost(AssemblPost):

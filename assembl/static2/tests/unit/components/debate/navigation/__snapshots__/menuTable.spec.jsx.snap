@@ -2,12 +2,16 @@
 
 exports[`MenuTable component should match the default table (ideas table) 1`] = `
 <Connect(Apollo(Component))
+  discussionPhaseId="2"
   identifier="foo"
+  phaseId="RGlzY3Vzc2lvblBoYXNlOjI="
 />
 `;
 
 exports[`MenuTable component should match the survey table 1`] = `
 <Connect(Apollo(Component))
+  discussionPhaseId="2"
   identifier="survey"
+  phaseId="RGlzY3Vzc2lvblBoYXNlOjI="
 />
 `;

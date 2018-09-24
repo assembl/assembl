@@ -1,8 +1,7 @@
-query DebateThematicsQuery($lang: String!, $identifier: String!) {
-  thematics: ideas(identifier: $identifier) {
+query DebateThematicsQuery($lang: String!, $discussionPhaseId: Int!) {
+  thematics: ideas(discussionPhaseId: $discussionPhaseId) {
     ... on Thematic {
       id
-      identifier
       title(lang: $lang)
       description(lang: $lang)
       numPosts

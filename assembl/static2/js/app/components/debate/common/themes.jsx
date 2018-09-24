@@ -26,7 +26,7 @@ class Themes extends React.Component {
   }
 
   render() {
-    const { thematics, identifier } = this.props;
+    const { thematics, identifier, phaseId } = this.props;
     const slug = getDiscussionSlug();
     return (
       <section className="themes-section">
@@ -46,7 +46,7 @@ class Themes extends React.Component {
                       imgUrl={thematic.img ? thematic.img.externalUrl : ''}
                       numPosts={thematic.numPosts}
                       numContributors={thematic.numContributors}
-                      link={`${get('idea', { slug: slug, phase: identifier, themeId: thematic.id })}`}
+                      link={`${get('idea', { slug: slug, phase: identifier, phaseId: phaseId, themeId: thematic.id })}`}
                       title={thematic.title}
                       description={thematic.description}
                     />

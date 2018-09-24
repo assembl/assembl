@@ -2,7 +2,7 @@
 import pytest
 
 @pytest.fixture(scope="function")
-def bright_mirror(graphql_request, graphql_registry, test_session):
+def bright_mirror(phases, graphql_request, graphql_registry, test_session):
     import os
     from io import BytesIO
     from assembl.graphql.schema import Schema as schema
@@ -18,7 +18,7 @@ def bright_mirror(graphql_request, graphql_registry, test_session):
         graphql_registry['createThematic'],
         context_value=graphql_request,
         variable_values={
-            'identifier': 'brightMirror',
+            'discussionPhaseId': phases['brightMirror'].id,
             'messageViewOverride': 'brightMirror',
             'titleEntries': [
                 {'value': u"Comprendre les dynamiques et les enjeux", 'localeCode': u"fr"},

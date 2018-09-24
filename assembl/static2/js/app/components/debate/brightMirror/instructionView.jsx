@@ -4,7 +4,7 @@ import React from 'react';
 import { NO_BODY_LENGTH } from '../common/topPostForm';
 import Permissions, { connectedUserCan } from '../../../utils/permissions';
 import TopPostFormContainer from '../common/topPostFormContainer';
-import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
+import { getIfPhaseCompletedById } from '../../../utils/timeline';
 import FictionsList from './fictionsList';
 import InstructionsText from './instructionsText';
 
@@ -22,6 +22,7 @@ export type InstructionViewProps = {
   timeline: Timeline,
   /** Bright Mirror identifier */
   identifier: string,
+  phaseId: string,
   lang: string
 };
 
@@ -33,10 +34,10 @@ const InstructionView = ({
   announcementContent,
   timeline,
   identifier,
+  phaseId,
   lang
 }: InstructionViewProps) => {
-  const canPost =
-    isUserConnected && connectedUserCan(Permissions.ADD_POST) && !getIfPhaseCompletedByIdentifier(timeline, identifier);
+  const canPost = isUserConnected && connectedUserCan(Permissions.ADD_POST) && !getIfPhaseCompletedById(timeline, phaseId);
 
   return (
     <div className="instruction-view">

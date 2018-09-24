@@ -1,6 +1,7 @@
 // @flow
 
 import { isDateExpired, getNumberOfDays, calculatePercentage } from './globalFunctions';
+import { PHASES } from '../constants';
 
 type Phase = {
   id: string,
@@ -33,27 +34,41 @@ export const getIsDebateStarted = (_timeline: Timeline) => {
   return timeline.map(phase => new Date(phase.start)).some(startDate => currentDate >= startDate);
 };
 
-export const getCurrentPhaseIdentifier = (_timeline: Timeline) => {
+export const getCurrentPhase = (_timeline: Timeline) => {
   let timeline = _timeline;
   if (!timeline) {
     timeline = [];
   }
 
   const currentDate = new Date();
-  let identifier = '';
+  let currentPhase = null;
   timeline.forEach((phase) => {
     const startDate = new Date(phase.start);
     const endDate = new Date(phase.end);
     if (currentDate >= startDate && currentDate < endDate) {
-      identifier = phase.identifier;
+      currentPhase = phase;
     }
   });
-  if (identifier) {
-    return identifier;
+  if (currentPhase) {
+    return currentPhase;
   }
   // if all phases are closed, take the last closed phase
   const sortedTimeline = [...timeline].sort(dateComparator);
-  return sortedTimeline.length === 0 ? 'thread' : sortedTimeline[sortedTimeline.length - 1].identifier;
+  return sortedTimeline[sortedTimeline.length - 1];
+};
+
+export const getCurrentPhaseData = (_timeline: Timeline) => {
+  const currentPhase = getCurrentPhase(_timeline);
+  if (currentPhase) {
+    return {
+      currentPhaseIdentifier: currentPhase.identifier,
+      currentPhaseId: currentPhase.id
+    };
+  }
+  return {
+    currentPhaseIdentifier: PHASES.thread,
+    currentPhaseId: ''
+  };
 };
 
 export const isPhaseStarted = (_timeline: Timeline, _identifier: string) => {
@@ -130,15 +145,13 @@ export const isCurrentPhase = (_phase: Phase) => {
   return currentPhase;
 };
 
-export const getPhaseName = (_timeline: Timeline, _identifier: string) => {
-  let timeline = _timeline;
-  if (!timeline) {
-    timeline = [];
-  }
-  const identifier = _identifier;
+export const getPhaseName = (_timeline: Timeline, _id: string) => {
+  const timeline = _timeline;
+  const phaseId = _id;
   let phaseName = '';
+  if (!phaseId || !timeline) return phaseName;
   timeline.forEach((phase) => {
-    if (phase.identifier === identifier) {
+    if (phase.id === phaseId) {
       phaseName = phase.title;
     }
   });
@@ -152,15 +165,13 @@ export const isStepCompleted = (_phase: Phase) => {
   return isDateExpired(currentDate, endDate);
 };
 
-export const getIfPhaseCompletedByIdentifier = (_timeline: Timeline, _identifier: string) => {
-  let timeline = _timeline;
-  if (!timeline) {
-    timeline = [];
-  }
-  const identifier = _identifier;
+export const getIfPhaseCompletedById = (_timeline: Timeline, _id: string) => {
+  const timeline = _timeline;
+  const phaseId = _id;
   let isPhaseCompleted = false;
+  if (!phaseId || !timeline) return isPhaseCompleted;
   timeline.forEach((phase) => {
-    if (identifier === phase.identifier) {
+    if (phaseId === phase.id) {
       isPhaseCompleted = isStepCompleted(phase);
     }
   });
@@ -196,6 +207,15 @@ export const getPhaseId = (_timeline: Timeline, identifier: string) => {
   const phase = timeline.find(p => p.identifier === identifier);
   const phaseId = phase && phase.id;
   return phaseId;
+};
+
+export const getPhaseById = (_timeline: Timeline, id: string) => {
+  let timeline = _timeline;
+  if (!timeline) {
+    timeline = [];
+  }
+  const phase = timeline.find(p => p.id === id);
+  return phase;
 };
 
 // TODO an other solution... The solution must be independent

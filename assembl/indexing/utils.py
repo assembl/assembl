@@ -80,13 +80,10 @@ def populate_from_langstring_prop(content, data, propName, dataPropName=None):
 
 
 def get_idea_id_for_post(post):
-    from assembl.models.idea import Idea, MessageView
-    idea_ids = [link.idea_id
-        for link in post.indirect_idea_content_links_without_cache()
-        if link.__class__.__name__ == 'IdeaRelatedPostLink']
+    from assembl.models.idea import MessageView
+    ideas = post.get_ideas()
 
-    def index_idea(idea_id):
-        idea = Idea.get(idea_id)
+    def index_idea(idea):
         # If the post is a fiction for Bright Mirror, don't index it.
         if idea.message_view_override == MessageView.brightMirror.value:
             return False
@@ -97,14 +94,13 @@ def get_idea_id_for_post(post):
 
         return True
 
-    return filter(index_idea, idea_ids)
+    return [idea.id for idea in ideas if index_idea(idea)]
 
 
 def get_data(content):
     """Return uid, dict of fields we want to index,
     return None if we don't index."""
-    from assembl.models import Idea, Post, PropositionPost, SynthesisPost, AgentProfile, LangString, Extract
-    from assembl.models.timeline import Phases
+    from assembl.models import Idea, Post, SynthesisPost, AgentProfile, LangString, Extract
     if type(content) == Idea:  # only index Idea, not Thematic or Question
         data = {}
         for attr in ('creation_date', 'id', 'discussion_id'):
@@ -117,6 +113,11 @@ def get_data(content):
         if announcement:
             populate_from_langstring_prop(announcement, data, 'title', 'announcement_title')
             populate_from_langstring_prop(announcement, data, 'body', 'announcement_body')
+
+        phase = content.get_associated_phase()
+        if phase:
+            data['phase_id'] = phase.id
+            data['phase_identifier'] = phase.identifier
 
         return get_uid(content), data
 
@@ -162,10 +163,10 @@ def get_data(content):
         data['type'] = content.type  # this is the subtype (assembl_post, email...)
 #        data['publishes_synthesis_id'] = getattr(
 #            content, 'publishes_synthesis_id', None)
-        if isinstance(content, PropositionPost):
-            data['phase_id'] = Phases.survey.value
-        else:
-            data['phase_id'] = Phases.thread.value
+        phase = content.get_created_phase()
+        if phase:
+            data['phase_id'] = phase.id
+            data['phase_identifier'] = phase.identifier
 
         if isinstance(content, SynthesisPost):
             populate_from_langstring_prop(content.publishes_synthesis,
@@ -204,10 +205,10 @@ def get_data(content):
         data['post_id'] = content.content_id
         post = Post.get(content.content_id)
         populate_from_langstring_prop(post, data, 'subject')
-        if isinstance(post, PropositionPost):
-            data['phase_id'] = Phases.survey.value
-        else:
-            data['phase_id'] = Phases.thread.value
+        phase = post.get_created_phase()
+        if phase:
+            data['phase_id'] = phase.id
+            data['phase_identifier'] = phase.identifier
 
         idea_id = get_idea_id_for_post(post)
         if not idea_id:

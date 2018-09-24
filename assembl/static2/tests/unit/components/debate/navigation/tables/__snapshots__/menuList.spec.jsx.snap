@@ -43,6 +43,7 @@ Array [
                 }
                 onClick={undefined}
                 onMouseOver={[Function]}
+                phaseId="phaseFoo"
                 selected={false}
             />
             <Connect(DumbMenuItem)
@@ -56,6 +57,7 @@ Array [
                 }
                 onClick={undefined}
                 onMouseOver={[Function]}
+                phaseId="phaseFoo"
                 selected={false}
             />
         </Scrollbars>
@@ -110,6 +112,7 @@ Array [
                 }
                 onClick={undefined}
                 onMouseOver={[Function]}
+                phaseId="phaseFoo"
                 selected={false}
             />
             <Connect(DumbMenuItem)
@@ -123,6 +126,7 @@ Array [
                 }
                 onClick={undefined}
                 onMouseOver={[Function]}
+                phaseId="phaseFoo"
                 selected={false}
             />
         </Scrollbars>

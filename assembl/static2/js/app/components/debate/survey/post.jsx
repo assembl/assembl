@@ -6,7 +6,7 @@ import { Translate, I18n } from 'react-redux-i18n';
 
 import { getConnectedUserId } from '../../../utils/globalFunctions';
 import Permissions, { connectedUserCan } from '../../../utils/permissions';
-import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
+import { getIfPhaseCompletedById } from '../../../utils/timeline';
 import PostCreator from './postCreator';
 import Like from '../../svg/like';
 import Disagree from '../../svg/disagree';
@@ -41,6 +41,7 @@ type Props = {
   questionId: string,
   screenWidth: number,
   themeId: string,
+  phaseId: string,
   isHarvesting: boolean
 };
 
@@ -60,10 +61,11 @@ class Post extends React.Component<Props> {
 
   handleSentiment = (event, type, refetchQueries, currentCounts: { disagree: number, like: number }) => {
     const { post } = this.props.data;
+    const { phaseId } = this.props;
     const isUserConnected = getConnectedUserId() !== null;
     if (isUserConnected) {
       const { timeline } = this.props;
-      const isPhaseCompleted = getIfPhaseCompletedByIdentifier(timeline, 'survey');
+      const isPhaseCompleted = getIfPhaseCompletedById(timeline, phaseId);
       if (!isPhaseCompleted) {
         const target = event.currentTarget;
         const isMySentiment = post.mySentiment === type;

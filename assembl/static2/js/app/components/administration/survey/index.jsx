@@ -15,12 +15,14 @@ import { load, postLoadFormat } from './load';
 import { createMutationsPromises, save } from './save';
 import validate from './validate';
 import Loader from '../../common/loader';
+import { PHASES } from '../../../constants';
 
 type Props = {
   client: ApolloClient,
   section: string,
   thematicId: string,
   debateId: string,
+  discussionPhaseId: string,
   editLocale: string,
   locale: string
 };
@@ -29,41 +31,47 @@ const loading = <Loader />;
 
 const steps = ['1', '2', '3'];
 
-const DumbSurveyAdminForm = ({ client, section, thematicId, debateId, editLocale, locale }: Props) => (
-  <LoadSaveReinitializeForm
-    load={(fetchPolicy: FetchPolicy) => load(client, fetchPolicy, locale)}
-    loading={loading}
-    postLoadFormat={postLoadFormat}
-    createMutationsPromises={createMutationsPromises(client)}
-    save={save}
-    validate={validate}
-    mutators={{
-      ...arrayMutators
-    }}
-    render={({ handleSubmit, pristine, submitting, values }) => (
-      <React.Fragment>
-        <div className="admin-content">
-          <AdminForm handleSubmit={handleSubmit} pristine={pristine} submitting={submitting}>
-            {section === '1' && <Step1 editLocale={editLocale} locale={locale} />}
-            {section === 'configThematics' && (
-              <ConfigureThematicForm thematicId={thematicId} editLocale={editLocale} values={values} />
-            )}
-            {section === '2' && <Step2 editLocale={editLocale} values={values} />}
-            {section === '3' && <Step3 debateId={debateId} locale={locale} />}
-          </AdminForm>
-        </div>
-        {steps.includes(section) && (
-          <Navbar
-            currentStep={section}
-            steps={steps}
-            phaseIdentifier="survey"
-            beforeChangeSection={() => (pristine || submitting) && handleSubmit()}
-          />
-        )}
-      </React.Fragment>
-    )}
-  />
-);
+const DumbSurveyAdminForm = ({ client, section, thematicId, discussionPhaseId, debateId, editLocale, locale }: Props) => {
+  if (!discussionPhaseId) {
+    return loading;
+  }
+  return (
+    <LoadSaveReinitializeForm
+      load={(fetchPolicy: FetchPolicy) => load(client, fetchPolicy, discussionPhaseId, locale)}
+      loading={loading}
+      postLoadFormat={postLoadFormat}
+      createMutationsPromises={createMutationsPromises(client, discussionPhaseId)}
+      save={save}
+      validate={validate}
+      mutators={{
+        ...arrayMutators
+      }}
+      render={({ handleSubmit, pristine, submitting, values }) => (
+        <React.Fragment>
+          <div className="admin-content">
+            <AdminForm handleSubmit={handleSubmit} pristine={pristine} submitting={submitting}>
+              {section === '1' && <Step1 editLocale={editLocale} locale={locale} discussionPhaseId={discussionPhaseId} />}
+              {section === 'configThematics' && (
+                <ConfigureThematicForm thematicId={thematicId} editLocale={editLocale} values={values} />
+              )}
+              {section === '2' && <Step2 editLocale={editLocale} values={values} />}
+              {section === '3' && <Step3 debateId={debateId} locale={locale} />}
+            </AdminForm>
+          </div>
+          {steps.includes(section) && (
+            <Navbar
+              steps={steps}
+              currentStep={section}
+              totalSteps={3}
+              phaseIdentifier={PHASES.survey}
+              beforeChangeSection={() => (pristine || submitting) && handleSubmit()}
+            />
+          )}
+        </React.Fragment>
+      )}
+    />
+  );
+};
 
 const mapStateToProps = state => ({
   debateId: state.context.debateId,

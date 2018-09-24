@@ -2,23 +2,26 @@ import pytest
 from graphql_relay.node.node import to_global_id
 
 
-def test_get_frontend_route_post(discussion, idea_with_en_fr, reply_post_1):
+def test_get_frontend_route_post(phases, discussion, idea_with_en_fr, reply_post_1):
     from assembl.lib.frontend_urls import FrontendUrls
     route_name = "post"
     furl = FrontendUrls(discussion)
 
     idea_id = to_global_id('Idea', idea_with_en_fr.id)
     element = to_global_id('Post', reply_post_1)
-
+    thread = phases['thread']
     options = {
         'slug': discussion.slug,
-        'phase': 'thread',
+        'phase': thread.identifier,
         'themeId': idea_id,
         'element': element
     }
     resp = furl.get_frontend_url(route_name, **options)
-    expected = "/{slug}/debate/thread/theme/{themeId}/#{element}".format(
-        slug=discussion.slug, themeId=idea_id, element=element)
+    expected = "/{slug}/debate/{phase}/theme/{themeId}/#{element}".format(
+        slug=discussion.slug,
+        phase=thread.identifier,
+        themeId=idea_id,
+        element=element)
     assert resp == expected
 
 
@@ -57,15 +60,15 @@ def test_get_route_react_backend_login(discussion, test_webrequest):
     assert get_route('furl_login') == "/login"
 
 
-def test_get_route_react_frontend_post(discussion, test_webrequest,
+def test_get_route_react_frontend_post(phases, discussion, test_webrequest,
                                        idea_with_en_fr, reply_post_1):
     from assembl.views import create_get_route
     get_route = create_get_route(test_webrequest, discussion)
     idea_id = to_global_id('Idea', idea_with_en_fr.id)
     element = to_global_id('Post', reply_post_1)
-
+    thread = phases['thread']
     options = {
-        'phase': 'thread',
+        'phase': thread.identifier,
         'themeId': idea_id,
         'element': element
     }
@@ -73,7 +76,7 @@ def test_get_route_react_frontend_post(discussion, test_webrequest,
     expected = "/{slug}/debate/{phase}/theme/{theme_id}/#{element}"\
         .format(
             slug=discussion.slug,
-            phase='thread',
+            phase=thread.identifier,
             theme_id=idea_id,
             element=element
         )
@@ -81,13 +84,13 @@ def test_get_route_react_frontend_post(discussion, test_webrequest,
 
 
 def test_get_route_react_frontend_post_no_element(
-        discussion, test_webrequest, idea_with_en_fr, reply_post_1):
+        phases, discussion, test_webrequest, idea_with_en_fr, reply_post_1):
     from assembl.views import create_get_route
     get_route = create_get_route(test_webrequest, discussion)
     idea_id = to_global_id('Idea', idea_with_en_fr.id)
-
+    thread = phases['thread']
     options = {
-        'phase': 'thread',
+        'phase': thread.identifier,
         'themeId': idea_id,
         'element': ''
     }
@@ -95,7 +98,7 @@ def test_get_route_react_frontend_post_no_element(
     expected = "/{slug}/debate/{phase}/theme/{theme_id}/#{element}"\
         .format(
             slug=discussion.slug,
-            phase='thread',
+            phase=thread.identifier,
             theme_id=idea_id,
             element=""
         )

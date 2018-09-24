@@ -1,16 +1,15 @@
 // @flow
 import sortBy from 'lodash/sortBy';
 import type { ApolloClient } from 'react-apollo';
-import { PHASES } from '../../../constants';
 
 import ThematicsQuery from '../../../graphql/ThematicsQuery.graphql';
 import { convertEntriesToI18nValue, convertEntriesToI18nRichText } from '../../form/utils';
 import type { BrightMirrorAdminValues } from './types.flow';
 
-export const load = async (client: ApolloClient, fetchPolicy: FetchPolicy) => {
+export const load = async (client: ApolloClient, fetchPolicy: FetchPolicy, discussionPhaseId: ?string) => {
   const { data } = await client.query({
     query: ThematicsQuery,
-    variables: { identifier: PHASES.brightMirror },
+    variables: { discussionPhaseId: discussionPhaseId },
     fetchPolicy: fetchPolicy
   });
   return data;

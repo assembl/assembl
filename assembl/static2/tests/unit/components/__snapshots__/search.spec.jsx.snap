@@ -359,7 +359,7 @@ exports[`Hits components UserHit component should render a user hit 1`] = `
   <div
     className="TITLE"
   >
-    <p
+    <div
       dangerouslySetInnerHTML={
         Object {
           "__html": "Gertrude Effertz",

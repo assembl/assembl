@@ -10,7 +10,7 @@ from graphene_sqlalchemy import SQLAlchemyConnectionField
 from graphene_sqlalchemy.converter import (convert_column_to_string,
                                            convert_sqlalchemy_type)
 from graphene_sqlalchemy.utils import get_query
-from sqlalchemy.orm import contains_eager, joinedload, subqueryload
+from sqlalchemy.orm import subqueryload
 
 import assembl.graphql.docstrings as docs
 from assembl import models
@@ -40,8 +40,12 @@ from assembl.graphql.section import (CreateSection, DeleteSection, Section,
 from assembl.graphql.sentiment import AddSentiment, DeleteSentiment
 from assembl.graphql.synthesis import Synthesis
 from assembl.graphql.user import UpdateUser, DeleteUserInformation, UpdateAcceptedCookies
-from .configurable_fields import ConfigurableFieldUnion, CreateTextField, UpdateTextField, DeleteTextField, ProfileField, UpdateProfileFields
-from assembl.graphql.timeline import DiscussionPhase, CreateDiscussionPhase, UpdateDiscussionPhase, DeleteDiscussionPhase
+from .configurable_fields import (
+    ConfigurableFieldUnion, CreateTextField, UpdateTextField,
+    DeleteTextField, ProfileField, UpdateProfileFields)
+from assembl.graphql.timeline import (
+    DiscussionPhase, CreateDiscussionPhase,
+    UpdateDiscussionPhase, DeleteDiscussionPhase)
 from assembl.graphql.votes import AddTokenVote, AddGaugeVote
 from assembl.graphql.vote_session import (
     VoteSession, UpdateVoteSession, CreateTokenVoteSpecification,
@@ -50,9 +54,7 @@ from assembl.graphql.vote_session import (
     UpdateTokenVoteSpecification, DeleteVoteSpecification,
     CreateProposal, UpdateProposal, DeleteProposal
 )
-from assembl.graphql.utils import (
-    get_fields, get_root_thematic_for_phase,
-    get_posts_for_phases)
+from assembl.graphql.utils import get_fields, get_root_thematic_for_phase
 from assembl.graphql.preferences import UpdateHarvestingTranslationPreference
 from assembl.lib.locale import strip_country
 from assembl.lib.sqla_types import EmailString
@@ -61,6 +63,7 @@ from assembl.models.post import countable_publication_states
 from assembl.nlp.translation_service import DummyGoogleTranslationService
 from assembl.graphql.permissions_helpers import require_instance_permission
 from assembl.auth import CrudPermissions
+from assembl.utils import get_ideas, get_posts_for_phases
 
 
 convert_sqlalchemy_type.register(EmailString)(convert_column_to_string)
@@ -80,11 +83,9 @@ log = logging.getLogger('assembl')
 class Query(graphene.ObjectType):
     node = Node.Field(description=docs.Schema.node)
     root_idea = graphene.Field(
-        IdeaUnion, identifier=graphene.String(description=docs.Default.phase_identifier), description=docs.Schema.root_idea)
+        IdeaUnion, discussion_phase_id=graphene.Int(description=docs.Default.discussion_phase_id), description=docs.Schema.root_idea)
     ideas = graphene.List(
-        IdeaUnion,
-        identifier=graphene.String(required=True, description=docs.Default.phase_identifier),
-        description=docs.Schema.ideas)
+        IdeaUnion, discussion_phase_id=graphene.Int(required=True, description=docs.Default.discussion_phase_id), description=docs.Schema.ideas)
     syntheses = graphene.List(Synthesis, description=docs.Schema.syntheses)
     num_participants = graphene.Int(description=docs.Schema.num_participants)
     discussion_preferences = graphene.Field(DiscussionPreferences, description=docs.Schema.discussion_preferences)
@@ -97,7 +98,7 @@ class Query(graphene.ObjectType):
     has_syntheses = graphene.Boolean(description=docs.Schema.has_syntheses)
     vote_session = graphene.Field(
         VoteSession,
-        discussion_phase_id=graphene.Int(required=True, description=docs.Default.phase_identifier_id),
+        discussion_phase_id=graphene.Int(required=True, description=docs.Default.discussion_phase_id),
         description=docs.Schema.vote_session)
     resources = graphene.List(Resource, description=docs.Schema.resources)
     resources_center = graphene.Field(lambda: ResourcesCenter, description=docs.Schema.resources_center)
@@ -162,11 +163,12 @@ class Query(graphene.ObjectType):
     def resolve_root_idea(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
-        identifier = args.get('identifier')
-        if identifier is None or identifier == 'thread':
+        discussion_phase_id = args.get('discussion_phase_id')
+        if not discussion_phase_id:
             return discussion.root_idea
 
-        root_thematic = get_root_thematic_for_phase(discussion, identifier)
+        discussion_phase = models.DiscussionPhase.get(discussion_phase_id)
+        root_thematic = get_root_thematic_for_phase(discussion_phase)
         return root_thematic
 
     def resolve_vote_session(self, args, context, info):
@@ -179,40 +181,11 @@ class Query(graphene.ObjectType):
         return vote_session
 
     def resolve_ideas(self, args, context, info):
-        discussion_id = context.matchdict['discussion_id']
-        discussion = models.Discussion.get(discussion_id)
-        phase_identifier = args.get('identifier')
-        if phase_identifier in ('survey', 'brightMirror'):
-            root_thematic = get_root_thematic_for_phase(discussion, phase_identifier)
-            if root_thematic is None:
-                return []
-
-            return root_thematic.get_children()
-
-        model = models.Idea
-        query = get_query(model, context)
-        descendants_query = discussion.root_idea.get_descendants_query(inclusive=False)
-        query = query.outerjoin(
-                models.Idea.source_links
-            ).filter(model.id.in_(descendants_query)
-            ).filter(
-                model.hidden == False,  # noqa: E712
-                model.sqla_type == 'idea',
-                model.tombstone_date == None  # noqa: E711
-            ).options(
-                contains_eager(models.Idea.source_links),
-                subqueryload(models.Idea.attachments).joinedload("document"),
-#                subqueryload(models.Idea.message_columns),
-                joinedload(models.Idea.title).joinedload("entries"),
-#                joinedload(models.Idea.synthesis_title).joinedload("entries"),
-                joinedload(models.Idea.description).joinedload("entries"),
-            ).order_by(models.IdeaLink.order, models.Idea.creation_date)
-        if phase_identifier == 'multiColumns':
-            # Filter out ideas that don't have columns.
-            query = query.filter(
-                models.Idea.message_view_override == 'messageColumns')
-
-        return query
+        phase_id = args.get('discussion_phase_id')
+        phase = models.DiscussionPhase.get(phase_id)
+        return get_ideas(
+            phase,
+            options=[subqueryload(models.Idea.attachments).joinedload("document")])
 
     def resolve_syntheses(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']

@@ -8,6 +8,7 @@ import withLoadingIndicator from '../../../common/withLoadingIndicator';
 
 type SurveyTableProps = {
   identifier: string,
+  phaseId: string,
   onMenuItemClick: Function,
   data: {
     loading: boolean,
@@ -17,9 +18,9 @@ type SurveyTableProps = {
 };
 
 export function DumbSurveyTable(props: SurveyTableProps) {
-  const { identifier, onMenuItemClick, data } = props;
+  const { identifier, phaseId, onMenuItemClick, data } = props;
   const { thematics } = data;
-  return <MenuList items={thematics} identifier={identifier} onMenuItemClick={onMenuItemClick} />;
+  return <MenuList items={thematics} phaseId={phaseId} identifier={identifier} onMenuItemClick={onMenuItemClick} />;
 }
 
 const SurveyTableWithData = graphql(DebateThematicsQuery);

@@ -56,7 +56,7 @@ class IdeaInterface(graphene.Interface):
     num_posts = graphene.Int(description=docs.IdeaInterface.num_posts)
     num_total_posts = graphene.Int(description=docs.IdeaInterface.num_total_posts)
     num_contributors = graphene.Int(description=docs.IdeaInterface.num_contributors)
-    num_children = graphene.Int(identifier=graphene.String(), description=docs.IdeaInterface.num_children)
+    num_children = graphene.Int(discussion_phase_id=graphene.Int(), description=docs.IdeaInterface.num_children)
     img = graphene.Field(Document, description=docs.IdeaInterface.img)
     order = graphene.Float(description=docs.IdeaInterface.order)
     live = graphene.Field(lambda: IdeaUnion, description=docs.IdeaInterface.live)
@@ -66,6 +66,8 @@ class IdeaInterface(graphene.Interface):
         'assembl.graphql.vote_session.VoteSpecificationUnion',
         required=True, description=docs.IdeaInterface.vote_specifications)
     type = graphene.String(description=docs.IdeaInterface.type)
+    parent_id = graphene.ID(description=docs.Idea.parent_id)
+    ancestors = graphene.List(graphene.ID, description=docs.Idea.ancestors)
 
     def resolve_title(self, args, context, info):
         return resolve_langstring(self.title, args.get('lang'))
@@ -91,7 +93,6 @@ class IdeaInterface(graphene.Interface):
     def resolve_num_posts(self, args, context, info):
         # Return the number of posts bound to this idea.
         # Special case for root: do not count all posts, but only those bound to an idea.
-        # TODO: Find a way to get all posts of a given phase.
         if isinstance(self, models.RootIdea):
             return self.num_posts - self.num_orphan_posts
         else:
@@ -105,8 +106,9 @@ class IdeaInterface(graphene.Interface):
         return self.get_order_from_first_parent()
 
     def resolve_num_children(self, args, context, info):
-        phase = args.get('identifier', '')
-        if phase == 'multiColumns':
+        phase_id = args.get('discussion_phase_id')
+        phase = models.DiscussionPhase.get(phase_id)
+        if phase.identifier == Phases.multiColumns.value:
             _it = models.Idea.__table__
             _ilt = models.IdeaLink.__table__
             _target_it = models.Idea.__table__.alias()
@@ -129,6 +131,18 @@ class IdeaInterface(graphene.Interface):
 
     def resolve_type(self, args, context, info):
         return self.__class__.__name__
+
+    def resolve_parent_id(self, args, context, info):
+        if not self.parents:
+            return None
+
+        return self.parents[0].graphene_id()
+
+    def resolve_ancestors(self, args, context, info):
+        # We use id_only=True and models.Idea.get on purpose, to
+        # use a simpler ancestors query and use Idea identity map.
+        return [models.Idea.get(id).graphene_id()
+                for id in self.get_all_ancestors(id_only=True)]
 
 
 class IdeaAnnouncementInput(graphene.InputObjectType):
@@ -225,12 +239,10 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
     # This is the "What you need to know"
     synthesis_title = graphene.String(lang=graphene.String(), description=docs.Idea.synthesis_title)
     children = graphene.List(lambda: Idea, description=docs.Idea.children)
-    parent_id = graphene.ID(description=docs.Idea.parent_id)
     posts = SQLAlchemyConnectionField('assembl.graphql.post.PostConnection', description=docs.Idea.posts)  # use dotted name to avoid circular import  # noqa: E501
     contributors = graphene.List(AgentProfile, description=docs.Idea.contributors)
     announcement = graphene.Field(lambda: IdeaAnnouncement, description=docs.Idea.announcement)
     message_columns = graphene.List(lambda: IdeaMessageColumn, description=docs.Idea.message_columns)
-    ancestors = graphene.List(graphene.ID, description=docs.Idea.ancestors)
     vote_results = graphene.Field(VoteResults, required=True, description=docs.Idea.vote_results)
 
     def resolve_vote_results(self, args, context, info):
@@ -280,16 +292,6 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
     def resolve_children(self, args, context, info):
         # filter on child.hidden to not include the root thematic in the children of root_idea  # noqa: E501
         return [child for child in self.get_children() if not child.hidden]
-
-    def resolve_parent_id(self, args, context, info):
-        if not self.source_links:
-            return None
-
-        return Node.to_global_id('Idea', self.source_links[0].source_id)
-
-    def resolve_ancestors(self, args, context, info):
-        return [Node.to_global_id('Idea', id)
-                for id in self.get_all_ancestors(id_only=True)]
 
     def resolve_posts(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
@@ -490,7 +492,7 @@ class Thematic(SecureObjectType, SQLAlchemyObjectType):
     class Meta:
         model = models.Thematic
         interfaces = (Node, IdeaInterface)
-        only_fields = ('id', 'identifier')
+        only_fields = ('id', )
 
     questions = graphene.List(Question, description=docs.Thematic.questions)
     video = graphene.Field(Video, lang=graphene.String(), description=docs.Thematic.video)
@@ -590,7 +592,7 @@ class CreateThematic(graphene.Mutation):
         # it can't be None, having an empty [] is perfectly valid.
         title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.Default.langstring_entries)
         description_entries = graphene.List(LangStringEntryInput, description=docs.Default.langstring_entries)
-        identifier = graphene.String(required=True, description=docs.Default.required_language_input)
+        discussion_phase_id = graphene.Int(required=True, description=docs.CreateThematic.discussion_phase_id)
         video = graphene.Argument(VideoInput, description=docs.CreateThematic.video)
         announcement = graphene.Argument(IdeaAnnouncementInput, description=docs.Idea.announcement)
         questions = graphene.List(QuestionInput, description=docs.CreateThematic.questions)
@@ -608,7 +610,9 @@ class CreateThematic(graphene.Mutation):
         EMBED_ATTACHMENT = models.AttachmentPurpose.EMBED_ATTACHMENT.value
         MEDIA_ATTACHMENT = models.AttachmentPurpose.MEDIA_ATTACHMENT.value
         cls = models.Idea
-        phase_identifier = args.get('identifier')
+        phase_id = args.get('discussion_phase_id')
+        phase = models.DiscussionPhase.get(phase_id)
+        phase_identifier = phase.identifier
         if phase_identifier == Phases.survey.value:
             cls = models.Thematic
 
@@ -683,25 +687,19 @@ class CreateThematic(graphene.Mutation):
                     raise Exception(
                         'Parent Idea does not belong to this discussion')  # noqa: E501
             else:
-                if phase_identifier in (Phases.thread.value, Phases.multiColumns.value):
-                    parent_idea = discussion.root_idea
-                else:
-                    # Our thematic, because it inherits from Idea, needs to be
-                    # associated to the root idea of the discussion.
-                    # We create a hidden root thematic, corresponding to the
-                    # `identifier` phase, child of the root idea,
-                    # and add our thematic as a child of this root thematic.
-                    parent_idea = get_root_thematic_for_phase(discussion, phase_identifier)
-                    if parent_idea is None:
-                        parent_idea = create_root_thematic(discussion, phase_identifier)
+                # Our thematic, because it inherits from Idea, needs to be
+                # associated to the root idea of the discussion.
+                # We create a hidden root thematic, corresponding to the
+                # phase, child of the root idea,
+                # and add our thematic as a child of this root thematic.
+                parent_idea = get_root_thematic_for_phase(phase)
+                if parent_idea is None:
+                    parent_idea = create_root_thematic(phase)
 
             saobj = cls(
                 discussion_id=discussion_id,
                 title=title_langstring,
                 **kwargs)
-            if cls == models.Thematic:
-                saobj.identifier = phase_identifier  # I don't think this is really used
-
             db.add(saobj)
             order = len(parent_idea.get_children()) + 1.0
             db.add(

@@ -17,7 +17,7 @@ class Default:
     \"voteSession\"\n
     \"brightMirror\"\n
     """
-    phase_identifier_id = "The database identifier relating to the discussion phase."
+    discussion_phase_id = "The database id of a discussion phase."
 
 
 class Schema:
@@ -371,7 +371,6 @@ class VideoInput:
 class Thematic:
     __doc__ = """A Thematic is an Idea that exists under the Survey Phase of a debate.
     Thematics differ slightly from Ideas because Thematics' subideas are Questions."""
-    identifier = "The phase identifier of the Thematic."
     questions = """A list of Question objects that are bound to the Thematic."""
     video = """A Video objet that is often integrated to the header of a Thematic."""
 
@@ -380,7 +379,7 @@ class CreateThematic:
     __doc__ = """A mutation to create a new thematic."""
     title_entries = IdeaInterface.title_entries
     description_entries = IdeaInterface.description_entries
-    identifier = Thematic.identifier
+    discussion_phase_id = Default.discussion_phase_id
     video = Thematic.video
     questions = Thematic.questions
     image = Default.document % ("An Image to be shown in the Thematic. ")
@@ -392,7 +391,6 @@ class UpdateThematic:
     id = Default.node_id % ("Thematic") + " The identifier of the Thematic to be updated."
     title_entries = CreateThematic.title_entries
     description_entries = CreateThematic.description_entries
-    identifier = CreateThematic.identifier
     video = CreateThematic.video
     questions = CreateThematic.questions
     image = CreateThematic.image

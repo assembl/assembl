@@ -24,6 +24,7 @@ import TimelineQuery from '../graphql/Timeline.graphql';
 import { convertEntriesToEditorState } from '../utils/draftjs';
 import { getPhaseId } from '../utils/timeline';
 import landingPagePlugin from '../utils/administration/landingPage';
+import { fromGlobalId } from '../utils/globalFunctions';
 
 const SECTIONS_WITHOUT_LANGUAGEMENU = ['1', '6'];
 
@@ -194,8 +195,11 @@ class Administration extends React.Component {
       timeline
     } = this.props;
     const { phase } = params;
+    const phaseId = getPhaseId(timeline, phase);
+    const discussionPhaseId = phaseId ? fromGlobalId(phaseId) : null;
     const childrenWithProps = React.Children.map(children, child =>
       React.cloneElement(child, {
+        discussionPhaseId: discussionPhaseId,
         locale: locale,
         refetchTabsConditions: refetchTabsConditions,
         refetchVoteSession: refetchVoteSession,
@@ -311,10 +315,10 @@ const isNotInLandingPageAdmin = isNotInAdminSection('landingPage');
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   graphql(VoteSessionQuery, {
-    skip: ({ timeline }) => typeof getPhaseId(timeline, 'voteSession') !== 'string',
-    options: ({ timeline, locale }) => {
-      const id = timeline ? getPhaseId(timeline, 'voteSession') : null;
-      const discussionPhaseId = id ? atob(id).split(':')[1] : null;
+    skip: ({ params }) => params.phase !== 'voteSession',
+    options: ({ locale, timeline, params }) => {
+      const phaseId = getPhaseId(timeline, params.phase);
+      const discussionPhaseId = phaseId ? fromGlobalId(phaseId) : null;
       return {
         variables: { discussionPhaseId: discussionPhaseId, lang: locale }
       };

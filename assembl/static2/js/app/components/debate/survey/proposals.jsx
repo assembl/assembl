@@ -16,11 +16,11 @@ class Proposals extends React.Component {
   };
 
   render() {
-    const { questionIndex, questionId, themeId, title, posts, nbPostsToShow, phaseUrl } = this.props;
+    const { phaseId, questionIndex, questionId, themeId, title, posts, nbPostsToShow, phaseUrl } = this.props;
     const postsToShow = posts.slice(0, nbPostsToShow);
     const link = `${phaseUrl}${getRoute('question', { questionId: questionId, questionIndex: questionIndex })}`;
     return (
-      <div className={'shown'}>
+      <div className="shown">
         <h3 className="collapsed-title">
           <span>{`${questionIndex}/ ${title}`}</span>
           <div className={postsToShow.length > 0 ? 'shown proposal-arrow' : 'hidden proposal-arrow'}>
@@ -40,6 +40,7 @@ class Proposals extends React.Component {
                 postIndex={index}
                 questionId={questionId}
                 key={post.node.id}
+                phaseId={phaseId}
               />
             ))}
           </div>

@@ -8,16 +8,16 @@ import FieldArrayWithActions from '../../form/fieldArrayWithActions';
 import MultilingualTextFieldAdapter from '../../form/multilingualTextFieldAdapter';
 import { addThematicTooltip, deleteThematicTooltip, deleteSubThematicDisabledTooltip } from '../../common/tooltips';
 import { removeMenuItem, addMenuItem, swapMenuItem } from '../thematicsMenu';
-import { PHASES } from '../../../constants';
 
 type Props = {
+  discussionPhaseId: string,
   editLocale: string,
   locale: string,
   client: ApolloClient
 };
 
-const Step1 = ({ editLocale, locale, client }: Props) => {
-  const queryVariables = { identifier: PHASES.survey, lang: locale };
+const Step1 = ({ discussionPhaseId, editLocale, locale, client }: Props) => {
+  const queryVariables = { discussionPhaseId: discussionPhaseId, lang: locale };
   return (
     <React.Fragment>
       <div className="form-title">{I18n.t('administration.survey.1')}</div>

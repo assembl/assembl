@@ -422,6 +422,10 @@ class AgentProfile(Base):
             return False
         return expiry < datetime.utcnow()
 
+    @classmethod
+    def graphene_type(cls):
+        return 'AgentProfile'
+
 
 class AbstractAgentAccount(Base):
     """An abstract class for online accounts that identify AgentsProfiles

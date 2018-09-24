@@ -1,6 +1,4 @@
 # -*- coding=utf-8 -*-
-from graphql_relay.node.node import from_global_id, to_global_id
-
 from assembl.graphql.schema import Schema as schema
 
 
@@ -61,6 +59,100 @@ def test_mutation_create_discussion_phase(graphql_request, discussion_with_2_pha
     assert phase['order'] == 1.0
 
 
+def test_mutation_create_discussion_phase_force_phase_root_idea(graphql_request, graphql_registry):
+    res = schema.execute(
+        graphql_registry['createDiscussionPhase'],
+        context_value=graphql_request,
+        variable_values={
+            "lang": u"en",
+            "identifier": u"voteSession",
+            "isThematicsTable": False,  # shouldn't taken in account
+            "titleEntries": [
+                { "localeCode": "en", "value": u"My new phase" }
+            ],
+            "start": '2018-01-20T09:01:00.000001Z',
+            "end": '2018-05-20T00:00:00.100001Z',
+            "order": 1.0
+        }
+    )
+    assert res.errors is None
+    phase = res.data['createDiscussionPhase']['discussionPhase']
+    assert phase['isThematicsTable'] is True
+    res = schema.execute(
+        graphql_registry['createDiscussionPhase'],
+        context_value=graphql_request,
+        variable_values={
+            "lang": u"en",
+            "identifier": u"brightMirror",
+            "isThematicsTable": False,  # shouldn't taken in account
+            "titleEntries": [
+                { "localeCode": "en", "value": u"My new phase" }
+            ],
+            "start": '2018-01-20T09:01:00.000001Z',
+            "end": '2018-05-20T00:00:00.100001Z',
+            "order": 1.0
+        }
+    )
+    assert res.errors is None
+    phase = res.data['createDiscussionPhase']['discussionPhase']
+    assert phase['isThematicsTable'] is True
+    res = schema.execute(
+        graphql_registry['createDiscussionPhase'],
+        context_value=graphql_request,
+        variable_values={
+            "lang": u"en",
+            "identifier": u"multiColumns",
+            "isThematicsTable": False,
+            "titleEntries": [
+                { "localeCode": "en", "value": u"My new phase" }
+            ],
+            "start": '2018-01-20T09:01:00.000001Z',
+            "end": '2018-05-20T00:00:00.100001Z',
+            "order": 1.0
+        }
+    )
+    assert res.errors is None
+    phase = res.data['createDiscussionPhase']['discussionPhase']
+    assert phase['isThematicsTable'] is False
+    # thread phase should use discussion.root_idea
+    res = schema.execute(
+        graphql_registry['createDiscussionPhase'],
+        context_value=graphql_request,
+        variable_values={
+            "lang": u"en",
+            "identifier": u"thread",
+            "isThematicsTable": False,
+            "titleEntries": [
+                { "localeCode": "en", "value": u"My new phase" }
+            ],
+            "start": '2018-01-20T09:01:00.000001Z',
+            "end": '2018-05-20T00:00:00.100001Z',
+            "order": 1.0
+        }
+    )
+    assert res.errors is None
+    phase = res.data['createDiscussionPhase']['discussionPhase']
+    assert phase['isThematicsTable'] is False
+    res = schema.execute(
+        graphql_registry['createDiscussionPhase'],
+        context_value=graphql_request,
+        variable_values={
+            "lang": u"en",
+            "identifier": u"decouverte",
+            "isThematicsTable": False,  # shouldn't taken in account
+            "titleEntries": [
+                { "localeCode": "en", "value": u"My new phase" }
+            ],
+            "start": '2018-01-20T09:01:00.000001Z',
+            "end": '2018-05-20T00:00:00.100001Z',
+            "order": 1.0
+        }
+    )
+    assert res.errors is None
+    phase = res.data['createDiscussionPhase']['discussionPhase']
+    assert phase['isThematicsTable'] is True
+
+
 def test_mutation_update_discussion_phase(graphql_request, discussion_with_2_phase_interface_v2, timeline_phase2_interface_v2, graphql_registry):
     import os
     from io import BytesIO
@@ -71,15 +163,15 @@ def test_mutation_update_discussion_phase(graphql_request, discussion_with_2_pha
 
     graphql_request.POST['variables.image'] = FieldStorage()
     phase1 = discussion_with_2_phase_interface_v2.timeline_events[0]
-    phase1_id = to_global_id('DiscussionPhase', phase1.id)
+    phase1_id = phase1.graphene_id()
     res = schema.execute(
         graphql_registry['updateDiscussionPhase'],
         context_value=graphql_request,
         variable_values={
             "id": phase1_id,
             "lang": u"en",
-            "identifier": u"multiColumn",
-            "isThematicsTable": True,
+            "identifier": u"multiColumns",
+            "isThematicsTable": False,
             "titleEntries": [
                 { "localeCode": "en", "value": u"My new title" }
             ],
@@ -95,8 +187,8 @@ def test_mutation_update_discussion_phase(graphql_request, discussion_with_2_pha
     assert res.errors is None
     phase1_updated = res.data['updateDiscussionPhase']['discussionPhase']
     assert phase1_updated['id'] == phase1_id
-    assert phase1_updated['identifier'] == 'multiColumn'
-    assert phase1_updated['isThematicsTable'] is True
+    assert phase1_updated['identifier'] == 'multiColumns'
+    assert phase1_updated['isThematicsTable'] is False
     assert phase1_updated['title'] == u'My new title'
     assert phase1_updated['titleEntries'][0]['localeCode'] == u'en'
     assert phase1_updated['titleEntries'][0]['value'] == u'My new title'
@@ -107,9 +199,10 @@ def test_mutation_update_discussion_phase(graphql_request, discussion_with_2_pha
     assert phase1_updated['image']['mimeType'] == 'image/png'
     assert phase1_updated['order'] == 1.0
 
+
 def test_mutation_delete_discussion_phase(graphql_request, discussion_with_2_phase_interface_v2, timeline_phase2_interface_v2, graphql_registry):
     phase1 = discussion_with_2_phase_interface_v2.timeline_events[0]
-    phase1_id = to_global_id('DiscussionPhase', phase1.id)
+    phase1_id = phase1.graphene_id()
     res = schema.execute(
         graphql_registry['deleteDiscussionPhase'],
         context_value=graphql_request,

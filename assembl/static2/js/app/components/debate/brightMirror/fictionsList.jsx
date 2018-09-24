@@ -59,7 +59,12 @@ const FictionsList = ({ posts, identifier, refetchIdea, lang, themeId }: Fiction
       <Animated key={post.id} preset="scalein">
         <FictionPreview
           id={post.id}
-          link={`${get('brightMirrorFiction', { slug: slug, phase: identifier, themeId: themeId, fictionId: post.id })}`}
+          link={`${get('brightMirrorFiction', {
+            slug: slug,
+            phase: identifier,
+            themeId: themeId,
+            fictionId: post.id
+          })}`}
           // $FlowFixMe subject is fetch localized
           title={post.subject}
           creationDate={I18n.l(post.creationDate, { dateFormat: 'date.format2' })}

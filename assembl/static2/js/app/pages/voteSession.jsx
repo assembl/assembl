@@ -16,8 +16,8 @@ import Section from '../components/common/section';
 import AvailableTokens from '../components/voteSession/availableTokens';
 import Proposals from '../components/voteSession/proposals';
 import ProposalsResults from '../components/voteSession/proposalsResults';
-import { getDomElementOffset, isMobile } from '../utils/globalFunctions';
-import { getPhaseId, getIfPhaseCompletedByIdentifier } from '../utils/timeline';
+import { getDomElementOffset, isMobile, fromGlobalId } from '../utils/globalFunctions';
+import { getIfPhaseCompletedById } from '../utils/timeline';
 import { promptForLoginOr, displayAlert, displayModal } from '../utils/utilityManager';
 import { transformLinksInHtml } from '../utils/linkify';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
@@ -416,11 +416,11 @@ class DumbVoteSession extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state, ownProps) => ({
   timeline: state.timeline,
   debate: state.debate,
   lang: state.i18n.locale,
-  isPhaseCompleted: getIfPhaseCompletedByIdentifier(state.timeline, 'voteSession')
+  isPhaseCompleted: getIfPhaseCompletedById(state.timeline, ownProps.phaseId)
 });
 
 export { DumbVoteSession };
@@ -428,12 +428,9 @@ export { DumbVoteSession };
 export default compose(
   connect(mapStateToProps),
   graphql(VoteSessionQuery, {
-    options: ({ timeline, lang }) => {
-      const phaseId = timeline ? getPhaseId(timeline, 'voteSession') : null;
-      return {
-        variables: { discussionPhaseId: phaseId ? atob(phaseId).split(':')[1] : null, lang: lang }
-      };
-    },
+    options: ({ lang, phaseId }) => ({
+      variables: { discussionPhaseId: fromGlobalId(phaseId), lang: lang }
+    }),
     props: ({ data, ownProps }) => {
       const defaultHeaderImage = ownProps.debate.debateData.headerBackgroundUrl || '';
       if (data.loading) {

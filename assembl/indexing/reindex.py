@@ -10,8 +10,9 @@ from assembl.indexing import indexing_active
 
 
 def reindex_in_elasticsearch(contents):
+    changes = get_changes()
     for content in contents:
-        get_changes().index_content(content)
+        changes.index_content(content)
         yield content
 
 
@@ -36,7 +37,7 @@ def intermediate_commit(contents):
 
 
 def get_indexable_contents(session):
-    from assembl.models import AgentProfile, Extract, Idea, Post
+    from assembl.models import AgentProfile, Idea, Post
     from assembl.models.post import PublicationStates
 
     query = session.query(Idea

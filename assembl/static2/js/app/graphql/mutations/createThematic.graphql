@@ -1,5 +1,5 @@
 mutation createThematic(
-  $identifier: String!
+  $discussionPhaseId: Int!
   $image: String
   $titleEntries: [LangStringEntryInput]!
   $descriptionEntries: [LangStringEntryInput]
@@ -10,7 +10,7 @@ mutation createThematic(
   $messageViewOverride: String
 ) {
   createThematic(
-    identifier: $identifier
+    discussionPhaseId: $discussionPhaseId
     image: $image
     titleEntries: $titleEntries
     descriptionEntries: $descriptionEntries

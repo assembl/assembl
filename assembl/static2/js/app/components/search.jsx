@@ -65,24 +65,41 @@ const highlightedTextOrTruncatedText = (hit, field) => {
   return text;
 };
 
-function getPostUrl(ideaId, postId, phaseId, slug) {
-  if (!ideaId) {
+function getPostUrl(ideaId, postId, phaseIdentifier, slug) {
+  if (!ideaId || !phaseIdentifier) {
     return undefined;
   }
   const ideaBase64id = btoa(`Idea:${ideaId}`);
   const postBase64id = btoa(`Post:${postId}`);
-  if (phaseId === 'thread') {
-    return getRoute('post', { slug: slug, phase: phaseId, themeId: ideaBase64id, element: postBase64id });
-  } else if (phaseId === 'survey') {
+  if (phaseIdentifier === 'thread') {
+    return getRoute('post', {
+      slug: slug,
+      phase: phaseIdentifier,
+      themeId: ideaBase64id,
+      element: postBase64id
+    });
+  } else if (phaseIdentifier === 'survey') {
     return getRoute('questionPost', {
       slug: slug,
-      phase: phaseId,
+      phase: phaseIdentifier,
       questionId: ideaBase64id,
       questionIndex: 1,
       element: postBase64id
     });
   }
   return undefined;
+}
+
+function getIdeaUrl(ideaId, phaseIdentifier, slug) {
+  if (!ideaId || !phaseIdentifier) {
+    return undefined;
+  }
+  const ideaBase64id = btoa(`Idea:${ideaId}`);
+  return getRoute('idea', {
+    slug: slug,
+    phase: phaseIdentifier,
+    themeId: ideaBase64id
+  });
 }
 
 let Link;
@@ -125,20 +142,21 @@ if (v1Interface) {
     case 'user':
       return undefined;
     case 'idea': {
-      const ideaBase64id = btoa(`Idea:${id}`);
-      return `/${slug}/debate/thread/theme/${ideaBase64id}`;
+      const phaseIdentifier = hit._source.phase_identifier;
+      const ideaId = id;
+      return getIdeaUrl(ideaId, phaseIdentifier, slug);
     }
     case 'extract': {
-      const phaseId = hit._source.phase_id || 'thread';
-      const ideaId = hit._source.idea_id;
+      const phaseIdentifier = hit._source.phase_identifier;
+      const ideaId = hit._source.idea_id[0];
       const postId = hit._source.post_id;
-      return getPostUrl(ideaId, postId, phaseId, slug);
+      return getPostUrl(ideaId, postId, phaseIdentifier, slug);
     }
     default: {
       // post
-      const phaseId = hit._source.phase_id || 'thread';
-      const ideaId = hit._source.idea_id.length > 0 ? hit._source.idea_id[0] : null;
-      return getPostUrl(ideaId, id, phaseId, slug);
+      const phaseIdentifier = hit._source.phase_identifier;
+      const ideaId = hit._source.idea_id[0];
+      return getPostUrl(ideaId, id, phaseIdentifier, slug);
     }
     }
   };
@@ -225,7 +243,7 @@ const BaseHit = ({ bemBlocks, imageType, onLinkClick, title, url, renderBody, re
       {url ? (
         <Link onClick={onLinkClick} to={url} dangerouslySetInnerHTML={{ __html: title }} />
       ) : (
-        <p dangerouslySetInnerHTML={{ __html: title }} />
+        <div dangerouslySetInnerHTML={{ __html: title }} />
       )}
     </div>
     {renderBody && <div className={bemBlocks.item('content')}>{renderBody()}</div>}

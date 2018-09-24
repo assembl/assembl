@@ -9,7 +9,7 @@ import { prefetchMenuQuery } from './menuTable';
 import { getPhaseStatus, isSeveralIdentifiers } from '../../../utils/timeline';
 import { displayModal } from '../../../utils/utilityManager';
 import { get, goTo } from '../../../utils/routeMap';
-import { isMobile } from '../../../utils/globalFunctions';
+import { isMobile, fromGlobalId } from '../../../utils/globalFunctions';
 import { PHASE_STATUS, PHASES } from '../../../constants';
 
 export const phasesToIgnore = [PHASES.voteSession];
@@ -29,6 +29,7 @@ type TimelineSegmentProps = {
   startDate: string,
   endDate: string,
   phaseIdentifier: string,
+  phaseId: string,
   debate: DebateType,
   barPercent: number,
   locale: string,
@@ -47,18 +48,21 @@ export class DumbTimelineSegment extends React.Component<TimelineSegmentProps, T
   };
 
   componentWillMount() {
-    const { phaseIdentifier, title, startDate, endDate, locale, client } = this.props;
+    const { phaseId, phaseIdentifier, title, startDate, endDate, locale, client } = this.props;
     this.isTouchScreenDevice = isMobile.any();
     this.phaseStatus = getPhaseStatus(startDate, endDate);
     const notStarted = this.phaseStatus === PHASE_STATUS.notStarted;
     const ignore = phasesToIgnore.includes(phaseIdentifier);
     this.ignoreMenu = ignore && !notStarted;
     this.phaseName = title;
-    if (!ignore && !notStarted) {
-      // don't prefetch if we're not going to use it
+    const discussionPhaseId = fromGlobalId(phaseId);
+    if (discussionPhaseId && !ignore && !notStarted) {
+      // Check discussionPhaseId for flow to be happy, phaseId can't be null, but fromGlobalId can return null.
+      // Don't prefetch query if we're not going to use it.
       prefetchMenuQuery(client, {
         lang: locale,
-        identifier: phaseIdentifier
+        identifier: phaseIdentifier,
+        discussionPhaseId: discussionPhaseId
       });
     }
   }
@@ -89,9 +93,9 @@ export class DumbTimelineSegment extends React.Component<TimelineSegmentProps, T
   };
 
   displayPhase = () => {
-    const { phaseIdentifier, onDeselect, timeline } = this.props;
+    const { phaseId, phaseIdentifier, onDeselect, timeline } = this.props;
     const { debateData } = this.props.debate;
-    const params = { slug: debateData.slug, phase: phaseIdentifier };
+    const params = { slug: debateData.slug, phase: phaseIdentifier, phaseId: phaseId };
     const isSeveralPhases = isSeveralIdentifiers(timeline);
     if (isSeveralPhases) {
       if (this.phaseStatus === PHASE_STATUS.notStarted) {

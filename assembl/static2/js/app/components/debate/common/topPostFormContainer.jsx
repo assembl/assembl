@@ -3,13 +3,13 @@ import * as React from 'react';
 import { Grid, Row, Col } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
 import classNames from 'classnames';
-import TopPostForm, { BODY_MAX_LENGTH } from './topPostForm';
+import TopPostForm from './topPostForm';
 import { hexToRgb } from '../../../utils/globalFunctions';
 import { MIN_WIDTH_COLUMN, SMALL_SCREEN_HEIGHT } from '../../../constants';
 
 type TopPostFormContainerProps = {
-  messageColumns?: Object,
-  isColumnViewInline?: boolean,
+  messageColumns: Array<*>,
+  isColumnViewInline: boolean,
   ideaId: string,
   refetchIdea: Function,
   topPostsCount: number,
@@ -34,8 +34,9 @@ class TopPostFormContainer extends React.Component<TopPostFormContainerProps, To
   topPostFormContainer: () => void;
 
   static defaultProps = {
-    instructionLabelMsgId: 'debate.thread.startDiscussion',
-    bodyMaxLength: BODY_MAX_LENGTH
+    instructionLabel: 'debate.thread.startDiscussion',
+    isColumnViewInline: false,
+    messageColumns: []
   };
 
   constructor(props: TopPostFormContainerProps) {
@@ -68,7 +69,7 @@ class TopPostFormContainer extends React.Component<TopPostFormContainerProps, To
   }
 
   getClassNames() {
-    const { messageColumns = [], isColumnViewInline } = this.props;
+    const { messageColumns, isColumnViewInline } = this.props;
     return classNames({ 'columns-view': messageColumns.length > 1 }, { 'columns-view-inline': isColumnViewInline });
   }
 
@@ -77,7 +78,7 @@ class TopPostFormContainer extends React.Component<TopPostFormContainerProps, To
   }
 
   getColumnsInfos() {
-    const { messageColumns = [] } = this.props;
+    const { messageColumns } = this.props;
     let columnsInfos = [];
     if (messageColumns.length > 1) {
       columnsInfos = messageColumns;
@@ -92,7 +93,7 @@ class TopPostFormContainer extends React.Component<TopPostFormContainerProps, To
     const {
       ideaId,
       refetchIdea,
-      messageColumns = [],
+      messageColumns,
       isColumnViewInline,
       topPostsCount,
       instructionLabelMsgId,

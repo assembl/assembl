@@ -104,6 +104,7 @@ COMMON_POST = {
         'parent_creator_id': LONG,
     #    'publishes_synthesis_id': KEYWORD,
         'type': KEYWORD,
+        'phase_identifier': KEYWORD,
         'phase_id': KEYWORD,
         'sentiment_tags': KEYWORD
         # 'sentiment_counts'
@@ -129,6 +130,8 @@ _IDEA_MAPPING = {
         'discussion_id': LONG,
         'creation_date': DATE,
         'id': LONG,
+        'phase_identifier': KEYWORD,
+        'phase_id': KEYWORD,
     }
 }
 
@@ -140,6 +143,7 @@ _EXTRACT_MAPPING = {
         'post_id': LONG,
         'creator_id': LONG,
         'idea_id': LONG,
+        'phase_identifier': KEYWORD,
         'phase_id': KEYWORD,
         'body': TEXT,
         'extract_nature': KEYWORD,

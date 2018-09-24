@@ -15,7 +15,7 @@ import Permissions, { connectedUserCan } from '../../../utils/permissions';
 import Sentiments from './sentiments';
 import getSentimentStats from './sentimentStats';
 import sentimentDefinitions from './sentimentDefinitions';
-import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
+import { getIfPhaseCompletedById } from '../../../utils/timeline';
 import { withScreenWidth } from '../../common/screenDimensions';
 
 type Props = {
@@ -25,7 +25,7 @@ type Props = {
   debateData: DebateData,
   editable: boolean,
   handleEditClick: Function,
-  identifier: string,
+  phaseId: string,
   mySentiment: string,
   numChildren: number,
   postId: string,
@@ -57,7 +57,7 @@ class PostActions extends React.Component<Props> {
       timeline,
       editable,
       handleEditClick,
-      identifier,
+      phaseId,
       mySentiment,
       numChildren,
       postId,
@@ -79,7 +79,7 @@ class PostActions extends React.Component<Props> {
     const useSocial = debateData.useSocialMedia;
     let overflowMenu = null;
     const tooltipPlacement = screenWidth >= MEDIUM_SCREEN_WIDTH ? 'left' : 'top';
-    const isPhaseCompleted = getIfPhaseCompletedByIdentifier(timeline, identifier);
+    const isPhaseCompleted = getIfPhaseCompletedById(timeline, phaseId);
     if (editable && (userCanDeleteThisMessage || userCanEditThisMessage)) {
       overflowMenu = (
         <div className="overflow-action">

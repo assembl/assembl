@@ -62,7 +62,8 @@ describe('Hits components', () => {
             subject_en: 'We need to quantify the optical HTTP panel!',
             body_en: 'We need to connect the multi-byte SQL interface!',
             idea_id: ['fakeIdeaId', 'otherFakeIdeaId'],
-            phase_id: 'thread',
+            phase_id: 1,
+            phase_identifier: 'thread',
             id: 'fakePostId',
             sentiment_counts: {
               like: 2,
@@ -106,7 +107,10 @@ describe('Hits components', () => {
             announcement_title_en: 'You can\'t reboot the circuit without parsing the wireless GB feed!',
             announcement_body_en: 'backing up the microchip won\'t do anything!',
             num_posts: 544,
-            num_contributors: 42
+            num_contributors: 42,
+            id: 456,
+            phase_id: 1,
+            phase_identifier: 'thread'
           }
         }
       };
@@ -208,7 +212,8 @@ describe('Hits components', () => {
             subject_en: 'We need to quantify the optical HTTP panel!',
             body: 'We need to connect the multi-byte SQL interface!',
             idea_id: 'fakeIdeaId',
-            phase_id: 'thread',
+            phase_id: 1,
+            phase_identifier: 'thread',
             post_id: 'fakePostId'
           }
         }

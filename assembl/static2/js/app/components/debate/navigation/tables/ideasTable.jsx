@@ -9,6 +9,7 @@ import withLoadingIndicator from '../../../common/withLoadingIndicator';
 
 type IdeasTableProps = {
   identifier: string,
+  phaseId: string,
   onMenuItemClick: Function,
   data: {
     loading: boolean,
@@ -19,9 +20,17 @@ type IdeasTableProps = {
 };
 
 export function DumbIdeasTable(props: IdeasTableProps) {
-  const { identifier, onMenuItemClick, data } = props;
+  const { identifier, phaseId, onMenuItemClick, data } = props;
   const { ideas, rootIdea } = data;
-  return <MenuList items={ideas} rootItem={rootIdea && rootIdea.id} identifier={identifier} onMenuItemClick={onMenuItemClick} />;
+  return (
+    <MenuList
+      items={ideas}
+      rootItem={rootIdea && rootIdea.id}
+      phaseId={phaseId}
+      identifier={identifier}
+      onMenuItemClick={onMenuItemClick}
+    />
+  );
 }
 
 const IdeasTableWithData = graphql(AllIdeasQuery);

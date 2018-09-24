@@ -1,14 +1,12 @@
 # -*- coding: utf-8 -*-
 import json
-import pytest
 
-from graphql_relay.node.node import to_global_id, from_global_id
+from graphql_relay.node.node import from_global_id
 
-from assembl import models
 from assembl.graphql.schema import Schema as schema
 
 
-def test_graphql_numPosts_of_sub_idea_1(graphql_request, root_idea, subidea_1, subidea_1_1,
+def test_graphql_numPosts_of_sub_idea_1(phases, graphql_request, root_idea, subidea_1, subidea_1_1,
                                              subidea_1_1_1,
                                              idea_message_column_positive_on_subidea_1_1,
                                              idea_message_column_negative_on_subidea_1_1,
@@ -20,24 +18,25 @@ def test_graphql_numPosts_of_sub_idea_1(graphql_request, root_idea, subidea_1, s
     subidea_1_1.message_view_override = 'messageColumns'
     subidea_1_1.messages_in_parent = False
     subidea_1_1.db.flush()
-
     # This test verify that we don't care about messages_in_parent to count posts.
     res = schema.execute(
-        u"""query AllIdeasQuery ($identifier: String!){
-            ideas (identifier: $identifier) {
+        u"""query AllIdeasQuery($discussionPhaseId: Int!){
+            ideas(discussionPhaseId: $discussionPhaseId) {
               ... on Idea {
                 id
                 numPosts
               }
             }
-            rootIdea {
-              ... on Idea {
+            rootIdea(discussionPhaseId: $discussionPhaseId) {
+              ... on Node {
                 id
+              }
+              ... on IdeaInterface {
                 numPosts
               }
             }
         }
-        """, context_value=graphql_request, variable_values={"identifier": u"thread"})
+        """, context_value=graphql_request, variable_values={"discussionPhaseId": phases['thread'].id})
     assert res.errors is None
     root_idea = res.data['rootIdea']
 
@@ -55,12 +54,12 @@ def test_graphql_numPosts_of_sub_idea_1(graphql_request, root_idea, subidea_1, s
     assert grand_child_idea['numPosts'] == 1
 
 
-def test_graphql_get_all_ideas(graphql_request,
+def test_graphql_get_all_ideas(phases, graphql_request,
                                user_language_preference_en_cookie,
                                subidea_1_1_1):
     res = schema.execute(
-        u"""query AllIdeasQuery($lang: String!, $identifier: String!) {
-            ideas(identifier: $identifier) {
+        u"""query AllIdeasQuery($lang: String!, $discussionPhaseId: Int!) {
+            ideas(discussionPhaseId: $discussionPhaseId) {
               ... on Idea {
                 id
                 title(lang: $lang)
@@ -69,7 +68,7 @@ def test_graphql_get_all_ideas(graphql_request,
                 numPosts
                 numContributors
                 totalSentiments
-                numChildren(identifier: $identifier)
+                numChildren(discussionPhaseId: $discussionPhaseId)
                 parentId
                 order
                 posts(first:10) {
@@ -81,14 +80,14 @@ def test_graphql_get_all_ideas(graphql_request,
                 }
               }
             }
-            rootIdea {
-              ... on Idea {
+            rootIdea(discussionPhaseId: $discussionPhaseId) {
+              ... on Node {
                 id
               }
             }
         }
         """, context_value=graphql_request,
-        variable_values={"identifier": u"thread", "lang": u"en"})
+        variable_values={"discussionPhaseId": phases['thread'].id, "lang": u"en"})
     root_idea = res.data['rootIdea']
     assert root_idea['id'] is not None
     assert len(res.data['ideas']) == 3
@@ -114,7 +113,7 @@ def test_graphql_get_all_ideas(graphql_request,
     assert res.errors is None
 
 
-def test_graphql_get_all_ideas_multiColumns_phase(graphql_request,
+def test_graphql_get_all_ideas_multiColumns_phase(phases, graphql_request,
                                                   user_language_preference_en_cookie,
                                                   subidea_1,
                                                   subidea_1_1_1,
@@ -127,8 +126,8 @@ def test_graphql_get_all_ideas_multiColumns_phase(graphql_request,
     # the ideas query should return only subidea_1
     # We have a column on subidea_1_1, but messageColumns is not enabled on it.
     res = schema.execute(
-        u"""query AllIdeasQuery($lang: String!, $identifier: String!) {
-            ideas(identifier: $identifier) {
+        u"""query AllIdeasQuery($lang: String!, $discussionPhaseId: Int!) {
+            ideas(discussionPhaseId: $discussionPhaseId) {
               ... on Idea {
                 id
                 title(lang: $lang)
@@ -136,7 +135,7 @@ def test_graphql_get_all_ideas_multiColumns_phase(graphql_request,
                 messageViewOverride
                 numPosts
                 numContributors
-                numChildren(identifier: $identifier)
+                numChildren(discussionPhaseId: $discussionPhaseId)
                 parentId
                 order
                 posts(first:10) {
@@ -148,14 +147,14 @@ def test_graphql_get_all_ideas_multiColumns_phase(graphql_request,
                 }
               }
             }
-            rootIdea {
-              ... on Idea {
+            rootIdea(discussionPhaseId: $discussionPhaseId) {
+              ... on Node {
                 id
               }
             }
         }
         """, context_value=graphql_request,
-        variable_values={"identifier": u"multiColumns", "lang": u"en"})
+        variable_values={"discussionPhaseId": phases['multiColumns'].id, "lang": u"en"})
     root_idea = res.data['rootIdea']
     assert root_idea['id'] is not None
     assert len(res.data['ideas']) == 1
@@ -171,19 +170,77 @@ def test_graphql_get_all_ideas_multiColumns_phase(graphql_request,
     subidea_1.db.flush()
 
 
-def test_graphql_get_all_ideas_with_modified_order(graphql_request,
+def test_graphql_get_all_ideas_thread_without_vote_proposals(phases, graphql_request,
+                               user_language_preference_en_cookie,
+                               subidea_1_1_1, vote_proposal):
+    # proposals of vote session is attached to a root idea of the vote session phase, child
+    # of discussion.root_idea. Those proposals shouldn't be returned.
+    res = schema.execute(
+        u"""query AllIdeasQuery($lang: String!, $discussionPhaseId: Int!) {
+            ideas(discussionPhaseId: $discussionPhaseId) {
+              ... on Idea {
+                id
+                title(lang: $lang)
+              }
+            }
+            rootIdea(discussionPhaseId: $discussionPhaseId) {
+              ... on Node {
+                id
+              }
+            }
+        }
+        """, context_value=graphql_request,
+        variable_values={"discussionPhaseId": phases['thread'].id, "lang": u"en"})
+    root_idea = res.data['rootIdea']
+    assert root_idea['id'] is not None
+    assert len(res.data['ideas']) == 3
+
+
+def test_graphql_get_all_ideas_survey_phase(phases, graphql_request,
+                               user_language_preference_en_cookie,
+                               thematic_and_question):
+    res = schema.execute(
+        u"""query AllIdeasQuery($lang: String!, $discussionPhaseId: Int!) {
+              ideas(discussionPhaseId: $discussionPhaseId) {
+                ... on Thematic {
+                  id
+                  title(lang: $lang)
+                  parentId
+                  ancestors
+                }
+              }
+              rootIdea(discussionPhaseId: $discussionPhaseId) {
+                ... on Thematic {
+                  id
+                }
+              }
+            }
+        """,
+        context_value=graphql_request,
+        variable_values={"discussionPhaseId": phases['survey'].id, "lang": u"en"})
+    assert res.errors is None
+    root_idea = res.data['rootIdea']
+    assert root_idea['id'] is not None
+    assert len(res.data['ideas']) == 1
+    first_idea = res.data['ideas'][0]
+    assert first_idea['title'] == u'Understanding the dynamics and issues'
+    assert first_idea['parentId'] == root_idea['id']
+    assert root_idea['id'] in first_idea['ancestors']
+
+
+def test_graphql_get_all_ideas_with_modified_order(phases, graphql_request,
                                user_language_preference_en_cookie,
                                subidea_1_1_1_1_1, subidea_1_1_1_1_2):
     res = schema.execute(
-        u"""query AllIdeasQuery($lang: String!, $identifier: String!) {
-            ideas(identifier: $identifier) {
+        u"""query AllIdeasQuery($lang: String!, $discussionPhaseId: Int!) {
+            ideas(discussionPhaseId: $discussionPhaseId) {
               ... on Idea {
                 id
                 title(lang: $lang)
                 titleEntries { value, localeCode }
                 numPosts
                 numContributors
-                numChildren(identifier: $identifier)
+                numChildren(discussionPhaseId: $discussionPhaseId)
                 parentId
                 order
                 posts(first:10) {
@@ -195,14 +252,14 @@ def test_graphql_get_all_ideas_with_modified_order(graphql_request,
                 }
               }
             }
-            rootIdea {
-              ... on Idea {
+            rootIdea(discussionPhaseId: $discussionPhaseId) {
+              ... on Node {
                 id
               }
             }
         }
         """, context_value=graphql_request,
-        variable_values={"identifier": u"thread", "lang": u"en"})
+        variable_values={"discussionPhaseId": phases['thread'].id, "lang": u"en"})
     assert [idea['title'] for idea in res.data['ideas']] == [
         u'Favor economic growth',
         u'Lower taxes',
@@ -216,15 +273,15 @@ def test_graphql_get_all_ideas_with_modified_order(graphql_request,
     subidea_1_1_1_1_1.source_links[0].order = 2.0
     subidea_1_1_1_1_1.db.flush()
     res = schema.execute(
-        u"""query AllIdeasQuery($lang: String!, $identifier: String!) {
-            ideas(identifier: $identifier) {
+        u"""query AllIdeasQuery($lang: String!, $discussionPhaseId: Int!) {
+            ideas(discussionPhaseId: $discussionPhaseId) {
               ... on Idea {
                 id
                 title(lang: $lang)
                 titleEntries { value, localeCode }
                 numPosts
                 numContributors
-                numChildren(identifier: $identifier)
+                numChildren(discussionPhaseId: $discussionPhaseId)
                 parentId
                 order
                 posts(first:10) {
@@ -236,14 +293,14 @@ def test_graphql_get_all_ideas_with_modified_order(graphql_request,
                 }
               }
             }
-            rootIdea {
-              ... on Idea {
+            rootIdea(discussionPhaseId: $discussionPhaseId) {
+              ... on Node {
                 id
               }
             }
         }
         """, context_value=graphql_request,
-        variable_values={"identifier": u"thread", "lang": u"en"})
+        variable_values={"discussionPhaseId": phases['thread'].id, "lang": u"en"})
     assert [idea['title'] for idea in res.data['ideas']] == [
         u'Favor economic growth',
         u'Lower taxes',
@@ -281,10 +338,10 @@ def test_graphql_get_direct_ideas_from_root_idea(graphql_request, subidea_1_1_1)
     assert res.data['rootIdea']['children'][0]['title'] == u'Favor economic growth'
 
 
-def test_graphql_discussion_counters_survey_phase_no_thematic(graphql_request):
+def test_graphql_discussion_counters_survey_phase_no_thematic(graphql_request, phases):
     res = schema.execute(
-        u"""query RootIdeaStats($identifier: String) {
-              rootIdea(identifier: $identifier) {
+        u"""query RootIdeaStats($discussionPhaseId: Int) {
+              rootIdea(discussionPhaseId: $discussionPhaseId) {
                 ... on Node {
                   id
                 }
@@ -294,15 +351,15 @@ def test_graphql_discussion_counters_survey_phase_no_thematic(graphql_request):
               }
               numParticipants
             }
-        """, context_value=graphql_request, variable_values={'identifier': 'survey'})
+        """, context_value=graphql_request, variable_values={'discussionPhaseId': phases['survey'].id})
     assert res.data['rootIdea'] is None
     assert res.data['numParticipants'] == 1
 
 
-def test_graphql_discussion_counters_survey_phase_with_proposals(graphql_request, proposals):
+def test_graphql_discussion_counters_survey_phase_with_proposals(graphql_request, proposals, phases):
     res = schema.execute(
-        u"""query RootIdeaStats($identifier: String) {
-              rootIdea(identifier: $identifier) {
+        u"""query RootIdeaStats($discussionPhaseId: Int) {
+              rootIdea(discussionPhaseId: $discussionPhaseId) {
                 ... on Node {
                   id
                 }
@@ -313,16 +370,17 @@ def test_graphql_discussion_counters_survey_phase_with_proposals(graphql_request
               }
               numParticipants
             }
-        """, context_value=graphql_request, variable_values={'identifier': 'survey'})
+        """, context_value=graphql_request, variable_values={'discussionPhaseId': phases['survey'].id})
+    assert res.data['rootIdea']['id']
     assert res.data['rootIdea']['numTotalPosts'] == 15  # all posts
     assert res.data['rootIdea']['numPosts'] == 15  # phase 1 posts
     assert res.data['numParticipants'] == 1
 
 
-def test_graphql_discussion_counters_thread_phase(graphql_request, proposals):
+def test_graphql_discussion_counters_thread_phase(graphql_request, proposals, phases):
     res = schema.execute(
-        u"""query RootIdeaStats($identifier: String) {
-              rootIdea(identifier: $identifier) {
+        u"""query RootIdeaStats($discussionPhaseId: Int) {
+              rootIdea(discussionPhaseId: $discussionPhaseId) {
                 ... on Node {
                   id
                 }
@@ -333,13 +391,14 @@ def test_graphql_discussion_counters_thread_phase(graphql_request, proposals):
               }
               numParticipants
             }
-        """, context_value=graphql_request, variable_values={'identifier': 'thread'})
+        """, context_value=graphql_request, variable_values={'discussionPhaseId': phases['thread'].id})
+    assert res.data['rootIdea']['id']
     assert res.data['rootIdea']['numTotalPosts'] == 15  # all posts
     assert res.data['rootIdea']['numPosts'] == 15  # phase 1+2 posts counted when current phase is thread
     assert res.data['numParticipants'] == 1
 
 
-def test_graphql_discussion_counters_thread_phase_deleted_thematic(graphql_request, thematic_and_question, proposals):
+def test_graphql_discussion_counters_thread_phase_deleted_thematic(graphql_request, thematic_and_question, proposals, phases):
     thematic_id, first_question_id = thematic_and_question
     res = schema.execute(
         u"""mutation DeleteThematic($id: ID!) {
@@ -351,8 +410,8 @@ def test_graphql_discussion_counters_thread_phase_deleted_thematic(graphql_reque
     assert res.errors is None
     assert res.data['deleteThematic']['success'] is True
     res = schema.execute(
-        u"""query RootIdeaStats($identifier: String) {
-              rootIdea(identifier: $identifier) {
+        u"""query RootIdeaStats($discussionPhaseId: Int) {
+              rootIdea(discussionPhaseId: $discussionPhaseId) {
                 ... on Node {
                   id
                 }
@@ -363,17 +422,18 @@ def test_graphql_discussion_counters_thread_phase_deleted_thematic(graphql_reque
               }
               numParticipants
             }
-        """, context_value=graphql_request, variable_values={'identifier': 'thread'})
+        """, context_value=graphql_request, variable_values={'discussionPhaseId': phases['thread'].id})
+    assert res.data['rootIdea']['id']
     assert res.data['rootIdea']['numTotalPosts'] == 15  # all posts
     # But the posts are not bound anymore
     assert res.data['rootIdea']['numPosts'] == 0
     assert res.data['numParticipants'] == 1
 
 
-def test_graphql_discussion_counters_thread_phase_with_posts(graphql_request, proposals, top_post_in_thread_phase):
+def test_graphql_discussion_counters_thread_phase_with_posts(graphql_request, proposals, top_post_in_thread_phase, phases):
     res = schema.execute(
-        u"""query RootIdeaStats($identifier: String) {
-              rootIdea(identifier: $identifier) {
+        u"""query RootIdeaStats($discussionPhaseId: Int) {
+              rootIdea(discussionPhaseId: $discussionPhaseId) {
                 ... on Node {
                   id
                 }
@@ -384,9 +444,32 @@ def test_graphql_discussion_counters_thread_phase_with_posts(graphql_request, pr
               }
               numParticipants
             }
-        """, context_value=graphql_request, variable_values={'identifier': 'thread'})
+        """, context_value=graphql_request, variable_values={'discussionPhaseId': phases['thread'].id})
+    assert res.data['rootIdea']['id']
     assert res.data['rootIdea']['numTotalPosts'] == 16  # all posts
     assert res.data['rootIdea']['numPosts'] == 16  # phase 1+2 posts counted when current phase is thread
+    # 16 because thread phase is on discussion.root_idea and survey phase is a sub root idea of it.
+    assert res.data['numParticipants'] == 1
+
+
+def test_graphql_discussion_counters_all_phases(graphql_request, proposals, top_post_in_thread_phase, phases):
+    res = schema.execute(
+        u"""query RootIdeaStats($discussionPhaseId: Int) {
+              rootIdea(discussionPhaseId: $discussionPhaseId) {
+                ... on Node {
+                  id
+                }
+                ... on IdeaInterface {
+                  numPosts,
+                  numTotalPosts
+                }
+              }
+              numParticipants
+            }
+        """, context_value=graphql_request, variable_values={'discussionPhaseId': None})
+    assert res.data['rootIdea']['id']
+    assert res.data['rootIdea']['numTotalPosts'] == 16  # all posts
+    assert res.data['rootIdea']['numPosts'] == 16  # phase 1+2 posts counted because all posts come from discussion.root_idea
     assert res.data['numParticipants'] == 1
 
 
@@ -466,9 +549,7 @@ query Post($id: ID!) {
 
 
 def test_announcement_on_idea(graphql_request, announcement_en_fr):
-    from graphene.relay import Node
-    idea_id = announcement_en_fr.idea.id
-    node_id = Node.to_global_id('Idea', idea_id)
+    node_id = announcement_en_fr.idea.graphene_id()
     res = schema.execute(u"""
 query Idea($id: ID!, $lang: String!){
     idea: node(id: $id) {
@@ -494,9 +575,7 @@ query Idea($id: ID!, $lang: String!){
 
 
 def test_no_announcement_on_ideas(graphql_request, idea_with_en_fr):
-    from graphene.relay import Node
-    idea_id = idea_with_en_fr.id
-    node_id = Node.to_global_id('Idea', idea_id)
+    node_id = idea_with_en_fr.graphene_id()
     res = schema.execute(u"""
 query Idea($id: ID!, $lang: String!){
     idea: node(id: $id) {
@@ -592,7 +671,7 @@ query QuestionPosts($id: ID!, $first: Int!, $after: String!) {
     assert all(post['node']['id'] in proposals for post in question_posts)
 
 
-def test_graphql_create_bright_mirror(graphql_request, graphql_registry, test_session):
+def test_graphql_create_bright_mirror(graphql_request, graphql_registry, test_session, phases):
     import os
     from io import BytesIO
 
@@ -607,7 +686,7 @@ def test_graphql_create_bright_mirror(graphql_request, graphql_registry, test_se
         graphql_registry['createThematic'],
         context_value=graphql_request,
         variable_values={
-            'identifier': 'brightMirror',
+            'discussionPhaseId': phases['brightMirror'].id,
             'messageViewOverride': 'brightMirror',
             'titleEntries': [
                 {'value': u"Comprendre les dynamiques et les enjeux", 'localeCode': u"fr"},
@@ -644,7 +723,7 @@ def test_graphql_create_bright_mirror(graphql_request, graphql_registry, test_se
     assert idea['order'] == 1.0
 
 
-def test_graphql_create_bright_mirror_no_title(graphql_request, graphql_registry, test_session):
+def test_graphql_create_bright_mirror_no_title(phases, graphql_request, graphql_registry, test_session):
     import os
     from io import BytesIO
 
@@ -659,7 +738,7 @@ def test_graphql_create_bright_mirror_no_title(graphql_request, graphql_registry
         graphql_registry['createThematic'],
         context_value=graphql_request,
         variable_values={
-            'identifier': 'brightMirror',
+            'discussionPhaseId': phases['brightMirror'].id,
             'messageViewOverride': 'brightMirror',
             'titleEntries': None,
             'descriptionEntries': [
@@ -682,7 +761,7 @@ def test_graphql_create_bright_mirror_no_title(graphql_request, graphql_registry
     assert 'Variable "$titleEntries" of required type "[LangStringEntryInput]!" was not provided.' == res.errors[0].args[0]
 
 
-def test_graphql_create_bright_mirror_empty_title(graphql_request, graphql_registry, test_session):
+def test_graphql_create_bright_mirror_empty_title(phases, graphql_request, graphql_registry, test_session):
     import os
     from io import BytesIO
 
@@ -697,7 +776,7 @@ def test_graphql_create_bright_mirror_empty_title(graphql_request, graphql_regis
         graphql_registry['createThematic'],
         context_value=graphql_request,
         variable_values={
-            'identifier': 'brightMirror',
+            'discussionPhaseId': phases['brightMirror'].id,
             'messageViewOverride': 'brightMirror',
             'titleEntries': [],
             'descriptionEntries': [
@@ -720,7 +799,7 @@ def test_graphql_create_bright_mirror_empty_title(graphql_request, graphql_regis
     assert "titleEntries needs at least one entry" in res.errors[0].args[0]
 
 
-def test_graphql_create_bright_mirror_announcement_empty_title(graphql_request, graphql_registry, test_session):
+def test_graphql_create_bright_mirror_announcement_empty_title(phases, graphql_request, graphql_registry, test_session):
     import os
     from io import BytesIO
 
@@ -735,7 +814,7 @@ def test_graphql_create_bright_mirror_announcement_empty_title(graphql_request, 
         graphql_registry['createThematic'],
         context_value=graphql_request,
         variable_values={
-            'identifier': 'brightMirror',
+            'discussionPhaseId': phases['brightMirror'].id,
             'messageViewOverride': 'brightMirror',
             'titleEntries': [
                 {'value': u"Comprendre les dynamiques et les enjeux", 'localeCode': u"fr"},
@@ -758,11 +837,11 @@ def test_graphql_create_bright_mirror_announcement_empty_title(graphql_request, 
     assert "Announcement titleEntries needs at least one entry" in res.errors[0].args[0]
 
 
-def test_graphql_get_bright_mirror(graphql_request, graphql_registry, bright_mirror, test_session):
+def test_graphql_get_bright_mirror(graphql_request, graphql_registry, bright_mirror, test_session, phases):
     res = schema.execute(
         graphql_registry['ThematicsQuery'],
         context_value=graphql_request,
-        variable_values={'identifier': u'brightMirror'}
+        variable_values={'discussionPhaseId': phases['brightMirror'].id}
         )
 
     assert res.errors is None
@@ -791,11 +870,11 @@ def test_graphql_get_bright_mirror(graphql_request, graphql_registry, bright_mir
     assert idea['order'] == 1.0
 
 
-def test_graphql_get_bright_mirror_noresult(graphql_request, graphql_registry):
+def test_graphql_get_bright_mirror_noresult(phases, graphql_request, graphql_registry):
     res = schema.execute(
         graphql_registry['ThematicsQuery'],
         context_value=graphql_request,
-        variable_values={'identifier': u'brightMirror'}
+        variable_values={'discussionPhaseId': phases['brightMirror'].id}
         )
 
     assert res.errors is None

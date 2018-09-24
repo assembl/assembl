@@ -17,6 +17,7 @@ from .langstring import (
     langstring_from_input_entries,
     update_langstring_from_input_entries
 )
+from assembl.models.timeline import Phases
 from .permissions_helpers import require_cls_permission, require_instance_permission
 from .types import SecureObjectType
 from .utils import DateTime, abort_transaction_on_exception
@@ -78,6 +79,13 @@ class CreateDiscussionPhase(graphene.Mutation):
         cls = models.DiscussionPhase
         require_cls_permission(CrudPermissions.CREATE, cls, context)
         discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        identifier = args.get('identifier')
+        is_thematics_table = True
+        if identifier in (Phases.multiColumns.value, Phases.thread.value):
+            # force is_thematics_table to False
+            is_thematics_table = False
+
         with cls.default_db.no_autoflush as db:
             title_entries = args.get('title_entries')
             if len(title_entries) == 0:
@@ -87,14 +95,14 @@ class CreateDiscussionPhase(graphene.Mutation):
             title_langstring = langstring_from_input_entries(title_entries)
             saobj = cls(
                 discussion_id=discussion_id,
-                identifier=args.get('identifier'),
-                is_thematics_table=args.get('is_thematics_table'),
+                identifier=identifier,
+                is_thematics_table=is_thematics_table,
                 title=title_langstring,
                 start=args.get('start'),
                 end=args.get('end'),
                 order=args.get('order'))
 
-            db.add(saobj)
+            discussion.timeline_events.append(saobj)
             db.flush()
 
         return CreateDiscussionPhase(discussion_phase=saobj)
@@ -136,8 +144,9 @@ class UpdateDiscussionPhase(graphene.Mutation):
             if description_entries is not None:
                 update_langstring_from_input_entries(phase, 'description', description_entries)
 
-            phase.identifier = args.get('identifier')
-            phase.is_thematics_table = args.get('is_thematics_table')
+            identifier = args.get('identifier')
+            phase.identifier = identifier
+#            phase.is_thematics_table = is_thematics_table
             # SQLAlchemy wants naive datetimes
             phase.start = args.get('start').replace(tzinfo=None)
             phase.end = args.get('end').replace(tzinfo=None)

@@ -142,7 +142,7 @@ class PostView extends React.PureComponent<Props, State> {
       nuggetsManager,
       rowIndex,
       originalLocale,
-      identifier,
+      phaseId,
       body,
       subject,
       modifiedSubject,
@@ -250,7 +250,7 @@ class PostView extends React.PureComponent<Props, State> {
                 routerParams={routerParams}
                 debateData={debateData}
                 postSubject={subject ? subject.replace('Re: ', '') : ''}
-                identifier={identifier}
+                phaseId={phaseId}
                 timeline={timeline}
               />
             </div>
@@ -265,7 +265,7 @@ class PostView extends React.PureComponent<Props, State> {
               textareaRef={answerTextareaRef}
               hideAnswerForm={this.hideAnswerForm}
               handleAnswerClick={this.handleAnswerClick}
-              identifier={identifier}
+              phaseId={phaseId}
             />
           </div>
         )}

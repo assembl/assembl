@@ -4,7 +4,7 @@ import { Grid, Row, Col } from 'react-bootstrap';
 
 import { get } from '../../utils/routeMap';
 import { getDiscussionSlug } from '../../utils/globalFunctions';
-import { getCurrentPhaseIdentifier } from '../../utils/timeline';
+import { getCurrentPhaseData } from '../../utils/timeline';
 import { browserHistory } from '../../router';
 import ParticipateButton from '../common/participateButton';
 
@@ -17,7 +17,7 @@ class Objectives extends React.Component {
   displayPhase() {
     const slug = { slug: getDiscussionSlug() };
     const { timeline } = this.props;
-    const currentPhaseIdentifier = getCurrentPhaseIdentifier(timeline);
+    const { currentPhaseIdentifier } = getCurrentPhaseData(timeline);
     browserHistory.push(get('debate', { ...slug, phase: currentPhaseIdentifier }));
   }
 

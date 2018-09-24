@@ -241,7 +241,7 @@ class IdeasLevel extends React.Component {
   }
 
   render() {
-    const { ideas, identifier, setSelectedIdeas, nbLevel, ideaLevel, selectedIdeasId } = this.props;
+    const { ideas, identifier, phaseId, setSelectedIdeas, nbLevel, ideaLevel, selectedIdeasId } = this.props;
     const { sliderLeftPosition, sliderCount, sliderContainerWidth, ideaPreviewWidth, sliderMarginTop } = this.state;
     const slug = getDiscussionSlug();
     const isRightLimitReached = this.isRightLimitReached();
@@ -297,7 +297,7 @@ class IdeasLevel extends React.Component {
                   numPosts={idea.numPosts}
                   numContributors={idea.numContributors}
                   numChildren={idea.numChildren}
-                  link={`${getRoute('idea', { slug: slug, phase: identifier, themeId: idea.id })}`}
+                  link={`${getRoute('idea', { slug: slug, phase: identifier, phaseId: phaseId, themeId: idea.id })}`}
                   title={truncate(idea.title, {
                     length: stringMaxLength(ideaLevel),
                     separator: ' ',

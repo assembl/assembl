@@ -22,6 +22,7 @@ describe('IdeasTable component', () => {
     };
     const props = {
       identifier: 'multiColumns',
+      phaseId: 'phaseFoo',
       data: data
     };
     const renderer = new ShallowRenderer();
