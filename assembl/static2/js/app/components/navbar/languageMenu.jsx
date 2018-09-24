@@ -7,6 +7,7 @@ import { NavDropdown, MenuItem } from 'react-bootstrap';
 import { getAvailableLocales } from '../../utils/i18n';
 import { addLanguagePreference } from '../../actions/adminActions';
 import withoutLoadingIndicator from '../common/withoutLoadingIndicator';
+import { setCookieItem } from '../../utils/globalFunctions';
 import getDiscussionPreferenceLanguage from '../../graphql/DiscussionPreferenceLanguage.graphql';
 
 const doNothing = () => {};
@@ -55,7 +56,7 @@ class LanguageMenu extends React.Component<Props, State> {
     if (locale === 'nb') {
       locale = 'no';
     }
-    document.cookie = `_LOCALE_=${locale}; path=/`;
+    setCookieItem('_LOCALE_', locale);
     changeLanguage(key);
     location.reload(true);
   }

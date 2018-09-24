@@ -181,16 +181,29 @@ export const getCookieItem = (sKey: string) => {
   );
 };
 
-export function setCookieItem(name: string, value: any) {
+const cookie = (key: string, value: string, expires: string, sensitive: boolean = false, path: string = '/'): string => {
+  // As a security policy, we want all cookies that are set to be set according to the scheme
+  // of the URL
+  // In order to test sensitivity, utilize the debateData's requireSecureConnection and what type of
+  // data is being put as a cookie
+  let template = `${key}=${value};path=${path};expires=${expires}`;
+  if (sensitive) {
+    template += ';secure;HttpOnly;';
+  }
+  return template;
+};
+
+export function setCookieItem(name: string, value: any, sensitive: boolean = false) {
   const date = new Date();
   date.setMonth(date.getMonth() + 13);
-  document.cookie = `${name}=${value}; path=/;expires=${date.toString()}`;
+  document.cookie = cookie(name, value, date.toString(), sensitive);
 }
 
 export function deleteCookieItem(name: string, path: string) {
   if (getCookieItem(name)) {
     // Set an expiration date in the past to delete the cookie in the browser
-    document.cookie = `${name}=;path=${path};expires=Thu, 28 Aug 1993 00:00:01 GTM;`;
+    const expiryDate = 'Thu, 28 Aug 1993 00:00:01 GTM';
+    document.cookie = cookie(name, '', expiryDate, false, path);
   }
 }
 

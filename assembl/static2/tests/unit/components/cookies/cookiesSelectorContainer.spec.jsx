@@ -151,7 +151,7 @@ describe('CookiesSelectorContainer component', () => {
       date.setMonth(date.getMonth() + 13);
       expect(document.cookie).toBe(
         'cookies_configuration=ACCEPT_TRACKING_ON_DISCUSSION,ACCEPT_SESSION_ON_DISCUSSION,ACCEPT_LOCALE,' +
-          `ACCEPT_PRIVACY_POLICY_ON_DISCUSSION,ACCEPT_USER_GUIDELINE_ON_DISCUSSION,ACCEPT_CGU; path=/;expires=${date}`
+          `ACCEPT_PRIVACY_POLICY_ON_DISCUSSION,ACCEPT_USER_GUIDELINE_ON_DISCUSSION,ACCEPT_CGU;path=/;expires=${date}`
       );
     });
   });
