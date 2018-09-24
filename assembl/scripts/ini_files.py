@@ -108,6 +108,8 @@ def fill_template(template, config, output=None):
         with open(template) as tmpl:
             tmpl = env.from_string(tmpl.read())
         # Boolean overloading
+        # Jinja should interpret 'false' as False but no:
+        # https://github.com/ansible/ansible/issues/14983
         for (k, v) in config.items():
             if str(v).lower() == 'false':
                 config[k] = False
