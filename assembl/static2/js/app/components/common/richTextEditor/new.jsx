@@ -186,6 +186,7 @@ export default class RichTextEditor extends React.Component<Props, State> {
           <Editor
             editorState={editorState}
             onChange={onChange}
+            onFocus={this.handleEditorFocus}
             placeholder={placeholder}
             plugins={this.plugins}
             ref={(e) => {
