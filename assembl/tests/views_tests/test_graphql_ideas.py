@@ -545,7 +545,7 @@ query Post($id: ID!) {
                 {u'body': u'super important quote',
                  u'important': True},
                 ]
-    }}
+            }}
 
 
 def test_announcement_on_idea(graphql_request, announcement_en_fr):
@@ -622,15 +622,15 @@ query Question($lang: String!, $id: ID!) {
     })
 
     assert json.loads(json.dumps(res.data)) == {
-      u'question': {
-          u'thematic': {
-              u'id': thematic_and_question[0],
-              u'img': None,
-              u'title': u'Understanding the dynamics and issues'
-          },
-          u'id': node_id,
-          u'title': u"Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?"
-      }
+        u'question': {
+            u'thematic': {
+                u'id': thematic_and_question[0],
+                u'img': None,
+                u'title': u'Understanding the dynamics and issues'
+                },
+            u'id': node_id,
+            u'title': u"Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?"
+            }
     }
 
 
@@ -667,7 +667,7 @@ query QuestionPosts($id: ID!, $first: Int!, $after: String!) {
     result = json.loads(json.dumps(res.data))
     assert 'question' in result and 'posts' in result['question'] and 'edges' in result['question']['posts']
     question_posts = result['question']['posts']['edges']
-    assert len(question_posts) ==  len_proposals
+    assert len(question_posts) == len_proposals
     assert all(post['node']['id'] in proposals for post in question_posts)
 
 
@@ -879,3 +879,88 @@ def test_graphql_get_bright_mirror_noresult(phases, graphql_request, graphql_reg
 
     assert res.errors is None
     assert len(res.data['thematics']) == 0
+
+
+def test_graphql_bright_mirror_should_get_only_published_posts(graphql_request, graphql_registry, bright_mirror,
+                                                        post_published_for_bright_mirror,
+                                                        post_draft_for_bright_mirror, test_session):
+
+    res = schema.execute(u"""
+        query Idea($id: ID!) {
+            idea: node(id: $id) {
+                ... on Idea {
+                    numPosts
+                    posts {
+                        edges {
+                            node {
+                                ... on Post { subject }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+      """, context_value=graphql_request, variable_values={
+        "id": bright_mirror,
+        })
+    assert json.loads(json.dumps(res.data)) == {
+        u'idea': {
+            u'numPosts': 1,
+            u'posts': {
+                u'edges': [
+                    {
+                        u'node': {
+                            u'subject': u'Published'
+                        }
+                    }
+                ]
+            }
+        }
+    }
+
+
+def test_graphql_bright_mirror_get_all_posts(graphql_request, graphql_registry, bright_mirror,
+                                                        post_published_for_bright_mirror, admin_user,
+                                                        post_draft_for_bright_mirror, test_session):
+    post_published_for_bright_mirror.creator = admin_user
+    post_published_for_bright_mirror.db.flush()
+    post_draft_for_bright_mirror.creator = admin_user
+    post_draft_for_bright_mirror.db.flush()
+
+    res = schema.execute(u"""
+        query Idea($id: ID!) {
+            idea: node(id: $id) {
+                ... on Idea {
+                    numPosts
+                    posts {
+                        edges {
+                            node {
+                                ... on Post { subject }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+      """, context_value=graphql_request, variable_values={
+        "id": bright_mirror,
+        })
+    assert json.loads(json.dumps(res.data)) == {
+        u'idea': {
+            u'numPosts': 1,
+            u'posts': {
+                u'edges': [
+                    {
+                        u'node': {
+                            u'subject': u'Draft'
+                        }
+                    },
+                    {
+                        u'node': {
+                            u'subject': u'Published'
+                        }
+                    }
+                ]
+            }
+        }
+    }
