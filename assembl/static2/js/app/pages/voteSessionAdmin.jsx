@@ -506,8 +506,7 @@ class VoteSessionAdmin extends React.Component<Props, State> {
   render() {
     const { editLocale, section, debateId, voteSessionId } = this.props;
     const saveDisabled = !this.dataHaveChanged();
-    // const currentStep = parseInt(section, 10);
-    const exportLink = ['vote_results_csv', 'extract_csv_voters'].map(option => ({
+    const exportLinks = ['vote_results_csv', 'extract_csv_voters'].map(option => ({
       msgId: `vote.${snakeToCamel(option)}`,
       url: get('exportVoteSessionData', {
         debateId: debateId,
@@ -521,7 +520,7 @@ class VoteSessionAdmin extends React.Component<Props, State> {
         {section === '1' && <PageForm editLocale={editLocale} />}
         {section === '2' && <ModulesSection />}
         {section === '3' && <VoteProposalsSection />}
-        {section === '4' && <ExportSection exportLink={exportLink} annotation="voteSessionAnnotation" />}
+        {section === '4' && <ExportSection exportLink={exportLinks} annotation="voteSessionAnnotation" />}
         {section && <Navbar currentStep={section} steps={['1', '2', '3', '4']} phaseIdentifier={PHASES.voteSession} />}
       </div>
     );
