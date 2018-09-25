@@ -29,7 +29,8 @@ import deleteProposalMutation from '../graphql/mutations/deleteProposal.graphql'
 import { convertEntriesToHTML, convertImmutableEntriesToJS } from '../utils/draftjs';
 import { get } from '../utils/routeMap';
 import { displayAlert, displayCustomModal, closeModal } from '../utils/utilityManager';
-import { getDiscussionSlug, snakeToCamel } from '../utils/globalFunctions';
+import { getDiscussionSlug, snakeToCamel, fromGlobalId } from '../utils/globalFunctions';
+import { PHASES } from '../constants';
 
 type VoteModule = {
   choices?: Array<VoteChoice>,
@@ -505,8 +506,8 @@ class VoteSessionAdmin extends React.Component<Props, State> {
   render() {
     const { editLocale, section, debateId, voteSessionId } = this.props;
     const saveDisabled = !this.dataHaveChanged();
-    const currentStep = parseInt(section, 10);
-    const exportLinks = ['vote_results_csv', 'extract_csv_voters'].map(option => ({
+    // const currentStep = parseInt(section, 10);
+    const exportLink = ['vote_results_csv', 'extract_csv_voters'].map(option => ({
       msgId: `vote.${snakeToCamel(option)}`,
       url: get('exportVoteSessionData', {
         debateId: debateId,
