@@ -11,9 +11,6 @@ import type {
   FictionCommentFormState
 } from '../../../../../js/app/components/debate/brightMirror/fictionCommentForm';
 
-// Import existing storybook data
-import { defaultFictionCommentProps } from '../../../../../js/app/stories/components/debate/brightMirror/fictionCommentForm.stories';
-
 // Separate the snapshots in directories next to each component
 // Name should match with the story name
 initStoryshots({
@@ -28,7 +25,6 @@ describe('<FictionCommentForm /> - with shallow', () => {
 
   beforeEach(() => {
     fictionCommentForm = {
-      ...defaultFictionCommentProps,
       onCancelCommentCallback: jest.fn(),
       onSubmitCommentCallback: jest.fn()
     };

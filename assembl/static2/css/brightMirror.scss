@@ -3,6 +3,13 @@
 $light-khaki: #f1fbe5;
 $duck-egg-blue: #b7f4f0;
 
+// Other colors
+$blue-violet: #5404d7;
+$hospital-green: #93e79d;
+// Striped background colors
+$ice: #d2ffee;
+$alt-ice: #6a9986;
+
 $fiction-toolbar-icon-size: 17px;
 
 // Mixins
@@ -34,6 +41,55 @@ $fiction-toolbar-icon-size: 17px;
   @include set-background(default);
 }
 
+.bright-mirror-comments {
+  // Striped background
+  background:
+    repeating-linear-gradient(
+      -45deg,
+      $ice,
+      $ice 4px,
+      $white 2px,
+      $white 7px
+    );
+  padding-left: 0;
+  padding-right: 0;
+
+  .comments-header,
+  .comments-content {
+    padding: 30px 18px;
+  }
+
+  .comments-header {
+    .title {
+      color: $black;
+      font-family: $font-family4;
+      font-size: $font-size-l;
+      font-weight: 300;
+      line-height: 52px;
+      letter-spacing: 2px;
+    }
+
+    .img-responsive {
+      margin: 0 auto;
+    }
+
+    .subtitle {
+      color: $black;
+      font-family: $font-family;
+      font-size: $font-size-ml;
+      letter-spacing: 1.1px;
+    }
+  }
+
+  .comments-content {
+    background-color: $white;
+
+    .comment-container {
+      padding-bottom: 25px;
+    }
+  }
+}
+
 @media screen and (min-width: $screen-sm-min) {
   .bright-mirror-fiction {
     .back-btn {
@@ -42,6 +98,17 @@ $fiction-toolbar-icon-size: 17px;
 
     .container-fluid {
       padding: 25px 54px 90px 54px;
+    }
+  }
+
+  .bright-mirror-comments {
+    .comments-header,
+    .comments-content {
+      padding: 45px 54px;
+    }
+
+    .comments-content {
+      padding-top: 50px;
     }
   }
 }
@@ -58,6 +125,20 @@ $fiction-toolbar-icon-size: 17px;
       padding: 60px 285px 90px 295px;
     }
   }
+
+  .bright-mirror-comments {
+    padding-left: 285px;
+    padding-right: 285px;
+
+    .comments-header {
+      padding-top: 115px;
+
+      .title {
+        font-size: $font-size-xl;
+        margin-bottom: 35px;
+      }
+    }
+  }
 }
 
 // Component imports
@@ -65,4 +146,5 @@ $fiction-toolbar-icon-size: 17px;
 @import "components/fictionHeader";
 @import "components/fictionToolbar";
 @import "components/fictionBody";
+@import "components/fictionCommentForm";
 @import "components/fictionComment";

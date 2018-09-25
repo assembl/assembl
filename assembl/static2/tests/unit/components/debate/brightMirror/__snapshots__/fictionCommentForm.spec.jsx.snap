@@ -10,41 +10,47 @@ exports[`Storyshots FictionCommentForm default 1`] = `
       }
     }
   >
-    <form>
+    <form
+      className="comment-form"
+    >
       <div
-        className="comment-textarea form-group"
+        className="textarea-with-buttons-container"
       >
-        <label
-          className="control-label sr-only"
-          htmlFor="comment-textarea"
+        <div
+          className="comment-textarea form-group"
         >
-          Commentaires
-        </label>
-        <textarea
-          className="form-control"
-          id="comment-textarea"
-          onChange={[Function]}
-          placeholder="Rejoins le débat..."
-          type={undefined}
-          value=""
-        />
+          <label
+            className="control-label sr-only"
+            htmlFor="comment-textarea"
+          >
+            Commentaires
+          </label>
+          <textarea
+            className="form-control"
+            id="comment-textarea"
+            onChange={[Function]}
+            placeholder="Rejoins le débat..."
+            type={undefined}
+            value=""
+          />
+        </div>
+        <button
+          className="cancel btn btn-default"
+          disabled={false}
+          onClick={[Function]}
+          type="button"
+        >
+          Annuler
+        </button>
+        <button
+          className="submit btn btn-default"
+          disabled={true}
+          onClick={[Function]}
+          type="button"
+        >
+          Commenter
+        </button>
       </div>
-      <button
-        className="cancel btn btn-default"
-        disabled={false}
-        onClick={[Function]}
-        type="button"
-      >
-        Annuler
-      </button>
-      <button
-        className="submit btn btn-default"
-        disabled={true}
-        onClick={[Function]}
-        type="button"
-      >
-        Commenter
-      </button>
     </form>
   </div>
   <button

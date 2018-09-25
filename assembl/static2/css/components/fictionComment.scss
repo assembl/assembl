@@ -9,7 +9,9 @@
   .content {
     color: $black;
     font-size: $font-size-xs;
+    padding-bottom: 25px;
     padding-left: 10px;
+    width: 100%;
 
     .meta {
       display: flex;
@@ -37,7 +39,8 @@
     }
 
     .toolbar {
-      display: flex;
+      display: none;
+      // display: flex;
 
       .assembl-icon-up-open,
       .assembl-icon-down-open {

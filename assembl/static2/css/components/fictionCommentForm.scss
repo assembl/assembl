@@ -1,0 +1,35 @@
+.comment-form {
+  padding-bottom: 30px;
+
+  .textarea-with-buttons-container {
+    border: 2px solid $blue-violet;
+    border-radius: 4px;
+
+    .form-control {
+      border: none;
+    }
+
+    .comment-textarea {
+      margin-bottom: 0;
+    }
+
+    .btn {
+      border-color: transparent;
+      height: 54px;
+    }
+  }
+}
+
+@media screen and (min-width: $screen-sm-min) {
+  .comment-form {
+    padding-bottom: 50px;
+
+    .textarea-with-buttons-container {
+      display: flex;
+
+      .comment-textarea {
+        flex-grow: 1;
+      }
+    }
+  }
+}

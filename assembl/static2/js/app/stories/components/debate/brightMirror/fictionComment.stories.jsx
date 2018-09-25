@@ -7,13 +7,13 @@ import { withKnobs, text, number, object } from '@storybook/addon-knobs';
 /* eslint-enable */
 
 // import components
-import FictionComment from '../../../../components/debate/brightMirror/fictionComment';
-import type { FictionCommentProps } from '../../../../components/debate/brightMirror/fictionComment';
+import { FictionComment } from '../../../../components/debate/brightMirror/fictionComment';
+import type { FictionCommentGraphQLProps } from '../../../../components/debate/brightMirror/fictionComment';
 
 // import existing storybook data
 import { defaultCircleAvatar } from './circleAvatar.stories';
 
-export const defaultFictionComment: FictionCommentProps = {
+export const defaultFictionComment: FictionCommentGraphQLProps = {
   authorFullname: 'Helen Aguilar',
   publishedDate: '2018-07-09',
   displayedPublishedDate: 'August 8th, 2018',

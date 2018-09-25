@@ -10,7 +10,8 @@ import FictionHeader from '../../../components/debate/brightMirror/fictionHeader
 import FictionToolbar from '../../../components/debate/brightMirror/fictionToolbar';
 import FictionBody from '../../../components/debate/brightMirror/fictionBody';
 import BackButton from '../../../components/debate/common/backButton';
-import FictionComment from '../../../components/debate/brightMirror/fictionComment';
+import FictionCommentForm from '../../../components/debate/brightMirror/fictionCommentForm';
+import { FictionComment } from '../../../components/debate/brightMirror/fictionComment';
 
 configure({ adapter: new Adapter() });
 
@@ -37,7 +38,11 @@ describe('<BrightMirrorFiction /> - with shallow', () => {
     expect(wrapper.find(FictionBody)).toHaveLength(1);
   });
 
+  it('should render a FictionCommentForm', () => {
+    expect(wrapper.find(FictionCommentForm)).toHaveLength(1);
+  });
+
   it('should render a FictionComment', () => {
-    expect(wrapper.find(FictionComment)).toHaveLength(1);
+    expect(wrapper.find(FictionComment)).toHaveLength(6);
   });
 });

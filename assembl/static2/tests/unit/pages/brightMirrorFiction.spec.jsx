@@ -1,10 +1,12 @@
 // @flow
 import React from 'react';
+import initStoryshots from '@storybook/addon-storyshots';
 import { configure, mount } from 'enzyme';
 import { MockedProvider } from 'react-apollo/test-utils';
 import Adapter from 'enzyme-adapter-react-16';
 // Graphql imports
 import BrightMirrorFictionQuery from '../../../js/app/graphql/BrightMirrorFictionQuery.graphql';
+import IdeaWithCommentsQuery from '../../../js/app/graphql/IdeaWithPostsQuery.graphql';
 // Containers import
 import { BrightMirrorFiction } from '../../../js/app/pages/brightMirrorFiction';
 // Components imports
@@ -12,25 +14,26 @@ import FictionHeader from '../../../js/app/components/debate/brightMirror/fictio
 import FictionToolbar from '../../../js/app/components/debate/brightMirror/fictionToolbar';
 import FictionBody from '../../../js/app/components/debate/brightMirror/fictionBody';
 import FictionCommentForm from '../../../js/app/components/debate/brightMirror/fictionCommentForm';
+import FictionCommentList from '../../../js/app/components/debate/brightMirror/fictionCommentList';
 // Constant imports
 import { PublicationStates } from '../../../js/app/constants';
 // Type imports
-import type { BrightMirrorFictionProps, BrightMirrorFictionData } from '../../../js/app/pages/brightMirrorFiction';
+import type {
+  BrightMirrorFictionProps,
+  BrightMirrorFictionData,
+  IdeaWithCommentsData
+} from '../../../js/app/pages/brightMirrorFiction';
+
+// Separate the snapshots in directories next to each component
+// Name should match with the story name
+initStoryshots({
+  storyKindRegex: /^BrightMirrorFiction$/
+});
 
 configure({ adapter: new Adapter() });
 
 // Mock utils functions
 jest.mock('../../../js/app/utils/utilityManager', () => ({ displayAlert: jest.fn() }));
-
-const brightMirrorFictionPropsTemplate = {
-  slug: 'voluptatem-veritatis-ea',
-  phase: 'hic',
-  themeId: 'nihil',
-  fictionId: 'deleniti',
-  contentLocale: 'en',
-  // Mutation function
-  createComment: undefined
-};
 
 const brightMirrorFictionDataTemplate = {
   fiction: {
@@ -49,10 +52,36 @@ const brightMirrorFictionDataTemplate = {
   }
 };
 
+const ideaWithCommentsDataTemplate = {
+  idea: {
+    id: 'aaaaaaaaaa',
+    numPosts: 999,
+    posts: {
+      edges: [
+        { node: { id: 'aaaaaaaaaa', parentId: 'fictionId' } },
+        { node: { id: 'bbbbbbbbbb', parentId: 'fictionId' } },
+        { node: { id: 'cccccccccc', parentId: 'fictionId' } }
+      ]
+    }
+  }
+};
+
+const brightMirrorFictionPropsTemplate = {
+  slug: 'voluptatem-veritatis-ea',
+  phase: 'hic',
+  themeId: 'nihil',
+  fictionId: 'fictionId',
+  contentLocale: 'en',
+  contentLocaleMapping: {},
+  // Mutation function
+  createComment: undefined
+};
+
 describe('<BrightMirrorFiction /> - with mount', () => {
   let wrapper;
   let mocks;
   let brightMirrorFictionData: BrightMirrorFictionData;
+  let ideaWithCommentsData: IdeaWithCommentsData;
   let brightMirrorFictionProps: BrightMirrorFictionProps;
 
   const displayNothing = () => {
@@ -60,6 +89,7 @@ describe('<BrightMirrorFiction /> - with mount', () => {
     expect(wrapper.find(FictionToolbar)).toHaveLength(0);
     expect(wrapper.find(FictionBody)).toHaveLength(0);
     expect(wrapper.find(FictionCommentForm)).toHaveLength(0);
+    expect(wrapper.find(FictionCommentList)).toHaveLength(0);
   };
 
   describe('when loading is done without error', () => {
@@ -71,8 +101,15 @@ describe('<BrightMirrorFiction /> - with mount', () => {
         error: null
       };
 
+      ideaWithCommentsData = {
+        ...ideaWithCommentsDataTemplate,
+        loading: false,
+        error: null
+      };
+
       brightMirrorFictionProps = {
         brightMirrorFictionData: brightMirrorFictionData,
+        ideaWithCommentsData: ideaWithCommentsData,
         ...brightMirrorFictionPropsTemplate
       };
 
@@ -81,7 +118,13 @@ describe('<BrightMirrorFiction /> - with mount', () => {
         {
           request: { query: BrightMirrorFictionQuery },
           result: {
-            data: brightMirrorFictionData
+            brightMirrorFictionData: brightMirrorFictionData
+          }
+        },
+        {
+          request: { query: IdeaWithCommentsQuery },
+          result: {
+            brightMirrorFictionData: ideaWithCommentsData
           }
         }
       ];
@@ -108,6 +151,10 @@ describe('<BrightMirrorFiction /> - with mount', () => {
     it('should render a FictionCommentForm', () => {
       expect(wrapper.find(FictionCommentForm)).toHaveLength(1);
     });
+
+    it('should render a FictionCommentList', () => {
+      expect(wrapper.find(FictionCommentList)).toHaveLength(1);
+    });
   });
 
   describe('when loading is not done', () => {
@@ -119,8 +166,15 @@ describe('<BrightMirrorFiction /> - with mount', () => {
         error: null
       };
 
+      ideaWithCommentsData = {
+        ...ideaWithCommentsDataTemplate,
+        loading: true, // set loading to true
+        error: null
+      };
+
       brightMirrorFictionProps = {
         brightMirrorFictionData: brightMirrorFictionData,
+        ideaWithCommentsData: ideaWithCommentsData,
         ...brightMirrorFictionPropsTemplate
       };
 
@@ -155,8 +209,15 @@ describe('<BrightMirrorFiction /> - with mount', () => {
         error: { dummy: 'error' } // set loading error
       };
 
+      ideaWithCommentsData = {
+        ...ideaWithCommentsDataTemplate,
+        loading: false,
+        error: { dummy: 'error' } // set loading error
+      };
+
       brightMirrorFictionProps = {
         brightMirrorFictionData: brightMirrorFictionData,
+        ideaWithCommentsData: ideaWithCommentsData,
         ...brightMirrorFictionPropsTemplate
       };
 

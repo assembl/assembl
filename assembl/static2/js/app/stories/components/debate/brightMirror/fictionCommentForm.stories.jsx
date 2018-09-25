@@ -14,9 +14,9 @@ const actions: { [name: string]: Function } = {
   onSubmitCommentCallback: action('onSubmitCommentCallback')
 };
 
-export const defaultFictionCommentProps: FictionCommentFormProps = {
+export const defaultFictionCommentForm: FictionCommentFormProps = {
   onCancelCommentCallback: actions.onCancelCommentCallback,
   onSubmitCommentCallback: actions.onSubmitCommentCallback
 };
 
-storiesOf('FictionCommentForm', module).add('default', withInfo()(() => <FictionCommentForm {...defaultFictionCommentProps} />));
+storiesOf('FictionCommentForm', module).add('default', withInfo()(() => <FictionCommentForm {...defaultFictionCommentForm} />));
