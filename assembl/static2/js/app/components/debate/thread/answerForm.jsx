@@ -12,7 +12,6 @@ import uploadDocumentMutation from '../../../graphql/mutations/uploadDocument.gr
 import { displayAlert, promptForLoginOr } from '../../../utils/utilityManager';
 import { convertContentStateToHTML, editorStateIsEmpty, uploadNewAttachments } from '../../../utils/draftjs';
 import RichTextEditor from '../../common/richTextEditor';
-import attachmentsPlugin from '../../common/richTextEditor/attachmentsPlugin';
 import { BODY_MAX_LENGTH } from '../common/topPostForm';
 import { getIfPhaseCompletedById } from '../../../utils/timeline';
 import { scrollToPost } from '../../../utils/hashLinkScroll';
