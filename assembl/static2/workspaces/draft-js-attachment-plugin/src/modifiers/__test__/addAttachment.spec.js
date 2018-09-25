@@ -7,6 +7,7 @@ describe('addAttachment modifier', () => {
   it('should return a new editor state with a document', () => {
     const editorState = EditorState.createEmpty();
     const data = {
+      id: '',
       mimeType: 'application/pdf',
       src: 'http://path/to/my/file.pdf',
       title: 'My pdf'
@@ -16,6 +17,7 @@ describe('addAttachment modifier', () => {
     const entityKey = contentState.getLastCreatedEntityKey();
     const entity = contentState.getEntity(entityKey);
     expect(entity.getData()).toEqual({
+      id: '',
       mimeType: 'application/pdf',
       src: 'http://path/to/my/file.pdf',
       title: 'My pdf'
@@ -44,6 +46,7 @@ describe('addAttachment modifier', () => {
   it('should return a new editor state with an image', () => {
     const editorState = EditorState.createEmpty();
     const data = {
+      id: '',
       mimeType: 'image/jpeg',
       src: 'http://path/to/my/image.jpg',
       title: 'My image'
@@ -53,6 +56,7 @@ describe('addAttachment modifier', () => {
     const entityKey = contentState.getLastCreatedEntityKey();
     const entity = contentState.getEntity(entityKey);
     expect(entity.getData()).toEqual({
+      id: '',
       mimeType: 'image/jpeg',
       src: 'http://path/to/my/image.jpg',
       title: 'My image'

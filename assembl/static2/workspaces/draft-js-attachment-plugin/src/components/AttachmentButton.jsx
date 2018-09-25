@@ -26,6 +26,7 @@ class AttachmentButton extends React.Component<Props> {
     if (getEditorState && setEditorState && values.file) {
       setEditorState(
         addAttachment(getEditorState(), {
+          id: '',
           mimeType: values.file.mimeType,
           src: values.file.externalUrl,
           title: values.file.imgTitle

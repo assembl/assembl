@@ -6,22 +6,19 @@ import getFileExtension from '../utils/getFileExtension';
 
 export default function entityToHTML(entity: EntityInstance): string {
   const { id } = entity.data;
-  const externalUrl = entity.data.externalUrl ? entity.data.externalUrl : '';
+  const src = entity.data.src ? entity.data.src : '';
   const mimeType = entity.data.mimeType ? entity.data.mimeType : '';
   const title = entity.data.title ? entity.data.title : '';
   if (mimeType.startsWith('image')) {
-    return (
-      `<img class="attachment-image" src="${externalUrl}" alt="" title="${title}" ` +
-      `data-id="${id}" data-mimetype="${mimeType}" />`
-    );
+    return `<img class="attachment-image" src="${src}" alt="" title="${title}" data-id="${id}" data-mimetype="${mimeType}" />`;
   }
 
   const extension = getFileExtension(title);
   const iconPath = getDocumentIconPath(extension);
   return (
-    `<a href="${externalUrl}" title="${title}">` +
+    `<a href="${src}" title="${title}">` +
     `<img class="attachment-icon" alt="${extension}" src="${iconPath}" data-id="${id}" data-mimetype="${mimeType}"` +
-    ` data-title="${title}" data-externalurl="${externalUrl}" />` +
+    ` data-title="${title}" data-externalurl="${src}" />` +
     '</a>'
   );
 }

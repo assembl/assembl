@@ -55,6 +55,7 @@ describe('addAttachment method', () => {
     };
     wrapper.instance().addAttachment(values);
     const expectedData = {
+      id: '',
       mimeType: 'image/jpeg',
       src: 'my_file.jpg',
       title: 'My file'

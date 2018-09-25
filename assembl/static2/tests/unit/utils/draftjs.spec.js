@@ -247,9 +247,9 @@ describe('draftjs utils', () => {
       const updatedContentState = result.contentState;
       const updatedEntityData = updatedContentState.getEntity('2').getData();
       expect(updatedEntityData).toEqual({
-        externalUrl: '/data/my-doc.pdf',
         id: 'my-doc-id',
         mimeType: 'application/pdf',
+        src: '/data/my-doc.pdf',
         title: 'My document'
       });
       expect(result.documentIds).toEqual(['my-img-id', 'my-doc-id']);

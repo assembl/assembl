@@ -2,6 +2,7 @@
 import { EditorState, AtomicBlockUtils } from 'draft-js';
 
 type AttachmentData = {
+  id: string,
   mimeType: string,
   src: string,
   title: string

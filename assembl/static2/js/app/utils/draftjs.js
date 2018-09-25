@@ -141,7 +141,7 @@ export function uploadNewAttachments(editorState: EditorState, uploadDocument: F
             const { externalUrl, id, mimeType, title } = doc;
             contentState = contentState.replaceEntityData(entityKey, {
               id: id,
-              externalUrl: externalUrl,
+              src: externalUrl,
               title: title,
               mimeType: mimeType
             });

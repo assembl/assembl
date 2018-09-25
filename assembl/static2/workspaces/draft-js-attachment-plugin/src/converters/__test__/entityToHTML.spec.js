@@ -6,9 +6,9 @@ import entityToHTML from '../entityToHTML';
 describe('entityToHTML function', () => {
   it('should return an img tag for images', () => {
     const entity = TestEditorUtils.createDocumentEntity({
-      externalUrl: 'http://www.example.com/foobar.png',
       id: 'foobar',
       mimeType: 'image/png',
+      src: 'http://www.example.com/foobar.png',
       title: 'Foobar'
     });
     const expected =
@@ -20,9 +20,9 @@ describe('entityToHTML function', () => {
 
   it('should return the icon for documents (pdf, doc, ...)', () => {
     const entity = TestEditorUtils.createDocumentEntity({
-      externalUrl: 'http://www.example.com/document/1122/data',
       id: 'foobar',
       mimeType: 'application/pdf',
+      src: 'http://www.example.com/document/1122/data',
       title: 'foobar.pdf'
     });
     const expected =
