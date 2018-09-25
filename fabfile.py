@@ -46,7 +46,7 @@ def running_locally(hosts=None):
 
 
 def sudo(*args, **kwargs):
-    sudoer = env.get("sudo_user", None) or env.get("user")
+    sudoer = env.get("sudoer", None) or env.get("user")
     with settings(user=sudoer,
                   sudo_prefix='sudo -i -S -p \'{}\''.format(env.sudo_prompt)):
         if sudoer == "root":
@@ -1091,6 +1091,12 @@ def app_compile_nodbupdate():
     execute(compile_stylesheets)
     execute(compile_messages)
     execute(compile_javascript)
+
+
+@task
+def generate_dh_group():
+    """Generate Diffie-Hellman Group"""
+    sudo("openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048")
 
 
 @task
