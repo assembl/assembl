@@ -465,7 +465,7 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
             query = Post.query.join(
                 related, Post.id == related.c.post_id
             ).filter(
-                Post.IdeaWithPosts == models.PublicationStates.PUBLISHED
+                Post.publication_state == models.PublicationStates.PUBLISHED
             ).order_by(
                 desc(Post.creation_date), Post.id
             ).options(joinedload(Post.creator))
