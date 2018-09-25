@@ -280,7 +280,7 @@ class CreatePost(graphene.Mutation):
         parent_id = graphene.ID(description=docs.CreatePost.parent_id)
         attachments = graphene.List(graphene.String, description=docs.CreatePost.attachments)
         message_classifier = graphene.String(description=docs.CreatePost.message_classifier)
-        publication_state = graphene.String(description=docs.CreatePost.publication_state)
+        publication_state = PublicationStates(description=docs.CreatePost.publication_state)
 
     post = graphene.Field(lambda: Post)
 
@@ -426,7 +426,7 @@ class UpdatePost(graphene.Mutation):
         subject = graphene.String(description=docs.UpdatePost.subject)
         body = graphene.String(required=True, description=docs.UpdatePost.body)
         attachments = graphene.List(graphene.String, description=docs.UpdatePost.attachments)
-        publication_state = graphene.String(description=docs.UpdatePost.publication_state)
+        publication_state = PublicationStates(description=docs.UpdatePost.publication_state)
 
     post = graphene.Field(lambda: Post)
 

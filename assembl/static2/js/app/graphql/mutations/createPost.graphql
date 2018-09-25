@@ -8,7 +8,7 @@ mutation createPost(
   $messageClassifier: String
   $parentId: ID
   $attachments: [String]
-  $publicationState: String
+  $publicationState: PublicationStates
 ) {
   createPost(
     ideaId: $ideaId

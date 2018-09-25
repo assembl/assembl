@@ -3453,7 +3453,7 @@ export type createPostMutationVariables = {|
   messageClassifier?: ?string,
   parentId?: ?string,
   attachments?: ?Array<?string>,
-  publicationState?: ?string
+  publicationState?: ?PublicationStates
 |};
 
 export type createPostMutation = {|
@@ -4731,7 +4731,7 @@ export type updatePostMutationVariables = {|
   subject?: ?string,
   body: string,
   attachments?: ?Array<?string>,
-  publicationState?: ?string
+  publicationState?: ?PublicationStates
 |};
 
 export type updatePostMutation = {|

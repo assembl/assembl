@@ -224,7 +224,7 @@ class TopPostForm extends React.Component<TopPostFormProps, TopPostFormState> {
                   onClick={() => this.createTopPost(PublicationStates.DRAFT)}
                   disabled={submitting}
                 >
-                  <Translate value="debate.brightMirror.save" />
+                  <Translate value="debate.brightMirror.saveDraft" />
                 </Button>
               ) : null}
             </div>

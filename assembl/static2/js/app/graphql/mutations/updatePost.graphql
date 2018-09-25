@@ -6,7 +6,7 @@ mutation updatePost(
   $subject: String
   $body: String!
   $attachments: [String]
-  $publicationState: String
+  $publicationState: PublicationStates
 ) {
   updatePost(postId: $postId, subject: $subject, body: $body, attachments: $attachments, publicationState: $publicationState) {
     post {
