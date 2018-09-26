@@ -6,6 +6,7 @@ $duck-egg-blue: #b7f4f0;
 // Other colors
 $blue-violet: #5404d7;
 $hospital-green: #93e79d;
+$pale-blue: #cef1ff;
 // Striped background colors
 $ice: #d2ffee;
 $alt-ice: #6a9986;
@@ -96,7 +97,7 @@ $fiction-toolbar-icon-size: 17px;
 @media screen and (min-width: $screen-xl-min) {
   .bright-mirror-fiction,
   .bright-mirror-comments {
-    padding: 90px 285px 0 285px;
+    padding: 90px 285px 90px 285px;
   }
 
   .bright-mirror-comments {

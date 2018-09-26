@@ -30,7 +30,7 @@ const FictionCommentList = ({ comments, contentLocale, contentLocaleMapping, ide
       noRowsRenderer={NoComponent}
       SeparatorComponent={NoComponent}
       identifier={identifier}
-      InnerComponentHeight={100}
+      InnerComponentHeight={125}
     />
   );
 };
