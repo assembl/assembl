@@ -4,24 +4,84 @@ exports[`ExportSection component should render an ExportSection component with l
 <div
   className="admin-box admin-export-section"
 >
-  <SectionTitle
-    annotation="You can export all of the data by clicking on the export button"
-    title="Export data"
-  />
+  <div>
+    <h3
+      className="dark-title-3"
+    >
+      Export data
+    </h3>
+    <div
+      className="box-hyphen"
+    />
+    <div
+      className="annotation"
+    >
+      You can export all of the data by clicking on the export button
+    </div>
+  </div>
   <div
     className="admin-content"
   >
+    <div
+      className="form-group"
+    >
+      <div
+        className="radio"
+        style={undefined}
+      >
+        <label
+          title=""
+        >
+          <input
+            checked={true}
+            disabled={false}
+            onChange={[Function]}
+            type="radio"
+          />
+          <span
+            className={undefined}
+            style={undefined}
+          >
+            Keep the messages in their original languages
+          </span>
+        </label>
+      </div>
+      <div
+        className="radio"
+        style={undefined}
+      >
+        <label
+          title=""
+        >
+          <input
+            checked={false}
+            disabled={false}
+            onChange={[Function]}
+            type="radio"
+          />
+          <span
+            className={undefined}
+            style={undefined}
+          >
+            Translate the messages in:
+          </span>
+        </label>
+      </div>
+    </div>
     <br />
-    <Link
+    <a
       className="button-link button-dark margin-l"
       href="foo.com"
-      onlyActiveOnIndex={false}
+      onClick={[Function]}
       style={Object {}}
     >
-      <Translate
-        value="administration.export.link"
-      />
-    </Link>
+      <span
+        className={undefined}
+        style={undefined}
+      >
+        Export
+      </span>
+    </a>
   </div>
 </div>
 `;
@@ -30,24 +90,128 @@ exports[`ExportSection component should render an ExportSection component withou
 <div
   className="admin-box admin-export-section"
 >
-  <SectionTitle
-    annotation="You can export all of the data by clicking on the export button"
-    title="Export data"
-  />
+  <div>
+    <h3
+      className="dark-title-3"
+    >
+      Export data
+    </h3>
+    <div
+      className="box-hyphen"
+    />
+    <div
+      className="annotation"
+    >
+      You can export all of the data by clicking on the export button
+    </div>
+  </div>
   <div
     className="admin-content"
   >
     <br />
-    <Link
+    <a
       className="button-link button-dark margin-l"
       href="foo.com"
-      onlyActiveOnIndex={false}
+      onClick={[Function]}
       style={Object {}}
     >
-      <Translate
-        value="administration.export.link"
-      />
-    </Link>
+      <span
+        className={undefined}
+        style={undefined}
+      >
+        Export
+      </span>
+    </a>
+  </div>
+</div>
+`;
+
+exports[`ExportSection component should render an export section that handles different export links 1`] = `
+<div
+  className="admin-box admin-export-section"
+>
+  <div>
+    <h3
+      className="dark-title-3"
+    >
+      Export data
+    </h3>
+    <div
+      className="box-hyphen"
+    />
+    <div
+      className="annotation"
+    >
+      You can export all of the data by clicking on the export button
+    </div>
+  </div>
+  <div
+    className="admin-content"
+  >
+    <div
+      className="form-group"
+    >
+      <div
+        className="radio"
+        style={undefined}
+      >
+        <label
+          title=""
+        >
+          <input
+            checked={true}
+            disabled={false}
+            name="exportLink"
+            onChange={[Function]}
+            type="radio"
+            value="foo.com"
+          />
+          <span
+            className={undefined}
+            style={undefined}
+          >
+            Export general data for the vote module
+          </span>
+        </label>
+      </div>
+      <div
+        className="radio"
+        style={undefined}
+      >
+        <label
+          title=""
+        >
+          <input
+            checked={false}
+            disabled={false}
+            name="exportLink"
+            onChange={[Function]}
+            type="radio"
+            value="bar.org"
+          />
+          <span
+            className={undefined}
+            style={undefined}
+          >
+            Export vote details for each user
+          </span>
+        </label>
+      </div>
+    </div>
+    <br />
+    <a
+      className="button-link button-dark margin-l"
+      href="foo.com"
+      onClick={[Function]}
+      style={Object {}}
+    >
+      <span
+        className={undefined}
+        style={undefined}
+      >
+        Export
+      </span>
+    </a>
   </div>
 </div>
 `;

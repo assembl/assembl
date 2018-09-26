@@ -29,7 +29,7 @@ import deleteProposalMutation from '../graphql/mutations/deleteProposal.graphql'
 import { convertEntriesToHTML, convertImmutableEntriesToJS } from '../utils/draftjs';
 import { get } from '../utils/routeMap';
 import { displayAlert, displayCustomModal, closeModal } from '../utils/utilityManager';
-import { getDiscussionSlug } from '../utils/globalFunctions';
+import { getDiscussionSlug, snakeToCamel, fromGlobalId } from '../utils/globalFunctions';
 import { PHASES } from '../constants';
 
 type VoteModule = {
@@ -504,15 +504,22 @@ class VoteSessionAdmin extends React.Component<Props, State> {
 
   render() {
     const { editLocale, section, debateId, voteSessionId } = this.props;
-    const exportLink = get('exportVoteSessionData', { debateId: debateId, voteSessionId: voteSessionId });
     const saveDisabled = !this.dataHaveChanged();
+    const exportLinks = ['vote_results_csv', 'extract_csv_voters'].map(option => ({
+      msgId: `vote.${snakeToCamel(option)}`,
+      url: get('exportVoteSessionData', {
+        debateId: debateId,
+        exportRoute: option,
+        voteSessionId: voteSessionId
+      })
+    }));
     return (
       <div className="token-vote-admin">
         <SaveButton disabled={saveDisabled} saveAction={this.saveAction} />
         {section === '1' && <PageForm editLocale={editLocale} />}
         {section === '2' && <ModulesSection />}
         {section === '3' && <VoteProposalsSection />}
-        {section === '4' && <ExportSection exportLink={exportLink} annotation="voteSessionAnnotation" />}
+        {section === '4' && <ExportSection exportLink={exportLinks} annotation="voteSessionAnnotation" />}
         {section && <Navbar currentStep={section} steps={['1', '2', '3', '4']} phaseIdentifier={PHASES.voteSession} />}
       </div>
     );

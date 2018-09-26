@@ -1,78 +1,148 @@
 // @flow
-/* eslint-disable  react/no-unused-prop-types */
 import * as React from 'react';
 import { I18n, Translate } from 'react-redux-i18n';
 import { Link } from 'react-router';
 import { FormGroup, Radio, Checkbox, FormControl } from 'react-bootstrap';
+
 import SectionTitle from './sectionTitle';
 
-type ExportSectionProps = {
+type Props = {
   languages?: Array<Object>,
   handleTranslationChange?: (shouldTranslate: boolean) => void,
   handleExportLocaleChange?: (locale: string) => void,
   handleAnonymousChange?: void => void,
-  withLanguageOptions?: boolean,
-  exportLink: string,
+  withLanguageOptions: boolean,
+  exportLink: string | Array<{ msgId: string, url: string }>,
   exportLocale?: string,
-  translate?: boolean,
+  translate: boolean,
   annotation: string,
   sectionTitle: string
 };
 
-type ExportLanguageDropDownProps = {
-  languages?: Array<Object>,
-  onSelect: Function,
-  activeKey?: string
+type State = {
+  exportLink: string
 };
 
-class ExportSection extends React.Component<ExportSectionProps> {
+class ExportSection extends React.Component<Props, State> {
   static defaultProps = {
-    handleTranslationChange: undefined,
-    handleExportLocaleChange: undefined,
-    handleAnonymousChange: undefined,
-    languages: undefined,
     withLanguageOptions: false,
-    exportLocale: undefined,
     translate: false,
     annotation: 'defaultAnnotation',
     sectionTitle: 'defaultSectionTitle'
   };
 
-  static ExportLanguageDropDown = ({ languages, onSelect, activeKey }: ExportLanguageDropDownProps) => {
-    const activeLanguage = languages ? languages.filter(language => language.locale === activeKey)[0] : null;
+  static getDerivedStateFromProps(props: Props, state: State) {
+    const { exportLink } = props;
+    return {
+      ...state,
+      exportLink: typeof exportLink === 'string' ? exportLink : exportLink[0].url
+    };
+  }
+
+  constructor(props: Props) {
+    super(props);
+    this.state = { exportLink: '' };
+  }
+
+  handleExportLinkChange = (e: SyntheticInputEvent<HTMLInputElement>): void => {
+    this.setState({
+      exportLink: e.target.value
+    });
+  };
+
+  renderAnonymousOption = () => {
+    const { handleAnonymousChange } = this.props;
+    if (!handleAnonymousChange) {
+      return null;
+    }
+
     return (
-      <FormControl
-        className="export-language-dropdown"
-        componentClass="select"
-        onChange={({ target: { value } }) => {
-          onSelect(value);
-        }}
-        value={activeLanguage ? activeLanguage.locale : ''}
-      >
-        {languages &&
-          languages.map(lang => (
-            <option key={`locale-${lang.locale}`} value={lang.locale}>
-              {lang.name}
-            </option>
-          ))}
-      </FormControl>
+      <FormGroup>
+        <Checkbox onChange={handleAnonymousChange}>
+          <Translate value="administration.export.anonymous" />
+        </Checkbox>
+      </FormGroup>
     );
   };
 
-  render() {
+  renderLinkOptions = () => {
+    const { exportLink } = this.props;
+    if (!Array.isArray(exportLink)) {
+      return null;
+    }
+
+    return (
+      <FormGroup>
+        {exportLink.map(option => (
+          <Radio
+            key={option.msgId}
+            checked={this.state.exportLink === option.url}
+            name="exportLink"
+            value={option.url}
+            onChange={this.handleExportLinkChange}
+          >
+            <Translate value={`administration.export.${option.msgId}`} />
+          </Radio>
+        ))}
+      </FormGroup>
+    );
+  };
+
+  renderLanguageOptions = () => {
     const {
       languages,
       handleTranslationChange,
       handleExportLocaleChange,
-      handleAnonymousChange,
       withLanguageOptions,
-      exportLink,
       translate,
-      exportLocale,
-      annotation,
-      sectionTitle
+      exportLocale
     } = this.props;
+    if (!withLanguageOptions || !handleTranslationChange || !handleExportLocaleChange) {
+      return null;
+    }
 
+    const activeLanguage = languages ? languages.filter(language => language.locale === exportLocale)[0] : null;
+    return (
+      <FormGroup>
+        <Radio
+          checked={!translate}
+          onChange={() => {
+            handleTranslationChange(false);
+          }}
+        >
+          <Translate value="administration.export.noExportLanguage" />
+        </Radio>
+        <Radio
+          checked={translate}
+          onChange={() => {
+            handleTranslationChange(true);
+          }}
+        >
+          <Translate value="administration.export.translateTheMessagesIn" />
+          {translate && (
+            <FormControl
+              className="export-language-dropdown"
+              componentClass="select"
+              onChange={({ target: { value } }) => {
+                handleExportLocaleChange(value);
+              }}
+              value={activeLanguage ? activeLanguage.locale : ''}
+            >
+              {languages &&
+                languages.map(lang => (
+                  <option key={`locale-${lang.locale}`} value={lang.locale}>
+                    {lang.name}
+                  </option>
+                ))}
+            </FormControl>
+          )}
+        </Radio>
+      </FormGroup>
+    );
+  };
+
+  render() {
+    const { annotation, sectionTitle } = this.props;
     return (
       <div className="admin-box admin-export-section">
         <SectionTitle
@@ -80,42 +150,11 @@ class ExportSection extends React.Component<ExportSectionProps> {
           annotation={I18n.t(`administration.export.${annotation}`)}
         />
         <div className="admin-content">
-          {withLanguageOptions &&
-            handleTranslationChange &&
-            handleExportLocaleChange &&
-            handleAnonymousChange && (
-              <FormGroup>
-                <Checkbox onChange={handleAnonymousChange}>
-                  <Translate value="administration.export.anonymous" />
-                </Checkbox>
-                <Radio
-                  checked={!translate}
-                  onChange={() => {
-                    handleTranslationChange(false);
-                  }}
-                >
-                  <Translate value="administration.export.noExportLanguage" />
-                </Radio>
-                <Radio
-                  checked={translate}
-                  onChange={() => {
-                    handleTranslationChange(true);
-                  }}
-                >
-                  <Translate value="administration.export.translateTheMessagesIn" />
-                  {translate && (
-                    <ExportSection.ExportLanguageDropDown
-                      languages={languages}
-                      onSelect={handleExportLocaleChange}
-                      activeKey={exportLocale}
-                    />
-                  )}
-                </Radio>
-              </FormGroup>
-            )}
-
+          {this.renderAnonymousOption()}
+          {this.renderLanguageOptions()}
+          {this.renderLinkOptions()}
           <br />
-          <Link className="button-link button-dark margin-l" href={exportLink}>
+          <Link className="button-link button-dark margin-l" href={this.state.exportLink}>
             <Translate value="administration.export.link" />
           </Link>
         </div>

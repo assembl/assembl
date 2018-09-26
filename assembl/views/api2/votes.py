@@ -21,7 +21,8 @@ from assembl.models import (
     NumberGaugeVoteSpecification, TokenVoteSpecification, LanguagePreferenceCollection)
 from assembl.lib.sqla import get_named_class
 from . import (FORM_HEADER, JSON_HEADER, check_permissions)
-
+from assembl.views.api2.discussion import csv_response, CSV_MIMETYPE
+from assembl.views.api2.utils import frange
 
 # Votes are private
 @view_config(context=CollectionContext, renderer='json',
@@ -349,3 +350,76 @@ def global_vote_results_csv(request):
         csvw.writerow(row)
     output.seek(0)
     return Response(body_file=output, content_type='text/csv', content_disposition='attachment; filename="vote_results.csv')
+
+
+@view_config(context=InstanceContext, name="extract_csv_voters",
+             ctx_instance_class=VotingWidget, request_method='GET',
+             permission=P_DISC_STATS)
+def extract_voters(request):
+    import assembl.models as m
+    import numpy as np
+    extract_list = []
+    ctx = request.context
+    widget = ctx._instance
+    if widget.activity_state != "ended":
+        permissions = get_permissions(user_id, ctx.get_discussion_id())
+        if P_ADMIN_DISC not in permissions:
+            raise HTTPUnauthorized()
+    user_prefs = LanguagePreferenceCollection.getCurrent()
+    db = widget.db
+    fieldnames = ["Nom du contributeur", "Adresse mail du contributeur", "Date/heure du vote", "Proposition"]
+    ideas = widget.db.query(Idea).join(AbstractVoteSpecification).filter(AbstractVoteSpecification.widget_id == widget.id).distinct().all()
+    votes = widget.db.query(AbstractIdeaVote).filter(AbstractVoteSpecification.widget_id==widget.id).all()
+    votes.sort(key=lambda x: x.vote_spec_id, reverse=True)
+    users = widget.db.query(User).all()
+    vote_specs = widget.db.query(AbstractVoteSpecification).filter(AbstractVoteSpecification.widget_id == widget.id).all()
+
+    for count,vote in enumerate(votes):
+        voter = m.User.get(vote.voter_id)
+        contributor = voter.name or ""
+        contributor_mail = voter.preferred_email or ""
+        vote_date = vote.vote_date or ""
+        proposition = m.Idea.get(vote.idea_id).title.best_lang(user_prefs).value or ""
+        vote_value = vote.vote_value
+
+        if votes[count].vote_spec_id != votes[count-1].vote_spec_id and fieldnames[-1] != "  ":
+            fieldnames.append("  ")
+
+        extract_info = {
+            "Nom du contributeur": contributor.encode('utf-8'),
+            "Adresse mail du contributeur": contributor_mail.encode('utf-8'),
+            "Date/heure du vote": str(vote_date).encode('utf-8'),
+            "Proposition": proposition.encode('utf-8'),
+        }
+
+        if vote.type == u'token_idea_vote':
+            token_category = m.TokenCategorySpecification.get(vote.token_category_id).name.best_lang(user_prefs).value or ""
+            if token_category not in fieldnames:
+                fieldnames.append(token_category.encode('utf-8'))
+            extract_info.update({token_category : str(vote_value).encode('utf-8')})
+            extract_list.append(extract_info)
+
+        if vote.type == u'gauge_idea_vote':
+            vote_spec = m.AbstractVoteSpecification.get(vote.vote_spec_id)
+            if vote_spec.type == u'number_gauge_vote_specification':
+                options = list(frange(vote_spec.minimum, vote_spec.maximum, vote_spec.maximum/vote_spec.nb_ticks))
+
+                for option in options:
+                    if vote_value == option:
+                        choice = str(option).encode('utf-8')
+                        option = str(option) + " " + vote_spec.unit
+                        if option not in fieldnames:
+                            fieldnames.append(option.encode('utf-8'))
+                            extract_info.update({option : "1"})
+                    else:
+                        choice = str(option).encode('utf-8')
+                        option = str(option) + " " + vote_spec.unit
+                        if option not in fieldnames:
+                            fieldnames.append(option.encode('utf-8'))
+                            extract_info.update({option : "0"})
+
+            extract_list.append(extract_info)
+    import operator
+    extract_list.sort(key=operator.itemgetter('Nom du contributeur'))
+    return csv_response(extract_list, CSV_MIMETYPE, fieldnames)
+

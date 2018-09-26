@@ -786,7 +786,11 @@ const Translations = {
         defaultSectionTitle: "Exporter les données",
         taxonomySectionTitle: "Exporter les taxonomies",
         translateTheMessagesIn: "Traduire l'ensemble des messages en :",
-        anonymous: "Rendre les données anonymes"
+        anonymous: "Rendre les données anonymes",
+        vote: {
+          voteResultsCsv: "Exporter les données générales du module de vote",
+          extractCsvVoters: "Exporter les détails de vote de chaque utilisateur"
+        }
       },
       step_x_total: "Section %{num} sur %{total}",
       saveThemes: "Sauvegarder",
@@ -1642,7 +1646,11 @@ const Translations = {
         defaultSectionTitle: "Export data",
         taxonomySectionTitle: "Export taxonomy",
         translateTheMessagesIn: "Translate the messages in:",
-        anonymous: "Make the data anonymous"
+        anonymous: "Make the data anonymous",
+        vote: {
+          voteResultsCsv: "Export general data for the vote module",
+          extractCsvVoters: "Export vote details for each user"
+        }
       },
       step_x_total: "Section %{num} on %{total}",
       saveThemes: "Save",
