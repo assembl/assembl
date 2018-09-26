@@ -419,6 +419,7 @@ def extract_voters(request):
                             extract_info.update({option : "0"})
 
             extract_list.append(extract_info)
-
+    import operator
+    extract_list.sort(key=operator.itemgetter('Nom du contributeur'))
     return csv_response(extract_list, CSV_MIMETYPE, fieldnames)
 
