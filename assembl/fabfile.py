@@ -2622,11 +2622,11 @@ def set_fail2ban_configurations():
     """Utilize configurations to populate and push fail2ban configs, must be done as a sudo user"""
     if exists('/etc/fail2ban'):
         from jinja2 import Environment, FileSystemLoader
-        jenv = Environment(
-            loader=FileSystemLoader('./templates'),
-            autoescape=lambda t: False)
         # This is done locally
-        template_folder = os.path.join(dirname(__file__), 'templates', 'system')
+        template_folder = os.path.join(local_code_root, 'assembl', 'templates', 'system')
+        jenv = Environment(
+            loader=FileSystemLoader(template_folder),
+            autoescape=lambda t: False)
         filters = [f for f in os.listdir(template_folder) if f.startswith('filter-')]
         filters.append('jail.local.jinja2')
         filters_to_file = {}
