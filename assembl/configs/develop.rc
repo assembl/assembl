@@ -20,6 +20,8 @@ _requirement_inputs = requirements.in requirements-chrouter.in requirements-dev.
 frozen_requirements = requirements-dev.frozen.txt
 _build_docs = false
 _can_test = true
+accept_secure_connection = false
+require_secure_connection = false
 
 # If not proxied by nginx or something, public_port in app:main needs to match
 # this value
