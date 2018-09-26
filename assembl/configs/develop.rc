@@ -69,3 +69,4 @@ mail.port = 8025
 mail.host = localhost
 
 disable_notification = true
+visible_errors = true
