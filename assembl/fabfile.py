@@ -197,6 +197,43 @@ def load_rcfile_config():
     env.code_root = code_root()
 
 
+def fill_template(template, config, output=None, default_dir=None):
+    if not exists(template):
+        if not default_dir:
+            default_dir = join(local_code_root, 'templates', 'system')
+        template = join(default_dir, template)
+    if not exists(template):
+        raise RuntimeError("Missing template")
+    config['here'] = config.get('here', os.getcwd())
+    if template.endswith('.tmpl'):
+        with open(template) as tmpl:
+            result = tmpl.read() % config
+    elif template.endswith('.jinja2'):
+        from jinja2 import Environment
+        env = Environment()
+        with open(template) as tmpl:
+            tmpl = env.from_string(tmpl.read())
+        # Boolean overloading
+        # Jinja should interpret 'false' as False but no:
+        # https://github.com/ansible/ansible/issues/14983
+        for (k, v) in config.items():
+            if str(v).lower() == 'false':
+                config[k] = False
+            if '%(' in v:
+                try:
+                    config[k] = v % config
+                except KeyError:
+                    pass
+        result = tmpl.render(config)
+    else:
+        raise RuntimeError("Unknown template type")
+    if hasattr(output, 'write'):
+        output.write(result)
+    else:
+        with open(output, 'w') as out:
+            out.write(result)
+
+
 def task(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
@@ -2589,8 +2626,8 @@ def set_fail2ban_configurations():
             loader=FileSystemLoader('./templates'),
             autoescape=lambda t: False)
         # This is done locally
-        tempalte_folder = os.path.join(dirname(__file__), 'templates')
-        filters = [f for f in os.listdir(tempalte_folder) if f.startswith('filter-')]
+        template_folder = os.path.join(dirname(__file__), 'templates', 'system')
+        filters = [f for f in os.listdir(template_folder) if f.startswith('filter-')]
         filters.append('jail.local.jinja2')
         filters_to_file = {}
         for f in filters:

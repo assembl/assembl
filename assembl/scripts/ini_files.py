@@ -9,7 +9,7 @@ from ConfigParser import (
 from argparse import ArgumentParser, FileType
 import logging
 
-from ..fabfile import combine_rc, code_root, venv_path, filter_global_names
+from ..fabfile import combine_rc, code_root, venv_path, filter_global_names, fill_template
 
 # global umask so ini files are unreadable by others
 os.umask(0o027)
@@ -91,41 +91,6 @@ def ensureSection(config, section):
     """Ensure that config has that section"""
     if section.lower() != 'default' and not config.has_section(section):
         config.add_section(section)
-
-
-def fill_template(template, config, output=None):
-    if not exists(template):
-        template = join(local_code_root, 'templates', 'system', template)
-    if not exists(template):
-        raise RuntimeError("Missing template")
-    config['here'] = config.get('here', os.getcwd())
-    if template.endswith('.tmpl'):
-        with open(template) as tmpl:
-            result = tmpl.read() % config
-    elif template.endswith('.jinja2'):
-        from jinja2 import Environment
-        env = Environment()
-        with open(template) as tmpl:
-            tmpl = env.from_string(tmpl.read())
-        # Boolean overloading
-        # Jinja should interpret 'false' as False but no:
-        # https://github.com/ansible/ansible/issues/14983
-        for (k, v) in config.items():
-            if str(v).lower() == 'false':
-                config[k] = False
-            if '%(' in v:
-                try:
-                    config[k] = v % config
-                except KeyError:
-                    pass
-        result = tmpl.render(config)
-    else:
-        raise RuntimeError("Unknown template type")
-    if hasattr(output, 'write'):
-        output.write(result)
-    else:
-        with open(output, 'w') as out:
-            out.write(result)
 
 
 def generate_ini_files(config, config_fname):
