@@ -13,6 +13,7 @@ import { BrightMirrorFiction } from '../../../js/app/pages/brightMirrorFiction';
 import FictionHeader from '../../../js/app/components/debate/brightMirror/fictionHeader';
 import FictionToolbar from '../../../js/app/components/debate/brightMirror/fictionToolbar';
 import FictionBody from '../../../js/app/components/debate/brightMirror/fictionBody';
+import FictionCommentHeader from '../../../js/app/components/debate/brightMirror/fictionCommentHeader';
 import FictionCommentForm from '../../../js/app/components/debate/brightMirror/fictionCommentForm';
 import FictionCommentList from '../../../js/app/components/debate/brightMirror/fictionCommentList';
 // Constant imports
@@ -88,6 +89,7 @@ describe('<BrightMirrorFiction /> - with mount', () => {
     expect(wrapper.find(FictionBody)).toHaveLength(0);
     expect(wrapper.find(FictionToolbar)).toHaveLength(0);
     expect(wrapper.find(FictionBody)).toHaveLength(0);
+    expect(wrapper.find(FictionCommentHeader)).toHaveLength(0);
     expect(wrapper.find(FictionCommentForm)).toHaveLength(0);
     expect(wrapper.find(FictionCommentList)).toHaveLength(0);
   };
@@ -147,6 +149,10 @@ describe('<BrightMirrorFiction /> - with mount', () => {
 
     it('should render a FictionBody', () => {
       expect(wrapper.find(FictionBody)).toHaveLength(1);
+    });
+
+    it('should render a FictionCommentHeader', () => {
+      expect(wrapper.find(FictionCommentHeader)).toHaveLength(1);
     });
 
     it('should render a FictionCommentForm', () => {

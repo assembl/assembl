@@ -29,7 +29,7 @@ describe('<FictionCommentHeader /> - with shallow', () => {
   });
 
   it('should render a title', () => {
-    expect(wrapper.find('h1 [className="title center"]')).toHaveLength(1);
+    expect(wrapper.find('h1 [className="title"]')).toHaveLength(1);
     expect(wrapper.contains(fictionCommentHeader.strongTitle)).toBe(true);
     expect(wrapper.contains(fictionCommentHeader.title)).toBe(true);
   });

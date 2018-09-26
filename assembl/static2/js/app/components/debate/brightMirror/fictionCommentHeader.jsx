@@ -17,8 +17,9 @@ export type FictionCommentHeaderProps = {
 
 const FictionCommentHeader = ({ strongTitle, title, imgSrc, imgAlt, subtitle }: FictionCommentHeaderProps) => (
   <div className="comments-header">
-    <h1 className="title center">
-      <strong>{strongTitle}</strong>&nbsp;{title}
+    <h1 className="title">
+      <span className="highlight">{strongTitle}&nbsp;</span>
+      {title}
     </h1>
     <p>
       <Image responsive src={imgSrc} alt={imgAlt} />

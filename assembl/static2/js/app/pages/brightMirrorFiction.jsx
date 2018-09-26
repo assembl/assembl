@@ -1,6 +1,6 @@
 // @flow
 import React, { Fragment, Component } from 'react';
-import { Grid, Row, Col, Image } from 'react-bootstrap';
+import { Grid, Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { I18n } from 'react-redux-i18n';
 // Graphql imports
@@ -18,6 +18,7 @@ import FictionHeader from '../components/debate/brightMirror/fictionHeader';
 import FictionToolbar from '../components/debate/brightMirror/fictionToolbar';
 import FictionBody from '../components/debate/brightMirror/fictionBody';
 import BackButton from '../components/debate/common/backButton';
+import FictionCommentHeader from '../components/debate/brightMirror/fictionCommentHeader';
 import FictionCommentForm from '../components/debate/brightMirror/fictionCommentForm';
 import FictionCommentList from '../components/debate/brightMirror/fictionCommentList';
 // Utils imports
@@ -31,6 +32,7 @@ import type { CircleAvatarProps } from '../components/debate/brightMirror/circle
 import type { FictionHeaderProps } from '../components/debate/brightMirror/fictionHeader';
 import type { FictionToolbarProps } from '../components/debate/brightMirror/fictionToolbar';
 import type { FictionBodyProps } from '../components/debate/brightMirror/fictionBody';
+import type { FictionCommentHeaderProps } from '../components/debate/brightMirror/fictionCommentHeader';
 import type { FictionCommentFormProps } from '../components/debate/brightMirror/fictionCommentForm';
 import type { FictionCommentListProps } from '../components/debate/brightMirror/fictionCommentList';
 
@@ -256,6 +258,14 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
       onSubmitCommentCallback: this.submitCommentHandler
     };
 
+    const fictionCommentHeaderProps: FictionCommentHeaderProps = {
+      strongTitle: I18n.t('debate.brightMirror.commentFictionStrongTitle'),
+      title: I18n.t('debate.brightMirror.commentFictionTitle'),
+      imgSrc: '/static2/img/illustration-mechanisme.png',
+      imgAlt: I18n.t('debate.brightMirror.commentFictionImageAlt'),
+      subtitle: I18n.t('debate.brightMirror.commentFictionSubtitle', { count: comments.length })
+    };
+
     const fictionCommentListProps: FictionCommentListProps = {
       comments: comments,
       contentLocale: contentLocale,
@@ -282,16 +292,7 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
         <Grid fluid className="bright-mirror-comments">
           <Row>
             <Col xs={12}>
-              <div className="comments-header">
-                <h1 className="title center">
-                  <strong>Prenez la parole !</strong> Quels sujets sont abordés dans cette fiction ?
-                </h1>
-                <p>
-                  <Image responsive src="/static2/img/illustration-mechanisme.png" alt="illustration-mechanisme" />
-                </p>
-                <p className="subtitle center">{comments.length} messages</p>
-              </div>
-
+              <FictionCommentHeader {...fictionCommentHeaderProps} />
               <article className="comments-content">
                 <FictionCommentForm {...fictionCommentFormProps} />
                 <FictionCommentList {...fictionCommentListProps} />

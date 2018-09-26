@@ -14,12 +14,14 @@ exports[`Storyshots FictionCommentHeader default 1`] = `
       className="comments-header"
     >
       <h1
-        className="title center"
+        className="title"
       >
-        <strong>
+        <span
+          className="highlight"
+        >
           Prenez la parole !
-        </strong>
-         
+           
+        </span>
         Quels sujets sont abordés dans cette fiction ?
       </h1>
       <p>
@@ -424,12 +426,14 @@ exports[`Storyshots FictionCommentHeader playground 1`] = `
       className="comments-header"
     >
       <h1
-        className="title center"
+        className="title"
       >
-        <strong>
+        <span
+          className="highlight"
+        >
           Prenez la parole !
-        </strong>
-         
+           
+        </span>
         Quels sujets sont abordés dans cette fiction ?
       </h1>
       <p>

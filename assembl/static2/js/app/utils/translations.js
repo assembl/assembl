@@ -391,6 +391,10 @@ const Translations = {
       },
       brightMirror: {
         allFictions: "Fictions déjà parues",
+        commentFictionStrongTitle: "Prenez la parole !",
+        commentFictionTitle: "Quels sujets sont abordés dans cette fiction ?",
+        commentFictionImageAlt: "Illustration prenez la parole",
+        commentFictionSubtitle: "%{count} messages",
         commentFictionLabel: "Commentaires",
         commentFictionPlaceholder: "Rejoins le débat...",
         commentFictionCancel: "Annuler",
@@ -1263,6 +1267,10 @@ const Translations = {
       },
       brightMirror: {
         allFictions: "Published fictions",
+        commentFictionStrongTitle: "Let's talk!",
+        commentFictionTitle: "What are the topics of the fiction?",
+        commentFictionImageAlt: "Let's talk illustration",
+        commentFictionSubtitle: "%{count} messages",
         commentFictionLabel: "Comments",
         commentFictionPlaceholder: "Join the debate...",
         commentFictionCancel: "Cancel",

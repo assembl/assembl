@@ -1,0 +1,57 @@
+.comments-header {
+  padding-bottom: 30px;
+
+  .title {
+    color: $black;
+    font-family: $font-family4;
+    font-size: $font-size-l;
+    font-weight: 300;
+    line-height: 52px;
+    letter-spacing: 2px;
+  }
+
+  .title .highlight {
+    display: block;
+    font-family: $font-family;
+  }
+
+  .subtitle {
+    color: $black;
+    font-family: $font-family;
+    font-size: $font-size-ml;
+    letter-spacing: 1.1px;
+    margin: 0;
+  }
+}
+
+@media screen and (min-width: $screen-sm-min) {
+  .comments-header {
+    .title .highlight {
+      display: inline-block;
+    }
+  }
+}
+
+@media screen and (min-width: $screen-xl-min) {
+  .comments-header {
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 95px;
+    width: 1200px;
+
+    .title {
+      font-size: $font-size-xl;
+      margin-bottom: 35px;
+      text-align: center;
+    }
+
+    .img-responsive {
+      margin: 0 auto;
+    }
+
+    .subtitle {
+      font-size: $font-size-xl;
+      margin-top: 35px;
+    }
+  }
+}

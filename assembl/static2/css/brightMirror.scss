@@ -33,7 +33,7 @@ $fiction-toolbar-icon-size: 17px;
   }
 
   .container-fluid {
-    padding: 10px 18px 70px 18px;
+    padding: 30px 18px 70px 18px;
   }
 }
 
@@ -42,52 +42,31 @@ $fiction-toolbar-icon-size: 17px;
 }
 
 .bright-mirror-comments {
+  padding-bottom: 30px;
+  padding-top: 30px;
+
   // Striped background
-  background:
-    repeating-linear-gradient(
-      -45deg,
-      $ice,
-      $ice 4px,
-      $white 2px,
-      $white 7px
-    );
-  padding-left: 0;
-  padding-right: 0;
+  background: repeating-linear-gradient(
+    -45deg,
+    $ice,
+    $ice 4px,
+    $white 2px,
+    $white 7px
+  );
+  //   padding-left: 0;
+  //   padding-right: 0;
 
-  .comments-header,
-  .comments-content {
-    padding: 30px 18px;
-  }
+  //   .comments-content {
+  //     padding: 30px 18px;
+  //   }
 
-  .comments-header {
-    .title {
-      color: $black;
-      font-family: $font-family4;
-      font-size: $font-size-l;
-      font-weight: 300;
-      line-height: 52px;
-      letter-spacing: 2px;
-    }
+  //   .comments-content {
+  //     background-color: $white;
 
-    .img-responsive {
-      margin: 0 auto;
-    }
-
-    .subtitle {
-      color: $black;
-      font-family: $font-family;
-      font-size: $font-size-ml;
-      letter-spacing: 1.1px;
-    }
-  }
-
-  .comments-content {
-    background-color: $white;
-
-    .comment-container {
-      padding-bottom: 25px;
-    }
-  }
+  //     .comment-container {
+  //       padding-bottom: 25px;
+  //     }
+  //   }
 }
 
 @media screen and (min-width: $screen-sm-min) {
@@ -146,5 +125,6 @@ $fiction-toolbar-icon-size: 17px;
 @import "components/fictionHeader";
 @import "components/fictionToolbar";
 @import "components/fictionBody";
+@import "components/fictionCommentHeader";
 @import "components/fictionCommentForm";
 @import "components/fictionComment";
