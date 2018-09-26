@@ -2559,10 +2559,10 @@ def set_fail2ban_configurations():
     if exists('/etc/fail2ban'):
         from jinja2 import Environment, FileSystemLoader
         jenv = Environment(
-            loader=FileSystemLoader('./docker'),
+            loader=FileSystemLoader('./templates'),
             autoescape=lambda t: False)
         # This is done locally
-        tempalte_folder = os.path.join(dirname(__file__), 'docker')
+        tempalte_folder = os.path.join(dirname(__file__), 'templates')
         filters = [f for f in os.listdir(tempalte_folder) if f.startswith('filter-')]
         filters.append('jail.local.jinja2')
         filters_to_file = {}
