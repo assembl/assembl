@@ -200,7 +200,7 @@ def load_rcfile_config():
 def fill_template(template, config, output=None, default_dir=None):
     if not exists(template):
         if not default_dir:
-            default_dir = join(local_code_root, 'templates', 'system')
+            default_dir = join(local_code_root, 'assembl', 'templates', 'system')
         template = join(default_dir, template)
     if not exists(template):
         raise RuntimeError("Missing template")
