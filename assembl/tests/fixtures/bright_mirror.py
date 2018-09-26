@@ -43,3 +43,72 @@ def bright_mirror(phases, graphql_request, graphql_registry, test_session):
 
     bright_mirror_id = res.data['createThematic']['thematic']['id']
     return bright_mirror_id
+
+
+@pytest.fixture(scope="function")
+def post_published_for_bright_mirror(
+        request, test_session, discussion, admin_user,
+        bright_mirror):
+    from assembl.models import Post, Idea, LangString, IdeaRelatedPostLink, PublicationStates
+    from graphene.relay import Node
+    idea_id = bright_mirror
+    raw_id = int(Node.from_global_id(idea_id)[1])
+    idea = Idea.get(raw_id)
+    p = Post(
+        discussion=discussion, creator=admin_user,
+        subject=LangString.create(u"Published"),
+        body=LangString.create(u"A simple published fiction"),
+        type='post', publication_state=PublicationStates.PUBLISHED,
+        message_id="msgpublished@example2.com")
+
+    idc = IdeaRelatedPostLink(
+        idea=idea,
+        creator=admin_user,
+        content=p)
+
+    test_session.add(p)
+    test_session.add(idc)
+    test_session.flush()
+
+    def fin():
+        print "finalizer post_published_for_bright_mirror"
+        test_session.delete(p)
+        test_session.delete(idc)
+        test_session.flush()
+
+    request.addfinalizer(fin)
+    return p
+
+@pytest.fixture(scope="function")
+def post_draft_for_bright_mirror(
+        request, test_session, discussion, moderator_user,
+        bright_mirror):
+    from assembl.models import Post, Idea, LangString, IdeaRelatedPostLink, PublicationStates
+    from graphene.relay import Node
+    idea_id = bright_mirror
+    raw_id = int(Node.from_global_id(idea_id)[1])
+    idea = Idea.get(raw_id)
+    p = Post(
+        discussion=discussion, creator=moderator_user,
+        subject=LangString.create(u"Draft"),
+        body=LangString.create(u"A simple draft fiction"),
+        type='post', publication_state=PublicationStates.DRAFT,
+        message_id="msgdraft@example2.com")
+
+    idc = IdeaRelatedPostLink(
+        idea=idea,
+        creator=moderator_user,
+        content=p)
+
+    test_session.add(p)
+    test_session.add(idc)
+    test_session.flush()
+
+    def fin():
+        print "finalizer post_draft_for_bright_mirror"
+        test_session.delete(p)
+        test_session.delete(idc)
+        test_session.flush()
+
+    request.addfinalizer(fin)
+    return p

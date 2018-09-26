@@ -1,7 +1,14 @@
 #import "../fragments/Post.graphql"
 
-mutation updatePost($contentLocale: String!, $postId: ID!, $subject: String, $body: String!, $attachments: [String]) {
-  updatePost(postId: $postId, subject: $subject, body: $body, attachments: $attachments) {
+mutation updatePost(
+  $contentLocale: String!
+  $postId: ID!
+  $subject: String
+  $body: String!
+  $attachments: [String]
+  $publicationState: PublicationStates
+) {
+  updatePost(postId: $postId, subject: $subject, body: $body, attachments: $attachments, publicationState: $publicationState) {
     post {
       ...Post
     }

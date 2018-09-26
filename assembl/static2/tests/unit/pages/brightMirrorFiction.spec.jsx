@@ -12,18 +12,20 @@ import FictionHeader from '../../../js/app/components/debate/brightMirror/fictio
 import FictionToolbar from '../../../js/app/components/debate/brightMirror/fictionToolbar';
 import FictionBody from '../../../js/app/components/debate/brightMirror/fictionBody';
 // Type imports
-import type { BrightMirrorFictionData, BrightMirrorFictionProps } from '../../../js/app/pages/brightMirrorFiction';
+import { PublicationStates } from '../../../js/app/constants';
+import type { Data, Props } from '../../../js/app/pages/brightMirrorFiction';
 
 configure({ adapter: new Adapter() });
 
 // Mock utils functions
 jest.mock('../../../js/app/utils/utilityManager', () => ({ displayAlert: jest.fn() }));
 
-const brightMirrorFictionData: BrightMirrorFictionData = {
+const brightMirrorFictionData: Data = {
   fiction: {
     subject: 'Hic quia eveniet cupiditate placeat laboriosam.',
     body: 'Odit mollitia natus ea iusto voluptatibus omnis pariatur tempore ipsum.',
     creationDate: new Date(),
+    publicationState: PublicationStates.PUBLISHED,
     creator: {
       userId: 99999999,
       displayName: 'Wendy Quigley',
@@ -39,7 +41,7 @@ const brightMirrorFictionData: BrightMirrorFictionData = {
 describe('<BrightMirrorFiction /> - with mount', () => {
   let wrapper;
   let mocks;
-  let brightMirrorFictionProps: BrightMirrorFictionProps;
+  let brightMirrorFictionProps: Props;
 
   beforeEach(() => {
     // Define props

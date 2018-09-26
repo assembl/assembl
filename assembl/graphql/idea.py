@@ -311,8 +311,16 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
         if 'creator' in fields.get('edges', {}).get('node', {}):
             query = query.options(joinedload(models.Post.creator))
 
+        Post = models.Post
+
+        if self.message_view_override == Phases.brightMirror.value:
+            user_id = context.authenticated_userid
+            if user_id is not None:
+                query = query.filter(Post.publication_state == models.PublicationStates.PUBLISHED or (Post.creator_id == user_id and Post.publication_state == models.PublicationStates.DRAFT))
+            else:
+                query = query.filter(Post.publication_state == models.PublicationStates.PUBLISHED)
+
         if not sentiments_only:
-            Post = models.Post
             query = query.order_by(desc(Post.creation_date), Post.id)
             if len(discussion.discussion_locales) > 1:
                 query = query.options(*models.Content.subqueryload_options())

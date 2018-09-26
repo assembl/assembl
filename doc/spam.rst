@@ -1,5 +1,33 @@
+How to not be marked as spam
+============================
+
+There's a number of things to do so the subscription and notification emails don't go in the client's spam folder. The following assumes the application server handles mail.
+
+In most cases, the mail domain name and the application domain name will be identical; but we will distinguish them below.
+
+Important: The reverse DNS of the server (both IPv4 and IPv6) must point back to the mail domain name.
+
+See the :ref:`vmm` documentation for further postfix configuration, even if you don't install vmm.
+
+DNS records
+-----------
+
+You should set ``MX``, ``SPF`` and ``DMARC``:
+
+    MX mail_domain_name  10  mail_domain_name 
+    TXT mail_domain_name v=spf1 mx -all
+    SPF mail_domain_name v=spf1 mx -all
+    TXT _dmarc.mail_domain_name v=DMARC1;p=reject;rua=mailto:postmaster@mail_domain_name
+
+and, if domains are different::
+
+    MX application_domain_name  10  mail_domain_name
+    TXT application_domain_name v=spf1 mx -all
+    SPF application_domain_name v=spf1 mx -all
+
+
 DKIM procedure
-==============
+--------------
 
 Mostly following
 
@@ -12,7 +40,7 @@ https://help.ubuntu.com/community/Postfix/DKIM
     sudo mkdir -p /etc/opendkim/keys    # if necessary
     sudo chown opendkim:opendkim /etc/opendkim /etc/opendkim/keys
     cd !$
-    sudo -u opendkim opendkim-genkey -t -s mail -d <domain name>
+    sudo -u opendkim opendkim-genkey -t -s mail -d mail_domain_name
     # They should be in -rw------- mode.
     
     sudo cat mail.txt
@@ -20,20 +48,20 @@ https://help.ubuntu.com/community/Postfix/DKIM
 You'll see something like::
 
     mail._domainkey IN  TXT ( "v=DKIM1; k=rsa; t=y; "
-        "p=MIGfMA0GCS......" )  ; ----- DKIM key mail for <domain name>
+        "p=MIGfMA0GCS......" )  ; ----- DKIM key mail for mail_domain_name
 
 The quoted value (make sure to collapse quotes) needs to be a TXT record in the DNS for
-``mail._domainkey.<domain name>``
+``mail._domainkey.mail_domain_name``
 
 While you're there, there should be another TXT record for
-``_dmarc.<domain name>`` containing ``v=DMARC1; p=reject; rua=postmaster@myorganization.com``
+``_dmarc.mail_domain_name`` containing ``v=DMARC1; p=reject; rua=postmaster@myorganization.com``
 
 (Use a postmaster address that exists; it can be on the same domain on your organization's domain)
 
 .. code-block:: sh
 
-    sudo mv mail.private <domain name>.private
-    sudo mv mail.txt <domain name>.txt
+    sudo mv mail.private mail_domain_name.private
+    sudo mv mail.txt mail_domain_name.txt
 
 # IF THERE IS A SINGLE ASSEMBL SERVER ON YOUR MACHINE
 
@@ -41,13 +69,13 @@ Edit ``/etc/opendkim.conf`` to add or set::
 
     AutoRestart             Yes
     AutoRestartRate         10/1h
-    Domain          <domain name>
-    KeyFile     /etc/opendkim/keys/<domain name>.private
+    Domain          mail_domain_name
+    KeyFile     /etc/opendkim/keys/mail_domain_name.private
     Selector        mail
     Canonicalization    relaxed/simple
     Socket        inet:12345@localhost
 
-# ELSE, IF THERE ARE MULTIPLE ASSEMBL SERVERS ON YOUR MACHINE
+# ELSE, IF THERE ARE MULTIPLE ASSEMBL SERVERS ON YOUR MACHINE, EACH WITH ITS DOMAIN NAME:
 
 Edit ``/etc/opendkim.conf`` to add or set::
 
@@ -65,20 +93,20 @@ Edit ``/etc/opendkim/TrustedHosts``::
 
     localhost
     127.0.0.1
-    <domain name 1>
-    <domain name 2>
+    mail_domain_name_1
+    mail_domain_name_2
     ...
 
 Edit ``/etc/opendkim/KeyTable``::
 
-    mail._domainkey.<domain name 1> <domain name 1>:mail:/etc/opendkim/keys/<domain name 1>.private
-    mail._domainkey.<domain name 2> <domain name 2>:mail:/etc/opendkim/keys/<domain name 2>.private
+    mail._domainkey.mail_domain_name_1 mail_domain_name_1:mail:/etc/opendkim/keys/mail_domain_name_1.private
+    mail._domainkey.mail_domain_name_2 mail_domain_name_2:mail:/etc/opendkim/keys/mail_domain_name_2.private
     ...
 
 Edit ``/etc/opendkim/SigningTable``::
 
-    *@<domain name 1> mail._domainkey.<domain name 1>
-    *@<domain name 2> mail._domainkey.<domain name 2>
+    *@mail_domain_name_1 mail._domainkey.mail_domain_name_1
+    *@mail_domain_name_2 mail._domainkey.mail_domain_name_2
     ...
 
 

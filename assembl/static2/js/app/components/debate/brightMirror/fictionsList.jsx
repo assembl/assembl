@@ -13,7 +13,7 @@ import { fictionBackgroundColors } from '../../../constants';
 import Permissions, { connectedUserCan } from '../../../utils/permissions';
 import { displayAlert } from '../../../utils/utilityManager';
 
-export type FictionsListProps = {
+export type Props = {
   posts: Array<FictionPostPreview>,
   /** Bright Mirror identifier */
   identifier: string,
@@ -36,16 +36,17 @@ const deleteFictionHandler = () => {
 
 const getRandomColor = () => fictionBackgroundColors[Math.floor(Math.random() * fictionBackgroundColors.length)];
 
-const FictionsList = ({ posts, identifier, refetchIdea, lang, themeId }: FictionsListProps) => {
+const FictionsList = ({ posts, identifier, refetchIdea, lang, themeId }: Props) => {
   const slug = getDiscussionSlug();
 
   const connectedUserId = getConnectedUserId();
 
-  const childElements = posts.map((post) => {
+  const childElements = posts.reduce((result, post) => {
     // Define user permissions
     let authorName = '';
     let userCanEdit = false;
     let userCanDelete = false;
+
     if (post.creator) {
       const { userId, displayName, isDeleted } = post.creator;
       authorName = isDeleted ? I18n.t('deletedUser') : displayName;
@@ -55,16 +56,11 @@ const FictionsList = ({ posts, identifier, refetchIdea, lang, themeId }: Fiction
         connectedUserCan(Permissions.DELETE_POST);
     }
 
-    return (
+    result.push(
       <Animated key={post.id} preset="scalein">
         <FictionPreview
           id={post.id}
-          link={`${get('brightMirrorFiction', {
-            slug: slug,
-            phase: identifier,
-            themeId: themeId,
-            fictionId: post.id
-          })}`}
+          link={`${get('brightMirrorFiction', { slug: slug, phase: identifier, themeId: themeId, fictionId: post.id })}`}
           // $FlowFixMe subject is fetch localized
           title={post.subject}
           creationDate={I18n.l(post.creationDate, { dateFormat: 'date.format2' })}
@@ -76,11 +72,13 @@ const FictionsList = ({ posts, identifier, refetchIdea, lang, themeId }: Fiction
           userCanEdit={userCanEdit}
           userCanDelete={userCanDelete}
           lang={lang}
+          publicationState={post.publicationState}
           deleteFictionHandler={deleteFictionHandler}
         />
       </Animated>
     );
-  });
+    return result;
+  }, []);
 
   return (
     <section className="fictions-section">

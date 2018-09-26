@@ -535,6 +535,7 @@ class CreatePost:
     parent_id = PostInterface.parent_id
     attachments = PostInterface.attachments
     message_classifier = PostInterface.message_classifier
+    publication_state = PostInterface.publication_state
 
 
 class UpdatePost:
@@ -543,6 +544,7 @@ class UpdatePost:
     subject = "The subject of Post, updated in the original langauge of the Post."
     body = Default.string_entry % ("Post body") + " This is just a string input, and will update the original language body of the Post."
     attachments = "A list of Attachments to be appended to the Post."
+    publication_state = PostInterface.publication_state
 
 
 class DeletePost:

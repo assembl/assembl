@@ -80,7 +80,7 @@ exports[`Storyshots FictionPreview default 1`] = `
             className="inner-box"
           >
             <h3>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit....
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis tincidunt dolor.
             </h3>
             <p
               className="info"
@@ -88,12 +88,12 @@ exports[`Storyshots FictionPreview default 1`] = `
               <span
                 className="author"
               >
-                John Doe - 
+                John Doe
               </span>
               <span
                 className="published-date"
               >
-                01/01/2018
+                 - 01/01/2018
               </span>
             </p>
           </div>
@@ -572,6 +572,36 @@ exports[`Storyshots FictionPreview default 1`] = `
                         }
                       </span>
                     </span>
+                  </span>
+                  <span>
+                    <span>
+                      <br />
+                        
+                    </span>
+                    <span
+                      style={Object {}}
+                    >
+                      publicationState
+                    </span>
+                    <span>
+                      =
+                      <span
+                        style={Object {}}
+                      >
+                        "
+                        <span
+                          style={
+                            Object {
+                              "color": "#22a",
+                              "wordBreak": "break-word",
+                            }
+                          }
+                        >
+                          PUBLISHED
+                        </span>
+                        "
+                      </span>
+                    </span>
                     <br />
                   </span>
                 </span>
@@ -725,7 +755,7 @@ exports[`Storyshots FictionPreview playground 1`] = `
             className="inner-box"
           >
             <h3>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit....
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis tincidunt dolor.
             </h3>
             <p
               className="info"
@@ -733,12 +763,12 @@ exports[`Storyshots FictionPreview playground 1`] = `
               <span
                 className="author"
               >
-                John Doe - 
+                John Doe
               </span>
               <span
                 className="published-date"
               >
-                01/01/2018
+                 - 01/01/2018
               </span>
             </p>
           </div>
@@ -1215,6 +1245,36 @@ exports[`Storyshots FictionPreview playground 1`] = `
                           deleteFictionHandler
                         </span>
                         }
+                      </span>
+                    </span>
+                  </span>
+                  <span>
+                    <span>
+                      <br />
+                        
+                    </span>
+                    <span
+                      style={Object {}}
+                    >
+                      publicationState
+                    </span>
+                    <span>
+                      =
+                      <span
+                        style={Object {}}
+                      >
+                        "
+                        <span
+                          style={
+                            Object {
+                              "color": "#22a",
+                              "wordBreak": "break-word",
+                            }
+                          }
+                        >
+                          PUBLISHED
+                        </span>
+                        "
                       </span>
                     </span>
                     <br />

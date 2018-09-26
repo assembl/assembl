@@ -17,7 +17,9 @@ type TopPostFormContainerProps = {
   fillBodyLabelMsgId: string,
   bodyPlaceholderMsgId: string,
   postSuccessMsgId: string,
-  bodyMaxLength?: number
+  bodyMaxLength: number,
+  draftable: boolean,
+  draftSuccessMsgId: string
 };
 
 type TopPostFormContainerState = {
@@ -34,9 +36,11 @@ class TopPostFormContainer extends React.Component<TopPostFormContainerProps, To
   topPostFormContainer: () => void;
 
   static defaultProps = {
-    instructionLabel: 'debate.thread.startDiscussion',
+    instructionLabelMsgId: 'debate.thread.startDiscussion',
     isColumnViewInline: false,
-    messageColumns: []
+    messageColumns: [],
+    draftable: false,
+    draftSuccessMsgId: null
   };
 
   constructor(props: TopPostFormContainerProps) {
@@ -100,7 +104,9 @@ class TopPostFormContainer extends React.Component<TopPostFormContainerProps, To
       fillBodyLabelMsgId,
       bodyPlaceholderMsgId,
       postSuccessMsgId,
-      bodyMaxLength
+      draftSuccessMsgId,
+      bodyMaxLength,
+      draftable
     } = this.props;
     const columnsInfos = this.getColumnsInfos();
     const { sticky } = this.state;
@@ -166,6 +172,8 @@ class TopPostFormContainer extends React.Component<TopPostFormContainerProps, To
                             bodyPlaceholderMsgId={bodyPlaceholderMsgId}
                             postSuccessMsgId={postSuccessMsgId}
                             bodyMaxLength={bodyMaxLength}
+                            draftable={draftable}
+                            draftSuccessMsgId={draftSuccessMsgId}
                           />
                         </Col>
                       </Row>

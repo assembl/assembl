@@ -280,6 +280,7 @@ class CreatePost(graphene.Mutation):
         parent_id = graphene.ID(description=docs.CreatePost.parent_id)
         attachments = graphene.List(graphene.String, description=docs.CreatePost.attachments)
         message_classifier = graphene.String(description=docs.CreatePost.message_classifier)
+        publication_state = PublicationStates(description=docs.CreatePost.publication_state)
 
     post = graphene.Field(lambda: Post)
 
@@ -321,6 +322,8 @@ class CreatePost(graphene.Mutation):
             classifier = args.get('message_classifier', None)
             body = sanitize_html(body)
             body_langstring = models.LangString.create(body)
+            publication_state = models.PublicationStates.from_string(args.get('publication_state')) if args.get('publication_state') in models.PublicationStates.values() else models.PublicationStates.PUBLISHED
+
             if subject:
                 subject = sanitize_text(subject)
                 subject_langstring = models.LangString.create(subject)
@@ -377,12 +380,14 @@ class CreatePost(graphene.Mutation):
                 creator_id=user_id,
                 body_mime_type=u'text/html',
                 message_classifier=classifier,
-                creation_date=datetime.utcnow()
+                creation_date=datetime.utcnow(),
+                publication_state=publication_state
             )
             new_post.guess_languages()
             db = new_post.db
             db.add(new_post)
             db.flush()
+
             if in_reply_to_post:
                 new_post.set_parent(in_reply_to_post)
             elif in_reply_to_idea:
@@ -394,7 +399,6 @@ class CreatePost(graphene.Mutation):
                     idea=in_reply_to_idea
                 )
                 db.add(idea_post_link)
-
             db.flush()
 
             attachments = args.get('attachments', [])
@@ -422,6 +426,7 @@ class UpdatePost(graphene.Mutation):
         subject = graphene.String(description=docs.UpdatePost.subject)
         body = graphene.String(required=True, description=docs.UpdatePost.body)
         attachments = graphene.List(graphene.String, description=docs.UpdatePost.attachments)
+        publication_state = PublicationStates(description=docs.UpdatePost.publication_state)
 
     post = graphene.Field(lambda: Post)
 
@@ -506,6 +511,14 @@ class UpdatePost(graphene.Mutation):
                     post.db.delete(document)
                     post.attachments.remove(post_attachment)
                     post.db.flush()
+
+        publication_state = models.PublicationStates.from_string(args.get('publication_state')) if args.get('publication_state') in models.PublicationStates.values() else None
+        if publication_state and publication_state != post.publication_state:
+            post.publication_state = publication_state
+            changed = True
+            # Update the creation date when switching from draft to published
+            if post.publication_state == models.PublicationStates.DRAFT and publication_state == models.PublicationStates.PUBLISHED:
+                post.creation_date = datetime.utcnow()
 
         if changed:
             post.modification_date = datetime.utcnow()

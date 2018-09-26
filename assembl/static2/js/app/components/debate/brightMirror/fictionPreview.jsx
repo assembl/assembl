@@ -1,9 +1,8 @@
 // @flow
 import * as React from 'react';
 import { Link } from 'react-router';
-import truncate from 'lodash/truncate';
 // Constant imports
-import { FICTION_PREVIEW_TITLE_MAX_CHAR, FICTION_PREVIEW_NAME_MAX_CHAR } from '../../../constants';
+import { PublicationStates, FICTION_DRAFT_OPACITY } from '../../../constants';
 import { NO_BODY_LENGTH } from '../common/topPostForm';
 // Components imports
 import EditPostForm from '../common/editPostForm';
@@ -28,15 +27,9 @@ export type FictionPreviewProps = {
   lang: string,
   userCanEdit: boolean,
   userCanDelete: boolean,
-  deleteFictionHandler: Function
+  deleteFictionHandler: Function,
+  publicationState: string
 };
-
-const ellipsis = (text, length) =>
-  `${truncate(text, {
-    length: length,
-    separator: ' ',
-    omission: '...'
-  })}`;
 
 const FictionPreview = ({
   id,
@@ -50,8 +43,10 @@ const FictionPreview = ({
   lang,
   userCanEdit,
   userCanDelete,
-  deleteFictionHandler
+  deleteFictionHandler,
+  publicationState
 }: FictionPreviewProps) => {
+  const isDraft = publicationState === PublicationStates.DRAFT;
   // Define components
   const openPostModal = () => {
     const content = (
@@ -68,8 +63,11 @@ const FictionPreview = ({
           postSuccessMsgId="debate.brightMirror.postSuccessMsg"
           editTitleLabelMsgId="debate.brightMirror.editFiction"
           bodyDescriptionMsgId="debate.brightMirror.fiction"
+          fillBodyLabelMsgId="debate.brightMirror.fillBodyLabel"
+          draftSuccessMsgId="debate.brightMirror.draftSuccessMsg"
           childrenUpdate={false}
           bodyMaxLength={NO_BODY_LENGTH}
+          draftable={isDraft}
         />
       </div>
     );
@@ -98,21 +96,24 @@ const FictionPreview = ({
 
   // Format author name
   const name = authorName || '';
-  const author = `${ellipsis(name, FICTION_PREVIEW_NAME_MAX_CHAR)} - `;
+  const date = ` - ${creationDate}`;
+
+  const backgroundColor = color + (isDraft ? FICTION_DRAFT_OPACITY : '');
 
   return (
-    <div className="fiction-preview" style={{ backgroundColor: color }}>
+    <div className="fiction-preview" style={{ backgroundColor: backgroundColor }}>
       <div className="content-box">
+        {isDraft ? <span className="draft">{PublicationStates.DRAFT}</span> : null}
         <ul className="actions">
           {editButton}
           {deleteButton}
         </ul>
         <Link className="link" to={link}>
           <div className="inner-box">
-            <h3>{ellipsis(title, FICTION_PREVIEW_TITLE_MAX_CHAR)}</h3>
+            <h3>{title}</h3>
             <p className="info">
-              <span className="author">{author}</span>
-              <span className="published-date">{creationDate}</span>
+              <span className="author">{name}</span>
+              <span className="published-date">{date}</span>
             </p>
           </div>
         </Link>

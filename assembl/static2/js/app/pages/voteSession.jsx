@@ -16,7 +16,7 @@ import Section from '../components/common/section';
 import AvailableTokens from '../components/voteSession/availableTokens';
 import Proposals from '../components/voteSession/proposals';
 import ProposalsResults from '../components/voteSession/proposalsResults';
-import { getDomElementOffset, isMobile, fromGlobalId } from '../utils/globalFunctions';
+import { getDomElementOffset, isMobile } from '../utils/globalFunctions';
 import { getIfPhaseCompletedById } from '../utils/timeline';
 import { promptForLoginOr, displayAlert, displayModal } from '../utils/utilityManager';
 import { transformLinksInHtml } from '../utils/linkify';
@@ -428,8 +428,8 @@ export { DumbVoteSession };
 export default compose(
   connect(mapStateToProps),
   graphql(VoteSessionQuery, {
-    options: ({ lang, phaseId }) => ({
-      variables: { discussionPhaseId: fromGlobalId(phaseId), lang: lang }
+    options: ({ lang, discussionPhaseId }) => ({
+      variables: { discussionPhaseId: discussionPhaseId, lang: lang }
     }),
     props: ({ data, ownProps }) => {
       const defaultHeaderImage = ownProps.debate.debateData.headerBackgroundUrl || '';

@@ -32,7 +32,8 @@ type FictionPostPreview = {
     userId: string,
     displayName: ?string,
     isDeleted: ?boolean
-  |}
+  |},
+  publicationState: string
 };
 
 type EditableDocument = DocumentFragment & {

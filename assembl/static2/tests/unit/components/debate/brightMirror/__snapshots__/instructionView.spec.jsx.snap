@@ -80,9 +80,10 @@ exports[`Bright Mirror page should match BrightMirror instruction snapshot 1`] =
     <TopPostFormContainer
       bodyMaxLength={0}
       bodyPlaceholderMsgId="debate.brightMirror.fillBodyLabel"
+      draftSuccessMsgId="debate.brightMirror.draftSuccessMsg"
+      draftable={true}
       fillBodyLabelMsgId="debate.brightMirror.fillBodyLabel"
       ideaId={0}
-      instructionLabel="debate.thread.startDiscussion"
       instructionLabelMsgId="debate.brightMirror.startFictionLabel"
       isColumnViewInline={false}
       messageColumns={Array []}

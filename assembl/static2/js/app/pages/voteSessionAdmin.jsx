@@ -184,7 +184,7 @@ type Props = {
   debateId: string,
   route: Route,
   router: Router,
-  phaseId: string
+  discussionPhaseId: string
 };
 
 type State = {
@@ -333,7 +333,7 @@ class VoteSessionAdmin extends React.Component<Props, State> {
       createProposal,
       updateProposal,
       deleteProposal,
-      phaseId
+      discussionPhaseId
     } = this.props;
 
     if (voteSessionPage.get('_hasChanged')) {
@@ -346,7 +346,6 @@ class VoteSessionAdmin extends React.Component<Props, State> {
       const propositionsSectionTitleEntries = voteSessionPage.get('propositionsSectionTitleEntries').toJS();
       const pageHeaderImage = voteSessionPage.get('headerImage').toJS();
       const headerImage = typeof pageHeaderImage.externalUrl === 'object' ? pageHeaderImage.externalUrl : null;
-      const discussionPhaseId = fromGlobalId(phaseId);
       const payload = {
         variables: {
           discussionPhaseId: discussionPhaseId,
