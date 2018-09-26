@@ -1,4 +1,8 @@
 .comments-header {
+  padding-bottom: 25px;
+  padding-left: 15px;
+  padding-right: 15px;
+
   .title {
     color: $black;
     font-family: $font-family4;
@@ -24,6 +28,9 @@
 
 @media screen and (min-width: $screen-sm-min) {
   .comments-header {
+    padding-left: 54px;
+    padding-right: 54px;
+
     .title .highlight {
       display: inline-block;
     }

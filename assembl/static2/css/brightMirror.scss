@@ -26,8 +26,7 @@ $fiction-toolbar-icon-size: 17px;
 }
 
 // Bright mirror global style
-.bright-mirror-fiction,
-.bright-mirror-comments {
+.bright-mirror-fiction {
   padding-bottom: 30px;
   padding-top: 30px;
 }
@@ -40,6 +39,17 @@ $fiction-toolbar-icon-size: 17px;
 
   .container-fluid {
     padding: 30px 18px 70px 18px;
+  }
+}
+
+.bright-mirror-comments {
+  padding: 30px 0 0 0;
+
+  .comments-content {
+    background-color: $white;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 30px;
   }
 }
 
@@ -59,8 +69,7 @@ $fiction-toolbar-icon-size: 17px;
 }
 
 @media screen and (min-width: $screen-sm-min) {
-  .bright-mirror-fiction,
-  .bright-mirror-comments {
+  .bright-mirror-fiction {
     padding: 90px 54px;
   }
 
@@ -75,13 +84,11 @@ $fiction-toolbar-icon-size: 17px;
   }
 
   .bright-mirror-comments {
-    .comments-header,
-    .comments-content {
-      padding: 45px 54px;
-    }
+    padding: 40px 0 0 0;
 
     .comments-content {
-      padding-top: 50px;
+      padding-left: 54px;
+      padding-right: 54px;
     }
   }
 }
@@ -89,7 +96,15 @@ $fiction-toolbar-icon-size: 17px;
 @media screen and (min-width: $screen-xl-min) {
   .bright-mirror-fiction,
   .bright-mirror-comments {
-    padding: 130px 285px 90px 285px;
+    padding: 90px 285px 0 285px;
+  }
+
+  .bright-mirror-comments {
+    .comments-content {
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 80px;
+    }
   }
 
   .bright-mirror-fiction {

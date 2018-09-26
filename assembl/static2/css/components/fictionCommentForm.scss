@@ -1,21 +1,46 @@
 .comment-form {
-  padding-bottom: 30px;
+  padding-bottom: 25px;
 
   .textarea-with-buttons-container {
     border: 2px solid $blue-violet;
     border-radius: 4px;
+    display: flex;
+    flex-wrap: wrap;
 
     .form-control {
       border: none;
+      height: 75px;
+      resize: none;
+
+      &:focus {
+        box-shadow: none;
+      }
     }
 
     .comment-textarea {
-      margin-bottom: 0;
+      flex-grow: 20; // flex-grow for textarea-with-buttons-container flex display
+      margin: 0;
+    }
+
+    .comment-buttons {
+      display: flex;
+      flex-grow: 1; // flex-grow for textarea-with-buttons-container flex display
     }
 
     .btn {
       border-color: transparent;
-      height: 54px;
+      flex-basis: 100px;
+      flex-grow: 1; // flex-grow for comment-buttons flex display
+
+      &.cancel {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+
+      &.submit {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+      }
     }
   }
 }
@@ -25,10 +50,17 @@
     padding-bottom: 50px;
 
     .textarea-with-buttons-container {
-      display: flex;
+      .form-control {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        height: 52px;
+      }
 
-      .comment-textarea {
-        flex-grow: 1;
+      .btn {
+        &.cancel {
+          border-top-left-radius: 0;
+          border-bottom-left-radius: 0;
+        }
       }
     }
   }

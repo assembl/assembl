@@ -64,12 +64,14 @@ class FictionCommentForm extends Component<LocalFictionCommentFormProps, Fiction
               onChange={this.formInputOnChangeHandler}
             />
           </FormGroup>
-          <Button className="cancel" onClick={this.formCancelHandler}>
-            {I18n.t('debate.brightMirror.commentFictionCancel')}
-          </Button>
-          <Button className="submit" onClick={this.formSubmitHandler} disabled={commentTextareaValue === EMPTY_STRING}>
-            {I18n.t('debate.brightMirror.commentFictionSubmit')}
-          </Button>
+          <div className="comment-buttons">
+            <Button className="cancel" onClick={this.formCancelHandler}>
+              {I18n.t('debate.brightMirror.commentFictionCancel')}
+            </Button>
+            <Button className="submit" onClick={this.formSubmitHandler} disabled={commentTextareaValue === EMPTY_STRING}>
+              {I18n.t('debate.brightMirror.commentFictionSubmit')}
+            </Button>
+          </div>
         </div>
       </form>
     );

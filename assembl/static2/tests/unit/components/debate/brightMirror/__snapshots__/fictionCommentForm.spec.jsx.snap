@@ -34,22 +34,26 @@ exports[`Storyshots FictionCommentForm default 1`] = `
             value=""
           />
         </div>
-        <button
-          className="cancel btn btn-default"
-          disabled={false}
-          onClick={[Function]}
-          type="button"
+        <div
+          className="comment-buttons"
         >
-          Annuler
-        </button>
-        <button
-          className="submit btn btn-default"
-          disabled={true}
-          onClick={[Function]}
-          type="button"
-        >
-          Commenter
-        </button>
+          <button
+            className="cancel btn btn-default"
+            disabled={false}
+            onClick={[Function]}
+            type="button"
+          >
+            Annuler
+          </button>
+          <button
+            className="submit btn btn-default"
+            disabled={true}
+            onClick={[Function]}
+            type="button"
+          >
+            Commenter
+          </button>
+        </div>
       </div>
     </form>
   </div>
