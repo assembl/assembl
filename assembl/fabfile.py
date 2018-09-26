@@ -371,9 +371,9 @@ def generate_frozen_requirements():
     local_venv = env.get("local_venv", "./venv")
     with settings(host_string="localhost", venvpath=local_venv,
                   user=getuser(), projectpath=os.getcwd()):
-        venvcmd("fab -c configs/local_prod.rc generate_new_requirements")
-        venvcmd("fab -c configs/testing.rc generate_new_requirements")
-        venvcmd("fab -c configs/develop.rc generate_new_requirements")
+        venvcmd("fab -c assembl/configs/local_prod.rc generate_new_requirements")
+        venvcmd("fab -c assembl/configs/testing.rc generate_new_requirements")
+        venvcmd("fab -c assembl/configs/develop.rc generate_new_requirements")
         # TODO: Check that no package has different versions in different files.
 
 
