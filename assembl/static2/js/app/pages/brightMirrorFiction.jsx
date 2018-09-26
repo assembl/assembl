@@ -68,7 +68,9 @@ export type IdeaWithCommentsData = {
   /** GraphQL flag that checks the query/mutation state */
   loading: boolean,
   /** GraphQL error object used to handle fetching errors */
-  error: any
+  error: any,
+  /** GraphQL refetch function in order to refresh data once a comment is submitted */
+  refetch: Function
 };
 
 type BrightMirrorFictionGraphQLProps = {
@@ -131,7 +133,7 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
     displayAlert('success', I18n.t('loading.wait'));
 
     // Define variables
-    const { contentLocale, themeId, fictionId, createComment } = this.props;
+    const { contentLocale, themeId, fictionId, createComment, ideaWithCommentsData } = this.props;
     const createPostInputs: CreateCommentInputs = {
       body: comment,
       contentLocale: contentLocale,
@@ -145,6 +147,9 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
         // If needed post result can be fetch with `result.data.createPost.post`
         displayAlert('success', I18n.t('debate.thread.postSuccess'));
         // Set state here to update UI
+
+        // Refetch 'ideaWithCommentsData' to display the updated list of comments
+        ideaWithCommentsData.refetch();
       })
       .catch((error) => {
         displayAlert('danger', `${error}`);

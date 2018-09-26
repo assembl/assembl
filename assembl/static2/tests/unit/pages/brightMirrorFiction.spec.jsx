@@ -104,7 +104,8 @@ describe('<BrightMirrorFiction /> - with mount', () => {
       ideaWithCommentsData = {
         ...ideaWithCommentsDataTemplate,
         loading: false,
-        error: null
+        error: null,
+        refetch: () => null
       };
 
       brightMirrorFictionProps = {
@@ -169,7 +170,8 @@ describe('<BrightMirrorFiction /> - with mount', () => {
       ideaWithCommentsData = {
         ...ideaWithCommentsDataTemplate,
         loading: true, // set loading to true
-        error: null
+        error: null,
+        refetch: () => null
       };
 
       brightMirrorFictionProps = {
@@ -212,7 +214,8 @@ describe('<BrightMirrorFiction /> - with mount', () => {
       ideaWithCommentsData = {
         ...ideaWithCommentsDataTemplate,
         loading: false,
-        error: { dummy: 'error' } // set loading error
+        error: { dummy: 'error' }, // set loading error
+        refetch: () => null
       };
 
       brightMirrorFictionProps = {
