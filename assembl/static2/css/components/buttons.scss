@@ -225,6 +225,14 @@
   background-color: $more-info-color;
 }
 
+.back-btn {
+  color: $black;
+
+  .icon-button {
+    font-size: 20px;
+  }
+}
+
 // The partial used below is only used as an example for instruction purpose
 @import '../../js/app/integration/101/components/button101/button101';
 @import '../../js/app/integration/101/components/checkbox101/checkbox101';

@@ -24,7 +24,14 @@ $fiction-toolbar-icon-size: 17px;
 
 // Bright mirror global style
 .bright-mirror-fiction {
-  padding: 30px 18px 70px 18px;
+  .back-btn {
+    display: block;
+    padding: 15px 18px;
+  }
+
+  .container-fluid {
+    padding: 10px 18px 70px 18px;
+  }
 }
 
 .background-fiction-default {
@@ -33,13 +40,27 @@ $fiction-toolbar-icon-size: 17px;
 
 @media screen and (min-width: $screen-sm-min) {
   .bright-mirror-fiction {
-    padding: 90px 54px;
+    .back-btn {
+      padding: 25px 54px;
+    }
+
+    .container-fluid {
+      padding: 25px 54px 90px 54px;
+    }
   }
 }
 
 @media screen and (min-width: $screen-xl-min) {
   .bright-mirror-fiction {
-    padding: 130px 285px 90px 295px;
+    .back-btn {
+      margin: 0 auto;
+      max-width: 1400px;
+      padding: 25px 0 0 0;
+    }
+
+    .container-fluid {
+      padding: 60px 285px 90px 295px;
+    }
   }
 }
 

@@ -335,6 +335,7 @@ const Translations = {
       confirmDeletionButtonCancel: "Annuler",
       whatYouNeedToKnow: "À retenir",
       syntheses: "Synthèses",
+      back: "Retour",
       survey: {
         loadRecentPosts: "Afficher les propositions récentes",
         themesTitle: "Choisissez une thématique !",
@@ -1204,6 +1205,7 @@ const Translations = {
       confirmDeletionButtonCancel: "Cancel",
       whatYouNeedToKnow: "What you need to know",
       syntheses: "Syntheses",
+      back: "Back",
       survey: {
         loadRecentPosts: "Load recent proposals",
         themesTitle: "Choose a theme!",

@@ -15,6 +15,8 @@ import withLoadingIndicator from '../components/common/withLoadingIndicator';
 import FictionHeader from '../components/debate/brightMirror/fictionHeader';
 import FictionToolbar from '../components/debate/brightMirror/fictionToolbar';
 import FictionBody from '../components/debate/brightMirror/fictionBody';
+import BackButton from '../components/debate/common/backButton';
+
 // Utils imports
 import { displayAlert } from '../utils/utilityManager';
 import { getConnectedUserId } from '../utils/globalFunctions';
@@ -104,6 +106,9 @@ export class BrightMirrorFiction extends Component<Props, State> {
     const modifyFictionCallback = (subject, body, state) => {
       this.setState({ title: subject, content: body, publicationState: state });
     };
+    const backBtnCallback = () => {
+      browserHistory.push(`${get('idea', { slug: slug, phase: phase, themeId: themeId })}`);
+    };
     // Define components props
     const circleAvatarProps: CircleAvatarProps = {
       username: displayName,
@@ -135,17 +140,20 @@ export class BrightMirrorFiction extends Component<Props, State> {
     };
     return (
       <Fragment>
-        <Grid fluid className="bright-mirror-fiction background-fiction-default">
-          <Row>
-            <Col xs={12}>
-              <article>
-                <FictionHeader {...fictionHeaderProps} />
-                <FictionToolbar {...fictionToolbarProps} />
-                <FictionBody {...fictionBodyProps} />
-              </article>
-            </Col>
-          </Row>
-        </Grid>
+        <div className="bright-mirror-fiction background-fiction-default">
+          <BackButton handleClick={backBtnCallback} linkClassName="back-btn" />
+          <Grid fluid>
+            <Row>
+              <Col xs={12}>
+                <article>
+                  <FictionHeader {...fictionHeaderProps} />
+                  <FictionToolbar {...fictionToolbarProps} />
+                  <FictionBody {...fictionBodyProps} />
+                </article>
+              </Col>
+            </Row>
+          </Grid>
+        </div>
       </Fragment>
     );
   }
