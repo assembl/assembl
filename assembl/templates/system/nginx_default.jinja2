@@ -2,7 +2,7 @@
 server {
     listen   80;
     {% if nginx_ipv6 %}
-      listen   [::]:80;
+    listen   [::]:80;
     {% endif %}
     server_name {{public_hostname}};
     return 301 https://$host$request_uri;
@@ -19,9 +19,8 @@ server {
   {% if accept_secure_connection %}
     listen 443 ssl http2;
     {% if nginx_ipv6 %}
-        listen   [::]:443 ssl http2;
+    listen   [::]:443 ssl http2;
     {% endif %}
-    
     {% if use_letsencrypt %}
       ssl_certificate     /etc/letsencrypt/live/{{public_hostname}}/fullchain.pem;
       ssl_certificate_key /etc/letsencrypt/live/{{public_hostname}}/privkey.pem;
@@ -38,55 +37,55 @@ server {
     ssl_stapling on;
     ssl_stapling_verify on;
     {% if ocsp_path %}
-      ssl_trusted_certificate {{ ocsp_path }};
+    ssl_trusted_certificate {{ ocsp_path }};
     {% endif %}
     {% if ssl_dhparam %}
-      ssl_dhparam {{ ssl_dhparam }};
+    ssl_dhparam {{ ssl_dhparam }};
     {% endif %}
 
   {% endif %}
   {% if not require_secure_connection %}
     listen    80;
     {% if nginx_ipv6 %}
-        listen   [::]:80;
+    listen   [::]:80;
     {% endif %}
   {% endif %}
 
-  add_header x-xss-protection "1; mode=block" always;
-  add_header x-frame-options "SAMEORIGIN" always;
-  add_header X-Content-Type-Options "nosniff" always;
+    add_header x-xss-protection "1; mode=block" always;
+    add_header x-frame-options "SAMEORIGIN" always;
+    add_header X-Content-Type-Options "nosniff" always;
 
-  server_tokens off;
-  {% if csp_header %}
+    server_tokens off;
+    {% if csp_header %}
     add_header Content-Security-Policy "{{ csp_header }}";
-  {% endif %}
+    {% endif %}
 
-  # This is the server name, if you're running multiple servers
-  server_name {{public_hostname}};
+    # This is the server name, if you're running multiple servers
+    server_name {{public_hostname}};
 
-  {% if disallow_robots %}
+    {% if disallow_robots %}
     location /robots.txt {
         return 200 "User-agent: *\nDisallow: /";
     }
-  {% endif %}
+    {% endif %}
 
-  {% if use_letsencrypt %}
-  location /.well-known {
-      #This is for domain verification
-      alias /var/www/html/.well-known;
-  }
-  {% endif %}
+    {% if use_letsencrypt %}
+    location /.well-known {
+        #This is for domain verification
+        alias /var/www/html/.well-known;
+    }
+    {% endif %}
 
-  {% if changes_websocket_proxied %}
+    {% if changes_websocket_proxied %}
     location /socket {
-        proxy_pass http://{{changes_websocket_host}}:{{changes_websocket_port}}/{{changes_prefix}};
+        proxy_pass http://{{changes_websocket_host}}:{{changes_websocket_port}}{{changes_prefix}};
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection "upgrade";
     }
-  {% endif %}
+    {% endif %}
 
-  {% if url_metadata_host %}
+    {% if url_metadata_host %}
     location /urlmetadata/ {
         proxy_http_version 1.1;
         proxy_set_header Host $http_host;
@@ -100,36 +99,29 @@ server {
         rewrite    /urlmetadata/(.*) /$1 break;
         proxy_pass http://urlmetadata;
     }
-  {% endif %}
+    {% endif %}
 
-  location /static {
-      #Do NOT put something like "expires modified +1h;" here, it WILL cause problems when deploying a new version.
-      #Nor will it help your performance after the first hour...
-      add_header Cache-Control "public, max-age=3600";
-      alias {{code_root}}/assembl/static;
-  }
+    location /static {
+        #Do NOT put something like "expires modified +1h;" here, it WILL cause problems when deploying a new version.
+        #Nor will it help your performance after the first hour...
+        add_header Cache-Control "public, max-age=3600";
+        alias {{code_root}}/assembl/static;
+    }
 
-  location /static2 {
-      #Do NOT put something like "expires modified +1h;" here, it WILL cause problems when deploying a new version.
-      #Nor will it help your performance after the first hour...
-      add_header Cache-Control "public, max-age=3600";
-      alias {{code_root}}/assembl/static2;
-  }
+    location /private_uploads {
+      internal;
+      alias {{ projectpath }}/var/uploads;
+    }
 
-  location /private_uploads {
-    internal;
-    alias {{ projectpath }}/var/uploads;
-  }
-
-  location / {
-      include uwsgi_params;
-      uwsgi_read_timeout 5m;
-      {% if uwsgi_port %}
+    location / {
+        include uwsgi_params;
+        uwsgi_read_timeout 5m;
+        {% if uwsgi_port %}
         uwsgi_pass uwsgi://{{ uwsgi_host }}:{{ uwsgi_port }};
-      {% else %}
+        {% else %}
         uwsgi_pass unix://{{ projectpath }}/var/run/uwsgi.sock;
-      {% endif %}
-  }
+        {% endif %}
+    }
 
   # So files uploaded to the database are not artificailly limited by nginx
   client_max_body_size 500M;
