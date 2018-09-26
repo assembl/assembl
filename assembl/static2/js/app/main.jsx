@@ -21,13 +21,10 @@ class Main extends React.Component<Props> {
     const { themeId } = params;
     const { currentPhaseIdentifier, currentPhaseId } = getCurrentPhaseData(timeline);
     let identifier = params.phase || null;
-    let phaseId = params.phaseId || null;
+    let phaseId = currentPhaseId;
     if (!identifier) {
       identifier = currentPhaseIdentifier;
-      phaseId = currentPhaseId;
-    }
-    if (!phaseId && identifier) {
-      // keep old shared urls working
+    } else {
       phaseId = getPhaseId(timeline, identifier);
     }
     const discussionPhaseId = phaseId ? fromGlobalId(phaseId) : null;

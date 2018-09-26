@@ -315,7 +315,7 @@ const isNotInLandingPageAdmin = isNotInAdminSection('landingPage');
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   graphql(VoteSessionQuery, {
-    skip: ({ params }) => params.phase !== 'voteSession',
+    skip: ({ params, timeline }) => !timeline || params.phase !== 'voteSession',
     options: ({ locale, timeline, params }) => {
       const phaseId = getPhaseId(timeline, params.phase);
       const discussionPhaseId = phaseId ? fromGlobalId(phaseId) : null;

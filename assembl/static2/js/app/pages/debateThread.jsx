@@ -7,6 +7,13 @@ import Ideas from '../components/debate/tableOfIdeas/ideas';
 import AllIdeasQuery from '../graphql/AllIdeasQuery.graphql';
 
 const DebateThread = ({ identifier, data, params, children }) => {
+  if (!data) {
+    return (
+      <div className="debate">
+        <Loader color="black" />
+      </div>
+    );
+  }
   const { loading, ideas, rootIdea } = data;
   const phaseId = params.phaseId || null;
   const themeId = params.themeId || null;
@@ -24,9 +31,7 @@ const DebateThread = ({ identifier, data, params, children }) => {
       {loading && isParentRoute && <Loader color="black" />}
       {!loading &&
         ideas &&
-        isParentRoute && (
-          <Ideas ideas={ideas} rootIdeaId={rootIdea.id} identifier={identifier} phaseId={phaseId} />
-        )}
+        isParentRoute && <Ideas ideas={ideas} rootIdeaId={rootIdea.id} identifier={identifier} phaseId={phaseId} />}
       {!isParentRoute && <section className="debate-section">{childrenElm}</section>}
     </div>
   );
@@ -37,7 +42,11 @@ DebateThread.propTypes = {
     loading: PropTypes.bool.isRequired,
     error: PropTypes.object,
     ideas: PropTypes.Array
-  }).isRequired
+  })
+};
+
+DebateThread.defaultProps = {
+  data: null
 };
 
 const mapStateToProps = state => ({
@@ -45,4 +54,9 @@ const mapStateToProps = state => ({
   slug: state.debate.debateData.slug
 });
 
-export default compose(connect(mapStateToProps), graphql(AllIdeasQuery))(DebateThread);
+export default compose(
+  connect(mapStateToProps),
+  graphql(AllIdeasQuery, {
+    skip: ({ discussionPhaseId }) => !discussionPhaseId
+  })
+)(DebateThread);
