@@ -113,6 +113,11 @@ def fill_template(template, config, output=None):
         for (k, v) in config.items():
             if str(v).lower() == 'false':
                 config[k] = False
+            if '%(' in v:
+                try:
+                    config[k] = v % config
+                except KeyError:
+                    pass
         result = tmpl.render(config)
     else:
         raise RuntimeError("Unknown template type")
