@@ -289,7 +289,7 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
             </Row>
           </Grid>
         </div>
-        <Grid fluid className="bright-mirror-comments">
+        <Grid fluid className="bright-mirror-comments background-comments-default">
           <Row>
             <Col xs={12}>
               <FictionCommentHeader {...fictionCommentHeaderProps} />

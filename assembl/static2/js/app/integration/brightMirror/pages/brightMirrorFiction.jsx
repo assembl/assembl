@@ -38,7 +38,7 @@ const BrightMirrorFiction = () => (
         </Row>
       </Grid>
     </div>
-    <Grid fluid className="bright-mirror-comment">
+    <Grid fluid className="bright-mirror-comments background-comments-default">
       <Row>
         <Col xs={12}>
           <FictionCommentHeader {...defaultFictionCommentHeader} />

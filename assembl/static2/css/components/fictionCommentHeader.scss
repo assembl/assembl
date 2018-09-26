@@ -1,6 +1,4 @@
 .comments-header {
-  padding-bottom: 30px;
-
   .title {
     color: $black;
     font-family: $font-family4;
@@ -34,11 +32,6 @@
 
 @media screen and (min-width: $screen-xl-min) {
   .comments-header {
-    margin-left: auto;
-    margin-right: auto;
-    padding-top: 95px;
-    width: 1200px;
-
     .title {
       font-size: $font-size-xl;
       margin-bottom: 35px;

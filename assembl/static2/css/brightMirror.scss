@@ -26,6 +26,12 @@ $fiction-toolbar-icon-size: 17px;
 }
 
 // Bright mirror global style
+.bright-mirror-fiction,
+.bright-mirror-comments {
+  padding-bottom: 30px;
+  padding-top: 30px;
+}
+
 .bright-mirror-fiction {
   .back-btn {
     display: block;
@@ -41,10 +47,7 @@ $fiction-toolbar-icon-size: 17px;
   @include set-background(default);
 }
 
-.bright-mirror-comments {
-  padding-bottom: 30px;
-  padding-top: 30px;
-
+.background-comments-default {
   // Striped background
   background: repeating-linear-gradient(
     -45deg,
@@ -53,23 +56,14 @@ $fiction-toolbar-icon-size: 17px;
     $white 2px,
     $white 7px
   );
-  //   padding-left: 0;
-  //   padding-right: 0;
-
-  //   .comments-content {
-  //     padding: 30px 18px;
-  //   }
-
-  //   .comments-content {
-  //     background-color: $white;
-
-  //     .comment-container {
-  //       padding-bottom: 25px;
-  //     }
-  //   }
 }
 
 @media screen and (min-width: $screen-sm-min) {
+  .bright-mirror-fiction,
+  .bright-mirror-comments {
+    padding: 90px 54px;
+  }
+
   .bright-mirror-fiction {
     .back-btn {
       padding: 25px 54px;
@@ -93,6 +87,11 @@ $fiction-toolbar-icon-size: 17px;
 }
 
 @media screen and (min-width: $screen-xl-min) {
+  .bright-mirror-fiction,
+  .bright-mirror-comments {
+    padding: 130px 285px 90px 285px;
+  }
+
   .bright-mirror-fiction {
     .back-btn {
       margin: 0 auto;
