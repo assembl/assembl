@@ -763,7 +763,7 @@ def install_url_metadata_wheel():
     "Install url_metadata in venv3 as a wheel."
     execute(build_virtualenv_python3)
     # Temporary, until we have our own wheelhouse
-    venvcmd_py3('pip install https://github.com/assembl/url_metadata/releases/download/0.0.1/url_metadata-0.0.1-py3-none-any.whl')
+    venvcmd_py3('pip install -U https://github.com/assembl/url_metadata/releases/download/0.0.1/url_metadata-0.0.1-py3-none-any.whl')
 
 
 def separate_pip_install(package, wrapper=None):
