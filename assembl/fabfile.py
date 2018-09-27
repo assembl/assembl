@@ -962,6 +962,7 @@ def updatemaincode(backup=False):
                 run('git pull')
 
             venvcmd_py3('pip install -r ../url_metadata/requirements.txt')
+            venvcmd_py3('pip install -e ../url_metadata')
 
 
 def get_robot_machine():
