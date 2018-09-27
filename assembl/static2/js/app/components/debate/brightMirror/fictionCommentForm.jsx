@@ -1,6 +1,7 @@
 // @flow
 import React, { Component } from 'react';
-import { FormGroup, ControlLabel, FormControl, Button } from 'react-bootstrap';
+import TextareaAutosize from 'react-autosize-textarea';
+import { FormGroup, ControlLabel, Button } from 'react-bootstrap';
 import { I18n } from 'react-redux-i18n';
 // Constant import
 import { EMPTY_STRING } from '../../../constants';
@@ -54,24 +55,25 @@ class FictionCommentForm extends Component<LocalFictionCommentFormProps, Fiction
 
     return (
       <form className="comment-form">
-        <div className="textarea-with-buttons-container">
-          <FormGroup controlId={COMMENT_TEXTAREA_ID} className={COMMENT_TEXTAREA_ID}>
-            <ControlLabel srOnly>{I18n.t('debate.brightMirror.commentFictionLabel')}</ControlLabel>
-            <FormControl
-              componentClass="textarea"
-              value={commentTextareaValue}
-              placeholder={I18n.t('debate.brightMirror.commentFictionPlaceholder')}
-              onChange={this.formInputOnChangeHandler}
-            />
-          </FormGroup>
-          <div className="comment-buttons">
-            <Button className="cancel" onClick={this.formCancelHandler}>
-              {I18n.t('debate.brightMirror.commentFictionCancel')}
-            </Button>
-            <Button className="submit" onClick={this.formSubmitHandler} disabled={commentTextareaValue === EMPTY_STRING}>
-              {I18n.t('debate.brightMirror.commentFictionSubmit')}
-            </Button>
-          </div>
+        <FormGroup controlId={COMMENT_TEXTAREA_ID} className={COMMENT_TEXTAREA_ID}>
+          <ControlLabel srOnly>{I18n.t('debate.brightMirror.commentFictionLabel')}</ControlLabel>
+          {/* Use of TextareaAutosize instead of Bootstrap 3 textarea form control */}
+          <TextareaAutosize
+            className="form-control"
+            id={COMMENT_TEXTAREA_ID}
+            onChange={this.formInputOnChangeHandler}
+            placeholder={I18n.t('debate.brightMirror.commentFictionPlaceholder')}
+            rows={2}
+            value={commentTextareaValue}
+          />
+        </FormGroup>
+        <div className="comment-buttons">
+          <Button className="cancel" onClick={this.formCancelHandler}>
+            {I18n.t('debate.brightMirror.commentFictionCancel')}
+          </Button>
+          <Button className="submit" onClick={this.formSubmitHandler} disabled={commentTextareaValue === EMPTY_STRING}>
+            {I18n.t('debate.brightMirror.commentFictionSubmit')}
+          </Button>
         </div>
       </form>
     );
