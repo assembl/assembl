@@ -1,6 +1,5 @@
 from __future__ import print_function
 import os
-import sys
 
 from pip.download import PipSession
 from pip.req import parse_requirements
@@ -10,18 +9,16 @@ here = os.path.abspath(os.path.dirname(__file__))
 README = open(os.path.join(here, 'README.md')).read()
 CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
 
-# parse_requirements() returns generator of pip.req.InstallRequirement objects
-if not os.path.exists('requirements.txt'):
-    print("Please run first: fab -c configs/develop.rc ensure_requirements")
-    sys.exit(0)
 
-install_reqs = parse_requirements('requirements.txt', session=PipSession())
-
-# requires is a list of requirement
-# e.g. ['django==1.5.1', 'mezzanine==1.4.6']
-requires = [str(ir.req) for ir in install_reqs]
-
-tests_require = ['WebTest']
+def parse_reqs(*req_files):
+    """returns a list of requirements from a list of req files"""
+    requirements = set()
+    session = PipSession()
+    for req_file in req_files:
+        # parse_requirements() returns generator of pip.req.InstallRequirement objects
+        parsed = parse_requirements(req_file, session=session)
+        requirements.update({str(ir.req) for ir in parsed})
+    return list(requirements)
 
 
 setup(name='assembl',
@@ -83,9 +80,12 @@ setup(name='assembl',
       zip_safe=False,
       test_suite='assembl',
       setup_requires=['pip>=6'],
-      install_requires=requires,
-      tests_require=tests_require,
-      extras_require=dict(test=tests_require),
+      install_requires=parse_reqs('requirements.in', 'requirements-chrouter.in'),
+      tests_require=parse_reqs('requirements-tests.in'),
+      extras_require={
+          'docs': parse_reqs('requirements-doc.in'),
+          'dev': parse_reqs('requirements-dev.in'),
+      },
       entry_points={
           "console_scripts": [
               "assembl-db-manage = assembl.scripts.db_manage:main",
