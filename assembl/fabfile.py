@@ -755,7 +755,6 @@ def install_url_metadata_source():
         print cyan("Cloning git repository")
         with cd("%(projectpath)s/.." % env):
             run('git clone git://github.com/assembl/url_metadata.git')
-    venvcmd_py3('pip install -r ../url_metadata/requirements.txt')
     venvcmd_py3('pip install -e ../url_metadata')
 
 
@@ -964,8 +963,7 @@ def updatemaincode(backup=False):
             with cd(path):
                 run('git pull')
 
-            venvcmd_py3('pip install -r ../url_metadata/requirements.txt')
-            venvcmd_py3('pip install -e ../url_metadata/requirements.txt')
+            venvcmd_py3('pip install -e ../url_metadata')
         else:
             execute(install_url_metadata_wheel)
 
