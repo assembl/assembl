@@ -42,8 +42,8 @@ assembl/locale/*/LC_MESSAGES/*.jed.json
 /local.cfg
 /assembl.db
 /vendor_config.ini
-/configs/local.rc
-/configs/bluenove-server-configs/
+/assembl/configs/local.rc
+/assembl/configs/bluenove-server-configs/
 
 # app
 /data/*
