@@ -104,7 +104,7 @@ type BrightMirrorFictionState = {
   /** Fiction content */
   content: string,
   /** GraphQL loading flag */
-  loading: boolean
+  loading: boolean,
   /** Fiction publication state */
   publicationState: string
 };
@@ -116,8 +116,8 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
     this.state = {
       title: EMPTY_STRING,
       content: EMPTY_STRING,
-      loading: props.brightMirrorFictionData.loading
-      publicationState: props.data.fiction.publicationState || PublicationStates.PUBLISHED
+      loading: props.brightMirrorFictionData.loading,
+      publicationState: PublicationStates.PUBLISHED
     };
   }
 
@@ -126,7 +126,10 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
     this.setState({
       title: nextProps.brightMirrorFictionData.fiction.subject ? nextProps.brightMirrorFictionData.fiction.subject : EMPTY_STRING,
       content: nextProps.brightMirrorFictionData.fiction.body ? nextProps.brightMirrorFictionData.fiction.body : EMPTY_STRING,
-      loading: nextProps.brightMirrorFictionData.loading || nextProps.ideaWithCommentsData.loading
+      loading: nextProps.brightMirrorFictionData.loading || nextProps.ideaWithCommentsData.loading,
+      publicationState: nextProps.brightMirrorFictionData.fiction.publicationState
+        ? nextProps.brightMirrorFictionData.fiction.publicationState
+        : PublicationStates.PUBLISHED
     });
   }
 
