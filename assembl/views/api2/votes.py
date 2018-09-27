@@ -1,20 +1,19 @@
-from datetime import datetime
 from cStringIO import StringIO
 import csv
 from collections import defaultdict
+import operator
 
 from pyramid.view import view_config
 from pyramid.httpexceptions import (
-    HTTPBadRequest, HTTPUnauthorized, HTTPNotFound)
+    HTTPBadRequest, HTTPUnauthorized)
 from pyramid.response import Response
 from pyramid.settings import asbool
 from simplejson import dumps
 from sqlalchemy.sql import func
-from sqlalchemy.orm import aliased
 
 from ..traversal import (CollectionContext, InstanceContext)
 from assembl.auth import (
-    P_READ, Everyone, CrudPermissions, P_ADMIN_DISC, P_VOTE, P_DISC_STATS)
+    P_READ, CrudPermissions, P_ADMIN_DISC, P_VOTE, P_DISC_STATS)
 from assembl.auth.util import get_permissions
 from assembl.models import (
     Idea, AbstractIdeaVote, User, AbstractVoteSpecification, VotingWidget,
@@ -349,37 +348,37 @@ def global_vote_results_csv(request):
                 row.append(num_votes)
         csvw.writerow(row)
     output.seek(0)
-    return Response(body_file=output, content_type='text/csv', content_disposition='attachment; filename="vote_results.csv')
+    return Response(body_file=output, content_type='text/csv', content_disposition='attachment; filename="vote_results.csv"')
 
 
 @view_config(context=InstanceContext, name="extract_csv_voters",
              ctx_instance_class=VotingWidget, request_method='GET',
              permission=P_DISC_STATS)
 def extract_voters(request):
-    import assembl.models as m
-    import numpy as np
-    extract_list = []
+    extract_votes = []
     ctx = request.context
+    user_id = request.authenticated_userid
+    if not user_id:
+        raise HTTPUnauthorized
     widget = ctx._instance
+    user_id = request.authenticated_userid
     if widget.activity_state != "ended":
         permissions = get_permissions(user_id, ctx.get_discussion_id())
         if P_ADMIN_DISC not in permissions:
             raise HTTPUnauthorized()
     user_prefs = LanguagePreferenceCollection.getCurrent()
-    db = widget.db
     fieldnames = ["Nom du contributeur", "Adresse mail du contributeur", "Date/heure du vote", "Proposition"]
-    ideas = widget.db.query(Idea).join(AbstractVoteSpecification).filter(AbstractVoteSpecification.widget_id == widget.id).distinct().all()
-    votes = widget.db.query(AbstractIdeaVote).filter(AbstractVoteSpecification.widget_id==widget.id).all()
-    votes.sort(key=lambda x: x.vote_spec_id, reverse=True)
-    users = widget.db.query(User).all()
-    vote_specs = widget.db.query(AbstractVoteSpecification).filter(AbstractVoteSpecification.widget_id == widget.id).all()
-
-    for count,vote in enumerate(votes):
-        voter = m.User.get(vote.voter_id)
-        contributor = voter.name or ""
-        contributor_mail = voter.preferred_email or ""
-        vote_date = vote.vote_date or ""
-        proposition = m.Idea.get(vote.idea_id).title.best_lang(user_prefs).value or ""
+    votes = widget.db.query(AbstractIdeaVote
+        ).filter(AbstractVoteSpecification.widget_id==widget.id
+        ).filter(AbstractIdeaVote.tombstone_date == None
+        ).order_by(AbstractIdeaVote.vote_spec_id.desc()
+        ).all()
+    for count, vote in enumerate(votes):
+        voter = vote.voter
+        contributor = voter.display_name() or u""
+        contributor_mail = voter.get_preferred_email() or u""
+        vote_date = vote.vote_date or u""
+        proposition = Idea.get(vote.idea_id).title.best_lang(user_prefs).value or u""
         vote_value = vote.vote_value
 
         if votes[count].vote_spec_id != votes[count-1].vote_spec_id and fieldnames[-1] != "  ":
@@ -388,38 +387,32 @@ def extract_voters(request):
         extract_info = {
             "Nom du contributeur": contributor.encode('utf-8'),
             "Adresse mail du contributeur": contributor_mail.encode('utf-8'),
-            "Date/heure du vote": str(vote_date).encode('utf-8'),
+            "Date/heure du vote": str(vote_date),
             "Proposition": proposition.encode('utf-8'),
         }
 
         if vote.type == u'token_idea_vote':
-            token_category = m.TokenCategorySpecification.get(vote.token_category_id).name.best_lang(user_prefs).value or ""
+            token_category = vote.token_category.name.best_lang(user_prefs).value or u""
             if token_category not in fieldnames:
                 fieldnames.append(token_category.encode('utf-8'))
-            extract_info.update({token_category : str(vote_value).encode('utf-8')})
-            extract_list.append(extract_info)
+            extract_info.update({token_category: str(vote_value)})
+            extract_votes.append(extract_info)
 
         if vote.type == u'gauge_idea_vote':
-            vote_spec = m.AbstractVoteSpecification.get(vote.vote_spec_id)
-            if vote_spec.type == u'number_gauge_vote_specification':
-                options = list(frange(vote_spec.minimum, vote_spec.maximum, vote_spec.maximum/vote_spec.nb_ticks))
+            spec = vote.vote_spec
+            if isinstance(spec, NumberGaugeVoteSpecification):
+                for choice_value in range_float(spec.minimum, spec.maximum, spec.nb_ticks):
+                    option = u"{} {}".format(choice_value, spec.unit).encode('utf-8')
+                    if option not in fieldnames:
+                        fieldnames.append(option)
+                    extract_info.update({option: "1" if vote_value == choice_value else "0"})
+            else:
+                for choice in spec.get_choices():
+                    option = choice.label.best_lang(user_prefs).value
+                    if option not in fieldnames:
+                        fieldnames.append(option)
+                    extract_info.update({option: "1" if vote_value == choice.value else "0"})
 
-                for option in options:
-                    if vote_value == option:
-                        choice = str(option).encode('utf-8')
-                        option = str(option) + " " + vote_spec.unit
-                        if option not in fieldnames:
-                            fieldnames.append(option.encode('utf-8'))
-                            extract_info.update({option : "1"})
-                    else:
-                        choice = str(option).encode('utf-8')
-                        option = str(option) + " " + vote_spec.unit
-                        if option not in fieldnames:
-                            fieldnames.append(option.encode('utf-8'))
-                            extract_info.update({option : "0"})
-
-            extract_list.append(extract_info)
-    import operator
-    extract_list.sort(key=operator.itemgetter('Nom du contributeur'))
-    return csv_response(extract_list, CSV_MIMETYPE, fieldnames)
-
+            extract_votes.append(extract_info)
+    extract_votes.sort(key=operator.itemgetter('Nom du contributeur'))
+    return csv_response(extract_votes, CSV_MIMETYPE, fieldnames)

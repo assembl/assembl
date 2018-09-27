@@ -29,7 +29,7 @@ import deleteProposalMutation from '../graphql/mutations/deleteProposal.graphql'
 import { convertEntriesToHTML, convertImmutableEntriesToJS } from '../utils/draftjs';
 import { get } from '../utils/routeMap';
 import { displayAlert, displayCustomModal, closeModal } from '../utils/utilityManager';
-import { getDiscussionSlug, snakeToCamel, fromGlobalId } from '../utils/globalFunctions';
+import { getDiscussionSlug, snakeToCamel } from '../utils/globalFunctions';
 import { PHASES } from '../constants';
 
 type VoteModule = {
