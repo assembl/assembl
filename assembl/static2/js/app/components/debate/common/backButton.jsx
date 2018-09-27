@@ -3,7 +3,7 @@ import React from 'react';
 import { Link } from 'react-router';
 import { Translate } from 'react-redux-i18n';
 
-type Props = {
+export type Props = {
   handleClick: Function,
   linkClassName: ?string
 };

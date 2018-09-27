@@ -4,17 +4,22 @@ import { Grid, Row, Col } from 'react-bootstrap';
 import FictionHeader from '../../../components/debate/brightMirror/fictionHeader';
 import FictionToolbar from '../../../components/debate/brightMirror/fictionToolbar';
 import FictionBody from '../../../components/debate/brightMirror/fictionBody';
-import BackButton from '../../../components/debate/common/backButton';
+import BackButton, { type Props as BackButtonProps } from '../../../components/debate/common/backButton';
 
 // Import existing storybook data
 import { defaultFictionHeader } from '../../../stories/components/debate/brightMirror/fictionHeader.stories';
 import { defaultFictionToolbar } from '../../../stories/components/debate/brightMirror/fictionToolbar.stories';
 import { defaultFictionBody } from '../../../stories/components/debate/brightMirror/fictionBody.stories';
 
+const defaultBackBtnProps: BackButtonProps = {
+  handleClick: Function,
+  linkClassName: 'back-btn'
+};
+
 const BrightMirrorFiction = () => (
   <div className="bright-mirror">
     <div className="bright-mirror-fiction background-fiction-default">
-      <BackButton handleClick={() => {}} linkClassName="back-btn" />
+      <BackButton {...defaultBackBtnProps} />
       <Grid fluid>
         <Row>
           <Col xs={12}>
