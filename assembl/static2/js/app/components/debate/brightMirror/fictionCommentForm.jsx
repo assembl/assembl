@@ -17,14 +17,19 @@ type LocalFictionCommentFormProps = FictionCommentFormProps;
 
 export type FictionCommentFormState = {
   /** Comment input text */
-  commentTextareaValue: string
+  commentTextareaValue: string,
+  /** Flag that toggles form buttons display */
+  showFormActionButtons: boolean
 };
 
 const COMMENT_TEXTAREA_ID = 'comment-textarea';
+const COMMENT_CANCEL_BUTTON_ID = 'comment-cancel-button';
+const COMMENT_SUBMIT_BUTTON_ID = 'comment-submit-button';
 
 class FictionCommentForm extends Component<LocalFictionCommentFormProps, FictionCommentFormState> {
   state = {
-    commentTextareaValue: ''
+    commentTextareaValue: '',
+    showFormActionButtons: false
   };
 
   formInputOnChangeHandler = (event: any) => {
@@ -34,7 +39,10 @@ class FictionCommentForm extends Component<LocalFictionCommentFormProps, Fiction
   };
 
   formCancelHandler = () => {
-    this.setState({ commentTextareaValue: EMPTY_STRING });
+    this.setState({
+      commentTextareaValue: EMPTY_STRING,
+      showFormActionButtons: false
+    });
 
     const { onCancelCommentCallback } = this.props;
     if (onCancelCommentCallback) {
@@ -46,35 +54,66 @@ class FictionCommentForm extends Component<LocalFictionCommentFormProps, Fiction
     const { onSubmitCommentCallback } = this.props;
     if (onSubmitCommentCallback) {
       onSubmitCommentCallback(this.state.commentTextareaValue);
-      this.setState({ commentTextareaValue: EMPTY_STRING });
+      this.setState({
+        commentTextareaValue: EMPTY_STRING,
+        showFormActionButtons: false
+      });
+    }
+  };
+
+  focusHandler = (event: any) => {
+    if (event.target.id === COMMENT_TEXTAREA_ID) {
+      this.setState({ showFormActionButtons: true });
+    }
+  };
+
+  blurHandler = (event: any) => {
+    if (event.target.id === COMMENT_TEXTAREA_ID && event.relatedTarget === null) {
+      this.setState({ showFormActionButtons: false });
     }
   };
 
   render() {
-    const { commentTextareaValue } = this.state;
+    const { commentTextareaValue, showFormActionButtons } = this.state;
+
+    const textarea = (
+      <FormGroup controlId={COMMENT_TEXTAREA_ID} className={COMMENT_TEXTAREA_ID}>
+        <ControlLabel srOnly>{I18n.t('debate.brightMirror.commentFictionLabel')}</ControlLabel>
+        {/* Use of TextareaAutosize instead of Bootstrap 3 textarea form control */}
+        <TextareaAutosize
+          className="form-control"
+          id={COMMENT_TEXTAREA_ID}
+          onChange={this.formInputOnChangeHandler}
+          placeholder={I18n.t('debate.brightMirror.commentFictionPlaceholder')}
+          rows={2}
+          value={commentTextareaValue}
+          onFocus={this.focusHandler}
+          onBlur={this.blurHandler}
+        />
+      </FormGroup>
+    );
+
+    // Display form action buttons only when the focus is set on the textarea
+    const actionButtons = showFormActionButtons ? (
+      <div className="comment-buttons">
+        <Button id={COMMENT_CANCEL_BUTTON_ID} className="cancel" onClick={this.formCancelHandler}>
+          {I18n.t('debate.brightMirror.commentFictionCancel')}
+        </Button>
+        <Button
+          id={COMMENT_SUBMIT_BUTTON_ID}
+          className="submit"
+          onClick={this.formSubmitHandler}
+          disabled={commentTextareaValue === EMPTY_STRING}
+        >
+          {I18n.t('debate.brightMirror.commentFictionSubmit')}
+        </Button>
+      </div>
+    ) : null;
 
     return (
       <form className="comment-form">
-        <FormGroup controlId={COMMENT_TEXTAREA_ID} className={COMMENT_TEXTAREA_ID}>
-          <ControlLabel srOnly>{I18n.t('debate.brightMirror.commentFictionLabel')}</ControlLabel>
-          {/* Use of TextareaAutosize instead of Bootstrap 3 textarea form control */}
-          <TextareaAutosize
-            className="form-control"
-            id={COMMENT_TEXTAREA_ID}
-            onChange={this.formInputOnChangeHandler}
-            placeholder={I18n.t('debate.brightMirror.commentFictionPlaceholder')}
-            rows={2}
-            value={commentTextareaValue}
-          />
-        </FormGroup>
-        <div className="comment-buttons">
-          <Button className="cancel" onClick={this.formCancelHandler}>
-            {I18n.t('debate.brightMirror.commentFictionCancel')}
-          </Button>
-          <Button className="submit" onClick={this.formSubmitHandler} disabled={commentTextareaValue === EMPTY_STRING}>
-            {I18n.t('debate.brightMirror.commentFictionSubmit')}
-          </Button>
-        </div>
+        {textarea}
+        {actionButtons}
       </form>
     );
   }
