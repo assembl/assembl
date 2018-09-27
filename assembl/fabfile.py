@@ -733,9 +733,6 @@ def build_virtualenv_python3():
         run("brew install libmagic")  # needed for python-magic
         run('pip3 install virtualenv')
 
-    # Don't install this on travis
-    if getenv('TRAVIS_COMMIT', None):
-        return
     print(cyan('Creating a fresh virtualenv with Python 3'))
     assert env.venvpath
     # This relies on env.venvpath
@@ -905,7 +902,9 @@ def bootstrap_from_checkout(backup=False):
     """
     execute(updatemaincode, backup=backup)
     execute(build_virtualenv)
-    if env.is_production_env:
+    if getenv('TRAVIS_COMMIT', None):
+        pass
+    elif env.is_production_env:
         execute(install_url_metadata_wheel)
     else:
         execute(install_url_metadata_source)
