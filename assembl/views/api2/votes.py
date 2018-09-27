@@ -21,7 +21,6 @@ from assembl.models import (
 from assembl.lib.sqla import get_named_class
 from . import (FORM_HEADER, JSON_HEADER, check_permissions)
 from assembl.views.api2.discussion import csv_response, CSV_MIMETYPE
-from assembl.views.api2.utils import frange
 
 # Votes are private
 @view_config(context=CollectionContext, renderer='json',
