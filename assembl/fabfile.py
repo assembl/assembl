@@ -745,11 +745,26 @@ def build_virtualenv_python3():
         print(cyan('(otherwise the virtualenv command would produce an error)'))
         return
     run('python3 -mvirtualenv --python python3 %s' % venv3)
+
+
+@task
+def install_url_metadata_source():
+    "Install url_metadata in venv3 as source, for development"
+    execute(build_virtualenv_python3)
     if not exists("%(projectpath)s/../url_metadata" % env):
         print cyan("Cloning git repository")
         with cd("%(projectpath)s/.." % env):
             run('git clone git://github.com/assembl/url_metadata.git')
     venvcmd_py3('pip install -r ../url_metadata/requirements.txt')
+    venvcmd_py3('pip install -e ../url_metadata')
+
+
+@task
+def install_url_metadata_wheel():
+    "Install url_metadata in venv3 as a wheel."
+    execute(build_virtualenv_python3)
+    # Temporary, until we have our own wheelhouse
+    venvcmd_py3('pip install https://github.com/assembl/url_metadata/releases/download/0.0.1/url_metadata-0.0.1-py3-none-any.whl')
 
 
 def separate_pip_install(package, wrapper=None):
@@ -891,7 +906,7 @@ def bootstrap_from_checkout(backup=False):
     """
     execute(updatemaincode, backup=backup)
     execute(build_virtualenv)
-    execute(build_virtualenv_python3)
+    execute(install_url_metadata_wheel)
     execute(app_update_dependencies, backup=backup)
     execute(app_setup)
     execute(check_and_create_database_user)
