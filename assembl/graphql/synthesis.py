@@ -55,7 +55,7 @@ class Synthesis(SecureObjectType, SQLAlchemyObjectType):
     def resolve_img(self, args, context, info):
         ideas = self.get_ideas()
         last_idea = ideas[-1].live if ideas else None
-        if last_idea.attachments:
+        if last_idea and last_idea.attachments:
             return last_idea.attachments[0].document
 
     def resolve_post(self, args, context, info):
