@@ -906,7 +906,10 @@ def bootstrap_from_checkout(backup=False):
     """
     execute(updatemaincode, backup=backup)
     execute(build_virtualenv)
-    execute(install_url_metadata_wheel)
+    if env.is_production_env:
+        execute(install_url_metadata_wheel)
+    else:
+        execute(install_url_metadata_source)
     execute(app_update_dependencies, backup=backup)
     execute(app_setup)
     execute(check_and_create_database_user)
@@ -956,13 +959,15 @@ def updatemaincode(backup=False):
             run('git pull %s %s' % (env.gitrepo, env.gitbranch))
 
         path = join(env.projectpath, '..', 'url_metadata')
-        if exists(path):
+        if exists(path) and not env.is_production_env:
             print(cyan('Updating url_metadata Git repository'))
             with cd(path):
                 run('git pull')
 
             venvcmd_py3('pip install -r ../url_metadata/requirements.txt')
-            venvcmd_py3('pip install -e ../url_metadata')
+            venvcmd_py3('pip install -e ../url_metadata/requirements.txt')
+        else:
+            execute(install_url_metadata_wheel)
 
 
 def get_robot_machine():
