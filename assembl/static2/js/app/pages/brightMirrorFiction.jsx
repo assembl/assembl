@@ -262,11 +262,11 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
     };
 
     const fictionCommentHeaderProps: FictionCommentHeaderProps = {
-      strongTitle: I18n.t('debate.brightMirror.commentFictionStrongTitle'),
-      title: I18n.t('debate.brightMirror.commentFictionTitle'),
+      strongTitle: I18n.t('debate.brightMirror.commentFiction.strongTitle'),
+      title: I18n.t('debate.brightMirror.commentFiction.title'),
       imgSrc: '/static2/img/illustration-mechanisme.png',
-      imgAlt: I18n.t('debate.brightMirror.commentFictionImageAlt'),
-      subtitle: I18n.t('debate.brightMirror.commentFictionSubtitle', { count: comments.length })
+      imgAlt: I18n.t('debate.brightMirror.commentFiction.imageAlt'),
+      subtitle: I18n.t('debate.brightMirror.commentFiction.subtitle', { count: comments.length })
     };
 
     const fictionCommentListProps: FictionCommentListProps = {
@@ -313,7 +313,6 @@ const mapStateToProps = state => ({
 });
 export default compose(
   connect(mapStateToProps),
-  // GraphQL queries
   graphql(BrightMirrorFictionQuery, {
     // GraphQL custom data name
     name: 'brightMirrorFictionData',
@@ -337,7 +336,6 @@ export default compose(
       }
     })
   }),
-  // GraphQL mutations
   graphql(CreateBrightMirrorCommentMutation, {
     // GraphQL custom function name
     name: 'createComment'

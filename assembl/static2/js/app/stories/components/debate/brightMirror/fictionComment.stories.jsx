@@ -23,7 +23,7 @@ export const defaultFictionComment: FictionCommentGraphQLProps = {
   circleAvatar: { ...defaultCircleAvatar }
 };
 
-const playgroundButton = {
+const playground = {
   ...defaultFictionComment
 };
 
@@ -34,12 +34,12 @@ storiesOf('FictionComment', module)
     'playground',
     withInfo()(() => (
       <FictionComment
-        authorFullname={text('Author fullname', playgroundButton.authorFullname)}
-        publishedDate={text('Published date', playgroundButton.publishedDate)}
-        displayedPublishedDate={text('Displayed published date', playgroundButton.displayedPublishedDate)}
-        commentContent={text('Comment content', playgroundButton.commentContent)}
-        numberOfChildComments={number('Number of comments', playgroundButton.numberOfChildComments)}
-        circleAvatar={object('circleAvatar', playgroundButton.circleAvatar)}
+        authorFullname={text('Author fullname', playground.authorFullname)}
+        publishedDate={text('Published date', playground.publishedDate)}
+        displayedPublishedDate={text('Displayed published date', playground.displayedPublishedDate)}
+        commentContent={text('Comment content', playground.commentContent)}
+        numberOfChildComments={number('Number of comments', playground.numberOfChildComments)}
+        circleAvatar={object('circleAvatar', playground.circleAvatar)}
       />
     ))
   );

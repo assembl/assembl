@@ -43,13 +43,6 @@ function loadStories() {
   require('../js/app/stories/components/debate/brightMirror/fictionCommentHeader.stories.jsx');
   require('../js/app/stories/components/debate/brightMirror/fictionCommentForm.stories.jsx');
   require('../js/app/stories/components/debate/brightMirror/fictionComment.stories.jsx');
-  // require('../js/app/stories/components/debate/brightMirror/fictionCommentList.stories.jsx');
-
-  // TODO: To clean ?
-  // require('../js/app/stories/components/common/common.jsx');
-  // require('../js/app/stories/components/common/urlPreview/urlPreview.jsx');
-  // require('../js/app/stories/components/common/urlPreview/embed.jsx');
-  // require('../js/app/stories/components/common/urlPreview/frame.jsx');
 }
 
 configure(loadStories, module);

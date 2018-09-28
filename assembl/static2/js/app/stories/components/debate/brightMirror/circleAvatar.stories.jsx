@@ -20,7 +20,7 @@ export const customCircleAvatar: CircleAvatarProps = {
   src: ''
 };
 
-const playgroundButton = {
+const playground = {
   username: 'taryn-treutel',
   src: ['https://loremflickr.com/300/300', '/static2/img/icons/avatar.png']
 };
@@ -32,9 +32,6 @@ storiesOf('CircleAvatar', module)
   .add(
     'playground',
     withInfo()(() => (
-      <CircleAvatar
-        username={text('username', playgroundButton.username)}
-        src={select('src', playgroundButton.src, playgroundButton.src[0])}
-      />
+      <CircleAvatar username={text('username', playground.username)} src={select('src', playground.src, playground.src[0])} />
     ))
   );

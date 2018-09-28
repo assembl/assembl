@@ -391,14 +391,6 @@ const Translations = {
       },
       brightMirror: {
         allFictions: "Fictions déjà parues",
-        commentFictionStrongTitle: "Prenez la parole !",
-        commentFictionTitle: "Quels sujets sont abordés dans cette fiction ?",
-        commentFictionImageAlt: "Illustration prenez la parole",
-        commentFictionSubtitle: "%{count} messages",
-        commentFictionLabel: "Commentaires",
-        commentFictionPlaceholder: "Rejoins le débat...",
-        commentFictionCancel: "Annuler",
-        commentFictionSubmit: "Commenter",
         deleteFiction: "Supprimez votre fiction",
         deleteFictionModalBody: "Êtes-vous sûr de vouloir supprimer cette fiction ?",
         deleteFictionSuccessMsg: "Votre fiction a été supprimée",
@@ -406,7 +398,17 @@ const Translations = {
         fiction: "Fiction",
         fillBodyLabel: "Ecrivez votre fiction",
         postSuccessMsg: "Merci pour votre participation. Votre fiction a bien été enregistrée !",
-        startFictionLabel: "Je partage ma fiction"
+        startFictionLabel: "Je partage ma fiction",
+        commentFiction: {
+          cancel: "Annuler",
+          imageAlt: "Illustration prenez la parole",
+          label: "Commentaires",
+          placeholder: "Rejoins le débat...",
+          strongTitle: "Prenez la parole !",
+          submit: "Commenter",
+          subtitle: "%{count} messages",
+          title: "Quels sujets sont abordés dans cette fiction ?"
+        }
       },
       themes: "Thèmes",
       notStarted: "La phase %{phaseName} n'a pas encore commencé. Merci de revenir à partir du ",
@@ -1267,14 +1269,6 @@ const Translations = {
       },
       brightMirror: {
         allFictions: "Published fictions",
-        commentFictionStrongTitle: "Let's talk!",
-        commentFictionTitle: "What are the topics of the fiction?",
-        commentFictionImageAlt: "Let's talk illustration",
-        commentFictionSubtitle: "%{count} messages",
-        commentFictionLabel: "Comments",
-        commentFictionPlaceholder: "Join the debate...",
-        commentFictionCancel: "Cancel",
-        commentFictionSubmit: "Comment",
         deleteFiction: "Delete your fiction",
         deleteFictionModalBody: "Are you sure you want to delete this fiction?",
         deleteFictionSuccessMsg: "Your fiction was deleted",
@@ -1282,7 +1276,17 @@ const Translations = {
         fiction: "Fiction",
         fillBodyLabel: "Write your fiction",
         postSuccessMsg: "Thanks for your participation. Your fiction has been saved!",
-        startFictionLabel: "Share a fiction"
+        startFictionLabel: "Share a fiction",
+        commentFiction: {
+          cancel: "Cancel",
+          imageAlt: "Let's talk illustration",
+          label: "Comments",
+          placeholder: "Join the debate...",
+          strongTitle: "Let's talk!",
+          submit: "Comment",
+          subtitle: "%{count} messages",
+          title: "What are the topics of the fiction?"
+        }
       },
       themes: "Themes",
       notStarted: "The %{phaseName} phase has not started. Please come back from ",

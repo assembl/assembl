@@ -17,7 +17,7 @@ export const defaultFictionCommentHeader: FictionCommentHeaderProps = {
   subtitle: '6 messages'
 };
 
-const playgroundButton = {
+const playground = {
   ...defaultFictionCommentHeader
 };
 
@@ -28,11 +28,11 @@ storiesOf('FictionCommentHeader', module)
     'playground',
     withInfo()(() => (
       <FictionCommentHeader
-        strongTitle={text('Strong title', playgroundButton.strongTitle)}
-        title={text('Title', playgroundButton.title)}
-        imgSrc={text('Image source', playgroundButton.imgSrc)}
-        imgAlt={text('Image alt description', playgroundButton.imgAlt)}
-        subtitle={text('Subtitle', playgroundButton.subtitle)}
+        strongTitle={text('Strong title', playground.strongTitle)}
+        title={text('Title', playground.title)}
+        imgSrc={text('Image source', playground.imgSrc)}
+        imgAlt={text('Image alt description', playground.imgAlt)}
+        subtitle={text('Subtitle', playground.subtitle)}
       />
     ))
   );

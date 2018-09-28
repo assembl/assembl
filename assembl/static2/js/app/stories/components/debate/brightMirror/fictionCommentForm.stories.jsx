@@ -16,7 +16,8 @@ const actions: { [name: string]: Function } = {
 
 export const defaultFictionCommentForm: FictionCommentFormProps = {
   onCancelCommentCallback: actions.onCancelCommentCallback,
-  onSubmitCommentCallback: actions.onSubmitCommentCallback
+  onSubmitCommentCallback: actions.onSubmitCommentCallback,
+  rowsForTextarea: 2
 };
 
 storiesOf('FictionCommentForm', module).add('default', withInfo()(() => <FictionCommentForm {...defaultFictionCommentForm} />));

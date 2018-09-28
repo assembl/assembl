@@ -10,7 +10,9 @@ export type FictionCommentFormProps = {
   /** Optional comment callback when cancel is clicked */
   onCancelCommentCallback?: ?Function,
   /** Comment callback when submit is clicked */
-  onSubmitCommentCallback?: ?Function
+  onSubmitCommentCallback: Function,
+  /** Optional rows for textarea, default set to 2 */
+  rowsForTextarea?: number
 };
 
 type LocalFictionCommentFormProps = FictionCommentFormProps;
@@ -27,6 +29,10 @@ const COMMENT_CANCEL_BUTTON_ID = 'comment-cancel-button';
 const COMMENT_SUBMIT_BUTTON_ID = 'comment-submit-button';
 
 class FictionCommentForm extends Component<LocalFictionCommentFormProps, FictionCommentFormState> {
+  static defaultProps = {
+    rowsForTextarea: 2
+  };
+
   state = {
     commentTextareaValue: '',
     showFormActionButtons: false
@@ -78,14 +84,14 @@ class FictionCommentForm extends Component<LocalFictionCommentFormProps, Fiction
 
     const textarea = (
       <FormGroup controlId={COMMENT_TEXTAREA_ID} className={COMMENT_TEXTAREA_ID}>
-        <ControlLabel srOnly>{I18n.t('debate.brightMirror.commentFictionLabel')}</ControlLabel>
+        <ControlLabel srOnly>{I18n.t('debate.brightMirror.commentFiction.label')}</ControlLabel>
         {/* Use of TextareaAutosize instead of Bootstrap 3 textarea form control */}
         <TextareaAutosize
           className="form-control"
           id={COMMENT_TEXTAREA_ID}
           onChange={this.formInputOnChangeHandler}
-          placeholder={I18n.t('debate.brightMirror.commentFictionPlaceholder')}
-          rows={2}
+          placeholder={I18n.t('debate.brightMirror.commentFiction.placeholder')}
+          rows={this.props.rowsForTextarea}
           value={commentTextareaValue}
           onFocus={this.focusHandler}
           onBlur={this.blurHandler}
@@ -97,7 +103,7 @@ class FictionCommentForm extends Component<LocalFictionCommentFormProps, Fiction
     const actionButtons = showFormActionButtons ? (
       <div className="comment-buttons">
         <Button id={COMMENT_CANCEL_BUTTON_ID} className="cancel" onClick={this.formCancelHandler}>
-          {I18n.t('debate.brightMirror.commentFictionCancel')}
+          {I18n.t('debate.brightMirror.commentFiction.cancel')}
         </Button>
         <Button
           id={COMMENT_SUBMIT_BUTTON_ID}
@@ -105,7 +111,7 @@ class FictionCommentForm extends Component<LocalFictionCommentFormProps, Fiction
           onClick={this.formSubmitHandler}
           disabled={commentTextareaValue === EMPTY_STRING}
         >
-          {I18n.t('debate.brightMirror.commentFictionSubmit')}
+          {I18n.t('debate.brightMirror.commentFiction.submit')}
         </Button>
       </div>
     ) : null;
