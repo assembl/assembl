@@ -2215,6 +2215,8 @@ def install_java():
 def install_yarn():
     """Install yarn"""
     if not env.mac:
+        if not run('which yarn', warn_only=True).failed:
+            return
         if not exists('/etc/apt/sources.list.d/yarn.list'):
             sudo('apt-get update')
             sudo('apt-get install apt-transport-https')
