@@ -963,7 +963,7 @@ def updatemaincode(backup=False):
                 run('git pull')
 
             venvcmd_py3('pip install -e ../url_metadata')
-        else:
+        elif not getenv('TRAVIS_COMMIT', None):
             execute(install_url_metadata_wheel)
 
 
