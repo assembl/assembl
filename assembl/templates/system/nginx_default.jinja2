@@ -104,6 +104,7 @@ server {
     location /static {
         #Do NOT put something like "expires modified +1h;" here, it WILL cause problems when deploying a new version.
         #Nor will it help your performance after the first hour...
+        autoindex off;
         add_header Cache-Control "public, max-age=3600";
         alias {{code_root}}/assembl/static;
     }
