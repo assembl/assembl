@@ -956,15 +956,13 @@ def updatemaincode(backup=False):
             run('git checkout %s' % env.gitbranch)
             run('git pull %s %s' % (env.gitrepo, env.gitbranch))
 
-        path = join(env.projectpath, '..', 'url_metadata')
-        if exists(path) and not env.is_production_env:
-            print(cyan('Updating url_metadata Git repository'))
-            with cd(path):
-                run('git pull')
-
-            venvcmd_py3('pip install -e ../url_metadata')
-        elif not getenv('TRAVIS_COMMIT', None):
-            execute(install_url_metadata_wheel)
+        if not env.is_production_env and not getenv('TRAVIS_COMMIT', None):
+            path = join(env.projectpath, '..', 'url_metadata')
+            if exists(path):
+                print(cyan('Updating url_metadata Git repository'))
+                with cd(path):
+                    run('git pull')
+                venvcmd_py3('pip install -e ../url_metadata')
 
 
 def get_robot_machine():
