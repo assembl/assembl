@@ -4,6 +4,43 @@ dist: trusty
 addons:
   ssh_known_hosts: localhost
   postgresql: "9.5"
+  apt:
+    update: true
+    sources:
+      - sourceline: 'deb https://dl.yarnpkg.com/debian/ stable main'
+        key_url: 'https://dl.yarnpkg.com/debian/pubkey.gpg'
+    packages:
+      - fabric
+      - git
+      - yarn
+      - openssh-server
+      - apt-transport-https
+      - python-virtualenv
+      - python-pip
+      - python-psycopg2
+      - redis-server
+      - memcached
+      - python-requests
+      - python-jinja2
+      - python-dev
+      - pkg-config
+      - automake
+      - bison
+      - flex
+      - gperf
+      - gawk
+      - chromium-chromedriver
+      - libpq-dev
+      - libmemcached-dev
+      - libzmq3-dev
+      - libxslt1-dev
+      - libffi-dev
+      - libhiredis-dev
+      - libxml2-dev
+      - libssl-dev
+      - libreadline-dev
+      - libxmlsec1-dev
+      - libgraphviz-dev
 git:
   depth: 100
 cache:
@@ -21,13 +58,8 @@ before_install:
  # Remove mongodb repo that has an expired GPG key which gives a travis errored because
  # fabric is doing an apt-get update.
  - ls /etc/apt/sources.list.d/
-# - sudo rm -f /etc/apt/sources.list.d/mongodb-3.4.list
-# - sudo rm -f /etc/apt/sources.list.d/cassandra.list
- - sudo rm -f /etc/apt/sources.list.d/*
- - sudo apt-get update
  # The following line is needed, otherwise the set_file_permissions fab command yells error "Operation not permitted"
  - sudo usermod -a -G www-data $USER
- - sudo apt-get install -y fabric git openssh-server
  - ssh-keygen -P '' -f ~/.ssh/id_rsa && cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
  - echo -e "_extends = ./testing.rc\n_gitbranch = $TRAVIS_COMMIT\nsqlalchemy.echo = False" > travis.rc
  # The following line produces warning "uses weak digest algorithm" during its `apt-get update`
