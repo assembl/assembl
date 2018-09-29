@@ -198,11 +198,11 @@ def load_rcfile_config():
 
 
 def fill_template(template, config, output=None, default_dir=None):
-    if not exists(template):
+    if not os.path.exists(template):
         if not default_dir:
             default_dir = join(local_code_root, 'assembl', 'templates', 'system')
         template = join(default_dir, template)
-    if not exists(template):
+    if not os.path.exists(template):
         raise RuntimeError("Missing template")
     config['here'] = config.get('here', os.getcwd())
     if template.endswith('.tmpl'):
