@@ -16,13 +16,14 @@ class Proposals extends React.Component {
   };
 
   render() {
-    const { phaseId, questionIndex, questionId, themeId, title, posts, nbPostsToShow, phaseUrl } = this.props;
+    const { phaseId, questionIndex, questionId, themeId, title, posts, nbPostsToShow, phaseUrl, questionsLength } = this.props;
+    const questionTitle = questionsLength > 1 ? `${questionIndex}/ ${title}` : title;
     const postsToShow = posts.slice(0, nbPostsToShow);
     const link = `${phaseUrl}${getRoute('question', { questionId: questionId, questionIndex: questionIndex })}`;
     return (
       <div className="shown">
         <h3 className="collapsed-title">
-          <span>{`${questionIndex}/ ${title}`}</span>
+          <span>{questionTitle}</span>
           <div className={postsToShow.length > 0 ? 'shown proposal-arrow' : 'hidden proposal-arrow'}>
             <span
               className={this.state.hideProposals ? 'assembl-icon-down-open color pointer' : 'assembl-icon-up-open color pointer'}

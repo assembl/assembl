@@ -152,6 +152,7 @@ class Survey extends React.Component<SurveyProps, SurveyState> {
                   title={question.title}
                   index={index + 1}
                   key={index}
+                  questionsLength={questions.length}
                   questionId={question.id}
                   scrollToQuestion={this.scrollToQuestion}
                   refetchTheme={refetchThematic}
@@ -185,6 +186,7 @@ class Survey extends React.Component<SurveyProps, SurveyState> {
                         questions.map((question, index) => (
                           <Proposals
                             nbPostsToShow={3}
+                            questionsLength={questions.length}
                             themeId={id}
                             title={question.title}
                             posts={question.posts.edges}

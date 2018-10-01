@@ -26,7 +26,8 @@ type QuestionProps = {
   refetchTheme: Function,
   mutate: Function,
   screenHeight: number,
-  screenWidth: number
+  screenWidth: number,
+  questionsLength: number
 };
 
 type QuestionState = {
@@ -93,7 +94,8 @@ class Question extends React.Component<QuestionProps, QuestionState> {
   };
 
   render() {
-    const { phaseId, index, title, screenWidth, screenHeight } = this.props;
+    const { phaseId, index, title, screenWidth, screenHeight, questionsLength } = this.props;
+    const questionTitle = questionsLength > 1 ? `${index}/ ${title}` : title;
     let height = screenHeight;
     const timelineElm = document && document.getElementById('timeline');
     // This is necessary to bypass an issue with Flow
@@ -112,7 +114,7 @@ class Question extends React.Component<QuestionProps, QuestionState> {
           <div className="max-container">
             <div className="question-title">
               <div className="title-hyphen">&nbsp;</div>
-              <h1 className="dark-title-5">{`${index}/ ${title}`}</h1>
+              <h1 className="dark-title-5">{questionTitle}</h1>
             </div>
             <Col xs={12} md={9} className="col-centered">
               <RichTextEditor
