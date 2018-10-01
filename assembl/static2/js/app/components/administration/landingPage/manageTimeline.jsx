@@ -12,6 +12,16 @@ import { updateLandingPageModuleTitle, updateLandingPageModuleSubtitle } from '.
 import { getDiscussionSlug } from '../../../utils/globalFunctions';
 import { get } from '../../../utils/routeMap';
 
+type Props = {
+  timelineModuleId: string, // eslint-disable-line react/no-unused-prop-types
+  discussionPhaseIds: Array<string>,
+  editLocale: string,
+  sectionTitle: string,
+  sectionSubtitle: string,
+  handleTitleChange: Function,
+  handleSubtitleChange: Function
+};
+
 const DumbManageTimeline = ({
   discussionPhaseIds,
   editLocale,
@@ -19,7 +29,7 @@ const DumbManageTimeline = ({
   sectionSubtitle,
   handleTitleChange,
   handleSubtitleChange
-}) => {
+}: Props) => {
   const sectionTitlePh = I18n.t('administration.ph.propositionSectionTitle');
   const subtitleSectionPh = I18n.t('administration.ph.propositionSectionSubtitle');
   const slug = { slug: getDiscussionSlug() };

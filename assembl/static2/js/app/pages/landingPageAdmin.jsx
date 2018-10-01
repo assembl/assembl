@@ -46,7 +46,8 @@ type Props = {
   updateDiscussion: Function,
   updateDiscussionPhase: Function,
   discussionPhases: Array<Object>,
-  refetchTimeline: Function
+  refetchTimeline: Function,
+  timelineModuleId: string
 };
 
 type State = {
@@ -183,14 +184,14 @@ class LandingPageAdmin extends React.Component<Props, State> {
     this.props.landingPageModulesHasChanged || this.props.pageHasChanged || this.props.phasesHaveChanged;
 
   render() {
-    const { editLocale, header, section } = this.props;
+    const { editLocale, header, section, timelineModuleId } = this.props;
     const saveDisabled = !this.dataHaveChanged();
     return (
       <div className="landing-page-admin">
         <SaveButton disabled={saveDisabled} saveAction={this.saveAction} />
         {section === '1' && <ManageModules {...this.props} />}
         {section === '2' && <CustomizeHeader editLocale={editLocale} header={header} />}
-        {section === '3' && <ManageTimeline editLocale={editLocale} />}
+        {section === '3' && <ManageTimeline timelineModuleId={timelineModuleId} editLocale={editLocale} />}
         {section && <Navbar currentStep={section} steps={['1', '2', '3']} phaseIdentifier="landingPage" />}
       </div>
     );
