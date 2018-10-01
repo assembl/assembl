@@ -2,7 +2,7 @@
 import { EditorState } from 'draft-js';
 import React from 'react';
 import { type FieldRenderProps } from 'react-final-form';
-import { ControlLabel, FormGroup } from 'react-bootstrap';
+import { FormGroup } from 'react-bootstrap';
 
 import RichTextEditor from '../common/richTextEditor';
 import Error from './error';
@@ -32,7 +32,6 @@ const RichTextFieldAdapter = ({
   const valueInLocale = value[editLocale] || EditorState.createEmpty();
   return (
     <FormGroup controlId={name} validationState={getValidationState(error, touched)}>
-      {valueInLocale ? <ControlLabel>{label}</ControlLabel> : null}
       <RichTextEditor
         {...otherListeners}
         {...rest}
