@@ -43,6 +43,7 @@ from pyramid_mailer import get_mailer
 from pyramid_mailer.message import Message
 import requests
 
+from assembl.lib.clean_input import unescape
 from assembl.lib.config import get_config
 from assembl.lib.migration import create_default_discussion_data
 from assembl.lib.parsedatetime import parse_datetime
@@ -1603,7 +1604,7 @@ def phase2_csv_export(request):
 
     output = tempfile.NamedTemporaryFile('w+b', delete=True)
     # include BOM for Excel to open the file in UTF-8 properly
-    output.write(u'\ufeff'.encode('utf-8'))
+    output.write(u'\ufeff')
     writer = csv.DictWriter(
         output, dialect='excel', delimiter=';', fieldnames=fieldnames, quoting=csv.QUOTE_ALL)
     writer.writeheader()
@@ -1620,8 +1621,8 @@ def phase2_csv_export(request):
             body = get_entries_locale_original(post.body)
 
             row[POST_SUBJECT] = subject.get('entry')
-            row[POST_BODY] = body.get('entry')
-            row[POST_BODY_ORIGINAL] = body.get('original')
+            row[POST_BODY] = unescape(body.get('entry'))
+            row[POST_BODY_ORIGINAL] = unescape(body.get('original'))
             row[POST_ID] = post.id
             row[POST_LOCALE] = body.get('locale') or subject.get('locale') or None
             if not has_anon:
