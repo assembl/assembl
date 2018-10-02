@@ -57,11 +57,11 @@ class ExportSection extends React.Component<Props, State> {
     }
 
     return (
-      <FormGroup>
+      <React.Fragment>
         <Checkbox onChange={handleAnonymousChange}>
           <Translate value="administration.export.anonymous" />
         </Checkbox>
-      </FormGroup>
+      </React.Fragment>
     );
   };
 
@@ -72,7 +72,7 @@ class ExportSection extends React.Component<Props, State> {
     }
 
     return (
-      <FormGroup>
+      <React.Fragment>
         {exportLink.map(option => (
           <Radio
             key={option.msgId}
@@ -84,7 +84,7 @@ class ExportSection extends React.Component<Props, State> {
             <Translate value={`administration.export.${option.msgId}`} />
           </Radio>
         ))}
-      </FormGroup>
+      </React.Fragment>
     );
   };
 
@@ -103,7 +103,7 @@ class ExportSection extends React.Component<Props, State> {
 
     const activeLanguage = languages ? languages.filter(language => language.locale === exportLocale)[0] : null;
     return (
-      <FormGroup>
+      <React.Fragment>
         <Radio
           checked={!translate}
           onChange={() => {
@@ -137,7 +137,7 @@ class ExportSection extends React.Component<Props, State> {
             </FormControl>
           )}
         </Radio>
-      </FormGroup>
+      </React.Fragment>
     );
   };
 
@@ -150,9 +150,11 @@ class ExportSection extends React.Component<Props, State> {
           annotation={I18n.t(`administration.export.${annotation}`)}
         />
         <div className="admin-content">
-          {this.renderAnonymousOption()}
-          {this.renderLanguageOptions()}
-          {this.renderLinkOptions()}
+          <FormGroup>
+            {this.renderAnonymousOption()}
+            {this.renderLanguageOptions()}
+            {this.renderLinkOptions()}
+          </FormGroup>
           <br />
           <Link className="button-link button-dark margin-l" href={this.state.exportLink}>
             <Translate value="administration.export.link" />

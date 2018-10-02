@@ -108,6 +108,9 @@ exports[`ExportSection component should render an ExportSection component withou
   <div
     className="admin-content"
   >
+    <div
+      className="form-group"
+    />
     <br />
     <a
       className="button-link button-dark margin-l"
