@@ -83,15 +83,18 @@ export default compose(
     name: 'updateAcceptedCookies'
   }),
   graphql(acceptedCookiesQuery, {
+    skip: props => !props.id,
     props: ({ data }) => {
       if (data.loading) {
-        return { loading: true };
+        return { error: null, loading: true };
       }
       if (data.error) {
-        return { error: data.error };
+        return { error: data.error, loading: false };
       }
       return {
-        cookiesList: data.user.acceptedCookies
+        cookiesList: data.user.acceptedCookies,
+        error: null,
+        loading: false
       };
     }
   }),
