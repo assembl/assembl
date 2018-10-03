@@ -8,7 +8,7 @@ import { compose, graphql } from 'react-apollo';
 import type { Map } from 'immutable';
 
 import { updateContentLocale } from '../../../actions/contentLocaleActions';
-import withLoadingIndicator from '../../common/withLoadingIndicator';
+import manageErrorAndLoading from '../../common/manageErrorAndLoading';
 import FlatList from '../../common/flatList';
 import Post from './post';
 import QuestionPosts from '../../../graphql/QuestionPostsQuery.graphql';
@@ -141,5 +141,5 @@ export default compose(
       };
     }
   }),
-  withLoadingIndicator({ color: 'black' })
+  manageErrorAndLoading({ color: 'black', displayLoader: true })
 )(DumbPosts);

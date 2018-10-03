@@ -12,7 +12,7 @@ import { get, getContextual } from '../../utils/routeMap';
 import inputHandler from '../../utils/inputHandler';
 import { displayAlert, displayCustomModal } from '../../utils/utilityManager';
 import FormControlWithLabel from '../common/formControlWithLabel';
-import withoutLoadingIndicator from '../../components/common/withoutLoadingIndicator';
+import manageErrorAndLoading from '../../components/common/manageErrorAndLoading';
 import TabsConditionQuery from '../../graphql/TabsConditionQuery.graphql';
 import TextFieldsQuery from '../../graphql/TextFields.graphql';
 import LegalContentsQuery from '../../graphql/LegalContents.graphql';
@@ -290,5 +290,5 @@ export default compose(
     }
   }),
   withData,
-  withoutLoadingIndicator()
+  manageErrorAndLoading({ displayLoader: false })
 )(SignupForm);

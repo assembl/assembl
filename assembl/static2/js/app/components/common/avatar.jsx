@@ -6,7 +6,7 @@ import { NavDropdown, MenuItem } from 'react-bootstrap';
 
 import { getContextual, get } from '../../utils/routeMap';
 import UserQuery from '../../graphql/userQuery.graphql';
-import withoutLoadingIndicator from './withoutLoadingIndicator';
+import manageErrorAndLoading from './manageErrorAndLoading';
 import { browserHistory } from '../../router';
 import { localAwareLink } from '../../utils/utilityManager';
 
@@ -100,5 +100,5 @@ export default compose(
       };
     }
   }),
-  withoutLoadingIndicator()
+  manageErrorAndLoading({ displayLoader: false })
 )(ProfileIcon);

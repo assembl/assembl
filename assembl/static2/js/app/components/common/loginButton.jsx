@@ -5,7 +5,7 @@ import { Button } from 'react-bootstrap';
 import { compose, graphql } from 'react-apollo';
 import { getCurrentView, getContextual } from '../../utils/routeMap';
 import { getDiscussionSlug } from '../../utils/globalFunctions';
-import withoutLoadingIndicator from './withoutLoadingIndicator';
+import manageErrorAndLoading from './manageErrorAndLoading';
 import DiscussionQuery from '../../graphql/DiscussionQuery.graphql';
 
 type ButtonProps = {
@@ -48,7 +48,4 @@ const DumbButton = ({ data: { discussion: { loginData: { url, local } } }, label
   );
 };
 
-export default compose(
-  graphql(DiscussionQuery),
-  withoutLoadingIndicator()
-)(DumbButton);
+export default compose(graphql(DiscussionQuery), manageErrorAndLoading({ displayLoader: false }))(DumbButton);

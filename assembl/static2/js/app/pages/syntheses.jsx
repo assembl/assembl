@@ -13,7 +13,7 @@ import Card from '../components/common/card';
 import CardList from '../components/common/cardList';
 import SynthesesQuery from '../graphql/SynthesesQuery.graphql';
 
-import withLoadingIndicator from '../components/common/withLoadingIndicator';
+import manageErrorAndLoading from '../components/common/manageErrorAndLoading';
 
 type SynthesesProps = {
   syntheses: Array<Object>,
@@ -85,5 +85,5 @@ export default compose(
       };
     }
   }),
-  withLoadingIndicator()
+  manageErrorAndLoading({ displayLoader: true })
 )(DumbSyntheses);

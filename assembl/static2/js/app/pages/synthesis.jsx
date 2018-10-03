@@ -7,7 +7,7 @@ import { Col, Grid, Row } from 'react-bootstrap';
 import Header from '../components/common/header';
 import Section from '../components/common/section';
 import SynthesisQuery from '../graphql/SynthesisQuery.graphql';
-import withLoadingIndicator from '../components/common/withLoadingIndicator';
+import manageErrorAndLoading from '../components/common/manageErrorAndLoading';
 import IdeaSynthesisTree from '../components/synthesis/IdeaSynthesisTree';
 import { getPartialTree, getChildren } from '../utils/tree';
 import SideMenu from '../components/synthesis/sideMenu';
@@ -207,5 +207,5 @@ export default compose(
       };
     }
   }),
-  withLoadingIndicator()
+  manageErrorAndLoading({ displayLoader: true })
 )(DumbSynthesis);

@@ -11,7 +11,7 @@ import DeleteMyAccount from '../components/profile/deleteMyAccount';
 import ConfiguredField, { type ConfiguredFieldType } from '../components/common/configuredField';
 import CookiesSelectorContainer from '../components/cookies/cookiesSelectorContainer';
 import { get, getContextual } from '../utils/routeMap';
-import withLoadingIndicator from '../components/common/withLoadingIndicator';
+import manageErrorAndLoading from '../components/common/manageErrorAndLoading';
 import UserQuery from '../graphql/userQuery.graphql';
 import ProfileFieldsQuery from '../graphql/ProfileFields.graphql';
 import UpdateUserMutation from '../graphql/mutations/updateUser.graphql';
@@ -260,5 +260,5 @@ export default compose(
   }),
   graphql(UpdateUserMutation, { name: 'updateUser' }),
   graphql(UpdateProfileFieldsMutation, { name: 'updateProfileFields' }),
-  withLoadingIndicator()
+  manageErrorAndLoading({ displayLoader: true })
 )(Profile);

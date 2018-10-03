@@ -20,7 +20,7 @@ import { getDomElementOffset, isMobile } from '../utils/globalFunctions';
 import { getIfPhaseCompletedById } from '../utils/timeline';
 import { promptForLoginOr, displayAlert, displayModal } from '../utils/utilityManager';
 import { transformLinksInHtml } from '../utils/linkify';
-import withLoadingIndicator from '../components/common/withLoadingIndicator';
+import manageErrorAndLoading from '../components/common/manageErrorAndLoading';
 import MessagePage from '../components/common/messagePage';
 
 export type TokenCategory = {|
@@ -494,5 +494,5 @@ export default compose(
   graphql(AddTokenVoteMutation, {
     name: 'addTokenVote'
   }),
-  withLoadingIndicator()
+  manageErrorAndLoading({ displayLoader: true })
 )(DumbVoteSession);

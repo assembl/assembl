@@ -12,7 +12,7 @@ import { updatePhases } from '../actions/adminActions/timeline';
 import { updateSections } from '../actions/adminActions/adminSections';
 import { updateLandingPageModules, updateLandingPage } from '../actions/adminActions/landingPage';
 import { updateTextFields } from '../actions/adminActions/profileOptions';
-import withLoadingIndicator from '../components/common/withLoadingIndicator';
+import manageErrorAndLoading from '../components/common/manageErrorAndLoading';
 import Menu from '../components/administration/menu';
 import LanguageMenu from '../components/administration/languageMenu';
 import SectionsQuery from '../graphql/SectionsQuery.graphql';
@@ -470,5 +470,5 @@ export default compose(
     skip: isNotInLandingPageAdmin
   }),
   mergeLoadingAndHasErrors,
-  withLoadingIndicator()
+  manageErrorAndLoading({ displayLoader: true })
 )(Administration);

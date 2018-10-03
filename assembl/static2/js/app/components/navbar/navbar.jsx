@@ -17,7 +17,7 @@ import FlatNavbar from './FlatNavbar';
 import BurgerNavbar from './BurgerNavbar';
 import { APP_CONTAINER_MAX_WIDTH, APP_CONTAINER_PADDING } from '../../constants';
 import { snakeToCamel } from '../../utils/globalFunctions';
-import withoutLoadingIndicator from '../common/withoutLoadingIndicator';
+import manageErrorAndLoading from '../common/manageErrorAndLoading';
 import DebateLink from '../debate/navigation/debateLink';
 import Logo from './Logo';
 import UserMenu from './UserMenu';
@@ -217,6 +217,6 @@ export default compose(
       };
     }
   }),
-  withoutLoadingIndicator(),
+  manageErrorAndLoading({ displayLoader: false }),
   withScreenWidth
 )(AssemblNavbar);

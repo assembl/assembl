@@ -7,7 +7,7 @@ import { Grid } from 'react-bootstrap';
 import type { Map } from 'immutable';
 
 import { updateContentLocale } from '../actions/contentLocaleActions';
-import withLoadingIndicator from '../components/common/withLoadingIndicator';
+import manageErrorAndLoading from '../components/common/manageErrorAndLoading';
 import Media from '../components/common/media';
 import Header from '../components/common/header';
 import Question from '../components/debate/survey/question';
@@ -254,5 +254,5 @@ export default compose(
       };
     }
   }),
-  withLoadingIndicator({ color: 'black' })
+  manageErrorAndLoading({ color: 'black', displayLoader: true })
 )(Survey);

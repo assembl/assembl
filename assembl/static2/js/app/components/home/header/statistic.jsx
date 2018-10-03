@@ -5,7 +5,7 @@ import { I18n } from 'react-redux-i18n';
 import moment from 'moment';
 import 'moment-duration-format'; // needed for momentDuration.format()
 import RootIdeaStats from '../../../graphql/RootIdeaStats.graphql';
-import withLoadingIndicator from '../../../components/common/withLoadingIndicator';
+import manageErrorAndLoading from '../../../components/common/manageErrorAndLoading';
 import HeaderStatistics, { statMessages, statParticipants, statSentiments } from '../../../components/common/headerStatistics';
 
 class Statistic extends React.Component<$FlowFixMeProps> {
@@ -43,4 +43,4 @@ class Statistic extends React.Component<$FlowFixMeProps> {
   }
 }
 
-export default compose(graphql(RootIdeaStats), withLoadingIndicator({ textHidden: true, color: 'white' }))(Statistic);
+export default compose(graphql(RootIdeaStats), manageErrorAndLoading({ textHidden: true, color: 'white' }))(Statistic);

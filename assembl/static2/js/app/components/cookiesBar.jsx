@@ -11,7 +11,7 @@ import { get } from '../utils/routeMap';
 import updateAcceptedCookies from '../graphql/mutations/updateAcceptedCookies.graphql';
 import acceptedCookiesQuery from '../graphql/acceptedCookiesQuery.graphql';
 import { COOKIE_TYPES } from '../constants';
-import withoutLoadingIndicator from './common/withoutLoadingIndicator';
+import manageErrorAndLoading from './common/manageErrorAndLoading';
 
 type State = {
   hide: ?boolean
@@ -98,5 +98,5 @@ export default compose(
       };
     }
   }),
-  withoutLoadingIndicator()
+  manageErrorAndLoading({ displayLoader: false })
 )(DumbCookiesBar);

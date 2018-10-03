@@ -4,7 +4,7 @@ import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import ResourcesQuery from '../graphql/ResourcesQuery.graphql';
 import ResourcesCenterPageQuery from '../graphql/ResourcesCenterPage.graphql';
-import withLoadingIndicator from '../components/common/withLoadingIndicator';
+import manageErrorAndLoading from '../components/common/manageErrorAndLoading';
 import ResourcesCenter from '../components/resourcesCenter';
 
 const ResourcesCenterContainer = ({ data, resourcesCenterHeaderUrl, resourcesCenterTitle }) => (
@@ -39,5 +39,5 @@ export default compose(
     }
   }),
   graphql(ResourcesQuery),
-  withLoadingIndicator()
+  manageErrorAndLoading({ displayLoader: true })
 )(ResourcesCenterContainer);

@@ -1,7 +1,7 @@
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import ThematicsQuery from '../graphql/ThematicsQuery.graphql';
-import withLoadingIndicator from '../components/common/withLoadingIndicator';
+import manageErrorAndLoading from '../components/common/manageErrorAndLoading';
 import { browserHistory } from '../router';
 import { get } from '../utils/routeMap';
 import { displayAlert } from '../utils/utilityManager';
@@ -55,5 +55,5 @@ export default compose(
       };
     }
   }),
-  withLoadingIndicator()
+  manageErrorAndLoading({ displayLoader: true })
 )(BrightMirror);

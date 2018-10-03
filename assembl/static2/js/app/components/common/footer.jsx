@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { graphql, compose } from 'react-apollo';
 
 import { get } from '../../utils/routeMap';
-import withoutLoadingIndicator from '../../components/common/withoutLoadingIndicator';
+import manageErrorAndLoading from '../../components/common/manageErrorAndLoading';
 import TabsConditionQuery from '../../graphql/TabsConditionQuery.graphql';
 
 class Footer extends React.Component {
@@ -126,4 +126,4 @@ const withData = graphql(TabsConditionQuery, {
   })
 });
 
-export default compose(connect(mapStateToProps), withData, withoutLoadingIndicator())(Footer);
+export default compose(connect(mapStateToProps), withData, manageErrorAndLoading({ displayLoader: false }))(Footer);

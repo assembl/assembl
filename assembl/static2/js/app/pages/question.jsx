@@ -6,7 +6,7 @@ import { Translate, I18n } from 'react-redux-i18n';
 import { Grid } from 'react-bootstrap';
 import { Link } from 'react-router';
 
-import withLoadingIndicator from '../components/common/withLoadingIndicator';
+import manageErrorAndLoading from '../components/common/manageErrorAndLoading';
 import Header from '../components/common/header';
 import Posts from '../components/debate/survey/posts';
 import Question from '../graphql/QuestionQuery.graphql';
@@ -119,5 +119,5 @@ export default compose(
       };
     }
   }),
-  withLoadingIndicator({ color: 'black' })
+  manageErrorAndLoading({ color: 'black', displayLoader: true })
 )(DumbQuestion);

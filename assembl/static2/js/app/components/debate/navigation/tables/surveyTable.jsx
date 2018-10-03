@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { graphql, compose } from 'react-apollo';
 import DebateThematicsQuery from '../../../../graphql/DebateThematicsQuery.graphql';
 import MenuList, { type ItemNode } from './menuList';
-import withLoadingIndicator from '../../../common/withLoadingIndicator';
+import manageErrorAndLoading from '../../../common/manageErrorAndLoading';
 
 type SurveyTableProps = {
   identifier: string,
@@ -30,4 +30,6 @@ const mapStateToProps = state => ({
   debate: state.debate
 });
 
-export default compose(connect(mapStateToProps), SurveyTableWithData, withLoadingIndicator())(DumbSurveyTable);
+export default compose(connect(mapStateToProps), SurveyTableWithData, manageErrorAndLoading({ displayLoader: true }))(
+  DumbSurveyTable
+);

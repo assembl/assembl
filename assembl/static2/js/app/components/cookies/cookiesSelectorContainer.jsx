@@ -11,13 +11,12 @@ import { displayAlert } from '../../utils/utilityManager';
 // graphql
 import acceptedCookiesQuery from '../../graphql/acceptedCookiesQuery.graphql';
 import updateAcceptedCookies from '../../graphql/mutations/updateAcceptedCookies.graphql';
-import withLoadingIndicator from '../common/withLoadingIndicator';
+import manageErrorAndLoading from '../common/manageErrorAndLoading';
 
 import type { CookieObject } from './cookieSetter';
 import { COOKIE_TRANSLATION_KEYS, COOKIE_TYPES, COOKIES_CATEGORIES } from '../../constants';
 
 type Props = {
-  error: ?Error,
   updateAcceptedCookies: Function,
   cookiesList: Array<string>,
   locale: string
@@ -42,11 +41,7 @@ const { essential, analytics, other } = COOKIES_CATEGORIES;
 export class DumbCookiesSelectorContainer extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    const { cookiesList, error } = props;
-    if (error) {
-      throw new Error(`GraphQL error: ${error.message}`);
-    }
-
+    const { cookiesList } = props;
     let cookiesByCategory = {};
     if (cookiesList) {
       // @$FlowFixMe flow does not see that getCookieItem has been checked as non null
@@ -217,5 +212,5 @@ export default compose(
       };
     }
   }),
-  withLoadingIndicator()
+  manageErrorAndLoading({ displayLoader: true })
 )(DumbCookiesSelectorContainer);

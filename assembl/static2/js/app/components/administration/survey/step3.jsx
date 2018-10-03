@@ -5,7 +5,7 @@ import { compose, graphql } from 'react-apollo';
 import ExportSection from '../exportSection';
 import { get } from '../../../utils/routeMap';
 import DiscussionPreferenceLanguage from '../../../graphql/DiscussionPreferenceLanguage.graphql';
-import withLoadingIndicator from '../../common/withLoadingIndicator';
+import manageErrorAndLoading from '../../common/manageErrorAndLoading';
 
 type Language = {
   locale: string
@@ -93,5 +93,5 @@ export default compose(
       };
     }
   }),
-  withLoadingIndicator()
+  manageErrorAndLoading({ displayLoader: true })
 )(Step3);
