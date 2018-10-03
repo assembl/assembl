@@ -27,8 +27,8 @@ describe('RichTextEditor component', () => {
   });
 
   describe('getCharCount method', () => {
-    it('should return 0 if the editorState content is empty');
-    it('should return the number of characters in the editorState');
+    xit('should return 0 if the editorState content is empty', () => {});
+    xit('should return the number of characters in the editorState', () => {});
   });
 
   describe('shouldHidePlaceholder method', () => {

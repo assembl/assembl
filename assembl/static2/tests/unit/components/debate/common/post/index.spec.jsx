@@ -97,7 +97,7 @@ describe('Post component', () => {
   });
 
   // TODO: find a way to set state or to call handleEditClick
-  it('should render a form to edit the post if mode is edit');
+  xit('should render a form to edit the post if mode is edit', () => {});
 
   it('should render a PostView component and pass its props to it', () => {
     const props = postProps;

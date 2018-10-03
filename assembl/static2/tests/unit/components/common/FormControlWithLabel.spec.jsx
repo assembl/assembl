@@ -54,5 +54,5 @@ describe('FormControlWithLabel component', () => {
     expect(tree).toMatchSnapshot();
   });
 
-  it('should validate the input if its required prop is true');
+  xit('should validate the input if its required prop is true', () => {});
 });
