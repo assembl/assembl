@@ -13,6 +13,7 @@ import { updateSections } from '../actions/adminActions/adminSections';
 import { updateLandingPageModules, updateLandingPage } from '../actions/adminActions/landingPage';
 import { updateTextFields } from '../actions/adminActions/profileOptions';
 import manageErrorAndLoading from '../components/common/manageErrorAndLoading';
+import mergeLoadingAndError from '../components/common/mergeLoadingAndError';
 import Menu from '../components/administration/menu';
 import LanguageMenu from '../components/administration/languageMenu';
 import SectionsQuery from '../graphql/SectionsQuery.graphql';
@@ -20,10 +21,10 @@ import TextFields from '../graphql/TextFields.graphql';
 import LegalContentsQuery from '../graphql/LegalContents.graphql';
 import VoteSessionQuery from '../graphql/VoteSession.graphql';
 import LandingPageQuery from '../graphql/LandingPage.graphql';
+import LandingPageModules from '../graphql/LandingPageModules.graphql';
 import TimelineQuery from '../graphql/Timeline.graphql';
 import { convertEntriesToEditorState } from '../utils/draftjs';
 import { getPhaseId } from '../utils/timeline';
-import landingPageModulesPlugin from '../utils/administration/landingPageModules';
 import { fromGlobalId } from '../utils/globalFunctions';
 
 const SECTIONS_WITHOUT_LANGUAGEMENU = ['1', '6'];
@@ -154,7 +155,7 @@ class Administration extends React.Component {
 
   putLandingPageModulesInStore(landingPageModules) {
     if (landingPageModules) {
-      const filtered = filter(landingPageModulesPlugin.graphqlQuery, { landingPageModules: landingPageModules });
+      const filtered = filter(LandingPageModules, { landingPageModules: landingPageModules });
       this.props.updateLandingPageModules(filtered.landingPageModules);
     }
   }
@@ -271,42 +272,6 @@ const mapDispatchToProps = dispatch => ({
   updatePhases: phases => dispatch(updatePhases(phases))
 });
 
-const mergeLoadingAndError = WrappedComponent => (props) => {
-  const {
-    voteSessionError,
-    voteSessionLoading,
-    sectionsError,
-    sectionsLoading,
-    legalContentsAreLoading,
-    legalContentsError,
-    textFieldsLoading,
-    textFieldsError,
-    landingPageError,
-    landingPageLoading,
-    timelineIsLoading,
-    timelineError
-  } = props;
-
-  const error =
-    voteSessionError ||
-    legalContentsError ||
-    landingPageError ||
-    sectionsError ||
-    props[landingPageModulesPlugin.error] ||
-    textFieldsError ||
-    timelineError;
-  const loading =
-    voteSessionLoading ||
-    legalContentsAreLoading ||
-    landingPageLoading ||
-    sectionsLoading ||
-    props[landingPageModulesPlugin.loading] ||
-    textFieldsLoading ||
-    timelineIsLoading;
-
-  return <WrappedComponent {...props} error={error} loading={loading} />;
-};
-
 const isNotInAdminSection = adminSectionName => props => !props.router.getCurrentLocation().pathname.endsWith(adminSectionName);
 
 const isNotInDiscussionAdmin = isNotInAdminSection('discussion');
@@ -326,14 +291,18 @@ export default compose(
     props: ({ data }) => {
       if (data.error || data.loading) {
         return {
-          voteSessionError: data.error,
-          voteSessionLoading: data.loading
+          voteSessionMetadata: {
+            error: data.error,
+            loading: data.loading
+          }
         };
       }
 
       return {
-        voteSessionLoading: data.loading,
-        voteSessionError: data.error,
+        voteSessionMetadata: {
+          error: data.error,
+          loading: data.loading
+        },
         voteSession: data.voteSession,
         refetchVoteSession: data.refetch
       };
@@ -343,14 +312,18 @@ export default compose(
     props: ({ data }) => {
       if (data.error || data.loading) {
         return {
-          sectionsError: data.error,
-          sectionsLoading: data.loading
+          sectionsMetadata: {
+            error: data.error,
+            loading: data.loading
+          }
         };
       }
 
       return {
-        sectionsLoading: data.loading,
-        sectionsError: data.error,
+        sectionsMetadata: {
+          error: data.error,
+          loading: data.loading
+        },
         refetchSections: data.refetch,
         sections: data.sections
       };
@@ -361,14 +334,18 @@ export default compose(
     props: ({ data }) => {
       if (data.error || data.loading) {
         return {
-          legalContentsError: data.error,
-          legalContentsAreLoading: data.loading
+          legalContentsMetadata: {
+            error: data.error,
+            loading: data.loading
+          }
         };
       }
 
       return {
-        legalContentsAreLoading: data.loading,
-        legalContentsHaveErrors: data.error,
+        legalContentsMetadata: {
+          error: data.error,
+          loading: data.loading
+        },
         refetchLegalContents: data.refetch,
         legalContents: data.legalContents
       };
@@ -382,23 +359,48 @@ export default compose(
     props: ({ data }) => {
       if (data.error || data.loading) {
         return {
-          timelineError: data.error,
-          timelineIsLoading: data.loading
+          timelineMetadata: {
+            error: data.error,
+            loading: data.loading
+          }
         };
       }
 
       return {
-        timelineIsLoading: data.loading,
-        timelineError: data.error,
+        timelineMetadata: {
+          error: data.error,
+          loading: data.loading
+        },
         refetchTimeline: data.refetch,
         timeline: data.timeline
       };
     },
     skip: props => isNotInLandingPageAdmin(props) && isNotInDiscussionAdmin(props)
   }),
-  graphql(landingPageModulesPlugin.graphqlQuery, {
-    options: landingPageModulesPlugin.queryOptions,
-    props: landingPageModulesPlugin.dataToProps,
+  graphql(LandingPageModules, {
+    options: ({ locale }) => ({
+      variables: { lang: locale }
+    }),
+    props: ({ data }) => {
+      if (data.error || data.loading) {
+        return {
+          landingPageModulesMetadata: {
+            error: data.error,
+            loading: data.loading
+          },
+          landingPageModules: []
+        };
+      }
+
+      return {
+        landingPageModulesMetadata: {
+          error: data.error,
+          loading: data.loading
+        },
+        refetchLandingPageModules: data.refetch,
+        landingPageModules: data.landingPageModules
+      };
+    },
     skip: isNotInLandingPageAdmin
   }),
   graphql(TextFields, {
@@ -408,14 +410,18 @@ export default compose(
     props: ({ data }) => {
       if (data.error || data.loading) {
         return {
-          textFieldsError: data.error,
-          textFieldsLoading: data.loading
+          textFieldsMetadata: {
+            error: data.error,
+            loading: data.loading
+          }
         };
       }
 
       return {
-        textFieldsLoading: data.loading,
-        textFieldsError: data.error,
+        textFieldsMetadata: {
+          error: data.error,
+          loading: data.loading
+        },
         refetchTextFields: data.refetch,
         textFields: data.textFields
       };
@@ -429,20 +435,32 @@ export default compose(
     props: ({ data }) => {
       if (data.error || data.loading) {
         return {
-          landingPageError: data.error,
-          landingPageLoading: data.loading
+          landingPageMetadata: {
+            error: data.error,
+            loading: data.loading
+          }
         };
       }
 
       return {
-        landingPageLoading: data.loading,
-        landingPageError: data.error,
+        landingPageMetadata: {
+          error: data.error,
+          loading: data.loading
+        },
         refetchLandingPage: data.refetch,
         landingPage: data.discussion
       };
     },
     skip: isNotInLandingPageAdmin
   }),
-  mergeLoadingAndError,
+  mergeLoadingAndError([
+    'voteSessionMetadata',
+    'sectionsMetadata',
+    'legalContentsMetadata',
+    'timelineMetadata',
+    'landingPageModulesMetadata',
+    'textFieldsMetadata',
+    'landingPageMetadata'
+  ]),
   manageErrorAndLoading({ displayLoader: true })
 )(Administration);
