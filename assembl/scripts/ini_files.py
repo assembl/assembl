@@ -56,7 +56,7 @@ DEFAULTS = {
     'autostart_gulp': 'false',
     'autostart_webpack': 'false',
     'autostart_uwsgi': 'false',
-    'autostart_elasticsearch_server': 'false',
+    'autostart_elasticsearch': 'true',
     'sup_log_size': '1000000',  # in bytes, ~1Mb
     'sup_log_backups': '10',
 }
