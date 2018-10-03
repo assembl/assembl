@@ -7758,8 +7758,8 @@ rc-slider@^8.3.1:
     warning "^3.0.0"
 
 rc-slider@assembl/slider#use-src-instead-of-es:
-  version "8.6.1"
-  resolved "https://codeload.github.com/assembl/slider/tar.gz/ffdac086ba99839b75c52bde7ef4db9ff54cfba3"
+  version "8.6.2"
+  resolved "https://codeload.github.com/assembl/slider/tar.gz/a148d0880e1ea024def47a11eeefc1dd84ee654d"
   dependencies:
     babel-runtime "6.x"
     classnames "^2.2.5"
