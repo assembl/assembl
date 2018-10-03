@@ -1,8 +1,24 @@
 {
   "plugins": [
-    "transform-object-rest-spread",
-    "transform-class-properties",
-    ["transform-runtime", { "helpers": true, "polyfill": false }]
+    "@babel/plugin-proposal-object-rest-spread",
+    "@babel/plugin-proposal-class-properties",
+    [
+      "@babel/plugin-transform-runtime",
+      {
+        "helpers": true
+      }
+    ]
   ],
-  "presets": [["env", { "targets": { "node": 6 } }], "react", "flow"]
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "targets": {
+          "node": 6
+        }
+      }
+    ],
+    "@babel/preset-react",
+    "@babel/preset-flow"
+  ]
 }

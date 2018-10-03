@@ -74,17 +74,18 @@ module.exports = {
             use: {
               loader: 'babel-loader',
               options: {
-                forceEnv: 'development',
+                envName: 'development',
                 babelrc: false,
                 plugins: [
-                  'transform-object-rest-spread', 'transform-class-properties',
-                  ['transform-runtime', { helpers: true, polyfill: false }],
+                  '@babel/plugin-proposal-object-rest-spread',
+                  '@babel/plugin-proposal-class-properties',
+                  ['@babel/plugin-transform-runtime', { helpers: true }],
                   'react-hot-loader/babel'
                 ],
-                presets: [["env", { "modules": false, "targets": { "ie": 11 },
-                                    "debug": true, "useBuiltIns": true,
+                presets: [["@babel/preset-env", { "modules": false, "targets": { "ie": 11 },
+                                    "debug": true, "useBuiltIns": "entry",
                                     "exclude": ["web.timers", "web.immediate", "web.dom.iterable"] }],
-                          "react", "flow"]
+                          "@babel/preset-react", "@babel/preset-flow"]
               }
             },
             include: [

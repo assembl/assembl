@@ -50,7 +50,7 @@ module.exports = {
             use: {
               loader: 'babel-loader',
               options: {
-                forceEnv: 'production',  // babel default to development otherwise, this is to remove the __REACT_HOT_LOADER__ conditions in the code
+                envName: 'production',  // babel default to development otherwise, this is to remove the __REACT_HOT_LOADER__ conditions in the code
                 // We specify plugins and presets here to be able to transpile
                 // dependencies that may have a .babelrc but doesn't do
                 // an actual transpilation to ES5. The .babelrc
@@ -60,14 +60,14 @@ module.exports = {
                 // A dependency is transpiled only if it's in the include below.
                 babelrc: false,
                 plugins: [
-                  'transform-object-rest-spread',
-                  'transform-class-properties',
-                  ['transform-runtime', { helpers: true, polyfill: false }]
+                  '@babel/plugin-proposal-object-rest-spread',
+                  '@babel/plugin-proposal-class-properties',
+                  ['@babel/plugin-transform-runtime', { helpers: true }]
                 ],
-                presets: [["env", { "modules": false, "targets": { "ie": 11 },
-                                    "debug": true, "useBuiltIns": true,
+                presets: [["@babel/preset-env", { "modules": false, "targets": { "ie": 11 },
+                                    "debug": true, "useBuiltIns": "entry",
                                     "exclude": ["web.timers", "web.immediate", "web.dom.iterable"] }],
-                          "react", "flow"]
+                          "@babel/preset-react", "@babel/preset-flow"]
               }
             },
             include: [
