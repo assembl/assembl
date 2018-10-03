@@ -1219,6 +1219,29 @@ def generate_dh_group():
 
 
 @task
+def setup_nginx_file(ready_for_production=False):
+    """Creates nginx config file from template."""
+    from jinja2 import Environment, FileSystemLoader
+    jenv = Environment(loader=FileSystemLoader('doc/sample_nginx_config/'), autoescape=lambda t: False)
+    # Deleting any existing nginx configurations already existing
+    if exists("/etc/nginx/sites-enabled/assembl.%s" % (env.public_hostname)):
+        sudo("rm /etc/nginx/sites-enabled/assembl.%s" % (env.public_hostname))
+    if exists("/etc/nginx/sites-enabled/assembl.%s" % (env.server_ip_address)):
+        sudo("rm /etc/nginx.sites-enabled/assembl.%s" % (env.server_ip_address))
+    # There are two nginx template, one before DNS, the second one for after DNS propagation
+    if not ready_for_production:
+        assembl_nginx_template = jenv.get_template('assembl.yourdomain.com')
+    else:
+        assembl_nginx_template = jenv.get_template('assembl.yourdomain.production-ready')
+    with open('assembl.%s' % (env.public_hostname), 'w') as f:
+        f.write(assembl_nginx_template.render(public_hostname=env.public_hostname))
+    put("assembl.%s" % (env.public_hostname), "%s/doc/sample_nginx_config/" % (env._projectpath))
+    sudo("cp %s/doc/sample_nginx_config/assembl.%s /etc/nginx/sites-available/assembl.%s" % (env._projectpath, env.public_hostname, env.public_hostname))
+    sudo("ln -s /etc/nginx/sites-available/assembl.%s /etc/nginx/sites-enabled/" % env.public_hostname)
+    sudo("/etc/init.d/nginx restart")
+
+
+@task
 def webservers_reload():
     """
     Reload the webserver stack.
