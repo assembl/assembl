@@ -16,7 +16,7 @@ import ManageTimeline from '../components/administration/landingPage/manageTimel
 import Navbar from '../components/administration/navbar';
 import { displayAlert } from '../utils/utilityManager';
 import SaveButton, { getMutationsPromises, runSerial } from '../components/administration/saveButton';
-import landingPagePlugin from '../utils/administration/landingPage';
+import landingPageModulesPlugin from '../utils/administration/landingPageModules';
 import updateDiscussionMutation from '../graphql/mutations/updateDiscussion.graphql';
 import updateDiscussionPhaseMutation from '../graphql/mutations/updateDiscussionPhase.graphql';
 
@@ -117,9 +117,9 @@ class LandingPageAdmin extends React.Component<Props, State> {
     if (landingPageModulesHasChanged) {
       const mutationsPromises = getMutationsPromises({
         items: landingPageModules,
-        variablesCreator: landingPagePlugin.variablesCreator,
-        createMutation: this.props[landingPagePlugin.createMutationName],
-        updateMutation: this.props[landingPagePlugin.updateMutationName]
+        variablesCreator: landingPageModulesPlugin.variablesCreator,
+        createMutation: this.props[landingPageModulesPlugin.createMutationName],
+        updateMutation: this.props[landingPageModulesPlugin.updateMutationName]
       });
 
       runSerial(mutationsPromises)
@@ -242,11 +242,11 @@ const mapStateToProps = ({ admin: { editLocale, landingPage, timeline } }) => {
 
 export default compose(
   connect(mapStateToProps),
-  graphql(landingPagePlugin.createMutation, {
-    name: landingPagePlugin.createMutationName
+  graphql(landingPageModulesPlugin.createMutation, {
+    name: landingPageModulesPlugin.createMutationName
   }),
-  graphql(landingPagePlugin.updateMutation, {
-    name: landingPagePlugin.updateMutationName
+  graphql(landingPageModulesPlugin.updateMutation, {
+    name: landingPageModulesPlugin.updateMutationName
   }),
   graphql(updateDiscussionMutation, {
     name: 'updateDiscussion'

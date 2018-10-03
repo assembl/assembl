@@ -3,36 +3,29 @@ import LandingPageModules from '../../graphql/LandingPageModules.graphql';
 import createLandingPageModule from '../../graphql/mutations/createLandingPageModule.graphql';
 import updateLandingPageModule from '../../graphql/mutations/updateLandingPageModule.graphql';
 
-const landingPagePlugin = {
+const landingPageModulesPlugin = {
   createMutation: createLandingPageModule,
   createMutationName: 'createLandingPageModule',
   updateMutation: updateLandingPageModule,
   updateMutationName: 'updateLandingPageModule',
   graphqlQuery: LandingPageModules,
-  loading: 'landingPageLoading',
-  hasErrors: 'landingPageHasErrors',
+  loading: 'landingPageModulesLoading',
+  error: 'landingPageModulesError',
   queryOptions: ({ locale }) => ({
     variables: { lang: locale }
   }),
   dataToProps: ({ data }) => {
-    if (data.loading) {
+    if (data.error || data.loading) {
       return {
-        landingPageLoading: true,
-        landingPageModules: []
-      };
-    }
-
-    if (data.error) {
-      return {
-        landingPageHasErrors: true,
-        landingPageLoading: false,
+        landingPageModulesError: data.error,
+        landingPageModulesLoading: data.loading,
         landingPageModules: []
       };
     }
 
     return {
-      landingPageLoading: data.loading,
-      landingPageHasErrors: data.error,
+      landingPageModulesLoading: data.loading,
+      landingPageModulesError: data.error,
       refetchLandingPageModules: data.refetch,
       landingPageModules: data.landingPageModules
     };
@@ -47,4 +40,4 @@ const landingPagePlugin = {
   })
 };
 
-export default landingPagePlugin;
+export default landingPageModulesPlugin;
