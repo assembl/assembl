@@ -383,7 +383,7 @@ class Idea(HistoryMixin, DiscussionBoundBase):
         if root_idea:
             return root_idea.discussion_phase
 
-        return get_phase_by_identifier(self.discussion, Phases.thread.value)
+        return get_phase_by_identifier(self.discussion or Discussion.get(self.discussion_id), Phases.thread.value)
 
     def get_applicable_announcement(self):
         from .announcement import IdeaAnnouncement

@@ -814,12 +814,14 @@ class CreateProposal(graphene.Mutation):
         title_entries = args.get('title_entries')
         description_entries = args.get('description_entries')
         discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
 
         with cls.default_db.no_autoflush as db:
             title_ls = langstring_from_input_entries(title_entries)
             description_ls = langstring_from_input_entries(description_entries)
             proposal = cls(
                 discussion_id=discussion_id,
+                discussion=discussion,
                 title=title_ls,
                 description=description_ls
             )

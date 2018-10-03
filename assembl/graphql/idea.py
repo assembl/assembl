@@ -706,6 +706,7 @@ class CreateThematic(graphene.Mutation):
 
             saobj = cls(
                 discussion_id=discussion_id,
+                discussion=discussion,
                 title=title_langstring,
                 **kwargs)
             db.add(saobj)
@@ -758,6 +759,7 @@ class CreateThematic(graphene.Mutation):
                         question_input['title_entries'])
                     question = models.Question(
                         title=title_ls,
+                        discussion=discussion,
                         discussion_id=discussion_id
                     )
                     db.add(
