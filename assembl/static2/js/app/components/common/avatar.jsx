@@ -91,13 +91,16 @@ export default compose(
   graphql(UserQuery, {
     skip: props => !props.id,
     props: ({ data }) => {
-      if (data.loading) {
-        return { loading: true };
+      if (data.error || data.loading) {
+        return {
+          error: data.error,
+          loading: data.loading
+        };
       }
-      if (data.error) {
-        return { error: data.error };
-      }
+
       return {
+        error: data.error,
+        loading: data.loading,
         displayName: data.user.displayName
       };
     }

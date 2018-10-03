@@ -6,6 +6,7 @@ import { Translate, I18n } from 'react-redux-i18n';
 import { form, FormGroup, FormControl, Button } from 'react-bootstrap';
 import { Link } from 'react-router';
 import * as lodashGet from 'lodash/get';
+
 import { signupAction } from '../../actions/authenticationActions';
 import { getDiscussionSlug } from '../../utils/globalFunctions';
 import { get, getContextual } from '../../utils/routeMap';
@@ -13,6 +14,7 @@ import inputHandler from '../../utils/inputHandler';
 import { displayAlert, displayCustomModal } from '../../utils/utilityManager';
 import FormControlWithLabel from '../common/formControlWithLabel';
 import manageErrorAndLoading from '../../components/common/manageErrorAndLoading';
+import mergeLoadingAndError from '../../components/common/mergeLoadingAndError';
 import TabsConditionQuery from '../../graphql/TabsConditionQuery.graphql';
 import TextFieldsQuery from '../../graphql/TextFields.graphql';
 import LegalContentsQuery from '../../graphql/LegalContents.graphql';
@@ -246,49 +248,73 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-const withData = graphql(TabsConditionQuery, {
-  props: ({ data }) => ({
-    ...data,
-    hasTermsAndConditions: data.hasTermsAndConditions,
-    hasPrivacyPolicy: data.hasPrivacyPolicy,
-    hasUserGuidelines: data.hasUserGuidelines
-  })
-});
-
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   graphql(TextFieldsQuery, {
     props: ({ data }) => {
-      if (data.loading) {
-        return { loading: true, textFields: [] };
-      }
-      if (data.error) {
-        // this is needed to properly redirect to home page in case of error
-        return { error: data.error, textFields: [] };
+      if (data.error || data.loading) {
+        return {
+          textFieldsQueryMetadata: {
+            error: data.error,
+            loading: data.loading
+          },
+          textFields: []
+        };
       }
 
       return {
+        textFieldsQueryMetadata: {
+          error: data.error,
+          loading: data.loading
+        },
         textFields: data.textFields
       };
     }
   }),
   graphql(LegalContentsQuery, {
     props: ({ data }) => {
-      if (data.loading) {
-        return { loading: true };
-      }
-      if (data.error) {
-        return { error: data.error, loading: false };
+      if (data.error || data.loading) {
+        return {
+          legalContentsQueryMetadata: {
+            error: data.error,
+            loading: data.loading
+          }
+        };
       }
 
       return {
-        ...data,
+        legalContentsQueryMetadata: {
+          error: data.error,
+          loading: data.loading
+        },
         termsAndConditionsText: lodashGet(data, 'legalContents.termsAndConditions', ''),
         privacyPolicyText: lodashGet(data, 'legalContents.privacyPolicy', ''),
         userGuidelinesText: lodashGet(data, 'legalContents.userGuidelines', '')
       };
     }
   }),
-  withData,
+  graphql(TabsConditionQuery, {
+    props: ({ data }) => {
+      if (data.error || data.loading) {
+        return {
+          tabsConditionQueryMetadata: {
+            error: data.error,
+            loading: data.loading
+          }
+        };
+      }
+
+      return {
+        tabsConditionQueryMetadata: {
+          error: data.error,
+          loading: data.loading
+        },
+        hasTermsAndConditions: data.hasTermsAndConditions,
+        hasPrivacyPolicy: data.hasPrivacyPolicy,
+        hasUserGuidelines: data.hasUserGuidelines
+      };
+    }
+  }),
+  mergeLoadingAndError(['textFieldsQueryMetadata', 'legalContentsQueryMetadata', 'tabsConditionQueryMetadata']),
   manageErrorAndLoading({ displayLoader: false })
 )(SignupForm);

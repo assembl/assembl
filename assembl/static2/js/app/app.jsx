@@ -93,18 +93,10 @@ export default compose(
       variables: { lang: locale }
     }),
     props: ({ data }) => {
-      if (data.loading) {
+      if (data.error || data.loading) {
         return {
           error: data.error,
-          loading: true,
-          timeline: []
-        };
-      }
-
-      if (data.error) {
-        return {
-          error: data.error,
-          loading: false,
+          loading: data.loading,
           timeline: []
         };
       }
@@ -122,7 +114,7 @@ export default compose(
       }));
       return {
         error: data.error,
-        loading: false,
+        loading: data.loading,
         timeline: phasesForStore
       };
     }

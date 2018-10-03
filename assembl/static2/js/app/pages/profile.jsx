@@ -19,6 +19,7 @@ import UpdateProfileFieldsMutation from '../graphql/mutations/updateProfileField
 import { browserHistory } from '../router';
 import { displayAlert } from '../utils/utilityManager';
 import { encodeUserIdBase64 } from '../utils/globalFunctions';
+import mergeLoadingAndError from '../components/common/mergeLoadingAndError';
 
 type ProfileProps = {
   connectedUserId: string,
@@ -226,15 +227,21 @@ export default compose(
   connect(mapStateToProps),
   graphql(ProfileFieldsQuery, {
     props: ({ data }) => {
-      if (data.loading) {
-        return { loading: true, profileFields: [] };
-      }
-      if (data.error) {
-        // this is needed to properly redirect to home page in case of error
-        return { error: data.error, profileFields: [] };
+      if (data.error || data.loading) {
+        return {
+          profileFieldsQueryMetadata: {
+            error: data.error,
+            loading: data.loading
+          },
+          profileFields: []
+        };
       }
 
       return {
+        profileFieldsQueryMetadata: {
+          error: data.error,
+          loading: data.loading
+        },
         profileFields: data.profileFields
       };
     }
@@ -242,15 +249,21 @@ export default compose(
   graphql(UserQuery, {
     skip: props => !props.id,
     props: ({ data }) => {
-      if (data.loading) {
-        return { loading: true };
+      if (data.error || data.loading) {
+        return {
+          userQueryMetadata: {
+            error: data.error,
+            loading: data.loading
+          }
+        };
       }
-      if (data.error) {
-        // this is needed to properly redirect to home page in case of error
-        return { error: data.error };
-      }
+
       const { creationDate, email, hasPassword, name, username } = data.user;
       return {
+        userQueryMetadata: {
+          error: data.error,
+          loading: data.loading
+        },
         creationDate: creationDate,
         email: email,
         hasPassword: hasPassword,
@@ -261,5 +274,6 @@ export default compose(
   }),
   graphql(UpdateUserMutation, { name: 'updateUser' }),
   graphql(UpdateProfileFieldsMutation, { name: 'updateProfileFields' }),
+  mergeLoadingAndError(['profileFieldsQueryMetadata', 'userQueryMetadata']),
   manageErrorAndLoading({ displayLoader: true })
 )(Profile);
