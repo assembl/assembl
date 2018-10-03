@@ -37,13 +37,16 @@ class ProfileIcon extends React.Component {
     const { slug, connectedUserId, loginData } = this.props;
     let loginUrl = `${getContextual('login', { slug: slug })}?next=${this.state.next}`;
     if (loginData && loginData.url) {
-      loginUrl = loginData.url.includes('?') ?
-        `${loginData.url}&next=${this.state.next}` : `${loginData.url}?next=${this.state.next}`;
+      loginUrl = loginData.url.includes('?')
+        ? `${loginData.url}&next=${this.state.next}`
+        : `${loginData.url}?next=${this.state.next}`;
     }
     const dropdownUser = (
       <div className="inline">
         <span className="assembl-icon-profil grey" />
-        <span className="user-account"><Translate value="profile.panelTitle" /></span>
+        <span className="user-account">
+          <Translate value="profile.panelTitle" />
+        </span>
       </div>
     );
     const LoginAnchor = () => (
@@ -55,9 +58,7 @@ class ProfileIcon extends React.Component {
     const urlData = { url: loginUrl, local: loginData.local };
     return (
       <div className="right avatar">
-        {!connectedUserId && loginUrl && (
-          <LocalAwareAnchor urlData={urlData} />
-        )}
+        {!connectedUserId && loginUrl && <LocalAwareAnchor urlData={urlData} />}
         {connectedUserId && (
           <ul className="dropdown-xs">
             <NavDropdown pullRight title={dropdownUser} id="user-dropdown">
