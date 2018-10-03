@@ -11,6 +11,7 @@ import { getCurrentPhaseData } from './utils/timeline';
 import { fetchDebateData } from './actions/debateActions';
 import { addContext } from './actions/contextActions';
 import { updateTimeline } from './actions/timelineActions';
+import manageErrorAndLoading from './components/common/manageErrorAndLoading';
 import Loader from './components/common/loader';
 import Error from './components/common/error';
 import ChatFrame from './components/common/ChatFrame';
@@ -26,23 +27,31 @@ class App extends React.Component {
     const connectedUserName = getConnectedUserName();
     this.props.fetchDebateData(debateId);
     this.props.addContext(this.props.route.path, debateId, connectedUserId, connectedUserName);
+
+    const { location, params, timeline, putTimelineInStore } = this.props;
+
+    putTimelineInStore(timeline);
+    if (!params.phase && location.pathname.split('/').indexOf('debate') > -1) {
+      const { currentPhaseIdentifier } = getCurrentPhaseData(timeline);
+      browserHistory.push(get('debate', { slug: params.slug, phase: currentPhaseIdentifier }));
+    }
   }
 
   componentDidUpdate(prevProps) {
-    const { timelineLoading, location, params, timeline, putTimelineInStore } = this.props;
+    const { location, params, timeline, putTimelineInStore } = this.props;
     // Don't do a timeline identity check (we are sure it's always different here) but use isEqual to be sure
     // we don't change the redux store (and trigger a full rerendering) if timeline array didn't change.
-    if (!timelineLoading && !isEqual(timeline, prevProps.timeline)) {
+    if (!isEqual(timeline, prevProps.timeline)) {
       putTimelineInStore(timeline);
     }
-    if (!params.phase && !timelineLoading && location.pathname.split('/').indexOf('debate') > -1) {
+    if (!params.phase && location.pathname.split('/').indexOf('debate') > -1) {
       const { currentPhaseIdentifier } = getCurrentPhaseData(timeline);
       browserHistory.push(get('debate', { slug: params.slug, phase: currentPhaseIdentifier }));
     }
   }
 
   render() {
-    const { debateData, debateLoading, debateError } = this.props.debate;
+    const { debateData, debateError, debateLoading } = this.props.debate;
     const divClassNames = classNames('app', { 'harvesting-mode-on': this.props.isHarvesting });
     return (
       <div className={divClassNames}>
@@ -86,12 +95,16 @@ export default compose(
     props: ({ data }) => {
       if (data.loading) {
         return {
-          timelineLoading: true
+          error: data.error,
+          loading: true,
+          timeline: []
         };
       }
+
       if (data.error) {
         return {
-          timelineLoading: false,
+          error: data.error,
+          loading: false,
           timeline: []
         };
       }
@@ -108,9 +121,11 @@ export default compose(
         description: phase.description
       }));
       return {
-        timelineLoading: data.loading,
+        error: data.error,
+        loading: false,
         timeline: phasesForStore
       };
     }
-  })
+  }),
+  manageErrorAndLoading({ displayLoader: true })
 )(App);
