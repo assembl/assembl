@@ -124,7 +124,7 @@
     "react-final-form": "^3.6.2",
     "react-final-form-arrays": "^1.0.6",
     "react-frame-component": "^3.0.0",
-    "react-hot-loader": "^4.3.0",
+    "react-hot-loader": "^4.3.11",
     "react-intl-po": "^2.0.2",
     "react-masonry-component": "^6.2.1",
     "react-redux": "^5.0.6",
