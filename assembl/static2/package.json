@@ -74,7 +74,7 @@
     "glob": "^7.1.2",
     "graphql-tools": "^1.1.0",
     "identity-obj-proxy": "^3.0.0",
-    "jest": "^20.0.4",
+    "jest": "^23.6.0",
     "jest-coffee-preprocessor": "^1.0.0",
     "jest-transform-graphql": "^2.1.0",
     "node-sass": "^4.5.3",
