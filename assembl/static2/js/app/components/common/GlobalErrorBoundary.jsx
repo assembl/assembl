@@ -16,11 +16,12 @@ export default class GlobalErrorBoundary extends React.Component<Props, State> {
     this.state = { error: null };
   }
 
-  // eslint-disable-next-line no-unused-vars
   componentDidCatch(error: Error, info: { componentStack: string }) {
     this.setState({ error: error });
     // TODO: log the error to sentry
-    // console.error(error, info.componentStack); // eslint-disable-line no-console
+    if (process.env.NODE_ENV === 'development') {
+      console.error(error, info.componentStack); // eslint-disable-line no-console
+    }
   }
 
   render() {
