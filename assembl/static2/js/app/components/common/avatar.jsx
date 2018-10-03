@@ -89,6 +89,7 @@ const mapStateToProps = ({ context, debate }) => ({
 export default compose(
   connect(mapStateToProps),
   graphql(UserQuery, {
+    skip: props => !props.id,
     props: ({ data }) => {
       if (data.loading) {
         return { loading: true };

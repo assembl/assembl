@@ -240,6 +240,7 @@ export default compose(
     }
   }),
   graphql(UserQuery, {
+    skip: props => !props.id,
     props: ({ data }) => {
       if (data.loading) {
         return { loading: true };
