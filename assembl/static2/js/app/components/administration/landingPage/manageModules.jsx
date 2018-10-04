@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { I18n, Translate } from 'react-redux-i18n';
 import type { List, Map } from 'immutable';
 import { Button } from 'react-bootstrap';
+import countBy from 'lodash/countBy';
+import get from 'lodash/get';
 import { displayModal, closeModal } from '../../../utils/utilityManager';
 import ModulesPreview from './modulesPreview';
 import SectionTitle from '../../administration/sectionTitle';
@@ -36,6 +38,22 @@ type Props = {
   toggleModule: Function,
   createModule: Function
 };
+
+export const addCountSuffix = (modules: Array<LandingPageModule>): Array<LandingPageModule> => {
+  // This function counts the occurencies of each module titles
+  // and adds the count as a suffix if it has duplicates
+  const titleCounts = countBy(modules, 'title');
+  const duplicatesCurrentIndex = {};
+  return modules.map((module) => {
+    const { title } = module;
+    if (titleCounts[title] > 1) {
+      duplicatesCurrentIndex[title] = get(duplicatesCurrentIndex, title, 0) + 1;
+      return { ...module, title: `${title} ${duplicatesCurrentIndex[title]}` };
+    }
+    return module;
+  });
+};
+
 export const DumbManageModules = ({
   enabledModules,
   moduleTypes,
@@ -70,6 +88,7 @@ export const DumbManageModules = ({
   const textAndMultimediaIsChecked = enabledModules.some(
     module => module.getIn(['moduleType', 'title']) === 'Text & Multi-media'
   );
+  const updatedModuleTypes = addCountSuffix(moduleTypes);
   return (
     <div className="admin-box">
       <SectionTitle
@@ -82,7 +101,12 @@ export const DumbManageModules = ({
         </p>
         <div className="two-columns-admin">
           <div className="column-left">
-            <SelectModulesForm lang={locale} moduleTypes={moduleTypes} modulesById={modulesById} toggleModule={toggleModule} />
+            <SelectModulesForm
+              lang={locale}
+              moduleTypes={updatedModuleTypes}
+              modulesById={modulesById}
+              toggleModule={toggleModule}
+            />
             <div className="margin-xl">
               <Button
                 className="button-submit button-dark"
