@@ -146,13 +146,16 @@ class UpdateUser(graphene.Mutation):
 
         with cls.default_db.no_autoflush as db:
             username = args.get('username')
-            if username and username != user.username_p:
-                if db.query(models.Username).filter_by(
-                    username=username
-                ).count():
-                    raise Exception(u"001: We already have a user with this username.")
+            # only modify the username if it was given in parameter
+            if username is not None:
+                if username != user.username_p:
+                    if db.query(models.Username).filter_by(
+                        username=username
+                    ).count():
+                        raise Exception(u"001: We already have a user with this username.")
 
-            user.username_p = username
+                user.username_p = username
+
             name = args.get('name')
             # only modify the name if it was given in parameter
             if name is not None:

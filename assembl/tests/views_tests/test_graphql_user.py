@@ -88,15 +88,29 @@ def test_graphql_update_user(graphql_request, participant1_user, graphql_registr
     graphql_request.POST['variables.img'] = FieldStorage(
         u'path/to/new-img.png', 'image/png')
 
+    user_id = to_global_id('AgentProfile', participant1_user.id)
     res = schema.execute(graphql_registry["updateUser"],
                          context_value=graphql_request, variable_values={
-        "id": to_global_id('AgentProfile', participant1_user.id),
+        "id": user_id,
         "name": u"M. Barking Loon",
         "username": u"Barking.Loon",
         "img": u"variables.img"
     })
     assert res.errors is None
     assert res.data['updateUser']['user']['name'] == u'M. Barking Loon'
+    assert res.data['updateUser']['user']['username'] == u'Barking.Loon'
+    assert res.data['updateUser']['user']['displayName'] == u'Barking.Loon'
+    image = res.data['updateUser']['user']['image']
+    assert '/documents/' in image['externalUrl']
+
+    # update only the user name
+    res = schema.execute(graphql_registry["updateUser"],
+                         context_value=graphql_request, variable_values={
+        "id": user_id,
+        "name": u"M. Barking Moon"
+    })
+    assert res.errors is None
+    assert res.data['updateUser']['user']['name'] == u'M. Barking Moon'
     assert res.data['updateUser']['user']['username'] == u'Barking.Loon'
     assert res.data['updateUser']['user']['displayName'] == u'Barking.Loon'
     image = res.data['updateUser']['user']['image']
