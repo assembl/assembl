@@ -11,10 +11,7 @@ type State = {
 };
 
 export default class GlobalErrorBoundary extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = { error: null };
-  }
+  state = { error: null };
 
   componentDidCatch(error: Error, info: { componentStack: string }) {
     this.setState({ error: error });
