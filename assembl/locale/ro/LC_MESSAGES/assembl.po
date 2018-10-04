@@ -197,11 +197,11 @@ msgstr ""
 
 #: assembl/models/preferences.py:552
 msgid "Generic Errors"
-msgstr "Eroare de conexiune"
+msgstr ""
 
 #: assembl/models/preferences.py:554
 msgid "Display a generic error message."
-msgstr "mesaj de eroare ajax:"
+msgstr ""
 
 #: assembl/models/preferences.py:563
 msgid "Extra data for CSV reports"

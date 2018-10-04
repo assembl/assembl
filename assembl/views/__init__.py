@@ -653,8 +653,8 @@ def error_view(exc, request):
     return dict(
         context, debate_link="/", error_code=error_code,
         error=_("error"), 
-        text=_("Our server has encountered a problem. The page you have requested is not accesible."),
-        excuse=_("We apologise for the inconvenience!"),
+        text=_("Our server has encountered a problem. The page you have requested is not accessible."),
+        excuse=_("We apologize for the inconvenience!"),
         home_button=_("Home page")
     )
 
