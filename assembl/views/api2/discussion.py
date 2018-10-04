@@ -43,7 +43,7 @@ from pyramid_mailer import get_mailer
 from pyramid_mailer.message import Message
 import requests
 
-from assembl.lib.clean_input import unescape
+from assembl.lib.clean_input import sanitize_text
 from assembl.lib.config import get_config
 from assembl.lib.migration import create_default_discussion_data
 from assembl.lib.parsedatetime import parse_datetime
@@ -1491,10 +1491,10 @@ def phase1_csv_export(request):
             posts = get_published_posts(question)
             for post in posts:
                 post_entries = get_entries_locale_original(post.body)
-                row[POST_BODY] = post_entries.get('entry')
+                row[POST_BODY] = sanitize_text(post_entries.get('entry'))
                 row[POST_ID] = post.id
                 row[POST_LOCALE] = post_entries.get('locale')
-                row[POST_BODY_ORIGINAL] = post_entries.get('original')
+                row[POST_BODY_ORIGINAL] = sanitize_text(post_entries.get('original'))
                 if not has_anon:
                     row[POST_CREATOR_NAME] = post.creator.real_name()
                 else:
@@ -1621,8 +1621,8 @@ def phase2_csv_export(request):
             body = get_entries_locale_original(post.body)
 
             row[POST_SUBJECT] = subject.get('entry')
-            row[POST_BODY] = unescape(body.get('entry'))
-            row[POST_BODY_ORIGINAL] = unescape(body.get('original'))
+            row[POST_BODY] = sanitize_text(body.get('entry'))
+            row[POST_BODY_ORIGINAL] = sanitize_text(body.get('original'))
             row[POST_ID] = post.id
             row[POST_LOCALE] = body.get('locale') or subject.get('locale') or None
             if not has_anon:
