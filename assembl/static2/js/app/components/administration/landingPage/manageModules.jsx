@@ -16,9 +16,19 @@ import {
 } from '../../../actions/adminActions/landingPage';
 import { createRandomId } from '../../../utils/globalFunctions';
 
+export type LandingPageModule = {
+  defaultOrder: number,
+  editableOrder: boolean,
+  id: string,
+  identifier: string,
+  moduleId: string,
+  required: boolean,
+  title: string
+};
+
 type Props = {
   enabledModules: List<Map>,
-  moduleTypes: Array<Object>,
+  moduleTypes: Array<LandingPageModule>,
   locale: string,
   modulesById: Map<string, Map>,
   moveModuleDown: Function,
@@ -57,6 +67,9 @@ export const DumbManageModules = ({
     const includeFooter = true;
     return displayModal(null, body, includeFooter, footer);
   };
+  const textAndMultimediaIsChecked = enabledModules.some(
+    module => module.getIn(['moduleType', 'title']) === 'Text & Multi-media'
+  );
   return (
     <div className="admin-box">
       <SectionTitle
@@ -71,7 +84,11 @@ export const DumbManageModules = ({
           <div className="column-left">
             <SelectModulesForm lang={locale} moduleTypes={moduleTypes} modulesById={modulesById} toggleModule={toggleModule} />
             <div className="margin-xl">
-              <Button className="button-submit button-dark" onClick={displayConfirmationModal}>
+              <Button
+                className="button-submit button-dark"
+                onClick={displayConfirmationModal}
+                disabled={!textAndMultimediaIsChecked}
+              >
                 <Translate value="administration.landingPage.manageModules.textAndMultimediaBtn" />
               </Button>
             </div>

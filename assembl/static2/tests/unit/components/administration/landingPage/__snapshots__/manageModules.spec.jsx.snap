@@ -30,9 +30,85 @@ exports[`ManageModules component should render a form to manage the landing page
         className="column-left"
       >
         <Unknown
-          lang={undefined}
-          moduleTypes={undefined}
-          modulesById={undefined}
+          lang="fr"
+          moduleTypes={
+            Array [
+              Object {
+                "identifier": "HEADER",
+                "moduleId": "abc123",
+                "required": true,
+                "title": "Header",
+              },
+              Object {
+                "identifier": "INTRODUCTION",
+                "moduleId": "def456",
+                "required": false,
+                "title": "Introduction",
+              },
+              Object {
+                "identifier": "VIDEO",
+                "moduleId": "ghi789",
+                "required": false,
+                "title": "Video",
+              },
+              Object {
+                "identifier": "FOOTER",
+                "moduleId": "jkl865",
+                "required": true,
+                "title": "Footer",
+              },
+            ]
+          }
+          modulesById={
+            Immutable.Map {
+              abc123: Immutable.Map {
+                enabled: true,
+                id: "abc123",
+                moduleType: Immutable.Map {
+                  moduleId: "abc123",
+                  editableOrder: false,
+                  identifier: "HEADER",
+                  required: true,
+                  title: "Header",
+                },
+                order: 1,
+              },
+              def456: Immutable.Map {
+                enabled: false,
+                id: "def456",
+                moduleType: Immutable.Map {
+                  moduleId: "def456",
+                  editableOrder: true,
+                  identifier: "INTRODUCTION",
+                  title: "Introduction",
+                },
+                order: 2,
+              },
+              ghi789: Immutable.Map {
+                enabled: true,
+                id: "ghi789",
+                moduleType: Immutable.Map {
+                  moduleId: "ghi789",
+                  editableOrder: true,
+                  identifier: "VIDEO",
+                  title: "Video",
+                },
+                order: 5,
+              },
+              jkl865: Immutable.Map {
+                enabled: true,
+                id: "jkl865",
+                moduleType: Immutable.Map {
+                  moduleId: "jkl865",
+                  editableOrder: false,
+                  identifier: "FOOTER",
+                  required: true,
+                  title: "Footer",
+                },
+                order: 99,
+              },
+            }
+          }
           toggleModule={[Function]}
         />
         <div
@@ -44,7 +120,7 @@ exports[`ManageModules component should render a form to manage the landing page
             bsClass="btn"
             bsStyle="default"
             className="button-submit button-dark"
-            disabled={false}
+            disabled={true}
             onClick={[Function]}
           >
             <Translate
@@ -57,7 +133,45 @@ exports[`ManageModules component should render a form to manage the landing page
         className="column-right"
       >
         <ModulesPreview
-          modules={undefined}
+          modules={
+            Immutable.List [
+              Immutable.Map {
+                enabled: true,
+                id: "abc123",
+                moduleType: Immutable.Map {
+                  moduleId: "abc123",
+                  editableOrder: false,
+                  identifier: "HEADER",
+                  required: true,
+                  title: "Header",
+                },
+                order: 1,
+              },
+              Immutable.Map {
+                enabled: true,
+                id: "ghi789",
+                moduleType: Immutable.Map {
+                  moduleId: "ghi789",
+                  editableOrder: true,
+                  identifier: "VIDEO",
+                  title: "Video",
+                },
+                order: 5,
+              },
+              Immutable.Map {
+                enabled: true,
+                id: "jkl865",
+                moduleType: Immutable.Map {
+                  moduleId: "jkl865",
+                  editableOrder: false,
+                  identifier: "FOOTER",
+                  required: true,
+                  title: "Footer",
+                },
+                order: 99,
+              },
+            ]
+          }
           moveModuleDown={[Function]}
           moveModuleUp={[Function]}
         />
