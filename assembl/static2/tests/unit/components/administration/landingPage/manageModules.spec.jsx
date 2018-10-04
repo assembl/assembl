@@ -1,7 +1,11 @@
 import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
-import { DumbManageModules, addCountSuffix } from '../../../../../js/app/components/administration/landingPage/manageModules';
+import {
+  DumbManageModules,
+  addCountSuffix,
+  sortByTitle
+} from '../../../../../js/app/components/administration/landingPage/manageModules';
 import { enabledModules, moduleTypes, modulesById } from './fakeData';
 
 describe('ManageModules component', () => {
@@ -57,6 +61,15 @@ describe('addCountSuffix function', () => {
       { title: 'ipsum 2' },
       { title: 'foo' }
     ];
+    expect(actual).toEqual(expected);
+  });
+});
+
+describe('sortByTitle function', () => {
+  it('should return an array of modules sorted on title', () => {
+    const fakeModules = [{ title: 'lorem 1' }, { title: 'ipsum' }, { title: 'lorem 2' }, { title: 'foo' }];
+    const actual = sortByTitle(fakeModules);
+    const expected = [{ title: 'foo' }, { title: 'ipsum' }, { title: 'lorem 1' }, { title: 'lorem 2' }];
     expect(actual).toEqual(expected);
   });
 });

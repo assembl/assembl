@@ -68,6 +68,16 @@ export const addCountSuffix = (modules: Array<LandingPageModule>): Array<Landing
   });
 };
 
+export const sortByTitle = (modules: Array<LandingPageModule>): Array<LandingPageModule> => {
+  const newModules = [...modules];
+  newModules.sort((a, b) => {
+    if (a.title < b.title) return -1;
+    if (a.title > b.title) return 1;
+    return 0;
+  });
+  return newModules;
+};
+
 export const DumbManageModules = ({
   enabledModules,
   moduleTypes,
@@ -102,7 +112,7 @@ export const DumbManageModules = ({
   const textAndMultimediaIsChecked = enabledModules.some(
     module => module.getIn(['moduleType', 'identifier']) === MODULES_IDENTIFIERS.introduction
   );
-  const updatedModuleTypes = addCountSuffix(moduleTypes);
+  const updatedModuleTypes = sortByTitle(addCountSuffix(moduleTypes));
   return (
     <div className="admin-box">
       <SectionTitle

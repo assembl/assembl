@@ -34,6 +34,12 @@ exports[`ManageModules component should render a form to manage the landing page
           moduleTypes={
             Array [
               Object {
+                "identifier": "FOOTER",
+                "moduleId": "jkl865",
+                "required": true,
+                "title": "Footer",
+              },
+              Object {
                 "identifier": "HEADER",
                 "moduleId": "abc123",
                 "required": true,
@@ -50,12 +56,6 @@ exports[`ManageModules component should render a form to manage the landing page
                 "moduleId": "ghi789",
                 "required": false,
                 "title": "Video",
-              },
-              Object {
-                "identifier": "FOOTER",
-                "moduleId": "jkl865",
-                "required": true,
-                "title": "Footer",
               },
             ]
           }
