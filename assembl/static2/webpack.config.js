@@ -4,8 +4,7 @@ Once you have made changes to this file, you have to run `supervisorctl restart 
 
 var path = require('path');
 var webpack = require('webpack');
-var UglifyJSPlugin = require('uglifyjs-webpack-plugin');
-var ExtractTextPlugin = require("extract-text-webpack-plugin");
+var MiniCssExtractPlugin = require("mini-css-extract-plugin");
 var glob = require('glob');
 var _ = require('lodash');
 
@@ -65,7 +64,7 @@ module.exports = {
                   ['@babel/plugin-transform-runtime', { helpers: true }]
                 ],
                 presets: [["@babel/preset-env", { "modules": false, "targets": { "ie": 11 },
-                                    "debug": true, "useBuiltIns": "entry",
+                                    "debug": false, "useBuiltIns": "entry",
                                     "exclude": ["web.timers", "web.immediate", "web.dom.iterable"] }],
                           "@babel/preset-react", "@babel/preset-flow"]
               }
@@ -78,15 +77,18 @@ module.exports = {
         },
         {
             test: /\.scss$/,
-            use: ExtractTextPlugin.extract({
-              fallback:'style-loader',
-              use: ['css-loader', 'sass-loader']})
+            use: [
+              MiniCssExtractPlugin.loader,
+              'css-loader',
+              'sass-loader'
+            ]
         },
         {
             test: /\.css$/,
-            use: ExtractTextPlugin.extract({
-              fallback:'style-loader',
-              use: ['css-loader']})
+            use: [
+              MiniCssExtractPlugin.loader,
+              'css-loader',
+            ]
         },
         {
             test: /\.(eot|woff|woff2|ttf|svg|png|jpe?g|gif)(\?\S*)?$/,
@@ -96,10 +98,6 @@ module.exports = {
           test: /\.(graphql|gql)$/,
           exclude: /node_modules/,
           use: 'graphql-tag/loader'
-        },
-        {
-          test: /\.json$/,
-          use: 'json-loader'
         },
         {
           test: /\.coffee$/,
@@ -121,13 +119,8 @@ module.exports = {
           jquery$: path.join(__dirname, 'node_modules/jquery/dist/jquery.slim.min.js'),
         },
     },
+    mode: 'production',
     plugins: [
-        new webpack.DefinePlugin({
-          'process.env': {
-            NODE_ENV: JSON.stringify('production')
-          }
-        }),
-        new UglifyJSPlugin({ sourceMap: true, parallel: true, cache: true }),
-        new ExtractTextPlugin("[name].css"),
+        new MiniCssExtractPlugin({ filename: "[name].css" }),
     ]
 };

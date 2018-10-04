@@ -32,9 +32,6 @@ function theme_entries() {
     return entries;
 }
 
-// Keep css-loader 0.14.5 for performance, see
-// https://github.com/webpack-contrib/css-loader/issues/124
-// For css hot reload to work, don't use ExtractTextPlugin
 module.exports = {
     // devtool: '#cheap-module-eval-source-map', // https://webpack.js.org/configuration/devtool/
     devtool: '#cheap-module-source-map', // https://github.com/webpack/webpack-dev-server/issues/1090
@@ -116,10 +113,6 @@ module.exports = {
           use: 'graphql-tag/loader'
         },
         {
-          test: /\.json$/,
-          use: 'json-loader'
-        },
-        {
           test: /\.coffee$/,
           use: [
             {
@@ -139,12 +132,8 @@ module.exports = {
           jquery$: path.join(__dirname, 'node_modules/jquery/dist/jquery.slim.min.js'),
         },
     },
+    mode: 'development',
     plugins: [
         new webpack.HotModuleReplacementPlugin(),
-        new webpack.DefinePlugin({
-          'process.env': {
-            NODE_ENV: JSON.stringify('development')
-          }
-        }),
     ]
 };
