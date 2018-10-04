@@ -1,9 +1,8 @@
 // @flow
 import React, { Fragment } from 'react';
+import { I18n } from 'react-redux-i18n';
 // Components imports
 import CircleAvatar from './circleAvatar';
-// Constant imports
-import { NO_AUTHOR_SPECIFIED } from '../../../constants';
 // Types imports
 import type { CircleAvatarProps } from './circleAvatar';
 
@@ -19,7 +18,7 @@ const FictionHeader = ({ authorFullname, publishedDate, displayedPublishedDate, 
     <header className="header">
       <CircleAvatar {...circleAvatar} />
       <div className="meta">
-        <p className="author">{authorFullname || NO_AUTHOR_SPECIFIED}</p>
+        <p className="author">{authorFullname || I18n.t('debate.brightMirror.noAuthorSpecified')}</p>
         <p className="date-time">
           <time dateTime={publishedDate} pubdate="true">
             {displayedPublishedDate}

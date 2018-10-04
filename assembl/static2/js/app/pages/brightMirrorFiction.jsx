@@ -28,6 +28,7 @@ import Permissions, { connectedUserCan } from '../utils/permissions';
 // Constant imports
 import { FICTION_DELETE_CALLBACK, EMPTY_STRING, PublicationStates } from '../constants';
 // Type imports
+import type { ContentLocaleMapping } from '../actions/actionTypes';
 import type { CircleAvatarProps } from '../components/debate/brightMirror/circleAvatar';
 import type { FictionHeaderProps } from '../components/debate/brightMirror/fictionHeader';
 import type { FictionToolbarProps } from '../components/debate/brightMirror/fictionToolbar';
@@ -52,7 +53,7 @@ type BrightMirrorFictionReduxProps = {
   /** Fiction locale fetched from mapStateToProps */
   contentLocale: string,
   /** Fiction locale mapping fetched from mapStateToProps */
-  contentLocaleMapping: any
+  contentLocaleMapping: ContentLocaleMapping
 };
 
 export type BrightMirrorFictionData = {
@@ -123,13 +124,13 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
 
   componentWillReceiveProps(nextProps: LocalBrightMirrorFictionProps) {
     // Sync state
+    const { subject, body, publicationState } = nextProps.brightMirrorFictionData.fiction;
+
     this.setState({
-      title: nextProps.brightMirrorFictionData.fiction.subject ? nextProps.brightMirrorFictionData.fiction.subject : EMPTY_STRING,
-      content: nextProps.brightMirrorFictionData.fiction.body ? nextProps.brightMirrorFictionData.fiction.body : EMPTY_STRING,
+      title: subject || EMPTY_STRING,
+      content: body || EMPTY_STRING,
       loading: nextProps.brightMirrorFictionData.loading || nextProps.ideaWithCommentsData.loading,
-      publicationState: nextProps.brightMirrorFictionData.fiction.publicationState
-        ? nextProps.brightMirrorFictionData.fiction.publicationState
-        : PublicationStates.PUBLISHED
+      publicationState: publicationState || PublicationStates.PUBLISHED
     });
   }
 
@@ -266,7 +267,7 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
       title: I18n.t('debate.brightMirror.commentFiction.title'),
       imgSrc: '/static2/img/illustration-mechanisme.png',
       imgAlt: I18n.t('debate.brightMirror.commentFiction.imageAlt'),
-      subtitle: I18n.t('debate.brightMirror.commentFiction.subtitle', { count: comments.length })
+      commentsCount: comments.length
     };
 
     const fictionCommentListProps: FictionCommentListProps = {

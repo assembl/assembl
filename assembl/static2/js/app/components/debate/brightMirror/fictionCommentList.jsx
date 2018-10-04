@@ -3,6 +3,8 @@ import React from 'react';
 // Components imports
 import Tree from '../../../components/common/tree';
 import FictionComment from './fictionComment';
+// Type imports
+import type { ContentLocaleMapping } from '../../../actions/actionTypes';
 
 export type FictionCommentListProps = {
   /** Array of fiction comments */
@@ -10,7 +12,7 @@ export type FictionCommentListProps = {
   /** Content locale used by Tree */
   contentLocale: string,
   /** Content locale mapping used by Tree */
-  contentLocaleMapping: any,
+  contentLocaleMapping: ContentLocaleMapping,
   /** Identifier of the idea - e.g 'brightMirror' */
   identifier: string
 };

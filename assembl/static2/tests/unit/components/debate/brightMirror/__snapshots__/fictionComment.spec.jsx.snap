@@ -50,8 +50,12 @@ exports[`Storyshots FictionComment default 1`] = `
           className="toolbar"
         >
           <p>
-            999
-             answers
+            <span
+              className={undefined}
+              style={undefined}
+            >
+              999 réponses
+            </span>
           </p>
           <a
             className="action-toggle"
@@ -572,8 +576,12 @@ exports[`Storyshots FictionComment playground 1`] = `
           className="toolbar"
         >
           <p>
-            999
-             answers
+            <span
+              className={undefined}
+              style={undefined}
+            >
+              999 réponses
+            </span>
           </p>
           <a
             className="action-toggle"

@@ -3,7 +3,7 @@ import React from 'react';
 /* eslint-disable import/no-extraneous-dependencies */
 import { storiesOf } from '@storybook/react';
 import { withInfo } from '@storybook/addon-info';
-import { withKnobs, text } from '@storybook/addon-knobs';
+import { withKnobs, text, number } from '@storybook/addon-knobs';
 /* eslint-enable */
 
 import FictionCommentHeader from '../../../../components/debate/brightMirror/fictionCommentHeader';
@@ -14,7 +14,7 @@ export const defaultFictionCommentHeader: FictionCommentHeaderProps = {
   title: 'Quels sujets sont abordés dans cette fiction ?',
   imgSrc: '/static2/img/illustration-mechanisme.png',
   imgAlt: 'illustration-mechanisme',
-  subtitle: '6 messages'
+  commentsCount: 6
 };
 
 const playground = {
@@ -32,7 +32,7 @@ storiesOf('FictionCommentHeader', module)
         title={text('Title', playground.title)}
         imgSrc={text('Image source', playground.imgSrc)}
         imgAlt={text('Image alt description', playground.imgAlt)}
-        subtitle={text('Subtitle', playground.subtitle)}
+        commentsCount={number('Number of comments', playground.commentsCount)}
       />
     ))
   );

@@ -12,7 +12,7 @@ import FictionPreview from './fictionPreview';
 import Permissions, { connectedUserCan } from '../../../utils/permissions';
 import { displayAlert } from '../../../utils/utilityManager';
 // Constant imports
-import { fictionBackgroundColors, EMPTY_STRING } from '../../../constants';
+import { fictionBackgroundColors, EMPTY_STRING, PublicationStates } from '../../../constants';
 
 export type Props = {
   posts: Array<FictionPostPreview>,
@@ -42,7 +42,7 @@ const FictionsList = ({ posts, identifier, refetchIdea, lang, themeId }: Props) 
 
   const connectedUserId = getConnectedUserId();
 
-  const childElements = posts.reduce((result, post) => {
+  const childElements = posts.filter(post => post.publicationState === PublicationStates.PUBLISHED).reduce((result, post) => {
     // Define user permissions
     let authorName = '';
     let userCanEdit = false;

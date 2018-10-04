@@ -42,6 +42,6 @@ describe('<FictionCommentHeader /> - with shallow', () => {
 
   it('should display a subtitle', () => {
     expect(wrapper.find('p [className="subtitle center"]')).toHaveLength(1);
-    expect(wrapper.contains(fictionCommentHeader.subtitle)).toBe(true);
+    expect(wrapper.find(`Translate [count=${fictionCommentHeader.commentsCount}]`)).toHaveLength(1);
   });
 });

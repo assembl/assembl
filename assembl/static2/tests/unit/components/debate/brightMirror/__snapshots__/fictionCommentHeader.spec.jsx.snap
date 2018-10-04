@@ -34,7 +34,12 @@ exports[`Storyshots FictionCommentHeader default 1`] = `
       <p
         className="subtitle center"
       >
-        6 messages
+        <span
+          className={undefined}
+          style={undefined}
+        >
+          6 messages
+        </span>
       </p>
     </div>
   </div>
@@ -318,25 +323,24 @@ exports[`Storyshots FictionCommentHeader default 1`] = `
                     <span
                       style={Object {}}
                     >
-                      subtitle
+                      commentsCount
                     </span>
                     <span>
                       =
                       <span
                         style={Object {}}
                       >
-                        "
+                        {
                         <span
                           style={
                             Object {
-                              "color": "#22a",
-                              "wordBreak": "break-word",
+                              "color": "#a11",
                             }
                           }
                         >
-                          6 messages
+                          6
                         </span>
-                        "
+                        }
                       </span>
                     </span>
                     <br />
@@ -446,7 +450,12 @@ exports[`Storyshots FictionCommentHeader playground 1`] = `
       <p
         className="subtitle center"
       >
-        6 messages
+        <span
+          className={undefined}
+          style={undefined}
+        >
+          6 messages
+        </span>
       </p>
     </div>
   </div>
@@ -730,25 +739,24 @@ exports[`Storyshots FictionCommentHeader playground 1`] = `
                     <span
                       style={Object {}}
                     >
-                      subtitle
+                      commentsCount
                     </span>
                     <span>
                       =
                       <span
                         style={Object {}}
                       >
-                        "
+                        {
                         <span
                           style={
                             Object {
-                              "color": "#22a",
-                              "wordBreak": "break-word",
+                              "color": "#a11",
                             }
                           }
                         >
-                          6 messages
+                          6
                         </span>
-                        "
+                        }
                       </span>
                     </span>
                     <br />

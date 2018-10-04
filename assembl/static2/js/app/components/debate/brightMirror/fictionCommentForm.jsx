@@ -15,8 +15,6 @@ export type FictionCommentFormProps = {
   rowsForTextarea?: number
 };
 
-type LocalFictionCommentFormProps = FictionCommentFormProps;
-
 export type FictionCommentFormState = {
   /** Comment input text */
   commentTextareaValue: string,
@@ -28,7 +26,7 @@ const COMMENT_TEXTAREA_ID = 'comment-textarea';
 const COMMENT_CANCEL_BUTTON_ID = 'comment-cancel-button';
 const COMMENT_SUBMIT_BUTTON_ID = 'comment-submit-button';
 
-class FictionCommentForm extends Component<LocalFictionCommentFormProps, FictionCommentFormState> {
+class FictionCommentForm extends Component<FictionCommentFormProps, FictionCommentFormState> {
   static defaultProps = {
     rowsForTextarea: 2
   };
@@ -38,51 +36,67 @@ class FictionCommentForm extends Component<LocalFictionCommentFormProps, Fiction
     showFormActionButtons: false
   };
 
-  formInputOnChangeHandler = (event: any) => {
-    if (event.target.id === COMMENT_TEXTAREA_ID) {
-      this.setState({ commentTextareaValue: event.target.value });
+  // Handler methods
+  formInputOnChangeHandler = (event: SyntheticEvent<HTMLInputElement>) => {
+    const { id, value } = event.currentTarget;
+    if (id === COMMENT_TEXTAREA_ID) {
+      this.setState({ commentTextareaValue: value });
     }
   };
 
   formCancelHandler = () => {
-    this.setState({
-      commentTextareaValue: EMPTY_STRING,
-      showFormActionButtons: false
-    });
-
     const { onCancelCommentCallback } = this.props;
-    if (onCancelCommentCallback) {
-      onCancelCommentCallback();
-    }
+
+    this.setState(
+      {
+        commentTextareaValue: EMPTY_STRING,
+        showFormActionButtons: false
+      },
+      () => {
+        if (onCancelCommentCallback) {
+          onCancelCommentCallback();
+        }
+      }
+    );
   };
 
   formSubmitHandler = () => {
     const { onSubmitCommentCallback } = this.props;
-    if (onSubmitCommentCallback) {
-      onSubmitCommentCallback(this.state.commentTextareaValue);
-      this.setState({
+    const { commentTextareaValue } = this.state;
+
+    this.setState(
+      {
         commentTextareaValue: EMPTY_STRING,
         showFormActionButtons: false
-      });
-    }
+      },
+      () => {
+        if (onSubmitCommentCallback) {
+          onSubmitCommentCallback(commentTextareaValue);
+        }
+      }
+    );
   };
 
-  focusHandler = (event: any) => {
-    if (event.target.id === COMMENT_TEXTAREA_ID) {
+  focusHandler = (event: SyntheticMouseEvent<HTMLInputElement>) => {
+    // Show action buttons when focus is on COMMENT_TEXTAREA_ID
+    if (event.currentTarget.id === COMMENT_TEXTAREA_ID) {
       this.setState({ showFormActionButtons: true });
     }
   };
 
-  blurHandler = (event: any) => {
-    if (event.target.id === COMMENT_TEXTAREA_ID && event.relatedTarget === null) {
+  blurHandler = (event: SyntheticMouseEvent<HTMLInputElement>) => {
+    // Hide action buttons when focus is not on COMMENT_TEXTAREA_ID
+    if (event.currentTarget.id === COMMENT_TEXTAREA_ID && event.relatedTarget === null) {
       this.setState({ showFormActionButtons: false });
     }
   };
 
-  render() {
-    const { commentTextareaValue, showFormActionButtons } = this.state;
+  // Render methods
+  renderTextArea = () => {
+    const { rowsForTextarea } = this.props;
+    const { commentTextareaValue } = this.state;
 
-    const textarea = (
+    return (
       <FormGroup controlId={COMMENT_TEXTAREA_ID} className={COMMENT_TEXTAREA_ID}>
         <ControlLabel srOnly>{I18n.t('debate.brightMirror.commentFiction.label')}</ControlLabel>
         {/* Use of TextareaAutosize instead of Bootstrap 3 textarea form control */}
@@ -91,16 +105,20 @@ class FictionCommentForm extends Component<LocalFictionCommentFormProps, Fiction
           id={COMMENT_TEXTAREA_ID}
           onChange={this.formInputOnChangeHandler}
           placeholder={I18n.t('debate.brightMirror.commentFiction.placeholder')}
-          rows={this.props.rowsForTextarea}
+          rows={rowsForTextarea}
           value={commentTextareaValue}
           onFocus={this.focusHandler}
           onBlur={this.blurHandler}
         />
       </FormGroup>
     );
+  };
 
-    // Display form action buttons only when the focus is set on the textarea
-    const actionButtons = showFormActionButtons ? (
+  // Display form action buttons only when the focus is set on the textarea
+  renderActionButtons = () => {
+    const { commentTextareaValue, showFormActionButtons } = this.state;
+
+    return showFormActionButtons ? (
       <div className="comment-buttons">
         <Button id={COMMENT_CANCEL_BUTTON_ID} className="cancel" onClick={this.formCancelHandler}>
           {I18n.t('debate.brightMirror.commentFiction.cancel')}
@@ -115,11 +133,13 @@ class FictionCommentForm extends Component<LocalFictionCommentFormProps, Fiction
         </Button>
       </div>
     ) : null;
+  };
 
+  render() {
     return (
       <form className="comment-form">
-        {textarea}
-        {actionButtons}
+        {this.renderTextArea()}
+        {this.renderActionButtons()}
       </form>
     );
   }

@@ -112,7 +112,7 @@ describe('<FictionComment /> - with mount', () => {
     });
 
     it('should display "no author specified"', () => {
-      expect(wrapper.contains('no author specified')).toBe(true);
+      expect(wrapper.contains('Auteur non défini')).toBe(true);
     });
   });
 });

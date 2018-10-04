@@ -1,19 +1,18 @@
 // @flow
 import React from 'react';
+import { I18n, Translate } from 'react-redux-i18n';
 // Graphql imports
 import { compose, graphql } from 'react-apollo';
 // Helpers imports
 import moment from 'moment';
 // Optimization: Should create commentQuery.graphql and adapt the query
 import CommentQuery from '../../../graphql/BrightMirrorFictionQuery.graphql';
-// HOC imports
-import withLoadingIndicator from '../../../components/common/withLoadingIndicator';
 // Components imports
 import CircleAvatar from './circleAvatar';
 import ToggleCommentButton from '../common/toggleCommentButton';
 import ReplyToCommentButton from '../common/replyToCommentButton';
 // Constant imports
-import { NO_AUTHOR_SPECIFIED, EMPTY_STRING } from '../../../constants';
+import { EMPTY_STRING } from '../../../constants';
 // Types imports
 import type { CircleAvatarProps } from './circleAvatar';
 
@@ -30,7 +29,7 @@ export type FictionCommentGraphQLProps = {
   displayedPublishedDate: string,
   /** Number of child comments */
   numberOfChildComments: number,
-  /** Comment published date, TODO: change it into moment date */
+  /** Comment published date */
   publishedDate: string
 };
 
@@ -49,7 +48,7 @@ export const FictionComment = ({
     <div className="content">
       <header className="meta">
         <p>
-          <strong>{authorFullname || NO_AUTHOR_SPECIFIED}</strong>
+          <strong>{authorFullname || I18n.t('debate.brightMirror.noAuthorSpecified')}</strong>
         </p>
         <p className="published-date">
           <time dateTime={publishedDate} pubdate="true">
@@ -59,7 +58,9 @@ export const FictionComment = ({
       </header>
       <p className="comment">{commentContent}</p>
       <footer className="toolbar">
-        <p>{numberOfChildComments} answers</p>
+        <p>
+          <Translate value="debate.brightMirror.numberOfResponses" count={numberOfChildComments} />
+        </p>
         <ToggleCommentButton />
         <ReplyToCommentButton />
       </footer>
@@ -92,8 +93,8 @@ const mapQueryToProps = ({ data }) => {
     };
   }
   // Return empty object when data is still loading or query is failed
-  // TODO: display an alert
+  // TODO: display an alert if error/undefined and a loader
   return {};
 };
 
-export default compose(graphql(CommentQuery, { props: mapQueryToProps }), withLoadingIndicator())(FictionComment);
+export default compose(graphql(CommentQuery, { props: mapQueryToProps }))(FictionComment);
