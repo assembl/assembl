@@ -7,9 +7,38 @@
 {% endblock %}
 
 {% block body %}
+    <link type="text/css" rel="stylesheet" href="/static2/css/errorPage.css" />
     <body>
-        <h1>This is the error page</h1>
+        <table id="mainTable">
+            <tr>
+                <td id="tdSpace" style="width: auto">
+                </td>
+                <td id="tdText" style="width: 30%">
+                    <h2 id="titleError">erreur</h2>
+                    <h1 id="Title500">500</h1>
+                    <p class="text">Notre serveur vient de rencontrer</br>
+                                    un problème et la page sur laquelle</br>
+                                    vous étiez s'est fermée !</p>
+                    <p class="text" id="excuse">Veuillez nous excuser pour gène</br>
+                                                occassionnée !</p>
+                    {% if debate_link %}
+                        <button onclick="location.href='{{debate_link}}'">RETOUR À L'ACCUEIL</button>
+                    {% endif %}
+                </td>
+                <td id="tdImg" style="width: 50%">
+                    <img id="serverImage" src="/static2/img/Erreur500-illustration.png" />
+                </td>
+            </tr>
+        </table>
+        {# <div id="contentDiv">
+            <h1 id="mainMessage">Internal Server Error</h1>
 
+            {% if debate_link %}
+                <div id="linkDiv">
+                    <a href={{ debate_link }}>Return to home page</a>
+                </div>
+            {%- endif %}
+        </div> #}
         {% block for_testing %}
             {% if under_test %}
                 <div id="under-test" class="hidden">V2</div>

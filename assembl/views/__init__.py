@@ -14,7 +14,7 @@ import simplejson as json
 from pyramid.view import view_config
 from pyramid.response import Response
 from pyramid.httpexceptions import (
-    HTTPInternalServerError, HTTPMovedPermanently, HTTPError, # HTTPNotFound,
+    HTTPInternalServerError, HTTPMovedPermanently, HTTPError,
     HTTPBadRequest, HTTPFound, HTTPTemporaryRedirect as HTTPTemporaryRedirectP)
 from pyramid.i18n import TranslationStringFactory
 from pyramid.security import Everyone
@@ -646,29 +646,9 @@ def csrf_error_view(exc, request):
 
 
 def error_view(exc, request):
-    # from traceback import format_exc
-    from datetime import datetime
     capture_exception(getattr(request, "exc_info", None))
-    # format_exc(request.exception))
-    visible_errors = config.get('visible_errors', False)
-    display_error = datetime.utcnow().isoformat() + "\n"
-    if visible_errors:
-        display_error += repr(request.exception)
-    return HTTPInternalServerError(
-        explanation="Sorry, Assembl had an internal issue and you have to reload. Please send this to a discussion administrator.",
-        detail=display_error)
-
-
-# def new_error_view(context, request):
-#     print 'EXCEPTION VIEW'
-#     import pdb; pdb.set_trace()
-#     try:
-#         capture_exception(getattr(request, "exc_info", None))
-#     except Exception as e:
-#         request.logger().error("loggingError", exc_info=sys.exc_info())
-#     context = get_default_context(request)
-#     return context
-
+    context = get_default_context(request)
+    return dict(context, debate_link="/")
 
 def redirector(request):
     return HTTPMovedPermanently(request.route_url(
@@ -716,9 +696,8 @@ def includeme(config):
     config.include(legacy_backbone_include, route_prefix='/{discussion_slug}')
 
     if asbool(config.get_settings().get('assembl_handle_exceptions', 'true')):
-        config.add_view(error_view, context=Exception)
-    #    config.add_view(new_error_view, context=Exception, 
-    #                     renderer='assembl:templates/error_page.jinja2')
+        config.add_view(error_view, context=Exception,
+                        renderer='assembl:templates/error_page.jinja2')
 
     #  authentication
     config.include('.auth')
