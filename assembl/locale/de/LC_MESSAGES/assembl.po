@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 2.8.9\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-10-04 15:58+0200\n"
+"POT-Creation-Date: 2018-10-04 16:41+0200\n"
 "PO-Revision-Date: 2018-05-18 15:50+0200\n"
 "Last-Translator: \n"
 "Language: de\n"
@@ -331,7 +331,7 @@ msgstr ""
 msgid "Allow white list to be applied to the default login process"
 msgstr ""
 
-#: assembl/models/preferences.py:821 
+#: assembl/models/preferences.py:821
 msgid "Discussion administrators"
 msgstr "Diskussionsstatistik"
 
@@ -4791,11 +4791,11 @@ msgstr ""
 #: assembl/views/__init__.py:656
 msgid ""
 "Our server has encountered a problem. The page you have requested is not "
-"accesible."
+"accessible."
 msgstr ""
 
 #: assembl/views/__init__.py:657
-msgid "We apologise for the inconvenience!"
+msgid "We apologize for the inconvenience!"
 msgstr ""
 
 #: assembl/views/__init__.py:658
@@ -5173,4 +5173,13 @@ msgstr ""
 #, python-format
 msgid "No discussion found for slug=%s"
 msgstr "Keine Diskussion gefunden für slug=%s"
+
+#~ msgid ""
+#~ "Our server has encountered a problem."
+#~ " The page you have requested is "
+#~ "not accesible."
+#~ msgstr ""
+
+#~ msgid "We apologise for the inconvenience!"
+#~ msgstr ""
 

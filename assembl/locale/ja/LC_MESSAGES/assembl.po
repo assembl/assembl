@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-10-04 15:58+0200\n"
+"POT-Creation-Date: 2018-10-04 16:41+0200\n"
 "PO-Revision-Date: 2017-08-26 01:06+0900\n"
 "Last-Translator: \n"
 "Language: ja\n"
@@ -4455,11 +4455,11 @@ msgstr ""
 #: assembl/views/__init__.py:656
 msgid ""
 "Our server has encountered a problem. The page you have requested is not "
-"accesible."
+"accessible."
 msgstr ""
 
 #: assembl/views/__init__.py:657
-msgid "We apologise for the inconvenience!"
+msgid "We apologize for the inconvenience!"
 msgstr ""
 
 #: assembl/views/__init__.py:658
@@ -4835,4 +4835,13 @@ msgstr "slug=%s のディスカッションは見つかりませんでした"
 
 #~ msgid "Secret for assembl as a client of the authentication server"
 #~ msgstr "認証サーバーのクライアントとしてのAssemblの暗証"
+
+#~ msgid ""
+#~ "Our server has encountered a problem."
+#~ " The page you have requested is "
+#~ "not accesible."
+#~ msgstr ""
+
+#~ msgid "We apologise for the inconvenience!"
+#~ msgstr ""
 

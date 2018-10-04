@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Assembl\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-10-04 15:58+0200\n"
+"POT-Creation-Date: 2018-10-04 16:41+0200\n"
 "PO-Revision-Date: 2018-02-05 17:41+0100\n"
 "Last-Translator: Quentin Grimaud <quentin.grimaud@gmail.com>\n"
 "Language: fr\n"
@@ -4772,13 +4772,20 @@ msgid "error"
 msgstr "erreur"
 
 #: assembl/views/__init__.py:656
+#, fuzzy
+#| msgid "" "Our server has encountered a problem. The page you have requested
+#| is not " "accesible."
 msgid ""
 "Our server has encountered a problem. The page you have requested is not "
-"accesible."
-msgstr "Notre serveur vient de rencontrer un problème et la page sur laquelle vous étiez s'est fermée !"
+"accessible."
+msgstr ""
+"Notre serveur vient de rencontrer un problème et la page sur laquelle "
+"vous étiez s'est fermée !"
 
 #: assembl/views/__init__.py:657
-msgid "We apologise for the inconvenience!"
+#, fuzzy
+#| msgid "We apologise for the inconvenience!"
+msgid "We apologize for the inconvenience!"
 msgstr "Veuillez nous excuser pour la gène occasionné !"
 
 #: assembl/views/__init__.py:658
