@@ -646,9 +646,17 @@ def csrf_error_view(exc, request):
 
 
 def error_view(exc, request):
+    _ = TranslationStringFactory('assembl')
+    error_code = exc.code.replace("f", "")
     capture_exception(getattr(request, "exc_info", None))
     context = get_default_context(request)
-    return dict(context, debate_link="/")
+    return dict(
+        context, debate_link="/", error_code=error_code,
+        error=_("error"), 
+        text=_("Our server has encountered a problem. The page you have requested is not accesible."),
+        excuse=_("We apologise for the inconvenience!"),
+        home_button=_("Home page")
+    )
 
 def redirector(request):
     return HTTPMovedPermanently(request.route_url(

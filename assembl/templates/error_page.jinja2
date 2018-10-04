@@ -14,15 +14,26 @@
                 <td id="tdSpace" style="width: auto">
                 </td>
                 <td id="tdText" style="width: 30%">
-                    <h2 id="titleError">erreur</h2>
-                    <h1 id="Title500">500</h1>
-                    <p class="text">Notre serveur vient de rencontrer</br>
-                                    un problème et la page sur laquelle</br>
-                                    vous étiez s'est fermée !</p>
-                    <p class="text" id="excuse">Veuillez nous excuser pour gène</br>
-                                                occassionnée !</p>
+                    {% if error %}
+                        <h2 id="titleError">{{error}}</h2>
+                    {% endif %}
+                    {% if error_code %}
+                        <h1 id="Title500">{{error_code}}</h1>
+                    {% else %}
+                        <h1 id="Title500">2</h1>
+                    {% endif %}
+                    {% if text %}
+                        <p class="text">{{text}}</p>
+                    {% endif %}
+                    {% if excuse %}
+                        <p class="text" id="excuse">{{excuse}}</p>
+                    {% endif %}
                     {% if debate_link %}
-                        <button onclick="location.href='{{debate_link}}'">RETOUR À L'ACCUEIL</button>
+                        <button onclick="location.href='{{debate_link}}'">
+                        {% if home_button %}
+                            {{home_button}}
+                        {% endif %}
+                        </button>
                     {% endif %}
                 </td>
                 <td id="tdImg" style="width: 50%">

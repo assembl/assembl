@@ -1,28 +1,10 @@
 @font-face {
-  font-family: 'latoRegular';
-  src: url('/static2/fonts/Lato-Regular.eot');
-  src:
-    local('☺'),
-    url('/static2/fonts/Lato-Regular.woff') format('woff'),
-    url('/static2/fonts/Lato-Regular.ttf') format('truetype');
-}
-
-@font-face {
   font-family: 'LatoMedium';
   src: url('/static2/fonts/Lato-Medium.eot');
   src:
     local('☺'),
     url('/static2/fonts/Lato-Medium.woff') format('woff'),
     url('/static2/fonts/Lato-Medium.ttf') format('truetype');
-}
-
-@font-face {
-  font-family: 'LatoBold';
-  src: url('/static2/fonts/Lato-Bold.eot');
-  src:
-    local('☺'),
-    url('/static2/fonts/Lato-Bold.woff') format('woff'),
-    url('/static2/fonts/Lato-Bold.ttf') format('truetype');
 }
 
 body {
@@ -52,11 +34,6 @@ body {
 }
 
 @media only screen and (max-width: 1100px) {
-  /* #tdSpace {
-    width: 0%;
-    display: none;
-  } */
-
   #tdImg {
     width: auto;
   }
