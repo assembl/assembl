@@ -42,47 +42,49 @@ const FictionsList = ({ posts, identifier, refetchIdea, lang, themeId }: Props) 
 
   const connectedUserId = getConnectedUserId();
 
-  const childElements = posts.filter(post => post.publicationState === PublicationStates.PUBLISHED).reduce((result, post) => {
-    // Define user permissions
-    let authorName = '';
-    let userCanEdit = false;
-    let userCanDelete = false;
+  const childElements = posts.reduce((result, post) => {
+    if (post.publicationState === PublicationStates.PUBLISHED) {
+      // Define user permissions
+      let authorName = '';
+      let userCanEdit = false;
+      let userCanDelete = false;
 
-    if (post.creator) {
-      const { userId, displayName, isDeleted } = post.creator;
-      authorName = isDeleted ? I18n.t('deletedUser') : displayName;
-      userCanEdit = connectedUserId === String(userId) && connectedUserCan(Permissions.EDIT_MY_POST);
-      userCanDelete =
-        (connectedUserId === String(userId) && connectedUserCan(Permissions.DELETE_MY_POST)) ||
-        connectedUserCan(Permissions.DELETE_POST);
+      if (post.creator) {
+        const { userId, displayName, isDeleted } = post.creator;
+        authorName = isDeleted ? I18n.t('deletedUser') : displayName;
+        userCanEdit = connectedUserId === String(userId) && connectedUserCan(Permissions.EDIT_MY_POST);
+        userCanDelete =
+          (connectedUserId === String(userId) && connectedUserCan(Permissions.DELETE_MY_POST)) ||
+          connectedUserCan(Permissions.DELETE_POST);
+      }
+      // Define bright mirror fiction props
+      const brightMirrorFictionProps = {
+        slug: slug,
+        phase: identifier,
+        themeId: themeId,
+        fictionId: post.id
+      };
+
+      result.push(
+        <Animated key={post.id} preset="scalein">
+          <FictionPreview
+            id={post.id}
+            link={`${get('brightMirrorFiction', brightMirrorFictionProps)}`}
+            title={post.subject}
+            creationDate={I18n.l(post.creationDate, { dateFormat: 'date.format2' })}
+            authorName={authorName}
+            color={getRandomColor()}
+            originalBody={post.body || EMPTY_STRING}
+            refetchIdea={refetchIdea}
+            userCanEdit={userCanEdit}
+            userCanDelete={userCanDelete}
+            lang={lang}
+            publicationState={post.publicationState}
+            deleteFictionHandler={deleteFictionHandler}
+          />
+        </Animated>
+      );
     }
-    // Define bright mirror fiction props
-    const brightMirrorFictionProps = {
-      slug: slug,
-      phase: identifier,
-      themeId: themeId,
-      fictionId: post.id
-    };
-
-    result.push(
-      <Animated key={post.id} preset="scalein">
-        <FictionPreview
-          id={post.id}
-          link={`${get('brightMirrorFiction', brightMirrorFictionProps)}`}
-          title={post.subject}
-          creationDate={I18n.l(post.creationDate, { dateFormat: 'date.format2' })}
-          authorName={authorName}
-          color={getRandomColor()}
-          originalBody={post.body || EMPTY_STRING}
-          refetchIdea={refetchIdea}
-          userCanEdit={userCanEdit}
-          userCanDelete={userCanDelete}
-          lang={lang}
-          publicationState={post.publicationState}
-          deleteFictionHandler={deleteFictionHandler}
-        />
-      </Animated>
-    );
     return result;
   }, []);
 
