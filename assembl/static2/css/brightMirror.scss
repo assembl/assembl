@@ -32,17 +32,6 @@ $fiction-toolbar-icon-size: 17px;
   padding-top: 30px;
 }
 
-.bright-mirror-fiction {
-  .back-btn {
-    display: block;
-    padding: 15px 18px;
-  }
-
-  .container-fluid {
-    padding: 30px 18px 70px 18px;
-  }
-}
-
 .bright-mirror-comments {
   padding: 30px 0 0 0;
 
@@ -60,28 +49,20 @@ $fiction-toolbar-icon-size: 17px;
 
 .background-comments-default {
   // Striped background
-  background: repeating-linear-gradient(
-    -45deg,
-    $ice,
-    $ice 4px,
-    $white 2px,
-    $white 7px
-  );
+  background:
+    repeating-linear-gradient(
+      -45deg,
+      $ice,
+      $ice 4px,
+      $white 2px,
+      $white 7px
+    );
 }
 
 @media screen and (min-width: $screen-sm-min) {
   .bright-mirror-fiction {
-    padding: 90px 54px;
-  }
-
-  .bright-mirror-fiction {
-    .back-btn {
-      padding: 25px 54px;
-    }
-
-    .container-fluid {
-      padding: 25px 54px 90px 54px;
-    }
+    padding-left: 54px;
+    padding-right: 54px;
   }
 
   .bright-mirror-comments {
@@ -97,7 +78,7 @@ $fiction-toolbar-icon-size: 17px;
 @media screen and (min-width: $screen-xl-min) {
   .bright-mirror-fiction,
   .bright-mirror-comments {
-    padding: 90px 285px 90px 285px;
+    padding: 90px 285px;
   }
 
   .bright-mirror-comments {
@@ -107,35 +88,10 @@ $fiction-toolbar-icon-size: 17px;
       padding-top: 80px;
     }
   }
-
-  .bright-mirror-fiction {
-    .back-btn {
-      margin: 0 auto;
-      max-width: 1400px;
-      padding: 25px 0 0 0;
-    }
-
-    .container-fluid {
-      padding: 60px 285px 90px 295px;
-    }
-  }
-
-  .bright-mirror-comments {
-    padding-left: 285px;
-    padding-right: 285px;
-
-    .comments-header {
-      padding-top: 115px;
-
-      .title {
-        font-size: $font-size-xl;
-        margin-bottom: 35px;
-      }
-    }
-  }
 }
 
 // Component imports
+@import "components/backButton";
 @import "components/circleAvatar";
 @import "components/fictionHeader";
 @import "components/fictionToolbar";
