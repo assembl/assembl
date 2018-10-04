@@ -85,9 +85,7 @@ export const DumbManageModules = ({
     const includeFooter = true;
     return displayModal(null, body, includeFooter, footer);
   };
-  const textAndMultimediaIsChecked = enabledModules.some(
-    module => module.getIn(['moduleType', 'title']) === 'Text & Multi-media'
-  );
+  const textAndMultimediaIsChecked = enabledModules.some(module => module.getIn(['moduleType', 'identifier']) === 'INTRODUCTION');
   const updatedModuleTypes = addCountSuffix(moduleTypes);
   return (
     <div className="admin-box">
