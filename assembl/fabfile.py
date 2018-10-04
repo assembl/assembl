@@ -2133,6 +2133,56 @@ def set_ssl_certificates():
 
 
 @task
+def create_backup_script():
+    """
+    Generates backup script that stores the backup on a local borg repository.
+    Sets a cron job for it.
+    """
+    from jinja2 import Environment, FileSystemLoader
+    print(green("Generating backup script on remote host."))
+    jenv = Environment(loader=FileSystemLoader('doc/'), autoescape=lambda t: False)
+    backup_template = jenv.get_template('backup_template.jinja2')
+    with open('backup_all_assembl.sh', 'w') as f:
+        f.write(backup_template.render(user=env._user, project_path=env._projectpath))
+    put('backup_all_assembl.sh', '/home/assembl_user/backup_all_assembl.sh')
+    run('chmod +x backup_all_assembl.sh')
+    cron_command = "15 3 * * * /home/" + env._user + "/backup_all_assembl.sh"
+    create_add_to_crontab_command(cron_command)
+
+
+@task
+def create_alert_disk_space_script():
+    """Generates the script to alert on disk space limit and sets cron job for it."""
+    from jinja2 import Environment, FileSystemLoader
+    jenv = Environment(loader=FileSystemLoader('doc/'), autoescape=lambda t: False)
+    alert_disk_space_template = jenv.get_template('alert_disk_space_template.jinja2')
+    with open('alert_disk_space.sh', 'w') as f:
+        f.write(alert_disk_space_template.render())
+    put('alert_disk_space.sh', '/home/assembl_user/alert_disk_space.sh')
+    run('chmod +x alert_disk_space.sh')
+    cron_command = "MAILTO=assembl.admin@bluenove.com"
+    run(create_add_to_crontab_command(cron_command))
+    cron_command = "0 5 * * * /home/" + env._user + "/alert_disk_space.sh"
+    run(create_add_to_crontab_command(cron_command))
+
+
+@task
+def install_ncftp_client():
+    """Installs ncftp_client. This client is used to move borg repositories from the
+    local machine to the ftp backup machine or object storage."""
+    print(cyan('Installing ncftp client'))
+    if not env.mac:
+        sudo('apt-get install -y ncftp')
+
+
+@task
+def backup_borg_repository():
+    """Moves borg backup folder to the bac"""
+    cron_command = "30 5 * * * ncftpput -R -v -u \"%s\" -p \"%s\" %s / %s" % (env.ftp_backup_user, env.ftp_backup_password, env.ftp_backup_endpoint, env.ftp_backup_folder)
+    run(create_add_to_crontab_command(cron_command))
+
+
+@task
 def reindex_elasticsearch(bg=False):
     "Rebuild the elasticsearch index"
     cmd = "assembl-reindex-all-contents " + env.ini_file
