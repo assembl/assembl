@@ -1476,7 +1476,7 @@ def phase1_csv_export(request):
 
     output = tempfile.NamedTemporaryFile('w+b', delete=True)
     # include BOM for Excel to open the file in UTF-8 properly
-    output.write(u'\ufeff'.encode('utf-8'))
+    output.write(u'\ufeff')
     writer = csv.DictWriter(
         output, dialect='excel', delimiter=';', fieldnames=fieldnames, quoting=csv.QUOTE_ALL)
     writer.writeheader()
