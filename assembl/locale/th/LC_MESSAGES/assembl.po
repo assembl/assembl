@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 2.8.9\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-08-16 18:33+0200\n"
+"POT-Creation-Date: 2018-10-04 15:58+0200\n"
 "PO-Revision-Date: 2018-05-18 16:18+0200\n"
 "Last-Translator: \n"
 "Language: th\n"
@@ -47,43 +47,43 @@ msgstr "${val} ไม่ใช่สตริง: ${err}"
 msgid "Unknown User ${uid}"
 msgstr "ผู้ใช้ที่ไม่รู้จัก ${uid}"
 
-#: assembl/models/idea.py:269 assembl/static/js/app/views/ideaPanel.js:211
+#: assembl/models/idea.py:270 assembl/static/js/app/views/ideaPanel.js:211
 msgid "Idea"
 msgstr "แนวคิด"
 
-#: assembl/models/notification.py:621
+#: assembl/models/notification.py:620
 msgid "A synthesis is posted"
 msgstr "มีการโพสต์บทสังเคราะห์"
 
-#: assembl/models/notification.py:650
+#: assembl/models/notification.py:649
 msgid "Any message is posted to the discussion"
 msgstr "มีการโพสต์ข้อความในการสนทนา"
 
-#: assembl/models/notification.py:679
+#: assembl/models/notification.py:678
 msgid "Someone directly responds to one of your messages"
 msgstr "มีคนตอบข้อความใดข้อความหนึ่งของคุณโดยตรง"
 
-#: assembl/models/notification.py:1093
+#: assembl/models/notification.py:1069
 msgid "SYNTHESIS: "
 msgstr "การสังเคราะห์: "
 
-#: assembl/models/preferences.py:115 assembl/models/preferences.py:564
+#: assembl/models/preferences.py:115 assembl/models/preferences.py:593
 msgid "No special authentication"
 msgstr "ไม่มีการรับรองความถูกต้องแบบเจาะจง"
 
-#: assembl/models/preferences.py:391
+#: assembl/models/preferences.py:409
 msgid "Languages used"
 msgstr "ภาษาที่ใช้"
 
-#: assembl/models/preferences.py:392
+#: assembl/models/preferences.py:410
 msgid "All languages expected in the discussion"
 msgstr "ทุกภาษาที่คาดหวังในการสนทนา"
 
-#: assembl/models/preferences.py:402
+#: assembl/models/preferences.py:420
 msgid "Use landing page"
 msgstr "ใช้เพจเริ่มต้น"
 
-#: assembl/models/preferences.py:403
+#: assembl/models/preferences.py:421
 msgid ""
 "Are users directed to the landing page and phases at login, or diretly to"
 " the debate"
@@ -91,129 +91,136 @@ msgstr ""
 "ผู้ใช้ถูกกำหนดให้ไปที่เพจเริ่มต้นและขั้นตอนการเข้าสู่ระบบ "
 "หรือไปยังการสนทนาโดยตรง"
 
-#: assembl/models/preferences.py:411 assembl/models/preferences.py:425
+#: assembl/models/preferences.py:429 assembl/models/preferences.py:443
 msgid "Translation service"
 msgstr "บริการแปลภาษา"
 
-#: assembl/models/preferences.py:414
+#: assembl/models/preferences.py:432
 msgid "No translation"
 msgstr "ไม่มีการแปล"
 
-#: assembl/models/preferences.py:416
+#: assembl/models/preferences.py:434
 msgid "Dummy translation service (two steps)"
 msgstr "Dummy translation service (two steps)"
 
-#: assembl/models/preferences.py:418
+#: assembl/models/preferences.py:436
 msgid "Dummy translation service (one step)"
 msgstr "บริการแบบจำลองการแปล (หนึ่งขั้นตอน)"
 
-#: assembl/models/preferences.py:420
+#: assembl/models/preferences.py:438
 msgid "Dummy translation service (two steps) with errors"
 msgstr "บริการแบบจำลองการแปล (สองขั้นตอน) ที่มีข้อผิดพลาด"
 
-#: assembl/models/preferences.py:422
+#: assembl/models/preferences.py:440
 msgid "Dummy translation service (one step) with errors"
 msgstr "บริการแบบจำลองการแปล (หนึ่งขั้นตอน) ที่มีข้อผิดพลาด"
 
-#: assembl/models/preferences.py:424
+#: assembl/models/preferences.py:442
 msgid "Google Translate"
 msgstr "การแปลของ Google"
 
-#: assembl/models/preferences.py:437
+#: assembl/models/preferences.py:455
 msgid "Panel order in simple view"
 msgstr "เรียงแผงในมุมมองแบบง่าย"
 
-#: assembl/models/preferences.py:440
+#: assembl/models/preferences.py:458
 msgid "Navigation, Idea, Messages"
 msgstr "การนำทาง, แนวคิด, ข้อความ"
 
-#: assembl/models/preferences.py:441
+#: assembl/models/preferences.py:459
 msgid "Navigation, Messages, Idea"
 msgstr "การนำทาง, ข้อความ, แนวคิด"
 
-#: assembl/models/preferences.py:442
+#: assembl/models/preferences.py:460
 msgid "Order of panels"
 msgstr "ลำดับของแผง"
 
-#: assembl/models/preferences.py:454
+#: assembl/models/preferences.py:472
 msgid "Extra JSON parameters"
 msgstr "พารามิเตอร์พิเศษของ JSON"
 
-#: assembl/models/preferences.py:456
+#: assembl/models/preferences.py:474
 msgid "Parameters for quick frontend settings"
 msgstr "พารามิเตอร์สำหรับการตั้งค่าฟร้อนท์เอนด์อย่างรวดเร็ว"
 
-#: assembl/models/preferences.py:465
+#: assembl/models/preferences.py:483
 msgid "Terms of use URL"
 msgstr "ข้อกำหนดการใช้งาน URL"
 
-#: assembl/models/preferences.py:467
+#: assembl/models/preferences.py:485
 msgid "URL of a document presenting terms of use for the discussion"
 msgstr "URL ของเอกสารที่นำเสนอข้อกำหนดการใช้งานสำหรับการสนทนา"
 
-#: assembl/models/preferences.py:476
+#: assembl/models/preferences.py:494
 msgid "Video URL"
 msgstr "URL ของวิดีโอ "
 
-#: assembl/models/preferences.py:478
+#: assembl/models/preferences.py:496
 msgid "URL of a video presenting the discussion"
 msgstr "URL ของวิดีโอที่นำเสนอการสนทนา"
 
-#: assembl/models/preferences.py:487
+#: assembl/models/preferences.py:505
 #, fuzzy
-#| msgid "Message titles"
 msgid "Tab title"
 msgstr "ชื่อข้อความ"
 
-#: assembl/models/preferences.py:489
+#: assembl/models/preferences.py:507
 msgid "Title which appears on the tab, by default assembl"
 msgstr ""
 
-#: assembl/models/preferences.py:498
+#: assembl/models/preferences.py:516
 msgid "Video description"
 msgstr "คำอธิบายวิดีโอ"
 
-#: assembl/models/preferences.py:500
+#: assembl/models/preferences.py:518
 msgid "Description of the video presenting the discussion"
 msgstr "คำอธิบายของวิดีโอที่นำเสนอการสนทนา"
 
-#: assembl/models/preferences.py:509
+#: assembl/models/preferences.py:527
 msgid "Social sharing"
 msgstr "การแชร์บนโซเชียลมีเดีย"
 
-#: assembl/models/preferences.py:512
+#: assembl/models/preferences.py:530
 msgid "Show the share button on posts and ideas"
 msgstr "แสดงปุ่มแชร์ในโพสต์และแนวคิด"
 
-#: assembl/models/preferences.py:523
+#: assembl/models/preferences.py:541
 msgid "Private social sharing"
 msgstr "การแชร์แบบส่วนตัวบนโซเชียลมีเดีย"
 
-#: assembl/models/preferences.py:525
+#: assembl/models/preferences.py:543
 msgid "Publicizing or privatizing social sharing"
 msgstr "การตั้งค่าเป็นสาธารณะหรือเป็นส่วนตัวในการแชร์บนโซเชียลมีเดีย"
 
-#: assembl/models/preferences.py:534
+#: assembl/models/preferences.py:552
+msgid "Generic Errors"
+msgstr ""
+
+#: assembl/models/preferences.py:554
+msgid "Display a generic error message."
+msgstr ""
+
+#: assembl/models/preferences.py:563
 msgid "Extra data for CSV reports"
 msgstr "ข้อมูลเพิ่มเติมสำหรับรายงาน CSV"
 
-#: assembl/models/preferences.py:537
+#: assembl/models/preferences.py:566
 msgid "data taken from social_auth's extra_data to add to CSV reports"
 msgstr "data taken from social_auth's extra_data to add to CSV reports"
 
-#: assembl/models/preferences.py:549
+#: assembl/models/preferences.py:578
 msgid "Require anti-virus check"
 msgstr "ต้องตรวจสอบการป้องกันไวรัส"
 
-#: assembl/models/preferences.py:552
+#: assembl/models/preferences.py:581
 msgid "Run an anti-virus on file attachments"
 msgstr "เรียกใช้โปรแกรมป้องกันไวรัสในไฟล์แนบ"
 
-#: assembl/models/preferences.py:566
+#: assembl/models/preferences.py:595
 msgid "Authentication service type"
 msgstr "ประเภทบริการการรับรองความถูกต้อง"
 
-#: assembl/models/preferences.py:568
+#: assembl/models/preferences.py:597
 msgid ""
 "A primary authentication server for this discussion, defined as a python-"
 "social-auth backend. Participants will be auto-logged in to that server, "
@@ -225,19 +232,19 @@ msgstr ""
 "ผู้เข้าร่วมจะเข้าสู่ระบบโดยอัตโนมัติในเซิร์ฟเวอร์นั้น "
 "และการสมัครสมาชิกโดยอัตโนมัติในการสนทนาจะต้องมีบัญชีจากแบ็กเอนด์นี้"
 
-#: assembl/models/preferences.py:583
+#: assembl/models/preferences.py:612
 msgid "Allow access to moderated text"
 msgstr "อนุญาตให้เข้าถึงข้อความที่ได้รับการกลั่นกรอง"
 
-#: assembl/models/preferences.py:586
+#: assembl/models/preferences.py:615
 msgid "Are moderated posts simply hidden or made inaccessible by default?"
 msgstr "โพสต์ที่ผ่านการกลั่นกรองถูกซ่อนไว้หรือไม่สามารถเข้าถึงได้ตามค่าเริ่มต้นหรือไม่"
 
-#: assembl/models/preferences.py:599
+#: assembl/models/preferences.py:628
 msgid "Idea panel opens automatically"
 msgstr "แผงแนวคิดจะเปิดขึ้นโดยอัตโนมัติ"
 
-#: assembl/models/preferences.py:602
+#: assembl/models/preferences.py:631
 msgid ""
 "Does the Idea panel automatically open when an idea is clicked ? (and "
 "close when a special section is clicked)"
@@ -245,27 +252,27 @@ msgstr ""
 "แผงแนวคิดเปิดขึ้นโดยอัตโนมัติเมื่อมีการคลิกที่แนวคิดหรือไม่ "
 "(และปิดเมื่อมีการคลิกที่ส่วนใดส่วนหนึ่ง)"
 
-#: assembl/models/preferences.py:614
+#: assembl/models/preferences.py:643
 msgid "Ids of columns in column view"
 msgstr "รหัสของคอลัมน์ในมุมมองของคอลัมน์"
 
-#: assembl/models/preferences.py:616
+#: assembl/models/preferences.py:645
 msgid "What are (ordered) identifiers of columns in multi-column views?"
 msgstr "ตัวบ่งชี้ (ที่เรียงลำดับ) ของคอลัมน์ในมุมมองแบบหลายคอลัมน์คืออะไร"
 
-#: assembl/models/preferences.py:629
+#: assembl/models/preferences.py:658
 msgid "Default colors of columns in column view"
 msgstr "สีตามค่าเริ่มต้นของคอลัมน์ในมุมมองของคอลัมน์"
 
-#: assembl/models/preferences.py:631
+#: assembl/models/preferences.py:660
 msgid "What are (default) theme colors of columns in multi-column views?"
 msgstr "สีธีม (ตามค่าเริ่มต้น) ของคอลัมน์ในมุมมองแบบหลายคอลัมน์คืออะไร"
 
-#: assembl/models/preferences.py:643
+#: assembl/models/preferences.py:672
 msgid "Names of columns in column view"
 msgstr "ชื่อคอลัมน์ในมุมมองของคอลัมน์"
 
-#: assembl/models/preferences.py:645
+#: assembl/models/preferences.py:674
 msgid ""
 "What are (default) names of columns in multi-column views, in each "
 "discussion language?"
@@ -273,19 +280,19 @@ msgstr ""
 "ชื่อคอลัมน์ (ตามค่าเริ่มต้น) ในมุมมองแบบหลายคอลัมน์ "
 "ในแต่ละภาษาการสนทนาคืออะไร"
 
-#: assembl/models/preferences.py:658
+#: assembl/models/preferences.py:687
 msgid "Default permissions"
 msgstr "สิทธิ์เริ่มต้น"
 
-#: assembl/models/preferences.py:661
+#: assembl/models/preferences.py:690
 msgid "The basic permissions for a new discussion"
 msgstr "สิทธิ์ขั้นพื้นฐานสำหรับการสนทนาใหม่"
 
-#: assembl/models/preferences.py:743
+#: assembl/models/preferences.py:772
 msgid "Require Email Domain"
 msgstr "ต้องใช้โดเมนอีเมล"
 
-#: assembl/models/preferences.py:746
+#: assembl/models/preferences.py:775
 msgid ""
 "List of domain names of user email address required for self-"
 "registration. Only accounts with at least an email from those domains can"
@@ -297,63 +304,63 @@ msgstr ""
 " self-register to this discussion. Anyone can self-register if this is "
 "empty."
 
-#: assembl/models/preferences.py:762
+#: assembl/models/preferences.py:791
 #, fuzzy
 msgid "Whitelist on authentication service"
 msgstr "ประเภทบริการการรับรองความถูกต้อง"
 
-#: assembl/models/preferences.py:765
+#: assembl/models/preferences.py:794
 msgid "Allow white list to be applied to the authentication service chosen"
 msgstr ""
 
-#: assembl/models/preferences.py:777
+#: assembl/models/preferences.py:806
 msgid "Whitelist on standard registration"
 msgstr ""
 
-#: assembl/models/preferences.py:780
+#: assembl/models/preferences.py:809
 msgid "Allow white list to be applied to the default login process"
 msgstr ""
 
-#: assembl/models/preferences.py:792
+#: assembl/models/preferences.py:821
 #, fuzzy
 msgid "Discussion administrators"
 msgstr "สถิติการสนทนา"
 
-#: assembl/models/preferences.py:795
+#: assembl/models/preferences.py:824
 msgid ""
 "A list of discussion administrators, if different from the server "
 "administrator"
 msgstr ""
 
-#: assembl/models/preferences.py:808
+#: assembl/models/preferences.py:837
 msgid "Show CI Dashboard"
 msgstr "แสดงแดชบอร์ด CI (ปัญญาสะสม)"
 
-#: assembl/models/preferences.py:811
+#: assembl/models/preferences.py:840
 msgid "Show the CI Dashboard in the panel group window"
 msgstr "แสดงแดชบอร์ด CI (ปัญญาสะสม) ในหน้าต่างกลุ่มแผง"
 
-#: assembl/models/preferences.py:823
+#: assembl/models/preferences.py:852
 msgid "URL of CI Dashboard"
 msgstr "URL ของแดชบอร์ด CI (ปัญญาสะสม)"
 
-#: assembl/models/preferences.py:825
+#: assembl/models/preferences.py:854
 msgid "Configuration of the visualizations shown in the CI Dashboard"
 msgstr "การกำหนดค่าการจัดรูปแบบแสดงข้อมูลที่แสดงในแดชบอร์ด CI"
 
-#: assembl/models/preferences.py:843
+#: assembl/models/preferences.py:872
 msgid "Catalyst Visualizations"
 msgstr "การจัดรูปแบบการแสดงข้อมูล Catalyst"
 
-#: assembl/models/preferences.py:846
+#: assembl/models/preferences.py:875
 msgid "A JSON description of available Catalyst visualizations"
 msgstr "คำอธิบาย JSON เกี่ยวกับการจัดรูปแบบการแสดงข้อมูล Catalyst ที่มีอยู่"
 
-#: assembl/models/preferences.py:858
+#: assembl/models/preferences.py:887
 msgid "Navigation sections"
 msgstr "ส่วนการนำทาง"
 
-#: assembl/models/preferences.py:861
+#: assembl/models/preferences.py:890
 msgid ""
 "A JSON specification of Catalyst visualizations to show in the navigation"
 " section"
@@ -361,19 +368,19 @@ msgstr ""
 "ข้อกำหนด JSON เกี่ยวกับการจัดรูปแบบการแสดงข้อมูล Catalyst "
 "เพื่อแสดงในส่วนการนำทาง"
 
-#: assembl/models/preferences.py:874
+#: assembl/models/preferences.py:903
 msgid "Catalyst translations"
 msgstr "การแปลความหมาย Catalyst"
 
-#: assembl/models/preferences.py:877
+#: assembl/models/preferences.py:906
 msgid "Translations applicable to Catalyst visualizations, in Jed (JSON) format"
 msgstr "การแปลที่เหมาะสมกับการจัดรูปแบบการแสดงข้อมูล Catalyst ในรูปแบบ Jed (JSON)"
 
-#: assembl/models/preferences.py:894
+#: assembl/models/preferences.py:923
 msgid "Default Table of Ideas Collapsed state"
 msgstr "ค่าเริ่มต้นสถานะตารางแนวคิดที่ถูกยุบ"
 
-#: assembl/models/preferences.py:897
+#: assembl/models/preferences.py:926
 msgid ""
 "Default expanded/collapsed state of each idea in the table of ideas. A "
 "user can override it by opening/closing an idea"
@@ -381,56 +388,55 @@ msgstr ""
 "ค่าเริ่มต้นสถานะขยาย / ยุบของแต่ละแนวคิดในตารางแนวคิด "
 "ผู้ใช้สามารถแทนที่ได้โดยการเปิด / ปิดแนวคิด"
 
-#: assembl/models/preferences.py:912
+#: assembl/models/preferences.py:941
 msgid "Preference data"
 msgstr "ข้อมูลการกำหนดลักษณะ"
 
-#: assembl/models/preferences.py:915
+#: assembl/models/preferences.py:944
 msgid "The preference configuration; override only with care"
 msgstr "การตั้งค่าการกำหนดลักษณะ; โปรดแทนที่ด้วยความระมัดระวัง"
 
-#: assembl/models/preferences.py:927
+#: assembl/models/preferences.py:956
 msgid "Cookies banner"
 msgstr "แบนเนอร์คุ้กกี้"
 
-#: assembl/models/preferences.py:930
+#: assembl/models/preferences.py:959
 msgid "Show the banner offering to disable Piwik cookies"
 msgstr "แสดงแบนเนอร์ที่เสนอเพื่อปิดใช้งานคุ้กกี้ Piwik"
 
-#: assembl/models/preferences.py:942
+#: assembl/models/preferences.py:971
 msgid "Custom HTML code on the landing page"
 msgstr ""
 
-#: assembl/models/preferences.py:945
+#: assembl/models/preferences.py:974
 msgid ""
 "Custom HTML code that will be integrated on the landing page of the "
 "debate, right after the <body> tag"
 msgstr ""
 
-#: assembl/models/preferences.py:955
+#: assembl/models/preferences.py:984
 msgid "Custom HTML code on the user registration page"
 msgstr ""
 
-#: assembl/models/preferences.py:958
+#: assembl/models/preferences.py:987
 msgid ""
 "Custom HTML code that will be integrated on the user registration page of"
 " the debate, right after the <body> tag"
 msgstr ""
 
-#: assembl/models/preferences.py:968 assembl/models/preferences.py:971
+#: assembl/models/preferences.py:997 assembl/models/preferences.py:1000
 #, fuzzy
-#| msgid "Catalyst translations"
 msgid "Harvesting translation"
 msgstr "การแปลความหมาย Catalyst"
 
-#: assembl/models/preferences.py:979
+#: assembl/models/preferences.py:1008
 msgid "Valid CORS paths for GraphQL API calls"
 msgstr ""
 
-#: assembl/models/preferences.py:982
+#: assembl/models/preferences.py:1011
 msgid ""
-"A list of valid URLs or IP addresses that are allowed to make CORS api "
-"calls to the GraphQL API"
+"A list of valid domain names or IP addresses that are allowed to make "
+"CORS api calls to the GraphQL API"
 msgstr ""
 
 #: assembl/static/js/app/routeManager.js:416
@@ -2567,7 +2573,7 @@ msgid "Subject:"
 msgstr "เรื่อง:"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:125
-#: assembl/views/auth/views.py:1011
+#: assembl/views/auth/views.py:1021
 msgid "Welcome to {discussion_topic}."
 msgstr "ยินดีต้อนรับสู่ {discussion_topic}."
 
@@ -4591,6 +4597,24 @@ msgstr "ยกเลิกการสมัครใช้งาน"
 msgid "unsubscribed"
 msgstr "ยกเลิกการสมัครใช้งานแล้ว"
 
+#: assembl/views/__init__.py:655
+msgid "error"
+msgstr ""
+
+#: assembl/views/__init__.py:656
+msgid ""
+"Our server has encountered a problem. The page you have requested is not "
+"accesible."
+msgstr ""
+
+#: assembl/views/__init__.py:657
+msgid "We apologise for the inconvenience!"
+msgstr ""
+
+#: assembl/views/__init__.py:658
+msgid "Home page"
+msgstr ""
+
 #: assembl/views/admin/views.py:392
 msgid "No file given."
 msgstr "ไม่มีไฟล์ที่กำหนดให้"
@@ -4616,119 +4640,123 @@ msgstr "คุณต้องเข้าสู่ระบบเพื่อด
 msgid "Your message is empty"
 msgstr "ข้อความของคุณว่างเปล่า"
 
-#: assembl/views/api2/auth.py:347
+#: assembl/views/api2/auth.py:46
+msgid "The provided input combination is not valid."
+msgstr ""
+
+#: assembl/views/api2/auth.py:350
 msgid "The user does not exist"
 msgstr "ไม่พบผู้ใช้"
 
-#: assembl/views/api2/auth.py:358
+#: assembl/views/api2/auth.py:367
 msgid "This email does not exist"
 msgstr "ไม่มีอีเมลนี้"
 
-#: assembl/views/api2/auth.py:363
+#: assembl/views/api2/auth.py:377
 msgid "Please give an identifier"
 msgstr "โปรดระบุตัวบ่งชี้"
 
-#: assembl/views/api2/auth.py:368
+#: assembl/views/api2/auth.py:383
 msgid "This user has no email"
 msgstr "ผู้ใช้รายนี้ไม่มีอีเมล"
 
-#: assembl/views/api2/auth.py:371
+#: assembl/views/api2/auth.py:390
 msgid "This is not a user"
 msgstr "นี่ไม่ใช่ผู้ใช้"
 
-#: assembl/views/api2/auth.py:392
+#: assembl/views/api2/auth.py:414
 msgid "The passwords that were entered are mismatched!"
 msgstr "รหัสผ่านที่ป้อนไม่ตรงกัน!"
 
-#: assembl/views/api2/auth.py:406 assembl/views/auth/views.py:964
-#: assembl/views/auth/views.py:1032
+#: assembl/views/api2/auth.py:428 assembl/views/auth/views.py:974
+#: assembl/views/auth/views.py:1042
 msgid "This link is not valid. Do you want us to send another?"
 msgstr "ลิงค์นี้ไม่ถูกต้อง คุณต้องการให้เราส่งให้ใหม่หรือไม่"
 
-#: assembl/views/api2/auth.py:409 assembl/views/auth/views.py:967
-#: assembl/views/auth/views.py:1035
+#: assembl/views/api2/auth.py:431 assembl/views/auth/views.py:977
+#: assembl/views/auth/views.py:1045
 msgid "This link has been used. Do you want us to send another?"
 msgstr "ลิงค์นี้ถูกนำมาใช้แล้ว คุณต้องการให้เราส่งให้ใหม่หรือไม่"
 
-#: assembl/views/api2/auth.py:438 assembl/views/auth/views.py:388
+#: assembl/views/api2/auth.py:461 assembl/views/auth/views.py:398
 msgid "Please use a name of at least 3 characters"
 msgstr "โปรดใช้ชื่อที่มีอย่างน้อย 3 อักขระ"
 
-#: assembl/views/api2/auth.py:447 assembl/views/auth/views.py:321
-#: assembl/views/auth/views.py:395
+#: assembl/views/api2/auth.py:470 assembl/views/auth/views.py:331
+#: assembl/views/auth/views.py:405
 msgid "This is not a valid email"
 msgstr "นี่ไม่ใช่อีเมลที่ถูกต้อง"
 
-#: assembl/views/api2/auth.py:455 assembl/views/auth/views.py:402
+#: assembl/views/api2/auth.py:479 assembl/views/auth/views.py:412
 msgid "We already have a user with this email."
 msgstr "เรามีผู้ใช้ที่มีอีเมลนี้อยู่แล้ว"
 
-#: assembl/views/api2/auth.py:460
+#: assembl/views/api2/auth.py:491
 msgid "No email."
 msgstr "ไม่มีอีเมล"
 
-#: assembl/views/api2/auth.py:466
+#: assembl/views/api2/auth.py:498
 msgid "We already have a user with this username."
 msgstr "เรามีผู้ใช้ที่มีชื่อผู้ใช้นี้อยู่แล้ว"
 
-#: assembl/views/api2/auth.py:471
+#: assembl/views/api2/auth.py:509
 #, fuzzy
 msgid "The username must be less than 20 characters."
 msgstr "โปรดใช้ชื่อที่มีอย่างน้อย 3 อักขระ"
 
-#: assembl/views/api2/auth.py:485
+#: assembl/views/api2/auth.py:523
 msgid ""
 "Your email domain has not been approved for registration. Please contact "
 "${emails} for support."
 msgstr ""
 
-#: assembl/views/api2/auth.py:486
+#: assembl/views/api2/auth.py:524
 msgid ""
 "Your email domain has not been approved for registration. Please contact "
 "one of ${emails} for support."
 msgstr ""
 
-#: assembl/views/auth/views.py:294
+#: assembl/views/auth/views.py:304
 #, python-format
 msgid "The username %s is already used"
 msgstr "ชื่อผู้ใช้ %s ถูกใช้แล้ว"
 
-#: assembl/views/auth/views.py:313 assembl/views/auth/views.py:1046
+#: assembl/views/auth/views.py:323 assembl/views/auth/views.py:1056
 msgid "The passwords are not identical"
 msgstr "รหัสผ่านไม่เหมือนกัน"
 
-#: assembl/views/auth/views.py:406
+#: assembl/views/auth/views.py:416
 msgid "The passwords should be identical"
 msgstr "รหัสผ่านควรเหมือนกัน"
 
-#: assembl/views/auth/views.py:462
+#: assembl/views/auth/views.py:472
 msgid ""
 "Your email was refused by the SMTP server.  You probably entered an email"
 " that does not exist."
 msgstr "อีเมลของคุณถูกปฏิเสธโดยเซิร์ฟเวอร์ SMTP คุณอาจป้อนอีเมลที่ไม่มีอยู่"
 
-#: assembl/views/auth/views.py:519 assembl/views/auth/views.py:844
-#: assembl/views/auth/views.py:850
+#: assembl/views/auth/views.py:529 assembl/views/auth/views.py:854
+#: assembl/views/auth/views.py:860
 msgid "This user cannot be found"
 msgstr "ไม่พบผู้ใช้นี้"
 
-#: assembl/views/auth/views.py:537
+#: assembl/views/auth/views.py:547
 msgid "Invalid user and password"
 msgstr "ผู้ใช้และรหัสผ่านไม่ถูกต้อง"
 
-#: assembl/views/auth/views.py:601
+#: assembl/views/auth/views.py:611
 msgid "This email address is already confirmed"
 msgstr "ที่อยู่อีเมลนี้ได้รับการยืนยันแล้ว"
 
-#: assembl/views/auth/views.py:602
+#: assembl/views/auth/views.py:612
 msgid "You do not need to confirm this email address, it is already confirmed."
 msgstr "คุณไม่จำเป็นต้องยืนยันที่อยู่อีเมลนี้ เนื่องจากได้รับการยืนยันแล้ว"
 
-#: assembl/views/auth/views.py:610 assembl/views/auth/views.py:809
+#: assembl/views/auth/views.py:620 assembl/views/auth/views.py:819
 msgid "Confirmation requested"
 msgstr "ขอการยืนยันแล้ว"
 
-#: assembl/views/auth/views.py:611 assembl/views/auth/views.py:810
+#: assembl/views/auth/views.py:621 assembl/views/auth/views.py:820
 msgid ""
 "A confirmation e-mail has been sent to your account and should be in your"
 " inbox in a few minutes. It contains a confirmation link, please click on"
@@ -4740,25 +4768,25 @@ msgstr ""
 "โปรดคลิกที่ลิงค์เพื่อยืนยันที่อยู่อีเมลของคุณ "
 "หากคุณไม่ได้รับอีเมลดังกล่าว (โปรดตรวจสอบสแปม) คลิกที่นี่"
 
-#: assembl/views/auth/views.py:659 assembl/views/auth/views.py:683
-#: assembl/views/auth/views.py:705
+#: assembl/views/auth/views.py:669 assembl/views/auth/views.py:693
+#: assembl/views/auth/views.py:715
 #, python-format
 msgid "Email <%s> already confirmed"
 msgstr "อีเมล <%s> ได้รับการยืนยันแล้ว"
 
-#: assembl/views/auth/views.py:671
+#: assembl/views/auth/views.py:681
 msgid "This link was not valid. We sent another."
 msgstr "ลิงค์นี้ไม่ถูกต้อง เราได้ส่งให้ใหม่แล้ว"
 
-#: assembl/views/auth/views.py:674
+#: assembl/views/auth/views.py:684
 msgid "This link has been used. We sent another."
 msgstr "ลิงค์นี้ถูกนำมาใช้แล้ว เราได้ส่งให้ใหม่แล้ว"
 
-#: assembl/views/auth/views.py:687
+#: assembl/views/auth/views.py:697
 msgid "This link is not valid. Please attempt to login to get another one."
 msgstr "ลิงค์นี้ไม่ถูกต้อง โปรดพยายามเข้าสู่ระบบเพื่อรับลิงค์อื่น"
 
-#: assembl/views/auth/views.py:726
+#: assembl/views/auth/views.py:736
 #, python-format
 msgid ""
 "Your email address %s has been confirmed, and you are now subscribed to "
@@ -4767,28 +4795,28 @@ msgstr ""
 "ที่อยู่อีเมลของคุณ %s ได้รับการยืนยัน "
 "และขณะนี้คุณได้สมัครรับการแจ้งเตือนเริ่มต้นของการสนทนาแล้ว"
 
-#: assembl/views/auth/views.py:731
+#: assembl/views/auth/views.py:741
 #, python-format
 msgid "Your email address %s has been confirmed."
 msgstr "ที่อยู่อีเมลของคุณ %s ได้รับการยืนยันแล้ว"
 
-#: assembl/views/auth/views.py:756
+#: assembl/views/auth/views.py:766
 msgid "Login failed, try again"
 msgstr "การเข้าสู่ระบบล้มเหลว โปรดลองอีกครั้ง"
 
-#: assembl/views/auth/views.py:797
+#: assembl/views/auth/views.py:807
 msgid "This email is already confirmed."
 msgstr "อีเมลนี้ได้รับการยืนยันแล้ว"
 
-#: assembl/views/auth/views.py:818
+#: assembl/views/auth/views.py:828
 msgid "We do not know about this email."
 msgstr "เราไม่ทราบเกี่ยวกับอีเมลนี้"
 
-#: assembl/views/auth/views.py:897
+#: assembl/views/auth/views.py:907
 msgid "Password change requested"
 msgstr "ขอเปลี่ยนรหัสผ่านแล้ว"
 
-#: assembl/views/auth/views.py:898
+#: assembl/views/auth/views.py:908
 msgid ""
 "We have sent you an email with a temporary connection link. Please use "
 "that link to log in and change your password."
@@ -4796,39 +4824,39 @@ msgstr ""
 "เราได้ส่งอีเมลพร้อมลิงค์การเชื่อมต่อชั่วคราวให้กับคุณ "
 "โปรดใช้ลิงค์นั้นเพื่อเข้าสู่ระบบแล้วเปลี่ยนรหัสผ่านของคุณ"
 
-#: assembl/views/auth/views.py:979
+#: assembl/views/auth/views.py:989
 msgid "You will enter the discussion as <b>{name}</b>."
 msgstr "คุณจะเข้าสู่การสนทนาด้วย <b>{name}</b>"
 
-#: assembl/views/auth/views.py:983
+#: assembl/views/auth/views.py:993
 msgid "You will enter Assembl as <b>{name}</b>."
 msgstr "คุณจะเข้าสู่ Assembl ด้วย <b>{name}</b>"
 
-#: assembl/views/auth/views.py:986
+#: assembl/views/auth/views.py:996
 msgid "Please choose your password for security reasons."
 msgstr "โปรดเลือกรหัสผ่านของคุณเพื่อความปลอดภัย"
 
-#: assembl/views/auth/views.py:1015
+#: assembl/views/auth/views.py:1025
 msgid "Change your password"
 msgstr "เปลี่ยนรหัสผ่านของคุณ"
 
-#: assembl/views/auth/views.py:1054
+#: assembl/views/auth/views.py:1064
 msgid "Password changed"
 msgstr "เปลี่ยนรหัสผ่านแล้ว"
 
-#: assembl/views/auth/views.py:1068
+#: assembl/views/auth/views.py:1078
 msgid "email"
 msgstr "อีเมล"
 
-#: assembl/views/auth/views.py:1069
+#: assembl/views/auth/views.py:1079
 msgid "Please confirm your {confirm_what} with {assembl}"
 msgstr "โปรดยืนยัน {confirm_what} ของคุณกับ {assembl}"
 
-#: assembl/views/auth/views.py:1071
+#: assembl/views/auth/views.py:1081
 msgid "account"
 msgstr "บัญชี"
 
-#: assembl/views/auth/views.py:1072
+#: assembl/views/auth/views.py:1082
 msgid ""
 "Hello, {name}, and welcome to {assembl}!\n"
 "\n"
@@ -4848,7 +4876,7 @@ msgstr ""
 "ด้วยความนับถือ\n"
 "ทีม {assembl} "
 
-#: assembl/views/auth/views.py:1079
+#: assembl/views/auth/views.py:1089
 msgid ""
 "<p>Hello, {name}, and welcome to {assembl}!</p>\n"
 "<p>Please <a href=\"{confirm_url}\">click here to confirm your email "
@@ -4862,7 +4890,7 @@ msgstr ""
 "และกรอกข้อมูลการลงทะเบียน</p>\n"
 "<p>ด้วยความนับถือ<br />ทีม {assembl} </p>"
 
-#: assembl/views/auth/views.py:1084
+#: assembl/views/auth/views.py:1094
 msgid ""
 "Hello, {name}!\n"
 "\n"
@@ -4882,7 +4910,7 @@ msgstr ""
 "ด้วยความนับถือ\n"
 "ทีม {assembl} "
 
-#: assembl/views/auth/views.py:1091
+#: assembl/views/auth/views.py:1101
 msgid ""
 "<p>Hello, {name}!</p>\n"
 "<p>Please <a href=\"{confirm_url}\">click here to confirm your new email "
@@ -4896,11 +4924,11 @@ msgstr ""
 "ใน {assembl} บัญชีของคุณ</p>\n"
 "<p>ด้วยความนับถือ<br />ทีม {assembl} </p>"
 
-#: assembl/views/auth/views.py:1145
+#: assembl/views/auth/views.py:1155
 msgid "Request for password change"
 msgstr "ขอเปลี่ยนรหัสผ่าน"
 
-#: assembl/views/auth/views.py:1149
+#: assembl/views/auth/views.py:1159
 msgid ""
 "<p>Hello, {name}!</p>\n"
 "<p>We have received a request to change the password on your {assembl} "
@@ -4919,7 +4947,7 @@ msgstr ""
 "<p>หากคุณไม่ได้ขอให้ตั้งรหัสผ่านใหม่ โปรดปิด/ลบอีเมลนี้</p>\n"
 "<p>ขอแสดงความนับถือ<br /> ทีม {assembl} </p>\n"
 
-#: assembl/views/auth/views.py:1155
+#: assembl/views/auth/views.py:1165
 msgid ""
 "Hello, {name}!\n"
 "We have received a request to change the password on your {assembl} "
@@ -4942,8 +4970,11 @@ msgstr ""
 "ขอแสดงความนับถือ\n"
 "ทีม {assembl} \n"
 
-#: assembl/views/discussion/views.py:56
+#: assembl/views/discussion/views.py:55
 #, python-format
 msgid "No discussion found for slug=%s"
 msgstr "ไม่พบการสนทนาสำหรับ slug=%s"
+
+#~ msgid ""
+#~ msgstr ""
 
