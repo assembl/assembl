@@ -39,6 +39,20 @@ type Props = {
   createModule: Function
 };
 
+const MODULES_IDENTIFIERS = {
+  header: 'HEADER',
+  timeline: 'TIMELINE',
+  chatbot: 'CHATBOT',
+  topThematics: 'TOP_THEMATICS',
+  tweets: 'TWEETS',
+  contact: 'CONTACT',
+  data: 'DATA',
+  news: 'NEWS',
+  partners: 'PARTNERS',
+  introduction: 'INTRODUCTION',
+  footer: 'FOOTER'
+};
+
 export const addCountSuffix = (modules: Array<LandingPageModule>): Array<LandingPageModule> => {
   // This function counts the occurencies of each module titles
   // and adds the count as a suffix if it has duplicates
@@ -85,7 +99,9 @@ export const DumbManageModules = ({
     const includeFooter = true;
     return displayModal(null, body, includeFooter, footer);
   };
-  const textAndMultimediaIsChecked = enabledModules.some(module => module.getIn(['moduleType', 'identifier']) === 'INTRODUCTION');
+  const textAndMultimediaIsChecked = enabledModules.some(
+    module => module.getIn(['moduleType', 'identifier']) === MODULES_IDENTIFIERS.introduction
+  );
   const updatedModuleTypes = addCountSuffix(moduleTypes);
   return (
     <div className="admin-box">
