@@ -2144,9 +2144,9 @@ def create_backup_script():
     backup_template = jenv.get_template('backup_template.jinja2')
     with open('backup_all_assembl.sh', 'w') as f:
         f.write(backup_template.render(user=env._user, project_path=env._projectpath))
-    put('backup_all_assembl.sh', '/home/assembl_user/backup_all_assembl.sh')
+    put('backup_all_assembl.sh', '/home/%s/backup_all_assembl.sh' % (env.user))
     run('chmod +x backup_all_assembl.sh')
-    cron_command = "15 3 * * * /home/" + env._user + "/backup_all_assembl.sh"
+    cron_command = "15 3 * * * /home/" + env.user + "/backup_all_assembl.sh"
     create_add_to_crontab_command(cron_command)
 
 
@@ -2158,11 +2158,12 @@ def create_alert_disk_space_script():
     alert_disk_space_template = jenv.get_template('alert_disk_space_template.jinja2')
     with open('alert_disk_space.sh', 'w') as f:
         f.write(alert_disk_space_template.render())
-    put('alert_disk_space.sh', '/home/assembl_user/alert_disk_space.sh')
+    put('alert_disk_space.sh', '/home/%s/alert_disk_space.sh' % (env.user))
     run('chmod +x alert_disk_space.sh')
-    cron_command = "MAILTO=assembl.admin@bluenove.com"
+    admin_email = env.admin_email if env.admin_email else "assembl.admin@bluenove.com"
+    cron_command = "MAILTO=%s" % (admin_email)
     run(create_add_to_crontab_command(cron_command))
-    cron_command = "0 5 * * * /home/" + env._user + "/alert_disk_space.sh"
+    cron_command = "0 5 * * * /home/" + env.user + "/alert_disk_space.sh"
     run(create_add_to_crontab_command(cron_command))
 
 
