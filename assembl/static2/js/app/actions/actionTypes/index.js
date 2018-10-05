@@ -388,6 +388,8 @@ export type CreateLandingPageModules = {
   id: string,
   identifier: string,
   order: number,
+  numberOfDuplicatesModules: number,
+  title: string,
   type: typeof CREATE_LANDING_PAGE_MODULE
 };
 

@@ -112,6 +112,7 @@ export const modulesById: ModulesByIdReducer = (state = initialState, action) =>
       defaultResource
         .setIn(['moduleType', 'moduleId'], action.id)
         .setIn(['moduleType', 'identifier'], action.identifier)
+        .setIn(['moduleType', 'title'], `${action.title} ${action.numberOfDuplicatesModules}`)
         .set('order', action.order)
         .set('id', action.id)
     );

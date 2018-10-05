@@ -104,6 +104,9 @@ export const DumbManageModules = ({
 }: Props) => {
   const displayConfirmationModal = () => {
     const body = <Translate value="administration.landingPage.manageModules.confirmationModal" />;
+    const numberOfTextAndMultimediaModules = moduleTypes.filter(
+      moduleType => moduleType.identifier === MODULES_IDENTIFIERS.introduction
+    ).length;
     const footer = [
       <Button key="cancel" id="cancel-deleting-button" onClick={closeModal} className="button-cancel button-dark">
         <Translate value="cancel" />
@@ -112,7 +115,7 @@ export const DumbManageModules = ({
         key="add"
         id="confirm-add-tm-button"
         onClick={() => {
-          createModule(enabledModules.size - 2);
+          createModule(enabledModules.size - 2, numberOfTextAndMultimediaModules + 1);
           closeModal();
         }}
         className="button-submit button-dark"
@@ -127,7 +130,9 @@ export const DumbManageModules = ({
   const textAndMultimediaIsChecked = enabledModules.some(
     module => module.getIn(['moduleType', 'identifier']) === MODULES_IDENTIFIERS.introduction
   );
+
   const updatedModuleTypes = sortByTitle(moduleTypes);
+
   return (
     <div className="admin-box">
       <SectionTitle
@@ -182,9 +187,17 @@ const mapDispatchToProps = dispatch => ({
   moveModuleDown: id => dispatch(moveLandingPageModuleDown(id)),
   moveModuleUp: id => dispatch(moveLandingPageModuleUp(id)),
   toggleModule: id => dispatch(toggleLandingPageModule(id)),
-  createModule: (nextOrder, identifier = 'INTRODUCTION') => {
+  createModule: (nextOrder, numberOfDuplicatesModules, identifier = MODULES_IDENTIFIERS.introduction) => {
     const newId = createRandomId();
-    return dispatch(createLandingPageModules(newId, identifier, nextOrder));
+    return dispatch(
+      createLandingPageModules(
+        newId,
+        identifier,
+        numberOfDuplicatesModules,
+        I18n.t('administration.landingPage.manageModules.textAndMultimedia'),
+        nextOrder
+      )
+    );
   }
 });
 export default connect(mapStateToProps, mapDispatchToProps)(DumbManageModules);
