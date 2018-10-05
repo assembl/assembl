@@ -36,22 +36,17 @@ class BrightMirror extends React.Component {
 export default compose(
   graphql(ThematicsQuery, {
     props: ({ data }) => {
-      if (data.loading) {
+      if (data.error || data.loading) {
         return {
-          loading: true
-        };
-      }
-
-      if (data.error) {
-        return {
-          errors: data.error,
-          loading: false
+          error: data.error,
+          loading: data.loading
         };
       }
 
       return {
-        thematics: data.thematics,
-        loading: false
+        error: data.error,
+        loading: data.loading,
+        thematics: data.thematics
       };
     }
   }),

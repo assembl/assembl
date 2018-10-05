@@ -21,18 +21,17 @@ export default compose(
   graphql(ResourcesCenterPageQuery, {
     props: ({ data, ownProps }) => {
       const defaultHeaderImage = ownProps.debate.debateData.headerBackgroundUrl || '';
-      if (data.loading) {
+      if (data.error || data.loading) {
         return {
-          loading: true
+          error: data.error,
+          loading: data.loading
         };
       }
-      if (data.error) {
-        return {
-          hasErrors: true
-        };
-      }
+
       const { title, headerImage } = data.resourcesCenter;
       return {
+        error: data.error,
+        loading: data.loading,
         resourcesCenterTitle: title || I18n.t('resourcesCenter.defaultHeaderTitle'),
         resourcesCenterHeaderUrl: headerImage ? headerImage.externalUrl : defaultHeaderImage
       };

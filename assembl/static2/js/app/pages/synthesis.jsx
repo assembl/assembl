@@ -198,10 +198,16 @@ export default compose(
       variables: { id: props.params.synthesisId, lang: props.lang }
     }),
     props: ({ data }) => {
-      if (data.loading) {
-        return { loading: true };
+      if (data.error || data.loading) {
+        return {
+          error: data.error,
+          loading: data.loading
+        };
       }
+
       return {
+        error: data.error,
+        loading: data.loading,
         synthesis: data.synthesisPost.publishesSynthesis,
         synthesisPostId: data.synthesisPost.id
       };

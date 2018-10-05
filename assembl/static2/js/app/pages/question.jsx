@@ -2,7 +2,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
-import { Translate, I18n } from 'react-redux-i18n';
+import { Translate } from 'react-redux-i18n';
 import { Grid } from 'react-bootstrap';
 import { Link } from 'react-router';
 
@@ -10,7 +10,6 @@ import manageErrorAndLoading from '../components/common/manageErrorAndLoading';
 import Header from '../components/common/header';
 import Posts from '../components/debate/survey/posts';
 import Question from '../graphql/QuestionQuery.graphql';
-import { displayAlert } from '../utils/utilityManager';
 import { get as getRoute } from '../utils/routeMap';
 import HeaderStatistics, { statContributions, statMessages, statParticipants } from '../components/common/headerStatistics';
 
@@ -21,7 +20,6 @@ type NavigationParams = {
 
 type QuestionProps = {
   phaseId: string,
-  hasErrors: boolean,
   title: string,
   numContributors: number,
   numPosts: number,
@@ -34,10 +32,6 @@ type QuestionProps = {
 };
 
 export function DumbQuestion(props: QuestionProps) {
-  if (props.hasErrors) {
-    displayAlert('danger', I18n.t('error.loading'));
-    return null;
-  }
   const { phaseId, imgUrl, title, numContributors, numPosts, thematicTitle, thematicId, params, slug, totalSentiments } = props;
   const link = `${getRoute('idea', { slug: slug, phase: 'survey', phaseId: phaseId, themeId: thematicId })}`;
   let statElements = [];
@@ -92,23 +86,18 @@ export default compose(
   connect(mapStateToProps),
   graphql(Question, {
     props: ({ data }) => {
-      if (data.loading) {
+      if (data.error || data.loading) {
         return {
-          loading: true
-        };
-      }
-
-      if (data.error) {
-        return {
-          hasErrors: true
+          error: data.error,
+          loading: data.loading
         };
       }
 
       const { question: { numContributors, numPosts, totalSentiments, thematic: { img, title, id } } } = data;
 
       return {
-        hasErrors: false,
-        loading: false,
+        error: data.error,
+        loading: data.loading,
         title: data.question.title,
         imgUrl: img ? img.externalUrl : '',
         numContributors: numContributors,

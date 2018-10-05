@@ -71,15 +71,16 @@ export default compose(
   connect(mapStateToProps),
   graphql(SynthesesQuery, {
     props: ({ data }) => {
-      if (data.loading) {
-        return { loading: true };
+      if (data.error || data.loading) {
+        return {
+          error: data.error,
+          loading: data.loading
+        };
       }
-      if (data.error) {
-        console.error(data.error); // eslint-disable-line
-        return { loading: false };
-      }
+
       return {
-        loading: false,
+        error: data.error,
+        loading: data.loading,
         syntheses: data.syntheses,
         hasSyntheses: data.syntheses.length > 0
       };
