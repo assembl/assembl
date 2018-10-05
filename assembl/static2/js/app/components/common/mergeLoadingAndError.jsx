@@ -10,7 +10,8 @@ export default (queryMetadatasNames: Array<string>) => (WrappedComponent: React.
   props: Object
 ): React.Node => {
   const queryMetadatas: Array<QueryMetadata> = queryMetadatasNames.map(name => props[name]).filter(metadata => metadata);
-  const error = queryMetadatas.find(metadata => metadata.error);
+  const firstMetadataWithError = queryMetadatas.find(metadata => metadata.error);
+  const error = firstMetadataWithError ? firstMetadataWithError.error : undefined;
   const loading = queryMetadatas.some(metadata => metadata.loading);
   return <WrappedComponent {...props} error={error} loading={loading} />;
 };
