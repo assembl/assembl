@@ -17,7 +17,8 @@ import FlatNavbar from './FlatNavbar';
 import BurgerNavbar from './BurgerNavbar';
 import { APP_CONTAINER_MAX_WIDTH, APP_CONTAINER_PADDING } from '../../constants';
 import { snakeToCamel } from '../../utils/globalFunctions';
-import withoutLoadingIndicator from '../common/withoutLoadingIndicator';
+import manageErrorAndLoading from '../common/manageErrorAndLoading';
+import mergeLoadingAndError from '../common/mergeLoadingAndError';
 import DebateLink from '../debate/navigation/debateLink';
 import Logo from './Logo';
 import UserMenu from './UserMenu';
@@ -124,10 +125,7 @@ export class AssemblNavbar extends React.PureComponent<AssemblNavbarProps, Assem
   };
 
   render = () => {
-    const { screenWidth, debate, phase, timeline, sectionLoading, discussionLoading, sectionData, discussionData } = this.props;
-    if (sectionLoading || discussionLoading || !sectionData || !discussionData) {
-      return null;
-    }
+    const { screenWidth, debate, phase, timeline, sectionData } = this.props;
     const sections = sectionData.sections;
     const { debateData } = debate;
     const { logo, slug, isLargeLogo } = debateData;
@@ -184,15 +182,21 @@ export default compose(
   })),
   graphql(DiscussionQuery, {
     props: ({ data }) => {
-      if (data.loading) {
-        return { discussionLoading: true, discussionData: null };
-      }
-      if (data.error) {
-        return { discussionLoading: false, discussionData: null };
+      if (data.error || data.loading) {
+        return {
+          discussionQueryMetadata: {
+            error: data.error,
+            loading: data.loading
+          },
+          discussionData: null
+        };
       }
 
       return {
-        discussionLoading: false,
+        discussionQueryMetadata: {
+          error: data.error,
+          loading: data.loading
+        },
         discussionData: data.discussion
       };
     }
@@ -204,19 +208,26 @@ export default compose(
       }
     }),
     props: ({ data }) => {
-      if (data.loading) {
-        return { sectionloading: true, sectionData: null };
-      }
-      if (data.error) {
-        return { sectionLoading: false, sectionData: { sections: [] } };
+      if (data.error || data.loading) {
+        return {
+          sectionsQueryMetadata: {
+            error: data.error,
+            loading: data.loading
+          },
+          sectionData: { sections: [] }
+        };
       }
 
       return {
-        sectionLoading: false,
+        sectionsQueryMetadata: {
+          error: data.error,
+          loading: data.loading
+        },
         sectionData: data
       };
     }
   }),
-  withoutLoadingIndicator(),
+  mergeLoadingAndError(['discussionQueryMetadata', 'sectionsQueryMetadata']),
+  manageErrorAndLoading({ displayLoader: false }),
   withScreenWidth
 )(AssemblNavbar);

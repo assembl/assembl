@@ -8,7 +8,7 @@ import EditPostForm from '../editPostForm';
 import DeletedPost from '../deletedPost';
 import PostView from './postView';
 import PostQuery from '../../../../graphql/PostQuery.graphql';
-import withLoadingIndicator from '../../../common/withLoadingIndicator';
+import manageErrorAndLoading from '../../../common/manageErrorAndLoading';
 import { DeletedPublicationStates, PublicationStates } from '../../../../constants';
 import hashLinkScroll from '../../../../utils/hashLinkScroll';
 import NuggetsManager from '../../../common/nuggetsManager';
@@ -222,4 +222,4 @@ const withData: OperationComponent<Response> = graphql(PostQuery);
 
 // Absolutely don't use redux connect here to avoid performance issue.
 // Please pass the needed props from Tree component.
-export default compose(withData, withLoadingIndicator())(PostWithContext);
+export default compose(withData, manageErrorAndLoading({ displayLoader: true }))(PostWithContext);

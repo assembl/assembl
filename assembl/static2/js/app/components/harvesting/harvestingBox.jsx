@@ -12,7 +12,7 @@ import addPostExtractMutation from '../../graphql/mutations/addPostExtract.graph
 import updateExtractMutation from '../../graphql/mutations/updateExtract.graphql';
 import deleteExtractMutation from '../../graphql/mutations/deleteExtract.graphql';
 import confirmExtractMutation from '../../graphql/mutations/confirmExtract.graphql';
-import withLoadingIndicator from '../../components/common/withLoadingIndicator';
+import manageErrorAndLoading from '../../components/common/manageErrorAndLoading';
 import { getConnectedUserId, getConnectedUserName } from '../../utils/globalFunctions';
 import AvatarImage from '../common/avatarImage';
 import TaxonomyOverflowMenu from './taxonomyOverflowMenu';
@@ -626,5 +626,5 @@ export default compose(
   graphql(confirmExtractMutation, {
     name: 'confirmExtract'
   }),
-  withLoadingIndicator()
+  manageErrorAndLoading({ displayLoader: true })
 )(DumbHarvestingBox);

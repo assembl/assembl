@@ -3,6 +3,7 @@
 exports[`FlatList component should match FlatList loading snapshot 1`] = `
 <Loader
   color="black"
+  textHidden={false}
 />
 `;
 

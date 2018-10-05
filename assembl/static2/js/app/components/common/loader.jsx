@@ -1,8 +1,18 @@
+// @flow
 import React from 'react';
 import { Translate } from 'react-redux-i18n';
 import Ellipsis from '../svg/ellipsis';
 
-class Loader extends React.Component {
+export type Props = {
+  color?: string,
+  textHidden?: boolean
+};
+
+class Loader extends React.Component<Props> {
+  static defaultProps = {
+    textHidden: false
+  };
+
   render() {
     return (
       <div className={this.props.textHidden ? 'loader-container-xs' : 'loader-container-xl'}>

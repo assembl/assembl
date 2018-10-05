@@ -1,6 +1,7 @@
 /* eslint max-len: "off", quotes: ["error", "double"] */
 const Translations = {
   fr: {
+    globalError: "Il y a eu une erreur, merci de réessayer plus tard.",
     here: "ici",
     yes: "oui",
     no: "non",
@@ -889,6 +890,7 @@ const Translations = {
     }
   },
   en: {
+    globalError: "Something went wrong. Please try again later.",
     here: "here",
     yes: "yes",
     no: "no",

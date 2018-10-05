@@ -1,0 +1,229 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`manageErrorAndLoading HOC should display a loader if data are loading and we want to display a loader (use data prop) 1`] = `
+<div
+  className="loader-container-xl"
+>
+  <div
+    className="loader"
+  >
+    <span
+      className={undefined}
+      style={undefined}
+    >
+      Please wait...
+    </span>
+    <div
+      className="relative"
+    >
+      <svg
+        fill={undefined}
+        height="30"
+        viewBox="0 0 120 30"
+        width="30"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle
+          cx="15"
+          cy="15"
+          r="15"
+        >
+          <animate
+            attributeName="r"
+            begin="0s"
+            calcMode="linear"
+            dur="0.8s"
+            from="15"
+            repeatCount="indefinite"
+            to="15"
+            values="15;9;15"
+          />
+          <animate
+            attributeName="fill-opacity"
+            begin="0s"
+            calcMode="linear"
+            dur="0.8s"
+            from="1"
+            repeatCount="indefinite"
+            to="1"
+            values="1;.5;1"
+          />
+        </circle>
+        <circle
+          cx="60"
+          cy="15"
+          fillOpacity="0.3"
+          r="9"
+        >
+          <animate
+            attributeName="r"
+            begin="0s"
+            calcMode="linear"
+            dur="0.8s"
+            from="9"
+            repeatCount="indefinite"
+            to="9"
+            values="9;15;9"
+          />
+          <animate
+            attributeName="fill-opacity"
+            begin="0s"
+            calcMode="linear"
+            dur="0.8s"
+            from="0.5"
+            repeatCount="indefinite"
+            to="0.5"
+            values=".5;1;.5"
+          />
+        </circle>
+        <circle
+          cx="105"
+          cy="15"
+          r="15"
+        >
+          <animate
+            attributeName="r"
+            begin="0s"
+            calcMode="linear"
+            dur="0.8s"
+            from="15"
+            repeatCount="indefinite"
+            to="15"
+            values="15;9;15"
+          />
+          <animate
+            attributeName="fill-opacity"
+            begin="0s"
+            calcMode="linear"
+            dur="0.8s"
+            from="1"
+            repeatCount="indefinite"
+            to="1"
+            values="1;.5;1"
+          />
+        </circle>
+      </svg>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`manageErrorAndLoading HOC should display a loader if data are loading and we want to display a loader 1`] = `
+<div
+  className="loader-container-xl"
+>
+  <div
+    className="loader"
+  >
+    <span
+      className={undefined}
+      style={undefined}
+    >
+      Please wait...
+    </span>
+    <div
+      className="relative"
+    >
+      <svg
+        fill={undefined}
+        height="30"
+        viewBox="0 0 120 30"
+        width="30"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle
+          cx="15"
+          cy="15"
+          r="15"
+        >
+          <animate
+            attributeName="r"
+            begin="0s"
+            calcMode="linear"
+            dur="0.8s"
+            from="15"
+            repeatCount="indefinite"
+            to="15"
+            values="15;9;15"
+          />
+          <animate
+            attributeName="fill-opacity"
+            begin="0s"
+            calcMode="linear"
+            dur="0.8s"
+            from="1"
+            repeatCount="indefinite"
+            to="1"
+            values="1;.5;1"
+          />
+        </circle>
+        <circle
+          cx="60"
+          cy="15"
+          fillOpacity="0.3"
+          r="9"
+        >
+          <animate
+            attributeName="r"
+            begin="0s"
+            calcMode="linear"
+            dur="0.8s"
+            from="9"
+            repeatCount="indefinite"
+            to="9"
+            values="9;15;9"
+          />
+          <animate
+            attributeName="fill-opacity"
+            begin="0s"
+            calcMode="linear"
+            dur="0.8s"
+            from="0.5"
+            repeatCount="indefinite"
+            to="0.5"
+            values=".5;1;.5"
+          />
+        </circle>
+        <circle
+          cx="105"
+          cy="15"
+          r="15"
+        >
+          <animate
+            attributeName="r"
+            begin="0s"
+            calcMode="linear"
+            dur="0.8s"
+            from="15"
+            repeatCount="indefinite"
+            to="15"
+            values="15;9;15"
+          />
+          <animate
+            attributeName="fill-opacity"
+            begin="0s"
+            calcMode="linear"
+            dur="0.8s"
+            from="1"
+            repeatCount="indefinite"
+            to="1"
+            values="1;.5;1"
+          />
+        </circle>
+      </svg>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`manageErrorAndLoading HOC should render the component if everything is OK (use data prop) 1`] = `
+<div>
+  My dummy component
+</div>
+`;
+
+exports[`manageErrorAndLoading HOC should render the component if everything is OK 1`] = `
+<div>
+  My dummy component
+</div>
+`;

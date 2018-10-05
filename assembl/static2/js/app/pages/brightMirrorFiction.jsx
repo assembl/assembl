@@ -13,6 +13,8 @@ import IdeaWithCommentsQuery from '../graphql/IdeaWithPostsQuery.graphql';
 // Route helpers imports
 import { browserHistory } from '../router';
 import { get } from '../utils/routeMap';
+// HOC imports
+import manageErrorAndLoading from '../components/common/manageErrorAndLoading';
 // Components imports
 import FictionHeader from '../components/debate/brightMirror/fictionHeader';
 import FictionToolbar from '../components/debate/brightMirror/fictionToolbar';
@@ -340,5 +342,6 @@ export default compose(
   graphql(CreateBrightMirrorCommentMutation, {
     // GraphQL custom function name
     name: 'createComment'
-  })
+  }),
+  manageErrorAndLoading({ displayLoader: true })
 )(BrightMirrorFiction);

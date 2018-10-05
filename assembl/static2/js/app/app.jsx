@@ -29,7 +29,11 @@ class App extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { timelineLoading, location, params, timeline, putTimelineInStore } = this.props;
+    const { error, timelineLoading, location, params, timeline, putTimelineInStore } = this.props;
+    if (error) {
+      throw new Error(`GraphQL error: ${error.message}`);
+    }
+
     // Don't do a timeline identity check (we are sure it's always different here) but use isEqual to be sure
     // we don't change the redux store (and trigger a full rerendering) if timeline array didn't change.
     if (!timelineLoading && !isEqual(timeline, prevProps.timeline)) {
@@ -84,15 +88,11 @@ export default compose(
       variables: { lang: locale }
     }),
     props: ({ data }) => {
-      if (data.loading) {
+      if (data.error || data.loading) {
         return {
-          timelineLoading: true
-        };
-      }
-      if (data.error) {
-        return {
-          timelineLoading: false,
-          timeline: []
+          error: data.error,
+          timeline: [], // empty timeline to avoid to block the whole app until timeline data is loaded
+          timelineLoading: data.loading
         };
       }
 
@@ -108,6 +108,7 @@ export default compose(
         description: phase.description
       }));
       return {
+        error: data.error,
         timelineLoading: data.loading,
         timeline: phasesForStore
       };

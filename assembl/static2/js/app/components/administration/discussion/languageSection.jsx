@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { Checkbox } from 'react-bootstrap';
 
 import SectionTitle from '../sectionTitle';
-import withLoadingIndicator from '../../common/withLoadingIndicator';
+import manageErrorAndLoading from '../../common/manageErrorAndLoading';
 import { addLanguagePreference, removeLanguagePreference, languagePreferencesHasChanged } from '../../../actions/adminActions';
 import getAllPreferenceLanguage from '../../../graphql/AllLanguagePreferences.graphql';
 
@@ -126,5 +126,5 @@ export default compose(
       }
     })
   }),
-  withLoadingIndicator()
+  manageErrorAndLoading({ displayLoader: true })
 )(LanguageSection);

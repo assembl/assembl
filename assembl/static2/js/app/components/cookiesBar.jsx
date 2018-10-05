@@ -11,7 +11,7 @@ import { get } from '../utils/routeMap';
 import updateAcceptedCookies from '../graphql/mutations/updateAcceptedCookies.graphql';
 import acceptedCookiesQuery from '../graphql/acceptedCookiesQuery.graphql';
 import { COOKIE_TYPES } from '../constants';
-import withoutLoadingIndicator from './common/withoutLoadingIndicator';
+import manageErrorAndLoading from './common/manageErrorAndLoading';
 
 type State = {
   hide: ?boolean
@@ -83,17 +83,21 @@ export default compose(
     name: 'updateAcceptedCookies'
   }),
   graphql(acceptedCookiesQuery, {
+    skip: props => !props.id,
     props: ({ data }) => {
-      if (data.loading) {
-        return { loading: true };
+      if (data.error || data.loading) {
+        return {
+          error: data.error,
+          loading: data.loading
+        };
       }
-      if (data.error) {
-        return { error: data.error };
-      }
+
       return {
+        error: data.error,
+        loading: data.loading,
         cookiesList: data.user.acceptedCookies
       };
     }
   }),
-  withoutLoadingIndicator()
+  manageErrorAndLoading({ displayLoader: false })
 )(DumbCookiesBar);

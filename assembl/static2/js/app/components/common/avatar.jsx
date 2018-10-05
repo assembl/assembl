@@ -6,7 +6,7 @@ import { NavDropdown, MenuItem } from 'react-bootstrap';
 
 import { getContextual, get } from '../../utils/routeMap';
 import UserQuery from '../../graphql/userQuery.graphql';
-import withoutLoadingIndicator from './withoutLoadingIndicator';
+import manageErrorAndLoading from './manageErrorAndLoading';
 import { browserHistory } from '../../router';
 import { localAwareLink } from '../../utils/utilityManager';
 
@@ -37,13 +37,16 @@ class ProfileIcon extends React.Component {
     const { slug, connectedUserId, loginData } = this.props;
     let loginUrl = `${getContextual('login', { slug: slug })}?next=${this.state.next}`;
     if (loginData && loginData.url) {
-      loginUrl = loginData.url.includes('?') ?
-        `${loginData.url}&next=${this.state.next}` : `${loginData.url}?next=${this.state.next}`;
+      loginUrl = loginData.url.includes('?')
+        ? `${loginData.url}&next=${this.state.next}`
+        : `${loginData.url}?next=${this.state.next}`;
     }
     const dropdownUser = (
       <div className="inline">
         <span className="assembl-icon-profil grey" />
-        <span className="user-account"><Translate value="profile.panelTitle" /></span>
+        <span className="user-account">
+          <Translate value="profile.panelTitle" />
+        </span>
       </div>
     );
     const LoginAnchor = () => (
@@ -55,9 +58,7 @@ class ProfileIcon extends React.Component {
     const urlData = { url: loginUrl, local: loginData.local };
     return (
       <div className="right avatar">
-        {!connectedUserId && loginUrl && (
-          <LocalAwareAnchor urlData={urlData} />
-        )}
+        {!connectedUserId && loginUrl && <LocalAwareAnchor urlData={urlData} />}
         {connectedUserId && (
           <ul className="dropdown-xs">
             <NavDropdown pullRight title={dropdownUser} id="user-dropdown">
@@ -88,17 +89,21 @@ const mapStateToProps = ({ context, debate }) => ({
 export default compose(
   connect(mapStateToProps),
   graphql(UserQuery, {
+    skip: props => !props.id,
     props: ({ data }) => {
-      if (data.loading) {
-        return { loading: true };
+      if (data.error || data.loading) {
+        return {
+          error: data.error,
+          loading: data.loading
+        };
       }
-      if (data.error) {
-        return { error: data.error };
-      }
+
       return {
+        error: data.error,
+        loading: data.loading,
         displayName: data.user.displayName
       };
     }
   }),
-  withoutLoadingIndicator()
+  manageErrorAndLoading({ displayLoader: false })
 )(ProfileIcon);

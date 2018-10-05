@@ -20,7 +20,7 @@ import { getDomElementOffset, isMobile } from '../utils/globalFunctions';
 import { getIfPhaseCompletedById } from '../utils/timeline';
 import { promptForLoginOr, displayAlert, displayModal } from '../utils/utilityManager';
 import { transformLinksInHtml } from '../utils/linkify';
-import withLoadingIndicator from '../components/common/withLoadingIndicator';
+import manageErrorAndLoading from '../components/common/manageErrorAndLoading';
 import MessagePage from '../components/common/messagePage';
 
 export type TokenCategory = {|
@@ -433,19 +433,16 @@ export default compose(
     }),
     props: ({ data, ownProps }) => {
       const defaultHeaderImage = ownProps.debate.debateData.headerBackgroundUrl || '';
-      if (data.loading) {
+      if (data.error || data.loading) {
         return {
-          loading: true
-        };
-      }
-      if (data.error) {
-        return {
-          hasErrors: true
+          error: data.error,
+          loading: data.loading
         };
       }
 
       if (!data.voteSession) {
         return {
+          error: data.error,
           loading: data.loading,
           title: '',
           seeCurrentVotes: false,
@@ -472,6 +469,7 @@ export default compose(
       } = data.voteSession;
 
       return {
+        error: data.error,
         loading: data.loading,
         headerImageUrl: headerImage ? headerImage.externalUrl : defaultHeaderImage,
         title: title,
@@ -494,5 +492,5 @@ export default compose(
   graphql(AddTokenVoteMutation, {
     name: 'addTokenVote'
   }),
-  withLoadingIndicator()
+  manageErrorAndLoading({ displayLoader: true })
 )(DumbVoteSession);

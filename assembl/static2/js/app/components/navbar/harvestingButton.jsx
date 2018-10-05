@@ -6,7 +6,7 @@ import { I18n } from 'react-redux-i18n';
 import { withRouter } from 'react-router';
 
 import PreferencesQuery from '../../graphql/UserPreferencesQuery.graphql';
-import withoutLoadingIndicator from '../common/withoutLoadingIndicator';
+import manageErrorAndLoading from '../common/manageErrorAndLoading';
 import { updateContentLocaleByOriginalLocale } from '../../actions/contentLocaleActions';
 import { toggleHarvesting } from '../../actions/contextActions';
 import { isHarvestable } from '../../utils/globalFunctions';
@@ -68,6 +68,6 @@ export default compose(
   graphql(PreferencesQuery, {
     options: () => ({ notifyOnNetworkStatusChange: true, fetchPolicy: 'network-only' })
   }),
-  withoutLoadingIndicator(),
+  manageErrorAndLoading({ displayLoader: false }),
   withRouter
 )(DumbHarvestingButton);

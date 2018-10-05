@@ -2,12 +2,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
-import { Translate, I18n } from 'react-redux-i18n';
+import { Translate } from 'react-redux-i18n';
 import { Grid } from 'react-bootstrap';
 import type { Map } from 'immutable';
 
 import { updateContentLocale } from '../actions/contentLocaleActions';
-import withLoadingIndicator from '../components/common/withLoadingIndicator';
+import manageErrorAndLoading from '../components/common/manageErrorAndLoading';
 import Media from '../components/common/media';
 import Header from '../components/common/header';
 import Question from '../components/debate/survey/question';
@@ -15,7 +15,6 @@ import Navigation from '../components/debate/survey/navigation';
 import Proposals from '../components/debate/survey/proposals';
 import { getIfPhaseCompletedById } from '../utils/timeline';
 import ThematicQuery from '../graphql/ThematicQuery.graphql';
-import { displayAlert } from '../utils/utilityManager';
 import { get as getRoute } from '../utils/routeMap';
 import HeaderStatistics, { statContributions, statMessages, statParticipants } from '../components/common/headerStatistics';
 
@@ -38,7 +37,6 @@ type SurveyProps = {
   phaseId: string,
   timeline: Timeline,
   defaultContentLocaleMapping: Map,
-  hasErrors: boolean,
   imgUrl: string,
   loading: boolean,
   media: Object, // TODO: we should add a type for media/video and use it everywhere
@@ -114,10 +112,6 @@ class Survey extends React.Component<SurveyProps, SurveyState> {
   };
 
   render() {
-    if (this.props.hasErrors) {
-      displayAlert('danger', I18n.t('error.loading'));
-      return null;
-    }
     const {
       id,
       imgUrl,
@@ -226,24 +220,18 @@ export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   graphql(ThematicQuery, {
     props: ({ data }) => {
-      if (data.loading) {
+      if (data.error || data.loading) {
         return {
-          loading: true
-        };
-      }
-
-      if (data.error) {
-        return {
-          hasErrors: true
+          error: data.error,
+          loading: data.loading
         };
       }
 
       const { thematic: { img, questions, title, video: media, numContributors, numPosts, totalSentiments }, refetch } = data;
-
       return {
-        hasErrors: false,
+        error: data.error,
+        loading: data.loading,
         imgUrl: img ? img.externalUrl : '',
-        loading: false,
         media: media,
         numContributors: numContributors,
         numPosts: numPosts,
@@ -254,5 +242,5 @@ export default compose(
       };
     }
   }),
-  withLoadingIndicator({ color: 'black' })
+  manageErrorAndLoading({ color: 'black', displayLoader: true })
 )(Survey);

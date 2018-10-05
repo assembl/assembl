@@ -331,12 +331,11 @@ export default compose(
         };
       }
       if (data.error) {
-        return {
-          ideaHasErrors: true
-        };
+        throw new Error(data.error.message);
       }
 
       return {
+        ideaLoading: false,
         announcement: data.idea.announcement,
         id: data.idea.id,
         title: data.idea.title,

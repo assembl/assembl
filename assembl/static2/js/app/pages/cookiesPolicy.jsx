@@ -7,7 +7,7 @@ import { I18n, Translate } from 'react-redux-i18n';
 
 import TextWithHeaderPage from '../components/common/textWithHeaderPage';
 import CookiesSelectorContainer from '../components/cookies/cookiesSelectorContainer';
-import withLoadingIndicator from '../components/common/withLoadingIndicator';
+import manageErrorAndLoading from '../components/common/manageErrorAndLoading';
 import LegalContents from '../graphql/LegalContents.graphql';
 import type { State } from '../reducers/rootReducer';
 
@@ -58,4 +58,4 @@ export const mapStateToProps: State => LegalContentsQueryVariables = state => ({
   lang: state.i18n.locale
 });
 
-export default compose(connect(mapStateToProps), withData, withLoadingIndicator())(CookiesPolicy);
+export default compose(connect(mapStateToProps), withData, manageErrorAndLoading({ displayLoader: true }))(CookiesPolicy);

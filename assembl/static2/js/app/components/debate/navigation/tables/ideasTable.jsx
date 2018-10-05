@@ -5,7 +5,7 @@ import { graphql, compose } from 'react-apollo';
 
 import AllIdeasQuery from '../../../../graphql/AllIdeasQuery.graphql';
 import MenuList, { type ItemNode } from './menuList';
-import withLoadingIndicator from '../../../common/withLoadingIndicator';
+import manageErrorAndLoading from '../../../common/manageErrorAndLoading';
 
 type IdeasTableProps = {
   identifier: string,
@@ -40,4 +40,6 @@ const mapStateToProps = state => ({
   debate: state.debate
 });
 
-export default compose(connect(mapStateToProps), IdeasTableWithData, withLoadingIndicator())(DumbIdeasTable);
+export default compose(connect(mapStateToProps), IdeasTableWithData, manageErrorAndLoading({ displayLoader: true }))(
+  DumbIdeasTable
+);

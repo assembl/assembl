@@ -7,7 +7,7 @@ import { Col, Grid, Row } from 'react-bootstrap';
 import Header from '../components/common/header';
 import Section from '../components/common/section';
 import SynthesisQuery from '../graphql/SynthesisQuery.graphql';
-import withLoadingIndicator from '../components/common/withLoadingIndicator';
+import manageErrorAndLoading from '../components/common/manageErrorAndLoading';
 import IdeaSynthesisTree from '../components/synthesis/IdeaSynthesisTree';
 import { getPartialTree, getChildren } from '../utils/tree';
 import SideMenu from '../components/synthesis/sideMenu';
@@ -198,14 +198,20 @@ export default compose(
       variables: { id: props.params.synthesisId, lang: props.lang }
     }),
     props: ({ data }) => {
-      if (data.loading) {
-        return { loading: true };
+      if (data.error || data.loading) {
+        return {
+          error: data.error,
+          loading: data.loading
+        };
       }
+
       return {
+        error: data.error,
+        loading: data.loading,
         synthesis: data.synthesisPost.publishesSynthesis,
         synthesisPostId: data.synthesisPost.id
       };
     }
   }),
-  withLoadingIndicator()
+  manageErrorAndLoading({ displayLoader: true })
 )(DumbSynthesis);

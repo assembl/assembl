@@ -18,7 +18,7 @@ import { deleteMessageTooltip, likeTooltip, disagreeTooltip } from '../../common
 import { sentimentDefinitionsObject } from '../common/sentimentDefinitions';
 import StatisticsDoughnut from '../common/statisticsDoughnut';
 import { EXTRA_SMALL_SCREEN_WIDTH, DeletedPublicationStates } from '../../../constants';
-import withLoadingIndicator from '../../common/withLoadingIndicator';
+import manageErrorAndLoading from '../../common/manageErrorAndLoading';
 import ResponsiveOverlayTrigger from '../../common/responsiveOverlayTrigger';
 import { withScreenWidth } from '../../common/screenDimensions';
 import PostBody from '../common/post/postBody';
@@ -332,7 +332,7 @@ export default compose(
   graphql(deleteSentimentMutation, {
     name: 'deleteSentiment'
   }),
-  withLoadingIndicator(),
+  manageErrorAndLoading({ displayLoader: true }),
   withScreenWidth,
   withApollo
 )(Post);

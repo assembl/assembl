@@ -11,7 +11,7 @@ import { displayAlert } from '../../utils/utilityManager';
 // graphql
 import acceptedCookiesQuery from '../../graphql/acceptedCookiesQuery.graphql';
 import updateAcceptedCookies from '../../graphql/mutations/updateAcceptedCookies.graphql';
-import withLoadingIndicator from '../common/withLoadingIndicator';
+import manageErrorAndLoading from '../common/manageErrorAndLoading';
 
 import type { CookieObject } from './cookieSetter';
 import { COOKIE_TRANSLATION_KEYS, COOKIE_TYPES, COOKIES_CATEGORIES } from '../../constants';
@@ -42,27 +42,31 @@ export class DumbCookiesSelectorContainer extends React.Component<Props, State> 
   constructor(props: Props) {
     super(props);
     const { cookiesList } = props;
-    // @$FlowFixMe flow does not see that getCookieItem has been checked as non null
-    const cookiesFromBrowser = getCookieItem('cookies_configuration') && getCookieItem('cookies_configuration').split(',');
-    const storedCookies =
-      cookiesList && cookiesList.length > 0
-        ? // if the user is logged in, we get the cookiesList from the query
-        cookiesList
-        : // otherwise, we take it from the browser
-        cookiesFromBrowser;
-    const missingCookies = COOKIE_TYPES.filter(
-      cookie =>
-        !cookiesList.includes(cookie) && !cookie.includes('REJECT') && !cookiesList.includes(this.toggleCookieType(cookie))
-    );
-    const fullCookiesList = storedCookies && [...storedCookies, ...missingCookies];
-    const cookiesArray =
-      fullCookiesList &&
-      fullCookiesList.map(cookie => ({
-        ...this.getCookieObjectData(cookie),
-        accepted: this.isCookieAccepted(cookie),
-        cookieType: cookie
-      }));
-    const cookiesByCategory = cookiesArray && this.getCookiesObjectFromArray(cookiesArray);
+    let cookiesByCategory = {};
+    if (cookiesList) {
+      // @$FlowFixMe flow does not see that getCookieItem has been checked as non null
+      const cookiesFromBrowser = getCookieItem('cookies_configuration') && getCookieItem('cookies_configuration').split(',');
+      const storedCookies =
+        cookiesList.length > 0
+          ? // if the user is logged in, we get the cookiesList from the query
+          cookiesList
+          : // otherwise, we take it from the browser
+          cookiesFromBrowser;
+
+      const missingCookies = COOKIE_TYPES.filter(
+        cookie =>
+          !cookiesList.includes(cookie) && !cookie.startsWith('REJECT') && !cookiesList.includes(this.toggleCookieType(cookie))
+      );
+      const fullCookiesList = storedCookies && [...storedCookies, ...missingCookies];
+      const cookiesArray =
+        fullCookiesList &&
+        fullCookiesList.map(cookie => ({
+          ...this.getCookieObjectData(cookie),
+          accepted: this.isCookieAccepted(cookie),
+          cookieType: cookie
+        }));
+      cookiesByCategory = cookiesArray && this.getCookiesObjectFromArray(cookiesArray);
+    }
 
     this.state = {
       activeKey: 'essential',
@@ -162,6 +166,10 @@ export class DumbCookiesSelectorContainer extends React.Component<Props, State> 
 
   render() {
     const { cookies, show, activeKey, settingsHaveChanged } = this.state;
+    if (!cookies) {
+      return null;
+    }
+
     return (
       <CookiesSelector
         cookies={cookies}
@@ -189,17 +197,21 @@ export default compose(
     name: 'updateAcceptedCookies'
   }),
   graphql(acceptedCookiesQuery, {
+    skip: props => !props.id,
     props: ({ data }) => {
-      if (data.loading) {
-        return { loading: true };
+      if (data.error || data.loading) {
+        return {
+          error: data.error,
+          loading: data.loading
+        };
       }
-      if (data.error) {
-        return { error: data.error };
-      }
+
       return {
+        error: data.error,
+        loading: data.loading,
         cookiesList: data.user.acceptedCookies
       };
     }
   }),
-  withLoadingIndicator()
+  manageErrorAndLoading({ displayLoader: true })
 )(DumbCookiesSelectorContainer);

@@ -6,7 +6,7 @@ import { compose, graphql } from 'react-apollo';
 import { NavDropdown, MenuItem } from 'react-bootstrap';
 import { getAvailableLocales } from '../../utils/i18n';
 import { addLanguagePreference } from '../../actions/adminActions';
-import withoutLoadingIndicator from '../common/withoutLoadingIndicator';
+import manageErrorAndLoading from '../common/manageErrorAndLoading';
 import { setCookieItem } from '../../utils/globalFunctions';
 import getDiscussionPreferenceLanguage from '../../graphql/DiscussionPreferenceLanguage.graphql';
 
@@ -142,5 +142,5 @@ export default compose(
       }
     })
   }),
-  withoutLoadingIndicator()
+  manageErrorAndLoading({ displayLoader: false })
 )(LanguageMenu);

@@ -82,20 +82,16 @@ export default compose(
       }
     }),
     props: ({ data }) => {
-      if (data.loading) {
+      if (data.error || data.loading) {
         return {
-          loading: true
+          error: data.error,
+          loading: data.loading
         };
       }
 
-      if (data.error) {
-        return {
-          hasErrors: true,
-          loading: false
-        };
-      }
       return {
-        hasErrors: false,
+        error: data.error,
+        loading: data.loading,
         languages: data.discussionPreferences.languages
       };
     }

@@ -6,7 +6,7 @@ import { OverlayTrigger } from 'react-bootstrap';
 import { compose, graphql, type ApolloClient } from 'react-apollo';
 import { Translate } from 'react-redux-i18n';
 
-import withoutLoadingIndicator from '../common/withoutLoadingIndicator';
+import manageErrorAndLoading from '../common/manageErrorAndLoading';
 import { get } from '../../utils/routeMap';
 import { getPartialTreeByParentId, getPath } from '../../utils/tree';
 import { fromGlobalId } from '../../utils/globalFunctions';
@@ -255,6 +255,6 @@ export default compose(
       variables: { discussionPhaseId: fromGlobalId(phase.id), lang: locale }
     })
   }),
-  withoutLoadingIndicator(),
+  manageErrorAndLoading({ displayLoader: false }),
   withRouter
 )(ThematicsMenu);
