@@ -53,9 +53,9 @@ const MODULES_IDENTIFIERS = {
   footer: 'FOOTER'
 };
 
-export const addCountSuffix = (modules: Array<LandingPageModule>): Array<LandingPageModule> => {
-  // This function counts the occurencies of each module titles
-  // and adds the count as a suffix if it has duplicates
+export const addEnumSuffixToModuleTitles = (modules: Array<LandingPageModule>): Array<LandingPageModule> => {
+  // Add a suffix to the title of the module if this module appears more than one time.
+  // This suffix is the number of times this module appeared in the array.
   const titleCounts = countBy(modules, 'title');
   const duplicatesCurrentIndex = {};
   return modules.map((module) => {
@@ -112,7 +112,7 @@ export const DumbManageModules = ({
   const textAndMultimediaIsChecked = enabledModules.some(
     module => module.getIn(['moduleType', 'identifier']) === MODULES_IDENTIFIERS.introduction
   );
-  const updatedModuleTypes = sortByTitle(addCountSuffix(moduleTypes));
+  const updatedModuleTypes = sortByTitle(addEnumSuffixToModuleTitles(moduleTypes));
   return (
     <div className="admin-box">
       <SectionTitle

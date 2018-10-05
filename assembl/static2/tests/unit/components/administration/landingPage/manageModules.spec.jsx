@@ -3,7 +3,7 @@ import ShallowRenderer from 'react-test-renderer/shallow';
 
 import {
   DumbManageModules,
-  addCountSuffix,
+  addEnumSuffixToModuleTitles,
   sortByTitle
 } from '../../../../../js/app/components/administration/landingPage/manageModules';
 import { enabledModules, moduleTypes, modulesById } from './fakeData';
@@ -32,14 +32,14 @@ describe('ManageModules component', () => {
   });
 });
 
-describe('addCountSuffix function', () => {
+describe('addEnumSuffixToModuleTitles function', () => {
   it('should return the same array if there is no duplicate', () => {
     const fakeModules = [{ title: 'lorem' }, { title: 'ipsum' }, { title: 'foo' }];
-    expect(addCountSuffix(fakeModules)).toEqual(fakeModules);
+    expect(addEnumSuffixToModuleTitles(fakeModules)).toEqual(fakeModules);
   });
   it('should return an array of modules with count added on the title of duplicates', () => {
     const fakeModules = [{ title: 'lorem' }, { title: 'lorem' }, { title: 'ipsum' }, { title: 'foo' }];
-    const actual = addCountSuffix(fakeModules);
+    const actual = addEnumSuffixToModuleTitles(fakeModules);
     const expected = [{ title: 'lorem 1' }, { title: 'lorem 2' }, { title: 'ipsum' }, { title: 'foo' }];
     expect(actual).toEqual(expected);
   });
@@ -52,7 +52,7 @@ describe('addCountSuffix function', () => {
       { title: 'ipsum' },
       { title: 'foo' }
     ];
-    const actual = addCountSuffix(fakeModules);
+    const actual = addEnumSuffixToModuleTitles(fakeModules);
     const expected = [
       { title: 'ipsum 1' },
       { title: 'lorem 1' },
