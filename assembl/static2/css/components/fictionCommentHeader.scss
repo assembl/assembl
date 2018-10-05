@@ -1,0 +1,57 @@
+.comments-header {
+  padding-bottom: 25px;
+  padding-left: 15px;
+  padding-right: 15px;
+
+  .title {
+    color: $black;
+    font-family: $font-family4;
+    font-size: $font-size-l;
+    font-weight: 300;
+    line-height: 52px;
+    letter-spacing: 2px;
+  }
+
+  .title .highlight {
+    display: block;
+    font-family: $font-family;
+  }
+
+  .subtitle {
+    color: $black;
+    font-family: $font-family;
+    font-size: $font-size-ml;
+    letter-spacing: 1.1px;
+    margin: 0;
+  }
+}
+
+@media screen and (min-width: $screen-sm-min) {
+  .comments-header {
+    padding-left: 54px;
+    padding-right: 54px;
+
+    .title .highlight {
+      display: inline-block;
+    }
+  }
+}
+
+@media screen and (min-width: $screen-xl-min) {
+  .comments-header {
+    .title {
+      font-size: $font-size-xl;
+      margin-bottom: 35px;
+      text-align: center;
+    }
+
+    .img-responsive {
+      margin: 0 auto;
+    }
+
+    .subtitle {
+      font-size: $font-size-xl;
+      margin-top: 35px;
+    }
+  }
+}

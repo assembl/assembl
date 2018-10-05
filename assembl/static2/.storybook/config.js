@@ -40,12 +40,9 @@ function loadStories() {
   require('../js/app/stories/components/debate/brightMirror/fictionHeader.stories.jsx');
   require('../js/app/stories/components/debate/brightMirror/fictionToolbar.stories.jsx');
   require('../js/app/stories/components/debate/brightMirror/fictionBody.stories.jsx');
-
-  // TODO: To clean ?
-  // require('../js/app/stories/components/common/common.jsx');
-  // require('../js/app/stories/components/common/urlPreview/urlPreview.jsx');
-  // require('../js/app/stories/components/common/urlPreview/embed.jsx');
-  // require('../js/app/stories/components/common/urlPreview/frame.jsx');
+  require('../js/app/stories/components/debate/brightMirror/fictionCommentHeader.stories.jsx');
+  require('../js/app/stories/components/debate/brightMirror/fictionCommentForm.stories.jsx');
+  require('../js/app/stories/components/debate/brightMirror/fictionComment.stories.jsx');
 }
 
 configure(loadStories, module);

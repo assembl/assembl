@@ -1,11 +1,15 @@
-@import 'components/circleAvatar';
-@import 'components/fictionHeader';
-@import 'components/fictionBody';
-
 // Variables
 // Bright Mirror background colors
 $light-khaki: #f1fbe5;
 $duck-egg-blue: #b7f4f0;
+
+// Other colors
+$blue-violet: #5404d7;
+$hospital-green: #93e79d;
+$pale-blue: #cef1ff;
+// Striped background colors
+$ice: #d2ffee;
+$alt-ice: #6a9986;
 
 $fiction-toolbar-icon-size: 17px;
 
@@ -24,13 +28,18 @@ $fiction-toolbar-icon-size: 17px;
 
 // Bright mirror global style
 .bright-mirror-fiction {
-  .back-btn {
-    display: block;
-    padding: 15px 18px;
-  }
+  padding-bottom: 30px;
+  padding-top: 30px;
+}
 
-  .container-fluid {
-    padding: 10px 18px 70px 18px;
+.bright-mirror-comments {
+  padding: 30px 0 0 0;
+
+  .comments-content {
+    background-color: $white;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 30px;
   }
 }
 
@@ -38,34 +47,55 @@ $fiction-toolbar-icon-size: 17px;
   @include set-background(default);
 }
 
+.background-comments-default {
+  // Striped background
+  background:
+    repeating-linear-gradient(
+      -45deg,
+      $ice,
+      $ice 4px,
+      $white 2px,
+      $white 7px
+    );
+}
+
 @media screen and (min-width: $screen-sm-min) {
   .bright-mirror-fiction {
-    .back-btn {
-      padding: 25px 54px;
-    }
+    padding-left: 54px;
+    padding-right: 54px;
+  }
 
-    .container-fluid {
-      padding: 25px 54px 90px 54px;
+  .bright-mirror-comments {
+    padding: 40px 0 0 0;
+
+    .comments-content {
+      padding-left: 54px;
+      padding-right: 54px;
     }
   }
 }
 
 @media screen and (min-width: $screen-xl-min) {
-  .bright-mirror-fiction {
-    .back-btn {
-      margin: 0 auto;
-      max-width: 1400px;
-      padding: 25px 0 0 0;
-    }
+  .bright-mirror-fiction,
+  .bright-mirror-comments {
+    padding: 90px 285px;
+  }
 
-    .container-fluid {
-      padding: 60px 285px 90px 295px;
+  .bright-mirror-comments {
+    .comments-content {
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 80px;
     }
   }
 }
 
 // Component imports
-@import 'components/circleAvatar';
-@import 'components/fictionHeader';
-@import 'components/fictionToolbar';
-@import 'components/fictionBody';
+@import "components/backButton";
+@import "components/circleAvatar";
+@import "components/fictionHeader";
+@import "components/fictionToolbar";
+@import "components/fictionBody";
+@import "components/fictionCommentHeader";
+@import "components/fictionCommentForm";
+@import "components/fictionComment";

@@ -7,8 +7,8 @@ import { configure, shallow, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 /* eslint-enable */
 
-import DeletePostButton from '../../../../../../js/app/components/debate/common/deletePostButton';
-import type { DeletePostButtonProps } from '../../../../../../js/app/components/debate/common/deletePostButton';
+import DeletePostButton from '../../../../../js/app/components/debate/common/deletePostButton';
+import type { DeletePostButtonProps } from '../../../../../js/app/components/debate/common/deletePostButton';
 
 // Separate the snapshots in directories next to each component
 // Name should match with the story name

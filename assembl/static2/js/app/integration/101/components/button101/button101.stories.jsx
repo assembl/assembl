@@ -31,7 +31,7 @@ const dangerButton: Button101Type = {
   type: 'danger'
 };
 
-const playgroundButton: Object = {
+const playground: Object = {
   label: 'Playground label',
   type: ['info', 'danger'],
   isDisabled: false
@@ -46,9 +46,9 @@ storiesOf('Button101', module)
     'playground',
     withInfo()(() => (
       <Button101
-        label={text('label', playgroundButton.label)}
-        type={select('type', playgroundButton.type, playgroundButton.type[0])}
-        isDisabled={boolean('isDisabled', playgroundButton.isDisabled)}
+        label={text('label', playground.label)}
+        type={select('type', playground.type, playground.type[0])}
+        isDisabled={boolean('isDisabled', playground.isDisabled)}
         onClickHandler={actions.onClickHandler}
       />
     ))

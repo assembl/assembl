@@ -115,6 +115,7 @@
     "react-active-html": "~1.2.1",
     "react-animated-transitions": "^0.0.6",
     "react-apollo": "^1.4.12",
+    "react-autosize-textarea": "^4.0.0",
     "react-bootstrap": "^0.31.2",
     "react-color": "^2.13.8",
     "react-copy-to-clipboard": "^5.0.1",

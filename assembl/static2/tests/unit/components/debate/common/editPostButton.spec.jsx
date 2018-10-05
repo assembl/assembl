@@ -1,7 +1,7 @@
 import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
-import EditPostButton from '../../../../../../js/app/components/debate/common/editPostButton';
+import EditPostButton from '../../../../../js/app/components/debate/common/editPostButton';
 
 describe('EditPostButton component', () => {
   it('should render an edit post button', () => {

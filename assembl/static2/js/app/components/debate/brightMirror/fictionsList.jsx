@@ -2,16 +2,17 @@
 import * as React from 'react';
 import Masonry from 'react-masonry-component';
 import Animated from 'react-animated-transitions';
-
 import { Grid } from 'react-bootstrap';
 import { Translate, I18n } from 'react-redux-i18n';
+// Route helpers imports
 import { get } from '../../../utils/routeMap';
-
+// Utils imports
 import { getDiscussionSlug, getConnectedUserId } from '../../../utils/globalFunctions';
 import FictionPreview from './fictionPreview';
-import { fictionBackgroundColors } from '../../../constants';
 import Permissions, { connectedUserCan } from '../../../utils/permissions';
 import { displayAlert } from '../../../utils/utilityManager';
+// Constant imports
+import { fictionBackgroundColors, EMPTY_STRING, PublicationStates } from '../../../constants';
 
 export type Props = {
   posts: Array<FictionPostPreview>,
@@ -42,41 +43,48 @@ const FictionsList = ({ posts, identifier, refetchIdea, lang, themeId }: Props) 
   const connectedUserId = getConnectedUserId();
 
   const childElements = posts.reduce((result, post) => {
-    // Define user permissions
-    let authorName = '';
-    let userCanEdit = false;
-    let userCanDelete = false;
+    if (post.publicationState === PublicationStates.PUBLISHED) {
+      // Define user permissions
+      let authorName = '';
+      let userCanEdit = false;
+      let userCanDelete = false;
 
-    if (post.creator) {
-      const { userId, displayName, isDeleted } = post.creator;
-      authorName = isDeleted ? I18n.t('deletedUser') : displayName;
-      userCanEdit = connectedUserId === String(userId) && connectedUserCan(Permissions.EDIT_MY_POST);
-      userCanDelete =
-        (connectedUserId === String(userId) && connectedUserCan(Permissions.DELETE_MY_POST)) ||
-        connectedUserCan(Permissions.DELETE_POST);
+      if (post.creator) {
+        const { userId, displayName, isDeleted } = post.creator;
+        authorName = isDeleted ? I18n.t('deletedUser') : displayName;
+        userCanEdit = connectedUserId === String(userId) && connectedUserCan(Permissions.EDIT_MY_POST);
+        userCanDelete =
+          (connectedUserId === String(userId) && connectedUserCan(Permissions.DELETE_MY_POST)) ||
+          connectedUserCan(Permissions.DELETE_POST);
+      }
+      // Define bright mirror fiction props
+      const brightMirrorFictionProps = {
+        slug: slug,
+        phase: identifier,
+        themeId: themeId,
+        fictionId: post.id
+      };
+
+      result.push(
+        <Animated key={post.id} preset="scalein">
+          <FictionPreview
+            id={post.id}
+            link={`${get('brightMirrorFiction', brightMirrorFictionProps)}`}
+            title={post.subject}
+            creationDate={I18n.l(post.creationDate, { dateFormat: 'date.format2' })}
+            authorName={authorName}
+            color={getRandomColor()}
+            originalBody={post.body || EMPTY_STRING}
+            refetchIdea={refetchIdea}
+            userCanEdit={userCanEdit}
+            userCanDelete={userCanDelete}
+            lang={lang}
+            publicationState={post.publicationState}
+            deleteFictionHandler={deleteFictionHandler}
+          />
+        </Animated>
+      );
     }
-
-    result.push(
-      <Animated key={post.id} preset="scalein">
-        <FictionPreview
-          id={post.id}
-          link={`${get('brightMirrorFiction', { slug: slug, phase: identifier, themeId: themeId, fictionId: post.id })}`}
-          // $FlowFixMe subject is fetch localized
-          title={post.subject}
-          creationDate={I18n.l(post.creationDate, { dateFormat: 'date.format2' })}
-          authorName={authorName}
-          color={getRandomColor()}
-          // $FlowFixMe body is fetch localized
-          originalBody={post.body}
-          refetchIdea={refetchIdea}
-          userCanEdit={userCanEdit}
-          userCanDelete={userCanDelete}
-          lang={lang}
-          publicationState={post.publicationState}
-          deleteFictionHandler={deleteFictionHandler}
-        />
-      </Animated>
-    );
     return result;
   }, []);
 

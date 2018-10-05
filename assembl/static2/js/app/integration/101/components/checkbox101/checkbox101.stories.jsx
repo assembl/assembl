@@ -28,7 +28,7 @@ const customLabelCheckbox: Checkbox101Type = {
   label: 'Custom Label'
 };
 
-const playgroundButton: Object = {
+const playground: Object = {
   label: 'Playground label',
   isDone: true
 };
@@ -42,8 +42,8 @@ storiesOf('Checkbox101', module)
     'playground',
     withInfo()(() => (
       <Checkbox101
-        label={text('label', playgroundButton.label)}
-        isDone={boolean('isDone', playgroundButton.isDone)}
+        label={text('label', playground.label)}
+        isDone={boolean('isDone', playground.isDone)}
         onChangeHandler={actions.onChangeHandler}
       />
     ))

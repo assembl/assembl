@@ -1,0 +1,62 @@
+.comment-form {
+  border: 2px solid $blue-violet;
+  border-radius: 4px;
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 25px;
+
+  .form-control {
+    border: none;
+    height: 75px;
+    resize: none !important; // Set it to !important because TextareaAutosize force horizontal resize
+
+    &:focus {
+      box-shadow: none;
+    }
+  }
+
+  .comment-textarea {
+    flex-grow: 20; // flex-grow for textarea-with-buttons-container flex display
+    margin: 0;
+  }
+
+  .comment-buttons {
+    display: flex;
+    flex-grow: 1; // flex-grow for textarea-with-buttons-container flex display
+  }
+
+  .btn {
+    border-color: transparent;
+    flex-basis: 100px;
+    flex-grow: 1; // flex-grow for comment-buttons flex display
+
+    &.cancel {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    &.submit {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+  }
+}
+
+@media screen and (min-width: $screen-sm-min) {
+  .comment-form {
+    margin-bottom: 50px;
+
+    .form-control {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+      height: 52px;
+    }
+
+    .btn {
+      &.cancel {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+      }
+    }
+  }
+}

@@ -361,7 +361,9 @@ class Tree extends React.Component {
                 onScroll={onChildScroll}
                 scrollTop={scrollTop}
                 autoHeight
-                rowHeight={this.cache.rowHeight}
+                // TOFIX: temporary monkey patch - will be fixed with DEVAS-1764 (Reply to a comment)
+                rowHeight={this.props.InnerComponentHeight || this.cache.rowHeight}
+                // rowHeight={this.cache.rowHeight}
                 deferredMeasurementCache={this.cache}
                 noRowsRenderer={noRowsRenderer}
                 ref={(ref) => {

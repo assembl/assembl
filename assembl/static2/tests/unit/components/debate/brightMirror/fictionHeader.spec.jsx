@@ -42,7 +42,7 @@ describe('<FictionHeader /> - with shallow', () => {
 
   it('should display "no author specified" when authorFullname is null', () => {
     wrapper.setProps({ authorFullname: '' });
-    expect(wrapper.contains('no author specified')).toBe(true);
+    expect(wrapper.contains('Auteur non défini')).toBe(true);
   });
 
   it('should display the article published date', () => {
