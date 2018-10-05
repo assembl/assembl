@@ -13,16 +13,18 @@ type Props = {
 } & LoaderProps;
 
 type WrappedProps = {
-  data: { error: Error, loading: boolean } & any,
-  error: ?Error,
-  loading: ?boolean
+  data: { error?: ?Error, loading?: boolean } & any,
+  error?: ?Error,
+  loading?: boolean
 };
 
 const manageErrorAndLoading = (props: Props) => (WrappedComponent: React.ComponentType<any>) => (wrappedProps: WrappedProps) => {
   const { data, error, loading } = wrappedProps;
   if (error || (data && data.error)) {
     const graphqlError = error || data.error;
-    throw new Error(`GraphQL error: ${graphqlError.message}`);
+    if (graphqlError) {
+      throw new Error(`GraphQL error: ${graphqlError.message}`);
+    }
   }
 
   if (loading || (data && data.loading)) {
