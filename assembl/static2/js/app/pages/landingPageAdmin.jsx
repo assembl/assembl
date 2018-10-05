@@ -125,7 +125,7 @@ class LandingPageAdmin extends React.Component<Props, State> {
       updateDiscussionPhase,
       refetchTimeline
     } = this.props;
-    displayAlert('success', `${I18n.t('loading.wait')}...`);
+    displayAlert('success', `${I18n.t('loading.wait')}...`, false, -1);
     if (landingPageModulesHasChanged) {
       const mutationsPromises = getMutationsPromises({
         items: landingPageModules,
