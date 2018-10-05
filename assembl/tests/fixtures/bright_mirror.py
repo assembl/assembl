@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import pytest
-import datetime
+from datetime import datetime, timedelta
 
 @pytest.fixture(scope="function")
 def bright_mirror(phases, graphql_request, graphql_registry, test_session):
@@ -61,7 +61,7 @@ def post_published_for_bright_mirror(
         body=LangString.create(u"A simple published fiction"),
         type='post', publication_state=PublicationStates.PUBLISHED,
         message_id="msgpublished@example2.com",
-        creation_date = datetime.date.today() - datetime.timedelta(days=1))
+        creation_date = datetime.utcnow() - timedelta(days=1))
 
     idc = IdeaRelatedPostLink(
         idea=idea,
@@ -96,7 +96,7 @@ def post_published_for_bright_mirror_participant(
         body=LangString.create(u"A simple published fiction by participant"),
         type='post', publication_state=PublicationStates.PUBLISHED,
         message_id="msgpublisheparticipant2@example2.com",
-        creation_date = datetime.date.today())
+        creation_date = datetime.utcnow())
 
     idc = IdeaRelatedPostLink(
         idea=idea,
@@ -132,7 +132,7 @@ def post_draft_for_bright_mirror(
         body=LangString.create(u"A simple draft fiction"),
         type='post', publication_state=PublicationStates.DRAFT,
         message_id="msgdraft@example2.com",
-        creation_date = datetime.date.today() - datetime.timedelta(days=7))
+        creation_date = datetime.utcnow() - timedelta(days=7))
 
     idc = IdeaRelatedPostLink(
         idea=idea,

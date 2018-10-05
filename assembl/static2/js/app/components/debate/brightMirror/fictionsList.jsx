@@ -12,7 +12,7 @@ import FictionPreview from './fictionPreview';
 import Permissions, { connectedUserCan } from '../../../utils/permissions';
 import { displayAlert } from '../../../utils/utilityManager';
 // Constant imports
-import { fictionBackgroundColors, EMPTY_STRING, PublicationStates } from '../../../constants';
+import { fictionBackgroundColors, EMPTY_STRING } from '../../../constants';
 
 export type Props = {
   posts: Array<FictionPostPreview>,
@@ -37,7 +37,7 @@ const deleteFictionHandler = () => {
 
 const getRandomColor = () => fictionBackgroundColors[Math.floor(Math.random() * fictionBackgroundColors.length)];
 
-const PublicationStateCreationDateComparator = (a, b) => {
+const publicationStateCreationDateComparator = (a, b) => {
   const aDate: string = a.creationDate;
   const bDate: string = b.creationDate;
   const aState = a.publicationState;
@@ -56,7 +56,7 @@ const FictionsList = ({ posts, identifier, refetchIdea, lang, themeId }: Props) 
 
   const connectedUserId = getConnectedUserId();
 
-  const childElements = posts.sort(PublicationStateCreationDateComparator).reduce((result, post) => {
+  const childElements = posts.sort(publicationStateCreationDateComparator).reduce((result, post) => {
     // Define user permissions
     let authorName = '';
     let userCanEdit = false;
