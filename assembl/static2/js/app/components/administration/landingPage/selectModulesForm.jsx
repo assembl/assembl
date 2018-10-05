@@ -4,11 +4,11 @@ import { Checkbox, FormGroup } from 'react-bootstrap';
 import type { Map } from 'immutable';
 import { I18n } from 'react-redux-i18n';
 import Helper from '../../common/helper';
-import type { LandingPageModule } from './manageModules';
+import type { LandingPageModuleType } from './manageModules';
 
 type Props = {
   modulesById: Map<Object>,
-  moduleTypes: Array<LandingPageModule>,
+  moduleTypes: Array<LandingPageModuleType>,
   toggleModule: Function
 };
 

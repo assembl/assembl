@@ -26,6 +26,7 @@ import TimelineQuery from '../graphql/Timeline.graphql';
 import { convertEntriesToEditorState } from '../utils/draftjs';
 import { getPhaseId } from '../utils/timeline';
 import { fromGlobalId } from '../utils/globalFunctions';
+import { addEnumSuffixToModuleTitles } from '../components/administration/landingPage/manageModules';
 
 const SECTIONS_WITHOUT_LANGUAGEMENU = ['1', '6'];
 
@@ -155,8 +156,9 @@ class Administration extends React.Component {
 
   putLandingPageModulesInStore(landingPageModules) {
     if (landingPageModules) {
-      const filtered = filter(LandingPageModules, { landingPageModules: landingPageModules });
-      this.props.updateLandingPageModules(filtered.landingPageModules);
+      const filtered = filter(landingPagePlugin.graphqlQuery, { landingPageModules: landingPageModules });
+      const landingPageModulesWithUpdatedTitles = addEnumSuffixToModuleTitles(filtered.landingPageModules);
+      this.props.updateLandingPageModules(landingPageModulesWithUpdatedTitles);
     }
   }
 

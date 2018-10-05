@@ -34,32 +34,50 @@ describe('ManageModules component', () => {
 
 describe('addEnumSuffixToModuleTitles function', () => {
   it('should return the same array if there is no duplicate', () => {
-    const fakeModules = [{ title: 'lorem' }, { title: 'ipsum' }, { title: 'foo' }];
+    const fakeModules = [
+      { moduleType: { title: 'lorem' } },
+      { moduleType: { title: 'ipsum' } },
+      { moduleType: { title: 'foo' } }
+    ];
     expect(addEnumSuffixToModuleTitles(fakeModules)).toEqual(fakeModules);
   });
   it('should return an array of modules with count added on the title of duplicates', () => {
-    const fakeModules = [{ title: 'lorem' }, { title: 'lorem' }, { title: 'ipsum' }, { title: 'foo' }];
+    const fakeModules = [
+      { moduleType: { title: 'lorem' } },
+      { moduleType: { title: 'lorem' } },
+      { moduleType: { title: 'ipsum' } },
+      { moduleType: { title: 'foo' } }
+    ];
     const actual = addEnumSuffixToModuleTitles(fakeModules);
-    const expected = [{ title: 'lorem 1' }, { title: 'lorem 2' }, { title: 'ipsum' }, { title: 'foo' }];
+    const expected = [
+      { moduleType: { title: 'lorem 1' } },
+      { moduleType: { title: 'lorem 2' } },
+      { moduleType: { title: 'ipsum' } },
+      { moduleType: { title: 'foo' } }
+    ];
     expect(actual).toEqual(expected);
   });
   it('should return an array of modules with count added on the title of different duplicates', () => {
     const fakeModules = [
-      { title: 'ipsum' },
-      { title: 'lorem' },
-      { title: 'lorem' },
-      { title: 'lorem' },
-      { title: 'ipsum' },
-      { title: 'foo' }
+      { moduleType: { title: 'ipsum' } },
+      { moduleType: { title: 'lorem' } },
+      { moduleType: { title: 'lorem' } },
+      { moduleType: { title: 'lorem' } },
+      { moduleType: { title: 'ipsum' } },
+      {
+        moduleType: { title: 'foo' }
+      }
     ];
     const actual = addEnumSuffixToModuleTitles(fakeModules);
     const expected = [
-      { title: 'ipsum 1' },
-      { title: 'lorem 1' },
-      { title: 'lorem 2' },
-      { title: 'lorem 3' },
-      { title: 'ipsum 2' },
-      { title: 'foo' }
+      { moduleType: { title: 'ipsum 1' } },
+      { moduleType: { title: 'lorem 1' } },
+      { moduleType: { title: 'lorem 2' } },
+      { moduleType: { title: 'lorem 3' } },
+      { moduleType: { title: 'ipsum 2' } },
+      {
+        moduleType: { title: 'foo' }
+      }
     ];
     expect(actual).toEqual(expected);
   });
@@ -67,8 +85,8 @@ describe('addEnumSuffixToModuleTitles function', () => {
 
 describe('sortByTitle function', () => {
   it('should return an array of modules sorted on title', () => {
-    const fakeModules = [{ title: 'lorem 1' }, { title: 'ipsum' }, { title: 'lorem 2' }, { title: 'foo' }];
-    const actual = sortByTitle(fakeModules);
+    const fakeModulesTypes = [{ title: 'lorem 1' }, { title: 'ipsum' }, { title: 'lorem 2' }, { title: 'foo' }];
+    const actual = sortByTitle(fakeModulesTypes);
     const expected = [{ title: 'foo' }, { title: 'ipsum' }, { title: 'lorem 1' }, { title: 'lorem 2' }];
     expect(actual).toEqual(expected);
   });

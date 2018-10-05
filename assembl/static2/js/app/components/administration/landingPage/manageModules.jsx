@@ -18,7 +18,7 @@ import {
 } from '../../../actions/adminActions/landingPage';
 import { createRandomId } from '../../../utils/globalFunctions';
 
-export type LandingPageModule = {
+export type LandingPageModuleType = {
   defaultOrder: number,
   editableOrder: boolean,
   id: string,
@@ -28,9 +28,22 @@ export type LandingPageModule = {
   title: string
 };
 
+type LandingPageModule = {
+  configuration: Object,
+  enabled: boolean,
+  existsInDatabase: true,
+  id: string,
+  moduleType: LandingPageModule,
+  order: number,
+  subtitle: ?string,
+  subtitleEntries: Array<LangstringEntries>,
+  title: ?string,
+  titleEntries: Array<LangstringEntries>
+};
+
 type Props = {
   enabledModules: List<Map>,
-  moduleTypes: Array<LandingPageModule>,
+  moduleTypes: Array<LandingPageModuleType>,
   locale: string,
   modulesById: Map<string, Map>,
   moveModuleDown: Function,
@@ -56,19 +69,20 @@ const MODULES_IDENTIFIERS = {
 export const addEnumSuffixToModuleTitles = (modules: Array<LandingPageModule>): Array<LandingPageModule> => {
   // Add a suffix to the title of the module if this module appears more than one time.
   // This suffix is the number of times this module appeared in the array.
-  const titleCounts = countBy(modules, 'title');
+  const moduleTypeTitles = modules.map(module => ({ title: module.moduleType.title }));
+  const titleCounts = countBy(moduleTypeTitles, 'title');
   const duplicatesCurrentIndex = {};
   return modules.map((module) => {
-    const { title } = module;
-    if (titleCounts[title] > 1) {
+    const { title } = module.moduleType;
+    if (title && titleCounts[title] > 1) {
       duplicatesCurrentIndex[title] = get(duplicatesCurrentIndex, title, 0) + 1;
-      return { ...module, title: `${title} ${duplicatesCurrentIndex[title]}` };
+      return { ...module, moduleType: { ...module.moduleType, title: title && `${title} ${duplicatesCurrentIndex[title]}` } };
     }
     return module;
   });
 };
 
-export const sortByTitle = (modules: Array<LandingPageModule>): Array<LandingPageModule> => {
+export const sortByTitle = (modules: Array<LandingPageModuleType>): Array<LandingPageModuleType> => {
   const newModules = [...modules];
   newModules.sort((a, b) => {
     if (a.title < b.title) return -1;
@@ -109,10 +123,11 @@ export const DumbManageModules = ({
     const includeFooter = true;
     return displayModal(null, body, includeFooter, footer);
   };
+
   const textAndMultimediaIsChecked = enabledModules.some(
     module => module.getIn(['moduleType', 'identifier']) === MODULES_IDENTIFIERS.introduction
   );
-  const updatedModuleTypes = sortByTitle(addEnumSuffixToModuleTitles(moduleTypes));
+  const updatedModuleTypes = sortByTitle(moduleTypes);
   return (
     <div className="admin-box">
       <SectionTitle
