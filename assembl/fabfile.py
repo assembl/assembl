@@ -2156,8 +2156,9 @@ def create_alert_disk_space_script():
     from jinja2 import Environment, FileSystemLoader
     jenv = Environment(loader=FileSystemLoader('doc/'), autoescape=lambda t: False)
     alert_disk_space_template = jenv.get_template('alert_disk_space_template.jinja2')
+    disk_limit = int(env.disk_limit) * 1024
     with open('alert_disk_space.sh', 'w') as f:
-        f.write(alert_disk_space_template.render())
+        f.write(alert_disk_space_template.render(disk_limit=str(disk_limit)))
     put('alert_disk_space.sh', '/home/%s/alert_disk_space.sh' % (env.user))
     run('chmod +x alert_disk_space.sh')
     admin_email = env.admin_email if env.admin_email else "assembl.admin@bluenove.com"
