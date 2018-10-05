@@ -127,9 +127,13 @@ export const DumbManageModules = ({
     return displayModal(null, body, includeFooter, footer);
   };
 
-  const textAndMultimediaIsChecked = enabledModules.some(
+  const totalNumberOfTextAndMultimediaModules = moduleTypes.filter(
+    module => module.identifier === MODULES_IDENTIFIERS.introduction
+  ).length;
+  const numberOfEnabledTextAndMultimediaModules = enabledModules.filter(
     module => module.getIn(['moduleType', 'identifier']) === MODULES_IDENTIFIERS.introduction
-  );
+  ).length;
+  const allTextAndMultimediaAreChecked = numberOfEnabledTextAndMultimediaModules === totalNumberOfTextAndMultimediaModules;
 
   const updatedModuleTypes = sortByTitle(moduleTypes);
 
@@ -155,7 +159,7 @@ export const DumbManageModules = ({
               <Button
                 className="button-submit button-dark"
                 onClick={displayConfirmationModal}
-                disabled={!textAndMultimediaIsChecked}
+                disabled={!allTextAndMultimediaAreChecked}
               >
                 <Translate value="administration.landingPage.manageModules.textAndMultimediaBtn" />
               </Button>
