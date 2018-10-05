@@ -24,7 +24,7 @@ type SynthesesProps = {
 export class DumbSyntheses extends React.Component<SynthesesProps> {
   componentDidMount() {
     const { syntheses, slug } = this.props;
-    if (syntheses.length === 1) {
+    if (syntheses && syntheses.length === 1) {
       const firstSynthesis = syntheses[0];
       browserHistory.push(`${get('synthesis', { synthesisId: firstSynthesis.post.id, slug: slug })}`);
     }
@@ -82,7 +82,7 @@ export default compose(
         error: data.error,
         loading: data.loading,
         syntheses: data.syntheses,
-        hasSyntheses: data.syntheses.length > 0
+        hasSyntheses: data && data.syntheses ? data.syntheses.length > 0 : false
       };
     }
   }),
