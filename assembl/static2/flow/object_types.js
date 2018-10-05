@@ -27,7 +27,7 @@ type FictionPostPreview = {
   id: string,
   subject: ?string,
   body: ?string,
-  creationDate: ?any,
+  creationDate: string,
   creator: ?{|
     userId: string,
     displayName: ?string,

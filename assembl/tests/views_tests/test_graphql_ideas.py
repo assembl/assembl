@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import json
+import datetime
 
 from graphql_relay.node.node import from_global_id
 
@@ -883,7 +884,8 @@ def test_graphql_get_bright_mirror_noresult(phases, graphql_request, graphql_reg
 
 def test_graphql_bright_mirror_should_get_only_published_posts(graphql_request, graphql_registry, bright_mirror,
                                                         post_published_for_bright_mirror,
-                                                        post_draft_for_bright_mirror, test_session):
+                                                        post_draft_for_bright_mirror, test_session,
+                                                        post_published_for_bright_mirror_participant):
 
     res = schema.execute(u"""
         query Idea($id: ID!) {
@@ -905,9 +907,14 @@ def test_graphql_bright_mirror_should_get_only_published_posts(graphql_request, 
         })
     assert json.loads(json.dumps(res.data)) == {
         u'idea': {
-            u'numPosts': 1,
+            u'numPosts': 2,
             u'posts': {
                 u'edges': [
+                    {
+                        u'node': {
+                            u'subject': u'Published by participant'
+                        }
+                    },
                     {
                         u'node': {
                             u'subject': u'Published'
@@ -919,9 +926,10 @@ def test_graphql_bright_mirror_should_get_only_published_posts(graphql_request, 
     }
 
 
-def test_graphql_bright_mirror_get_all_posts(graphql_request, graphql_registry, bright_mirror,
+def test_graphql_bright_mirror_should_get_all_posts_of_user_draft_first(graphql_request, graphql_registry, bright_mirror,
                                                         post_published_for_bright_mirror, admin_user,
-                                                        post_draft_for_bright_mirror, test_session):
+                                                        post_draft_for_bright_mirror, test_session,
+                                                        post_published_for_bright_mirror_participant):
     post_published_for_bright_mirror.creator = admin_user
     post_published_for_bright_mirror.db.flush()
     post_draft_for_bright_mirror.creator = admin_user
@@ -947,17 +955,22 @@ def test_graphql_bright_mirror_get_all_posts(graphql_request, graphql_registry, 
         })
     assert json.loads(json.dumps(res.data)) == {
         u'idea': {
-            u'numPosts': 1,
+            u'numPosts': 2,
             u'posts': {
                 u'edges': [
                     {
                         u'node': {
-                            u'subject': u'Draft'
+                            u'subject': u'Published by participant'
                         }
                     },
                     {
                         u'node': {
                             u'subject': u'Published'
+                        }
+                    },
+                    {
+                        u'node': {
+                            u'subject': u'Draft'
                         }
                     }
                 ]

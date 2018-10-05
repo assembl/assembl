@@ -26,6 +26,14 @@ describe('<FictionsList /> - with shallow', () => {
   });
 
   it('should render fiction previews', () => {
-    expect(wrapper.find('FictionPreview')).toHaveLength(3);
+    expect(wrapper.find('FictionPreview')).toHaveLength(4);
+  });
+
+  it('should render fiction previews in state order first then in date order', () => {
+    const listPreviews = wrapper.find('FictionPreview');
+    expect(listPreviews.get(0).props.title).toEqual('Red is dead 4');
+    expect(listPreviews.get(1).props.title).toEqual('Red is dead');
+    expect(listPreviews.get(2).props.title).toEqual('Red is dead 2');
+    expect(listPreviews.get(3).props.title).toEqual('Red is dead 3');
   });
 });
