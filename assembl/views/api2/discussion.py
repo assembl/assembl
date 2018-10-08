@@ -587,7 +587,7 @@ def extract_taxonomy_csv(request):
     return csv_response(extract_list, CSV_MIMETYPE, fieldnames)
 
 
-def csv_response(results, format, fieldnames=None):
+def csv_response(results, format, fieldnames=None, content_disposition=None):
     output = StringIO()
     # include BOM for Excel to open the file in UTF-8 properly
     output.write(u'\ufeff'.encode('utf-8'))
@@ -621,7 +621,7 @@ def csv_response(results, format, fieldnames=None):
         writer.save('')
 
     output.seek(0)
-    return Response(body_file=output, content_type=format)
+    return Response(body_file=output, content_type=format, content_disposition=content_disposition)
 
 
 @view_config(context=InstanceContext, name="contribution_count",

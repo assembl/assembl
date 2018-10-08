@@ -417,4 +417,4 @@ def extract_voters(request):
 
             extract_votes.append(extract_info)
     extract_votes.sort(key=operator.itemgetter('Nom du contributeur'))
-    return csv_response(extract_votes, CSV_MIMETYPE, fieldnames)
+    return csv_response(extract_votes, CSV_MIMETYPE, fieldnames, content_disposition='attachment; filename="detailed_vote_results.csv"')
