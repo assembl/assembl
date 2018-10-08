@@ -584,7 +584,7 @@ def extract_taxonomy_csv(request):
         }
         extract_list.append(extract_info)
 
-    return csv_response(extract_list, CSV_MIMETYPE, fieldnames)
+    return csv_response(extract_list, CSV_MIMETYPE, fieldnames, content_disposition='attachment; filename="extract_taxonomies.csv"')
 
 
 def csv_response(results, format, fieldnames=None, content_disposition=None):
