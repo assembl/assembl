@@ -1,3 +1,101 @@
+.harvesting-menu {
+  font-size: $font-size-xs;
+  letter-spacing: 1.3px;
+  line-height: 1;
+  border: 1px solid $grey1;
+  border-radius: 0;
+  position: absolute;
+  margin-top: -60px !important;
+  margin-left: 125px;
+
+  .assembl-icon-cancel {
+    cursor: pointer;
+    position: absolute;
+    right: 5px;
+    top: 10px;
+    font-size: 13px;
+  }
+
+  .button-taxonomy {
+    width: 90%;
+    border-radius: 0;
+    height: auto;
+    padding: 3px 0;
+    margin: 10px 0;
+  }
+
+  .button-taxonomy:hover {
+    border-color: $first-color;
+
+    span {
+      color: white;
+    }
+  }
+
+  .arrow {
+    display: none;
+  }
+
+  .popover-content {
+    padding: 30px 0 10px 0;
+    width: 245px;
+  }
+
+  .taxonomy-label {
+    color: $black;
+    padding: 5px 10px 10px 8px;
+    font-family: $font-family4;
+
+    .nature-label {
+      display: contents;
+      position: absolute;
+      margin-top: 5px;
+      padding-left: 10px;
+
+      span {
+        display: block;
+        margin: -20px 0 0 32px;
+      }
+    }
+
+    .action-label {
+      display: contents;
+      position: absolute;
+      margin-top: 5px;
+
+      span {
+        display: block;
+        margin: -19px 0 0 32px;
+      }
+    }
+
+    svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    &:hover {
+      background-color: $first-color-light;
+      font-family: $font-family;
+    }
+  }
+
+  .taxonomy-label-border {
+    padding: 5px 10px 10px;
+    border-bottom: 1px solid $grey1;
+  }
+
+  .taxonomy-category {
+    font-family: $font-family3;
+    padding: 25px 10px 10px;
+  }
+
+  .taxonomy-label.active {
+    background-color: $first-color-light;
+    font-family: $font-family;
+  }
+}
+
 .harvesting-anchor {
   position: absolute;
   z-index: 1000;
@@ -334,104 +432,6 @@
           display: block;
           margin: 0 0 0 -6px;
         }
-      }
-    }
-
-    .taxonomy-menu {
-      font-size: $font-size-xs;
-      letter-spacing: 1.3px;
-      line-height: 1;
-      border: 1px solid $grey1;
-      border-radius: 0;
-      position: absolute;
-      left: 295px;
-      top: 25px;
-
-      .assembl-icon-cancel {
-        cursor: pointer;
-        position: absolute;
-        right: 5px;
-        top: 10px;
-        font-size: 13px;
-      }
-
-      .button-taxonomy {
-        width: 90%;
-        border-radius: 0;
-        height: auto;
-        padding: 3px 0;
-        margin: 10px 0;
-      }
-
-      .button-taxonomy:hover {
-        border-color: $first-color;
-
-        span {
-          color: white;
-        }
-      }
-
-      .arrow {
-        display: none;
-      }
-
-      .popover-content {
-        padding: 30px 0 10px 0;
-        width: 245px;
-      }
-
-      .taxonomy-label {
-        color: $black;
-        padding: 5px 10px 10px 8px;
-        font-family: $font-family4;
-
-        .nature-label {
-          display: contents;
-          position: absolute;
-          margin-top: 5px;
-          padding-left: 10px;
-
-          span {
-            display: block;
-            margin: -20px 0 0 32px;
-          }
-        }
-
-        .action-label {
-          display: contents;
-          position: absolute;
-          margin-top: 5px;
-
-          span {
-            display: block;
-            margin: -19px 0 0 32px;
-          }
-        }
-
-        svg {
-          width: 22px;
-          height: 22px;
-        }
-
-        &:hover {
-          background-color: $first-color-light;
-          font-family: $font-family;
-        }
-      }
-
-      .taxonomy-label-border {
-        padding: 5px 10px 10px;
-        border-bottom: 1px solid $grey1;
-      }
-
-      .taxonomy-category {
-        font-family: $font-family3;
-        padding: 25px 10px 10px;
-      }
-
-      .taxonomy-label.active {
-        background-color: $first-color-light;
-        font-family: $font-family;
       }
     }
   }
