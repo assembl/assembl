@@ -114,11 +114,11 @@ export const DumbManageModules = ({
             />
             <div className="margin-xl">
               <AddModuleButton
-                numberOfTextAndMultimediaModules={numberOfTextAndMultimediaModules}
+                numberOfDuplicatesModules={numberOfTextAndMultimediaModules}
                 numberOfEnabledModules={enabledModules.size}
-                closeModal={() => {}}
                 createModule={createModule}
-                allTextAndMultimediaAreChecked={allTextAndMultimediaAreChecked}
+                allDuplicatesAreChecked={allTextAndMultimediaAreChecked}
+                buttonTitleTranslationKey="textAndMultimediaBtn"
               />
             </div>
           </div>

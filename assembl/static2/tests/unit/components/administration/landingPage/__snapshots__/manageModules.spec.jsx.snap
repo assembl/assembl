@@ -115,11 +115,11 @@ exports[`ManageModules component should render a form to manage the landing page
           className="margin-xl"
         >
           <AddModuleButton
-            allTextAndMultimediaAreChecked={false}
-            closeModal={[Function]}
+            allDuplicatesAreChecked={false}
+            buttonTitleTranslationKey="textAndMultimediaBtn"
             createModule={[Function]}
+            numberOfDuplicatesModules={1}
             numberOfEnabledModules={3}
-            numberOfTextAndMultimediaModules={1}
           />
         </div>
       </div>

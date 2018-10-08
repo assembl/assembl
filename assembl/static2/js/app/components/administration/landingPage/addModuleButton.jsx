@@ -6,16 +6,18 @@ import { displayModal, closeModal } from '../../../utils/utilityManager';
 
 type Props = {
   createModule: Function,
-  numberOfTextAndMultimediaModules: number,
+  numberOfDuplicatesModules: number,
   numberOfEnabledModules: number,
-  allTextAndMultimediaAreChecked: boolean
+  allDuplicatesAreChecked: boolean,
+  buttonTitleTranslationKey: string
 };
 
 const AddModuleButton = ({
   createModule,
-  numberOfTextAndMultimediaModules,
+  numberOfDuplicatesModules,
   numberOfEnabledModules,
-  allTextAndMultimediaAreChecked
+  allDuplicatesAreChecked,
+  buttonTitleTranslationKey
 }: Props) => {
   const displayConfirmationModal = () => {
     const body = <Translate value="administration.landingPage.manageModules.confirmationModal" />;
@@ -27,7 +29,7 @@ const AddModuleButton = ({
         key="add"
         id="confirm-add-tm-button"
         onClick={() => {
-          createModule(numberOfEnabledModules - 2, numberOfTextAndMultimediaModules + 1);
+          createModule(numberOfEnabledModules - 2, numberOfDuplicatesModules + 1);
           closeModal();
         }}
         className="button-submit button-dark"
@@ -39,8 +41,8 @@ const AddModuleButton = ({
     return displayModal(null, body, includeFooter, footer);
   };
   return (
-    <Button className="button-submit button-dark" onClick={displayConfirmationModal} disabled={!allTextAndMultimediaAreChecked}>
-      <Translate value="administration.landingPage.manageModules.textAndMultimediaBtn" />
+    <Button className="button-submit button-dark" onClick={displayConfirmationModal} disabled={!allDuplicatesAreChecked}>
+      <Translate value={`administration.landingPage.manageModules.${buttonTitleTranslationKey}`} />
     </Button>
   );
 };
