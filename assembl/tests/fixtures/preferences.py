@@ -37,7 +37,7 @@ def non_standard_preference(request, test_session):
                 "description": "The preference configuration; override only with care",
                 "allow_user_override": None,
                 "modification_permission": P_SYSADMIN,
-                "default": None
+                "default": {}
             },
             {
                 "id": "test_url",
