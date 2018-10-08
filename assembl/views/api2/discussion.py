@@ -589,6 +589,8 @@ def extract_taxonomy_csv(request):
 
 def csv_response(results, format, fieldnames=None):
     output = StringIO()
+    # include BOM for Excel to open the file in UTF-8 properly
+    output.write(u'\ufeff'.encode('utf-8'))
 
     if format == CSV_MIMETYPE:
         from csv import writer

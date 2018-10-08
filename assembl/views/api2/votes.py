@@ -274,6 +274,8 @@ def global_vote_results_csv(request):
         coltitles.append('Total votes')
 
     output = StringIO()
+    # include BOM for Excel to open the file in UTF-8 properly
+    output.write(u'\ufeff'.encode('utf-8'))
     csvw = csv.writer(output)
     csvw.writerow(coltitles)
     from assembl.graphql.vote_session import get_avg_choice
@@ -337,6 +339,7 @@ def global_vote_results_csv(request):
                     histogram = dict(q_histogram.all())
                     for choice in template_spec.get_choices():
                         row.append(histogram.get(choice.value, 0))
+
             if spec is None:
                 row.append('-')
             else:
