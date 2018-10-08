@@ -102,7 +102,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
       [ACTIONS.create]: {
         buttons: [
           { id: 'cancel', title: 'debate.confirmDeletionButtonCancel', className: 'button-cancel', onClick: cancelHarvesting },
-          { id: 'validate', title: 'common.attachFileForm.submit', className: 'button-submit', onClick: this.validateHarvesting }
+          { id: 'validate', title: 'harvesting.submit', className: 'button-submit', onClick: this.validateHarvesting }
         ]
       },
       [ACTIONS.edit]: {
@@ -110,7 +110,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
           { id: 'cancel', title: 'debate.confirmDeletionButtonCancel', className: 'button-cancel', onClick: this.setEditMode },
           {
             id: 'validate',
-            title: 'common.attachFileForm.submit',
+            title: 'harvesting.submit',
             className: 'button-submit',
             onClick: this.updateHarvestingBody
           }
