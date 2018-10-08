@@ -4,6 +4,11 @@ import { type EditorState } from 'draft-js';
 
 export type IdeaMessageColumns = Array<IdeaMessageColumnFragment>;
 
+export type TreeItem = {
+  id: string,
+  children?: Array<TreeItem>
+};
+
 export type Idea = {
   id: string,
   parentId: string,
@@ -17,7 +22,7 @@ export type Idea = {
   ancestors: Array<string>
 };
 
-type Post = PostFragment & {
+type Post = { ...PostFragment } & {
   messageClassifier: ?string,
   creationDate: string,
   parentId: number

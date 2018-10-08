@@ -13,7 +13,7 @@ type Props = {
   classifier: string,
   color: string,
   contentLocaleMapping: Object,
-  data: Array<Post>,
+  data: Array<TreeItem & Post>,
   ideaId: string,
   identifier: string,
   phaseId: string,
