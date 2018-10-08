@@ -55,6 +55,16 @@
   }
 }
 
+.collapsed-answer-form {
+  .rich-text-editor {
+    .editor-toolbar {
+      &.top {
+        display: none;
+      }
+    }
+  }
+}
+
 .rich-text-editor {
   font-family: $font-family;
   margin-top: 16px;
@@ -159,6 +169,10 @@
 
   .editor-toolbar {
     float: right;
+
+    &.top {
+      margin-top: -276px;
+    }
 
     .btn-group {
       margin-right: 5px;

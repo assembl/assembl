@@ -85,7 +85,7 @@ export default class RichTextEditor extends React.Component<Props, State> {
           buttonWrapper: 'btn-group'
         },
         toolbarStyles: {
-          toolbar: 'editor-toolbar'
+          toolbar: classNames('editor-toolbar', props.toolbarPosition)
         }
       }
     });
@@ -162,14 +162,13 @@ export default class RichTextEditor extends React.Component<Props, State> {
   };
 
   render() {
-    const { editorState, maxLength, onChange, placeholder, textareaRef, toolbarPosition } = this.props;
+    const { editorState, maxLength, onChange, placeholder, textareaRef } = this.props;
     const divClassName = classNames('rich-text-editor', { hidePlaceholder: this.shouldHidePlaceholder() });
     const { Attachments, CustomCounter, Modal, Toolbar } = this.components;
     return (
       <div className={divClassName} ref={textareaRef} onClick={this.focusEditor}>
         <div className="editor-header">
           {editorState.getCurrentContent().hasText() ? <div className="editor-label form-label">{placeholder}</div> : null}
-          {toolbarPosition === 'top' ? <Toolbar /> : null}
           <div className="clear" />
         </div>
         <Modal />
@@ -188,7 +187,11 @@ export default class RichTextEditor extends React.Component<Props, State> {
             <CustomCounter limit={maxLength} countFunction={this.countRemainingChars} />
           </div>
         ) : null}
-        {toolbarPosition === 'bottom' ? <Toolbar /> : null}
+        {/*
+          we have to move toolbar in css for now since there is a bug in draft-js-plugin
+          It should be fixed in draft-js-plugin v3
+         */}
+        <Toolbar />
         {Attachments ? <Attachments /> : null}
       </div>
     );
