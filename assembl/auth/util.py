@@ -385,7 +385,7 @@ def add_user(name, email, password, role, force=False, username=None,
     from assembl.models import Discussion, Username
     db = db or Discussion.default_db
     # refetch within transaction
-    all_roles = {r.name: r for r in Role.default_db.query(Role).all()}
+    all_roles = {r.name: r for r in db.query(Role).all()}
     user = None
     created_user = True
     if discussion and localrole:
