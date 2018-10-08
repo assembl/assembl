@@ -5,7 +5,6 @@ import { EditorState, RichUtils } from 'draft-js';
 import Editor from 'draft-js-plugins-editor';
 import classNames from 'classnames';
 import createToolbarPlugin from 'draft-js-static-toolbar-plugin';
-import { ItalicButton, BoldButton, UnorderedListButton } from 'draft-js-buttons';
 import createCounterPlugin from 'draft-js-counter-plugin';
 
 // from our workspaces
@@ -14,6 +13,8 @@ import createAttachmentPlugin from 'draft-js-attachment-plugin';
 import createLinkPlugin from 'draft-js-link-plugin';
 import createModalPlugin from 'draft-js-modal-plugin';
 /* eslint-enable import/no-extraneous-dependencies */
+
+import { BoldButton, ItalicButton, UnorderedListButton } from './buttons';
 
 type DraftPlugin = any;
 
@@ -31,8 +32,6 @@ type Props = {
 type State = {
   editorHasFocus: boolean
 };
-
-const ToolbarSeparator = () => <span className="separator" />;
 
 export default class RichTextEditor extends React.Component<Props, State> {
   editor: ?Editor;
@@ -64,7 +63,7 @@ export default class RichTextEditor extends React.Component<Props, State> {
     const { LinkButton } = linkPlugin;
 
     const components = {};
-    const toolbarStructure = [BoldButton, ItalicButton, UnorderedListButton, ToolbarSeparator, LinkButton, ToolbarSeparator];
+    const toolbarStructure = [BoldButton, ItalicButton, UnorderedListButton, LinkButton];
     const plugins = [counterPlugin, linkPlugin];
     if (props.withAttachmentButton) {
       const attachmentPlugin = createAttachmentPlugin({

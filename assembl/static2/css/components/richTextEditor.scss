@@ -166,7 +166,7 @@
       .btn {
         font-size: 10px;
         border: 0;
-        border-radius: 0;
+        border-radius: 20px;
 
         span {
           &:before {
@@ -174,15 +174,27 @@
           }
         }
       }
+    }
 
-      .btn:first-child {
-        border-top-left-radius: 20px;
-        border-bottom-left-radius: 20px;
+    .btn-group:first-of-type {
+      margin-right: 0;
+
+      .btn {
+        border-radius: 20px 0 0 20px;
       }
+    }
 
-      .btn:last-child {
-        border-top-right-radius: 20px;
-        border-bottom-right-radius: 20px;
+    .btn-group:nth-of-type(2) {
+      margin-right: 0;
+
+      .btn {
+        border-radius: 0;
+      }
+    }
+
+    .btn-group:nth-of-type(3) {
+      .btn {
+        border-radius: 0 20px 20px 0;
       }
     }
   }
