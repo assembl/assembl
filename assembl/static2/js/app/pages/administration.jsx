@@ -156,7 +156,7 @@ class Administration extends React.Component {
 
   putLandingPageModulesInStore(landingPageModules) {
     if (landingPageModules) {
-      const filtered = filter(landingPagePlugin.graphqlQuery, { landingPageModules: landingPageModules });
+      const filtered = filter(LandingPageModules, { landingPageModules: landingPageModules });
       const landingPageModulesWithUpdatedTitles = addEnumSuffixToModuleTitles(filtered.landingPageModules);
       this.props.updateLandingPageModules(landingPageModulesWithUpdatedTitles);
     }
