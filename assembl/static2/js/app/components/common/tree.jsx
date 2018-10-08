@@ -103,11 +103,12 @@ class Tree extends React.Component<Props> {
   }) => {
     const {
       data,
+      identifier,
+      phaseId,
+      lang,
       InnerComponent, // component that will be rendered in the child
       InnerComponentFolded, // component that will be used to render the children when folded
-      SeparatorComponent, // separator component between first level children
-      identifier,
-      phaseId
+      SeparatorComponent // separator component between first level children
     } = this.props;
 
     const childData = data[index];
@@ -116,18 +117,19 @@ class Tree extends React.Component<Props> {
         <div style={style}>
           {index > 0 ? <SeparatorComponent /> : null}
           <Child
-            {...childData}
-            contentLocaleMapping={parent.props.contentLocaleMapping}
             key={childData.id}
+            {...childData}
+            identifier={identifier}
+            phaseId={phaseId}
+            lang={lang}
             rowIndex={index}
+            contentLocaleMapping={parent.props.contentLocaleMapping}
             InnerComponent={InnerComponent}
             InnerComponentFolded={InnerComponentFolded}
             SeparatorComponent={SeparatorComponent}
             nuggetsManager={this.nuggetsManager}
             listRef={this.listRef}
             cache={this.cache}
-            identifier={identifier}
-            phaseId={phaseId}
           />
         </div>
       </CellMeasurer>

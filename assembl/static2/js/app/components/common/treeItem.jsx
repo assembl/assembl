@@ -2,6 +2,7 @@
 // @flow
 import * as React from 'react';
 import { Map } from 'immutable';
+import classnames from 'classnames';
 import debounce from 'lodash/debounce';
 import { CellMeasurerCache, List } from 'react-virtualized';
 
@@ -9,27 +10,28 @@ import { scrollToPost } from '../../utils/hashLinkScroll';
 import NuggetsManager from './nuggetsManager';
 
 type BaseProps = {
-  InnerComponentFolded: ({ nbPosts: number }) => React.Node,
-  level: number,
-  hidden: boolean,
-  contentLocaleMapping: Map<string, string>,
   id: string,
+  identifier: string,
+  phaseId: string,
+  level: number,
+  fullLevel?: string,
+  rowIndex: number,
+  hidden: boolean,
+  originalLocale?: string,
+  lang: string,
+  contentLocaleMapping: Map<string, string>,
+  listRef: List,
+  nuggetsManager: NuggetsManager,
+  cache: CellMeasurerCache,
+  SeparatorComponent: React.Node,
+  InnerComponentFolded: ({ nbPosts: number }) => React.Node,
   InnerComponent: (
     BaseProps & {
       contentLocale: string,
       numChildren: number,
       measureTreeHeight: (delay?: number) => void
     }
-  ) => React.Node,
-  originalLocale?: string,
-  rowIndex: number,
-  SeparatorComponent: React.Node,
-  fullLevel?: string,
-  nuggetsManager: NuggetsManager,
-  listRef: List,
-  cache: CellMeasurerCache,
-  identifier: string,
-  phaseId: string
+  ) => React.Node
 };
 
 type Props = {
@@ -155,41 +157,26 @@ class Child extends React.PureComponent<Props, State> {
 
   render() {
     const {
-      contentLocaleMapping,
-      hidden,
       id,
       children,
+      identifier,
+      phaseId,
+      lang,
+      originalLocale,
+      fullLevel,
+      level,
+      hidden,
+      rowIndex, // the index of the row (i.e. level 0 item) in the List
+      contentLocaleMapping,
       InnerComponent,
       InnerComponentFolded,
-      level,
-      originalLocale,
-      rowIndex, // the index of the row (i.e. level 0 item) in the List
       SeparatorComponent,
-      fullLevel,
       nuggetsManager,
       listRef,
-      cache,
-      identifier,
-      phaseId
+      cache
     } = this.props;
-    const cssClasses = () => {
-      let cls = `level level-${level}`;
-      if (level > 0) {
-        cls += ' border-left child-level';
-      }
-      if (level > 3) {
-        cls += ' no-shift';
-      }
-      if (level > 4) {
-        cls += ' padding-right';
-      }
-      if (hidden) {
-        cls += ' hidden';
-      }
-      return cls;
-    };
+    const { expanded, visible } = this.state;
     const numChildren = children ? children.length : 0;
-    const expanded = this.state.expanded;
     const contentLocale = contentLocaleMapping.getIn([id, 'contentLocale'], originalLocale);
     const forwardProps = {
       contentLocale: contentLocale,
@@ -199,19 +186,22 @@ class Child extends React.PureComponent<Props, State> {
     delete forwardProps.children;
     // InnerComponent, the post, is only rendered when the Child appears in the viewport or next page
     const { hash } = window.location;
-    let visible = this.state.visible;
+    let isVisible = visible;
     // load right away the shared post
     let hashid;
     if (hash !== '') {
       hashid = hash.replace('#', '').split('?')[0];
-      if (hashid === id) {
-        visible = true;
-      }
+      isVisible = hashid === id || isVisible;
     }
 
     return (
       <div
-        className={cssClasses()}
+        className={classnames(`level level-${level}`, {
+          'border-left child-level': level > 0,
+          'no-shift': level > 3,
+          'padding-right': level > 4,
+          hidden: hidden
+        })}
         id={id}
         ref={(el) => {
           this.holder = el;
@@ -220,37 +210,40 @@ class Child extends React.PureComponent<Props, State> {
           }
         }}
       >
-        {visible ? (
+        {isVisible ? (
           <InnerComponent {...forwardProps} measureTreeHeight={this.resizeTreeHeight} />
         ) : (
           <div style={{ height: 0.5 * window.innerHeight }} />
         )}
-        {numChildren > 0 ? this.renderToggleLink(expanded, level < 4) : null}
-        {numChildren > 0
-          ? children.map((child, idx) => {
-            const fullLevelArray: Array<string> = fullLevel ? fullLevel.split('-') : [];
-            fullLevelArray[level] = `${idx}`;
-            return (
-              <Child
-                hidden={!expanded}
-                key={child.id}
-                {...child}
-                contentLocaleMapping={contentLocaleMapping}
-                rowIndex={rowIndex}
-                level={level + 1}
-                InnerComponent={InnerComponent}
-                InnerComponentFolded={InnerComponentFolded}
-                SeparatorComponent={SeparatorComponent}
-                fullLevel={fullLevelArray.join('-')}
-                nuggetsManager={nuggetsManager}
-                listRef={listRef}
-                cache={cache}
-                identifier={identifier}
-                phaseId={phaseId}
-              />
-            );
-          })
-          : null}
+        {numChildren > 0 ? (
+          <React.Fragment>
+            {this.renderToggleLink(expanded, level < 4)}
+            {children.map((child, idx) => {
+              const fullLevelArray: Array<string> = fullLevel ? fullLevel.split('-') : [];
+              fullLevelArray[level] = `${idx}`;
+              return (
+                <Child
+                  key={child.id}
+                  {...child}
+                  identifier={identifier}
+                  phaseId={phaseId}
+                  hidden={!expanded}
+                  contentLocaleMapping={contentLocaleMapping}
+                  lang={lang}
+                  level={level + 1}
+                  fullLevel={fullLevelArray.join('-')}
+                  rowIndex={rowIndex}
+                  InnerComponent={InnerComponent}
+                  InnerComponentFolded={InnerComponentFolded}
+                  SeparatorComponent={SeparatorComponent}
+                  nuggetsManager={nuggetsManager}
+                  listRef={listRef}
+                  cache={cache}
+                />
+              );
+            })}
+          </React.Fragment>
+        ) : null}
         {numChildren > 0 && !expanded ? (
           <div
             className="postfolded-container"
