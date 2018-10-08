@@ -26,6 +26,10 @@ $fiction-toolbar-icon-size: 17px;
   }
 }
 
+:focus {
+  outline-color: $white;
+}
+
 // Bright mirror global style
 .bright-mirror-fiction {
   padding-bottom: 30px;
@@ -99,3 +103,4 @@ $fiction-toolbar-icon-size: 17px;
 @import "components/fictionCommentHeader";
 @import "components/fictionCommentForm";
 @import "components/fictionComment";
+@import "components/fictionCommentList";

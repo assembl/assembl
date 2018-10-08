@@ -30,8 +30,10 @@ const FictionCommentList = ({
   onSubmitHandler
 }: FictionCommentListProps) => {
   const FIRST_ROW_INDEX = 0;
+
+  // Component that will be rendered when no post if posted
   const NoRowsRenderer = () => (
-    <div className="center">
+    <div className="no-row center">
       <Translate value="debate.thread.noPostsInThread" />
     </div>
   );
