@@ -233,6 +233,7 @@ class Post extends React.Component<Props> {
     return (
       <div className="shown box" id={post.id}>
         <div className="content">
+          {/* $FlowFixMe */}
           <PostCreator name={creatorName} />
           <PostBody
             dbId={post.dbId}
