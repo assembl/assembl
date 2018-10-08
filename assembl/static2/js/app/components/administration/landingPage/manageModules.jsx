@@ -64,13 +64,28 @@ const MODULES_IDENTIFIERS = {
 };
 
 export const sortByTitle = (modules: Array<LandingPageModuleType>): Array<LandingPageModuleType> => {
-  const newModules = [...modules];
-  newModules.sort((a, b) => {
+  const sortedModules = [...modules];
+  sortedModules.sort((a, b) => {
     if (a.title < b.title) return -1;
     if (a.title > b.title) return 1;
     return 0;
   });
-  return newModules;
+  let index = 0;
+  sortedModules.forEach((module) => {
+    if (module.identifier === 'HEADER') {
+      index = sortedModules.indexOf(module);
+      sortedModules.splice(index, 1);
+      sortedModules.splice(0, 0, module);
+    }
+  });
+  sortedModules.forEach((module) => {
+    if (module.identifier === 'FOOTER') {
+      index = sortedModules.indexOf(module);
+      sortedModules.splice(index, 1);
+      sortedModules.splice(sortedModules.length, 0, module);
+    }
+  });
+  return sortedModules;
 };
 
 export const DumbManageModules = ({
@@ -89,7 +104,7 @@ export const DumbManageModules = ({
 
   const numberOfEnabledTextAndMultimediaModules = enabledModules.filter(
     module => module.getIn(['moduleType', 'identifier']) === MODULES_IDENTIFIERS.introduction
-  ).length;
+  ).size;
   const allTextAndMultimediaAreChecked = numberOfEnabledTextAndMultimediaModules === numberOfTextAndMultimediaModules;
 
   const updatedModuleTypes = sortByTitle(moduleTypes);
