@@ -9,7 +9,7 @@ import FictionCommentHeader from '../../../../../js/app/components/debate/bright
 import type { FictionCommentHeaderProps } from '../../../../../js/app/components/debate/brightMirror/fictionCommentHeader';
 
 // Import existing storybook data
-import { defaultFictionCommentHeader } from '../../../../../js/app/stories/components/debate/brightMirror/fictionCommentHeader.stories';
+import { defaultFictionCommentHeader } from '../../../../../js/app/stories/components/debate/brightMirror/fictionCommentHeader.stories'; // eslint-disable-line max-len
 
 // Separate the snapshots in directories next to each component
 // Name should match with the story name
