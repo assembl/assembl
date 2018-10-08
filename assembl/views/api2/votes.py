@@ -266,7 +266,7 @@ def global_vote_results_csv(request):
         else:
             coltitles.append(u'{title} - moyenne'.format(title=title).encode('utf-8'))
             if isinstance(template_spec, NumberGaugeVoteSpecification):
-                for choice_value in range_float(template_spec.minimum, spec.maximum, spec.nb_ticks):
+                for choice_value in range_float(template_spec.minimum, template_spec.maximum, template_spec.nb_ticks):
                     coltitles.append(u'{value} {unit}'.format(value=choice_value, unit=template_spec.unit).encode('utf-8'))
             else:
                 for choice in template_spec.get_choices():
