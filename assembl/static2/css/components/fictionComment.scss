@@ -39,7 +39,8 @@
     }
 
     .toolbar {
-      display: none;
+      display: flex;
+      flex-wrap: wrap;
 
       .assembl-icon-up-open,
       .assembl-icon-down-open {
@@ -52,6 +53,10 @@
         color: $black;
         font-size: $font-size-s;
         padding-left: 17px;
+      }
+
+      .comment-form {
+        flex-basis: 890px;
       }
     }
   }

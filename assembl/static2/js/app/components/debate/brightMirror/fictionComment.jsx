@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import React, { Component } from 'react';
 import { I18n, Translate } from 'react-redux-i18n';
 // Graphql imports
 import { compose, graphql } from 'react-apollo';
@@ -11,12 +11,17 @@ import CommentQuery from '../../../graphql/BrightMirrorFictionQuery.graphql';
 import CircleAvatar from './circleAvatar';
 import ToggleCommentButton from '../common/toggleCommentButton';
 import ReplyToCommentButton from '../common/replyToCommentButton';
+import FictionCommentForm from './fictionCommentForm';
 // Constant imports
 import { EMPTY_STRING } from '../../../constants';
 // Types imports
 import type { CircleAvatarProps } from './circleAvatar';
+import type { FictionCommentFormProps } from './fictionCommentForm';
 
-// type FictionCommentProps = {};
+export type FictionCommentProps = {
+  /** Submit comment callback used in order to catch a submit event from tree.jsx */
+  submitCommentCallback: Function
+};
 
 export type FictionCommentGraphQLProps = {
   /** Author fullname */
@@ -25,6 +30,8 @@ export type FictionCommentGraphQLProps = {
   circleAvatar: CircleAvatarProps,
   /** Comment content */
   commentContent: string,
+  /** Comment parent id */
+  commentParentId: string,
   /** Comment displayed published date */
   displayedPublishedDate: string,
   /** Number of child comments */
@@ -33,46 +40,72 @@ export type FictionCommentGraphQLProps = {
   publishedDate: string
 };
 
-type LocalFictionCommentProps = FictionCommentGraphQLProps; // & FictionCommentProps;
+type LocalFictionCommentProps = FictionCommentProps & FictionCommentGraphQLProps;
 
-export const FictionComment = ({
-  authorFullname,
-  circleAvatar,
-  commentContent,
-  displayedPublishedDate,
-  numberOfChildComments,
-  publishedDate
-}: LocalFictionCommentProps) => (
-  <article className="comment-container">
-    <CircleAvatar {...circleAvatar} />
-    <div className="content">
-      <header className="meta">
-        <p>
-          <strong>{authorFullname || I18n.t('debate.brightMirror.noAuthorSpecified')}</strong>
-        </p>
-        <p className="published-date">
-          <time dateTime={publishedDate} pubdate="true">
-            &nbsp;-&nbsp;{displayedPublishedDate}
-          </time>
-        </p>
-      </header>
-      <p className="comment">{commentContent}</p>
-      <footer className="toolbar">
-        <p>
-          <Translate value="debate.brightMirror.numberOfResponses" count={numberOfChildComments} />
-        </p>
-        <ToggleCommentButton />
-        <ReplyToCommentButton />
-      </footer>
-    </div>
-  </article>
-);
+type FictionCommentState = {};
+
+// Type use for creating a Bright Mirror comment with CreateCommentMutation
+export type CreateCommentInputs = {
+  /** Comment body content */
+  body: string,
+  /** Comment content locale */
+  contentLocale: string,
+  /** Comment idea identifier */
+  ideaId: string,
+  /** Comment parent identifier */
+  parentId: string
+};
+
+export class FictionComment extends Component<LocalFictionCommentProps, FictionCommentState> {
+  render() {
+    const {
+      authorFullname,
+      circleAvatar,
+      commentContent,
+      commentParentId,
+      displayedPublishedDate,
+      numberOfChildComments,
+      publishedDate,
+      submitCommentCallback
+    } = this.props;
+    const fictionCommentFormProps: FictionCommentFormProps = {
+      onSubmitCommentCallback: (comment: string) => submitCommentCallback(comment, commentParentId)
+    };
+
+    return (
+      <article className="comment-container">
+        <CircleAvatar {...circleAvatar} />
+        <div className="content">
+          <header className="meta">
+            <p>
+              <strong>{authorFullname || I18n.t('debate.brightMirror.noAuthorSpecified')}</strong>
+            </p>
+            <p className="published-date">
+              <time dateTime={publishedDate} pubdate="true">
+                &nbsp;-&nbsp;{displayedPublishedDate}
+              </time>
+            </p>
+          </header>
+          <p className="comment">{commentContent}</p>
+          <footer className="toolbar">
+            <p>
+              <Translate value="debate.brightMirror.numberOfResponses" count={numberOfChildComments} />
+            </p>
+            <ToggleCommentButton />
+            <ReplyToCommentButton />
+            <FictionCommentForm {...fictionCommentFormProps} />
+          </footer>
+        </div>
+      </article>
+    );
+  }
+}
 
 const mapQueryToProps = ({ data }) => {
   if (data.loading === false && data.error === undefined) {
     // Define variables
     const { fiction } = data;
-    const { contentLocale } = data.variables;
+    const { contentLocale, id } = data.variables;
     const circleAvatarProps: CircleAvatarProps = {
       username: fiction.creator.displayName,
       src:
@@ -85,6 +118,7 @@ const mapQueryToProps = ({ data }) => {
       authorFullname: fiction.creator.displayName,
       circleAvatar: circleAvatarProps,
       commentContent: fiction.body,
+      commentParentId: id,
       displayedPublishedDate: moment(fiction.creationDate)
         .locale(contentLocale)
         .fromNow(),
