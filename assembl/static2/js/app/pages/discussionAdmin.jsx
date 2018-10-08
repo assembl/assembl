@@ -169,7 +169,7 @@ class DiscussionAdmin extends React.Component<Props, State> {
       deleteDiscussionPhase,
       editLocale
     } = this.props;
-    displayAlert('success', `${I18n.t('loading.wait')}...`);
+    displayAlert('success', `${I18n.t('loading.wait')}...`, false, -1);
 
     if (languagePreferenceHasChanged) {
       const payload = {
