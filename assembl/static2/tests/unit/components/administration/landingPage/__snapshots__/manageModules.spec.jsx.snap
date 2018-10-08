@@ -114,19 +114,13 @@ exports[`ManageModules component should render a form to manage the landing page
         <div
           className="margin-xl"
         >
-          <Button
-            active={false}
-            block={false}
-            bsClass="btn"
-            bsStyle="default"
-            className="button-submit button-dark"
-            disabled={true}
-            onClick={[Function]}
-          >
-            <Translate
-              value="administration.landingPage.manageModules.textAndMultimediaBtn"
-            />
-          </Button>
+          <AddModuleButton
+            allTextAndMultimediaAreChecked={false}
+            closeModal={[Function]}
+            createModule={[Function]}
+            numberOfEnabledModules={3}
+            numberOfTextAndMultimediaModules={1}
+          />
         </div>
       </div>
       <div

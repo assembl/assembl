@@ -3,8 +3,6 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { I18n, Translate } from 'react-redux-i18n';
 import type { List, Map } from 'immutable';
-import { Button } from 'react-bootstrap';
-import { displayModal, closeModal } from '../../../utils/utilityManager';
 import ModulesPreview from './modulesPreview';
 import SectionTitle from '../../administration/sectionTitle';
 import SelectModulesForm from './selectModulesForm';
@@ -15,6 +13,7 @@ import {
   createLandingPageModule
 } from '../../../actions/adminActions/landingPage';
 import { createRandomId } from '../../../utils/globalFunctions';
+import AddModuleButton from './addModuleButton';
 
 export type LandingPageModuleType = {
   defaultOrder: number,
@@ -87,27 +86,6 @@ export const DumbManageModules = ({
   const numberOfTextAndMultimediaModules = moduleTypes.filter(
     moduleType => moduleType.identifier === MODULES_IDENTIFIERS.introduction
   ).length;
-  const displayConfirmationModal = () => {
-    const body = <Translate value="administration.landingPage.manageModules.confirmationModal" />;
-    const footer = [
-      <Button key="cancel" id="cancel-deleting-button" onClick={closeModal} className="button-cancel button-dark">
-        <Translate value="cancel" />
-      </Button>,
-      <Button
-        key="add"
-        id="confirm-add-tm-button"
-        onClick={() => {
-          createModule(enabledModules.size - 2, numberOfTextAndMultimediaModules + 1);
-          closeModal();
-        }}
-        className="button-submit button-dark"
-      >
-        <Translate value="validate" />
-      </Button>
-    ];
-    const includeFooter = true;
-    return displayModal(null, body, includeFooter, footer);
-  };
 
   const numberOfEnabledTextAndMultimediaModules = enabledModules.filter(
     module => module.getIn(['moduleType', 'identifier']) === MODULES_IDENTIFIERS.introduction
@@ -135,13 +113,13 @@ export const DumbManageModules = ({
               toggleModule={toggleModule}
             />
             <div className="margin-xl">
-              <Button
-                className="button-submit button-dark"
-                onClick={displayConfirmationModal}
-                disabled={!allTextAndMultimediaAreChecked}
-              >
-                <Translate value="administration.landingPage.manageModules.textAndMultimediaBtn" />
-              </Button>
+              <AddModuleButton
+                numberOfTextAndMultimediaModules={numberOfTextAndMultimediaModules}
+                numberOfEnabledModules={enabledModules.size}
+                closeModal={() => {}}
+                createModule={createModule}
+                allTextAndMultimediaAreChecked={allTextAndMultimediaAreChecked}
+              />
             </div>
           </div>
           <div className="column-right">
