@@ -10,6 +10,7 @@ import FictionBody from '../../../../components/debate/brightMirror/fictionBody'
 import type { FictionBodyProps } from '../../../../components/debate/brightMirror/fictionBody';
 
 export const defaultFictionBody: FictionBodyProps = {
+  id: '0',
   title: 'Les émotifs',
   content: `
     <p><strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
@@ -38,7 +39,9 @@ export const defaultFictionBody: FictionBodyProps = {
     also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release
     of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker
     including versions of Lorem Ipsum.</p>
-  `
+  `,
+  contentLocale: 'en',
+  lang: 'en'
 };
 
 const noFictionBody: FictionBodyProps = {
@@ -56,6 +59,12 @@ storiesOf('FictionBody', module)
   .add(
     'playground',
     withInfo()(() => (
-      <FictionBody title={text('title', playgroundFictionBody.title)} content={text('content', playgroundFictionBody.content)} />
+      <FictionBody
+        id={text('id', playgroundFictionBody.id)}
+        title={text('title', playgroundFictionBody.title)}
+        content={text('content', playgroundFictionBody.content)}
+        contentLocale={text('contentLocale', playgroundFictionBody.contentLocale)}
+        lang={text('lang', playgroundFictionBody.lang)}
+      />
     ))
   );

@@ -15,12 +15,17 @@ initStoryshots({
 
 configure({ adapter: new Adapter() });
 
+const defaultId: string = '0';
 const defaultTitle: string = 'Fugit veritatis nemo';
 const defaultContent: string = 'Vero et ut et quia quo. Molestiae ut cupiditate odio numquam veniam esse cumque modi.';
+const defaultLocale: string = 'en';
 
 const defaultFictionBody: FictionBodyProps = {
+  id: defaultId,
   title: defaultTitle,
-  content: defaultContent
+  content: defaultContent,
+  contentLocale: defaultLocale,
+  lang: defaultLocale
 };
 
 describe('<FictionBody /> - with shallow', () => {
