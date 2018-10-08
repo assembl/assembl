@@ -15,6 +15,7 @@ import type { FictionCommentProps, FictionCommentGraphQLProps } from '../../../.
 import { defaultCircleAvatar } from './circleAvatar.stories';
 
 export const defaultFictionComment: FictionCommentProps = {
+  numChildren: 999,
   submitCommentCallback: action('submitCommentCallback')
 };
 
@@ -25,7 +26,6 @@ export const defaultFictionCommentGraphQL: FictionCommentGraphQLProps = {
   commentParentId: 'dummyId',
   commentContent:
     'Est et rerum. Ut sed voluptatem possimus. Ut cumque magni sapiente voluptatem ut rerum aut harum quo. Non delectus quo.',
-  numberOfChildComments: 999,
   circleAvatar: { ...defaultCircleAvatar }
 };
 
@@ -46,8 +46,8 @@ storiesOf('FictionComment', module)
         displayedPublishedDate={text('Displayed published date', playground.displayedPublishedDate)}
         commentParentId={text('Comment parent id', playground.commentParentId)}
         commentContent={text('Comment content', playground.commentContent)}
-        numberOfChildComments={number('Number of comments', playground.numberOfChildComments)}
         circleAvatar={object('circleAvatar', playground.circleAvatar)}
+        numChildren={number('Number of comments', playground.numChildren)}
         submitCommentCallback={playground.submitCommentCallback}
       />
     ))

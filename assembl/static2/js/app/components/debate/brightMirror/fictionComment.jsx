@@ -19,6 +19,8 @@ import type { CircleAvatarProps } from './circleAvatar';
 import type { FictionCommentFormProps } from './fictionCommentForm';
 
 export type FictionCommentProps = {
+  /** Number of child comments */
+  numChildren: number,
   /** Submit comment callback used in order to catch a submit event from tree.jsx */
   submitCommentCallback: Function
 };
@@ -34,8 +36,6 @@ export type FictionCommentGraphQLProps = {
   commentParentId: string,
   /** Comment displayed published date */
   displayedPublishedDate: string,
-  /** Number of child comments */
-  numberOfChildComments: number,
   /** Comment published date */
   publishedDate: string
 };
@@ -64,7 +64,7 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
       commentContent,
       commentParentId,
       displayedPublishedDate,
-      numberOfChildComments,
+      numChildren,
       publishedDate,
       submitCommentCallback
     } = this.props;
@@ -89,7 +89,7 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
           <p className="comment">{commentContent}</p>
           <footer className="toolbar">
             <p>
-              <Translate value="debate.brightMirror.numberOfResponses" count={numberOfChildComments} />
+              <Translate value="debate.brightMirror.numberOfResponses" count={numChildren} />
             </p>
             <ToggleCommentButton />
             <ReplyToCommentButton />
@@ -122,7 +122,6 @@ const mapQueryToProps = ({ data }) => {
       displayedPublishedDate: moment(fiction.creationDate)
         .locale(contentLocale)
         .fromNow(),
-      numberOfChildComments: -999,
       publishedDate: fiction.creationDate
     };
   }
