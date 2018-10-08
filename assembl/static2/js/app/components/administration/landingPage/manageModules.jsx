@@ -102,11 +102,11 @@ export const DumbManageModules = ({
   toggleModule,
   createModule
 }: Props) => {
+  const numberOfTextAndMultimediaModules = moduleTypes.filter(
+    moduleType => moduleType.identifier === MODULES_IDENTIFIERS.introduction
+  ).length;
   const displayConfirmationModal = () => {
     const body = <Translate value="administration.landingPage.manageModules.confirmationModal" />;
-    const numberOfTextAndMultimediaModules = moduleTypes.filter(
-      moduleType => moduleType.identifier === MODULES_IDENTIFIERS.introduction
-    ).length;
     const footer = [
       <Button key="cancel" id="cancel-deleting-button" onClick={closeModal} className="button-cancel button-dark">
         <Translate value="cancel" />
@@ -127,13 +127,10 @@ export const DumbManageModules = ({
     return displayModal(null, body, includeFooter, footer);
   };
 
-  const totalNumberOfTextAndMultimediaModules = moduleTypes.filter(
-    module => module.identifier === MODULES_IDENTIFIERS.introduction
-  ).length;
   const numberOfEnabledTextAndMultimediaModules = enabledModules.filter(
     module => module.getIn(['moduleType', 'identifier']) === MODULES_IDENTIFIERS.introduction
   ).length;
-  const allTextAndMultimediaAreChecked = numberOfEnabledTextAndMultimediaModules === totalNumberOfTextAndMultimediaModules;
+  const allTextAndMultimediaAreChecked = numberOfEnabledTextAndMultimediaModules === numberOfTextAndMultimediaModules;
 
   const updatedModuleTypes = sortByTitle(moduleTypes);
 
