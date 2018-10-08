@@ -14,7 +14,7 @@ import {
   toggleLandingPageModule,
   moveLandingPageModuleDown,
   moveLandingPageModuleUp,
-  createLandingPageModules
+  createLandingPageModule
 } from '../../../actions/adminActions/landingPage';
 import { createRandomId } from '../../../utils/globalFunctions';
 
@@ -194,7 +194,7 @@ const mapDispatchToProps = dispatch => ({
   createModule: (nextOrder, numberOfDuplicatesModules, identifier = MODULES_IDENTIFIERS.introduction) => {
     const newId = createRandomId();
     return dispatch(
-      createLandingPageModules(
+      createLandingPageModule(
         newId,
         identifier,
         numberOfDuplicatesModules,
