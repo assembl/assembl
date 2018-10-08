@@ -1,12 +1,15 @@
 // @flow
 import { EditorState } from 'draft-js';
 import React from 'react';
+import { compose, graphql } from 'react-apollo';
 import { type FieldRenderProps } from 'react-final-form';
 import { FormGroup } from 'react-bootstrap';
+import uploadDocumentMutation from '../../graphql/mutations/uploadDocument.graphql';
 
 import RichTextEditor from '../common/richTextEditor';
 import Error from './error';
 import { getValidationState } from './utils';
+import attachmentsPlugin from '../common/richTextEditor/attachmentsPlugin';
 
 type multilingualValue = { [string]: EditorState };
 
@@ -19,16 +22,24 @@ type Props = {
     onFocus: (?SyntheticFocusEvent<*>) => void,
     value: multilingualValue
   },
-  label: string
+  label: string,
+  uploadDocument: Function,
+  withAttachment: boolean
 } & FieldRenderProps;
 
 const RichTextFieldAdapter = ({
   editLocale,
+  uploadDocument,
+  withAttachment,
   input: { name, onBlur, onChange, value, ...otherListeners },
   label,
   meta: { error, touched },
   ...rest
 }: Props) => {
+  if (withAttachment) {
+    attachmentsPlugin.uploadNewAttachments(value[editLocale], uploadDocument);
+  }
+
   const valueInLocale = value[editLocale] || EditorState.createEmpty();
   return (
     <FormGroup controlId={name} validationState={getValidationState(error, touched)}>
@@ -39,11 +50,15 @@ const RichTextFieldAdapter = ({
         placeholder={label}
         toolbarPosition="bottom"
         onChange={es => onChange({ ...value, [editLocale]: es })}
-        withAttachmentButton={false}
+        withAttachmentButton={withAttachment}
       />
       <Error name={name} />
     </FormGroup>
   );
 };
 
-export default RichTextFieldAdapter;
+RichTextFieldAdapter.defaultProps = {
+  withAttachment: false
+};
+
+export default compose(graphql(uploadDocumentMutation, { name: 'uploadDocument' }))(RichTextFieldAdapter);

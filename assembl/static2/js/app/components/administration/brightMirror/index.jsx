@@ -100,6 +100,7 @@ const BrightMirrorAdminForm = ({ client, editLocale, discussionPhaseId }: Props)
                     editLocale={editLocale}
                     name={announcementBodyName}
                     label={announcementBodyLabel}
+                    withAttachment
                     component={MultilingualRichTextFieldAdapter}
                   />
                 </div>

@@ -60,7 +60,9 @@ const InstructionView = ({
       <InstructionsText title={announcementContent.title} body={announcementContent.body} />
       <div className="overflow-x">
         {topPostFormContainer}
-        <FictionsList posts={posts} identifier={identifier} themeId={ideaId} refetchIdea={refetchIdea} lang={lang} />
+        {posts.length > 0 ? (
+          <FictionsList posts={posts} identifier={identifier} themeId={ideaId} refetchIdea={refetchIdea} lang={lang} />
+        ) : null}
       </div>
     </div>
   );

@@ -42,6 +42,19 @@ type ExtractInPostProps = {
   children: React.Node
 };
 
+type PostBodyReplacementType = {
+  afterload?: Function
+};
+
+type HtmlProps = {
+  extracts?: ?Array<?ExtractFragment>,
+  rawHtml: string,
+  divRef?: ?Function,
+  dbId?: ?number,
+  replacementComponents: PostBodyReplacementType,
+  contentLocale?: ?string
+};
+
 const ExtractInPost = ({ id, state, children }: ExtractInPostProps) => {
   const isSubmitted = state === ExtractStates.SUBMITTED;
   return (
@@ -82,7 +95,7 @@ export const postBodyReplacementComponents = (afterLoad?: Function) => ({
   )
 });
 
-const Html = (props) => {
+export const Html = (props: HtmlProps) => {
   const { extracts, rawHtml, divRef, dbId, replacementComponents, contentLocale, ...containerProps } = props;
   /*
    * The activeHtml() function will parse the raw html,
@@ -134,6 +147,13 @@ const Html = (props) => {
       {nodes}
     </div>
   );
+};
+
+Html.defaultProps = {
+  extracts: [],
+  contentLocale: null,
+  divRef: null,
+  dbId: null
 };
 
 export const DumbPostBody = ({
