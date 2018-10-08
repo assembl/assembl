@@ -11,6 +11,7 @@ from pyramid.interfaces import ISessionFactory, IAuthorizationPolicy
 from pyramid.request import Request
 
 from assembl.models import SocialAuthAccount
+from assembl.auth.password import password_change_token, verify_password_change_token, Validity
 
 
 def test_assembl_login(discussion, participant1_user,
@@ -268,3 +269,20 @@ def test_autologin_override(
         discussion_slug=closed_discussion.slug,
         backend=google_identity_provider.name
     ) == urlparse.urlparse(reply.location).path
+
+def test_change_password_token(test_app, participant1_user):
+    # Set up
+    old_password = participant1_user.password
+    token = password_change_token(participant1_user)
+    my_json = {"token": token,
+                "password1": "lolo",
+                "password2": "lolo"}
+
+    # Test token
+    user, validity = verify_password_change_token(token)
+    assert validity == Validity.VALID
+    
+    # Test API
+    response = test_app.post_json('/data/AgentProfile/do_password_change', my_json)
+    assert response.status_code == 200
+    assert old_password != participant1_user.password
