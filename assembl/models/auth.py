@@ -834,7 +834,8 @@ class User(AgentProfile):
                     R_CATCHER,
                     username=machine_id,
                     is_machine=True,
-                    flush=False
+                    flush=False,
+                    db=db
                 )
 
     @property
