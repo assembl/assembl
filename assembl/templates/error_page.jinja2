@@ -4,23 +4,23 @@
 {% endblock %}
 
 {% block main_css %}
+  <link type="text/css" rel="stylesheet" href="{{REACT_URL}}/build/theme_{{theme_name}}_web.css" />
 {% endblock %}
 
 {% block body %}
-    <link type="text/css" rel="stylesheet" href="/static2/css/errorPage.css" />
     <body>
-        <table id="mainTable">
+        <table id="main-table">
             <tr>
-                <td id="tdSpace" style="width: auto">
+                <td id="td-space" style="width: auto">
                 </td>
-                <td id="tdText" style="width: 30%">
+                <td id="td-text" style="width: 30%">
                     {% if error %}
-                        <h2 id="titleError">{{error}}</h2>
+                        <h2 id="title-error">{{error}}</h2>
                     {% endif %}
                     {% if error_code %}
-                        <h1 id="Title500">{{error_code}}</h1>
+                        <h1 id="title-error-code">{{error_code}}</h1>
                     {% else %}
-                        <h1 id="Title500">2</h1>
+                        <h1 id="title-error-code">2</h1>
                     {% endif %}
                     {% if text %}
                         <p class="text">{{text}}</p>
@@ -36,20 +36,19 @@
                         </button>
                     {% endif %}
                 </td>
-                <td id="tdImg" style="width: 50%">
-                    <img id="serverImage" src="/static2/img/Erreur500-illustration.png" />
+                <td id="td-img" style="width: 50%">
+                    <img id="server-image" src="/static2/img/Erreur500-illustration.png" />
                 </td>
             </tr>
         </table>
-        {# <div id="contentDiv">
-            <h1 id="mainMessage">Internal Server Error</h1>
 
-            {% if debate_link %}
-                <div id="linkDiv">
-                    <a href={{ debate_link }}>Return to home page</a>
-                </div>
-            {%- endif %}
-        </div> #}
+        {% block main_js %}
+            {% include 'analytics_common.jinja2' %}
+            {% if NODE_ENV == 'development' %}
+                <script src="{{REACT_URL}}/build/theme_{{theme_name}}_web.js"></script>
+            {% endif %}
+        {% endblock %}
+
         {% block for_testing %}
             {% if under_test %}
                 <div id="under-test" class="hidden">V2</div>

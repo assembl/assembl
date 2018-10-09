@@ -8,66 +8,66 @@
 }
 
 body {
-  background-color: #e5f6fc;
+  background-color: $first-color-light;
   margin: 0;
   overflow-x: hidden;
 }
 
-#mainTable {
+#main-table {
   width: 100%;
   height: 100vh;
   text-align: left;
 }
 
-#mainTable tr {
+#main-table tr {
   height: 100%;
 }
 
-#serverImage {
+#server-image {
   margin-left: 40px;
   width: 85%;
   max-width: 400px;
 }
 
-#tdText {
+#td-text {
   min-width: 350px;
 }
 
 @media only screen and (max-width: 1100px) {
-  #tdImg {
+  #td-img {
     width: auto;
   }
 }
 
 @media only screen and (max-width: 800px) {
-  #tdImg {
+  #td-img {
     display: none;
   }
 
-  #tdSpace {
+  #td-space {
     width: 0%;
     display: none;
   }
 
-  #tdText {
+  #td-text {
     width: 100%;
   }
 }
 
-#Title500 {
+#title-error-code {
   font-family: latoBold;
   font-size: 120px;
   text-align: center;
-  color: #00b6ff;
+  color: $first-color;
   margin: 0;
   margin-top: -55px;
 }
 
-#titleError {
+#title-error {
   font-family: latoBold;
   font-size: 44px;
   text-align: center;
-  color: #00b6ff;
+  color: $first-color;
   margin-block-end: 0;
   margin-block-start: 0;
   margin-bottom: 25px;
@@ -93,11 +93,12 @@ button {
   font-family: LatoMedium;
   font-size: 12px;
   font-weight: bold;
+  color: $second-color;
   letter-spacing: 1.7px;
   text-align: center;
   text-transform: uppercase;
   line-height: 1.42857143;
-  border: 2px solid #00b6ff;
+  border: 2px solid $first-color;
   background-color: transparent;
   padding: 10px 24px;
   min-width: 210px;
@@ -105,7 +106,7 @@ button {
   margin-left: 50%;
   transform: translateX(-50%);
   transition: color 0.2s ease-in;
-  -webkit-transition:  right 0.2s ease-in;
+  -webkit-transition: right 0.2s ease-in;
   z-index: 0;
   cursor: pointer;
 }
@@ -118,7 +119,7 @@ button:before {
   left: 0;
   right: 0;
   bottom: 0;
-  background: #00b6ff;
+  background: $first-color;
   -webkit-transform: scaleX(0);
   transform: scaleX(0);
   -webkit-transform-origin: 0 50%;
