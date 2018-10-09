@@ -29,7 +29,7 @@ describe('AddModuleButton component', () => {
   });
   it('should render a modal when you click on the button', () => {
     wrapper.simulate('click');
-    expect(displayModal).toHaveBeenCalled();
+    expect(displayModal).toHaveBeenCalledTimes(1);
   });
   it('should match the snapshot', () => {
     const component = renderer.create(<AddModuleButton {...props} />);
