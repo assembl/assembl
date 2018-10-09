@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-10-04 16:41+0200\n"
+"POT-Creation-Date: 2018-10-09 17:06+0200\n"
 "PO-Revision-Date: 2017-08-26 01:06+0900\n"
 "Last-Translator: \n"
 "Language: ja\n"
@@ -159,7 +159,6 @@ msgid "URL of a video presenting the discussion"
 msgstr "ディスカッションを紹介するビデオのURL"
 
 #: assembl/models/preferences.py:505
-#, fuzzy
 msgid "Tab title"
 msgstr "メッセージのタイトル"
 
@@ -184,7 +183,6 @@ msgid "Show the share button on posts and ideas"
 msgstr "投稿とアイデアの共有ボタンを表示する"
 
 #: assembl/models/preferences.py:541
-#, fuzzy
 msgid "Private social sharing"
 msgstr "ソーシャルシェアリング"
 
@@ -298,7 +296,6 @@ msgstr ""
 "これが空であれば誰でも自動登録することができます."
 
 #: assembl/models/preferences.py:791
-#, fuzzy
 msgid "Whitelist on authentication service"
 msgstr "認証サービスの種類"
 
@@ -315,7 +312,6 @@ msgid "Allow white list to be applied to the default login process"
 msgstr ""
 
 #: assembl/models/preferences.py:821
-#, fuzzy
 msgid "Discussion administrators"
 msgstr "ディスカッションの統計"
 
@@ -414,7 +410,6 @@ msgid ""
 msgstr ""
 
 #: assembl/models/preferences.py:997 assembl/models/preferences.py:1000
-#, fuzzy
 msgid "Harvesting translation"
 msgstr "Catalystの翻訳"
 
@@ -622,7 +617,6 @@ msgid "See results from the vote of "
 msgstr "投票結果を見る "
 
 #: assembl/static/js/app/models/widget.js:289
-#, fuzzy
 msgid "Vote results"
 msgstr "投票結果を見る"
 
@@ -1917,12 +1911,10 @@ msgid "Synthesis"
 msgstr "シンセシス"
 
 #: assembl/static/js/app/views/synthesisPanel.js:227
-#, fuzzy
 msgid "A short title for the synthesis"
 msgstr "シンセシスを読む"
 
 #: assembl/static/js/app/views/synthesisPanel.js:228
-#, fuzzy
 msgid "New Synthesis"
 msgstr "最後のシンセシス"
 
@@ -2034,7 +2026,6 @@ msgid "Go back to the discussion"
 msgstr "ディスカッションに戻る"
 
 #: assembl/static/js/app/views/tokenVoteSession.js:1815
-#, fuzzy
 msgid "Modify my vote"
 msgstr "あなたの投票を修正する"
 
@@ -2573,9 +2564,8 @@ msgid "Thanks!"
 msgstr "ありがとうございます！"
 
 #: assembl/templates/notifications/html_mail.jinja2:82
-#, fuzzy, python-format
-msgid ""
-"You are receiving this because you are subscribed to discussion "
+#, python-format
+msgid "You are receiving this because you are subscribed to discussion "
 "%(discussionLink)s.  Specifically, you currently receive a notification "
 "when:"
 msgstr "あなたはディスカッション%(discussionLink)sの%(notificationConfigLink)sなので、これを受け取っています。具体的には、あなたは次の場合に通知を受け取ります。"
@@ -2585,7 +2575,6 @@ msgid "Reply to this message"
 msgstr "このメッセージに返信する"
 
 #: assembl/templates/notifications/html_mail_post_synthesis.jinja2:31
-#, fuzzy
 msgid "Comment on this synthesis"
 msgstr "このシンセシスにコメントする"
 
@@ -3441,7 +3430,6 @@ msgid "For mailing lists only: Where messages are sent to the list"
 msgstr ""
 
 #: assembl/templates/views/emailSource.tmpl:30
-#, fuzzy
 msgid "Host"
 msgstr "投稿"
 
@@ -3454,17 +3442,14 @@ msgid "True"
 msgstr ""
 
 #: assembl/templates/views/emailSource.tmpl:48
-#, fuzzy
 msgid "False"
 msgstr "閉じる"
 
 #: assembl/templates/views/emailSource.tmpl:52
-#, fuzzy
 msgid "Folder"
 msgstr "役割"
 
 #: assembl/templates/views/emailSource.tmpl:60
-#, fuzzy
 msgid "Port"
 msgstr "再インポート"
 
@@ -4459,11 +4444,11 @@ msgid ""
 msgstr ""
 
 #: assembl/views/__init__.py:657
-msgid "We apologize for the inconvenience!"
+msgid "We apologize for the inconvenience"
 msgstr ""
 
 #: assembl/views/__init__.py:658
-msgid "Home page"
+msgid "Homepage"
 msgstr ""
 
 #: assembl/views/admin/views.py:392
@@ -4551,7 +4536,6 @@ msgid "We already have a user with this username."
 msgstr "既にこのユーザー名を持つユーザーがいます."
 
 #: assembl/views/api2/auth.py:509
-#, fuzzy
 msgid "The username must be less than 20 characters."
 msgstr "3文字以上の名前を使用してください"
 
@@ -4836,12 +4820,12 @@ msgstr "slug=%s のディスカッションは見つかりませんでした"
 #~ msgid "Secret for assembl as a client of the authentication server"
 #~ msgstr "認証サーバーのクライアントとしてのAssemblの暗証"
 
-#~ msgid ""
-#~ "Our server has encountered a problem."
-#~ " The page you have requested is "
-#~ "not accesible."
+#~ msgid "We apologise for the inconvenience!"
 #~ msgstr ""
 
-#~ msgid "We apologise for the inconvenience!"
+#~ msgid "We apologize for the inconvenience!"
+#~ msgstr ""
+
+#~ msgid "Home page"
 #~ msgstr ""
 

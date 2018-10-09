@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Assembl\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-10-04 16:41+0200\n"
+"POT-Creation-Date: 2018-10-09 17:06+0200\n"
 "PO-Revision-Date: 2018-02-05 17:41+0100\n"
 "Last-Translator: Quentin Grimaud <quentin.grimaud@gmail.com>\n"
 "Language: fr\n"
@@ -201,11 +201,11 @@ msgstr "Rendre le partage social public ou privé"
 
 #: assembl/models/preferences.py:552
 msgid "Generic Errors"
-msgstr "Erreur générique"
+msgstr "Erreurs générique"
 
 #: assembl/models/preferences.py:554
 msgid "Display a generic error message."
-msgstr "affiche un message d'erreur générique"
+msgstr "Affiche un message d'erreur générique."
 
 #: assembl/models/preferences.py:563
 msgid "Extra data for CSV reports"
@@ -4772,24 +4772,17 @@ msgid "error"
 msgstr "erreur"
 
 #: assembl/views/__init__.py:656
-#, fuzzy
-#| msgid "" "Our server has encountered a problem. The page you have requested
-#| is not " "accesible."
-msgid ""
-"Our server has encountered a problem. The page you have requested is not "
+msgid "Our server has encountered a problem. The page you have requested is not "
 "accessible."
-msgstr ""
-"Notre serveur vient de rencontrer un problème et la page sur laquelle "
+msgstr "Notre serveur vient de rencontrer un problème et la page sur laquelle "
 "vous étiez s'est fermée !"
 
 #: assembl/views/__init__.py:657
-#, fuzzy
-#| msgid "We apologise for the inconvenience!"
-msgid "We apologize for the inconvenience!"
+msgid "We apologize for the inconvenience"
 msgstr "Veuillez nous excuser pour la gène occasionné !"
 
 #: assembl/views/__init__.py:658
-msgid "Home page"
+msgid "Homepage"
 msgstr "Retour à l'accueil"
 
 #: assembl/views/admin/views.py:392
@@ -4821,7 +4814,7 @@ msgstr "Votre message est vide"
 
 #: assembl/views/api2/auth.py:46
 msgid "The provided input combination is not valid."
-msgstr ""
+msgstr "La combinaison de champs est invalide."
 
 #: assembl/views/api2/auth.py:350
 msgid "The user does not exist"
@@ -5165,7 +5158,7 @@ msgstr ""
 "L'équipe {assembl}\n"
 
 #: assembl/views/discussion/views.py:55
-#, fuzzy, python-format
+#, python-format
 msgid "No discussion found for slug=%s"
 msgstr "Aucune discussion trouvée avec l’id=%s"
 

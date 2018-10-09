@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 2.13.1\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-10-04 16:41+0200\n"
+"POT-Creation-Date: 2018-10-09 17:06+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -4378,11 +4378,11 @@ msgid ""
 msgstr ""
 
 #: assembl/views/__init__.py:657
-msgid "We apologize for the inconvenience!"
+msgid "We apologize for the inconvenience"
 msgstr ""
 
 #: assembl/views/__init__.py:658
-msgid "Home page"
+msgid "Homepage"
 msgstr ""
 
 #: assembl/views/admin/views.py:392

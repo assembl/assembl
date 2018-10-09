@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-10-04 16:41+0200\n"
+"POT-Creation-Date: 2018-10-09 17:06+0200\n"
 "PO-Revision-Date: 2014-07-24 17:38-0500\n"
 "Last-Translator: Benoit Grégoire <benoitg@coeus.ca>\n"
 "Language: en\n"
@@ -824,9 +824,7 @@ msgid "DISABLED"
 msgstr ""
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:133
-#, fuzzy
-msgid ""
-"Find the different syntheses produced since the beginning of the "
+msgid "Find the different syntheses produced since the beginning of the "
 "discussion"
 msgstr ""
 
@@ -1144,21 +1142,19 @@ msgid "Go to this idea"
 msgstr ""
 
 #: assembl/static/js/app/views/ideaClassificationOnMessage.js:362
-#, fuzzy
 msgid "This message is linked to the following idea because: "
 msgid_plural "This message is linked to the %1$d following ideas because: "
 msgstr[0] ""
 msgstr[1] ""
 
 #: assembl/static/js/app/views/ideaClassificationOnMessage.js:367
-#, fuzzy
 msgid "Link between this message and the idea"
 msgid_plural "Links between this message and ideas"
 msgstr[0] ""
 msgstr[1] ""
 
 #: assembl/static/js/app/views/ideaInSynthesis.js:167
-#, fuzzy, python-format
+#, python-format
 msgid "%d message is available under this idea"
 msgid_plural "%d messages are available under this idea"
 msgstr[0] ""
@@ -1323,7 +1319,7 @@ msgid "Oldest messages first"
 msgstr ""
 
 #: assembl/static/js/app/views/messageColumnsPanel.js:388
-#, fuzzy, python-format
+#, python-format
 msgid "%d message on theme “%s”"
 msgid_plural "%d messages on theme “%s”"
 msgstr[0] ""
@@ -1343,7 +1339,7 @@ msgid "This message has been deleted by its author."
 msgstr ""
 
 #: assembl/static/js/app/views/messageFamily.js:121
-#, fuzzy, python-format
+#, python-format
 msgid "%d more message is available in this message's full context."
 msgid_plural "%d more messages are available in this message's full context."
 msgstr[0] ""
@@ -1415,14 +1411,14 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: assembl/static/js/app/views/messageListPostQuery.js:567
-#, fuzzy, python-format
+#, python-format
 msgid "Found %d message%s out of %d messages that:"
 msgid_plural "Found %d messages%s out of %d messages that:"
 msgstr[0] ""
 msgstr[1] ""
 
 #: assembl/static/js/app/views/messageListPostQuery.js:570
-#, fuzzy, python-format
+#, python-format
 msgid "Found %d message%s out of %d messages:"
 msgid_plural "Found %d messages%s out of %d messages:"
 msgstr[0] ""
@@ -1571,7 +1567,7 @@ msgid "message \"%s\""
 msgstr ""
 
 #: assembl/static/js/app/views/postFilters.js:289
-#, fuzzy, python-format
+#, python-format
 msgid "Are in the conversation that follows: %s"
 msgstr ""
 
@@ -1691,7 +1687,6 @@ msgid "Only include messages you haven't read yet, or you manually marked unread
 msgstr ""
 
 #: assembl/static/js/app/views/postFilters.js:599
-#, fuzzy
 msgid "Read messages"
 msgstr ""
 
@@ -1906,7 +1901,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: assembl/static/js/app/views/statistics.js:1074
-#, fuzzy, python-format
+#, python-format
 msgid "%d participant has contributed since the beginning of the discussion"
 msgid_plural "%d participants have contributed since the beginning of the discussion"
 msgstr[0] ""
@@ -4309,7 +4304,7 @@ msgid "Publish"
 msgstr ""
 
 #: assembl/templates/views/tokenVoteCollection.tmpl:4
-#, fuzzy, python-format
+#, python-format
 msgid "Ideas (%s)"
 msgstr ""
 
@@ -4410,11 +4405,11 @@ msgid ""
 msgstr ""
 
 #: assembl/views/__init__.py:657
-msgid "We apologize for the inconvenience!"
+msgid "We apologize for the inconvenience"
 msgstr ""
 
 #: assembl/views/__init__.py:658
-msgid "Home page"
+msgid "Homepage"
 msgstr ""
 
 #: assembl/views/admin/views.py:392
@@ -5921,12 +5916,12 @@ msgstr ""
 #~ msgid "Secret for assembl as a client of the authentication server"
 #~ msgstr ""
 
-#~ msgid ""
-#~ "Our server has encountered a problem."
-#~ " The page you have requested is "
-#~ "not accesible."
+#~ msgid "We apologise for the inconvenience!"
 #~ msgstr ""
 
-#~ msgid "We apologise for the inconvenience!"
+#~ msgid "We apologize for the inconvenience!"
+#~ msgstr ""
+
+#~ msgid "Home page"
 #~ msgstr ""
 

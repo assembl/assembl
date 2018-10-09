@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-10-04 16:41+0200\n"
+"POT-Creation-Date: 2018-10-09 17:06+0200\n"
 "PO-Revision-Date: 2017-11-08 22:44+0400\n"
 "Last-Translator: Benoit Grégoire <benoitg@coeus.ca>\n"
 "Language: ru\n"
@@ -161,7 +161,6 @@ msgid "URL of a video presenting the discussion"
 msgstr "URL видео, в котором представлено обсуждение"
 
 #: assembl/models/preferences.py:505
-#, fuzzy
 msgid "Tab title"
 msgstr "Заголовки сообщений"
 
@@ -186,7 +185,6 @@ msgid "Show the share button on posts and ideas"
 msgstr "Показывать кнопку совместного доступа к сообщениям и идеям"
 
 #: assembl/models/preferences.py:541
-#, fuzzy
 msgid "Private social sharing"
 msgstr "Социальный обмен"
 
@@ -314,7 +312,6 @@ msgstr ""
 "зарегистрироваться, если он пуст."
 
 #: assembl/models/preferences.py:791
-#, fuzzy
 msgid "Whitelist on authentication service"
 msgstr "Тип службы проверки подлинности"
 
@@ -331,7 +328,6 @@ msgid "Allow white list to be applied to the default login process"
 msgstr ""
 
 #: assembl/models/preferences.py:821
-#, fuzzy
 msgid "Discussion administrators"
 msgstr "Обсуждение статистики"
 
@@ -434,7 +430,6 @@ msgid ""
 msgstr ""
 
 #: assembl/models/preferences.py:997 assembl/models/preferences.py:1000
-#, fuzzy
 msgid "Harvesting translation"
 msgstr "Переводы Catalyst"
 
@@ -649,7 +644,6 @@ msgid "See results from the vote of "
 msgstr "См. Результаты голосования "
 
 #: assembl/static/js/app/models/widget.js:289
-#, fuzzy
 msgid "Vote results"
 msgstr "См. Результаты голосования"
 
@@ -2034,12 +2028,10 @@ msgid "Synthesis"
 msgstr "синтез;"
 
 #: assembl/static/js/app/views/synthesisPanel.js:227
-#, fuzzy
 msgid "A short title for the synthesis"
 msgstr "Прочитать синтез"
 
 #: assembl/static/js/app/views/synthesisPanel.js:228
-#, fuzzy
 msgid "New Synthesis"
 msgstr "Последний синтез"
 
@@ -2168,7 +2160,6 @@ msgid "Go back to the discussion"
 msgstr "Вернуться к обсуждению"
 
 #: assembl/static/js/app/views/tokenVoteSession.js:1815
-#, fuzzy
 msgid "Modify my vote"
 msgstr "Изменить голос"
 
@@ -2731,13 +2722,11 @@ msgid "Thanks!"
 msgstr "Спасибо!"
 
 #: assembl/templates/notifications/html_mail.jinja2:82
-#, fuzzy, python-format
-msgid ""
-"You are receiving this because you are subscribed to discussion "
+#, python-format
+msgid "You are receiving this because you are subscribed to discussion "
 "%(discussionLink)s.  Specifically, you currently receive a notification "
 "when:"
-msgstr ""
-"Вы получаете это, потому что вы %(notificationConfigLink)s для обсуждения"
+msgstr "Вы получаете это, потому что вы %(notificationConfigLink)s для обсуждения"
 " %(discussionLink)s. В частности, вы в настоящее время получаете "
 "уведомление, когда:"
 
@@ -2746,7 +2735,6 @@ msgid "Reply to this message"
 msgstr "Ответить на это сообщение"
 
 #: assembl/templates/notifications/html_mail_post_synthesis.jinja2:31
-#, fuzzy
 msgid "Comment on this synthesis"
 msgstr "Прокомментировать этот синтез"
 
@@ -3650,7 +3638,6 @@ msgid "For mailing lists only: Where messages are sent to the list"
 msgstr ""
 
 #: assembl/templates/views/emailSource.tmpl:30
-#, fuzzy
 msgid "Host"
 msgstr "Посты"
 
@@ -3663,17 +3650,14 @@ msgid "True"
 msgstr ""
 
 #: assembl/templates/views/emailSource.tmpl:48
-#, fuzzy
 msgid "False"
 msgstr "Закрыть"
 
 #: assembl/templates/views/emailSource.tmpl:52
-#, fuzzy
 msgid "Folder"
 msgstr "Роль"
 
 #: assembl/templates/views/emailSource.tmpl:60
-#, fuzzy
 msgid "Port"
 msgstr "Реимпорт"
 
@@ -4734,11 +4718,11 @@ msgid ""
 msgstr ""
 
 #: assembl/views/__init__.py:657
-msgid "We apologize for the inconvenience!"
+msgid "We apologize for the inconvenience"
 msgstr ""
 
 #: assembl/views/__init__.py:658
-msgid "Home page"
+msgid "Homepage"
 msgstr ""
 
 #: assembl/views/admin/views.py:392
@@ -4826,7 +4810,6 @@ msgid "We already have a user with this username."
 msgstr "У нас уже есть пользователь с этим именем пользователя."
 
 #: assembl/views/api2/auth.py:509
-#, fuzzy
 msgid "The username must be less than 20 characters."
 msgstr "Пожалуйста, используйте имя не менее 3 символов"
 
@@ -5140,12 +5123,12 @@ msgstr "Не найдено ни одного обсуждения для slug=%
 #~ msgid "Secret for assembl as a client of the authentication server"
 #~ msgstr "Секрет для сборки в качестве клиента сервера аутентификации"
 
-#~ msgid ""
-#~ "Our server has encountered a problem."
-#~ " The page you have requested is "
-#~ "not accesible."
+#~ msgid "We apologise for the inconvenience!"
 #~ msgstr ""
 
-#~ msgid "We apologise for the inconvenience!"
+#~ msgid "We apologize for the inconvenience!"
+#~ msgstr ""
+
+#~ msgid "Home page"
 #~ msgstr ""
 

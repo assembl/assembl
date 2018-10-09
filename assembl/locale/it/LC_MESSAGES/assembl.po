@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 2.8.9\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-10-04 16:41+0200\n"
+"POT-Creation-Date: 2018-10-09 17:06+0200\n"
 "PO-Revision-Date: 2018-05-18 16:15+0200\n"
 "Last-Translator: \n"
 "Language: it\n"
@@ -160,7 +160,6 @@ msgid "URL of a video presenting the discussion"
 msgstr "URL di un video di presentazione della discussione"
 
 #: assembl/models/preferences.py:505
-#, fuzzy
 msgid "Tab title"
 msgstr "Titoli dei messaggi"
 
@@ -311,7 +310,6 @@ msgstr ""
 "autoregistrarsi se la lista è vuota."
 
 #: assembl/models/preferences.py:791
-#, fuzzy
 msgid "Whitelist on authentication service"
 msgstr "Tipo di servizio di autenticazione"
 
@@ -328,7 +326,6 @@ msgid "Allow white list to be applied to the default login process"
 msgstr ""
 
 #: assembl/models/preferences.py:821
-#, fuzzy
 msgid "Discussion administrators"
 msgstr "Statistiche di discussione"
 
@@ -433,7 +430,6 @@ msgid ""
 msgstr ""
 
 #: assembl/models/preferences.py:997 assembl/models/preferences.py:1000
-#, fuzzy
 msgid "Harvesting translation"
 msgstr "Traduzioni Catalyst"
 
@@ -4736,11 +4732,11 @@ msgid ""
 msgstr ""
 
 #: assembl/views/__init__.py:657
-msgid "We apologize for the inconvenience!"
+msgid "We apologize for the inconvenience"
 msgstr ""
 
 #: assembl/views/__init__.py:658
-msgid "Home page"
+msgid "Homepage"
 msgstr ""
 
 #: assembl/views/admin/views.py:392
@@ -4828,7 +4824,6 @@ msgid "We already have a user with this username."
 msgstr "Esiste già un utente con questo nome utente."
 
 #: assembl/views/api2/auth.py:509
-#, fuzzy
 msgid "The username must be less than 20 characters."
 msgstr "Usa un nome di almeno 3 caratteri"
 
@@ -5112,12 +5107,12 @@ msgstr "Non è stata trovata nessuna discussione per slug=%s"
 #~ msgid ""
 #~ msgstr ""
 
-#~ msgid ""
-#~ "Our server has encountered a problem."
-#~ " The page you have requested is "
-#~ "not accesible."
+#~ msgid "We apologise for the inconvenience!"
 #~ msgstr ""
 
-#~ msgid "We apologise for the inconvenience!"
+#~ msgid "We apologize for the inconvenience!"
+#~ msgstr ""
+
+#~ msgid "Home page"
 #~ msgstr ""
 
