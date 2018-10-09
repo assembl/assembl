@@ -5,7 +5,7 @@ Note that Assembl is a `hybrid app`_, and combines routes and :py:mod:`traversal
 .. _`hybrid app`: http://docs.pylonsproject.org/projects/pyramid/en/latest/narr/hybrid.html
 """
 
-import os.path
+import os
 import io
 from collections import defaultdict
 from urlparse import urlparse
@@ -654,8 +654,18 @@ def error_view(exc, request):
         context, debate_link="/", error_code=error_code,
         error=_("error"), 
         text=_("Our server has encountered a problem. The page you have requested is not accessible."),
-        excuse=_("We apologize for the inconvenience!"),
-        home_button=_("Home page")
+        excuse=_("We apologize for the inconvenience"),
+        home_button=_("Homepage")
+    )
+
+def error_template(request):
+    context = get_default_context(request)
+    return dict(
+        context, debate_link="/", error_code="500",
+        error="error", 
+        text="Our server has encountered a problem. The page you have requested is not accessible.",
+        excuse="We apologize for the inconvenience",
+        home_button="Homepage"
     )
 
 def redirector(request):
@@ -705,6 +715,11 @@ def includeme(config):
 
     if asbool(config.get_settings().get('assembl_handle_exceptions', 'true')):
         config.add_view(error_view, context=Exception,
+                        renderer='assembl:templates/error_page.jinja2')
+
+    if os.environ["NODE_ENV"] == 'development':
+        config.add_route('error_template', '/error_template')
+        config.add_view(error_template, route_name='error_template',
                         renderer='assembl:templates/error_page.jinja2')
 
     #  authentication
