@@ -95,7 +95,7 @@ export const getAvailableLocales = (locale: string, translations: { [string]: an
 */
 // EditorState in case of rich text
 type LangstringValue = string | EditorState;
-type LangstringEntriesList = List<Map<string, LangstringValue>>;
+export type LangstringEntriesList = List<Map<string, LangstringValue>>;
 export const updateInLangstringEntries = (locale: string, value: LangstringValue) => (
   entries: LangstringEntriesList = List()
 ): LangstringEntriesList => {
