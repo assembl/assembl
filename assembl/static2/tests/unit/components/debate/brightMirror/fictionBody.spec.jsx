@@ -48,7 +48,7 @@ describe('<FictionBody /> - with shallow', () => {
 
   it('should display "no title specified" when title is set to null', () => {
     wrapper.setProps({ title: '' });
-    expect(wrapper.contains('no title specified')).toBe(true);
+    expect(wrapper.contains('Titre non défini')).toBe(true);
   });
 });
 
@@ -69,6 +69,6 @@ describe('<FictionBody /> - with mount', () => {
   it('should display "no content specified" when content is set to null', () => {
     wrapper.setProps({ content: '' });
     const fictionContent: string = wrapper.find('div [className="fiction-content"]').text();
-    expect(fictionContent).toEqual('no content specified');
+    expect(fictionContent).toEqual('Contenu non défini');
   });
 });
