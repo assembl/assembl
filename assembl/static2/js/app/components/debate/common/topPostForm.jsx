@@ -107,7 +107,10 @@ class TopPostForm extends React.Component<TopPostFormProps, TopPostFormState> {
     const { body, subject } = this.state;
     this.setState({ submitting: true });
     const bodyIsEmpty = editorStateIsEmpty(body);
-    if ((subject || this.props.ideaOnColumn) && !bodyIsEmpty) {
+    if (
+      ((subject || this.props.ideaOnColumn) && !bodyIsEmpty) ||
+      (publicationState === PublicationStates.DRAFT && (subject || !bodyIsEmpty))
+    ) {
       displayAlert('success', I18n.t('loading.wait'));
 
       // first, we upload each attachment
@@ -137,6 +140,9 @@ class TopPostForm extends React.Component<TopPostFormProps, TopPostFormState> {
             this.setState({ submitting: false });
           });
       });
+    } else if (publicationState === PublicationStates.DRAFT && (!subject && bodyIsEmpty)) {
+      displayAlert('warning', I18n.t('debate.brightMirror.fillEitherTitleContent'));
+      this.setState({ submitting: false });
     } else if (!subject && !ideaOnColumn) {
       displayAlert('warning', I18n.t('debate.thread.fillSubject'));
       this.setState({ submitting: false });

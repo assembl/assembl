@@ -19,7 +19,8 @@ type TopPostFormContainerProps = {
   postSuccessMsgId: string,
   bodyMaxLength: number,
   draftable: boolean,
-  draftSuccessMsgId: string
+  draftSuccessMsgId: string,
+  fullscreen: boolean
 };
 
 type TopPostFormContainerState = {
@@ -40,7 +41,8 @@ class TopPostFormContainer extends React.Component<TopPostFormContainerProps, To
     isColumnViewInline: false,
     messageColumns: [],
     draftable: false,
-    draftSuccessMsgId: null
+    draftSuccessMsgId: null,
+    fullscreen: false
   };
 
   constructor(props: TopPostFormContainerProps) {
@@ -106,12 +108,14 @@ class TopPostFormContainer extends React.Component<TopPostFormContainerProps, To
       postSuccessMsgId,
       draftSuccessMsgId,
       bodyMaxLength,
-      draftable
+      draftable,
+      fullscreen
     } = this.props;
     const columnsInfos = this.getColumnsInfos();
     const { sticky } = this.state;
     const containerClassNames = sticky && messageColumns.length <= 1 && topPostsCount >= 1 ? 'top-post-sticky' : '';
-
+    const containerMdOffset = fullscreen ? 0 : 2;
+    const formMdSize = fullscreen ? 10 : 6;
     return (
       <div id="top-post-form" ref={this.setFormContainerRef} className={containerClassNames}>
         <Grid fluid className={messageColumns.length > 1 ? '' : 'background-color'}>
@@ -135,7 +139,7 @@ class TopPostFormContainer extends React.Component<TopPostFormContainerProps, To
                           sm={messageColumns.length > 1 ? 10 : 3}
                           md={messageColumns.length > 1 ? 10 : 2}
                           smOffset={messageColumns.length > 1 ? 1 : 1}
-                          mdOffset={messageColumns.length > 1 ? 1 : 2}
+                          mdOffset={messageColumns.length > 1 ? 1 : containerMdOffset}
                           className="no-padding"
                         >
                           <div className="start-discussion-container">
@@ -156,7 +160,7 @@ class TopPostFormContainer extends React.Component<TopPostFormContainerProps, To
                         <Col
                           xs={12}
                           sm={messageColumns.length > 1 ? 10 : 7}
-                          md={messageColumns.length > 1 ? 10 : 6}
+                          md={messageColumns.length > 1 ? 10 : formMdSize}
                           mdOffset={messageColumns.length > 1 ? 1 : 0}
                           className="no-padding"
                         >
