@@ -286,3 +286,4 @@ def test_change_password_token(test_app, participant1_user):
     response = test_app.post_json('/data/AgentProfile/do_password_change', my_json)
     assert response.status_code == 200
     assert old_password != participant1_user.password
+    assert participant1_user.check_password("lolo") == True
