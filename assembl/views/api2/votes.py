@@ -266,7 +266,7 @@ def global_vote_results_csv(request):
         else:
             coltitles.append(u'{title} - moyenne'.format(title=title).encode('utf-8'))
             if isinstance(template_spec, NumberGaugeVoteSpecification):
-                for choice_value in range_float(template_spec.minimum, spec.maximum, spec.nb_ticks):
+                for choice_value in range_float(template_spec.minimum, template_spec.maximum, template_spec.nb_ticks):
                     coltitles.append(u'{value} {unit}'.format(value=choice_value, unit=template_spec.unit).encode('utf-8'))
             else:
                 for choice in template_spec.get_choices():
@@ -274,6 +274,8 @@ def global_vote_results_csv(request):
         coltitles.append('Total votes')
 
     output = StringIO()
+    # include BOM for Excel to open the file in UTF-8 properly
+    output.write(u'\ufeff'.encode('utf-8'))
     csvw = csv.writer(output)
     csvw.writerow(coltitles)
     from assembl.graphql.vote_session import get_avg_choice
@@ -337,6 +339,7 @@ def global_vote_results_csv(request):
                     histogram = dict(q_histogram.all())
                     for choice in template_spec.get_choices():
                         row.append(histogram.get(choice.value, 0))
+
             if spec is None:
                 row.append('-')
             else:
@@ -414,4 +417,4 @@ def extract_voters(request):
 
             extract_votes.append(extract_info)
     extract_votes.sort(key=operator.itemgetter('Nom du contributeur'))
-    return csv_response(extract_votes, CSV_MIMETYPE, fieldnames)
+    return csv_response(extract_votes, CSV_MIMETYPE, fieldnames, content_disposition='attachment; filename="detailed_vote_results.csv"')
