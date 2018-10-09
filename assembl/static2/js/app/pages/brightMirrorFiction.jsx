@@ -113,6 +113,21 @@ type BrightMirrorFictionState = {
 };
 
 export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps, BrightMirrorFictionState> {
+  static getDerivedStateFromProps(nextProps: LocalBrightMirrorFictionProps) {
+    // Sync state
+    const { loading } = nextProps.brightMirrorFictionData;
+    if (loading) return null;
+
+    const { subject, body, publicationState } = nextProps.brightMirrorFictionData.fiction;
+
+    return {
+      title: subject || EMPTY_STRING,
+      content: body || EMPTY_STRING,
+      loading: nextProps.brightMirrorFictionData.loading || nextProps.ideaWithCommentsData.loading,
+      publicationState: publicationState || PublicationStates.PUBLISHED
+    };
+  }
+
   // Lifecycle functions
   constructor(props: LocalBrightMirrorFictionProps) {
     super(props);
@@ -122,21 +137,6 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
       loading: props.brightMirrorFictionData.loading,
       publicationState: PublicationStates.PUBLISHED
     };
-  }
-
-  componentWillReceiveProps(nextProps: LocalBrightMirrorFictionProps) {
-    // Sync state
-    const { loading } = nextProps.brightMirrorFictionData;
-    if (loading) return;
-
-    const { subject, body, publicationState } = nextProps.brightMirrorFictionData.fiction;
-
-    this.setState({
-      title: subject || EMPTY_STRING,
-      content: body || EMPTY_STRING,
-      loading: nextProps.brightMirrorFictionData.loading || nextProps.ideaWithCommentsData.loading,
-      publicationState: publicationState || PublicationStates.PUBLISHED
-    });
   }
 
   // Define callback functions
