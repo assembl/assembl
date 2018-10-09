@@ -1,13 +1,18 @@
+// @flow
 import React from 'react';
 import { Grid, Col } from 'react-bootstrap';
 import get from 'lodash/get';
 import { I18n } from 'react-redux-i18n';
-import AsLogin from '../components/login/assemblLogin';
+import AssemblLogin from '../components/login/assemblLogin';
 import { SocialMedia } from '../components/login/socialMediaLogin';
 import { getProvidersData, getDiscussionSlug, getPossibleErrorMessage } from '../utils/globalFunctions';
 import { displayAlert } from '../utils/utilityManager';
 
-class Login extends React.Component {
+type Props = {
+  location: RouterPath
+};
+
+class Login extends React.Component<Props> {
   componentDidMount() {
     const error = getPossibleErrorMessage();
     if (error) {
@@ -16,9 +21,10 @@ class Login extends React.Component {
   }
 
   render() {
+    const { location } = this.props;
     const slug = getDiscussionSlug();
     const providers = getProvidersData();
-    const next = get(this.props, 'location.query.next', null);
+    const next = get(location, 'query.next', null);
     // Disable social media login for contextless login until post-login path
     // is determined
     // TODO: Determine contextless social media login action
@@ -43,7 +49,7 @@ class Login extends React.Component {
               </div>
             )}
             <Col xs={12} md={hasSocialMedias ? 6 : 12}>
-              {slug ? <AsLogin next={next} slug={slug} /> : <AsLogin next={next} />}
+              <AssemblLogin next={next} slug={slug} />
             </Col>
             <div className="clear">&nbsp;</div>
           </div>

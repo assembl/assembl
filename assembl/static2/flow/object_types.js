@@ -161,3 +161,12 @@ type ConfigurableField = {
 };
 
 type OverlayPlacement = 'top' | 'right' | 'bottom' | 'left';
+
+type RouterPath = {
+  action: string,
+  hash?: string,
+  key: string,
+  pathname: string,
+  query?: { [key: string]: any },
+  search: string
+};
