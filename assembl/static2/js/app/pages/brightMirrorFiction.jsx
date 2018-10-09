@@ -126,6 +126,9 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
 
   componentWillReceiveProps(nextProps: LocalBrightMirrorFictionProps) {
     // Sync state
+    const { loading } = nextProps.brightMirrorFictionData;
+    if (loading) return;
+
     const { subject, body, publicationState } = nextProps.brightMirrorFictionData.fiction;
 
     this.setState({
