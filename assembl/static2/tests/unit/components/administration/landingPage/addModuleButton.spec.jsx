@@ -20,17 +20,21 @@ describe('AddModuleButton component', () => {
     buttonTitleTranslationKey: 'textAndMultimediaBtn'
   };
   const wrapper = shallow(<AddModuleButton {...props} />);
+
   it('should render a non disabled button', () => {
     expect(wrapper.find('Button [disabled=false]')).toHaveLength(1);
   });
+
   it('should render a disabled button', () => {
     wrapper.setProps({ allDuplicatesAreChecked: false });
     expect(wrapper.find('Button [disabled=true]')).toHaveLength(1);
   });
+
   it('should render a modal when you click on the button', () => {
     wrapper.simulate('click');
     expect(displayModal).toHaveBeenCalledTimes(1);
   });
+
   it('should match the snapshot', () => {
     const component = renderer.create(<AddModuleButton {...props} />);
     const tree = component.toJSON();

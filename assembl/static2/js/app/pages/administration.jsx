@@ -26,7 +26,7 @@ import TimelineQuery from '../graphql/Timeline.graphql';
 import { convertEntriesToEditorState } from '../utils/draftjs';
 import { getPhaseId } from '../utils/timeline';
 import { fromGlobalId } from '../utils/globalFunctions';
-import { addEnumSuffixToModuleTitles } from '../components/form/utils';
+import { addEnumSuffixToModuleTitles } from '../components/administration/landingPage/addEnumSuffixToModuleTitles';
 
 const SECTIONS_WITHOUT_LANGUAGEMENU = ['1', '6'];
 
