@@ -11,7 +11,7 @@ exports[`Storyshots FictionPreview default 1`] = `
     }
   >
     <div
-      className="fiction-preview"
+      className="fiction-preview "
       style={
         Object {
           "backgroundColor": "#b3e5fc",
@@ -686,7 +686,7 @@ exports[`Storyshots FictionPreview playground 1`] = `
     }
   >
     <div
-      className="fiction-preview"
+      className="fiction-preview "
       style={
         Object {
           "backgroundColor": "#b3e5fc",

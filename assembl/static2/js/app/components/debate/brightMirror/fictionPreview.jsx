@@ -1,8 +1,9 @@
 // @flow
 import * as React from 'react';
 import { Link } from 'react-router';
+import { I18n } from 'react-redux-i18n';
 // Constant imports
-import { PublicationStates, FICTION_DRAFT_OPACITY } from '../../../constants';
+import { PublicationStates } from '../../../constants';
 import { NO_BODY_LENGTH } from '../common/topPostForm';
 // Components imports
 import EditPostForm from '../common/editPostForm';
@@ -98,12 +99,10 @@ const FictionPreview = ({
   const name = authorName || '';
   const date = ` - ${creationDate}`;
 
-  const backgroundColor = color + (isDraft ? FICTION_DRAFT_OPACITY : '');
-
   return (
-    <div className="fiction-preview" style={{ backgroundColor: backgroundColor }}>
+    <div className={`fiction-preview ${isDraft ? 'draft' : ''}`} style={{ backgroundColor: color }}>
       <div className="content-box">
-        {isDraft ? <span className="draft">{PublicationStates.DRAFT}</span> : null}
+        {isDraft ? <span className="draft-label">{I18n.t('debate.brightMirror.draftLabel')}</span> : null}
         <ul className="actions">
           {editButton}
           {deleteButton}
