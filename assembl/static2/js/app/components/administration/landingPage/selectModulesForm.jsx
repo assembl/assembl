@@ -1,9 +1,18 @@
+// @flow
 import React from 'react';
 import { Checkbox, FormGroup } from 'react-bootstrap';
+import type { Map } from 'immutable';
 import { I18n } from 'react-redux-i18n';
 import Helper from '../../common/helper';
+import type { LandingPageModuleType } from './manageModules';
 
-export const DumbSelectModulesForm = ({ modulesById, moduleTypes, toggleModule }) => (
+type Props = {
+  modulesById: Map<Object>,
+  moduleTypes: Array<LandingPageModuleType>,
+  toggleModule: Function
+};
+
+export const DumbSelectModulesForm = ({ modulesById, moduleTypes, toggleModule }: Props) => (
   <div className="select-modules-form">
     <FormGroup>
       {moduleTypes.map((moduleType) => {

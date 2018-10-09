@@ -824,9 +824,9 @@ const Translations = {
         manageModules: {
           title: "Administrer les modules",
           helper: "Choisissez les modules que vous souhaitez voir apparaître dans la page d'accueil et leurs emplacements.",
-          textAndMultimedia: "Texte & Multimédia",
-          textAndMultimediaBtn: "Ajouter un module Texte & Multimédia",
-          confirmationModal: "Voulez-vous ajouter un module Texte & Multimédia supplémentaire à la page d'accueil ?"
+          textAndMultimedia: "Texte & Multi-média",
+          textAndMultimediaBtn: "Ajouter un module Texte & Multi-média",
+          confirmationModal: "Voulez-vous ajouter un module Texte & Multi-média supplémentaire à la page d'accueil ?"
         },
         header: {
           title: "Header",
