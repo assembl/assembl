@@ -97,7 +97,7 @@ type Props = {
   deleteTextField: Function,
   profileOptionsHasChanged: boolean,
   refetchTextFields: Function,
-  textFields: string,
+  textFields: Array<Object>,
   updateDiscussionPhase: Function,
   createDiscussionPhase: Function,
   deleteDiscussionPhase: Function,

@@ -1,9 +1,42 @@
+// @flow
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Button } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
 
-export const runSerial = (tasks) => {
+import { type MutationsPromises } from '../form/types.flow';
+
+type Props = {
+  disabled: boolean,
+  saveAction: () => void,
+  specificClasses?: ?string
+};
+
+type Item = {
+  id: string,
+  _isNew: boolean,
+  _toDelete: boolean,
+  _hasChanged: boolean,
+  [string]: any
+};
+
+type Query = {
+  query: any,
+  variables?: Object
+};
+
+type Params = {
+  items: Array<Item>,
+  variablesCreator: (Item, number) => Object,
+  updateMutation: Function,
+  deleteVariablesCreator?: Item => Object,
+  createMutation?: Function,
+  deleteMutation?: Function,
+  refetchQueries?: Array<Query>,
+  lang?: string
+};
+
+export const runSerial = (tasks: MutationsPromises) => {
   if (tasks.length > 0 && typeof tasks[0] !== 'function') {
     throw new Error('runSerial takes an array of functions with each function returning a Promise');
   }
@@ -15,8 +48,17 @@ export const runSerial = (tasks) => {
 };
 
 /* Utility that creates create/delete/update mutations for a list of items */
-export const getMutationsPromises = (params) => {
-  const { items, variablesCreator, deleteVariablesCreator, createMutation, deleteMutation, updateMutation, lang } = params;
+export const getMutationsPromises = (params: Params) => {
+  const {
+    items,
+    variablesCreator,
+    deleteVariablesCreator,
+    createMutation,
+    deleteMutation,
+    updateMutation,
+    refetchQueries,
+    lang
+  } = params;
   const promises = [];
   items.forEach((item, index) => {
     if (item._isNew && item._toDelete) {
@@ -26,15 +68,15 @@ export const getMutationsPromises = (params) => {
       const variables = variablesCreator(item, index);
       variables.lang = lang;
       const payload = {
-        refetchQueries: params.refetchQueries || [],
+        refetchQueries: refetchQueries || [],
         variables: variables
       };
       const p1 = () => createMutation(payload);
       promises.push(p1);
-    } else if (item._toDelete && !item._isNew && deleteMutation) {
+    } else if (deleteVariablesCreator && item._toDelete && !item._isNew && deleteMutation) {
       // delete item
       const payload = {
-        refetchQueries: params.refetchQueries || [],
+        refetchQueries: refetchQueries || [],
         variables: deleteVariablesCreator(item)
       };
       const p3 = () => deleteMutation(payload);
@@ -45,7 +87,7 @@ export const getMutationsPromises = (params) => {
       variables.id = item.id;
       variables.lang = lang;
       const payload = {
-        refetchQueries: params.refetchQueries || [],
+        refetchQueries: refetchQueries || [],
         variables: variables
       };
       const p2 = () => updateMutation(payload);
@@ -56,7 +98,7 @@ export const getMutationsPromises = (params) => {
   return promises;
 };
 
-export const DumbSaveButton = ({ disabled, saveAction, specificClasses }) => {
+export const DumbSaveButton = ({ disabled, saveAction, specificClasses }: Props) => {
   const buttonClasses = specificClasses || 'save-button button-submit button-dark right';
   return (
     <Button className={buttonClasses} disabled={disabled} onClick={saveAction}>
@@ -65,19 +107,26 @@ export const DumbSaveButton = ({ disabled, saveAction, specificClasses }) => {
   );
 };
 
-class SaveButtonInPortal extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    this.el = document.createElement('span');
-  }
+DumbSaveButton.defaultProps = {
+  specificClasses: null
+};
+
+class SaveButtonInPortal extends React.PureComponent<Props> {
+  static defaultProps = {
+    specificClasses: null
+  };
 
   componentDidMount() {
-    document.getElementById('save-button').appendChild(this.el);
+    const saveButton = document.getElementById('save-button');
+    if (saveButton) saveButton.appendChild(this.el);
   }
 
   componentWillUnmount() {
-    document.getElementById('save-button').removeChild(this.el);
+    const saveButton = document.getElementById('save-button');
+    if (saveButton) saveButton.removeChild(this.el);
   }
+
+  el: HTMLElement = document.createElement('span');
 
   render() {
     return ReactDOM.createPortal(<DumbSaveButton {...this.props} />, this.el);

@@ -7,6 +7,7 @@ exports[`DumbAdminForm component should render an admin form 1`] = `
   <SaveButtonInPortal
     disabled={false}
     saveAction={[Function]}
+    specificClasses={null}
   />
   nothing
 </form>
