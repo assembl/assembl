@@ -1,8 +1,11 @@
-import React from 'react';
+// @flow
+import * as React from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 import isEqual from 'lodash/isEqual';
+import { type Route } from 'react-router';
 import { compose, graphql } from 'react-apollo';
+// $FlowFixMe
 import { filter } from 'graphql-anywhere';
 
 import { get } from './utils/routeMap';
@@ -19,7 +22,42 @@ import TimelineQuery from './graphql/Timeline.graphql';
 
 export const IsHarvestingContext = React.createContext(false);
 
-class App extends React.Component {
+type Debate = {
+  debateData: DebateData,
+  debateLoading: boolean,
+  debateError: ?string
+};
+
+type Location = {
+  action: string,
+  hash: string,
+  key: string,
+  pathname: string,
+  query: Object,
+  search: string
+};
+
+type Params = {
+  phase: string,
+  slug: string
+};
+
+type Props = {
+  addContext: Function,
+  children: React.Node,
+  debate: Debate,
+  error?: ?Error,
+  fetchDebateData: Function,
+  location: Location,
+  params: Params,
+  putTimelineInStore: Function,
+  route: Route,
+  timeline: Timeline,
+  timelineLoading: boolean,
+  isHarvesting: boolean
+};
+
+class App extends React.Component<Props> {
   componentDidMount() {
     const debateId = getDiscussionId();
     const connectedUserId = getConnectedUserId();
@@ -28,7 +66,7 @@ class App extends React.Component {
     this.props.addContext(this.props.route.path, debateId, connectedUserId, connectedUserName);
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps: Props) {
     const { error, timelineLoading, location, params, timeline, putTimelineInStore } = this.props;
     if (error) {
       throw new Error(`GraphQL error: ${error.message}`);
@@ -47,14 +85,15 @@ class App extends React.Component {
 
   render() {
     const { debateData, debateLoading, debateError } = this.props.debate;
-    const divClassNames = classNames('app', { 'harvesting-mode-on': this.props.isHarvesting });
+    const { isHarvesting, children } = this.props;
+    const divClassNames = classNames('app', { 'harvesting-mode-on': isHarvesting });
     return (
       <div className={divClassNames}>
         <ChatFrame />
         {debateLoading && <Loader />}
         {debateData && (
           <div className="app-child">
-            <IsHarvestingContext.Provider value={this.props.isHarvesting}>{this.props.children}</IsHarvestingContext.Provider>
+            <IsHarvestingContext.Provider value={this.props.isHarvesting}>{children}</IsHarvestingContext.Provider>
           </div>
         )}
         {debateError && <Error errorMessage={debateError} />}
