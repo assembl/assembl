@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 
-import Aux from '../../hoc/aux/aux';
 import { customFictionsList } from '../../stories/components/debate/brightMirror/fictionsList.stories';
 import { customInstructionsText } from '../../stories/components/debate/brightMirror/instructionsText.stories';
 import FictionsList from '../../components/debate/brightMirror/fictionsList';
@@ -27,23 +26,21 @@ const props = {
 class Index extends Component {
   render() {
     return (
-      <Aux>
-        <div className="instruction-view">
-          <InstructionsText {...customInstructionsText} />
-          <div className="overflow-x">
-            <TopPostFormContainer
-              ideaId={props.ideaId}
-              refetchIdea={props.refetchIdea}
-              topPostsCount={props.posts.length}
-              instructionLabelMsgId="debate.brightMirror.startFictionLabel"
-              fillBodyLabelMsgId="debate.brightMirror.fillBodyLabel"
-              bodyPlaceholderMsgId="debate.brightMirror.fillBodyLabel"
-              postSuccessMsgId="debate.brightMirror.postSuccessMsg"
-            />
-            <FictionsList {...customFictionsList} />
-          </div>
+      <div className="instruction-view">
+        <InstructionsText {...customInstructionsText} />
+        <div className="overflow-x">
+          <TopPostFormContainer
+            ideaId={props.ideaId}
+            refetchIdea={props.refetchIdea}
+            topPostsCount={props.posts.length}
+            instructionLabelMsgId="debate.brightMirror.startFictionLabel"
+            fillBodyLabelMsgId="debate.brightMirror.fillBodyLabel"
+            bodyPlaceholderMsgId="debate.brightMirror.fillBodyLabel"
+            postSuccessMsgId="debate.brightMirror.postSuccessMsg"
+          />
+          <FictionsList {...customFictionsList} />
         </div>
-      </Aux>
+      </div>
     );
   }
 }
