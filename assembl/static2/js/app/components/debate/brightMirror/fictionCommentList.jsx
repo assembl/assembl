@@ -1,18 +1,18 @@
 // @flow
 import React from 'react';
+import { Map } from 'immutable';
 // Components imports
-import Tree from '../../../components/common/tree';
+import { Tree } from '../../../components/common/tree';
 import FictionComment from './fictionComment';
 // Type imports
-import type { ContentLocaleMapping } from '../../../actions/actionTypes';
 
 export type FictionCommentListProps = {
   /** Array of fiction comments */
-  comments: Array<{ id: string, contentLocale: string }>,
+  comments: Array<TreeItem & { id: string, contentLocale: string }>,
   /** Content locale used by Tree */
   contentLocale: string,
   /** Content locale mapping used by Tree */
-  contentLocaleMapping: ContentLocaleMapping,
+  contentLocaleMapping: Map<string, string>,
   /** Identifier of the idea - e.g 'brightMirror' */
   identifier: string
 };

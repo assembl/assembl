@@ -5,7 +5,7 @@ import { configure, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 
 import FictionCommentList from '../../../../../js/app/components/debate/brightMirror/fictionCommentList';
-import Tree from '../../../../../js/app/components/common/tree';
+import { Tree } from '../../../../../js/app/components/common/tree';
 import type { FictionCommentListProps } from '../../../../../js/app/components/debate/brightMirror/fictionCommentList';
 
 // Import existing storybook data
