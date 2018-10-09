@@ -46,6 +46,12 @@ type TopPostFormState = {
   submitting: boolean
 };
 
+function submittingState(value) {
+  return {
+    submitting: value
+  };
+}
+
 class TopPostForm extends React.Component<TopPostFormProps, TopPostFormState> {
   formContainer: ?HTMLDivElement;
 
@@ -105,7 +111,7 @@ class TopPostForm extends React.Component<TopPostFormProps, TopPostFormState> {
       draftSuccessMsgId
     } = this.props;
     const { body, subject } = this.state;
-    this.setState({ submitting: true });
+    this.setState(submittingState(true));
     const bodyIsEmpty = editorStateIsEmpty(body);
     if (
       ((subject || this.props.ideaOnColumn) && !bodyIsEmpty) ||
@@ -133,22 +139,22 @@ class TopPostForm extends React.Component<TopPostFormProps, TopPostFormState> {
             const successMsgId = publicationState === PublicationStates.DRAFT ? draftSuccessMsgId : postSuccessMsgId;
             displayAlert('success', I18n.t(successMsgId));
             this.resetForm();
-            this.setState({ submitting: false });
+            this.setState(submittingState(false));
           })
           .catch((error) => {
             displayAlert('danger', `${error}`);
-            this.setState({ submitting: false });
+            this.setState(submittingState(false));
           });
       });
     } else if (publicationState === PublicationStates.DRAFT && (!subject && bodyIsEmpty)) {
       displayAlert('warning', I18n.t('debate.brightMirror.fillEitherTitleContent'));
-      this.setState({ submitting: false });
+      this.setState(submittingState(false));
     } else if (!subject && !ideaOnColumn) {
       displayAlert('warning', I18n.t('debate.thread.fillSubject'));
-      this.setState({ submitting: false });
+      this.setState(submittingState(false));
     } else if (bodyIsEmpty) {
       displayAlert('warning', I18n.t(fillBodyLabelMsgId));
-      this.setState({ submitting: false });
+      this.setState(submittingState(false));
     }
   };
 
