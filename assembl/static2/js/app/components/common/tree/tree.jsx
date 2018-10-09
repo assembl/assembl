@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { AutoSizer, CellMeasurer, CellMeasurerCache, List, WindowScroller } from 'react-virtualized';
 
-import NuggetsManager from './nuggetsManager';
+import NuggetsManager from '../nuggetsManager';
 import Child from './treeItem';
 
 type ChildType = TreeItem & {

@@ -6,8 +6,8 @@ import classnames from 'classnames';
 import debounce from 'lodash/debounce';
 import { CellMeasurerCache, List } from 'react-virtualized';
 
-import { scrollToPost } from '../../utils/hashLinkScroll';
-import NuggetsManager from './nuggetsManager';
+import { scrollToPost } from '../../../utils/hashLinkScroll';
+import NuggetsManager from '../nuggetsManager';
 
 type BaseProps = {
   id: string,

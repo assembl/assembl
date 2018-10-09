@@ -2,7 +2,7 @@
 import React from 'react';
 import { Map } from 'immutable';
 // Components imports
-import Tree from '../../../components/common/tree';
+import { Tree } from '../../../components/common/tree';
 import FictionComment from './fictionComment';
 // Type imports
 
