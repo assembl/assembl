@@ -5110,13 +5110,3 @@ msgstr "Nem található beszélgetés a következővel kapcsolatban: slug=%s"
 
 #~ msgid ""
 #~ msgstr ""
-
-#~ msgid "We apologise for the inconvenience!"
-#~ msgstr ""
-
-#~ msgid "We apologize for the inconvenience!"
-#~ msgstr ""
-
-#~ msgid "Home page"
-#~ msgstr ""
-

@@ -5128,13 +5128,3 @@ msgstr "No se ha encontrado ninguna discusión para slug=%s"
 
 #~ msgid ""
 #~ msgstr ""
-
-#~ msgid "We apologise for the inconvenience!"
-#~ msgstr ""
-
-#~ msgid "We apologize for the inconvenience!"
-#~ msgstr ""
-
-#~ msgid "Home page"
-#~ msgstr ""
-
