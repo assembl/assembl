@@ -26,7 +26,7 @@ const defaultFictionCommentCallbacks: FictionCommentExtraProps = {
 
 export const defaultFictionComment: FictionCommentBaseProps = {
   numChildren: 999,
-  fictionCommentCallbacks: defaultFictionCommentCallbacks
+  fictionCommentExtraProps: defaultFictionCommentCallbacks
 };
 
 export const defaultFictionCommentGraphQL: FictionCommentGraphQLProps = {
@@ -58,7 +58,7 @@ storiesOf('FictionComment', module)
         commentContent={text('Comment content', playground.commentContent)}
         circleAvatar={object('circleAvatar', playground.circleAvatar)}
         numChildren={number('Number of comments', playground.numChildren)}
-        fictionCommentCallbacks={playground.fictionCommentCallbacks}
+        fictionCommentExtraProps={playground.fictionCommentExtraProps}
       />
     ))
   );

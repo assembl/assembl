@@ -32,7 +32,7 @@ export type FictionCommentBaseProps = {
   /** Number of child comments */
   numChildren: number,
   /**  */
-  fictionCommentCallbacks: FictionCommentExtraProps
+  fictionCommentExtraProps: FictionCommentExtraProps
 };
 
 export type FictionCommentGraphQLProps = {
@@ -76,9 +76,9 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
       displayedPublishedDate,
       numChildren,
       publishedDate,
-      fictionCommentCallbacks
+      fictionCommentExtraProps
     } = this.props;
-    const { expandedFromTree, expandCollapseCallbackFromTree } = fictionCommentCallbacks;
+    const { expandedFromTree, expandCollapseCallbackFromTree } = fictionCommentExtraProps;
 
     const toggleCommentButtonProps: ToggleCommentButtonProps = {
       isExpanded: expandedFromTree != null ? expandedFromTree : false,
@@ -86,7 +86,7 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
     };
 
     const fictionCommentFormProps: FictionCommentFormProps = {
-      onSubmitCommentCallback: (comment: string) => fictionCommentCallbacks.submitCommentCallback(comment, commentParentId)
+      onSubmitCommentCallback: (comment: string) => fictionCommentExtraProps.submitCommentCallback(comment, commentParentId)
     };
 
     const displayToggleCommentButton = numChildren > 0 ? <ToggleCommentButton {...toggleCommentButtonProps} /> : null;

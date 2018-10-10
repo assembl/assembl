@@ -21,7 +21,7 @@ type Props = {
   InnerComponent: any => React.Node,
   SeparatorComponent: () => React.Node,
   noRowsRenderer: () => React.Node,
-  fictionCommentCallbacks?: Object
+  fictionCommentExtraProps?: Object
 };
 
 class Tree extends React.Component<Props> {
@@ -109,7 +109,7 @@ class Tree extends React.Component<Props> {
       InnerComponent, // component that will be rendered in the child
       InnerComponentFolded, // component that will be used to render the children when folded
       SeparatorComponent, // separator component between first level children
-      fictionCommentCallbacks // Optional Bright Mirror fiction debate props
+      fictionCommentExtraProps // Optional Bright Mirror fiction debate props
     } = this.props;
 
     const childData = data[index];
@@ -131,7 +131,7 @@ class Tree extends React.Component<Props> {
             nuggetsManager={this.nuggetsManager}
             listRef={this.listRef}
             cache={this.cache}
-            fictionCommentCallbacks={fictionCommentCallbacks}
+            fictionCommentExtraProps={fictionCommentExtraProps}
           />
         </div>
       </CellMeasurer>

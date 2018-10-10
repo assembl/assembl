@@ -33,7 +33,7 @@ type BaseProps = {
       measureTreeHeight: (delay?: number) => void
     }
   ) => React.Node,
-  fictionCommentCallbacks?: Object
+  fictionCommentExtraProps?: Object
 };
 
 type Props = {
@@ -180,7 +180,7 @@ class Child extends React.PureComponent<Props, State> {
       nuggetsManager,
       listRef,
       cache,
-      fictionCommentCallbacks
+      fictionCommentExtraProps
     } = this.props;
     const { expanded, visible } = this.state;
     const numChildren = children ? children.length : 0;
@@ -197,9 +197,9 @@ class Child extends React.PureComponent<Props, State> {
     if (identifier === PHASES.brightMirror) {
       forwardProps = {
         ...forwardProps,
-        fictionCommentCallbacks: {
-          ...forwardProps.fictionCommentCallbacks,
-          expanded: expanded,
+        fictionCommentExtraProps: {
+          ...forwardProps.fictionCommentExtraProps,
+          expandedFromTree: expanded,
           expandCollapseCallbackFromTree: event => this.expandCollapseHandler(event, expanded)
         }
       };
@@ -261,7 +261,7 @@ class Child extends React.PureComponent<Props, State> {
                   nuggetsManager={nuggetsManager}
                   listRef={listRef}
                   cache={cache}
-                  fictionCommentCallbacks={fictionCommentCallbacks}
+                  fictionCommentExtraProps={fictionCommentExtraProps}
                 />
               );
             })}

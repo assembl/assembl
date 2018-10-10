@@ -45,7 +45,7 @@ const FictionCommentList = ({
     </div>
   );
 
-  const fictionCommentCallbacks: FictionCommentExtraProps = {
+  const fictionCommentExtraProps: FictionCommentExtraProps = {
     submitCommentCallback: onSubmitHandler
   };
 
@@ -60,7 +60,7 @@ const FictionCommentList = ({
       noRowsRenderer={NoRowsRenderer}
       SeparatorComponent={InfiniteSeparator}
       identifier={identifier}
-      fictionCommentCallbacks={fictionCommentCallbacks}
+      fictionCommentExtraProps={fictionCommentExtraProps}
     />
   );
 };
