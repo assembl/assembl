@@ -15,7 +15,7 @@ import { fetchDebateData } from './actions/debateActions';
 import { addContext } from './actions/contextActions';
 import { updateTimeline } from './actions/timelineActions';
 import Loader from './components/common/loader';
-import Error from './components/common/error';
+import ErrorMessage from './components/common/error';
 import ChatFrame from './components/common/ChatFrame';
 import { browserHistory } from './router';
 import TimelineQuery from './graphql/Timeline.graphql';
@@ -96,7 +96,7 @@ class App extends React.Component<Props> {
             <IsHarvestingContext.Provider value={this.props.isHarvesting}>{children}</IsHarvestingContext.Provider>
           </div>
         )}
-        {debateError && <Error errorMessage={debateError} />}
+        {debateError && <ErrorMessage errorMessage={debateError} />}
       </div>
     );
   }

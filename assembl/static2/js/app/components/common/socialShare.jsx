@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { ShareButtons, generateShareIcon } from 'react-share';
@@ -13,7 +14,24 @@ const {
   TelegramShareButton
 } = ShareButtons;
 
-const SuperShareButton = ({ Component, Icon, url, onClose, ...props }) => {
+type Props = {
+  url: string,
+  onClose: () => void,
+  social: boolean
+};
+
+type State = {
+  copied: boolean
+};
+
+type SuperShareButtonProps = {
+  Component: any => void,
+  Icon: any => void,
+  url: string,
+  onClose: () => void
+};
+
+const SuperShareButton = ({ Component, Icon, url, onClose, ...props }: SuperShareButtonProps) => {
   const data = { url: url, onShareWindowClose: onClose };
   return (
     <div className="social-share-button">
@@ -24,16 +42,14 @@ const SuperShareButton = ({ Component, Icon, url, onClose, ...props }) => {
   );
 };
 
-export default class SocialShare extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      copied: false
-    };
-  }
+export default class SocialShare extends React.Component<Props, State> {
+  state = {
+    copied: false
+  };
 
   render() {
     const { url, onClose, social } = this.props;
+    const { copied } = this.state;
     const SocialNetworks = [
       { Component: FacebookShareButton, iconName: 'facebook' },
       { Component: GooglePlusShareButton, iconName: 'google' },
@@ -66,9 +82,7 @@ export default class SocialShare extends React.Component {
           </div>
         )}
         <CopyToClipboard text={url} onCopy={() => this.setState({ copied: true })}>
-          <button className="btn btn-default btn-copy">
-            {this.state.copied ? I18n.t('debate.linkCopied') : I18n.t('debate.copyLink')}
-          </button>
+          <button className="btn btn-default btn-copy">{copied ? I18n.t('debate.linkCopied') : I18n.t('debate.copyLink')}</button>
         </CopyToClipboard>
       </div>
     );

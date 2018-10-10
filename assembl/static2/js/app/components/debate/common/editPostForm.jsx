@@ -166,6 +166,7 @@ class EditPostForm extends React.PureComponent<EditPostFormProps, EditPostFormSt
                 value={subject}
                 handleTxtChange={this.updateSubject}
                 maxLength={TEXT_INPUT_MAX_LENGTH}
+                name="top-post-title"
               />
             )}
             <FormGroup>

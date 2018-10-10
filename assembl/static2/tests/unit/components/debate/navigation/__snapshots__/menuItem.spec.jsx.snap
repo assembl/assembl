@@ -35,6 +35,9 @@ exports[`DumbMenuItem component should match a not selected menu item 1`] = `
         className="menu-stats"
         numContributors={10}
         numPosts={123}
+        showNumContributors={true}
+        showNumPosts={true}
+        vertical={false}
       />
     </div>
   </div>
@@ -76,6 +79,9 @@ exports[`DumbMenuItem component should match a selected menu item 1`] = `
         className="menu-stats"
         numContributors={10}
         numPosts={123}
+        showNumContributors={true}
+        showNumPosts={true}
+        vertical={false}
       />
     </div>
     <span

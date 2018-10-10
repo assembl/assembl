@@ -1,41 +1,67 @@
+// @flow
 import React from 'react';
 import { Link } from 'react-router';
 import { Modal, Button } from 'react-bootstrap';
 
-class AssemblModal extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      content: null,
-      showModal: false
-    };
-    this.close = this.close.bind(this);
-    this.open = this.open.bind(this);
-    this.goToUrl = this.goToUrl.bind(this);
-  }
+type Props = {
+  showModal: boolean
+};
 
-  componentWillReceiveProps(nextProps) {
+type ButtonProps = {
+  label: string,
+  link: string,
+  internalLink: ?string
+};
+
+type State = {
+  content: ?string,
+  showModal: boolean,
+  title: ?string,
+  body: ?string,
+  footer: ?string,
+  footerTxt: ?string,
+  button: ?ButtonProps,
+  bsSize: ?string,
+  modalClass: ?string
+};
+
+class AssemblModal extends React.Component<Props, State> {
+  state = {
+    content: null,
+    showModal: false,
+    title: null,
+    body: null,
+    footer: null,
+    footerTxt: null,
+    button: null,
+    bsSize: null,
+    modalClass: null
+  };
+
+  componentWillReceiveProps(nextProps: Props) {
     this.setState({
       showModal: nextProps.showModal
     });
   }
 
-  close() {
+  url: string = '';
+
+  close = () => {
     this.setState({
       showModal: false
     });
-  }
+  };
 
-  open() {
+  open = () => {
     this.setState({
       showModal: true
     });
-  }
+  };
 
-  goToUrl(url) {
+  goToUrl = (url: string) => {
     this.url = url;
     window.location = this.url;
-  }
+  };
 
   render() {
     const { content, title, body, footer, footerTxt, button, bsSize, modalClass } = this.state;

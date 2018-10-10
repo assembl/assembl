@@ -1,20 +1,55 @@
-import React from 'react';
+// @flow
+import * as React from 'react';
 import { I18n } from 'react-redux-i18n';
 import { Grid, Col, Button, Image, ResponsiveEmbed } from 'react-bootstrap';
 
 import { displayModal } from '../../utils/utilityManager';
 
-class Media extends React.Component {
-  static isValidDescription = description => !!(description && description !== '<p></p>');
+type File = {
+  externalUrl: string
+};
+type Props = {
+  title: string,
+  descriptionTop: string,
+  descriptionBottom: string,
+  descriptionSide: string,
+  htmlCode: string,
+  mediaFile: File,
+  noTitle: boolean
+};
 
-  static Title = ({ value }) => (
+type TitleProps = {
+  value: ?string // eslint-disable-line
+};
+
+type SideDescriptionProps = {
+  content: string // eslint-disable-line
+};
+
+type TopDescriptionProps = {
+  content: string // eslint-disable-line
+};
+
+type BottomDescription = {
+  content: string // eslint-disable-line
+};
+
+type ContentProps = {
+  htmlCode: string,
+  mediaFile: File
+};
+
+class Media extends React.Component<Props> {
+  static isValidDescription = (description: ?string): boolean => description !== '<p></p>';
+
+  static Title = ({ value }: TitleProps) => (
     <div className="media-title-section">
       <div className="title-hyphen">&nbsp;</div>
       <h1 className="dark-title-1">{value || I18n.t('debate.survey.titleVideo')}</h1>
     </div>
   );
 
-  static SideDescription = ({ content }) => (
+  static SideDescription = ({ content }: SideDescriptionProps) => (
     <div className="media-description">
       <div className="media-description-icon">
         <span className="assembl-icon-pepite color2">&nbsp;</span>
@@ -24,15 +59,15 @@ class Media extends React.Component {
     </div>
   );
 
-  static TopDescription = ({ content }) => (
+  static TopDescription = ({ content }: TopDescriptionProps) => (
     <div className="media-description-layer media-description-top" dangerouslySetInnerHTML={{ __html: content }} />
   );
 
-  static ImageModal = content => () => {
+  static ImageModal = (content: React.Node) => () => {
     displayModal(null, content, false, null, null, true, 'large');
   };
 
-  static Content = ({ htmlCode, mediaFile }) => {
+  static Content = ({ htmlCode, mediaFile }: ContentProps) => {
     const isLocal = !htmlCode && mediaFile && mediaFile.externalUrl;
     const component = isLocal ? (
       <Image responsive src={mediaFile.externalUrl} />
@@ -52,7 +87,7 @@ class Media extends React.Component {
     );
   };
 
-  static BottomDescription = ({ content }) => (
+  static BottomDescription = ({ content }: BottomDescription) => (
     <div className="media-description-layer media-description-bottom" dangerouslySetInnerHTML={{ __html: content }} />
   );
 

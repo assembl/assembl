@@ -1,6 +1,13 @@
-import React from 'react';
+// @flow
+import * as React from 'react';
 
-const VisibilityComponent = ({ classname, isVisible, children }) => (
+type Props = {
+  classname: string,
+  isVisible: boolean,
+  children: React.Node
+};
+
+const VisibilityComponent = ({ classname, isVisible, children }: Props) => (
   <div className={isVisible ? classname : 'hidden'}>{children}</div>
 );
 

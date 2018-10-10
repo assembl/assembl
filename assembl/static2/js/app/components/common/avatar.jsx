@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
@@ -10,27 +11,25 @@ import manageErrorAndLoading from './manageErrorAndLoading';
 import { browserHistory } from '../../router';
 import { localAwareLink } from '../../utils/utilityManager';
 
-class ProfileIcon extends React.Component {
-  constructor(props) {
-    super(props);
-    this.setCurrentView = this.setCurrentView.bind(this);
+type Props = {
+  // used by getDerivedStateFromProps
+  location: string, // eslint-disable-line
+  slug: string,
+  connectedUserId: string,
+  loginData: {
+    url: string,
+    local: string
   }
+};
 
-  componentWillMount() {
-    this.setCurrentView();
-  }
+type State = { next: string };
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.location) {
-      this.setState({ next: nextProps.location });
+class Avatar extends React.Component<Props, State> {
+  static getDerivedStateFromProps(props: Props) {
+    if (props.location) {
+      return { next: props.location };
     }
-  }
-
-  setCurrentView() {
-    const { location } = this.props;
-    this.setState({
-      next: location
-    });
+    return null;
   }
 
   render() {
@@ -109,4 +108,4 @@ export default compose(
     }
   }),
   manageErrorAndLoading({ displayLoader: false })
-)(ProfileIcon);
+)(Avatar);
