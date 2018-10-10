@@ -9,14 +9,24 @@ import { withKnobs, text, number, object } from '@storybook/addon-knobs';
 
 // import components
 import { FictionComment } from '../../../../components/debate/brightMirror/fictionComment';
-import type { FictionCommentProps, FictionCommentGraphQLProps } from '../../../../components/debate/brightMirror/fictionComment';
+import type {
+  FictionCommentExtraProps,
+  FictionCommentBaseProps,
+  FictionCommentGraphQLProps
+} from '../../../../components/debate/brightMirror/fictionComment';
 
 // import existing storybook data
 import { defaultCircleAvatar } from './circleAvatar.stories';
 
-export const defaultFictionComment: FictionCommentProps = {
+const defaultFictionCommentCallbacks: FictionCommentExtraProps = {
+  submitCommentCallback: action('submitCommentCallback'),
+  expandedFromTree: true,
+  expandCollapseCallbackFromTree: action('expandCollapseCallbackFromTree')
+};
+
+export const defaultFictionComment: FictionCommentBaseProps = {
   numChildren: 999,
-  submitCommentCallback: action('submitCommentCallback')
+  fictionCommentCallbacks: defaultFictionCommentCallbacks
 };
 
 export const defaultFictionCommentGraphQL: FictionCommentGraphQLProps = {
@@ -48,7 +58,7 @@ storiesOf('FictionComment', module)
         commentContent={text('Comment content', playground.commentContent)}
         circleAvatar={object('circleAvatar', playground.circleAvatar)}
         numChildren={number('Number of comments', playground.numChildren)}
-        submitCommentCallback={playground.submitCommentCallback}
+        fictionCommentCallbacks={playground.fictionCommentCallbacks}
       />
     ))
   );

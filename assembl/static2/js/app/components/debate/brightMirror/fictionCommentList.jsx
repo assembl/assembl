@@ -8,6 +8,7 @@ import FictionComment from './fictionComment';
 // import FoldedPost from '../common/post/foldedPost';
 import InfiniteSeparator from '../../../components/common/infiniteSeparator';
 // Type imports
+import type { FictionCommentExtraProps } from './fictionComment';
 
 export type FictionCommentListProps = {
   /** Array of fiction comments */
@@ -44,6 +45,10 @@ const FictionCommentList = ({
     </div>
   );
 
+  const fictionCommentCallbacks: FictionCommentExtraProps = {
+    submitCommentCallback: onSubmitHandler
+  };
+
   return (
     <Tree
       contentLocaleMapping={contentLocaleMapping}
@@ -55,7 +60,7 @@ const FictionCommentList = ({
       noRowsRenderer={NoRowsRenderer}
       SeparatorComponent={InfiniteSeparator}
       identifier={identifier}
-      submitCommentCallback={onSubmitHandler}
+      fictionCommentCallbacks={fictionCommentCallbacks}
     />
   );
 };

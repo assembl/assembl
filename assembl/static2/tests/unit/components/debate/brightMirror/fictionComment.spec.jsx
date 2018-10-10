@@ -78,11 +78,11 @@ describe('<FictionComment /> - with mount', () => {
       expect(wrapper.contains(defaultFictionCommentGraphQL.commentContent)).toBe(true);
     });
 
-    xit('TODO: should display the number of child comments', () => {
-      expect(wrapper.contains(`${defaultFictionComment.numChildren} answers`)).toBe(true);
+    it('should display the number of child comments', () => {
+      expect(wrapper.contains(`${defaultFictionComment.numChildren} responses`)).toBe(true);
     });
 
-    xit('TODO: should display a "toggle comment" button', () => {
+    it('should display a "toggle comment" button', () => {
       expect(wrapper.find(ToggleCommentButton)).toHaveLength(1);
     });
 

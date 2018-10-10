@@ -17,12 +17,22 @@ import { EMPTY_STRING } from '../../../constants';
 // Types imports
 import type { CircleAvatarProps } from './circleAvatar';
 import type { FictionCommentFormProps } from './fictionCommentForm';
+import type { ToggleCommentButtonProps } from '../common/toggleCommentButton';
 
-export type FictionCommentProps = {
+export type FictionCommentExtraProps = {
+  /** Submit comment callback used in order to catch a submit event from tree.jsx */
+  submitCommentCallback: Function,
+  /** Expand flag set from Tree.jsx */
+  expandedFromTree?: ?boolean,
+  /** Expand collapse callback function set from Tree.jsx  */
+  expandCollapseCallbackFromTree?: ?Function
+};
+
+export type FictionCommentBaseProps = {
   /** Number of child comments */
   numChildren: number,
-  /** Submit comment callback used in order to catch a submit event from tree.jsx */
-  submitCommentCallback: Function
+  /**  */
+  fictionCommentCallbacks: FictionCommentExtraProps
 };
 
 export type FictionCommentGraphQLProps = {
@@ -40,7 +50,7 @@ export type FictionCommentGraphQLProps = {
   publishedDate: string
 };
 
-type LocalFictionCommentProps = FictionCommentProps & FictionCommentGraphQLProps;
+type LocalFictionCommentProps = FictionCommentBaseProps & FictionCommentGraphQLProps;
 
 type FictionCommentState = {};
 
@@ -66,11 +76,20 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
       displayedPublishedDate,
       numChildren,
       publishedDate,
-      submitCommentCallback
+      fictionCommentCallbacks
     } = this.props;
-    const fictionCommentFormProps: FictionCommentFormProps = {
-      onSubmitCommentCallback: (comment: string) => submitCommentCallback(comment, commentParentId)
+    const { expandedFromTree, expandCollapseCallbackFromTree } = fictionCommentCallbacks;
+
+    const toggleCommentButtonProps: ToggleCommentButtonProps = {
+      isExpanded: expandedFromTree != null ? expandedFromTree : false,
+      onClickCallback: expandCollapseCallbackFromTree != null ? expandCollapseCallbackFromTree : () => null
     };
+
+    const fictionCommentFormProps: FictionCommentFormProps = {
+      onSubmitCommentCallback: (comment: string) => fictionCommentCallbacks.submitCommentCallback(comment, commentParentId)
+    };
+
+    const displayToggleCommentButton = numChildren > 0 ? <ToggleCommentButton {...toggleCommentButtonProps} /> : null;
 
     return (
       <article className="comment-container">
@@ -91,7 +110,7 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
             <p>
               <Translate value="debate.brightMirror.numberOfResponses" count={numChildren} />
             </p>
-            <ToggleCommentButton />
+            {displayToggleCommentButton}
             <ReplyToCommentButton />
             <FictionCommentForm {...fictionCommentFormProps} />
           </footer>
