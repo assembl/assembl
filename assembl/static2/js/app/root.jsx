@@ -22,7 +22,7 @@ const Root = ({ children, routes, debateData }: Props) => (
   <React.Fragment>
     <DebateCustomHTMLCode currentRoute={routes[routes.length - 1].path} debateData={debateData} />
     <Modal
-      ref={(modalComponent: React.Node) => {
+      ref={(modalComponent) => {
         modalManager.setComponent(modalComponent);
       }}
     />

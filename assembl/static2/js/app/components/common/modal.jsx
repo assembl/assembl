@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 import { Modal, Button } from 'react-bootstrap';
 
 type Props = {
-  showModal: boolean
+  showModal?: boolean
 };
 
 type ButtonProps = {
