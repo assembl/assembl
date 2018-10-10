@@ -1,25 +1,29 @@
+// @flow
 import React from 'react';
-import { connect } from 'react-redux';
 import { Translate, I18n } from 'react-redux-i18n';
 import { form, FormGroup, FormControl, Button } from 'react-bootstrap';
+
 import { getDiscussionSlug } from '../../utils/globalFunctions';
-import { requestPasswordChangeAction } from '../../actions/authenticationActions';
-import inputHandler from '../../utils/inputHandler';
 import { displayAlert } from '../../utils/utilityManager';
+import { type ChangePasswordResponse } from '../../pages/requestPasswordChange';
 
-class SendPwdForm extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { identifier: null };
-    this.submitHandler = this.submitHandler.bind(this);
-    this.handleInput = this.handleInput.bind(this);
-  }
+type Props = {
+  passwordChangeResponse: ChangePasswordResponse,
+  requestPasswordChange: (string, string) => void
+};
 
-  componentWillReceiveProps(nextProps) {
-    const { auth } = nextProps;
-    const resp = auth.passwordChangeRequest;
-    if (resp && resp.success === false) {
-      const firstError = resp.data[0];
+type State = {
+  identifier: string | null
+};
+
+class RequestNewPasswordForm extends React.Component<Props, State> {
+  state = { identifier: null };
+
+  componentWillReceiveProps(nextProps: Props) {
+    const { passwordChangeResponse } = nextProps;
+    // we explicitely check if success is false because it can be null if the request has not been set yet
+    if (passwordChangeResponse.success === false && passwordChangeResponse.data.length > 0) {
+      const firstError = passwordChangeResponse.data[0];
       let msg;
       if (firstError.type === 'nonJson') {
         msg = I18n.t('login.somethingWentWrong');
@@ -30,14 +34,21 @@ class SendPwdForm extends React.Component {
     }
   }
 
-  handleInput(e) {
-    inputHandler(this, e);
-  }
+  handleIdentifierChange = (e: SyntheticEvent<HTMLInputElement>) => {
+    const value = e.currentTarget.value;
+    this.setState(() => ({
+      identifier: value
+    }));
+  };
 
-  submitHandler(e) {
+  handleSubmit = (e: SyntheticEvent<HTMLFormElement>) => {
+    const { requestPasswordChange } = this.props;
+    const slug = getDiscussionSlug();
     e.preventDefault();
-    this.props.sendRequest(this.state.identifier, getDiscussionSlug());
-  }
+    if (this.state.identifier && slug) {
+      requestPasswordChange(this.state.identifier, slug);
+    }
+  };
 
   render() {
     return (
@@ -46,7 +57,7 @@ class SendPwdForm extends React.Component {
           <Translate value="login.forgotPwd" />
         </div>
         <div className="box">
-          <form className="resendPwd" onSubmit={this.submitHandler}>
+          <form className="resendPwd" onSubmit={this.handleSubmit}>
             <input type="hidden" name="referer" value="v2" />
             <FormGroup className="margin-m">
               <FormControl
@@ -54,11 +65,13 @@ class SendPwdForm extends React.Component {
                 name="identifier"
                 required
                 placeholder={I18n.t('login.username')}
-                onChange={this.handleInput}
+                onChange={this.handleIdentifierChange}
+                value={this.state.identifier}
               />
             </FormGroup>
             <FormGroup>
               <Button
+                disabled={!this.state.identifier}
                 type="submit"
                 name="send_req_password"
                 value={I18n.t('login.send')}
@@ -74,12 +87,4 @@ class SendPwdForm extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({
-  auth: state.auth
-});
-
-const mapDispatchToProps = dispatch => ({
-  sendRequest: (id, discussionSlug) => dispatch(requestPasswordChangeAction(id, discussionSlug))
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(SendPwdForm);
+export default RequestNewPasswordForm;
