@@ -10,7 +10,7 @@ export type ToggleCommentButtonProps = {
 };
 
 const ToggleCommentButton = ({ isExpanded, onClickCallback }: ToggleCommentButtonProps) => {
-  const iconStyle = isExpanded ? 'down' : 'up';
+  const iconStyle = isExpanded ? 'up' : 'down';
 
   return (
     <Link className="action-toggle" onClick={onClickCallback}>

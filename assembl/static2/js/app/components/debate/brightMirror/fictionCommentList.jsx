@@ -5,7 +5,7 @@ import { Translate } from 'react-redux-i18n';
 // Components imports
 import { Tree } from '../../../components/common/tree';
 import FictionComment from './fictionComment';
-// import FoldedPost from '../common/post/foldedPost';
+import FoldedPost from '../common/post/foldedPost';
 import InfiniteSeparator from '../../../components/common/infiniteSeparator';
 // Type imports
 import type { FictionCommentExtraProps } from './fictionComment';
@@ -39,12 +39,6 @@ const FictionCommentList = ({
     </div>
   );
 
-  const FoldedComments = () => (
-    <div className="center">
-      <Translate value="debate.thread.foldedPostLink" count={9999999999} />
-    </div>
-  );
-
   const fictionCommentExtraProps: FictionCommentExtraProps = {
     submitCommentCallback: onSubmitHandler
   };
@@ -56,7 +50,7 @@ const FictionCommentList = ({
       data={comments}
       initialRowIndex={FIRST_ROW_INDEX}
       InnerComponent={FictionComment}
-      InnerComponentFolded={FoldedComments}
+      InnerComponentFolded={FoldedPost}
       noRowsRenderer={NoRowsRenderer}
       SeparatorComponent={InfiniteSeparator}
       identifier={identifier}

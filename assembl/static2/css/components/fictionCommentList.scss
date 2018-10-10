@@ -1,3 +1,12 @@
-.no-row {
-  padding-bottom: 80px;
+.bright-mirror-comments {
+  .no-row {
+    padding-bottom: 80px;
+  }
+
+  .post-folded {
+    cursor: pointer;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+  }
 }

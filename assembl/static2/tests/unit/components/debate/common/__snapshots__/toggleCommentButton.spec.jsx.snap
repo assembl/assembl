@@ -16,7 +16,7 @@ exports[`Storyshots ToggleCommentButton default 1`] = `
       style={Object {}}
     >
       <span
-        className="assembl-icon-down-open"
+        className="assembl-icon-up-open"
       />
     </a>
   </div>
@@ -294,7 +294,7 @@ exports[`Storyshots ToggleCommentButton playground 1`] = `
       style={Object {}}
     >
       <span
-        className="assembl-icon-down-open"
+        className="assembl-icon-up-open"
       />
     </a>
   </div>
