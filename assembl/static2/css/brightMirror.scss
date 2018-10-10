@@ -37,7 +37,7 @@ $fiction-toolbar-icon-size: 17px;
 }
 
 .bright-mirror-comments {
-  padding: 30px 0 0 0;
+  padding: 30px 0;
 
   .comments-content {
     background-color: $white;
@@ -48,7 +48,7 @@ $fiction-toolbar-icon-size: 17px;
     // Tree.jsx style adjustments
     .infinite-separator {
       border-bottom: 1px solid #192882;
-      margin: 90px auto;
+      margin: 30px auto;
       position: relative;
       width: 200px;
 
@@ -102,7 +102,7 @@ $fiction-toolbar-icon-size: 17px;
   }
 
   .bright-mirror-comments {
-    padding: 40px 0 0 0;
+    padding: 40px 0;
 
     .comments-content {
       padding-left: 54px;
@@ -130,9 +130,7 @@ $fiction-toolbar-icon-size: 17px;
 
   .bright-mirror-comments {
     .comments-content {
-      padding-left: 50px;
-      padding-right: 50px;
-      padding-top: 80px;
+      padding: 80px 50px;
 
       // Tree.jsx style adjustments
       .level {
