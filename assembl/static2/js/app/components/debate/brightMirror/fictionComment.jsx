@@ -18,6 +18,7 @@ import { EMPTY_STRING } from '../../../constants';
 import type { CircleAvatarProps } from './circleAvatar';
 import type { FictionCommentFormProps } from './fictionCommentForm';
 import type { ToggleCommentButtonProps } from '../common/toggleCommentButton';
+import type { ReplyToCommentButtonProps } from '../common/replyToCommentButton';
 
 export type FictionCommentExtraProps = {
   /** Submit comment callback used in order to catch a submit event from tree.jsx */
@@ -31,7 +32,7 @@ export type FictionCommentExtraProps = {
 export type FictionCommentBaseProps = {
   /** Number of child comments */
   numChildren: number,
-  /**  */
+  /** Extra props defined from Tree.jsx */
   fictionCommentExtraProps: FictionCommentExtraProps
 };
 
@@ -52,7 +53,9 @@ export type FictionCommentGraphQLProps = {
 
 type LocalFictionCommentProps = FictionCommentBaseProps & FictionCommentGraphQLProps;
 
-type FictionCommentState = {};
+type FictionCommentState = {
+  showFictionCommentForm: boolean
+};
 
 // Type use for creating a Bright Mirror comment with CreateCommentMutation
 export type CreateCommentInputs = {
@@ -67,6 +70,15 @@ export type CreateCommentInputs = {
 };
 
 export class FictionComment extends Component<LocalFictionCommentProps, FictionCommentState> {
+  constructor(props: LocalFictionCommentProps) {
+    super(props);
+    this.state = {
+      showFictionCommentForm: false
+    };
+  }
+
+  displayFictionCommentForm = (show: boolean) => this.setState({ showFictionCommentForm: show });
+
   render() {
     const {
       authorFullname,
@@ -78,6 +90,7 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
       publishedDate,
       fictionCommentExtraProps
     } = this.props;
+    const { showFictionCommentForm } = this.state;
     const { expandedFromTree, expandCollapseCallbackFromTree } = fictionCommentExtraProps;
 
     const toggleCommentButtonProps: ToggleCommentButtonProps = {
@@ -85,11 +98,24 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
       onClickCallback: expandCollapseCallbackFromTree != null ? expandCollapseCallbackFromTree : () => null
     };
 
+    const replyToCommentButtonProps: ReplyToCommentButtonProps = {
+      onClickCallback: () => this.displayFictionCommentForm(true)
+    };
+
     const fictionCommentFormProps: FictionCommentFormProps = {
+      onCancelCommentCallback: () => this.displayFictionCommentForm(false),
       onSubmitCommentCallback: (comment: string) => fictionCommentExtraProps.submitCommentCallback(comment, commentParentId)
     };
 
     const displayToggleCommentButton = numChildren > 0 ? <ToggleCommentButton {...toggleCommentButtonProps} /> : null;
+
+    // Display FictionCommentForm when ReplyToCommentButton is clicked.
+    // ReplyToCommentButton is hidden when FictionCommentForm is displayed
+    const displayFictionCommentForm = showFictionCommentForm ? (
+      <FictionCommentForm {...fictionCommentFormProps} />
+    ) : (
+      <ReplyToCommentButton {...replyToCommentButtonProps} />
+    );
 
     return (
       <article className="comment-container">
@@ -111,8 +137,7 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
               <Translate value="debate.brightMirror.numberOfResponses" count={numChildren} />
             </p>
             {displayToggleCommentButton}
-            <ReplyToCommentButton />
-            <FictionCommentForm {...fictionCommentFormProps} />
+            {displayFictionCommentForm}
           </footer>
         </div>
       </article>

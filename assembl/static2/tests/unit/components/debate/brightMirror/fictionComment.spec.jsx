@@ -1,16 +1,19 @@
 // @flow
 import React from 'react';
 // import initStoryshots from '@storybook/addon-storyshots';
-import { configure, mount } from 'enzyme';
+import { configure, mount, shallow } from 'enzyme';
 import { MockedProvider } from 'react-apollo/test-utils';
 import Adapter from 'enzyme-adapter-react-16';
 // GraphQL imports
 import CommentQuery from '../../../../../js/app/graphql/BrightMirrorFictionQuery.graphql';
 // Components imports
-import FictionComment from '../../../../../js/app/components/debate/brightMirror/fictionComment';
+import FictionComment, {
+  FictionComment as ShallowFictionComment
+} from '../../../../../js/app/components/debate/brightMirror/fictionComment';
 import CircleAvatar from '../../../../../js/app/components/debate/brightMirror/circleAvatar';
 import ToggleCommentButton from '../../../../../js/app/components/debate/common/toggleCommentButton';
 import ReplyToCommentButton from '../../../../../js/app/components/debate/common/replyToCommentButton';
+import FictionCommentForm from '../../../../../js/app/components/debate/brightMirror/fictionCommentForm';
 // Type imports
 import type { FictionCommentGraphQLProps } from '../../../../../js/app/components/debate/brightMirror/fictionComment';
 
@@ -29,6 +32,39 @@ import {
 // });
 
 configure({ adapter: new Adapter() });
+
+describe('<FictionComment /> - with shallow', () => {
+  let wrapper;
+  let fictionComment: FictionCommentGraphQLProps;
+
+  beforeEach(() => {
+    fictionComment = {
+      ...defaultFictionComment,
+      ...defaultFictionCommentGraphQL
+    };
+
+    wrapper = shallow(<ShallowFictionComment {...fictionComment} />);
+  });
+
+  it('should render one CircleAvatar with default value', () => {
+    expect(wrapper.find(CircleAvatar)).toHaveLength(1);
+  });
+
+  it('should display a "toggle comment" button', () => {
+    expect(wrapper.find(ToggleCommentButton)).toHaveLength(1);
+  });
+
+  it('should display a "reply to comment" button when FictionCommentForm is hidden', () => {
+    expect(wrapper.find(ReplyToCommentButton)).toHaveLength(1);
+    expect(wrapper.find(FictionCommentForm)).toHaveLength(0);
+  });
+
+  it('should not display a "reply to comment" button when FictionCommentForm is displayed', () => {
+    wrapper.setState({ showFictionCommentForm: true });
+    expect(wrapper.find(ReplyToCommentButton)).toHaveLength(0);
+    expect(wrapper.find(FictionCommentForm)).toHaveLength(1);
+  });
+});
 
 describe('<FictionComment /> - with mount', () => {
   let wrapper;
@@ -61,10 +97,6 @@ describe('<FictionComment /> - with mount', () => {
       );
     });
 
-    it('should render one CircleAvatar with default value', () => {
-      expect(wrapper.find(CircleAvatar)).toHaveLength(1);
-    });
-
     it('should display the comment author fullname', () => {
       expect(wrapper.contains(defaultFictionCommentGraphQL.authorFullname)).toBe(true);
     });
@@ -80,14 +112,6 @@ describe('<FictionComment /> - with mount', () => {
 
     it('should display the number of child comments', () => {
       expect(wrapper.contains(`${defaultFictionComment.numChildren} responses`)).toBe(true);
-    });
-
-    it('should display a "toggle comment" button', () => {
-      expect(wrapper.find(ToggleCommentButton)).toHaveLength(1);
-    });
-
-    xit('TODO: should display a "reply to comment" button', () => {
-      expect(wrapper.find(ReplyToCommentButton)).toHaveLength(1);
     });
   });
 
