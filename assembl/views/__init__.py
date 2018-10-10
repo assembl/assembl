@@ -717,6 +717,7 @@ def includeme(config):
         config.add_view(error_view, context=Exception,
                         renderer='assembl:templates/error_page.jinja2')
 
+    # View for error template in development environment only
     if os.getenv('NODE_ENV') == "development":
         config.add_route('error_template', '/error_template')
         config.add_view(error_template, route_name='error_template',
