@@ -717,7 +717,7 @@ def includeme(config):
         config.add_view(error_view, context=Exception,
                         renderer='assembl:templates/error_page.jinja2')
 
-    if os.environ["NODE_ENV"] == 'development':
+    if os.getenv('NODE_ENV') == "development":
         config.add_route('error_template', '/error_template')
         config.add_view(error_template, route_name='error_template',
                         renderer='assembl:templates/error_page.jinja2')
