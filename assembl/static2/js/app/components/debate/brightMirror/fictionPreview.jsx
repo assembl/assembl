@@ -2,6 +2,7 @@
 import * as React from 'react';
 import { Link } from 'react-router';
 import { I18n } from 'react-redux-i18n';
+import classNames from 'classnames';
 // Constant imports
 import { PublicationStates } from '../../../constants';
 import { NO_BODY_LENGTH } from '../common/topPostForm';
@@ -100,7 +101,7 @@ const FictionPreview = ({
   const date = ` - ${creationDate}`;
 
   return (
-    <div className={`fiction-preview ${isDraft ? 'draft' : ''}`} style={{ backgroundColor: color }}>
+    <div className={classNames('fiction-preview', { draft: isDraft })} style={{ backgroundColor: color }}>
       <div className="content-box">
         {isDraft ? <span className="draft-label">{I18n.t('debate.brightMirror.draftLabel')}</span> : null}
         <ul className="actions">
