@@ -104,7 +104,10 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
 
     const fictionCommentFormProps: FictionCommentFormProps = {
       onCancelCommentCallback: () => this.displayFictionCommentForm(false),
-      onSubmitCommentCallback: (comment: string) => fictionCommentExtraProps.submitCommentCallback(comment, commentParentId)
+      onSubmitCommentCallback: (comment: string) => {
+        this.displayFictionCommentForm(false);
+        fictionCommentExtraProps.submitCommentCallback(comment, commentParentId);
+      }
     };
 
     const displayToggleCommentButton = numChildren > 0 ? <ToggleCommentButton {...toggleCommentButtonProps} /> : null;
