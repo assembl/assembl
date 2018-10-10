@@ -21,7 +21,7 @@ type Props = {
   InnerComponent: any => React.Node,
   SeparatorComponent: () => React.Node,
   noRowsRenderer: () => React.Node,
-  InnerComponentHeight?: number | (({ index: number }) => number)
+  fictionCommentCallbacks?: Object
 };
 
 class Tree extends React.Component<Props> {
@@ -108,7 +108,8 @@ class Tree extends React.Component<Props> {
       lang,
       InnerComponent, // component that will be rendered in the child
       InnerComponentFolded, // component that will be used to render the children when folded
-      SeparatorComponent // separator component between first level children
+      SeparatorComponent, // separator component between first level children
+      fictionCommentCallbacks // Optional Bright Mirror fiction debate props
     } = this.props;
 
     const childData = data[index];
@@ -130,6 +131,7 @@ class Tree extends React.Component<Props> {
             nuggetsManager={this.nuggetsManager}
             listRef={this.listRef}
             cache={this.cache}
+            fictionCommentCallbacks={fictionCommentCallbacks}
           />
         </div>
       </CellMeasurer>
@@ -137,7 +139,7 @@ class Tree extends React.Component<Props> {
   };
 
   render() {
-    const { contentLocaleMapping, data, lang, noRowsRenderer, InnerComponentHeight } = this.props;
+    const { contentLocaleMapping, data, lang, noRowsRenderer } = this.props;
     return (
       <WindowScroller>
         {({ height, isScrolling, onChildScroll, scrollTop }) => (
@@ -160,9 +162,7 @@ class Tree extends React.Component<Props> {
                 onScroll={onChildScroll}
                 scrollTop={scrollTop}
                 autoHeight
-                // TOFIX: temporary monkey patch - will be fixed with DEVAS-1764 (Reply to a comment)
-                rowHeight={InnerComponentHeight || this.cache.rowHeight}
-                // rowHeight={this.cache.rowHeight}
+                rowHeight={this.cache.rowHeight}
                 deferredMeasurementCache={this.cache}
                 noRowsRenderer={noRowsRenderer}
                 ref={(ref) => {
