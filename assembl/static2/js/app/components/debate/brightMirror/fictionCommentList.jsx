@@ -1,12 +1,12 @@
 // @flow
 import React from 'react';
 import { Map } from 'immutable';
-import { Translate } from 'react-redux-i18n';
 // Components imports
 import { Tree } from '../../../components/common/tree';
 import FictionComment from './fictionComment';
 import FoldedPost from '../common/post/foldedPost';
 import InfiniteSeparator from '../../../components/common/infiniteSeparator';
+import { noRowsRenderer } from '../../../pages/idea';
 // Type imports
 import type { FictionCommentExtraProps } from './fictionComment';
 
@@ -32,13 +32,6 @@ const FictionCommentList = ({
 }: FictionCommentListProps) => {
   const FIRST_ROW_INDEX = 0;
 
-  // Component that will be rendered when no post if posted
-  const NoRowsRenderer = () => (
-    <div className="no-row center">
-      <Translate value="debate.thread.noPostsInThread" />
-    </div>
-  );
-
   const fictionCommentExtraProps: FictionCommentExtraProps = {
     submitCommentCallback: onSubmitHandler
   };
@@ -51,7 +44,7 @@ const FictionCommentList = ({
       initialRowIndex={FIRST_ROW_INDEX}
       InnerComponent={FictionComment}
       InnerComponentFolded={FoldedPost}
-      noRowsRenderer={NoRowsRenderer}
+      noRowsRenderer={noRowsRenderer}
       SeparatorComponent={InfiniteSeparator}
       identifier={identifier}
       fictionCommentExtraProps={fictionCommentExtraProps}

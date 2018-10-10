@@ -103,7 +103,7 @@ export const transformPosts = (edges, messageColumns, additionnalProps = {}) => 
     .sort(creationDateLastDescendantComparator);
 };
 
-const noRowsRenderer = () => (
+export const noRowsRenderer = () => (
   <div className="center">
     <Translate value="debate.thread.noPostsInThread" />
   </div>
