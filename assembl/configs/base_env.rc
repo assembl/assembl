@@ -27,7 +27,7 @@ changes_websocket_proxied = true
 changes_prefix = /socket
 accept_secure_connection = true
 require_secure_connection = true
-
+admin_email = assembl.admin@bluenove.com
 *sentry_scheme = https
 *sentry_host = localhost
 _sentry_db_host = localhost
