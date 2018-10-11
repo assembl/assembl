@@ -98,7 +98,7 @@ class LandingPageAdmin extends React.Component<Props, State> {
     end: moment(phase.end, moment.ISO_8601),
     titleEntries: phase.titleEntries,
     descriptionEntries: phase.descriptionEntries,
-    image: phase.image && typeof phase.image.externalUrl === 'object' ? phase.image.externalUrl : null
+    image: this.getImageVariable(phase.image)
   });
 
   createVariablesForLandingPageModuleMutation = item => ({
