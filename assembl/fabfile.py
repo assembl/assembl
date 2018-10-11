@@ -919,6 +919,8 @@ def bootstrap_from_checkout(backup=False):
         execute(database_restore, backup=backup)
     execute(app_reload)
     execute(webservers_reload)
+    execute(create_backup_script)
+    execute(create_alert_disk_space_script)
 
 
 @task
