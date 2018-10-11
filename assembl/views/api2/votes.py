@@ -410,7 +410,7 @@ def extract_voters(request):
                     extract_info.update({option: "1" if vote_value == choice_value else "0"})
             else:
                 for choice in spec.get_choices():
-                    option = choice.label.best_lang(user_prefs).value
+                    option = choice.label.best_lang(user_prefs).value.encode('utf-8')
                     if option not in fieldnames:
                         fieldnames.append(option)
                     extract_info.update({option: "1" if vote_value == choice.value else "0"})
