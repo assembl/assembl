@@ -101,6 +101,10 @@ describe('<FictionComment /> - with mount', () => {
       expect(wrapper.contains(defaultFictionCommentGraphQL.authorFullname)).toBe(true);
     });
 
+    it('should display the parent comment author fullname', () => {
+      expect(wrapper.contains(defaultFictionCommentGraphQL.parentCommentAuthorFullname)).toBe(true);
+    });
+
     it('should display the comment published date', () => {
       expect(wrapper.find(`time [dateTime="${defaultFictionCommentGraphQL.publishedDate}"]`)).toHaveLength(1);
       expect(wrapper.contains(defaultFictionCommentGraphQL.displayedPublishedDate)).toBe(true);
@@ -121,6 +125,38 @@ describe('<FictionComment /> - with mount', () => {
         ...defaultFictionComment,
         ...defaultFictionCommentGraphQL,
         authorFullname: '',
+        // Below are the required input params for CommentQuery
+        id: 'aaa',
+        contentLocale: 'fr'
+      };
+
+      // Mock Apollo
+      mocks = [
+        {
+          request: { query: CommentQuery },
+          result: {
+            data: fictionComment
+          }
+        }
+      ];
+      wrapper = mount(
+        <MockedProvider mocks={mocks}>
+          <FictionComment {...fictionComment} />
+        </MockedProvider>
+      );
+    });
+
+    it('should display "no author specified"', () => {
+      expect(wrapper.contains('No author specified')).toBe(true);
+    });
+  });
+
+  describe('when parentCommentAuthorFullname is null', () => {
+    beforeEach(() => {
+      fictionComment = {
+        ...defaultFictionComment,
+        ...defaultFictionCommentGraphQL,
+        parentCommentAuthorFullname: '',
         // Below are the required input params for CommentQuery
         id: 'aaa',
         contentLocale: 'fr'

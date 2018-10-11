@@ -30,13 +30,14 @@ export const defaultFictionComment: FictionCommentBaseProps = {
 };
 
 export const defaultFictionCommentGraphQL: FictionCommentGraphQLProps = {
-  authorFullname: 'Helen Aguilar',
-  publishedDate: '2018-07-09',
-  displayedPublishedDate: 'August 8th, 2018',
+  authorFullname: 'Luke Skywalker',
+  circleAvatar: { ...defaultCircleAvatar },
   commentParentId: 'dummyId',
   commentContent:
     'Est et rerum. Ut sed voluptatem possimus. Ut cumque magni sapiente voluptatem ut rerum aut harum quo. Non delectus quo.',
-  circleAvatar: { ...defaultCircleAvatar }
+  displayedPublishedDate: 'August 8th, 2018',
+  parentCommentAuthorFullname: 'Dark Vador',
+  publishedDate: '2018-07-09'
 };
 
 const playground = {
@@ -52,12 +53,13 @@ storiesOf('FictionComment', module)
     withInfo()(() => (
       <FictionComment
         authorFullname={text('Author fullname', playground.authorFullname)}
-        publishedDate={text('Published date', playground.publishedDate)}
-        displayedPublishedDate={text('Displayed published date', playground.displayedPublishedDate)}
-        commentParentId={text('Comment parent id', playground.commentParentId)}
-        commentContent={text('Comment content', playground.commentContent)}
         circleAvatar={object('circleAvatar', playground.circleAvatar)}
+        commentContent={text('Comment content', playground.commentContent)}
+        commentParentId={text('Comment parent id', playground.commentParentId)}
+        displayedPublishedDate={text('Displayed published date', playground.displayedPublishedDate)}
         numChildren={number('Number of comments', playground.numChildren)}
+        parentCommentAuthorFullname={text('Parent comment author fullname', playground.parentCommentAuthorFullname)}
+        publishedDate={text('Published date', playground.publishedDate)}
         fictionCommentExtraProps={playground.fictionCommentExtraProps}
       />
     ))

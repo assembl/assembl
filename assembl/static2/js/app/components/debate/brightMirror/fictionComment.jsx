@@ -31,11 +31,12 @@ export type FictionCommentExtraProps = {
 };
 
 export type FictionCommentBaseProps = {
+  /** Children node used in our case for integration purpose */
+  children?: Node,
   /** Number of child comments */
   numChildren: number,
   /** Extra props defined from Tree.jsx */
-  fictionCommentExtraProps: FictionCommentExtraProps,
-  children?: Node
+  fictionCommentExtraProps: FictionCommentExtraProps
 };
 
 export type FictionCommentGraphQLProps = {
@@ -49,6 +50,8 @@ export type FictionCommentGraphQLProps = {
   commentParentId: string,
   /** Comment displayed published date */
   displayedPublishedDate: string,
+  /** Parent message author fullname */
+  parentCommentAuthorFullname: string,
   /** Comment published date */
   publishedDate: string
 };
@@ -85,13 +88,14 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
     const {
       authorFullname,
       circleAvatar,
+      children,
       commentContent,
       commentParentId,
       displayedPublishedDate,
       numChildren,
+      parentCommentAuthorFullname,
       publishedDate,
-      fictionCommentExtraProps,
-      children
+      fictionCommentExtraProps
     } = this.props;
     const { showFictionCommentForm } = this.state;
     const { expandedFromTree, expandCollapseCallbackFromTree } = fictionCommentExtraProps;
@@ -129,8 +133,12 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
           <CircleAvatar {...circleAvatar} />
           <div className="content">
             <header className="meta">
-              <p>
+              <p className="author">
                 <strong>{authorFullname || I18n.t('debate.brightMirror.noAuthorSpecified')}</strong>
+                <span className="parent-info">
+                  <span className="assembl-icon-back-arrow" />
+                  {parentCommentAuthorFullname || I18n.t('debate.brightMirror.noAuthorSpecified')}
+                </span>
               </p>
               <p className="published-date">
                 <time dateTime={publishedDate} pubdate="true">
