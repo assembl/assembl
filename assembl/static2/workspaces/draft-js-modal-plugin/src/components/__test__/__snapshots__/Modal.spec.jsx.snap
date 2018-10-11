@@ -6,7 +6,7 @@ exports[`Modal component should render a form to add a link 1`] = `
     className="modal-backdrop fade in"
   />
   <div
-    className="insertion-box box"
+    className="insertion-box"
   >
     <div
       className="modal-header"

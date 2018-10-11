@@ -168,7 +168,11 @@ export default class RichTextEditor extends React.Component<Props, State> {
     return (
       <div className={divClassName} ref={textareaRef} onClick={this.focusEditor}>
         <div className="editor-header">
-          {editorState.getCurrentContent().hasText() ? <div className="editor-label form-label">{placeholder}</div> : null}
+          {editorState.getCurrentContent().hasText() ? (
+            <div className="editor-label form-label">{placeholder}</div>
+          ) : (
+            <div className="editor-label form-label">&nbsp;</div>
+          )}
           <div className="clear" />
         </div>
         <Modal />

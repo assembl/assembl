@@ -38,7 +38,9 @@ const AddLinkForm = ({ initialValues, onSubmit }: Props) => (
       <BootstrapForm componentClass="div" horizontal>
         <FormGroup controlId="url">
           <Col componentClass={ControlLabel} sm={2}>
-            <Translate value="common.editor.linkPlugin.url" />
+            <div className="richtext-label">
+              <Translate value="common.editor.linkPlugin.url" />
+            </div>
           </Col>
           <Col sm={10}>
             <Field name="url" component={FormControlAdapter} />
@@ -46,7 +48,9 @@ const AddLinkForm = ({ initialValues, onSubmit }: Props) => (
         </FormGroup>
         <FormGroup controlId="text">
           <Col componentClass={ControlLabel} sm={2}>
-            <Translate value="common.editor.linkPlugin.text" />
+            <div className="richtext-label">
+              <Translate value="common.editor.linkPlugin.text" />
+            </div>
           </Col>
           <Col sm={10}>
             <Field name="text" component={FormControlAdapter} />
@@ -59,18 +63,21 @@ const AddLinkForm = ({ initialValues, onSubmit }: Props) => (
             </Field>
           </Col>
         </FormGroup>
-        <FormGroup>
-          <Col smOffset={2} sm={10}>
-            <Button
-              type="submit"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                handleSubmit();
-              }}
-            >
-              <Translate value="common.editor.linkPlugin.submit" />
-            </Button>
+        <FormGroup className="margin-m">
+          <Col sm={12}>
+            <div className="center">
+              <Button
+                type="submit"
+                className="button-submit button-dark"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  handleSubmit();
+                }}
+              >
+                <Translate value="common.editor.linkPlugin.submit" />
+              </Button>
+            </div>
           </Col>
         </FormGroup>
       </BootstrapForm>

@@ -11,12 +11,16 @@ exports[`AddLinkForm component should render a form to add a link 1`] = `
       className="col-sm-2 control-label"
       htmlFor="url"
     >
-      <span
-        className={undefined}
-        style={undefined}
+      <div
+        className="richtext-label"
       >
-        URL
-      </span>
+        <span
+          className={undefined}
+          style={undefined}
+        >
+          URL
+        </span>
+      </div>
     </label>
     <div
       className="col-sm-10"
@@ -58,12 +62,16 @@ exports[`AddLinkForm component should render a form to add a link 1`] = `
       className="col-sm-2 control-label"
       htmlFor="text"
     >
-      <span
-        className={undefined}
-        style={undefined}
+      <div
+        className="richtext-label"
       >
-        Link text
-      </span>
+        <span
+          className={undefined}
+          style={undefined}
+        >
+          Link text
+        </span>
+      </div>
     </label>
     <div
       className="col-sm-10"
@@ -132,24 +140,28 @@ exports[`AddLinkForm component should render a form to add a link 1`] = `
     </div>
   </div>
   <div
-    className="form-group"
+    className="margin-m form-group"
   >
     <div
-      className="col-sm-10 col-sm-offset-2"
+      className="col-sm-12"
     >
-      <button
-        className="btn btn-default"
-        disabled={false}
-        onClick={[Function]}
-        type="submit"
+      <div
+        className="center"
       >
-        <span
-          className={undefined}
-          style={undefined}
+        <button
+          className="button-submit button-dark btn btn-default"
+          disabled={false}
+          onClick={[Function]}
+          type="submit"
         >
-          Submit
-        </span>
-      </button>
+          <span
+            className={undefined}
+            style={undefined}
+          >
+            Submit
+          </span>
+        </button>
+      </div>
     </div>
   </div>
 </div>

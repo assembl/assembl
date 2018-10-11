@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { Button, Col, Form as BootstrapForm, FormGroup } from 'react-bootstrap';
+import { Button, Form as BootstrapForm, FormGroup } from 'react-bootstrap';
 import { Form, Field } from 'react-final-form';
 import { Translate } from 'react-redux-i18n';
 
@@ -22,12 +22,13 @@ const AddAttachmentForm = ({ onSubmit }: Props) => (
   <Form
     onSubmit={onSubmit}
     render={({ handleSubmit }) => (
-      <BootstrapForm componentClass="div" horizontal>
-        <Field name="file" component={FileUploaderFieldAdapter} />
-        <FormGroup>
-          <Col smOffset={2} sm={10}>
+      <BootstrapForm>
+        <div className="center">
+          <Field name="file" component={FileUploaderFieldAdapter} />
+          <FormGroup>
             <Button
               type="submit"
+              className="button-submit button-dark"
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -36,8 +37,8 @@ const AddAttachmentForm = ({ onSubmit }: Props) => (
             >
               <Translate value="common.editor.linkPlugin.submit" />
             </Button>
-          </Col>
-        </FormGroup>
+          </FormGroup>
+        </div>
       </BootstrapForm>
     )}
   />

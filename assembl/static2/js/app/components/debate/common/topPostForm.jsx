@@ -217,6 +217,7 @@ class TopPostForm extends React.Component<TopPostFormProps, TopPostFormState> {
                 placeholder={I18n.t(bodyPlaceholderMsgId)}
                 withAttachmentButton
               />
+              <div className="clear" />
               {!ideaOnColumn ? (
                 <Button className="button-cancel button-dark btn btn-default left margin-l" onClick={this.resetForm}>
                   <Translate value="cancel" />
