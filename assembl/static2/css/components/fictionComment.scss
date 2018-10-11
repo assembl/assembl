@@ -62,6 +62,18 @@
   }
 }
 
+.level-1 .comment-container .content .comment {
+  background-color: rgba($color: $pale-blue, $alpha: 0.75);
+}
+
+.level-2 .comment-container .content .comment {
+  background-color: rgba($color: $pale-blue, $alpha: 0.5);
+}
+
+.level-3 .comment-container .content .comment {
+  background-color: rgba($color: $pale-blue, $alpha: 0.25);
+}
+
 @media screen and (min-width: $screen-sm-min) {
   .comment-container {
     padding-left: 40px;
