@@ -75,7 +75,7 @@ describe('<FictionCommentForm /> - with shallow', () => {
         commentTextareaValue: 'Qui sunt cumque.'
       };
       wrapper.setState({ ...fictionCommentFormState });
-      wrapper.find('Button [className="submit"]').simulate('click');
+      wrapper.find('Button [className="submit"]').simulate('mousedown');
 
       expect(spy).toHaveBeenCalledTimes(1);
     });
@@ -88,7 +88,7 @@ describe('<FictionCommentForm /> - with shallow', () => {
       };
 
       wrapper.setState({ ...fictionCommentFormState });
-      wrapper.find('Button [className="cancel"]').simulate('click');
+      wrapper.find('Button [className="cancel"]').simulate('mousedown');
 
       expect(spy).toHaveBeenCalledTimes(1);
       expect(wrapper.state().commentTextareaValue).toEqual('');
