@@ -1,5 +1,6 @@
 // @flow
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
+import type { Node } from 'react';
 import { I18n, Translate } from 'react-redux-i18n';
 // Graphql imports
 import { compose, graphql } from 'react-apollo';
@@ -33,7 +34,8 @@ export type FictionCommentBaseProps = {
   /** Number of child comments */
   numChildren: number,
   /** Extra props defined from Tree.jsx */
-  fictionCommentExtraProps: FictionCommentExtraProps
+  fictionCommentExtraProps: FictionCommentExtraProps,
+  children?: Node
 };
 
 export type FictionCommentGraphQLProps = {
@@ -88,7 +90,8 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
       displayedPublishedDate,
       numChildren,
       publishedDate,
-      fictionCommentExtraProps
+      fictionCommentExtraProps,
+      children
     } = this.props;
     const { showFictionCommentForm } = this.state;
     const { expandedFromTree, expandCollapseCallbackFromTree } = fictionCommentExtraProps;
@@ -121,29 +124,32 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
     );
 
     return (
-      <article className="comment-container">
-        <CircleAvatar {...circleAvatar} />
-        <div className="content">
-          <header className="meta">
-            <p>
-              <strong>{authorFullname || I18n.t('debate.brightMirror.noAuthorSpecified')}</strong>
-            </p>
-            <p className="published-date">
-              <time dateTime={publishedDate} pubdate="true">
-                &nbsp;-&nbsp;{displayedPublishedDate}
-              </time>
-            </p>
-          </header>
-          <p className="comment">{commentContent}</p>
-          <footer className="toolbar">
-            <p>
-              <Translate value="debate.brightMirror.numberOfResponses" count={numChildren} />
-            </p>
-            {displayToggleCommentButton}
-            {displayFictionCommentForm}
-          </footer>
-        </div>
-      </article>
+      <Fragment>
+        <article className="comment-container">
+          <CircleAvatar {...circleAvatar} />
+          <div className="content">
+            <header className="meta">
+              <p>
+                <strong>{authorFullname || I18n.t('debate.brightMirror.noAuthorSpecified')}</strong>
+              </p>
+              <p className="published-date">
+                <time dateTime={publishedDate} pubdate="true">
+                  &nbsp;-&nbsp;{displayedPublishedDate}
+                </time>
+              </p>
+            </header>
+            <p className="comment">{commentContent}</p>
+            <footer className="toolbar">
+              <p>
+                <Translate value="debate.brightMirror.numberOfResponses" count={numChildren} />
+              </p>
+              {displayToggleCommentButton}
+              {displayFictionCommentForm}
+            </footer>
+          </div>
+        </article>
+        {children}
+      </Fragment>
     );
   }
 }

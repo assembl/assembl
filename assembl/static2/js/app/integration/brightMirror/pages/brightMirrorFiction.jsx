@@ -25,6 +25,30 @@ const defaultBackBtnProps: BackButtonProps = {
   linkClassName: 'back-btn'
 };
 
+const fictionComments = (
+  <div className="level level-0">
+    <FictionComment {...defaultFictionComment} {...defaultFictionCommentGraphQL}>
+      <div className="level level-1 border-left child-level">
+        <FictionComment {...defaultFictionComment} {...defaultFictionCommentGraphQL} />
+        <FictionComment {...defaultFictionComment} {...defaultFictionCommentGraphQL}>
+          <div className="level level-2 border-left child-level">
+            <FictionComment {...defaultFictionComment} {...defaultFictionCommentGraphQL} />
+            <FictionComment {...defaultFictionComment} {...defaultFictionCommentGraphQL} />
+            <FictionComment {...defaultFictionComment} {...defaultFictionCommentGraphQL}>
+              <div className="level level-3 border-left child-level">
+                <FictionComment {...defaultFictionComment} {...defaultFictionCommentGraphQL} />
+                <FictionComment {...defaultFictionComment} {...defaultFictionCommentGraphQL} />
+                <FictionComment {...defaultFictionComment} {...defaultFictionCommentGraphQL} />
+                <FictionComment {...defaultFictionComment} {...defaultFictionCommentGraphQL} />
+              </div>
+            </FictionComment>
+          </div>
+        </FictionComment>
+      </div>
+    </FictionComment>
+  </div>
+);
+
 const BrightMirrorFiction = () => (
   <div className="bright-mirror">
     <div className="bright-mirror-fiction background-fiction-default">
@@ -47,12 +71,8 @@ const BrightMirrorFiction = () => (
           <FictionCommentHeader {...defaultFictionCommentHeader} />
           <div className="comments-content">
             <FictionCommentForm {...defaultFictionCommentForm} />
-            <FictionComment {...defaultFictionComment} {...defaultFictionCommentGraphQL} />
-            <FictionComment {...defaultFictionComment} {...defaultFictionCommentGraphQL} />
-            <FictionComment {...defaultFictionComment} {...defaultFictionCommentGraphQL} />
-            <FictionComment {...defaultFictionComment} {...defaultFictionCommentGraphQL} />
-            <FictionComment {...defaultFictionComment} {...defaultFictionCommentGraphQL} />
-            <FictionComment {...defaultFictionComment} {...defaultFictionCommentGraphQL} />
+            {fictionComments}
+            {fictionComments}
           </div>
         </Col>
       </Row>

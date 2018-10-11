@@ -48,6 +48,6 @@ describe('<BrightMirrorFiction /> - with shallow', () => {
   });
 
   it('should render a FictionComment', () => {
-    expect(wrapper.find(FictionComment)).toHaveLength(6);
+    expect(wrapper.find(FictionComment)).toHaveLength(20);
   });
 });
