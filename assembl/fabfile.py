@@ -2138,12 +2138,8 @@ def create_backup_script():
     Generates backup script that stores the backup on a local borg repository.
     Sets a cron job for it.
     """
-    from jinja2 import Environment, FileSystemLoader
-    print(green("Generating backup script on remote host."))
-    jenv = Environment(loader=FileSystemLoader('doc/'), autoescape=lambda t: False)
-    backup_template = jenv.get_template('backup_template.jinja2')
-    with open('backup_all_assembl.sh', 'w') as f:
-        f.write(backup_template.render(user=env._user, project_path=env._projectpath))
+    rc_info = filter_global_names(combine_rc(env['rcfile']))
+    fill_template('assembl/templates/system/backup_template.jinja2', rc_info, 'backup_all_assembl.sh')
     put('backup_all_assembl.sh', '/home/%s/backup_all_assembl.sh' % (env.user))
     run('chmod +x backup_all_assembl.sh')
     cron_command = "15 3 * * * /home/" + env.user + "/backup_all_assembl.sh"
@@ -2153,12 +2149,8 @@ def create_backup_script():
 @task
 def create_alert_disk_space_script():
     """Generates the script to alert on disk space limit and sets cron job for it."""
-    from jinja2 import Environment, FileSystemLoader
-    jenv = Environment(loader=FileSystemLoader('doc/'), autoescape=lambda t: False)
-    alert_disk_space_template = jenv.get_template('alert_disk_space_template.jinja2')
-    disk_limit = int(env.disk_limit) * 1024
-    with open('alert_disk_space.sh', 'w') as f:
-        f.write(alert_disk_space_template.render(disk_limit=str(disk_limit)))
+    rc_info = filter_global_names(combine_rc(env['rcfile']))
+    fill_template('assembl/templates/system/alert_disk_space_template.jinja2', rc_info, 'alert_disk_space_template.sh')
     put('alert_disk_space.sh', '/home/%s/alert_disk_space.sh' % (env.user))
     run('chmod +x alert_disk_space.sh')
     admin_email = env.admin_email if env.admin_email else "assembl.admin@bluenove.com"
