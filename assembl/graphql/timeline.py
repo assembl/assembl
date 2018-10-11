@@ -1,5 +1,4 @@
 # -*- coding=utf-8 -*-
-import os.path
 
 import graphene
 from graphene.relay import Node
@@ -19,7 +18,7 @@ from .langstring import (
 )
 from .permissions_helpers import require_cls_permission, require_instance_permission
 from .types import SecureObjectType
-from .utils import DateTime, abort_transaction_on_exception
+from .utils import DateTime, abort_transaction_on_exception, update_attachment
 
 
 class DiscussionPhase(SecureObjectType, SQLAlchemyObjectType):
@@ -146,37 +145,15 @@ class UpdateDiscussionPhase(graphene.Mutation):
             discussion_id = context.matchdict['discussion_id']
             discussion = models.Discussion.get(discussion_id)
             if image is not None:
-                if image == 'TO_DELETE' and phase.attachments:
-                    # delete the image
-                    attachment = phase.attachments[0]
-                    attachment.document.delete_file()
-                    db.delete(attachment.document)
-                    db.delete(attachment)
-                    phase.attachments.remove(attachment)
-                else:
-                    filename = os.path.basename(context.POST[image].filename)
-                    mime_type = context.POST[image].type
-                    document = models.File(
-                        discussion=discussion,
-                        mime_type=mime_type,
-                        title=filename)
-                    document.add_file_data(context.POST[image].file)
-                    # if there is already an attachment, remove it with the
-                    # associated document (image)
-                    if phase.attachments:
-                        for attachment in phase.attachments[:]:
-                            attachment.document.delete_file()
-                            db.delete(attachment.document)
-                            phase.attachments.remove(attachment)
-
-                    attachment = models.TimelineEventAttachment(
-                        document=document,
-                        discussion=discussion,
-                        creator_id=context.authenticated_userid,
-                        title=filename,
-                        attachmentPurpose=models.AttachmentPurpose.IMAGE.value
-                    )
-                    phase.attachments.append(attachment)
+                update_attachment(
+                    discussion,
+                    models.TimelineEventAttachment,
+                    image,
+                    phase.attachments,
+                    models.AttachmentPurpose.IMAGE.value,
+                    db,
+                    context
+                )
 
             db.flush()
 

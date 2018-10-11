@@ -192,79 +192,29 @@ class UpdateDiscussion(graphene.Mutation):
             LANDING_PAGE_HEADER_IMAGE = models.AttachmentPurpose.LANDING_PAGE_HEADER_IMAGE.value
             image = args.get('header_image')
             if image is not None:
-                header_images = [
-                    att for att in discussion.attachments
-                    if att.attachmentPurpose == LANDING_PAGE_HEADER_IMAGE
-                ]
-
-                if image == 'TO_DELETE' and header_images:
-                    header_image = header_images[0]
-                    header_image.document.delete_file()
-                    db.delete(header_image.document)
-                    discussion.attachments.remove(header_image)
-                else:
-                    filename = os.path.basename(context.POST[image].filename)
-                    mime_type = context.POST[image].type
-                    document = models.File(
-                        discussion=discussion,
-                        mime_type=mime_type,
-                        title=filename)
-                    document.add_file_data(context.POST[image].file)
-
-                    # if there is already an IMAGE, remove it with the
-                    # associated document
-                    if header_images:
-                        header_image = header_images[0]
-                        header_image.document.delete_file()
-                        db.delete(header_image.document)
-                        discussion.attachments.remove(header_image)
-
-                    db.add(models.DiscussionAttachment(
-                        document=document,
-                        discussion=discussion,
-                        creator_id=context.authenticated_userid,
-                        title=filename,
-                        attachmentPurpose=LANDING_PAGE_HEADER_IMAGE
-                    ))
+                update_attachment(
+                    discussion,
+                    models.DiscussionAttachment,
+                    image,
+                    discussion.attachments,
+                    LANDING_PAGE_HEADER_IMAGE,
+                    db,
+                    context
+                )
 
             # add uploaded logo image as an attachment to the discussion
             LANDING_PAGE_LOGO_IMAGE = models.AttachmentPurpose.LANDING_PAGE_LOGO_IMAGE.value
             image = args.get('logo_image')
             if image is not None:
-                logo_images = [
-                    att for att in discussion.attachments
-                    if att.attachmentPurpose == LANDING_PAGE_LOGO_IMAGE
-                ]
-
-                if image == 'TO_DELETE' and logo_images:
-                    logo_image = logo_images[0]
-                    logo_image.document.delete_file()
-                    db.delete(logo_image.document)
-                    discussion.attachments.remove(logo_image)
-                else:
-                    filename = os.path.basename(context.POST[image].filename)
-                    mime_type = context.POST[image].type
-                    document = models.File(
-                        discussion=discussion,
-                        mime_type=mime_type,
-                        title=filename)
-                    document.add_file_data(context.POST[image].file)
-
-                    # if there is already an IMAGE, remove it with the
-                    # associated document
-                    if logo_images:
-                        logo_image = logo_images[0]
-                        logo_image.document.delete_file()
-                        db.delete(logo_image.document)
-                        discussion.attachments.remove(logo_image)
-
-                    db.add(models.DiscussionAttachment(
-                        document=document,
-                        discussion=discussion,
-                        creator_id=context.authenticated_userid,
-                        title=filename,
-                        attachmentPurpose=LANDING_PAGE_LOGO_IMAGE
-                    ))
+                update_attachment(
+                    discussion,
+                    models.DiscussionAttachment,
+                    image,
+                    discussion.attachments,
+                    LANDING_PAGE_LOGO_IMAGE,
+                    db,
+                    context
+                )
 
         db.flush()
         discussion = cls.get(discussion_id)
