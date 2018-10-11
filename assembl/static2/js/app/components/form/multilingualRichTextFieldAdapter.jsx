@@ -36,11 +36,10 @@ const RichTextFieldAdapter = ({
   meta: { error, touched },
   ...rest
 }: Props) => {
-  if (withAttachment) {
-    attachmentsPlugin.uploadNewAttachments(value[editLocale], uploadDocument);
-  }
-
   const valueInLocale = value[editLocale] || EditorState.createEmpty();
+  if (withAttachment) {
+    attachmentsPlugin.uploadNewAttachments(valueInLocale, uploadDocument);
+  }
   return (
     <FormGroup controlId={name} validationState={getValidationState(error, touched)}>
       <RichTextEditor
