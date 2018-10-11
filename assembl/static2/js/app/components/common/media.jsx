@@ -33,19 +33,17 @@ class Media extends React.Component {
     displayModal(null, content, false, null, null, true, 'large');
   };
 
-
-  static Content = ({ content }) => {
-    const isLocal = content[0] === '/';
-    const isVideoFile = EDFHacks.srcIsVideoFile(content);
+  static Content = ({ htmlCode, mediaFile }) => {
+    const isLocal = !htmlCode && mediaFile && mediaFile.externalUrl;
+    const isVideoFile = EDFHacks.srcIsVideoFile(htmlCode);
     const component = isLocal ? (
       <Image responsive src={mediaFile.externalUrl} />
     ) : (
       <ResponsiveEmbed a16by9>
-
         {isVideoFile ? (
-          <video src={content} controls preload="none" /> // eslint-disable-line jsx-a11y/media-has-caption
+          <video src={htmlCode} controls preload="none" /> // eslint-disable-line jsx-a11y/media-has-caption
         ) : (
-          <iframe title="media" src={content} />
+          <iframe title="media" src={htmlCode} />
         )}
       </ResponsiveEmbed>
     );
