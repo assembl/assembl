@@ -8,7 +8,7 @@ type Props = {
 };
 
 class Modal extends React.Component<Props> {
-  componentWillMount() {
+  componentDidMount() {
     this.props.store.subscribeToItem('content', () => this.forceUpdate());
   }
 
