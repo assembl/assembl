@@ -13,13 +13,10 @@ type State = {
 };
 
 class Image extends React.Component<Props, State> {
-  constructor() {
-    super();
-    this.state = {
-      filename: '',
-      src: ''
-    };
-  }
+  state = {
+    filename: '',
+    src: ''
+  };
 
   componentDidMount() {
     this.updateState(this.props);
@@ -63,7 +60,7 @@ class Image extends React.Component<Props, State> {
     const { filename, src } = this.state;
     return (
       <div className="atomic-block" data-blocktype="atomic">
-        {src && <img className="attachment-image" src={src} alt={filename} title={filename} />}
+        {src ? <img className="attachment-image" src={src} alt={filename} title={filename} /> : null}
       </div>
     );
   }
