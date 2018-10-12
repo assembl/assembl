@@ -3,6 +3,7 @@ import { ContentState, EditorState, RichUtils } from 'draft-js';
 
 import EditorUtils from '../index';
 import { createSelectionState } from '../selection';
+import { ENTITY_MUTABILITY, ENTITY_TYPES } from '../constants';
 
 describe('EditorUtils', () => {
   describe('createLinkAtSelection function', () => {
@@ -47,7 +48,7 @@ describe('EditorUtils', () => {
   describe('replaceLinkAtCursor function', () => {
     it('should replace text and entity data', () => {
       let contentState = ContentState.createFromText('Use Google');
-      contentState = contentState.createEntity('LINK', 'MUTABLE', {
+      contentState = contentState.createEntity(ENTITY_TYPES.link, ENTITY_MUTABILITY.mutable, {
         target: '_blank',
         text: 'Google',
         title: 'Google',

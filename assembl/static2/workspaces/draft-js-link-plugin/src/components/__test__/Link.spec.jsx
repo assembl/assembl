@@ -2,13 +2,17 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 import { ContentState, EditorState, Modifier, SelectionState } from 'draft-js';
 
+import { constants } from 'assembl-editor-utils';
+
 import Link from '../Link';
+
+const { ENTITY_MUTABILITY, ENTITY_TYPES } = constants;
 
 describe('Link component', () => {
   it('should render a link', () => {
     // create an editor state with a link entity
     let contentState = ContentState.createFromText('I will input the solid state PNG port');
-    contentState = contentState.createEntity('LINK', 'MUTABLE', {
+    contentState = contentState.createEntity(ENTITY_TYPES.link, ENTITY_MUTABILITY.mutable, {
       target: '_blank',
       title: 'My link',
       url: 'https://en.wikipedia.org/wiki/Portable_Network_Graphics'

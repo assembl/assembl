@@ -4,6 +4,8 @@ import React from 'react';
 import { configure, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 
+import { constants } from 'assembl-editor-utils';
+
 import createAttachmentPlugin from '../index';
 import removeAttachment from '../modifiers/removeAttachment';
 
@@ -12,6 +14,8 @@ configure({ adapter: new Adapter() });
 jest.mock('../components/DocumentIcon', () => 'DummyDocumentIcon');
 jest.mock('../components/Image', () => 'DummyImage');
 jest.mock('../modifiers/removeAttachment');
+
+const { ENTITY_MUTABILITY, ENTITY_TYPES } = constants;
 
 describe('createAttachmentPlugin function', () => {
   it('should provides a decorated attachment button', () => {
@@ -102,7 +106,7 @@ describe('createAttachmentPlugin function', () => {
 
     it('should render an atomic block with an image', () => {
       let contentState = ContentState.createFromText('');
-      contentState = contentState.createEntity('IMAGE', 'IMMUTABLE', { src: 'my-img.png' });
+      contentState = contentState.createEntity(ENTITY_TYPES.image, ENTITY_MUTABILITY.immutable, { src: 'my-img.png' });
       const entityKey = contentState.getLastCreatedEntityKey();
       let editorState = EditorState.createWithContent(contentState);
       editorState = AtomicBlockUtils.insertAtomicBlock(editorState, entityKey, ' ');
@@ -125,7 +129,7 @@ describe('createAttachmentPlugin function', () => {
     it('should render an atomic block with a document', () => {
       let contentState = ContentState.createFromText('');
       // $FlowFixMe DraftEntityType is too restrictive in DraftJS (see https://github.com/facebook/draft-js/issues/868 )
-      contentState = contentState.createEntity('DOCUMENT', 'IMMUTABLE', { src: 'my-img.png' });
+      contentState = contentState.createEntity(ENTITY_TYPES.document, ENTITY_MUTABILITY.immutable, { src: 'my-img.png' });
       const entityKey = contentState.getLastCreatedEntityKey();
       let editorState = EditorState.createWithContent(contentState);
       editorState = AtomicBlockUtils.insertAtomicBlock(editorState, entityKey, ' ');

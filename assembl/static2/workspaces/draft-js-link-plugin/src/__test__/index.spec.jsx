@@ -3,6 +3,7 @@ import { ContentState } from 'draft-js';
 import React from 'react';
 import { configure, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
+import { constants } from 'assembl-editor-utils';
 
 import createLinkPlugin from '../index';
 import linkStrategy, { matchesEntityType } from '../linkStrategy';
@@ -10,6 +11,8 @@ import linkStrategy, { matchesEntityType } from '../linkStrategy';
 jest.mock('../linkStrategy');
 
 configure({ adapter: new Adapter() });
+
+const { ENTITY_TYPES } = constants;
 
 describe('createLinkPlugin function', () => {
   it('should create a decorator for links', () => {
@@ -26,7 +29,7 @@ describe('createLinkPlugin function', () => {
     linkDecorator.strategy(contentState.getFirstBlock(), callbackSpy, contentState);
     expect(linkStrategy).toHaveBeenCalled();
 
-    linkDecorator.matchesEntityType('LINK');
+    linkDecorator.matchesEntityType(ENTITY_TYPES.link);
     expect(matchesEntityType).toHaveBeenCalled();
 
     const DecoratedLink = linkDecorator.component;

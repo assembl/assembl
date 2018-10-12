@@ -3,8 +3,11 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 import { AtomicBlockUtils, ContentState, EditorState } from 'draft-js';
 
-// import img from './base64img';
+import { constants } from 'assembl-editor-utils';
+
 import Image from '../Image';
+
+const { ENTITY_MUTABILITY, ENTITY_TYPES } = constants;
 
 function mockFileReader(img) {
   const addEventListener = jest.fn((_, evtHandler) => {
@@ -24,7 +27,7 @@ describe('Image component', () => {
   it('should render an image (url)', () => {
     let contentState = ContentState.createFromText('');
     // $FlowFixMe DraftEntityType is too restrictive in DraftJS (see https://github.com/facebook/draft-js/issues/868 )
-    contentState = contentState.createEntity('IMAGE', 'IMMUTABLE', {
+    contentState = contentState.createEntity(ENTITY_TYPES.image, ENTITY_MUTABILITY.immutable, {
       mimeType: 'image/png',
       src: 'my-img.png',
       title: 'My image'
@@ -51,7 +54,7 @@ describe('Image component', () => {
     // $FlowFixMe DraftEntityType is too restrictive in DraftJS (see https://github.com/facebook/draft-js/issues/868 )
     const src = new File([img], 'foobar.jpg');
     const DummyFileReader = mockFileReader(img);
-    contentState = contentState.createEntity('IMAGE', 'IMMUTABLE', {
+    contentState = contentState.createEntity(ENTITY_TYPES.image, ENTITY_MUTABILITY.immutable, {
       mimeType: 'image/png',
       src: src,
       title: 'My image'

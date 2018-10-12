@@ -1,6 +1,7 @@
 // @flow
 import { ContentState, EditorState, Modifier } from 'draft-js';
 
+import { ENTITY_MUTABILITY, ENTITY_TYPES } from '../constants';
 import { getEntityRange } from '../entities';
 import { createSelectionState } from '../selection';
 
@@ -13,8 +14,8 @@ describe('getEntityRange function', () => {
 
   it('should get the range (start/end offsets) of this entity', () => {
     let contentState = ContentState.createFromText('we need to connect the bluetooth SSL capacitor!').createEntity(
-      'LINK',
-      'MUTABLE',
+      ENTITY_TYPES.link,
+      ENTITY_MUTABILITY.mutable,
       {}
     );
     const block = contentState.getFirstBlock();

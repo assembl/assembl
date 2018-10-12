@@ -1,7 +1,11 @@
 // @flow
 import { AtomicBlockUtils, ContentState, EditorState } from 'draft-js';
 
+import { constants } from 'assembl-editor-utils';
+
 import getAttachments from '../getAttachments';
+
+const { ENTITY_MUTABILITY, ENTITY_TYPES } = constants;
 
 describe('getAttachments function', () => {
   it('should return an empty list if there are no attachments in editor state', () => {
@@ -12,7 +16,7 @@ describe('getAttachments function', () => {
 
   it('should return the list of attachments', () => {
     let contentState = ContentState.createFromText('');
-    contentState = contentState.createEntity('IMAGE', 'IMMUTABLE', {
+    contentState = contentState.createEntity(ENTITY_TYPES.image, ENTITY_MUTABILITY.immutable, {
       mimeType: 'image/png',
       src: 'my-img.png',
       title: 'My image'
@@ -22,7 +26,7 @@ describe('getAttachments function', () => {
     editorState = AtomicBlockUtils.insertAtomicBlock(editorState, imgEntityKey, ' ');
 
     // $FlowFixMe DraftEntityType is too restrictive in DraftJS (see https://github.com/facebook/draft-js/issues/868 )
-    contentState = contentState.createEntity('DOCUMENT', 'IMMUTABLE', {
+    contentState = contentState.createEntity(ENTITY_TYPES.document, ENTITY_MUTABILITY.immutable, {
       mimeType: 'application/pdf',
       src: 'my-file.pdf',
       title: 'My pdf'

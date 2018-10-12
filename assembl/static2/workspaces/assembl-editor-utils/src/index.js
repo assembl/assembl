@@ -3,6 +3,7 @@ import { EditorState, Modifier, RichUtils } from 'draft-js';
 import DraftJSPluginsUtils from 'draft-js-plugins-utils';
 
 import { getSelectedBlockKey } from './blocks';
+import * as constants from './constants';
 import { getEntityRange } from './entities';
 import { createSelectionState } from './selection';
 
@@ -15,12 +16,14 @@ type LinkData = {
 
 const { collapseToEnd, getCurrentEntity, getCurrentEntityKey, hasEntity, removeLinkAtSelection } = DraftJSPluginsUtils;
 
+const { ENTITY_TYPES, ENTITY_MUTABILITY } = constants;
+
 export default {
   collapseToEnd: collapseToEnd,
 
   createLinkAtSelection: (editorState: EditorState, data: LinkData): EditorState => {
     const { text } = data;
-    const contentState = editorState.getCurrentContent().createEntity('LINK', 'MUTABLE', data);
+    const contentState = editorState.getCurrentContent().createEntity(ENTITY_TYPES.link, ENTITY_MUTABILITY.mutable, data);
     const entityKey = contentState.getLastCreatedEntityKey();
     let withLink;
     if (text) {
@@ -60,4 +63,4 @@ export default {
   removeLinkAtSelection: removeLinkAtSelection
 };
 
-export { createSelectionState };
+export { constants, createSelectionState };

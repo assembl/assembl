@@ -5,10 +5,12 @@ import { I18n } from 'react-redux-i18n';
 
 // from workspaces
 // eslint-disable-next-line import/no-extraneous-dependencies
-import EditorUtils from 'assembl-editor-utils';
+import EditorUtils, { constants } from 'assembl-editor-utils';
 
 import AddLinkForm, { type FormValues } from './AddLinkForm';
 import type { DraftJSPluginStore, Theme } from '../index';
+
+const { ENTITY_TYPES } = constants;
 
 type Props = {
   closeModal: void => void,
@@ -71,7 +73,7 @@ export default class LinkButton extends React.Component<Props> {
 
   render() {
     const { onRemoveLinkAtSelection, store, theme } = this.props;
-    const hasLinkSelected = (store.getEditorState && EditorUtils.hasEntity(store.getEditorState(), 'LINK')) || false;
+    const hasLinkSelected = (store.getEditorState && EditorUtils.hasEntity(store.getEditorState(), ENTITY_TYPES.link)) || false;
     const buttonClassName = classNames(theme.button, { active: hasLinkSelected });
     const handleClick = hasLinkSelected ? onRemoveLinkAtSelection : this.openModal;
     return (

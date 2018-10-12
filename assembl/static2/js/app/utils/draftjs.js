@@ -9,6 +9,7 @@ import { type List, type Map } from 'immutable';
 
 // from our workspaces
 /* eslint-disable import/no-extraneous-dependencies */
+import { constants } from 'assembl-editor-utils';
 import { converters as linkConverters } from 'draft-js-link-plugin';
 import { converters as attachmentsConverters } from 'draft-js-attachment-plugin';
 /* eslint-enable import/no-extraneous-dependencies */
@@ -18,9 +19,7 @@ type Entry = {
   value: string | EditorState
 };
 
-const IMAGE_ENTITY = 'IMAGE';
-const DOCUMENT_ENTITY = 'DOCUMENT';
-const LINK_ENTITY = 'LINK';
+const { ENTITY_TYPES } = constants;
 
 export function blockToHTML(block: ContentBlock): { start: string, end: string } | void {
   if (block.type === 'atomic') {
@@ -54,9 +53,9 @@ const customConvertFromHTML = convertFromHTML({
 const customConvertToHTML = convertToHTML({
   blockToHTML: blockToHTML,
   entityToHTML: (entity: EntityInstance, originalText: string): string => {
-    if (entity.type === DOCUMENT_ENTITY || entity.type === IMAGE_ENTITY) {
+    if (entity.type === ENTITY_TYPES.document || entity.type === ENTITY_TYPES.image) {
       return attachmentsConverters.entityToHTML(entity);
-    } else if (entity.type === LINK_ENTITY) {
+    } else if (entity.type === ENTITY_TYPES.link) {
       return linkConverters.entityToHTML(entity, originalText);
     }
 
