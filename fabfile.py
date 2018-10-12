@@ -1444,8 +1444,10 @@ def set_file_permissions():
                 usermod=usermod_path, webgrp=webgrp, user=env.user))
     with cd(env.projectpath):
         upload_dir = get_upload_dir()
-        run('chmod -R o-rwx .')
-        run('chmod -R g-rw .')
+        sudoer = env.get('sudoer')
+        with settings(user=sudoer):
+            sudo('chmod -R o-rwx .')
+            sudo('chmod -R g-rw .')
         run('chgrp {webgrp} . assembl var var/run'.format(webgrp=webgrp))
         run('chgrp -R {webgrp} assembl/static assembl/static2'.format(webgrp=webgrp))
         run('chgrp -R {webgrp} {uploads}'.format(webgrp=webgrp, uploads=upload_dir))
