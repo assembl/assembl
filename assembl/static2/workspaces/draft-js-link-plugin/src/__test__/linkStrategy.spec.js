@@ -1,3 +1,4 @@
+// @flow
 import { ContentState, Modifier } from 'draft-js';
 
 import { createSelectionState } from 'assembl-editor-utils';
@@ -23,13 +24,13 @@ describe('linkStrategy', () => {
     });
     const contentBlock = contentState.getFirstBlock();
     const blockKey = contentBlock.getKey();
-    let selection = createSelectionState(blockKey, '0', '4');
+    let selection = createSelectionState(blockKey, 0, 4);
     const linkEntityKey = contentState.getLastCreatedEntityKey();
     contentState = Modifier.applyEntity(contentState, selection, linkEntityKey);
-    contentState = contentState.createEntity('MENTION', 'MUTABLE', {
-      name: 'johann'
+    contentState = contentState.createEntity('IMAGE', 'MUTABLE', {
+      externalUrl: 'my-img.jpg'
     });
-    selection = createSelectionState(blockKey, '8', '14');
+    selection = createSelectionState(blockKey, 8, 14);
     const mentionEntityKey = contentState.getLastCreatedEntityKey();
     contentState = Modifier.applyEntity(contentState, selection, mentionEntityKey);
 
@@ -38,7 +39,7 @@ describe('linkStrategy', () => {
       title: 'My link',
       url: 'https://en.wikipedia.org/wiki/Portable_Network_Graphics'
     });
-    selection = createSelectionState(blockKey, '12', '16');
+    selection = createSelectionState(blockKey, 12, 16);
     const linkEntityKey2 = contentState.getLastCreatedEntityKey();
     contentState = Modifier.applyEntity(contentState, selection, linkEntityKey2);
 
