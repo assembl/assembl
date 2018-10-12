@@ -8,7 +8,12 @@ import { constants } from 'assembl-editor-utils';
 import getDocumentIconPath from '../utils/getDocumentIconPath';
 import getFileExtension from '../utils/getFileExtension';
 
-const DocumentIcon = ({ block, contentState }: { block: ContentBlock, contentState: ContentState }) => {
+type Props = {
+  block: ContentBlock,
+  contentState: ContentState
+};
+
+const DocumentIcon = ({ block, contentState }: Props) => {
   const entityKey = block.getEntityAt(0);
   const entity = contentState.getEntity(entityKey);
   const data = entity.getData();

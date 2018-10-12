@@ -15,7 +15,7 @@ export type AddAttachmentFormValues = {
 };
 
 type Props = {
-  onSubmit: Function
+  onSubmit: (values: AddAttachmentFormValues) => void
 };
 
 const AddAttachmentForm = ({ onSubmit }: Props) => (
