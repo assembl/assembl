@@ -298,12 +298,10 @@ const Translations = {
         bulletList: "Liste de puces",
         closeModal: "Fermer",
         attachmentPlugin: {
-          title: "Insérer une pièce jointe",
-          submit: "Valider"
+          title: "Insérer une pièce jointe"
         },
         linkPlugin: {
           openInNewTab: "Ouvrir le lien dans un nouvel onglet",
-          submit: "Valider",
           text: "Texte du lien",
           title: "Insérer un lien",
           url: "Adresse web"
@@ -1189,12 +1187,10 @@ const Translations = {
         bulletList: "Bullet list",
         closeModal: "Close",
         attachmentPlugin: {
-          title: "Add an attachment",
-          submit: "Submit"
+          title: "Add an attachment"
         },
         linkPlugin: {
           openInNewTab: "Open link in new tab",
-          submit: "Submit",
           text: "Link text",
           title: "Insert a link",
           url: "URL"

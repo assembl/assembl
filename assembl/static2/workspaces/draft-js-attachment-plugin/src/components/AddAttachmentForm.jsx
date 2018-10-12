@@ -35,7 +35,7 @@ const AddAttachmentForm = ({ onSubmit }: Props) => (
                 handleSubmit();
               }}
             >
-              <Translate value="common.editor.linkPlugin.submit" />
+              <Translate value="validate" />
             </Button>
           </FormGroup>
         </div>

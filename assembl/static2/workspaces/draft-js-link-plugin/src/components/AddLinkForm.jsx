@@ -75,7 +75,7 @@ const AddLinkForm = ({ initialValues, onSubmit }: Props) => (
                   handleSubmit();
                 }}
               >
-                <Translate value="common.editor.linkPlugin.submit" />
+                <Translate value="validate" />
               </Button>
             </div>
           </Col>
