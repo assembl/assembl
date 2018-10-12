@@ -22,7 +22,7 @@ const AddAttachmentForm = ({ onSubmit }: Props) => (
   <Form
     onSubmit={onSubmit}
     render={({ handleSubmit }) => (
-      <BootstrapForm>
+      <BootstrapForm componentClass="div" horizontal>
         <div className="center">
           <Field name="file" component={FileUploaderFieldAdapter} />
           <FormGroup>
