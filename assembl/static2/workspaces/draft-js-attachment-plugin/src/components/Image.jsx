@@ -22,10 +22,6 @@ class Image extends React.Component<Props, State> {
     this.updateState(this.props);
   }
 
-  componentWillReceiveProps(nextProps: Props) {
-    this.updateState(nextProps);
-  }
-
   updateState = (props: Props) => {
     const { block, contentState } = props;
     const entityKey = block.getEntityAt(0);
