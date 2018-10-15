@@ -1,0 +1,23 @@
+#!/bin/bash -e
+
+url=$1
+source_branch=$2
+target_branch=$3
+
+if [ -z "$SSH_PRIVATE_KEY" ]; then
+	>&2 echo "Set SSH_PRIVATE_KEY environment variable"
+	exit 1
+fi
+
+ssh_host=$(echo $url | sed 's/.*@//' | sed 's/[:/].*//')
+
+mkdir -p ~/.ssh
+echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+chmod 600 ~/.ssh/id_rsa
+ssh-keyscan -H "$ssh_host" >> ~/.ssh/known_hosts
+
+git merge ${target_branch:-master}
+git checkout ${target_branch:-master}
+git merge ${source_branch:-develop}
+git push --force
+exit 0

@@ -7,3 +7,12 @@ test_frontend:
   script:
     - cd assembl/static2
     - yarn run test
+
+push to master:
+  stage: pushtomaster
+  only:
+    - develop
+  script:
+    - chmod +x scripts/git-push
+    - scripts/git-push git@github.com:assembl/assembl.git
+  when: on_success
