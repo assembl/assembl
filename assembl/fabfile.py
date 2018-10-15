@@ -2145,7 +2145,7 @@ def create_backup_script():
     put('backup_all_assembl.sh', '/home/%s/backup_all_assembl.sh' % (env.user))
     run('chmod +x backup_all_assembl.sh')
     cron_command = "15 3 * * * /home/" + env.user + "/backup_all_assembl.sh"
-    create_add_to_crontab_command(cron_command)
+    run(create_add_to_crontab_command(cron_command))
 
 
 @task
