@@ -31,7 +31,6 @@ borg create \
     --exclude $ASSEMBL_PATH'/assembl/static/widget/*/bower_components' \
     --exclude $ASSEMBL_PATH/assembl/static/js/node_modules \
     --exclude $ASSEMBL_PATH/assembl/static2/node_modules \
-    --exclude $ASSEMBL_PATH/.git \
     --exclude '*.sass-cache' \
     --exclude $ASSEMBL_PATH/assembl_dumps \
     --exclude '*.pyc' \
