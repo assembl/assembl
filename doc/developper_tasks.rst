@@ -33,10 +33,10 @@ Only the first time you run it:
     # On Mac OS X, you can omit sudo -u postgres
     sudo -u postgres createuser --createdb --no-createrole --no-superuser assembl_test --pwprompt  # Enter assembl_test as password at the prompt
     PGPASSWORD=assembl_test createdb --host localhost -U assembl_test assembl_test
-    fab -c assembl/configs/testing.rc create_local_ini
+    fab  -f assembl/fabfile.py -c assembl/configs/testing.rc create_local_ini
     assembl-db-manage testing.ini bootstrap
 
-Note that the ``fab -c assembl/configs/testing.rc create_local_ini`` command should be repeated whenever ``production.ini``, ``assembl/configs/base_env.rc`` or ``assembl/configs/testing.ini`` changes.
+Note that the ``fab  -f assembl/fabfile.py -c assembl/configs/testing.rc create_local_ini`` command should be repeated whenever ``production.ini``, ``assembl/configs/base_env.rc`` or ``assembl/configs/testing.ini`` changes.
 
 Thereafter:
 

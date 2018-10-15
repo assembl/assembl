@@ -36,7 +36,7 @@ export const defaultFictionCommentGraphQL: FictionCommentGraphQLProps = {
   commentContent:
     'Est et rerum. Ut sed voluptatem possimus. Ut cumque magni sapiente voluptatem ut rerum aut harum quo. Non delectus quo.',
   displayedPublishedDate: 'August 8th, 2018',
-  parentCommentAuthorFullname: 'Dark Vador',
+  parentPostAuthorFullname: 'Dark Vador',
   publishedDate: '2018-07-09'
 };
 
@@ -58,7 +58,7 @@ storiesOf('FictionComment', module)
         commentParentId={text('Comment parent id', playground.commentParentId)}
         displayedPublishedDate={text('Displayed published date', playground.displayedPublishedDate)}
         numChildren={number('Number of comments', playground.numChildren)}
-        parentCommentAuthorFullname={text('Parent comment author fullname', playground.parentCommentAuthorFullname)}
+        parentPostAuthorFullname={text('Parent comment author fullname', playground.parentPostAuthorFullname)}
         publishedDate={text('Published date', playground.publishedDate)}
         fictionCommentExtraProps={playground.fictionCommentExtraProps}
       />

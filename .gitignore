@@ -146,3 +146,7 @@ local.ini.*
 
 #test upload
 var/test_uploads
+
+# ignore files generated with `fab  -f assembl/fabfile.py -c assembl/configs/testing.rc create_local_ini`
+testing.ini.bak
+urls.db

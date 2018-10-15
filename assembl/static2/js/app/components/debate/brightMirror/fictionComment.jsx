@@ -50,8 +50,8 @@ export type FictionCommentGraphQLProps = {
   commentParentId: string,
   /** Comment displayed published date */
   displayedPublishedDate: string,
-  /** Parent message author fullname */
-  parentCommentAuthorFullname: string,
+  /** Parent post author fullname */
+  parentPostAuthorFullname: string,
   /** Comment published date */
   publishedDate: string
 };
@@ -93,7 +93,7 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
       commentParentId,
       displayedPublishedDate,
       numChildren,
-      parentCommentAuthorFullname,
+      parentPostAuthorFullname,
       publishedDate,
       fictionCommentExtraProps
     } = this.props;
@@ -134,10 +134,10 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
           <div className="content">
             <header className="meta">
               <p className="author">
-                <strong>{authorFullname || I18n.t('debate.brightMirror.noAuthorSpecified')}</strong>
+                <strong>{authorFullname}</strong>
                 <span className="parent-info">
                   <span className="assembl-icon-back-arrow" />
-                  {parentCommentAuthorFullname || I18n.t('debate.brightMirror.noAuthorSpecified')}
+                  {parentPostAuthorFullname}
                 </span>
               </p>
               <p className="published-date">
@@ -166,7 +166,9 @@ const mapQueryToProps = ({ data }) => {
   if (data.loading === false && data.error === undefined) {
     // Define variables
     const { fiction } = data;
+    const { creator, parentPostCreator } = fiction;
     const { contentLocale, id } = data.variables;
+    const noAuthorSpecified = I18n.t('debate.brightMirror.noAuthorSpecified');
     const circleAvatarProps: CircleAvatarProps = {
       username: fiction.creator.displayName,
       src:
@@ -176,13 +178,14 @@ const mapQueryToProps = ({ data }) => {
     };
     // Map graphQL returned data with local props
     return {
-      authorFullname: fiction.creator.displayName,
+      authorFullname: creator ? creator.displayName : noAuthorSpecified,
       circleAvatar: circleAvatarProps,
       commentContent: fiction.body,
       commentParentId: id,
       displayedPublishedDate: moment(fiction.creationDate)
         .locale(contentLocale)
         .fromNow(),
+      parentPostAuthorFullname: parentPostCreator ? parentPostCreator.displayName : noAuthorSpecified,
       publishedDate: fiction.creationDate
     };
   }

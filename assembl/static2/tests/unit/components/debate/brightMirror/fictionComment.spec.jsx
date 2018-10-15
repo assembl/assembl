@@ -102,7 +102,7 @@ describe('<FictionComment /> - with mount', () => {
     });
 
     it('should display the parent comment author fullname', () => {
-      expect(wrapper.contains(defaultFictionCommentGraphQL.parentCommentAuthorFullname)).toBe(true);
+      expect(wrapper.contains(defaultFictionCommentGraphQL.parentPostAuthorFullname)).toBe(true);
     });
 
     it('should display the comment published date', () => {
@@ -124,7 +124,7 @@ describe('<FictionComment /> - with mount', () => {
       fictionComment = {
         ...defaultFictionComment,
         ...defaultFictionCommentGraphQL,
-        authorFullname: '',
+        authorFullname: 'No author specified',
         // Below are the required input params for CommentQuery
         id: 'aaa',
         contentLocale: 'fr'
@@ -146,17 +146,17 @@ describe('<FictionComment /> - with mount', () => {
       );
     });
 
-    it('should display "no author specified"', () => {
+    it('should display "No author specified"', () => {
       expect(wrapper.contains('No author specified')).toBe(true);
     });
   });
 
-  describe('when parentCommentAuthorFullname is null', () => {
+  describe('when parentPostAuthorFullname is null', () => {
     beforeEach(() => {
       fictionComment = {
         ...defaultFictionComment,
         ...defaultFictionCommentGraphQL,
-        parentCommentAuthorFullname: '',
+        parentPostAuthorFullname: 'No author specified',
         // Below are the required input params for CommentQuery
         id: 'aaa',
         contentLocale: 'fr'
@@ -178,7 +178,7 @@ describe('<FictionComment /> - with mount', () => {
       );
     });
 
-    it('should display "no author specified"', () => {
+    it('should display "No author specified"', () => {
       expect(wrapper.contains('No author specified')).toBe(true);
     });
   });
