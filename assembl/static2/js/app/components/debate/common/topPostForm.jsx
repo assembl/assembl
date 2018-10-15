@@ -205,6 +205,7 @@ class TopPostForm extends React.Component<TopPostFormProps, TopPostFormState> {
               handleTxtChange={this.handleSubjectChange}
               handleInputFocus={this.handleInputFocus}
               isActive={isActive}
+              name="top-post-title"
             />
           ) : null}
           {isActive || ideaOnColumn ? (

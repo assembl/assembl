@@ -9,7 +9,8 @@ export const TextInputWithRemainingChars = ({
   maxLength,
   handleTxtChange,
   handleInputFocus,
-  isActive
+  isActive,
+  name
 }) => {
   const remainingChars = maxLength - value.length;
   return (
@@ -22,6 +23,7 @@ export const TextInputWithRemainingChars = ({
         value={value}
         onFocus={handleInputFocus || null}
         onChange={handleTxtChange}
+        name={name}
       />
       <div className="annotation margin-xs">
         {isActive ? (
