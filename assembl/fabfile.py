@@ -2140,6 +2140,7 @@ def create_backup_script():
     Generates backup script that stores the backup on a local borg repository.
     Sets a cron job for it.
     """
+    sudo("apt-get -y install borgbackup")
     rc_info = filter_global_names(combine_rc(env['rcfile']))
     fill_template('assembl/templates/system/backup_template.jinja2', rc_info, 'backup_all_assembl.sh')
     put('backup_all_assembl.sh', '/home/%s/backup_all_assembl.sh' % (env.user))
