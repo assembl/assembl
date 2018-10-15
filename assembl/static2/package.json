@@ -12,14 +12,14 @@
     "build": "webpack --progress --colors",
     "coverage": "jest --coverage",
     "dev": "webpack -d --watch",
-    "eslint": "eslint js/app tests --ext .js --ext .jsx --cache",
-    "eslint:fix": "eslint js/app tests --ext .js --ext .jsx --fix",
+    "eslint": "eslint js/app tests workspaces --ext .js --ext .jsx --cache",
+    "eslint:fix": "eslint js/app tests workspaces --ext .js --ext .jsx --fix",
     "stylelint": "stylelint '**/*.scss' --cache",
     "stylelint:fix": "stylelint '**/*.scss' --fix",
-    "eslint:table": "eslint js/app tests --ext .js --ext .jsx --cache --format table",
-    "eslint:summary": "eslint js/app tests --ext .js --ext .jsx --cache --format 'node_modules/eslint-friendly-formatter'",
+    "eslint:table": "eslint js/app tests workspaces --ext .js --ext .jsx --cache --format table",
+    "eslint:summary": "eslint js/app tests workspaces --ext .js --ext .jsx --cache --format 'node_modules/eslint-friendly-formatter'",
     "flow": "flow",
-    "format": "prettier-eslint --write 'js/**/*.js?' 'tests/**/*.js?' '*.js'",
+    "format": "prettier-eslint --write 'js/**/*.js?' 'tests/**/*.js?' 'workspaces/**/*.js?' '*.js'",
     "i18n:export": "node ./scripts/translations2messages.js && rip json2pot messages.json -k id -o ../locale/assembl-v2.pot && ./scripts/merge_po_files.bash",
     "i18n:import": "rip po2json '../locale/assembl-v2/*.po' -m messages.json -k id -o './translations'",
     "storybook": "start-storybook -p 9001 -c .storybook -s ..",
@@ -93,6 +93,10 @@
     "classnames": "^2.2.5",
     "draft-convert": "^2",
     "draft-js": "^0.10.5",
+    "draft-js-buttons": "^2.0.1",
+    "draft-js-counter-plugin": "^2.0.1",
+    "draft-js-plugins-editor": "^2.1.1",
+    "draft-js-static-toolbar-plugin": "^2.0.2",
     "final-form": "^4.8.2",
     "final-form-arrays": "^1.0.4",
     "graphql": "^0.10.5",
@@ -157,7 +161,7 @@
       "jsx"
     ],
     "transformIgnorePatterns": [
-      "/node_modules/[^h][^y][^p]"
+      "/node_modules/(?!(assembl-editor-utils|assembl-test-editor-utils|draft-js-attachment-plugin|draft-js-link-plugin|draft-js-modal-plugin|hypothesis)/)"
     ],
     "transform": {
       "\\.(gql|graphql)$": "jest-transform-graphql",
@@ -170,5 +174,9 @@
     "globals": {
       "globalAnalytics": {}
     }
-  }
+  },
+  "private": true,
+  "workspaces": [
+    "workspaces/*"
+  ]
 }

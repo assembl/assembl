@@ -10,12 +10,11 @@ import { PublicationStates } from '../../../constants';
 
 import createPostMutation from '../../../graphql/mutations/createPost.graphql';
 import uploadDocumentMutation from '../../../graphql/mutations/uploadDocument.graphql';
-import { convertContentStateToHTML, editorStateIsEmpty } from '../../../utils/draftjs';
+import { convertContentStateToHTML, editorStateIsEmpty, uploadNewAttachments } from '../../../utils/draftjs';
 import { getDomElementOffset } from '../../../utils/globalFunctions';
 import { displayAlert, promptForLoginOr } from '../../../utils/utilityManager';
 import { TextInputWithRemainingChars } from '../../common/textInputWithRemainingChars';
 import RichTextEditor from '../../common/richTextEditor';
-import attachmentsPlugin from '../../common/richTextEditor/attachmentsPlugin';
 
 export const TEXT_INPUT_MAX_LENGTH = 140;
 export const NO_BODY_LENGTH = 0;
@@ -120,7 +119,8 @@ class TopPostForm extends React.Component<TopPostFormProps, TopPostFormState> {
       displayAlert('success', I18n.t('loading.wait'));
 
       // first, we upload each attachment
-      const uploadDocumentsPromise = attachmentsPlugin.uploadNewAttachments(body, uploadDocument);
+      // $FlowFixMe we know that body is not empty
+      const uploadDocumentsPromise = uploadNewAttachments(body, uploadDocument);
       uploadDocumentsPromise.then((result) => {
         const variables = {
           contentLocale: contentLocale,
@@ -218,6 +218,7 @@ class TopPostForm extends React.Component<TopPostFormProps, TopPostFormState> {
                 placeholder={I18n.t(bodyPlaceholderMsgId)}
                 withAttachmentButton
               />
+              <div className="clear" />
               {!ideaOnColumn ? (
                 <Button className="button-cancel button-dark btn btn-default left margin-l" onClick={this.resetForm}>
                   <Translate value="cancel" />

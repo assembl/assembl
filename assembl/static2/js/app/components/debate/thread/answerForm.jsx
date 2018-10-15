@@ -10,9 +10,8 @@ import classNames from 'classnames';
 import createPostMutation from '../../../graphql/mutations/createPost.graphql';
 import uploadDocumentMutation from '../../../graphql/mutations/uploadDocument.graphql';
 import { displayAlert, promptForLoginOr } from '../../../utils/utilityManager';
-import { convertContentStateToHTML, editorStateIsEmpty } from '../../../utils/draftjs';
+import { convertContentStateToHTML, editorStateIsEmpty, uploadNewAttachments } from '../../../utils/draftjs';
 import RichTextEditor from '../../common/richTextEditor';
-import attachmentsPlugin from '../../common/richTextEditor/attachmentsPlugin';
 import { BODY_MAX_LENGTH } from '../common/topPostForm';
 import { getIfPhaseCompletedById } from '../../../utils/timeline';
 import { scrollToPost } from '../../../utils/hashLinkScroll';
@@ -76,7 +75,8 @@ class AnswerForm extends React.PureComponent<AnswerFormProps, AnswerFormState> {
     const bodyIsEmpty = !body || editorStateIsEmpty(body);
     if (!bodyIsEmpty) {
       // first we upload the new documents
-      const uploadDocumentsPromise = attachmentsPlugin.uploadNewAttachments(body, uploadDocument);
+      // $FlowFixMe we know that body is not null as we checked bodyIsEmpty
+      const uploadDocumentsPromise = uploadNewAttachments(body, uploadDocument);
       uploadDocumentsPromise.then((result) => {
         if (!result.contentState) {
           return;

@@ -1,23 +1,22 @@
 // @flow
-/*
-  Note that this component is fully uncontrolled
-  Warning: you need to set a key on it to specify if editor state is empty or not
-  Therefore, react will recreate the editor if the status (empty/not empty) changes
-*/
-// eslint-disable-next-line
-// See https://reactjs.org/blog/2018/06/07/you-probably-dont-need-derived-state.html#recommendation-fully-uncontrolled-component-with-a-key
-
 import * as React from 'react';
-import { Translate, I18n } from 'react-redux-i18n';
-import { Editor, EditorState, RichUtils } from 'draft-js';
+import { I18n } from 'react-redux-i18n';
+import { EditorState, RichUtils } from 'draft-js';
+import Editor from 'draft-js-plugins-editor';
 import classNames from 'classnames';
-import punycode from 'punycode';
+import createToolbarPlugin from 'draft-js-static-toolbar-plugin';
+import createCounterPlugin from 'draft-js-counter-plugin';
 
-import AtomicBlockRenderer from './atomicBlockRenderer';
-import Toolbar from './toolbar';
-import type { ButtonConfigType } from './buttonConfigType';
-import EditAttachments from '../editAttachments';
-import attachmentsPlugin from './attachmentsPlugin';
+// from our workspaces
+/* eslint-disable import/no-extraneous-dependencies */
+import createAttachmentPlugin from 'draft-js-attachment-plugin';
+import createLinkPlugin from 'draft-js-link-plugin';
+import createModalPlugin from 'draft-js-modal-plugin';
+/* eslint-enable import/no-extraneous-dependencies */
+
+import { BoldButton, ItalicButton, UnorderedListButton } from './buttons';
+
+type DraftPlugin = any;
 
 type Props = {
   editorState: EditorState,
@@ -30,23 +29,16 @@ type Props = {
   withAttachmentButton: boolean
 };
 
-type RichTextEditorState = {
+type State = {
   editorHasFocus: boolean
 };
 
-function customBlockRenderer(block) {
-  if (block.getType() === 'atomic') {
-    return {
-      component: AtomicBlockRenderer,
-      editable: false
-    };
-  }
-
-  return null;
-}
-
-export default class RichTextEditor extends React.Component<Props, RichTextEditorState> {
+export default class RichTextEditor extends React.Component<Props, State> {
   editor: ?Editor;
+
+  plugins: Array<DraftPlugin>;
+
+  components: { [string]: React.ComponentType<*> };
 
   static defaultProps = {
     handleInputFocus: undefined,
@@ -57,6 +49,58 @@ export default class RichTextEditor extends React.Component<Props, RichTextEdito
 
   constructor(props: Props): void {
     super(props);
+    this.editor = React.createRef();
+    const modalPlugin = createModalPlugin();
+    const { closeModal, setModalContent, Modal } = modalPlugin;
+    const counterPlugin = createCounterPlugin();
+    const modalConfig = {
+      closeModal: closeModal,
+      setModalContent: setModalContent
+    };
+    const linkPlugin = createLinkPlugin({
+      ...modalConfig
+    });
+    const { LinkButton } = linkPlugin;
+
+    const components = {};
+    const toolbarStructure = [BoldButton, ItalicButton, UnorderedListButton, LinkButton];
+    const plugins = [counterPlugin, linkPlugin];
+    if (props.withAttachmentButton) {
+      const attachmentPlugin = createAttachmentPlugin({
+        ...modalConfig
+      });
+      const { AttachmentButton, Attachments } = attachmentPlugin;
+      toolbarStructure.push(AttachmentButton);
+      plugins.push(attachmentPlugin);
+      components.Attachments = Attachments;
+    }
+
+    const staticToolbarPlugin = createToolbarPlugin({
+      structure: toolbarStructure,
+      // we need this for toolbar plugin to add css classes to buttons and toolbar
+      theme: {
+        buttonStyles: {
+          active: 'active',
+          button: 'btn btn-default',
+          buttonWrapper: 'btn-group'
+        },
+        toolbarStyles: {
+          toolbar: classNames('editor-toolbar', props.toolbarPosition)
+        }
+      }
+    });
+    plugins.push(staticToolbarPlugin);
+
+    this.plugins = plugins;
+    const { CustomCounter } = counterPlugin;
+    const { Toolbar } = staticToolbarPlugin;
+    this.components = {
+      CustomCounter: CustomCounter,
+      Modal: Modal,
+      Toolbar: Toolbar,
+      ...components
+    };
+
     this.state = {
       editorHasFocus: false
     };
@@ -72,40 +116,12 @@ export default class RichTextEditor extends React.Component<Props, RichTextEdito
     );
   };
 
-  getToolbarButtons(): Array<ButtonConfigType> {
-    const bold = {
-      id: 'bold',
-      icon: 'text-bold',
-      label: I18n.t('common.editor.bold'),
-      type: 'style',
-      style: 'BOLD'
-    };
-    const italic = {
-      id: 'italic',
-      icon: 'text-italics',
-      label: I18n.t('common.editor.italic'),
-      type: 'style',
-      style: 'ITALIC'
-    };
-    const bullets = {
-      id: 'bullets',
-      icon: 'text-bullets',
-      label: I18n.t('common.editor.bulletList'),
-      type: 'block-type',
-      style: 'unordered-list-item'
-    };
-    const buttons = [bold, italic, bullets];
-    return buttons;
-  }
-
-  getCharCount(editorState: EditorState): number {
-    // this code is "borrowed" from the draft-js counter plugin
-    const decodeUnicode = str => punycode.ucs2.decode(str); // func to handle unicode characters
-    const plainText = editorState.getCurrentContent().getPlainText('');
+  countRemainingChars = (plainText: string): string => {
     const regex = /(?:\r\n|\r|\n)/g; // new line, carriage return, line feed
     const cleanString = plainText.replace(regex, '').trim(); // replace above characters w/ nothing
-    return decodeUnicode(cleanString).length;
-  }
+    const count = this.props.maxLength - cleanString.length;
+    return I18n.t('debate.remaining_x_characters', { nbCharacters: count });
+  };
 
   shouldHidePlaceholder(): boolean {
     // don't display placeholder if user changes the block type (to bullet list) before to type anything
@@ -133,17 +149,6 @@ export default class RichTextEditor extends React.Component<Props, RichTextEdito
     }, 50);
   };
 
-  renderRemainingChars = (): React.Element<any> => {
-    const { editorState, maxLength } = this.props;
-    const charCount = this.getCharCount(editorState);
-    const remainingChars = maxLength - charCount;
-    return (
-      <div className="annotation margin-xs">
-        <Translate value="debate.remaining_x_characters" nbCharacters={remainingChars < 10000 ? remainingChars : maxLength} />
-      </div>
-    );
-  };
-
   handleReturn = (e: SyntheticKeyboardEvent<*>): 'handled' | 'not-handled' => {
     // Pressing shift-enter keys creates a new line (<br/>) instead of an new paragraph (<p>)
     // See https://github.com/HubSpot/draft-convert/issues/83
@@ -156,55 +161,42 @@ export default class RichTextEditor extends React.Component<Props, RichTextEdito
     return 'not-handled';
   };
 
-  deleteAttachment = (documentId: string): void => {
-    const { editorState, onChange } = this.props;
-    const contentState = editorState.getCurrentContent();
-    const newContentState = attachmentsPlugin.removeAttachment(contentState, documentId);
-    onChange(EditorState.createWithContent(newContentState));
-  };
-
-  renderToolbar = () => {
-    const { editorState, onChange, withAttachmentButton } = this.props;
-    return (
-      <Toolbar
-        buttonsConfig={this.getToolbarButtons()}
-        editorState={editorState}
-        focusEditor={this.focusEditor}
-        onChange={onChange}
-        withAttachmentButton={withAttachmentButton}
-      />
-    );
-  };
-
   render() {
-    const { editorState, maxLength, onChange, placeholder, textareaRef, toolbarPosition } = this.props;
+    const { editorState, maxLength, onChange, placeholder, textareaRef } = this.props;
     const divClassName = classNames('rich-text-editor', { hidePlaceholder: this.shouldHidePlaceholder() });
-    const attachments = attachmentsPlugin.getAttachments(editorState);
+    const { Attachments, CustomCounter, Modal, Toolbar } = this.components;
     return (
-      <div className={divClassName} ref={textareaRef}>
+      <div className={divClassName} ref={textareaRef} onClick={this.focusEditor}>
         <div className="editor-header">
-          {editorState.getCurrentContent().hasText() ? <div className="editor-label form-label">{placeholder}</div> : null}
-          {toolbarPosition === 'top' ? this.renderToolbar() : null}
+          {editorState.getCurrentContent().hasText() ? (
+            <div className="editor-label form-label">{placeholder}</div>
+          ) : (
+            <div className="editor-label form-label">&nbsp;</div>
+          )}
           <div className="clear" />
         </div>
-        <div onClick={this.focusEditor}>
-          <Editor
-            blockRendererFn={customBlockRenderer}
-            editorState={editorState}
-            onChange={onChange}
-            onFocus={this.handleEditorFocus}
-            placeholder={placeholder}
-            ref={(e) => {
-              this.editor = e;
-            }}
-            handleReturn={this.handleReturn}
-            spellCheck
-          />
-        </div>
-        {maxLength ? this.renderRemainingChars() : null}
-        {toolbarPosition === 'bottom' ? this.renderToolbar() : null}
-
-        <EditAttachments attachments={attachments} onDelete={this.deleteAttachment} />
+        <Modal />
+        <Editor
+          editorState={editorState}
+          onChange={onChange}
+          onFocus={this.handleEditorFocus}
+          placeholder={placeholder}
+          plugins={this.plugins}
+          ref={this.editor}
+          handleReturn={this.handleReturn}
+          spellCheck
+        />
+        {maxLength ? (
+          <div className="annotation margin-xs">
+            <CustomCounter limit={maxLength} countFunction={this.countRemainingChars} />
+          </div>
+        ) : null}
+        {/*
+          we have to move toolbar in css for now since there is a bug in draft-js-plugin
+          It should be fixed in draft-js-plugin v3
+         */}
+        <Toolbar />
+        {Attachments ? <Attachments /> : null}
       </div>
     );
   }

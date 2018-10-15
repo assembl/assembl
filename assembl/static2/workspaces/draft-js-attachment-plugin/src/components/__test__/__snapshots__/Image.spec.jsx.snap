@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Image component should render an image (File) 1`] = `
+<div
+  className="atomic-block"
+  data-blocktype="atomic"
+>
+  <img
+    alt="foobar.jpg"
+    className="attachment-image"
+    src="Z2ltbWUgc29tZSBiYXNlNjQ="
+    title="foobar.jpg"
+  />
+</div>
+`;
+
+exports[`Image component should render an image (url) 1`] = `
+<div
+  className="atomic-block"
+  data-blocktype="atomic"
+>
+  <img
+    alt="My image"
+    className="attachment-image"
+    src="my-img.png"
+    title="My image"
+  />
+</div>
+`;

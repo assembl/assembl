@@ -9,7 +9,7 @@ import { Tree } from '../../../../../js/app/components/common/tree';
 import type { FictionCommentListProps } from '../../../../../js/app/components/debate/brightMirror/fictionCommentList';
 
 // Import existing storybook data
-import { defaultFictionCommentList } from '../../../../../js/app/stories/components/debate/brightMirror/fictionCommentList.stories';
+import { defaultFictionCommentList } from '../../../../../js/app/stories/components/debate/brightMirror/fictionCommentList.stories'; // eslint-disable-line max-length
 
 // Separate the snapshots in directories next to each component
 // Name should match with the story name

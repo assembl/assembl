@@ -10,10 +10,14 @@ import uploadDocumentMutation from '../../../graphql/mutations/uploadDocument.gr
 import updatePostMutation from '../../../graphql/mutations/updatePost.graphql';
 import { displayAlert, inviteUserToLogin } from '../../../utils/utilityManager';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
-import { convertToEditorState, convertContentStateToHTML, editorStateIsEmpty } from '../../../utils/draftjs';
+import {
+  convertToEditorState,
+  convertContentStateToHTML,
+  editorStateIsEmpty,
+  uploadNewAttachments,
+  type UploadNewAttachmentsPromiseResult
+} from '../../../utils/draftjs';
 import RichTextEditor from '../../common/richTextEditor';
-import attachmentsPlugin from '../../common/richTextEditor/attachmentsPlugin';
-import type { UploadNewAttachmentsPromiseResult } from '../../common/richTextEditor/attachmentsPlugin';
 import { TextInputWithRemainingChars } from '../../common/textInputWithRemainingChars';
 import { TEXT_INPUT_MAX_LENGTH, BODY_MAX_LENGTH } from './topPostForm';
 
@@ -71,8 +75,8 @@ class EditPostForm extends React.PureComponent<EditPostFormProps, EditPostFormSt
     this.setState({ subject: e.target.value });
   };
 
-  updateBody = (rawBody: EditorState): void => {
-    this.setState({ body: rawBody });
+  updateBody = (body: EditorState): void => {
+    this.setState({ body: body });
   };
 
   handleCancel = (): void => {
@@ -93,7 +97,7 @@ class EditPostForm extends React.PureComponent<EditPostFormProps, EditPostFormSt
     const bodyIsEmpty = editorStateIsEmpty(body);
     if (!subjectIsEmpty && !bodyIsEmpty) {
       // first we upload the new documents
-      const uploadDocumentsPromise = attachmentsPlugin.uploadNewAttachments(body, uploadDocument);
+      const uploadDocumentsPromise = uploadNewAttachments(body, uploadDocument);
       uploadDocumentsPromise.then((result: UploadNewAttachmentsPromiseResult) => {
         if (!result.contentState) {
           return;

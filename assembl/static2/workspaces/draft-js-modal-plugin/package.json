@@ -1,0 +1,18 @@
+{
+  "name": "draft-js-modal-plugin",
+  "version": "0.1.0",
+  "main": "src/index.js",
+  "author": "Bluenove",
+  "license": "MIT",
+  "dependencies": {
+    "decorate-component-with-props": "^1.1.0",
+    "draft-js": "^0.10.5",
+    "react": "^16.3.1",
+    "react-redux-i18n": "1.9.1"
+  },
+  "devDependencies": {
+    "enzyme": "^3.4.1",
+    "enzyme-adapter-react-16": "^1.2.0",
+    "react-test-renderer": "^16.3.1"
+  }
+}

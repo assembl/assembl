@@ -77,6 +77,8 @@ npm-debug.log
 
 # static2
 /assembl/static2/node_modules/
+/assembl/static2/workspaces/*/node_modules/
+/assembl/static2/workspaces/*/yarn-error.log
 /assembl/static2/build/
 /assembl/static2/graphql-documentation/
 /assembl/static2/coverage/

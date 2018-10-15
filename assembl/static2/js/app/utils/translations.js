@@ -41,6 +41,7 @@ const Translations = {
       validated: "Attrapage validé",
       confirm: "Confirmer",
       reject: "Rejeter",
+      submit: "Valider",
       now: "Maintenant",
       harvestingSuccess: "L'extrait a été mis à jour avec succès.",
       harvestingDeleted: "L'extrait a été supprimé avec succès.",
@@ -287,10 +288,6 @@ const Translations = {
       tableOfContents: "Sommaire"
     },
     common: {
-      attachFileForm: {
-        label: "Insérer une pièce jointe",
-        submit: "Valider"
-      },
       attachments: {
         download: "Télécharger"
       },
@@ -298,7 +295,17 @@ const Translations = {
         attachment: "Joindre un fichier",
         bold: "Gras",
         italic: "Italique",
-        bulletList: "Liste de puces"
+        bulletList: "Liste de puces",
+        closeModal: "Fermer",
+        attachmentPlugin: {
+          title: "Insérer une pièce jointe"
+        },
+        linkPlugin: {
+          openInNewTab: "Ouvrir le lien dans un nouvel onglet",
+          text: "Texte du lien",
+          title: "Insérer un lien",
+          url: "Adresse web"
+        }
       },
       uploadButton: "Choisissez un fichier",
       goUp: "Remonter"
@@ -933,6 +940,7 @@ const Translations = {
       validated: "Harvesting validated",
       confirm: "Confirm",
       reject: "Reject",
+      submit: "Submit",
       now: "Now",
       harvesting: "Harvesting",
       harvestingSuccess: "The extract was updated successfully.",
@@ -1169,10 +1177,6 @@ const Translations = {
       panelTitle: "Welcome to Assembl community page"
     },
     common: {
-      attachFileForm: {
-        label: "Add an attachment",
-        submit: "Submit"
-      },
       attachments: {
         download: "Download"
       },
@@ -1180,7 +1184,17 @@ const Translations = {
         attachment: "Add a file",
         bold: "Bold",
         italic: "Italic",
-        bulletList: "Bullet list"
+        bulletList: "Bullet list",
+        closeModal: "Close",
+        attachmentPlugin: {
+          title: "Add an attachment"
+        },
+        linkPlugin: {
+          openInNewTab: "Open link in new tab",
+          text: "Link text",
+          title: "Insert a link",
+          url: "URL"
+        }
       },
       uploadButton: "Choose a file to upload",
       goUp: "Back to top"
