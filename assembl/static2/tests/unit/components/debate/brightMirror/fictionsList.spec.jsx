@@ -4,6 +4,7 @@ import { configure, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 
 import FictionsList from '../../../../../js/app/components/debate/brightMirror/fictionsList';
+// eslint-disable-next-line max-len
 import { customFictionsList } from '../../../../../js/app/stories/components/debate/brightMirror/fictionsList.stories';
 
 configure({ adapter: new Adapter() });

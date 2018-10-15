@@ -1,3 +1,4 @@
+// eslint-disable-next-line max-len
 import { addEnumSuffixToModuleTitles } from '../../../../../js/app/components/administration/landingPage/addEnumSuffixToModuleTitles';
 
 describe('addEnumSuffixToModuleTitles function', () => {
