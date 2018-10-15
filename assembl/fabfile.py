@@ -1380,6 +1380,7 @@ def install_single_server():
     execute(install_redis)
     execute(install_memcached)
     execute(install_borg)
+    execute(install_ncftp_client)
 
 
 @task
@@ -1414,6 +1415,28 @@ def install_server_deps():
 def install_borg():
     print(cyan("Installing borg"))
     sudo("apt-get -y install borgbackup")
+
+
+@task
+def set_borg_password():
+    print(cyan("Setting borg password"))
+    run("BORG_NEW_PASSPHRASE=\'%s\' borg change-passphrase /home/assembl_user/assembl/assembl_backups.borg" % env.borg_password)
+
+
+@task
+def test_backup():
+    run("BORG_PASSPHRASE=\"%s\" ./backup_all_assembl.sh" % env.borg_password)
+
+
+@task
+def list_backups():
+    run("borg list /home/assembl_user/assembl/assembl_backups.borg")
+
+
+@task
+def testing_all_backup():
+    execute(test_backup)
+    execute(list_backups)
 
 
 @task
@@ -2151,7 +2174,7 @@ def create_backup_script():
     fill_template('assembl/templates/system/backup_template.jinja2', rc_info, 'backup_all_assembl.sh')
     put('backup_all_assembl.sh', '/home/%s/backup_all_assembl.sh' % (env.user))
     run('chmod +x backup_all_assembl.sh')
-    cron_command = "15 3 * * * /home/" + env.user + "/backup_all_assembl.sh"
+    cron_command = "15 3 * * * BORG_PASSPHRASE=\"%s\" /home/%s/backup_all_assembl.sh" % (env.borg_password, env.user)
     run(create_add_to_crontab_command(cron_command))
 
 
@@ -2179,8 +2202,14 @@ def install_ncftp_client():
 
 
 @task
+def backup_borg_repository_manually():
+    command = "ncftpput -R -v -u \"%s\" -p \"%s\" %s / %s" % (env.ftp_backup_user, env.ftp_backup_password, env.ftp_backup_endpoint, env.ftp_backup_folder)
+    run(command)
+
+
+@task
 def backup_borg_repository():
-    """Moves borg backup folder to the bac"""
+    """Moves borg backup folder to the ovh ftp backup server."""
     cron_command = "30 5 * * * ncftpput -R -v -u \"%s\" -p \"%s\" %s / %s" % (env.ftp_backup_user, env.ftp_backup_password, env.ftp_backup_endpoint, env.ftp_backup_folder)
     run(create_add_to_crontab_command(cron_command))
 
