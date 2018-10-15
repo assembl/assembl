@@ -31,7 +31,12 @@ or use this commands:
     sudo docker run   --detach   --name sentry-smtp   tianon/exim4
     sudo docker run   --rm ${REPOSITORY}   config generate-secret-key
 
-put the given key to config.yml
+put the given key to docker-compose.yml and set the correct value 
+.. code:: sh
+
+    SENTRY_SECRET_KEY: $(YOUR_KEY)
+    extra_hosts:
+      - "dockerhost:42.42.42.42" #replace 42.42.42.42 by the server IP
 
 .. code:: sh
 
@@ -39,6 +44,7 @@ put the given key to config.yml
     sudo docker run   --detach   --name sentry-web-01   --publish 9000:9000   sentry-onpremise   run web
     sudo docker run   --detach   --name sentry-worker-01   sentry-onpremise   run worker
     sudo docker run   --detach   --name sentry-cron   sentry-onpremise   run cron
+
 
 Apache configuration
 --------------------
@@ -88,3 +94,23 @@ Update docker-sentry
 
 Follow the steps under **Updating Sentry**
 https://github.com/getsentry/onpremise/blob/master/README.md#updating-sentry
+
+
+Mail configuration
+------------------
+
+set your mail configuration in config.yml or do it with the admin UI of sentry at https://your.url/manage/status/mail/
+
+.. code:: sh
+
+    mail.backend: 'smtp'  # Use dummy if you want to disable email entirely
+    mail.host: 'host url'
+    mail.port: 25
+    mail.username: 'sentry@stats.bluenove.com'
+    mail.password: 'password'
+    mail.use-tls: true
+    # The email address to send on behalf of
+    mail.from: 'sentry@stats.bluenove.com'
+
+    # If you'd like to configure email replies, enable this.
+    mail.enable-replies: false
