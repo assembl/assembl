@@ -69,7 +69,10 @@ class ProfileIcon extends React.Component {
               >
                 <Translate value="profile.panelTitle" />
               </MenuItem>
-              <MenuItem href={`${getContextual('oldLogout', { slug: slug })}?next=${get('home', { slug: slug })}`}>
+              <MenuItem
+                id="logout-dropdown"
+                href={`${getContextual('oldLogout', { slug: slug })}?next=${get('home', { slug: slug })}`}
+              >
                 <Translate value="navbar.logout" />
               </MenuItem>
             </NavDropdown>
