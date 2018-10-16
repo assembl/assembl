@@ -1,14 +1,17 @@
 fragment BrightMirrorFiction on Post {
-  subject(lang: $contentLocale)
   body(lang: $contentLocale)
   creationDate
+  subject(lang: $contentLocale)
   publicationState
   creator {
-    userId
     displayName
     isDeleted
+    userId
     image {
       externalUrl
     }
+  }
+  parentPostCreator {
+    displayName
   }
 }

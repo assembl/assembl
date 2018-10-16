@@ -107,6 +107,7 @@ class PostInterface(SQLAlchemyInterface):
     type = graphene.String(description=docs.PostInterface.type)
     discussion_id = graphene.String(description=docs.PostInterface.discussion_id)
     modified = graphene.Boolean(description=docs.PostInterface.modified)
+    parent_post_creator = graphene.Field(lambda: AgentProfile, description=docs.PostInterface.parent_post_creator)
 
     def resolve_db_id(self, args, context, info):
         return self.id
@@ -127,6 +128,11 @@ class PostInterface(SQLAlchemyInterface):
     def resolve_body(self, args, context, info):
         body = resolve_langstring(self.get_body(), args.get('lang'))
         return body
+
+    def resolve_parent_post_creator(self, args, context, info):
+        if self.parent_id:
+            post = models.Content.get(self.parent_id)
+            return post.creator
 
     @staticmethod
     def _maybe_translate(post, locale, request):

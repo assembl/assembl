@@ -3,6 +3,7 @@ import React, { Fragment, Component } from 'react';
 import { Grid, Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { I18n } from 'react-redux-i18n';
+import head from 'lodash/head';
 // Graphql imports
 import { compose, graphql } from 'react-apollo';
 import BrightMirrorFictionQuery from '../graphql/BrightMirrorFictionQuery.graphql';
@@ -13,6 +14,7 @@ import IdeaWithCommentsQuery from '../graphql/IdeaWithPostsQuery.graphql';
 // Route helpers imports
 import { browserHistory } from '../router';
 import { get } from '../utils/routeMap';
+import { transformPosts } from './idea';
 // HOC imports
 import manageErrorAndLoading from '../components/common/manageErrorAndLoading';
 // Components imports
@@ -38,6 +40,7 @@ import type { FictionBodyProps } from '../components/debate/brightMirror/fiction
 import type { FictionCommentHeaderProps } from '../components/debate/brightMirror/fictionCommentHeader';
 import type { FictionCommentFormProps } from '../components/debate/brightMirror/fictionCommentForm';
 import type { FictionCommentListProps } from '../components/debate/brightMirror/fictionCommentList';
+import type { CreateCommentInputs } from '../components/debate/brightMirror/fictionComment';
 
 // Define types
 export type BrightMirrorFictionProps = {
@@ -87,18 +90,6 @@ type BrightMirrorFictionGraphQLProps = {
   ideaWithCommentsData: IdeaWithCommentsData
 };
 
-// Type use for creating a Bright Mirror comment with CreateCommentMutation
-type CreateCommentInputs = {
-  /** Comment body content */
-  body: string,
-  /** Comment content locale */
-  contentLocale: string,
-  /** Comment idea identifier */
-  ideaId: string,
-  /** Comment parent identifier */
-  parentId: string
-};
-
 type LocalBrightMirrorFictionProps = BrightMirrorFictionProps & BrightMirrorFictionReduxProps & BrightMirrorFictionGraphQLProps;
 
 type BrightMirrorFictionState = {
@@ -140,16 +131,17 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
   }
 
   // Define callback functions
-  submitCommentHandler = (comment: string) => {
+  submitCommentHandler = (comment: string, commentParentId: string) => {
     displayAlert('success', I18n.t('loading.wait'));
 
     // Define variables
     const { contentLocale, themeId, fictionId, createComment, ideaWithCommentsData } = this.props;
+    const parentId = commentParentId || fictionId;
     const createPostInputs: CreateCommentInputs = {
       body: comment,
       contentLocale: contentLocale,
       ideaId: themeId,
-      parentId: fictionId
+      parentId: parentId
     };
 
     // Call the mutation function to create a comment
@@ -166,6 +158,26 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
         displayAlert('danger', `${error}`);
       });
   };
+
+  // Create an array of comments from the current fiction
+  // The fiction is the main post, a post (or comment) with a parentId identical to the fictionId
+  // will be considered as the top level of comments of the fiction
+  getTopComments() {
+    const { fictionId, ideaWithCommentsData } = this.props;
+    const { edges } = ideaWithCommentsData.idea.posts;
+    const { idea, refetch } = ideaWithCommentsData;
+
+    if (!ideaWithCommentsData.idea) return [];
+
+    const topComments = head(
+      transformPosts(edges, [], {
+        refetchIdea: refetch,
+        ideaId: idea.id
+      }).filter(post => post.id === fictionId)
+    ).children;
+
+    return topComments;
+  }
 
   render() {
     const { title, content, loading, publicationState } = this.state;
@@ -190,20 +202,9 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
 
     // Define variables
     const { fiction } = brightMirrorFictionData;
-    const { idea } = ideaWithCommentsData;
     const getDisplayName = () => (fiction.creator && fiction.creator.displayName ? fiction.creator.displayName : EMPTY_STRING);
     const displayName = fiction.creator && fiction.creator.isDeleted ? I18n.t('deletedUser') : getDisplayName();
-    // Create an array of comments from the current fiction
-    // The fiction is the main post, a post (or comment) with a parentId identical to the fictionId
-    // is considered as the first level of comments of the fiction
-    const comments = idea.posts.edges.filter(comment => comment.node.parentId === fictionId).reduce(
-      (array, element) =>
-        array.concat({
-          id: element.node.id,
-          contentLocale: contentLocale
-        }),
-      []
-    );
+    const topComments = this.getTopComments();
 
     // Define user permission
     const USER_ID_NOT_FOUND = -9999;
@@ -275,14 +276,15 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
       title: I18n.t('debate.brightMirror.commentFiction.title'),
       imgSrc: '/static2/img/illustration-mechanisme.png',
       imgAlt: I18n.t('debate.brightMirror.commentFiction.imageAlt'),
-      commentsCount: comments.length
+      commentsCount: topComments.length
     };
 
     const fictionCommentListProps: FictionCommentListProps = {
-      comments: comments,
+      comments: topComments,
       contentLocale: contentLocale,
       contentLocaleMapping: contentLocaleMapping,
-      identifier: phase
+      identifier: phase,
+      onSubmitHandler: this.submitCommentHandler
     };
 
     return (

@@ -8,6 +8,8 @@ import { CellMeasurerCache, List } from 'react-virtualized';
 
 import { scrollToPost } from '../../../utils/hashLinkScroll';
 import NuggetsManager from '../nuggetsManager';
+import { PHASES } from '../../../constants';
+import type { FictionCommentExtraProps } from '../../../components/debate/brightMirror/fictionComment';
 
 type BaseProps = {
   id: string,
@@ -31,7 +33,8 @@ type BaseProps = {
       numChildren: number,
       measureTreeHeight: (delay?: number) => void
     }
-  ) => React.Node
+  ) => React.Node,
+  fictionCommentExtraProps?: FictionCommentExtraProps
 };
 
 type Props = {
@@ -136,14 +139,18 @@ class Child extends React.PureComponent<Props, State> {
     );
   };
 
+  expandCollapseHandler = (event: SyntheticEvent<HTMLDivElement>, expanded: boolean) => {
+    if (expanded) {
+      this.scrollToElement();
+    }
+    this.expandCollapse(event);
+  };
+
   renderToggleLink = (expanded: boolean, indented: boolean) => (
     <div
       ref={this.scrollAnchor}
       onClick={(event) => {
-        if (expanded) {
-          this.scrollToElement();
-        }
-        this.expandCollapse(event);
+        this.expandCollapseHandler(event, expanded);
       }}
       className={indented ? 'expand-indented' : 'expand'}
     >
@@ -173,16 +180,32 @@ class Child extends React.PureComponent<Props, State> {
       SeparatorComponent,
       nuggetsManager,
       listRef,
-      cache
+      cache,
+      fictionCommentExtraProps
     } = this.props;
     const { expanded, visible } = this.state;
     const numChildren = children ? children.length : 0;
     const contentLocale = contentLocaleMapping.getIn([id, 'contentLocale'], originalLocale);
-    const forwardProps = {
-      contentLocale: contentLocale,
+    // Define forwarded props according to identifier value
+    let forwardProps = {
       ...this.props,
+      contentLocale: contentLocale,
       numChildren: numChildren
     };
+
+    // Push additional props from Tree.jsx to InnerComponent when identifier is brightMirror
+    // We want to use some Tree.jsx functions to handle collapse/expand behavior for the list of fiction comments
+    if (identifier === PHASES.brightMirror) {
+      forwardProps = {
+        ...forwardProps,
+        fictionCommentExtraProps: {
+          ...forwardProps.fictionCommentExtraProps,
+          expandedFromTree: expanded,
+          expandCollapseCallbackFromTree: event => this.expandCollapseHandler(event, expanded)
+        }
+      };
+    }
+
     delete forwardProps.children;
     // InnerComponent, the post, is only rendered when the Child appears in the viewport or next page
     const { hash } = window.location;
@@ -217,7 +240,7 @@ class Child extends React.PureComponent<Props, State> {
         )}
         {numChildren > 0 ? (
           <React.Fragment>
-            {this.renderToggleLink(expanded, level < 4)}
+            {identifier !== PHASES.brightMirror ? this.renderToggleLink(expanded, level < 4) : null}
             {children.map((child, idx) => {
               const fullLevelArray: Array<string> = fullLevel ? fullLevel.split('-') : [];
               fullLevelArray[level] = `${idx}`;
@@ -239,6 +262,7 @@ class Child extends React.PureComponent<Props, State> {
                   nuggetsManager={nuggetsManager}
                   listRef={listRef}
                   cache={cache}
+                  fictionCommentExtraProps={fictionCommentExtraProps}
                 />
               );
             })}
@@ -248,10 +272,7 @@ class Child extends React.PureComponent<Props, State> {
           <div
             className="postfolded-container"
             onClick={(event) => {
-              if (expanded) {
-                this.scrollToElement();
-              }
-              this.expandCollapse(event);
+              this.expandCollapseHandler(event, expanded);
             }}
           >
             <div className="post-folded">

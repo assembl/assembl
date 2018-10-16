@@ -15,12 +15,39 @@ import { defaultFictionToolbar } from '../../../stories/components/debate/bright
 import { defaultFictionBody } from '../../../stories/components/debate/brightMirror/fictionBody.stories';
 import { defaultFictionCommentHeader } from '../../../stories/components/debate/brightMirror/fictionCommentHeader.stories';
 import { defaultFictionCommentForm } from '../../../stories/components/debate/brightMirror/fictionCommentForm.stories';
-import { defaultFictionComment } from '../../../stories/components/debate/brightMirror/fictionComment.stories';
+import {
+  defaultFictionComment,
+  defaultFictionCommentGraphQL
+} from '../../../stories/components/debate/brightMirror/fictionComment.stories';
 
 const defaultBackBtnProps: BackButtonProps = {
   handleClick: Function,
   linkClassName: 'back-btn'
 };
+
+const fictionComments = (
+  <div className="level level-0">
+    <FictionComment {...defaultFictionComment} {...defaultFictionCommentGraphQL}>
+      <div className="level level-1 border-left child-level">
+        <FictionComment {...defaultFictionComment} {...defaultFictionCommentGraphQL} />
+        <FictionComment {...defaultFictionComment} {...defaultFictionCommentGraphQL}>
+          <div className="level level-2 border-left child-level">
+            <FictionComment {...defaultFictionComment} {...defaultFictionCommentGraphQL} />
+            <FictionComment {...defaultFictionComment} {...defaultFictionCommentGraphQL} />
+            <FictionComment {...defaultFictionComment} {...defaultFictionCommentGraphQL}>
+              <div className="level level-3 border-left child-level">
+                <FictionComment {...defaultFictionComment} {...defaultFictionCommentGraphQL} />
+                <FictionComment {...defaultFictionComment} {...defaultFictionCommentGraphQL} />
+                <FictionComment {...defaultFictionComment} {...defaultFictionCommentGraphQL} />
+                <FictionComment {...defaultFictionComment} {...defaultFictionCommentGraphQL} />
+              </div>
+            </FictionComment>
+          </div>
+        </FictionComment>
+      </div>
+    </FictionComment>
+  </div>
+);
 
 const BrightMirrorFiction = () => (
   <div className="bright-mirror">
@@ -44,12 +71,8 @@ const BrightMirrorFiction = () => (
           <FictionCommentHeader {...defaultFictionCommentHeader} />
           <div className="comments-content">
             <FictionCommentForm {...defaultFictionCommentForm} />
-            <FictionComment {...defaultFictionComment} />
-            <FictionComment {...defaultFictionComment} />
-            <FictionComment {...defaultFictionComment} />
-            <FictionComment {...defaultFictionComment} />
-            <FictionComment {...defaultFictionComment} />
-            <FictionComment {...defaultFictionComment} />
+            {fictionComments}
+            {fictionComments}
           </div>
         </Col>
       </Row>

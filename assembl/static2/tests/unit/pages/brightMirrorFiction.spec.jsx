@@ -35,6 +35,9 @@ configure({ adapter: new Adapter() });
 
 // Mock utils functions
 jest.mock('../../../js/app/utils/utilityManager', () => ({ displayAlert: jest.fn() }));
+jest.mock('../../../js/app/pages/idea', () => ({
+  transformPosts: jest.fn(() => [{ id: 'fictionId', children: ['yyy', 'zzz'] }])
+}));
 
 const brightMirrorFictionDataTemplate = {
   fiction: {

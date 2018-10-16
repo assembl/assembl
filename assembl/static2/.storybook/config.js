@@ -33,6 +33,9 @@ function loadStories() {
   require('../js/app/integration/101/components/checkboxList101/checkboxList101.stories.jsx');
   require('../js/app/stories/components/common/menu/menu.stories.jsx');
 
+  require('../js/app/stories/components/debate/common/toggleCommentButton.stories.jsx');
+  require('../js/app/stories/components/debate/common/replyToCommentButton.stories.jsx');
+
   require('../js/app/stories/components/debate/brightMirror/fictionPreview.stories.jsx');
   require('../js/app/stories/components/debate/brightMirror/fictionsList.stories.jsx');
   require('../js/app/stories/components/debate/brightMirror/instructionsText.stories.jsx');

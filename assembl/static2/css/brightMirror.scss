@@ -26,6 +26,10 @@ $fiction-toolbar-icon-size: 17px;
   }
 }
 
+:focus {
+  outline: none;
+}
+
 // Bright mirror global style
 .bright-mirror-fiction {
   padding-bottom: 30px;
@@ -33,13 +37,45 @@ $fiction-toolbar-icon-size: 17px;
 }
 
 .bright-mirror-comments {
-  padding: 30px 0 0 0;
+  padding: 30px 0;
 
   .comments-content {
     background-color: $white;
     padding-left: 15px;
     padding-right: 15px;
     padding-top: 30px;
+
+    // Tree.jsx style adjustments
+    .infinite-separator {
+      border-bottom: 1px solid #192882;
+      margin: 30px auto;
+      position: relative;
+      width: 200px;
+
+      span {
+        background-color: $white;
+        margin: 0 0 0 75px;
+        padding: 0 15px 0 0;
+        position: absolute;
+        text-align: center;
+        top: -8px;
+        width: 50px;
+      }
+    }
+
+    .level {
+      .expand-indented {
+        display: none;
+      }
+
+      .border-left {
+        border-left: none;
+      }
+
+      .level-1 {
+        padding-left: 20px;
+      }
+    }
   }
 }
 
@@ -66,11 +102,22 @@ $fiction-toolbar-icon-size: 17px;
   }
 
   .bright-mirror-comments {
-    padding: 40px 0 0 0;
+    padding: 40px 0;
 
     .comments-content {
       padding-left: 54px;
       padding-right: 54px;
+
+      // Tree.jsx style adjustments
+      .level {
+        .expand-indented {
+          display: inline-block;
+        }
+
+        .level-1 {
+          padding-left: 40px;
+        }
+      }
     }
   }
 }
@@ -83,9 +130,16 @@ $fiction-toolbar-icon-size: 17px;
 
   .bright-mirror-comments {
     .comments-content {
-      padding-left: 50px;
-      padding-right: 50px;
-      padding-top: 80px;
+      padding: 80px 50px;
+
+      // Tree.jsx style adjustments
+      .level {
+        .level-1,
+        .level-2,
+        .level-3 {
+          padding-left: 40px;
+        }
+      }
     }
   }
 }
@@ -93,9 +147,12 @@ $fiction-toolbar-icon-size: 17px;
 // Component imports
 @import "components/backButton";
 @import "components/circleAvatar";
+@import "components/toggleCommentButton";
+@import "components/replyToCommentButton";
 @import "components/fictionHeader";
 @import "components/fictionToolbar";
 @import "components/fictionBody";
 @import "components/fictionCommentHeader";
 @import "components/fictionCommentForm";
 @import "components/fictionComment";
+@import "components/fictionCommentList";

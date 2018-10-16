@@ -518,6 +518,7 @@ class PostInterface:
     type = """The type of the post. The class name of the post."""
     discussion_id = """The database identifier of the Discussion."""
     modified = """A boolean flag to say whether the post is modified or not."""
+    parent_post_creator = "The User or AgentProfile who created the parent post."
 
 
 class Post:

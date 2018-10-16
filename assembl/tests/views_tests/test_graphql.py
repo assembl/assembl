@@ -2603,6 +2603,54 @@ def test_get_all_posts(graphql_request, proposition_id):
     assert proposition_id == first_post['id']
     return res
 
+def test_get_parent_post_creator(
+    graphql_request, graphql_registry, bright_mirror,
+    post_published_for_bright_mirror,
+    participant_published_post_with_parent_post_for_bright_mirror, test_session):
+
+    res = schema.execute(u"""query Idea($id: ID!) {
+        idea: node(id: $id) {
+            ... on Idea {
+                numPosts
+                posts {
+                    edges {
+                        node {
+                            ... on Post {
+                                subject
+                                parentPostCreator {
+                                    id,
+                                    displayName
+                                }
+                                creator {
+                                    id,
+                                    displayName
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }""",
+    context_value=graphql_request,
+    variable_values={
+        "id": bright_mirror,
+    })
+
+    assert res.data
+    assert len(res.data['idea']['posts']['edges']) == res.data['idea']['numPosts']
+
+    first_post = res.data['idea']['posts']['edges'][0]['node']
+    second_post = res.data['idea']['posts']['edges'][1]['node']
+
+    assert first_post['subject'] == 'Published by participant'
+    assert first_post['creator']['displayName'] == 'A. Barking Loon'
+    assert first_post['parentPostCreator']['displayName'] == 'Mr. Administrator'
+
+    assert second_post['subject'] == 'Published'
+    assert second_post['creator']['displayName'] == 'Mr. Administrator'
+    assert second_post['parentPostCreator'] == None
+
 
 def test_query_discussion_login_url_default(graphql_request, discussion, test_session, graphql_registry):
     res = schema.execute(graphql_registry['DiscussionQuery'], context_value=graphql_request)

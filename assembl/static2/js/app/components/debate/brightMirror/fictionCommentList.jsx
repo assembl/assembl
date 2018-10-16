@@ -4,7 +4,11 @@ import { Map } from 'immutable';
 // Components imports
 import { Tree } from '../../../components/common/tree';
 import FictionComment from './fictionComment';
+import FoldedPost from '../common/post/foldedPost';
+import InfiniteSeparator from '../../../components/common/infiniteSeparator';
+import { noRowsRenderer } from '../../../pages/idea';
 // Type imports
+import type { FictionCommentExtraProps } from './fictionComment';
 
 export type FictionCommentListProps = {
   /** Array of fiction comments */
@@ -14,12 +18,23 @@ export type FictionCommentListProps = {
   /** Content locale mapping used by Tree */
   contentLocaleMapping: Map<string, string>,
   /** Identifier of the idea - e.g 'brightMirror' */
-  identifier: string
+  identifier: string,
+  /** Submit comment callback used in order to catch a submit event from tree.jsx */
+  onSubmitHandler: Function
 };
 
-const FictionCommentList = ({ comments, contentLocale, contentLocaleMapping, identifier }: FictionCommentListProps) => {
+const FictionCommentList = ({
+  comments,
+  contentLocale,
+  contentLocaleMapping,
+  identifier,
+  onSubmitHandler
+}: FictionCommentListProps) => {
   const FIRST_ROW_INDEX = 0;
-  const NoComponent = () => null;
+
+  const fictionCommentExtraProps: FictionCommentExtraProps = {
+    submitCommentCallback: onSubmitHandler
+  };
 
   return (
     <Tree
@@ -28,11 +43,11 @@ const FictionCommentList = ({ comments, contentLocale, contentLocaleMapping, ide
       data={comments}
       initialRowIndex={FIRST_ROW_INDEX}
       InnerComponent={FictionComment}
-      InnerComponentFolded={NoComponent}
-      noRowsRenderer={NoComponent}
-      SeparatorComponent={NoComponent}
+      InnerComponentFolded={FoldedPost}
+      noRowsRenderer={noRowsRenderer}
+      SeparatorComponent={InfiniteSeparator}
       identifier={identifier}
-      InnerComponentHeight={125}
+      fictionCommentExtraProps={fictionCommentExtraProps}
     />
   );
 };
