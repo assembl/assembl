@@ -24,10 +24,9 @@ test_frontend:
     - yarn run flow
 
 # push to master:
-#   stage: pushtomaster
+#   stage: deploy
 #   only:
 #     - develop
 #   script:
-#     - chmod +x scripts/git-push
-#     - scripts/git-push git@github.com:assembl/assembl.git
+#     - /bin/bash scripts/git-push https://$GITHUB_ACCESS_TOKEN@github.com/assembl/assembl.git
 #   when: on_success
