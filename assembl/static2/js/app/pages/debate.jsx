@@ -7,6 +7,7 @@ import Themes from '../components/debate/common/themes';
 import DebateThematicsQuery from '../graphql/DebateThematicsQuery.graphql';
 
 type Props = {
+  phaseId: string,
   identifier: string,
   data: {
     loading: boolean,
@@ -21,9 +22,8 @@ type Props = {
   children: React.Node
 };
 
-const Debate = ({ identifier, data, params, children }: Props) => {
+const Debate = ({ phaseId, identifier, data, params, children }: Props) => {
   const { loading, thematics } = data;
-  const phaseId = params.phaseId || null;
   const themeId = params.themeId || null;
   const questionId = params.questionId || null;
   const isParentRoute = !(themeId || questionId) || false;

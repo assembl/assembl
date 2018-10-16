@@ -7,6 +7,7 @@ import Ideas from '../components/debate/tableOfIdeas/ideas';
 import AllIdeasQuery from '../graphql/AllIdeasQuery.graphql';
 
 type Props = {
+  phaseId: string,
   identifier: string,
   data: {
     loading: boolean,
@@ -21,7 +22,7 @@ type Props = {
   children: React.Node
 };
 
-const DebateThread = ({ identifier, data, params, children }: Props) => {
+const DebateThread = ({ phaseId, identifier, data, params, children }: Props) => {
   if (!data) {
     return (
       <div className="debate">
@@ -30,7 +31,6 @@ const DebateThread = ({ identifier, data, params, children }: Props) => {
     );
   }
   const { loading, ideas, rootIdea } = data;
-  const phaseId = params.phaseId;
   const themeId = params.themeId || null;
   const isParentRoute = !themeId;
   const childrenElm = React.Children.map(children, child =>
