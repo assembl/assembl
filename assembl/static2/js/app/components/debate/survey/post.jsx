@@ -314,7 +314,6 @@ class Post extends React.Component<Props> {
 
 const mapStateToProps = (state, { id }) => ({
   debate: state.debate,
-  timeline: state.timeline,
   contentLocale: state.contentLocale.getIn([id, 'contentLocale']),
   lang: state.i18n.locale,
   isHarvesting: state.context.isHarvesting

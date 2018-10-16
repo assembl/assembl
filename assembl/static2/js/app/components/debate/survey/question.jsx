@@ -138,7 +138,6 @@ class Question extends React.Component<Props, State> {
 }
 
 const mapStateToProps = state => ({
-  timeline: state.timeline,
   contentLocale: state.i18n.locale
 });
 

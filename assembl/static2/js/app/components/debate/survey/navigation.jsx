@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grid, Col } from 'react-bootstrap';
-import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
+
 import { getDomElementOffset, calculatePercentage } from '../../../utils/globalFunctions';
 import { SMALL_SCREEN_WIDTH } from '../../../constants';
 import { withScreenDimensions } from '../../common/screenDimensions';
@@ -183,8 +183,4 @@ class Navigation extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({
-  timeline: state.timeline
-});
-
-export default withScreenDimensions(connect(mapStateToProps)(Navigation));
+export default withScreenDimensions(Navigation);
