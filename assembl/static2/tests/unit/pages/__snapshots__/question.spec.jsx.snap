@@ -92,7 +92,6 @@ exports[`Question page should match Question with data snapshot 1`] = `
             </h3>
             <Connect(withRouter(Apollo(Component)))
               isPhaseCompleted={false}
-              phaseId="phaseFoo"
               questionId="FooInd"
               themeId="ThematicId"
             />
