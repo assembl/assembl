@@ -143,8 +143,8 @@ export default class RichTextEditor extends React.Component<Props, State> {
     // Hacky: Wait to focus the editor so we don't lose selection.
     // The toolbar actions don't work at all without this.
     setTimeout(() => {
-      if (this.editor) {
-        this.editor.focus();
+      if (this.editor && this.editor.current) {
+        this.editor.current.focus();
       }
     }, 50);
   };
