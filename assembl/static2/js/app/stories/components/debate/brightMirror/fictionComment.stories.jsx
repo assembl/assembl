@@ -25,6 +25,7 @@ const defaultFictionCommentCallbacks: FictionCommentExtraProps = {
 };
 
 export const defaultFictionComment: FictionCommentBaseProps = {
+  measureTreeHeight: action('measureTreeHeight'),
   numChildren: 999,
   fictionCommentExtraProps: defaultFictionCommentCallbacks
 };
@@ -57,6 +58,7 @@ storiesOf('FictionComment', module)
         commentContent={text('Comment content', playground.commentContent)}
         commentParentId={text('Comment parent id', playground.commentParentId)}
         displayedPublishedDate={text('Displayed published date', playground.displayedPublishedDate)}
+        measureTreeHeight={playground.measureTreeHeight}
         numChildren={number('Number of comments', playground.numChildren)}
         parentPostAuthorFullname={text('Parent comment author fullname', playground.parentPostAuthorFullname)}
         publishedDate={text('Published date', playground.publishedDate)}

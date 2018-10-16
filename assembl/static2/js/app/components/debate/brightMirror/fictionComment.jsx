@@ -33,6 +33,8 @@ export type FictionCommentExtraProps = {
 export type FictionCommentBaseProps = {
   /** Children node used in our case for integration purpose */
   children?: Node,
+  /** Function that should be called when a comment is rendered */
+  measureTreeHeight: (delay?: number) => void,
   /** Number of child comments */
   numChildren: number,
   /** Extra props defined from Tree.jsx */
@@ -82,7 +84,11 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
     };
   }
 
-  displayFictionCommentForm = (show: boolean) => this.setState({ showFictionCommentForm: show });
+  displayFictionCommentForm = (show: boolean) => {
+    this.setState({ showFictionCommentForm: show });
+    // Update tree height when comment form is toggled
+    this.props.measureTreeHeight();
+  };
 
   render() {
     const {
@@ -92,6 +98,7 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
       commentContent,
       commentParentId,
       displayedPublishedDate,
+      measureTreeHeight,
       numChildren,
       parentPostAuthorFullname,
       publishedDate,
@@ -126,6 +133,9 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
     ) : (
       <ReplyToCommentButton {...replyToCommentButtonProps} />
     );
+
+    // Update tree height when component is rendered
+    measureTreeHeight();
 
     return (
       <Fragment>

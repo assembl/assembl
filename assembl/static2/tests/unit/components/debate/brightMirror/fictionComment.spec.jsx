@@ -40,9 +40,9 @@ describe('<FictionComment /> - with shallow', () => {
   beforeEach(() => {
     fictionComment = {
       ...defaultFictionComment,
-      ...defaultFictionCommentGraphQL
+      ...defaultFictionCommentGraphQL,
+      measureTreeHeight: jest.fn()
     };
-
     wrapper = shallow(<ShallowFictionComment {...fictionComment} />);
   });
 
@@ -76,6 +76,7 @@ describe('<FictionComment /> - with mount', () => {
       fictionComment = {
         ...defaultFictionComment,
         ...defaultFictionCommentGraphQL,
+        measureTreeHeight: jest.fn(),
         // Below are the required input params for CommentQuery
         id: 'aaa',
         contentLocale: 'fr'
@@ -124,6 +125,7 @@ describe('<FictionComment /> - with mount', () => {
       fictionComment = {
         ...defaultFictionComment,
         ...defaultFictionCommentGraphQL,
+        measureTreeHeight: jest.fn(),
         authorFullname: 'No author specified',
         // Below are the required input params for CommentQuery
         id: 'aaa',
@@ -156,6 +158,7 @@ describe('<FictionComment /> - with mount', () => {
       fictionComment = {
         ...defaultFictionComment,
         ...defaultFictionCommentGraphQL,
+        measureTreeHeight: jest.fn(),
         parentPostAuthorFullname: 'No author specified',
         // Below are the required input params for CommentQuery
         id: 'aaa',
