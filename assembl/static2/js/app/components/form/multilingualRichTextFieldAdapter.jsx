@@ -20,14 +20,12 @@ type Props = {
     value: multilingualValue
   },
   label: string,
-  uploadDocument: Function,
-  withAttachment: boolean
+  uploadDocument: Function
 } & FieldRenderProps;
 
 const RichTextFieldAdapter = ({
   editLocale,
   uploadDocument,
-  withAttachment,
   input: { name, onBlur, onChange, value, ...otherListeners },
   label,
   meta: { error, touched },
@@ -43,7 +41,6 @@ const RichTextFieldAdapter = ({
         placeholder={label}
         toolbarPosition="bottom"
         onChange={es => onChange({ ...value, [editLocale]: es })}
-        withAttachmentButton={withAttachment}
       />
       <Error name={name} />
     </FormGroup>
