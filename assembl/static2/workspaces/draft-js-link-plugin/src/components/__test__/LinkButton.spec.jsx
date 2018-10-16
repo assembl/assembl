@@ -73,7 +73,7 @@ describe('addLink method', () => {
 });
 
 describe('getSelectedText method', () => {
-  it('should get selected text');
+  xit('should get selected text', () => {});
 });
 
 describe('LinkButton component', () => {

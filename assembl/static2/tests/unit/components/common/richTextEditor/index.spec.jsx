@@ -9,7 +9,7 @@ import RichTextEditor from '../../../../../js/app/components/common/richTextEdit
 configure({ adapter: new Adapter() });
 
 describe('RichTextEditor component', () => {
-  it.skip('should render a rich text editor', () => {
+  xit('should render a rich text editor', () => {
     const contentState = ContentState.createFromText('foobar');
     const editorState = EditorState.createWithContent(contentState);
     const onChangeSpy = jest.fn();
