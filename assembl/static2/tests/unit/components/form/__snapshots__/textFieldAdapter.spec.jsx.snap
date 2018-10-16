@@ -17,9 +17,8 @@ exports[`TextFieldAdapter component should render a text field 1`] = `
       className="form-control"
       id="fullname"
       onChange={[Function]}
-      onFocus={[Function]}
+      onFocus={[MockFunction]}
       placeholder="Full name"
-      type={undefined}
       value="Amber Zieme"
     />
   </div>
@@ -49,9 +48,8 @@ exports[`TextFieldAdapter component should render a text field touched with erro
       className="form-control"
       id="fullname"
       onChange={[Function]}
-      onFocus={[Function]}
+      onFocus={[MockFunction]}
       placeholder="Full name"
-      type={undefined}
       value="Amber Zieme"
     />
   </div>
@@ -81,9 +79,8 @@ exports[`TextFieldAdapter component should render a text field untouched with er
       className="form-control"
       id="fullname"
       onChange={[Function]}
-      onFocus={[Function]}
+      onFocus={[MockFunction]}
       placeholder="Full name"
-      type={undefined}
       value="Amber Zieme"
     />
   </div>
@@ -107,9 +104,8 @@ exports[`TextFieldAdapter component should render a text field without value 1`]
       className="form-control"
       id="fullname"
       onChange={[Function]}
-      onFocus={[Function]}
+      onFocus={[MockFunction]}
       placeholder="Full name"
-      type={undefined}
       value=""
     />
   </div>

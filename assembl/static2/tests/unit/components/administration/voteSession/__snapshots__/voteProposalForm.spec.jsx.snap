@@ -10,9 +10,7 @@ exports[`VoteProposalForm component should render an empty form to create a vote
   >
     <div
       className="inline"
-    >
-      
-    </div>
+    />
   </div>
   <div
     className="title"
@@ -23,15 +21,11 @@ exports[`VoteProposalForm component should render an empty form to create a vote
     />
   </div>
   <FormControlWithLabel
-    componentClass={undefined}
-    disabled={undefined}
-    formControlProps={undefined}
     helperText=""
     helperUrl=""
     id="proposal-title-1"
     label="Title of the proposal"
     labelAlwaysVisible={false}
-    name={undefined}
     onChange={[Function]}
     required={true}
     type="text"
@@ -46,29 +40,22 @@ exports[`VoteProposalForm component should render an empty form to create a vote
     value={null}
   />
   <FormControlWithLabel
-    componentClass={undefined}
-    disabled={undefined}
-    formControlProps={undefined}
     helperText=""
     helperUrl=""
     id="proposal-description-1"
     label="Description"
     labelAlwaysVisible={false}
-    name={undefined}
     onChange={[Function]}
     required={true}
     type="rich-text"
-    validationErrors={undefined}
     value={null}
   />
   <FormGroup
     bsClass="form-group"
     validationState={null}
   >
-    Immutable.List [
-    ]
-    Immutable.List [
-    ]
+    Immutable.List []
+    Immutable.List []
   </FormGroup>
   <div
     className="separator"
@@ -86,9 +73,7 @@ exports[`VoteProposalForm component should render an empty form to create a vote
   >
     <div
       className="inline"
-    >
-      
-    </div>
+    />
   </div>
   <div
     className="title"
@@ -99,45 +84,33 @@ exports[`VoteProposalForm component should render an empty form to create a vote
     />
   </div>
   <FormControlWithLabel
-    componentClass={undefined}
-    disabled={undefined}
-    formControlProps={undefined}
     helperText=""
     helperUrl=""
     id="proposal-title-1"
     label="Title of the proposal"
     labelAlwaysVisible={false}
-    name={undefined}
     onChange={[Function]}
     required={true}
     type="text"
-    validationErrors={undefined}
     value={null}
   />
   <FormControlWithLabel
-    componentClass={undefined}
-    disabled={undefined}
-    formControlProps={undefined}
     helperText=""
     helperUrl=""
     id="proposal-description-1"
     label="Description"
     labelAlwaysVisible={false}
-    name={undefined}
     onChange={[Function]}
     required={true}
     type="rich-text"
-    validationErrors={undefined}
     value={null}
   />
   <FormGroup
     bsClass="form-group"
     validationState={null}
   >
-    Immutable.List [
-    ]
-    Immutable.List [
-    ]
+    Immutable.List []
+    Immutable.List []
   </FormGroup>
   <div
     className="separator"

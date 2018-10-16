@@ -14,7 +14,7 @@ exports[`DebateLink component should match the DebateLink 1`] = `
   onMouseLeave={[Function]}
   onMouseOver={[Function]}
 >
-  <Unknown>
+  <React.Fragment>
     <div
       className="debate-class debate-class-active"
       data-text="Debate"
@@ -44,6 +44,6 @@ exports[`DebateLink component should match the DebateLink 1`] = `
         </div>
       </section>
     </div>
-  </Unknown>
+  </React.Fragment>
 </div>
 `;

@@ -32,10 +32,7 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (non st
               >
                 One
               </h2>
-              <span
-                className={undefined}
-                style={undefined}
-              >
+              <span>
                 3 tokens remaining
               </span>
             </div>
@@ -71,10 +68,7 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (non st
               >
                 Two
               </h2>
-              <span
-                className={undefined}
-                style={undefined}
-              >
+              <span>
                 6 tokens remaining
               </span>
             </div>
@@ -110,10 +104,7 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (non st
               >
                 Three
               </h2>
-              <span
-                className={undefined}
-                style={undefined}
-              >
+              <span>
                 4 tokens remaining
               </span>
             </div>
@@ -149,10 +140,7 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (non st
               >
                 Four
               </h2>
-              <span
-                className={undefined}
-                style={undefined}
-              >
+              <span>
                 10 tokens remaining
               </span>
             </div>
@@ -204,10 +192,7 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (non st
               >
                 Positive
               </h2>
-              <span
-                className={undefined}
-                style={undefined}
-              >
+              <span>
                 3 tokens remaining
               </span>
             </div>
@@ -484,10 +469,7 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (non st
               >
                 Negative
               </h2>
-              <span
-                className={undefined}
-                style={undefined}
-              >
+              <span>
                 10 tokens remaining
               </span>
             </div>
@@ -740,10 +722,7 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (sticky
               >
                 Positive
               </h2>
-              <span
-                className={undefined}
-                style={undefined}
-              >
+              <span>
                 3 tokens remaining
               </span>
             </div>
@@ -1020,10 +999,7 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (sticky
               >
                 Negative
               </h2>
-              <span
-                className={undefined}
-                style={undefined}
-              >
+              <span>
                 10 tokens remaining
               </span>
             </div>

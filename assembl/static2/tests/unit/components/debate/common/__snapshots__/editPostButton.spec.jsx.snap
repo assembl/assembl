@@ -8,7 +8,7 @@ exports[`EditPostButton component should render an edit post button 1`] = `
   bsStyle="default"
   className="my-custom-class"
   disabled={false}
-  onClick={[Function]}
+  onClick={[MockFunction]}
 >
   <span
     className="assembl-icon-edit"

@@ -15,10 +15,7 @@ exports[`Announcement component <Announcement /> on a multiColumns should render
     <h3
       className="announcement-title-text dark-title-1"
     >
-      <span
-        className={undefined}
-        style={undefined}
-      >
+      <span>
         Announcement
       </span>
     </h3>
@@ -167,10 +164,7 @@ exports[`Announcement component <Announcement /> on a multiColumns should render
               <div
                 className="doughnut-label-text"
               >
-                <span
-                  className={undefined}
-                  style={undefined}
-                >
+                <span>
                   Reactions
                 </span>
               </div>
@@ -241,10 +235,7 @@ exports[`Announcement component <Announcement/> on a thread should render an ann
     <h3
       className="announcement-title-text dark-title-1"
     >
-      <span
-        className={undefined}
-        style={undefined}
-      >
+      <span>
         Announcement
       </span>
     </h3>
@@ -425,10 +416,7 @@ exports[`Announcement component <Announcement/> on a thread should render an ann
               <div
                 className="doughnut-label-text"
               >
-                <span
-                  className={undefined}
-                  style={undefined}
-                >
+                <span>
                   Reactions
                 </span>
               </div>
@@ -476,13 +464,13 @@ Array [
       className="no-arrow-tooltip"
       id="dontUnderstandTooltip"
       placement="right"
->
+    >
       2
        
       <Translate
-            value="debate.dontUnderstand"
+        value="debate.dontUnderstand"
       />
-</Tooltip>,
+    </Tooltip>,
     "color": "yellow",
     "count": 2,
   },
@@ -492,13 +480,13 @@ Array [
       className="no-arrow-tooltip"
       id="disagreeTooltip"
       placement="right"
->
+    >
       0
        
       <Translate
-            value="debate.disagree"
+        value="debate.disagree"
       />
-</Tooltip>,
+    </Tooltip>,
     "color": "red",
     "count": 0,
   },
@@ -508,13 +496,13 @@ Array [
       className="no-arrow-tooltip"
       id="likeTooltip"
       placement="right"
->
+    >
       4
        
       <Translate
-            value="debate.like"
+        value="debate.like"
       />
-</Tooltip>,
+    </Tooltip>,
     "color": "green",
     "count": 4,
   },
@@ -524,13 +512,13 @@ Array [
       className="no-arrow-tooltip"
       id="moreinfoTooltip"
       placement="right"
->
+    >
       3
        
       <Translate
-            value="debate.moreinfo"
+        value="debate.moreinfo"
       />
-</Tooltip>,
+    </Tooltip>,
     "color": "purple",
     "count": 3,
   },
@@ -562,11 +550,11 @@ Object {
       bsClass="tooltip"
       id="disagreeTooltip"
       placement="right"
->
+    >
       <Translate
-            value="debate.disagree"
+        value="debate.disagree"
       />
-</Tooltip>,
+    </Tooltip>,
     "type": "DISAGREE",
   },
   "dontUnderstand": Object {
@@ -578,11 +566,11 @@ Object {
       bsClass="tooltip"
       id="dontUnderstandTooltip"
       placement="right"
->
+    >
       <Translate
-            value="debate.dontUnderstand"
+        value="debate.dontUnderstand"
       />
-</Tooltip>,
+    </Tooltip>,
     "type": "DONT_UNDERSTAND",
   },
   "like": Object {
@@ -594,11 +582,11 @@ Object {
       bsClass="tooltip"
       id="likeTooltip"
       placement="right"
->
+    >
       <Translate
-            value="debate.like"
+        value="debate.like"
       />
-</Tooltip>,
+    </Tooltip>,
     "type": "LIKE",
   },
   "moreInfo": Object {
@@ -610,11 +598,11 @@ Object {
       bsClass="tooltip"
       id="moreInfoTooltip"
       placement="right"
->
+    >
       <Translate
-            value="debate.moreInfo"
+        value="debate.moreInfo"
       />
-</Tooltip>,
+    </Tooltip>,
     "type": "MORE_INFO",
   },
 }

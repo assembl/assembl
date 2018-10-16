@@ -15,8 +15,7 @@ exports[`VoteProposalsSection component should render a VoteProposalsSection com
       className="admin-content"
     >
       <form>
-        Immutable.List [
-        ]
+        Immutable.List []
         <OverlayTrigger
           defaultOverlayShown={false}
           overlay={
@@ -40,7 +39,7 @@ exports[`VoteProposalsSection component should render a VoteProposalsSection com
         >
           <div
             className="plus margin-l"
-            onClick={[Function]}
+            onClick={[MockFunction]}
           >
             +
           </div>
@@ -71,13 +70,11 @@ exports[`VoteProposalsSection component should render a voteProposalsSection wit
             editLocale="fr"
             id={
               Immutable.Map {
-                _isNew: false,
-                _toDelete: false,
-                id: "1234",
-                titleEntries: Immutable.List [
-                ],
-                descriptionEntries: Immutable.List [
-                ],
+                "_isNew": false,
+                "_toDelete": false,
+                "id": "1234",
+                "titleEntries": Immutable.List [],
+                "descriptionEntries": Immutable.List [],
               }
             }
             index={1}
@@ -87,13 +84,11 @@ exports[`VoteProposalsSection component should render a voteProposalsSection wit
             editLocale="fr"
             id={
               Immutable.Map {
-                _isNew: false,
-                _toDelete: false,
-                id: "5678",
-                titleEntries: Immutable.List [
-                ],
-                descriptionEntries: Immutable.List [
-                ],
+                "_isNew": false,
+                "_toDelete": false,
+                "id": "5678",
+                "titleEntries": Immutable.List [],
+                "descriptionEntries": Immutable.List [],
               }
             }
             index={2}
@@ -123,7 +118,7 @@ exports[`VoteProposalsSection component should render a voteProposalsSection wit
         >
           <div
             className="plus margin-l"
-            onClick={[Function]}
+            onClick={[MockFunction]}
           >
             +
           </div>

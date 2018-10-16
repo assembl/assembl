@@ -36,8 +36,8 @@ exports[`harvestingAnchor component should match harvestingAnchor snapshot 1`] =
     >
       <div
         className="left-side-harvesting-button__button"
-        onClick={[Function]}
-        onMouseDown={[Function]}
+        onClick={[MockFunction]}
+        onMouseDown={[MockFunction]}
       >
         <div
           className="left-side-harvesting-button__button__inside"
@@ -88,8 +88,8 @@ exports[`harvestingAnchor component should match harvestingAnchor snapshot when 
     >
       <div
         className="left-side-harvesting-button__button"
-        onClick={[Function]}
-        onMouseDown={[Function]}
+        onClick={[MockFunction]}
+        onMouseDown={[MockFunction]}
       >
         <div
           className="left-side-harvesting-button__button__inside"
@@ -140,8 +140,8 @@ exports[`harvestingAnchor component should match harvestingAnchor snapshot when 
     >
       <div
         className="left-side-harvesting-button__button"
-        onClick={[Function]}
-        onMouseDown={[Function]}
+        onClick={[MockFunction]}
+        onMouseDown={[MockFunction]}
       >
         <div
           className="left-side-harvesting-button__button__inside"

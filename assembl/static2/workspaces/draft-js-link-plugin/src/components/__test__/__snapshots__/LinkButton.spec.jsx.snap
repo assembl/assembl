@@ -24,7 +24,7 @@ exports[`LinkButton component should render an active LinkButton if selection is
 >
   <button
     className="btn active"
-    onClick={[Function]}
+    onClick={[MockFunction]}
     type="button"
   >
     <span

@@ -21,7 +21,6 @@ exports[`DumbEditSectionForm component should render a form to edit a section of
   >
     <div
       className="checkbox"
-      style={undefined}
     >
       <label
         title=""
@@ -29,11 +28,10 @@ exports[`DumbEditSectionForm component should render a form to edit a section of
         <input
           checked={true}
           disabled={false}
-          onChange={[Function]}
+          onChange={[MockFunction]}
           type="checkbox"
         />
         <span
-          className={undefined}
           style={
             Object {
               "lineHeight": "20px",
@@ -50,16 +48,13 @@ exports[`DumbEditSectionForm component should render a form to edit a section of
   >
     <label
       className="control-label"
-      htmlFor={undefined}
     >
       URL
     </label>
     <input
       className="form-control"
-      id={undefined}
-      name={undefined}
       onBlur={[Function]}
-      onChange={[Function]}
+      onChange={[MockFunction]}
       placeholder="URL"
       type="text"
       value="www.google.fr"

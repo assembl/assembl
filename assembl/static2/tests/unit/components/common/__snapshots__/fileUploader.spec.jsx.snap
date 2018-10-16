@@ -8,10 +8,7 @@ exports[`FileUploader component should render a file uploader for an image file 
     onClick={[Function]}
     type="button"
   >
-    <span
-      className={undefined}
-      style={undefined}
-    >
+    <span>
       Choose a file to upload
     </span>
   </button>
@@ -40,10 +37,7 @@ exports[`FileUploader component should render a file uploader with the filename 
     onClick={[Function]}
     type="button"
   >
-    <span
-      className={undefined}
-      style={undefined}
-    >
+    <span>
       Choose a file to upload
     </span>
   </button>
@@ -52,7 +46,6 @@ exports[`FileUploader component should render a file uploader with the filename 
   >
     <img
       alt="preview"
-      src={undefined}
     />
   </div>
   <div
@@ -77,10 +70,7 @@ exports[`FileUploader component should render a file uploader with the filename 
     onClick={[Function]}
     type="button"
   >
-    <span
-      className={undefined}
-      style={undefined}
-    >
+    <span>
       Choose a file to upload
     </span>
   </button>
@@ -114,10 +104,7 @@ exports[`FileUploader component should render a file uploader without preview 1`
     onClick={[Function]}
     type="button"
   >
-    <span
-      className={undefined}
-      style={undefined}
-    >
+    <span>
       Choose a file to upload
     </span>
   </button>

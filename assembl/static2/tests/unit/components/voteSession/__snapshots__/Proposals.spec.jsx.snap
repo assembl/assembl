@@ -788,10 +788,7 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
             onClick={[Function]}
             type="button"
           >
-            <span
-              className={undefined}
-              style={undefined}
-            >
+            <span>
               Show votes of the community
             </span>
           </button>
@@ -1585,7 +1582,6 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               onMouseDown={[Function]}
               onMouseUp={[Function]}
               onTouchStart={[Function]}
-              style={undefined}
             >
               <div
                 className="rc-slider-rail"
@@ -1693,10 +1689,7 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
             onClick={[Function]}
             type="button"
           >
-            <span
-              className={undefined}
-              style={undefined}
-            >
+            <span>
               Show votes of the community
             </span>
           </button>

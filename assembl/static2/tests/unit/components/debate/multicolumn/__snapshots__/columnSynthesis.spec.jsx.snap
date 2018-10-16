@@ -14,8 +14,8 @@ exports[`ColumnSynthesis component should render a folded post 1`] = `
       <BoxWithHyphen
         additionalContainerClassNames="column-synthesis"
         body="Excepturi est rerum nulla explicabo ex voluptatibus quam repellendus.
-      Repudiandae quia nesciunt autem et aliquid. Dolores nisi perferendis voluptas
-      corrupti voluptate molestias est. Porro et rerum sunt accusantium dolores qui."
+Repudiandae quia nesciunt autem et aliquid. Dolores nisi perferendis voluptas
+corrupti voluptate molestias est. Porro et rerum sunt accusantium dolores qui."
         date=""
         href=""
         hyphenStyle={
@@ -31,9 +31,7 @@ exports[`ColumnSynthesis component should render a folded post 1`] = `
       className="post-right"
     >
       <Connect(Connect(withApollo(PostActions)))
-        debateData={undefined}
         editable={false}
-        identifier={undefined}
         mySentiment="like"
         phaseId="my-phase-id"
         postId="XYZ333"

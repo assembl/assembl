@@ -7,7 +7,7 @@ exports[`harvestingBox component should match harvestingBox snapshot when author
   <div>
     <div
       className="harvesting-close-button"
-      onClick={[Function]}
+      onClick={[MockFunction]}
     >
       <span
         className="assembl-icon-cancel grey"
@@ -223,7 +223,7 @@ exports[`harvestingBox component should match harvestingBox snapshot when extrac
   <div>
     <div
       className="harvesting-close-button"
-      onClick={[Function]}
+      onClick={[MockFunction]}
     >
       <span
         className="assembl-icon-cancel grey"
@@ -401,7 +401,7 @@ exports[`harvestingBox component should match harvestingBox snapshot when extrac
         bsStyle="default"
         className="button-cancel button-dark"
         disabled={false}
-        onClick={[Function]}
+        onClick={[MockFunction]}
       >
         Cancel
       </Button>
@@ -428,7 +428,7 @@ exports[`harvestingBox component should match harvestingBox snapshot when nugget
   <div>
     <div
       className="harvesting-close-button"
-      onClick={[Function]}
+      onClick={[MockFunction]}
     >
       <span
         className="assembl-icon-cancel grey"
@@ -679,7 +679,7 @@ exports[`harvestingBox component should match harvestingBox snapshot when select
   <div>
     <div
       className="harvesting-close-button"
-      onClick={[Function]}
+      onClick={[MockFunction]}
     >
       <span
         className="assembl-icon-cancel grey"
@@ -895,7 +895,7 @@ exports[`harvestingBox component should match harvestingBox snapshot when the co
   <div>
     <div
       className="harvesting-close-button"
-      onClick={[Function]}
+      onClick={[MockFunction]}
     >
       <span
         className="assembl-icon-cancel grey"
@@ -1111,7 +1111,7 @@ exports[`harvestingBox component should match harvestingBox snapshot when there 
   <div>
     <div
       className="harvesting-close-button"
-      onClick={[Function]}
+      onClick={[MockFunction]}
     >
       <span
         className="assembl-icon-cancel grey"
@@ -1327,7 +1327,7 @@ exports[`harvestingBox component should match harvestingBox snapshot when there 
   <div>
     <div
       className="harvesting-close-button"
-      onClick={[Function]}
+      onClick={[MockFunction]}
     >
       <span
         className="assembl-icon-cancel grey"
@@ -1514,7 +1514,7 @@ exports[`harvestingBox component should match harvestingBox snapshot when there 
         bsStyle="default"
         className="button-cancel button-dark"
         disabled={false}
-        onClick={[Function]}
+        onClick={[MockFunction]}
       >
         Cancel
       </Button>

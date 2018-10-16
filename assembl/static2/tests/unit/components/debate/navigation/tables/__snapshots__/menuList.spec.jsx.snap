@@ -6,64 +6,62 @@ Array [
   <div
     className="menu-table-col debate-class"
     onMouseLeave={[Function]}
->
+  >
     <div
-        className="menu-table"
-        style={
-            Object {
-                "height": "114px",
-              }
+      className="menu-table"
+      style={
+        Object {
+          "height": "114px",
         }
+      }
     >
-        <Scrollbars
-            autoHeight={false}
-            autoHeightMax={200}
-            autoHeightMin={0}
-            autoHide={false}
-            autoHideDuration={200}
-            autoHideTimeout={1000}
-            hideTracksWhenNotNeeded={false}
-            renderThumbHorizontal={[Function]}
-            renderThumbVertical={[Function]}
-            renderTrackHorizontal={[Function]}
-            renderTrackVertical={[Function]}
-            renderView={[Function]}
-            tagName="div"
-            thumbMinSize={30}
-            universal={false}
-        >
-            <Connect(DumbMenuItem)
-                hasSubItems={false}
-                identifier="survey"
-                item={
-                    Object {
-                        "id": "foo",
-                        "parentId": "root",
-                      }
-                }
-                onClick={undefined}
-                onMouseOver={[Function]}
-                phaseId="phaseFoo"
-                selected={false}
-            />
-            <Connect(DumbMenuItem)
-                hasSubItems={false}
-                identifier="survey"
-                item={
-                    Object {
-                        "id": "bar",
-                        "parentId": "root",
-                      }
-                }
-                onClick={undefined}
-                onMouseOver={[Function]}
-                phaseId="phaseFoo"
-                selected={false}
-            />
-        </Scrollbars>
+      <Scrollbars
+        autoHeight={false}
+        autoHeightMax={200}
+        autoHeightMin={0}
+        autoHide={false}
+        autoHideDuration={200}
+        autoHideTimeout={1000}
+        hideTracksWhenNotNeeded={false}
+        renderThumbHorizontal={[Function]}
+        renderThumbVertical={[Function]}
+        renderTrackHorizontal={[Function]}
+        renderTrackVertical={[Function]}
+        renderView={[Function]}
+        tagName="div"
+        thumbMinSize={30}
+        universal={false}
+      >
+        <Connect(DumbMenuItem)
+          hasSubItems={false}
+          identifier="survey"
+          item={
+            Object {
+              "id": "foo",
+              "parentId": "root",
+            }
+          }
+          onMouseOver={[Function]}
+          phaseId="phaseFoo"
+          selected={false}
+        />
+        <Connect(DumbMenuItem)
+          hasSubItems={false}
+          identifier="survey"
+          item={
+            Object {
+              "id": "bar",
+              "parentId": "root",
+            }
+          }
+          onMouseOver={[Function]}
+          phaseId="phaseFoo"
+          selected={false}
+        />
+      </Scrollbars>
     </div>
     
-</div>,
+  </div>,
 ]
 `;
 
@@ -71,67 +69,65 @@ exports[`MenuList component should match the sub-MenuList 1`] = `
 Array [
   <div
     className="sub-menu-separator"
-/>,
+  />,
   <div
     className="menu-table-col debate-class sub-menu"
     onMouseLeave={[Function]}
->
+  >
     <div
-        className="menu-table"
-        style={
-            Object {
-                "height": "114px",
-              }
+      className="menu-table"
+      style={
+        Object {
+          "height": "114px",
         }
+      }
     >
-        <Scrollbars
-            autoHeight={false}
-            autoHeightMax={200}
-            autoHeightMin={0}
-            autoHide={false}
-            autoHideDuration={200}
-            autoHideTimeout={1000}
-            hideTracksWhenNotNeeded={false}
-            renderThumbHorizontal={[Function]}
-            renderThumbVertical={[Function]}
-            renderTrackHorizontal={[Function]}
-            renderTrackVertical={[Function]}
-            renderView={[Function]}
-            tagName="div"
-            thumbMinSize={30}
-            universal={false}
-        >
-            <Connect(DumbMenuItem)
-                hasSubItems={false}
-                identifier="survey"
-                item={
-                    Object {
-                        "id": "foo",
-                        "parentId": "root",
-                      }
-                }
-                onClick={undefined}
-                onMouseOver={[Function]}
-                phaseId="phaseFoo"
-                selected={false}
-            />
-            <Connect(DumbMenuItem)
-                hasSubItems={false}
-                identifier="survey"
-                item={
-                    Object {
-                        "id": "bar",
-                        "parentId": "root",
-                      }
-                }
-                onClick={undefined}
-                onMouseOver={[Function]}
-                phaseId="phaseFoo"
-                selected={false}
-            />
-        </Scrollbars>
+      <Scrollbars
+        autoHeight={false}
+        autoHeightMax={200}
+        autoHeightMin={0}
+        autoHide={false}
+        autoHideDuration={200}
+        autoHideTimeout={1000}
+        hideTracksWhenNotNeeded={false}
+        renderThumbHorizontal={[Function]}
+        renderThumbVertical={[Function]}
+        renderTrackHorizontal={[Function]}
+        renderTrackVertical={[Function]}
+        renderView={[Function]}
+        tagName="div"
+        thumbMinSize={30}
+        universal={false}
+      >
+        <Connect(DumbMenuItem)
+          hasSubItems={false}
+          identifier="survey"
+          item={
+            Object {
+              "id": "foo",
+              "parentId": "root",
+            }
+          }
+          onMouseOver={[Function]}
+          phaseId="phaseFoo"
+          selected={false}
+        />
+        <Connect(DumbMenuItem)
+          hasSubItems={false}
+          identifier="survey"
+          item={
+            Object {
+              "id": "bar",
+              "parentId": "root",
+            }
+          }
+          onMouseOver={[Function]}
+          phaseId="phaseFoo"
+          selected={false}
+        />
+      </Scrollbars>
     </div>
     
-</div>,
+  </div>,
 ]
 `;

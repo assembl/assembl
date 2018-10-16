@@ -13,10 +13,7 @@ exports[`FieldArrayWithActions component should render an array of fields with d
       <div
         className="title left"
       >
-        <span
-          className={undefined}
-          style={undefined}
-        >
+        <span>
           My account
         </span>
       </div>
@@ -89,10 +86,7 @@ exports[`FieldArrayWithActions component should render an array of fields with d
       <div
         className="title left"
       >
-        <span
-          className={undefined}
-          style={undefined}
-        >
+        <span>
           My account
         </span>
       </div>
@@ -192,10 +186,7 @@ exports[`FieldArrayWithActions component should render an array of fields with d
       <div
         className="title left"
       >
-        <span
-          className={undefined}
-          style={undefined}
-        >
+        <span>
           My account
         </span>
       </div>
@@ -265,10 +256,7 @@ exports[`FieldArrayWithActions component should render an array of fields with d
       <div
         className="title left"
       >
-        <span
-          className={undefined}
-          style={undefined}
-        >
+        <span>
           My account
         </span>
       </div>

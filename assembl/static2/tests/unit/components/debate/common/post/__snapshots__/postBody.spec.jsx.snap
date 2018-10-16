@@ -6,20 +6,17 @@ exports[`PostBody component should render a html body 1`] = `
     id="message-body-local:Content/3059"
   >
     You can't index 
-    <Unknown>
+    <React.Fragment>
       <a
         className="linkified"
         href="url"
-        target={undefined}
-        title={undefined}
       >
         the port
       </a>
       <URLMetadataLoader
-        afterLoad={undefined}
         url="url"
       />
-    </Unknown>
+    </React.Fragment>
      without 
     <ExtractInPost
       id="annotationId"
@@ -67,9 +64,8 @@ exports[`PostBody component should render a post body 1`] = `
     <Html
       contentLocale="fr"
       dbId={124}
-      divRef={[Function]}
+      divRef={[MockFunction]}
       extracts={Array []}
-      onMouseUp={undefined}
       rawHtml="<p>You can't index the port without programming the wireless HTTP program!</p>"
       replacementComponents={
         Object {

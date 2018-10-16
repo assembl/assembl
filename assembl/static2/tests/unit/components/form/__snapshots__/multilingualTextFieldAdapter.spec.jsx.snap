@@ -17,10 +17,9 @@ exports[`MultilingualTextFieldAdapter component should render a required text fi
       className="form-control"
       id="title"
       onChange={[Function]}
-      onFocus={[Function]}
+      onFocus={[MockFunction]}
       placeholder="Title *"
       required={true}
-      type={undefined}
       value="Bonjour"
     />
   </div>
@@ -50,10 +49,9 @@ exports[`MultilingualTextFieldAdapter component should render a text field 1`] =
       className="form-control"
       id="title"
       onChange={[Function]}
-      onFocus={[Function]}
+      onFocus={[MockFunction]}
       placeholder="Title"
       required={false}
-      type={undefined}
       value="Bonjour"
     />
   </div>
@@ -77,10 +75,9 @@ exports[`MultilingualTextFieldAdapter component should render a text field touch
       className="form-control"
       id="title"
       onChange={[Function]}
-      onFocus={[Function]}
+      onFocus={[MockFunction]}
       placeholder="Title"
       required={false}
-      type={undefined}
       value=""
     />
   </div>
@@ -104,10 +101,9 @@ exports[`MultilingualTextFieldAdapter component should render a text field untou
       className="form-control"
       id="title"
       onChange={[Function]}
-      onFocus={[Function]}
+      onFocus={[MockFunction]}
       placeholder="Title"
       required={false}
-      type={undefined}
       value=""
     />
   </div>
@@ -131,10 +127,9 @@ exports[`MultilingualTextFieldAdapter component should render a text field witho
       className="form-control"
       id="title"
       onChange={[Function]}
-      onFocus={[Function]}
+      onFocus={[MockFunction]}
       placeholder="Title"
       required={false}
-      type={undefined}
       value=""
     />
   </div>

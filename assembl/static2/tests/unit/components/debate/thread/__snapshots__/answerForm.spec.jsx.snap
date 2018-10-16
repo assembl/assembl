@@ -20,19 +20,9 @@ exports[`AnswerForm component should render a answer form 1`] = `
         <RichTextEditor
           editorState={
             EditorState {
-              "_immutable": Object {
+              "_immutable": Immutable.Record {
                 "allowUndo": true,
-                "currentContent": Object {
-                  "blockMap": Object {
-                    "EditorStateKey": Object {
-                      "characterList": Array [],
-                      "data": Object {},
-                      "depth": 0,
-                      "key": "EditorStateKey",
-                      "text": "",
-                      "type": "unstyled",
-                    },
-                  },
+                "currentContent": Immutable.Record {
                   "entityMap": Object {
                     "__add": [Function],
                     "__create": [Function],
@@ -47,25 +37,35 @@ exports[`AnswerForm component should render a answer form 1`] = `
                     "mergeData": [Function],
                     "replaceData": [Function],
                   },
-                  "selectionAfter": Object {
-                    "anchorKey": "EditorStateKey",
-                    "anchorOffset": 0,
-                    "focusKey": "EditorStateKey",
-                    "focusOffset": 0,
-                    "hasFocus": false,
-                    "isBackward": false,
+                  "blockMap": Immutable.OrderedMap {
+                    "EditorStateKey": Immutable.Record {
+                      "key": "EditorStateKey",
+                      "type": "unstyled",
+                      "text": "",
+                      "characterList": Immutable.List [],
+                      "depth": 0,
+                      "data": Immutable.Map {},
+                    },
                   },
-                  "selectionBefore": Object {
+                  "selectionBefore": Immutable.Record {
                     "anchorKey": "EditorStateKey",
                     "anchorOffset": 0,
                     "focusKey": "EditorStateKey",
                     "focusOffset": 0,
-                    "hasFocus": false,
                     "isBackward": false,
+                    "hasFocus": false,
+                  },
+                  "selectionAfter": Immutable.Record {
+                    "anchorKey": "EditorStateKey",
+                    "anchorOffset": 0,
+                    "focusKey": "EditorStateKey",
+                    "focusOffset": 0,
+                    "isBackward": false,
+                    "hasFocus": false,
                   },
                 },
                 "decorator": null,
-                "directionMap": Object {
+                "directionMap": Immutable.OrderedMap {
                   "EditorStateKey": "LTR",
                 },
                 "forceSelection": false,
@@ -73,31 +73,31 @@ exports[`AnswerForm component should render a answer form 1`] = `
                 "inlineStyleOverride": null,
                 "lastChangeType": null,
                 "nativelyRenderedContent": null,
-                "redoStack": Array [],
-                "selection": Object {
+                "redoStack": Immutable.Stack [],
+                "selection": Immutable.Record {
                   "anchorKey": "EditorStateKey",
                   "anchorOffset": 0,
                   "focusKey": "EditorStateKey",
                   "focusOffset": 0,
-                  "hasFocus": false,
                   "isBackward": false,
+                  "hasFocus": false,
                 },
-                "treeMap": Object {
-                  "EditorStateKey": Array [
-                    Object {
-                      "decoratorKey": null,
+                "treeMap": Immutable.OrderedMap {
+                  "EditorStateKey": Immutable.List [
+                    Immutable.Record {
+                      "start": 0,
                       "end": 0,
-                      "leaves": Array [
-                        Object {
-                          "end": 0,
+                      "decoratorKey": null,
+                      "leaves": Immutable.List [
+                        Immutable.Record {
                           "start": 0,
+                          "end": 0,
                         },
                       ],
-                      "start": 0,
                     },
                   ],
                 },
-                "undoStack": Array [],
+                "undoStack": Immutable.Stack [],
               },
             }
           }
@@ -105,7 +105,313 @@ exports[`AnswerForm component should render a answer form 1`] = `
           maxLength={3000}
           onChange={[Function]}
           placeholder="Answer"
-          textareaRef={[Function]}
+          textareaRef={
+            [MockFunction] {
+              "calls": Array [
+                Array [
+                  <div
+                    class="rich-text-editor"
+                  >
+                    <div
+                      class="editor-header"
+                    >
+                      <div
+                        class="editor-label form-label"
+                      >
+                        Answer
+                      </div>
+                      <div
+                        class="clear"
+                      />
+                    </div>
+                    <div>
+                      <div
+                        class="DraftEditor-root"
+                      >
+                        <div
+                          class="DraftEditor-editorContainer"
+                        >
+                          <div
+                            aria-describedby="placeholder-EditorStateKey"
+                            class="notranslate public-DraftEditor-content"
+                            contenteditable="true"
+                            role="textbox"
+                            spellcheck="true"
+                            style="outline: none; white-space: pre-wrap; word-wrap: break-word;"
+                          >
+                            <div
+                              data-contents="true"
+                            >
+                              <div
+                                class=""
+                                data-block="true"
+                                data-editor="EditorStateKey"
+                                data-offset-key="EditorStateKey-0-0"
+                              >
+                                <div
+                                  class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"
+                                  data-offset-key="EditorStateKey-0-0"
+                                >
+                                  <span
+                                    data-offset-key="EditorStateKey-0-0"
+                                  >
+                                    <span
+                                      data-text="true"
+                                    >
+                                      Hello
+                                    </span>
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="annotation margin-xs"
+                    >
+                      <span
+                        class="draftJsUndoPlugin__counter__2wZYK"
+                      >
+                        You have 2995 characters left
+                      </span>
+                    </div>
+                    <div
+                      class="editor-toolbar top"
+                    >
+                      <div
+                        class="btn-group"
+                      >
+                        <button
+                          class="btn btn-default"
+                          type="button"
+                        >
+                          <span
+                            class="assembl-icon-text-bold"
+                            title="Bold"
+                          />
+                        </button>
+                      </div>
+                      <div
+                        class="btn-group"
+                      >
+                        <button
+                          class="btn btn-default"
+                          type="button"
+                        >
+                          <span
+                            class="assembl-icon-text-italics"
+                            title="Italic"
+                          />
+                        </button>
+                      </div>
+                      <div
+                        class="btn-group"
+                      >
+                        <button
+                          class="btn btn-default"
+                          type="button"
+                        >
+                          <span
+                            class="assembl-icon-text-bullets"
+                            title="Bullet list"
+                          />
+                        </button>
+                      </div>
+                      <div
+                        class="btn-group"
+                      >
+                        <button
+                          class="btn btn-default"
+                          type="button"
+                        >
+                          <span
+                            class="assembl-icon-text-link"
+                          />
+                        </button>
+                      </div>
+                      <div
+                        class="btn-group"
+                      >
+                        <button
+                          class="btn btn-default"
+                          type="button"
+                        >
+                          <span
+                            class="assembl-icon-text-attachment"
+                          />
+                        </button>
+                      </div>
+                    </div>
+                    <div
+                      class="attachments"
+                    />
+                  </div>,
+                ],
+                Array [
+                  <div
+                    class="rich-text-editor"
+                  >
+                    <div
+                      class="editor-header"
+                    >
+                      <div
+                        class="editor-label form-label"
+                      >
+                         
+                      </div>
+                      <div
+                        class="clear"
+                      />
+                    </div>
+                    <div>
+                      <div
+                        class="DraftEditor-root"
+                      >
+                        <div
+                          class="public-DraftEditorPlaceholder-root"
+                        >
+                          <div
+                            class="public-DraftEditorPlaceholder-inner"
+                            id="placeholder-EditorStateKey"
+                            style="white-space: pre-wrap;"
+                          >
+                            Answer
+                          </div>
+                        </div>
+                        <div
+                          class="DraftEditor-editorContainer"
+                        >
+                          <div
+                            aria-describedby="placeholder-EditorStateKey"
+                            class="notranslate public-DraftEditor-content"
+                            contenteditable="true"
+                            role="textbox"
+                            spellcheck="true"
+                            style="outline: none; white-space: pre-wrap; word-wrap: break-word;"
+                          >
+                            <div
+                              data-contents="true"
+                            >
+                              <div
+                                class=""
+                                data-block="true"
+                                data-editor="EditorStateKey"
+                                data-offset-key="EditorStateKey-0-0"
+                              >
+                                <div
+                                  class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"
+                                  data-offset-key="EditorStateKey-0-0"
+                                >
+                                  <span
+                                    data-offset-key="EditorStateKey-0-0"
+                                  >
+                                    <br
+                                      data-text="true"
+                                    />
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="annotation margin-xs"
+                    >
+                      <span
+                        class="draftJsUndoPlugin__counter__2wZYK"
+                      >
+                        You have 3000 characters left
+                      </span>
+                    </div>
+                    <div
+                      class="editor-toolbar top"
+                    >
+                      <div
+                        class="btn-group"
+                      >
+                        <button
+                          class="btn btn-default"
+                          type="button"
+                        >
+                          <span
+                            class="assembl-icon-text-bold"
+                            title="Bold"
+                          />
+                        </button>
+                      </div>
+                      <div
+                        class="btn-group"
+                      >
+                        <button
+                          class="btn btn-default"
+                          type="button"
+                        >
+                          <span
+                            class="assembl-icon-text-italics"
+                            title="Italic"
+                          />
+                        </button>
+                      </div>
+                      <div
+                        class="btn-group"
+                      >
+                        <button
+                          class="btn btn-default"
+                          type="button"
+                        >
+                          <span
+                            class="assembl-icon-text-bullets"
+                            title="Bullet list"
+                          />
+                        </button>
+                      </div>
+                      <div
+                        class="btn-group"
+                      >
+                        <button
+                          class="btn btn-default"
+                          type="button"
+                        >
+                          <span
+                            class="assembl-icon-text-link"
+                          />
+                        </button>
+                      </div>
+                      <div
+                        class="btn-group"
+                      >
+                        <button
+                          class="btn btn-default"
+                          type="button"
+                        >
+                          <span
+                            class="assembl-icon-text-attachment"
+                          />
+                        </button>
+                      </div>
+                    </div>
+                    <div
+                      class="attachments"
+                    />
+                  </div>,
+                ],
+              ],
+              "results": Array [
+                Object {
+                  "isThrow": false,
+                  "value": undefined,
+                },
+                Object {
+                  "isThrow": false,
+                  "value": undefined,
+                },
+              ],
+            }
+          }
           toolbarPosition="top"
           withAttachmentButton={true}
         />

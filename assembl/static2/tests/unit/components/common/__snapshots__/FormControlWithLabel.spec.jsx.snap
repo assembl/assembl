@@ -9,7 +9,7 @@ exports[`FormControlWithLabel component should render a form control with label 
     id="my-input"
     name="my-input"
     onBlur={[Function]}
-    onChange={[Function]}
+    onChange={[MockFunction]}
     placeholder="Foobar"
     type="text"
     value=""
@@ -32,7 +32,7 @@ exports[`FormControlWithLabel component should render a form control with label 
     id="my-input"
     name="my-input"
     onBlur={[Function]}
-    onChange={[Function]}
+    onChange={[MockFunction]}
     placeholder="Foobar"
     type="text"
     value="some-value"
@@ -55,7 +55,7 @@ exports[`FormControlWithLabel component should render a form control with label 
     id="my-input"
     name="my-input"
     onBlur={[Function]}
-    onChange={[Function]}
+    onChange={[MockFunction]}
     placeholder="Foobar"
     type="text"
     value={0}

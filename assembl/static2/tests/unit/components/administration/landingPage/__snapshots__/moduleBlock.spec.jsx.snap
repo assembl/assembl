@@ -24,7 +24,7 @@ exports[`ModuleBlock component should render a block that represents the module 
       className="admin-icons btn btn-default"
       disabled={false}
       onBlur={[Function]}
-      onClick={[Function]}
+      onClick={[MockFunction]}
       onFocus={[Function]}
       onMouseOut={[Function]}
       onMouseOver={[Function]}
@@ -38,7 +38,7 @@ exports[`ModuleBlock component should render a block that represents the module 
       className="admin-icons btn btn-default"
       disabled={false}
       onBlur={[Function]}
-      onClick={[Function]}
+      onClick={[MockFunction]}
       onFocus={[Function]}
       onMouseOut={[Function]}
       onMouseOver={[Function]}

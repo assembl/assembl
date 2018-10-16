@@ -4,9 +4,7 @@ exports[`harvestingMenu component should match harvestingMenu snapshot when extr
 <div>
   <div
     className="harvesting-container"
-  >
-    
-  </div>
+  />
 </div>
 `;
 
@@ -18,9 +16,7 @@ exports[`harvestingMenu component should match harvestingMenu snapshot when nugg
   />
   <div
     className="harvesting-container"
-  >
-    
-  </div>
+  />
 </div>
 `;
 
@@ -41,7 +37,7 @@ exports[`harvestingMenu component should match harvestingMenu snapshot when the 
         }
       }
       displayHarvestingBox={false}
-      handleClickAnchor={[Function]}
+      handleClickAnchor={[MockFunction]}
       handleMouseDown={[Function]}
     />
   </div>
@@ -56,9 +52,7 @@ exports[`harvestingMenu component should match harvestingMenu snapshot when the 
   />
   <div
     className="harvesting-container"
-  >
-    
-  </div>
+  />
 </div>
 `;
 
@@ -72,17 +66,17 @@ exports[`harvestingMenu component should match harvestingMenu snapshot when the 
     className="harvesting-container"
   >
     <Connect(Apollo(Apollo(Apollo(Apollo(Component)))))
-      cancelHarvesting={[Function]}
+      cancelHarvesting={[MockFunction]}
       displayHarvestingBox={true}
       lang="fr"
       postId="123456"
-      refetchPost={[Function]}
+      refetchPost={[MockFunction]}
       selection={
         Object {
           "removeAllRanges": [Function],
         }
       }
-      setHarvestingBoxDisplay={[Function]}
+      setHarvestingBoxDisplay={[MockFunction]}
       showNuggetAction={false}
     />
   </div>
@@ -97,9 +91,7 @@ exports[`harvestingMenu component should match harvestingMenu snapshot when ther
   />
   <div
     className="harvesting-container"
-  >
-    
-  </div>
+  />
 </div>
 `;
 
@@ -107,8 +99,6 @@ exports[`harvestingMenu component should match harvestingMenu snapshot when ther
 <div>
   <div
     className="harvesting-container"
-  >
-    
-  </div>
+  />
 </div>
 `;

@@ -16,7 +16,6 @@ exports[`IdeasTable component should match the IdeasTable 1`] = `
       },
     ]
   }
-  onMenuItemClick={undefined}
   phaseId="phaseFoo"
   rootItem="root"
 />

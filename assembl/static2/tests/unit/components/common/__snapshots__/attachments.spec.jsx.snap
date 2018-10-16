@@ -22,10 +22,7 @@ exports[`Attachments component should render the list of attachments 1`] = `
       target="_blank"
       type="application/pdf"
     >
-      <span
-        className={undefined}
-        style={undefined}
-      >
+      <span>
         Download
       </span>
     </a>

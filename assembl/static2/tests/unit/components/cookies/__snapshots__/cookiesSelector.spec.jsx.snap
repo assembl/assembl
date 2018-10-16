@@ -7,16 +7,12 @@ exports[`CookiesSelector component should render a list of cookieSetter componen
   <h2
     className="dark-title-2"
   >
-    <span
-      className={undefined}
-      style={undefined}
-    >
+    <span>
       Cookies configuration
     </span>
   </h2>
   <span
     className="cookies-instructions"
-    style={undefined}
   >
     Select the cookies you wish to refuse below
   </span>
@@ -33,7 +29,6 @@ exports[`CookiesSelector component should render a list of cookieSetter componen
         />
         <span
           className="dark-title-3"
-          style={undefined}
         >
           Essential
         </span>
@@ -67,10 +62,7 @@ exports[`CookiesSelector component should render a list of cookieSetter componen
               />
             </div>
           </div>
-          <span
-            className={undefined}
-            style={undefined}
-          >
+          <span>
             This cookie is required
           </span>
         </div>
@@ -86,7 +78,6 @@ exports[`CookiesSelector component should render a list of cookieSetter componen
         />
         <span
           className="dark-title-3"
-          style={undefined}
         >
           Analytics and customization
         </span>
@@ -102,13 +93,10 @@ exports[`CookiesSelector component should render a list of cookieSetter componen
     <button
       className="button-submit button-dark btn btn-default"
       disabled={false}
-      onClick={[Function]}
+      onClick={[MockFunction]}
       type="button"
     >
-      <span
-        className={undefined}
-        style={undefined}
-      >
+      <span>
         Save
       </span>
     </button>

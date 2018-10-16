@@ -6,7 +6,6 @@ exports[`CookiesBar component should render a bar with 2 buttons to accept the c
 >
   <span
     className="cookies-text"
-    style={undefined}
   >
     Assembl uses cookies to offer you the best possible experience. To use Assembl, you have to agree to the cookies policy of the debate.
   </span>
@@ -19,10 +18,7 @@ exports[`CookiesBar component should render a bar with 2 buttons to accept the c
       onClick={[Function]}
       type="button"
     >
-      <span
-        className={undefined}
-        style={undefined}
-      >
+      <span>
         I agree
       </span>
     </button>
@@ -36,10 +32,7 @@ exports[`CookiesBar component should render a bar with 2 buttons to accept the c
         onClick={[Function]}
         type="button"
       >
-        <span
-          className={undefined}
-          style={undefined}
-        >
+        <span>
           See more
         </span>
       </button>
@@ -54,7 +47,6 @@ exports[`CookiesBar component should render a hidden bar if all or some cookies 
 >
   <span
     className="cookies-text"
-    style={undefined}
   >
     Assembl uses cookies to offer you the best possible experience. To use Assembl, you have to agree to the cookies policy of the debate.
   </span>
@@ -67,10 +59,7 @@ exports[`CookiesBar component should render a hidden bar if all or some cookies 
       onClick={[Function]}
       type="button"
     >
-      <span
-        className={undefined}
-        style={undefined}
-      >
+      <span>
         I agree
       </span>
     </button>
@@ -84,10 +73,7 @@ exports[`CookiesBar component should render a hidden bar if all or some cookies 
         onClick={[Function]}
         type="button"
       >
-        <span
-          className={undefined}
-          style={undefined}
-        >
+        <span>
           See more
         </span>
       </button>

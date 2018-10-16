@@ -59,7 +59,6 @@ exports[`Synthesis component should match Synthesis snapshot 1`] = `
               ]
             }
             show={false}
-            synthesisPostId={undefined}
           />
         </Col>
         <Col

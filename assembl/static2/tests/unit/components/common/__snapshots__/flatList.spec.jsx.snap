@@ -8,9 +8,7 @@ exports[`FlatList component should match FlatList loading snapshot 1`] = `
 `;
 
 exports[`FlatList component should match FlatList with data snapshot 1`] = `
-<div
-  className={undefined}
->
+<div>
   <ListItem
     node={
       Object {
