@@ -2,7 +2,8 @@ image: python:2.7
 
 test_frontend:
   before_script:
-    - apt-get update -qq && apt-get install -y -qq nodejs
+    - wget -qO- https://deb.nodesource.com/setup_8.x | bash -
+    - apt-get install -y -qq nodejs
     - cd assembl/static2 && npm install
   script:
     - cd assembl/static2
