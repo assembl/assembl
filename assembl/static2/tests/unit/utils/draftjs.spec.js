@@ -46,12 +46,10 @@ describe('draftjs utils', () => {
 
     it('should create an atomic block if the node is an atomic block (image)', () => {
       const node = document.createElement('div');
-      node.dataset = { blocktype: 'atomic' };
+      node.dataset.blocktype = 'atomic';
       const child = document.createElement('img');
-      child.dataset = {
-        id: 'foobar',
-        mimeType: 'image/png'
-      };
+      child.dataset.id = 'foobar';
+      child.dataset.mimeType = 'image/png';
       node.appendChild(child);
       const lastList = null;
       const inBlock = 'atomic';
@@ -62,14 +60,12 @@ describe('draftjs utils', () => {
 
     it('should create an atomic block if the node is an atomic block (non image)', () => {
       const node = document.createElement('div');
-      node.dataset = { blocktype: 'atomic' };
+      node.dataset.blocktype = 'atomic';
       const child = document.createElement('a');
       const grandchild = document.createElement('img');
-      grandchild.dataset = {
-        externalurl: 'http://www.example.com/mydoc.pdf',
-        id: 'foobar',
-        mimetype: 'application/pdf'
-      };
+      grandchild.dataset.externalurl = 'http://www.example.com/mydoc.pdf';
+      grandchild.dataset.id = 'foobar';
+      grandchild.dataset.mimetype = 'application/pdf';
       child.appendChild(grandchild);
       node.appendChild(child);
 

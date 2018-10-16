@@ -12,9 +12,7 @@ describe('initializeSentry function', () => {
 
   it('should initialize sentry with the dsn carried by given element', () => {
     const element = document.createElement('div');
-    element.dataset = {
-      sentryDsn: 'http://78979791248@my-sentry-server.com/2'
-    };
+    element.dataset.sentryDsn = 'http://78979791248@my-sentry-server.com/2';
     initializeSentry(element);
     expect(Sentry.init).toHaveBeenCalledWith({
       dsn: 'http://78979791248@my-sentry-server.com/2'
@@ -23,16 +21,13 @@ describe('initializeSentry function', () => {
 
   it('should not initialize sentry if there is no dsn on element', () => {
     const element = document.createElement('div');
-    element.dataset = {};
     initializeSentry(element);
     expect(Sentry.init).not.toHaveBeenCalled();
   });
 
   it('should not initialize sentry if dsn is empty', () => {
     const element = document.createElement('div');
-    element.dataset = {
-      sentryDsn: ''
-    };
+    element.dataset.sentryDsn = '';
     initializeSentry(element);
     expect(Sentry.init).not.toHaveBeenCalled();
   });
