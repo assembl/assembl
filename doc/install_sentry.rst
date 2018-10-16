@@ -5,23 +5,27 @@ Install docker
 --------------
 
 Install docker-ce:
+~~~~~~~~~~~~~~~~~~
+
 Follow the steps of this link under the **Install Docker CE** section
+
 https://docs.docker.com/install/linux/docker-ce/ubuntu/#install-docker-ce
 
+
 Install docker-compose:
-Follow step one
-https://www.digitalocean.com/community/tutorials/how-to-install-docker-compose-on-ubuntu-16-04#step-1-%E2%80%94-installing-docker-compose
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Follow step one on this link: https://www.digitalocean.com/community/tutorials/how-to-install-docker-compose-on-ubuntu-16-04#step-1-%E2%80%94-installing-docker-compose
 
 .. code:: sh
 
     sudo ln -sf /usr/local/bin/docker-compose /usr/bin/docker-compose
 
-Follow the steps under **Up and Running** section
-https://github.com/getsentry/onpremise/blob/master/README.md#up-and-running
+Follow the steps under **Up and Running** section: https://github.com/getsentry/onpremise/blob/master/README.md#up-and-running
 
-Follow this steps:
-https://docs.sentry.io/server/installation/docker/
-or use this commands:
+and these steps: https://docs.sentry.io/server/installation/docker/
+
+or use these commands:
 
 .. code:: sh
 
@@ -31,12 +35,15 @@ or use this commands:
     sudo docker run   --detach   --name sentry-smtp   tianon/exim4
     sudo docker run   --rm ${REPOSITORY}   config generate-secret-key
 
-put the given key to docker-compose.yml and set the correct value 
+Put the given key to docker-compose.yml and set the correct value 
+
 .. code:: sh
 
     SENTRY_SECRET_KEY: $(YOUR_KEY)
     extra_hosts:
       - "dockerhost:42.42.42.42" #replace 42.42.42.42 by the server IP
+
+and continue with these
 
 .. code:: sh
 
@@ -49,10 +56,13 @@ put the given key to docker-compose.yml and set the correct value
 Apache configuration
 --------------------
 
-Secure Apache with Let's encrypt:
+Secure Apache with Let's encrypt: 
 https://www.digitalocean.com/community/tutorials/how-to-secure-apache-with-let-s-encrypt-on-ubuntu-16-04
 
-.. code:: conf
+Create a new file in ``/etc/apache2/sites-available/``
+Add this to this new file
+
+.. code:: sh
 
     <VirtualHost *:80>
         ServerName sentry.bluenove.com
@@ -92,14 +102,13 @@ apply changes:
 Update docker-sentry
 --------------------
 
-Follow the steps under **Updating Sentry**
-https://github.com/getsentry/onpremise/blob/master/README.md#updating-sentry
+Follow the steps under **Updating Sentry**: https://github.com/getsentry/onpremise/blob/master/README.md#updating-sentry
 
 
 Mail configuration
 ------------------
 
-set your mail configuration in config.yml or do it with the admin UI of sentry at https://your.url/manage/status/mail/
+Set your mail configuration in config.yml or do it with the admin UI of sentry at https://sentry.bluenove.com/manage/status/mail/ (for this example)
 
 .. code:: sh
 

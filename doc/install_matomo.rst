@@ -1,7 +1,10 @@
 Install Matomo
 ==============
 
-access your server via SSH
+Download and preparation
+-----------------------
+
+Access your server via SSH and then run these commands to download Matomo
 
 .. code:: sh
 
@@ -13,23 +16,26 @@ You should have something like this
 
 .. code:: sh
 
-    /
-        var/
-            www/
-                piwki/
-                    piwki/
-                        config/
-                        misc/
-                        README.md
-                        ...    
+    |-- /
+        |-- var/
+            |-- www/
+                |-- piwki/
+                    |-- piwki/
+                        |-- config/
+
+                        |-- misc/
+
+                        |-- README.md
+
+                        |-- ...    
 
 Configure Apache2
 -----------------
 
-Create a new file in ``/etc/apache2/sites-available/``
-Add this to this file:
+Create a new file in ``/etc/apache2/sites-available/`` and add the following configuration to this new file.
 
-.. code::
+.. code:: sh
+
     <VirtualHost *:80>
         ServerName stats.bluenove.com
         Redirect / https://stats.bluenove.com/
@@ -58,7 +64,7 @@ Add this to this file:
 For the SSL lines, you should follow this gide to secure Apache with let's encrypt:
 https://www.digitalocean.com/community/tutorials/how-to-secure-apache-with-let-s-encrypt-on-ubuntu-16-04
 
-apply changes:
+Apply changes:
 
 .. code:: sh
 
@@ -66,21 +72,25 @@ apply changes:
     sudo /etc/init.d/apache2 restart
 
 The website should be accessible with the given ServerName URL
+
 You can now follow the configuration steps.
+
 Documentation: https://matomo.org/docs/installation/#getting-started
 
-Set geoip2
+Set GeoIP2
 ----------
 
-Dowload **GeoLite2 City**
-https://dev.maxmind.com/geoip/geoip2/geolite2/#Downloads
+Download **GeoLite2 City**: https://dev.maxmind.com/geoip/geoip2/geolite2/#Downloads
 
-Copy it to your server
+Copy it to your server:
+
 .. code:: sh
     
     tar -xzf GeoLite(...).tar.gz
     scp GeoLite(...)/GeoLite2-City.mmdb yourUser@yourIP:/var/www/piwik/piwik/misc/
 
 Then go to your matomo website
+
 Settings > System > Geolocation
+
 **GeoIP Legacy (PECL)** should be accessible. Select it and you are done.
