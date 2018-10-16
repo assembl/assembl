@@ -4,9 +4,9 @@ test_frontend:
   before_script:
     - wget -qO- https://deb.nodesource.com/setup_8.x | bash -
     - apt-get install -y -qq nodejs
-    - cd assembl/static2 && npm install
-  script:
     - cd assembl/static2
+    - npm install
+  script:
     - npm run test
 
 # push to master:
