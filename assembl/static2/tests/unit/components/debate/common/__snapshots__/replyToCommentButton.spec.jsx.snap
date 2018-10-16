@@ -11,6 +11,7 @@ exports[`Storyshots ReplyToCommentButton default 1`] = `
     }
   >
     <a
+      className="action-reply"
       onClick={[Function]}
       style={Object {}}
     >
