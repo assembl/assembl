@@ -19,6 +19,9 @@ test_frontend:
     - yarn
   script:
     - yarn run test
+    - yarn run eslint
+    - yarn run stylelint
+    - yarn run flow
 
 # push to master:
 #   stage: pushtomaster
