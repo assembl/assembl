@@ -19,32 +19,32 @@ type PostNode = {
   }
 };
 
-type PostsProps = {
+type Props = {
   posts: {
     edges: Array<PostNode>
   },
   networkStatus: number,
   defaultContentLocaleMapping: Map,
+  isPhaseCompleted: boolean,
   fetchMore: Function,
   refetch: Function,
   questionId: string,
   themeId: string,
-  phaseId: string,
   updateContentLocaleMapping: Function
 };
 
-export class DumbPosts extends React.Component<PostsProps> {
+export class DumbPosts extends React.Component<Props> {
   componentWillMount() {
     this.updateContentLocaleMappingFromProps(this.props);
   }
 
-  componentWillReceiveProps(nextProps: PostsProps) {
+  componentWillReceiveProps(nextProps: Props) {
     if (nextProps.posts !== this.props.posts) {
       this.updateContentLocaleMappingFromProps(nextProps);
     }
   }
 
-  updateContentLocaleMappingFromProps(props: PostsProps) {
+  updateContentLocaleMappingFromProps(props: Props) {
     const { defaultContentLocaleMapping, updateContentLocaleMapping, posts } = props;
     const contentLocaleMappingData = {};
     posts.edges.forEach((edge) => {
@@ -61,7 +61,7 @@ export class DumbPosts extends React.Component<PostsProps> {
   }
 
   render() {
-    const { networkStatus, fetchMore, refetch, phaseId, themeId, posts, questionId } = this.props;
+    const { networkStatus, fetchMore, refetch, themeId, posts, questionId, isPhaseCompleted } = this.props;
     return (
       <FlatList
         items={posts}
@@ -74,10 +74,10 @@ export class DumbPosts extends React.Component<PostsProps> {
         loadPreviousMessage="debate.survey.loadRecentPosts"
         itemData={item => ({
           id: item.node.id,
+          isPhaseCompleted: isPhaseCompleted,
           originalLocale: item.node.originalLocale,
           questionId: questionId,
-          themeId: themeId,
-          phaseId: phaseId
+          themeId: themeId
         })}
       />
     );

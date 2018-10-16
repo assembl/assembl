@@ -16,7 +16,17 @@ class Proposals extends React.Component {
   };
 
   render() {
-    const { phaseId, questionIndex, questionId, themeId, title, posts, nbPostsToShow, phaseUrl, questionsLength } = this.props;
+    const {
+      isPhaseCompleted,
+      questionIndex,
+      questionId,
+      themeId,
+      title,
+      posts,
+      nbPostsToShow,
+      phaseUrl,
+      questionsLength
+    } = this.props;
     const questionTitle = questionsLength > 1 ? `${questionIndex}/ ${title}` : title;
     const postsToShow = posts.slice(0, nbPostsToShow);
     const link = `${phaseUrl}${getRoute('question', { questionId: questionId, questionIndex: questionIndex })}`;
@@ -41,7 +51,7 @@ class Proposals extends React.Component {
                 postIndex={index}
                 questionId={questionId}
                 key={post.node.id}
-                phaseId={phaseId}
+                isPhaseCompleted={isPhaseCompleted}
               />
             ))}
           </div>
