@@ -5,6 +5,7 @@ import { AutoSizer, CellMeasurer, CellMeasurerCache, List, WindowScroller } from
 
 import NuggetsManager from '../nuggetsManager';
 import Child from './treeItem';
+import type { FictionCommentExtraProps } from '../../../components/debate/brightMirror/fictionComment';
 
 type ChildType = TreeItem & {
   [string]: any
@@ -21,7 +22,7 @@ type Props = {
   InnerComponent: any => React.Node,
   SeparatorComponent: () => React.Node,
   noRowsRenderer: () => React.Node,
-  fictionCommentExtraProps?: Object
+  fictionCommentExtraProps?: FictionCommentExtraProps
 };
 
 class Tree extends React.Component<Props> {

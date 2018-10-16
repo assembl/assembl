@@ -77,17 +77,17 @@ export type CreateCommentInputs = {
 };
 
 export class FictionComment extends Component<LocalFictionCommentProps, FictionCommentState> {
-  constructor(props: LocalFictionCommentProps) {
-    super(props);
-    this.state = {
-      showFictionCommentForm: false
-    };
+  state = {
+    showFictionCommentForm: false
+  };
+
+  componentDidMount() {
+    // Update tree height when component is rendered
+    this.props.measureTreeHeight();
   }
 
   displayFictionCommentForm = (show: boolean) => {
     this.setState({ showFictionCommentForm: show });
-    // Update tree height when comment form is toggled
-    this.props.measureTreeHeight();
   };
 
   render() {
@@ -98,7 +98,6 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
       commentContent,
       commentParentId,
       displayedPublishedDate,
-      measureTreeHeight,
       numChildren,
       parentPostAuthorFullname,
       publishedDate,
@@ -133,9 +132,6 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
     ) : (
       <ReplyToCommentButton {...replyToCommentButtonProps} />
     );
-
-    // Update tree height when component is rendered
-    measureTreeHeight();
 
     return (
       <Fragment>

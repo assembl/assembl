@@ -9,6 +9,7 @@ import { CellMeasurerCache, List } from 'react-virtualized';
 import { scrollToPost } from '../../../utils/hashLinkScroll';
 import NuggetsManager from '../nuggetsManager';
 import { PHASES } from '../../../constants';
+import type { FictionCommentExtraProps } from '../../../components/debate/brightMirror/fictionComment';
 
 type BaseProps = {
   id: string,
@@ -33,7 +34,7 @@ type BaseProps = {
       measureTreeHeight: (delay?: number) => void
     }
   ) => React.Node,
-  fictionCommentExtraProps?: Object
+  fictionCommentExtraProps?: FictionCommentExtraProps
 };
 
 type Props = {
