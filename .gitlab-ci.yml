@@ -1,9 +1,4 @@
-stages:
-  - test
 test_frontend:
-  tags:
-    - CD
-    - CI
   before_script:
     - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
     - echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
@@ -13,11 +8,11 @@ test_frontend:
     - cd assembl/static2
     - yarn run test
 
-push to master:
-  stage: pushtomaster
-  only:
-    - develop
-  script:
-    - chmod +x scripts/git-push
-    - scripts/git-push git@github.com:assembl/assembl.git
-  when: on_success
+# push to master:
+#   stage: pushtomaster
+#   only:
+#     - develop
+#   script:
+#     - chmod +x scripts/git-push
+#     - scripts/git-push git@github.com:assembl/assembl.git
+#   when: on_success
