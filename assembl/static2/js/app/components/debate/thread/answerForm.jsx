@@ -13,7 +13,7 @@ import { displayAlert, promptForLoginOr } from '../../../utils/utilityManager';
 import { convertContentStateToHTML, editorStateIsEmpty, uploadNewAttachments } from '../../../utils/draftjs';
 import RichTextEditor from '../../common/richTextEditor';
 import { BODY_MAX_LENGTH } from '../common/topPostForm';
-import { getIfPhaseCompletedById } from '../../../utils/timeline';
+import { getIsPhaseCompletedById } from '../../../utils/timeline';
 import { scrollToPost } from '../../../utils/hashLinkScroll';
 
 type AnswerFormProps = {
@@ -48,7 +48,7 @@ class AnswerForm extends React.PureComponent<AnswerFormProps, AnswerFormState> {
 
   componentWillMount() {
     const { phaseId, timeline } = this.props;
-    const isPhaseCompleted = getIfPhaseCompletedById(timeline, phaseId);
+    const isPhaseCompleted = getIsPhaseCompletedById(timeline, phaseId);
     if (isPhaseCompleted) this.setState({ isHidden: true });
   }
 

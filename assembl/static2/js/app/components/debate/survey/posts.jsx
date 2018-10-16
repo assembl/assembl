@@ -25,6 +25,7 @@ type PostsProps = {
   },
   networkStatus: number,
   defaultContentLocaleMapping: Map,
+  isPhaseCompleted: boolean,
   fetchMore: Function,
   refetch: Function,
   questionId: string,
@@ -61,7 +62,7 @@ export class DumbPosts extends React.Component<PostsProps> {
   }
 
   render() {
-    const { networkStatus, fetchMore, refetch, phaseId, themeId, posts, questionId } = this.props;
+    const { networkStatus, fetchMore, refetch, phaseId, themeId, posts, questionId, isPhaseCompleted } = this.props;
     return (
       <FlatList
         items={posts}
@@ -74,6 +75,7 @@ export class DumbPosts extends React.Component<PostsProps> {
         loadPreviousMessage="debate.survey.loadRecentPosts"
         itemData={item => ({
           id: item.node.id,
+          isPhaseCompleted: isPhaseCompleted,
           originalLocale: item.node.originalLocale,
           questionId: questionId,
           themeId: themeId,

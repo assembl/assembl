@@ -4,7 +4,7 @@ import React from 'react';
 import { NO_BODY_LENGTH } from '../common/topPostForm';
 import Permissions, { connectedUserCan } from '../../../utils/permissions';
 import TopPostFormContainer from '../common/topPostFormContainer';
-import { getIfPhaseCompletedById } from '../../../utils/timeline';
+import { getIsPhaseCompletedById } from '../../../utils/timeline';
 import FictionsList from './fictionsList';
 import InstructionsText from './instructionsText';
 
@@ -38,7 +38,7 @@ const InstructionView = ({
   lang
 }: InstructionViewProps) => {
   // Check permission
-  const canPost = isUserConnected && connectedUserCan(Permissions.ADD_POST) && !getIfPhaseCompletedById(timeline, phaseId);
+  const canPost = isUserConnected && connectedUserCan(Permissions.ADD_POST) && !getIsPhaseCompletedById(timeline, phaseId);
 
   const topPostFormContainer = canPost ? (
     <TopPostFormContainer

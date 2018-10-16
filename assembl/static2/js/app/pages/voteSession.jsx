@@ -17,7 +17,7 @@ import AvailableTokens from '../components/voteSession/availableTokens';
 import Proposals from '../components/voteSession/proposals';
 import ProposalsResults from '../components/voteSession/proposalsResults';
 import { getDomElementOffset, isMobile } from '../utils/globalFunctions';
-import { getIfPhaseCompletedById } from '../utils/timeline';
+import { getIsPhaseCompletedById } from '../utils/timeline';
 import { promptForLoginOr, displayAlert, displayModal } from '../utils/utilityManager';
 import { transformLinksInHtml } from '../utils/linkify';
 import manageErrorAndLoading from '../components/common/manageErrorAndLoading';
@@ -420,7 +420,7 @@ const mapStateToProps = (state, ownProps) => ({
   timeline: state.timeline,
   debate: state.debate,
   lang: state.i18n.locale,
-  isPhaseCompleted: getIfPhaseCompletedById(state.timeline, ownProps.phaseId)
+  isPhaseCompleted: getIsPhaseCompletedById(state.timeline, ownProps.phaseId)
 });
 
 export { DumbVoteSession };

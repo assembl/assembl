@@ -7,7 +7,6 @@ import { Grid, Col, Button } from 'react-bootstrap';
 import { EditorState } from 'draft-js';
 
 import { getConnectedUserId } from '../../../utils/globalFunctions';
-import { getIfPhaseCompletedById } from '../../../utils/timeline';
 import { inviteUserToLogin, displayAlert } from '../../../utils/utilityManager';
 import createPostMutation from '../../../graphql/mutations/createPost.graphql';
 import { SMALL_SCREEN_WIDTH, MINIMUM_BODY_LENGTH } from '../../../constants';
@@ -15,12 +14,11 @@ import { withScreenDimensions } from '../../common/screenDimensions';
 import RichTextEditor from '../../common/richTextEditor';
 import { convertEditorStateToHTML } from '../../../utils/draftjs';
 
-type QuestionProps = {
+type Props = {
+  isPhaseCompleted: boolean,
   title: string,
-  timeline: Timeline,
   contentLocale: string,
   questionId: string,
-  phaseId: string,
   scrollToQuestion: Function,
   index: number,
   refetchTheme: Function,
@@ -30,13 +28,13 @@ type QuestionProps = {
   questionsLength: number
 };
 
-type QuestionState = {
+type State = {
   buttonDisabled: boolean,
   postBody: EditorState
 };
 
-class Question extends React.Component<QuestionProps, QuestionState> {
-  constructor(props: QuestionProps) {
+class Question extends React.Component<Props, State> {
+  constructor(props: Props) {
     super(props);
     this.state = {
       buttonDisabled: false,
@@ -94,7 +92,7 @@ class Question extends React.Component<QuestionProps, QuestionState> {
   };
 
   render() {
-    const { phaseId, index, title, screenWidth, screenHeight, questionsLength } = this.props;
+    const { index, isPhaseCompleted, title, screenWidth, screenHeight, questionsLength } = this.props;
     const questionTitle = questionsLength > 1 ? `${index}/ ${title}` : title;
     let height = screenHeight;
     const timelineElm = document && document.getElementById('timeline');
@@ -102,8 +100,6 @@ class Question extends React.Component<QuestionProps, QuestionState> {
     if (timelineElm) {
       height = screenHeight - timelineElm.clientHeight;
     }
-    const { timeline } = this.props;
-    const isPhaseCompleted = getIfPhaseCompletedById(timeline, phaseId);
     return (
       <section
         className={isPhaseCompleted ? 'hidden' : 'questions-section'}

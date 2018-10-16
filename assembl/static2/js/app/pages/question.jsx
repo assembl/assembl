@@ -12,14 +12,16 @@ import Posts from '../components/debate/survey/posts';
 import Question from '../graphql/QuestionQuery.graphql';
 import { get as getRoute } from '../utils/routeMap';
 import HeaderStatistics, { statContributions, statMessages, statParticipants } from '../components/common/headerStatistics';
+import { getIsPhaseCompletedById } from '../utils/timeline';
 
 type NavigationParams = {
   questionIndex: string,
   questionId: string
 };
 
-type QuestionProps = {
+type Props = {
   phaseId: string,
+  timeline: Timeline,
   title: string,
   numContributors: number,
   numPosts: number,
@@ -31,12 +33,25 @@ type QuestionProps = {
   totalSentiments: number
 };
 
-export function DumbQuestion(props: QuestionProps) {
-  const { phaseId, imgUrl, title, numContributors, numPosts, thematicTitle, thematicId, params, slug, totalSentiments } = props;
+export function DumbQuestion(props: Props) {
+  const {
+    phaseId,
+    imgUrl,
+    timeline,
+    title,
+    numContributors,
+    numPosts,
+    thematicTitle,
+    thematicId,
+    params,
+    slug,
+    totalSentiments
+  } = props;
   const link = `${getRoute('idea', { slug: slug, phase: 'survey', phaseId: phaseId, themeId: thematicId })}`;
   let statElements = [];
   const numContributions = numPosts + totalSentiments;
   statElements = [statMessages(numPosts), statContributions(numContributions), statParticipants(numContributors)];
+  const isPhaseCompleted = getIsPhaseCompletedById(timeline, phaseId);
   return (
     <div className="question">
       <div className="relative">
@@ -61,7 +76,12 @@ export function DumbQuestion(props: QuestionProps) {
                 <h3 className="collapsed-title">
                   <span>{`${params.questionIndex}/ ${title}`}</span>
                 </h3>
-                <Posts questionId={params.questionId} themeId={thematicId} phaseId={phaseId} />
+                <Posts
+                  questionId={params.questionId}
+                  themeId={thematicId}
+                  phaseId={phaseId}
+                  isPhaseCompleted={isPhaseCompleted}
+                />
                 <div className="back-btn-container">
                   <Link to={link} className="button-submit button-dark">
                     <Translate value="debate.question.backToQuestions" />
@@ -79,7 +99,8 @@ export function DumbQuestion(props: QuestionProps) {
 
 const mapStateToProps = state => ({
   lang: state.i18n.locale,
-  slug: state.debate.debateData.slug
+  slug: state.debate.debateData.slug,
+  timeline: state.timeline
 });
 
 export default compose(

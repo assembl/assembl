@@ -5,7 +5,7 @@ import { I18n } from 'react-redux-i18n';
 
 import PostColumn from './postColumn';
 import { orderPostsByMessageClassifier } from './utils';
-import { getIfPhaseCompletedById } from '../../../utils/timeline';
+import { getIsPhaseCompletedById } from '../../../utils/timeline';
 import TabbedColumns from './tabbedColumns';
 import MultiColumns from './multiColumns';
 import hashLinkScroll from '../../../utils/hashLinkScroll';
@@ -42,7 +42,7 @@ class ColumnsView extends React.Component<$FlowFixMeProps> {
     if (!Array.isArray(messageColumns)) return null;
     const showSynthesis = messageColumns.some(column => !!get(column, 'columnSynthesis.body'));
     const columnsArray = orderPostsByMessageClassifier(messageColumns, posts);
-    const isPhaseCompleted = getIfPhaseCompletedById(timeline, phaseId);
+    const isPhaseCompleted = getIsPhaseCompletedById(timeline, phaseId);
     let ColumnsComponent;
     if (this.shouldShowTabs(messageColumns.length)) {
       ColumnsComponent = TabbedColumns;
