@@ -22,3 +22,7 @@ test_frontend:
     - yarn run eslint
     - yarn run stylelint
     - yarn run flow
+
+test_manual:
+  when: manual
+  script: echo "Deployment OK"
