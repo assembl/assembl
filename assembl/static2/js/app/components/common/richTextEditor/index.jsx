@@ -166,7 +166,7 @@ export default class RichTextEditor extends React.Component<Props, State> {
     const divClassName = classNames('rich-text-editor', { hidePlaceholder: this.shouldHidePlaceholder() });
     const { Attachments, CustomCounter, Modal, Toolbar } = this.components;
     return (
-      <div className={divClassName} ref={textareaRef} onClick={this.focusEditor}>
+      <div className={divClassName} ref={textareaRef}>
         <div className="editor-header">
           {editorState.getCurrentContent().hasText() ? (
             <div className="editor-label form-label">{placeholder}</div>
@@ -176,16 +176,18 @@ export default class RichTextEditor extends React.Component<Props, State> {
           <div className="clear" />
         </div>
         <Modal />
-        <Editor
-          editorState={editorState}
-          onChange={onChange}
-          onFocus={this.handleEditorFocus}
-          placeholder={placeholder}
-          plugins={this.plugins}
-          ref={this.editor}
-          handleReturn={this.handleReturn}
-          spellCheck
-        />
+        <div onClick={this.focusEditor}>
+          <Editor
+            editorState={editorState}
+            onChange={onChange}
+            onFocus={this.handleEditorFocus}
+            placeholder={placeholder}
+            plugins={this.plugins}
+            ref={this.editor}
+            handleReturn={this.handleReturn}
+            spellCheck
+          />
+        </div>
         {maxLength ? (
           <div className="annotation margin-xs">
             <CustomCounter limit={maxLength} countFunction={this.countRemainingChars} />
