@@ -219,7 +219,7 @@ def fill_template(template, config, output=None, default_dir=None):
         for (k, v) in config.items():
             if str(v).lower() == 'false':
                 config[k] = False
-            if '%(' in v:
+            if '%(' in str(v):
                 try:
                     config[k] = v % config
                 except KeyError:
@@ -1389,6 +1389,7 @@ def install_assembl_server_deps():
     Will install most assembl components on a single server, except db
     """
     execute(install_yarn)
+    execute(create_clean_crontab)
     execute(upgrade_yarn_crontab)
     execute(install_server_deps)
     execute(install_assembl_deps)
@@ -1413,30 +1414,34 @@ def install_server_deps():
 
 @task
 def install_borg():
-    print(cyan("Installing borg"))
-    sudo("apt-get -y install borgbackup")
+    if env.mac:
+        path = '/usr/local/bin/borg'
+        if not exists(path):
+            print(cyan("Installing borg"))
+            run('brew cask install borgbackup')
+        return 0
+
+    path = '/usr/bin/borg'
+    if not exists(path):
+        print(cyan("Installing borg"))
+        sudo("apt-get -y install borgbackup")
 
 
 @task
-def set_borg_password():
-    print(cyan("Setting borg password"))
-    run("BORG_NEW_PASSPHRASE=\'%s\' borg change-passphrase /home/assembl_user/assembl/assembl_backups.borg" % env.borg_password)
+def install_ncftp_client():
+    """Installs ncftp_client. This client is used to move borg repositories from the
+    local machine to the ftp backup machine or object storage."""
+    if env.mac:
+        ncftp_path = '/usr/local/bin/ncftp'
+        if not exists(ncftp_path):
+            print(cyan('Installing ncftp client'))
+            run('brew install ncftp')
+        return 0
 
-
-@task
-def test_backup():
-    run("BORG_PASSPHRASE=\"%s\" ./backup_all_assembl.sh" % env.borg_password)
-
-
-@task
-def list_backups():
-    run("borg list /home/assembl_user/assembl/assembl_backups.borg")
-
-
-@task
-def testing_all_backup():
-    execute(test_backup)
-    execute(list_backups)
+    print(cyan('Installing ncftp client'))
+    ncftp_path = '/usr/bin/ncftp'
+    if not exists(ncftp_path):
+        sudo('apt-get install -y ncftp')
 
 
 @task
@@ -2170,12 +2175,32 @@ def create_backup_script():
     Generates backup script that stores the backup on a local borg repository.
     Sets a cron job for it.
     """
-    rc_info = filter_global_names(combine_rc(env['rcfile']))
-    fill_template('assembl/templates/system/backup_template.jinja2', rc_info, 'backup_all_assembl.sh')
-    put('backup_all_assembl.sh', '/home/%s/backup_all_assembl.sh' % (env.user))
-    run('chmod +x backup_all_assembl.sh')
-    cron_command = "15 3 * * * BORG_PASSPHRASE=\"%s\" /home/%s/backup_all_assembl.sh" % (env.borg_password, env.user)
-    run(create_add_to_crontab_command(cron_command))
+    path = join(env.projectpath, 'backup_all_assembl.sh')
+    if not exists(path):
+        fill_template('assembl/templates/system/backup_template.jinja2', env, 'backup_all_assembl.sh')
+        try:
+            put('backup_all_assembl.sh', path)
+            run('chmod +x backup_all_assembl.sh')
+            run('chown %s:%s backup_all_assembl.sh' % env.user)
+        finally:
+            os.unlink('backup_all_assembl.sh')
+
+
+@task
+def create_clean_crontab(migrate=False):
+    """
+    Start with a clean crontab for the assembl user, or migrate by adding email at top
+    """
+    admin_email = env.admin_email
+    if not admin_email:
+        if not migrate:
+            run("echo '' | crontab -")
+    else:
+        cron_command = "MAILTO=%s" % (admin_email)
+        if not migrate:
+            run('echo %s | crontab -' % cron_command)
+        else:
+            run('(echo %s; crontab -l) | crontab -' % cron_command)
 
 
 @task
@@ -2185,32 +2210,63 @@ def create_alert_disk_space_script():
     fill_template('assembl/templates/system/alert_disk_space_template.jinja2', rc_info, 'alert_disk_space_template.sh')
     put('alert_disk_space.sh', '/home/%s/alert_disk_space.sh' % (env.user))
     run('chmod +x alert_disk_space.sh')
-    admin_email = env.admin_email if env.admin_email else "assembl.admin@bluenove.com"
-    cron_command = "MAILTO=%s" % (admin_email)
-    run(create_add_to_crontab_command(cron_command))
     cron_command = "0 5 * * * /home/" + env.user + "/alert_disk_space.sh"
     run(create_add_to_crontab_command(cron_command))
 
 
 @task
-def install_ncftp_client():
-    """Installs ncftp_client. This client is used to move borg repositories from the
-    local machine to the ftp backup machine or object storage."""
-    print(cyan('Installing ncftp client'))
-    if not env.mac:
-        sudo('apt-get install -y ncftp')
+def set_borg_password():
+    """
+    Helper function to change the passphrase of the assembl borg repo manually
+    """
+    print(cyan("Setting borg password"))
+    run("BORG_NEW_PASSPHRASE=\'%s\' borg change-passphrase %s" % env.borg_password, env.ftp_backup_folder)
 
 
 @task
-def backup_borg_repository_manually():
-    command = "ncftpput -R -v -u \"%s\" -p \"%s\" %s / %s" % (env.ftp_backup_user, env.ftp_backup_password, env.ftp_backup_endpoint, env.ftp_backup_folder)
+def list_backups():
+    """
+    Helper function to list all backups in the borg repo
+    """
+    run("borg list %s" % env.ftp_backup_folder)
+
+
+def ftp_backup_cmd():
+    # -z sync folders
+    # -R recursive
+    # -v verbose
+    # -f XXX (authentication file)
+    return 'ncftpput -z -R -v -f ncftp.cfg {endpoint} / {backup_folder}'.format(
+        endpoint=env.ftp_backup_endpoint, backup_folder=env.ftp_backup_folder)
+
+
+def borg_backup_cmd():
+    return join(env.projectpath, 'backup_all_assembl.sh')
+
+
+@task
+def execute_backup_borg_repository():
+    """Command to manually execute the borg backup and FTP deployment"""
+
+    # Ensure the required tools are installed
+    execute(install_borg)
+    execute(set_ftp_private_information)
+    execute(create_backup_script)
+    command = "source {do_backup} && {put_backup}".format(do_backup=borg_backup_cmd(), put_backup=ftp_backup_cmd())
     run(command)
 
 
 @task
-def backup_borg_repository():
-    """Moves borg backup folder to the ovh ftp backup server."""
-    cron_command = "30 5 * * * ncftpput -R -v -u \"%s\" -p \"%s\" %s / %s" % (env.ftp_backup_user, env.ftp_backup_password, env.ftp_backup_endpoint, env.ftp_backup_folder)
+def cron_backup_borg_repository():
+    """Command to set the crontask to backup assembl into a repo + push on FTP server"""
+
+    # Ensure the required tools are installed
+    execute(install_borg)
+    execute(set_ftp_private_information)
+    execute(create_backup_script)
+
+    command = "source {do_backup} && {put_backup}".format(do_backup=borg_backup_cmd(), put_backup=ftp_backup_cmd())
+    cron_command = "25 3 * * * {cmd} > var/log/assembl_backup.log &2>1".format(cmd=command)
     run(create_add_to_crontab_command(cron_command))
 
 
@@ -2753,3 +2809,28 @@ def set_fail2ban_configurations():
         finally:
             for path in filters_to_file.values():
                 os.unlink(path)
+
+
+@task
+def set_ftp_private_information(force=False):
+    """
+    Place backup FTP information in a safe place in order to login without awareness of passwords
+    """
+    # Ensure this FTP client is installed on host
+    execute(install_ncftp_client)
+    if not exists('ncftp.cfg') or force:
+        # fill template and set file permission
+        fill_template('assembl/templates/system/ncftp.cfg.jinja2', env, 'ncftp.cfg')
+        path = join(env.projectpath, 'ncftp.cfg')
+        try:
+            put_status = put('ncftp.cfg', path)
+            if put_status.failed:
+                raise RuntimeError('The put operation failed to put ncftp.cfg')
+
+            # Only readable by the user
+            run('chmod 400 %s' % path)
+            run('chown %(user)s:%(user)s %(file)s' % {'user': env.user, 'file': path})
+
+        finally:
+            # Remove the templated file
+            os.unlink('ncftp.cfg')

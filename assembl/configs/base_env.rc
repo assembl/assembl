@@ -27,12 +27,13 @@ changes_websocket_proxied = true
 changes_prefix = /socket
 accept_secure_connection = true
 require_secure_connection = true
+# This is global technical contact, not often used by Assembl discussions
 admin_email = assembl.admin@bluenove.com
 *sentry_scheme = https
 *sentry_host = localhost
 _sentry_db_host = localhost
 # _sentry_db_password =
-# Replace with your admin email if necessary
+# Replace with your admin email if necessary, used by Assembl discussions
 assembl.admin_email = webmaster@%(public_hostname)s
 assembl.generic_errors = false
 memcached_host = localhost
