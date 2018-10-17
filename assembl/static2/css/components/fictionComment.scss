@@ -17,7 +17,8 @@
       display: flex;
 
       p {
-        margin-bottom: 5px;
+        margin-bottom: 4px;
+        margin-right: 4px;
       }
 
       .author {
@@ -84,10 +85,6 @@
   .comment {
     background-color: rgba($color: $pale-blue, $alpha: 0.75);
   }
-
-  .meta .author .parent-info {
-    display: inline-block;
-  }
 }
 
 .level-2 .comment-container .content {
@@ -103,6 +100,12 @@
 }
 
 @media screen and (min-width: $screen-sm-min) {
+  .level-1 .comment-container .content {
+    .meta .author .parent-info {
+      display: inline-block;
+    }
+  }
+
   .comment-container {
     padding-left: 40px;
   }
