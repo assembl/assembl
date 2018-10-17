@@ -87,7 +87,7 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
   }
 
   displayFictionCommentForm = (show: boolean) => {
-    this.setState({ showFictionCommentForm: show });
+    this.setState({ showFictionCommentForm: show }, this.props.measureTreeHeight());
   };
 
   render() {
@@ -148,7 +148,7 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
               </p>
               <p className="published-date">
                 <time dateTime={publishedDate} pubdate="true">
-                  &nbsp;-&nbsp;{displayedPublishedDate}
+                  -&nbsp;{displayedPublishedDate}
                 </time>
               </p>
             </header>

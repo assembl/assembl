@@ -23,7 +23,7 @@ exports[`Storyshots FictionToolbar default 1`] = `
         />
       </a>
       <a
-        className=""
+        className="delete"
         onClick={[Function]}
         style={Object {}}
       >

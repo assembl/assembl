@@ -2,15 +2,31 @@
   margin-bottom: 85px;
   text-align: right;
 
-  .assembl-icon-edit,
-  .assembl-icon-delete {
+  .edit,
+  .delete {
     color: $black;
     font-size: $fiction-toolbar-icon-size;
+    padding-left: 10px;
   }
 }
 
 @media screen and (min-width: $screen-sm-min) {
   .action-buttons {
     margin-bottom: 65px;
+  }
+}
+
+@media screen and (min-width: $screen-xl-min) {
+  .action-buttons {
+    .edit,
+    .delete {
+      cursor: pointer;
+      display: inline-block;
+      transition: all 0.2s ease-in-out;
+
+      &:hover {
+        transform: scale(1.2);
+      }
+    }
   }
 }
