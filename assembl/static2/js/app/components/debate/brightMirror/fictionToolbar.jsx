@@ -68,6 +68,7 @@ const FictionToolbar = ({
       {userCanDelete ? (
         <DeletePostButton
           postId={fictionId}
+          linkClassName="delete"
           modalBodyMessage="debate.brightMirror.deleteFictionModalBody"
           onDeleteCallback={onDeleteCallback}
         />

@@ -114,8 +114,8 @@ class TopPostFormContainer extends React.Component<TopPostFormContainerProps, To
     const columnsInfos = this.getColumnsInfos();
     const { sticky } = this.state;
     const containerClassNames = sticky && messageColumns.length <= 1 && topPostsCount >= 1 ? 'top-post-sticky' : '';
-    const containerMdOffset = fullscreen ? 0 : 2;
-    const formMdSize = fullscreen ? 10 : 6;
+    const containerMdOffset = fullscreen ? 1 : 2;
+    const formMdSize = fullscreen ? 8 : 6;
     return (
       <div id="top-post-form" ref={this.setFormContainerRef} className={containerClassNames}>
         <Grid fluid className={messageColumns.length > 1 ? '' : 'background-color'}>

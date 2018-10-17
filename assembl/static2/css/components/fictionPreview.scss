@@ -4,6 +4,7 @@
   width: 149px;
   height: 200px;
   margin: 4px;
+  transition: all 0.3s ease-out;
 
   &.draft {
     background-color: $white !important;
@@ -19,7 +20,6 @@
   }
 
   &:hover {
-    transition: all 0.3s ease-out;
     transform: scale($card-popin);
   }
 
@@ -111,13 +111,15 @@
       padding: 0 8px;
 
       .info {
+        align-items: center;
+        display: flex;
         margin-bottom: 12px;
 
         .author {
           font-size: $font-size-xxs;
+          line-height: 12px;
+          padding-right: 3px;
           max-width: 70px;
-          display: inline-block;
-          line-height: 8px;
         }
 
         .published-date {
