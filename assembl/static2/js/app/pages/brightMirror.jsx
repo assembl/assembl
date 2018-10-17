@@ -18,7 +18,7 @@ class BrightMirror extends React.Component {
   }
 
   render() {
-    const { errors, identifier, children, params } = this.props;
+    const { errors, identifier, children, params, phaseId } = this.props;
     if (errors) {
       displayAlert('danger', `${errors}`);
       return <div />;
@@ -26,7 +26,8 @@ class BrightMirror extends React.Component {
     const childrenElm = React.Children.map(children, child =>
       React.cloneElement(child, {
         id: params.themeId,
-        identifier: identifier
+        identifier: identifier,
+        phaseId: phaseId
       })
     );
     return <div className="bright-mirror">{childrenElm}</div>;

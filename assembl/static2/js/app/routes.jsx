@@ -91,7 +91,9 @@ const DebateChild = (props) => {
   case 'voteSession':
     return <NotFound />;
   case 'brightMirror':
-    return <Idea id={props.id} identifier={props.identifier} routerParams={props.params} additionalFields />;
+    return (
+      <Idea id={props.id} identifier={props.identifier} phaseId={props.phaseId} routerParams={props.params} additionalFields />
+    );
   default:
     return (
       <Idea
