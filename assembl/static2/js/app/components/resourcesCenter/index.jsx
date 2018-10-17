@@ -16,15 +16,16 @@ export type Resource = {
   doc: Object
 };
 
-type ResourcesCenterProps = {
+type Props = {
+  headerBackgroundUrl: string,
   headerTitle: string,
-  resources: Array<Resource>,
-  headerBackgroundUrl: string
+  phaseId: string,
+  resources: Array<Resource>
 };
 
-const ResourcesCenter = ({ resources, headerBackgroundUrl, headerTitle }: ResourcesCenterProps) => (
+const ResourcesCenter = ({ headerBackgroundUrl, headerTitle, phaseId, resources }: Props) => (
   <div className="resources-center">
-    <Header title={headerTitle} imgUrl={headerBackgroundUrl} type="resourcesCenter" />
+    <Header title={headerTitle} imgUrl={headerBackgroundUrl} type="resourcesCenter" phaseId={phaseId} />
     <section>
       {resources.map((resource, index) => {
         const { title, text, embedCode, image, doc } = resource;

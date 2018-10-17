@@ -1,7 +1,8 @@
 // @flow
 import get from 'lodash/get';
 import * as React from 'react';
-import { ApolloClient, withApollo } from 'react-apollo';
+import { ApolloClient, compose, withApollo } from 'react-apollo';
+import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
 import { OverlayTrigger } from 'react-bootstrap';
 import { MEDIUM_SCREEN_WIDTH } from '../../../constants';
@@ -173,5 +174,9 @@ class PostActions extends React.Component<Props> {
   }
 }
 
+const mapStateToProps = state => ({
+  timeline: state.timeline
+});
+
 // $FlowFixMe
-export default withScreenWidth(withApollo(PostActions));
+export default compose(connect(mapStateToProps), withScreenWidth, withApollo)(PostActions);

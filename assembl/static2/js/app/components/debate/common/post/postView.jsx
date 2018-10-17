@@ -147,8 +147,7 @@ class PostView extends React.PureComponent<Props, State> {
       subject,
       modifiedSubject,
       multiColumns,
-      isHarvesting,
-      timeline
+      isHarvesting
     } = this.props;
     const translate = contentLocale !== originalLocale;
 
@@ -251,7 +250,6 @@ class PostView extends React.PureComponent<Props, State> {
                 debateData={debateData}
                 postSubject={subject ? subject.replace('Re: ', '') : ''}
                 phaseId={phaseId}
-                timeline={timeline}
               />
             </div>
           </div>

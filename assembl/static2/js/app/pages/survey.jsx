@@ -135,7 +135,7 @@ class Survey extends React.Component<Props, State> {
     return (
       <div className="survey">
         <div className="relative">
-          <Header title={title} imgUrl={imgUrl} isPhaseCompleted={isPhaseCompleted} phaseId={phaseId} type="idea">
+          <Header title={title} imgUrl={imgUrl} phaseId={phaseId} type="idea">
             <HeaderStatistics statElements={statElements} />
           </Header>
           {media && <Media {...media} />}

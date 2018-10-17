@@ -69,6 +69,7 @@ type Props = {
   instructionsSectionContent: string,
   isPhaseCompleted: boolean,
   modules: Array<VoteSpecification>,
+  phaseId: string,
   propositionsSectionTitle: string,
   proposals: Array<Proposal>,
   randomProposals: Array<Proposal>,
@@ -322,7 +323,8 @@ class DumbVoteSession extends React.Component<Props, State> {
       proposals,
       randomProposals,
       modules,
-      isPhaseCompleted
+      isPhaseCompleted,
+      phaseId
     } = this.props;
 
     const { availableTokensSticky, windowWidth, hasChanged } = this.state;
@@ -345,7 +347,7 @@ class DumbVoteSession extends React.Component<Props, State> {
 
     return (
       <div className="votesession-page">
-        <Header title={title} subtitle={subTitleToShow} imgUrl={headerImageUrl} type="voteSession">
+        <Header title={title} subtitle={subTitleToShow} imgUrl={headerImageUrl} type="voteSession" phaseId={phaseId}>
           <HeaderStatistics statElements={this.getStatElements()} />
         </Header>
         {!isPhaseCompleted ? (
@@ -420,7 +422,7 @@ const mapStateToProps = (state, ownProps) => ({
   timeline: state.timeline,
   debate: state.debate,
   lang: state.i18n.locale,
-  isPhaseCompleted: getIsPhaseCompletedById(state.timeline, ownProps.phaseId)
+  isPhaseCompleted: ownProps.phaseId && getIsPhaseCompletedById(state.timeline, ownProps.phaseId)
 });
 
 export { DumbVoteSession };
