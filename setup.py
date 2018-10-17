@@ -27,7 +27,7 @@ setup(name='assembl',
       long_description=README + '\n\n' + CHANGES,
       classifiers=[
           "Programming Language :: Python :: 2.7",
-          "Programming Language :: Javascript",
+          "Programming Language :: JavaScript",
           "Framework :: Pyramid",
           "Topic :: Communications",
           "Topic :: Internet :: WWW/HTTP",
