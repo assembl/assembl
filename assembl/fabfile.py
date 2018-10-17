@@ -902,14 +902,13 @@ def bootstrap_from_checkout(backup=False):
     """
     execute(updatemaincode, backup=backup)
     execute(build_virtualenv)
-    if getenv('TRAVIS_COMMIT', None):
-        pass
-    elif env.is_production_env:
-        execute(install_url_metadata_wheel)
-    else:
-        execute(install_url_metadata_source)
+    if not is_integration_env():
+        if env.is_production_env:
+            execute(install_url_metadata_wheel)
+        else:
+            execute(install_url_metadata_source)
     execute(app_update_dependencies, backup=backup)
-    execute(app_setup)
+    execute(app_setup, backup=backup)
     execute(check_and_create_database_user)
     execute(app_compile_nodbupdate)
     execute(set_file_permissions)
@@ -919,16 +918,17 @@ def bootstrap_from_checkout(backup=False):
         execute(database_restore, backup=backup)
     execute(app_reload)
     execute(webservers_reload)
-    execute(create_backup_script)
-    execute(create_alert_disk_space_script)
+    if not is_integration_env():
+        execute(create_backup_script)
+        execute(create_alert_disk_space_script)
 
 
 @task
-def bootstrap_from_backup(backup=True):
+def bootstrap_from_backup():
     """
     Creates the virtualenv and install the app from the backup files
     """
-    execute(bootstrap_from_checkout, backup=backup)
+    execute(bootstrap_from_checkout, backup=True)
 
 
 def clone_repository():
@@ -958,7 +958,7 @@ def updatemaincode(backup=False):
             run('git checkout %s' % env.gitbranch)
             run('git pull %s %s' % (env.gitrepo, env.gitbranch))
 
-        if not env.is_production_env and not getenv('TRAVIS_COMMIT', None):
+        if not env.is_production_env and not is_integration_env():
             path = join(env.projectpath, '..', 'url_metadata')
             if exists(path):
                 print(cyan('Updating url_metadata Git repository'))
@@ -992,6 +992,12 @@ def get_robot_machine():
 
     print red("No user machine found!")
     return None
+
+
+def is_integration_env():
+    # Centralize checking whether in CI/CD env
+    if getenv('TRAVIS_COMMIT', None):
+        return True
 
 
 @task
@@ -1077,18 +1083,20 @@ def restart_bluenove_actionable():
 
 
 @task
-def app_setup():
-    "Setup the environment so the application can run"
+def app_setup(backup=False):
+    """Setup the environment so the application can run"""
     venvcmd('pip install -e ./')
     execute(setup_var_directory)
     if not exists(env.ini_file):
         execute(create_local_ini)
-    venvcmd('assembl-ini-files populate %s' % (env.ini_file))
-    with cd(env.projectpath):
-        has_pre_commit = run('cat requirements.txt|grep pre-commit', warn_only=True)
-        if has_pre_commit and not exists(join(
-                env.projectpath, '.git/hooks/pre-commit')):
-            venvcmd("pre-commit install")
+    if not backup:
+        venvcmd('assembl-ini-files populate %s' % (env.ini_file))
+    if not env.is_production_env:
+        with cd(env.projectpath):
+            has_pre_commit = run('cat requirements.txt|grep pre-commit', warn_only=True)
+            if has_pre_commit and not exists(join(
+                    env.projectpath, '.git/hooks/pre-commit')):
+                venvcmd("pre-commit install")
 
 
 @task
@@ -2005,28 +2013,29 @@ def postgres_user_detach():
             pid))
 
 
+def is_supervisord_running():
+    result = venvcmd('supervisorctl pid')
+    if 'no such file' in result:
+        return False
+    try:
+        pid = int(result)
+        if pid:
+            return True
+    except:
+        return False
+
+
 @task
-def database_restore(backup=False):
+def database_restore():
     """
     Restores the database backed up on the remote server
     """
-    if not backup:
-        assert(env.wsginame in ('staging.wsgi', 'dev.wsgi'))
-        processes = filter_autostart_processes([
-            "dev:pserve" "celery_imap", "changes_router", "celery_notify",
-            "celery_notification_dispatch", "source_reader"])
-    else:
-        processes = filter_autostart_processes([
-            "dev:pserve", "dev:gulp", "dev:webpack", "edgesense", "elasticsearch", "celery_imap", "changes_router", "celery_notify",
-            "celery_notification_dispatch", "celery_notify_beat", "celery_translate", "source_reader", "maintenance_uwsgi", "metrics",
-            "metrics_py", "prod:uwsgi"])
-
-    if(env.wsginame != 'dev.wsgi'):
-        execute(webservers_stop)
-        processes.append("prod:uwsgi")  # possibly not autostarted
-
-    for process in processes:
-        supervisor_process_stop(process)
+    execute(webservers_stop)
+    if is_supervisord_running():
+        venvcmd('supervisorctl shutdown all')
+    from time import sleep
+    # Sleep for 15 seconds to allow time for all procs to die
+    sleep(15)
 
     # Kill postgres processes in order to be able to drop tables
     # execute(postgres_user_detach)
@@ -2053,14 +2062,11 @@ def database_restore(backup=False):
             env.db_host,
             env.db_database,
             env.db_user,
-            remote_db_path())
-        )
+            remote_db_path()))
 
-    for process in processes:
-        supervisor_process_start(process)
-
-    if(env.wsginame != 'dev.wsgi'):
-        execute(webservers_start)
+    if not is_supervisord_running():
+        venvcmd('supervisord')
+    execute(webservers_start)
 
 
 def get_config():
@@ -2220,7 +2226,7 @@ def set_borg_password():
     Helper function to change the passphrase of the assembl borg repo manually
     """
     print(cyan("Setting borg password"))
-    run("BORG_NEW_PASSPHRASE=\'%s\' borg change-passphrase %s" % env.borg_password, env.ftp_backup_folder)
+    run("BORG_NEW_PASSPHRASE=\'%s\' borg change-passphrase %s" % (env.borg_password, env.ftp_backup_folder))
 
 
 @task
@@ -2228,7 +2234,7 @@ def list_backups():
     """
     Helper function to list all backups in the borg repo
     """
-    run("borg list %s" % env.ftp_backup_folder)
+    run("BORG_PASSPHRASE=\'%s\' borg list %s" % (env.borg_password, env.ftp_backup_folder))
 
 
 def ftp_backup_cmd():
