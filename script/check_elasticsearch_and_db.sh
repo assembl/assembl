@@ -8,6 +8,9 @@ if [ "$1" == "" ]
 then
     echo "You should pass local.ini as argument"
     exit 1
+elif [ "$NODE_ENV" != "" ]
+then
+    exit 0
 fi
 
 # parse elasticsearch_host from local.ini
@@ -70,4 +73,5 @@ then
 fi
 
 # everything is good
+supervisorctl start prod:uwsgi
 exit 0
