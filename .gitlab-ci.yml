@@ -53,3 +53,15 @@ test_integration_and_ui:
     - yarn jest tests/integration
     # run each ui test one by one
     - yarn runinband
+
+build_wheel:
+  stage: build
+  only:
+    - add_build_job
+  before_script:
+    - pip install --upgrade bumpversion
+    - pip install --upgrade twine
+  script:
+    - bumpversion minor
+    - python setup.py bdist_wheel
+    - twine upload -u bluenove --skip-existing dist/*
