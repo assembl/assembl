@@ -801,17 +801,22 @@ def reset_db():
     """
     # Only for the staging server (fro tests)
     if env.wsginame == 'staging.wsgi':
+        print(green('Restore and update the latest database'))
         # Retrieve the symbolic link of the dump
         path = join(env.projectpath, remote_db_path())
         if not exists(path):
             # If the dump don't exist, we create it
+            print(cyan('Create a new dump'))
             execute(database_dump)
         else:
             # Otherwise, we restore the last dump
+            print(cyan('Restore the last dump'))
             execute(database_restore)
 
+        print(cyan('Update the restored db'))
         execute(app_db_update)
         # Create the updated dump for future tests
+        print(cyan('Create the updated dump for future tests'))
         execute(database_dump)
 
 
