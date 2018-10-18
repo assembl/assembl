@@ -3,6 +3,7 @@ image: python:2.7
 cache:
   paths:
     - assembl/static2/node_modules/
+    - /usr/local/share/.cache/yarn/v2
 
 test_frontend:
   image: node:8
@@ -10,6 +11,7 @@ test_frontend:
     - export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
     - cd assembl/static2
     - yarn
+    - yarn cache dir
   script:
     - yarn run test
     - yarn run eslint
