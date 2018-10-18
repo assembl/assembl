@@ -13,25 +13,19 @@ then
     exit 0
 fi
 
+LOCAL_INI=$1
+
 # parse elasticsearch_host from local.ini
-elasticsearch_host="$(cat $1 | grep "elasticsearch_host")"
-elasticsearch_host=${elasticsearch_host// /}
-elasticsearch_host=${elasticsearch_host//elasticsearch_host=/}
+elasticsearch_host="$(grep "elasticsearch_host" $LOCAL_INI | tr -d ' ' | awk -F "=" '{print $2}')"
 
 # parse elasticsearch_port from local.ini
-elasticsearch_port="$(cat $1 | grep "elasticsearch_port")"
-elasticsearch_port=${elasticsearch_port// /}
-elasticsearch_port=${elasticsearch_port//elasticsearch_port=/}
+elasticsearch_port="$(grep "elasticsearch_port" $LOCAL_INI | tr -d ' ' | awk -F "=" '{print $2}')"
 
 # parse elasticsearch_index from local.ini
-elasticsearch_index="$(cat $1 | grep "elasticsearch_index")"
-elasticsearch_index=${elasticsearch_index// /}
-elasticsearch_index=${elasticsearch_index//elasticsearch_index=/}
+elasticsearch_index="$(grep "elasticsearch_index" $LOCAL_INI | tr -d ' ' | awk -F "=" '{print $2}')"
 
 # parse elasticsearch_version from local.ini
-elasticsearch_version="$(cat $1 | grep "elasticsearch_version")"
-elasticsearch_version=${elasticsearch_version// /}
-elasticsearch_version=${elasticsearch_version//elasticsearch_version=/}
+elasticsearch_version="$(grep "elasticsearch_version" $LOCAL_INI | tr -d ' ' | awk -F "=" '{print $2}')"
 
 ELASTICSEARCH_URL=http://${elasticsearch_host}:${elasticsearch_port}
 
@@ -40,7 +34,7 @@ CURL="$(curl --fail --silent --show-error ${ELASTICSEARCH_URL} 2>&1)"
 # if curl didn't succeed 
 if [ $? != 0 ]
 then
-    echo "Fail to connect to elatic search"
+    echo "Failed to connect to Elaticsearch server"
     echo "${CURL}"
     exit 1
 fi
@@ -66,8 +60,8 @@ then
 fi
 
 # Check if database is accessible
-psql -Uassembl assembl -c "SELECT * FROM pg_catalog.pg_tables" &> /dev/null
-if [ $? != 0 ]
+NB_TABLE="$(psql -Uassembl assembl -c "SELECT * FROM pg_catalog.pg_tables;" | grep public | wc -l | tr -d ' ')"
+if [ $NB_TABLE -lt 1 ]
 then
     exit 1
 fi
