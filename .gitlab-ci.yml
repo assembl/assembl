@@ -1,5 +1,14 @@
 image: python:2.7
 
+stages:
+  - test
+  - push_to_master
+  - build
+  - deploy_to_dev
+  - test_on_dev
+  - deploy_to_uat
+  - deploy_to_prod
+
 cache:
   paths:
     - assembl/static2/node_modules/
