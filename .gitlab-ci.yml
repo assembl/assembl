@@ -22,7 +22,6 @@ test_frontend:
     - export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
     - cd assembl/static2
     - yarn
-    - yarn cache dir
   script:
     - yarn run test
     - yarn run eslint
