@@ -16,7 +16,7 @@ test_frontend:
     - yarn run test
     - yarn run eslint
     - yarn run stylelint
-    - yarn run flow
+    - yarn run flow --quiet
 
 test_manual:
   when: manual
