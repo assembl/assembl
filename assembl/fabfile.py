@@ -795,6 +795,27 @@ def update_pip_requirements(force_reinstall=False):
 
 
 @task
+def reset_db():
+    """
+    Restore and update the latest database
+    """
+    # Only for the staging server (fro tests)
+    if env.wsginame == 'staging.wsgi':
+        # Retrieve the symbolic link of the dump
+        path = join(env.projectpath, remote_db_path())
+        if not exists(path):
+            # If the dump don't exist, we create it
+            execute(database_dump)
+        else:
+            # Otherwise, we restore the last dump
+            execute(database_restore)
+
+        execute(app_db_update)
+        # Create the updated dump for future tests
+        execute(database_dump)
+
+
+@task
 def app_db_update():
     """
     Migrates database using south
@@ -1186,6 +1207,8 @@ def app_compile_noupdate():
     all generated files. You normally do not need to have internet connectivity.
     """
     execute(app_compile_nodbupdate)
+    # Reset the db only for staging
+    execute(reset_db)
     execute(app_db_update)
     # tests()
     execute(app_reload)
