@@ -27,7 +27,7 @@ def parse_reqs(*req_files):
 
 
 setup(name='assembl',
-      version='2.13.1',
+      version='2.14.0',
       description='Collective Intelligence platform',
       long_description=README + '\n\n' + CHANGES,
       classifiers=[
