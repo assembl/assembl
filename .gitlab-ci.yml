@@ -61,6 +61,8 @@ build_wheel:
   before_script:
     - pip install --upgrade bumpversion
     - pip install --upgrade twine
+    - git config --global user.email "cedric.messiant@gmail.com"
+    - git config --global user.name "Cédric Messiant"
   script:
     - bumpversion minor
     - python setup.py bdist_wheel
