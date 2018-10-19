@@ -26,7 +26,7 @@ const Step1 = ({ discussionPhaseId, editLocale, locale, client }: Props) => {
         confirmDeletion
         name="themes"
         subFieldName="children"
-        minItems={2}
+        minItems={1}
         maxLevel={1}
         onRemove={id => removeMenuItem(id, client, queryVariables)}
         onAdd={(id, parentId, index) => addMenuItem(id, parentId, index, client, queryVariables)}
