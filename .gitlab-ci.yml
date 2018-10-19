@@ -63,6 +63,7 @@ build_wheel:
     - pip install --upgrade twine
     - git config --global user.email "cedric.messiant@gmail.com"
     - git config --global user.name "Cédric Messiant"
+    - git remote set-url --add origin git@github.com:assembl/assembl.git
   script:
     - bumpversion minor
     - git status
