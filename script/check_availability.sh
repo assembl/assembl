@@ -4,13 +4,9 @@
 # return 0 if success / return 1 if error
 
 # exit if no parameter given
-if [ "$1" == "" ]
-then
+if [ "$1" == "" ]; then
     echo "You should pass local.ini as argument"
     exit 1
-elif [ "$NODE_ENV" != "" ]
-then
-    exit 0
 fi
 
 LOCAL_INI=$1
@@ -32,40 +28,35 @@ ELASTICSEARCH_URL=http://${elasticsearch_host}:${elasticsearch_port}
 CURL="$(curl --fail --silent --show-error ${ELASTICSEARCH_URL} 2>&1)"
 
 # if curl didn't succeed 
-if [ $? != 0 ]
-then
+if [ $? != 0 ]; then
     echo "Failed to connect to Elaticsearch server"
     echo "${CURL}"
     exit 1
 fi
 
-# clear line to keep cluster_name value only
-CLUSTER_NAME=$(echo "${CURL}" | grep "cluster_name")
-CLUSTER_NAME=${CLUSTER_NAME// /}
-CLUSTER_NAME=${CLUSTER_NAME//\"/}
-CLUSTER_NAME=${CLUSTER_NAME//cluster_name:/}
-CLUSTER_NAME=${CLUSTER_NAME//,/}
+# Install jq if necessary
+if [ $(uname) == "Darwin" ]; then
+    fab -c $VIRTUAL_ENV/../assembl/configs/mac.rc install_jq
+elif [ $(uname) == "Linux" ]; then 
+    fab -c $VIRTUAL_ENV/../assembl/configs/develop.rc install_jq
+fi
 
-# clear line to keep version number value only
-VERSION=$(echo "${CURL}" | grep "number")
-VERSION=${VERSION// /}
-VERSION=${VERSION//\"/}
-VERSION=${VERSION//number:/}
-VERSION=${VERSION//,/}
+# Parse json to keep cluster_name value only
+CLUSTER_NAME=$(echo $CURL | jq '.cluster_name' | tr -d "\"")
+
+# Parse json to keep version number value only
+VERSION=$(echo $CURL | jq '.version.number' | tr -d "\"")
 
 # Check Elasticsearch cluster name and version
-if ([ "$CLUSTER_NAME" != "$elasticsearch_index" ] || [ "$VERSION" != "$elasticsearch_version" ])
-then
+if ([ "$CLUSTER_NAME" != "$elasticsearch_index" ] || [ "$VERSION" != "$elasticsearch_version" ]); then
     exit 1
 fi
 
 # Check if database is accessible
 NB_TABLE="$(psql -Uassembl assembl -c "SELECT * FROM pg_catalog.pg_tables;" | grep public | wc -l | tr -d ' ')"
-if [ $NB_TABLE -lt 1 ]
-then
+if [ $NB_TABLE -lt 1 ]; then
     exit 1
 fi
 
 # everything is good
-supervisorctl start prod:uwsgi
 exit 0

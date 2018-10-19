@@ -2688,3 +2688,15 @@ def set_fail2ban_configurations():
         finally:
             for path in filters_to_file.values():
                 os.unlink(path)
+
+
+@task
+def install_jq():
+    """
+    Install jq
+    """
+    print('Installing jq')
+    if env.mac and not exists('/usr/local/bin/jq'):
+        run('brew install jq')
+    else:
+        run('apt-get install -y jq')
