@@ -28,7 +28,7 @@ test_frontend:
     - yarn run stylelint
     - yarn run flow --quiet
 
-test_ui:
+test_integration_and_ui:
   image: node:8
   before_script:
     - apt-get update -qq
