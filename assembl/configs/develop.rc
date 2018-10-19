@@ -42,6 +42,7 @@ web_analytics_piwik_script=
 # 8088 thru 8089: reserved for automated testing
 # 8090-: production
 changes_websocket_port = 8085
+changes_websocket_proxied = false
 # ZMQ model changes local socket (backend will connect to this)
 # UNIQUE_PER_SERVER
 # Convention:
