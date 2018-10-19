@@ -794,6 +794,12 @@ def update_pip_requirements(force_reinstall=False):
         run("yes w | %s" % cmd)
 
 
+def db_updated():
+    history = venvcmd('alembic -c %s history' % (env.ini_file))
+    current = venvcmd('alembic -c %s heads' % (env.ini_file))
+    return current in history
+
+
 @task
 def reset_db():
     """
@@ -813,11 +819,13 @@ def reset_db():
             print(cyan('Restore the last dump'))
             execute(database_restore)
 
-        print(cyan('Update the restored db'))
-        execute(app_db_update)
-        # Create the updated dump for future tests
-        print(cyan('Create the updated dump for future tests'))
-        execute(database_dump)
+        # Update the dump only when the schema of the database changes
+        if not db_updated():
+            print(cyan('Update the restored db'))
+            execute(app_db_update)
+            # Create the updated dump for future tests
+            print(cyan('Create the updated dump for future tests'))
+            execute(database_dump)
 
 
 @task
