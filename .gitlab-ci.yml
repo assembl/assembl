@@ -29,7 +29,7 @@ test_frontend:
     - yarn run flow --quiet
 
 test_integration_and_ui:
-  image: node:8
+  image: node:8-slim
   before_script:
     - apt-get update -qq
     # install chrome dependencies
