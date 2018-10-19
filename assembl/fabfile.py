@@ -2695,8 +2695,9 @@ def install_jq():
     """
     Install jq
     """
-    print('Installing jq')
-    if env.mac and not exists('/usr/local/bin/jq'):
-        run('brew install jq')
-    else:
-        run('apt-get install -y jq')
+    if not exists('/usr/local/bin/jq'):
+        print('Installing jq')
+        if env.mac:
+            run('brew install jq')
+        else:
+            run('apt-get install -y jq')

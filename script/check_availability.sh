@@ -31,10 +31,8 @@ fi
 
 # Install jq if necessary
 if [ $(uname) == "Darwin" ]; then
-    uname
     fab -c $ASSEMBL_ROOT/assembl/configs/mac.rc install_jq
 elif [ $(uname) == "Linux" ]; then
-    uname
     fab -c $ASSEMBL_ROOT/assembl/configs/develop.rc install_jq
 fi
 
@@ -59,4 +57,5 @@ if [ $NB_TABLE -lt 1 ]; then
 fi
 
 # everything is good
+echo "Elasticsearch and database check successful" >> $ASSEMBL_ROOT/var/log/assembl.log
 exit 0
