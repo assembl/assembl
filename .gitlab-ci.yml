@@ -63,12 +63,22 @@ build_wheel:
     - pip install --upgrade twine
     - git config --global user.email "cedric.messiant@gmail.com"
     - git config --global user.name "Cédric Messiant"
-    - git remote set-url --add origin git@github.com:assembl/assembl.git
+    - git remote add github git@github.com:assembl/assembl.git
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - touch ~/.ssh/known_hosts
+    - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+    - ssh-keyscan -H github.com >> ~/.ssh/known_hosts
+    - git fetch github
   script:
-    - git checkout add_build_job
+    - git checkout -b bumpversion
     - bumpversion minor
-    - git status
-    - git diff
-    - git push origin HEAD:add_build_job
+    - git checkout -B tmp_master_for_ci_cd bumpversion
+    - git branch -d bumpversion
+    - git push github tmp_master_for_ci_cd
     - python setup.py bdist_wheel
     - twine upload -u bluenove --skip-existing dist/*
