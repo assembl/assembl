@@ -77,10 +77,17 @@ export class Fields extends React.PureComponent<FieldsProps> {
   }
 
   initialize = () => {
-    const { fields, minItems, level } = this.props;
-    const fieldsLength = fields.initial ? fields.initial.length : 0;
+    const { fields, minItems, level, onAdd, parentId } = this.props;
+    const fieldsLength = fields.value ? fields.value.length : 0;
     if (level === 0 && fieldsLength < minItems) {
-      range(0, minItems - fieldsLength).forEach(() => fields.push({ id: createRandomId() }));
+      range(0, minItems - fieldsLength).forEach(() => {
+        const id = createRandomId();
+        if (onAdd) {
+          const index = (fields.length || 0) + 1;
+          setTimeout(() => onAdd(id, parentId, index), 2000);
+        }
+        fields.push({ id: id });
+      });
     }
   };
 
