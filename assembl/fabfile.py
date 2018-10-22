@@ -813,11 +813,11 @@ def reset_db():
         if not exists(path):
             # If the dump don't exist, we create it
             print(cyan('Create a new dump'))
-            execute(database_dump)
+            execute(database_dump_aws)
         else:
             # Otherwise, we restore the last dump
             print(cyan('Restore the last dump'))
-            execute(database_restore)
+            execute(database_restore_aws)
 
         # Update the dump only when the schema of the database changes
         if not db_updated():
@@ -825,7 +825,95 @@ def reset_db():
             execute(app_db_update)
             # Create the updated dump for future tests
             print(cyan('Create the updated dump for future tests'))
-            execute(database_dump)
+            execute(database_dump_aws)
+
+
+@task
+def database_dump_aws():
+    """
+    Dumps the database on remote site
+    """
+    filename = 'db_%s_%s.sql.pgdump' % (env.wsginame, "0.0.1")
+    absolute_path = os.path.join(env.dbdumps_dir, filename)
+
+    # Dump
+    with prefix(venv_prefix()), cd(env.projectpath):
+        run('PGPASSWORD=%s pg_dump --host=%s -U%s --format=custom -b %s > %s' % (
+            env.db_password,
+            env.db_host,
+            env.db_user,
+            env.db_database,
+            absolute_path))
+        run('aws s3 sync --access_key=%s --secret_key=%s %s s3://assembl/%s ' % (
+            env.aws_access_key_id,
+            env.aws_secret_access_key,
+            absolute_path,
+            filename))
+
+
+@task
+def database_restore_aws(backup=False):
+    """
+    Restores the database backed up on the remote server
+    """
+    if not backup:
+        assert(env.wsginame in ('staging.wsgi', 'dev.wsgi'))
+        processes = filter_autostart_processes([
+            "dev:pserve" "celery_imap", "changes_router", "celery_notify",
+            "celery_notification_dispatch", "source_reader"])
+    else:
+        processes = filter_autostart_processes([
+            "dev:pserve", "dev:gulp", "dev:webpack", "edgesense", "elasticsearch", "celery_imap", "changes_router", "celery_notify",
+            "celery_notification_dispatch", "celery_notify_beat", "celery_translate", "source_reader", "maintenance_uwsgi", "metrics",
+            "metrics_py", "prod:uwsgi"])
+
+    if(env.wsginame != 'dev.wsgi'):
+        execute(webservers_stop)
+        processes.append("prod:uwsgi")  # possibly not autostarted
+
+    for process in processes:
+        supervisor_process_stop(process)
+
+    # Kill postgres processes in order to be able to drop tables
+    # execute(postgres_user_detach)
+
+    # Drop db
+    with settings(warn_only=True):
+        dropped = run('PGPASSWORD=%s dropdb --host=%s --username=%s --no-password %s' % (
+            env.db_password,
+            env.db_host,
+            env.db_user,
+            env.db_database))
+
+        assert dropped.succeeded or "does not exist" in dropped, \
+            "Could not drop the database"
+
+    # Create db
+    execute(database_create)
+    # Restore data
+    with prefix(venv_prefix()), cd(env.projectpath):
+        db_path = remote_db_path()
+        filename = 'db_%s_%s.sql.pgdump' % (env.wsginame, "0.0.1")
+        run('aws s3 sync --access_key=%s --secret_key=%s s3://assembl/%s %s' % (
+            env.aws_access_key_id,
+            env.aws_secret_access_key,
+            filename,
+            db_path))
+        run('PGPASSWORD=%s pg_restore --no-owner --role=%s --host=%s --dbname=%s -U%s --schema=public %s' % (
+            env.db_password,
+            env.db_user,
+            env.db_host,
+            env.db_database,
+            env.db_user,
+            db_path)
+        )
+        run('rm -f %s' % db_path)
+
+    for process in processes:
+        supervisor_process_start(process)
+
+    if(env.wsginame != 'dev.wsgi'):
+        execute(webservers_start)
 
 
 @task
