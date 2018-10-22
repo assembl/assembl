@@ -378,7 +378,7 @@ def generate_frozen_requirements():
 
 
 @task
-def migrate_local_ini():
+def migrate_local_ini(backup=False):
     """Generate a .rc file to match the existing local.ini file.
     (requires a base .rc file)
 
@@ -433,16 +433,23 @@ def migrate_local_ini():
                     templates = get_random_templates()
                     venvcmd("python2 -m assembl.scripts.ini_files combine -o " +
                             base_random_file_name + " " + " ".join(templates))
+
+                random_ini_output = random_ini_path
+                if backup:
+                    randname = env.random_file.split(".")[0]  # don't want the ini section
+                    randname = randname + "_different_after_backup.ini"
+                    random_ini_output = join(env.projectpath, randname)
                 # Create the new random file with the local.ini data
                 venvcmd("python2 -m assembl.scripts.ini_files diff -e -o %s %s %s" % (
-                        dest_random_file_name, base_random_file_name,
+                        random_ini_output, base_random_file_name,
                         local_file_name))
                 # Create the new rc file.
                 venvcmd("python2 -m assembl.scripts.ini_files migrate -o %s -i %s -r %s %s" % (
-                        dest_path, local_file_name, dest_random_file_name,
+                        dest_path, local_file_name, random_ini_path,
                         env.rcfile))
             # Overwrite the random file
-            put(dest_random_file_name, random_ini_path)
+            if not backup:
+                put(dest_random_file_name, random_ini_path)
         finally:
             os.unlink(base_random_file_name)
             os.unlink(dest_random_file_name)
@@ -692,7 +699,7 @@ def build_virtualenv():
         return
     run('python2 -mvirtualenv --no-setuptools %(venvpath)s' % env)
     # create the virtualenv with --no-setuptools to avoid downgrading setuptools that may fail
-    if env.uses_bluenove_actionable:
+    if env.uses_bluenove_actionable and not is_integration_env():
         execute(install_bluenove_actionable)
 
     if env.mac:
@@ -928,7 +935,17 @@ def bootstrap_from_backup():
     """
     Creates the virtualenv and install the app from the backup files
     """
+    execute(fetch_backup, name=None)
+    execute(regenerate_rc_file)
     execute(bootstrap_from_checkout, backup=True)
+
+
+@task
+def regenerate_rc_file():
+    """
+    Regenerates RC file from ini file to restore production server from backup
+    """
+    venvcmd('assembl-ini-files migrate -i local.ini -r {random} {rc}' (env.rcfile))
 
 
 def clone_repository():
@@ -2187,7 +2204,7 @@ def create_backup_script():
         try:
             put('backup_all_assembl.sh', path)
             run('chmod +x backup_all_assembl.sh')
-            run('chown %s:%s backup_all_assembl.sh' % env.user)
+            run('chown %s:%s backup_all_assembl.sh' % (env.user, env.user))
         finally:
             os.unlink('backup_all_assembl.sh')
 
@@ -2242,8 +2259,18 @@ def ftp_backup_cmd():
     # -R recursive
     # -v verbose
     # -f XXX (authentication file)
-    return 'ncftpput -z -R -v -f ncftp.cfg {endpoint} / {backup_folder}'.format(
+    return 'ncftpput -z -R -v -f /home/assembl_user/assembl/ncftp.cfg {endpoint} / {backup_folder}'.format(
         endpoint=env.ftp_backup_endpoint, backup_folder=env.ftp_backup_folder)
+
+
+def ftp_get_cmd():
+    """Command to download borg repository from ftp backup server to the production server"""
+    # return 'ncftpget -R -v -u {user} -p {password} {endpoint} /home/assembl_user/assembl_backup/ assembl_backups.borg'.format(
+    #     user=env.ftp_backup_user, password=env.ftp_backup_password, endpoint=env.ftp_backup_endpoint)
+
+    # This command is to use ncftp.cfg instead of the env variables. Can't make it work right now.
+    return 'ncftpget -R -v -f ncftp.cfg {endpoint} /home/assembl_user/assembl_backup/ assembl_backups.borg'.format(
+        endpoint=env.ftp_backup_endpoint)
 
 
 def borg_backup_cmd():
@@ -2260,6 +2287,27 @@ def execute_backup_borg_repository():
     execute(create_backup_script)
     command = "source {do_backup} && {put_backup}".format(do_backup=borg_backup_cmd(), put_backup=ftp_backup_cmd())
     run(command)
+
+
+@task
+def fetch_backup(name=None):
+    """
+    Fetch a borg backup of Assembl from a repository location specified in RC file.
+    If no name is specified, fetches the last backup.
+    """
+
+    if not exists('/home/assembl_user/assembl_backup'):
+        run("mkdir /home/assembl_user/assembl_backup")
+    command = "source {download_command}".format(download_command=ftp_get_cmd())
+    run(command)
+    if name is None:
+        last_backup = run("BORG_PASSPHRASE={borg_password} borg list /home/assembl_user/assembl_backup/assembl_backups.borg | sed '$!d'".format(borg_password=env.borg_password))
+        backup_name = last_backup.split(' ')[0]
+    else:
+        backup_name = name
+    run("BORG_PASSPHRASE={borg_password} borg extract /home/assembl_user/assembl_backup/assembl_backups.borg::{backup_name}".format(borg_password=env.borg_password, last_backup=backup_name))
+    # Moving the last backup assembl folder to assembl_user
+    run("mv /home/assembl_user/home/assembl_user/assembl /home/assembl_user/")
 
 
 @task
