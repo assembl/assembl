@@ -283,6 +283,18 @@ def update_vendor_config():
         system("cd %s ; git pull" % config_file_dir)
 
 
+def create_backup_rc(server_hostname):
+    """Create an rc file for backup. Launched from inside create_local_ini"""
+    backup_rc_file = 'backup_{server_hostname}.rc'.format(server_hostname=server_hostname)
+    backup_rc_path = os.path.join(env.projectpath, backup_rc_file)
+    if not running_locally():
+        rc_info = combine_rc(env.rcfile)
+        with open(backup_rc_file, 'w') as backup_rc:
+            for key in rc_info:
+                backup_rc.write("{key}={value} \n".format(key=key, value=rc_info[key]))
+        put(backup_rc_file, backup_rc_path)
+
+
 @task
 def create_local_ini():
     """Replace the local.ini file with one composed from the current .rc file"""
@@ -326,6 +338,7 @@ def create_local_ini():
                 put(random_file_name, random_ini_path)
             # send the local file
             put(local_file_name, local_ini_path)
+            create_backup_rc(env.public_hostname)
         finally:
             os.unlink(random_file_name)
             os.unlink(local_file_name)
