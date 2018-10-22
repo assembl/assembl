@@ -2263,14 +2263,14 @@ def ftp_backup_cmd():
         endpoint=env.ftp_backup_endpoint, backup_folder=env.ftp_backup_folder)
 
 
-def ftp_get_cmd():
+def ftp_get(ncftp_config, source, destination):
     """Command to download borg repository from ftp backup server to the production server"""
-    # return 'ncftpget -R -v -u {user} -p {password} {endpoint} /home/assembl_user/assembl_backup/ assembl_backups.borg'.format(
-    #     user=env.ftp_backup_user, password=env.ftp_backup_password, endpoint=env.ftp_backup_endpoint)
-
-    # This command is to use ncftp.cfg instead of the env variables. Can't make it work right now.
-    return 'ncftpget -R -v -f ncftp.cfg {endpoint} /home/assembl_user/assembl_backup/ assembl_backups.borg'.format(
-        endpoint=env.ftp_backup_endpoint)
+    # TODO: only download latest version
+    # This command is to use ncftp.cfg instead of the env variables.
+    run('ncftpget -R -v -f {ncftp_config} {destination} {source}'.format(
+        ncftp_config=ncftp_config,
+        source=source,
+        destination=destination))
 
 
 def borg_backup_cmd():
@@ -2296,10 +2296,15 @@ def fetch_backup(name=None):
     If no name is specified, fetches the last backup.
     """
 
-    if not exists('/home/assembl_user/assembl_backup'):
-        run("mkdir /home/assembl_user/assembl_backup")
-    command = "source {download_command}".format(download_command=ftp_get_cmd())
-    run(command)
+    destination_folder = '/home/assembl_user/assembl_backup'
+
+    if not exists(destination_folder):
+        run("mkdir {destination_folder}".format(destination_folder=destination_folder))
+
+    ftp_get(ncftp_config='/home/assembl_user/assembl/ncftp.cfg',
+            source='assembl_backups.borg',
+            destination=destination_folder)
+
     if name is None:
         last_backup = run("BORG_PASSPHRASE={borg_password} borg list /home/assembl_user/assembl_backup/assembl_backups.borg | sed '$!d'".format(borg_password=env.borg_password))
         backup_name = last_backup.split(' ')[0]
@@ -2307,7 +2312,7 @@ def fetch_backup(name=None):
         backup_name = name
     run("BORG_PASSPHRASE={borg_password} borg extract /home/assembl_user/assembl_backup/assembl_backups.borg::{backup_name}".format(borg_password=env.borg_password, last_backup=backup_name))
     # Moving the last backup assembl folder to assembl_user
-    run("mv /home/assembl_user/home/assembl_user/assembl /home/assembl_user/")
+    # run("mv /home/assembl_user/home/assembl_user/assembl /home/assembl_user/")
 
 
 @task
