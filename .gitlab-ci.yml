@@ -100,7 +100,6 @@ build_wheel:
     - ./node_modules/.bin/gulp build:test
 
     # compile v2 javascript
-    - df -h
     - cd ${CI_PROJECT_DIR}/assembl/static2
     - yarn
     - yarn run build
@@ -119,6 +118,9 @@ build_wheel:
     - git checkout -B tmp_master_for_ci_cd bumpversion
     - git branch -d bumpversion
     - git push github tmp_master_for_ci_cd
+    - git checkout add_build_job
+    - git merge tmp_master_for_ci_cd --no-edit -m "Merge new version"
+    - git push github add_build_job
 
     # create the wheel and upload to pypi
     - cd ${CI_PROJECT_DIR}/
