@@ -815,7 +815,7 @@ def reset_db():
     """
     Restore and update the latest database
     """
-    # Only for the staging server (fro tests)
+    # Only for the staging server (for tests)
     if env.wsginame == 'staging.wsgi':
         exists = False
         # Retrieve the symbolic link of the dump
@@ -1343,7 +1343,7 @@ def app_compile_noupdate():
     """
     execute(app_compile_nodbupdate)
     # Reset the db only for staging
-    # execute(reset_db)
+    execute(reset_db)
     execute(app_db_update)
     # tests()
     execute(app_reload)
