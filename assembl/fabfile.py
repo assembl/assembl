@@ -667,8 +667,10 @@ def get_db_dump_name():
 
 
 def get_versioned_db_dump_name():
-    # TODO include version
-    return 'db_%s_%s.sql.pgdump' % (env.wsginame, strftime('%Y%m%d'))
+    bumpversion_config = SafeConfigParser()
+    bumpversion_config.read(join(env.projectpath, '.bumpversion.cfg'))
+    current_version = bumpversion_config.get('bumpversion', 'current_version')
+    return 'db_%s_%s.sql.pgdump' % (env.wsginame, current_version or strftime('%Y%m%d'))
 
 
 def remote_db_path():
@@ -814,7 +816,7 @@ def reset_db():
     Restore and update the latest database
     """
     # Only for the staging server (fro tests)
-    if env.wsginame == 'staging.wsgi':
+    if env.wsginame == 'dev.wsgi':
         exists = False
         # Retrieve the symbolic link of the dump
         with shell_env(
