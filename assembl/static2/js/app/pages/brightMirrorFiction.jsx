@@ -152,7 +152,10 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
         // Set state here to update UI
 
         // Refetch 'ideaWithCommentsData' to display the updated list of comments
-        ideaWithCommentsData.refetch();
+        ideaWithCommentsData.refetch().then(() => {
+          // Force scroll by 1px down in order to display the new comment
+          window.scrollBy(0, 1);
+        });
       })
       .catch((error) => {
         displayAlert('danger', `${error}`);
