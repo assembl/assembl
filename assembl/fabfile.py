@@ -666,6 +666,11 @@ def get_db_dump_name():
     return 'assembl-backup.pgdump'
 
 
+def get_versioned_db_dump_name():
+    # TODO include version
+    return 'db_%s_%s.sql.pgdump' % (env.wsginame, strftime('%Y%m%d'))
+
+
 def remote_db_path():
     return join(env.projectpath, get_db_dump_name())
 
@@ -794,7 +799,10 @@ def update_pip_requirements(force_reinstall=False):
         run("yes w | %s" % cmd)
 
 
-def db_updated():
+def is_db_updated():
+    """
+    Return if the database is update or not
+    """
     history = venvcmd('alembic -c %s history' % (env.ini_file))
     current = venvcmd('alembic -c %s heads' % (env.ini_file))
     return current in history
@@ -807,10 +815,17 @@ def reset_db():
     """
     # Only for the staging server (fro tests)
     if env.wsginame == 'staging.wsgi':
-        print(green('Restore and update the latest database'))
+        exists = False
         # Retrieve the symbolic link of the dump
-        path = join(env.projectpath, remote_db_path())
-        if not exists(path):
+        with shell_env(
+            AWS_ACCESS_KEY_ID=env.aws_access_key_id,
+            AWS_SECRET_ACCESS_KEY=env.aws_secret_access_key
+        ):
+            exists = venvcmd('aws s3 ls s3://%s/%s | wc -l' % (env.aws_bucket_name, get_db_dump_name()))
+            exists = False if exists == '0' else True
+
+        print(green('Restore and update the latest database'))
+        if not exists:
             # If the dump don't exist, we create it
             print(cyan('Create a new dump'))
             execute(database_dump_aws)
@@ -820,7 +835,7 @@ def reset_db():
             execute(database_restore_aws)
 
         # Update the dump only when the schema of the database changes
-        if not db_updated():
+        if not is_db_updated():
             print(cyan('Update the restored db'))
             execute(app_db_update)
             # Create the updated dump for future tests
@@ -831,30 +846,41 @@ def reset_db():
 @task
 def database_dump_aws():
     """
-    Dumps the database on remote site
+    Dumps the database on an amazon s3 object storage
     """
-    filename = 'db_%s_%s.sql.pgdump' % (env.wsginame, "0.0.1")
-    absolute_path = os.path.join(env.dbdumps_dir, filename)
-
-    # Dump
-    with prefix(venv_prefix()), cd(env.projectpath):
+    with prefix(venv_prefix()), \
+        cd(env.projectpath), \
+        shell_env(
+        AWS_ACCESS_KEY_ID=env.aws_access_key_id,
+        AWS_SECRET_ACCESS_KEY=env.aws_secret_access_key
+    ):
+        dump_name = get_versioned_db_dump_name()
+        dump_path = os.path.join(env.dbdumps_dir, dump_name)
+        # Create the db dump
         run('PGPASSWORD=%s pg_dump --host=%s -U%s --format=custom -b %s > %s' % (
             env.db_password,
             env.db_host,
             env.db_user,
             env.db_database,
-            absolute_path))
-        run('aws s3 sync --access_key=%s --secret_key=%s %s s3://assembl/%s ' % (
-            env.aws_access_key_id,
-            env.aws_secret_access_key,
-            absolute_path,
-            filename))
+            dump_path))
+        # Copy the created dump in the aws bucket
+        run('aws s3 cp %s s3://%s/%s ' % (
+            dump_path,
+            env.aws_bucket_name,
+            dump_name))
+        # Add a copy as a symbolic link
+        run('aws s3 cp %s s3://%s/%s ' % (
+            dump_path,
+            env.aws_bucket_name,
+            get_db_dump_name()))
+        # Remove the created dump from the locale host
+        run('rm -f %s' % dump_path)
 
 
 @task
 def database_restore_aws(backup=False):
     """
-    Restores the database backed up on the remote server
+    Restores the database backed up on the amazon s3 object storage
     """
     if not backup:
         assert(env.wsginame in ('staging.wsgi', 'dev.wsgi'))
@@ -891,23 +917,29 @@ def database_restore_aws(backup=False):
     # Create db
     execute(database_create)
     # Restore data
-    with prefix(venv_prefix()), cd(env.projectpath):
-        db_path = remote_db_path()
-        filename = 'db_%s_%s.sql.pgdump' % (env.wsginame, "0.0.1")
-        run('aws s3 sync --access_key=%s --secret_key=%s s3://assembl/%s %s' % (
-            env.aws_access_key_id,
-            env.aws_secret_access_key,
-            filename,
-            db_path))
+    with prefix(venv_prefix()),\
+        cd(env.projectpath),\
+        shell_env(
+        AWS_ACCESS_KEY_ID=env.aws_access_key_id,
+        AWS_SECRET_ACCESS_KEY=env.aws_secret_access_key
+    ):
+        filename = remote_db_path()
+        # Download the latest dump from the amazon s3 object storage
+        run('aws s3 cp s3://%s/%s %s' % (
+            env.aws_bucket_name,
+            get_db_dump_name(),
+            filename))
+        # Restore the downloaded dump
         run('PGPASSWORD=%s pg_restore --no-owner --role=%s --host=%s --dbname=%s -U%s --schema=public %s' % (
             env.db_password,
             env.db_user,
             env.db_host,
             env.db_database,
             env.db_user,
-            db_path)
+            filename)
         )
-        run('rm -f %s' % db_path)
+        # Remove the downloaded dump from the localhost
+        run('rm -f %s' % filename)
 
     for process in processes:
         supervisor_process_start(process)
@@ -1309,7 +1341,7 @@ def app_compile_noupdate():
     """
     execute(app_compile_nodbupdate)
     # Reset the db only for staging
-    execute(reset_db)
+    # execute(reset_db)
     execute(app_db_update)
     # tests()
     execute(app_reload)
