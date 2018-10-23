@@ -94,6 +94,7 @@ script:
   - if [ "$TO_TEST" = "FRONTEND" ]; then py.test --maxfail=2 assembl -k "test_graphql"; fi
   - if [ "$TO_TEST" = "BACKEND" ]; then flake8 assembl; fi
   - cd assembl/static2
+  - if [ "$TO_TEST" = "FRONTEND" ]; node scripts/ci-coverage-validate.js; fi
   - if [ "$TO_TEST" = "FRONTEND" ]; then npm test; fi
   - if [ "$TO_TEST" = "FRONTEND" ]; then npm run eslint; fi
   - if [ "$TO_TEST" = "FRONTEND" ]; then npm run flow; fi
