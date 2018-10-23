@@ -816,7 +816,7 @@ def reset_db():
     Restore and update the latest database
     """
     # Only for the staging server (fro tests)
-    if env.wsginame == 'dev.wsgi':
+    if env.wsginame == 'staging.wsgi':
         exists = False
         # Retrieve the symbolic link of the dump
         with shell_env(
