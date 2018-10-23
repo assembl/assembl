@@ -818,7 +818,7 @@ def reset_db():
     # Only for the staging server (for tests)
     if env.wsginame == 'staging.wsgi':
         exists = False
-        # Retrieve the symbolic link of the dump
+        # Test if the dump exists on the amazon s3 object storage
         with shell_env(
             AWS_ACCESS_KEY_ID=env.aws_access_key_id,
             AWS_SECRET_ACCESS_KEY=env.aws_secret_access_key
