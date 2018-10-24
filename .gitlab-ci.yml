@@ -117,6 +117,7 @@ build_wheel:
     - bumpversion minor
     - git checkout -B tmp_master_for_ci_cd bumpversion
     - git branch -d bumpversion
+    - git pull --rebase
     - git push github tmp_master_for_ci_cd
     - git checkout add_build_job
     - git merge tmp_master_for_ci_cd --no-edit -m "Merge new version"
