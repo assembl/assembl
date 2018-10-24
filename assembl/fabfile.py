@@ -1422,6 +1422,7 @@ def install_server_deps():
     Tools needed by server in order to operate securely and cleanly, but not related to Assembl
     """
     execute(install_fail2ban)
+    execute(install_jq)
 
 
 @task
@@ -2695,7 +2696,7 @@ def install_jq():
     """
     Install jq
     """
-    if not exists('/usr/local/bin/jq'):
+    if not exists('/usr/local/bin/jq') or not exists('/usr/bin/jq'):
         print('Installing jq')
         if env.mac:
             run('brew install jq')
