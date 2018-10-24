@@ -51,7 +51,3 @@ test_integration_and_ui:
     - yarn jest tests/integration
     # run each ui test one by one
     - yarn runinband
-
-  artifacts:
-    paths:
-      - assembl-tests/screenshots/
