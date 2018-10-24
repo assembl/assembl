@@ -52,13 +52,8 @@ test_integration_and_ui:
     # run integration tests
     - yarn jest tests/integration
     # run each ui test one by one
-    - yarn runinband || true
-    - cd screenshots
-    - ls
-    - scp test-screenshot.png assembl_user@dev-assembl.bluenove.com:~/pptr/
-    - scp test-screenshot2.png assembl_user@dev-assembl.bluenove.com:~/pptr/
+    - yarn runinband
 
   artifacts:
     paths:
       - assembl-tests/screenshots/
-  allow_failure: true
