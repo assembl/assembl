@@ -670,7 +670,7 @@ def get_versioned_db_dump_name():
     bumpversion_config = SafeConfigParser()
     bumpversion_config.read(join(env.projectpath, '.bumpversion.cfg'))
     current_version = bumpversion_config.get('bumpversion', 'current_version')
-    return 'db_%s_%s.sql.pgdump' % (env.wsginame, current_version or strftime('%Y%m%d'))
+    return 'db_{}_{}.sql.pgdump'.format(env.wsginame, current_version or strftime('%Y%m%d'))
 
 
 def remote_db_path():
@@ -805,8 +805,8 @@ def is_db_updated():
     """
     Return if the database is update or not
     """
-    history = venvcmd('alembic -c %s history' % (env.ini_file))
-    current = venvcmd('alembic -c %s heads' % (env.ini_file))
+    history = venvcmd('alembic -c {} history'.format(env.ini_file))
+    current = venvcmd('alembic -c {} heads'.format(env.ini_file))
     return current in history
 
 
@@ -823,7 +823,7 @@ def reset_db():
             AWS_ACCESS_KEY_ID=env.aws_access_key_id,
             AWS_SECRET_ACCESS_KEY=env.aws_secret_access_key
         ):
-            exists = venvcmd('aws s3 ls s3://%s/%s | wc -l' % (env.aws_bucket_name, get_db_dump_name()))
+            exists = venvcmd('aws s3 ls s3://{}/{} | wc -l'.format(env.aws_bucket_name, get_db_dump_name()))
             exists = False if exists == '0' else True
 
         print(green('Restore and update the latest database'))
@@ -859,24 +859,24 @@ def database_dump_aws():
         dump_name = get_versioned_db_dump_name()
         dump_path = os.path.join(env.dbdumps_dir, dump_name)
         # Create the db dump
-        run('PGPASSWORD=%s pg_dump --host=%s -U%s --format=custom -b %s > %s' % (
+        run('PGPASSWORD={} pg_dump --host={} -U{} --format=custom -b {} > {}'.format(
             env.db_password,
             env.db_host,
             env.db_user,
             env.db_database,
             dump_path))
         # Copy the created dump in the aws bucket
-        run('aws s3 cp %s s3://%s/%s ' % (
+        run('aws s3 cp {} s3://{}/{} '.format(
             dump_path,
             env.aws_bucket_name,
             dump_name))
         # Add a copy as a symbolic link
-        run('aws s3 cp %s s3://%s/%s ' % (
+        run('aws s3 cp {} s3://{}/{} '.format(
             dump_path,
             env.aws_bucket_name,
             get_db_dump_name()))
         # Remove the created dump from the locale host
-        run('rm -f %s' % dump_path)
+        run('rm -f {}'.format(dump_path))
 
 
 @task
@@ -907,7 +907,7 @@ def database_restore_aws(backup=False):
 
     # Drop db
     with settings(warn_only=True):
-        dropped = run('PGPASSWORD=%s dropdb --host=%s --username=%s --no-password %s' % (
+        dropped = run('PGPASSWORD={} dropdb --host={} --username={} --no-password {}'.format(
             env.db_password,
             env.db_host,
             env.db_user,
@@ -927,12 +927,12 @@ def database_restore_aws(backup=False):
     ):
         filename = remote_db_path()
         # Download the latest dump from the amazon s3 object storage
-        run('aws s3 cp s3://%s/%s %s' % (
+        run('aws s3 cp s3://{}/{} {}'.format(
             env.aws_bucket_name,
             get_db_dump_name(),
             filename))
         # Restore the downloaded dump
-        run('PGPASSWORD=%s pg_restore --no-owner --role=%s --host=%s --dbname=%s -U%s --schema=public %s' % (
+        run('PGPASSWORD={} pg_restore --no-owner --role={} --host={} --dbname={} -U{} --schema=public {}'.format(
             env.db_password,
             env.db_user,
             env.db_host,
@@ -941,7 +941,7 @@ def database_restore_aws(backup=False):
             filename)
         )
         # Remove the downloaded dump from the localhost
-        run('rm -f %s' % filename)
+        run('rm -f {}'.format(filename))
 
     for process in processes:
         supervisor_process_start(process)
