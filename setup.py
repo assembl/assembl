@@ -22,7 +22,8 @@ def parse_reqs(*req_files):
     for req_file in req_files:
         # parse_requirements() returns generator of pip.req.InstallRequirement objects
         parsed = parse_requirements(req_file, session=session)
-        requirements.update({str(ir.req) for ir in parsed})
+        requirements.update({str(ir.req) for ir in parsed if not ir.link})
+
     return list(requirements)
 
 
