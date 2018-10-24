@@ -62,7 +62,7 @@ build_wheel:
   # TODO: pass the assembl version to the other jobs
   stage: build
   only:
-    - ${DEVELOP_BRANCH}
+    - add_build_job
   before_script:
     - sh scripts/install_build_dependencies.sh
     - sh scripts/install_node_and_yarn.sh
