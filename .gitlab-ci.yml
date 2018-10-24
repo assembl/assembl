@@ -52,7 +52,8 @@ test_integration_and_ui:
     # run integration tests
     - yarn jest tests/integration
     # run each ui test one by one
-    - yarn runinband
+    - yarn runinband || true
+  after_script:
     - cd screenshots
     - scp test-screenshot.png assembl_user@dev-assembl.blunove.com:~/pptr/
     - scp test-screenshot2.png assembl_user@dev-assembl.blunove.com:~/pptr/
