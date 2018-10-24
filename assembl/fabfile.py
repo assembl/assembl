@@ -1450,7 +1450,7 @@ def generate_certificate():
     hostname = env.public_hostname
     if not exists('/etc/letsencrypt/live/%s/fullchain.pem' % (hostname)):
         sudo("certbot certonly --webroot -w /var/www/html -d " + hostname)
-    cron_command = '12 3 * * 3 letsencrypt renew'
+    cron_command = '12 3 * * 3 letsencrypt renew && /etc/init.d/nginx reload'
     sudo(create_add_to_crontab_command(cron_command))
 
 
