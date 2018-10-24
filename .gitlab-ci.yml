@@ -53,78 +53,25 @@ test_integration_and_ui:
     - yarn jest tests/integration
     # run each ui test one by one
     - yarn runinband
+variables:
+  DEVELOP_BRANCH: add_build_job
+  MASTER_BRANCH: tmp_master_for_ci_cd
 
 build_wheel:
   # TODO: urlmetadata
+  # TODO: pass the assembl version to the other jobs
   stage: build
   only:
-    - add_build_job
+    - ${DEVELOP_BRANCH}
   before_script:
-    - apt-get update -qq
-    - apt-get remove -yqq cmdtest
-    - apt-get install -yqq build-essential python-dev pkg-config automake bison flex gperf gawk graphviz
-    - apt-get install -yqq apt-transport-https libpq-dev libmemcached-dev libzmq3-dev libxslt1-dev libffi-dev libhiredis-dev libxml2-dev libssl-dev libreadline-dev libxmlsec1-dev libgraphviz-dev
-    - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
-    - echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
-    - wget -qO- https://deb.nodesource.com/setup_8.x | bash -
-    - apt-get install -yqq nodejs yarn
-    - apt-get autoclean -qq && apt-get autoremove -qq && rm -rf /var/lib/apt/lists/*
-    - pip install -r requirements.in
-    - export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-    - pip install --upgrade bumpversion
-    - pip install --upgrade twine
-    - git config --global user.email "cedric.messiant@gmail.com"
-    - git config --global user.name "Cédric Messiant"
-    - git remote add github git@github.com:assembl/assembl.git
-    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
-    - eval $(ssh-agent -s)
-    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
-    - mkdir -p ~/.ssh
-    - chmod 700 ~/.ssh
-    - touch ~/.ssh/known_hosts
-    - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
-    - chmod 644 ~/.ssh/known_hosts
-    - git fetch github
+    - sh scripts/install_build_dependencies.sh
+    - sh scripts/install_node_and_yarn.sh
+    - sh scripts/configure_ssh.sh
+    - sh scripts/clear_apt_cache.sh
+    - sh scripts/configure_assembl_remote.sh
   script:
-    # compile v1 stylesheets
-    - cd ${CI_PROJECT_DIR}/assembl/static/js
-    - yarn
-    - ./node_modules/.bin/gulp sass
-    - ./node_modules/.bin/node-sass --source-map -r -o ../widget/card/app/css --source-map ../widget/card/app/css ../widget/card/app/scss
-    - ./node_modules/.bin/node-sass --source-map -r -o ../widget/video/app/css --source-map ../widget/video/app/css ../widget/video/app/scss
-    - ./node_modules/.bin/node-sass --source-map -r -o ../widget/session/css --source-map ../widget/session/css ../widget/session/scss
-
-    # compile v1 javascript
-    - ./node_modules/.bin/gulp libs
-    - ./node_modules/.bin/gulp browserify:prod
-    - ./node_modules/.bin/gulp build:test
-
-    # compile v2 javascript
-    - cd ${CI_PROJECT_DIR}/assembl/static2
-    - yarn
-    - yarn run build
-    - rm -rf node_modules
-
-    # compile messages
-    - cd ${CI_PROJECT_DIR}
-    - python setup.py compile_catalog
-    - python assembl/scripts/po2json.py
-
-    - rm -rf ${CI_PROJECT_DIR}/assembl/static/js/node_modules
-
     # bump the version, merge to master
-    - git checkout -b bumpversion
-    - bumpversion minor
-    - git checkout -B tmp_master_for_ci_cd bumpversion
-    - git branch -d bumpversion
-    - git pull --rebase github tmp_master_for_ci_cd
-    - git push github tmp_master_for_ci_cd
-    - git checkout -B add_build_job --track github/add_build_job
-    - git merge tmp_master_for_ci_cd --no-edit -m "Merge new version"
-    - git push github add_build_job
-
+    - sh scripts/bump_assembl_version_and_push.sh
     # create the wheel and upload to pypi
-    - cd ${CI_PROJECT_DIR}/
-    - rm -rf dist build assembl.egg-info
-    - python setup.py bdist_wheel
+    - sh scripts/create_assembl_wheel.sh
     - twine upload -u bluenove --skip-existing dist/*
