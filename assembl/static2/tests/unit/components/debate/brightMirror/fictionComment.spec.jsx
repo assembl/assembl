@@ -34,6 +34,13 @@ import {
 
 configure({ adapter: new Adapter() });
 
+// Mock utils functions
+jest.mock('../../../../../js/app/utils/globalFunctions', () => ({
+  getConnectedUserId: jest.fn(() => '1234567890'),
+  isMobile: { any: jest.fn(() => false) }
+}));
+jest.mock('../../../../../js/app/utils/permissions', () => ({ connectedUserCan: jest.fn(() => true) }));
+
 describe('<FictionComment /> - with shallow', () => {
   let wrapper;
   let fictionComment: FictionCommentGraphQLProps;
@@ -64,16 +71,6 @@ describe('<FictionComment /> - with shallow', () => {
     wrapper.setState({ showFictionCommentForm: true });
     expect(wrapper.find(ReplyToCommentButton)).toHaveLength(0);
     expect(wrapper.find(FictionCommentForm)).toHaveLength(1);
-  });
-
-  it('should display a "Edit this message" button when userCanEdit state is true', () => {
-    wrapper.setState({ userCanEdit: true });
-    expect(wrapper.find(EditPostButton)).toHaveLength(1);
-  });
-
-  it('should display a "Edit this message" button when userCanEdit state is false', () => {
-    wrapper.setState({ userCanEdit: false });
-    expect(wrapper.find(EditPostButton)).toHaveLength(0);
   });
 });
 
@@ -194,6 +191,74 @@ describe('<FictionComment /> - with mount', () => {
 
     it('should display "No author specified"', () => {
       expect(wrapper.contains('No author specified')).toBe(true);
+    });
+  });
+
+  describe('when getConnectedUserId match permission and authorUserId', () => {
+    // getConnectedUserId mocked value is 1234567890
+    beforeEach(() => {
+      fictionComment = {
+        ...defaultFictionComment,
+        ...defaultFictionCommentGraphQL,
+        authorUserId: 1234567890,
+        measureTreeHeight: jest.fn(),
+        // Below are the required input params for CommentQuery
+        id: 'aaa',
+        contentLocale: 'fr'
+      };
+
+      // Mock Apollo
+      mocks = [
+        {
+          request: { query: CommentQuery },
+          result: {
+            data: fictionComment
+          }
+        }
+      ];
+      wrapper = mount(
+        <MockedProvider mocks={mocks}>
+          <FictionComment {...fictionComment} />
+        </MockedProvider>
+      );
+    });
+
+    it('should display a "Edit this message" button', () => {
+      expect(wrapper.find(EditPostButton)).toHaveLength(1);
+    });
+  });
+
+  describe('when getConnectedUserId does not match permission and authorUserId', () => {
+    // getConnectedUserId mocked value is 1234567890
+    beforeEach(() => {
+      fictionComment = {
+        ...defaultFictionComment,
+        ...defaultFictionCommentGraphQL,
+        authorUserId: 9876543210,
+        measureTreeHeight: jest.fn(),
+        // Below are the required input params for CommentQuery
+        id: 'aaa',
+        contentLocale: 'fr'
+      };
+
+      // Mock Apollo
+      mocks = [
+        {
+          request: { query: CommentQuery },
+          result: {
+            data: fictionComment
+          }
+        }
+      ];
+      wrapper = mount(
+        <MockedProvider mocks={mocks}>
+          <FictionComment {...fictionComment} />
+        </MockedProvider>
+      );
+    });
+
+    it('should not display a "Edit this message" button', () => {
+      expect(wrapper.find(EditPostButton)).toHaveLength(0);
     });
   });
 });

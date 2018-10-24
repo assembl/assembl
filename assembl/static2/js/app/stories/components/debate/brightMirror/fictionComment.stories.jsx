@@ -31,6 +31,7 @@ export const defaultFictionComment: FictionCommentBaseProps = {
 };
 
 export const defaultFictionCommentGraphQL: FictionCommentGraphQLProps = {
+  authorUserId: 1234567890,
   authorFullname: 'Luke Skywalker',
   circleAvatar: { ...defaultCircleAvatar },
   commentParentId: 'dummyId',
@@ -53,6 +54,7 @@ storiesOf('FictionComment', module)
     'playground',
     withInfo()(() => (
       <FictionComment
+        authorUserId={playground.authorUserId}
         authorFullname={text('Author fullname', playground.authorFullname)}
         circleAvatar={object('circleAvatar', playground.circleAvatar)}
         commentContent={text('Comment content', playground.commentContent)}

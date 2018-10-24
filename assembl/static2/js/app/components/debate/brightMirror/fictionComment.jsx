@@ -6,6 +6,8 @@ import { I18n, Translate } from 'react-redux-i18n';
 import { compose, graphql } from 'react-apollo';
 // Helpers imports
 import moment from 'moment';
+import { getConnectedUserId } from '../../../utils/globalFunctions';
+import Permissions, { connectedUserCan } from '../../../utils/permissions';
 // Optimization: Should create commentQuery.graphql and adapt the query
 import CommentQuery from '../../../graphql/BrightMirrorFictionQuery.graphql';
 // Components imports
@@ -45,6 +47,8 @@ export type FictionCommentBaseProps = {
 };
 
 export type FictionCommentGraphQLProps = {
+  /** Author user Id */
+  authorUserId: number,
   /** Author fullname */
   authorFullname: string,
   /** Circle avatar props */
@@ -65,7 +69,6 @@ type LocalFictionCommentProps = FictionCommentBaseProps & FictionCommentGraphQLP
 
 type FictionCommentState = {
   showFictionCommentForm: boolean,
-  userCanEdit: boolean,
   isEditing: boolean
 };
 
@@ -84,7 +87,6 @@ export type CreateCommentInputs = {
 export class FictionComment extends Component<LocalFictionCommentProps, FictionCommentState> {
   state = {
     showFictionCommentForm: false,
-    userCanEdit: true,
     isEditing: false
   };
 
@@ -105,6 +107,7 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
 
   render() {
     const {
+      authorUserId,
       authorFullname,
       circleAvatar,
       children,
@@ -116,7 +119,7 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
       publishedDate,
       fictionCommentExtraProps
     } = this.props;
-    const { isEditing, showFictionCommentForm, userCanEdit } = this.state;
+    const { isEditing, showFictionCommentForm } = this.state;
     const { expandedFromTree, expandCollapseCallbackFromTree } = fictionCommentExtraProps;
 
     const toggleCommentButtonProps: ToggleCommentButtonProps = {
@@ -152,6 +155,7 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
     const displayFictionCommentForm = showFictionCommentForm ? <FictionCommentForm {...fictionCommentFormProps} /> : null;
 
     // Display EditPostButton only when the user have the required rights
+    const userCanEdit = getConnectedUserId() === String(authorUserId) && connectedUserCan(Permissions.EDIT_MY_POST);
     const displayEditPostButton =
       userCanEdit && !isEditing ? (
         <ResponsiveOverlayTrigger placement="left" tooltip={editFictionCommentTooltip}>
@@ -226,8 +230,11 @@ const mapQueryToProps = ({ data }) => {
           ? fiction.creator.image.externalUrl
           : EMPTY_STRING
     };
+    const USER_ID_NOT_FOUND = -9999;
+
     // Map graphQL returned data with local props
     return {
+      authorUserId: creator ? creator.userId : USER_ID_NOT_FOUND,
       authorFullname: creator ? creator.displayName : noAuthorSpecified,
       circleAvatar: circleAvatarProps,
       commentContent: fiction.body,
