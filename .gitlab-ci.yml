@@ -60,5 +60,5 @@ test_integration_and_ui:
 
   artifacts:
     paths:
-      - screenshots/
+      - assembl-tests/screenshots/
   allow_failure: true
