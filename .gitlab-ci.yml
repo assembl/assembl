@@ -14,19 +14,19 @@ cache:
     - assembl/static2/node_modules/
     - /usr/local/share/.cache/yarn/v2
 
-test_frontend:
-  except:
-    - master
-  image: node:8
-  before_script:
-    - export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-    - cd assembl/static2
-    - yarn
-  script:
-    - yarn run test
-    - yarn run eslint
-    - yarn run stylelint
-    - yarn run flow --quiet
+# test_frontend:
+#   except:
+#     - master
+#   image: node:8
+#   before_script:
+#     - export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+#     - cd assembl/static2
+#     - yarn
+#   script:
+#     - yarn run test
+#     - yarn run eslint
+#     - yarn run stylelint
+#     - yarn run flow --quiet
 
 test_integration_and_ui:
   image: node:8-slim
