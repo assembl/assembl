@@ -56,3 +56,4 @@ test_integration_and_ui:
   artifacts:
     paths:
       - screenshots/
+  allow_failure: true
