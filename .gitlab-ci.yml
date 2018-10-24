@@ -15,6 +15,7 @@ cache:
     - /usr/local/share/.cache/yarn/v2
 
 test_frontend:
+  stage: test
   except:
     - master
   image: node:8
@@ -29,6 +30,7 @@ test_frontend:
     - yarn run flow --quiet
 
 test_integration_and_ui:
+  stage: test_on_dev
   image: node:8
   before_script:
     - apt-get update -qq
