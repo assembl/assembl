@@ -60,6 +60,8 @@ variables:
 build_wheel:
   # TODO: urlmetadata
   # TODO: pass the assembl version to the other jobs
+  variables:
+    CI_DEBUG_TRACE: "true"
   stage: build
   only:
     - add_build_job
