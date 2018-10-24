@@ -119,7 +119,7 @@ build_wheel:
     - git branch -d bumpversion
     - git pull --rebase github tmp_master_for_ci_cd
     - git push github tmp_master_for_ci_cd
-    - git checkout add_build_job
+    - git checkout -B add_build_job --track github/add_build_job
     - git merge tmp_master_for_ci_cd --no-edit -m "Merge new version"
     - git push github add_build_job
 
