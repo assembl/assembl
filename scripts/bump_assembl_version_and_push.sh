@@ -1,4 +1,5 @@
 #!/bin/sh
+git fetch github
 git checkout -b bumpversion
 bumpversion minor
 git checkout -B ${MASTER_BRANCH} bumpversion
