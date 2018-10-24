@@ -45,7 +45,7 @@ VERSION=$(echo $CURL | jq '.version.number' | tr -d "\"")
 
 # Check Elasticsearch cluster name and version
 if ([ "$CLUSTER_NAME" != "$elasticsearch_index" ] || [ "$VERSION" != "$elasticsearch_version" ]); then
-    echo "Wrong Elasticseach cluster name or version"
+    printf "Wrong Elasticseach cluster name or version"
     exit 1
 fi
 
@@ -57,5 +57,4 @@ if [ $NB_TABLE -lt 1 ]; then
 fi
 
 # everything is good
-echo "Elasticsearch and database check successful" >> $ASSEMBL_ROOT/var/log/assembl.log
 exit 0
