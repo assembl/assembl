@@ -20,4 +20,18 @@ export const defaultFictionCommentForm: FictionCommentFormProps = {
   rowsForTextarea: 2
 };
 
-storiesOf('FictionCommentForm', module).add('default', withInfo()(() => <FictionCommentForm {...defaultFictionCommentForm} />));
+const fictionCommentFormWithComment: FictionCommentFormProps = {
+  ...defaultFictionCommentForm,
+  commentValue: 'What\'s normal anyways?'
+};
+
+const fictionCommentFormInEditMode: FictionCommentFormProps = {
+  ...defaultFictionCommentForm,
+  commentValue: 'What\'s normal anyways?',
+  editMode: true
+};
+
+storiesOf('FictionCommentForm', module)
+  .add('default', withInfo()(() => <FictionCommentForm {...defaultFictionCommentForm} />))
+  .add('with comment', withInfo()(() => <FictionCommentForm {...fictionCommentFormWithComment} />))
+  .add('in edit mode', withInfo()(() => <FictionCommentForm {...fictionCommentFormInEditMode} />));

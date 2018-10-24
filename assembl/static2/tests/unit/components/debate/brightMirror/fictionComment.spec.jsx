@@ -14,6 +14,7 @@ import CircleAvatar from '../../../../../js/app/components/debate/brightMirror/c
 import ToggleCommentButton from '../../../../../js/app/components/debate/common/toggleCommentButton';
 import ReplyToCommentButton from '../../../../../js/app/components/debate/common/replyToCommentButton';
 import FictionCommentForm from '../../../../../js/app/components/debate/brightMirror/fictionCommentForm';
+import EditPostButton from '../../../../../js/app/components/debate/common/editPostButton';
 // Type imports
 import type { FictionCommentGraphQLProps } from '../../../../../js/app/components/debate/brightMirror/fictionComment';
 
@@ -63,6 +64,16 @@ describe('<FictionComment /> - with shallow', () => {
     wrapper.setState({ showFictionCommentForm: true });
     expect(wrapper.find(ReplyToCommentButton)).toHaveLength(0);
     expect(wrapper.find(FictionCommentForm)).toHaveLength(1);
+  });
+
+  it('should display a "Edit this message" button when userCanEdit state is true', () => {
+    wrapper.setState({ userCanEdit: true });
+    expect(wrapper.find(EditPostButton)).toHaveLength(1);
+  });
+
+  it('should display a "Edit this message" button when userCanEdit state is false', () => {
+    wrapper.setState({ userCanEdit: false });
+    expect(wrapper.find(EditPostButton)).toHaveLength(0);
   });
 });
 

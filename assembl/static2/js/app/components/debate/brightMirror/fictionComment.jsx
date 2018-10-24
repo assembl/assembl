@@ -13,8 +13,11 @@ import CircleAvatar from './circleAvatar';
 import ToggleCommentButton from '../common/toggleCommentButton';
 import ReplyToCommentButton from '../common/replyToCommentButton';
 import FictionCommentForm from './fictionCommentForm';
+import EditPostButton from '../common/editPostButton';
+import ResponsiveOverlayTrigger from '../../common/responsiveOverlayTrigger';
 // Constant imports
 import { EMPTY_STRING } from '../../../constants';
+import { editFictionCommentTooltip } from '../../common/tooltips';
 // Types imports
 import type { CircleAvatarProps } from './circleAvatar';
 import type { FictionCommentFormProps } from './fictionCommentForm';
@@ -61,7 +64,9 @@ export type FictionCommentGraphQLProps = {
 type LocalFictionCommentProps = FictionCommentBaseProps & FictionCommentGraphQLProps;
 
 type FictionCommentState = {
-  showFictionCommentForm: boolean
+  showFictionCommentForm: boolean,
+  userCanEdit: boolean,
+  isEditing: boolean
 };
 
 // Type use for creating a Bright Mirror comment with CreateCommentMutation
@@ -78,7 +83,9 @@ export type CreateCommentInputs = {
 
 export class FictionComment extends Component<LocalFictionCommentProps, FictionCommentState> {
   state = {
-    showFictionCommentForm: false
+    showFictionCommentForm: false,
+    userCanEdit: true,
+    isEditing: false
   };
 
   componentDidMount() {
@@ -88,6 +95,12 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
 
   displayFictionCommentForm = (show: boolean) => {
     this.setState({ showFictionCommentForm: show }, this.props.measureTreeHeight());
+  };
+
+  toggleIsEditing = (value: boolean) => {
+    this.setState({
+      isEditing: value
+    });
   };
 
   render() {
@@ -103,7 +116,7 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
       publishedDate,
       fictionCommentExtraProps
     } = this.props;
-    const { showFictionCommentForm } = this.state;
+    const { isEditing, showFictionCommentForm, userCanEdit } = this.state;
     const { expandedFromTree, expandCollapseCallbackFromTree } = fictionCommentExtraProps;
 
     const toggleCommentButtonProps: ToggleCommentButtonProps = {
@@ -123,14 +136,63 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
       }
     };
 
+    const editCommentFormProps: FictionCommentFormProps = {
+      onCancelCommentCallback: () => this.toggleIsEditing(false),
+      onSubmitCommentCallback: () => this.toggleIsEditing(false),
+      commentValue: commentContent,
+      editMode: true
+    };
+
+    // Display ToggleCommentButton only when there are answers to a comment
     const displayToggleCommentButton = numChildren > 0 ? <ToggleCommentButton {...toggleCommentButtonProps} /> : null;
 
     // Display FictionCommentForm when ReplyToCommentButton is clicked.
     // ReplyToCommentButton is hidden when FictionCommentForm is displayed
-    const displayFictionCommentForm = showFictionCommentForm ? (
-      <FictionCommentForm {...fictionCommentFormProps} />
+    const displayReplyToCommentButton = showFictionCommentForm ? null : <ReplyToCommentButton {...replyToCommentButtonProps} />;
+    const displayFictionCommentForm = showFictionCommentForm ? <FictionCommentForm {...fictionCommentFormProps} /> : null;
+
+    // Display EditPostButton only when the user have the required rights
+    const displayEditPostButton =
+      userCanEdit && !isEditing ? (
+        <ResponsiveOverlayTrigger placement="left" tooltip={editFictionCommentTooltip}>
+          <EditPostButton handleClick={() => this.toggleIsEditing(true)} linkClassName="action-edit" />
+        </ResponsiveOverlayTrigger>
+      ) : null;
+
+    const displayHeader = (
+      <header className="meta">
+        <p className="author">
+          <strong>{authorFullname}</strong>
+          <span className="parent-info">
+            <span className="assembl-icon-back-arrow" />
+            {parentPostAuthorFullname}
+          </span>
+        </p>
+        <p className="published-date">
+          <time dateTime={publishedDate} pubdate="true">
+            -&nbsp;{displayedPublishedDate}
+          </time>
+        </p>
+      </header>
+    );
+
+    const displayCommentContent = isEditing ? (
+      <FictionCommentForm {...editCommentFormProps} />
     ) : (
-      <ReplyToCommentButton {...replyToCommentButtonProps} />
+      <p className="comment">{commentContent}</p>
+    );
+
+    const displayFooter = (
+      <footer className="toolbar">
+        <div className="left-content">
+          <p>
+            <Translate value="debate.brightMirror.numberOfResponses" count={numChildren} />
+          </p>
+          {displayToggleCommentButton}
+          {displayReplyToCommentButton}
+        </div>
+        <div className="right-content">{displayEditPostButton}</div>
+      </footer>
     );
 
     return (
@@ -138,28 +200,10 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
         <article className="comment-container">
           <CircleAvatar {...circleAvatar} />
           <div className="content">
-            <header className="meta">
-              <p className="author">
-                <strong>{authorFullname}</strong>
-                <span className="parent-info">
-                  <span className="assembl-icon-back-arrow" />
-                  {parentPostAuthorFullname}
-                </span>
-              </p>
-              <p className="published-date">
-                <time dateTime={publishedDate} pubdate="true">
-                  -&nbsp;{displayedPublishedDate}
-                </time>
-              </p>
-            </header>
-            <p className="comment">{commentContent}</p>
-            <footer className="toolbar">
-              <p>
-                <Translate value="debate.brightMirror.numberOfResponses" count={numChildren} />
-              </p>
-              {displayToggleCommentButton}
-              {displayFictionCommentForm}
-            </footer>
+            {displayHeader}
+            {displayCommentContent}
+            {displayFooter}
+            {displayFictionCommentForm}
           </div>
         </article>
         {children}

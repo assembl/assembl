@@ -40,6 +40,10 @@
       }
     }
 
+    .comment-form {
+      margin-bottom: 5px;
+    }
+
     .comment {
       background-color: $pale-blue;
       border-top-right-radius: 4px;
@@ -53,7 +57,13 @@
 
     .toolbar {
       display: flex;
-      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+
+      .left-content,
+      .right-content {
+        display: flex;
+      }
 
       .assembl-icon-up-open,
       .assembl-icon-down-open {
@@ -62,14 +72,26 @@
         padding-left: 7px;
       }
 
-      .assembl-icon-back-arrow {
+      .assembl-icon-back-arrow,
+      .assembl-icon-edit {
         color: $black;
         font-size: $font-size-s;
-        padding-left: 17px;
+        padding-left: 15px;
       }
 
-      .comment-form {
-        flex-basis: 100%;
+      .assembl-icon-back-arrow:before {
+        transform: scaleX(-1);
+      }
+
+      .action-toggle,
+      .action-reply,
+      .action-edit {
+        opacity: 0.7;
+        transition: opacity 0.2s linear;
+
+        &:hover {
+          opacity: 1;
+        }
       }
     }
   }
