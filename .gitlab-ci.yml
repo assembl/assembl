@@ -55,8 +55,8 @@ test_integration_and_ui:
     - yarn runinband || true
     - cd screenshots
     - ls
-    - scp test-screenshot.png assembl_user@dev-assembl.blunove.com:~/pptr/
-    - scp test-screenshot2.png assembl_user@dev-assembl.blunove.com:~/pptr/
+    - scp test-screenshot.png assembl_user@dev-assembl.bluenove.com:~/pptr/
+    - scp test-screenshot2.png assembl_user@dev-assembl.bluenove.com:~/pptr/
 
   artifacts:
     paths:
