@@ -26,7 +26,7 @@
       language: system
       files: '.*/static2/.*jsx?$'
     - id: jest-coverage-ratchet
-      name: jest coverage threshold update
+      name: jest coverage threshold update (i this fails, please git add package.json and commit again.)
       entry: bash -c "cd assembl/static2/; npm run updateCoverageThresholds"
       language: system
       files: '.*/static2/.*jsx?$'
