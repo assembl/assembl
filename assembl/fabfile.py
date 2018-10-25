@@ -2701,4 +2701,4 @@ def install_jq():
         if env.mac:
             run('brew install jq')
         else:
-            run('apt-get install -y jq')
+            sudo('apt-get install -y jq')

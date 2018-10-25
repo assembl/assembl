@@ -34,7 +34,7 @@ if [ $? == 1 ]; then
     if [ $(uname) == "Darwin" ]; then
         brew install jq
     elif [ $(uname) == "Linux" ]; then
-        apt-get install -y jq
+        sudo apt-get install -y jq
     fi
 fi
 # Parse json to keep cluster_name value only
