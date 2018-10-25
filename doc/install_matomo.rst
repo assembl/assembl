@@ -10,7 +10,7 @@ Access your server via SSH and then run these commands to download Matomo
 
     wget https://builds.piwik.org/piwik.zip && unzip piwik.zip
     sudo mkdir /var/www/piwik
-    sudo mv piwki /var/www/piwik/
+    sudo mv piwik /var/www/piwik/
 
 You should have something like this
 
@@ -19,8 +19,8 @@ You should have something like this
     |-- /
         |-- var/
             |-- www/
-                |-- piwki/
-                    |-- piwki/
+                |-- piwik/
+                    |-- piwik/
                         |-- config/
 
                         |-- misc/
