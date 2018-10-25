@@ -17,7 +17,7 @@ type Props = {
   requestPasswordChange: (string, string) => void
 };
 
-class RequestPasswordChange extends React.Component<Props> {
+export class DumbRequestPasswordChange extends React.Component<Props> {
   render() {
     const { passwordChangeResponse, requestPasswordChange } = this.props;
     return (
@@ -47,4 +47,4 @@ const mapDispatchToProps = dispatch => ({
   requestPasswordChange: (id, discussionSlug) => dispatch(requestPasswordChangeAction(id, discussionSlug))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(RequestPasswordChange);
+export default connect(mapStateToProps, mapDispatchToProps)(DumbRequestPasswordChange);
