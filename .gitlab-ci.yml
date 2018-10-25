@@ -27,7 +27,9 @@ test_frontend:
     - yarn run test
     - yarn run eslint
     - yarn run stylelint
-    - yarn run flow --quiet
+    - yarn run flow --
+    # update the coverage thresholds
+    - yarn jest-coverage-ratchet
     - yarn jest --coverage
 
 test_integration_and_ui:
