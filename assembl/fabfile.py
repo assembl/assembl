@@ -37,6 +37,7 @@ from fabric.api import (
     abort, cd, env, execute, hide, prefix, settings, task as fab_task)
 from fabric.colors import yellow, cyan, red, green
 from fabric.context_managers import shell_env
+import boto3
 
 # import logging
 # import paramiko
@@ -1949,14 +1950,45 @@ def compile_fontello_fonts():
                         ffile.write(fdata.read())
 
 
+
+@task
+def print_kms_password():
+    "check if the client response is the right password"
+    client = boto3.client('secretsmanager')
+    response = client.get_secret_value(
+    SecretId='dev-psql-password'
+    )
+    from pprint import pprint
+    import ast
+    password_dict = ast.literal_eval(response["SecretString"])
+    kms_password = password_dict["password"]
+
+    def check_if_database_exists():
+        with settings(warn_only=True):
+            checkDatabase = venvcmd('assembl-pypsql -1 -u {user} -p {password} -n {host} "{command}"'.format(
+                command="SELECT 1 FROM pg_database WHERE datname='%s'" % (env.db_database),
+                password=kms_password, host=env.db_host, user=env.db_user))
+        return not checkDatabase.failed
+
+    check_if_database_exists()
+
+
+
+
 @task
 def check_and_create_database_user(host=None, user=None, password=None):
     """
     Create a user and a DB for the project
     """
-    host = host or env.db_host
-    user = user or env.db_user
-    password = password or env.db_password
+    client = boto3.client('secretsmanager')
+    response = client.get_secret_value(
+    SecretId='assembl_sudo_user'
+    )
+    from pprint import pprint
+    import ast
+    password_dict = ast.literal_eval(response["SecretString"])
+    kms_password = password_dict["password"]
+    password = password or kms_password
     pypsql = join(code_root(), 'assembl', 'scripts', 'pypsql.py')
     with settings(warn_only=True):
         checkUser = run('python2 {pypsql} -1 -u {user} -p {password} -n {host} "{command}"'.format(
@@ -2044,12 +2076,21 @@ def create_sentry_project():
     with open(env.random_file, 'w') as f:
         parser.write(f)
 
+    client = boto3.client('secretsmanager')
+    response = client.get_secret_value(
+    SecretId='assembl_sudo_user'
+    )
+    from pprint import pprint
+    import ast
+    password_dict = ast.literal_eval(response["SecretString"])
+    kms_password = password_dict["password"]
+    password = kms_password
 
 def check_if_database_exists():
     with settings(warn_only=True):
         checkDatabase = venvcmd('assembl-pypsql -1 -u {user} -p {password} -n {host} "{command}"'.format(
             command="SELECT 1 FROM pg_database WHERE datname='%s'" % (env.db_database),
-            password=env.db_password, host=env.db_host, user=env.db_user))
+            password=password, host=env.db_host, user=env.db_user))
         return not checkDatabase.failed
 
 
@@ -2057,7 +2098,7 @@ def check_if_db_tables_exist():
     with settings(warn_only=True):
         checkDatabase = venvcmd('assembl-pypsql -1 -u {user} -p {password} -n {host} -d {database} "{command}"'.format(
             command="SELECT count(*) from permission", database=env.db_database,
-            password=env.db_password, host=env.db_host, user=env.db_user))
+            password=password, host=env.db_host, user=env.db_user))
         return not checkDatabase.failed
 
 
@@ -2065,7 +2106,7 @@ def check_if_first_user_exists():
     with settings(warn_only=True):
         checkDatabase = venvcmd('assembl-pypsql -1 -u {user} -p {password} -n {host} -d {database} "{command}"'.format(
             command="SELECT count(*) from public.user", database=env.db_database,
-            password=env.db_password, host=env.db_host, user=env.db_user))
+            password=password, host=env.db_host, user=env.db_user))
         return not checkDatabase.failed and int(checkDatabase.strip('()L,')) > 0
 
 
