@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for js/app/integration/brightMirror/pages/brightMirrorFiction.jsx</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../../../prettify.css" />
+    <link rel="stylesheet" href="../../../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../../../index.html">All files</a> / <a href="index.html">js/app/integration/brightMirror/pages</a> brightMirrorFiction.jsx
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>4/4</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/0</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>1/1</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>4/4</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line high'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// @flow
+import React from 'react';
+import { Grid, Row, Col } from 'react-bootstrap';
+import FictionHeader from '../../../components/debate/brightMirror/fictionHeader';
+import FictionToolbar from '../../../components/debate/brightMirror/fictionToolbar';
+import FictionBody from '../../../components/debate/brightMirror/fictionBody';
+import BackButton, { type Props as BackButtonProps } from '../../../components/debate/common/backButton';
+import FictionCommentHeader from '../../../components/debate/brightMirror/fictionCommentHeader';
+import FictionCommentForm from '../../../components/debate/brightMirror/fictionCommentForm';
+import { FictionComment } from '../../../components/debate/brightMirror/fictionComment';
+&nbsp;
+// Import existing storybook data
+import { defaultFictionHeader } from '../../../stories/components/debate/brightMirror/fictionHeader.stories';
+import { defaultFictionToolbar } from '../../../stories/components/debate/brightMirror/fictionToolbar.stories';
+import { defaultFictionBody } from '../../../stories/components/debate/brightMirror/fictionBody.stories';
+import { defaultFictionCommentHeader } from '../../../stories/components/debate/brightMirror/fictionCommentHeader.stories';
+import { defaultFictionCommentForm } from '../../../stories/components/debate/brightMirror/fictionCommentForm.stories';
+import {
+  defaultFictionComment,
+  defaultFictionCommentGraphQL
+} from '../../../stories/components/debate/brightMirror/fictionComment.stories';
+&nbsp;
+const defaultBackBtnProps: BackButtonProps = {
+  handleClick: Function,
+  linkClassName: 'back-btn'
+};
+&nbsp;
+const fictionComments = (
+  &lt;div className="level level-0"&gt;
+    &lt;FictionComment {...defaultFictionComment} {...defaultFictionCommentGraphQL}&gt;
+      &lt;div className="level level-1 border-left child-level"&gt;
+        &lt;FictionComment {...defaultFictionComment} {...defaultFictionCommentGraphQL} /&gt;
+        &lt;FictionComment {...defaultFictionComment} {...defaultFictionCommentGraphQL}&gt;
+          &lt;div className="level level-2 border-left child-level"&gt;
+            &lt;FictionComment {...defaultFictionComment} {...defaultFictionCommentGraphQL} /&gt;
+            &lt;FictionComment {...defaultFictionComment} {...defaultFictionCommentGraphQL} /&gt;
+            &lt;FictionComment {...defaultFictionComment} {...defaultFictionCommentGraphQL}&gt;
+              &lt;div className="level level-3 border-left child-level"&gt;
+                &lt;FictionComment {...defaultFictionComment} {...defaultFictionCommentGraphQL} /&gt;
+                &lt;FictionComment {...defaultFictionComment} {...defaultFictionCommentGraphQL} /&gt;
+                &lt;FictionComment {...defaultFictionComment} {...defaultFictionCommentGraphQL} /&gt;
+                &lt;FictionComment {...defaultFictionComment} {...defaultFictionCommentGraphQL} /&gt;
+              &lt;/div&gt;
+            &lt;/FictionComment&gt;
+          &lt;/div&gt;
+        &lt;/FictionComment&gt;
+      &lt;/div&gt;
+    &lt;/FictionComment&gt;
+  &lt;/div&gt;
+);
+&nbsp;
+const BrightMirrorFiction = () =&gt; (
+  &lt;div className="bright-mirror"&gt;
+    &lt;div className="bright-mirror-fiction background-fiction-default"&gt;
+      &lt;BackButton {...defaultBackBtnProps} /&gt;
+      &lt;Grid fluid&gt;
+        &lt;Row&gt;
+          &lt;Col xs={12}&gt;
+            &lt;article&gt;
+              &lt;FictionHeader {...defaultFictionHeader} /&gt;
+              &lt;FictionToolbar {...defaultFictionToolbar} /&gt;
+              &lt;FictionBody {...defaultFictionBody} /&gt;
+            &lt;/article&gt;
+          &lt;/Col&gt;
+        &lt;/Row&gt;
+      &lt;/Grid&gt;
+    &lt;/div&gt;
+    &lt;Grid fluid className="bright-mirror-comments background-comments-default"&gt;
+      &lt;Row&gt;
+        &lt;Col xs={12}&gt;
+          &lt;FictionCommentHeader {...defaultFictionCommentHeader} /&gt;
+          &lt;div className="comments-content"&gt;
+            &lt;FictionCommentForm {...defaultFictionCommentForm} /&gt;
+            {fictionComments}
+            {fictionComments}
+          &lt;/div&gt;
+        &lt;/Col&gt;
+      &lt;/Row&gt;
+    &lt;/Grid&gt;
+  &lt;/div&gt;
+);
+&nbsp;
+export default BrightMirrorFiction;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Fri Oct 26 2018 15:51:30 GMT+0200 (CEST)
+</div>
+</div>
+<script src="../../../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../../../sorter.js"></script>
+</body>
+</html>

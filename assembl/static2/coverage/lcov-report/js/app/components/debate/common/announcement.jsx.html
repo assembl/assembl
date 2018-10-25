@@ -1,0 +1,455 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for js/app/components/debate/common/announcement.jsx</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../../../prettify.css" />
+    <link rel="stylesheet" href="../../../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../../../index.html">All files</a> / <a href="index.html">js/app/components/debate/common</a> announcement.jsx
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">16.13% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>5/31</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/10</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>0/13</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">17.24% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>5/29</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// @noflow
+import * as React from 'react';
+import { Translate } from 'react-redux-i18n';
+import { Col, Tooltip } from 'react-bootstrap';
+&nbsp;
+import StatisticsDoughnut from '../common/statisticsDoughnut';
+import { sentimentDefinitionsObject } from './sentimentDefinitions';
+import type { SentimentDefinition } from './sentimentDefinitions';
+import Media from '../../common/media';
+import { CountablePublicationStates } from '../../../constants';
+import PostsAndContributorsCount from '../../common/postsAndContributorsCount';
+&nbsp;
+export const createTooltip = <span class="fstat-no" title="function not covered" >(s</span>entiment: SentimentDefinition, count: number) =&gt; (
+<span class="cstat-no" title="statement not covered" >  &lt;Tooltip id={`${sentiment.camelType}Tooltip`} className="no-arrow-tooltip"&gt;</span>
+    {count} &lt;Translate value={`debate.${sentiment.camelType}`} /&gt;
+  &lt;/Tooltip&gt;
+);
+&nbsp;
+type SentimentsCounts = {
+  [string]: {
+    ...SentimentDefinition,
+    count: number
+  }
+};
+&nbsp;
+type Posts = {
+  edges: Array&lt;{ node: { sentimentCounts: { [string]: number }, publicationState: string } }&gt;
+};
+&nbsp;
+export const getColumnInfos = <span class="fstat-no" title="function not covered" >(m</span>essageColumns: Array&lt;IdeaMessageColumnFragment&gt;) =&gt; {
+  const columnsArray = <span class="cstat-no" title="statement not covered" >messageColumns.map(<span class="fstat-no" title="function not covered" >co</span>l =&gt; (<span class="cstat-no" title="statement not covered" >{ count: col.numPosts, color: col.color, name: col.name })</span>);</span>
+<span class="cstat-no" title="statement not covered" >  return columnsArray;</span>
+};
+&nbsp;
+export const getSentimentsCount = <span class="fstat-no" title="function not covered" >(p</span>osts: Posts) =&gt; {
+  const counters: SentimentsCounts = <span class="cstat-no" title="statement not covered" >{ ...sentimentDefinitionsObject };</span>
+<span class="cstat-no" title="statement not covered" >  Object.keys(counters).forEach(<span class="fstat-no" title="function not covered" >(k</span>ey) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    counters[key].count = 0;</span>
+  });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  return posts.edges</span>
+    .filter(<span class="fstat-no" title="function not covered" >({</span> node: { publicationState } }) =&gt; <span class="cstat-no" title="statement not covered" >Object.keys(CountablePublicationStates).indexOf(publicationState) &gt; -1)</span>
+    .reduce(
+<span class="fstat-no" title="function not covered" >      (r</span>esult, { node: { sentimentCounts } }) =&gt;
+<span class="cstat-no" title="statement not covered" >        Object.keys(result).reduce(<span class="fstat-no" title="function not covered" >(n</span>aziLinter, key) =&gt; {</span>
+          const postCounts = <span class="cstat-no" title="statement not covered" >naziLinter;</span>
+<span class="cstat-no" title="statement not covered" >          postCounts[key].count += sentimentCounts[key];</span>
+<span class="cstat-no" title="statement not covered" >          return postCounts;</span>
+        }, result),
+      counters
+    );
+};
+&nbsp;
+export const createDoughnutElements = <span class="fstat-no" title="function not covered" >(s</span>entimentCounts: SentimentsCounts) =&gt;
+<span class="cstat-no" title="statement not covered" >  Object.keys(sentimentCounts).map(<span class="fstat-no" title="function not covered" >ke</span>y =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
+    color: sentimentCounts[key].color,
+    count: sentimentCounts[key].count,
+    Tooltip: createTooltip(sentimentCounts[key], sentimentCounts[key].count)
+  }));
+&nbsp;
+const dirtySplitHack = <span class="fstat-no" title="function not covered" >(a</span>nnouncementContent) =&gt; {
+  const body = <span class="cstat-no" title="statement not covered" >announcementContent.body;</span>
+  // To allow edit from V1 announcement, add !split!https://video.url!split!
+  const split = <span class="cstat-no" title="statement not covered" >body.split('!split!');</span>
+<span class="cstat-no" title="statement not covered" >  return split.length &gt;= 3</span>
+    ? {
+      descriptionTop: `${split[0]}&lt;/p&gt;`,
+      descriptionBottom: `&lt;p&gt;${split[2]}`,
+      htmlCode: split[1],
+      noTitle: true
+    }
+    : {
+      descriptionTop: body,
+      descriptionBottom: null,
+      htmlCode: null,
+      noTitle: true
+    };
+};
+&nbsp;
+class Announcement extends React.Component&lt;$FlowFixMeProps&gt; {
+  render = <span class="fstat-no" title="function not covered" >()</span> =&gt; {
+    const { ideaWithPostsData: { idea }, announcementContent, isMultiColumns } = <span class="cstat-no" title="statement not covered" >this.props;</span>
+    const { numContributors, numPosts, posts, messageColumns } = <span class="cstat-no" title="statement not covered" >idea;</span>
+    const sentimentsCount = <span class="cstat-no" title="statement not covered" >getSentimentsCount(posts);</span>
+    const mediaContent = <span class="cstat-no" title="statement not covered" >announcementContent.body &amp;&amp; dirtySplitHack(announcementContent);</span>
+    const columnInfos = <span class="cstat-no" title="statement not covered" >getColumnInfos(messageColumns);</span>
+    const doughnutElements = <span class="cstat-no" title="statement not covered" >isMultiColumns ? columnInfos : createDoughnutElements(sentimentsCount);</span>
+<span class="cstat-no" title="statement not covered" >    return (</span>
+      &lt;div className="announcement"&gt;
+        &lt;div className="announcement-title"&gt;
+          &lt;div className="title-hyphen"&gt;&amp;nbsp;&lt;/div&gt;
+          &lt;h3 className="announcement-title-text dark-title-1"&gt;
+            &lt;Translate value="debate.thread.announcement" /&gt;
+          &lt;/h3&gt;
+        &lt;/div&gt;
+        &lt;Col xs={12} md={8} className="announcement-media col-md-push-4"&gt;
+          {mediaContent &amp;&amp; &lt;Media {...mediaContent} /&gt;}
+        &lt;/Col&gt;
+        &lt;Col xs={12} md={4} className="col-md-pull-8"&gt;
+          &lt;div className="announcement-statistics"&gt;
+            &lt;div className="announcement-doughnut"&gt;
+              &lt;StatisticsDoughnut elements={doughnutElements} /&gt;
+            &lt;/div&gt;
+            {isMultiColumns ? (
+              &lt;div className="announcement-numbers-multicol"&gt;
+                {columnInfos.map(<span class="fstat-no" title="function not covered" >(c</span>ol, index) =&gt; (
+<span class="cstat-no" title="statement not covered" >                  &lt;div style={{ color: col.color }} key={`col-${index}`}&gt;</span>
+                    {col.count} &lt;span className="col-announcement-count"&gt;{col.name}&lt;/span&gt;
+                  &lt;/div&gt;
+                ))}
+                &lt;div className="color"&gt;
+                  {numContributors} &lt;span className="assembl-icon-profil" /&gt;
+                &lt;/div&gt;
+              &lt;/div&gt;
+            ) : (
+              &lt;div className="announcement-numbers"&gt;
+                &lt;PostsAndContributorsCount
+                  className="announcement-numbers"
+                  numContributors={numContributors}
+                  numPosts={numPosts}
+                /&gt;
+              &lt;/div&gt;
+            )}
+          &lt;/div&gt;
+        &lt;/Col&gt;
+      &lt;/div&gt;
+    );
+  };
+}
+&nbsp;
+export default Announcement;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Fri Oct 26 2018 15:51:30 GMT+0200 (CEST)
+</div>
+</div>
+<script src="../../../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../../../sorter.js"></script>
+</body>
+</html>

@@ -1,0 +1,713 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for js/app/components/cookies/cookiesSelectorContainer.jsx</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../../prettify.css" />
+    <link rel="stylesheet" href="../../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../../index.html">All files</a> / <a href="index.html">js/app/components/cookies</a> cookiesSelectorContainer.jsx
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">89.86% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>62/69</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">80.85% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>38/47</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">85.71% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>18/21</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">91.04% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>61/67</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line high'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">120x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">60x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">63x</span>
+<span class="cline-any cline-yes">61x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">61x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">50x</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">40x</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">30x</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">20x</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">67x</span>
+<span class="cline-any cline-yes">67x</span>
+<span class="cline-any cline-yes">44x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">53x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// @flow
+import React from 'react';
+import { compose, graphql } from 'react-apollo';
+import { connect } from 'react-redux';
+import { I18n } from 'react-redux-i18n';
+&nbsp;
+import CookiesSelector from './cookiesSelector';
+import { getCookieItem, setCookieItem } from '../../utils/globalFunctions';
+import { displayAlert } from '../../utils/utilityManager';
+&nbsp;
+// graphql
+import acceptedCookiesQuery from '../../graphql/acceptedCookiesQuery.graphql';
+import updateAcceptedCookies from '../../graphql/mutations/updateAcceptedCookies.graphql';
+import manageErrorAndLoading from '../common/manageErrorAndLoading';
+&nbsp;
+import type { CookieObject } from './cookieSetter';
+import { COOKIE_TRANSLATION_KEYS, COOKIE_TYPES, COOKIES_CATEGORIES } from '../../constants';
+&nbsp;
+type Props = {
+  updateAcceptedCookies: Function,
+  cookiesList: Array&lt;string&gt;,
+  locale: string
+};
+&nbsp;
+export type CookiesObject = {
+  other?: Array&lt;CookieObject&gt;,
+  essential?: Array&lt;CookieObject&gt;,
+  analytics?: Array&lt;CookieObject&gt;
+};
+&nbsp;
+type State = {
+  activeKey: ?string,
+  show: boolean,
+  cookies: ?CookiesObject,
+  settingsHaveChanged: boolean
+};
+&nbsp;
+const { userSession, locale, matomo, privacyPolicy, userGuideline, cgu } = COOKIE_TRANSLATION_KEYS;
+const { essential, analytics, other } = COOKIES_CATEGORIES;
+&nbsp;
+export class DumbCookiesSelectorContainer extends React.Component&lt;Props, State&gt; {
+  constructor(props: Props) {
+    super(props);
+    const { cookiesList } = props;
+    let cookiesByCategory = {};
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (cookiesList) {
+      // @$FlowFixMe flow does not see that getCookieItem has been checked as non null
+      const cookiesFromBrowser = getCookieItem('cookies_configuration') &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >getCookieItem('cookies_configuration').split(',');</span>
+      const storedCookies =
+        cookiesList.length &gt; 0
+          ? // if the user is logged in, we get the cookiesList from the query
+          cookiesList
+          : // otherwise, we take it from the browser
+<span class="branch-1 cbranch-no" title="branch not covered" >          cookiesFromBrowser;</span>
+&nbsp;
+      const missingCookies = COOKIE_TYPES.filter(
+        cookie =&gt;
+          !cookiesList.includes(cookie) &amp;&amp; !cookie.startsWith('REJECT') &amp;&amp; !cookiesList.includes(this.toggleCookieType(cookie))
+      );
+      const fullCookiesList = storedCookies &amp;&amp; [...storedCookies, ...missingCookies];
+      const cookiesArray =
+        fullCookiesList &amp;&amp;
+        fullCookiesList.map(cookie =&gt; ({
+          ...this.getCookieObjectData(cookie),
+          accepted: this.isCookieAccepted(cookie),
+          cookieType: cookie
+        }));
+      cookiesByCategory = cookiesArray &amp;&amp; this.getCookiesObjectFromArray(cookiesArray);
+    }
+&nbsp;
+    this.state = {
+      activeKey: 'essential',
+      show: true,
+      cookies: cookiesByCategory,
+      settingsHaveChanged: false
+    };
+  }
+&nbsp;
+  isCookieAccepted = (cookie: string): boolean =&gt; {
+    if (cookie.startsWith('ACCEPT')) {
+      return true;
+    }
+    return false;
+  };
+&nbsp;
+  getCookieObjectData = (cookie: string) =&gt; {
+    if (cookie.includes('SESSION_ON_DISCUSSION')) {
+      return { category: essential, name: userSession };
+    }
+    if (cookie.includes('LOCALE')) {
+      return { category: essential, name: locale };
+    }
+    if (cookie.includes('TRACKING_ON_DISCUSSION')) {
+      return { category: analytics, name: matomo };
+    }
+    if (cookie.includes('PRIVACY_POLICY_ON_DISCUSSION')) {
+      return { category: essential, name: privacyPolicy };
+    }
+    if (cookie.includes('USER_GUIDELINE_ON_DISCUSSION')) {
+      return { category: essential, name: userGuideline };
+    }
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (cookie.includes('CGU')) {
+      return { category: essential, name: cgu };
+    }
+<span class="cstat-no" title="statement not covered" >    return { category: other, name: cookie };</span>
+  };
+&nbsp;
+  getCookiesObjectFromArray = (cookiesArray: Array&lt;CookieObject&gt;) =&gt; {
+    const cookiesObject = {};
+    cookiesArray.forEach((cookie) =&gt; {
+      // eslint-disable-line
+      const { category } = cookie;
+      if (cookiesObject[category]) {
+        cookiesObject[category] = [...cookiesObject[category], cookie];
+      } else {
+        cookiesObject[category] = [cookie];
+      }
+    });
+    return cookiesObject;
+  };
+&nbsp;
+  handleToggle = (updatedCookie: CookieObject) =&gt; {
+    const { cookies } = this.state;
+    // Flow bugs with Object.values
+    // see https://github.com/facebook/flow/issues/2221
+    // $FlowFixMe
+    const cookiesArray: Array&lt;CookieObject&gt; =
+      cookies &amp;&amp;
+      Object.keys(cookies)
+        .map(cookie =&gt; cookies[cookie])
+        .reduce((flat, next) =&gt; flat.concat(next), []);
+    const updatedCookiesArray = cookiesArray.map(
+      (cookie: CookieObject) =&gt;
+        (cookie.name === updatedCookie.name ? { ...updatedCookie, cookieType: this.toggleCookieType(cookie.cookieType) } : cookie)
+    );
+    const updatedCookiesByCategory = this.getCookiesObjectFromArray(updatedCookiesArray);
+    this.setState({ cookies: updatedCookiesByCategory, settingsHaveChanged: true });
+  };
+&nbsp;
+  toggleCookieType = (cookie: string): string =&gt;
+    (cookie.startsWith('ACCEPT') ? cookie.replace('ACCEPT', 'REJECT') : cookie.replace('REJECT', 'ACCEPT'));
+&nbsp;
+  saveChanges = () =&gt; {
+    const { cookies } = this.state;
+    // Flow bugs with Object.values
+    // see https://github.com/facebook/flow/issues/2221
+    // $FlowFixMe
+    const cookiesArray: Array&lt;CookieObject&gt; =
+      cookies &amp;&amp;
+      Object.keys(cookies)
+        .map(cookie =&gt; cookies[cookie])
+        .reduce((flat, next) =&gt; flat.concat(next), []);
+    const newCookiesList = cookiesArray.map(c =&gt; c.cookieType);
+    // Update the cookies in the back
+    this.props.updateAcceptedCookies({ variables: { actions: newCookiesList } });
+    // Update the cookies in the browser
+    setCookieItem('cookies_configuration', newCookiesList);
+    displayAlert('success', I18n.t('cookiesPolicy.success'));
+  };
+&nbsp;
+  handleCategorySelection = (category: string) =&gt; {
+    const { show, activeKey } = this.state;
+    this.setState({ activeKey: category, show: !show });
+    return category !== activeKey &amp;&amp; this.setState({ show: true });
+  };
+&nbsp;
+  render() {
+    const { cookies, show, activeKey, settingsHaveChanged } = this.state;
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (!cookies) {
+<span class="cstat-no" title="statement not covered" >      return null;</span>
+    }
+&nbsp;
+    return (
+      &lt;CookiesSelector
+        cookies={cookies}
+        show={show}
+        activeKey={activeKey}
+        handleSave={this.saveChanges}
+        handleToggle={this.handleToggle}
+        handleCategorySelection={this.handleCategorySelection}
+        toggleCookieType={this.toggleCookieType}
+        locale={this.props.locale}
+        settingsHaveChanged={settingsHaveChanged}
+      /&gt;
+    );
+  }
+}
+&nbsp;
+const mapStateToProps = <span class="fstat-no" title="function not covered" >st</span>ate =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
+  id: state.context.connectedUserIdBase64,
+  locale: state.i18n.locale
+});
+&nbsp;
+export default compose(
+  connect(mapStateToProps),
+  graphql(updateAcceptedCookies, {
+    name: 'updateAcceptedCookies'
+  }),
+  graphql(acceptedCookiesQuery, {
+    skip: <span class="fstat-no" title="function not covered" >pr</span>ops =&gt; <span class="cstat-no" title="statement not covered" >!props.id,</span>
+    props: <span class="fstat-no" title="function not covered" >({</span> data }) =&gt; {
+<span class="cstat-no" title="statement not covered" >      if (data.error || data.loading) {</span>
+<span class="cstat-no" title="statement not covered" >        return {</span>
+          error: data.error,
+          loading: data.loading
+        };
+      }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      return {</span>
+        error: data.error,
+        loading: data.loading,
+        cookiesList: data.user.acceptedCookies
+      };
+    }
+  }),
+  manageErrorAndLoading({ displayLoader: true })
+)(DumbCookiesSelectorContainer);</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Fri Oct 26 2018 15:51:30 GMT+0200 (CEST)
+</div>
+</div>
+<script src="../../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../../sorter.js"></script>
+</body>
+</html>

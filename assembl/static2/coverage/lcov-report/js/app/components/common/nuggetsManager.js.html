@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for js/app/components/common/nuggetsManager.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../../prettify.css" />
+    <link rel="stylesheet" href="../../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../../index.html">All files</a> / <a href="index.html">js/app/components/common</a> nuggetsManager.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">4.76% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>1/21</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/8</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">12.5% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>1/8</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">5% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>1/20</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// @flow
+&nbsp;
+import range from 'lodash/range';
+&nbsp;
+import Nuggets from '../debate/thread/nuggets';
+&nbsp;
+class NuggetsManager {
+  nuggetsList: Array&lt;Nuggets&gt;;
+&nbsp;
+  constructor() {
+    this.nuggetsList = [];
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  ad</span>d(nuggets: Nuggets) {
+<span class="cstat-no" title="statement not covered" >    this.nuggetsList.push(nuggets);</span>
+<span class="cstat-no" title="statement not covered" >    this.sort();</span>
+<span class="cstat-no" title="statement not covered" >    this.update();</span>
+  }
+&nbsp;
+  update = <span class="fstat-no" title="function not covered" >()</span> =&gt; {
+<span class="cstat-no" title="statement not covered" >    this.nuggetsList.reduce(<span class="fstat-no" title="function not covered" >(p</span>revious, nuggets) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      nuggets.updateTop(previous);</span>
+<span class="cstat-no" title="statement not covered" >      return nuggets;</span>
+    }, null);
+  };
+&nbsp;
+<span class="fstat-no" title="function not covered" >  re</span>move(nuggets: Nuggets) {
+    const index = <span class="cstat-no" title="statement not covered" >this.nuggetsList.indexOf(nuggets);</span>
+<span class="cstat-no" title="statement not covered" >    if (index === -1) {</span>
+      // Tried to remove nuggets component that is not managed by this NuggetsManager, this shouldn't happen.
+<span class="cstat-no" title="statement not covered" >      return;</span>
+    }
+<span class="cstat-no" title="statement not covered" >    delete this.nuggetsList[index];</span>
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  so</span>rt() {
+<span class="cstat-no" title="statement not covered" >    this.nuggetsList.sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; {</span>
+      const aLevel = <span class="cstat-no" title="statement not covered" >a.props.completeLevel.split('-');</span>
+      const bLevel = <span class="cstat-no" title="statement not covered" >b.props.completeLevel.split('-');</span>
+      const maxIndex = <span class="cstat-no" title="statement not covered" >Math.max(aLevel.length, bLevel.length);</span>
+<span class="cstat-no" title="statement not covered" >      return range(maxIndex).reduce(<span class="fstat-no" title="function not covered" >(d</span>iff, index) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        if (diff !== 0) <span class="cstat-no" title="statement not covered" >return diff;</span></span>
+        // the two next lines convert for ex. a=[29,0] &gt; b=[29,0,0] to a=[29,0,-1] &gt; b=[29,0,0]
+        const aValue = <span class="cstat-no" title="statement not covered" >index &lt; aLevel.length ? aLevel[index] : -1;</span>
+        const bValue = <span class="cstat-no" title="statement not covered" >index &lt; bLevel.length ? bLevel[index] : -1;</span>
+<span class="cstat-no" title="statement not covered" >        return aValue - bValue;</span>
+      }, 0);
+    });
+  }
+}
+&nbsp;
+export default NuggetsManager;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Fri Oct 26 2018 15:51:30 GMT+0200 (CEST)
+</div>
+</div>
+<script src="../../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../../sorter.js"></script>
+</body>
+</html>

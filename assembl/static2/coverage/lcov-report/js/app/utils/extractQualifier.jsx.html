@@ -1,0 +1,503 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for js/app/utils/extractQualifier.jsx</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../prettify.css" />
+    <link rel="stylesheet" href="../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../index.html">All files</a> / <a href="index.html">js/app/utils</a> extractQualifier.jsx
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">15.38% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>4/26</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/20</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>0/2</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">15.38% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>4/26</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
+import DesignFiction from '../components/svg/taxonomy/displayDesignFiction';
+import MultiColumn from '../components/svg/taxonomy/displayMultiColumn';
+import OpenQuestions from '../components/svg/taxonomy/displayOpenQuestions';
+import Thread from '../components/svg/taxonomy/displayThread';
+import Tokens from '../components/svg/taxonomy/displayTokens';
+import ToArgument from '../components/svg/taxonomy/toArgument';
+import MixMatch from '../components/svg/taxonomy/mixMatch';
+import Example from '../components/svg/taxonomy/example';
+import BlueFlag from '../components/svg/taxonomy/blueFlag';
+import YellowFlag from '../components/svg/taxonomy/yellowFlag';
+import OrangeFlag from '../components/svg/taxonomy/orangeFlag';
+import RedFlag from '../components/svg/taxonomy/redFlag';
+import GreenFlag from '../components/svg/taxonomy/greenFlag';
+import PurpleFlag from '../components/svg/taxonomy/purpleFlag';
+import Classify from '../components/svg/taxonomy/classify';
+import MoreSpecific from '../components/svg/taxonomy/moreSpecific';
+import MakeGeneric from '../components/svg/taxonomy/makeGeneric';
+import BlackFlag from '../components/svg/taxonomy/blackFlag';
+&nbsp;
+export const extractNatures = [
+  {
+    qualifier: 'issue',
+    label: 'search.taxonomy_nature.issue'
+  },
+  {
+    qualifier: 'actionable_solution',
+    label: 'search.taxonomy_nature.actionable_solution'
+  },
+  {
+    qualifier: 'knowledge',
+    label: 'search.taxonomy_nature.knowledge'
+  },
+  {
+    qualifier: 'example',
+    label: 'search.taxonomy_nature.example'
+  },
+  {
+    qualifier: 'concept',
+    label: 'search.taxonomy_nature.concept'
+  },
+  {
+    qualifier: 'argument',
+    label: 'search.taxonomy_nature.argument'
+  },
+  {
+    qualifier: 'cognitive_bias',
+    label: 'search.taxonomy_nature.cognitive_bias'
+  }
+];
+&nbsp;
+export const extractActions = [
+  {
+    qualifier: 'classify',
+    label: 'search.taxonomy_action.classify'
+  },
+  {
+    qualifier: 'make_generic',
+    label: 'search.taxonomy_action.make_generic'
+  },
+  {
+    qualifier: 'argument',
+    label: 'search.taxonomy_action.argument'
+  },
+  {
+    qualifier: 'give_examples',
+    label: 'search.taxonomy_action.give_examples'
+  },
+  {
+    qualifier: 'more_specific',
+    label: 'search.taxonomy_action.more_specific'
+  },
+  {
+    qualifier: 'mix_match',
+    label: 'search.taxonomy_action.mix_match'
+  },
+  {
+    qualifier: 'display_multi_column',
+    label: 'search.taxonomy_action.display_multi_column'
+  },
+  {
+    qualifier: 'display_thread',
+    label: 'search.taxonomy_action.display_thread'
+  },
+  {
+    qualifier: 'display_tokens',
+    label: 'search.taxonomy_action.display_tokens'
+  },
+  {
+    qualifier: 'display_open_questions',
+    label: 'search.taxonomy_action.display_open_questions'
+  },
+  {
+    qualifier: 'display_bright_mirror',
+    label: 'search.taxonomy_action.display_bright_mirror'
+  }
+];
+&nbsp;
+export const ActionIcons = <span class="fstat-no" title="function not covered" >({</span> qualifier, backgroundColor, color }) =&gt; {
+<span class="cstat-no" title="statement not covered" >  switch (qualifier) {</span>
+  case 'display_bright_mirror':
+<span class="cstat-no" title="statement not covered" >    return &lt;DesignFiction backgroundColor={backgroundColor} color={color} /&gt;;</span>
+  case 'display_multi_column':
+<span class="cstat-no" title="statement not covered" >    return &lt;MultiColumn backgroundColor={backgroundColor} color={color} /&gt;;</span>
+  case 'display_open_questions':
+<span class="cstat-no" title="statement not covered" >    return &lt;OpenQuestions backgroundColor={backgroundColor} color={color} /&gt;;</span>
+  case 'display_thread':
+<span class="cstat-no" title="statement not covered" >    return &lt;Thread backgroundColor={backgroundColor} color={color} /&gt;;</span>
+  case 'display_tokens':
+<span class="cstat-no" title="statement not covered" >    return &lt;Tokens backgroundColor={backgroundColor} color={color} /&gt;;</span>
+  case 'argument':
+<span class="cstat-no" title="statement not covered" >    return &lt;ToArgument backgroundColor={backgroundColor} color={color} /&gt;;</span>
+  case 'mix_match':
+<span class="cstat-no" title="statement not covered" >    return &lt;MixMatch backgroundColor={backgroundColor} color={color} /&gt;;</span>
+  case 'give_examples':
+<span class="cstat-no" title="statement not covered" >    return &lt;Example backgroundColor={backgroundColor} color={color} /&gt;;</span>
+  case 'classify':
+<span class="cstat-no" title="statement not covered" >    return &lt;Classify backgroundColor={backgroundColor} color={color} /&gt;;</span>
+  case 'more_specific':
+<span class="cstat-no" title="statement not covered" >    return &lt;MoreSpecific backgroundColor={backgroundColor} color={color} /&gt;;</span>
+  case 'make_generic':
+<span class="cstat-no" title="statement not covered" >    return &lt;MakeGeneric backgroundColor={backgroundColor} color={color} /&gt;;</span>
+  default:
+<span class="cstat-no" title="statement not covered" >    return &lt;span&gt;{qualifier}&lt;/span&gt;;</span>
+  }
+};
+&nbsp;
+export const NatureIcons = <span class="fstat-no" title="function not covered" >({</span> qualifier }) =&gt; {
+<span class="cstat-no" title="statement not covered" >  switch (qualifier) {</span>
+  case 'concept':
+<span class="cstat-no" title="statement not covered" >    return &lt;BlueFlag /&gt;;</span>
+  case 'argument':
+<span class="cstat-no" title="statement not covered" >    return &lt;YellowFlag /&gt;;</span>
+  case 'example':
+<span class="cstat-no" title="statement not covered" >    return &lt;OrangeFlag /&gt;;</span>
+  case 'issue':
+<span class="cstat-no" title="statement not covered" >    return &lt;RedFlag /&gt;;</span>
+  case 'actionable_solution':
+<span class="cstat-no" title="statement not covered" >    return &lt;GreenFlag /&gt;;</span>
+  case 'knowledge':
+<span class="cstat-no" title="statement not covered" >    return &lt;PurpleFlag /&gt;;</span>
+  case 'cognitive_bias':
+<span class="cstat-no" title="statement not covered" >    return &lt;BlackFlag /&gt;;</span>
+  default:
+<span class="cstat-no" title="statement not covered" >    return &lt;span&gt;{qualifier}&lt;/span&gt;;</span>
+  }
+};</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Fri Oct 26 2018 15:51:30 GMT+0200 (CEST)
+</div>
+</div>
+<script src="../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../sorter.js"></script>
+</body>
+</html>

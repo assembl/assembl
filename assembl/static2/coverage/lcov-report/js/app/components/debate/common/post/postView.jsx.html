@@ -1,0 +1,887 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for js/app/components/debate/common/post/postView.jsx</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../../../../prettify.css" />
+    <link rel="stylesheet" href="../../../../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../../../../index.html">All files</a> / <a href="index.html">js/app/components/debate/common/post</a> postView.jsx
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">28.57% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>14/49</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">45.71% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>16/35</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">18.75% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>3/16</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">27.66% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>13/47</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// @flow
+import * as React from 'react';
+import { Translate, I18n } from 'react-redux-i18n';
+import { getDomElementOffset, elementContainsSelection } from '../../../../utils/globalFunctions';
+import Attachments from '../../../common/attachments';
+import ProfileLine from '../../../common/profileLine';
+import PostActions from '../../common/postActions';
+import AnswerForm from '../../thread/answerForm';
+import Nuggets from '../../thread/nuggets';
+import RelatedIdeas from './relatedIdeas';
+import PostBody from './postBody';
+import HarvestingMenu from '../../../harvesting/harvestingMenu';
+import type { Props as PostProps } from './index';
+&nbsp;
+type Props = PostProps &amp; {
+  body: string,
+  handleEditClick: Function,
+  isHarvesting: boolean,
+  modifiedSubject: React.Element&lt;any&gt;,
+  multiColumns: boolean,
+  subject: string,
+  timeline: Timeline
+};
+&nbsp;
+type State = {
+  showAnswerForm: boolean,
+  displayHarvestingAnchor: boolean,
+  displayHarvestingBox: boolean,
+  harvestingAnchorPosition: Object
+};
+&nbsp;
+class PostView extends React.PureComponent&lt;Props, State&gt; {
+  answerTextarea: ?HTMLTextAreaElement;
+&nbsp;
+  postView: ?HTMLElement;
+&nbsp;
+  static defaultProps = {
+    isHarvesting: false,
+    multiColumns: false
+  };
+&nbsp;
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      showAnswerForm: false,
+      displayHarvestingAnchor: false,
+      displayHarvestingBox: false,
+      harvestingAnchorPosition: { x: 0, y: 0 }
+    };
+  }
+&nbsp;
+  handleAnswerClick = <span class="fstat-no" title="function not covered" >()</span> =&gt; {
+<span class="cstat-no" title="statement not covered" >    this.setState({ showAnswerForm: true }, this.props.measureTreeHeight);</span>
+<span class="cstat-no" title="statement not covered" >    setTimeout(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+      const answerTextarea = <span class="cstat-no" title="statement not covered" >this.answerTextarea;</span>
+<span class="cstat-no" title="statement not covered" >      if (!answerTextarea) <span class="cstat-no" title="statement not covered" >return;</span></span>
+      const txtareaOffset = <span class="cstat-no" title="statement not covered" >getDomElementOffset(answerTextarea).top;</span>
+<span class="cstat-no" title="statement not covered" >      window.scrollTo({ top: txtareaOffset - answerTextarea.clientHeight, left: 0, behavior: 'smooth' });</span>
+    }, 200);
+  };
+&nbsp;
+  hideAnswerForm = <span class="fstat-no" title="function not covered" >()</span> =&gt; {
+<span class="cstat-no" title="statement not covered" >    this.setState({ showAnswerForm: false }, this.props.measureTreeHeight);</span>
+  };
+&nbsp;
+  recomputeTreeHeightOnImagesLoad = <span class="fstat-no" title="function not covered" >(e</span>l: HTMLElement) =&gt; {
+    // recompute the tree height after images are loaded
+<span class="cstat-no" title="statement not covered" >    if (el) {</span>
+      const images = <span class="cstat-no" title="statement not covered" >el.getElementsByTagName('img');</span>
+<span class="cstat-no" title="statement not covered" >      Array.from(images).forEach(<span class="fstat-no" title="function not covered" >im</span>g =&gt;</span>
+<span class="cstat-no" title="statement not covered" >        img.addEventListener('load', <span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >          this.props.measureTreeHeight(400);</span>
+        })
+      );
+    }
+  };
+&nbsp;
+<span class="fstat-no" title="function not covered" >  ge</span>tAnchorPosition() {
+    const selection = <span class="cstat-no" title="statement not covered" >document.getSelection();</span>
+    const selectionRange = <span class="cstat-no" title="statement not covered" >selection ? selection.getRangeAt(0) : null;</span>
+    const selectionPositionY = <span class="cstat-no" title="statement not covered" >selectionRange ? selectionRange.getBoundingClientRect().top : 0;</span>
+    // $FlowFixMe this.postView may be null
+    const anchorPositionX = <span class="cstat-no" title="statement not covered" >this.postView.offsetLeft + this.postView.clientWidth / 2;</span>
+    // $FlowFixMe this.postView may be null
+    const anchorPositionY = <span class="cstat-no" title="statement not covered" >selectionPositionY - this.postView.getBoundingClientRect().top;</span>
+<span class="cstat-no" title="statement not covered" >    return { x: anchorPositionX, y: anchorPositionY };</span>
+  }
+&nbsp;
+  handleMouseUpWhileHarvesting = <span class="fstat-no" title="function not covered" >()</span>: void =&gt; {
+    const { isHarvesting } = <span class="cstat-no" title="statement not covered" >this.props;</span>
+    const { dbId } = <span class="cstat-no" title="statement not covered" >this.props.data.post;</span>
+    const isSelectionInBody = <span class="cstat-no" title="statement not covered" >elementContainsSelection(document.getElementById(`message-body-local:Content/${dbId}`));</span>
+<span class="cstat-no" title="statement not covered" >    if (isHarvesting &amp;&amp; isSelectionInBody) {</span>
+      const harvestingAnchorPosition = <span class="cstat-no" title="statement not covered" >this.getAnchorPosition();</span>
+<span class="cstat-no" title="statement not covered" >      this.setState({ displayHarvestingAnchor: true, harvestingAnchorPosition: harvestingAnchorPosition });</span>
+    } else {
+<span class="cstat-no" title="statement not covered" >      this.setState({ displayHarvestingAnchor: false });</span>
+    }
+  };
+&nbsp;
+  handleClickAnchor = <span class="fstat-no" title="function not covered" >()</span>: void =&gt; {
+    const { displayHarvestingAnchor, displayHarvestingBox } = <span class="cstat-no" title="statement not covered" >this.state;</span>
+<span class="cstat-no" title="statement not covered" >    this.setState({ displayHarvestingAnchor: !displayHarvestingAnchor, displayHarvestingBox: !displayHarvestingBox });</span>
+  };
+&nbsp;
+  setHarvestingBoxDisplay = <span class="fstat-no" title="function not covered" >()</span>: void =&gt; {
+    const { displayHarvestingBox } = <span class="cstat-no" title="statement not covered" >this.state;</span>
+<span class="cstat-no" title="statement not covered" >    this.setState({ displayHarvestingBox: !displayHarvestingBox });</span>
+  };
+&nbsp;
+  cancelHarvesting = <span class="fstat-no" title="function not covered" >()</span>: void =&gt; {
+<span class="cstat-no" title="statement not covered" >    this.setState({ displayHarvestingBox: false });</span>
+<span class="cstat-no" title="statement not covered" >    window.getSelection().removeAllRanges();</span>
+  };
+&nbsp;
+  render() {
+    const {
+      bodyMimeType,
+      dbId,
+      indirectIdeaContentLinks,
+      creator,
+      modified,
+      sentimentCounts,
+      mySentiment,
+      attachments,
+      extracts
+    } = this.props.data.post;
+    const {
+      borderLeftColor,
+      handleEditClick,
+      contentLocale,
+      id,
+      lang,
+      ideaId,
+      refetchIdea,
+      // creationDate is retrieved by IdeaWithPosts query, not PostQuery
+      creationDate,
+      fullLevel,
+      numChildren,
+      routerParams,
+      debateData,
+      nuggetsManager,
+      rowIndex,
+      originalLocale,
+      phaseId,
+      body,
+      subject,
+      modifiedSubject,
+      multiColumns,
+      isHarvesting
+    } = this.props;
+    const translate = contentLocale !== originalLocale;
+&nbsp;
+    const completeLevelArray = fullLevel ? [rowIndex, ...fullLevel.split('-').map(string =&gt; Number(string))] : <span class="branch-1 cbranch-no" title="branch not covered" >[rowIndex];</span>
+&nbsp;
+    const answerTextareaRef = <span class="fstat-no" title="function not covered" >(e</span>l: ?HTMLTextAreaElement) =&gt; {
+<span class="cstat-no" title="statement not covered" >      this.answerTextarea = el;</span>
+    };
+&nbsp;
+    const boxStyle = {
+      borderLeftColor: borderLeftColor
+    };
+&nbsp;
+    let canReply = !multiColumns;
+    // If we're in thread mode, check if the first idea associated to the post is multi columns.
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (!multiColumns &amp;&amp; indirectIdeaContentLinks &amp;&amp; <span class="branch-2 cbranch-no" title="branch not covered" >indirectIdeaContentLinks.length &gt; 0)</span> {
+<span class="cstat-no" title="statement not covered" >      canReply = indirectIdeaContentLinks[0].idea.messageViewOverride !== 'messageColumns';</span>
+    }
+&nbsp;
+    const { displayHarvestingAnchor, displayHarvestingBox, harvestingAnchorPosition } = this.state;
+&nbsp;
+    const { refetch } = this.props.data;
+&nbsp;
+    return (
+      &lt;div
+        ref={<span class="fstat-no" title="function not covered" >(p</span>) =&gt; {
+<span class="cstat-no" title="statement not covered" >          this.postView = p;</span>
+        }}
+      &gt;
+        {!multiColumns &amp;&amp; (
+          &lt;Nuggets extracts={extracts} postId={id} nuggetsManager={nuggetsManager} completeLevel={completeLevelArray.join('-')} /&gt;
+        )}
+        {isHarvesting &amp;&amp; (
+<span class="branch-1 cbranch-no" title="branch not covered" >          &lt;HarvestingMenu</span>
+            postId={id}
+            lang={contentLocale}
+            extracts={extracts}
+            isAuthorAccountDeleted={creator.isDeleted}
+            harvestingAnchorPosition={harvestingAnchorPosition}
+            refetchPost={refetch}
+            displayHarvestingAnchor={displayHarvestingAnchor}
+            displayHarvestingBox={displayHarvestingBox}
+            setHarvestingBoxDisplay={this.setHarvestingBoxDisplay}
+            handleClickAnchor={this.handleClickAnchor}
+            cancelHarvesting={this.cancelHarvesting}
+            showNuggetAction={!multiColumns}
+          /&gt;
+        )}
+        &lt;div className="box" style={boxStyle}&gt;
+          &lt;div className="post-row"&gt;
+            &lt;div className="post-left"&gt;
+              {creator &amp;&amp; (
+                &lt;ProfileLine
+                  userId={creator.userId}
+                  userName={creator.isDeleted ? <span class="branch-0 cbranch-no" title="branch not covered" >I18n.t('deletedUser') </span>: creator.displayName}
+                  creationDate={creationDate}
+                  locale={lang}
+                  modified={modified}
+                /&gt;
+              )}
+              &lt;PostBody
+                handleMouseUpWhileHarvesting={this.handleMouseUpWhileHarvesting}
+                body={body}
+                dbId={dbId}
+                extracts={extracts}
+                bodyMimeType={bodyMimeType}
+                contentLocale={contentLocale}
+                id={id}
+                lang={lang}
+                subject={modifiedSubject}
+                originalLocale={originalLocale}
+                translate={translate}
+                translationEnabled={debateData.translationEnabled}
+                bodyDivRef={this.recomputeTreeHeightOnImagesLoad}
+                measureTreeHeight={this.props.measureTreeHeight}
+                isHarvesting={isHarvesting}
+              /&gt;
+&nbsp;
+              &lt;Attachments attachments={attachments} /&gt;
+&nbsp;
+              {!multiColumns &amp;&amp; (
+                &lt;div&gt;
+                  &lt;RelatedIdeas indirectIdeaContentLinks={indirectIdeaContentLinks} /&gt;
+&nbsp;
+                  &lt;div className="answers annotation"&gt;
+                    &lt;Translate value="debate.thread.numberOfResponses" count={numChildren} /&gt;
+                  &lt;/div&gt;
+                &lt;/div&gt;
+              )}
+            &lt;/div&gt;
+            &lt;div className="post-right"&gt;
+              &lt;PostActions
+                creatorUserId={creator.userId}
+                postId={id}
+                handleEditClick={handleEditClick}
+                sentimentCounts={sentimentCounts}
+                mySentiment={mySentiment}
+                numChildren={numChildren}
+                routerParams={routerParams}
+                debateData={debateData}
+                postSubject={subject ? subject.replace('Re: ', '') : <span class="branch-1 cbranch-no" title="branch not covered" >''}</span>
+                phaseId={phaseId}
+              /&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+        {canReply &amp;&amp; (
+          &lt;div className={this.state.showAnswerForm ? <span class="branch-0 cbranch-no" title="branch not covered" >'answer-form' </span>: 'collapsed-answer-form'}&gt;
+            &lt;AnswerForm
+              parentId={id}
+              ideaId={ideaId}
+              refetchIdea={refetchIdea}
+              textareaRef={answerTextareaRef}
+              hideAnswerForm={this.hideAnswerForm}
+              handleAnswerClick={this.handleAnswerClick}
+              phaseId={phaseId}
+            /&gt;
+          &lt;/div&gt;
+        )}
+      &lt;/div&gt;
+    );
+  }
+}
+&nbsp;
+export default PostView;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Fri Oct 26 2018 15:51:30 GMT+0200 (CEST)
+</div>
+</div>
+<script src="../../../../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../../../../sorter.js"></script>
+</body>
+</html>

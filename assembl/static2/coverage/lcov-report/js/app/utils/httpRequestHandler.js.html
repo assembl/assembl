@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for js/app/utils/httpRequestHandler.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../prettify.css" />
+    <link rel="stylesheet" href="../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../index.html">All files</a> / <a href="index.html">js/app/utils</a> httpRequestHandler.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">9.76% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>4/41</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/18</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>0/11</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">10% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>4/40</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68</td><td class="line-coverage quiet"><span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const convertToURLEncodedString = <span class="fstat-no" title="function not covered" >ob</span>j =&gt;
+<span class="cstat-no" title="statement not covered" >  Object.keys(obj)</span>
+    .map(<span class="fstat-no" title="function not covered" >k </span>=&gt; <span class="cstat-no" title="statement not covered" >`${encodeURIComponent(k)}=${encodeURIComponent(obj[k])}`)</span>
+    .join('&amp;');
+const getResponseContentType = <span class="fstat-no" title="function not covered" >xh</span>r =&gt;
+  // eslint-disable-line no-unused-vars
+<span class="cstat-no" title="statement not covered" >  xhr.getResponseHeader('Content-Type').split(';')[0];</span>
+/*
+  A global async method that returns a Promisified ajax call
+  @params payload [Object] The object that will be sent
+  @params isJson [Boolean] Pass a flag if the object is JSON. Default is form header.
+  @retuns [Promise]
+*/
+export const xmlHttpRequest = <span class="fstat-no" title="function not covered" >ob</span>j =&gt;
+<span class="cstat-no" title="statement not covered" >  new Promise(<span class="fstat-no" title="function not covered" >(r</span>esolve, reject) =&gt; {</span>
+    const xhr = <span class="cstat-no" title="statement not covered" >new XMLHttpRequest();</span>
+    const url = <span class="cstat-no" title="statement not covered" >obj.url;</span>
+    let payload = <span class="cstat-no" title="statement not covered" >obj.payload;</span>
+<span class="cstat-no" title="statement not covered" >    xhr.open(obj.method, url);</span>
+<span class="cstat-no" title="statement not covered" >    if (obj.method.toLowerCase() === 'post') {</span>
+<span class="cstat-no" title="statement not covered" >      obj.headers = obj.headers || {}; </span>// eslint-disable-line
+<span class="cstat-no" title="statement not covered" >      if (obj.isJson &amp;&amp; obj.isJson === true) {</span>
+<span class="cstat-no" title="statement not covered" >        obj.headers['Content-Type'] = 'application/json'; </span>// eslint-disable-line
+<span class="cstat-no" title="statement not covered" >        payload = JSON.stringify(obj.payload);</span>
+      } else {
+<span class="cstat-no" title="statement not covered" >        obj.headers['Content-Type'] = 'application/x-www-form-urlencoded'; </span>// eslint-disable-line
+<span class="cstat-no" title="statement not covered" >        payload = convertToURLEncodedString(payload);</span>
+      }
+    }
+<span class="cstat-no" title="statement not covered" >    if (obj.headers) {</span>
+<span class="cstat-no" title="statement not covered" >      Object.keys(obj.headers).forEach(<span class="fstat-no" title="function not covered" >(k</span>ey) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        xhr.setRequestHeader(key, obj.headers[key]);</span>
+      });
+    }
+<span class="cstat-no" title="statement not covered" >    xhr.onload = <span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+      let resp;
+<span class="cstat-no" title="statement not covered" >      if (xhr.status &gt;= 200 &amp;&amp; xhr.status &lt; 300) {</span>
+<span class="cstat-no" title="statement not covered" >        resp = xhr.response;</span>
+<span class="cstat-no" title="statement not covered" >        try {</span>
+<span class="cstat-no" title="statement not covered" >          resp = JSON.parse(resp);</span>
+        } catch (e) {
+          // TODO: Remove console warn AFTER a successful contract is agreed upon
+<span class="cstat-no" title="statement not covered" >          console.warn('A successful response did not return JSON. Passing status only.'); </span>// eslint-disable-line
+<span class="cstat-no" title="statement not covered" >          resp = xhr.status;</span>
+        }
+<span class="cstat-no" title="statement not covered" >        resolve(resp);</span>
+      } else {
+        // Contract agreed upon. If API is to fail, must respond with
+        // JSONError type. Front-end respects this type of response only.
+        const respType = <span class="cstat-no" title="statement not covered" >getResponseContentType(xhr);</span>
+<span class="cstat-no" title="statement not covered" >        if (respType === 'application/json') {</span>
+<span class="cstat-no" title="statement not covered" >          resp = JSON.parse(xhr.responseText);</span>
+        } else {
+<span class="cstat-no" title="statement not covered" >          resp = [{ type: 'nonJson', message: '', status: xhr.status }];</span>
+        }
+<span class="cstat-no" title="statement not covered" >        reject(resp);</span>
+      }
+    };
+<span class="cstat-no" title="statement not covered" >    xhr.onerror = <span class="fstat-no" title="function not covered" >()</span> =&gt;</span>
+      // Network level failure
+<span class="cstat-no" title="statement not covered" >      reject(xhr.statusText || xhr.responseText);</span>
+<span class="cstat-no" title="statement not covered" >    xhr.send(payload);</span>
+  });
+&nbsp;
+export const fetchContentType = <span class="fstat-no" title="function not covered" >ur</span>l =&gt;
+<span class="cstat-no" title="statement not covered" >  fetch(url, {</span>
+    method: 'HEAD'
+  }).then(<span class="fstat-no" title="function not covered" >re</span>sponse =&gt; <span class="cstat-no" title="statement not covered" >response.headers.get('Content-Type'),</span> <span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >null)</span>;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Fri Oct 26 2018 15:51:30 GMT+0200 (CEST)
+</div>
+</div>
+<script src="../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../sorter.js"></script>
+</body>
+</html>

@@ -1,0 +1,878 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for js/app/components/administration/voteSession/gaugeForm.jsx</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../../../prettify.css" />
+    <link rel="stylesheet" href="../../../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../../../index.html">All files</a> / <a href="index.html">js/app/components/administration/voteSession</a> gaugeForm.jsx
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">14.55% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>8/55</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">50% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>8/16</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">9.52% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>2/21</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">14.81% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>8/54</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">24x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">24x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">24x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">27x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">24x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">24x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">24x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// @flow
+import * as React from 'react';
+import { connect } from 'react-redux';
+import { I18n, Translate } from 'react-redux-i18n';
+import { List, Map } from 'immutable';
+import range from 'lodash/range';
+import { SplitButton, MenuItem, Radio, FormGroup } from 'react-bootstrap';
+&nbsp;
+import { getEntryValueForLocale } from '../../../utils/i18n';
+import { createRandomId } from '../../../utils/globalFunctions';
+import FormControlWithLabel from '../../common/formControlWithLabel';
+import NumberGaugeForm from './numberGaugeForm';
+import TextGaugeForm from './textGaugeForm';
+import {
+  updateGaugeVoteInstructions,
+  updateGaugeVoteNbTicks,
+  updateGaugeVoteIsNumber,
+  createGaugeVoteChoice,
+  deleteGaugeVoteChoice,
+  updateGaugeMinimum,
+  updateGaugeMaximum,
+  updateGaugeUnit,
+  updateGaugeVoteChoiceLabel,
+  markAllDependenciesAsChanged
+} from '../../../actions/adminActions/voteSession';
+&nbsp;
+export type VoteChoice = {|
+  id: string,
+  title: string
+|};
+&nbsp;
+type GaugeFormProps = {
+  id: string,
+  index: ?number,
+  instructions: string,
+  canChangeType: boolean,
+  nbTicks: number,
+  minimum: ?number,
+  maximum: ?number,
+  unit: ?string,
+  isNumberGauge: boolean,
+  choices: ?List&lt;VoteChoice&gt;,
+  handleInstructionsChange: Function,
+  createChoice: string =&gt; void,
+  deleteChoice: number =&gt; void,
+  updateNbTicks: number =&gt; void,
+  handleNumberGaugeCheck: Function,
+  handleNumberGaugeUncheck: Function,
+  handleMinChange: number =&gt; void,
+  handleMaxChange: number =&gt; void,
+  handleUnitChange: string =&gt; void,
+  handleGaugeChoiceLabelChange: (string, string) =&gt; void
+};
+&nbsp;
+export const getGaugeModuleInfo = <span class="fstat-no" title="function not covered" >(g</span>augeModule: Map&lt;string, *&gt;, gaugeChoicesById: Map&lt;string, *&gt;, editLocale: string) =&gt; {
+  const instructions = <span class="cstat-no" title="statement not covered" >getEntryValueForLocale(gaugeModule.get('instructionsEntries'), editLocale);</span>
+  const choices = <span class="cstat-no" title="statement not covered" >gaugeModule.get('choices', List());</span>
+<span class="cstat-no" title="statement not covered" >  return {</span>
+    instructions: instructions,
+    canChangeType: gaugeModule.get('_isNew'),
+    nbTicks: gaugeModule.get('isNumberGauge') ? gaugeModule.get('nbTicks') : choices.size,
+    isNumberGauge: gaugeModule.get('isNumberGauge'),
+    choices: gaugeModule.get('isNumberGauge')
+      ? null
+      : choices.map(<span class="fstat-no" title="function not covered" >(c</span>id) =&gt; {
+        const gaugeChoice = <span class="cstat-no" title="statement not covered" >gaugeChoicesById.get(cid);</span>
+        const title = <span class="cstat-no" title="statement not covered" >getEntryValueForLocale(gaugeChoice.get('labelEntries'), editLocale);</span>
+        const value = <span class="cstat-no" title="statement not covered" >gaugeChoice.get('value');</span>
+<span class="cstat-no" title="statement not covered" >        return Map({ id: cid, title: title, value: value });</span>
+      }),
+    minimum: gaugeModule.get('minimum'),
+    maximum: gaugeModule.get('maximum'),
+    type: gaugeModule.get('type'),
+    unit: gaugeModule.get('unit')
+  };
+};
+&nbsp;
+type ChangeNbTicksParams = {
+  isNumberGauge: boolean,
+  nbTicks: number,
+  value: number,
+  createChoice: string =&gt; void,
+  deleteChoice: number =&gt; void,
+  updateNbTicks: number =&gt; void
+};
+export const changeNbTicks = <span class="fstat-no" title="function not covered" >({</span>
+  createChoice,
+  deleteChoice,
+  isNumberGauge,
+  nbTicks,
+  updateNbTicks,
+  value
+}: ChangeNbTicksParams): void =&gt; {
+<span class="cstat-no" title="statement not covered" >  if (isNumberGauge) {</span>
+<span class="cstat-no" title="statement not covered" >    updateNbTicks(value);</span>
+  } else <span class="cstat-no" title="statement not covered" >if (nbTicks &lt; value) {</span>
+    const nbChoiceToCreate = <span class="cstat-no" title="statement not covered" >value - nbTicks;</span>
+<span class="cstat-no" title="statement not covered" >    for (let i = 0; i &lt; nbChoiceToCreate; i += 1) {</span>
+      const newId = <span class="cstat-no" title="statement not covered" >createRandomId();</span>
+<span class="cstat-no" title="statement not covered" >      createChoice(newId);</span>
+    }
+  } else {
+    const nbChoiceToDelete = <span class="cstat-no" title="statement not covered" >nbTicks - value;</span>
+<span class="cstat-no" title="statement not covered" >    for (let i = 0; i &lt; nbChoiceToDelete; i += 1) {</span>
+<span class="cstat-no" title="statement not covered" >      deleteChoice(nbTicks - 1 - i);</span>
+    }
+  }
+};
+&nbsp;
+const DumbGaugeForm = ({
+  id,
+  instructions,
+  nbTicks,
+  canChangeType,
+  isNumberGauge,
+  choices,
+  minimum,
+  maximum,
+  unit,
+  handleInstructionsChange,
+  createChoice,
+  deleteChoice,
+  updateNbTicks,
+  handleNumberGaugeCheck,
+  handleNumberGaugeUncheck,
+  handleMinChange,
+  handleMaxChange,
+  handleUnitChange,
+  handleGaugeChoiceLabelChange,
+  index
+}: GaugeFormProps) =&gt; (
+  &lt;div className="gauges-vote-form" id={`gauge-form-${index + 1}`}&gt;
+    {index !== null &amp;&amp; &lt;Translate value="administration.gauge" number={index + 1} /&gt;}
+    &lt;div className="flex margin-m"&gt;
+      &lt;FormControlWithLabel
+        id={`gauge-vote-instructions-${index + 1}`}
+        value={instructions}
+        label={I18n.t('administration.gaugeVoteInstructions')}
+        required
+        type="text"
+        onChange={handleInstructionsChange}
+        helperUrl="/static2/img/helpers/helper6.png"
+        helperText={I18n.t('administration.helpers.gaugeVoteInstructions')}
+      /&gt;
+    &lt;/div&gt;
+    &lt;FormGroup&gt;
+      &lt;div className="flex"&gt;
+        &lt;label htmlFor={`dropdown-${index + 1}`}&gt;
+          &lt;Translate value="administration.nbTicks" /&gt;
+        &lt;/label&gt;
+      &lt;/div&gt;
+      &lt;SplitButton
+        title={nbTicks}
+        id={`dropdown-${index + 1}`}
+        required
+        className="admin-dropdown"
+        onSelect={<span class="fstat-no" title="function not covered" >ev</span>entKey =&gt;
+<span class="cstat-no" title="statement not covered" >          changeNbTicks({</span>
+            isNumberGauge: isNumberGauge,
+            nbTicks: nbTicks,
+            value: eventKey,
+            createChoice: createChoice,
+            deleteChoice: deleteChoice,
+            updateNbTicks: updateNbTicks
+          })
+        }
+      &gt;
+        {range(2, 11).map(value =&gt; (
+          &lt;MenuItem key={`gauge-notch-${value}`} eventKey={value}&gt;
+            {value}
+          &lt;/MenuItem&gt;
+        ))}
+      &lt;/SplitButton&gt;
+    &lt;/FormGroup&gt;
+    {canChangeType &amp;&amp; (
+      &lt;div className="margin-m"&gt;
+        &lt;Radio
+          onChange={handleNumberGaugeUncheck}
+          checked={!isNumberGauge}
+          name={`gauge-type-${id}`}
+          id={`radio-text-${index + 1}`}
+        &gt;
+          &lt;Translate value="administration.textValue" /&gt;
+        &lt;/Radio&gt;
+        &lt;Radio
+          onChange={handleNumberGaugeCheck}
+          checked={isNumberGauge}
+          name={`gauge-type-${id}`}
+          id={`radio-number-${index + 1}`}
+        &gt;
+          &lt;Translate value="administration.numberValue" /&gt;
+        &lt;/Radio&gt;
+      &lt;/div&gt;
+    )}
+    {isNumberGauge &amp;&amp; (
+      &lt;NumberGaugeForm
+        id={id}
+        minimum={minimum}
+        maximum={maximum}
+        unit={unit}
+        handleMinChange={<span class="fstat-no" title="function not covered" >e </span>=&gt; <span class="cstat-no" title="statement not covered" >handleMinChange(e.target.value)}</span>
+        handleMaxChange={<span class="fstat-no" title="function not covered" >e </span>=&gt; <span class="cstat-no" title="statement not covered" >handleMaxChange(e.target.value)}</span>
+        handleUnitChange={<span class="fstat-no" title="function not covered" >e </span>=&gt; <span class="cstat-no" title="statement not covered" >handleUnitChange(e.target.value)}</span>
+      /&gt;
+    )}
+    {!isNumberGauge &amp;&amp; &lt;TextGaugeForm choices={choices} handleGaugeChoiceLabelChange={handleGaugeChoiceLabelChange} /&gt;}
+    &lt;div className="separator" /&gt;
+  &lt;/div&gt;
+);
+&nbsp;
+DumbGaugeForm.defaultProps = {
+  index: null,
+  minimum: 0,
+  maximum: 10
+};
+&nbsp;
+const mapStateToProps = <span class="fstat-no" title="function not covered" >(s</span>tate, { id, editLocale }) =&gt; {
+  const { gaugeChoicesById } = <span class="cstat-no" title="statement not covered" >state.admin.voteSession;</span>
+  const gaugeModule = <span class="cstat-no" title="statement not covered" >state.admin.voteSession.modulesById.get(id);</span>
+<span class="cstat-no" title="statement not covered" >  return getGaugeModuleInfo(gaugeModule, gaugeChoicesById, editLocale);</span>
+};
+&nbsp;
+const mapDispatchToProps = <span class="fstat-no" title="function not covered" >(d</span>ispatch, { id, editLocale }) =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
+  handleInstructionsChange: <span class="fstat-no" title="function not covered" >(e</span>) =&gt; {
+<span class="cstat-no" title="statement not covered" >    dispatch(markAllDependenciesAsChanged(id));</span>
+<span class="cstat-no" title="statement not covered" >    dispatch(updateGaugeVoteInstructions(id, editLocale, e.target.value));</span>
+  },
+  createChoice: <span class="fstat-no" title="function not covered" >(n</span>ewId) =&gt; {
+<span class="cstat-no" title="statement not covered" >    dispatch(markAllDependenciesAsChanged(id));</span>
+<span class="cstat-no" title="statement not covered" >    dispatch(createGaugeVoteChoice(id, newId));</span>
+  },
+  deleteChoice: <span class="fstat-no" title="function not covered" >(i</span>dx) =&gt; {
+<span class="cstat-no" title="statement not covered" >    dispatch(markAllDependenciesAsChanged(id));</span>
+<span class="cstat-no" title="statement not covered" >    dispatch(deleteGaugeVoteChoice(id, idx));</span>
+  },
+  updateNbTicks: <span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; {
+<span class="cstat-no" title="statement not covered" >    dispatch(markAllDependenciesAsChanged(id));</span>
+<span class="cstat-no" title="statement not covered" >    dispatch(updateGaugeVoteNbTicks(id, value));</span>
+  },
+  handleNumberGaugeCheck: <span class="fstat-no" title="function not covered" >()</span> =&gt; {
+<span class="cstat-no" title="statement not covered" >    dispatch(markAllDependenciesAsChanged(id));</span>
+<span class="cstat-no" title="statement not covered" >    dispatch(updateGaugeVoteIsNumber(id, true));</span>
+  },
+  handleNumberGaugeUncheck: <span class="fstat-no" title="function not covered" >()</span> =&gt; {
+<span class="cstat-no" title="statement not covered" >    dispatch(markAllDependenciesAsChanged(id));</span>
+<span class="cstat-no" title="statement not covered" >    dispatch(updateGaugeVoteIsNumber(id, false));</span>
+<span class="cstat-no" title="statement not covered" >    dispatch(createGaugeVoteChoice(id, createRandomId()));</span>
+<span class="cstat-no" title="statement not covered" >    dispatch(createGaugeVoteChoice(id, createRandomId()));</span>
+  },
+  // for number gauge
+  handleMinChange: <span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; {
+<span class="cstat-no" title="statement not covered" >    dispatch(markAllDependenciesAsChanged(id));</span>
+<span class="cstat-no" title="statement not covered" >    dispatch(updateGaugeMinimum(id, value));</span>
+  },
+  handleMaxChange: <span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; {
+<span class="cstat-no" title="statement not covered" >    dispatch(markAllDependenciesAsChanged(id));</span>
+<span class="cstat-no" title="statement not covered" >    dispatch(updateGaugeMaximum(id, value));</span>
+  },
+  handleUnitChange: <span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; {
+<span class="cstat-no" title="statement not covered" >    dispatch(markAllDependenciesAsChanged(id));</span>
+<span class="cstat-no" title="statement not covered" >    dispatch(updateGaugeUnit(id, value));</span>
+  },
+  // for text gauge
+  handleGaugeChoiceLabelChange: <span class="fstat-no" title="function not covered" >(c</span>id, value) =&gt; {
+<span class="cstat-no" title="statement not covered" >    dispatch(markAllDependenciesAsChanged(id));</span>
+<span class="cstat-no" title="statement not covered" >    dispatch(updateGaugeVoteChoiceLabel(cid, editLocale, value, id));</span>
+  }
+});
+&nbsp;
+export { DumbGaugeForm };
+&nbsp;
+export default connect(mapStateToProps, mapDispatchToProps)(DumbGaugeForm);</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Fri Oct 26 2018 15:51:30 GMT+0200 (CEST)
+</div>
+</div>
+<script src="../../../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../../../sorter.js"></script>
+</body>
+</html>

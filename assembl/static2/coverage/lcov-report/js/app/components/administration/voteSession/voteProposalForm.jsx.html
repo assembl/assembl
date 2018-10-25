@@ -1,0 +1,947 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for js/app/components/administration/voteSession/voteProposalForm.jsx</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../../../prettify.css" />
+    <link rel="stylesheet" href="../../../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../../../index.html">All files</a> / <a href="index.html">js/app/components/administration/voteSession</a> voteProposalForm.jsx
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">25% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>16/64</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">25% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>12/48</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">6.25% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>2/32</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">27.59% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>16/58</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293
+294
+295</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">24x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">24x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">24x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">24x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// @flow
+import * as React from 'react';
+import { connect } from 'react-redux';
+import { I18n, Translate } from 'react-redux-i18n';
+import { OverlayTrigger, Button, Checkbox, FormGroup, HelpBlock } from 'react-bootstrap';
+import { EditorState } from 'draft-js';
+&nbsp;
+import FormControlWithLabel from '../../common/formControlWithLabel';
+import { getEntryValueForLocale } from '../../../utils/i18n';
+import { deleteVoteProposalTooltip, upTooltip, downTooltip } from '../../common/tooltips';
+import {
+  updateVoteProposalTitle,
+  updateVoteProposalDescription,
+  deleteVoteProposal,
+  moveProposalUp,
+  moveProposalDown,
+  addModuleToProposal,
+  cancelModuleCustomization,
+  deleteVoteModule,
+  undeleteModule
+} from '../../../actions/adminActions/voteSession';
+import { displayCustomModal, displayModal, closeModal } from '../../../utils/utilityManager';
+import { editorStateIsEmpty } from '../../../utils/draftjs';
+import { createRandomId } from '../../../utils/globalFunctions';
+import CustomizeGaugeForm from './customizeGaugeForm';
+&nbsp;
+type VoteProposalFormProps = {
+  index: number,
+  title: string,
+  description: EditorState,
+  _toDelete: boolean,
+  markAsToDelete: Function,
+  updateTitle: Function,
+  updateDescription: Function,
+  editLocale: string,
+  nbProposals: number,
+  handleUpClick: Function,
+  handleDownClick: Function,
+  associateModuleToProposal: Function,
+  cancelCustomization: Function,
+  deassociateModuleToProposal: Function,
+  reactivateModule: Function,
+  tokenModules: Object,
+  gaugeModules: Object,
+  proposalModules: Object,
+  validationErrors: ValidationErrors
+};
+&nbsp;
+export const getValidationState = (validationErrors: ?Array&lt;ErrorDef&gt;): ?string =&gt;
+  (validationErrors &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >validationErrors.length &gt; 0 </span>? <span class="branch-0 cbranch-no" title="branch not covered" >'error' </span>: null);
+&nbsp;
+const DumbVoteProposalForm = ({
+  index,
+  title,
+  description,
+  _toDelete,
+  markAsToDelete,
+  updateTitle,
+  updateDescription,
+  editLocale,
+  nbProposals,
+  handleUpClick,
+  handleDownClick,
+  tokenModules,
+  gaugeModules,
+  proposalModules,
+  associateModuleToProposal,
+  cancelCustomization,
+  deassociateModuleToProposal,
+  reactivateModule,
+  validationErrors
+}: VoteProposalFormProps) =&gt; {
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (_toDelete) {
+<span class="cstat-no" title="statement not covered" >    return null;</span>
+  }
+&nbsp;
+  const handleTitleChange = <span class="fstat-no" title="function not covered" >e </span>=&gt; <span class="cstat-no" title="statement not covered" >updateTitle(editLocale, e.target.value);</span>
+  const handleDescriptionChange = <span class="fstat-no" title="function not covered" >va</span>lue =&gt; <span class="cstat-no" title="statement not covered" >updateDescription(editLocale, value);</span>
+&nbsp;
+  const moduleIsSelected = <span class="fstat-no" title="function not covered" >vo</span>teSpecTemplateId =&gt;
+<span class="cstat-no" title="statement not covered" >    proposalModules.some(<span class="fstat-no" title="function not covered" >m </span>=&gt; <span class="cstat-no" title="statement not covered" >m.get('voteSpecTemplateId') === voteSpecTemplateId &amp;&amp; !m.get('_toDelete'))</span>;</span>
+&nbsp;
+  const toggleModule = <span class="fstat-no" title="function not covered" >(v</span>oteSpecTemplateId) =&gt; {
+    const pModule = <span class="cstat-no" title="statement not covered" >proposalModules.find(<span class="fstat-no" title="function not covered" >m </span>=&gt; <span class="cstat-no" title="statement not covered" >m.get('voteSpecTemplateId') === voteSpecTemplateId)</span>;</span>
+<span class="cstat-no" title="statement not covered" >    if (pModule) {</span>
+<span class="cstat-no" title="statement not covered" >      if (pModule.get('_toDelete')) {</span>
+<span class="cstat-no" title="statement not covered" >        reactivateModule(pModule.get('id'));</span>
+      } else {
+<span class="cstat-no" title="statement not covered" >        deassociateModuleToProposal(pModule.get('id'));</span>
+      }
+    } else {
+<span class="cstat-no" title="statement not covered" >      associateModuleToProposal(voteSpecTemplateId);</span>
+    }
+  };
+&nbsp;
+  const confirmModal = <span class="fstat-no" title="function not covered" >()</span> =&gt; {
+    const modalTitle = <span class="cstat-no" title="statement not covered" >&lt;Translate value="administration.voteProposals.deleteModalTitle" /&gt;;</span>
+    const body = <span class="cstat-no" title="statement not covered" >&lt;Translate value="administration.voteProposals.deleteModalBody" /&gt;;</span>
+    const footer = <span class="cstat-no" title="statement not covered" >[</span>
+      &lt;Button key="cancel" onClick={closeModal} className="button-cancel button-dark"&gt;
+        &lt;Translate value="debate.confirmDeletionButtonCancel" /&gt;
+      &lt;/Button&gt;,
+      &lt;Button key="delete" onClick={markAsToDelete} className="button-submit button-dark"&gt;
+        &lt;Translate value="debate.confirmDeletionButtonDelete" /&gt;
+      &lt;/Button&gt;
+    ];
+    const includeFooter = <span class="cstat-no" title="statement not covered" >true;</span>
+<span class="cstat-no" title="statement not covered" >    return displayModal(modalTitle, body, includeFooter, footer);</span>
+  };
+&nbsp;
+  const settingsModal = <span class="fstat-no" title="function not covered" >(i</span>d) =&gt; {
+    const content = <span class="cstat-no" title="statement not covered" >&lt;CustomizeGaugeForm close={closeModal} gaugeModuleId={id} editLocale={editLocale} /&gt;;</span>
+<span class="cstat-no" title="statement not covered" >    displayCustomModal(content, true, 'gauge-settings-modal');</span>
+  };
+&nbsp;
+  const isTitleEmpty = title === '' || title === null;
+&nbsp;
+  const isDescriptionEmpty = description === null || <span class="branch-1 cbranch-no" title="branch not covered" >editorStateIsEmpty(description);</span>
+  const areFieldsEmpty = isDescriptionEmpty &amp;&amp; isTitleEmpty;
+&nbsp;
+  return (
+    &lt;div className="form-container vote-proposal-form" id={`proposal-form-${index}`}&gt;
+      &lt;div className="pointer right"&gt;
+        &lt;div className="inline"&gt;
+          {index &lt; nbProposals ? (
+<span class="branch-0 cbranch-no" title="branch not covered" >            &lt;OverlayTrigger placement="top" overlay={downTooltip}&gt;</span>
+              &lt;Button onClick={handleDownClick} className="admin-icons"&gt;
+                &lt;span className="assembl-icon-down-bold grey" /&gt;
+              &lt;/Button&gt;
+            &lt;/OverlayTrigger&gt;
+          ) : null}
+          {index &gt; 1 ? (
+<span class="branch-0 cbranch-no" title="branch not covered" >            &lt;OverlayTrigger placement="top" overlay={upTooltip}&gt;</span>
+              &lt;Button onClick={handleUpClick} className="admin-icons"&gt;
+                &lt;span className="assembl-icon-up-bold grey" /&gt;
+              &lt;/Button&gt;
+            &lt;/OverlayTrigger&gt;
+          ) : null}
+        &lt;/div&gt;
+        {nbProposals &gt; 2 &amp;&amp; (
+<span class="branch-1 cbranch-no" title="branch not covered" >          &lt;OverlayTrigger placement="top" overlay={deleteVoteProposalTooltip}&gt;</span>
+            &lt;Button className="admin-icons" onClick={areFieldsEmpty ? markAsToDelete : confirmModal}&gt;
+              &lt;span className="assembl-icon-delete grey" /&gt;
+            &lt;/Button&gt;
+          &lt;/OverlayTrigger&gt;
+        )}
+      &lt;/div&gt;
+&nbsp;
+      &lt;div className="title"&gt;
+        &lt;Translate value="administration.voteProposals.defineProposal" number={index} /&gt;
+      &lt;/div&gt;
+&nbsp;
+      &lt;FormControlWithLabel
+        id={`proposal-title-${index}`}
+        value={title}
+        label={I18n.t('administration.voteProposals.title')}
+        onChange={handleTitleChange}
+        required
+        type="text"
+        validationErrors={validationErrors.title}
+      /&gt;
+&nbsp;
+      &lt;FormControlWithLabel
+        id={`proposal-description-${index}`}
+        key={`description-${editLocale}`}
+        value={description}
+        label={I18n.t('administration.voteProposals.description')}
+        onChange={handleDescriptionChange}
+        type="rich-text"
+        required
+      /&gt;
+&nbsp;
+      &lt;FormGroup validationState={getValidationState(validationErrors.modules)}&gt;
+        {validationErrors.modules &amp;&amp;
+<span class="branch-1 cbranch-no" title="branch not covered" >          validationErrors.modules.length &gt; 0 </span>&amp;&amp;
+<span class="branch-2 cbranch-no" title="branch not covered" >          validationErrors.modules.map(<span class="fstat-no" title="function not covered" >(e</span>rror, idx) =&gt; (</span>
+<span class="cstat-no" title="statement not covered" >            &lt;HelpBlock key={idx}&gt;</span>
+              &lt;Translate value={`administration.voteProposals.validationErrors.${error.code}`} {...error.vars} /&gt;
+            &lt;/HelpBlock&gt;
+          ))}
+&nbsp;
+        {tokenModules.map(<span class="fstat-no" title="function not covered" >(v</span>oteSpecTemplateId, idx) =&gt; (
+<span class="cstat-no" title="statement not covered" >          &lt;Checkbox</span>
+            id={`token-checkbox-${idx}`}
+            key={voteSpecTemplateId}
+            checked={moduleIsSelected(voteSpecTemplateId)}
+            onChange={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >toggleModule(voteSpecTemplateId)}</span>
+          &gt;
+            &lt;Translate value="administration.voteProposals.tokenVote" /&gt;
+          &lt;/Checkbox&gt;
+        ))}
+        {gaugeModules.map(<span class="fstat-no" title="function not covered" >(v</span>oteSpecTemplateId, idx) =&gt; {
+          const number = <span class="cstat-no" title="statement not covered" >gaugeModules.size &gt; 1 ? idx + 1 : '';</span>
+          const pModule = <span class="cstat-no" title="statement not covered" >proposalModules.find(<span class="fstat-no" title="function not covered" >m </span>=&gt; <span class="cstat-no" title="statement not covered" >m.get('voteSpecTemplateId') === voteSpecTemplateId)</span>;</span>
+<span class="cstat-no" title="statement not covered" >          return (</span>
+            &lt;div key={voteSpecTemplateId}&gt;
+              &lt;Checkbox
+                id={`gauge-checkbox-${idx}`}
+                className="inline"
+                checked={moduleIsSelected(voteSpecTemplateId)}
+                onChange={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >toggleModule(voteSpecTemplateId)}</span>
+              &gt;
+                {pModule &amp;&amp; pModule.get('isCustom') ? (
+                  &lt;Translate value="administration.voteProposals.customGauge" number={number} /&gt;
+                ) : (
+                  &lt;Translate value="administration.voteProposals.gauge" number={number} /&gt;
+                )}
+              &lt;/Checkbox&gt;
+&nbsp;
+              {pModule &amp;&amp;
+                pModule.get('id') &amp;&amp; (
+                  &lt;div&gt;
+                    &lt;span
+                      className="inline settings-link"
+                      onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; {
+<span class="cstat-no" title="statement not covered" >                        settingsModal(pModule.get('id'));</span>
+                      }}
+                    &gt;
+                      &lt;i className="assembl-icon-edit" /&gt;
+                      &lt;Translate value="administration.voteProposals.gaugeSettings" /&gt;
+                    &lt;/span&gt;
+&nbsp;
+                    {pModule.get('isCustom') &amp;&amp; (
+                      &lt;span
+                        className="inline settings-link"
+                        onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; {
+<span class="cstat-no" title="statement not covered" >                          cancelCustomization(pModule.get('id'));</span>
+                        }}
+                      &gt;
+                        &lt;i className="assembl-icon-cancel" /&gt;
+                        &lt;Translate value="administration.voteProposals.cancelCustomization" /&gt;
+                      &lt;/span&gt;
+                    )}
+                  &lt;/div&gt;
+                )}
+            &lt;/div&gt;
+          );
+        })}
+      &lt;/FormGroup&gt;
+      &lt;div className="separator" /&gt;
+    &lt;/div&gt;
+  );
+};
+&nbsp;
+const mapStateToProps = <span class="fstat-no" title="function not covered" >({</span> admin }, { id, editLocale }) =&gt; {
+  const proposal = <span class="cstat-no" title="statement not covered" >admin.voteSession.voteProposalsById.get(id);</span>
+  const { modulesInOrder, modulesById } = <span class="cstat-no" title="statement not covered" >admin.voteSession;</span>
+  const description = <span class="cstat-no" title="statement not covered" >getEntryValueForLocale(proposal.get('descriptionEntries'), editLocale);</span>
+<span class="cstat-no" title="statement not covered" >  return {</span>
+    _toDelete: proposal.get('_toDelete', false),
+    validationErrors: proposal.get('_validationErrors'),
+    title: getEntryValueForLocale(proposal.get('titleEntries'), editLocale),
+    description: description || EditorState.createEmpty(),
+    order: proposal.get('order'),
+    proposalModules: proposal.get('modules').map(<span class="fstat-no" title="function not covered" >mo</span>duleId =&gt; <span class="cstat-no" title="statement not covered" >modulesById.get(moduleId))</span>,
+    tokenModules: modulesInOrder.filter(
+<span class="fstat-no" title="function not covered" >      vo</span>teSpecTemplateId =&gt;
+<span class="cstat-no" title="statement not covered" >        !modulesById.getIn([voteSpecTemplateId, 'proposalId']) &amp;&amp;</span>
+        modulesById.getIn([voteSpecTemplateId, 'type']) === 'tokens' &amp;&amp;
+        !modulesById.getIn([voteSpecTemplateId, '_toDelete'])
+    ),
+    gaugeModules: modulesInOrder.filter(
+<span class="fstat-no" title="function not covered" >      vo</span>teSpecTemplateId =&gt;
+<span class="cstat-no" title="statement not covered" >        !modulesById.getIn([voteSpecTemplateId, 'proposalId']) &amp;&amp;</span>
+        modulesById.getIn([voteSpecTemplateId, 'type']) === 'gauge' &amp;&amp;
+        !modulesById.getIn([voteSpecTemplateId, '_toDelete'])
+    )
+  };
+};
+&nbsp;
+const mapDispatchToProps = <span class="fstat-no" title="function not covered" >(d</span>ispatch, { id }) =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
+  cancelCustomization: <span class="fstat-no" title="function not covered" >mo</span>duleId =&gt; <span class="cstat-no" title="statement not covered" >dispatch(cancelModuleCustomization(moduleId)),</span>
+  markAsToDelete: <span class="fstat-no" title="function not covered" >()</span> =&gt; {
+<span class="cstat-no" title="statement not covered" >    dispatch(deleteVoteProposal(id));</span>
+<span class="cstat-no" title="statement not covered" >    closeModal();</span>
+  },
+  updateTitle: <span class="fstat-no" title="function not covered" >(l</span>ocale, value) =&gt; {
+<span class="cstat-no" title="statement not covered" >    dispatch(updateVoteProposalTitle(id, locale, value));</span>
+  },
+  updateDescription: <span class="fstat-no" title="function not covered" >(l</span>ocale, value) =&gt; {
+<span class="cstat-no" title="statement not covered" >    dispatch(updateVoteProposalDescription(id, locale, value));</span>
+  },
+  handleUpClick: <span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >dispatch(moveProposalUp(id)),</span>
+  handleDownClick: <span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >dispatch(moveProposalDown(id)),</span>
+  associateModuleToProposal: <span class="fstat-no" title="function not covered" >(v</span>oteSpecTemplateId) =&gt; {
+    const newId = <span class="cstat-no" title="statement not covered" >createRandomId();</span>
+<span class="cstat-no" title="statement not covered" >    dispatch(addModuleToProposal(newId, id, voteSpecTemplateId));</span>
+  },
+  deassociateModuleToProposal: <span class="fstat-no" title="function not covered" >mo</span>duleId =&gt; <span class="cstat-no" title="statement not covered" >dispatch(deleteVoteModule(moduleId)),</span>
+  reactivateModule: <span class="fstat-no" title="function not covered" >mo</span>duleId =&gt; <span class="cstat-no" title="statement not covered" >dispatch(undeleteModule(moduleId))</span>
+});
+&nbsp;
+export { DumbVoteProposalForm };
+&nbsp;
+export default connect(mapStateToProps, mapDispatchToProps)(DumbVoteProposalForm);</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Fri Oct 26 2018 15:51:30 GMT+0200 (CEST)
+</div>
+</div>
+<script src="../../../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../../../sorter.js"></script>
+</body>
+</html>

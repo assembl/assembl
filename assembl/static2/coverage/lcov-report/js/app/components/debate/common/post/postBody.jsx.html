@@ -1,0 +1,803 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for js/app/components/debate/common/post/postBody.jsx</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../../../../prettify.css" />
+    <link rel="stylesheet" href="../../../../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../../../../index.html">All files</a> / <a href="index.html">js/app/components/debate/common/post</a> postBody.jsx
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">46% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>23/50</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">25% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>10/40</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">25% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>3/12</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">47.83% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>22/46</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">24x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">24x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">24x</span>
+<span class="cline-any cline-yes">14x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">14x</span>
+<span class="cline-any cline-yes">14x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">14x</span>
+<span class="cline-any cline-yes">14x</span>
+<span class="cline-any cline-yes">14x</span>
+<span class="cline-any cline-yes">14x</span>
+<span class="cline-any cline-yes">14x</span>
+<span class="cline-any cline-yes">14x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">14x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">14x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">14x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">14x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">24x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">24x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// @flow
+import * as React from 'react';
+import { graphql } from 'react-apollo';
+import activeHtml from 'react-active-html';
+import classNames from 'classnames';
+import jQuery from 'jquery';
+import ARange from 'annotator_range'; // eslint-disable-line
+import { withRouter } from 'react-router';
+&nbsp;
+import { getConnectedUserId, isHarvestable } from '../../../../utils/globalFunctions';
+import { isSpecialURL } from '../../../../utils/urlPreview';
+import { ExtractStates } from '../../../../constants';
+import { transformLinksInHtml /* getUrls */ } from '../../../../utils/linkify';
+import UpdateHarvestingTranslationPreference from '../../../../graphql/mutations/updateHarvestingTranslationPreference.graphql';
+import PostTranslate from '../../common/translations/postTranslate';
+import Embed from '../../../common/urlPreview/embed';
+import URLMetadataLoader from '../../../common/urlPreview/urlMetadataLoader';
+&nbsp;
+type Props = {
+  body: ?string,
+  dbId: ?number,
+  extracts: ?Array&lt;?ExtractFragment&gt;,
+  bodyDivRef?: Function, // eslint-disable-line react/require-default-props
+  bodyMimeType: string,
+  contentLocale: string,
+  id: string,
+  lang: string,
+  subject?: React.Node, // eslint-disable-line react/require-default-props
+  originalLocale: string,
+  translate: boolean,
+  translationEnabled: boolean,
+  isHarvesting: boolean,
+  params: RouterParams,
+  handleMouseUpWhileHarvesting?: Function, // eslint-disable-line react/require-default-props
+  measureTreeHeight?: Function, // eslint-disable-line react/require-default-props
+  updateHarvestingTranslation: Function
+};
+&nbsp;
+type ExtractInPostProps = {
+  id: string,
+  state: string,
+  children: React.Node
+};
+&nbsp;
+type PostBodyReplacementType = {
+  afterload?: Function
+};
+&nbsp;
+type HtmlProps = {
+  extracts?: ?Array&lt;?ExtractFragment&gt;,
+  rawHtml: string,
+  divRef?: ?Function,
+  dbId?: ?number,
+  replacementComponents: PostBodyReplacementType,
+  contentLocale?: ?string
+};
+&nbsp;
+const ExtractInPost = <span class="fstat-no" title="function not covered" >({</span> id, state, children }: ExtractInPostProps) =&gt; {
+  const isSubmitted = <span class="cstat-no" title="statement not covered" >state === ExtractStates.SUBMITTED;</span>
+<span class="cstat-no" title="statement not covered" >  return (</span>
+    &lt;span
+      className={classNames('extract-in-message', {
+        submitted: isSubmitted
+      })}
+      id={id}
+    &gt;
+      {children}
+    &lt;/span&gt;
+  );
+};
+&nbsp;
+export const postBodyReplacementComponents = (afterLoad?: Function) =&gt; ({
+  iframe: <span class="fstat-no" title="function not covered" >(a</span>ttributes: Object) =&gt; (
+    // the src iframe url is different from the resource url
+<span class="cstat-no" title="statement not covered" >    &lt;Embed</span>
+      key={attributes.key}
+      url={attributes['data-source-url'] || attributes.src}
+      defaultEmbed={&lt;iframe title="post-embed" {...attributes} /&gt;}
+    /&gt;
+  ),
+  a: <span class="fstat-no" title="function not covered" >(a</span>ttributes: Object) =&gt; {
+    const embeddedUrl = <span class="cstat-no" title="statement not covered" >isSpecialURL(attributes.href);</span>
+    const origin = (
+<span class="cstat-no" title="statement not covered" >      &lt;a</span>
+        key={`url-link-${attributes.key}`}
+        href={attributes.href}
+        className="linkified"
+        target={attributes.target}
+        title={attributes.title}
+      &gt;
+        {attributes.children}
+      &lt;/a&gt;
+    );
+<span class="cstat-no" title="statement not covered" >    if (embeddedUrl) <span class="cstat-no" title="statement not covered" >return origin;</span></span>
+<span class="cstat-no" title="statement not covered" >    return [origin, &lt;URLMetadataLoader key={`url-preview-${attributes.href}`} url={attributes.href} afterLoad={afterLoad} /&gt;];</span>
+  },
+  annotation: <span class="fstat-no" title="function not covered" >(a</span>ttributes: Object) =&gt; (
+<span class="cstat-no" title="statement not covered" >    &lt;ExtractInPost key={attributes.key} id={attributes.id} state={attributes['data-state']}&gt;</span>
+      {attributes.children}
+    &lt;/ExtractInPost&gt;
+  )
+});
+&nbsp;
+export const Html = (props: HtmlProps) =&gt; {
+  const { extracts, rawHtml, divRef, dbId, replacementComponents, contentLocale, ...containerProps } = props;
+  /*
+   * The activeHtml() function will parse the raw html,
+   * replace specified tags with provided components
+   * and return a list of react elements
+  */
+  // this anchor is shared with marionette code
+  const anchor = dbId ? <span class="branch-0 cbranch-no" title="branch not covered" >`message-body-local:Content/${dbId}` </span>: '';
+  let html = `&lt;div id="${anchor}"&gt;${rawHtml}&lt;/div&gt;`;
+&nbsp;
+  <span class="missing-if-branch" title="else path not taken" >E</span>if (extracts) {
+    const white = /^\s*$/;
+    const parser = new DOMParser();
+    html = parser.parseFromString(html, 'text/html');
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (html.body) {
+      html = html.body;
+    }
+    extracts.forEach(<span class="fstat-no" title="function not covered" >(e</span>xtract) =&gt; {
+<span class="cstat-no" title="statement not covered" >      if (extract &amp;&amp; extract.lang === contentLocale) {</span>
+        const tfis = <span class="cstat-no" title="statement not covered" >extract.textFragmentIdentifiers;</span>
+        const wrapper = <span class="cstat-no" title="statement not covered" >jQuery(`&lt;annotation id="${extract.id}" data-state="${extract.extractState || ''}"&gt;&lt;/annotation&gt;`);</span>
+<span class="cstat-no" title="statement not covered" >        if (tfis) {</span>
+<span class="cstat-no" title="statement not covered" >          tfis.forEach(<span class="fstat-no" title="function not covered" >(t</span>fi) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >            if (tfi &amp;&amp; tfi.xpathStart &amp;&amp; tfi.offsetStart !== null &amp;&amp; tfi.xpathEnd &amp;&amp; tfi.offsetEnd !== null) {</span>
+              const range = <span class="cstat-no" title="statement not covered" >new ARange.SerializedRange({</span>
+                start: tfi.xpathStart,
+                startOffset: tfi.offsetStart,
+                end: tfi.xpathEnd,
+                endOffset: tfi.offsetEnd
+              });
+<span class="cstat-no" title="statement not covered" >              try {</span>
+                const normedRange = <span class="cstat-no" title="statement not covered" >range.normalize(html);</span>
+                const nodes = <span class="cstat-no" title="statement not covered" >jQuery(normedRange.textNodes()).filter(<span class="fstat-no" title="function not covered" >(i</span>dx, node) =&gt; <span class="cstat-no" title="statement not covered" >!white.test(node))</span>;</span>
+<span class="cstat-no" title="statement not covered" >                nodes.wrap(wrapper);</span>
+              } catch (error) {
+<span class="cstat-no" title="statement not covered" >                console.error(error); </span>// eslint-disable-line no-console
+              }
+            }
+          });
+        }
+      }
+    });
+    html = html.children;
+  }
+  const nodes = activeHtml(html, replacementComponents);
+  // add a key to to fix a render issue with react 16 with duplicate texts after harvesting
+  return (
+    &lt;div ref={divRef} {...containerProps} key={extracts ? extracts.length : <span class="branch-1 cbranch-no" title="branch not covered" >0}</span>&gt;
+      {nodes}
+    &lt;/div&gt;
+  );
+};
+&nbsp;
+Html.defaultProps = {
+  extracts: [],
+  contentLocale: null,
+  divRef: null,
+  dbId: null
+};
+&nbsp;
+export const DumbPostBody = ({
+  body,
+  extracts,
+  bodyDivRef,
+  bodyMimeType,
+  contentLocale,
+  id,
+  dbId,
+  lang,
+  subject,
+  originalLocale,
+  translate,
+  translationEnabled,
+  handleMouseUpWhileHarvesting,
+  measureTreeHeight,
+  updateHarvestingTranslation,
+  isHarvesting,
+  params
+}: Props) =&gt; {
+  const divClassNames = 'post-body post-body--is-harvestable';
+  const htmlClassNames = classNames('post-body-content', 'body', {
+    'pre-wrap': bodyMimeType === 'text/plain'
+  });
+  // Only non-special URLs (like Youtube or SketchFab) will be transformed
+  // We need to add the URLs previews to the end of each post (See URLMetadataLoader)
+  // const urls = body &amp;&amp; [...getUrls(body.replace(/&lt;\/p&gt;/gi, ' &lt;/p&gt;'))].filter(url =&gt; !isSpecialURL(url));
+  const afterLoad = <span class="fstat-no" title="function not covered" >()</span> =&gt; {
+<span class="cstat-no" title="statement not covered" >    if (measureTreeHeight) <span class="cstat-no" title="statement not covered" >measureTreeHeight(400);</span></span>
+  };
+  return (
+    &lt;div className={divClassNames}&gt;
+      {translationEnabled ? (
+        &lt;PostTranslate
+          contentLocale={contentLocale}
+          id={id}
+          lang={lang}
+          originalLocale={originalLocale}
+          translate={translate}
+          afterLoad={afterLoad}
+          onTranslate={<span class="fstat-no" title="function not covered" >(f</span>rom, into) =&gt; {
+            const connectedUserIdBase64 = <span class="cstat-no" title="statement not covered" >getConnectedUserId(true);</span>
+<span class="cstat-no" title="statement not covered" >            if (connectedUserIdBase64 &amp;&amp; isHarvesting &amp;&amp; isHarvestable(params)) {</span>
+<span class="cstat-no" title="statement not covered" >              updateHarvestingTranslation({</span>
+                variables: {
+                  id: connectedUserIdBase64,
+                  translation: {
+                    localeFrom: from,
+                    localeInto: into
+                  }
+                }
+              });
+            }
+          }}
+        /&gt;
+      ) : null}
+      {subject &amp;&amp; &lt;h3 className="post-body-title dark-title-3"&gt;{subject}&lt;/h3&gt;}
+      {body &amp;&amp; (
+        &lt;div className={htmlClassNames}&gt;
+          &lt;Html
+            onMouseUp={handleMouseUpWhileHarvesting}
+            rawHtml={transformLinksInHtml(body)}
+            divRef={bodyDivRef}
+            extracts={extracts}
+            dbId={dbId}
+            replacementComponents={postBodyReplacementComponents(afterLoad)}
+            contentLocale={contentLocale}
+          /&gt;
+          {/* {urls &amp;&amp; (
+            &lt;div className="urls-container"&gt;
+              {urls.map(url =&gt; &lt;URLMetadataLoader key={url} url={url} afterLoad={afterLoad} /&gt;)}
+            &lt;/div&gt;
+          )} */}
+        &lt;/div&gt;
+      )}
+    &lt;/div&gt;
+  );
+};
+&nbsp;
+export default withRouter(
+  graphql(UpdateHarvestingTranslationPreference, {
+    name: 'updateHarvestingTranslation'
+  })(DumbPostBody)
+);</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Fri Oct 26 2018 15:51:30 GMT+0200 (CEST)
+</div>
+</div>
+<script src="../../../../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../../../../sorter.js"></script>
+</body>
+</html>

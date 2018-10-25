@@ -1,0 +1,695 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for js/app/components/debate/common/editPostForm.jsx</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../../../prettify.css" />
+    <link rel="stylesheet" href="../../../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../../../index.html">All files</a> / <a href="index.html">js/app/components/debate/common</a> editPostForm.jsx
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>0/41</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/26</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>0/14</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>0/41</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// @flow
+import * as React from 'react';
+import { compose, graphql, withApollo } from 'react-apollo';
+import { Row, Col, FormGroup, Button } from 'react-bootstrap';
+import { Translate, I18n } from 'react-redux-i18n';
+import { EditorState } from 'draft-js';
+import { PublicationStates } from '../../../constants';
+&nbsp;
+import uploadDocumentMutation from '../../../graphql/mutations/uploadDocument.graphql';
+import updatePostMutation from '../../../graphql/mutations/updatePost.graphql';
+import { displayAlert, inviteUserToLogin } from '../../../utils/utilityManager';
+import { getConnectedUserId } from '../../../utils/globalFunctions';
+import {
+  convertToEditorState,
+  convertContentStateToHTML,
+  editorStateIsEmpty,
+  uploadNewAttachments,
+  type UploadNewAttachmentsPromiseResult
+} from '../../../utils/draftjs';
+import RichTextEditor from '../../common/richTextEditor';
+import { TextInputWithRemainingChars } from '../../common/textInputWithRemainingChars';
+import { TEXT_INPUT_MAX_LENGTH, BODY_MAX_LENGTH } from './topPostForm';
+&nbsp;
+type EditPostFormProps = {
+  originalLocale: string,
+  body: string,
+  id: string,
+  subject: string,
+  readOnly: boolean,
+  modifiedOriginalSubject: string,
+  goBackToViewMode: Function,
+  client: Object,
+  uploadDocument: Function,
+  updatePost: Function,
+  onSuccess: Function,
+  postSuccessMsgId?: string,
+  editTitleLabelMsgId?: string,
+  bodyDescriptionMsgId?: string,
+  fillBodyLabelMsgId?: string,
+  childrenUpdate?: boolean,
+  bodyMaxLength?: number,
+  draftable?: boolean,
+  draftSuccessMsgId?: string
+};
+&nbsp;
+type EditPostFormState = {
+  subject: string,
+  body: EditorState
+};
+&nbsp;
+class EditPostForm extends React.PureComponent&lt;EditPostFormProps, EditPostFormState&gt; {
+  static defaultProps = {
+    postSuccessMsgId: 'debate.thread.postSuccess',
+    editTitleLabelMsgId: 'debate.edit.title',
+    bodyDescriptionMsgId: 'debate.edit.body',
+    fillBodyLabelMsgId: 'debate.thread.fillBody',
+    childrenUpdate: true,
+    bodyMaxLength: BODY_MAX_LENGTH,
+    onSuccess: <span class="fstat-no" title="function not covered" >()</span> =&gt; {},
+    draftable: false,
+    draftSuccessMsgId: null
+  };
+&nbsp;
+<span class="fstat-no" title="function not covered" >  co</span>nstructor(props: EditPostFormProps) {
+<span class="cstat-no" title="statement not covered" >    super(props);</span>
+    const { subject } = <span class="cstat-no" title="statement not covered" >props;</span>
+    const body = <span class="cstat-no" title="statement not covered" >props.body || '';</span>
+<span class="cstat-no" title="statement not covered" >    this.state = {</span>
+      body: convertToEditorState(body),
+      subject: subject
+    };
+  }
+&nbsp;
+  updateSubject = <span class="fstat-no" title="function not covered" >(e</span>: SyntheticInputEvent&lt;HTMLInputElement&gt;): void =&gt; {
+<span class="cstat-no" title="statement not covered" >    this.setState({ subject: e.target.value });</span>
+  };
+&nbsp;
+  updateBody = <span class="fstat-no" title="function not covered" >(b</span>ody: EditorState): void =&gt; {
+<span class="cstat-no" title="statement not covered" >    this.setState({ body: body });</span>
+  };
+&nbsp;
+  handleCancel = <span class="fstat-no" title="function not covered" >()</span>: void =&gt; {
+<span class="cstat-no" title="statement not covered" >    this.props.goBackToViewMode();</span>
+  };
+&nbsp;
+  handleInputFocus = <span class="fstat-no" title="function not covered" >()</span> =&gt; {
+    const isUserConnected = <span class="cstat-no" title="statement not covered" >getConnectedUserId();</span> // TO DO put isUserConnected in the store
+<span class="cstat-no" title="statement not covered" >    if (!isUserConnected) {</span>
+<span class="cstat-no" title="statement not covered" >      inviteUserToLogin();</span>
+    }
+  };
+&nbsp;
+  handleSubmit = <span class="fstat-no" title="function not covered" >(p</span>ublicationState) =&gt; {
+    const { uploadDocument, updatePost, postSuccessMsgId, childrenUpdate, draftSuccessMsgId, fillBodyLabelMsgId } = <span class="cstat-no" title="statement not covered" >this.props;</span>
+    const { subject, body } = <span class="cstat-no" title="statement not covered" >this.state;</span>
+    const subjectIsEmpty = <span class="cstat-no" title="statement not covered" >subject.length === 0;</span>
+    const bodyIsEmpty = <span class="cstat-no" title="statement not covered" >editorStateIsEmpty(body);</span>
+<span class="cstat-no" title="statement not covered" >    if (!subjectIsEmpty &amp;&amp; !bodyIsEmpty) {</span>
+      // first we upload the new documents
+      const uploadDocumentsPromise = <span class="cstat-no" title="statement not covered" >uploadNewAttachments(body, uploadDocument);</span>
+<span class="cstat-no" title="statement not covered" >      uploadDocumentsPromise.then(<span class="fstat-no" title="function not covered" >(r</span>esult: UploadNewAttachmentsPromiseResult) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        if (!result.contentState) {</span>
+<span class="cstat-no" title="statement not covered" >          return;</span>
+        }
+&nbsp;
+        const variables = <span class="cstat-no" title="statement not covered" >{</span>
+          contentLocale: this.props.originalLocale,
+          postId: this.props.id,
+          subject: subject || '',
+          body: convertContentStateToHTML(result.contentState),
+          attachments: result.documentIds,
+          publicationState: publicationState
+        };
+<span class="cstat-no" title="statement not covered" >        displayAlert('success', I18n.t('loading.wait'));</span>
+        const oldSubject = <span class="cstat-no" title="statement not covered" >this.props.subject;</span>
+<span class="cstat-no" title="statement not covered" >        updatePost({ variables: variables })</span>
+          .then(<span class="fstat-no" title="function not covered" >()</span> =&gt; {
+            const successMsgId = <span class="cstat-no" title="statement not covered" >publicationState === PublicationStates.DRAFT ? draftSuccessMsgId : postSuccessMsgId;</span>
+<span class="cstat-no" title="statement not covered" >            displayAlert('success', I18n.t(successMsgId));</span>
+<span class="cstat-no" title="statement not covered" >            this.props.goBackToViewMode();</span>
+<span class="cstat-no" title="statement not covered" >            this.props.onSuccess(variables.subject, variables.body, variables.publicationState);</span>
+<span class="cstat-no" title="statement not covered" >            if (childrenUpdate &amp;&amp; oldSubject !== subject) {</span>
+              // If we edited the subject, we need to reload all descendants posts,
+              // we do this by refetch all Post queries.
+              // Descendants are actually a subset of Post queries, so we overfetch here.
+              // This is fine, editing a subject should be a rare action.
+              const queryManager = <span class="cstat-no" title="statement not covered" >this.props.client.queryManager;</span>
+<span class="cstat-no" title="statement not covered" >              queryManager.queryIdsByName.Post.forEach(<span class="fstat-no" title="function not covered" >(q</span>ueryId) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >                queryManager.observableQueries[queryId].observableQuery.refetch();</span>
+              });
+            }
+          })
+          .catch(<span class="fstat-no" title="function not covered" >(e</span>rror) =&gt; {
+<span class="cstat-no" title="statement not covered" >            displayAlert('danger', `${error}`);</span>
+          });
+      });
+    } else <span class="cstat-no" title="statement not covered" >if (subjectIsEmpty) {</span>
+<span class="cstat-no" title="statement not covered" >      displayAlert('warning', I18n.t('debate.thread.fillSubject'));</span>
+    } else <span class="cstat-no" title="statement not covered" >if (bodyIsEmpty) {</span>
+<span class="cstat-no" title="statement not covered" >      displayAlert('warning', I18n.t(fillBodyLabelMsgId));</span>
+    }
+  };
+&nbsp;
+<span class="fstat-no" title="function not covered" >  re</span>nder() {
+    const { subject, body } = <span class="cstat-no" title="statement not covered" >this.state;</span>
+    const { editTitleLabelMsgId, modifiedOriginalSubject, bodyDescriptionMsgId, bodyMaxLength } = <span class="cstat-no" title="statement not covered" >this.props;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    return (</span>
+      &lt;Row&gt;
+        &lt;Col xs={12} md={12}&gt;
+          &lt;div className="color margin-left-9"&gt;
+            &lt;span className="assembl-icon-edit" /&gt;&amp;nbsp;&lt;Translate value={editTitleLabelMsgId} className="sm-title" /&gt;
+          &lt;/div&gt;
+        &lt;/Col&gt;
+        &lt;Col xs={12} md={12}&gt;
+          &lt;div className="answer-form-inner"&gt;
+            {this.props.readOnly ? (
+              &lt;div&gt;
+                &lt;h3 className="dark-title-3"&gt;{modifiedOriginalSubject}&lt;/h3&gt;
+                &lt;div className="margin-m" /&gt;
+              &lt;/div&gt;
+            ) : (
+              &lt;TextInputWithRemainingChars
+                alwaysDisplayLabel
+                label={I18n.t('debate.edit.subject')}
+                value={subject}
+                handleTxtChange={this.updateSubject}
+                maxLength={TEXT_INPUT_MAX_LENGTH}
+              /&gt;
+            )}
+            &lt;FormGroup&gt;
+              &lt;RichTextEditor
+                editorState={body}
+                placeholder={I18n.t(bodyDescriptionMsgId)}
+                onChange={this.updateBody}
+                maxLength={bodyMaxLength}
+                withAttachmentButton
+              /&gt;
+&nbsp;
+              &lt;div className="button-container"&gt;
+                &lt;Button className="button-cancel button-dark btn btn-default left" onClick={this.handleCancel}&gt;
+                  &lt;Translate value="cancel" /&gt;
+                &lt;/Button&gt;
+                &lt;Button
+                  className="button-submit button-dark btn btn-default right"
+                  onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >this.handleSubmit(PublicationStates.PUBLISHED)}</span>
+                &gt;
+                  &lt;Translate value="debate.post" /&gt;
+                &lt;/Button&gt;
+                {this.props.draftable ? (
+                  &lt;Button
+                    className="button-submit button-dark btn btn-default right btn-draft"
+                    onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >this.handleSubmit(PublicationStates.DRAFT)}</span>
+                  &gt;
+                    &lt;Translate value="debate.brightMirror.saveDraft" /&gt;
+                  &lt;/Button&gt;
+                ) : null}
+              &lt;/div&gt;
+            &lt;/FormGroup&gt;
+          &lt;/div&gt;
+        &lt;/Col&gt;
+      &lt;/Row&gt;
+    );
+  }
+}
+&nbsp;
+export default compose(
+  graphql(uploadDocumentMutation, { name: 'uploadDocument' }),
+  graphql(updatePostMutation, { name: 'updatePost' }),
+  withApollo
+)(EditPostForm);</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Fri Oct 26 2018 15:51:30 GMT+0200 (CEST)
+</div>
+</div>
+<script src="../../../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../../../sorter.js"></script>
+</body>
+</html>

@@ -1,0 +1,629 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for js/app/reducers/adminReducer/timeline.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../../prettify.css" />
+    <link rel="stylesheet" href="../../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../../index.html">All files</a> / <a href="index.html">js/app/reducers/adminReducer</a> timeline.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">83.61% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>51/61</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">60.42% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>29/48</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>8/8</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">83.05% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>49/59</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line high'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">15x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// @flow
+import type ReduxAction from 'redux';
+import { combineReducers } from 'redux';
+import { List, Map, fromJS } from 'immutable';
+import { updateInLangstringEntries } from '../../utils/i18n';
+import { moveItemUp, moveItemDown } from '../../utils/globalFunctions';
+&nbsp;
+import {
+  type Action,
+  CREATE_PHASE,
+  UPDATE_PHASES,
+  DELETE_PHASE,
+  UPDATE_PHASE_TITLE,
+  UPDATE_PHASE_DESCRIPTION,
+  UPDATE_PHASE_IDENTIFIER,
+  UPDATE_PHASE_IMAGE,
+  UPDATE_PHASE_START,
+  UPDATE_PHASE_END,
+  UPDATE_IS_THEMATICS_TABLE,
+  MOVE_PHASE_UP,
+  MOVE_PHASE_DOWN
+} from '../../actions/actionTypes';
+&nbsp;
+const defaultImage = Map({
+  externalUrl: '',
+  mimeType: '',
+  title: ''
+});
+&nbsp;
+const emptyPhase = Map({
+  _hasChanged: false,
+  _isNew: true,
+  _toDelete: false,
+  identifier: null,
+  titleEntries: List(),
+  descriptionEntries: List(),
+  start: null,
+  end: null,
+  isThematicsTable: false,
+  hasConflictingDates: false,
+  endIsBeforeStart: false,
+  image: defaultImage
+});
+&nbsp;
+const hasConflictingDates = (phase, phases) =&gt; {
+  const start = phase.get('start');
+  const end = phase.get('end');
+  const id = phase.get('id');
+  const orderedPhasesMap = phases.filter(p =&gt; !p.get('_toDelete')).sortBy(p =&gt; p.get('order'));
+  const phaseIndex = orderedPhasesMap.keySeq().indexOf(id);
+  const phasesArray = orderedPhasesMap.valueSeq().toJS();
+  const previousPhase = phasesArray[phaseIndex - 1];
+  const nextPhase = phasesArray[phaseIndex + 1];
+  const res = (start &amp;&amp; previousPhase &amp;&amp; <span class="branch-2 cbranch-no" title="branch not covered" >start.isBefore(previousPhase.end))</span> || (end &amp;&amp; nextPhase &amp;&amp; <span class="branch-5 cbranch-no" title="branch not covered" >end.isAfter(nextPhase.start))</span>;
+  return res || false;
+};
+&nbsp;
+const setHasConflictingDates = (phases) =&gt; {
+  let newState = phases;
+  newState.forEach((phase, id) =&gt; {
+    newState = newState.setIn([id, 'hasConflictingDates'], hasConflictingDates(phase, newState));
+  });
+  return newState;
+};
+&nbsp;
+type PhasesByIdState = Map&lt;string, Map&gt;;
+type PhasesByIdReducer = (PhasesByIdState, ReduxAction&lt;Action&gt;) =&gt; PhasesByIdState;
+export const phasesById: PhasesByIdReducer = (state: PhasesByIdState = Map(), action: ReduxAction&lt;Action&gt;) =&gt; {
+  switch (action.type) {
+  case CREATE_PHASE:
+    return state.set(
+      action.id,
+      emptyPhase
+        .set('id', action.id)
+        .set('order', action.order)
+        .set('identifier', 'survey')
+    );
+  case DELETE_PHASE: {
+    let newState = state.setIn([action.id, '_toDelete'], true);
+    newState = setHasConflictingDates(newState);
+    return newState;
+  }
+  case UPDATE_PHASE_TITLE:
+    return state
+      .updateIn([action.id, 'titleEntries'], updateInLangstringEntries(action.locale, action.value))
+      .setIn([action.id, '_hasChanged'], true);
+<span class="branch-3 cbranch-no" title="branch not covered" >  case UPDATE_PHASE_DESCRIPTION:</span>
+<span class="cstat-no" title="statement not covered" >    return state</span>
+      .updateIn([action.id, 'descriptionEntries'], updateInLangstringEntries(action.locale, action.value))
+      .setIn([action.id, '_hasChanged'], true);
+  case UPDATE_PHASE_IDENTIFIER:
+    return state.setIn([action.id, 'identifier'], action.value).setIn([action.id, '_hasChanged'], true);
+  case UPDATE_PHASE_START: {
+    const end = state.getIn([action.id, 'end']);
+    const newStart = action.value;
+    const endIsBeforeNewStart = end &amp;&amp; end.isBefore(newStart);
+    let newState = state
+      .setIn([action.id, 'start'], newStart)
+      .setIn([action.id, 'endIsBeforeStart'], endIsBeforeNewStart || false)
+      .setIn([action.id, '_hasChanged'], true);
+    newState = setHasConflictingDates(newState);
+    return newState;
+  }
+  case UPDATE_PHASE_END: {
+    const start = state.getIn([action.id, 'start']);
+    const newEnd = action.value;
+    const newIsBeforeStart = start &amp;&amp; newEnd.isBefore(start);
+    let newState = state
+      .setIn([action.id, 'end'], newEnd)
+      .setIn([action.id, 'endIsBeforeStart'], newIsBeforeStart || false)
+      .setIn([action.id, '_hasChanged'], true);
+    newState = setHasConflictingDates(newState);
+    return newState;
+  }
+<span class="branch-7 cbranch-no" title="branch not covered" >  case UPDATE_PHASE_IMAGE:</span>
+<span class="cstat-no" title="statement not covered" >    return state</span>
+      .setIn([action.id, 'image', 'externalUrl'], action.value)
+      .setIn([action.id, 'image', 'mimeType'], action.value.type)
+      .setIn([action.id, 'image', 'title'], action.value.name)
+      .setIn([action.id, '_hasChanged'], true);
+  case UPDATE_IS_THEMATICS_TABLE:
+    return state.setIn([action.id, 'isThematicsTable'], action.value).setIn([action.id, '_hasChanged'], true);
+<span class="branch-9 cbranch-no" title="branch not covered" >  case MOVE_PHASE_UP: {</span>
+    let newState = <span class="cstat-no" title="statement not covered" >moveItemUp(state, action.id);</span>
+<span class="cstat-no" title="statement not covered" >    newState = setHasConflictingDates(newState);</span>
+<span class="cstat-no" title="statement not covered" >    return newState;</span>
+  }
+<span class="branch-10 cbranch-no" title="branch not covered" >  case MOVE_PHASE_DOWN: {</span>
+    let newState = <span class="cstat-no" title="statement not covered" >moveItemDown(state, action.id);</span>
+<span class="cstat-no" title="statement not covered" >    newState = setHasConflictingDates(newState);</span>
+<span class="cstat-no" title="statement not covered" >    return newState;</span>
+  }
+  case UPDATE_PHASES: {
+    let newState = Map();
+    action.phases.forEach(
+      ({ identifier, titleEntries, start, end, id, isThematicsTable, order, image, descriptionEntries }) =&gt; {
+        const phaseInfo = Map({
+          _hasChanged: false,
+          _isNew: false,
+          _toDelete: false,
+          identifier: identifier,
+          titleEntries: fromJS(titleEntries),
+          start: start,
+          end: end,
+          isThematicsTable: isThematicsTable || false, // default to false until we have the interface to set a thematicstable
+          id: id,
+          order: order,
+          endIsBeforeStart: end.isBefore(start),
+          image: image ? fromJS(image) : <span class="branch-1 cbranch-no" title="branch not covered" >defaultImage,</span>
+          descriptionEntries: fromJS(descriptionEntries)
+        });
+&nbsp;
+        newState = newState.set(id, phaseInfo);
+      }
+    );
+    newState = setHasConflictingDates(newState);
+    return newState;
+  }
+  default:
+    return state;
+  }
+};
+&nbsp;
+type TimelineHasChangedReducer = (boolean, ReduxAction&lt;Action&gt;) =&gt; boolean;
+export const phasesHaveChanged: TimelineHasChangedReducer = (state = false, action) =&gt; {
+  switch (action.type) {
+<span class="branch-0 cbranch-no" title="branch not covered" >  case UPDATE_PHASES:</span>
+<span class="cstat-no" title="statement not covered" >    return false;</span>
+<span class="branch-1 cbranch-no" title="branch not covered" >  case CREATE_PHASE:</span>
+<span class="branch-2 cbranch-no" title="branch not covered" >  case DELETE_PHASE:</span>
+<span class="branch-3 cbranch-no" title="branch not covered" >  case UPDATE_PHASE_TITLE:</span>
+<span class="branch-4 cbranch-no" title="branch not covered" >  case UPDATE_PHASE_DESCRIPTION:</span>
+<span class="branch-5 cbranch-no" title="branch not covered" >  case UPDATE_PHASE_IDENTIFIER:</span>
+<span class="branch-6 cbranch-no" title="branch not covered" >  case UPDATE_PHASE_IMAGE:</span>
+<span class="branch-7 cbranch-no" title="branch not covered" >  case UPDATE_PHASE_START:</span>
+<span class="branch-8 cbranch-no" title="branch not covered" >  case UPDATE_PHASE_END:</span>
+<span class="branch-9 cbranch-no" title="branch not covered" >  case UPDATE_IS_THEMATICS_TABLE:</span>
+<span class="branch-10 cbranch-no" title="branch not covered" >  case MOVE_PHASE_UP:</span>
+<span class="branch-11 cbranch-no" title="branch not covered" >  case MOVE_PHASE_DOWN:</span>
+<span class="cstat-no" title="statement not covered" >    return true;</span>
+  default:
+    return state;
+  }
+};
+&nbsp;
+export default combineReducers({
+  phasesHaveChanged: phasesHaveChanged,
+  phasesById: phasesById
+});</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Fri Oct 26 2018 15:51:30 GMT+0200 (CEST)
+</div>
+</div>
+<script src="../../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../../sorter.js"></script>
+</body>
+</html>

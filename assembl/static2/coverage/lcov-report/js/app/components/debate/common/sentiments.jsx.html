@@ -1,0 +1,494 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for js/app/components/debate/common/sentiments.jsx</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../../../prettify.css" />
+    <link rel="stylesheet" href="../../../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../../../index.html">All files</a> / <a href="index.html">js/app/components/debate/common</a> sentiments.jsx
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">6.25% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>1/16</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/40</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>0/4</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">6.25% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>1/16</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// @flow
+import React from 'react';
+import { type ApolloClient } from 'react-apollo';
+import { Translate } from 'react-redux-i18n';
+import addSentimentMutation from '../../../graphql/mutations/addSentiment.graphql';
+import deleteSentimentMutation from '../../../graphql/mutations/deleteSentiment.graphql';
+import { getConnectedUserId } from '../../../utils/globalFunctions';
+import { inviteUserToLogin, displayModal } from '../../../utils/utilityManager';
+import sentimentDefinitions, { type SentimentDefinition } from './sentimentDefinitions';
+import ResponsiveOverlayTrigger from '../../common/responsiveOverlayTrigger';
+&nbsp;
+type SentimentProps = {
+  client: ApolloClient,
+  isPhaseCompleted: boolean,
+  isSelected: boolean,
+  mySentiment: ?string,
+  placement: OverlayPlacement,
+  postId: string,
+  sentiment: SentimentDefinition,
+  sentimentCounts: SentimentCountsFragment
+};
+&nbsp;
+const Sentiment = <span class="fstat-no" title="function not covered" >({</span>
+  sentimentCounts,
+  mySentiment,
+  sentiment,
+  client,
+  isSelected,
+  postId,
+  placement,
+  isPhaseCompleted
+}: SentimentProps) =&gt; {
+  const likeCount = <span class="cstat-no" title="statement not covered" >sentimentCounts.like ? sentimentCounts.like : 0;</span>
+  const disagreeCount = <span class="cstat-no" title="statement not covered" >sentimentCounts.disagree ? sentimentCounts.disagree : 0;</span>
+  const dontUnderstandCount = <span class="cstat-no" title="statement not covered" >sentimentCounts.dontUnderstand ? sentimentCounts.dontUnderstand : 0;</span>
+  const moreInfoCount = <span class="cstat-no" title="statement not covered" >sentimentCounts.moreInfo ? sentimentCounts.moreInfo : 0;</span>
+  const sentimentComponent = (
+<span class="cstat-no" title="statement not covered" >    &lt;div</span>
+      className={isSelected ? 'sentiment sentiment-active' : 'sentiment'}
+      onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; {
+        const isUserConnected = <span class="cstat-no" title="statement not covered" >getConnectedUserId();</span>
+<span class="cstat-no" title="statement not covered" >        if (!isUserConnected) {</span>
+<span class="cstat-no" title="statement not covered" >          inviteUserToLogin();</span>
+        } else <span class="cstat-no" title="statement not covered" >if (isPhaseCompleted) {</span>
+          const body = (
+<span class="cstat-no" title="statement not covered" >            &lt;div&gt;</span>
+              &lt;Translate value="debate.isCompleted" /&gt;
+            &lt;/div&gt;
+          );
+<span class="cstat-no" title="statement not covered" >          displayModal(null, body, true, null, null, true);</span>
+        } else {
+<span class="cstat-no" title="statement not covered" >          client.mutate(</span>
+            isSelected
+              ? {
+                mutation: deleteSentimentMutation,
+                variables: { postId: postId },
+                optimisticResponse: {
+                  deleteSentiment: {
+                    post: {
+                      id: postId,
+                      sentimentCounts: {
+                        like: likeCount - (mySentiment === sentiment.type ? 1 : 0),
+                        disagree: disagreeCount - (mySentiment === sentiment.type ? 1 : 0),
+                        dontUnderstand: dontUnderstandCount - (mySentiment === sentiment.type ? 1 : 0),
+                        moreInfo: moreInfoCount - (mySentiment === sentiment.type ? 1 : 0),
+                        __typename: 'SentimentCounts'
+                      },
+                      mySentiment: null,
+                      __typename: 'Post'
+                    },
+                    __typename: 'DeleteSentiment'
+                  }
+                }
+              }
+              : {
+                mutation: addSentimentMutation,
+                variables: { postId: postId, type: sentiment.type },
+                optimisticResponse: {
+                  addSentiment: {
+                    post: {
+                      id: postId,
+                      sentimentCounts: {
+                        like: sentiment.camelType === 'like' ? likeCount + 1 : likeCount - (mySentiment === 'LIKE' ? 1 : 0),
+                        disagree:
+                            sentiment.camelType === 'disagree'
+                              ? disagreeCount + 1
+                              : disagreeCount - (mySentiment === 'DISAGREE' ? 1 : 0),
+                        dontUnderstand:
+                            sentiment.camelType === 'dontUnderstand'
+                              ? dontUnderstandCount + 1
+                              : dontUnderstandCount - (mySentiment === 'DONT_UNDERSTAND' ? 1 : 0),
+                        moreInfo:
+                            sentiment.camelType === 'moreInfo'
+                              ? moreInfoCount + 1
+                              : moreInfoCount - (mySentiment === 'MORE_INFO' ? 1 : 0),
+                        __typename: 'SentimentCounts'
+                      },
+                      mySentiment: sentiment.type,
+                      __typename: 'Post'
+                    },
+                    __typename: 'AddSentiment'
+                  }
+                }
+              }
+          );
+        }
+      }}
+    &gt;
+      &lt;sentiment.SvgComponent size={23} /&gt;
+    &lt;/div&gt;
+  );
+<span class="cstat-no" title="statement not covered" >  return (</span>
+    &lt;ResponsiveOverlayTrigger placement={placement} tooltip={sentiment.tooltip}&gt;
+      {sentimentComponent}
+    &lt;/ResponsiveOverlayTrigger&gt;
+  );
+};
+&nbsp;
+type SentimentsProps = {
+  client: ApolloClient,
+  isPhaseCompleted: boolean,
+  mySentiment: ?string,
+  placement: OverlayPlacement,
+  postId: string,
+  sentimentCounts: SentimentCountsFragment
+};
+&nbsp;
+export default <span class="fstat-no" title="function not covered" >({</span> sentimentCounts, mySentiment, client, postId, placement, isPhaseCompleted }: SentimentsProps) =&gt; (
+<span class="cstat-no" title="statement not covered" >  &lt;div className="add-sentiment"&gt;</span>
+    {sentimentDefinitions.map(<span class="fstat-no" title="function not covered" >se</span>ntiment =&gt; (
+<span class="cstat-no" title="statement not covered" >      &lt;Sentiment</span>
+        key={sentiment.type}
+        sentimentCounts={sentimentCounts}
+        mySentiment={mySentiment}
+        sentiment={sentiment}
+        isSelected={mySentiment === sentiment.type}
+        postId={postId}
+        client={client}
+        placement={placement}
+        isPhaseCompleted={isPhaseCompleted}
+      /&gt;
+    ))}
+  &lt;/div&gt;
+);</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Fri Oct 26 2018 15:51:30 GMT+0200 (CEST)
+</div>
+</div>
+<script src="../../../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../../../sorter.js"></script>
+</body>
+</html>

@@ -1,0 +1,1967 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for js/app/reducers/adminReducer/voteSession.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../../prettify.css" />
+    <link rel="stylesheet" href="../../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../../index.html">All files</a> / <a href="index.html">js/app/reducers/adminReducer</a> voteSession.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">48.92% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>91/186</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">61.03% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>83/136</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">43.75% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>21/48</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">48.63% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>89/183</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+311
+312
+313
+314
+315
+316
+317
+318
+319
+320
+321
+322
+323
+324
+325
+326
+327
+328
+329
+330
+331
+332
+333
+334
+335
+336
+337
+338
+339
+340
+341
+342
+343
+344
+345
+346
+347
+348
+349
+350
+351
+352
+353
+354
+355
+356
+357
+358
+359
+360
+361
+362
+363
+364
+365
+366
+367
+368
+369
+370
+371
+372
+373
+374
+375
+376
+377
+378
+379
+380
+381
+382
+383
+384
+385
+386
+387
+388
+389
+390
+391
+392
+393
+394
+395
+396
+397
+398
+399
+400
+401
+402
+403
+404
+405
+406
+407
+408
+409
+410
+411
+412
+413
+414
+415
+416
+417
+418
+419
+420
+421
+422
+423
+424
+425
+426
+427
+428
+429
+430
+431
+432
+433
+434
+435
+436
+437
+438
+439
+440
+441
+442
+443
+444
+445
+446
+447
+448
+449
+450
+451
+452
+453
+454
+455
+456
+457
+458
+459
+460
+461
+462
+463
+464
+465
+466
+467
+468
+469
+470
+471
+472
+473
+474
+475
+476
+477
+478
+479
+480
+481
+482
+483
+484
+485
+486
+487
+488
+489
+490
+491
+492
+493
+494
+495
+496
+497
+498
+499
+500
+501
+502
+503
+504
+505
+506
+507
+508
+509
+510
+511
+512
+513
+514
+515
+516
+517
+518
+519
+520
+521
+522
+523
+524
+525
+526
+527
+528
+529
+530
+531
+532
+533
+534
+535
+536
+537
+538
+539
+540
+541
+542
+543
+544
+545
+546
+547
+548
+549
+550
+551
+552
+553
+554
+555
+556
+557
+558
+559
+560
+561
+562
+563
+564
+565
+566
+567
+568
+569
+570
+571
+572
+573
+574
+575
+576
+577
+578
+579
+580
+581
+582
+583
+584
+585
+586
+587
+588
+589
+590
+591
+592
+593
+594
+595
+596
+597
+598
+599
+600
+601
+602
+603
+604
+605
+606
+607
+608
+609
+610
+611
+612
+613
+614
+615
+616
+617
+618
+619
+620
+621
+622
+623
+624
+625
+626
+627
+628
+629
+630
+631
+632
+633
+634
+635</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">15x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">37x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">29x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">20x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">35x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">15x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// @flow
+import pick from 'lodash/pick';
+import { combineReducers } from 'redux';
+import type ReduxAction from 'redux';
+import { fromJS, List, Map } from 'immutable';
+import {
+  type Action,
+  UPDATE_VOTE_SESSION_PAGE_TITLE,
+  UPDATE_VOTE_SESSION_PAGE_SEECURRENTVOTES,
+  UPDATE_VOTE_SESSION_PAGE_SUBTITLE,
+  UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_TITLE,
+  UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_CONTENT,
+  UPDATE_VOTE_SESSION_PAGE_PROPOSITIONS_TITLE,
+  UPDATE_VOTE_SESSION_PAGE_IMAGE,
+  UPDATE_VOTE_SESSION_PAGE,
+  UPDATE_VOTE_MODULE,
+  UPDATE_VOTE_MODULES,
+  DELETE_VOTE_MODULE,
+  CREATE_TOKEN_VOTE_MODULE,
+  CREATE_GAUGE_VOTE_MODULE,
+  UPDATE_TOKEN_VOTE_EXCLUSIVE_CATEGORY,
+  UPDATE_TOKEN_VOTE_INSTRUCTIONS,
+  CREATE_TOKEN_VOTE_CATEGORY,
+  DELETE_TOKEN_VOTE_CATEGORY,
+  UPDATE_TOKEN_VOTE_CATEGORY_TITLE,
+  UPDATE_TOKEN_TOTAL_NUMBER,
+  UPDATE_TOKEN_VOTE_CATEGORY_COLOR,
+  UPDATE_VOTE_PROPOSALS,
+  CREATE_VOTE_PROPOSAL,
+  DELETE_VOTE_PROPOSAL,
+  UPDATE_VOTE_PROPOSAL_TITLE,
+  UPDATE_VOTE_PROPOSAL_DESCRIPTION,
+  MOVE_PROPOSAL_UP,
+  MOVE_PROPOSAL_DOWN,
+  UPDATE_GAUGE_VOTE_INSTRUCTIONS,
+  UPDATE_GAUGE_VOTE_NUMBER_TICKS,
+  UPDATE_GAUGE_VOTE_IS_NUMBER,
+  CREATE_GAUGE_VOTE_CHOICE,
+  DELETE_GAUGE_VOTE_CHOICE,
+  UPDATE_GAUGE_VOTE_CHOICE_LABEL,
+  UPDATE_GAUGE_MINIMUM,
+  UPDATE_GAUGE_MAXIMUM,
+  UPDATE_GAUGE_UNIT,
+  ADD_MODULE_TO_PROPOSAL,
+  UNDELETE_MODULE,
+  MARK_ALL_DEPENDENCIES_AS_CHANGED,
+  SET_VALIDATION_ERRORS,
+  CANCEL_MODULE_CUSTOMIZATION
+} from '../../actions/actionTypes';
+import { updateInLangstringEntries } from '../../utils/i18n';
+import { pickerColors } from '../../constants';
+import { moveItemUp, moveItemDown } from '../../utils/globalFunctions';
+&nbsp;
+const initialPage = Map({
+  _hasChanged: false,
+  id: '',
+  titleEntries: List(),
+  seeCurrentVotes: false,
+  subTitleEntries: List(),
+  instructionsSectionTitleEntries: List(),
+  instructionsSectionContentEntries: List(),
+  propositionsSectionTitleEntries: List(),
+  headerImage: Map({
+    externalUrl: '',
+    mimeType: '',
+    title: ''
+  })
+});
+export type VoteSessionPageReducer = (Map, ReduxAction&lt;Action&gt;) =&gt; Map;
+export const voteSessionPage: VoteSessionPageReducer = (state = initialPage, action) =&gt; {
+  switch (action.type) {
+  case UPDATE_VOTE_SESSION_PAGE_TITLE:
+    return state
+      .update('titleEntries', updateInLangstringEntries(action.locale, fromJS(action.value)))
+      .set('_hasChanged', true);
+  case UPDATE_VOTE_SESSION_PAGE_SEECURRENTVOTES:
+    return state.set('seeCurrentVotes', action.value).set('_hasChanged', true);
+  case UPDATE_VOTE_SESSION_PAGE_SUBTITLE:
+    return state
+      .update('subTitleEntries', updateInLangstringEntries(action.locale, fromJS(action.value)))
+      .set('_hasChanged', true);
+  case UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_TITLE:
+    return state
+      .update('instructionsSectionTitleEntries', updateInLangstringEntries(action.locale, fromJS(action.value)))
+      .set('_hasChanged', true);
+  case UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_CONTENT:
+    return state
+      .update('instructionsSectionContentEntries', updateInLangstringEntries(action.locale, action.value))
+      .set('_hasChanged', true);
+  case UPDATE_VOTE_SESSION_PAGE_PROPOSITIONS_TITLE:
+    return state
+      .update('propositionsSectionTitleEntries', updateInLangstringEntries(action.locale, fromJS(action.value)))
+      .set('_hasChanged', true);
+  case UPDATE_VOTE_SESSION_PAGE_IMAGE:
+    return state
+      .setIn(['headerImage', 'externalUrl'], action.value)
+      .setIn(['headerImage', 'mimeType'], action.value.type)
+      .set('_hasChanged', true);
+<span class="branch-7 cbranch-no" title="branch not covered" >  case UPDATE_VOTE_SESSION_PAGE: {</span>
+    let headerImage = <span class="cstat-no" title="statement not covered" >Map({</span>
+      externalUrl: '',
+      mimeType: ''
+    });
+<span class="cstat-no" title="statement not covered" >    if (action.headerImage) {</span>
+<span class="cstat-no" title="statement not covered" >      headerImage = fromJS(action.headerImage);</span>
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    return Map({</span>
+      _hasChanged: false,
+      id: fromJS(action.id),
+      titleEntries: fromJS(action.titleEntries),
+      seeCurrentVotes: action.seeCurrentVotes,
+      subTitleEntries: fromJS(action.subTitleEntries),
+      instructionsSectionTitleEntries: fromJS(action.instructionsSectionTitleEntries),
+      instructionsSectionContentEntries: List(action.instructionsSectionContentEntries.map(<span class="fstat-no" title="function not covered" >en</span>try =&gt; <span class="cstat-no" title="statement not covered" >Map(entry))</span>),
+      propositionsSectionTitleEntries: fromJS(action.propositionsSectionTitleEntries),
+      headerImage: headerImage
+    });
+  }
+  default:
+    return state;
+  }
+};
+&nbsp;
+export const modulesOrProposalsHaveChanged = (state: boolean = false, action: ReduxAction&lt;Action&gt;) =&gt; {
+  switch (action.type) {
+  case ADD_MODULE_TO_PROPOSAL:
+  case CANCEL_MODULE_CUSTOMIZATION:
+  case CREATE_GAUGE_VOTE_CHOICE:
+  case CREATE_GAUGE_VOTE_MODULE:
+  case CREATE_TOKEN_VOTE_CATEGORY:
+  case CREATE_TOKEN_VOTE_MODULE:
+  case CREATE_VOTE_PROPOSAL:
+  case UPDATE_VOTE_MODULE:
+  case DELETE_GAUGE_VOTE_CHOICE:
+  case DELETE_TOKEN_VOTE_CATEGORY:
+  case DELETE_VOTE_MODULE:
+  case DELETE_VOTE_PROPOSAL:
+  case MARK_ALL_DEPENDENCIES_AS_CHANGED:
+  case MOVE_PROPOSAL_DOWN:
+  case MOVE_PROPOSAL_UP:
+  case UPDATE_GAUGE_MAXIMUM:
+  case UPDATE_GAUGE_MINIMUM:
+  case UPDATE_GAUGE_UNIT:
+  case UPDATE_GAUGE_VOTE_CHOICE_LABEL:
+  case UPDATE_GAUGE_VOTE_INSTRUCTIONS:
+  case UPDATE_GAUGE_VOTE_IS_NUMBER:
+  case UPDATE_GAUGE_VOTE_NUMBER_TICKS:
+  case UPDATE_TOKEN_TOTAL_NUMBER:
+  case UPDATE_TOKEN_VOTE_CATEGORY_COLOR:
+  case UPDATE_TOKEN_VOTE_CATEGORY_TITLE:
+  case UPDATE_TOKEN_VOTE_EXCLUSIVE_CATEGORY:
+  case UPDATE_TOKEN_VOTE_INSTRUCTIONS:
+  case UPDATE_VOTE_PROPOSAL_DESCRIPTION:
+  case UPDATE_VOTE_PROPOSAL_TITLE:
+    return true;
+  case UPDATE_VOTE_MODULES:
+  case UPDATE_VOTE_PROPOSALS:
+    return false;
+  default:
+    return state;
+  }
+};
+&nbsp;
+export const modulesInOrder = (state: List&lt;number&gt; = List(), action: ReduxAction&lt;Action&gt;) =&gt; {
+  switch (action.type) {
+<span class="branch-0 cbranch-no" title="branch not covered" >  case UPDATE_VOTE_MODULES:</span>
+<span class="cstat-no" title="statement not covered" >    return List(Object.keys(action.voteModules).map(<span class="fstat-no" title="function not covered" >ke</span>y =&gt; <span class="cstat-no" title="statement not covered" >action.voteModules[key].id || null)</span>);</span>
+<span class="branch-1 cbranch-no" title="branch not covered" >  case CREATE_TOKEN_VOTE_MODULE:</span>
+<span class="cstat-no" title="statement not covered" >    return state.push(action.id);</span>
+<span class="branch-2 cbranch-no" title="branch not covered" >  case CREATE_GAUGE_VOTE_MODULE:</span>
+<span class="cstat-no" title="statement not covered" >    return state.push(action.id);</span>
+  default:
+    return state;
+  }
+};
+&nbsp;
+const defaultTokenModule = Map({
+  _hasChanged: false,
+  isCustom: false,
+  _isNew: true,
+  _toDelete: false,
+  type: 'tokens',
+  instructionsEntries: List(),
+  exclusiveCategories: true,
+  tokenCategories: List(),
+  proposalId: null,
+  voteSpecTemplateId: null
+});
+&nbsp;
+const defaultTextGaugeChoice = Map({
+  id: String,
+  labelEntries: List()
+  // value: Number
+});
+&nbsp;
+const defaultTextGaugeModule = Map({
+  _hasChanged: false,
+  isCustom: false,
+  _isNew: true,
+  _toDelete: false,
+  type: 'gauge',
+  instructionsEntries: List(),
+  isNumberGauge: false,
+  choices: List(),
+  proposalId: null,
+  voteSpecTemplateId: null
+});
+&nbsp;
+const defaultNumberGaugeModule = Map({
+  _hasChanged: false,
+  isCustom: false,
+  _isNew: true,
+  _toDelete: false,
+  type: 'gauge',
+  instructionsEntries: List(),
+  nbTicks: 2,
+  isNumberGauge: true,
+  minimum: 0,
+  maximum: 10,
+  unit: '',
+  proposalId: null,
+  voteSpecTemplateId: null
+});
+&nbsp;
+const getModuleInfo = <span class="fstat-no" title="function not covered" >(m</span>) =&gt; {
+  const typeMapping = <span class="cstat-no" title="statement not covered" >{</span>
+    token_vote_specification: 'tokens',
+    number_gauge_vote_specification: 'gauge',
+    gauge_vote_specification: 'gauge'
+  };
+  const moduleInfo = <span class="cstat-no" title="statement not covered" >{</span>
+    _hasChanged: false,
+    _isNew: false,
+    _toDelete: false,
+    id: m.id,
+    instructionsEntries: m.instructionsEntries,
+    isCustom: m.isCustom,
+    proposalId: m.proposalId,
+    type: typeMapping[m.voteType],
+    voteSpecTemplateId: m.voteSpecTemplateId
+  };
+&nbsp;
+  let customModuleInfo = <span class="cstat-no" title="statement not covered" >{};</span>
+<span class="cstat-no" title="statement not covered" >  if (m.voteSpecTemplateId === null || m.isCustom) {</span>
+<span class="cstat-no" title="statement not covered" >    if (m.voteType === 'token_vote_specification') {</span>
+<span class="cstat-no" title="statement not covered" >      customModuleInfo = {</span>
+        exclusiveCategories: m.exclusiveCategories,
+        tokenCategories: m.tokenCategories.map(<span class="fstat-no" title="function not covered" >t </span>=&gt; <span class="cstat-no" title="statement not covered" >t.id)</span>
+      };
+    } else <span class="cstat-no" title="statement not covered" >if (m.voteType === 'number_gauge_vote_specification') {</span>
+<span class="cstat-no" title="statement not covered" >      customModuleInfo = {</span>
+        nbTicks: m.nbTicks,
+        isNumberGauge: true,
+        maximum: m.maximum,
+        minimum: m.minimum,
+        unit: m.unit
+      };
+    } else <span class="cstat-no" title="statement not covered" >if (m.voteType === 'gauge_vote_specification') {</span>
+<span class="cstat-no" title="statement not covered" >      customModuleInfo = {</span>
+        nbTicks: m.choices.size,
+        isNumberGauge: false,
+        choices: m.choices.map(<span class="fstat-no" title="function not covered" >c </span>=&gt; <span class="cstat-no" title="statement not covered" >c.id)</span>
+      };
+    }
+  }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  return {</span>
+    ...customModuleInfo,
+    ...moduleInfo
+  };
+};
+&nbsp;
+const specificKeys = ['choices', 'maximum', 'minimum', 'nbTicks', 'unit'];
+type SpecificInfo = {
+  maximum?: Number,
+  minimum?: Number,
+  nbTicks?: Number,
+  unit?: string,
+  choices?: List&lt;string&gt;
+};
+const updateGaugeSpecificInfo = (info: SpecificInfo) =&gt; (m: Map&lt;string, any&gt;) =&gt; {
+  if (m.get('isNumberGauge')) {
+    const { maximum, minimum, nbTicks, unit } = info;
+    return m
+      .delete('choices')
+      .set('maximum', maximum)
+      .set('minimum', minimum)
+      .set('nbTicks', nbTicks)
+      .set('unit', unit);
+  }
+&nbsp;
+  return m
+    .set('choices', info.choices)
+    .delete('maximum')
+    .delete('minimum')
+    .delete('nbTicks')
+    .delete('unit');
+};
+&nbsp;
+export const modulesById = (state: Map&lt;string, Map&gt; = Map(), action: ReduxAction&lt;Action&gt;) =&gt; {
+  switch (action.type) {
+<span class="branch-0 cbranch-no" title="branch not covered" >  case UPDATE_VOTE_MODULES: {</span>
+    let newState = <span class="cstat-no" title="statement not covered" >state;</span>
+<span class="cstat-no" title="statement not covered" >    action.voteModules.forEach(<span class="fstat-no" title="function not covered" >(m</span>) =&gt; {</span>
+      const moduleInfo = <span class="cstat-no" title="statement not covered" >getModuleInfo(m);</span>
+<span class="cstat-no" title="statement not covered" >      newState = newState.set(m.id, fromJS(moduleInfo));</span>
+    });
+<span class="cstat-no" title="statement not covered" >    return newState;</span>
+  }
+  case DELETE_VOTE_MODULE:
+    return state.setIn([action.id, '_toDelete'], true);
+<span class="branch-2 cbranch-no" title="branch not covered" >  case CREATE_TOKEN_VOTE_MODULE:</span>
+<span class="cstat-no" title="statement not covered" >    return state.set(action.id, defaultTokenModule.set('id', action.id));</span>
+  case UPDATE_TOKEN_VOTE_EXCLUSIVE_CATEGORY:
+    return state.setIn([action.id, 'exclusiveCategories'], action.value).setIn([action.id, '_hasChanged'], true);
+  case UPDATE_TOKEN_VOTE_INSTRUCTIONS:
+    return state
+      .updateIn([action.id, 'instructionsEntries'], updateInLangstringEntries(action.locale, action.value))
+      .setIn([action.id, '_hasChanged'], true);
+  case CREATE_TOKEN_VOTE_CATEGORY:
+    return state
+      .updateIn([action.moduleId, 'tokenCategories'], tokenCategories =&gt; tokenCategories.push(action.id))
+      .setIn([action.moduleId, '_hasChanged'], true);
+  case DELETE_TOKEN_VOTE_CATEGORY:
+    return state
+      .updateIn([action.moduleId, 'tokenCategories'], tokenCategories =&gt; tokenCategories.delete(action.index))
+      .setIn([action.moduleId, '_hasChanged'], true);
+  case UPDATE_TOKEN_VOTE_CATEGORY_TITLE:
+  case UPDATE_TOKEN_VOTE_CATEGORY_COLOR:
+  case UPDATE_TOKEN_TOTAL_NUMBER:
+    return state.setIn([action.moduleId, '_hasChanged'], true);
+<span class="branch-10 cbranch-no" title="branch not covered" >  case CREATE_GAUGE_VOTE_MODULE:</span>
+<span class="cstat-no" title="statement not covered" >    return state.set(action.id, defaultTextGaugeModule.set('id', action.id));</span>
+<span class="branch-11 cbranch-no" title="branch not covered" >  case UPDATE_GAUGE_VOTE_INSTRUCTIONS:</span>
+<span class="cstat-no" title="statement not covered" >    return state</span>
+      .updateIn([action.id, 'instructionsEntries'], updateInLangstringEntries(action.locale, action.value))
+      .setIn([action.id, '_hasChanged'], true);
+<span class="branch-12 cbranch-no" title="branch not covered" >  case UPDATE_GAUGE_VOTE_IS_NUMBER: {</span>
+<span class="cstat-no" title="statement not covered" >    if (action.value) {</span>
+<span class="cstat-no" title="statement not covered" >      return state.set(action.id, defaultNumberGaugeModule.set('id', action.id)).setIn([action.id, '_hasChanged'], true);</span>
+    }
+<span class="cstat-no" title="statement not covered" >    return state.set(action.id, defaultTextGaugeModule.set('id', action.id)).setIn([action.id, '_hasChanged'], true);</span>
+  }
+<span class="branch-13 cbranch-no" title="branch not covered" >  case UPDATE_GAUGE_VOTE_NUMBER_TICKS:</span>
+<span class="cstat-no" title="statement not covered" >    return state.setIn([action.id, 'nbTicks'], action.value).setIn([action.id, '_hasChanged'], true);</span>
+<span class="branch-14 cbranch-no" title="branch not covered" >  case CREATE_GAUGE_VOTE_CHOICE:</span>
+<span class="cstat-no" title="statement not covered" >    return state</span>
+      .updateIn([action.moduleId, 'choices'], <span class="fstat-no" title="function not covered" >ch</span>oices =&gt; <span class="cstat-no" title="statement not covered" >choices.push(action.id))</span>
+      .setIn([action.moduleId, '_hasChanged'], true);
+<span class="branch-15 cbranch-no" title="branch not covered" >  case DELETE_GAUGE_VOTE_CHOICE:</span>
+<span class="cstat-no" title="statement not covered" >    return state</span>
+      .updateIn([action.moduleId, 'choices'], <span class="fstat-no" title="function not covered" >ch</span>oices =&gt; <span class="cstat-no" title="statement not covered" >choices.delete(action.index))</span>
+      .setIn([action.moduleId, '_hasChanged'], true);
+<span class="branch-16 cbranch-no" title="branch not covered" >  case UPDATE_GAUGE_VOTE_CHOICE_LABEL:</span>
+<span class="cstat-no" title="statement not covered" >    return state.setIn([action.moduleId, '_hasChanged'], true);</span>
+<span class="branch-17 cbranch-no" title="branch not covered" >  case UPDATE_GAUGE_MINIMUM:</span>
+<span class="cstat-no" title="statement not covered" >    return state.setIn([action.id, 'minimum'], action.value).setIn([action.id, '_hasChanged'], true);</span>
+<span class="branch-18 cbranch-no" title="branch not covered" >  case UPDATE_GAUGE_MAXIMUM:</span>
+<span class="cstat-no" title="statement not covered" >    return state.setIn([action.id, 'maximum'], action.value).setIn([action.id, '_hasChanged'], true);</span>
+<span class="branch-19 cbranch-no" title="branch not covered" >  case UPDATE_GAUGE_UNIT:</span>
+<span class="cstat-no" title="statement not covered" >    return state.setIn([action.id, 'unit'], action.value).setIn([action.id, '_hasChanged'], true);</span>
+<span class="branch-20 cbranch-no" title="branch not covered" >  case UPDATE_VOTE_PROPOSALS: {</span>
+    let newState = <span class="cstat-no" title="statement not covered" >state;</span>
+<span class="cstat-no" title="statement not covered" >    action.voteProposals.forEach(<span class="fstat-no" title="function not covered" >(p</span>roposal) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      proposal.modules.forEach(<span class="fstat-no" title="function not covered" >(p</span>Module) =&gt; {</span>
+        const moduleInfo = <span class="cstat-no" title="statement not covered" >{</span>
+          ...getModuleInfo(pModule),
+          proposalId: proposal.id
+        };
+<span class="cstat-no" title="statement not covered" >        newState = newState.set(pModule.id, fromJS(moduleInfo));</span>
+      });
+    });
+<span class="cstat-no" title="statement not covered" >    return newState;</span>
+  }
+  case ADD_MODULE_TO_PROPOSAL:
+    return state.set(
+      action.id,
+      fromJS({
+        id: action.id,
+        isCustom: false,
+        proposalId: action.proposalId,
+        _isNew: true,
+        _toDelete: false,
+        _hasChanged: false,
+        voteSpecTemplateId: action.voteSpecTemplateId
+      })
+    );
+  case UNDELETE_MODULE:
+    return state.setIn([action.id, '_toDelete'], false);
+  case MARK_ALL_DEPENDENCIES_AS_CHANGED:
+    return state.map((voteSpec) =&gt; {
+      if (voteSpec.get('voteSpecTemplateId') === action.id &amp;&amp; !voteSpec.get('isCustom')) {
+        return voteSpec.set('_hasChanged', true);
+      }
+&nbsp;
+      return voteSpec;
+    });
+  case CANCEL_MODULE_CUSTOMIZATION: {
+    const template = state.get(state.getIn([action.id, 'voteSpecTemplateId']));
+    const specificInfo = template.filter((v, k) =&gt; specificKeys.includes(k)).toJS();
+    return state
+      .update(action.id, m =&gt; m.set('isNumberGauge', template.get('isNumberGauge')))
+      .update(action.id, m =&gt; m.set('isCustom', false).set('_hasChanged', true))
+      .update(action.id, updateGaugeSpecificInfo(specificInfo))
+      .setIn([action.id, 'instructionsEntries'], template.get('instructionsEntries'))
+      .deleteIn([action.id, 'choices']);
+  }
+  case UPDATE_VOTE_MODULE: {
+    const { instructions, isCustom, isNumberGauge, type } = action.info;
+    let specificInfo = pick(action.info, specificKeys);
+    specificInfo = {
+      ...specificInfo,
+      choices: specificInfo.choices &amp;&amp; specificInfo.choices.map(c =&gt; c.get('id'))
+    };
+    return state
+      .update(action.id, m =&gt;
+        m
+          .set('isNumberGauge', isNumberGauge)
+          .set('isCustom', isCustom)
+          .set('type', type)
+          .set('_hasChanged', true)
+          .update('instructionsEntries', updateInLangstringEntries(action.locale, instructions))
+      )
+      .update(action.id, updateGaugeSpecificInfo(specificInfo));
+  }
+  default:
+    return state;
+  }
+};
+&nbsp;
+const defaultTokenCategory = Map({
+  id: '',
+  titleEntries: List(),
+  totalNumber: 1,
+  color: '#B8E986'
+});
+&nbsp;
+const getTokenCategories = <span class="fstat-no" title="function not covered" >(m</span>) =&gt; {
+<span class="cstat-no" title="statement not covered" >  if (m.voteType === 'token_vote_specification') {</span>
+<span class="cstat-no" title="statement not covered" >    return m.tokenCategories.map(<span class="fstat-no" title="function not covered" >t </span>=&gt;</span>
+<span class="cstat-no" title="statement not covered" >      Map({</span>
+        id: t.id,
+        titleEntries: fromJS(t.titleEntries),
+        color: t.color,
+        totalNumber: t.totalNumber
+      })
+    );
+  }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  return [];</span>
+};
+&nbsp;
+export const tokenCategoriesById = (state: Map&lt;string, Map&gt; = Map(), action: ReduxAction&lt;Action&gt;) =&gt; {
+  switch (action.type) {
+<span class="branch-0 cbranch-no" title="branch not covered" >  case UPDATE_VOTE_MODULES: {</span>
+    let newState = <span class="cstat-no" title="statement not covered" >Map();</span>
+<span class="cstat-no" title="statement not covered" >    action.voteModules.forEach(<span class="fstat-no" title="function not covered" >(m</span>) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      getTokenCategories(m).forEach(<span class="fstat-no" title="function not covered" >(t</span>c) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        newState = newState.set(tc.get('id'), tc);</span>
+      });
+    });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    return newState;</span>
+  }
+<span class="branch-1 cbranch-no" title="branch not covered" >  case UPDATE_VOTE_PROPOSALS: {</span>
+    let newState = <span class="cstat-no" title="statement not covered" >state;</span>
+<span class="cstat-no" title="statement not covered" >    action.voteProposals.forEach(<span class="fstat-no" title="function not covered" >(p</span>roposal) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      proposal.modules.forEach(<span class="fstat-no" title="function not covered" >(m</span>) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        getTokenCategories(m).forEach(<span class="fstat-no" title="function not covered" >(t</span>c) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >          newState = newState.set(tc.get('id'), tc);</span>
+        });
+      });
+    });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    return newState;</span>
+  }
+<span class="branch-2 cbranch-no" title="branch not covered" >  case CREATE_TOKEN_VOTE_CATEGORY: {</span>
+    const randomColor = <span class="cstat-no" title="statement not covered" >pickerColors[Math.floor(Math.random() * Math.floor(pickerColors.length))];</span>
+<span class="cstat-no" title="statement not covered" >    return state.set(action.id, defaultTokenCategory.set('id', action.id).set('color', randomColor));</span>
+  }
+<span class="branch-3 cbranch-no" title="branch not covered" >  case UPDATE_TOKEN_VOTE_CATEGORY_TITLE:</span>
+<span class="cstat-no" title="statement not covered" >    return state.updateIn([action.id, 'titleEntries'], updateInLangstringEntries(action.locale, action.value));</span>
+<span class="branch-4 cbranch-no" title="branch not covered" >  case UPDATE_TOKEN_VOTE_CATEGORY_COLOR:</span>
+<span class="cstat-no" title="statement not covered" >    return state.setIn([action.id, 'color'], action.value);</span>
+<span class="branch-5 cbranch-no" title="branch not covered" >  case UPDATE_TOKEN_TOTAL_NUMBER:</span>
+<span class="cstat-no" title="statement not covered" >    return state.setIn([action.id, 'totalNumber'], action.value);</span>
+  default:
+    return state;
+  }
+};
+&nbsp;
+const defaultVoteProposal = Map({
+  _isNew: true,
+  _toDelete: false,
+  _hasChanged: false,
+  _validationErrors: [],
+  id: '',
+  titleEntries: List(),
+  descriptionEntries: List(),
+  modules: List()
+});
+&nbsp;
+export const voteProposalsById = (state: Map&lt;string, Map&gt; = Map(), action: ReduxAction&lt;Action&gt;) =&gt; {
+  switch (action.type) {
+<span class="branch-0 cbranch-no" title="branch not covered" >  case UPDATE_VOTE_PROPOSALS: {</span>
+    let newState = <span class="cstat-no" title="statement not covered" >Map();</span>
+<span class="cstat-no" title="statement not covered" >    action.voteProposals.forEach(<span class="fstat-no" title="function not covered" >(p</span>roposal) =&gt; {</span>
+      const proposalInfo = <span class="cstat-no" title="statement not covered" >Map({</span>
+        _isNew: false,
+        _toDelete: false,
+        _hasChanged: false,
+        _validationErrors: List(),
+        order: proposal.order,
+        id: proposal.id,
+        titleEntries: fromJS(proposal.titleEntries),
+        descriptionEntries: List(proposal.descriptionEntries.map(
+<span class="fstat-no" title="function not covered" >          en</span>try =&gt; <span class="cstat-no" title="statement not covered" >Map(entry)</span>
+        )),
+        modules: fromJS(proposal.modules ? proposal.modules.map(<span class="fstat-no" title="function not covered" >m </span>=&gt; <span class="cstat-no" title="statement not covered" >m.id)</span> : [])
+      });
+<span class="cstat-no" title="statement not covered" >      newState = newState.set(proposal.id, proposalInfo);</span>
+    });
+<span class="cstat-no" title="statement not covered" >    return newState;</span>
+  }
+  case CREATE_VOTE_PROPOSAL: {
+    const order =
+        state
+          .filter(item =&gt; !item.get('_toDelete'))
+          .map(v =&gt; v.get('order'))
+          .max() + 1.0;
+    return state.set(action.id, defaultVoteProposal.set('id', action.id).set('order', order));
+  }
+<span class="branch-2 cbranch-no" title="branch not covered" >  case DELETE_VOTE_PROPOSAL:</span>
+<span class="cstat-no" title="statement not covered" >    return state.setIn([action.id, '_toDelete'], true);</span>
+  case MOVE_PROPOSAL_UP:
+    return moveItemUp(state, action.id);
+  case MOVE_PROPOSAL_DOWN:
+    return moveItemDown(state, action.id);
+  case UPDATE_VOTE_PROPOSAL_TITLE:
+    return state
+      .updateIn([action.id, 'titleEntries'], updateInLangstringEntries(action.locale, action.value))
+      .setIn([action.id, '_hasChanged'], true);
+  case UPDATE_VOTE_PROPOSAL_DESCRIPTION:
+    return state
+      .updateIn([action.id, 'descriptionEntries'], updateInLangstringEntries(action.locale, action.value))
+      .setIn([action.id, '_hasChanged'], true);
+  case ADD_MODULE_TO_PROPOSAL:
+    return state
+      .updateIn([action.proposalId, 'modules'], modules =&gt; modules.push(action.id));
+  case SET_VALIDATION_ERRORS:
+    return state.setIn([action.id, '_validationErrors'], action.errors);
+  default:
+    return state;
+  }
+};
+&nbsp;
+const getGaugeChoices = <span class="fstat-no" title="function not covered" >(m</span>) =&gt; {
+<span class="cstat-no" title="statement not covered" >  if (m.voteType === 'gauge_vote_specification') {</span>
+<span class="cstat-no" title="statement not covered" >    return m.choices.map(<span class="fstat-no" title="function not covered" >c </span>=&gt;</span>
+<span class="cstat-no" title="statement not covered" >      Map({</span>
+        id: c.id,
+        labelEntries: fromJS(c.labelEntries),
+        value: c.value
+      })
+    );
+  }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  return [];</span>
+};
+&nbsp;
+export const gaugeChoicesById = (state: Map&lt;string, Map&gt; = Map(), action: ReduxAction&lt;Action&gt;) =&gt; {
+  switch (action.type) {
+  case UPDATE_VOTE_MODULE: {
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (action.info.choices) {
+      let newState = state;
+      action.info.choices.forEach((choice) =&gt; {
+        const cid = choice.get('id');
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (state.has(cid)) {
+<span class="cstat-no" title="statement not covered" >          newState = newState.updateIn([cid, 'labelEntries'], updateInLangstringEntries(action.locale, choice.get('title')));</span>
+        } else {
+          newState = newState.set(
+            cid,
+            defaultTextGaugeChoice
+              .set('id', cid)
+              .update('labelEntries', updateInLangstringEntries(action.locale, choice.get('title')))
+          );
+        }
+      });
+&nbsp;
+      return newState;
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    return state;</span>
+  }
+<span class="branch-1 cbranch-no" title="branch not covered" >  case UPDATE_VOTE_MODULES: {</span>
+    let newState = <span class="cstat-no" title="statement not covered" >Map();</span>
+<span class="cstat-no" title="statement not covered" >    action.voteModules.forEach(<span class="fstat-no" title="function not covered" >(m</span>) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      getGaugeChoices(m).forEach(<span class="fstat-no" title="function not covered" >(g</span>c) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        newState = newState.set(gc.get('id'), gc);</span>
+      });
+    });
+<span class="cstat-no" title="statement not covered" >    return newState;</span>
+  }
+&nbsp;
+<span class="branch-2 cbranch-no" title="branch not covered" >  case UPDATE_VOTE_PROPOSALS: {</span>
+    let newState = <span class="cstat-no" title="statement not covered" >state;</span>
+<span class="cstat-no" title="statement not covered" >    action.voteProposals.forEach(<span class="fstat-no" title="function not covered" >(p</span>roposal) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      proposal.modules.forEach(<span class="fstat-no" title="function not covered" >(m</span>) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        getGaugeChoices(m).forEach(<span class="fstat-no" title="function not covered" >(g</span>c) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >          newState = newState.set(gc.get('id'), gc);</span>
+        });
+      });
+    });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    return newState;</span>
+  }
+<span class="branch-3 cbranch-no" title="branch not covered" >  case CREATE_GAUGE_VOTE_CHOICE:</span>
+<span class="cstat-no" title="statement not covered" >    return state.set(action.id, defaultTextGaugeChoice.set('id', action.id));</span>
+<span class="branch-4 cbranch-no" title="branch not covered" >  case UPDATE_GAUGE_VOTE_CHOICE_LABEL:</span>
+<span class="cstat-no" title="statement not covered" >    return state.updateIn([action.id, 'labelEntries'], updateInLangstringEntries(action.locale, action.value));</span>
+  default:
+    return state;
+  }
+};
+&nbsp;
+export default combineReducers({
+  page: voteSessionPage,
+  modulesInOrder: modulesInOrder,
+  modulesById: modulesById,
+  tokenCategoriesById: tokenCategoriesById,
+  voteProposalsById: voteProposalsById,
+  gaugeChoicesById: gaugeChoicesById,
+  modulesOrProposalsHaveChanged: modulesOrProposalsHaveChanged
+});</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Fri Oct 26 2018 15:51:30 GMT+0200 (CEST)
+</div>
+</div>
+<script src="../../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../../sorter.js"></script>
+</body>
+</html>

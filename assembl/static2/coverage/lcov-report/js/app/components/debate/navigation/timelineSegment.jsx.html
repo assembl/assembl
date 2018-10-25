@@ -1,0 +1,545 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for js/app/components/debate/navigation/timelineSegment.jsx</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../../../prettify.css" />
+    <link rel="stylesheet" href="../../../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../../../index.html">All files</a> / <a href="index.html">js/app/components/debate/navigation</a> timelineSegment.jsx
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">45.95% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>17/37</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">43.33% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>13/30</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">28.57% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>2/7</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">47.22% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>17/36</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">16x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">16x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// @flow
+import * as React from 'react';
+import { withApollo, type ApolloClient } from 'react-apollo';
+import { Translate, Localize } from 'react-redux-i18n';
+import { connect } from 'react-redux';
+import classNames from 'classnames';
+&nbsp;
+import { prefetchMenuQuery } from './menuTable';
+import { getPhaseStatus, isSeveralIdentifiers } from '../../../utils/timeline';
+import { displayModal } from '../../../utils/utilityManager';
+import { get, goTo } from '../../../utils/routeMap';
+import { isMobile, fromGlobalId } from '../../../utils/globalFunctions';
+import { PHASE_STATUS, PHASES } from '../../../constants';
+&nbsp;
+export const phasesToIgnore = [PHASES.voteSession];
+&nbsp;
+export type DebateType = {
+  debateData: {
+    slug: string,
+    useSocialMedia: boolean
+  }
+};
+&nbsp;
+type TimelineSegmentProps = {
+  timeline: Timeline,
+  index: number,
+  client: ApolloClient,
+  title: string,
+  startDate: string,
+  endDate: string,
+  phaseIdentifier: string,
+  phaseId: string,
+  debate: DebateType,
+  barPercent: number,
+  locale: string,
+  active: boolean,
+  onSelect: Function,
+  onDeselect: Function
+};
+&nbsp;
+type TimelineSegmentState = {
+  active: boolean
+};
+&nbsp;
+export class DumbTimelineSegment extends React.Component&lt;TimelineSegmentProps, TimelineSegmentState&gt; {
+  state = {
+    active: false
+  };
+&nbsp;
+  componentWillMount() {
+    const { phaseId, phaseIdentifier, title, startDate, endDate, locale, client } = this.props;
+    this.isTouchScreenDevice = isMobile.any();
+    this.phaseStatus = getPhaseStatus(startDate, endDate);
+    const notStarted = this.phaseStatus === PHASE_STATUS.notStarted;
+    const ignore = phasesToIgnore.includes(phaseIdentifier);
+    this.ignoreMenu = ignore &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >!notStarted;</span>
+    this.phaseName = title;
+    const discussionPhaseId = fromGlobalId(phaseId);
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (discussionPhaseId &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >!ignore </span>&amp;&amp; <span class="branch-2 cbranch-no" title="branch not covered" >!notStarted)</span> {
+      // Check discussionPhaseId for flow to be happy, phaseId can't be null, but fromGlobalId can return null.
+      // Don't prefetch query if we're not going to use it.
+<span class="cstat-no" title="statement not covered" >      prefetchMenuQuery(client, {</span>
+        lang: locale,
+        identifier: phaseIdentifier,
+        discussionPhaseId: discussionPhaseId
+      });
+    }
+  }
+&nbsp;
+  phaseStatus = null;
+&nbsp;
+  phaseName = null;
+&nbsp;
+  ignoreMenu = false;
+&nbsp;
+  isTouchScreenDevice = false;
+&nbsp;
+  segment = null;
+&nbsp;
+  select = <span class="fstat-no" title="function not covered" >()</span> =&gt; {
+    const { onSelect, index } = <span class="cstat-no" title="statement not covered" >this.props;</span>
+<span class="cstat-no" title="statement not covered" >    onSelect(index);</span>
+  };
+&nbsp;
+  renderNotStarted = <span class="fstat-no" title="function not covered" >()</span> =&gt; {
+    const { startDate } = <span class="cstat-no" title="statement not covered" >this.props;</span>
+<span class="cstat-no" title="statement not covered" >    return (</span>
+      &lt;div&gt;
+        &lt;Translate value="debate.notStarted" phaseName={this.phaseName} /&gt;
+        &lt;Localize value={startDate} dateFormat="date.format" /&gt;
+      &lt;/div&gt;
+    );
+  };
+&nbsp;
+  displayPhase = <span class="fstat-no" title="function not covered" >()</span> =&gt; {
+    const { phaseIdentifier, onDeselect, timeline } = <span class="cstat-no" title="statement not covered" >this.props;</span>
+    const { debateData } = <span class="cstat-no" title="statement not covered" >this.props.debate;</span>
+    const params = <span class="cstat-no" title="statement not covered" >{ slug: debateData.slug, phase: phaseIdentifier };</span>
+    const isSeveralPhases = <span class="cstat-no" title="statement not covered" >isSeveralIdentifiers(timeline);</span>
+<span class="cstat-no" title="statement not covered" >    if (isSeveralPhases) {</span>
+<span class="cstat-no" title="statement not covered" >      if (this.phaseStatus === PHASE_STATUS.notStarted) {</span>
+<span class="cstat-no" title="statement not covered" >        displayModal(null, this.renderNotStarted(), true, null, null, true);</span>
+<span class="cstat-no" title="statement not covered" >        onDeselect();</span>
+      }
+<span class="cstat-no" title="statement not covered" >      if (this.phaseStatus === PHASE_STATUS.inProgress || this.phaseStatus === PHASE_STATUS.completed) {</span>
+<span class="cstat-no" title="statement not covered" >        goTo(get('debate', params));</span>
+<span class="cstat-no" title="statement not covered" >        onDeselect();</span>
+      }
+    } else {
+<span class="cstat-no" title="statement not covered" >      goTo(get('debate', params));</span>
+<span class="cstat-no" title="statement not covered" >      onDeselect();</span>
+    }
+  };
+&nbsp;
+  render() {
+    const { barPercent, title, active } = this.props;
+    const inProgress = this.phaseStatus === PHASE_STATUS.inProgress;
+    const timelineClass = 'timeline-title txt-active-light';
+    const touchActive = this.isTouchScreenDevice &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >!active;</span>
+    const onClick = touchActive ? <span class="branch-0 cbranch-no" title="branch not covered" >this.select </span>: this.displayPhase;
+    return (
+      &lt;div
+        ref={<span class="fstat-no" title="function not covered" >(s</span>egment) =&gt; {
+<span class="cstat-no" title="statement not covered" >          this.segment = segment;</span>
+        }}
+        className={classNames('minimized-timeline', {
+          active: active
+        })}
+        onMouseOver={!this.isTouchScreenDevice ? this.select : <span class="branch-1 cbranch-no" title="branch not covered" >null}</span>
+      &gt;
+        &lt;div onClick={onClick} className={timelineClass}&gt;
+          {inProgress &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >&lt;span className="arrow assembl-icon assembl-icon-right-dir" /&gt;}</span>
+          &lt;div className="timeline-link"&gt;{title}&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div className="timeline-graph"&gt;
+          &lt;div className="timeline-bars"&gt;
+            {barPercent &gt; 0 &amp;&amp; (
+              &lt;div className="timeline-bar-filler" style={barPercent &lt; 20 ? <span class="branch-0 cbranch-no" title="branch not covered" >{ width: '20%' } </span>: { width: `${barPercent}%` }}&gt;
+                &amp;nbsp;
+              &lt;/div&gt;
+            )}
+            &lt;div className="timeline-bar-background-container"&gt;
+              &amp;nbsp;
+              &lt;div className="timeline-bar-background" /&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+        {!this.ignoreMenu &amp;&amp; active &amp;&amp; &lt;span className="timeline-arrow" /&gt;}
+      &lt;/div&gt;
+    );
+  }
+}
+&nbsp;
+const mapStateToProps = <span class="fstat-no" title="function not covered" >st</span>ate =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
+  locale: state.i18n.locale,
+  debate: state.debate,
+  timeline: state.timeline
+});
+&nbsp;
+// $FlowFixMe
+export default connect(mapStateToProps)(withApollo(DumbTimelineSegment));</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Fri Oct 26 2018 15:51:30 GMT+0200 (CEST)
+</div>
+</div>
+<script src="../../../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../../../sorter.js"></script>
+</body>
+</html>

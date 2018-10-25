@@ -28,6 +28,7 @@ test_frontend:
     - yarn run eslint
     - yarn run stylelint
     - yarn run flow --quiet
+    - yarn jest --coverage
 
 test_integration_and_ui:
   stage: test_on_dev

@@ -1,0 +1,842 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for js/app/components/administration/thematicsMenu.jsx</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../../prettify.css" />
+    <link rel="stylesheet" href="../../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../../index.html">All files</a> / <a href="index.html">js/app/components/administration</a> thematicsMenu.jsx
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">12.07% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>7/58</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/34</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>0/11</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">13.46% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>7/52</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">104x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">104x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">104x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">104x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">104x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">104x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">104x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// @flow
+import React from 'react';
+import sortBy from 'lodash/sortBy';
+import { Link, withRouter } from 'react-router';
+import { OverlayTrigger } from 'react-bootstrap';
+import { compose, graphql, type ApolloClient } from 'react-apollo';
+import { Translate } from 'react-redux-i18n';
+&nbsp;
+import manageErrorAndLoading from '../common/manageErrorAndLoading';
+import { get } from '../../utils/routeMap';
+import { getPartialTreeByParentId, getPath } from '../../utils/tree';
+import { fromGlobalId } from '../../utils/globalFunctions';
+import ThematicsDataQuery from '../../graphql/ThematicsDataQuery.graphql';
+import { thematicTitle } from '../common/tooltips';
+import { Menu, MenuItem } from '../common/menu';
+&nbsp;
+type Thematic = {
+  /* The thematic id */
+  id: string,
+  /* The id of the thematic's parent */
+  parentId: string,
+  /* The order Thematic in the idea tree. */
+  order: number,
+  /* The Thematic title. */
+  title: string
+};
+&nbsp;
+type RootIdea = {
+  id: string
+};
+&nbsp;
+type Data = {
+  thematicsData: Array&lt;Thematic&gt;,
+  rootIdea: RootIdea
+};
+&nbsp;
+type ThematicsMenuProps = {
+  /* The slug for the composition of the url */
+  slug: { slug: string | null },
+  phase: Phase
+};
+&nbsp;
+type ThematicsMenuItemProps = {
+  /* A list of thematics */
+  descendants: Array&lt;Thematic&gt;,
+  /* The roots Ideas of the sub idea tree */
+  roots: Array&lt;Thematic&gt;,
+  /* The roots parents indexes */
+  indexes: Array&lt;number&gt;,
+  /* The menu section query */
+  sectionQuery: { section: string }
+} &amp; ThematicsMenuProps;
+&nbsp;
+type Props = {
+  /* The menu item that calls this component. See constants/PHASES_ADMIN_MENU */
+  menuItem: { sectionId: string, title: string },
+  rootSectionId: string,
+  /* The ThematicsDataQuery result */
+  data: Data,
+  location: { query: { section: string, thematicId: string } }
+};
+&nbsp;
+type QueryVariablesType = {
+  discussionPhaseId: string,
+  lang: string
+};
+/**
+ * @param {string} id - The id of the removed thematic.
+ * @param {ApolloClient} client - The apollo client.
+ * @param {QueryVariablesType} variables - The ThematicsDataQuery variables.
+ * Remove the thematic with id equal to id from the result of the ThematicsDataQuery query.
+ */
+export const removeMenuItem = <span class="fstat-no" title="function not covered" >(i</span>d: string, client: ApolloClient, variables: QueryVariablesType) =&gt; {
+  const query = <span class="cstat-no" title="statement not covered" >{ query: ThematicsDataQuery, variables: variables };</span>
+  const data = <span class="cstat-no" title="statement not covered" >client.readQuery(query);</span>
+<span class="cstat-no" title="statement not covered" >  client.writeQuery({</span>
+    ...query,
+    data: {
+      thematicsData: data.thematicsData.filter(<span class="fstat-no" title="function not covered" >t </span>=&gt; <span class="cstat-no" title="statement not covered" >t.id !== id)</span>
+    }
+  });
+};
+&nbsp;
+/**
+ * @param {string} id - The id of the added thematic.
+ * @param {string} parentId - The parent id of the added thematic.
+ * @param {number} index - The index of the added thematic.
+ * @param {ApolloClient} client - The apollo client.
+ * @param {QueryVariablesType} variables - The ThematicsDataQuery variables.
+ * Add a new thematic to the result of the ThematicsDataQuery query.
+ */
+export const addMenuItem = <span class="fstat-no" title="function not covered" >(i</span>d: string, parentId: string, index: number, client: ApolloClient, variables: QueryVariablesType) =&gt; {
+  const query = <span class="cstat-no" title="statement not covered" >{ query: ThematicsDataQuery, variables: variables };</span>
+  const data = <span class="cstat-no" title="statement not covered" >client.readQuery(query);</span>
+  const newMenuItem = <span class="cstat-no" title="statement not covered" >{</span>
+    id: id,
+    order: index + 1,
+    parentId: parentId,
+    title: '',
+    __typename: 'Idea'
+  };
+<span class="cstat-no" title="statement not covered" >  client.writeQuery({</span>
+    ...query,
+    data: {
+      thematicsData: [...data.thematicsData, newMenuItem]
+    }
+  });
+};
+&nbsp;
+/**
+ * @param {string} id - The id of the added item.
+ * @param {string} parentId - The parent id of the added item.
+ * @param {number} index - The source index of the thematic.
+ * @param {number} targetIndex - The target index of the thematic.
+ * @param {ApolloClient} client - The apollo client.
+ * @param {QueryVariablesType} variables - The ThematicsDataQuery variables.
+ * Change the order of a themeatic to targetIndex.
+ */
+export const swapMenuItem = <span class="fstat-no" title="function not covered" >(</span>
+  id: string,
+  parentId: string,
+  index: number,
+  targetIndex: number,
+  client: ApolloClient,
+  variables: QueryVariablesType
+) =&gt; {
+  const query = <span class="cstat-no" title="statement not covered" >{ query: ThematicsDataQuery, variables: variables };</span>
+  const data = <span class="cstat-no" title="statement not covered" >client.readQuery(query);</span>
+  const isDownAction = <span class="cstat-no" title="statement not covered" >targetIndex - index &gt; 0;</span>
+  const newThematics = <span class="cstat-no" title="statement not covered" >data.thematicsData.map(<span class="fstat-no" title="function not covered" >(t</span>hematic) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (parentId &amp;&amp; thematic.parentId !== parentId) <span class="cstat-no" title="statement not covered" >return thematic;</span></span>
+    // if it's the swapped thematic
+<span class="cstat-no" title="statement not covered" >    if (thematic.id === id) <span class="cstat-no" title="statement not covered" >return { ...thematic, order: targetIndex + 1 };</span></span>
+    // the item index in the array
+    const itemIndex = <span class="cstat-no" title="statement not covered" >thematic.order - 1;</span>
+<span class="cstat-no" title="statement not covered" >    if (isDownAction) {</span>
+<span class="cstat-no" title="statement not covered" >      if (itemIndex &gt;= index + 1 &amp;&amp; itemIndex &lt;= targetIndex) {</span>
+        // order to order -1
+<span class="cstat-no" title="statement not covered" >        return { ...thematic, order: itemIndex };</span>
+      }
+    } else <span class="cstat-no" title="statement not covered" >if (itemIndex &lt;= index - 1 &amp;&amp; itemIndex &gt;= targetIndex) {</span>
+      // order to order + 1
+<span class="cstat-no" title="statement not covered" >      return { ...thematic, order: itemIndex + 2 };</span>
+    }
+<span class="cstat-no" title="statement not covered" >    return thematic;</span>
+  });
+<span class="cstat-no" title="statement not covered" >  client.writeQuery({</span>
+    ...query,
+    data: {
+      thematicsData: newThematics
+    }
+  });
+};
+&nbsp;
+const ThematicsMenuItems = <span class="fstat-no" title="function not covered" >({</span> roots, descendants, slug, phase, indexes, sectionQuery, ...menuProps }: ThematicsMenuItemProps) =&gt;
+<span class="cstat-no" title="statement not covered" >  sortBy(roots, 'order').map(<span class="fstat-no" title="function not covered" >(t</span>hematic, index) =&gt; {</span>
+    const subIndexes = <span class="cstat-no" title="statement not covered" >[...indexes];</span>
+<span class="cstat-no" title="statement not covered" >    subIndexes.push(index + 1);</span>
+    const subMenuTree = <span class="cstat-no" title="statement not covered" >getPartialTreeByParentId(thematic.id, descendants);</span>
+    const hasSubMenu = <span class="cstat-no" title="statement not covered" >subMenuTree.roots.length &gt; 0;</span>
+    const link = (
+<span class="cstat-no" title="statement not covered" >      &lt;Link</span>
+        to={`${get('administration', { ...slug, id: phase.identifier }, { ...sectionQuery, thematicId: thematic.id })}`}
+        activeClassName="active"
+      &gt;
+        &lt;Translate value="administration.menu.configureThematic" index={subIndexes.join('.')} /&gt;
+      &lt;/Link&gt;
+    );
+<span class="cstat-no" title="statement not covered" >    return (</span>
+      &lt;MenuItem
+        key={thematic.id}
+        {...menuProps}
+        id={index}
+        title={
+          thematic.title ? (
+            &lt;OverlayTrigger placement="top" overlay={thematicTitle(thematic.title)}&gt;
+              {link}
+            &lt;/OverlayTrigger&gt;
+          ) : (
+            link
+          )
+        }
+      &gt;
+        {hasSubMenu ? (
+          &lt;Menu&gt;
+            &lt;ThematicsMenuItems
+              slug={slug}
+              phase={phase}
+              descendants={subMenuTree.descendants}
+              roots={subMenuTree.roots}
+              sectionQuery={sectionQuery}
+              indexes={subIndexes}
+            /&gt;
+          &lt;/Menu&gt;
+        ) : null}
+      &lt;/MenuItem&gt;
+    );
+  });
+&nbsp;
+ThematicsMenuItems.defaultProps = {
+  indexes: []
+};
+&nbsp;
+const sortThematics = <span class="fstat-no" title="function not covered" >(i</span>tems: Array&lt;Thematic&gt;): Array&lt;Thematic&gt; =&gt; <span class="cstat-no" title="statement not covered" >sortBy(items, 'order');</span>
+&nbsp;
+const ThematicsMenu = <span class="fstat-no" title="function not covered" >({</span>
+  slug,
+  phase,
+  rootSectionId,
+  menuItem,
+  data: { rootIdea, thematicsData },
+  location
+}: ThematicsMenuProps &amp; Props) =&gt; {
+<span class="cstat-no" title="statement not covered" >  if (!thematicsData) <span class="cstat-no" title="statement not covered" >return null;</span></span>
+  const sectionIndex = <span class="cstat-no" title="statement not covered" >rootSectionId ? `${rootSectionId}.${menuItem.sectionId}` : menuItem.sectionId;</span>
+  const sectionQuery = <span class="cstat-no" title="statement not covered" >{ section: sectionIndex };</span>
+  const { roots, descendants } = <span class="cstat-no" title="statement not covered" >getPartialTreeByParentId(rootIdea &amp;&amp; rootIdea.id, thematicsData);</span>
+<span class="cstat-no" title="statement not covered" >  if (roots.length === 0) <span class="cstat-no" title="statement not covered" >return null;</span></span>
+  const firstThematic = <span class="cstat-no" title="statement not covered" >sortBy(roots, 'order')[0];</span>
+  const firstThematicLink = <span class="cstat-no" title="statement not covered" >`${get(</span>
+    'administration',
+    { ...slug, id: phase.identifier },
+    { ...sectionQuery, thematicId: firstThematic.id }
+  )}`;
+  const { section, thematicId } = <span class="cstat-no" title="statement not covered" >location.query;</span>
+  const openedPath = <span class="cstat-no" title="statement not covered" >[];</span>
+<span class="cstat-no" title="statement not covered" >  if (sectionIndex === section) {</span>
+<span class="cstat-no" title="statement not covered" >    openedPath.push(0);</span>
+    const requestThematic = <span class="cstat-no" title="statement not covered" >thematicsData.find(<span class="fstat-no" title="function not covered" >t </span>=&gt; <span class="cstat-no" title="statement not covered" >t.id === thematicId)</span> || null;</span>
+<span class="cstat-no" title="statement not covered" >    if (requestThematic) {</span>
+<span class="cstat-no" title="statement not covered" >      openedPath.push(...getPath(requestThematic, thematicsData, sortThematics));</span>
+    }
+  }
+<span class="cstat-no" title="statement not covered" >  return (</span>
+    &lt;Menu openedPath={openedPath}&gt;
+      &lt;MenuItem
+        className="thematics-menu-item"
+        title={
+          &lt;Link to={firstThematicLink} activeClassName="active"&gt;
+            &lt;Translate value={menuItem.title} /&gt;
+          &lt;/Link&gt;
+        }
+      &gt;
+        &lt;Menu&gt;
+          &lt;ThematicsMenuItems slug={slug} phase={phase} descendants={descendants} roots={roots} sectionQuery={sectionQuery} /&gt;
+        &lt;/Menu&gt;
+      &lt;/MenuItem&gt;
+    &lt;/Menu&gt;
+  );
+};
+&nbsp;
+export default compose(
+  graphql(ThematicsDataQuery, {
+    options: <span class="fstat-no" title="function not covered" >({</span> phase, locale }) =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
+      variables: { discussionPhaseId: fromGlobalId(phase.id), lang: locale }
+    })
+  }),
+  manageErrorAndLoading({ displayLoader: false }),
+  withRouter
+)(ThematicsMenu);</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Fri Oct 26 2018 15:51:30 GMT+0200 (CEST)
+</div>
+</div>
+<script src="../../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../../sorter.js"></script>
+</body>
+</html>

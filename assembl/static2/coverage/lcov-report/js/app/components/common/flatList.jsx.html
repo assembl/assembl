@@ -1,0 +1,506 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for js/app/components/common/flatList.jsx</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../../prettify.css" />
+    <link rel="stylesheet" href="../../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../../index.html">All files</a> / <a href="index.html">js/app/components/common</a> flatList.jsx
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">21.95% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>9/41</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">38.24% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>13/34</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">23.08% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>3/13</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">21.95% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>9/41</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/* eslint-disable no-undef */
+// @flow
+import * as React from 'react';
+import { withRouter } from 'react-router';
+import { I18n, Translate } from 'react-redux-i18n';
+import { Button } from 'react-bootstrap';
+import throttle from 'lodash/throttle';
+import { browserHistory } from '../../router';
+&nbsp;
+import Loader from './loader';
+import { displayAlert } from '../../utils/utilityManager';
+import { APOLLO_NETWORK_STATUS } from '../../constants';
+&nbsp;
+type ItemNode = {
+  node: Object
+};
+&nbsp;
+type FlatListProps = {
+  items: {
+    pageInfo: {
+      endCursor: string,
+      hasNextPage: boolean
+    },
+    edges: Array&lt;ItemNode&gt;
+  },
+  ListItem: Function | React.ComponentType&lt;*&gt;,
+  className?: string,
+  location: { hash: string, pathname: string },
+  loadPreviousMessage?: string,
+  networkStatus: number,
+  onEndReachedThreshold: number,
+  itemData: Function,
+  fetchMore: Function,
+  refetch: Function,
+  extractItems: Function
+};
+&nbsp;
+export class DumbFlatList extends React.Component&lt;FlatListProps&gt; {
+  loading: boolean;
+&nbsp;
+  static defaultProps = {
+    onEndReachedThreshold: 0.8,
+    itemData: () =&gt; {}
+  };
+&nbsp;
+<span class="fstat-no" title="function not covered" >  co</span>mponentDidMount() {
+<span class="cstat-no" title="statement not covered" >    window.addEventListener('scroll', this.handleScroll);</span>
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  co</span>mponentWillUnmount() {
+<span class="cstat-no" title="statement not covered" >    window.removeEventListener('scroll', this.handleScroll);</span>
+  }
+&nbsp;
+  handleScroll = throttle(<span class="fstat-no" title="function not covered" >()</span> =&gt; {
+<span class="cstat-no" title="statement not covered" >    if (!this.loading) {</span>
+      const { onEndReachedThreshold } = <span class="cstat-no" title="statement not covered" >this.props;</span>
+      // $FlowFixMe
+      const windowHeight = <span class="cstat-no" title="statement not covered" >'innerHeight' in window ? window.innerHeight : document.documentElement.offsetHeight;</span>
+      const body = <span class="cstat-no" title="statement not covered" >document.body;</span>
+      const html = <span class="cstat-no" title="statement not covered" >document.documentElement;</span>
+      // $FlowFixMe
+      const docHeight = <span class="cstat-no" title="statement not covered" >Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);</span>
+      const windowBottom = <span class="cstat-no" title="statement not covered" >windowHeight + window.pageYOffset;</span>
+      const threshold = <span class="cstat-no" title="statement not covered" >docHeight * onEndReachedThreshold;</span>
+<span class="cstat-no" title="statement not covered" >      if (windowBottom &gt;= threshold) {</span>
+<span class="cstat-no" title="statement not covered" >        this.onEndReached();</span>
+      }
+    }
+  }, 100);
+&nbsp;
+  onEndReached = throttle(<span class="fstat-no" title="function not covered" >()</span> =&gt; {
+    // The fetchMore method is used to load new data and add it
+    // to the original query we used to populate the list
+    const { fetchMore, items, extractItems, networkStatus } = <span class="cstat-no" title="statement not covered" >this.props;</span>
+<span class="cstat-no" title="statement not covered" >    if (!items.pageInfo.hasNextPage) {</span>
+<span class="cstat-no" title="statement not covered" >      return;</span>
+    }
+    // If no request is in flight for this query, and no errors happened. Everything is OK.
+<span class="cstat-no" title="statement not covered" >    if (networkStatus === APOLLO_NETWORK_STATUS.ready) {</span>
+<span class="cstat-no" title="statement not covered" >      this.loading = true;</span>
+<span class="cstat-no" title="statement not covered" >      fetchMore({</span>
+        variables: { after: items.pageInfo.endCursor || '', fromNode: null },
+        updateQuery: <span class="fstat-no" title="function not covered" >(p</span>reviousResult, { fetchMoreResult }) =&gt; {
+          // Don't do anything if there weren't any new items
+          const previousResultEntities = <span class="cstat-no" title="statement not covered" >extractItems(previousResult);</span>
+<span class="cstat-no" title="statement not covered" >          if (!fetchMoreResult || !previousResultEntities.pageInfo.hasNextPage) {</span>
+<span class="cstat-no" title="statement not covered" >            return previousResult;</span>
+          }
+          const fetchMoreResultEntities = <span class="cstat-no" title="statement not covered" >extractItems(fetchMoreResult);</span>
+<span class="cstat-no" title="statement not covered" >          fetchMoreResultEntities.edges = previousResultEntities.edges.concat(fetchMoreResultEntities.edges);</span>
+<span class="cstat-no" title="statement not covered" >          return fetchMoreResult;</span>
+        }
+      })
+        .then(<span class="fstat-no" title="function not covered" >()</span> =&gt; {
+<span class="cstat-no" title="statement not covered" >          this.loading = false;</span>
+        })
+        .catch(<span class="fstat-no" title="function not covered" >()</span> =&gt; {
+<span class="cstat-no" title="statement not covered" >          displayAlert('danger', I18n.t('error.loading'));</span>
+<span class="cstat-no" title="statement not covered" >          this.loading = false;</span>
+        });
+    }
+  }, 100);
+&nbsp;
+  onRefresh = <span class="fstat-no" title="function not covered" >()</span> =&gt; {
+    const { refetch } = <span class="cstat-no" title="statement not covered" >this.props;</span>
+<span class="cstat-no" title="statement not covered" >    refetch().catch(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      displayAlert('danger', I18n.t('error.loading'));</span>
+    });
+  };
+&nbsp;
+  render() {
+    const { hash } = this.props.location;
+    let id;
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (hash !== '') {
+<span class="cstat-no" title="statement not covered" >      id = hash.replace('#', '').split('?')[0];</span>
+    }
+&nbsp;
+    const { networkStatus, items, ListItem, itemData, className, loadPreviousMessage } = this.props;
+    if (
+      items == null ||
+      networkStatus === APOLLO_NETWORK_STATUS.loading ||
+      networkStatus === APOLLO_NETWORK_STATUS.setVariables
+    ) {
+      return &lt;Loader color="black" /&gt;;
+    }
+    const entities = items.edges;
+    return (
+      &lt;div className={className}&gt;
+        {id &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >loadPreviousMessage </span>? (
+<span class="branch-0 cbranch-no" title="branch not covered" >          &lt;Button</span>
+            className="button-dark button-submit"
+            style={{ marginBottom: '20px' }}
+            onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; {
+<span class="cstat-no" title="statement not covered" >              browserHistory.push(this.props.location.pathname);</span>
+            }}
+          &gt;
+            &lt;Translate value={loadPreviousMessage} /&gt;
+          &lt;/Button&gt;
+        ) : null}
+        {entities &amp;&amp; entities.map((item, index) =&gt; &lt;ListItem key={item.node.id || index} {...itemData(item)} node={item.node} /&gt;)}
+        {networkStatus === APOLLO_NETWORK_STATUS.fetchMore &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >items.pageInfo.hasNextPage </span>&amp;&amp; <span class="branch-2 cbranch-no" title="branch not covered" >&lt;Loader color="black" /&gt;}</span>
+      &lt;/div&gt;
+    );
+  }
+}
+&nbsp;
+const FlatList = withRouter(DumbFlatList);
+export default FlatList;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Fri Oct 26 2018 15:51:30 GMT+0200 (CEST)
+</div>
+</div>
+<script src="../../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../../sorter.js"></script>
+</body>
+</html>

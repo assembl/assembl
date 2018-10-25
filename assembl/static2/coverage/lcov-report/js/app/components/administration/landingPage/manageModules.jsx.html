@@ -1,0 +1,599 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for js/app/components/administration/landingPage/manageModules.jsx</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../../../prettify.css" />
+    <link rel="stylesheet" href="../../../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../../../index.html">All files</a> / <a href="index.html">js/app/components/administration/landingPage</a> manageModules.jsx
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">69.77% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>30/43</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">77.78% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>7/9</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">46.67% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>7/15</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">70% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>28/40</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line medium'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// @flow
+import * as React from 'react';
+import { connect } from 'react-redux';
+import { I18n, Translate } from 'react-redux-i18n';
+import type { List, Map } from 'immutable';
+import ModulesPreview from './modulesPreview';
+import SectionTitle from '../../administration/sectionTitle';
+import SelectModulesForm from './selectModulesForm';
+import {
+  toggleLandingPageModule,
+  moveLandingPageModuleDown,
+  moveLandingPageModuleUp,
+  createLandingPageModule
+} from '../../../actions/adminActions/landingPage';
+import { createRandomId } from '../../../utils/globalFunctions';
+import AddModuleButton from './addModuleButton';
+&nbsp;
+export type LandingPageModuleType = {
+  defaultOrder: number,
+  editableOrder: boolean,
+  id: string,
+  identifier: string,
+  moduleId: string,
+  required: boolean,
+  title: string
+};
+&nbsp;
+export type LandingPageModule = {
+  configuration: Object,
+  enabled: boolean,
+  existsInDatabase: true,
+  id: string,
+  moduleType: LandingPageModule,
+  order: number,
+  subtitle: ?string,
+  subtitleEntries: Array&lt;LangstringEntries&gt;,
+  title: ?string,
+  titleEntries: Array&lt;LangstringEntries&gt;
+};
+&nbsp;
+type Props = {
+  enabledModules: List&lt;Map&gt;,
+  moduleTypes: Array&lt;LandingPageModuleType&gt;,
+  locale: string,
+  modulesById: Map&lt;string, Map&gt;,
+  moveModuleDown: Function,
+  moveModuleUp: Function,
+  toggleModule: Function,
+  createModule: Function
+};
+&nbsp;
+const MODULES_IDENTIFIERS = {
+  header: 'HEADER',
+  timeline: 'TIMELINE',
+  chatbot: 'CHATBOT',
+  topThematics: 'TOP_THEMATICS',
+  tweets: 'TWEETS',
+  contact: 'CONTACT',
+  data: 'DATA',
+  news: 'NEWS',
+  partners: 'PARTNERS',
+  introduction: 'INTRODUCTION',
+  footer: 'FOOTER'
+};
+&nbsp;
+export const sortByTitle = (modules: Array&lt;LandingPageModuleType&gt;): Array&lt;LandingPageModuleType&gt; =&gt; {
+  const sortedModules = [...modules];
+  sortedModules.sort((a, b) =&gt; {
+    if (a.title &lt; b.title) return -1;
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (a.title &gt; b.title) return 1;
+<span class="cstat-no" title="statement not covered" >    return 0;</span>
+  });
+  let index = 0;
+  sortedModules.forEach((module) =&gt; {
+    if (module.identifier === 'HEADER') {
+      index = sortedModules.indexOf(module);
+      sortedModules.splice(index, 1);
+      sortedModules.splice(0, 0, module);
+    }
+  });
+  sortedModules.forEach((module) =&gt; {
+    if (module.identifier === 'FOOTER') {
+      index = sortedModules.indexOf(module);
+      sortedModules.splice(index, 1);
+      sortedModules.splice(sortedModules.length, 0, module);
+    }
+  });
+  return sortedModules;
+};
+&nbsp;
+export const DumbManageModules = ({
+  enabledModules,
+  moduleTypes,
+  locale,
+  modulesById,
+  moveModuleDown,
+  moveModuleUp,
+  toggleModule,
+  createModule
+}: Props) =&gt; {
+  const numberOfTextAndMultimediaModules = moduleTypes.filter(
+    moduleType =&gt; moduleType.identifier === MODULES_IDENTIFIERS.introduction
+  ).length;
+&nbsp;
+  const numberOfEnabledTextAndMultimediaModules = enabledModules.filter(
+    module =&gt; module.getIn(['moduleType', 'identifier']) === MODULES_IDENTIFIERS.introduction
+  ).size;
+  const allTextAndMultimediaAreChecked = numberOfEnabledTextAndMultimediaModules === numberOfTextAndMultimediaModules;
+&nbsp;
+  const updatedModuleTypes = sortByTitle(moduleTypes);
+&nbsp;
+  return (
+    &lt;div className="admin-box"&gt;
+      &lt;SectionTitle
+        title={I18n.t('administration.landingPage.manageModules.title')}
+        annotation={I18n.t('administration.annotation')}
+      /&gt;
+      &lt;div className="admin-content form-container" style={{ maxWidth: '700px' }}&gt;
+        &lt;p className="admin-paragraph"&gt;
+          &lt;Translate value="administration.landingPage.manageModules.helper" /&gt;
+        &lt;/p&gt;
+        &lt;div className="two-columns-admin"&gt;
+          &lt;div className="column-left"&gt;
+            &lt;SelectModulesForm
+              lang={locale}
+              moduleTypes={updatedModuleTypes}
+              modulesById={modulesById}
+              toggleModule={toggleModule}
+            /&gt;
+            &lt;div className="margin-xl"&gt;
+              &lt;AddModuleButton
+                numberOfDuplicatesModules={numberOfTextAndMultimediaModules}
+                numberOfEnabledModules={enabledModules.size}
+                createModule={createModule}
+                allDuplicatesAreChecked={allTextAndMultimediaAreChecked}
+                buttonTitleTranslationKey="textAndMultimediaBtn"
+              /&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+          &lt;div className="column-right"&gt;
+            &lt;ModulesPreview modules={enabledModules} moveModuleDown={moveModuleDown} moveModuleUp={moveModuleUp} /&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+};
+const mapStateToProps = <span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; {
+  const { enabledModulesInOrder, modulesById, modulesInOrder } = <span class="cstat-no" title="statement not covered" >state.admin.landingPage;</span>
+<span class="cstat-no" title="statement not covered" >  return {</span>
+    enabledModules: enabledModulesInOrder.map(<span class="fstat-no" title="function not covered" >id</span> =&gt; <span class="cstat-no" title="statement not covered" >modulesById.get(id))</span>,
+    modulesById: modulesById,
+    moduleTypes: modulesInOrder
+      .map(<span class="fstat-no" title="function not covered" >(i</span>d) =&gt; {
+        let module = <span class="cstat-no" title="statement not covered" >modulesById.get(id);</span>
+<span class="cstat-no" title="statement not covered" >        module = module.setIn(['moduleType', 'moduleId'], id);</span>
+<span class="cstat-no" title="statement not covered" >        return module.get('moduleType');</span>
+      })
+      .toJS()
+  };
+};
+const mapDispatchToProps = <span class="fstat-no" title="function not covered" >di</span>spatch =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
+  moveModuleDown: <span class="fstat-no" title="function not covered" >id</span> =&gt; <span class="cstat-no" title="statement not covered" >dispatch(moveLandingPageModuleDown(id)),</span>
+  moveModuleUp: <span class="fstat-no" title="function not covered" >id</span> =&gt; <span class="cstat-no" title="statement not covered" >dispatch(moveLandingPageModuleUp(id)),</span>
+  toggleModule: <span class="fstat-no" title="function not covered" >id</span> =&gt; <span class="cstat-no" title="statement not covered" >dispatch(toggleLandingPageModule(id)),</span>
+  createModule: <span class="fstat-no" title="function not covered" >(n</span>extOrder, numberOfDuplicatesModules, identifier = <span class="branch-0 cbranch-no" title="branch not covered" >MODULES_IDENTIFIERS.introduction)</span> =&gt; {
+    const newId = <span class="cstat-no" title="statement not covered" >createRandomId();</span>
+<span class="cstat-no" title="statement not covered" >    return dispatch(</span>
+      createLandingPageModule(
+        newId,
+        identifier,
+        numberOfDuplicatesModules,
+        I18n.t('administration.landingPage.manageModules.textAndMultimedia'),
+        nextOrder
+      )
+    );
+  }
+});
+export default connect(mapStateToProps, mapDispatchToProps)(DumbManageModules);</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Fri Oct 26 2018 15:51:30 GMT+0200 (CEST)
+</div>
+</div>
+<script src="../../../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../../../sorter.js"></script>
+</body>
+</html>

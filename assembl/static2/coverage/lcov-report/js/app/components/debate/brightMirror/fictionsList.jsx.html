@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for js/app/components/debate/brightMirror/fictionsList.jsx</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../../../prettify.css" />
+    <link rel="stylesheet" href="../../../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../../../index.html">All files</a> / <a href="index.html">js/app/components/debate/brightMirror</a> fictionsList.jsx
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">87.88% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>29/33</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">57.89% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>11/19</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">80% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>4/5</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">90% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>27/30</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line high'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">19x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">19x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">19x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">19x</span>
+<span class="cline-any cline-yes">14x</span>
+<span class="cline-any cline-yes">14x</span>
+<span class="cline-any cline-yes">14x</span>
+<span class="cline-any cline-yes">14x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">14x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">19x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">16x</span>
+<span class="cline-any cline-yes">16x</span>
+<span class="cline-any cline-yes">16x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">16x</span>
+<span class="cline-any cline-yes">16x</span>
+<span class="cline-any cline-yes">16x</span>
+<span class="cline-any cline-yes">16x</span>
+<span class="cline-any cline-yes">16x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">16x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">16x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">16x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// @flow
+import * as React from 'react';
+import Masonry from 'react-masonry-component';
+import Animated from 'react-animated-transitions';
+import { Grid } from 'react-bootstrap';
+import { Translate, I18n } from 'react-redux-i18n';
+// Route helpers imports
+import { get } from '../../../utils/routeMap';
+// Utils imports
+import { getDiscussionSlug, getConnectedUserId } from '../../../utils/globalFunctions';
+import FictionPreview from './fictionPreview';
+import Permissions, { connectedUserCan } from '../../../utils/permissions';
+import { displayAlert } from '../../../utils/utilityManager';
+// Constant imports
+import { fictionBackgroundColors, EMPTY_STRING } from '../../../constants';
+&nbsp;
+export type Props = {
+  posts: Array&lt;FictionPostPreview&gt;,
+  /** Bright Mirror identifier */
+  identifier: string,
+  themeId: string,
+  /** Function to refetch idea */
+  refetchIdea: Function,
+  lang: string
+};
+&nbsp;
+const masonryOptions = {
+  transitionDuration: 0,
+  fitWidth: true,
+  horizontalOrder: true
+};
+&nbsp;
+// Define callback functions
+const deleteFictionHandler = <span class="fstat-no" title="function not covered" >()</span> =&gt; {
+<span class="cstat-no" title="statement not covered" >  displayAlert('success', I18n.t('debate.brightMirror.deleteFictionSuccessMsg'));</span>
+};
+&nbsp;
+const getRandomColor = () =&gt; fictionBackgroundColors[Math.floor(Math.random() * fictionBackgroundColors.length)];
+&nbsp;
+const publicationStateCreationDateComparator = (a, b) =&gt; {
+  const aDate: string = a.creationDate;
+  const bDate: string = b.creationDate;
+  const aState = a.publicationState;
+  const bState = b.publicationState;
+&nbsp;
+  if (aState === bState) {
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (aDate &gt; bDate) return -1;
+<span class="cstat-no" title="statement not covered" >    if (aDate &lt; bDate) <span class="cstat-no" title="statement not covered" >return 1;</span></span>
+<span class="cstat-no" title="statement not covered" >    return 0;</span>
+  }
+  return aState &lt; bState ? -1 : 1;
+};
+&nbsp;
+const FictionsList = ({ posts, identifier, refetchIdea, lang, themeId }: Props) =&gt; {
+  const slug = getDiscussionSlug();
+&nbsp;
+  const connectedUserId = getConnectedUserId();
+&nbsp;
+  const childElements = posts.sort(publicationStateCreationDateComparator).reduce((result, post) =&gt; {
+    // Define user permissions
+    let authorName = '';
+    let userCanEdit = false;
+    let userCanDelete = false;
+&nbsp;
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (post.creator) {
+      const { userId, displayName, isDeleted } = post.creator;
+      authorName = isDeleted ? <span class="branch-0 cbranch-no" title="branch not covered" >I18n.t('deletedUser') </span>: displayName;
+      userCanEdit = connectedUserId === String(userId) &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >connectedUserCan(Permissions.EDIT_MY_POST);</span>
+      userCanDelete =
+        (connectedUserId === String(userId) &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >connectedUserCan(Permissions.DELETE_MY_POST))</span> ||
+        connectedUserCan(Permissions.DELETE_POST);
+    }
+    // Define bright mirror fiction props
+    const brightMirrorFictionProps = {
+      slug: slug,
+      phase: identifier,
+      themeId: themeId,
+      fictionId: post.id
+    };
+&nbsp;
+    result.push(
+      &lt;Animated key={post.id} preset="scalein"&gt;
+        &lt;FictionPreview
+          id={post.id}
+          link={`${get('brightMirrorFiction', brightMirrorFictionProps)}`}
+          title={post.subject}
+          creationDate={I18n.l(post.creationDate, { dateFormat: 'date.format2' })}
+          authorName={authorName}
+          color={getRandomColor()}
+          originalBody={post.body || <span class="branch-1 cbranch-no" title="branch not covered" >EMPTY_STRING}</span>
+          refetchIdea={refetchIdea}
+          userCanEdit={userCanEdit}
+          userCanDelete={userCanDelete}
+          lang={lang}
+          publicationState={post.publicationState}
+          deleteFictionHandler={deleteFictionHandler}
+        /&gt;
+      &lt;/Animated&gt;
+    );
+    return result;
+  }, []);
+&nbsp;
+  return (
+    &lt;section className="fictions-section"&gt;
+      &lt;Grid fluid className="background-grey"&gt;
+        &lt;div className="max-container"&gt;
+          &lt;div className="title-section"&gt;
+            &lt;div className="title-hyphen"&gt;&amp;nbsp;&lt;/div&gt;
+            &lt;h1 className="dark-title-1"&gt;
+              &lt;Translate value="debate.brightMirror.allFictions" /&gt;
+            &lt;/h1&gt;
+          &lt;/div&gt;
+          &lt;div className="content-section"&gt;
+            &lt;Masonry
+              className={'fictions-list'}
+              elementType={'div'}
+              options={masonryOptions}
+              disableImagesLoaded={false}
+              updateOnEachImageLoad={false}
+            &gt;
+              {childElements}
+            &lt;/Masonry&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/Grid&gt;
+    &lt;/section&gt;
+  );
+};
+&nbsp;
+export default FictionsList;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Fri Oct 26 2018 15:51:30 GMT+0200 (CEST)
+</div>
+</div>
+<script src="../../../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../../../sorter.js"></script>
+</body>
+</html>

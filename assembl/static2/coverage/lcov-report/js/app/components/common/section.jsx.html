@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for js/app/components/common/section.jsx</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../../prettify.css" />
+    <link rel="stylesheet" href="../../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../../index.html">All files</a> / <a href="index.html">js/app/components/common</a> section.jsx
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">75% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>15/20</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">55% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>11/20</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">71.43% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>5/7</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">75% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>15/20</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line medium'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// @flow
+import * as React from 'react';
+import { Translate } from 'react-redux-i18n';
+import classnames from 'classnames';
+import { SECTION_INDEX_GENERATOR, getIndexesForIdeas } from '../../utils/section';
+&nbsp;
+type SectionProps = {
+  containerAdditionalClassNames: Array&lt;string&gt; | string,
+  title: string,
+  index: number,
+  displayIndex: boolean,
+  indexGenerator: Function,
+  parents: Array&lt;number&gt;,
+  children: React.Node,
+  className: string,
+  translate: boolean,
+  innerRef?: Function,
+  id?: string
+};
+&nbsp;
+const level1 = (title, index, translate) =&gt; (
+  &lt;div&gt;
+    &lt;div className="title-hyphen"&gt;&amp;nbsp;&lt;/div&gt;
+    &lt;h1 className="section-title section-title1 dark-title-1"&gt;
+      {index ? &lt;span className="section-title-index"&gt;{index}&lt;/span&gt; : null}
+      {translate ? &lt;Translate value={title} /&gt; : title}
+    &lt;/h1&gt;
+  &lt;/div&gt;
+);
+&nbsp;
+const level2 = (title, index, translate) =&gt; (
+  &lt;h2 className="section-title section-title-2 dark-title-1"&gt;
+    {index ? &lt;span className="section-title-index"&gt;{index}&lt;/span&gt; : <span class="branch-1 cbranch-no" title="branch not covered" >null}</span>
+    {translate ? <span class="branch-0 cbranch-no" title="branch not covered" >&lt;Translate value={title} /&gt; </span>: title}
+  &lt;/h2&gt;
+);
+&nbsp;
+const level3 = (title, index, translate) =&gt; (
+  &lt;h3 className="section-title section-title-3 dark-title-1"&gt;
+    {index ? &lt;span className="section-title-index"&gt;{index}&lt;/span&gt; : <span class="branch-1 cbranch-no" title="branch not covered" >null}</span>
+    {translate ? <span class="branch-0 cbranch-no" title="branch not covered" >&lt;Translate value={title} /&gt; </span>: title}
+  &lt;/h3&gt;
+);
+&nbsp;
+const levelN = <span class="fstat-no" title="function not covered" >(t</span>itle, index, translate) =&gt; (
+<span class="cstat-no" title="statement not covered" >  &lt;h3 className="section-title section-title-3 dark-title-1"&gt;</span>
+    {index ? &lt;span className="section-title-index"&gt;{index}&lt;/span&gt; : null}
+    {translate ? &lt;Translate value={title} /&gt; : title}
+  &lt;/h3&gt;
+);
+&nbsp;
+const LEVELS = [level1, level2, level3];
+&nbsp;
+class Section extends React.Component&lt;SectionProps&gt; {
+  static defaultProps = {
+    containerAdditionalClassNames: [],
+    index: 1,
+    displayIndex: false,
+    indexGenerator: SECTION_INDEX_GENERATOR.alphanumericOr,
+    parents: [],
+    className: 'themes-section',
+    translate: false,
+    innerRef: undefined
+  };
+&nbsp;
+  getIndexes = <span class="fstat-no" title="function not covered" >()</span> =&gt; {
+    const { index, parents } = <span class="cstat-no" title="statement not covered" >this.props;</span>
+    const indexes = <span class="cstat-no" title="statement not covered" >parents.slice();</span>
+<span class="cstat-no" title="statement not covered" >    indexes.push(index);</span>
+<span class="cstat-no" title="statement not covered" >    return indexes;</span>
+  };
+&nbsp;
+  getTitle = () =&gt; {
+    const { title, parents, indexGenerator, displayIndex, translate, index } = this.props;
+    const indexes = getIndexesForIdeas(parents, index);
+    const titleRenderer = LEVELS[parents.length] || <span class="branch-1 cbranch-no" title="branch not covered" >levelN;</span>
+    return titleRenderer(title, displayIndex &amp;&amp; indexGenerator(indexes), translate);
+  };
+&nbsp;
+  render() {
+    const { className, children, containerAdditionalClassNames, innerRef, id } = this.props;
+    const containerClassName = classnames('max-container', containerAdditionalClassNames);
+    return (
+      &lt;section className={className} ref={innerRef} id={id}&gt;
+        &lt;div className={containerClassName}&gt;
+          &lt;div className="title-section"&gt;{this.getTitle()}&lt;/div&gt;
+          &lt;div className="content-section margin-l"&gt;{children}&lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/section&gt;
+    );
+  }
+}
+&nbsp;
+export default Section;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Fri Oct 26 2018 15:51:30 GMT+0200 (CEST)
+</div>
+</div>
+<script src="../../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../../sorter.js"></script>
+</body>
+</html>

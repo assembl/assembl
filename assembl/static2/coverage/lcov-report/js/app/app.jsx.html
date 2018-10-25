@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for js/app/app.jsx</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../prettify.css" />
+    <link rel="stylesheet" href="../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../index.html">All files</a> / <a href="index.html">js/app</a> app.jsx
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">9.68% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>3/31</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/21</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>0/11</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">10.71% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>3/28</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
+import { connect } from 'react-redux';
+import classNames from 'classnames';
+import isEqual from 'lodash/isEqual';
+import { compose, graphql } from 'react-apollo';
+import { filter } from 'graphql-anywhere';
+&nbsp;
+import { get } from './utils/routeMap';
+import { getDiscussionId, getConnectedUserId, getConnectedUserName } from './utils/globalFunctions';
+import { getCurrentPhaseData } from './utils/timeline';
+import { fetchDebateData } from './actions/debateActions';
+import { addContext } from './actions/contextActions';
+import { updateTimeline } from './actions/timelineActions';
+import Loader from './components/common/loader';
+import Error from './components/common/error';
+import ChatFrame from './components/common/ChatFrame';
+import { browserHistory } from './router';
+import TimelineQuery from './graphql/Timeline.graphql';
+&nbsp;
+export const IsHarvestingContext = React.createContext(false);
+&nbsp;
+class App extends React.Component {
+<span class="fstat-no" title="function not covered" >  co</span>mponentDidMount() {
+    const debateId = <span class="cstat-no" title="statement not covered" >getDiscussionId();</span>
+    const connectedUserId = <span class="cstat-no" title="statement not covered" >getConnectedUserId();</span>
+    const connectedUserName = <span class="cstat-no" title="statement not covered" >getConnectedUserName();</span>
+<span class="cstat-no" title="statement not covered" >    this.props.fetchDebateData(debateId);</span>
+<span class="cstat-no" title="statement not covered" >    this.props.addContext(this.props.route.path, debateId, connectedUserId, connectedUserName);</span>
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  co</span>mponentDidUpdate(prevProps) {
+    const { error, timelineLoading, location, params, timeline, putTimelineInStore } = <span class="cstat-no" title="statement not covered" >this.props;</span>
+<span class="cstat-no" title="statement not covered" >    if (error) {</span>
+<span class="cstat-no" title="statement not covered" >      throw new Error(`GraphQL error: ${error.message}`);</span>
+    }
+&nbsp;
+    // Don't do a timeline identity check (we are sure it's always different here) but use isEqual to be sure
+    // we don't change the redux store (and trigger a full rerendering) if timeline array didn't change.
+<span class="cstat-no" title="statement not covered" >    if (!timelineLoading &amp;&amp; !isEqual(timeline, prevProps.timeline)) {</span>
+<span class="cstat-no" title="statement not covered" >      putTimelineInStore(timeline);</span>
+    }
+<span class="cstat-no" title="statement not covered" >    if (!params.phase &amp;&amp; !timelineLoading &amp;&amp; location.pathname.split('/').indexOf('debate') &gt; -1) {</span>
+      const { currentPhaseIdentifier } = <span class="cstat-no" title="statement not covered" >getCurrentPhaseData(timeline);</span>
+<span class="cstat-no" title="statement not covered" >      browserHistory.push(get('debate', { slug: params.slug, phase: currentPhaseIdentifier }));</span>
+    }
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  re</span>nder() {
+    const { debateData, debateLoading, debateError } = <span class="cstat-no" title="statement not covered" >this.props.debate;</span>
+    const divClassNames = <span class="cstat-no" title="statement not covered" >classNames('app', { 'harvesting-mode-on': this.props.isHarvesting });</span>
+<span class="cstat-no" title="statement not covered" >    return (</span>
+      &lt;div className={divClassNames}&gt;
+        &lt;ChatFrame /&gt;
+        {debateLoading &amp;&amp; &lt;Loader /&gt;}
+        {debateData &amp;&amp; (
+          &lt;div className="app-child"&gt;
+            &lt;IsHarvestingContext.Provider value={this.props.isHarvesting}&gt;{this.props.children}&lt;/IsHarvestingContext.Provider&gt;
+          &lt;/div&gt;
+        )}
+        {debateError &amp;&amp; &lt;Error errorMessage={debateError} /&gt;}
+      &lt;/div&gt;
+    );
+  }
+}
+&nbsp;
+const mapStateToProps = <span class="fstat-no" title="function not covered" >st</span>ate =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
+  i18n: state.i18n,
+  debate: state.debate,
+  isHarvesting: state.context.isHarvesting
+});
+&nbsp;
+const mapDispatchToProps = <span class="fstat-no" title="function not covered" >di</span>spatch =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
+  fetchDebateData: <span class="fstat-no" title="function not covered" >(d</span>ebateId) =&gt; {
+<span class="cstat-no" title="statement not covered" >    dispatch(fetchDebateData(debateId));</span>
+  },
+  addContext: <span class="fstat-no" title="function not covered" >(p</span>ath, debateId, connectedUserId, connectedUserName) =&gt; {
+<span class="cstat-no" title="statement not covered" >    dispatch(addContext(path, debateId, connectedUserId, connectedUserName));</span>
+  },
+  putTimelineInStore: <span class="fstat-no" title="function not covered" >(t</span>imeline) =&gt; {
+<span class="cstat-no" title="statement not covered" >    dispatch(updateTimeline(timeline));</span>
+  }
+});
+&nbsp;
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  graphql(TimelineQuery, {
+    options: <span class="fstat-no" title="function not covered" >({</span> i18n: { locale } }) =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
+      variables: { lang: locale }
+    }),
+    props: <span class="fstat-no" title="function not covered" >({</span> data }) =&gt; {
+<span class="cstat-no" title="statement not covered" >      if (data.error || data.loading) {</span>
+<span class="cstat-no" title="statement not covered" >        return {</span>
+          error: data.error,
+          timeline: [], // empty timeline to avoid to block the whole app until timeline data is loaded
+          timelineLoading: data.loading
+        };
+      }
+&nbsp;
+      const filteredPhases = <span class="cstat-no" title="statement not covered" >filter(TimelineQuery, { timeline: data.timeline });</span>
+      const phasesForStore = <span class="cstat-no" title="statement not covered" >filteredPhases.timeline.map(<span class="fstat-no" title="function not covered" >ph</span>ase =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
+        id: phase.id,
+        identifier: phase.identifier,
+        isThematicsTable: phase.isThematicsTable,
+        start: phase.start,
+        end: phase.end,
+        image: phase.image,
+        title: phase.title,
+        description: phase.description
+      }));
+<span class="cstat-no" title="statement not covered" >      return {</span>
+        error: data.error,
+        timelineLoading: data.loading,
+        timeline: phasesForStore
+      };
+    }
+  })
+)(App);</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Fri Oct 26 2018 15:51:30 GMT+0200 (CEST)
+</div>
+</div>
+<script src="../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../sorter.js"></script>
+</body>
+</html>

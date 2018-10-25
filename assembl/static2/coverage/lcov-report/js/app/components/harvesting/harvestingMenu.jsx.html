@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for js/app/components/harvesting/harvestingMenu.jsx</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../../prettify.css" />
+    <link rel="stylesheet" href="../../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../../index.html">All files</a> / <a href="index.html">js/app/components/harvesting</a> harvestingMenu.jsx
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">71.43% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>10/14</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">78.95% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>15/19</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">40% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>2/5</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">76.92% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>10/13</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line medium'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// @flow
+import * as React from 'react';
+import addPostExtractMutation from '../../graphql/mutations/addPostExtract.graphql'; // eslint-disable-line
+import updateExtractMutation from '../../graphql/mutations/updateExtract.graphql'; // eslint-disable-line
+import deleteExtractMutation from '../../graphql/mutations/deleteExtract.graphql'; // eslint-disable-line
+import HarvestingAnchor from './harvestingAnchor';
+import HarvestingBox from './harvestingBox';
+import HarvestingBadge from './harvestingBadge';
+&nbsp;
+type Props = {
+  extracts: Array&lt;Extract&gt;,
+  postId: string,
+  lang: string,
+  displayHarvestingBox: boolean,
+  displayHarvestingAnchor: boolean,
+  harvestingAnchorPosition: Object,
+  setHarvestingBoxDisplay: Function,
+  handleClickAnchor: Function,
+  cancelHarvesting: Function,
+  refetchPost: Function,
+  isAuthorAccountDeleted: boolean,
+  showNuggetAction: boolean
+};
+&nbsp;
+type State = {
+  displayExtractsBox: boolean
+};
+&nbsp;
+class HarvestingMenu extends React.Component&lt;Props, State&gt; {
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      displayExtractsBox: false
+    };
+  }
+&nbsp;
+  handleMouseDown = <span class="fstat-no" title="function not covered" >(e</span>vent: SyntheticMouseEvent&lt;&gt;) =&gt; {
+    // This would otherwise clear the selection
+<span class="cstat-no" title="statement not covered" >    event.preventDefault();</span>
+<span class="cstat-no" title="statement not covered" >    return false;</span>
+  };
+&nbsp;
+  toggleExtractsBox = <span class="fstat-no" title="function not covered" >()</span>: void =&gt; {
+<span class="cstat-no" title="statement not covered" >    this.setState(<span class="fstat-no" title="function not covered" >pr</span>evState =&gt; (<span class="cstat-no" title="statement not covered" >{ displayExtractsBox: !prevState.displayExtractsBox })</span>);</span>
+  };
+&nbsp;
+  render() {
+    const {
+      setHarvestingBoxDisplay,
+      displayHarvestingBox,
+      displayHarvestingAnchor,
+      postId,
+      handleClickAnchor,
+      extracts,
+      harvestingAnchorPosition,
+      refetchPost,
+      cancelHarvesting,
+      isAuthorAccountDeleted,
+      showNuggetAction,
+      lang
+    } = this.props;
+    const selection = window.getSelection();
+    const { displayExtractsBox } = this.state;
+    const showHarvestingBadge = !displayExtractsBox &amp;&amp; extracts &amp;&amp; extracts.length &gt; 0;
+    const showBoxWithExtracts = displayExtractsBox &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >extracts </span>&amp;&amp; <span class="branch-2 cbranch-no" title="branch not covered" >extracts.length &gt; 0 </span>&amp;&amp; <span class="branch-3 cbranch-no" title="branch not covered" >!displayHarvestingBox;</span>
+    const showBoxInHarvestingMode = displayHarvestingBox &amp;&amp; selection.toString().length &gt; 0;
+    const showHarvestingAnchor = displayHarvestingAnchor &amp;&amp; selection.toString().length &gt; 0;
+    return (
+      &lt;div&gt;
+        {showHarvestingBadge &amp;&amp; &lt;HarvestingBadge toggleExtractsBox={this.toggleExtractsBox} extractsNumber={extracts.length} /&gt;}
+        &lt;div className="harvesting-container"&gt;
+          {showBoxWithExtracts &amp;&amp; (
+<span class="branch-1 cbranch-no" title="branch not covered" >            &lt;HarvestingBox</span>
+              postId={postId}
+              key={`extracts-${postId}`}
+              extracts={extracts}
+              isAuthorAccountDeleted={isAuthorAccountDeleted}
+              displayHarvestingBox={displayHarvestingBox}
+              refetchPost={refetchPost}
+              cancelHarvesting={cancelHarvesting}
+              setHarvestingBoxDisplay={setHarvestingBoxDisplay}
+              showNuggetAction={showNuggetAction}
+              toggleExtractsBox={this.toggleExtractsBox}
+            /&gt;
+          )}
+          {showBoxInHarvestingMode &amp;&amp; (
+            &lt;HarvestingBox
+              postId={postId}
+              key={`harvesting-${postId}`}
+              selection={selection}
+              lang={lang}
+              displayHarvestingBox={displayHarvestingBox}
+              refetchPost={refetchPost}
+              cancelHarvesting={cancelHarvesting}
+              setHarvestingBoxDisplay={setHarvestingBoxDisplay}
+              showNuggetAction={showNuggetAction}
+            /&gt;
+          )}
+          {showHarvestingAnchor &amp;&amp; (
+            &lt;HarvestingAnchor
+              displayHarvestingBox={displayHarvestingBox}
+              handleMouseDown={this.handleMouseDown}
+              anchorPosition={harvestingAnchorPosition}
+              handleClickAnchor={handleClickAnchor}
+            /&gt;
+          )}
+        &lt;/div&gt;
+      &lt;/div&gt;
+    );
+  }
+}
+&nbsp;
+export default HarvestingMenu;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Fri Oct 26 2018 15:51:30 GMT+0200 (CEST)
+</div>
+</div>
+<script src="../../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../../sorter.js"></script>
+</body>
+</html>
