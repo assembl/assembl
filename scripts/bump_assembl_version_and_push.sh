@@ -1,4 +1,5 @@
 #!/bin/sh
+ssh-keyscan -H github.com >> ~/.ssh/known_hosts
 git fetch github
 git checkout -b bumpversion
 bumpversion minor
