@@ -37,20 +37,21 @@ Create a new file in ``/etc/apache2/sites-available/`` and add the following con
 .. code:: sh
 
     <VirtualHost *:80>
-        ServerName stats.bluenove.com
-        Redirect / https://stats.bluenove.com/
+        ServerName $hostname
+        Redirect / https://$hostname/
     </VirtualHost>
 
     <VirtualHost *:443>
-        ServerName stats.bluenove.com
+        ServerName $hostname
 
         ServerAdmin assembl.admin@bluenove.com
         DocumentRoot /var/www/piwik/piwik
 
         SSLEngine on
-        SSLCertificateFile /etc/letsencrypt/live/stats.bluenove.com/cert.pem
-        SSLCertificateKeyFile /etc/letsencrypt/live/stats.bluenove.com/privkey.pem
-        SSLCertificateChainFile /etc/letsencrypt/live/stats.bluenove.com/chain.pem
+        # Path to use letsencrypt with apache2
+        SSLCertificateFile /etc/letsencrypt/live/$hostname/cert.pem
+        SSLCertificateKeyFile /etc/letsencrypt/live/$hostname/privkey.pem
+        SSLCertificateChainFile /etc/letsencrypt/live/$hostname/chain.pem
 
         ErrorLog ${APACHE_LOG_DIR}/piwik_error.log
         CustomLog ${APACHE_LOG_DIR}/piwik_access.log combined
@@ -87,7 +88,7 @@ Copy it to your server:
 .. code:: sh
     
     tar -xzf GeoLite(...).tar.gz
-    scp GeoLite(...)/GeoLite2-City.mmdb yourUser@yourIP:/var/www/piwik/piwik/misc/
+    scp GeoLite(...)/GeoLite2-City.mmdb $piwik_user@$hostname:/var/www/piwik/piwik/misc/
 
 Then go to your matomo website
 

@@ -7,22 +7,19 @@ Install docker
 Install docker-ce:
 ~~~~~~~~~~~~~~~~~~
 
-Follow the steps of this link under the **Install Docker CE** section
-
-https://docs.docker.com/install/linux/docker-ce/ubuntu/#install-docker-ce
+Follow the steps of this link under the `Install Docker CE`_ section
 
 
 Install docker-compose:
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-Follow step one on this link: https://www.digitalocean.com/community/tutorials/how-to-install-docker-compose-on-ubuntu-16-04#step-1-%E2%80%94-installing-docker-compose
+Follow step one on `this link`_
 
 .. code:: sh
 
     sudo ln -sf /usr/local/bin/docker-compose /usr/bin/docker-compose
 
-Follow the steps under **Up and Running** section: https://github.com/getsentry/onpremise/blob/master/README.md#up-and-running
-
+Follow the steps under `Up and Running`_ section
 and these steps: https://docs.sentry.io/server/installation/docker/
 
 or use these commands:
@@ -56,8 +53,7 @@ and continue with these
 Apache configuration
 --------------------
 
-Secure Apache with Let's encrypt: 
-https://www.digitalocean.com/community/tutorials/how-to-secure-apache-with-let-s-encrypt-on-ubuntu-16-04
+`Secure Apache with Let's encrypt`_
 
 Create a new file in ``/etc/apache2/sites-available/``
 Add this to this new file
@@ -65,7 +61,7 @@ Add this to this new file
 .. code:: sh
 
     <VirtualHost *:80>
-        ServerName sentry.bluenove.com
+        ServerName $hostname
 
         RewriteEngine On
         RewriteCond %{HTTPS} !=on
@@ -73,11 +69,11 @@ Add this to this new file
     </VirtualHost>
 
     <VirtualHost *:443>
-        ServerName sentry.bluenove.com
+        ServerName $hostname
 
         SSLEngine on
-        SSLCertificateFile /etc/letsencrypt/live/sentry.bluenove.com/fullchain.pem
-        SSLCertificateKeyFile /etc/letsencrypt/live/sentry.bluenove.com/privkey.pem
+        SSLCertificateFile /etc/letsencrypt/live/$hostname/fullchain.pem
+        SSLCertificateKeyFile /etc/letsencrypt/live/$hostname/privkey.pem
         Include /etc/letsencrypt/options-ssl-apache.conf
 
         ProxyPreserveHost On
@@ -95,31 +91,37 @@ apply changes:
 
 .. code:: sh
 
-    sudo a2ensite sentry.bluenove.com.conf 
+    sudo a2ensite $hostname.conf 
     sudo /etc/init.d/apache2 restart
 
 
 Update docker-sentry
 --------------------
 
-Follow the steps under **Updating Sentry**: https://github.com/getsentry/onpremise/blob/master/README.md#updating-sentry
+Follow the steps under `Updating Sentry`_
 
 
 Mail configuration
 ------------------
 
-Set your mail configuration in config.yml or do it with the admin UI of sentry at https://sentry.bluenove.com/manage/status/mail/ (for this example)
+Set your mail configuration in config.yml or do it with the admin UI of sentry at https://$hostname/manage/status/mail/
 
 .. code:: sh
 
     mail.backend: 'smtp'  # Use dummy if you want to disable email entirely
     mail.host: 'host url'
     mail.port: 25
-    mail.username: 'sentry@stats.bluenove.com'
+    mail.username: 'sentry@$hostname'
     mail.password: 'password'
     mail.use-tls: true
     # The email address to send on behalf of
-    mail.from: 'sentry@stats.bluenove.com'
+    mail.from: 'example@$hostname'
 
     # If you'd like to configure email replies, enable this.
     mail.enable-replies: false
+
+.. _`Install Docker CE`: https://docs.docker.com/install/linux/docker-ce/ubuntu/#install-docker-ce
+.. _`Up and Running`: https://github.com/getsentry/onpremise/blob/master/README.md#up-and-running
+.. _`this link`: https://www.digitalocean.com/community/tutorials/how-to-install-docker-compose-on-ubuntu-16-04#step-1-%E2%80%94-installing-docker-compose
+.. _`Secure Apache with Let's encrypt`: https://www.digitalocean.com/community/tutorials/how-to-secure-apache-with-let-s-encrypt-on-ubuntu-16-04
+.. _`Updating Sentry`: https://github.com/getsentry/onpremise/blob/master/README.md#updating-sentry
