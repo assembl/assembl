@@ -1,42 +1,45 @@
-.fiction-title {
-  color: $black;
-  font-size: $font-size-ml;
-  letter-spacing: 0.5px;
-}
-
-.fiction-content {
-  color: $black;
-  line-height: 1.7;
-  letter-spacing: 0.9px;
-
-  .attachment-image {
-    margin-bottom: 20px;
-    margin-top: 15px;
-  }
-}
-
-@media screen and (min-width: $screen-sm-min) {
-  .fiction-title {
-    font-size: $font-size-xll;
-    letter-spacing: 2.4px;
+.bright-mirror-fiction {
+  .post-body-title {
+    color: $black;
+    font-size: $font-size-ml;
+    letter-spacing: 0.5px;
+    font-family: $font-family;
   }
 
-  .fiction-content {
-    font-size: $font-size-mll;
-    letter-spacing: 1.1px;
+  .post-body-content {
+    color: $black;
+    line-height: 1.7;
+    letter-spacing: 0.9px;
 
     .attachment-image {
-      margin-bottom: 35px;
-      margin-top: 35px;
+      margin-bottom: 20px;
+      margin-top: 15px;
     }
   }
-}
 
-@media screen and (min-width: $screen-xl-min) {
-  .fiction-content {
-    .attachment-image {
-      margin-bottom: 25px;
-      margin-top: 45px;
+  @media screen and (min-width: $screen-sm-min) {
+    .post-body-title {
+      font-size: $font-size-xll;
+      letter-spacing: 2.4px;
+    }
+
+    .post-body-content {
+      font-size: $font-size-mll;
+      letter-spacing: 1.1px;
+
+      .attachment-image {
+        margin-bottom: 35px;
+        margin-top: 35px;
+      }
+    }
+  }
+
+  @media screen and (min-width: $screen-xl-min) {
+    .post-body-content {
+      .attachment-image {
+        margin-bottom: 25px;
+        margin-top: 45px;
+      }
     }
   }
 }

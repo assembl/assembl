@@ -40,8 +40,12 @@ export const defaultFictionBody: FictionBodyProps = {
     of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker
     including versions of Lorem Ipsum.</p>
   `,
-  contentLocale: 'en',
-  lang: 'en'
+  contentLocale: 'fr',
+  lang: 'fr',
+  extracts: [],
+  dbId: 1,
+  bodyMimeType: 'text/html',
+  refetchPost: Function
 };
 
 const noFictionBody: FictionBodyProps = {
@@ -65,6 +69,10 @@ storiesOf('FictionBody', module)
         content={text('content', playgroundFictionBody.content)}
         contentLocale={text('contentLocale', playgroundFictionBody.contentLocale)}
         lang={text('lang', playgroundFictionBody.lang)}
+        extracts={playgroundFictionBody.extracts}
+        dbId={playgroundFictionBody.dbId}
+        bodyMimeType={playgroundFictionBody.bodyMimeType}
+        refetchPost={playgroundFictionBody.refetchPost}
       />
     ))
   );

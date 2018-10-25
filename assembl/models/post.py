@@ -866,6 +866,29 @@ class ImportedPost(Post):
             source_post_id=self.source_post_id), True
 
 
+class ExtractComment(AssemblPost):
+    """
+        A Post that is linked to an extract.
+    """
+    __tablename__ = "extract_comment"
+
+    id = Column(Integer, ForeignKey(
+        'assembl_post.id',
+        ondelete='CASCADE',
+        onupdate='CASCADE'
+    ), primary_key=True)
+
+    parent_extract_id = Column(
+        Integer,
+        ForeignKey('extract.id', ondelete="CASCADE", onupdate="CASCADE"),
+        nullable=False, index=True
+    )
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'extract_comment',
+    }
+
+
 @event.listens_for(ImportedPost.source_post_id, 'set', propagate=True)
 def receive_set(target, value, oldvalue, initiator):
     "listen for the 'set' event, keeps the message_id in Post class in sync with the source_post_id"

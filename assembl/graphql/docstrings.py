@@ -215,6 +215,7 @@ class ExtractInterface:
     creator_id = """The id of the User who created the extract."""
     creator = """The AgentProfile object description of the creator."""
     lang = """The lang of the extract."""
+    comment = """A comment post related to an extract."""
 
 
 class PostExtract:
@@ -567,6 +568,13 @@ class AddPostAttachment:
 class DeletePostAttachment:
     post_id = Default.node_id % ("Post") + " The identifier of the Post that the Attachment will be deleted from."
     attachment_id = "The database identifier of the Attachement to be deleted."
+
+
+class AddExtractComment:
+    __doc__ = "A mutation to create a comment linked to an Extract"
+    extract_id = Default.node_id % ("Post")
+    body = PostInterface.body
+    parent_id = PostInterface.parent_id
 
 
 class AddPostExtract:

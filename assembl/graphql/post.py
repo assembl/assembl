@@ -250,6 +250,56 @@ class Post(SecureObjectType, SQLAlchemyObjectType):
         only_fields = ('id',)  # inherits fields from Post interface only
 
 
+class ExtractComment(SecureObjectType, SQLAlchemyObjectType):
+
+    class Meta:
+        model = models.ExtractComment
+        interfaces = (Node, PostInterface)
+        only_fields = ('id', 'parent_extract')
+
+
+class AddExtractComment(graphene.Mutation):
+    __doc__ = docs.AddExtractComment.__doc__
+
+    class Input:
+        extract_id = graphene.ID(required=True, description=docs.AddExtractComment.extract_id)
+        body = graphene.String(required=True, description=docs.AddExtractComment.body)
+        parent_id = graphene.ID(description=docs.AddExtractComment.parent_id)
+
+    extract = graphene.Field(lambda: Extract)
+
+    @staticmethod
+    @abort_transaction_on_exception
+    def mutate(root, args, context, info):
+        require_cls_permission(CrudPermissions.CREATE, models.ExtractComment, context)
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+
+        user_id = context.authenticated_userid or Everyone
+
+        extract_id = args.get('extract_id')
+        extract_id_global = int(Node.from_global_id(extract_id)[1])
+        extract = models.Extract.get(extract_id_global)
+
+        body_html = sanitize_html(args.get('body'))
+        body_langstring = models.LangString.create(body_html)
+
+        new_post = models.ExtractComment(
+            discussion=discussion,
+            body=body_langstring,
+            creator_id=user_id,
+            body_mime_type=u'text/html',
+            creation_date=datetime.utcnow(),
+            parent_extract_id=extract.id,
+        )
+
+        db = new_post.db
+        db.add(new_post)
+        db.flush()
+
+        return AddExtractComment(extract=extract)
+
+
 class PostConnection(graphene.Connection):
 
     class Meta:
@@ -708,6 +758,7 @@ class AddPostExtract(graphene.Mutation):
         offset_end = graphene.Int(required=True, description=docs.AddPostExtract.offset_end)
 
     post = graphene.Field(lambda: Post)
+    extract = graphene.Field(lambda: Extract)
 
     @staticmethod
     @abort_transaction_on_exception
@@ -753,7 +804,7 @@ class AddPostExtract(graphene.Mutation):
         db.add(range)
         db.flush()
 
-        return AddPostExtract(post=post)
+        return AddPostExtract(post=post, extract=new_extract)
 
 
 # Used by the Bigdatext app

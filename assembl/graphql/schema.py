@@ -31,7 +31,7 @@ from assembl.graphql.locale import Locale
 from assembl.graphql.post import (AddPostAttachment, CreatePost, DeletePost,
                                   DeletePostAttachment, UndeletePost,
                                   UpdatePost, AddPostExtract, PostConnection,
-                                  AddPostsExtract)
+                                  AddPostsExtract, AddExtractComment)
 from assembl.graphql.extract import (UpdateExtract, DeleteExtract, ConfirmExtract)
 from assembl.graphql.resource import (CreateResource, DeleteResource, Resource,
                                       UpdateResource)
@@ -481,6 +481,7 @@ class Mutations(graphene.ObjectType):
     update_discussion_phase = UpdateDiscussionPhase.Field(description=docs.CreateDiscussionPhase.__doc__)
     delete_discussion_phase = DeleteDiscussionPhase.Field(description=docs.DeleteDiscussionPhase.__doc__)
     update_harvesting_translation_preference = UpdateHarvestingTranslationPreference.Field(description=docs.UpdateHarvestingTranslationPreference.__doc__)
+    add_extract_comment = AddExtractComment.Field(description=docs.AddExtractComment.__doc__)
 
 
 Schema = graphene.Schema(query=Query, mutation=Mutations)

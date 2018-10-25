@@ -30,5 +30,8 @@ mutation addPostExtract(
         }
       }
     }
+    extract {
+      ...Extract
+    }
   }
 }

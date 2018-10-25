@@ -1,0 +1,52 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots SideCommentAnchor default 1`] = `
+<Story
+  PropTable={[Function]}
+  components={
+    Object {
+      "a": [Function],
+      "code": [Function],
+      "h1": [Function],
+      "h2": [Function],
+      "h3": [Function],
+      "h4": [Function],
+      "h5": [Function],
+      "h6": [Function],
+      "li": [Function],
+      "p": [Function],
+      "ul": [Function],
+    }
+  }
+  context={
+    Object {
+      "fileName": "/Users/cedrtang/workspace/python/assembl/assembl/static2/js/app/stories/components/debate/brightMirror/sideComment/sideCommentAnchor.stories.jsx",
+      "framework": "react",
+      "kind": "SideCommentAnchor",
+      "story": "default",
+    }
+  }
+  info=""
+  maxPropArrayLength={3}
+  maxPropObjectKeys={3}
+  maxPropStringLength={50}
+  maxPropsIntoLine={3}
+  propTables={Array []}
+  propTablesExclude={Array []}
+  showHeader={true}
+  showInline={false}
+  showSource={true}
+  styles={[Function]}
+>
+  <SideCommentAnchor
+    anchorPosition={
+      Object {
+        "x": 50,
+        "y": 50,
+      }
+    }
+    handleClickAnchor={[Function]}
+    handleMouseDown={[Function]}
+  />
+</Story>
+`;

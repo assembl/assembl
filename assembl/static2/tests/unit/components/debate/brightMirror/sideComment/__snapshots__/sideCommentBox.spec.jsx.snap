@@ -1,0 +1,497 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots SideCommentBox multiple comments 1`] = `
+<Story
+  PropTable={[Function]}
+  components={
+    Object {
+      "a": [Function],
+      "code": [Function],
+      "h1": [Function],
+      "h2": [Function],
+      "h3": [Function],
+      "h4": [Function],
+      "h5": [Function],
+      "h6": [Function],
+      "li": [Function],
+      "p": [Function],
+      "ul": [Function],
+    }
+  }
+  context={
+    Object {
+      "fileName": "/Users/cedrtang/workspace/python/assembl/assembl/static2/js/app/stories/components/debate/brightMirror/sideComment/sideCommentBox.stories.jsx",
+      "framework": "react",
+      "kind": "SideCommentBox",
+      "story": "multiple comments",
+    }
+  }
+  info=""
+  maxPropArrayLength={3}
+  maxPropObjectKeys={3}
+  maxPropStringLength={50}
+  maxPropsIntoLine={3}
+  propTables={Array []}
+  propTablesExclude={Array []}
+  showHeader={true}
+  showInline={false}
+  showSource={true}
+  styles={[Function]}
+>
+  <DumbSideCommentBox
+    addExtractComment={[Function]}
+    addPostExtract={[Function]}
+    cancelSubmit={[Function]}
+    clearHighlights={[Function]}
+    contentLocale="en"
+    currentUser={
+      Object {
+        "displayName": "John Doe User",
+        "id": "1223456",
+        "isDeleted": false,
+        "isMachine": false,
+        "preferences": Object {
+          "harvestingTranslation": Object {
+            "localeFrom": "en",
+            "localeInto": "fr",
+          },
+        },
+        "userId": 1,
+      }
+    }
+    displayCommentBox={true}
+    extracts={
+      Array [
+        Object {
+          "body": "This is the extract!",
+          "comment": Object {
+            "attachments": Array [],
+            "body": "<p><strong>Lorem ipsum dolor sit amet.</strong></p><div class=\\"atomic-block\\" data-blocktype=\\"atomic\\"><img class=\\"attachment-image\\" src=\\"https://picsum.photos/400/200/\\" alt=\\"\\" title=\\"loremPixel.jpg\\" data-id=\\"1\\" data-mimetype=\\"image/jpeg\\"></div><p></p><p>https://youtu.be/MzfBIcJaJSU</p>",
+            "creationDate": "2018-01-26T09:19:01.492406+00:00",
+            "creator": Object {
+              "displayName": "Odile Commenter",
+              "id": "21",
+              "isDeleted": false,
+              "isMachine": false,
+              "preferences": Object {
+                "harvestingTranslation": Object {
+                  "localeFrom": "en",
+                  "localeInto": "fr",
+                },
+              },
+              "userId": 2,
+            },
+            "id": "0",
+          },
+          "creationDate": "2018-03-29T16:28:27.324276+00:00",
+          "creator": Object {
+            "displayName": "John Doe User",
+            "id": "1223456",
+            "isDeleted": false,
+            "isMachine": false,
+            "preferences": Object {
+              "harvestingTranslation": Object {
+                "localeFrom": "en",
+                "localeInto": "fr",
+              },
+            },
+            "userId": 1,
+          },
+          "extractAction": "classify",
+          "extractNature": "issue",
+          "extractState": "PUBLISHED",
+          "id": "987643",
+          "important": false,
+          "lang": "en",
+          "textFragmentIdentifiers": Array [
+            Object {
+              "offsetEnd": 988,
+              "offsetStart": 973,
+              "xpathEnd": "//div[@id='message-body-local:Content/3059']/",
+              "xpathStart": "//div[@id='message-body-local:Content/3059']/",
+            },
+          ],
+        },
+        Object {
+          "body": "This is the extract!",
+          "comment": Object {
+            "attachments": Array [],
+            "body": "Second comment!",
+            "creationDate": "2017-02-12T09:19:01.492406+00:00",
+            "creator": Object {
+              "displayName": "John Doe User",
+              "id": "1223456",
+              "isDeleted": false,
+              "isMachine": false,
+              "preferences": Object {
+                "harvestingTranslation": Object {
+                  "localeFrom": "en",
+                  "localeInto": "fr",
+                },
+              },
+              "userId": 1,
+            },
+            "id": "1",
+          },
+          "creationDate": "2018-03-29T16:28:27.324276+00:00",
+          "creator": Object {
+            "displayName": "John Doe User",
+            "id": "1223456",
+            "isDeleted": false,
+            "isMachine": false,
+            "preferences": Object {
+              "harvestingTranslation": Object {
+                "localeFrom": "en",
+                "localeInto": "fr",
+              },
+            },
+            "userId": 1,
+          },
+          "extractAction": "classify",
+          "extractNature": "issue",
+          "extractState": "PUBLISHED",
+          "id": "987643",
+          "important": false,
+          "lang": "en",
+          "textFragmentIdentifiers": Array [
+            Object {
+              "offsetEnd": 988,
+              "offsetStart": 973,
+              "xpathEnd": "//div[@id='message-body-local:Content/3059']/",
+              "xpathStart": "//div[@id='message-body-local:Content/3059']/",
+            },
+          ],
+        },
+        Object {
+          "body": "This is the extract!",
+          "comment": Object {
+            "attachments": Array [],
+            "body": "Third comment!",
+            "creationDate": "2001-03-10T09:19:01.492406+00:00",
+            "creator": Object {
+              "displayName": "Odile Commenter",
+              "id": "21",
+              "isDeleted": false,
+              "isMachine": false,
+              "preferences": Object {
+                "harvestingTranslation": Object {
+                  "localeFrom": "en",
+                  "localeInto": "fr",
+                },
+              },
+              "userId": 2,
+            },
+            "id": "2",
+          },
+          "creationDate": "2018-03-29T16:28:27.324276+00:00",
+          "creator": Object {
+            "displayName": "John Doe User",
+            "id": "1223456",
+            "isDeleted": false,
+            "isMachine": false,
+            "preferences": Object {
+              "harvestingTranslation": Object {
+                "localeFrom": "en",
+                "localeInto": "fr",
+              },
+            },
+            "userId": 1,
+          },
+          "extractAction": "classify",
+          "extractNature": "issue",
+          "extractState": "PUBLISHED",
+          "id": "987643",
+          "important": false,
+          "lang": "en",
+          "textFragmentIdentifiers": Array [
+            Object {
+              "offsetEnd": 988,
+              "offsetStart": 973,
+              "xpathEnd": "//div[@id='message-body-local:Content/3059']/",
+              "xpathStart": "//div[@id='message-body-local:Content/3059']/",
+            },
+          ],
+        },
+      ]
+    }
+    lang="en"
+    position={
+      Object {
+        "x": 0,
+        "y": 0,
+      }
+    }
+    postId="1"
+    refetchPost={[Function]}
+    selection={null}
+    setCommentBoxDisplay={[Function]}
+    setPositionToExtract={[Function]}
+    submitting={false}
+    toggleExtractsBox={[Function]}
+  />
+</Story>
+`;
+
+exports[`Storyshots SideCommentBox single comment 1`] = `
+<Story
+  PropTable={[Function]}
+  components={
+    Object {
+      "a": [Function],
+      "code": [Function],
+      "h1": [Function],
+      "h2": [Function],
+      "h3": [Function],
+      "h4": [Function],
+      "h5": [Function],
+      "h6": [Function],
+      "li": [Function],
+      "p": [Function],
+      "ul": [Function],
+    }
+  }
+  context={
+    Object {
+      "fileName": "/Users/cedrtang/workspace/python/assembl/assembl/static2/js/app/stories/components/debate/brightMirror/sideComment/sideCommentBox.stories.jsx",
+      "framework": "react",
+      "kind": "SideCommentBox",
+      "story": "single comment",
+    }
+  }
+  info=""
+  maxPropArrayLength={3}
+  maxPropObjectKeys={3}
+  maxPropStringLength={50}
+  maxPropsIntoLine={3}
+  propTables={Array []}
+  propTablesExclude={Array []}
+  showHeader={true}
+  showInline={false}
+  showSource={true}
+  styles={[Function]}
+>
+  <DumbSideCommentBox
+    addExtractComment={[Function]}
+    addPostExtract={[Function]}
+    cancelSubmit={[Function]}
+    clearHighlights={[Function]}
+    contentLocale="en"
+    currentUser={
+      Object {
+        "displayName": "John Doe User",
+        "id": "1223456",
+        "isDeleted": false,
+        "isMachine": false,
+        "preferences": Object {
+          "harvestingTranslation": Object {
+            "localeFrom": "en",
+            "localeInto": "fr",
+          },
+        },
+        "userId": 1,
+      }
+    }
+    displayCommentBox={true}
+    extracts={
+      Array [
+        Object {
+          "body": "This is the extract!",
+          "comment": Object {
+            "attachments": Array [],
+            "body": "<p><strong>Lorem ipsum dolor sit amet.</strong></p><div class=\\"atomic-block\\" data-blocktype=\\"atomic\\"><img class=\\"attachment-image\\" src=\\"https://picsum.photos/400/200/\\" alt=\\"\\" title=\\"loremPixel.jpg\\" data-id=\\"1\\" data-mimetype=\\"image/jpeg\\"></div><p></p><p>https://youtu.be/MzfBIcJaJSU</p>",
+            "creationDate": "2018-01-26T09:19:01.492406+00:00",
+            "creator": Object {
+              "displayName": "Odile Commenter",
+              "id": "21",
+              "isDeleted": false,
+              "isMachine": false,
+              "preferences": Object {
+                "harvestingTranslation": Object {
+                  "localeFrom": "en",
+                  "localeInto": "fr",
+                },
+              },
+              "userId": 2,
+            },
+            "id": "0",
+          },
+          "creationDate": "2018-03-29T16:28:27.324276+00:00",
+          "creator": Object {
+            "displayName": "John Doe User",
+            "id": "1223456",
+            "isDeleted": false,
+            "isMachine": false,
+            "preferences": Object {
+              "harvestingTranslation": Object {
+                "localeFrom": "en",
+                "localeInto": "fr",
+              },
+            },
+            "userId": 1,
+          },
+          "extractAction": "classify",
+          "extractNature": "issue",
+          "extractState": "PUBLISHED",
+          "id": "987643",
+          "important": false,
+          "lang": "en",
+          "textFragmentIdentifiers": Array [
+            Object {
+              "offsetEnd": 988,
+              "offsetStart": 973,
+              "xpathEnd": "//div[@id='message-body-local:Content/3059']/",
+              "xpathStart": "//div[@id='message-body-local:Content/3059']/",
+            },
+          ],
+        },
+      ]
+    }
+    lang="en"
+    position={
+      Object {
+        "x": 0,
+        "y": 0,
+      }
+    }
+    postId="1"
+    refetchPost={[Function]}
+    selection={null}
+    setCommentBoxDisplay={[Function]}
+    setPositionToExtract={[Function]}
+    submitting={false}
+    toggleExtractsBox={[Function]}
+  />
+</Story>
+`;
+
+exports[`Storyshots SideCommentBox submitting 1`] = `
+<Story
+  PropTable={[Function]}
+  components={
+    Object {
+      "a": [Function],
+      "code": [Function],
+      "h1": [Function],
+      "h2": [Function],
+      "h3": [Function],
+      "h4": [Function],
+      "h5": [Function],
+      "h6": [Function],
+      "li": [Function],
+      "p": [Function],
+      "ul": [Function],
+    }
+  }
+  context={
+    Object {
+      "fileName": "/Users/cedrtang/workspace/python/assembl/assembl/static2/js/app/stories/components/debate/brightMirror/sideComment/sideCommentBox.stories.jsx",
+      "framework": "react",
+      "kind": "SideCommentBox",
+      "story": "submitting",
+    }
+  }
+  info=""
+  maxPropArrayLength={3}
+  maxPropObjectKeys={3}
+  maxPropStringLength={50}
+  maxPropsIntoLine={3}
+  propTables={Array []}
+  propTablesExclude={Array []}
+  showHeader={true}
+  showInline={false}
+  showSource={true}
+  styles={[Function]}
+>
+  <DumbSideCommentBox
+    addExtractComment={[Function]}
+    addPostExtract={[Function]}
+    cancelSubmit={[Function]}
+    clearHighlights={[Function]}
+    contentLocale="en"
+    currentUser={
+      Object {
+        "displayName": "John Doe User",
+        "id": "1223456",
+        "isDeleted": false,
+        "isMachine": false,
+        "preferences": Object {
+          "harvestingTranslation": Object {
+            "localeFrom": "en",
+            "localeInto": "fr",
+          },
+        },
+        "userId": 1,
+      }
+    }
+    displayCommentBox={true}
+    extracts={
+      Array [
+        Object {
+          "body": "This is the extract!",
+          "comment": Object {
+            "attachments": Array [],
+            "body": "<p><strong>Lorem ipsum dolor sit amet.</strong></p><div class=\\"atomic-block\\" data-blocktype=\\"atomic\\"><img class=\\"attachment-image\\" src=\\"https://picsum.photos/400/200/\\" alt=\\"\\" title=\\"loremPixel.jpg\\" data-id=\\"1\\" data-mimetype=\\"image/jpeg\\"></div><p></p><p>https://youtu.be/MzfBIcJaJSU</p>",
+            "creationDate": "2018-01-26T09:19:01.492406+00:00",
+            "creator": Object {
+              "displayName": "Odile Commenter",
+              "id": "21",
+              "isDeleted": false,
+              "isMachine": false,
+              "preferences": Object {
+                "harvestingTranslation": Object {
+                  "localeFrom": "en",
+                  "localeInto": "fr",
+                },
+              },
+              "userId": 2,
+            },
+            "id": "0",
+          },
+          "creationDate": "2018-03-29T16:28:27.324276+00:00",
+          "creator": Object {
+            "displayName": "John Doe User",
+            "id": "1223456",
+            "isDeleted": false,
+            "isMachine": false,
+            "preferences": Object {
+              "harvestingTranslation": Object {
+                "localeFrom": "en",
+                "localeInto": "fr",
+              },
+            },
+            "userId": 1,
+          },
+          "extractAction": "classify",
+          "extractNature": "issue",
+          "extractState": "PUBLISHED",
+          "id": "987643",
+          "important": false,
+          "lang": "en",
+          "textFragmentIdentifiers": Array [
+            Object {
+              "offsetEnd": 988,
+              "offsetStart": 973,
+              "xpathEnd": "//div[@id='message-body-local:Content/3059']/",
+              "xpathStart": "//div[@id='message-body-local:Content/3059']/",
+            },
+          ],
+        },
+      ]
+    }
+    lang="en"
+    position={
+      Object {
+        "x": 0,
+        "y": 0,
+      }
+    }
+    postId="1"
+    refetchPost={[Function]}
+    selection={null}
+    setCommentBoxDisplay={[Function]}
+    setPositionToExtract={[Function]}
+    submitting={true}
+    toggleExtractsBox={[Function]}
+  />
+</Story>
+`;

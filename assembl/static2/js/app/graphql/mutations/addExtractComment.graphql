@@ -1,0 +1,15 @@
+#import "../fragments/Extract.graphql"
+#import "../fragments/ExtractComment.graphql"
+
+mutation addExtractComment($extractId: ID!, $body: String!, $parentId: ID, $contentLocale: String!) {
+  addExtractComment(extractId: $extractId, body: $body, parentId: $parentId) {
+    extract {
+      ...Extract
+      ... on Extract {
+        comment {
+          ...ExtractComment
+        }
+      }
+    }
+  }
+}

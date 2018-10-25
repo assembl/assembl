@@ -4,6 +4,7 @@ import { Grid, Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { I18n } from 'react-redux-i18n';
 import head from 'lodash/head';
+import type { OperationComponent } from 'react-apollo';
 // Graphql imports
 import { compose, graphql } from 'react-apollo';
 import BrightMirrorFictionQuery from '../graphql/BrightMirrorFictionQuery.graphql';
@@ -43,6 +44,16 @@ import type { FictionCommentListProps } from '../components/debate/brightMirror/
 import type { CreateCommentInputs } from '../components/debate/brightMirror/fictionComment';
 
 // Define types
+export type BrightMirrorFictionData = {
+  /** Fiction object formatted through GraphQL  */
+  fiction: BrightMirrorFictionFragment,
+  /** GraphQL error object used to handle fetching errors */
+  error: any,
+  /** GraphQL flag that checks the query/mutation state */
+  loading: boolean,
+  refetch: () => void
+};
+
 export type BrightMirrorFictionProps = {
   /** URL slug */
   slug: string,
@@ -59,15 +70,6 @@ type BrightMirrorFictionReduxProps = {
   contentLocale: string,
   /** Fiction locale mapping fetched from mapStateToProps */
   contentLocaleMapping: ContentLocaleMapping
-};
-
-export type BrightMirrorFictionData = {
-  /** Fiction object formatted through GraphQL  */
-  fiction: BrightMirrorFictionFragment,
-  /** GraphQL flag that checks the query/mutation state */
-  loading: boolean,
-  /** GraphQL error object used to handle fetching errors */
-  error: any
 };
 
 export type IdeaWithCommentsData = {
@@ -268,7 +270,14 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
       title: title,
       content: content,
       contentLocale: contentLocale,
-      lang: contentLocale
+      lang: contentLocale,
+      isAuthorAccountDeleted: fiction.creator && fiction.creator.isDeleted ? fiction.creator.isDeleted : false,
+      // $FlowFixMe extracts are never null
+      extracts: fiction.extracts,
+      bodyMimeType: fiction.bodyMimeType,
+      // $FlowFixMe dbId is never null
+      dbId: fiction.dbId,
+      refetchPost: brightMirrorFictionData.refetch
     };
 
     const fictionCommentFormProps: FictionCommentFormProps = {
@@ -299,7 +308,7 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
           <BackButton handleClick={backBtnCallback} linkClassName="back-btn" />
           <Grid fluid>
             <Row>
-              <Col xs={12}>
+              <Col xs={10}>
                 <article>
                   <FictionHeader {...fictionHeaderProps} />
                   <FictionToolbar {...fictionToolbarProps} />
@@ -328,19 +337,22 @@ const mapStateToProps = state => ({
   contentLocale: state.i18n.locale,
   contentLocaleMapping: state.contentLocale
 });
+
+const withData: OperationComponent<Response> = graphql(BrightMirrorFictionQuery, {
+  // GraphQL custom data name
+  name: 'brightMirrorFictionData',
+  // GraphQL needed input variables
+  options: ({ fictionId, contentLocale }) => ({
+    variables: {
+      id: fictionId,
+      contentLocale: contentLocale
+    }
+  })
+});
+
 export default compose(
   connect(mapStateToProps),
-  graphql(BrightMirrorFictionQuery, {
-    // GraphQL custom data name
-    name: 'brightMirrorFictionData',
-    // GraphQL needed input variables
-    options: ({ fictionId, contentLocale }) => ({
-      variables: {
-        id: fictionId,
-        contentLocale: contentLocale
-      }
-    })
-  }),
+  withData,
   graphql(IdeaWithCommentsQuery, {
     // GraphQL custom data name
     name: 'ideaWithCommentsData',

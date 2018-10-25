@@ -549,6 +549,45 @@ query Post($id: ID!) {
             }}
 
 
+def test_extract_get_comment(admin_user, graphql_request, top_post_in_thread_phase, extract_post_1_to_subidea_1_1, extract_comment):
+    from graphene.relay import Node
+    raw_id = int(Node.from_global_id(top_post_in_thread_phase)[1])
+    from assembl.models import Post
+    post = Post.get(raw_id)
+    post.extracts.append(extract_post_1_to_subidea_1_1)
+    post.db.flush()
+
+    res = schema.execute(u"""
+        query Post($id: ID!, $lang: String!) {
+          post: node(id: $id) {
+            ... on Post {
+              extracts {
+                body
+                important
+                comment {
+                  subject(lang: $lang)
+                }
+              }
+            }
+          }
+        }
+    """, context_value=graphql_request, variable_values={
+            "id": top_post_in_thread_phase,
+            "lang": u'en',
+        })
+
+    assert json.loads(json.dumps(res.data)) == {
+        u'post': {
+            u'extracts': [
+                {u'body': u'body',
+                u'important': False,
+                u'comment': {
+                  u'subject': 'comment of extract title'
+                }},
+                ]
+            }}
+
+
 def test_announcement_on_idea(graphql_request, announcement_en_fr):
     node_id = announcement_en_fr.idea.graphene_id()
     res = schema.execute(u"""

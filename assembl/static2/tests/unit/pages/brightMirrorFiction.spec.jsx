@@ -10,7 +10,6 @@ import IdeaWithCommentsQuery from '../../../js/app/graphql/IdeaWithPostsQuery.gr
 // Containers import
 import { BrightMirrorFiction } from '../../../js/app/pages/brightMirrorFiction';
 // Components imports
-import FictionHeader from '../../../js/app/components/debate/brightMirror/fictionHeader';
 import FictionToolbar from '../../../js/app/components/debate/brightMirror/fictionToolbar';
 import FictionBody from '../../../js/app/components/debate/brightMirror/fictionBody';
 import FictionCommentHeader from '../../../js/app/components/debate/brightMirror/fictionCommentHeader';
@@ -41,6 +40,7 @@ jest.mock('../../../js/app/pages/idea', () => ({
 
 const brightMirrorFictionDataTemplate = {
   fiction: {
+    dbId: 1,
     subject: 'Hic quia eveniet cupiditate placeat laboriosam.',
     body: 'Odit mollitia natus ea iusto voluptatibus omnis pariatur tempore ipsum.',
     creationDate: new Date(),
@@ -52,8 +52,12 @@ const brightMirrorFictionDataTemplate = {
       image: {
         externalUrl: 'http://tyrese.info'
       }
-    }
-  }
+    },
+    bodyMimeType: 'text/html',
+    extracts: []
+  },
+  error: null,
+  refetch: () => {}
 };
 
 const ideaWithCommentsDataTemplate = {
@@ -135,15 +139,18 @@ describe('<BrightMirrorFiction /> - with mount', () => {
         }
       ];
 
+      // Create DOM to allow document.getElementById function
+      const div = document.createElement('div');
+      window.domNode = div;
+      // $FlowFixMe because document.body may be null
+      document.body.appendChild(div);
+
       wrapper = mount(
         <MockedProvider mocks={mocks}>
           <BrightMirrorFiction {...brightMirrorFictionProps} />
-        </MockedProvider>
+        </MockedProvider>,
+        { attachTo: window.domNode }
       );
-    });
-
-    it('should render a FictionHeader', () => {
-      expect(wrapper.find(FictionHeader)).toHaveLength(1);
     });
 
     it('should render a FictionToolbar', () => {

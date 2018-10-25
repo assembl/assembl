@@ -63,14 +63,13 @@ $fiction-toolbar-icon-size: 17px;
 
 .background-comments-default {
   // Striped background
-  background:
-    repeating-linear-gradient(
-      -45deg,
-      $ice,
-      $ice 4px,
-      $white 2px,
-      $white 7px
-    );
+  background: repeating-linear-gradient(
+    -45deg,
+    $ice,
+    $ice 4px,
+    $white 2px,
+    $white 7px
+  );
 }
 
 @media screen and (min-width: $screen-sm-min) {
@@ -115,15 +114,20 @@ $fiction-toolbar-icon-size: 17px;
 }
 
 // Component imports
-@import "components/backButton";
-@import "components/circleAvatar";
-@import "components/toggleCommentButton";
-@import "components/editPostButton";
-@import "components/replyToCommentButton";
-@import "components/fictionHeader";
-@import "components/fictionToolbar";
-@import "components/fictionBody";
-@import "components/fictionCommentHeader";
-@import "components/fictionCommentForm";
-@import "components/fictionComment";
-@import "components/fictionCommentList";
+@import 'components/backButton';
+@import 'components/circleAvatar';
+@import 'components/toggleCommentButton';
+@import 'components/editPostButton';
+@import 'components/replyToCommentButton';
+@import 'components/fictionHeader';
+@import 'components/fictionToolbar';
+@import 'components/fictionBody';
+@import 'components/fictionCommentHeader';
+@import 'components/fictionCommentForm';
+@import 'components/fictionComment';
+@import 'components/fictionCommentList';
+@import 'components/fictionEditModal';
+@import 'components/fictionPreview';
+@import 'components/fictionsList';
+@import 'components/instructionsText';
+@import 'components/fictionSideComment';
