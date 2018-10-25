@@ -106,7 +106,6 @@
     "immutable": "~3.7.4",
     "isomorphic-fetch": "^2.2.1",
     "jest-coverage-ratchet": "^0.2.3",
-    "jest-coverage-validator": "^0.6.9",
     "jquery": "^3.3.1",
     "json-loader": "^0.5.4",
     "linkifyjs": "^2.1.5",
@@ -148,12 +147,15 @@
   },
   "//": "See https://facebook.github.io/jest/docs/webpack.html for more info",
   "jest": {
+    "coverageReporters": [
+      "json-summary"
+    ],
     "coverageThreshold": {
       "global": {
-        "branches": 30,
-        "functions": 30,
-        "lines": 30,
-        "statements": -10
+        "lines": 53.04,
+        "statements": 51.79,
+        "functions": 39.55,
+        "branches": 38.8
       }
     },
     "moduleNameMapper": {

@@ -5421,7 +5421,7 @@ jest-changed-files@^20.0.3:
   version "20.0.3"
   resolved "https://registry.yarnpkg.com/jest-changed-files/-/jest-changed-files-20.0.3.tgz#9394d5cc65c438406149bef1bf4d52b68e03e3f8"
 
-jest-cli@^20.0.3, jest-cli@^20.0.4:
+jest-cli@^20.0.4:
   version "20.0.4"
   resolved "https://registry.yarnpkg.com/jest-cli/-/jest-cli-20.0.4.tgz#e532b19d88ae5bc6c417e8b0593a6fe954b1dc93"
   dependencies:
@@ -5486,13 +5486,6 @@ jest-coverage-ratchet@^0.2.3:
     fs-extra "^3.0.1"
     ramda "^0.23.0"
     yargs "^8.0.1"
-
-jest-coverage-validator@^0.6.9:
-  version "0.6.9"
-  resolved "https://registry.yarnpkg.com/jest-coverage-validator/-/jest-coverage-validator-0.6.9.tgz#63f1cc9ea5a7f0ed807fd3fbee13347e0de547b3"
-  dependencies:
-    jest-cli "^20.0.3"
-    lodash "^4.17.4"
 
 jest-diff@^20.0.3:
   version "20.0.3"
