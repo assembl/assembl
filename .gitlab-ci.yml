@@ -2,7 +2,6 @@ image: python:2.7
 
 stages:
   - test
-  - push_to_master
   - build
   - deploy_to_dev
   - test_on_dev
@@ -18,6 +17,7 @@ test_frontend:
   stage: test
   except:
     - master
+    - tmp_master_for_ci_cd
   image: node:8
   before_script:
     - export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
@@ -32,6 +32,8 @@ test_frontend:
 test_integration_and_ui:
   stage: test_on_dev
   image: node:8
+  only:
+    - tmp_master_for_ci_cd
   before_script:
     - eval $(ssh-agent -s) && sh scripts/configure_ssh.sh
     - sh scripts/prepare_integration_tests.sh
@@ -40,18 +42,14 @@ test_integration_and_ui:
     - yarn jest tests/integration
     # run each ui test one by one
     - yarn runinband
-variables:
-  DEVELOP_BRANCH: add_build_job
-  MASTER_BRANCH: tmp_master_for_ci_cd
 
 build_wheel:
-  # TODO: urlmetadata
-  # TODO: pass the assembl version to the other jobs
-  # variables:
-  #   CI_DEBUG_TRACE: "true"
   stage: build
   only:
-    - add_build_job
+    - develop
+  variables:
+    DEVELOP_BRANCH: develop
+    MASTER_BRANCH: tmp_master_for_ci_cd
   before_script:
     - sh scripts/install_build_dependencies.sh
     - sh scripts/install_node_and_yarn.sh
