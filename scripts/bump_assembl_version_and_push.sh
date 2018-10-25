@@ -1,4 +1,11 @@
 #!/bin/sh
+echo '.git/config'
+cat .git/config
+echo 'known_hosts'
+cat ~/.ssh/known_hosts
+echo 'remotes'
+git remote -v
+ssh assembl_user@dev-assembl.bluenove.com ls
 ssh-keyscan -H github.com >> ~/.ssh/known_hosts
 git fetch github
 git checkout -b bumpversion
