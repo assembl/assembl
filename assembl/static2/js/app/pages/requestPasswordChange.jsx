@@ -1,23 +1,37 @@
+// @flow
 import React from 'react';
 import { connect } from 'react-redux';
 import { Grid, Row, Col } from 'react-bootstrap';
-import SendPwdForm from '../components/login/sendPwdForm';
+
+import { requestPasswordChangeAction } from '../actions/authenticationActions';
+import RequestNewPasswordForm from '../components/login/requestNewPasswordForm';
 import SendPwdConfirm from '../components/login/sendPwdConfirm';
 
-class RequestPasswordChange extends React.Component {
+export type ChangePasswordResponse = {
+  data: Array<any>,
+  success: boolean | null
+};
+
+type Props = {
+  passwordChangeResponse: ChangePasswordResponse,
+  requestPasswordChange: (string, string) => void
+};
+
+export class DumbRequestPasswordChange extends React.Component<Props> {
   render() {
-    const { auth } = this.props;
-    let pwdSendConfirm = null;
-    if ('passwordChangeRequest' in auth) {
-      if (auth.passwordChangeRequest.success !== null) {
-        pwdSendConfirm = auth.passwordChangeRequest.success;
-      }
-    }
+    const { passwordChangeResponse, requestPasswordChange } = this.props;
     return (
       <Grid fluid className="login-container">
         <Row className="max-container center">
           <Col xs={12} md={6} className="col-centered">
-            {pwdSendConfirm ? <SendPwdConfirm /> : <SendPwdForm />}
+            {passwordChangeResponse.success ? (
+              <SendPwdConfirm />
+            ) : (
+              <RequestNewPasswordForm
+                passwordChangeResponse={passwordChangeResponse}
+                requestPasswordChange={requestPasswordChange}
+              />
+            )}
           </Col>
         </Row>
       </Grid>
@@ -25,8 +39,12 @@ class RequestPasswordChange extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({
-  auth: state.auth
+const mapStateToProps = ({ auth }) => ({
+  passwordChangeResponse: auth.passwordChangeRequest
 });
 
-export default connect(mapStateToProps)(RequestPasswordChange);
+const mapDispatchToProps = dispatch => ({
+  requestPasswordChange: (id, discussionSlug) => dispatch(requestPasswordChangeAction(id, discussionSlug))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(DumbRequestPasswordChange);
