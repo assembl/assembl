@@ -43,10 +43,11 @@ class RequestNewPasswordForm extends React.Component<Props, State> {
 
   handleSubmit = (e: SyntheticEvent<HTMLFormElement>) => {
     const { requestPasswordChange } = this.props;
+    const { identifier } = this.state;
     const slug = getDiscussionSlug();
     e.preventDefault();
-    if (this.state.identifier && slug) {
-      requestPasswordChange(this.state.identifier, slug);
+    if (identifier && slug) {
+      requestPasswordChange(identifier, slug);
     }
   };
 

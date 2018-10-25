@@ -36,8 +36,8 @@ class RequestPasswordChange extends React.Component<Props> {
   }
 }
 
-const mapStateToProps = state => ({
-  passwordChangeResponse: state.auth.passwordChangeRequest
+const mapStateToProps = ({ auth }) => ({
+  passwordChangeResponse: auth.passwordChangeRequest
 });
 
 const mapDispatchToProps = dispatch => ({
