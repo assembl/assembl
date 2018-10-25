@@ -60,8 +60,8 @@ variables:
 build_wheel:
   # TODO: urlmetadata
   # TODO: pass the assembl version to the other jobs
-  variables:
-    CI_DEBUG_TRACE: "true"
+  # variables:
+  #   CI_DEBUG_TRACE: "true"
   stage: build
   only:
     - add_build_job
@@ -69,7 +69,7 @@ build_wheel:
     - sh scripts/install_build_dependencies.sh
     - sh scripts/install_node_and_yarn.sh
     - sh scripts/configure_assembl_remote.sh
-    - sh scripts/configure_ssh.sh
+    - eval $(ssh-agent -s) && sh scripts/configure_ssh.sh
     - sh scripts/clear_apt_cache.sh
   script:
     # bump the version, merge to master
