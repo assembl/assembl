@@ -28,8 +28,7 @@ test_frontend:
     - yarn run eslint
     - yarn run stylelint
     - yarn run flow --
-    # update the coverage thresholds
-    - yarn jest-coverage-ratchet
+    # This will fail if the coverage has lowered
     - yarn jest --coverage
 
 test_integration_and_ui:
