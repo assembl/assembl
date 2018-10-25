@@ -2,7 +2,6 @@ image: python:2.7
 
 stages:
   - test
-  - push_to_master
   - build
   - deploy_to_dev
   - test_on_dev
@@ -18,6 +17,7 @@ test_frontend:
   stage: test
   except:
     - master
+    - tmp_master_for_ci_cd
   image: node:8
   before_script:
     - export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
@@ -32,24 +32,33 @@ test_frontend:
 test_integration_and_ui:
   stage: test_on_dev
   image: node:8
+  only:
+    - tmp_master_for_ci_cd
   before_script:
-    - apt-get update -qq
-    # install chrome dependencies
-    - apt-get install -yq gconf-service libasound2 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgcc1 libgconf-2-4 libgdk-pixbuf2.0-0 libglib2.0-0 libgtk-3-0 libnspr4 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils wget
-    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
-    - eval $(ssh-agent -s)
-    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
-    - mkdir -p ~/.ssh
-    - chmod 700 ~/.ssh
-    - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
-    - chmod 644 ~/.ssh/known_hosts
-    - git clone https://github.com/bluenove/assembl-tests
-    - cd assembl-tests
-    - yarn
-    # fetch data required for e2e tests
-    - scp $UI_TESTS_DATA_PATH data.js
+    - eval $(ssh-agent -s) && sh scripts/configure_ssh.sh
+    - sh scripts/prepare_integration_tests.sh
   script:
     # run integration tests
     - yarn jest tests/integration
     # run each ui test one by one
     - yarn runinband
+
+build_wheel:
+  stage: build
+  only:
+    - develop
+  variables:
+    DEVELOP_BRANCH: develop
+    MASTER_BRANCH: tmp_master_for_ci_cd
+  before_script:
+    - sh scripts/install_build_dependencies.sh
+    - sh scripts/install_node_and_yarn.sh
+    - sh scripts/configure_assembl_remote.sh
+    - eval $(ssh-agent -s) && sh scripts/configure_ssh.sh
+    - sh scripts/clear_apt_cache.sh
+  script:
+    # bump the version, merge to master
+    - sh scripts/bump_assembl_version_and_push.sh
+    # create the wheel and upload to pypi
+    - sh scripts/create_assembl_wheel.sh
+    - twine upload -u bluenove --skip-existing dist/*
