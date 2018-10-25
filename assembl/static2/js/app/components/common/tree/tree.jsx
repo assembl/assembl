@@ -134,6 +134,7 @@ class Tree extends React.Component<Props> {
             cache={this.cache}
             fictionCommentExtraProps={fictionCommentExtraProps}
           />
+          <span>This span is a test</span>
         </div>
       </CellMeasurer>
     );

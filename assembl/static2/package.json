@@ -11,6 +11,7 @@
     "test:watch": "npm test -- --watch",
     "build": "webpack --progress --colors",
     "coverage": "jest --coverage",
+    "updateCoverageThresholds": "jest-coverage-ratchet",
     "dev": "webpack -d --watch",
     "eslint": "eslint js/app tests workspaces --ext .js --ext .jsx --cache",
     "eslint:fix": "eslint js/app tests workspaces --ext .js --ext .jsx --fix",

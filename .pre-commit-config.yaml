@@ -1,42 +1,47 @@
 - repo: local
   hooks:
-#  - id: pytest
-#    name: pytest
-#    entry: ./venv/bin/py.test -s assembl -vv
-#    language: system
-#    types: [python]
-  - id: stylelint
-    name: stylelint
-    entry: bash -c "cd assembl/static2/; npm run stylelint"
-    language: system
-    files: ".*/static2/.*scss$"
-  - id: eslint
-    name: eslint
-    entry: bash -c "cd assembl/static2/; npm run eslint"
-    language: system
-    files: ".*/static2/.*jsx?$"
-  - id: flow
-    name: flow
-    entry: bash -c "cd assembl/static2/; if [[ $USE_FLOW_FROM_DOCKER ]]; then docker run --rm -v $PWD:/app node:6 bash -c 'cd /app; npm run flow'; else npm run flow; fi"
-    language: system
-    files: ".*/static2/.*jsx?$"
-  - id: jest
-    name: js tests
-    entry: bash -c "cd assembl/static2/; npm test"
-    language: system
-    files: ".*/static2/.*jsx?$"
-  - id: prettier-js
-    name: prettier-js (If this fails, please git add prettier changes and commit again.)
-    entry: bash -c "./assembl/static2/scripts/prettier-eslint.py --write `git diff --name-only --diff-filter=d --cached -- '*.jsx' '*.js'|grep static2`"
-    language: system
-    files: ".*/static2/.*jsx?$"
-  - id: prettier-graphql
-    name: prettier-graphql (If this fails, please git add prettier changes and commit again.)
-    entry: bash -c "./assembl/static2/node_modules/.bin/prettier --print-width 130 -l `git diff --name-only --diff-filter=d --cached -- '*.graphql'`; RES=$?; ./assembl/static2/node_modules/.bin/prettier --print-width 130 --write `git diff --name-only --cached -- '*.graphql'` > /dev/null; exit $RES"
-    language: system
-    files: ".*/static2/.*graphql$"
-  - id: flake8
-    name: flake8
-    entry: bash -c "PATH=./venv/bin/:$PATH flake8 `git diff --name-only --diff-filter=d --cached -- '*.py'`"
-    language: system
-    types: [python]
+    #  - id: pytest
+    #    name: pytest
+    #    entry: ./venv/bin/py.test -s assembl -vv
+    #    language: system
+    #    types: [python]
+    - id: stylelint
+      name: stylelint
+      entry: bash -c "cd assembl/static2/; npm run stylelint"
+      language: system
+      files: '.*/static2/.*scss$'
+    - id: eslint
+      name: eslint
+      entry: bash -c "cd assembl/static2/; npm run eslint"
+      language: system
+      files: '.*/static2/.*jsx?$'
+    - id: flow
+      name: flow
+      entry: bash -c "cd assembl/static2/; if [[ $USE_FLOW_FROM_DOCKER ]]; then docker run --rm -v $PWD:/app node:6 bash -c 'cd /app; npm run flow'; else npm run flow; fi"
+      language: system
+      files: '.*/static2/.*jsx?$'
+    - id: jest
+      name: js tests
+      entry: bash -c "cd assembl/static2/; npm test"
+      language: system
+      files: '.*/static2/.*jsx?$'
+    - id: jest-coverage-ratchet
+      name: jest coverage threshold update
+      entry: bash -c "cd assembl/static2/; npm run updateCoverageThresholds"
+      language: system
+      files: '.*/static2/.*jsx?$'
+    - id: prettier-js
+      name: prettier-js (If this fails, please git add prettier changes and commit again.)
+      entry: bash -c "./assembl/static2/scripts/prettier-eslint.py --write `git diff --name-only --diff-filter=d --cached -- '*.jsx' '*.js'|grep static2`"
+      language: system
+      files: '.*/static2/.*jsx?$'
+    - id: prettier-graphql
+      name: prettier-graphql (If this fails, please git add prettier changes and commit again.)
+      entry: bash -c "./assembl/static2/node_modules/.bin/prettier --print-width 130 -l `git diff --name-only --diff-filter=d --cached -- '*.graphql'`; RES=$?; ./assembl/static2/node_modules/.bin/prettier --print-width 130 --write `git diff --name-only --cached -- '*.graphql'` > /dev/null; exit $RES"
+      language: system
+      files: '.*/static2/.*graphql$'
+    - id: flake8
+      name: flake8
+      entry: bash -c "PATH=./venv/bin/:$PATH flake8 `git diff --name-only --diff-filter=d --cached -- '*.py'`"
+      language: system
+      types: [python]
