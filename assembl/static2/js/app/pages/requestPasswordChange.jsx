@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Grid, Row, Col } from 'react-bootstrap';
 
 import { requestPasswordChangeAction } from '../actions/authenticationActions';
-import SendPwdForm from '../components/login/sendPwdForm';
+import RequestNewPasswordForm from '../components/login/requestNewPasswordForm';
 import SendPwdConfirm from '../components/login/sendPwdConfirm';
 
 export type ChangePasswordResponse = {
@@ -27,7 +27,10 @@ class RequestPasswordChange extends React.Component<Props> {
             {passwordChangeResponse.success ? (
               <SendPwdConfirm />
             ) : (
-              <SendPwdForm passwordChangeResponse={passwordChangeResponse} requestPasswordChange={requestPasswordChange} />
+              <RequestNewPasswordForm
+                passwordChangeResponse={passwordChangeResponse}
+                requestPasswordChange={requestPasswordChange}
+              />
             )}
           </Col>
         </Row>

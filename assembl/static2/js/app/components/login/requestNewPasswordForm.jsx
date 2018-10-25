@@ -67,7 +67,7 @@ class RequestNewPasswordForm extends React.Component<Props, State> {
                 required
                 placeholder={I18n.t('login.username')}
                 onChange={this.handleIdentifierChange}
-                value={this.state.identifier}
+                value={this.state.identifier || ''}
               />
             </FormGroup>
             <FormGroup>
