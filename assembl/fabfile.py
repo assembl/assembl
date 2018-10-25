@@ -801,6 +801,11 @@ def update_pip_requirements(force_reinstall=False):
         run("yes w | %s" % cmd)
 
 
+def install_awscli():
+    if venvcmd('which aws', warn_only=True).failed:
+        venvcmd('pip install awscli')
+
+
 def is_db_updated():
     """
     Return if the database is update or not
@@ -817,6 +822,7 @@ def reset_db():
     """
     # Only for the staging server (for tests)
     if env.wsginame == 'staging.wsgi':
+        install_awscli()
         exists = False
         # Test if the dump exists on the amazon s3 object storage
         with shell_env(
@@ -850,33 +856,47 @@ def database_dump_aws():
     """
     Dumps the database on an amazon s3 object storage
     """
+    install_awscli()
     with prefix(venv_prefix()), \
         cd(env.projectpath), \
         shell_env(
         AWS_ACCESS_KEY_ID=env.aws_access_key_id,
-        AWS_SECRET_ACCESS_KEY=env.aws_secret_access_key
+        AWS_SECRET_ACCESS_KEY=env.aws_secret_access_key,
+        PGPASSWORD=env.db_password
     ):
         dump_name = get_versioned_db_dump_name()
         dump_path = os.path.join(env.dbdumps_dir, dump_name)
         # Create the db dump
-        run('PGPASSWORD={} pg_dump --host={} -U{} --format=custom -b {} > {}'.format(
-            env.db_password,
+        run('pg_dump --host={} -U{} --format=custom -b {} > {}'.format(
             env.db_host,
             env.db_user,
             env.db_database,
             dump_path))
         # Copy the created dump in the aws bucket
-        run('aws s3 cp {} s3://{}/{} '.format(
+        venvcmd('aws s3 cp {} s3://{}/{} '.format(
             dump_path,
             env.aws_bucket_name,
             dump_name))
         # Add a copy as a symbolic link
-        run('aws s3 cp {} s3://{}/{} '.format(
+        venvcmd('aws s3 cp {} s3://{}/{} '.format(
             dump_path,
             env.aws_bucket_name,
             get_db_dump_name()))
-        # Remove the created dump from the locale host
+        # Remove the created dump from the local host
         run('rm -f {}'.format(dump_path))
+
+
+_processes_to_restart_without_backup = [
+    "dev:pserve" "celery_imap", "changes_router",
+    "celery_notify", "celery_notification_dispatch",
+    "source_reader"]
+
+
+_processes_to_restart_with_backup = _processes_to_restart_without_backup + [
+    "dev:gulp", "dev:webpack", "edgesense",
+    "elasticsearch", "celery_notify_beat",
+    "celery_translate", "maintenance_uwsgi",
+    "metrics", "metrics_py", "prod:uwsgi"]
 
 
 @task
@@ -884,16 +904,12 @@ def database_restore_aws(backup=False):
     """
     Restores the database backed up on the amazon s3 object storage
     """
+    install_awscli()
     if not backup:
         assert(env.wsginame in ('staging.wsgi', 'dev.wsgi'))
-        processes = filter_autostart_processes([
-            "dev:pserve" "celery_imap", "changes_router", "celery_notify",
-            "celery_notification_dispatch", "source_reader"])
+        processes = filter_autostart_processes(_processes_to_restart_without_backup)
     else:
-        processes = filter_autostart_processes([
-            "dev:pserve", "dev:gulp", "dev:webpack", "edgesense", "elasticsearch", "celery_imap", "changes_router", "celery_notify",
-            "celery_notification_dispatch", "celery_notify_beat", "celery_translate", "source_reader", "maintenance_uwsgi", "metrics",
-            "metrics_py", "prod:uwsgi"])
+        processes = filter_autostart_processes(_processes_to_restart_with_backup)
 
     if(env.wsginame != 'dev.wsgi'):
         execute(webservers_stop)
@@ -906,9 +922,8 @@ def database_restore_aws(backup=False):
     # execute(postgres_user_detach)
 
     # Drop db
-    with settings(warn_only=True):
-        dropped = run('PGPASSWORD={} dropdb --host={} --username={} --no-password {}'.format(
-            env.db_password,
+    with settings(warn_only=True), shell_env(PGPASSWORD=env.db_password):
+        dropped = run('dropdb --host={} --username={} --no-password {}'.format(
             env.db_host,
             env.db_user,
             env.db_database))
@@ -923,24 +938,24 @@ def database_restore_aws(backup=False):
         cd(env.projectpath),\
         shell_env(
         AWS_ACCESS_KEY_ID=env.aws_access_key_id,
-        AWS_SECRET_ACCESS_KEY=env.aws_secret_access_key
+        AWS_SECRET_ACCESS_KEY=env.aws_secret_access_key,
+        PGPASSWORD=env.db_password
     ):
         filename = remote_db_path()
         # Download the latest dump from the amazon s3 object storage
-        run('aws s3 cp s3://{}/{} {}'.format(
+        venvcmd('aws s3 cp s3://{}/{} {}'.format(
             env.aws_bucket_name,
             get_db_dump_name(),
             filename))
         # Restore the downloaded dump
-        run('PGPASSWORD={} pg_restore --no-owner --role={} --host={} --dbname={} -U{} --schema=public {}'.format(
-            env.db_password,
+        run('pg_restore --no-owner --role={} --host={} --dbname={} -U{} --schema=public {}'.format(
             env.db_user,
             env.db_host,
             env.db_database,
             env.db_user,
             filename)
         )
-        # Remove the downloaded dump from the localhost
+        # Remove the downloaded dump from the local host
         run('rm -f {}'.format(filename))
 
     for process in processes:
@@ -2150,14 +2165,9 @@ def database_restore(backup=False):
     """
     if not backup:
         assert(env.wsginame in ('staging.wsgi', 'dev.wsgi'))
-        processes = filter_autostart_processes([
-            "dev:pserve" "celery_imap", "changes_router", "celery_notify",
-            "celery_notification_dispatch", "source_reader"])
+        processes = filter_autostart_processes(_processes_to_restart_without_backup)
     else:
-        processes = filter_autostart_processes([
-            "dev:pserve", "dev:gulp", "dev:webpack", "edgesense", "elasticsearch", "celery_imap", "changes_router", "celery_notify",
-            "celery_notification_dispatch", "celery_notify_beat", "celery_translate", "source_reader", "maintenance_uwsgi", "metrics",
-            "metrics_py", "prod:uwsgi"])
+        processes = filter_autostart_processes(_processes_to_restart_with_backup)
 
     if(env.wsginame != 'dev.wsgi'):
         execute(webservers_stop)
