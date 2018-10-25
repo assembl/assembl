@@ -76,7 +76,13 @@ class DumbSideCommentBox extends React.Component<Props, State> {
       [ACTIONS.create]: {
         buttons: [
           { id: 'cancel', title: 'debate.confirmDeletionButtonCancel', className: 'button-cancel', onClick: cancelSubmit },
-          { id: 'validate', title: 'common.attachFileForm.submit', className: 'button-submit', onClick: this.submit }
+          { id: 'validate', title: 'harvesting.submit', className: 'button-submit', onClick: this.submit }
+        ]
+      },
+      [ACTIONS.confirm]: {
+        buttons: [
+          { id: 'reject', title: 'harvesting.reject', className: 'button-cancel', onClick: cancelSubmit },
+          { id: 'confirm', title: 'harvesting.confirm', className: 'button-submit', onClick: this.submit }
         ]
       }
     };

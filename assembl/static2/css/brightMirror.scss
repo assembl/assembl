@@ -38,6 +38,8 @@ $fiction-toolbar-icon-size: 17px;
 
 .bright-mirror-comments {
   padding: 30px 0;
+  z-index: 100;
+  position: relative;
 
   .comments-content {
     background-color: $white;
@@ -63,13 +65,14 @@ $fiction-toolbar-icon-size: 17px;
 
 .background-comments-default {
   // Striped background
-  background: repeating-linear-gradient(
-    -45deg,
-    $ice,
-    $ice 4px,
-    $white 2px,
-    $white 7px
-  );
+  background:
+    repeating-linear-gradient(
+      -45deg,
+      $ice,
+      $ice 4px,
+      $white 2px,
+      $white 7px
+    );
 }
 
 @media screen and (min-width: $screen-sm-min) {

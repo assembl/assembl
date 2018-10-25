@@ -103,6 +103,9 @@ describe('<BrightMirrorFiction /> - with mount', () => {
 
   describe('when loading is done without error', () => {
     beforeEach(() => {
+      window.getSelection = () => ({
+        removeAllRanges: () => {}
+      });
       // Define props
       brightMirrorFictionData = {
         ...brightMirrorFictionDataTemplate,
@@ -176,6 +179,9 @@ describe('<BrightMirrorFiction /> - with mount', () => {
 
   describe('when loading is not done', () => {
     beforeEach(() => {
+      window.getSelection = () => ({
+        removeAllRanges: () => {}
+      });
       // Define props
       brightMirrorFictionData = {
         ...brightMirrorFictionDataTemplate,
@@ -206,10 +212,17 @@ describe('<BrightMirrorFiction /> - with mount', () => {
         }
       ];
 
+      // Create DOM to allow document.getElementById function
+      const div = document.createElement('div');
+      window.domNode = div;
+      // $FlowFixMe because document.body may be null
+      document.body.appendChild(div);
+
       wrapper = mount(
         <MockedProvider mocks={mocks}>
           <BrightMirrorFiction {...brightMirrorFictionProps} />
-        </MockedProvider>
+        </MockedProvider>,
+        { attachTo: window.domNode }
       );
     });
 
@@ -220,6 +233,9 @@ describe('<BrightMirrorFiction /> - with mount', () => {
 
   describe('when there is a loading error', () => {
     beforeEach(() => {
+      window.getSelection = () => ({
+        removeAllRanges: () => {}
+      });
       // Define props
       brightMirrorFictionData = {
         ...brightMirrorFictionDataTemplate,
@@ -250,10 +266,17 @@ describe('<BrightMirrorFiction /> - with mount', () => {
         }
       ];
 
+      // Create DOM to allow document.getElementById function
+      const div = document.createElement('div');
+      window.domNode = div;
+      // $FlowFixMe because document.body may be null
+      document.body.appendChild(div);
+
       wrapper = mount(
         <MockedProvider mocks={mocks}>
           <BrightMirrorFiction {...brightMirrorFictionProps} />
-        </MockedProvider>
+        </MockedProvider>,
+        { attachTo: window.domNode }
       );
     });
 
