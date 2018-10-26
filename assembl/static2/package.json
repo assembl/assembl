@@ -11,7 +11,6 @@
     "test:watch": "npm test -- --watch",
     "build": "webpack --progress --colors",
     "coverage": "jest --coverage",
-    "updateCoverageThresholds": "jest-coverage-ratchet",
     "dev": "webpack -d --watch",
     "eslint": "eslint js/app tests workspaces --ext .js --ext .jsx --cache",
     "eslint:fix": "eslint js/app tests workspaces --ext .js --ext .jsx --fix",
@@ -152,10 +151,10 @@
     ],
     "coverageThreshold": {
       "global": {
-        "lines": 53.04,
-        "statements": 51.79,
-        "functions": 39.55,
-        "branches": 38.8
+        "lines": 53,
+        "statements": 51,
+        "functions": 39,
+        "branches": 38
       }
     },
     "moduleNameMapper": {
