@@ -5,11 +5,14 @@ import { I18n, Translate } from 'react-redux-i18n';
 // Graphql imports
 import { compose, graphql } from 'react-apollo';
 // Helpers imports
+import head from 'lodash/head';
 import moment from 'moment';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
 import Permissions, { connectedUserCan } from '../../../utils/permissions';
+import { displayAlert } from '../../../utils/utilityManager';
 // Optimization: Should create commentQuery.graphql and adapt the query
 import CommentQuery from '../../../graphql/BrightMirrorFictionQuery.graphql';
+import UpdateCommentMutation from '../../../graphql/mutations/updatePost.graphql';
 // Components imports
 import CircleAvatar from './circleAvatar';
 import ToggleCommentButton from '../common/toggleCommentButton';
@@ -64,14 +67,20 @@ export type FictionCommentGraphQLProps = {
   /** Parent post author fullname */
   parentPostAuthorFullname: string,
   /** Comment published date */
-  publishedDate: string
+  publishedDate: string,
+  /** Update comment mutation from GraphQL */
+  updateComment: Function
 };
 
 type LocalFictionCommentProps = FictionCommentBaseProps & FictionCommentGraphQLProps;
 
 type FictionCommentState = {
+  /** Flag used to show/hide the comment form */
   showFictionCommentForm: boolean,
-  isEditing: boolean
+  /** Flag used to check if the user is currently editing his comment */
+  isEditing: boolean,
+  /** State that holds the updated value of the comment when updateComment mutation is successful */
+  updatedCommentContent: string
 };
 
 // Type use for creating a Bright Mirror comment with CreateCommentMutation
@@ -86,10 +95,21 @@ export type CreateCommentInputs = {
   parentId: string
 };
 
+// Type use for updating a Bright Mirror comment with UpdateCommentMutation
+export type UpdateCommentInputs = {
+  /** Comment body content */
+  body: string,
+  /** Comment content locale */
+  contentLocale: string,
+  /** Comment id identifier */
+  postId: string
+};
+
 export class FictionComment extends Component<LocalFictionCommentProps, FictionCommentState> {
   state = {
     showFictionCommentForm: false,
-    isEditing: false
+    isEditing: false,
+    updatedCommentContent: ''
   };
 
   componentDidMount() {
@@ -103,6 +123,35 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
 
   toggleIsEditing = (value: boolean) => {
     this.setState({ isEditing: value }, this.props.measureTreeHeight());
+  };
+
+  updateCommentHandler = (comment: string, commentId: string) => {
+    displayAlert('success', I18n.t('loading.wait'));
+    this.displayFictionCommentForm(false);
+    this.toggleIsEditing(false);
+
+    // Define variables
+    const { updateComment } = this.props;
+    const updatePostInputs: UpdateCommentInputs = {
+      body: comment,
+      contentLocale: 'fr',
+      postId: commentId
+    };
+
+    // Call the mutation function to create a comment
+    updateComment({ variables: updatePostInputs })
+      .then((result) => {
+        // If needed post result can be fetch with `result.data.createPost.post`
+        displayAlert('success', I18n.t('debate.thread.postSuccess'));
+
+        // Set state here to update UI
+        // Refetch 'commentData' to display the updated data of the comment
+        const { value } = head(result.data.updatePost.post.bodyEntries);
+        this.setState({ updatedCommentContent: value });
+      })
+      .catch((error) => {
+        displayAlert('danger', `${error}`);
+      });
   };
 
   render() {
@@ -120,7 +169,7 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
       publishedDate,
       fictionCommentExtraProps
     } = this.props;
-    const { isEditing, showFictionCommentForm } = this.state;
+    const { isEditing, showFictionCommentForm, updatedCommentContent } = this.state;
     const { expandedFromTree, expandCollapseCallbackFromTree } = fictionCommentExtraProps;
 
     const toggleCommentButtonProps: ToggleCommentButtonProps = {
@@ -142,7 +191,7 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
 
     const editCommentFormProps: FictionCommentFormProps = {
       onCancelCommentCallback: () => this.toggleIsEditing(false),
-      onSubmitCommentCallback: () => this.toggleIsEditing(false),
+      onSubmitCommentCallback: (comment: string) => this.updateCommentHandler(comment, commentParentId),
       commentValue: commentContent,
       editMode: true
     };
@@ -191,7 +240,7 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
     const displayCommentContent = isEditing ? (
       <FictionCommentForm {...editCommentFormProps} />
     ) : (
-      <p className="comment">{commentContent}</p>
+      <p className="comment">{updatedCommentContent || commentContent}</p>
     );
 
     const displayFooter = (
@@ -260,4 +309,10 @@ const mapQueryToProps = ({ data }) => {
   return {};
 };
 
-export default compose(graphql(CommentQuery, { props: mapQueryToProps }))(FictionComment);
+export default compose(
+  graphql(CommentQuery, { props: mapQueryToProps }),
+  graphql(UpdateCommentMutation, {
+    // GraphQL custom function name
+    name: 'updateComment'
+  })
+)(FictionComment);
