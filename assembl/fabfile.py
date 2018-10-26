@@ -37,7 +37,6 @@ from fabric.api import (
     abort, cd, env, execute, hide, prefix, settings, task as fab_task)
 from fabric.colors import yellow, cyan, red, green
 from fabric.context_managers import shell_env
-import boto3
 
 # import logging
 # import paramiko
@@ -56,6 +55,11 @@ _local_file = __file__
 if _local_file.endswith('.pyc'):
     _local_file = _local_file[:-1]
 local_code_root = dirname(dirname(realpath(_local_file)))
+
+secret_id_list = {
+    'db_password': 'dev-psql-password',
+
+}
 
 
 def sanitize_hosts(alt_env=None):
@@ -153,6 +157,23 @@ def as_bool(b):
     return str(b).lower() in {"1", "true", "yes", "t", "on"}
 
 
+def populate_secrets():
+    import boto3  # noqa
+    import json
+    client = boto3.client('secretsmanager') # noqa
+    name = os.path.splitext(os.path.basename(env.rcfile))[0]
+    # If you want BETTER naming scheme on secretmanager -> RENAME THE RC FILES!
+    # remove this once secretmanager has proper names of rc_files
+    name = 'assembl_sudo_user'
+    response = client.get_secret_value(
+        SecretId=name,
+    )
+    env_vars = json.loads(response["SecretString"])
+    # Add env variable overrides here
+    for env_key, env_value in env_vars.iteritems():
+        env[env_key] = env_value
+
+
 def sanitize_env():
     """Ensure boolean and list env variables are such"""
     # If the remote system is a mac you SHOULD set mac=true in your .rc file
@@ -182,6 +203,7 @@ def sanitize_env():
         env.projectpath, '%s_dumps' % env.get("projectname", 'assembl')))
     env.ini_file = env.get('ini_file', 'local.ini')
     env.group = env.get('group', env.user)
+    populate_secrets()
 
 
 def load_rcfile_config():
@@ -264,6 +286,12 @@ def getmtime(path):
 
 def listdir(path):
     return run("ls " + path).split()
+
+
+@task
+def my_debug_task():
+    from pprint import pprint
+    pprint(env)
 
 
 @task
@@ -367,6 +395,12 @@ def get_random_templates():
 def ensure_pip_compile():
     if not exists(env.venvpath + "/bin/pip-compile"):
         separate_pip_install('pip-tools')
+
+
+@task
+def test():
+    "Generate frozen requirements.txt file (with name taken from environment)."
+    populate_secrets()
 
 
 @task
@@ -1950,45 +1984,14 @@ def compile_fontello_fonts():
                         ffile.write(fdata.read())
 
 
-
-@task
-def print_kms_password():
-    "check if the client response is the right password"
-    client = boto3.client('secretsmanager')
-    response = client.get_secret_value(
-    SecretId='dev-psql-password'
-    )
-    from pprint import pprint
-    import ast
-    password_dict = ast.literal_eval(response["SecretString"])
-    kms_password = password_dict["password"]
-
-    def check_if_database_exists():
-        with settings(warn_only=True):
-            checkDatabase = venvcmd('assembl-pypsql -1 -u {user} -p {password} -n {host} "{command}"'.format(
-                command="SELECT 1 FROM pg_database WHERE datname='%s'" % (env.db_database),
-                password=kms_password, host=env.db_host, user=env.db_user))
-        return not checkDatabase.failed
-
-    check_if_database_exists()
-
-
-
-
 @task
 def check_and_create_database_user(host=None, user=None, password=None):
     """
     Create a user and a DB for the project
     """
-    client = boto3.client('secretsmanager')
-    response = client.get_secret_value(
-    SecretId='assembl_sudo_user'
-    )
-    from pprint import pprint
-    import ast
-    password_dict = ast.literal_eval(response["SecretString"])
-    kms_password = password_dict["password"]
-    password = password or kms_password
+    host = host or env.db_host
+    user = user or env.db_user
+    password = password or env.db_password
     pypsql = join(code_root(), 'assembl', 'scripts', 'pypsql.py')
     with settings(warn_only=True):
         checkUser = run('python2 {pypsql} -1 -u {user} -p {password} -n {host} "{command}"'.format(
@@ -2076,21 +2079,12 @@ def create_sentry_project():
     with open(env.random_file, 'w') as f:
         parser.write(f)
 
-    client = boto3.client('secretsmanager')
-    response = client.get_secret_value(
-    SecretId='assembl_sudo_user'
-    )
-    from pprint import pprint
-    import ast
-    password_dict = ast.literal_eval(response["SecretString"])
-    kms_password = password_dict["password"]
-    password = kms_password
 
 def check_if_database_exists():
     with settings(warn_only=True):
         checkDatabase = venvcmd('assembl-pypsql -1 -u {user} -p {password} -n {host} "{command}"'.format(
             command="SELECT 1 FROM pg_database WHERE datname='%s'" % (env.db_database),
-            password=password, host=env.db_host, user=env.db_user))
+            password=env.db_password, host=env.db_host, user=env.db_user))
         return not checkDatabase.failed
 
 
@@ -2098,7 +2092,7 @@ def check_if_db_tables_exist():
     with settings(warn_only=True):
         checkDatabase = venvcmd('assembl-pypsql -1 -u {user} -p {password} -n {host} -d {database} "{command}"'.format(
             command="SELECT count(*) from permission", database=env.db_database,
-            password=password, host=env.db_host, user=env.db_user))
+            password=env.db_password, host=env.db_host, user=env.db_user))
         return not checkDatabase.failed
 
 
@@ -2106,7 +2100,7 @@ def check_if_first_user_exists():
     with settings(warn_only=True):
         checkDatabase = venvcmd('assembl-pypsql -1 -u {user} -p {password} -n {host} -d {database} "{command}"'.format(
             command="SELECT count(*) from public.user", database=env.db_database,
-            password=password, host=env.db_host, user=env.db_user))
+            password=env.db_password, host=env.db_host, user=env.db_user))
         return not checkDatabase.failed and int(checkDatabase.strip('()L,')) > 0
 
 
@@ -2170,6 +2164,7 @@ def database_dump():
     """
     Dumps the database on remote site
     """
+
     if not exists(env.dbdumps_dir):
         run('mkdir -m700 %s' % env.dbdumps_dir)
 
@@ -2253,6 +2248,7 @@ def database_delete():
     execute(check_and_create_database_user)
 
     with settings(warn_only=True), hide('stdout'):
+
         checkDatabase = venvcmd('assembl-pypsql -1 -u {user} -p {password} -n {host} "{command}"'.format(
             command="SELECT 1 FROM pg_database WHERE datname='%s'" % (env.db_database),
             password=env.db_password, host=env.db_host, user=env.db_user))
@@ -3130,6 +3126,7 @@ def set_fail2ban_configurations():
         finally:
             for path in filters_to_file.values():
                 os.unlink(path)
+<<<<<<< HEAD
 
 
 @task
@@ -3168,3 +3165,5 @@ def install_jq():
             run('brew install jq')
         else:
             sudo('apt-get install -y jq')
+=======
+>>>>>>> Clean fake8 error
