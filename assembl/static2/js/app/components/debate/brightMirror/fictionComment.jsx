@@ -60,6 +60,8 @@ export type FictionCommentGraphQLProps = {
   commentContent: string,
   /** Comment parent id */
   commentParentId: string,
+  /** Content Locale */
+  contentLocale: string,
   /** Comment displayed published date */
   displayedPublishedDate: string,
   /** Flag that tells if a comment was updated by its owner */
@@ -131,10 +133,10 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
     this.toggleIsEditing(false);
 
     // Define variables
-    const { updateComment } = this.props;
+    const { updateComment, contentLocale } = this.props;
     const updatePostInputs: UpdateCommentInputs = {
       body: comment,
-      contentLocale: 'fr',
+      contentLocale: contentLocale,
       postId: commentId
     };
 
@@ -296,6 +298,7 @@ const mapQueryToProps = ({ data }) => {
       circleAvatar: circleAvatarProps,
       commentContent: fiction.body,
       commentParentId: id,
+      contentLocale: contentLocale,
       displayedPublishedDate: moment(fiction.creationDate)
         .locale(contentLocale)
         .fromNow(),

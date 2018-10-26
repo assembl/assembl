@@ -37,6 +37,7 @@ export const defaultFictionCommentGraphQL: FictionCommentGraphQLProps = {
   commentParentId: 'dummyId',
   commentContent:
     'Est et rerum. Ut sed voluptatem possimus. Ut cumque magni sapiente voluptatem ut rerum aut harum quo. Non delectus quo.',
+  contentLocale: 'fr',
   displayedPublishedDate: 'August 8th, 2018',
   modified: false,
   parentPostAuthorFullname: 'Dark Vador',
@@ -61,6 +62,7 @@ storiesOf('FictionComment', module)
         circleAvatar={object('circleAvatar', playground.circleAvatar)}
         commentContent={text('Comment content', playground.commentContent)}
         commentParentId={text('Comment parent id', playground.commentParentId)}
+        contentLocale={playground.contentLocale}
         displayedPublishedDate={text('Displayed published date', playground.displayedPublishedDate)}
         measureTreeHeight={playground.measureTreeHeight}
         numChildren={number('Number of comments', playground.numChildren)}
