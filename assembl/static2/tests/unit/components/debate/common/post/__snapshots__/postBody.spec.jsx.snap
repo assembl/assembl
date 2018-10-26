@@ -23,7 +23,7 @@ exports[`PostBody component should render a post body 1`] = `
   <div
     className="post-body-content body"
   >
-    <Html
+    <Unknown
       contentLocale="fr"
       dbId={124}
       divRef={[Function]}

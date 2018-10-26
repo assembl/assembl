@@ -106,7 +106,6 @@
     "hypothesis": "https://github.com/conversence/client.git#anchor_range_on_fragment",
     "immutable": "~3.7.4",
     "isomorphic-fetch": "^2.2.1",
-    "jest-coverage-ratchet": "^0.2.3",
     "jquery": "^3.3.1",
     "json-loader": "^0.5.4",
     "linkifyjs": "^2.1.5",

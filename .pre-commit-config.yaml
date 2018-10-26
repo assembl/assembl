@@ -25,11 +25,6 @@
     entry: bash -c "cd assembl/static2/; npm test"
     language: system
     files: ".*/static2/.*jsx?$"
-  - id: jest-coverage-ratchet
-    name: jest coverage threshold update (i this fails, please git add package.json and commit again.)
-    entry: bash -c "cd assembl/static2/; npm run updateCoverageThresholds"
-    language: system
-    files: '.*/static2/.*jsx?$'
   - id: prettier-js
     name: prettier-js (If this fails, please git add prettier changes and commit again.)
     entry: bash -c "./assembl/static2/scripts/prettier-eslint.py --write `git diff --name-only --diff-filter=d --cached -- '*.jsx' '*.js'|grep static2`"
