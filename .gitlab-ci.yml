@@ -27,7 +27,7 @@ test_frontend:
     - yarn run test
     - yarn run eslint
     - yarn run stylelint
-    - yarn run flow --
+    - yarn run flow --quiet
     # This will fail if the coverage has lowered
     - yarn jest --coverage
 
