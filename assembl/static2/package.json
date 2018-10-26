@@ -147,11 +147,11 @@
   "//": "See https://facebook.github.io/jest/docs/webpack.html for more info",
   "jest": {
     "coverageReporters": [
-      "json-summary"
+      "json-summary", "lcov"
     ],
     "coverageThreshold": {
       "global": {
-        "lines": 53,
+        "lines": 52,
         "statements": 51,
         "functions": 39,
         "branches": 38
