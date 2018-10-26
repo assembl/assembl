@@ -3,6 +3,7 @@
 
   .circle-avatar {
     height: 30px;
+    margin-top: 5px;
     width: 30px;
   }
 
@@ -14,8 +15,6 @@
     width: 100%;
 
     .meta {
-      display: flex;
-
       p {
         margin-bottom: 4px;
         margin-right: 4px;
@@ -104,6 +103,10 @@
 }
 
 .level-1 .comment-container .content {
+  .meta .author .parent-info {
+    display: inline-block;
+  }
+
   .comment {
     background-color: rgba($color: $pale-blue, $alpha: 0.75);
   }
@@ -122,9 +125,20 @@
 }
 
 @media screen and (min-width: $screen-sm-min) {
-  .level-1 .comment-container .content {
-    .meta .author .parent-info {
-      display: inline-block;
+  .comment-container {
+    .circle-avatar {
+      margin-top: 0;
+    }
+
+    .content {
+      .meta {
+        display: flex;
+
+        .published-date:before {
+          content: "-";
+          margin-right: 4px;
+        }
+      }
     }
   }
 

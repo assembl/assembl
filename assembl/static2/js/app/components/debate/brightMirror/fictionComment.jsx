@@ -172,7 +172,7 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
         </p>
         <p className="published-date">
           <time dateTime={publishedDate} pubdate="true">
-            -&nbsp;{displayedPublishedDate}
+            {displayedPublishedDate}
           </time>
         </p>
       </header>
