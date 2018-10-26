@@ -17,6 +17,8 @@ Installation and administration
    howtoupgrade
    python_requirements
    preprod_update
+   install_sentry
+   install_matomo
 
 Stack and architecture
 ----------------------
