@@ -666,6 +666,13 @@ def get_db_dump_name():
     return 'assembl-backup.pgdump'
 
 
+def get_versioned_db_dump_name():
+    bumpversion_config = SafeConfigParser()
+    bumpversion_config.read(join(env.projectpath, '.bumpversion.cfg'))
+    current_version = bumpversion_config.get('bumpversion', 'current_version')
+    return 'db_{}_{}.sql.pgdump'.format(env.wsginame, current_version or strftime('%Y%m%d'))
+
+
 def remote_db_path():
     return join(env.projectpath, get_db_dump_name())
 
@@ -792,6 +799,170 @@ def update_pip_requirements(force_reinstall=False):
             separate_pip_install(package, wrapper)
         cmd = "%(venvpath)s/bin/pip install -r %(projectpath)s/requirements.txt" % env
         run("yes w | %s" % cmd)
+
+
+def install_awscli():
+    if venvcmd('which aws', warn_only=True).failed:
+        venvcmd('pip install awscli')
+
+
+def is_db_updated():
+    """
+    Return if the database is update or not
+    """
+    history = venvcmd('alembic -c {} history'.format(env.ini_file))
+    current = venvcmd('alembic -c {} heads'.format(env.ini_file))
+    return current in history
+
+
+@task
+def reset_db():
+    """
+    Restore and update the latest database
+    """
+    # Only for the staging server (for tests)
+    if env.wsginame == 'staging.wsgi':
+        install_awscli()
+        exists = False
+        # Test if the dump exists on the amazon s3 object storage
+        with shell_env(
+            AWS_ACCESS_KEY_ID=env.aws_access_key_id,
+            AWS_SECRET_ACCESS_KEY=env.aws_secret_access_key
+        ):
+            exists = venvcmd('aws s3 ls s3://{}/{} | wc -l'.format(env.aws_bucket_name, get_db_dump_name()))
+            exists = False if exists == '0' else True
+
+        print(green('Restore and update the latest database'))
+        if not exists:
+            # If the dump don't exist, we create it
+            print(cyan('Create a new dump'))
+            execute(database_dump_aws)
+        else:
+            # Otherwise, we restore the last dump
+            print(cyan('Restore the last dump'))
+            execute(database_restore_aws)
+
+        # Update the dump only when the schema of the database changes
+        if not is_db_updated():
+            print(cyan('Update the restored db'))
+            execute(app_db_update)
+            # Create the updated dump for future tests
+            print(cyan('Create the updated dump for future tests'))
+            execute(database_dump_aws)
+
+
+@task
+def database_dump_aws():
+    """
+    Dumps the database on an amazon s3 object storage
+    """
+    install_awscli()
+    with prefix(venv_prefix()), \
+        cd(env.projectpath), \
+        shell_env(
+        AWS_ACCESS_KEY_ID=env.aws_access_key_id,
+        AWS_SECRET_ACCESS_KEY=env.aws_secret_access_key,
+        PGPASSWORD=env.db_password
+    ):
+        dump_name = get_versioned_db_dump_name()
+        dump_path = os.path.join(env.dbdumps_dir, dump_name)
+        # Create the db dump
+        run('pg_dump --host={} -U{} --format=custom -b {} > {}'.format(
+            env.db_host,
+            env.db_user,
+            env.db_database,
+            dump_path))
+        # Copy the created dump in the aws bucket
+        venvcmd('aws s3 cp {} s3://{}/{} '.format(
+            dump_path,
+            env.aws_bucket_name,
+            dump_name))
+        # Add a copy as a symbolic link
+        venvcmd('aws s3 cp {} s3://{}/{} '.format(
+            dump_path,
+            env.aws_bucket_name,
+            get_db_dump_name()))
+        # Remove the created dump from the local host
+        run('rm -f {}'.format(dump_path))
+
+
+_processes_to_restart_without_backup = [
+    "dev:pserve" "celery_imap", "changes_router",
+    "celery_notify", "celery_notification_dispatch",
+    "source_reader"]
+
+
+_processes_to_restart_with_backup = _processes_to_restart_without_backup + [
+    "dev:gulp", "dev:webpack", "edgesense",
+    "elasticsearch", "celery_notify_beat",
+    "celery_translate", "maintenance_uwsgi",
+    "metrics", "metrics_py", "prod:uwsgi"]
+
+
+@task
+def database_restore_aws(backup=False):
+    """
+    Restores the database backed up on the amazon s3 object storage
+    """
+    install_awscli()
+    if not backup:
+        assert(env.wsginame in ('staging.wsgi', 'dev.wsgi'))
+        processes = filter_autostart_processes(_processes_to_restart_without_backup)
+    else:
+        processes = filter_autostart_processes(_processes_to_restart_with_backup)
+
+    if(env.wsginame != 'dev.wsgi'):
+        execute(webservers_stop)
+        processes.append("prod:uwsgi")  # possibly not autostarted
+
+    for process in processes:
+        supervisor_process_stop(process)
+
+    # Kill postgres processes in order to be able to drop tables
+    # execute(postgres_user_detach)
+
+    # Drop db
+    with settings(warn_only=True), shell_env(PGPASSWORD=env.db_password):
+        dropped = run('dropdb --host={} --username={} --no-password {}'.format(
+            env.db_host,
+            env.db_user,
+            env.db_database))
+
+        assert dropped.succeeded or "does not exist" in dropped, \
+            "Could not drop the database"
+
+    # Create db
+    execute(database_create)
+    # Restore data
+    with prefix(venv_prefix()),\
+        cd(env.projectpath),\
+        shell_env(
+        AWS_ACCESS_KEY_ID=env.aws_access_key_id,
+        AWS_SECRET_ACCESS_KEY=env.aws_secret_access_key,
+        PGPASSWORD=env.db_password
+    ):
+        filename = remote_db_path()
+        # Download the latest dump from the amazon s3 object storage
+        venvcmd('aws s3 cp s3://{}/{} {}'.format(
+            env.aws_bucket_name,
+            get_db_dump_name(),
+            filename))
+        # Restore the downloaded dump
+        run('pg_restore --no-owner --role={} --host={} --dbname={} -U{} --schema=public {}'.format(
+            env.db_user,
+            env.db_host,
+            env.db_database,
+            env.db_user,
+            filename)
+        )
+        # Remove the downloaded dump from the local host
+        run('rm -f {}'.format(filename))
+
+    for process in processes:
+        supervisor_process_start(process)
+
+    if(env.wsginame != 'dev.wsgi'):
+        execute(webservers_start)
 
 
 @task
@@ -1186,6 +1357,8 @@ def app_compile_noupdate():
     all generated files. You normally do not need to have internet connectivity.
     """
     execute(app_compile_nodbupdate)
+    # Reset the db only for staging
+    execute(reset_db)
     execute(app_db_update)
     # tests()
     execute(app_reload)
@@ -1993,14 +2166,9 @@ def database_restore(backup=False):
     """
     if not backup:
         assert(env.wsginame in ('staging.wsgi', 'dev.wsgi'))
-        processes = filter_autostart_processes([
-            "dev:pserve" "celery_imap", "changes_router", "celery_notify",
-            "celery_notification_dispatch", "source_reader"])
+        processes = filter_autostart_processes(_processes_to_restart_without_backup)
     else:
-        processes = filter_autostart_processes([
-            "dev:pserve", "dev:gulp", "dev:webpack", "edgesense", "elasticsearch", "celery_imap", "changes_router", "celery_notify",
-            "celery_notification_dispatch", "celery_notify_beat", "celery_translate", "source_reader", "maintenance_uwsgi", "metrics",
-            "metrics_py", "prod:uwsgi"])
+        processes = filter_autostart_processes(_processes_to_restart_with_backup)
 
     if(env.wsginame != 'dev.wsgi'):
         execute(webservers_stop)
