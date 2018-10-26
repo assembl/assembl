@@ -21,7 +21,7 @@ import FictionCommentForm from './fictionCommentForm';
 import EditPostButton from '../common/editPostButton';
 import ResponsiveOverlayTrigger from '../../common/responsiveOverlayTrigger';
 // Constant imports
-import { EMPTY_STRING } from '../../../constants';
+import { EMPTY_STRING, USER_ID_NOT_FOUND } from '../../../constants';
 import { editFictionCommentTooltip } from '../../common/tooltips';
 // Types imports
 import type { CircleAvatarProps } from './circleAvatar';
@@ -297,7 +297,6 @@ const mapQueryToProps = ({ data }) => {
           ? fiction.creator.image.externalUrl
           : EMPTY_STRING
     };
-    const USER_ID_NOT_FOUND = -9999;
 
     // Map graphQL returned data with local props
     return {

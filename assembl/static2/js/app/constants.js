@@ -18,6 +18,7 @@ export const COLUMN_OPACITY_GAIN = 0.5;
 // Bright mirror
 export const EMPTY_STRING = '';
 export const FICTION_DELETE_CALLBACK = 'FICTION_DELETE_CALLBACK';
+export const USER_ID_NOT_FOUND = -9999;
 
 // Minimum length for survey answers
 export const MINIMUM_BODY_LENGTH = 10;
