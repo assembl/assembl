@@ -36,6 +36,16 @@
         font-size: $font-size-xxs;
         font-weight: 300;
         line-height: 1.91;
+
+        .isEdited {
+          text-transform: capitalize;
+
+          &:before {
+            content: "-";
+            margin-left: 4px;
+            margin-right: 4px;
+          }
+        }
       }
     }
 
@@ -134,9 +144,11 @@
       .meta {
         display: flex;
 
-        .published-date:before {
-          content: "-";
-          margin-right: 4px;
+        .published-date {
+          &:before {
+            content: "-";
+            margin-right: 4px;
+          }
         }
       }
     }

@@ -59,6 +59,8 @@ export type FictionCommentGraphQLProps = {
   commentParentId: string,
   /** Comment displayed published date */
   displayedPublishedDate: string,
+  /** Flag that tells if a comment was updated by its owner */
+  modified: boolean,
   /** Parent post author fullname */
   parentPostAuthorFullname: string,
   /** Comment published date */
@@ -113,6 +115,7 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
       commentParentId,
       displayedPublishedDate,
       numChildren,
+      modified,
       parentPostAuthorFullname,
       publishedDate,
       fictionCommentExtraProps
@@ -161,6 +164,12 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
         </ResponsiveOverlayTrigger>
       ) : null;
 
+    const displayIsEdited = modified ? (
+      <span className="isEdited">
+        <Translate value="debate.thread.postEdited" />
+      </span>
+    ) : null;
+
     const displayHeader = (
       <header className="meta">
         <p className="author">
@@ -174,6 +183,7 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
           <time dateTime={publishedDate} pubdate="true">
             {displayedPublishedDate}
           </time>
+          {displayIsEdited}
         </p>
       </header>
     );
@@ -240,6 +250,7 @@ const mapQueryToProps = ({ data }) => {
       displayedPublishedDate: moment(fiction.creationDate)
         .locale(contentLocale)
         .fromNow(),
+      modified: fiction.modified,
       parentPostAuthorFullname: parentPostCreator ? parentPostCreator.displayName : noAuthorSpecified,
       publishedDate: fiction.creationDate
     };

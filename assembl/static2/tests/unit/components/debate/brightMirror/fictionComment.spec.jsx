@@ -1,5 +1,6 @@
 // @flow
 import React from 'react';
+import { I18n } from 'react-redux-i18n';
 // import initStoryshots from '@storybook/addon-storyshots';
 import { configure, mount, shallow } from 'enzyme';
 import { MockedProvider } from 'react-apollo/test-utils';
@@ -117,6 +118,10 @@ describe('<FictionComment /> - with mount', () => {
     it('should display the comment published date', () => {
       expect(wrapper.find(`time [dateTime="${defaultFictionCommentGraphQL.publishedDate}"]`)).toHaveLength(1);
       expect(wrapper.contains(defaultFictionCommentGraphQL.displayedPublishedDate)).toBe(true);
+    });
+
+    it('should not display the comment as edited', () => {
+      expect(wrapper.contains(I18n.t('debate.thread.postEdited'))).toBe(false);
     });
 
     it('should display the comment content', () => {
@@ -259,6 +264,39 @@ describe('<FictionComment /> - with mount', () => {
 
     it('should not display a "Edit this message" button', () => {
       expect(wrapper.find(EditPostButton)).toHaveLength(0);
+    });
+  });
+
+  describe('when modified is true', () => {
+    beforeEach(() => {
+      fictionComment = {
+        ...defaultFictionComment,
+        ...defaultFictionCommentGraphQL,
+        measureTreeHeight: jest.fn(),
+        modified: true,
+        // Below are the required input params for CommentQuery
+        id: 'aaa',
+        contentLocale: 'fr'
+      };
+
+      // Mock Apollo
+      mocks = [
+        {
+          request: { query: CommentQuery },
+          result: {
+            data: fictionComment
+          }
+        }
+      ];
+      wrapper = mount(
+        <MockedProvider mocks={mocks}>
+          <FictionComment {...fictionComment} />
+        </MockedProvider>
+      );
+    });
+
+    it('should display the comment as edited', () => {
+      expect(wrapper.contains(I18n.t('debate.thread.postEdited'))).toBe(true);
     });
   });
 });

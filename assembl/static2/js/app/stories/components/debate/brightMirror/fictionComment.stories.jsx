@@ -4,7 +4,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import { withInfo } from '@storybook/addon-info';
-import { withKnobs, text, number, object } from '@storybook/addon-knobs';
+import { withKnobs, text, number, object, boolean } from '@storybook/addon-knobs';
 /* eslint-enable */
 
 // import components
@@ -38,6 +38,7 @@ export const defaultFictionCommentGraphQL: FictionCommentGraphQLProps = {
   commentContent:
     'Est et rerum. Ut sed voluptatem possimus. Ut cumque magni sapiente voluptatem ut rerum aut harum quo. Non delectus quo.',
   displayedPublishedDate: 'August 8th, 2018',
+  modified: false,
   parentPostAuthorFullname: 'Dark Vador',
   publishedDate: '2018-07-09'
 };
@@ -62,6 +63,7 @@ storiesOf('FictionComment', module)
         displayedPublishedDate={text('Displayed published date', playground.displayedPublishedDate)}
         measureTreeHeight={playground.measureTreeHeight}
         numChildren={number('Number of comments', playground.numChildren)}
+        modified={boolean('Is modified', playground.modified)}
         parentPostAuthorFullname={text('Parent comment author fullname', playground.parentPostAuthorFullname)}
         publishedDate={text('Published date', playground.publishedDate)}
         fictionCommentExtraProps={playground.fictionCommentExtraProps}
