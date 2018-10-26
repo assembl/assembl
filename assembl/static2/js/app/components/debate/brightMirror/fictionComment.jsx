@@ -100,9 +100,7 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
   };
 
   toggleIsEditing = (value: boolean) => {
-    this.setState({
-      isEditing: value
-    });
+    this.setState({ isEditing: value }, this.props.measureTreeHeight());
   };
 
   render() {
