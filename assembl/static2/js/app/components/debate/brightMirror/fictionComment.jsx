@@ -82,7 +82,9 @@ type FictionCommentState = {
   /** Flag used to check if the user is currently editing his comment */
   isEditing: boolean,
   /** State that holds the updated value of the comment when updateComment mutation is successful */
-  updatedCommentContent: string
+  updatedCommentContent: string,
+  /** State that holds the updated modified flag of the comment when updateComment mutation is successful */
+  updatedModified: boolean
 };
 
 // Type use for creating a Bright Mirror comment with CreateCommentMutation
@@ -111,7 +113,8 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
   state = {
     showFictionCommentForm: false,
     isEditing: false,
-    updatedCommentContent: ''
+    updatedCommentContent: '',
+    updatedModified: false
   };
 
   componentDidMount() {
@@ -149,7 +152,11 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
         // Set state here to update UI
         // Fetch comment from result
         const { value } = head(result.data.updatePost.post.bodyEntries);
-        this.setState({ updatedCommentContent: value });
+        const { modified } = result.data.updatePost.post;
+        this.setState({
+          updatedCommentContent: value,
+          updatedModified: modified
+        });
       })
       .catch((error) => {
         displayAlert('danger', `${error}`);
@@ -171,7 +178,7 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
       publishedDate,
       fictionCommentExtraProps
     } = this.props;
-    const { isEditing, showFictionCommentForm, updatedCommentContent } = this.state;
+    const { isEditing, showFictionCommentForm, updatedCommentContent, updatedModified } = this.state;
     const { expandedFromTree, expandCollapseCallbackFromTree } = fictionCommentExtraProps;
 
     const toggleCommentButtonProps: ToggleCommentButtonProps = {
@@ -215,11 +222,12 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
         </ResponsiveOverlayTrigger>
       ) : null;
 
-    const displayIsEdited = modified ? (
-      <span className="isEdited">
-        <Translate value="debate.thread.postEdited" />
-      </span>
-    ) : null;
+    const displayIsEdited =
+      updatedModified || modified ? (
+        <span className="isEdited">
+          <Translate value="debate.thread.postEdited" />
+        </span>
+      ) : null;
 
     const displayHeader = (
       <header className="meta">
