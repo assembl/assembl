@@ -24,12 +24,11 @@ test_frontend:
     - cd assembl/static2
     - yarn
   script:
-    - yarn run test
+    # This will fail if any test fails or if the coverage has lowered
+    - yarn jest --coverage
     - yarn run eslint
     - yarn run stylelint
     - yarn run flow --quiet
-    # This will fail if the coverage has lowered
-    - yarn jest --coverage
 
 test_integration_and_ui:
   stage: test_on_dev

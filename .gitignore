@@ -82,7 +82,7 @@ npm-debug.log
 /assembl/static2/build/
 /assembl/static2/graphql-documentation/
 /assembl/static2/.eslintcache
-/assembl/static2/coverage/lcov*
+/assembl/static2/coverage/
 /assembl/static2/.stylelintcache
 /assembl/static2/npm-debug.log
 /assembl/static2/yarn-error.log
