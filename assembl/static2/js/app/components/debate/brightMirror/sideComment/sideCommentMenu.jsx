@@ -10,9 +10,9 @@ type Props = {
   lang: string,
   displaySubmitBox: boolean,
   displayCommentAnchor: boolean,
-  commentAnchorPosition: Object,
-  badgeDynamicPosition: Object,
-  badgeFixedPosition: Object,
+  commentAnchorPosition: { x: number, y: number },
+  badgeDynamicPosition: { x: number, y: number },
+  badgeFixedPosition: { x: number, y: number },
   setCommentBoxDisplay: Function,
   handleClickAnchor: Function,
   cancelSubmit: Function,
@@ -25,12 +25,7 @@ type State = {
 };
 
 class SideCommentMenu extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      commentBoxDisplayed: false
-    };
-  }
+  state = { commentBoxDisplayed: false };
 
   handleMouseDown = (event: SyntheticMouseEvent<>) => {
     // This would otherwise clear the selection

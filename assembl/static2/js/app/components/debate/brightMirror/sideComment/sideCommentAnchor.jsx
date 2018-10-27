@@ -1,12 +1,13 @@
 // @flow
 import * as React from 'react';
+
 import { I18n } from 'react-redux-i18n';
 import { OverlayTrigger } from 'react-bootstrap';
 import { ANCHOR_SIZE } from '../../../../constants';
 import { harvestingTooltip } from '../../../common/tooltips';
 
 export type Props = {
-  anchorPosition: Object,
+  anchorPosition: { x: number, y: number },
   handleClickAnchor: Function,
   handleMouseDown: Function
 };

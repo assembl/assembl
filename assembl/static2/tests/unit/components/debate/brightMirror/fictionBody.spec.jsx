@@ -6,7 +6,7 @@ import renderer from 'react-test-renderer';
 
 import PostBody from '../../../../../js/app/components/debate/common/post/postBody';
 import FictionBody from '../../../../../js/app/components/debate/brightMirror/fictionBody';
-import type { FictionBodyProps } from '../../../../../js/app/components/debate/brightMirror/fictionBody';
+import type { Props as FictionBodyProps } from '../../../../../js/app/components/debate/brightMirror/fictionBody';
 
 configure({ adapter: new Adapter() });
 

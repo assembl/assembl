@@ -37,7 +37,7 @@ import type { ContentLocaleMapping } from '../actions/actionTypes';
 import type { CircleAvatarProps } from '../components/debate/brightMirror/circleAvatar';
 import type { FictionHeaderProps } from '../components/debate/brightMirror/fictionHeader';
 import type { FictionToolbarProps } from '../components/debate/brightMirror/fictionToolbar';
-import type { FictionBodyProps } from '../components/debate/brightMirror/fictionBody';
+import type { Props as FictionBodyProps } from '../components/debate/brightMirror/fictionBody';
 import type { FictionCommentHeaderProps } from '../components/debate/brightMirror/fictionCommentHeader';
 import type { FictionCommentFormProps } from '../components/debate/brightMirror/fictionCommentForm';
 import type { FictionCommentListProps } from '../components/debate/brightMirror/fictionCommentList';

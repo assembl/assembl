@@ -7,7 +7,7 @@ import { withKnobs, text } from '@storybook/addon-knobs';
 /* eslint-enable */
 
 import FictionBody from '../../../../components/debate/brightMirror/fictionBody';
-import type { FictionBodyProps } from '../../../../components/debate/brightMirror/fictionBody';
+import type { Props as FictionBodyProps } from '../../../../components/debate/brightMirror/fictionBody';
 
 export const defaultFictionBody: FictionBodyProps = {
   id: '0',

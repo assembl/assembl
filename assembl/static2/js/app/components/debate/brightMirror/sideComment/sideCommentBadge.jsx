@@ -1,12 +1,13 @@
 // @flow
 import * as React from 'react';
+
 import classNames from 'classnames';
 import { COMMENT_BADGE_OFFSET } from '../../../../constants';
 
 export type Props = {
   toggleExtractsBox: Function,
   extractsNumber: number,
-  position: ?Object,
+  position: ?{ x: number, y: number },
   showBox: boolean
 };
 

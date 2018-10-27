@@ -1,11 +1,12 @@
 // @flow
 import React from 'react';
+
 import SideCommentMenu from './sideComment/sideCommentMenu';
-import { elementContainsSelection } from '../../../utils/globalFunctions';
+import { elementContainsSelection, getConnectedUserId } from '../../../utils/globalFunctions';
 import PostBody from '../common/post/postBody';
 import { COMMENT_DYNAMIC_OFFSET, ANCHOR_OFFSET } from '../../../constants';
 
-export type FictionBodyProps = {
+export type Props = {
   id: string,
   title: string,
   content: string,
@@ -20,19 +21,19 @@ export type FictionBodyProps = {
 type State = {
   displayCommentAnchor: boolean,
   displaySubmitBox: boolean,
-  commentAnchorPosition: Object,
-  commentBadgeFixedPosition: Object,
-  commentBadgeDynamicPosition: Object,
+  commentAnchorPosition: { x: number, y: number },
+  commentBadgeFixedPosition: { x: number, y: number },
+  commentBadgeDynamicPosition: { x: number, y: number },
   commentBadgePositionInit: boolean
 };
 
 const noTitleMessage: string = 'no title specified';
 const noContentMessage: string = 'no content specified';
 
-class FictionBody extends React.Component<FictionBodyProps, State> {
-  fictionBodyView: ?HTMLElement;
+class FictionBody extends React.Component<Props, State> {
+  fictionBodyView: { current: null | HTMLDivElement };
 
-  constructor(props: FictionBodyProps) {
+  constructor(props: Props) {
     super(props);
     this.state = {
       displayCommentAnchor: false,
@@ -42,6 +43,7 @@ class FictionBody extends React.Component<FictionBodyProps, State> {
       commentBadgeFixedPosition: { x: 0, y: 0 },
       commentBadgePositionInit: false
     };
+    this.fictionBodyView = React.createRef();
   }
 
   componentDidMount() {
@@ -61,7 +63,7 @@ class FictionBody extends React.Component<FictionBodyProps, State> {
   };
 
   setCommentBadgeToExtractPosition = (extract: FictionExtractFragment) => {
-    const extractElement = document.getElementById(`${extract.id}`);
+    const extractElement = document.getElementById(extract.id);
     if (extractElement && this.fictionBodyView) {
       // Scroll extract in middle of page
       const elementRect = extractElement.getBoundingClientRect();
@@ -69,11 +71,11 @@ class FictionBody extends React.Component<FictionBodyProps, State> {
       const middle = absoluteElementTop - window.innerHeight / 2;
       window.scrollTo(0, middle);
       // $FlowFixMe this.fictionBodyView may be null
-      const nexPositionY = extractElement.getBoundingClientRect().top - this.fictionBodyView.getBoundingClientRect().top;
+      const nexPositionY = extractElement.getBoundingClientRect().top - this.fictionBodyView.current.getBoundingClientRect().top;
       this.setState({
         commentBadgeDynamicPosition: {
           // $FlowFixMe this.fictionBodyView may be null
-          x: this.fictionBodyView.offsetLeft + this.fictionBodyView.clientWidth,
+          x: this.fictionBodyView.current.offsetLeft + this.fictionBodyView.current.clientWidth,
           y: nexPositionY - COMMENT_DYNAMIC_OFFSET
         }
       });
@@ -87,17 +89,18 @@ class FictionBody extends React.Component<FictionBodyProps, State> {
     const selectionPositionY = selectionRect ? selectionRect.top : 0;
     const selectionPositionX = selectionRect ? selectionRect.left : 0;
     // $FlowFixMe this.fictionBodyView may be null
-    const bodyPosition = this.fictionBodyView.getBoundingClientRect().left - selectionRect.width / 2;
+    const bodyPosition = this.fictionBodyView.current.getBoundingClientRect().left - selectionRect.width / 2;
     const anchorPositionX = selectionPositionX - bodyPosition - ANCHOR_OFFSET;
     // $FlowFixMe this.fictionBodyView may be null
-    const anchorPositionY = selectionPositionY - this.fictionBodyView.getBoundingClientRect().top;
+    const anchorPositionY = selectionPositionY - this.fictionBodyView.current.getBoundingClientRect().top;
     return { x: anchorPositionX, y: anchorPositionY };
   };
 
   handleMouseUpWhileHarvesting = () => {
     const { dbId } = this.props;
     const isSelectionInBody = elementContainsSelection(document.getElementById(`message-body-local:Content/${dbId}`));
-    if (isSelectionInBody) {
+
+    if (getConnectedUserId() && isSelectionInBody) {
       const commentAnchorPosition = this.getAnchorPosition();
       this.setState({
         displayCommentAnchor: true,
@@ -117,20 +120,16 @@ class FictionBody extends React.Component<FictionBodyProps, State> {
       // Set box on same line as selection
       commentBadgeDynamicPosition: {
         // $FlowFixMe because element may be null
-        x: this.fictionBodyView.offsetLeft + this.fictionBodyView.clientWidth,
+        x: this.fictionBodyView.current.offsetLeft + this.fictionBodyView.current.clientWidth,
         y: commentAnchorPosition.y - COMMENT_DYNAMIC_OFFSET
       }
     });
   };
 
-  setCommentBoxDisplay = () => {
-    const { displaySubmitBox } = this.state;
-    this.setState({ displaySubmitBox: !displaySubmitBox });
-  };
+  toggleCommentBoxDisplay = () => this.setState(state => ({ ...state, displaySubmitBox: !state.displaySubmitBox }));
 
   cancelSubmit = () => {
-    this.setState({ displaySubmitBox: false });
-    window.getSelection().removeAllRanges();
+    this.setState({ displaySubmitBox: false }, () => window.getSelection().removeAllRanges());
   };
 
   render() {
@@ -144,11 +143,7 @@ class FictionBody extends React.Component<FictionBodyProps, State> {
     } = this.state;
 
     return (
-      <div
-        ref={(v) => {
-          this.fictionBodyView = v;
-        }}
-      >
+      <div ref={this.fictionBodyView}>
         <SideCommentMenu
           postId={id}
           lang={contentLocale}
@@ -159,7 +154,7 @@ class FictionBody extends React.Component<FictionBodyProps, State> {
           refetchPost={refetchPost}
           displayCommentAnchor={displayCommentAnchor}
           displaySubmitBox={displaySubmitBox}
-          setCommentBoxDisplay={this.setCommentBoxDisplay}
+          setCommentBoxDisplay={this.toggleCommentBoxDisplay}
           handleClickAnchor={this.handleClickAnchor}
           cancelSubmit={this.cancelSubmit}
           setCommentBadgeToExtractPosition={this.setCommentBadgeToExtractPosition}

@@ -1,5 +1,6 @@
 // @flow
 import * as React from 'react';
+
 import ARange from 'annotator_range'; // eslint-disable-line
 import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
@@ -36,7 +37,7 @@ export type Props = {
   refetchPost: Function,
   toggleCommentsBox?: Function,
   clearHighlights: Function,
-  position: Object,
+  position: { x: number, y: number },
   setPositionToExtract: Function
 };
 
@@ -54,9 +55,16 @@ const ACTIONS = {
 };
 
 class DumbSideCommentBox extends React.Component<Props, State> {
-  menu: any;
-
-  actions: any;
+  actions: {
+    [x: string]: {
+      buttons: {
+        id: string,
+        title: string,
+        className: string,
+        onClick: Function
+      }[]
+    }
+  };
 
   constructor(props: Props) {
     super(props);
@@ -89,8 +97,15 @@ class DumbSideCommentBox extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-    const { submitting } = this.state;
-    if (submitting) this.wrapSelectedText();
+    const { submitting, extractIndex } = this.state;
+    if (submitting) {
+      this.wrapSelectedText();
+    } else {
+      const currentExtract = this.getCurrentExtract(extractIndex);
+      if (currentExtract) {
+        this.hightlightExtract(currentExtract);
+      }
+    }
   }
 
   wrapSelectedText = () => {
@@ -171,7 +186,7 @@ class DumbSideCommentBox extends React.Component<Props, State> {
   hightlightExtract = (extract: FictionExtractFragment) => {
     const { clearHighlights } = this.props;
     clearHighlights();
-    const extractElement = document.getElementById(`${extract.id}`);
+    const extractElement = document.getElementById(extract.id);
     if (extractElement) extractElement.classList.add('active-extract');
   };
 
@@ -201,10 +216,6 @@ class DumbSideCommentBox extends React.Component<Props, State> {
     const { contentLocale, extracts, cancelSubmit, position, toggleCommentsBox } = this.props;
     const { submitting, extractIndex, body } = this.state;
     const currentExtract = this.getCurrentExtract(extractIndex);
-    if (!submitting && currentExtract) {
-      this.hightlightExtract(currentExtract);
-    }
-
     const currentComment = currentExtract && currentExtract.comment;
     const commentUsername =
       currentComment && currentComment.creator && !currentComment.creator.isDeleted
