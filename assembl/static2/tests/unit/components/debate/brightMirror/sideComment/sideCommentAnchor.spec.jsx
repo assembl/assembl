@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import initStoryshots, { shallowSnapshot } from '@storybook/addon-storyshots';
+import initStoryshots from '@storybook/addon-storyshots';
 import { configure, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 
@@ -10,8 +10,7 @@ import { defaultSideCommentAnchor } from '../../../../../../js/app/stories/compo
 // Separate the snapshots in directories next to each component
 // Name should match with the story name
 initStoryshots({
-  storyKindRegex: /^SideCommentAnchor$/,
-  test: shallowSnapshot
+  storyKindRegex: /^SideCommentAnchor$/
 });
 
 configure({ adapter: new Adapter() });

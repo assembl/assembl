@@ -1,8 +1,8 @@
 // @flow
 import React from 'react';
-import initStoryshots, { shallowSnapshot } from '@storybook/addon-storyshots';
 import { configure, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
+import ShallowRenderer from 'react-test-renderer/shallow';
 
 import { DumbSideCommentBox } from '../../../../../../js/app/components/debate/brightMirror/sideComment/sideCommentBox';
 import {
@@ -10,13 +10,6 @@ import {
   multipleSideCommentBox,
   submittingSideCommentBox
 } from '../../../../../../js/app/stories/components/debate/brightMirror/sideComment/sideCommentBox.stories';
-
-// Separate the snapshots in directories next to each component
-// Name should match with the story name
-initStoryshots({
-  storyKindRegex: /^SideCommentBox$/,
-  test: shallowSnapshot
-});
 
 configure({ adapter: new Adapter() });
 
@@ -27,6 +20,14 @@ describe('<SideCommentBox /> - default with shallow', () => {
 
   beforeEach(() => {
     wrapper = shallow(<DumbSideCommentBox {...defaultSideCommentBox} />);
+  });
+
+  // Cannot use storyshots because of some draftjs problem
+  it('should match snapshot', () => {
+    const renderer = new ShallowRenderer();
+    renderer.render(<DumbSideCommentBox {...defaultSideCommentBox} />);
+    const result = renderer.getRenderOutput();
+    expect(result).toMatchSnapshot();
   });
 
   it('should render number in header', () => {
@@ -64,6 +65,14 @@ describe('<SideCommentBox /> - multiple with shallow', () => {
 
   beforeEach(() => {
     wrapper = shallow(<DumbSideCommentBox {...multipleSideCommentBox} />);
+  });
+
+  // Cannot use storyshots because of some draftjs problem
+  it('should match snapshot', () => {
+    const renderer = new ShallowRenderer();
+    renderer.render(<DumbSideCommentBox {...multipleSideCommentBox} />);
+    const result = renderer.getRenderOutput();
+    expect(result).toMatchSnapshot();
   });
 
   it('should render number in header', () => {
