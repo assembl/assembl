@@ -56,11 +56,6 @@ if _local_file.endswith('.pyc'):
     _local_file = _local_file[:-1]
 local_code_root = dirname(dirname(realpath(_local_file)))
 
-secret_id_list = {
-    'db_password': 'dev-psql-password',
-
-}
-
 
 def sanitize_hosts(alt_env=None):
     alt_env = alt_env or env
@@ -162,9 +157,6 @@ def populate_secrets():
     import json
     client = boto3.client('secretsmanager') # noqa
     name = os.path.splitext(os.path.basename(env.rcfile))[0]
-    # If you want BETTER naming scheme on secretmanager -> RENAME THE RC FILES!
-    # remove this once secretmanager has proper names of rc_files
-    name = 'assembl_sudo_user'
     response = client.get_secret_value(
         SecretId=name,
     )
@@ -289,12 +281,6 @@ def listdir(path):
 
 
 @task
-def my_debug_task():
-    from pprint import pprint
-    pprint(env)
-
-
-@task
 def update_vendor_config():
     """Update the repository of the currently used config file"""
     config_file_dir = dirname(env.rcfile)
@@ -395,12 +381,6 @@ def get_random_templates():
 def ensure_pip_compile():
     if not exists(env.venvpath + "/bin/pip-compile"):
         separate_pip_install('pip-tools')
-
-
-@task
-def test():
-    "Generate frozen requirements.txt file (with name taken from environment)."
-    populate_secrets()
 
 
 @task
@@ -3126,7 +3106,6 @@ def set_fail2ban_configurations():
         finally:
             for path in filters_to_file.values():
                 os.unlink(path)
-<<<<<<< HEAD
 
 
 @task
@@ -3165,5 +3144,3 @@ def install_jq():
             run('brew install jq')
         else:
             sudo('apt-get install -y jq')
-=======
->>>>>>> Clean fake8 error
