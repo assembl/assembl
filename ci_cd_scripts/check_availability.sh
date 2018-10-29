@@ -44,7 +44,7 @@ fi
 DB_HOST="$(grep "db_host" $LOCAL_INI | head -n 1 | tr -d ' ' | awk -F "=" '{print $2}')"
 DB_USER="$(grep "db_user" $LOCAL_INI | head -n 1 | tr -d ' ' | awk -F "=" '{print $2}')"
 DB_NAME="$(grep "db_database" $LOCAL_INI | head -n 1 | tr -d ' ' | awk -F "=" '{print $2}')"
-PGPASSWORD="$(grep "db_password" $LOCAL_INI | head -n 1 | tr -d ' ' | awk -F "=" '{print $2}')"
+export PGPASSWORD="$(grep "db_password" $LOCAL_INI | head -n 1 | tr -d ' ' | awk -F "=" '{print $2}')"
 
 NB_TABLE="$(psql -h $DB_HOST -U $DB_USER $DB_NAME -c "SELECT * FROM pg_catalog.pg_tables;" | grep public | wc -l | tr -d ' ')"
 if [ $NB_TABLE -lt 1 ]; then
@@ -52,5 +52,5 @@ if [ $NB_TABLE -lt 1 ]; then
     exit 1
 fi
 
-# everything is good
+printf "Good to connect to Assembl\n"
 exit 0
