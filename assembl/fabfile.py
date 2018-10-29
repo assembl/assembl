@@ -946,7 +946,7 @@ def bootstrap_from_checkout(backup=False):
     if not backup:
         execute(app_db_install)
     else:
-        execute(database_restore, backup=backup)
+        execute(database_restore)
     execute(app_reload)
     execute(webservers_reload)
     if not is_integration_env():
@@ -959,8 +959,6 @@ def bootstrap_from_backup():
     """
     Creates the virtualenv and install the app from the backup files
     """
-    execute(fetch_backup, name=None)
-    execute(regenerate_rc_file)
     execute(bootstrap_from_checkout, backup=True)
 
 
@@ -1298,7 +1296,7 @@ def webservers_stop():
     if env.uses_nginx:
         # Nginx
         if exists('/etc/init.d/nginx'):
-            run('sudo /etc/init.d/nginx stop')
+            sudo('/etc/init.d/nginx stop')
         elif env.mac:
             sudo('killall nginx')
 
@@ -1310,7 +1308,7 @@ def webservers_start():
     if env.uses_nginx:
         # Nginx
         if exists('/etc/init.d/nginx'):
-            run('sudo /etc/init.d/nginx start')
+            sudo('/etc/init.d/nginx start')
         elif env.mac and exists('/usr/local/nginx/sbin/nginx'):
             sudo('/usr/local/nginx/sbin/nginx')
 
@@ -2319,24 +2317,21 @@ def fetch_backup(name=None):
     Fetch a borg backup of Assembl from a repository location specified in RC file.
     If no name is specified, fetches the last backup.
     """
-
-    destination_folder = '/home/assembl_user/assembl_backup'
-
+    destination_folder = "/home/assembl_user/assembl_backup"
     if not exists(destination_folder):
         run("mkdir {destination_folder}".format(destination_folder=destination_folder))
-
     ftp_get(ncftp_config='/home/assembl_user/assembl/ncftp.cfg',
             source='assembl_backups.borg',
             destination=destination_folder)
 
     if name is None:
-        last_backup = run("BORG_PASSPHRASE={borg_password} borg list /home/assembl_user/assembl_backup/assembl_backups.borg | sed '$!d'".format(borg_password=env.borg_password))
+        last_backup = run("BORG_PASSPHRASE={borg_password} borg list {destination_folder}/assembl_backups.borg | sed '$!d'".format(destination_folder=destination_folder, borg_password=env.borg_password))
         backup_name = last_backup.split(' ')[0]
     else:
         backup_name = name
-    run("BORG_PASSPHRASE={borg_password} borg extract /home/assembl_user/assembl_backup/assembl_backups.borg::{backup_name}".format(borg_password=env.borg_password, last_backup=backup_name))
+    run("BORG_PASSPHRASE={borg_password} borg extract {destination_folder}/assembl_backups.borg::{backup_name}".format(destination_folder=destination_folder, borg_password=env.borg_password, backup_name=backup_name))
     # Moving the last backup assembl folder to assembl_user
-    # run("mv /home/assembl_user/home/assembl_user/assembl /home/assembl_user/")
+    run("mv /home/assembl_user/home/assembl_user/assembl {destination_folder}".format(destination_folder=destination_folder))
 
 
 @task
