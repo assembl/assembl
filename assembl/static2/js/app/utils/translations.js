@@ -419,6 +419,7 @@ const Translations = {
         startFictionLabel: "Je partage ma fiction",
         commentFiction: {
           cancel: "Annuler",
+          editComment: "Modifier ce message",
           imageAlt: "Illustration prenez la parole",
           label: "Commentaires",
           numberOfComments: "%{count} messages",
@@ -1317,6 +1318,7 @@ const Translations = {
         startFictionLabel: "Share a fiction",
         commentFiction: {
           cancel: "Cancel",
+          editComment: "Edit this message",
           imageAlt: "Let's talk illustration",
           label: "Comments",
           numberOfComments: "%{count} messages",

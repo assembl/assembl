@@ -4,7 +4,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import { withInfo } from '@storybook/addon-info';
-import { withKnobs, text, number, object } from '@storybook/addon-knobs';
+import { withKnobs, text, number, object, boolean } from '@storybook/addon-knobs';
 /* eslint-enable */
 
 // import components
@@ -31,14 +31,18 @@ export const defaultFictionComment: FictionCommentBaseProps = {
 };
 
 export const defaultFictionCommentGraphQL: FictionCommentGraphQLProps = {
+  authorUserId: 1234567890,
   authorFullname: 'Luke Skywalker',
   circleAvatar: { ...defaultCircleAvatar },
   commentParentId: 'dummyId',
   commentContent:
     'Est et rerum. Ut sed voluptatem possimus. Ut cumque magni sapiente voluptatem ut rerum aut harum quo. Non delectus quo.',
+  contentLocale: 'fr',
   displayedPublishedDate: 'August 8th, 2018',
+  modified: false,
   parentPostAuthorFullname: 'Dark Vador',
-  publishedDate: '2018-07-09'
+  publishedDate: '2018-07-09',
+  updateComment: action('updateComment')
 };
 
 const playground = {
@@ -53,15 +57,19 @@ storiesOf('FictionComment', module)
     'playground',
     withInfo()(() => (
       <FictionComment
+        authorUserId={playground.authorUserId}
         authorFullname={text('Author fullname', playground.authorFullname)}
         circleAvatar={object('circleAvatar', playground.circleAvatar)}
         commentContent={text('Comment content', playground.commentContent)}
         commentParentId={text('Comment parent id', playground.commentParentId)}
+        contentLocale={playground.contentLocale}
         displayedPublishedDate={text('Displayed published date', playground.displayedPublishedDate)}
         measureTreeHeight={playground.measureTreeHeight}
         numChildren={number('Number of comments', playground.numChildren)}
+        modified={boolean('Is modified', playground.modified)}
         parentPostAuthorFullname={text('Parent comment author fullname', playground.parentPostAuthorFullname)}
         publishedDate={text('Published date', playground.publishedDate)}
+        updateComment={playground.updateComment}
         fictionCommentExtraProps={playground.fictionCommentExtraProps}
       />
     ))

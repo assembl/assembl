@@ -1,5 +1,6 @@
 // @flow
 import React from 'react';
+import { I18n } from 'react-redux-i18n';
 // import initStoryshots from '@storybook/addon-storyshots';
 import { configure, mount, shallow } from 'enzyme';
 import { MockedProvider } from 'react-apollo/test-utils';
@@ -14,6 +15,7 @@ import CircleAvatar from '../../../../../js/app/components/debate/brightMirror/c
 import ToggleCommentButton from '../../../../../js/app/components/debate/common/toggleCommentButton';
 import ReplyToCommentButton from '../../../../../js/app/components/debate/common/replyToCommentButton';
 import FictionCommentForm from '../../../../../js/app/components/debate/brightMirror/fictionCommentForm';
+import EditPostButton from '../../../../../js/app/components/debate/common/editPostButton';
 // Type imports
 import type { FictionCommentGraphQLProps } from '../../../../../js/app/components/debate/brightMirror/fictionComment';
 
@@ -32,6 +34,13 @@ import {
 // });
 
 configure({ adapter: new Adapter() });
+
+// Mock utils functions
+jest.mock('../../../../../js/app/utils/globalFunctions', () => ({
+  getConnectedUserId: jest.fn(() => '1234567890'),
+  isMobile: { any: jest.fn(() => false) }
+}));
+jest.mock('../../../../../js/app/utils/permissions', () => ({ connectedUserCan: jest.fn(() => true) }));
 
 describe('<FictionComment /> - with shallow', () => {
   let wrapper;
@@ -111,6 +120,10 @@ describe('<FictionComment /> - with mount', () => {
       expect(wrapper.contains(defaultFictionCommentGraphQL.displayedPublishedDate)).toBe(true);
     });
 
+    it('should not display the comment as edited', () => {
+      expect(wrapper.contains(I18n.t('debate.thread.postEdited'))).toBe(false);
+    });
+
     it('should display the comment content', () => {
       expect(wrapper.contains(defaultFictionCommentGraphQL.commentContent)).toBe(true);
     });
@@ -183,6 +196,107 @@ describe('<FictionComment /> - with mount', () => {
 
     it('should display "No author specified"', () => {
       expect(wrapper.contains('No author specified')).toBe(true);
+    });
+  });
+
+  describe('when getConnectedUserId match permission and authorUserId', () => {
+    // getConnectedUserId mocked value is 1234567890
+    beforeEach(() => {
+      fictionComment = {
+        ...defaultFictionComment,
+        ...defaultFictionCommentGraphQL,
+        authorUserId: 1234567890,
+        measureTreeHeight: jest.fn(),
+        // Below are the required input params for CommentQuery
+        id: 'aaa',
+        contentLocale: 'fr'
+      };
+
+      // Mock Apollo
+      mocks = [
+        {
+          request: { query: CommentQuery },
+          result: {
+            data: fictionComment
+          }
+        }
+      ];
+      wrapper = mount(
+        <MockedProvider mocks={mocks}>
+          <FictionComment {...fictionComment} />
+        </MockedProvider>
+      );
+    });
+
+    it('should display a "Edit this message" button', () => {
+      expect(wrapper.find(EditPostButton)).toHaveLength(1);
+    });
+  });
+
+  describe('when getConnectedUserId does not match permission and authorUserId', () => {
+    // getConnectedUserId mocked value is 1234567890
+    beforeEach(() => {
+      fictionComment = {
+        ...defaultFictionComment,
+        ...defaultFictionCommentGraphQL,
+        authorUserId: 9876543210,
+        measureTreeHeight: jest.fn(),
+        // Below are the required input params for CommentQuery
+        id: 'aaa',
+        contentLocale: 'fr'
+      };
+
+      // Mock Apollo
+      mocks = [
+        {
+          request: { query: CommentQuery },
+          result: {
+            data: fictionComment
+          }
+        }
+      ];
+      wrapper = mount(
+        <MockedProvider mocks={mocks}>
+          <FictionComment {...fictionComment} />
+        </MockedProvider>
+      );
+    });
+
+    it('should not display a "Edit this message" button', () => {
+      expect(wrapper.find(EditPostButton)).toHaveLength(0);
+    });
+  });
+
+  describe('when modified is true', () => {
+    beforeEach(() => {
+      fictionComment = {
+        ...defaultFictionComment,
+        ...defaultFictionCommentGraphQL,
+        measureTreeHeight: jest.fn(),
+        modified: true,
+        // Below are the required input params for CommentQuery
+        id: 'aaa',
+        contentLocale: 'fr'
+      };
+
+      // Mock Apollo
+      mocks = [
+        {
+          request: { query: CommentQuery },
+          result: {
+            data: fictionComment
+          }
+        }
+      ];
+      wrapper = mount(
+        <MockedProvider mocks={mocks}>
+          <FictionComment {...fictionComment} />
+        </MockedProvider>
+      );
+    });
+
+    it('should display the comment as edited', () => {
+      expect(wrapper.contains(I18n.t('debate.thread.postEdited'))).toBe(true);
     });
   });
 });

@@ -12,7 +12,11 @@ export type FictionCommentFormProps = {
   /** Comment callback when submit is clicked */
   onSubmitCommentCallback: Function,
   /** Optional rows for textarea, default set to 2 */
-  rowsForTextarea?: number
+  rowsForTextarea?: number,
+  /** Optional flag that indicates if the form should be in edit mode */
+  editMode?: boolean,
+  /** Optional comment value, is used when editing a comment */
+  commentValue?: string
 };
 
 export type FictionCommentFormState = {
@@ -28,12 +32,14 @@ const COMMENT_SUBMIT_BUTTON_ID = 'comment-submit-button';
 
 class FictionCommentForm extends Component<FictionCommentFormProps, FictionCommentFormState> {
   static defaultProps = {
+    commentValue: '',
+    editMode: false,
     rowsForTextarea: 2
   };
 
   state = {
-    commentTextareaValue: '',
-    showFormActionButtons: false
+    commentTextareaValue: this.props.commentValue ? this.props.commentValue : EMPTY_STRING,
+    showFormActionButtons: this.props.editMode ? this.props.editMode : false
   };
 
   // Handler methods

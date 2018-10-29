@@ -3,6 +3,7 @@ fragment BrightMirrorFiction on Post {
   creationDate
   subject(lang: $contentLocale)
   publicationState
+  modified
   creator {
     displayName
     isDeleted

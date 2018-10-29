@@ -30,7 +30,7 @@ import { displayAlert } from '../utils/utilityManager';
 import { getConnectedUserId } from '../utils/globalFunctions';
 import Permissions, { connectedUserCan } from '../utils/permissions';
 // Constant imports
-import { FICTION_DELETE_CALLBACK, EMPTY_STRING, PublicationStates } from '../constants';
+import { FICTION_DELETE_CALLBACK, EMPTY_STRING, PublicationStates, USER_ID_NOT_FOUND } from '../constants';
 // Type imports
 import type { ContentLocaleMapping } from '../actions/actionTypes';
 import type { CircleAvatarProps } from '../components/debate/brightMirror/circleAvatar';
@@ -147,7 +147,7 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
     // Call the mutation function to create a comment
     createComment({ variables: createPostInputs })
       .then(() => {
-        // If needed post result can be fetch with `result.data.createPost.post`
+        // If needed post result can be fetched with `result.data.createPost.post`
         displayAlert('success', I18n.t('debate.thread.postSuccess'));
         // Set state here to update UI
 
@@ -210,7 +210,6 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
     const topComments = this.getTopComments();
 
     // Define user permission
-    const USER_ID_NOT_FOUND = -9999;
     const userId = fiction.creator ? fiction.creator.userId : USER_ID_NOT_FOUND;
     const userCanDelete =
       (getConnectedUserId() === String(userId) && connectedUserCan(Permissions.DELETE_MY_POST)) ||

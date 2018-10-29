@@ -71,10 +71,6 @@ $fiction-toolbar-icon-size: 17px;
       .border-left {
         border-left: none;
       }
-
-      .level-1 {
-        padding-left: 20px;
-      }
     }
   }
 }
@@ -114,7 +110,8 @@ $fiction-toolbar-icon-size: 17px;
           display: inline-block;
         }
 
-        .level-1 {
+        .level-1,
+        .level-2 {
           padding-left: 40px;
         }
       }
@@ -131,15 +128,6 @@ $fiction-toolbar-icon-size: 17px;
   .bright-mirror-comments {
     .comments-content {
       padding: 80px 50px;
-
-      // Tree.jsx style adjustments
-      .level {
-        .level-1,
-        .level-2,
-        .level-3 {
-          padding-left: 40px;
-        }
-      }
     }
   }
 }
@@ -148,6 +136,7 @@ $fiction-toolbar-icon-size: 17px;
 @import "components/backButton";
 @import "components/circleAvatar";
 @import "components/toggleCommentButton";
+@import "components/editPostButton";
 @import "components/replyToCommentButton";
 @import "components/fictionHeader";
 @import "components/fictionToolbar";
