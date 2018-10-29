@@ -48,8 +48,8 @@ class PyramidWebTestRequest(TestRequest):
         return self._base_pyramid_request.route_path(
             name, *args, **kwargs)
 
-    def route_url(self, name, *args, **kwargs):
-        return self._base_pyramid_request.route_url(
+    def route_url_s(self, name, *args, **kwargs):
+        return self._base_pyramid_request.route_url_s(
             name, *args, **kwargs)
 
     # TODO: Find a way to change user here

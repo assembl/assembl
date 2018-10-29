@@ -210,7 +210,7 @@ class FrontendUrls(object):
         from pyramid.request import Request
         req = Request.blank('/', base_url=self.discussion.get_base_url())
         Celery didn't like this.  To revisit once we have virtual hosts
-        return req.route_url('home', discussion_slug=self.discussion.slug)
+        return req.route_url_s('home', discussion_slug=self.discussion.slug)
 
         Returns the legacy URL route. Currently, /debate/{discussion_slug}
         """

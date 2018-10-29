@@ -2654,7 +2654,7 @@ def test_query_discussion_login_url_non_local(graphql_request, discussion, test_
 
     res = schema.execute(graphql_registry['DiscussionQuery'], context_value=graphql_request)
     _query = {'idp': 'test_shib'}
-    expected_url = graphql_request.route_url(
+    expected_url = graphql_request.route_url_s(
         "contextual_social.auth",
         discussion_slug=discussion.slug,
         backend='saml',

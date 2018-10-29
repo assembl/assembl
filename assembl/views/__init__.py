@@ -18,6 +18,8 @@ from pyramid.httpexceptions import (
 from pyramid.i18n import TranslationStringFactory
 from pyramid.security import Everyone
 from pyramid.settings import asbool, aslist
+from pyramid.request import Request
+from pyramid.configurator import add_request_method
 from social_core.exceptions import AuthMissingParameter
 
 from assembl.lib.json import json_renderer_factory
@@ -203,7 +205,8 @@ def get_default_context(request, **kwargs):
     kwargs.update(default_context)
     from ..auth.util import get_user, get_current_discussion
     if request.scheme == "http"\
-            and asbool(config.get("require_secure_connection")):
+            and asbool(config.get("require_secure_connection"))\
+            and not asbool(config.get("proxied_secure_connection", None)):
         raise HTTPFound(get_global_base_url(True) + request.path_qs)
     react_url = '/static2'
     use_webpack_server = asbool(config.get('use_webpack_server'))
@@ -231,10 +234,10 @@ def get_default_context(request, **kwargs):
     _ = TranslationStringFactory('assembl')
     user = get_user(request)
     if user and user.username:
-        user_profile_edit_url = request.route_url(
+        user_profile_edit_url = request.route_url_s(
             'profile_user', type='u', identifier=user.username.username)
     elif user:
-        user_profile_edit_url = request.route_url(
+        user_profile_edit_url = request.route_url_s(
             'profile_user', type='id', identifier=user.id)
     else:
         user_profile_edit_url = None
@@ -655,7 +658,7 @@ def error_view(exc, request):
 
 
 def redirector(request):
-    return HTTPMovedPermanently(request.route_url(
+    return HTTPMovedPermanently(request.route_url_s(
         'home', discussion_slug=request.matchdict.get('discussion_slug')))
 
 
@@ -678,6 +681,13 @@ def includeme(config):
     else:
         config.add_route('discussion_list', '/')
 
+    if asbool(settings.get('proxied_secure_connection', None)):
+        def route_url_s(request, *args, **kwargs):
+            return request.route_url(*args, _scheme='https', **kwargs)
+        add_request_method(route_url_s, 'route_url_s')
+    else:
+        add_request_method(Request.route_url, 'route_url_s')
+
     config.include(backbone_include, route_prefix='/debate/{discussion_slug}')
     config.include(legacy_backbone_include, route_prefix='/{discussion_slug}')
 
@@ -696,7 +706,7 @@ def includeme(config):
     config.add_route('home', '/debate/{discussion_slug}')
 
     def redirector(request):
-        return HTTPMovedPermanently(request.route_url('home', discussion_slug=request.matchdict.get('discussion_slug')))
+        return HTTPMovedPermanently(request.route_url_s('home', discussion_slug=request.matchdict.get('discussion_slug')))
     config.add_view(redirector, route_name='home-auto')
     default_context['cache_bust'] = \
         config.registry.settings['requirejs.cache_bust']

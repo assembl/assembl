@@ -552,7 +552,7 @@ def assembl_register_user(request):
             if asbool(config.get('pyramid.debug_authorization')):
                 # for debugging purposes
                 from assembl.auth.password import email_token
-                print "email token:", request.route_url(
+                print "email token:", request.route_url_s(
                     'user_confirm_email', token=email_token(account))
             if discussion:
                 check_subscription = discussion.preferences['whitelist_on_register']

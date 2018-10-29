@@ -129,9 +129,9 @@ def maybe_contextual_route(request, route_name, **args):
         if discussion:
             discussion_slug = discussion.slug
     if discussion_slug is None:
-        return request.route_url(route_name, **args)
+        return request.route_url_s(route_name, **args)
     else:
-        return request.route_url(
+        return request.route_url_s(
             'contextual_' + route_name,
             discussion_slug=discussion_slug, **args)
 
@@ -170,13 +170,13 @@ def get_social_autologin(request, discussion=None, next_view=None):
         auto_login_backend, provider = auto_login_backend.split(":", 1)
         query['idp'] = provider
     if discussion:
-        return request.route_url(
+        return request.route_url_s(
             "contextual_social.auth",
             discussion_slug=discussion.slug,
             backend=auto_login_backend,
             _query=query)
     else:
-        return request.route_url(
+        return request.route_url_s(
             "social.auth",
             backend=auto_login_backend,
             _query=query)
@@ -221,7 +221,8 @@ def logout(request):
 )
 def login_view(request):
     if request.scheme == "http"\
-            and asbool(config.get("accept_secure_connection")):
+            and asbool(config.get("accept_secure_connection"))\
+            and not asbool(config.get("proxied_secure_connection", None)):
         return HTTPFound(get_global_base_url(True) + request.path_qs)
     force_providers = request.matched_route.name.endswith('_forceproviders')
     if request.matched_route.name == 'contextual_login':
@@ -289,7 +290,7 @@ def assembl_profile(request):
 
     confirm_email = request.params.get('confirm_email', None)
     if confirm_email:
-        return HTTPTemporaryRedirect(location=request.route_url(
+        return HTTPTemporaryRedirect(location=request.route_url_s(
             'confirm_emailid_sent', email_account_id=int(confirm_email)))
     errors = []
     if save:
@@ -335,7 +336,7 @@ def assembl_profile(request):
                 email=add_email, profile=profile)
             session.add(email)
         if redirect:
-            return HTTPFound(location=request.route_url(
+            return HTTPFound(location=request.route_url_s(
                 'profile_user', type='u', identifier=username))
         profile = session.query(User).get(user_id)
     unverified_emails = [
@@ -385,7 +386,8 @@ def assembl_register_view(request):
     next_view = handle_next_view(request)
     if not request.params.get('email'):
         if request.scheme == "http"\
-                and asbool(config.get("accept_secure_connection")):
+                and asbool(config.get("accept_secure_connection"))\
+                and not asbool(config.get("proxied_secure_connection", None)):
             return HTTPFound(get_global_base_url(True) + request.path_qs)
         response = get_login_context(request)
         return response
@@ -452,7 +454,7 @@ def assembl_register_view(request):
         if asbool(config.get('pyramid.debug_authorization')):
             # for debugging purposes
             from assembl.auth.password import email_token
-            print "email token:", request.route_url(
+            print "email token:", request.route_url_s(
                 'user_confirm_email', token=email_token(email_account))
         headers = remember(request, user.id)
         user.successful_login()
@@ -668,7 +670,7 @@ def user_confirm_email(request):
         error = localizer.translate(
             _("Email <%s> already confirmed")) % (account.email,)
         request.session.flash(error)
-        return HTTPFound(location=request.route_url(
+        return HTTPFound(location=request.route_url_s(
             route,
             discussion_slug=inferred_discussion.slug if inferred_discussion else None))
 
@@ -749,7 +751,7 @@ def user_confirm_email(request):
             route = 'home'
     else:
         route = 'discussion_list'
-    return HTTPFound(location=request.route_url(
+    return HTTPFound(location=request.route_url_s(
         route,
         discussion_slug=inferred_discussion.slug
         if inferred_discussion else None,
@@ -958,7 +960,7 @@ def do_password_change(request):
         # W+P+: welcome link sends onwards irrespective of token
         if logged_in:
             # L+: send onwards to discussion
-            return HTTPFound(location=request.route_url(
+            return HTTPFound(location=request.route_url_s(
                 'home' if discussion else 'discussion_list',
                 discussion_slug=discussion.slug))
         else:
@@ -1063,7 +1065,7 @@ def finish_password_change(request):
             maybe_auto_subscribe(user, discussion)
         request.session.flash(localizer.translate(_(
             "Password changed")), 'message')
-        return HTTPFound(location=request.route_url(
+        return HTTPFound(location=request.route_url_s(
             'home' if discussion else 'discussion_list',
             discussion_slug=discussion.slug))
 

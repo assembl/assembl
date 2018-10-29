@@ -40,12 +40,12 @@ def discussion_list_view(request):
         }
         if user_has_permission(discussion.id, user_id, P_ADMIN_DISC):
             discussion_context['admin_url'] = discussionFrontendUrls.get_discussion_edition_url()
-            discussion_context['permissions_url'] = request.route_url(
+            discussion_context['permissions_url'] = request.route_url_s(
                 'discussion_permissions', discussion_id=discussion.id)
         context['discussions'].append(discussion_context)
     if R_SYSADMIN in roles:
-        context['discussions_admin_url'] = request.route_url('discussion_admin')
-        context['permissions_admin_url'] = request.route_url('general_permissions')
-        context['preferences_admin_url'] = request.route_url('admin_global_preferences')
+        context['discussions_admin_url'] = request.route_url_s('discussion_admin')
+        context['permissions_admin_url'] = request.route_url_s('general_permissions')
+        context['preferences_admin_url'] = request.route_url_s('admin_global_preferences')
     context['user'] = user
     return context

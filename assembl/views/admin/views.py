@@ -217,7 +217,7 @@ def discussion_edit(request):
     context = dict(
         get_default_context(request),
         discussion=discussion,
-        admin_discussion_permissions_url=request.route_url(
+        admin_discussion_permissions_url=request.route_url_s(
             'discussion_permissions', discussion_id=discussion.id),
         partners=partners)
 

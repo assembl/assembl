@@ -33,7 +33,7 @@ class EmailCreatorAtDiscussionCreation(object):
         jinja_env = Notification.make_jinja_env()
         (assembl_css, ink_css) = Notification.get_css_paths(discussion)
         request = get_current_request()
-        confirm_url = request.route_url(
+        confirm_url = request.route_url_s(
             'contextual_welcome',
             discussion_slug=discussion.slug,
             ticket=password_change_token(profile))

@@ -43,7 +43,7 @@ def test_route_discussion_root(
     discussion.db.commit()
     resp = test_app.get(route)
     assert resp.status_int == 307
-    assert resp.location == test_adminuser_webrequest.route_url(
+    assert resp.location == test_adminuser_webrequest.route_url_s(
         'home', discussion_slug=discussion.slug)
 
     discussion.preferences['landing_page'] = True

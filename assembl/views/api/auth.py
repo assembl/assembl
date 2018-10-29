@@ -314,7 +314,7 @@ def get_user_has_permission(request):
 
 @view_config(route_name='saml_metadata')
 def saml_metadata_view(request):
-    complete_url = request.route_url('social.complete', backend="saml")
+    complete_url = request.route_url_s('social.complete', backend="saml")
     saml_backend = load_backend(
         load_strategy(request),
         "saml",

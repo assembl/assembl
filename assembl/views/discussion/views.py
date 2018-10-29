@@ -100,11 +100,11 @@ def home_view(request):
         if login_url:
             pass
         elif next_view:
-            login_url = request.route_url("contextual_react_login",
+            login_url = request.route_url_s("contextual_react_login",
                                           discussion_slug=discussion.slug,
                                           _query={"next": next_view})
         else:
-            login_url = request.route_url(
+            login_url = request.route_url_s(
                 'contextual_react_login', discussion_slug=discussion.slug)
         return HTTPTemporaryRedirect(login_url)
     elif not canRead:
@@ -122,21 +122,21 @@ def home_view(request):
     if route_name == "purl_posts":
         post_id = FrontendUrls.getRequestedPostId(request)
         if not post_id:
-            return HTTPSeeOther(request.route_url(
+            return HTTPSeeOther(request.route_url_s(
                 'home', discussion_slug=discussion.slug))
         post = Post.get_instance(post_id)
         if not post or post.discussion_id != discussion.id:
-            return HTTPSeeOther(request.route_url(
+            return HTTPSeeOther(request.route_url_s(
                 'home', discussion_slug=discussion.slug))
         context['post'] = post
     elif route_name == "purl_idea":
         idea_id = FrontendUrls.getRequestedIdeaId(request)
         if not idea_id:
-            return HTTPSeeOther(request.route_url(
+            return HTTPSeeOther(request.route_url_s(
                 'home', discussion_slug=discussion.slug))
         idea = Idea.get_instance(idea_id)
         if not idea or idea.discussion_id != discussion.id:
-            return HTTPSeeOther(request.route_url(
+            return HTTPSeeOther(request.route_url_s(
                 'home', discussion_slug=discussion.slug))
         context['idea'] = idea
 
@@ -257,11 +257,11 @@ def react_view(request, required_permission=P_READ):
             elif next_view:
                 # Assuming that the next_view already knows about canUseReact.
                 # If not, will be re-routed
-                login_url = request.route_url("contextual_react_login",
+                login_url = request.route_url_s("contextual_react_login",
                                               discussion_slug=discussion.slug,
                                               _query={"next": next_view})
             else:
-                login_url = request.route_url(
+                login_url = request.route_url_s(
                     'contextual_react_login', discussion_slug=discussion.slug)
             return HTTPTemporaryRedirect(login_url)
         elif not canRead and required_permission == P_ADMIN_DISC and canUseReact:
@@ -287,7 +287,7 @@ def react_view(request, required_permission=P_READ):
             else:
                 extra_path = None
             query = request.query_string or None
-            url = request.route_url('home',
+            url = request.route_url_s('home',
                                     discussion_slug=discussion.slug,
                                     extra_path=extra_path,
                                     _query=query)
@@ -395,7 +395,7 @@ def purl_post(request):
                 idc = post.idea_links_of_content[0]
                 idea = idc.idea
         if not idea:
-            return HTTPSeeOther(location=request.route_url(
+            return HTTPSeeOther(location=request.route_url_s(
                 'new_home', discussion_slug=discussion.slug))
         return HTTPSeeOther(
             location=urljoin(
@@ -409,7 +409,7 @@ def purl_post(request):
 
     # V1 purl
     return HTTPOk(
-        location=request.route_url(
+        location=request.route_url_s(
             'purl_posts',
             discussion_slug=discussion.slug,
             remainder=quote_plus(type(post).uri_generic(post.id)))
@@ -433,7 +433,7 @@ def purl_ideas(request):
         if not idea:
             # If no idea is found, redirect to new home instead of 404
             # TODO: Determine if this is acceptable practice
-            return HTTPSeeOther(location=request.route_url(
+            return HTTPSeeOther(location=request.route_url_s(
                 'new_home', discussion_slug=discussion.slug))
 
         return HTTPSeeOther(
@@ -447,7 +447,7 @@ def purl_ideas(request):
         )
     # V1 Idea
     return HTTPOk(
-        location=request.route_url(
+        location=request.route_url_s(
             'purl_ideas',
             discussion_slug=discussion.slug,
             remainder=quote_plus(type(idea).uri_generic(idea.id))
@@ -509,7 +509,7 @@ def includeme(config):
                     request_method='GET')
 
     def redirector(request):
-        return HTTPMovedPermanently(request.route_url(
+        return HTTPMovedPermanently(request.route_url_s(
             'bare_slug',
             discussion_slug=request.matchdict.get('discussion_slug')))
     config.add_view(redirector, route_name='auto_bare_slug')
