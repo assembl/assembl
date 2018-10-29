@@ -19,7 +19,6 @@ from pyramid.i18n import TranslationStringFactory
 from pyramid.security import Everyone
 from pyramid.settings import asbool, aslist
 from pyramid.request import Request
-from pyramid.configurator import add_request_method
 from social_core.exceptions import AuthMissingParameter
 
 from assembl.lib.json import json_renderer_factory
@@ -684,9 +683,9 @@ def includeme(config):
     if asbool(settings.get('proxied_secure_connection', None)):
         def route_url_s(request, *args, **kwargs):
             return request.route_url(*args, _scheme='https', **kwargs)
-        add_request_method(route_url_s, 'route_url_s')
+        config.add_request_method(route_url_s, 'route_url_s')
     else:
-        add_request_method(Request.route_url, 'route_url_s')
+        config.add_request_method(Request.route_url, 'route_url_s')
 
     config.include(backbone_include, route_prefix='/debate/{discussion_slug}')
     config.include(legacy_backbone_include, route_prefix='/{discussion_slug}')
