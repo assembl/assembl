@@ -454,13 +454,16 @@ class Content(TombstonableMixin, DiscussionBoundBase):
             log.error("What is this mimetype?" + mimetype)
             return body
 
-    def maybe_translate(self, pref_collection):
+    def maybe_translate(self, pref_collection=None):
         from assembl.tasks.translate import (
             translate_content, PrefCollectionTranslationTable)
         service = self.discussion.translation_service()
         if service.canTranslate is not None:
-            translations = PrefCollectionTranslationTable(
-                service, pref_collection)
+            translations = None
+            if pref_collection:
+                translations = PrefCollectionTranslationTable(
+                    service, pref_collection)
+
             translate_content(
                 self, translation_table=translations, service=service)
 

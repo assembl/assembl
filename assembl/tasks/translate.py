@@ -37,7 +37,7 @@ class DiscussionPreloadTranslationTable(TranslationTable):
         self.base_languages.discard(None)
 
     def languages_for(self, locale_code, db=None):
-        locale_code = self.service.asKnownLocale(locale_code)
+        locale_code = self.service.asKnownLocale(locale_code) or []
         return self.base_languages - set(locale_code)
 
 
