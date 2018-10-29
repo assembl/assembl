@@ -74,7 +74,7 @@ describe('DumbTimeline component', () => {
     expect(rendered).toMatchSnapshot();
   });
 
-  it('test', () => {
+  it('should display a not started Phase', () => {
     const timelineNotStarted = [
       {
         identifier: 'foo',
