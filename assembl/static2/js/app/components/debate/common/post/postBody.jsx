@@ -162,6 +162,8 @@ Html.defaultProps = {
   dbId: null
 };
 
+Html.displayName = 'Html';
+
 export const DumbPostBody = ({
   body,
   extracts,

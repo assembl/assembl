@@ -146,6 +146,17 @@
   },
   "//": "See https://facebook.github.io/jest/docs/webpack.html for more info",
   "jest": {
+    "coverageReporters": [
+      "json-summary", "lcov"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "lines": 52,
+        "statements": 51,
+        "functions": 39,
+        "branches": 38
+      }
+    },
     "moduleNameMapper": {
       "\\.(css|less|scss)$": "identity-obj-proxy",
       "jquery": "<rootDir>/node_modules/jquery/dist/jquery.slim.min.js",
