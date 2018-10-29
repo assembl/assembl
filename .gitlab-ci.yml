@@ -82,8 +82,8 @@ deploy_to_uat:
 
 deploy_to_prod:
   stage: deploy_to_prod
-  only:
-    - develop
+  # only:
+  #   - develop
   script:
     # empty script for now
     - python scripts/deploy_to_prod.py
