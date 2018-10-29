@@ -6,8 +6,8 @@ import { FormGroup, Button } from 'react-bootstrap';
 import { I18n, Translate } from 'react-redux-i18n';
 import classNames from 'classnames';
 import { EditorState } from 'draft-js';
-import { PublicationStates } from '../../../constants';
 
+import { PublicationStates } from '../../../constants';
 import createPostMutation from '../../../graphql/mutations/createPost.graphql';
 import uploadDocumentMutation from '../../../graphql/mutations/uploadDocument.graphql';
 import { convertContentStateToHTML, editorStateIsEmpty, uploadNewAttachments } from '../../../utils/draftjs';
@@ -20,7 +20,7 @@ export const TEXT_INPUT_MAX_LENGTH = 140;
 export const NO_BODY_LENGTH = 0;
 export const BODY_MAX_LENGTH = 3000;
 
-type TopPostFormProps = {
+type Props = {
   contentLocale: string,
   createPost: Function,
   ideaId: string,
@@ -38,20 +38,29 @@ type TopPostFormProps = {
   draftSuccessMsgId?: string
 };
 
-type TopPostFormState = {
+type State = {
   body: EditorState,
   isActive: boolean,
   subject: string,
   submitting: boolean
 };
 
-function submittingState(value) {
-  return {
-    submitting: value
-  };
-}
+export const submittingState = (value: boolean) => ({
+  submitting: value
+});
 
-class TopPostForm extends React.Component<TopPostFormProps, TopPostFormState> {
+export const getClassNames = (ideaOnColumn: boolean, submitting: boolean) =>
+  classNames([
+    'button-submit',
+    'button-dark',
+    'btn',
+    'btn-default',
+    'right',
+    !ideaOnColumn ? 'margin-l' : 'margin-m',
+    submitting && 'cursor-wait'
+  ]);
+
+export class DumbTopPostForm extends React.Component<Props, State> {
   formContainer: ?HTMLDivElement;
 
   static defaultProps = {
@@ -96,7 +105,7 @@ class TopPostForm extends React.Component<TopPostFormProps, TopPostFormState> {
     this.setState({ body: EditorState.createEmpty() });
   };
 
-  createTopPost = (publicationState) => {
+  createTopPost = (publicationState: string) => {
     const {
       contentLocale,
       createPost,
@@ -160,31 +169,17 @@ class TopPostForm extends React.Component<TopPostFormProps, TopPostFormState> {
 
   handleInputFocus = promptForLoginOr(() => this.displayForm(true));
 
-  updateBody = (newValue) => {
+  updateBody = (newValue: Object) => {
     this.setState({
       body: newValue
     });
   };
 
-  handleSubjectChange = (e) => {
+  handleSubjectChange = (e: SyntheticInputEvent<HTMLInputElement>) => {
     this.setState({
       subject: e.target.value
     });
   };
-
-  getClassNames() {
-    const { ideaOnColumn } = this.props;
-    const { submitting } = this.state;
-    return classNames([
-      'button-submit',
-      'button-dark',
-      'btn',
-      'btn-default',
-      'right',
-      !ideaOnColumn ? 'margin-l' : 'margin-m',
-      submitting && 'cursor-wait'
-    ]);
-  }
 
   setFormContainerRef = (el: ?HTMLDivElement): void => {
     this.formContainer = el;
@@ -225,7 +220,7 @@ class TopPostForm extends React.Component<TopPostFormProps, TopPostFormState> {
                 </Button>
               ) : null}
               <Button
-                className={this.getClassNames()}
+                className={getClassNames(ideaOnColumn, submitting)}
                 onClick={() => this.createTopPost(PublicationStates.PUBLISHED)}
                 style={{ marginBottom: '30px' }}
                 disabled={submitting}
@@ -234,7 +229,7 @@ class TopPostForm extends React.Component<TopPostFormProps, TopPostFormState> {
               </Button>
               {draftable ? (
                 <Button
-                  className={`${this.getClassNames()} btn-draft`}
+                  className={`${getClassNames(ideaOnColumn, submitting)} btn-draft`}
                   onClick={() => this.createTopPost(PublicationStates.DRAFT)}
                   disabled={submitting}
                 >
@@ -257,4 +252,4 @@ export default compose(
   connect(mapStateToProps),
   graphql(createPostMutation, { name: 'createPost' }),
   graphql(uploadDocumentMutation, { name: 'uploadDocument' })
-)(TopPostForm);
+)(DumbTopPostForm);
