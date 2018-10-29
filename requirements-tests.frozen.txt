@@ -4,15 +4,15 @@
 #
 #    pip-compile --output-file requirements-tests.frozen.txt requirements.in requirements-doc.in requirements-tests.in
 #
--e git+https://github.com/assembl/Beaker.git@assembl#egg=Beaker
--e git+https://github.com/maparent/cornice.git@master#egg=cornice
--e git+https://github.com/pythonforfacebook/facebook-sdk.git@ddc911f54d6136e149c03d145fd3760751a7d50d#egg=facebook_sdk
--e git+https://github.com/ecreall/graphql-wsgi.git@090df73f0184f20a643c3d3f413e55f3f4be3d45#egg=graphql-wsgi
--e git+https://github.com/dgilland/hashfs.git@386ce3b8c69576007549ddf5122282099b87fe42#egg=hashfs
+-e git+https://github.com/assembl/Beaker.git@79a9e4bd7b0f5eb059f537df3788d613f11ec6fd#egg=Beaker
+-e git+https://github.com/assembl/cornice.git@5c70aa88ab40199cde88afb786a897c787998efc#egg=cornice
+-e git+https://github.com/assembl/facebook-sdk.git@ddc911f54d6136e149c03d145fd3760751a7d50d#egg=facebook_sdk
+-e git+https://github.com/assembl/graphql-wsgi.git@090df73f0184f20a643c3d3f413e55f3f4be3d45#egg=graphql-wsgi
+-e git+https://github.com/assembl/hashfs.git@386ce3b8c69576007549ddf5122282099b87fe42#egg=hashfs
 -e git+https://github.com/assembl/jasmine-splinter-runner.git#egg=jasmine-splinter-runner
--e git+https://github.com/benoitg/jwzthreading.git@master#egg=jwzthreading
--e git+https://github.com/maparent/langdetect.git@no_sample#egg=langdetect
--e git+https://github.com/assembl/pyramid_beaker.git@assembl#egg=pyramid_beaker
+-e git+https://github.com/assembl/jwzthreading.git@a5a5af7ec260b21a7d25db83cad9874a3a5af90b#egg=jwzthreading
+-e git+https://github.com/assembl/langdetect.git@49a67668866fffd99a2978aec81d1e759cc0511e#egg=langdetect
+-e git+https://github.com/assembl/pyramid_beaker.git@1677e82555ec09449f5bc97a843062e3c1226b34#egg=pyramid_beaker
 alabaster==0.7.10         # via sphinx
 alembic==0.8.6
 amqp==2.3.2               # via kombu
@@ -159,7 +159,7 @@ singledispatch==3.4.0.3   # via graphene-sqlalchemy
 six==1.10.0
 snowballstemmer==1.2.1    # via sphinx
 social-auth-app-pyramid==1.0.0
-social-auth-core==1.7.0
+social-auth-core==2.0.0
 social-auth-storage-sqlalchemy==1.1.0
 sphinx==1.5.1
 sphinxcontrib-httpdomain==1.5.0

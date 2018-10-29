@@ -64,7 +64,7 @@ requests==2.10.0
 rotate-backups==4.4
 simplejson==3.8.2
 six==1.10.0
-social-auth-core==1.7.0
+social-auth-core==2.0.0
 social-auth-app-pyramid==1.0.0
 social-auth-storage-sqlalchemy==1.1.0
 SQLAlchemy==1.2.2
