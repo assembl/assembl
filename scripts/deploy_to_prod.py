@@ -3,6 +3,8 @@ import json
 
 prod_clients_json = os.environ.get('PROD_CLIENTS')
 
+print('HELLO WORLD')
+
 print(prod_clients_json)
 
 prod_clients = json.load(prod_clients_json)
