@@ -8,10 +8,10 @@ stages:
   - deploy_to_uat
   - deploy_to_prod
 
-# cache:
-#   paths:
-#     - assembl/static2/node_modules/
-#     - /usr/local/share/.cache/yarn/v2
+cache:
+  paths:
+    - assembl/static2/node_modules/
+    - /usr/local/share/.cache/yarn/v2
 
 test_frontend:
   stage: test
@@ -82,9 +82,10 @@ deploy_to_uat:
 
 deploy_to_prod:
   stage: deploy_to_prod
-  # only:
-  #   - develop
+  environment: PROD
+  only:
+    - develop
   script:
-    # empty script for now
+    # fake script for now
     - python scripts/deploy_to_prod.py
-  # when: manual
+  when: manual
