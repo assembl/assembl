@@ -4,7 +4,6 @@ import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 
 import { DumbTimelineSegment } from '../../../../../js/app/components/debate/navigation/timelineSegment';
-import { displayAlert } from '../../../../../js/app/utils/utilityManager';
 
 configure({ adapter: new Adapter() });
 
