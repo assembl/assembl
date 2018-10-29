@@ -16,7 +16,7 @@ import { BODY_MAX_LENGTH } from '../common/topPostForm';
 import { getIsPhaseCompletedById } from '../../../utils/timeline';
 import { scrollToPost } from '../../../utils/hashLinkScroll';
 
-type AnswerFormProps = {
+type Props = {
   contentLocale: string,
   createPost: Function,
   hideAnswerForm: Function,
@@ -30,13 +30,13 @@ type AnswerFormProps = {
   handleAnswerClick: Function
 };
 
-type AnswerFormState = {
+type State = {
   body: EditorState,
   submitting: boolean,
   isHidden: boolean
 };
 
-class AnswerForm extends React.PureComponent<AnswerFormProps, AnswerFormState> {
+export class DumbAnswerForm extends React.PureComponent<Props, State> {
   constructor() {
     super();
     this.state = {
@@ -57,7 +57,7 @@ class AnswerForm extends React.PureComponent<AnswerFormProps, AnswerFormState> {
     this.setState({ body: EditorState.createEmpty() }, hideAnswerForm);
   };
 
-  updateBody = (newValue) => {
+  updateBody = (newValue: EditorState) => {
     this.setState({
       body: newValue
     });
@@ -171,4 +171,4 @@ export default compose(
   connect(mapStateToProps),
   graphql(createPostMutation, { name: 'createPost' }),
   graphql(uploadDocumentMutation, { name: 'uploadDocument' })
-)(AnswerForm);
+)(DumbAnswerForm);
