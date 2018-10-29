@@ -87,4 +87,4 @@ deploy_to_prod:
   script:
     # empty script for now
     - python scripts/deploy_to_prod.py
-  when: manual
+  # when: manual
