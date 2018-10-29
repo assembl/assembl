@@ -16,6 +16,7 @@ import ToggleCommentButton from '../../../../../js/app/components/debate/common/
 import ReplyToCommentButton from '../../../../../js/app/components/debate/common/replyToCommentButton';
 import FictionCommentForm from '../../../../../js/app/components/debate/brightMirror/fictionCommentForm';
 import EditPostButton from '../../../../../js/app/components/debate/common/editPostButton';
+import DeletePostButton from '../../../../../js/app/components/debate/common/deletePostButton';
 // Type imports
 import type { FictionCommentGraphQLProps } from '../../../../../js/app/components/debate/brightMirror/fictionComment';
 
@@ -231,6 +232,10 @@ describe('<FictionComment /> - with mount', () => {
 
     it('should display a "Edit this message" button', () => {
       expect(wrapper.find(EditPostButton)).toHaveLength(1);
+    });
+
+    it('should display a "Delete this message" button', () => {
+      expect(wrapper.find(DeletePostButton)).toHaveLength(1);
     });
   });
 

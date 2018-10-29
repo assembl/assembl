@@ -19,10 +19,11 @@ import ToggleCommentButton from '../common/toggleCommentButton';
 import ReplyToCommentButton from '../common/replyToCommentButton';
 import FictionCommentForm from './fictionCommentForm';
 import EditPostButton from '../common/editPostButton';
+import DeletePostButton from '../common/deletePostButton';
 import ResponsiveOverlayTrigger from '../../common/responsiveOverlayTrigger';
 // Constant imports
 import { EMPTY_STRING, USER_ID_NOT_FOUND } from '../../../constants';
-import { editFictionCommentTooltip } from '../../common/tooltips';
+import { editFictionCommentTooltip, deleteFictionCommentTooltip } from '../../common/tooltips';
 // Types imports
 import type { CircleAvatarProps } from './circleAvatar';
 import type { FictionCommentFormProps } from './fictionCommentForm';
@@ -239,6 +240,16 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
         </span>
       ) : null;
 
+    const displayDeletePostButton = (
+      <ResponsiveOverlayTrigger placement="left" tooltip={deleteFictionCommentTooltip}>
+        <DeletePostButton
+          linkClassName="action-delete"
+          modalBodyMessage="debate.brightMirror.deleteFictionModalBody"
+          postId={99999999999}
+        />
+      </ResponsiveOverlayTrigger>
+    );
+
     const displayHeader = (
       <header className="meta">
         <p className="author">
@@ -272,7 +283,10 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
           {displayToggleCommentButton}
           {displayReplyToCommentButton}
         </div>
-        <div className="right-content">{displayEditPostButton}</div>
+        <div className="right-content">
+          {displayEditPostButton}
+          {displayDeletePostButton}
+        </div>
       </footer>
     );
 
