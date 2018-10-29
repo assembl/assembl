@@ -147,7 +147,7 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
     // Call the mutation function to create a comment
     createComment({ variables: createPostInputs })
       .then(() => {
-        // If needed post result can be fetch with `result.data.createPost.post`
+        // If needed post result can be fetched with `result.data.createPost.post`
         displayAlert('success', I18n.t('debate.thread.postSuccess'));
         // Set state here to update UI
 

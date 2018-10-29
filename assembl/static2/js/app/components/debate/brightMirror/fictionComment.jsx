@@ -146,7 +146,7 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
     // Call the mutation function to update a comment
     updateComment({ variables: updatePostInputs })
       .then((result) => {
-        // If needed post result can be fetch with `result.data.createPost.post`
+        // If needed post result can be fetched with `result.data.updatePost.post`
         displayAlert('success', I18n.t('debate.thread.postSuccess'));
 
         // Set state here to update UI
