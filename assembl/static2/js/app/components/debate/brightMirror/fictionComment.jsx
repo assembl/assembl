@@ -207,7 +207,7 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
       onCancelCommentCallback: () => this.toggleIsEditing(false),
       onSubmitCommentCallback: (comment: string) => this.updateCommentHandler(comment, commentParentId),
       updateTreeHeightCallback: () => this.updateTreeHeightCallbackHandler(),
-      commentValue: commentContent,
+      commentValue: updatedCommentContent || commentContent,
       editMode: true
     };
 
