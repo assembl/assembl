@@ -14,7 +14,6 @@ import IdeaWithCommentsQuery from '../graphql/IdeaWithPostsQuery.graphql';
 // Route helpers imports
 import { browserHistory } from '../router';
 import { get } from '../utils/routeMap';
-import { transformPosts } from './idea';
 // HOC imports
 import manageErrorAndLoading from '../components/common/manageErrorAndLoading';
 // Components imports
@@ -26,6 +25,7 @@ import FictionCommentHeader from '../components/debate/brightMirror/fictionComme
 import FictionCommentForm from '../components/debate/brightMirror/fictionCommentForm';
 import FictionCommentList from '../components/debate/brightMirror/fictionCommentList';
 // Utils imports
+import { transformPosts } from './idea';
 import { displayAlert } from '../utils/utilityManager';
 import { getConnectedUserId } from '../utils/globalFunctions';
 import Permissions, { connectedUserCan } from '../utils/permissions';
@@ -211,10 +211,12 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
 
     // Define user permission
     const userId = fiction.creator ? fiction.creator.userId : USER_ID_NOT_FOUND;
+    const connectedUserId = getConnectedUserId();
+    const userCanPost = connectedUserId && connectedUserCan(Permissions.ADD_POST);
     const userCanDelete =
-      (getConnectedUserId() === String(userId) && connectedUserCan(Permissions.DELETE_MY_POST)) ||
+      (connectedUserId === String(userId) && connectedUserCan(Permissions.DELETE_MY_POST)) ||
       connectedUserCan(Permissions.DELETE_POST);
-    const userCanEdit = getConnectedUserId() === String(userId) && connectedUserCan(Permissions.EDIT_MY_POST);
+    const userCanEdit = connectedUserId === String(userId) && connectedUserCan(Permissions.EDIT_MY_POST);
 
     // Define callback functions - TODO: move the logic out of render
     const deleteFictionCallback = () => {
@@ -289,6 +291,8 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
       onSubmitHandler: this.submitCommentHandler
     };
 
+    const displayFictionCommentForm = userCanPost ? <FictionCommentForm {...fictionCommentFormProps} /> : null;
+
     return (
       <Fragment>
         <div className="bright-mirror-fiction background-fiction-default">
@@ -310,7 +314,7 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
             <Col xs={12}>
               <FictionCommentHeader {...fictionCommentHeaderProps} />
               <article className="comments-content">
-                <FictionCommentForm {...fictionCommentFormProps} />
+                {displayFictionCommentForm}
                 <FictionCommentList {...fictionCommentListProps} />
               </article>
             </Col>
