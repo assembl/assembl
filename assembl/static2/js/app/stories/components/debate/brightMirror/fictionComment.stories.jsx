@@ -34,7 +34,7 @@ export const defaultFictionCommentGraphQL: FictionCommentGraphQLProps = {
   authorUserId: 1234567890,
   authorFullname: 'Luke Skywalker',
   circleAvatar: { ...defaultCircleAvatar },
-  commentParentId: 'dummyId',
+  commentId: 'dummyId',
   commentContent:
     'Est et rerum. Ut sed voluptatem possimus. Ut cumque magni sapiente voluptatem ut rerum aut harum quo. Non delectus quo.',
   contentLocale: 'fr',
@@ -61,7 +61,7 @@ storiesOf('FictionComment', module)
         authorFullname={text('Author fullname', playground.authorFullname)}
         circleAvatar={object('circleAvatar', playground.circleAvatar)}
         commentContent={text('Comment content', playground.commentContent)}
-        commentParentId={text('Comment parent id', playground.commentParentId)}
+        commentId={text('Comment id', playground.commentId)}
         contentLocale={playground.contentLocale}
         displayedPublishedDate={text('Displayed published date', playground.displayedPublishedDate)}
         measureTreeHeight={playground.measureTreeHeight}

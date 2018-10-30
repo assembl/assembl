@@ -59,8 +59,8 @@ export type FictionCommentGraphQLProps = {
   circleAvatar: CircleAvatarProps,
   /** Comment content */
   commentContent: string,
-  /** Comment parent id */
-  commentParentId: string,
+  /** Comment id, when submitting a new comment commentId is sent in order to set the comment parent id */
+  commentId: string,
   /** Content Locale */
   contentLocale: string,
   /** Comment displayed published date */
@@ -175,7 +175,7 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
       circleAvatar,
       children,
       commentContent,
-      commentParentId,
+      commentId,
       displayedPublishedDate,
       numChildren,
       modified,
@@ -199,14 +199,14 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
       onCancelCommentCallback: () => this.displayFictionCommentForm(false),
       onSubmitCommentCallback: (comment: string) => {
         this.displayFictionCommentForm(false);
-        fictionCommentExtraProps.submitCommentCallback(comment, commentParentId);
+        fictionCommentExtraProps.submitCommentCallback(comment, commentId);
       },
       updateTreeHeightCallback: () => this.updateTreeHeightCallbackHandler()
     };
 
     const editCommentFormProps: FictionCommentFormProps = {
       onCancelCommentCallback: () => this.toggleIsEditing(false),
-      onSubmitCommentCallback: (comment: string) => this.updateCommentHandler(comment, commentParentId),
+      onSubmitCommentCallback: (comment: string) => this.updateCommentHandler(comment, commentId),
       updateTreeHeightCallback: () => this.updateTreeHeightCallbackHandler(),
       commentValue: updatedCommentContent || commentContent,
       editMode: true
@@ -217,7 +217,6 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
 
     // Define user permission
     const connectedUserId = getConnectedUserId();
-    const userCanEdit = connectedUserId === String(authorUserId) && connectedUserCan(Permissions.EDIT_MY_POST);
 
     // Display FictionCommentForm when ReplyToCommentButton is clicked.
     // ReplyToCommentButton is hidden when FictionCommentForm is displayed
@@ -226,6 +225,7 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
     const displayFictionCommentForm = showFictionCommentForm ? <FictionCommentForm {...fictionCommentFormProps} /> : null;
 
     // Display EditPostButton only when the user have the required rights
+    const userCanEdit = connectedUserId === String(authorUserId) && connectedUserCan(Permissions.EDIT_MY_POST);
     const displayEditPostButton =
       userCanEdit && !isEditing ? (
         <ResponsiveOverlayTrigger placement="left" tooltip={editFictionCommentTooltip}>
@@ -240,15 +240,17 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
         </span>
       ) : null;
 
-    const displayDeletePostButton = (
+    // Display DeletePostButton only when the user have the required rights
+    const userCanDelete = connectedUserId === String(authorUserId) && connectedUserCan(Permissions.DELETE_MY_POST);
+    const displayDeletePostButton = userCanDelete ? (
       <ResponsiveOverlayTrigger placement="left" tooltip={deleteFictionCommentTooltip}>
         <DeletePostButton
           linkClassName="action-delete"
-          modalBodyMessage="debate.brightMirror.deleteFictionModalBody"
-          postId={99999999999}
+          modalBodyMessage="debate.brightMirror.commentFiction.deleteCommentBodyMessage"
+          postId={commentId}
         />
       </ResponsiveOverlayTrigger>
-    );
+    ) : null;
 
     const displayHeader = (
       <header className="meta">
@@ -328,7 +330,7 @@ const mapQueryToProps = ({ data }) => {
       authorFullname: creator ? creator.displayName : noAuthorSpecified,
       circleAvatar: circleAvatarProps,
       commentContent: fiction.body,
-      commentParentId: id,
+      commentId: id,
       contentLocale: contentLocale,
       displayedPublishedDate: moment(fiction.creationDate)
         .locale(contentLocale)

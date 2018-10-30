@@ -271,6 +271,10 @@ describe('<FictionComment /> - with mount', () => {
     it('should not display a "Edit this message" button', () => {
       expect(wrapper.find(EditPostButton)).toHaveLength(0);
     });
+
+    it('should not display a "Delete this message" button', () => {
+      expect(wrapper.find(DeletePostButton)).toHaveLength(0);
+    });
   });
 
   describe('when modified is true', () => {
