@@ -68,7 +68,6 @@ deploy_to_dev:
   stage: deploy_to_dev
   only:
     - tmp_master_for_ci_cd
-    - master
   script:
     # empty script for now
     - sh scripts/echo.sh
@@ -77,7 +76,6 @@ deploy_to_uat:
   stage: deploy_to_uat
   only:
     - tmp_master_for_ci_cd
-    - master
   script:
     # empty script for now
     - sh scripts/echo.sh
@@ -87,7 +85,6 @@ deploy_to_prod:
   environment: PROD
   only:
     - tmp_master_for_ci_cd
-    - master
   script:
     # fake script for now
     - python scripts/deploy_to_prod.py
