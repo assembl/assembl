@@ -65,26 +65,26 @@ build_wheel:
     - twine upload -u bluenove --skip-existing dist/*
 
 deploy_to_dev:
-  stage: deploy_to_dev
+  stage: tmp_master_for_ci_cd
   only:
-    - develop
+    - master
   script:
     # empty script for now
     - sh scripts/echo.sh
 
 deploy_to_uat:
-  stage: deploy_to_uat
+  stage: tmp_master_for_ci_cd
   only:
-    - develop
+    - master
   script:
     # empty script for now
     - sh scripts/echo.sh
 
 deploy_to_prod:
-  stage: deploy_to_prod
+  stage: tmp_master_for_ci_cd
   environment: PROD
   only:
-    - develop
+    - master
   script:
     # fake script for now
     - python scripts/deploy_to_prod.py
