@@ -83,7 +83,7 @@ deploy_to_uat:
     - sh scripts/echo.sh
 
 deploy_to_prod:
-  stage: depoy_to_prod
+  stage: deploy_to_prod
   environment: PROD
   only:
     - tmp_master_for_ci_cd
