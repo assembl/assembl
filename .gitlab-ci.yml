@@ -86,7 +86,7 @@ deploy_to_prod:
   stage: depoy_to_prod
   environment: PROD
   only:
-    - deploy_to_uat
+    - tmp_master_for_ci_cd
     - master
   script:
     # fake script for now
