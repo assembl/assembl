@@ -251,11 +251,6 @@ Assembl has several core fixtures that are important to note, in order to run th
     * A Pyramid GET request to "/", built on WebTest's TestRequest_, that includes an ``admin_user``
       as its ``authenticated_user_id``.
 
-- browser
-    * A browser fixture that is built on top of Splinter_ for integration testing. This specific fixture
-      is bound to the `phantom\.js`_ driver. To create a different, use this fixture as a template for
-      creating other drivers. Splinter has explicit documentation of different driver usages.
-
 
 Getting Started
 ^^^^^^^^^^^^^^^
