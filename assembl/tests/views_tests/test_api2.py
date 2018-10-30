@@ -34,6 +34,84 @@ def local_to_absolute(uri):
     return uri
 
 
+def test_make_two_columns_and_add_two_synthesis_for_the_columns(test_app,discussion, subidea_1, subidea_1_1, idea_message_column_positive_on_subidea_1_1):
+    """An integration test to verify the creation of of an extra column in a multicolumn."""
+    create_new_column_json="""{
+  "@id": "local:IdeaMessageColumn/%d",
+  "@type": "IdeaMessageColumn",
+  "@view": "default",
+  "color": "green",
+  "header": {
+    "@id": "local:LangString/53",
+    "@type": "LangString",
+    "@view": "extended",
+    "entries": [
+      {
+        "@id": "local:LangStringEntry/94",
+        "@language": "en",
+        "@type": "LangStringEntry",
+        "@view": "extended",
+        "value": "This is a positive header"
+      }
+    ]
+  },
+  "idea": "local:Idea/%d",
+  "message_classifier": "positive",
+  "name": {
+    "@id": "local:LangString/51",
+    "@type": "LangString",
+    "@view": "extended",
+    "entries": [
+      {
+        "@id": "local:LangStringEntry/92",
+        "@language": "en",
+        "@type": "LangStringEntry",
+        "@view": "extended",
+        "value": "Say my name"
+      }
+    ]
+  },
+  "previous_column": null,
+  "synthesis_title": {
+    "@id": "local:LangString/52",
+    "@type": "LangString",
+    "@view": "extended",
+    "entries": [
+      {
+        "@id": "local:LangStringEntry/93",
+        "@language": "en",
+        "@type": "LangStringEntry",
+        "@view": "extended",
+        "value": "Be positive Mohamed"
+      }
+    ]
+  },
+  "title": {
+    "@id": "local:LangString/50",
+    "@type": "LangString",
+    "@view": "extended",
+    "entries": [
+      {
+        "@id": "local:LangStringEntry/91",
+        "@language": "en",
+        "@type": "LangStringEntry",
+        "@view": "extended",
+        "value": "Add "
+      }
+    ]
+  }
+}""" % (idea_message_column_positive_on_subidea_1_1.id, subidea_1_1.id)
+
+    all_columns = test_app.get('/data/Discussion/%d/ideas/%d/message_columns' % (discussion.id, subidea_1_1.id))
+    assert all_columns.status_code == 200
+    assert all_columns.json_body[0]['synthesis_title']['entries'][0]['value'] == u"Be positive!"
+    add_new_column = test_app.put_json('/data/Discussion/%d/ideas/%d/message_columns/%d' % (discussion.id, subidea_1_1.id, idea_message_column_positive_on_subidea_1_1.id),json.loads(create_new_column_json))
+    assert add_new_column.status_code == 200
+
+    all_columns = test_app.get('/data/Discussion/%d/ideas/%d/message_columns' % (discussion.id, subidea_1_1.id))
+    all_columns.status_code == 200
+    assert all_columns.json_body[0]['synthesis_title']['entries'][0]['value'] == u"Be positive Mohamed"
+
 def test_get_ideas(discussion, test_app, synthesis_1,
                    subidea_1_1_1, test_session):
     all_ideas = test_app.get('/data/Idea')
