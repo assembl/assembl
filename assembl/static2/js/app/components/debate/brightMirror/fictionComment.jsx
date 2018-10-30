@@ -117,7 +117,7 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
     updatedModified: false
   };
 
-  componentDidMount() {
+  componentDidUpdate() {
     // Update tree height when component is rendered
     this.updateTreeHeightCallbackHandler();
   }
@@ -256,7 +256,7 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
     const displayCommentContent = isEditing ? (
       <FictionCommentForm {...editCommentFormProps} />
     ) : (
-      <p className="comment">{updatedCommentContent || commentContent}</p>
+      <p className="comment">{updatedCommentContent || commentContent || I18n.t('loading.wait')}</p>
     );
 
     const displayFooter = (
