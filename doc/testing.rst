@@ -327,5 +327,4 @@ TODO
 .. _TestRequest: http://docs.pylonsproject.org/projects/webtest/en/latest/api.html#webtest-app-testrequest
 .. _WebTest: http://docs.pylonsproject.org/projects/webtest/en/latest/
 .. _`Pyramid Documentation`: http://docs.pylonsproject.org/projects/pyramid/en/latest/narr/testing.html
-.. _Splinter: https://splinter.readthedocs.io/en/latest/
 .. _`phantom\.js`: http://phantomjs.org/
