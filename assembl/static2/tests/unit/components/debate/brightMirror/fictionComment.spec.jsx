@@ -38,7 +38,8 @@ configure({ adapter: new Adapter() });
 // Mock utils functions
 jest.mock('../../../../../js/app/utils/globalFunctions', () => ({
   getConnectedUserId: jest.fn(() => '1234567890'),
-  isMobile: { any: jest.fn(() => false) }
+  isMobile: { any: jest.fn(() => false) },
+  getIconPath: jest.fn(() => 'icons/path/avatar')
 }));
 jest.mock('../../../../../js/app/utils/permissions', () => ({ connectedUserCan: jest.fn(() => true) }));
 

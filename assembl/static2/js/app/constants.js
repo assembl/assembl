@@ -2,6 +2,7 @@
 import ThematicsMenu from './components/administration/thematicsMenu';
 
 export const DEFAULT_FAVICON = '/static/img/icon/infinite-1.png';
+export const ICONS_PATH = '/static2/img/icons';
 export const EXTRA_SMALL_SCREEN_WIDTH = 600;
 export const SMALL_SCREEN_WIDTH = 768;
 export const SMALL_SCREEN_HEIGHT = 812;

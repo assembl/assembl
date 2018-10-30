@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import { List } from 'immutable';
 import { I18n, Translate } from 'react-redux-i18n';
@@ -10,7 +11,24 @@ import manageErrorAndLoading from '../../common/manageErrorAndLoading';
 import { addLanguagePreference, removeLanguagePreference, languagePreferencesHasChanged } from '../../../actions/adminActions';
 import getAllPreferenceLanguage from '../../../graphql/AllLanguagePreferences.graphql';
 
-class LanguageSection extends React.Component {
+type Props = {
+  i18n: { locale: string },
+  data: AllLanguagePreferencesQuery & {
+    refetch: any => void
+  },
+  discussionLanguagePreferences: Array<string>,
+  signalLocaleChanged: boolean => void,
+  addLocaleToStore: string => void,
+  removeLocaleFromStore: string => void
+};
+
+type LocaleState = { [string]: { selected: boolean, name: string } };
+
+type State = {
+  localeState: LocaleState
+};
+
+class LanguageSection extends React.Component<Props, State> {
   constructor(props) {
     super(props);
     const { discussionLanguagePreferences, data } = props;
@@ -30,7 +48,7 @@ class LanguageSection extends React.Component {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: Props) {
     // Manage the change in interface locale, causing language names to change
     const currentLocale = this.props.i18n.locale;
     const nextLocale = nextProps.i18n.locale;
@@ -45,9 +63,9 @@ class LanguageSection extends React.Component {
     const newLocalePreferences = nextProps.discussionLanguagePreferences.sort();
     // Only update the state if there is a change in language preferences
     if (!currentEditLocaleList.equals(newLocalePreferences)) {
-      const newState = { ...this.state.localeState };
-      Object.entries(newState).forEach(([locale, state]) => {
-        const selectedState = state;
+      const newState: LocaleState = { ...this.state.localeState };
+      Object.keys(newState).forEach((locale) => {
+        const selectedState = newState[locale];
         if (newLocalePreferences.includes(locale)) {
           selectedState.selected = true;
         } else {
@@ -106,13 +124,13 @@ const mapStateToProps = ({ admin: { discussionLanguagePreferences }, i18n }) => 
 });
 
 const mapDispatchToProps = dispatch => ({
-  addLocaleToStore: (locale) => {
+  addLocaleToStore: (locale: string) => {
     dispatch(addLanguagePreference(locale));
   },
-  removeLocaleFromStore: (locale) => {
+  removeLocaleFromStore: (locale: string) => {
     dispatch(removeLanguagePreference(locale));
   },
-  signalLocaleChanged: (state) => {
+  signalLocaleChanged: (state: boolean) => {
     dispatch(languagePreferencesHasChanged(state));
   }
 });

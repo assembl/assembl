@@ -4,10 +4,7 @@ import { EditorState } from 'draft-js';
 export type I18nValue = { [string]: string };
 export type I18nRichTextValue = { [string]: EditorState };
 
-// file value for storage in react-final-form state
-export type FileValue =
-  | null
-  | string
+export type StrictFile =
   | {
       externalUrl: ?File,
       mimeType: ?string,
@@ -18,6 +15,8 @@ export type FileValue =
       mimeType: ?string,
       title: ?string
     };
+// file value for storage in react-final-form state
+export type FileValue = null | string | StrictFile;
 
 // file variable sent to mutations
 export type FileVariable = null | 'TO_DELETE' | File;

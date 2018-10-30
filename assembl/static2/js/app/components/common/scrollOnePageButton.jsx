@@ -1,12 +1,19 @@
+// @flow
 import React from 'react';
+
 import { isMobile } from '../../utils/globalFunctions';
 import { withScreenHeight } from '../common/screenDimensions';
 
-const scrollOnePageDown = screenHeight => () => {
+type Props = {
+  hidden: boolean,
+  screenHeight: number
+};
+
+const scrollOnePageDown = (screenHeight: number) => () => {
   window.scrollTo({ top: screenHeight, left: 0, behavior: 'smooth' });
 };
 
-export const DumbScrollOnePageButton = ({ hidden, screenHeight }) => {
+export const DumbScrollOnePageButton = ({ hidden, screenHeight }: Props) => {
   const scrollOnePageTopPosition = screenHeight - 35;
   const isTouchScreen = isMobile.any();
   return (

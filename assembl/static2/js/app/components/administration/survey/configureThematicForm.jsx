@@ -38,31 +38,30 @@ export function getFieldName(themeId: string, values: ThemesValue, fieldName: st
 }
 
 class ConfigureThematicForm extends React.PureComponent<Props> {
-  constructor(props: Props) {
-    super(props);
+  getName = () => {
     const { values, thematicId, slug } = this.props;
-    this.name = getFieldName(thematicId, values ? values.themes : [], 'themes');
-    if (!this.name) {
+    const name = getFieldName(thematicId, values ? values.themes : [], 'themes');
+    if (!name) {
       goTo(get('administration', { slug: slug, id: PHASES.survey }, { section: 1 }));
     }
-  }
-
-  name: string = '';
+    return name;
+  };
 
   render() {
     const { editLocale } = this.props;
+    const name = this.getName();
     return (
       <div className="form-container">
         <Field
           required
           editLocale={editLocale}
-          name={`${this.name}.title`}
+          name={`${name}.title`}
           component={MultilingualTextFieldAdapter}
           label={`${I18n.t('administration.tableOfThematics.thematicTitle')} ${editLocale.toUpperCase()}`}
         />
         <Field
           deleteTooltip={deleteThematicImageTooltip}
-          name={`${this.name}.img`}
+          name={`${name}.img`}
           component={FileUploaderFieldAdapter}
           label={I18n.t('administration.tableOfThematics.headerLabel')}
         />

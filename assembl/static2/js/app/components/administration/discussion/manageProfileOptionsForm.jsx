@@ -1,4 +1,6 @@
+// @flow
 import React from 'react';
+import { Map, List } from 'immutable';
 import { OverlayTrigger, Row, Button, Checkbox } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { I18n, Translate } from 'react-redux-i18n';
@@ -6,10 +8,32 @@ import { I18n, Translate } from 'react-redux-i18n';
 import SectionTitle from '../sectionTitle';
 import TextField from './textField';
 import { createRandomId } from '../../../utils/globalFunctions';
-import { getEntryValueForLocale } from '../../../utils/i18n';
+import { getEntryValueForLocale, type LangstringEntriesList } from '../../../utils/i18n';
 import { addTextFieldTooltip, hideTextFieldTooltip } from '../../common/tooltips';
 import * as actions from '../../../actions/adminActions/profileOptions';
 import { displayModal, closeModal } from '../../../utils/utilityManager';
+
+type TextFieldProps = {
+  id: string,
+  identifier: string,
+  _toDelete: boolean,
+  order: number,
+  fieldType: string,
+  titleEntries: LangstringEntriesList
+};
+
+type Props = {
+  editLocale: string,
+  textFields: List<Map<TextFieldProps>>,
+  addSelectField: () => void,
+  addTextField: () => void,
+  deleteTextField: string => void,
+  moveTextFieldDown: () => void,
+  moveTextFieldUp: () => void,
+  toggleTextFieldRequired: string => void,
+  toggleTextFieldHidden: string => void,
+  updateTextFieldTitle: (string, string, string) => void
+};
 
 const ManageProfileOptionsForm = ({
   addSelectField,
@@ -22,8 +46,8 @@ const ManageProfileOptionsForm = ({
   toggleTextFieldRequired,
   toggleTextFieldHidden,
   updateTextFieldTitle
-}) => {
-  const confirmTextFieldDeletion = (id) => {
+}: Props) => {
+  const confirmTextFieldDeletion = (id: string) => {
     const modalTitle = <Translate value="administration.confirmTextFieldDeletionTitle" />;
     const body = <Translate value="administration.confirmTextFieldDeletion" />;
     const footer = [
@@ -121,7 +145,7 @@ const ManageProfileOptionsForm = ({
                     moveDown={moveTextFieldDown}
                     moveUp={moveTextFieldUp}
                     required={tf.get('required')}
-                    title={getEntryValueForLocale(tf.get('titleEntries'), editLocale, '')}
+                    title={getEntryValueForLocale(tf.get('titleEntries'), editLocale, '') || ''}
                     toggleRequired={() => {
                       toggleTextFieldRequired(tf.get('id'));
                     }}
