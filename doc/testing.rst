@@ -235,9 +235,6 @@ Assembl has several core fixtures that are important to note, in order to run th
       fixture. It can be used to query the database, push new models, etc. It is an SQLAlchemy
       session maker. A ``test_session`` depends on a ``default_db_data``
 
-- test_server
-    * A uWSGI server fixture that refers to an Assembl instance
-
 - test_app
     * An Assembl instance fixture, built on WebTest's TestApp_ testing tool. This fixture
       builds on ``test_app_no_perm`` and gives the ``admin_user`` fixture administrative permissions,

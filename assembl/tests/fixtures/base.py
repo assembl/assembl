@@ -16,7 +16,6 @@ from webtest import TestApp
 from pkg_resources import get_distribution
 from pyramid.threadlocal import manager
 from pyramid import testing
-from pytest_localserver.http import WSGIServer
 import traceback
 
 import assembl
@@ -271,33 +270,6 @@ def test_app_no_login_real_policy(request, test_app_no_perm):
         bootstrap_db_data(session, False)
 
     return test_app_no_perm
-
-
-@pytest.fixture(scope="function")
-def test_server(request, test_app, empty_db):
-    """A uWSGI server fixture with permissions, admin user logged in"""
-
-    server = WSGIServer(application=test_app.app)
-    server.start()
-
-    def fin():
-        print "finalizer test_server"
-        server.stop()
-    request.addfinalizer(fin)
-    return server
-
-@pytest.fixture(scope="function")
-def test_server_no_login_real_policy(request, test_app_no_login_real_policy, empty_db):
-    """A uWSGI server fixture with permissions, and no user logged in"""
-
-    server = WSGIServer(application=test_app_no_login_real_policy.app)
-    server.start()
-
-    def fin():
-        print "finalizer test_server"
-        server.stop()
-    request.addfinalizer(fin)
-    return server
 
 
 @pytest.fixture(scope="function")
