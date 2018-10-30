@@ -19,19 +19,19 @@ type Props = {
 };
 
 type TitleProps = {
-  value: ?string // eslint-disable-line
+  value: ?string
 };
 
 type SideDescriptionProps = {
-  content: string // eslint-disable-line
+  content: string
 };
 
 type TopDescriptionProps = {
-  content: string // eslint-disable-line
+  content: string
 };
 
-type BottomDescription = {
-  content: string // eslint-disable-line
+type BottomDescriptionProps = {
+  content: string
 };
 
 type ContentProps = {
@@ -63,6 +63,10 @@ class Media extends React.Component<Props> {
     <div className="media-description-layer media-description-top" dangerouslySetInnerHTML={{ __html: content }} />
   );
 
+  static BottomDescription = ({ content }: BottomDescriptionProps) => (
+    <div className="media-description-layer media-description-bottom" dangerouslySetInnerHTML={{ __html: content }} />
+  );
+
   static ImageModal = (content: React.Node) => () => {
     displayModal(null, content, false, null, null, true, 'large');
   };
@@ -86,10 +90,6 @@ class Media extends React.Component<Props> {
       </div>
     );
   };
-
-  static BottomDescription = ({ content }: BottomDescription) => (
-    <div className="media-description-layer media-description-bottom" dangerouslySetInnerHTML={{ __html: content }} />
-  );
 
   render() {
     const { title, descriptionTop, descriptionBottom, descriptionSide, htmlCode, mediaFile, noTitle } = this.props;

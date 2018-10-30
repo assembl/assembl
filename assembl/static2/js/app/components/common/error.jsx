@@ -8,9 +8,9 @@ type Props = {
 const Error = ({ errorMessage }: Props) => (
   <div>
     <p>
-      <b>
+      <strong>
         <Translate value="error.reason" />
-      </b>&nbsp;&quot;{errorMessage}&quot;
+      </strong>&nbsp;&quot;{errorMessage}&quot;
     </p>
   </div>
 );

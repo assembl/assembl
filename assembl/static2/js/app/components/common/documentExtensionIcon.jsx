@@ -2,11 +2,12 @@
 import * as React from 'react';
 import { Map } from 'immutable';
 
+import { getIconPath } from '../../utils/globalFunctions';
+
 type DocumentExtensionIconProps = {
   filename: string
 };
 
-const iconsPath = '/static2/img/icons/black/';
 const defaultIcon = 'doc.svg';
 const mapping = Map({
   doc: 'doc.svg',
@@ -28,14 +29,14 @@ export const getExtension = (filename: string): string => {
   return parts[parts.length - 1];
 };
 
-export const getIconPath = (extension: string): string => {
+export const getIconPathByExtension = (extension: string): string => {
   const icon = mapping.get(extension, defaultIcon);
-  return `${iconsPath}${icon}`;
+  return getIconPath(icon, 'black');
 };
 
 const DocumentExtensionIcon = ({ filename }: DocumentExtensionIconProps) => {
   const extension = getExtension(filename);
-  const iconPath = getIconPath(extension);
+  const iconPath = getIconPathByExtension(extension);
   return <img className="attachment-icon" src={iconPath} alt={extension} />;
 };
 

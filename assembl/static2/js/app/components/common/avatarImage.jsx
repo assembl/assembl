@@ -1,6 +1,8 @@
 // @flow
 import React from 'react';
 
+import { getIconPath } from '../../utils/globalFunctions';
+
 type Props = {
   userId: ?(number | string),
   userName: ?string
@@ -9,7 +11,8 @@ type Props = {
 class AvatarImage extends React.PureComponent<Props> {
   render() {
     const { userId, userName } = this.props;
-    const src = userId ? `/user/id/${userId}/avatar/30` : '/static2/img/icons/avatar.png';
+    const avatarIcon = getIconPath('avatar.png');
+    const src = userId ? `/user/id/${userId}/avatar/30` : avatarIcon;
     return (
       <img
         src={src}
@@ -18,7 +21,7 @@ class AvatarImage extends React.PureComponent<Props> {
         alt={userName}
         onError={(e) => {
           const target = e.target;
-          target.src = '/static2/img/icons/avatar.png';
+          target.src = avatarIcon;
         }}
       />
     );

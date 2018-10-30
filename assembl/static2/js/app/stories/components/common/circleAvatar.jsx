@@ -7,6 +7,7 @@ import { withKnobs, text, select } from '@storybook/addon-knobs';
 /* eslint-enable */
 
 import CircleAvatar from '../../../components/common/circleAvatar';
+import { getIconPath } from '../../../utils/globalFunctions';
 
 export const customCircleAvatar = {
   src: 'https://loremflickr.com/300/300'
@@ -15,7 +16,7 @@ export const customCircleAvatar = {
 const playground = {
   size: '34',
   username: 'bright-mirror-author',
-  src: ['/static2/img/icons/avatar.png', 'https://loremflickr.com/300/300']
+  src: [getIconPath('avatar.png'), 'https://loremflickr.com/300/300']
 };
 
 storiesOf('CircleAvatar', module)

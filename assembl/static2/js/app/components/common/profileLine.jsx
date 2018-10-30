@@ -3,7 +3,6 @@ import React from 'react';
 import { Translate } from 'react-redux-i18n';
 import moment from 'moment';
 
-// $FlowFixMe
 import '../../../../css/components/profileLine.scss';
 import AvatarImage from './avatarImage';
 
