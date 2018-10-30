@@ -119,15 +119,19 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
 
   componentDidMount() {
     // Update tree height when component is rendered
-    this.props.measureTreeHeight();
+    this.updateTreeHeightCallbackHandler();
   }
 
+  updateTreeHeightCallbackHandler = () => {
+    this.props.measureTreeHeight();
+  };
+
   displayFictionCommentForm = (show: boolean) => {
-    this.setState({ showFictionCommentForm: show }, this.props.measureTreeHeight());
+    this.setState({ showFictionCommentForm: show }, this.updateTreeHeightCallbackHandler());
   };
 
   toggleIsEditing = (value: boolean) => {
-    this.setState({ isEditing: value }, this.props.measureTreeHeight());
+    this.setState({ isEditing: value }, this.updateTreeHeightCallbackHandler());
   };
 
   updateCommentHandler = (comment: string, commentId: string) => {
@@ -195,12 +199,14 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
       onSubmitCommentCallback: (comment: string) => {
         this.displayFictionCommentForm(false);
         fictionCommentExtraProps.submitCommentCallback(comment, commentParentId);
-      }
+      },
+      updateTreeHeightCallback: () => this.updateTreeHeightCallbackHandler()
     };
 
     const editCommentFormProps: FictionCommentFormProps = {
       onCancelCommentCallback: () => this.toggleIsEditing(false),
       onSubmitCommentCallback: (comment: string) => this.updateCommentHandler(comment, commentParentId),
+      updateTreeHeightCallback: () => this.updateTreeHeightCallbackHandler(),
       commentValue: commentContent,
       editMode: true
     };

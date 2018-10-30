@@ -16,14 +16,18 @@ export type FictionCommentFormProps = {
   /** Optional flag that indicates if the form should be in edit mode */
   editMode?: boolean,
   /** Optional comment value, is used when editing a comment */
-  commentValue?: string
+  commentValue?: string,
+  /** Optional callback used to call measureTreeHeight from fictionComment when editing a comment */
+  updateTreeHeightCallback?: ?Function
 };
 
 export type FictionCommentFormState = {
   /** Comment input text */
   commentTextareaValue: string,
   /** Flag that toggles form buttons display */
-  showFormActionButtons: boolean
+  showFormActionButtons: boolean,
+  /** Current text area height, it is updated when the content have line wraps or includes new lines */
+  currentTextAreaHeight: string
 };
 
 const COMMENT_TEXTAREA_ID = 'comment-textarea';
@@ -39,13 +43,17 @@ class FictionCommentForm extends Component<FictionCommentFormProps, FictionComme
 
   state = {
     commentTextareaValue: this.props.commentValue ? this.props.commentValue : EMPTY_STRING,
-    showFormActionButtons: this.props.editMode ? this.props.editMode : false
+    showFormActionButtons: this.props.editMode ? this.props.editMode : false,
+    currentTextAreaHeight: EMPTY_STRING
   };
 
   // Handler methods
   formInputOnChangeHandler = (event: SyntheticEvent<HTMLInputElement>) => {
     const { id, value } = event.currentTarget;
+    const { height } = event.currentTarget.style;
+
     if (id === COMMENT_TEXTAREA_ID) {
+      this.onHeightChangedHandler(height);
       this.setState({ commentTextareaValue: value });
     }
   };
@@ -94,6 +102,24 @@ class FictionCommentForm extends Component<FictionCommentFormProps, FictionComme
     // Hide action buttons when focus is not on COMMENT_TEXTAREA_ID
     if (event.currentTarget.id === COMMENT_TEXTAREA_ID && event.relatedTarget === null) {
       this.setState({ showFormActionButtons: false });
+    }
+  };
+
+  onHeightChangedHandler = (height: string) => {
+    const { currentTextAreaHeight } = this.state;
+    const { updateTreeHeightCallback } = this.props;
+
+    if (currentTextAreaHeight !== height) {
+      this.setState(
+        {
+          currentTextAreaHeight: height
+        },
+        () => {
+          if (updateTreeHeightCallback) {
+            updateTreeHeightCallback();
+          }
+        }
+      );
     }
   };
 
