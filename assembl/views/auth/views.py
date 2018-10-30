@@ -363,11 +363,11 @@ def avatar(request):
     profile = get_profile(request)
     size = int(request.matchdict.get('size'))
     if profile:
-        gravatar_url = profile.avatar_url(size, request.application_url)
+        gravatar_url = profile.avatar_url(size, '/')
         return HTTPFound(location=gravatar_url)
     default = request.registry.settings.get(
         'avatar.default_image_url', '') or \
-        request.application_url+'/static/img/icon/user.png'
+        '/static/img/icon/user.png'
     return HTTPFound(location=default)
 
 

@@ -93,8 +93,7 @@ def home_view(request):
             # If referred here from a post url, want to be able to
             # send the user back. Usually, Assembl will send the user
             # here to login on private discussions.
-            referrer = request.url
-            next_view = path_qs(referrer)
+            next_view = request.path_qs
 
         login_url = get_social_autologin(request, discussion, next_view)
         if login_url:
