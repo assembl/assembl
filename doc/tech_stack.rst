@@ -178,7 +178,7 @@ Testing
 ^^^^^^^
 
 pytest_
-  Our main testing framework. One feature we use a lot is `pytest fixtures`_, in :py:mod:`assembl.tests.fixtures`. Front-end tests are run by the backend, thanks to splinter_.
+  Our main testing framework. One feature we use a lot is `pytest fixtures`_, in :py:mod:`assembl.tests.fixtures`.
 
 Mocha_
   Our frontend testing framework
@@ -189,14 +189,8 @@ Chai_
 coverage_
   Verify the coverage of back-end tests
 
-jasmine_splinter_runner_
-  Run the Mocha_ tests from pytest and collect test results.
-
 mock_
   Mock objects and monkey-patch python modules.
-
-splinter_
-  Drive the PhantomJS_ web browser through selenium_ for front-end tests.
 
 flaky_
   Allows to define some tests as flaky, i.e. attempt them a few times before declaring failure.
@@ -699,7 +693,6 @@ We have used multiple processes rather than threads.
 .. _ipython: http://ipython.org/
 .. _iso639: https://github.com/janpipek/iso639-python
 .. _isodate: http://cheeseshop.python.org/pypi/isodate
-.. _jasmine_splinter_runner: https://github.com/cobrateam/jasmine-splinter-runner
 .. _Jed: https://slexaxton.github.io/Jed/
 .. _Jinja2: http://jinja.pocoo.org/
 .. _jwzthreading: http://www.amk.ca/python/code/jwz.html
@@ -758,7 +751,6 @@ We have used multiple processes rather than threads.
 .. _RESTful: https://en.wikipedia.org/wiki/Representational_state_transfer
 .. _requests: http://python-requests.org/
 .. _scikit_learn: http://scikit-learn.org/
-.. _selenium: http://www.seleniumhq.org/
 .. _Sentry: https://github.com/getsentry/sentry
 .. _Setuptools: http://pythonhosted.org/setuptools/
 .. _simplejson: http://github.com/simplejson/simplejson
@@ -766,7 +758,6 @@ We have used multiple processes rather than threads.
 .. _SockJS: https://github.com/sockjs/sockjs-client
 .. _sockjs_client: https://github.com/sockjs/sockjs-client
 .. _sockjs_tornado: https://github.com/assembl/sockjs-tornado/
-.. _splinter: https://github.com/cobrateam/splinter
 .. _SQLAlchemy: http://www.sqlalchemy.org/
 .. _sqltap: http://sqltap.inconshreveable.com/
 .. _Supervisord: http://supervisord.org/

@@ -6,7 +6,6 @@ The core fixtures that will:
     4) drop the tables (upon completion)
     5) create a pyramid test application
     6) create a databse session
-    7) A fixture for a headless browser
 """
 
 from datetime import datetime
@@ -17,8 +16,6 @@ from webtest import TestApp
 from pkg_resources import get_distribution
 from pyramid.threadlocal import manager
 from pyramid import testing
-from pytest_localserver.http import WSGIServer
-from splinter import Browser
 import traceback
 
 import assembl
@@ -273,56 +270,6 @@ def test_app_no_login_real_policy(request, test_app_no_perm):
         bootstrap_db_data(session, False)
 
     return test_app_no_perm
-
-
-@pytest.fixture(scope="function")
-def test_server(request, test_app, empty_db):
-    """A uWSGI server fixture with permissions, admin user logged in"""
-
-    server = WSGIServer(application=test_app.app)
-    server.start()
-
-    def fin():
-        print "finalizer test_server"
-        server.stop()
-    request.addfinalizer(fin)
-    return server
-
-@pytest.fixture(scope="function")
-def test_server_no_login_real_policy(request, test_app_no_login_real_policy, empty_db):
-    """A uWSGI server fixture with permissions, and no user logged in"""
-
-    server = WSGIServer(application=test_app_no_login_real_policy.app)
-    server.start()
-
-    def fin():
-        print "finalizer test_server"
-        server.stop()
-    request.addfinalizer(fin)
-    return server
-
-
-@pytest.fixture(scope="module")
-def browser(request):
-    """A Splinter-based browser fixture - used for integration
-    testing"""
-
-    import sys
-    import os
-    from os.path import exists
-    if sys.platform == 'linux2':
-        if exists('/usr/lib/chromium-browser/chromedriver'):  # ubuntu
-            os.environ["PATH"] += ":/usr/lib/chromium-browser"
-        if exists('/usr/lib/chromium/chromedriver'):  # debian jessie (on stretch it's /usr/bin/chromedriver)
-            os.environ["PATH"] += ":/usr/lib/chromium"
-    browser = Browser('chrome', headless=True)
-
-    def fin():
-        print "finalizer browser"
-        browser.quit()
-    request.addfinalizer(fin)
-
-    return browser
 
 
 @pytest.fixture(scope="function")
