@@ -45,24 +45,6 @@ $fiction-toolbar-icon-size: 17px;
     padding-right: 15px;
     padding-top: 30px;
 
-    // Tree.jsx style adjustments
-    .infinite-separator {
-      border-bottom: 1px solid #192882;
-      margin: 30px auto;
-      position: relative;
-      width: 200px;
-
-      span {
-        background-color: $white;
-        margin: 0 0 0 75px;
-        padding: 0 15px 0 0;
-        position: absolute;
-        text-align: center;
-        top: -8px;
-        width: 50px;
-      }
-    }
-
     .level {
       .expand-indented {
         display: none;

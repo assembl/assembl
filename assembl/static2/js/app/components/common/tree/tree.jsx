@@ -59,7 +59,7 @@ class Tree extends React.Component<Props> {
 
   cache: CellMeasurerCache = new CellMeasurerCache({
     defaultHeight: 500,
-    minHeight: 185,
+    minHeight: 100,
     fixedWidth: true
   });
 
