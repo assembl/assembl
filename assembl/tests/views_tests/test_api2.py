@@ -55,7 +55,7 @@ def test_make_two_columns_and_add_two_synthesis_for_the_columns(test_app,discuss
       }
     ]
   },
-  "idea": "local:Idea/3",
+  "idea": "local:Idea/%d",
   "message_classifier": "positive",
   "name": {
     "@id": "local:LangString/51",
@@ -100,7 +100,7 @@ def test_make_two_columns_and_add_two_synthesis_for_the_columns(test_app,discuss
       }
     ]
   }
-}""" % (idea_message_column_positive_on_subidea_1_1.id)
+}""" % (idea_message_column_positive_on_subidea_1_1.id, subidea_1_1.id)
 
     all_columns = test_app.get('/data/Discussion/%d/ideas/%d/message_columns' % (discussion.id, subidea_1_1.id))
     assert all_columns.status_code == 200
