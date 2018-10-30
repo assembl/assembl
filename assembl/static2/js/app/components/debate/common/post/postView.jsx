@@ -11,6 +11,7 @@ import RelatedIdeas from './relatedIdeas';
 import PostBody from './postBody';
 import HarvestingMenu from '../../../harvesting/harvestingMenu';
 import type { Props as PostProps } from './index';
+import { getExtractTagId } from '../../../../utils/extract';
 
 type Props = PostProps & {
   body: string,
@@ -89,7 +90,7 @@ class PostView extends React.PureComponent<Props, State> {
   handleMouseUpWhileHarvesting = (): void => {
     const { isHarvesting } = this.props;
     const { dbId } = this.props.data.post;
-    const isSelectionInBody = elementContainsSelection(document.getElementById(`message-body-local:Content/${dbId}`));
+    const isSelectionInBody = elementContainsSelection(document.getElementById(getExtractTagId(dbId)));
     if (isHarvesting && isSelectionInBody) {
       const harvestingAnchorPosition = this.getAnchorPosition();
       this.setState({ displayHarvestingAnchor: true, harvestingAnchorPosition: harvestingAnchorPosition });

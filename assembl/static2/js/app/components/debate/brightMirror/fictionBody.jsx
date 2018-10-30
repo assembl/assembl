@@ -5,6 +5,7 @@ import SideCommentMenu from './sideComment/sideCommentMenu';
 import { elementContainsSelection, getConnectedUserId } from '../../../utils/globalFunctions';
 import PostBody from '../common/post/postBody';
 import { COMMENT_DYNAMIC_OFFSET, ANCHOR_OFFSET } from '../../../constants';
+import { getExtractTagId } from '../../../utils/extract';
 
 export type Props = {
   id: string,
@@ -55,7 +56,7 @@ class FictionBody extends React.Component<Props, State> {
   setCommentBadgeFixedPosition = () => {
     const { dbId } = this.props;
     // $FlowFixMe because element may be null
-    const body = document.getElementById(`message-body-local:Content/${dbId}`).getBoundingClientRect();
+    const body = document.getElementById(getExtractTagId(dbId)).getBoundingClientRect();
     this.setState({
       commentBadgeFixedPosition: { x: body.right, y: body.top },
       commentBadgePositionInit: true
@@ -98,7 +99,7 @@ class FictionBody extends React.Component<Props, State> {
 
   handleMouseUpWhileHarvesting = () => {
     const { dbId } = this.props;
-    const isSelectionInBody = elementContainsSelection(document.getElementById(`message-body-local:Content/${dbId}`));
+    const isSelectionInBody = elementContainsSelection(document.getElementById(getExtractTagId(dbId)));
 
     if (getConnectedUserId() && isSelectionInBody) {
       const commentAnchorPosition = this.getAnchorPosition();

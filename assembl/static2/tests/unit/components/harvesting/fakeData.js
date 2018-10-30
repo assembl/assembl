@@ -1,3 +1,5 @@
+import { getExtractTagId } from '../../../../js/app/utils/extract';
+
 export const extracts = [
   {
     body: 'Hello world!',
@@ -15,8 +17,8 @@ export const extracts = [
       {
         offsetEnd: 988,
         offsetStart: 973,
-        xpathEnd: '//div[@id=\'message-body-local:Content/3059\']/',
-        xpathStart: '//div[@id=\'message-body-local:Content/3059\']/'
+        xpathEnd: `//div[@id='${getExtractTagId(3059)}']/`,
+        xpathStart: `//div[@id='${getExtractTagId(3059)}']/`
       }
     ]
   },
@@ -36,8 +38,8 @@ export const extracts = [
       {
         offsetEnd: 123,
         offsetStart: 22,
-        xpathEnd: '//div[@id=\'message-body-local:Content/3050\']/',
-        xpathStart: '//div[@id=\'message-body-local:Content/3050\']/'
+        xpathEnd: `//div[@id='${getExtractTagId(3050)}']/`,
+        xpathStart: `//div[@id='${getExtractTagId(3050)}']/`
       }
     ]
   }
@@ -59,8 +61,8 @@ export const extract = {
     {
       offsetEnd: 988,
       offsetStart: 973,
-      xpathEnd: '//div[@id=\'message-body-local:Content/3059\']/',
-      xpathStart: '//div[@id=\'message-body-local:Content/3059\']/'
+      xpathEnd: `//div[@id='${getExtractTagId(3059)}']/`,
+      xpathStart: `//div[@id='${getExtractTagId(3059)}']/`
     }
   ]
 };
@@ -82,8 +84,8 @@ export const submittedExtract = {
     {
       offsetEnd: 988,
       offsetStart: 973,
-      xpathEnd: '//div[@id=\'message-body-local:Content/3059\']/',
-      xpathStart: '//div[@id=\'message-body-local:Content/3059\']/'
+      xpathEnd: `//div[@id='${getExtractTagId(3059)}']/`,
+      xpathStart: `//div[@id='${getExtractTagId(3059)}']/`
     }
   ]
 };

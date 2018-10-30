@@ -4,6 +4,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { withInfo } from '@storybook/addon-info';
 import { withKnobs } from '@storybook/addon-knobs';
+import { getExtractTagId } from '../../../../../utils/extract';
 /* eslint-enable */
 
 import {
@@ -59,8 +60,8 @@ const extract0 = {
     {
       offsetEnd: 988,
       offsetStart: 973,
-      xpathEnd: '//div[@id=\'message-body-local:Content/3059\']/',
-      xpathStart: '//div[@id=\'message-body-local:Content/3059\']/'
+      xpathEnd: `//div[@id='${getExtractTagId(3059)}']/`,
+      xpathStart: `//div[@id='${getExtractTagId(3059)}']/`
     }
   ],
   comment: {
@@ -86,8 +87,8 @@ const extract1 = {
     {
       offsetEnd: 988,
       offsetStart: 973,
-      xpathEnd: '//div[@id=\'message-body-local:Content/3059\']/',
-      xpathStart: '//div[@id=\'message-body-local:Content/3059\']/'
+      xpathEnd: `//div[@id='${getExtractTagId(3059)}']/`,
+      xpathStart: `//div[@id='${getExtractTagId(3059)}']/`
     }
   ],
   comment: {
@@ -113,8 +114,8 @@ const extract2 = {
     {
       offsetEnd: 988,
       offsetStart: 973,
-      xpathEnd: '//div[@id=\'message-body-local:Content/3059\']/',
-      xpathStart: '//div[@id=\'message-body-local:Content/3059\']/'
+      xpathEnd: `//div[@id='${getExtractTagId(3059)}']/`,
+      xpathStart: `//div[@id='${getExtractTagId(3059)}']/`
     }
   ],
   comment: {

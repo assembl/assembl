@@ -19,7 +19,7 @@ import TaxonomyOverflowMenu from './taxonomyOverflowMenu';
 import FormControlWithLabel from '../common/formControlWithLabel';
 import { displayAlert, displayModal, closeModal } from '../../utils/utilityManager';
 import { editExtractTooltip, deleteExtractTooltip, nuggetExtractTooltip, qualifyExtractTooltip } from '../common/tooltips';
-import { NatureIcons, ActionIcons } from '../../utils/extractQualifier';
+import { NatureIcons, ActionIcons } from '../../utils/extract';
 import { ExtractStates } from '../../constants';
 
 type Props = {
