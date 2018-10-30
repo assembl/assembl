@@ -95,6 +95,35 @@ describe('TopPostForm component', () => {
     expect(subject).toEqual('Hello');
   });
 
+  it('should return a key key to display a message in the alert when the subject is not filled', () => {
+    const wrapper = shallow(<DumbTopPostForm {...props} />);
+    const instance = wrapper.instance();
+    const result = instance.getWarningMessageToDisplay('PUBLISHED', '', false, false);
+    const expectedResult = 'debate.thread.fillSubject';
+    expect(result).toEqual(expectedResult);
+  });
+
+  it('should return a key to display a message in the alert when the body is not filled', () => {
+    const wrapper = shallow(<DumbTopPostForm {...props} />);
+    const instance = wrapper.instance();
+    const result = instance.getWarningMessageToDisplay('PUBLISHED', 'Here the subject', true, false);
+    expect(result).toEqual('654321');
+  });
+
+  it('should return a key to display a message in the alert when the body and the subject are not filled in a draft', () => {
+    const wrapper = shallow(<DumbTopPostForm {...props} />);
+    const instance = wrapper.instance();
+    const result = instance.getWarningMessageToDisplay('DRAFT', '', true, false);
+    expect(result).toEqual('debate.brightMirror.fillEitherTitleContent');
+  });
+
+  it('should return null when the form is fully completed', () => {
+    const wrapper = shallow(<DumbTopPostForm {...props} />);
+    const instance = wrapper.instance();
+    const result = instance.getWarningMessageToDisplay('PUBLISHED', 'Here the subject', false, false);
+    expect(result).toEqual(null);
+  });
+
   it('should return the button class names when the multi-column view is active', () => {
     const buttonClasses = getClassNames(true, false);
     const expectedResult = 'button-submit button-dark btn btn-default right margin-m';

@@ -105,6 +105,17 @@ export class DumbTopPostForm extends React.Component<Props, State> {
     this.setState({ body: EditorState.createEmpty() });
   };
 
+  getWarningMessageToDisplay = (publicationState: string, subject: string, bodyIsEmpty: boolean, ideaOnColumn: boolean) => {
+    if (publicationState === PublicationStates.DRAFT && (!subject && bodyIsEmpty)) {
+      return 'debate.brightMirror.fillEitherTitleContent';
+    } else if (!subject && !ideaOnColumn) {
+      return 'debate.thread.fillSubject';
+    } else if (bodyIsEmpty) {
+      return this.props.fillBodyLabelMsgId;
+    }
+    return null;
+  };
+
   createTopPost = (publicationState: string) => {
     const {
       contentLocale,
@@ -113,9 +124,8 @@ export class DumbTopPostForm extends React.Component<Props, State> {
       refetchIdea,
       uploadDocument,
       messageClassifier,
-      ideaOnColumn,
-      fillBodyLabelMsgId,
       postSuccessMsgId,
+      ideaOnColumn,
       draftSuccessMsgId
     } = this.props;
     const { body, subject } = this.state;
@@ -155,14 +165,9 @@ export class DumbTopPostForm extends React.Component<Props, State> {
             this.setState(submittingState(false));
           });
       });
-    } else if (publicationState === PublicationStates.DRAFT && (!subject && bodyIsEmpty)) {
-      displayAlert('warning', I18n.t('debate.brightMirror.fillEitherTitleContent'));
-      this.setState(submittingState(false));
-    } else if (!subject && !ideaOnColumn) {
-      displayAlert('warning', I18n.t('debate.thread.fillSubject'));
-      this.setState(submittingState(false));
-    } else if (bodyIsEmpty) {
-      displayAlert('warning', I18n.t(fillBodyLabelMsgId));
+    } else {
+      const warningMessage = this.getWarningMessageToDisplay(publicationState, subject, bodyIsEmpty, ideaOnColumn);
+      if (warningMessage) displayAlert('warning', I18n.t(warningMessage));
       this.setState(submittingState(false));
     }
   };
