@@ -1,4 +1,4 @@
-// @noflow
+// @flow
 import * as React from 'react';
 import { Translate } from 'react-redux-i18n';
 import { Col, Tooltip } from 'react-bootstrap';
@@ -25,6 +25,18 @@ type SentimentsCounts = {
 
 type Posts = {
   edges: Array<{ node: { sentimentCounts: { [string]: number }, publicationState: string } }>
+};
+
+type AnnouncementContent = {
+  __typename: string,
+  body: string,
+  title: string
+};
+
+type Props = {
+  isMultiColumns: boolean,
+  anouncementcontent: AnnouncementContent,
+  idea: Idea
 };
 
 export const getColumnInfos = (messageColumns: Array<IdeaMessageColumnFragment>) => {
@@ -77,55 +89,50 @@ const dirtySplitHack = (announcementContent) => {
     };
 };
 
-class Announcement extends React.Component<$FlowFixMeProps> {
-  render = () => {
-    const { ideaWithPostsData: { idea }, announcementContent, isMultiColumns } = this.props;
-    const { numContributors, numPosts, posts, messageColumns } = idea;
-    const sentimentsCount = getSentimentsCount(posts);
-    const mediaContent = announcementContent.body && dirtySplitHack(announcementContent);
-    const columnInfos = getColumnInfos(messageColumns);
-    const doughnutElements = isMultiColumns ? columnInfos : createDoughnutElements(sentimentsCount);
-    return (
-      <div className="announcement">
-        <div className="announcement-title">
-          <div className="title-hyphen">&nbsp;</div>
-          <h3 className="announcement-title-text dark-title-1">
-            <Translate value="debate.thread.announcement" />
-          </h3>
-        </div>
-        <Col xs={12} md={8} className="announcement-media col-md-push-4">
-          {mediaContent && <TextAndMedia {...mediaContent} />}
-        </Col>
-        <Col xs={12} md={4} className="col-md-pull-8">
-          <div className="announcement-statistics">
-            <div className="announcement-doughnut">
-              <StatisticsDoughnut elements={doughnutElements} />
-            </div>
-            {isMultiColumns ? (
-              <div className="announcement-numbers-multicol">
-                {columnInfos.map((col, index) => (
-                  <div style={{ color: col.color }} key={`col-${index}`}>
-                    {col.count} <span className="col-announcement-count">{col.name}</span>
-                  </div>
-                ))}
-                <div className="color">
-                  {numContributors} <span className="assembl-icon-profil" />
-                </div>
-              </div>
-            ) : (
-              <div className="announcement-numbers">
-                <PostsAndContributorsCount
-                  className="announcement-numbers"
-                  numContributors={numContributors}
-                  numPosts={numPosts}
-                />
-              </div>
-            )}
-          </div>
-        </Col>
+const Announcement = ({ idea, announcementContent, isMultiColumns }: Props) => {
+  const { numContributors, numPosts, posts, messageColumns } = idea;
+  const sentimentsCount = getSentimentsCount(posts);
+  const mediaContent = announcementContent.body && dirtySplitHack(announcementContent);
+  const columnInfos = getColumnInfos(messageColumns);
+  const doughnutElements = isMultiColumns ? columnInfos : createDoughnutElements(sentimentsCount);
+  return (
+    <div className="announcement">
+      <div className="announcement-title">
+        <div className="title-hyphen">&nbsp;</div>
+        <h3 className="announcement-title-text dark-title-1">
+          <Translate value="debate.thread.announcement" />
+        </h3>
       </div>
-    );
-  };
-}
+      <Col xs={12} md={8} className="announcement-media col-md-push-4">
+        {mediaContent && <TextAndMedia {...mediaContent} />}
+      </Col>
+      <Col xs={12} md={4} className="col-md-pull-8">
+        <div className="announcement-statistics">
+          <div className="announcement-doughnut">
+            <StatisticsDoughnut elements={doughnutElements} />
+          </div>
+          {isMultiColumns ? (
+            <div className="announcement-numbers-multicol">
+              {columnInfos.map((col, index) => (
+                <div style={{ color: col.color }} key={`col-${index}`}>
+                  {col.count} <span className="col-announcement-count">{col.name}</span>
+                </div>
+              ))}
+              <div className="color">
+                {numContributors} <span className="assembl-icon-profil" />
+              </div>
+            </div>
+          ) : (
+            <div className="announcement-numbers">
+              <PostsAndContributorsCount className="announcement-numbers" numContributors={numContributors} numPosts={numPosts} />
+            </div>
+          )}
+        </div>
+      </Col>
+    </div>
+  );
+};
+
+Announcement.displayName = 'Announcement';
 
 export default Announcement;
