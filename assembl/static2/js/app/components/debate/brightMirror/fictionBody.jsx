@@ -17,7 +17,8 @@ export type Props = {
   extracts: Array<FictionExtractFragment>,
   dbId: number,
   bodyMimeType: string,
-  refetchPost: Function
+  refetchPost: Function,
+  userCanReply: boolean
 };
 
 type State = {
@@ -135,7 +136,19 @@ class FictionBody extends React.Component<Props, State> {
   };
 
   render() {
-    const { id, title, content, contentLocale, lang, extracts, refetchPost, dbId, bodyMimeType, ideaId } = this.props;
+    const {
+      id,
+      title,
+      content,
+      contentLocale,
+      lang,
+      extracts,
+      refetchPost,
+      dbId,
+      bodyMimeType,
+      ideaId,
+      userCanReply
+    } = this.props;
     const {
       displayCommentAnchor,
       displaySubmitBox,
@@ -161,6 +174,7 @@ class FictionBody extends React.Component<Props, State> {
           handleClickAnchor={this.handleClickAnchor}
           cancelSubmit={this.cancelSubmit}
           setCommentBadgeToExtractPosition={this.setCommentBadgeToExtractPosition}
+          userCanReply={userCanReply}
         />
 
         <PostBody

@@ -1,0 +1,24 @@
+.side-comment-badge {
+  z-index: 0;
+
+  .badge-total {
+    left: -2px;
+
+    &.wide {
+      left: -4px;
+      width: 22px;
+    }
+  }
+
+  .side-comment-button {
+    margin-top: 5px;
+
+    .assembl-icon-suggest {
+      color: $first-color;
+
+      &:before {
+        font-size: 23px;
+      }
+    }
+  }
+}

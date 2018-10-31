@@ -46,7 +46,8 @@ export const defaultFictionBody: FictionBodyProps = {
   extracts: [],
   dbId: 1,
   bodyMimeType: 'text/html',
-  refetchPost: Function
+  refetchPost: Function,
+  userCanReply: false
 };
 
 const noFictionBody: FictionBodyProps = {
@@ -75,6 +76,7 @@ storiesOf('FictionBody', module)
         bodyMimeType={playgroundFictionBody.bodyMimeType}
         refetchPost={playgroundFictionBody.refetchPost}
         ideaId={playgroundFictionBody.ideaId}
+        userCanReply={playgroundFictionBody.userCanReply}
       />
     ))
   );

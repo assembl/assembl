@@ -7,13 +7,10 @@ import { withKnobs } from '@storybook/addon-knobs';
 import { getExtractTagId } from '../../../../../utils/extract';
 /* eslint-enable */
 
-import {
-  DumbSideCommentBox,
-  type Props as SideCommentBoxProps
-} from '../../../../../components/debate/brightMirror/sideComment/sideCommentBox';
+import InnerBoxView, { Props } from '../../../../../components/debate/brightMirror/sideComment/innerBoxView';
 import { ExtractStates } from '../../../../../constants';
 
-const currentUser = {
+export const currentUser = {
   displayName: 'John Doe User',
   id: '1223456',
   userId: 1,
@@ -27,7 +24,7 @@ const currentUser = {
   }
 };
 
-const commentor = {
+export const commentor = {
   displayName: 'Odile Commenter',
   id: '21',
   userId: 2,
@@ -41,12 +38,12 @@ const commentor = {
   }
 };
 
-const richBody =
+export const richBody =
   '<p><strong>Lorem ipsum dolor sit amet.</strong></p><div class="atomic-block" data-blocktype="atomic">' +
   '<img class="attachment-image" src="https://picsum.photos/400/200/" alt="" title="loremPixel.jpg" ' +
   'data-id="1" data-mimetype="image/jpeg"></div><p></p><p>https://youtu.be/MzfBIcJaJSU</p>';
 
-const extract0 = {
+export const extract0 = {
   body: 'This is the extract!',
   creationDate: '2018-03-29T16:28:27.324276+00:00',
   creator: currentUser,
@@ -73,7 +70,7 @@ const extract0 = {
   }
 };
 
-const extract1 = {
+export const extract1 = {
   body: 'This is the extract!',
   creationDate: '2018-03-29T16:28:27.324276+00:00',
   creator: currentUser,
@@ -100,7 +97,7 @@ const extract1 = {
   }
 };
 
-const extract2 = {
+export const extract2 = {
   body: 'This is the extract!',
   creationDate: '2018-03-29T16:28:27.324276+00:00',
   creator: currentUser,
@@ -127,88 +124,34 @@ const extract2 = {
   }
 };
 
-const extractWithReply = {
-  body: 'This is the extract!',
-  creationDate: '2018-03-29T16:28:27.324276+00:00',
-  creator: currentUser,
-  extractNature: 'issue',
-  extractAction: 'classify',
-  extractState: ExtractStates.PUBLISHED,
-  id: '987643',
-  lang: 'en',
-  important: false,
-  textFragmentIdentifiers: [
-    {
-      offsetEnd: 988,
-      offsetStart: 973,
-      xpathEnd: '//div[@id=\'message-body-local:Content/3059\']/',
-      xpathStart: '//div[@id=\'message-body-local:Content/3059\']/'
-    }
-  ],
-  comment: {
-    id: '0',
-    creationDate: '2018-01-26T09:19:01.492406+00:00',
-    creator: commentor,
-    body: richBody,
-    attachments: [],
-    reply: {
-      id: '1',
-      creationDate: '2018-01-27T10:19:01.492406+00:00',
-      creator: currentUser,
-      body: 'This is a reply to a comment',
-      attachments: []
-    }
-  }
-};
-
-export const defaultSideCommentBoxProps: SideCommentBoxProps = {
-  ideaId: '0',
-  extracts: [extract0],
-  currentUser: currentUser,
-  postId: '1',
-  submitting: false,
+export const defaultInnerBoxViewProps: Props = {
   contentLocale: 'en',
-  lang: 'en',
-  selection: null,
-  displayCommentBox: true,
-  setCommentBoxDisplay: Function,
-  cancelSubmit: Function,
-  addPostExtract: Function,
-  createPost: Function,
-  refetchPost: Function,
-  toggleExtractsBox: Function,
-  position: { x: 0, y: 0 },
-  setPositionToExtract: Function,
-  clearHighlights: Function,
-  userCanReply: false
+  extractIndex: 0,
+  extracts: [extract0],
+  changeCurrentExtract: Function
 };
 
-export const multipleSideCommentBoxProps: SideCommentBoxProps = {
-  ...defaultSideCommentBoxProps,
-  extracts: [extract0, extract1, extract2],
-  setPositionToExtract: () => {}
+export const multipleInnerBoxViewProps: Props = {
+  ...defaultInnerBoxViewProps,
+  extractIndex: 1,
+  extracts: [extract0, extract1, extract2]
 };
 
-export const submittingSideCommentBoxProps: SideCommentBoxProps = {
-  ...defaultSideCommentBoxProps,
-  submitting: true
-};
-
-export const canReplySideCommentBoxProps: SideCommentBoxProps = {
-  ...defaultSideCommentBoxProps,
-  userCanReply: true
-};
-
-export const withReplySideCommentBoxProps: SideCommentBoxProps = {
-  ...defaultSideCommentBoxProps,
-  extracts: [extractWithReply],
-  setPositionToExtract: () => {}
-};
-
-storiesOf('SideCommentBox', module)
+storiesOf('InnerBoxView', module)
   .addDecorator(withKnobs)
-  .add('single comment', withInfo()(() => <DumbSideCommentBox {...defaultSideCommentBoxProps} />))
-  .add('multiple comments', withInfo()(() => <DumbSideCommentBox {...multipleSideCommentBoxProps} />))
-  .add('submitting', withInfo()(() => <DumbSideCommentBox {...submittingSideCommentBoxProps} />))
-  .add('can reply', withInfo()(() => <DumbSideCommentBox {...canReplySideCommentBoxProps} />))
-  .add('with reply', withInfo()(() => <DumbSideCommentBox {...withReplySideCommentBoxProps} />));
+  .add(
+    'single comment',
+    withInfo()(() => (
+      <div className="harvesting-box">
+        <InnerBoxView {...defaultInnerBoxViewProps} />
+      </div>
+    ))
+  )
+  .add(
+    'multiple comments',
+    withInfo()(() => (
+      <div className="harvesting-box">
+        <InnerBoxView {...multipleInnerBoxViewProps} />
+      </div>
+    ))
+  );

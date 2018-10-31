@@ -278,7 +278,8 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
       bodyMimeType: fiction.bodyMimeType,
       // $FlowFixMe dbId is never null
       dbId: fiction.dbId,
-      refetchPost: brightMirrorFictionData.refetch
+      refetchPost: brightMirrorFictionData.refetch,
+      userCanReply: userCanEdit
     };
 
     const fictionCommentFormProps: FictionCommentFormProps = {

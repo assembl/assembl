@@ -1,0 +1,32 @@
+.side-comment-anchor {
+  position: absolute;
+  z-index: 1000;
+
+  .button {
+    width: 130px;
+    height: 35px;
+    border-radius: 4px;
+    background-color: $first-color;
+    text-align: center;
+    line-height: 35px;
+    cursor: pointer;
+  }
+
+  .arrow-down {
+    position: relative;
+    left: 60px;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid $first-color;
+  }
+
+  .suggest {
+    font-family: $font-family3;
+    font-size: $font-size-xs;
+    letter-spacing: 1.5px;
+    color: $white;
+    text-transform: uppercase;
+  }
+}

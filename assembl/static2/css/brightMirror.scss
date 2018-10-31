@@ -36,6 +36,12 @@ $fiction-toolbar-icon-size: 17px;
   padding-top: 30px;
 }
 
+.side-comment-container {
+  position: absolute;
+  left: 0;
+  padding-top: 10px;
+}
+
 .bright-mirror-comments {
   padding: 30px 0;
   z-index: 100;
@@ -135,3 +141,6 @@ $fiction-toolbar-icon-size: 17px;
 @import "components/fictionsList";
 @import "components/instructionsText";
 @import "components/fictionSideComment";
+@import 'components/fictionSideCommentAnchor';
+@import 'components/fictionSideCommentBadge';
+@import 'components/fictionSideCommentBox';

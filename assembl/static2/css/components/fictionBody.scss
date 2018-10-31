@@ -17,6 +17,11 @@
     }
   }
 
+  .active-extract,
+  .selection-highlight {
+    background-color: $opacity-color;
+  }
+
   @media screen and (min-width: $screen-sm-min) {
     .post-body-title {
       font-size: $font-size-xll;
