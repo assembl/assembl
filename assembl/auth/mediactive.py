@@ -50,5 +50,5 @@ class Mediactive(BaseAuth):
         user = super(Mediactive, self).complete(*args, **kwargs)
         data = self.strategy.request_data()
         if user and data.get('next', None):
-            self.strategy.session.pop('next')
+            self.strategy.request.session.pop('next')
         return user
