@@ -10,6 +10,7 @@ import type { Props as FictionBodyProps } from '../../../../../js/app/components
 
 configure({ adapter: new Adapter() });
 
+const defaultIdeaId: string = '0';
 const defaultId: string = '0';
 const defaultTitle: string = 'Fugit veritatis nemo';
 const defaultContent: string = 'Vero et ut et quia quo. Molestiae ut cupiditate odio numquam veniam esse cumque modi.';
@@ -21,6 +22,7 @@ const bodyMimeType: string = 'text/html';
 const refetchPost: Function = jest.fn();
 
 const defaultFictionBody: FictionBodyProps = {
+  ideaId: defaultIdeaId,
   id: defaultId,
   title: defaultTitle,
   content: defaultContent,
@@ -97,7 +99,8 @@ describe('<FictionBody /> - snapshots', () => {
       isAuthorAccountDeleted: defaultIsAuthorAccountDeleted,
       dbId: defaultDbId,
       bodyMimeType: bodyMimeType,
-      refetchPost: refetchPost
+      refetchPost: refetchPost,
+      ideaId: defaultIdeaId
     };
     const component = renderer.create(<FictionBody {...props} />);
     const tree = component.toJSON();

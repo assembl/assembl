@@ -10,6 +10,7 @@ import FictionBody from '../../../../components/debate/brightMirror/fictionBody'
 import type { Props as FictionBodyProps } from '../../../../components/debate/brightMirror/fictionBody';
 
 export const defaultFictionBody: FictionBodyProps = {
+  ideaId: '0',
   id: '0',
   title: 'Les émotifs',
   content: `
@@ -73,6 +74,7 @@ storiesOf('FictionBody', module)
         dbId={playgroundFictionBody.dbId}
         bodyMimeType={playgroundFictionBody.bodyMimeType}
         refetchPost={playgroundFictionBody.refetchPost}
+        ideaId={playgroundFictionBody.ideaId}
       />
     ))
   );

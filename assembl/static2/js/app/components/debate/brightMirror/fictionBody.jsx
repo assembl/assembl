@@ -9,6 +9,7 @@ import { getExtractTagId } from '../../../utils/extract';
 
 export type Props = {
   id: string,
+  ideaId: string,
   title: string,
   content: string,
   contentLocale: string,
@@ -134,7 +135,7 @@ class FictionBody extends React.Component<Props, State> {
   };
 
   render() {
-    const { id, title, content, contentLocale, lang, extracts, refetchPost, dbId, bodyMimeType } = this.props;
+    const { id, title, content, contentLocale, lang, extracts, refetchPost, dbId, bodyMimeType, ideaId } = this.props;
     const {
       displayCommentAnchor,
       displaySubmitBox,
@@ -147,6 +148,7 @@ class FictionBody extends React.Component<Props, State> {
       <div ref={this.fictionBodyView}>
         <SideCommentMenu
           postId={id}
+          ideaId={ideaId}
           lang={contentLocale}
           extracts={extracts}
           commentAnchorPosition={commentAnchorPosition}

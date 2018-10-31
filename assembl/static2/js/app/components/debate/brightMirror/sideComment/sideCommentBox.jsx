@@ -12,7 +12,7 @@ import activeHtml from 'react-active-html';
 import { EditorState } from 'draft-js';
 
 import addPostExtractMutation from '../../../../graphql/mutations/addPostExtract.graphql';
-import addExtractCommentMutation from '../../../../graphql/mutations/addExtractComment.graphql';
+import createPostMutation from '../../../../graphql/mutations/createPost.graphql';
 import manageErrorAndLoading from '../../../../components/common/manageErrorAndLoading';
 import { getConnectedUserId, getConnectedUserName } from '../../../../utils/globalFunctions';
 import AvatarImage from '../../../common/avatarImage';
@@ -26,6 +26,7 @@ import { transformLinksInHtml /* getUrls */ } from '../../../../utils/linkify';
 export type Props = {
   extracts: Array<FictionExtractFragment>,
   postId: string,
+  ideaId: string,
   submitting: boolean,
   contentLocale: string,
   lang?: string,
@@ -33,7 +34,7 @@ export type Props = {
   setCommentBoxDisplay: Function,
   cancelSubmit: Function,
   addPostExtract: Function,
-  addExtractComment: Function,
+  createPost: Function,
   refetchPost: Function,
   toggleCommentsBox?: Function,
   clearHighlights: Function,
@@ -108,6 +109,16 @@ class DumbSideCommentBox extends React.Component<Props, State> {
     }
   }
 
+  componentDidUpdate() {
+    const { submitting, extractIndex } = this.state;
+    if (!submitting) {
+      const currentExtract = this.getCurrentExtract(extractIndex);
+      if (currentExtract) {
+        this.hightlightExtract(currentExtract);
+      }
+    }
+  }
+
   wrapSelectedText = () => {
     const { selection } = this.props;
     if (selection && selection.toString().length > 0) {
@@ -137,7 +148,7 @@ class DumbSideCommentBox extends React.Component<Props, State> {
   };
 
   submit = (): void => {
-    const { postId, contentLocale, lang, addPostExtract, addExtractComment, setCommentBoxDisplay, refetchPost } = this.props;
+    const { ideaId, postId, contentLocale, lang, addPostExtract, createPost, setCommentBoxDisplay, refetchPost } = this.props;
     const { body, selectionText, serializedAnnotatorRange } = this.state;
     if (!selectionText || !serializedAnnotatorRange) {
       return;
@@ -164,11 +175,12 @@ class DumbSideCommentBox extends React.Component<Props, State> {
     addPostExtract({ variables: variables })
       .then((result) => {
         const postVars = {
+          ideaId: ideaId,
           extractId: result.data.addPostExtract.extract.id,
           body: convertContentStateToHTML(body.getCurrentContent()),
           contentLocale: contentLocale
         };
-        addExtractComment({ variables: postVars }).then(() => {
+        createPost({ variables: postVars }).then(() => {
           this.setState({
             submitting: false
           });
@@ -337,8 +349,8 @@ export default compose(
   graphql(addPostExtractMutation, {
     name: 'addPostExtract'
   }),
-  graphql(addExtractCommentMutation, {
-    name: 'addExtractComment'
+  graphql(createPostMutation, {
+    name: 'createPost'
   }),
   manageErrorAndLoading({ displayLoader: true })
 )(DumbSideCommentBox);

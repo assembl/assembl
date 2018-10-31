@@ -108,6 +108,7 @@ class PostInterface(SQLAlchemyInterface):
     discussion_id = graphene.String(description=docs.PostInterface.discussion_id)
     modified = graphene.Boolean(description=docs.PostInterface.modified)
     parent_post_creator = graphene.Field(lambda: AgentProfile, description=docs.PostInterface.parent_post_creator)
+    parent_extract_id = graphene.ID(description=docs.PostInterface.parent_extract_id)
 
     def resolve_db_id(self, args, context, info):
         return self.id
@@ -238,6 +239,12 @@ class PostInterface(SQLAlchemyInterface):
     def resolve_modified(self, args, context, info):
         return self.get_modification_date() > self.creation_date
 
+    def resolve_parent_extract_id(self, args, context, info):
+        if self.parent_extract_id is None:
+            return None
+
+        return models.Extract.graphene_id_for(self.parent_extract_id)
+
 
 class Post(SecureObjectType, SQLAlchemyObjectType):
     __doc__ = docs.Post.__doc__
@@ -256,48 +263,6 @@ class ExtractComment(SecureObjectType, SQLAlchemyObjectType):
         model = models.ExtractComment
         interfaces = (Node, PostInterface)
         only_fields = ('id', 'parent_extract')
-
-
-class AddExtractComment(graphene.Mutation):
-    __doc__ = docs.AddExtractComment.__doc__
-
-    class Input:
-        extract_id = graphene.ID(required=True, description=docs.AddExtractComment.extract_id)
-        body = graphene.String(required=True, description=docs.AddExtractComment.body)
-        parent_id = graphene.ID(description=docs.AddExtractComment.parent_id)
-
-    extract = graphene.Field(lambda: Extract)
-
-    @staticmethod
-    @abort_transaction_on_exception
-    def mutate(root, args, context, info):
-        require_cls_permission(CrudPermissions.CREATE, models.ExtractComment, context)
-        discussion_id = context.matchdict['discussion_id']
-        discussion = models.Discussion.get(discussion_id)
-
-        user_id = context.authenticated_userid or Everyone
-
-        extract_id = args.get('extract_id')
-        extract_id_global = int(Node.from_global_id(extract_id)[1])
-        extract = models.Extract.get(extract_id_global)
-
-        body_html = sanitize_html(args.get('body'))
-        body_langstring = models.LangString.create(body_html)
-
-        new_post = models.ExtractComment(
-            discussion=discussion,
-            body=body_langstring,
-            creator_id=user_id,
-            body_mime_type=u'text/html',
-            creation_date=datetime.utcnow(),
-            parent_extract_id=extract.id,
-        )
-
-        db = new_post.db
-        db.add(new_post)
-        db.flush()
-
-        return AddExtractComment(extract=extract)
 
 
 class PostConnection(graphene.Connection):
@@ -337,6 +302,7 @@ class CreatePost(graphene.Mutation):
         attachments = graphene.List(graphene.String, description=docs.CreatePost.attachments)
         message_classifier = graphene.String(description=docs.CreatePost.message_classifier)
         publication_state = PublicationStates(description=docs.CreatePost.publication_state)
+        extract_id = graphene.ID(description=docs.CreatePost.extract_id)
 
     post = graphene.Field(lambda: Post)
 
@@ -352,10 +318,17 @@ class CreatePost(graphene.Mutation):
         idea_id = args.get('idea_id')
         idea_id = int(Node.from_global_id(idea_id)[1])
         in_reply_to_idea = models.Idea.get(idea_id)
+
         if isinstance(in_reply_to_idea, models.Question):
             cls = models.PropositionPost
         else:
             cls = models.AssemblPost
+
+        extract_id = args.get('extract_id')
+        if extract_id:
+            extract_id_global = int(Node.from_global_id(extract_id)[1])
+            extract = models.Extract.get(extract_id_global)
+            cls = models.ExtractComment
 
         in_reply_to_post = None
         if cls == models.AssemblPost:
@@ -429,16 +402,30 @@ class CreatePost(graphene.Mutation):
                         subject_langstring = models.LangString.create(
                             new_subject, locale)
 
-            new_post = cls(
-                discussion=discussion,
-                subject=subject_langstring,
-                body=body_langstring,
-                creator_id=user_id,
-                body_mime_type=u'text/html',
-                message_classifier=classifier,
-                creation_date=datetime.utcnow(),
-                publication_state=publication_state
-            )
+            if cls == models.ExtractComment:
+                new_post = cls(
+                    discussion=discussion,
+                    subject=subject_langstring,
+                    body=body_langstring,
+                    creator_id=user_id,
+                    body_mime_type=u'text/html',
+                    message_classifier=classifier,
+                    creation_date=datetime.utcnow(),
+                    publication_state=publication_state,
+                    parent_extract_id=extract.id
+                )
+            else:
+                new_post = cls(
+                    discussion=discussion,
+                    subject=subject_langstring,
+                    body=body_langstring,
+                    creator_id=user_id,
+                    body_mime_type=u'text/html',
+                    message_classifier=classifier,
+                    creation_date=datetime.utcnow(),
+                    publication_state=publication_state
+                )
+
             new_post.guess_languages()
             db = new_post.db
             db.add(new_post)

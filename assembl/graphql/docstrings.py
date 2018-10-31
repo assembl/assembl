@@ -520,6 +520,7 @@ class PostInterface:
     discussion_id = """The database identifier of the Discussion."""
     modified = """A boolean flag to say whether the post is modified or not."""
     parent_post_creator = "The User or AgentProfile who created the parent post."
+    parent_extract_id = "The Extract id to which the post is associated with"
 
 
 class Post:
@@ -538,6 +539,7 @@ class CreatePost:
     attachments = PostInterface.attachments
     message_classifier = PostInterface.message_classifier
     publication_state = PostInterface.publication_state
+    extract_id = """The extract if the post is a comment of a fiction"""
 
 
 class UpdatePost:
@@ -568,13 +570,6 @@ class AddPostAttachment:
 class DeletePostAttachment:
     post_id = Default.node_id % ("Post") + " The identifier of the Post that the Attachment will be deleted from."
     attachment_id = "The database identifier of the Attachement to be deleted."
-
-
-class AddExtractComment:
-    __doc__ = "A mutation to create a comment linked to an Extract"
-    extract_id = Default.node_id % ("Post")
-    body = PostInterface.body
-    parent_id = PostInterface.parent_id
 
 
 class AddPostExtract:

@@ -128,6 +128,7 @@ const extract2 = {
 };
 
 export const defaultSideCommentBox: SideCommentBoxProps = {
+  ideaId: '0',
   extracts: [extract0],
   currentUser: currentUser,
   postId: '1',
@@ -139,7 +140,7 @@ export const defaultSideCommentBox: SideCommentBoxProps = {
   setCommentBoxDisplay: Function,
   cancelSubmit: Function,
   addPostExtract: Function,
-  addExtractComment: Function,
+  createPost: Function,
   refetchPost: Function,
   toggleExtractsBox: Function,
   position: { x: 0, y: 0 },

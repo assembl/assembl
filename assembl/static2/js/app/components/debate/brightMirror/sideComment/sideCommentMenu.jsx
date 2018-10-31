@@ -6,6 +6,7 @@ import SideCommentBadge from './sideCommentBadge';
 
 type Props = {
   extracts: Array<FictionExtractFragment>,
+  ideaId: string,
   postId: string,
   lang: string,
   displaySubmitBox: boolean,
@@ -62,6 +63,7 @@ class SideCommentMenu extends React.Component<Props, State> {
 
   render() {
     const {
+      ideaId,
       setCommentBoxDisplay,
       displaySubmitBox,
       displayCommentAnchor,
@@ -90,7 +92,7 @@ class SideCommentMenu extends React.Component<Props, State> {
 
     return (
       <div>
-        <div className="harvesting-container">
+        <div className="side-comment-container">
           {showCommentBadge && (
             <SideCommentBadge
               toggleExtractsBox={this.toggleCommentsBox}
@@ -101,6 +103,7 @@ class SideCommentMenu extends React.Component<Props, State> {
           )}
           {showBox && (
             <SideCommentBox
+              ideaId={ideaId}
               postId={postId}
               key={`extract-${postId}`}
               extracts={extracts}
