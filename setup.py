@@ -41,7 +41,7 @@ def search_dependency_links(*req_files):
 
 
 setup(name='assembl',
-      version='2.16.0',
+      version='2.17.0',
       description='Collective Intelligence platform',
       long_description=README + '\n\n' + CHANGES,
       classifiers=[
