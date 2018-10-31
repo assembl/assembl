@@ -10,7 +10,7 @@ apt-get install -yqq \
     flex \
     gawk \
     gperf \
-    graphviz
+    graphviz \
     libffi-dev \
     libgraphviz-dev \
     libhiredis-dev \
