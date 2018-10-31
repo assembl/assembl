@@ -4,30 +4,36 @@ import { configure, shallow, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 
 import { DumbTopPostForm, getClassNames, submittingState } from '../../../../../js/app/components/debate/common/topPostForm';
+import type { Props } from '../../../../../js/app/components/debate/common/topPostForm';
 
 configure({ adapter: new Adapter() });
 
-describe('TopPostForm component', () => {
-  const props = {
-    contentLocale: 'en',
-    ideaId: '123456',
-    messageClassifier: 'positive',
-    scrollOffset: 200,
-    fillBodyLabelMsgId: '654321',
-    bodyPlaceholderMsgId: '678910',
-    postSuccessMsgId: '019876',
-    bodyMaxLength: 400,
-    draftSuccessMsgId: '8765432',
-    createPost: jest.fn(),
-    refetchIdea: jest.fn(),
-    uploadDocument: jest.fn(),
-    onDisplayForm: jest.fn(),
-    draftable: false,
-    ideaOnColumn: false
-  };
+const topPostFormProps: Props = {
+  contentLocale: 'en',
+  ideaId: '123456',
+  messageClassifier: 'positive',
+  scrollOffset: 200,
+  fillBodyLabelMsgId: '654321',
+  bodyPlaceholderMsgId: '678910',
+  postSuccessMsgId: '019876',
+  bodyMaxLength: 400,
+  draftSuccessMsgId: '8765432',
+  createPost: jest.fn(),
+  refetchIdea: jest.fn(),
+  uploadDocument: jest.fn(),
+  onDisplayForm: jest.fn(),
+  draftable: false,
+  ideaOnColumn: false
+};
+
+describe('<TopPostForm /> - with shallow', () => {
+  let wrapper;
+
+  beforeEach(() => {
+    wrapper = shallow(<DumbTopPostForm {...topPostFormProps} />);
+  });
 
   it('should expand the component', () => {
-    const wrapper = shallow(<DumbTopPostForm {...props} />);
     const instance = wrapper.instance();
     instance.displayForm(true);
     const isActive = wrapper.state().isActive;
@@ -35,7 +41,6 @@ describe('TopPostForm component', () => {
   });
 
   it('should collapse the component', () => {
-    const wrapper = shallow(<DumbTopPostForm {...props} />);
     wrapper.setState({ isActive: true });
     const instance = wrapper.instance();
     instance.resetForm(false);
@@ -43,44 +48,28 @@ describe('TopPostForm component', () => {
     expect(isActive).toBe(false);
   });
 
-  it('should render the title input when the component is not on multi column view', () => {
-    const wrapper = mount(<DumbTopPostForm {...props} />);
-    expect(wrapper.find('input[name="top-post-title"]')).toHaveLength(1);
-  });
-
-  it('should not render the title input when the component is on multi column view', () => {
-    const wrapper = mount(<DumbTopPostForm {...props} />);
-    wrapper.setProps({ ideaOnColumn: true });
-    expect(wrapper.find('input[name="top-post-title"]')).toHaveLength(0);
-  });
-
   it('should not render buttons when the component is collapsed', () => {
-    const wrapper = shallow(<DumbTopPostForm {...props} />);
     wrapper.setState({ isActive: false });
     expect(wrapper.find('Button')).toHaveLength(0);
   });
 
   it('should render 2 buttons when the component is expanded but not draftable', () => {
-    const wrapper = shallow(<DumbTopPostForm {...props} />);
     wrapper.setState({ isActive: true });
     expect(wrapper.find('Button')).toHaveLength(2);
   });
 
   it('should render 3 buttons when the component is expanded and draftable', () => {
-    const wrapper = shallow(<DumbTopPostForm {...props} />);
     wrapper.setState({ isActive: true });
     wrapper.setProps({ draftable: true });
     expect(wrapper.find('Button')).toHaveLength(3);
   });
 
   it('should not render the rich text editor when the component is collapse', () => {
-    const wrapper = mount(<DumbTopPostForm {...props} />);
     wrapper.setState({ isActive: false });
     expect(wrapper.find('.rich-text-editor')).toHaveLength(0);
   });
 
   it('should update the body with the new value', () => {
-    const wrapper = shallow(<DumbTopPostForm {...props} />);
     const instance = wrapper.instance();
     instance.updateBody({ foo: 'bar' });
     const body = wrapper.state().body;
@@ -88,7 +77,6 @@ describe('TopPostForm component', () => {
   });
 
   it('should update the subject with the new value', () => {
-    const wrapper = shallow(<DumbTopPostForm {...props} />);
     const instance = wrapper.instance();
     instance.handleSubjectChange({ target: { value: 'Hello' } });
     const subject = wrapper.state().subject;
@@ -96,7 +84,6 @@ describe('TopPostForm component', () => {
   });
 
   it('should return a key key to display a message in the alert when the subject is not filled', () => {
-    const wrapper = shallow(<DumbTopPostForm {...props} />);
     const instance = wrapper.instance();
     const result = instance.getWarningMessageToDisplay('PUBLISHED', '', false, false);
     const expectedResult = 'debate.thread.fillSubject';
@@ -104,26 +91,42 @@ describe('TopPostForm component', () => {
   });
 
   it('should return a key to display a message in the alert when the body is not filled', () => {
-    const wrapper = shallow(<DumbTopPostForm {...props} />);
     const instance = wrapper.instance();
     const result = instance.getWarningMessageToDisplay('PUBLISHED', 'Here the subject', true, false);
     expect(result).toEqual('654321');
   });
 
   it('should return a key to display a message in the alert when the body and the subject are not filled in a draft', () => {
-    const wrapper = shallow(<DumbTopPostForm {...props} />);
     const instance = wrapper.instance();
     const result = instance.getWarningMessageToDisplay('DRAFT', '', true, false);
     expect(result).toEqual('debate.brightMirror.fillEitherTitleContent');
   });
 
   it('should return null when the form is fully completed', () => {
-    const wrapper = shallow(<DumbTopPostForm {...props} />);
     const instance = wrapper.instance();
     const result = instance.getWarningMessageToDisplay('PUBLISHED', 'Here the subject', false, false);
     expect(result).toEqual(null);
   });
+});
 
+describe('<TopPostForm /> - with mount', () => {
+  let wrapper;
+
+  beforeEach(() => {
+    wrapper = mount(<DumbTopPostForm {...topPostFormProps} />);
+  });
+
+  it('should render the title input when the component is not on multi column view', () => {
+    expect(wrapper.find('input[name="top-post-title"]')).toHaveLength(1);
+  });
+
+  it('should not render the title input when the component is on multi column view', () => {
+    wrapper.setProps({ ideaOnColumn: true });
+    expect(wrapper.find('input[name="top-post-title"]')).toHaveLength(0);
+  });
+});
+
+describe('getClassNames function', () => {
   it('should return the button class names when the multi-column view is active', () => {
     const buttonClasses = getClassNames(true, false);
     const expectedResult = 'button-submit button-dark btn btn-default right margin-m';
@@ -135,7 +138,9 @@ describe('TopPostForm component', () => {
     const expectedResult = 'button-submit button-dark btn btn-default right margin-l cursor-wait';
     expect(result).toBe(expectedResult);
   });
+});
 
+describe('submittingState function', () => {
   it('should return a submitting state', () => {
     const result = submittingState(true);
     expect(result).toEqual({ submitting: true });

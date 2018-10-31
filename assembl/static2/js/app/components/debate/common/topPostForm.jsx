@@ -20,7 +20,7 @@ export const TEXT_INPUT_MAX_LENGTH = 140;
 export const NO_BODY_LENGTH = 0;
 export const BODY_MAX_LENGTH = 3000;
 
-type Props = {
+export type Props = {
   contentLocale: string,
   createPost: Function,
   ideaId: string,
