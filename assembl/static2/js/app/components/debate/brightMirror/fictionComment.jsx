@@ -117,17 +117,21 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
     updatedModified: false
   };
 
-  componentDidMount() {
+  componentDidUpdate() {
     // Update tree height when component is rendered
-    this.props.measureTreeHeight();
+    this.updateTreeHeightCallbackHandler();
   }
 
+  updateTreeHeightCallbackHandler = () => {
+    this.props.measureTreeHeight();
+  };
+
   displayFictionCommentForm = (show: boolean) => {
-    this.setState({ showFictionCommentForm: show }, this.props.measureTreeHeight());
+    this.setState({ showFictionCommentForm: show }, this.updateTreeHeightCallbackHandler());
   };
 
   toggleIsEditing = (value: boolean) => {
-    this.setState({ isEditing: value }, this.props.measureTreeHeight());
+    this.setState({ isEditing: value }, this.updateTreeHeightCallbackHandler());
   };
 
   updateCommentHandler = (comment: string, commentId: string) => {
@@ -195,26 +199,32 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
       onSubmitCommentCallback: (comment: string) => {
         this.displayFictionCommentForm(false);
         fictionCommentExtraProps.submitCommentCallback(comment, commentParentId);
-      }
+      },
+      updateTreeHeightCallback: () => this.updateTreeHeightCallbackHandler()
     };
 
     const editCommentFormProps: FictionCommentFormProps = {
       onCancelCommentCallback: () => this.toggleIsEditing(false),
       onSubmitCommentCallback: (comment: string) => this.updateCommentHandler(comment, commentParentId),
-      commentValue: commentContent,
+      updateTreeHeightCallback: () => this.updateTreeHeightCallbackHandler(),
+      commentValue: updatedCommentContent || commentContent,
       editMode: true
     };
 
     // Display ToggleCommentButton only when there are answers to a comment
     const displayToggleCommentButton = numChildren > 0 ? <ToggleCommentButton {...toggleCommentButtonProps} /> : null;
 
+    // Define user permission
+    const connectedUserId = getConnectedUserId();
+    const userCanEdit = connectedUserId === String(authorUserId) && connectedUserCan(Permissions.EDIT_MY_POST);
+
     // Display FictionCommentForm when ReplyToCommentButton is clicked.
     // ReplyToCommentButton is hidden when FictionCommentForm is displayed
-    const displayReplyToCommentButton = showFictionCommentForm ? null : <ReplyToCommentButton {...replyToCommentButtonProps} />;
+    const displayReplyToCommentButton =
+      connectedUserId && !showFictionCommentForm ? <ReplyToCommentButton {...replyToCommentButtonProps} /> : null;
     const displayFictionCommentForm = showFictionCommentForm ? <FictionCommentForm {...fictionCommentFormProps} /> : null;
 
     // Display EditPostButton only when the user have the required rights
-    const userCanEdit = getConnectedUserId() === String(authorUserId) && connectedUserCan(Permissions.EDIT_MY_POST);
     const displayEditPostButton =
       userCanEdit && !isEditing ? (
         <ResponsiveOverlayTrigger placement="left" tooltip={editFictionCommentTooltip}>
@@ -250,7 +260,7 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
     const displayCommentContent = isEditing ? (
       <FictionCommentForm {...editCommentFormProps} />
     ) : (
-      <p className="comment">{updatedCommentContent || commentContent}</p>
+      <p className="comment">{updatedCommentContent || commentContent || I18n.t('loading.wait')}</p>
     );
 
     const displayFooter = (

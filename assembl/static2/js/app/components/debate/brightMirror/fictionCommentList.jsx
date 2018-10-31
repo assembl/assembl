@@ -5,7 +5,6 @@ import { Map } from 'immutable';
 import { Tree } from '../../../components/common/tree';
 import FictionComment from './fictionComment';
 import FoldedPost from '../common/post/foldedPost';
-import InfiniteSeparator from '../../../components/common/infiniteSeparator';
 import { noRowsRenderer } from '../../../pages/idea';
 // Type imports
 import type { FictionCommentExtraProps } from './fictionComment';
@@ -45,7 +44,7 @@ const FictionCommentList = ({
       InnerComponent={FictionComment}
       InnerComponentFolded={FoldedPost}
       noRowsRenderer={noRowsRenderer}
-      SeparatorComponent={InfiniteSeparator}
+      SeparatorComponent={() => null}
       identifier={identifier}
       fictionCommentExtraProps={fictionCommentExtraProps}
     />

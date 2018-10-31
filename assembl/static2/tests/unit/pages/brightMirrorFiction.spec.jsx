@@ -158,8 +158,8 @@ describe('<BrightMirrorFiction /> - with mount', () => {
       expect(wrapper.find(FictionCommentHeader)).toHaveLength(1);
     });
 
-    it('should render a FictionCommentForm', () => {
-      expect(wrapper.find(FictionCommentForm)).toHaveLength(1);
+    it('should not render a FictionCommentForm when user is not connected', () => {
+      expect(wrapper.find(FictionCommentForm)).toHaveLength(0);
     });
 
     it('should render a FictionCommentList', () => {
