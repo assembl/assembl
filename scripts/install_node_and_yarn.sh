@@ -1,4 +1,6 @@
 #!/bin/sh
+set -e
+
 apt-get update -qq
 # we need to remove cmdtest package as it provides a yarn binary
 apt-get remove -yqq cmdtest

@@ -1,4 +1,6 @@
 #!/bin/sh
+set -e
+
 apt-get update -qq
 apt-get install -yqq \
     apt-transport-https \

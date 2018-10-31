@@ -1,4 +1,6 @@
 #!/bin/sh
+set -e
+
 cd ${CI_PROJECT_DIR}/
 git fetch github
 git checkout -b bumpversion

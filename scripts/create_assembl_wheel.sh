@@ -1,3 +1,6 @@
+#!/bin/sh
+set -e
+
 # compile v1 stylesheets
 cd ${CI_PROJECT_DIR}/assembl/static/js
 yarn
