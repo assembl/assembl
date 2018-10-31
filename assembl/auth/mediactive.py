@@ -45,3 +45,10 @@ class Mediactive(BaseAuth):
         data = loads(mediactiveDecrypter.decrypt(self.data['data']))
         kwargs.update({'response': data, 'backend': self})
         return self.strategy.authenticate(*args, **kwargs)
+
+    def complete(self, *args, **kwargs):
+        user = super(Mediactive, self).complete(*args, **kwargs)
+        data = self.strategy.request_data()
+        if user and data.get('next', None):
+            self.strategy.session.pop('next')
+        return user
