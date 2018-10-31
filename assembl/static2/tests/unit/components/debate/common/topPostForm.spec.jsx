@@ -83,7 +83,7 @@ describe('<TopPostForm /> - with shallow', () => {
     expect(subject).toEqual('Hello');
   });
 
-  it('should return a key key to display a message in the alert when the subject is not filled', () => {
+  it('should return a key to display a message in the alert when the subject is not filled', () => {
     const instance = wrapper.instance();
     const result = instance.getWarningMessageToDisplay('PUBLISHED', '', false, false);
     const expectedResult = 'debate.thread.fillSubject';

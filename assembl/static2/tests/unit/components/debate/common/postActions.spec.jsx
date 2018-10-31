@@ -109,7 +109,7 @@ describe('<PostActions /> - with shallow', () => {
     expect(wrapper.find(OverlayTrigger)).toHaveLength(1);
   });
 
-  it('should render 2 overlays when the user has permissions and the total of sentiments is grather than 0', () => {
+  it('should render 2 overlays when the user has permissions and the total of sentiments is greater than 0', () => {
     wrapper.setProps({
       sentimentCounts: {
         disagree: 1,
