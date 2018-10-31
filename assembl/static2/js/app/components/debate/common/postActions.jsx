@@ -11,7 +11,7 @@ import { sharePostTooltip } from '../../common/tooltips';
 import getOverflowMenuForPost from './overflowMenu';
 import ResponsiveOverlayTrigger from '../../common/responsiveOverlayTrigger';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
-import { openShareModal, displayModal } from '../../../utils/utilityManager';
+import { openShareModal } from '../../../utils/utilityManager';
 import Permissions, { connectedUserCan } from '../../../utils/permissions';
 import Sentiments from './sentiments';
 import getSentimentStats from './sentimentStats';
@@ -19,7 +19,7 @@ import sentimentDefinitions from './sentimentDefinitions';
 import { getIsPhaseCompletedById } from '../../../utils/timeline';
 import { withScreenWidth } from '../../common/screenDimensions';
 
-type Props = {
+export type Props = {
   timeline: Timeline,
   client: ApolloClient,
   creatorUserId: string,
@@ -35,19 +35,10 @@ type Props = {
   sentimentCounts: SentimentCountsFragment
 };
 
-class PostActions extends React.Component<Props> {
+export class PostActions extends React.Component<Props> {
   static defaultProps = {
     editable: true,
     numChildren: 0
-  };
-
-  displayPhaseCompletedModal = (): void => {
-    const body = (
-      <div>
-        <Translate value="debate.noAnswer" />
-      </div>
-    );
-    displayModal(null, body, true, null, null, true);
   };
 
   render() {
