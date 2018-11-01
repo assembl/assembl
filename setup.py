@@ -30,7 +30,7 @@ def parse_reqs(req_files, include_links=True, include_non_links=True):
 
 
 setup(name='assembl',
-      version='2.17.0',
+      version='2.18.0',
       description='Collective Intelligence platform',
       long_description=README + '\n\n' + CHANGES,
       classifiers=[
