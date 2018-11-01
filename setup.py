@@ -15,17 +15,16 @@ README = open(os.path.join(here, 'README.md')).read()
 CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
 
 
-def parse_reqs(req_files, include_links=True, include_non_links=True):
+def parse_reqs(req_files, links=False):
     """returns a list of requirements from a list of req files"""
     requirements = set()
     session = PipSession()
     for req_file in req_files:
         # parse_requirements() returns generator of pip.req.InstallRequirement objects
         parsed = parse_requirements(req_file, session=session)
-        requirements.update({str(ir.req) for ir in parsed
-                             if (ir.link and include_links) or
-                                (not ir.link and include_non_links)})
-
+        requirements.update({str(ir.req) if not links else ir.link.url.replace('git+', '')
+                             for ir in parsed
+                             if ir.link or not links})
     return list(requirements)
 
 
@@ -92,7 +91,7 @@ setup(name='assembl',
       tests_require=parse_reqs(['requirements-tests.in']),
       dependency_links=parse_reqs(
           ['requirements.in', 'requirements-chrouter.in'],
-          include_non_links=False
+          links=True
       ),
       extras_require={
           'docs': parse_reqs(['requirements-doc.in']),
