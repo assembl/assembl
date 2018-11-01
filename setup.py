@@ -15,29 +15,18 @@ README = open(os.path.join(here, 'README.md')).read()
 CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
 
 
-def parse_reqs(*req_files):
+def parse_reqs(req_files, include_links=True, include_non_links=True):
     """returns a list of requirements from a list of req files"""
     requirements = set()
     session = PipSession()
     for req_file in req_files:
         # parse_requirements() returns generator of pip.req.InstallRequirement objects
         parsed = parse_requirements(req_file, session=session)
-        requirements.update({str(ir.req) for ir in parsed if not ir.link})
+        requirements.update({str(ir.req) for ir in parsed
+                             if (ir.link and include_links) or
+                                (not ir.link and include_non_links)})
 
     return list(requirements)
-
-
-def search_dependency_links(*req_files):
-    """Search for dependency links in requirements files."""
-    dependency_links = []
-    session = PipSession()
-    for req_file in req_files:
-        parsed = parse_requirements(req_file, session=session)
-        dependency_links.extend([
-            ir.link.url.replace('git+', '') for ir in parsed if ir.link
-        ])
-
-    return dependency_links
 
 
 setup(name='assembl',
@@ -99,14 +88,16 @@ setup(name='assembl',
       zip_safe=False,
       test_suite='assembl',
       setup_requires=['pip>=6'],
-      install_requires=parse_reqs('requirements.in', 'requirements-chrouter.in'),
-      tests_require=parse_reqs('requirements-tests.in'),
-      dependency_links=search_dependency_links(
-          'requirements.in', 'requirements-chrouter.in'
+      install_requires=parse_reqs(['requirements.in', 'requirements-chrouter.in']),
+      tests_require=parse_reqs(['requirements-tests.in']),
+      dependency_links=parse_reqs(
+          ['requirements.in', 'requirements-chrouter.in'],
+          include_non_links=False
       ),
       extras_require={
-          'docs': parse_reqs('requirements-doc.in'),
-          'dev': parse_reqs('requirements-dev.in'),
+          'docs': parse_reqs(['requirements-doc.in']),
+          'dev': parse_reqs(['requirements-dev.in']),
+          'test': parse_reqs(['requirements-tests.in']),
       },
       entry_points={
           "console_scripts": [
