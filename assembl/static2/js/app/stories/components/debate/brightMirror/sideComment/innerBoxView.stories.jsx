@@ -43,6 +43,14 @@ export const richBody =
   '<img class="attachment-image" src="https://picsum.photos/400/200/" alt="" title="loremPixel.jpg" ' +
   'data-id="1" data-mimetype="image/jpeg"></div><p></p><p>https://youtu.be/MzfBIcJaJSU</p>';
 
+const comment = {
+  id: '0',
+  creationDate: '2018-01-26T09:19:01.492406+00:00',
+  creator: commentor,
+  body: richBody,
+  attachments: []
+};
+
 export const extract0 = {
   body: 'This is the extract!',
   creationDate: '2018-03-29T16:28:27.324276+00:00',
@@ -61,13 +69,7 @@ export const extract0 = {
       xpathStart: `//div[@id='${getExtractTagId(3059)}']/`
     }
   ],
-  comment: {
-    id: '0',
-    creationDate: '2018-01-26T09:19:01.492406+00:00',
-    creator: commentor,
-    body: richBody,
-    attachments: []
-  }
+  comments: [comment]
 };
 
 export const extract1 = {
@@ -88,13 +90,7 @@ export const extract1 = {
       xpathStart: `//div[@id='${getExtractTagId(3059)}']/`
     }
   ],
-  comment: {
-    id: '1',
-    creationDate: '2017-02-12T09:19:01.492406+00:00',
-    creator: currentUser,
-    body: 'Second comment!',
-    attachments: []
-  }
+  comments: [comment]
 };
 
 export const extract2 = {
@@ -115,19 +111,14 @@ export const extract2 = {
       xpathStart: `//div[@id='${getExtractTagId(3059)}']/`
     }
   ],
-  comment: {
-    id: '2',
-    creationDate: '2001-03-10T09:19:01.492406+00:00',
-    creator: commentor,
-    body: 'Third comment!',
-    attachments: []
-  }
+  comments: [comment]
 };
 
 export const defaultInnerBoxViewProps: Props = {
   contentLocale: 'en',
   extractIndex: 0,
   extracts: [extract0],
+  comment: comment,
   changeCurrentExtract: Function
 };
 

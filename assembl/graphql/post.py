@@ -331,7 +331,7 @@ class CreatePost(graphene.Mutation):
             cls = models.ExtractComment
 
         in_reply_to_post = None
-        if cls == models.AssemblPost:
+        if (cls == models.AssemblPost) or (cls == models.ExtractComment):
             in_reply_to_post_id = args.get('parent_id')
             if in_reply_to_post_id:
                 in_reply_to_post_id = int(

@@ -21,10 +21,10 @@ exports[`Storyshots InnerBoxView multiple comments 1`] = `
             className="profile"
           >
             <img
-              alt="John Doe User"
+              alt="Odile Commenter"
               height="30"
               onError={[Function]}
-              src="/user/id/1/avatar/30"
+              src="/user/id/2/avatar/30"
               width="30"
             />
             <div
@@ -33,13 +33,13 @@ exports[`Storyshots InnerBoxView multiple comments 1`] = `
               <div
                 className="username"
               >
-                John Doe User
+                Odile Commenter
               </div>
               <div
                 className="harvesting-date"
-                title="2017-02-12T09:19:01.492406+00:00"
+                title="2018-01-26T09:19:01.492406+00:00"
               >
-                2 years ago
+                9 months ago
               </div>
             </div>
           </div>
@@ -64,7 +64,55 @@ exports[`Storyshots InnerBoxView multiple comments 1`] = `
             <div
               className="extract-body"
             >
-              Second comment!
+              <p>
+                <strong>
+                  Lorem ipsum dolor sit amet.
+                </strong>
+              </p>
+              <div
+                className="atomic-block"
+                data-blocktype="atomic"
+              >
+                <img
+                  alt=""
+                  className="attachment-image"
+                  data-id="1"
+                  data-mimetype="image/jpeg"
+                  src="https://picsum.photos/400/200/"
+                  title="loremPixel.jpg"
+                />
+              </div>
+              <p />
+              <p>
+                <a
+                  className="linkified"
+                  href="https://youtu.be/MzfBIcJaJSU"
+                  target="_blank"
+                  title={undefined}
+                >
+                  https://youtu.be/MzfBIcJaJSU
+                </a>
+              </p>
+              <div>
+                <div
+                  className="embed-theater "
+                >
+                  <div
+                    className="embed-thumbnail-container"
+                    onClick={[Function]}
+                  >
+                    <img
+                      alt="youtube video"
+                      className="embed-thumbnail"
+                      src="https://img.youtube.com/vi/MzfBIcJaJSU/mqdefault.jpg"
+                    />
+                    <span
+                      className="play-button"
+                    />
+                  </div>
+                </div>
+              </div>
+              <p />
             </div>
             <div
               className="next-extract"
@@ -1001,6 +1049,227 @@ exports[`Storyshots InnerBoxView multiple comments 1`] = `
                       <span
                         style={Object {}}
                       >
+                        comment
+                      </span>
+                      <span>
+                        =
+                        <span
+                          style={Object {}}
+                        >
+                          {
+                          <span
+                            style={
+                              Object {
+                                "color": "#666",
+                              }
+                            }
+                          >
+                            {
+                            <span>
+                              <span>
+                                <br />
+                                  
+                                  
+                              </span>
+                              <span
+                                style={
+                                  Object {
+                                    "color": "#666",
+                                  }
+                                }
+                              >
+                                id
+                              </span>
+                            </span>
+                            : 
+                            <span
+                              style={
+                                Object {
+                                  "color": "#22a",
+                                  "wordBreak": "break-word",
+                                }
+                              }
+                            >
+                              '0'
+                            </span>
+                            ,
+                            <span>
+                              <span>
+                                <br />
+                                  
+                                  
+                              </span>
+                              <span
+                                style={
+                                  Object {
+                                    "color": "#666",
+                                  }
+                                }
+                              >
+                                creationDate
+                              </span>
+                            </span>
+                            : 
+                            <span
+                              style={
+                                Object {
+                                  "color": "#22a",
+                                  "wordBreak": "break-word",
+                                }
+                              }
+                            >
+                              '2018-01-26T09:19:01.492406+00:00'
+                            </span>
+                            ,
+                            <span>
+                              <span>
+                                <br />
+                                  
+                                  
+                              </span>
+                              <span
+                                style={
+                                  Object {
+                                    "color": "#666",
+                                  }
+                                }
+                              >
+                                creator
+                              </span>
+                            </span>
+                            : 
+                            <span
+                              style={
+                                Object {
+                                  "color": "#666",
+                                }
+                              }
+                            >
+                              {
+                              <span>
+                                <span>
+                                  <br />
+                                      
+                                    
+                                </span>
+                                <span
+                                  style={
+                                    Object {
+                                      "color": "#666",
+                                    }
+                                  }
+                                >
+                                  displayName
+                                </span>
+                              </span>
+                              : 
+                              <span
+                                style={
+                                  Object {
+                                    "color": "#22a",
+                                    "wordBreak": "break-word",
+                                  }
+                                }
+                              >
+                                'Odile Commenter'
+                              </span>
+                              ,
+                              <span>
+                                <span>
+                                  <br />
+                                      
+                                    
+                                </span>
+                                <span
+                                  style={
+                                    Object {
+                                      "color": "#666",
+                                    }
+                                  }
+                                >
+                                  id
+                                </span>
+                              </span>
+                              : 
+                              <span
+                                style={
+                                  Object {
+                                    "color": "#22a",
+                                    "wordBreak": "break-word",
+                                  }
+                                }
+                              >
+                                '21'
+                              </span>
+                              ,
+                              <span>
+                                <span>
+                                  <br />
+                                      
+                                    
+                                </span>
+                                <span
+                                  style={
+                                    Object {
+                                      "color": "#666",
+                                    }
+                                  }
+                                >
+                                  userId
+                                </span>
+                              </span>
+                              : 
+                              <span
+                                style={
+                                  Object {
+                                    "color": "#a11",
+                                  }
+                                }
+                              >
+                                2
+                              </span>
+                              ,
+                              <span>
+                                <span>
+                                  <br />
+                                      
+                                    
+                                </span>
+                                …
+                              </span>
+                              <span>
+                                <br />
+                                    
+                              </span>
+                              }
+                            </span>
+                            ,
+                            <span>
+                              <span>
+                                <br />
+                                  
+                                  
+                              </span>
+                              …
+                            </span>
+                            <span>
+                              <br />
+                                
+                            </span>
+                            }
+                          </span>
+                          }
+                        </span>
+                      </span>
+                    </span>
+                    <span>
+                      <span>
+                        <br />
+                          
+                      </span>
+                      <span
+                        style={Object {}}
+                      >
                         changeCurrentExtract
                       </span>
                       <span>
@@ -1727,6 +1996,227 @@ exports[`Storyshots InnerBoxView single comment 1`] = `
                               </span>
                             </span>
                             ]
+                          </span>
+                          }
+                        </span>
+                      </span>
+                    </span>
+                    <span>
+                      <span>
+                        <br />
+                          
+                      </span>
+                      <span
+                        style={Object {}}
+                      >
+                        comment
+                      </span>
+                      <span>
+                        =
+                        <span
+                          style={Object {}}
+                        >
+                          {
+                          <span
+                            style={
+                              Object {
+                                "color": "#666",
+                              }
+                            }
+                          >
+                            {
+                            <span>
+                              <span>
+                                <br />
+                                  
+                                  
+                              </span>
+                              <span
+                                style={
+                                  Object {
+                                    "color": "#666",
+                                  }
+                                }
+                              >
+                                id
+                              </span>
+                            </span>
+                            : 
+                            <span
+                              style={
+                                Object {
+                                  "color": "#22a",
+                                  "wordBreak": "break-word",
+                                }
+                              }
+                            >
+                              '0'
+                            </span>
+                            ,
+                            <span>
+                              <span>
+                                <br />
+                                  
+                                  
+                              </span>
+                              <span
+                                style={
+                                  Object {
+                                    "color": "#666",
+                                  }
+                                }
+                              >
+                                creationDate
+                              </span>
+                            </span>
+                            : 
+                            <span
+                              style={
+                                Object {
+                                  "color": "#22a",
+                                  "wordBreak": "break-word",
+                                }
+                              }
+                            >
+                              '2018-01-26T09:19:01.492406+00:00'
+                            </span>
+                            ,
+                            <span>
+                              <span>
+                                <br />
+                                  
+                                  
+                              </span>
+                              <span
+                                style={
+                                  Object {
+                                    "color": "#666",
+                                  }
+                                }
+                              >
+                                creator
+                              </span>
+                            </span>
+                            : 
+                            <span
+                              style={
+                                Object {
+                                  "color": "#666",
+                                }
+                              }
+                            >
+                              {
+                              <span>
+                                <span>
+                                  <br />
+                                      
+                                    
+                                </span>
+                                <span
+                                  style={
+                                    Object {
+                                      "color": "#666",
+                                    }
+                                  }
+                                >
+                                  displayName
+                                </span>
+                              </span>
+                              : 
+                              <span
+                                style={
+                                  Object {
+                                    "color": "#22a",
+                                    "wordBreak": "break-word",
+                                  }
+                                }
+                              >
+                                'Odile Commenter'
+                              </span>
+                              ,
+                              <span>
+                                <span>
+                                  <br />
+                                      
+                                    
+                                </span>
+                                <span
+                                  style={
+                                    Object {
+                                      "color": "#666",
+                                    }
+                                  }
+                                >
+                                  id
+                                </span>
+                              </span>
+                              : 
+                              <span
+                                style={
+                                  Object {
+                                    "color": "#22a",
+                                    "wordBreak": "break-word",
+                                  }
+                                }
+                              >
+                                '21'
+                              </span>
+                              ,
+                              <span>
+                                <span>
+                                  <br />
+                                      
+                                    
+                                </span>
+                                <span
+                                  style={
+                                    Object {
+                                      "color": "#666",
+                                    }
+                                  }
+                                >
+                                  userId
+                                </span>
+                              </span>
+                              : 
+                              <span
+                                style={
+                                  Object {
+                                    "color": "#a11",
+                                  }
+                                }
+                              >
+                                2
+                              </span>
+                              ,
+                              <span>
+                                <span>
+                                  <br />
+                                      
+                                    
+                                </span>
+                                …
+                              </span>
+                              <span>
+                                <br />
+                                    
+                              </span>
+                              }
+                            </span>
+                            ,
+                            <span>
+                              <span>
+                                <br />
+                                  
+                                  
+                              </span>
+                              …
+                            </span>
+                            <span>
+                              <br />
+                                
+                            </span>
+                            }
                           </span>
                           }
                         </span>

@@ -64,13 +64,16 @@ const extract0 = {
       xpathStart: `//div[@id='${getExtractTagId(3059)}']/`
     }
   ],
-  comment: {
-    id: '0',
-    creationDate: '2018-01-26T09:19:01.492406+00:00',
-    creator: commentor,
-    body: richBody,
-    attachments: []
-  }
+  comments: [
+    {
+      id: '0',
+      parentId: null,
+      creationDate: '2018-01-26T09:19:01.492406+00:00',
+      creator: commentor,
+      body: richBody,
+      attachments: []
+    }
+  ]
 };
 
 const extract1 = {
@@ -91,13 +94,16 @@ const extract1 = {
       xpathStart: `//div[@id='${getExtractTagId(3059)}']/`
     }
   ],
-  comment: {
-    id: '1',
-    creationDate: '2017-02-12T09:19:01.492406+00:00',
-    creator: currentUser,
-    body: 'Second comment!',
-    attachments: []
-  }
+  comments: [
+    {
+      id: '1',
+      parentId: null,
+      creationDate: '2017-02-12T09:19:01.492406+00:00',
+      creator: currentUser,
+      body: 'Second comment!',
+      attachments: []
+    }
+  ]
 };
 
 const extract2 = {
@@ -118,13 +124,16 @@ const extract2 = {
       xpathStart: `//div[@id='${getExtractTagId(3059)}']/`
     }
   ],
-  comment: {
-    id: '2',
-    creationDate: '2001-03-10T09:19:01.492406+00:00',
-    creator: commentor,
-    body: 'Third comment!',
-    attachments: []
-  }
+  comments: [
+    {
+      id: '2',
+      parentId: null,
+      creationDate: '2001-03-10T09:19:01.492406+00:00',
+      creator: commentor,
+      body: 'Third comment!',
+      attachments: []
+    }
+  ]
 };
 
 const extractWithReply = {
@@ -145,20 +154,25 @@ const extractWithReply = {
       xpathStart: '//div[@id=\'message-body-local:Content/3059\']/'
     }
   ],
-  comment: {
-    id: '0',
-    creationDate: '2018-01-26T09:19:01.492406+00:00',
-    creator: commentor,
-    body: richBody,
-    attachments: [],
-    reply: {
+  comments: [
+    {
+      id: '0',
+      parentId: null,
+      creationDate: '2018-01-26T09:19:01.492406+00:00',
+      creator: commentor,
+      body: richBody,
+      attachments: [],
+      reply: {}
+    },
+    {
       id: '1',
+      parentId: '0',
       creationDate: '2018-01-27T10:19:01.492406+00:00',
       creator: currentUser,
       body: 'This is a reply to a comment',
       attachments: []
     }
-  }
+  ]
 };
 
 export const defaultSideCommentBoxProps: SideCommentBoxProps = {

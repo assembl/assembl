@@ -12,29 +12,26 @@ import { postBodyReplacementComponents } from '../../common/post/postBody';
 export type Props = {
   contentLocale: string,
   extractIndex: number,
-  extracts: Array<FictionExtractFragment>,
-  changeCurrentExtract: Function
+  extracts: ?Array<FictionExtractFragment>,
+  comment: ExtractComment,
+  changeCurrentExtract: ?Function
 };
 
 const renderRichtext = text => activeHtml(text && transformLinksInHtml(text), postBodyReplacementComponents());
 
-const InnerBoxView = ({ contentLocale, extractIndex, extracts, changeCurrentExtract }: Props) => {
-  const currentExtract = extracts && extracts.length > 0 ? extracts[extractIndex] : null;
-  const currentComment = currentExtract && currentExtract.comment;
+const InnerBoxView = ({ contentLocale, extractIndex, extracts, comment, changeCurrentExtract }: Props) => {
   const displayName =
-    currentComment && currentComment.creator && !currentComment.creator.isDeleted
-      ? currentComment.creator.displayName
-      : I18n.t('deletedUser');
+    comment && comment.creator && !comment.creator.isDeleted ? comment.creator.displayName : I18n.t('deletedUser');
 
   return (
     <div>
       <div className="harvesting-box-header">
         <div className="profile">
-          <AvatarImage userId={currentComment.creator.userId} userName={displayName} />
+          <AvatarImage userId={comment.creator.userId} userName={displayName} />
           <div className="harvesting-infos">
             <div className="username">{displayName}</div>
-            <div className="harvesting-date" title={currentComment.creationDate}>
-              {moment(currentComment.creationDate)
+            <div className="harvesting-date" title={comment.creationDate}>
+              {moment(comment.creationDate)
                 .locale(contentLocale)
                 .fromNow()}
             </div>
@@ -55,7 +52,7 @@ const InnerBoxView = ({ contentLocale, extractIndex, extracts, changeCurrentExtr
                 </div>
               )}
           </div>
-          <div className="extract-body">{currentComment && renderRichtext(currentComment.body)}</div>
+          <div className="extract-body">{comment && renderRichtext(comment.body)}</div>
           <div className="next-extract">
             {extracts &&
               extractIndex < extracts.length - 1 && (

@@ -1,7 +1,7 @@
 #import "./Attachment.graphql"
 #import "./AgentProfileInfo.graphql"
 
-fragment ExtractComment on ExtractComment {
+fragment ExtractComment on Post {
   id
   body(lang: $contentLocale)
   creationDate
@@ -11,4 +11,5 @@ fragment ExtractComment on ExtractComment {
   attachments {
     ...Attachment
   }
+  parentId
 }
