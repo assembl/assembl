@@ -71,8 +71,8 @@ class AgentProfile(SecureObjectType, SQLAlchemyObjectType):
             from assembl.models.social_auth import SocialAuthAccount
             saa = SocialAuthAccount.get_social_auth_for_user(user=self, provider='mediactive').first()
             if saa:
-                first_name = saa.extra_data['firstname'].lower()
-                last_name = saa.extra_data['lastname'].lower()[0]
+                first_name = saa.extra_data['firstname'].strip().replace(" ", "_").lower()
+                last_name = saa.extra_data['lastname'].strip().lower()[0]
                 return "{}.{}".format(first_name, last_name)
         except:
             return self.display_name()
