@@ -49,6 +49,6 @@ export const videoUtilities = {
     const components = path.split('/');
     const file = components[components.length - 1].split('.');
     const extension = file[file.length - 1];
-    return videoExtensions.indexOf(extension) > -1;
+    return videoExtensions.includes(extension);
   }
 };

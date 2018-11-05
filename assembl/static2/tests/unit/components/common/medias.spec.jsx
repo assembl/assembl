@@ -19,12 +19,12 @@ describe('<Medias /> - with shallow', () => {
     wrapper = shallow(<Medias {...MediasProps} />);
   });
 
-  it('should display a video tag when the path is a mp4', () => {
+  it('should display a video tag when the path is a mp4 file', () => {
     expect(wrapper.find('video')).toHaveLength(1);
     expect(wrapper.find('iframe')).toHaveLength(0);
   });
 
-  it('should display a iframe tag when the path an embed video', () => {
+  it('should display an iframe tag when the path an embed video', () => {
     wrapper.setProps({ path: 'https://www.youtube.com/embed/8Ot8mNRCLkY' });
     expect(wrapper.find('iframe')).toHaveLength(1);
     expect(wrapper.find('video')).toHaveLength(0);

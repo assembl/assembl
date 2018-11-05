@@ -1,6 +1,6 @@
 import { videoUtilities } from '../../../js/app/utils/videoUtilities';
 
-describe('should test if the path is a video file', () => {
+describe('pathIsVideoFile function', () => {
   it('should return true if the path is a mp4 video', () => {
     const path = 'http://www.video.fr/videos/video.mp4';
     const result = videoUtilities.pathIsVideoFile(path);
