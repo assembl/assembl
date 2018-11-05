@@ -325,7 +325,13 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
                     )
                 )
             else:
-                query = query.filter(Post.publication_state == models.PublicationStates.PUBLISHED)
+                query = query.filter(
+                    or_(
+                        Post.publication_state == models.PublicationStates.PUBLISHED,
+                        Post.publication_state == models.PublicationStates.DELETED_BY_ADMIN,
+                        Post.publication_state == models.PublicationStates.DELETED_BY_USER
+                    )
+                )
 
         if not sentiments_only:
             query = query.order_by(desc(Post.creation_date), Post.id)

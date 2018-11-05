@@ -189,15 +189,15 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
       publishedDate,
       fictionCommentExtraProps
     } = this.props;
+    const { isEditing, showFictionCommentForm, updatedCommentContent, updatedModified } = this.state;
+    const { expandedFromTree, expandCollapseCallbackFromTree } = fictionCommentExtraProps;
+
     // Display DeletedFictionComment component when comment is marked as DELETED_BY_USER or DELETED_BY_ADMIN
     if (publicationState in DeletedPublicationStates) {
       const isDeletedByAuthor = publicationState === PublicationStates.DELETED_BY_USER;
       const deletedFictionCommentProps: DeletedFictionCommentProps = { isDeletedByAuthor: isDeletedByAuthor };
       return <DeletedFictionComment {...deletedFictionCommentProps} />;
     }
-
-    const { isEditing, showFictionCommentForm, updatedCommentContent, updatedModified } = this.state;
-    const { expandedFromTree, expandCollapseCallbackFromTree } = fictionCommentExtraProps;
 
     const toggleCommentButtonProps: ToggleCommentButtonProps = {
       isExpanded: expandedFromTree != null ? expandedFromTree : false,
