@@ -1575,6 +1575,7 @@ def phase2_csv_export(request):
     IDEA_NAME = u"Nom de l'idée"
     POST_SUBJECT = u"Sujet"
     POST_BODY = u"Post"
+    POST_CLASSIFIER = u'Classification de Post'
     POST_ID = u"Numéro du post"
     POST_LOCALE = u"Locale du post"
     POST_LIKE_COUNT = u"Nombre de \"J'aime\""
@@ -1592,6 +1593,7 @@ def phase2_csv_export(request):
         IDEA_NAME.encode('utf-8'),
         POST_SUBJECT.encode('utf-8'),
         POST_BODY.encode('utf-8'),
+        POST_CLASSIFIER.encode('utf-8'),
         POST_ID.encode('utf-8'),
         POST_LOCALE.encode('utf-8'),
         POST_LIKE_COUNT.encode('utf-8'),
@@ -1630,9 +1632,9 @@ def phase2_csv_export(request):
         for post in posts:
             subject = get_entries_locale_original(post.subject)
             body = get_entries_locale_original(post.body)
-
             row[POST_SUBJECT] = subject.get('entry')
             row[POST_BODY] = sanitize_text(body.get('entry'))
+            row[POST_CLASSIFIER] = post.message_classifier if post.message_classifier else ""
             row[POST_BODY_ORIGINAL] = sanitize_text(body.get('original'))
             row[POST_ID] = post.id
             row[POST_LOCALE] = body.get('locale') or subject.get('locale') or None
