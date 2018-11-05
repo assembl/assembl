@@ -180,6 +180,7 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
       children,
       commentContent,
       commentId,
+      contentLocale,
       displayedPublishedDate,
       numChildren,
       modified,
@@ -254,12 +255,19 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
 
     // Display DeletePostButton only when the user have the required rights
     const userCanDelete = connectedUserId === String(authorUserId) && connectedUserCan(Permissions.DELETE_MY_POST);
+    const refetchQueries = [
+      {
+        query: CommentQuery,
+        variables: { id: commentId, contentLocale: contentLocale }
+      }
+    ];
     const displayDeletePostButton = userCanDelete ? (
       <ResponsiveOverlayTrigger placement="left" tooltip={deleteFictionCommentTooltip}>
         <DeletePostButton
           linkClassName="action-delete"
           modalBodyMessage="debate.brightMirror.commentFiction.deleteCommentBodyMessage"
           postId={commentId}
+          refetchQueries={refetchQueries}
         />
       </ResponsiveOverlayTrigger>
     ) : null;
