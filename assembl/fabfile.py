@@ -2907,9 +2907,13 @@ def set_ftp_private_information(force=False):
         fill_template('assembl/templates/system/ncftp.cfg.jinja2', env, ftp_info_file)
         path = join(env.projectpath, 'ncftp.cfg')
         try:
-            put(ftp_info_file, path)
+            put_status = put(ftp_info_file, path)
+            if put_status.failed:
+                raise RuntimeError('The put operation failed to put ncftp.cfg')
+
             # Only readable by the user
             run('chmod 400 %s' % path)
             run('chown %(user)s:%(user)s %(file)s' % {'user': env.user, 'file': path})
-        except:
-            raise Exception('The put operation failed to put ncftp.cfg')
+        finally:
+            # Remove the templated file
+            os.unlink(ftp_info_file)
