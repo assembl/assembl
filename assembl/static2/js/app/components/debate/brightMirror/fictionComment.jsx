@@ -21,14 +21,16 @@ import FictionCommentForm from './fictionCommentForm';
 import EditPostButton from '../common/editPostButton';
 import DeletePostButton from '../common/deletePostButton';
 import ResponsiveOverlayTrigger from '../../common/responsiveOverlayTrigger';
+import DeletedFictionComment from './deletedFictionComment';
 // Constant imports
-import { EMPTY_STRING, USER_ID_NOT_FOUND } from '../../../constants';
+import { EMPTY_STRING, USER_ID_NOT_FOUND, DeletedPublicationStates, PublicationStates } from '../../../constants';
 import { editFictionCommentTooltip, deleteFictionCommentTooltip } from '../../common/tooltips';
 // Types imports
 import type { CircleAvatarProps } from './circleAvatar';
 import type { FictionCommentFormProps } from './fictionCommentForm';
 import type { ToggleCommentButtonProps } from '../common/toggleCommentButton';
 import type { ReplyToCommentButtonProps } from '../common/replyToCommentButton';
+import type { DeletedFictionCommentProps } from './deletedFictionComment';
 
 export type FictionCommentExtraProps = {
   /** Submit comment callback used in order to catch a submit event from tree.jsx */
@@ -69,6 +71,8 @@ export type FictionCommentGraphQLProps = {
   modified: boolean,
   /** Parent post author fullname */
   parentPostAuthorFullname: string,
+  /** Comment publication state */
+  publicationState: string,
   /** Comment published date */
   publishedDate: string,
   /** Update comment mutation from GraphQL */
@@ -180,9 +184,17 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
       numChildren,
       modified,
       parentPostAuthorFullname,
+      publicationState,
       publishedDate,
       fictionCommentExtraProps
     } = this.props;
+    // Display DeletedFictionComment component when comment is marked as DELETED_BY_USER or DELETED_BY_ADMIN
+    if (publicationState in DeletedPublicationStates) {
+      const isDeletedByAuthor = publicationState === PublicationStates.DELETED_BY_USER;
+      const deletedFictionCommentProps: DeletedFictionCommentProps = { isDeletedByAuthor: isDeletedByAuthor };
+      return <DeletedFictionComment {...deletedFictionCommentProps} />;
+    }
+
     const { isEditing, showFictionCommentForm, updatedCommentContent, updatedModified } = this.state;
     const { expandedFromTree, expandCollapseCallbackFromTree } = fictionCommentExtraProps;
 
@@ -337,6 +349,7 @@ const mapQueryToProps = ({ data }) => {
         .fromNow(),
       modified: fiction.modified,
       parentPostAuthorFullname: parentPostCreator ? parentPostCreator.displayName : noAuthorSpecified,
+      publicationState: fiction.publicationState,
       publishedDate: fiction.creationDate
     };
   }
