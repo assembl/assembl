@@ -316,7 +316,14 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
         if self.message_view_override == Phases.brightMirror.value:
             user_id = context.authenticated_userid
             if user_id is not None:
-                query = query.filter(or_(Post.publication_state == models.PublicationStates.PUBLISHED, and_(Post.creator_id == user_id, Post.publication_state == models.PublicationStates.DRAFT)))
+                query = query.filter(
+                    or_(
+                        Post.publication_state == models.PublicationStates.PUBLISHED,
+                        Post.publication_state == models.PublicationStates.DELETED_BY_ADMIN,
+                        and_(Post.creator_id == user_id, Post.publication_state == models.PublicationStates.DELETED_BY_USER),
+                        and_(Post.creator_id == user_id, Post.publication_state == models.PublicationStates.DRAFT)
+                    )
+                )
             else:
                 query = query.filter(Post.publication_state == models.PublicationStates.PUBLISHED)
 
