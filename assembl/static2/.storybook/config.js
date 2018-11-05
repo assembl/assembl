@@ -45,6 +45,7 @@ function loadStories() {
   require('../js/app/stories/components/debate/brightMirror/fictionBody.stories.jsx');
   require('../js/app/stories/components/debate/brightMirror/fictionCommentHeader.stories.jsx');
   require('../js/app/stories/components/debate/brightMirror/fictionCommentForm.stories.jsx');
+  require('../js/app/stories/components/debate/brightMirror/deletedFictionComment.stories.jsx');
   require('../js/app/stories/components/debate/brightMirror/fictionComment.stories.jsx');
   require('../js/app/stories/components/debate/brightMirror/sideComment/sideCommentBox.stories.jsx');
   require('../js/app/stories/components/debate/brightMirror/sideComment/sideCommentBadge.stories.jsx');
