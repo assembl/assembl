@@ -1,11 +1,14 @@
 #!/bin/sh
 
-#You need to set these two environment variables, for example:
-#ASSEMBL_PATH=/home/benoitg/development/assembl
-#REPOSITORY=www-data@coeus.ca:/media/backup/assembl_backups.borg
+# You need to set these two environment variables, for example:
+# ASSEMBL_PATH=/home/benoitg/development/assembl
+# BORG_PASSPHRASE='strong passphrase to unlock keyfile'
+# Note, the BORG_PASSPHRASE can be set to '' for simplified usage, though this is discouraged
+# REPOSITORY=www-data@coeus.ca:/media/backup/assembl_backups.borg
+# NOte, the REPOSITORY can also be locally hosted
 
 set -x BORG_RELOCATED_REPO_ACCESS_IS_OK=yes
-BORG_PASSPHRASE='' borg init --encryption=keyfile $REPOSITORY || true
+$BORG_PASSPHRASE borg init --encryption=keyfile $REPOSITORY || true
 echo "Do not worry if the above command fails, it is expected to fail except the first time it is run"
 
 cd $ASSEMBL_PATH
@@ -31,13 +34,12 @@ borg create \
     --exclude $ASSEMBL_PATH'/assembl/static/widget/*/bower_components' \
     --exclude $ASSEMBL_PATH/assembl/static/js/node_modules \
     --exclude $ASSEMBL_PATH/assembl/static2/node_modules \
-    --exclude $ASSEMBL_PATH/.git \
     --exclude '*.sass-cache' \
     --exclude $ASSEMBL_PATH/assembl_dumps \
     --exclude '*.pyc' \
     --progress \
     --stats
-#    --verbose
+    --verbose
 
 rm $ASSEMBL_PATH/assembl-backup-real.pgdump
 # Use the `prune` subcommand to maintain 7 daily, 4 weekly
