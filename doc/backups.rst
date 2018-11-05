@@ -112,7 +112,7 @@ Use the command::
     fab -c {RC_FILE} fetch_backup
 
 This command will fetch the backup from the ftp server. If you don't fix the name,
-by default it will get the last backup folder.
+by default it will get the last backup folder. If you want to set the name, it should be given as an argument to the function.
 
 You will have the backup assembl in a newly created `home` folder.
 
@@ -129,7 +129,7 @@ If you want to restore the backup on the server in the newly created `assembl_ba
 If you want this to be your new assembl instance, you have to shut down all supervisor
 processes in the usual directory.
 
-If there is a problem with the database restore on the new folder, youb light have to do
-`service postgresql restart` to shut down all processes if you ge the error stating that there are still other processes using the database.
+If there is a problem with the database restore on the new folder, you might have to do
+`service postgresql restart` to shut down all processes if you get the error stating that there are still other processes using the database.
 
 Since you changed the project path you will have to change the paths in the nginx configuration. Then you should restart nginx.
