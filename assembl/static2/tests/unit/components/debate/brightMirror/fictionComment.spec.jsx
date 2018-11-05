@@ -245,7 +245,7 @@ describe('<FictionComment /> - with mount', () => {
   });
 
   describe('when getConnectedUserId does not match permission and authorUserId', () => {
-    // getConnectedUserId mocked value is 1234567890
+    // getConnectedUserId mocked value is 1234567890 (as admin)
     beforeEach(() => {
       fictionComment = {
         ...defaultFictionComment,
@@ -278,7 +278,7 @@ describe('<FictionComment /> - with mount', () => {
     });
 
     it('should not display a "Delete this message" button', () => {
-      expect(wrapper.find(DeletePostButton)).toHaveLength(0);
+      expect(wrapper.find(DeletePostButton)).toHaveLength(1);
     });
   });
 

@@ -254,7 +254,9 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
       ) : null;
 
     // Display DeletePostButton only when the user have the required rights
-    const userCanDelete = connectedUserId === String(authorUserId) && connectedUserCan(Permissions.DELETE_MY_POST);
+    const userCanDelete =
+      (connectedUserId === String(authorUserId) && connectedUserCan(Permissions.DELETE_MY_POST)) ||
+      connectedUserCan(Permissions.DELETE_POST);
     const refetchQueries = [
       {
         query: CommentQuery,
