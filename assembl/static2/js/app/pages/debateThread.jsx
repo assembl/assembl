@@ -1,12 +1,28 @@
-import React from 'react';
-import { PropTypes } from 'prop-types';
+// @flow
+import * as React from 'react';
 import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
 import Loader from '../components/common/loader';
 import Ideas from '../components/debate/tableOfIdeas/ideas';
 import AllIdeasQuery from '../graphql/AllIdeasQuery.graphql';
 
-const DebateThread = ({ identifier, data, params, children }) => {
+type Props = {
+  phaseId: string,
+  identifier: string,
+  data: {
+    loading: boolean,
+    error: ?Error,
+    rootIdea: Idea,
+    ideas: Array<Idea>
+  },
+  params: {
+    phaseId: string,
+    themeId?: string
+  },
+  children: React.Node
+};
+
+const DebateThread = ({ phaseId, identifier, data, params, children }: Props) => {
   if (!data) {
     return (
       <div className="debate">
@@ -15,9 +31,8 @@ const DebateThread = ({ identifier, data, params, children }) => {
     );
   }
   const { loading, ideas, rootIdea } = data;
-  const phaseId = params.phaseId || null;
   const themeId = params.themeId || null;
-  const isParentRoute = !themeId || false;
+  const isParentRoute = !themeId;
   const childrenElm = React.Children.map(children, child =>
     React.cloneElement(child, {
       id: themeId,
@@ -35,14 +50,6 @@ const DebateThread = ({ identifier, data, params, children }) => {
       {!isParentRoute && <section className="debate-section">{childrenElm}</section>}
     </div>
   );
-};
-
-DebateThread.propTypes = {
-  data: PropTypes.shape({
-    loading: PropTypes.bool.isRequired,
-    error: PropTypes.object,
-    ideas: PropTypes.Array
-  })
 };
 
 DebateThread.defaultProps = {

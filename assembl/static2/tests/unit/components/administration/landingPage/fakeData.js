@@ -84,4 +84,4 @@ export const moduleTypes = [
   }
 ];
 
-export const enabledModulesInOrder = List.of(abc123, ghi789, jkl865);
+export const enabledModules = List.of(abc123, ghi789, jkl865);

@@ -1,15 +1,13 @@
 // @flow
 import React from 'react';
 import { Col, Grid } from 'react-bootstrap';
-import activeHtml from 'react-active-html';
-import { postBodyReplacementComponents } from '../common/post/postBody';
+import { transformLinksInHtml /* getUrls */ } from '../../../utils/linkify';
+import { Html, postBodyReplacementComponents } from '../common/post/postBody';
 
 export type InstructionsTextProps = {
   title: string,
   body: string
 };
-
-const renderRichtext = text => activeHtml(text, postBodyReplacementComponents());
 
 const InstructionsText = ({ title, body }: InstructionsTextProps) => (
   <Grid fluid className="background-light instructions-text">
@@ -21,7 +19,7 @@ const InstructionsText = ({ title, body }: InstructionsTextProps) => (
             <h3 className="announcement-title-text dark-title-1">{title}</h3>
           </div>
           <Col xs={12} md={8} className="announcement-media col-md-push-2">
-            {renderRichtext(body)}
+            <Html rawHtml={transformLinksInHtml(body)} replacementComponents={postBodyReplacementComponents()} />
           </Col>
         </div>
       </div>

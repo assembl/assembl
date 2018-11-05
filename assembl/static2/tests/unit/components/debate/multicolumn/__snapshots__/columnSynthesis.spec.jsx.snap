@@ -30,11 +30,12 @@ exports[`ColumnSynthesis component should render a folded post 1`] = `
     <div
       className="post-right"
     >
-      <Connect(withApollo(PostActions))
+      <Connect(Connect(withApollo(PostActions)))
         debateData={undefined}
         editable={false}
         identifier={undefined}
         mySentiment="like"
+        phaseId="my-phase-id"
         postId="XYZ333"
         routerParams={
           Object {

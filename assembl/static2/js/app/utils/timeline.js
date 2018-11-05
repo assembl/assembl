@@ -145,37 +145,33 @@ export const isCurrentPhase = (_phase: Phase) => {
   return currentPhase;
 };
 
-export const getPhaseName = (_timeline: Timeline, _id: string) => {
-  const timeline = _timeline;
-  const phaseId = _id;
-  let phaseName = '';
-  if (!phaseId || !timeline) return phaseName;
-  timeline.forEach((phase) => {
-    if (phase.id === phaseId) {
-      phaseName = phase.title;
-    }
-  });
-  return phaseName;
+function findPhase(timeline: Timeline, phaseId: string): Phase {
+  const phase = timeline.find(p => p.id === phaseId);
+  if (!phase) {
+    throw new Error('No phase found with this id');
+  }
+
+  return phase;
+}
+
+export const getPhaseName = (timeline: Timeline, phaseId: string) => {
+  if (!phaseId) throw new Error('No phase id!');
+  if (!timeline) throw new Error('No timeline!');
+  const phase = findPhase(timeline, phaseId);
+  return phase.title;
 };
 
-export const isStepCompleted = (_phase: Phase) => {
-  const phase = _phase;
+export const isStepCompleted = (phase: Phase) => {
   const currentDate = new Date();
   const endDate = new Date(phase.end);
   return isDateExpired(currentDate, endDate);
 };
 
-export const getIfPhaseCompletedById = (_timeline: Timeline, _id: string) => {
-  const timeline = _timeline;
-  const phaseId = _id;
-  let isPhaseCompleted = false;
-  if (!phaseId || !timeline) return isPhaseCompleted;
-  timeline.forEach((phase) => {
-    if (phaseId === phase.id) {
-      isPhaseCompleted = isStepCompleted(phase);
-    }
-  });
-  return isPhaseCompleted;
+export const getIsPhaseCompletedById = (timeline: Timeline, phaseId: string) => {
+  if (!phaseId) throw new Error('No phase id!');
+  if (!timeline) throw new Error('No timeline!');
+  const phase = findPhase(timeline, phaseId);
+  return isStepCompleted(phase);
 };
 
 export const getBarPercent = (_phase: Phase) => {

@@ -1,14 +1,29 @@
-import React from 'react';
-import { PropTypes } from 'prop-types';
+// @flow
+import * as React from 'react';
 import { connect } from 'react-redux';
 import { graphql } from 'react-apollo';
 import Loader from '../components/common/loader';
 import Themes from '../components/debate/common/themes';
 import DebateThematicsQuery from '../graphql/DebateThematicsQuery.graphql';
 
-const Debate = ({ identifier, data, params, children }) => {
+type Props = {
+  phaseId: string,
+  identifier: string,
+  data: {
+    loading: boolean,
+    error: ?Error,
+    thematics: DebateThematicsQueryQuery
+  },
+  params: {
+    phaseId?: string,
+    themeId?: string,
+    questionId?: string
+  },
+  children: React.Node
+};
+
+const Debate = ({ phaseId, identifier, data, params, children }: Props) => {
   const { loading, thematics } = data;
-  const phaseId = params.phaseId || null;
   const themeId = params.themeId || null;
   const questionId = params.questionId || null;
   const isParentRoute = !(themeId || questionId) || false;
@@ -28,14 +43,6 @@ const Debate = ({ identifier, data, params, children }) => {
       </div>
     </div>
   );
-};
-
-Debate.propTypes = {
-  data: PropTypes.shape({
-    loading: PropTypes.bool.isRequired,
-    error: PropTypes.object,
-    thematics: PropTypes.Array
-  }).isRequired
 };
 
 const DebateWithData = graphql(DebateThematicsQuery)(Debate);

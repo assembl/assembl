@@ -2,20 +2,19 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
-import { Translate, I18n } from 'react-redux-i18n';
+import { Translate } from 'react-redux-i18n';
 import { Grid } from 'react-bootstrap';
 import type { Map } from 'immutable';
 
 import { updateContentLocale } from '../actions/contentLocaleActions';
-import withLoadingIndicator from '../components/common/withLoadingIndicator';
+import manageErrorAndLoading from '../components/common/manageErrorAndLoading';
 import Media from '../components/common/media';
 import Header from '../components/common/header';
 import Question from '../components/debate/survey/question';
 import Navigation from '../components/debate/survey/navigation';
 import Proposals from '../components/debate/survey/proposals';
-import { getIfPhaseCompletedById } from '../utils/timeline';
+import { getIsPhaseCompletedById } from '../utils/timeline';
 import ThematicQuery from '../graphql/ThematicQuery.graphql';
-import { displayAlert } from '../utils/utilityManager';
 import { get as getRoute } from '../utils/routeMap';
 import HeaderStatistics, { statContributions, statMessages, statParticipants } from '../components/common/headerStatistics';
 
@@ -34,16 +33,15 @@ type QuestionType = {
   title: string
 };
 
-type SurveyProps = {
-  phaseId: string,
+type Props = {
   timeline: Timeline,
   defaultContentLocaleMapping: Map,
-  hasErrors: boolean,
   imgUrl: string,
   loading: boolean,
   media: Object, // TODO: we should add a type for media/video and use it everywhere
   numContributors: number,
   numPosts: number,
+  phaseId: string,
   questions: Array<QuestionType>,
   refetchThematic: Function,
   title: string,
@@ -53,13 +51,13 @@ type SurveyProps = {
   updateContentLocaleMapping: Function
 };
 
-type SurveyState = {
+type State = {
   isScroll: boolean,
   questionIndex: number | null,
   showModal: boolean
 };
 
-class Survey extends React.Component<SurveyProps, SurveyState> {
+class Survey extends React.Component<Props, State> {
   constructor(props) {
     super(props);
     this.state = {
@@ -114,26 +112,23 @@ class Survey extends React.Component<SurveyProps, SurveyState> {
   };
 
   render() {
-    if (this.props.hasErrors) {
-      displayAlert('danger', I18n.t('error.loading'));
-      return null;
-    }
     const {
       id,
       imgUrl,
       media,
       numPosts,
       numContributors,
+      phaseId,
       questions,
       refetchThematic,
       title,
       slug,
       totalSentiments,
-      timeline,
-      phaseId
+      timeline
     } = this.props;
-    const isPhaseCompleted = getIfPhaseCompletedById(timeline, phaseId);
-    const phaseUrl = `${getRoute('debate', { slug: slug, phase: 'survey', phaseId: phaseId })}`;
+
+    const isPhaseCompleted = getIsPhaseCompletedById(timeline, phaseId);
+    const phaseUrl = `${getRoute('debate', { slug: slug, phase: 'survey' })}`;
     let statElements = [];
     const numContributions = numPosts + totalSentiments;
     statElements = [statMessages(numPosts), statContributions(numContributions), statParticipants(numContributors)];
@@ -148,7 +143,7 @@ class Survey extends React.Component<SurveyProps, SurveyState> {
             {questions &&
               questions.map((question, index) => (
                 <Question
-                  phaseId={phaseId}
+                  isPhaseCompleted={isPhaseCompleted}
                   title={question.title}
                   index={index + 1}
                   key={index}
@@ -165,7 +160,7 @@ class Survey extends React.Component<SurveyProps, SurveyState> {
               questionIndex={this.state.questionIndex}
               isScroll={this.state.isScroll}
               scrollToQuestion={this.scrollToQuestion}
-              phaseId={phaseId}
+              isPhaseCompleted={isPhaseCompleted}
             />
           )}
           <div className="proposals" style={{ minHeight: '100px' }}>
@@ -192,7 +187,7 @@ class Survey extends React.Component<SurveyProps, SurveyState> {
                             posts={question.posts.edges}
                             questionIndex={index + 1}
                             questionId={question.id}
-                            phaseId={phaseId}
+                            isPhaseCompleted={isPhaseCompleted}
                             phaseUrl={phaseUrl}
                             key={index}
                           />
@@ -226,24 +221,18 @@ export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   graphql(ThematicQuery, {
     props: ({ data }) => {
-      if (data.loading) {
+      if (data.error || data.loading) {
         return {
-          loading: true
-        };
-      }
-
-      if (data.error) {
-        return {
-          hasErrors: true
+          error: data.error,
+          loading: data.loading
         };
       }
 
       const { thematic: { img, questions, title, video: media, numContributors, numPosts, totalSentiments }, refetch } = data;
-
       return {
-        hasErrors: false,
+        error: data.error,
+        loading: data.loading,
         imgUrl: img ? img.externalUrl : '',
-        loading: false,
         media: media,
         numContributors: numContributors,
         numPosts: numPosts,
@@ -254,5 +243,5 @@ export default compose(
       };
     }
   }),
-  withLoadingIndicator({ color: 'black' })
+  manageErrorAndLoading({ color: 'black', displayLoader: true })
 )(Survey);

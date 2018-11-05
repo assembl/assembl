@@ -17,10 +17,10 @@ import AvailableTokens from '../components/voteSession/availableTokens';
 import Proposals from '../components/voteSession/proposals';
 import ProposalsResults from '../components/voteSession/proposalsResults';
 import { getDomElementOffset, isMobile } from '../utils/globalFunctions';
-import { getIfPhaseCompletedById } from '../utils/timeline';
+import { getIsPhaseCompletedById } from '../utils/timeline';
 import { promptForLoginOr, displayAlert, displayModal } from '../utils/utilityManager';
 import { transformLinksInHtml } from '../utils/linkify';
-import withLoadingIndicator from '../components/common/withLoadingIndicator';
+import manageErrorAndLoading from '../components/common/manageErrorAndLoading';
 import MessagePage from '../components/common/messagePage';
 
 export type TokenCategory = {|
@@ -69,6 +69,7 @@ type Props = {
   instructionsSectionContent: string,
   isPhaseCompleted: boolean,
   modules: Array<VoteSpecification>,
+  phaseId: string,
   propositionsSectionTitle: string,
   proposals: Array<Proposal>,
   randomProposals: Array<Proposal>,
@@ -322,7 +323,8 @@ class DumbVoteSession extends React.Component<Props, State> {
       proposals,
       randomProposals,
       modules,
-      isPhaseCompleted
+      isPhaseCompleted,
+      phaseId
     } = this.props;
 
     const { availableTokensSticky, windowWidth, hasChanged } = this.state;
@@ -345,7 +347,7 @@ class DumbVoteSession extends React.Component<Props, State> {
 
     return (
       <div className="votesession-page">
-        <Header title={title} subtitle={subTitleToShow} imgUrl={headerImageUrl} type="voteSession">
+        <Header title={title} subtitle={subTitleToShow} imgUrl={headerImageUrl} type="voteSession" phaseId={phaseId}>
           <HeaderStatistics statElements={this.getStatElements()} />
         </Header>
         {!isPhaseCompleted ? (
@@ -420,7 +422,7 @@ const mapStateToProps = (state, ownProps) => ({
   timeline: state.timeline,
   debate: state.debate,
   lang: state.i18n.locale,
-  isPhaseCompleted: getIfPhaseCompletedById(state.timeline, ownProps.phaseId)
+  isPhaseCompleted: ownProps.phaseId && getIsPhaseCompletedById(state.timeline, ownProps.phaseId)
 });
 
 export { DumbVoteSession };
@@ -433,19 +435,16 @@ export default compose(
     }),
     props: ({ data, ownProps }) => {
       const defaultHeaderImage = ownProps.debate.debateData.headerBackgroundUrl || '';
-      if (data.loading) {
+      if (data.error || data.loading) {
         return {
-          loading: true
-        };
-      }
-      if (data.error) {
-        return {
-          hasErrors: true
+          error: data.error,
+          loading: data.loading
         };
       }
 
       if (!data.voteSession) {
         return {
+          error: data.error,
           loading: data.loading,
           title: '',
           seeCurrentVotes: false,
@@ -472,6 +471,7 @@ export default compose(
       } = data.voteSession;
 
       return {
+        error: data.error,
         loading: data.loading,
         headerImageUrl: headerImage ? headerImage.externalUrl : defaultHeaderImage,
         title: title,
@@ -494,5 +494,5 @@ export default compose(
   graphql(AddTokenVoteMutation, {
     name: 'addTokenVote'
   }),
-  withLoadingIndicator()
+  manageErrorAndLoading({ displayLoader: true })
 )(DumbVoteSession);

@@ -1,8 +1,11 @@
-import React from 'react';
+// @flow
+import * as React from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 import isEqual from 'lodash/isEqual';
+import { type Route } from 'react-router';
 import { compose, graphql } from 'react-apollo';
+// $FlowFixMe
 import { filter } from 'graphql-anywhere';
 
 import { get } from './utils/routeMap';
@@ -12,14 +15,49 @@ import { fetchDebateData } from './actions/debateActions';
 import { addContext } from './actions/contextActions';
 import { updateTimeline } from './actions/timelineActions';
 import Loader from './components/common/loader';
-import Error from './components/common/error';
+import ErrorMessage from './components/common/error';
 import ChatFrame from './components/common/ChatFrame';
 import { browserHistory } from './router';
 import TimelineQuery from './graphql/Timeline.graphql';
 
 export const IsHarvestingContext = React.createContext(false);
 
-class App extends React.Component {
+type Debate = {
+  debateData: DebateData,
+  debateLoading: boolean,
+  debateError: ?string
+};
+
+type Location = {
+  action: string,
+  hash: string,
+  key: string,
+  pathname: string,
+  query: Object,
+  search: string
+};
+
+type Params = {
+  phase: string,
+  slug: string
+};
+
+type Props = {
+  addContext: Function,
+  children: React.Node,
+  debate: Debate,
+  error?: ?Error,
+  fetchDebateData: Function,
+  location: Location,
+  params: Params,
+  putTimelineInStore: Function,
+  route: Route,
+  timeline: Timeline,
+  timelineLoading: boolean,
+  isHarvesting: boolean
+};
+
+class App extends React.Component<Props> {
   componentDidMount() {
     const debateId = getDiscussionId();
     const connectedUserId = getConnectedUserId();
@@ -28,8 +66,12 @@ class App extends React.Component {
     this.props.addContext(this.props.route.path, debateId, connectedUserId, connectedUserName);
   }
 
-  componentDidUpdate(prevProps) {
-    const { timelineLoading, location, params, timeline, putTimelineInStore } = this.props;
+  componentDidUpdate(prevProps: Props) {
+    const { error, timelineLoading, location, params, timeline, putTimelineInStore } = this.props;
+    if (error) {
+      throw new Error(`GraphQL error: ${error.message}`);
+    }
+
     // Don't do a timeline identity check (we are sure it's always different here) but use isEqual to be sure
     // we don't change the redux store (and trigger a full rerendering) if timeline array didn't change.
     if (!timelineLoading && !isEqual(timeline, prevProps.timeline)) {
@@ -43,17 +85,18 @@ class App extends React.Component {
 
   render() {
     const { debateData, debateLoading, debateError } = this.props.debate;
-    const divClassNames = classNames('app', { 'harvesting-mode-on': this.props.isHarvesting });
+    const { isHarvesting, children } = this.props;
+    const divClassNames = classNames('app', { 'harvesting-mode-on': isHarvesting });
     return (
       <div className={divClassNames}>
         <ChatFrame />
         {debateLoading && <Loader />}
         {debateData && (
           <div className="app-child">
-            <IsHarvestingContext.Provider value={this.props.isHarvesting}>{this.props.children}</IsHarvestingContext.Provider>
+            <IsHarvestingContext.Provider value={this.props.isHarvesting}>{children}</IsHarvestingContext.Provider>
           </div>
         )}
-        {debateError && <Error errorMessage={debateError} />}
+        {debateError && <ErrorMessage errorMessage={debateError} />}
       </div>
     );
   }
@@ -84,15 +127,11 @@ export default compose(
       variables: { lang: locale }
     }),
     props: ({ data }) => {
-      if (data.loading) {
+      if (data.error || data.loading) {
         return {
-          timelineLoading: true
-        };
-      }
-      if (data.error) {
-        return {
-          timelineLoading: false,
-          timeline: []
+          error: data.error,
+          timeline: [], // empty timeline to avoid to block the whole app until timeline data is loaded
+          timelineLoading: data.loading
         };
       }
 
@@ -108,6 +147,7 @@ export default compose(
         description: phase.description
       }));
       return {
+        error: data.error,
         timelineLoading: data.loading,
         timeline: phasesForStore
       };

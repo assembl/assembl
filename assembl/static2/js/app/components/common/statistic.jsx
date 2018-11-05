@@ -1,6 +1,12 @@
+// @flow
 import React from 'react';
 
-class Statistic extends React.Component {
+type Props = {
+  numPosts: number,
+  numContributors: number
+};
+
+class Statistic extends React.PureComponent<Props> {
   render() {
     const { numPosts, numContributors } = this.props;
     return (

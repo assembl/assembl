@@ -12,7 +12,8 @@ import { updatePhases } from '../actions/adminActions/timeline';
 import { updateSections } from '../actions/adminActions/adminSections';
 import { updateLandingPageModules, updateLandingPage } from '../actions/adminActions/landingPage';
 import { updateTextFields } from '../actions/adminActions/profileOptions';
-import withLoadingIndicator from '../components/common/withLoadingIndicator';
+import manageErrorAndLoading from '../components/common/manageErrorAndLoading';
+import mergeLoadingAndError from '../components/common/mergeLoadingAndError';
 import Menu from '../components/administration/menu';
 import LanguageMenu from '../components/administration/languageMenu';
 import SectionsQuery from '../graphql/SectionsQuery.graphql';
@@ -20,11 +21,12 @@ import TextFields from '../graphql/TextFields.graphql';
 import LegalContentsQuery from '../graphql/LegalContents.graphql';
 import VoteSessionQuery from '../graphql/VoteSession.graphql';
 import LandingPageQuery from '../graphql/LandingPage.graphql';
+import LandingPageModules from '../graphql/LandingPageModules.graphql';
 import TimelineQuery from '../graphql/Timeline.graphql';
 import { convertEntriesToEditorState } from '../utils/draftjs';
 import { getPhaseId } from '../utils/timeline';
-import landingPagePlugin from '../utils/administration/landingPage';
 import { fromGlobalId } from '../utils/globalFunctions';
+import { addEnumSuffixToModuleTitles } from '../components/administration/landingPage/addEnumSuffixToModuleTitles';
 
 const SECTIONS_WITHOUT_LANGUAGEMENU = ['1', '6'];
 
@@ -154,8 +156,9 @@ class Administration extends React.Component {
 
   putLandingPageModulesInStore(landingPageModules) {
     if (landingPageModules) {
-      const filtered = filter(landingPagePlugin.graphqlQuery, { landingPageModules: landingPageModules });
-      this.props.updateLandingPageModules(filtered.landingPageModules);
+      const filtered = filter(LandingPageModules, { landingPageModules: landingPageModules });
+      const landingPageModulesWithUpdatedTitles = addEnumSuffixToModuleTitles(filtered.landingPageModules);
+      this.props.updateLandingPageModules(landingPageModulesWithUpdatedTitles);
     }
   }
 
@@ -271,42 +274,6 @@ const mapDispatchToProps = dispatch => ({
   updatePhases: phases => dispatch(updatePhases(phases))
 });
 
-const mergeLoadingAndHasErrors = WrappedComponent => (props) => {
-  const {
-    voteSessionHasErrors,
-    voteSessionLoading,
-    sectionsHasErrors,
-    sectionsLoading,
-    legalContentsAreLoading,
-    legalContentsHaveErrors,
-    textFieldsLoading,
-    textFieldsHasErrors,
-    landingPageHasErrors,
-    landingPageLoading,
-    timelineIsLoading,
-    timelineHasErrors
-  } = props;
-
-  const hasErrors =
-    voteSessionHasErrors ||
-    legalContentsHaveErrors ||
-    landingPageHasErrors ||
-    sectionsHasErrors ||
-    props[landingPagePlugin.hasErrors] ||
-    textFieldsHasErrors ||
-    timelineHasErrors;
-  const loading =
-    voteSessionLoading ||
-    legalContentsAreLoading ||
-    landingPageLoading ||
-    sectionsLoading ||
-    props[landingPagePlugin.loading] ||
-    textFieldsLoading ||
-    timelineIsLoading;
-
-  return <WrappedComponent {...props} hasErrors={hasErrors} loading={loading} />;
-};
-
 const isNotInAdminSection = adminSectionName => props => !props.router.getCurrentLocation().pathname.endsWith(adminSectionName);
 
 const isNotInDiscussionAdmin = isNotInAdminSection('discussion');
@@ -324,20 +291,20 @@ export default compose(
       };
     },
     props: ({ data }) => {
-      if (data.loading) {
+      if (data.error || data.loading) {
         return {
-          voteSessionLoading: true
-        };
-      }
-      if (data.error) {
-        return {
-          voteSessionHasErrors: true
+          voteSessionMetadata: {
+            error: data.error,
+            loading: data.loading
+          }
         };
       }
 
       return {
-        voteSessionLoading: data.loading,
-        voteSessionHasErrors: data.error,
+        voteSessionMetadata: {
+          error: data.error,
+          loading: data.loading
+        },
         voteSession: data.voteSession,
         refetchVoteSession: data.refetch
       };
@@ -345,21 +312,20 @@ export default compose(
   }),
   graphql(SectionsQuery, {
     props: ({ data }) => {
-      if (data.loading) {
+      if (data.error || data.loading) {
         return {
-          sectionsLoading: true
-        };
-      }
-
-      if (data.error) {
-        return {
-          sectionsHasErrors: true
+          sectionsMetadata: {
+            error: data.error,
+            loading: data.loading
+          }
         };
       }
 
       return {
-        sectionsLoading: data.loading,
-        sectionsHasErrors: data.error,
+        sectionsMetadata: {
+          error: data.error,
+          loading: data.loading
+        },
         refetchSections: data.refetch,
         sections: data.sections
       };
@@ -368,20 +334,20 @@ export default compose(
   }),
   graphql(LegalContentsQuery, {
     props: ({ data }) => {
-      if (data.loading) {
+      if (data.error || data.loading) {
         return {
-          legalContentsAreLoading: true
-        };
-      }
-      if (data.error) {
-        return {
-          legalContentsHaveErrors: true
+          legalContentsMetadata: {
+            error: data.error,
+            loading: data.loading
+          }
         };
       }
 
       return {
-        legalContentsAreLoading: data.loading,
-        legalContentsHaveErrors: data.error,
+        legalContentsMetadata: {
+          error: data.error,
+          loading: data.loading
+        },
         refetchLegalContents: data.refetch,
         legalContents: data.legalContents
       };
@@ -393,29 +359,50 @@ export default compose(
       variables: { lang: locale }
     }),
     props: ({ data }) => {
-      if (data.loading) {
+      if (data.error || data.loading) {
         return {
-          timelineIsLoading: true
-        };
-      }
-      if (data.error) {
-        return {
-          timelineHasErrors: true
+          timelineMetadata: {
+            error: data.error,
+            loading: data.loading
+          }
         };
       }
 
       return {
-        timelineIsLoading: data.loading,
-        timelineHasErrors: data.error,
+        timelineMetadata: {
+          error: data.error,
+          loading: data.loading
+        },
         refetchTimeline: data.refetch,
         timeline: data.timeline
       };
     },
     skip: props => isNotInLandingPageAdmin(props) && isNotInDiscussionAdmin(props)
   }),
-  graphql(landingPagePlugin.graphqlQuery, {
-    options: landingPagePlugin.queryOptions,
-    props: landingPagePlugin.dataToProps,
+  graphql(LandingPageModules, {
+    options: ({ locale }) => ({
+      variables: { lang: locale }
+    }),
+    props: ({ data }) => {
+      if (data.error || data.loading) {
+        return {
+          landingPageModulesMetadata: {
+            error: data.error,
+            loading: data.loading
+          },
+          landingPageModules: []
+        };
+      }
+
+      return {
+        landingPageModulesMetadata: {
+          error: data.error,
+          loading: data.loading
+        },
+        refetchLandingPageModules: data.refetch,
+        landingPageModules: data.landingPageModules
+      };
+    },
     skip: isNotInLandingPageAdmin
   }),
   graphql(TextFields, {
@@ -423,21 +410,20 @@ export default compose(
       variables: { lang: locale }
     }),
     props: ({ data }) => {
-      if (data.loading) {
+      if (data.error || data.loading) {
         return {
-          textFieldsLoading: true
-        };
-      }
-
-      if (data.error) {
-        return {
-          textFieldsHasErrors: true
+          textFieldsMetadata: {
+            error: data.error,
+            loading: data.loading
+          }
         };
       }
 
       return {
-        textFieldsLoading: data.loading,
-        textFieldsHasErrors: data.error,
+        textFieldsMetadata: {
+          error: data.error,
+          loading: data.loading
+        },
         refetchTextFields: data.refetch,
         textFields: data.textFields
       };
@@ -449,26 +435,34 @@ export default compose(
       variables: { lang: locale }
     }),
     props: ({ data }) => {
-      if (data.loading) {
+      if (data.error || data.loading) {
         return {
-          landingPageLoading: true
-        };
-      }
-      if (data.error) {
-        return {
-          landingPageHasErrors: true
+          landingPageMetadata: {
+            error: data.error,
+            loading: data.loading
+          }
         };
       }
 
       return {
-        landingPageLoading: data.loading,
-        landingPageHasErrors: data.error,
+        landingPageMetadata: {
+          error: data.error,
+          loading: data.loading
+        },
         refetchLandingPage: data.refetch,
         landingPage: data.discussion
       };
     },
     skip: isNotInLandingPageAdmin
   }),
-  mergeLoadingAndHasErrors,
-  withLoadingIndicator()
+  mergeLoadingAndError([
+    'voteSessionMetadata',
+    'sectionsMetadata',
+    'legalContentsMetadata',
+    'timelineMetadata',
+    'landingPageModulesMetadata',
+    'textFieldsMetadata',
+    'landingPageMetadata'
+  ]),
+  manageErrorAndLoading({ displayLoader: true })
 )(Administration);

@@ -6,6 +6,7 @@ import { PHASES } from '../constants';
 import ExportSection from '../components/administration/exportSection';
 import Navbar from '../components/administration/navbar';
 import DiscussionPreferenceLanguageQuery from '../graphql/DiscussionPreferenceLanguage.graphql';
+import manageErrorAndLoading from '../components/common/manageErrorAndLoading';
 
 class MultiColumnsAdmin extends React.Component {
   constructor(props) {
@@ -74,22 +75,19 @@ export default compose(
       }
     }),
     props: ({ data }) => {
-      if (data.loading) {
+      if (data.error || data.loading) {
         return {
-          loading: true
+          error: data.error,
+          loading: data.loading
         };
       }
 
-      if (data.error) {
-        return {
-          hasErrors: true,
-          loading: false
-        };
-      }
       return {
-        hasErrors: false,
+        error: data.error,
+        loading: data.loading,
         languages: data.discussionPreferences.languages
       };
     }
-  })
+  }),
+  manageErrorAndLoading({ displayLoader: true })
 )(MultiColumnsAdmin);

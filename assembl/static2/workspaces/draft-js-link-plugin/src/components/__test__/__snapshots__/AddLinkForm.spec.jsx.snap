@@ -1,0 +1,168 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AddLinkForm component should render a form to add a link 1`] = `
+<div
+  className="form-horizontal"
+>
+  <div
+    className="form-group"
+  >
+    <label
+      className="col-sm-2 control-label"
+      htmlFor="url"
+    >
+      <div
+        className="richtext-label"
+      >
+        <span
+          className={undefined}
+          style={undefined}
+        >
+          URL
+        </span>
+      </div>
+    </label>
+    <div
+      className="col-sm-10"
+    >
+      <input
+        className="form-control"
+        id="url"
+        meta={
+          Object {
+            "active": false,
+            "data": Object {},
+            "dirty": false,
+            "dirtySinceLastSubmit": false,
+            "error": undefined,
+            "initial": undefined,
+            "invalid": false,
+            "pristine": true,
+            "submitError": undefined,
+            "submitFailed": false,
+            "submitSucceeded": false,
+            "touched": false,
+            "valid": true,
+            "visited": false,
+          }
+        }
+        onBlur={[Function]}
+        onChange={[Function]}
+        onFocus={[Function]}
+        render={undefined}
+        type={undefined}
+        value=""
+      />
+    </div>
+  </div>
+  <div
+    className="form-group"
+  >
+    <label
+      className="col-sm-2 control-label"
+      htmlFor="text"
+    >
+      <div
+        className="richtext-label"
+      >
+        <span
+          className={undefined}
+          style={undefined}
+        >
+          Link text
+        </span>
+      </div>
+    </label>
+    <div
+      className="col-sm-10"
+    >
+      <input
+        className="form-control"
+        id="text"
+        meta={
+          Object {
+            "active": false,
+            "data": Object {},
+            "dirty": false,
+            "dirtySinceLastSubmit": false,
+            "error": undefined,
+            "initial": "driver",
+            "invalid": false,
+            "pristine": true,
+            "submitError": undefined,
+            "submitFailed": false,
+            "submitSucceeded": false,
+            "touched": false,
+            "valid": true,
+            "visited": false,
+          }
+        }
+        onBlur={[Function]}
+        onChange={[Function]}
+        onFocus={[Function]}
+        render={undefined}
+        type={undefined}
+        value="driver"
+      />
+    </div>
+  </div>
+  <div
+    className="form-group"
+  >
+    <div
+      className="col-sm-10 col-sm-offset-2"
+    >
+      <div
+        className="checkbox"
+        style={undefined}
+      >
+        <label
+          title=""
+        >
+          <input
+            checked={false}
+            disabled={false}
+            name="openInNewTab"
+            onBlur={[Function]}
+            onChange={[Function]}
+            onFocus={[Function]}
+            type="checkbox"
+            value=""
+          />
+          <span
+            className={undefined}
+            style={undefined}
+          >
+            Open link in new tab
+          </span>
+        </label>
+      </div>
+    </div>
+  </div>
+  <div
+    className="margin-m form-group"
+  >
+    <div
+      className="col-sm-12"
+    >
+      <div
+        className="center"
+      >
+        <button
+          className="button-submit button-dark btn btn-default"
+          disabled={false}
+          onClick={[Function]}
+          type="submit"
+        >
+          <span
+            className={undefined}
+            style={undefined}
+          >
+            Validate
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;

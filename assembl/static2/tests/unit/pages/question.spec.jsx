@@ -7,6 +7,15 @@ describe('Question page', () => {
   it('should match Question with data snapshot', () => {
     const props = {
       imgUrl: 'https://foo.bar/umgurl',
+      timeline: [
+        {
+          id: 'phaseFoo',
+          title: 'Survey',
+          identifier: 'survey',
+          start: '2018-09-27T20:00:00+00:00',
+          end: '2100-01-27T20:00:00+00:00'
+        }
+      ],
       title: 'Foo',
       thematicTitle: 'Bar',
       thematicId: 'ThematicId',

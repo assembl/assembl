@@ -1,16 +1,29 @@
+// @flow
 import React from 'react';
 import { FormControl } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
 
+type Props = {
+  alwaysDisplayLabel: boolean,
+  value: string,
+  label: boolean,
+  maxLength: number,
+  handleTxtChange: (SyntheticInputEvent<HTMLInputElement>) => void,
+  handleInputFocus?: ?(SyntheticInputEvent<HTMLInputElement>) => void,
+  isActive?: boolean,
+  name: string
+};
+
 export const TextInputWithRemainingChars = ({
-  alwaysDisplayLabel = false,
+  alwaysDisplayLabel,
   value,
   label,
   maxLength,
   handleTxtChange,
   handleInputFocus,
-  isActive
-}) => {
+  isActive,
+  name
+}: Props) => {
   const remainingChars = maxLength - value.length;
   return (
     <div>
@@ -22,6 +35,7 @@ export const TextInputWithRemainingChars = ({
         value={value}
         onFocus={handleInputFocus || null}
         onChange={handleTxtChange}
+        name={name}
       />
       <div className="annotation margin-xs">
         {isActive ? (
@@ -32,4 +46,10 @@ export const TextInputWithRemainingChars = ({
       </div>
     </div>
   );
+};
+
+TextInputWithRemainingChars.defaultProps = {
+  alwaysDisplayLabel: false,
+  isActive: false,
+  handleInputFocus: null
 };

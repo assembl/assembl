@@ -1,8 +1,19 @@
+// @flow
 import React from 'react';
 import { Link } from 'react-router';
+
 import Statistic from './statistic';
 
-class ThematicPreview extends React.Component {
+type Props = {
+  imgUrl: string,
+  link: string,
+  title: string,
+  description: string,
+  numPosts: number,
+  numContributors: number
+};
+
+class ThematicPreview extends React.PureComponent<Props> {
   render() {
     const { imgUrl, link, title, description, numPosts, numContributors } = this.props;
     return (

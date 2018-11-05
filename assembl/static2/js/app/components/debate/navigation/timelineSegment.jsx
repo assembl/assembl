@@ -93,9 +93,9 @@ export class DumbTimelineSegment extends React.Component<TimelineSegmentProps, T
   };
 
   displayPhase = () => {
-    const { phaseId, phaseIdentifier, onDeselect, timeline } = this.props;
+    const { phaseIdentifier, onDeselect, timeline } = this.props;
     const { debateData } = this.props.debate;
-    const params = { slug: debateData.slug, phase: phaseIdentifier, phaseId: phaseId };
+    const params = { slug: debateData.slug, phase: phaseIdentifier };
     const isSeveralPhases = isSeveralIdentifiers(timeline);
     if (isSeveralPhases) {
       if (this.phaseStatus === PHASE_STATUS.notStarted) {

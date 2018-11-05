@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 
-import Tree from '../../common/tree';
+import { Tree } from '../../common/tree';
 import ColumnHeader from './columnHeader';
 import FoldedPost from '../common/post/foldedPost';
 import ColumnsPost from '../../../components/debate/multiColumns/columnsPost';
@@ -13,7 +13,7 @@ type Props = {
   classifier: string,
   color: string,
   contentLocaleMapping: Object,
-  data: Array<Post>,
+  data: Array<TreeItem & Post>,
   ideaId: string,
   identifier: string,
   phaseId: string,

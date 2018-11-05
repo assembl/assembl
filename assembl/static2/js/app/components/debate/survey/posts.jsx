@@ -2,17 +2,15 @@
 // @flow
 import * as React from 'react';
 import { withRouter } from 'react-router';
-import { I18n } from 'react-redux-i18n';
 import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
 import type { Map } from 'immutable';
 
 import { updateContentLocale } from '../../../actions/contentLocaleActions';
-import withLoadingIndicator from '../../common/withLoadingIndicator';
+import manageErrorAndLoading from '../../common/manageErrorAndLoading';
 import FlatList from '../../common/flatList';
 import Post from './post';
 import QuestionPosts from '../../../graphql/QuestionPostsQuery.graphql';
-import { displayAlert } from '../../../utils/utilityManager';
 
 type PostNode = {
   node: {
@@ -21,33 +19,32 @@ type PostNode = {
   }
 };
 
-type PostsProps = {
-  hasErrors: boolean,
+type Props = {
   posts: {
     edges: Array<PostNode>
   },
   networkStatus: number,
   defaultContentLocaleMapping: Map,
+  isPhaseCompleted: boolean,
   fetchMore: Function,
   refetch: Function,
   questionId: string,
   themeId: string,
-  phaseId: string,
   updateContentLocaleMapping: Function
 };
 
-export class DumbPosts extends React.Component<PostsProps> {
+export class DumbPosts extends React.Component<Props> {
   componentWillMount() {
     this.updateContentLocaleMappingFromProps(this.props);
   }
 
-  componentWillReceiveProps(nextProps: PostsProps) {
+  componentWillReceiveProps(nextProps: Props) {
     if (nextProps.posts !== this.props.posts) {
       this.updateContentLocaleMappingFromProps(nextProps);
     }
   }
 
-  updateContentLocaleMappingFromProps(props: PostsProps) {
+  updateContentLocaleMappingFromProps(props: Props) {
     const { defaultContentLocaleMapping, updateContentLocaleMapping, posts } = props;
     const contentLocaleMappingData = {};
     posts.edges.forEach((edge) => {
@@ -64,11 +61,7 @@ export class DumbPosts extends React.Component<PostsProps> {
   }
 
   render() {
-    if (this.props.hasErrors) {
-      displayAlert('danger', I18n.t('error.loading'));
-      return null;
-    }
-    const { networkStatus, fetchMore, refetch, phaseId, themeId, posts, questionId } = this.props;
+    const { networkStatus, fetchMore, refetch, themeId, posts, questionId, isPhaseCompleted } = this.props;
     return (
       <FlatList
         items={posts}
@@ -81,10 +74,10 @@ export class DumbPosts extends React.Component<PostsProps> {
         loadPreviousMessage="debate.survey.loadRecentPosts"
         itemData={item => ({
           id: item.node.id,
+          isPhaseCompleted: isPhaseCompleted,
           originalLocale: item.node.originalLocale,
           questionId: questionId,
-          themeId: themeId,
-          phaseId: phaseId
+          themeId: themeId
         })}
       />
     );
@@ -116,24 +109,18 @@ export default compose(
       };
     },
     props: ({ data }) => {
-      if (data.loading) {
+      if (data.error || data.loading) {
         return {
-          loading: true,
-          networkStatus: data.networkStatus
-        };
-      }
-
-      if (data.error) {
-        return {
-          hasErrors: true,
+          error: data.error,
+          loading: data.loading,
           networkStatus: data.networkStatus
         };
       }
 
       const { question: { posts }, fetchMore, refetch, networkStatus } = data;
-
       return {
-        hasErrors: false,
+        error: data.error,
+        loading: data.loading,
         posts: posts,
         fetchMore: fetchMore,
         refetch: refetch,
@@ -141,5 +128,5 @@ export default compose(
       };
     }
   }),
-  withLoadingIndicator({ color: 'black' })
+  manageErrorAndLoading({ color: 'black', displayLoader: true })
 )(DumbPosts);

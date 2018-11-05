@@ -1,6 +1,6 @@
 build/*
 coverage/*
-node_modules/*
+**/node_modules/*
 css/*
 js/app/components/styleguide/*
 package.json

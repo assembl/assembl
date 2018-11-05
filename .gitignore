@@ -77,10 +77,12 @@ npm-debug.log
 
 # static2
 /assembl/static2/node_modules/
+/assembl/static2/workspaces/*/node_modules/
+/assembl/static2/workspaces/*/yarn-error.log
 /assembl/static2/build/
 /assembl/static2/graphql-documentation/
-/assembl/static2/coverage/
 /assembl/static2/.eslintcache
+/assembl/static2/coverage/*
 /assembl/static2/.stylelintcache
 /assembl/static2/npm-debug.log
 /assembl/static2/yarn-error.log
@@ -144,3 +146,7 @@ local.ini.*
 
 #test upload
 var/test_uploads
+
+# ignore files generated with `fab  -f assembl/fabfile.py -c assembl/configs/testing.rc create_local_ini`
+testing.ini.bak
+urls.db

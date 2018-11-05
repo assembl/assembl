@@ -14,6 +14,10 @@ imap_host = localhost
 piwik_host = localhost
 url_metadata_host = localhost
 changes_websocket_host = localhost
+# AWS S3 config
+aws_bucket_name =
+aws_access_key_id =
+aws_secret_access_key =
 # The port to use for the websocket (client frontends will connect to this)
 # In prod, your firewall needs to allow this through or proxy it through nginx
 # UNIQUE_PER_SERVER

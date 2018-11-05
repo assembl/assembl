@@ -30,12 +30,12 @@ describe('i18n util module', () => {
     });
   });
 
-  describe('updateInLangstringEntries function', () => {
-    it('should return an updater function to update a value in langstring entries');
+  xdescribe('updateInLangstringEntries function', () => {
+    it('should return an updater function to update a value in langstring entries', () => {});
   });
 
-  describe('getEntryValueForLocale function', () => {
-    it('should return the value for the langstring entry with given locale');
+  xdescribe('getEntryValueForLocale function', () => {
+    it('should return the value for the langstring entry with given locale', () => {});
   });
 
   describe('convertToLangstringEntries function', () => {

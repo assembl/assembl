@@ -1,0 +1,50 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Attachments component should render a list of attachments 1`] = `
+<div
+  className="attachments"
+>
+  <div
+    className="attachment"
+  >
+    <span
+      className="assembl-icon-text-attachment"
+    />
+    <a
+      href="my-file.pdf"
+      rel="noopener noreferrer"
+      target="_blank"
+    >
+      My pdf
+    </a>
+    <span
+      className="assembl-icon-delete"
+      onClick={[Function]}
+    />
+  </div>
+  <div
+    className="attachment"
+  >
+    <span
+      className="assembl-icon-text-attachment"
+    />
+    <a
+      href="some-dummy-url"
+      rel="noopener noreferrer"
+      target="_blank"
+    >
+      My image
+    </a>
+    <span
+      className="assembl-icon-delete"
+      onClick={[Function]}
+    />
+  </div>
+</div>
+`;
+
+exports[`Attachments component should render an empty list of attachments 1`] = `
+<div
+  className="attachments"
+/>
+`;

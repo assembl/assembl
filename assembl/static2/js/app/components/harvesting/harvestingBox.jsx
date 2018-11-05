@@ -12,7 +12,7 @@ import addPostExtractMutation from '../../graphql/mutations/addPostExtract.graph
 import updateExtractMutation from '../../graphql/mutations/updateExtract.graphql';
 import deleteExtractMutation from '../../graphql/mutations/deleteExtract.graphql';
 import confirmExtractMutation from '../../graphql/mutations/confirmExtract.graphql';
-import withLoadingIndicator from '../../components/common/withLoadingIndicator';
+import manageErrorAndLoading from '../../components/common/manageErrorAndLoading';
 import { getConnectedUserId, getConnectedUserName } from '../../utils/globalFunctions';
 import AvatarImage from '../common/avatarImage';
 import TaxonomyOverflowMenu from './taxonomyOverflowMenu';
@@ -51,7 +51,7 @@ type State = {
   editableExtract: string,
   extractNature: ?string,
   extractAction: ?string,
-  showOverflowMenu: boolean,
+  menuTarget: HTMLElement | null,
   overflowMenu: ?HTMLElement,
   overflowMenuTop: number
 };
@@ -93,7 +93,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
       editableExtract: extract ? extract.body : '',
       extractNature: extract && extract.extractNature ? extract.extractNature.split('.')[1] : null,
       extractAction: extract && extract.extractAction ? extract.extractAction.split('.')[1] : null,
-      showOverflowMenu: false,
+      menuTarget: null,
       overflowMenu: null,
       overflowMenuTop: 25
     };
@@ -102,7 +102,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
       [ACTIONS.create]: {
         buttons: [
           { id: 'cancel', title: 'debate.confirmDeletionButtonCancel', className: 'button-cancel', onClick: cancelHarvesting },
-          { id: 'validate', title: 'common.attachFileForm.submit', className: 'button-submit', onClick: this.validateHarvesting }
+          { id: 'validate', title: 'harvesting.submit', className: 'button-submit', onClick: this.validateHarvesting }
         ]
       },
       [ACTIONS.edit]: {
@@ -110,7 +110,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
           { id: 'cancel', title: 'debate.confirmDeletionButtonCancel', className: 'button-cancel', onClick: this.setEditMode },
           {
             id: 'validate',
-            title: 'common.attachFileForm.submit',
+            title: 'harvesting.submit',
             className: 'button-submit',
             onClick: this.updateHarvestingBody
           }
@@ -148,7 +148,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
   };
 
   qualifyExtract = (taxonomies: Taxonomies): void => {
-    this.setState({ showOverflowMenu: false });
+    this.setState({ menuTarget: null });
     const { nature, action } = taxonomies;
     const { updateExtract, refetchPost } = this.props;
     const { extractIndex } = this.state;
@@ -362,7 +362,8 @@ class DumbHarvestingBox extends React.Component<Props, State> {
       isNugget: isNugget,
       extractNature: extract && extract.extractNature ? extract.extractNature.split('.')[1] : null,
       extractAction: extract && extract.extractAction ? extract.extractAction.split('.')[1] : null,
-      editableExtract: extract ? extract.body : ''
+      editableExtract: extract ? extract.body : '',
+      menuTarget: null
     }));
   };
 
@@ -405,7 +406,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
       editableExtract,
       extractNature,
       extractAction,
-      showOverflowMenu,
+      menuTarget,
       overflowMenuTop,
       extractIndex
     } = this.state;
@@ -501,21 +502,22 @@ class DumbHarvestingBox extends React.Component<Props, State> {
                 <Button
                   disabled={menuDisabled}
                   className="taxonomy-menu-btn"
-                  onClick={() => {
-                    this.setState({ showOverflowMenu: !showOverflowMenu });
+                  onClick={(e) => {
+                    this.setState({ menuTarget: !menuTarget ? e.target : null });
                   }}
                 >
                   <span className="assembl-icon-ellipsis-vert grey" />
                 </Button>
               </OverlayTrigger>
-              {showOverflowMenu && (
+              {menuTarget && (
                 <TaxonomyOverflowMenu
                   innerRef={this.updateOverflowMenu}
                   handleClick={this.qualifyExtract}
                   extractNature={extractNature}
                   extractAction={extractAction}
+                  target={menuTarget}
                   onCloseClick={() => {
-                    this.setState({ showOverflowMenu: false });
+                    this.setState({ menuTarget: null });
                   }}
                   top={overflowMenuTop}
                 />
@@ -626,5 +628,5 @@ export default compose(
   graphql(confirmExtractMutation, {
     name: 'confirmExtract'
   }),
-  withLoadingIndicator()
+  manageErrorAndLoading({ displayLoader: true })
 )(DumbHarvestingBox);

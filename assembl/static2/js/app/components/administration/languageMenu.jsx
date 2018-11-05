@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import { connect } from 'react-redux';
 import { OverlayTrigger } from 'react-bootstrap';
@@ -21,7 +22,14 @@ import Th from '../svg/flags/th';
 import Tr from '../svg/flags/tr';
 import ZhCN from '../svg/flags/zh_CN';
 
-const Flag = ({ locale }) => {
+type Props = {
+  editLocale: string,
+  discussionPreferences: Array<string>,
+  isHidden: boolean,
+  changeLocale: string => void
+};
+
+const Flag = ({ locale }: { locale: string }) => {
   switch (locale) {
   case 'de':
     return <De />;
@@ -60,7 +68,7 @@ const Flag = ({ locale }) => {
   }
 };
 
-const LanguageMenu = ({ changeLocale, editLocale, discussionPreferences, isHidden }) => {
+const LanguageMenu = ({ changeLocale, editLocale, discussionPreferences, isHidden }: Props) => {
   if (!isHidden) {
     return (
       <div className="relative">

@@ -235,9 +235,6 @@ Assembl has several core fixtures that are important to note, in order to run th
       fixture. It can be used to query the database, push new models, etc. It is an SQLAlchemy
       session maker. A ``test_session`` depends on a ``default_db_data``
 
-- test_server
-    * A uWSGI server fixture that refers to an Assembl instance
-
 - test_app
     * An Assembl instance fixture, built on WebTest's TestApp_ testing tool. This fixture
       builds on ``test_app_no_perm`` and gives the ``admin_user`` fixture administrative permissions,
@@ -250,11 +247,6 @@ Assembl has several core fixtures that are important to note, in order to run th
 - test_adminuser_webrequest
     * A Pyramid GET request to "/", built on WebTest's TestRequest_, that includes an ``admin_user``
       as its ``authenticated_user_id``.
-
-- browser
-    * A browser fixture that is built on top of Splinter_ for integration testing. This specific fixture
-      is bound to the `phantom\.js`_ driver. To create a different, use this fixture as a template for
-      creating other drivers. Splinter has explicit documentation of different driver usages.
 
 
 Getting Started
@@ -327,5 +319,4 @@ TODO
 .. _TestRequest: http://docs.pylonsproject.org/projects/webtest/en/latest/api.html#webtest-app-testrequest
 .. _WebTest: http://docs.pylonsproject.org/projects/webtest/en/latest/
 .. _`Pyramid Documentation`: http://docs.pylonsproject.org/projects/pyramid/en/latest/narr/testing.html
-.. _Splinter: https://splinter.readthedocs.io/en/latest/
 .. _`phantom\.js`: http://phantomjs.org/

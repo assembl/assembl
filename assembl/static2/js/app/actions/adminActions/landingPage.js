@@ -84,13 +84,17 @@ export const updateLandingPageModuleSubtitle = (
   type: actionTypes.UPDATE_LANDING_PAGE_MODULE_SUBTITLE
 });
 
-export const createLandingPageModules = (
+export const createLandingPageModule = (
   id: string,
   identifier: string,
+  numberOfDuplicatesModules: number,
+  title: string,
   order: number
-): actionTypes.CreateLandingPageModules => ({
+): actionTypes.createLandingPageModule => ({
   id: id,
   identifier: identifier,
+  numberOfDuplicatesModules: numberOfDuplicatesModules,
+  title: title,
   order: order,
   type: actionTypes.CREATE_LANDING_PAGE_MODULE
 });

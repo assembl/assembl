@@ -1,10 +1,86 @@
 import { ContentState, EditorState } from 'draft-js';
 import { List, Map } from 'immutable';
 
+/* eslint-disable import/no-extraneous-dependencies */
+import TestUtils from 'assembl-test-editor-utils';
+/* eslint-enable import/no-extraneous-dependencies */
+
 import { createEditorStateFromText } from '../../helpers/draftjs';
 import * as draftjs from '../../../js/app/utils/draftjs';
 
 describe('draftjs utils', () => {
+  describe('blockToHTML function', () => {
+    const { blockToHTML } = draftjs;
+    it('should return undefined for non atomic block', () => {
+      const block = {
+        type: 'unstyled'
+      };
+      const result = blockToHTML(block);
+      expect(result).toBeUndefined();
+    });
+
+    it('should convert atomic block to a div', () => {
+      const block = {
+        type: 'atomic'
+      };
+      const result = blockToHTML(block);
+      const expected = {
+        start: '<div class="atomic-block" data-blocktype="atomic">',
+        end: '</div>'
+      };
+      expect(result).toEqual(expected);
+    });
+  });
+
+  describe('htmlToBlock function', () => {
+    const { htmlToBlock } = draftjs;
+    it('should create an atomic block if the node is an img tag', () => {
+      const nodeName = 'img';
+      const node = {};
+      const lastList = null;
+      const inBlock = 'unstyled';
+      const result = htmlToBlock(nodeName, node, lastList, inBlock);
+      const expected = 'atomic';
+      expect(result).toEqual(expected);
+    });
+
+    it('should create an atomic block if the node is an atomic block (image)', () => {
+      const node = document.createElement('div');
+      node.dataset = { blocktype: 'atomic' };
+      const child = document.createElement('img');
+      child.dataset = {
+        id: 'foobar',
+        mimeType: 'image/png'
+      };
+      node.appendChild(child);
+      const lastList = null;
+      const inBlock = 'atomic';
+      const result = htmlToBlock('div', node, lastList, inBlock);
+      const expected = 'atomic';
+      expect(result).toEqual(expected);
+    });
+
+    it('should create an atomic block if the node is an atomic block (non image)', () => {
+      const node = document.createElement('div');
+      node.dataset = { blocktype: 'atomic' };
+      const child = document.createElement('a');
+      const grandchild = document.createElement('img');
+      grandchild.dataset = {
+        externalurl: 'http://www.example.com/mydoc.pdf',
+        id: 'foobar',
+        mimetype: 'application/pdf'
+      };
+      child.appendChild(grandchild);
+      node.appendChild(child);
+
+      const lastList = null;
+      const inBlock = 'atomic';
+      const result = htmlToBlock('div', node, lastList, inBlock);
+      const expected = 'atomic';
+      expect(result).toEqual(expected);
+    });
+  });
+
   // describe('convertEntries function');
   describe('convertToEditorState function', () => {
     const { convertToEditorState } = draftjs;
@@ -143,6 +219,41 @@ describe('draftjs utils', () => {
     it('should return false if rawContentState is not empty', () => {
       const es = createEditorStateFromText('foo');
       expect(editorStateIsEmpty(es)).toBeFalsy();
+    });
+  });
+
+  describe('uploadNewAttachments function', () => {
+    const { uploadNewAttachments } = draftjs;
+    it('should upload new attachments and return a promise with updated content state and the document ids', async () => {
+      const fileB64 = window.btoa('gimme some base64');
+      const myFile = new File([fileB64], 'my-file.pdf');
+      const uploadDocumentSpy = jest.fn();
+      const fakeResponse = {
+        data: {
+          uploadDocument: {
+            document: {
+              externalUrl: '/data/my-doc.pdf',
+              id: 'my-doc-id',
+              mimeType: 'application/pdf',
+              title: 'My document'
+            }
+          }
+        }
+      };
+      uploadDocumentSpy.mockImplementationOnce(() => Promise.resolve(fakeResponse));
+      const editorState = TestUtils.createEditorStateWithTwoAttachments('my-img.jpg', myFile);
+      const promise = uploadNewAttachments(editorState, uploadDocumentSpy);
+      const result = await promise;
+      const updatedContentState = result.contentState;
+      const updatedEntityData = updatedContentState.getEntity('2').getData();
+      expect(updatedEntityData).toEqual({
+        id: 'my-doc-id',
+        mimeType: 'application/pdf',
+        src: '/data/my-doc.pdf',
+        title: 'My document'
+      });
+      expect(result.documentIds).toEqual(['my-img-id', 'my-doc-id']);
+      expect(uploadDocumentSpy).toHaveBeenCalledWith({ variables: { file: myFile } });
     });
   });
 });

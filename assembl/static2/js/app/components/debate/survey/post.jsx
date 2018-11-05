@@ -6,7 +6,6 @@ import { Translate, I18n } from 'react-redux-i18n';
 
 import { getConnectedUserId } from '../../../utils/globalFunctions';
 import Permissions, { connectedUserCan } from '../../../utils/permissions';
-import { getIfPhaseCompletedById } from '../../../utils/timeline';
 import PostCreator from './postCreator';
 import Like from '../../svg/like';
 import Disagree from '../../svg/disagree';
@@ -18,7 +17,7 @@ import { deleteMessageTooltip, likeTooltip, disagreeTooltip } from '../../common
 import { sentimentDefinitionsObject } from '../common/sentimentDefinitions';
 import StatisticsDoughnut from '../common/statisticsDoughnut';
 import { EXTRA_SMALL_SCREEN_WIDTH, DeletedPublicationStates } from '../../../constants';
-import withLoadingIndicator from '../../common/withLoadingIndicator';
+import manageErrorAndLoading from '../../common/manageErrorAndLoading';
 import ResponsiveOverlayTrigger from '../../common/responsiveOverlayTrigger';
 import { withScreenWidth } from '../../common/screenDimensions';
 import PostBody from '../common/post/postBody';
@@ -28,7 +27,7 @@ import QuestionQuery from '../../../graphql/QuestionQuery.graphql';
 import ThematicQuery from '../../../graphql/ThematicQuery.graphql';
 
 type Props = {
-  timeline: Timeline,
+  isPhaseCompleted: boolean,
   addSentiment: Function,
   contentLocale: string,
   debate: DebateData,
@@ -41,7 +40,6 @@ type Props = {
   questionId: string,
   screenWidth: number,
   themeId: string,
-  phaseId: string,
   isHarvesting: boolean
 };
 
@@ -61,11 +59,9 @@ class Post extends React.Component<Props> {
 
   handleSentiment = (event, type, refetchQueries, currentCounts: { disagree: number, like: number }) => {
     const { post } = this.props.data;
-    const { phaseId } = this.props;
+    const { isPhaseCompleted } = this.props;
     const isUserConnected = getConnectedUserId() !== null;
     if (isUserConnected) {
-      const { timeline } = this.props;
-      const isPhaseCompleted = getIfPhaseCompletedById(timeline, phaseId);
       if (!isPhaseCompleted) {
         const target = event.currentTarget;
         const isMySentiment = post.mySentiment === type;
@@ -233,6 +229,7 @@ class Post extends React.Component<Props> {
     return (
       <div className="shown box" id={post.id}>
         <div className="content">
+          {/* $FlowFixMe */}
           <PostCreator name={creatorName} />
           <PostBody
             dbId={post.dbId}
@@ -317,7 +314,6 @@ class Post extends React.Component<Props> {
 
 const mapStateToProps = (state, { id }) => ({
   debate: state.debate,
-  timeline: state.timeline,
   contentLocale: state.contentLocale.getIn([id, 'contentLocale']),
   lang: state.i18n.locale,
   isHarvesting: state.context.isHarvesting
@@ -332,7 +328,7 @@ export default compose(
   graphql(deleteSentimentMutation, {
     name: 'deleteSentiment'
   }),
-  withLoadingIndicator(),
+  manageErrorAndLoading({ displayLoader: true }),
   withScreenWidth,
   withApollo
 )(Post);

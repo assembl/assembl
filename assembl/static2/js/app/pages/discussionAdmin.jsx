@@ -97,7 +97,7 @@ type Props = {
   deleteTextField: Function,
   profileOptionsHasChanged: boolean,
   refetchTextFields: Function,
-  textFields: string,
+  textFields: Array<Object>,
   updateDiscussionPhase: Function,
   createDiscussionPhase: Function,
   deleteDiscussionPhase: Function,
@@ -169,7 +169,7 @@ class DiscussionAdmin extends React.Component<Props, State> {
       deleteDiscussionPhase,
       editLocale
     } = this.props;
-    displayAlert('success', `${I18n.t('loading.wait')}...`);
+    displayAlert('success', `${I18n.t('loading.wait')}...`, false, -1);
 
     if (languagePreferenceHasChanged) {
       const payload = {

@@ -2,6 +2,7 @@
 import ThematicsMenu from './components/administration/thematicsMenu';
 
 export const DEFAULT_FAVICON = '/static/img/icon/infinite-1.png';
+export const ICONS_PATH = '/static2/img/icons';
 export const EXTRA_SMALL_SCREEN_WIDTH = 600;
 export const SMALL_SCREEN_WIDTH = 768;
 export const SMALL_SCREEN_HEIGHT = 812;
@@ -18,6 +19,7 @@ export const COLUMN_OPACITY_GAIN = 0.5;
 // Bright mirror
 export const EMPTY_STRING = '';
 export const FICTION_DELETE_CALLBACK = 'FICTION_DELETE_CALLBACK';
+export const USER_ID_NOT_FOUND = -9999;
 
 // Minimum length for survey answers
 export const MINIMUM_BODY_LENGTH = 10;
@@ -285,8 +287,6 @@ export const fictionBackgroundColors = [
   '#d7ccc8',
   '#cfd8dc'
 ];
-
-export const FICTION_DRAFT_OPACITY = '70';
 
 export const modulesTranslationKeys = ['survey', 'thread', 'multiColumns', 'voteSession', 'brightMirror'];
 

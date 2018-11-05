@@ -178,7 +178,7 @@ exports[`PostView component should render a post in view mode 1`] = `
       <div
         className="post-right"
       >
-        <Connect(withApollo(PostActions))
+        <Connect(Connect(withApollo(PostActions)))
           creatorUserId="dannietreutel"
           debateData={
             Object {
@@ -199,7 +199,6 @@ exports[`PostView component should render a post in view mode 1`] = `
             }
           }
           sentimentCounts={3}
-          timeline={Array []}
         />
       </div>
     </div>
@@ -207,7 +206,7 @@ exports[`PostView component should render a post in view mode 1`] = `
   <div
     className="collapsed-answer-form"
   >
-    <Connect(Apollo(Apollo(AnswerForm)))
+    <Connect(Apollo(Apollo(DumbAnswerForm)))
       handleAnswerClick={[Function]}
       hideAnswerForm={[Function]}
       ideaId="ABC123"

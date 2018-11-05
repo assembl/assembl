@@ -19,11 +19,13 @@ type Props = {
     onFocus: (?SyntheticFocusEvent<*>) => void,
     value: multilingualValue
   },
-  label: string
+  label: string,
+  uploadDocument: Function
 } & FieldRenderProps;
 
 const RichTextFieldAdapter = ({
   editLocale,
+  uploadDocument,
   input: { name, onBlur, onChange, value, ...otherListeners },
   label,
   meta: { error, touched },
@@ -39,11 +41,14 @@ const RichTextFieldAdapter = ({
         placeholder={label}
         toolbarPosition="bottom"
         onChange={es => onChange({ ...value, [editLocale]: es })}
-        withAttachmentButton={false}
       />
       <Error name={name} />
     </FormGroup>
   );
+};
+
+RichTextFieldAdapter.defaultProps = {
+  withAttachment: false
 };
 
 export default RichTextFieldAdapter;

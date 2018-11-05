@@ -1,5 +1,44 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`PostBody component should render a html body 1`] = `
+<div>
+  <div
+    id="message-body-local:Content/3059"
+  >
+    You can't index 
+    <a
+      className="linkified"
+      href="url"
+      target={undefined}
+      title={undefined}
+    >
+      the port
+    </a>
+    <URLMetadataLoader
+      afterLoad={undefined}
+      url="url"
+    />
+     without 
+    <ExtractInPost
+      id="annotationId"
+      state="pending"
+    >
+      programming
+    </ExtractInPost>
+     the wireless HTTP program! 
+    <Embed
+      defaultEmbed={
+        <iframe
+          src="iframe-src"
+          title="post-embed"
+        />
+      }
+      url="iframe-src"
+    />
+  </div>
+</div>
+`;
+
 exports[`PostBody component should render a post body 1`] = `
 <div
   className="post-body post-body--is-harvestable"

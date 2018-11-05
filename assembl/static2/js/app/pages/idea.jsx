@@ -103,7 +103,7 @@ export const transformPosts = (edges, messageColumns, additionnalProps = {}) => 
     .sort(creationDateLastDescendantComparator);
 };
 
-const noRowsRenderer = () => (
+export const noRowsRenderer = () => (
   <div className="center">
     <Translate value="debate.thread.noPostsInThread" />
   </div>
@@ -331,12 +331,11 @@ export default compose(
         };
       }
       if (data.error) {
-        return {
-          ideaHasErrors: true
-        };
+        throw new Error(data.error.message);
       }
 
       return {
+        ideaLoading: false,
         announcement: data.idea.announcement,
         id: data.idea.id,
         title: data.idea.title,

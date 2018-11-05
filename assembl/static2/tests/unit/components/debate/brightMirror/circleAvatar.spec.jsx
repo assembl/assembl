@@ -6,6 +6,7 @@ import Adapter from 'enzyme-adapter-react-16';
 
 import CircleAvatar from '../../../../../js/app/components/debate/brightMirror/circleAvatar';
 import type { CircleAvatarProps } from '../../../../../js/app/components/debate/brightMirror/circleAvatar';
+import { getIconPath } from '../../../../../js/app/utils/globalFunctions';
 
 // Separate the snapshots in directories next to each component
 // Name should match with the story name
@@ -14,6 +15,8 @@ initStoryshots({
 });
 
 configure({ adapter: new Adapter() });
+
+const avatarIcon = getIconPath('avatar.png');
 
 const defaultCircleAvatar: CircleAvatarProps = {
   username: 'taryn-treutel',
@@ -43,6 +46,6 @@ describe('<CircleAvatar /> - with shallow', () => {
 
   it('should render one image with a default alt tag set to no-username-avatar', () => {
     wrapper.setProps({ username: '', src: '' });
-    expect(wrapper.find('img [alt="no-username-avatar"] [src="/static2/img/icons/avatar.png"]')).toHaveLength(1);
+    expect(wrapper.find(`img [alt="no-username-avatar"] [src="${avatarIcon}"]`)).toHaveLength(1);
   });
 });

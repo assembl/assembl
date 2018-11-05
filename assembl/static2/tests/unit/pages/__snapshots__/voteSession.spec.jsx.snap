@@ -6,6 +6,7 @@ exports[`VoteSession component should match VoteSession snapshot 1`] = `
 >
   <Connect(Header)
     imgUrl="foo.jpg"
+    phaseId="my-phase-id"
     subtitle="Maintenant il faut voter."
     title="Phase de vote à la majorité et estimation multicritère"
     type="voteSession"
@@ -267,6 +268,7 @@ exports[`VoteSession component should match VoteSession snapshot with empty modu
 >
   <Connect(Header)
     imgUrl="foo.jpg"
+    phaseId="my-phase-id"
     subtitle="Maintenant il faut voter."
     title="Phase de vote à la majorité et estimation multicritère"
     type="voteSession"

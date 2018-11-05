@@ -11,13 +11,7 @@ exports[`Bright Mirror page should hide fiction creation section if timeline is 
   <div
     className="overflow-x"
   >
-    <FictionsList
-      identifier="brightMirror"
-      lang={undefined}
-      posts={Array []}
-      refetchIdea={[Function]}
-      themeId={0}
-    />
+    
   </div>
 </div>
 `;
@@ -33,13 +27,7 @@ exports[`Bright Mirror page should hide fiction creation section if user is not 
   <div
     className="overflow-x"
   >
-    <FictionsList
-      identifier="brightMirror"
-      lang={undefined}
-      posts={Array []}
-      refetchIdea={[Function]}
-      themeId={0}
-    />
+    
   </div>
 </div>
 `;
@@ -55,13 +43,7 @@ exports[`Bright Mirror page should hide fiction creation section if user is not 
   <div
     className="overflow-x"
   >
-    <FictionsList
-      identifier="brightMirror"
-      lang={undefined}
-      posts={Array []}
-      refetchIdea={[Function]}
-      themeId={0}
-    />
+    
   </div>
 </div>
 `;
@@ -83,6 +65,7 @@ exports[`Bright Mirror page should match BrightMirror instruction snapshot 1`] =
       draftSuccessMsgId="debate.brightMirror.draftSuccessMsg"
       draftable={true}
       fillBodyLabelMsgId="debate.brightMirror.fillBodyLabel"
+      fullscreen={true}
       ideaId={0}
       instructionLabelMsgId="debate.brightMirror.startFictionLabel"
       isColumnViewInline={false}
@@ -90,13 +73,6 @@ exports[`Bright Mirror page should match BrightMirror instruction snapshot 1`] =
       postSuccessMsgId="debate.brightMirror.postSuccessMsg"
       refetchIdea={[Function]}
       topPostsCount={0}
-    />
-    <FictionsList
-      identifier="brightMirror"
-      lang={undefined}
-      posts={Array []}
-      refetchIdea={[Function]}
-      themeId={0}
     />
   </div>
 </div>

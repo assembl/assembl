@@ -10,14 +10,13 @@ import classNames from 'classnames';
 import createPostMutation from '../../../graphql/mutations/createPost.graphql';
 import uploadDocumentMutation from '../../../graphql/mutations/uploadDocument.graphql';
 import { displayAlert, promptForLoginOr } from '../../../utils/utilityManager';
-import { convertContentStateToHTML, editorStateIsEmpty } from '../../../utils/draftjs';
+import { convertContentStateToHTML, editorStateIsEmpty, uploadNewAttachments } from '../../../utils/draftjs';
 import RichTextEditor from '../../common/richTextEditor';
-import attachmentsPlugin from '../../common/richTextEditor/attachmentsPlugin';
 import { BODY_MAX_LENGTH } from '../common/topPostForm';
-import { getIfPhaseCompletedById } from '../../../utils/timeline';
+import { getIsPhaseCompletedById } from '../../../utils/timeline';
 import { scrollToPost } from '../../../utils/hashLinkScroll';
 
-type AnswerFormProps = {
+type Props = {
   contentLocale: string,
   createPost: Function,
   hideAnswerForm: Function,
@@ -31,13 +30,13 @@ type AnswerFormProps = {
   handleAnswerClick: Function
 };
 
-type AnswerFormState = {
+type State = {
   body: EditorState,
   submitting: boolean,
   isHidden: boolean
 };
 
-class AnswerForm extends React.PureComponent<AnswerFormProps, AnswerFormState> {
+export class DumbAnswerForm extends React.PureComponent<Props, State> {
   constructor() {
     super();
     this.state = {
@@ -49,7 +48,7 @@ class AnswerForm extends React.PureComponent<AnswerFormProps, AnswerFormState> {
 
   componentWillMount() {
     const { phaseId, timeline } = this.props;
-    const isPhaseCompleted = getIfPhaseCompletedById(timeline, phaseId);
+    const isPhaseCompleted = getIsPhaseCompletedById(timeline, phaseId);
     if (isPhaseCompleted) this.setState({ isHidden: true });
   }
 
@@ -58,7 +57,7 @@ class AnswerForm extends React.PureComponent<AnswerFormProps, AnswerFormState> {
     this.setState({ body: EditorState.createEmpty() }, hideAnswerForm);
   };
 
-  updateBody = (newValue) => {
+  updateBody = (newValue: EditorState) => {
     this.setState({
       body: newValue
     });
@@ -76,7 +75,8 @@ class AnswerForm extends React.PureComponent<AnswerFormProps, AnswerFormState> {
     const bodyIsEmpty = !body || editorStateIsEmpty(body);
     if (!bodyIsEmpty) {
       // first we upload the new documents
-      const uploadDocumentsPromise = attachmentsPlugin.uploadNewAttachments(body, uploadDocument);
+      // $FlowFixMe we know that body is not null as we checked bodyIsEmpty
+      const uploadDocumentsPromise = uploadNewAttachments(body, uploadDocument);
       uploadDocumentsPromise.then((result) => {
         if (!result.contentState) {
           return;
@@ -171,4 +171,4 @@ export default compose(
   connect(mapStateToProps),
   graphql(createPostMutation, { name: 'createPost' }),
   graphql(uploadDocumentMutation, { name: 'uploadDocument' })
-)(AnswerForm);
+)(DumbAnswerForm);

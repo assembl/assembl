@@ -1,8 +1,23 @@
 /* @flow */
 /* eslint-disable */
 import { type EditorState } from 'draft-js';
+import Immutable from 'immutable';
+
+/* temporary dummy types */
+type RawDraftContentState = {
+  blocks: Array<Object>,
+  entityMap: { [key: string]: Object }
+};
+type DraftBlockType = string;
+type DraftInlineStyle = Immutable.OrderedSet<string>;
+/* end temporary dummy types */
 
 export type IdeaMessageColumns = Array<IdeaMessageColumnFragment>;
+
+export type TreeItem = {
+  id: string,
+  children?: Array<TreeItem>
+};
 
 export type Idea = {
   id: string,
@@ -17,7 +32,7 @@ export type Idea = {
   ancestors: Array<string>
 };
 
-type Post = PostFragment & {
+type Post = { ...PostFragment } & {
   messageClassifier: ?string,
   creationDate: string,
   parentId: number
@@ -27,7 +42,7 @@ type FictionPostPreview = {
   id: string,
   subject: ?string,
   body: ?string,
-  creationDate: ?any,
+  creationDate: string,
   creator: ?{|
     userId: string,
     displayName: ?string,
@@ -161,3 +176,12 @@ type ConfigurableField = {
 };
 
 type OverlayPlacement = 'top' | 'right' | 'bottom' | 'left';
+
+type RouterPath = {
+  action: string,
+  hash?: string,
+  key: string,
+  pathname: string,
+  query?: { [key: string]: any },
+  search: string
+};

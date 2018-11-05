@@ -16,7 +16,8 @@ type VideoValue = {
   title: I18nValue,
   descriptionBottom: I18nRichTextValue,
   descriptionSide: I18nRichTextValue,
-  descriptionTop: I18nRichTextValue
+  descriptionTop: I18nRichTextValue,
+  present?: string
 };
 
 export type ThemeValue = {

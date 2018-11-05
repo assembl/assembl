@@ -1,0 +1,153 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AnswerForm component should render a answer form 1`] = `
+<Row
+  bsClass="row"
+  componentClass="div"
+>
+  <Col
+    bsClass="col"
+    componentClass="div"
+    md={12}
+    xs={12}
+  >
+    <div
+      className="answer-form-inner"
+    >
+      <FormGroup
+        bsClass="form-group"
+      >
+        <RichTextEditor
+          editorState={
+            EditorState {
+              "_immutable": Object {
+                "allowUndo": true,
+                "currentContent": Object {
+                  "blockMap": Object {
+                    "EditorStateKey": Object {
+                      "characterList": Array [],
+                      "data": Object {},
+                      "depth": 0,
+                      "key": "EditorStateKey",
+                      "text": "",
+                      "type": "unstyled",
+                    },
+                  },
+                  "entityMap": Object {
+                    "__add": [Function],
+                    "__create": [Function],
+                    "__get": [Function],
+                    "__getLastCreatedEntityKey": [Function],
+                    "__mergeData": [Function],
+                    "__replaceData": [Function],
+                    "add": [Function],
+                    "create": [Function],
+                    "get": [Function],
+                    "getLastCreatedEntityKey": [Function],
+                    "mergeData": [Function],
+                    "replaceData": [Function],
+                  },
+                  "selectionAfter": Object {
+                    "anchorKey": "EditorStateKey",
+                    "anchorOffset": 0,
+                    "focusKey": "EditorStateKey",
+                    "focusOffset": 0,
+                    "hasFocus": false,
+                    "isBackward": false,
+                  },
+                  "selectionBefore": Object {
+                    "anchorKey": "EditorStateKey",
+                    "anchorOffset": 0,
+                    "focusKey": "EditorStateKey",
+                    "focusOffset": 0,
+                    "hasFocus": false,
+                    "isBackward": false,
+                  },
+                },
+                "decorator": null,
+                "directionMap": Object {
+                  "EditorStateKey": "LTR",
+                },
+                "forceSelection": false,
+                "inCompositionMode": false,
+                "inlineStyleOverride": null,
+                "lastChangeType": null,
+                "nativelyRenderedContent": null,
+                "redoStack": Array [],
+                "selection": Object {
+                  "anchorKey": "EditorStateKey",
+                  "anchorOffset": 0,
+                  "focusKey": "EditorStateKey",
+                  "focusOffset": 0,
+                  "hasFocus": false,
+                  "isBackward": false,
+                },
+                "treeMap": Object {
+                  "EditorStateKey": Array [
+                    Object {
+                      "decoratorKey": null,
+                      "end": 0,
+                      "leaves": Array [
+                        Object {
+                          "end": 0,
+                          "start": 0,
+                        },
+                      ],
+                      "start": 0,
+                    },
+                  ],
+                },
+                "undoStack": Array [],
+              },
+            }
+          }
+          handleInputFocus={[Function]}
+          maxLength={3000}
+          onChange={[Function]}
+          placeholder="Answer"
+          textareaRef={[Function]}
+          toolbarPosition="top"
+          withAttachmentButton={true}
+        />
+        <div
+          className="button-container"
+        >
+          <Button
+            active={false}
+            block={false}
+            bsClass="btn"
+            bsStyle="default"
+            className="button-cancel button-dark btn btn-default left"
+            disabled={false}
+            onClick={[Function]}
+          >
+            <Translate
+              value="cancel"
+            />
+          </Button>
+          <Button
+            active={false}
+            block={false}
+            bsClass="btn"
+            bsStyle="default"
+            className="button-submit button-dark btn btn-default right"
+            disabled={false}
+            onClick={[Function]}
+          >
+            <Translate
+              value="debate.post"
+            />
+          </Button>
+        </div>
+      </FormGroup>
+    </div>
+  </Col>
+</Row>
+`;
+
+exports[`AnswerForm component should render a hidden form 1`] = `
+<Row
+  bsClass="row"
+  componentClass="div"
+/>
+`;

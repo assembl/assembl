@@ -5,7 +5,7 @@ import { Button } from 'react-bootstrap';
 import { compose, graphql } from 'react-apollo';
 import { getCurrentView, getContextual } from '../../utils/routeMap';
 import { getDiscussionSlug } from '../../utils/globalFunctions';
-import withoutLoadingIndicator from './withoutLoadingIndicator';
+import manageErrorAndLoading from './manageErrorAndLoading';
 import DiscussionQuery from '../../graphql/DiscussionQuery.graphql';
 
 type ButtonProps = {
@@ -25,7 +25,7 @@ const DumbButton = ({ data: { discussion: { loginData: { url, local } } }, label
   const next = getCurrentView();
   let link = `${getContextual('login', { slug: slug })}?next=${next}`;
   if (url && !local) {
-    link = (url.includes('?')) ? `${url}&next=${next}` : `${url}?next=${next}`;
+    link = url.includes('?') ? `${url}&next=${next}` : `${url}?next=${next}`;
   }
   const handleButtonClick = () => {
     window.location = link;
@@ -37,10 +37,7 @@ const DumbButton = ({ data: { discussion: { loginData: { url, local } } }, label
           {label}
         </Link>
       ) : (
-        <Button
-          onClick={handleButtonClick}
-          className="button-submit button-dark"
-        >
+        <Button onClick={handleButtonClick} className="button-submit button-dark">
           {label}
         </Button>
       )}
@@ -48,7 +45,4 @@ const DumbButton = ({ data: { discussion: { loginData: { url, local } } }, label
   );
 };
 
-export default compose(
-  graphql(DiscussionQuery),
-  withoutLoadingIndicator()
-)(DumbButton);
+export default compose(graphql(DiscussionQuery), manageErrorAndLoading({ displayLoader: false }))(DumbButton);

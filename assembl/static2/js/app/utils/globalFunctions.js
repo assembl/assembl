@@ -2,7 +2,7 @@
 import { type Map } from 'immutable';
 
 import { getDisplayedPhaseIdentifier } from './timeline';
-import { HARVESTABLE_PHASES } from '../constants';
+import { HARVESTABLE_PHASES, ICONS_PATH } from '../constants';
 
 const getInputValue = (id: string) => {
   const elem = document.getElementById(id);
@@ -288,4 +288,8 @@ export function isHarvestable(params: RouterParams) {
 
 export function fromGlobalId(id: string): string | null {
   return id ? atob(id).split(':')[1] : null;
+}
+
+export function getIconPath(icon, color = '') {
+  return color ? `${ICONS_PATH}/${color}/${icon}` : `${ICONS_PATH}/${icon}`;
 }

@@ -4,16 +4,57 @@
 {% endblock %}
 
 {% block main_css %}
+  <link type="text/css" rel="stylesheet" href="{{REACT_URL}}/build/theme_{{theme_name}}_web.css" />
 {% endblock %}
 
 {% block body %}
     <body>
-        <h1>This is the error page</h1>
+        <div class='error-page'>
+            <table class="main-table">
+                <tr>
+                    <td class="td-space" style="width: auto">
+                    </td>
+                    <td class="td-text" style="width: 30%">
+                        {% if error %}
+                            <h2 class="title-error">{{error}}</h2>
+                        {% endif %}
+                        {% if error_code %}
+                            <h1 class="title-error-code">{{error_code}}</h1>
+                        {% else %}
+                            <h1 class="title-error-code">2</h1>
+                        {% endif %}
+                        {% if text %}
+                            <p class="text">{{text}}</p>
+                        {% endif %}
+                        {% if excuse %}
+                            <p class="text" class="excuse">{{excuse}}</p>
+                        {% endif %}
+                        {% if debate_link %}
+                            <button onclick="location.href='{{debate_link}}'">
+                            {% if home_button %}
+                                {{home_button}}
+                            {% endif %}
+                            </button>
+                        {% endif %}
+                    </td>
+                    <td class="td-img" style="width: 50%">
+                        <img class="server-image" src="/static2/img/Erreur500-illustration.png" />
+                    </td>
+                </tr>
+            </table>
 
-        {% block for_testing %}
-            {% if under_test %}
-                <div id="under-test" class="hidden">V2</div>
-            {%- endif %}
-        {% endblock %}
+            {% block main_js %}
+                {% include 'analytics_common.jinja2' %}
+                {% if NODE_ENV == 'development' %}
+                    <script src="{{REACT_URL}}/build/theme_{{theme_name}}_web.js"></script>
+                {% endif %}
+            {% endblock %}
+
+            {% block for_testing %}
+                {% if under_test %}
+                    <div class="under-test" class="hidden">V2</div>
+                {%- endif %}
+            {% endblock %}
+        </div>
     </body>
 {% endblock%}

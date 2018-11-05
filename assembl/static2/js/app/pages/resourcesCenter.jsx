@@ -4,11 +4,16 @@ import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import ResourcesQuery from '../graphql/ResourcesQuery.graphql';
 import ResourcesCenterPageQuery from '../graphql/ResourcesCenterPage.graphql';
-import withLoadingIndicator from '../components/common/withLoadingIndicator';
+import manageErrorAndLoading from '../components/common/manageErrorAndLoading';
 import ResourcesCenter from '../components/resourcesCenter';
 
-const ResourcesCenterContainer = ({ data, resourcesCenterHeaderUrl, resourcesCenterTitle }) => (
-  <ResourcesCenter {...data} headerBackgroundUrl={resourcesCenterHeaderUrl} headerTitle={resourcesCenterTitle} />
+const ResourcesCenterContainer = ({ data, phaseId, resourcesCenterHeaderUrl, resourcesCenterTitle }) => (
+  <ResourcesCenter
+    {...data}
+    headerBackgroundUrl={resourcesCenterHeaderUrl}
+    headerTitle={resourcesCenterTitle}
+    phaseId={phaseId}
+  />
 );
 
 const mapStateToProps = state => ({
@@ -21,23 +26,22 @@ export default compose(
   graphql(ResourcesCenterPageQuery, {
     props: ({ data, ownProps }) => {
       const defaultHeaderImage = ownProps.debate.debateData.headerBackgroundUrl || '';
-      if (data.loading) {
+      if (data.error || data.loading) {
         return {
-          loading: true
+          error: data.error,
+          loading: data.loading
         };
       }
-      if (data.error) {
-        return {
-          hasErrors: true
-        };
-      }
+
       const { title, headerImage } = data.resourcesCenter;
       return {
+        error: data.error,
+        loading: data.loading,
         resourcesCenterTitle: title || I18n.t('resourcesCenter.defaultHeaderTitle'),
         resourcesCenterHeaderUrl: headerImage ? headerImage.externalUrl : defaultHeaderImage
       };
     }
   }),
   graphql(ResourcesQuery),
-  withLoadingIndicator()
+  manageErrorAndLoading({ displayLoader: true })
 )(ResourcesCenterContainer);

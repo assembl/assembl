@@ -33,6 +33,9 @@ function loadStories() {
   require('../js/app/integration/101/components/checkboxList101/checkboxList101.stories.jsx');
   require('../js/app/stories/components/common/menu/menu.stories.jsx');
 
+  require('../js/app/stories/components/debate/common/toggleCommentButton.stories.jsx');
+  require('../js/app/stories/components/debate/common/replyToCommentButton.stories.jsx');
+
   require('../js/app/stories/components/debate/brightMirror/fictionPreview.stories.jsx');
   require('../js/app/stories/components/debate/brightMirror/fictionsList.stories.jsx');
   require('../js/app/stories/components/debate/brightMirror/instructionsText.stories.jsx');
@@ -40,12 +43,9 @@ function loadStories() {
   require('../js/app/stories/components/debate/brightMirror/fictionHeader.stories.jsx');
   require('../js/app/stories/components/debate/brightMirror/fictionToolbar.stories.jsx');
   require('../js/app/stories/components/debate/brightMirror/fictionBody.stories.jsx');
-
-  // TODO: To clean ?
-  // require('../js/app/stories/components/common/common.jsx');
-  // require('../js/app/stories/components/common/urlPreview/urlPreview.jsx');
-  // require('../js/app/stories/components/common/urlPreview/embed.jsx');
-  // require('../js/app/stories/components/common/urlPreview/frame.jsx');
+  require('../js/app/stories/components/debate/brightMirror/fictionCommentHeader.stories.jsx');
+  require('../js/app/stories/components/debate/brightMirror/fictionCommentForm.stories.jsx');
+  require('../js/app/stories/components/debate/brightMirror/fictionComment.stories.jsx');
 }
 
 configure(loadStories, module);

@@ -40,7 +40,12 @@ describe('ResourcesCenter component', () => {
     ];
     const shallowRenderer = new ShallowRenderer();
     shallowRenderer.render(
-      <ResourcesCenter resources={mockResources} headerBackgroundUrl={headerBackgroundUrl} headerTitle={headerTitle} />
+      <ResourcesCenter
+        resources={mockResources}
+        headerBackgroundUrl={headerBackgroundUrl}
+        headerTitle={headerTitle}
+        phaseId="my-phase-id"
+      />
     );
     const result = shallowRenderer.getRenderOutput();
     expect(result).toMatchSnapshot();

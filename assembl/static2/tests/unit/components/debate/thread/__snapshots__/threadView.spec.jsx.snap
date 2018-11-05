@@ -1,0 +1,80 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ThreadView component should render a ThreadView without the TopPostForm 1`] = `
+<div
+  className="overflow-x"
+>
+  <Grid
+    bsClass="container"
+    className="background-grey"
+    componentClass="div"
+    fluid={true}
+  >
+    <div
+      className="max-container background-grey"
+    >
+      <div
+        className="content-section"
+      >
+        <Tree
+          InnerComponent={[Function]}
+          InnerComponentFolded={[Function]}
+          SeparatorComponent={[Function]}
+          contentLocaleMapping={null}
+          data={Array []}
+          identifier="foo"
+          initialRowIndex={0}
+          lang="fr"
+          noRowsRenderer={null}
+          phaseId="FooID"
+        />
+      </div>
+    </div>
+  </Grid>
+</div>
+`;
+
+exports[`ThreadView component should render a TopPostForm 1`] = `
+<div
+  className="overflow-x"
+>
+  <TopPostFormContainer
+    draftSuccessMsgId={null}
+    draftable={false}
+    fullscreen={false}
+    ideaId={undefined}
+    instructionLabelMsgId="debate.thread.startDiscussion"
+    isColumnViewInline={false}
+    messageColumns={Array []}
+    refetchIdea={[Function]}
+    topPostsCount={0}
+  />
+  <Grid
+    bsClass="container"
+    className="background-grey"
+    componentClass="div"
+    fluid={true}
+  >
+    <div
+      className="max-container background-grey"
+    >
+      <div
+        className="content-section"
+      >
+        <Tree
+          InnerComponent={[Function]}
+          InnerComponentFolded={[Function]}
+          SeparatorComponent={[Function]}
+          contentLocaleMapping={null}
+          data={Array []}
+          identifier="foo"
+          initialRowIndex={0}
+          lang="fr"
+          noRowsRenderer={null}
+          phaseId="FooID"
+        />
+      </div>
+    </div>
+  </Grid>
+</div>
+`;

@@ -1,6 +1,7 @@
 /* eslint max-len: "off", quotes: ["error", "double"] */
 const Translations = {
   fr: {
+    globalError: "Il y a eu une erreur, merci de réessayer plus tard.",
     here: "ici",
     yes: "oui",
     no: "non",
@@ -40,6 +41,7 @@ const Translations = {
       validated: "Attrapage validé",
       confirm: "Confirmer",
       reject: "Rejeter",
+      submit: "Valider",
       now: "Maintenant",
       harvestingSuccess: "L'extrait a été mis à jour avec succès.",
       harvestingDeleted: "L'extrait a été supprimé avec succès.",
@@ -286,10 +288,6 @@ const Translations = {
       tableOfContents: "Sommaire"
     },
     common: {
-      attachFileForm: {
-        label: "Insérer une pièce jointe",
-        submit: "Valider"
-      },
       attachments: {
         download: "Télécharger"
       },
@@ -297,7 +295,17 @@ const Translations = {
         attachment: "Joindre un fichier",
         bold: "Gras",
         italic: "Italique",
-        bulletList: "Liste de puces"
+        bulletList: "Liste de puces",
+        closeModal: "Fermer",
+        attachmentPlugin: {
+          title: "Insérer une pièce jointe"
+        },
+        linkPlugin: {
+          openInNewTab: "Ouvrir le lien dans un nouvel onglet",
+          text: "Texte du lien",
+          title: "Insérer un lien",
+          url: "Adresse web"
+        }
       },
       uploadButton: "Choisissez un fichier",
       goUp: "Remonter"
@@ -390,17 +398,39 @@ const Translations = {
         announcement: "Consigne"
       },
       brightMirror: {
-        startFictionLabel: "Je partage ma fiction",
-        fillBodyLabel: "Ecrivez votre fiction",
-        postSuccessMsg: "Merci pour votre participation. Votre fiction a bien été publiée !",
         allFictions: "Fictions déjà parues",
-        editFiction: "Editez votre fiction",
         deleteFiction: "Supprimez votre fiction",
-        fiction: "Fiction",
         deleteFictionModalBody: "Êtes-vous sûr de vouloir supprimer cette fiction ?",
         deleteFictionSuccessMsg: "Votre fiction a été supprimée",
+        draftEmptyTitle: "Sans titre",
+        draftLabel: "Brouillon",
+        draftSuccessMsg: "Votre fiction a bien été enregistrée.",
+        editFiction: "Editez votre fiction",
+        fiction: "Fiction",
+        fillBodyLabel: "Ecrivez votre fiction",
+        noTitleSpecified: "Titre non défini",
+        noContentSpecified: "Contenu non défini",
+        fillEitherTitleContent: "Veuillez remplir le titre et/ou la fiction",
+        noAuthorSpecified: "Auteur non défini",
+        numberOfResponses: "%{count} réponses",
+        numberOfResponses_0: "Aucune réponse",
+        numberOfResponses_1: "%{count} réponse",
+        postSuccessMsg: "Merci pour votre participation. Votre fiction a bien été publiée !",
         saveDraft: "Sauvegarder",
-        draftSuccessMsg: "Votre fiction a bien été enregistrée."
+        startFictionLabel: "Je partage ma fiction",
+        commentFiction: {
+          cancel: "Annuler",
+          editComment: "Modifier ce message",
+          imageAlt: "Illustration prenez la parole",
+          label: "Commentaires",
+          numberOfComments: "%{count} messages",
+          numberOfComments_0: "Aucun message pour le moment",
+          numberOfComments_1: "%{count} message",
+          placeholder: "Rejoins le débat...",
+          strongTitle: "Prenez la parole !",
+          submit: "Commenter",
+          title: "Quels sujets sont abordés dans cette fiction ?"
+        }
       },
       themes: "Thèmes",
       notStarted: "La phase %{phaseName} n'a pas encore commencé. Merci de revenir à partir du ",
@@ -809,9 +839,9 @@ const Translations = {
         manageModules: {
           title: "Administrer les modules",
           helper: "Choisissez les modules que vous souhaitez voir apparaître dans la page d'accueil et leurs emplacements.",
-          textAndMultimedia: "Texte & Multimédia",
-          textAndMultimediaBtn: "Ajouter un module Texte & Multimédia",
-          confirmationModal: "Voulez-vous ajouter un module Texte & Multimédia supplémentaire à la page d'accueil ?"
+          textAndMultimedia: "Texte & Multi-média",
+          textAndMultimediaBtn: "Ajouter un module Texte & Multi-média",
+          confirmationModal: "Voulez-vous ajouter un module Texte & Multi-média supplémentaire à la page d'accueil ?"
         },
         header: {
           title: "Header",
@@ -875,6 +905,7 @@ const Translations = {
     }
   },
   en: {
+    globalError: "Something went wrong. Please try again later.",
     here: "here",
     yes: "yes",
     no: "no",
@@ -911,6 +942,7 @@ const Translations = {
       validated: "Harvesting validated",
       confirm: "Confirm",
       reject: "Reject",
+      submit: "Submit",
       now: "Now",
       harvesting: "Harvesting",
       harvestingSuccess: "The extract was updated successfully.",
@@ -1147,10 +1179,6 @@ const Translations = {
       panelTitle: "Welcome to Assembl community page"
     },
     common: {
-      attachFileForm: {
-        label: "Add an attachment",
-        submit: "Submit"
-      },
       attachments: {
         download: "Download"
       },
@@ -1158,7 +1186,17 @@ const Translations = {
         attachment: "Add a file",
         bold: "Bold",
         italic: "Italic",
-        bulletList: "Bullet list"
+        bulletList: "Bullet list",
+        closeModal: "Close",
+        attachmentPlugin: {
+          title: "Add an attachment"
+        },
+        linkPlugin: {
+          openInNewTab: "Open link in new tab",
+          text: "Link text",
+          title: "Insert a link",
+          url: "URL"
+        }
       },
       uploadButton: "Choose a file to upload",
       goUp: "Back to top"
@@ -1260,17 +1298,39 @@ const Translations = {
         announcement: "Announcement"
       },
       brightMirror: {
-        startFictionLabel: "Share a fiction",
-        fillBodyLabel: "Write your fiction",
-        postSuccessMsg: "Thanks for your participation. Your fiction has been published successfully.",
         allFictions: "Published fictions",
-        editFiction: "Edit your fiction",
         deleteFiction: "Delete your fiction",
-        fiction: "Fiction",
         deleteFictionModalBody: "Are you sure you want to delete this fiction?",
         deleteFictionSuccessMsg: "Your fiction was deleted",
+        draftEmptyTitle: "Untitled",
+        draftLabel: "Draft",
+        draftSuccessMsg: "Your fiction has been saved successfully.",
+        editFiction: "Edit your fiction",
+        fiction: "Fiction",
+        fillBodyLabel: "Write your fiction",
+        noTitleSpecified: "No title specified",
+        noContentSpecified: "No content specified",
+        fillEitherTitleContent: "Please, write a title or a fiction",
+        noAuthorSpecified: "No author specified",
+        numberOfResponses: "%{count} responses",
+        numberOfResponses_0: "No response",
+        numberOfResponses_1: "%{count} response",
+        postSuccessMsg: "Thanks for your participation. Your fiction has been published successfully!",
         saveDraft: "Save",
-        draftSuccessMsg: "Your fiction has been saved successfully."
+        startFictionLabel: "Share a fiction",
+        commentFiction: {
+          cancel: "Cancel",
+          editComment: "Edit this message",
+          imageAlt: "Let's talk illustration",
+          label: "Comments",
+          numberOfComments: "%{count} messages",
+          numberOfComments_0: "No message at the moment",
+          numberOfComments_1: "%{count} message",
+          placeholder: "Join the debate...",
+          strongTitle: "Let's talk!",
+          submit: "Comment",
+          title: "What are the topics of the fiction?"
+        }
       },
       themes: "Themes",
       notStarted: "The %{phaseName} phase has not started. Please come back from ",

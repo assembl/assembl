@@ -8,6 +8,7 @@ export type Props = {
   debateData: DebateData,
   identifier: string,
   mySentiment: ?string,
+  phaseId: string,
   routerParams: RouterParams,
   sentimentCounts: SentimentCountsFragment,
   synthesisId: string,
@@ -20,6 +21,7 @@ const ColumnSynthesis = ({
   debateData,
   identifier,
   mySentiment,
+  phaseId,
   routerParams,
   sentimentCounts,
   synthesisId,
@@ -44,6 +46,7 @@ const ColumnSynthesis = ({
           editable={false}
           identifier={identifier}
           mySentiment={mySentiment}
+          phaseId={phaseId}
           postId={synthesisId}
           routerParams={routerParams}
           sentimentCounts={sentimentCounts}

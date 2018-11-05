@@ -34,6 +34,84 @@ def local_to_absolute(uri):
     return uri
 
 
+def test_make_two_columns_and_add_two_synthesis_for_the_columns(test_app,discussion, subidea_1, subidea_1_1, idea_message_column_positive_on_subidea_1_1):
+    """An integration test to verify the creation of of an extra column in a multicolumn."""
+    create_new_column_json="""{
+  "@id": "local:IdeaMessageColumn/%d",
+  "@type": "IdeaMessageColumn",
+  "@view": "default",
+  "color": "green",
+  "header": {
+    "@id": "local:LangString/53",
+    "@type": "LangString",
+    "@view": "extended",
+    "entries": [
+      {
+        "@id": "local:LangStringEntry/94",
+        "@language": "en",
+        "@type": "LangStringEntry",
+        "@view": "extended",
+        "value": "This is a positive header"
+      }
+    ]
+  },
+  "idea": "local:Idea/%d",
+  "message_classifier": "positive",
+  "name": {
+    "@id": "local:LangString/51",
+    "@type": "LangString",
+    "@view": "extended",
+    "entries": [
+      {
+        "@id": "local:LangStringEntry/92",
+        "@language": "en",
+        "@type": "LangStringEntry",
+        "@view": "extended",
+        "value": "Say my name"
+      }
+    ]
+  },
+  "previous_column": null,
+  "synthesis_title": {
+    "@id": "local:LangString/52",
+    "@type": "LangString",
+    "@view": "extended",
+    "entries": [
+      {
+        "@id": "local:LangStringEntry/93",
+        "@language": "en",
+        "@type": "LangStringEntry",
+        "@view": "extended",
+        "value": "Be positive Mohamed"
+      }
+    ]
+  },
+  "title": {
+    "@id": "local:LangString/50",
+    "@type": "LangString",
+    "@view": "extended",
+    "entries": [
+      {
+        "@id": "local:LangStringEntry/91",
+        "@language": "en",
+        "@type": "LangStringEntry",
+        "@view": "extended",
+        "value": "Add "
+      }
+    ]
+  }
+}""" % (idea_message_column_positive_on_subidea_1_1.id, subidea_1_1.id)
+
+    all_columns = test_app.get('/data/Discussion/%d/ideas/%d/message_columns' % (discussion.id, subidea_1_1.id))
+    assert all_columns.status_code == 200
+    assert all_columns.json_body[0]['synthesis_title']['entries'][0]['value'] == u"Be positive!"
+    add_new_column = test_app.put_json('/data/Discussion/%d/ideas/%d/message_columns/%d' % (discussion.id, subidea_1_1.id, idea_message_column_positive_on_subidea_1_1.id),json.loads(create_new_column_json))
+    assert add_new_column.status_code == 200
+
+    all_columns = test_app.get('/data/Discussion/%d/ideas/%d/message_columns' % (discussion.id, subidea_1_1.id))
+    all_columns.status_code == 200
+    assert all_columns.json_body[0]['synthesis_title']['entries'][0]['value'] == u"Be positive Mohamed"
+
 def test_get_ideas(discussion, test_app, synthesis_1,
                    subidea_1_1_1, test_session):
     all_ideas = test_app.get('/data/Idea')
@@ -906,25 +984,11 @@ def test_add_timeline_event(test_app, discussion):
     assert phase1_data['next_event'] == phase2_data['@id']
     assert phase1_data['@type'] == 'DiscussionPhase'
 
+class AbstractExport(object):
+    # HEADER = {}
 
-class TestPhase1Export(object):
-
-    THEMATIC_NAME = 0
-    QUESTION_ID = 1
-    QUESTION_TITLE = 2
-    POST_BODY = 3
-    POST_LIKE_COUNT = 6
-    POST_DISAGREE_COUNT = 7
-    POST_CREATOR_NAME = 8
-    POST_CREATOR_EMAIL = 9
-    POST_CREATION_DATE = 10
-    SENTIMENT_ACTOR_NAME = 11
-    SENTIMENT_ACTOR_EMAIL = 12
-    SENTIMENT_CREATION_DATE = 13
-    POST_BODY_ORIGINAL = 14
-
-    def _get(self, app, discussion_id, lang=None):
-        base_req = '/data/Discussion/{}/phase1_csv_export'.format(discussion_id)
+    def _get(self, app, discussion_id, lang=None, view_name=None):
+        base_req = '/data/Discussion/%d/%s' % (discussion_id, view_name)
         req = base_req
         if lang:
             req = base_req + '?lang=%s' % lang
@@ -939,9 +1003,93 @@ class TestPhase1Export(object):
         result = csv.reader(csv_file, dialect='excel', delimiter=';')
         return list(result)
 
-    def test_base(self, proposals_with_sentiments, discussion, test_app):
-        result = self.get_result(test_app, discussion.id)
+class TestTaxonomyExport(AbstractExport):
 
+    view_name = 'extract_csv_taxonomy'
+    THEMATIC = 0
+    MESSAGE = 1
+    CONTENT_HARVESTED = 2
+    CONTENT_LOCALE = 3
+    ORIGINAL_MESSAGE = 4
+    ORIGINAL_LOCALE = 5
+    QUALIFY_BY_NATURE = 6
+    QUALIFY_BY_ACTION = 7
+    OWNER_OF_THE_MESSAGE = 8
+    PUBLISHED_ON = 9
+    HARVESTER = 10
+    HARVESTED_ON = 11
+    NUGGET = 12
+    STATE = 13
+
+    def test_base(self, test_session, test_app, discussion, extract_post_1_to_subidea_1_1, extract_with_range_in_reply_post_1):
+        result = self.get_result(test_app, discussion.id, view_name=self.view_name)
+        header = result[0]
+    
+        assert header[self.MESSAGE] == "Message"
+        assert header[self.CONTENT_HARVESTED] == "Content Harvested"
+        assert header[self.CONTENT_LOCALE] == "Content Locale"
+        assert header[self.ORIGINAL_MESSAGE] == "Original Message"
+        assert header[self.ORIGINAL_LOCALE] == "Original Locale"
+        assert header[self.QUALIFY_BY_NATURE] == "Qualify By Nature"
+        assert header[self.QUALIFY_BY_ACTION] == "Qualify By Action"
+        assert header[self.OWNER_OF_THE_MESSAGE] == "Owner Of The Message"
+        assert header[self.PUBLISHED_ON] == "Published On"
+        assert header[self.HARVESTER] == "Harvester"
+        assert header[self.HARVESTED_ON] == "Harvested On"
+        assert header[self.NUGGET] == "Nugget"
+        assert header[self.STATE] == "State"
+
+        first_row = result[1]
+        assert first_row[self.THEMATIC] == "Lower taxes"
+        assert first_row[self.MESSAGE] == "post body with some text so we can test harvesting features. I'm writing a very topical comment with an unrelated source, hoping it would make people angry and make them write answers. I have read in '17O Solid-State NMR Spectroscopy of Functional Oxides for Energy Conversion' thesis by Halat, D. M. (2018) that variable-temperature spectra indicate the onset of oxide-ion motion involving the interstitials at 130 \xc2\xb0C, which is linked to an orthorhombic\xe2\x88\x92tetragonal phase transition. For the V-doped phases, an oxide-ion conduction mechanism is observed that involves oxygen exchange between the Bi-O sublattice and rapidly rotating VO4 tetrahedral units. The more poorly conducting P-doped phase exhibits only vacancy conduction with no evidence of sublattice exchange, a result ascribed to the differing propensities of the dopants to undergo variable oxygen coordination. So I think it would be a very bad idea to allow hot beverages in coworking spaces. But it looks like people don't really care about scientific evidence around here."
+        assert first_row[self.CONTENT_HARVESTED] == "body"
+        assert first_row[self.CONTENT_LOCALE] == "no extract locale"
+        assert first_row[self.ORIGINAL_MESSAGE] == "post body with some text so we can test harvesting features. I'm writing a very topical comment with an unrelated source, hoping it would make people angry and make them write answers. I have read in '17O Solid-State NMR Spectroscopy of Functional Oxides for Energy Conversion' thesis by Halat, D. M. (2018) that variable-temperature spectra indicate the onset of oxide-ion motion involving the interstitials at 130 \xc2\xb0C, which is linked to an orthorhombic\xe2\x88\x92tetragonal phase transition. For the V-doped phases, an oxide-ion conduction mechanism is observed that involves oxygen exchange between the Bi-O sublattice and rapidly rotating VO4 tetrahedral units. The more poorly conducting P-doped phase exhibits only vacancy conduction with no evidence of sublattice exchange, a result ascribed to the differing propensities of the dopants to undergo variable oxygen coordination. So I think it would be a very bad idea to allow hot beverages in coworking spaces. But it looks like people don't really care about scientific evidence around here."
+        assert first_row[self.ORIGINAL_LOCALE] == "und"
+        assert first_row[self.QUALIFY_BY_NATURE] == "actionable_solution"
+        assert first_row[self.QUALIFY_BY_ACTION] == "give_examples"
+        assert first_row[self.OWNER_OF_THE_MESSAGE] == "James T. Expert"
+        assert first_row[self.PUBLISHED_ON] == "2000-01-04 00:00:00"
+        assert first_row[self.HARVESTER] == "James T. Expert"
+        assert first_row[self.NUGGET] == "No"
+        assert first_row[self.STATE] == "PUBLISHED"
+
+        last_row = result[-1]
+        assert last_row[self.THEMATIC] == "Lower taxes"
+        assert last_row[self.MESSAGE] == "post body with some text so we can test harvesting features. I'm writing a very topical comment with an unrelated source, hoping it would make people angry and make them write answers. I have read in '17O Solid-State NMR Spectroscopy of Functional Oxides for Energy Conversion' thesis by Halat, D. M. (2018) that variable-temperature spectra indicate the onset of oxide-ion motion involving the interstitials at 130 \xc2\xb0C, which is linked to an orthorhombic\xe2\x88\x92tetragonal phase transition. For the V-doped phases, an oxide-ion conduction mechanism is observed that involves oxygen exchange between the Bi-O sublattice and rapidly rotating VO4 tetrahedral units. The more poorly conducting P-doped phase exhibits only vacancy conduction with no evidence of sublattice exchange, a result ascribed to the differing propensities of the dopants to undergo variable oxygen coordination. So I think it would be a very bad idea to allow hot beverages in coworking spaces. But it looks like people don't really care about scientific evidence around here."
+        assert last_row[self.CONTENT_HARVESTED] == "variable-temperature spectra indicate the onset of oxide-ion motion involving the interstitials at 130 \xc2\xb0C, which is linked to an orthorhombic\xe2\x88\x92tetragonal phase transition. For the V-doped phases, an oxide-ion conduction mechanism is observed that involves oxygen exchange between the Bi-O sublattice and rapidly rotating VO4 tetrahedral units. The more poorly conducting P-doped phase exhibits only vacancy conduction with no evidence of sublattice exchange, a result ascribed to the differing propensities of the dopants to undergo variable oxygen coordination. So I think it would be a very bad idea to allow hot beverages in coworking spaces."
+        assert last_row[self.CONTENT_LOCALE] == "en"
+        assert last_row[self.ORIGINAL_MESSAGE] == "post body with some text so we can test harvesting features. I'm writing a very topical comment with an unrelated source, hoping it would make people angry and make them write answers. I have read in '17O Solid-State NMR Spectroscopy of Functional Oxides for Energy Conversion' thesis by Halat, D. M. (2018) that variable-temperature spectra indicate the onset of oxide-ion motion involving the interstitials at 130 \xc2\xb0C, which is linked to an orthorhombic\xe2\x88\x92tetragonal phase transition. For the V-doped phases, an oxide-ion conduction mechanism is observed that involves oxygen exchange between the Bi-O sublattice and rapidly rotating VO4 tetrahedral units. The more poorly conducting P-doped phase exhibits only vacancy conduction with no evidence of sublattice exchange, a result ascribed to the differing propensities of the dopants to undergo variable oxygen coordination. So I think it would be a very bad idea to allow hot beverages in coworking spaces. But it looks like people don't really care about scientific evidence around here."
+        assert last_row[self.ORIGINAL_LOCALE] == "und"
+        assert last_row[self.QUALIFY_BY_NATURE] == " "
+        assert last_row[self.QUALIFY_BY_ACTION] == " "
+        assert last_row[self.OWNER_OF_THE_MESSAGE] == "James T. Expert"
+        assert last_row[self.PUBLISHED_ON] == "2000-01-04 00:00:00"
+        assert last_row[self.HARVESTER] == "Maximilien de Robespierre"
+        assert last_row[self.NUGGET] == "Yes"
+        assert last_row[self.STATE] == "PUBLISHED"
+
+
+class TestPhase1Export(AbstractExport):
+
+    view_name = 'phase1_csv_export'
+    THEMATIC_NAME = 0
+    QUESTION_ID = 1
+    QUESTION_TITLE = 2
+    POST_BODY = 3
+    POST_LIKE_COUNT = 6
+    POST_DISAGREE_COUNT = 7
+    POST_CREATOR_NAME = 8
+    POST_CREATOR_EMAIL = 9
+    POST_CREATION_DATE = 10
+    SENTIMENT_ACTOR_NAME = 11
+    SENTIMENT_ACTOR_EMAIL = 12
+    SENTIMENT_CREATION_DATE = 13
+    POST_BODY_ORIGINAL = 14
+
+
+    def test_base(self, proposals_with_sentiments, discussion, test_app):
+        result = self.get_result(test_app, discussion.id, view_name=self.view_name)
         header = result[0]
         assert header[TestPhase1Export.QUESTION_ID] == b'Numéro de la question'
         assert header[TestPhase1Export.SENTIMENT_ACTOR_NAME] == b"Nom du votant"
@@ -970,22 +1118,63 @@ class TestPhase1Export(object):
 
     def test_en(self, proposals_en_fr, discussion, test_app, en_locale):
         lang = en_locale.root_locale
-        result = self.get_result(test_app, discussion.id, lang=lang)
+        result = self.get_result(test_app, discussion.id, lang=lang, view_name=self.view_name)
 
         first_row = result[1]
         assert first_row[TestPhase1Export.POST_BODY] == b'English Proposition 14'
 
     def test_fr(self, proposals_en_fr, discussion, test_app, fr_locale):
         lang = fr_locale.root_locale
-        result = self.get_result(test_app, discussion.id, lang=lang)
+        result = self.get_result(test_app, discussion.id, lang=lang, view_name=self.view_name)
 
         first_row = result[1]
         assert first_row[TestPhase1Export.POST_BODY] == b'French Proposition 14'
 
     def test_bad_locale(self, proposals_en_fr, discussion, test_app):
         lang = "super_bad_locale"
-        result = self.get_result(test_app, discussion.id, lang=lang)
+        result = self.get_result(test_app, discussion.id, lang=lang, view_name=self.view_name)
 
         first_row = result[1]
         # By default, fr will be returned if the language input is bad
         assert first_row[TestPhase1Export.POST_BODY] == b'French Proposition 14'
+
+class TestPhase2Export(AbstractExport):
+    view_name = 'phase2_csv_export'
+    NUMERO_IDEE = 0
+    NUMERO_IDEE_PARENT = 1
+    NOM_IDEE = 2
+    SUJET = 3
+    POST = 4
+    NUMERO_DU_POST = 5
+    LOCALE_DU_POST = 6
+    NOMBRE_DE_JAIME = 7
+    NOMBRE_DE_DEACCORD = 8
+    NOM_DU_CONTRIBUTEUR = 9
+    MAIL_CONTRIBUTEUR = 10
+    DATE_POST = 11
+    NOM_VOTANT = 12
+    MAIL_VOTANT = 13
+    DATE_VOTE = 14
+    ORIGINAL = 15
+
+    def test_base(self, proposals_with_sentiments, discussion, timeline_phase2_interface_v2, test_app):
+        result = self.get_result(test_app, discussion.id, view_name=self.view_name)
+        header = result[0]
+        assert header[self.NUMERO_IDEE_PARENT] == b"Les numéros des parent d'idée"
+        assert header[self.NOM_IDEE] == b"Nom de l'idée"
+        assert header[self.SUJET] == b"Sujet"
+        assert header[self.POST] == b"Post"
+        assert header[self.NUMERO_DU_POST] == b"Numéro du post"
+        assert header[self.LOCALE_DU_POST] == b"Locale du post"
+        assert header[self.NOMBRE_DE_JAIME] == b"Nombre de \"J\'aime\""
+        assert header[self.NOMBRE_DE_DEACCORD] == b"Nombre de \"En désaccord\""
+        assert header[self.NOM_DU_CONTRIBUTEUR] == b"Nom du contributeur"
+        assert header[self.MAIL_CONTRIBUTEUR] == b"Adresse mail du contributeur"
+        assert header[self.DATE_POST] == b"Date/heure du post"
+        assert header[self.NOM_VOTANT] == b"Nom du votant"
+        assert header[self.MAIL_VOTANT] == b"Adresse mail du votant"
+        assert header[self.DATE_VOTE] == b"Date/heure du vote"
+        assert header[self.ORIGINAL] == b"Original"
+
+    # TODO: Add more unit tests for the phase 2 export API.
+    # TODO: Add unit tests for votes export API.

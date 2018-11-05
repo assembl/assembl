@@ -13,7 +13,7 @@ import Card from '../components/common/card';
 import CardList from '../components/common/cardList';
 import SynthesesQuery from '../graphql/SynthesesQuery.graphql';
 
-import withLoadingIndicator from '../components/common/withLoadingIndicator';
+import manageErrorAndLoading from '../components/common/manageErrorAndLoading';
 
 type SynthesesProps = {
   syntheses: Array<Object>,
@@ -24,7 +24,7 @@ type SynthesesProps = {
 export class DumbSyntheses extends React.Component<SynthesesProps> {
   componentDidMount() {
     const { syntheses, slug } = this.props;
-    if (syntheses.length === 1) {
+    if (syntheses && syntheses.length === 1) {
       const firstSynthesis = syntheses[0];
       browserHistory.push(`${get('synthesis', { synthesisId: firstSynthesis.post.id, slug: slug })}`);
     }
@@ -71,19 +71,20 @@ export default compose(
   connect(mapStateToProps),
   graphql(SynthesesQuery, {
     props: ({ data }) => {
-      if (data.loading) {
-        return { loading: true };
+      if (data.error || data.loading) {
+        return {
+          error: data.error,
+          loading: data.loading
+        };
       }
-      if (data.error) {
-        console.error(data.error); // eslint-disable-line
-        return { loading: false };
-      }
+
       return {
-        loading: false,
+        error: data.error,
+        loading: data.loading,
         syntheses: data.syntheses,
-        hasSyntheses: data.syntheses.length > 0
+        hasSyntheses: data && data.syntheses ? data.syntheses.length > 0 : false
       };
     }
   }),
-  withLoadingIndicator()
+  manageErrorAndLoading({ displayLoader: true })
 )(DumbSyntheses);

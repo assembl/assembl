@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AttachmentButton component should render an attachment button 1`] = `
+<div
+  className="btn-group"
+  onMouseDown={[Function]}
+>
+  <button
+    className="btn"
+    onClick={[Function]}
+    type="button"
+  >
+    <span
+      className="assembl-icon-text-attachment"
+    />
+  </button>
+</div>
+`;

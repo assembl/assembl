@@ -8,6 +8,7 @@ describe('ColumnSynthesis component', () => {
     const props = {
       classifier: 'positive',
       mySentiment: 'like',
+      phaseId: 'my-phase-id',
       routerParams: {
         phase: 'thread',
         slug: 'foobar',

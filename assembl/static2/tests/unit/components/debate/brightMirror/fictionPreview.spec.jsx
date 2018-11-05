@@ -59,11 +59,11 @@ describe('<FictionPreview /> - with shallow', () => {
 
   it('should render draft label when publication state is draft', () => {
     wrapper.setProps({ publicationState: PublicationStates.DRAFT });
-    expect(wrapper.find('span [className="draft"]')).toHaveLength(1);
+    expect(wrapper.find('span [className="draft-label"]')).toHaveLength(1);
   });
 
   it('should not render draft label when publication state is published', () => {
     wrapper.setProps({ publicationState: PublicationStates.PUBLISHED });
-    expect(wrapper.find('span [className="draft"]')).toHaveLength(0);
+    expect(wrapper.find('span [className="draft-label"]')).toHaveLength(0);
   });
 });

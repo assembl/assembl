@@ -39,7 +39,13 @@ exports[`Storyshots InstructionsText default 1`] = `
             <div
               className="announcement-media col-md-push-2 col-md-8 col-xs-12"
             >
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis tincidunt dolor.
+              <div>
+                <div
+                  id=""
+                >
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis tincidunt dolor.
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -363,7 +369,13 @@ exports[`Storyshots InstructionsText playground 1`] = `
             <div
               className="announcement-media col-md-push-2 col-md-8 col-xs-12"
             >
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis tincidunt dolor.
+              <div>
+                <div
+                  id=""
+                >
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis tincidunt dolor.
+                </div>
+              </div>
             </div>
           </div>
         </div>

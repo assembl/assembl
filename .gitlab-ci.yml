@@ -1,0 +1,94 @@
+image: python:2.7
+
+stages:
+  - test
+  - build
+  - deploy_to_dev
+  - test_on_dev
+  - deploy_to_uat
+  - deploy_to_prod
+
+cache:
+  paths:
+    - assembl/static2/node_modules/
+    - /usr/local/share/.cache/yarn/v2
+
+test_frontend:
+  stage: test
+  except:
+    - master
+    - tmp_master_for_ci_cd
+  image: node:8
+  before_script:
+    - export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+    - cd assembl/static2
+    - yarn
+  script:
+    # This will fail if any test fails or if the coverage has lowered
+    - yarn jest --coverage
+    - yarn run eslint
+    - yarn run stylelint
+    - yarn run flow --quiet
+
+test_integration_and_ui:
+  stage: test_on_dev
+  image: node:8
+  only:
+    - tmp_master_for_ci_cd
+  before_script:
+    - eval $(ssh-agent -s) && sh scripts/configure_ssh.sh
+    - sh scripts/prepare_integration_tests.sh
+  script:
+    # run integration tests
+    - yarn jest tests/integration
+    # run each ui test one by one
+    - yarn runinband
+
+build_wheel:
+  stage: build
+  only:
+    - develop
+  variables:
+    DEVELOP_BRANCH: develop
+    MASTER_BRANCH: tmp_master_for_ci_cd
+  artifacts:
+    paths:
+      - dist/
+  before_script:
+    - sh scripts/install_build_dependencies.sh
+    - sh scripts/install_node_and_yarn.sh
+    - sh scripts/configure_assembl_remote.sh
+    - eval $(ssh-agent -s) && sh scripts/configure_ssh.sh
+    - sh scripts/clear_apt_cache.sh
+  script:
+    # bump the version, merge to master
+    - sh scripts/bump_assembl_version_and_push.sh
+    # create the wheel and upload to pypi
+    - sh scripts/create_assembl_wheel.sh
+    # - twine upload -u bluenove --skip-existing dist/*
+
+deploy_to_dev:
+  stage: deploy_to_dev
+  only:
+    - tmp_master_for_ci_cd
+  script:
+    # empty script for now
+    - sh scripts/echo.sh
+
+deploy_to_uat:
+  stage: deploy_to_uat
+  only:
+    - tmp_master_for_ci_cd
+  script:
+    # empty script for now
+    - sh scripts/echo.sh
+
+deploy_to_prod:
+  stage: deploy_to_prod
+  environment: PROD
+  only:
+    - tmp_master_for_ci_cd
+  script:
+    # fake script for now
+    - python scripts/deploy_to_prod.py
+  when: manual

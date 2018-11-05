@@ -1,7 +1,8 @@
 // @flow
 import get from 'lodash/get';
 import * as React from 'react';
-import { ApolloClient, withApollo } from 'react-apollo';
+import { ApolloClient, compose, withApollo } from 'react-apollo';
+import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
 import { OverlayTrigger } from 'react-bootstrap';
 import { MEDIUM_SCREEN_WIDTH } from '../../../constants';
@@ -10,15 +11,15 @@ import { sharePostTooltip } from '../../common/tooltips';
 import getOverflowMenuForPost from './overflowMenu';
 import ResponsiveOverlayTrigger from '../../common/responsiveOverlayTrigger';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
-import { openShareModal, displayModal } from '../../../utils/utilityManager';
+import { openShareModal } from '../../../utils/utilityManager';
 import Permissions, { connectedUserCan } from '../../../utils/permissions';
 import Sentiments from './sentiments';
 import getSentimentStats from './sentimentStats';
 import sentimentDefinitions from './sentimentDefinitions';
-import { getIfPhaseCompletedById } from '../../../utils/timeline';
+import { getIsPhaseCompletedById } from '../../../utils/timeline';
 import { withScreenWidth } from '../../common/screenDimensions';
 
-type Props = {
+export type Props = {
   timeline: Timeline,
   client: ApolloClient,
   creatorUserId: string,
@@ -34,19 +35,10 @@ type Props = {
   sentimentCounts: SentimentCountsFragment
 };
 
-class PostActions extends React.Component<Props> {
+export class PostActions extends React.Component<Props> {
   static defaultProps = {
     editable: true,
     numChildren: 0
-  };
-
-  displayPhaseCompletedModal = (): void => {
-    const body = (
-      <div>
-        <Translate value="debate.noAnswer" />
-      </div>
-    );
-    displayModal(null, body, true, null, null, true);
   };
 
   render() {
@@ -79,7 +71,7 @@ class PostActions extends React.Component<Props> {
     const useSocial = debateData.useSocialMedia;
     let overflowMenu = null;
     const tooltipPlacement = screenWidth >= MEDIUM_SCREEN_WIDTH ? 'left' : 'top';
-    const isPhaseCompleted = getIfPhaseCompletedById(timeline, phaseId);
+    const isPhaseCompleted = getIsPhaseCompletedById(timeline, phaseId);
     if (editable && (userCanDeleteThisMessage || userCanEditThisMessage)) {
       overflowMenu = (
         <div className="overflow-action">
@@ -173,5 +165,9 @@ class PostActions extends React.Component<Props> {
   }
 }
 
+const mapStateToProps = state => ({
+  timeline: state.timeline
+});
+
 // $FlowFixMe
-export default withScreenWidth(withApollo(PostActions));
+export default compose(connect(mapStateToProps), withScreenWidth, withApollo)(PostActions);

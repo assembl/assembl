@@ -1,10 +1,19 @@
+// @flow
 import React from 'react';
 import { Translate } from 'react-redux-i18n';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import get from 'lodash/get';
 
-const ChatFrameModal = ({ src }) => (
+type Props = {
+  src: string
+};
+
+type State = {
+  isOpen: boolean
+};
+
+const ChatFrameModal = ({ src }: { src: string }) => (
   <div className="chatframe-modal">
     <div className="chatframe-modal-header">
       <span className="chatframe-icon chatframe-modal-icon assembl-icon-robot" />
@@ -14,7 +23,7 @@ const ChatFrameModal = ({ src }) => (
   </div>
 );
 
-const ChatFrameButton = ({ isOpen, toggle }) =>
+const ChatFrameButton = ({ isOpen, toggle }: { isOpen: boolean, toggle: () => void }) =>
   (isOpen ? (
     <div onClick={toggle} className="chatframe-icon chatframe-button assembl-icon-cancel" />
   ) : (
@@ -30,7 +39,7 @@ const ChatFrameButton = ({ isOpen, toggle }) =>
     </OverlayTrigger>
   ));
 
-class DumbChatFrame extends React.Component {
+class DumbChatFrame extends React.Component<Props, State> {
   state = { isOpen: false };
 
   toggle = () => this.setState(({ isOpen }) => ({ isOpen: !isOpen }));

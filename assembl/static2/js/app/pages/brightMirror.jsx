@@ -1,7 +1,7 @@
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import ThematicsQuery from '../graphql/ThematicsQuery.graphql';
-import withLoadingIndicator from '../components/common/withLoadingIndicator';
+import manageErrorAndLoading from '../components/common/manageErrorAndLoading';
 import { browserHistory } from '../router';
 import { get } from '../utils/routeMap';
 import { displayAlert } from '../utils/utilityManager';
@@ -18,7 +18,7 @@ class BrightMirror extends React.Component {
   }
 
   render() {
-    const { errors, identifier, children, params } = this.props;
+    const { errors, identifier, children, params, phaseId } = this.props;
     if (errors) {
       displayAlert('danger', `${errors}`);
       return <div />;
@@ -26,7 +26,8 @@ class BrightMirror extends React.Component {
     const childrenElm = React.Children.map(children, child =>
       React.cloneElement(child, {
         id: params.themeId,
-        identifier: identifier
+        identifier: identifier,
+        phaseId: phaseId
       })
     );
     return <div className="bright-mirror">{childrenElm}</div>;
@@ -36,24 +37,19 @@ class BrightMirror extends React.Component {
 export default compose(
   graphql(ThematicsQuery, {
     props: ({ data }) => {
-      if (data.loading) {
+      if (data.error || data.loading) {
         return {
-          loading: true
-        };
-      }
-
-      if (data.error) {
-        return {
-          errors: data.error,
-          loading: false
+          error: data.error,
+          loading: data.loading
         };
       }
 
       return {
-        thematics: data.thematics,
-        loading: false
+        error: data.error,
+        loading: data.loading,
+        thematics: data.thematics
       };
     }
   }),
-  withLoadingIndicator()
+  manageErrorAndLoading({ displayLoader: true })
 )(BrightMirror);

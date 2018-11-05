@@ -17,39 +17,109 @@ exports[`Storyshots FictionBody default 1`] = `
     </h1>
     <div
       className="fiction-content"
-      dangerouslySetInnerHTML={
-        Object {
-          "__html": "
-            <p><strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
-            been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
-            scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into
-            electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of
-            Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus
-            PageMaker including versions of Lorem Ipsum.</p><p></p><p></p><div class=\\"atomic-block\\" data-blocktype=\\"atomic\\">
-            <img class=\\"attachment-image\\" src=\\"https://loremflickr.com/g/1100/400/paris\\" alt=\\"\\"
-            title=\\"one-piece-unlimited-cruise-sp-banner.jpg\\" data-id=\\"2417\\" data-mimetype=\\"image/jpeg\\"></div><p></p><p>
-            <strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been
-            the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled
-            it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting,
-            remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem
-            Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem
-            Ipsum.</p><p></p><p><strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem
-            Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type
-            and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic
-            typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing
-            Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem
-            Ipsum.</p><p></p><p></p><div class=\\"atomic-block\\" data-blocktype=\\"atomic\\"><img class=\\"attachment-image\\"
-            src=\\"https://loremflickr.com/g/1100/400/brazil,rio\\" alt=\\"\\" title=\\"one-piece-unlimited-cruise-sp-banner.jpg\\"
-            data-id=\\"2418\\" data-mimetype=\\"image/jpeg\\"></div><p></p><p><strong>Lorem Ipsum</strong> is simply dummy text of the printing
-            and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown
-            printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but
-            also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release
-            of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker
-            including versions of Lorem Ipsum.</p>
-          ",
-        }
-      }
-    />
+    >
+      <div
+        className="post-body post-body--is-harvestable"
+      >
+        <div
+          className="post-body-content body"
+        >
+          <div
+            onMouseUp={undefined}
+          >
+            <div
+              id=""
+            >
+              
+                  
+              <p>
+                <strong>
+                  Lorem Ipsum
+                </strong>
+                 is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
+                    been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
+                    scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into
+                    electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of
+                    Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus
+                    PageMaker including versions of Lorem Ipsum.
+              </p>
+              <p />
+              <p />
+              <div
+                className="atomic-block"
+                data-blocktype="atomic"
+              >
+                
+                    
+                <img
+                  alt=""
+                  className="attachment-image"
+                  data-id="2417"
+                  data-mimetype="image/jpeg"
+                  src="https://loremflickr.com/g/1100/400/paris"
+                  title="one-piece-unlimited-cruise-sp-banner.jpg"
+                />
+              </div>
+              <p />
+              <p>
+                
+                    
+                <strong>
+                  Lorem Ipsum
+                </strong>
+                 is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been
+                    the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled
+                    it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting,
+                    remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem
+                    Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem
+                    Ipsum.
+              </p>
+              <p />
+              <p>
+                <strong>
+                  Lorem Ipsum
+                </strong>
+                 is simply dummy text of the printing and typesetting industry. Lorem
+                    Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type
+                    and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic
+                    typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing
+                    Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem
+                    Ipsum.
+              </p>
+              <p />
+              <p />
+              <div
+                className="atomic-block"
+                data-blocktype="atomic"
+              >
+                <img
+                  alt=""
+                  className="attachment-image"
+                  data-id="2418"
+                  data-mimetype="image/jpeg"
+                  src="https://loremflickr.com/g/1100/400/brazil,rio"
+                  title="one-piece-unlimited-cruise-sp-banner.jpg"
+                />
+              </div>
+              <p />
+              <p>
+                <strong>
+                  Lorem Ipsum
+                </strong>
+                 is simply dummy text of the printing
+                    and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown
+                    printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but
+                    also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release
+                    of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker
+                    including versions of Lorem Ipsum.
+              </p>
+              
+                
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   <button
     onClick={[Function]}
@@ -204,7 +274,40 @@ exports[`Storyshots FictionBody default 1`] = `
                 </span>
                 <span>
                   <span>
-                     
+                    <span>
+                      <br />
+                        
+                    </span>
+                    <span
+                      style={Object {}}
+                    >
+                      id
+                    </span>
+                    <span>
+                      =
+                      <span
+                        style={Object {}}
+                      >
+                        "
+                        <span
+                          style={
+                            Object {
+                              "color": "#22a",
+                              "wordBreak": "break-word",
+                            }
+                          }
+                        >
+                          0
+                        </span>
+                        "
+                      </span>
+                    </span>
+                  </span>
+                  <span>
+                    <span>
+                      <br />
+                        
+                    </span>
                     <span
                       style={Object {}}
                     >
@@ -231,7 +334,10 @@ exports[`Storyshots FictionBody default 1`] = `
                     </span>
                   </span>
                   <span>
-                     
+                    <span>
+                      <br />
+                        
+                    </span>
                     <span
                       style={Object {}}
                     >
@@ -257,7 +363,67 @@ exports[`Storyshots FictionBody default 1`] = `
                         "
                       </span>
                     </span>
-                     
+                  </span>
+                  <span>
+                    <span>
+                      <br />
+                        
+                    </span>
+                    <span
+                      style={Object {}}
+                    >
+                      contentLocale
+                    </span>
+                    <span>
+                      =
+                      <span
+                        style={Object {}}
+                      >
+                        "
+                        <span
+                          style={
+                            Object {
+                              "color": "#22a",
+                              "wordBreak": "break-word",
+                            }
+                          }
+                        >
+                          en
+                        </span>
+                        "
+                      </span>
+                    </span>
+                  </span>
+                  <span>
+                    <span>
+                      <br />
+                        
+                    </span>
+                    <span
+                      style={Object {}}
+                    >
+                      lang
+                    </span>
+                    <span>
+                      =
+                      <span
+                        style={Object {}}
+                      >
+                        "
+                        <span
+                          style={
+                            Object {
+                              "color": "#22a",
+                              "wordBreak": "break-word",
+                            }
+                          }
+                        >
+                          en
+                        </span>
+                        "
+                      </span>
+                    </span>
+                    <br />
                   </span>
                 </span>
                 <span
@@ -343,16 +509,29 @@ exports[`Storyshots FictionBody no content  1`] = `
     <h1
       className="fiction-title"
     >
-      no title specified
+      Titre non défini
     </h1>
     <div
       className="fiction-content"
-      dangerouslySetInnerHTML={
-        Object {
-          "__html": "no content specified",
-        }
-      }
-    />
+    >
+      <div
+        className="post-body post-body--is-harvestable"
+      >
+        <div
+          className="post-body-content body"
+        >
+          <div
+            onMouseUp={undefined}
+          >
+            <div
+              id=""
+            >
+              Contenu non défini
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   <button
     onClick={[Function]}
@@ -507,7 +686,40 @@ exports[`Storyshots FictionBody no content  1`] = `
                 </span>
                 <span>
                   <span>
-                     
+                    <span>
+                      <br />
+                        
+                    </span>
+                    <span
+                      style={Object {}}
+                    >
+                      id
+                    </span>
+                    <span>
+                      =
+                      <span
+                        style={Object {}}
+                      >
+                        "
+                        <span
+                          style={
+                            Object {
+                              "color": "#22a",
+                              "wordBreak": "break-word",
+                            }
+                          }
+                        >
+                          0
+                        </span>
+                        "
+                      </span>
+                    </span>
+                  </span>
+                  <span>
+                    <span>
+                      <br />
+                        
+                    </span>
                     <span
                       style={Object {}}
                     >
@@ -534,7 +746,10 @@ exports[`Storyshots FictionBody no content  1`] = `
                     </span>
                   </span>
                   <span>
-                     
+                    <span>
+                      <br />
+                        
+                    </span>
                     <span
                       style={Object {}}
                     >
@@ -559,7 +774,67 @@ exports[`Storyshots FictionBody no content  1`] = `
                         "
                       </span>
                     </span>
-                     
+                  </span>
+                  <span>
+                    <span>
+                      <br />
+                        
+                    </span>
+                    <span
+                      style={Object {}}
+                    >
+                      contentLocale
+                    </span>
+                    <span>
+                      =
+                      <span
+                        style={Object {}}
+                      >
+                        "
+                        <span
+                          style={
+                            Object {
+                              "color": "#22a",
+                              "wordBreak": "break-word",
+                            }
+                          }
+                        >
+                          en
+                        </span>
+                        "
+                      </span>
+                    </span>
+                  </span>
+                  <span>
+                    <span>
+                      <br />
+                        
+                    </span>
+                    <span
+                      style={Object {}}
+                    >
+                      lang
+                    </span>
+                    <span>
+                      =
+                      <span
+                        style={Object {}}
+                      >
+                        "
+                        <span
+                          style={
+                            Object {
+                              "color": "#22a",
+                              "wordBreak": "break-word",
+                            }
+                          }
+                        >
+                          en
+                        </span>
+                        "
+                      </span>
+                    </span>
+                    <br />
                   </span>
                 </span>
                 <span
@@ -649,39 +924,109 @@ exports[`Storyshots FictionBody playground 1`] = `
     </h1>
     <div
       className="fiction-content"
-      dangerouslySetInnerHTML={
-        Object {
-          "__html": "
-            <p><strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
-            been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
-            scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into
-            electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of
-            Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus
-            PageMaker including versions of Lorem Ipsum.</p><p></p><p></p><div class=\\"atomic-block\\" data-blocktype=\\"atomic\\">
-            <img class=\\"attachment-image\\" src=\\"https://loremflickr.com/g/1100/400/paris\\" alt=\\"\\"
-            title=\\"one-piece-unlimited-cruise-sp-banner.jpg\\" data-id=\\"2417\\" data-mimetype=\\"image/jpeg\\"></div><p></p><p>
-            <strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been
-            the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled
-            it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting,
-            remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem
-            Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem
-            Ipsum.</p><p></p><p><strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem
-            Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type
-            and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic
-            typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing
-            Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem
-            Ipsum.</p><p></p><p></p><div class=\\"atomic-block\\" data-blocktype=\\"atomic\\"><img class=\\"attachment-image\\"
-            src=\\"https://loremflickr.com/g/1100/400/brazil,rio\\" alt=\\"\\" title=\\"one-piece-unlimited-cruise-sp-banner.jpg\\"
-            data-id=\\"2418\\" data-mimetype=\\"image/jpeg\\"></div><p></p><p><strong>Lorem Ipsum</strong> is simply dummy text of the printing
-            and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown
-            printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but
-            also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release
-            of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker
-            including versions of Lorem Ipsum.</p>
-          ",
-        }
-      }
-    />
+    >
+      <div
+        className="post-body post-body--is-harvestable"
+      >
+        <div
+          className="post-body-content body"
+        >
+          <div
+            onMouseUp={undefined}
+          >
+            <div
+              id=""
+            >
+              
+                  
+              <p>
+                <strong>
+                  Lorem Ipsum
+                </strong>
+                 is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
+                    been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
+                    scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into
+                    electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of
+                    Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus
+                    PageMaker including versions of Lorem Ipsum.
+              </p>
+              <p />
+              <p />
+              <div
+                className="atomic-block"
+                data-blocktype="atomic"
+              >
+                
+                    
+                <img
+                  alt=""
+                  className="attachment-image"
+                  data-id="2417"
+                  data-mimetype="image/jpeg"
+                  src="https://loremflickr.com/g/1100/400/paris"
+                  title="one-piece-unlimited-cruise-sp-banner.jpg"
+                />
+              </div>
+              <p />
+              <p>
+                
+                    
+                <strong>
+                  Lorem Ipsum
+                </strong>
+                 is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been
+                    the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled
+                    it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting,
+                    remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem
+                    Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem
+                    Ipsum.
+              </p>
+              <p />
+              <p>
+                <strong>
+                  Lorem Ipsum
+                </strong>
+                 is simply dummy text of the printing and typesetting industry. Lorem
+                    Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type
+                    and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic
+                    typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing
+                    Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem
+                    Ipsum.
+              </p>
+              <p />
+              <p />
+              <div
+                className="atomic-block"
+                data-blocktype="atomic"
+              >
+                <img
+                  alt=""
+                  className="attachment-image"
+                  data-id="2418"
+                  data-mimetype="image/jpeg"
+                  src="https://loremflickr.com/g/1100/400/brazil,rio"
+                  title="one-piece-unlimited-cruise-sp-banner.jpg"
+                />
+              </div>
+              <p />
+              <p>
+                <strong>
+                  Lorem Ipsum
+                </strong>
+                 is simply dummy text of the printing
+                    and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown
+                    printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but
+                    also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release
+                    of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker
+                    including versions of Lorem Ipsum.
+              </p>
+              
+                
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   <button
     onClick={[Function]}
@@ -836,7 +1181,40 @@ exports[`Storyshots FictionBody playground 1`] = `
                 </span>
                 <span>
                   <span>
-                     
+                    <span>
+                      <br />
+                        
+                    </span>
+                    <span
+                      style={Object {}}
+                    >
+                      id
+                    </span>
+                    <span>
+                      =
+                      <span
+                        style={Object {}}
+                      >
+                        "
+                        <span
+                          style={
+                            Object {
+                              "color": "#22a",
+                              "wordBreak": "break-word",
+                            }
+                          }
+                        >
+                          0
+                        </span>
+                        "
+                      </span>
+                    </span>
+                  </span>
+                  <span>
+                    <span>
+                      <br />
+                        
+                    </span>
                     <span
                       style={Object {}}
                     >
@@ -863,7 +1241,10 @@ exports[`Storyshots FictionBody playground 1`] = `
                     </span>
                   </span>
                   <span>
-                     
+                    <span>
+                      <br />
+                        
+                    </span>
                     <span
                       style={Object {}}
                     >
@@ -889,7 +1270,67 @@ exports[`Storyshots FictionBody playground 1`] = `
                         "
                       </span>
                     </span>
-                     
+                  </span>
+                  <span>
+                    <span>
+                      <br />
+                        
+                    </span>
+                    <span
+                      style={Object {}}
+                    >
+                      contentLocale
+                    </span>
+                    <span>
+                      =
+                      <span
+                        style={Object {}}
+                      >
+                        "
+                        <span
+                          style={
+                            Object {
+                              "color": "#22a",
+                              "wordBreak": "break-word",
+                            }
+                          }
+                        >
+                          en
+                        </span>
+                        "
+                      </span>
+                    </span>
+                  </span>
+                  <span>
+                    <span>
+                      <br />
+                        
+                    </span>
+                    <span
+                      style={Object {}}
+                    >
+                      lang
+                    </span>
+                    <span>
+                      =
+                      <span
+                        style={Object {}}
+                      >
+                        "
+                        <span
+                          style={
+                            Object {
+                              "color": "#22a",
+                              "wordBreak": "break-word",
+                            }
+                          }
+                        >
+                          en
+                        </span>
+                        "
+                      </span>
+                    </span>
+                    <br />
                   </span>
                 </span>
                 <span

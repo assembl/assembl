@@ -223,7 +223,7 @@ def authentication_callback(user_id, request):
     from raven.base import Raven
     if Raven:
         if user_id:
-            Raven.user_context({'user_id': user_id})
+            Raven.user_context({'user_id': str(user_id)})
         if discussion_id:
             Raven.context.merge({'discussion_id': discussion_id})
 
@@ -380,12 +380,12 @@ def maybe_auto_subscribe(user, discussion, check_authorization=True):
 
 
 def add_user(name, email, password, role, force=False, username=None,
-             localrole=None, discussion=None, change_old_password=True,
+             localrole=None, discussion=None, change_old_password=True, db=None,
              **kwargs):
     from assembl.models import Discussion, Username
-    db = Discussion.default_db
+    db = db or Discussion.default_db
     # refetch within transaction
-    all_roles = {r.name: r for r in Role.default_db.query(Role).all()}
+    all_roles = {r.name: r for r in db.query(Role).all()}
     user = None
     created_user = True
     if discussion and localrole:

@@ -19,7 +19,7 @@ export const defaultFictionHeader: FictionHeaderProps = {
   circleAvatar: { ...defaultCircleAvatar }
 };
 
-const playgroundButton = {
+const playground = {
   ...defaultFictionHeader
 };
 
@@ -30,10 +30,10 @@ storiesOf('FictionHeader', module)
     'playground',
     withInfo()(() => (
       <FictionHeader
-        authorFullname={text('authorFullname', playgroundButton.authorFullname)}
-        publishedDate={text('publishedDate', playgroundButton.publishedDate)}
-        displayedPublishedDate={text('displayedPublishedDate', playgroundButton.displayedPublishedDate)}
-        circleAvatar={object('circleAvatar', playgroundButton.circleAvatar)}
+        authorFullname={text('authorFullname', playground.authorFullname)}
+        publishedDate={text('publishedDate', playground.publishedDate)}
+        displayedPublishedDate={text('displayedPublishedDate', playground.displayedPublishedDate)}
+        circleAvatar={object('circleAvatar', playground.circleAvatar)}
       />
     ))
   );

@@ -12,6 +12,7 @@ import Routes from './routes';
 import hashLinkScroll from './utils/hashLinkScroll';
 import { ScreenDimensionsProvider } from './components/common/screenDimensions';
 import { browserHistory } from './router';
+import GlobalErrorBoundary from './components/common/GlobalErrorBoundary';
 
 require('smoothscroll-polyfill').polyfill();
 
@@ -22,14 +23,16 @@ const renderAssembl = (routes) => {
     <AppContainer>
       <ApolloProvider store={store} client={client}>
         <ScreenDimensionsProvider>
-          <Router
-            history={browserHistory}
-            routes={routes}
-            onUpdate={() => {
-              window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-              hashLinkScroll();
-            }}
-          />
+          <GlobalErrorBoundary>
+            <Router
+              history={browserHistory}
+              routes={routes}
+              onUpdate={() => {
+                window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+                hashLinkScroll();
+              }}
+            />
+          </GlobalErrorBoundary>
         </ScreenDimensionsProvider>
       </ApolloProvider>
     </AppContainer>,

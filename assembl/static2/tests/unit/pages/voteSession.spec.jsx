@@ -33,6 +33,7 @@ describe('VoteSession component', () => {
       instructionsSectionTitle: 'Instructions de la phase de vote',
       instructionsSectionContent: '',
       modules: [],
+      phaseId: 'my-phase-id',
       propositionsSectionTitle: 'Vote sur 0 propositions',
       proposals: [],
       randomProposals: []
@@ -71,6 +72,7 @@ describe('VoteSession component', () => {
           voteType: 'token_vote_specification'
         }
       ],
+      phaseId: 'my-phase-id',
       propositionsSectionTitle: 'Vote sur 10 propositions',
       proposals: proposals,
       randomProposals: proposals

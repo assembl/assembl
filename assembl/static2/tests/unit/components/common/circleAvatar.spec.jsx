@@ -7,6 +7,7 @@ import Adapter from 'enzyme-adapter-react-16';
 /* eslint-enable */
 
 import CircleAvatar from '../../../../js/app/components/common/circleAvatar';
+import { getIconPath } from '../../../../js/app/utils/globalFunctions';
 
 // Separate the snapshots in directories next to each component
 // Name should match with the story name
@@ -15,6 +16,8 @@ initStoryshots({
 });
 
 configure({ adapter: new Adapter() });
+
+const avatarIcon = getIconPath('avatar.png');
 
 describe('<CircleAvatar /> - with shallow', () => {
   let wrapper;
@@ -45,8 +48,8 @@ describe('<CircleAvatar /> - with shallow', () => {
     expect(wrapper.find('img [alt="bright-mirror-author-avatar"]')).toHaveLength(1);
   });
 
-  it('should render one image with a default image set to /static2/img/icons/avatar.png', () => {
-    expect(wrapper.find('img [src="/static2/img/icons/avatar.png"]')).toHaveLength(1);
+  it(`should render one image with a default image set to ${avatarIcon}`, () => {
+    expect(wrapper.find(`img [src="${avatarIcon}"]`)).toHaveLength(1);
   });
 
   it('should render one image with a custom image', () => {

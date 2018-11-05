@@ -63,6 +63,7 @@ def bootstrap_db_data(db, mark=True):
     ensure_functions(session)
     if mark:
         mark_changed(session)
+    session.flush()
 
 
 def ensure_db_version(config_uri, session_maker):

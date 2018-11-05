@@ -1,0 +1,20 @@
+.bright-mirror-fiction {
+  .back-btn {
+    display: block;
+    padding: 0 15px 15px 15px;
+  }
+
+  @media screen and (min-width: $screen-sm-min) {
+    .back-btn {
+      padding-bottom: 25px;
+    }
+  }
+
+  @media screen and (min-width: $screen-xl-min) {
+    .back-btn {
+      margin: 0 auto;
+      max-width: 1400px;
+      padding-bottom: 60px;
+    }
+  }
+}

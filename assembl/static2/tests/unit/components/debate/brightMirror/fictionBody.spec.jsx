@@ -15,12 +15,17 @@ initStoryshots({
 
 configure({ adapter: new Adapter() });
 
+const defaultId: string = '0';
 const defaultTitle: string = 'Fugit veritatis nemo';
 const defaultContent: string = 'Vero et ut et quia quo. Molestiae ut cupiditate odio numquam veniam esse cumque modi.';
+const defaultLocale: string = 'en';
 
 const defaultFictionBody: FictionBodyProps = {
+  id: defaultId,
   title: defaultTitle,
-  content: defaultContent
+  content: defaultContent,
+  contentLocale: defaultLocale,
+  lang: defaultLocale
 };
 
 describe('<FictionBody /> - with shallow', () => {
@@ -43,7 +48,7 @@ describe('<FictionBody /> - with shallow', () => {
 
   it('should display "no title specified" when title is set to null', () => {
     wrapper.setProps({ title: '' });
-    expect(wrapper.contains('no title specified')).toBe(true);
+    expect(wrapper.contains('Titre non défini')).toBe(true);
   });
 });
 
@@ -64,6 +69,6 @@ describe('<FictionBody /> - with mount', () => {
   it('should display "no content specified" when content is set to null', () => {
     wrapper.setProps({ content: '' });
     const fictionContent: string = wrapper.find('div [className="fiction-content"]').text();
-    expect(fictionContent).toEqual('no content specified');
+    expect(fictionContent).toEqual('Contenu non défini');
   });
 });

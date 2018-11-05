@@ -6,22 +6,21 @@ import { FormGroup, Button } from 'react-bootstrap';
 import { I18n, Translate } from 'react-redux-i18n';
 import classNames from 'classnames';
 import { EditorState } from 'draft-js';
-import { PublicationStates } from '../../../constants';
 
+import { PublicationStates } from '../../../constants';
 import createPostMutation from '../../../graphql/mutations/createPost.graphql';
 import uploadDocumentMutation from '../../../graphql/mutations/uploadDocument.graphql';
-import { convertContentStateToHTML, editorStateIsEmpty } from '../../../utils/draftjs';
+import { convertContentStateToHTML, editorStateIsEmpty, uploadNewAttachments } from '../../../utils/draftjs';
 import { getDomElementOffset } from '../../../utils/globalFunctions';
 import { displayAlert, promptForLoginOr } from '../../../utils/utilityManager';
 import { TextInputWithRemainingChars } from '../../common/textInputWithRemainingChars';
 import RichTextEditor from '../../common/richTextEditor';
-import attachmentsPlugin from '../../common/richTextEditor/attachmentsPlugin';
 
 export const TEXT_INPUT_MAX_LENGTH = 140;
 export const NO_BODY_LENGTH = 0;
 export const BODY_MAX_LENGTH = 3000;
 
-type TopPostFormProps = {
+export type Props = {
   contentLocale: string,
   createPost: Function,
   ideaId: string,
@@ -39,14 +38,29 @@ type TopPostFormProps = {
   draftSuccessMsgId?: string
 };
 
-type TopPostFormState = {
+type State = {
   body: EditorState,
   isActive: boolean,
   subject: string,
   submitting: boolean
 };
 
-class TopPostForm extends React.Component<TopPostFormProps, TopPostFormState> {
+export const submittingState = (value: boolean) => ({
+  submitting: value
+});
+
+export const getClassNames = (ideaOnColumn: boolean, submitting: boolean) =>
+  classNames([
+    'button-submit',
+    'button-dark',
+    'btn',
+    'btn-default',
+    'right',
+    !ideaOnColumn ? 'margin-l' : 'margin-m',
+    submitting && 'cursor-wait'
+  ]);
+
+export class DumbTopPostForm extends React.Component<Props, State> {
   formContainer: ?HTMLDivElement;
 
   static defaultProps = {
@@ -91,7 +105,18 @@ class TopPostForm extends React.Component<TopPostFormProps, TopPostFormState> {
     this.setState({ body: EditorState.createEmpty() });
   };
 
-  createTopPost = (publicationState) => {
+  getWarningMessageToDisplay = (publicationState: string, subject: string, bodyIsEmpty: boolean, ideaOnColumn: boolean) => {
+    if (publicationState === PublicationStates.DRAFT && (!subject && bodyIsEmpty)) {
+      return 'debate.brightMirror.fillEitherTitleContent';
+    } else if (!subject && !ideaOnColumn) {
+      return 'debate.thread.fillSubject';
+    } else if (bodyIsEmpty) {
+      return this.props.fillBodyLabelMsgId;
+    }
+    return null;
+  };
+
+  createTopPost = (publicationState: string) => {
     const {
       contentLocale,
       createPost,
@@ -99,24 +124,27 @@ class TopPostForm extends React.Component<TopPostFormProps, TopPostFormState> {
       refetchIdea,
       uploadDocument,
       messageClassifier,
-      ideaOnColumn,
-      fillBodyLabelMsgId,
       postSuccessMsgId,
+      ideaOnColumn,
       draftSuccessMsgId
     } = this.props;
     const { body, subject } = this.state;
-    this.setState({ submitting: true });
+    this.setState(submittingState(true));
     const bodyIsEmpty = editorStateIsEmpty(body);
-    if ((subject || this.props.ideaOnColumn) && !bodyIsEmpty) {
+    if (
+      ((subject || this.props.ideaOnColumn) && !bodyIsEmpty) ||
+      (publicationState === PublicationStates.DRAFT && (subject || !bodyIsEmpty))
+    ) {
       displayAlert('success', I18n.t('loading.wait'));
 
       // first, we upload each attachment
-      const uploadDocumentsPromise = attachmentsPlugin.uploadNewAttachments(body, uploadDocument);
+      // $FlowFixMe we know that body is not empty
+      const uploadDocumentsPromise = uploadNewAttachments(body, uploadDocument);
       uploadDocumentsPromise.then((result) => {
         const variables = {
           contentLocale: contentLocale,
           ideaId: ideaId,
-          subject: subject || null,
+          subject: subject || I18n.t('debate.brightMirror.draftEmptyTitle'),
           messageClassifier: messageClassifier || null,
           // use the updated content state with new entities
           body: convertContentStateToHTML(result.contentState),
@@ -130,49 +158,33 @@ class TopPostForm extends React.Component<TopPostFormProps, TopPostFormState> {
             const successMsgId = publicationState === PublicationStates.DRAFT ? draftSuccessMsgId : postSuccessMsgId;
             displayAlert('success', I18n.t(successMsgId));
             this.resetForm();
-            this.setState({ submitting: false });
+            this.setState(submittingState(false));
           })
           .catch((error) => {
             displayAlert('danger', `${error}`);
-            this.setState({ submitting: false });
+            this.setState(submittingState(false));
           });
       });
-    } else if (!subject && !ideaOnColumn) {
-      displayAlert('warning', I18n.t('debate.thread.fillSubject'));
-      this.setState({ submitting: false });
-    } else if (bodyIsEmpty) {
-      displayAlert('warning', I18n.t(fillBodyLabelMsgId));
-      this.setState({ submitting: false });
+    } else {
+      const warningMessage = this.getWarningMessageToDisplay(publicationState, subject, bodyIsEmpty, ideaOnColumn);
+      if (warningMessage) displayAlert('warning', I18n.t(warningMessage));
+      this.setState(submittingState(false));
     }
   };
 
   handleInputFocus = promptForLoginOr(() => this.displayForm(true));
 
-  updateBody = (newValue) => {
+  updateBody = (newValue: Object) => {
     this.setState({
       body: newValue
     });
   };
 
-  handleSubjectChange = (e) => {
+  handleSubjectChange = (e: SyntheticInputEvent<HTMLInputElement>) => {
     this.setState({
       subject: e.target.value
     });
   };
-
-  getClassNames() {
-    const { ideaOnColumn } = this.props;
-    const { submitting } = this.state;
-    return classNames([
-      'button-submit',
-      'button-dark',
-      'btn',
-      'btn-default',
-      'right',
-      !ideaOnColumn ? 'margin-l' : 'margin-m',
-      submitting && 'cursor-wait'
-    ]);
-  }
 
   setFormContainerRef = (el: ?HTMLDivElement): void => {
     this.formContainer = el;
@@ -193,6 +205,7 @@ class TopPostForm extends React.Component<TopPostFormProps, TopPostFormState> {
               handleTxtChange={this.handleSubjectChange}
               handleInputFocus={this.handleInputFocus}
               isActive={isActive}
+              name="top-post-title"
             />
           ) : null}
           {isActive || ideaOnColumn ? (
@@ -205,13 +218,14 @@ class TopPostForm extends React.Component<TopPostFormProps, TopPostFormState> {
                 placeholder={I18n.t(bodyPlaceholderMsgId)}
                 withAttachmentButton
               />
+              <div className="clear" />
               {!ideaOnColumn ? (
                 <Button className="button-cancel button-dark btn btn-default left margin-l" onClick={this.resetForm}>
                   <Translate value="cancel" />
                 </Button>
               ) : null}
               <Button
-                className={this.getClassNames()}
+                className={getClassNames(ideaOnColumn, submitting)}
                 onClick={() => this.createTopPost(PublicationStates.PUBLISHED)}
                 style={{ marginBottom: '30px' }}
                 disabled={submitting}
@@ -220,7 +234,7 @@ class TopPostForm extends React.Component<TopPostFormProps, TopPostFormState> {
               </Button>
               {draftable ? (
                 <Button
-                  className={`${this.getClassNames()} btn-draft`}
+                  className={`${getClassNames(ideaOnColumn, submitting)} btn-draft`}
                   onClick={() => this.createTopPost(PublicationStates.DRAFT)}
                   disabled={submitting}
                 >
@@ -243,4 +257,4 @@ export default compose(
   connect(mapStateToProps),
   graphql(createPostMutation, { name: 'createPost' }),
   graphql(uploadDocumentMutation, { name: 'uploadDocument' })
-)(TopPostForm);
+)(DumbTopPostForm);

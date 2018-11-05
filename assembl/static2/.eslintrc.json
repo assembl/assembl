@@ -14,8 +14,9 @@
   },
   "plugins": ["react", "flowtype"],
   "rules": {
+    "import/no-named-as-default": 0,
     "import/prefer-default-export": 0,
-    "import/no-extraneous-dependencies": ["error", { "devDependencies": ["**/stories/**/*.jsx", "**/tests/**/*.*"] }],
+    "import/no-extraneous-dependencies": ["error", { "devDependencies": ["**/stories/**/*.jsx", "**/tests/**/*.*", "**/__test__/*"] }],
     "jsx-a11y/no-static-element-interactions": 0,
     "react/no-array-index-key": 0,
     "react/no-danger": 0,

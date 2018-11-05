@@ -42,6 +42,19 @@ type ExtractInPostProps = {
   children: React.Node
 };
 
+type PostBodyReplacementType = {
+  afterload?: Function
+};
+
+type HtmlProps = {
+  extracts?: ?Array<?ExtractFragment>,
+  rawHtml: string,
+  divRef?: ?Function,
+  dbId?: ?number,
+  replacementComponents: PostBodyReplacementType,
+  contentLocale?: ?string
+};
+
 const ExtractInPost = ({ id, state, children }: ExtractInPostProps) => {
   const isSubmitted = state === ExtractStates.SUBMITTED;
   return (
@@ -68,8 +81,14 @@ export const postBodyReplacementComponents = (afterLoad?: Function) => ({
   a: (attributes: Object) => {
     const embeddedUrl = isSpecialURL(attributes.href);
     const origin = (
-      <a key={`url-link-${attributes.href}`} href={attributes.href} className="linkified" target="_blank">
-        {attributes.href}
+      <a
+        key={`url-link-${attributes.key}`}
+        href={attributes.href}
+        className="linkified"
+        target={attributes.target}
+        title={attributes.title}
+      >
+        {attributes.children}
       </a>
     );
     if (embeddedUrl) return origin;
@@ -82,7 +101,7 @@ export const postBodyReplacementComponents = (afterLoad?: Function) => ({
   )
 });
 
-const Html = (props) => {
+export const Html = (props: HtmlProps) => {
   const { extracts, rawHtml, divRef, dbId, replacementComponents, contentLocale, ...containerProps } = props;
   /*
    * The activeHtml() function will parse the raw html,
@@ -135,6 +154,15 @@ const Html = (props) => {
     </div>
   );
 };
+
+Html.defaultProps = {
+  extracts: [],
+  contentLocale: null,
+  divRef: null,
+  dbId: null
+};
+
+Html.displayName = 'Html';
 
 export const DumbPostBody = ({
   body,

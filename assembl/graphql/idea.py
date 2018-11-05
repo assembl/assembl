@@ -10,7 +10,7 @@ from graphene_sqlalchemy import SQLAlchemyConnectionField, SQLAlchemyObjectType
 from graphene_sqlalchemy.utils import is_mapped
 from pyramid.httpexceptions import HTTPUnauthorized
 from pyramid.security import Everyone
-from sqlalchemy import desc, func, join, select
+from sqlalchemy import desc, func, join, select, or_, and_
 from sqlalchemy.orm import joinedload
 
 from assembl import models
@@ -316,7 +316,7 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
         if self.message_view_override == Phases.brightMirror.value:
             user_id = context.authenticated_userid
             if user_id is not None:
-                query = query.filter(Post.publication_state == models.PublicationStates.PUBLISHED or (Post.creator_id == user_id and Post.publication_state == models.PublicationStates.DRAFT))
+                query = query.filter(or_(Post.publication_state == models.PublicationStates.PUBLISHED, and_(Post.creator_id == user_id, Post.publication_state == models.PublicationStates.DRAFT)))
             else:
                 query = query.filter(Post.publication_state == models.PublicationStates.PUBLISHED)
 

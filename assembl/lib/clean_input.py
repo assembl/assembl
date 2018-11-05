@@ -39,7 +39,7 @@ VALID_TAGS = ['a',
               'span',
               ]
 
-VALID_ATTRIBUTES = ['href',  # For hyperlinks
+VALID_ATTRIBUTES = ['href', 'target', # For hyperlinks
                     'alt',  # For accessiblity
                     'colspan', 'headers', 'abbr',
                     'scope', 'sorted',  # For tables

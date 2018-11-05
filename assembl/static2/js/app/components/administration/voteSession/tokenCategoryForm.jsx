@@ -49,7 +49,7 @@ const DumbTokenCategoryForm = ({
         label={I18n.t('administration.tokenNumber')}
         required
         type="number"
-        onChange={handleNumberChange}
+        onChange={v => handleNumberChange(parseInt(v, 10))}
         value={totalNumber.toString()}
         formControlProps={{
           min: '1'

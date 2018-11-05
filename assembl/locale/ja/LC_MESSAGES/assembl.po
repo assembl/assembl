@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-08-16 18:33+0200\n"
+"POT-Creation-Date: 2018-10-09 17:06+0200\n"
 "PO-Revision-Date: 2017-08-26 01:06+0900\n"
 "Last-Translator: \n"
 "Language: ja\n"
@@ -48,172 +48,177 @@ msgstr "${val} 文字列ではありません：${err}"
 msgid "Unknown User ${uid}"
 msgstr "不明なユーザ ${uid}"
 
-#: assembl/models/idea.py:269 assembl/static/js/app/views/ideaPanel.js:211
+#: assembl/models/idea.py:270 assembl/static/js/app/views/ideaPanel.js:211
 msgid "Idea"
 msgstr "アイデア"
 
-#: assembl/models/notification.py:621
+#: assembl/models/notification.py:620
 msgid "A synthesis is posted"
 msgstr "シンセシスが投稿されました"
 
-#: assembl/models/notification.py:650
+#: assembl/models/notification.py:649
 msgid "Any message is posted to the discussion"
 msgstr "全てのメッセージがディスカッションに投稿されます"
 
-#: assembl/models/notification.py:679
+#: assembl/models/notification.py:678
 msgid "Someone directly responds to one of your messages"
 msgstr "誰かがあなたのメッセージに応答しています"
 
-#: assembl/models/notification.py:1093
+#: assembl/models/notification.py:1069
 msgid "SYNTHESIS: "
 msgstr "シンセシス : "
 
-#: assembl/models/preferences.py:115 assembl/models/preferences.py:564
+#: assembl/models/preferences.py:115 assembl/models/preferences.py:593
 msgid "No special authentication"
 msgstr "特別な認証なし"
 
-#: assembl/models/preferences.py:391
+#: assembl/models/preferences.py:409
 msgid "Languages used"
 msgstr "使用言語"
 
-#: assembl/models/preferences.py:392
+#: assembl/models/preferences.py:410
 msgid "All languages expected in the discussion"
 msgstr "ディスカッションで期待されるすべての言語"
 
-#: assembl/models/preferences.py:402
+#: assembl/models/preferences.py:420
 msgid "Use landing page"
 msgstr "ランディングページを使用する"
 
-#: assembl/models/preferences.py:403
+#: assembl/models/preferences.py:421
 msgid ""
 "Are users directed to the landing page and phases at login, or diretly to"
 " the debate"
 msgstr "ログイン時にユーザーがリンク先ページやフェーズに誘導されましたか、もしくは討論に直接誘導されましたか"
 
-#: assembl/models/preferences.py:411 assembl/models/preferences.py:425
+#: assembl/models/preferences.py:429 assembl/models/preferences.py:443
 msgid "Translation service"
 msgstr "翻訳サービス"
 
-#: assembl/models/preferences.py:414
+#: assembl/models/preferences.py:432
 msgid "No translation"
 msgstr "翻訳がありません"
 
-#: assembl/models/preferences.py:416
+#: assembl/models/preferences.py:434
 msgid "Dummy translation service (two steps)"
 msgstr "ダミー翻訳サービス(2ステップ)"
 
-#: assembl/models/preferences.py:418
+#: assembl/models/preferences.py:436
 msgid "Dummy translation service (one step)"
 msgstr "ダミー翻訳サービス(ワンステップ)"
 
-#: assembl/models/preferences.py:420
+#: assembl/models/preferences.py:438
 msgid "Dummy translation service (two steps) with errors"
 msgstr "エラーのあるダミー翻訳サービス(２ステップ)"
 
-#: assembl/models/preferences.py:422
+#: assembl/models/preferences.py:440
 msgid "Dummy translation service (one step) with errors"
 msgstr "エラーのあるダミー翻訳サービス(1ステップ)"
 
-#: assembl/models/preferences.py:424
+#: assembl/models/preferences.py:442
 msgid "Google Translate"
 msgstr "グーグル翻訳"
 
-#: assembl/models/preferences.py:437
+#: assembl/models/preferences.py:455
 msgid "Panel order in simple view"
 msgstr "シンプルなビューでのパネルオーダー"
 
-#: assembl/models/preferences.py:440
+#: assembl/models/preferences.py:458
 msgid "Navigation, Idea, Messages"
 msgstr "ナビゲーション、アイデア、メッセージ"
 
-#: assembl/models/preferences.py:441
+#: assembl/models/preferences.py:459
 msgid "Navigation, Messages, Idea"
 msgstr "ナビゲーション、メッセージ、アイデア"
 
-#: assembl/models/preferences.py:442
+#: assembl/models/preferences.py:460
 msgid "Order of panels"
 msgstr "パネルの順序"
 
-#: assembl/models/preferences.py:454
+#: assembl/models/preferences.py:472
 msgid "Extra JSON parameters"
 msgstr "追加のJSONパラメータ"
 
-#: assembl/models/preferences.py:456
+#: assembl/models/preferences.py:474
 msgid "Parameters for quick frontend settings"
 msgstr "クイックフロントエンド設定のパラメータ"
 
-#: assembl/models/preferences.py:465
+#: assembl/models/preferences.py:483
 msgid "Terms of use URL"
 msgstr "利用規約のURL"
 
-#: assembl/models/preferences.py:467
+#: assembl/models/preferences.py:485
 msgid "URL of a document presenting terms of use for the discussion"
 msgstr "議論のための利用規約のURL"
 
-#: assembl/models/preferences.py:476
+#: assembl/models/preferences.py:494
 msgid "Video URL"
 msgstr "動画のURL"
 
-#: assembl/models/preferences.py:478
+#: assembl/models/preferences.py:496
 msgid "URL of a video presenting the discussion"
 msgstr "ディスカッションを紹介するビデオのURL"
 
-#: assembl/models/preferences.py:487
-#, fuzzy
-#| msgid "Message titles"
+#: assembl/models/preferences.py:505
 msgid "Tab title"
 msgstr "メッセージのタイトル"
 
-#: assembl/models/preferences.py:489
+#: assembl/models/preferences.py:507
 msgid "Title which appears on the tab, by default assembl"
 msgstr ""
 
-#: assembl/models/preferences.py:498
+#: assembl/models/preferences.py:516
 msgid "Video description"
 msgstr "動画の説明"
 
-#: assembl/models/preferences.py:500
+#: assembl/models/preferences.py:518
 msgid "Description of the video presenting the discussion"
 msgstr "ディスカッションを紹介するビデオの説明"
 
-#: assembl/models/preferences.py:509
+#: assembl/models/preferences.py:527
 msgid "Social sharing"
 msgstr "ソーシャルシェアリング"
 
-#: assembl/models/preferences.py:512
+#: assembl/models/preferences.py:530
 msgid "Show the share button on posts and ideas"
 msgstr "投稿とアイデアの共有ボタンを表示する"
 
-#: assembl/models/preferences.py:523
-#, fuzzy
+#: assembl/models/preferences.py:541
 msgid "Private social sharing"
 msgstr "ソーシャルシェアリング"
 
-#: assembl/models/preferences.py:525
+#: assembl/models/preferences.py:543
 msgid "Publicizing or privatizing social sharing"
 msgstr ""
 
-#: assembl/models/preferences.py:534
+#: assembl/models/preferences.py:552
+msgid "Generic Errors"
+msgstr ""
+
+#: assembl/models/preferences.py:554
+msgid "Display a generic error message."
+msgstr ""
+
+#: assembl/models/preferences.py:563
 msgid "Extra data for CSV reports"
 msgstr ""
 
-#: assembl/models/preferences.py:537
+#: assembl/models/preferences.py:566
 msgid "data taken from social_auth's extra_data to add to CSV reports"
 msgstr ""
 
-#: assembl/models/preferences.py:549
+#: assembl/models/preferences.py:578
 msgid "Require anti-virus check"
 msgstr ""
 
-#: assembl/models/preferences.py:552
+#: assembl/models/preferences.py:581
 msgid "Run an anti-virus on file attachments"
 msgstr ""
 
-#: assembl/models/preferences.py:566
+#: assembl/models/preferences.py:595
 msgid "Authentication service type"
 msgstr "認証サービスの種類"
 
-#: assembl/models/preferences.py:568
+#: assembl/models/preferences.py:597
 msgid ""
 "A primary authentication server for this discussion, defined as a python-"
 "social-auth backend. Participants will be auto-logged in to that server, "
@@ -223,63 +228,63 @@ msgstr ""
 "この議論のためのon-social-"
 "authバックエンドとして定義されるプライマリ認証サーバー。参加者はこのサーバーに自動ログインし、ディスカッションの自動登録にはこのバックエンドからのアカウントが必要です."
 
-#: assembl/models/preferences.py:583
+#: assembl/models/preferences.py:612
 msgid "Allow access to moderated text"
 msgstr "モデレートされたテキストへのアクセスを許可する"
 
-#: assembl/models/preferences.py:586
+#: assembl/models/preferences.py:615
 msgid "Are moderated posts simply hidden or made inaccessible by default?"
 msgstr "モデレートされた投稿は、デフォルトで隠されているかアクセス不能になっていますか ?"
 
-#: assembl/models/preferences.py:599
+#: assembl/models/preferences.py:628
 msgid "Idea panel opens automatically"
 msgstr "アイデアパネルが自動的に開きます"
 
-#: assembl/models/preferences.py:602
+#: assembl/models/preferences.py:631
 msgid ""
 "Does the Idea panel automatically open when an idea is clicked ? (and "
 "close when a special section is clicked)"
 msgstr "アイデアがクリックされるとアイデアパネルが自動的に開きますか？ (そして、特別なセクションがクリックされたときに閉じますか？)"
 
-#: assembl/models/preferences.py:614
+#: assembl/models/preferences.py:643
 msgid "Ids of columns in column view"
 msgstr "カラムビューのカラムのID"
 
-#: assembl/models/preferences.py:616
+#: assembl/models/preferences.py:645
 msgid "What are (ordered) identifiers of columns in multi-column views?"
 msgstr "マルチカラムビューのカラムの（順序付けられた）識別子は何ですか?"
 
-#: assembl/models/preferences.py:629
+#: assembl/models/preferences.py:658
 msgid "Default colors of columns in column view"
 msgstr "カラムビュー内のカラムのデフォルトの色"
 
-#: assembl/models/preferences.py:631
+#: assembl/models/preferences.py:660
 msgid "What are (default) theme colors of columns in multi-column views?"
 msgstr "マルチカラムビューのカラムの（デフォルトの）テーマカラーは何ですか ?"
 
-#: assembl/models/preferences.py:643
+#: assembl/models/preferences.py:672
 msgid "Names of columns in column view"
 msgstr "カラムビューのカラム名"
 
-#: assembl/models/preferences.py:645
+#: assembl/models/preferences.py:674
 msgid ""
 "What are (default) names of columns in multi-column views, in each "
 "discussion language?"
 msgstr "各列の言語で、マルチカラムビューの（デフォルトの）カラムの名前は何ですか ?"
 
-#: assembl/models/preferences.py:658
+#: assembl/models/preferences.py:687
 msgid "Default permissions"
 msgstr "デフォルトのアクセス許可"
 
-#: assembl/models/preferences.py:661
+#: assembl/models/preferences.py:690
 msgid "The basic permissions for a new discussion"
 msgstr "新しいディスカッションのためのベーシックのアクセス許可"
 
-#: assembl/models/preferences.py:743
+#: assembl/models/preferences.py:772
 msgid "Require Email Domain"
 msgstr "電子メールドメインを要求する"
 
-#: assembl/models/preferences.py:746
+#: assembl/models/preferences.py:775
 msgid ""
 "List of domain names of user email address required for self-"
 "registration. Only accounts with at least an email from those domains can"
@@ -290,136 +295,132 @@ msgstr ""
 "これらのドメインからの電子メールを少なくとも一つ含むアカウントだけがこのディスカッションに自動登録することができます. "
 "これが空であれば誰でも自動登録することができます."
 
-#: assembl/models/preferences.py:762
-#, fuzzy
+#: assembl/models/preferences.py:791
 msgid "Whitelist on authentication service"
 msgstr "認証サービスの種類"
 
-#: assembl/models/preferences.py:765
+#: assembl/models/preferences.py:794
 msgid "Allow white list to be applied to the authentication service chosen"
 msgstr ""
 
-#: assembl/models/preferences.py:777
+#: assembl/models/preferences.py:806
 msgid "Whitelist on standard registration"
 msgstr ""
 
-#: assembl/models/preferences.py:780
+#: assembl/models/preferences.py:809
 msgid "Allow white list to be applied to the default login process"
 msgstr ""
 
-#: assembl/models/preferences.py:792
-#, fuzzy
+#: assembl/models/preferences.py:821
 msgid "Discussion administrators"
 msgstr "ディスカッションの統計"
 
-#: assembl/models/preferences.py:795
+#: assembl/models/preferences.py:824
 msgid ""
 "A list of discussion administrators, if different from the server "
 "administrator"
 msgstr ""
 
-#: assembl/models/preferences.py:808
+#: assembl/models/preferences.py:837
 msgid "Show CI Dashboard"
 msgstr "CIダッシュボードを表示する"
 
-#: assembl/models/preferences.py:811
+#: assembl/models/preferences.py:840
 msgid "Show the CI Dashboard in the panel group window"
 msgstr "パネルグループウィンドウにCIダッシュボードを表示する"
 
-#: assembl/models/preferences.py:823
+#: assembl/models/preferences.py:852
 msgid "URL of CI Dashboard"
 msgstr "CIダッシュボードのURL"
 
-#: assembl/models/preferences.py:825
+#: assembl/models/preferences.py:854
 msgid "Configuration of the visualizations shown in the CI Dashboard"
 msgstr "CIダッシュボードに表示されるビジュアライゼーションの設定"
 
-#: assembl/models/preferences.py:843
+#: assembl/models/preferences.py:872
 msgid "Catalyst Visualizations"
 msgstr "Catalystの可視化"
 
-#: assembl/models/preferences.py:846
+#: assembl/models/preferences.py:875
 msgid "A JSON description of available Catalyst visualizations"
 msgstr "利用可能なCatalystの可視化に関するJSONの説明"
 
-#: assembl/models/preferences.py:858
+#: assembl/models/preferences.py:887
 msgid "Navigation sections"
 msgstr "ナビゲーションセクション"
 
-#: assembl/models/preferences.py:861
+#: assembl/models/preferences.py:890
 msgid ""
 "A JSON specification of Catalyst visualizations to show in the navigation"
 " section"
 msgstr "ナビゲーションセクションに表示するCatalystの可視化のJSON仕様"
 
-#: assembl/models/preferences.py:874
+#: assembl/models/preferences.py:903
 msgid "Catalyst translations"
 msgstr "Catalystの翻訳"
 
-#: assembl/models/preferences.py:877
+#: assembl/models/preferences.py:906
 msgid "Translations applicable to Catalyst visualizations, in Jed (JSON) format"
 msgstr "Jed（JSON）形式のCatalystの可視化に適用される翻訳"
 
-#: assembl/models/preferences.py:894
+#: assembl/models/preferences.py:923
 msgid "Default Table of Ideas Collapsed state"
 msgstr "アイデアの折りたたまれた状態のデフォルトの表"
 
-#: assembl/models/preferences.py:897
+#: assembl/models/preferences.py:926
 msgid ""
 "Default expanded/collapsed state of each idea in the table of ideas. A "
 "user can override it by opening/closing an idea"
 msgstr "アイデアの表の各アイデアのデフォルトの展開/折りたたみ状態。ユーザーは、アイデアを開いたり閉じたりすることでオーバーライドすることができます"
 
-#: assembl/models/preferences.py:912
+#: assembl/models/preferences.py:941
 msgid "Preference data"
 msgstr "プリファレンスデータ"
 
-#: assembl/models/preferences.py:915
+#: assembl/models/preferences.py:944
 msgid "The preference configuration; override only with care"
 msgstr "プリファレンス設定。慎重にオーバーライドすること"
 
-#: assembl/models/preferences.py:927
+#: assembl/models/preferences.py:956
 msgid "Cookies banner"
 msgstr "クッキーのバナー"
 
-#: assembl/models/preferences.py:930
+#: assembl/models/preferences.py:959
 msgid "Show the banner offering to disable Piwik cookies"
 msgstr "Piwikクッキーを無効にするためのバナーを表示する"
 
-#: assembl/models/preferences.py:942
+#: assembl/models/preferences.py:971
 msgid "Custom HTML code on the landing page"
 msgstr ""
 
-#: assembl/models/preferences.py:945
+#: assembl/models/preferences.py:974
 msgid ""
 "Custom HTML code that will be integrated on the landing page of the "
 "debate, right after the <body> tag"
 msgstr ""
 
-#: assembl/models/preferences.py:955
+#: assembl/models/preferences.py:984
 msgid "Custom HTML code on the user registration page"
 msgstr ""
 
-#: assembl/models/preferences.py:958
+#: assembl/models/preferences.py:987
 msgid ""
 "Custom HTML code that will be integrated on the user registration page of"
 " the debate, right after the <body> tag"
 msgstr ""
 
-#: assembl/models/preferences.py:968 assembl/models/preferences.py:971
-#, fuzzy
-#| msgid "Catalyst translations"
+#: assembl/models/preferences.py:997 assembl/models/preferences.py:1000
 msgid "Harvesting translation"
 msgstr "Catalystの翻訳"
 
-#: assembl/models/preferences.py:979
+#: assembl/models/preferences.py:1008
 msgid "Valid CORS paths for GraphQL API calls"
 msgstr ""
 
-#: assembl/models/preferences.py:982
+#: assembl/models/preferences.py:1011
 msgid ""
-"A list of valid URLs or IP addresses that are allowed to make CORS api "
-"calls to the GraphQL API"
+"A list of valid domain names or IP addresses that are allowed to make "
+"CORS api calls to the GraphQL API"
 msgstr ""
 
 #: assembl/static/js/app/routeManager.js:416
@@ -616,7 +617,6 @@ msgid "See results from the vote of "
 msgstr "投票結果を見る "
 
 #: assembl/static/js/app/models/widget.js:289
-#, fuzzy
 msgid "Vote results"
 msgstr "投票結果を見る"
 
@@ -1911,12 +1911,10 @@ msgid "Synthesis"
 msgstr "シンセシス"
 
 #: assembl/static/js/app/views/synthesisPanel.js:227
-#, fuzzy
 msgid "A short title for the synthesis"
 msgstr "シンセシスを読む"
 
 #: assembl/static/js/app/views/synthesisPanel.js:228
-#, fuzzy
 msgid "New Synthesis"
 msgstr "最後のシンセシス"
 
@@ -2028,7 +2026,6 @@ msgid "Go back to the discussion"
 msgstr "ディスカッションに戻る"
 
 #: assembl/static/js/app/views/tokenVoteSession.js:1815
-#, fuzzy
 msgid "Modify my vote"
 msgstr "あなたの投票を修正する"
 
@@ -2491,7 +2488,7 @@ msgid "Subject:"
 msgstr "件名:"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:125
-#: assembl/views/auth/views.py:1011
+#: assembl/views/auth/views.py:1021
 msgid "Welcome to {discussion_topic}."
 msgstr "{discussion_topic}へようこそ。"
 
@@ -2567,9 +2564,8 @@ msgid "Thanks!"
 msgstr "ありがとうございます！"
 
 #: assembl/templates/notifications/html_mail.jinja2:82
-#, fuzzy, python-format
-msgid ""
-"You are receiving this because you are subscribed to discussion "
+#, python-format
+msgid "You are receiving this because you are subscribed to discussion "
 "%(discussionLink)s.  Specifically, you currently receive a notification "
 "when:"
 msgstr "あなたはディスカッション%(discussionLink)sの%(notificationConfigLink)sなので、これを受け取っています。具体的には、あなたは次の場合に通知を受け取ります。"
@@ -2579,7 +2575,6 @@ msgid "Reply to this message"
 msgstr "このメッセージに返信する"
 
 #: assembl/templates/notifications/html_mail_post_synthesis.jinja2:31
-#, fuzzy
 msgid "Comment on this synthesis"
 msgstr "このシンセシスにコメントする"
 
@@ -3435,7 +3430,6 @@ msgid "For mailing lists only: Where messages are sent to the list"
 msgstr ""
 
 #: assembl/templates/views/emailSource.tmpl:30
-#, fuzzy
 msgid "Host"
 msgstr "投稿"
 
@@ -3448,17 +3442,14 @@ msgid "True"
 msgstr ""
 
 #: assembl/templates/views/emailSource.tmpl:48
-#, fuzzy
 msgid "False"
 msgstr "閉じる"
 
 #: assembl/templates/views/emailSource.tmpl:52
-#, fuzzy
 msgid "Folder"
 msgstr "役割"
 
 #: assembl/templates/views/emailSource.tmpl:60
-#, fuzzy
 msgid "Port"
 msgstr "再インポート"
 
@@ -4442,6 +4433,24 @@ msgstr "登録解除"
 msgid "unsubscribed"
 msgstr "登録解除されました"
 
+#: assembl/views/__init__.py:655
+msgid "error"
+msgstr ""
+
+#: assembl/views/__init__.py:656
+msgid ""
+"Our server has encountered a problem. The page you have requested is not "
+"accessible."
+msgstr ""
+
+#: assembl/views/__init__.py:657
+msgid "We apologize for the inconvenience"
+msgstr ""
+
+#: assembl/views/__init__.py:658
+msgid "Homepage"
+msgstr ""
+
 #: assembl/views/admin/views.py:392
 msgid "No file given."
 msgstr "ファイルがありません."
@@ -4467,119 +4476,122 @@ msgstr "読んだ投稿を表示するには、ログインしている必要が
 msgid "Your message is empty"
 msgstr "あなたのメッセージは空です"
 
-#: assembl/views/api2/auth.py:347
+#: assembl/views/api2/auth.py:46
+msgid "The provided input combination is not valid."
+msgstr ""
+
+#: assembl/views/api2/auth.py:350
 msgid "The user does not exist"
 msgstr "ユーザーが存在しません"
 
-#: assembl/views/api2/auth.py:358
+#: assembl/views/api2/auth.py:367
 msgid "This email does not exist"
 msgstr "このメールは存在しません"
 
-#: assembl/views/api2/auth.py:363
+#: assembl/views/api2/auth.py:377
 msgid "Please give an identifier"
 msgstr "識別子を与えてください"
 
-#: assembl/views/api2/auth.py:368
+#: assembl/views/api2/auth.py:383
 msgid "This user has no email"
 msgstr "このユーザーのメールはありません"
 
-#: assembl/views/api2/auth.py:371
+#: assembl/views/api2/auth.py:390
 msgid "This is not a user"
 msgstr "これはユーザーではありません"
 
-#: assembl/views/api2/auth.py:392
+#: assembl/views/api2/auth.py:414
 msgid "The passwords that were entered are mismatched!"
 msgstr "入力されたパスワードが一致していません"
 
-#: assembl/views/api2/auth.py:406 assembl/views/auth/views.py:964
-#: assembl/views/auth/views.py:1032
+#: assembl/views/api2/auth.py:428 assembl/views/auth/views.py:974
+#: assembl/views/auth/views.py:1042
 msgid "This link is not valid. Do you want us to send another?"
 msgstr "このリンクは無効です。別のリンクを受信しますか？"
 
-#: assembl/views/api2/auth.py:409 assembl/views/auth/views.py:967
-#: assembl/views/auth/views.py:1035
+#: assembl/views/api2/auth.py:431 assembl/views/auth/views.py:977
+#: assembl/views/auth/views.py:1045
 msgid "This link has been used. Do you want us to send another?"
 msgstr "このリンクは使用されています。別のリンクを受信しますか？"
 
-#: assembl/views/api2/auth.py:438 assembl/views/auth/views.py:388
+#: assembl/views/api2/auth.py:461 assembl/views/auth/views.py:398
 msgid "Please use a name of at least 3 characters"
 msgstr "3文字以上の名前を使用してください"
 
-#: assembl/views/api2/auth.py:447 assembl/views/auth/views.py:321
-#: assembl/views/auth/views.py:395
+#: assembl/views/api2/auth.py:470 assembl/views/auth/views.py:331
+#: assembl/views/auth/views.py:405
 msgid "This is not a valid email"
 msgstr "これは有効なメールではありません"
 
-#: assembl/views/api2/auth.py:455 assembl/views/auth/views.py:402
+#: assembl/views/api2/auth.py:479 assembl/views/auth/views.py:412
 msgid "We already have a user with this email."
 msgstr "既にこのメールアドレスを利用しているユーザーがいます。"
 
-#: assembl/views/api2/auth.py:460
+#: assembl/views/api2/auth.py:491
 msgid "No email."
 msgstr "メールはありません."
 
-#: assembl/views/api2/auth.py:466
+#: assembl/views/api2/auth.py:498
 msgid "We already have a user with this username."
 msgstr "既にこのユーザー名を持つユーザーがいます."
 
-#: assembl/views/api2/auth.py:471
-#, fuzzy
+#: assembl/views/api2/auth.py:509
 msgid "The username must be less than 20 characters."
 msgstr "3文字以上の名前を使用してください"
 
-#: assembl/views/api2/auth.py:485
+#: assembl/views/api2/auth.py:523
 msgid ""
 "Your email domain has not been approved for registration. Please contact "
 "${emails} for support."
 msgstr ""
 
-#: assembl/views/api2/auth.py:486
+#: assembl/views/api2/auth.py:524
 msgid ""
 "Your email domain has not been approved for registration. Please contact "
 "one of ${emails} for support."
 msgstr ""
 
-#: assembl/views/auth/views.py:294
+#: assembl/views/auth/views.py:304
 #, python-format
 msgid "The username %s is already used"
 msgstr "ユーザー名 %s は既に使用されています"
 
-#: assembl/views/auth/views.py:313 assembl/views/auth/views.py:1046
+#: assembl/views/auth/views.py:323 assembl/views/auth/views.py:1056
 msgid "The passwords are not identical"
 msgstr "パスワードは同一ではありません"
 
-#: assembl/views/auth/views.py:406
+#: assembl/views/auth/views.py:416
 msgid "The passwords should be identical"
 msgstr "パスワードは同じでなければなりません"
 
-#: assembl/views/auth/views.py:462
+#: assembl/views/auth/views.py:472
 msgid ""
 "Your email was refused by the SMTP server.  You probably entered an email"
 " that does not exist."
 msgstr "電子メールはSMTPサーバーによって拒否されました. 存在しない電子メールを入力した可能性があります."
 
-#: assembl/views/auth/views.py:519 assembl/views/auth/views.py:844
-#: assembl/views/auth/views.py:850
+#: assembl/views/auth/views.py:529 assembl/views/auth/views.py:854
+#: assembl/views/auth/views.py:860
 msgid "This user cannot be found"
 msgstr "このユーザーは見つかりません"
 
-#: assembl/views/auth/views.py:537
+#: assembl/views/auth/views.py:547
 msgid "Invalid user and password"
 msgstr "無効なユーザーとパスワード"
 
-#: assembl/views/auth/views.py:601
+#: assembl/views/auth/views.py:611
 msgid "This email address is already confirmed"
 msgstr "このメールアドレスは既に確認済みです"
 
-#: assembl/views/auth/views.py:602
+#: assembl/views/auth/views.py:612
 msgid "You do not need to confirm this email address, it is already confirmed."
 msgstr "このメールアドレスを確認する必要はありません。既に確認済みです."
 
-#: assembl/views/auth/views.py:610 assembl/views/auth/views.py:809
+#: assembl/views/auth/views.py:620 assembl/views/auth/views.py:819
 msgid "Confirmation requested"
 msgstr "確認のリクエスト"
 
-#: assembl/views/auth/views.py:611 assembl/views/auth/views.py:810
+#: assembl/views/auth/views.py:621 assembl/views/auth/views.py:820
 msgid ""
 "A confirmation e-mail has been sent to your account and should be in your"
 " inbox in a few minutes. It contains a confirmation link, please click on"
@@ -4587,91 +4599,91 @@ msgid ""
 "confirmation e-mail (check your spams), click here."
 msgstr "あなたのアカウントに確認メールが送信されました。数分で受信トレイに届きます。。メールには確認リンクが含まれていますので、メールアドレスの確認のためリンクをクリックしてください。確認メールが届かない場合は、迷惑メールを確認した上で、ここをクリックしてください."
 
-#: assembl/views/auth/views.py:659 assembl/views/auth/views.py:683
-#: assembl/views/auth/views.py:705
+#: assembl/views/auth/views.py:669 assembl/views/auth/views.py:693
+#: assembl/views/auth/views.py:715
 #, python-format
 msgid "Email <%s> already confirmed"
 msgstr "既に確認済みのメール<%s>"
 
-#: assembl/views/auth/views.py:671
+#: assembl/views/auth/views.py:681
 msgid "This link was not valid. We sent another."
 msgstr "このリンクは無効です。別のリンクを送りました。"
 
-#: assembl/views/auth/views.py:674
+#: assembl/views/auth/views.py:684
 msgid "This link has been used. We sent another."
 msgstr "このリンクが使用されています。別のリンクを送りました。"
 
-#: assembl/views/auth/views.py:687
+#: assembl/views/auth/views.py:697
 msgid "This link is not valid. Please attempt to login to get another one."
 msgstr "このリンクは無効です。別のリンクの取得のため、もう一度ログインしてください。"
 
-#: assembl/views/auth/views.py:726
+#: assembl/views/auth/views.py:736
 #, python-format
 msgid ""
 "Your email address %s has been confirmed, and you are now subscribed to "
 "discussion's default notifications."
 msgstr "あなたのメールアドレス%sが確認され、ディスカッションのデフォルトの通知に登録されました。"
 
-#: assembl/views/auth/views.py:731
+#: assembl/views/auth/views.py:741
 #, python-format
 msgid "Your email address %s has been confirmed."
 msgstr "あなたのメールアドレス%sが確認されました。"
 
-#: assembl/views/auth/views.py:756
+#: assembl/views/auth/views.py:766
 msgid "Login failed, try again"
 msgstr "ログインに失敗しました。もう一度お試しください"
 
-#: assembl/views/auth/views.py:797
+#: assembl/views/auth/views.py:807
 msgid "This email is already confirmed."
 msgstr "このメールは既に確認済みです."
 
-#: assembl/views/auth/views.py:818
+#: assembl/views/auth/views.py:828
 msgid "We do not know about this email."
 msgstr "このメールについてはわかりません."
 
-#: assembl/views/auth/views.py:897
+#: assembl/views/auth/views.py:907
 msgid "Password change requested"
 msgstr "パスワードの変更がリクエストされました"
 
-#: assembl/views/auth/views.py:898
+#: assembl/views/auth/views.py:908
 msgid ""
 "We have sent you an email with a temporary connection link. Please use "
 "that link to log in and change your password."
 msgstr "一時的に有効なリンクを記載したメールをお送りしています. ログインしてパスワードを変更するには、そのリンクを使用してください."
 
-#: assembl/views/auth/views.py:979
+#: assembl/views/auth/views.py:989
 msgid "You will enter the discussion as <b>{name}</b>."
 msgstr "あなたは<b> {name} </b>としてディスカッションに参加します。"
 
-#: assembl/views/auth/views.py:983
+#: assembl/views/auth/views.py:993
 msgid "You will enter Assembl as <b>{name}</b>."
 msgstr "Assemblに<b> {name} </b>として参加します。"
 
-#: assembl/views/auth/views.py:986
+#: assembl/views/auth/views.py:996
 msgid "Please choose your password for security reasons."
 msgstr "セキュリティ上の理由からパスワードを選択してください."
 
-#: assembl/views/auth/views.py:1015
+#: assembl/views/auth/views.py:1025
 msgid "Change your password"
 msgstr "パスワードを変更してください"
 
-#: assembl/views/auth/views.py:1054
+#: assembl/views/auth/views.py:1064
 msgid "Password changed"
 msgstr "パスワードが変更されました"
 
-#: assembl/views/auth/views.py:1068
+#: assembl/views/auth/views.py:1078
 msgid "email"
 msgstr "eメール"
 
-#: assembl/views/auth/views.py:1069
+#: assembl/views/auth/views.py:1079
 msgid "Please confirm your {confirm_what} with {assembl}"
 msgstr "{assembl}で{confirm_what}を確認してください"
 
-#: assembl/views/auth/views.py:1071
+#: assembl/views/auth/views.py:1081
 msgid "account"
 msgstr "アカウント"
 
-#: assembl/views/auth/views.py:1072
+#: assembl/views/auth/views.py:1082
 msgid ""
 "Hello, {name}, and welcome to {assembl}!\n"
 "\n"
@@ -4690,7 +4702,7 @@ msgstr ""
 "よろしくお願いします。\n"
 "{assembl}チーム"
 
-#: assembl/views/auth/views.py:1079
+#: assembl/views/auth/views.py:1089
 msgid ""
 "<p>Hello, {name}, and welcome to {assembl}!</p>\n"
 "<p>Please <a href=\"{confirm_url}\">click here to confirm your email "
@@ -4703,7 +4715,7 @@ msgstr ""
 "あなたの登録を完了してください。</p>\n"
 "<p>よろしくお願いいたします。<br />{assembl}チーム</p>"
 
-#: assembl/views/auth/views.py:1084
+#: assembl/views/auth/views.py:1094
 msgid ""
 "Hello, {name}!\n"
 "\n"
@@ -4717,7 +4729,7 @@ msgstr ""
 "\\ n \\ n下のリンクをクリックして{{email}>あなたの新しい電子メールアドレスを確認してください。\\ n "
 "<{confirm_url}> \\ n \\ nよろしくお願いします。\\ n {Assembl}チーム"
 
-#: assembl/views/auth/views.py:1091
+#: assembl/views/auth/views.py:1101
 msgid ""
 "<p>Hello, {name}!</p>\n"
 "<p>Please <a href=\"{confirm_url}\">click here to confirm your new email "
@@ -4729,11 +4741,11 @@ msgstr ""
 "<p>新しい電子メールアドレスを確認するには<a href=\"{confirm_url}\">ここをクリック</a>してください。</p>\n"
 "<p>よろしくお願いいたします。<br />{assembl}チーム</p>"
 
-#: assembl/views/auth/views.py:1145
+#: assembl/views/auth/views.py:1155
 msgid "Request for password change"
 msgstr "パスワード変更の要求"
 
-#: assembl/views/auth/views.py:1149
+#: assembl/views/auth/views.py:1159
 msgid ""
 "<p>Hello, {name}!</p>\n"
 "<p>We have received a request to change the password on your {assembl} "
@@ -4750,7 +4762,7 @@ msgstr ""
 "<p>パスワード変更の申請をしていない場合は、このメールを無視してください。</p> \n"
 "<p>よろしくお願いします。<br /> {assembl}チーム</p>\n"
 
-#: assembl/views/auth/views.py:1155
+#: assembl/views/auth/views.py:1165
 msgid ""
 "Hello, {name}!\n"
 "We have received a request to change the password on your {assembl} "
@@ -4773,7 +4785,7 @@ msgstr ""
 "宜しくお願いします、\n"
 "{assembl}チーム\n"
 
-#: assembl/views/discussion/views.py:56
+#: assembl/views/discussion/views.py:55
 #, python-format
 msgid "No discussion found for slug=%s"
 msgstr "slug=%s のディスカッションは見つかりませんでした"
@@ -4791,7 +4803,7 @@ msgstr "slug=%s のディスカッションは見つかりませんでした"
 #~ msgstr "私的認証サーバ"
 
 #~ msgid ""
-#~ msgstr "ユーザーが認証する必要のある個人認証のエンドポイントURL."
+#~ msgstr ""
 
 #~ msgid "WordPress OAuth Server"
 #~ msgstr "WordPress OAuthサーバー"
@@ -4807,4 +4819,3 @@ msgstr "slug=%s のディスカッションは見つかりませんでした"
 
 #~ msgid "Secret for assembl as a client of the authentication server"
 #~ msgstr "認証サーバーのクライアントとしてのAssemblの暗証"
-

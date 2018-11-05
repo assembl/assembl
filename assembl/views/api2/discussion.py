@@ -43,6 +43,7 @@ from pyramid_mailer import get_mailer
 from pyramid_mailer.message import Message
 import requests
 
+from assembl.lib.clean_input import sanitize_text
 from assembl.lib.config import get_config
 from assembl.lib.migration import create_default_discussion_data
 from assembl.lib.parsedatetime import parse_datetime
@@ -518,7 +519,7 @@ def extract_taxonomy_csv(request):
     extracts = db.query(m.Extract).filter(m.Extract.discussion_id == discussion.id)
     extract_list = []
     user_prefs = LanguagePreferenceCollection.getCurrent()
-    fieldnames = ["Thematic", "Message", "Content harvested", "Qualify by nature", "Qualify by action",
+    fieldnames = ["Thematic", "Message", "Content harvested",  "Content locale", "Original message", "Original locale", "Qualify by nature", "Qualify by action",
                   "Owner of the message", "Published on", "Harvester", "Harvested on", "Nugget", "State"]
     for extract in extracts:
         if extract.idea_id:
@@ -532,9 +533,15 @@ def extract_taxonomy_csv(request):
                 thematic = no_thematic_associated
         else:
             thematic = no_thematic_associated
+        if extract.locale_id:
+            extract_locale = extract.locale.code
+        else:
+            extract_locale = "no extract locale"
         query = db.query(m.Post).filter(m.Post.id == extract.content_id).first()
         if query:
             if query.body:
+                original_message = query.body.first_original().value
+                original_locale = query.body.first_original().locale.code
                 message = query.body.best_lang(user_prefs).value
             else:
                 message = "no message"
@@ -572,6 +579,9 @@ def extract_taxonomy_csv(request):
             "Thematic": thematic.encode('utf-8'),
             "Message": sanitize_text(message).encode('utf-8'),
             "Content harvested": content_harvested.encode('utf-8'),
+            "Content locale": extract_locale.encode('utf-8'),
+            "Original message": sanitize_text(original_message).encode('utf-8'),
+            "Original locale": original_locale.encode('utf-8'),
             "Qualify by nature": qualify_by_nature.encode('utf-8'),
             "Qualify by action": qualify_by_action.encode('utf-8'),
             "Owner of the message": owner_of_the_message.encode('utf-8'),
@@ -583,11 +593,13 @@ def extract_taxonomy_csv(request):
         }
         extract_list.append(extract_info)
 
-    return csv_response(extract_list, CSV_MIMETYPE, fieldnames)
+    return csv_response(extract_list, CSV_MIMETYPE, fieldnames, content_disposition='attachment; filename="extract_taxonomies.csv"')
 
 
-def csv_response(results, format, fieldnames=None):
+def csv_response(results, format, fieldnames=None, content_disposition=None):
     output = StringIO()
+    # include BOM for Excel to open the file in UTF-8 properly
+    output.write(u'\ufeff'.encode('utf-8'))
 
     if format == CSV_MIMETYPE:
         from csv import writer
@@ -618,7 +630,7 @@ def csv_response(results, format, fieldnames=None):
         writer.save('')
 
     output.seek(0)
-    return Response(body_file=output, content_type=format)
+    return Response(body_file=output, content_type=format, content_disposition=content_disposition)
 
 
 @view_config(context=InstanceContext, name="contribution_count",
@@ -1490,10 +1502,10 @@ def phase1_csv_export(request):
             posts = get_published_posts(question)
             for post in posts:
                 post_entries = get_entries_locale_original(post.body)
-                row[POST_BODY] = post_entries.get('entry')
+                row[POST_BODY] = sanitize_text(post_entries.get('entry'))
                 row[POST_ID] = post.id
                 row[POST_LOCALE] = post_entries.get('locale')
-                row[POST_BODY_ORIGINAL] = post_entries.get('original')
+                row[POST_BODY_ORIGINAL] = sanitize_text(post_entries.get('original'))
                 if not has_anon:
                     row[POST_CREATOR_NAME] = post.creator.real_name()
                 else:
@@ -1563,6 +1575,7 @@ def phase2_csv_export(request):
     IDEA_NAME = u"Nom de l'idée"
     POST_SUBJECT = u"Sujet"
     POST_BODY = u"Post"
+    POST_CLASSIFIER = u'Classification de Post'
     POST_ID = u"Numéro du post"
     POST_LOCALE = u"Locale du post"
     POST_LIKE_COUNT = u"Nombre de \"J'aime\""
@@ -1580,6 +1593,7 @@ def phase2_csv_export(request):
         IDEA_NAME.encode('utf-8'),
         POST_SUBJECT.encode('utf-8'),
         POST_BODY.encode('utf-8'),
+        POST_CLASSIFIER.encode('utf-8'),
         POST_ID.encode('utf-8'),
         POST_LOCALE.encode('utf-8'),
         POST_LIKE_COUNT.encode('utf-8'),
@@ -1618,10 +1632,10 @@ def phase2_csv_export(request):
         for post in posts:
             subject = get_entries_locale_original(post.subject)
             body = get_entries_locale_original(post.body)
-
             row[POST_SUBJECT] = subject.get('entry')
-            row[POST_BODY] = body.get('entry')
-            row[POST_BODY_ORIGINAL] = body.get('original')
+            row[POST_BODY] = sanitize_text(body.get('entry'))
+            row[POST_CLASSIFIER] = post.message_classifier if post.message_classifier else ""
+            row[POST_BODY_ORIGINAL] = sanitize_text(body.get('original'))
             row[POST_ID] = post.id
             row[POST_LOCALE] = body.get('locale') or subject.get('locale') or None
             if not has_anon:

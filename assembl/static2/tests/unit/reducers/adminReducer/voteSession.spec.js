@@ -1063,7 +1063,7 @@ describe('voteSession admin reducers', () => {
 
   describe('modulesById reducer', () => {
     const { modulesById } = reducers;
-    it('should handle UPDATE_VOTE_MODULES action type');
+    xit('should handle UPDATE_VOTE_MODULES action type', () => {});
 
     it('should handle DELETE_VOTE_MODULE action type', () => {
       const state = fromJS({
@@ -1098,7 +1098,7 @@ describe('voteSession admin reducers', () => {
       expect(actual.toJS()).toEqual(expected);
     });
 
-    it('should handle CREATE_TOKEN_VOTE_MODULE action type');
+    xit('should handle CREATE_TOKEN_VOTE_MODULE action type', () => {});
 
     it('should handle UPDATE_TOKEN_VOTE_EXCLUSIVE_CATEGORY action type', () => {
       const state = fromJS({
@@ -1337,31 +1337,31 @@ describe('voteSession admin reducers', () => {
       expect(actual.toJS()).toEqual(expected);
     });
 
-    it('should handle UPDATE_TOKEN_VOTE_CATEGORY_COLOR action type');
+    xit('should handle UPDATE_TOKEN_VOTE_CATEGORY_COLOR action type', () => {});
 
-    it('should handle UPDATE_TOKEN_TOTAL_NUMBER action type');
+    xit('should handle UPDATE_TOKEN_TOTAL_NUMBER action type', () => {});
 
-    it('should handle CREATE_GAUGE_VOTE_MODULE action type');
+    xit('should handle CREATE_GAUGE_VOTE_MODULE action type', () => {});
 
-    it('should handle UPDATE_GAUGE_VOTE_INSTRUCTIONS action type');
+    xit('should handle UPDATE_GAUGE_VOTE_INSTRUCTIONS action type', () => {});
 
-    it('should handle UPDATE_GAUGE_VOTE_IS_NUMBER action type');
+    xit('should handle UPDATE_GAUGE_VOTE_IS_NUMBER action type', () => {});
 
-    it('should handle UPDATE_GAUGE_VOTE_NUMBER_TICKS action type');
+    xit('should handle UPDATE_GAUGE_VOTE_NUMBER_TICKS action type', () => {});
 
-    it('should handle CREATE_GAUGE_VOTE_CHOICE action type');
+    xit('should handle CREATE_GAUGE_VOTE_CHOICE action type', () => {});
 
-    it('should handle DELETE_GAUGE_VOTE_CHOICE action type');
+    xit('should handle DELETE_GAUGE_VOTE_CHOICE action type', () => {});
 
-    it('should handle UPDATE_GAUGE_VOTE_CHOICE_LABEL action type');
+    xit('should handle UPDATE_GAUGE_VOTE_CHOICE_LABEL action type', () => {});
 
-    it('should handle UPDATE_GAUGE_MINIMUM action type');
+    xit('should handle UPDATE_GAUGE_MINIMUM action type', () => {});
 
-    it('should handle UPDATE_GAUGE_MAXIMUM action type');
+    xit('should handle UPDATE_GAUGE_MAXIMUM action type', () => {});
 
-    it('should handle UPDATE_GAUGE_UNIT action type');
+    xit('should handle UPDATE_GAUGE_UNIT action type', () => {});
 
-    it('should handle UPDATE_VOTE_PROPOSALS action type');
+    xit('should handle UPDATE_VOTE_PROPOSALS action type', () => {});
 
     it('should handle ADD_MODULE_TO_PROPOSAL action type', () => {
       const state = Map();

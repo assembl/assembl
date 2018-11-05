@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import { connect } from 'react-redux';
 import { Grid, Row } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
-import { getPhaseName, getIfPhaseCompletedById } from '../../utils/timeline';
+import { getIsPhaseCompletedById, getPhaseName } from '../../utils/timeline';
 import WhatYouNeedToKnow from '../debate/common/whatYouNeedToKnow';
 import HeaderActions from '../debate/common/headerActions';
 import { type DebateType } from '../debate/navigation/timelineSegment';
@@ -13,8 +13,8 @@ type Props = {
   children: React.Node,
   title: string,
   subtitle: string,
+  phaseId?: string,
   imgUrl: ?string,
-  phaseId: string,
   synthesisTitle?: string,
   additionalHeaderClasses: string,
   type: string,
@@ -26,8 +26,15 @@ class Header extends React.Component<Props> {
   render() {
     const { children, title, subtitle, imgUrl, phaseId, synthesisTitle, additionalHeaderClasses, type, timeline } = this.props;
     const { debateData } = this.props.debate;
-    const isPhaseCompleted = getIfPhaseCompletedById(timeline, phaseId);
-    const closedPhaseName = getPhaseName(timeline, phaseId).toLowerCase();
+    let isPhaseCompleted = false;
+    let closedPhaseName = '';
+    if (phaseId) {
+      isPhaseCompleted = getIsPhaseCompletedById(timeline, phaseId);
+      if (isPhaseCompleted) {
+        closedPhaseName = getPhaseName(timeline, phaseId).toLowerCase();
+      }
+    }
+
     const titleClassNames = classnames([additionalHeaderClasses], 'light-title-7');
     return (
       <div className="header-section-container">

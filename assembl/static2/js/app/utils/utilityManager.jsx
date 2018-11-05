@@ -26,19 +26,31 @@ export const displayAlert = (style, msg, topPosition = false, time = 4000) => {
     alertMsg:String => the message displayed in the alert
     showAlert:Boolean => to show/hide the alert
     topPosition:Boolean => if true, the top attribute should be 0
+    time => the duration of the alert. If time === -1, it is persistent
   */
-  alertManager.component.setState({
-    base: false,
-    alertStyle: style,
-    alertMsg: msg,
-    showAlert: true,
-    topPosition: topPosition
-  });
-  setTimeout(() => {
-    alertManager.component.setState({
+  alertManager.component.setState(
+    // ensure that we hide the old alert if it was persistent
+    {
       showAlert: false
-    });
-  }, time);
+    },
+    () => {
+      alertManager.component.setState({
+        base: false,
+        alertStyle: style,
+        alertMsg: msg,
+        showAlert: true,
+        topPosition: topPosition
+      });
+    }
+  );
+
+  if (time !== -1) {
+    setTimeout(() => {
+      alertManager.component.setState({
+        showAlert: false
+      });
+    }, time);
+  }
 };
 
 export const displayModal = (title, body, footer, footerTxt, button = null, showModal = true, bsSize = null) => {
@@ -106,7 +118,10 @@ export const openShareModal = (options) => {
 export const inviteUserToLogin = () => {
   const body = (
     <div>
-      <p><Translate value="login.loginModalBody" /></p><br />
+      <p>
+        <Translate value="login.loginModalBody" />
+      </p>
+      <br />
       <LoginButton label={I18n.t('login.loginModalFooter')} />
     </div>
   );
@@ -122,7 +137,6 @@ export const promptForLoginOr = action => () => {
     action();
   }
 };
-
 
 export const defaultAnchorAttributes = {
   rel: 'noopener no-referrer',
@@ -141,7 +155,15 @@ export const localAwareLink = AnchorComponent => ({ urlData, anchorAttributes, p
   const attrs = anchorAttributes || null;
   const componentProps = props || null;
   if (!urlData.local) {
-    return (<a href={urlData.url} {...attrs} ><AnchorComponent {...componentProps} /></a>);
+    return (
+      <a href={urlData.url} {...attrs}>
+        <AnchorComponent {...componentProps} />
+      </a>
+    );
   }
-  return (<Link to={urlData.url} {...attrs}><AnchorComponent {...componentProps} /></Link>);
+  return (
+    <Link to={urlData.url} {...attrs}>
+      <AnchorComponent {...componentProps} />
+    </Link>
+  );
 };
