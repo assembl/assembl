@@ -39,7 +39,7 @@ type ContentProps = {
   mediaFile: File
 };
 
-class Media extends React.Component<Props> {
+class TextAndMedia extends React.Component<Props> {
   static isValidDescription = (description: ?string): boolean => description !== '<p></p>';
 
   static Title = ({ value }: TitleProps) => (
@@ -83,7 +83,7 @@ class Media extends React.Component<Props> {
     return (
       <div className="media-container">
         {isLocal ? (
-          <Button onClick={Media.ImageModal(<div className="media-container">{component}</div>)}>{component}</Button>
+          <Button onClick={TextAndMedia.ImageModal(<div className="media-container">{component}</div>)}>{component}</Button>
         ) : (
           component
         )}
@@ -93,9 +93,9 @@ class Media extends React.Component<Props> {
 
   render() {
     const { title, descriptionTop, descriptionBottom, descriptionSide, htmlCode, mediaFile, noTitle } = this.props;
-    const validDescriptionSide = Media.isValidDescription(descriptionSide);
-    const validDescriptionTop = Media.isValidDescription(descriptionTop);
-    const validDescriptionBottom = Media.isValidDescription(descriptionBottom);
+    const validDescriptionSide = TextAndMedia.isValidDescription(descriptionSide);
+    const validDescriptionTop = TextAndMedia.isValidDescription(descriptionTop);
+    const validDescriptionBottom = TextAndMedia.isValidDescription(descriptionBottom);
 
     const validMedia = !!(htmlCode || mediaFile);
     const somethingOnRight = !!(validDescriptionTop || validDescriptionBottom || validMedia || validDescriptionSide);
@@ -107,21 +107,21 @@ class Media extends React.Component<Props> {
     return !noTitle || something ? (
       <section className="media-section background-light">
         <div className="max-container">
-          {!noTitle && <Media.Title value={title} />}
+          {!noTitle && <TextAndMedia.Title value={title} />}
           {something && (
             <Grid fluid>
               {somethingOnLeft && (
                 <Col sm={totalSize} md={somethingOnRight ? leftSize : totalSize}>
-                  {validDescriptionSide && <Media.SideDescription content={descriptionSide} />}
+                  {validDescriptionSide && <TextAndMedia.SideDescription content={descriptionSide} />}
                 </Col>
               )}
               {somethingOnRight && (
                 <Col sm={totalSize} md={somethingOnLeft ? rightSize : totalSize}>
                   <div className="media-right">
-                    {validDescriptionTop && <Media.TopDescription content={descriptionTop} />}
-                    {validMedia && <Media.Content htmlCode={htmlCode} mediaFile={mediaFile} />}
-                    {validDescriptionSide && <Media.SideDescription content={descriptionSide} />}
-                    {validDescriptionBottom && <Media.BottomDescription content={descriptionBottom} />}
+                    {validDescriptionTop && <TextAndMedia.TopDescription content={descriptionTop} />}
+                    {validMedia && <TextAndMedia.Content htmlCode={htmlCode} mediaFile={mediaFile} />}
+                    {validDescriptionSide && <TextAndMedia.SideDescription content={descriptionSide} />}
+                    {validDescriptionBottom && <TextAndMedia.BottomDescription content={descriptionBottom} />}
                   </div>
                 </Col>
               )}
@@ -133,4 +133,4 @@ class Media extends React.Component<Props> {
   }
 }
 
-export default Media;
+export default TextAndMedia;

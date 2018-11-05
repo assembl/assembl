@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
 import { Grid, Row, Col } from 'react-bootstrap';
 
+import Medias from '../common/medias';
+
 class Video extends React.Component {
   constructor(props) {
     super(props);
@@ -48,7 +50,7 @@ class Video extends React.Component {
                   {debateData.video.videoUrl && (
                     <Col xs={12} md={6} className={this.state.isTextHigher ? 'col-bottom' : ''}>
                       <div className="video-container" id="video-vid">
-                        <iframe src={debateData.video.videoUrl} frameBorder="0" width="560" height="315" title="video" />
+                        <Medias path={debateData.video.videoUrl} />
                       </div>
                     </Col>
                   )}
