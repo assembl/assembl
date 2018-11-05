@@ -17,6 +17,7 @@ Installation and administration
    howtoupgrade
    python_requirements
    preprod_update
+   create_debate
    install_sentry
    install_matomo
 
