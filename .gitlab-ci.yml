@@ -51,6 +51,9 @@ build_wheel:
   variables:
     DEVELOP_BRANCH: develop
     MASTER_BRANCH: tmp_master_for_ci_cd
+  artifacts:
+    paths:
+      - dist/
   before_script:
     - sh scripts/install_build_dependencies.sh
     - sh scripts/install_node_and_yarn.sh
@@ -62,7 +65,7 @@ build_wheel:
     - sh scripts/bump_assembl_version_and_push.sh
     # create the wheel and upload to pypi
     - sh scripts/create_assembl_wheel.sh
-    - twine upload -u bluenove --skip-existing dist/*
+    # - twine upload -u bluenove --skip-existing dist/*
 
 deploy_to_dev:
   stage: deploy_to_dev
