@@ -223,7 +223,7 @@ def authentication_callback(user_id, request):
     from raven.base import Raven
     if Raven:
         if user_id:
-            Raven.user_context({'user_id': user_id})
+            Raven.user_context({'user_id': str(user_id)})
         if discussion_id:
             Raven.context.merge({'discussion_id': discussion_id})
 
