@@ -2222,9 +2222,11 @@ def create_backup_script():
     """
     path = join(env.projectpath, 'backup_all_assembl.sh')
     if not exists(path):
-        fill_template('assembl/templates/system/backup_template.jinja2', env, 'backup_all_assembl.sh')
+        with NamedTemporaryFile(delete=False) as f:
+            backup_all_assembl = f.name
+        fill_template('assembl/templates/system/backup_template.jinja2', env, backup_all_assembl)
         try:
-            put('backup_all_assembl.sh', path)
+            put(backup_all_assembl, path)
             run('chmod +x backup_all_assembl.sh')
             run('chown %s:%s backup_all_assembl.sh' % (env.user, env.user))
         finally:
@@ -2252,8 +2254,10 @@ def create_clean_crontab(migrate=False):
 def create_alert_disk_space_script():
     """Generates the script to alert on disk space limit and sets cron job for it."""
     rc_info = filter_global_names(combine_rc(env['rcfile']))
-    fill_template('assembl/templates/system/alert_disk_space_template.jinja2', rc_info, 'alert_disk_space_template.sh')
-    put('alert_disk_space.sh', '/home/%s/alert_disk_space.sh' % (env.user))
+    with NamedTemporaryFile(delete=False) as f:
+        alert_disk_space = f.name
+    fill_template('assembl/templates/system/alert_disk_space_template.jinja2', rc_info, alert_disk_space)
+    put(alert_disk_space, '/home/%s/alert_disk_space.sh' % (env.user))
     run('chmod +x alert_disk_space.sh')
     cron_command = "0 5 * * * /home/" + env.user + "/alert_disk_space.sh"
     run(create_add_to_crontab_command(cron_command))
@@ -2898,17 +2902,14 @@ def set_ftp_private_information(force=False):
     execute(install_ncftp_client)
     if not exists('ncftp.cfg') or force:
         # fill template and set file permission
-        fill_template('assembl/templates/system/ncftp.cfg.jinja2', env, 'ncftp.cfg')
+        with NamedTemporaryFile(delete=False) as f:
+            ftp_info_file = f.name
+        fill_template('assembl/templates/system/ncftp.cfg.jinja2', env, ftp_info_file)
         path = join(env.projectpath, 'ncftp.cfg')
         try:
-            put_status = put('ncftp.cfg', path)
-            if put_status.failed:
-                raise RuntimeError('The put operation failed to put ncftp.cfg')
-
+            put(ftp_info_file, path)
             # Only readable by the user
             run('chmod 400 %s' % path)
             run('chown %(user)s:%(user)s %(file)s' % {'user': env.user, 'file': path})
-
-        finally:
-            # Remove the templated file
-            os.unlink('ncftp.cfg')
+        except:
+            raise Exception('The put operation failed to put ncftp.cfg')

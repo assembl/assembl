@@ -132,4 +132,4 @@ processes in the usual directory.
 If there is a problem with the database restore on the new folder, you might have to do
 `service postgresql restart` to shut down all processes if you get the error stating that there are still other processes using the database.
 
-Since you changed the project path you will have to change the paths in the nginx configuration. Then you should restart nginx.
+Since you changed the project path you will have to change the paths in the nginx configuration. You should regenerate the nginx configuration file using setup_nginx_file. Be careful, this will delete your old nginx configuration annd replace with the new one. Then you should restart nginx.
