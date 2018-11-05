@@ -28,10 +28,8 @@ const ResourcesCenter = ({ headerBackgroundUrl, headerTitle, phaseId, resources 
     <Header title={headerTitle} imgUrl={headerBackgroundUrl} type="resourcesCenter" phaseId={phaseId} />
     <section>
       {resources.map((resource, index) => {
-        const { title, text, embedCode, image, doc } = resource;
-        return (
-          <ResourceBlock title={title} text={text} embedCode={embedCode} image={image} doc={doc} index={index} key={index} />
-        );
+        const { title, text, embedCode, image, doc, id } = resource;
+        return <ResourceBlock title={title} text={text} embedCode={embedCode} image={image} doc={doc} index={index} key={id} />;
       })}
     </section>
   </div>
