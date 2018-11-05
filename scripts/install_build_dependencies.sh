@@ -25,6 +25,4 @@ apt-get install -yqq \
     pkg-config \
     python-dev
 
-pip install --upgrade bumpversion
-
-pip install --upgrade twine
+pip install -r requirements-build.txt
