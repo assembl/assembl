@@ -152,6 +152,25 @@ def as_bool(b):
     return str(b).lower() in {"1", "true", "yes", "t", "on"}
 
 
+def populate_secrets():
+    try:
+        import boto3  # noqa
+        import json
+    except ImportError:
+        # we don't have boto3 yet
+        return
+
+    client = boto3.client('secretsmanager') # noqa
+    name = os.path.splitext(os.path.basename(env.rcfile))[0]
+    response = client.get_secret_value(
+        SecretId=name,
+    )
+    env_vars = json.loads(response["SecretString"])
+    # Add env variable overrides here
+    for env_key, env_value in env_vars.iteritems():
+        env[env_key] = env_value
+
+
 def sanitize_env():
     """Ensure boolean and list env variables are such"""
     # If the remote system is a mac you SHOULD set mac=true in your .rc file
@@ -181,6 +200,7 @@ def sanitize_env():
         env.projectpath, '%s_dumps' % env.get("projectname", 'assembl')))
     env.ini_file = env.get('ini_file', 'local.ini')
     env.group = env.get('group', env.user)
+    populate_secrets()
 
 
 def load_rcfile_config():
@@ -2129,6 +2149,7 @@ def database_dump():
     """
     Dumps the database on remote site
     """
+
     if not exists(env.dbdumps_dir):
         run('mkdir -m700 %s' % env.dbdumps_dir)
 
@@ -2212,6 +2233,7 @@ def database_delete():
     execute(check_and_create_database_user)
 
     with settings(warn_only=True), hide('stdout'):
+
         checkDatabase = venvcmd('assembl-pypsql -1 -u {user} -p {password} -n {host} "{command}"'.format(
             command="SELECT 1 FROM pg_database WHERE datname='%s'" % (env.db_database),
             password=env.db_password, host=env.db_host, user=env.db_user))
