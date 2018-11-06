@@ -4,6 +4,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { withInfo } from '@storybook/addon-info';
 import { withKnobs } from '@storybook/addon-knobs';
+import { action } from '@storybook/addon-actions';
 /* eslint-enable */
 
 import SideCommentAnchor, {
@@ -12,8 +13,8 @@ import SideCommentAnchor, {
 
 export const defaultSideCommentAnchor: SideCommentAnchorProps = {
   anchorPosition: { x: 50, y: 50 },
-  handleClickAnchor: Function,
-  handleMouseDown: Function
+  handleClickAnchor: action('handleClickAnchor'),
+  handleMouseDown: action('handleMouseDown')
 };
 
 storiesOf('SideCommentAnchor', module)

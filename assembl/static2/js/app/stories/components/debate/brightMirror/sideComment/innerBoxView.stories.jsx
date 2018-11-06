@@ -4,6 +4,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { withInfo } from '@storybook/addon-info';
 import { withKnobs } from '@storybook/addon-knobs';
+import { action } from '@storybook/addon-actions';
 import { getExtractTagId } from '../../../../../utils/extract';
 /* eslint-enable */
 
@@ -119,7 +120,7 @@ export const defaultInnerBoxViewProps: Props = {
   extractIndex: 0,
   extracts: [extract0],
   comment: comment,
-  changeCurrentExtract: Function
+  changeCurrentExtract: action('changeCurrentExtract')
 };
 
 export const multipleInnerBoxViewProps: Props = {

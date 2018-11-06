@@ -18,7 +18,7 @@ def test_mutation_add_extract_comment(admin_user, graphql_request, idea_in_threa
 
     idea_id = idea_in_thread_phase
     res = schema.execute(u"""
-        mutation myFirstMutation {
+        mutation createPost {
             createPost(
                 ideaId:"%s",
                 extractId:"%s",
@@ -49,7 +49,7 @@ def test_mutation_add_extract_comment_reply(admin_user, graphql_request, idea_in
     comment_id = extract_comment.graphene_id()
     idea_id = idea_in_thread_phase
     res = schema.execute(u"""
-        mutation myFirstMutation {
+        mutation createPost {
             createPost(
                 ideaId:"%s",
                 extractId:"%s",

@@ -1,5 +1,5 @@
 .action-buttons {
-  margin-bottom: 85px;
+  margin-bottom: 55px;
   text-align: right;
 
   .edit,
@@ -28,5 +28,9 @@
         transform: scale(1.2);
       }
     }
+  }
+
+  .action-buttons {
+    margin-bottom: 75px;
   }
 }

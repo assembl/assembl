@@ -12,9 +12,9 @@ export type Props = {
   userId: ?string,
   userName: ?string,
   body: EditorState,
-  updateBody: Function,
-  submit: Function,
-  cancelSubmit: Function
+  updateBody: EditorState => void,
+  submit: () => void,
+  cancelSubmit: () => void
 };
 
 class InnerBoxSubmit extends React.Component<Props, State> {

@@ -3,5 +3,7 @@
 
   &.disabled {
     color: $grey2;
+    pointer-events: none;
+    cursor: default;
   }
 }

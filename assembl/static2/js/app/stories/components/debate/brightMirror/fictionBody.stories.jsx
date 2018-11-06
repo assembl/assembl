@@ -4,6 +4,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { withInfo } from '@storybook/addon-info';
 import { withKnobs, text } from '@storybook/addon-knobs';
+import { action } from '@storybook/addon-actions';
 /* eslint-enable */
 
 import FictionBody from '../../../../components/debate/brightMirror/fictionBody';
@@ -46,7 +47,7 @@ export const defaultFictionBody: FictionBodyProps = {
   extracts: [],
   dbId: 1,
   bodyMimeType: 'text/html',
-  refetchPost: Function,
+  refetchPost: action('refetchPost'),
   userCanReply: false
 };
 

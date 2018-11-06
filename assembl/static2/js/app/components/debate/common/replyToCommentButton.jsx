@@ -10,7 +10,7 @@ export type ReplyToCommentButtonProps = {
 };
 
 const ReplyToCommentButton = ({ onClickCallback, disabled }: ReplyToCommentButtonProps) => (
-  <Link className={classNames('action-reply', { disabled: disabled })} onClick={!disabled ? onClickCallback : null}>
+  <Link className={classNames('action-reply', { disabled: disabled })} onClick={onClickCallback}>
     <span className="assembl-icon-back-arrow" />
   </Link>
 );

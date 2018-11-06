@@ -210,7 +210,7 @@ exports[`Storyshots SideCommentBadge default 1`] = `
                             }
                           }
                         >
-                          Function
+                          toggleExtractBox
                         </span>
                         }
                       </span>
@@ -724,7 +724,7 @@ exports[`Storyshots SideCommentBadge playground 1`] = `
                             }
                           }
                         >
-                          Function
+                          toggleExtractBox
                         </span>
                         }
                       </span>

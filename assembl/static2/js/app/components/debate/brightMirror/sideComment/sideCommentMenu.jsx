@@ -14,11 +14,11 @@ type Props = {
   commentAnchorPosition: { x: number, y: number },
   badgeDynamicPosition: { x: number, y: number },
   badgeFixedPosition: { x: number, y: number },
-  setCommentBoxDisplay: Function,
-  handleClickAnchor: Function,
-  cancelSubmit: Function,
+  setCommentBoxDisplay: () => void,
+  handleClickAnchor: () => void,
+  cancelSubmit: () => void,
   refetchPost: Function,
-  setCommentBadgeToExtractPosition: Function,
+  setCommentBadgeToExtractPosition: FictionExtractFragment => void,
   userCanReply: boolean
 };
 

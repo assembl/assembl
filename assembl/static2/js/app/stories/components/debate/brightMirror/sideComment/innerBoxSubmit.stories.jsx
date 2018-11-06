@@ -5,6 +5,7 @@ import { storiesOf } from '@storybook/react';
 import { withInfo } from '@storybook/addon-info';
 import { withKnobs } from '@storybook/addon-knobs';
 import { EditorState, ContentState } from 'draft-js';
+import { action } from '@storybook/addon-actions';
 /* eslint-enable */
 
 import InnerBoxSubmit, { Props } from '../../../../../components/debate/brightMirror/sideComment/innerBoxSubmit';
@@ -14,8 +15,8 @@ export const defaultInnerBoxSubmitProps: Props = {
   userName: 'Odile Deray',
   body: EditorState.createWithContent(ContentState.createFromText('Hello')),
   updateBody: () => {},
-  submit: Function,
-  cancelSubmit: Function
+  submit: action('submit'),
+  cancelSubmit: action('cancelSubmit')
 };
 
 storiesOf('InnerBoxSubmit', module)

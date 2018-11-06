@@ -282,7 +282,7 @@ exports[`Storyshots SideCommentAnchor default 1`] = `
                             }
                           }
                         >
-                          Function
+                          handleClickAnchor
                         </span>
                         }
                       </span>
@@ -308,7 +308,7 @@ exports[`Storyshots SideCommentAnchor default 1`] = `
                             }
                           }
                         >
-                          Function
+                          handleMouseDown
                         </span>
                         }
                       </span>

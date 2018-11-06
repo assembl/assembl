@@ -4,6 +4,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { withInfo } from '@storybook/addon-info';
 import { withKnobs } from '@storybook/addon-knobs';
+import { action } from '@storybook/addon-actions';
 import { getExtractTagId } from '../../../../../utils/extract';
 /* eslint-enable */
 
@@ -185,15 +186,15 @@ export const defaultSideCommentBoxProps: SideCommentBoxProps = {
   lang: 'en',
   selection: null,
   displayCommentBox: true,
-  setCommentBoxDisplay: Function,
-  cancelSubmit: Function,
-  addPostExtract: Function,
-  createPost: Function,
-  refetchPost: Function,
-  toggleExtractsBox: Function,
+  setCommentBoxDisplay: action('setCommentBoxDisplay'),
+  cancelSubmit: action('cancelSubmit'),
+  addPostExtract: action('addPostExtract'),
+  createPost: action('createPost'),
+  refetchPost: action('refetchPost'),
+  toggleExtractsBox: action('toggleExtractsBox'),
   position: { x: 0, y: 0 },
-  setPositionToExtract: Function,
-  clearHighlights: Function,
+  setPositionToExtract: action('setPositionToExtract'),
+  clearHighlights: action('clearHighlights'),
   userCanReply: false
 };
 

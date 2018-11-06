@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import React, { Fragment } from 'react';
 
 import moment from 'moment';
 import activeHtml from 'react-active-html';
@@ -14,17 +14,17 @@ export type Props = {
   extractIndex: number,
   extracts: ?Array<FictionExtractFragment>,
   comment: ExtractComment,
-  changeCurrentExtract: ?Function
+  changeCurrentExtract: (?number) => void
 };
 
-const renderRichtext = text => activeHtml(text && transformLinksInHtml(text), postBodyReplacementComponents());
+const renderRichtext = (text: string) => activeHtml(text && transformLinksInHtml(text), postBodyReplacementComponents());
 
 const InnerBoxView = ({ contentLocale, extractIndex, extracts, comment, changeCurrentExtract }: Props) => {
   const displayName =
     comment && comment.creator && !comment.creator.isDeleted ? comment.creator.displayName : I18n.t('deletedUser');
 
   return (
-    <div>
+    <Fragment>
       <div className="harvesting-box-header">
         <div className="profile">
           <AvatarImage userId={comment.creator.userId} userName={displayName} />
@@ -67,7 +67,7 @@ const InnerBoxView = ({ contentLocale, extractIndex, extracts, comment, changeCu
           </div>
         </div>
       </div>
-    </div>
+    </Fragment>
   );
 };
 

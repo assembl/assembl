@@ -39,12 +39,4 @@ describe('<ReplyToCommentButton /> - with shallow', () => {
 
     expect(onClickHandler).toHaveBeenCalledTimes(1);
   });
-
-  it('should not execute onClickHandler if disabled when clicking on the component', () => {
-    const onClickHandler = jest.fn();
-    wrapper.setProps({ onClickCallback: onClickHandler, disabled: true });
-    wrapper.find(Link).simulate('click');
-
-    expect(onClickHandler).toHaveBeenCalledTimes(0);
-  });
 });

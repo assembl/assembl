@@ -28,15 +28,15 @@ export type Props = {
   contentLocale: string,
   lang?: string,
   selection?: ?Object,
-  setCommentBoxDisplay: Function,
-  cancelSubmit: Function,
+  setCommentBoxDisplay: () => void,
+  cancelSubmit: () => void,
   addPostExtract: Function,
   createPost: Function,
   refetchPost: Function,
-  toggleCommentsBox?: Function,
-  clearHighlights: Function,
+  toggleCommentsBox?: () => void,
+  clearHighlights: () => void,
   position: { x: number, y: number },
-  setPositionToExtract: Function,
+  setPositionToExtract: FictionExtractFragment => void,
   userCanReply: boolean
 };
 
@@ -147,14 +147,14 @@ class DumbSideCommentBox extends React.Component<Props, State> {
     return extracts && extracts.length > 0 ? extracts[extractIndex] : null;
   };
 
-  getCurrentComment = (extract) => {
+  getCurrentComment = (extract: FictionExtractFragment) => {
     const topComments = extract && extract.comments && extract.comments.filter(post => post.parentId === null);
-    return topComments && topComments.length > 0 ? topComments[0] : null;
+    return (topComments && topComments[0]) || null;
   };
 
-  getCurrentCommentReply = (extract, comment) => {
+  getCurrentCommentReply = (extract: FictionExtractFragment, comment: ExtractComment) => {
     const replies = extract && comment && extract.comments.filter(post => post.parentId === comment.id);
-    return replies && replies.length > 0 ? replies[0] : null;
+    return (replies && replies[0]) || null;
   };
 
   submit = (): void => {
@@ -191,13 +191,17 @@ class DumbSideCommentBox extends React.Component<Props, State> {
           contentLocale: contentLocale
         };
         createPost({ variables: postVars }).then(() => {
-          this.setState({
-            submitting: false
-          });
-          setCommentBoxDisplay();
-          window.getSelection().removeAllRanges();
-          displayAlert('success', I18n.t('debate.brightMirror.sideCommentSuccessMsg'));
-          refetchPost();
+          this.setState(
+            {
+              submitting: false
+            },
+            () => {
+              setCommentBoxDisplay();
+              window.getSelection().removeAllRanges();
+              displayAlert('success', I18n.t('debate.brightMirror.sideCommentSuccessMsg'));
+              refetchPost();
+            }
+          );
         });
       })
       .catch((error) => {
@@ -225,12 +229,16 @@ class DumbSideCommentBox extends React.Component<Props, State> {
       contentLocale: contentLocale
     };
     createPost({ variables: postVars }).then(() => {
-      this.setState({
-        replying: false
-      });
-      window.getSelection().removeAllRanges();
-      displayAlert('success', I18n.t('debate.brightMirror.sideCommentSuccessMsg'));
-      refetchPost();
+      this.setState(
+        {
+          replying: false
+        },
+        () => {
+          window.getSelection().removeAllRanges();
+          displayAlert('success', I18n.t('debate.brightMirror.sideCommentSuccessMsg'));
+          refetchPost();
+        }
+      );
     });
   };
 
@@ -288,6 +296,9 @@ class DumbSideCommentBox extends React.Component<Props, State> {
     const currentComment = this.getCurrentComment(currentExtract);
     const currentReply = this.getCurrentCommentReply(currentExtract, currentComment);
     const hasReply = !!currentReply;
+
+    if (!submitting && !currentComment) return null;
+
     return (
       <div
         className={classnames('side-comment-box')}

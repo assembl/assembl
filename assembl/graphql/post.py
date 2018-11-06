@@ -433,9 +433,10 @@ class CreatePost(graphene.Mutation):
 
             if in_reply_to_post:
                 new_post.set_parent(in_reply_to_post)
-            elif in_reply_to_idea:
+            elif in_reply_to_idea and cls != models.ExtractComment:
                 # don't create IdeaRelatedPostLink when we have both
-                # in_reply_to_post and in_reply_to_idea
+                # in_reply_to_post and in_reply_to_idea or if it's a comment
+                # for an extract
                 idea_post_link = models.IdeaRelatedPostLink(
                     creator_id=user_id,
                     content=new_post,
