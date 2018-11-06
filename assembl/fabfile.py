@@ -2256,7 +2256,7 @@ def is_supervisord_running():
 
 
 @task
-def database_restore():
+def database_restore(backup=False):
     """
     Restores the database backed up on the remote server
     """
@@ -3115,8 +3115,8 @@ def set_ftp_private_information(force=False):
         finally:
             # Remove the templated file
             os.unlink(ftp_info_file)
-            
-            
+
+
 def install_jq():
     """
     Install jq
