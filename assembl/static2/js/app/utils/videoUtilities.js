@@ -43,6 +43,7 @@ const videoExtensions = [
   'f4b'
 ];
 
+// TODO get the MIME-TYPE from url metadata
 export const videoUtilities = {
   pathIsVideoFile: (path) => {
     if (!path || typeof path !== 'string') return false;
