@@ -1,0 +1,89 @@
+.side-comment-container {
+  position: absolute;
+  left: 0;
+  padding-top: 10px;
+}
+
+.side-comment-badge {
+  z-index: 0;
+
+  .badge-total {
+    left: -2px;
+
+    &.wide {
+      left: -4px;
+      width: 22px;
+    }
+  }
+
+  .side-comment-button {
+    margin-top: 5px;
+
+    .assembl-icon-suggest {
+      color: $first-color;
+
+      &:before {
+        font-size: 23px;
+      }
+    }
+  }
+}
+
+.side-comment-box {
+  position: absolute;
+  z-index: 200;
+
+  .active-box,
+  .theme-box {
+    border-left: none;
+  }
+
+  .arrow-left {
+    position: absolute;
+    left: 12px;
+    top: 20px;
+    width: 0;
+    height: 0;
+    border-top: 6px solid transparent;
+    border-bottom: 6px solid transparent;
+    border-right: 6px solid $white;
+  }
+}
+
+.side-comment-anchor {
+  position: absolute;
+  z-index: 1000;
+
+  .button {
+    width: 130px;
+    height: 35px;
+    border-radius: 4px;
+    background-color: $first-color;
+    text-align: center;
+    line-height: 35px;
+    cursor: pointer;
+  }
+
+  .arrow-down {
+    position: relative;
+    left: 60px;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid $first-color;
+  }
+
+  .suggest {
+    font-family: $font-family3;
+    font-size: $font-size-xs;
+    letter-spacing: 1.5px;
+    color: $white;
+    text-transform: uppercase;
+  }
+}
+
+.active-extract,
+.selection-highlight {
+  background-color: $opacity-color;
+}

@@ -15,6 +15,7 @@ import UpdateHarvestingTranslationPreference from '../../../../graphql/mutations
 import PostTranslate from '../../common/translations/postTranslate';
 import Embed from '../../../common/urlPreview/embed';
 import URLMetadataLoader from '../../../common/urlPreview/urlMetadataLoader';
+import { getExtractTagId } from '../../../../utils/extract';
 
 type Props = {
   body: ?string,
@@ -109,7 +110,7 @@ export const Html = (props: HtmlProps) => {
    * and return a list of react elements
   */
   // this anchor is shared with marionette code
-  const anchor = dbId ? `message-body-local:Content/${dbId}` : '';
+  const anchor = dbId ? getExtractTagId(dbId) : '';
   let html = `<div id="${anchor}">${rawHtml}</div>`;
 
   if (extracts) {

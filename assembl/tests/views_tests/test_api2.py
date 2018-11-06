@@ -1024,7 +1024,7 @@ class TestTaxonomyExport(AbstractExport):
     def test_base(self, test_session, test_app, discussion, extract_post_1_to_subidea_1_1, extract_with_range_in_reply_post_1):
         result = self.get_result(test_app, discussion.id, view_name=self.view_name)
         header = result[0]
-    
+
         assert header[self.MESSAGE] == "Message"
         assert header[self.CONTENT_HARVESTED] == "Content Harvested"
         assert header[self.CONTENT_LOCALE] == "Content Locale"
@@ -1138,6 +1138,7 @@ class TestPhase1Export(AbstractExport):
         # By default, fr will be returned if the language input is bad
         assert first_row[TestPhase1Export.POST_BODY] == b'French Proposition 14'
 
+
 class TestPhase2Export(AbstractExport):
     view_name = 'phase2_csv_export'
     NUMERO_IDEE = 0
@@ -1145,17 +1146,18 @@ class TestPhase2Export(AbstractExport):
     NOM_IDEE = 2
     SUJET = 3
     POST = 4
-    NUMERO_DU_POST = 5
-    LOCALE_DU_POST = 6
-    NOMBRE_DE_JAIME = 7
-    NOMBRE_DE_DEACCORD = 8
-    NOM_DU_CONTRIBUTEUR = 9
-    MAIL_CONTRIBUTEUR = 10
-    DATE_POST = 11
-    NOM_VOTANT = 12
-    MAIL_VOTANT = 13
-    DATE_VOTE = 14
-    ORIGINAL = 15
+    POST_CLASSIFIER = 5
+    NUMERO_DU_POST = 6
+    LOCALE_DU_POST = 7
+    NOMBRE_DE_JAIME = 8
+    NOMBRE_DE_DEACCORD = 9
+    NOM_DU_CONTRIBUTEUR = 10
+    MAIL_CONTRIBUTEUR = 11
+    DATE_POST = 12
+    NOM_VOTANT = 13
+    MAIL_VOTANT = 14
+    DATE_VOTE = 15
+    ORIGINAL = 16
 
     def test_base(self, proposals_with_sentiments, discussion, timeline_phase2_interface_v2, test_app):
         result = self.get_result(test_app, discussion.id, view_name=self.view_name)
@@ -1175,6 +1177,7 @@ class TestPhase2Export(AbstractExport):
         assert header[self.MAIL_VOTANT] == b"Adresse mail du votant"
         assert header[self.DATE_VOTE] == b"Date/heure du vote"
         assert header[self.ORIGINAL] == b"Original"
+        assert header[self.POST_CLASSIFIER] == b"Classification de Post"
 
     # TODO: Add more unit tests for the phase 2 export API.
     # TODO: Add unit tests for votes export API.

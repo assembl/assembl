@@ -145,3 +145,5 @@ export const NatureIcons = ({ qualifier }) => {
     return <span>{qualifier}</span>;
   }
 };
+
+export const getExtractTagId = id => `message-body-local:Content/${id}`;

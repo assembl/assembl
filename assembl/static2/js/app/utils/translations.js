@@ -430,7 +430,11 @@ const Translations = {
           strongTitle: "Prenez la parole !",
           submit: "Commenter",
           title: "Quels sujets sont abordés dans cette fiction ?"
-        }
+        },
+        commentersParticipation: "%{count} participants ont commenté un extrait.",
+        commentersParticipation_1: "%{count} participant a commenté un extrait.",
+        commentLabel: "Votre commentaire",
+        suggest: "Suggérer"
       },
       themes: "Thèmes",
       notStarted: "La phase %{phaseName} n'a pas encore commencé. Merci de revenir à partir du ",
@@ -1330,7 +1334,11 @@ const Translations = {
           strongTitle: "Let's talk!",
           submit: "Comment",
           title: "What are the topics of the fiction?"
-        }
+        },
+        commentersParticipation: "%{count} participants commented a quote.",
+        commentersParticipation_1: "%{count} participant commented a quote.",
+        commentLabel: "Your comment",
+        suggest: "Suggest"
       },
       themes: "Themes",
       notStarted: "The %{phaseName} phase has not started. Please come back from ",

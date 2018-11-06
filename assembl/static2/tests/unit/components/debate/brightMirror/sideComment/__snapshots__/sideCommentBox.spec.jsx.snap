@@ -1,0 +1,272 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SideCommentBox /> - default with shallow should match snapshot 1`] = `
+<div
+  className="side-comment-box"
+  style={
+    Object {
+      "left": "50px",
+      "top": "0px",
+    }
+  }
+>
+  <div
+    className="arrow-left"
+  />
+  <div>
+    <div
+      className="harvesting-close-button"
+      onClick={undefined}
+    >
+      <span
+        className="assembl-icon-cancel grey"
+      />
+    </div>
+  </div>
+  <div
+    className="theme-box harvesting-box active-box"
+  >
+    <div
+      className="harvesting-box-header"
+    >
+      <div
+        className="extracts-nb-msg"
+      >
+        <Translate
+          count={1}
+          value="debate.brightMirror.commentersParticipation"
+        />
+      </div>
+      <div
+        className="profile"
+      >
+        <AvatarImage
+          userId={2}
+          userName="Odile Commenter"
+        />
+        <div
+          className="harvesting-infos"
+        >
+          <div
+            className="username"
+          >
+            Odile Commenter
+          </div>
+          <div
+            className="harvesting-date"
+            title="2018-01-26T09:19:01.492406+00:00"
+          >
+            9 months ago
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="harvesting-box-body"
+    >
+      <div
+        className="body-container"
+      >
+        <div
+          className="previous-extract"
+        />
+        <div
+          className="extract-body"
+        >
+          <p>
+            <strong>
+              Lorem ipsum dolor sit amet.
+            </strong>
+          </p>
+          <div
+            className="atomic-block"
+            data-blocktype="atomic"
+          >
+            <img
+              alt=""
+              className="attachment-image"
+              data-id="1"
+              data-mimetype="image/jpeg"
+              src="https://picsum.photos/400/200/"
+              title="loremPixel.jpg"
+            />
+          </div>
+          <p />
+          <p>
+            <a
+              className="linkified"
+              href="https://youtu.be/MzfBIcJaJSU"
+              target="_blank"
+              title={undefined}
+            >
+              https://youtu.be/MzfBIcJaJSU
+            </a>
+          </p>
+          <div>
+            <Embed
+              defaultEmbed={
+                <iframe
+                  allowFullScreen=""
+                  className="embedded-video"
+                  data-source-url="https://youtu.be/MzfBIcJaJSU"
+                  frameBorder="0"
+                  src="https://www.youtube.com/embed/MzfBIcJaJSU"
+                  title=""
+                />
+              }
+              url="https://youtu.be/MzfBIcJaJSU"
+            />
+          </div>
+          <p />
+        </div>
+        <div
+          className="next-extract"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<SideCommentBox /> - multiple with shallow should match snapshot 1`] = `
+<div
+  className="side-comment-box"
+  style={
+    Object {
+      "left": "50px",
+      "top": "0px",
+    }
+  }
+>
+  <div
+    className="arrow-left"
+  />
+  <div>
+    <div
+      className="harvesting-close-button"
+      onClick={undefined}
+    >
+      <span
+        className="assembl-icon-cancel grey"
+      />
+    </div>
+  </div>
+  <div
+    className="theme-box harvesting-box active-box"
+  >
+    <div
+      className="harvesting-box-header"
+    >
+      <div
+        className="extracts-nb-msg"
+      >
+        <Translate
+          count={3}
+          value="debate.brightMirror.commentersParticipation"
+        />
+      </div>
+      <div
+        className="profile"
+      >
+        <AvatarImage
+          userId={2}
+          userName="Odile Commenter"
+        />
+        <div
+          className="harvesting-infos"
+        >
+          <div
+            className="username"
+          >
+            Odile Commenter
+          </div>
+          <div
+            className="harvesting-date"
+            title="2018-01-26T09:19:01.492406+00:00"
+          >
+            9 months ago
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="harvesting-box-body"
+    >
+      <div
+        className="body-container"
+      >
+        <div
+          className="previous-extract"
+        />
+        <div
+          className="extract-body"
+        >
+          <p>
+            <strong>
+              Lorem ipsum dolor sit amet.
+            </strong>
+          </p>
+          <div
+            className="atomic-block"
+            data-blocktype="atomic"
+          >
+            <img
+              alt=""
+              className="attachment-image"
+              data-id="1"
+              data-mimetype="image/jpeg"
+              src="https://picsum.photos/400/200/"
+              title="loremPixel.jpg"
+            />
+          </div>
+          <p />
+          <p>
+            <a
+              className="linkified"
+              href="https://youtu.be/MzfBIcJaJSU"
+              target="_blank"
+              title={undefined}
+            >
+              https://youtu.be/MzfBIcJaJSU
+            </a>
+          </p>
+          <div>
+            <Embed
+              defaultEmbed={
+                <iframe
+                  allowFullScreen=""
+                  className="embedded-video"
+                  data-source-url="https://youtu.be/MzfBIcJaJSU"
+                  frameBorder="0"
+                  src="https://www.youtube.com/embed/MzfBIcJaJSU"
+                  title=""
+                />
+              }
+              url="https://youtu.be/MzfBIcJaJSU"
+            />
+          </div>
+          <p />
+        </div>
+        <div
+          className="next-extract"
+        >
+          <div
+            onClick={[Function]}
+          >
+            <span
+              className="assembl-icon-down-open grey"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="extracts-numbering"
+    >
+      1
+      /
+      3
+    </div>
+  </div>
+</div>
+`;

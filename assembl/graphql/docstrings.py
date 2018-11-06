@@ -215,6 +215,7 @@ class ExtractInterface:
     creator_id = """The id of the User who created the extract."""
     creator = """The AgentProfile object description of the creator."""
     lang = """The lang of the extract."""
+    comment = """A comment post related to an extract."""
 
 
 class PostExtract:
@@ -519,6 +520,7 @@ class PostInterface:
     discussion_id = """The database identifier of the Discussion."""
     modified = """A boolean flag to say whether the post is modified or not."""
     parent_post_creator = "The User or AgentProfile who created the parent post."
+    parent_extract_id = "The Extract id to which the post is associated with"
 
 
 class Post:
@@ -537,6 +539,7 @@ class CreatePost:
     attachments = PostInterface.attachments
     message_classifier = PostInterface.message_classifier
     publication_state = PostInterface.publication_state
+    extract_id = """The extract if the post is a comment of a fiction"""
 
 
 class UpdatePost:

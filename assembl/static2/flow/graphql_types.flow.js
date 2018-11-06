@@ -19,11 +19,13 @@ export type CookieTypes =
   | 'ACCEPT_PRIVACY_POLICY_ON_DISCUSSION'
   | 'ACCEPT_SESSION_ON_DISCUSSION'
   | 'ACCEPT_TRACKING_ON_DISCUSSION'
+  | 'ACCEPT_USER_GUIDELINE_ON_DISCUSSION'
   | 'REJECT_CGU'
   | 'REJECT_LOCALE'
   | 'REJECT_PRIVACY_POLICY_ON_DISCUSSION'
   | 'REJECT_SESSION_ON_DISCUSSION'
-  | 'REJECT_TRACKING_ON_DISCUSSION';
+  | 'REJECT_TRACKING_ON_DISCUSSION'
+  | 'REJECT_USER_GUIDELINE_ON_DISCUSSION';
 
 export type ExtractStates = 'PUBLISHED' | 'SUBMITTED';
 
@@ -112,7 +114,7 @@ export type FieldDataInput = {|
 
 export type AllIdeasQueryQueryVariables = {|
   lang: string,
-  identifier: string
+  discussionPhaseId: number
 |};
 
 export type AllIdeasQueryQuery = {|
@@ -152,7 +154,10 @@ export type AllIdeasQueryQuery = {|
         // The ID of the object.
         id: string
       }
-    | {})
+    | {
+        // The ID of the object.
+        id: string
+      })
 |};
 
 export type AllLanguagePreferencesQueryVariables = {|
@@ -189,6 +194,9 @@ export type BrightMirrorFictionQuery = {|
     | {}
     | {}
     | {
+        // The internal database ID of the post.
+        // This should never be used in logical computations, however, it exists to give the exact database id for use in sorting or creating classifiers for Posts.
+        dbId: ?number,
         // A Subject of the post in a given language.
         subject: ?string,
         // A Body of the post (the main content of the post). in a given language.
@@ -228,8 +236,168 @@ export type BrightMirrorFictionQuery = {|
             // A url to an image or a document to be attached.
             externalUrl: ?string
           |}
-        |}
+        |},
+        // A ??? in a given language.
+        bodyMimeType: string,
+        // A list of IdeaContentLinks that are in fact Extracts on the Post. Extracts are valuable entities taken from
+        extracts: ?Array<?{|
+          // The ID of the object.
+          id: string,
+          // The date the Extract was created, in UTC timezone.
+          creationDate: ?any,
+          // A flag for importance of the Extract.
+          important: ?boolean,
+          // The body of text that is extracted from the post. This is not language dependent, but rather just unicode text.
+          body: string,
+          // The lang of the extract.
+          lang: ?string,
+          // The taxonomy (or classification) of the extracted body. The options are one of:
+          //
+          //
+          // issue: The body of text is an issue.
+          //
+          // actionable_solution: The body of text is a potentially actionable solution.
+          //
+          // knowledge: The body of text is in fact knowledge gained by the community.
+          //
+          // example: The body of text is an example in the context that it was derived from.
+          //
+          // concept: The body of text is a high level concept.
+          //
+          // argument: The body of text is an argument for/against in the context that it was extracted from.
+          //
+          // cognitive_bias: The body of text, in fact, has cognitive bias in the context it was extracted from.
+          //
+          //
+          extractNature: ?string,
+          // The taxonomy (or classification) of the actions that can be taken from the extracted body. The options are one of:
+          //
+          //
+          // classify: This body of text should be re-classified by an priviledged user.
+          //
+          // make_generic: The body of text is a specific example and not generic.
+          //
+          // argument: A user must give more arguments.
+          //
+          // give_examples: A user must give more examples.
+          //
+          // more_specific: A user must be more specific within the same context.
+          //
+          // mix_match: The body of text has relevancy in another section of the deabte. These should be mixed and matched to create greater meaning.
+          //
+          // display_multi_column: A priviledged user should activate the Mutli-Column view.
+          //
+          // display_thread: A priviledged user should activate the Thread view.
+          //
+          // display_tokens: A priviledged user should activate the Token Vote view.
+          //
+          // display_open_questions: A priviledged user should activate the Open Question view.
+          //
+          // display_bright_mirror: A priviledged user should activate the Bright Mirror view.
+          //
+          //
+          extractAction: ?string,
+          // A graphene Field containing the state of the extract. The options are:
+          // SUBMITTED,
+          //
+          // PUBLISHED
+          //
+          extractState: ?ExtractStates,
+          // A list of TextFragmentIdentifiers.
+          textFragmentIdentifiers: ?Array<?{|
+            // The xPath selector starting point in the DOM, representing where the string text that the fragment is held is positioned.
+            xpathStart: ?string,
+            // The xPath selector ending point in the DOM, representing where the string text that the fragment is held is positioned.
+            // Often times the xpathEnd variable is the same as the xpathStart selector.
+            xpathEnd: ?string,
+            // The character offset index where an extract begins, beginning from index 0 in a string of text.
+            offsetStart: ?number,
+            // The character offset index where an extract ends in a string of text.
+            offsetEnd: ?number
+          |}>,
+          // The AgentProfile object description of the creator.
+          creator: ?{|
+            // The ID of the object.
+            id: string,
+            // The unique database identifier of the User.
+            userId: number,
+            // How the User is represented throughout the debate. If a user-name exists, this will be chosen. If it does not, the name is determined.
+            displayName: ?string,
+            // A boolean flag that shows if the User is deleted.
+            // If True, the User information is cleansed from the system, and the User can no longer log in.
+            isDeleted: ?boolean,
+            // A boolean flag describing if the User is a machine user or human user.
+            isMachine: ?boolean,
+            // The preferences of the User.
+            preferences: ?{|
+              // The harvesting Translation preference.
+              harvestingTranslation: ?{|
+                // The source locale of the translation.
+                localeFrom: string,
+                // The target locale of the translation.
+                localeInto: string
+              |}
+            |}
+          |},
+          // A comment post related to an extract.
+          comment: ?{|
+            // The ID of the object.
+            id: string,
+            // A Body of the post (the main content of the post). in a given language.
+            body: ?string,
+            // The date that the object was created, in UTC timezone, in ISO 8601 format.
+            creationDate: ?any,
+            creator: ?{|
+              // The ID of the object.
+              id: string,
+              // The unique database identifier of the User.
+              userId: number,
+              // How the User is represented throughout the debate. If a user-name exists, this will be chosen. If it does not, the name is determined.
+              displayName: ?string,
+              // A boolean flag that shows if the User is deleted.
+              // If True, the User information is cleansed from the system, and the User can no longer log in.
+              isDeleted: ?boolean,
+              // A boolean flag describing if the User is a machine user or human user.
+              isMachine: ?boolean,
+              // The preferences of the User.
+              preferences: ?{|
+                // The harvesting Translation preference.
+                harvestingTranslation: ?{|
+                  // The source locale of the translation.
+                  localeFrom: string,
+                  // The target locale of the translation.
+                  localeInto: string
+                |}
+              |}
+            |},
+            // List of attachements to the post.
+            attachments: ?Array<?{|
+              id: string,
+              // Any file that can be attached to a Post. A file metadata object, described by the Document object.
+              document: ?{|
+                id: string,
+                // The filename title.
+                title: ?string,
+                // A url to an image or a document to be attached.
+                externalUrl: ?string,
+                // The MIME-Type of the file uploaded.
+                mimeType: ?string,
+                // Antivirus check status of the File, for servers that support Anti-Virus filtering. The possible options are:
+                //
+                // "unchecked": The AV did not make a check on this file.
+                //
+                // "passed": The AV did a pass on this file, and it passed AV check.
+                //
+                // "failed": The AV did a pass on this file, and the file failed the AV check. Under this condition, the file would not be touched or
+                // accessed by the application.
+                //
+                avChecked: ?string
+              |}
+            |}>
+          |}
+        |}>
       }
+    | {}
     | {}
     | {}
     | {}
@@ -252,7 +420,7 @@ export type BrightMirrorFictionQuery = {|
 
 export type DebateThematicsQueryQueryVariables = {|
   lang: string,
-  identifier: string
+  discussionPhaseId: number
 |};
 
 export type DebateThematicsQueryQuery = {|
@@ -262,8 +430,6 @@ export type DebateThematicsQueryQuery = {|
     | {
         // The ID of the object.
         id: string,
-        // An identifier correspond to a specific phase.
-        identifier: ?string,
         // The title of the Idea, often shown in the Idea header itself.
         title: ?string,
         // The description of the Idea, often shown in the header of the Idea.
@@ -366,6 +532,7 @@ export type IdeaQuery = {|
           body: ?string
         |}
       }
+    | {}
     | {}
     | {}
     | {}
@@ -555,6 +722,7 @@ export type IdeaWithPostsQuery = {|
           |}>
         |}
       }
+    | {}
     | {}
     | {}
     | {}
@@ -1098,6 +1266,7 @@ export type PostQuery = {|
     | {}
     | {}
     | {}
+    | {}
     | {})
 |};
 
@@ -1208,6 +1377,7 @@ export type QuestionPostsQuery = {|
     | {}
     | {}
     | {}
+    | {}
     | {
         // The ID of the object.
         id: string,
@@ -1250,6 +1420,7 @@ export type QuestionQueryVariables = {|
 export type QuestionQuery = {|
   // The ID of the object
   question: ?(
+    | {}
     | {}
     | {}
     | {}
@@ -1413,39 +1584,6 @@ export type RootIdeaStatsQuery = {|
     // The total number of unique page views.
     nbUniqPageviews: ?number
   |}
-|};
-
-export type RootIdeasQueryQueryVariables = {|
-  lang: string
-|};
-
-export type RootIdeasQueryQuery = {|
-  // An idea union between either an Idea type or a Thematic type.
-  rootIdea: ?(
-    | {
-        // A list of all immediate child Ideas on the Idea, exluding any hidden Ideas. The RootIdea will not be shown here, for example.
-        // The subchildren of each subIdea is not shown here.
-        children: ?Array<?{|
-          // The ID of the object.
-          id: string,
-          // The title of the Idea, often shown in the Idea header itself.
-          title: ?string,
-          // The description of the Idea, often shown in the header of the Idea.
-          description: ?string,
-          // The total number of active posts on that idea (excludes deleted posts).
-          numPosts: ?number,
-          // The total number of users who contributed to the Idea/Thematic/Question.
-          //
-          // Contribution is counted as either as a sentiment set, a post created.
-          numContributors: ?number,
-          // Header image associated with the idea. A file metadata object, described by the Document object.
-          img: ?{|
-            // A url to an image or a document to be attached.
-            externalUrl: ?string
-          |}
-        |}>
-      }
-    | {})
 |};
 
 export type SectionsQueryQueryVariables = {|
@@ -1788,6 +1926,10 @@ export type SynthesisQueryQuery = {|
     | {
         // The ID of the object.
         id: string
+      }
+    | {
+        // The ID of the object.
+        id: string
       })
 |};
 
@@ -1914,6 +2056,7 @@ export type ThematicQueryQuery = {|
     | {}
     | {}
     | {}
+    | {}
     | {
         // The title of the Idea, often shown in the Idea header itself.
         title: ?string,
@@ -1986,12 +2129,13 @@ export type ThematicQueryQuery = {|
 |};
 
 export type ThematicsDataQueryQueryVariables = {|
-  identifier: string
+  discussionPhaseId: number,
+  lang: string
 |};
 
 export type ThematicsDataQueryQuery = {|
   // List of all ideas on the debate.
-  thematics: ?Array<?(
+  thematicsData: ?Array<?(
     | {
         // The order of the Idea, Thematic, Question in the idea tree.
         order: ?number,
@@ -1999,36 +2143,16 @@ export type ThematicsDataQueryQuery = {|
         id: string,
         // The Relay.Node ID type of the Idea object.
         parentId: ?string,
-        // A list of all immediate child Ideas on the Idea, exluding any hidden Ideas. The RootIdea will not be shown here, for example.
-        // The subchildren of each subIdea is not shown here.
-        children: ?Array<?{|
-          // The order of the Idea, Thematic, Question in the idea tree.
-          order: ?number,
-          // The ID of the object.
-          id: string,
-          // A list of all immediate child Ideas on the Idea, exluding any hidden Ideas. The RootIdea will not be shown here, for example.
-          // The subchildren of each subIdea is not shown here.
-          children: ?Array<?{|
-            // The order of the Idea, Thematic, Question in the idea tree.
-            order: ?number,
-            // The ID of the object.
-            id: string,
-            // A list of all immediate child Ideas on the Idea, exluding any hidden Ideas. The RootIdea will not be shown here, for example.
-            // The subchildren of each subIdea is not shown here.
-            children: ?Array<?{|
-              // The order of the Idea, Thematic, Question in the idea tree.
-              order: ?number,
-              // The ID of the object.
-              id: string
-            |}>
-          |}>
-        |}>
+        // The title of the Idea, often shown in the Idea header itself.
+        title: ?string
       }
     | {
         // The order of the Idea, Thematic, Question in the idea tree.
         order: ?number,
         // The ID of the object.
-        id: string
+        id: string,
+        // The title of the Idea, often shown in the Idea header itself.
+        title: ?string
       })>,
   // An idea union between either an Idea type or a Thematic type.
   rootIdea: ?(
@@ -2036,11 +2160,14 @@ export type ThematicsDataQueryQuery = {|
         // The ID of the object.
         id: string
       }
-    | {})
+    | {
+        // The ID of the object.
+        id: string
+      })
 |};
 
 export type ThematicsQueryQueryVariables = {|
-  identifier: string
+  discussionPhaseId: number
 |};
 
 export type ThematicsQueryQuery = {|
@@ -2095,88 +2222,7 @@ export type ThematicsQueryQuery = {|
             // The unicode encoded string representation of the content.
             value: ?string
           |}>
-        |},
-        // A list of all immediate child Ideas on the Idea, exluding any hidden Ideas. The RootIdea will not be shown here, for example.
-        // The subchildren of each subIdea is not shown here.
-        children: ?Array<?{|
-          // Use a non-standard view for this idea.
-          // Currently only supporting "messageColumns" and "brightMirror".
-          messageViewOverride: ?string,
-          // The order of the Idea, Thematic, Question in the idea tree.
-          order: ?number,
-          // A list of possible languages of the entity as LangStringEntry objects. This is the Idea title in multiple languages.
-          titleEntries: ?Array<?{|
-            // The ISO 639-1 locale code of the language the content represents.
-            localeCode: string,
-            // The unicode encoded string representation of the content.
-            value: ?string
-          |}>,
-          // Header image associated with the idea. A file metadata object, described by the Document object.
-          img: ?{|
-            // A url to an image or a document to be attached.
-            externalUrl: ?string,
-            // The MIME-Type of the file uploaded.
-            mimeType: ?string,
-            // The filename title.
-            title: ?string
-          |},
-          // The ID of the object.
-          id: string,
-          // A list of all immediate child Ideas on the Idea, exluding any hidden Ideas. The RootIdea will not be shown here, for example.
-          // The subchildren of each subIdea is not shown here.
-          children: ?Array<?{|
-            // Use a non-standard view for this idea.
-            // Currently only supporting "messageColumns" and "brightMirror".
-            messageViewOverride: ?string,
-            // The order of the Idea, Thematic, Question in the idea tree.
-            order: ?number,
-            // A list of possible languages of the entity as LangStringEntry objects. This is the Idea title in multiple languages.
-            titleEntries: ?Array<?{|
-              // The ISO 639-1 locale code of the language the content represents.
-              localeCode: string,
-              // The unicode encoded string representation of the content.
-              value: ?string
-            |}>,
-            // Header image associated with the idea. A file metadata object, described by the Document object.
-            img: ?{|
-              // A url to an image or a document to be attached.
-              externalUrl: ?string,
-              // The MIME-Type of the file uploaded.
-              mimeType: ?string,
-              // The filename title.
-              title: ?string
-            |},
-            // The ID of the object.
-            id: string,
-            // A list of all immediate child Ideas on the Idea, exluding any hidden Ideas. The RootIdea will not be shown here, for example.
-            // The subchildren of each subIdea is not shown here.
-            children: ?Array<?{|
-              // Use a non-standard view for this idea.
-              // Currently only supporting "messageColumns" and "brightMirror".
-              messageViewOverride: ?string,
-              // The order of the Idea, Thematic, Question in the idea tree.
-              order: ?number,
-              // A list of possible languages of the entity as LangStringEntry objects. This is the Idea title in multiple languages.
-              titleEntries: ?Array<?{|
-                // The ISO 639-1 locale code of the language the content represents.
-                localeCode: string,
-                // The unicode encoded string representation of the content.
-                value: ?string
-              |}>,
-              // Header image associated with the idea. A file metadata object, described by the Document object.
-              img: ?{|
-                // A url to an image or a document to be attached.
-                externalUrl: ?string,
-                // The MIME-Type of the file uploaded.
-                mimeType: ?string,
-                // The filename title.
-                title: ?string
-              |},
-              // The ID of the object.
-              id: string
-            |}>
-          |}>
-        |}>
+        |}
       }
     | {
         // Use a non-standard view for this idea.
@@ -2263,7 +2309,10 @@ export type ThematicsQueryQuery = {|
         // The ID of the object.
         id: string
       }
-    | {})
+    | {
+        // The ID of the object.
+        id: string
+      })
 |};
 
 export type TimelineQueryVariables = {|
@@ -2345,6 +2394,7 @@ export type UserPreferencesQuery = {|
           |}
         |}
       }
+    | {}
     | {}
     | {}
     | {}
@@ -2839,7 +2889,177 @@ export type AcceptedCookiesQuery = {|
     | {}
     | {}
     | {}
+    | {}
     | {})
+|};
+
+export type addExtractCommentMutationVariables = {|
+  extractId: string,
+  body: string,
+  parentId?: ?string,
+  contentLocale: string
+|};
+
+export type addExtractCommentMutation = {|
+  // A mutation to create a comment linked to an Extract
+  addExtractComment: ?{|
+    extract: ?{|
+      // The ID of the object.
+      id: string,
+      // The date the Extract was created, in UTC timezone.
+      creationDate: ?any,
+      // A flag for importance of the Extract.
+      important: ?boolean,
+      // The body of text that is extracted from the post. This is not language dependent, but rather just unicode text.
+      body: string,
+      // The lang of the extract.
+      lang: ?string,
+      // The taxonomy (or classification) of the extracted body. The options are one of:
+      //
+      //
+      // issue: The body of text is an issue.
+      //
+      // actionable_solution: The body of text is a potentially actionable solution.
+      //
+      // knowledge: The body of text is in fact knowledge gained by the community.
+      //
+      // example: The body of text is an example in the context that it was derived from.
+      //
+      // concept: The body of text is a high level concept.
+      //
+      // argument: The body of text is an argument for/against in the context that it was extracted from.
+      //
+      // cognitive_bias: The body of text, in fact, has cognitive bias in the context it was extracted from.
+      //
+      //
+      extractNature: ?string,
+      // The taxonomy (or classification) of the actions that can be taken from the extracted body. The options are one of:
+      //
+      //
+      // classify: This body of text should be re-classified by an priviledged user.
+      //
+      // make_generic: The body of text is a specific example and not generic.
+      //
+      // argument: A user must give more arguments.
+      //
+      // give_examples: A user must give more examples.
+      //
+      // more_specific: A user must be more specific within the same context.
+      //
+      // mix_match: The body of text has relevancy in another section of the deabte. These should be mixed and matched to create greater meaning.
+      //
+      // display_multi_column: A priviledged user should activate the Mutli-Column view.
+      //
+      // display_thread: A priviledged user should activate the Thread view.
+      //
+      // display_tokens: A priviledged user should activate the Token Vote view.
+      //
+      // display_open_questions: A priviledged user should activate the Open Question view.
+      //
+      // display_bright_mirror: A priviledged user should activate the Bright Mirror view.
+      //
+      //
+      extractAction: ?string,
+      // A graphene Field containing the state of the extract. The options are:
+      // SUBMITTED,
+      //
+      // PUBLISHED
+      //
+      extractState: ?ExtractStates,
+      // A list of TextFragmentIdentifiers.
+      textFragmentIdentifiers: ?Array<?{|
+        // The xPath selector starting point in the DOM, representing where the string text that the fragment is held is positioned.
+        xpathStart: ?string,
+        // The xPath selector ending point in the DOM, representing where the string text that the fragment is held is positioned.
+        // Often times the xpathEnd variable is the same as the xpathStart selector.
+        xpathEnd: ?string,
+        // The character offset index where an extract begins, beginning from index 0 in a string of text.
+        offsetStart: ?number,
+        // The character offset index where an extract ends in a string of text.
+        offsetEnd: ?number
+      |}>,
+      // The AgentProfile object description of the creator.
+      creator: ?{|
+        // The ID of the object.
+        id: string,
+        // The unique database identifier of the User.
+        userId: number,
+        // How the User is represented throughout the debate. If a user-name exists, this will be chosen. If it does not, the name is determined.
+        displayName: ?string,
+        // A boolean flag that shows if the User is deleted.
+        // If True, the User information is cleansed from the system, and the User can no longer log in.
+        isDeleted: ?boolean,
+        // A boolean flag describing if the User is a machine user or human user.
+        isMachine: ?boolean,
+        // The preferences of the User.
+        preferences: ?{|
+          // The harvesting Translation preference.
+          harvestingTranslation: ?{|
+            // The source locale of the translation.
+            localeFrom: string,
+            // The target locale of the translation.
+            localeInto: string
+          |}
+        |}
+      |},
+      // A comment post related to an extract.
+      comment: ?{|
+        // The ID of the object.
+        id: string,
+        // A Body of the post (the main content of the post). in a given language.
+        body: ?string,
+        // The date that the object was created, in UTC timezone, in ISO 8601 format.
+        creationDate: ?any,
+        creator: ?{|
+          // The ID of the object.
+          id: string,
+          // The unique database identifier of the User.
+          userId: number,
+          // How the User is represented throughout the debate. If a user-name exists, this will be chosen. If it does not, the name is determined.
+          displayName: ?string,
+          // A boolean flag that shows if the User is deleted.
+          // If True, the User information is cleansed from the system, and the User can no longer log in.
+          isDeleted: ?boolean,
+          // A boolean flag describing if the User is a machine user or human user.
+          isMachine: ?boolean,
+          // The preferences of the User.
+          preferences: ?{|
+            // The harvesting Translation preference.
+            harvestingTranslation: ?{|
+              // The source locale of the translation.
+              localeFrom: string,
+              // The target locale of the translation.
+              localeInto: string
+            |}
+          |}
+        |},
+        // List of attachements to the post.
+        attachments: ?Array<?{|
+          id: string,
+          // Any file that can be attached to a Post. A file metadata object, described by the Document object.
+          document: ?{|
+            id: string,
+            // The filename title.
+            title: ?string,
+            // A url to an image or a document to be attached.
+            externalUrl: ?string,
+            // The MIME-Type of the file uploaded.
+            mimeType: ?string,
+            // Antivirus check status of the File, for servers that support Anti-Virus filtering. The possible options are:
+            //
+            // "unchecked": The AV did not make a check on this file.
+            //
+            // "passed": The AV did a pass on this file, and it passed AV check.
+            //
+            // "failed": The AV did a pass on this file, and the file failed the AV check. Under this condition, the file would not be touched or
+            // accessed by the application.
+            //
+            avChecked: ?string
+          |}
+        |}>
+      |}
+    |}
+  |}
 |};
 
 export type addGaugeVoteMutationVariables = {|
@@ -3126,6 +3346,106 @@ export type addPostExtractMutation = {|
           avChecked: ?string
         |}
       |}>
+    |},
+    extract: ?{|
+      // The ID of the object.
+      id: string,
+      // The date the Extract was created, in UTC timezone.
+      creationDate: ?any,
+      // A flag for importance of the Extract.
+      important: ?boolean,
+      // The body of text that is extracted from the post. This is not language dependent, but rather just unicode text.
+      body: string,
+      // The lang of the extract.
+      lang: ?string,
+      // The taxonomy (or classification) of the extracted body. The options are one of:
+      //
+      //
+      // issue: The body of text is an issue.
+      //
+      // actionable_solution: The body of text is a potentially actionable solution.
+      //
+      // knowledge: The body of text is in fact knowledge gained by the community.
+      //
+      // example: The body of text is an example in the context that it was derived from.
+      //
+      // concept: The body of text is a high level concept.
+      //
+      // argument: The body of text is an argument for/against in the context that it was extracted from.
+      //
+      // cognitive_bias: The body of text, in fact, has cognitive bias in the context it was extracted from.
+      //
+      //
+      extractNature: ?string,
+      // The taxonomy (or classification) of the actions that can be taken from the extracted body. The options are one of:
+      //
+      //
+      // classify: This body of text should be re-classified by an priviledged user.
+      //
+      // make_generic: The body of text is a specific example and not generic.
+      //
+      // argument: A user must give more arguments.
+      //
+      // give_examples: A user must give more examples.
+      //
+      // more_specific: A user must be more specific within the same context.
+      //
+      // mix_match: The body of text has relevancy in another section of the deabte. These should be mixed and matched to create greater meaning.
+      //
+      // display_multi_column: A priviledged user should activate the Mutli-Column view.
+      //
+      // display_thread: A priviledged user should activate the Thread view.
+      //
+      // display_tokens: A priviledged user should activate the Token Vote view.
+      //
+      // display_open_questions: A priviledged user should activate the Open Question view.
+      //
+      // display_bright_mirror: A priviledged user should activate the Bright Mirror view.
+      //
+      //
+      extractAction: ?string,
+      // A graphene Field containing the state of the extract. The options are:
+      // SUBMITTED,
+      //
+      // PUBLISHED
+      //
+      extractState: ?ExtractStates,
+      // A list of TextFragmentIdentifiers.
+      textFragmentIdentifiers: ?Array<?{|
+        // The xPath selector starting point in the DOM, representing where the string text that the fragment is held is positioned.
+        xpathStart: ?string,
+        // The xPath selector ending point in the DOM, representing where the string text that the fragment is held is positioned.
+        // Often times the xpathEnd variable is the same as the xpathStart selector.
+        xpathEnd: ?string,
+        // The character offset index where an extract begins, beginning from index 0 in a string of text.
+        offsetStart: ?number,
+        // The character offset index where an extract ends in a string of text.
+        offsetEnd: ?number
+      |}>,
+      // The AgentProfile object description of the creator.
+      creator: ?{|
+        // The ID of the object.
+        id: string,
+        // The unique database identifier of the User.
+        userId: number,
+        // How the User is represented throughout the debate. If a user-name exists, this will be chosen. If it does not, the name is determined.
+        displayName: ?string,
+        // A boolean flag that shows if the User is deleted.
+        // If True, the User information is cleansed from the system, and the User can no longer log in.
+        isDeleted: ?boolean,
+        // A boolean flag describing if the User is a machine user or human user.
+        isMachine: ?boolean,
+        // The preferences of the User.
+        preferences: ?{|
+          // The harvesting Translation preference.
+          harvestingTranslation: ?{|
+            // The source locale of the translation.
+            localeFrom: string,
+            // The target locale of the translation.
+            localeInto: string
+          |}
+        |}
+      |}
     |}
   |}
 |};
@@ -3898,7 +4218,7 @@ export type createTextFieldMutation = {|
 |};
 
 export type createThematicMutationVariables = {|
-  identifier: string,
+  discussionPhaseId: number,
   image?: ?string,
   titleEntries: Array<?LangStringEntryInput>,
   descriptionEntries?: ?Array<?LangStringEntryInput>,
@@ -4197,11 +4517,11 @@ export type deleteThematicMutation = {|
   |}
 |};
 
-export type deleteUserInformationMutationVariables = {|
+export type DeleteUserInformationMutationVariables = {|
   id: string
 |};
 
-export type deleteUserInformationMutation = {|
+export type DeleteUserInformationMutation = {|
   // A mutation allowing a user to delete all his information according to article 17 of GDPR.
   // All vital information regarding the User acrosst the database is cleansed.
   deleteUserInformation: ?{|
@@ -5595,6 +5915,7 @@ export type UserQuery = {|
     | {}
     | {}
     | {}
+    | {}
     | {})
 |};
 
@@ -5837,6 +6158,9 @@ export type AttachmentFragment = {|
 |};
 
 export type BrightMirrorFictionFragment = {|
+  // The internal database ID of the post.
+  // This should never be used in logical computations, however, it exists to give the exact database id for use in sorting or creating classifiers for Posts.
+  dbId: ?number,
   // A Subject of the post in a given language.
   subject: ?string,
   // A Body of the post (the main content of the post). in a given language.
@@ -5876,7 +6200,166 @@ export type BrightMirrorFictionFragment = {|
       // A url to an image or a document to be attached.
       externalUrl: ?string
     |}
-  |}
+  |},
+  // A ??? in a given language.
+  bodyMimeType: string,
+  // A list of IdeaContentLinks that are in fact Extracts on the Post. Extracts are valuable entities taken from
+  extracts: ?Array<?{|
+    // The ID of the object.
+    id: string,
+    // The date the Extract was created, in UTC timezone.
+    creationDate: ?any,
+    // A flag for importance of the Extract.
+    important: ?boolean,
+    // The body of text that is extracted from the post. This is not language dependent, but rather just unicode text.
+    body: string,
+    // The lang of the extract.
+    lang: ?string,
+    // The taxonomy (or classification) of the extracted body. The options are one of:
+    //
+    //
+    // issue: The body of text is an issue.
+    //
+    // actionable_solution: The body of text is a potentially actionable solution.
+    //
+    // knowledge: The body of text is in fact knowledge gained by the community.
+    //
+    // example: The body of text is an example in the context that it was derived from.
+    //
+    // concept: The body of text is a high level concept.
+    //
+    // argument: The body of text is an argument for/against in the context that it was extracted from.
+    //
+    // cognitive_bias: The body of text, in fact, has cognitive bias in the context it was extracted from.
+    //
+    //
+    extractNature: ?string,
+    // The taxonomy (or classification) of the actions that can be taken from the extracted body. The options are one of:
+    //
+    //
+    // classify: This body of text should be re-classified by an priviledged user.
+    //
+    // make_generic: The body of text is a specific example and not generic.
+    //
+    // argument: A user must give more arguments.
+    //
+    // give_examples: A user must give more examples.
+    //
+    // more_specific: A user must be more specific within the same context.
+    //
+    // mix_match: The body of text has relevancy in another section of the deabte. These should be mixed and matched to create greater meaning.
+    //
+    // display_multi_column: A priviledged user should activate the Mutli-Column view.
+    //
+    // display_thread: A priviledged user should activate the Thread view.
+    //
+    // display_tokens: A priviledged user should activate the Token Vote view.
+    //
+    // display_open_questions: A priviledged user should activate the Open Question view.
+    //
+    // display_bright_mirror: A priviledged user should activate the Bright Mirror view.
+    //
+    //
+    extractAction: ?string,
+    // A graphene Field containing the state of the extract. The options are:
+    // SUBMITTED,
+    //
+    // PUBLISHED
+    //
+    extractState: ?ExtractStates,
+    // A list of TextFragmentIdentifiers.
+    textFragmentIdentifiers: ?Array<?{|
+      // The xPath selector starting point in the DOM, representing where the string text that the fragment is held is positioned.
+      xpathStart: ?string,
+      // The xPath selector ending point in the DOM, representing where the string text that the fragment is held is positioned.
+      // Often times the xpathEnd variable is the same as the xpathStart selector.
+      xpathEnd: ?string,
+      // The character offset index where an extract begins, beginning from index 0 in a string of text.
+      offsetStart: ?number,
+      // The character offset index where an extract ends in a string of text.
+      offsetEnd: ?number
+    |}>,
+    // The AgentProfile object description of the creator.
+    creator: ?{|
+      // The ID of the object.
+      id: string,
+      // The unique database identifier of the User.
+      userId: number,
+      // How the User is represented throughout the debate. If a user-name exists, this will be chosen. If it does not, the name is determined.
+      displayName: ?string,
+      // A boolean flag that shows if the User is deleted.
+      // If True, the User information is cleansed from the system, and the User can no longer log in.
+      isDeleted: ?boolean,
+      // A boolean flag describing if the User is a machine user or human user.
+      isMachine: ?boolean,
+      // The preferences of the User.
+      preferences: ?{|
+        // The harvesting Translation preference.
+        harvestingTranslation: ?{|
+          // The source locale of the translation.
+          localeFrom: string,
+          // The target locale of the translation.
+          localeInto: string
+        |}
+      |}
+    |},
+    // A comment post related to an extract.
+    comment: ?{|
+      // The ID of the object.
+      id: string,
+      // A Body of the post (the main content of the post). in a given language.
+      body: ?string,
+      // The date that the object was created, in UTC timezone, in ISO 8601 format.
+      creationDate: ?any,
+      creator: ?{|
+        // The ID of the object.
+        id: string,
+        // The unique database identifier of the User.
+        userId: number,
+        // How the User is represented throughout the debate. If a user-name exists, this will be chosen. If it does not, the name is determined.
+        displayName: ?string,
+        // A boolean flag that shows if the User is deleted.
+        // If True, the User information is cleansed from the system, and the User can no longer log in.
+        isDeleted: ?boolean,
+        // A boolean flag describing if the User is a machine user or human user.
+        isMachine: ?boolean,
+        // The preferences of the User.
+        preferences: ?{|
+          // The harvesting Translation preference.
+          harvestingTranslation: ?{|
+            // The source locale of the translation.
+            localeFrom: string,
+            // The target locale of the translation.
+            localeInto: string
+          |}
+        |}
+      |},
+      // List of attachements to the post.
+      attachments: ?Array<?{|
+        id: string,
+        // Any file that can be attached to a Post. A file metadata object, described by the Document object.
+        document: ?{|
+          id: string,
+          // The filename title.
+          title: ?string,
+          // A url to an image or a document to be attached.
+          externalUrl: ?string,
+          // The MIME-Type of the file uploaded.
+          mimeType: ?string,
+          // Antivirus check status of the File, for servers that support Anti-Virus filtering. The possible options are:
+          //
+          // "unchecked": The AV did not make a check on this file.
+          //
+          // "passed": The AV did a pass on this file, and it passed AV check.
+          //
+          // "failed": The AV did a pass on this file, and the file failed the AV check. Under this condition, the file would not be touched or
+          // accessed by the application.
+          //
+          avChecked: ?string
+        |}
+      |}>
+    |}
+  |}>
 |};
 
 export type discussionPhaseFragment = {|
@@ -6039,6 +6522,219 @@ export type ExtractFragment = {|
         localeInto: string
       |}
     |}
+  |}
+|};
+
+export type ExtractCommentFragment = {|
+  // The ID of the object.
+  id: string,
+  // A Body of the post (the main content of the post). in a given language.
+  body: ?string,
+  // The date that the object was created, in UTC timezone, in ISO 8601 format.
+  creationDate: ?any,
+  creator: ?{|
+    // The ID of the object.
+    id: string,
+    // The unique database identifier of the User.
+    userId: number,
+    // How the User is represented throughout the debate. If a user-name exists, this will be chosen. If it does not, the name is determined.
+    displayName: ?string,
+    // A boolean flag that shows if the User is deleted.
+    // If True, the User information is cleansed from the system, and the User can no longer log in.
+    isDeleted: ?boolean,
+    // A boolean flag describing if the User is a machine user or human user.
+    isMachine: ?boolean,
+    // The preferences of the User.
+    preferences: ?{|
+      // The harvesting Translation preference.
+      harvestingTranslation: ?{|
+        // The source locale of the translation.
+        localeFrom: string,
+        // The target locale of the translation.
+        localeInto: string
+      |}
+    |}
+  |},
+  // List of attachements to the post.
+  attachments: ?Array<?{|
+    id: string,
+    // Any file that can be attached to a Post. A file metadata object, described by the Document object.
+    document: ?{|
+      id: string,
+      // The filename title.
+      title: ?string,
+      // A url to an image or a document to be attached.
+      externalUrl: ?string,
+      // The MIME-Type of the file uploaded.
+      mimeType: ?string,
+      // Antivirus check status of the File, for servers that support Anti-Virus filtering. The possible options are:
+      //
+      // "unchecked": The AV did not make a check on this file.
+      //
+      // "passed": The AV did a pass on this file, and it passed AV check.
+      //
+      // "failed": The AV did a pass on this file, and the file failed the AV check. Under this condition, the file would not be touched or
+      // accessed by the application.
+      //
+      avChecked: ?string
+    |}
+  |}>
+|};
+
+export type FictionExtractFragment = {|
+  // The ID of the object.
+  id: string,
+  // The date the Extract was created, in UTC timezone.
+  creationDate: ?any,
+  // A flag for importance of the Extract.
+  important: ?boolean,
+  // The body of text that is extracted from the post. This is not language dependent, but rather just unicode text.
+  body: string,
+  // The lang of the extract.
+  lang: ?string,
+  // The taxonomy (or classification) of the extracted body. The options are one of:
+  //
+  //
+  // issue: The body of text is an issue.
+  //
+  // actionable_solution: The body of text is a potentially actionable solution.
+  //
+  // knowledge: The body of text is in fact knowledge gained by the community.
+  //
+  // example: The body of text is an example in the context that it was derived from.
+  //
+  // concept: The body of text is a high level concept.
+  //
+  // argument: The body of text is an argument for/against in the context that it was extracted from.
+  //
+  // cognitive_bias: The body of text, in fact, has cognitive bias in the context it was extracted from.
+  //
+  //
+  extractNature: ?string,
+  // The taxonomy (or classification) of the actions that can be taken from the extracted body. The options are one of:
+  //
+  //
+  // classify: This body of text should be re-classified by an priviledged user.
+  //
+  // make_generic: The body of text is a specific example and not generic.
+  //
+  // argument: A user must give more arguments.
+  //
+  // give_examples: A user must give more examples.
+  //
+  // more_specific: A user must be more specific within the same context.
+  //
+  // mix_match: The body of text has relevancy in another section of the deabte. These should be mixed and matched to create greater meaning.
+  //
+  // display_multi_column: A priviledged user should activate the Mutli-Column view.
+  //
+  // display_thread: A priviledged user should activate the Thread view.
+  //
+  // display_tokens: A priviledged user should activate the Token Vote view.
+  //
+  // display_open_questions: A priviledged user should activate the Open Question view.
+  //
+  // display_bright_mirror: A priviledged user should activate the Bright Mirror view.
+  //
+  //
+  extractAction: ?string,
+  // A graphene Field containing the state of the extract. The options are:
+  // SUBMITTED,
+  //
+  // PUBLISHED
+  //
+  extractState: ?ExtractStates,
+  // A list of TextFragmentIdentifiers.
+  textFragmentIdentifiers: ?Array<?{|
+    // The xPath selector starting point in the DOM, representing where the string text that the fragment is held is positioned.
+    xpathStart: ?string,
+    // The xPath selector ending point in the DOM, representing where the string text that the fragment is held is positioned.
+    // Often times the xpathEnd variable is the same as the xpathStart selector.
+    xpathEnd: ?string,
+    // The character offset index where an extract begins, beginning from index 0 in a string of text.
+    offsetStart: ?number,
+    // The character offset index where an extract ends in a string of text.
+    offsetEnd: ?number
+  |}>,
+  // The AgentProfile object description of the creator.
+  creator: ?{|
+    // The ID of the object.
+    id: string,
+    // The unique database identifier of the User.
+    userId: number,
+    // How the User is represented throughout the debate. If a user-name exists, this will be chosen. If it does not, the name is determined.
+    displayName: ?string,
+    // A boolean flag that shows if the User is deleted.
+    // If True, the User information is cleansed from the system, and the User can no longer log in.
+    isDeleted: ?boolean,
+    // A boolean flag describing if the User is a machine user or human user.
+    isMachine: ?boolean,
+    // The preferences of the User.
+    preferences: ?{|
+      // The harvesting Translation preference.
+      harvestingTranslation: ?{|
+        // The source locale of the translation.
+        localeFrom: string,
+        // The target locale of the translation.
+        localeInto: string
+      |}
+    |}
+  |},
+  // A comment post related to an extract.
+  comment: ?{|
+    // The ID of the object.
+    id: string,
+    // A Body of the post (the main content of the post). in a given language.
+    body: ?string,
+    // The date that the object was created, in UTC timezone, in ISO 8601 format.
+    creationDate: ?any,
+    creator: ?{|
+      // The ID of the object.
+      id: string,
+      // The unique database identifier of the User.
+      userId: number,
+      // How the User is represented throughout the debate. If a user-name exists, this will be chosen. If it does not, the name is determined.
+      displayName: ?string,
+      // A boolean flag that shows if the User is deleted.
+      // If True, the User information is cleansed from the system, and the User can no longer log in.
+      isDeleted: ?boolean,
+      // A boolean flag describing if the User is a machine user or human user.
+      isMachine: ?boolean,
+      // The preferences of the User.
+      preferences: ?{|
+        // The harvesting Translation preference.
+        harvestingTranslation: ?{|
+          // The source locale of the translation.
+          localeFrom: string,
+          // The target locale of the translation.
+          localeInto: string
+        |}
+      |}
+    |},
+    // List of attachements to the post.
+    attachments: ?Array<?{|
+      id: string,
+      // Any file that can be attached to a Post. A file metadata object, described by the Document object.
+      document: ?{|
+        id: string,
+        // The filename title.
+        title: ?string,
+        // A url to an image or a document to be attached.
+        externalUrl: ?string,
+        // The MIME-Type of the file uploaded.
+        mimeType: ?string,
+        // Antivirus check status of the File, for servers that support Anti-Virus filtering. The possible options are:
+        //
+        // "unchecked": The AV did not make a check on this file.
+        //
+        // "passed": The AV did a pass on this file, and it passed AV check.
+        //
+        // "failed": The AV did a pass on this file, and the file failed the AV check. Under this condition, the file would not be touched or
+        // accessed by the application.
+        //
+        avChecked: ?string
+      |}
+    |}>
   |}
 |};
 

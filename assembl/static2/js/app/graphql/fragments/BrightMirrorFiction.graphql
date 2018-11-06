@@ -1,4 +1,8 @@
+#import "./FictionExtract.graphql"
+
 fragment BrightMirrorFiction on Post {
+  dbId
+  subject(lang: $contentLocale)
   body(lang: $contentLocale)
   creationDate
   subject(lang: $contentLocale)
@@ -14,5 +18,9 @@ fragment BrightMirrorFiction on Post {
   }
   parentPostCreator {
     displayName
+  }
+  bodyMimeType
+  extracts {
+    ...FictionExtract
   }
 }

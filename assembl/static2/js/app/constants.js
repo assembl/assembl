@@ -15,6 +15,7 @@ export const NB_IDEA_PREVIEW_TO_SHOW = 4;
 export const APP_CONTAINER_PADDING = 15;
 export const MIN_WIDTH_COLUMN = 400;
 export const COLUMN_OPACITY_GAIN = 0.5;
+export const FICTION_COMMENT_MAX_LENGTH = 3000;
 
 // Bright mirror
 export const EMPTY_STRING = '';
@@ -25,6 +26,10 @@ export const USER_ID_NOT_FOUND = -9999;
 export const MINIMUM_BODY_LENGTH = 10;
 
 export const ANCHOR_SIZE = 44;
+export const ANCHOR_OFFSET = 6;
+export const COMMENT_BADGE_OFFSET = 24.5;
+export const COMMENT_BOX_OFFSET = 50;
+export const COMMENT_DYNAMIC_OFFSET = 5;
 
 export const MAX_TREE_FORM_LEVEL = 4;
 

@@ -170,6 +170,7 @@ from .post import (  # noqa: E402, F401
     PublicationStates,
     WidgetPost,
     SynthesisPost,
+    ExtractComment,
 )
 from .mail import (  # noqa: E402, F401
     AbstractFilesystemMailbox,

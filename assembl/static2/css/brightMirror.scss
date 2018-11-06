@@ -38,6 +38,8 @@ $fiction-toolbar-icon-size: 17px;
 
 .bright-mirror-comments {
   padding: 30px 0;
+  z-index: 100;
+  position: relative;
 
   .comments-content {
     background-color: $white;
@@ -115,15 +117,20 @@ $fiction-toolbar-icon-size: 17px;
 }
 
 // Component imports
-@import "components/backButton";
-@import "components/circleAvatar";
-@import "components/toggleCommentButton";
-@import "components/editPostButton";
-@import "components/replyToCommentButton";
-@import "components/fictionHeader";
-@import "components/fictionToolbar";
-@import "components/fictionBody";
-@import "components/fictionCommentHeader";
-@import "components/fictionCommentForm";
-@import "components/fictionComment";
-@import "components/fictionCommentList";
+@import 'components/backButton';
+@import 'components/circleAvatar';
+@import 'components/toggleCommentButton';
+@import 'components/editPostButton';
+@import 'components/replyToCommentButton';
+@import 'components/fictionHeader';
+@import 'components/fictionToolbar';
+@import 'components/fictionBody';
+@import 'components/fictionCommentHeader';
+@import 'components/fictionCommentForm';
+@import 'components/fictionComment';
+@import 'components/fictionCommentList';
+@import 'components/fictionEditModal';
+@import 'components/fictionPreview';
+@import 'components/fictionsList';
+@import 'components/instructionsText';
+@import 'components/fictionSideComment';

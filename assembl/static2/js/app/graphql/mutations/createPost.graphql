@@ -9,6 +9,7 @@ mutation createPost(
   $parentId: ID
   $attachments: [String]
   $publicationState: PublicationStates
+  $extractId: ID
 ) {
   createPost(
     ideaId: $ideaId
@@ -18,6 +19,7 @@ mutation createPost(
     parentId: $parentId
     attachments: $attachments
     publicationState: $publicationState
+    extractId: $extractId
   ) {
     post {
       ...Post

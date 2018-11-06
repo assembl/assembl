@@ -1,0 +1,14 @@
+#import "./Attachment.graphql"
+#import "./AgentProfileInfo.graphql"
+
+fragment ExtractComment on ExtractComment {
+  id
+  body(lang: $contentLocale)
+  creationDate
+  creator {
+    ...AgentProfileInfo
+  }
+  attachments {
+    ...Attachment
+  }
+}

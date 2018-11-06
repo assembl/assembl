@@ -512,3 +512,23 @@ testa""")
         test_session.flush()
     request.addfinalizer(fin)
     return p
+
+
+@pytest.fixture(scope="function")
+def extract_comment(request, extract_post_1_to_subidea_1_1, discussion, admin_user, test_session):
+    from assembl.models import ExtractComment, LangString
+    p = ExtractComment(
+        discussion=discussion, creator=admin_user,
+        subject=LangString.create(u"comment of extract title"),
+        body=LangString.create(u"comment of extract body"),
+        message_id="msg9@example.com",
+        parent_extract_id=extract_post_1_to_subidea_1_1.id)
+    test_session.add(p)
+    test_session.flush()
+
+    def fin():
+        print "finalizer post_subject_locale_determined_by_creator"
+        test_session.delete(p)
+        test_session.flush()
+    request.addfinalizer(fin)
+    return p

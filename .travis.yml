@@ -18,7 +18,6 @@ addons:
       - python-virtualenv
       - python-pip
       - python-psycopg2
-      - redis-server
       - memcached
       - python-requests
       - python-jinja2
@@ -35,7 +34,6 @@ addons:
       - libzmq3-dev
       - libxslt1-dev
       - libffi-dev
-      - libhiredis-dev
       - libxml2-dev
       - libssl-dev
       - libreadline-dev
@@ -54,6 +52,8 @@ cache:
     - assembl/static/widget/video/bower_components
     - assembl/static/widget/vote/bower_components
     - assembl/static2/node_modules
+services:
+ - redis-server
 before_install:
  # Remove mongodb repo that has an expired GPG key which gives a travis errored because
  # fabric is doing an apt-get update.

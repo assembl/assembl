@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Popover, Button, Overlay } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
 import classnames from 'classnames';
-import { extractNatures, extractActions, NatureIcons, ActionIcons } from '../../utils/extractQualifier';
+import { extractNatures, extractActions, NatureIcons, ActionIcons } from '../../utils/extract';
 
 type Props = {
   handleClick: Function,
