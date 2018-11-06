@@ -31,8 +31,6 @@ export type Props = {
   selection?: ?Object,
   setCommentBoxDisplay: () => void,
   cancelSubmit: () => void,
-  addPostExtract: Function,
-  createPost: Function,
   refetchPost: Function,
   toggleCommentsBox?: () => void,
   clearHighlights: () => void,
@@ -303,7 +301,7 @@ class DumbSideCommentBox extends React.Component<Props, State> {
     this.setState(state => ({ replying: !state.replying }));
   };
 
-  setCommentEditMode = (postId, body) => {
+  setCommentEditMode = (postId: number, body: string) => {
     this.setState({ editComment: true, editingPostId: postId, body: convertToEditorState(body) });
   };
 

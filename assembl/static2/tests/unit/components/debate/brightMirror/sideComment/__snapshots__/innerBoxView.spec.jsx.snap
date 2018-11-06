@@ -20,119 +20,108 @@ exports[`Storyshots InnerBoxView multiple comments 1`] = `
           className="profile"
         >
           <img
-            alt="Odile Commenter"
+            alt="John Doe User"
             height="30"
             onError={[Function]}
-            src="/user/id/2/avatar/30"
+            src="/user/id/1/avatar/30"
             width="30"
           />
           <div
             className="harvesting-infos"
           >
-            <img
-              alt="John Doe User"
-              height="30"
-              onError={[Function]}
-              src="/user/id/1/avatar/30"
-              width="30"
-            />
             <div
               className="username"
             >
-              <div
-                className="username"
-              >
-                John Doe User
-              </div>
-              <div
-                className="harvesting-date"
-                title="2018-01-26T09:19:01.492406+00:00"
-              >
-                9 months ago
-              </div>
+              John Doe User
+            </div>
+            <div
+              className="harvesting-date"
+              title="2018-01-26T09:19:01.492406+00:00"
+            >
+              9 months ago
             </div>
           </div>
         </div>
-      </div>
-      <div
-        className="harvesting-box-body"
-      >
         <div
-          className="body-container"
+          className="harvesting-box-body"
         >
           <div
-            className="previous-extract"
+            className="body-container"
           >
             <div
-              onClick={[Function]}
+              className="previous-extract"
             >
-              <span
-                className="assembl-icon-down-open grey"
-              />
-            </div>
-          </div>
-          <div
-            className="extract-body"
-          >
-            <p>
-              <strong>
-                Lorem ipsum dolor sit amet.
-              </strong>
-            </p>
-            <div
-              className="atomic-block"
-              data-blocktype="atomic"
-            >
-              <img
-                alt=""
-                className="attachment-image"
-                data-id="1"
-                data-mimetype="image/jpeg"
-                src="https://picsum.photos/400/200/"
-                title="loremPixel.jpg"
-              />
-            </div>
-            <p />
-            <p>
-              <a
-                className="linkified"
-                href="https://youtu.be/MzfBIcJaJSU"
-                target="_blank"
-                title={undefined}
-              >
-                https://youtu.be/MzfBIcJaJSU
-              </a>
-            </p>
-            <div>
               <div
-                className="embed-theater "
+                onClick={[Function]}
               >
-                <div
-                  className="embed-thumbnail-container"
-                  onClick={[Function]}
-                >
-                  <img
-                    alt="youtube video"
-                    className="embed-thumbnail"
-                    src="https://img.youtube.com/vi/MzfBIcJaJSU/mqdefault.jpg"
-                  />
-                  <span
-                    className="play-button"
-                  />
-                </div>
+                <span
+                  className="assembl-icon-down-open grey"
+                />
               </div>
             </div>
-            <p />
-          </div>
-          <div
-            className="next-extract"
-          >
             <div
-              onClick={[Function]}
+              className="extract-body"
             >
-              <span
-                className="assembl-icon-down-open grey"
-              />
+              <p>
+                <strong>
+                  Lorem ipsum dolor sit amet.
+                </strong>
+              </p>
+              <div
+                className="atomic-block"
+                data-blocktype="atomic"
+              >
+                <img
+                  alt=""
+                  className="attachment-image"
+                  data-id="1"
+                  data-mimetype="image/jpeg"
+                  src="https://picsum.photos/400/200/"
+                  title="loremPixel.jpg"
+                />
+              </div>
+              <p />
+              <p>
+                <a
+                  className="linkified"
+                  href="https://youtu.be/MzfBIcJaJSU"
+                  target="_blank"
+                  title={undefined}
+                >
+                  https://youtu.be/MzfBIcJaJSU
+                </a>
+              </p>
+              <div>
+                <div
+                  className="embed-theater "
+                >
+                  <div
+                    className="embed-thumbnail-container"
+                    onClick={[Function]}
+                  >
+                    <img
+                      alt="youtube video"
+                      className="embed-thumbnail"
+                      src="https://img.youtube.com/vi/MzfBIcJaJSU/mqdefault.jpg"
+                    />
+                    <span
+                      className="play-button"
+                    />
+                  </div>
+                </div>
+              </div>
+              <p />
+            </div>
+            <div
+              className="next-extract"
+            >
+              <div
+                onClick={[Function]}
+              >
+                <span
+                  className="assembl-icon-down-open grey"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -1323,7 +1312,7 @@ exports[`Storyshots InnerBoxView multiple comments 1`] = `
                               }
                             }
                           >
-                            Function
+                            setEditMode
                           </span>
                           }
                         </span>
@@ -1478,72 +1467,72 @@ exports[`Storyshots InnerBoxView single comment 1`] = `
             </button>
           </div>
         </div>
-      </div>
-      <div
-        className="harvesting-box-body"
-      >
         <div
-          className="body-container"
+          className="harvesting-box-body"
         >
           <div
-            className="previous-extract"
-          />
-          <div
-            className="extract-body"
+            className="body-container"
           >
-            <p>
-              <strong>
-                Lorem ipsum dolor sit amet.
-              </strong>
-            </p>
             <div
-              className="atomic-block"
-              data-blocktype="atomic"
+              className="previous-extract"
+            />
+            <div
+              className="extract-body"
             >
-              <img
-                alt=""
-                className="attachment-image"
-                data-id="1"
-                data-mimetype="image/jpeg"
-                src="https://picsum.photos/400/200/"
-                title="loremPixel.jpg"
-              />
-            </div>
-            <p />
-            <p>
-              <a
-                className="linkified"
-                href="https://youtu.be/MzfBIcJaJSU"
-                target="_blank"
-                title={undefined}
-              >
-                https://youtu.be/MzfBIcJaJSU
-              </a>
-            </p>
-            <div>
+              <p>
+                <strong>
+                  Lorem ipsum dolor sit amet.
+                </strong>
+              </p>
               <div
-                className="embed-theater "
+                className="atomic-block"
+                data-blocktype="atomic"
               >
-                <div
-                  className="embed-thumbnail-container"
-                  onClick={[Function]}
+                <img
+                  alt=""
+                  className="attachment-image"
+                  data-id="1"
+                  data-mimetype="image/jpeg"
+                  src="https://picsum.photos/400/200/"
+                  title="loremPixel.jpg"
+                />
+              </div>
+              <p />
+              <p>
+                <a
+                  className="linkified"
+                  href="https://youtu.be/MzfBIcJaJSU"
+                  target="_blank"
+                  title={undefined}
                 >
-                  <img
-                    alt="youtube video"
-                    className="embed-thumbnail"
-                    src="https://img.youtube.com/vi/MzfBIcJaJSU/mqdefault.jpg"
-                  />
-                  <span
-                    className="play-button"
-                  />
+                  https://youtu.be/MzfBIcJaJSU
+                </a>
+              </p>
+              <div>
+                <div
+                  className="embed-theater "
+                >
+                  <div
+                    className="embed-thumbnail-container"
+                    onClick={[Function]}
+                  >
+                    <img
+                      alt="youtube video"
+                      className="embed-thumbnail"
+                      src="https://img.youtube.com/vi/MzfBIcJaJSU/mqdefault.jpg"
+                    />
+                    <span
+                      className="play-button"
+                    />
+                  </div>
                 </div>
               </div>
+              <p />
             </div>
-            <p />
+            <div
+              className="next-extract"
+            />
           </div>
-          <div
-            className="next-extract"
-          />
         </div>
       </div>
     </div>
@@ -2324,7 +2313,7 @@ exports[`Storyshots InnerBoxView single comment 1`] = `
                               }
                             }
                           >
-                            Function
+                            setEditMode
                           </span>
                           }
                         </span>
