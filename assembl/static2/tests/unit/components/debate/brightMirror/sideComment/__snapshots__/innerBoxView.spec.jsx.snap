@@ -29,16 +29,27 @@ exports[`Storyshots InnerBoxView multiple comments 1`] = `
           <div
             className="harvesting-infos"
           >
+            <img
+              alt="John Doe User"
+              height="30"
+              onError={[Function]}
+              src="/user/id/1/avatar/30"
+              width="30"
+            />
             <div
               className="username"
             >
-              Odile Commenter
-            </div>
-            <div
-              className="harvesting-date"
-              title="2018-01-26T09:19:01.492406+00:00"
-            >
-              9 months ago
+              <div
+                className="username"
+              >
+                John Doe User
+              </div>
+              <div
+                className="harvesting-date"
+                title="2018-01-26T09:19:01.492406+00:00"
+              >
+                9 months ago
+              </div>
             </div>
           </div>
         </div>
@@ -537,7 +548,7 @@ exports[`Storyshots InnerBoxView multiple comments 1`] = `
                                       }
                                     }
                                   >
-                                    'John Doe User'
+                                    'Odile Commenter'
                                   </span>
                                   ,
                                   <span>
@@ -565,7 +576,7 @@ exports[`Storyshots InnerBoxView multiple comments 1`] = `
                                       }
                                     }
                                   >
-                                    '1223456'
+                                    '21'
                                   </span>
                                   ,
                                   <span>
@@ -592,7 +603,7 @@ exports[`Storyshots InnerBoxView multiple comments 1`] = `
                                       }
                                     }
                                   >
-                                    1
+                                    2
                                   </span>
                                   ,
                                   <span>
@@ -945,7 +956,7 @@ exports[`Storyshots InnerBoxView multiple comments 1`] = `
                                       }
                                     }
                                   >
-                                    'John Doe User'
+                                    'Odile Commenter'
                                   </span>
                                   ,
                                   <span>
@@ -973,7 +984,7 @@ exports[`Storyshots InnerBoxView multiple comments 1`] = `
                                       }
                                     }
                                   >
-                                    '1223456'
+                                    '21'
                                   </span>
                                   ,
                                   <span>
@@ -1000,7 +1011,7 @@ exports[`Storyshots InnerBoxView multiple comments 1`] = `
                                       }
                                     }
                                   >
-                                    1
+                                    2
                                   </span>
                                   ,
                                   <span>
@@ -1169,7 +1180,7 @@ exports[`Storyshots InnerBoxView multiple comments 1`] = `
                                   }
                                 }
                               >
-                                'Odile Commenter'
+                                'John Doe User'
                               </span>
                               ,
                               <span>
@@ -1197,7 +1208,7 @@ exports[`Storyshots InnerBoxView multiple comments 1`] = `
                                   }
                                 }
                               >
-                                '21'
+                                '1223456'
                               </span>
                               ,
                               <span>
@@ -1224,7 +1235,7 @@ exports[`Storyshots InnerBoxView multiple comments 1`] = `
                                   }
                                 }
                               >
-                                2
+                                1
                               </span>
                               ,
                               <span>
@@ -1284,6 +1295,35 @@ exports[`Storyshots InnerBoxView multiple comments 1`] = `
                             }
                           >
                             changeCurrentExtract
+                          </span>
+                          }
+                        </span>
+                      </span>
+                    </span>
+                    <span>
+                      <span>
+                        <br />
+                          
+                      </span>
+                      <span
+                        style={Object {}}
+                      >
+                        setEditMode
+                      </span>
+                      <span>
+                        =
+                        <span
+                          style={Object {}}
+                        >
+                          {
+                          <span
+                            style={
+                              Object {
+                                "color": "#170",
+                              }
+                            }
+                          >
+                            Function
                           </span>
                           }
                         </span>
@@ -1422,6 +1462,20 @@ exports[`Storyshots InnerBoxView single comment 1`] = `
             >
               9 months ago
             </div>
+          </div>
+          <div
+            className="button-bar"
+          >
+            <button
+              className="action-menu-btn btn btn-default"
+              disabled={false}
+              onClick={[Function]}
+              type="button"
+            >
+              <span
+                className="assembl-icon-ellipsis-vert grey"
+              />
+            </button>
           </div>
         </div>
       </div>
@@ -1903,7 +1957,7 @@ exports[`Storyshots InnerBoxView single comment 1`] = `
                                       }
                                     }
                                   >
-                                    'John Doe User'
+                                    'Odile Commenter'
                                   </span>
                                   ,
                                   <span>
@@ -1931,7 +1985,7 @@ exports[`Storyshots InnerBoxView single comment 1`] = `
                                       }
                                     }
                                   >
-                                    '1223456'
+                                    '21'
                                   </span>
                                   ,
                                   <span>
@@ -1958,7 +2012,7 @@ exports[`Storyshots InnerBoxView single comment 1`] = `
                                       }
                                     }
                                   >
-                                    1
+                                    2
                                   </span>
                                   ,
                                   <span>
@@ -2242,6 +2296,35 @@ exports[`Storyshots InnerBoxView single comment 1`] = `
                             }
                           >
                             changeCurrentExtract
+                          </span>
+                          }
+                        </span>
+                      </span>
+                    </span>
+                    <span>
+                      <span>
+                        <br />
+                          
+                      </span>
+                      <span
+                        style={Object {}}
+                      >
+                        setEditMode
+                      </span>
+                      <span>
+                        =
+                        <span
+                          style={Object {}}
+                        >
+                          {
+                          <span
+                            style={
+                              Object {
+                                "color": "#170",
+                              }
+                            }
+                          >
+                            Function
                           </span>
                           }
                         </span>

@@ -11,11 +11,12 @@ import { EditorState } from 'draft-js';
 
 import addPostExtractMutation from '../../../../graphql/mutations/addPostExtract.graphql';
 import createPostMutation from '../../../../graphql/mutations/createPost.graphql';
+import updatePostMutation from '../../../../graphql/mutations/updatePost.graphql';
 import manageErrorAndLoading from '../../../../components/common/manageErrorAndLoading';
 import { getConnectedUserId, getConnectedUserName } from '../../../../utils/globalFunctions';
 import { displayAlert } from '../../../../utils/utilityManager';
 import { COMMENT_BOX_OFFSET } from '../../../../constants';
-import { convertContentStateToHTML, editorStateIsEmpty } from '../../../../utils/draftjs';
+import { convertContentStateToHTML, editorStateIsEmpty, convertToEditorState } from '../../../../utils/draftjs';
 import ReplyToCommentButton from '../../common/replyToCommentButton';
 import InnerBoxSubmit from './innerBoxSubmit';
 import InnerBoxView from './innerBoxView';
@@ -46,7 +47,9 @@ type State = {
   submitting: boolean,
   replying: boolean,
   selectionText: ?string,
-  serializedAnnotatorRange: ?Object
+  serializedAnnotatorRange: ?Object,
+  editComment: boolean,
+  editingPostId: string
 };
 
 const ACTIONS = {
@@ -77,7 +80,9 @@ class DumbSideCommentBox extends React.Component<Props, State> {
       submitting: submitting,
       replying: false,
       selectionText: selection && selection.toString(),
-      serializedAnnotatorRange: annotatorRange && annotatorRange.serialize(document, 'annotation')
+      serializedAnnotatorRange: annotatorRange && annotatorRange.serialize(document, 'annotation'),
+      editComment: false,
+      editingPostId: null
     };
 
     // actions props
@@ -242,6 +247,29 @@ class DumbSideCommentBox extends React.Component<Props, State> {
     });
   };
 
+  editPost = () => {
+    const { contentLocale, refetchPost, updatePost } = this.props;
+    const { body, editingPostId } = this.state;
+
+    const bodyIsEmpty = editorStateIsEmpty(body);
+    if (bodyIsEmpty) {
+      displayAlert('warning', I18n.t('debate.thread.fillBody'));
+    }
+
+    const postVars = {
+      postId: editingPostId,
+      body: convertContentStateToHTML(body.getCurrentContent()),
+      contentLocale: contentLocale
+    };
+    updatePost({ variables: postVars }).then(() => {
+      this.setState({
+        editComment: false
+      });
+      displayAlert('success', I18n.t('debate.brightMirror.sideCommentEditSuccessMsg'));
+      refetchPost();
+    });
+  };
+
   hightlightExtract = (extract: FictionExtractFragment) => {
     const { clearHighlights } = this.props;
     clearHighlights();
@@ -275,6 +303,14 @@ class DumbSideCommentBox extends React.Component<Props, State> {
     this.setState(state => ({ replying: !state.replying }));
   };
 
+  setCommentEditMode = (postId, body) => {
+    this.setState({ editComment: true, editingPostId: postId, body: convertToEditorState(body) });
+  };
+
+  cancelEditMode = () => {
+    this.setState({ editComment: false });
+  };
+
   renderActionFooter = () => {
     const { userCanReply } = this.props;
     const { extractIndex } = this.state;
@@ -291,7 +327,7 @@ class DumbSideCommentBox extends React.Component<Props, State> {
 
   render() {
     const { contentLocale, extracts, cancelSubmit, position, toggleCommentsBox } = this.props;
-    const { submitting, extractIndex, body, replying } = this.state;
+    const { submitting, extractIndex, body, replying, editComment } = this.state;
     const currentExtract = this.getCurrentExtract(extractIndex);
     const currentComment = this.getCurrentComment(currentExtract);
     const currentReply = this.getCurrentCommentReply(currentExtract, currentComment);
@@ -299,6 +335,42 @@ class DumbSideCommentBox extends React.Component<Props, State> {
 
     if (!submitting && !currentComment) return null;
 
+    let commentView;
+
+    if (submitting) {
+      commentView = (
+        <InnerBoxSubmit
+          userId={getConnectedUserId()}
+          userName={getConnectedUserName()}
+          body={body}
+          updateBody={this.updateBody}
+          submit={this.submit}
+          cancelSubmit={cancelSubmit}
+        />
+      );
+    } else if (editComment) {
+      commentView = (
+        <InnerBoxSubmit
+          userId={getConnectedUserId()}
+          userName={getConnectedUserName()}
+          body={body}
+          updateBody={this.updateBody}
+          submit={this.editPost}
+          cancelSubmit={this.cancelEditMode}
+        />
+      );
+    } else {
+      commentView = (
+        <InnerBoxView
+          contentLocale={contentLocale}
+          extractIndex={extractIndex}
+          extracts={extracts}
+          comment={currentComment}
+          changeCurrentExtract={this.changeCurrentExtract}
+          setEditMode={this.setCommentEditMode}
+        />
+      );
+    }
     return (
       <div
         className={classnames('side-comment-box')}
@@ -323,25 +395,9 @@ class DumbSideCommentBox extends React.Component<Props, State> {
               <Translate value="debate.brightMirror.commentersParticipation" count={extracts.length} />
             </div>
           )}
-          {submitting ? (
-            <InnerBoxSubmit
-              userId={getConnectedUserId()}
-              userName={getConnectedUserName()}
-              body={body}
-              updateBody={this.updateBody}
-              submit={this.submit}
-              cancelSubmit={cancelSubmit}
-            />
-          ) : (
-            <InnerBoxView
-              contentLocale={contentLocale}
-              extractIndex={extractIndex}
-              extracts={extracts}
-              comment={currentComment}
-              changeCurrentExtract={this.changeCurrentExtract}
-            />
-          )}
+          {commentView}
           {!submitting &&
+            !editComment &&
             extracts &&
             extracts.length > 1 && (
               <div className="extracts-numbering">
@@ -380,6 +436,9 @@ export default compose(
   }),
   graphql(createPostMutation, {
     name: 'createPost'
+  }),
+  graphql(updatePostMutation, {
+    name: 'updatePost'
   }),
   manageErrorAndLoading({ displayLoader: true })
 )(DumbSideCommentBox);

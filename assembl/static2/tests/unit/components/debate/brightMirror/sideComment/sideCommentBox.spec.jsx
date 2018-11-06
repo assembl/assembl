@@ -44,6 +44,11 @@ describe('<SideCommentBox /> - default with shallow', () => {
   it('should not render extract numbering', () => {
     expect(wrapper.find('div [className="extracts-numbering"]')).toHaveLength(0);
   });
+
+  it('should display edit form', () => {
+    wrapper.setState({ editComment: true });
+    expect(wrapper.find('InnerBoxSubmit')).toHaveLength(1);
+  });
 });
 
 describe('<SideCommentBox /> - multiple with shallow', () => {
