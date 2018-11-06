@@ -153,8 +153,13 @@ def as_bool(b):
 
 
 def populate_secrets():
-    import boto3  # noqa
-    import json
+    try:
+        import boto3  # noqa
+        import json
+    except ImportError:
+        # we don't have boto3 yet
+        return
+
     client = boto3.client('secretsmanager') # noqa
     name = os.path.splitext(os.path.basename(env.rcfile))[0]
     response = client.get_secret_value(
