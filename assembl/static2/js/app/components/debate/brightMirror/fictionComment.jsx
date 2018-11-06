@@ -199,6 +199,7 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
 
     // Display DeletedFictionComment component when comment is marked as DELETED_BY_USER or DELETED_BY_ADMIN
     if (publicationState in DeletedPublicationStates) {
+      // isDeletedByAuthor is true if DELETED_BY_USER, is false if DELETED_BY_ADMIN
       const isDeletedByAuthor = publicationState === PublicationStates.DELETED_BY_USER;
       const deletedFictionCommentProps: DeletedFictionCommentProps = {
         expandCollapseCallbackFromTree: expandCollapseCallbackFromTree,
@@ -210,7 +211,7 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
     }
 
     const toggleCommentButtonProps: ToggleCommentButtonProps = {
-      isExpanded: expandedFromTree || false,
+      isExpanded: !!expandedFromTree,
       onClickCallback: expandCollapseCallbackFromTree != null ? expandCollapseCallbackFromTree : () => null
     };
 
@@ -240,6 +241,7 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
 
     // Define user permission
     const connectedUserId = getConnectedUserId();
+    const isUserTheConnectedUser = connectedUserId === String(authorUserId);
 
     // Display FictionCommentForm when ReplyToCommentButton is clicked.
     // ReplyToCommentButton is hidden when FictionCommentForm is displayed
@@ -248,7 +250,7 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
     const displayFictionCommentForm = showFictionCommentForm ? <FictionCommentForm {...fictionCommentFormProps} /> : null;
 
     // Display EditPostButton only when the user have the required rights
-    const userCanEdit = connectedUserId === String(authorUserId) && connectedUserCan(Permissions.EDIT_MY_POST);
+    const userCanEdit = isUserTheConnectedUser && connectedUserCan(Permissions.EDIT_MY_POST);
     const displayEditPostButton =
       userCanEdit && !isEditing ? (
         <ResponsiveOverlayTrigger placement="left" tooltip={editFictionCommentTooltip}>
@@ -265,8 +267,7 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
 
     // Display DeletePostButton only when the user have the required rights
     const userCanDelete =
-      (connectedUserId === String(authorUserId) && connectedUserCan(Permissions.DELETE_MY_POST)) ||
-      connectedUserCan(Permissions.DELETE_POST);
+      (isUserTheConnectedUser && connectedUserCan(Permissions.DELETE_MY_POST)) || connectedUserCan(Permissions.DELETE_POST);
     const refetchQueries = [
       {
         query: CommentQuery,

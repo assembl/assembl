@@ -409,11 +409,11 @@ exports[`Storyshots DeletedFictionComment default 1`] = `
                     <span
                       style={
                         Object {
-                          "color": "#777",
+                          "color": "#170",
                         }
                       }
                     >
-                      null
+                      expandCollapseCallbackFromTree
                     </span>
                   </td>
                   <td
@@ -874,11 +874,11 @@ exports[`Storyshots DeletedFictionComment playground 1`] = `
                     <span
                       style={
                         Object {
-                          "color": "#777",
+                          "color": "#170",
                         }
                       }
                     >
-                      null
+                      expandCollapseCallbackFromTree
                     </span>
                   </td>
                   <td

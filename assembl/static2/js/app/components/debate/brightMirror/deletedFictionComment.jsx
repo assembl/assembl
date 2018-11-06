@@ -33,8 +33,8 @@ const DeletedFictionComment = ({
   const deletedMessageKey = isDeletedByAuthor ? deletedByAuthorMsgKey : deletedByAdminMsgKey;
 
   const toggleCommentButtonProps: ToggleCommentButtonProps = {
-    isExpanded: expandedFromTree || false,
-    onClickCallback: expandCollapseCallbackFromTree != null ? expandCollapseCallbackFromTree : () => null
+    isExpanded: !!expandedFromTree,
+    onClickCallback: expandCollapseCallbackFromTree
   };
 
   // Display ToggleCommentButton only when there are answers to a comment
@@ -72,7 +72,7 @@ const DeletedFictionComment = ({
 };
 
 DeletedFictionComment.defaultProps = {
-  expandCollapseCallbackFromTree: null,
+  expandCollapseCallbackFromTree: () => null,
   expandedFromTree: null
 };
 
