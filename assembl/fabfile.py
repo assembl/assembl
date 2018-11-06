@@ -75,9 +75,12 @@ def running_locally(hosts=None, alt_env=None):
 
 def sudo(*args, **kwargs):
     sudoer = env.get("sudoer", None) or env.get("user")
+    # Generic ability for a defined user to have capabilities to run commands on machine without
+    # being a sudo user
+    has_vi_sudo = as_bool(env.get('user_has_visudo', False))
     with settings(user=sudoer,
                   sudo_prefix='sudo -i -S -p \'{}\''.format(env.sudo_prompt)):
-        if sudoer == "root":
+        if sudoer == "root" or has_vi_sudo:
             run(*args, **kwargs)
         else:
             fabsudo(*args, **kwargs)
@@ -744,7 +747,7 @@ def printenv():
 
 # # Virtualenv
 @task
-def build_virtualenv():
+def build_virtualenv(with_setuptools=False):
     """
     Build the virtualenv
     """
@@ -755,7 +758,10 @@ def build_virtualenv():
         print(cyan('The virtualenv seems to already exist, so we don\'t try to create it again'))
         print(cyan('(otherwise the virtualenv command would produce an error)'))
         return
-    run('python2 -mvirtualenv --no-setuptools %(venvpath)s' % env)
+    setup_tools = ''
+    if not with_setuptools:
+        setup_tools = '--no-setuptools'
+    run('python2 -mvirtualenv %s %s' % (setup_tools, env.venvpath))
     # create the virtualenv with --no-setuptools to avoid downgrading setuptools that may fail
     if env.uses_bluenove_actionable and not is_integration_env():
         execute(install_bluenove_actionable)
@@ -876,6 +882,54 @@ def is_db_updated():
     return current in history
 
 
+def _sync_uploads_folder(local=False):
+    # Sync uploads folder
+    install_awscli()
+    with shell_env(
+        AWS_ACCESS_KEY_ID=env.aws_access_key_id,
+        AWS_SECRET_ACCESS_KEY=env.aws_secret_access_key
+    ):
+        cmd = '{}/var/uploads s3://{}/uploads'.format(env.projectpath, env.aws_bucket_name)
+        if local:
+            cmd = 's3://{}/uploads {} --delete'.format(env.aws_bucket_name, get_upload_dir())
+        venvcmd('aws s3 sync %s' % cmd)
+
+
+@task
+def sync_with_remote_upload_folder():
+    """
+    Syncronize the uploads folder on the host with S3 bucket
+    """
+    _sync_uploads_folder()
+
+
+@task
+def sync_with_local_upload_folder():
+    """
+    Syncronize a remote uploads folder, on S3 bucket, with the local uploads folder
+    """
+    _sync_uploads_folder(local=True)
+
+
+@task
+def reset_upload_folder():
+    if env.wsginame == 'staging.wsginame':
+        # Ensure an uploads folder
+        remote_uploads_exists = False
+        local_upload_exists = exists(get_upload_dir())
+        with shell_env(
+            AWS_ACCESS_KEY_ID=env.aws_access_key_id,
+            AWS_SECRET_ACCESS_KEY=env.aws_secret_access_key
+        ):
+            remote_uploads_exists = venvcmd('aws s3 ls s3://{}/uploads | wc -l'.format(env.aws_bucket_name))
+            remote_uploads_exists = False if exists == '0' else True
+
+        if local_upload_exists and not remote_uploads_exists:
+            execute(sync_with_remote_upload_folder)
+        else:
+            execute(sync_with_local_upload_folder)
+
+
 @task
 def reset_db():
     """
@@ -910,6 +964,7 @@ def reset_db():
             # Create the updated dump for future tests
             print(cyan('Create the updated dump for future tests'))
             execute(database_dump_aws)
+            execute(sync_with_remote_upload_folder)
 
 
 @task
@@ -1170,6 +1225,22 @@ def regenerate_rc_file():
     venvcmd('assembl-ini-files migrate -i local.ini -r {random} {rc}' (env.rcfile))
 
 
+@task
+def bootstrap_from_wheel():
+    """
+    The de-facto way to bootstrap the dev-staging server in a CI/CD context
+    """
+    # execute(deploy_wheel)
+    execute(app_setup)
+    execute(check_and_create_database_user)
+    execute(set_file_permissions)
+    execute(reset_upload_folder)
+    execute(reset_db)
+    execute(install_url_metadata_wheel)
+    execute(setup_nginx_file)
+    # Restart webserver
+
+
 def clone_repository():
     """
     Clone repository
@@ -1324,7 +1395,8 @@ def restart_bluenove_actionable():
 @task
 def app_setup(backup=False):
     """Setup the environment so the application can run"""
-    venvcmd('pip install -e ./')
+    if not env.package_install:
+        venvcmd('pip install -e ./')
     execute(setup_var_directory)
     if not exists(env.ini_file):
         execute(create_local_ini)
@@ -1472,18 +1544,17 @@ def generate_dh_group():
 
 
 @task
-def setup_nginx_file(ready_for_production=False):
+def setup_nginx_file():
     """Creates nginx config file from template."""
     # Deleting any existing nginx configurations already existing
-    if exists("/etc/nginx/sites-enabled/assembl.%s" % (env.public_hostname)):
-        sudo("rm /etc/nginx/sites-enabled/assembl.%s" % (env.public_hostname))
-    if exists("/etc/nginx/sites-enabled/assembl.%s" % (env.server_ip_address)):
-        sudo("rm /etc/nginx.sites-enabled/assembl.%s" % (env.server_ip_address))
-    fill_template('assembl/templates/system/nginx_default.jinja2', env, 'assembl.%s' % (env.public_hostname))
+    if exists("/etc/nginx/sites-enabled/%s" % (env.public_hostname)):
+        sudo("rm /etc/nginx/sites-enabled/%s" % (env.public_hostname))
+    rc_info = filter_global_names(combine_rc(env['rcfile']))
+    fill_template('assembl/templates/system/nginx_default.jinja2', rc_info, '%s' % (env.public_hostname))
     sudoer = env.get("sudoer", None) or env.get("user")
     with settings(user=sudoer):
-        put("assembl.%s" % (env.public_hostname), "/etc/nginx/sites-available/assembl.%s" % (env.public_hostname), use_sudo=True)
-    sudo("ln -s /etc/nginx/sites-available/assembl.%s /etc/nginx/sites-enabled/" % env.public_hostname)
+        put("%s" % (env.public_hostname), "/etc/nginx/sites-available/%s" % (env.public_hostname), use_sudo=True)
+    sudo("ln -s /etc/nginx/sites-available/%(host_name)s /etc/nginx/sites-enabled/%(hostname)s" % {'host_name': env.public_hostname})
     sudo("/etc/init.d/nginx restart")
 
 
@@ -1528,7 +1599,8 @@ def webservers_start():
     if env.uses_nginx:
         # Nginx
         if exists('/etc/init.d/nginx'):
-            sudo('/etc/init.d/nginx start')
+            # Have to ensure that the env.user has visudo rights to call this
+            run('/etc/init.d/nginx start')
         elif env.mac and exists('/usr/local/nginx/sbin/nginx'):
             sudo('/usr/local/nginx/sbin/nginx')
 
@@ -1867,8 +1939,10 @@ def install_memcached():
 
 @task
 def install_fail2ban():
-    print(cyan('Installing fail2ban'))
-    if not env.mac:
+    if env.mac:
+        return
+    if not exists('/usr/bin/fail2ban-client'):
+        print(cyan('Installing fail2ban'))
         sudo('apt-get install -y fail2ban')
 
 
@@ -3096,39 +3170,43 @@ def add_user_to_group(user, group):
 @task
 def set_fail2ban_configurations():
     """Utilize configurations to populate and push fail2ban configs, must be done as a sudo user"""
-    if exists('/etc/fail2ban'):
-        from jinja2 import Environment, FileSystemLoader
-        # This is done locally
-        template_folder = os.path.join(local_code_root, 'assembl', 'templates', 'system')
-        jenv = Environment(
-            loader=FileSystemLoader(template_folder),
-            autoescape=lambda t: False)
-        filters = [f for f in os.listdir(template_folder) if f.startswith('filter-')]
-        filters.append('jail.local.jinja2')
-        filters_to_file = {}
-        for f in filters:
-            with NamedTemporaryFile(delete=False) as f2:
-                filters_to_file[f] = f2.name
-        try:
-            # populate jail and/or filters
-            print("Generating template files")
-            for (template_name, temp_path) in filters_to_file.items():
-                with open(temp_path, 'w') as f:
-                    filter_template = jenv.get_template(template_name)
-                    f.write(filter_template.render(**env))
+    if env.mac:
+        return
 
-                final_name = template_name[:-7]  # remove .jinja2 extension
-                final_path = '/etc/fail2ban/'
-                if final_name.startswith('filter-'):
-                    final_name = final_name[7:]  # Remove filter-
-                    final_name += '.conf'  # add extension
-                    final_path += 'filter.d/'
-                final_path = join(final_path, final_name)
-                put(temp_path, final_path)
+    execute(install_fail2ban)
 
-        finally:
-            for path in filters_to_file.values():
-                os.unlink(path)
+    from jinja2 import Environment, FileSystemLoader
+    # This is done locally
+    template_folder = os.path.join(local_code_root, 'assembl', 'templates', 'system')
+    jenv = Environment(
+        loader=FileSystemLoader(template_folder),
+        autoescape=lambda t: False)
+    filters = [f for f in os.listdir(template_folder) if f.startswith('filter-')]
+    filters.append('jail.local.jinja2')
+    filters_to_file = {}
+    for f in filters:
+        with NamedTemporaryFile(delete=False) as f2:
+            filters_to_file[f] = f2.name
+    try:
+        # populate jail and/or filters
+        print("Generating template files")
+        for (template_name, temp_path) in filters_to_file.items():
+            with open(temp_path, 'w') as f:
+                filter_template = jenv.get_template(template_name)
+                f.write(filter_template.render(**env))
+
+            final_name = template_name[:-7]  # remove .jinja2 extension
+            final_path = '/etc/fail2ban/'
+            if final_name.startswith('filter-'):
+                final_name = final_name[7:]  # Remove filter-
+                final_name += '.conf'  # add extension
+                final_path += 'filter.d/'
+            final_path = join(final_path, final_name)
+            put(temp_path, final_path)
+
+    finally:
+        for path in filters_to_file.values():
+            os.unlink(path)
 
 
 @task
@@ -3168,3 +3246,52 @@ def install_jq():
             run('brew install jq')
         else:
             sudo('apt-get install -y jq')
+
+
+@task
+def secure_sshd_fail2ban():
+    if env.mac:
+        return
+    # Fail2ban needs verbose logging for full security
+    sudo("sed -i 's/LogLevel .*/LogLevel VERBOSE/' /etc/ssh/sshd_config")
+    sudo('service ssh restart')
+
+
+@task
+def ensure_private_configs():
+    """
+    Private configs are created once for a server. During CI/CD, we want these configurations
+    to survive each version upgrade
+    """
+    private_config_path = normpath(os.path. join(env.projectpath, '..', 'global_configs'))
+    run('mkdir -p %s' % private_config_path)
+
+    # Ensure that the server's random.ini survives each version
+    remote_random_path = os.path.join(env.projectpath, 'random.ini')
+    remote_random_path_destination = normpath(os.path.join(private_config_path, 'random.ini'))
+    if not exists(remote_random_path_destination):
+        run('cp %s %s' % (remote_random_path, remote_random_path_destination))
+
+    # TODO: Copy all images manually added to static2/img that was manually added
+
+
+@task
+def deploy_wheel(version=None):
+    # Run by same user who will install Assembl
+    # Tested on Ubuntu only
+    execute(ensure_private_configs)
+    base_wheel_path = os.path.join('~', 'assembl_wheels')
+    if not version:
+        version = run('ls -t %s | head -n 1' % (base_wheel_path))
+    wheel_path = os.path.join(base_wheel_path, version, 'assembl-%s-py2-none-any.whl' % version)
+    link_path = env.wheelhouse or None
+    use_wheel = ''
+    if link_path:
+        use_wheel = '--find-links=%s' % link_path
+    # Make this into a task
+    run('rm -rf %s' % env.projectpath)
+    run('mkdir -p %s' % env.projectpath)
+
+    execute(build_virtualenv, with_setuptools=True)
+    venvcmd('pip install %s %s' % (use_wheel, wheel_path))
+    # Link the fabfile for ease
