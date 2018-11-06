@@ -98,6 +98,7 @@ type DebateData = Object & {
   twitter: { backgroundImageUrl: string, id: string },
   useSocialMedia: boolean,
   video: {
+    titleEntries: LangstringEntries,
     descriptionEntriesTop: LangstringEntries,
     videoUrl: string
   },

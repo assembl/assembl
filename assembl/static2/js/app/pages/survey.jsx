@@ -8,7 +8,7 @@ import type { Map } from 'immutable';
 
 import { updateContentLocale } from '../actions/contentLocaleActions';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
-import Media from '../components/common/media';
+import TextAndMedia from '../components/common/textAndMedia';
 import Header from '../components/common/header';
 import Question from '../components/debate/survey/question';
 import Navigation from '../components/debate/survey/navigation';
@@ -141,7 +141,7 @@ class Survey extends React.Component<SurveyProps, SurveyState> {
           <Header title={title} imgUrl={imgUrl} identifier="survey" type="idea">
             <HeaderStatistics statElements={statElements} />
           </Header>
-          {media && <Media {...media} />}
+          {media && <TextAndMedia {...media} />}
           <div className="questions">
             {questions &&
               questions.map((question, index) => (

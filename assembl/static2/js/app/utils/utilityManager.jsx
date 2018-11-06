@@ -106,7 +106,10 @@ export const openShareModal = (options) => {
 export const inviteUserToLogin = () => {
   const body = (
     <div>
-      <p><Translate value="login.loginModalBody" /></p><br />
+      <p>
+        <Translate value="login.loginModalBody" />
+      </p>
+      <br />
       <LoginButton label={I18n.t('login.loginModalFooter')} />
     </div>
   );
@@ -122,7 +125,6 @@ export const promptForLoginOr = action => () => {
     action();
   }
 };
-
 
 export const defaultAnchorAttributes = {
   rel: 'noopener no-referrer',
@@ -141,7 +143,15 @@ export const localAwareLink = AnchorComponent => ({ urlData, anchorAttributes, p
   const attrs = anchorAttributes || null;
   const componentProps = props || null;
   if (!urlData.local) {
-    return (<a href={urlData.url} {...attrs} ><AnchorComponent {...componentProps} /></a>);
+    return (
+      <a href={urlData.url} {...attrs}>
+        <AnchorComponent {...componentProps} />
+      </a>
+    );
   }
-  return (<Link to={urlData.url} {...attrs}><AnchorComponent {...componentProps} /></Link>);
+  return (
+    <Link to={urlData.url} {...attrs}>
+      <AnchorComponent {...componentProps} />
+    </Link>
+  );
 };

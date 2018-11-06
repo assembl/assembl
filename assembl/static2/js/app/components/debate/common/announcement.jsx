@@ -6,7 +6,7 @@ import { Col, Tooltip } from 'react-bootstrap';
 import StatisticsDoughnut from '../common/statisticsDoughnut';
 import { sentimentDefinitionsObject } from './sentimentDefinitions';
 import type { SentimentDefinition } from './sentimentDefinitions';
-import Media from '../../common/media';
+import TextAndMedia from '../../common/textAndMedia';
 import { CountablePublicationStates } from '../../../constants';
 import PostsAndContributorsCount from '../../common/postsAndContributorsCount';
 
@@ -94,7 +94,7 @@ class Announcement extends React.Component<$FlowFixMeProps> {
           </h3>
         </div>
         <Col xs={12} md={8} className="announcement-media col-md-push-4">
-          {mediaContent && <Media {...mediaContent} />}
+          {mediaContent && <TextAndMedia {...mediaContent} />}
         </Col>
         <Col xs={12} md={4} className="col-md-pull-8">
           <div className="announcement-statistics">
