@@ -6,28 +6,33 @@ import { Grid, Row, Col } from 'react-bootstrap';
 
 import Medias from '../common/medias';
 
-class Video extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isTextHigher: false
-    };
-  }
+type Props = {
+  debateData: DebateData,
+  locale: string
+};
 
-  componentWillReceiveProps() {
-    const { debateData } = this.props.debate;
+type State = {
+  isTextHigher: boolean
+};
+
+class Video extends React.Component<Props, State> {
+  static getDerivedStateFromProps(props: Props) {
+    const { debateData } = props;
     const videoTxt = document.getElementById('video-txt');
     const video = document.getElementById('video-vid');
     if (debateData.videoUrl && videoTxt) {
       const textHeight = videoTxt.clientHeight;
       const videoHeight = video.clientHeight;
-      if (textHeight > videoHeight + 5) this.setState({ isTextHigher: true });
+      if (textHeight > videoHeight + 5) return { isTextHigher: true };
     }
+    return null;
   }
 
+  state = { isTextHigher: false };
+
   render() {
-    const { debateData } = this.props.debate;
-    const { locale } = this.props.i18n;
+    const { debateData } = this.props;
+    const { locale } = this.props;
     return (
       <section className="home-section video-section">
         <Grid fluid>
@@ -66,8 +71,8 @@ class Video extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  debate: state.debate,
-  i18n: state.i18n
+  debateData: state.debate.debateData,
+  locale: state.i18n.locale
 });
 
 export default connect(mapStateToProps)(Video);
