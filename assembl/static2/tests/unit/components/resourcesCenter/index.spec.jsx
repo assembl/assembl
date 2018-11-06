@@ -11,6 +11,7 @@ describe('ResourcesCenter component', () => {
       {
         doc: null,
         embedCode: 'https://www.youtube.com/embed/3m7BgIvC-uQ',
+        id: 'res1',
         image: null,
         text:
           '<p>Le 1er octobre, deux millions de Catalans (soit 43 % des électeurs) se prononcent ' +
@@ -21,6 +22,7 @@ describe('ResourcesCenter component', () => {
       {
         doc: 'https://wwww.fakeurl.com',
         embedCode: null,
+        id: 'res2',
         image: 'http://img.lemde.fr/2017/11/13/0/0/3847/2565/534/0/60/0/aaa6aa4_31822-8xbq9n.k1vw019k9.jpg',
         text:
           '<p>Depuis sa réouverture, il y a un an, la salle emblématique tente d’écrire une ' +
@@ -30,6 +32,7 @@ describe('ResourcesCenter component', () => {
       {
         doc: null,
         embedCode: 'https://www.youtube.com/embed/3m7BgIvC-uQ',
+        id: 'res3',
         image: 'http://img.lemde.fr/2017/11/13/0/0/3847/2565/534/0/60/0/aaa6aa4_31822-8xbq9n.k1vw019k9.jpg',
         text:
           '<p>Les données rassemblées par les scientifiques du GCP suggèrent en outre que le ' +
