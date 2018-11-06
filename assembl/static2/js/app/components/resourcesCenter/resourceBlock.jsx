@@ -4,6 +4,8 @@ import classnames from 'classnames';
 import { Grid } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
 
+import Medias from '../common/medias';
+
 export type Media = {
   type: string,
   url: string
@@ -43,7 +45,7 @@ const ResourceBlock = (props: ResourceBlockProps) => {
             !image && (
               <div className="resource-video-container">
                 <div className={videoClassNames}>
-                  <iframe title="resource-video" src={embedCode} className="resource-iframe" frameBorder="0" allowFullScreen />
+                  <Medias path={embedCode} />
                 </div>
               </div>
             )}
