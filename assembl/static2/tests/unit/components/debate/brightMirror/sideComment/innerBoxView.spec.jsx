@@ -23,6 +23,8 @@ jest.mock('../../../../../../js/app/utils/globalFunctions', () => ({
   getIconPath: jest.fn(() => 'icons/path/avatar')
 }));
 
+jest.mock('../../../../../../js/app/utils/permissions', () => ({ connectedUserCan: jest.fn(() => true) }));
+
 describe('<InnerBoxView /> - default with shallow', () => {
   let wrapper;
 

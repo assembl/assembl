@@ -11,6 +11,7 @@ import { transformLinksInHtml /* getUrls */ } from '../../../../utils/linkify';
 import { postBodyReplacementComponents } from '../../common/post/postBody';
 import { getConnectedUserId } from '../../../../utils/globalFunctions';
 import { editFictionCommentTooltip } from '../../../common/tooltips';
+import Permissions, { connectedUserCan } from '../../../../utils/permissions';
 
 export type Props = {
   contentLocale: string,
@@ -30,14 +31,20 @@ class InnerBoxView extends React.Component<Props, State> {
     menuTarget: null
   };
 
-  renderRichtext = text => activeHtml(text && transformLinksInHtml(text), postBodyReplacementComponents());
+  renderRichtext = (text: string) => activeHtml(text && transformLinksInHtml(text), postBodyReplacementComponents());
 
   render() {
     const { contentLocale, extractIndex, extracts, comment, changeCurrentExtract, setEditMode } = this.props;
     const { menuTarget } = this.state;
     const displayName =
       comment && comment.creator && !comment.creator.isDeleted ? comment.creator.displayName : I18n.t('deletedUser');
-    const idEditable = comment && comment.creator && String(comment.creator.userId) === getConnectedUserId() && setEditMode;
+    const canEdit =
+      comment &&
+      comment.creator &&
+      String(comment.creator.userId) === getConnectedUserId() &&
+      connectedUserCan(Permissions.EDIT_MY_POST) &&
+      // Prevent editing reply for now (will be added in another ticket)
+      setEditMode;
 
     return (
       <Fragment>
@@ -52,7 +59,7 @@ class InnerBoxView extends React.Component<Props, State> {
                   .fromNow()}
               </div>
             </div>
-            {idEditable && (
+            {canEdit && (
               <div className="button-bar">
                 <Button
                   className="action-menu-btn"

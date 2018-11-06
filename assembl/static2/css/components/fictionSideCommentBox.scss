@@ -16,6 +16,29 @@
 
       .button-bar {
         padding-top: 0;
+
+        .action-menu-btn {
+          border: none;
+          padding: 0 0 0 2px;
+          background: none;
+
+          &:hover,
+          &:focus {
+            background: none !important;
+          }
+
+          .assembl-icon-ellipsis-vert {
+            &:before {
+              font-size: 20px;
+              vertical-align: middle;
+              padding: 2px 0 0;
+            }
+
+            &:hover {
+              color: $harvesting-green;
+            }
+          }
+        }
       }
     }
 
@@ -67,29 +90,6 @@
 
     .action-reply {
       font-size: 20px;
-    }
-  }
-
-  .action-menu-btn {
-    border: none;
-    padding: 0 0 0 2px;
-    background: none;
-
-    &:hover,
-    &:focus {
-      background: none !important;
-    }
-
-    .assembl-icon-ellipsis-vert {
-      &:before {
-        font-size: 20px;
-        vertical-align: middle;
-        padding: 2px 0 0;
-      }
-
-      &:hover {
-        color: $harvesting-green;
-      }
     }
   }
 }
