@@ -15,7 +15,7 @@ type State = {
   isTextHigher: boolean
 };
 
-class Video extends React.Component<Props, State> {
+export class Video extends React.Component<Props, State> {
   static getDerivedStateFromProps(props: Props) {
     const { debateData } = props;
     const videoTxt = document.getElementById('video-txt');
