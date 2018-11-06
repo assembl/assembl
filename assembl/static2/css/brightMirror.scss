@@ -65,13 +65,14 @@ $fiction-toolbar-icon-size: 17px;
 
 .background-comments-default {
   // Striped background
-  background: repeating-linear-gradient(
-    -45deg,
-    $ice,
-    $ice 4px,
-    $white 2px,
-    $white 7px
-  );
+  background:
+    repeating-linear-gradient(
+      -45deg,
+      $ice,
+      $ice 4px,
+      $white 2px,
+      $white 7px
+    );
 }
 
 @media screen and (min-width: $screen-sm-min) {
