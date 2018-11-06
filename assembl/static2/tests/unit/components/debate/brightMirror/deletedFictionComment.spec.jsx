@@ -6,6 +6,7 @@ import Adapter from 'enzyme-adapter-react-16';
 // Components imports
 import DeletedFictionComment from '../../../../../js/app/components/debate/brightMirror/deletedFictionComment';
 import CircleAvatar from '../../../../../js/app/components/debate/brightMirror/circleAvatar';
+import ToggleCommentButton from '../../../../../js/app/components/debate/common/toggleCommentButton';
 // Type imports
 import type { DeletedFictionCommentProps } from '../../../../../js/app/components/debate/brightMirror/deletedFictionComment';
 
@@ -33,6 +34,14 @@ describe('<DeletedFictionComment /> - with shallow', () => {
 
   it('should render one default CircleAvatar', () => {
     expect(wrapper.find(CircleAvatar)).toHaveLength(1);
+  });
+
+  it('should display the number of child comments', () => {
+    expect(wrapper.find('Translate [value="debate.thread.postDeletedByUser"]')).toHaveLength(1);
+  });
+
+  it('should display a "toggle comment" button', () => {
+    expect(wrapper.find(ToggleCommentButton)).toHaveLength(1);
   });
 
   it('should display the default deleted message by author', () => {

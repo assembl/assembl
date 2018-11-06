@@ -31,6 +31,31 @@ exports[`Storyshots DeletedFictionComment default 1`] = `
             Ce message a été supprimé par son auteur.
           </span>
         </p>
+        <footer
+          className="toolbar"
+        >
+          <div
+            className="left-content"
+          >
+            <p>
+              <span
+                className={undefined}
+                style={undefined}
+              >
+                999 réponses
+              </span>
+            </p>
+            <a
+              className="action-toggle"
+              onClick={[Function]}
+              style={Object {}}
+            >
+              <span
+                className="assembl-icon-up-open"
+              />
+            </a>
+          </div>
+        </footer>
       </div>
     </article>
   </div>
@@ -187,13 +212,85 @@ exports[`Storyshots DeletedFictionComment default 1`] = `
                 </span>
                 <span>
                   <span>
-                     
+                    <span>
+                      <br />
+                        
+                    </span>
+                    <span
+                      style={Object {}}
+                    >
+                      expandCollapseCallbackFromTree
+                    </span>
+                    <span>
+                      =
+                      <span
+                        style={Object {}}
+                      >
+                        {
+                        <span
+                          style={
+                            Object {
+                              "color": "#170",
+                            }
+                          }
+                        >
+                          expandCollapseCallbackFromTree
+                        </span>
+                        }
+                      </span>
+                    </span>
+                  </span>
+                  <span>
+                    <span>
+                      <br />
+                        
+                    </span>
+                    <span
+                      style={Object {}}
+                    >
+                      expandedFromTree
+                    </span>
+                  </span>
+                  <span>
+                    <span>
+                      <br />
+                        
+                    </span>
                     <span
                       style={Object {}}
                     >
                       isDeletedByAuthor
                     </span>
-                     
+                  </span>
+                  <span>
+                    <span>
+                      <br />
+                        
+                    </span>
+                    <span
+                      style={Object {}}
+                    >
+                      numChildren
+                    </span>
+                    <span>
+                      =
+                      <span
+                        style={Object {}}
+                      >
+                        {
+                        <span
+                          style={
+                            Object {
+                              "color": "#a11",
+                            }
+                          }
+                        >
+                          999
+                        </span>
+                        }
+                      </span>
+                    </span>
+                    <br />
                   </span>
                 </span>
                 <span
@@ -255,9 +352,111 @@ exports[`Storyshots DeletedFictionComment default 1`] = `
               DeletedFictionComment
               " Component
             </h2>
-            <small>
-              No propTypes defined!
-            </small>
+            <table
+              className="css-1ytzlk7"
+            >
+              <thead>
+                <tr>
+                  <th
+                    className="css-d52hbj"
+                  >
+                    property
+                  </th>
+                  <th
+                    className="css-d52hbj"
+                  >
+                    propType
+                  </th>
+                  <th
+                    className="css-d52hbj"
+                  >
+                    required
+                  </th>
+                  <th
+                    className="css-d52hbj"
+                  >
+                    default
+                  </th>
+                  <th
+                    className="css-d52hbj"
+                  >
+                    description
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td
+                    className="css-1ygfcef"
+                  >
+                    expandCollapseCallbackFromTree
+                  </td>
+                  <td
+                    className="css-1ygfcef"
+                  >
+                    <span>
+                      unknown
+                    </span>
+                  </td>
+                  <td
+                    className="css-d52hbj"
+                  >
+                    -
+                  </td>
+                  <td
+                    className="css-d52hbj"
+                  >
+                    <span
+                      style={
+                        Object {
+                          "color": "#777",
+                        }
+                      }
+                    >
+                      null
+                    </span>
+                  </td>
+                  <td
+                    className="css-d52hbj"
+                  />
+                </tr>
+                <tr>
+                  <td
+                    className="css-1ygfcef"
+                  >
+                    expandedFromTree
+                  </td>
+                  <td
+                    className="css-1ygfcef"
+                  >
+                    <span>
+                      unknown
+                    </span>
+                  </td>
+                  <td
+                    className="css-d52hbj"
+                  >
+                    -
+                  </td>
+                  <td
+                    className="css-d52hbj"
+                  >
+                    <span
+                      style={
+                        Object {
+                          "color": "#777",
+                        }
+                      }
+                    >
+                      null
+                    </span>
+                  </td>
+                  <td
+                    className="css-d52hbj"
+                  />
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -297,6 +496,31 @@ exports[`Storyshots DeletedFictionComment playground 1`] = `
             Ce message a été supprimé par son auteur.
           </span>
         </p>
+        <footer
+          className="toolbar"
+        >
+          <div
+            className="left-content"
+          >
+            <p>
+              <span
+                className={undefined}
+                style={undefined}
+              >
+                999 réponses
+              </span>
+            </p>
+            <a
+              className="action-toggle"
+              onClick={[Function]}
+              style={Object {}}
+            >
+              <span
+                className="assembl-icon-up-open"
+              />
+            </a>
+          </div>
+        </footer>
       </div>
     </article>
   </div>
@@ -453,13 +677,85 @@ exports[`Storyshots DeletedFictionComment playground 1`] = `
                 </span>
                 <span>
                   <span>
-                     
+                    <span>
+                      <br />
+                        
+                    </span>
+                    <span
+                      style={Object {}}
+                    >
+                      expandCollapseCallbackFromTree
+                    </span>
+                    <span>
+                      =
+                      <span
+                        style={Object {}}
+                      >
+                        {
+                        <span
+                          style={
+                            Object {
+                              "color": "#170",
+                            }
+                          }
+                        >
+                          expandCollapseCallbackFromTree
+                        </span>
+                        }
+                      </span>
+                    </span>
+                  </span>
+                  <span>
+                    <span>
+                      <br />
+                        
+                    </span>
+                    <span
+                      style={Object {}}
+                    >
+                      expandedFromTree
+                    </span>
+                  </span>
+                  <span>
+                    <span>
+                      <br />
+                        
+                    </span>
                     <span
                       style={Object {}}
                     >
                       isDeletedByAuthor
                     </span>
-                     
+                  </span>
+                  <span>
+                    <span>
+                      <br />
+                        
+                    </span>
+                    <span
+                      style={Object {}}
+                    >
+                      numChildren
+                    </span>
+                    <span>
+                      =
+                      <span
+                        style={Object {}}
+                      >
+                        {
+                        <span
+                          style={
+                            Object {
+                              "color": "#a11",
+                            }
+                          }
+                        >
+                          999
+                        </span>
+                        }
+                      </span>
+                    </span>
+                    <br />
                   </span>
                 </span>
                 <span
@@ -521,9 +817,111 @@ exports[`Storyshots DeletedFictionComment playground 1`] = `
               DeletedFictionComment
               " Component
             </h2>
-            <small>
-              No propTypes defined!
-            </small>
+            <table
+              className="css-1ytzlk7"
+            >
+              <thead>
+                <tr>
+                  <th
+                    className="css-d52hbj"
+                  >
+                    property
+                  </th>
+                  <th
+                    className="css-d52hbj"
+                  >
+                    propType
+                  </th>
+                  <th
+                    className="css-d52hbj"
+                  >
+                    required
+                  </th>
+                  <th
+                    className="css-d52hbj"
+                  >
+                    default
+                  </th>
+                  <th
+                    className="css-d52hbj"
+                  >
+                    description
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td
+                    className="css-1ygfcef"
+                  >
+                    expandCollapseCallbackFromTree
+                  </td>
+                  <td
+                    className="css-1ygfcef"
+                  >
+                    <span>
+                      unknown
+                    </span>
+                  </td>
+                  <td
+                    className="css-d52hbj"
+                  >
+                    -
+                  </td>
+                  <td
+                    className="css-d52hbj"
+                  >
+                    <span
+                      style={
+                        Object {
+                          "color": "#777",
+                        }
+                      }
+                    >
+                      null
+                    </span>
+                  </td>
+                  <td
+                    className="css-d52hbj"
+                  />
+                </tr>
+                <tr>
+                  <td
+                    className="css-1ygfcef"
+                  >
+                    expandedFromTree
+                  </td>
+                  <td
+                    className="css-1ygfcef"
+                  >
+                    <span>
+                      unknown
+                    </span>
+                  </td>
+                  <td
+                    className="css-d52hbj"
+                  >
+                    -
+                  </td>
+                  <td
+                    className="css-d52hbj"
+                  >
+                    <span
+                      style={
+                        Object {
+                          "color": "#777",
+                        }
+                      }
+                    >
+                      null
+                    </span>
+                  </td>
+                  <td
+                    className="css-d52hbj"
+                  />
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>

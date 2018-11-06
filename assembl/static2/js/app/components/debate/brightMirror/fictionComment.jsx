@@ -192,15 +192,25 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
     const { isEditing, showFictionCommentForm, updatedCommentContent, updatedModified } = this.state;
     const { expandedFromTree, expandCollapseCallbackFromTree } = fictionCommentExtraProps;
 
+    // Translation key
+    const postEditedMsgKey = 'debate.thread.postEdited';
+    const deleteCommentBodyMessageMsgKey = 'debate.brightMirror.commentFiction.deleteCommentBodyMessage';
+    const numberOfResponsesMsgKey = 'debate.brightMirror.numberOfResponses';
+
     // Display DeletedFictionComment component when comment is marked as DELETED_BY_USER or DELETED_BY_ADMIN
     if (publicationState in DeletedPublicationStates) {
       const isDeletedByAuthor = publicationState === PublicationStates.DELETED_BY_USER;
-      const deletedFictionCommentProps: DeletedFictionCommentProps = { isDeletedByAuthor: isDeletedByAuthor };
+      const deletedFictionCommentProps: DeletedFictionCommentProps = {
+        expandCollapseCallbackFromTree: expandCollapseCallbackFromTree,
+        expandedFromTree: expandedFromTree,
+        isDeletedByAuthor: isDeletedByAuthor,
+        numChildren: numChildren
+      };
       return <DeletedFictionComment {...deletedFictionCommentProps} />;
     }
 
     const toggleCommentButtonProps: ToggleCommentButtonProps = {
-      isExpanded: expandedFromTree != null ? expandedFromTree : false,
+      isExpanded: expandedFromTree || false,
       onClickCallback: expandCollapseCallbackFromTree != null ? expandCollapseCallbackFromTree : () => null
     };
 
@@ -249,7 +259,7 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
     const displayIsEdited =
       updatedModified || modified ? (
         <span className="isEdited">
-          <Translate value="debate.thread.postEdited" />
+          <Translate value={postEditedMsgKey} />
         </span>
       ) : null;
 
@@ -267,7 +277,7 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
       <ResponsiveOverlayTrigger placement="left" tooltip={deleteFictionCommentTooltip}>
         <DeletePostButton
           linkClassName="action-delete"
-          modalBodyMessage="debate.brightMirror.commentFiction.deleteCommentBodyMessage"
+          modalBodyMessage={deleteCommentBodyMessageMsgKey}
           postId={commentId}
           refetchQueries={refetchQueries}
         />
@@ -302,7 +312,7 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
       <footer className="toolbar">
         <div className="left-content">
           <p>
-            <Translate value="debate.brightMirror.numberOfResponses" count={numChildren} />
+            <Translate value={numberOfResponsesMsgKey} count={numChildren} />
           </p>
           {displayToggleCommentButton}
           {displayReplyToCommentButton}

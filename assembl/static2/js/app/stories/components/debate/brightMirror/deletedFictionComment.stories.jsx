@@ -2,8 +2,9 @@
 import React from 'react';
 /* eslint-disable import/no-extraneous-dependencies */
 import { storiesOf } from '@storybook/react';
+import { action } from '@storybook/addon-actions';
 import { withInfo } from '@storybook/addon-info';
-import { withKnobs, boolean } from '@storybook/addon-knobs';
+import { withKnobs, boolean, number } from '@storybook/addon-knobs';
 /* eslint-enable */
 
 // import components
@@ -11,7 +12,10 @@ import DeletedFictionComment from '../../../../components/debate/brightMirror/de
 import type { DeletedFictionCommentProps } from '../../../../components/debate/brightMirror/deletedFictionComment';
 
 export const defaultDeletedFictionComment: DeletedFictionCommentProps = {
-  isDeletedByAuthor: true
+  expandCollapseCallbackFromTree: action('expandCollapseCallbackFromTree'),
+  expandedFromTree: true,
+  isDeletedByAuthor: true,
+  numChildren: 999
 };
 
 const playground = {
@@ -24,6 +28,11 @@ storiesOf('DeletedFictionComment', module)
   .add(
     'playground',
     withInfo()(() => (
-      <DeletedFictionComment isDeletedByAuthor={boolean('Is comment deleted by author', playground.isDeletedByAuthor)} />
+      <DeletedFictionComment
+        expandCollapseCallbackFromTree={playground.expandCollapseCallbackFromTree}
+        expandedFromTree={playground.expandedFromTree}
+        isDeletedByAuthor={boolean('Is comment deleted by author', playground.isDeletedByAuthor)}
+        numChildren={number('Number of comments', playground.numChildren)}
+      />
     ))
   );
