@@ -66,6 +66,14 @@ build_wheel:
     # create the wheel and upload to pypi
     - sh scripts/create_assembl_wheel.sh
     # - twine upload -u bluenove --skip-existing dist/*
+    - export VERSION="$(grep current_version $CI_PROJECT_DIR/.bumpversion.cfg | tr -d ' ' | awk -F '=' '{print $2}')""
+    # Copy the assembl wheel, then build a wheelhouse for the dependency links only
+    - grep "git+http" $CI_PROJECT_DIR/requirements-dev.frozen.txt > deps.txt
+    - pip wheel --wheel-dir=$CI_PROJECT_DIR/wheelhouse --process-dependency-links -r deps.txt
+    - scp -r -4 -i ~/.ssh/assembl_user.pem $CI_PROJECT_DIR/dist assembl_user@dev-assembl.bluenove.com:~/assembl_wheels/$VERSION
+    - rsync -avr -e "ssh -i ~/.ssh/assembl_user.pem" $CI_PROJECT_DIR/wheelhouse assembl_user@dev-assembl.bluenove.com::~/wheelhouse
+    # Remove ssh files so that the keys are not kept on image prior to travis removal
+    - rm -rf ~/.ssh
 
 deploy_to_dev:
   stage: deploy_to_dev
@@ -92,3 +100,20 @@ deploy_to_prod:
     # fake script for now
     - python scripts/deploy_to_prod.py
   when: manual
+
+push_to_develop_server:
+  stage: deploy_to_dev
+  only:
+    - tmp_master_for_ci_cd
+    # Add my branch here
+  before_script:
+    - sh scripts/configure_ssh.sh
+    - pip install fabric==1.14
+    - mkdir -p private_configs
+    - ssh -4 -i ~/.ssh/vaultmaster.pem vaultmaster@dev-assembl.bluenove.com "cd /opt/vault/bluenove-server-configs; git pull"
+    - scp -4 -i ~/.ssh/vaultmaster.pem vaultmaster@dev-assembl.bluenove.com:/opt/vault/bluenove-server-configs/dev_staging.rc ./private_configs/dev_staging.rc
+    - scp -4 -i ~/.ssh/vaultmaster.pem vaultmaster@dev-assembl.bluenove.com:/opt/vault/bluenove-server-configs/bluenove.rc ./private_configs/bluenove.rc
+    - export VERSION=$(grep current_version .bumpversion.cfg | tr -d ' ' | awk -F "=" '{print $2}')
+  script:
+    - fab -f assembl/fabfile.py -c private_configs/dev_staging.rc deploy_wheel:$VERSION
+    - fab -f assembl/fabfile.py -c private_configs/dev_staging.rc 
