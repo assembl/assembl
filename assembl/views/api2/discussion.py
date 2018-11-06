@@ -1444,6 +1444,8 @@ def phase1_csv_export(request):
     discussion = request.context._instance
     discussion_id = discussion.id
     Idea.prepare_counters(discussion_id, True)
+
+    # Ensure additions to the header are reflected in the tests
     THEMATIC_NAME = u"Nom de la thématique"
     QUESTION_ID = u"Numéro de la question"
     QUESTION_TITLE = u"Intitulé de la question"
@@ -1570,6 +1572,7 @@ def phase2_csv_export(request):
     discussion_id = discussion.id
     Idea.prepare_counters(discussion_id, True)
 
+    # Ensure additions to the header are reflected in the tests
     IDEA_ID = u"Numéro de l'idée"
     IDEA_PARENT_ID = u"Les numéros des parent d'idée"
     IDEA_NAME = u"Nom de l'idée"
