@@ -9,7 +9,7 @@ import Medias from '../../../../js/app/components/common/medias';
 
 configure({ adapter: new Adapter() });
 
-describe('<Medias /> - with shallow', () => {
+describe('<Video /> - with shallow', () => {
   let wrapper;
 
   it('should display the title from the debateData object in french', () => {
