@@ -652,7 +652,7 @@ def error_view(exc, request):
     context = get_default_context(request)
     return dict(
         context, debate_link="/", error_code=error_code,
-        error=_("error"), 
+        error=_("error"),
         text=_("Our server has encountered a problem. The page you have requested is not accessible."),
         excuse=_("We apologize for the inconvenience"),
         home_button=_("Homepage")
@@ -662,7 +662,7 @@ def error_template(request):
     context = get_default_context(request)
     return dict(
         context, debate_link="/", error_code="500",
-        error="error", 
+        error="error",
         text="Our server has encountered a problem. The page you have requested is not accessible.",
         excuse="We apologize for the inconvenience",
         home_button="Homepage"
