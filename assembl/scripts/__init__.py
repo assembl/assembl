@@ -1,6 +1,6 @@
 """Scripts that can be run from the CLI"""
 
-import logging
+import logging.config
 
 from pyramid.paster import get_appsettings, bootstrap
 

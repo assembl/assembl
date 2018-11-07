@@ -15,7 +15,7 @@ from ..fabfile import combine_rc, code_root, venv_path, filter_global_names, fil
 os.umask(0o027)
 
 
-log = logging.getLogger('assembl')
+log = logging.getLogger()
 logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
 
 # Case sensitive options

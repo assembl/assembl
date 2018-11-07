@@ -10,7 +10,7 @@ from six import string_types
 
 from ..lib import logging
 
-log = logging.getLogger('assembl.auth')
+log = logging.getLogger()
 
 
 class GenericAuth(BaseAuth):

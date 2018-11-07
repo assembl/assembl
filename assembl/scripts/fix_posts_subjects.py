@@ -36,7 +36,7 @@ def fix_posts_subjects(db, logger):
 
 
 def get_logger():
-    logger = logging.getLogger('fix_posts_subjects')
+    logger = logging.getLogger()
     fh = logging.FileHandler('/tmp/fix_posts_subjects.log', 'w')
     fh.setLevel(logging.INFO)
     formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')

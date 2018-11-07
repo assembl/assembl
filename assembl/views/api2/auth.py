@@ -333,7 +333,7 @@ def reset_password(request):
     identifier = request.json_body.get('identifier')
     user_id = request.json_body.get('user_id')
     slug = request.json_body.get('discussion_slug')
-    logger = logging.getLogger('assembl.auth')
+    logger = logging.getLogger()
     discussion = None
     if slug:
         discussion = Discussion.default_db.query(
@@ -450,7 +450,7 @@ def assembl_register_user(request):
     localizer = request.localizer
     session = AgentProfile.default_db
     json = request.json
-    logger = logging.getLogger('assembl')
+    logger = logging.getLogger()
     discussion = discussion_from_request(request)
     permissions = get_permissions(
         Everyone, discussion.id if discussion else None)

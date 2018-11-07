@@ -1,9 +1,7 @@
 from datetime import datetime
 import simplejson as json
-from urllib import quote
 from smtplib import SMTPRecipientsRefused
 from email.header import Header
-import logging
 
 from pyramid.i18n import TranslationStringFactory
 from pyramid.view import view_config
@@ -27,18 +25,14 @@ from sqlalchemy import desc
 from pyisemail import is_email
 from social_core.actions import do_auth
 from social_pyramid.utils import psa
-from social_core.exceptions import (
-    AuthException, AuthFailed, AuthCanceled, AuthUnknownError,
-    AuthMissingParameter, AuthStateMissing, AuthStateForbidden,
-    AuthTokenError)
-
+from social_core.exceptions import (AuthException)
 
 from assembl.models import (
     EmailAccount, IdentityProvider, SocialAuthAccount,
-    AgentProfile, User, Username, Role, LocalUserRole, Preferences,
-    AbstractAgentAccount, Discussion, AgentStatusInDiscussion)
+    AgentProfile, User, Username, Preferences,
+    AbstractAgentAccount, AgentStatusInDiscussion)
 from assembl.auth import (
-    P_READ, R_PARTICIPANT, P_SELF_REGISTER, P_SELF_REGISTER_REQUEST)
+    P_READ, P_SELF_REGISTER, P_SELF_REGISTER_REQUEST)
 from assembl.auth.password import (
     verify_email_token, verify_password_change_token,
     password_change_token, Validity, get_data_token_time)
@@ -46,7 +40,7 @@ from assembl.auth.util import (
     discussion_from_request, roles_with_permissions, maybe_auto_subscribe,
     get_permissions)
 from assembl.auth.social_auth import maybe_social_logout
-from ...lib import config
+from ...lib import config, logging
 from assembl.lib.sqla_types import EmailString
 from assembl.lib.utils import normalize_email_name, get_global_base_url
 from .. import (
@@ -54,7 +48,7 @@ from .. import (
     HTTPTemporaryRedirect, create_get_route, sanitize_next_view)
 
 _ = TranslationStringFactory('assembl')
-log = logging.getLogger('assembl')
+log = logging.getLogger()
 
 
 public_roles = {Everyone, Authenticated}

@@ -1,8 +1,7 @@
-import logging
 from sqlalchemy.orm import with_polymorphic
 from sqlalchemy.orm import joinedload
 
-from assembl.lib import config
+from assembl.lib import config, logging
 from assembl.indexing.changes import get_changes
 from assembl.indexing.utils import delete_index, create_index_and_mapping
 from assembl.indexing.settings import get_index_settings
@@ -17,7 +16,7 @@ def reindex_in_elasticsearch(contents):
 
 
 def intermediate_commit(contents):
-    logger = logging.getLogger('assembl')
+    logger = logging.getLogger()
     count = 0
     changes = get_changes()
     for content in contents:

@@ -1,5 +1,4 @@
 """Definition of the discussion class."""
-import logging
 import traceback
 from collections import defaultdict
 from datetime import datetime
@@ -18,6 +17,7 @@ from sqlalchemy.orm import (backref, join, relationship, subqueryload,
 from sqlalchemy.sql.expression import distinct, literal
 
 from assembl.lib.config import get
+from assembl.lib import logging
 from assembl.lib.utils import full_class_name, get_global_base_url, slugify
 
 from . import DiscussionBoundBase, NamedClassMixin
@@ -33,7 +33,7 @@ from .preferences import Preferences
 from assembl.lib.caching import create_analytics_region
 
 resolver = DottedNameResolver(__package__)
-log = logging.getLogger('assembl')
+log = logging.getLogger()
 visit_analytics_region = create_analytics_region()
 
 
