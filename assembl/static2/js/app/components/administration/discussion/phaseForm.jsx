@@ -10,7 +10,12 @@ import { type moment } from 'moment';
 import { modulesTranslationKeys } from '../../../constants';
 import { getDiscussionSlug } from '../../../utils/globalFunctions';
 import { get } from '../../../utils/routeMap';
-import { updatePhaseIdentifier, updateStartDate, updateEndDate } from '../../../actions/adminActions/timeline';
+import {
+  updatePhaseIdentifier,
+  updateStartDate,
+  updateEndDate,
+  updateIsThematicsTable
+} from '../../../actions/adminActions/timeline';
 
 type PhaseFormProps = {
   phaseId: string,
@@ -142,7 +147,10 @@ const mapStateToProps = (state, { phaseId }) => {
 };
 
 const mapDispatchToProps = (dispatch, { phaseId }) => ({
-  handleIdentifierChange: eventKey => dispatch(updatePhaseIdentifier(phaseId, eventKey)),
+  handleIdentifierChange: (eventKey) => {
+    dispatch(updatePhaseIdentifier(phaseId, eventKey));
+    dispatch(updateIsThematicsTable(phaseId, eventKey === 'survey'));
+  },
   handleStartDateChange: date => dispatch(updateStartDate(phaseId, date)),
   handleEndDateChange: date => dispatch(updateEndDate(phaseId, date))
 });
