@@ -11,7 +11,7 @@ from pyramid.security import (
 from pyramid.i18n import TranslationStringFactory
 from pyramid.httpexceptions import (
     HTTPNotFound, HTTPUnauthorized, HTTPBadRequest, HTTPClientError,
-    HTTPOk, HTTPNoContent, HTTPForbidden, HTTPNotImplemented,
+    HTTPOk, HTTPNoContent, HTTPForbidden, HTTPNotImplemented, HTTPFound,
     HTTPPreconditionFailed, HTTPConflict, HTTPInternalServerError)
 from pyisemail import is_email
 
@@ -450,8 +450,15 @@ def assembl_register_user(request):
             continue
         email = EmailString.normalize_email_case(email)
         # Find agent account to avoid duplicates!
-        if session.query(AbstractAgentAccount).filter_by(
-                email_ci=email).count():
+        existing = session.query(AbstractAgentAccount).filter_by(
+                email_ci=email, verified=True).all()
+        if existing:
+            if existing.profile.password is None and discussion\
+                    and existing.provider != discussion.preferences['authorization_server_backend']:
+                # Ok so someone is trying to register, but the user is unusable.
+                return HTTPFound(location=request.route_path(
+                    'contextual_react_request_password_change',
+                    discussion_slug=discussion.slug))
             errors.add_error(localizer.translate(_(
                 "We already have a user with this email.")),
                 ErrorTypes.EXISTING_EMAIL,
