@@ -31,5 +31,6 @@ def upgrade(pyramid_env):
 
 
 def downgrade(pyramid_env):
+    from assembl.lib.sqla_types import CoerceUnicode
     with context.begin_transaction():
         op.alter_column('username', 'username', type_=CoerceUnicode(20))
