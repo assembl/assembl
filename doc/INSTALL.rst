@@ -281,11 +281,10 @@ Change the values for:
 
 If you use sentry to monitor:
 
-* ``pipeline``
-* ``raven_url``
-* ``dsn``
+* ``sentry_key``
+* ``sentry_id``
 
-Also set up the ``raven_url`` and raven client key where appropriate.
+Those will be used to create the ``sentry_dsn`` setting.
 
 Put your chosen database username and password in
 
