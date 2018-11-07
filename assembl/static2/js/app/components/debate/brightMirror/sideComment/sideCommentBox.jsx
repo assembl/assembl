@@ -260,11 +260,15 @@ class DumbSideCommentBox extends React.Component<Props, State> {
       contentLocale: contentLocale
     };
     updatePost({ variables: postVars }).then(() => {
-      this.setState({
-        editComment: false
-      });
-      displayAlert('success', I18n.t('debate.brightMirror.sideCommentEditSuccessMsg'));
-      refetchPost();
+      this.setState(
+        {
+          editComment: false
+        },
+        () => {
+          displayAlert('success', I18n.t('debate.brightMirror.sideCommentEditSuccessMsg'));
+          refetchPost();
+        }
+      );
     });
   };
 
