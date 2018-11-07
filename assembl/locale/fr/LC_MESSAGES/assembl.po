@@ -134,11 +134,11 @@ msgstr "Il est trop facile de deviner un simple mot."
 
 #: assembl/models/auth.py:646
 msgid "Names and surnames by themselves are easy to guess."
-msgstr "Les noms est prénoms seuls sont faciles à deviner."
+msgstr "Les noms et prénoms seuls sont faciles à deviner."
 
 #: assembl/models/auth.py:647
 msgid "Common names and surnames are easy to guess."
-msgstr "Les noms est prénoms courants sont faciles à deviner."
+msgstr "Les noms et prénoms courants sont faciles à deviner."
 
 #: assembl/models/auth.py:648
 msgid "Use a few words, avoid common phrases."
