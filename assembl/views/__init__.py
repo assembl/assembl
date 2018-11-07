@@ -360,7 +360,7 @@ def get_default_context(request, **kwargs):
         REACT_URL=react_url,
         elasticsearch_lang_indexes=config.get('elasticsearch_lang_indexes', 'en fr'),
         first_login_after_auto_subscribe_to_notifications=first_login_after_auto_subscribe_to_notifications,
-        raven_url=config.get('raven_url') or '',
+        sentry_dsn=config.get('sentry_dsn', ''),
         activate_tour=str(config.get('activate_tour') or False).lower(),
         providers=providers,
         providers_json=json.dumps(providers),

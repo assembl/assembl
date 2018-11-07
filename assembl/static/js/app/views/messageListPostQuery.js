@@ -414,7 +414,7 @@ var PostQuery = function() {
         collection.url = url;
         collection.collectionManager = new CollectionManager();
         return Promise.resolve(collection.fetch()).thenReturn(collection).catch(function(e) {
-          if (raven_url) {
+          if (sentry_dsn) {
             Raven.captureException(e);
           } else {
             throw e;
