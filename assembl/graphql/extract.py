@@ -56,16 +56,15 @@ class Extract(SecureObjectType, SQLAlchemyObjectType):
     creator = graphene.Field(lambda: AgentProfile, description=docs.ExtractInterface.creator)
     extract_state = graphene.Field(type=ExtractStates, description=docs.ExtractInterface.extract_state)
     lang = graphene.String(description=docs.ExtractInterface.lang)
-    comment = graphene.Field("assembl.graphql.post.ExtractComment", description=docs.ExtractInterface.comment)
+    comments = graphene.List("assembl.graphql.post.Post", description=docs.ExtractInterface.comments)
 
     def resolve_creator(self, args, context, info):
         if self.creator_id is not None:
             return models.AgentProfile.get(self.creator_id)
 
-    def resolve_comment(self, args, context, info):
+    def resolve_comments(self, args, context, info):
         return models.ExtractComment.query.filter(
-            models.ExtractComment.parent_extract_id == self.id
-        ).first()
+            models.ExtractComment.parent_extract_id == self.id).all()
 
 
 class UpdateExtract(graphene.Mutation):

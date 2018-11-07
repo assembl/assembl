@@ -7,21 +7,18 @@ import { compose, graphql } from 'react-apollo';
 import { Button } from 'react-bootstrap';
 import { Translate, I18n } from 'react-redux-i18n';
 import classnames from 'classnames';
-import moment from 'moment';
-import activeHtml from 'react-active-html';
 import { EditorState } from 'draft-js';
 
 import addPostExtractMutation from '../../../../graphql/mutations/addPostExtract.graphql';
 import createPostMutation from '../../../../graphql/mutations/createPost.graphql';
 import manageErrorAndLoading from '../../../../components/common/manageErrorAndLoading';
 import { getConnectedUserId, getConnectedUserName } from '../../../../utils/globalFunctions';
-import AvatarImage from '../../../common/avatarImage';
 import { displayAlert } from '../../../../utils/utilityManager';
-import { postBodyReplacementComponents } from '../../common/post/postBody';
-import RichTextEditor from '../../../common/richTextEditor';
-import { FICTION_COMMENT_MAX_LENGTH, COMMENT_BOX_OFFSET } from '../../../../constants';
+import { COMMENT_BOX_OFFSET } from '../../../../constants';
 import { convertContentStateToHTML, editorStateIsEmpty } from '../../../../utils/draftjs';
-import { transformLinksInHtml /* getUrls */ } from '../../../../utils/linkify';
+import ReplyToCommentButton from '../../common/replyToCommentButton';
+import InnerBoxSubmit from './innerBoxSubmit';
+import InnerBoxView from './innerBoxView';
 
 export type Props = {
   extracts: Array<FictionExtractFragment>,
@@ -31,21 +28,23 @@ export type Props = {
   contentLocale: string,
   lang?: string,
   selection?: ?Object,
-  setCommentBoxDisplay: Function,
-  cancelSubmit: Function,
+  setCommentBoxDisplay: () => void,
+  cancelSubmit: () => void,
   addPostExtract: Function,
   createPost: Function,
   refetchPost: Function,
-  toggleCommentsBox?: Function,
-  clearHighlights: Function,
+  toggleCommentsBox?: () => void,
+  clearHighlights: () => void,
   position: { x: number, y: number },
-  setPositionToExtract: Function
+  setPositionToExtract: FictionExtractFragment => void,
+  userCanReply: boolean
 };
 
 type State = {
   extractIndex: number,
   body: EditorState,
   submitting: boolean,
+  replying: boolean,
   selectionText: ?string,
   serializedAnnotatorRange: ?Object
 };
@@ -76,6 +75,7 @@ class DumbSideCommentBox extends React.Component<Props, State> {
       extractIndex: 0,
       body: EditorState.createEmpty(),
       submitting: submitting,
+      replying: false,
       selectionText: selection && selection.toString(),
       serializedAnnotatorRange: annotatorRange && annotatorRange.serialize(document, 'annotation')
     };
@@ -147,6 +147,16 @@ class DumbSideCommentBox extends React.Component<Props, State> {
     return extracts && extracts.length > 0 ? extracts[extractIndex] : null;
   };
 
+  getCurrentComment = (extract: FictionExtractFragment) => {
+    const topComments = extract && extract.comments && extract.comments.filter(post => post.parentId === null);
+    return (topComments && topComments[0]) || null;
+  };
+
+  getCurrentCommentReply = (extract: FictionExtractFragment, comment: ExtractComment) => {
+    const replies = extract && comment && extract.comments.filter(post => post.parentId === comment.id);
+    return (replies && replies[0]) || null;
+  };
+
   submit = (): void => {
     const { ideaId, postId, contentLocale, lang, addPostExtract, createPost, setCommentBoxDisplay, refetchPost } = this.props;
     const { body, selectionText, serializedAnnotatorRange } = this.state;
@@ -181,18 +191,55 @@ class DumbSideCommentBox extends React.Component<Props, State> {
           contentLocale: contentLocale
         };
         createPost({ variables: postVars }).then(() => {
-          this.setState({
-            submitting: false
-          });
-          setCommentBoxDisplay();
-          window.getSelection().removeAllRanges();
-          displayAlert('success', I18n.t('harvesting.harvestingValidated'));
-          refetchPost();
+          this.setState(
+            {
+              submitting: false
+            },
+            () => {
+              setCommentBoxDisplay();
+              window.getSelection().removeAllRanges();
+              displayAlert('success', I18n.t('debate.brightMirror.sideCommentSuccessMsg'));
+              refetchPost();
+            }
+          );
         });
       })
       .catch((error) => {
         displayAlert('danger', `${error}`);
       });
+  };
+
+  submitReply = (): void => {
+    const { ideaId, contentLocale, createPost, refetchPost } = this.props;
+    const { body, extractIndex } = this.state;
+    const currentExtract = this.getCurrentExtract(extractIndex);
+    const currentComment = this.getCurrentComment(currentExtract);
+
+    const bodyIsEmpty = editorStateIsEmpty(body);
+    if (bodyIsEmpty) {
+      displayAlert('warning', I18n.t('debate.thread.fillBody'));
+      return;
+    }
+
+    const postVars = {
+      ideaId: ideaId,
+      extractId: currentExtract.id,
+      parentId: currentComment.id,
+      body: convertContentStateToHTML(body.getCurrentContent()),
+      contentLocale: contentLocale
+    };
+    createPost({ variables: postVars }).then(() => {
+      this.setState(
+        {
+          replying: false
+        },
+        () => {
+          window.getSelection().removeAllRanges();
+          displayAlert('success', I18n.t('debate.brightMirror.sideCommentSuccessMsg'));
+          refetchPost();
+        }
+      );
+    });
   };
 
   hightlightExtract = (extract: FictionExtractFragment) => {
@@ -208,7 +255,7 @@ class DumbSideCommentBox extends React.Component<Props, State> {
     });
   };
 
-  renderFooter = () => {
+  renderSubmitFooter = () => {
     const { submitting } = this.state;
     const actionId = submitting ? ACTIONS.create : ACTIONS.confirm;
     if (!actionId) return null;
@@ -224,18 +271,34 @@ class DumbSideCommentBox extends React.Component<Props, State> {
     );
   };
 
+  toggleReplying = () => {
+    this.setState(state => ({ replying: !state.replying }));
+  };
+
+  renderActionFooter = () => {
+    const { userCanReply } = this.props;
+    const { extractIndex } = this.state;
+    const currentExtract = this.getCurrentExtract(extractIndex);
+    const currentComment = this.getCurrentComment(currentExtract);
+    const hasReply = !!this.getCurrentCommentReply(currentExtract, currentComment);
+
+    return (
+      <div className="action-box-footer">
+        {userCanReply && <ReplyToCommentButton onClickCallback={this.toggleReplying} disabled={hasReply} />}
+      </div>
+    );
+  };
+
   render() {
     const { contentLocale, extracts, cancelSubmit, position, toggleCommentsBox } = this.props;
-    const { submitting, extractIndex, body } = this.state;
+    const { submitting, extractIndex, body, replying } = this.state;
     const currentExtract = this.getCurrentExtract(extractIndex);
-    const currentComment = currentExtract && currentExtract.comment;
-    const commentUsername =
-      currentComment && currentComment.creator && !currentComment.creator.isDeleted
-        ? currentComment.creator.displayName
-        : I18n.t('deletedUser');
-    const userName = submitting ? getConnectedUserName() : commentUsername;
-    const userId = submitting ? getConnectedUserId() : currentComment && currentComment.creator && currentComment.creator.userId;
-    const renderRichtext = text => activeHtml(text && transformLinksInHtml(text), postBodyReplacementComponents());
+    const currentComment = this.getCurrentComment(currentExtract);
+    const currentReply = this.getCurrentCommentReply(currentExtract, currentComment);
+    const hasReply = !!currentReply;
+
+    if (!submitting && !currentComment) return null;
+
     return (
       <div
         className={classnames('side-comment-box')}
@@ -255,75 +318,29 @@ class DumbSideCommentBox extends React.Component<Props, State> {
             'active-box': !submitting
           })}
         >
-          <div className="harvesting-box-header">
-            {!submitting && (
-              <div className="extracts-nb-msg">
-                <Translate value="debate.brightMirror.commentersParticipation" count={extracts.length} />
-              </div>
-            )}
-            <div className="profile">
-              <AvatarImage userId={userId} userName={userName} />
-              <div className="harvesting-infos">
-                <div className="username">{userName}</div>
-                {!submitting &&
-                  currentComment &&
-                  currentComment.creationDate && (
-                    <div className="harvesting-date" title={currentComment.creationDate}>
-                      {moment(currentComment.creationDate)
-                        .locale(contentLocale)
-                        .fromNow()}
-                    </div>
-                  )}
-                {submitting && (
-                  <div className="harvesting-date">
-                    <Translate value="harvesting.now" />
-                  </div>
-                )}
-              </div>
+          {!submitting && (
+            <div className="extracts-nb-msg">
+              <Translate value="debate.brightMirror.commentersParticipation" count={extracts.length} />
             </div>
-          </div>
-          <div className="harvesting-box-body">
-            {!submitting &&
-              extracts && (
-                <div className="body-container">
-                  <div className="previous-extract">
-                    {extractIndex > 0 && (
-                      <div
-                        onClick={() => {
-                          this.changeCurrentExtract(-1);
-                        }}
-                      >
-                        <span className="assembl-icon-down-open grey" />
-                      </div>
-                    )}
-                  </div>
-                  <div className="extract-body">{currentComment && renderRichtext(currentComment.body)}</div>
-                  <div className="next-extract">
-                    {extracts &&
-                      extractIndex < extracts.length - 1 && (
-                        <div
-                          onClick={() => {
-                            this.changeCurrentExtract(1);
-                          }}
-                        >
-                          <span className="assembl-icon-down-open grey" />
-                        </div>
-                      )}
-                  </div>
-                </div>
-              )}
-            {submitting && (
-              <div className="submit-comment">
-                <RichTextEditor
-                  editorState={body}
-                  maxLength={FICTION_COMMENT_MAX_LENGTH}
-                  onChange={this.updateBody}
-                  placeholder={I18n.t('debate.brightMirror.commentLabel')}
-                  withAttachmentButton
-                />
-              </div>
-            )}
-          </div>
+          )}
+          {submitting ? (
+            <InnerBoxSubmit
+              userId={getConnectedUserId()}
+              userName={getConnectedUserName()}
+              body={body}
+              updateBody={this.updateBody}
+              submit={this.submit}
+              cancelSubmit={cancelSubmit}
+            />
+          ) : (
+            <InnerBoxView
+              contentLocale={contentLocale}
+              extractIndex={extractIndex}
+              extracts={extracts}
+              comment={currentComment}
+              changeCurrentExtract={this.changeCurrentExtract}
+            />
+          )}
           {!submitting &&
             extracts &&
             extracts.length > 1 && (
@@ -331,7 +348,19 @@ class DumbSideCommentBox extends React.Component<Props, State> {
                 {extractIndex + 1}/{extracts.length}
               </div>
             )}
-          {submitting && this.renderFooter()}
+          {!submitting && this.renderActionFooter()}
+          {replying && (
+            <InnerBoxSubmit
+              userId={getConnectedUserId()}
+              userName={getConnectedUserName()}
+              body={body}
+              updateBody={this.updateBody}
+              submit={this.submitReply}
+              cancelSubmit={this.toggleReplying}
+            />
+          )}
+          {!submitting &&
+            hasReply && <InnerBoxView contentLocale={contentLocale} extractIndex={extractIndex} comment={currentReply} />}
         </div>
       </div>
     );

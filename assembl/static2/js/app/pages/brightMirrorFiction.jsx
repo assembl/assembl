@@ -278,7 +278,8 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
       bodyMimeType: fiction.bodyMimeType,
       // $FlowFixMe dbId is never null
       dbId: fiction.dbId,
-      refetchPost: brightMirrorFictionData.refetch
+      refetchPost: brightMirrorFictionData.refetch,
+      userCanReply: userCanEdit
     };
 
     const fictionCommentFormProps: FictionCommentFormProps = {
@@ -309,7 +310,7 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
           <BackButton handleClick={backBtnCallback} linkClassName="back-btn" />
           <Grid fluid>
             <Row>
-              <Col xs={10}>
+              <Col xs={12} lg={10}>
                 <article>
                   <FictionHeader {...fictionHeaderProps} />
                   <FictionToolbar {...fictionToolbarProps} />

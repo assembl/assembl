@@ -345,7 +345,7 @@ def reset_password(request):
     if user_id:
         user = AgentProfile.get(int(user_id))
         if not user:
-            if not discussion.preferences['generic_auth_errors']:
+            if not discussion.preferences['generic_errors']:
                 raise JSONError(
                     localizer.translate(_("The user does not exist")),
                     code=HTTPNotFound.code)
@@ -362,7 +362,7 @@ def reset_password(request):
     elif identifier:
         user, account = from_identifier(identifier)
         if not user:
-            if not discussion.preferences['generic_auth_errors']:
+            if not discussion.preferences['generic_errors']:
                 raise JSONError(
                     localizer.translate(_("This email does not exist")),
                     code=HTTPNotFound.code)
@@ -379,14 +379,14 @@ def reset_password(request):
     if not email:
         email = user.get_preferred_email()
         if not email:
-            if not discussion.preferences['generic_auth_errors']:
+            if not discussion.preferences['generic_errors']:
                 error = localizer.translate(_("This user has no email"))
             else:
                 error = localizer.translate(_(generic_error_message))
                 logger.error("This user has no email.")
             raise JSONError(error, code=HTTPPreconditionFailed.code)
     if not isinstance(user, User):
-        if not discussion.preferences['generic_auth_errors']:
+        if not discussion.preferences['generic_errors']:
             error = localizer.translate(_("This is not a user"))
         else:
             error = localizer.translate(_(generic_error_message))
@@ -475,7 +475,7 @@ def assembl_register_user(request):
         # Find agent account to avoid duplicates!
         if session.query(AbstractAgentAccount).filter_by(
                 email_ci=email).count():
-            if not discussion.preferences['generic_auth_errors']:
+            if not discussion.preferences['generic_errors']:
                 errors.add_error(localizer.translate(_(
                     "We already have a user with this email.")),
                     ErrorTypes.EXISTING_EMAIL,
@@ -494,7 +494,7 @@ def assembl_register_user(request):
     if username:
         if session.query(Username).filter(
                 func.lower(Username.username) == username.lower()).count():
-            if not discussion.preferences['generic_auth_errors']:
+            if not discussion.preferences['generic_errors']:
                 errors.add_error(localizer.translate(_(
                     "We already have a user with this username.")),
                     ErrorTypes.EXISTING_USERNAME,

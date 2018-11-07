@@ -4,6 +4,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { withInfo } from '@storybook/addon-info';
 import { withKnobs } from '@storybook/addon-knobs';
+import { action } from '@storybook/addon-actions';
 import { getExtractTagId } from '../../../../../utils/extract';
 /* eslint-enable */
 
@@ -64,13 +65,16 @@ const extract0 = {
       xpathStart: `//div[@id='${getExtractTagId(3059)}']/`
     }
   ],
-  comment: {
-    id: '0',
-    creationDate: '2018-01-26T09:19:01.492406+00:00',
-    creator: commentor,
-    body: richBody,
-    attachments: []
-  }
+  comments: [
+    {
+      id: '0',
+      parentId: null,
+      creationDate: '2018-01-26T09:19:01.492406+00:00',
+      creator: commentor,
+      body: richBody,
+      attachments: []
+    }
+  ]
 };
 
 const extract1 = {
@@ -91,13 +95,16 @@ const extract1 = {
       xpathStart: `//div[@id='${getExtractTagId(3059)}']/`
     }
   ],
-  comment: {
-    id: '1',
-    creationDate: '2017-02-12T09:19:01.492406+00:00',
-    creator: currentUser,
-    body: 'Second comment!',
-    attachments: []
-  }
+  comments: [
+    {
+      id: '1',
+      parentId: null,
+      creationDate: '2017-02-12T09:19:01.492406+00:00',
+      creator: currentUser,
+      body: 'Second comment!',
+      attachments: []
+    }
+  ]
 };
 
 const extract2 = {
@@ -118,16 +125,58 @@ const extract2 = {
       xpathStart: `//div[@id='${getExtractTagId(3059)}']/`
     }
   ],
-  comment: {
-    id: '2',
-    creationDate: '2001-03-10T09:19:01.492406+00:00',
-    creator: commentor,
-    body: 'Third comment!',
-    attachments: []
-  }
+  comments: [
+    {
+      id: '2',
+      parentId: null,
+      creationDate: '2001-03-10T09:19:01.492406+00:00',
+      creator: commentor,
+      body: 'Third comment!',
+      attachments: []
+    }
+  ]
 };
 
-export const defaultSideCommentBox: SideCommentBoxProps = {
+const extractWithReply = {
+  body: 'This is the extract!',
+  creationDate: '2018-03-29T16:28:27.324276+00:00',
+  creator: currentUser,
+  extractNature: 'issue',
+  extractAction: 'classify',
+  extractState: ExtractStates.PUBLISHED,
+  id: '987643',
+  lang: 'en',
+  important: false,
+  textFragmentIdentifiers: [
+    {
+      offsetEnd: 988,
+      offsetStart: 973,
+      xpathEnd: '//div[@id=\'message-body-local:Content/3059\']/',
+      xpathStart: '//div[@id=\'message-body-local:Content/3059\']/'
+    }
+  ],
+  comments: [
+    {
+      id: '0',
+      parentId: null,
+      creationDate: '2018-01-26T09:19:01.492406+00:00',
+      creator: commentor,
+      body: richBody,
+      attachments: [],
+      reply: {}
+    },
+    {
+      id: '1',
+      parentId: '0',
+      creationDate: '2018-01-27T10:19:01.492406+00:00',
+      creator: currentUser,
+      body: 'This is a reply to a comment',
+      attachments: []
+    }
+  ]
+};
+
+export const defaultSideCommentBoxProps: SideCommentBoxProps = {
   ideaId: '0',
   extracts: [extract0],
   currentUser: currentUser,
@@ -137,30 +186,44 @@ export const defaultSideCommentBox: SideCommentBoxProps = {
   lang: 'en',
   selection: null,
   displayCommentBox: true,
-  setCommentBoxDisplay: Function,
-  cancelSubmit: Function,
-  addPostExtract: Function,
-  createPost: Function,
-  refetchPost: Function,
-  toggleExtractsBox: Function,
+  setCommentBoxDisplay: action('setCommentBoxDisplay'),
+  cancelSubmit: action('cancelSubmit'),
+  addPostExtract: action('addPostExtract'),
+  createPost: action('createPost'),
+  refetchPost: action('refetchPost'),
+  toggleExtractsBox: action('toggleExtractsBox'),
   position: { x: 0, y: 0 },
-  setPositionToExtract: Function,
-  clearHighlights: Function
+  setPositionToExtract: action('setPositionToExtract'),
+  clearHighlights: action('clearHighlights'),
+  userCanReply: false
 };
 
-export const multipleSideCommentBox: SideCommentBoxProps = {
-  ...defaultSideCommentBox,
+export const multipleSideCommentBoxProps: SideCommentBoxProps = {
+  ...defaultSideCommentBoxProps,
   extracts: [extract0, extract1, extract2],
   setPositionToExtract: () => {}
 };
 
-export const submittingSideCommentBox: SideCommentBoxProps = {
-  ...defaultSideCommentBox,
+export const submittingSideCommentBoxProps: SideCommentBoxProps = {
+  ...defaultSideCommentBoxProps,
   submitting: true
+};
+
+export const canReplySideCommentBoxProps: SideCommentBoxProps = {
+  ...defaultSideCommentBoxProps,
+  userCanReply: true
+};
+
+export const withReplySideCommentBoxProps: SideCommentBoxProps = {
+  ...defaultSideCommentBoxProps,
+  extracts: [extractWithReply],
+  setPositionToExtract: () => {}
 };
 
 storiesOf('SideCommentBox', module)
   .addDecorator(withKnobs)
-  .add('single comment', withInfo()(() => <DumbSideCommentBox {...defaultSideCommentBox} />))
-  .add('multiple comments', withInfo()(() => <DumbSideCommentBox {...multipleSideCommentBox} />))
-  .add('submitting', withInfo()(() => <DumbSideCommentBox {...submittingSideCommentBox} />));
+  .add('single comment', withInfo()(() => <DumbSideCommentBox {...defaultSideCommentBoxProps} />))
+  .add('multiple comments', withInfo()(() => <DumbSideCommentBox {...multipleSideCommentBoxProps} />))
+  .add('submitting', withInfo()(() => <DumbSideCommentBox {...submittingSideCommentBoxProps} />))
+  .add('can reply', withInfo()(() => <DumbSideCommentBox {...canReplySideCommentBoxProps} />))
+  .add('with reply', withInfo()(() => <DumbSideCommentBox {...withReplySideCommentBoxProps} />));

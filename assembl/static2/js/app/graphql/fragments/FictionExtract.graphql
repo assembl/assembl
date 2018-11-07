@@ -19,7 +19,7 @@ fragment FictionExtract on Extract {
   creator {
     ...AgentProfileInfo
   }
-  comment {
+  comments {
     ...ExtractComment
   }
 }

@@ -4,6 +4,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { withInfo } from '@storybook/addon-info';
 import { withKnobs, number } from '@storybook/addon-knobs';
+import { action } from '@storybook/addon-actions';
 /* eslint-enable */
 
 import SideCommentBadge, {
@@ -11,7 +12,7 @@ import SideCommentBadge, {
 } from '../../../../../components/debate/brightMirror/sideComment/sideCommentBadge';
 
 export const defaultSideCommentBadge: SideCommentBadgeProps = {
-  toggleExtractsBox: Function,
+  toggleExtractsBox: action('toggleExtractBox'),
   extractsNumber: 1,
   position: { x: 0, y: 0 },
   showBox: true

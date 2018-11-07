@@ -215,7 +215,7 @@ class ExtractInterface:
     creator_id = """The id of the User who created the extract."""
     creator = """The AgentProfile object description of the creator."""
     lang = """The lang of the extract."""
-    comment = """A comment post related to an extract."""
+    comments = """A list of comment post related to an extract."""
 
 
 class PostExtract:

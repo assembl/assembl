@@ -8,8 +8,8 @@ import { harvestingTooltip } from '../../../common/tooltips';
 
 export type Props = {
   anchorPosition: { x: number, y: number },
-  handleClickAnchor: Function,
-  handleMouseDown: Function
+  handleClickAnchor: () => void,
+  handleMouseDown: SyntheticMouseEvent => void
 };
 
 const SideCommentAnchor = ({ handleClickAnchor, handleMouseDown, anchorPosition }: Props) => (

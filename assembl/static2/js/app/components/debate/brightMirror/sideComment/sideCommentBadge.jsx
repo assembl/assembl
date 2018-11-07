@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import { COMMENT_BADGE_OFFSET } from '../../../../constants';
 
 export type Props = {
-  toggleExtractsBox: Function,
+  toggleExtractsBox: () => void,
   extractsNumber: number,
   position: ?{ x: number, y: number },
   showBox: boolean

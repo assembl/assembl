@@ -14,11 +14,12 @@ type Props = {
   commentAnchorPosition: { x: number, y: number },
   badgeDynamicPosition: { x: number, y: number },
   badgeFixedPosition: { x: number, y: number },
-  setCommentBoxDisplay: Function,
-  handleClickAnchor: Function,
-  cancelSubmit: Function,
+  setCommentBoxDisplay: () => void,
+  handleClickAnchor: () => void,
+  cancelSubmit: () => void,
   refetchPost: Function,
-  setCommentBadgeToExtractPosition: Function
+  setCommentBadgeToExtractPosition: FictionExtractFragment => void,
+  userCanReply: boolean
 };
 
 type State = {
@@ -76,7 +77,8 @@ class SideCommentMenu extends React.Component<Props, State> {
       extracts,
       badgeDynamicPosition,
       badgeFixedPosition,
-      setCommentBadgeToExtractPosition
+      setCommentBadgeToExtractPosition,
+      userCanReply
     } = this.props;
     const { commentBoxDisplayed } = this.state;
     const hasExtracts = extracts && extracts.length > 0;
@@ -118,6 +120,7 @@ class SideCommentMenu extends React.Component<Props, State> {
               position={badgePosition}
               clearHighlights={this.clearHighlights}
               setPositionToExtract={setCommentBadgeToExtractPosition}
+              userCanReply={userCanReply}
             />
           )}
           {showCommentAnchor && (

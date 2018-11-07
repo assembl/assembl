@@ -1,3 +1,9 @@
 .action-reply {
   cursor: pointer;
+
+  &.disabled {
+    color: $grey2;
+    pointer-events: none;
+    cursor: default;
+  }
 }

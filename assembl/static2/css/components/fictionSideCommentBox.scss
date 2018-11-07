@@ -1,0 +1,66 @@
+.side-comment-box {
+  position: absolute;
+  z-index: 200;
+
+  .theme-box {
+    border-left: none;
+
+    .extracts-nb-msg {
+      padding: 10px 20px;
+    }
+
+    .harvesting-box-header {
+      border: 0;
+    }
+
+    .harvesting-box-body {
+      padding: 10px 5px 10px;
+    }
+
+    .body-container {
+      .previous-extract,
+      .next-extract {
+        flex-basis: 10px;
+        padding: 0;
+        font-size: 8px;
+      }
+
+      .next-extract {
+        margin-top: 10px;
+      }
+
+      .extract-body {
+        min-width: 255px;
+        margin: 0 5px 10px;
+      }
+    }
+
+    .submit-comment {
+      padding: 0 15px;
+    }
+  }
+
+  .arrow-left {
+    position: absolute;
+    left: 12px;
+    top: 20px;
+    width: 0;
+    height: 0;
+    border-top: 6px solid transparent;
+    border-bottom: 6px solid transparent;
+    border-right: 6px solid $white;
+  }
+
+  .action-box-footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    background-color: $grey9;
+    padding: 0 20px;
+    height: 46px;
+
+    .action-reply {
+      font-size: 20px;
+    }
+  }
+}
