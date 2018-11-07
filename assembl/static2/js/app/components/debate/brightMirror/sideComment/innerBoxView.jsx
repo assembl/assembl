@@ -85,33 +85,33 @@ class InnerBoxView extends React.Component<Props, State> {
               </div>
             )}
           </div>
-          <div className="harvesting-box-body">
-            <div className="body-container">
-              <div className="previous-extract">
-                {extracts &&
-                  extractIndex > 0 && (
-                    <div
-                      onClick={() => {
-                        changeCurrentExtract(-1);
-                      }}
-                    >
-                      <span className="assembl-icon-down-open grey" />
-                    </div>
-                  )}
-              </div>
-              <div className="extract-body">{comment && this.renderRichtext(comment.body)}</div>
-              <div className="next-extract">
-                {extracts &&
-                  extractIndex < extracts.length - 1 && (
-                    <div
-                      onClick={() => {
-                        changeCurrentExtract(1);
-                      }}
-                    >
-                      <span className="assembl-icon-down-open grey" />
-                    </div>
-                  )}
-              </div>
+        </div>
+        <div className="harvesting-box-body">
+          <div className="body-container">
+            <div className="previous-extract">
+              {extracts &&
+                extractIndex > 0 && (
+                  <div
+                    onClick={() => {
+                      changeCurrentExtract(-1);
+                    }}
+                  >
+                    <span className="assembl-icon-down-open grey" />
+                  </div>
+                )}
+            </div>
+            <div className="extract-body">{comment && this.renderRichtext(comment.body)}</div>
+            <div className="next-extract">
+              {extracts &&
+                extractIndex < extracts.length - 1 && (
+                  <div
+                    onClick={() => {
+                      changeCurrentExtract(1);
+                    }}
+                  >
+                    <span className="assembl-icon-down-open grey" />
+                  </div>
+                )}
             </div>
           </div>
         </div>

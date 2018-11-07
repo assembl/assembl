@@ -42,86 +42,86 @@ exports[`Storyshots InnerBoxView multiple comments 1`] = `
             </div>
           </div>
         </div>
+      </div>
+      <div
+        className="harvesting-box-body"
+      >
         <div
-          className="harvesting-box-body"
+          className="body-container"
         >
           <div
-            className="body-container"
+            className="previous-extract"
           >
             <div
-              className="previous-extract"
+              onClick={[Function]}
             >
-              <div
-                onClick={[Function]}
-              >
-                <span
-                  className="assembl-icon-down-open grey"
-                />
-              </div>
+              <span
+                className="assembl-icon-down-open grey"
+              />
             </div>
+          </div>
+          <div
+            className="extract-body"
+          >
+            <p>
+              <strong>
+                Lorem ipsum dolor sit amet.
+              </strong>
+            </p>
             <div
-              className="extract-body"
+              className="atomic-block"
+              data-blocktype="atomic"
             >
-              <p>
-                <strong>
-                  Lorem ipsum dolor sit amet.
-                </strong>
-              </p>
-              <div
-                className="atomic-block"
-                data-blocktype="atomic"
+              <img
+                alt=""
+                className="attachment-image"
+                data-id="1"
+                data-mimetype="image/jpeg"
+                src="https://picsum.photos/400/200/"
+                title="loremPixel.jpg"
+              />
+            </div>
+            <p />
+            <p>
+              <a
+                className="linkified"
+                href="https://youtu.be/MzfBIcJaJSU"
+                target="_blank"
+                title={undefined}
               >
-                <img
-                  alt=""
-                  className="attachment-image"
-                  data-id="1"
-                  data-mimetype="image/jpeg"
-                  src="https://picsum.photos/400/200/"
-                  title="loremPixel.jpg"
-                />
-              </div>
-              <p />
-              <p>
-                <a
-                  className="linkified"
-                  href="https://youtu.be/MzfBIcJaJSU"
-                  target="_blank"
-                  title={undefined}
-                >
-                  https://youtu.be/MzfBIcJaJSU
-                </a>
-              </p>
-              <div>
+                https://youtu.be/MzfBIcJaJSU
+              </a>
+            </p>
+            <div>
+              <div
+                className="embed-theater "
+              >
                 <div
-                  className="embed-theater "
+                  className="embed-thumbnail-container"
+                  onClick={[Function]}
                 >
-                  <div
-                    className="embed-thumbnail-container"
-                    onClick={[Function]}
-                  >
-                    <img
-                      alt="youtube video"
-                      className="embed-thumbnail"
-                      src="https://img.youtube.com/vi/MzfBIcJaJSU/mqdefault.jpg"
-                    />
-                    <span
-                      className="play-button"
-                    />
-                  </div>
+                  <img
+                    alt="youtube video"
+                    className="embed-thumbnail"
+                    src="https://img.youtube.com/vi/MzfBIcJaJSU/mqdefault.jpg"
+                  />
+                  <span
+                    className="play-button"
+                  />
                 </div>
               </div>
-              <p />
             </div>
+            <p />
+          </div>
+          <div
+            className="next-extract"
+          >
             <div
-              className="next-extract"
+              onClick={[Function]}
             >
-              <div
-                onClick={[Function]}
-              >
-                <span
-                  className="assembl-icon-down-open grey"
-                />
-              </div>
+              <span
+                className="assembl-icon-down-open grey"
+              />
             </div>
           </div>
         </div>
@@ -1467,72 +1467,72 @@ exports[`Storyshots InnerBoxView single comment 1`] = `
             </button>
           </div>
         </div>
+      </div>
+      <div
+        className="harvesting-box-body"
+      >
         <div
-          className="harvesting-box-body"
+          className="body-container"
         >
           <div
-            className="body-container"
+            className="previous-extract"
+          />
+          <div
+            className="extract-body"
           >
+            <p>
+              <strong>
+                Lorem ipsum dolor sit amet.
+              </strong>
+            </p>
             <div
-              className="previous-extract"
-            />
-            <div
-              className="extract-body"
+              className="atomic-block"
+              data-blocktype="atomic"
             >
-              <p>
-                <strong>
-                  Lorem ipsum dolor sit amet.
-                </strong>
-              </p>
-              <div
-                className="atomic-block"
-                data-blocktype="atomic"
+              <img
+                alt=""
+                className="attachment-image"
+                data-id="1"
+                data-mimetype="image/jpeg"
+                src="https://picsum.photos/400/200/"
+                title="loremPixel.jpg"
+              />
+            </div>
+            <p />
+            <p>
+              <a
+                className="linkified"
+                href="https://youtu.be/MzfBIcJaJSU"
+                target="_blank"
+                title={undefined}
               >
-                <img
-                  alt=""
-                  className="attachment-image"
-                  data-id="1"
-                  data-mimetype="image/jpeg"
-                  src="https://picsum.photos/400/200/"
-                  title="loremPixel.jpg"
-                />
-              </div>
-              <p />
-              <p>
-                <a
-                  className="linkified"
-                  href="https://youtu.be/MzfBIcJaJSU"
-                  target="_blank"
-                  title={undefined}
-                >
-                  https://youtu.be/MzfBIcJaJSU
-                </a>
-              </p>
-              <div>
+                https://youtu.be/MzfBIcJaJSU
+              </a>
+            </p>
+            <div>
+              <div
+                className="embed-theater "
+              >
                 <div
-                  className="embed-theater "
+                  className="embed-thumbnail-container"
+                  onClick={[Function]}
                 >
-                  <div
-                    className="embed-thumbnail-container"
-                    onClick={[Function]}
-                  >
-                    <img
-                      alt="youtube video"
-                      className="embed-thumbnail"
-                      src="https://img.youtube.com/vi/MzfBIcJaJSU/mqdefault.jpg"
-                    />
-                    <span
-                      className="play-button"
-                    />
-                  </div>
+                  <img
+                    alt="youtube video"
+                    className="embed-thumbnail"
+                    src="https://img.youtube.com/vi/MzfBIcJaJSU/mqdefault.jpg"
+                  />
+                  <span
+                    className="play-button"
+                  />
                 </div>
               </div>
-              <p />
             </div>
-            <div
-              className="next-extract"
-            />
+            <p />
           </div>
+          <div
+            className="next-extract"
+          />
         </div>
       </div>
     </div>
