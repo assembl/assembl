@@ -7,7 +7,6 @@ tornado==4.3
 PyJWT==1.4.0
 pytz==2016.4
 pyzmq==15.2.0
-raven==6.9.0
 requests==2.10.0
 simplejson==3.8.2
 
