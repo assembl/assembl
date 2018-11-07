@@ -27,7 +27,7 @@ from assembl.lib.frontend_urls import FrontendUrls
 from assembl.lib.locale import (
     get_language, get_country, to_posix_string, strip_country)
 from assembl.lib.utils import get_global_base_url
-from assembl.lib.raven_client import capture_exception
+from assembl.lib.sentry import capture_exception
 from assembl.models.auth import (
     UserLanguagePreference,
     LanguagePreferenceOrder,
