@@ -7,6 +7,7 @@ import TopPostFormContainer from '../common/topPostFormContainer';
 import { getIsPhaseCompletedById } from '../../../utils/timeline';
 import FictionsList from './fictionsList';
 import InstructionsText from './instructionsText';
+import { PublicationStates } from '../../../constants';
 
 export type InstructionViewProps = {
   isUserConnected: boolean,
@@ -40,11 +41,17 @@ const InstructionView = ({
   // Check permission
   const canPost = isUserConnected && connectedUserCan(Permissions.ADD_POST) && !getIsPhaseCompletedById(timeline, phaseId);
 
+  // Filter out DELETED_BY_USER and DELETED_BY_ADMIN posts
+  const filteredPosts = posts.filter(
+    post =>
+      post.publicationState !== PublicationStates.DELETED_BY_ADMIN && post.publicationState !== PublicationStates.DELETED_BY_USER
+  );
+
   const topPostFormContainer = canPost ? (
     <TopPostFormContainer
       ideaId={ideaId}
       refetchIdea={refetchIdea}
-      topPostsCount={posts.length}
+      topPostsCount={filteredPosts.length}
       instructionLabelMsgId="debate.brightMirror.startFictionLabel"
       fillBodyLabelMsgId="debate.brightMirror.fillBodyLabel"
       bodyPlaceholderMsgId="debate.brightMirror.fillBodyLabel"
@@ -61,8 +68,8 @@ const InstructionView = ({
       <InstructionsText title={announcementContent.title} body={announcementContent.body} />
       <div className="overflow-x">
         {topPostFormContainer}
-        {posts.length > 0 ? (
-          <FictionsList posts={posts} identifier={identifier} themeId={ideaId} refetchIdea={refetchIdea} lang={lang} />
+        {filteredPosts.length > 0 ? (
+          <FictionsList posts={filteredPosts} identifier={identifier} themeId={ideaId} refetchIdea={refetchIdea} lang={lang} />
         ) : null}
       </div>
     </div>

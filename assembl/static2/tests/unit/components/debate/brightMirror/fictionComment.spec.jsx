@@ -11,11 +11,13 @@ import CommentQuery from '../../../../../js/app/graphql/BrightMirrorFictionQuery
 import FictionComment, {
   FictionComment as ShallowFictionComment
 } from '../../../../../js/app/components/debate/brightMirror/fictionComment';
+import DeletedFictionComment from '../../../../../js/app/components/debate/brightMirror/deletedFictionComment';
 import CircleAvatar from '../../../../../js/app/components/debate/brightMirror/circleAvatar';
 import ToggleCommentButton from '../../../../../js/app/components/debate/common/toggleCommentButton';
 import ReplyToCommentButton from '../../../../../js/app/components/debate/common/replyToCommentButton';
 import FictionCommentForm from '../../../../../js/app/components/debate/brightMirror/fictionCommentForm';
 import EditPostButton from '../../../../../js/app/components/debate/common/editPostButton';
+import DeletePostButton from '../../../../../js/app/components/debate/common/deletePostButton';
 // Type imports
 import type { FictionCommentGraphQLProps } from '../../../../../js/app/components/debate/brightMirror/fictionComment';
 
@@ -73,6 +75,10 @@ describe('<FictionComment /> - with shallow', () => {
     wrapper.setState({ showFictionCommentForm: true });
     expect(wrapper.find(ReplyToCommentButton)).toHaveLength(0);
     expect(wrapper.find(FictionCommentForm)).toHaveLength(1);
+  });
+
+  it('should not display a DeletedFictionComment component', () => {
+    expect(wrapper.find(DeletedFictionComment)).toHaveLength(0);
   });
 });
 
@@ -232,10 +238,14 @@ describe('<FictionComment /> - with mount', () => {
     it('should display a "Edit this message" button', () => {
       expect(wrapper.find(EditPostButton)).toHaveLength(1);
     });
+
+    it('should display a "Delete this message" button', () => {
+      expect(wrapper.find(DeletePostButton)).toHaveLength(1);
+    });
   });
 
   describe('when getConnectedUserId does not match permission and authorUserId', () => {
-    // getConnectedUserId mocked value is 1234567890
+    // getConnectedUserId mocked value is 1234567890 (as admin)
     beforeEach(() => {
       fictionComment = {
         ...defaultFictionComment,
@@ -265,6 +275,10 @@ describe('<FictionComment /> - with mount', () => {
 
     it('should not display a "Edit this message" button', () => {
       expect(wrapper.find(EditPostButton)).toHaveLength(0);
+    });
+
+    it('should not display a "Delete this message" button', () => {
+      expect(wrapper.find(DeletePostButton)).toHaveLength(1);
     });
   });
 
@@ -298,6 +312,70 @@ describe('<FictionComment /> - with mount', () => {
 
     it('should display the comment as edited', () => {
       expect(wrapper.contains(I18n.t('debate.thread.postEdited'))).toBe(true);
+    });
+  });
+
+  describe('when publicationState is DELETED_BY_USER', () => {
+    beforeEach(() => {
+      fictionComment = {
+        ...defaultFictionComment,
+        ...defaultFictionCommentGraphQL,
+        publicationState: 'DELETED_BY_USER',
+        // Below are the required input params for CommentQuery
+        id: 'aaa',
+        contentLocale: 'fr'
+      };
+
+      // Mock Apollo
+      mocks = [
+        {
+          request: { query: CommentQuery },
+          result: {
+            data: fictionComment
+          }
+        }
+      ];
+      wrapper = mount(
+        <MockedProvider mocks={mocks}>
+          <FictionComment {...fictionComment} />
+        </MockedProvider>
+      );
+    });
+
+    it('should display a DeletedFictionComment component', () => {
+      expect(wrapper.find(DeletedFictionComment)).toHaveLength(1);
+    });
+  });
+
+  describe('when publicationState is DELETED_BY_ADMIN', () => {
+    beforeEach(() => {
+      fictionComment = {
+        ...defaultFictionComment,
+        ...defaultFictionCommentGraphQL,
+        publicationState: 'DELETED_BY_ADMIN',
+        // Below are the required input params for CommentQuery
+        id: 'aaa',
+        contentLocale: 'fr'
+      };
+
+      // Mock Apollo
+      mocks = [
+        {
+          request: { query: CommentQuery },
+          result: {
+            data: fictionComment
+          }
+        }
+      ];
+      wrapper = mount(
+        <MockedProvider mocks={mocks}>
+          <FictionComment {...fictionComment} />
+        </MockedProvider>
+      );
+    });
+
+    it('should display a DeletedFictionComment component', () => {
+      expect(wrapper.find(DeletedFictionComment)).toHaveLength(1);
     });
   });
 });

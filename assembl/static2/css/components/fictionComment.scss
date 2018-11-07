@@ -82,10 +82,15 @@
       }
 
       .assembl-icon-back-arrow,
-      .assembl-icon-edit {
+      .assembl-icon-edit,
+      .assembl-icon-delete {
         color: $black;
         font-size: $font-size-s;
         padding-left: 15px;
+      }
+
+      .assembl-icon-delete {
+        padding-left: 8px;
       }
 
       .assembl-icon-back-arrow:before {
@@ -94,7 +99,8 @@
 
       .action-toggle,
       .action-reply,
-      .action-edit {
+      .action-edit,
+      .action-delete {
         opacity: 0.7;
         transition: opacity 0.2s linear;
 

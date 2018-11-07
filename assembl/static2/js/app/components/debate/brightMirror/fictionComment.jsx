@@ -19,15 +19,18 @@ import ToggleCommentButton from '../common/toggleCommentButton';
 import ReplyToCommentButton from '../common/replyToCommentButton';
 import FictionCommentForm from './fictionCommentForm';
 import EditPostButton from '../common/editPostButton';
+import DeletePostButton from '../common/deletePostButton';
 import ResponsiveOverlayTrigger from '../../common/responsiveOverlayTrigger';
+import DeletedFictionComment from './deletedFictionComment';
 // Constant imports
-import { EMPTY_STRING, USER_ID_NOT_FOUND } from '../../../constants';
-import { editFictionCommentTooltip } from '../../common/tooltips';
+import { EMPTY_STRING, USER_ID_NOT_FOUND, DeletedPublicationStates, PublicationStates } from '../../../constants';
+import { editFictionCommentTooltip, deleteFictionCommentTooltip } from '../../common/tooltips';
 // Types imports
 import type { CircleAvatarProps } from './circleAvatar';
 import type { FictionCommentFormProps } from './fictionCommentForm';
 import type { ToggleCommentButtonProps } from '../common/toggleCommentButton';
 import type { ReplyToCommentButtonProps } from '../common/replyToCommentButton';
+import type { DeletedFictionCommentProps } from './deletedFictionComment';
 
 export type FictionCommentExtraProps = {
   /** Submit comment callback used in order to catch a submit event from tree.jsx */
@@ -58,8 +61,8 @@ export type FictionCommentGraphQLProps = {
   circleAvatar: CircleAvatarProps,
   /** Comment content */
   commentContent: string,
-  /** Comment parent id */
-  commentParentId: string,
+  /** Comment id, when submitting a new comment commentId is sent in order to set the comment parent id */
+  commentId: string,
   /** Content Locale */
   contentLocale: string,
   /** Comment displayed published date */
@@ -68,6 +71,8 @@ export type FictionCommentGraphQLProps = {
   modified: boolean,
   /** Parent post author fullname */
   parentPostAuthorFullname: string,
+  /** Comment publication state */
+  publicationState: string,
   /** Comment published date */
   publishedDate: string,
   /** Update comment mutation from GraphQL */
@@ -174,19 +179,39 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
       circleAvatar,
       children,
       commentContent,
-      commentParentId,
+      commentId,
+      contentLocale,
       displayedPublishedDate,
       numChildren,
       modified,
       parentPostAuthorFullname,
+      publicationState,
       publishedDate,
       fictionCommentExtraProps
     } = this.props;
     const { isEditing, showFictionCommentForm, updatedCommentContent, updatedModified } = this.state;
     const { expandedFromTree, expandCollapseCallbackFromTree } = fictionCommentExtraProps;
 
+    // Translation key
+    const postEditedMsgKey = 'debate.thread.postEdited';
+    const deleteCommentBodyMessageMsgKey = 'debate.brightMirror.commentFiction.deleteCommentBodyMessage';
+    const numberOfResponsesMsgKey = 'debate.brightMirror.numberOfResponses';
+
+    // Display DeletedFictionComment component when comment is marked as DELETED_BY_USER or DELETED_BY_ADMIN
+    if (publicationState in DeletedPublicationStates) {
+      // isDeletedByAuthor is true if DELETED_BY_USER, is false if DELETED_BY_ADMIN
+      const isDeletedByAuthor = publicationState === PublicationStates.DELETED_BY_USER;
+      const deletedFictionCommentProps: DeletedFictionCommentProps = {
+        expandCollapseCallbackFromTree: expandCollapseCallbackFromTree,
+        expandedFromTree: expandedFromTree,
+        isDeletedByAuthor: isDeletedByAuthor,
+        numChildren: numChildren
+      };
+      return <DeletedFictionComment {...deletedFictionCommentProps} />;
+    }
+
     const toggleCommentButtonProps: ToggleCommentButtonProps = {
-      isExpanded: expandedFromTree != null ? expandedFromTree : false,
+      isExpanded: !!expandedFromTree,
       onClickCallback: expandCollapseCallbackFromTree != null ? expandCollapseCallbackFromTree : () => null
     };
 
@@ -198,14 +223,14 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
       onCancelCommentCallback: () => this.displayFictionCommentForm(false),
       onSubmitCommentCallback: (comment: string) => {
         this.displayFictionCommentForm(false);
-        fictionCommentExtraProps.submitCommentCallback(comment, commentParentId);
+        fictionCommentExtraProps.submitCommentCallback(comment, commentId);
       },
       updateTreeHeightCallback: () => this.updateTreeHeightCallbackHandler()
     };
 
     const editCommentFormProps: FictionCommentFormProps = {
       onCancelCommentCallback: () => this.toggleIsEditing(false),
-      onSubmitCommentCallback: (comment: string) => this.updateCommentHandler(comment, commentParentId),
+      onSubmitCommentCallback: (comment: string) => this.updateCommentHandler(comment, commentId),
       updateTreeHeightCallback: () => this.updateTreeHeightCallbackHandler(),
       commentValue: updatedCommentContent || commentContent,
       editMode: true
@@ -216,7 +241,7 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
 
     // Define user permission
     const connectedUserId = getConnectedUserId();
-    const userCanEdit = connectedUserId === String(authorUserId) && connectedUserCan(Permissions.EDIT_MY_POST);
+    const isUserTheConnectedUser = connectedUserId === String(authorUserId);
 
     // Display FictionCommentForm when ReplyToCommentButton is clicked.
     // ReplyToCommentButton is hidden when FictionCommentForm is displayed
@@ -225,6 +250,7 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
     const displayFictionCommentForm = showFictionCommentForm ? <FictionCommentForm {...fictionCommentFormProps} /> : null;
 
     // Display EditPostButton only when the user have the required rights
+    const userCanEdit = isUserTheConnectedUser && connectedUserCan(Permissions.EDIT_MY_POST);
     const displayEditPostButton =
       userCanEdit && !isEditing ? (
         <ResponsiveOverlayTrigger placement="left" tooltip={editFictionCommentTooltip}>
@@ -235,9 +261,29 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
     const displayIsEdited =
       updatedModified || modified ? (
         <span className="isEdited">
-          <Translate value="debate.thread.postEdited" />
+          <Translate value={postEditedMsgKey} />
         </span>
       ) : null;
+
+    // Display DeletePostButton only when the user have the required rights
+    const userCanDelete =
+      (isUserTheConnectedUser && connectedUserCan(Permissions.DELETE_MY_POST)) || connectedUserCan(Permissions.DELETE_POST);
+    const refetchQueries = [
+      {
+        query: CommentQuery,
+        variables: { id: commentId, contentLocale: contentLocale }
+      }
+    ];
+    const displayDeletePostButton = userCanDelete ? (
+      <ResponsiveOverlayTrigger placement="left" tooltip={deleteFictionCommentTooltip}>
+        <DeletePostButton
+          linkClassName="action-delete"
+          modalBodyMessage={deleteCommentBodyMessageMsgKey}
+          postId={commentId}
+          refetchQueries={refetchQueries}
+        />
+      </ResponsiveOverlayTrigger>
+    ) : null;
 
     const displayHeader = (
       <header className="meta">
@@ -267,12 +313,15 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
       <footer className="toolbar">
         <div className="left-content">
           <p>
-            <Translate value="debate.brightMirror.numberOfResponses" count={numChildren} />
+            <Translate value={numberOfResponsesMsgKey} count={numChildren} />
           </p>
           {displayToggleCommentButton}
           {displayReplyToCommentButton}
         </div>
-        <div className="right-content">{displayEditPostButton}</div>
+        <div className="right-content">
+          {displayEditPostButton}
+          {displayDeletePostButton}
+        </div>
       </footer>
     );
 
@@ -314,13 +363,14 @@ const mapQueryToProps = ({ data }) => {
       authorFullname: creator ? creator.displayName : noAuthorSpecified,
       circleAvatar: circleAvatarProps,
       commentContent: fiction.body,
-      commentParentId: id,
+      commentId: id,
       contentLocale: contentLocale,
       displayedPublishedDate: moment(fiction.creationDate)
         .locale(contentLocale)
         .fromNow(),
       modified: fiction.modified,
       parentPostAuthorFullname: parentPostCreator ? parentPostCreator.displayName : noAuthorSpecified,
+      publicationState: fiction.publicationState,
       publishedDate: fiction.creationDate
     };
   }

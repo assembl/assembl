@@ -303,4 +303,10 @@ export const editFictionCommentTooltip = (
   </Tooltip>
 );
 
+export const deleteFictionCommentTooltip = (
+  <Tooltip id="deleteFictionCommentTooltip">
+    <Translate value="debate.brightMirror.commentFiction.deleteComment" />
+  </Tooltip>
+);
+
 export const fileNameTooltip = (fileName?: string) => <Tooltip id="fileNameTooltip">{fileName}</Tooltip>;

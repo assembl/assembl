@@ -420,6 +420,8 @@ const Translations = {
         startFictionLabel: "Je partage ma fiction",
         commentFiction: {
           cancel: "Annuler",
+          deleteComment: "Supprimer ce message",
+          deleteCommentBodyMessage: "Êtes-vous sûr de vouloir supprimer ce message ?",
           editComment: "Modifier ce message",
           imageAlt: "Illustration prenez la parole",
           label: "Commentaires",
@@ -1324,6 +1326,8 @@ const Translations = {
         startFictionLabel: "Share a fiction",
         commentFiction: {
           cancel: "Cancel",
+          deleteComment: "Delete this message",
+          deleteCommentBodyMessage: "Are you sure you want to delete this message?",
           editComment: "Edit this message",
           imageAlt: "Let's talk illustration",
           label: "Comments",
