@@ -25,7 +25,7 @@ test_frontend:
     - yarn
   script:
     # This will fail if any test fails or if the coverage has lowered
-    - yarn jest --runInBand --coverage
+    - yarn jest --coverage --runInBand
     - yarn run eslint
     - yarn run stylelint
     - yarn run flow --quiet
