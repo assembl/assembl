@@ -142,8 +142,9 @@ class Profile extends React.PureComponent<ProfileProps, ProfileState> {
   };
 
   render() {
-    const { creationDate, hasPassword, lang, id, name } = this.props;
+    const { creationDate, hasPassword, isSocialAccount, lang, id, name } = this.props;
     const profileFields = this.props.profileFields;
+    const canShowPasswordChange = hasPassword || (!hasPassword && isSocialAccount);
 
     return (
       <div className="profile background-dark-grey">
@@ -179,14 +180,18 @@ class Profile extends React.PureComponent<ProfileProps, ProfileState> {
                       <Translate value="profile.save" />
                     </Button>
                   </div>
-                  {hasPassword && (
+                  {canShowPasswordChange && (
                     <div>
                       <h2 className="dark-title-2 margin-l">
                         <Translate value="profile.password" />
                       </h2>
                       <div className="profile-form center">
                         {this.state.passwordEditionOpen ? (
-                          <ModifyPasswordForm id={id} successCallback={() => this.setState({ passwordEditionOpen: false })} />
+                          <ModifyPasswordForm
+                            id={id}
+                            isSocialAccount={isSocialAccount}
+                            successCallback={() => this.setState({ passwordEditionOpen: false })}
+                          />
                         ) : (
                           <Button
                             id="modify-password-button"
@@ -258,7 +263,7 @@ export default compose(
         };
       }
 
-      const { creationDate, email, hasPassword, name, username } = data.user;
+      const { creationDate, email, hasPassword, isSocialAccount, name, username } = data.user;
       return {
         userQueryMetadata: {
           error: data.error,
@@ -267,6 +272,7 @@ export default compose(
         creationDate: creationDate,
         email: email,
         hasPassword: hasPassword,
+        isSocialAccount: isSocialAccount,
         name: name,
         username: username
       };

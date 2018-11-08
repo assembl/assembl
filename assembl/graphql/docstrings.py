@@ -703,6 +703,7 @@ class AgentProfile:
     image = Default.document % ("Image appearing on the avatar of the User. ")
     creation_date = Default.creation_date
     has_password = "A boolean flag describing if the User has a password."
+    is_social_account = "A boolean flag that will share whether the account is a social account or not"
     is_deleted = """A boolean flag that shows if the User is deleted.
     If True, the User information is cleansed from the system, and the User can no longer log in."""
     is_machine = """A boolean flag describing if the User is a machine user or human user."""

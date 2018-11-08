@@ -8,6 +8,7 @@ query User($id: ID!) {
       email
       creationDate
       hasPassword
+      isSocialAccount
       isDeleted
     }
   }
