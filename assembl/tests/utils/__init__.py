@@ -2,7 +2,6 @@
 All utility methods, classes and functions needed for testing applications
 """
 
-import logging
 import sys
 from itertools import chain
 
@@ -16,10 +15,11 @@ from contextlib import contextmanager
 from assembl.lib.sqla import (
     configure_engine, get_session_maker,
     get_metadata, is_zopish, mark_changed)
+from assembl.lib import logging
 from assembl.auth import R_PARTICIPANT
 
 
-log = logging.getLogger('pytest.assembl')
+log = logging.getLogger()
 
 
 class PyramidWebTestRequest(TestRequest):

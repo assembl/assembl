@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import logging
 import dateutil.parser
 from random import randint
 from operator import attrgetter
@@ -14,6 +13,7 @@ from sqlalchemy.orm import subqueryload
 
 import assembl.graphql.docstrings as docs
 from assembl import models
+from assembl.lib import logging
 
 from assembl.graphql.discussion import (Discussion, UpdateDiscussion, DiscussionPreferences,
                                         LegalContents,
@@ -69,7 +69,7 @@ from assembl.utils import get_ideas, get_posts_for_phases
 convert_sqlalchemy_type.register(EmailString)(convert_column_to_string)
 models.Base.query = models.Base.default_db.query_property()
 
-log = logging.getLogger('assembl')
+log = logging.getLogger()
 
 
 # For security, always use only_fields in the Meta class to be sure we don't

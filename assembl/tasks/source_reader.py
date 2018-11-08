@@ -9,9 +9,9 @@ from threading import Thread, Event, currentThread
 from traceback import print_stack
 from datetime import datetime, timedelta
 from abc import ABCMeta, abstractmethod
-import logging
 from logging.config import fileConfig
 
+from assembl.lib import logging
 from pyramid.paster import get_appsettings
 from zope.component import getGlobalSiteManager
 from kombu import BrokerConnection, Exchange, Queue
@@ -26,7 +26,7 @@ from assembl.lib.config import set_config
 from assembl.lib.enum import OrderedEnum
 from assembl.lib.sqla import configure_engine
 
-log = logging.getLogger('assembl')
+log = logging.getLogger()
 pool_counter = 0
 
 

@@ -41,7 +41,6 @@ and elasticsearch will be out of sync. We can always reindex completely the
 elasticsearch index to sync it again with the postgres database.
 """
 
-import logging
 import threading
 
 from transaction.interfaces import ISavepointDataManager, IDataManagerSavepoint
@@ -49,7 +48,7 @@ from zope.interface import implementer
 import transaction
 from elasticsearch.helpers import bulk
 
-from assembl.lib import config
+from assembl.lib import config, logging
 from .settings import get_index_settings
 from .utils import (
     connect,
@@ -59,7 +58,7 @@ from .utils import (
     get_doc_type_from_uid,
     )
 
-logger = logging.getLogger('assembl.indexing')
+logger = logging.getLogger()
 
 
 @implementer(IDataManagerSavepoint)

@@ -1,7 +1,6 @@
 """Posts are a kind of :py:class:`assembl.models.generic.Content` that has an author, and reply to some other content."""
 from datetime import datetime
 import uuid
-import logging
 from abc import ABCMeta, abstractmethod
 import simplejson as json
 
@@ -29,13 +28,13 @@ from ..lib.decl_enums import DeclEnum
 from ..lib.sqla_types import CoerceUnicode
 from .generic import Content, ContentSource
 from .auth import AgentProfile
-from ..lib import config
+from ..lib import config, logging
 from .langstrings import LangString, LangStringEntry
 from assembl.views.traversal import AbstractCollectionDefinition
 import assembl.graphql.docstrings as docs
 from assembl.models.idea import MessageView
 
-log = logging.getLogger('assembl')
+log = logging.getLogger()
 
 
 class PostVisitor(object):

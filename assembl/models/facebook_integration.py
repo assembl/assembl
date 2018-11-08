@@ -3,7 +3,6 @@ from abc import abstractmethod
 from collections import defaultdict
 from datetime import datetime, timedelta
 from urlparse import urlparse, parse_qs
-import logging
 
 import facebook
 from sqlalchemy import (
@@ -26,6 +25,7 @@ from .social_auth import SocialAuthAccount
 
 from ..auth import (CrudPermissions, P_EXPORT_EXTERNAL_SOURCE, P_SYSADMIN)
 from ..lib.config import get_config
+from assembl.lib import logging
 from ..lib.sqla import Base
 from ..lib.sqla_types import URLString
 from ..lib.parsedatetime import parse_datetime
@@ -36,7 +36,7 @@ from .post import ImportedPost
 from .attachment import Document, PostAttachment
 
 
-log = logging.getLogger('assembl')
+log = logging.getLogger()
 
 API_VERSION_USED = 2.2
 DEFAULT_TIMEOUT = 30  # seconds

@@ -4,7 +4,6 @@ Pyramid allows to use model objects as Context objects, but in our cases they're
 """
 
 from traceback import print_exc
-import logging
 
 from sqlalchemy import select
 from sqlalchemy.orm import aliased

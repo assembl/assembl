@@ -3,7 +3,6 @@
 .. _PythonSocialAuth: http://psa.matiasaguirre.net/
 """
 import re
-import logging
 
 from pyramid.events import subscriber, BeforeRender
 from pyramid.security import remember, forget
@@ -16,11 +15,11 @@ from social_core.utils import to_setting_name, setting_name, SETTING_PREFIX
 
 from assembl.models import User, Preferences, IdentityProvider
 from .util import discussion_from_request, maybe_auto_subscribe
-from ..lib import config
+from ..lib import config, logging
 from .generic_auth_backend import load_backends, GenericAuth
 
 
-log = logging.getLogger('assembl')
+log = logging.getLogger()
 
 
 def login_user(backend, user, user_social_auth):

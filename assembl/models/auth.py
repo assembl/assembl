@@ -7,7 +7,6 @@ import hashlib
 import simplejson as json
 from collections import defaultdict
 from enum import IntEnum
-import logging
 from abc import abstractmethod
 
 from sqlalchemy.ext.hybrid import hybrid_property
@@ -35,7 +34,7 @@ from sqlalchemy.orm import (
 from sqlalchemy.orm.attributes import NO_VALUE
 from sqlalchemy.sql.functions import count
 
-from ..lib import config
+from ..lib import config, logging
 from ..lib.locale import to_posix_string
 from ..lib.model_watcher import get_model_watcher
 from ..lib.sqla import CrudOperation, PrivateObjectMixin
@@ -60,7 +59,7 @@ from ..auth import (
 from .langstrings import Locale
 from assembl.models.cookie_types import CookieTypes, AcceptedCookies, RejectedCookies
 
-log = logging.getLogger('assembl')
+log = logging.getLogger()
 
 
 # None-tolerant min, max

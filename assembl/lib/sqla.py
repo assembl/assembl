@@ -10,7 +10,6 @@ import types
 from collections import Iterable, defaultdict
 import atexit
 from abc import abstractmethod
-import logging
 from time import sleep
 from random import random
 from threading import Thread
@@ -46,9 +45,10 @@ from .decl_enums import EnumSymbol, DeclEnumType
 from .utils import get_global_base_url
 from ..lib.config import get_config
 from ..indexing.reindex import reindex_content
+from . import logging
 
 atexit_engines = []
-log = logging.getLogger('assembl')
+log = logging.getLogger()
 
 
 class CrudOperation(Enum):

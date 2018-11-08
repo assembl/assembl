@@ -4,7 +4,6 @@
     :parts: 1
 """
 from datetime import datetime
-import logging
 from abc import abstractmethod
 import re
 
@@ -24,6 +23,7 @@ from sqlalchemy.sql.functions import count
 import assembl.graphql.docstrings as docs
 from ..lib.sqla import (CrudOperation, Base)
 from ..lib.model_watcher import get_model_watcher
+from ..lib import logging
 from . import DiscussionBoundBase
 from .langstrings import (LangString, LangStringEntry)
 from ..auth import (
@@ -34,7 +34,7 @@ from .discussion import Discussion
 from ..lib.history_mixin import TombstonableMixin
 from ..lib.clean_input import sanitize_text, sanitize_html
 
-log = logging.getLogger('assembl')
+log = logging.getLogger()
 
 
 class ContentSource(DiscussionBoundBase):
