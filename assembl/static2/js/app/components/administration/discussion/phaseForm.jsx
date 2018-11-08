@@ -146,7 +146,7 @@ const mapStateToProps = (state, { phaseId }) => {
     end: phase ? phase.get('end') : null,
     hasConflictingDates: phase ? phase.get('hasConflictingDates') : null,
     locale: state.i18n.locale,
-    isNew: phase.get('_isNew')
+    isNew: phase && phase.get('_isNew')
   };
 };
 
