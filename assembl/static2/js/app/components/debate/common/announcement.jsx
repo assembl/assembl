@@ -23,8 +23,17 @@ type SentimentsCounts = {
   }
 };
 
+type Post = {
+  node: {
+    sentimentCounts: {
+      [string]: number
+    },
+    publicationState: string
+  }
+};
+
 type Posts = {
-  edges: Array<{ node: { sentimentCounts: { [string]: number }, publicationState: string } }>
+  edges: Array<Post>
 };
 
 type AnnouncementContent = {
@@ -35,7 +44,7 @@ type AnnouncementContent = {
 
 type Props = {
   isMultiColumns: boolean,
-  anouncementcontent: AnnouncementContent,
+  anouncementContent: AnnouncementContent,
   idea: Idea
 };
 
