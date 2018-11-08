@@ -3,7 +3,8 @@
   text-align: right;
 
   .edit,
-  .delete {
+  .delete,
+  .share {
     color: $black;
     font-size: $fiction-toolbar-icon-size;
     padding-left: 10px;
@@ -19,7 +20,8 @@
 @media screen and (min-width: $screen-xl-min) {
   .action-buttons {
     .edit,
-    .delete {
+    .delete,
+    .share {
       cursor: pointer;
       display: inline-block;
       transition: all 0.2s ease-in-out;

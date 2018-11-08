@@ -8,33 +8,41 @@ import { displayCustomModal, closeModal } from '../../../utils/utilityManager';
 import EditPostButton from '../common/editPostButton';
 import EditPostForm from '../common/editPostForm';
 import DeletePostButton from '../common/deletePostButton';
+import SharePostButton from '../common/sharePostButton';
 import { PublicationStates } from '../../../constants';
+// Type imports
+import type { Props as EditPostButtonProps } from '../common/editPostButton';
+import type { Props as DeletePostButtonProps } from '../common/deletePostButton';
+import type { Props as SharePostButtonProps } from '../common/sharePostButton';
 
 export type FictionToolbarProps = {
   fictionId: string,
-  title: string,
-  originalBody: string,
+  /** Fiction meta information: slug, phase, themeId, fictionId */
+  fictionMetaInfo: BrightMirrorFictionProps,
   lang: string,
-  /** Publication State */
-  publicationState: string,
-  userCanEdit: boolean,
+  /** Delete fiction callback, should only be set when current user is either the author of the fiction or an admin */
+  onDeleteCallback?: () => void,
   /** Edit fiction callback, should only be set when current user is the author of the fiction */
   onModifyCallback?: () => void,
+  originalBody: string,
+  /** Publication State */
+  publicationState: string,
+  title: string,
   userCanDelete: boolean,
-  /** Delete fiction callback, should only be set when current user is either the author of the fiction or an admin */
-  onDeleteCallback?: () => void
+  userCanEdit: boolean
 };
 
 const FictionToolbar = ({
   fictionId,
-  title,
-  originalBody,
+  fictionMetaInfo,
   lang,
-  userCanEdit,
-  publicationState,
+  onDeleteCallback,
   onModifyCallback,
+  originalBody,
+  publicationState,
+  title,
   userCanDelete,
-  onDeleteCallback
+  userCanEdit
 }: FictionToolbarProps) => {
   const openPostModal = () => {
     const content = (
@@ -62,17 +70,30 @@ const FictionToolbar = ({
     return displayCustomModal(content, true, 'fiction-edit-modal');
   };
 
+  const editPostButtonProps: EditPostButtonProps = {
+    handleClick: openPostModal,
+    linkClassName: 'edit'
+  };
+
+  const deletePostButtonProps: DeletePostButtonProps = {
+    postId: fictionId,
+    linkClassName: 'delete',
+    modalBodyMessage: 'debate.brightMirror.deleteFictionModalBody',
+    onDeleteCallback: onDeleteCallback
+  };
+
+  const sharePostButtonProps: SharePostButtonProps = {
+    linkClassName: 'share',
+    metaInfo: { ...fictionMetaInfo },
+    modalTitleMsgKey: 'debate.brightMirror.shareFiction',
+    type: 'brightMirrorFiction'
+  };
+
   return (
     <div className="action-buttons">
-      {userCanEdit ? <EditPostButton handleClick={openPostModal} linkClassName="edit" /> : null}
-      {userCanDelete ? (
-        <DeletePostButton
-          postId={fictionId}
-          linkClassName="delete"
-          modalBodyMessage="debate.brightMirror.deleteFictionModalBody"
-          onDeleteCallback={onDeleteCallback}
-        />
-      ) : null}
+      {userCanEdit ? <EditPostButton {...editPostButtonProps} /> : null}
+      {userCanDelete ? <DeletePostButton {...deletePostButtonProps} /> : null}
+      <SharePostButton {...sharePostButtonProps} />
     </div>
   );
 };
