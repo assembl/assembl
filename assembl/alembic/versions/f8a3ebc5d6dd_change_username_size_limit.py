@@ -14,20 +14,12 @@ from alembic import context, op
 import sqlalchemy as sa
 import transaction
 
-
 from assembl.lib import config
-
 
 def upgrade(pyramid_env):
     from assembl.lib.sqla_types import CoerceUnicode
     with context.begin_transaction():
         op.alter_column('username', 'username', type_=CoerceUnicode(40))
-
-    # Do stuff with the app's models here.
-    from assembl import models as m
-    db = m.get_session_maker()()
-    with transaction.manager:
-        pass
 
 
 def downgrade(pyramid_env):
