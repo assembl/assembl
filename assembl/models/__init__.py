@@ -122,7 +122,8 @@ from .auth import (  # noqa: E402, F401
     UserLanguagePreference,
     UserRole,
     UserTemplate,
-    Username
+    Username,
+    OldPassword
 )
 from .configurable_fields import (  # noqa: E402, F401
     AbstractConfigurableField,
