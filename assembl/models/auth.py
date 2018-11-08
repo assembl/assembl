@@ -1408,7 +1408,7 @@ class Username(Base):
     user_id = Column(Integer,
                      ForeignKey('user.id', ondelete='CASCADE', onupdate='CASCADE'),
                      nullable=False, unique=True, index=True)
-    username = Column(CoerceUnicode(20), primary_key=True)
+    username = Column(CoerceUnicode(40), primary_key=True)
     user = relationship(User, backref=backref('username', uselist=False, lazy="joined"))
     __table_args__ = (
         Index("ix_public_username_username_ci", func.lower(username), unique=True),)
