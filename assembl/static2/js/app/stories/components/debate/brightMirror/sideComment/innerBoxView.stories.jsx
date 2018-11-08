@@ -52,10 +52,18 @@ const comment = {
   attachments: []
 };
 
+const comment2 = {
+  id: '0',
+  creationDate: '2018-01-26T09:19:01.492406+00:00',
+  creator: currentUser,
+  body: richBody,
+  attachments: []
+};
+
 export const extract0 = {
   body: 'This is the extract!',
   creationDate: '2018-03-29T16:28:27.324276+00:00',
-  creator: currentUser,
+  creator: commentor,
   extractNature: 'issue',
   extractAction: 'classify',
   extractState: ExtractStates.PUBLISHED,
@@ -91,13 +99,13 @@ export const extract1 = {
       xpathStart: `//div[@id='${getExtractTagId(3059)}']/`
     }
   ],
-  comments: [comment]
+  comments: [comment2]
 };
 
 export const extract2 = {
   body: 'This is the extract!',
   creationDate: '2018-03-29T16:28:27.324276+00:00',
-  creator: currentUser,
+  creator: commentor,
   extractNature: 'issue',
   extractAction: 'classify',
   extractState: ExtractStates.PUBLISHED,
@@ -120,12 +128,14 @@ export const defaultInnerBoxViewProps: Props = {
   extractIndex: 0,
   extracts: [extract0],
   comment: comment,
-  changeCurrentExtract: action('changeCurrentExtract')
+  changeCurrentExtract: action('changeCurrentExtract'),
+  setEditMode: action('setEditMode')
 };
 
 export const multipleInnerBoxViewProps: Props = {
   ...defaultInnerBoxViewProps,
   extractIndex: 1,
+  comment: comment2,
   extracts: [extract0, extract1, extract2]
 };
 
