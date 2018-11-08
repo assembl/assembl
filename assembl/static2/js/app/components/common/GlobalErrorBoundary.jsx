@@ -2,7 +2,6 @@
 import * as React from 'react';
 import { Translate } from 'react-redux-i18n';
 
-// eslint-disable-next-line import/no-extraneous-dependencies
 import * as Sentry from '@sentry/browser';
 
 type Props = {
