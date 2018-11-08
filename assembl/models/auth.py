@@ -936,12 +936,13 @@ class User(AgentProfile):
         from ..auth.password import hash_password
         if password:
             # keep the current password to avoid the user to reuse it later
-            self.old_passwords.append(
-                OldPassword(password=self.password))
-            # keep only the last 5 passwords (4 in self.old_passwords
-            # and the current password)
-            for p in self.old_passwords[0:-4]:
-                self.old_passwords.remove(p)
+            if self.password:
+                self.old_passwords.append(
+                    OldPassword(password=self.password))
+                # keep only the last 5 passwords (4 in self.old_passwords
+                # and the current password)
+                for p in self.old_passwords[0:-4]:
+                    self.old_passwords.remove(p)
 
             # set the new password
             self.password = hash_password(password)

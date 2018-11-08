@@ -37,7 +37,9 @@ def abort_transaction_on_exception(fn):
         try:
             return fn(*args, **kwargs)
         except Exception:
+            import traceback
             import transaction
+            traceback.print_exc()
             transaction.abort()
             raise
 

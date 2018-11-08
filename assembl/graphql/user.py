@@ -165,8 +165,9 @@ class UpdateUser(graphene.Mutation):
             new_password = args.get('new_password')
             new_password2 = args.get('new_password2')
             # only modify the password if it was given in parameter
-            if old_password is not None and new_password is not None and new_password2 is not None:
-                if not user.check_password(old_password):
+            if (old_password is not None or user.password is None) and new_password is not None and new_password2 is not None:
+                # If the User is a social user, they won't initially have a password (so it can be none)
+                if user.password and not user.check_password(old_password):
                     raise Exception(u"002: The entered password doesn't match your current password.")
 
                 if new_password != new_password2:
