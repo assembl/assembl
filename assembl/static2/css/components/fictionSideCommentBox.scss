@@ -19,7 +19,7 @@
 
         .action-menu-btn {
           border: none;
-          padding: 0 0 0 2px;
+          padding-left: 2px;
           background: none;
 
           &:hover,
@@ -97,7 +97,7 @@
 .tools-menu {
   margin-top: -30px !important;
   margin-left: 25px;
-  border: 1px solid #e7e6f5;
+  border: 1px solid $grey1;
   border-radius: 0;
 
   .popover-content {

@@ -80,7 +80,7 @@ class DumbSideCommentBox extends React.Component<Props, State> {
       selectionText: selection && selection.toString(),
       serializedAnnotatorRange: annotatorRange && annotatorRange.serialize(document, 'annotation'),
       editComment: false,
-      editingPostId: null
+      editingPostId: ''
     };
 
     // actions props
@@ -252,6 +252,7 @@ class DumbSideCommentBox extends React.Component<Props, State> {
     const bodyIsEmpty = editorStateIsEmpty(body);
     if (bodyIsEmpty) {
       displayAlert('warning', I18n.t('debate.thread.fillBody'));
+      return;
     }
 
     const postVars = {
@@ -327,20 +328,14 @@ class DumbSideCommentBox extends React.Component<Props, State> {
     );
   };
 
-  render() {
-    const { contentLocale, extracts, cancelSubmit, position, toggleCommentsBox } = this.props;
-    const { submitting, extractIndex, body, replying, editComment } = this.state;
+  getCommentView = () => {
+    const { contentLocale, extracts, cancelSubmit } = this.props;
+    const { submitting, extractIndex, body, editComment } = this.state;
     const currentExtract = this.getCurrentExtract(extractIndex);
     const currentComment = this.getCurrentComment(currentExtract);
-    const currentReply = this.getCurrentCommentReply(currentExtract, currentComment);
-    const hasReply = !!currentReply;
-
-    if (!submitting && !currentComment) return null;
-
-    let commentView;
 
     if (submitting) {
-      commentView = (
+      return (
         <InnerBoxSubmit
           userId={getConnectedUserId()}
           userName={getConnectedUserName()}
@@ -351,7 +346,7 @@ class DumbSideCommentBox extends React.Component<Props, State> {
         />
       );
     } else if (editComment) {
-      commentView = (
+      return (
         <InnerBoxSubmit
           userId={getConnectedUserId()}
           userName={getConnectedUserName()}
@@ -361,18 +356,31 @@ class DumbSideCommentBox extends React.Component<Props, State> {
           cancelSubmit={this.cancelEditMode}
         />
       );
-    } else {
-      commentView = (
-        <InnerBoxView
-          contentLocale={contentLocale}
-          extractIndex={extractIndex}
-          extracts={extracts}
-          comment={currentComment}
-          changeCurrentExtract={this.changeCurrentExtract}
-          setEditMode={this.setCommentEditMode}
-        />
-      );
     }
+    return (
+      <InnerBoxView
+        contentLocale={contentLocale}
+        extractIndex={extractIndex}
+        extracts={extracts}
+        comment={currentComment}
+        changeCurrentExtract={this.changeCurrentExtract}
+        setEditMode={this.setCommentEditMode}
+      />
+    );
+  };
+
+  render() {
+    const { contentLocale, extracts, cancelSubmit, position, toggleCommentsBox } = this.props;
+    const { submitting, extractIndex, body, replying, editComment } = this.state;
+    const currentExtract = this.getCurrentExtract(extractIndex);
+    const currentComment = this.getCurrentComment(currentExtract);
+    const currentReply = this.getCurrentCommentReply(currentExtract, currentComment);
+    const hasReply = !!currentReply;
+
+    if (!submitting && !currentComment) return null;
+
+    const commentView = this.getCommentView();
+
     return (
       <div
         className={classnames('side-comment-box')}

@@ -26,22 +26,21 @@ export type State = {
   menuTarget: HTMLElement | null
 };
 
+const renderRichtext = (text: string) => activeHtml(text && transformLinksInHtml(text), postBodyReplacementComponents());
+
 class InnerBoxView extends React.Component<Props, State> {
   state = {
     menuTarget: null
   };
 
-  renderRichtext = (text: string) => activeHtml(text && transformLinksInHtml(text), postBodyReplacementComponents());
-
   render() {
     const { contentLocale, extractIndex, extracts, comment, changeCurrentExtract, setEditMode } = this.props;
     const { menuTarget } = this.state;
-    const displayName =
-      comment && comment.creator && !comment.creator.isDeleted ? comment.creator.displayName : I18n.t('deletedUser');
+    const { creator } = comment;
+    const displayName = creator && !creator.isDeleted ? creator.displayName : I18n.t('deletedUser');
     const canEdit =
-      comment &&
-      comment.creator &&
-      String(comment.creator.userId) === getConnectedUserId() &&
+      creator &&
+      String(creator.userId) === getConnectedUserId() &&
       connectedUserCan(Permissions.EDIT_MY_POST) &&
       // Prevent editing reply for now (will be added in another ticket)
       setEditMode;
@@ -74,7 +73,7 @@ class InnerBoxView extends React.Component<Props, State> {
                     <Popover id="tools" className="tools-menu overflow-menu">
                       <div>
                         <OverlayTrigger placement="top" overlay={editFictionCommentTooltip}>
-                          <Button onClick={() => setEditMode(comment.id, comment.body)} class="edit-btn">
+                          <Button onClick={() => setEditMode(comment.id, comment.body)} className="edit-btn">
                             <span className="assembl-icon-edit grey" />
                           </Button>
                         </OverlayTrigger>
@@ -100,7 +99,7 @@ class InnerBoxView extends React.Component<Props, State> {
                   </div>
                 )}
             </div>
-            <div className="extract-body">{comment && this.renderRichtext(comment.body)}</div>
+            <div className="extract-body">{renderRichtext(comment.body)}</div>
             <div className="next-extract">
               {extracts &&
                 extractIndex < extracts.length - 1 && (
