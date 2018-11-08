@@ -418,6 +418,7 @@ const Translations = {
         postSuccessMsg: "Merci pour votre participation. Votre fiction a bien été publiée !",
         sideCommentSuccessMsg: "Votre commentaire a été publié avec succès !",
         saveDraft: "Sauvegarder",
+        shareFiction: "Partager cette fiction",
         startFictionLabel: "Je partage ma fiction",
         commentFiction: {
           cancel: "Annuler",
@@ -1325,6 +1326,7 @@ const Translations = {
         postSuccessMsg: "Thanks for your participation. Your fiction has been published successfully!",
         sideCommentSuccessMsg: "Your comment has been published successfully!",
         saveDraft: "Save",
+        shareFiction: "Share a short story",
         startFictionLabel: "Share a fiction",
         commentFiction: {
           cancel: "Cancel",

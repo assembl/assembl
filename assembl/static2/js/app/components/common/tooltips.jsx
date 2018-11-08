@@ -297,6 +297,12 @@ export const deleteFictionTooltip = (
   </Tooltip>
 );
 
+export const shareFictionTooltip = (
+  <Tooltip id="shareFictionTooltip">
+    <Translate value="debate.brightMirror.shareFiction" />
+  </Tooltip>
+);
+
 export const editFictionCommentTooltip = (
   <Tooltip id="editFictionCommentTooltip">
     <Translate value="debate.brightMirror.commentFiction.editComment" />
