@@ -1,6 +1,232 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Announcement component <Announcement/> on a thread should render an announcement with a thread idea 1`] = `
+exports[`Announcement component <Announcement /> on a multiColumns should render an announcement with the content associated to a multiColumns idea 1`] = `
+<div
+  className="announcement"
+>
+  <div
+    className="announcement-title"
+  >
+    <div
+      className="title-hyphen"
+    >
+       
+    </div>
+    <h3
+      className="announcement-title-text dark-title-1"
+    >
+      <span
+        className={undefined}
+        style={undefined}
+      >
+        Announcement
+      </span>
+    </h3>
+  </div>
+  <div
+    className="announcement-media col-md-push-4 col-md-8 col-xs-12"
+  >
+    <section
+      className="media-section background-light"
+    >
+      <div
+        className="max-container"
+      >
+        <div
+          className="container-fluid"
+        >
+          <div
+            className="col-md-4 col-sm-12"
+          >
+            <div
+              className="media-description"
+            >
+              <div
+                className="media-description-icon"
+              >
+                <span
+                  className="assembl-icon-pepite color2"
+                >
+                   
+                </span>
+              </div>
+              <div
+                className="description-txt"
+                dangerouslySetInnerHTML={
+                  Object {
+                    "__html": undefined,
+                  }
+                }
+              />
+              <div
+                className="box-hyphen left"
+              >
+                 
+              </div>
+            </div>
+          </div>
+          <div
+            className="col-md-8 col-sm-12"
+          >
+            <div
+              className="media-right"
+            >
+              <div
+                className="media-description-layer media-description-top"
+                dangerouslySetInnerHTML={
+                  Object {
+                    "__html": "<p>Bonjour à tous</p>",
+                  }
+                }
+              />
+              <div
+                className="media-description"
+              >
+                <div
+                  className="media-description-icon"
+                >
+                  <span
+                    className="assembl-icon-pepite color2"
+                  >
+                     
+                  </span>
+                </div>
+                <div
+                  className="description-txt"
+                  dangerouslySetInnerHTML={
+                    Object {
+                      "__html": undefined,
+                    }
+                  }
+                />
+                <div
+                  className="box-hyphen left"
+                >
+                   
+                </div>
+              </div>
+              <div
+                className="media-description-layer media-description-bottom"
+                dangerouslySetInnerHTML={
+                  Object {
+                    "__html": null,
+                  }
+                }
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <div
+    className="col-md-pull-8 col-md-4 col-xs-12"
+  >
+    <div
+      className="announcement-statistics"
+    >
+      <div
+        className="announcement-doughnut"
+      >
+        <div
+          className="statistics-doughnut"
+        >
+          <div
+            className="statistics"
+          >
+            <div
+              className="doughnut-container superpose"
+            >
+              <svg
+                className="doughnut"
+                viewBox="0 0 140 140"
+              >
+                <path
+                  className="circle"
+                  d="M 70 120 A 50 50 0 0 0 70 20"
+                  fill="transparent"
+                  stroke="green"
+                />
+                <path
+                  className="circle"
+                  d="M 69.99999999999999 20 A 50 50 0 0 0 70 120"
+                  fill="transparent"
+                  stroke="red"
+                />
+              </svg>
+            </div>
+            <div
+              className="doughnut-label superpose"
+            >
+              <div
+                className="doughnut-label-count"
+              >
+                2
+              </div>
+              
+              <div
+                className="doughnut-label-text"
+              >
+                <span
+                  className={undefined}
+                  style={undefined}
+                >
+                  Reactions
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        className="announcement-numbers-multicol"
+      >
+        <div
+          style={
+            Object {
+              "color": "green",
+            }
+          }
+        >
+          1
+           
+          <span
+            className="col-announcement-count"
+          >
+            Positive
+          </span>
+        </div>
+        <div
+          style={
+            Object {
+              "color": "red",
+            }
+          }
+        >
+          1
+           
+          <span
+            className="col-announcement-count"
+          >
+            Negative
+          </span>
+        </div>
+        <div
+          className="color"
+        >
+          2
+           
+          <span
+            className="assembl-icon-profil"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Announcement component <Announcement/> on a thread should render an announcement with the content associated to a thread idea 1`] = `
 <div
   className="announcement"
 >
