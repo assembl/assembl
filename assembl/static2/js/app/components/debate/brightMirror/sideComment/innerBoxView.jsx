@@ -5,21 +5,23 @@ import moment from 'moment';
 import activeHtml from 'react-active-html';
 import { I18n } from 'react-redux-i18n';
 import { Button, OverlayTrigger, Popover, Overlay } from 'react-bootstrap';
+import classnames from 'classnames';
 
 import AvatarImage from '../../../common/avatarImage';
 import { transformLinksInHtml /* getUrls */ } from '../../../../utils/linkify';
 import { postBodyReplacementComponents } from '../../common/post/postBody';
 import { getConnectedUserId } from '../../../../utils/globalFunctions';
-import { editFictionCommentTooltip } from '../../../common/tooltips';
+import { editSideCommentTooltip, deleteSideCommentTooltip } from '../../../common/tooltips';
 import Permissions, { connectedUserCan } from '../../../../utils/permissions';
 
 export type Props = {
   contentLocale: string,
-  extractIndex: number,
+  extractIndex: ?number,
   extracts: ?Array<FictionExtractFragment>,
   comment: ExtractComment,
   changeCurrentExtract: (?number) => void,
-  setEditMode: ?(number, string) => void
+  setEditMode: ?(number, string) => void,
+  deletePost: ?(ExtractComment, number) => void
 };
 
 export type State = {
@@ -34,7 +36,7 @@ class InnerBoxView extends React.Component<Props, State> {
   };
 
   render() {
-    const { contentLocale, extractIndex, extracts, comment, changeCurrentExtract, setEditMode } = this.props;
+    const { contentLocale, extractIndex, extracts, comment, changeCurrentExtract, setEditMode, deletePost } = this.props;
     const { menuTarget } = this.state;
     const { creator } = comment;
     const displayName = creator && !creator.isDeleted ? creator.displayName : I18n.t('deletedUser');
@@ -44,6 +46,12 @@ class InnerBoxView extends React.Component<Props, State> {
       connectedUserCan(Permissions.EDIT_MY_POST) &&
       // Prevent editing reply for now (will be added in another ticket)
       setEditMode;
+    const canDelete =
+      (comment &&
+        comment.creator &&
+        String(comment.creator.userId) === getConnectedUserId() &&
+        connectedUserCan(Permissions.DELETE_MY_POST)) ||
+      connectedUserCan(Permissions.DELETE_POST);
 
     return (
       <Fragment>
@@ -58,32 +66,44 @@ class InnerBoxView extends React.Component<Props, State> {
                   .fromNow()}
               </div>
             </div>
-            {canEdit && (
-              <div className="button-bar">
-                <Button
-                  className="action-menu-btn"
-                  onClick={(e) => {
-                    this.setState({ menuTarget: !menuTarget ? e.target : null });
-                  }}
-                >
-                  <span className="assembl-icon-ellipsis-vert grey" />
-                </Button>
-                {menuTarget && (
-                  <Overlay show target={menuTarget} placement="bottom">
-                    <Popover id="tools" className="tools-menu overflow-menu">
-                      <div>
-                        <OverlayTrigger placement="top" overlay={editFictionCommentTooltip}>
+          </div>
+          {(canEdit || canDelete) && (
+            <div className="button-bar">
+              <Button
+                className="action-menu-btn"
+                onClick={(e) => {
+                  this.setState({ menuTarget: !menuTarget ? e.target : null });
+                }}
+              >
+                <span className="assembl-icon-ellipsis-vert grey" />
+              </Button>
+              {menuTarget && (
+                <Overlay show target={menuTarget} placement="bottom">
+                  <Popover id="tools" className={classnames('tools-menu overflow-menu', { multiple: canEdit && canDelete })}>
+                    <div>
+                      {canEdit ? (
+                        <OverlayTrigger placement="top" overlay={editSideCommentTooltip}>
                           <Button onClick={() => setEditMode(comment.id, comment.body)} className="edit-btn">
                             <span className="assembl-icon-edit grey" />
                           </Button>
                         </OverlayTrigger>
-                      </div>
-                    </Popover>
-                  </Overlay>
-                )}
-              </div>
-            )}
-          </div>
+                      ) : null}
+                      {canDelete ? (
+                        <OverlayTrigger placement="top" overlay={deleteSideCommentTooltip}>
+                          <Button
+                            onClick={() => deletePost(comment, extracts && extracts[extractIndex].id)}
+                            className="delete-btn"
+                          >
+                            <span className="assembl-icon-delete grey" />
+                          </Button>
+                        </OverlayTrigger>
+                      ) : null}
+                    </div>
+                  </Popover>
+                </Overlay>
+              )}
+            </div>
+          )}
         </div>
         <div className="harvesting-box-body">
           <div className="body-container">

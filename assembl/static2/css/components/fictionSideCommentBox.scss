@@ -100,8 +100,16 @@
   border: 1px solid $grey1;
   border-radius: 0;
 
+  &.multiple {
+    margin-left: 40px;
+  }
+
   .popover-content {
     padding: 2px 10px;
+
+    .delete-btn {
+      margin-left: 10px;
+    }
   }
 
   .arrow {

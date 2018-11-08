@@ -315,4 +315,16 @@ export const deleteFictionCommentTooltip = (
   </Tooltip>
 );
 
+export const editSideCommentTooltip = (
+  <Tooltip id="editFictionCommentTooltip">
+    <Translate value="debate.brightMirror.sideComment.editTooltip" />
+  </Tooltip>
+);
+
+export const deleteSideCommentTooltip = (
+  <Tooltip id="editFictionCommentTooltip">
+    <Translate value="debate.brightMirror.sideComment.deleteTooltip" />
+  </Tooltip>
+);
+
 export const fileNameTooltip = (fileName?: string) => <Tooltip id="fileNameTooltip">{fileName}</Tooltip>;

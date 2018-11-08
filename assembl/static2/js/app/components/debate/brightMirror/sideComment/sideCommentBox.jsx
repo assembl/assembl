@@ -12,10 +12,12 @@ import { EditorState } from 'draft-js';
 import addPostExtractMutation from '../../../../graphql/mutations/addPostExtract.graphql';
 import createPostMutation from '../../../../graphql/mutations/createPost.graphql';
 import updatePostMutation from '../../../../graphql/mutations/updatePost.graphql';
+import deletePostMutation from '../../../../graphql/mutations/deletePost.graphql';
+import deleteExtractMutation from '../../../../graphql/mutations/deleteExtract.graphql';
 import manageErrorAndLoading from '../../../../components/common/manageErrorAndLoading';
 import { getConnectedUserId, getConnectedUserName } from '../../../../utils/globalFunctions';
-import { displayAlert } from '../../../../utils/utilityManager';
-import { COMMENT_BOX_OFFSET } from '../../../../constants';
+import { displayAlert, displayModal, closeModal } from '../../../../utils/utilityManager';
+import { COMMENT_BOX_OFFSET, PublicationStates } from '../../../../constants';
 import { convertContentStateToHTML, editorStateIsEmpty, convertToEditorState } from '../../../../utils/draftjs';
 import ReplyToCommentButton from '../../common/replyToCommentButton';
 import InnerBoxSubmit from './innerBoxSubmit';
@@ -156,7 +158,10 @@ class DumbSideCommentBox extends React.Component<Props, State> {
   };
 
   getCurrentCommentReply = (extract: FictionExtractFragment, comment: ExtractComment) => {
-    const replies = extract && comment && extract.comments.filter(post => post.parentId === comment.id);
+    const replies =
+      extract &&
+      comment &&
+      extract.comments.filter(post => post.parentId === comment.id && post.publicationState === PublicationStates.PUBLISHED);
     return (replies && replies[0]) || null;
   };
 
@@ -196,12 +201,13 @@ class DumbSideCommentBox extends React.Component<Props, State> {
         createPost({ variables: postVars }).then(() => {
           this.setState(
             {
-              submitting: false
+              submitting: false,
+              body: EditorState.createEmpty()
             },
             () => {
               setCommentBoxDisplay();
               window.getSelection().removeAllRanges();
-              displayAlert('success', I18n.t('debate.brightMirror.sideCommentSuccessMsg'));
+              displayAlert('success', I18n.t('debate.brightMirror.sideComment.submitSuccessMsg'));
               refetchPost();
             }
           );
@@ -234,11 +240,12 @@ class DumbSideCommentBox extends React.Component<Props, State> {
     createPost({ variables: postVars }).then(() => {
       this.setState(
         {
-          replying: false
+          replying: false,
+          body: EditorState.createEmpty()
         },
         () => {
           window.getSelection().removeAllRanges();
-          displayAlert('success', I18n.t('debate.brightMirror.sideCommentSuccessMsg'));
+          displayAlert('success', I18n.t('debate.brightMirror.sideComment.submitSuccessMsg'));
           refetchPost();
         }
       );
@@ -263,14 +270,57 @@ class DumbSideCommentBox extends React.Component<Props, State> {
     updatePost({ variables: postVars }).then(() => {
       this.setState(
         {
-          editComment: false
+          editComment: false,
+          body: EditorState.createEmpty()
         },
         () => {
-          displayAlert('success', I18n.t('debate.brightMirror.sideCommentEditSuccessMsg'));
+          displayAlert('success', I18n.t('debate.brightMirror.sideComment.submitSuccessMsg'));
           refetchPost();
         }
       );
     });
+  };
+
+  deletePost = (comment: ExtractComment, extractId: number) => {
+    const { refetchPost, deletePost, deleteExtract } = this.props;
+    const title = <Translate value="debate.confirmDeletionTitle" />;
+    const body = <Translate value="debate.brightMirror.sideComment.confirmDeleteMsg" />;
+    const footer = [
+      <Button key="cancel" onClick={closeModal} className="button-cancel button-dark">
+        <Translate value="debate.confirmDeletionButtonCancel" />
+      </Button>,
+      <Button
+        key="delete"
+        onClick={() => {
+          if (comment.parentId) {
+            // If it's a reply, we just delete the post
+            const postVars = {
+              postId: comment.id
+            };
+            deletePost({ variables: postVars }).then(() => {
+              displayAlert('success', I18n.t('debate.brightMirror.sideComment.deleteSuccessMsg'));
+              closeModal();
+              refetchPost();
+            });
+          } else {
+            // If it's a main comment, we delete the extract
+            const extractVars = {
+              extractId: extractId
+            };
+            deleteExtract({ variables: extractVars }).then(() => {
+              displayAlert('success', I18n.t('debate.brightMirror.sideComment.deleteSuccessMsg'));
+              closeModal();
+              refetchPost();
+            });
+          }
+        }}
+        className="button-submit button-dark"
+      >
+        <Translate value="debate.confirmDeletionButtonDelete" />
+      </Button>
+    ];
+    const includeFooter = true;
+    return displayModal(title, body, includeFooter, footer);
   };
 
   hightlightExtract = (extract: FictionExtractFragment) => {
@@ -365,6 +415,7 @@ class DumbSideCommentBox extends React.Component<Props, State> {
         comment={currentComment}
         changeCurrentExtract={this.changeCurrentExtract}
         setEditMode={this.setCommentEditMode}
+        deletePost={this.deletePost}
       />
     );
   };
@@ -402,7 +453,7 @@ class DumbSideCommentBox extends React.Component<Props, State> {
         >
           {!submitting && (
             <div className="extracts-nb-msg">
-              <Translate value="debate.brightMirror.commentersParticipation" count={extracts.length} />
+              <Translate value="debate.brightMirror.sideComment.commentersParticipation" count={extracts.length} />
             </div>
           )}
           {commentView}
@@ -426,7 +477,7 @@ class DumbSideCommentBox extends React.Component<Props, State> {
             />
           )}
           {!submitting &&
-            hasReply && <InnerBoxView contentLocale={contentLocale} extractIndex={extractIndex} comment={currentReply} />}
+            hasReply && <InnerBoxView contentLocale={contentLocale} comment={currentReply} deletePost={this.deletePost} />}
         </div>
       </div>
     );
@@ -449,6 +500,12 @@ export default compose(
   }),
   graphql(updatePostMutation, {
     name: 'updatePost'
+  }),
+  graphql(deletePostMutation, {
+    name: 'deletePost'
+  }),
+  graphql(deleteExtractMutation, {
+    name: 'deleteExtract'
   }),
   manageErrorAndLoading({ displayLoader: true })
 )(DumbSideCommentBox);
