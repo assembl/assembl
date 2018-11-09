@@ -120,6 +120,7 @@ exports[`PhaseForm component should render a form to update the dates and module
   >
     <SplitButton
       className="admin-dropdown"
+      disabled={true}
       id="dropdown-1234"
       onSelect={[Function]}
       title="Survey module"

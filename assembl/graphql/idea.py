@@ -136,7 +136,8 @@ class IdeaInterface(graphene.Interface):
         if not self.parents:
             return None
 
-        return self.parents[0].graphene_id()
+        parent = self.parents[0]
+        return parent.graphene_id() if parent else None
 
     def resolve_ancestors(self, args, context, info):
         # We use id_only=True and models.Idea.get on purpose, to

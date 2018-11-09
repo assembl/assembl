@@ -17,7 +17,8 @@ describe('PhaseForm component', () => {
       identifier: 'survey',
       start: moment('2014-12-31T09:00:00+00:00'),
       end: moment('2015-12-31T09:00:00+00:00'),
-      locale: 'fr'
+      locale: 'fr',
+      isNew: false
     };
 
     const shallowRenderer = new ShallowRenderer();
