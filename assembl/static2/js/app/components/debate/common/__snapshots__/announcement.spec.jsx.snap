@@ -467,3 +467,72 @@ exports[`Announcement component <Announcement/> on a thread should render an ann
   </div>
 </div>
 `;
+
+exports[`Announcement component createDoughnutElements function should return an array of elements for a <StatisticDoughnut /> component 1`] = `
+Array [
+  Object {
+    "Tooltip": <Tooltip
+      bsClass="tooltip"
+      className="no-arrow-tooltip"
+      id="dontUnderstandTooltip"
+      placement="right"
+>
+      2
+       
+      <Translate
+            value="debate.dontUnderstand"
+      />
+</Tooltip>,
+    "color": "yellow",
+    "count": 2,
+  },
+  Object {
+    "Tooltip": <Tooltip
+      bsClass="tooltip"
+      className="no-arrow-tooltip"
+      id="disagreeTooltip"
+      placement="right"
+>
+      0
+       
+      <Translate
+            value="debate.disagree"
+      />
+</Tooltip>,
+    "color": "red",
+    "count": 0,
+  },
+  Object {
+    "Tooltip": <Tooltip
+      bsClass="tooltip"
+      className="no-arrow-tooltip"
+      id="likeTooltip"
+      placement="right"
+>
+      4
+       
+      <Translate
+            value="debate.like"
+      />
+</Tooltip>,
+    "color": "green",
+    "count": 4,
+  },
+  Object {
+    "Tooltip": <Tooltip
+      bsClass="tooltip"
+      className="no-arrow-tooltip"
+      id="moreinfoTooltip"
+      placement="right"
+>
+      3
+       
+      <Translate
+            value="debate.moreinfo"
+      />
+</Tooltip>,
+    "color": "purple",
+    "count": 3,
+  },
+]
+`;

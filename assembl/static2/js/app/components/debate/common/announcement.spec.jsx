@@ -1,9 +1,7 @@
 import React from 'react';
 import renderer from 'react-test-renderer'; // eslint-disable-line
 
-import Translate from 'react-redux-i18n';
 import Announcement, { createDoughnutElements } from '../../../../../js/app/components/debate/common/announcement';
-import Tooltip from '../../../../../js/app/components/common/tooltips';
 
 describe('Announcement component', () => {
   const announcementContent = {
@@ -100,12 +98,12 @@ describe('Announcement component', () => {
   describe('createDoughnutElements function', () => {
     it('should return an array of elements for a <StatisticDoughnut /> component', () => {
       const fakeSentimentCounts = {
-        disagree: {
-          type: 'DISAGREE',
-          camelType: 'disagree',
-          color: 'red',
+        dontUnderstand: {
+          type: 'DONT_UNDERSTAND',
+          camelType: 'dontUnderstand',
+          color: 'yellow',
           tooltip: {},
-          count: 0,
+          count: 2,
           svgComponent: {
             defaultProps: {
               backgroundColor: '#ffffff',
@@ -113,12 +111,12 @@ describe('Announcement component', () => {
             }
           }
         },
-        dontUnderstand: {
-          type: 'DONT_UNDERSTAND',
-          camelType: 'dontUnderstand',
-          color: 'yellow',
+        disagree: {
+          type: 'DISAGREE',
+          camelType: 'disagree',
+          color: 'red',
           tooltip: {},
-          count: 2,
+          count: 0,
           svgComponent: {
             defaultProps: {
               backgroundColor: '#ffffff',
@@ -153,52 +151,8 @@ describe('Announcement component', () => {
           }
         }
       };
-      const expected = [
-        {
-          count: 4,
-          Tooltip: renderer.create(
-            <Tooltip bsClass="tooltip" className="no-arrow-tooltip" id="dontUnderstandTooltip" placement="right">
-              2
-              <Translate value="debate.dontUnderstand" />
-            </Tooltip>
-          ),
-          color: 'green'
-        },
-        {
-          count: 0,
-          Tooltip: renderer.create(
-            <Tooltip bsClass="tooltip" className="no-arrow-tooltip" id="dontUnderstandTooltip" placement="right">
-              2
-              <Translate value="debate.dontUnderstand" />
-            </Tooltip>
-          ),
-          color: 'red'
-        },
-        {
-          count: 3,
-          Tooltip: renderer.create(
-            <Tooltip bsClass="tooltip" className="no-arrow-tooltip" id="dontUnderstandTooltip" placement="right">
-              2
-              <Translate value="debate.dontUnderstand" />
-            </Tooltip>
-          ),
-          color: 'purple'
-        },
-        {
-          count: 2,
-          Tooltip: renderer.create(
-            <Tooltip bsClass="tooltip" className="no-arrow-tooltip" id="dontUnderstandTooltip" placement="right">
-              2
-              <Translate value="debate.dontUnderstand" />
-            </Tooltip>
-          ),
-          color: 'yellow'
-        }
-      ];
       const result = createDoughnutElements(fakeSentimentCounts);
-      console.log('expected', expected);
-      console.log('result', result);
-      // expect(result).toEqual(expected);
+      expect(result).toMatchSnapshot();
     });
   });
 });

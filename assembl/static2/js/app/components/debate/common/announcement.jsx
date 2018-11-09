@@ -71,14 +71,12 @@ export const getSentimentsCount = (posts: Posts) => {
     );
 };
 
-export const createDoughnutElements = (sentimentCounts: SentimentsCounts) => {
-  const doughnutelements = Object.keys(sentimentCounts).map(key => ({
+export const createDoughnutElements = (sentimentCounts: SentimentsCounts) =>
+  Object.keys(sentimentCounts).map(key => ({
     color: sentimentCounts[key].color,
     count: sentimentCounts[key].count,
     Tooltip: createTooltip(sentimentCounts[key], sentimentCounts[key].count)
   }));
-  return doughnutelements;
-};
 
 const dirtySplitHack = (announcementContent) => {
   const body = announcementContent.body;
