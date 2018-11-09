@@ -70,6 +70,29 @@ exports[`Storyshots FictionPreview default 1`] = `
               </div>
             </div>
           </li>
+          <li>
+            <div
+              className="custom-overlay"
+            >
+              <div
+                onBlur={[Function]}
+                onClick={null}
+                onFocus={[Function]}
+                onMouseOut={[Function]}
+                onMouseOver={[Function]}
+              >
+                <a
+                  className={undefined}
+                  onClick={[Function]}
+                  style={Object {}}
+                >
+                  <span
+                    className="assembl-icon-share"
+                  />
+                </a>
+              </div>
+            </div>
+          </li>
         </ul>
         <a
           className="link"
@@ -740,6 +763,29 @@ exports[`Storyshots FictionPreview playground 1`] = `
                 >
                   <span
                     className="assembl-icon-delete"
+                  />
+                </a>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div
+              className="custom-overlay"
+            >
+              <div
+                onBlur={[Function]}
+                onClick={null}
+                onFocus={[Function]}
+                onMouseOut={[Function]}
+                onMouseOver={[Function]}
+              >
+                <a
+                  className={undefined}
+                  onClick={[Function]}
+                  style={Object {}}
+                >
+                  <span
+                    className="assembl-icon-share"
                   />
                 </a>
               </div>

@@ -13,6 +13,8 @@ import Permissions, { connectedUserCan } from '../../../utils/permissions';
 import { displayAlert } from '../../../utils/utilityManager';
 // Constant imports
 import { fictionBackgroundColors, EMPTY_STRING } from '../../../constants';
+// Type imports
+import type { BrightMirrorFictionProps } from '../../../pages/brightMirrorFiction';
 
 export type Props = {
   posts: Array<FictionPostPreview>,
@@ -71,7 +73,7 @@ const FictionsList = ({ posts, identifier, refetchIdea, lang, themeId }: Props) 
         connectedUserCan(Permissions.DELETE_POST);
     }
     // Define bright mirror fiction props
-    const brightMirrorFictionProps = {
+    const fictionMetaInfo: BrightMirrorFictionProps = {
       slug: slug,
       phase: identifier,
       themeId: themeId,
@@ -82,7 +84,7 @@ const FictionsList = ({ posts, identifier, refetchIdea, lang, themeId }: Props) 
       <Animated key={post.id} preset="scalein">
         <FictionPreview
           id={post.id}
-          link={`${get('brightMirrorFiction', brightMirrorFictionProps)}`}
+          link={`${get('brightMirrorFiction', fictionMetaInfo)}`}
           title={post.subject}
           creationDate={I18n.l(post.creationDate, { dateFormat: 'date.format2' })}
           authorName={authorName}
@@ -94,6 +96,7 @@ const FictionsList = ({ posts, identifier, refetchIdea, lang, themeId }: Props) 
           lang={lang}
           publicationState={post.publicationState}
           deleteFictionHandler={deleteFictionHandler}
+          fictionMetaInfo={fictionMetaInfo}
         />
       </Animated>
     );
