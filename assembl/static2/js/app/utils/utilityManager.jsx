@@ -103,6 +103,8 @@ const getPathForModal = (type, params, elementId) => {
     return { url: getFullPath('resourcesCenter', params) };
   case 'synthesis':
     return { url: getFullPath('synthesis', params) };
+  case 'brightMirrorFiction':
+    return { url: getFullPath('brightMirrorFiction', { ...params }) };
   default:
     return { url: getFullPath('post', { ...params, element: elementId }) };
   }

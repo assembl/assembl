@@ -253,16 +253,24 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
       circleAvatar: { ...circleAvatarProps }
     };
 
+    const fictionMetaInfo: BrightMirrorFictionProps = {
+      fictionId: fictionId,
+      phase: phase,
+      slug: slug,
+      themeId: themeId
+    };
+
     const fictionToolbarProps: FictionToolbarProps = {
       fictionId: fictionId,
-      title: title,
-      originalBody: content,
+      fictionMetaInfo: fictionMetaInfo,
       lang: contentLocale,
       publicationState: publicationState,
-      userCanEdit: userCanEdit,
-      userCanDelete: userCanDelete,
+      onDeleteCallback: deleteFictionCallback,
       onModifyCallback: modifyFictionCallback,
-      onDeleteCallback: deleteFictionCallback
+      originalBody: content,
+      title: title,
+      userCanDelete: userCanDelete,
+      userCanEdit: userCanEdit
     };
 
     const fictionBodyProps: FictionBodyProps = {

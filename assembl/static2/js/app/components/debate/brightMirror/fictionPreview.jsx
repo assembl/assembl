@@ -10,10 +10,14 @@ import { NO_BODY_LENGTH } from '../common/topPostForm';
 import EditPostForm from '../common/editPostForm';
 import EditPostButton from '../common/editPostButton';
 import DeletePostButton from '../common/deletePostButton';
+import SharePostButton from '../common/sharePostButton';
 import ResponsiveOverlayTrigger from '../../common/responsiveOverlayTrigger';
-import { editFictionTooltip, deleteFictionTooltip } from '../../common/tooltips';
+import { editFictionTooltip, deleteFictionTooltip, shareFictionTooltip } from '../../common/tooltips';
 // Utils imports
 import { displayCustomModal, closeModal } from '../../../utils/utilityManager';
+// Type imports
+import type { BrightMirrorFictionProps } from '../../../pages/brightMirrorFiction';
+import type { Props as SharePostButtonProps } from '../common/sharePostButton';
 
 export type FictionPreviewProps = {
   id: string,
@@ -30,7 +34,9 @@ export type FictionPreviewProps = {
   userCanEdit: boolean,
   userCanDelete: boolean,
   deleteFictionHandler: Function,
-  publicationState: string
+  publicationState: string,
+  /** Fiction meta information: slug, phase, themeId, fictionId */
+  fictionMetaInfo: BrightMirrorFictionProps
 };
 
 const FictionPreview = ({
@@ -46,9 +52,11 @@ const FictionPreview = ({
   userCanEdit,
   userCanDelete,
   deleteFictionHandler,
-  publicationState
+  publicationState,
+  fictionMetaInfo
 }: FictionPreviewProps) => {
   const isDraft = publicationState === PublicationStates.DRAFT;
+
   // Define components
   const openPostModal = () => {
     const content = (
@@ -96,6 +104,20 @@ const FictionPreview = ({
     </li>
   ) : null;
 
+  const sharePostButtonProps: SharePostButtonProps = {
+    metaInfo: { ...fictionMetaInfo },
+    modalTitleMsgKey: 'debate.brightMirror.shareFiction',
+    type: 'brightMirrorFiction'
+  };
+
+  const shareButton = isDraft ? null : (
+    <li>
+      <ResponsiveOverlayTrigger placement="left" tooltip={shareFictionTooltip}>
+        <SharePostButton {...sharePostButtonProps} />
+      </ResponsiveOverlayTrigger>
+    </li>
+  );
+
   // Format author name
   const name = authorName || '';
   const date = ` - ${creationDate}`;
@@ -107,6 +129,7 @@ const FictionPreview = ({
         <ul className="actions">
           {editButton}
           {deleteButton}
+          {shareButton}
         </ul>
         <Link className="link" to={link}>
           <div className="inner-box">

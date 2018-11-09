@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 
-type Props = {
+export type Props = {
   handleClick: Function,
   linkClassName: ?string
 };

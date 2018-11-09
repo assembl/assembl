@@ -419,6 +419,7 @@ const Translations = {
         sideCommentSuccessMsg: "Votre commentaire a été publié avec succès !",
         sideCommentEditSuccessMsg: "Votre commentaire a été édité avec succès !",
         saveDraft: "Sauvegarder",
+        shareFiction: "Partager cette fiction",
         startFictionLabel: "Je partage ma fiction",
         commentFiction: {
           cancel: "Annuler",
@@ -1327,6 +1328,7 @@ const Translations = {
         sideCommentSuccessMsg: "Your comment has been published successfully!",
         sideCommentEditSuccessMsg: "Your comment has been edited successfully!",
         saveDraft: "Save",
+        shareFiction: "Share a short story",
         startFictionLabel: "Share a fiction",
         commentFiction: {
           cancel: "Cancel",
