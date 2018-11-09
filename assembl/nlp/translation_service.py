@@ -508,7 +508,7 @@ class GoogleTranslationService(DummyGoogleTranslationService):
                         x[u'language'] for x in r[u'languages']]
                     if set(self._known_locales) != set(
                             DummyGoogleTranslationService._known_locales):
-                        from ..lib.raven_client import capture_message
+                        from ..lib.sentry import capture_message
                         capture_message("google changed its language set again")
             except:
                 return self.known_locales_cls

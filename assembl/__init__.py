@@ -19,6 +19,8 @@ from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid_beaker import session_factory_from_settings
 from pyramid.settings import asbool
 from pyramid.path import DottedNameResolver
+import sentry_sdk
+from sentry_sdk.integrations.pyramid import PyramidIntegration
 from zope.component import getGlobalSiteManager
 
 from .lib.sqla import (
@@ -52,6 +54,13 @@ def main(global_config, **settings):
         # uwsgi does not load logging properly
         from pyramid.paster import setup_logging
         setup_logging(global_config['__file__'])
+
+    # Sentry
+    if settings.get('sentry_dsn', ''):
+        sentry_sdk.init(
+            dsn=settings['sentry_dsn'],
+            integrations=[PyramidIntegration()]
+        )
 
     from views.traversal import root_factory
     config = Configurator(registry=getGlobalSiteManager())

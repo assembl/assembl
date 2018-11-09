@@ -8,6 +8,7 @@ from graphql.utils.ast_to_dict import ast_to_dict
 
 from .langstring import langstring_from_input_entries
 from assembl import models
+from assembl.lib.sentry import capture_exception
 
 
 class DateTime(Scalar):
@@ -39,6 +40,7 @@ def abort_transaction_on_exception(fn):
         except Exception:
             import transaction
             transaction.abort()
+            capture_exception()
             raise
 
     return decorator

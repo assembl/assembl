@@ -16,9 +16,9 @@ var App = require('./app.js'),
  * */
 Ctx.initMomentJsLocale();
 
-if (raven_url.length) {
+if (sentry_dsn.length) {
   Raven.config(
-      raven_url,
+      sentry_dsn,
       {
         ignoreErrors: ['AttributeError: \'ZMQRouter\' object has no attribute \'loop\''] //Squelch error untill https://github.com/mrjoes/sockjs-tornado/pull/67 goes through
       }

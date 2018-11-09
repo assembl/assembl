@@ -30,7 +30,7 @@ from assembl.lib.sqla import (
 from assembl.lib.zmqlib import configure_zmq
 from assembl.indexing.changes import configure_indexing
 from assembl.lib.model_watcher import configure_model_watcher
-from assembl.lib.raven_client import setup_raven, capture_exception
+from assembl.lib.sentry import capture_exception
 
 
 def find_or_create_object_by_keys(db, keys, obj, columns):

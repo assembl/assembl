@@ -80,7 +80,7 @@ mycompany.rc
     (<- ``base_env.rc``) Create such a file to add company-specific information, such as saml contacts, piwik and sentry servers, etc.
 
 myserver.rc
-    (<- ``mycompany.rc``) server-specific information: ``public_hostname``, raven keys, social login keys, etc.
+    (<- ``mycompany.rc``) server-specific information: ``public_hostname``, sentry keys, social login keys, etc.
 
 production.ini
     Most variables should be defined at that layer. Suitable base for a production environment

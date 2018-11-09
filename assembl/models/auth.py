@@ -40,7 +40,7 @@ from ..lib.model_watcher import get_model_watcher
 from ..lib.sqla import CrudOperation, PrivateObjectMixin
 from ..lib.sqla_types import (
     URLString, EmailString, EmailUnicode, CaseInsensitiveWord, CoerceUnicode)
-from ..lib.raven_client import capture_exception
+from ..lib.sentry import capture_exception
 from . import Base, DiscussionBoundBase
 from ..auth import (
     ASSEMBL_PERMISSIONS,

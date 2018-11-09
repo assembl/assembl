@@ -136,7 +136,7 @@ pytz_
 pyzmq_
   Use the ZeroMQ_ messaging bus from python. Used for the :py:mod:`assembl.tasks.changes_router`.
 
-raven_py_
+sentry-sdk
   Send error reports to Sentry_.
 
 RDFLib_
@@ -425,7 +425,10 @@ Moment_
   Date calculation and logalized textual display in javascript
 
 raven_js_
-  Used to send client-side errors to Sentry_ in production
+  Used to send client-side errors to Sentry_ in production (assembl v1)
+
+sentry-javascript_
+  Used to send client-side errors to Sentry_ in production (assembl v2)
 
 sockjs_client_
   Used for websocket communication on the frontend
@@ -740,7 +743,8 @@ We have used multiple processes rather than threads.
 .. _pytz: http://pythonhosted.org/pytz
 .. _pyzmq: https://pyzmq.readthedocs.org/
 .. _raven_js: https://github.com/getsentry/raven-js
-.. _raven_py: https://github.com/getsentry/raven-python
+.. _sentry-javascript: https://github.com/getsentry/sentry-javascript
+.. _sentry-python: https://github.com/getsentry/sentry-python
 .. _RDFLib: https://rdflib.readthedocs.io/en/stable/
 .. _rdflib_jsonld: https://github.com/RDFLib/rdflib-jsonld
 .. _React: https://facebook.github.io/react/

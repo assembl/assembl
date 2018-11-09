@@ -7,7 +7,7 @@ import transaction
 from pyramid.settings import asbool
 
 from ..lib import config
-from ..lib.raven_client import capture_exception
+from ..lib.sentry import capture_exception
 from ..lib.logging import getLogger
 from . import celery, SMTP_DOMAIN_DELAYS
 
