@@ -34,19 +34,22 @@ class ModifyPasswordForm extends React.Component<Props, State> {
   handleOldPasswordChange = (e: SyntheticInputEvent<HTMLInputElement>) => {
     const value = e.target.value;
     const { isSocialAccount } = this.props;
-    const disabled = isEmpty(value) || isEmpty(this.state.newPassword) || isEmpty(this.state.newPassword2) || !isSocialAccount;
+    const { newPassword, newPassword2 } = this.state;
+    const disabled = isEmpty(value) || isEmpty(newPassword) || isEmpty(newPassword2) || !isSocialAccount;
     this.setState({ oldPassword: value, disabled: disabled });
   };
 
   handleNewPasswordChange = (e: SyntheticInputEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    const disabled = isEmpty(value) || isEmpty(this.state.newPassword2);
+    const { newPassword2 } = this.state;
+    const disabled = isEmpty(value) || isEmpty(newPassword2);
     this.setState({ newPassword: value, disabled: disabled });
   };
 
   handleNewPassword2Change = (e: SyntheticInputEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    const disabled = isEmpty(this.state.newPassword) || isEmpty(value);
+    const { newPassword } = this.state;
+    const disabled = isEmpty(newPassword) || isEmpty(value);
     this.setState({ newPassword2: value, disabled: disabled });
   };
 
@@ -78,10 +81,7 @@ class ModifyPasswordForm extends React.Component<Props, State> {
 
   render() {
     const { isSocialAccount } = this.props;
-    let oldPasswordLabel = I18n.t('profile.oldPassword');
-    if (isSocialAccount) {
-      oldPasswordLabel = I18n.t('profile.oldPasswordSocial');
-    }
+    const oldPasswordLabel = isSocialAccount ? I18n.t('profile.oldPasswordSocial') : I18n.t('profile.oldPassword');
     const newPasswordLabel = I18n.t('profile.newPassword');
     const newPassword2Label = I18n.t('profile.newPassword2');
     const { oldPassword, newPassword, newPassword2 } = this.state;

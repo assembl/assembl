@@ -481,7 +481,7 @@ const Translations = {
       userName: "Nom d'utilisateur",
       fullname: "Nom complet",
       email: "Email",
-      oldPasswordSocial: "Mot de passe actuel (vide si ne pas s'inscrire sur la plateforme)",
+      oldPasswordSocial: "Mot de passe actuel (vide si vous n'êtes pas inscrit sur la plateforme)",
       oldPassword: "Mot de passe actuel",
       newPassword: "Nouveau mot de passe",
       newPassword2: "Retaper le mot de passe",

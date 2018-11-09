@@ -92,7 +92,7 @@ class AgentProfile(SecureObjectType, SQLAlchemyObjectType):
     def resolve_is_social_account(self, args, context, info):
         from assembl.models.social_auth import SocialAuthAccount
         for a in self.accounts:
-            if issubclass(a.__class__, SocialAuthAccount):
+            if issubclass(type(a), SocialAuthAccount):
                 return True
         return False
 
@@ -173,7 +173,7 @@ class UpdateUser(graphene.Mutation):
             new_password = args.get('new_password')
             new_password2 = args.get('new_password2')
             # only modify the password if it was given in parameter
-            if (old_password is not None or user.password is None) and new_password is not None and new_password2 is not None:
+            if (old_password is not None or user.password is None) and None not in (new_password, new_password2):
                 # If the User is a social user, they won't initially have a password (so it can be none)
                 if user.password and not user.check_password(old_password):
                     raise Exception(u"002: The entered password doesn't match your current password.")
