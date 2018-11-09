@@ -69,6 +69,21 @@ class DumbSideCommentBox extends React.Component<Props, State> {
     }
   };
 
+  static getDerivedStateFromProps(nextProps, prevState) {
+    // Required when switching from displaying comment to submitting to force a refresh of component
+    const { submitting, selection } = nextProps;
+    if (prevState.submitting !== submitting) {
+      const annotatorRange = nextProps.selection && ARange.sniff(nextProps.selection.getRangeAt(0));
+      return {
+        submitting: submitting,
+        selectionText: selection && selection.toString(),
+        serializedAnnotatorRange: annotatorRange.serialize(document, 'annotation')
+      };
+    }
+
+    return null;
+  }
+
   constructor(props: Props) {
     super(props);
     const { cancelSubmit, submitting, selection } = props;
@@ -114,13 +129,19 @@ class DumbSideCommentBox extends React.Component<Props, State> {
     }
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevState: State) {
     const { submitting, extractIndex } = this.state;
+    const { clearHighlights } = this.props;
     if (!submitting) {
       const currentExtract = this.getCurrentExtract(extractIndex);
       if (currentExtract) {
         this.hightlightExtract(currentExtract);
       }
+    } else {
+      // Needed when switching from display comments to submitting
+      clearHighlights();
+      // Wrap selection only when switching, not when body is updated
+      if (prevState.submitting !== submitting) this.wrapSelectedText();
     }
   }
 

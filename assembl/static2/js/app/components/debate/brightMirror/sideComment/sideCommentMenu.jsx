@@ -112,7 +112,6 @@ class SideCommentMenu extends React.Component<Props, State> {
               selection={selection}
               lang={lang}
               submitting={showBoxInSubmitMode}
-              displayCommentBox={commentBoxDisplayed}
               refetchPost={refetchPost}
               cancelSubmit={cancelSubmit}
               setCommentBoxDisplay={setCommentBoxDisplay}
@@ -125,7 +124,6 @@ class SideCommentMenu extends React.Component<Props, State> {
           )}
           {showCommentAnchor && (
             <SideCommentAnchor
-              displayHarvestingBox={commentBoxDisplayed}
               handleMouseDown={this.handleMouseDown}
               anchorPosition={commentAnchorPosition}
               handleClickAnchor={handleClickAnchor}

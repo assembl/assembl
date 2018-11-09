@@ -66,6 +66,12 @@
 
     .submit-comment {
       padding: 0 15px;
+
+      .rich-text-editor {
+        .editor-label {
+          padding-top: 30px;
+        }
+      }
     }
   }
 
