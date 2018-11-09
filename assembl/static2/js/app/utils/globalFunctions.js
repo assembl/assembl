@@ -33,6 +33,8 @@ export const getConnectedUserId = (base64: boolean = false) => {
 
 export const getConnectedUserName = () => getInputValue('user-displayname');
 
+export const isConnectedUser = (currentUserId: ?string) => String(currentUserId) === getConnectedUserId();
+
 export const moveElementToFirstPosition = (array: Array<any>, targetElement: any) => {
   const others = array.filter(elelement => elelement !== targetElement);
   return [targetElement, ...others];

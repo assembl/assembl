@@ -5,12 +5,11 @@ import moment from 'moment';
 import activeHtml from 'react-active-html';
 import { I18n } from 'react-redux-i18n';
 import { Button, OverlayTrigger, Popover, Overlay } from 'react-bootstrap';
-import classnames from 'classnames';
 
 import AvatarImage from '../../../common/avatarImage';
 import { transformLinksInHtml /* getUrls */ } from '../../../../utils/linkify';
 import { postBodyReplacementComponents } from '../../common/post/postBody';
-import { getConnectedUserId } from '../../../../utils/globalFunctions';
+import { isConnectedUser } from '../../../../utils/globalFunctions';
 import { editSideCommentTooltip, deleteSideCommentTooltip } from '../../../common/tooltips';
 import Permissions, { connectedUserCan } from '../../../../utils/permissions';
 
@@ -41,13 +40,12 @@ class InnerBoxView extends React.Component<Props, State> {
     const { creator } = comment;
     const displayName = creator && !creator.isDeleted ? creator.displayName : I18n.t('deletedUser');
     const canEdit =
-      creator &&
-      String(creator.userId) === getConnectedUserId() &&
+      isConnectedUser(creator && creator.userId) &&
       connectedUserCan(Permissions.EDIT_MY_POST) &&
       // Prevent editing reply for now (will be added in another ticket)
       setEditMode;
     const canDelete =
-      (creator && String(creator.userId) === getConnectedUserId() && connectedUserCan(Permissions.DELETE_MY_POST)) ||
+      (isConnectedUser(creator && creator.userId) && connectedUserCan(Permissions.DELETE_MY_POST)) ||
       connectedUserCan(Permissions.DELETE_POST);
 
     return (
@@ -76,7 +74,7 @@ class InnerBoxView extends React.Component<Props, State> {
               </Button>
               {menuTarget && (
                 <Overlay show target={menuTarget} placement="bottom">
-                  <Popover id="tools" className={classnames('tools-menu overflow-menu', { multiple: canEdit && canDelete })}>
+                  <Popover id="tools" className="tools-menu overflow-menu">
                     <div>
                       {canEdit ? (
                         <OverlayTrigger placement="top" overlay={editSideCommentTooltip}>

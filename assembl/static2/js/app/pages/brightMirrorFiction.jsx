@@ -318,7 +318,7 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
           <BackButton handleClick={backBtnCallback} linkClassName="back-btn" />
           <Grid fluid>
             <Row>
-              <Col xs={12} lg={10}>
+              <Col xs={12} lg={9}>
                 <article>
                   <FictionHeader {...fictionHeaderProps} />
                   <FictionToolbar {...fictionToolbarProps} />

@@ -19,7 +19,7 @@ configure({ adapter: new Adapter() });
 
 // Mock utils functions
 jest.mock('../../../../../../js/app/utils/globalFunctions', () => ({
-  getConnectedUserId: jest.fn(() => '2'),
+  isConnectedUser: jest.fn(() => true),
   getIconPath: jest.fn(() => 'icons/path/avatar')
 }));
 

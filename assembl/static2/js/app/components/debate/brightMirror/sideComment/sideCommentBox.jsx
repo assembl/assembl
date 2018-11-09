@@ -302,41 +302,39 @@ class DumbSideCommentBox extends React.Component<Props, State> {
     });
   };
 
-  deletePost = (comment: ExtractComment, extractId: number) => {
+  onDeleteConfirmation = (comment: ExtractComment, extractId: number) => {
     const { refetchPost, deletePost, deleteExtract } = this.props;
+    if (comment.parentId) {
+      // If it's a reply, we just delete the post
+      const postVars = {
+        postId: comment.id
+      };
+      deletePost({ variables: postVars }).then(() => {
+        displayAlert('success', I18n.t('debate.brightMirror.sideComment.deleteSuccessMsg'));
+        closeModal();
+        refetchPost();
+      });
+    } else {
+      // If it's a main comment, we delete the extract
+      const extractVars = {
+        extractId: extractId
+      };
+      deleteExtract({ variables: extractVars }).then(() => {
+        displayAlert('success', I18n.t('debate.brightMirror.sideComment.deleteSuccessMsg'));
+        closeModal();
+        refetchPost();
+      });
+    }
+  };
+
+  deletePost = (comment: ExtractComment, extractId: number) => {
     const title = <Translate value="debate.confirmDeletionTitle" />;
     const body = <Translate value="debate.brightMirror.sideComment.confirmDeleteMsg" />;
     const footer = [
       <Button key="cancel" onClick={closeModal} className="button-cancel button-dark">
         <Translate value="debate.confirmDeletionButtonCancel" />
       </Button>,
-      <Button
-        key="delete"
-        onClick={() => {
-          if (comment.parentId) {
-            // If it's a reply, we just delete the post
-            const postVars = {
-              postId: comment.id
-            };
-            deletePost({ variables: postVars }).then(() => {
-              displayAlert('success', I18n.t('debate.brightMirror.sideComment.deleteSuccessMsg'));
-              closeModal();
-              refetchPost();
-            });
-          } else {
-            // If it's a main comment, we delete the extract
-            const extractVars = {
-              extractId: extractId
-            };
-            deleteExtract({ variables: extractVars }).then(() => {
-              displayAlert('success', I18n.t('debate.brightMirror.sideComment.deleteSuccessMsg'));
-              closeModal();
-              refetchPost();
-            });
-          }
-        }}
-        className="button-submit button-dark"
-      >
+      <Button key="delete" onClick={() => this.onDeleteConfirmation(comment, extractId)} className="button-submit button-dark">
         <Translate value="debate.confirmDeletionButtonDelete" />
       </Button>
     ];
