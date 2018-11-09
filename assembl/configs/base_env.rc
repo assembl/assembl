@@ -114,6 +114,8 @@ _package_install = false
 # bugherd_url
 # bugherd_key
 # wsginame
+_webmaster_user = webmaster
+_sudo_port = 22
 
 # Optional - Path to SSL Stapling certificates, must be single file
 # on server
