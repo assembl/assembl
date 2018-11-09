@@ -1392,7 +1392,7 @@ def update_node(force_reinstall=False):
     """
     Install node and npm to a known-good version
     """
-    node_version_cmd_regex = re.compile('^v6\.11\.5')
+    node_version_cmd_regex = re.compile('^v10\.13\.0')
     with settings(warn_only=True), hide('running', 'stdout'):
         node_version_cmd_result = venvcmd("node --version")
     match = node_version_cmd_regex.match(node_version_cmd_result)
@@ -1401,8 +1401,9 @@ def update_node(force_reinstall=False):
         # Stop gulp and webpack because otherwise node may be busy
         supervisor_process_stop('dev:gulp')
         supervisor_process_stop('dev:webpack')
+        venvcmd("rm -rf venv/lib/node_modules/")
         venvcmd("rm -f venv/bin/npm")  # remove the symlink first otherwise next command raises OSError: [Errno 17] File exists
-        venvcmd("nodeenv --node=6.11.5 --npm=3.10.10 --python-virtualenv assembl/static/js")
+        venvcmd("nodeenv --node=10.13.0 --npm=6.4.1 --python-virtualenv assembl/static/js")
         with cd(get_node_base_path()):
             venvcmd("npm install reinstall -g", chdir=False)
         with cd(get_new_node_base_path()):

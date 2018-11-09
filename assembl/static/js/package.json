@@ -61,7 +61,7 @@
     "gulp-uglify": "~1.5.4",
     "gulp-util": "~3.0.7",
     "js-fixtures": "~1.5.3",
-    "jsdoc-rst-template": "https://github.com/assembl/jsdoc-rst-template",
+    "jsdoc-rst-template": "git+https://github.com/assembl/jsdoc-rst-template.git",
     "node-bourbon": "~4.2.8",
     "node-gyp": "~3",
     "node-sass": "~3.8.0",
