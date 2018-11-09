@@ -47,10 +47,7 @@ class InnerBoxView extends React.Component<Props, State> {
       // Prevent editing reply for now (will be added in another ticket)
       setEditMode;
     const canDelete =
-      (comment &&
-        comment.creator &&
-        String(comment.creator.userId) === getConnectedUserId() &&
-        connectedUserCan(Permissions.DELETE_MY_POST)) ||
+      (creator && String(creator.userId) === getConnectedUserId() && connectedUserCan(Permissions.DELETE_MY_POST)) ||
       connectedUserCan(Permissions.DELETE_POST);
 
     return (

@@ -73,7 +73,7 @@ class DumbSideCommentBox extends React.Component<Props, State> {
     // Required when switching from displaying comment to submitting to force a refresh of component
     const { submitting, selection } = nextProps;
     if (prevState.submitting !== submitting) {
-      const annotatorRange = nextProps.selection && ARange.sniff(nextProps.selection.getRangeAt(0));
+      const annotatorRange = selection && ARange.sniff(selection.getRangeAt(0));
       return {
         submitting: submitting,
         selectionText: selection && selection.toString(),
@@ -178,7 +178,7 @@ class DumbSideCommentBox extends React.Component<Props, State> {
     return (topComments && topComments[0]) || null;
   };
 
-  getCurrentCommentReply = (extract: FictionExtractFragment, comment: ExtractComment) => {
+  getCurrentCommentReply = (extract: ?FictionExtractFragment, comment: ?ExtractComment) => {
     const replies =
       extract &&
       comment &&
