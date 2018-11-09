@@ -2684,7 +2684,6 @@ def create_add_to_crontab_command(crontab_line):
     return "(crontab -l | grep -Fv '{cron}'; echo '{cron}') | crontab -".format(cron=crontab_line)
 
 
-@task
 def upgrade_yarn():
     if env.mac:
         run("brew update && brew upgrade yarn")
