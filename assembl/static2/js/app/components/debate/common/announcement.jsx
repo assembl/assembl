@@ -37,9 +37,8 @@ type Posts = {
 };
 
 type AnnouncementContent = {
-  __typename: string,
   body: string,
-  title: string
+  title?: string // The component is currently set with the boolean noTitle
 };
 
 type Props = {
@@ -72,12 +71,14 @@ export const getSentimentsCount = (posts: Posts) => {
     );
 };
 
-export const createDoughnutElements = (sentimentCounts: SentimentsCounts) =>
-  Object.keys(sentimentCounts).map(key => ({
+export const createDoughnutElements = (sentimentCounts: SentimentsCounts) => {
+  const doughnutelements = Object.keys(sentimentCounts).map(key => ({
     color: sentimentCounts[key].color,
     count: sentimentCounts[key].count,
     Tooltip: createTooltip(sentimentCounts[key], sentimentCounts[key].count)
   }));
+  return doughnutelements;
+};
 
 const dirtySplitHack = (announcementContent) => {
   const body = announcementContent.body;
@@ -113,7 +114,7 @@ const Announcement = ({ idea, announcementContent, isMultiColumns }: Props) => {
         </h3>
       </div>
       <Col xs={12} md={8} className="announcement-media col-md-push-4">
-        {mediaContent && <TextAndMedia {...mediaContent} />}
+        {mediaContent ? <TextAndMedia {...mediaContent} /> : null}
       </Col>
       <Col xs={12} md={4} className="col-md-pull-8">
         <div className="announcement-statistics">

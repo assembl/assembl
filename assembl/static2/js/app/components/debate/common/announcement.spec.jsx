@@ -1,13 +1,13 @@
 import React from 'react';
 import renderer from 'react-test-renderer'; // eslint-disable-line
 
-import Announcement from '../../../../../js/app/components/debate/common/announcement';
+import Translate from 'react-redux-i18n';
+import Announcement, { createDoughnutElements } from '../../../../../js/app/components/debate/common/announcement';
+import Tooltip from '../../../../../js/app/components/common/tooltips';
 
 describe('Announcement component', () => {
   const announcementContent = {
-    body: '<p>Bonjour à tous</p>',
-    title: 'Titre de l\'annonce',
-    __typename: 'IdeaAnnouncement'
+    body: '<p>Bonjour à tous</p>'
   };
   const fakePost1 = {
     __typename: 'PostEdge',
@@ -95,6 +95,110 @@ describe('Announcement component', () => {
       const component = renderer.create(<Announcement {...announcementProps} />);
       const tree = component.toJSON();
       expect(tree).toMatchSnapshot();
+    });
+  });
+  describe('createDoughnutElements function', () => {
+    it('should return an array of elements for a <StatisticDoughnut /> component', () => {
+      const fakeSentimentCounts = {
+        disagree: {
+          type: 'DISAGREE',
+          camelType: 'disagree',
+          color: 'red',
+          tooltip: {},
+          count: 0,
+          svgComponent: {
+            defaultProps: {
+              backgroundColor: '#ffffff',
+              color: 'purple'
+            }
+          }
+        },
+        dontUnderstand: {
+          type: 'DONT_UNDERSTAND',
+          camelType: 'dontUnderstand',
+          color: 'yellow',
+          tooltip: {},
+          count: 2,
+          svgComponent: {
+            defaultProps: {
+              backgroundColor: '#ffffff',
+              color: 'purple'
+            }
+          }
+        },
+        like: {
+          type: 'LIKE',
+          camelType: 'like',
+          color: 'green',
+          tooltip: {},
+          count: 4,
+          svgComponent: {
+            defaultProps: {
+              backgroundColor: '#ffffff',
+              color: 'purple'
+            }
+          }
+        },
+        moreInfo: {
+          type: 'MORE_INFO',
+          camelType: 'moreinfo',
+          color: 'purple',
+          tooltip: {},
+          count: 3,
+          svgComponent: {
+            defaultProps: {
+              backgroundColor: '#ffffff',
+              color: 'purple'
+            }
+          }
+        }
+      };
+      const expected = [
+        {
+          count: 4,
+          Tooltip: renderer.create(
+            <Tooltip bsClass="tooltip" className="no-arrow-tooltip" id="dontUnderstandTooltip" placement="right">
+              2
+              <Translate value="debate.dontUnderstand" />
+            </Tooltip>
+          ),
+          color: 'green'
+        },
+        {
+          count: 0,
+          Tooltip: renderer.create(
+            <Tooltip bsClass="tooltip" className="no-arrow-tooltip" id="dontUnderstandTooltip" placement="right">
+              2
+              <Translate value="debate.dontUnderstand" />
+            </Tooltip>
+          ),
+          color: 'red'
+        },
+        {
+          count: 3,
+          Tooltip: renderer.create(
+            <Tooltip bsClass="tooltip" className="no-arrow-tooltip" id="dontUnderstandTooltip" placement="right">
+              2
+              <Translate value="debate.dontUnderstand" />
+            </Tooltip>
+          ),
+          color: 'purple'
+        },
+        {
+          count: 2,
+          Tooltip: renderer.create(
+            <Tooltip bsClass="tooltip" className="no-arrow-tooltip" id="dontUnderstandTooltip" placement="right">
+              2
+              <Translate value="debate.dontUnderstand" />
+            </Tooltip>
+          ),
+          color: 'yellow'
+        }
+      ];
+      const result = createDoughnutElements(fakeSentimentCounts);
+      console.log('expected', expected);
+      console.log('result', result);
+      // expect(result).toEqual(expected);
     });
   });
 });
