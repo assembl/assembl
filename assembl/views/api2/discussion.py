@@ -1503,6 +1503,9 @@ def phase1_csv_export(request):
             row[QUESTION_TITLE] = get_entries_locale_original(question.title).get('entry')
             posts = get_published_posts(question)
             for post in posts:
+                if has_lang:
+                    post.maybe_translate(target_locales=[language])
+
                 post_entries = get_entries_locale_original(post.body)
                 row[POST_BODY] = sanitize_text(post_entries.get('entry'))
                 row[POST_ID] = post.id
@@ -1633,6 +1636,9 @@ def phase2_csv_export(request):
         row[IDEA_NAME] = get_entries_locale_original(idea.title).get('entry')
         posts = get_published_posts(idea)
         for post in posts:
+            if has_lang:
+                post.maybe_translate(target_locales=[language])
+
             subject = get_entries_locale_original(post.subject)
             body = get_entries_locale_original(post.body)
             row[POST_SUBJECT] = subject.get('entry')
