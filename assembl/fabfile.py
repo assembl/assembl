@@ -28,7 +28,7 @@ from os.path import join, dirname, split, normpath, realpath
 # Other calls to os.path rarely mostly don't work remotely. Use locally only.
 import os.path
 from functools import wraps
-from tempfile import NamedTemporaryFile
+from tempfile import NamedTemporaryFile, TemporaryFile
 
 from fabric.operations import (
     local, put, get, run, sudo as fabsudo)
@@ -75,12 +75,16 @@ def running_locally(hosts=None, alt_env=None):
 
 def sudo(*args, **kwargs):
     sudoer = env.get("sudoer", None) or env.get("user")
+    if kwargs.get('webmaster', False):
+        sudoer = env.get('webmaster_user')
     # Generic ability for a defined user to have capabilities to run commands on machine without
     # being a sudo user
-    has_vi_sudo = as_bool(env.get('user_has_visudo', False))
-    with settings(user=sudoer,
-                  sudo_prefix='sudo -i -S -p \'{}\''.format(env.sudo_prompt)):
-        if sudoer == "root" or has_vi_sudo:
+    passwords = {}
+    if env.sudo_password:
+        pass_key = '%s@%s:%s' % (env.sudoer, env.public_hostname, env.sudo_port)
+        passwords[pass_key] = '%s' % env.sudo_password
+    with settings(user=sudoer, passwords=passwords):
+        if sudoer in ("root", env.webmaster_user):
             run(*args, **kwargs)
         else:
             fabsudo(*args, **kwargs)
@@ -210,6 +214,7 @@ def sanitize_env():
         env.projectpath, '%s_dumps' % env.get("projectname", 'assembl')))
     env.ini_file = env.get('ini_file', 'local.ini')
     env.group = env.get('group', env.user)
+    env.webmaster_user = env.get('webmaster_user', 'webmaster')
     populate_secrets()
 
 
@@ -728,9 +733,7 @@ def get_db_dump_name():
 
 
 def get_versioned_db_dump_name():
-    bumpversion_config = SafeConfigParser()
-    bumpversion_config.read(join(env.projectpath, '.bumpversion.cfg'))
-    current_version = bumpversion_config.get('bumpversion', 'current_version')
+    current_version = venvcmd('python -c "import pkg_resources; print pkg_resources.require(\'assembl\')[0].version"')
     return 'db_{}_{}.sql.pgdump'.format(env.wsginame, current_version or strftime('%Y%m%d'))
 
 
@@ -972,6 +975,9 @@ def database_dump_aws():
     """
     Dumps the database on an amazon s3 object storage
     """
+    if not exists(env.dbdumps_dir):
+        run('mkdir -m700 %s' % env.dbdumps_dir)
+
     install_awscli()
     with prefix(venv_prefix()), \
         cd(env.projectpath), \
@@ -3263,16 +3269,15 @@ def ensure_private_configs():
     Private configs are created once for a server. During CI/CD, we want these configurations
     to survive each version upgrade
     """
-    private_config_path = normpath(os.path. join(env.projectpath, '..', 'global_configs'))
-    run('mkdir -p %s' % private_config_path)
-
-    # Ensure that the server's random.ini survives each version
     remote_random_path = os.path.join(env.projectpath, 'random.ini')
-    remote_random_path_destination = normpath(os.path.join(private_config_path, 'random.ini'))
-    if not exists(remote_random_path_destination):
-        run('cp %s %s' % (remote_random_path, remote_random_path_destination))
+    private_config_path = normpath(os.path. join(env.projectpath, '..', 'global_configs'))
+    if exists(remote_random_path):
+        run('mkdir -p %s' % private_config_path)
 
-    # TODO: Copy all images manually added to static2/img that was manually added
+        # Ensure that the server's random.ini survives (under migration). New servers will generate own random.ini
+        remote_random_path_destination = normpath(os.path.join(private_config_path, 'random.ini'))
+        if not exists(remote_random_path_destination):
+            run('cp %s %s' % (remote_random_path, remote_random_path_destination))
 
 
 @task
@@ -3294,4 +3299,101 @@ def deploy_wheel(version=None):
 
     execute(build_virtualenv, with_setuptools=True)
     venvcmd('pip install %s %s' % (use_wheel, wheel_path))
+    venvcmd('pip install %s[dev]' % wheel_path)  # Need to install to allow debugging of server
     # Link the fabfile for ease
+
+
+def _generate_random_string(N=32):
+    import random
+    import string
+    return ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(N))
+
+
+@task
+def random_sudo_task():
+    if sudo('grep webmaster /etc/passwd').failed:
+        print "shit failed"
+
+
+@task
+def check_or_create_webmaster_user():
+    if env.mac:
+        return
+
+    username = env.webmaster_user
+    hostname = env.public_hostname
+    if sudo('grep %s /etc/passwd' % username).failed:
+
+        print(red("A webmaster does not exist on this machine. One will be created for you. \
+                  You will be responsible for fetching the private key of this user."))
+        password = _generate_random_string()
+        # Create a webmaster user
+        sudo('adduser %s --gecos "First Last,RoomNumber,WorkPhone,HomePhone" --disabled-password' % username)
+        sudo('export WEBMASTERPASSWORD="%s"' % password)
+        sudo('echo "webmaster:$WEBMASTERPASSWORD" | sudo chpasswd')
+        if run('which ssh-keygen').failed:
+            print(yellow("ssh-client is not installed on this machine. Installing it now..."))
+            sudo('apt-get install -y openssh-client')
+        run('ssh-keygen -q -t rsa -N '' -f /home/%s/.ssh/id_rsa' % username)
+        run('cat /home/%(username)s/.ssh/id_rsa.pub >> /home/%(username)s/.ssh/authorized_keys' % {'username': username})
+        run('chmod -R 700 /home/%s/.ssh' % username)
+
+    print(red("Generating private information for %s user. This file contains private information and should not be shared"))
+    output_path = join(env.here, '%s.secret' % hostname)
+    with hide('running', 'stdout'):
+        # In the future, do NOT do this. Instead, use KMS or SecretManager, or Vault as the place to store
+        # the secret information
+        with TemporaryFile() as f:
+            get('/home/%s/.ssh/id_rsa', f)
+            f.seek(0)
+            private_key = f.read()
+            data = {
+                'username': username,
+                'password': password,
+                'hostname': hostname,
+                'rsa_private_key': private_key,
+                'passphrase': ''
+            }
+            fill_template('system_user_information.jinja2', data, output=output_path)
+    print(green("The secrets file has been generated at %s" % output_path))
+
+
+@task
+def set_webmaster_user_permissions():
+    """
+    Make sure that the nginx configs folder can be edited by webmaster user
+    """
+    if env.mac:
+        return
+
+    username = env.webmaster_user
+    group = 'www-data'
+    sudo('chown -R %s:%s /etc/nginx/sites-enabled /etc/nginx/sites-available' % username, group)
+    if sudo('grep %s /etc/sudoers').failed:
+        commands = [
+            '/etc/init.d/nginx stop',
+            '/etc/init.d/nginx start',
+            '/etc/init.d/nginx reload',
+            '/etc/init.d/nginx restart',
+        ]
+        config_line = "%s ALL=NOPASSWD: %s" % username, ','.join(commands)
+        run('echo \'%s\' | sudo EDITOR=\'tee -a\' visudo' % config_line)
+
+
+@task
+def prepare_server_for_deployment():
+    """
+    A one-stop command to prepare servers for automatic deployment
+    Must be run as a root/sudo user
+    """
+    if env.mac:
+        return
+
+    # install docker
+    # add webmaster user to docker user
+
+    # TODO: Make sure all reloads/template updating are done with this user
+    # And their "sudo" command uses the webmaster user (in fabric)
+    # This function assumes that the private key of such a user is added to the ssh-agent of the runner
+    execute(check_or_create_webmaster_user)
+    execute(set_webmaster_user_permissions)
