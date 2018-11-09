@@ -2,6 +2,7 @@
 import React from 'react';
 // Constant imports
 import { NO_BODY_LENGTH } from '../common/topPostForm';
+import { PublicationStates } from '../../../constants';
 // Utils imports
 import { displayCustomModal, closeModal } from '../../../utils/utilityManager';
 // Components imports
@@ -9,7 +10,8 @@ import EditPostButton from '../common/editPostButton';
 import EditPostForm from '../common/editPostForm';
 import DeletePostButton from '../common/deletePostButton';
 import SharePostButton from '../common/sharePostButton';
-import { PublicationStates } from '../../../constants';
+import ResponsiveOverlayTrigger from '../../common/responsiveOverlayTrigger';
+import { editFictionTooltip, deleteFictionTooltip, shareFictionTooltip } from '../../common/tooltips';
 // Type imports
 import type { Props as EditPostButtonProps } from '../common/editPostButton';
 import type { Props as DeletePostButtonProps } from '../common/deletePostButton';
@@ -89,11 +91,29 @@ const FictionToolbar = ({
     type: 'brightMirrorFiction'
   };
 
+  const editPostButton = userCanEdit ? (
+    <ResponsiveOverlayTrigger placement="left" tooltip={editFictionTooltip}>
+      <EditPostButton {...editPostButtonProps} />
+    </ResponsiveOverlayTrigger>
+  ) : null;
+
+  const deletePostButton = userCanDelete ? (
+    <ResponsiveOverlayTrigger placement="bottom" tooltip={deleteFictionTooltip}>
+      <DeletePostButton {...deletePostButtonProps} />{' '}
+    </ResponsiveOverlayTrigger>
+  ) : null;
+
+  const sharePostButton = (
+    <ResponsiveOverlayTrigger placement="right" tooltip={shareFictionTooltip}>
+      <SharePostButton {...sharePostButtonProps} />
+    </ResponsiveOverlayTrigger>
+  );
+
   return (
     <div className="action-buttons">
-      {userCanEdit ? <EditPostButton {...editPostButtonProps} /> : null}
-      {userCanDelete ? <DeletePostButton {...deletePostButtonProps} /> : null}
-      <SharePostButton {...sharePostButtonProps} />
+      {editPostButton}
+      {deletePostButton}
+      {sharePostButton}
     </div>
   );
 };

@@ -13,33 +13,70 @@ exports[`Storyshots FictionToolbar default 1`] = `
     <div
       className="action-buttons"
     >
-      <a
-        className="edit"
-        onClick={[Function]}
-        style={Object {}}
+      <div
+        className="custom-overlay"
       >
-        <span
-          className="assembl-icon-edit"
-        />
-      </a>
-      <a
-        className="delete"
-        onClick={[Function]}
-        style={Object {}}
+        <div
+          onBlur={[Function]}
+          onClick={null}
+          onFocus={[Function]}
+          onMouseOut={[Function]}
+          onMouseOver={[Function]}
+        >
+          <a
+            className="edit"
+            onClick={[Function]}
+            style={Object {}}
+          >
+            <span
+              className="assembl-icon-edit"
+            />
+          </a>
+        </div>
+      </div>
+      <div
+        className="custom-overlay"
       >
-        <span
-          className="assembl-icon-delete"
-        />
-      </a>
-      <a
-        className="share"
-        onClick={[Function]}
-        style={Object {}}
+        <div
+          onBlur={[Function]}
+          onClick={null}
+          onFocus={[Function]}
+          onMouseOut={[Function]}
+          onMouseOver={[Function]}
+        >
+          <a
+            className="delete"
+            onClick={[Function]}
+            style={Object {}}
+          >
+            <span
+              className="assembl-icon-delete"
+            />
+          </a>
+           
+        </div>
+      </div>
+      <div
+        className="custom-overlay"
       >
-        <span
-          className="assembl-icon-share"
-        />
-      </a>
+        <div
+          onBlur={[Function]}
+          onClick={null}
+          onFocus={[Function]}
+          onMouseOut={[Function]}
+          onMouseOver={[Function]}
+        >
+          <a
+            className="share"
+            onClick={[Function]}
+            style={Object {}}
+          >
+            <span
+              className="assembl-icon-share"
+            />
+          </a>
+        </div>
+      </div>
     </div>
   </div>
   <button
@@ -737,33 +774,70 @@ exports[`Storyshots FictionToolbar playground 1`] = `
     <div
       className="action-buttons"
     >
-      <a
-        className="edit"
-        onClick={[Function]}
-        style={Object {}}
+      <div
+        className="custom-overlay"
       >
-        <span
-          className="assembl-icon-edit"
-        />
-      </a>
-      <a
-        className="delete"
-        onClick={[Function]}
-        style={Object {}}
+        <div
+          onBlur={[Function]}
+          onClick={null}
+          onFocus={[Function]}
+          onMouseOut={[Function]}
+          onMouseOver={[Function]}
+        >
+          <a
+            className="edit"
+            onClick={[Function]}
+            style={Object {}}
+          >
+            <span
+              className="assembl-icon-edit"
+            />
+          </a>
+        </div>
+      </div>
+      <div
+        className="custom-overlay"
       >
-        <span
-          className="assembl-icon-delete"
-        />
-      </a>
-      <a
-        className="share"
-        onClick={[Function]}
-        style={Object {}}
+        <div
+          onBlur={[Function]}
+          onClick={null}
+          onFocus={[Function]}
+          onMouseOut={[Function]}
+          onMouseOver={[Function]}
+        >
+          <a
+            className="delete"
+            onClick={[Function]}
+            style={Object {}}
+          >
+            <span
+              className="assembl-icon-delete"
+            />
+          </a>
+           
+        </div>
+      </div>
+      <div
+        className="custom-overlay"
       >
-        <span
-          className="assembl-icon-share"
-        />
-      </a>
+        <div
+          onBlur={[Function]}
+          onClick={null}
+          onFocus={[Function]}
+          onMouseOut={[Function]}
+          onMouseOver={[Function]}
+        >
+          <a
+            className="share"
+            onClick={[Function]}
+            style={Object {}}
+          >
+            <span
+              className="assembl-icon-share"
+            />
+          </a>
+        </div>
+      </div>
     </div>
   </div>
   <button

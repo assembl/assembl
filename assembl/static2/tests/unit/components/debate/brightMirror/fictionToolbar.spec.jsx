@@ -8,6 +8,7 @@ import FictionToolbar from '../../../../../js/app/components/debate/brightMirror
 import DeletePostButton from '../../../../../js/app/components/debate/common/deletePostButton';
 import EditPostButton from '../../../../../js/app/components/debate/common/editPostButton';
 import SharePostButton from '../../../../../js/app/components/debate/common/sharePostButton';
+import ResponsiveOverlayTrigger from '../../../../../js/app/components/common/responsiveOverlayTrigger';
 import type { FictionToolbarProps } from '../../../../../js/app/components/debate/brightMirror/fictionToolbar';
 
 // Import existing storybook data
@@ -52,5 +53,9 @@ describe('<FictionToolbar /> - with shallow', () => {
 
   it('should render one SharePostButton', () => {
     expect(wrapper.find(SharePostButton)).toHaveLength(1);
+  });
+
+  it('should render 3 ResponsiveOverlayTrigger for tooltip', () => {
+    expect(wrapper.find(ResponsiveOverlayTrigger)).toHaveLength(3);
   });
 });

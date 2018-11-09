@@ -1,4 +1,13 @@
 .action-buttons {
+  // Inline render of action buttons
+  .custom-overlay {
+    display: inline-block;
+
+    div {
+      display: inline-block;
+    }
+  }
+
   margin-bottom: 55px;
   text-align: right;
 
