@@ -19,8 +19,6 @@ from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid_beaker import session_factory_from_settings
 from pyramid.settings import asbool
 from pyramid.path import DottedNameResolver
-import sentry_sdk
-from sentry_sdk.integrations.pyramid import PyramidIntegration
 from zope.component import getGlobalSiteManager
 
 from .lib.sqla import (
@@ -56,6 +54,8 @@ def main(global_config, **settings):
         setup_logging(global_config['__file__'])
 
     # Sentry
+    import sentry_sdk
+    from sentry_sdk.integrations.pyramid import PyramidIntegration
     if settings.get('sentry_dsn', ''):
         sentry_sdk.init(
             dsn=settings['sentry_dsn'],
