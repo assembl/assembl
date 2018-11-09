@@ -37,7 +37,7 @@ from assembl.models import (
     IdeaRelatedPostLink, AgentProfile, LangString,
     DummyContext, LanguagePreferenceCollection, SentimentOfPost)
 from assembl.models.post import deleted_publication_states
-from assembl.lib.raven_client import capture_message
+from assembl.lib.sentry import capture_message
 
 log = logging.getLogger()
 

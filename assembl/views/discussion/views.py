@@ -16,6 +16,7 @@ from urllib import quote_plus
 from urlparse import urljoin
 
 from ...lib.clean_input import escape_html
+from ...lib.config import get
 from ...lib.utils import path_qs
 from ...lib.sqla import get_named_object
 from ...lib.frontend_urls import FrontendUrls
@@ -223,7 +224,8 @@ def react_view(request, required_permission=P_READ):
         "assembl_version": pkg_resources.get_distribution("assembl").version,
         "elasticsearch_lang_indexes": old_context['elasticsearch_lang_indexes'],
         "web_analytics": old_context['web_analytics'],
-        "under_test": old_context['under_test']
+        "under_test": old_context['under_test'],
+        "sentry_dsn": get('sentry_dsn')
     }
 
     if discussion:

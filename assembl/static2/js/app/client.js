@@ -1,5 +1,7 @@
 import { ApolloClient, toIdValue, IntrospectionFragmentMatcher } from 'react-apollo';
 import { createNetworkInterface } from 'apollo-upload-client';
+import * as Sentry from '@sentry/browser';
+
 import { getDiscussionSlug } from './utils/globalFunctions';
 import { getFullPath } from './utils/routeMap';
 import fetch from 'isomorphic-fetch'; // eslint-disable-line
@@ -27,6 +29,31 @@ const myFragmentMatcher = new IntrospectionFragmentMatcher({
 
 const dataIdFromObject = o => o.id;
 
+const networkInterface = createNetworkInterface({
+  uri: getFullPath('graphql', { slug: getDiscussionSlug() }),
+  opts: {
+    credentials: 'same-origin'
+  }
+});
+
+// trace every graphql operation in sentry
+networkInterface.use([
+  {
+    applyMiddleware: function (req, next) {
+      Sentry.addBreadcrumb({
+        category: 'graphql',
+        message: `GraphQL operation: ${req.request.operationName}`,
+        data: {
+          variables: req.request.variables
+        },
+        level: 'info'
+      });
+
+      next();
+    }
+  }
+]);
+
 const client = new ApolloClient({
   fragmentMatcher: myFragmentMatcher,
   dataIdFromObject: dataIdFromObject,
@@ -35,12 +62,7 @@ const client = new ApolloClient({
       node: (_, args) => toIdValue(dataIdFromObject({ id: args.id }))
     }
   },
-  networkInterface: createNetworkInterface({
-    uri: getFullPath('graphql', { slug: getDiscussionSlug() }),
-    opts: {
-      credentials: 'same-origin'
-    }
-  })
+  networkInterface: networkInterface
 });
 
 export default client;

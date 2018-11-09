@@ -731,12 +731,12 @@ return cls.extend({
         return true;
       });
     }).catch(function(e) {
-      if (raven_url) {
+      if (sentry_dsn) {
         Raven.captureException(e);
       }
       that.ui.messageFamilyList.add("<div class='error'>We are sorry, a technical error occured during rendering.</div>");
       //For debugging, uncomment the following to get stack traces add true || at the begining of the if
-      if (that.debugPaging || Ctx.debugRender || !raven_url) {
+      if (that.debugPaging || Ctx.debugRender || !sentry_dsn) {
         throw e;
       }
 
@@ -1818,7 +1818,7 @@ return cls.extend({
             throw new Error("resultMessageIdCollection is missing");
           }
         } catch (e) {
-          if (raven_url) {
+          if (sentry_dsn) {
             Raven.captureException(e,
                 { messageId: messageId,
                   visitorViewData: visitorData.visitorViewData

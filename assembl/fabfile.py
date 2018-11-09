@@ -2016,6 +2016,7 @@ def check_and_create_sentry_database_user():
 def create_sentry_project():
     """Create a project for the current assembl server.
     Mostly useful for Docker. Tested on Sentry 8."""
+    # TODO: update this and test it with sentry 9
     if os.path.exists(env.random_file):
         env.update(as_rc(env.random_file))
     if env.get("sentry_key", None) and env.get("sentry_secret", None):

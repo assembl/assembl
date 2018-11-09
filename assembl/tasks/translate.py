@@ -3,7 +3,7 @@ from abc import abstractmethod
 
 from . import celery
 from ..lib.utils import waiting_get
-from ..lib.raven_client import capture_exception
+from ..lib.sentry import capture_exception
 
 _services = {}
 

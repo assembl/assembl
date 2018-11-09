@@ -24,9 +24,7 @@ sentry_api_token = {{ sentry_api_token }}
 {% elif docker_sentry %}
 *sentry_host = {{ docker_sentry }}
 {% else %}
-raven_url =
-handler_sentry__args = ()
-filter:raven__dsn =
+sentry_dsn =
 {% endif %}
 
 {% if docker_piwik == 'docker' %}

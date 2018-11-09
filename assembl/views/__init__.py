@@ -27,7 +27,7 @@ from assembl.lib.frontend_urls import FrontendUrls
 from assembl.lib.locale import (
     get_language, get_country, to_posix_string, strip_country)
 from assembl.lib.utils import get_global_base_url
-from assembl.lib.raven_client import capture_exception
+from assembl.lib.sentry import capture_exception
 from assembl.models.auth import (
     UserLanguagePreference,
     LanguagePreferenceOrder,
@@ -360,7 +360,7 @@ def get_default_context(request, **kwargs):
         REACT_URL=react_url,
         elasticsearch_lang_indexes=config.get('elasticsearch_lang_indexes', 'en fr'),
         first_login_after_auto_subscribe_to_notifications=first_login_after_auto_subscribe_to_notifications,
-        raven_url=config.get('raven_url') or '',
+        sentry_dsn=config.get('sentry_dsn', ''),
         activate_tour=str(config.get('activate_tour') or False).lower(),
         providers=providers,
         providers_json=json.dumps(providers),
@@ -652,7 +652,7 @@ def error_view(exc, request):
     context = get_default_context(request)
     return dict(
         context, debate_link="/", error_code=error_code,
-        error=_("error"), 
+        error=_("error"),
         text=_("Our server has encountered a problem. The page you have requested is not accessible."),
         excuse=_("We apologize for the inconvenience"),
         home_button=_("Homepage")
@@ -662,7 +662,7 @@ def error_template(request):
     context = get_default_context(request)
     return dict(
         context, debate_link="/", error_code="500",
-        error="error", 
+        error="error",
         text="Our server has encountered a problem. The page you have requested is not accessible.",
         excuse="We apologize for the inconvenience",
         home_button="Homepage"

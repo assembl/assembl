@@ -219,13 +219,15 @@ def authentication_callback(user_id, request):
     connection.info['userid'] = user_id
     discussion = discussion_from_request(request)
     discussion_id = discussion.id if discussion else None
-    # this is a good time to tell raven about the user
-    from raven.base import Raven
-    if Raven:
+    # this is a good time to tell sentry about the user
+    from sentry_sdk import configure_scope
+    with configure_scope() as scope:
         if user_id:
-            Raven.user_context({'user_id': str(user_id)})
+            scope.user = {
+                "id": str(user_id)
+            }
         if discussion_id:
-            Raven.context.merge({'discussion_id': discussion_id})
+            scope.set_tag('discussion_id', discussion_id)
 
     return get_roles(user_id, discussion_id)
 

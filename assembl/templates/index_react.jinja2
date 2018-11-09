@@ -36,7 +36,7 @@
         {% if messages %}
             <div class='hidden' id='serverMessages'>{{ messages }}</div>
         {% endif %}
-        <div id='root'></div>
+        <div id='root' data-sentry-dsn="{{sentry_dsn}}"></div>
         {% block main_js %}
             {% include 'analytics_common.jinja2' %}
             <script src='{{REACT_URL}}/build/bundle.js'></script>

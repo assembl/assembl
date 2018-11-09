@@ -23,7 +23,6 @@ from pyramid_mailer import mailer_factory_from_settings
 from ..lib.sqla import configure_engine
 from ..lib.zmqlib import configure_zmq
 from ..lib.config import set_config
-from assembl.lib.raven_client import setup_raven
 from zope.component import getGlobalSiteManager
 from ..lib.model_watcher import configure_model_watcher
 from assembl.indexing.changes import configure_indexing
@@ -112,7 +111,6 @@ class CeleryWithConfig(Celery):
         config.read(settings_file)
         registry = getGlobalSiteManager()
         registry.settings = settings
-        setup_raven(config)
         set_config(settings)
         configure_engine(settings, True)
         configure_indexing()
