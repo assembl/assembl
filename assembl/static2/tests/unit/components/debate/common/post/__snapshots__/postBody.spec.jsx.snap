@@ -16,6 +16,7 @@ exports[`PostBody component should render a html body 1`] = `
     </a>
     <URLMetadataLoader
       afterLoad={undefined}
+      contentOnly={false}
       url="url"
     />
      without 

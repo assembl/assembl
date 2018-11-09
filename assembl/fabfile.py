@@ -160,15 +160,16 @@ def populate_secrets():
         # we don't have boto3 yet
         return
 
-    client = boto3.client('secretsmanager') # noqa
-    name = os.path.splitext(os.path.basename(env.rcfile))[0]
-    response = client.get_secret_value(
-        SecretId=name,
-    )
-    env_vars = json.loads(response["SecretString"])
-    # Add env variable overrides here
-    for env_key, env_value in env_vars.iteritems():
-        env[env_key] = env_value
+    if env.wsginame != 'dev.wsgi':
+        client = boto3.client('secretsmanager') # noqa
+        name = os.path.splitext(os.path.basename(env.rcfile))[0]
+        response = client.get_secret_value(
+            SecretId=name,
+        )
+        env_vars = json.loads(response["SecretString"])
+        # Add env variable overrides here
+        for env_key, env_value in env_vars.iteritems():
+            env[env_key] = env_value
 
 
 def sanitize_env():

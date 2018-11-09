@@ -92,8 +92,15 @@ export const postBodyReplacementComponents = (afterLoad?: Function) => ({
         {attributes.children}
       </a>
     );
-    if (embeddedUrl) return origin;
-    return [origin, <URLMetadataLoader key={`url-preview-${attributes.href}`} url={attributes.href} afterLoad={afterLoad} />];
+    return [
+      origin,
+      <URLMetadataLoader
+        key={`url-preview-${attributes.href}`}
+        contentOnly={embeddedUrl}
+        url={attributes.href}
+        afterLoad={afterLoad}
+      />
+    ];
   },
   annotation: (attributes: Object) => (
     <ExtractInPost key={attributes.key} id={attributes.id} state={attributes['data-state']}>

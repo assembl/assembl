@@ -14,6 +14,8 @@ import { converters as linkConverters } from 'draft-js-link-plugin';
 import { converters as attachmentsConverters } from 'draft-js-attachment-plugin';
 /* eslint-enable import/no-extraneous-dependencies */
 
+import { addProtocol } from './linkify';
+
 type Entry = {
   localeCode: string,
   value: string | EditorState
@@ -43,7 +45,7 @@ const customConvertFromHTML = convertFromHTML({
   htmlToEntity: function (nodeName: string, node: HTMLElement, createEntity: Function): EntityInstance | null {
     if (nodeName === 'a') {
       // $FlowFixMe: if nodeName is 'a', node should be an HTMLAnchorElement
-      return linkConverters.htmlToEntity(nodeName, node, createEntity);
+      return linkConverters.htmlToEntity(nodeName, node, createEntity, addProtocol);
     }
 
     return attachmentsConverters.htmlToEntity(nodeName, node, createEntity);

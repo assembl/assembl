@@ -92,26 +92,6 @@ exports[`Storyshots InnerBoxView multiple comments 1`] = `
                 https://youtu.be/MzfBIcJaJSU
               </a>
             </p>
-            <div>
-              <div
-                className="embed-theater "
-              >
-                <div
-                  className="embed-thumbnail-container"
-                  onClick={[Function]}
-                >
-                  <img
-                    alt="youtube video"
-                    className="embed-thumbnail"
-                    src="https://img.youtube.com/vi/MzfBIcJaJSU/mqdefault.jpg"
-                  />
-                  <span
-                    className="play-button"
-                  />
-                </div>
-              </div>
-            </div>
-            <p />
           </div>
           <div
             className="next-extract"
@@ -1509,26 +1489,6 @@ exports[`Storyshots InnerBoxView single comment 1`] = `
                 https://youtu.be/MzfBIcJaJSU
               </a>
             </p>
-            <div>
-              <div
-                className="embed-theater "
-              >
-                <div
-                  className="embed-thumbnail-container"
-                  onClick={[Function]}
-                >
-                  <img
-                    alt="youtube video"
-                    className="embed-thumbnail"
-                    src="https://img.youtube.com/vi/MzfBIcJaJSU/mqdefault.jpg"
-                  />
-                  <span
-                    className="play-button"
-                  />
-                </div>
-              </div>
-            </div>
-            <p />
           </div>
           <div
             className="next-extract"

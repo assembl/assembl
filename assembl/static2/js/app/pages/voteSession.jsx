@@ -6,7 +6,10 @@ import { connect } from 'react-redux';
 import { I18n, Translate } from 'react-redux-i18n';
 import { Map } from 'immutable';
 import shuffle from 'lodash/shuffle';
+import activeHtml from 'react-active-html';
 
+import { isSpecialURL } from '../utils/urlPreview';
+import URLMetadataLoader from '../components/common/urlPreview/urlMetadataLoader';
 import VoteSessionQuery from '../graphql/VoteSession.graphql';
 import AddTokenVoteMutation from '../graphql/mutations/addTokenVote.graphql';
 import AddGaugeVoteMutation from '../graphql/mutations/addGaugeVote.graphql';
@@ -123,6 +126,27 @@ export const filterGaugeVoteModules: FilterGaugeVoteModules = modules =>
 type FilterNumberGaugeVoteModules = (Array<VoteSpecification>) => Array<NumberGaugeVoteSpecification>;
 export const filterNumberGaugeVoteModules: FilterNumberGaugeVoteModules = modules =>
   modules.filter(module => module.voteType === 'number_gauge_vote_specification').sort(moduleComparator);
+
+export const voteSessionBodyReplacementComponents = () => ({
+  a: (attributes: Object) => (
+    <React.Fragment>
+      <a
+        key={`url-link-${attributes.key}`}
+        href={attributes.href}
+        className="linkified"
+        target={attributes.target}
+        title={attributes.title}
+      >
+        {attributes.children}
+      </a>
+      {isSpecialURL(attributes.href) ? (
+        <URLMetadataLoader key={`url-preview-${attributes.href}`} contentOnly url={attributes.href} />
+      ) : null}
+    </React.Fragment>
+  )
+});
+
+const renderRichtext = (text: string) => activeHtml(text && transformLinksInHtml(text), voteSessionBodyReplacementComponents());
 
 class DumbVoteSession extends React.Component<Props, State> {
   availableTokensContainerRef: ?HTMLDivElement;
@@ -361,10 +385,7 @@ class DumbVoteSession extends React.Component<Props, State> {
                   sm={10}
                   className="no-padding"
                 >
-                  <div
-                    dangerouslySetInnerHTML={{ __html: transformLinksInHtml(instructionsSectionContent) }}
-                    className="vote-instructions"
-                  />
+                  <div className="vote-instructions">{renderRichtext(instructionsSectionContent)}</div>
                   {tokenVoteModule &&
                     tokenVoteModule.tokenCategories && (
                       <div ref={this.setAvailableTokensRef}>

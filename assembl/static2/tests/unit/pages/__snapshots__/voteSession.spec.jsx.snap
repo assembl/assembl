@@ -60,12 +60,9 @@ exports[`VoteSession component should match VoteSession snapshot 1`] = `
         >
           <div
             className="vote-instructions"
-            dangerouslySetInnerHTML={
-              Object {
-                "__html": "Elisez les meilleurs propositions, vous avez 8 jetons pour et 3 jetons contre",
-              }
-            }
-          />
+          >
+            Elisez les meilleurs propositions, vous avez 8 jetons pour et 3 jetons contre
+          </div>
           <div>
             <AvailableTokens
               remainingTokensByCategory={
@@ -322,12 +319,9 @@ exports[`VoteSession component should match VoteSession snapshot with empty modu
         >
           <div
             className="vote-instructions"
-            dangerouslySetInnerHTML={
-              Object {
-                "__html": "",
-              }
-            }
-          />
+          >
+            
+          </div>
         </Col>
       </Row>
     </Section>

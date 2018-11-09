@@ -5,7 +5,7 @@ import Embed from './embed';
 // For a future development (integration of graphs ...)
 // import Frame from './frame';
 
-export type URLPreviewProps = {
+export type Props = {
   id: string,
   url: string,
   html: string, // eslint-disable-line react/no-unused-prop-types
@@ -16,10 +16,11 @@ export type URLPreviewProps = {
   faviconUrl: string,
   authorName: string,
   authorAvatar: string,
-  afterLoad: ?Function
+  afterLoad: ?Function,
+  contentOnly: boolean
 };
 
-class URLPreview extends React.Component<URLPreviewProps> {
+class URLPreview extends React.Component<Props> {
   componentDidMount() {
     // const { html, afterLoad } = this.props;
     // if (!html && afterLoad) afterLoad();
@@ -28,11 +29,18 @@ class URLPreview extends React.Component<URLPreviewProps> {
   }
 
   render() {
-    const { id } = this.props;
+    const { id, contentOnly } = this.props;
     // For a future development (integration of graphs ...)
     // If we have an integration HTML code, we need to include it into an iframe (the Frame component)
     // if (html) return <Frame id={id} html={html} afterLoad={afterLoad} />;
     const { authorName, authorAvatar, url, title, description, thumbnailUrl, providerName, faviconUrl } = this.props;
+    const embed = (
+      <Embed
+        url={url}
+        defaultEmbed={thumbnailUrl && <div style={{ backgroundImage: `url("${thumbnailUrl}")` }} className="url-img-preview" />}
+      />
+    );
+    if (contentOnly) return embed;
     // isContribution like a twitter post
     const isContribution = authorName || authorAvatar;
     return (
@@ -58,14 +66,7 @@ class URLPreview extends React.Component<URLPreviewProps> {
         )}
         <div className="url-content-container">
           <div className="url-description">{description}</div>
-          <div className="url-media-container">
-            <Embed
-              url={url}
-              defaultEmbed={
-                thumbnailUrl && <div style={{ backgroundImage: `url("${thumbnailUrl}")` }} className="url-img-preview" />
-              }
-            />
-          </div>
+          <div className="url-media-container">{embed}</div>
         </div>
         {isContribution && (
           <div className="url-footer">

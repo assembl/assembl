@@ -304,7 +304,10 @@ const Translations = {
           openInNewTab: "Ouvrir le lien dans un nouvel onglet",
           text: "Texte du lien",
           title: "Insérer un lien",
-          url: "Adresse web"
+          url: "Adresse web",
+          editLinkForm: {
+            title: "Modifier le lien"
+          }
         }
       },
       uploadButton: "Choisissez un fichier",
@@ -1203,7 +1206,10 @@ const Translations = {
           openInNewTab: "Open link in new tab",
           text: "Link text",
           title: "Insert a link",
-          url: "URL"
+          url: "URL",
+          editLinkForm: {
+            title: "Edit the link"
+          }
         }
       },
       uploadButton: "Choose a file to upload",
