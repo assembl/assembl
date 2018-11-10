@@ -416,8 +416,6 @@ const Translations = {
         numberOfResponses_0: "Aucune réponse",
         numberOfResponses_1: "%{count} réponse",
         postSuccessMsg: "Merci pour votre participation. Votre fiction a bien été publiée !",
-        sideCommentSuccessMsg: "Votre commentaire a été publié avec succès !",
-        sideCommentEditSuccessMsg: "Votre commentaire a été édité avec succès !",
         saveDraft: "Sauvegarder",
         shareFiction: "Partager cette fiction",
         startFictionLabel: "Je partage ma fiction",
@@ -436,9 +434,17 @@ const Translations = {
           submit: "Commenter",
           title: "Quels sujets sont abordés dans cette fiction ?"
         },
-        commentersParticipation: "%{count} participants ont commenté un extrait.",
-        commentersParticipation_1: "%{count} participant a commenté un extrait.",
-        commentLabel: "Votre commentaire",
+        sideComment: {
+          commentersParticipation: "%{count} participants ont commenté un extrait.",
+          commentersParticipation_1: "%{count} participant a commenté un extrait.",
+          commentLabel: "Votre commentaire",
+          submitSuccessMsg: "Votre commentaire a été publié avec succès !",
+          editSuccessMsg: "Votre commentaire a été édité avec succès !",
+          deleteSuccessMsg: "Votre commentaire a été supprimé avec succès !",
+          confirmDeleteMsg: "Êtes vous sûr de vouloir supprimer ce commentaire ?",
+          editTooltip: "Modifier",
+          deleteTooltip: "Supprimer"
+        },
         suggest: "Suggérer"
       },
       themes: "Thèmes",
@@ -1325,8 +1331,6 @@ const Translations = {
         numberOfResponses_0: "No response",
         numberOfResponses_1: "%{count} response",
         postSuccessMsg: "Thanks for your participation. Your fiction has been published successfully!",
-        sideCommentSuccessMsg: "Your comment has been published successfully!",
-        sideCommentEditSuccessMsg: "Your comment has been edited successfully!",
         saveDraft: "Save",
         shareFiction: "Share a short story",
         startFictionLabel: "Share a fiction",
@@ -1345,9 +1349,17 @@ const Translations = {
           submit: "Comment",
           title: "What are the topics of the fiction?"
         },
-        commentersParticipation: "%{count} participants commented a quote.",
-        commentersParticipation_1: "%{count} participant commented a quote.",
-        commentLabel: "Your comment",
+        sideComment: {
+          commentersParticipation: "%{count} participants commented a quote.",
+          commentersParticipation_1: "%{count} participant commented a quote.",
+          commentLabel: "Your comment",
+          submitSuccessMsg: "Your comment has been published successfully!",
+          editSuccessMsg: "Your comment has been edited successfully!",
+          deleteSuccessMsg: "Your comment has been deleted successfully!",
+          confirmDeleteMsg: "Are you sure you would like to delete this comment?",
+          editTooltip: "Edit",
+          deleteTooltip: "Delete"
+        },
         suggest: "Suggest"
       },
       themes: "Themes",

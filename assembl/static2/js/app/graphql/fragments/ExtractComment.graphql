@@ -12,4 +12,5 @@ fragment ExtractComment on Post {
     ...Attachment
   }
   parentId
+  publicationState
 }

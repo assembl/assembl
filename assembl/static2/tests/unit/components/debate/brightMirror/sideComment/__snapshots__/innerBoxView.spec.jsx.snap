@@ -42,6 +42,20 @@ exports[`Storyshots InnerBoxView multiple comments 1`] = `
             </div>
           </div>
         </div>
+        <div
+          className="button-bar"
+        >
+          <button
+            className="action-menu-btn btn btn-default"
+            disabled={false}
+            onClick={[Function]}
+            type="button"
+          >
+            <span
+              className="assembl-icon-ellipsis-vert grey"
+            />
+          </button>
+        </div>
       </div>
       <div
         className="harvesting-box-body"
@@ -1317,6 +1331,35 @@ exports[`Storyshots InnerBoxView multiple comments 1`] = `
                           }
                         </span>
                       </span>
+                    </span>
+                    <span>
+                      <span>
+                        <br />
+                          
+                      </span>
+                      <span
+                        style={Object {}}
+                      >
+                        deletePost
+                      </span>
+                      <span>
+                        =
+                        <span
+                          style={Object {}}
+                        >
+                          {
+                          <span
+                            style={
+                              Object {
+                                "color": "#170",
+                              }
+                            }
+                          >
+                            deletePost
+                          </span>
+                          }
+                        </span>
+                      </span>
                       <br />
                     </span>
                   </span>
@@ -1452,20 +1495,20 @@ exports[`Storyshots InnerBoxView single comment 1`] = `
               9 months ago
             </div>
           </div>
-          <div
-            className="button-bar"
+        </div>
+        <div
+          className="button-bar"
+        >
+          <button
+            className="action-menu-btn btn btn-default"
+            disabled={false}
+            onClick={[Function]}
+            type="button"
           >
-            <button
-              className="action-menu-btn btn btn-default"
-              disabled={false}
-              onClick={[Function]}
-              type="button"
-            >
-              <span
-                className="assembl-icon-ellipsis-vert grey"
-              />
-            </button>
-          </div>
+            <span
+              className="assembl-icon-ellipsis-vert grey"
+            />
+          </button>
         </div>
       </div>
       <div
@@ -2314,6 +2357,35 @@ exports[`Storyshots InnerBoxView single comment 1`] = `
                             }
                           >
                             setEditMode
+                          </span>
+                          }
+                        </span>
+                      </span>
+                    </span>
+                    <span>
+                      <span>
+                        <br />
+                          
+                      </span>
+                      <span
+                        style={Object {}}
+                      >
+                        deletePost
+                      </span>
+                      <span>
+                        =
+                        <span
+                          style={Object {}}
+                        >
+                          {
+                          <span
+                            style={
+                              Object {
+                                "color": "#170",
+                              }
+                            }
+                          >
+                            deletePost
                           </span>
                           }
                         </span>

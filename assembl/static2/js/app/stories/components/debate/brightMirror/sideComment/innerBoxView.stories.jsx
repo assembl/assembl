@@ -129,7 +129,8 @@ export const defaultInnerBoxViewProps: Props = {
   extracts: [extract0],
   comment: comment,
   changeCurrentExtract: action('changeCurrentExtract'),
-  setEditMode: action('setEditMode')
+  setEditMode: action('setEditMode'),
+  deletePost: action('deletePost')
 };
 
 export const multipleInnerBoxViewProps: Props = {

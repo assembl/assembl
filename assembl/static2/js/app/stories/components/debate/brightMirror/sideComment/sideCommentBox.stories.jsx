@@ -12,7 +12,7 @@ import {
   DumbSideCommentBox,
   type Props as SideCommentBoxProps
 } from '../../../../../components/debate/brightMirror/sideComment/sideCommentBox';
-import { ExtractStates } from '../../../../../constants';
+import { ExtractStates, PublicationStates } from '../../../../../constants';
 
 const currentUser = {
   displayName: 'John Doe User',
@@ -72,7 +72,8 @@ const extract0 = {
       creationDate: '2018-01-26T09:19:01.492406+00:00',
       creator: commentor,
       body: richBody,
-      attachments: []
+      attachments: [],
+      publicationState: PublicationStates.PUBLISHED
     }
   ]
 };
@@ -102,7 +103,8 @@ const extract1 = {
       creationDate: '2017-02-12T09:19:01.492406+00:00',
       creator: currentUser,
       body: 'Second comment!',
-      attachments: []
+      attachments: [],
+      publicationState: PublicationStates.PUBLISHED
     }
   ]
 };
@@ -132,7 +134,8 @@ const extract2 = {
       creationDate: '2001-03-10T09:19:01.492406+00:00',
       creator: commentor,
       body: 'Third comment!',
-      attachments: []
+      attachments: [],
+      publicationState: PublicationStates.PUBLISHED
     }
   ]
 };
@@ -163,7 +166,8 @@ const extractWithReply = {
       creator: commentor,
       body: richBody,
       attachments: [],
-      reply: {}
+      reply: {},
+      publicationState: PublicationStates.PUBLISHED
     },
     {
       id: '1',
@@ -171,7 +175,8 @@ const extractWithReply = {
       creationDate: '2018-01-27T10:19:01.492406+00:00',
       creator: currentUser,
       body: 'This is a reply to a comment',
-      attachments: []
+      attachments: [],
+      publicationState: PublicationStates.PUBLISHED
     }
   ]
 };
@@ -185,7 +190,6 @@ export const defaultSideCommentBoxProps: SideCommentBoxProps = {
   contentLocale: 'en',
   lang: 'en',
   selection: null,
-  displayCommentBox: true,
   setCommentBoxDisplay: action('setCommentBoxDisplay'),
   cancelSubmit: action('cancelSubmit'),
   addPostExtract: action('addPostExtract'),

@@ -27,8 +27,8 @@ export const MINIMUM_BODY_LENGTH = 10;
 
 export const ANCHOR_SIZE = 44;
 export const ANCHOR_OFFSET = 6;
-export const COMMENT_BADGE_OFFSET = 24.5;
-export const COMMENT_BOX_OFFSET = 50;
+export const COMMENT_BADGE_OFFSET = 10.5;
+export const COMMENT_BOX_OFFSET = 40;
 export const COMMENT_DYNAMIC_OFFSET = 5;
 
 export const MAX_TREE_FORM_LEVEL = 4;

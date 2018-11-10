@@ -12,11 +12,6 @@ exports[`Storyshots SideCommentAnchor default 1`] = `
   >
     <div
       className="side-comment-anchor"
-      onBlur={[Function]}
-      onClick={null}
-      onFocus={[Function]}
-      onMouseOut={[Function]}
-      onMouseOver={[Function]}
       style={
         Object {
           "left": "6px",

@@ -21,4 +21,8 @@
       }
     }
   }
+
+  @media screen and (min-width: $screen-xl-min) {
+    margin-left: 25px;
+  }
 }

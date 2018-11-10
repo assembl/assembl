@@ -44,7 +44,7 @@ class InnerBoxSubmit extends React.Component<Props, State> {
               editorState={body}
               maxLength={FICTION_COMMENT_MAX_LENGTH}
               onChange={updateBody}
-              placeholder={I18n.t('debate.brightMirror.commentLabel')}
+              placeholder={I18n.t('debate.brightMirror.sideComment.commentLabel')}
               withAttachmentButton
             />
           </div>

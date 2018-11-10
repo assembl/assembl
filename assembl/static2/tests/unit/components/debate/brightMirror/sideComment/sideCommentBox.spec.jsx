@@ -13,6 +13,7 @@ import {
   canReplySideCommentBoxProps,
   withReplySideCommentBoxProps
 } from '../../../../../../js/app/stories/components/debate/brightMirror/sideComment/sideCommentBox.stories';
+import { displayModal } from '../../../../../../js/app/utils/utilityManager';
 
 initStoryshots({
   storyKindRegex: /^DumbSideCommentBox$/
@@ -21,6 +22,7 @@ initStoryshots({
 configure({ adapter: new Adapter() });
 
 jest.mock('annotator_range');
+jest.mock('../../../../../../js/app/utils/utilityManager');
 
 describe('<SideCommentBox /> - default with shallow', () => {
   let wrapper;
@@ -48,6 +50,11 @@ describe('<SideCommentBox /> - default with shallow', () => {
   it('should display edit form', () => {
     wrapper.setState({ editComment: true });
     expect(wrapper.find('InnerBoxSubmit')).toHaveLength(1);
+  });
+
+  it('should render a modal when function deletePost is called', () => {
+    wrapper.instance().deletePost();
+    expect(displayModal).toHaveBeenCalledTimes(1);
   });
 });
 

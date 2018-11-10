@@ -2,7 +2,7 @@
 import React from 'react';
 
 import initStoryshots from '@storybook/addon-storyshots';
-import { configure, shallow } from 'enzyme';
+import { configure, shallow, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 
 import InnerBoxView from '../../../../../../js/app/components/debate/brightMirror/sideComment/innerBoxView';
@@ -19,7 +19,7 @@ configure({ adapter: new Adapter() });
 
 // Mock utils functions
 jest.mock('../../../../../../js/app/utils/globalFunctions', () => ({
-  getConnectedUserId: jest.fn(() => '2'),
+  isConnectedUser: jest.fn(() => true),
   getIconPath: jest.fn(() => 'icons/path/avatar')
 }));
 
@@ -49,7 +49,6 @@ describe('<InnerBoxView /> - default with shallow', () => {
   });
 
   it('should render menu button', () => {
-    wrapper.setProps({ setEditMode: jest.fn() });
     expect(wrapper.find('Button [className="action-menu-btn"]')).toHaveLength(1);
   });
 });
@@ -77,7 +76,45 @@ describe('<InnerBoxView /> - multiple with shallow', () => {
     expect(wrapper.find('div [className="assembl-icon-down-open grey"]')).toHaveLength(2);
   });
 
-  it('should not render menu button', () => {
-    expect(wrapper.find('Button [className="action-menu-btn"]')).toHaveLength(0);
+  it('should render menu button', () => {
+    expect(wrapper.find('Button [className="action-menu-btn"]')).toHaveLength(1);
+  });
+});
+
+describe('<InnerBoxView /> - with mount', () => {
+  let wrapper;
+
+  beforeEach(() => {
+    wrapper = mount(<InnerBoxView {...defaultInnerBoxViewProps} />);
+  });
+
+  it('should display delete button', () => {
+    wrapper.find('Button [className="action-menu-btn"]').simulate('click');
+    expect(wrapper.find('Button [className="delete-btn"]')).toHaveLength(1);
+  });
+
+  it('should call delete Post', () => {
+    const deleteSpy = jest.fn(() => {});
+    wrapper.setProps({ ...defaultInnerBoxViewProps, deletePost: deleteSpy });
+
+    wrapper.find('Button [className="action-menu-btn"]').simulate('click');
+    wrapper.find('Button [className="delete-btn"]').simulate('click');
+
+    expect(deleteSpy).toHaveBeenCalled();
+  });
+
+  it('should display edit button', () => {
+    wrapper.find('Button [className="action-menu-btn"]').simulate('click');
+    expect(wrapper.find('Button [className="edit-btn"]')).toHaveLength(1);
+  });
+
+  it('should call setEditMode', () => {
+    const editSpy = jest.fn(() => {});
+    wrapper.setProps({ ...defaultInnerBoxViewProps, setEditMode: editSpy });
+
+    wrapper.find('Button [className="action-menu-btn"]').simulate('click');
+    wrapper.find('Button [className="edit-btn"]').simulate('click');
+
+    expect(editSpy).toHaveBeenCalled();
   });
 });
