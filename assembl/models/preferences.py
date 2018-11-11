@@ -608,7 +608,7 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
         },
         {
             "id": "watson_categories",
-            "name": _("Get concepts from Watson"),
+            "name": _("Get categories from Watson"),
             "value_type": "bool",
             "description": _("Use Watson to identify categories"),
             "allow_user_override": None,
@@ -617,7 +617,7 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
         },
         {
             "id": "watson_sentiment",
-            "name": _("Get concepts from Watson"),
+            "name": _("Get sentiments from Watson"),
             "value_type": "bool",
             "description": _("Use Watson to identify sentiments"),
             "allow_user_override": None,
@@ -626,7 +626,7 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
         },
         {
             "id": "watson_emotion",
-            "name": _("Get concepts from Watson"),
+            "name": _("Get emotions from Watson"),
             "value_type": "bool",
             "description": _("Use Watson to identify emotions"),
             "allow_user_override": None,

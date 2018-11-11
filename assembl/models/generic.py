@@ -573,6 +573,7 @@ class Content(TombstonableMixin, DiscussionBoundBase):
         ).order_by(
             PostKeywordAnalysis.score.desc())
         if limit:
+            assert isinstance(limit, int)
             sq = sq.limit(20)
         sq = sq.subquery()
 
