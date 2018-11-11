@@ -71,7 +71,7 @@ class Discussion:
     header_image = Default.document % ("The file representing the header of the landing page. ", )
     logo_image = Default.document % ("The file representing the logo of the debate. ", )
     slug = """A string used to form the URL of the discussion."""
-    top_keywords = "Keywords most often found in the discussion"
+    top_keywords = "Keywords most often found in the discussion, according to NLP engine"
     nlp_sentiment = "The aggregated sentiment analysis on the posts"
 
 
@@ -286,7 +286,7 @@ class VoteResults:
 
 class TagResult:
     __doc__ = "A tag assigned to a post, with its scoring value"
-    score = "The score associated with the tag"
+    score = "The score associated with the tag (0-1, increasing relevance)"
     value = "The tag keyword"
 
 
@@ -304,7 +304,7 @@ class IdeaInterface:
     title_entries = Default.langstring_entries % ("This is the Idea title in multiple languages.",)
     description = "The description of the Idea, often shown in the header of the Idea."
     description_entries = Default.langstring_entries % ("This is the description of the Idea in multiple languages.",)
-    top_keywords = "The list of top keywords found in messages associated to this idea"
+    top_keywords = "The list of top keywords found in messages associated to this idea, according to NLP engine"
     nlp_sentiment = "The aggregated sentiment analysis on the posts"
     num_posts = "The total number of active posts on that idea (excludes deleted posts)."
     num_total_posts = "The total number of posts on that idea and on all its children ideas."
@@ -531,7 +531,7 @@ class PostInterface:
     DELETED_BY_ADMIN,\n
     WIDGET_SCOPED\n"""
     attachments = "List of attachements to the post."
-    keywords = "Keywords associated with the post."
+    keywords = "Keywords associated with the post, according to NLP engine."
     nlp_sentiment = "Sentiment analysis results"
     original_locale = Default.string_entry % ("Locale in which the original message was written.")
     publishes_synthesis = "Graphene Field modeling a relationship to a published synthesis."
