@@ -53,7 +53,7 @@ def upgrade(pyramid_env):
         )
 
         op.create_table(
-            "post_dbpediaconcept_analysis",
+            "post_localized_concept_analysis",
             sa.Column("id", sa.Integer, primary_key=True),
             sa.Column("source_id", sa.Integer, sa.ForeignKey(
                 "computation.id", ondelete="CASCADE")),
@@ -86,7 +86,7 @@ def upgrade(pyramid_env):
 def downgrade(pyramid_env):
     with context.begin_transaction():
         op.drop_table("post_keyword_analysis")
-        op.drop_table("post_dbpediaconcept_analysis")
+        op.drop_table("post_localized_concept_analysis")
         op.drop_table("post_watsonv1_sentiments")
         op.drop_table("localized_concept")
         op.drop_table("tag")

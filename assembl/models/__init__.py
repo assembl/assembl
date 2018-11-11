@@ -355,7 +355,7 @@ from .nlp import (  # noqa: E402, F401
     DBPediaConcept,
     Tag,
     PostKeywordAnalysis,
-    PostDBPediaConceptAnalysis,
+    PostLocalizedConceptAnalysis,
     PostWatsonV1SentimentAnalysis,
 )
 from .resource import Resource  # noqa: E402, F401

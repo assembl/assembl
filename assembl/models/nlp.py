@@ -322,17 +322,17 @@ class PostKeywordAnalysis(PostKeywordAnalysisMixin, DiscussionBoundBase):
     category = Column(Boolean)
 
 
-class PostDBPediaConceptAnalysis(
+class PostLocalizedConceptAnalysis(
         PostKeywordAnalysisMixin, DiscussionBoundBase):
-    __tablename__ = "post_dbpediaconcept_analysis"
+    __tablename__ = "post_localized_concept_analysis"
     concept_id = Column(Integer, ForeignKey(
         LocalizedUriConcept.id, ondelete="CASCADE"))
     value = relationship(LocalizedUriConcept)
-    # q=db.query(func.sum(PostDBPediaConceptAnalysis.score).label('score'),
+    # q=db.query(func.sum(PostLocalizedConceptAnalysis.score).label('score'),
     #                     DBPediaConcept.english_id_calc.label('id')
     #            ).join(DBPediaConcept
     #            ).group_by(DBPediaConcept.english_id_calc
-    #            ).order_by(func.sum(PostDBPediaConceptAnalysis.score).desc()
+    #            ).order_by(func.sum(PostLocalizedConceptAnalysis.score).desc()
     #            ).limit(30).subquery()
     # db.query(DBPediaConcept.concept_uri, q.c.score
     #          ).join(q, DBPediaConcept.id==q.columns.id).all()

@@ -54,7 +54,7 @@ def process_post_created_task(id):
     from ..models.nlp import (
         DBPediaConcept,
         PostKeywordAnalysis,
-        PostDBPediaConceptAnalysis,
+        PostLocalizedConceptAnalysis,
         PostWatsonV1SentimentAnalysis,
         Tag,
     )
@@ -105,7 +105,7 @@ def process_post_created_task(id):
                     dbconcept = DBPediaConcept.get_or_create(
                         concept['dbpedia_resource'], post.db)
                     dbconcept.identify_languages(desired_locales, post.db)
-                    post.db.add(PostDBPediaConceptAnalysis(
+                    post.db.add(PostLocalizedConceptAnalysis(
                         post=post, source=computation,
                         value=dbconcept, score=keyword['relevance']))
                 sentiments = {}
