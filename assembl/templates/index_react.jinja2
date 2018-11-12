@@ -50,5 +50,18 @@
                 <div id="under-test" class="hidden">V2</div>
             {%- endif %}
         {% endblock %}
+
+        {% if inject_bugherd %}
+            <!-- Bugherd injection -->
+            <script type='text/javascript'>
+            (function (d, t) {
+            var bh = d.createElement(t), s = d.getElementsByTagName(t)[0];
+            bh.type = 'text/javascript';
+            bh.src = 'https://www.bugherd.com/sidebarv2.js?apikey=mtcl06zwfwhfvmxqxb1d5q';
+            s.parentNode.insertBefore(bh, s);
+            })(document, 'script');
+            </script>
+            <!-- End of Bugherd injection -->
+        {% endif %}
     </body>
 {% endblock%}
