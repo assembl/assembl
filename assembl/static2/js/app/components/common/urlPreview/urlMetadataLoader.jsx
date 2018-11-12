@@ -6,8 +6,7 @@ import { fetchURLMetadata } from '../../../utils/urlPreview';
 
 type Props = {
   url: string,
-  afterLoad: ?Function,
-  contentOnly: boolean
+  afterLoad: ?Function
 };
 
 type State = {
@@ -37,10 +36,10 @@ class URLMetadataLoader extends React.Component<Props, State> {
   }
 
   render() {
-    const { afterLoad, contentOnly } = this.props;
+    const { afterLoad } = this.props;
     const { loading, error, metadata } = this.state;
     if (loading) return null;
-    return metadata && !error ? <UrlPreview {...metadata} afterLoad={afterLoad} contentOnly={contentOnly} /> : null;
+    return metadata && !error ? <UrlPreview {...metadata} afterLoad={afterLoad} /> : null;
   }
 }
 

@@ -80,27 +80,23 @@ export const postBodyReplacementComponents = (afterLoad?: Function) => ({
     />
   ),
   a: (attributes: Object) => {
-    const embeddedUrl = isSpecialURL(attributes.href);
+    const { href, key, target, title, children } = attributes;
+    const embeddedUrl = isSpecialURL(href);
     const origin = (
-      <a
-        key={`url-link-${attributes.key}`}
-        href={attributes.href}
-        className="linkified"
-        target={attributes.target}
-        title={attributes.title}
-      >
-        {attributes.children}
+      <a key={`url-link-${key}`} href={href} className="linkified" target={target} title={title}>
+        {children}
       </a>
     );
-    return [
-      origin,
-      <URLMetadataLoader
-        key={`url-preview-${attributes.href}`}
-        contentOnly={embeddedUrl}
-        url={attributes.href}
-        afterLoad={afterLoad}
-      />
-    ];
+    return (
+      <React.Fragment>
+        {origin}
+        {embeddedUrl ? (
+          <Embed key={`url-embed-${href}`} url={href} />
+        ) : (
+          <URLMetadataLoader key={`url-preview-${href}`} url={href} afterLoad={afterLoad} />
+        )}
+      </React.Fragment>
+    );
   },
   annotation: (attributes: Object) => (
     <ExtractInPost key={attributes.key} id={attributes.id} state={attributes['data-state']}>

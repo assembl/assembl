@@ -38,7 +38,7 @@ exports[`Storyshots InnerBoxView multiple comments 1`] = `
               className="harvesting-date"
               title="2018-01-26T09:19:01.492406+00:00"
             >
-              9 months ago
+              10 months ago
             </div>
           </div>
         </div>
@@ -91,6 +91,23 @@ exports[`Storyshots InnerBoxView multiple comments 1`] = `
               >
                 https://youtu.be/MzfBIcJaJSU
               </a>
+              <div
+                className="embed-theater "
+              >
+                <div
+                  className="embed-thumbnail-container"
+                  onClick={[Function]}
+                >
+                  <img
+                    alt="youtube video"
+                    className="embed-thumbnail"
+                    src="https://img.youtube.com/vi/MzfBIcJaJSU/mqdefault.jpg"
+                  />
+                  <span
+                    className="play-button"
+                  />
+                </div>
+              </div>
             </p>
           </div>
           <div
@@ -1429,7 +1446,7 @@ exports[`Storyshots InnerBoxView single comment 1`] = `
               className="harvesting-date"
               title="2018-01-26T09:19:01.492406+00:00"
             >
-              9 months ago
+              10 months ago
             </div>
           </div>
           <div
@@ -1488,6 +1505,23 @@ exports[`Storyshots InnerBoxView single comment 1`] = `
               >
                 https://youtu.be/MzfBIcJaJSU
               </a>
+              <div
+                className="embed-theater "
+              >
+                <div
+                  className="embed-thumbnail-container"
+                  onClick={[Function]}
+                >
+                  <img
+                    alt="youtube video"
+                    className="embed-thumbnail"
+                    src="https://img.youtube.com/vi/MzfBIcJaJSU/mqdefault.jpg"
+                  />
+                  <span
+                    className="play-button"
+                  />
+                </div>
+              </div>
             </p>
           </div>
           <div

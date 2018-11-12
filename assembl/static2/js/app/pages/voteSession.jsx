@@ -9,7 +9,7 @@ import shuffle from 'lodash/shuffle';
 import activeHtml from 'react-active-html';
 
 import { isSpecialURL } from '../utils/urlPreview';
-import URLMetadataLoader from '../components/common/urlPreview/urlMetadataLoader';
+import Embed from '../components/common/urlPreview/embed';
 import VoteSessionQuery from '../graphql/VoteSession.graphql';
 import AddTokenVoteMutation from '../graphql/mutations/addTokenVote.graphql';
 import AddGaugeVoteMutation from '../graphql/mutations/addGaugeVote.graphql';
@@ -128,22 +128,17 @@ export const filterNumberGaugeVoteModules: FilterNumberGaugeVoteModules = module
   modules.filter(module => module.voteType === 'number_gauge_vote_specification').sort(moduleComparator);
 
 export const voteSessionBodyReplacementComponents = () => ({
-  a: (attributes: Object) => (
-    <React.Fragment>
-      <a
-        key={`url-link-${attributes.key}`}
-        href={attributes.href}
-        className="linkified"
-        target={attributes.target}
-        title={attributes.title}
-      >
-        {attributes.children}
-      </a>
-      {isSpecialURL(attributes.href) ? (
-        <URLMetadataLoader key={`url-preview-${attributes.href}`} contentOnly url={attributes.href} />
-      ) : null}
-    </React.Fragment>
-  )
+  a: (attributes: Object) => {
+    const { href, key, target, title, children } = attributes;
+    return (
+      <React.Fragment>
+        <a key={`url-link-${key}`} href={href} className="linkified" target={target} title={title}>
+          {children}
+        </a>
+        {isSpecialURL(href) ? <Embed key={`url-embed-${href}`} url={href} /> : null}
+      </React.Fragment>
+    );
+  }
 });
 
 const renderRichtext = (text: string) => activeHtml(text && transformLinksInHtml(text), voteSessionBodyReplacementComponents());

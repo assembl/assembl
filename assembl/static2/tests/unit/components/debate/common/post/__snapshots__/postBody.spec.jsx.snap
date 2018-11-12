@@ -6,19 +6,20 @@ exports[`PostBody component should render a html body 1`] = `
     id="message-body-local:Content/3059"
   >
     You can't index 
-    <a
-      className="linkified"
-      href="url"
-      target={undefined}
-      title={undefined}
-    >
-      the port
-    </a>
-    <URLMetadataLoader
-      afterLoad={undefined}
-      contentOnly={false}
-      url="url"
-    />
+    <Unknown>
+      <a
+        className="linkified"
+        href="url"
+        target={undefined}
+        title={undefined}
+      >
+        the port
+      </a>
+      <URLMetadataLoader
+        afterLoad={undefined}
+        url="url"
+      />
+    </Unknown>
      without 
     <ExtractInPost
       id="annotationId"
