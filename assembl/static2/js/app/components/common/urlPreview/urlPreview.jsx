@@ -5,7 +5,7 @@ import Embed from './embed';
 // For a future development (integration of graphs ...)
 // import Frame from './frame';
 
-export type URLPreviewProps = {
+export type Props = {
   id: string,
   url: string,
   html: string, // eslint-disable-line react/no-unused-prop-types
@@ -19,7 +19,7 @@ export type URLPreviewProps = {
   afterLoad: ?Function
 };
 
-class URLPreview extends React.Component<URLPreviewProps> {
+class URLPreview extends React.Component<Props> {
   componentDidMount() {
     // const { html, afterLoad } = this.props;
     // if (!html && afterLoad) afterLoad();
