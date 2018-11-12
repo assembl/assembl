@@ -216,6 +216,11 @@ def react_view(request, required_permission=P_READ):
     get_route = old_context["get_route"]
     theme_name, theme_relative_path = get_theme_info(discussion, frontend_version=2)
     node_env = os.getenv('NODE_ENV', 'production')
+    # wsginame values are defined in *.rc files
+    wsginame = get('wsginame', '')
+    bugherd_url = None
+    if wsginame in ('preprod.wsgi',):
+        bugherd_url = get('bugherd_url', None)
     common_context = {
         "theme_name": theme_name,
         "theme_relative_path": theme_relative_path,
@@ -225,7 +230,8 @@ def react_view(request, required_permission=P_READ):
         "elasticsearch_lang_indexes": old_context['elasticsearch_lang_indexes'],
         "web_analytics": old_context['web_analytics'],
         "under_test": old_context['under_test'],
-        "sentry_dsn": get('sentry_dsn', '')
+        "sentry_dsn": get('sentry_dsn', ''),
+        "bugherd_url": bugherd_url
     }
 
     if discussion:
