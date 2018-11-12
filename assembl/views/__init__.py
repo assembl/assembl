@@ -338,7 +338,7 @@ def get_default_context(request, **kwargs):
     if wsginame:
         # wsginame values are defined in *.rc files
         inject_bugherd = True if wsginame in ('preprod.wsgi')
-    else
+    else:
         inject_bugherd = False
     base = dict(
         kwargs,
