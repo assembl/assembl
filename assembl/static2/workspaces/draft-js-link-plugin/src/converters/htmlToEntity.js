@@ -14,7 +14,8 @@ export default function (
     const data = {
       url: formatLink ? formatLink(node.href) : node.href,
       target: node.target || undefined,
-      title: node.title || undefined
+      title: node.title || undefined,
+      text: node.innerHTML || undefined
     };
 
     return createEntity(ENTITY_TYPES.link, ENTITY_MUTABILITY.mutable, data);
