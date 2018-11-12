@@ -110,6 +110,10 @@ _package_install = false
 # _user
 # _projectpath
 # _dbdumps_dir
+# Activate bugherd on staging/preproduction servers only
+# bugherd_url
+# bugherd_key
+# wsginame
 
 # Optional - Path to SSL Stapling certificates, must be single file
 # on server
