@@ -27,13 +27,14 @@ export type Theme = {
 type Config = {
   closeModal: void => void,
   setModalContent: (React.Node, string) => void,
+  formatLink?: string => string,
   theme?: Theme
 };
 
 export const converters = linkConverters;
 
 export default (config: Config) => {
-  const { closeModal, setModalContent, theme } = config;
+  const { closeModal, setModalContent, formatLink, theme } = config;
 
   const store = {
     getEditorState: undefined,
@@ -52,7 +53,8 @@ export default (config: Config) => {
         matchesEntityType: matchesEntityType,
         component: decorateComponentWithProps(Link, {
           closeModal: closeModal,
-          setModalContent: setModalContent
+          setModalContent: setModalContent,
+          formatLink: formatLink
         })
       }
     ],
@@ -61,6 +63,7 @@ export default (config: Config) => {
       ownTheme: theme,
       closeModal: closeModal,
       setModalContent: setModalContent,
+      formatLink: formatLink,
       store: store,
       onRemoveLinkAtSelection: () => {
         const { getEditorState, setEditorState } = store;

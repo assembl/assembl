@@ -4,18 +4,18 @@ import React from 'react';
 import UrlPreview, { type URLPreviewProps } from './urlPreview';
 import { fetchURLMetadata } from '../../../utils/urlPreview';
 
-type URLMetadataLoaderProps = {
+type Props = {
   url: string,
   afterLoad: ?Function
 };
 
-type URLMetadataLoaderState = {
+type State = {
   loading: boolean,
   error: boolean,
   metadata: URLPreviewProps | null
 };
 
-class URLMetadataLoader extends React.Component<URLMetadataLoaderProps, URLMetadataLoaderState> {
+class URLMetadataLoader extends React.Component<Props, State> {
   state = {
     loading: true,
     error: false,

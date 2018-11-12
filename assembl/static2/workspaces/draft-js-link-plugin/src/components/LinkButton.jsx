@@ -17,7 +17,8 @@ type Props = {
   setModalContent: (React.Node, string) => void,
   store: DraftJSPluginStore,
   theme: Theme,
-  onRemoveLinkAtSelection: () => void
+  onRemoveLinkAtSelection: () => void,
+  formatLink?: string => string
 };
 
 export default class LinkButton extends React.Component<Props> {
@@ -26,7 +27,7 @@ export default class LinkButton extends React.Component<Props> {
   };
 
   addLink = (values: FormValues) => {
-    const { closeModal, store } = this.props;
+    const { closeModal, store, formatLink } = this.props;
     if (store) {
       const { getEditorState, setEditorState } = store;
       if (getEditorState && setEditorState) {
@@ -37,7 +38,7 @@ export default class LinkButton extends React.Component<Props> {
             target: values.openInNewTab ? '_blank' : null,
             text: text,
             title: title,
-            url: values.url
+            url: formatLink ? formatLink(values.url) : values.url
           };
           setEditorState(EditorUtils.createLinkAtSelection(getEditorState(), data));
         }
