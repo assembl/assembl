@@ -1,0 +1,30 @@
+.select-field {
+  > .select-field__control {
+    border-radius: 15px;
+  }
+
+  > .select-field__control--is-focused {
+    border-color: $grey11 !important;
+    box-shadow: initial !important;
+    border-radius: 15px;
+  }
+
+  .select-field__input {
+    > input {
+      height: auto !important;
+      box-shadow: none !important;
+    }
+  }
+
+  .select-field__multi-value {
+    border-radius: 12px;
+    border: solid 1px $grey11;
+    margin-left: 2px;
+
+    .select-field__multi-value__remove {
+      border-radius: 12px;
+      padding-left: 3px;
+      padding-right: 3px;
+    }
+  }
+}

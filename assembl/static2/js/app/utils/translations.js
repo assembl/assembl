@@ -56,7 +56,17 @@ const Translations = {
       qualifyExtract: "Qualifier l'extrait attrapé",
       move: "Déplacer",
       qualifyNature: "Qualifier par nature",
-      qualifyAction: "Qualifier par action"
+      qualifyAction: "Qualifier par action",
+      tags: {
+        label: "Tags",
+        cancel: "Annuler",
+        validate: "Valider",
+        select: {
+          placeholder: "Selectionner des tags",
+          noOptions: "Aucun tag trouvé",
+          newOption: "Ajouter ce tag '%{option}'"
+        }
+      }
     },
     cookies: {
       userSession: "Session utilisateur",
@@ -920,6 +930,13 @@ const Translations = {
     },
     duration: {
       format: "h [h]"
+    },
+    form: {
+      select: {
+        placeholder: "Selectionner...",
+        noOptions: "Aucune options n'est disponible",
+        newOption: "Ajouter l'option '%{option}'"
+      }
     }
   },
   en: {
@@ -976,7 +993,17 @@ const Translations = {
       qualifyExtract: "Qualify the extract",
       move: "Move",
       qualifyNature: "Qualify by nature",
-      qualifyAction: "Qualify by action"
+      qualifyAction: "Qualify by action",
+      tags: {
+        label: "Tags",
+        cancel: "Cancel",
+        validate: "Validate",
+        select: {
+          placeholder: "Select tags",
+          noOptions: "No tags",
+          newOption: "Create this tag '%{option}'"
+        }
+      }
     },
     cookies: {
       userSession: "User Session",
@@ -1829,6 +1856,13 @@ const Translations = {
     },
     duration: {
       format: "h [h]"
+    },
+    form: {
+      select: {
+        placeholder: "Select...",
+        noOptions: "No options",
+        newOption: "Create '%{option}'"
+      }
     }
   }
 };

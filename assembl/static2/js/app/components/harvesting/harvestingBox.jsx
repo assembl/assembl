@@ -21,6 +21,7 @@ import { displayAlert, displayModal, closeModal } from '../../utils/utilityManag
 import { editExtractTooltip, deleteExtractTooltip, nuggetExtractTooltip, qualifyExtractTooltip } from '../common/tooltips';
 import { NatureIcons, ActionIcons } from '../../utils/extract';
 import { ExtractStates } from '../../constants';
+import TagsForm from './tagsForm';
 
 type Props = {
   extracts?: Array<Extract>,
@@ -421,6 +422,8 @@ class DumbHarvestingBox extends React.Component<Props, State> {
     const harvesterUserId = extract && extract.creator && extract.creator.userId ? extract.creator.userId : getConnectedUserId();
     const menuDisabled = disabled || isSubmitted;
     const hasFooter = disabled || isEditable || isSubmitted;
+    // TODO remove. get the extract tags
+    const tags = ['Cool tag', 'Un autre tag', 'Et un autre'];
     return (
       <div className={isSubmitted ? 'submitted-harvesting' : ''}>
         <div>
@@ -582,6 +585,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
                   </div>
                 </div>
               )}
+
             {hasExtract &&
               extract &&
               isEditable && (
@@ -601,6 +605,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
                 {extractIndex + 1}/{extracts.length}
               </div>
             )}
+          <TagsForm canEdit options={tags} initialValues={tags} />
           {hasFooter && this.renderFooter()}
         </div>
       </div>

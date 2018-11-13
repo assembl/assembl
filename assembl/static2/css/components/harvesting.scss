@@ -502,6 +502,70 @@
     }
   }
 
+  .harvesting-tags-form-container,
+  .harvesting-tags-container {
+    background-color: $grey1;
+    padding: 15px 5px 10px 34px;
+
+    .harvesting-box-footer {
+      padding: 5px 0;
+    }
+
+    .harvesting-tags-titles-container {
+      margin-bottom: 10px;
+    }
+
+    .harvesting-tag-container {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background-color: white;
+      border-radius: 13px;
+      padding: 2px 2px 2px 10px;
+      color: $grey8;
+      margin-right: 5px;
+      margin-bottom: 5px;
+
+      .harvesting-tag-title {
+        margin-right: 7px;
+        white-space: nowrap;
+      }
+
+      .assembl-icon-cancel {
+        cursor: pointer;
+
+        &::before {
+          padding-left: 2px;
+        }
+      }
+
+      .assembl-icon-cancel:hover {
+        background-color: $lightred;
+        border-radius: 12px;
+        color: $red;
+      }
+    }
+
+    .harvesting-tags-edit {
+      display: inline-flex;
+      border-radius: 16px;
+      padding: 0 3px 0;
+      color: $first-color;
+      border: solid 1px $first-color;
+      font-size: 14px;
+      font-weight: bold;
+      line-height: normal;
+      height: 17px;
+      width: 17px;
+      cursor: pointer;
+
+      &:hover {
+        color: white;
+        background-color: $first-color;
+      }
+    }
+  }
+
   .harvesting-box-footer {
     text-align: center;
     background-color: $grey1;

@@ -212,6 +212,23 @@ exports[`harvestingBox component should match harvestingBox snapshot when author
       /
       2
     </div>
+    <TagsForm
+      canEdit={true}
+      initialValues={
+        Array [
+          "Cool tag",
+          "Un autre tag",
+          "Et un autre",
+        ]
+      }
+      options={
+        Array [
+          "Cool tag",
+          "Un autre tag",
+          "Et un autre",
+        ]
+      }
+    />
   </div>
 </div>
 `;
@@ -391,6 +408,23 @@ exports[`harvestingBox component should match harvestingBox snapshot when extrac
         [object Object]
       </div>
     </div>
+    <TagsForm
+      canEdit={true}
+      initialValues={
+        Array [
+          "Cool tag",
+          "Un autre tag",
+          "Et un autre",
+        ]
+      }
+      options={
+        Array [
+          "Cool tag",
+          "Un autre tag",
+          "Et un autre",
+        ]
+      }
+    />
     <div
       className="harvesting-box-footer"
     >
@@ -668,6 +702,23 @@ exports[`harvestingBox component should match harvestingBox snapshot when nugget
       /
       2
     </div>
+    <TagsForm
+      canEdit={true}
+      initialValues={
+        Array [
+          "Cool tag",
+          "Un autre tag",
+          "Et un autre",
+        ]
+      }
+      options={
+        Array [
+          "Cool tag",
+          "Un autre tag",
+          "Et un autre",
+        ]
+      }
+    />
   </div>
 </div>
 `;
@@ -884,6 +935,23 @@ exports[`harvestingBox component should match harvestingBox snapshot when select
       /
       2
     </div>
+    <TagsForm
+      canEdit={true}
+      initialValues={
+        Array [
+          "Cool tag",
+          "Un autre tag",
+          "Et un autre",
+        ]
+      }
+      options={
+        Array [
+          "Cool tag",
+          "Un autre tag",
+          "Et un autre",
+        ]
+      }
+    />
   </div>
 </div>
 `;
@@ -1100,6 +1168,23 @@ exports[`harvestingBox component should match harvestingBox snapshot when the co
       /
       2
     </div>
+    <TagsForm
+      canEdit={true}
+      initialValues={
+        Array [
+          "Cool tag",
+          "Un autre tag",
+          "Et un autre",
+        ]
+      }
+      options={
+        Array [
+          "Cool tag",
+          "Un autre tag",
+          "Et un autre",
+        ]
+      }
+    />
   </div>
 </div>
 `;
@@ -1316,6 +1401,23 @@ exports[`harvestingBox component should match harvestingBox snapshot when there 
       /
       2
     </div>
+    <TagsForm
+      canEdit={true}
+      initialValues={
+        Array [
+          "Cool tag",
+          "Un autre tag",
+          "Et un autre",
+        ]
+      }
+      options={
+        Array [
+          "Cool tag",
+          "Un autre tag",
+          "Et un autre",
+        ]
+      }
+    />
   </div>
 </div>
 `;
@@ -1504,6 +1606,23 @@ exports[`harvestingBox component should match harvestingBox snapshot when there 
         [object Object]
       </div>
     </div>
+    <TagsForm
+      canEdit={true}
+      initialValues={
+        Array [
+          "Cool tag",
+          "Un autre tag",
+          "Et un autre",
+        ]
+      }
+      options={
+        Array [
+          "Cool tag",
+          "Un autre tag",
+          "Et un autre",
+        ]
+      }
+    />
     <div
       className="harvesting-box-footer"
     >
