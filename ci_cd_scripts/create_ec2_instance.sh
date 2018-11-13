@@ -7,8 +7,8 @@ aws ec2 run-instances   \
     --placement AvailabilityZone=eu-west-1a \
     --key-name victor   \
     --security-group-ids "sg-0b6c0251567043d03" \
-    --associate-public-ip-address   \
-    --user-data file://~/assembl/ci_cd_scripts/user-data.txt
+    --associate-public-ip-address
+    # --user-data file://~/assembl/ci_cd_scripts/user-data.txt
 
 aws rds create-db-instance  \
     --engine postgres   \
@@ -23,7 +23,7 @@ aws rds create-db-instance  \
     --no-publicly-accessible    \
     --availability-zone eu-west-1a  \
     --vpc-security-group-ids "sg-0b6c0251567043d03" \
-    --db-name rd_test   \
+    --db-name rds_test   \
     --port 5432 \
     --db-parameter-group-name default.postgres10    \
     --option-group-name default:postgres-10 \
@@ -33,3 +33,5 @@ aws rds create-db-instance  \
     --monitoring-interval 0 \
     --preferred-maintenance-window Mon:03:00-Mon:04:00  \
     --no-deletion-protection
+
+    # psql --host=test-instance.c4ii4zqyuc88.eu-west-1.rds.amazonaws.com --port=5432 --username=master --password --dbname=rd_test
