@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import { connect } from 'react-redux';
 import { Translate, I18n } from 'react-redux-i18n';
@@ -101,6 +102,17 @@ export const transformPosts = (edges, messageColumns, additionnalProps = {}) => 
     })
     .filter(topPost => !(deletedPublicationStates.indexOf(topPost.publicationState) > -1 && topPost.children.length === 0))
     .sort(creationDateLastDescendantComparator);
+};
+
+// Function that counts the total number of posts in a Bright Mirror debate section
+// transformedFilteredPosts parameter is built from transformPosts filtered with the current displayed fiction
+export const getDebateTotalMessages = (transformedFilteredPosts: [Object]) => {
+  if (transformedFilteredPosts.length) {
+    return (
+      1 + getDebateTotalMessages(transformedFilteredPosts[0].children) + getDebateTotalMessages(transformedFilteredPosts.slice(1))
+    );
+  }
+  return 0;
 };
 
 export const noRowsRenderer = () => (

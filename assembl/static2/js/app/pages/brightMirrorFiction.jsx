@@ -26,7 +26,7 @@ import FictionCommentHeader from '../components/debate/brightMirror/fictionComme
 import FictionCommentForm from '../components/debate/brightMirror/fictionCommentForm';
 import FictionCommentList from '../components/debate/brightMirror/fictionCommentList';
 // Utils imports
-import { transformPosts } from './idea';
+import { transformPosts, getDebateTotalMessages } from './idea';
 import { displayAlert } from '../utils/utilityManager';
 import { getConnectedUserId } from '../utils/globalFunctions';
 import Permissions, { connectedUserCan } from '../utils/permissions';
@@ -105,6 +105,13 @@ type BrightMirrorFictionState = {
   publicationState: string
 };
 
+type CommentsInfo = {
+  /** Top comments build from transformPosts function */
+  topComments: [Object],
+  /** Total number of comments (debate section) */
+  commentsCount: number
+};
+
 export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps, BrightMirrorFictionState> {
   static getDerivedStateFromProps(nextProps: LocalBrightMirrorFictionProps) {
     // Sync state
@@ -164,24 +171,30 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
       });
   };
 
-  // Create an array of comments from the current fiction
+  // Fetch top comments and total number of comments from fictionId
   // The fiction is the main post, a post (or comment) with a parentId identical to the fictionId
   // will be considered as the top level of comments of the fiction
-  getTopComments() {
+  getCommentsInfo() {
     const { fictionId, ideaWithCommentsData } = this.props;
     const { edges } = ideaWithCommentsData.idea.posts;
     const { idea, refetch } = ideaWithCommentsData;
 
     if (!ideaWithCommentsData.idea) return [];
 
-    const topComments = head(
-      transformPosts(edges, [], {
-        refetchIdea: refetch,
-        ideaId: idea.id
-      }).filter(post => post.id === fictionId)
-    ).children;
+    const transformedPosts = transformPosts(edges, [], {
+      refetchIdea: refetch,
+      ideaId: idea.id
+    }).filter(post => post.id === fictionId);
 
-    return topComments;
+    const topComments = head(transformedPosts).children;
+    const commentsCount = getDebateTotalMessages(transformedPosts) - 1; // We remove 1 since one entry is the fiction post itself
+
+    const commentsInfo: CommentsInfo = {
+      topComments: topComments,
+      commentsCount: commentsCount
+    };
+
+    return commentsInfo;
   }
 
   render() {
@@ -209,7 +222,7 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
     const { fiction } = brightMirrorFictionData;
     const getDisplayName = () => (fiction.creator && fiction.creator.displayName ? fiction.creator.displayName : EMPTY_STRING);
     const displayName = fiction.creator && fiction.creator.isDeleted ? I18n.t('deletedUser') : getDisplayName();
-    const topComments = this.getTopComments();
+    const commentsInfo: CommentsInfo = this.getCommentsInfo();
 
     // Define user permission
     const userId = fiction.creator ? fiction.creator.userId : USER_ID_NOT_FOUND;
@@ -299,11 +312,11 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
       title: I18n.t('debate.brightMirror.commentFiction.title'),
       imgSrc: '/static2/img/illustration-mechanisme.png',
       imgAlt: I18n.t('debate.brightMirror.commentFiction.imageAlt'),
-      commentsCount: topComments.length
+      commentsCount: commentsInfo.commentsCount
     };
 
     const fictionCommentListProps: FictionCommentListProps = {
-      comments: topComments,
+      comments: commentsInfo.topComments,
       contentLocale: contentLocale,
       contentLocaleMapping: contentLocaleMapping,
       identifier: phase,
