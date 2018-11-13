@@ -18,6 +18,7 @@ test_frontend:
   except:
     - master
     - tmp_master_for_ci_cd
+    - add_deploy_job
   image: node:10
   before_script:
     - export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
@@ -35,6 +36,7 @@ test_integration_and_ui:
   image: node:10
   only:
     - tmp_master_for_ci_cd
+    - add_deploy_job
   before_script:
     - eval $(ssh-agent -s) && sh scripts/configure_ssh.sh
     - sh scripts/prepare_integration_tests.sh
@@ -48,6 +50,7 @@ build_wheel:
   stage: build
   only:
     - develop
+    - add_deploy_job
   variables:
     DEVELOP_BRANCH: develop
     MASTER_BRANCH: tmp_master_for_ci_cd
@@ -68,44 +71,18 @@ build_wheel:
     # - twine upload -u bluenove --skip-existing dist/*
     - export VERSION="$(grep current_version $CI_PROJECT_DIR/.bumpversion.cfg | tr -d ' ' | awk -F '=' '{print $2}')""
     # Copy the assembl wheel, then build a wheelhouse for the dependency links only
-    - grep "git+http" $CI_PROJECT_DIR/requirements-dev.frozen.txt > deps.txt
-    - pip wheel --wheel-dir=$CI_PROJECT_DIR/wheelhouse --process-dependency-links -r deps.txt
+    - grep "git+http" $CI_PROJECT_DIR/requirements-dev.frozen.txt > $CI_PROJECT_DIR/deps.txt
+    - pip wheel --wheel-dir=$CI_PROJECT_DIR/wheelhouse --process-dependency-links -r $CI_PROJECT_DIR/deps.txt
     - scp -r -4 -i ~/.ssh/assembl_user.pem $CI_PROJECT_DIR/dist assembl_user@dev-assembl.bluenove.com:~/assembl_wheels/$VERSION
-    - rsync -avr -e "ssh -i ~/.ssh/assembl_user.pem" $CI_PROJECT_DIR/wheelhouse assembl_user@dev-assembl.bluenove.com::~/wheelhouse
+    - rsync -zvr -e "ssh -i ~/.ssh/assembl_user.pem" $CI_PROJECT_DIR/wheelhouse assembl_user@dev-assembl.bluenove.com:/home/assembl_user/wheelhouse
     # Remove ssh files so that the keys are not kept on image prior to travis removal
     - rm -rf ~/.ssh
-
-deploy_to_dev:
-  stage: deploy_to_dev
-  only:
-    - tmp_master_for_ci_cd
-  script:
-    # empty script for now
-    - sh scripts/echo.sh
-
-deploy_to_uat:
-  stage: deploy_to_uat
-  only:
-    - tmp_master_for_ci_cd
-  script:
-    # empty script for now
-    - sh scripts/echo.sh
-
-deploy_to_prod:
-  stage: deploy_to_prod
-  environment: PROD
-  only:
-    - tmp_master_for_ci_cd
-  script:
-    # fake script for now
-    - python scripts/deploy_to_prod.py
-  when: manual
 
 push_to_develop_server:
   stage: deploy_to_dev
   only:
     - tmp_master_for_ci_cd
-    # Add my branch here
+    - add_deploy_job
   before_script:
     - sh scripts/configure_ssh.sh
     - pip install fabric==1.14
@@ -116,4 +93,23 @@ push_to_develop_server:
     - export VERSION=$(grep current_version .bumpversion.cfg | tr -d ' ' | awk -F "=" '{print $2}')
   script:
     - fab -f assembl/fabfile.py -c private_configs/dev_staging.rc deploy_wheel:$VERSION
-    - fab -f assembl/fabfile.py -c private_configs/dev_staging.rc 
+    - fab -f assembl/fabfile.py -c private_configs/dev_staging.rc bootstrap_from_wheel
+
+deploy_to_uat:
+  stage: deploy_to_uat
+  only:
+    - tmp_master_for_ci_cd
+    - add_deploy_job
+  script:
+    # empty script for now
+    - echo "Running deployment..."
+
+deploy_to_prod:
+  stage: deploy_to_prod
+  environment: PROD
+  only:
+    - tmp_master_for_ci_cd
+  script:
+    # fake script for now
+    - python scripts/deploy_to_prod.py
+  when: manual
