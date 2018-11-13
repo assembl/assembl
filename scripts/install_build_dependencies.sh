@@ -9,6 +9,7 @@ apt-get install -yqq \
     build-essential \
     flex \
     gawk \
+    rsync \
     gperf \
     graphviz \
     libffi-dev \
