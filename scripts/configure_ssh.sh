@@ -2,7 +2,7 @@
 set -e
 eval "$(ssh-agent -s)"
 mkdir -p ~/.ssh
-chmod -r 700 ~/.ssh
+chmod -R 700 ~/.ssh
 echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
 
 echo "$VAULT_SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
