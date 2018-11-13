@@ -85,9 +85,9 @@ def sudo(*args, **kwargs):
         passwords[pass_key] = '%s' % env.sudo_password
     with settings(user=sudoer, passwords=passwords):
         if sudoer in ("root", env.webmaster_user):
-            run(*args, **kwargs)
+            return run(*args, **kwargs)
         else:
-            fabsudo(*args, **kwargs)
+            return fabsudo(*args, **kwargs)
 
 
 def get_prefixed(key, alt_env=None, default=None):
@@ -298,6 +298,28 @@ def getmtime(path):
 
 def listdir(path):
     return run("ls " + path).split()
+
+
+def _generate_random_string(N=32):
+    import random
+    import string
+    return ''.join(random.SystemRandom().choice(string.letters + string.digits) for _ in range(N))
+
+
+def warn_only(string, use_sudo=False):
+    with settings(warn_only=True):
+        if use_sudo:
+            return sudo(string)
+        return run(string)
+
+
+def run_as_user(cmd, user, password=None, **kwargs):
+    passwords = {}
+    if password:
+        pass_key = '%s@%s:%s' % (user, env.public_hostname, env.sudo_port)
+        passwords[pass_key] = password
+    with settings(user=user, passwords=passwords):
+        run(cmd, **kwargs)
 
 
 @task
@@ -1242,6 +1264,7 @@ def bootstrap_from_wheel():
     execute(set_file_permissions)
     execute(reset_upload_folder)
     execute(reset_db)
+    execute(reindex_elasticsearch)
     execute(install_url_metadata_wheel)
     execute(setup_nginx_file)
     # Restart webserver
@@ -1553,15 +1576,20 @@ def generate_dh_group():
 def setup_nginx_file():
     """Creates nginx config file from template."""
     # Deleting any existing nginx configurations already existing
-    if exists("/etc/nginx/sites-enabled/%s" % (env.public_hostname)):
-        sudo("rm /etc/nginx/sites-enabled/%s" % (env.public_hostname))
-    rc_info = filter_global_names(combine_rc(env['rcfile']))
-    fill_template('assembl/templates/system/nginx_default.jinja2', rc_info, '%s' % (env.public_hostname))
-    sudoer = env.get("sudoer", None) or env.get("user")
-    with settings(user=sudoer):
-        put("%s" % (env.public_hostname), "/etc/nginx/sites-available/%s" % (env.public_hostname), use_sudo=True)
-    sudo("ln -s /etc/nginx/sites-available/%(host_name)s /etc/nginx/sites-enabled/%(hostname)s" % {'host_name': env.public_hostname})
-    sudo("/etc/init.d/nginx restart")
+    if not env.webmaster_user:
+        print(red("A webmaster user does not exist"))
+    with settings(user=env.webmaster_user):
+        if exists("/etc/nginx/sites-enabled/%s" % (env.public_hostname)):
+            run("rm /etc/nginx/sites-enabled/%s" % (env.public_hostname))
+        rc_info = filter_global_names(combine_rc(env['rcfile']))
+        file = join(os.getcwd(), env.public_hostname)
+        try:
+            fill_template('nginx_default.jinja2', rc_info, file)
+            put(file, "/etc/nginx/sites-available/%s" % (env.public_hostname))
+            run("ln -s /etc/nginx/sites-available/%(host_name)s /etc/nginx/sites-enabled/%(hostname)s" % {'host_name': env.public_hostname})
+            run("sudo /etc/init.d/nginx restart")
+        finally:
+            os.unlink(file)
 
 
 @task
@@ -1573,6 +1601,10 @@ def webservers_reload():
         # Nginx (sudo is part of command line here because we don't have full
         # sudo access
         print(cyan("Reloading nginx"))
+        if env.webmaster_user:
+            with settings(user=env.webmaster_user):
+                if exists('/etc/init.d/nginx'):
+                    run('sudo /etc/init.d/nginx reload')
         if (env.get('sudo_user'), None) and exists('/etc/init.d/nginx'):
             sudo('/etc/init.d/nginx reload')
         elif exists('/etc/init.d/nginx'):
@@ -3288,29 +3320,19 @@ def deploy_wheel(version=None):
         version = run('ls -t %s | head -n 1' % (base_wheel_path))
     wheel_path = os.path.join(base_wheel_path, version, 'assembl-%s-py2-none-any.whl' % version)
     link_path = env.wheelhouse or None
-    use_wheel = ''
-    if link_path:
-        use_wheel = '--find-links=%s' % link_path
+    use_wheel = '' if link_path else '--find-links=%s' % link_path
     # Make this into a task
-    run('rm -rf %s' % env.projectpath)
-    run('mkdir -p %s' % env.projectpath)
+    # Remove the main code_path
+    assembl_main_project_path = join(env.projectpath, 'assembl')
+    if exists(assembl_main_project_path):
+        run('rm -rf %s' % assembl_main_project_path)
+    if exists(env.venvpath):
+        run('rm -rf %s' % env.venvpath)
 
     execute(build_virtualenv, with_setuptools=True)
     venvcmd('pip install %s %s' % (use_wheel, wheel_path))
-    venvcmd('pip install %s[dev]' % wheel_path)  # Need to install to allow debugging of server
+    venvcmd('pip install %s[dev]' % wheel_path)  # Allow debugging on server
     # Link the fabfile for ease
-
-
-def _generate_random_string(N=32):
-    import random
-    import string
-    return ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(N))
-
-
-@task
-def random_sudo_task():
-    if sudo('grep webmaster /etc/passwd').failed:
-        print "shit failed"
 
 
 @task
@@ -3320,39 +3342,48 @@ def check_or_create_webmaster_user():
 
     username = env.webmaster_user
     hostname = env.public_hostname
-    if sudo('grep %s /etc/passwd' % username).failed:
+    if warn_only('grep %s /etc/passwd' % username).failed:
 
-        print(red("A webmaster does not exist on this machine. One will be created for you. \
-                  You will be responsible for fetching the private key of this user."))
+        print(red("A webmaster user does not exist on this machine. One will be created for you. "
+                  "You will be responsible for fetching the private key of this user."))
         password = _generate_random_string()
-        # Create a webmaster user
+        # Create a webmaster user, including the home folder
         sudo('adduser %s --gecos "First Last,RoomNumber,WorkPhone,HomePhone" --disabled-password' % username)
-        sudo('export WEBMASTERPASSWORD="%s"' % password)
-        sudo('echo "webmaster:$WEBMASTERPASSWORD" | sudo chpasswd')
+        with hide('running', 'stdout'), shell_env(WEBMASTERPASSWORD=password):
+            sudo('echo "webmaster:$WEBMASTERPASSWORD" | sudo chpasswd')
         if run('which ssh-keygen').failed:
             print(yellow("ssh-client is not installed on this machine. Installing it now..."))
             sudo('apt-get install -y openssh-client')
-        run('ssh-keygen -q -t rsa -N '' -f /home/%s/.ssh/id_rsa' % username)
-        run('cat /home/%(username)s/.ssh/id_rsa.pub >> /home/%(username)s/.ssh/authorized_keys' % {'username': username})
-        run('chmod -R 700 /home/%s/.ssh' % username)
+        run_as_user('ssh-keygen -q -t rsa -N "" -f /home/%s/.ssh/id_rsa' % username, username, password=password)
+        run_as_user('cat /home/%(username)s/.ssh/id_rsa.pub >> /home/%(username)s/.ssh/authorized_keys' % {'username': username},
+                    username, password=password)
+        run_as_user('chmod -R 700 /home/%s/.ssh' % username, username, password=password)
 
-    print(red("Generating private information for %s user. This file contains private information and should not be shared"))
-    output_path = join(env.here, '%s.secret' % hostname)
+    print(red("Generating private information for %s user. This file contains private information and should not be shared" % username))
+    output_path = join(os.getcwd(), '%s.secret' % hostname)
     with hide('running', 'stdout'):
         # In the future, do NOT do this. Instead, use KMS or SecretManager, or Vault as the place to store
         # the secret information
         with TemporaryFile() as f:
-            get('/home/%s/.ssh/id_rsa', f)
-            f.seek(0)
-            private_key = f.read()
-            data = {
-                'username': username,
-                'password': password,
-                'hostname': hostname,
-                'rsa_private_key': private_key,
-                'passphrase': ''
-            }
-            fill_template('system_user_information.jinja2', data, output=output_path)
+            # Need to temporarily allow access
+            temp_path = '/home/%s/tmp.pem' % env.user
+            sudo('cp /home/%s/.ssh/id_rsa %s' % (username, temp_path))
+            sudo('chown %s:%s %s' % (env.user, env.user, temp_path))
+            result = get(temp_path, local_path=f)
+            run('rm -f %s' % temp_path)
+            if not result.failed:
+                f.seek(0)
+                private_key = f.read()
+                data = {
+                    'username': username,
+                    'password': password,
+                    'hostname': hostname,
+                    'private_key': private_key,
+                    'rsa_passphrase': ''
+                }
+                fill_template('system_user_information.jinja2', data, output=output_path)
+            else:
+                print(red("Failed to fetch the resource. Please access the resource by-hand."))
     print(green("The secrets file has been generated at %s" % output_path))
 
 
@@ -3366,16 +3397,16 @@ def set_webmaster_user_permissions():
 
     username = env.webmaster_user
     group = 'www-data'
-    sudo('chown -R %s:%s /etc/nginx/sites-enabled /etc/nginx/sites-available' % username, group)
-    if sudo('grep %s /etc/sudoers').failed:
+    sudo('chown -R %s:%s /etc/nginx/sites-enabled /etc/nginx/sites-available' % (username, group))
+    if warn_only('grep %s /etc/sudoers' % username, use_sudo=True).failed:
         commands = [
             '/etc/init.d/nginx stop',
             '/etc/init.d/nginx start',
             '/etc/init.d/nginx reload',
             '/etc/init.d/nginx restart',
         ]
-        config_line = "%s ALL=NOPASSWD: %s" % username, ','.join(commands)
-        run('echo \'%s\' | sudo EDITOR=\'tee -a\' visudo' % config_line)
+        config_line = "%s ALL=NOPASSWD: %s" % (username, ','.join(commands))
+        sudo('echo \'%s\' | sudo EDITOR=\'tee -a\' visudo' % config_line)
 
 
 @task
