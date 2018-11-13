@@ -5,7 +5,7 @@ mkdir -p ~/.ssh
 chmod -R 700 ~/.ssh
 echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
 
-echo "$VAULT_SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+echo "$VAULT_SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
 echo $VAULT_SSH_PRIVATE_KEY > ~/.ssh/vaultmaster.pem
 
 echo "$ASSEMBL_USER_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
