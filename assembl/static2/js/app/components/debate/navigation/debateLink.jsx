@@ -75,35 +75,37 @@ export class DumbDebateLink extends React.Component<DebateLinkProps, DebateLinkS
         onMouseOver={!isTouchScreenDevice && !screenTooSmall ? this.showMenu : null}
         onMouseLeave={!isTouchScreenDevice && !screenTooSmall ? this.hideMenu : null}
       >
-        <div className={classNames(className, activeClassName)} data-text={dataText}>
-          {children}
-        </div>
-        {!screenTooSmall && (
-          <div className="header-container">
-            <section className="timeline-section" id="timeline">
-              <div className="max-container">
-                <TimelineCpt
-                  timeline={timeline}
-                  activeSegment={activeSegment}
-                  showNavigation
-                  identifier={identifier}
-                  onItemSelect={this.showSegmentMenu}
-                  onItemDeselect={this.hideMenu}
+        {!screenTooSmall ? (
+          <React.Fragment>
+            <div className={classNames(className, activeClassName)} data-text={dataText}>
+              {children}
+            </div>
+            <div className="header-container">
+              <section className="timeline-section" id="timeline">
+                <div className="max-container">
+                  <TimelineCpt
+                    timeline={timeline}
+                    activeSegment={activeSegment}
+                    showNavigation
+                    identifier={identifier}
+                    onItemSelect={this.showSegmentMenu}
+                    onItemDeselect={this.hideMenu}
+                  />
+                </div>
+              </section>
+              {activeSegmentPhase && (
+                <TimelineSegmentMenu
+                  phaseIdentifier={activeSegmentPhase.identifier}
+                  phaseId={activeSegmentPhase.id}
+                  title={activeSegmentPhase.title}
+                  onMenuItemClick={this.hideMenu}
+                  startDate={activeSegmentPhase.start}
+                  endDate={activeSegmentPhase.end}
                 />
-              </div>
-            </section>
-            {activeSegmentPhase && (
-              <TimelineSegmentMenu
-                phaseIdentifier={activeSegmentPhase.identifier}
-                phaseId={activeSegmentPhase.id}
-                title={activeSegmentPhase.title}
-                onMenuItemClick={this.hideMenu}
-                startDate={activeSegmentPhase.start}
-                endDate={activeSegmentPhase.end}
-              />
-            )}
-          </div>
-        )}
+              )}
+            </div>
+          </React.Fragment>
+        ) : null}
       </div>
     );
   }
