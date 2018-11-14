@@ -77,14 +77,26 @@ def get_user_password_from_config(user):
     return env.get('%s_user_password' % user, None)
 
 
+def fabpass_for(user, password=None):
+    """
+    A method that creates the dict of users/passwords necessary for fabric to be able to
+    log in to system unassisted
+    """
+    if not user:
+        raise RuntimeError("No user was presented to get a password for")
+    passwords = env.passwords or {}
+    pass_key = '%s@%s:%s' % (user, env.public_hostname, env.ssh_port or '22')
+    passwords[pass_key] = password or get_user_password_from_config(user)
+    return passwords
+
+
 def sudo(*args, **kwargs):
     sudoer = env.get("sudoer", None) or env.get("user")
     # Generic ability for a defined user to have capabilities to run commands on machine without
     # being a sudo user
     passwords = {}
     if env.sudo_password:
-        pass_key = '%s@%s:%s' % (env.sudoer, env.public_hostname, env.sudo_port)
-        passwords[pass_key] = '%s' % env.sudo_password
+        passwords = fabpass_for(env.sudoer, env.sudo_password)
     with settings(user=sudoer, passwords=passwords):
         if sudoer in ("root",):
             return run(*args, **kwargs)
@@ -318,13 +330,12 @@ def warn_only(string, use_sudo=False):
 def run_as_user(cmd, user, password=None, **kwargs):
     passwords = {}
     password_from_env = get_user_password_from_config(user)
-    if password or password_from_env:
-        if password is None or password_from_env is None:
-            raise RuntimeError("No password has been provided to run command \"%s\"as user %s" % cmd, user)
-        pass_key = '%s@%s:%s' % (user, env.public_hostname, env.sudo_port)
-        passwords[pass_key] = password or password_from_env
+    pwd = password or password_from_env
+    if not pwd:
+        raise RuntimeError("No password has been provided to run command \"%s\"as user %s" % cmd, user)
+    passwords = fabpass_for(user, password=pwd)
     with settings(user=user, passwords=passwords):
-        run(cmd, **kwargs)
+        return run(cmd, **kwargs)
 
 
 @task
@@ -930,7 +941,12 @@ def _sync_uploads_folder(local=False):
         cmd = '{}/var/uploads s3://{}/uploads'.format(env.projectpath, env.aws_bucket_name)
         if local:
             cmd = 's3://{}/uploads {} --delete'.format(env.aws_bucket_name, get_upload_dir())
-        venvcmd('aws s3 sync %s' % cmd)
+            venvcmd('aws s3 sync %s' % cmd)
+        else:
+            if exists(get_upload_dir()):
+                venvcmd('aws s3 cp %s' % cmd)
+            else:
+                print(red("There is no uploads folder to sync with Amazon S3!"))
 
 
 @task
@@ -990,10 +1006,12 @@ def reset_db():
             # If the dump don't exist, we create it
             print(cyan('Create a new dump'))
             execute(database_dump_aws)
+            execute(sync_with_remote_upload_folder)
         else:
             # Otherwise, we restore the last dump
             print(cyan('Restore the last dump'))
             execute(database_restore_aws)
+            execute(sync_with_local_upload_folder)
 
         # Update the dump only when the schema of the database changes
         if not is_db_updated():
@@ -1002,7 +1020,6 @@ def reset_db():
             # Create the updated dump for future tests
             print(cyan('Create the updated dump for future tests'))
             execute(database_dump_aws)
-            execute(sync_with_remote_upload_folder)
 
 
 @task
@@ -1585,22 +1602,33 @@ def generate_dh_group():
 
 
 @task
-def setup_nginx_file():
+def setup_nginx_file(debug=False):
     """Creates nginx config file from template."""
     # Deleting any existing nginx configurations already existing
     if not env.webmaster_user:
         print(red("A webmaster user does not exist"))
-    with settings(user=env.webmaster_user):
-        if exists("/etc/nginx/sites-enabled/%s" % (env.public_hostname)):
-            run("rm /etc/nginx/sites-enabled/%s" % (env.public_hostname))
+        return
+
+    file = join(os.getcwd(), env.public_hostname)
+    try:
         rc_info = filter_global_names(combine_rc(env['rcfile']))
-        file = join(os.getcwd(), env.public_hostname)
-        try:
-            fill_template('nginx_default.jinja2', rc_info, file)
+        fill_template('nginx_default.jinja2', rc_info, file)
+        run_as_user('cp -fp /etc/nginx/sites-available/%(host_name)s /etc/nginx/sites-available/%(host_name)s.bak' % {'host_name': env.public_hostname},
+                    env.webmaster_user)
+        # Have to change users with settings due to put operation
+        with settings(user=env.webmaster_user, passwords=fabpass_for(env.webmaster_user)):
             put(file, "/etc/nginx/sites-available/%s" % (env.public_hostname))
-            run("ln -s /etc/nginx/sites-available/%(host_name)s /etc/nginx/sites-enabled/%(hostname)s" % {'host_name': env.public_hostname})
-            run("sudo /etc/init.d/nginx restart")
-        finally:
+            status = sudo('nginx -t', warn_only=True)
+            if status.failed:
+                run('rm -f /etc/nginx/sites-available/%s' % env.public_hostname)
+                run('mv /etc/nginx/sites-available/%(host_name)s.bak /etc/nginx/sites-available/%(host_name)s' % {'host_name': env.public_hostname})
+                raise RuntimeError("The NGINX configuration was improperly set up! Please rerun setup_nginx_file with debug enabled to view the config")
+            else:
+                run("rm -f /etc/nginx/sites-enabled/%s" % (env.public_hostname))
+                run("ln -s /etc/nginx/sites-available/%(host_name)s /etc/nginx/sites-enabled/%(host_name)s" % {'host_name': env.public_hostname})
+                run("sudo /etc/init.d/nginx restart")
+    finally:
+        if debug:
             os.unlink(file)
 
 
@@ -1862,6 +1890,7 @@ def generate_certificate():
         sudo("certbot certonly --webroot -w /var/www/html -d " + hostname)
     cron_command = '12 3 * * 3 letsencrypt renew && /etc/init.d/nginx reload'
     sudo(create_add_to_crontab_command(cron_command))
+    execute(generate_dh_group)
 
 
 # # Server packages
@@ -3428,10 +3457,8 @@ def set_webmaster_user_permissions():
     sudo('chown -R %s:%s /etc/nginx/sites-enabled /etc/nginx/sites-available' % (username, group))
     if warn_only('grep %s /etc/sudoers' % username, use_sudo=True).failed:
         commands = [
-            '/etc/init.d/nginx stop',
-            '/etc/init.d/nginx start',
-            '/etc/init.d/nginx reload',
-            '/etc/init.d/nginx restart',
+            '/etc/init.d/nginx *',
+            '/usr/sbin/nginx'  # This still crashes as the nginx deamon runs as root
         ]
         config_line = "%s ALL=NOPASSWD: %s" % (username, ','.join(commands))
         sudo('echo \'%s\' | sudo EDITOR=\'tee -a\' visudo' % config_line)
