@@ -125,13 +125,13 @@ const FictionPreview = ({
   return (
     <div className={classNames('fiction-preview', { draft: isDraft })} style={{ backgroundColor: color }}>
       <div className="content-box">
-        {isDraft ? <span className="draft-label">{I18n.t('debate.brightMirror.draftLabel')}</span> : null}
         <ul className="actions">
           {editButton}
           {deleteButton}
           {shareButton}
         </ul>
         <Link className="link" to={link}>
+          {isDraft ? <div className="draft-label">{I18n.t('debate.brightMirror.draftLabel')}</div> : null}
           <div className="inner-box">
             <h3>{title}</h3>
             <p className="info">
