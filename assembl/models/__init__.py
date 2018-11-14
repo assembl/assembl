@@ -226,7 +226,7 @@ from .idea_content_link import (  # noqa: E402, F401
     IdeaContentWidgetLink,
     IdeaRelatedPostLink,
     IdeaThreadContextBreakLink,
-    TextFragmentIdentifier,
+    TextFragmentIdentifier
 )
 from .idea_graph_view import (  # noqa: E402, F401
     ExplicitSubGraphView,
@@ -344,6 +344,7 @@ from .announcement import (  # noqa: E402, F401
     Announcement,
     IdeaAnnouncement,
 )
+
 from .computation import (  # noqa: E402, F401
     ComputationProcess,
     Computation,
@@ -358,6 +359,12 @@ from .nlp import (  # noqa: E402, F401
     PostLocalizedConceptAnalysis,
     PostWatsonV1SentimentAnalysis,
 )
+
+from .tag import (  # noqa: E402, F401
+    Tag,
+    ExtractsTagsAssociation
+)
+
 from .resource import Resource  # noqa: E402, F401
 
 from .section import Section  # noqa: E402, F401

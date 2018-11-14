@@ -40,6 +40,7 @@ from assembl.graphql.section import (CreateSection, DeleteSection, Section,
 from assembl.graphql.sentiment import AddSentiment, DeleteSentiment
 from assembl.graphql.synthesis import Synthesis
 from assembl.graphql.user import UpdateUser, DeleteUserInformation, UpdateAcceptedCookies
+from assembl.graphql.tag import Tag
 from .configurable_fields import (
     ConfigurableFieldUnion, CreateTextField, UpdateTextField,
     DeleteTextField, ProfileField, UpdateProfileFields)
@@ -133,16 +134,16 @@ class Query(graphene.ObjectType):
         end_date=graphene.String(description=docs.SchemaPosts.end_date),
         identifiers=graphene.List(graphene.String, description=docs.SchemaPosts.identifiers),
         description=docs.SchemaPosts.__doc__)
-    tags = graphene.List(graphene.String, filter=graphene.String())
+    tags = graphene.List(lambda: Tag, filter=graphene.String())
 
     def resolve_tags(self, args, context, info):
-        # TODO use a Tags table
-        tags = ['Cool tag', 'Un autre tag', 'Et un autre', 'Pourquoi pas', 'En plus']
         filter = args.get('filter', '')
+        model = models.Tag
         if not filter:
-            return tags
+            return model.query().all()
 
-        return [t for t in tags if filter.lower() in t.lower()]
+        filter = '%{}%'.format(filter)
+        return model.query.filter(model.value.ilike(filter)).all()
 
     def resolve_resources(self, args, context, info):
         model = models.Resource

@@ -11,6 +11,7 @@ from .permissions_helpers import require_instance_permission
 from .types import SecureObjectType, SQLAlchemyInterface
 from .utils import abort_transaction_on_exception, DateTime
 from .user import AgentProfile
+from .tag import Tag
 
 
 ExtractStates = graphene.Enum.from_enum(models.ExtractStates)
@@ -57,6 +58,7 @@ class Extract(SecureObjectType, SQLAlchemyObjectType):
     extract_state = graphene.Field(type=ExtractStates, description=docs.ExtractInterface.extract_state)
     lang = graphene.String(description=docs.ExtractInterface.lang)
     comments = graphene.List("assembl.graphql.post.Post", description=docs.ExtractInterface.comments)
+    tags = graphene.List(Tag, description=docs.ExtractInterface.comments)
 
     def resolve_creator(self, args, context, info):
         if self.creator_id is not None:
@@ -111,19 +113,21 @@ class UpdateExtractTags(graphene.Mutation):
         id = graphene.ID(required=True, description=docs.UpdateExtract.extract_id)
         tags = graphene.List(graphene.String, description=docs.UpdateExtract.extract_nature)
 
-    tags = graphene.List(graphene.String)
+    tags = graphene.List(lambda: Tag)
 
     @staticmethod
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
-        # @TODO add the tags column -> ref, tags Table
         extract_id = args.get('id')
         extract_id = int(Node.from_global_id(extract_id)[1])
         extract = models.Extract.get(extract_id)
         require_instance_permission(CrudPermissions.UPDATE, extract, context)
-        # extract.tags = args.get('tags', [])
-        # extract.db.flush()
-        return UpdateExtractTags(tags=args.get('tags', []))
+        db = extract.db
+        tags = models.Tag.get_tags(args.get('tags', []), db)
+        db.add_all(tags['new_tags'])
+        extract.tags = tags['new_tags'] + tags['tags']
+        db.flush()
+        return UpdateExtractTags(tags=extract.tags)
 
 
 class DeleteExtract(graphene.Mutation):

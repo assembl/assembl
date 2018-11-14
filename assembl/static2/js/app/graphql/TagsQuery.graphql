@@ -1,3 +1,6 @@
 query TagsQuery($filter: String) {
-  tags(filter: $filter)
+  tags(filter: $filter) {
+    id
+    value
+  }
 }

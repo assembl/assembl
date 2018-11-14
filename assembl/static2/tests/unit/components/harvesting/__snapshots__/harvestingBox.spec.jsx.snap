@@ -217,9 +217,8 @@ exports[`harvestingBox component should match harvestingBox snapshot when author
       id="987643"
       initialValues={
         Array [
-          "Cool tag",
-          "Un autre tag",
-          "Et un autre",
+          "foo",
+          "bar",
         ]
       }
       updateTags={undefined}
@@ -685,9 +684,8 @@ exports[`harvestingBox component should match harvestingBox snapshot when nugget
       id="987643"
       initialValues={
         Array [
-          "Cool tag",
-          "Un autre tag",
-          "Et un autre",
+          "foo",
+          "bar",
         ]
       }
       updateTags={undefined}
@@ -913,9 +911,8 @@ exports[`harvestingBox component should match harvestingBox snapshot when select
       id="987643"
       initialValues={
         Array [
-          "Cool tag",
-          "Un autre tag",
-          "Et un autre",
+          "foo",
+          "bar",
         ]
       }
       updateTags={undefined}
@@ -1141,9 +1138,8 @@ exports[`harvestingBox component should match harvestingBox snapshot when the co
       id="987643"
       initialValues={
         Array [
-          "Cool tag",
-          "Un autre tag",
-          "Et un autre",
+          "foo",
+          "bar",
         ]
       }
       updateTags={undefined}
@@ -1369,9 +1365,8 @@ exports[`harvestingBox component should match harvestingBox snapshot when there 
       id="987643"
       initialValues={
         Array [
-          "Cool tag",
-          "Un autre tag",
-          "Et un autre",
+          "foo",
+          "bar",
         ]
       }
       updateTags={undefined}

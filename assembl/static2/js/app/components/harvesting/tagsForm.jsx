@@ -61,7 +61,7 @@ class TagsForm extends React.Component<Props, State> {
           this.setState({
             submitting: false,
             editing: false,
-            currentTags: result.data.updateExtractTags.tags
+            currentTags: result.data.updateExtractTags.tags.map(tag => tag.value)
           });
         });
       }
@@ -105,8 +105,8 @@ class TagsForm extends React.Component<Props, State> {
         .then((value) => {
           const { data: { tags } } = value;
           return tags.map(tag => ({
-            label: tag,
-            value: tag
+            label: tag.value,
+            value: tag.value
           }));
         });
   };

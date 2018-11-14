@@ -6,7 +6,7 @@ from datetime import datetime
 from enum import Enum
 
 import assembl.graphql.docstrings as docs
-from sqlalchemy.orm import (relationship, backref)
+from sqlalchemy.orm import relationship, backref
 from sqlalchemy import (
     Column,
     Boolean,
@@ -31,6 +31,7 @@ from .idea import Idea
 from .generic import Content
 from .post import Post
 from .vocabulary import AbstractEnumVocabulary
+from .tag import ExtractsTagsAssociation
 from ..auth import (
     CrudPermissions, P_READ, P_EDIT_IDEA,
     P_EDIT_EXTRACT, P_ADD_IDEA, P_ADD_EXTRACT,
@@ -353,6 +354,23 @@ class Extract(IdeaContentPositiveLink):
 
     extract_hash = Column(
         String, nullable=False, unique=True)
+
+    tags_associations = relationship(ExtractsTagsAssociation)
+
+    @property
+    def tags(self):
+        return [te_association.tag for te_association in self.tags_associations]
+
+    @tags.setter
+    def tags(self, tags):
+        current_tags = self.tags
+        to_add = [tag for tag in tags if tag not in current_tags]
+        to_remove = [te_a for te_a in self.tags_associations if te_a.tag not in tags]
+        for te_a in to_remove:
+            self.tags_associations.remove(te_a)
+            self.db.delete(te_a)
+
+        self.tags_associations.extend([ExtractsTagsAssociation(tag=tag) for tag in to_add])
 
     @property
     def extract_nature_name(self):
