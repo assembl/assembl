@@ -187,7 +187,7 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
     }).filter(post => post.id === fictionId);
 
     const topComments = head(transformedPosts).children;
-    const commentsCount = getDebateTotalMessages(transformedPosts) - 1; // We remove 1 since one entry is the fiction post itself
+    const commentsCount = getDebateTotalMessages(topComments);
 
     const commentsInfo: CommentsInfo = {
       topComments: topComments,
