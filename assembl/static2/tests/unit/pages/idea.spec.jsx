@@ -1,4 +1,4 @@
-import { transformPosts } from '../../../js/app/pages/idea';
+import { transformPosts, getDebateTotalMessages } from '../../../js/app/pages/idea';
 
 describe('transformPosts function', () => {
   it('should transform posts', () => {
@@ -282,5 +282,89 @@ describe('transformPosts function', () => {
     ];
     const output = transformPosts(postsInput, []);
     expect(output).toEqual(expectedOutput);
+  });
+});
+
+describe('getFictionDebateTotalMessages function', () => {
+  const childrenNode = { children: [] };
+
+  it('should return 0 when array is empty', () => {
+    const array = [];
+    expect(getDebateTotalMessages(array)).toEqual(0);
+  });
+
+  it('should return 1 message', () => {
+    const array = [childrenNode];
+    expect(getDebateTotalMessages(array)).toEqual(1);
+  });
+
+  it('should return 3 messages (with level 1 children embedded)', () => {
+    const array = [
+      childrenNode,
+      {
+        children: [childrenNode]
+      }
+    ];
+    expect(getDebateTotalMessages(array)).toEqual(3);
+  });
+
+  it('should return 5 messages (with level 2 children embedded)', () => {
+    const array = [
+      childrenNode,
+      {
+        children: [
+          childrenNode,
+          {
+            children: [childrenNode]
+          }
+        ]
+      }
+    ];
+    expect(getDebateTotalMessages(array)).toEqual(5);
+  });
+
+  it('should return 7 messages (with level 3 children embedded)', () => {
+    const array = [
+      childrenNode,
+      {
+        children: [
+          childrenNode,
+          {
+            children: [
+              childrenNode,
+              {
+                children: [childrenNode]
+              }
+            ]
+          }
+        ]
+      }
+    ];
+    expect(getDebateTotalMessages(array)).toEqual(7);
+  });
+
+  it('should return 9 messages (with level 4 children embedded)', () => {
+    const array = [
+      childrenNode,
+      {
+        children: [
+          childrenNode,
+          {
+            children: [
+              childrenNode,
+              {
+                children: [
+                  childrenNode,
+                  {
+                    children: [childrenNode]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ];
+    expect(getDebateTotalMessages(array)).toEqual(9);
   });
 });

@@ -81,7 +81,7 @@ describe('<FictionPreview /> - with shallow', () => {
     });
 
     it('should render draft label', () => {
-      expect(wrapper.find('span [className="draft-label"]')).toHaveLength(1);
+      expect(wrapper.find('div [className="draft-label"]')).toHaveLength(1);
     });
 
     it('should not render share button', () => {

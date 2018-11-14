@@ -35,6 +35,7 @@ configure({ adapter: new Adapter() });
 // Mock utils functions
 jest.mock('../../../js/app/utils/utilityManager', () => ({ displayAlert: jest.fn() }));
 jest.mock('../../../js/app/pages/idea', () => ({
+  getDebateTotalMessages: jest.fn(() => 9876),
   transformPosts: jest.fn(() => [{ id: 'fictionId', children: ['yyy', 'zzz'] }])
 }));
 
