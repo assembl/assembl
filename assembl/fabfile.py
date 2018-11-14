@@ -73,10 +73,12 @@ def running_locally(hosts=None, alt_env=None):
     return set(hosts) - set(['localhost', '127.0.0.1']) == set()
 
 
+def get_user_password_from_config(user):
+    return env.get('%s_user_password' % user, None)
+
+
 def sudo(*args, **kwargs):
     sudoer = env.get("sudoer", None) or env.get("user")
-    if kwargs.get('webmaster', False):
-        sudoer = env.get('webmaster_user')
     # Generic ability for a defined user to have capabilities to run commands on machine without
     # being a sudo user
     passwords = {}
@@ -84,7 +86,7 @@ def sudo(*args, **kwargs):
         pass_key = '%s@%s:%s' % (env.sudoer, env.public_hostname, env.sudo_port)
         passwords[pass_key] = '%s' % env.sudo_password
     with settings(user=sudoer, passwords=passwords):
-        if sudoer in ("root", env.webmaster_user):
+        if sudoer in ("root",):
             return run(*args, **kwargs)
         else:
             return fabsudo(*args, **kwargs)
@@ -315,8 +317,10 @@ def warn_only(string, use_sudo=False):
 
 def run_as_user(cmd, user, password=None, **kwargs):
     passwords = {}
-    password_from_env = env.get('%s_password' % user, None)
+    password_from_env = get_user_password_from_config(user)
     if password or password_from_env:
+        if password is None or password_from_env is None:
+            raise RuntimeError("No password has been provided to run command \"%s\"as user %s" % cmd, user)
         pass_key = '%s@%s:%s' % (user, env.public_hostname, env.sudo_port)
         passwords[pass_key] = password or password_from_env
     with settings(user=user, passwords=passwords):
@@ -3355,25 +3359,25 @@ def deploy_wheel(version=None):
 
 
 @task
-def check_or_create_webmaster_user():
+def create_user(name, rsa_passphrase=""):
     if env.mac:
         return
 
-    username = env.webmaster_user
+    username = name
     hostname = env.public_hostname
     if warn_only('grep %s /etc/passwd' % username).failed:
 
-        print(red("A webmaster user does not exist on this machine. One will be created for you. "
-                  "You will be responsible for fetching the private key of this user."))
-        password = _generate_random_string()
+        print(red("A %s user does not exist on this machine. One will be created for you. "
+                  "You will be responsible for fetching the private key of this user." % username))
+        password = get_user_password_from_config(username) or _generate_random_string()
         # Create a webmaster user, including the home folder
         sudo('adduser %s --gecos "First Last,RoomNumber,WorkPhone,HomePhone" --disabled-password' % username)
-        with hide('running', 'stdout'), shell_env(WEBMASTERPASSWORD=password):
-            sudo('echo "webmaster:$WEBMASTERPASSWORD" | sudo chpasswd')
+        with hide('running', 'stdout'), shell_env(USER_SPECIFIED_PASSWORD=password):
+            sudo('echo "%s:$USER_SPECIFIED_PASSWORD" | sudo chpasswd' % username)
         if run('which ssh-keygen').failed:
             print(yellow("ssh-client is not installed on this machine. Installing it now..."))
             sudo('apt-get install -y openssh-client')
-        run_as_user('ssh-keygen -q -t rsa -N "" -f /home/%s/.ssh/id_rsa' % username, username, password=password)
+        run_as_user('ssh-keygen -q -t rsa -N %s -f /home/%s/.ssh/id_rsa' % (rsa_passphrase, username), username, password=password)
         run_as_user('cat /home/%(username)s/.ssh/id_rsa.pub >> /home/%(username)s/.ssh/authorized_keys' % {'username': username},
                     username, password=password)
         run_as_user('chmod -R 700 /home/%s/.ssh' % username, username, password=password)
@@ -3404,6 +3408,11 @@ def check_or_create_webmaster_user():
             else:
                 print(red("Failed to fetch the resource. Please access the resource by-hand."))
     print(green("The secrets file has been generated at %s" % output_path))
+
+
+@task
+def check_or_create_webmaster_user():
+    execute(create_user, name=env.webmaster_user)
 
 
 @task
