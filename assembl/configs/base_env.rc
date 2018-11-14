@@ -121,7 +121,7 @@ _package_install = false
 _webmaster_user = webmaster
 # A *_user_password that is passed can be used to automatically switch between users in fabric
 _webmaster_user_password = 
-_sudo_port = 22
+_ssh_port = 22
 
 # Optional - Path to SSL Stapling certificates, must be single file
 # on server
