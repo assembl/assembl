@@ -1069,7 +1069,8 @@ def compile_stylesheets():
     """
     with cd(env.projectpath):
         with cd('assembl/static/js'):
-            venvcmd('pwd')
+            venvcmd('pwd', chdir=False)
+            venvcmd('ls node_modules/.bin', chdir=False)
             venvcmd('./node_modules/.bin/gulp sass', chdir=False)
         venvcmd('./assembl/static/js/node_modules/.bin/node-sass --source-map -r -o assembl/static/widget/card/app/css --source-map assembl/static/widget/card/app/css assembl/static/widget/card/app/scss', shell=True)
         venvcmd('./assembl/static/js/node_modules/.bin/node-sass --source-map -r -o assembl/static/widget/video/app/css --source-map assembl/static/widget/video/app/css assembl/static/widget/video/app/scss', shell=True)
