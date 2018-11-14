@@ -75,7 +75,7 @@ exports[`Announcement component <Announcement /> on a multiColumns should render
                 className="media-description-layer media-description-top"
                 dangerouslySetInnerHTML={
                   Object {
-                    "__html": "<p>Bonjour à tous</p>",
+                    "__html": "<p>Bonjour à tous</p><p>Nous allons mettre un deuxieme paragraphe</p><p>Et un peu de <strong>texte en gras</strong>",
                   }
                 }
               />
@@ -301,7 +301,7 @@ exports[`Announcement component <Announcement/> on a thread should render an ann
                 className="media-description-layer media-description-top"
                 dangerouslySetInnerHTML={
                   Object {
-                    "__html": "<p>Bonjour à tous</p>",
+                    "__html": "<p>Bonjour à tous</p><p>Nous allons mettre un deuxieme paragraphe</p><p>Et un peu de <strong>texte en gras</strong>",
                   }
                 }
               />
@@ -535,4 +535,87 @@ Array [
     "count": 3,
   },
 ]
+`;
+
+exports[`Announcement component createTooltip function should return a tooltip with the count for a given sentiment 1`] = `
+<Tooltip
+  bsClass="tooltip"
+  className="no-arrow-tooltip"
+  id="likeTooltip"
+  placement="right"
+>
+   
+  <Translate
+    value="debate.like"
+  />
+</Tooltip>
+`;
+
+exports[`Announcement component getSentimentsCount function should return the counts of each sentiments given we pass it a Posts object 1`] = `
+Object {
+  "disagree": Object {
+    "SvgComponent": [Function],
+    "camelType": "disagree",
+    "color": "#F2474D",
+    "count": 2,
+    "tooltip": <Tooltip
+      bsClass="tooltip"
+      id="disagreeTooltip"
+      placement="right"
+>
+      <Translate
+            value="debate.disagree"
+      />
+</Tooltip>,
+    "type": "DISAGREE",
+  },
+  "dontUnderstand": Object {
+    "SvgComponent": [Function],
+    "camelType": "dontUnderstand",
+    "color": "#FAC16F",
+    "count": 9,
+    "tooltip": <Tooltip
+      bsClass="tooltip"
+      id="dontUnderstandTooltip"
+      placement="right"
+>
+      <Translate
+            value="debate.dontUnderstand"
+      />
+</Tooltip>,
+    "type": "DONT_UNDERSTAND",
+  },
+  "like": Object {
+    "SvgComponent": [Function],
+    "camelType": "like",
+    "color": "#46D081",
+    "count": 3,
+    "tooltip": <Tooltip
+      bsClass="tooltip"
+      id="likeTooltip"
+      placement="right"
+>
+      <Translate
+            value="debate.like"
+      />
+</Tooltip>,
+    "type": "LIKE",
+  },
+  "moreInfo": Object {
+    "SvgComponent": [Function],
+    "camelType": "moreInfo",
+    "color": "#9374FF",
+    "count": 1,
+    "tooltip": <Tooltip
+      bsClass="tooltip"
+      id="moreInfoTooltip"
+      placement="right"
+>
+      <Translate
+            value="debate.moreInfo"
+      />
+</Tooltip>,
+    "type": "MORE_INFO",
+  },
+}
 `;

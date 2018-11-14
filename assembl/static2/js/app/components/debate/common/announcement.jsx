@@ -38,7 +38,8 @@ type Posts = {
 
 type AnnouncementContent = {
   body: string,
-  title?: string // The component is currently set with the boolean noTitle
+  title?: string, // The component is currently set with the boolean noTitle,
+  __typename?: string
 };
 
 type Props = {
@@ -78,7 +79,7 @@ export const createDoughnutElements = (sentimentCounts: SentimentsCounts) =>
     Tooltip: createTooltip(sentimentCounts[key], sentimentCounts[key].count)
   }));
 
-const dirtySplitHack = (announcementContent) => {
+export const dirtySplitHack = (announcementContent: Announcementcontent) => {
   const body = announcementContent.body;
   // To allow edit from V1 announcement, add !split!https://video.url!split!
   const split = body.split('!split!');
