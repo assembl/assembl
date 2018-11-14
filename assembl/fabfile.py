@@ -1138,7 +1138,8 @@ def bootstrap_from_checkout(backup=False):
             execute(install_url_metadata_wheel)
         else:
             execute(install_url_metadata_source)
-    execute(app_update_dependencies, backup=backup)
+    # execute(app_update_dependencies, backup=backup)
+    execute(app_reinstall_all_dependencies)
     execute(app_setup, backup=backup)
     execute(check_and_create_database_user)
     execute(app_compile_nodbupdate)
