@@ -315,9 +315,10 @@ def warn_only(string, use_sudo=False):
 
 def run_as_user(cmd, user, password=None, **kwargs):
     passwords = {}
-    if password:
+    password_from_env = env.get('%s_password' % user, None)
+    if password or password_from_env:
         pass_key = '%s@%s:%s' % (user, env.public_hostname, env.sudo_port)
-        passwords[pass_key] = password
+        passwords[pass_key] = password or password_from_env
     with settings(user=user, passwords=passwords):
         run(cmd, **kwargs)
 
@@ -537,19 +538,27 @@ def migrate_local_ini(backup=False):
             os.unlink(local_file_name)
 
 
-@task
-def supervisor_restart():
-    "Restart supervisor itself."
+def supervisor_shutdown(retries=10):
+    """
+    Shutdown Assembl's supervisor
+    """
     with hide('running', 'stdout'):
         venvcmd("supervisorctl shutdown")
-    while True:
-        sleep(5)
+    print(yellow("Waiting for supervisor to shutdown"))
+    while retries > 0:
+        sleep(6)
         result = venvcmd("supervisorctl status", warn_only=True)
         if not result.failed:
             break
-        # otherwise still in shutdown mode
+        retries -= 1
     # Another supervisor, upstart, etc may be watching it, give it more time
-    sleep(5)
+    sleep(6)
+
+
+@task
+def supervisor_restart():
+    """Restart supervisor itself."""
+    execute(supervisor_shutdown)
     result = venvcmd("supervisorctl status")
     if "no such file" in result:
         venvcmd("supervisord")
@@ -1028,15 +1037,12 @@ def database_dump_aws():
 
 
 _processes_to_restart_without_backup = [
-    "dev:pserve", "celery", "changes_router",
-    "celery_notify", "source_reader"]
+    "dev:pserve" "celery", "changes_router",
+    "celery_notify_beat", "source_reader"]
 
 
 _processes_to_restart_with_backup = _processes_to_restart_without_backup + [
-    "dev:gulp", "dev:webpack", "edgesense",
-    "elasticsearch", "celery_notify_beat",
-    "celery_translate", "maintenance_uwsgi",
-    "metrics", "metrics_py", "prod:uwsgi"]
+    "dev:gulp", "dev:webpack", "elasticsearch", "maintenance_uwsgi", "prod:uwsgi"]
 
 
 @task
@@ -1045,18 +1051,19 @@ def database_restore_aws(backup=False):
     Restores the database backed up on the amazon s3 object storage
     """
     install_awscli()
-    if not backup:
-        assert(env.wsginame in ('staging.wsgi', 'dev.wsgi'))
-        processes = filter_autostart_processes(_processes_to_restart_without_backup)
-    else:
-        processes = filter_autostart_processes(_processes_to_restart_with_backup)
+    # if not backup:
+    #     assert(env.wsginame in ('staging.wsgi', 'dev.wsgi'))
+    #     processes = filter_autostart_processes(_processes_to_restart_without_backup)
+    # else:
+    #     processes = filter_autostart_processes(_processes_to_restart_with_backup)
 
     if(env.wsginame != 'dev.wsgi'):
         execute(webservers_stop)
-        processes.append("prod:uwsgi")  # possibly not autostarted
+        # processes.append("prod:uwsgi")  # possibly not autostarted
 
-    for process in processes:
-        supervisor_process_stop(process)
+    # for process in processes:
+    #     supervisor_process_stop(process)
+    execute(supervisor_shutdown)
 
     # Kill postgres processes in order to be able to drop tables
     # execute(postgres_user_detach)
@@ -1098,11 +1105,12 @@ def database_restore_aws(backup=False):
         # Remove the downloaded dump from the local host
         run('rm -f {}'.format(filename))
 
-    for process in processes:
-        supervisor_process_start(process)
+    # for process in processes:
+    #     supervisor_process_start(process)
 
-    if(env.wsginame != 'dev.wsgi'):
-        execute(webservers_start)
+    venvcmd('supervisord')
+    # if(env.wsginame != 'dev.wsgi'):
+    #     execute(webservers_start)
 
 
 @task
@@ -3293,45 +3301,56 @@ def secure_sshd_fail2ban():
 
 
 @task
-def ensure_private_configs():
+def migrate_important_information(path, to=None):
     """
-    Private configs are created once for a server. During CI/CD, we want these configurations
-    to survive each version upgrade
+    Move important files that are meant to survive moving to an automated deployment strategy
     """
-    remote_random_path = os.path.join(env.projectpath, 'random.ini')
-    private_config_path = normpath(os.path. join(env.projectpath, '..', 'global_configs'))
-    if exists(remote_random_path):
-        run('mkdir -p %s' % private_config_path)
-
+    if exists(path):
         # Ensure that the server's random.ini survives (under migration). New servers will generate own random.ini
-        remote_random_path_destination = normpath(os.path.join(private_config_path, 'random.ini'))
+        basename = os.path.basename(path)
+        remote_random_path_destination = normpath(to, basename)
         if not exists(remote_random_path_destination):
-            run('cp %s %s' % (remote_random_path, remote_random_path_destination))
+            run('cp -r %s %s' % (path, remote_random_path_destination))
+
+
+@task
+def migrate_server_for_automated_deployment():
+    important_vars = [
+        'var',
+        'random.ini',
+        'local.rc'
+    ]
+    private_config_path = normpath(os.path. join(env.projectpath, '..', 'global_configs'))
+    run('mkdir -p %s' % private_config_path)
+
+    for v in important_vars:
+        execute(migrate_important_information, path=join(env.projectpath, v))
 
 
 @task
 def deploy_wheel(version=None):
     # Run by same user who will install Assembl
     # Tested on Ubuntu only
-    execute(ensure_private_configs)
-    base_wheel_path = os.path.join('~', 'assembl_wheels')
+    execute(migrate_server_for_automated_deployment)
+    base_wheel_path = os.path.join('/home/%s/' % env.user, 'assembl_wheels')
     if not version:
         version = run('ls -t %s | head -n 1' % (base_wheel_path))
     wheel_path = os.path.join(base_wheel_path, version, 'assembl-%s-py2-none-any.whl' % version)
-    link_path = env.wheelhouse or None
-    use_wheel = '' if link_path else '--find-links=%s' % link_path
+    use_wheel = '' if not env.wheelhouse else '--find-links=%s' % env.wheelhouse
     # Make this into a task
     # Remove the main code_path
     assembl_main_project_path = join(env.projectpath, 'assembl')
+    fabric_path = normpath(join(code_root(), 'fabfile.py'))
     if exists(assembl_main_project_path):
         run('rm -rf %s' % assembl_main_project_path)
     if exists(env.venvpath):
         run('rm -rf %s' % env.venvpath)
+    # Account for venv3 as well
 
     execute(build_virtualenv, with_setuptools=True)
     venvcmd('pip install %s %s' % (use_wheel, wheel_path))
-    venvcmd('pip install %s[dev]' % wheel_path)  # Allow debugging on server
-    # Link the fabfile for ease
+    venvcmd('pip install %s[dev]' % wheel_path)  # To allow debugging on server
+    venvcmd('ln -s %s %s' % (fabric_path, env.projectpath))
 
 
 @task
@@ -3412,7 +3431,7 @@ def set_webmaster_user_permissions():
 def prepare_server_for_deployment():
     """
     A one-stop command to prepare servers for automatic deployment
-    Must be run as a root/sudo user
+    MUST have a sudo user/pass set in the environment
     """
     if env.mac:
         return
