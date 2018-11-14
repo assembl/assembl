@@ -216,7 +216,8 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
     };
 
     const replyToCommentButtonProps: ReplyToCommentButtonProps = {
-      onClickCallback: () => this.displayFictionCommentForm(true)
+      onClickCallback: () => this.displayFictionCommentForm(true),
+      tooltipPlacement: 'right'
     };
 
     const fictionCommentFormProps: FictionCommentFormProps = {
@@ -275,7 +276,7 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
       }
     ];
     const displayDeletePostButton = userCanDelete ? (
-      <ResponsiveOverlayTrigger placement="left" tooltip={deleteFictionCommentTooltip}>
+      <ResponsiveOverlayTrigger placement="bottom" tooltip={deleteFictionCommentTooltip}>
         <DeletePostButton
           linkClassName="action-delete"
           modalBodyMessage={deleteCommentBodyMessageMsgKey}
