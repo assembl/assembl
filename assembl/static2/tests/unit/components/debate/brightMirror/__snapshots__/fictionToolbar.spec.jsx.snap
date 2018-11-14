@@ -23,15 +23,16 @@ exports[`Storyshots FictionToolbar default 1`] = `
           onMouseOut={[Function]}
           onMouseOver={[Function]}
         >
-          <a
-            className="edit"
+          <button
+            className="edit btn btn-default"
+            disabled={false}
             onClick={[Function]}
-            style={Object {}}
+            type="button"
           >
             <span
               className="assembl-icon-edit"
             />
-          </a>
+          </button>
         </div>
       </div>
       <div
@@ -44,15 +45,16 @@ exports[`Storyshots FictionToolbar default 1`] = `
           onMouseOut={[Function]}
           onMouseOver={[Function]}
         >
-          <a
-            className="delete"
+          <button
+            className="delete btn btn-default"
+            disabled={false}
             onClick={[Function]}
-            style={Object {}}
+            type="button"
           >
             <span
               className="assembl-icon-delete"
             />
-          </a>
+          </button>
            
         </div>
       </div>
@@ -784,15 +786,16 @@ exports[`Storyshots FictionToolbar playground 1`] = `
           onMouseOut={[Function]}
           onMouseOver={[Function]}
         >
-          <a
-            className="edit"
+          <button
+            className="edit btn btn-default"
+            disabled={false}
             onClick={[Function]}
-            style={Object {}}
+            type="button"
           >
             <span
               className="assembl-icon-edit"
             />
-          </a>
+          </button>
         </div>
       </div>
       <div
@@ -805,15 +808,16 @@ exports[`Storyshots FictionToolbar playground 1`] = `
           onMouseOut={[Function]}
           onMouseOver={[Function]}
         >
-          <a
-            className="delete"
+          <button
+            className="delete btn btn-default"
+            disabled={false}
             onClick={[Function]}
-            style={Object {}}
+            type="button"
           >
             <span
               className="assembl-icon-delete"
             />
-          </a>
+          </button>
            
         </div>
       </div>

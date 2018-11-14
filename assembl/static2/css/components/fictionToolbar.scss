@@ -17,6 +17,15 @@
     color: $black;
     font-size: $fiction-toolbar-icon-size;
     padding-left: 10px;
+    background: none;
+    border: none;
+
+    &:hover, &:focus, &:active {
+      background: none;
+      border: none;
+      outline: none;
+      box-shadow: none;
+    }
   }
 }
 
