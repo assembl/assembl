@@ -50,8 +50,11 @@ class Tree extends React.Component<Props> {
     }
   }
 
-  componentDidUpdate() {
-    this.triggerScrollToRow(this.props.initialRowIndex);
+  componentDidUpdate(prevProps: Props) {
+    const { initialRowIndex } = this.props;
+    if (prevProps.initialRowIndex !== initialRowIndex) {
+      this.triggerScrollToRow(initialRowIndex);
+    }
   }
 
   triggerScrollToRow = (rowIndex: ?number) => {
