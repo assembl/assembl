@@ -160,15 +160,22 @@ def populate_secrets():
         # we don't have boto3 yet
         return
 
-    client = boto3.client('secretsmanager') # noqa
-    name = os.path.splitext(os.path.basename(env.rcfile))[0]
-    response = client.get_secret_value(
-        SecretId=name,
-    )
-    env_vars = json.loads(response["SecretString"])
-    # Add env variable overrides here
-    for env_key, env_value in env_vars.iteritems():
-        env[env_key] = env_value
+    # ignore if you don't have secrets it means you are on your desktop.
+    # so we don't need a AWS account to start locally
+    if env.get('aws_secrets_id', None):
+        aws_client = boto3.client('secretsmanager')
+        print("Fetching secrets from AWS Secrets Manager with id %s" % env.aws_secrets_id)
+        response = aws_client.get_secret_value(
+            SecretId=env.aws_secrets_id,
+        )
+        env_vars = json.loads(response["SecretString"])
+        # Add env variable overrides here
+        for env_key, env_value in env_vars.iteritems():
+            env[env_key] = env_value
+    else:
+        if(env.wsginame != 'dev.wsgi'):
+            raise RuntimeError("You should define a aws_secrets_id on a prod server.")
+        print("No aws_secrets_id defined - using defaults defined in .rc files.")
 
 
 def sanitize_env():
@@ -741,7 +748,7 @@ def build_virtualenv():
     """
     Build the virtualenv
     """
-    print(cyan('Creating a fresh virtualenv'))
+    print(cyan('Creating a fresh virtualenv %s' % env.venvpath))
     assert env.venvpath
     # This relies on env.venvpath
     if exists(join(env.venvpath, "bin/activate")):
