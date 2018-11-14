@@ -6,4 +6,8 @@
     pointer-events: none;
     cursor: default;
   }
+
+  .assembl-icon-back-arrow:before {
+    transform: scaleX(-1);
+  }
 }
