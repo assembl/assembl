@@ -31,10 +31,7 @@ class Tree extends React.Component<Props> {
     // or to avoid recreating all dom nodes if we go back to the same idea.
     this.cache.clearAll();
     this.prevStopIndex = 0;
-    const { initialRowIndex } = this.props;
-    if (this.listRef && initialRowIndex !== null) {
-      this.listRef.scrollToRow(initialRowIndex);
-    }
+    this.triggerScrollToRow(this.props.initialRowIndex);
   }
 
   componentWillReceiveProps(nextProps: Props) {
@@ -52,6 +49,16 @@ class Tree extends React.Component<Props> {
       this.prevStopIndex = 0;
     }
   }
+
+  componentDidUpdate() {
+    this.triggerScrollToRow(this.props.initialRowIndex);
+  }
+
+  triggerScrollToRow = (rowIndex: ?number) => {
+    if (this.listRef && rowIndex !== null) {
+      this.listRef.scrollToRow(rowIndex);
+    }
+  };
 
   nuggetsManager: NuggetsManager = new NuggetsManager();
 
