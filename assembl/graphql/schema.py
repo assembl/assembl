@@ -32,7 +32,7 @@ from assembl.graphql.post import (AddPostAttachment, CreatePost, DeletePost,
                                   DeletePostAttachment, UndeletePost,
                                   UpdatePost, AddPostExtract, PostConnection,
                                   AddPostsExtract)
-from assembl.graphql.extract import (UpdateExtract, DeleteExtract, ConfirmExtract)
+from assembl.graphql.extract import (UpdateExtract, UpdateExtractTags, DeleteExtract, ConfirmExtract)
 from assembl.graphql.resource import (CreateResource, DeleteResource, Resource,
                                       UpdateResource)
 from assembl.graphql.section import (CreateSection, DeleteSection, Section,
@@ -133,6 +133,16 @@ class Query(graphene.ObjectType):
         end_date=graphene.String(description=docs.SchemaPosts.end_date),
         identifiers=graphene.List(graphene.String, description=docs.SchemaPosts.identifiers),
         description=docs.SchemaPosts.__doc__)
+    tags = graphene.List(graphene.String, filter=graphene.String())
+
+    def resolve_tags(self, args, context, info):
+        # TODO use a Tags table
+        tags = ['Cool tag', 'Un autre tag', 'Et un autre', 'Pourquoi pas', 'En plus']
+        filter = args.get('filter', '')
+        if not filter:
+            return tags
+
+        return [t for t in tags if filter.lower() in t.lower()]
 
     def resolve_resources(self, args, context, info):
         model = models.Resource
@@ -471,6 +481,7 @@ class Mutations(graphene.ObjectType):
     add_post_extract = AddPostExtract.Field(description=docs.AddPostExtract.__doc__)
     add_posts_extract = AddPostsExtract.Field(description=docs.AddPostsExtract.__doc__)
     update_extract = UpdateExtract.Field(description=docs.UpdateExtract.__doc__)
+    update_extract_tags = UpdateExtractTags.Field(description=docs.UpdateExtract.__doc__)
     delete_extract = DeleteExtract.Field(description=docs.DeleteExtract.__doc__)
     create_text_field = CreateTextField.Field(description=docs.CreateTextField.__doc__)
     confirm_extract = ConfirmExtract.Field(description=docs.ConfirmExtract.__doc__)

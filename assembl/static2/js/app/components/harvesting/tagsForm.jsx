@@ -3,16 +3,20 @@ import React from 'react';
 import { Translate, I18n } from 'react-redux-i18n';
 import { Form, Field } from 'react-final-form';
 import { Button } from 'react-bootstrap';
+import { type ApolloClient, withApollo } from 'react-apollo';
+
 import SelectFieldAdapter from '../form/selectFieldAdapter';
+import TagsQuery from '../../graphql/TagsQuery.graphql';
 
 type Props = {
+  client: ApolloClient,
   initialValues: Array<string>,
-  options: Array<string>,
   canEdit: boolean
 };
 
 type State = {
   editing: false,
+  submitting: boolean,
   currentTags: Array<string>
 };
 
@@ -25,23 +29,43 @@ class TagsForm extends React.Component<Props, State> {
 
   state = {
     editing: false,
+    submitting: false,
     currentTags: this.props.initialValues
   };
 
   renderFooter = (handleSubmit, pristine = false, submitting = false) => (
     <div className="harvesting-box-footer">
-      <Button key="cancel" className="button-cancel button-dark" onClick={this.cancel}>
+      <Button disabled={submitting} key="cancel" className="button-cancel button-dark" onClick={this.cancel}>
         {I18n.t('harvesting.tags.cancel')}
       </Button>
-      <Button desabled={!pristine && !submitting} key="validate" className="button-submit button-dark" onClick={handleSubmit}>
+      <Button disabled={pristine || submitting} key="validate" className="button-submit button-dark" onClick={handleSubmit}>
         {I18n.t('harvesting.tags.validate')}
       </Button>
     </div>
   );
 
-  updateExtractTags = (tags) => {
+  updateTags = (tags) => {
     // TODO query and mutations
-    console.log(tags); //eslint-disable-line
+    const { id, updateTags } = this.props;
+    this.setState(
+      {
+        submitting: true
+      },
+      () => {
+        updateTags({
+          variables: {
+            id: id,
+            tags: tags
+          }
+        }).then((result) => {
+          this.setState({
+            submitting: false,
+            editing: false,
+            currentTags: result.data.updateExtractTags.tags
+          });
+        });
+      }
+    );
   };
 
   cancel = () => {
@@ -58,9 +82,8 @@ class TagsForm extends React.Component<Props, State> {
     });
   };
 
-  pristine = () => {
+  pristine = (currentTags) => {
     const { initialValues } = this.props;
-    const { currentTags } = this.state;
     return currentTags.length === initialValues.length && currentTags.every(tag => initialValues.includes(tag));
   };
 
@@ -71,11 +94,30 @@ class TagsForm extends React.Component<Props, State> {
     }));
   };
 
+  getTagsLoader = () => {
+    const { client } = this.props;
+    return inputValue =>
+      client
+        .query({
+          query: TagsQuery,
+          variables: { filter: inputValue }
+        })
+        .then((value) => {
+          const { data: { tags } } = value;
+          return tags.map(tag => ({
+            label: tag,
+            value: tag
+          }));
+        });
+  };
+
   renderTags = () => {
     const { canEdit } = this.props;
-    const { currentTags } = this.state;
+    const { currentTags, submitting } = this.state;
+    const pristine = this.pristine(currentTags);
     return (
       <div className="harvesting-tags-container">
+        <label htmlFor="tags">{I18n.t('harvesting.tags.label')}</label>
         <div className="harvesting-tags-titles-container">
           {currentTags.map(tag => (
             <div key={tag} className="harvesting-tag-container">
@@ -89,39 +131,42 @@ class TagsForm extends React.Component<Props, State> {
             </div>
           ) : null}
         </div>
-        {!this.pristine() && this.renderFooter(() => this.updateExtractTags(currentTags))}
+        {!pristine && this.renderFooter(() => this.updateTags(currentTags), pristine, submitting)}
       </div>
     );
   };
 
   renderForm = () => {
-    const { options } = this.props;
     const { currentTags } = this.state;
     return (
       <Form
         initialValues={{ tags: currentTags }}
         onSubmit={({ tags }) => {
-          this.updateExtract(tags);
+          this.updateTags(tags);
         }}
-        render={({ handleSubmit, pristine, submitting }) => (
-          <form onSubmit={handleSubmit} className="harvesting-tags-form-container form-container">
-            <Field
-              name="tags"
-              component={SelectFieldAdapter}
-              label={I18n.t('harvesting.tags.label')}
-              // The Select fields
-              isMulti
-              canCreate
-              value={currentTags}
-              options={options}
-              className="tags-select"
-              placeholder="harvesting.tags.select.placeholder"
-              noOptionsMessage={() => <Translate value={'harvesting.tags.select.noOptions'} />}
-              formatCreateLabel={newOption => <Translate value={'harvesting.tags.select.newOption'} option={newOption} />}
-            />
-            {this.renderFooter(handleSubmit, pristine, submitting)}
-          </form>
-        )}
+        render={({ handleSubmit, values, submitting }) => {
+          const pristine = this.pristine(values.tags);
+          return (
+            <form onSubmit={handleSubmit} className="harvesting-tags-form-container form-container">
+              <Field
+                name="tags"
+                component={SelectFieldAdapter}
+                label={I18n.t('harvesting.tags.label')}
+                // The Select fields
+                isMulti
+                canCreate
+                isAsync
+                value={currentTags}
+                loadOptions={this.getTagsLoader()}
+                className="tags-select"
+                placeholder="harvesting.tags.select.placeholder"
+                noOptionsMessage={() => <Translate value="harvesting.tags.select.noOptions" />}
+                formatCreateLabel={newOption => <Translate value="harvesting.tags.select.newOption" option={newOption} />}
+              />
+              {this.renderFooter(handleSubmit, pristine, submitting)}
+            </form>
+          );
+        }}
       />
     );
   };
@@ -129,8 +174,8 @@ class TagsForm extends React.Component<Props, State> {
   render() {
     const { canEdit } = this.props;
     const { editing } = this.state;
-    return <React.Fragment>{canEdit && editing ? this.renderForm() : this.renderTags()}</React.Fragment>;
+    return canEdit && editing ? this.renderForm() : this.renderTags();
   }
 }
 
-export default TagsForm;
+export default withApollo(TagsForm);

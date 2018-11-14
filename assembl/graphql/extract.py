@@ -104,6 +104,28 @@ class UpdateExtract(graphene.Mutation):
         return UpdateExtract(extract=extract)
 
 
+class UpdateExtractTags(graphene.Mutation):
+    __doc__ = docs.UpdateExtract.__doc__
+
+    class Input:
+        id = graphene.ID(required=True, description=docs.UpdateExtract.extract_id)
+        tags = graphene.List(graphene.String, description=docs.UpdateExtract.extract_nature)
+
+    tags = graphene.List(graphene.String)
+
+    @staticmethod
+    @abort_transaction_on_exception
+    def mutate(root, args, context, info):
+        # @TODO add the tags column -> ref, tags Table
+        extract_id = args.get('id')
+        extract_id = int(Node.from_global_id(extract_id)[1])
+        extract = models.Extract.get(extract_id)
+        require_instance_permission(CrudPermissions.UPDATE, extract, context)
+        # extract.tags = args.get('tags', [])
+        # extract.db.flush()
+        return UpdateExtractTags(tags=args.get('tags', []))
+
+
 class DeleteExtract(graphene.Mutation):
     __doc__ = docs.DeleteExtract.__doc__
 

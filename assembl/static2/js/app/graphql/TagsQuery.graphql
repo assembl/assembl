@@ -1,0 +1,3 @@
+query TagsQuery($filter: String) {
+  tags(filter: $filter)
+}

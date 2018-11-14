@@ -934,7 +934,7 @@ const Translations = {
     form: {
       select: {
         placeholder: "Selectionner...",
-        noOptions: "Aucune options n'est disponible",
+        noOptions: "Aucune option n'est disponible",
         newOption: "Ajouter l'option '%{option}'"
       }
     }

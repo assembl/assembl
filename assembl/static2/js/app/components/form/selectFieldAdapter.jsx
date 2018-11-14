@@ -6,12 +6,16 @@ import { Translate, I18n } from 'react-redux-i18n';
 import classNames from 'classnames';
 import Creatable from 'react-select/lib/Creatable';
 import Select from 'react-select';
+import AsyncCreatableSelect from 'react-select/lib/AsyncCreatable';
+import AsyncSelect from 'react-select/lib/Async';
+import makeAnimated from 'react-select/lib/animated';
 
 import Error from './error';
 import { getValidationState } from './utils';
 
 type Props = {
   isMulti: boolean,
+  isAsync: boolean,
   canCreate: boolean,
   required: boolean,
   label: string,
@@ -21,6 +25,7 @@ type Props = {
   noOptionsMessage: () => React.Node,
   formatCreateLabel: string => React.Node,
   options?: Array<string>,
+  loadOptions?: (string, (Array<string>) => void) => Promise<*> | undefined,
   input: {
     name: string,
     onChange: (SyntheticInputEvent<*> | any) => void,
@@ -30,12 +35,14 @@ type Props = {
 
 const SelectFieldAdapter = ({
   isMulti,
+  isAsync,
   canCreate,
   required,
   label,
   placeholder,
   className,
   options,
+  loadOptions,
   input: { name, onChange, value, ...otherListeners },
   meta: { error, touched },
   ...rest
@@ -46,7 +53,10 @@ const SelectFieldAdapter = ({
     defaultValue = isMulti ? value.map(option => ({ value: option, label: option })) : { value: value, label: value };
   }
   const selectOptions = options ? options.map(option => ({ value: option, label: option })) : [];
-  const SelectComponent = canCreate ? Creatable : Select;
+  let SelectComponent = canCreate ? Creatable : Select;
+  if (isAsync) {
+    SelectComponent = canCreate ? AsyncCreatableSelect : AsyncSelect;
+  }
   return (
     <FormGroup controlId={name} validationState={getValidationState(error, touched)}>
       {decoratedLabel ? <ControlLabel>{decoratedLabel}</ControlLabel> : null}
@@ -54,11 +64,15 @@ const SelectFieldAdapter = ({
         className={classNames('select-field', className)}
         {...otherListeners}
         {...rest}
+        cacheOptions
+        defaultOptions
         isMulti={isMulti}
+        components={makeAnimated()}
         name={name}
         placeholder={I18n.t(placeholder)}
         defaultValue={defaultValue}
         options={selectOptions}
+        loadOptions={loadOptions}
         onChange={(selectedOptions) => {
           const selectedValues = isMulti ? selectedOptions.map(selectedOption => selectedOption.value) : selectedOptions.value;
           onChange(selectedValues);
@@ -72,13 +86,14 @@ const SelectFieldAdapter = ({
 SelectFieldAdapter.defaultProps = {
   required: false,
   isMulti: false,
+  isAsync: false,
   canCreate: false,
   options: [],
   className: '',
   classNamePrefix: 'select-field',
   placeholder: 'form.select.placeholder',
-  noOptionsMessage: () => <Translate value={'form.select.noOptions'} />,
-  formatCreateLabel: newOption => <Translate value={'form.select.newOption'} option={newOption} />
+  noOptionsMessage: () => <Translate value="form.select.noOptions" />,
+  formatCreateLabel: newOption => <Translate value="form.select.newOption" option={newOption} />
 };
 
 export default SelectFieldAdapter;

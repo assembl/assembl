@@ -12,6 +12,7 @@ import addPostExtractMutation from '../../graphql/mutations/addPostExtract.graph
 import updateExtractMutation from '../../graphql/mutations/updateExtract.graphql';
 import deleteExtractMutation from '../../graphql/mutations/deleteExtract.graphql';
 import confirmExtractMutation from '../../graphql/mutations/confirmExtract.graphql';
+import updateExtractTagsMutation from '../../graphql/mutations/updateExtractTags.graphql';
 import manageErrorAndLoading from '../../components/common/manageErrorAndLoading';
 import { getConnectedUserId, getConnectedUserName } from '../../utils/globalFunctions';
 import AvatarImage from '../common/avatarImage';
@@ -605,7 +606,9 @@ class DumbHarvestingBox extends React.Component<Props, State> {
                 {extractIndex + 1}/{extracts.length}
               </div>
             )}
-          <TagsForm canEdit options={tags} initialValues={tags} />
+          {hasExtract && (
+            <TagsForm canEdit id={extract.id} initialValues={extract.tags || tags} updateTags={this.props.updateTags} />
+          )}
           {hasFooter && this.renderFooter()}
         </div>
       </div>
@@ -632,6 +635,9 @@ export default compose(
   }),
   graphql(confirmExtractMutation, {
     name: 'confirmExtract'
+  }),
+  graphql(updateExtractTagsMutation, {
+    name: 'updateTags'
   }),
   manageErrorAndLoading({ displayLoader: true })
 )(DumbHarvestingBox);

@@ -65,8 +65,8 @@ exports[`harvestingMenu component should match harvestingMenu snapshot when the 
   <div
     className="harvesting-container"
   >
-    <Connect(Apollo(Apollo(Apollo(Apollo(Component)))))
-      cancelHarvesting={[MockFunction]}
+    <Connect(Apollo(Apollo(Apollo(Apollo(Apollo(Component))))))
+      cancelHarvesting={[Function]}
       displayHarvestingBox={true}
       lang="fr"
       postId="123456"
