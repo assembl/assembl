@@ -190,7 +190,7 @@ export const defaultSideCommentBoxProps: SideCommentBoxProps = {
   contentLocale: 'en',
   lang: 'en',
   selection: null,
-  setCommentBoxDisplay: action('setCommentBoxDisplay'),
+  toggleSubmitDisplay: action('toggleSubmitDisplay'),
   cancelSubmit: action('cancelSubmit'),
   addPostExtract: action('addPostExtract'),
   createPost: action('createPost'),

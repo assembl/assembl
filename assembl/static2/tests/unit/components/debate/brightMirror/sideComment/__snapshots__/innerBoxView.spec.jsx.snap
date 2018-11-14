@@ -77,52 +77,7 @@ exports[`Storyshots InnerBoxView multiple comments 1`] = `
           <div
             className="extract-body"
           >
-            <p>
-              <strong>
-                Lorem ipsum dolor sit amet.
-              </strong>
-            </p>
-            <div
-              className="atomic-block"
-              data-blocktype="atomic"
-            >
-              <img
-                alt=""
-                className="attachment-image"
-                data-id="1"
-                data-mimetype="image/jpeg"
-                src="https://picsum.photos/400/200/"
-                title="loremPixel.jpg"
-              />
-            </div>
-            <p />
-            <p>
-              <a
-                className="linkified"
-                href="https://youtu.be/MzfBIcJaJSU"
-                target="_blank"
-                title={undefined}
-              >
-                https://youtu.be/MzfBIcJaJSU
-              </a>
-              <div
-                className="embed-theater "
-              >
-                <div
-                  className="embed-thumbnail-container"
-                  onClick={[Function]}
-                >
-                  <img
-                    alt="youtube video"
-                    className="embed-thumbnail"
-                    src="https://img.youtube.com/vi/MzfBIcJaJSU/mqdefault.jpg"
-                  />
-                  <span
-                    className="play-button"
-                  />
-                </div>
-              </div>
-            </p>
+            This is the body
           </div>
           <div
             className="next-extract"
@@ -1520,52 +1475,7 @@ exports[`Storyshots InnerBoxView single comment 1`] = `
           <div
             className="extract-body"
           >
-            <p>
-              <strong>
-                Lorem ipsum dolor sit amet.
-              </strong>
-            </p>
-            <div
-              className="atomic-block"
-              data-blocktype="atomic"
-            >
-              <img
-                alt=""
-                className="attachment-image"
-                data-id="1"
-                data-mimetype="image/jpeg"
-                src="https://picsum.photos/400/200/"
-                title="loremPixel.jpg"
-              />
-            </div>
-            <p />
-            <p>
-              <a
-                className="linkified"
-                href="https://youtu.be/MzfBIcJaJSU"
-                target="_blank"
-                title={undefined}
-              >
-                https://youtu.be/MzfBIcJaJSU
-              </a>
-              <div
-                className="embed-theater "
-              >
-                <div
-                  className="embed-thumbnail-container"
-                  onClick={[Function]}
-                >
-                  <img
-                    alt="youtube video"
-                    className="embed-thumbnail"
-                    src="https://img.youtube.com/vi/MzfBIcJaJSU/mqdefault.jpg"
-                  />
-                  <span
-                    className="play-button"
-                  />
-                </div>
-              </div>
-            </p>
+            This is the body
           </div>
           <div
             className="next-extract"

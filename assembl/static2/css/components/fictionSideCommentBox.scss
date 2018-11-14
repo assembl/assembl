@@ -67,6 +67,10 @@
         min-width: 225px;
         margin: 0 10px 10px;
       }
+
+      .embed-theater.open {
+        margin-top: 30px;
+      }
     }
 
     .submit-comment {
@@ -75,6 +79,11 @@
       .rich-text-editor {
         .editor-label {
           padding-top: 30px;
+        }
+
+        .attachments {
+          float: none;
+          margin-top: 0;
         }
       }
     }

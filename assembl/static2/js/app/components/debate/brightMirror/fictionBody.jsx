@@ -60,7 +60,7 @@ class FictionBody extends React.Component<Props, State> {
     // $FlowFixMe because element may be null
     const body = document.getElementById(getExtractTagId(dbId)).getBoundingClientRect();
     this.setState({
-      commentBadgeFixedPosition: { x: body.right, y: body.top },
+      commentBadgeFixedPosition: { x: body.right, y: body.top + window.pageYOffset },
       commentBadgePositionInit: true
     });
   };
@@ -129,7 +129,7 @@ class FictionBody extends React.Component<Props, State> {
     });
   };
 
-  toggleCommentBoxDisplay = () => this.setState(state => ({ ...state, displaySubmitBox: !state.displaySubmitBox }));
+  toggleSubmitDisplay = () => this.setState(state => ({ ...state, displaySubmitBox: !state.displaySubmitBox }));
 
   cancelSubmit = () => {
     this.setState({ displaySubmitBox: false }, () => window.getSelection().removeAllRanges());
@@ -170,7 +170,7 @@ class FictionBody extends React.Component<Props, State> {
           refetchPost={refetchPost}
           displayCommentAnchor={displayCommentAnchor}
           displaySubmitBox={displaySubmitBox}
-          setCommentBoxDisplay={this.toggleCommentBoxDisplay}
+          toggleSubmitDisplay={this.toggleSubmitDisplay}
           handleClickAnchor={this.handleClickAnchor}
           cancelSubmit={this.cancelSubmit}
           setCommentBadgeToExtractPosition={this.setCommentBadgeToExtractPosition}

@@ -14,7 +14,7 @@ type Props = {
   commentAnchorPosition: { x: number, y: number },
   badgeDynamicPosition: { x: number, y: number },
   badgeFixedPosition: { x: number, y: number },
-  setCommentBoxDisplay: () => void,
+  toggleSubmitDisplay: () => void,
   handleClickAnchor: () => void,
   cancelSubmit: () => void,
   refetchPost: Function,
@@ -65,7 +65,7 @@ class SideCommentMenu extends React.Component<Props, State> {
   render() {
     const {
       ideaId,
-      setCommentBoxDisplay,
+      toggleSubmitDisplay,
       displaySubmitBox,
       displayCommentAnchor,
       postId,
@@ -114,7 +114,7 @@ class SideCommentMenu extends React.Component<Props, State> {
               submitting={showBoxInSubmitMode}
               refetchPost={refetchPost}
               cancelSubmit={cancelSubmit}
-              setCommentBoxDisplay={setCommentBoxDisplay}
+              toggleSubmitDisplay={toggleSubmitDisplay}
               toggleCommentsBox={this.toggleCommentsBox}
               position={badgePosition}
               clearHighlights={this.clearHighlights}

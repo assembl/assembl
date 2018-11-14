@@ -39,10 +39,7 @@ export const commentor = {
   }
 };
 
-export const richBody =
-  '<p><strong>Lorem ipsum dolor sit amet.</strong></p><div class="atomic-block" data-blocktype="atomic">' +
-  '<img class="attachment-image" src="https://picsum.photos/400/200/" alt="" title="loremPixel.jpg" ' +
-  'data-id="1" data-mimetype="image/jpeg"></div><p></p><p>https://youtu.be/MzfBIcJaJSU</p>';
+export const richBody = 'This is the body';
 
 const comment = {
   id: '0',

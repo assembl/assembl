@@ -15,10 +15,16 @@ import updatePostMutation from '../../../../graphql/mutations/updatePost.graphql
 import deletePostMutation from '../../../../graphql/mutations/deletePost.graphql';
 import deleteExtractMutation from '../../../../graphql/mutations/deleteExtract.graphql';
 import manageErrorAndLoading from '../../../../components/common/manageErrorAndLoading';
+import uploadDocumentMutation from '../../../../graphql/mutations/uploadDocument.graphql';
 import { getConnectedUserId, getConnectedUserName } from '../../../../utils/globalFunctions';
 import { displayAlert, displayModal, closeModal } from '../../../../utils/utilityManager';
 import { COMMENT_BOX_OFFSET, PublicationStates } from '../../../../constants';
-import { convertContentStateToHTML, editorStateIsEmpty, convertToEditorState } from '../../../../utils/draftjs';
+import {
+  convertContentStateToHTML,
+  editorStateIsEmpty,
+  convertToEditorState,
+  uploadNewAttachments
+} from '../../../../utils/draftjs';
 import ReplyToCommentButton from '../../common/replyToCommentButton';
 import InnerBoxSubmit from './innerBoxSubmit';
 import InnerBoxView from './innerBoxView';
@@ -31,7 +37,7 @@ export type Props = {
   contentLocale: string,
   lang?: string,
   selection?: ?Object,
-  setCommentBoxDisplay: () => void,
+  toggleSubmitDisplay: () => void,
   cancelSubmit: () => void,
   refetchPost: Function,
   toggleCommentsBox?: () => void,
@@ -187,7 +193,19 @@ class DumbSideCommentBox extends React.Component<Props, State> {
   };
 
   submit = (): void => {
-    const { ideaId, postId, contentLocale, lang, addPostExtract, createPost, setCommentBoxDisplay, refetchPost } = this.props;
+    const {
+      ideaId,
+      postId,
+      contentLocale,
+      lang,
+      addPostExtract,
+      createPost,
+      toggleSubmitDisplay,
+      toggleCommentsBox,
+      refetchPost,
+      uploadDocument,
+      extracts
+    } = this.props;
     const { body, selectionText, serializedAnnotatorRange } = this.state;
     if (!selectionText || !serializedAnnotatorRange) {
       return;
@@ -213,25 +231,33 @@ class DumbSideCommentBox extends React.Component<Props, State> {
     displayAlert('success', I18n.t('loading.wait'));
     addPostExtract({ variables: variables })
       .then((result) => {
-        const postVars = {
-          ideaId: ideaId,
-          extractId: result.data.addPostExtract.extract.id,
-          body: convertContentStateToHTML(body.getCurrentContent()),
-          contentLocale: contentLocale
-        };
-        createPost({ variables: postVars }).then(() => {
-          this.setState(
-            {
-              submitting: false,
-              body: EditorState.createEmpty()
-            },
-            () => {
-              setCommentBoxDisplay();
-              window.getSelection().removeAllRanges();
-              displayAlert('success', I18n.t('debate.brightMirror.sideComment.submitSuccessMsg'));
-              refetchPost();
-            }
-          );
+        const uploadDocumentsPromise = uploadNewAttachments(body, uploadDocument);
+        uploadDocumentsPromise.then((resultUpload) => {
+          const postVars = {
+            ideaId: ideaId,
+            extractId: result.data.addPostExtract.extract.id,
+            body: convertContentStateToHTML(resultUpload.contentState),
+            attachments: resultUpload.documentIds,
+            contentLocale: contentLocale
+          };
+          createPost({ variables: postVars }).then(() => {
+            this.setState(
+              {
+                submitting: false,
+                body: EditorState.createEmpty(),
+                // Set next comment to the last submitted
+                extractIndex: extracts.length
+              },
+              () => {
+                // Close submit view, open comments view on refresh
+                toggleSubmitDisplay();
+                toggleCommentsBox();
+                window.getSelection().removeAllRanges();
+                displayAlert('success', I18n.t('debate.brightMirror.sideComment.submitSuccessMsg'));
+                refetchPost();
+              }
+            );
+          });
         });
       })
       .catch((error) => {
@@ -240,7 +266,7 @@ class DumbSideCommentBox extends React.Component<Props, State> {
   };
 
   submitReply = (): void => {
-    const { ideaId, contentLocale, createPost, refetchPost } = this.props;
+    const { ideaId, contentLocale, createPost, refetchPost, uploadDocument } = this.props;
     const { body, extractIndex } = this.state;
     const currentExtract = this.getCurrentExtract(extractIndex);
     const currentComment = this.getCurrentComment(currentExtract);
@@ -251,25 +277,29 @@ class DumbSideCommentBox extends React.Component<Props, State> {
       return;
     }
 
-    const postVars = {
-      ideaId: ideaId,
-      extractId: currentExtract.id,
-      parentId: currentComment.id,
-      body: convertContentStateToHTML(body.getCurrentContent()),
-      contentLocale: contentLocale
-    };
-    createPost({ variables: postVars }).then(() => {
-      this.setState(
-        {
-          replying: false,
-          body: EditorState.createEmpty()
-        },
-        () => {
-          window.getSelection().removeAllRanges();
-          displayAlert('success', I18n.t('debate.brightMirror.sideComment.submitSuccessMsg'));
-          refetchPost();
-        }
-      );
+    const uploadDocumentsPromise = uploadNewAttachments(body, uploadDocument);
+    uploadDocumentsPromise.then((result) => {
+      const postVars = {
+        ideaId: ideaId,
+        extractId: currentExtract.id,
+        parentId: currentComment.id,
+        body: convertContentStateToHTML(result.contentState),
+        attachments: result.documentIds,
+        contentLocale: contentLocale
+      };
+      createPost({ variables: postVars }).then(() => {
+        this.setState(
+          {
+            replying: false,
+            body: EditorState.createEmpty()
+          },
+          () => {
+            window.getSelection().removeAllRanges();
+            displayAlert('success', I18n.t('debate.brightMirror.sideComment.submitSuccessMsg'));
+            refetchPost();
+          }
+        );
+      });
     });
   };
 
@@ -526,5 +556,6 @@ export default compose(
   graphql(deleteExtractMutation, {
     name: 'deleteExtract'
   }),
+  graphql(uploadDocumentMutation, { name: 'uploadDocument' }),
   manageErrorAndLoading({ displayLoader: true })
 )(DumbSideCommentBox);
