@@ -24,7 +24,7 @@ export class DumbRequestPasswordChange extends React.Component<Props> {
       <Grid fluid className="login-container">
         <Row className="max-container center">
           <Col xs={12} md={6} className="col-centered">
-            {passwordChangeResponse.success ? (
+            {passwordChangeResponse && passwordChangeResponse.success ? (
               <SendPwdConfirm />
             ) : (
               <RequestNewPasswordForm
