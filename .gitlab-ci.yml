@@ -18,7 +18,7 @@ test_frontend:
   except:
     - master
     - tmp_master_for_ci_cd
-  image: node:8
+  image: node:10
   before_script:
     - export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
     - cd assembl/static2
@@ -32,7 +32,7 @@ test_frontend:
 
 test_integration_and_ui:
   stage: test_on_dev
-  image: node:8
+  image: node:10
   only:
     - tmp_master_for_ci_cd
   before_script:
