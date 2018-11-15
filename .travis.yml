@@ -73,7 +73,6 @@ install:
  - pip install psycopg2
  - python2 $PWD/assembl/scripts/pypsql.py -u postgres -n localhost  "CREATE USER assembl_test WITH CREATEDB ENCRYPTED PASSWORD 'assembl_test'; COMMIT;"
  # we need to uninstall pytest from travis venv to ensure we use our version
- - ls -l $VIRTUAL_ENV/lib/python2.7/site-packages/
  - pip uninstall -y pytest
  # The following command runs lots of sub-commands. After the following line has completed, approximately 10min have elapsed from the very beginning of the build
  - fab -f assembl/fabfile.py -c travis.rc bootstrap_from_checkout
