@@ -1407,7 +1407,7 @@ def update_node(force_reinstall=False):
         execute(upgrade_yarn)
         with cd(get_node_base_path()):
             venvcmd("npm install reinstall -g", chdir=False)
-        execute(update_npm_requirements(True))
+        execute(update_npm_requirements, force_reinstall=True)
     else:
         print(green('Node version ok'))
 
