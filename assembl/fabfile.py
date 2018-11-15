@@ -1408,10 +1408,7 @@ def update_node(force_reinstall=False):
         venvcmd("rm -f venv/bin/npm")  # remove the symlink first otherwise next command raises OSError: [Errno 17] File exists
         venvcmd("nodeenv --node=10.13.0 --npm=6.4.1 --python-virtualenv assembl/static/js")
         execute(upgrade_yarn)
-        with cd(get_node_base_path()):
-            venvcmd("npm install reinstall -g", chdir=False)
-        with cd(get_new_node_base_path()):
-            venvcmd("npm install reinstall -g", chdir=False)
+        execute(update_npm_requirements(True))
     else:
         print(green('Node version ok'))
 
