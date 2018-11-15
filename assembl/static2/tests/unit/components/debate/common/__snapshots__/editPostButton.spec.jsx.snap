@@ -1,14 +1,17 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`EditPostButton component should render an edit post button 1`] = `
-<Link
+<Button
+  active={false}
+  block={false}
+  bsClass="btn"
+  bsStyle="default"
   className="my-custom-class"
+  disabled={false}
   onClick={[Function]}
-  onlyActiveOnIndex={false}
-  style={Object {}}
 >
   <span
     className="assembl-icon-edit"
   />
-</Link>
+</Button>
 `;

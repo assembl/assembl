@@ -1,19 +1,19 @@
 .overflow-menu {
   .overflow-menu-container {
+    padding: 0;
     display: flex;
     flex-direction: column;
   }
 
   .overflow-menu-action {
     color: $first-color-opacity-70;
+    border: none;
+    padding: 0;
 
-    &:hover {
+    &:hover, &:active, &:focus {
       color: $first-color;
-      cursor: pointer;
-    }
-
-    &:last-child {
-      margin-top: 10px;
+      background: none;
+      outline: none;
     }
   }
 }
