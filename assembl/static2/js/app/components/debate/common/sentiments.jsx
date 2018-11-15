@@ -30,10 +30,11 @@ const Sentiment = ({
   placement,
   isPhaseCompleted
 }: SentimentProps) => {
-  const likeCount = sentimentCounts.like ? sentimentCounts.like : 0;
-  const disagreeCount = sentimentCounts.disagree ? sentimentCounts.disagree : 0;
-  const dontUnderstandCount = sentimentCounts.dontUnderstand ? sentimentCounts.dontUnderstand : 0;
-  const moreInfoCount = sentimentCounts.moreInfo ? sentimentCounts.moreInfo : 0;
+  const { like, disagree, dontUnderstand, moreInfo } = sentimentCounts;
+  const likeCount = like || 0;
+  const disagreeCount = disagree || 0;
+  const dontUnderstandCount = dontUnderstand || 0;
+  const moreInfoCount = moreInfo || 0;
   const sentimentComponent = (
     <div
       className={isSelected ? 'sentiment sentiment-active' : 'sentiment'}
