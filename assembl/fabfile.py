@@ -3155,6 +3155,7 @@ def set_ftp_private_information(force=False):
             os.unlink(ftp_info_file)
 
 
+@task
 def install_jq():
     """
     Install jq
