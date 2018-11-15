@@ -391,7 +391,7 @@ exports[`Announcement component <Announcement/> on a thread should render an ann
                 />
                 <path
                   className="circle"
-                  d="M 49.65360166665506 24.32698745581962 A 50 50 0 1 0 113.30650522723651 94.99093045493377"
+                  d="M 49.65360166665506 24.326987455819626 A 50 50 0 1 0 113.30650522723651 94.99093045493377"
                   fill="transparent"
                   onBlur={[Function]}
                   onClick={null}
@@ -402,7 +402,7 @@ exports[`Announcement component <Announcement/> on a thread should render an ann
                 />
                 <path
                   className="circle"
-                  d="M 69.99999999999999 20 A 50 50 0 0 0 49.65360166665506 24.32698745581962"
+                  d="M 69.99999999999999 20 A 50 50 0 0 0 49.65360166665506 24.326987455819626"
                   fill="transparent"
                   onBlur={[Function]}
                   onClick={null}
