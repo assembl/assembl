@@ -19,9 +19,11 @@ import AvatarImage from '../common/avatarImage';
 import TaxonomyOverflowMenu from './taxonomyOverflowMenu';
 import FormControlWithLabel from '../common/formControlWithLabel';
 import { displayAlert, displayModal, closeModal } from '../../utils/utilityManager';
+import { connectedUserIsAdmin } from '../../utils/permissions';
 import { editExtractTooltip, deleteExtractTooltip, nuggetExtractTooltip, qualifyExtractTooltip } from '../common/tooltips';
 import { NatureIcons, ActionIcons } from '../../utils/extract';
 import { ExtractStates } from '../../constants';
+import Tags, { type TagsData } from './tags';
 import TagsForm from './tagsForm';
 
 type Props = {
@@ -83,13 +85,13 @@ class DumbHarvestingBox extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     const { extracts, cancelHarvesting } = this.props;
-    const hasExtract = extracts ? extracts.length > 0 : false;
+    const hasExtracts = extracts ? extracts.length > 0 : false;
     const extract = this.getCurrentExtract(0);
     const isNugget = extract ? extract.important : false;
     this.state = {
       extractIndex: 0,
-      disabled: !hasExtract,
-      extractIsValidated: hasExtract,
+      disabled: !hasExtracts,
+      extractIsValidated: hasExtracts,
       isNugget: isNugget,
       isEditable: false,
       editableExtract: extract ? extract.body : '',
@@ -104,7 +106,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
       [ACTIONS.create]: {
         buttons: [
           { id: 'cancel', title: 'debate.confirmDeletionButtonCancel', className: 'button-cancel', onClick: cancelHarvesting },
-          { id: 'validate', title: 'harvesting.submit', className: 'button-submit', onClick: this.validateHarvesting }
+          { id: 'validate', title: 'harvesting.submit', className: 'button-submit', onClick: null }
         ]
       },
       [ACTIONS.edit]: {
@@ -259,7 +261,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
       });
   };
 
-  validateHarvesting = (): void => {
+  validateHarvesting = (data: TagsData): void => {
     const { postId, selection, contentLocale, lang, addPostExtract, setHarvestingBoxDisplay, refetchPost } = this.props;
     if (!selection) {
       return;
@@ -273,6 +275,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
     if (!serializedAnnotatorRange) {
       return;
     }
+    const { tags } = data;
     const variables = {
       contentLocale: contentLocale,
       postId: postId,
@@ -282,7 +285,8 @@ class DumbHarvestingBox extends React.Component<Props, State> {
       xpathStart: serializedAnnotatorRange.start,
       xpathEnd: serializedAnnotatorRange.end,
       offsetStart: serializedAnnotatorRange.startOffset,
-      offsetEnd: serializedAnnotatorRange.endOffset
+      offsetEnd: serializedAnnotatorRange.endOffset,
+      tags: tags
     };
     displayAlert('success', I18n.t('loading.wait'));
     addPostExtract({ variables: variables })
@@ -369,6 +373,24 @@ class DumbHarvestingBox extends React.Component<Props, State> {
     }));
   };
 
+  updateTags = (tags: Array<string>, callback: (Array<string>) => void) => {
+    const { updateTags } = this.props;
+    const { extractIndex } = this.state;
+    const extract = this.getCurrentExtract(extractIndex);
+    if (extract) {
+      const variables = {
+        id: extract.id,
+        tags: tags
+      };
+      updateTags({
+        variables: variables
+      }).then((result) => {
+        const newTags = result.data.updateExtractTags.tags.map(tag => tag.value);
+        callback(newTags);
+      });
+    }
+  };
+
   renderFooter = () => {
     const { disabled, isEditable, extractIndex } = this.state;
     const extract = this.getCurrentExtract(extractIndex);
@@ -377,6 +399,22 @@ class DumbHarvestingBox extends React.Component<Props, State> {
     const actionId = isEditable ? ACTIONS.edit : (disabled && ACTIONS.create) || (isSubmitted && ACTIONS.confirm);
     if (!actionId) return null;
     const action = this.actions[actionId];
+    if (disabled) {
+      return (
+        <TagsForm
+          onSubmit={this.validateHarvesting}
+          renderFooter={({ handleSubmit }) => (
+            <div className="harvesting-box-footer">
+              {action.buttons.map(button => (
+                <Button key={button.id} className={`${button.className} button-dark`} onClick={button.onClick || handleSubmit}>
+                  {I18n.t(button.title)}
+                </Button>
+              ))}
+            </div>
+          )}
+        />
+      );
+    }
     return (
       <div className="harvesting-box-footer">
         {action.buttons.map(button => (
@@ -413,7 +451,6 @@ class DumbHarvestingBox extends React.Component<Props, State> {
       extractIndex
     } = this.state;
     const extract = this.getCurrentExtract(extractIndex);
-    const hasExtract = extract !== null;
     const selectionText = selection ? selection.toString() : '';
     const harvesterUserName =
       extract && extract.creator && extract.creator.displayName ? extract.creator.displayName : getConnectedUserName();
@@ -529,8 +566,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
               <AvatarImage userId={harvesterUserId} userName={userName} />
               <div className="harvesting-infos">
                 <div className="username">{userName}</div>
-                {hasExtract &&
-                  extract &&
+                {extract &&
                   extract.creationDate && (
                     <div className="harvesting-date" title={extract.creationDate}>
                       {harvestingDate ||
@@ -539,7 +575,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
                           .fromNow()}
                     </div>
                   )}
-                {!hasExtract && (
+                {!extract && (
                   <div className="harvesting-date">
                     <Translate value="harvesting.now" />
                   </div>
@@ -554,7 +590,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
             </div>
           )}
           <div className="harvesting-box-body">
-            {hasExtract &&
+            {extract &&
               extract &&
               !isEditable && (
                 <div className="body-container">
@@ -585,8 +621,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
                 </div>
               )}
 
-            {hasExtract &&
-              extract &&
+            {extract &&
               isEditable && (
                 <FormControlWithLabel
                   label=""
@@ -596,7 +631,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
                   onChange={e => this.editExtract(e.target.value)}
                 />
               )}
-            {!hasExtract && <div className="selection-body">{selectionText}</div>}
+            {!extract && <div className="selection-body">{selectionText}</div>}
           </div>
           {extracts &&
             extracts.length > 1 && (
@@ -604,15 +639,15 @@ class DumbHarvestingBox extends React.Component<Props, State> {
                 {extractIndex + 1}/{extracts.length}
               </div>
             )}
-          {hasExtract && (
-            <TagsForm
-              canEdit
-              id={extract.id}
+          {extract && !hasFooter ? (
+            <Tags
+              canEdit={connectedUserIsAdmin()}
+              key={extract.id}
               initialValues={extract.tags ? extract.tags.map(tag => tag.value) : []}
-              updateTags={this.props.updateTags}
+              updateTags={this.updateTags}
             />
-          )}
-          {hasFooter && this.renderFooter()}
+          ) : null}
+          {hasFooter ? this.renderFooter() : null}
         </div>
       </div>
     );

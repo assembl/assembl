@@ -137,13 +137,14 @@ class Query(graphene.ObjectType):
     tags = graphene.List(lambda: Tag, filter=graphene.String())
 
     def resolve_tags(self, args, context, info):
-        filter = args.get('filter', '')
+        _filter = args.get('filter', '')
         model = models.Tag
-        if not filter:
-            return model.query().all()
+        query = get_query(model, context)
+        if not _filter:
+            return query.all()
 
-        filter = '%{}%'.format(filter)
-        return model.query.filter(model.value.ilike(filter)).all()
+        _filter = '%{}%'.format(_filter)
+        return query.filter(model.value.ilike(_filter)).all()
 
     def resolve_resources(self, args, context, info):
         model = models.Resource

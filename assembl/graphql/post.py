@@ -291,6 +291,7 @@ class PostExtractEntryFields(graphene.AbstractType):
     xpath_end = graphene.String(required=True, description=docs.PostExtract.xpath_end)
     body = graphene.String(required=True, description=docs.PostExtract.body)
     lang = graphene.String(required=True, description=docs.PostExtract.lang)
+    tags = graphene.List(graphene.String, description=docs.PostExtract.offset_end)
 
 
 class PostExtractEntry(graphene.ObjectType, PostExtractEntryFields):
@@ -756,6 +757,7 @@ class AddPostExtract(graphene.Mutation):
         xpath_end = graphene.String(required=True, description=docs.AddPostExtract.xpath_end)
         offset_start = graphene.Int(required=True, description=docs.AddPostExtract.offset_start)
         offset_end = graphene.Int(required=True, description=docs.AddPostExtract.offset_end)
+        tags = graphene.List(graphene.String, description=docs.AddPostExtract.offset_end)
 
     post = graphene.Field(lambda: Post)
     extract = graphene.Field(lambda: Extract)
@@ -794,6 +796,9 @@ class AddPostExtract(graphene.Mutation):
             extract_hash=extract_hash
         )
         new_extract.lang = args.get('lang')
+        tags = models.Tag.get_tags(args.get('tags', []), db)
+        db.add_all(tags['new_tags'])
+        new_extract.tags = tags['new_tags'] + tags['tags']
         db.add(new_extract)
         range = models.TextFragmentIdentifier(
             extract=new_extract,

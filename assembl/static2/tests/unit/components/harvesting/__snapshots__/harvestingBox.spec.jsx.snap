@@ -212,16 +212,15 @@ exports[`harvestingBox component should match harvestingBox snapshot when author
       /
       2
     </div>
-    <withApollo(TagsForm)
-      canEdit={true}
-      id="987643"
+    <Tags
+      canEdit={false}
       initialValues={
         Array [
           "foo",
           "bar",
         ]
       }
-      updateTags={undefined}
+      updateTags={[Function]}
     />
   </div>
 </div>
@@ -402,32 +401,10 @@ exports[`harvestingBox component should match harvestingBox snapshot when extrac
         [object Object]
       </div>
     </div>
-    <div
-      className="harvesting-box-footer"
-    >
-      <Button
-        active={false}
-        block={false}
-        bsClass="btn"
-        bsStyle="default"
-        className="button-cancel button-dark"
-        disabled={false}
-        onClick={[MockFunction]}
-      >
-        Cancel
-      </Button>
-      <Button
-        active={false}
-        block={false}
-        bsClass="btn"
-        bsStyle="default"
-        className="button-submit button-dark"
-        disabled={false}
-        onClick={[Function]}
-      >
-        Submit
-      </Button>
-    </div>
+    <withApollo(TagsForm)
+      onSubmit={[Function]}
+      renderFooter={[Function]}
+    />
   </div>
 </div>
 `;
@@ -679,16 +656,15 @@ exports[`harvestingBox component should match harvestingBox snapshot when nugget
       /
       2
     </div>
-    <withApollo(TagsForm)
-      canEdit={true}
-      id="987643"
+    <Tags
+      canEdit={false}
       initialValues={
         Array [
           "foo",
           "bar",
         ]
       }
-      updateTags={undefined}
+      updateTags={[Function]}
     />
   </div>
 </div>
@@ -906,16 +882,15 @@ exports[`harvestingBox component should match harvestingBox snapshot when select
       /
       2
     </div>
-    <withApollo(TagsForm)
-      canEdit={true}
-      id="987643"
+    <Tags
+      canEdit={false}
       initialValues={
         Array [
           "foo",
           "bar",
         ]
       }
-      updateTags={undefined}
+      updateTags={[Function]}
     />
   </div>
 </div>
@@ -1133,16 +1108,15 @@ exports[`harvestingBox component should match harvestingBox snapshot when the co
       /
       2
     </div>
-    <withApollo(TagsForm)
-      canEdit={true}
-      id="987643"
+    <Tags
+      canEdit={false}
       initialValues={
         Array [
           "foo",
           "bar",
         ]
       }
-      updateTags={undefined}
+      updateTags={[Function]}
     />
   </div>
 </div>
@@ -1360,16 +1334,15 @@ exports[`harvestingBox component should match harvestingBox snapshot when there 
       /
       2
     </div>
-    <withApollo(TagsForm)
-      canEdit={true}
-      id="987643"
+    <Tags
+      canEdit={false}
       initialValues={
         Array [
           "foo",
           "bar",
         ]
       }
-      updateTags={undefined}
+      updateTags={[Function]}
     />
   </div>
 </div>
@@ -1559,32 +1532,10 @@ exports[`harvestingBox component should match harvestingBox snapshot when there 
         [object Object]
       </div>
     </div>
-    <div
-      className="harvesting-box-footer"
-    >
-      <Button
-        active={false}
-        block={false}
-        bsClass="btn"
-        bsStyle="default"
-        className="button-cancel button-dark"
-        disabled={false}
-        onClick={[MockFunction]}
-      >
-        Cancel
-      </Button>
-      <Button
-        active={false}
-        block={false}
-        bsClass="btn"
-        bsStyle="default"
-        className="button-submit button-dark"
-        disabled={false}
-        onClick={[Function]}
-      >
-        Submit
-      </Button>
-    </div>
+    <withApollo(TagsForm)
+      onSubmit={[Function]}
+      renderFooter={[Function]}
+    />
   </div>
 </div>
 `;
