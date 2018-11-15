@@ -79,10 +79,11 @@ class DumbSideCommentBox extends React.Component<Props, State> {
     // Required when switching from displaying comment to submitting to force a refresh of component
     const { submitting, selection } = nextProps;
     if (prevState.submitting !== submitting) {
-      const annotatorRange = selection && ARange.sniff(selection.getRangeAt(0));
+      const selectionText = selection && selection.toString();
+      const annotatorRange = selectionText && ARange.sniff(selection.getRangeAt(0));
       return {
         submitting: submitting,
-        selectionText: selection && selection.toString(),
+        selectionText: selectionText,
         serializedAnnotatorRange: annotatorRange.serialize(document, 'annotation')
       };
     }
@@ -93,14 +94,15 @@ class DumbSideCommentBox extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     const { cancelSubmit, submitting, selection } = props;
-    const annotatorRange = selection && ARange.sniff(selection.getRangeAt(0));
+    const selectionText = selection && selection.toString();
+    const annotatorRange = selectionText && ARange.sniff(selection.getRangeAt(0));
 
     this.state = {
       extractIndex: 0,
       body: EditorState.createEmpty(),
       submitting: submitting,
       replying: false,
-      selectionText: selection && selection.toString(),
+      selectionText: selectionText,
       serializedAnnotatorRange: annotatorRange && annotatorRange.serialize(document, 'annotation'),
       editComment: false,
       editingPostId: ''

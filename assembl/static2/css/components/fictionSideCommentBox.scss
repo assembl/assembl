@@ -2,6 +2,12 @@
   position: absolute;
   z-index: 200;
 
+  .harvesting-close-button {
+    .assembl-icon-cancel:before {
+      margin: 0.2em 0.2em 0.2em 0.25em;
+    }
+  }
+
   .theme-box {
     border-left: none;
     width: 275px;
