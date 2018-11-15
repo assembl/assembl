@@ -20,7 +20,7 @@ type SentimentProps = {
   sentimentCounts: SentimentCountsFragment
 };
 
-const Sentiment = ({
+export const Sentiment = ({
   sentimentCounts,
   mySentiment,
   sentiment,
