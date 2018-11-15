@@ -89,7 +89,10 @@ def graphql_api(request):
     # don't check read permission for TextFields query needed on the signup
     # page because we don't have read permission on private debate
     check_read_permission = True
-    if request.content_type == 'application/json' and u'query' in request.json_body and request.json_body['query'].startswith(u'query TextFields('):
+    if request.content_type == 'application/json' and u'query' in request.json_body and (
+        request.json_body['query'].startswith(u'query TextFields(') or
+            request.json_body['query'].startswith(u'query TabsCondition(') or
+            request.json_body['query'].startswith(u'query LegalContents(')):
         check_read_permission = False
 
     if check_read_permission and not discussion.user_can(user_id, CrudPermissions.READ, permissions):
