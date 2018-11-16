@@ -16,7 +16,7 @@ from ..lib import config
 from ..lib import logging
 
 API_ENDPOINTS = {}
-api_version = config.get("watson_api_version", "2018-03-16")
+api_version = config.get("watson_api_version", "2018-09-21")
 log = logging.getLogger('assembl')
 
 
