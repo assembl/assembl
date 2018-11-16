@@ -198,9 +198,9 @@ const DumbGaugeForm = ({
         minimum={minimum}
         maximum={maximum}
         unit={unit}
-        handleMinChange={() => handleMinChange}
-        handleMaxChange={() => handleMaxChange}
-        handleUnitChange={() => handleUnitChange}
+        handleMinChange={(value: number) => handleMinChange(value)}
+        handleMaxChange={(value: number) => handleMaxChange(value)}
+        handleUnitChange={(value: number) => handleUnitChange(value)}
       />
     )}
     {!isNumberGauge && <TextGaugeForm choices={choices} handleGaugeChoiceLabelChange={handleGaugeChoiceLabelChange} />}
