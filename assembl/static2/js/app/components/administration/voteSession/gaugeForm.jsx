@@ -198,9 +198,9 @@ const DumbGaugeForm = ({
         minimum={minimum}
         maximum={maximum}
         unit={unit}
-        handleMinChange={e => handleMinChange(e.target.value)}
-        handleMaxChange={e => handleMaxChange(e.target.value)}
-        handleUnitChange={e => handleUnitChange(e.target.value)}
+        handleMinChange={() => handleMinChange}
+        handleMaxChange={() => handleMaxChange}
+        handleUnitChange={() => handleUnitChange}
       />
     )}
     {!isNumberGauge && <TextGaugeForm choices={choices} handleGaugeChoiceLabelChange={handleGaugeChoiceLabelChange} />}
@@ -250,11 +250,11 @@ const mapDispatchToProps = (dispatch, { id, editLocale }) => ({
   // for number gauge
   handleMinChange: (value) => {
     dispatch(markAllDependenciesAsChanged(id));
-    dispatch(updateGaugeMinimum(id, value));
+    dispatch(updateGaugeMinimum(id, parseInt(value, 10)));
   },
   handleMaxChange: (value) => {
     dispatch(markAllDependenciesAsChanged(id));
-    dispatch(updateGaugeMaximum(id, value));
+    dispatch(updateGaugeMaximum(id, parseInt(value, 10)));
   },
   handleUnitChange: (value) => {
     dispatch(markAllDependenciesAsChanged(id));
