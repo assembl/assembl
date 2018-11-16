@@ -13,6 +13,11 @@ import makeAnimated from 'react-select/lib/animated';
 import Error from './error';
 import { getValidationState } from './utils';
 
+export type Option = {
+  value: string,
+  label: string
+};
+
 type Props = {
   isMulti: boolean,
   isAsync: boolean,
@@ -24,12 +29,12 @@ type Props = {
   className?: string,
   noOptionsMessage: () => React.Node,
   formatCreateLabel: string => React.Node,
-  options?: Array<string>,
-  loadOptions?: (string, (Array<string>) => void) => Promise<*> | undefined,
+  options?: Array<Option>,
+  loadOptions?: (string, (Array<Option>) => void) => Promise<*> | undefined,
   input: {
     name: string,
     onChange: (SyntheticInputEvent<*> | any) => void,
-    value?: Array<string> | string
+    value?: Array<Option> | Option
   }
 } & FieldRenderProps;
 
@@ -48,14 +53,11 @@ const SelectFieldAdapter = ({
   ...rest
 }: Props) => {
   const decoratedLabel = label && required ? `${label} *` : label;
-  let defaultValue = isMulti ? [] : null;
-  if (value) {
-    defaultValue = isMulti ? value.map(option => ({ value: option, label: option })) : { value: value, label: value };
-  }
-  const selectOptions = options ? options.map(option => ({ value: option, label: option })) : [];
-  let SelectComponent = canCreate ? Creatable : Select;
+  let SelectComponent = null;
   if (isAsync) {
     SelectComponent = canCreate ? AsyncCreatableSelect : AsyncSelect;
+  } else {
+    SelectComponent = canCreate ? Creatable : Select;
   }
   return (
     <FormGroup controlId={name} validationState={getValidationState(error, touched)}>
@@ -70,13 +72,10 @@ const SelectFieldAdapter = ({
         components={makeAnimated()}
         name={name}
         placeholder={I18n.t(placeholder)}
-        defaultValue={defaultValue}
-        options={selectOptions}
+        defaultValue={value}
+        options={options}
         loadOptions={loadOptions}
-        onChange={(selectedOptions) => {
-          const selectedValues = isMulti ? selectedOptions.map(selectedOption => selectedOption.value) : selectedOptions.value;
-          onChange(selectedValues);
-        }}
+        onChange={onChange}
       />
       <Error name={name} />
     </FormGroup>

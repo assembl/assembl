@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Tags component should match the form footer 1`] = `
+<ReactFinalForm
+  initialValues={
+    Object {
+      "tags": Array [
+        Object {
+          "label": "foo",
+          "value": "fooid",
+        },
+        Object {
+          "label": "bar",
+          "value": "barid",
+        },
+      ],
+    }
+  }
+  onSubmit={[Function]}
+  render={[Function]}
+/>
+`;

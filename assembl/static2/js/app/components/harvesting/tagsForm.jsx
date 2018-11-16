@@ -4,7 +4,7 @@ import { Translate, I18n } from 'react-redux-i18n';
 import { Form, Field } from 'react-final-form';
 import { type ApolloClient, withApollo } from 'react-apollo';
 
-import SelectFieldAdapter from '../form/selectFieldAdapter';
+import SelectFieldAdapter, { type Option } from '../form/selectFieldAdapter';
 import Tags from '../../graphql/TagsQuery.graphql';
 
 export type FormData = {
@@ -15,9 +15,9 @@ export type FormData = {
 
 type Props = {
   client: ApolloClient,
-  initialValues: Array<string>,
+  initialValues: Array<Option>,
   renderFooter: (formData: FormData) => React.Node,
-  onSubmit: (result: { tags: Array<string> }) => void
+  onSubmit: (result: { tags: Array<Option> }) => void
 };
 
 export const tagsLoader = (client: ApolloClient) => (inputValue: string) =>
@@ -31,18 +31,18 @@ export const tagsLoader = (client: ApolloClient) => (inputValue: string) =>
       const { data: { tags } } = value;
       return tags.map(tag => ({
         label: tag.value,
-        value: tag.value
+        value: tag.id
       }));
     });
 
-class TagsForm extends React.Component<Props> {
+export const tagsComparator = (initialValues: Array<Option>, currentTags: Array<Option>): boolean => {
+  const initialValuesIds = initialValues.map(tag => tag.value);
+  return currentTags.length === initialValues.length && currentTags.every(tag => initialValuesIds.includes(tag.value));
+};
+
+export class DumbTagsForm extends React.Component<Props> {
   static defaultProps = {
     initialValues: []
-  };
-
-  pristine = (currentTags: Array<string>) => {
-    const { initialValues } = this.props;
-    return currentTags.length === initialValues.length && currentTags.every(tag => initialValues.includes(tag));
   };
 
   render() {
@@ -53,7 +53,7 @@ class TagsForm extends React.Component<Props> {
         onSubmit={onSubmit}
         render={({ handleSubmit, values, submitting }) => {
           // Don't use final form pristine here
-          const pristine = this.pristine(values.tags);
+          const pristine = tagsComparator(initialValues, values.tags);
           return (
             <form onSubmit={handleSubmit} className="harvesting-tags-form-container form-container">
               <Field
@@ -80,4 +80,4 @@ class TagsForm extends React.Component<Props> {
   }
 }
 
-export default withApollo(TagsForm);
+export default withApollo(DumbTagsForm);

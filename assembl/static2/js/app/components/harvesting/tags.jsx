@@ -3,22 +3,23 @@ import React from 'react';
 import { I18n } from 'react-redux-i18n';
 import { Button } from 'react-bootstrap';
 
-import TagsForm, { type FormData } from './tagsForm';
+import { type Option } from '../form/selectFieldAdapter';
+import TagsForm, { type FormData, tagsComparator } from './tagsForm';
 
 type Props = {
-  initialValues: Array<string>,
+  initialValues: Array<Option>,
   canEdit: boolean,
-  updateTags: (tags: Array<string>, callback: (tags: Array<string>) => void) => void
+  updateTags: (tags: Array<Option>, callback: (tags: Array<Option>) => void) => void
 };
 
 type State = {
   editing: false,
   submitting: boolean,
-  currentTags: Array<string>
+  currentTags: Array<Option>
 };
 
 export type TagsData = {
-  tags: Array<string>
+  tags: Array<Option>
 };
 
 class Tags extends React.Component<Props, State> {
@@ -47,12 +48,13 @@ class Tags extends React.Component<Props, State> {
   updateTags = (data: TagsData) => {
     const { updateTags } = this.props;
     const { tags } = data;
+    const tagsValues = tags.map(tag => tag.label);
     this.setState(
       {
         submitting: true
       },
       () => {
-        updateTags(tags, (newtags: Arra<string>) => {
+        updateTags(tagsValues, (newtags: Arra<Option>) => {
           this.setState({
             submitting: false,
             editing: false,
@@ -77,30 +79,25 @@ class Tags extends React.Component<Props, State> {
     });
   };
 
-  pristine = (currentTags: Array<string>) => {
-    const { initialValues } = this.props;
-    return currentTags.length === initialValues.length && currentTags.every(tag => initialValues.includes(tag));
-  };
-
   removeTag = (tag: string) => {
     this.setState(state => ({
       ...state,
-      currentTags: state.currentTags.filter(currentTag => currentTag !== tag)
+      currentTags: state.currentTags.filter(currentTag => currentTag.value !== tag)
     }));
   };
 
   renderTags = () => {
-    const { canEdit } = this.props;
+    const { initialValues, canEdit } = this.props;
     const { currentTags, submitting } = this.state;
-    const pristine = this.pristine(currentTags);
+    const pristine = tagsComparator(initialValues, currentTags);
     return (
       <div className="harvesting-tags-container">
         <label htmlFor="tags">{I18n.t('harvesting.tags.label')}</label>
         <div className="harvesting-tags-titles-container">
           {currentTags.map(tag => (
-            <div key={tag} className="harvesting-tag-container">
-              <span className="harvesting-tag-title">{tag}</span>
-              {canEdit ? <div className="assembl-icon-cancel" onClick={() => this.removeTag(tag)} /> : null}
+            <div key={tag.value} className="harvesting-tag-container">
+              <span className="harvesting-tag-title">{tag.label}</span>
+              {canEdit ? <div className="assembl-icon-cancel" onClick={() => this.removeTag(tag.value)} /> : null}
             </div>
           ))}
           {canEdit ? (

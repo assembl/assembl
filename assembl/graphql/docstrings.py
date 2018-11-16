@@ -226,6 +226,11 @@ class ExtractInterface:
     tags = "The list of tags of the extract."
 
 
+class TagInterface:
+    __doc__ = """A tag is a string. It allows to classify objects such as extracts."""
+    value = """The value of the tag. This is not language dependent, but rather just unicode text."""
+
+
 class PostExtract:
     post_id = Default.node_id % ("Post")
     body = ExtractInterface.body

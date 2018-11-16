@@ -9,7 +9,7 @@ from .types import SecureObjectType, SQLAlchemyInterface
 
 
 class TagInterface(SQLAlchemyInterface):
-    __doc__ = docs.ExtractInterface.__doc__
+    __doc__ = docs.TagInterface.__doc__
 
     class Meta:
         model = models.Tag
@@ -17,11 +17,11 @@ class TagInterface(SQLAlchemyInterface):
         # Don't add id in only_fields in an interface
         # will be just the primary key, not the base64 type:id
 
-    value = graphene.String(description=docs.ExtractInterface.text_fragment_identifiers)
+    value = graphene.String(description=docs.TagInterface.value)
 
 
 class Tag(SecureObjectType, SQLAlchemyObjectType):
-    __doc__ = docs.ExtractInterface.__doc__
+    __doc__ = docs.TagInterface.__doc__
 
     class Meta:
         model = models.Tag

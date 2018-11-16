@@ -216,8 +216,14 @@ exports[`harvestingBox component should match harvestingBox snapshot when author
       canEdit={false}
       initialValues={
         Array [
-          "foo",
-          "bar",
+          Object {
+            "label": "foo",
+            "value": "fooid",
+          },
+          Object {
+            "label": "bar",
+            "value": "barid",
+          },
         ]
       }
       updateTags={[Function]}
@@ -401,7 +407,7 @@ exports[`harvestingBox component should match harvestingBox snapshot when extrac
         [object Object]
       </div>
     </div>
-    <withApollo(TagsForm)
+    <withApollo(DumbTagsForm)
       onSubmit={[Function]}
       renderFooter={[Function]}
     />
@@ -660,8 +666,14 @@ exports[`harvestingBox component should match harvestingBox snapshot when nugget
       canEdit={false}
       initialValues={
         Array [
-          "foo",
-          "bar",
+          Object {
+            "label": "foo",
+            "value": "fooid",
+          },
+          Object {
+            "label": "bar",
+            "value": "barid",
+          },
         ]
       }
       updateTags={[Function]}
@@ -886,8 +898,14 @@ exports[`harvestingBox component should match harvestingBox snapshot when select
       canEdit={false}
       initialValues={
         Array [
-          "foo",
-          "bar",
+          Object {
+            "label": "foo",
+            "value": "fooid",
+          },
+          Object {
+            "label": "bar",
+            "value": "barid",
+          },
         ]
       }
       updateTags={[Function]}
@@ -1112,8 +1130,14 @@ exports[`harvestingBox component should match harvestingBox snapshot when the co
       canEdit={false}
       initialValues={
         Array [
-          "foo",
-          "bar",
+          Object {
+            "label": "foo",
+            "value": "fooid",
+          },
+          Object {
+            "label": "bar",
+            "value": "barid",
+          },
         ]
       }
       updateTags={[Function]}
@@ -1338,8 +1362,14 @@ exports[`harvestingBox component should match harvestingBox snapshot when there 
       canEdit={false}
       initialValues={
         Array [
-          "foo",
-          "bar",
+          Object {
+            "label": "foo",
+            "value": "fooid",
+          },
+          Object {
+            "label": "bar",
+            "value": "barid",
+          },
         ]
       }
       updateTags={[Function]}
@@ -1532,7 +1562,7 @@ exports[`harvestingBox component should match harvestingBox snapshot when there 
         [object Object]
       </div>
     </div>
-    <withApollo(TagsForm)
+    <withApollo(DumbTagsForm)
       onSubmit={[Function]}
       renderFooter={[Function]}
     />

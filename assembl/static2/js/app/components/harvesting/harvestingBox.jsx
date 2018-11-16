@@ -26,6 +26,7 @@ import { NatureIcons, ActionIcons } from '../../utils/extract';
 import { ExtractStates } from '../../constants';
 import Tags, { type TagsData } from './tags';
 import TagsForm from './tagsForm';
+import { type Option } from '../form/selectFieldAdapter';
 
 type Props = {
   extracts?: Array<Extract>,
@@ -415,7 +416,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
     }));
   };
 
-  updateTags = (tags: Array<string>, callback: (tags: Array<string>) => void) => {
+  updateTags = (tags: Array<string>, callback: (tags: Array<Option>) => void) => {
     const { extractIndex } = this.state;
     const extract = this.getCurrentExtract(extractIndex);
     if (extract) {
@@ -427,7 +428,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
         tags: tags
       })
         .then(({ data: { updateExtractTags } }) => {
-          const newTags = updateExtractTags.tags.map(tag => tag.value);
+          const newTags = updateExtractTags.tags.map(tag => ({ value: tag.id, label: tag.value }));
           // Update the list of tags of the Tags component
           callback(newTags);
         })
@@ -690,7 +691,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
             <Tags
               canEdit={connectedUserIsAdmin()}
               key={extract.id}
-              initialValues={extract.tags ? extract.tags.map(tag => tag.value) : []}
+              initialValues={extract.tags ? extract.tags.map(tag => ({ value: tag.id, label: tag.value })) : []}
               updateTags={this.updateTags}
             />
           ) : null}
