@@ -49,7 +49,9 @@ const DumbTokenCategoryForm = ({
         label={I18n.t('administration.tokenNumber')}
         required
         type="number"
-        onChange={v => handleNumberChange(parseInt(v, 10))}
+        onChange={(v) => {
+          handleNumberChange(parseInt(v, 10));
+        }}
         value={totalNumber.toString()}
         formControlProps={{
           min: '1'
@@ -83,9 +85,9 @@ const mapStateToProps = (state, { id, editLocale }) => {
 
 const mapDispatchToProps = (dispatch, { moduleId, id, editLocale }) => ({
   handleTitleChange: e => dispatch(updateTokenVoteCategoryTitle(id, editLocale, e.target.value, moduleId)),
-  handleNumberChange: (e) => {
-    if (e.target.value > 0) {
-      dispatch(updateTokenTotalNumber(id, e.target.value, moduleId));
+  handleNumberChange: (value) => {
+    if (value > 0) {
+      dispatch(updateTokenTotalNumber(id, value, moduleId));
     }
   },
   handleColorChange: color => dispatch(updateTokenVoteCategoryColor(id, color.hex, moduleId))

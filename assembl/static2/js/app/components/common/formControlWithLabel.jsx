@@ -148,7 +148,7 @@ class FormControlWithLabel extends React.Component<FormControlWithLabelProps, Fo
         name={name}
         type={type}
         placeholder={this.getLabel()}
-        onChange={onChange}
+        onChange={event => onChange(event.target.value)}
         value={valueToShow}
         onBlur={this.setValidationState}
         {...additionalProps}
