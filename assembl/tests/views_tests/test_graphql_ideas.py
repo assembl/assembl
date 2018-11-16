@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 import json
-import datetime
 
 from graphql_relay.node.node import from_global_id
 
+from assembl import models
 from assembl.graphql.schema import Schema as schema
 
 
@@ -800,6 +800,9 @@ def test_graphql_create_bright_mirror(graphql_request, graphql_registry, test_se
     assert 'externalUrl' in idea['img']
     assert idea['messageViewOverride'] == u'brightMirror'
     assert idea['order'] == 1.0
+    raw_id = int(from_global_id(idea['id'])[1])
+    test_session.delete(models.Idea.get(raw_id))
+    test_session.flush()
 
 
 def test_graphql_create_bright_mirror_no_title(phases, graphql_request, graphql_registry, test_session):
@@ -1055,3 +1058,110 @@ def test_graphql_bright_mirror_should_get_all_posts_of_user_draft_first(graphql_
             }
         }
     }
+
+
+def test_mutation_update_ideas_create(phases, graphql_request, graphql_registry, test_session):
+    import os
+    from io import BytesIO
+
+    class FieldStorage(object):
+        file = BytesIO(os.urandom(16))
+        filename = u'path/to/img.png'
+        type = 'image/png'
+
+    graphql_request.POST['variables.ideas.0.image'] = FieldStorage()
+
+    res = schema.execute(
+        graphql_registry['updateIdeas'],
+        context_value=graphql_request,
+        variable_values={
+            'discussionPhaseId': phases['brightMirror'].id,
+            'ideas': [{
+                'messageViewOverride': 'brightMirror',
+                'titleEntries': [
+                    {'value': u"Comprendre les dynamiques et les enjeux", 'localeCode': u"fr"},
+                    {'value': u"Understanding the dynamics and issues", 'localeCode': u"en"}
+                ],
+                'descriptionEntries': [
+                    {'value': u"Desc FR", 'localeCode': u"fr"},
+                    {'value': u"Desc EN", 'localeCode': u"en"}
+                ],
+                'image': u'variables.ideas.0.image',  # this is added via graphql_wsgi but we need to do it ourself here
+                'announcement': {
+                    'titleEntries': [
+                        {'value': u"Title FR announce", 'localeCode': u"fr"},
+                        {'value': u"Title EN announce", 'localeCode': u"en"}
+                    ],
+                    'bodyEntries': [
+                        {'value': u"Body FR announce", 'localeCode': u"fr"},
+                        {'value': u"Body EN announce", 'localeCode': u"en"}
+                    ]
+                }
+            }]
+        })
+
+    assert res.errors is None
+    ideas = res.data['updateIdeas']['rootIdea']['children']
+    assert len(ideas) == 1
+    idea = ideas[0]
+    assert idea['announcement'] == {
+        u'title': u'Title EN announce',
+        u'body': u'Body EN announce'
+    }
+    assert idea['title'] == u'Understanding the dynamics and issues'
+    assert idea['description'] == u'Desc EN'
+    assert idea['img'] is not None
+    assert 'externalUrl' in idea['img']
+    assert idea['messageViewOverride'] == u'brightMirror'
+    assert idea['order'] == 1.0
+
+    # and update the idea without changing the image
+    del graphql_request.POST['variables.ideas.0.image']
+    res = schema.execute(
+        graphql_registry['updateIdeas'],
+        context_value=graphql_request,
+        variable_values={
+            'discussionPhaseId': phases['brightMirror'].id,
+            'ideas': [{
+                'id': idea['id'],  # specify id will do update_idea instead of create_idea
+                'messageViewOverride': 'brightMirror',
+                'titleEntries': [
+                    {'value': u"[modified] Comprendre les dynamiques et les enjeux", 'localeCode': u"fr"},
+                    {'value': u"[modified] Understanding the dynamics and issues", 'localeCode': u"en"}
+                ],
+                'descriptionEntries': [
+                    {'value': u"[modified] Desc FR", 'localeCode': u"fr"},
+                    {'value': u"[modified] Desc EN", 'localeCode': u"en"}
+                ],
+                'announcement': {
+                    'titleEntries': [
+                        {'value': u"[modified] Title FR announce", 'localeCode': u"fr"},
+                        {'value': u"[modified] Title EN announce", 'localeCode': u"en"}
+                    ],
+                    'bodyEntries': [
+                        {'value': u"[modified] Body FR announce", 'localeCode': u"fr"},
+                        {'value': u"[modified] Body EN announce", 'localeCode': u"en"}
+                    ]
+                }
+            }]
+        })
+
+    assert res.errors is None
+    ideas = res.data['updateIdeas']['rootIdea']['children']
+    assert len(ideas) == 1
+    idea = ideas[0]
+    assert idea['announcement'] == {
+        u'title': u'[modified] Title EN announce',
+        u'body': u'[modified] Body EN announce'
+    }
+    assert idea['title'] == u'[modified] Understanding the dynamics and issues'
+    assert idea['description'] == u'[modified] Desc EN'
+    assert idea['img'] is not None
+    assert 'externalUrl' in idea['img']
+    assert idea['messageViewOverride'] == u'brightMirror'
+    assert idea['order'] == 1.0
+
+    # cleanup
+    raw_id = int(from_global_id(idea['id'])[1])
+    test_session.delete(models.Idea.get(raw_id))
+    test_session.flush()
