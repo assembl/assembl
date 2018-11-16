@@ -11,16 +11,16 @@ export type Media = {
   url: string
 };
 
-export type ResourceBlockProps = {
+export type Props = {
   title: string,
   text: string,
-  image: Object,
-  doc: Object,
+  image: StrictFile | null,
+  doc: StrictFile | null,
   embedCode: string,
   index: number
 };
 
-const ResourceBlock = (props: ResourceBlockProps) => {
+const ResourceBlock = (props: Props) => {
   const { index, title, text, embedCode, image, doc } = props;
   const isEven = index % 2 === 0;
   const float = isEven ? 'rsc-media-right margin-case-left' : 'rsc-media-left margin-case-right';

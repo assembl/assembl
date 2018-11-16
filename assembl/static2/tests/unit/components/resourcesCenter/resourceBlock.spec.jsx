@@ -3,18 +3,18 @@ import React from 'react';
 import { configure, shallow, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 
-import type { ResourceBlockProps } from '../../../../js/app/components/resourcesCenter/resourceBlock';
+import type { Props as ResourceBlockProps } from '../../../../js/app/components/resourcesCenter/resourceBlock';
 import ResourceBlock from '../../../../js/app/components/resourcesCenter/resourceBlock';
 import { Medias } from '../../../../js/app/components/common/medias';
 
 configure({ adapter: new Adapter() });
 
-const ResourceProps: ResourceBlockProps = {
+const props: ResourceBlockProps = {
   title: 'Resource title',
   text: 'Resource text',
   image: null,
   doc: null,
-  embedCode: null,
+  embedCode: '',
   index: 1
 };
 
@@ -22,7 +22,7 @@ describe('<ResourceBlock /> - with shallow', () => {
   let wrapper;
 
   beforeEach(() => {
-    wrapper = shallow(<ResourceBlock {...ResourceProps} />);
+    wrapper = shallow(<ResourceBlock {...props} />);
   });
 
   it('should render an image when the image props is not null', () => {
@@ -48,7 +48,7 @@ describe('<ResourceBlock /> - with mount', () => {
   let wrapper;
 
   beforeEach(() => {
-    wrapper = mount(<ResourceBlock {...ResourceProps} />);
+    wrapper = mount(<ResourceBlock {...props} />);
   });
 
   it('should render a link to download when the doc props is not null', () => {

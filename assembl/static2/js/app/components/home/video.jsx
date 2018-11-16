@@ -6,9 +6,9 @@ import { Grid, Row, Col } from 'react-bootstrap';
 
 import Medias from '../common/medias';
 
-type Props = {
-  debateData: DebateData,
-  locale: string
+export type Props = {
+  locale: string,
+  video: DebateVideo
 };
 
 type State = {
@@ -17,12 +17,12 @@ type State = {
 
 export class Video extends React.Component<Props, State> {
   static getDerivedStateFromProps(props: Props) {
-    const { debateData } = props;
+    const { video } = props;
     const videoTxt = document.getElementById('video-txt');
-    const video = document.getElementById('video-vid');
-    if (debateData.videoUrl && videoTxt) {
+    const domVideo = document.getElementById('video-vid');
+    if (video.videoUrl && videoTxt) {
       const textHeight = videoTxt.clientHeight;
-      const videoHeight = video.clientHeight;
+      const videoHeight = domVideo.clientHeight;
       if (textHeight > videoHeight + 5) return { isTextHigher: true };
     }
     return null;
@@ -31,7 +31,7 @@ export class Video extends React.Component<Props, State> {
   state = { isTextHigher: false };
 
   render() {
-    const { debateData } = this.props;
+    const { video } = this.props;
     const { locale } = this.props;
     return (
       <section className="home-section video-section">
@@ -40,23 +40,23 @@ export class Video extends React.Component<Props, State> {
             <div className="title-section">
               <div className="title-hyphen">&nbsp;</div>
               <h1 className="dark-title-1">
-                {debateData.video.titleEntries ? debateData.video.titleEntries[locale] : <Translate value="home.video" />}
+                {video.titleEntries ? video.titleEntries[locale] : <Translate value="home.video" />}
               </h1>
             </div>
             <div className="content-section">
               <div className="content-margin">
                 <Row>
-                  {debateData.video.descriptionEntriesTop && (
+                  {video.descriptionEntriesTop && (
                     <Col xs={12} md={6} className={this.state.isTextHigher ? 'col-bottom' : ''}>
                       <div className="text" id="video-txt">
-                        {debateData.video.descriptionEntriesTop[locale]}
+                        {video.descriptionEntriesTop[locale]}
                       </div>
                     </Col>
                   )}
-                  {debateData.video.videoUrl && (
+                  {video.videoUrl && (
                     <Col xs={12} md={6} className={this.state.isTextHigher ? 'col-bottom' : ''}>
                       <div className="video-container" id="video-vid">
-                        <Medias path={debateData.video.videoUrl} />
+                        <Medias path={video.videoUrl} />
                       </div>
                     </Col>
                   )}
@@ -71,8 +71,8 @@ export class Video extends React.Component<Props, State> {
 }
 
 const mapStateToProps = state => ({
-  debateData: state.debate.debateData,
-  locale: state.i18n.locale
+  locale: state.i18n.locale,
+  video: state.debate.debateData.video
 });
 
 export default connect(mapStateToProps)(Video);

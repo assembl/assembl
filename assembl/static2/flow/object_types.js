@@ -98,6 +98,12 @@ type SocialMedia = {
 
 type Timeline = Array<Phase>;
 
+type DebateVideo = {
+  titleEntries: null | { [string]: string },
+  descriptionEntriesTop: null | { [string]: string },
+  videoUrl: null | string
+};
+
 type DebateData = Object & {
   chatbot: Chatbot,
   chatframe: any, // TODO
@@ -125,11 +131,7 @@ type DebateData = Object & {
   translationEnabled: boolean,
   twitter: { backgroundImageUrl: string, id: string },
   useSocialMedia: boolean,
-  video: {
-    titleEntries: LangstringEntries,
-    descriptionEntriesTop: LangstringEntries,
-    videoUrl: string
-  },
+  video: DebateVideo,
   customHtmlCodeLandingPage: ?string,
   customHtmlCodeRegistrationPage: ?string
 };
@@ -186,3 +188,15 @@ type RouterPath = {
   query?: { [key: string]: any },
   search: string
 };
+
+type StrictFile =
+  | {
+      externalUrl: ?File,
+      mimeType: ?string,
+      title: ?string
+    }
+  | {
+      externalUrl: ?string,
+      mimeType: ?string,
+      title: ?string
+    };

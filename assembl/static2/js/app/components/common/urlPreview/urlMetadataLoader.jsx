@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 
-import UrlPreview, { type URLPreviewProps } from './urlPreview';
+import UrlPreview, { type Props as URLPreviewProps } from './urlPreview';
 import { fetchURLMetadata } from '../../../utils/urlPreview';
 
 type Props = {

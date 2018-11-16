@@ -11,6 +11,7 @@ export type Media = {
 export type Resource = {
   title: string,
   text: string,
+  id: string,
   image: Object,
   embedCode: string,
   doc: Object

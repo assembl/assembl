@@ -1,7 +1,6 @@
 // @flow
 import { I18n } from 'react-redux-i18n';
 
-import type { StrictFile } from '../../../form/types.flow';
 import type { PersonalizeInterfaceValues } from './types.flow';
 
 const ICON_MIMETYPE = ['image/vnd.microsoft.icon', 'image/x-icon'];
