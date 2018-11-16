@@ -1,17 +1,35 @@
 How to set the themes on production instances:
 ==============================================
 
+First time:
+~~~~~~~~~~~
+
 You must add this line to your local RC file:
-`theme2_repositories__git-urls=git@github.com:bluenove/assembl2-client-themes.git`
 
-then you must add your public ssh key to the github repo
+.. code:: sh
 
-then do your app_compile locally
+    theme2_repositories__git-urls=git@github.com:bluenove/assembl2-client-themes.git
 
-By now you should have access to `assembl/static2/css/themes/vendor/assembl2_client_themes`
 
-Each debate has his themes documented in a separate folder. Be careful, the folder name should be exactly the name of the debate.
+Then you must add your public ssh key to the github repo
 
-Add your themes and then commit them and push them
+Then run app_compile locally:
 
-fab -c {RC_FILE} update_vendor_themes_2
+.. code:: sh
+
+    fab -c local.rc app_compile
+
+By now you should have access to ``assembl/static2/css/themes/vendor/assembl2_client_themes``
+
+Create theme for a debate:
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Each debate has his themes documented in a separate folder. Be careful, the folder name should be exactly the name of the debate (slug).
+
+Add your themes, commit them and push them
+
+Finally update your theme on the debate server:
+
+.. code:: sh
+
+    fab -c {RC_FILE} update_vendor_themes_2
