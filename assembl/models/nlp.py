@@ -290,10 +290,6 @@ class PostKeywordAnalysisMixin(object):
             Computation.id, ondelete="CASCADE"))
 
     @declared_attr
-    def post(self):
-        return relationship(Content)
-
-    @declared_attr
     def source(self):
         return relationship(Computation)
 
@@ -320,6 +316,7 @@ class PostKeywordAnalysis(PostKeywordAnalysisMixin, DiscussionBoundBase):
         Tag.id, ondelete="CASCADE"))
     value = relationship(Tag)
     category = Column(Boolean)
+    post = relationship(Content, backref="keyword_analysis")
 
 
 class PostLocalizedConceptAnalysis(
@@ -328,6 +325,7 @@ class PostLocalizedConceptAnalysis(
     concept_id = Column(Integer, ForeignKey(
         LocalizedUriConcept.id, ondelete="CASCADE"))
     value = relationship(LocalizedUriConcept)
+    post = relationship(Content, backref="keyword_localized_analysis")
     # q=db.query(func.sum(PostLocalizedConceptAnalysis.score).label('score'),
     #                     DBPediaConcept.english_id_calc.label('id')
     #            ).join(DBPediaConcept
