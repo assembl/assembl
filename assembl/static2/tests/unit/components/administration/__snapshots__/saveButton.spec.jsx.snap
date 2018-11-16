@@ -4,13 +4,10 @@ exports[`Save button component should render a disabled save button 1`] = `
 <button
   className="save-button button-submit button-dark right btn btn-default"
   disabled={true}
-  onClick={[Function]}
+  onClick={[MockFunction]}
   type="button"
 >
-  <span
-    className={undefined}
-    style={undefined}
-  >
+  <span>
     Save
   </span>
 </button>
@@ -20,13 +17,10 @@ exports[`Save button component should render a save button 1`] = `
 <button
   className="save-button button-submit button-dark right btn btn-default"
   disabled={false}
-  onClick={[Function]}
+  onClick={[MockFunction]}
   type="button"
 >
-  <span
-    className={undefined}
-    style={undefined}
-  >
+  <span>
     Save
   </span>
 </button>
@@ -36,13 +30,10 @@ exports[`Save button component should render a save button with specific classes
 <button
   className="my-great-green-save-button btn btn-default"
   disabled={false}
-  onClick={[Function]}
+  onClick={[MockFunction]}
   type="button"
 >
-  <span
-    className={undefined}
-    style={undefined}
-  >
+  <span>
     Save
   </span>
 </button>

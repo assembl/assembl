@@ -24,10 +24,7 @@ exports[`Storyshots DeletedFictionComment default 1`] = `
         <p
           className="comment"
         >
-          <span
-            className={undefined}
-            style={undefined}
-          >
+          <span>
             Ce message a été supprimé par son auteur.
           </span>
         </p>
@@ -38,10 +35,7 @@ exports[`Storyshots DeletedFictionComment default 1`] = `
             className="left-content"
           >
             <p>
-              <span
-                className={undefined}
-                style={undefined}
-              >
+              <span>
                 999 réponses
               </span>
             </p>
@@ -119,9 +113,7 @@ exports[`Storyshots DeletedFictionComment default 1`] = `
     >
       ×
     </button>
-    <div
-      style={undefined}
-    >
+    <div>
       <div
         style={
           Object {
@@ -129,7 +121,6 @@ exports[`Storyshots DeletedFictionComment default 1`] = `
             "backgroundColor": "#fff",
             "border": "1px solid #eee",
             "borderRadius": "2px",
-            "boxShadow": "0px 2px 3px rgba(0, 0, 0, 0.05)",
             "color": "#444",
             "fontFamily": "-apple-system, \\".SFNSText-Regular\\", \\"San Francisco\\", BlinkMacSystemFont, \\"Segoe UI\\", \\"Roboto\\", \\"Oxygen\\", \\"Ubuntu\\", \\"Cantarell\\", \\"Fira Sans\\", \\"Droid Sans\\", \\"Helvetica Neue\\", \\"Lucida Grande\\", \\"Arial\\", sans-serif",
             "fontSize": "15px",
@@ -189,7 +180,7 @@ exports[`Storyshots DeletedFictionComment default 1`] = `
             Story Source
           </h1>
           <pre
-            className="css-4akams"
+            className="css-r8d96o eyvlbql0"
           >
             <div>
               <div
@@ -203,7 +194,7 @@ exports[`Storyshots DeletedFictionComment default 1`] = `
                 <span
                   style={
                     Object {
-                      "color": "#777",
+                      "color": "#444",
                     }
                   }
                 >
@@ -296,7 +287,7 @@ exports[`Storyshots DeletedFictionComment default 1`] = `
                 <span
                   style={
                     Object {
-                      "color": "#777",
+                      "color": "#444",
                     }
                   }
                 >
@@ -305,11 +296,11 @@ exports[`Storyshots DeletedFictionComment default 1`] = `
               </div>
             </div>
             <button
-              className="css-py33tc"
+              className="css-1naocv3 eva467m0"
               onClick={[Function]}
             >
               <div
-                className="css-kv47nt"
+                className="css-lvl6aa eva467m1"
               >
                 <div
                   style={
@@ -353,32 +344,32 @@ exports[`Storyshots DeletedFictionComment default 1`] = `
               " Component
             </h2>
             <table
-              className="css-1ytzlk7"
+              className="css-1uhv8nx e1vdo5380"
             >
               <thead>
                 <tr>
                   <th
-                    className="css-d52hbj"
+                    className="css-11b5gui e6fp4ir1"
                   >
                     property
                   </th>
                   <th
-                    className="css-d52hbj"
+                    className="css-11b5gui e6fp4ir1"
                   >
                     propType
                   </th>
                   <th
-                    className="css-d52hbj"
+                    className="css-11b5gui e6fp4ir1"
                   >
                     required
                   </th>
                   <th
-                    className="css-d52hbj"
+                    className="css-11b5gui e6fp4ir1"
                   >
                     default
                   </th>
                   <th
-                    className="css-d52hbj"
+                    className="css-11b5gui e6fp4ir1"
                   >
                     description
                   </th>
@@ -387,24 +378,24 @@ exports[`Storyshots DeletedFictionComment default 1`] = `
               <tbody>
                 <tr>
                   <td
-                    className="css-1ygfcef"
+                    className="css-1qcb1f7 e6fp4ir0"
                   >
                     expandCollapseCallbackFromTree
                   </td>
                   <td
-                    className="css-1ygfcef"
+                    className="css-1qcb1f7 e6fp4ir0"
                   >
                     <span>
                       unknown
                     </span>
                   </td>
                   <td
-                    className="css-d52hbj"
+                    className="css-11b5gui e6fp4ir0"
                   >
                     -
                   </td>
                   <td
-                    className="css-d52hbj"
+                    className="css-11b5gui e6fp4ir0"
                   >
                     <span
                       style={
@@ -417,34 +408,34 @@ exports[`Storyshots DeletedFictionComment default 1`] = `
                     </span>
                   </td>
                   <td
-                    className="css-d52hbj"
+                    className="css-11b5gui e6fp4ir0"
                   />
                 </tr>
                 <tr>
                   <td
-                    className="css-1ygfcef"
+                    className="css-1qcb1f7 e6fp4ir0"
                   >
                     expandedFromTree
                   </td>
                   <td
-                    className="css-1ygfcef"
+                    className="css-1qcb1f7 e6fp4ir0"
                   >
                     <span>
                       unknown
                     </span>
                   </td>
                   <td
-                    className="css-d52hbj"
+                    className="css-11b5gui e6fp4ir0"
                   >
                     -
                   </td>
                   <td
-                    className="css-d52hbj"
+                    className="css-11b5gui e6fp4ir0"
                   >
                     <span
                       style={
                         Object {
-                          "color": "#777",
+                          "color": "#444",
                         }
                       }
                     >
@@ -452,7 +443,7 @@ exports[`Storyshots DeletedFictionComment default 1`] = `
                     </span>
                   </td>
                   <td
-                    className="css-d52hbj"
+                    className="css-11b5gui e6fp4ir0"
                   />
                 </tr>
               </tbody>
@@ -489,10 +480,7 @@ exports[`Storyshots DeletedFictionComment playground 1`] = `
         <p
           className="comment"
         >
-          <span
-            className={undefined}
-            style={undefined}
-          >
+          <span>
             Ce message a été supprimé par son auteur.
           </span>
         </p>
@@ -503,10 +491,7 @@ exports[`Storyshots DeletedFictionComment playground 1`] = `
             className="left-content"
           >
             <p>
-              <span
-                className={undefined}
-                style={undefined}
-              >
+              <span>
                 999 réponses
               </span>
             </p>
@@ -584,9 +569,7 @@ exports[`Storyshots DeletedFictionComment playground 1`] = `
     >
       ×
     </button>
-    <div
-      style={undefined}
-    >
+    <div>
       <div
         style={
           Object {
@@ -594,7 +577,6 @@ exports[`Storyshots DeletedFictionComment playground 1`] = `
             "backgroundColor": "#fff",
             "border": "1px solid #eee",
             "borderRadius": "2px",
-            "boxShadow": "0px 2px 3px rgba(0, 0, 0, 0.05)",
             "color": "#444",
             "fontFamily": "-apple-system, \\".SFNSText-Regular\\", \\"San Francisco\\", BlinkMacSystemFont, \\"Segoe UI\\", \\"Roboto\\", \\"Oxygen\\", \\"Ubuntu\\", \\"Cantarell\\", \\"Fira Sans\\", \\"Droid Sans\\", \\"Helvetica Neue\\", \\"Lucida Grande\\", \\"Arial\\", sans-serif",
             "fontSize": "15px",
@@ -654,7 +636,7 @@ exports[`Storyshots DeletedFictionComment playground 1`] = `
             Story Source
           </h1>
           <pre
-            className="css-4akams"
+            className="css-r8d96o eyvlbql0"
           >
             <div>
               <div
@@ -668,7 +650,7 @@ exports[`Storyshots DeletedFictionComment playground 1`] = `
                 <span
                   style={
                     Object {
-                      "color": "#777",
+                      "color": "#444",
                     }
                   }
                 >
@@ -761,7 +743,7 @@ exports[`Storyshots DeletedFictionComment playground 1`] = `
                 <span
                   style={
                     Object {
-                      "color": "#777",
+                      "color": "#444",
                     }
                   }
                 >
@@ -770,11 +752,11 @@ exports[`Storyshots DeletedFictionComment playground 1`] = `
               </div>
             </div>
             <button
-              className="css-py33tc"
+              className="css-1naocv3 eva467m0"
               onClick={[Function]}
             >
               <div
-                className="css-kv47nt"
+                className="css-lvl6aa eva467m1"
               >
                 <div
                   style={
@@ -818,32 +800,32 @@ exports[`Storyshots DeletedFictionComment playground 1`] = `
               " Component
             </h2>
             <table
-              className="css-1ytzlk7"
+              className="css-1uhv8nx e1vdo5380"
             >
               <thead>
                 <tr>
                   <th
-                    className="css-d52hbj"
+                    className="css-11b5gui e6fp4ir1"
                   >
                     property
                   </th>
                   <th
-                    className="css-d52hbj"
+                    className="css-11b5gui e6fp4ir1"
                   >
                     propType
                   </th>
                   <th
-                    className="css-d52hbj"
+                    className="css-11b5gui e6fp4ir1"
                   >
                     required
                   </th>
                   <th
-                    className="css-d52hbj"
+                    className="css-11b5gui e6fp4ir1"
                   >
                     default
                   </th>
                   <th
-                    className="css-d52hbj"
+                    className="css-11b5gui e6fp4ir1"
                   >
                     description
                   </th>
@@ -852,24 +834,24 @@ exports[`Storyshots DeletedFictionComment playground 1`] = `
               <tbody>
                 <tr>
                   <td
-                    className="css-1ygfcef"
+                    className="css-1qcb1f7 e6fp4ir0"
                   >
                     expandCollapseCallbackFromTree
                   </td>
                   <td
-                    className="css-1ygfcef"
+                    className="css-1qcb1f7 e6fp4ir0"
                   >
                     <span>
                       unknown
                     </span>
                   </td>
                   <td
-                    className="css-d52hbj"
+                    className="css-11b5gui e6fp4ir0"
                   >
                     -
                   </td>
                   <td
-                    className="css-d52hbj"
+                    className="css-11b5gui e6fp4ir0"
                   >
                     <span
                       style={
@@ -882,34 +864,34 @@ exports[`Storyshots DeletedFictionComment playground 1`] = `
                     </span>
                   </td>
                   <td
-                    className="css-d52hbj"
+                    className="css-11b5gui e6fp4ir0"
                   />
                 </tr>
                 <tr>
                   <td
-                    className="css-1ygfcef"
+                    className="css-1qcb1f7 e6fp4ir0"
                   >
                     expandedFromTree
                   </td>
                   <td
-                    className="css-1ygfcef"
+                    className="css-1qcb1f7 e6fp4ir0"
                   >
                     <span>
                       unknown
                     </span>
                   </td>
                   <td
-                    className="css-d52hbj"
+                    className="css-11b5gui e6fp4ir0"
                   >
                     -
                   </td>
                   <td
-                    className="css-d52hbj"
+                    className="css-11b5gui e6fp4ir0"
                   >
                     <span
                       style={
                         Object {
-                          "color": "#777",
+                          "color": "#444",
                         }
                       }
                     >
@@ -917,7 +899,7 @@ exports[`Storyshots DeletedFictionComment playground 1`] = `
                     </span>
                   </td>
                   <td
-                    className="css-d52hbj"
+                    className="css-11b5gui e6fp4ir0"
                   />
                 </tr>
               </tbody>

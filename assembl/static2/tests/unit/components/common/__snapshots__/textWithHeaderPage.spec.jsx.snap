@@ -5,7 +5,6 @@ exports[`TextWithHeaderPage component should render the header with a title and 
   className="text-with-header"
 >
   <Connect(Header)
-    imgUrl={undefined}
     title="Terms and Conditios"
   />
   <div

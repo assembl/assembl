@@ -40,7 +40,6 @@ exports[`VoteSession component should match VoteSession snapshot 1`] = `
       displayIndex={false}
       index={1}
       indexGenerator={[Function]}
-      innerRef={undefined}
       parents={Array []}
       title="Instructions de la phase de vote"
       translate={false}
@@ -67,8 +66,8 @@ exports[`VoteSession component should match VoteSession snapshot 1`] = `
             <AvailableTokens
               remainingTokensByCategory={
                 Immutable.Map {
-                  negative: 10,
-                  positive: 8,
+                  "negative": 10,
+                  "positive": 8,
                 }
               }
               sticky={false}
@@ -107,7 +106,6 @@ exports[`VoteSession component should match VoteSession snapshot 1`] = `
       displayIndex={false}
       index={1}
       indexGenerator={[Function]}
-      innerRef={undefined}
       parents={Array []}
       title="Vote sur 10 propositions"
       translate={false}
@@ -215,19 +213,13 @@ exports[`VoteSession component should match VoteSession snapshot 1`] = `
             }
             remainingTokensByCategory={
               Immutable.Map {
-                negative: 10,
-                positive: 8,
+                "negative": 10,
+                "positive": 8,
               }
             }
             seeCurrentVotes={true}
-            userGaugeVotes={
-              Immutable.Map {
-              }
-            }
-            userTokenVotes={
-              Immutable.Map {
-              }
-            }
+            userGaugeVotes={Immutable.Map {}}
+            userTokenVotes={Immutable.Map {}}
             voteForProposalGauge={[Function]}
             voteForProposalToken={[Function]}
           />
@@ -299,7 +291,6 @@ exports[`VoteSession component should match VoteSession snapshot with empty modu
       displayIndex={false}
       index={1}
       indexGenerator={[Function]}
-      innerRef={undefined}
       parents={Array []}
       title="Instructions de la phase de vote"
       translate={false}
@@ -319,9 +310,7 @@ exports[`VoteSession component should match VoteSession snapshot with empty modu
         >
           <div
             className="vote-instructions"
-          >
-            
-          </div>
+          />
         </Col>
       </Row>
     </Section>
@@ -338,7 +327,6 @@ exports[`VoteSession component should match VoteSession snapshot with empty modu
       displayIndex={false}
       index={1}
       indexGenerator={[Function]}
-      innerRef={undefined}
       parents={Array []}
       title="Vote sur 0 propositions"
       translate={false}
@@ -357,19 +345,10 @@ exports[`VoteSession component should match VoteSession snapshot with empty modu
         >
           <Proposals
             proposals={Array []}
-            remainingTokensByCategory={
-              Immutable.Map {
-              }
-            }
+            remainingTokensByCategory={Immutable.Map {}}
             seeCurrentVotes={true}
-            userGaugeVotes={
-              Immutable.Map {
-              }
-            }
-            userTokenVotes={
-              Immutable.Map {
-              }
-            }
+            userGaugeVotes={Immutable.Map {}}
+            userTokenVotes={Immutable.Map {}}
             voteForProposalGauge={[Function]}
             voteForProposalToken={[Function]}
           />

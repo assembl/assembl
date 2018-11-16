@@ -7,17 +7,13 @@ exports[`manageErrorAndLoading HOC should display a loader if data are loading a
   <div
     className="loader"
   >
-    <span
-      className={undefined}
-      style={undefined}
-    >
+    <span>
       Please wait...
     </span>
     <div
       className="relative"
     >
       <svg
-        fill={undefined}
         height="30"
         viewBox="0 0 120 30"
         width="30"
@@ -115,17 +111,13 @@ exports[`manageErrorAndLoading HOC should display a loader if data are loading a
   <div
     className="loader"
   >
-    <span
-      className={undefined}
-      style={undefined}
-    >
+    <span>
       Please wait...
     </span>
     <div
       className="relative"
     >
       <svg
-        fill={undefined}
         height="30"
         viewBox="0 0 120 30"
         width="30"

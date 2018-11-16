@@ -81,7 +81,7 @@ exports[`Post component should render a PostView component and pass its props to
     originalLocale="fr"
     phaseId="DEF345"
     publicationState="PUBLISHED"
-    refetchIdea={[Function]}
+    refetchIdea={[MockFunction]}
     routerParams={
       Object {
         "phase": "thread",
@@ -99,7 +99,6 @@ exports[`Post component should render a PostView component and pass its props to
 exports[`Post component should render a deleted post 1`] = `
 <DeletedPost
   deletedBy="user"
-  id={undefined}
   subject={
     <span>
       We need to hack the solid state HTTP alarm!
@@ -137,7 +136,7 @@ exports[`PostView component should render a post in view mode 1`] = `
           userId="dannietreutel"
           userName="Dannie Treutel"
         />
-        <withRouter(Apollo(Component))
+        <withRouter(Apollo(DumbPostBody))
           body="<p>You can't index the port without programming the wireless HTTP program!</p>"
           bodyDivRef={[Function]}
           bodyMimeType="text/html"
@@ -148,7 +147,6 @@ exports[`PostView component should render a post in view mode 1`] = `
           id="XYZ333"
           isHarvesting={false}
           lang="fr"
-          measureTreeHeight={undefined}
           originalLocale="fr"
           subject={
             <span>
@@ -162,9 +160,7 @@ exports[`PostView component should render a post in view mode 1`] = `
           attachments={Array []}
         />
         <div>
-          <RelatedIdeas
-            indirectIdeaContentLinks={undefined}
-          />
+          <RelatedIdeas />
           <div
             className="answers annotation"
           >
@@ -185,7 +181,7 @@ exports[`PostView component should render a post in view mode 1`] = `
               "translationEnabled": true,
             }
           }
-          handleEditClick={[Function]}
+          handleEditClick={[MockFunction]}
           mySentiment="like"
           numChildren={3}
           phaseId="DEF345"
@@ -212,7 +208,7 @@ exports[`PostView component should render a post in view mode 1`] = `
       ideaId="ABC123"
       parentId="XYZ333"
       phaseId="DEF345"
-      refetchIdea={[Function]}
+      refetchIdea={[MockFunction]}
       textareaRef={[Function]}
     />
   </div>

@@ -10,10 +10,7 @@ exports[`ParticipantsCount component should match ParticipantsCount snapshot 1`]
   <div
     className="participants-count__text margin-s"
   >
-    <span
-      className={undefined}
-      style={undefined}
-    >
+    <span>
       666 participants have expressed themselves!
     </span>
   </div>

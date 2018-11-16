@@ -35,8 +35,7 @@ exports[`ModulesSection component should render a ModuleSection component with t
             popOverClass=""
           />
         </Checkbox>
-        Immutable.List [
-        ]
+        Immutable.List []
         <div
           className="separator"
         />
@@ -265,8 +264,7 @@ exports[`ModulesSection component should render a ModulesSection component witho
             popOverClass=""
           />
         </Checkbox>
-        Immutable.List [
-        ]
+        Immutable.List []
         <Checkbox
           bsClass="checkbox"
           checked={false}
@@ -285,8 +283,7 @@ exports[`ModulesSection component should render a ModulesSection component witho
             popOverClass=""
           />
         </Checkbox>
-        Immutable.List [
-        ]
+        Immutable.List []
       </div>
     </div>
   </div>

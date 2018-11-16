@@ -7,10 +7,7 @@ exports[`AddModuleButton component should match the snapshot 1`] = `
   onClick={[Function]}
   type="button"
 >
-  <span
-    className={undefined}
-    style={undefined}
-  >
+  <span>
     Add a Text & Multimedia module
   </span>
 </button>

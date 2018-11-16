@@ -10,9 +10,7 @@ exports[`Bright Mirror page should hide fiction creation section if timeline is 
   />
   <div
     className="overflow-x"
-  >
-    
-  </div>
+  />
 </div>
 `;
 
@@ -26,9 +24,7 @@ exports[`Bright Mirror page should hide fiction creation section if user is not 
   />
   <div
     className="overflow-x"
-  >
-    
-  </div>
+  />
 </div>
 `;
 
@@ -42,9 +38,7 @@ exports[`Bright Mirror page should hide fiction creation section if user is not 
   />
   <div
     className="overflow-x"
-  >
-    
-  </div>
+  />
 </div>
 `;
 

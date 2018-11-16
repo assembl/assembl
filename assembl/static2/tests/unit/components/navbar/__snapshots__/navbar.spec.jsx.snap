@@ -19,61 +19,56 @@ exports[`AssemblNavbar component should render a BurgerNavbar and a hidden FlatN
           Array [
             <SectionLink
               options={
-                  Object {
-                      "phase": "thread",
-                      "phaseContext": "new",
-                      "phaseId": "",
-                      "screenTooSmall": true,
-                      "slug": undefined,
-                    }
+                Object {
+                  "phase": "thread",
+                  "phaseContext": "new",
+                  "phaseId": "",
+                  "screenTooSmall": true,
+                  "slug": undefined,
+                }
               }
               section={
-                  Object {
-                      "id": "mysection",
-                      "sectionType": "CUSTOM",
-                      "title": "My section",
-                      "url": "http://www.gnu.org",
-                    }
+                Object {
+                  "id": "mysection",
+                  "sectionType": "CUSTOM",
+                  "title": "My section",
+                  "url": "http://www.gnu.org",
+                }
               }
-          />,
+            />,
           ]
         }
         logoLink="http://www.homesweethome.org"
-        logoSrc={undefined}
         renderUserMenu={[Function]}
-        slug={undefined}
       />
       <FlatNavbar
         elements={
           Array [
             <SectionLink
               options={
-                  Object {
-                      "phase": "thread",
-                      "phaseContext": "new",
-                      "phaseId": "",
-                      "screenTooSmall": true,
-                      "slug": undefined,
-                    }
+                Object {
+                  "phase": "thread",
+                  "phaseContext": "new",
+                  "phaseId": "",
+                  "screenTooSmall": true,
+                  "slug": undefined,
+                }
               }
               section={
-                  Object {
-                      "id": "mysection",
-                      "sectionType": "CUSTOM",
-                      "title": "My section",
-                      "url": "http://www.gnu.org",
-                    }
+                Object {
+                  "id": "mysection",
+                  "sectionType": "CUSTOM",
+                  "title": "My section",
+                  "url": "http://www.gnu.org",
+                }
               }
-          />,
+            />,
           ]
         }
-        isLargeLogo={undefined}
         logoLink="http://www.homesweethome.org"
-        logoSrc={undefined}
         maxWidth={-20}
         renderUserMenu={[Function]}
         setWidth={[Function]}
-        slug={undefined}
         style={
           Object {
             "opacity": 0,
@@ -106,32 +101,29 @@ exports[`AssemblNavbar component should render a FlatNavbar with a big screenWid
           Array [
             <SectionLink
               options={
-                  Object {
-                      "phase": "thread",
-                      "phaseContext": "new",
-                      "phaseId": "",
-                      "screenTooSmall": false,
-                      "slug": undefined,
-                    }
+                Object {
+                  "phase": "thread",
+                  "phaseContext": "new",
+                  "phaseId": "",
+                  "screenTooSmall": false,
+                  "slug": undefined,
+                }
               }
               section={
-                  Object {
-                      "id": "mysection",
-                      "sectionType": "CUSTOM",
-                      "title": "My section",
-                      "url": "http://www.gnu.org",
-                    }
+                Object {
+                  "id": "mysection",
+                  "sectionType": "CUSTOM",
+                  "title": "My section",
+                  "url": "http://www.gnu.org",
+                }
               }
-          />,
+            />,
           ]
         }
-        isLargeLogo={undefined}
         logoLink="http://www.homesweethome.org"
-        logoSrc={undefined}
         maxWidth={1370}
         renderUserMenu={[Function]}
         setWidth={[Function]}
-        slug={undefined}
         style={Object {}}
       />
     </div>

@@ -6,7 +6,6 @@ exports[`taxonomyOverflowMenu component should match harvestingMenu snapshot 1`]
   placement="bottom"
   rootClose={false}
   show={true}
-  target={undefined}
 >
   <Popover
     bsClass="popover"
@@ -24,7 +23,6 @@ exports[`taxonomyOverflowMenu component should match harvestingMenu snapshot 1`]
       </div>
       <div
         className="assembl-icon-cancel"
-        onClick={undefined}
       />
       <div
         className="taxonomy-category"
@@ -40,7 +38,7 @@ exports[`taxonomyOverflowMenu component should match harvestingMenu snapshot 1`]
           className="taxonomy-label active"
           onClick={[Function]}
         >
-          <Unknown
+          <NatureIcons
             qualifier="issue"
           />
           <div
@@ -55,7 +53,7 @@ exports[`taxonomyOverflowMenu component should match harvestingMenu snapshot 1`]
           className="taxonomy-label"
           onClick={[Function]}
         >
-          <Unknown
+          <NatureIcons
             qualifier="actionable_solution"
           />
           <div
@@ -70,7 +68,7 @@ exports[`taxonomyOverflowMenu component should match harvestingMenu snapshot 1`]
           className="taxonomy-label"
           onClick={[Function]}
         >
-          <Unknown
+          <NatureIcons
             qualifier="knowledge"
           />
           <div
@@ -85,7 +83,7 @@ exports[`taxonomyOverflowMenu component should match harvestingMenu snapshot 1`]
           className="taxonomy-label"
           onClick={[Function]}
         >
-          <Unknown
+          <NatureIcons
             qualifier="example"
           />
           <div
@@ -100,7 +98,7 @@ exports[`taxonomyOverflowMenu component should match harvestingMenu snapshot 1`]
           className="taxonomy-label"
           onClick={[Function]}
         >
-          <Unknown
+          <NatureIcons
             qualifier="concept"
           />
           <div
@@ -115,7 +113,7 @@ exports[`taxonomyOverflowMenu component should match harvestingMenu snapshot 1`]
           className="taxonomy-label"
           onClick={[Function]}
         >
-          <Unknown
+          <NatureIcons
             qualifier="argument"
           />
           <div
@@ -130,7 +128,7 @@ exports[`taxonomyOverflowMenu component should match harvestingMenu snapshot 1`]
           className="taxonomy-label"
           onClick={[Function]}
         >
-          <Unknown
+          <NatureIcons
             qualifier="cognitive_bias"
           />
           <div
@@ -156,7 +154,7 @@ exports[`taxonomyOverflowMenu component should match harvestingMenu snapshot 1`]
           className="taxonomy-label active"
           onClick={[Function]}
         >
-          <Unknown
+          <ActionIcons
             backgroundColor="#fff"
             color="#000"
             qualifier="classify"
@@ -173,7 +171,7 @@ exports[`taxonomyOverflowMenu component should match harvestingMenu snapshot 1`]
           className="taxonomy-label"
           onClick={[Function]}
         >
-          <Unknown
+          <ActionIcons
             backgroundColor="#fff"
             color="#000"
             qualifier="make_generic"
@@ -190,7 +188,7 @@ exports[`taxonomyOverflowMenu component should match harvestingMenu snapshot 1`]
           className="taxonomy-label"
           onClick={[Function]}
         >
-          <Unknown
+          <ActionIcons
             backgroundColor="#fff"
             color="#000"
             qualifier="argument"
@@ -207,7 +205,7 @@ exports[`taxonomyOverflowMenu component should match harvestingMenu snapshot 1`]
           className="taxonomy-label"
           onClick={[Function]}
         >
-          <Unknown
+          <ActionIcons
             backgroundColor="#fff"
             color="#000"
             qualifier="give_examples"
@@ -224,7 +222,7 @@ exports[`taxonomyOverflowMenu component should match harvestingMenu snapshot 1`]
           className="taxonomy-label"
           onClick={[Function]}
         >
-          <Unknown
+          <ActionIcons
             backgroundColor="#fff"
             color="#000"
             qualifier="more_specific"
@@ -241,7 +239,7 @@ exports[`taxonomyOverflowMenu component should match harvestingMenu snapshot 1`]
           className="taxonomy-label"
           onClick={[Function]}
         >
-          <Unknown
+          <ActionIcons
             backgroundColor="#fff"
             color="#000"
             qualifier="mix_match"
@@ -258,7 +256,7 @@ exports[`taxonomyOverflowMenu component should match harvestingMenu snapshot 1`]
           className="taxonomy-label"
           onClick={[Function]}
         >
-          <Unknown
+          <ActionIcons
             backgroundColor="#fff"
             color="#000"
             qualifier="display_multi_column"
@@ -275,7 +273,7 @@ exports[`taxonomyOverflowMenu component should match harvestingMenu snapshot 1`]
           className="taxonomy-label"
           onClick={[Function]}
         >
-          <Unknown
+          <ActionIcons
             backgroundColor="#fff"
             color="#000"
             qualifier="display_thread"
@@ -292,7 +290,7 @@ exports[`taxonomyOverflowMenu component should match harvestingMenu snapshot 1`]
           className="taxonomy-label"
           onClick={[Function]}
         >
-          <Unknown
+          <ActionIcons
             backgroundColor="#fff"
             color="#000"
             qualifier="display_tokens"
@@ -309,7 +307,7 @@ exports[`taxonomyOverflowMenu component should match harvestingMenu snapshot 1`]
           className="taxonomy-label"
           onClick={[Function]}
         >
-          <Unknown
+          <ActionIcons
             backgroundColor="#fff"
             color="#000"
             qualifier="display_open_questions"
@@ -326,7 +324,7 @@ exports[`taxonomyOverflowMenu component should match harvestingMenu snapshot 1`]
           className="taxonomy-label"
           onClick={[Function]}
         >
-          <Unknown
+          <ActionIcons
             backgroundColor="#fff"
             color="#000"
             qualifier="display_bright_mirror"

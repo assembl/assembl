@@ -22,20 +22,14 @@ exports[`HeaderStatistics component should match HeaderStatistics snapshot 1`] =
           <div
             className="stat-nb"
           >
-            <span
-              className={undefined}
-              style={undefined}
-            >
+            <span>
               3
             </span>
           </div>
           <div
             className="stat-nb stat-label"
           >
-            <span
-              className={undefined}
-              style={undefined}
-            >
+            <span>
               messages
             </span>
           </div>
@@ -57,20 +51,14 @@ exports[`HeaderStatistics component should match HeaderStatistics snapshot 1`] =
           <div
             className="stat-nb"
           >
-            <span
-              className={undefined}
-              style={undefined}
-            >
+            <span>
               5
             </span>
           </div>
           <div
             className="stat-nb stat-label"
           >
-            <span
-              className={undefined}
-              style={undefined}
-            >
+            <span>
               contributions
             </span>
           </div>
@@ -92,20 +80,14 @@ exports[`HeaderStatistics component should match HeaderStatistics snapshot 1`] =
           <div
             className="stat-nb"
           >
-            <span
-              className={undefined}
-              style={undefined}
-            >
+            <span>
               2
             </span>
           </div>
           <div
             className="stat-nb stat-label"
           >
-            <span
-              className={undefined}
-              style={undefined}
-            >
+            <span>
               participants
             </span>
           </div>
@@ -127,20 +109,14 @@ exports[`HeaderStatistics component should match HeaderStatistics snapshot 1`] =
           <div
             className="stat-nb"
           >
-            <span
-              className={undefined}
-              style={undefined}
-            >
+            <span>
               27
             </span>
           </div>
           <div
             className="stat-nb stat-label"
           >
-            <span
-              className={undefined}
-              style={undefined}
-            >
+            <span>
               participations
             </span>
           </div>

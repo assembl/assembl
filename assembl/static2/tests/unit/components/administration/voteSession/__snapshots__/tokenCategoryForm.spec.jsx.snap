@@ -13,24 +13,17 @@ exports[`tokenTypeForm component should render a TokenCategoryForm component 1`]
     className="margin-m"
   >
     <FormControlWithLabel
-      componentClass={undefined}
-      disabled={undefined}
-      formControlProps={undefined}
       helperText=""
       helperUrl=""
       id="token-title-1"
       label="Token title"
       labelAlwaysVisible={false}
-      name={undefined}
-      onChange={[Function]}
+      onChange={[MockFunction]}
       required={true}
       type="text"
-      validationErrors={undefined}
       value="En faveur"
     />
     <FormControlWithLabel
-      componentClass={undefined}
-      disabled={undefined}
       formControlProps={
         Object {
           "min": "1",
@@ -41,11 +34,9 @@ exports[`tokenTypeForm component should render a TokenCategoryForm component 1`]
       id="token-number-1"
       label="Number of tokens per participant"
       labelAlwaysVisible={false}
-      name={undefined}
       onChange={[Function]}
       required={true}
       type="number"
-      validationErrors={undefined}
       value="12"
     />
     <label
@@ -71,7 +62,7 @@ exports[`tokenTypeForm component should render a TokenCategoryForm component 1`]
         ]
       }
       id="color-picker-1"
-      onChange={[Function]}
+      onChange={[MockFunction]}
       triangle="hide"
       width="100%"
     />

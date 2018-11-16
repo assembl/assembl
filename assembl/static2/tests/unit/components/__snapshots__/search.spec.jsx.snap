@@ -24,24 +24,15 @@ exports[`Hits components DumbExtractHit component should render an extract hit 1
   <div
     className="INFO"
   >
-    <span
-      className={undefined}
-      style={undefined}
-    >
+    <span>
       Harvested on
     </span>
      
-    <span
-      className={undefined}
-      style={undefined}
-    >
+    <span>
       August 8th, 2018
     </span>
      
-    <span
-      className={undefined}
-      style={undefined}
-    >
+    <span>
       by
     </span>
      
@@ -186,24 +177,15 @@ exports[`Hits components PostHit component should render a post hit 1`] = `
   <div
     className="INFO"
   >
-    <span
-      className={undefined}
-      style={undefined}
-    >
+    <span>
       Published on
     </span>
      
-    <span
-      className={undefined}
-      style={undefined}
-    >
+    <span>
       August 8th, 2018
     </span>
      
-    <span
-      className={undefined}
-      style={undefined}
-    >
+    <span>
       by
     </span>
      
@@ -295,24 +277,15 @@ exports[`Hits components SynthesisHit component should render a synthesis hit 1`
   <div
     className="INFO"
   >
-    <span
-      className={undefined}
-      style={undefined}
-    >
+    <span>
       Published on
     </span>
      
-    <span
-      className={undefined}
-      style={undefined}
-    >
+    <span>
       August 8th, 2018
     </span>
      
-    <span
-      className={undefined}
-      style={undefined}
-    >
+    <span>
       by
     </span>
      
@@ -385,17 +358,11 @@ exports[`Hits components UserHit component should render a user hit 1`] = `
       </span>
     </div>
     <span>
-      <span
-        className={undefined}
-        style={undefined}
-      >
+      <span>
         Member since
       </span>
        
-      <span
-        className={undefined}
-        style={undefined}
-      >
+      <span>
         July 7th, 2016
       </span>
     </span>

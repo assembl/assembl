@@ -33,24 +33,24 @@ exports[`LegalForm component should match snapshot 1`] = `
       dangerouslySetInnerHTML={
         Object {
           "__html": "Armelle Le Comte (Oxfam). Les pays émergents représentent une grande diversité.
-        Un pays comme l’Inde a encore des centaines de millions d’habitants qui vivent
-        dans une pauvreté extrême, qui n’ont pas accès à l’électricité, par exemple.
-        Les pays émergents comme la Chine sont aussi très attrayants pour les investisseurs privés,
-        notamment pour développer les énergies renouvelables, ce qu’on appelle « l’atténuation ».
-        Les besoins en adaptation, eux, dépendent beaucoup plus des financements publics car ils sont
-        moins rentables. Il ne faut pas oublier non plus que les pays émergents et les pays en développement
-        plus pauvres investissent eux-mêmes des ressources financières domestiques considérables pour faire
-        face aux impacts du changement. Un pays comme la Tanzanie, par exemple, mobilise bien plus dans son
-        budget national pour le climat que ce qu’elle reçoit des bailleurs internationaux.
-        Maxime : Quelle est la contrepartie exigée des pays bénéficiaires, en particulier en termes
-        d’évaluation indépendante des projets financés ? Armelle Le Comte. Chaque bailleur international
-        a ses propres modalités de mise en œuvre et d’exigence vis-à-vis des pays bénéficiaires qu’il soutient.
-        Ces règles sont strictes et complexes d’un point de vue administratif pour des pays en développement
-        qui disposent souvent de peu de personnel. Certains fonds bilatéraux passent directement d’un Etat
-        à un autre, d’autres transitent par des ONG qui mènent directement des projets sur le terrain.
-        Cela étant dit, les bailleurs doivent améliorer la transparence des projets qu’ils soutiennent
-        sur le terrain. L’Agence française de développement, par exemple, ne donne pas toujours toutes
-        les informations, notamment en ce qui concerne les impacts sociaux et environnementaux.",
+Un pays comme l’Inde a encore des centaines de millions d’habitants qui vivent
+dans une pauvreté extrême, qui n’ont pas accès à l’électricité, par exemple.
+Les pays émergents comme la Chine sont aussi très attrayants pour les investisseurs privés,
+notamment pour développer les énergies renouvelables, ce qu’on appelle « l’atténuation ».
+Les besoins en adaptation, eux, dépendent beaucoup plus des financements publics car ils sont
+moins rentables. Il ne faut pas oublier non plus que les pays émergents et les pays en développement
+plus pauvres investissent eux-mêmes des ressources financières domestiques considérables pour faire
+face aux impacts du changement. Un pays comme la Tanzanie, par exemple, mobilise bien plus dans son
+budget national pour le climat que ce qu’elle reçoit des bailleurs internationaux.
+Maxime : Quelle est la contrepartie exigée des pays bénéficiaires, en particulier en termes
+d’évaluation indépendante des projets financés ? Armelle Le Comte. Chaque bailleur international
+a ses propres modalités de mise en œuvre et d’exigence vis-à-vis des pays bénéficiaires qu’il soutient.
+Ces règles sont strictes et complexes d’un point de vue administratif pour des pays en développement
+qui disposent souvent de peu de personnel. Certains fonds bilatéraux passent directement d’un Etat
+à un autre, d’autres transitent par des ONG qui mènent directement des projets sur le terrain.
+Cela étant dit, les bailleurs doivent améliorer la transparence des projets qu’ils soutiennent
+sur le terrain. L’Agence française de développement, par exemple, ne donne pas toujours toutes
+les informations, notamment en ce qui concerne les impacts sociaux et environnementaux.",
         }
       }
     />

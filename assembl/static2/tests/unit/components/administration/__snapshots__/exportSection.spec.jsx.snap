@@ -27,7 +27,6 @@ exports[`ExportSection component should render an ExportSection component with l
     >
       <div
         className="radio"
-        style={undefined}
       >
         <label
           title=""
@@ -38,17 +37,13 @@ exports[`ExportSection component should render an ExportSection component with l
             onChange={[Function]}
             type="radio"
           />
-          <span
-            className={undefined}
-            style={undefined}
-          >
+          <span>
             Keep the messages in their original languages
           </span>
         </label>
       </div>
       <div
         className="radio"
-        style={undefined}
       >
         <label
           title=""
@@ -59,10 +54,7 @@ exports[`ExportSection component should render an ExportSection component with l
             onChange={[Function]}
             type="radio"
           />
-          <span
-            className={undefined}
-            style={undefined}
-          >
+          <span>
             Translate the messages in:
           </span>
         </label>
@@ -75,10 +67,7 @@ exports[`ExportSection component should render an ExportSection component with l
       onClick={[Function]}
       style={Object {}}
     >
-      <span
-        className={undefined}
-        style={undefined}
-      >
+      <span>
         Export
       </span>
     </a>
@@ -118,10 +107,7 @@ exports[`ExportSection component should render an ExportSection component withou
       onClick={[Function]}
       style={Object {}}
     >
-      <span
-        className={undefined}
-        style={undefined}
-      >
+      <span>
         Export
       </span>
     </a>
@@ -156,7 +142,6 @@ exports[`ExportSection component should render an export section that handles di
     >
       <div
         className="radio"
-        style={undefined}
       >
         <label
           title=""
@@ -169,17 +154,13 @@ exports[`ExportSection component should render an export section that handles di
             type="radio"
             value="foo.com"
           />
-          <span
-            className={undefined}
-            style={undefined}
-          >
+          <span>
             Export general data for the vote module
           </span>
         </label>
       </div>
       <div
         className="radio"
-        style={undefined}
       >
         <label
           title=""
@@ -192,10 +173,7 @@ exports[`ExportSection component should render an export section that handles di
             type="radio"
             value="bar.org"
           />
-          <span
-            className={undefined}
-            style={undefined}
-          >
+          <span>
             Export vote details for each user
           </span>
         </label>
@@ -208,10 +186,7 @@ exports[`ExportSection component should render an export section that handles di
       onClick={[Function]}
       style={Object {}}
     >
-      <span
-        className={undefined}
-        style={undefined}
-      >
+      <span>
         Export
       </span>
     </a>

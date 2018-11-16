@@ -13,7 +13,7 @@ exports[`Modal component should render a form to add a link 1`] = `
     >
       <button
         className="close"
-        onClick={[Function]}
+        onClick={[MockFunction]}
         title="Close"
       >
         <span

@@ -26,35 +26,23 @@ exports[`ManageModules component should render a page to manage the landing page
         className="margin-l"
       />
       <FormControlWithLabel
-        componentClass={undefined}
-        disabled={undefined}
-        formControlProps={undefined}
         helperText=""
         helperUrl=""
-        id={undefined}
         label="Debate title"
         labelAlwaysVisible={false}
-        name={undefined}
-        onChange={[Function]}
+        onChange={[MockFunction]}
         required={true}
         type="text"
-        validationErrors={undefined}
         value="title"
       />
       <FormControlWithLabel
-        componentClass={undefined}
-        disabled={undefined}
-        formControlProps={undefined}
         helperText=""
         helperUrl=""
-        id={undefined}
         label="Debate subtitle"
         labelAlwaysVisible={false}
-        name={undefined}
-        onChange={[Function]}
+        onChange={[MockFunction]}
         required={true}
         type="rich-text"
-        validationErrors={undefined}
         value="subtitle"
       />
       <FormGroup
@@ -81,7 +69,7 @@ exports[`ManageModules component should render a page to manage the landing page
           }
           fileOrUrl="img/headerImg.jpg"
           filename=""
-          handleChange={[Function]}
+          handleChange={[MockFunction]}
           imgTitle="myHeaderImage"
           isAdminUploader={true}
           mimeType="image/jpeg"
@@ -98,19 +86,13 @@ exports[`ManageModules component should render a page to manage the landing page
         </div>
       </FormGroup>
       <FormControlWithLabel
-        componentClass={undefined}
-        disabled={undefined}
-        formControlProps={undefined}
         helperText=""
         helperUrl=""
-        id={undefined}
         label="Name of the referral button to the debate"
         labelAlwaysVisible={false}
-        name={undefined}
-        onChange={[Function]}
+        onChange={[MockFunction]}
         required={true}
         type="text"
-        validationErrors={undefined}
         value="button label"
       />
       <FormGroup
@@ -137,7 +119,7 @@ exports[`ManageModules component should render a page to manage the landing page
           }
           fileOrUrl="img/logoImg.jpg"
           filename=""
-          handleChange={[Function]}
+          handleChange={[MockFunction]}
           imgTitle="myLogoImage"
           isAdminUploader={true}
           mimeType="image/jpeg"
