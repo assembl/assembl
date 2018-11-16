@@ -7,6 +7,7 @@ import { Button, OverlayTrigger } from 'react-bootstrap';
 import { Translate, I18n } from 'react-redux-i18n';
 import classnames from 'classnames';
 import moment from 'moment';
+import update from 'immutability-helper';
 
 import addPostExtractMutation from '../../graphql/mutations/addPostExtract.graphql';
 import updateExtractMutation from '../../graphql/mutations/updateExtract.graphql';
@@ -65,11 +66,53 @@ type Taxonomies = {
   action: ?string
 };
 
+type UpdateTags = {
+  postId: string,
+  id: string,
+  tags: Array<string>
+};
+
 const ACTIONS = {
   create: 'create', // create a new extract
   edit: 'edit', // edit an extract
   confirm: 'confirm' // confirm a submitted extract
 };
+
+function updateTagsMutation({ mutate }) {
+  return ({ postId, id, tags }: UpdateTags) =>
+    mutate({
+      variables: {
+        id: id,
+        tags: tags
+      },
+      optimisticResponse: {
+        __typename: 'Mutation',
+        updateExtractTags: {
+          __typename: 'UpdateExtractTags',
+          tags: tags.map(tag => ({ __typename: 'Tag', value: tag, id: tag }))
+        }
+      },
+      updateQueries: {
+        // Udate the Post query
+        Post: (prev, { queryVariables, mutationResult }) => {
+          if (queryVariables.id !== postId) return false;
+          const currentExtract = prev.post.extracts.filter(ex => ex.id === id)[0];
+          if (!currentExtract) return false;
+          const indexExtract = prev.post.extracts.indexOf(currentExtract);
+          const newExtract = update(currentExtract, {
+            tags: { $set: mutationResult.data.updateExtractTags.tags }
+          });
+          return update(prev, {
+            post: {
+              extracts: {
+                $splice: [[indexExtract, 1, newExtract]]
+              }
+            }
+          });
+        }
+      }
+    });
+}
 
 class DumbHarvestingBox extends React.Component<Props, State> {
   menu: any;
@@ -236,8 +279,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
         <Translate value="validate" />
       </Button>
     ];
-    const includeFooter = true;
-    return displayModal(modalTitle, body, includeFooter, footer);
+    return displayModal(modalTitle, body, true, footer);
   };
 
   deleteHarvesting = (): void => {
@@ -373,21 +415,25 @@ class DumbHarvestingBox extends React.Component<Props, State> {
     }));
   };
 
-  updateTags = (tags: Array<string>, callback: (Array<string>) => void) => {
-    const { updateTags } = this.props;
+  updateTags = (tags: Array<string>, callback: (tags: Array<string>) => void) => {
     const { extractIndex } = this.state;
     const extract = this.getCurrentExtract(extractIndex);
     if (extract) {
-      const variables = {
+      const { updateTags, postId } = this.props;
+      // Update the extract tags with an optimistic response
+      updateTags({
+        postId: postId,
         id: extract.id,
         tags: tags
-      };
-      updateTags({
-        variables: variables
-      }).then((result) => {
-        const newTags = result.data.updateExtractTags.tags.map(tag => tag.value);
-        callback(newTags);
-      });
+      })
+        .then(({ data: { updateExtractTags } }) => {
+          const newTags = updateExtractTags.tags.map(tag => tag.value);
+          // Update the list of tags of the Tags component
+          callback(newTags);
+        })
+        .catch((error) => {
+          displayAlert('danger', `${error}`);
+        });
     }
   };
 
@@ -400,6 +446,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
     if (!actionId) return null;
     const action = this.actions[actionId];
     if (disabled) {
+      // Render the Tags form ony if it is the create action
       return (
         <TagsForm
           onSubmit={this.validateHarvesting}
@@ -675,7 +722,11 @@ export default compose(
     name: 'confirmExtract'
   }),
   graphql(updateExtractTagsMutation, {
-    name: 'updateTags'
+    props: function (props) {
+      return {
+        updateTags: updateTagsMutation(props)
+      };
+    }
   }),
   manageErrorAndLoading({ displayLoader: true })
 )(DumbHarvestingBox);

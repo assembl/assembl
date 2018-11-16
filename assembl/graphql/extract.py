@@ -58,7 +58,7 @@ class Extract(SecureObjectType, SQLAlchemyObjectType):
     extract_state = graphene.Field(type=ExtractStates, description=docs.ExtractInterface.extract_state)
     lang = graphene.String(description=docs.ExtractInterface.lang)
     comments = graphene.List("assembl.graphql.post.Post", description=docs.ExtractInterface.comments)
-    tags = graphene.List(Tag, description=docs.ExtractInterface.comments)
+    tags = graphene.List(Tag, description=docs.ExtractInterface.tags)
 
     def resolve_creator(self, args, context, info):
         if self.creator_id is not None:
@@ -107,11 +107,11 @@ class UpdateExtract(graphene.Mutation):
 
 
 class UpdateExtractTags(graphene.Mutation):
-    __doc__ = docs.UpdateExtract.__doc__
+    __doc__ = docs.UpdateExtractTags.__doc__
 
     class Input:
-        id = graphene.ID(required=True, description=docs.UpdateExtract.extract_id)
-        tags = graphene.List(graphene.String, description=docs.UpdateExtract.extract_nature)
+        id = graphene.ID(required=True, description=docs.UpdateExtractTags.extract_id)
+        tags = graphene.List(graphene.String, description=docs.UpdateExtractTags.tags)
 
     tags = graphene.List(lambda: Tag)
 
@@ -124,7 +124,6 @@ class UpdateExtractTags(graphene.Mutation):
         require_instance_permission(CrudPermissions.UPDATE, extract, context)
         db = extract.db
         tags = models.Tag.get_tags(args.get('tags', []), db)
-        db.add_all(tags['new_tags'])
         extract.tags = tags['new_tags'] + tags['tags']
         db.flush()
         return UpdateExtractTags(tags=extract.tags)

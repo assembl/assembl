@@ -1,4 +1,4 @@
-query TagsQuery($filter: String) {
+query Tags($filter: String) {
   tags(filter: $filter) {
     id
     value

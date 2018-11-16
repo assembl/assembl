@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from sqlalchemy.orm import relationship
 from sqlalchemy import (
     Column,
@@ -10,7 +11,6 @@ from . import Base
 
 
 class Tag(Base):
-
     __tablename__ = "tag"
     id = Column(Integer, primary_key=True)
     value = Column(UnicodeText, unique=True)

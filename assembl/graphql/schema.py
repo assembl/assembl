@@ -134,7 +134,10 @@ class Query(graphene.ObjectType):
         end_date=graphene.String(description=docs.SchemaPosts.end_date),
         identifiers=graphene.List(graphene.String, description=docs.SchemaPosts.identifiers),
         description=docs.SchemaPosts.__doc__)
-    tags = graphene.List(lambda: Tag, filter=graphene.String())
+    tags = graphene.List(
+        lambda: Tag,
+        filter=graphene.String(description=docs.SchemaTags.filter),
+        description=docs.SchemaTags.__doc__)
 
     def resolve_tags(self, args, context, info):
         _filter = args.get('filter', '')
@@ -483,7 +486,7 @@ class Mutations(graphene.ObjectType):
     add_post_extract = AddPostExtract.Field(description=docs.AddPostExtract.__doc__)
     add_posts_extract = AddPostsExtract.Field(description=docs.AddPostsExtract.__doc__)
     update_extract = UpdateExtract.Field(description=docs.UpdateExtract.__doc__)
-    update_extract_tags = UpdateExtractTags.Field(description=docs.UpdateExtract.__doc__)
+    update_extract_tags = UpdateExtractTags.Field(description=docs.UpdateExtractTags.__doc__)
     delete_extract = DeleteExtract.Field(description=docs.DeleteExtract.__doc__)
     create_text_field = CreateTextField.Field(description=docs.CreateTextField.__doc__)
     confirm_extract = ConfirmExtract.Field(description=docs.ConfirmExtract.__doc__)

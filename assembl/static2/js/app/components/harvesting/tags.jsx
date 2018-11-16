@@ -7,7 +7,8 @@ import TagsForm, { type FormData } from './tagsForm';
 
 type Props = {
   initialValues: Array<string>,
-  canEdit: boolean
+  canEdit: boolean,
+  updateTags: (tags: Array<string>, callback: (tags: Array<string>) => void) => void
 };
 
 type State = {
@@ -51,7 +52,7 @@ class Tags extends React.Component<Props, State> {
         submitting: true
       },
       () => {
-        updateTags(tags, (newtags) => {
+        updateTags(tags, (newtags: Arra<string>) => {
           this.setState({
             submitting: false,
             editing: false,
@@ -108,7 +109,12 @@ class Tags extends React.Component<Props, State> {
             </div>
           ) : null}
         </div>
-        {!pristine && this.renderFooter(() => this.updateTags(currentTags), pristine, submitting)}
+        {!pristine &&
+          this.renderFooter({
+            handleSubmit: () => this.updateTags({ tags: currentTags }),
+            pristine: pristine,
+            submitting: submitting
+          })}
       </div>
     );
   };

@@ -107,6 +107,7 @@
     "graphql-anywhere": "^3.1.0",
     "history": "^3.0.0",
     "hypothesis": "https://github.com/conversence/client.git#anchor_range_on_fragment",
+    "immutability-helper": "^2.8.1",
     "immutable": "~3.7.4",
     "isomorphic-fetch": "^2.2.1",
     "jquery": "^3.3.1",

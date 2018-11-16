@@ -120,7 +120,7 @@ def extract_post_1_to_subidea_1_1(
         subidea_1_1, discussion, test_session):
     """ Links reply_post_1 to subidea_1_1 """
 
-    from assembl.models import Extract
+    from assembl.models import Extract, Tag
     from assembl.models.idea_content_link import ExtractNatureVocabulary, ExtractActionVocabulary
     e = Extract(
         body=u"body",
@@ -133,11 +133,19 @@ def extract_post_1_to_subidea_1_1(
         extract_nature=ExtractNatureVocabulary.Enum.actionable_solution,
         extract_action=ExtractActionVocabulary.Enum.give_examples
     )
+    tags = Tag.get_tags(['foo', 'bar'])
+    e.tags = tags['new_tags'] + tags['tags']
     test_session.add(e)
     test_session.flush()
 
     def fin():
         print "finalizer extract_post_1_to_subidea_1_1"
+        tags = e.tags
+        e.tags = []
+        for tag in tags:
+            test_session.delete(tag)
+
+        test_session.delete(e)
         test_session.delete(e)
         test_session.flush()
     request.addfinalizer(fin)

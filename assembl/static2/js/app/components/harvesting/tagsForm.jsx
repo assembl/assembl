@@ -5,7 +5,7 @@ import { Form, Field } from 'react-final-form';
 import { type ApolloClient, withApollo } from 'react-apollo';
 
 import SelectFieldAdapter from '../form/selectFieldAdapter';
-import TagsQuery from '../../graphql/TagsQuery.graphql';
+import Tags from '../../graphql/TagsQuery.graphql';
 
 export type FormData = {
   handleSubmit: Function,
@@ -17,14 +17,15 @@ type Props = {
   client: ApolloClient,
   initialValues: Array<string>,
   renderFooter: (formData: FormData) => React.Node,
-  onSubmit: ({ tags: Array<string> }) => void
+  onSubmit: (result: { tags: Array<string> }) => void
 };
 
-export const tagsLoader = (client: ApolloClient) => inputValue =>
+export const tagsLoader = (client: ApolloClient) => (inputValue: string) =>
   client
     .query({
-      query: TagsQuery,
-      variables: { filter: inputValue }
+      query: Tags,
+      variables: { filter: inputValue },
+      fetchPolicy: 'network-only'
     })
     .then((value) => {
       const { data: { tags } } = value;
@@ -39,23 +40,19 @@ class TagsForm extends React.Component<Props> {
     initialValues: []
   };
 
-  getTagsLoader = () => {
-    const { client } = this.props;
-    return tagsLoader(client);
-  };
-
-  pristine = (currentTags) => {
+  pristine = (currentTags: Array<string>) => {
     const { initialValues } = this.props;
     return currentTags.length === initialValues.length && currentTags.every(tag => initialValues.includes(tag));
   };
 
   render() {
-    const { initialValues, renderFooter, onSubmit } = this.props;
+    const { initialValues, renderFooter, onSubmit, client } = this.props;
     return (
       <Form
         initialValues={{ tags: initialValues }}
         onSubmit={onSubmit}
         render={({ handleSubmit, values, submitting }) => {
+          // Don't use final form pristine here
           const pristine = this.pristine(values.tags);
           return (
             <form onSubmit={handleSubmit} className="harvesting-tags-form-container form-container">
@@ -63,12 +60,12 @@ class TagsForm extends React.Component<Props> {
                 name="tags"
                 component={SelectFieldAdapter}
                 label={I18n.t('harvesting.tags.label')}
-                // The Select fields
+                // The Select field props
                 isMulti
                 canCreate
                 isAsync
                 value={initialValues}
-                loadOptions={this.getTagsLoader()}
+                loadOptions={tagsLoader(client)}
                 className="tags-select"
                 placeholder="harvesting.tags.select.placeholder"
                 noOptionsMessage={() => <Translate value="harvesting.tags.select.noOptions" />}
