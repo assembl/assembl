@@ -24,7 +24,4 @@ flow/
 # map .graphql files to an empty object, see https://github.com/facebook/flow/issues/2852
 module.name_mapper='.*\(.graphql\)' -> 'empty/object'
 module.name_mapper='annotator_range' -> 'empty/object'
-module.file_ext=.js
-module.file_ext=.jsx
-module.file_ext=.scss
 module.name_mapper.extension='scss' -> 'empty/object'
