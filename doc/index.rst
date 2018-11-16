@@ -17,9 +17,9 @@ Installation and administration
    howtoupgrade
    python_requirements
    preprod_update
+   themes
    install_sentry
    install_matomo
-   themes
 
 Stack and architecture
 ----------------------
