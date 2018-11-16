@@ -45,7 +45,8 @@ type Props = {
   confirmExtract: Function,
   deleteExtract: Function,
   refetchPost: Function,
-  toggleExtractsBox?: Function
+  toggleExtractsBox?: Function,
+  updateTags: Function
 };
 
 type State = {

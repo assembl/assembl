@@ -30,7 +30,7 @@ type Props = {
   noOptionsMessage: () => React.Node,
   formatCreateLabel: string => React.Node,
   options?: Array<Option>,
-  loadOptions?: (string, (Array<Option>) => void) => Promise<*> | undefined,
+  loadOptions?: (string, (Array<Option>) => void) => Promise<*> | null,
   input: {
     name: string,
     onChange: (SyntheticInputEvent<*> | any) => void,

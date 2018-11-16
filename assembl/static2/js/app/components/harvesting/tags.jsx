@@ -9,11 +9,11 @@ import TagsForm, { type FormData, tagsComparator } from './tagsForm';
 type Props = {
   initialValues: Array<Option>,
   canEdit: boolean,
-  updateTags: (tags: Array<Option>, callback: (tags: Array<Option>) => void) => void
+  updateTags: (tags: Array<string>, callback: (tags: Array<Option>) => void) => void
 };
 
 type State = {
-  editing: false,
+  editing: boolean,
   submitting: boolean,
   currentTags: Array<Option>
 };
@@ -54,7 +54,7 @@ class Tags extends React.Component<Props, State> {
         submitting: true
       },
       () => {
-        updateTags(tagsValues, (newtags: Arra<Option>) => {
+        updateTags(tagsValues, (newtags: Array<Option>) => {
           this.setState({
             submitting: false,
             editing: false,

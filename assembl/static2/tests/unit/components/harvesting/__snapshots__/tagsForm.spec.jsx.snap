@@ -16,7 +16,7 @@ exports[`Tags component should match the form footer 1`] = `
       ],
     }
   }
-  onSubmit={[Function]}
+  onSubmit={[MockFunction]}
   render={[Function]}
 />
 `;

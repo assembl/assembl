@@ -66,7 +66,7 @@ exports[`harvestingMenu component should match harvestingMenu snapshot when the 
     className="harvesting-container"
   >
     <Connect(Apollo(Apollo(Apollo(Apollo(Apollo(Component))))))
-      cancelHarvesting={[Function]}
+      cancelHarvesting={[MockFunction]}
       displayHarvestingBox={true}
       lang="fr"
       postId="123456"

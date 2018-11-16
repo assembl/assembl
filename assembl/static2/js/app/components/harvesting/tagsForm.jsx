@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { Translate, I18n } from 'react-redux-i18n';
 import { Form, Field } from 'react-final-form';
 import { type ApolloClient, withApollo } from 'react-apollo';
@@ -10,7 +10,7 @@ import Tags from '../../graphql/TagsQuery.graphql';
 export type FormData = {
   handleSubmit: Function,
   pristine: boolean,
-  submitting: boolean
+  submitting: boolean | void
 };
 
 type Props = {
@@ -53,7 +53,8 @@ export class DumbTagsForm extends React.Component<Props> {
         onSubmit={onSubmit}
         render={({ handleSubmit, values, submitting }) => {
           // Don't use final form pristine here
-          const pristine = tagsComparator(initialValues, values.tags);
+          const tags = values ? values.tags : [];
+          const pristine = tagsComparator(initialValues, tags);
           return (
             <form onSubmit={handleSubmit} className="harvesting-tags-form-container form-container">
               <Field
