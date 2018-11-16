@@ -22,15 +22,7 @@ type TitleProps = {
   value: ?string
 };
 
-type SideDescriptionProps = {
-  content: string
-};
-
-type TopDescriptionProps = {
-  content: string
-};
-
-type BottomDescriptionProps = {
+type DescriptionProps = {
   content: string
 };
 
@@ -40,7 +32,7 @@ type ContentProps = {
 };
 
 class TextAndMedia extends React.Component<Props> {
-  static isValidDescription = (description: ?string): boolean => description !== '<p></p>';
+  static isValidDescription = (description: ?string): boolean => (description ? description !== '<p></p>' : false);
 
   static Title = ({ value }: TitleProps) => (
     <div className="media-title-section">
@@ -49,7 +41,7 @@ class TextAndMedia extends React.Component<Props> {
     </div>
   );
 
-  static SideDescription = ({ content }: SideDescriptionProps) => (
+  static SideDescription = ({ content }: DescriptionProps) => (
     <div className="media-description">
       <div className="media-description-icon">
         <span className="assembl-icon-pepite color2">&nbsp;</span>
@@ -59,11 +51,11 @@ class TextAndMedia extends React.Component<Props> {
     </div>
   );
 
-  static TopDescription = ({ content }: TopDescriptionProps) => (
+  static TopDescription = ({ content }: DescriptionProps) => (
     <div className="media-description-layer media-description-top" dangerouslySetInnerHTML={{ __html: content }} />
   );
 
-  static BottomDescription = ({ content }: BottomDescriptionProps) => (
+  static BottomDescription = ({ content }: DescriptionProps) => (
     <div className="media-description-layer media-description-bottom" dangerouslySetInnerHTML={{ __html: content }} />
   );
 
