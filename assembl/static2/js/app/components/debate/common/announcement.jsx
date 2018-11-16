@@ -36,7 +36,7 @@ type Posts = {
   edges: Array<Post>
 };
 
-type AnnouncementContent = {
+export type AnnouncementContent = {
   body: string,
   title?: string, // The component is currently set with the boolean noTitle,
   __typename?: string
@@ -44,14 +44,14 @@ type AnnouncementContent = {
 
 type Props = {
   isMultiColumns: boolean,
-  anouncementContent: AnnouncementContent,
+  announcementContent: AnnouncementContent,
   idea: Idea
 };
 
-export const getColumnInfos = (messageColumns: Array<IdeaMessageColumnFragment>) => {
-  const columnsArray = messageColumns.map(col => ({ count: col.numPosts, color: col.color, name: col.name }));
-  return columnsArray;
-};
+type ColumnsInfoType = { count: ?number, color: ?string, name: ?string };
+
+export const getColumnInfos = (messageColumns: Array<IdeaMessageColumnFragment>): Array<ColumnsInfoType> =>
+  messageColumns.map(col => ({ count: col.numPosts, color: col.color, name: col.name }));
 
 export const getSentimentsCount = (posts: Posts) => {
   const counters: SentimentsCounts = { ...sentimentDefinitionsObject };
@@ -79,7 +79,7 @@ export const createDoughnutElements = (sentimentCounts: SentimentsCounts) =>
     Tooltip: createTooltip(sentimentCounts[key], sentimentCounts[key].count)
   }));
 
-export const dirtySplitHack = (announcementContent: Announcementcontent) => {
+export const dirtySplitHack = (announcementContent: AnnouncementContent) => {
   const body = announcementContent.body;
   // To allow edit from V1 announcement, add !split!https://video.url!split!
   const split = body.split('!split!');

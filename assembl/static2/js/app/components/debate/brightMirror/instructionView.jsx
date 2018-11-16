@@ -8,6 +8,7 @@ import { getIsPhaseCompletedById } from '../../../utils/timeline';
 import FictionsList from './fictionsList';
 import InstructionsText from './instructionsText';
 import { PublicationStates } from '../../../constants';
+import type { AnnouncementContent } from '../common/announcement';
 
 export type InstructionViewProps = {
   isUserConnected: boolean,
@@ -16,10 +17,7 @@ export type InstructionViewProps = {
   refetchIdea: Function,
   posts: Array<FictionPostPreview>,
   /** Instructions */
-  announcementContent: {
-    title: string,
-    body: string
-  },
+  announcementContent: AnnouncementContent,
   timeline: Timeline,
   /** Bright Mirror identifier */
   identifier: string,

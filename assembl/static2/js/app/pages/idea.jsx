@@ -5,6 +5,7 @@ import { Translate, I18n } from 'react-redux-i18n';
 import { compose, graphql } from 'react-apollo';
 import { Grid } from 'react-bootstrap';
 import { withRouter } from 'react-router';
+import type { Map } from 'immutable';
 
 import { updateContentLocale } from '../actions/contentLocaleActions';
 import Header from '../components/common/header';
@@ -19,12 +20,50 @@ import ThreadView from '../components/debate/thread/threadView';
 import { DeletedPublicationStates, PHASES, FICTION_DELETE_CALLBACK } from '../constants';
 import HeaderStatistics, { statContributions, statMessages, statParticipants } from '../components/common/headerStatistics';
 import InstructionView from '../components/debate/brightMirror/instructionView';
+import type { ContentLocaleMapping } from '../actions/actionTypes';
+import type { AnnouncementContent } from '../components/debate/common/announcement';
 // Utils imports
 import { displayAlert } from '../utils/utilityManager';
 
 const deletedPublicationStates = Object.keys(DeletedPublicationStates);
 
-const creationDateDescComparator = (a, b) => {
+type Props = {
+  contentLocaleMapping: ContentLocaleMapping,
+  defaultContentLocaleMapping: Map,
+  updateContentLocaleMapping: ContentLocaleMapping => void,
+  timeline: Timeline,
+  debateData: DebateData,
+  lang: string,
+  ideaLoading: boolean,
+  ideaWithPostsData: IdeaWithPostsQuery,
+  identifier: string,
+  phaseId: string,
+  routerParams: RouterParams,
+  location: {
+    state: { callback: string }
+  },
+  announcement: AnnouncementContent,
+  id: string,
+  headerImgUrl: string,
+  synthesisTitle: string,
+  title: string
+};
+
+type PostWithChildren = {
+  children: Array<PostWithChildren>
+} & Post;
+
+type Column = {
+  messageClassifier: string,
+  color: string,
+  name: string
+};
+
+type Node = {
+  node: { messageClassifier: string, [string]: any }
+};
+
+const creationDateDescComparator = (a: Post, b: Post) => {
   if (a.creationDate > b.creationDate) {
     return -1;
   }
@@ -37,7 +76,7 @@ const creationDateDescComparator = (a, b) => {
 /*
  * From a post, get the latest creationDate of live descendants and self
  */
-const getLatest = (post) => {
+const getLatest = (post: PostWithChildren) => {
   let maxDate = post.creationDate;
   if (post.children.length === 0) {
     if (deletedPublicationStates.indexOf(post.publicationState) > -1) {
@@ -54,9 +93,9 @@ const getLatest = (post) => {
   return maxDate;
 };
 
-const creationDateLastDescendantComparator = (a, b) => {
-  const firstDate = getLatest(a);
-  const secondDate = getLatest(b);
+const creationDateLastDescendantComparator = (a: PostWithChildren, b: PostWithChildren) => {
+  const firstDate = getLatest(a) || '';
+  const secondDate = getLatest(b) || '';
   if (firstDate > secondDate) {
     return -1;
   }
@@ -66,7 +105,7 @@ const creationDateLastDescendantComparator = (a, b) => {
   return 1;
 };
 
-export const transformPosts = (edges, messageColumns, additionnalProps = {}) => {
+export const transformPosts = (edges: Array<Node>, messageColumns: Array<Column>, additionnalProps: { [string]: any } = {}) => {
   const postsByParent = {};
 
   const columns = { null: { colColor: null, colName: null } };
@@ -106,7 +145,7 @@ export const transformPosts = (edges, messageColumns, additionnalProps = {}) => 
 
 // Function that counts the total number of posts in a Bright Mirror debate section
 // transformedFilteredPosts parameter is built from transformPosts filtered with the current displayed fiction
-export const getDebateTotalMessages = (transformedFilteredPosts: [Object]) => {
+export const getDebateTotalMessages = (transformedFilteredPosts: Array<Object>) => {
   if (transformedFilteredPosts.length) {
     return (
       1 + getDebateTotalMessages(transformedFilteredPosts[0].children) + getDebateTotalMessages(transformedFilteredPosts.slice(1))
@@ -121,23 +160,18 @@ export const noRowsRenderer = () => (
   </div>
 );
 
-class Idea extends React.Component {
-  constructor(props) {
-    super(props);
-    this.getTopPosts = this.getTopPosts.bind(this);
-  }
-
+class Idea extends React.Component<Props> {
   componentDidMount() {
     this.displayBrightMirrorDeleteFictionMessage();
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: Props) {
     if (nextProps.ideaWithPostsData.idea !== this.props.ideaWithPostsData.idea) {
       this.updateContentLocaleMappingFromProps(nextProps);
     }
   }
 
-  updateContentLocaleMappingFromProps(props) {
+  updateContentLocaleMappingFromProps(props: Props) {
     const { defaultContentLocaleMapping, ideaWithPostsData, updateContentLocaleMapping } = props;
     if (!ideaWithPostsData.loading) {
       const postsEdges = ideaWithPostsData.idea.posts.edges;
@@ -182,7 +216,7 @@ class Idea extends React.Component {
     return null;
   };
 
-  getTopPosts() {
+  getTopPosts = () => {
     const { ideaWithPostsData, routerParams, timeline, debateData } = this.props;
     if (!ideaWithPostsData.idea) return [];
     const topPosts = transformPosts(ideaWithPostsData.idea.posts.edges, ideaWithPostsData.idea.messageColumns, {
@@ -193,7 +227,7 @@ class Idea extends React.Component {
       debateData: debateData
     });
     return topPosts;
-  }
+  };
 
   displayBrightMirrorDeleteFictionMessage() {
     // Location state is set in brightMirrorFiction.jsx > deleteFictionCallback
@@ -245,7 +279,7 @@ class Idea extends React.Component {
       debateData: debateData,
       ideaId: id,
       ideaWithPostsData: ideaWithPostsData,
-      isUserConnected: getConnectedUserId(),
+      isUserConnected: !!getConnectedUserId(),
       contentLocaleMapping: contentLocaleMapping,
       refetchIdea: refetchIdea,
       lang: lang,
