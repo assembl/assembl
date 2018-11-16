@@ -30,6 +30,8 @@ sameAs = "http://www.w3.org/2002/07/owl#sameAs"
 
 
 class LocalizedUriConcept(Base):
+    """A concept identified by a URI, with an expression in one language.
+    Links back to the english expression."""
     __tablename__ = "localized_concept"
     id = Column(Integer, primary_key=True)
     type = Column(String(20), nullable=False)
@@ -72,6 +74,7 @@ class LocalizedUriConcept(Base):
 
 
 class DBPediaConcept(LocalizedUriConcept):
+    """A concept taken from DBPedia, with specific properties"""
     _rel_re = re.compile(r'http://([-\w]+\.)?dbpedia.org/resource/(.*)')
 
     __mapper_args__ = {
@@ -182,6 +185,7 @@ class DBPediaConcept(LocalizedUriConcept):
 
 
 class Tag(Base):
+    """Simple keywords (not bound to a concept), used to tag posts."""
     __tablename__ = 'tag'
     id = Column(Integer, primary_key=True)
     locale_id = Column(Integer, ForeignKey(Locale.id))
@@ -277,6 +281,7 @@ LangString.setup_ownership_load_event(Tag, ['label'])
 
 
 class PostKeywordAnalysisMixin(object):
+    """Mixin to tie keywords (tags or concepts) and content"""
     id = Column(Integer, primary_key=True)
     score = Column(Float)
 
@@ -310,6 +315,7 @@ class PostKeywordAnalysisMixin(object):
 
 
 class PostKeywordAnalysis(PostKeywordAnalysisMixin, DiscussionBoundBase):
+    """Association table to tie Tags and Content, with a score"""
     __tablename__ = "post_keyword_analysis"
     value = Column(Unicode, index=True)
     tag_id = Column(Integer, ForeignKey(
@@ -321,6 +327,7 @@ class PostKeywordAnalysis(PostKeywordAnalysisMixin, DiscussionBoundBase):
 
 class PostLocalizedConceptAnalysis(
         PostKeywordAnalysisMixin, DiscussionBoundBase):
+    """Association table to tie Concepts and Content, with a score"""
     __tablename__ = "post_localized_concept_analysis"
     concept_id = Column(Integer, ForeignKey(
         LocalizedUriConcept.id, ondelete="CASCADE"))
@@ -337,6 +344,8 @@ class PostLocalizedConceptAnalysis(
 
 
 class PostWatsonV1SentimentAnalysis(Base):
+    """Other computation results associated to a Post, as defined
+    by Watson API."""
     __tablename__ = "post_watsonv1_sentiments"
     id = Column(Integer, primary_key=True)
     post_id = Column(Integer, ForeignKey(

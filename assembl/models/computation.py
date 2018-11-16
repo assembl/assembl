@@ -15,6 +15,7 @@ from . import Base, DiscussionBoundBase
 
 
 class ComputationProcess(Base):
+    """The name of a process that performs computations"""
     __tablename__ = 'computation_process'
     id = Column(Integer, primary_key=True)
     name = Column(String)
@@ -30,6 +31,7 @@ class ComputationProcess(Base):
 
 
 class Computation(DiscussionBoundBase):
+    """A computation request with its lifecycle."""
     __tablename__ = 'computation'
     computation_status = ENUM(
         'pending', 'success', 'failure', name="computation_status")
@@ -52,6 +54,7 @@ class Computation(DiscussionBoundBase):
 
 
 class ComputationOnPost(Computation, DiscussionBoundBase):
+    """A computation that is bound to a post"""
     __tablename__ = 'computation_on_post'
     id = Column(Integer, ForeignKey(Computation.id), primary_key=True)
     post_id = Column(Integer, ForeignKey("content.id"), index=True)
@@ -77,6 +80,7 @@ class ComputationOnPost(Computation, DiscussionBoundBase):
 
 
 class ComputationOnIdea(Computation, DiscussionBoundBase):
+    """A computation that is bound to an idea"""
     __tablename__ = 'computation_on_idea'
     __mapper_args__ = {
         'polymorphic_identity': 'idea',
