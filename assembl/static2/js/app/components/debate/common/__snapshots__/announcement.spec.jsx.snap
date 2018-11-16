@@ -36,37 +36,7 @@ exports[`Announcement component <Announcement /> on a multiColumns should render
           className="container-fluid"
         >
           <div
-            className="col-md-4 col-sm-12"
-          >
-            <div
-              className="media-description"
-            >
-              <div
-                className="media-description-icon"
-              >
-                <span
-                  className="assembl-icon-pepite color2"
-                >
-                   
-                </span>
-              </div>
-              <div
-                className="description-txt"
-                dangerouslySetInnerHTML={
-                  Object {
-                    "__html": undefined,
-                  }
-                }
-              />
-              <div
-                className="box-hyphen left"
-              >
-                 
-              </div>
-            </div>
-          </div>
-          <div
-            className="col-md-8 col-sm-12"
+            className="col-md-12 col-sm-12"
           >
             <div
               className="media-right"
@@ -76,40 +46,6 @@ exports[`Announcement component <Announcement /> on a multiColumns should render
                 dangerouslySetInnerHTML={
                   Object {
                     "__html": "<p>Bonjour à tous</p><p>Nous allons mettre un deuxieme paragraphe</p><p>Et un peu de <strong>texte en gras</strong>",
-                  }
-                }
-              />
-              <div
-                className="media-description"
-              >
-                <div
-                  className="media-description-icon"
-                >
-                  <span
-                    className="assembl-icon-pepite color2"
-                  >
-                     
-                  </span>
-                </div>
-                <div
-                  className="description-txt"
-                  dangerouslySetInnerHTML={
-                    Object {
-                      "__html": undefined,
-                    }
-                  }
-                />
-                <div
-                  className="box-hyphen left"
-                >
-                   
-                </div>
-              </div>
-              <div
-                className="media-description-layer media-description-bottom"
-                dangerouslySetInnerHTML={
-                  Object {
-                    "__html": null,
                   }
                 }
               />
@@ -262,37 +198,7 @@ exports[`Announcement component <Announcement/> on a thread should render an ann
           className="container-fluid"
         >
           <div
-            className="col-md-4 col-sm-12"
-          >
-            <div
-              className="media-description"
-            >
-              <div
-                className="media-description-icon"
-              >
-                <span
-                  className="assembl-icon-pepite color2"
-                >
-                   
-                </span>
-              </div>
-              <div
-                className="description-txt"
-                dangerouslySetInnerHTML={
-                  Object {
-                    "__html": undefined,
-                  }
-                }
-              />
-              <div
-                className="box-hyphen left"
-              >
-                 
-              </div>
-            </div>
-          </div>
-          <div
-            className="col-md-8 col-sm-12"
+            className="col-md-12 col-sm-12"
           >
             <div
               className="media-right"
@@ -302,40 +208,6 @@ exports[`Announcement component <Announcement/> on a thread should render an ann
                 dangerouslySetInnerHTML={
                   Object {
                     "__html": "<p>Bonjour à tous</p><p>Nous allons mettre un deuxieme paragraphe</p><p>Et un peu de <strong>texte en gras</strong>",
-                  }
-                }
-              />
-              <div
-                className="media-description"
-              >
-                <div
-                  className="media-description-icon"
-                >
-                  <span
-                    className="assembl-icon-pepite color2"
-                  >
-                     
-                  </span>
-                </div>
-                <div
-                  className="description-txt"
-                  dangerouslySetInnerHTML={
-                    Object {
-                      "__html": undefined,
-                    }
-                  }
-                />
-                <div
-                  className="box-hyphen left"
-                >
-                   
-                </div>
-              </div>
-              <div
-                className="media-description-layer media-description-bottom"
-                dangerouslySetInnerHTML={
-                  Object {
-                    "__html": null,
                   }
                 }
               />
