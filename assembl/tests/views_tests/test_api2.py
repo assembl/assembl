@@ -1088,12 +1088,13 @@ class TestPhase1Export(AbstractExport):
     POST_LIKE_COUNT = 6
     POST_DISAGREE_COUNT = 7
     POST_CREATOR_NAME = 8
-    POST_CREATOR_EMAIL = 9
-    POST_CREATION_DATE = 10
-    SENTIMENT_ACTOR_NAME = 11
-    SENTIMENT_ACTOR_EMAIL = 12
-    SENTIMENT_CREATION_DATE = 13
-    POST_BODY_ORIGINAL = 14
+    POST_CREATOR_USERNAME = 9
+    POST_CREATOR_EMAIL = 10
+    POST_CREATION_DATE = 11
+    SENTIMENT_ACTOR_NAME = 12
+    SENTIMENT_ACTOR_EMAIL = 13
+    SENTIMENT_CREATION_DATE = 14
+    POST_BODY_ORIGINAL = 15
 
 
     def test_base(self, proposals_with_sentiments, discussion, test_app):
@@ -1111,6 +1112,7 @@ class TestPhase1Export(AbstractExport):
         assert first_row[TestPhase1Export.POST_LIKE_COUNT] == b'0'
         assert first_row[TestPhase1Export.POST_DISAGREE_COUNT] == b'0'
         assert first_row[TestPhase1Export.POST_CREATOR_NAME] == b'Mr. Administrator'
+        assert first_row[TestPhase1Export.POST_CREATOR_USERNAME] == b'mr_admin_user'
         assert first_row[TestPhase1Export.POST_CREATOR_EMAIL] == b'admin@assembl.com'
         date = datetime.utcnow().strftime('%d/%m/%Y')
         assert first_row[TestPhase1Export.POST_CREATION_DATE].startswith(date)
@@ -1160,12 +1162,13 @@ class TestPhase2Export(AbstractExport):
     NOMBRE_DE_JAIME = 8
     NOMBRE_DE_DEACCORD = 9
     NOM_DU_CONTRIBUTEUR = 10
-    MAIL_CONTRIBUTEUR = 11
-    DATE_POST = 12
-    NOM_VOTANT = 13
-    MAIL_VOTANT = 14
-    DATE_VOTE = 15
-    ORIGINAL = 16
+    NOM_UTILISATEUR_CONTRIBUTEUR = 11
+    MAIL_CONTRIBUTEUR = 12
+    DATE_POST = 13
+    NOM_VOTANT = 14
+    MAIL_VOTANT = 15
+    DATE_VOTE = 16
+    ORIGINAL = 17
 
     def test_base(self, proposals_with_sentiments, discussion, timeline_phase2_interface_v2, test_app):
         result = self.get_result(test_app, discussion.id, view_name=self.view_name)
@@ -1179,6 +1182,7 @@ class TestPhase2Export(AbstractExport):
         assert header[self.NOMBRE_DE_JAIME] == b"Nombre de \"J\'aime\""
         assert header[self.NOMBRE_DE_DEACCORD] == b"Nombre de \"En désaccord\""
         assert header[self.NOM_DU_CONTRIBUTEUR] == b"Nom du contributeur"
+        assert header[self.NOM_UTILISATEUR_CONTRIBUTEUR] == b"Nom d'utilisateur du contributeur"
         assert header[self.MAIL_CONTRIBUTEUR] == b"Adresse mail du contributeur"
         assert header[self.DATE_POST] == b"Date/heure du post"
         assert header[self.NOM_VOTANT] == b"Nom du votant"

@@ -946,6 +946,11 @@ class User(AgentProfile):
             # set the new password
             self.password = hash_password(password)
 
+    def anonymous_username(self):
+        if self.username_p:
+            size = len(self.username_p)
+            return hash(self.username_p, size)
+
     def check_password(self, password):
         if self.password:
             from ..auth.password import verify_password

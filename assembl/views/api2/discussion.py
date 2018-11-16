@@ -519,8 +519,11 @@ def extract_taxonomy_csv(request):
     extracts = db.query(m.Extract).filter(m.Extract.discussion_id == discussion.id)
     extract_list = []
     user_prefs = LanguagePreferenceCollection.getCurrent()
-    fieldnames = ["Thematic", "Message", "Content harvested",  "Content locale", "Original message", "Original locale", "Qualify by nature", "Qualify by action",
-                  "Owner of the message", "Published on", "Harvester", "Harvested on", "Nugget", "State", "Tags"]
+    fieldnames = ["Thematic", "Message", "Content harvested",  "Content locale",
+                  "Original message", "Original locale", "Qualify by nature",
+                  "Qualify by action", "Message owner full name", "Message owner username",
+                  "Published on", "Harvester full name", "Harvester username",
+                  "Harvested on", "Nugget", "State", "Tags"]
     for extract in extracts:
         if extract.idea_id:
             thematic = db.query(m.Idea).get(extract.idea_id)
@@ -537,12 +540,12 @@ def extract_taxonomy_csv(request):
             extract_locale = extract.locale.code
         else:
             extract_locale = "no extract locale"
-        query = db.query(m.Post).get(extract.content_id)
-        if query:
-            if query.body:
-                original_message = query.body.first_original().value
-                original_locale = query.body.first_original().locale.code
-                message = query.body.best_lang(user_prefs).value
+        content = db.query(m.Post).filter(m.Post.id == extract.content_id).first()
+        if content:
+            if content.body:
+                original_message = content.body.first_original().value
+                original_locale = content.body.first_original().locale.code
+                message = content.body.best_lang(user_prefs).value
             else:
                 message = "no message"
         else:
@@ -551,7 +554,7 @@ def extract_taxonomy_csv(request):
             message = "no message"
 
         if thematic == no_thematic_associated:
-            idea_ids = m.Idea.get_idea_ids_showing_post(query.id)
+            idea_ids = m.Idea.get_idea_ids_showing_post(content.id)
             for thematic_id in reversed(idea_ids):
                 thematic_title = db.query(m.Idea).get(thematic_id).title
                 if thematic_title:
@@ -569,13 +572,21 @@ def extract_taxonomy_csv(request):
             qualify_by_action = extract.extract_action.name
         else:
             qualify_by_action = " "
-        owner_of_the_message = db.query(m.User).get(query.creator_id).name
-        published_on = unicode(query.creation_date.replace(microsecond=0))
-        harvester = db.query(m.User).get(extract.owner_id).name
+        owner_of_the_message = db.query(m.User).filter(m.User.id == content.creator_id).first()
+        published_on = unicode(content.creation_date.replace(microsecond=0))
+        harvester = db.query(m.User).filter(m.User.id == extract.owner_id).first()
         harvested_on = unicode(extract.creation_date.replace(microsecond=0))
         nugget = "Yes" if extract.important else "No"
         state = getattr(extract, 'extract_state', ExtractStates.PUBLISHED.value)
         tags = [t.value for t in extract.tags]
+        message_full_name = owner_of_the_message.real_name().encode('utf-8') if \
+            owner_of_the_message.real_name() else ""
+        message_username = owner_of_the_message.username_p.encode('utf-8') if \
+            owner_of_the_message.username_p else ""
+        harvester_full_name = harvester.real_name().encode('utf-8') if \
+            harvester.real_name() else ""
+        harvester_username = harvester.username_p.encode('utf-8') if \
+            harvester.username_p else ""
         extract_info = {
             "Thematic": thematic.encode('utf-8'),
             "Message": sanitize_text(message).encode('utf-8'),
@@ -585,9 +596,11 @@ def extract_taxonomy_csv(request):
             "Original locale": original_locale.encode('utf-8'),
             "Qualify by nature": qualify_by_nature.encode('utf-8'),
             "Qualify by action": qualify_by_action.encode('utf-8'),
-            "Owner of the message": owner_of_the_message.encode('utf-8'),
+            "Message owner full name": message_full_name,
+            "Message owner username": message_username,
             "Published on": published_on.encode('utf-8'),
-            "Harvester": harvester.encode('utf-8'),
+            "Harvester full name": harvester_full_name,
+            "Harvester username": harvester_username,
             "Harvested on": harvested_on.encode('utf-8'),
             "Nugget": nugget.encode('utf-8'),
             "State": state.encode('utf-8'),
@@ -1457,6 +1470,7 @@ def phase1_csv_export(request):
     POST_LIKE_COUNT = u"Nombre de \"J'aime\""
     POST_DISAGREE_COUNT = u"Nombre de \"En désaccord\""
     POST_CREATOR_NAME = u"Nom du contributeur"
+    POST_CREATOR_USERNAME = u"Nom d'utilisateur du contributeur"
     POST_CREATOR_EMAIL = u"Adresse mail du contributeur"
     POST_CREATION_DATE = u"Date/heure du post"
     SENTIMENT_ACTOR_NAME = u"Nom du votant"
@@ -1473,6 +1487,7 @@ def phase1_csv_export(request):
         POST_LIKE_COUNT.encode('utf-8'),
         POST_DISAGREE_COUNT.encode('utf-8'),
         POST_CREATOR_NAME.encode('utf-8'),
+        POST_CREATOR_USERNAME.encode('utf-8'),
         POST_CREATOR_EMAIL.encode('utf-8'),
         POST_CREATION_DATE.encode('utf-8'),
         SENTIMENT_ACTOR_NAME.encode('utf-8'),
@@ -1515,8 +1530,10 @@ def phase1_csv_export(request):
                 row[POST_BODY_ORIGINAL] = sanitize_text(post_entries.get('original'))
                 if not has_anon:
                     row[POST_CREATOR_NAME] = post.creator.real_name()
+                    row[POST_CREATOR_USERNAME] = post.creator.username_p or ""
                 else:
                     row[POST_CREATOR_NAME] = post.creator.anonymous_name()
+                    row[POST_CREATOR_USERNAME] = post.creator.anonymous_username() or ""
                 row[POST_CREATOR_EMAIL] = post.creator.get_preferred_email(anonymous=has_anon)
                 row[POST_CREATION_DATE] = format_date(post.creation_date)
                 row[POST_LIKE_COUNT] = post.like_count
@@ -1589,6 +1606,7 @@ def phase2_csv_export(request):
     POST_LIKE_COUNT = u"Nombre de \"J'aime\""
     POST_DISAGREE_COUNT = u"Nombre de \"En désaccord\""
     POST_CREATOR_NAME = u"Nom du contributeur"
+    POST_CREATOR_USERNAME = u"Nom d'utilisateur du contributeur"
     POST_CREATOR_EMAIL = u"Adresse mail du contributeur"
     POST_CREATION_DATE = u"Date/heure du post"
     SENTIMENT_ACTOR_NAME = u"Nom du votant"
@@ -1607,6 +1625,7 @@ def phase2_csv_export(request):
         POST_LIKE_COUNT.encode('utf-8'),
         POST_DISAGREE_COUNT.encode('utf-8'),
         POST_CREATOR_NAME.encode('utf-8'),
+        POST_CREATOR_USERNAME.encode('utf-8'),
         POST_CREATOR_EMAIL.encode('utf-8'),
         POST_CREATION_DATE.encode('utf-8'),
         SENTIMENT_ACTOR_NAME.encode('utf-8'),
@@ -1651,8 +1670,10 @@ def phase2_csv_export(request):
             row[POST_LOCALE] = body.get('locale') or subject.get('locale') or None
             if not has_anon:
                 row[POST_CREATOR_NAME] = post.creator.real_name()
+                row[POST_CREATOR_USERNAME] = post.creator.username_p or ""
             else:
                 row[POST_CREATOR_NAME] = post.creator.anonymous_name()
+                row[POST_CREATOR_USERNAME] = post.creator.anonymous_username() or ""
             row[POST_CREATOR_EMAIL] = post.creator.get_preferred_email(anonymous=has_anon)
             row[POST_CREATION_DATE] = format_date(post.creation_date)
             row[POST_LIKE_COUNT] = post.like_count
