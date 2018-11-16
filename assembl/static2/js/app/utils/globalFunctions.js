@@ -292,6 +292,6 @@ export function fromGlobalId(id: string): string | null {
   return id ? atob(id).split(':')[1] : null;
 }
 
-export function getIconPath(icon, color = '') {
+export function getIconPath(icon: string, color: string = '') {
   return color ? `${ICONS_PATH}/${color}/${icon}` : `${ICONS_PATH}/${icon}`;
 }

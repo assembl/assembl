@@ -20,7 +20,7 @@ export class Video extends React.Component<Props, State> {
     const { video } = props;
     const videoTxt = document.getElementById('video-txt');
     const domVideo = document.getElementById('video-vid');
-    if (video.videoUrl && videoTxt) {
+    if (video.videoUrl && videoTxt && domVideo) {
       const textHeight = videoTxt.clientHeight;
       const videoHeight = domVideo.clientHeight;
       if (textHeight > videoHeight + 5) return { isTextHigher: true };

@@ -16,7 +16,7 @@ describe('<Video /> - with shallow', () => {
     const videoProps: Props = {
       locale: 'fr',
       video: {
-        descriptionEntries: {
+        descriptionEntriesTop: {
           en: 'The description'
         },
         titleEntries: {
@@ -52,7 +52,7 @@ describe('<Video /> - with shallow', () => {
     const videoProps: Props = {
       locale: 'en',
       video: {
-        descriptionEntries: null,
+        descriptionEntriesTop: null,
         titleEntries: null,
         videoUrl: ''
       }

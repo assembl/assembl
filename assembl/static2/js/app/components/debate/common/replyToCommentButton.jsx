@@ -15,7 +15,7 @@ export type ReplyToCommentButtonProps = {
 
 const ReplyToCommentButton = ({ onClickCallback, disabled, tooltipPlacement }: ReplyToCommentButtonProps) => (
   <Link className={classNames('action-reply', { disabled: disabled })} onClick={onClickCallback}>
-    <ResponsiveOverlayTrigger placement={tooltipPlacement} tooltip={answerTooltip}>
+    <ResponsiveOverlayTrigger placement={tooltipPlacement || 'top'} tooltip={answerTooltip}>
       <span className="assembl-icon-back-arrow" />
     </ResponsiveOverlayTrigger>
   </Link>

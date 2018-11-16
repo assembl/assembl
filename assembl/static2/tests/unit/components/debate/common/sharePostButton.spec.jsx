@@ -27,8 +27,10 @@ describe('<SharePostButton /> - with shallow', () => {
     slug: 'i-named-him-after-his-daddy',
     themeId: 'he-got-a-daddy-named-forrest-too'
   };
+
   const sharePostButtonProps: SharePostButtonProps = {
-    fictionMetaInfo: fictionMetaInfo,
+    metaInfo: fictionMetaInfo,
+    linkClassName: '',
     modalTitleMsgKey: 'debate.brightMirror.shareFiction',
     type: 'brightMirrorFiction'
   };
