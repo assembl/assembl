@@ -40,7 +40,13 @@ export type Props = {
   toggleSubmitDisplay: () => void,
   cancelSubmit: () => void,
   refetchPost: Function,
-  toggleCommentsBox?: () => void,
+  addPostExtract: Function,
+  createPost: Function,
+  updatePost: Function,
+  uploadDocument: Function,
+  deletePost: Function,
+  deleteExtract: Function,
+  toggleCommentsBox: () => void,
   clearHighlights: () => void,
   position: { x: number, y: number },
   setPositionToExtract: FictionExtractFragment => void,
@@ -75,16 +81,16 @@ class DumbSideCommentBox extends React.Component<Props, State> {
     }
   };
 
-  static getDerivedStateFromProps(nextProps, prevState) {
+  static getDerivedStateFromProps(nextProps: Props, prevState: State) {
     // Required when switching from displaying comment to submitting to force a refresh of component
     const { submitting, selection } = nextProps;
     if (prevState.submitting !== submitting) {
       const selectionText = selection && selection.toString();
-      const annotatorRange = selectionText && ARange.sniff(selection.getRangeAt(0));
+      const annotatorRange = selection && selectionText && ARange.sniff(selection.getRangeAt(0));
       return {
         submitting: submitting,
         selectionText: selectionText,
-        serializedAnnotatorRange: annotatorRange.serialize(document, 'annotation')
+        serializedAnnotatorRange: annotatorRange && annotatorRange.serialize(document, 'annotation')
       };
     }
 
@@ -95,7 +101,7 @@ class DumbSideCommentBox extends React.Component<Props, State> {
     super(props);
     const { cancelSubmit, submitting, selection } = props;
     const selectionText = selection && selection.toString();
-    const annotatorRange = selectionText && ARange.sniff(selection.getRangeAt(0));
+    const annotatorRange = selection && selectionText && ARange.sniff(selection.getRangeAt(0));
 
     this.state = {
       extractIndex: 0,
@@ -137,7 +143,7 @@ class DumbSideCommentBox extends React.Component<Props, State> {
     }
   }
 
-  componentDidUpdate(prevState: State) {
+  componentDidUpdate(prevProps: Props, prevState: State) {
     const { submitting, extractIndex } = this.state;
     const { clearHighlights } = this.props;
     if (!submitting) {
@@ -169,7 +175,8 @@ class DumbSideCommentBox extends React.Component<Props, State> {
     const { setPositionToExtract } = this.props;
     this.setState((prevState) => {
       const next = step ? prevState.extractIndex + step : 0;
-      setPositionToExtract(this.getCurrentExtract(next));
+      const nextExtract = this.getCurrentExtract(next);
+      if (nextExtract) setPositionToExtract(nextExtract);
       return {
         extractIndex: next
       };
@@ -181,16 +188,20 @@ class DumbSideCommentBox extends React.Component<Props, State> {
     return extracts && extracts.length > 0 ? extracts[extractIndex] : null;
   };
 
-  getCurrentComment = (extract: FictionExtractFragment) => {
-    const topComments = extract && extract.comments && extract.comments.filter(post => post.parentId === null);
+  getCurrentComment = (extract: ?FictionExtractFragment) => {
+    const topComments = extract && extract.comments && extract.comments.filter(post => post && post.parentId === null);
     return (topComments && topComments[0]) || null;
   };
 
-  getCurrentCommentReply = (extract: ?FictionExtractFragment, comment: ?ExtractComment) => {
+  getCurrentCommentReply = (extract: ?FictionExtractFragment, comment: ?ExtractCommentFragment) => {
+    const extractComments = extract && extract.comments;
+    const commentId = comment && comment.id;
     const replies =
-      extract &&
       comment &&
-      extract.comments.filter(post => post.parentId === comment.id && post.publicationState === PublicationStates.PUBLISHED);
+      extractComments &&
+      extractComments.filter(
+        post => post && post.parentId === commentId && post.publicationState === PublicationStates.PUBLISHED
+      );
     return (replies && replies[0]) || null;
   };
 
@@ -283,8 +294,8 @@ class DumbSideCommentBox extends React.Component<Props, State> {
     uploadDocumentsPromise.then((result) => {
       const postVars = {
         ideaId: ideaId,
-        extractId: currentExtract.id,
-        parentId: currentComment.id,
+        extractId: currentExtract && currentExtract.id,
+        parentId: currentComment && currentComment.id,
         body: convertContentStateToHTML(result.contentState),
         attachments: result.documentIds,
         contentLocale: contentLocale
@@ -334,7 +345,7 @@ class DumbSideCommentBox extends React.Component<Props, State> {
     });
   };
 
-  onDeleteConfirmation = (comment: ExtractComment, extractId: number) => {
+  onDeleteConfirmation = (comment: ExtractCommentFragment, extractId: string) => {
     const { refetchPost, deletePost, deleteExtract } = this.props;
     if (comment.parentId) {
       // If it's a reply, we just delete the post
@@ -359,7 +370,7 @@ class DumbSideCommentBox extends React.Component<Props, State> {
     }
   };
 
-  deletePost = (comment: ExtractComment, extractId: number) => {
+  deletePost = (comment: ExtractCommentFragment, extractId: string) => {
     const title = <Translate value="debate.confirmDeletionTitle" />;
     const body = <Translate value="debate.brightMirror.sideComment.confirmDeleteMsg" />;
     const footer = [
@@ -407,7 +418,7 @@ class DumbSideCommentBox extends React.Component<Props, State> {
     this.setState(state => ({ replying: !state.replying }));
   };
 
-  setCommentEditMode = (postId: number, body: string) => {
+  setCommentEditMode = (postId: string, body: string) => {
     this.setState({ editComment: true, editingPostId: postId, body: convertToEditorState(body) });
   };
 
@@ -457,18 +468,20 @@ class DumbSideCommentBox extends React.Component<Props, State> {
           cancelSubmit={this.cancelEditMode}
         />
       );
+    } else if (currentComment) {
+      return (
+        <InnerBoxView
+          contentLocale={contentLocale}
+          extractIndex={extractIndex}
+          extracts={extracts}
+          comment={currentComment}
+          changeCurrentExtract={this.changeCurrentExtract}
+          setEditMode={this.setCommentEditMode}
+          deletePost={this.deletePost}
+        />
+      );
     }
-    return (
-      <InnerBoxView
-        contentLocale={contentLocale}
-        extractIndex={extractIndex}
-        extracts={extracts}
-        comment={currentComment}
-        changeCurrentExtract={this.changeCurrentExtract}
-        setEditMode={this.setCommentEditMode}
-        deletePost={this.deletePost}
-      />
-    );
+    return null;
   };
 
   render() {
@@ -477,7 +490,6 @@ class DumbSideCommentBox extends React.Component<Props, State> {
     const currentExtract = this.getCurrentExtract(extractIndex);
     const currentComment = this.getCurrentComment(currentExtract);
     const currentReply = this.getCurrentCommentReply(currentExtract, currentComment);
-    const hasReply = !!currentReply;
 
     if (!submitting && !currentComment) return null;
 
@@ -528,7 +540,7 @@ class DumbSideCommentBox extends React.Component<Props, State> {
             />
           )}
           {!submitting &&
-            hasReply && <InnerBoxView contentLocale={contentLocale} comment={currentReply} deletePost={this.deletePost} />}
+            !!currentReply && <InnerBoxView contentLocale={contentLocale} comment={currentReply} deletePost={this.deletePost} />}
         </div>
       </div>
     );

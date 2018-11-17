@@ -11,7 +11,7 @@ import ToggleCommentButton from '../../../../../js/app/components/debate/common/
 import type { DeletedFictionCommentProps } from '../../../../../js/app/components/debate/brightMirror/deletedFictionComment';
 
 // Import existing storybook data
-import { defaultDeletedFictionComment } from '../../../../../js/app/stories/components/debate/brightMirror/deletedFictionComment.stories';
+import { defaultDeletedFictionComment } from '../../../../../js/app/stories/components/debate/brightMirror/deletedFictionComment.stories'; // eslint-disable-line max-len
 
 // Separate the snapshots in directories next to each component
 // Name should match with the story name

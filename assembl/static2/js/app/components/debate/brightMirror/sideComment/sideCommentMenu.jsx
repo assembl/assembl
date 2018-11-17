@@ -18,7 +18,7 @@ type Props = {
   handleClickAnchor: () => void,
   cancelSubmit: () => void,
   refetchPost: Function,
-  setCommentBadgeToExtractPosition: FictionExtractFragment => void,
+  setPositionToExtract: (?FictionExtractFragment) => void,
   userCanReply: boolean
 };
 
@@ -44,11 +44,11 @@ class SideCommentMenu extends React.Component<Props, State> {
   };
 
   toggleCommentsBox = () => {
-    const { setCommentBadgeToExtractPosition, extracts } = this.props;
+    const { setPositionToExtract, extracts } = this.props;
     this.clearHighlights();
     this.setState((prevState) => {
       // If displaying box, set position to first extract
-      if (!prevState.commentBoxDisplayed) setCommentBadgeToExtractPosition(extracts && extracts.length > 0 && extracts[0]);
+      if (!prevState.commentBoxDisplayed && extracts && extracts.length > 0) setPositionToExtract(extracts[0]);
       return { commentBoxDisplayed: !prevState.commentBoxDisplayed };
     });
   };
@@ -77,7 +77,7 @@ class SideCommentMenu extends React.Component<Props, State> {
       extracts,
       badgeDynamicPosition,
       badgeFixedPosition,
-      setCommentBadgeToExtractPosition,
+      setPositionToExtract,
       userCanReply
     } = this.props;
     const { commentBoxDisplayed } = this.state;
@@ -118,7 +118,7 @@ class SideCommentMenu extends React.Component<Props, State> {
               toggleCommentsBox={this.toggleCommentsBox}
               position={badgePosition}
               clearHighlights={this.clearHighlights}
-              setPositionToExtract={setCommentBadgeToExtractPosition}
+              setPositionToExtract={setPositionToExtract}
               userCanReply={userCanReply}
             />
           )}

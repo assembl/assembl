@@ -63,7 +63,7 @@ const InstructionView = ({
 
   return (
     <div className="instruction-view">
-      <InstructionsText title={announcementContent.title} body={announcementContent.body} />
+      <InstructionsText title={announcementContent.title || ''} body={announcementContent.body} />
       <div className="overflow-x">
         {topPostFormContainer}
         {filteredPosts.length > 0 ? (

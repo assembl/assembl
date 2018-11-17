@@ -8,8 +8,8 @@ import { action } from '@storybook/addon-actions';
 import { getExtractTagId } from '../../../../../utils/extract';
 /* eslint-enable */
 
-import InnerBoxView, { Props } from '../../../../../components/debate/brightMirror/sideComment/innerBoxView';
-import { ExtractStates } from '../../../../../constants';
+import InnerBoxView, { type Props } from '../../../../../components/debate/brightMirror/sideComment/innerBoxView';
+import { ExtractStates, PublicationStates } from '../../../../../constants';
 
 export const currentUser = {
   displayName: 'John Doe User',
@@ -46,7 +46,9 @@ const comment = {
   creationDate: '2018-01-26T09:19:01.492406+00:00',
   creator: commentor,
   body: richBody,
-  attachments: []
+  attachments: [],
+  parentId: '',
+  publicationState: PublicationStates.PUBLISHED
 };
 
 const comment2 = {
@@ -54,7 +56,9 @@ const comment2 = {
   creationDate: '2018-01-26T09:19:01.492406+00:00',
   creator: currentUser,
   body: richBody,
-  attachments: []
+  attachments: [],
+  parentId: '',
+  publicationState: PublicationStates.PUBLISHED
 };
 
 export const extract0 = {

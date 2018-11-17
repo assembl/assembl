@@ -7,7 +7,7 @@ import { ANCHOR_SIZE } from '../../../../constants';
 export type Props = {
   anchorPosition: { x: number, y: number },
   handleClickAnchor: () => void,
-  handleMouseDown: SyntheticMouseEvent => void
+  handleMouseDown: (SyntheticMouseEvent<>) => boolean
 };
 
 const SideCommentAnchor = ({ handleClickAnchor, handleMouseDown, anchorPosition }: Props) => (

@@ -8,7 +8,7 @@ import { EditorState, ContentState } from 'draft-js';
 import { action } from '@storybook/addon-actions';
 /* eslint-enable */
 
-import InnerBoxSubmit, { Props } from '../../../../../components/debate/brightMirror/sideComment/innerBoxSubmit';
+import InnerBoxSubmit, { type Props } from '../../../../../components/debate/brightMirror/sideComment/innerBoxSubmit';
 
 export const defaultInnerBoxSubmitProps: Props = {
   userId: '1',

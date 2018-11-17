@@ -65,8 +65,8 @@ class FictionBody extends React.Component<Props, State> {
     });
   };
 
-  setCommentBadgeToExtractPosition = (extract: FictionExtractFragment) => {
-    const extractElement = document.getElementById(extract.id);
+  setPositionToExtract = (extract: ?FictionExtractFragment) => {
+    const extractElement = extract && document.getElementById(extract.id);
     if (extractElement && this.fictionBodyView) {
       // Scroll extract in middle of page
       const elementRect = extractElement.getBoundingClientRect();
@@ -173,7 +173,7 @@ class FictionBody extends React.Component<Props, State> {
           toggleSubmitDisplay={this.toggleSubmitDisplay}
           handleClickAnchor={this.handleClickAnchor}
           cancelSubmit={this.cancelSubmit}
-          setCommentBadgeToExtractPosition={this.setCommentBadgeToExtractPosition}
+          setPositionToExtract={this.setPositionToExtract}
           userCanReply={userCanReply}
         />
 

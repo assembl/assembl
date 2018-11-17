@@ -5,7 +5,7 @@ import { configure, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 
 import SideCommentAnchor from '../../../../../../js/app/components/debate/brightMirror/sideComment/sideCommentAnchor';
-import { defaultSideCommentAnchor } from '../../../../../../js/app/stories/components/debate/brightMirror/sideComment/sideCommentAnchor.stories';
+import { defaultSideCommentAnchor } from '../../../../../../js/app/stories/components/debate/brightMirror/sideComment/sideCommentAnchor.stories'; // eslint-disable-line max-len
 
 // Separate the snapshots in directories next to each component
 // Name should match with the story name

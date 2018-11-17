@@ -12,7 +12,7 @@ import type {
 } from '../../../../../js/app/components/debate/brightMirror/fictionCommentForm';
 
 // Import existing storybook data
-import { defaultFictionCommentForm } from '../../../../../js/app/stories/components/debate/brightMirror/fictionCommentForm.stories';
+import { defaultFictionCommentForm } from '../../../../../js/app/stories/components/debate/brightMirror/fictionCommentForm.stories'; // eslint-disable-line max-len
 
 // Separate the snapshots in directories next to each component
 // Name should match with the story name

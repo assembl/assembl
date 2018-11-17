@@ -223,19 +223,26 @@ export type BrightMirrorFictionQuery = {|
         // WIDGET_SCOPED
         //
         publicationState: ?PublicationStates,
+        // A boolean flag to say whether the post is modified or not.
+        modified: ?boolean,
         creator: ?{|
-          // The unique database identifier of the User.
-          userId: number,
           // How the User is represented throughout the debate. If a user-name exists, this will be chosen. If it does not, the name is determined.
           displayName: ?string,
           // A boolean flag that shows if the User is deleted.
           // If True, the User information is cleansed from the system, and the User can no longer log in.
           isDeleted: ?boolean,
+          // The unique database identifier of the User.
+          userId: number,
           // Image appearing on the avatar of the User. A file metadata object, described by the Document object.
           image: ?{|
             // A url to an image or a document to be attached.
             externalUrl: ?string
           |}
+        |},
+        // The User or AgentProfile who created the parent post.
+        parentPostCreator: ?{|
+          // How the User is represented throughout the debate. If a user-name exists, this will be chosen. If it does not, the name is determined.
+          displayName: ?string
         |},
         // A ??? in a given language.
         bodyMimeType: string,
@@ -339,8 +346,8 @@ export type BrightMirrorFictionQuery = {|
               |}
             |}
           |},
-          // A comment post related to an extract.
-          comment: ?{|
+          // A list of comment post related to an extract.
+          comments: ?Array<?{|
             // The ID of the object.
             id: string,
             // A Body of the post (the main content of the post). in a given language.
@@ -393,11 +400,32 @@ export type BrightMirrorFictionQuery = {|
                 //
                 avChecked: ?string
               |}
-            |}>
-          |}
+            |}>,
+            // The parent of a Post, if the Post is a reply to an existing Post. The Relay.Node ID type of the Post object.
+            parentId: ?string,
+            // A graphene Field containing the state of the publication of a certain post. The options are:
+            // DRAFT,
+            //
+            // SUBMITTED_IN_EDIT_GRACE_PERIOD,
+            //
+            // SUBMITTED_AWAITING_MODERATION,
+            //
+            // PUBLISHED,
+            //
+            // MODERATED_TEXT_ON_DEMAND,
+            //
+            // MODERATED_TEXT_NEVER_AVAILABLE,
+            //
+            // DELETED_BY_USER,
+            //
+            // DELETED_BY_ADMIN,
+            //
+            // WIDGET_SCOPED
+            //
+            publicationState: ?PublicationStates
+          |}>
         |}>
       }
-    | {}
     | {}
     | {}
     | {}
@@ -532,7 +560,6 @@ export type IdeaQuery = {|
           body: ?string
         |}
       }
-    | {}
     | {}
     | {}
     | {}
@@ -722,7 +749,6 @@ export type IdeaWithPostsQuery = {|
           |}>
         |}
       }
-    | {}
     | {}
     | {}
     | {}
@@ -1266,7 +1292,6 @@ export type PostQuery = {|
     | {}
     | {}
     | {}
-    | {}
     | {})
 |};
 
@@ -1377,7 +1402,6 @@ export type QuestionPostsQuery = {|
     | {}
     | {}
     | {}
-    | {}
     | {
         // The ID of the object.
         id: string,
@@ -1420,7 +1444,6 @@ export type QuestionQueryVariables = {|
 export type QuestionQuery = {|
   // The ID of the object
   question: ?(
-    | {}
     | {}
     | {}
     | {}
@@ -1926,10 +1949,6 @@ export type SynthesisQueryQuery = {|
     | {
         // The ID of the object.
         id: string
-      }
-    | {
-        // The ID of the object.
-        id: string
       })
 |};
 
@@ -2041,7 +2060,6 @@ export type ThematicQueryQueryVariables = {|
 export type ThematicQueryQuery = {|
   // The ID of the object
   thematic: ?(
-    | {}
     | {}
     | {}
     | {}
@@ -2394,7 +2412,6 @@ export type UserPreferencesQuery = {|
           |}
         |}
       }
-    | {}
     | {}
     | {}
     | {}
@@ -2871,7 +2888,9 @@ export type AcceptedCookiesQuery = {|
     | {}
     | {
         // The list of cookies accepted by the agent.
-        acceptedCookies: ?Array<?CookieTypes>
+        acceptedCookies: ?Array<?CookieTypes>,
+        // The ID of the object.
+        id: string
       }
     | {}
     | {}
@@ -2889,177 +2908,7 @@ export type AcceptedCookiesQuery = {|
     | {}
     | {}
     | {}
-    | {}
     | {})
-|};
-
-export type addExtractCommentMutationVariables = {|
-  extractId: string,
-  body: string,
-  parentId?: ?string,
-  contentLocale: string
-|};
-
-export type addExtractCommentMutation = {|
-  // A mutation to create a comment linked to an Extract
-  addExtractComment: ?{|
-    extract: ?{|
-      // The ID of the object.
-      id: string,
-      // The date the Extract was created, in UTC timezone.
-      creationDate: ?any,
-      // A flag for importance of the Extract.
-      important: ?boolean,
-      // The body of text that is extracted from the post. This is not language dependent, but rather just unicode text.
-      body: string,
-      // The lang of the extract.
-      lang: ?string,
-      // The taxonomy (or classification) of the extracted body. The options are one of:
-      //
-      //
-      // issue: The body of text is an issue.
-      //
-      // actionable_solution: The body of text is a potentially actionable solution.
-      //
-      // knowledge: The body of text is in fact knowledge gained by the community.
-      //
-      // example: The body of text is an example in the context that it was derived from.
-      //
-      // concept: The body of text is a high level concept.
-      //
-      // argument: The body of text is an argument for/against in the context that it was extracted from.
-      //
-      // cognitive_bias: The body of text, in fact, has cognitive bias in the context it was extracted from.
-      //
-      //
-      extractNature: ?string,
-      // The taxonomy (or classification) of the actions that can be taken from the extracted body. The options are one of:
-      //
-      //
-      // classify: This body of text should be re-classified by an priviledged user.
-      //
-      // make_generic: The body of text is a specific example and not generic.
-      //
-      // argument: A user must give more arguments.
-      //
-      // give_examples: A user must give more examples.
-      //
-      // more_specific: A user must be more specific within the same context.
-      //
-      // mix_match: The body of text has relevancy in another section of the deabte. These should be mixed and matched to create greater meaning.
-      //
-      // display_multi_column: A priviledged user should activate the Mutli-Column view.
-      //
-      // display_thread: A priviledged user should activate the Thread view.
-      //
-      // display_tokens: A priviledged user should activate the Token Vote view.
-      //
-      // display_open_questions: A priviledged user should activate the Open Question view.
-      //
-      // display_bright_mirror: A priviledged user should activate the Bright Mirror view.
-      //
-      //
-      extractAction: ?string,
-      // A graphene Field containing the state of the extract. The options are:
-      // SUBMITTED,
-      //
-      // PUBLISHED
-      //
-      extractState: ?ExtractStates,
-      // A list of TextFragmentIdentifiers.
-      textFragmentIdentifiers: ?Array<?{|
-        // The xPath selector starting point in the DOM, representing where the string text that the fragment is held is positioned.
-        xpathStart: ?string,
-        // The xPath selector ending point in the DOM, representing where the string text that the fragment is held is positioned.
-        // Often times the xpathEnd variable is the same as the xpathStart selector.
-        xpathEnd: ?string,
-        // The character offset index where an extract begins, beginning from index 0 in a string of text.
-        offsetStart: ?number,
-        // The character offset index where an extract ends in a string of text.
-        offsetEnd: ?number
-      |}>,
-      // The AgentProfile object description of the creator.
-      creator: ?{|
-        // The ID of the object.
-        id: string,
-        // The unique database identifier of the User.
-        userId: number,
-        // How the User is represented throughout the debate. If a user-name exists, this will be chosen. If it does not, the name is determined.
-        displayName: ?string,
-        // A boolean flag that shows if the User is deleted.
-        // If True, the User information is cleansed from the system, and the User can no longer log in.
-        isDeleted: ?boolean,
-        // A boolean flag describing if the User is a machine user or human user.
-        isMachine: ?boolean,
-        // The preferences of the User.
-        preferences: ?{|
-          // The harvesting Translation preference.
-          harvestingTranslation: ?{|
-            // The source locale of the translation.
-            localeFrom: string,
-            // The target locale of the translation.
-            localeInto: string
-          |}
-        |}
-      |},
-      // A comment post related to an extract.
-      comment: ?{|
-        // The ID of the object.
-        id: string,
-        // A Body of the post (the main content of the post). in a given language.
-        body: ?string,
-        // The date that the object was created, in UTC timezone, in ISO 8601 format.
-        creationDate: ?any,
-        creator: ?{|
-          // The ID of the object.
-          id: string,
-          // The unique database identifier of the User.
-          userId: number,
-          // How the User is represented throughout the debate. If a user-name exists, this will be chosen. If it does not, the name is determined.
-          displayName: ?string,
-          // A boolean flag that shows if the User is deleted.
-          // If True, the User information is cleansed from the system, and the User can no longer log in.
-          isDeleted: ?boolean,
-          // A boolean flag describing if the User is a machine user or human user.
-          isMachine: ?boolean,
-          // The preferences of the User.
-          preferences: ?{|
-            // The harvesting Translation preference.
-            harvestingTranslation: ?{|
-              // The source locale of the translation.
-              localeFrom: string,
-              // The target locale of the translation.
-              localeInto: string
-            |}
-          |}
-        |},
-        // List of attachements to the post.
-        attachments: ?Array<?{|
-          id: string,
-          // Any file that can be attached to a Post. A file metadata object, described by the Document object.
-          document: ?{|
-            id: string,
-            // The filename title.
-            title: ?string,
-            // A url to an image or a document to be attached.
-            externalUrl: ?string,
-            // The MIME-Type of the file uploaded.
-            mimeType: ?string,
-            // Antivirus check status of the File, for servers that support Anti-Virus filtering. The possible options are:
-            //
-            // "unchecked": The AV did not make a check on this file.
-            //
-            // "passed": The AV did a pass on this file, and it passed AV check.
-            //
-            // "failed": The AV did a pass on this file, and the file failed the AV check. Under this condition, the file would not be touched or
-            // accessed by the application.
-            //
-            avChecked: ?string
-          |}
-        |}>
-      |}
-    |}
-  |}
 |};
 
 export type addGaugeVoteMutationVariables = {|
@@ -3773,7 +3622,8 @@ export type createPostMutationVariables = {|
   messageClassifier?: ?string,
   parentId?: ?string,
   attachments?: ?Array<?string>,
-  publicationState?: ?PublicationStates
+  publicationState?: ?PublicationStates,
+  extractId?: ?string
 |};
 
 export type createPostMutation = {|
@@ -5915,7 +5765,6 @@ export type UserQuery = {|
     | {}
     | {}
     | {}
-    | {}
     | {})
 |};
 
@@ -6187,19 +6036,26 @@ export type BrightMirrorFictionFragment = {|
   // WIDGET_SCOPED
   //
   publicationState: ?PublicationStates,
+  // A boolean flag to say whether the post is modified or not.
+  modified: ?boolean,
   creator: ?{|
-    // The unique database identifier of the User.
-    userId: number,
     // How the User is represented throughout the debate. If a user-name exists, this will be chosen. If it does not, the name is determined.
     displayName: ?string,
     // A boolean flag that shows if the User is deleted.
     // If True, the User information is cleansed from the system, and the User can no longer log in.
     isDeleted: ?boolean,
+    // The unique database identifier of the User.
+    userId: number,
     // Image appearing on the avatar of the User. A file metadata object, described by the Document object.
     image: ?{|
       // A url to an image or a document to be attached.
       externalUrl: ?string
     |}
+  |},
+  // The User or AgentProfile who created the parent post.
+  parentPostCreator: ?{|
+    // How the User is represented throughout the debate. If a user-name exists, this will be chosen. If it does not, the name is determined.
+    displayName: ?string
   |},
   // A ??? in a given language.
   bodyMimeType: string,
@@ -6303,8 +6159,8 @@ export type BrightMirrorFictionFragment = {|
         |}
       |}
     |},
-    // A comment post related to an extract.
-    comment: ?{|
+    // A list of comment post related to an extract.
+    comments: ?Array<?{|
       // The ID of the object.
       id: string,
       // A Body of the post (the main content of the post). in a given language.
@@ -6357,8 +6213,30 @@ export type BrightMirrorFictionFragment = {|
           //
           avChecked: ?string
         |}
-      |}>
-    |}
+      |}>,
+      // The parent of a Post, if the Post is a reply to an existing Post. The Relay.Node ID type of the Post object.
+      parentId: ?string,
+      // A graphene Field containing the state of the publication of a certain post. The options are:
+      // DRAFT,
+      //
+      // SUBMITTED_IN_EDIT_GRACE_PERIOD,
+      //
+      // SUBMITTED_AWAITING_MODERATION,
+      //
+      // PUBLISHED,
+      //
+      // MODERATED_TEXT_ON_DEMAND,
+      //
+      // MODERATED_TEXT_NEVER_AVAILABLE,
+      //
+      // DELETED_BY_USER,
+      //
+      // DELETED_BY_ADMIN,
+      //
+      // WIDGET_SCOPED
+      //
+      publicationState: ?PublicationStates
+    |}>
   |}>
 |};
 
@@ -6578,7 +6456,29 @@ export type ExtractCommentFragment = {|
       //
       avChecked: ?string
     |}
-  |}>
+  |}>,
+  // The parent of a Post, if the Post is a reply to an existing Post. The Relay.Node ID type of the Post object.
+  parentId: ?string,
+  // A graphene Field containing the state of the publication of a certain post. The options are:
+  // DRAFT,
+  //
+  // SUBMITTED_IN_EDIT_GRACE_PERIOD,
+  //
+  // SUBMITTED_AWAITING_MODERATION,
+  //
+  // PUBLISHED,
+  //
+  // MODERATED_TEXT_ON_DEMAND,
+  //
+  // MODERATED_TEXT_NEVER_AVAILABLE,
+  //
+  // DELETED_BY_USER,
+  //
+  // DELETED_BY_ADMIN,
+  //
+  // WIDGET_SCOPED
+  //
+  publicationState: ?PublicationStates
 |};
 
 export type FictionExtractFragment = {|
@@ -6680,8 +6580,8 @@ export type FictionExtractFragment = {|
       |}
     |}
   |},
-  // A comment post related to an extract.
-  comment: ?{|
+  // A list of comment post related to an extract.
+  comments: ?Array<?{|
     // The ID of the object.
     id: string,
     // A Body of the post (the main content of the post). in a given language.
@@ -6734,8 +6634,30 @@ export type FictionExtractFragment = {|
         //
         avChecked: ?string
       |}
-    |}>
-  |}
+    |}>,
+    // The parent of a Post, if the Post is a reply to an existing Post. The Relay.Node ID type of the Post object.
+    parentId: ?string,
+    // A graphene Field containing the state of the publication of a certain post. The options are:
+    // DRAFT,
+    //
+    // SUBMITTED_IN_EDIT_GRACE_PERIOD,
+    //
+    // SUBMITTED_AWAITING_MODERATION,
+    //
+    // PUBLISHED,
+    //
+    // MODERATED_TEXT_ON_DEMAND,
+    //
+    // MODERATED_TEXT_NEVER_AVAILABLE,
+    //
+    // DELETED_BY_USER,
+    //
+    // DELETED_BY_ADMIN,
+    //
+    // WIDGET_SCOPED
+    //
+    publicationState: ?PublicationStates
+  |}>
 |};
 
 export type IdeaContentLinkFragment = {|

@@ -15,12 +15,12 @@ import Permissions, { connectedUserCan } from '../../../../utils/permissions';
 
 export type Props = {
   contentLocale: string,
-  extractIndex: ?number,
-  extracts: ?Array<FictionExtractFragment>,
-  comment: ExtractComment,
-  changeCurrentExtract: (?number) => void,
-  setEditMode: ?(number, string) => void,
-  deletePost: ?(ExtractComment, number) => void
+  extractIndex?: number,
+  extracts?: Array<FictionExtractFragment>,
+  comment: ExtractCommentFragment,
+  changeCurrentExtract?: (?number) => void,
+  setEditMode?: (string, string) => void,
+  deletePost: (ExtractCommentFragment, string) => void
 };
 
 export type State = {
@@ -47,12 +47,15 @@ class InnerBoxView extends React.Component<Props, State> {
     const canDelete =
       (isConnectedUser(creator && creator.userId) && connectedUserCan(Permissions.DELETE_MY_POST)) ||
       connectedUserCan(Permissions.DELETE_POST);
+    const currentExtractId = extracts && extractIndex ? extracts[extractIndex].id : '';
+    const canGoPrevious = extracts && extractIndex != null && extractIndex > 0;
+    const canGoNext = extracts && extractIndex != null && extractIndex < extracts.length - 1;
 
     return (
       <Fragment>
         <div className="harvesting-box-header">
           <div className="profile">
-            <AvatarImage userId={comment.creator.userId} userName={displayName} />
+            <AvatarImage userId={creator && creator.userId} userName={displayName} />
             <div className="harvesting-infos">
               <div className="username">{displayName}</div>
               <div className="harvesting-date" title={comment.creationDate}>
@@ -78,17 +81,14 @@ class InnerBoxView extends React.Component<Props, State> {
                     <div>
                       {canEdit ? (
                         <OverlayTrigger placement="top" overlay={editSideCommentTooltip}>
-                          <Button onClick={() => setEditMode(comment.id, comment.body)} className="edit-btn">
+                          <Button onClick={() => setEditMode && setEditMode(comment.id, comment.body || '')} className="edit-btn">
                             <span className="assembl-icon-edit grey" />
                           </Button>
                         </OverlayTrigger>
                       ) : null}
                       {canDelete ? (
                         <OverlayTrigger placement="top" overlay={deleteSideCommentTooltip}>
-                          <Button
-                            onClick={() => deletePost(comment, extracts && extracts[extractIndex].id)}
-                            className="delete-btn"
-                          >
+                          <Button onClick={() => deletePost(comment, currentExtractId)} className="delete-btn">
                             <span className="assembl-icon-delete grey" />
                           </Button>
                         </OverlayTrigger>
@@ -103,8 +103,8 @@ class InnerBoxView extends React.Component<Props, State> {
         <div className="harvesting-box-body">
           <div className="body-container">
             <div className="previous-extract">
-              {extracts &&
-                extractIndex > 0 && (
+              {canGoPrevious &&
+                changeCurrentExtract && (
                   <div
                     onClick={() => {
                       changeCurrentExtract(-1);
@@ -114,10 +114,10 @@ class InnerBoxView extends React.Component<Props, State> {
                   </div>
                 )}
             </div>
-            <div className="extract-body">{renderRichtext(comment.body)}</div>
+            <div className="extract-body">{renderRichtext(comment.body || '')}</div>
             <div className="next-extract">
-              {extracts &&
-                extractIndex < extracts.length - 1 && (
+              {canGoNext &&
+                changeCurrentExtract && (
                   <div
                     onClick={() => {
                       changeCurrentExtract(1);

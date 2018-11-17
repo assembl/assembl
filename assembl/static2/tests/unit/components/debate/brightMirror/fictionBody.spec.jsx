@@ -32,7 +32,8 @@ const defaultFictionBody: FictionBodyProps = {
   isAuthorAccountDeleted: defaultIsAuthorAccountDeleted,
   dbId: defaultDbId,
   bodyMimeType: bodyMimeType,
-  refetchPost: refetchPost
+  refetchPost: refetchPost,
+  userCanReply: false
 };
 
 describe('<FictionBody /> - with shallow', () => {
@@ -100,7 +101,8 @@ describe('<FictionBody /> - snapshots', () => {
       dbId: defaultDbId,
       bodyMimeType: bodyMimeType,
       refetchPost: refetchPost,
-      ideaId: defaultIdeaId
+      ideaId: defaultIdeaId,
+      userCanReply: false
     };
     const component = renderer.create(<FictionBody {...props} />);
     const tree = component.toJSON();

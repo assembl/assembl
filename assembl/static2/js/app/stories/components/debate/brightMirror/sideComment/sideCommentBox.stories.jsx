@@ -166,7 +166,6 @@ const extractWithReply = {
       creator: commentor,
       body: richBody,
       attachments: [],
-      reply: {},
       publicationState: PublicationStates.PUBLISHED
     },
     {
@@ -196,6 +195,11 @@ export const defaultSideCommentBoxProps: SideCommentBoxProps = {
   createPost: action('createPost'),
   refetchPost: action('refetchPost'),
   toggleExtractsBox: action('toggleExtractsBox'),
+  deleteExtract: action('deleteExtract'),
+  deletePost: action('deletePost'),
+  uploadDocument: action('uploadDocument'),
+  updatePost: action('updatePost'),
+  toggleCommentsBox: action('toggleCommentsBox'),
   position: { x: 0, y: 0 },
   setPositionToExtract: action('setPositionToExtract'),
   clearHighlights: action('clearHighlights'),

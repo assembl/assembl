@@ -17,48 +17,39 @@ export type Props = {
   cancelSubmit: () => void
 };
 
-class InnerBoxSubmit extends React.Component<Props, State> {
-  render() {
-    const { userId, userName, body, updateBody, submit, cancelSubmit } = this.props;
-    // actions props
-    const buttons = [
-      { id: 'cancel', title: 'debate.confirmDeletionButtonCancel', className: 'button-cancel', onClick: cancelSubmit },
-      { id: 'validate', title: 'harvesting.submit', className: 'button-submit', onClick: submit }
-    ];
-    return (
-      <div>
-        <div className="harvesting-box-header">
-          <div className="profile">
-            <AvatarImage userId={userId} userName={userName} />
-            <div className="harvesting-infos">
-              <div className="username">{userName}</div>
-              <div className="harvesting-date">
-                <Translate value="harvesting.now" />
-              </div>
-            </div>
+const InnerBoxSubmit = ({ userId, userName, body, updateBody, submit, cancelSubmit }: Props) => (
+  <div>
+    <div className="harvesting-box-header">
+      <div className="profile">
+        <AvatarImage userId={userId} userName={userName} />
+        <div className="harvesting-infos">
+          <div className="username">{userName}</div>
+          <div className="harvesting-date">
+            <Translate value="harvesting.now" />
           </div>
-        </div>
-        <div className="harvesting-box-body">
-          <div className="submit-comment">
-            <RichTextEditor
-              editorState={body}
-              maxLength={FICTION_COMMENT_MAX_LENGTH}
-              onChange={updateBody}
-              placeholder={I18n.t('debate.brightMirror.sideComment.commentLabel')}
-              withAttachmentButton
-            />
-          </div>
-        </div>
-        <div className="harvesting-box-footer">
-          {buttons.map(button => (
-            <Button key={button.id} className={`${button.className} button-dark`} onClick={button.onClick}>
-              {I18n.t(button.title)}
-            </Button>
-          ))}
         </div>
       </div>
-    );
-  }
-}
+    </div>
+    <div className="harvesting-box-body">
+      <div className="submit-comment">
+        <RichTextEditor
+          editorState={body}
+          maxLength={FICTION_COMMENT_MAX_LENGTH}
+          onChange={updateBody}
+          placeholder={I18n.t('debate.brightMirror.sideComment.commentLabel')}
+          withAttachmentButton
+        />
+      </div>
+    </div>
+    <div className="harvesting-box-footer">
+      <Button key="cancel" className={'button-cancel button-dark'} onClick={cancelSubmit}>
+        {I18n.t('debate.confirmDeletionButtonCancel')}
+      </Button>
+      <Button key="validate" className="button-submit button-dark" onClick={submit}>
+        {I18n.t('harvesting.submit')}
+      </Button>
+    </div>
+  </div>
+);
 
 export default InnerBoxSubmit;
