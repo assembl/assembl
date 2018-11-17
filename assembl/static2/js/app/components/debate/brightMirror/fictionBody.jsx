@@ -66,23 +66,34 @@ class FictionBody extends React.Component<Props, State> {
   };
 
   setPositionToExtract = (extract: ?FictionExtractFragment) => {
+    const { dbId } = this.props;
     const extractElement = extract && document.getElementById(extract.id);
+    let nextPositionY;
+    let scrollPosition;
     if (extractElement && this.fictionBodyView) {
       // Scroll extract in middle of page
       const elementRect = extractElement.getBoundingClientRect();
       const absoluteElementTop = elementRect.top + window.pageYOffset;
-      const middle = absoluteElementTop - window.innerHeight / 2;
-      window.scrollTo(0, middle);
+      scrollPosition = absoluteElementTop - window.innerHeight / 2;
+      window.scrollTo(0, scrollPosition);
       // $FlowFixMe this.fictionBodyView may be null
-      const nexPositionY = extractElement.getBoundingClientRect().top - this.fictionBodyView.current.getBoundingClientRect().top;
-      this.setState({
-        commentBadgeDynamicPosition: {
-          // $FlowFixMe this.fictionBodyView may be null
-          x: this.fictionBodyView.current.offsetLeft + this.fictionBodyView.current.clientWidth,
-          y: nexPositionY - COMMENT_DYNAMIC_OFFSET
-        }
-      });
+      nextPositionY = extractElement.getBoundingClientRect().top - this.fictionBodyView.current.getBoundingClientRect().top;
+    } else {
+      // Extract not found, maybe has been deleted or rewritten
+      // Set box on first line of body
+      // $FlowFixMe this.fictionBodyView may be null
+      const body = document.getElementById(getExtractTagId(dbId)).getBoundingClientRect();
+      // $FlowFixMe this.fictionBodyView may be null
+      nextPositionY = body.top - this.fictionBodyView.current.getBoundingClientRect().top;
+      window.scrollTo(0, window.innerHeight / 2);
     }
+    this.setState({
+      commentBadgeDynamicPosition: {
+        // $FlowFixMe this.fictionBodyView may be null
+        x: this.fictionBodyView.current.offsetLeft + this.fictionBodyView.current.clientWidth,
+        y: nextPositionY - COMMENT_DYNAMIC_OFFSET
+      }
+    });
   };
 
   getAnchorPosition = () => {
