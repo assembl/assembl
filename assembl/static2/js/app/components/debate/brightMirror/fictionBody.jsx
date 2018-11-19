@@ -68,29 +68,30 @@ class FictionBody extends React.Component<Props, State> {
   setPositionToExtract = (extract: ?FictionExtractFragment) => {
     const { dbId } = this.props;
     const extractElement = extract && document.getElementById(extract.id);
+    const fictionBodyRefCur = this.fictionBodyView.current;
+    if (!fictionBodyRefCur) return;
     let nextPositionY;
     let scrollPosition;
-    if (extractElement && this.fictionBodyView) {
+    if (extractElement) {
       // Scroll extract in middle of page
       const elementRect = extractElement.getBoundingClientRect();
       const absoluteElementTop = elementRect.top + window.pageYOffset;
       scrollPosition = absoluteElementTop - window.innerHeight / 2;
       window.scrollTo(0, scrollPosition);
-      // $FlowFixMe this.fictionBodyView may be null
-      nextPositionY = extractElement.getBoundingClientRect().top - this.fictionBodyView.current.getBoundingClientRect().top;
+      nextPositionY = extractElement.getBoundingClientRect().top - fictionBodyRefCur.getBoundingClientRect().top;
     } else {
       // Extract not found, maybe has been deleted or rewritten
       // Set box on first line of body
-      // $FlowFixMe this.fictionBodyView may be null
-      const body = document.getElementById(getExtractTagId(dbId)).getBoundingClientRect();
-      // $FlowFixMe this.fictionBodyView may be null
-      nextPositionY = body.top - this.fictionBodyView.current.getBoundingClientRect().top;
+      const bodyElement = document.getElementById(getExtractTagId(dbId));
+      nextPositionY =
+        bodyElement && fictionBodyRefCur
+          ? bodyElement.getBoundingClientRect().top - fictionBodyRefCur.getBoundingClientRect().top
+          : 0;
       window.scrollTo(0, window.innerHeight / 2);
     }
     this.setState({
       commentBadgeDynamicPosition: {
-        // $FlowFixMe this.fictionBodyView may be null
-        x: this.fictionBodyView.current.offsetLeft + this.fictionBodyView.current.clientWidth,
+        x: fictionBodyRefCur.offsetLeft + fictionBodyRefCur.clientWidth,
         y: nextPositionY - COMMENT_DYNAMIC_OFFSET
       }
     });
