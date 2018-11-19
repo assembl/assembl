@@ -1,0 +1,731 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MultilingualRichTextFieldAdapter component should render a required rich text field 1`] = `
+<form
+  onSubmit={[Function]}
+>
+  <div
+    className="form-group"
+  >
+    <AssemblEditor
+      editorState={
+        EditorState {
+          "_immutable": Immutable.Record {
+            "allowUndo": true,
+            "currentContent": Immutable.Record {
+              "entityMap": Object {
+                "__add": [Function],
+                "__create": [Function],
+                "__get": [Function],
+                "__getLastCreatedEntityKey": [Function],
+                "__mergeData": [Function],
+                "__replaceData": [Function],
+                "add": [Function],
+                "create": [Function],
+                "get": [Function],
+                "getLastCreatedEntityKey": [Function],
+                "mergeData": [Function],
+                "replaceData": [Function],
+              },
+              "blockMap": Immutable.OrderedMap {
+                "123": Immutable.Record {
+                  "key": "123",
+                  "type": "unstyled",
+                  "text": "Bonjour",
+                  "characterList": Immutable.List [
+                    Immutable.Record {
+                      "style": Immutable.OrderedSet [],
+                      "entity": null,
+                    },
+                    Immutable.Record {
+                      "style": Immutable.OrderedSet [],
+                      "entity": null,
+                    },
+                    Immutable.Record {
+                      "style": Immutable.OrderedSet [],
+                      "entity": null,
+                    },
+                    Immutable.Record {
+                      "style": Immutable.OrderedSet [],
+                      "entity": null,
+                    },
+                    Immutable.Record {
+                      "style": Immutable.OrderedSet [],
+                      "entity": null,
+                    },
+                    Immutable.Record {
+                      "style": Immutable.OrderedSet [],
+                      "entity": null,
+                    },
+                    Immutable.Record {
+                      "style": Immutable.OrderedSet [],
+                      "entity": null,
+                    },
+                  ],
+                  "depth": 0,
+                  "data": Immutable.Map {},
+                },
+              },
+              "selectionBefore": Immutable.Record {
+                "anchorKey": "123",
+                "anchorOffset": 0,
+                "focusKey": "123",
+                "focusOffset": 0,
+                "isBackward": false,
+                "hasFocus": false,
+              },
+              "selectionAfter": Immutable.Record {
+                "anchorKey": "123",
+                "anchorOffset": 0,
+                "focusKey": "123",
+                "focusOffset": 0,
+                "isBackward": false,
+                "hasFocus": false,
+              },
+            },
+            "decorator": null,
+            "directionMap": Immutable.OrderedMap {
+              "123": "LTR",
+            },
+            "forceSelection": false,
+            "inCompositionMode": false,
+            "inlineStyleOverride": null,
+            "lastChangeType": null,
+            "nativelyRenderedContent": null,
+            "redoStack": Immutable.Stack [],
+            "selection": Immutable.Record {
+              "anchorKey": "123",
+              "anchorOffset": 0,
+              "focusKey": "123",
+              "focusOffset": 0,
+              "isBackward": false,
+              "hasFocus": false,
+            },
+            "treeMap": Immutable.OrderedMap {
+              "123": Immutable.List [
+                Immutable.Record {
+                  "start": 0,
+                  "end": 7,
+                  "decoratorKey": null,
+                  "leaves": Immutable.List [
+                    Immutable.Record {
+                      "start": 0,
+                      "end": 7,
+                    },
+                  ],
+                },
+              ],
+            },
+            "undoStack": Immutable.Stack [],
+          },
+        }
+      }
+      onChange={[Function]}
+      onFocus={[MockFunction]}
+      placeholder="Text"
+      required={true}
+      toolbarPosition="bottom"
+      withAttachmentButton={false}
+    />
+  </div>
+  <button
+    disabled={true}
+    type="submit"
+  >
+    Submit
+  </button>
+</form>
+`;
+
+exports[`MultilingualRichTextFieldAdapter component should render a rich text field 1`] = `
+<form
+  onSubmit={[Function]}
+>
+  <div
+    className="form-group"
+  >
+    <AssemblEditor
+      editorState={
+        EditorState {
+          "_immutable": Immutable.Record {
+            "allowUndo": true,
+            "currentContent": Immutable.Record {
+              "entityMap": Object {
+                "__add": [Function],
+                "__create": [Function],
+                "__get": [Function],
+                "__getLastCreatedEntityKey": [Function],
+                "__mergeData": [Function],
+                "__replaceData": [Function],
+                "add": [Function],
+                "create": [Function],
+                "get": [Function],
+                "getLastCreatedEntityKey": [Function],
+                "mergeData": [Function],
+                "replaceData": [Function],
+              },
+              "blockMap": Immutable.OrderedMap {
+                "123": Immutable.Record {
+                  "key": "123",
+                  "type": "unstyled",
+                  "text": "Bonjour",
+                  "characterList": Immutable.List [
+                    Immutable.Record {
+                      "style": Immutable.OrderedSet [],
+                      "entity": null,
+                    },
+                    Immutable.Record {
+                      "style": Immutable.OrderedSet [],
+                      "entity": null,
+                    },
+                    Immutable.Record {
+                      "style": Immutable.OrderedSet [],
+                      "entity": null,
+                    },
+                    Immutable.Record {
+                      "style": Immutable.OrderedSet [],
+                      "entity": null,
+                    },
+                    Immutable.Record {
+                      "style": Immutable.OrderedSet [],
+                      "entity": null,
+                    },
+                    Immutable.Record {
+                      "style": Immutable.OrderedSet [],
+                      "entity": null,
+                    },
+                    Immutable.Record {
+                      "style": Immutable.OrderedSet [],
+                      "entity": null,
+                    },
+                  ],
+                  "depth": 0,
+                  "data": Immutable.Map {},
+                },
+              },
+              "selectionBefore": Immutable.Record {
+                "anchorKey": "123",
+                "anchorOffset": 0,
+                "focusKey": "123",
+                "focusOffset": 0,
+                "isBackward": false,
+                "hasFocus": false,
+              },
+              "selectionAfter": Immutable.Record {
+                "anchorKey": "123",
+                "anchorOffset": 0,
+                "focusKey": "123",
+                "focusOffset": 0,
+                "isBackward": false,
+                "hasFocus": false,
+              },
+            },
+            "decorator": null,
+            "directionMap": Immutable.OrderedMap {
+              "123": "LTR",
+            },
+            "forceSelection": false,
+            "inCompositionMode": false,
+            "inlineStyleOverride": null,
+            "lastChangeType": null,
+            "nativelyRenderedContent": null,
+            "redoStack": Immutable.Stack [],
+            "selection": Immutable.Record {
+              "anchorKey": "123",
+              "anchorOffset": 0,
+              "focusKey": "123",
+              "focusOffset": 0,
+              "isBackward": false,
+              "hasFocus": false,
+            },
+            "treeMap": Immutable.OrderedMap {
+              "123": Immutable.List [
+                Immutable.Record {
+                  "start": 0,
+                  "end": 7,
+                  "decoratorKey": null,
+                  "leaves": Immutable.List [
+                    Immutable.Record {
+                      "start": 0,
+                      "end": 7,
+                    },
+                  ],
+                },
+              ],
+            },
+            "undoStack": Immutable.Stack [],
+          },
+        }
+      }
+      onChange={[Function]}
+      onFocus={[MockFunction]}
+      placeholder="Text"
+      toolbarPosition="bottom"
+      withAttachmentButton={false}
+    />
+  </div>
+  <button
+    disabled={true}
+    type="submit"
+  >
+    Submit
+  </button>
+</form>
+`;
+
+exports[`MultilingualRichTextFieldAdapter component should render a rich text field touched with error 1`] = `
+<form
+  onSubmit={[Function]}
+>
+  <div
+    className="form-group has-error"
+  >
+    <AssemblEditor
+      editorState={
+        EditorState {
+          "_immutable": Immutable.Record {
+            "allowUndo": true,
+            "currentContent": Immutable.Record {
+              "entityMap": Object {
+                "__add": [Function],
+                "__create": [Function],
+                "__get": [Function],
+                "__getLastCreatedEntityKey": [Function],
+                "__mergeData": [Function],
+                "__replaceData": [Function],
+                "add": [Function],
+                "create": [Function],
+                "get": [Function],
+                "getLastCreatedEntityKey": [Function],
+                "mergeData": [Function],
+                "replaceData": [Function],
+              },
+              "blockMap": Immutable.OrderedMap {
+                "123": Immutable.Record {
+                  "key": "123",
+                  "type": "unstyled",
+                  "text": "",
+                  "characterList": Immutable.List [],
+                  "depth": 0,
+                  "data": Immutable.Map {},
+                },
+              },
+              "selectionBefore": Immutable.Record {
+                "anchorKey": "123",
+                "anchorOffset": 0,
+                "focusKey": "123",
+                "focusOffset": 0,
+                "isBackward": false,
+                "hasFocus": false,
+              },
+              "selectionAfter": Immutable.Record {
+                "anchorKey": "123",
+                "anchorOffset": 0,
+                "focusKey": "123",
+                "focusOffset": 0,
+                "isBackward": false,
+                "hasFocus": false,
+              },
+            },
+            "decorator": null,
+            "directionMap": Immutable.OrderedMap {
+              "123": "LTR",
+            },
+            "forceSelection": false,
+            "inCompositionMode": false,
+            "inlineStyleOverride": null,
+            "lastChangeType": null,
+            "nativelyRenderedContent": null,
+            "redoStack": Immutable.Stack [],
+            "selection": Immutable.Record {
+              "anchorKey": "123",
+              "anchorOffset": 0,
+              "focusKey": "123",
+              "focusOffset": 0,
+              "isBackward": false,
+              "hasFocus": false,
+            },
+            "treeMap": Immutable.OrderedMap {
+              "123": Immutable.List [
+                Immutable.Record {
+                  "start": 0,
+                  "end": 0,
+                  "decoratorKey": null,
+                  "leaves": Immutable.List [
+                    Immutable.Record {
+                      "start": 0,
+                      "end": 0,
+                    },
+                  ],
+                },
+              ],
+            },
+            "undoStack": Immutable.Stack [],
+          },
+        }
+      }
+      onChange={[Function]}
+      onFocus={[MockFunction]}
+      placeholder="Text"
+      toolbarPosition="bottom"
+      withAttachmentButton={false}
+    />
+  </div>
+  <button
+    disabled={true}
+    type="submit"
+  >
+    Submit
+  </button>
+</form>
+`;
+
+exports[`MultilingualRichTextFieldAdapter component should render a rich text field untouched with error 1`] = `
+<form
+  onSubmit={[Function]}
+>
+  <div
+    className="form-group"
+  >
+    <AssemblEditor
+      editorState={
+        EditorState {
+          "_immutable": Immutable.Record {
+            "allowUndo": true,
+            "currentContent": Immutable.Record {
+              "entityMap": Object {
+                "__add": [Function],
+                "__create": [Function],
+                "__get": [Function],
+                "__getLastCreatedEntityKey": [Function],
+                "__mergeData": [Function],
+                "__replaceData": [Function],
+                "add": [Function],
+                "create": [Function],
+                "get": [Function],
+                "getLastCreatedEntityKey": [Function],
+                "mergeData": [Function],
+                "replaceData": [Function],
+              },
+              "blockMap": Immutable.OrderedMap {
+                "123": Immutable.Record {
+                  "key": "123",
+                  "type": "unstyled",
+                  "text": "",
+                  "characterList": Immutable.List [],
+                  "depth": 0,
+                  "data": Immutable.Map {},
+                },
+              },
+              "selectionBefore": Immutable.Record {
+                "anchorKey": "123",
+                "anchorOffset": 0,
+                "focusKey": "123",
+                "focusOffset": 0,
+                "isBackward": false,
+                "hasFocus": false,
+              },
+              "selectionAfter": Immutable.Record {
+                "anchorKey": "123",
+                "anchorOffset": 0,
+                "focusKey": "123",
+                "focusOffset": 0,
+                "isBackward": false,
+                "hasFocus": false,
+              },
+            },
+            "decorator": null,
+            "directionMap": Immutable.OrderedMap {
+              "123": "LTR",
+            },
+            "forceSelection": false,
+            "inCompositionMode": false,
+            "inlineStyleOverride": null,
+            "lastChangeType": null,
+            "nativelyRenderedContent": null,
+            "redoStack": Immutable.Stack [],
+            "selection": Immutable.Record {
+              "anchorKey": "123",
+              "anchorOffset": 0,
+              "focusKey": "123",
+              "focusOffset": 0,
+              "isBackward": false,
+              "hasFocus": false,
+            },
+            "treeMap": Immutable.OrderedMap {
+              "123": Immutable.List [
+                Immutable.Record {
+                  "start": 0,
+                  "end": 0,
+                  "decoratorKey": null,
+                  "leaves": Immutable.List [
+                    Immutable.Record {
+                      "start": 0,
+                      "end": 0,
+                    },
+                  ],
+                },
+              ],
+            },
+            "undoStack": Immutable.Stack [],
+          },
+        }
+      }
+      onChange={[Function]}
+      onFocus={[MockFunction]}
+      placeholder="Text"
+      toolbarPosition="bottom"
+      withAttachmentButton={false}
+    />
+  </div>
+  <button
+    disabled={true}
+    type="submit"
+  >
+    Submit
+  </button>
+</form>
+`;
+
+exports[`MultilingualRichTextFieldAdapter component should render a rich text field with attachment button 1`] = `
+<form
+  onSubmit={[Function]}
+>
+  <div
+    className="form-group"
+  >
+    <AssemblEditor
+      editorState={
+        EditorState {
+          "_immutable": Immutable.Record {
+            "allowUndo": true,
+            "currentContent": Immutable.Record {
+              "entityMap": Object {
+                "__add": [Function],
+                "__create": [Function],
+                "__get": [Function],
+                "__getLastCreatedEntityKey": [Function],
+                "__mergeData": [Function],
+                "__replaceData": [Function],
+                "add": [Function],
+                "create": [Function],
+                "get": [Function],
+                "getLastCreatedEntityKey": [Function],
+                "mergeData": [Function],
+                "replaceData": [Function],
+              },
+              "blockMap": Immutable.OrderedMap {
+                "123": Immutable.Record {
+                  "key": "123",
+                  "type": "unstyled",
+                  "text": "Bonjour",
+                  "characterList": Immutable.List [
+                    Immutable.Record {
+                      "style": Immutable.OrderedSet [],
+                      "entity": null,
+                    },
+                    Immutable.Record {
+                      "style": Immutable.OrderedSet [],
+                      "entity": null,
+                    },
+                    Immutable.Record {
+                      "style": Immutable.OrderedSet [],
+                      "entity": null,
+                    },
+                    Immutable.Record {
+                      "style": Immutable.OrderedSet [],
+                      "entity": null,
+                    },
+                    Immutable.Record {
+                      "style": Immutable.OrderedSet [],
+                      "entity": null,
+                    },
+                    Immutable.Record {
+                      "style": Immutable.OrderedSet [],
+                      "entity": null,
+                    },
+                    Immutable.Record {
+                      "style": Immutable.OrderedSet [],
+                      "entity": null,
+                    },
+                  ],
+                  "depth": 0,
+                  "data": Immutable.Map {},
+                },
+              },
+              "selectionBefore": Immutable.Record {
+                "anchorKey": "123",
+                "anchorOffset": 0,
+                "focusKey": "123",
+                "focusOffset": 0,
+                "isBackward": false,
+                "hasFocus": false,
+              },
+              "selectionAfter": Immutable.Record {
+                "anchorKey": "123",
+                "anchorOffset": 0,
+                "focusKey": "123",
+                "focusOffset": 0,
+                "isBackward": false,
+                "hasFocus": false,
+              },
+            },
+            "decorator": null,
+            "directionMap": Immutable.OrderedMap {
+              "123": "LTR",
+            },
+            "forceSelection": false,
+            "inCompositionMode": false,
+            "inlineStyleOverride": null,
+            "lastChangeType": null,
+            "nativelyRenderedContent": null,
+            "redoStack": Immutable.Stack [],
+            "selection": Immutable.Record {
+              "anchorKey": "123",
+              "anchorOffset": 0,
+              "focusKey": "123",
+              "focusOffset": 0,
+              "isBackward": false,
+              "hasFocus": false,
+            },
+            "treeMap": Immutable.OrderedMap {
+              "123": Immutable.List [
+                Immutable.Record {
+                  "start": 0,
+                  "end": 7,
+                  "decoratorKey": null,
+                  "leaves": Immutable.List [
+                    Immutable.Record {
+                      "start": 0,
+                      "end": 7,
+                    },
+                  ],
+                },
+              ],
+            },
+            "undoStack": Immutable.Stack [],
+          },
+        }
+      }
+      onChange={[Function]}
+      onFocus={[MockFunction]}
+      placeholder="Text"
+      toolbarPosition="bottom"
+      withAttachmentButton={true}
+    />
+  </div>
+  <button
+    disabled={true}
+    type="submit"
+  >
+    Submit
+  </button>
+</form>
+`;
+
+exports[`MultilingualRichTextFieldAdapter component should render a rich text field without value 1`] = `
+<form
+  onSubmit={[Function]}
+>
+  <div
+    className="form-group"
+  >
+    <AssemblEditor
+      editorState={
+        EditorState {
+          "_immutable": Immutable.Record {
+            "allowUndo": true,
+            "currentContent": Immutable.Record {
+              "entityMap": Object {
+                "__add": [Function],
+                "__create": [Function],
+                "__get": [Function],
+                "__getLastCreatedEntityKey": [Function],
+                "__mergeData": [Function],
+                "__replaceData": [Function],
+                "add": [Function],
+                "create": [Function],
+                "get": [Function],
+                "getLastCreatedEntityKey": [Function],
+                "mergeData": [Function],
+                "replaceData": [Function],
+              },
+              "blockMap": Immutable.OrderedMap {
+                "123": Immutable.Record {
+                  "key": "123",
+                  "type": "unstyled",
+                  "text": "",
+                  "characterList": Immutable.List [],
+                  "depth": 0,
+                  "data": Immutable.Map {},
+                },
+              },
+              "selectionBefore": Immutable.Record {
+                "anchorKey": "123",
+                "anchorOffset": 0,
+                "focusKey": "123",
+                "focusOffset": 0,
+                "isBackward": false,
+                "hasFocus": false,
+              },
+              "selectionAfter": Immutable.Record {
+                "anchorKey": "123",
+                "anchorOffset": 0,
+                "focusKey": "123",
+                "focusOffset": 0,
+                "isBackward": false,
+                "hasFocus": false,
+              },
+            },
+            "decorator": null,
+            "directionMap": Immutable.OrderedMap {
+              "123": "LTR",
+            },
+            "forceSelection": false,
+            "inCompositionMode": false,
+            "inlineStyleOverride": null,
+            "lastChangeType": null,
+            "nativelyRenderedContent": null,
+            "redoStack": Immutable.Stack [],
+            "selection": Immutable.Record {
+              "anchorKey": "123",
+              "anchorOffset": 0,
+              "focusKey": "123",
+              "focusOffset": 0,
+              "isBackward": false,
+              "hasFocus": false,
+            },
+            "treeMap": Immutable.OrderedMap {
+              "123": Immutable.List [
+                Immutable.Record {
+                  "start": 0,
+                  "end": 0,
+                  "decoratorKey": null,
+                  "leaves": Immutable.List [
+                    Immutable.Record {
+                      "start": 0,
+                      "end": 0,
+                    },
+                  ],
+                },
+              ],
+            },
+            "undoStack": Immutable.Stack [],
+          },
+        }
+      }
+      onChange={[Function]}
+      onFocus={[MockFunction]}
+      placeholder="Text"
+      toolbarPosition="bottom"
+      withAttachmentButton={false}
+    />
+  </div>
+  <button
+    disabled={true}
+    type="submit"
+  >
+    Submit
+  </button>
+</form>
+`;
