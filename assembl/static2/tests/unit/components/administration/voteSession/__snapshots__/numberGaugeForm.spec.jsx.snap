@@ -30,7 +30,7 @@ exports[`DumbNumberGaugeForm component should render a form to set up a numeral 
       helperUrl=""
       label="Unit"
       labelAlwaysVisible={false}
-      onChange={[MockFunction]}
+      onChange={[Function]}
       required={true}
       type="text"
       value="kms"
