@@ -1,11 +1,16 @@
+// @flow
 import React from 'react';
 
-const BlackFlag = () => (
+type Props = {
+  color: string
+};
+
+const Flag = ({ color }: Props) => (
   <svg width="20px" height="20px" viewBox="0 0 20 20">
-    <g id="flag-jaune-copy" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
-      <g id="flag-bleu-copy" transform="translate(4.000000, 3.000000)">
+    <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
+      <g transform="translate(4.000000, 3.000000)">
         <g id="Capa_1">
-          <polygon id="Shape" fill="#000000" points="12 9 0.5 9 0.5 1 12 1 9.5 5" />
+          <polygon id="Shape" fill={color} points="12 9 0.5 9 0.5 1 12 1 9.5 5" />
           <path
             d="M0.25,
             0 C0.112,
@@ -36,4 +41,4 @@ const BlackFlag = () => (
   </svg>
 );
 
-export default BlackFlag;
+export default Flag;

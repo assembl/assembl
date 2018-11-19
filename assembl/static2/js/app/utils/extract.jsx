@@ -1,4 +1,7 @@
+// @flow
 import React from 'react';
+import get from 'lodash/get';
+
 import DesignFiction from '../components/svg/taxonomy/displayDesignFiction';
 import MultiColumn from '../components/svg/taxonomy/displayMultiColumn';
 import OpenQuestions from '../components/svg/taxonomy/displayOpenQuestions';
@@ -7,16 +10,10 @@ import Tokens from '../components/svg/taxonomy/displayTokens';
 import ToArgument from '../components/svg/taxonomy/toArgument';
 import MixMatch from '../components/svg/taxonomy/mixMatch';
 import Example from '../components/svg/taxonomy/example';
-import BlueFlag from '../components/svg/taxonomy/blueFlag';
-import YellowFlag from '../components/svg/taxonomy/yellowFlag';
-import OrangeFlag from '../components/svg/taxonomy/orangeFlag';
-import RedFlag from '../components/svg/taxonomy/redFlag';
-import GreenFlag from '../components/svg/taxonomy/greenFlag';
-import PurpleFlag from '../components/svg/taxonomy/purpleFlag';
 import Classify from '../components/svg/taxonomy/classify';
 import MoreSpecific from '../components/svg/taxonomy/moreSpecific';
 import MakeGeneric from '../components/svg/taxonomy/makeGeneric';
-import BlackFlag from '../components/svg/taxonomy/blackFlag';
+import Flag from '../components/svg/taxonomy/Flag';
 
 export const extractNatures = [
   {
@@ -96,7 +93,13 @@ export const extractActions = [
   }
 ];
 
-export const ActionIcons = ({ qualifier, backgroundColor, color }) => {
+type ActionIconsProps = {
+  qualifier: string,
+  backgroundColor: string,
+  color: string
+};
+
+export const ActionIcons = ({ qualifier, backgroundColor, color }: ActionIconsProps) => {
   switch (qualifier) {
   case 'display_bright_mirror':
     return <DesignFiction backgroundColor={backgroundColor} color={color} />;
@@ -125,25 +128,31 @@ export const ActionIcons = ({ qualifier, backgroundColor, color }) => {
   }
 };
 
-export const NatureIcons = ({ qualifier }) => {
-  switch (qualifier) {
-  case 'concept':
-    return <BlueFlag />;
-  case 'argument':
-    return <YellowFlag />;
-  case 'example':
-    return <OrangeFlag />;
-  case 'issue':
-    return <RedFlag />;
-  case 'actionable_solution':
-    return <GreenFlag />;
-  case 'knowledge':
-    return <PurpleFlag />;
-  case 'cognitive_bias':
-    return <BlackFlag />;
-  default:
-    return <span>{qualifier}</span>;
-  }
+function getTaxonomyNatureColor(nature: string): string {
+  const mapping = {
+    concept: '#00B6FF',
+    argument: '#FFEC00',
+    example: '#FF9F00',
+    issue: '#FF001F',
+    actionable_solution: '#35C646',
+    knowledge: '#BD10E0',
+    cognitive_bias: '#000000'
+  };
+
+  return get(mapping, nature, null);
+}
+
+type NatureIconProps = {
+  qualifier: string
 };
 
-export const getExtractTagId = id => `message-body-local:Content/${id}`;
+export const NatureIcons = ({ qualifier }: NatureIconProps) => {
+  const color = getTaxonomyNatureColor(qualifier);
+  if (color) {
+    return <Flag color={color} />;
+  }
+
+  return <span>{qualifier}</span>;
+};
+
+export const getExtractTagId = (id: string) => `message-body-local:Content/${id}`;
