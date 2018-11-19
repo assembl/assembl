@@ -201,10 +201,10 @@ class LandingPageAdmin extends React.Component<Props, State> {
     return (
       <div className="landing-page-admin">
         <SaveButton disabled={saveDisabled} saveAction={this.saveAction} />
-        {section === '1' && <ManageModules {...this.props} />}
-        {section === '2' && <CustomizeHeader editLocale={editLocale} header={header} />}
-        {section === '3' && <ManageTimeline timelineModuleId={timelineModuleId} editLocale={editLocale} />}
-        {section && <Navbar currentStep={section} steps={['1', '2', '3']} phaseIdentifier="landingPage" />}
+        {section === '1' && <CustomizeHeader editLocale={editLocale} header={header} />}
+        {section === '2' && <ManageTimeline timelineModuleId={timelineModuleId} editLocale={editLocale} />}
+        {section === '3' && <ManageModules {...this.props} />}
+        {section && <Navbar currentStep={section} steps={['1', '2']} phaseIdentifier="landingPage" />}
       </div>
     );
   }
