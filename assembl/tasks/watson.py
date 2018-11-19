@@ -2,6 +2,8 @@
 
 .. _Celery: http://www.celeryproject.org/
 """
+import traceback
+
 from watson_developer_cloud import NaturalLanguageUnderstandingV1
 from watson_developer_cloud.natural_language_understanding_v1 import (
     Features, CategoriesOptions, KeywordsOptions,
@@ -14,10 +16,11 @@ from ..lib.model_watcher import BaseModelEventWatcher
 from ..lib.utils import waiting_get
 from ..lib import config
 from ..lib import logging
+from ..lib.sentry import capture_exception
 
 API_ENDPOINTS = {}
 api_version = config.get("watson_api_version", "2018-09-21")
-log = logging.getLogger('assembl')
+log = logging.getLogger()
 
 
 # From https://www.ibm.com/watson/developercloud/natural-language-understanding/api/v1/
@@ -73,17 +76,22 @@ def do_watson_computation(id):
         assert api_key
         endpoint = get_endpoint(api_key)
         for computation in post.computations:
-            if computation.status == "pending":
+            if computation.status != "pending":
+                log.debug('skipping computation %d in state %s' % (
+                    computation.id, computation.status))
+            else:
                 features = Features._from_dict(computation.parameters)
                 try:
                     lse = post.body.first_original()
                     lang = lse.locale.code
+                    log.debug('watson analyzing %d' % post.id)
                     result = endpoint.analyze(
                         html=lse.value,
                         language=lang if lang != Locale.UNDEFINED else None,
                         clean=False,
                         return_analyzed_text=True,
                         features=features)
+                    log.debug('watson analyzed %d' % post.id)
                     if lang == Locale.UNDEFINED:
                         lse.locale = Locale.get_or_create(result['language'])
                     computation.result = result
@@ -129,13 +137,15 @@ def do_watson_computation(id):
                             text_length=len(result['analyzed_text']),
                             **sentiments
                         ))
-                except Exception as e:
-                    computation.result = str(e)
+                except Exception:
+                    capture_exception()
+                    computation.result = traceback.format_exc()
                     computation.status = "failure"
                     computation.retries = (computation.retries or 0) + 1
 
 
 def get_or_create_computation_on_post(post, process_name, parameters):
+    """Create the computation on the post for the given parameters"""
     from ..models.computation import ComputationOnPost, ComputationProcess
     for computation in post.computations:
         if (computation.process.name == process_name and
@@ -150,6 +160,7 @@ def get_or_create_computation_on_post(post, process_name, parameters):
 
 
 def prepare_computation(id):
+    """Prepare computation parameters according to discussion preferences"""
     from assembl.models import Content
     post = Content.get(id)
     active = any([post.discussion.preferences['watson_' + x]
@@ -174,6 +185,7 @@ def prepare_computation(id):
 
 
 def process_post_watson(id, celery=False):
+    """Use this entry point to analyze a post from pshell"""
     if celery:
         with transaction.manager:
             do_it = prepare_computation(id)
@@ -185,7 +197,7 @@ def process_post_watson(id, celery=False):
 
 
 class ModelEventWatcherCelerySender(BaseModelEventWatcher):
-    """A IModelEventWatcher that will receive CRUD events and send postCreated through Celery_"""
+    """A IModelEventWatcher that call watson for every post through Celery_"""
 
     def processPostCreated(self, id):
         process_post_watson(id, True)
