@@ -87,8 +87,7 @@ class TextAndMedia extends React.Component<Props> {
     const { title, descriptionTop, descriptionBottom, descriptionSide, htmlCode, mediaFile, noTitle } = this.props;
     const validDescriptionSide = TextAndMedia.isValidDescription(descriptionSide);
     const validDescriptionTop = TextAndMedia.isValidDescription(descriptionTop);
-    const validDescriptionBottom = TextAndMedia.isValidDescription(descriptionBottom);
-
+    const validDescriptionBottom = descriptionBottom && TextAndMedia.isValidDescription(descriptionBottom);
     const validMedia = !!(htmlCode || mediaFile);
     const somethingOnRight = !!(validDescriptionTop || validDescriptionBottom || validMedia || validDescriptionSide);
     const somethingOnLeft = validDescriptionSide;
@@ -104,16 +103,17 @@ class TextAndMedia extends React.Component<Props> {
             <Grid fluid>
               {somethingOnLeft && (
                 <Col sm={totalSize} md={somethingOnRight ? leftSize : totalSize}>
-                  {validDescriptionSide && <TextAndMedia.SideDescription content={descriptionSide} />}
+                  {descriptionSide && validDescriptionSide && <TextAndMedia.SideDescription content={descriptionSide} />}
                 </Col>
               )}
               {somethingOnRight && (
                 <Col sm={totalSize} md={somethingOnLeft ? rightSize : totalSize}>
                   <div className="media-right">
-                    {validDescriptionTop && <TextAndMedia.TopDescription content={descriptionTop} />}
-                    {validMedia && <TextAndMedia.Content htmlCode={htmlCode} mediaFile={mediaFile} />}
-                    {validDescriptionSide && <TextAndMedia.SideDescription content={descriptionSide} />}
-                    {validDescriptionBottom && <TextAndMedia.BottomDescription content={descriptionBottom} />}
+                    {descriptionTop && validDescriptionTop && <TextAndMedia.TopDescription content={descriptionTop} />}
+                    {htmlCode && mediaFile && validMedia && <TextAndMedia.Content htmlCode={htmlCode} mediaFile={mediaFile} />}
+                    {descriptionSide && validDescriptionSide && <TextAndMedia.SideDescription content={descriptionSide} />}
+                    {descriptionBottom &&
+                      validDescriptionBottom && <TextAndMedia.BottomDescription content={descriptionBottom} />}
                   </div>
                 </Col>
               )}

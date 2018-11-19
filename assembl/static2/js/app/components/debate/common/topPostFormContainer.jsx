@@ -30,7 +30,7 @@ type TopPostFormContainerState = {
 };
 
 class TopPostFormContainer extends React.Component<TopPostFormContainerProps, TopPostFormContainerState> {
-  topPostFormContainer: () => void;
+  topPostFormContainer: ?HTMLDivElement;
 
   static defaultProps = {
     instructionLabelMsgId: 'debate.thread.startDiscussion',
@@ -51,7 +51,9 @@ class TopPostFormContainer extends React.Component<TopPostFormContainerProps, To
   }
 
   componentWillReceiveProps() {
-    this.setState({ topPostFormOffset: this.topPostFormContainer.offsetTop });
+    if (this.topPostFormContainer) {
+      this.setState({ topPostFormOffset: this.topPostFormContainer.offsetTop });
+    }
   }
 
   componentWillUnmount() {
@@ -73,7 +75,7 @@ class TopPostFormContainer extends React.Component<TopPostFormContainerProps, To
     return classNames({ 'columns-view': messageColumns.length > 1 }, { 'columns-view-inline': isColumnViewInline });
   }
 
-  setFormContainerRef = (el: Object) => {
+  setFormContainerRef = (el: ?HTMLDivElement) => {
     this.topPostFormContainer = el;
   };
 
