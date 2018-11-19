@@ -9,12 +9,12 @@ type File = {
   externalUrl: string
 };
 type Props = {
-  title: string,
-  descriptionTop: string,
-  descriptionBottom: string,
-  descriptionSide: string,
-  htmlCode: string,
-  mediaFile: File,
+  title?: string,
+  descriptionTop: ?string,
+  descriptionBottom: ?string,
+  descriptionSide?: string,
+  htmlCode: ?string,
+  mediaFile?: File,
   noTitle: boolean
 };
 
