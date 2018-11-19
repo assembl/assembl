@@ -30,10 +30,6 @@ type TopPostFormContainerState = {
 };
 
 class TopPostFormContainer extends React.Component<TopPostFormContainerProps, TopPostFormContainerState> {
-  setFormContainerRef: () => void;
-
-  setFormPosition: () => void;
-
   topPostFormContainer: () => void;
 
   static defaultProps = {
@@ -47,8 +43,6 @@ class TopPostFormContainer extends React.Component<TopPostFormContainerProps, To
 
   constructor(props: TopPostFormContainerProps) {
     super(props);
-    this.setFormContainerRef = this.setFormContainerRef.bind(this);
-    this.setFormPosition = this.setFormPosition.bind(this);
     this.state = { sticky: false, expanded: false, topPostFormOffset: 0 };
   }
 
@@ -64,7 +58,7 @@ class TopPostFormContainer extends React.Component<TopPostFormContainerProps, To
     window.removeEventListener('scroll', this.setFormPosition);
   }
 
-  setFormPosition() {
+  setFormPosition = () => {
     if (!this.state.expanded) {
       if (this.state.topPostFormOffset <= window.pageYOffset && window.innerHeight > SMALL_SCREEN_HEIGHT) {
         this.setState({ sticky: true });
@@ -72,16 +66,16 @@ class TopPostFormContainer extends React.Component<TopPostFormContainerProps, To
         this.setState({ sticky: false });
       }
     }
-  }
+  };
 
   getClassNames() {
     const { messageColumns, isColumnViewInline } = this.props;
     return classNames({ 'columns-view': messageColumns.length > 1 }, { 'columns-view-inline': isColumnViewInline });
   }
 
-  setFormContainerRef(el: Object) {
+  setFormContainerRef = (el: Object) => {
     this.topPostFormContainer = el;
-  }
+  };
 
   getColumnsInfos() {
     const { messageColumns } = this.props;
