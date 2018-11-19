@@ -25,7 +25,7 @@ from ..lib.logging import getLogger
 from .computation import Computation
 
 
-log = getLogger('assembl')
+log = getLogger()
 sameAs = "http://www.w3.org/2002/07/owl#sameAs"
 
 
@@ -114,19 +114,24 @@ class DBPediaConcept(LocalizedUriConcept):
         return self.locale
 
     def identify_english(self, db=None):
+        """Look for an equivalent english concept"""
         db = db or self.db
         locale = self.identify_locale()
         if locale.code == 'en':
             return self
         elif not self.english_concept:
+            log.debug("Looking for an equivalent to concept %d (%s)" % (
+                self.id, self.concept_label))
             sparql = u"SELECT ?s WHERE {?s <%s> <%s>}" % (sameAs, self.concept_uri)
             result = requests.get('http://dbpedia.org/sparql', params={
                 'query': sparql,
                 'output': 'text/csv'})
             if not result.ok:
+                log.warning("DBPedia returned " + result.status_code)
                 return False
             results = [x.strip('"') for x in result.content.split()[1:]]
             if not len(results):
+                log.debug("DBPedia found no equivalent")
                 return False
             if len(results) > 1:
                 log.warning("multiple results in dbpedia:" + str(result))
@@ -139,6 +144,7 @@ class DBPediaConcept(LocalizedUriConcept):
                     concept_uri=result, locale=Locale.get_or_create('en', db))
                 db.add(concept)
             self.english_concept = concept
+            log.debug("DBPedia found " + concept.concept_label)
         return self.english_concept
 
     def identify_languages(self, languages, db=None):
@@ -157,11 +163,14 @@ class DBPediaConcept(LocalizedUriConcept):
         concepts = [c for c in existing if c.locale.code in languages]
         if not missing_locales:
             return concepts
+        log.debug("Concept %d (%s) wants translations: %s" % (
+            self.id, self.concept_label, ' '.join(missing_locales)))
         sparql = u"SELECT ?o WHERE {<%s> <%s> ?o}" % (self.concept_uri, sameAs)
         result = requests.get('http://dbpedia.org/sparql', params={
             'query': sparql,
             'output': 'text/csv'})
         if not result.ok:
+            log.warning("DBPedia returned " + result.status_code)
             return False
         results = [x.strip('"') for x in result.content.split()[1:]]
         for result in results:
@@ -180,6 +189,7 @@ class DBPediaConcept(LocalizedUriConcept):
             db.add(concept)
             concepts.append(concept)
             missing_locales.remove(locale)
+            log.debug("DBPedia found %s for %s" % (concept.concept_label, locale))
         db.flush()
         return concepts
 
