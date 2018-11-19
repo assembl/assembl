@@ -369,7 +369,7 @@ def extract_voters(request):
         if P_ADMIN_DISC not in permissions:
             raise HTTPUnauthorized()
     user_prefs = LanguagePreferenceCollection.getCurrent()
-    fieldnames = ["Nom du contributeur", "Adresse mail du contributeur", "Date/heure du vote", "Proposition"]
+    fieldnames = ["Nom du contributeur", "Nom d'utilisateur du contributeur", "Adresse mail du contributeur", "Date/heure du vote", "Proposition"]
     votes = widget.db.query(AbstractIdeaVote
         ).filter(AbstractVoteSpecification.widget_id==widget.id
         ).filter(AbstractIdeaVote.tombstone_date == None
@@ -377,7 +377,8 @@ def extract_voters(request):
         ).all()
     for count, vote in enumerate(votes):
         voter = vote.voter
-        contributor = voter.display_name() or u""
+        contributor = voter.real_name() or u""
+        contributor_username = voter.username_p or u""
         contributor_mail = voter.get_preferred_email() or u""
         vote_date = vote.vote_date or u""
         proposition = Idea.get(vote.idea_id).title.best_lang(user_prefs).value or u""
@@ -388,6 +389,7 @@ def extract_voters(request):
 
         extract_info = {
             "Nom du contributeur": contributor.encode('utf-8'),
+            "Nom d'utilisateur du contributeur": contributor_username.encode('utf-8'),
             "Adresse mail du contributeur": contributor_mail.encode('utf-8'),
             "Date/heure du vote": str(vote_date),
             "Proposition": proposition.encode('utf-8'),
