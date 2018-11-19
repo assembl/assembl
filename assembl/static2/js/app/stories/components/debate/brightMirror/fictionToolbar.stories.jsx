@@ -10,6 +10,7 @@ import { withKnobs, boolean } from '@storybook/addon-knobs';
 import FictionToolbar from '../../../../components/debate/brightMirror/fictionToolbar';
 import { PublicationStates } from '../../../../constants';
 import type { FictionToolbarProps } from '../../../../components/debate/brightMirror/fictionToolbar';
+import type { BrightMirrorFictionProps } from '../../../../pages/brightMirrorFiction';
 
 const fictionMetaInfo: BrightMirrorFictionProps = {
   fictionId: 'his-name-s-forrest',

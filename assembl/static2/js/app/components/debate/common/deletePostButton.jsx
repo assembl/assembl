@@ -12,9 +12,7 @@ type RefetchQuery = {
   variables: TVariables
 };
 
-export type DeletePostButtonProps = {
-  /** Mutation function name issued with deletePostMutation */
-  deletePost: Function,
+export type Props = {
   /** Class that is applied to the Link component  */
   linkClassName?: string,
   /** Post identifier */
@@ -27,6 +25,13 @@ export type DeletePostButtonProps = {
   onDeleteCallback?: Function
 };
 
+type GraphQLProps = {
+  /** Mutation function name issued with deletePostMutation */
+  deletePost: Function
+};
+
+type LocalProps = Props & GraphQLProps;
+
 const DeletePostButton = ({
   deletePost,
   linkClassName,
@@ -34,7 +39,7 @@ const DeletePostButton = ({
   refetchQueries,
   modalBodyMessage,
   onDeleteCallback
-}: DeletePostButtonProps) => {
+}: LocalProps) => {
   const displayConfirmationModal = () => {
     const title = <Translate value="debate.confirmDeletionTitle" />;
     const body = <Translate value={modalBodyMessage} />;
@@ -70,6 +75,7 @@ const DeletePostButton = ({
 };
 
 DeletePostButton.defaultProps = {
+  deletePost: null,
   linkClassName: '',
   refetchQueries: [],
   modalBodyMessage: 'debate.confirmDeletionBody',

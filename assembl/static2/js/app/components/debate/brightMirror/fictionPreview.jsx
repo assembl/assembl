@@ -105,6 +105,7 @@ const FictionPreview = ({
   ) : null;
 
   const sharePostButtonProps: SharePostButtonProps = {
+    linkClassName: 'share',
     metaInfo: { ...fictionMetaInfo },
     modalTitleMsgKey: 'debate.brightMirror.shareFiction',
     type: 'brightMirrorFiction'

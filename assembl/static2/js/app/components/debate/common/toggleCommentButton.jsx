@@ -6,7 +6,7 @@ export type ToggleCommentButtonProps = {
   /** Expand flag that changes the icon style */
   isExpanded: boolean,
   /** On click callback function */
-  onClickCallback: Function
+  onClickCallback?: ?Function
 };
 
 const ToggleCommentButton = ({ isExpanded, onClickCallback }: ToggleCommentButtonProps) => {
@@ -17,6 +17,10 @@ const ToggleCommentButton = ({ isExpanded, onClickCallback }: ToggleCommentButto
       <span className={`assembl-icon-${iconStyle}-open`} />
     </Link>
   );
+};
+
+ToggleCommentButton.defaultProps = {
+  onClickCallback: () => null
 };
 
 export default ToggleCommentButton;

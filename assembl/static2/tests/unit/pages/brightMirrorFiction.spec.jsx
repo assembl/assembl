@@ -46,6 +46,7 @@ const brightMirrorFictionDataTemplate = {
     body: 'Odit mollitia natus ea iusto voluptatibus omnis pariatur tempore ipsum.',
     creationDate: new Date(),
     publicationState: PublicationStates.PUBLISHED,
+    modified: false,
     creator: {
       userId: 99999999,
       displayName: 'Wendy Quigley',
@@ -53,6 +54,9 @@ const brightMirrorFictionDataTemplate = {
       image: {
         externalUrl: 'http://tyrese.info'
       }
+    },
+    parentPostCreator: {
+      displayName: 'Wendy Quigley'
     },
     bodyMimeType: 'text/html',
     extracts: []
