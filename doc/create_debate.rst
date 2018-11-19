@@ -50,11 +50,19 @@ In `email account`_, clic ``Create an Email Account``
 * Fill ``Enter password`` and ``Retype password``. This password is needed in the next step.
 * Clic ``Create`` button
 
+
+Forward email:
+
+* Find your new email in the mail list
+* Clic on ``view details`` and then on ``Forward this Mailbox``
+* Select ``Forward to this address:`` and write `assembl.admin@bluenove.com`
+* Clic ``Submit``
+
 Create Debate:
 --------------
 
 * Fill ``Topic`` and ``Slug``
-* Fill ``Host``
+* Fill ``Host`` with ``box562.bluehost.com``
 * Port must be 143
 * ``Username`` and ``Password`` are the one you wrote in bluehost email creation
 * Clic ``Create`` button
