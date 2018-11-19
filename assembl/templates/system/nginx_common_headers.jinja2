@@ -1,0 +1,6 @@
+add_header x-xss-protection "1; mode=block" always;
+add_header x-frame-options "SAMEORIGIN" always;
+add_header X-Content-Type-Options "nosniff" always;
+{% if csp_header %}
+add_header Content-Security-Policy "{{ csp_header }}";
+{% endif %}

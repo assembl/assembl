@@ -51,14 +51,8 @@ server {
     {% endif %}
   {% endif %}
 
-    add_header x-xss-protection "1; mode=block" always;
-    add_header x-frame-options "SAMEORIGIN" always;
-    add_header X-Content-Type-Options "nosniff" always;
-
+    include nginx_common_headers;
     server_tokens off;
-    {% if csp_header %}
-    add_header Content-Security-Policy "{{ csp_header }}";
-    {% endif %}
 
     # This is the server name, if you're running multiple servers
     server_name {{public_hostname}};
@@ -105,7 +99,8 @@ server {
         #Do NOT put something like "expires modified +1h;" here, it WILL cause problems when deploying a new version.
         #Nor will it help your performance after the first hour...
         autoindex off;
-        add_header Cache-Control "public, max-age=3600";
+        include nginx_common_headers;
+        add_header Cache-Control "public, max-age=3600, must-revalidate";
         alias {{code_root}}/assembl/static;
     }
 
