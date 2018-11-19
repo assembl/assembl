@@ -173,9 +173,9 @@ def populate_secrets():
         for env_key, env_value in env_vars.iteritems():
             env[env_key] = env_value
     else:
-        if(env.wsginame != 'dev.wsgi'):
-            raise RuntimeError("You should define a aws_secrets_id on a prod server.")
-        print("No aws_secrets_id defined - using defaults defined in .rc files.")
+        # TODO, once secrets have been put on secretmanager, and every client + server
+        # has AWS access, raise an error that secret manager is not set up.
+        print(red("No aws_secrets_id defined - using defaults defined in .rc files."))
 
 
 def sanitize_env():
