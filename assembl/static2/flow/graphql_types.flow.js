@@ -443,6 +443,7 @@ export type BrightMirrorFictionQuery = {|
     | {}
     | {}
     | {}
+    | {}
     | {})
 |};
 
@@ -560,6 +561,7 @@ export type IdeaQuery = {|
           body: ?string
         |}
       }
+    | {}
     | {}
     | {}
     | {}
@@ -749,6 +751,7 @@ export type IdeaWithPostsQuery = {|
           |}>
         |}
       }
+    | {}
     | {}
     | {}
     | {}
@@ -1248,7 +1251,14 @@ export type PostQuery = {|
                 localeInto: string
               |}
             |}
-          |}
+          |},
+          // The list of tags of the extract.
+          tags: ?Array<?{|
+            // The ID of the object.
+            id: string,
+            // The value of the tag. This is not language dependent, but rather just unicode text.
+            value: ?string
+          |}>
         |}>,
         // List of attachements to the post.
         attachments: ?Array<?{|
@@ -1275,6 +1285,7 @@ export type PostQuery = {|
           |}
         |}>
       }
+    | {}
     | {}
     | {}
     | {}
@@ -1402,6 +1413,7 @@ export type QuestionPostsQuery = {|
     | {}
     | {}
     | {}
+    | {}
     | {
         // The ID of the object.
         id: string,
@@ -1444,6 +1456,7 @@ export type QuestionQueryVariables = {|
 export type QuestionQuery = {|
   // The ID of the object
   question: ?(
+    | {}
     | {}
     | {}
     | {}
@@ -1949,6 +1962,10 @@ export type SynthesisQueryQuery = {|
     | {
         // The ID of the object.
         id: string
+      }
+    | {
+        // The ID of the object.
+        id: string
       })
 |};
 
@@ -1976,6 +1993,20 @@ export type TabsConditionQuery = {|
     // A URL for the homepage (optional). Often placed on the logo.
     homepageUrl: ?string
   |}
+|};
+
+export type TagsQueryVariables = {|
+  filter?: ?string
+|};
+
+export type TagsQuery = {|
+  // The list of filtered tags available on the discussion.
+  tags: ?Array<?{|
+    // The ID of the object.
+    id: string,
+    // The value of the tag. This is not language dependent, but rather just unicode text.
+    value: ?string
+  |}>
 |};
 
 export type TextFieldsQueryVariables = {|
@@ -2060,6 +2091,7 @@ export type ThematicQueryQueryVariables = {|
 export type ThematicQueryQuery = {|
   // The ID of the object
   thematic: ?(
+    | {}
     | {}
     | {}
     | {}
@@ -2412,6 +2444,7 @@ export type UserPreferencesQuery = {|
           |}
         |}
       }
+    | {}
     | {}
     | {}
     | {}
@@ -2908,6 +2941,7 @@ export type AcceptedCookiesQuery = {|
     | {}
     | {}
     | {}
+    | {}
     | {})
 |};
 
@@ -2958,7 +2992,8 @@ export type addPostExtractMutationVariables = {|
   xpathStart: string,
   xpathEnd: string,
   offsetStart: number,
-  offsetEnd: number
+  offsetEnd: number,
+  tags?: ?Array<?string>
 |};
 
 export type addPostExtractMutation = {|
@@ -3169,7 +3204,14 @@ export type addPostExtractMutation = {|
               localeInto: string
             |}
           |}
-        |}
+        |},
+        // The list of tags of the extract.
+        tags: ?Array<?{|
+          // The ID of the object.
+          id: string,
+          // The value of the tag. This is not language dependent, but rather just unicode text.
+          value: ?string
+        |}>
       |}>,
       // List of attachements to the post.
       attachments: ?Array<?{|
@@ -3294,7 +3336,14 @@ export type addPostExtractMutation = {|
             localeInto: string
           |}
         |}
-      |}
+      |},
+      // The list of tags of the extract.
+      tags: ?Array<?{|
+        // The ID of the object.
+        id: string,
+        // The value of the tag. This is not language dependent, but rather just unicode text.
+        value: ?string
+      |}>
     |}
   |}
 |};
@@ -3834,7 +3883,14 @@ export type createPostMutation = {|
               localeInto: string
             |}
           |}
-        |}
+        |},
+        // The list of tags of the extract.
+        tags: ?Array<?{|
+          // The ID of the object.
+          id: string,
+          // The value of the tag. This is not language dependent, but rather just unicode text.
+          value: ?string
+        |}>
       |}>,
       // List of attachements to the post.
       attachments: ?Array<?{|
@@ -4647,8 +4703,31 @@ export type updateExtractMutation = {|
             localeInto: string
           |}
         |}
-      |}
+      |},
+      // The list of tags of the extract.
+      tags: ?Array<?{|
+        // The ID of the object.
+        id: string,
+        // The value of the tag. This is not language dependent, but rather just unicode text.
+        value: ?string
+      |}>
     |}
+  |}
+|};
+
+export type updateExtractTagsMutationVariables = {|
+  id: string,
+  tags?: ?Array<?string>
+|};
+
+export type updateExtractTagsMutation = {|
+  updateExtractTags: ?{|
+    tags: ?Array<?{|
+      // The ID of the object.
+      id: string,
+      // The value of the tag. This is not language dependent, but rather just unicode text.
+      value: ?string
+    |}>
   |}
 |};
 
@@ -5112,7 +5191,14 @@ export type updatePostMutation = {|
               localeInto: string
             |}
           |}
-        |}
+        |},
+        // The list of tags of the extract.
+        tags: ?Array<?{|
+          // The ID of the object.
+          id: string,
+          // The value of the tag. This is not language dependent, but rather just unicode text.
+          value: ?string
+        |}>
       |}>,
       // List of attachements to the post.
       attachments: ?Array<?{|
@@ -5380,6 +5466,24 @@ export type updateSectionMutation = {|
       sectionType: string,
       // The order of the Sections on the top of the page.
       order: number
+    |}
+  |}
+|};
+
+export type updateTagMutationVariables = {|
+  id: string,
+  value: string,
+  taggableId?: ?string
+|};
+
+export type updateTagMutation = {|
+  // A mutation to update or replace the value of an existing tag.
+  updateTag: ?{|
+    tag: ?{|
+      // The ID of the object.
+      id: string,
+      // The value of the tag. This is not language dependent, but rather just unicode text.
+      value: ?string
     |}
   |}
 |};
@@ -5749,6 +5853,7 @@ export type UserQuery = {|
         // If True, the User information is cleansed from the system, and the User can no longer log in.
         isDeleted: ?boolean
       }
+    | {}
     | {}
     | {}
     | {}
@@ -6400,7 +6505,14 @@ export type ExtractFragment = {|
         localeInto: string
       |}
     |}
-  |}
+  |},
+  // The list of tags of the extract.
+  tags: ?Array<?{|
+    // The ID of the object.
+    id: string,
+    // The value of the tag. This is not language dependent, but rather just unicode text.
+    value: ?string
+  |}>
 |};
 
 export type ExtractCommentFragment = {|
@@ -6983,7 +7095,14 @@ export type PostFragment = {|
           localeInto: string
         |}
       |}
-    |}
+    |},
+    // The list of tags of the extract.
+    tags: ?Array<?{|
+      // The ID of the object.
+      id: string,
+      // The value of the tag. This is not language dependent, but rather just unicode text.
+      value: ?string
+    |}>
   |}>,
   // List of attachements to the post.
   attachments: ?Array<?{|

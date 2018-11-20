@@ -152,6 +152,11 @@ type TextFragmentIdentifier = {
   offsetEnd: number
 };
 
+type Tag = {
+  id: string,
+  value: string
+};
+
 type Extract = {
   textFragmentIdentifiers: Array<TextFragmentIdentifier>,
   id: string,
@@ -161,7 +166,8 @@ type Extract = {
   extractAction: string,
   extractState: string,
   body: string,
-  creator: AgentProfileInfoFragment
+  creator: AgentProfileInfoFragment,
+  tags: Array<Tag>
 };
 
 type FieldIdentifier = 'EMAIL' | 'FULLNAME' | 'PASSWORD' | 'PASSWORD2' | 'USERNAME' | 'CUSTOM';
