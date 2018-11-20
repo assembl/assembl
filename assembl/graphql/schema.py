@@ -143,7 +143,7 @@ class Query(graphene.ObjectType):
     def resolve_tags(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
         _filter = args.get('filter', '')
-        model = models.Tag
+        model = models.Keyword
         query = get_query(model, context).filter(
             model.discussion_id == discussion_id)
 

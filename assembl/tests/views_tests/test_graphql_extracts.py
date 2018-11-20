@@ -219,7 +219,7 @@ def test_mutation_update_extract(graphql_request, extract_with_range_in_reply_po
     "important": important,
     "extractNature": extractNature,
     "extractAction": extractAction,
-    "body": extract_body
+    "body": extract_body,
   }
 
   res = schema.execute(u"""
@@ -238,7 +238,6 @@ mutation updateExtract(
     important: $important
     extractNature: $extractNature
     extractAction: $extractAction
-    tags: $tags
   ) {
     extract {
       important

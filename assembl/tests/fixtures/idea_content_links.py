@@ -120,7 +120,7 @@ def extract_post_1_to_subidea_1_1(
         subidea_1_1, discussion, test_session):
     """ Links reply_post_1 to subidea_1_1 """
 
-    from assembl.models import Extract, Tag
+    from assembl.models import Extract, Keyword
     from assembl.models.idea_content_link import ExtractNatureVocabulary, ExtractActionVocabulary
     e = Extract(
         body=u"body",
@@ -133,7 +133,7 @@ def extract_post_1_to_subidea_1_1(
         extract_nature=ExtractNatureVocabulary.Enum.actionable_solution,
         extract_action=ExtractActionVocabulary.Enum.give_examples
     )
-    tags = Tag.get_tags(['foo', 'bar'])
+    tags = Keyword.get_tags(['foo', 'bar'], discussion.id, test_session)
     e.tags = tags['new_tags'] + tags['tags']
     test_session.add(e)
     test_session.flush()
