@@ -6,6 +6,7 @@ import CreateResource from '../../js/app/graphql/mutations/createResource.graphq
 import DeleteResource from '../../js/app/graphql/mutations/deleteResource.graphql';
 import UpdateResource from '../../js/app/graphql/mutations/updateResource.graphql';
 import UpdateResourcesCenter from '../../js/app/graphql/mutations/updateResourcesCenter.graphql';
+import UpdateLegalContents from '../../js/app/graphql/mutations/updateLegalContents.graphql';
 import ResourcesCenterPage from '../../js/app/graphql/ResourcesCenterPage.graphql';
 
 const MockedResponses = [
@@ -172,6 +173,50 @@ const MockedResponses = [
                 value: 'Ressource à mettre à jour'
               }
             ]
+          }
+        }
+      }
+    }
+  },
+  {
+    request: {
+      query: UpdateLegalContents,
+      variables: {
+        locale: 'en',
+        legalNoticeEntries: [
+          {
+            localeCode: 'en',
+            value: '<p>text in english</p>'
+          },
+          {
+            localeCode: 'fr',
+            value: '<p>texte en français</p>'
+          }
+        ],
+        termsAndConditionsEntries: [],
+        privacyPolicyEntries: [],
+        cookiesPolicyEntries: [],
+        userGuidelinesEntries: []
+      }
+    },
+    result: {
+      data: {
+        updateLegalContents: {
+          legalContents: {
+            legalNoticeEntries: [
+              {
+                localeCode: 'en',
+                value: '<p>text in english</p>'
+              },
+              {
+                localeCode: 'fr',
+                value: '<p>texte en français</p>'
+              }
+            ],
+            termsAndConditionsEntries: [],
+            cookiesPolicyEntries: [],
+            privacyPolicyEntries: [],
+            userGuidelinesEntries: []
           }
         }
       }
