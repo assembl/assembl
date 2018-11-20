@@ -231,6 +231,7 @@ describe('Announcement component', () => {
         descriptionTop:
           '<p>Bonjour à tous</p><p>Nous allons mettre un deuxieme paragraphe</p><p>Et un peu de <strong>texte en gras</strong>',
         descriptionBottom: null,
+        descriptionSide: null,
         htmlCode: null,
         noTitle: true
       };

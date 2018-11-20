@@ -84,7 +84,9 @@ export const createDoughnutElements = (sentimentCounts: SentimentsCounts): Array
     Tooltip: createTooltip(sentimentCounts[key], sentimentCounts[key].count)
   }));
 
-export const dirtySplitHack = (announcementContent: AnnouncementContent) => {
+export const dirtySplitHack = (
+  announcementContent: AnnouncementContent
+): { descriptionTop: ?string, descriptionBottom: ?string, descriptionSide: ?string, htmlCode: ?string, noTitle: boolean } => {
   const body = announcementContent.body;
   // To allow edit from V1 announcement, add !split!https://video.url!split!
   const split = body.split('!split!');
@@ -92,12 +94,14 @@ export const dirtySplitHack = (announcementContent: AnnouncementContent) => {
     ? {
       descriptionTop: `${split[0]}</p>`,
       descriptionBottom: `<p>${split[2]}`,
+      descriptionSide: null,
       htmlCode: split[1],
       noTitle: true
     }
     : {
       descriptionTop: body,
       descriptionBottom: null,
+      descriptionSide: null,
       htmlCode: null,
       noTitle: true
     };

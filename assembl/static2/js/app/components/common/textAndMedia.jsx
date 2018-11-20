@@ -12,9 +12,9 @@ type Props = {
   title?: string,
   descriptionTop: ?string,
   descriptionBottom: ?string,
-  descriptionSide?: string,
+  descriptionSide: ?string,
   htmlCode: ?string,
-  mediaFile?: File,
+  mediaFile?: ?File,
   noTitle: boolean
 };
 
@@ -27,8 +27,8 @@ type DescriptionProps = {
 };
 
 type ContentProps = {
-  htmlCode: string,
-  mediaFile: File
+  htmlCode: ?string,
+  mediaFile: ?File
 };
 
 class TextAndMedia extends React.Component<Props> {
@@ -66,7 +66,7 @@ class TextAndMedia extends React.Component<Props> {
   static Content = ({ htmlCode, mediaFile }: ContentProps) => {
     const isLocal = !htmlCode && mediaFile && mediaFile.externalUrl;
     const component = isLocal ? (
-      <Image responsive src={mediaFile.externalUrl} />
+      <Image responsive src={mediaFile && mediaFile.externalUrl} />
     ) : (
       <ResponsiveEmbed a16by9>
         <iframe title="media" src={htmlCode} />
@@ -110,7 +110,7 @@ class TextAndMedia extends React.Component<Props> {
                 <Col sm={totalSize} md={somethingOnLeft ? rightSize : totalSize}>
                   <div className="media-right">
                     {descriptionTop && validDescriptionTop && <TextAndMedia.TopDescription content={descriptionTop} />}
-                    {htmlCode && mediaFile && validMedia && <TextAndMedia.Content htmlCode={htmlCode} mediaFile={mediaFile} />}
+                    {validMedia && <TextAndMedia.Content htmlCode={htmlCode} mediaFile={mediaFile} />}
                     {descriptionSide && validDescriptionSide && <TextAndMedia.SideDescription content={descriptionSide} />}
                     {descriptionBottom &&
                       validDescriptionBottom && <TextAndMedia.BottomDescription content={descriptionBottom} />}

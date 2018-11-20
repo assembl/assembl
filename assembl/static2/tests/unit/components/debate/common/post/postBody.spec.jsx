@@ -37,7 +37,8 @@ describe('PostBody component', () => {
     const props = {
       extracts: extracts,
       rawHtml:
-        'You can\'t index <a href="url">the port</a> without <annotation data-state="pending" id="annotationId">programming</annotation> the wireless HTTP program! <iframe src="iframe-src"></iframe>',
+        'You can\'t index <a href="url">the port</a> without <annotation data-state="pending" ' +
+        'id="annotationId">programming</annotation> the wireless HTTP program! <iframe src="iframe-src"></iframe>',
       divRef: () => {},
       dbId: '3059',
       replacementComponents: postBodyReplacementComponents(),

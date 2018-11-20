@@ -14,7 +14,8 @@ export type Props = {
   linkClassName: ?string,
   /** Sharing modal popup title */
   modalTitleMsgKey: string,
-  /** Type that defines how to build the URL to share with getPathForModal in utilityManager, check routes.json for the URL format */
+  /** Type that defines how to build the URL to share with getPathForModal
+   in utilityManager, check routes.json for the URL format */
   type: string
 };
 
