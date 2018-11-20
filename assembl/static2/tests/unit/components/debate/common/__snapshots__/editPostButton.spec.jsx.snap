@@ -4,9 +4,8 @@ exports[`EditPostButton component should render an edit post button 1`] = `
 <Button
   active={false}
   block={false}
-  bsClass="btn"
+  bsClass="my-custom-class"
   bsStyle="default"
-  className="my-custom-class"
   disabled={false}
   onClick={[MockFunction]}
 >

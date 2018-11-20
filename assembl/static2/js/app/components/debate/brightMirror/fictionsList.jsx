@@ -110,7 +110,7 @@ const FictionsList = ({ posts, identifier, refetchIdea, lang, themeId }: Props) 
           <div className="title-section">
             <div className="title-hyphen">&nbsp;</div>
             <h1 className="dark-title-1">
-              <Translate value="debate.brightMirror.allFictions" />
+              <Translate value="debate.brightMirror.numberOfFictions" count={childElements.length} />
             </h1>
           </div>
           <div className="content-section">

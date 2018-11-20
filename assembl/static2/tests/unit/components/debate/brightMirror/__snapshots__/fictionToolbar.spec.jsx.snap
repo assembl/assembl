@@ -24,7 +24,7 @@ exports[`Storyshots FictionToolbar default 1`] = `
           onMouseOver={[Function]}
         >
           <button
-            className="edit btn btn-default"
+            className="edit edit-default"
             disabled={false}
             onClick={[Function]}
             type="button"
@@ -46,7 +46,7 @@ exports[`Storyshots FictionToolbar default 1`] = `
           onMouseOver={[Function]}
         >
           <button
-            className="delete btn btn-default"
+            className="delete delete-default"
             disabled={false}
             onClick={[Function]}
             type="button"
@@ -784,7 +784,7 @@ exports[`Storyshots FictionToolbar playground 1`] = `
           onMouseOver={[Function]}
         >
           <button
-            className="edit btn btn-default"
+            className="edit edit-default"
             disabled={false}
             onClick={[Function]}
             type="button"
@@ -806,7 +806,7 @@ exports[`Storyshots FictionToolbar playground 1`] = `
           onMouseOver={[Function]}
         >
           <button
-            className="delete btn btn-default"
+            className="delete delete-default"
             disabled={false}
             onClick={[Function]}
             type="button"

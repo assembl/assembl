@@ -36,7 +36,7 @@ exports[`Storyshots FictionPreview default 1`] = `
                 onMouseOver={[Function]}
               >
                 <button
-                  className="edit btn btn-default"
+                  className="edit edit-default"
                   disabled={false}
                   onClick={[Function]}
                   type="button"
@@ -60,7 +60,7 @@ exports[`Storyshots FictionPreview default 1`] = `
                 onMouseOver={[Function]}
               >
                 <button
-                  className="btn btn-default"
+                  className=" -default"
                   disabled={false}
                   onClick={[Function]}
                   type="button"
@@ -859,7 +859,7 @@ exports[`Storyshots FictionPreview playground 1`] = `
                 onMouseOver={[Function]}
               >
                 <button
-                  className="edit btn btn-default"
+                  className="edit edit-default"
                   disabled={false}
                   onClick={[Function]}
                   type="button"
@@ -883,7 +883,7 @@ exports[`Storyshots FictionPreview playground 1`] = `
                 onMouseOver={[Function]}
               >
                 <button
-                  className="btn btn-default"
+                  className=" -default"
                   disabled={false}
                   onClick={[Function]}
                   type="button"

@@ -401,7 +401,6 @@ const Translations = {
         announcement: "Consigne"
       },
       brightMirror: {
-        allFictions: "Fictions déjà parues",
         deleteFiction: "Supprimez votre fiction",
         deleteFictionModalBody: "Êtes-vous sûr de vouloir supprimer cette fiction ?",
         deleteFictionSuccessMsg: "Votre fiction a été supprimée",
@@ -415,6 +414,9 @@ const Translations = {
         noContentSpecified: "Contenu non défini",
         fillEitherTitleContent: "Veuillez remplir le titre et/ou la fiction",
         noAuthorSpecified: "Auteur non défini",
+        numberOfFictions: "Fictions déjà parues",
+        numberOfFictions_0: "Aucune fiction",
+        numberOfFictions_1: "Fiction déjà parue",
         numberOfResponses: "%{count} réponses",
         numberOfResponses_0: "Aucune réponse",
         numberOfResponses_1: "%{count} réponse",
@@ -1319,7 +1321,6 @@ const Translations = {
         announcement: "Announcement"
       },
       brightMirror: {
-        allFictions: "Published fictions",
         deleteFiction: "Delete your fiction",
         deleteFictionModalBody: "Are you sure you want to delete this fiction?",
         deleteFictionSuccessMsg: "Your fiction was deleted",
@@ -1333,6 +1334,9 @@ const Translations = {
         noContentSpecified: "No content specified",
         fillEitherTitleContent: "Please, write a title or a fiction",
         noAuthorSpecified: "No author specified",
+        numberOfFictions: "Published fictions",
+        numberOfFictions_0: "No published fiction",
+        numberOfFictions_1: "Published fiction",
         numberOfResponses: "%{count} responses",
         numberOfResponses_0: "No response",
         numberOfResponses_1: "%{count} response",
