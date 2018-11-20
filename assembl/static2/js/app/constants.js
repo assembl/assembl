@@ -315,3 +315,61 @@ CountablePublicationStates[PublicationStates.SUBMITTED_IN_EDIT_GRACE_PERIOD] = P
 CountablePublicationStates[PublicationStates.PUBLISHED] = PublicationStates.PUBLISHED;
 CountablePublicationStates[PublicationStates.MODERATED_TEXT_ON_DEMAND] = PublicationStates.MODERATED_TEXT_ON_DEMAND;
 CountablePublicationStates[PublicationStates.MODERATED_TEXT_NEVER_AVAILABLE] = PublicationStates.MODERATED_TEXT_NEVER_AVAILABLE;
+
+export type ColorDefinition = {
+  background: string,
+  text: string | null
+};
+
+export const harvestingColors: { [string]: ColorDefinition } = {
+  blue: {
+    background: '#00B6FF',
+    text: null
+  },
+  yellow: {
+    background: '#FFEC00',
+    text: null
+  },
+  orange: {
+    background: '#FF9F00',
+    text: null
+  },
+  red: {
+    background: '#FF001F',
+    text: null
+  },
+  green: {
+    background: '#35C646',
+    text: null
+  },
+  purple: {
+    background: '#BD10E0',
+    text: null
+  },
+  black: {
+    background: '#000000',
+    text: '#FFFFFF'
+  },
+  green2: {
+    background: '#7ed321', // default color
+    text: null
+  },
+  pink: {
+    background: '#FF9BB4',
+    text: null
+  },
+  paleGreen: {
+    background: '#B8E986',
+    text: null
+  }
+};
+
+export const harvestingColorsMapping: { [string]: ColorDefinition } = {
+  concept: harvestingColors.blue,
+  argument: harvestingColors.yellow,
+  example: harvestingColors.orange,
+  issue: harvestingColors.red,
+  actionable_solution: harvestingColors.green,
+  knowledge: harvestingColors.purple,
+  cognitive_bias: harvestingColors.black
+};

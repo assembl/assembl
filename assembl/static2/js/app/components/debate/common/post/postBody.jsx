@@ -59,13 +59,16 @@ type HtmlProps = {
 };
 
 export const ExtractInPost = ({ extractedByMachine, id, nature, state, children }: ExtractInPostProps) => {
-  const backgroundColor = getExtractColor(nature, state, extractedByMachine);
-  const style: { backgroundColor: string, color?: string } = { backgroundColor: backgroundColor };
-  if (backgroundColor === '#000000') {
-    style.color = '#FFFFFF';
-  }
+  const colorDefinition = getExtractColor(nature, state, extractedByMachine);
   return (
-    <span className="extract-in-message" style={style} id={id}>
+    <span
+      className="extract-in-message"
+      style={{
+        backgroundColor: colorDefinition.background,
+        color: colorDefinition.text
+      }}
+      id={id}
+    >
       {children}
     </span>
   );

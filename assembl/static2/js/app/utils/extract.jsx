@@ -2,7 +2,7 @@
 import React from 'react';
 import get from 'lodash/get';
 
-import { type ExtractState, ExtractStates } from '../constants';
+import { type ColorDefinition, type ExtractState, ExtractStates, harvestingColors, harvestingColorsMapping } from '../constants';
 import DesignFiction from '../components/svg/taxonomy/displayDesignFiction';
 import MultiColumn from '../components/svg/taxonomy/displayMultiColumn';
 import OpenQuestions from '../components/svg/taxonomy/displayOpenQuestions';
@@ -129,18 +129,8 @@ export const ActionIcons = ({ qualifier, backgroundColor, color }: ActionIconsPr
   }
 };
 
-function getTaxonomyNatureColor(nature: string): string {
-  const mapping = {
-    concept: '#00B6FF',
-    argument: '#FFEC00',
-    example: '#FF9F00',
-    issue: '#FF001F',
-    actionable_solution: '#35C646',
-    knowledge: '#BD10E0',
-    cognitive_bias: '#000000'
-  };
-
-  return get(mapping, nature, null);
+function getTaxonomyNatureColor(nature: string): ColorDefinition | null {
+  return get(harvestingColorsMapping, nature, null);
 }
 
 type NatureIconProps = {
@@ -150,7 +140,7 @@ type NatureIconProps = {
 export const NatureIcons = ({ qualifier }: NatureIconProps) => {
   const color = getTaxonomyNatureColor(qualifier);
   if (color) {
-    return <Flag color={color} />;
+    return <Flag color={color.background} />;
   }
 
   return <span>{qualifier}</span>;
@@ -158,20 +148,16 @@ export const NatureIcons = ({ qualifier }: NatureIconProps) => {
 
 export const getExtractTagId = (id: number) => `message-body-local:Content/${id}`;
 
-export function getExtractColor(nature: string, state: ExtractState, extractedByMachine: boolean): string {
-  const defaultColor = '#7ed321';
+export function getExtractColor(nature: string, state: ExtractState, extractedByMachine: boolean): ColorDefinition {
+  const defaultColor = harvestingColors.green2;
   if (extractedByMachine) {
     if (state === ExtractStates.SUBMITTED) {
-      return '#FF9BB4';
+      return harvestingColors.pink;
     } else if (state === ExtractStates.PUBLISHED) {
-      return '#B8E986';
+      return harvestingColors.paleGreen;
     }
   }
 
   const natureColor = getTaxonomyNatureColor(nature.replace('Enum.', ''));
-  if (natureColor) {
-    return natureColor;
-  }
-
-  return defaultColor;
+  return natureColor || defaultColor;
 }
