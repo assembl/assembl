@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { connect } from 'react-redux';
@@ -24,9 +24,9 @@ type PhaseFormProps = {
   identifier: string,
   start: moment,
   end: moment,
-  handleStartDateChange: Function,
-  handleEndDateChange: Function,
-  handleIdentifierChange: Function,
+  handleStartDateChange: moment => void,
+  handleEndDateChange: moment => void,
+  handleIdentifierChange: string => void,
   locale: string,
   hasConflictingDates: boolean,
   isNew: boolean
@@ -68,7 +68,7 @@ export const DumbPhaseForm = ({
     </SplitButton>
   );
 
-  const renderModuleSelectionMenu = () =>
+  const renderModuleSelectionMenu = (): React.Node =>
     (isNew ? (
       moduleSelectionMenu
     ) : (
@@ -101,11 +101,11 @@ export const DumbPhaseForm = ({
             <span className="assembl-icon-schedule grey" />
           </div>
         </label>
-        {hasConflictingDates && (
+        {hasConflictingDates ? (
           <div className="warning-label">
             <Translate value="administration.timelineAdmin.warningLabel" />
           </div>
-        )}
+        ) : null}
       </div>
       <div className="date-picker-field">
         <div className="date-picker-type">
@@ -128,11 +128,11 @@ export const DumbPhaseForm = ({
             <span className="assembl-icon-schedule grey" />
           </div>
         </label>
-        {hasConflictingDates && (
+        {hasConflictingDates ? (
           <div className="warning-label">
             <Translate value="administration.timelineAdmin.warningLabel" />
           </div>
-        )}
+        ) : null}
       </div>
       <div className="module-selection-text">
         <Translate value="administration.timelineAdmin.phaseModule" />
@@ -164,12 +164,12 @@ const mapStateToProps = (state, { phaseId }) => {
 };
 
 const mapDispatchToProps = (dispatch, { phaseId }) => ({
-  handleIdentifierChange: (eventKey) => {
-    dispatch(updatePhaseIdentifier(phaseId, eventKey));
-    dispatch(updateIsThematicsTable(phaseId, eventKey === 'survey'));
+  handleIdentifierChange: (eventKey: string) => {
+    dispatch(updatePhaseIdentifier((phaseId: string), (eventKey: string)));
+    dispatch(updateIsThematicsTable((phaseId: string), (eventKey === 'survey': boolean)));
   },
-  handleStartDateChange: date => dispatch(updateStartDate(phaseId, date)),
-  handleEndDateChange: date => dispatch(updateEndDate(phaseId, date))
+  handleStartDateChange: date => dispatch(updateStartDate((phaseId: string), (date: moment))),
+  handleEndDateChange: date => dispatch(updateEndDate((phaseId: string), (date: moment)))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(DumbPhaseForm);
