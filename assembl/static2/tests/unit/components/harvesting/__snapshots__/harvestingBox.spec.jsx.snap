@@ -24,8 +24,8 @@ exports[`harvestingBox component should match harvestingBox snapshot when author
         className="extracts-nb-msg"
       >
         <Translate
-          count={2}
-          extractNumber={2}
+          count={5}
+          extractNumber={5}
           value="harvesting.harvestedExtractNumbers"
         />
       </div>
@@ -210,7 +210,7 @@ exports[`harvestingBox component should match harvestingBox snapshot when author
     >
       1
       /
-      2
+      5
     </div>
   </div>
 </div>
@@ -445,8 +445,8 @@ exports[`harvestingBox component should match harvestingBox snapshot when nugget
         className="extracts-nb-msg"
       >
         <Translate
-          count={2}
-          extractNumber={2}
+          count={5}
+          extractNumber={5}
           value="harvesting.harvestedExtractNumbers"
         />
       </div>
@@ -666,7 +666,7 @@ exports[`harvestingBox component should match harvestingBox snapshot when nugget
     >
       1
       /
-      2
+      5
     </div>
   </div>
 </div>
@@ -696,8 +696,8 @@ exports[`harvestingBox component should match harvestingBox snapshot when select
         className="extracts-nb-msg"
       >
         <Translate
-          count={2}
-          extractNumber={2}
+          count={5}
+          extractNumber={5}
           value="harvesting.harvestedExtractNumbers"
         />
       </div>
@@ -882,7 +882,7 @@ exports[`harvestingBox component should match harvestingBox snapshot when select
     >
       1
       /
-      2
+      5
     </div>
   </div>
 </div>
@@ -912,8 +912,8 @@ exports[`harvestingBox component should match harvestingBox snapshot when the co
         className="extracts-nb-msg"
       >
         <Translate
-          count={2}
-          extractNumber={2}
+          count={5}
+          extractNumber={5}
           value="harvesting.harvestedExtractNumbers"
         />
       </div>
@@ -1098,7 +1098,7 @@ exports[`harvestingBox component should match harvestingBox snapshot when the co
     >
       1
       /
-      2
+      5
     </div>
   </div>
 </div>
@@ -1128,8 +1128,8 @@ exports[`harvestingBox component should match harvestingBox snapshot when there 
         className="extracts-nb-msg"
       >
         <Translate
-          count={2}
-          extractNumber={2}
+          count={5}
+          extractNumber={5}
           value="harvesting.harvestedExtractNumbers"
         />
       </div>
@@ -1314,7 +1314,7 @@ exports[`harvestingBox component should match harvestingBox snapshot when there 
     >
       1
       /
-      2
+      5
     </div>
   </div>
 </div>

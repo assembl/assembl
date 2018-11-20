@@ -2,6 +2,7 @@
 import React from 'react';
 import get from 'lodash/get';
 
+import { type ExtractState, ExtractStates } from '../constants';
 import DesignFiction from '../components/svg/taxonomy/displayDesignFiction';
 import MultiColumn from '../components/svg/taxonomy/displayMultiColumn';
 import OpenQuestions from '../components/svg/taxonomy/displayOpenQuestions';
@@ -155,4 +156,22 @@ export const NatureIcons = ({ qualifier }: NatureIconProps) => {
   return <span>{qualifier}</span>;
 };
 
-export const getExtractTagId = (id: string) => `message-body-local:Content/${id}`;
+export const getExtractTagId = (id: number) => `message-body-local:Content/${id}`;
+
+export function getExtractColor(nature: string, state: ExtractState, extractedByMachine: boolean): string {
+  const defaultColor = '#7ed321';
+  if (extractedByMachine) {
+    if (state === ExtractStates.SUBMITTED) {
+      return '#FF9BB4';
+    } else if (state === ExtractStates.PUBLISHED) {
+      return '#B8E986';
+    }
+  }
+
+  const natureColor = getTaxonomyNatureColor(nature.replace('Enum.', ''));
+  if (natureColor) {
+    return natureColor;
+  }
+
+  return defaultColor;
+}

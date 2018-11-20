@@ -534,16 +534,6 @@
   display: inline;
 }
 
-.harvesting-mode-on {
-  .extract-in-message {
-    background-color: $harvesting-green-light;
-
-    &.submitted {
-      background-color: $harvesting-blue-light;
-    }
-  }
-}
-
 .submitted-harvesting {
   .harvesting-submitted-message {
     color: $harvesting-blue;
