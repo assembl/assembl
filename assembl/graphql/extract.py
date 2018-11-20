@@ -147,6 +147,8 @@ class DeleteExtract(graphene.Mutation):
         require_instance_permission(CrudPermissions.DELETE, extract, context)
         for fragment in extract.text_fragment_identifiers:
             fragment.delete()
+
+        extract.tags = []
         extract.delete()
         extract.db.flush()
 

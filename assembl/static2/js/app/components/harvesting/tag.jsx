@@ -7,6 +7,7 @@ import update from 'immutability-helper';
 import updateTagGQLMutation from '../../graphql/mutations/updateTag.graphql';
 import { type Option } from '../form/selectFieldAdapter';
 import TagForm from './tagForm';
+import { displayAlert } from '../../utils/utilityManager';
 
 type Props = {
   contextId: string,
@@ -93,25 +94,18 @@ class Tag extends React.Component<Props, State> {
   updateTag = (values: TagData) => {
     const { updateTag, tag, contextId, onUpdate } = this.props;
     const { tag: { label } } = values;
-    this.setState(
-      {
-        submitting: true
-      },
-      () => {
-        updateTag({ id: tag.value, value: label, taggableId: contextId }).then(({ data }) => {
-          this.setState(
-            {
-              submitting: false,
-              editing: false
-            },
-            () => {
-              const newTag = data.updateTag.tag;
-              if (onUpdate) onUpdate({ value: newTag.id, label: newTag.value });
-            }
-          );
+    this.setState({ submitting: true }, () => {
+      updateTag({ id: tag.value, value: label, taggableId: contextId })
+        .then(({ data }) => {
+          this.setState({ submitting: false, editing: false }, () => {
+            const newTag = data.updateTag.tag;
+            if (onUpdate) onUpdate({ value: newTag.id, label: newTag.value });
+          });
+        })
+        .catch((error) => {
+          displayAlert('danger', `${error}`);
         });
-      }
-    );
+    });
   };
 
   cancel = (event: SyntheticEvent<HTMLDivElement>) => {

@@ -12,7 +12,7 @@ type Props = {
   initialValues: Array<Option>,
   contextId: string,
   canEdit: boolean,
-  updateTags: (tags: Array<string>, callback: (tags: Array<Option>) => void) => void
+  updateTags: (tags: Array<string>, callback: () => void) => void
 };
 
 type State = {
@@ -71,20 +71,14 @@ class Tags extends React.Component<Props, State> {
     const { updateTags } = this.props;
     const { tags } = data;
     const tagsValues = tags.map(tag => tag.label);
-    this.setState(
-      {
-        submitting: true
-      },
-      () => {
-        updateTags(tagsValues, (newtags: Array<Option>) => {
-          this.setState({
-            submitting: false,
-            editing: false,
-            currentTags: newtags
-          });
+    this.setState({ submitting: true }, () => {
+      updateTags(tagsValues, () => {
+        this.setState({
+          submitting: false,
+          editing: false
         });
-      }
-    );
+      });
+    });
   };
 
   cancel = () => {
