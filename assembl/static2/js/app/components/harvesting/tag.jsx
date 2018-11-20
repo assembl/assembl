@@ -83,7 +83,7 @@ function updateTagMutation({ mutate }) {
 
 class Tag extends React.Component<Props, State> {
   static defaultProps = {
-    canEdit: false
+    canRemove: false
   };
 
   state = {

@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Tag component should match the Tag form 1`] = `
+<ReactFinalForm
+  initialValues={
+    Object {
+      "tag": Object {
+        "label": "foo",
+        "value": "fooid",
+      },
+    }
+  }
+  onSubmit={[MockFunction]}
+  render={[Function]}
+/>
+`;

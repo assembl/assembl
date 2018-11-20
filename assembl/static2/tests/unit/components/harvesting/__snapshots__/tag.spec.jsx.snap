@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Tag component should match Tag snapshot (user can't edit) 1`] = `
+<Tag
+  canRemove={false}
+  contextId="123456YETRZ"
+  onUpdate={[MockFunction]}
+  remove={[MockFunction]}
+  tag={
+    Object {
+      "label": "foo",
+      "value": "fooid",
+    }
+  }
+  updateTag={[Function]}
+/>
+`;
+
+exports[`Tag component should match Tag snapshot 1`] = `
+<Tag
+  canRemove={true}
+  contextId="123456YETRZ"
+  onUpdate={[MockFunction]}
+  remove={[MockFunction]}
+  tag={
+    Object {
+      "label": "foo",
+      "value": "fooid",
+    }
+  }
+  updateTag={[Function]}
+/>
+`;
