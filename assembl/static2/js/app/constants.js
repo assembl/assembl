@@ -260,7 +260,7 @@ export const ExtractStates = {
   PUBLISHED: 'PUBLISHED'
 };
 
-export type ExtractState = ExtractStates.SUBMITTED | ExtractStates.PUBLISHED;
+export type ExtractState = typeof ExtractStates.SUBMITTED | typeof ExtractStates.PUBLISHED;
 
 export const pickerColors = [
   '#B8E986',
