@@ -43,8 +43,6 @@ export type AnnouncementContent = {
   __typename?: string
 };
 
-type MessageColumns = Array<IdeaMessageColumnFragment>;
-
 type DoughnutElements = {
   Tooltip: React.Node,
   color: string,
@@ -56,7 +54,7 @@ type Props = {
   announcementContent: AnnouncementContent,
   idea: { ...Idea } & {
     posts: Posts,
-    messageColumns: MessageColumns
+    messageColumns: IdeaMessageColumns
   }
 };
 
