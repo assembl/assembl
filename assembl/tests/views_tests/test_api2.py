@@ -987,8 +987,10 @@ def test_add_timeline_event(test_app, discussion):
 class AbstractExport(object):
     # HEADER = {}
 
-    def _get(self, app, discussion_id, lang=None, view_name=None):
+    def _get(self, app, discussion_id, widget_id=0, lang=None, view_name=None, votes_export=False):
         base_req = '/data/Discussion/%d/%s' % (discussion_id, view_name)
+        if votes_export:
+            base_req = '/data/Discussion/%d/widgets/%d/%s' % (discussion_id, widget_id, view_name)
         req = base_req
         if lang:
             req = base_req + '?lang=%s' % lang
@@ -1192,4 +1194,23 @@ class TestPhase2Export(AbstractExport):
         assert header[self.POST_CLASSIFIER] == b"Classification de Post"
 
     # TODO: Add more unit tests for the phase 2 export API.
-    # TODO: Add unit tests for votes export API.
+
+
+class TestExtractCsvVoters(AbstractExport):
+    view_name = 'extract_csv_voters'
+    NOM_DU_CONTRIBUTEUR = 0
+    NOM_UTILISATEUR_CONTRIBUTEUR = 1
+    EMAIL_DU_CONTRIBUTEUR = 2
+    DATE_HEURE_DU_VOTE = 3
+    PROPOSITION = 4
+
+    def test_base(self, test_app, discussion, token_vote_spec_with_votes, gauge_vote_specification_with_votes, number_gauge_vote_specification_with_votes):
+        result = self.get_result(test_app, discussion.id, gauge_vote_specification_with_votes.widget_id, view_name=self.view_name, votes_export=True)
+        header = result[0]
+        # assert header[self.NOM_DU_CONTRIBUTEUR] == b"Nom Du Contributeur"
+        assert header[self.NOM_UTILISATEUR_CONTRIBUTEUR] == b"Nom D'Utilisateur Du Contributeur"
+        assert header[self.EMAIL_DU_CONTRIBUTEUR] == b"Adresse Mail Du Contributeur"
+        assert header[self.DATE_HEURE_DU_VOTE] == b"Date/Heure Du Vote"
+        assert header[self.PROPOSITION] == b"Proposition"
+
+    # TODO: Add more unit tests for votes export API.
