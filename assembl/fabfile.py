@@ -18,7 +18,7 @@ from os import getenv
 import sys
 import re
 from getpass import getuser
-from shutil import rmtree, copyfile
+from shutil import copyfile
 from time import sleep, strftime, time
 from ConfigParser import ConfigParser, SafeConfigParser
 from StringIO import StringIO
@@ -1622,7 +1622,7 @@ def update_npm_requirements(force_reinstall=False):
         if exists(yarn_path):
             if force_reinstall:
                 print('Removing node_modules directory...')
-                rmtree(os.path.join(static2_path, 'node_modules'))
+                venvcmd('rm -rf {}'.format(os.path.join(static2_path, 'node_modules')))
 
             venvcmd(yarn_path, chdir=False)
         else:
