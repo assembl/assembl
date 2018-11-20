@@ -8,7 +8,7 @@ from sqlalchemy.orm import joinedload
 from assembl import models
 from assembl.graphql.schema import Schema as schema
 
-def test_mutation_add_extract(graphql_request, top_post_in_thread_phase):
+def test_mutation_add_extract(graphql_request, tags, top_post_in_thread_phase):
   post_db_id = int(from_global_id(top_post_in_thread_phase)[1])
   
   contentLocale = u'fr'
@@ -20,7 +20,7 @@ def test_mutation_add_extract(graphql_request, top_post_in_thread_phase):
   offsetStart = 17
   offsetEnd = 44
   important = False
-  tags = ['foo']
+  tags = ['tag1']
 
   variable_values = {
     "contentLocale": contentLocale,
@@ -108,7 +108,7 @@ mutation addPostExtract(
             u'extractAction': None, 
             u'extractNature': None, 
             u'important': important,
-            u'tags': [{u'value': u'foo'}]
+            u'tags': [{u'value': u'tag1'}]
           }
         ], 
         u'publicationState': 
@@ -127,6 +127,7 @@ mutation addPostExtract(
 
   res = schema.execute(mutation, context_value=graphql_request, variable_values=variable_values)
   assert res.errors and res.errors[0].message == "Extract already exists!"
+  models.AssemblPost.get(post_db_id).extracts[0].tags = []
 
 
 def test_mutation_delete_extract(graphql_request, extract_with_range_in_reply_post_1):
