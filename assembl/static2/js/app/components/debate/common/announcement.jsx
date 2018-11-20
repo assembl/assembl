@@ -17,10 +17,8 @@ export const createTooltip = (sentiment: SentimentDefinition, count: number) => 
 );
 
 type SentimentsCounts = {
-  [string]: {
-    count: number,
-    color: string,
-    Tooltip: React.Node
+  [string]: SentimentDefinition & {
+    count: number
   }
 };
 
@@ -52,10 +50,7 @@ type DoughnutElements = {
 type Props = {
   isMultiColumns: boolean,
   announcementContent: AnnouncementContent,
-  idea: { ...Idea } & {
-    posts: Posts,
-    messageColumns: IdeaMessageColumns
-  }
+  idea: Idea
 };
 
 type ColumnsInfoType = { count: ?number, color: ?string, name: ?string };
@@ -83,15 +78,11 @@ export const getSentimentsCount = (posts: Posts) => {
 };
 
 export const createDoughnutElements = (sentimentCounts: SentimentsCounts): Array<DoughnutElements> =>
-  Object.keys(sentimentCounts).map(
-    key =>
-      sentimentCounts[key] && {
-        color: sentimentCounts[key].color,
-        count: sentimentCounts[key].count,
-        // $FlowFixMe flow believes sentimentCounts[key] can be undefined but it's not annotated as possibly undefined
-        Tooltip: createTooltip(sentimentCounts[key], sentimentCounts[key].count)
-      }
-  );
+  Object.keys(sentimentCounts).map(key => ({
+    color: sentimentCounts[key].color,
+    count: sentimentCounts[key].count,
+    Tooltip: createTooltip(sentimentCounts[key], sentimentCounts[key].count)
+  }));
 
 export const dirtySplitHack = (announcementContent: AnnouncementContent) => {
   const body = announcementContent.body;
@@ -147,7 +138,6 @@ const Announcement = ({ idea, announcementContent, isMultiColumns }: Props) => {
             </div>
           ) : (
             <div className="announcement-numbers">
-              {/* $FlowFixMe numContributors is declared as a number in Idea (object_types) but flow believes it can be undefined */}
               <PostsAndContributorsCount className="announcement-numbers" numContributors={numContributors} numPosts={numPosts} />
             </div>
           )}
