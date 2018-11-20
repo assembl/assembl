@@ -68,7 +68,7 @@ const DeletePostButton = ({
     return displayModal(title, body, includeFooter, footer);
   };
   return (
-    <Button className={linkClassName} onClick={displayConfirmationModal}>
+    <Button bsClass={linkClassName} onClick={displayConfirmationModal}>
       <span className="assembl-icon-delete" />
     </Button>
   );

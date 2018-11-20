@@ -8,7 +8,7 @@ export type Props = {
 };
 
 const EditPostButton = ({ handleClick, linkClassName }: Props) => (
-  <Button className={linkClassName} onClick={handleClick}>
+  <Button bsClass={linkClassName} onClick={handleClick}>
     <span className="assembl-icon-edit" />
   </Button>
 );

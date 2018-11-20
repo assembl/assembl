@@ -86,11 +86,17 @@
       .assembl-icon-delete {
         color: $black;
         font-size: $font-size-s;
+      }
+
+      .assembl-icon-back-arrow,
+      .assembl-icon-edit {
         padding-left: 15px;
+        padding-right: 15px;
       }
 
       .assembl-icon-delete {
-        padding-left: 8px;
+        padding-left: 0;
+        padding-right: 0;
       }
 
       .assembl-icon-back-arrow:before {
