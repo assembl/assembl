@@ -7,6 +7,7 @@ import jQuery from 'jquery';
 import ARange from 'annotator_range'; // eslint-disable-line
 import { withRouter } from 'react-router';
 
+import { EMPTY_STRING } from '../../../../constants';
 import { getConnectedUserId, isHarvestable } from '../../../../utils/globalFunctions';
 import { isSpecialURL } from '../../../../utils/urlPreview';
 import { transformLinksInHtml /* getUrls */ } from '../../../../utils/linkify';
@@ -116,7 +117,7 @@ export const Html = (props: HtmlProps) => {
    * and return a list of react elements
   */
   // this anchor is shared with marionette code
-  const anchor = dbId ? getExtractTagId(dbId) : '';
+  const anchor = dbId ? getExtractTagId(dbId) : EMPTY_STRING;
   let html = `<div id="${anchor}">${rawHtml}</div>`;
 
   if (extracts) {
@@ -132,8 +133,8 @@ export const Html = (props: HtmlProps) => {
         const extractInfo = JSON.stringify({
           id: extract.id,
           extractedByMachine: !!(extract.creator && extract.creator.isMachine),
-          extractState: extract.extractState || '',
-          nature: extract.extractNature || ''
+          extractState: extract.extractState || EMPTY_STRING,
+          nature: extract.extractNature || EMPTY_STRING
         });
         const wrapper = jQuery(`<annotation data-extractInfo='${extractInfo}'></annotation>`);
         if (tfis) {
