@@ -12,7 +12,7 @@ import type { Props as FictionBodyProps } from '../../../../components/debate/br
 
 export const defaultFictionBody: FictionBodyProps = {
   ideaId: '0',
-  id: '0',
+  postId: '0',
   title: 'Les émotifs',
   content: `
     <p><strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
@@ -48,7 +48,17 @@ export const defaultFictionBody: FictionBodyProps = {
   dbId: 1,
   bodyMimeType: 'text/html',
   refetchPost: action('refetchPost'),
-  userCanReply: false
+  userCanReply: false,
+  mySentiment: 'LIKE',
+  sentimentCounts: {
+    disagree: 0,
+    dontUnderstand: 0,
+    like: 0,
+    moreInfo: 0
+  },
+  isPhaseCompleted: false,
+  client: action('client'),
+  screenWidth: 0
 };
 
 const noFictionBody: FictionBodyProps = {
@@ -67,7 +77,7 @@ storiesOf('FictionBody', module)
     'playground',
     withInfo()(() => (
       <FictionBody
-        id={text('id', playgroundFictionBody.id)}
+        postId={text('id', playgroundFictionBody.postId)}
         title={text('title', playgroundFictionBody.title)}
         content={text('content', playgroundFictionBody.content)}
         contentLocale={text('contentLocale', playgroundFictionBody.contentLocale)}
@@ -78,6 +88,11 @@ storiesOf('FictionBody', module)
         refetchPost={playgroundFictionBody.refetchPost}
         ideaId={playgroundFictionBody.ideaId}
         userCanReply={playgroundFictionBody.userCanReply}
+        mySentiment={playgroundFictionBody.mySentiment}
+        sentimentCounts={playgroundFictionBody.sentimentCounts}
+        isPhaseCompleted={playgroundFictionBody.isPhaseCompleted}
+        client={playgroundFictionBody.client}
+        screenWidth={playgroundFictionBody.screenWidth}
       />
     ))
   );

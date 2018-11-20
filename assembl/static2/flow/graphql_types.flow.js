@@ -27,9 +27,9 @@ export type CookieTypes =
   | 'REJECT_TRACKING_ON_DISCUSSION'
   | 'REJECT_USER_GUIDELINE_ON_DISCUSSION';
 
-export type ExtractStates = 'PUBLISHED' | 'SUBMITTED';
-
 export type SentimentTypes = 'DISAGREE' | 'DONT_UNDERSTAND' | 'LIKE' | 'MORE_INFO';
+
+export type ExtractStates = 'PUBLISHED' | 'SUBMITTED';
 
 export type LangStringEntryInput = {|
   // The unicode encoded string representation of the content.
@@ -239,6 +239,32 @@ export type BrightMirrorFictionQuery = {|
             externalUrl: ?string
           |}
         |},
+        // A list of SentimentCounts which counts each sentiment expressed. These include:
+        //
+        // Like,
+        //
+        // Agree,
+        //
+        // Disagree,
+        //
+        // Like,
+        //
+        // Don't Understand
+        //
+        // More Info
+        //
+        sentimentCounts: ?{|
+          // The number of Sentiments disagreeing with the post.
+          disagree: ?number,
+          // The number of Sentiments expressing "dont_understand" on the Post.
+          dontUnderstand: ?number,
+          // The number of Sentiments expressed "like" on the post.
+          like: ?number,
+          // The number of Sentiments requesting "more_info" on the post.
+          moreInfo: ?number
+        |},
+        // The SentimentType that the API calling User has on the Post, if any.
+        mySentiment: ?SentimentTypes,
         // The User or AgentProfile who created the parent post.
         parentPostCreator: ?{|
           // How the User is represented throughout the debate. If a user-name exists, this will be chosen. If it does not, the name is determined.
@@ -6052,6 +6078,32 @@ export type BrightMirrorFictionFragment = {|
       externalUrl: ?string
     |}
   |},
+  // A list of SentimentCounts which counts each sentiment expressed. These include:
+  //
+  // Like,
+  //
+  // Agree,
+  //
+  // Disagree,
+  //
+  // Like,
+  //
+  // Don't Understand
+  //
+  // More Info
+  //
+  sentimentCounts: ?{|
+    // The number of Sentiments disagreeing with the post.
+    disagree: ?number,
+    // The number of Sentiments expressing "dont_understand" on the Post.
+    dontUnderstand: ?number,
+    // The number of Sentiments expressed "like" on the post.
+    like: ?number,
+    // The number of Sentiments requesting "more_info" on the post.
+    moreInfo: ?number
+  |},
+  // The SentimentType that the API calling User has on the Post, if any.
+  mySentiment: ?SentimentTypes,
   // The User or AgentProfile who created the parent post.
   parentPostCreator: ?{|
     // How the User is represented throughout the debate. If a user-name exists, this will be chosen. If it does not, the name is determined.

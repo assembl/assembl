@@ -93,43 +93,41 @@ class SideCommentMenu extends React.Component<Props, State> {
     if (!showBox) this.clearHighlights();
 
     return (
-      <div>
-        <div className="side-comment-container">
-          {showCommentBadge && (
-            <SideCommentBadge
-              toggleExtractsBox={this.toggleCommentsBox}
-              extractsNumber={extracts.length}
-              position={badgePosition}
-              showBox={showBox}
-            />
-          )}
-          {showBox && (
-            <SideCommentBox
-              ideaId={ideaId}
-              postId={postId}
-              key={`extract-${postId}`}
-              extracts={extracts}
-              selection={selection}
-              lang={lang}
-              submitting={showBoxInSubmitMode}
-              refetchPost={refetchPost}
-              cancelSubmit={cancelSubmit}
-              toggleSubmitDisplay={toggleSubmitDisplay}
-              toggleCommentsBox={this.toggleCommentsBox}
-              position={badgePosition}
-              clearHighlights={this.clearHighlights}
-              setPositionToExtract={setPositionToExtract}
-              userCanReply={userCanReply}
-            />
-          )}
-          {showCommentAnchor && (
-            <SideCommentAnchor
-              handleMouseDown={this.handleMouseDown}
-              anchorPosition={commentAnchorPosition}
-              handleClickAnchor={handleClickAnchor}
-            />
-          )}
-        </div>
+      <div className="side-comment-container">
+        {showCommentBadge && (
+          <SideCommentBadge
+            toggleExtractsBox={this.toggleCommentsBox}
+            extractsNumber={extracts.length}
+            position={badgePosition}
+            showBox={showBox}
+          />
+        )}
+        {showBox && (
+          <SideCommentBox
+            ideaId={ideaId}
+            postId={postId}
+            key={`extract-${postId}`}
+            extracts={extracts}
+            selection={selection}
+            lang={lang}
+            submitting={showBoxInSubmitMode}
+            refetchPost={refetchPost}
+            cancelSubmit={cancelSubmit}
+            toggleSubmitDisplay={toggleSubmitDisplay}
+            toggleCommentsBox={this.toggleCommentsBox}
+            position={badgePosition}
+            clearHighlights={this.clearHighlights}
+            setPositionToExtract={setPositionToExtract}
+            userCanReply={userCanReply}
+          />
+        )}
+        {showCommentAnchor && (
+          <SideCommentAnchor
+            handleMouseDown={this.handleMouseDown}
+            anchorPosition={commentAnchorPosition}
+            handleClickAnchor={handleClickAnchor}
+          />
+        )}
       </div>
     );
   }

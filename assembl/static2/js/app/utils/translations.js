@@ -450,6 +450,12 @@ const Translations = {
           editTooltip: "Modifier",
           deleteTooltip: "Supprimer"
         },
+        sentiment: {
+          like: "Ça m'inspire !",
+          dislike: "Ça me refroidit !",
+          dontUnderstand: "Renforcer l'histoire",
+          moreInfo: "Enrichir le style"
+        },
         suggest: "Suggérer"
       },
       themes: "Thèmes",
@@ -1369,6 +1375,12 @@ const Translations = {
           confirmDeleteMsg: "Are you sure you would like to delete this comment?",
           editTooltip: "Edit",
           deleteTooltip: "Delete"
+        },
+        sentiment: {
+          like: "It inspires me!",
+          dislike: "It turned me off!",
+          dontUnderstand: "Strenghten the story",
+          moreInfo: "Enrich style"
         },
         suggest: "Suggest"
       },

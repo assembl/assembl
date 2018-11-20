@@ -23,6 +23,14 @@
 
       .profile {
         width: 230px;
+
+        img {
+          min-width: 30px;
+        }
+
+        .username {
+          width: 180px;
+        }
       }
 
       .button-bar {
@@ -127,7 +135,7 @@
 
       .harvesting-box-header {
         .profile {
-          width: auto;
+          width: 250px;
         }
       }
 

@@ -42,6 +42,21 @@ $fiction-toolbar-icon-size: 17px;
   padding-top: 10px;
 }
 
+.sentiment-container {
+  position: fixed;
+  left: 0;
+
+  .add-sentiment {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .min-sentiment {
+    position: absolute;
+  }
+}
+
 .bright-mirror-comments {
   padding: 30px 0;
   z-index: 100;
@@ -83,16 +98,16 @@ $fiction-toolbar-icon-size: 17px;
 
 @media screen and (min-width: $screen-sm-min) {
   .bright-mirror-fiction {
-    padding-left: 54px;
-    padding-right: 54px;
+    padding-left: 70px;
+    padding-right: 70px;
   }
 
   .bright-mirror-comments {
     padding: 40px 0;
 
     .comments-content {
-      padding-left: 54px;
-      padding-right: 54px;
+      padding-left: 70px;
+      padding-right: 70px;
 
       // Tree.jsx style adjustments
       .level {

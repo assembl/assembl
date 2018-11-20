@@ -23,7 +23,7 @@ const refetchPost: Function = jest.fn();
 
 const defaultFictionBody: FictionBodyProps = {
   ideaId: defaultIdeaId,
-  id: defaultId,
+  postId: defaultId,
   title: defaultTitle,
   content: defaultContent,
   contentLocale: defaultLocale,
@@ -33,7 +33,17 @@ const defaultFictionBody: FictionBodyProps = {
   dbId: defaultDbId,
   bodyMimeType: bodyMimeType,
   refetchPost: refetchPost,
-  userCanReply: false
+  userCanReply: false,
+  mySentiment: 'LIKE',
+  sentimentCounts: {
+    disagree: 0,
+    dontUnderstand: 0,
+    like: 0,
+    moreInfo: 0
+  },
+  isPhaseCompleted: false,
+  client: jest.fn(),
+  screenWidth: 100
 };
 
 describe('<FictionBody /> - with shallow', () => {
@@ -93,7 +103,7 @@ describe('<FictionBody /> - snapshots', () => {
     const props: FictionBodyProps = {
       title: '',
       content: '',
-      id: defaultId,
+      postId: defaultId,
       contentLocale: defaultLocale,
       lang: defaultLocale,
       extracts: defaultExtracts,
@@ -102,7 +112,17 @@ describe('<FictionBody /> - snapshots', () => {
       bodyMimeType: bodyMimeType,
       refetchPost: refetchPost,
       ideaId: defaultIdeaId,
-      userCanReply: false
+      userCanReply: false,
+      mySentiment: 'like',
+      sentimentCounts: {
+        disagree: 0,
+        dontUnderstand: 0,
+        like: 0,
+        moreInfo: 0
+      },
+      isPhaseCompleted: false,
+      client: jest.fn(),
+      screenWidth: 100
     };
     const component = renderer.create(<FictionBody {...props} />);
     const tree = component.toJSON();

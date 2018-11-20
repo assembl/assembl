@@ -327,4 +327,28 @@ export const deleteSideCommentTooltip = (
   </Tooltip>
 );
 
+export const fictionLikeTooltip = (
+  <Tooltip id="fictionLikeTooltip">
+    <Translate value="debate.brightMirror.sentiment.like" />
+  </Tooltip>
+);
+
+export const fictionDislikeTooltip = (
+  <Tooltip id="fictionDislikeTooltip">
+    <Translate value="debate.brightMirror.sentiment.dislike" />
+  </Tooltip>
+);
+
+export const fictionDontUnderstandTooltip = (
+  <Tooltip id="fictionDontUnderstandTooltip">
+    <Translate value="debate.brightMirror.sentiment.dontUnderstand" />
+  </Tooltip>
+);
+
+export const fictionMoreInfoTooltip = (
+  <Tooltip id="fictionMoreInfoTooltip">
+    <Translate value="debate.brightMirror.sentiment.moreInfo" />
+  </Tooltip>
+);
+
 export const fileNameTooltip = (fileName?: string) => <Tooltip id="fileNameTooltip">{fileName}</Tooltip>;

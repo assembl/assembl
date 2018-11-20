@@ -1,14 +1,16 @@
 // @flow
 import React from 'react';
+import { ApolloClient } from 'react-apollo';
 
 import SideCommentMenu from './sideComment/sideCommentMenu';
+import SentimentMenu from './sentimentMenu';
 import { elementContainsSelection, getConnectedUserId } from '../../../utils/globalFunctions';
 import PostBody from '../common/post/postBody';
 import { COMMENT_DYNAMIC_OFFSET, ANCHOR_OFFSET } from '../../../constants';
 import { getExtractTagId } from '../../../utils/extract';
 
 export type Props = {
-  id: string,
+  postId: string,
   ideaId: string,
   title: string,
   content: string,
@@ -18,7 +20,12 @@ export type Props = {
   dbId: number,
   bodyMimeType: string,
   refetchPost: Function,
-  userCanReply: boolean
+  userCanReply: boolean,
+  sentimentCounts: ?SentimentCountsFragment,
+  mySentiment: ?string,
+  isPhaseCompleted: boolean,
+  screenWidth: number,
+  client: ApolloClient
 };
 
 type State = {
@@ -27,6 +34,7 @@ type State = {
   commentAnchorPosition: { x: number, y: number },
   commentBadgeFixedPosition: { x: number, y: number },
   commentBadgeDynamicPosition: { x: number, y: number },
+  commentSentimentFixedPosition: { x: number, y: number },
   commentBadgePositionInit: boolean
 };
 
@@ -44,6 +52,7 @@ class FictionBody extends React.Component<Props, State> {
       commentAnchorPosition: { x: 0, y: 0 },
       commentBadgeDynamicPosition: { x: 0, y: 0 },
       commentBadgeFixedPosition: { x: 0, y: 0 },
+      commentSentimentFixedPosition: { x: 0, y: 0 },
       commentBadgePositionInit: false
     };
     this.fictionBodyView = React.createRef();
@@ -61,6 +70,7 @@ class FictionBody extends React.Component<Props, State> {
     const body = document.getElementById(getExtractTagId(dbId)).getBoundingClientRect();
     this.setState({
       commentBadgeFixedPosition: { x: body.right, y: body.top + window.pageYOffset },
+      commentSentimentFixedPosition: { x: body.left, y: body.top + window.pageYOffset },
       commentBadgePositionInit: true
     });
   };
@@ -149,7 +159,7 @@ class FictionBody extends React.Component<Props, State> {
 
   render() {
     const {
-      id,
+      postId,
       title,
       content,
       contentLocale,
@@ -159,20 +169,26 @@ class FictionBody extends React.Component<Props, State> {
       dbId,
       bodyMimeType,
       ideaId,
-      userCanReply
+      userCanReply,
+      sentimentCounts,
+      mySentiment,
+      isPhaseCompleted,
+      screenWidth,
+      client
     } = this.props;
     const {
       displayCommentAnchor,
       displaySubmitBox,
       commentAnchorPosition,
       commentBadgeDynamicPosition,
-      commentBadgeFixedPosition
+      commentBadgeFixedPosition,
+      commentSentimentFixedPosition
     } = this.state;
 
     return (
       <div ref={this.fictionBodyView}>
         <SideCommentMenu
-          postId={id}
+          postId={postId}
           ideaId={ideaId}
           lang={contentLocale}
           extracts={extracts}
@@ -188,7 +204,16 @@ class FictionBody extends React.Component<Props, State> {
           setPositionToExtract={this.setPositionToExtract}
           userCanReply={userCanReply}
         />
-
+        <SentimentMenu
+          position={commentSentimentFixedPosition}
+          sentimentCounts={sentimentCounts}
+          mySentiment={mySentiment}
+          isPhaseCompleted={isPhaseCompleted}
+          postId={postId}
+          refetchPost={refetchPost}
+          screenWidth={screenWidth}
+          client={client}
+        />
         <PostBody
           handleMouseUpWhileHarvesting={this.handleMouseUpWhileHarvesting}
           body={content || noContentMessage}
@@ -196,7 +221,7 @@ class FictionBody extends React.Component<Props, State> {
           extracts={extracts}
           bodyMimeType={bodyMimeType}
           contentLocale={contentLocale}
-          id={id}
+          id={postId}
           lang={lang}
           subject={title || noTitleMessage}
           originalLocale={contentLocale}

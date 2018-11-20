@@ -38,6 +38,9 @@ jest.mock('../../../js/app/pages/idea', () => ({
   getDebateTotalMessages: jest.fn(() => 9876),
   transformPosts: jest.fn(() => [{ id: 'fictionId', children: ['yyy', 'zzz'] }])
 }));
+jest.mock('../../../js/app/utils/timeline', () => ({
+  getIsPhaseCompletedById: jest.fn(() => false)
+}));
 
 const brightMirrorFictionDataTemplate = {
   fiction: {
@@ -59,7 +62,14 @@ const brightMirrorFictionDataTemplate = {
       displayName: 'Wendy Quigley'
     },
     bodyMimeType: 'text/html',
-    extracts: []
+    extracts: [],
+    mySentiment: 'LIKE',
+    sentimentCounts: {
+      disagree: 0,
+      dontUnderstand: 0,
+      like: 0,
+      moreInfo: 0
+    }
   },
   error: null,
   refetch: () => {}
@@ -89,6 +99,16 @@ const brightMirrorFictionPropsTemplate = {
   // Mutation function
   createComment: undefined
 };
+
+const timeline = [
+  {
+    identifier: 'foo',
+    id: 'FooID',
+    start: 'date1',
+    end: 'date2',
+    title: { entries: [{ en: 'Foo' }] }
+  }
+];
 
 describe('<BrightMirrorFiction /> - with mount', () => {
   let wrapper;
@@ -128,6 +148,10 @@ describe('<BrightMirrorFiction /> - with mount', () => {
       brightMirrorFictionProps = {
         brightMirrorFictionData: brightMirrorFictionData,
         ideaWithCommentsData: ideaWithCommentsData,
+        phaseId: '2',
+        timeline: timeline,
+        client: jest.fn(),
+        screenWidth: 100,
         ...brightMirrorFictionPropsTemplate
       };
 
@@ -204,9 +228,12 @@ describe('<BrightMirrorFiction /> - with mount', () => {
       brightMirrorFictionProps = {
         brightMirrorFictionData: brightMirrorFictionData,
         ideaWithCommentsData: ideaWithCommentsData,
+        phaseId: '2',
+        timeline: timeline,
+        client: jest.fn(),
+        screenWidth: 100,
         ...brightMirrorFictionPropsTemplate
       };
-
       // Mock Apollo
       mocks = [
         {
@@ -258,6 +285,10 @@ describe('<BrightMirrorFiction /> - with mount', () => {
       brightMirrorFictionProps = {
         brightMirrorFictionData: brightMirrorFictionData,
         ideaWithCommentsData: ideaWithCommentsData,
+        phaseId: '2',
+        timeline: timeline,
+        client: jest.fn(),
+        screenWidth: 100,
         ...brightMirrorFictionPropsTemplate
       };
 

@@ -4,9 +4,9 @@ import { Grid, Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { I18n } from 'react-redux-i18n';
 import head from 'lodash/head';
-import type { OperationComponent } from 'react-apollo';
+import type { OperationComponent, ApolloClient } from 'react-apollo';
 // Graphql imports
-import { compose, graphql } from 'react-apollo';
+import { compose, graphql, withApollo } from 'react-apollo';
 import BrightMirrorFictionQuery from '../graphql/BrightMirrorFictionQuery.graphql';
 // Optimization: Should create createBrightMirrorComment.graphql and adapt the mutation
 import CreateBrightMirrorCommentMutation from '../graphql/mutations/createPost.graphql';
@@ -25,11 +25,13 @@ import BackButton from '../components/debate/common/backButton';
 import FictionCommentHeader from '../components/debate/brightMirror/fictionCommentHeader';
 import FictionCommentForm from '../components/debate/brightMirror/fictionCommentForm';
 import FictionCommentList from '../components/debate/brightMirror/fictionCommentList';
+import { withScreenWidth } from '../components/common/screenDimensions';
 // Utils imports
 import { transformPosts, getDebateTotalMessages } from './idea';
 import { displayAlert } from '../utils/utilityManager';
 import { getConnectedUserId } from '../utils/globalFunctions';
 import Permissions, { connectedUserCan } from '../utils/permissions';
+import { getIsPhaseCompletedById } from '../utils/timeline';
 // Constant imports
 import { FICTION_DELETE_CALLBACK, EMPTY_STRING, PublicationStates, USER_ID_NOT_FOUND } from '../constants';
 // Type imports
@@ -65,6 +67,13 @@ export type BrightMirrorFictionProps = {
   fictionId: string
 };
 
+type AdditionalProps = {
+  timeline: Timeline,
+  phaseId: string,
+  client: ApolloClient,
+  screenWidth: number
+};
+
 type BrightMirrorFictionReduxProps = {
   /** Fiction locale fetched from mapStateToProps */
   contentLocale: string,
@@ -92,7 +101,10 @@ type BrightMirrorFictionGraphQLProps = {
   ideaWithCommentsData: IdeaWithCommentsData
 };
 
-type LocalBrightMirrorFictionProps = BrightMirrorFictionProps & BrightMirrorFictionReduxProps & BrightMirrorFictionGraphQLProps;
+type LocalBrightMirrorFictionProps = AdditionalProps &
+  BrightMirrorFictionProps &
+  BrightMirrorFictionReduxProps &
+  BrightMirrorFictionGraphQLProps;
 
 type BrightMirrorFictionState = {
   /** Fiction title */
@@ -215,7 +227,11 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
       ideaWithCommentsData,
       phase,
       slug,
-      themeId
+      themeId,
+      phaseId,
+      timeline,
+      client,
+      screenWidth
     } = this.props;
     // Handle fetching error
     if (brightMirrorFictionData.error || ideaWithCommentsData.error) {
@@ -275,7 +291,8 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
       fictionId: fictionId,
       phase: phase,
       slug: slug,
-      themeId: themeId
+      themeId: themeId,
+      phaseId: phaseId
     };
 
     const fictionToolbarProps: FictionToolbarProps = {
@@ -292,7 +309,7 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
     };
 
     const fictionBodyProps: FictionBodyProps = {
-      id: fictionId,
+      postId: fictionId,
       ideaId: themeId,
       title: title,
       content: content,
@@ -305,7 +322,12 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
       // $FlowFixMe dbId is never null
       dbId: fiction.dbId,
       refetchPost: brightMirrorFictionData.refetch,
-      userCanReply: userCanEdit
+      userCanReply: userCanEdit,
+      sentimentCounts: fiction.sentimentCounts,
+      mySentiment: fiction.mySentiment,
+      isPhaseCompleted: getIsPhaseCompletedById(timeline, phaseId),
+      client: client,
+      screenWidth: screenWidth
     };
 
     const fictionCommentFormProps: FictionCommentFormProps = {
@@ -363,7 +385,8 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
 }
 const mapStateToProps = state => ({
   contentLocale: state.i18n.locale,
-  contentLocaleMapping: state.contentLocale
+  contentLocaleMapping: state.contentLocale,
+  timeline: state.timeline
 });
 
 const withData: OperationComponent<Response> = graphql(BrightMirrorFictionQuery, {
@@ -381,6 +404,8 @@ const withData: OperationComponent<Response> = graphql(BrightMirrorFictionQuery,
 export default compose(
   connect(mapStateToProps),
   withData,
+  withScreenWidth,
+  withApollo,
   graphql(IdeaWithCommentsQuery, {
     // GraphQL custom data name
     name: 'ideaWithCommentsData',
