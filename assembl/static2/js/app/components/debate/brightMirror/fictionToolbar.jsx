@@ -16,6 +16,7 @@ import { editFictionTooltip, deleteFictionTooltip, shareFictionTooltip } from '.
 import type { Props as EditPostButtonProps } from '../common/editPostButton';
 import type { Props as DeletePostButtonProps } from '../common/deletePostButton';
 import type { Props as SharePostButtonProps } from '../common/sharePostButton';
+import type { BrightMirrorFictionProps } from '../../../pages/brightMirrorFiction';
 
 export type FictionToolbarProps = {
   fictionId: string,

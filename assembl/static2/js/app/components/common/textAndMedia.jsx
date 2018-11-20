@@ -9,12 +9,12 @@ type File = {
   externalUrl: string
 };
 type Props = {
-  title: string,
-  descriptionTop: string,
-  descriptionBottom: string,
-  descriptionSide: string,
-  htmlCode: string,
-  mediaFile: File,
+  title?: string,
+  descriptionTop: ?string,
+  descriptionBottom: ?string,
+  descriptionSide: ?string,
+  htmlCode: ?string,
+  mediaFile?: ?File,
   noTitle: boolean
 };
 
@@ -27,8 +27,8 @@ type DescriptionProps = {
 };
 
 type ContentProps = {
-  htmlCode: string,
-  mediaFile: File
+  htmlCode: ?string,
+  mediaFile: ?File
 };
 
 class TextAndMedia extends React.Component<Props> {
@@ -66,7 +66,7 @@ class TextAndMedia extends React.Component<Props> {
   static Content = ({ htmlCode, mediaFile }: ContentProps) => {
     const isLocal = !htmlCode && mediaFile && mediaFile.externalUrl;
     const component = isLocal ? (
-      <Image responsive src={mediaFile.externalUrl} />
+      <Image responsive src={mediaFile && mediaFile.externalUrl} />
     ) : (
       <ResponsiveEmbed a16by9>
         <iframe title="media" src={htmlCode} />
@@ -87,8 +87,7 @@ class TextAndMedia extends React.Component<Props> {
     const { title, descriptionTop, descriptionBottom, descriptionSide, htmlCode, mediaFile, noTitle } = this.props;
     const validDescriptionSide = TextAndMedia.isValidDescription(descriptionSide);
     const validDescriptionTop = TextAndMedia.isValidDescription(descriptionTop);
-    const validDescriptionBottom = TextAndMedia.isValidDescription(descriptionBottom);
-
+    const validDescriptionBottom = descriptionBottom && TextAndMedia.isValidDescription(descriptionBottom);
     const validMedia = !!(htmlCode || mediaFile);
     const somethingOnRight = !!(validDescriptionTop || validDescriptionBottom || validMedia || validDescriptionSide);
     const somethingOnLeft = validDescriptionSide;
@@ -104,16 +103,17 @@ class TextAndMedia extends React.Component<Props> {
             <Grid fluid>
               {somethingOnLeft && (
                 <Col sm={totalSize} md={somethingOnRight ? leftSize : totalSize}>
-                  {validDescriptionSide && <TextAndMedia.SideDescription content={descriptionSide} />}
+                  {descriptionSide && validDescriptionSide && <TextAndMedia.SideDescription content={descriptionSide} />}
                 </Col>
               )}
               {somethingOnRight && (
                 <Col sm={totalSize} md={somethingOnLeft ? rightSize : totalSize}>
                   <div className="media-right">
-                    {validDescriptionTop && <TextAndMedia.TopDescription content={descriptionTop} />}
+                    {descriptionTop && validDescriptionTop && <TextAndMedia.TopDescription content={descriptionTop} />}
                     {validMedia && <TextAndMedia.Content htmlCode={htmlCode} mediaFile={mediaFile} />}
-                    {validDescriptionSide && <TextAndMedia.SideDescription content={descriptionSide} />}
-                    {validDescriptionBottom && <TextAndMedia.BottomDescription content={descriptionBottom} />}
+                    {descriptionSide && validDescriptionSide && <TextAndMedia.SideDescription content={descriptionSide} />}
+                    {descriptionBottom &&
+                      validDescriptionBottom && <TextAndMedia.BottomDescription content={descriptionBottom} />}
                   </div>
                 </Col>
               )}

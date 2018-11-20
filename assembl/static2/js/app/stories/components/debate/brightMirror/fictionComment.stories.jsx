@@ -41,6 +41,7 @@ export const defaultFictionCommentGraphQL: FictionCommentGraphQLProps = {
   displayedPublishedDate: 'August 8th, 2018',
   modified: false,
   parentPostAuthorFullname: 'Dark Vador',
+  publicationState: 'PUBLISHED',
   publishedDate: '2018-07-09',
   updateComment: action('updateComment')
 };
@@ -68,6 +69,7 @@ storiesOf('FictionComment', module)
         numChildren={number('Number of comments', playground.numChildren)}
         modified={boolean('Is modified', playground.modified)}
         parentPostAuthorFullname={text('Parent comment author fullname', playground.parentPostAuthorFullname)}
+        publicationState={playground.publicationState}
         publishedDate={text('Published date', playground.publishedDate)}
         updateComment={playground.updateComment}
         fictionCommentExtraProps={playground.fictionCommentExtraProps}

@@ -29,7 +29,9 @@ export type Idea = {
   numContributors: number,
   numPosts: number,
   order: number,
-  ancestors: Array<string>
+  ancestors: Array<string>,
+  posts: Posts,
+  messageColumns: IdeaMessageColumns
 };
 
 type Post = { ...PostFragment } & {

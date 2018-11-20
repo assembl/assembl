@@ -21,4 +21,9 @@ const CircleAvatar = ({ username, src }: CircleAvatarProps) => (
   />
 );
 
+CircleAvatar.defaultProps = {
+  username: '',
+  src: ''
+};
+
 export default CircleAvatar;

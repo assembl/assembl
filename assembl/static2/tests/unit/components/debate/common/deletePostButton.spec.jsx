@@ -8,7 +8,7 @@ import Adapter from 'enzyme-adapter-react-16';
 /* eslint-enable */
 
 import DeletePostButton from '../../../../../js/app/components/debate/common/deletePostButton';
-import type { DeletePostButtonProps } from '../../../../../js/app/components/debate/common/deletePostButton';
+import type { Props as DeletePostButtonProps } from '../../../../../js/app/components/debate/common/deletePostButton';
 import { displayModal } from '../../../../../js/app/utils/utilityManager';
 
 // Separate the snapshots in directories next to each component

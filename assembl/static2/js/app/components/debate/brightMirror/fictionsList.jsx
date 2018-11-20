@@ -54,7 +54,7 @@ const publicationStateCreationDateComparator = (a, b) => {
 };
 
 const FictionsList = ({ posts, identifier, refetchIdea, lang, themeId }: Props) => {
-  const slug = getDiscussionSlug();
+  const slug = getDiscussionSlug() || EMPTY_STRING;
 
   const connectedUserId = getConnectedUserId();
 

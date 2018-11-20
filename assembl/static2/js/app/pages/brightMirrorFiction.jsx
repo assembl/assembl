@@ -107,7 +107,7 @@ type BrightMirrorFictionState = {
 
 type CommentsInfo = {
   /** Top comments build from transformPosts function */
-  topComments: [Object],
+  topComments: Array<TreeItem & { id: string, contentLocale: string }>,
   /** Total number of comments (debate section) */
   commentsCount: number
 };
@@ -174,12 +174,17 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
   // Fetch top comments and total number of comments from fictionId
   // The fiction is the main post, a post (or comment) with a parentId identical to the fictionId
   // will be considered as the top level of comments of the fiction
-  getCommentsInfo() {
+  getCommentsInfo(): CommentsInfo {
     const { fictionId, ideaWithCommentsData } = this.props;
     const { edges } = ideaWithCommentsData.idea.posts;
     const { idea, refetch } = ideaWithCommentsData;
 
-    if (!ideaWithCommentsData.idea) return [];
+    if (!ideaWithCommentsData.idea) {
+      return {
+        topComments: [],
+        commentsCount: 0
+      };
+    }
 
     const transformedPosts = transformPosts(edges, [], {
       refetchIdea: refetch,
