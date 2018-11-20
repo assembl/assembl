@@ -118,12 +118,13 @@ class UpdateExtractTags(graphene.Mutation):
     @staticmethod
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
         extract_id = args.get('id')
         extract_id = int(Node.from_global_id(extract_id)[1])
         extract = models.Extract.get(extract_id)
         require_instance_permission(CrudPermissions.UPDATE, extract, context)
         db = extract.db
-        tags = models.Tag.get_tags(args.get('tags', []), db)
+        tags = models.Tag.get_tags(args.get('tags', []), discussion_id, db)
         extract.tags = tags['new_tags'] + tags['tags']
         db.flush()
         return UpdateExtractTags(tags=extract.tags)

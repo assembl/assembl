@@ -361,6 +361,7 @@ from .nlp import (  # noqa: E402, F401
 )
 
 from .tag import (  # noqa: E402, F401
+    TaggableEntity,
     Tag,
     ExtractsTagsAssociation
 )

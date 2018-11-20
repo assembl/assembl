@@ -509,6 +509,8 @@ class DumbHarvestingBox extends React.Component<Props, State> {
     const harvesterUserId = extract && extract.creator && extract.creator.userId ? extract.creator.userId : getConnectedUserId();
     const menuDisabled = disabled || isSubmitted;
     const hasFooter = disabled || isEditable || isSubmitted;
+    const tags = extract && extract.tags ? extract.tags.map(tag => tag.id) : [];
+    tags.sort();
     return (
       <div className={isSubmitted ? 'submitted-harvesting' : ''}>
         <div>
@@ -691,7 +693,8 @@ class DumbHarvestingBox extends React.Component<Props, State> {
           {extract && !hasFooter ? (
             <Tags
               canEdit={connectedUserIsAdmin()}
-              key={extract.id}
+              key={extract.id + tags.join('')}
+              contextId={extract.id}
               initialValues={extract.tags ? extract.tags.map(tag => ({ value: tag.id, label: tag.value })) : []}
               updateTags={this.updateTags}
             />

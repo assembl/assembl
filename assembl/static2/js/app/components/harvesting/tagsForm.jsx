@@ -16,11 +16,12 @@ export type FormData = {
 type Props = {
   client: ApolloClient,
   initialValues: Array<Option>,
+  excludeOptions: Array<string>,
   renderFooter: (formData: FormData) => React.Node,
   onSubmit: (result: { tags: Array<Option> }) => void
 };
 
-export const tagsLoader = (client: ApolloClient) => (inputValue: string) =>
+export const tagsLoader = (client: ApolloClient, exclude: Array<string> = []) => (inputValue: string) =>
   client
     .query({
       query: Tags,
@@ -29,7 +30,7 @@ export const tagsLoader = (client: ApolloClient) => (inputValue: string) =>
     })
     .then((value) => {
       const { data: { tags } } = value;
-      return tags.map(tag => ({
+      return tags.filter(tag => !exclude.includes(tag.id)).map(tag => ({
         label: tag.value,
         value: tag.id
       }));
@@ -42,11 +43,12 @@ export const tagsComparator = (initialValues: Array<Option>, currentTags: Array<
 
 export class DumbTagsForm extends React.Component<Props> {
   static defaultProps = {
-    initialValues: []
+    initialValues: [],
+    excludeOptions: []
   };
 
   render() {
-    const { initialValues, renderFooter, onSubmit, client } = this.props;
+    const { initialValues, renderFooter, onSubmit, client, excludeOptions } = this.props;
     return (
       <Form
         initialValues={{ tags: initialValues }}
@@ -65,8 +67,9 @@ export class DumbTagsForm extends React.Component<Props> {
                 isMulti
                 canCreate
                 isAsync
+                autoFocus
                 value={initialValues}
-                loadOptions={tagsLoader(client)}
+                loadOptions={tagsLoader(client, excludeOptions)}
                 className="tags-select"
                 placeholder="harvesting.tags.select.placeholder"
                 noOptionsMessage={() => <Translate value="harvesting.tags.select.noOptions" />}

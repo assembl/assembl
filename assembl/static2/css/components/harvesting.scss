@@ -502,6 +502,27 @@
     }
   }
 
+  .harvesting-tag-form-container {
+    width: 100%;
+
+    .form-group {
+      margin: 0;
+    }
+
+    .select-field__control {
+      border: none;
+      min-height: 28px;
+    }
+
+    .select-field__indicator {
+      padding: 0 8px;
+    }
+
+    .select-field__value-container {
+      padding: 0;
+    }
+  }
+
   .harvesting-tags-form-container,
   .harvesting-tags-container {
     background-color: $grey1;
@@ -525,6 +546,10 @@
       color: $grey8;
       margin-right: 5px;
       margin-bottom: 5px;
+
+      &.editing {
+        width: 100%;
+      }
 
       .harvesting-tag-title {
         margin-right: 7px;
@@ -627,6 +652,48 @@
 
   .active-box {
     border-left-color: $harvesting-blue;
+  }
+}
+
+.harvesting-tag-input-container {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .harvesting-tag-input {
+    display: flex;
+    align-items: center;
+  }
+
+  .harvesting-tag-input-control {
+    display: flex;
+    padding: 0 5px;
+
+    .icon {
+      margin-right: 5px;
+      padding: 2px 2px 0 2px;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+
+    .icon:last-child {
+      margin-right: 0;
+    }
+
+    .cancel-icon:hover {
+      color: white !important;
+      background-color: $red !important;
+    }
+
+    .validate-icon {
+      padding: 2px 1px 0 1px;
+
+      &:hover {
+        color: white;
+        background-color: $green;
+      }
+    }
   }
 }
 

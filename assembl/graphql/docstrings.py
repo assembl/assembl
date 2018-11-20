@@ -261,9 +261,16 @@ class UpdateExtract:
 
 
 class UpdateExtractTags:
-    __doc__ = """A mutation to update the tags of an existing extract."""
+    doc__ = """A mutation to update the tags of an existing extract."""
     extract_id = """The Relay.Node ID type of the Extract object to the updated."""
     tags = """A list of strings."""
+
+
+class UpdateTag:
+    __doc__ = """A mutation to update or replace the value of an existing tag."""
+    id = """The Relay.Node ID type of the Tag object to the updated."""
+    taggable_id = """The Relay.Node ID type of the TaggableEntity object representing the context of the mutation."""
+    value = """A string representing the new value of the tag."""
 
 
 class DeleteExtract:

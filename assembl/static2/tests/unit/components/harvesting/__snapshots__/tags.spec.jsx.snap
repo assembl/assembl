@@ -12,24 +12,40 @@ exports[`Tags component should match Tags snapshot (user can't edit) 1`] = `
   <div
     className="harvesting-tags-titles-container"
   >
-    <div
-      className="harvesting-tag-container"
-    >
-      <span
-        className="harvesting-tag-title"
-      >
-        foo
-      </span>
-    </div>
-    <div
-      className="harvesting-tag-container"
-    >
-      <span
-        className="harvesting-tag-title"
-      >
-        bar
-      </span>
-    </div>
+    <Apollo(Tag)
+      canRemove={false}
+      excludeOptions={
+        Array [
+          "fooid",
+          "barid",
+        ]
+      }
+      onUpdate={[Function]}
+      remove={[Function]}
+      tag={
+        Object {
+          "label": "foo",
+          "value": "fooid",
+        }
+      }
+    />
+    <Apollo(Tag)
+      canRemove={false}
+      excludeOptions={
+        Array [
+          "fooid",
+          "barid",
+        ]
+      }
+      onUpdate={[Function]}
+      remove={[Function]}
+      tag={
+        Object {
+          "label": "bar",
+          "value": "barid",
+        }
+      }
+    />
   </div>
 </div>
 `;
@@ -46,32 +62,40 @@ exports[`Tags component should match Tags snapshot 1`] = `
   <div
     className="harvesting-tags-titles-container"
   >
-    <div
-      className="harvesting-tag-container"
-    >
-      <span
-        className="harvesting-tag-title"
-      >
-        foo
-      </span>
-      <div
-        className="assembl-icon-cancel"
-        onClick={[Function]}
-      />
-    </div>
-    <div
-      className="harvesting-tag-container"
-    >
-      <span
-        className="harvesting-tag-title"
-      >
-        bar
-      </span>
-      <div
-        className="assembl-icon-cancel"
-        onClick={[Function]}
-      />
-    </div>
+    <Apollo(Tag)
+      canRemove={true}
+      excludeOptions={
+        Array [
+          "fooid",
+          "barid",
+        ]
+      }
+      onUpdate={[Function]}
+      remove={[Function]}
+      tag={
+        Object {
+          "label": "foo",
+          "value": "fooid",
+        }
+      }
+    />
+    <Apollo(Tag)
+      canRemove={true}
+      excludeOptions={
+        Array [
+          "fooid",
+          "barid",
+        ]
+      }
+      onUpdate={[Function]}
+      remove={[Function]}
+      tag={
+        Object {
+          "label": "bar",
+          "value": "barid",
+        }
+      }
+    />
     <div
       className="harvesting-tags-edit"
       onClick={[Function]}

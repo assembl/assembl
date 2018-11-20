@@ -61,6 +61,10 @@ const Translations = {
         label: "Tags",
         cancel: "Annuler",
         validate: "Valider",
+        deleteConfirmation: {
+          confirmDeletionTitle: "Supprimer le tag \"%{tag}\"",
+          confirmDeletionBody: "Etes-vous certain de vouloir supprimer ce tag ?"
+        },
         select: {
           placeholder: "Selectionner des tags",
           noOptions: "Aucun tag trouvé",
@@ -998,6 +1002,10 @@ const Translations = {
         label: "Tags",
         cancel: "Cancel",
         validate: "Validate",
+        deleteConfirmation: {
+          confirmDeletionTitle: "Delete the tag \"%{tag}\"",
+          confirmDeletionBody: "Are you sure that you wish to delete this tag?"
+        },
         select: {
           placeholder: "Select tags",
           noOptions: "No tags",

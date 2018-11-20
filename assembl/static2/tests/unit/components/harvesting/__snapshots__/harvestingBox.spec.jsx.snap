@@ -214,6 +214,7 @@ exports[`harvestingBox component should match harvestingBox snapshot when author
     </div>
     <Tags
       canEdit={false}
+      contextId="987643"
       initialValues={
         Array [
           Object {
@@ -664,6 +665,7 @@ exports[`harvestingBox component should match harvestingBox snapshot when nugget
     </div>
     <Tags
       canEdit={false}
+      contextId="987643"
       initialValues={
         Array [
           Object {
@@ -896,6 +898,7 @@ exports[`harvestingBox component should match harvestingBox snapshot when select
     </div>
     <Tags
       canEdit={false}
+      contextId="987643"
       initialValues={
         Array [
           Object {
@@ -1128,6 +1131,7 @@ exports[`harvestingBox component should match harvestingBox snapshot when the co
     </div>
     <Tags
       canEdit={false}
+      contextId="987643"
       initialValues={
         Array [
           Object {
@@ -1360,6 +1364,7 @@ exports[`harvestingBox component should match harvestingBox snapshot when there 
     </div>
     <Tags
       canEdit={false}
+      contextId="987643"
       initialValues={
         Array [
           Object {

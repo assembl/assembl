@@ -19,7 +19,13 @@ def upgrade(pyramid_env):
     	op.create_table(
             'tag',
             sa.Column('id', sa.Integer, primary_key=True),
-            sa.Column('value', sa.UnicodeText, unique=True))
+            sa.Column('value', sa.UnicodeText, unique=True),
+            sa.Column('discussion_id',
+                sa.Integer,
+                sa.ForeignKey(
+                  'discussion.id',
+                   ondelete="CASCADE",
+                   onupdate="CASCADE"), nullable=False, index=False))
         op.create_table(
             'tags_association',
             sa.Column('id', sa.Integer, primary_key=True),

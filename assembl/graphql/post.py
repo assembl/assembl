@@ -796,7 +796,7 @@ class AddPostExtract(graphene.Mutation):
             extract_hash=extract_hash
         )
         new_extract.lang = args.get('lang')
-        tags = models.Tag.get_tags(args.get('tags', []), db)
+        tags = models.Tag.get_tags(args.get('tags', []), discussion_id, db)
         new_extract.tags = tags['new_tags'] + tags['tags']
         db.add(new_extract)
         range = models.TextFragmentIdentifier(

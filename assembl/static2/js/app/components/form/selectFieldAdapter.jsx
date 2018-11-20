@@ -27,6 +27,7 @@ type Props = {
   classNamePrefix: string,
   placeholder: string,
   className?: string,
+  components: { [string]: any },
   noOptionsMessage: () => React.Node,
   formatCreateLabel: string => React.Node,
   options?: Array<Option>,
@@ -48,6 +49,7 @@ const SelectFieldAdapter = ({
   className,
   options,
   loadOptions,
+  components,
   input: { name, onChange, value, ...otherListeners },
   meta: { error, touched },
   ...rest
@@ -69,13 +71,13 @@ const SelectFieldAdapter = ({
         cacheOptions
         defaultOptions
         isMulti={isMulti}
-        components={makeAnimated()}
         name={name}
         placeholder={I18n.t(placeholder)}
         defaultValue={value}
         options={options}
         loadOptions={loadOptions}
         onChange={onChange}
+        components={{ ...makeAnimated(), ...components }}
       />
       <Error name={name} />
     </FormGroup>
@@ -88,6 +90,7 @@ SelectFieldAdapter.defaultProps = {
   isAsync: false,
   canCreate: false,
   options: [],
+  components: {},
   className: '',
   classNamePrefix: 'select-field',
   placeholder: 'form.select.placeholder',
