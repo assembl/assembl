@@ -1,40 +1,111 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`PostBody component should render a html body 1`] = `
+exports[`ExtractInPost component should render a cognitive bias extract in a post 1`] = `
+<span
+  className="extract-in-message"
+  id="112233"
+  style={
+    Object {
+      "backgroundColor": "#000000",
+      "color": "#FFFFFF",
+    }
+  }
+>
+  text
+</span>
+`;
+
+exports[`ExtractInPost component should render an extract in a post (submitted by robot) 1`] = `
+<span
+  className="extract-in-message"
+  id="889900"
+  style={
+    Object {
+      "backgroundColor": "#FF9BB4",
+      "color": null,
+    }
+  }
+>
+  text
+</span>
+`;
+
+exports[`ExtractInPost component should render an extract in a post 1`] = `
+<span
+  className="extract-in-message"
+  id="112233"
+  style={
+    Object {
+      "backgroundColor": "#00B6FF",
+      "color": null,
+    }
+  }
+>
+  text
+</span>
+`;
+
+exports[`Html component should render a html body with extracts 1`] = `
 <div>
   <div
     id="message-body-local:Content/3059"
   >
-    You can't index 
-    <React.Fragment>
-      <a
-        className="linkified"
-        href="url"
-      >
-        the port
-      </a>
-      <URLMetadataLoader
-        url="url"
-      />
-    </React.Fragment>
-     without 
-    <ExtractInPost
-      id="annotationId"
-      state="pending"
+    You can't 
+    <span
+      id="message-body-local:Content/1010"
     >
-      programming
-    </ExtractInPost>
-     the wireless HTTP program! 
-    <Embed
-      defaultEmbed={
-        <iframe
-          src="iframe-src"
-          title="post-embed"
+      <ExtractInPost
+        extractedByMachine={true}
+        id="223344"
+        nature="Enum.actionable_solution"
+        state="PUBLISHED"
+      >
+        index
+      </ExtractInPost>
+       
+      <React.Fragment>
+        <a
+          className="linkified"
+          href="url"
+        >
+          <ExtractInPost
+            extractedByMachine={false}
+            id="778899"
+            nature="Enum.concept"
+            state="PUBLISHED"
+          >
+            the port
+          </ExtractInPost>
+        </a>
+        <URLMetadataLoader
+          url="url"
         />
-      }
-      url="iframe-src"
-    />
+      </React.Fragment>
+       without programming
+    </span>
   </div>
+  <div
+    id="message-body-local:Content/2020"
+  >
+    <ExtractInPost
+      extractedByMachine={true}
+      id="112233"
+      nature="Enum.actionable_solution"
+      state="SUBMITTED"
+    >
+      wireless
+    </ExtractInPost>
+     HTTP program
+  </div>
+  <Embed
+    defaultEmbed={
+      <iframe
+        src="iframe-src"
+        title="post-embed"
+      />
+    }
+    url="iframe-src"
+  />
 </div>
 `;
 

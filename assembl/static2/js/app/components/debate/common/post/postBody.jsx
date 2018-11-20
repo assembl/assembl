@@ -7,15 +7,15 @@ import jQuery from 'jquery';
 import ARange from 'annotator_range'; // eslint-disable-line
 import { withRouter } from 'react-router';
 
+import { EMPTY_STRING } from '../../../../constants';
 import { getConnectedUserId, isHarvestable } from '../../../../utils/globalFunctions';
 import { isSpecialURL } from '../../../../utils/urlPreview';
-import { ExtractStates } from '../../../../constants';
 import { transformLinksInHtml /* getUrls */ } from '../../../../utils/linkify';
 import UpdateHarvestingTranslationPreference from '../../../../graphql/mutations/updateHarvestingTranslationPreference.graphql';
 import PostTranslate from '../../common/translations/postTranslate';
 import Embed from '../../../common/urlPreview/embed';
 import URLMetadataLoader from '../../../common/urlPreview/urlMetadataLoader';
-import { getExtractTagId } from '../../../../utils/extract';
+import { getExtractTagId, getExtractColor } from '../../../../utils/extract';
 
 type Props = {
   body: ?string,
@@ -38,7 +38,9 @@ type Props = {
 };
 
 type ExtractInPostProps = {
+  extractedByMachine: boolean,
   id: string,
+  nature: string,
   state: string,
   children: React.Node
 };
@@ -56,13 +58,15 @@ type HtmlProps = {
   contentLocale?: ?string
 };
 
-const ExtractInPost = ({ id, state, children }: ExtractInPostProps) => {
-  const isSubmitted = state === ExtractStates.SUBMITTED;
+export const ExtractInPost = ({ extractedByMachine, id, nature, state, children }: ExtractInPostProps) => {
+  const colorDefinition = getExtractColor(nature, state, extractedByMachine);
   return (
     <span
-      className={classNames('extract-in-message', {
-        submitted: isSubmitted
-      })}
+      className="extract-in-message"
+      style={{
+        backgroundColor: colorDefinition.background,
+        color: colorDefinition.text
+      }}
       id={id}
     >
       {children}
@@ -98,11 +102,14 @@ export const postBodyReplacementComponents = (afterLoad?: Function) => ({
       </React.Fragment>
     );
   },
-  annotation: (attributes: Object) => (
-    <ExtractInPost key={attributes.key} id={attributes.id} state={attributes['data-state']}>
-      {attributes.children}
-    </ExtractInPost>
-  )
+  annotation: (attributes: Object) => {
+    const { id, extractedByMachine, extractState, nature } = JSON.parse(attributes['data-extractinfo']);
+    return (
+      <ExtractInPost key={attributes.key} id={id} extractedByMachine={extractedByMachine} nature={nature} state={extractState}>
+        {attributes.children}
+      </ExtractInPost>
+    );
+  }
 });
 
 export const Html = (props: HtmlProps) => {
@@ -113,7 +120,7 @@ export const Html = (props: HtmlProps) => {
    * and return a list of react elements
   */
   // this anchor is shared with marionette code
-  const anchor = dbId ? getExtractTagId(dbId) : '';
+  const anchor = dbId ? getExtractTagId(dbId) : EMPTY_STRING;
   let html = `<div id="${anchor}">${rawHtml}</div>`;
 
   if (extracts) {
@@ -126,7 +133,13 @@ export const Html = (props: HtmlProps) => {
     extracts.forEach((extract) => {
       if (extract && extract.lang === contentLocale) {
         const tfis = extract.textFragmentIdentifiers;
-        const wrapper = jQuery(`<annotation id="${extract.id}" data-state="${extract.extractState || ''}"></annotation>`);
+        const extractInfo = JSON.stringify({
+          id: extract.id,
+          extractedByMachine: !!(extract.creator && extract.creator.isMachine),
+          extractState: extract.extractState || EMPTY_STRING,
+          nature: extract.extractNature || EMPTY_STRING
+        });
+        const wrapper = jQuery(`<annotation data-extractInfo='${extractInfo}'></annotation>`);
         if (tfis) {
           tfis.forEach((tfi) => {
             if (tfi && tfi.xpathStart && tfi.offsetStart !== null && tfi.xpathEnd && tfi.offsetEnd !== null) {
