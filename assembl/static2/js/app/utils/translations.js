@@ -615,7 +615,8 @@ const Translations = {
         singleModule: "Module unique de participation",
         selectStart: "Date de démarrage de la phase %{count}",
         selectEnd: "Date de fin de la phase %{count}",
-        warningLabel: "Les dates que vous avez configuré entrent en conflit."
+        warningLabel: "Les dates que vous avez configuré entrent en conflit.",
+        moduleSelectionTooltip: "Vous ne pouvez pas changer le module d'une phase deja sauvegardée."
       },
       modules: {
         survey: "Module Questions",
@@ -1532,7 +1533,8 @@ const Translations = {
         singleModule: "Single participation module",
         selectStart: "Phase %{count}'s start date",
         selectEnd: "Phase %{count}'s end date",
-        warningLabel: "The dates you have set are in conflict"
+        warningLabel: "The dates you have set are in conflict",
+        moduleSelectionTooltip: "You can't change the module for a phase already saved."
       },
       modules: {
         survey: "Survey module",

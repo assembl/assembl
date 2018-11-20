@@ -4,7 +4,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { connect } from 'react-redux';
 import { Translate, I18n } from 'react-redux-i18n';
-import { SplitButton, MenuItem } from 'react-bootstrap';
+import { SplitButton, MenuItem, OverlayTrigger } from 'react-bootstrap';
 import { Link } from 'react-router';
 import { type moment } from 'moment';
 import { modulesTranslationKeys } from '../../../constants';
@@ -16,6 +16,7 @@ import {
   updateEndDate,
   updateIsThematicsTable
 } from '../../../actions/adminActions/timeline';
+import { moduleSelectionTooltip } from '../../common/tooltips';
 
 type PhaseFormProps = {
   phaseId: string,
@@ -50,6 +51,32 @@ export const DumbPhaseForm = ({
   const splitButtonTitle = I18n.t(`administration.modules.${identifier}`);
 
   const slug = { slug: getDiscussionSlug() };
+
+  const moduleSelectionMenu = (
+    <SplitButton
+      className="admin-dropdown"
+      disabled={!isNew}
+      id={`dropdown-${phaseId}`}
+      title={splitButtonTitle}
+      onSelect={handleIdentifierChange}
+    >
+      {modulesTranslationKeys.map(key => (
+        <MenuItem key={`module-${key}`} eventKey={key}>
+          {I18n.t(`administration.modules.${key}`)}
+        </MenuItem>
+      ))}
+    </SplitButton>
+  );
+
+  const renderModuleSelectionMenu = () =>
+    (isNew ? (
+      moduleSelectionMenu
+    ) : (
+      <OverlayTrigger placement="top" overlay={moduleSelectionTooltip}>
+        {/* OverlayTrigger doesn't work with the SplitButton component without a surrounding div */}
+        <div>{moduleSelectionMenu}</div>
+      </OverlayTrigger>
+    ));
 
   return (
     <div className="phase-form">
@@ -110,21 +137,7 @@ export const DumbPhaseForm = ({
       <div className="module-selection-text">
         <Translate value="administration.timelineAdmin.phaseModule" />
       </div>
-      <div className="margin-m">
-        <SplitButton
-          className="admin-dropdown"
-          disabled={!isNew}
-          id={`dropdown-${phaseId}`}
-          title={splitButtonTitle}
-          onSelect={handleIdentifierChange}
-        >
-          {modulesTranslationKeys.map(key => (
-            <MenuItem key={`module-${key}`} eventKey={key}>
-              {I18n.t(`administration.modules.${key}`)}
-            </MenuItem>
-          ))}
-        </SplitButton>
-      </div>
+      <div className="margin-m">{renderModuleSelectionMenu()}</div>
       <div className="text-xs configure-module-text">
         <Translate value="administration.timelineAdmin.configureModule" />
         <Link

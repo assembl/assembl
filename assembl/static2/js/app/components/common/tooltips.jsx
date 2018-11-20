@@ -281,6 +281,12 @@ export const deletePhaseTooltip = (
   </Tooltip>
 );
 
+export const moduleSelectionTooltip = (
+  <Tooltip id="moduleSelectionTooltip">
+    <Translate value="administration.timelineAdmin.moduleSelectionTooltip" />
+  </Tooltip>
+);
+
 export const phaseTooltip = (phaseTitle: string) => <Tooltip id="phaseTooltip">{phaseTitle}</Tooltip>;
 
 export const thematicTooltip = (title: string) => <Tooltip id="thematicTooltip">{title}</Tooltip>;
