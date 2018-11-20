@@ -53,8 +53,8 @@ class TaggableEntity(Base):
         raise Exception("Is not a taggable Entity!")
 
 
-class Tag(DiscussionBoundBase):
-    __tablename__ = "tag"
+class Keyword(DiscussionBoundBase):
+    __tablename__ = "keyword"
     id = Column(Integer, primary_key=True)
     value = Column(UnicodeText, unique=True)
     discussion_id = Column(Integer, ForeignKey(
@@ -65,7 +65,7 @@ class Tag(DiscussionBoundBase):
         nullable=False, index=True)
     discussion = relationship("Discussion")
     __mapper_args__ = {
-        'polymorphic_identity': 'tag',
+        'polymorphic_identity': 'keyword',
         'with_polymorphic': '*'
     }
 
@@ -105,8 +105,8 @@ class Tag(DiscussionBoundBase):
 class TagsAssociation(Base):
     __tablename__ = 'tags_association'
     id = Column(Integer, primary_key=True)
-    tag_id = Column(Integer, ForeignKey('tag.id'), nullable=False,)
-    tag = relationship(Tag)
+    tag_id = Column(Integer, ForeignKey('keyword.id'), nullable=False,)
+    tag = relationship(Keyword)
     __mapper_args__ = {
         'polymorphic_identity': 'tags_association',
         'with_polymorphic': '*'

@@ -351,6 +351,7 @@ from .computation import (  # noqa: E402, F401
     ComputationOnIdea,
     ComputationOnPost,
 )
+
 from .nlp import (  # noqa: E402, F401
     LocalizedUriConcept,
     DBPediaConcept,
@@ -362,7 +363,7 @@ from .nlp import (  # noqa: E402, F401
 
 from .tag import (  # noqa: E402, F401
     TaggableEntity,
-    Tag,
+    Keyword,
     ExtractsTagsAssociation
 )
 

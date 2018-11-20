@@ -16,7 +16,7 @@ class TagInterface(SQLAlchemyInterface):
     __doc__ = docs.TagInterface.__doc__
 
     class Meta:
-        model = models.Tag
+        model = models.Keyword
         only_fields = ('value', )
         # Don't add id in only_fields in an interface
         # will be just the primary key, not the base64 type:id
@@ -28,7 +28,7 @@ class Tag(SecureObjectType, SQLAlchemyObjectType):
     __doc__ = docs.TagInterface.__doc__
 
     class Meta:
-        model = models.Tag
+        model = models.Keyword
         interfaces = (Node, TagInterface)
         only_fields = ('id')
 
@@ -50,7 +50,7 @@ class UpdateTag(graphene.Mutation):
         tag_id = args.get('id')
         tag_id = int(Node.from_global_id(tag_id)[1])
         # The tag to replace or edit
-        tag = models.Tag.get(tag_id)
+        tag = models.Keyword.get(tag_id)
         require_instance_permission(CrudPermissions.UPDATE, tag, context)
         # The context of the mutation (Extract...)
         taggable = None
@@ -65,7 +65,7 @@ class UpdateTag(graphene.Mutation):
         value = args.get('value')
         updated_tag = tag
         # The desired tag. None if not exists
-        input_tag = models.Tag.get_tag(value, discussion_id, db)
+        input_tag = models.Keyword.get_tag(value, discussion_id, db)
         if input_tag and taggable:
             # If we have an input_tag and taggable is not null,
             # we replace the current tag by the input_tag

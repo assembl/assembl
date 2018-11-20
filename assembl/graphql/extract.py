@@ -124,7 +124,7 @@ class UpdateExtractTags(graphene.Mutation):
         extract = models.Extract.get(extract_id)
         require_instance_permission(CrudPermissions.UPDATE, extract, context)
         db = extract.db
-        tags = models.Tag.get_tags(args.get('tags', []), discussion_id, db)
+        tags = models.Keyword.get_tags(args.get('tags', []), discussion_id, db)
         extract.tags = tags['new_tags'] + tags['tags']
         db.flush()
         return UpdateExtractTags(tags=extract.tags)
