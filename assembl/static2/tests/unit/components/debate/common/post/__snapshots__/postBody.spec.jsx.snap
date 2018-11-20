@@ -1,5 +1,20 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`ExtractInPost component should render a cognitive bias extract in a post 1`] = `
+<span
+  className="extract-in-message"
+  id="112233"
+  style={
+    Object {
+      "backgroundColor": "#000000",
+      "color": "#FFFFFF",
+    }
+  }
+>
+  text
+</span>
+`;
+
 exports[`ExtractInPost component should render an extract in a post (submitted by robot) 1`] = `
 <span
   className="extract-in-message"

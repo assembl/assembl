@@ -57,11 +57,18 @@ type HtmlProps = {
   contentLocale?: ?string
 };
 
-export const ExtractInPost = ({ extractedByMachine, id, nature, state, children }: ExtractInPostProps) => (
-  <span className="extract-in-message" style={{ backgroundColor: getExtractColor(nature, state, extractedByMachine) }} id={id}>
-    {children}
-  </span>
-);
+export const ExtractInPost = ({ extractedByMachine, id, nature, state, children }: ExtractInPostProps) => {
+  const backgroundColor = getExtractColor(nature, state, extractedByMachine);
+  const style: { backgroundColor: string, color?: string } = { backgroundColor: backgroundColor };
+  if (backgroundColor === '#000000') {
+    style.color = '#FFFFFF';
+  }
+  return (
+    <span className="extract-in-message" style={style} id={id}>
+      {children}
+    </span>
+  );
+};
 
 export const postBodyReplacementComponents = (afterLoad?: Function) => ({
   iframe: (attributes: Object) => (

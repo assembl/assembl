@@ -81,4 +81,17 @@ describe('ExtractInPost component', () => {
     const tree = component.toJSON();
     expect(tree).toMatchSnapshot();
   });
+
+  it('should render a cognitive bias extract in a post', () => {
+    const props = {
+      extractedByMachine: false,
+      id: '112233',
+      nature: 'Enum.cognitive_bias',
+      state: 'PUBLISHED',
+      children: 'text'
+    };
+    const component = renderer.create(<ExtractInPost {...props} />);
+    const tree = component.toJSON();
+    expect(tree).toMatchSnapshot();
+  });
 });
