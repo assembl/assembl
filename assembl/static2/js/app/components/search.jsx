@@ -255,6 +255,7 @@ const PostHit = ({ bemBlocks, collapseSearch, locale, result }) => {
   const source = result._source;
   const subject = highlightedLSOrTruncatedLS(result, 'subject', locale);
   const body = highlightedLSOrTruncatedLS(result, 'body', locale);
+  // const ideaTitle = highlightedLSOrTruncatedLS(result, 'idea_title', locale);
   const published = {};
   return (
     <BaseHit

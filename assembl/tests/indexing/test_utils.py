@@ -13,6 +13,7 @@ def test_get_data_for_extract(phases, extract_submitted_in_post_related_to_sub_i
     assert data['creator_id'] == participant2_user.id
     assert data['discussion_id'] == extract.discussion.id
     assert data['idea_id'] == [subidea_1_1_1.id]
+    assert data['idea_title_en'] == u"Lower government revenue"
     assert data['phase_id'] == phases['thread'].id
     assert data['phase_identifier'] == u'thread'
     assert data['body'] == u"Commodi maiores magni rerum. Sint natus corporis in qui in ut dignissimos cumque repellendus. Reprehenderit nihil illum."
@@ -34,6 +35,8 @@ def test_get_data_for_post(phases, admin_user, post_related_to_sub_idea_1_1_1, s
     assert data['_parent'] == 'user:{}'.format(admin_user.id)
     assert data['discussion_id'] == post.discussion.id
     assert data['idea_id'] == [subidea_1_1_1.id]
+    assert data['idea_title_en'] == u"Lower government revenue"
+    assert 'idea_title_fr' not in data
     assert data['phase_id'] == phases['thread'].id
     assert data['phase_identifier'] == u'thread'
     assert data['creation_date'] == datetime.datetime(2018, 2, 17, 9, 0)
