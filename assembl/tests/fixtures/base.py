@@ -172,12 +172,11 @@ def admin_user(request, test_session):
     from assembl.models import User, Username, UserRole, Role
     u = User(name=u"Mr. Administrator", type="user",
         verified=True, last_assembl_login=datetime.utcnow())
-    username = Username(username="mr_admin_user", user=u)
+    u.username_p = "mr_admin_user"
     from assembl.models import EmailAccount
     account = EmailAccount(email="admin@assembl.com", profile=u, verified=True)
 
     test_session.add(u)
-    test_session.add(username)
     test_session.add(account)
     r = Role.get_role(R_SYSADMIN, test_session)
     ur = UserRole(user=u, role=r)
@@ -192,7 +191,7 @@ def admin_user(request, test_session):
         user_role = user.roles[0]
         test_session.delete(user_role)
         test_session.delete(account)
-        test_session.delete(username)
+        test_session.delete(user.username)
         test_session.delete(user)
         test_session.flush()
     request.addfinalizer(fin)
