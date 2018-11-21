@@ -101,7 +101,7 @@ class Discussion(SecureObjectType, SQLAlchemyObjectType):
     def resolve_button_label_entries(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
-        if discussion.subtitle:
+        if discussion.button_label:
             return resolve_langstring_entries(discussion, 'button_label')
 
         return []

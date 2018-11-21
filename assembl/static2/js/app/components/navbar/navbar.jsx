@@ -181,6 +181,11 @@ export default compose(
     timeline: state.timeline
   })),
   graphql(DiscussionQuery, {
+    options: ({ i18n }) => ({
+      variables: {
+        lang: i18n.locale
+      }
+    }),
     props: ({ data }) => {
       if (data.error || data.loading) {
         return {

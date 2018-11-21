@@ -1,24 +1,24 @@
 module.exports = {
-  "plugins": [
-    "@babel/plugin-proposal-object-rest-spread",
-    "@babel/plugin-proposal-class-properties",
+  plugins: [
+    '@babel/plugin-proposal-object-rest-spread',
+    '@babel/plugin-proposal-class-properties',
     [
-      "@babel/plugin-transform-runtime",
+      '@babel/plugin-transform-runtime',
       {
-        "helpers": true
+        helpers: true
       }
     ]
   ],
-  "presets": [
+  presets: [
     [
-      "@babel/preset-env",
+      '@babel/preset-env',
       {
-        "targets": {
-          "node": 10
+        targets: {
+          node: 10
         }
       }
     ],
-    "@babel/preset-react",
-    "@babel/preset-flow"
+    '@babel/preset-react',
+    '@babel/preset-flow'
   ]
-}
+};

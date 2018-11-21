@@ -1,5 +1,19 @@
-query DiscussionData($nextView: String) {
+query DiscussionData($nextView: String, $lang: String) {
   discussion {
+    logoImage {
+      mimeType
+      externalUrl
+      title
+    }
+    headerImage {
+      mimeType
+      title
+      externalUrl
+    }
+    title(lang: $lang)
+    subtitle(lang: $lang)
+    buttonLabel(lang: $lang)
+    homepageUrl
     loginData(nextView: $nextView) {
       local
       url

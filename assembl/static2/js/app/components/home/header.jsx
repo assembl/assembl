@@ -1,5 +1,6 @@
 import React from 'react';
 import { Translate, I18n } from 'react-redux-i18n';
+import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { Grid, Row } from 'react-bootstrap';
 
@@ -9,6 +10,8 @@ import { get } from '../../utils/routeMap';
 import { getCurrentPhaseData } from '../../utils/timeline';
 import { getDiscussionSlug } from '../../utils/globalFunctions';
 import { browserHistory } from '../../router';
+import manageErrorAndLoading from '../common/manageErrorAndLoading';
+import DiscussionQuery from '../../graphql/DiscussionQuery.graphql';
 
 class Header extends React.Component {
   constructor(props) {
@@ -25,17 +28,16 @@ class Header extends React.Component {
 
   render() {
     const { debateData } = this.props.debate;
-    const { locale } = this.props.i18n;
-    const { timeline } = this.props;
+    const { timeline, data: { discussion: { title, subtitle, headerImage, logoImage, buttonLabel } } } = this.props;
     return (
       <section className="home-section header-section">
         <Grid fluid className="max-container">
           <div className="header-content">
-            {debateData.headerLogoUrl ? <img className="header-logo" src={debateData.headerLogoUrl} alt="logo" /> : null}
+            {logoImage && logoImage.externalUrl ? <img className="header-logo" src={logoImage.externalUrl} alt="logo" /> : null}
             <div className="max-text-width">
-              {debateData.topic && <h1 className="light-title-1">{debateData.topic.titleEntries[locale]}</h1>}
+              {title && <h1 className="light-title-1">{title}</h1>}
               <h4 className="light-title-4 uppercase margin-m">
-                {debateData.introduction && <span>{debateData.introduction.titleEntries[locale]}</span>}
+                {subtitle && <span dangerouslySetInnerHTML={{ __html: subtitle }} />}
                 {debateData.dates && (
                   <div>
                     <Translate
@@ -47,7 +49,12 @@ class Header extends React.Component {
                 )}
               </h4>
               <div className="margin-l">
-                <ParticipateButton displayPhase={this.displayPhase} timeline={timeline} btnClass="light" />
+                <ParticipateButton
+                  displayPhase={this.displayPhase}
+                  timeline={timeline}
+                  btnClass="light"
+                  btnLabel={buttonLabel || null}
+                />
               </div>
             </div>
           </div>
@@ -55,9 +62,13 @@ class Header extends React.Component {
         <Grid fluid>
           <Row>
             <Statistic />
-            <div className="header-bkg" style={{ backgroundImage: `url(${debateData.headerBackgroundUrl})` }}>
-              &nbsp;
-            </div>
+            {headerImage && headerImage.externalUrl ? (
+              <div className="header-bkg" style={{ backgroundImage: `url(${headerImage.externalUrl})` }}>
+                &nbsp;
+              </div>
+            ) : (
+              <div className="header-bkg">&nbsp;</div>
+            )}
           </Row>
         </Grid>
       </section>
@@ -67,8 +78,10 @@ class Header extends React.Component {
 
 const mapStateToProps = state => ({
   debate: state.debate,
-  i18n: state.i18n,
+  lang: state.i18n.locale,
   timeline: state.timeline
 });
 
-export default connect(mapStateToProps)(Header);
+export default compose(connect(mapStateToProps), graphql(DiscussionQuery), manageErrorAndLoading({ displayLoader: false }))(
+  Header
+);
