@@ -280,8 +280,7 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
         elif data_type == "int":
             assert isinstance(value, int), "Not an integer"
         elif data_type == "json":
-            # Will raise a JSONDecodeError if not a valid JSON
-            json.loads(value)
+            pass  # no check
         else:
             assert isinstance(value, (str, unicode)), "Not a string"
             if data_type in ("string", "text"):
