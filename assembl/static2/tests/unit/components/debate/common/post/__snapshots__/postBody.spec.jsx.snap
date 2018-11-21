@@ -78,6 +78,7 @@ exports[`Html component should render a html body with extracts 1`] = `
           </ExtractInPost>
         </a>
         <URLMetadataLoader
+          afterLoad={[MockFunction]}
           url="url"
         />
       </React.Fragment>
@@ -95,6 +96,50 @@ exports[`Html component should render a html body with extracts 1`] = `
     >
       wireless
     </ExtractInPost>
+     HTTP program
+  </div>
+  <Embed
+    defaultEmbed={
+      <iframe
+        src="iframe-src"
+        title="post-embed"
+      />
+    }
+    url="iframe-src"
+  />
+</div>
+`;
+
+exports[`Html component should render a html body without extracts 1`] = `
+<div>
+  <div
+    id="message-body-local:Content/3059"
+  >
+    You can't 
+    <span
+      id="message-body-local:Content/1010"
+    >
+      index
+       
+      <React.Fragment>
+        <a
+          className="linkified"
+          href="url"
+        >
+          the port
+        </a>
+        <URLMetadataLoader
+          afterLoad={[MockFunction]}
+          url="url"
+        />
+      </React.Fragment>
+       without programming
+    </span>
+  </div>
+  <div
+    id="message-body-local:Content/2020"
+  >
+    wireless
      HTTP program
   </div>
   <Embed

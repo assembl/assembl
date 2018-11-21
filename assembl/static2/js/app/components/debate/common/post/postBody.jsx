@@ -74,7 +74,7 @@ export const ExtractInPost = ({ extractedByMachine, id, nature, state, children 
   );
 };
 
-export const postBodyReplacementComponents = (afterLoad?: Function) => ({
+export const postBodyReplacementComponents = (afterLoad?: Function, isHarvesting?: boolean = false) => ({
   iframe: (attributes: Object) => (
     // the src iframe url is different from the resource url
     <Embed
@@ -103,12 +103,16 @@ export const postBodyReplacementComponents = (afterLoad?: Function) => ({
     );
   },
   annotation: (attributes: Object) => {
-    const { id, extractedByMachine, extractState, nature } = JSON.parse(attributes['data-extractinfo']);
-    return (
-      <ExtractInPost key={attributes.key} id={id} extractedByMachine={extractedByMachine} nature={nature} state={extractState}>
-        {attributes.children}
-      </ExtractInPost>
-    );
+    if (isHarvesting) {
+      const { id, extractedByMachine, extractState, nature } = JSON.parse(attributes['data-extractinfo']);
+      return (
+        <ExtractInPost key={attributes.key} id={id} extractedByMachine={extractedByMachine} nature={nature} state={extractState}>
+          {attributes.children}
+        </ExtractInPost>
+      );
+    }
+
+    return attributes.children;
   }
 });
 
@@ -245,7 +249,7 @@ export const DumbPostBody = ({
             divRef={bodyDivRef}
             extracts={extracts}
             dbId={dbId}
-            replacementComponents={postBodyReplacementComponents(afterLoad)}
+            replacementComponents={postBodyReplacementComponents(afterLoad, isHarvesting)}
             contentLocale={contentLocale}
           />
           {/* {urls && (

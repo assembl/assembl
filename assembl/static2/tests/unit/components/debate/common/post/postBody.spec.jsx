@@ -20,6 +20,7 @@ describe('PostBody component', () => {
       contentLocale: 'fr',
       extracts: [],
       id: 'XYZ333',
+      isHarvesting: true,
       dbId: 124,
       lang: 'fr',
       subject: <span>open-source Associate</span>,
@@ -36,20 +37,35 @@ describe('PostBody component', () => {
 });
 
 describe('Html component', () => {
+  const afterLoadSpy = jest.fn();
+  const { extracts } = fakeData;
+  const props = {
+    extracts: extracts,
+    rawHtml:
+      'You can\'t <span id="message-body-local:Content/1010">index <a href="url">the port</a> without programming</div>' +
+      ' the <div id="message-body-local:Content/2020">wireless HTTP program</div>! <iframe src="iframe-src"></iframe>',
+    divRef: () => {},
+    dbId: '3059',
+    contentLocale: 'en'
+  };
+  const shallowRenderer = new ShallowRenderer();
+
   it('should render a html body with extracts', () => {
-    const { extracts } = fakeData;
-    const props = {
-      extracts: extracts,
-      rawHtml:
-        'You can\'t <span id="message-body-local:Content/1010">index <a href="url">the port</a> without programming</div>' +
-        ' the <div id="message-body-local:Content/2020">wireless HTTP program</div>! <iframe src="iframe-src"></iframe>',
-      divRef: () => {},
-      dbId: '3059',
-      replacementComponents: postBodyReplacementComponents(),
-      contentLocale: 'en'
+    const withExtractsProps = {
+      replacementComponents: postBodyReplacementComponents(afterLoadSpy, true),
+      ...props
     };
-    const shallowRenderer = new ShallowRenderer();
-    shallowRenderer.render(<Html {...props} />);
+    shallowRenderer.render(<Html {...withExtractsProps} />);
+    const result = shallowRenderer.getRenderOutput();
+    expect(result).toMatchSnapshot();
+  });
+
+  it('should render a html body without extracts', () => {
+    const withoutExtractsProps = {
+      replacementComponents: postBodyReplacementComponents(afterLoadSpy, false),
+      ...props
+    };
+    shallowRenderer.render(<Html {...withoutExtractsProps} />);
     const result = shallowRenderer.getRenderOutput();
     expect(result).toMatchSnapshot();
   });
