@@ -14,7 +14,7 @@ exports[`Storyshots FictionPreview default 1`] = `
       className="fiction-preview"
       style={
         Object {
-          "backgroundColor": "#b3e5fc",
+          "background": "linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url(https://s3-eu-west-1.amazonaws.com/brightmirror/preview-xx.jpg)",
         }
       }
     >
@@ -433,36 +433,6 @@ exports[`Storyshots FictionPreview default 1`] = `
                     <span
                       style={Object {}}
                     >
-                      color
-                    </span>
-                    <span>
-                      =
-                      <span
-                        style={Object {}}
-                      >
-                        "
-                        <span
-                          style={
-                            Object {
-                              "color": "#22a",
-                              "wordBreak": "break-word",
-                            }
-                          }
-                        >
-                          #b3e5fc
-                        </span>
-                        "
-                      </span>
-                    </span>
-                  </span>
-                  <span>
-                    <span>
-                      <br />
-                        
-                    </span>
-                    <span
-                      style={Object {}}
-                    >
                       originalBody
                     </span>
                     <span>
@@ -837,7 +807,7 @@ exports[`Storyshots FictionPreview playground 1`] = `
       className="fiction-preview"
       style={
         Object {
-          "backgroundColor": "#b3e5fc",
+          "background": "linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url(https://s3-eu-west-1.amazonaws.com/brightmirror/preview-xx.jpg)",
         }
       }
     >
@@ -1243,36 +1213,6 @@ exports[`Storyshots FictionPreview playground 1`] = `
                           }
                         >
                           /url/preview
-                        </span>
-                        "
-                      </span>
-                    </span>
-                  </span>
-                  <span>
-                    <span>
-                      <br />
-                        
-                    </span>
-                    <span
-                      style={Object {}}
-                    >
-                      color
-                    </span>
-                    <span>
-                      =
-                      <span
-                        style={Object {}}
-                      >
-                        "
-                        <span
-                          style={
-                            Object {
-                              "color": "#22a",
-                              "wordBreak": "break-word",
-                            }
-                          }
-                        >
-                          #b3e5fc
                         </span>
                         "
                       </span>

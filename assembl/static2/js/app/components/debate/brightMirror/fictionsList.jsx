@@ -12,7 +12,7 @@ import FictionPreview from './fictionPreview';
 import Permissions, { connectedUserCan } from '../../../utils/permissions';
 import { displayAlert } from '../../../utils/utilityManager';
 // Constant imports
-import { fictionBackgroundColors, EMPTY_STRING } from '../../../constants';
+import { EMPTY_STRING } from '../../../constants';
 // Type imports
 import type { BrightMirrorFictionProps } from '../../../pages/brightMirrorFiction';
 
@@ -36,8 +36,6 @@ const masonryOptions = {
 const deleteFictionHandler = () => {
   displayAlert('success', I18n.t('debate.brightMirror.deleteFictionSuccessMsg'));
 };
-
-const getRandomColor = () => fictionBackgroundColors[Math.floor(Math.random() * fictionBackgroundColors.length)];
 
 const publicationStateCreationDateComparator = (a, b) => {
   const aDate: string = a.creationDate;
@@ -88,7 +86,6 @@ const FictionsList = ({ posts, identifier, refetchIdea, lang, themeId }: Props) 
           title={post.subject}
           creationDate={I18n.l(post.creationDate, { dateFormat: 'date.format2' })}
           authorName={authorName}
-          color={getRandomColor()}
           originalBody={post.body || EMPTY_STRING}
           refetchIdea={refetchIdea}
           userCanEdit={userCanEdit}

@@ -25,7 +25,6 @@ export const customFictionPreview: FictionPreviewProps = {
   authorName: 'John Doe',
   creationDate: '01/01/2018',
   link: '/url/preview',
-  color: '#b3e5fc',
   originalBody: 'Origin body',
   refetchIdea: action('refetchIdea'),
   lang: 'fr',
@@ -48,7 +47,6 @@ storiesOf('FictionPreview', module)
         authorName={text('author name', customFictionPreview.authorName)}
         creationDate={text('creation date', customFictionPreview.creationDate)}
         link={text('url', customFictionPreview.link)}
-        color={text('color', customFictionPreview.color)}
         originalBody={text('original body', customFictionPreview.originalBody)}
         refetchIdea={customFictionPreview.refetchIdea}
         lang={text('original locale', customFictionPreview.lang)}

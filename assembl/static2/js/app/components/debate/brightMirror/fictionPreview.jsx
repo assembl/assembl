@@ -15,6 +15,7 @@ import ResponsiveOverlayTrigger from '../../common/responsiveOverlayTrigger';
 import { editFictionTooltip, deleteFictionTooltip, shareFictionTooltip } from '../../common/tooltips';
 // Utils imports
 import { displayCustomModal, closeModal } from '../../../utils/utilityManager';
+import { getRandomPictureUrl } from '../../../utils/globalFunctions';
 // Type imports
 import type { BrightMirrorFictionProps } from '../../../pages/brightMirrorFiction';
 import type { Props as SharePostButtonProps } from '../common/sharePostButton';
@@ -25,8 +26,6 @@ export type FictionPreviewProps = {
   authorName: ?string,
   creationDate: string,
   link: string,
-  /** Background color */
-  color: string,
   originalBody: string,
   /** Function to refresh idea */
   refetchIdea: Function,
@@ -45,7 +44,6 @@ const FictionPreview = ({
   authorName,
   creationDate,
   link,
-  color,
   originalBody,
   refetchIdea,
   lang,
@@ -123,8 +121,14 @@ const FictionPreview = ({
   const name = authorName || '';
   const date = ` - ${creationDate}`;
 
+  // Display preview picture only when the post is not a draft
+  // We add a black overlay with an opacity of 0.2 to fix contrast issue when displaying a light label
+  const previewStyle = isDraft
+    ? null
+    : { background: `linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url(${getRandomPictureUrl()})` };
+
   return (
-    <div className={classNames('fiction-preview', { draft: isDraft })} style={{ backgroundColor: color }}>
+    <div className={classNames('fiction-preview', { draft: isDraft })} style={previewStyle}>
       <div className="content-box">
         <ul className="actions">
           {editButton}
