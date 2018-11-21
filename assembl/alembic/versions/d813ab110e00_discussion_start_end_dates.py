@@ -36,6 +36,7 @@ def upgrade(pyramid_env):
             extra = pref['extra_json']
             if 'dates' in extra:
                 dates = extra['dates']
+                print("Checking if both start and end dates from Discussion %s exist" % slug)
                 if 'startDate' in dates and 'endDate' in dates:
                     print("Migrating Discussion %s's dates to model from extra_json" % slug)
                     try:
@@ -45,27 +46,31 @@ def upgrade(pyramid_env):
                             d = m.Discussion.__table__
                             db.execute(d.update().where(d.c.id == d_id).values(active_start_date=start_date))
                             db.execute(d.update().where(d.c.id == d_id).values(active_stop_date=stop_date))
+                            db.flush()
                     except:
                         print("Failed to convert Discussion %s's dates to model" % slug)
                 else:
-                    # Try to use phases
-                    print("Migrating Discussion %s's dates to model from phases" % slug)
-                    phases = db.query(m.TimelineEvent).filter_by(discussion_id=d_id).order_by(m.TimelineEvent.start.desc()).all()
-                    if phases:
-                        try:
-                            start_date = phases[0].start
-                            end_date = phases[-1].end
-                            if start_date and end_date and end_date < start_date:
-                                raise Exception("End date %s is earlier than the start date %s!" % end_date, start_date)
-                            if start_date:
-                                d = m.Discussion.__table__
-                                db.execute(d.update().where(d.c.id == d_id).values(active_start_date=start_date))
-                            if end_date:
-                                d = m.Discussion.__table__
-                                db.execute(d.update().where(d.c.id == d_id).values(active_start_date=start_date))
-                            db.flush()
-                        except:
-                            print("Failed to convert Discussion %s's dates to model" % slug)
+                    print("Not both start and end dates from Discussion %s are set! Skipped..." % slug)
+            else:
+                # Try to use phases
+                print("Migrating Discussion %s's dates to model from phases" % slug)
+                phases = db.query(m.TimelineEvent).filter_by(discussion_id=d_id).order_by(m.TimelineEvent.start.desc()).all()
+                if phases:
+                    try:
+                        start_date = phases[0].start
+                        end_date = phases[-1].end
+                        if start_date and end_date and end_date < start_date:
+                            raise Exception("End date %s is earlier than the start date %s!" % end_date, start_date)
+                        if start_date:
+                            d = m.Discussion.__table__
+                            db.execute(d.update().where(d.c.id == d_id).values(active_start_date=start_date))
+                        if end_date:
+                            d = m.Discussion.__table__
+                            db.execute(d.update().where(d.c.id == d_id).values(active_start_date=start_date))
+                    except:
+                        print("Failed to convert Discussion %s's dates to model" % slug)
+                else:
+                    print("There are no set phases for Discussion %s to continue. Skipped..." % slug)
         mark_changed(db)
 
 
