@@ -80,6 +80,8 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
     show_help_in_debate_section = Column(Boolean, default=True)
     preferences_id = Column(Integer, ForeignKey(Preferences.id))
     creator_id = Column(Integer, ForeignKey('user.id', ondelete="SET NULL"))
+    active_start_date = Column(DateTime)
+    active_end_date = Column(DateTime)
 
     preferences = relationship(Preferences, backref=backref(
         'discussion'), cascade="all, delete-orphan", single_parent=True)
