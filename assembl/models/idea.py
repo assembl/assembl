@@ -530,7 +530,7 @@ class Idea(HistoryMixin, DiscussionBoundBase):
             LangStringEntry.value, sq.c.score
         ).join(Locale).filter(
             label_cond
-        ).join(
+        ).distinct().join(
             Tag, Tag.label_id == LangStringEntry.langstring_id
         ).join(sq, sq.c.id == Tag.id)
         if not group:

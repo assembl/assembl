@@ -46,7 +46,7 @@ def get_endpoint(api_key):
     if api_key not in API_ENDPOINTS:
         API_ENDPOINTS[api_key] = NaturalLanguageUnderstandingV1(
             version=api_version,
-            iam_api_key=api_key,
+            iam_apikey=api_key,
             url=config.get('watson_url', None))
     return API_ENDPOINTS[api_key]
 
@@ -91,6 +91,12 @@ def do_watson_computation(id):
                         clean=False,
                         return_analyzed_text=True,
                         features=features)
+                    if result.get_status_code() != 200:
+                        computation.status = "failure"
+                        computation.result = result.get_headers()
+                        continue
+                    else:
+                        result = result.get_result()
                     log.debug('watson analyzed %d' % post.id)
                     if lang == Locale.UNDEFINED:
                         lse.locale = Locale.get_or_create(result['language'])
