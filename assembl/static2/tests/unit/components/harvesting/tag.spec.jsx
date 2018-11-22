@@ -8,7 +8,7 @@ describe('Tag component', () => {
     const props = {
       contextId: '123456YETRZ',
       tag: { label: 'foo', value: 'fooid' },
-      canRemove: true,
+      canEdit: true,
       remove: jest.fn(() => {}),
       updateTag: jest.fn(() => {}),
       onUpdate: jest.fn(() => {})
@@ -23,7 +23,7 @@ describe('Tag component', () => {
     const props = {
       contextId: '123456YETRZ',
       tag: { label: 'foo', value: 'fooid' },
-      canRemove: false,
+      canEdit: false,
       remove: jest.fn(() => {}),
       updateTag: jest.fn(() => {}),
       onUpdate: jest.fn(() => {})

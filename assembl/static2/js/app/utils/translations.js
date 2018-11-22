@@ -14,7 +14,7 @@ const Translations = {
     delete: "Supprimer",
     deleteConfirmation: {
       confirmDeletionTitle: "Supprimer un élément",
-      confirmDeletionBody: "Etes-vous certain de vouloir supprimer cet élément ?"
+      confirmDeletionBody: "Êtes-vous certain de vouloir supprimer cet élément ?"
     },
     accountDeleted: "Votre compte a été supprimé avec succès",
     deletedUser: "Compte utilisateur supprimé",
@@ -49,7 +49,7 @@ const Translations = {
       harvestingValidated: "L'extrait a été validé avec succès.",
       harvestingSubmitted: "L'extrait est en attente de validation.",
       deleteExtract: "Supprimer l'extrait attrapé",
-      confirmDeleteExtract: "Etes-vous certain de vouloir supprimer cet extrait ?",
+      confirmDeleteExtract: "Êtes-vous certain de vouloir supprimer cet extrait ?",
       validateExtract: "Extrait validé",
       editExtract: "Modifier l'extrait attrapé",
       nuggetExtract: "Pépiter l'extrait attrapé",
@@ -61,12 +61,13 @@ const Translations = {
         label: "Tags",
         cancel: "Annuler",
         validate: "Valider",
+        edit: "Cliquez pour editer le tag",
         deleteConfirmation: {
           confirmDeletionTitle: "Supprimer le tag \"%{tag}\"",
-          confirmDeletionBody: "Etes-vous certain de vouloir supprimer ce tag ?"
+          confirmDeletionBody: "Êtes-vous certain de vouloir supprimer ce tag ?"
         },
         select: {
-          placeholder: "Selectionner des tags",
+          placeholder: "Sélectionner des tags",
           noOptions: "Aucun tag trouvé",
           newOption: "Ajouter ce tag '%{option}'"
         }
@@ -817,7 +818,7 @@ const Translations = {
         thematicTitle: "Titre de la Thématique",
         headerLabel: "Choisir l'image de fond du bandeau",
         confirmDeletionTitle: "Supprimer la thématique %{title}",
-        confirmDeletionBody: "Etes-vous certain de vouloir supprimer cette thématique ?"
+        confirmDeletionBody: "Êtes-vous certain de vouloir supprimer cette thématique ?"
       },
       resourcesCenter: {
         createResource: "Ajouter un média",
@@ -937,7 +938,7 @@ const Translations = {
     },
     form: {
       select: {
-        placeholder: "Selectionner...",
+        placeholder: "Sélectionner...",
         noOptions: "Aucune option n'est disponible",
         newOption: "Ajouter l'option '%{option}'"
       }
@@ -1002,6 +1003,7 @@ const Translations = {
         label: "Tags",
         cancel: "Cancel",
         validate: "Validate",
+        edit: "Click to edit the tag",
         deleteConfirmation: {
           confirmDeletionTitle: "Delete the tag \"%{tag}\"",
           confirmDeletionBody: "Are you sure that you wish to delete this tag?"

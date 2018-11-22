@@ -3,16 +3,18 @@ import * as React from 'react';
 import classNames from 'classnames';
 import { graphql } from 'react-apollo';
 import update from 'immutability-helper';
+import { OverlayTrigger } from 'react-bootstrap';
 
 import updateTagGQLMutation from '../../graphql/mutations/updateTag.graphql';
 import { type Option } from '../form/selectFieldAdapter';
 import TagForm from './tagForm';
 import { displayAlert } from '../../utils/utilityManager';
+import { eidtTagTooltip } from '../common/tooltips';
 
 type Props = {
   contextId: string,
   tag: Option,
-  canRemove: boolean,
+  canEdit: boolean,
   excludeOptions: Array<string>,
   remove: (event: SyntheticEvent<HTMLDivElement>) => void,
   updateTag: Function,
@@ -83,7 +85,7 @@ function updateTagMutation({ mutate }) {
 
 class Tag extends React.Component<Props, State> {
   static defaultProps = {
-    canRemove: false
+    canEdit: false
   };
 
   state = {
@@ -133,19 +135,29 @@ class Tag extends React.Component<Props, State> {
   };
 
   render() {
-    const { tag, remove, canRemove } = this.props;
+    const { tag, remove, canEdit } = this.props;
     const { editing } = this.state;
-    return (
-      <div className={classNames('harvesting-tag-container', { editing: editing })} onClick={this.edit}>
+    const tagContent = (
+      <div
+        className={classNames('harvesting-tag-container', { editing: editing, editable: canEdit })}
+        onClick={canEdit ? this.edit : null}
+      >
         {!editing ? (
           <React.Fragment>
             <span className="harvesting-tag-title">{tag.label}</span>
-            {canRemove ? <div className="assembl-icon-cancel" onClick={remove} /> : null}
+            {canEdit ? <div className="assembl-icon-cancel" onClick={remove} /> : null}
           </React.Fragment>
         ) : (
           this.renderForm()
         )}
       </div>
+    );
+    return canEdit && !editing ? (
+      <OverlayTrigger placement="top" overlay={eidtTagTooltip}>
+        {tagContent}
+      </OverlayTrigger>
+    ) : (
+      tagContent
     );
   }
 }

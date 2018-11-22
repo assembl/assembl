@@ -16,7 +16,11 @@ type Props = {
   onCancel: () => void
 };
 
-const valueContainer = (pristine: boolean, onValidate?: Function, onCancel?: Function) => ({ children, ...props }) => {
+const valueContainer = (
+  pristine: boolean,
+  onValidate?: (?SyntheticEvent<HTMLFormElement>) => ?Promise<?Object>,
+  onCancel?: (SyntheticEvent<HTMLDivElement>) => void
+) => ({ children, ...props }) => {
   const currentValue = props.getValue()[0];
   const hasLabel = children[0];
   return (

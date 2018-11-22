@@ -551,6 +551,10 @@
         width: 100%;
       }
 
+      &.editable {
+        cursor: pointer;
+      }
+
       .harvesting-tag-title {
         margin-right: 7px;
         white-space: nowrap;

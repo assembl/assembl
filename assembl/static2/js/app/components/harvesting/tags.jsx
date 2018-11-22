@@ -127,7 +127,7 @@ class Tags extends React.Component<Props, State> {
           {currentTags.map(tag => (
             <Tag
               key={tag.value}
-              canRemove={canEdit}
+              canEdit={canEdit}
               excludeOptions={optionsToExclude}
               tag={tag}
               contextId={contextId}

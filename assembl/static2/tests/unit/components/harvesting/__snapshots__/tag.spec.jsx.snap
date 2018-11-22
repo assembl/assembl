@@ -2,7 +2,7 @@
 
 exports[`Tag component should match Tag snapshot (user can't edit) 1`] = `
 <Tag
-  canRemove={false}
+  canEdit={false}
   contextId="123456YETRZ"
   onUpdate={[MockFunction]}
   remove={[MockFunction]}
@@ -18,7 +18,7 @@ exports[`Tag component should match Tag snapshot (user can't edit) 1`] = `
 
 exports[`Tag component should match Tag snapshot 1`] = `
 <Tag
-  canRemove={true}
+  canEdit={true}
   contextId="123456YETRZ"
   onUpdate={[MockFunction]}
   remove={[MockFunction]}
