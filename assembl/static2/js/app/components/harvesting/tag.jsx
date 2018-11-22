@@ -137,27 +137,29 @@ class Tag extends React.Component<Props, State> {
   render() {
     const { tag, remove, canEdit } = this.props;
     const { editing } = this.state;
-    const tagContent = (
+    const tagTitle = <span className="harvesting-tag-title">{tag.label}</span>;
+    return (
       <div
         className={classNames('harvesting-tag-container', { editing: editing, editable: canEdit })}
         onClick={canEdit ? this.edit : null}
       >
         {!editing ? (
           <React.Fragment>
-            <span className="harvesting-tag-title">{tag.label}</span>
-            {canEdit ? <div className="assembl-icon-cancel" onClick={remove} /> : null}
+            {canEdit ? (
+              <React.Fragment>
+                <OverlayTrigger placement="top" overlay={eidtTagTooltip}>
+                  {tagTitle}
+                </OverlayTrigger>
+                <div className="assembl-icon-cancel" onClick={remove} />
+              </React.Fragment>
+            ) : (
+              tagTitle
+            )}
           </React.Fragment>
         ) : (
           this.renderForm()
         )}
       </div>
-    );
-    return canEdit && !editing ? (
-      <OverlayTrigger placement="top" overlay={eidtTagTooltip}>
-        {tagContent}
-      </OverlayTrigger>
-    ) : (
-      tagContent
     );
   }
 }
