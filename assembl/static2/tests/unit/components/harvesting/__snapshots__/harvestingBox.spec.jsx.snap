@@ -212,6 +212,23 @@ exports[`harvestingBox component should match harvestingBox snapshot when author
       /
       5
     </div>
+    <Tags
+      canEdit={false}
+      contextId="987643"
+      initialValues={
+        Array [
+          Object {
+            "label": "foo",
+            "value": "fooid",
+          },
+          Object {
+            "label": "bar",
+            "value": "barid",
+          },
+        ]
+      }
+      updateTags={[Function]}
+    />
   </div>
 </div>
 `;
@@ -391,32 +408,10 @@ exports[`harvestingBox component should match harvestingBox snapshot when extrac
         [object Object]
       </div>
     </div>
-    <div
-      className="harvesting-box-footer"
-    >
-      <Button
-        active={false}
-        block={false}
-        bsClass="btn"
-        bsStyle="default"
-        className="button-cancel button-dark"
-        disabled={false}
-        onClick={[MockFunction]}
-      >
-        Cancel
-      </Button>
-      <Button
-        active={false}
-        block={false}
-        bsClass="btn"
-        bsStyle="default"
-        className="button-submit button-dark"
-        disabled={false}
-        onClick={[Function]}
-      >
-        Submit
-      </Button>
-    </div>
+    <withApollo(DumbTagsForm)
+      onSubmit={[Function]}
+      renderFooter={[Function]}
+    />
   </div>
 </div>
 `;
@@ -668,6 +663,23 @@ exports[`harvestingBox component should match harvestingBox snapshot when nugget
       /
       5
     </div>
+    <Tags
+      canEdit={false}
+      contextId="987643"
+      initialValues={
+        Array [
+          Object {
+            "label": "foo",
+            "value": "fooid",
+          },
+          Object {
+            "label": "bar",
+            "value": "barid",
+          },
+        ]
+      }
+      updateTags={[Function]}
+    />
   </div>
 </div>
 `;
@@ -884,6 +896,23 @@ exports[`harvestingBox component should match harvestingBox snapshot when select
       /
       5
     </div>
+    <Tags
+      canEdit={false}
+      contextId="987643"
+      initialValues={
+        Array [
+          Object {
+            "label": "foo",
+            "value": "fooid",
+          },
+          Object {
+            "label": "bar",
+            "value": "barid",
+          },
+        ]
+      }
+      updateTags={[Function]}
+    />
   </div>
 </div>
 `;
@@ -1100,6 +1129,23 @@ exports[`harvestingBox component should match harvestingBox snapshot when the co
       /
       5
     </div>
+    <Tags
+      canEdit={false}
+      contextId="987643"
+      initialValues={
+        Array [
+          Object {
+            "label": "foo",
+            "value": "fooid",
+          },
+          Object {
+            "label": "bar",
+            "value": "barid",
+          },
+        ]
+      }
+      updateTags={[Function]}
+    />
   </div>
 </div>
 `;
@@ -1316,6 +1362,23 @@ exports[`harvestingBox component should match harvestingBox snapshot when there 
       /
       5
     </div>
+    <Tags
+      canEdit={false}
+      contextId="987643"
+      initialValues={
+        Array [
+          Object {
+            "label": "foo",
+            "value": "fooid",
+          },
+          Object {
+            "label": "bar",
+            "value": "barid",
+          },
+        ]
+      }
+      updateTags={[Function]}
+    />
   </div>
 </div>
 `;
@@ -1504,32 +1567,10 @@ exports[`harvestingBox component should match harvestingBox snapshot when there 
         [object Object]
       </div>
     </div>
-    <div
-      className="harvesting-box-footer"
-    >
-      <Button
-        active={false}
-        block={false}
-        bsClass="btn"
-        bsStyle="default"
-        className="button-cancel button-dark"
-        disabled={false}
-        onClick={[MockFunction]}
-      >
-        Cancel
-      </Button>
-      <Button
-        active={false}
-        block={false}
-        bsClass="btn"
-        bsStyle="default"
-        className="button-submit button-dark"
-        disabled={false}
-        onClick={[Function]}
-      >
-        Submit
-      </Button>
-    </div>
+    <withApollo(DumbTagsForm)
+      onSubmit={[Function]}
+      renderFooter={[Function]}
+    />
   </div>
 </div>
 `;

@@ -1,0 +1,8 @@
+mutation updateExtractTags($id: ID!, $tags: [String]) {
+  updateExtractTags(id: $id, tags: $tags) {
+    tags {
+      id
+      value
+    }
+  }
+}

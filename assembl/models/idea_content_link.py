@@ -6,7 +6,7 @@ from datetime import datetime
 from enum import Enum
 
 import assembl.graphql.docstrings as docs
-from sqlalchemy.orm import (relationship, backref)
+from sqlalchemy.orm import relationship, backref
 from sqlalchemy import (
     Column,
     Boolean,
@@ -31,6 +31,7 @@ from .idea import Idea
 from .generic import Content
 from .post import Post
 from .vocabulary import AbstractEnumVocabulary
+from .tag import ExtractsTagsAssociation, TaggableEntity
 from ..auth import (
     CrudPermissions, P_READ, P_EDIT_IDEA,
     P_EDIT_EXTRACT, P_ADD_IDEA, P_ADD_EXTRACT,
@@ -305,7 +306,7 @@ class ExtractStates(Enum):
 extract_states_identifiers = [t.value for t in ExtractStates.__members__.values()]
 
 
-class Extract(IdeaContentPositiveLink):
+class Extract(IdeaContentPositiveLink, TaggableEntity):
     """
     An extracted part of a Content. A quotation to be referenced by an `Idea`.
     """
@@ -353,6 +354,8 @@ class Extract(IdeaContentPositiveLink):
 
     extract_hash = Column(
         String, nullable=False, unique=True)
+
+    tags_associations_cls = ExtractsTagsAssociation
 
     @property
     def extract_nature_name(self):

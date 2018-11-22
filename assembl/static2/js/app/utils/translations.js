@@ -14,7 +14,7 @@ const Translations = {
     delete: "Supprimer",
     deleteConfirmation: {
       confirmDeletionTitle: "Supprimer un élément",
-      confirmDeletionBody: "Etes-vous certain de vouloir supprimer cet élément ?"
+      confirmDeletionBody: "Êtes-vous certain de vouloir supprimer cet élément ?"
     },
     accountDeleted: "Votre compte a été supprimé avec succès",
     deletedUser: "Compte utilisateur supprimé",
@@ -49,14 +49,29 @@ const Translations = {
       harvestingValidated: "L'extrait a été validé avec succès.",
       harvestingSubmitted: "L'extrait est en attente de validation.",
       deleteExtract: "Supprimer l'extrait attrapé",
-      confirmDeleteExtract: "Etes-vous certain de vouloir supprimer cet extrait ?",
+      confirmDeleteExtract: "Êtes-vous certain de vouloir supprimer cet extrait ?",
       validateExtract: "Extrait validé",
       editExtract: "Modifier l'extrait attrapé",
       nuggetExtract: "Pépiter l'extrait attrapé",
       qualifyExtract: "Qualifier l'extrait attrapé",
       move: "Déplacer",
       qualifyNature: "Qualifier par nature",
-      qualifyAction: "Qualifier par action"
+      qualifyAction: "Qualifier par action",
+      tags: {
+        label: "Tags",
+        cancel: "Annuler",
+        validate: "Valider",
+        edit: "Cliquez pour editer le tag",
+        deleteConfirmation: {
+          confirmDeletionTitle: "Supprimer le tag \"%{tag}\"",
+          confirmDeletionBody: "Êtes-vous certain de vouloir supprimer ce tag ?"
+        },
+        select: {
+          placeholder: "Sélectionner des tags",
+          noOptions: "Aucun tag trouvé",
+          newOption: "Ajouter ce tag '%{option}'"
+        }
+      }
     },
     cookies: {
       userSession: "Session utilisateur",
@@ -811,7 +826,7 @@ const Translations = {
         thematicTitle: "Titre de la Thématique",
         headerLabel: "Choisir l'image de fond du bandeau",
         confirmDeletionTitle: "Supprimer la thématique %{title}",
-        confirmDeletionBody: "Etes-vous certain de vouloir supprimer cette thématique ?"
+        confirmDeletionBody: "Êtes-vous certain de vouloir supprimer cette thématique ?"
       },
       resourcesCenter: {
         createResource: "Ajouter un média",
@@ -928,6 +943,13 @@ const Translations = {
     },
     duration: {
       format: "h [h]"
+    },
+    form: {
+      select: {
+        placeholder: "Sélectionner...",
+        noOptions: "Aucune option n'est disponible",
+        newOption: "Ajouter l'option '%{option}'"
+      }
     }
   },
   en: {
@@ -984,7 +1006,22 @@ const Translations = {
       qualifyExtract: "Qualify the extract",
       move: "Move",
       qualifyNature: "Qualify by nature",
-      qualifyAction: "Qualify by action"
+      qualifyAction: "Qualify by action",
+      tags: {
+        label: "Tags",
+        cancel: "Cancel",
+        validate: "Validate",
+        edit: "Click to edit the tag",
+        deleteConfirmation: {
+          confirmDeletionTitle: "Delete the tag \"%{tag}\"",
+          confirmDeletionBody: "Are you sure that you wish to delete this tag?"
+        },
+        select: {
+          placeholder: "Select tags",
+          noOptions: "No tags",
+          newOption: "Create this tag '%{option}'"
+        }
+      }
     },
     cookies: {
       userSession: "User Session",
@@ -1845,6 +1882,13 @@ const Translations = {
     },
     duration: {
       format: "h [h]"
+    },
+    form: {
+      select: {
+        placeholder: "Select...",
+        noOptions: "No options",
+        newOption: "Create '%{option}'"
+      }
     }
   }
 };

@@ -520,7 +520,7 @@ def extract_taxonomy_csv(request):
     extract_list = []
     user_prefs = LanguagePreferenceCollection.getCurrent()
     fieldnames = ["Thematic", "Message", "Content harvested",  "Content locale", "Original message", "Original locale", "Qualify by nature", "Qualify by action",
-                  "Owner of the message", "Published on", "Harvester", "Harvested on", "Nugget", "State"]
+                  "Owner of the message", "Published on", "Harvester", "Harvested on", "Nugget", "State", "Tags"]
     for extract in extracts:
         if extract.idea_id:
             thematic = db.query(m.Idea).get(extract.idea_id)
@@ -575,6 +575,7 @@ def extract_taxonomy_csv(request):
         harvested_on = unicode(extract.creation_date.replace(microsecond=0))
         nugget = "Yes" if extract.important else "No"
         state = getattr(extract, 'extract_state', ExtractStates.PUBLISHED.value)
+        tags = [t.value for t in extract.tags]
         extract_info = {
             "Thematic": thematic.encode('utf-8'),
             "Message": sanitize_text(message).encode('utf-8'),
@@ -589,7 +590,8 @@ def extract_taxonomy_csv(request):
             "Harvester": harvester.encode('utf-8'),
             "Harvested on": harvested_on.encode('utf-8'),
             "Nugget": nugget.encode('utf-8'),
-            "State": state.encode('utf-8')
+            "State": state.encode('utf-8'),
+            "Tags": ', '.join(tags).encode('utf-8')
         }
         extract_list.append(extract_info)
 

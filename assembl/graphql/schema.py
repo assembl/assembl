@@ -32,7 +32,8 @@ from assembl.graphql.post import (AddPostAttachment, CreatePost, DeletePost,
                                   DeletePostAttachment, UndeletePost,
                                   UpdatePost, AddPostExtract, PostConnection,
                                   AddPostsExtract)
-from assembl.graphql.extract import (UpdateExtract, DeleteExtract, ConfirmExtract)
+from assembl.graphql.extract import (UpdateExtract, UpdateExtractTags, DeleteExtract, ConfirmExtract)
+from assembl.graphql.tag import UpdateTag
 from assembl.graphql.resource import (CreateResource, DeleteResource, Resource,
                                       UpdateResource)
 from assembl.graphql.section import (CreateSection, DeleteSection, Section,
@@ -40,6 +41,7 @@ from assembl.graphql.section import (CreateSection, DeleteSection, Section,
 from assembl.graphql.sentiment import AddSentiment, DeleteSentiment
 from assembl.graphql.synthesis import Synthesis
 from assembl.graphql.user import UpdateUser, DeleteUserInformation, UpdateAcceptedCookies
+from assembl.graphql.tag import Tag
 from .configurable_fields import (
     ConfigurableFieldUnion, CreateTextField, UpdateTextField,
     DeleteTextField, ProfileField, UpdateProfileFields)
@@ -133,6 +135,23 @@ class Query(graphene.ObjectType):
         end_date=graphene.String(description=docs.SchemaPosts.end_date),
         identifiers=graphene.List(graphene.String, description=docs.SchemaPosts.identifiers),
         description=docs.SchemaPosts.__doc__)
+    tags = graphene.List(
+        lambda: Tag,
+        filter=graphene.String(description=docs.SchemaTags.filter),
+        description=docs.SchemaTags.__doc__)
+
+    def resolve_tags(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        _filter = args.get('filter', '')
+        model = models.Keyword
+        query = get_query(model, context).filter(
+            model.discussion_id == discussion_id)
+
+        if not _filter:
+            return query.limit(30).all()
+
+        _filter = '%{}%'.format(_filter)
+        return query.filter(model.value.ilike(_filter)).all()
 
     def resolve_resources(self, args, context, info):
         model = models.Resource
@@ -471,6 +490,8 @@ class Mutations(graphene.ObjectType):
     add_post_extract = AddPostExtract.Field(description=docs.AddPostExtract.__doc__)
     add_posts_extract = AddPostsExtract.Field(description=docs.AddPostsExtract.__doc__)
     update_extract = UpdateExtract.Field(description=docs.UpdateExtract.__doc__)
+    update_extract_tags = UpdateExtractTags.Field(description=docs.UpdateExtractTags.__doc__)
+    update_tag = UpdateTag.Field(description=docs.UpdateTag.__doc__)
     delete_extract = DeleteExtract.Field(description=docs.DeleteExtract.__doc__)
     create_text_field = CreateTextField.Field(description=docs.CreateTextField.__doc__)
     confirm_extract = ConfirmExtract.Field(description=docs.ConfirmExtract.__doc__)

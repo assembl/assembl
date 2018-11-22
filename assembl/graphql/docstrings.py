@@ -61,6 +61,11 @@ class SchemaPosts:
     identifiers = "A list of phase identifiers. " + Default.phase_identifier
 
 
+class SchemaTags:
+    __doc__ = """The list of filtered tags available on the discussion."""
+    filter = "A string used to filter the list of tags."
+
+
 class Discussion:
     __doc__ = """The Discussion object. This object describes certain parts of the core state of the debate."""
     id = Default.object_id % ("Discussion",)
@@ -218,6 +223,12 @@ class ExtractInterface:
     creator = """The AgentProfile object description of the creator."""
     lang = """The lang of the extract."""
     comments = """A list of comment post related to an extract."""
+    tags = "The list of tags of the extract."
+
+
+class TagInterface:
+    __doc__ = """A tag is a string. It allows to classify objects such as extracts."""
+    value = """The value of the tag. This is not language dependent, but rather just unicode text."""
 
 
 class PostExtract:
@@ -227,7 +238,8 @@ class PostExtract:
     xpath_end = TextFragmentIdentifier.xpath_end
     offset_start = TextFragmentIdentifier.offset_start
     offset_end = TextFragmentIdentifier.offset_end
-    lang = """The lang of the extract."""
+    lang = ExtractInterface.lang
+    tags = ExtractInterface.tags
 
 
 class AddPostsExtract:
@@ -246,6 +258,19 @@ class UpdateExtract:
     extract_nature = ExtractInterface.extract_nature
     extract_action = ExtractInterface.extract_action
     body = ExtractInterface.body
+
+
+class UpdateExtractTags:
+    doc__ = """A mutation to update the tags of an existing extract."""
+    extract_id = """The Relay.Node ID type of the Extract object to the updated."""
+    tags = """A list of strings."""
+
+
+class UpdateTag:
+    __doc__ = """A mutation to update or replace the value of an existing tag."""
+    id = """The Relay.Node ID type of the Tag object to the updated."""
+    taggable_id = """The Relay.Node ID type of the TaggableEntity object representing the context of the mutation."""
+    value = """A string representing the new value of the tag."""
 
 
 class DeleteExtract:
@@ -601,6 +626,7 @@ class AddPostExtract:
     xpath_end = TextFragmentIdentifier.xpath_end
     offset_start = TextFragmentIdentifier.offset_start
     offset_end = TextFragmentIdentifier.offset_end
+    tags = UpdateExtractTags.tags
 
 
 class Document:

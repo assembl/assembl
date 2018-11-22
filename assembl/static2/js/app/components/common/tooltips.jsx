@@ -216,6 +216,12 @@ export const harvestingTooltip = (
   </Tooltip>
 );
 
+export const editTagTooltip = (
+  <Tooltip id="editTagTooltip">
+    <Translate value="harvesting.tags.edit" />
+  </Tooltip>
+);
+
 export const deleteFileTooltip = (
   <Tooltip id="deleteFileTooltip">
     <Translate value="administration.deleteAssociatedFile" />

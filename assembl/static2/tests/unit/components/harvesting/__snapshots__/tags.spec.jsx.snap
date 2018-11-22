@@ -1,0 +1,129 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Tags component should match Tags snapshot (user can't edit) 1`] = `
+<div
+  className="harvesting-tags-container"
+>
+  <label
+    htmlFor="tags"
+  >
+    Tags
+  </label>
+  <div
+    className="harvesting-tags-titles-container"
+  >
+    <Apollo(Tag)
+      canEdit={false}
+      excludeOptions={
+        Array [
+          "fooid",
+          "barid",
+        ]
+      }
+      onUpdate={[Function]}
+      remove={[Function]}
+      tag={
+        Object {
+          "label": "foo",
+          "value": "fooid",
+        }
+      }
+    />
+    <Apollo(Tag)
+      canEdit={false}
+      excludeOptions={
+        Array [
+          "fooid",
+          "barid",
+        ]
+      }
+      onUpdate={[Function]}
+      remove={[Function]}
+      tag={
+        Object {
+          "label": "bar",
+          "value": "barid",
+        }
+      }
+    />
+  </div>
+</div>
+`;
+
+exports[`Tags component should match Tags snapshot 1`] = `
+<div
+  className="harvesting-tags-container"
+>
+  <label
+    htmlFor="tags"
+  >
+    Tags
+  </label>
+  <div
+    className="harvesting-tags-titles-container"
+  >
+    <Apollo(Tag)
+      canEdit={true}
+      excludeOptions={
+        Array [
+          "fooid",
+          "barid",
+        ]
+      }
+      onUpdate={[Function]}
+      remove={[Function]}
+      tag={
+        Object {
+          "label": "foo",
+          "value": "fooid",
+        }
+      }
+    />
+    <Apollo(Tag)
+      canEdit={true}
+      excludeOptions={
+        Array [
+          "fooid",
+          "barid",
+        ]
+      }
+      onUpdate={[Function]}
+      remove={[Function]}
+      tag={
+        Object {
+          "label": "bar",
+          "value": "barid",
+        }
+      }
+    />
+    <div
+      className="harvesting-tags-edit"
+      onClick={[Function]}
+    >
+      +
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Tags component should match Tags snapshot without initialValues 1`] = `
+<div
+  className="harvesting-tags-container"
+>
+  <label
+    htmlFor="tags"
+  >
+    Tags
+  </label>
+  <div
+    className="harvesting-tags-titles-container"
+  >
+    <div
+      className="harvesting-tags-edit"
+      onClick={[Function]}
+    >
+      +
+    </div>
+  </div>
+</div>
+`;

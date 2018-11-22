@@ -1,8 +1,11 @@
 import { getExtractTagId } from '../../../../js/app/utils/extract';
 
+const tags = [{ value: 'foo', id: 'fooid' }, { value: 'bar', id: 'barid' }];
+
 export const extracts = [
   {
     body: 'Hello world!',
+    tags: tags,
     creationDate: '2018-03-29T16:28:27.324276+00:00',
     creator: {
       displayName: 'John Doe',
@@ -26,6 +29,7 @@ export const extracts = [
   },
   {
     body: 'Hello everybody!',
+    tags: [],
     creationDate: '2018-04-29T16:28:27.324276+00:00',
     creator: {
       displayName: 'Alice Thomas',
