@@ -65,13 +65,14 @@ const highlightedTextOrTruncatedText = (hit, field) => {
   return text;
 };
 
-function getPostUrl(ideaId, postId, phaseIdentifier, slug) {
+function getPostUrl(ideaId, postId, phaseIdentifier, slug, extractId) {
   if (!ideaId || !phaseIdentifier) {
     return undefined;
   }
   const ideaBase64id = btoa(`Idea:${ideaId}`);
   const postBase64id = btoa(`Post:${postId}`);
-  if (phaseIdentifier === 'thread') {
+  const extractBase64id = btoa(`Extract:${extractId}`);
+  if (phaseIdentifier === 'thread' && !extractId) {
     return getRoute('post', {
       slug: slug,
       phase: phaseIdentifier,
@@ -85,6 +86,14 @@ function getPostUrl(ideaId, postId, phaseIdentifier, slug) {
       questionId: ideaBase64id,
       questionIndex: 1,
       element: postBase64id
+    });
+  } else if (phaseIdentifier === 'thread' && extractId) {
+    return getRoute('extract', {
+      slug: slug,
+      phase: phaseIdentifier,
+      themeId: ideaBase64id,
+      element: postBase64id,
+      extractId: extractBase64id
     });
   }
   return undefined;
@@ -150,7 +159,8 @@ if (v1Interface) {
       const phaseIdentifier = hit._source.phase_identifier;
       const ideaId = hit._source.idea_id[0];
       const postId = hit._source.post_id;
-      return getPostUrl(ideaId, postId, phaseIdentifier, slug);
+      const extractId = hit._source.id;
+      return getPostUrl(ideaId, postId, phaseIdentifier, slug, extractId);
     }
     default: {
       // post

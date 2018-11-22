@@ -29,21 +29,30 @@ type State = {
 };
 
 class HarvestingMenu extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      displayExtractsBox: false
-    };
+  static getDerivedStateFromProps(props: Props) {
+    const { extracts } = props;
+    const { hash } = window.location;
+    if (hash !== '') {
+      const hashExtractId = hash.split('#')[2];
+      let isHashMatchId = false;
+      extracts.forEach((extract) => {
+        if (hashExtractId === extract.id) isHashMatchId = true;
+      });
+      return { displayExtractsBox: isHashMatchId };
+    }
+    return null;
   }
+
+  state = { displayExtractsBox: false };
+
+  toggleExtractsBox = (): void => {
+    this.setState(prevState => ({ displayExtractsBox: !prevState.displayExtractsBox }));
+  };
 
   handleMouseDown = (event: SyntheticMouseEvent<>) => {
     // This would otherwise clear the selection
     event.preventDefault();
     return false;
-  };
-
-  toggleExtractsBox = (): void => {
-    this.setState(prevState => ({ displayExtractsBox: !prevState.displayExtractsBox }));
   };
 
   render() {
