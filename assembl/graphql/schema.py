@@ -147,7 +147,7 @@ class Query(graphene.ObjectType):
         query = get_query(model, context).filter(
             model.discussion_id == discussion_id)
 
-        # @TODO Add Pagination
+        # Add Pagination
         if not _filter:
             return query.limit(30).all()
 
