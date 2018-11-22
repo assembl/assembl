@@ -21,6 +21,9 @@ export const FICTION_COMMENT_MAX_LENGTH = 3000;
 export const EMPTY_STRING = '';
 export const FICTION_DELETE_CALLBACK = 'FICTION_DELETE_CALLBACK';
 export const USER_ID_NOT_FOUND = -9999;
+export const PICTURES_LENGTH = 40; // Number of pictures available on S3
+export const PICTURE_BASE_URL = 'https://s3-eu-west-1.amazonaws.com/brightmirror/preview-';
+export const PICTURE_EXTENSION = '.jpg';
 
 // Minimum length for survey answers
 export const MINIMUM_BODY_LENGTH = 10;

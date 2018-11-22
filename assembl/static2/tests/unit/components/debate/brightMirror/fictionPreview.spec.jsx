@@ -19,6 +19,13 @@ initStoryshots({
 
 configure({ adapter: new Adapter() });
 
+// Mock utils functions
+jest.mock('../../../../../js/app/utils/globalFunctions', () => ({
+  isMobile: { any: jest.fn(() => false) },
+  getIconPath: jest.fn(() => 'icons/path/avatar'),
+  getRandomPictureUrl: jest.fn(() => 'https://s3-eu-west-1.amazonaws.com/brightmirror/preview-xx.jpg')
+}));
+
 describe('<FictionPreview /> - with shallow', () => {
   let wrapper;
   let fictionPreview;

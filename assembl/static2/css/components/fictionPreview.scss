@@ -17,6 +17,13 @@
         background-color: $grey5;
       }
     }
+
+    h3,
+    p,
+    .author,
+    .published-date {
+      color: $black;
+    }
   }
 
   &:hover {
@@ -27,10 +34,11 @@
   p,
   .author,
   .published-date {
-    color: $black;
+    color: $white;
     letter-spacing: normal;
     line-height: 1.19;
     text-align: left;
+    text-transform: capitalize;
   }
 
   h3,

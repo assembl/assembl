@@ -2,7 +2,7 @@
 import { type Map } from 'immutable';
 
 import { getDisplayedPhaseIdentifier } from './timeline';
-import { HARVESTABLE_PHASES, ICONS_PATH } from '../constants';
+import { HARVESTABLE_PHASES, ICONS_PATH, PICTURES_LENGTH, PICTURE_BASE_URL, PICTURE_EXTENSION } from '../constants';
 
 const getInputValue = (id: string) => {
   const elem = document.getElementById(id);
@@ -295,3 +295,8 @@ export function fromGlobalId(id: string): string | null {
 export function getIconPath(icon: string, color: string = '') {
   return color ? `${ICONS_PATH}/${color}/${icon}` : `${ICONS_PATH}/${icon}`;
 }
+
+export const getRandomPictureUrl = () => {
+  const pictureId = Math.floor(Math.random() * PICTURES_LENGTH) + 1;
+  return `${PICTURE_BASE_URL}${pictureId}${PICTURE_EXTENSION}`;
+};
