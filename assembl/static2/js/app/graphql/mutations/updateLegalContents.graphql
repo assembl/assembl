@@ -1,4 +1,11 @@
+#import "../fragments/Attachment.graphql"
+
 mutation UpdateLegalContents(
+  $legalNoticeAttachments: [String]
+  $termsAndConditionsAttachments: [String]
+  $cookiesPolicyAttachments: [String]
+  $privacyPolicyAttachments: [String]
+  $userGuidelinesAttachments: [String]
   $legalNoticeEntries: [LangStringEntryInput]!
   $termsAndConditionsEntries: [LangStringEntryInput]!
   $cookiesPolicyEntries: [LangStringEntryInput]!
@@ -11,6 +18,11 @@ mutation UpdateLegalContents(
     cookiesPolicyEntries: $cookiesPolicyEntries
     privacyPolicyEntries: $privacyPolicyEntries
     userGuidelinesEntries: $userGuidelinesEntries
+    legalNoticeAttachments: $legalNoticeAttachments
+    termsAndConditionsAttachments: $termsAndConditionsAttachments
+    cookiesPolicyAttachments: $cookiesPolicyAttachments
+    privacyPolicyAttachments: $privacyPolicyAttachments
+    userGuidelinesAttachments: $userGuidelinesAttachments
   ) {
     legalContents {
       legalNoticeEntries {
@@ -32,6 +44,21 @@ mutation UpdateLegalContents(
       userGuidelinesEntries {
         localeCode
         value
+      }
+      legalNoticeAttachments {
+        ...Attachment
+      }
+      termsAndConditionsAttachments {
+        ...Attachment
+      }
+      cookiesPolicyAttachments {
+        ...Attachment
+      }
+      privacyPolicyAttachments {
+        ...Attachment
+      }
+      userGuidelinesAttachments {
+        ...Attachment
       }
     }
   }
