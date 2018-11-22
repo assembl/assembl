@@ -1,7 +1,7 @@
 -e git+https://github.com/assembl/Beaker.git@79a9e4bd7b0f5eb059f537df3788d613f11ec6fd#egg=Beaker
 -e git+https://github.com/assembl/cornice.git@5c70aa88ab40199cde88afb786a897c787998efc#egg=cornice
 -e git+https://github.com/assembl/facebook-sdk.git@ddc911f54d6136e149c03d145fd3760751a7d50d#egg=facebook_sdk
--e git+https://github.com/assembl/graphql-wsgi.git@ad190d7243a3d6d32e41952828daf3b100194f01#egg=graphql-wsgi
+-e git+https://github.com/assembl/graphql-wsgi.git@1f16c22872f51165866f0689c30602ec043acb1d#egg=graphql-wsgi
 -e git+https://github.com/assembl/hashfs.git@386ce3b8c69576007549ddf5122282099b87fe42#egg=hashfs
 -e git+https://github.com/assembl/jwzthreading.git@a5a5af7ec260b21a7d25db83cad9874a3a5af90b#egg=jwzthreading
 -e git+https://github.com/assembl/langdetect.git@49a67668866fffd99a2978aec81d1e759cc0511e#egg=langdetect
