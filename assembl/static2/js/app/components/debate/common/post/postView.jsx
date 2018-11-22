@@ -175,6 +175,8 @@ class PostView extends React.PureComponent<Props, State> {
     const relatedIdeasTitles = indirectIdeaContentLinks
       ? indirectIdeaContentLinks.map(link => link && link.idea && link.idea.title)
       : [];
+    const hasRelatedIdeas = relatedIdeasTitles.length > 0;
+
     return (
       <div
         ref={(p) => {
@@ -234,8 +236,7 @@ class PostView extends React.PureComponent<Props, State> {
 
               {!multiColumns ? (
                 <React.Fragment>
-                  <RelatedIdeas relatedIdeasTitles={relatedIdeasTitles} />
-
+                  {hasRelatedIdeas ? <RelatedIdeas relatedIdeasTitles={relatedIdeasTitles} /> : null}
                   <div className="answers annotation">
                     <Translate value="debate.thread.numberOfResponses" count={numChildren} />
                   </div>
