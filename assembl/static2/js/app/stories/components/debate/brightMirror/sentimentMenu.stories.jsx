@@ -4,7 +4,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import { withInfo } from '@storybook/addon-info';
-import { withKnobs, object, select, boolean } from '@storybook/addon-knobs';
+import { withKnobs, object, select } from '@storybook/addon-knobs';
 
 import SentimentMenu, { type Props } from '../../../../components/debate/brightMirror/sentimentMenu';
 import { SENTIMENTS } from '../../../../constants';
@@ -34,10 +34,9 @@ storiesOf('SentimentMenu', module)
       <SentimentMenu
         postId={props.postId}
         position={props.position}
-        client={props.client}
         screenWidth={props.screenWidth}
         refetchPost={props.refetchPost}
-        isPhaseCompleted={boolean('is phase completed?', props.isPhaseCompleted)}
+        isPhaseCompleted={props.isPhaseCompleted}
         mySentiment={select('my sentiment', SENTIMENTS, props.mySentiment)}
         sentimentCounts={object('sentiments counts', props.sentimentCounts)}
       />

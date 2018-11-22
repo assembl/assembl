@@ -42,7 +42,6 @@ const defaultFictionBody: FictionBodyProps = {
     moreInfo: 0
   },
   isPhaseCompleted: false,
-  client: jest.fn(),
   screenWidth: 100
 };
 
@@ -121,7 +120,6 @@ describe('<FictionBody /> - snapshots', () => {
         moreInfo: 0
       },
       isPhaseCompleted: false,
-      client: jest.fn(),
       screenWidth: 100
     };
     const component = renderer.create(<FictionBody {...props} />);

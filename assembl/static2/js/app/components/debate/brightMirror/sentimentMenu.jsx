@@ -2,7 +2,6 @@
 import React from 'react';
 import get from 'lodash/get';
 
-import { ApolloClient } from 'react-apollo';
 import { OverlayTrigger } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
 
@@ -16,26 +15,18 @@ export type Props = {
   postId: string,
   sentimentCounts: ?SentimentCountsFragment,
   mySentiment: ?string,
-  client: ApolloClient,
   screenWidth: number,
   refetchPost: Function,
   isPhaseCompleted: boolean
 };
 
-const SentimentMenu = ({
-  postId,
-  mySentiment,
-  client,
-  screenWidth,
-  refetchPost,
-  position,
-  sentimentCounts,
-  isPhaseCompleted
-}: Props) => {
+const SentimentMenu = ({ postId, mySentiment, screenWidth, refetchPost, position, sentimentCounts, isPhaseCompleted }: Props) => {
   let count = 0;
-  const totalSentimentsCount = sentimentCounts
-    ? sentimentCounts.like + sentimentCounts.disagree + sentimentCounts.dontUnderstand + sentimentCounts.moreInfo
-    : 0;
+  let totalSentimentsCount = 0;
+  if (sentimentCounts) {
+    const { like, disagree, dontUnderstand, moreInfo } = sentimentCounts;
+    totalSentimentsCount = like + disagree + dontUnderstand + moreInfo;
+  }
   return (
     <div
       className="sentiment-container hidden-xs hidden-sm hidden-md"
@@ -48,7 +39,6 @@ const SentimentMenu = ({
         sentimentCounts={sentimentCounts}
         mySentiment={mySentiment}
         placement="right"
-        client={client}
         postId={postId}
         isPhaseCompleted={isPhaseCompleted}
         onCompleted={refetchPost}

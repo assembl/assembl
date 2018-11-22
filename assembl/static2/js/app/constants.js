@@ -101,7 +101,12 @@ export const COOKIE_TYPES = [
   'REJECT_CGU'
 ];
 
-export const SENTIMENTS = ['DISAGREE', 'DONT_UNDERSTAND', 'LIKE', 'MORE_INFO'];
+export const SENTIMENTS = {
+  like: 'LIKE',
+  disagree: 'DISAGREE',
+  dontUnderstand: 'DONT_UNDERSTAND',
+  moreInfo: 'MORE_INFO'
+};
 
 export const ESSENTIAL_SIGNUP_COOKIES = [
   'ACCEPT_CGU',

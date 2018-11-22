@@ -1,6 +1,5 @@
 // @flow
 import React from 'react';
-import { ApolloClient } from 'react-apollo';
 
 import SideCommentMenu from './sideComment/sideCommentMenu';
 import SentimentMenu from './sentimentMenu';
@@ -24,8 +23,7 @@ export type Props = {
   sentimentCounts: ?SentimentCountsFragment,
   mySentiment: ?string,
   isPhaseCompleted: boolean,
-  screenWidth: number,
-  client: ApolloClient
+  screenWidth: number
 };
 
 type State = {
@@ -173,8 +171,7 @@ class FictionBody extends React.Component<Props, State> {
       sentimentCounts,
       mySentiment,
       isPhaseCompleted,
-      screenWidth,
-      client
+      screenWidth
     } = this.props;
     const {
       displayCommentAnchor,
@@ -212,7 +209,6 @@ class FictionBody extends React.Component<Props, State> {
           postId={postId}
           refetchPost={refetchPost}
           screenWidth={screenWidth}
-          client={client}
         />
         <PostBody
           handleMouseUpWhileHarvesting={this.handleMouseUpWhileHarvesting}

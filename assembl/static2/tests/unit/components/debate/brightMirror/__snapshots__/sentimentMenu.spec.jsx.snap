@@ -1405,35 +1405,6 @@ exports[`Storyshots SentimentMenu playground 1`] = `
                     <span
                       style={Object {}}
                     >
-                      client
-                    </span>
-                    <span>
-                      =
-                      <span
-                        style={Object {}}
-                      >
-                        {
-                        <span
-                          style={
-                            Object {
-                              "color": "#170",
-                            }
-                          }
-                        >
-                          client
-                        </span>
-                        }
-                      </span>
-                    </span>
-                  </span>
-                  <span>
-                    <span>
-                      <br />
-                        
-                    </span>
-                    <span
-                      style={Object {}}
-                    >
                       screenWidth
                     </span>
                     <span>

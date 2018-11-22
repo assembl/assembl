@@ -150,7 +150,6 @@ describe('<BrightMirrorFiction /> - with mount', () => {
         ideaWithCommentsData: ideaWithCommentsData,
         phaseId: '2',
         timeline: timeline,
-        client: jest.fn(),
         screenWidth: 100,
         ...brightMirrorFictionPropsTemplate
       };
@@ -230,7 +229,6 @@ describe('<BrightMirrorFiction /> - with mount', () => {
         ideaWithCommentsData: ideaWithCommentsData,
         phaseId: '2',
         timeline: timeline,
-        client: jest.fn(),
         screenWidth: 100,
         ...brightMirrorFictionPropsTemplate
       };
@@ -287,7 +285,6 @@ describe('<BrightMirrorFiction /> - with mount', () => {
         ideaWithCommentsData: ideaWithCommentsData,
         phaseId: '2',
         timeline: timeline,
-        client: jest.fn(),
         screenWidth: 100,
         ...brightMirrorFictionPropsTemplate
       };

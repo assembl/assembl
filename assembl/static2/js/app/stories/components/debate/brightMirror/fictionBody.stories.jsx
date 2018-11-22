@@ -57,7 +57,6 @@ export const defaultFictionBody: FictionBodyProps = {
     moreInfo: 0
   },
   isPhaseCompleted: false,
-  client: action('client'),
   screenWidth: 0
 };
 
@@ -91,7 +90,6 @@ storiesOf('FictionBody', module)
         mySentiment={playgroundFictionBody.mySentiment}
         sentimentCounts={playgroundFictionBody.sentimentCounts}
         isPhaseCompleted={playgroundFictionBody.isPhaseCompleted}
-        client={playgroundFictionBody.client}
         screenWidth={playgroundFictionBody.screenWidth}
       />
     ))

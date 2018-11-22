@@ -94,15 +94,15 @@ class SideCommentMenu extends React.Component<Props, State> {
 
     return (
       <div className="side-comment-container">
-        {showCommentBadge && (
+        {showCommentBadge ? (
           <SideCommentBadge
             toggleExtractsBox={this.toggleCommentsBox}
             extractsNumber={extracts.length}
             position={badgePosition}
             showBox={showBox}
           />
-        )}
-        {showBox && (
+        ) : null}
+        {showBox ? (
           <SideCommentBox
             ideaId={ideaId}
             postId={postId}
@@ -120,14 +120,14 @@ class SideCommentMenu extends React.Component<Props, State> {
             setPositionToExtract={setPositionToExtract}
             userCanReply={userCanReply}
           />
-        )}
-        {showCommentAnchor && (
+        ) : null}
+        {showCommentAnchor ? (
           <SideCommentAnchor
             handleMouseDown={this.handleMouseDown}
             anchorPosition={commentAnchorPosition}
             handleClickAnchor={handleClickAnchor}
           />
-        )}
+        ) : null}
       </div>
     );
   }

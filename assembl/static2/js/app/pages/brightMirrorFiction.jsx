@@ -4,9 +4,9 @@ import { Grid, Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { I18n } from 'react-redux-i18n';
 import head from 'lodash/head';
-import type { OperationComponent, ApolloClient } from 'react-apollo';
+import type { OperationComponent } from 'react-apollo';
 // Graphql imports
-import { compose, graphql, withApollo } from 'react-apollo';
+import { compose, graphql } from 'react-apollo';
 import BrightMirrorFictionQuery from '../graphql/BrightMirrorFictionQuery.graphql';
 // Optimization: Should create createBrightMirrorComment.graphql and adapt the mutation
 import CreateBrightMirrorCommentMutation from '../graphql/mutations/createPost.graphql';
@@ -70,7 +70,6 @@ export type BrightMirrorFictionProps = {
 type AdditionalProps = {
   timeline: Timeline,
   phaseId: string,
-  client: ApolloClient,
   screenWidth: number
 };
 
@@ -230,7 +229,6 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
       themeId,
       phaseId,
       timeline,
-      client,
       screenWidth
     } = this.props;
     // Handle fetching error
@@ -326,7 +324,6 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
       sentimentCounts: fiction.sentimentCounts,
       mySentiment: fiction.mySentiment,
       isPhaseCompleted: getIsPhaseCompletedById(timeline, phaseId),
-      client: client,
       screenWidth: screenWidth
     };
 
@@ -405,7 +402,6 @@ export default compose(
   connect(mapStateToProps),
   withData,
   withScreenWidth,
-  withApollo,
   graphql(IdeaWithCommentsQuery, {
     // GraphQL custom data name
     name: 'ideaWithCommentsData',
