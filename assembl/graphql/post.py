@@ -21,7 +21,7 @@ from jwzthreading import restrip_pat
 
 import assembl.graphql.docstrings as docs
 from .permissions_helpers import require_cls_permission
-from .document import Document
+from .attachment import Attachment
 from .idea import Idea, TagResult
 from .langstring import (LangStringEntry, resolve_best_langstring_entries,
                          resolve_langstring)
@@ -38,16 +38,6 @@ _ = TranslationStringFactory('assembl')
 publication_states_enum = PyEnum(
     'PublicationStates', [(k, k) for k in models.PublicationStates.values()])
 PublicationStates = graphene.Enum.from_enum(publication_states_enum)
-
-
-class PostAttachment(SecureObjectType, SQLAlchemyObjectType):
-    __doc__ = docs.PostAttachment.__doc__
-
-    class Meta:
-        model = models.PostAttachment
-        only_fields = ('id',)
-
-    document = graphene.Field(Document, description=docs.PostAttachment.document)
 
 
 class IdeaContentLink(graphene.ObjectType):
@@ -101,7 +91,7 @@ class PostInterface(SQLAlchemyInterface):
     db_id = graphene.Int(description=docs.PostInterface.db_id)
     body_mime_type = graphene.String(required=True, description=docs.PostInterface.body_mime_type)
     publication_state = graphene.Field(type=PublicationStates, description=docs.PostInterface.publication_state)
-    attachments = graphene.List(PostAttachment, description=docs.PostInterface.attachments)
+    attachments = graphene.List(Attachment, description=docs.PostInterface.attachments)
     original_locale = graphene.String(description=docs.PostInterface.original_locale)
     publishes_synthesis = graphene.Field(lambda: Synthesis, description=docs.PostInterface.publishes_synthesis)
     type = graphene.String(description=docs.PostInterface.type)

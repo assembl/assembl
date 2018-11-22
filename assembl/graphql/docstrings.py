@@ -496,9 +496,9 @@ class UpdateLandingPageModule:
     landing_page_module = CreateLandingPageModule.landing_page_module
 
 
-class PostAttachment:
-    __doc__ = "The Attachment object associated with a Post."
-    document = Default.document % ("Any file that can be attached to a Post. ")
+class Attachment:
+    __doc__ = "Any Attachment object."
+    document = Default.document % ("Any file that can be attached. ")
 
 
 class IdeaContentLink:
