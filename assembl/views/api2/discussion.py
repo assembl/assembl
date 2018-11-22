@@ -537,7 +537,7 @@ def extract_taxonomy_csv(request):
             extract_locale = extract.locale.code
         else:
             extract_locale = "no extract locale"
-        query = db.query(m.Post).filter(m.Post.id == extract.content_id).first()
+        query = db.query(m.Post).get(extract.content_id)
         if query:
             if query.body:
                 original_message = query.body.first_original().value
@@ -553,7 +553,7 @@ def extract_taxonomy_csv(request):
         if thematic == no_thematic_associated:
             idea_ids = m.Idea.get_idea_ids_showing_post(query.id)
             for thematic_id in reversed(idea_ids):
-                thematic_title = db.query(m.Idea).filter(m.Idea.id == thematic_id).first().title
+                thematic_title = db.query(m.Idea).get(thematic_id).title
                 if thematic_title:
                     thematic = thematic_title.best_lang(user_prefs).value
                     break
@@ -569,9 +569,9 @@ def extract_taxonomy_csv(request):
             qualify_by_action = extract.extract_action.name
         else:
             qualify_by_action = " "
-        owner_of_the_message = db.query(m.User).filter(m.User.id == query.creator_id).first().name
+        owner_of_the_message = db.query(m.User).get(query.creator_id).name
         published_on = unicode(query.creation_date.replace(microsecond=0))
-        harvester = db.query(m.User).filter(m.User.id == extract.owner_id).first().name
+        harvester = db.query(m.User).get(extract.owner_id).name
         harvested_on = unicode(extract.creation_date.replace(microsecond=0))
         nugget = "Yes" if extract.important else "No"
         state = getattr(extract, 'extract_state', ExtractStates.PUBLISHED.value)
