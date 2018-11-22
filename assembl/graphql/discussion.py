@@ -11,13 +11,17 @@ from assembl.auth import IF_OWNED, CrudPermissions
 from assembl.auth.util import get_permissions
 
 import assembl.graphql.docstrings as docs
+from .attachment import Attachment
 from .document import Document
 from .types import SecureObjectType
 from .langstring import (
     LangStringEntry, LangStringEntryInput, resolve_langstring,
     resolve_langstring_entries, update_langstring_from_input_entries)
 from .utils import (
-    abort_transaction_on_exception, update_attachment,
+    abort_transaction_on_exception,
+    create_attachment,
+    update_attachment,
+    get_attachments_with_purpose,
     get_attachment_with_purpose)
 from .idea import TagResult, SentimentAnalysisResult
 
@@ -329,6 +333,11 @@ class LegalContents(graphene.ObjectType):
     privacy_policy_entries = graphene.List(LangStringEntry, description=docs.LegalContents.privacy_policy_entries)
     user_guidelines = graphene.String(lang=graphene.String(), description=docs.LegalContents.user_guidelines)
     user_guidelines_entries = graphene.List(LangStringEntry, description=docs.LegalContents.user_guidelines_entries)
+    legal_notice_attachments = graphene.List(Attachment, description=docs.LegalContents.legal_notice_attachments)
+    terms_and_conditions_attachments = graphene.List(Attachment, description=docs.LegalContents.terms_and_conditions_attachments)
+    cookies_policy_attachments = graphene.List(Attachment, description=docs.LegalContents.cookies_policy_attachments)
+    privacy_policy_attachments = graphene.List(Attachment, description=docs.LegalContents.privacy_policy_attachments)
+    user_guidelines_attachments = graphene.List(Attachment, description=docs.LegalContents.user_guidelines_attachments)
 
     def resolve_legal_notice(self, args, context, info):
         """Legal notice value in given locale."""
@@ -399,6 +408,31 @@ class LegalContents(graphene.ObjectType):
             return resolve_langstring_entries(discussion, 'user_guidelines')
 
         return []
+
+    def resolve_legal_notice_attachments(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        return get_attachments_with_purpose(discussion.attachments, models.AttachmentPurpose.LEGAL_NOTICE_ATTACHMENT.value)
+
+    def resolve_terms_and_conditions_attachments(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        return get_attachments_with_purpose(discussion.attachments, models.AttachmentPurpose.TERMS_AND_CONDITIONS_ATTACHMENT.value)
+
+    def resolve_cookies_policy_attachments(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        return get_attachments_with_purpose(discussion.attachments, models.AttachmentPurpose.COOKIES_POLICY_ATTACHMENT.value)
+
+    def resolve_privacy_policy_attachments(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        return get_attachments_with_purpose(discussion.attachments, models.AttachmentPurpose.PRIVACY_POLICY_ATTACHMENT.value)
+
+    def resolve_user_guidelines_attachments(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        return get_attachments_with_purpose(discussion.attachments, models.AttachmentPurpose.USER_GUIDELINES_ATTACHMENT.value)
 
 
 class UpdateResourcesCenter(graphene.Mutation):
@@ -530,10 +564,52 @@ class UpdateDiscussionPreferences(graphene.Mutation):
         return UpdateDiscussionPreferences(preferences=discussion.preferences)
 
 
+def update_legal_contents_attachments(context, discussion, new_attachments, purpose):
+    """Create, update, delete legal contents attachments for a legal contents field."""
+    original_ln_attachments = get_attachments_with_purpose(
+        discussion.attachments, purpose)
+    original_attachments_doc_ids = []
+    if original_ln_attachments:
+        original_attachments_doc_ids = [
+            str(a.document_id) for a in original_ln_attachments]
+
+    for document_id in new_attachments:
+        if document_id not in original_attachments_doc_ids:
+            create_attachment(
+                discussion,
+                models.DiscussionAttachment,
+                purpose,
+                context,
+                document_id=document_id
+            )
+
+    # delete attachments that has been removed
+    documents_to_delete = set(original_attachments_doc_ids) - set(new_attachments)
+    for document_id in documents_to_delete:
+        with models.Discussion.default_db.no_autoflush:
+            document = models.Document.get(document_id)
+            attachments = discussion.db.query(
+                models.DiscussionAttachment
+            ).filter_by(
+                attachmentPurpose=purpose,
+                discussion_id=discussion.id,
+                document_id=document_id
+            ).all()
+            document.delete_file()
+            discussion.db.delete(document)
+            for attachment in attachments:
+                discussion.attachments.remove(attachment)
+
+
 class UpdateLegalContents(graphene.Mutation):
     __doc__ = docs.UpdateLegalContents.__doc__
 
     class Input:
+        legal_notice_attachments = graphene.List(graphene.String, description=docs.UpdateLegalContents.legal_notice_attachments)
+        terms_and_conditions_attachments = graphene.List(graphene.String, description=docs.UpdateLegalContents.terms_and_conditions_attachments)
+        cookies_policy_attachments = graphene.List(graphene.String, description=docs.UpdateLegalContents.cookies_policy_attachments)
+        privacy_policy_attachments = graphene.List(graphene.String, description=docs.UpdateLegalContents.privacy_policy_attachments)
+        user_guidelines_attachments = graphene.List(graphene.String, description=docs.UpdateLegalContents.user_guidelines_attachments)
         legal_notice_entries = graphene.List(LangStringEntryInput, description=docs.UpdateLegalContents.legal_notice_entries)
         terms_and_conditions_entries = graphene.List(LangStringEntryInput, description=docs.UpdateLegalContents.terms_and_conditions_entries)
         cookies_policy_entries = graphene.List(LangStringEntryInput, description=docs.UpdateLegalContents.cookies_policy_entries)
@@ -545,6 +621,11 @@ class UpdateLegalContents(graphene.Mutation):
     @staticmethod
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
+        LEGAL_NOTICE_ATTACHMENT = models.AttachmentPurpose.LEGAL_NOTICE_ATTACHMENT.value
+        TERMS_AND_CONDITIONS_ATTACHMENT = models.AttachmentPurpose.TERMS_AND_CONDITIONS_ATTACHMENT.value
+        COOKIES_POLICY_ATTACHMENT = models.AttachmentPurpose.COOKIES_POLICY_ATTACHMENT.value
+        PRIVACY_POLICY_ATTACHMENT = models.AttachmentPurpose.PRIVACY_POLICY_ATTACHMENT.value
+        USER_GUIDELINES_ATTACHMENT = models.AttachmentPurpose.USER_GUIDELINES_ATTACHMENT.value
         cls = models.Discussion
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
@@ -606,6 +687,21 @@ class UpdateLegalContents(graphene.Mutation):
             update_langstring_from_input_entries(
                 discussion, 'user_guidelines', user_guidelines_entries
             )
+
+            legal_contents_attachments_by_purpose = [
+                (args.get('legal_notice_attachments', []), LEGAL_NOTICE_ATTACHMENT),
+                (args.get('terms_and_conditions_attachments', []), TERMS_AND_CONDITIONS_ATTACHMENT),
+                (args.get('cookies_policy_attachments', []), COOKIES_POLICY_ATTACHMENT),
+                (args.get('privacy_policy_attachments', []), PRIVACY_POLICY_ATTACHMENT),
+                (args.get('user_guidelines_attachments', []), USER_GUIDELINES_ATTACHMENT),
+            ]
+            for new_attachments, purpose in legal_contents_attachments_by_purpose:
+                update_legal_contents_attachments(
+                    context,
+                    discussion,
+                    new_attachments,
+                    purpose
+                )
 
         db.flush()
         legal_contents = LegalContents()

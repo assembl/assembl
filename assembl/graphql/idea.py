@@ -770,9 +770,9 @@ class CreateThematic(graphene.Mutation):
                 new_attachment = create_attachment(
                     discussion,
                     models.IdeaAttachment,
-                    image,
                     EMBED_ATTACHMENT,
-                    context
+                    context,
+                    new_value=image
                 )
                 new_attachment.idea = saobj
                 db.add(new_attachment)
@@ -782,9 +782,9 @@ class CreateThematic(graphene.Mutation):
                 new_attachment = create_attachment(
                     discussion,
                     models.IdeaAttachment,
-                    video_media,
                     MEDIA_ATTACHMENT,
-                    context
+                    context,
+                    new_value=video_media
                 )
                 new_attachment.idea = saobj
                 db.add(new_attachment)

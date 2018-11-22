@@ -132,6 +132,11 @@ class LegalContents:
     privacy_policy_entries = Default.langstring_entries % ("",)
     user_guidelines = Default.string_entry % ("User Guidelines",)
     user_guidelines_entries = Default.langstring_entries % ("",)
+    legal_notice_attachments = Default.string_entry % ("Attachments for legal notice")
+    terms_and_conditions_attachments = Default.string_entry % ("Attachments for terms and conditions.")
+    cookies_policy_attachments = Default.string_entry % ("Attachments for cookies policy.")
+    privacy_policy_attachments = Default.string_entry % ("Attachments for privacy policy.")
+    user_guidelines_attachments = Default.string_entry % ("Attachments for user guidelines.")
 
 
 class UpdateResourcesCenter:
@@ -154,6 +159,11 @@ class UpdateLegalContents:
     cookies_policy_entries = Default.langstring_entries % ("This is the list of all Cookie Policies in various languages.",)
     privacy_policy_entries = Default.langstring_entries % ("This is the list of all Privay Policies in various languages.",)
     user_guidelines_entries = Default.langstring_entries % ("This is the list of all User Guidelines in various languages.",)
+    legal_notice_attachments = "The list of the Attachments used in legal notice entries."
+    terms_and_conditions_attachments = "The list of the Attachments used in terms and conditions entries."
+    cookies_policy_attachments = "The list of the Attachments used in cookies policy entries."
+    privacy_policy_attachments = "The list of the Attachments used in privacy policy entries."
+    user_guidelines_attachments = "The list of the Attachments used in user guidelines entries."
 
 
 class VisitsAnalytics:

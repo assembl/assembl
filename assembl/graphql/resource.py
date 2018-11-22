@@ -124,9 +124,9 @@ class CreateResource(graphene.Mutation):
                 new_attachment = create_attachment(
                     discussion,
                     models.ResourceAttachment,
-                    image,
                     ATTACHMENT_PURPOSE_IMAGE,
-                    context
+                    context,
+                    new_value=image
                 )
                 new_attachment.resource = saobj
                 db.add(new_attachment)
@@ -136,9 +136,9 @@ class CreateResource(graphene.Mutation):
                 new_attachment = create_attachment(
                     discussion,
                     models.ResourceAttachment,
-                    doc,
                     ATTACHMENT_PURPOSE_DOCUMENT,
-                    context
+                    context,
+                    new_value=doc
                 )
                 new_attachment.resource = saobj
                 db.add(new_attachment)

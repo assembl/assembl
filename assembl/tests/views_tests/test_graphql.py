@@ -2209,48 +2209,89 @@ def test_query_legal_contents(discussion, graphql_request, test_session):
     assert tac_fr['localeCode'] == u"fr"
 
 
-def test_update_legal_contents(graphql_request, discussion):
-    res = schema.execute(u"""
-mutation updateLegalContents {
-    updateLegalContents(
-        legalNoticeEntries: [
+def test_update_legal_contents(graphql_registry, graphql_request, discussion, simple_file, simple_file2):
+    variables = {
+        "lang": u"en",
+        "legalNoticeAttachments": [
+            simple_file.id
+        ],
+        "legalNoticeEntries": [
             {
-                value: "Use the digital JBOD panel, then you can override the solid state microchip!",
-                localeCode: "en"
+                "value": u"Use the digital JBOD panel, then you can override the solid state microchip!",
+                "localeCode": u"en"
             }
         ],
-        termsAndConditionsEntries: [
+        "termsAndConditionsAttachments": [],
+        "termsAndConditionsEntries": [
             {
-                value: "If we reboot the driver, we can get to the AGP protocol through the virtual HTTP bus!",
-                localeCode: "en"
+                "value": u"If we reboot the driver, we can get to the AGP protocol through the virtual HTTP bus!",
+                "localeCode": u"en"
+            }
+        ],
+        "cookiesPolicyAttachments": [],
+        "cookiesPolicyEntries": [
+            {
+                "value": u"My cookies policy",
+                "localeCode": u"en"
+            }
+        ],
+        "privacyPolicyAttachments": [],
+        "privacyPolicyEntries": [
+            {
+                "value": u"My privacy policy",
+                "localeCode": u"en"
+            }
+        ],
+        "userGuidelinesAttachments": [],
+        "userGuidelinesEntries": [
+            {
+                "value": u"My user guidelines",
+                "localeCode": u"en"
             }
         ]
-    ) {
-        legalContents {
-            legalNoticeEntries {
-                localeCode
-                value
-            }
-            termsAndConditionsEntries {
-                localeCode
-                value
-            }
-        }
     }
-}
-""", context_value=graphql_request)
+    res = schema.execute(
+        graphql_registry['updateLegalContents'],
+        variable_values=variables,
+        context_value=graphql_request
+    )
     assert res.errors is None
 
     assert res.data['updateLegalContents'] is not None
     assert res.data['updateLegalContents']['legalContents'] is not None
 
     legal_contents = res.data['updateLegalContents']['legalContents']
+    legal_notice_attachments = legal_contents['legalNoticeAttachments']
     legal_notice_en = legal_contents['legalNoticeEntries'][0]
-    tac_en = legal_contents['termsAndConditionsEntries'][0]
-    assert legal_notice_en['localeCode'] == 'en'
+    assert legal_notice_en['localeCode'] == u'en'
     assert legal_notice_en['value'] == u"Use the digital JBOD panel, then you can override the solid state microchip!"
-    assert tac_en['localeCode'] == 'en'
+    assert len(legal_notice_attachments) == 1
+
+    tac_attachments = legal_contents['termsAndConditionsAttachments']
+    tac_en = legal_contents['termsAndConditionsEntries'][0]
+    assert tac_en['localeCode'] == u'en'
     assert tac_en['value'] == u"If we reboot the driver, we can get to the AGP protocol through the virtual HTTP bus!"
+    assert len(tac_attachments) == 0
+
+    cookies_policy_attachments = legal_contents['cookiesPolicyAttachments']
+    cookies_policy_en = legal_contents['cookiesPolicyEntries'][0]
+    assert cookies_policy_en['value'] == u'My cookies policy'
+    assert len(cookies_policy_attachments) == 0
+
+    privacy_policy_attachments = legal_contents['privacyPolicyAttachments']
+    privacy_policy_en = legal_contents['privacyPolicyEntries'][0]
+    assert privacy_policy_en['value'] == u'My privacy policy'
+    assert len(privacy_policy_attachments) == 0
+
+    user_guidelines_attachments = legal_contents['userGuidelinesAttachments']
+    user_guidelines_en = legal_contents['userGuidelinesEntries'][0]
+    assert user_guidelines_en['value'] == u'My user guidelines'
+    assert len(user_guidelines_attachments) == 0
+
+    # we have to remove documents and attachments here
+    with models.Discussion.default_db.no_autoflush:
+        for attachment in discussion.attachments:
+            discussion.attachments.remove(attachment)
 
 
 def test_has_legal_notice(graphql_request, discussion):
