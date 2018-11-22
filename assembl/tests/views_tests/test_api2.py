@@ -1020,6 +1020,7 @@ class TestTaxonomyExport(AbstractExport):
     HARVESTED_ON = 11
     NUGGET = 12
     STATE = 13
+    TAGS = 14
 
     def test_base(self, test_session, test_app, discussion, extract_post_1_to_subidea_1_1, extract_with_range_in_reply_post_1):
         result = self.get_result(test_app, discussion.id, view_name=self.view_name)
@@ -1038,6 +1039,7 @@ class TestTaxonomyExport(AbstractExport):
         assert header[self.HARVESTED_ON] == "Harvested On"
         assert header[self.NUGGET] == "Nugget"
         assert header[self.STATE] == "State"
+        assert header[self.TAGS] == "Tags"
 
         first_row = result[1]
         assert first_row[self.THEMATIC] == "Lower taxes"
@@ -1053,6 +1055,7 @@ class TestTaxonomyExport(AbstractExport):
         assert first_row[self.HARVESTER] == "James T. Expert"
         assert first_row[self.NUGGET] == "No"
         assert first_row[self.STATE] == "PUBLISHED"
+        assert first_row[self.TAGS] == "foo, bar"
 
         last_row = result[-1]
         assert last_row[self.THEMATIC] == "Lower taxes"
@@ -1068,6 +1071,7 @@ class TestTaxonomyExport(AbstractExport):
         assert last_row[self.HARVESTER] == "Maximilien de Robespierre"
         assert last_row[self.NUGGET] == "Yes"
         assert last_row[self.STATE] == "PUBLISHED"
+        assert last_row[self.TAGS] == ""
 
 
 class TestPhase1Export(AbstractExport):
