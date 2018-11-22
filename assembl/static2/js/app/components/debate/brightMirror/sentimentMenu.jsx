@@ -16,11 +16,10 @@ export type Props = {
   sentimentCounts: ?SentimentCountsFragment,
   mySentiment: ?string,
   screenWidth: number,
-  refetchPost: Function,
   isPhaseCompleted: boolean
 };
 
-const SentimentMenu = ({ postId, mySentiment, screenWidth, refetchPost, position, sentimentCounts, isPhaseCompleted }: Props) => {
+const SentimentMenu = ({ postId, mySentiment, screenWidth, position, sentimentCounts, isPhaseCompleted }: Props) => {
   let count = 0;
   let totalSentimentsCount = 0;
   if (sentimentCounts) {
@@ -41,7 +40,6 @@ const SentimentMenu = ({ postId, mySentiment, screenWidth, refetchPost, position
         placement="right"
         postId={postId}
         isPhaseCompleted={isPhaseCompleted}
-        onCompleted={refetchPost}
         customSentimentDefinitions={fictionSentimentDefinitions}
       />
       {totalSentimentsCount > 0 ? (

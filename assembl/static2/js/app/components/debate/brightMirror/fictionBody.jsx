@@ -207,7 +207,6 @@ class FictionBody extends React.Component<Props, State> {
           mySentiment={mySentiment}
           isPhaseCompleted={isPhaseCompleted}
           postId={postId}
-          refetchPost={refetchPost}
           screenWidth={screenWidth}
         />
         <PostBody

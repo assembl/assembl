@@ -21,8 +21,7 @@ export const props: Props = {
   },
   isPhaseCompleted: false,
   client: action('client'),
-  screenWidth: 100,
-  refetchPost: action('refetchPost')
+  screenWidth: 100
 };
 
 storiesOf('SentimentMenu', module)
@@ -35,7 +34,6 @@ storiesOf('SentimentMenu', module)
         postId={props.postId}
         position={props.position}
         screenWidth={props.screenWidth}
-        refetchPost={props.refetchPost}
         isPhaseCompleted={props.isPhaseCompleted}
         mySentiment={select('my sentiment', SENTIMENTS, props.mySentiment)}
         sentimentCounts={object('sentiments counts', props.sentimentCounts)}

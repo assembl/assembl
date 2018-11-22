@@ -19,7 +19,6 @@ type SentimentProps = {
   postId: string,
   sentiment: SentimentDefinition,
   sentimentCounts: ?SentimentCountsFragment,
-  onCompleted: ?() => void,
   addSentiment: Function,
   deleteSentiment: Function
 };
@@ -32,7 +31,6 @@ export const DumbSentiment = ({
   postId,
   placement,
   isPhaseCompleted,
-  onCompleted,
   addSentiment,
   deleteSentiment
 }: SentimentProps) => {
@@ -81,7 +79,7 @@ export const DumbSentiment = ({
                 __typename: 'DeleteSentiment'
               }
             }
-          }).then(onCompleted);
+          });
         } else {
           addSentiment({
             variables: { postId: postId, type: sentiment.type },
@@ -102,7 +100,7 @@ export const DumbSentiment = ({
                 __typename: 'AddSentiment'
               }
             }
-          }).then(onCompleted);
+          });
         }
       }}
     >

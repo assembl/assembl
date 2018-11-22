@@ -767,35 +767,6 @@ exports[`Storyshots SentimentMenu default 1`] = `
                         }
                       </span>
                     </span>
-                  </span>
-                  <span>
-                    <span>
-                      <br />
-                        
-                    </span>
-                    <span
-                      style={Object {}}
-                    >
-                      refetchPost
-                    </span>
-                    <span>
-                      =
-                      <span
-                        style={Object {}}
-                      >
-                        {
-                        <span
-                          style={
-                            Object {
-                              "color": "#170",
-                            }
-                          }
-                        >
-                          refetchPost
-                        </span>
-                        }
-                      </span>
-                    </span>
                     <br />
                   </span>
                 </span>
@@ -1421,35 +1392,6 @@ exports[`Storyshots SentimentMenu playground 1`] = `
                           }
                         >
                           100
-                        </span>
-                        }
-                      </span>
-                    </span>
-                  </span>
-                  <span>
-                    <span>
-                      <br />
-                        
-                    </span>
-                    <span
-                      style={Object {}}
-                    >
-                      refetchPost
-                    </span>
-                    <span>
-                      =
-                      <span
-                        style={Object {}}
-                      >
-                        {
-                        <span
-                          style={
-                            Object {
-                              "color": "#170",
-                            }
-                          }
-                        >
-                          refetchPost
                         </span>
                         }
                       </span>
