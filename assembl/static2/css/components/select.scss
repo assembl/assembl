@@ -1,4 +1,11 @@
 .select-field {
+  &.expand-up {
+    .select-field__menu {
+      top: auto !important;
+      bottom: calc(100% - 1px) !important;
+    }
+  }
+
   > .select-field__control {
     border-radius: 15px;
   }

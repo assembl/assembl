@@ -1,5 +1,6 @@
 // @flow
 import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 import { type FieldRenderProps } from 'react-final-form';
 import { ControlLabel, FormGroup } from 'react-bootstrap';
 import { Translate, I18n } from 'react-redux-i18n';
@@ -39,63 +40,104 @@ type Props = {
   }
 } & FieldRenderProps;
 
-const SelectFieldAdapter = ({
-  isMulti,
-  isAsync,
-  canCreate,
-  required,
-  label,
-  placeholder,
-  className,
-  options,
-  loadOptions,
-  components,
-  input: { name, onChange, value, ...otherListeners },
-  meta: { error, touched },
-  ...rest
-}: Props) => {
-  const decoratedLabel = label && required ? `${label} *` : label;
-  let SelectComponent = null;
-  if (isAsync) {
-    SelectComponent = canCreate ? AsyncCreatableSelect : AsyncSelect;
-  } else {
-    SelectComponent = canCreate ? Creatable : Select;
-  }
-  return (
-    <FormGroup controlId={name} validationState={getValidationState(error, touched)}>
-      {decoratedLabel ? <ControlLabel>{decoratedLabel}</ControlLabel> : null}
-      <SelectComponent
-        className={classNames('select-field', className)}
-        {...otherListeners}
-        {...rest}
-        cacheOptions
-        defaultOptions
-        isMulti={isMulti}
-        name={name}
-        placeholder={I18n.t(placeholder)}
-        defaultValue={value}
-        options={options}
-        loadOptions={loadOptions}
-        onChange={onChange}
-        components={{ ...makeAnimated(), ...components }}
-      />
-      <Error name={name} />
-    </FormGroup>
-  );
+type State = {
+  direction: 'up' | 'down'
 };
 
-SelectFieldAdapter.defaultProps = {
-  required: false,
-  isMulti: false,
-  isAsync: false,
-  canCreate: false,
-  options: [],
-  components: {},
-  className: '',
-  classNamePrefix: 'select-field',
-  placeholder: 'form.select.placeholder',
-  noOptionsMessage: () => <Translate value="form.select.noOptions" />,
-  formatCreateLabel: newOption => <Translate value="form.select.newOption" option={newOption} />
-};
+const SELECT_MENU_HEIGHT = 300;
+
+class SelectFieldAdapter extends React.Component<Props, State> {
+  static defaultProps = {
+    required: false,
+    isMulti: false,
+    isAsync: false,
+    canCreate: false,
+    options: [],
+    components: {},
+    className: '',
+    classNamePrefix: 'select-field',
+    placeholder: 'form.select.placeholder',
+    noOptionsMessage: () => <Translate value="form.select.noOptions" />,
+    formatCreateLabel: (newOption: string) => <Translate value="form.select.newOption" option={newOption} />
+  };
+
+  state = {
+    direction: 'down'
+  };
+
+  componentDidMount() {
+    window.addEventListener('scroll', this.onPositionChange);
+    this.onPositionChange();
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.onPositionChange);
+  }
+
+  select: { current: null | HTMLDivElement } = React.createRef();
+
+  onPositionChange = () => {
+    const selectRef = this.select.current;
+    const selectDom = selectRef && ReactDOM.findDOMNode(selectRef); //eslint-disable-line
+    if (selectDom) {
+      const { direction } = this.state;
+      // $FlowFixMe the select is not a Text
+      const screenTop = selectDom.getBoundingClientRect().top;
+      const newDirection = window.innerHeight - screenTop < SELECT_MENU_HEIGHT ? 'up' : 'down';
+      if (direction !== newDirection) {
+        this.setState({ direction: newDirection });
+      }
+    }
+  };
+
+  render() {
+    const {
+      isMulti,
+      isAsync,
+      canCreate,
+      required,
+      label,
+      placeholder,
+      className,
+      options,
+      loadOptions,
+      components,
+      input: { name, onChange, value, ...otherListeners },
+      meta: { error, touched },
+      ...rest
+    } = this.props;
+    const { direction } = this.state;
+    const decoratedLabel = label && required ? `${label} *` : label;
+    let SelectComponent = null;
+    if (isAsync) {
+      SelectComponent = canCreate ? AsyncCreatableSelect : AsyncSelect;
+    } else {
+      SelectComponent = canCreate ? Creatable : Select;
+    }
+    return (
+      <FormGroup controlId={name} validationState={getValidationState(error, touched)}>
+        {decoratedLabel ? <ControlLabel>{decoratedLabel}</ControlLabel> : null}
+        <SelectComponent
+          // $FlowFixMe select is not a StateManager
+          ref={this.select}
+          className={classNames('select-field', className, { 'expand-up': direction === 'up' })}
+          {...otherListeners}
+          {...rest}
+          cacheOptions
+          defaultOptions
+          isMulti={isMulti}
+          name={name}
+          placeholder={I18n.t(placeholder)}
+          defaultValue={value}
+          options={options}
+          loadOptions={loadOptions}
+          onChange={onChange}
+          components={{ ...makeAnimated(), ...components }}
+        />
+        <Error name={name} />
+      </FormGroup>
+    );
+  }
+}
 
 export default SelectFieldAdapter;
