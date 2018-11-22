@@ -125,7 +125,7 @@ const FictionPreview = ({
   // We add a black overlay with an opacity of 0.2 to fix contrast issue when displaying a light label
   const previewStyle = isDraft
     ? null
-    : { background: `linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url(${getRandomPictureUrl()})` };
+    : { backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url(${getRandomPictureUrl()})` };
 
   return (
     <div className={classNames('fiction-preview', { draft: isDraft })} style={previewStyle}>
