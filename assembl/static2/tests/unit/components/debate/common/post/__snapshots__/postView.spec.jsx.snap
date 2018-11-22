@@ -159,8 +159,10 @@ exports[`PostView component should render a post in view mode 1`] = `
         <Attachments
           attachments={Array []}
         />
-        <div>
-          <RelatedIdeas />
+        <React.Fragment>
+          <RelatedIdeas
+            relatedIdeasTitles={Array []}
+          />
           <div
             className="answers annotation"
           >
@@ -169,7 +171,7 @@ exports[`PostView component should render a post in view mode 1`] = `
               value="debate.thread.numberOfResponses"
             />
           </div>
-        </div>
+        </React.Fragment>
       </div>
       <div
         className="post-right"

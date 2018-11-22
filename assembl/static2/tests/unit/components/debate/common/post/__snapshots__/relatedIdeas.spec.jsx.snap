@@ -17,12 +17,12 @@ exports[`RelatedIdeas component should render related ideas 1`] = `
     <span
       className="badge"
     >
-      Foo
+      Super thematic
     </span>
     <span
       className="badge"
     >
-      Bar
+      Fantastic thematic
     </span>
   </div>
 </div>

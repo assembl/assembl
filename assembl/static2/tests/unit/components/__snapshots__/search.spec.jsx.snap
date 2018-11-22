@@ -373,7 +373,9 @@ exports[`Hits components SynthesisHit component should render a synthesis hit 1`
       >
         <span
           className="badge"
-        />
+        >
+          Interesting thematic
+        </span>
       </div>
     </div>
   </div>

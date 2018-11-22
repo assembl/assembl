@@ -172,6 +172,9 @@ class PostView extends React.PureComponent<Props, State> {
 
     const { refetch } = this.props.data;
 
+    const relatedIdeasTitles = indirectIdeaContentLinks
+      ? indirectIdeaContentLinks.map(link => link && link.idea && link.idea.title)
+      : [];
     return (
       <div
         ref={(p) => {
@@ -229,15 +232,15 @@ class PostView extends React.PureComponent<Props, State> {
 
               <Attachments attachments={attachments} />
 
-              {!multiColumns && (
-                <div>
-                  <RelatedIdeas indirectIdeaContentLinks={indirectIdeaContentLinks} />
+              {!multiColumns ? (
+                <React.Fragment>
+                  <RelatedIdeas relatedIdeasTitles={relatedIdeasTitles} />
 
                   <div className="answers annotation">
                     <Translate value="debate.thread.numberOfResponses" count={numChildren} />
                   </div>
-                </div>
-              )}
+                </React.Fragment>
+              ) : null}
             </div>
             <div className="post-right">
               <PostActions
