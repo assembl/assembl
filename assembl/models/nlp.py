@@ -237,6 +237,7 @@ class Tag(Base):
             ls = LangString.create(label, locale.code)
             tag = cls(locale=locale, label=ls)
             db.add(tag)
+            db.flush()
         return tag
 
     @property
