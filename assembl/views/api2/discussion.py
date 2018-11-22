@@ -591,7 +591,7 @@ def extract_taxonomy_csv(request):
             "Harvested on": harvested_on.encode('utf-8'),
             "Nugget": nugget.encode('utf-8'),
             "State": state.encode('utf-8'),
-            "Tags": ', '.join(tags).encode('utf-8')
+            "Tags": u', '.join(tags).encode('utf-8')
         }
         extract_list.append(extract_info)
 
