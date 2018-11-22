@@ -349,14 +349,18 @@ $marginLeft: 80px;
     margin-left: $marginLeft;
     bottom: 2em;
 
-    .label {
-      color: #a4a4a4;
-      font-size: 11px;
-      padding: 0;
-    }
+    .link-idea {
+      display: flex;
 
-    .badge {
-      background-color: #c5c5c5;
+      .label {
+        color: #a4a4a4;
+        font-size: 11px;
+        padding-left: 0;
+      }
+
+      .badge {
+        background-color: #c5c5c5;
+      }
     }
   }
 
