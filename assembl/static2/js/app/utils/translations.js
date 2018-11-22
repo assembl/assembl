@@ -1377,10 +1377,10 @@ const Translations = {
           deleteTooltip: "Delete"
         },
         sentiment: {
-          like: "It inspires me!",
-          dislike: "It turned me off!",
-          dontUnderstand: "Strenghten the story",
-          moreInfo: "Enrich style"
+          like: "Inspiring!",
+          dislike: "Scary",
+          dontUnderstand: "Strengthen the plot",
+          moreInfo: "Enrich the style"
         },
         suggest: "Suggest"
       },
