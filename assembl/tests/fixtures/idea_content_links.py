@@ -146,7 +146,6 @@ def extract_post_1_to_subidea_1_1(
             test_session.delete(tag)
 
         test_session.delete(e)
-        test_session.delete(e)
         test_session.flush()
     request.addfinalizer(fin)
     return e

@@ -9,7 +9,7 @@ import updateTagGQLMutation from '../../graphql/mutations/updateTag.graphql';
 import { type Option } from '../form/selectFieldAdapter';
 import TagForm from './tagForm';
 import { displayAlert } from '../../utils/utilityManager';
-import { eidtTagTooltip } from '../common/tooltips';
+import { editTagTooltip } from '../common/tooltips';
 
 type Props = {
   contextId: string,
@@ -52,7 +52,7 @@ function updateTagMutation({ mutate }) {
         }
       },
       updateQueries: {
-        // Udate the Post query
+        // Update the Post query
         Post: (prev, { mutationResult }) => {
           const newExtracts = [];
           let edited = false;
@@ -147,7 +147,7 @@ class Tag extends React.Component<Props, State> {
           <React.Fragment>
             {canEdit ? (
               <React.Fragment>
-                <OverlayTrigger placement="top" overlay={eidtTagTooltip}>
+                <OverlayTrigger placement="top" overlay={editTagTooltip}>
                   {tagTitle}
                 </OverlayTrigger>
                 <div className="assembl-icon-cancel" onClick={remove} />

@@ -94,7 +94,7 @@ function updateTagsMutation({ mutate }) {
         }
       },
       updateQueries: {
-        // Udate the Post query
+        // Update the Post query
         Post: (prev, { queryVariables, mutationResult }) => {
           if (queryVariables.id !== postId) return false;
           const currentExtract = prev.post.extracts.filter(ex => ex.id === id)[0];
@@ -443,7 +443,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
     if (!actionId) return null;
     const action = this.actions[actionId];
     if (disabled) {
-      // Render the Tags form ony if it is the create action
+      // Render the Tags form only if it is the create action
       return (
         <TagsForm
           onSubmit={this.validateHarvesting}
