@@ -36,7 +36,7 @@ def test_get_data_for_post(phases, admin_user, post_related_to_sub_idea_1_1_1, s
     assert data['discussion_id'] == post.discussion.id
     assert data['idea_id'] == [subidea_1_1_1.id]
     assert data['idea_title_en'] == u"Lower government revenue"
-    assert 'idea_title_fr' not in data
+    assert data['idea_title_fr'] == u"Moins de revenus pour le gouvernement"
     assert data['phase_id'] == phases['thread'].id
     assert data['phase_identifier'] == u'thread'
     assert data['creation_date'] == datetime.datetime(2018, 2, 17, 9, 0)

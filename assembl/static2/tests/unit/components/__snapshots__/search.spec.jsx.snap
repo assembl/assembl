@@ -358,26 +358,6 @@ exports[`Hits components SynthesisHit component should render a synthesis hit 1`
         </div>
       </div>
     </div>
-    <div
-      className="link-idea"
-    >
-      <div
-        className="label"
-      >
-        <span>
-          This post is related to the following themes:
-        </span>
-      </div>
-      <div
-        className="badges"
-      >
-        <span
-          className="badge"
-        >
-          Interesting thematic
-        </span>
-      </div>
-    </div>
   </div>
 </div>
 `;

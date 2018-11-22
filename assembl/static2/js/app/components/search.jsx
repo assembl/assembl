@@ -165,13 +165,14 @@ if (v1Interface) {
 
 const PublishedInfo = (props) => {
   const { date, publishedOnMsgId, userId, userName, relatedIdeasTitles } = props;
+  const hasRelatedIdeasTitles = relatedIdeasTitles && relatedIdeasTitles.length > 0;
   return (
     <React.Fragment>
       <Translate value={publishedOnMsgId} /> <Localize value={date} dateFormat="date.format" /> <Translate value="search.by" />{' '}
       <TagFilter key={userId} field="creator_id" value={userId}>
         <ProfileLine userId={userId} userName={userName} />
       </TagFilter>
-      {relatedIdeasTitles.length > 0 ? <RelatedIdeas relatedIdeasTitles={relatedIdeasTitles} /> : null}
+      {hasRelatedIdeasTitles ? <RelatedIdeas relatedIdeasTitles={relatedIdeasTitles} /> : null}
     </React.Fragment>
   );
 };
@@ -258,6 +259,7 @@ const PostHit = ({ bemBlocks, collapseSearch, locale, result }) => {
   const subject = highlightedLSOrTruncatedLS(result, 'subject', locale);
   const body = highlightedLSOrTruncatedLS(result, 'body', locale);
   const published = {};
+  const ideaTitle = highlightedLSOrTruncatedLS(result, 'idea_title', locale);
   return (
     <BaseHit
       bemBlocks={bemBlocks}
@@ -286,7 +288,7 @@ const PostHit = ({ bemBlocks, collapseSearch, locale, result }) => {
           date={source.creation_date}
           userId={source.creator_id}
           userName={source.creator_name}
-          relatedIdeasTitles={[source.idea_title_en]}
+          relatedIdeasTitles={[ideaTitle]}
         />
       )}
     />
@@ -303,6 +305,7 @@ const DumbExtractHit = ({ bemBlocks, collapseSearch, isHarvesting, locale, toggl
     }
     collapseSearch();
   };
+  const ideaTitle = highlightedLSOrTruncatedLS(result, 'idea_title', locale);
   return (
     <BaseHit
       bemBlocks={bemBlocks}
@@ -317,7 +320,7 @@ const DumbExtractHit = ({ bemBlocks, collapseSearch, isHarvesting, locale, toggl
           userId={source.creator_id}
           userName={source.creator_name}
           publishedOnMsgId="search.harvested_on"
-          relatedIdeasTitles={[source.idea_title_en]}
+          relatedIdeasTitles={[ideaTitle]}
         />
       )}
     />
@@ -353,14 +356,7 @@ const SynthesisHit = ({ bemBlocks, collapseSearch, locale, result }) => {
           <div style={{ backgroundColor: '#f4f4f4', marginTop: '1em' }} dangerouslySetInnerHTML={{ __html: conclusion }} />
         </React.Fragment>
       )}
-      renderFooter={() => (
-        <PublishedInfo
-          date={source.creation_date}
-          userId={source.creator_id}
-          userName={source.creator_name}
-          relatedIdeasTitles={[source.idea_title_en]}
-        />
-      )}
+      renderFooter={() => <PublishedInfo date={source.creation_date} userId={source.creator_id} userName={source.creator_name} />}
     />
   );
 };
