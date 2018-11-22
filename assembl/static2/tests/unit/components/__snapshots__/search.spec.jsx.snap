@@ -65,6 +65,26 @@ exports[`Hits components DumbExtractHit component should render an extract hit 1
         </div>
       </div>
     </div>
+    <div
+      className="link-idea"
+    >
+      <div
+        className="label"
+      >
+        <span>
+          This post is related to the following themes:
+        </span>
+      </div>
+      <div
+        className="badges"
+      >
+        <span
+          className="badge"
+        >
+          Interesting thematic
+        </span>
+      </div>
+    </div>
   </div>
 </div>
 `;
@@ -218,6 +238,26 @@ exports[`Hits components PostHit component should render a post hit 1`] = `
         </div>
       </div>
     </div>
+    <div
+      className="link-idea"
+    >
+      <div
+        className="label"
+      >
+        <span>
+          This post is related to the following themes:
+        </span>
+      </div>
+      <div
+        className="badges"
+      >
+        <span
+          className="badge"
+        >
+          Interesting thematic
+        </span>
+      </div>
+    </div>
   </div>
 </div>
 `;
@@ -316,6 +356,24 @@ exports[`Hits components SynthesisHit component should render a synthesis hit 1`
             Annabelle Olson
           </div>
         </div>
+      </div>
+    </div>
+    <div
+      className="link-idea"
+    >
+      <div
+        className="label"
+      >
+        <span>
+          This post is related to the following themes:
+        </span>
+      </div>
+      <div
+        className="badges"
+      >
+        <span
+          className="badge"
+        />
       </div>
     </div>
   </div>

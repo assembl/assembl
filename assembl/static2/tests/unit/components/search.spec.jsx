@@ -70,7 +70,8 @@ describe('Hits components', () => {
               disagree: 3,
               dont_understand: 3,
               more_info: 1
-            }
+            },
+            idea_title_en: 'Interesting thematic'
           }
         }
       };
@@ -110,7 +111,8 @@ describe('Hits components', () => {
             num_contributors: 42,
             id: 456,
             phase_id: 1,
-            phase_identifier: 'thread'
+            phase_identifier: 'thread',
+            idea_title_en: 'Interesting thematic'
           }
         }
       };
@@ -145,7 +147,8 @@ describe('Hits components', () => {
             ideas_en: 'First idea Second idea',
             subject_en: 'Maybe it will transmit the optical application!!',
             introduction_en: 'I\'ll bypass the online PCI card, that should matrix the USB firewall!',
-            conclusion_en: 'Try to parse the COM card, maybe it will calculate the neural monitor!'
+            conclusion_en: 'Try to parse the COM card, maybe it will calculate the neural monitor!',
+            idea_title_en: 'Interesting thematic'
           }
         }
       };
@@ -179,7 +182,8 @@ describe('Hits components', () => {
           _source: {
             id: 'SD83SG',
             num_posts: 33,
-            creation_date: '2016-07-07'
+            creation_date: '2016-07-07',
+            idea_title_en: 'Interesting thematic'
           }
         }
       };
@@ -214,7 +218,8 @@ describe('Hits components', () => {
             idea_id: 'fakeIdeaId',
             phase_id: 1,
             phase_identifier: 'thread',
-            post_id: 'fakePostId'
+            post_id: 'fakePostId',
+            idea_title_en: 'Interesting thematic'
           }
         }
       };

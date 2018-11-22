@@ -162,14 +162,26 @@ if (v1Interface) {
   };
 }
 
+const RelatedIdeas = ({ title }) => (
+  <div className="link-idea">
+    <div className="label">
+      <Translate value="debate.thread.linkIdea" />
+    </div>
+    <div className="badges">
+      <span className="badge">{title}</span>
+    </div>
+  </div>
+);
+
 const PublishedInfo = (props) => {
-  const { date, publishedOnMsgId, userId, userName } = props;
+  const { date, publishedOnMsgId, userId, userName, ideaTitle } = props;
   return (
     <React.Fragment>
       <Translate value={publishedOnMsgId} /> <Localize value={date} dateFormat="date.format" /> <Translate value="search.by" />{' '}
       <TagFilter key={userId} field="creator_id" value={userId}>
         <ProfileLine userId={userId} userName={userName} />
       </TagFilter>
+      <RelatedIdeas title={ideaTitle} />
     </React.Fragment>
   );
 };
@@ -280,7 +292,14 @@ const PostHit = ({ bemBlocks, collapseSearch, locale, result }) => {
           </div>
         </React.Fragment>
       )}
-      renderFooter={() => <PublishedInfo date={source.creation_date} userId={source.creator_id} userName={source.creator_name} />}
+      renderFooter={() => (
+        <PublishedInfo
+          date={source.creation_date}
+          userId={source.creator_id}
+          userName={source.creator_name}
+          ideaTitle={source.idea_title_en}
+        />
+      )}
     />
   );
 };
@@ -309,6 +328,7 @@ const DumbExtractHit = ({ bemBlocks, collapseSearch, isHarvesting, locale, toggl
           userId={source.creator_id}
           userName={source.creator_name}
           publishedOnMsgId="search.harvested_on"
+          ideaTitle={source.idea_title_en}
         />
       )}
     />
