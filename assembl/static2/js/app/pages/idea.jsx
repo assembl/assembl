@@ -22,6 +22,7 @@ import HeaderStatistics, { statContributions, statMessages, statParticipants } f
 import InstructionView from '../components/debate/brightMirror/instructionView';
 import type { ContentLocaleMapping } from '../actions/actionTypes';
 import type { AnnouncementContent } from '../components/debate/common/announcement';
+import { toggleHarvesting as toggleHarvestingAction } from '../actions/contextActions';
 // Utils imports
 import { displayAlert } from '../utils/utilityManager';
 
@@ -46,7 +47,9 @@ type Props = {
   id: string,
   headerImgUrl: string,
   synthesisTitle: string,
-  title: string
+  title: string,
+  toggleHarvesting: Function,
+  isHarvesting: boolean
 };
 
 type PostWithChildren = {
@@ -162,7 +165,13 @@ export const noRowsRenderer = () => (
 
 class Idea extends React.Component<Props> {
   componentDidMount() {
+    const { toggleHarvesting, isHarvesting } = this.props;
     this.displayBrightMirrorDeleteFictionMessage();
+    const { hash } = window.location;
+    const extractId = hash && hash !== '' && hash.split('#')[2];
+    if (extractId && !isHarvesting) {
+      toggleHarvesting();
+    }
   }
 
   componentWillReceiveProps(nextProps: Props) {
@@ -354,11 +363,13 @@ const mapStateToProps = state => ({
   timeline: state.timeline,
   defaultContentLocaleMapping: state.defaultContentLocaleMapping,
   lang: state.i18n.locale,
-  debateData: state.debate.debateData
+  debateData: state.debate.debateData,
+  isHarvesting: state.context.isHarvesting
 });
 
 const mapDispatchToProps = dispatch => ({
-  updateContentLocaleMapping: info => dispatch(updateContentLocale(info))
+  updateContentLocaleMapping: info => dispatch(updateContentLocale(info)),
+  toggleHarvesting: () => dispatch(toggleHarvestingAction())
 });
 
 export default compose(
