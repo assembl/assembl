@@ -14,6 +14,7 @@ cache:
     - /usr/local/share/.cache/yarn/v2
 
 test_frontend:
+  cache: {}
   stage: test
   except:
     - master
