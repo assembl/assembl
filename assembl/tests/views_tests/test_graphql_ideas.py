@@ -473,6 +473,23 @@ def test_graphql_discussion_counters_all_phases(graphql_request, proposals, top_
     assert res.data['rootIdea']['numPosts'] == 16  # phase 1+2 posts counted because all posts come from discussion.root_idea
     assert res.data['numParticipants'] == 1
 
+def test_graphql_total_vote_session_participations_zero_vote(graphql_request, proposals, phases):
+    res = schema.execute(
+        u"""query RootIdeaStats {
+              totalVoteSessionParticipations
+            }
+        """, context_value=graphql_request)
+    assert res.errors is None
+    assert res.data['totalVoteSessionParticipations'] == 0
+
+def test_graphql_total_vote_session_participations_4_votes(graphql_request, phases, graphql_participant1_request, vote_session, vote_proposal, token_vote_spec_with_votes, gauge_vote_specification_with_votes, graphql_registry):
+    res = schema.execute(
+        u"""query RootIdeaStats {
+              totalVoteSessionParticipations
+            }
+        """, context_value=graphql_request)
+    assert res.errors is None
+    assert res.data['totalVoteSessionParticipations'] == 4
 
 def test_get_long_title_on_idea(graphql_request, idea_in_thread_phase):
     # This is the "What you need to know"
