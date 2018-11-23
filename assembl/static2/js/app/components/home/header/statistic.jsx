@@ -19,14 +19,15 @@ type Props = {
   rootIdea: Idea,
   numParticipants: number,
   totalSentiments: number,
+  totalVoteSessionParticipations: number,
   visitsAnalytics: VisitsAnalytics
 };
 
 class Statistic extends React.PureComponent<Props> {
   render() {
-    const { rootIdea, numParticipants, totalSentiments, visitsAnalytics } = this.props;
+    const { rootIdea, numParticipants, totalSentiments, totalVoteSessionParticipations, visitsAnalytics } = this.props;
     const { sumVisitsLength, nbPageviews } = visitsAnalytics;
-    const statElements = [statSentiments(totalSentiments), statParticipants(numParticipants)];
+    const statElements = [statSentiments(totalSentiments + totalVoteSessionParticipations), statParticipants(numParticipants)];
     if (rootIdea) {
       statElements.push(statMessages(rootIdea.numPosts));
     }
@@ -60,7 +61,9 @@ class Statistic extends React.PureComponent<Props> {
 
 export default compose(
   graphql(RootIdeaStatsQuery, {
-    props: ({ data: { rootIdea, numParticipants, totalSentiments, visitsAnalytics, loading, error } }) => {
+    props: ({
+      data: { rootIdea, numParticipants, totalSentiments, visitsAnalytics, loading, error, totalVoteSessionParticipations }
+    }) => {
       if (error || loading) {
         return {
           error: error,
@@ -71,7 +74,8 @@ export default compose(
         rootIdea: rootIdea,
         numParticipants: numParticipants,
         totalSentiments: totalSentiments,
-        visitsAnalytics: visitsAnalytics
+        visitsAnalytics: visitsAnalytics,
+        totalVoteSessionParticipations: totalVoteSessionParticipations
       };
     }
   }),
