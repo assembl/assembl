@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import get from 'lodash/get';
+import ARange from 'annotator_range'; // eslint-disable-line
 
 import { type ColorDefinition, type ExtractState, ExtractStates, harvestingColors, harvestingColorsMapping } from '../constants';
 import DesignFiction from '../components/svg/taxonomy/displayDesignFiction';
@@ -15,6 +16,14 @@ import Classify from '../components/svg/taxonomy/classify';
 import MoreSpecific from '../components/svg/taxonomy/moreSpecific';
 import MakeGeneric from '../components/svg/taxonomy/makeGeneric';
 import Flag from '../components/svg/taxonomy/Flag';
+
+export type Annotation = {
+  body: string,
+  xpathStart: string,
+  xpathEnd: string,
+  offsetStart: string,
+  offsetEnd: string
+};
 
 export const extractNatures = [
   {
@@ -161,3 +170,19 @@ export function getExtractColor(nature: string, state: ExtractState, extractedBy
   const natureColor = getTaxonomyNatureColor(nature.replace('Enum.', ''));
   return natureColor || defaultColor;
 }
+
+export const getAnnotationData = (selection: Object): Annotation | null => {
+  const body = selection ? selection.toString() : '';
+  const annotatorRange = selection && body ? ARange.sniff(selection.getRangeAt(0)) : null;
+  const serializedAnnotatorRange = annotatorRange ? annotatorRange.serialize(document, 'annotation') : null;
+  if (serializedAnnotatorRange) {
+    return {
+      body: body,
+      xpathStart: serializedAnnotatorRange.start,
+      xpathEnd: serializedAnnotatorRange.end,
+      offsetStart: serializedAnnotatorRange.startOffset,
+      offsetEnd: serializedAnnotatorRange.endOffset
+    };
+  }
+  return null;
+};

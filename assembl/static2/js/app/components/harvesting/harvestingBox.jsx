@@ -22,17 +22,17 @@ import FormControlWithLabel from '../common/formControlWithLabel';
 import { displayAlert, displayModal, closeModal } from '../../utils/utilityManager';
 import { connectedUserIsAdmin } from '../../utils/permissions';
 import { editExtractTooltip, deleteExtractTooltip, nuggetExtractTooltip, qualifyExtractTooltip } from '../common/tooltips';
-import { NatureIcons, ActionIcons } from '../../utils/extract';
+import { NatureIcons, ActionIcons, type Annotation } from '../../utils/extract';
 import { ExtractStates } from '../../constants';
-import Tags from './tags';
-// import TagsForm from './tagsForm';
+import Tags, { type TagsData } from './tags';
+import TagsForm from './tagsForm';
 
 type Props = {
   extracts?: Array<Extract>,
   postId: string,
   contentLocale: string,
   lang?: string,
-  selection: ?Object,
+  annotation: ?Annotation,
   harvestingDate?: string,
   isAuthorAccountDeleted?: boolean,
   showNuggetAction?: boolean,
@@ -150,7 +150,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
       [ACTIONS.create]: {
         buttons: [
           { id: 'cancel', title: 'debate.confirmDeletionButtonCancel', className: 'button-cancel', onClick: cancelHarvesting },
-          { id: 'validate', title: 'harvesting.submit', className: 'button-submit', onClick: this.validateHarvesting }
+          { id: 'validate', title: 'harvesting.submit', className: 'button-submit', onClick: null }
         ]
       },
       [ACTIONS.edit]: {
@@ -304,32 +304,19 @@ class DumbHarvestingBox extends React.Component<Props, State> {
       });
   };
 
-  validateHarvesting = (): void => {
-    const { postId, selection, contentLocale, lang, addPostExtract, setHarvestingBoxDisplay, refetchPost } = this.props;
-    if (!selection) {
+  validateHarvesting = (data: TagsData): void => {
+    const { postId, annotation, contentLocale, lang, addPostExtract, setHarvestingBoxDisplay, refetchPost } = this.props;
+    if (!annotation) {
       return;
     }
-    const selectionText = selection.toString();
-    const annotatorRange = ARange.sniff(selection.getRangeAt(0));
-    if (!annotatorRange) {
-      return;
-    }
-    const serializedAnnotatorRange = annotatorRange.serialize(document, 'annotation');
-    if (!serializedAnnotatorRange) {
-      return;
-    }
-    const tags = []; // data.tags.map(tag => tag.label);
+    const tags = data.tags.map(tag => tag.label);
     const variables = {
       contentLocale: contentLocale,
       postId: postId,
-      body: selectionText,
       important: false,
       lang: lang,
-      xpathStart: serializedAnnotatorRange.start,
-      xpathEnd: serializedAnnotatorRange.end,
-      offsetStart: serializedAnnotatorRange.startOffset,
-      offsetEnd: serializedAnnotatorRange.endOffset,
-      tags: tags
+      tags: tags,
+      ...annotation
     };
     displayAlert('success', I18n.t('loading.wait'));
     addPostExtract({ variables: variables })
@@ -442,23 +429,23 @@ class DumbHarvestingBox extends React.Component<Props, State> {
     const actionId = isEditable ? ACTIONS.edit : (disabled && ACTIONS.create) || (isSubmitted && ACTIONS.confirm);
     if (!actionId) return null;
     const action = this.actions[actionId];
-    // if (disabled) {
-    //   // Render the Tags form only if it is the create action
-    //   return (
-    //     <TagsForm
-    //       onSubmit={this.validateHarvesting}
-    //       renderFooter={({ handleSubmit }) => (
-    //         <div className="harvesting-box-footer">
-    //           {action.buttons.map(button => (
-    //             <Button key={button.id} className={`${button.className} button-dark`} onClick={button.onClick || handleSubmit}>
-    //               {I18n.t(button.title)}
-    //             </Button>
-    //           ))}
-    //         </div>
-    //       )}
-    //     />
-    //   );
-    // }
+    if (disabled) {
+      // Render the Tags form only if it is the create action
+      return (
+        <TagsForm
+          onSubmit={this.validateHarvesting}
+          renderFooter={({ handleSubmit }) => (
+            <div className="harvesting-box-footer">
+              {action.buttons.map(button => (
+                <Button key={button.id} className={`${button.className} button-dark`} onClick={button.onClick || handleSubmit}>
+                  {I18n.t(button.title)}
+                </Button>
+              ))}
+            </div>
+          )}
+        />
+      );
+    }
     return (
       <div className="harvesting-box-footer">
         {action.buttons.map(button => (
@@ -472,7 +459,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
 
   render() {
     const {
-      selection,
+      annotation,
       contentLocale,
       harvestingDate,
       isAuthorAccountDeleted,
@@ -495,7 +482,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
       extractIndex
     } = this.state;
     const extract = this.getCurrentExtract(extractIndex);
-    const selectionText = selection ? selection.toString() : '';
+    const selectionText = annotation ? annotation.body : '';
     const harvesterUserName =
       extract && extract.creator && extract.creator.displayName ? extract.creator.displayName : getConnectedUserName();
     const extractState = extract && extract.extractState;
@@ -637,7 +624,6 @@ class DumbHarvestingBox extends React.Component<Props, State> {
           )}
           <div className="harvesting-box-body">
             {extract &&
-              extract &&
               !isEditable && (
                 <div className="body-container">
                   <div className="previous-extract">
@@ -667,17 +653,16 @@ class DumbHarvestingBox extends React.Component<Props, State> {
                 </div>
               )}
 
-            {extract &&
-              isEditable && (
-                <FormControlWithLabel
-                  label=""
-                  componentClass="textarea"
-                  className="text-area"
-                  value={editableExtract}
-                  onChange={e => this.editExtract(e.target.value)}
-                />
-              )}
-            {!extract && <div className="selection-body">{selectionText}</div>}
+            {extract && isEditable ? (
+              <FormControlWithLabel
+                label=""
+                componentClass="textarea"
+                className="text-area"
+                value={editableExtract}
+                onChange={e => this.editExtract(e.target.value)}
+              />
+            ) : null}
+            {!extract && selectionText ? <div className="selection-body">{selectionText}</div> : null}
           </div>
           {extracts &&
             extracts.length > 1 && (
