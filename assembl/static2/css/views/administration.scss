@@ -35,7 +35,12 @@
 
   margin: $margin-section + $navbar-height 0;
 
-  input[type='text'], input[type='textarea'], .form-control, .admin-dropdown, .dropdown-toggle, .btn-default {
+  input[type='text'],
+  input[type='textarea'],
+  .form-control,
+  .admin-dropdown,
+  .dropdown-toggle,
+  .btn-default {
     border-radius: 0 !important;
 
     &:focus {
@@ -227,6 +232,10 @@
         padding-top: 20px;
         color: $grey2;
       }
+    }
+
+    .legal-content-section {
+      padding: 20px 0;
     }
 
     .two-columns-admin {
@@ -571,7 +580,8 @@
               width: 20px;
             }
 
-            &:first-child, &:last-child {
+            &:first-child,
+            &:last-child {
               opacity: 1;
               text-align: left;
             }
