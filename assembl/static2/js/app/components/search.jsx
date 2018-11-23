@@ -87,7 +87,7 @@ function getPostUrl(ideaId, postId, phaseIdentifier, slug, extractId) {
       questionIndex: 1,
       element: postBase64id
     });
-  } else if (phaseIdentifier === 'thread' && extractId) {
+  } else if (extractId) {
     return getRoute('extract', {
       slug: slug,
       phase: phaseIdentifier,

@@ -16,10 +16,10 @@ const getContentAreaOffset = () => {
   return offset;
 };
 
-export const scrollToPost = (postElement: any, smooth: boolean = true) => {
+export const scrollToPost = (postElement: ?HTMLElement, smooth: boolean = true) => {
   // Scroll after the post is painted.
   requestAnimationFrame(() => {
-    const scrollY = getDomElementOffset(postElement).top;
+    const scrollY = postElement ? getDomElementOffset(postElement).top : 0;
     const elmOffset = scrollY - getContentAreaOffset();
     if (smooth) {
       window.scrollTo({ top: elmOffset, left: 0, behavior: 'smooth' });
