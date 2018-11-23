@@ -70,8 +70,6 @@ class Child extends React.PureComponent<Props, State> {
 
   holder: HTMLDivElement | null = null;
 
-  scrollAnchor: { current: null | HTMLDivElement } = React.createRef();
-
   onScroll = debounce(() => {
     const holder = this.holder;
     if (!holder) {
@@ -146,9 +144,9 @@ class Child extends React.PureComponent<Props, State> {
     this.expandCollapse(event);
   };
 
-  renderToggleLink = (expanded: boolean, indented: boolean) => (
+  renderToggleLink = (expanded: boolean, indented: boolean, id: string) => (
     <div
-      ref={this.scrollAnchor}
+      id={id}
       onClick={(event) => {
         this.expandCollapseHandler(event, expanded);
       }}
@@ -159,7 +157,9 @@ class Child extends React.PureComponent<Props, State> {
   );
 
   scrollToElement = () => {
-    scrollToPost(this.scrollAnchor);
+    const { id } = this.props;
+    const anchor = document.getElementById(id);
+    scrollToPost(anchor);
   };
 
   render() {
@@ -240,7 +240,7 @@ class Child extends React.PureComponent<Props, State> {
         )}
         {numChildren > 0 ? (
           <React.Fragment>
-            {identifier !== PHASES.brightMirror ? this.renderToggleLink(expanded, level < 4) : null}
+            {identifier !== PHASES.brightMirror ? this.renderToggleLink(expanded, level < 4, id) : null}
             {children.map((child, idx) => {
               const fullLevelArray: Array<string> = fullLevel ? fullLevel.split('-') : [];
               fullLevelArray[level] = `${idx}`;
