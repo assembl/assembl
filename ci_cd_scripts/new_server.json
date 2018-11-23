@@ -1,0 +1,24 @@
+{
+    "ec2": {
+        "image_id": "ami-00035f41c82244dab",
+        "instance_type": "t2.nano",
+        "availability_zone": "eu-west-1a",
+        "key_name": "victor",
+        "security_group_ids": "sg-0b6c0251567043d03"
+    },
+    "rds": {
+        "engine": "postgres",
+        "db_instance_class": "db.t2.micro",
+        "allocated_storage": 20,
+        "db_instance_identifier": "test-instance-auto",
+        "master_username": "master",
+        "master_user_password": "secret99",
+        "db_subnet_group_name": "default",
+        "availability_zone": "eu-west-1a",
+        "security_group_ids": "sg-0b6c0251567043d03",
+        "db_name": "rds_aut_test",
+        "port": 5432,
+        "db_parameter_group_name": "default.postgres10",
+        "option_group_name": "default:postgres-10"
+    }
+}
