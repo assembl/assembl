@@ -17,7 +17,7 @@ class TagInterface(SQLAlchemyInterface):
 
     class Meta:
         model = models.Keyword
-        only_fields = ()
+        only_fields = ('value', )
         # Don't add id in only_fields in an interface
         # will be just the primary key, not the base64 type:id
 
@@ -30,7 +30,6 @@ class Tag(SecureObjectType, SQLAlchemyObjectType):
     class Meta:
         model = models.Keyword
         interfaces = (Node, TagInterface)
-        only_fields = ('id', )
 
 
 class UpdateTag(graphene.Mutation):
