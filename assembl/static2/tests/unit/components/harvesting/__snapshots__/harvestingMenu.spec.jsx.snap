@@ -66,16 +66,20 @@ exports[`harvestingMenu component should match harvestingMenu snapshot when the 
     className="harvesting-container"
   >
     <Connect(Apollo(Apollo(Apollo(Apollo(Apollo(Component))))))
+      annotation={
+        Object {
+          "body": "extract text",
+          "offsetEnd": 988,
+          "offsetStart": 973,
+          "xpathEnd": "//div[@id='start']/",
+          "xpathStart": "//div[@id='end']/",
+        }
+      }
       cancelHarvesting={[MockFunction]}
       displayHarvestingBox={true}
       lang="fr"
       postId="123456"
       refetchPost={[MockFunction]}
-      selection={
-        Object {
-          "removeAllRanges": [Function],
-        }
-      }
       setHarvestingBoxDisplay={[MockFunction]}
       showNuggetAction={false}
     />

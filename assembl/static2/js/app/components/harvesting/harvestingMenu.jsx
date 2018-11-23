@@ -1,11 +1,13 @@
 // @flow
 import * as React from 'react';
+
 import addPostExtractMutation from '../../graphql/mutations/addPostExtract.graphql'; // eslint-disable-line
 import updateExtractMutation from '../../graphql/mutations/updateExtract.graphql'; // eslint-disable-line
 import deleteExtractMutation from '../../graphql/mutations/deleteExtract.graphql'; // eslint-disable-line
 import HarvestingAnchor from './harvestingAnchor';
 import HarvestingBox from './harvestingBox';
 import HarvestingBadge from './harvestingBadge';
+import { getAnnotationData } from '../../utils/extract';
 
 type Props = {
   extracts: Array<Extract>,
@@ -60,11 +62,13 @@ class HarvestingMenu extends React.Component<Props, State> {
       lang
     } = this.props;
     const selection = window.getSelection();
+    const annotation = getAnnotationData(selection);
+    const hasAnnotation = !!annotation;
     const { displayExtractsBox } = this.state;
     const showHarvestingBadge = !displayExtractsBox && extracts && extracts.length > 0;
     const showBoxWithExtracts = displayExtractsBox && extracts && extracts.length > 0 && !displayHarvestingBox;
-    const showBoxInHarvestingMode = displayHarvestingBox && selection.toString().length > 0;
-    const showHarvestingAnchor = displayHarvestingAnchor && selection.toString().length > 0;
+    const showBoxInHarvestingMode = displayHarvestingBox && hasAnnotation;
+    const showHarvestingAnchor = displayHarvestingAnchor && hasAnnotation;
     return (
       <div>
         {showHarvestingBadge && <HarvestingBadge toggleExtractsBox={this.toggleExtractsBox} extractsNumber={extracts.length} />}
@@ -87,7 +91,7 @@ class HarvestingMenu extends React.Component<Props, State> {
             <HarvestingBox
               postId={postId}
               key={`harvesting-${postId}`}
-              selection={selection}
+              annotation={annotation}
               lang={lang}
               displayHarvestingBox={displayHarvestingBox}
               refetchPost={refetchPost}

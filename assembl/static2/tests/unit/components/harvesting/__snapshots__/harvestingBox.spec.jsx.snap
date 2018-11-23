@@ -401,39 +401,11 @@ exports[`harvestingBox component should match harvestingBox snapshot when extrac
     </div>
     <div
       className="harvesting-box-body"
-    >
-      <div
-        className="selection-body"
-      >
-        [object Object]
-      </div>
-    </div>
-    <div
-      className="harvesting-box-footer"
-    >
-      <Button
-        active={false}
-        block={false}
-        bsClass="btn"
-        bsStyle="default"
-        className="button-cancel button-dark"
-        disabled={false}
-        onClick={[MockFunction]}
-      >
-        Cancel
-      </Button>
-      <Button
-        active={false}
-        block={false}
-        bsClass="btn"
-        bsStyle="default"
-        className="button-submit button-dark"
-        disabled={false}
-        onClick={[Function]}
-      >
-        Submit
-      </Button>
-    </div>
+    />
+    <withApollo(DumbTagsForm)
+      onSubmit={[Function]}
+      renderFooter={[Function]}
+    />
   </div>
 </div>
 `;
@@ -1582,39 +1554,194 @@ exports[`harvestingBox component should match harvestingBox snapshot when there 
     </div>
     <div
       className="harvesting-box-body"
+    />
+    <withApollo(DumbTagsForm)
+      onSubmit={[Function]}
+      renderFooter={[Function]}
+    />
+  </div>
+</div>
+`;
+
+exports[`harvestingBox component should match harvestingBox snapshot with annotation 1`] = `
+<div
+  className=""
+>
+  <div>
+    <div
+      className="harvesting-close-button"
+      onClick={[MockFunction]}
+    >
+      <span
+        className="assembl-icon-cancel grey"
+      />
+    </div>
+  </div>
+  <div
+    className="theme-box harvesting-box"
+  >
+    <div
+      className="harvesting-box-header"
+    >
+      <div
+        className="harvesting-status"
+      >
+        <div
+          className="harvesting-in-progress"
+        >
+          <div
+            className="harvesting-status-label"
+          >
+            <Translate
+              value="harvesting.inProgress"
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        className="button-bar"
+      >
+        <OverlayTrigger
+          defaultOverlayShown={false}
+          overlay={
+            <Tooltip
+              bsClass="tooltip"
+              id="editExtractTooltip"
+              placement="right"
+            >
+              <Translate
+                value="harvesting.editExtract"
+              />
+            </Tooltip>
+          }
+          placement="top"
+          trigger={
+            Array [
+              "hover",
+              "focus",
+            ]
+          }
+        >
+          <Button
+            active={false}
+            block={false}
+            bsClass="btn"
+            bsStyle="default"
+            className=""
+            disabled={true}
+            onClick={[Function]}
+          >
+            <span
+              className="assembl-icon-edit grey"
+            />
+          </Button>
+        </OverlayTrigger>
+        <OverlayTrigger
+          defaultOverlayShown={false}
+          overlay={
+            <Tooltip
+              bsClass="tooltip"
+              id="deleteExtractTooltip"
+              placement="right"
+            >
+              <Translate
+                value="harvesting.deleteExtract"
+              />
+            </Tooltip>
+          }
+          placement="top"
+          trigger={
+            Array [
+              "hover",
+              "focus",
+            ]
+          }
+        >
+          <Button
+            active={false}
+            block={false}
+            bsClass="btn"
+            bsStyle="default"
+            disabled={true}
+            onClick={[Function]}
+          >
+            <span
+              className="assembl-icon-delete grey"
+            />
+          </Button>
+        </OverlayTrigger>
+        <OverlayTrigger
+          defaultOverlayShown={false}
+          overlay={
+            <Tooltip
+              bsClass="tooltip"
+              id="qualifyExtractTooltip"
+              placement="right"
+            >
+              <Translate
+                value="harvesting.qualifyExtract"
+              />
+            </Tooltip>
+          }
+          placement="top"
+          trigger={
+            Array [
+              "hover",
+              "focus",
+            ]
+          }
+        >
+          <Button
+            active={false}
+            block={false}
+            bsClass="btn"
+            bsStyle="default"
+            className="taxonomy-menu-btn"
+            disabled={true}
+            onClick={[Function]}
+          >
+            <span
+              className="assembl-icon-ellipsis-vert grey"
+            />
+          </Button>
+        </OverlayTrigger>
+      </div>
+      <div
+        className="profile"
+      >
+        <AvatarImage
+          userId={null}
+          userName={null}
+        />
+        <div
+          className="harvesting-infos"
+        >
+          <div
+            className="username"
+          />
+          <div
+            className="harvesting-date"
+          >
+            <Translate
+              value="harvesting.now"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="harvesting-box-body"
     >
       <div
         className="selection-body"
       >
-        [object Object]
+        extract text
       </div>
     </div>
-    <div
-      className="harvesting-box-footer"
-    >
-      <Button
-        active={false}
-        block={false}
-        bsClass="btn"
-        bsStyle="default"
-        className="button-cancel button-dark"
-        disabled={false}
-        onClick={[MockFunction]}
-      >
-        Cancel
-      </Button>
-      <Button
-        active={false}
-        block={false}
-        bsClass="btn"
-        bsStyle="default"
-        className="button-submit button-dark"
-        disabled={false}
-        onClick={[Function]}
-      >
-        Submit
-      </Button>
-    </div>
+    <withApollo(DumbTagsForm)
+      onSubmit={[Function]}
+      renderFooter={[Function]}
+    />
   </div>
 </div>
 `;
