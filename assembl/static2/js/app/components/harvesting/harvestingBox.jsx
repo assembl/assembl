@@ -24,8 +24,8 @@ import { connectedUserIsAdmin } from '../../utils/permissions';
 import { editExtractTooltip, deleteExtractTooltip, nuggetExtractTooltip, qualifyExtractTooltip } from '../common/tooltips';
 import { NatureIcons, ActionIcons } from '../../utils/extract';
 import { ExtractStates } from '../../constants';
-import Tags, { type TagsData } from './tags';
-import TagsForm from './tagsForm';
+import Tags from './tags';
+// import TagsForm from './tagsForm';
 
 type Props = {
   extracts?: Array<Extract>,
@@ -150,7 +150,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
       [ACTIONS.create]: {
         buttons: [
           { id: 'cancel', title: 'debate.confirmDeletionButtonCancel', className: 'button-cancel', onClick: cancelHarvesting },
-          { id: 'validate', title: 'harvesting.submit', className: 'button-submit', onClick: null }
+          { id: 'validate', title: 'harvesting.submit', className: 'button-submit', onClick: this.validateHarvesting }
         ]
       },
       [ACTIONS.edit]: {
@@ -304,7 +304,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
       });
   };
 
-  validateHarvesting = (data: TagsData): void => {
+  validateHarvesting = (): void => {
     const { postId, selection, contentLocale, lang, addPostExtract, setHarvestingBoxDisplay, refetchPost } = this.props;
     if (!selection) {
       return;
@@ -318,7 +318,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
     if (!serializedAnnotatorRange) {
       return;
     }
-    const tags = data.tags.map(tag => tag.label);
+    const tags = []; // data.tags.map(tag => tag.label);
     const variables = {
       contentLocale: contentLocale,
       postId: postId,
@@ -442,23 +442,23 @@ class DumbHarvestingBox extends React.Component<Props, State> {
     const actionId = isEditable ? ACTIONS.edit : (disabled && ACTIONS.create) || (isSubmitted && ACTIONS.confirm);
     if (!actionId) return null;
     const action = this.actions[actionId];
-    if (disabled) {
-      // Render the Tags form only if it is the create action
-      return (
-        <TagsForm
-          onSubmit={this.validateHarvesting}
-          renderFooter={({ handleSubmit }) => (
-            <div className="harvesting-box-footer">
-              {action.buttons.map(button => (
-                <Button key={button.id} className={`${button.className} button-dark`} onClick={button.onClick || handleSubmit}>
-                  {I18n.t(button.title)}
-                </Button>
-              ))}
-            </div>
-          )}
-        />
-      );
-    }
+    // if (disabled) {
+    //   // Render the Tags form only if it is the create action
+    //   return (
+    //     <TagsForm
+    //       onSubmit={this.validateHarvesting}
+    //       renderFooter={({ handleSubmit }) => (
+    //         <div className="harvesting-box-footer">
+    //           {action.buttons.map(button => (
+    //             <Button key={button.id} className={`${button.className} button-dark`} onClick={button.onClick || handleSubmit}>
+    //               {I18n.t(button.title)}
+    //             </Button>
+    //           ))}
+    //         </div>
+    //       )}
+    //     />
+    //   );
+    // }
     return (
       <div className="harvesting-box-footer">
         {action.buttons.map(button => (
