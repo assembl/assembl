@@ -81,10 +81,10 @@ class FictionBody extends React.Component<Props, State> {
     let nextPositionY;
     let scrollPosition;
     if (extractElement) {
-      // Scroll extract in middle of page
+      // Scroll extract in top section of page
       const elementRect = extractElement.getBoundingClientRect();
       const absoluteElementTop = elementRect.top + window.pageYOffset;
-      scrollPosition = absoluteElementTop - window.innerHeight / 2;
+      scrollPosition = absoluteElementTop - window.innerHeight / 5;
       window.scrollTo(0, scrollPosition);
       nextPositionY = extractElement.getBoundingClientRect().top - fictionBodyRefCur.getBoundingClientRect().top;
     } else {
@@ -95,7 +95,8 @@ class FictionBody extends React.Component<Props, State> {
         bodyElement && fictionBodyRefCur
           ? bodyElement.getBoundingClientRect().top - fictionBodyRefCur.getBoundingClientRect().top
           : 0;
-      window.scrollTo(0, window.innerHeight / 2);
+      // Scroll extract in top section of page
+      window.scrollTo(0, window.innerHeight / 5);
     }
     this.setState({
       commentBadgeDynamicPosition: {
@@ -137,6 +138,9 @@ class FictionBody extends React.Component<Props, State> {
 
   handleClickAnchor = () => {
     const { displayCommentAnchor, displaySubmitBox, commentAnchorPosition } = this.state;
+    // Scroll side box in top section of page
+    const scrollPosition = commentAnchorPosition.y + window.innerHeight / 3;
+    window.scrollTo(0, scrollPosition);
     this.setState({
       displayCommentAnchor: !displayCommentAnchor,
       displaySubmitBox: !displaySubmitBox,

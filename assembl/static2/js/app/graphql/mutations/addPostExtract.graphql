@@ -1,8 +1,6 @@
-#import "../fragments/Post.graphql"
 #import "../fragments/Extract.graphql"
 
 mutation addPostExtract(
-  $contentLocale: String!
   $lang: String!
   $postId: ID!
   $body: String!
@@ -24,14 +22,6 @@ mutation addPostExtract(
     offsetEnd: $offsetEnd
     tags: $tags
   ) {
-    post {
-      ...Post
-      ... on Post {
-        extracts {
-          ...Extract
-        }
-      }
-    }
     extract {
       ...Extract
     }

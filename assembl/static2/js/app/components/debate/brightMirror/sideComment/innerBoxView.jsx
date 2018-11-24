@@ -15,7 +15,7 @@ import Permissions, { connectedUserCan } from '../../../../utils/permissions';
 
 export type Props = {
   contentLocale: string,
-  extractIndex?: number,
+  extractIndex: number,
   extracts?: Array<FictionExtractFragment>,
   comment: ExtractCommentFragment,
   changeCurrentExtract?: (?number) => void,
@@ -30,6 +30,10 @@ export type State = {
 const renderRichtext = (text: string) => activeHtml(text && transformLinksInHtml(text), postBodyReplacementComponents());
 
 class InnerBoxView extends React.Component<Props, State> {
+  static defaultProps = {
+    extractIndex: 0
+  };
+
   state = {
     menuTarget: null
   };
@@ -47,7 +51,7 @@ class InnerBoxView extends React.Component<Props, State> {
     const canDelete =
       (isConnectedUser(creator && creator.userId) && connectedUserCan(Permissions.DELETE_MY_POST)) ||
       connectedUserCan(Permissions.DELETE_POST);
-    const currentExtractId = extracts && extractIndex ? extracts[extractIndex].id : '';
+    const currentExtractId = extracts ? extracts[extractIndex].id : '';
     const canGoPrevious = extracts && extractIndex != null && extractIndex > 0;
     const canGoNext = extracts && extractIndex != null && extractIndex < extracts.length - 1;
 

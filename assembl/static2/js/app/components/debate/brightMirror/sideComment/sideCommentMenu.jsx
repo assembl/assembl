@@ -62,6 +62,12 @@ class SideCommentMenu extends React.Component<Props, State> {
     });
   };
 
+  cancelCallback = () => {
+    const { cancelSubmit } = this.props;
+    this.cleanSelectedText();
+    cancelSubmit();
+  };
+
   render() {
     const {
       ideaId,
@@ -72,7 +78,6 @@ class SideCommentMenu extends React.Component<Props, State> {
       handleClickAnchor,
       commentAnchorPosition,
       refetchPost,
-      cancelSubmit,
       lang,
       extracts,
       badgeDynamicPosition,
@@ -112,7 +117,7 @@ class SideCommentMenu extends React.Component<Props, State> {
             lang={lang}
             submitting={showBoxInSubmitMode}
             refetchPost={refetchPost}
-            cancelSubmit={cancelSubmit}
+            cancelSubmit={this.cancelCallback}
             toggleSubmitDisplay={toggleSubmitDisplay}
             toggleCommentsBox={this.toggleCommentsBox}
             position={badgePosition}
