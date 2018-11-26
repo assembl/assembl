@@ -44,6 +44,7 @@ import { connectedUserIsExpert } from '../utils/permissions';
 import { get as getRoute } from '../utils/routeMap';
 import UserMessagesTagFilter from './search/UserMessagesTagFilter';
 import { toggleHarvesting as toggleHarvestingAction } from '../actions/contextActions';
+import RelatedIdeas from './debate/common/post/relatedIdeas';
 
 const FRAGMENT_SIZE = 400;
 const elasticsearchLangIndexesElement = document.getElementById('elasticsearchLangIndexes');
@@ -173,13 +174,15 @@ if (v1Interface) {
 }
 
 const PublishedInfo = (props) => {
-  const { date, publishedOnMsgId, userId, userName } = props;
+  const { date, publishedOnMsgId, userId, userName, relatedIdeasTitles } = props;
+  const hasRelatedIdeasTitles = relatedIdeasTitles && relatedIdeasTitles.length > 0;
   return (
     <React.Fragment>
       <Translate value={publishedOnMsgId} /> <Localize value={date} dateFormat="date.format" /> <Translate value="search.by" />{' '}
       <TagFilter key={userId} field="creator_id" value={userId}>
         <ProfileLine userId={userId} userName={userName} />
       </TagFilter>
+      {hasRelatedIdeasTitles ? <RelatedIdeas relatedIdeasTitles={relatedIdeasTitles} /> : null}
     </React.Fragment>
   );
 };
@@ -266,6 +269,7 @@ const PostHit = ({ bemBlocks, collapseSearch, locale, result }) => {
   const subject = highlightedLSOrTruncatedLS(result, 'subject', locale);
   const body = highlightedLSOrTruncatedLS(result, 'body', locale);
   const published = {};
+  const ideaTitle = highlightedLSOrTruncatedLS(result, 'idea_title', locale);
   return (
     <BaseHit
       bemBlocks={bemBlocks}
@@ -289,7 +293,14 @@ const PostHit = ({ bemBlocks, collapseSearch, locale, result }) => {
           </div>
         </React.Fragment>
       )}
-      renderFooter={() => <PublishedInfo date={source.creation_date} userId={source.creator_id} userName={source.creator_name} />}
+      renderFooter={() => (
+        <PublishedInfo
+          date={source.creation_date}
+          userId={source.creator_id}
+          userName={source.creator_name}
+          relatedIdeasTitles={[ideaTitle]}
+        />
+      )}
     />
   );
 };
@@ -304,6 +315,7 @@ const DumbExtractHit = ({ bemBlocks, collapseSearch, isHarvesting, locale, toggl
     }
     collapseSearch();
   };
+  const ideaTitle = highlightedLSOrTruncatedLS(result, 'idea_title', locale);
   return (
     <BaseHit
       bemBlocks={bemBlocks}
@@ -318,6 +330,7 @@ const DumbExtractHit = ({ bemBlocks, collapseSearch, isHarvesting, locale, toggl
           userId={source.creator_id}
           userName={source.creator_name}
           publishedOnMsgId="search.harvested_on"
+          relatedIdeasTitles={[ideaTitle]}
         />
       )}
     />

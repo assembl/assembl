@@ -70,7 +70,8 @@ describe('Hits components', () => {
               disagree: 3,
               dont_understand: 3,
               more_info: 1
-            }
+            },
+            idea_title_en: 'Interesting thematic'
           }
         }
       };
@@ -214,7 +215,8 @@ describe('Hits components', () => {
             idea_id: 'fakeIdeaId',
             phase_id: 1,
             phase_identifier: 'thread',
-            post_id: 'fakePostId'
+            post_id: 'fakePostId',
+            idea_title_en: 'Interesting thematic'
           }
         }
       };

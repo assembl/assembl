@@ -6,20 +6,7 @@ import RelatedIdeas from '../../../../../../js/app/components/debate/common/post
 describe('RelatedIdeas component', () => {
   it('should render related ideas', () => {
     const props = {
-      indirectIdeaContentLinks: [
-        {
-          idea: {
-            id: 'foo',
-            title: 'Foo'
-          }
-        },
-        {
-          idea: {
-            id: 'bar',
-            title: 'Bar'
-          }
-        }
-      ]
+      relatedIdeasTitles: ['Super thematic', 'Fantastic thematic']
     };
     const renderer = new ShallowRenderer();
     renderer.render(<RelatedIdeas {...props} />);

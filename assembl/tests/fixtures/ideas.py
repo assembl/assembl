@@ -177,7 +177,9 @@ def subidea_1_1_1(request, discussion, subidea_1_1, test_session):
                     |-> subidea_1_1_1"""
 
     from assembl.models import Idea, IdeaLink, LangString
-    i = Idea(title=LangString.create(u"Lower government revenue", 'en'),
+    title = LangString.create(u"Lower government revenue", 'en')
+    title.add_value(u'Moins de revenus pour le gouvernement', 'fr')
+    i = Idea(title=title,
              discussion=discussion,
              description=LangString.create("Some definition of an idea", 'en'))
     test_session.add(i)
