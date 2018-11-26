@@ -34,7 +34,7 @@ from ...models import (
 
 from .. import (
     HTTPTemporaryRedirect, get_default_context as base_default_context,
-    get_locale_from_request, get_theme_info, sanitize_next_view)
+    get_locale_from_request, get_theme_info, sanitize_next_view, get_resources_hash)
 from ...nlp.translation_service import DummyGoogleTranslationService
 from ..auth.views import get_social_autologin, get_login_context
 
@@ -221,6 +221,7 @@ def react_view(request, required_permission=P_READ):
     bugherd_url = None
     if wsginame in ('preprod.wsgi',):
         bugherd_url = get('bugherd_url', None)
+
     common_context = {
         "theme_name": theme_name,
         "theme_relative_path": theme_relative_path,
@@ -233,6 +234,8 @@ def react_view(request, required_permission=P_READ):
         "sentry_dsn": get('sentry_dsn', ''),
         "bugherd_url": bugherd_url
     }
+    resources_hash = get_resources_hash(theme_name)
+    common_context.update(resources_hash)
 
     if discussion:
         canRead = user_has_permission(discussion.id, user_id, required_permission)
