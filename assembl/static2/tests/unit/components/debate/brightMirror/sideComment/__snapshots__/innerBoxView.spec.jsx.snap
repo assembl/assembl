@@ -65,14 +65,11 @@ exports[`Storyshots InnerBoxView multiple comments 1`] = `
         >
           <div
             className="previous-extract"
+            onClick={[Function]}
           >
-            <div
-              onClick={[Function]}
-            >
-              <span
-                className="assembl-icon-down-open grey"
-              />
-            </div>
+            <span
+              className="assembl-icon-down-open grey"
+            />
           </div>
           <div
             className="extract-body"
@@ -81,14 +78,11 @@ exports[`Storyshots InnerBoxView multiple comments 1`] = `
           </div>
           <div
             className="next-extract"
+            onClick={[Function]}
           >
-            <div
-              onClick={[Function]}
-            >
-              <span
-                className="assembl-icon-down-open grey"
-              />
-            </div>
+            <span
+              className="assembl-icon-down-open grey"
+            />
           </div>
         </div>
       </div>
@@ -1534,7 +1528,7 @@ exports[`Storyshots InnerBoxView single comment 1`] = `
           className="body-container"
         >
           <div
-            className="previous-extract"
+            className="previous-extract empty"
           />
           <div
             className="extract-body"
@@ -1542,7 +1536,7 @@ exports[`Storyshots InnerBoxView single comment 1`] = `
             This is the body
           </div>
           <div
-            className="next-extract"
+            className="next-extract empty"
           />
         </div>
       </div>

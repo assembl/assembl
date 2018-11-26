@@ -2,6 +2,10 @@
   position: absolute;
   z-index: 200;
 
+  .harvesting-box {
+    box-shadow: none;
+  }
+
   .harvesting-close-button {
     .assembl-icon-cancel:before {
       margin: 0.2em 0.2em 0.2em 0.25em;
@@ -62,19 +66,40 @@
     }
 
     .harvesting-box-body {
-      padding: 10px 5px 10px;
+      padding: 0;
     }
 
     .body-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
       .previous-extract,
       .next-extract {
+        background-color: rgba($color: $grey2, $alpha: 0.1);
+        display: flex;
+        align-items: center;
+        align-self: stretch;
         flex-basis: 10px;
-        padding: 0;
         font-size: 8px;
-      }
+        margin-top: 0;
+        padding: 17px 5px 0 5px;
+        transition: all 0.2s linear;
 
-      .next-extract {
-        margin-top: 10px;
+        &:hover {
+          background-color: rgba($color: $grey2, $alpha: 1);
+
+          .assembl-icon-down-open {
+            color: white;
+          }
+        }
+
+        &.empty {
+          background-color: transparent;
+          padding-left: 5px;
+          padding-right: 5px;
+          cursor: default;
+        }
       }
 
       .extract-body {
@@ -118,7 +143,7 @@
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    background-color: $grey9;
+    background-color: rgba($color: $grey2, $alpha: 0.1);
     padding: 0 20px;
     height: 46px;
 

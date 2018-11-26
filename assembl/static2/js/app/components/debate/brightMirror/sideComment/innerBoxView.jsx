@@ -55,6 +55,34 @@ class InnerBoxView extends React.Component<Props, State> {
     const canGoPrevious = extracts && extractIndex != null && extractIndex > 0;
     const canGoNext = extracts && extractIndex != null && extractIndex < extracts.length - 1;
 
+    const displayPreviousArrow =
+      canGoPrevious && changeCurrentExtract ? (
+        <div
+          className="previous-extract"
+          onClick={() => {
+            changeCurrentExtract(-1);
+          }}
+        >
+          <span className="assembl-icon-down-open grey" />
+        </div>
+      ) : (
+        <div className="previous-extract empty" />
+      );
+
+    const displayNextArrow =
+      canGoNext && changeCurrentExtract ? (
+        <div
+          className="next-extract"
+          onClick={() => {
+            changeCurrentExtract(1);
+          }}
+        >
+          <span className="assembl-icon-down-open grey" />
+        </div>
+      ) : (
+        <div className="next-extract empty" />
+      );
+
     return (
       <Fragment>
         <div className="harvesting-box-header">
@@ -106,31 +134,9 @@ class InnerBoxView extends React.Component<Props, State> {
         </div>
         <div className="harvesting-box-body">
           <div className="body-container">
-            <div className="previous-extract">
-              {canGoPrevious &&
-                changeCurrentExtract && (
-                  <div
-                    onClick={() => {
-                      changeCurrentExtract(-1);
-                    }}
-                  >
-                    <span className="assembl-icon-down-open grey" />
-                  </div>
-                )}
-            </div>
+            {displayPreviousArrow}
             <div className="extract-body">{renderRichtext(comment.body || '')}</div>
-            <div className="next-extract">
-              {canGoNext &&
-                changeCurrentExtract && (
-                  <div
-                    onClick={() => {
-                      changeCurrentExtract(1);
-                    }}
-                  >
-                    <span className="assembl-icon-down-open grey" />
-                  </div>
-                )}
-            </div>
+            {displayNextArrow}
           </div>
         </div>
       </Fragment>
