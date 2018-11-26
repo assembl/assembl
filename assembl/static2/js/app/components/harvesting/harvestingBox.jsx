@@ -29,6 +29,7 @@ import TagsForm from './tagsForm';
 
 type Props = {
   extracts?: Array<Extract>,
+  extractsLength?: number,
   postId: string,
   contentLocale: string,
   lang?: string,
@@ -37,6 +38,8 @@ type Props = {
   isAuthorAccountDeleted?: boolean,
   showNuggetAction?: boolean,
   displayHarvestingBox: boolean,
+  activeExtractIndex: number,
+  onAdd: (extractIndex: number) => void,
   setHarvestingBoxDisplay: Function,
   cancelHarvesting: Function,
   addPostExtract: Function,
@@ -59,8 +62,7 @@ type State = {
   extractAction: ?string,
   menuTarget: HTMLElement | null,
   overflowMenu: ?HTMLElement,
-  overflowMenuTop: number,
-  hashExtractId: ?string
+  overflowMenuTop: number
 };
 
 type Taxonomies = {
@@ -122,6 +124,8 @@ class DumbHarvestingBox extends React.Component<Props, State> {
   actions: any;
 
   static defaultProps = {
+    activeExtractIndex: 0,
+    extractsLength: 0,
     harvestingDate: null,
     isAuthorAccountDeleted: false,
     showNuggetAction: true
@@ -129,16 +133,12 @@ class DumbHarvestingBox extends React.Component<Props, State> {
 
   constructor(props: Props) {
     super(props);
-    const { extracts, cancelHarvesting } = this.props;
+    const { extracts, cancelHarvesting, activeExtractIndex } = this.props;
     const hasExtracts = extracts ? extracts.length > 0 : false;
-    const { hash } = window.location;
-    const hashExtractId = hash !== '' ? hash.split('#')[2] : null;
-    const extractIndex = hashExtractId && extracts ? extracts.indexOf(this.getCurrentExtractById(hashExtractId)) : 0;
-    const currentExtractIndex = extractIndex < 0 ? 0 : extractIndex;
-    const extract = this.getCurrentExtractByIndex(currentExtractIndex);
+    const extract = this.getCurrentExtractByIndex(activeExtractIndex);
     const isNugget = extract ? extract.important : false;
     this.state = {
-      currentExtractIndex: currentExtractIndex,
+      currentExtractIndex: activeExtractIndex,
       disabled: !hasExtracts,
       extractIsValidated: hasExtracts,
       isNugget: isNugget,
@@ -148,8 +148,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
       extractAction: extract && extract.extractAction ? extract.extractAction.split('.')[1] : null,
       menuTarget: null,
       overflowMenu: null,
-      overflowMenuTop: 25,
-      hashExtractId: hashExtractId
+      overflowMenuTop: 25
     };
     // actions props
     this.actions = {
@@ -181,6 +180,13 @@ class DumbHarvestingBox extends React.Component<Props, State> {
 
   componentDidMount() {
     window.addEventListener('scroll', this.updateOverflowMenuPosition);
+  }
+
+  componentDidUpdate(prevProps: Props) {
+    const { activeExtractIndex } = this.props;
+    if (activeExtractIndex !== prevProps.activeExtractIndex) {
+      this.goToExtract(activeExtractIndex);
+    }
   }
 
   componentWillUnmount() {
@@ -315,7 +321,17 @@ class DumbHarvestingBox extends React.Component<Props, State> {
   };
 
   validateHarvesting = (data: TagsData): void => {
-    const { postId, annotation, contentLocale, lang, addPostExtract, setHarvestingBoxDisplay, refetchPost } = this.props;
+    const {
+      extractsLength,
+      postId,
+      annotation,
+      contentLocale,
+      lang,
+      addPostExtract,
+      setHarvestingBoxDisplay,
+      refetchPost,
+      onAdd
+    } = this.props;
     if (!annotation) {
       return;
     }
@@ -338,6 +354,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
         setHarvestingBoxDisplay();
         window.getSelection().removeAllRanges();
         displayAlert('success', I18n.t('harvesting.harvestingValidated'));
+        if (onAdd) onAdd(extractsLength || 0);
         refetchPost();
       })
       .catch((error) => {
@@ -401,17 +418,20 @@ class DumbHarvestingBox extends React.Component<Props, State> {
   changeCurrentExtract = (step: ?number): void => {
     const { currentExtractIndex } = this.state;
     const idx = step ? currentExtractIndex + step : 0;
+    this.goToExtract(idx);
+  };
+
+  goToExtract = (idx: number): void => {
     const extract = this.getCurrentExtractByIndex(idx);
     const isNugget = extract ? extract.important : false;
-    this.setState(prevState => ({
-      currentExtractIndex: step ? prevState.currentExtractIndex + step : 0,
+    this.setState({
+      currentExtractIndex: idx,
       isNugget: isNugget,
       extractNature: extract && extract.extractNature ? extract.extractNature.split('.')[1] : null,
       extractAction: extract && extract.extractAction ? extract.extractAction.split('.')[1] : null,
       editableExtract: extract ? extract.body : '',
-      menuTarget: null,
-      hashExtractId: null
-    }));
+      menuTarget: null
+    });
   };
 
   updateTags = (tags: Array<string>, callback: () => void) => {
