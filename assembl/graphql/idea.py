@@ -756,11 +756,14 @@ def create_idea(parent_idea, phase, args, context):
                 db.add(
                     models.IdeaLink(source=saobj, target=question,
                                     order=idx + 1.0))
+        else:
+            update_ideas_recursively(saobj, args.get('children', []), phase, context)
+
     db.flush()
     return saobj
 
 
-def update_idea(args, context):
+def update_idea(args, phase, context):
     EMBED_ATTACHMENT = models.AttachmentPurpose.EMBED_ATTACHMENT.value
     MEDIA_ATTACHMENT = models.AttachmentPurpose.MEDIA_ATTACHMENT.value
     cls = models.Idea
@@ -771,6 +774,8 @@ def update_idea(args, context):
     thematic_id = args.get('id')
     id_ = int(Node.from_global_id(thematic_id)[1])
     thematic = cls.get(id_)
+    if phase is None:  # UpdateThematic doesn't give phase
+        phase = thematic.get_associated_phase()
 
     permissions = get_permissions(user_id, discussion_id)
     allowed = thematic.user_can(
@@ -894,6 +899,8 @@ def update_idea(args, context):
             for question_id in set(existing_questions.keys()
                                    ).difference(updated_questions):
                 existing_questions[question_id].is_tombstone = True
+        elif not isinstance(thematic, models.Thematic):
+            update_ideas_recursively(thematic, args.get('children', []), phase, context)
 
     db.flush()
     return thematic
@@ -921,6 +928,24 @@ def delete_idea(args, context):
 
     tombstone_idea_recursively(thematic)
     thematic.db.flush()
+
+
+def update_ideas_recursively(parent_idea, children, phase, context):
+    existing_ideas = {
+        idea.id: idea for idea in parent_idea.get_children()}
+    updated_ideas = set()
+    for idea in children:
+        if idea.get('id', None):
+            id_ = int(Node.from_global_id(idea['id'])[1])
+            updated_ideas.add(id_)
+            update_idea(idea, phase, context)
+        else:
+            create_idea(parent_idea, phase, idea, context)
+
+    # remove idea (tombstone) that are not in input
+    for idea_id in set(existing_ideas.keys()
+            ).difference(updated_ideas):
+        tombstone_idea_recursively(existing_ideas[idea_id])
 
 
 # How the file upload works
@@ -1004,7 +1029,7 @@ class UpdateThematic(graphene.Mutation):
     @staticmethod
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
-        thematic = update_idea(args, context)
+        thematic = update_idea(args, None, context)
         return UpdateThematic(thematic=thematic)
 
 
@@ -1031,6 +1056,7 @@ class IdeaInput(graphene.InputObjectType):
     video = graphene.Argument(VideoInput, description=docs.CreateThematic.video)
     announcement = graphene.Argument(IdeaAnnouncementInput, description=docs.Idea.announcement)
     questions = graphene.List(QuestionInput, description=docs.CreateThematic.questions)
+    children = graphene.List(lambda: IdeaInput, description=docs.UpdateIdeas.ideas)
     image = graphene.String(description=docs.Default.image)
     order = graphene.Float(description=docs.Default.float_entry)
     message_view_override = graphene.String(description=docs.IdeaInterface.message_view_override)
@@ -1060,21 +1086,8 @@ class UpdateIdeas(graphene.Mutation):
         if root_idea is None:
             root_idea = create_root_thematic(phase)
 
-        existing_ideas = {
-            idea.id: idea for idea in root_idea.get_children()}
-        updated_ideas = set()
-        for idea in args['ideas']:
-            if idea.get('id', None):
-                id_ = int(Node.from_global_id(idea['id'])[1])
-                updated_ideas.add(id_)
-                update_idea(idea, context)
-            else:
-                create_idea(root_idea, phase, idea, context)
-
-        # remove idea (tombstone) that are not in input
-        for idea_id in set(existing_ideas.keys()
-                ).difference(updated_ideas):
-            tombstone_idea_recursively(existing_ideas[idea_id])
+        children = args['ideas']
+        update_ideas_recursively(root_idea, children, phase, context)
 
         phase.db.flush()
         return UpdateIdeas(root_idea=root_idea)
