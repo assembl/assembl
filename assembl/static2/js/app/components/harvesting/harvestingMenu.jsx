@@ -35,7 +35,7 @@ class HarvestingMenu extends React.Component<Props, State> {
     const { activeExtractIndex } = state;
     const { hash } = window.location;
     if (activeExtractIndex === null && hash !== '') {
-      const hashExtractId = hash.split('#')[1];
+      const hashExtractId = hash.split('#')[2];
       let isHashMatchId = false;
       let newActiveExtractIndex = null;
       extracts.forEach((extract, index) => {
