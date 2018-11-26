@@ -1028,15 +1028,17 @@ class TestTaxonomyExport(AbstractExport):
     ORIGINAL_LOCALE = 5
     QUALIFY_BY_NATURE = 6
     QUALIFY_BY_ACTION = 7
-    OWNER_OF_THE_MESSAGE = 8
-    PUBLISHED_ON = 9
-    HARVESTER = 10
-    HARVESTED_ON = 11
-    NUGGET = 12
-    STATE = 13
-    TAGS = 14
+    MESSAGE_OWNER_FULL_NAME = 8
+    MESSAGE_OWNER_USERNAME = 9
+    PUBLISHED_ON = 10
+    HARVESTER_FULL_NAME = 11
+    HARVESTER_USERNAME = 12
+    HARVESTED_ON = 13
+    NUGGET = 14
+    STATE = 15
+    TAGS = 16
 
-    def test_base(self, test_session, test_app, discussion, extract_post_1_to_subidea_1_1, extract_with_range_in_reply_post_1):
+    def test_base(self, test_session, test_app, discussion, user_language_preference_en_cookie, extract_post_1_to_subidea_1_1, extract_with_range_in_reply_post_1):
         result = self.get_result(test_app, discussion.id, view_name=self.view_name)
         header = result[0]
 
@@ -1047,9 +1049,11 @@ class TestTaxonomyExport(AbstractExport):
         assert header[self.ORIGINAL_LOCALE] == "Original Locale"
         assert header[self.QUALIFY_BY_NATURE] == "Qualify By Nature"
         assert header[self.QUALIFY_BY_ACTION] == "Qualify By Action"
-        assert header[self.OWNER_OF_THE_MESSAGE] == "Message Owner Full Name"
+        assert header[self.MESSAGE_OWNER_FULL_NAME] == "Message Owner Full Name"
+        assert header[self.MESSAGE_OWNER_USERNAME] == "Message Owner Username"
         assert header[self.PUBLISHED_ON] == "Published On"
-        assert header[self.HARVESTER] == "Harvester"
+        assert header[self.HARVESTER_FULL_NAME] == "Harvester Full Name"
+        assert header[self.HARVESTER_USERNAME] == "Harvester Username"
         assert header[self.HARVESTED_ON] == "Harvested On"
         assert header[self.NUGGET] == "Nugget"
         assert header[self.STATE] == "State"
@@ -1066,9 +1070,11 @@ class TestTaxonomyExport(AbstractExport):
         assert first_row[self.ORIGINAL_LOCALE] == "und"
         assert first_row[self.QUALIFY_BY_NATURE] == "actionable_solution"
         assert first_row[self.QUALIFY_BY_ACTION] == "give_examples"
-        assert first_row[self.OWNER_OF_THE_MESSAGE] == "James T. Expert"
+        assert first_row[self.MESSAGE_OWNER_FULL_NAME] == "James T. Expert"
+        assert first_row[self.MESSAGE_OWNER_USERNAME] == ""
         assert first_row[self.PUBLISHED_ON] == "2000-01-04 00:00:00"
-        assert first_row[self.HARVESTER] == "James T. Expert"
+        assert first_row[self.HARVESTER_FULL_NAME] == "James T. Expert"
+        assert first_row[self.HARVESTER_USERNAME] == ""
         assert first_row[self.NUGGET] == "No"
         assert first_row[self.STATE] == "PUBLISHED"
         assert first_row[self.TAGS] == "foo, bar"
@@ -1084,9 +1090,11 @@ class TestTaxonomyExport(AbstractExport):
         assert last_row[self.ORIGINAL_LOCALE] == "und"
         assert last_row[self.QUALIFY_BY_NATURE] == " "
         assert last_row[self.QUALIFY_BY_ACTION] == " "
-        assert last_row[self.OWNER_OF_THE_MESSAGE] == "James T. Expert"
+        assert last_row[self.MESSAGE_OWNER_FULL_NAME] == "James T. Expert"
+        assert last_row[self.MESSAGE_OWNER_USERNAME] == ""
         assert last_row[self.PUBLISHED_ON] == "2000-01-04 00:00:00"
-        assert last_row[self.HARVESTER] == "Maximilien de Robespierre"
+        assert last_row[self.HARVESTER_FULL_NAME] == "Maximilien de Robespierre"
+        assert last_row[self.HARVESTER_USERNAME] == ""
         assert last_row[self.NUGGET] == "Yes"
         assert last_row[self.STATE] == "PUBLISHED"
         assert last_row[self.TAGS] == ""
