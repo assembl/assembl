@@ -37,7 +37,7 @@ def test_get_data_for_post(phases, admin_user, post_related_to_sub_idea_1_1_1, s
     assert data['phase_id'] == phases['thread'].id
     assert data['phase_identifier'] == u'thread'
     assert data['creation_date'] == datetime.datetime(2018, 2, 17, 9, 0)
-    assert data['creator_display_name'] == u'Mr. Administrator'
+    assert data['creator_display_name'] == u'mr_admin_user'
     assert data['sentiment_counts'] == {
         'consensus': 0,
         'controversy': 1,
