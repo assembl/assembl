@@ -29,5 +29,7 @@ query DiscussionData($nextView: String, $lang: String) {
       local
       url
     }
+    startDate
+    endDate
   }
 }

@@ -1,4 +1,5 @@
 // @flow
+import moment from 'moment';
 import type { ApolloClient } from 'react-apollo';
 
 import DiscussionQuery from '../../../../graphql/DiscussionQuery.graphql';
@@ -24,7 +25,11 @@ export function postLoadFormat(data: Data): ResourcesValues {
     headerButtonLabel: convertEntriesToI18nValue(data.discussion.buttonLabelEntries),
     headerImage: data.discussion.headerImage,
     headerLogoImage: data.discussion.logoImage,
-    headerStartDate: data.discussion.debateStartDate || null,
-    headerEndDate: data.discussion.debateEndDate || null
+    headerStartDate: {
+      time: moment(data.discussion.startDate) || null 
+    },
+    headerEndDate: {
+      time: moment(data.discussion.endDate) || null
+    }
   };
 }

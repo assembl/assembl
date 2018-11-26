@@ -11,7 +11,7 @@ import { load, postLoadFormat } from './header/load';
 import { save, createMutationsPromises } from './header/save';
 import LoadSaveReinitializeForm from '../../form/LoadSaveReinitializeForm';
 import FileUploaderFieldAdapter from '../../form/fileUploaderFieldAdapter';
-// import DatePickerFieldAdapter from '../../form/datePickerFieldAdapter';
+import DatePickerFieldAdapter from '../../form/datePickerFieldAdapter';
 import MultilingualTextFieldAdapter from '../../form/multilingualTextFieldAdapter';
 import MultilingualRichTextFieldAdapter from '../../form/multilingualRichTextFieldAdapter';
 import AdminForm from '../../form/adminForm';
@@ -80,18 +80,24 @@ export const DumbCustomizeHeader = ({ client, editLocale, lang }: Props) => (
                 component={FileUploaderFieldAdapter}
                 label={I18n.t('administration.landingPage.header.logoDescription')}
               />
-              {/*
               <Field
                 name="headerStartDate"
                 component={DatePickerFieldAdapter}
-                label={I18n.t('administration.landingPage.header.startDate')}
+                pickerType={I18n.t('administration.landingPage.header.startDate')}
+                pickerName="start-date"
+                editLocale={editLocale}
+                placeHolder={I18n.t('administration.landingPage.header.timePlaceholder')}
+                showTime={false}
               />
               <Field
                 name="headerEndDate"
                 component={DatePickerFieldAdapter}
-                label={I18n.t('administration.landingPage.header.startDate')}
+                pickerType={I18n.t('administration.landingPage.header.startDate')}
+                pickerName="end-date"
+                editLocale={editLocale}
+                placeHolder={I18n.t('administration.landingPage.header.timePlaceholder')}
+                showTime={false}
               />
-              */}
             </div>
           </AdminForm>
         </div>

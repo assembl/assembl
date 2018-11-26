@@ -905,7 +905,10 @@ const Translations = {
           headerDescription:
             "L'image doit avoir une hauteur de 450px de haut et une largeur de 1280px. Le poids ne doit pas dépasser 1Mo.",
           logoDescription:
-            "Le logo doit avoir une hauteur maximale de 78px et une largeur maximale de 200px. Le poids ne doit pas dépasser 1Mo. Le fond doit être transparent."
+            "Le logo doit avoir une hauteur maximale de 78px et une largeur maximale de 200px. Le poids ne doit pas dépasser 1Mo. Le fond doit être transparent.",
+          startDate: "Date de début du débat",
+          endDate: "Date de fin du débat",
+          timePlaceholder: "Optionnel : Entrez les dates du débat"
         },
         timeline: {
           title: "Timeline",
@@ -1853,7 +1856,10 @@ const Translations = {
           logoImage: "Choose the header logo",
           headerDescription: "The image must have a height of 450px and a width of 1280px. The weight must not exceed 1 MB.",
           logoDescription:
-            "The logo must have a maximum height of 78px and a maximum width of 200px. The weight must not exceed 1 MB. The background must be transparent."
+            "The logo must have a maximum height of 78px and a maximum width of 200px. The weight must not exceed 1 MB. The background must be transparent.",
+          startDate: "The starting date of the debate",
+          endDate: "The ending date of the debate",
+          timePlaceholder: "Optional: Enter the dates of the debate"
         },
         timeline: {
           title: "Timeline",
