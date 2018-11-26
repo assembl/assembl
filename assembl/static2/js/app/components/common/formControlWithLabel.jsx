@@ -17,7 +17,7 @@ import Helper from './helper';
 type FormControlWithLabelProps = {
   value: ?(string | EditorState),
   required: boolean,
-  onChange: (string | EditorState | number) => void,
+  onChange: Function,
   type: string,
   disabled?: boolean,
   name?: string,
