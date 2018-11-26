@@ -1060,7 +1060,8 @@ def test_graphql_bright_mirror_should_get_all_posts_of_user_draft_first(graphql_
     }
 
 
-def test_mutation_update_ideas_create(phases, graphql_request, graphql_registry, test_session):
+def test_mutation_update_ideas_create(test_session, graphql_request, graphql_registry, phases):
+    test_session.commit()
     import os
     from io import BytesIO
 
@@ -1162,6 +1163,86 @@ def test_mutation_update_ideas_create(phases, graphql_request, graphql_registry,
     assert idea['order'] == 1.0
 
     # cleanup
-    raw_id = int(from_global_id(idea['id'])[1])
-    test_session.delete(models.Idea.get(raw_id))
-    test_session.flush()
+#    raw_id = int(from_global_id(idea['id'])[1])
+#    idea = models.Idea.get(raw_id)
+#    test_session.delete(idea.announcement)
+#    test_session.delete(idea.attachments[0].document)
+#    test_session.delete(idea.attachments[0])
+#    test_session.delete(idea)
+#    test_session.flush()
+    test_session.rollback()
+
+
+def test_mutation_update_ideas_delete(test_session, graphql_request, graphql_registry, phases):
+    test_session.commit()
+    import os
+    from io import BytesIO
+
+    class FieldStorage(object):
+        file = BytesIO(os.urandom(16))
+        filename = u'path/to/img.png'
+        type = 'image/png'
+
+    graphql_request.POST['variables.ideas.0.image'] = FieldStorage()
+
+    res = schema.execute(
+        graphql_registry['updateIdeas'],
+        context_value=graphql_request,
+        variable_values={
+            'discussionPhaseId': phases['brightMirror'].id,
+            'ideas': [{
+                'messageViewOverride': 'brightMirror',
+                'titleEntries': [
+                    {'value': u"Comprendre les dynamiques et les enjeux", 'localeCode': u"fr"},
+                    {'value': u"Understanding the dynamics and issues", 'localeCode': u"en"}
+                ],
+                'descriptionEntries': [
+                    {'value': u"Desc FR", 'localeCode': u"fr"},
+                    {'value': u"Desc EN", 'localeCode': u"en"}
+                ],
+                'image': u'variables.ideas.0.image',  # this is added via graphql_wsgi but we need to do it ourself here
+                'announcement': {
+                    'titleEntries': [
+                        {'value': u"Title FR announce", 'localeCode': u"fr"},
+                        {'value': u"Title EN announce", 'localeCode': u"en"}
+                    ],
+                    'bodyEntries': [
+                        {'value': u"Body FR announce", 'localeCode': u"fr"},
+                        {'value': u"Body EN announce", 'localeCode': u"en"}
+                    ]
+                }
+            }]
+        })
+
+    assert res.errors is None
+    ideas = res.data['updateIdeas']['rootIdea']['children']
+    assert len(ideas) == 1
+    idea = ideas[0]
+    assert idea['announcement'] == {
+        u'title': u'Title EN announce',
+        u'body': u'Body EN announce'
+    }
+    assert idea['title'] == u'Understanding the dynamics and issues'
+    assert idea['description'] == u'Desc EN'
+    assert idea['img'] is not None
+    assert 'externalUrl' in idea['img']
+    assert idea['messageViewOverride'] == u'brightMirror'
+    assert idea['order'] == 1.0
+
+    # and remove it
+    del graphql_request.POST['variables.ideas.0.image']
+    res = schema.execute(
+        graphql_registry['updateIdeas'],
+        context_value=graphql_request,
+        variable_values={
+            'discussionPhaseId': phases['brightMirror'].id,
+            'ideas': [
+            ]
+        })
+
+    assert res.errors is None
+    ideas = res.data['updateIdeas']['rootIdea']['children']
+    assert len(ideas) == 0
+
+    # cleanup
+    test_session.rollback()
