@@ -80,7 +80,7 @@ module.exports = {
                   'react-hot-loader/babel'
                 ],
                 presets: [["@babel/preset-env", { "modules": false, "targets": { "ie": 11 },
-                                    "debug": true, "useBuiltIns": "entry",
+                                    "debug": false, "useBuiltIns": "entry",
                                     "exclude": ["web.timers", "web.immediate", "web.dom.iterable"] }],
                           "@babel/preset-react", "@babel/preset-flow"]
               }
