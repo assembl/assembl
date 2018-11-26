@@ -225,7 +225,6 @@ describe('harvestingBox component', () => {
 
   it('should match harvestingBox snapshot with annotation', () => {
     const props = {
-      extractsLength: extracts.length,
       postId: '123456',
       contentLocale: 'fr',
       lang: 'fr',

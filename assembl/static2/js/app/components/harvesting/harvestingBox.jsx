@@ -124,7 +124,6 @@ class DumbHarvestingBox extends React.Component<Props, State> {
 
   static defaultProps = {
     activeExtractIndex: 0,
-    extractsLength: 0,
     harvestingDate: null,
     isAuthorAccountDeleted: false,
     showNuggetAction: true
