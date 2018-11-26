@@ -1,137 +1,108 @@
 // @flow
 import React from 'react';
 import { connect } from 'react-redux';
-import { I18n, Translate } from 'react-redux-i18n';
-import { FormGroup } from 'react-bootstrap';
+import { type ApolloClient, compose, withApollo } from 'react-apollo';
+import arrayMutators from 'final-form-arrays';
+import { I18n } from 'react-redux-i18n';
+import { Field } from 'react-final-form';
 import SectionTitle from '../../administration/sectionTitle';
-import FormControlWithLabel from '../../common/formControlWithLabel';
-import FileUploader from '../../common/fileUploader';
 import Helper from '../../common/helper';
-import {
-  updateLandingPageHeaderTitle,
-  updateLandingPageHeaderSubtitle,
-  updateLandingPageHeaderButtonLabel,
-  updateLandingPageHeaderImage,
-  updateLandingPageHeaderLogo
-} from '../../../actions/adminActions/landingPage';
+import { load, postLoadFormat } from './header/load';
+import { save, createMutationsPromises } from './header/save';
+import LoadSaveReinitializeForm from '../../form/LoadSaveReinitializeForm';
+import FileUploaderFieldAdapter from '../../form/fileUploaderFieldAdapter';
+// import DatePickerFieldAdapter from '../../form/datePickerFieldAdapter';
+import MultilingualTextFieldAdapter from '../../form/multilingualTextFieldAdapter';
+import MultilingualRichTextFieldAdapter from '../../form/multilingualRichTextFieldAdapter';
+import AdminForm from '../../form/adminForm';
+import Loader from '../../common/loader';
 
 type Props = {
-  header: {
-    title: string,
-    subtitle: ?string,
-    buttonLabel: string,
-    headerImgMimeType: string,
-    headerImgUrl: string,
-    headerImgTitle: string,
-    logoImgMimeType: string,
-    logoImgUrl: string,
-    logoImgTitle: string
-  },
+  client: ApolloClient,
   editLocale: string,
-  handleTitleChange: Function,
-  handleSubtitleChange: Function,
-  handleButtonLabelChange: Function,
-  handleImageChange: Function,
-  handleLogoChange: Function
+  lang: string
 };
 
-export const DumbCustomizeHeader = ({
-  header,
-  handleTitleChange,
-  handleSubtitleChange,
-  handleButtonLabelChange,
-  handleImageChange,
-  handleLogoChange,
-  editLocale
-}: Props) => {
-  const {
-    title,
-    subtitle,
-    buttonLabel,
-    headerImgMimeType,
-    headerImgUrl,
-    headerImgTitle,
-    logoImgMimeType,
-    logoImgUrl,
-    logoImgTitle
-  } = header;
-  const titlePh = I18n.t('administration.landingPage.header.titleLabel');
-  const subtitlePh = I18n.t('administration.landingPage.header.subtitleLabel');
-  const buttonLabelPh = I18n.t('administration.landingPage.header.buttonLabel');
-  return (
-    <div className="admin-box">
-      <SectionTitle title={I18n.t('administration.landingPage.header.title')} annotation={I18n.t('administration.annotation')} />
-      <div className="admin-content">
-        <div className="form-container">
-          <Helper
-            classname="admin-paragraph"
-            label={I18n.t('administration.landingPage.header.helper')}
-            helperUrl={'/static2/img/helpers/landing_page_admin/header.png'}
-            helperText={I18n.t('administration.helpers.landingPage.header')}
-          />
-          <div className="margin-l" />
-          <FormControlWithLabel label={titlePh} onChange={handleTitleChange} required type="text" value={title} />
-          <FormControlWithLabel
-            label={subtitlePh}
-            onChange={handleSubtitleChange}
-            required
-            type="rich-text"
-            value={subtitle}
-            key={`header-${editLocale}`}
-          />
-          <FormGroup>
-            <label htmlFor="landing-page-img-header">
-              <Translate value="administration.landingPage.header.headerImage" />
-            </label>
-            <FileUploader
-              fileOrUrl={headerImgUrl}
-              imgTitle={headerImgTitle}
-              handleChange={handleImageChange}
-              mimeType={headerImgMimeType}
-              name="landing-page-img-header"
-              isAdminUploader
-              onDeleteClick={() => handleImageChange('TO_DELETE')}
-            />
-            <div className="description-block">
-              <Translate value="administration.landingPage.header.headerDescription" />
+const loading = <Loader />;
+
+export const DumbCustomizeHeader = ({ client, editLocale, lang }: Props) => (
+  <div className="admin-box">
+    <SectionTitle title={I18n.t('administration.landingPage.header.title')} annotation={I18n.t('administration.annotation')} />
+    <LoadSaveReinitializeForm
+      load={fetchPolicy => load(client, lang, fetchPolicy)}
+      loading={loading}
+      postLoadFormat={postLoadFormat}
+      createMutationsPromises={createMutationsPromises(client)}
+      save={save}
+      // validate
+      mutators={{
+        ...arrayMutators
+      }}
+      render={({ handleSubmit, pristine, submitting }) => (
+        <div className="admin-content">
+          <AdminForm handleSubmit={handleSubmit} pristine={pristine} submitting={submitting}>
+            <div className="form-container">
+              <Helper
+                classname="admin-paragraph"
+                label={I18n.t('administration.landingPage.header.helper')}
+                helperUrl={'/static2/img/helpers/landing_page_admin/header.png'}
+                helperText={I18n.t('administration.helpers.landingPage.header')}
+              />
+              <Field
+                editLocale={editLocale}
+                name="headerTitle"
+                component={MultilingualTextFieldAdapter}
+                label={I18n.t('administration.landingPage.header.titleLabel')}
+                required
+              />
+              <Field
+                editLocale={editLocale}
+                withAttachmentButton={false}
+                name="headerSubtitle"
+                component={MultilingualRichTextFieldAdapter}
+                label={I18n.t('administration.landingPage.header.subtitleLabel')}
+                required
+              />
+              <Field
+                editLocale={editLocale}
+                name="headerButtonLabel"
+                component={MultilingualTextFieldAdapter}
+                label={I18n.t('administration.landingPage.header.buttonLabel')}
+                required={false}
+              />
+              <Field
+                name="headerImage"
+                component={FileUploaderFieldAdapter}
+                label={I18n.t('administration.landingPage.header.headerImage')}
+              />
+              <Field
+                name="headerLogoImage"
+                component={FileUploaderFieldAdapter}
+                label={I18n.t('administration.landingPage.header.logoDescription')}
+              />
+              {/*
+              <Field
+                name="headerStartDate"
+                component={DatePickerFieldAdapter}
+                label={I18n.t('administration.landingPage.header.startDate')}
+              />
+              <Field
+                name="headerEndDate"
+                component={DatePickerFieldAdapter}
+                label={I18n.t('administration.landingPage.header.startDate')}
+              />
+              */}
             </div>
-          </FormGroup>
-          <FormControlWithLabel
-            label={buttonLabelPh}
-            onChange={handleButtonLabelChange}
-            required
-            type="text"
-            value={buttonLabel}
-          />
-          <FormGroup>
-            <label htmlFor="landing-page-img-logo">
-              <Translate value="administration.landingPage.header.logoImage" />
-            </label>
-            <FileUploader
-              fileOrUrl={logoImgUrl}
-              imgTitle={logoImgTitle}
-              handleChange={handleLogoChange}
-              mimeType={logoImgMimeType}
-              name="landing-page-img-logo"
-              isAdminUploader
-              onDeleteClick={() => handleLogoChange('TO_DELETE')}
-            />
-            <div className="description-block">
-              <Translate value="administration.landingPage.header.logoDescription" />
-            </div>
-          </FormGroup>
+          </AdminForm>
         </div>
-      </div>
-    </div>
-  );
-};
+      )}
+    />
+  </div>
+);
 
-const mapDispatchToProps = (dispatch, { editLocale }) => ({
-  handleTitleChange: e => dispatch(updateLandingPageHeaderTitle(editLocale, e.target.value)),
-  handleSubtitleChange: value => dispatch(updateLandingPageHeaderSubtitle(editLocale, value)),
-  handleButtonLabelChange: e => dispatch(updateLandingPageHeaderButtonLabel(editLocale, e.target.value)),
-  handleImageChange: value => dispatch(updateLandingPageHeaderImage(value)),
-  handleLogoChange: value => dispatch(updateLandingPageHeaderLogo(value))
+const mapStateToProps = ({ admin: { editLocale } }, i18n) => ({
+  editLocale: editLocale,
+  lang: i18n.locale
 });
 
-export default connect(null, mapDispatchToProps)(DumbCustomizeHeader);
+export default compose(connect(mapStateToProps), withApollo)(DumbCustomizeHeader);

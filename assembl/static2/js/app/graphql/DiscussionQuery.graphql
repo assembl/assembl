@@ -1,3 +1,5 @@
+#import "./fragments/LangString.graphql"
+
 query DiscussionData($nextView: String, $lang: String) {
   discussion {
     logoImage {
@@ -11,8 +13,17 @@ query DiscussionData($nextView: String, $lang: String) {
       externalUrl
     }
     title(lang: $lang)
+    titleEntries {
+      ...langStringEntry
+    }
     subtitle(lang: $lang)
+    subtitleEntries {
+      ...langStringEntry
+    }
     buttonLabel(lang: $lang)
+    buttonLabelEntries {
+      ...langStringEntry
+    }
     homepageUrl
     loginData(nextView: $nextView) {
       local

@@ -894,6 +894,7 @@ const Translations = {
           confirmationModal: "Voulez-vous ajouter un module Texte & Multi-média supplémentaire à la page d'accueil ?"
         },
         header: {
+          successSave: "Le contenu du header a été mis à jour avec succès !",
           title: "Header",
           helper: "Personnalisez l'apparence du header de la page d'accueil.",
           titleLabel: "Titre du débat",
@@ -1842,6 +1843,7 @@ const Translations = {
           confirmationModal: "Are you sure you want to add a Text & Multimedia module to the landing page?"
         },
         header: {
+          successSave: "The header has been updated successfully!",
           title: "Header",
           helper: "Customize appearance of the header.",
           titleLabel: "Debate title",
