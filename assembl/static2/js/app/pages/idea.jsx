@@ -48,6 +48,7 @@ type Props = {
   headerImgUrl: string,
   synthesisTitle: string,
   title: string,
+  description: string,
   toggleHarvesting: Function,
   isHarvesting: boolean
 };
@@ -266,7 +267,7 @@ class Idea extends React.Component<Props> {
         </div>
       );
     }
-    const { announcement, id, headerImgUrl, synthesisTitle, title } = this.props;
+    const { announcement, id, headerImgUrl, synthesisTitle, title, description } = this.props;
     const isMultiColumns = ideaWithPostsData.loading ? false : ideaWithPostsData.idea.messageViewOverride === 'messageColumns';
     const isBrightMirror = ideaWithPostsData.loading ? false : ideaWithPostsData.idea.messageViewOverride === PHASES.brightMirror;
     const messageColumns = ideaWithPostsData.loading
@@ -326,6 +327,7 @@ class Idea extends React.Component<Props> {
         <Header
           title={title}
           synthesisTitle={synthesisTitle}
+          subtitle={description}
           imgUrl={headerImgUrl}
           phaseId={phaseId}
           ideaId={id}
@@ -396,6 +398,7 @@ export default compose(
         announcement: data.idea.announcement,
         id: data.idea.id,
         title: data.idea.title,
+        description: data.idea.description,
         synthesisTitle: data.idea.synthesisTitle,
         headerImgUrl: data.idea.img ? data.idea.img.externalUrl : ''
       };
