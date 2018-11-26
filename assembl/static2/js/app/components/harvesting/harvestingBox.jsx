@@ -29,7 +29,6 @@ import TagsForm from './tagsForm';
 
 type Props = {
   extracts?: Array<Extract>,
-  extractsLength?: number,
   postId: string,
   contentLocale: string,
   lang?: string,
@@ -321,17 +320,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
   };
 
   validateHarvesting = (data: TagsData): void => {
-    const {
-      extractsLength,
-      postId,
-      annotation,
-      contentLocale,
-      lang,
-      addPostExtract,
-      setHarvestingBoxDisplay,
-      refetchPost,
-      onAdd
-    } = this.props;
+    const { postId, annotation, contentLocale, lang, addPostExtract, setHarvestingBoxDisplay, refetchPost, onAdd } = this.props;
     if (!annotation) {
       return;
     }
@@ -347,15 +336,16 @@ class DumbHarvestingBox extends React.Component<Props, State> {
     displayAlert('success', I18n.t('loading.wait'));
     addPostExtract({ variables: variables })
       .then(() => {
-        this.setState({
-          disabled: false,
-          extractIsValidated: true
-        });
-        setHarvestingBoxDisplay();
-        window.getSelection().removeAllRanges();
         displayAlert('success', I18n.t('harvesting.harvestingValidated'));
-        if (onAdd) onAdd(extractsLength || 0);
-        refetchPost();
+        refetchPost().then(({ data: { post: { extracts } } }) => {
+          this.setState({
+            disabled: false,
+            extractIsValidated: true
+          });
+          setHarvestingBoxDisplay();
+          window.getSelection().removeAllRanges();
+          if (onAdd) onAdd(extracts.length || 0);
+        });
       })
       .catch((error) => {
         displayAlert('danger', `${error}`);

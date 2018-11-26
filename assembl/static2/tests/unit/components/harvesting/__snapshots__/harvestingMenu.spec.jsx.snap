@@ -77,7 +77,6 @@ exports[`harvestingMenu component should match harvestingMenu snapshot when the 
       }
       cancelHarvesting={[MockFunction]}
       displayHarvestingBox={true}
-      extractsLength={5}
       lang="fr"
       onAdd={[Function]}
       postId="123456"

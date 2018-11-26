@@ -35,17 +35,17 @@ class HarvestingMenu extends React.Component<Props, State> {
     const { activeExtractIndex } = state;
     const { hash } = window.location;
     if (activeExtractIndex === null && hash !== '') {
-      const hashExtractId = hash.split('#')[2];
+      const hashExtractId = hash.split('#')[1];
       let isHashMatchId = false;
-      let newActiveExtractIndex = 0;
+      let newActiveExtractIndex = null;
       extracts.forEach((extract, index) => {
         if (hashExtractId === extract.id) {
           isHashMatchId = true;
           newActiveExtractIndex = index;
         }
       });
-
-      return { displayExtractsBox: isHashMatchId, activeExtractIndex: newActiveExtractIndex };
+      if (!isHashMatchId) return null;
+      return { displayExtractsBox: true, activeExtractIndex: newActiveExtractIndex };
     }
     return null;
   }
@@ -81,13 +81,13 @@ class HarvestingMenu extends React.Component<Props, State> {
       showNuggetAction,
       lang
     } = this.props;
-    const { activeExtractIndex } = this.state;
     const selection = window.getSelection();
     const annotation = getAnnotationData(selection);
     const hasAnnotation = !!annotation;
-    const { displayExtractsBox } = this.state;
-    const showHarvestingBadge = !displayExtractsBox && extracts && extracts.length > 0;
-    const showBoxWithExtracts = displayExtractsBox && extracts && extracts.length > 0 && !displayHarvestingBox;
+    const hasExtracts = extracts && extracts.length > 0;
+    const { displayExtractsBox, activeExtractIndex } = this.state;
+    const showHarvestingBadge = !displayExtractsBox && hasExtracts;
+    const showBoxWithExtracts = displayExtractsBox && hasExtracts && !displayHarvestingBox;
     const showBoxInHarvestingMode = displayHarvestingBox && hasAnnotation;
     const showHarvestingAnchor = displayHarvestingAnchor && hasAnnotation;
     return (
@@ -99,7 +99,7 @@ class HarvestingMenu extends React.Component<Props, State> {
               postId={postId}
               key={`extracts-${postId}`}
               extracts={extracts}
-              activeExtractIndex={activeExtractIndex}
+              activeExtractIndex={activeExtractIndex || 0}
               isAuthorAccountDeleted={isAuthorAccountDeleted}
               displayHarvestingBox={displayHarvestingBox}
               refetchPost={refetchPost}
@@ -114,7 +114,6 @@ class HarvestingMenu extends React.Component<Props, State> {
               postId={postId}
               key={`harvesting-${postId}`}
               onAdd={this.setActiveExtract}
-              extractsLength={extracts.length}
               annotation={annotation}
               lang={lang}
               displayHarvestingBox={displayHarvestingBox}
