@@ -950,6 +950,7 @@ class User(AgentProfile):
         if self.username_p:
             size = len(self.username_p)
             return hash(self.username_p, size)
+        return None
 
     def check_password(self, password):
         if self.password:
