@@ -899,6 +899,12 @@ def update_idea(args, context):
     return thematic
 
 
+def tombstone_idea_recursively(idea):
+    idea.is_tombstone = True
+    for child in idea.get_children():
+        tombstone_idea_recursively(child)
+
+
 def delete_idea(args, context):
     discussion_id = context.matchdict['discussion_id']
     user_id = context.authenticated_userid or Everyone
@@ -913,12 +919,7 @@ def delete_idea(args, context):
     if not allowed:
         raise HTTPUnauthorized()
 
-    thematic.is_tombstone = True
-    questions = thematic.get_children()
-    # Tombstone all questions of the thematic as well
-    for q in questions:
-        q.is_tombstone = True
-    # TODO do it recursively for a normal idea
+    tombstone_idea_recursively(thematic)
     thematic.db.flush()
 
 
@@ -1059,10 +1060,21 @@ class UpdateIdeas(graphene.Mutation):
         if root_idea is None:
             root_idea = create_root_thematic(phase)
 
-        # TODO iterate on ideas and call create/update/delete_idea
+        existing_ideas = {
+            idea.id: idea for idea in root_idea.get_children()}
+        updated_ideas = set()
         for idea in args['ideas']:
             if idea.get('id', None):
+                id_ = int(Node.from_global_id(idea['id'])[1])
+                updated_ideas.add(id_)
                 update_idea(idea, context)
             else:
                 create_idea(root_idea, phase, idea, context)
+
+        # remove idea (tombstone) that are not in input
+        for idea_id in set(existing_ideas.keys()
+                ).difference(updated_ideas):
+            tombstone_idea_recursively(existing_ideas[idea_id])
+
+        phase.db.flush()
         return UpdateIdeas(root_idea=root_idea)
