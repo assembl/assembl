@@ -162,6 +162,28 @@ def get_time_series_timing(request, force_bounds=False):
     return (start, end, interval)
 
 
+@view_config(context=InstanceContext, name="watson_post_analytics",
+             ctx_instance_class=Discussion, request_method='GET',
+             permission=P_DISC_STATS)
+def get_watson_post_results(request):
+    discussion = request.context._instance
+    format = get_format(request)
+    num_keywords = int(request.GET.get('num_kw', 5))
+    fieldnames, results = discussion.get_watson_post_analytics(num_keywords)
+    return csv_response(results, format, fieldnames)
+
+
+@view_config(context=InstanceContext, name="watson_idea_analytics",
+             ctx_instance_class=Discussion, request_method='GET',
+             permission=P_DISC_STATS)
+def get_watson_idea_results(request):
+    discussion = request.context._instance
+    format = get_format(request)
+    num_keywords = int(request.GET.get('num_kw', 5))
+    fieldnames, results = discussion.get_watson_idea_analytics(num_keywords)
+    return csv_response(results, format, fieldnames)
+
+
 @view_config(context=InstanceContext, name="time_series_analytics",
              ctx_instance_class=Discussion, request_method='GET',
              permission=P_DISC_STATS)
@@ -631,19 +653,28 @@ def csv_response(results, format, fieldnames=None, content_disposition=None):
     elif format == XSLX_MIMETYPE:
         from zipfile import ZipFile, ZIP_DEFLATED
         from openpyxl.workbook import Workbook
+        from openpyxl.cell.cell import ILLEGAL_CHARACTERS_RE
         workbook = Workbook(True)
         archive = ZipFile(output, 'w', ZIP_DEFLATED, allowZip64=True)
         worksheet = workbook.create_sheet()
-        writerow = worksheet.append
+
+        def writerow(row):
+            row = [ILLEGAL_CHARACTERS_RE.subn('_', x)[0]
+                   if isinstance(x, str) else x for x in row]
+            worksheet.append(row)
         empty = None
 
     if fieldnames:
         # TODO: i18n
         writerow([' '.join(fn.split('_')).title() for fn in fieldnames])
         for r in results:
-            writerow([r.get(f, empty) for f in fieldnames])
+            if isinstance(r, dict):
+                r = [r.get(f, empty) for f in fieldnames]
+            r = convert_rowlist_to_utf8(r)
+            writerow(r)
     else:
         for r in results:
+            r = convert_rowlist_to_utf8(r)
             writerow(r)
 
     if format == XSLX_MIMETYPE:
@@ -1413,6 +1444,10 @@ def convert_to_utf8(rowdict):
         row[key.encode('utf-8')] = value.encode('utf-8') if isinstance(value, unicode) else value
 
     return row
+
+
+def convert_rowlist_to_utf8(rowlist):
+    return [x.encode('utf-8') if isinstance(x, unicode) else x for x in rowlist]
 
 
 def get_idea_parent_ids(idea):

@@ -35,6 +35,8 @@ from assembl.lib.caching import create_analytics_region
 resolver = DottedNameResolver(__package__)
 log = logging.getLogger()
 visit_analytics_region = create_analytics_region()
+watson_idea_analytics_region = create_analytics_region()
+watson_post_analytics_region = create_analytics_region()
 
 
 class Discussion(DiscussionBoundBase, NamedClassMixin):
@@ -1110,6 +1112,69 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
             return fname + "_" + str(args[0].id) + "_" + "_".join(str(s) for s in args[1:])
 
         return generate_key
+
+    @watson_post_analytics_region.cache_on_arguments(function_key_generator=generate_redis_key)
+    def get_watson_post_analytics(self, num_keywords=5):
+        from .post import Post, PublicationStates
+        from sqlalchemy.orm import joinedload_all
+        fieldnames = ['id', 'date', 'sentiment']
+        for i in range(num_keywords):
+            fieldnames.append('kw %d' % (i + 1))
+            fieldnames.append('kw %d score' % (i + 1))
+        fieldnames.append('content')
+        results = []
+        posts = self.db.query(Post
+            ).options(joinedload_all(Post.watson_sentiments), LangString.joinedload_option(Post.body)
+            ).filter_by(publication_state=PublicationStates.PUBLISHED, discussion_id=self.id
+            ).order_by(Post.creation_date)
+        for post in posts:
+            keywords = list(post.nlp_keywords(limit=num_keywords))
+            analysis = post.watson_sentiments
+            sentiment = analysis[0].sentiment if analysis else None
+            row = [post.id, post.creation_date.isoformat(' '), sentiment]
+            for (kw, score) in keywords:
+                row.extend((kw, score))
+            if len(keywords) < num_keywords:
+                row.extend((None,) * 2 * (num_keywords - len(keywords)))
+            row.append(post.get_original_body_preview())
+            results.append(row)
+        return fieldnames, results
+
+    @watson_idea_analytics_region.cache_on_arguments(function_key_generator=generate_redis_key)
+    def get_watson_idea_analytics(self, num_keywords=5):
+        from .idea import AppendingVisitor
+        fieldnames = ['id', 'type', 'title', 'positive sum', 'negative sum', 'num. posts', 'positive avg', 'negative avg']
+        for i in range(num_keywords):
+            fieldnames.append('kw %d' % (i + 1))
+            fieldnames.append('kw %d score' % (i + 1))
+        row = [self.id, 'Discussion', self.title.first_original() if self.title else self.slug]
+        (pos, neg, num) = self.sentiments()
+        row.extend((pos, neg, num))
+        if num:
+            row.extend((pos / num, neg / num))
+        else:
+            row.extend((None, None))
+        for (kw, score) in self.top_keywords(limit=num_keywords):
+            row.extend((kw, score))
+
+        class WatsonVisitor(AppendingVisitor):
+            def __init__(self, rows):
+                self.rows = rows
+
+            def visit_idea(self, idea, level, prev_result):
+                row = [idea.id, idea.__class__.__name__, idea.short_title]
+                (pos, neg, num) = idea.sentiments()
+                row.extend((pos, neg, num))
+                if num:
+                    row.extend((pos / num, neg / num))
+                else:
+                    row.extend((None, None))
+                for (kw, score) in idea.top_keywords(limit=num_keywords):
+                    row.extend((kw, score))
+                self.rows.append(row)
+        visitor = WatsonVisitor([row])
+        self.root_idea.visit_ideas_depth_first(visitor)
+        return fieldnames, visitor.rows
 
     @visit_analytics_region.cache_on_arguments(function_key_generator=generate_redis_key)
     def get_visits_time_series_analytics(self, start_date=None, end_date=None, only_fields=None):
