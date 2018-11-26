@@ -4,8 +4,8 @@
 {% block main_css %}
   {# Override the main CSS. #}
   {% if NODE_ENV != 'development' %}
-  <link type="text/css" rel="stylesheet" href="{{REACT_URL}}/build/bundle.css" />
-  <link type="text/css" rel="stylesheet" href="{{REACT_URL}}/build/theme_{{theme_name}}_web.css" />
+  <link type="text/css" rel="stylesheet" href="{{REACT_URL}}/build/bundle.{{bundle_css_hash}}.css" />
+  <link type="text/css" rel="stylesheet" href="{{REACT_URL}}/build/theme_{{theme_name}}_web.{{theme_hash}}.css" />
   {% endif %}
 {% endblock %}
 
@@ -39,7 +39,7 @@
         <div id='root' data-sentry-dsn="{{sentry_dsn}}"></div>
         {% block main_js %}
             {% include 'analytics_common.jinja2' %}
-            <script src='{{REACT_URL}}/build/bundle.js'></script>
+            <script src='{{REACT_URL}}/build/bundle.{{bundle_hash}}.js'></script>
             {% if NODE_ENV == 'development' %}
                 <script src="{{REACT_URL}}/build/theme_{{theme_name}}_web.js"></script>
             {% endif %}
