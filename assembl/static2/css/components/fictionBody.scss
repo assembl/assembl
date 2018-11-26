@@ -11,6 +11,10 @@
     color: $black;
     line-height: 1.7;
     letter-spacing: 0.9px;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+    hyphens: auto;
 
     .attachment-image {
       margin-bottom: 20px;

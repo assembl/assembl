@@ -62,6 +62,10 @@
       line-height: 1.62;
       margin-bottom: 7px;
       padding: 11px 15px;
+      overflow-wrap: break-word;
+      word-wrap: break-word;
+      word-break: break-word;
+      hyphens: auto;
     }
 
     .toolbar {
