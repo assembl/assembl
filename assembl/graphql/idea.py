@@ -851,10 +851,17 @@ def update_idea(args, context):
             if len(announcement_title_entries) == 0:
                 raise Exception('Announcement titleEntries needs at least one entry')
 
-            announcement_title_langstring = langstring_from_input_entries(announcement_title_entries)
-            announcement_body_langstring = langstring_from_input_entries(announcement.get('body_entries', None))
-            saobj2 = create_idea_announcement(user_id, discussion, thematic, announcement_title_langstring, announcement_body_langstring)
-            db.add(saobj2)
+            if not thematic.announcement:
+                announcement_title_langstring = langstring_from_input_entries(announcement_title_entries)
+                announcement_body_langstring = langstring_from_input_entries(announcement.get('body_entries', None))
+                saobj2 = create_idea_announcement(user_id, discussion, thematic, announcement_title_langstring, announcement_body_langstring)
+                db.add(saobj2)
+            else:
+                update_langstring_from_input_entries(
+                    thematic.announcement, 'title', announcement_title_entries)
+                update_langstring_from_input_entries(
+                    thematic.announcement, 'body', announcement.get('body_entries', None))
+                thematic.announcement.last_updated_by_id = user_id
 
         questions_input = args.get('questions')
         existing_questions = {
