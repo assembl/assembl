@@ -22,7 +22,8 @@ from .utils import (
     create_attachment,
     update_attachment,
     get_attachments_with_purpose,
-    get_attachment_with_purpose)
+    get_attachment_with_purpose,
+    DateTime)
 from .idea import TagResult, SentimentAnalysisResult
 
 
@@ -54,6 +55,8 @@ class Discussion(SecureObjectType, SQLAlchemyObjectType):
     button_label_entries = graphene.List(LangStringEntry, description=docs.Default.langstring_entries)
     header_image = graphene.Field(Document, description=docs.Discussion.header_image)
     logo_image = graphene.Field(Document, description=docs.Discussion.logo_image)
+    start_date = graphene.Field(DateTime, description=docs.Discussion.start_date)
+    end_date = graphene.Field(DateTime, description=docs.Discussion.end_date)
     top_keywords = graphene.List(TagResult, description=docs.Discussion.top_keywords)
     nlp_sentiment = graphene.Field(SentimentAnalysisResult, description=docs.Discussion.nlp_sentiment)
     slug = graphene.String(description=docs.Discussion.slug)
@@ -156,6 +159,28 @@ class Discussion(SecureObjectType, SQLAlchemyObjectType):
         result = self.sentiments()
         return SentimentAnalysisResult(**result._asdict())
 
+    def resolve_start_date(self, args, context, info):
+        from sqlalchemy import func
+        if self.active_start_date:
+            return self.active_start_date
+        discussion_id = context.matchdict['discussion_id']
+        db = models.Discussion.default_db
+        result = db.query(func.min(models.TimelineEvent.start)).filter(models.TimelineEvent.discussion_id == discussion_id).first()
+        if result:
+            result = result[0]
+            return result
+
+    def resolve_end_date(self, args, context, info):
+        from sqlalchemy import func
+        if self.active_end_date:
+            return self.active_end_date
+        discussion_id = context.matchdict['discussion_id']
+        db = models.Discussion.default_db
+        result = db.query(func.max(models.TimelineEvent.end)).filter(models.TimelineEvent.discussion_id == discussion_id).first()
+        if result:
+            result = result[0]
+            return result
+
 
 class UpdateDiscussion(graphene.Mutation):
     __doc__ = docs.UpdateDiscussion.__doc__
@@ -166,6 +191,8 @@ class UpdateDiscussion(graphene.Mutation):
         button_label_entries = graphene.List(LangStringEntryInput, description=docs.UpdateDiscussion.button_label_entries)
         header_image = graphene.String(description=docs.UpdateDiscussion.header_image)
         logo_image = graphene.String(description=docs.UpdateDiscussion.logo_image)
+        start_date = DateTime(description=docs.UpdateDiscussion.start_date)
+        end_date = DateTime(description=docs.UpdateDiscussion.end_date)
 
     discussion = graphene.Field(lambda: Discussion)
 
@@ -230,6 +257,13 @@ class UpdateDiscussion(graphene.Mutation):
                     db,
                     context
                 )
+
+        start_date = args.get('start_date', None)
+        end_date = args.get('end_date', None)
+        if start_date:
+            discussion.active_start_date = start_date.replace(tzinfo=None)
+        if end_date:
+            discussion.active_end_date = end_date.replace(tzinfo=None)
 
         db.flush()
         discussion = cls.get(discussion_id)

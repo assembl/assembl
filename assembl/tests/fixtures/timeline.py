@@ -137,19 +137,20 @@ def timeline_phase2_interface_v2(request, test_app, test_session, discussion):
     request.addfinalizer(fin)
     return phase2
 
+
 @pytest.fixture(scope="function")
 def timeline_vote_session(request, test_session, discussion):
     from assembl.models import DiscussionPhase, LangString
 
     phase = DiscussionPhase(
-        discussion = discussion,
-        identifier = 'voteSession',
-        title = LangString.create(u"voteSession phase title fixture", "en"),
-        description = LangString.create(u"voteSession phase description fixture", "en"),
-        start = datetime(2014, 12, 31, 9, 0, 0),
-        end = datetime(2015, 12, 31, 9, 0, 0),
-        interface_v1 = False,
-        image_url = u'https://example.net/image.jpg'
+        discussion=discussion,
+        identifier='voteSession',
+        title=LangString.create(u"voteSession phase title fixture", "en"),
+        description=LangString.create(u"voteSession phase description fixture", "en"),
+        start=datetime(2014, 12, 31, 9, 0, 0),
+        end=datetime(2015, 12, 31, 9, 0, 0),
+        interface_v1=False,
+        image_url=u'https://example.net/image.jpg'
     )
 
 

@@ -80,6 +80,8 @@ class Discussion:
     slug = """A string used to form the URL of the discussion."""
     top_keywords = "Keywords most often found in the discussion, according to NLP engine"
     nlp_sentiment = "The aggregated sentiment analysis on the posts"
+    start_date = "The start date of a discussion. A datetime that is either set in mutation, or calculated from the start of the first phase."
+    end_date = "The end date of a discussion. A datetime that is either set in a mutation, or calculated from the end of last phase."
 
 
 class UpdateDiscussion:
@@ -89,6 +91,8 @@ class UpdateDiscussion:
     button_label_entries = """The contents inside of the \"follow\" button in the landing page."""
     title_entries = """The title contents shown on the landing page of a discussion, just above the \"follow\" button. """
     subtitle_entries = """The subtitle contents shown on the landing page of a discussion, just above the \"follow\" button, under the title content. """
+    start_date = "The start date of a discussion, optionally set. If not set, will be calculated from the first phase"
+    end_date = "The end date of a discussion, optionally set. If not set, will be calculated from the end of last phase"
 
 
 class LangString:

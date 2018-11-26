@@ -2430,6 +2430,38 @@ def test_query_discussion_langstring_fields(discussion, graphql_request):
     }
 
 
+def test_query_discussion_landing_page_empty_dates_no_phases(graphql_request, discussion):
+    # Discussion fixture should have no fixed active_start/end_date
+    res = schema.execute("""query MyQuery {
+            discussion {
+                startDate
+                endDate
+            }
+        }""", context_value=graphql_request)
+    assert res.errors is None
+    assert not res.data['discussion']['startDate']
+    assert not res.data['discussion']['endDate']
+
+
+def test_query_discussion_landing_page_empty_dates_with_phases(graphql_request, test_session, discussion, timeline_phase2_interface_v2):
+    # Discussion fixture should have no fixed active_start/end_dates, allow for phases to calculate the date
+    from sqlalchemy import func
+    from assembl.models import TimelineEvent
+    import pytz
+    dates = test_session.query(func.min(TimelineEvent.start), func.max(TimelineEvent.end)).filter(
+        TimelineEvent.discussion_id == discussion.id).first()
+    assert dates
+    res = schema.execute("""query MyQuery {
+            discussion {
+                startDate
+                endDate
+            }
+        }""", context_value=graphql_request)
+    assert res.errors is None
+    assert res.data['discussion']['startDate'] == dates[0].replace(tzinfo=pytz.UTC).isoformat()
+    assert res.data['discussion']['endDate'] == dates[1].replace(tzinfo=pytz.UTC).isoformat()
+
+
 def test_mutation_update_discussion_langstring_fields(graphql_request, discussion):
     title_entry_en = u"Should we eat tomatoes?"
     title_entry_fr = u"Faut-il manger des tomates ?"
@@ -2601,6 +2633,44 @@ def test_update_discussion_landing_page_image_fields(graphql_request, graphql_re
     assert res_discussion['titleEntries'][0]['value'] == u'My title'
     assert res_discussion['subtitleEntries'][0]['value'] == u'My subtitle'
     assert res_discussion['buttonLabelEntries'][0]['value'] == u'My button label'
+
+
+def test_update_discussion_landing_page_date_fields(graphql_request, discussion):
+    start_date = '2018-01-01T00:00:00.000000Z'  # "%Y-%m-%dT%H:%M:%S.%fZ"
+    end_date = '2050-01-01T00:00:00.000000Z'
+    res = schema.execute("""mutation MyMutation($startDate: DateTime, $endDate: DateTime){
+        updateDiscussion(
+            startDate: $startDate
+            endDate: $endDate) {
+                discussion {
+                    startDate
+                    endDate
+                }
+            }
+        }""", context_value=graphql_request, variable_values={'startDate': start_date, 'endDate': end_date})
+    assert res.errors is None
+    assert res.data['updateDiscussion']['discussion']['startDate'] == '2018-01-01T00:00:00+00:00'
+    assert res.data['updateDiscussion']['discussion']['endDate'] == '2050-01-01T00:00:00+00:00'
+
+
+def test_update_discussion_landing_page_date_fields_empty(graphql_request, test_session, discussion):
+    from datetime import datetime
+    discussion.active_start_date = datetime(year=2018, month=1, day=1).replace(tzinfo=None)
+    discussion.active_end_date = datetime(year=2050, month=1, day=1).replace(tzinfo=None)
+    test_session.flush()
+    res = schema.execute("""mutation MyMutation($startDate: DateTime, $endDate: DateTime){
+        updateDiscussion(
+            startDate: $startDate
+            endDate: $endDate) {
+                discussion {
+                    startDate
+                    endDate
+                }
+            }
+        }""", context_value=graphql_request, variable_values={'startDate': None, 'endDate': None})
+    assert res.errors is None
+    assert res.data['updateDiscussion']['discussion']['startDate'] == '2018-01-01T00:00:00+00:00'
+    assert res.data['updateDiscussion']['discussion']['endDate'] == '2050-01-01T00:00:00+00:00'
 
 
 def test_get_all_posts(graphql_request, proposition_id):
