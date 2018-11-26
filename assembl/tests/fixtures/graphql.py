@@ -35,15 +35,15 @@ def phases(request, test_session, discussion):
     from assembl import models
 
     survey = DiscussionPhase(
-        discussion = discussion,
-        identifier = 'survey',
-        title = LangString.create(u"survey phase title fixture", "en"),
-        description = LangString.create(u"survey phase description fixture", "en"),
-        start = datetime(2018, 1, 15, 9, 0, 0),
-        end = datetime(2018, 2, 15, 9, 0, 0),
-        interface_v1 = False,
-        image_url = u'https://example.net/image.jpg',
-        is_thematics_table = True
+        discussion=discussion,
+        identifier='survey',
+        title=LangString.create(u"survey phase title fixture", "en"),
+        description=LangString.create(u"survey phase description fixture", "en"),
+        start=datetime(2018, 1, 15, 9, 0, 0),
+        end=datetime(2018, 2, 15, 9, 0, 0),
+        interface_v1=False,
+        image_url=u'https://example.net/image.jpg',
+        is_thematics_table=True
     )
 
     thread = DiscussionPhase(

@@ -984,6 +984,7 @@ def test_add_timeline_event(test_app, discussion):
     assert phase1_data['next_event'] == phase2_data['@id']
     assert phase1_data['@type'] == 'DiscussionPhase'
 
+
 class AbstractExport(object):
     # HEADER = {}
 
@@ -1003,7 +1004,18 @@ class AbstractExport(object):
         csv_file.seek(0)
         assert resp.status_code == 200
         result = csv.reader(csv_file, dialect='excel', delimiter=';')
-        return list(result)
+        result_as_list = list(result)
+        try:
+            header = result_as_list[0]
+            first_elem = header[0]
+            bom = u'\ufeff'.encode('utf-8')
+            if first_elem.startswith(bom):
+                result_as_list[0][0] = first_elem.replace(bom, '')
+            return result_as_list
+        except:
+            print "There was no BOM from excel"
+            return result_as_list
+
 
 class TestTaxonomyExport(AbstractExport):
 
@@ -1035,7 +1047,7 @@ class TestTaxonomyExport(AbstractExport):
         assert header[self.ORIGINAL_LOCALE] == "Original Locale"
         assert header[self.QUALIFY_BY_NATURE] == "Qualify By Nature"
         assert header[self.QUALIFY_BY_ACTION] == "Qualify By Action"
-        assert header[self.OWNER_OF_THE_MESSAGE] == "Owner Of The Message"
+        assert header[self.OWNER_OF_THE_MESSAGE] == "Message Owner Full Name"
         assert header[self.PUBLISHED_ON] == "Published On"
         assert header[self.HARVESTER] == "Harvester"
         assert header[self.HARVESTED_ON] == "Harvested On"
@@ -1098,8 +1110,7 @@ class TestPhase1Export(AbstractExport):
     SENTIMENT_CREATION_DATE = 14
     POST_BODY_ORIGINAL = 15
 
-
-    def test_base(self, proposals_with_sentiments, discussion, test_app):
+    def test_base(self, proposals_with_sentiments, user_language_preference_fr_cookie, discussion, test_app):
         result = self.get_result(test_app, discussion.id, view_name=self.view_name)
         header = result[0]
         assert header[TestPhase1Export.QUESTION_ID] == b'Numéro de la question'
@@ -1108,8 +1119,8 @@ class TestPhase1Export(AbstractExport):
         first_row = result[1]
         assert first_row[TestPhase1Export.THEMATIC_NAME] == b'Comprendre les dynamiques et les enjeux'
         assert first_row[TestPhase1Export.QUESTION_TITLE] == b"Comment qualifiez-vous l'emergence "\
-                                            b"de l'Intelligence Artificielle "\
-                                            b"dans notre société ?"
+            b"de l'Intelligence Artificielle "\
+            b"dans notre société ?"
         assert first_row[TestPhase1Export.POST_BODY] == b'une proposition 14'
         assert first_row[TestPhase1Export.POST_LIKE_COUNT] == b'0'
         assert first_row[TestPhase1Export.POST_DISAGREE_COUNT] == b'0'
@@ -1128,14 +1139,14 @@ class TestPhase1Export(AbstractExport):
         assert last_row[TestPhase1Export.POST_DISAGREE_COUNT] == b'0'
         assert last_row[TestPhase1Export.SENTIMENT_ACTOR_NAME] == b'Mr. Administrator'
 
-    def test_en(self, proposals_en_fr, discussion, test_app, en_locale):
+    def test_en(self, proposals_en_fr, user_language_preference_en_cookie, discussion, test_app, en_locale):
         lang = en_locale.root_locale
         result = self.get_result(test_app, discussion.id, lang=lang, view_name=self.view_name)
 
         first_row = result[1]
         assert first_row[TestPhase1Export.POST_BODY] == b'English Proposition 14'
 
-    def test_fr(self, proposals_en_fr, discussion, test_app, fr_locale):
+    def test_fr(self, proposals_en_fr, user_language_preference_fr_cookie, discussion, test_app, fr_locale):
         lang = fr_locale.root_locale
         result = self.get_result(test_app, discussion.id, lang=lang, view_name=self.view_name)
 
@@ -1172,7 +1183,7 @@ class TestPhase2Export(AbstractExport):
     DATE_VOTE = 16
     ORIGINAL = 17
 
-    def test_base(self, proposals_with_sentiments, discussion, timeline_phase2_interface_v2, test_app):
+    def test_base(self, proposals_with_sentiments, user_language_preference_fr_cookie, discussion, timeline_phase2_interface_v2, test_app):
         result = self.get_result(test_app, discussion.id, view_name=self.view_name)
         header = result[0]
         assert header[self.NUMERO_IDEE_PARENT] == b"Les numéros des parent d'idée"
@@ -1204,10 +1215,10 @@ class TestExtractCsvVoters(AbstractExport):
     DATE_HEURE_DU_VOTE = 3
     PROPOSITION = 4
 
-    def test_base(self, test_app, discussion, token_vote_spec_with_votes, gauge_vote_specification_with_votes, number_gauge_vote_specification_with_votes):
+    def test_base(self, test_app, discussion, user_language_preference_fr_cookie, token_vote_spec_with_votes, gauge_vote_specification_with_votes, number_gauge_vote_specification_with_votes):
         result = self.get_result(test_app, discussion.id, gauge_vote_specification_with_votes.widget_id, view_name=self.view_name, votes_export=True)
         header = result[0]
-        # assert header[self.NOM_DU_CONTRIBUTEUR] == b"Nom Du Contributeur"
+        assert header[self.NOM_DU_CONTRIBUTEUR] == b"Nom Du Contributeur"
         assert header[self.NOM_UTILISATEUR_CONTRIBUTEUR] == b"Nom D'Utilisateur Du Contributeur"
         assert header[self.EMAIL_DU_CONTRIBUTEUR] == b"Adresse Mail Du Contributeur"
         assert header[self.DATE_HEURE_DU_VOTE] == b"Date/Heure Du Vote"

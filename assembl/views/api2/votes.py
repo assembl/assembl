@@ -372,7 +372,7 @@ def extract_voters(request):
     fieldnames = ["Nom du contributeur", "Nom d'utilisateur du contributeur", "Adresse mail du contributeur", "Date/heure du vote", "Proposition"]
     votes = widget.db.query(AbstractIdeaVote
         ).filter(AbstractVoteSpecification.widget_id==widget.id
-        ).filter(AbstractIdeaVote.tombstone_date == None
+        ).filter(AbstractIdeaVote.tombstone_date==None
         ).order_by(AbstractIdeaVote.vote_spec_id.desc()
         ).all()
     for count, vote in enumerate(votes):
@@ -397,8 +397,9 @@ def extract_voters(request):
 
         if vote.type == u'token_idea_vote':
             token_category = vote.token_category.name.best_lang(user_prefs).value or u""
-            if token_category not in fieldnames:
-                fieldnames.append(token_category.encode('utf-8'))
+            token_category_encoded = token_category.encode('utf-8')
+            if token_category_encoded not in fieldnames:
+                fieldnames.append(token_category_encoded)
             extract_info.update({token_category: str(vote_value)})
             extract_votes.append(extract_info)
 
