@@ -66,6 +66,33 @@ describe('harvestingBox component', () => {
     expect(result).toMatchSnapshot();
   });
 
+  it('should match harvestingBox snapshot when there are extracts with active extract', () => {
+    const props = {
+      extracts: extracts,
+      activeExtractIndex: 1,
+      postId: '123456',
+      contentLocale: 'fr',
+      lang: 'fr',
+      annotation: null,
+      harvestingDate: '2018-04-29T16:28:27.324276+00:00',
+      isAuthorAccountDeleted: false,
+      showNuggetAction: false,
+      displayHarvestingBox: false,
+      setHarvestingBoxDisplay: setHarvestingBoxDisplaySpy,
+      cancelHarvesting: cancelHarvestingSpy,
+      addPostExtract: addPostExtractSpy,
+      updateExtract: updateExtractSpy,
+      confirmExtract: confirmExtractSpy,
+      deleteExtract: deleteExtractSpy,
+      refetchPost: refetchPostSpy,
+      toggleExtractsBox: toggleExtractsBoxSpy
+    };
+    const shallowRenderer = new ShallowRenderer();
+    shallowRenderer.render(<DumbHarvestingBox {...props} />);
+    const result = shallowRenderer.getRenderOutput();
+    expect(result).toMatchSnapshot();
+  });
+
   it('should match harvestingBox snapshot when extracts is undefined', () => {
     const props = {
       extracts: undefined,
