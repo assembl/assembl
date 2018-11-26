@@ -343,7 +343,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
           });
           setHarvestingBoxDisplay();
           window.getSelection().removeAllRanges();
-          if (onAdd) onAdd(extracts.length || 0);
+          if (onAdd) onAdd(extracts.length - 1);
         });
       })
       .catch((error) => {
