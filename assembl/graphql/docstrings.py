@@ -33,6 +33,7 @@ class Schema:
     default_preferences = """The default discussion preferences. These are server wide settings, independent of the debate."""
     locales = """The list of locales supported on the debate. These are the languages of the debate."""
     total_sentiments = """The total count of sentiments on the debate, regardless of chosen type. Deleted users' sentiments are not counted."""
+    total_vote_session_participations = """The total of all participations on all the vote sessions"""
     has_syntheses = """A boolean flag indicating if the debate has yet released a synthesis or not."""
     vote_session = """A vote session's meta data, if a vote session exists."""
     resources = """A list of Resource meta data on the debate."""

@@ -267,8 +267,9 @@ class DumbVoteSession extends React.Component<Props, State> {
 
   submitVotes = () => {
     const { addTokenVote, addGaugeVote, refetchVoteSession } = this.props;
+    const { userTokenVotes, userGaugeVotes } = this.state;
     this.setState({ submitting: true });
-    this.state.userTokenVotes.forEach((voteSpecs, proposalId) => {
+    userTokenVotes.forEach((voteSpecs, proposalId) => {
       voteSpecs.forEach((tokenCategories, voteSpecId) => {
         tokenCategories.forEach((voteValue, tokenCategoryId) => {
           addTokenVote({
@@ -289,7 +290,7 @@ class DumbVoteSession extends React.Component<Props, State> {
         });
       });
     });
-    this.state.userGaugeVotes.forEach((voteSpecs, proposalId) => {
+    userGaugeVotes.forEach((voteSpecs, proposalId) => {
       voteSpecs.forEach((voteValue, voteSpecId) => {
         addGaugeVote({
           variables: {
@@ -311,7 +312,7 @@ class DumbVoteSession extends React.Component<Props, State> {
   getStatElements = () => {
     let numParticipations = 0;
     let participantsIds = [];
-    this.props.proposals.forEach((p) => {
+    this.props.proposals.forEach((p: Proposal) => {
       participantsIds = participantsIds
         .concat(
           p.voteResults.participants.map((participant) => {
