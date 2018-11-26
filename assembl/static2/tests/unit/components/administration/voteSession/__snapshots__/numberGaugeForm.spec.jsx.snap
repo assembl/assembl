@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`DumbNumberGaugeForm component should render a form to set up a numeral gauge 1`] = `
-<div>
+<React.Fragment>
   <FormGroup
     bsClass="form-group"
   >
@@ -36,5 +36,5 @@ exports[`DumbNumberGaugeForm component should render a form to set up a numeral 
       value="kms"
     />
   </FormGroup>
-</div>
+</React.Fragment>
 `;
