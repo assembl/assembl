@@ -8,8 +8,57 @@ import UpdateResource from '../../js/app/graphql/mutations/updateResource.graphq
 import UpdateResourcesCenter from '../../js/app/graphql/mutations/updateResourcesCenter.graphql';
 import UpdateLegalContents from '../../js/app/graphql/mutations/updateLegalContents.graphql';
 import ResourcesCenterPage from '../../js/app/graphql/ResourcesCenterPage.graphql';
+import UploadDocument from '../../js/app/graphql/mutations/uploadDocument.graphql';
+
+const fileB64 = window.btoa('gimme some base64');
+export const docFile = new File([fileB64], 'my-file.pdf');
+docFile.id = 'my-doc-id';
+export const imgFile = new File([fileB64], 'my-img.png');
+imgFile.id = 'my-img-id';
 
 const MockedResponses = [
+  // documents
+  {
+    request: {
+      query: UploadDocument,
+      variables: {
+        file: docFile
+      }
+    },
+    result: {
+      data: {
+        uploadDocument: {
+          document: {
+            id: 'doc-id-from-backend',
+            externalUrl: '/data/my-doc.pdf',
+            mimeType: 'application/pdf',
+            title: 'My great document'
+          }
+        }
+      }
+    }
+  },
+  {
+    request: {
+      query: UploadDocument,
+      variables: {
+        file: imgFile
+      }
+    },
+    result: {
+      data: {
+        uploadDocument: {
+          document: {
+            id: 'img-id-from-backend',
+            externalUrl: '/data/my-img.png',
+            mimeType: 'image/png',
+            title: 'My great image'
+          }
+        }
+      }
+    }
+  },
+  // resources center
   {
     request: {
       query: ResourcesCenterPage,
@@ -69,6 +118,7 @@ const MockedResponses = [
         doc: null,
         embedCode: '',
         image: null,
+        // textAttachments: [],
         textEntries: [],
         titleEntries: [
           {
@@ -119,6 +169,7 @@ const MockedResponses = [
         doc: null,
         embedCode: '<iframe></iframe>',
         image: null,
+        // textAttachments: [],
         textEntries: [
           {
             localeCode: 'en',
@@ -182,7 +233,12 @@ const MockedResponses = [
     request: {
       query: UpdateLegalContents,
       variables: {
-        locale: 'en',
+        cookiesPolicyAttachments: [],
+        legalNoticeAttachments: [],
+        privacyPolicyAttachments: [],
+        termsAndConditionsAttachments: [],
+        userGuidelinesAttachments: [],
+        cookiesPolicyEntries: [],
         legalNoticeEntries: [
           {
             localeCode: 'en',
@@ -195,7 +251,6 @@ const MockedResponses = [
         ],
         termsAndConditionsEntries: [],
         privacyPolicyEntries: [],
-        cookiesPolicyEntries: [],
         userGuidelinesEntries: []
       }
     },
@@ -203,6 +258,12 @@ const MockedResponses = [
       data: {
         updateLegalContents: {
           legalContents: {
+            cookiesPolicyAttachments: [],
+            legalNoticeAttachments: [],
+            privacyPolicyAttachments: [],
+            termsAndConditionsAttachments: [],
+            userGuidelinesAttachments: [],
+            cookiesPolicyEntries: [],
             legalNoticeEntries: [
               {
                 localeCode: 'en',
@@ -213,9 +274,8 @@ const MockedResponses = [
                 value: '<p>texte en français</p>'
               }
             ],
-            termsAndConditionsEntries: [],
-            cookiesPolicyEntries: [],
             privacyPolicyEntries: [],
+            termsAndConditionsEntries: [],
             userGuidelinesEntries: []
           }
         }
