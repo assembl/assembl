@@ -561,6 +561,11 @@
 
     .select-field__multi-value__remove {
       padding: 0 !important;
+
+      &:hover {
+        background: none;
+        color: $grey3;
+      }
     }
 
     .harvesting-box-footer {
