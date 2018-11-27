@@ -9,6 +9,8 @@ def create_ec2():
     ec2 = boto3.resource('ec2')
     with open(sys.argv[1]) as f:
         config = json.load(f)
+    with open(sys.argv[2], 'r') as f:
+        user_data = f.read()
     ec2.create_instances(
         ImageId=config["ec2"]["image_id"],
         InstanceType=config["ec2"]["instance_type"],
@@ -20,7 +22,8 @@ def create_ec2():
         },
         SecurityGroupIds=[
             config["ec2"]["security_group_ids"]
-        ]
+        ],
+        UserData=user_data
     )
 
 
@@ -59,8 +62,8 @@ def create_rds():
 
 def check_argv():
     # check number of args
-    if len(sys.argv) != 2:
-        print "Usage: %s <path_to_new_server_json>" % (__file__)
+    if len(sys.argv) != 3:
+        print "Usage: %s <path_to_new_server_json> <path_to_user_data_file>" % (__file__)
         sys.exit(1)
     # try to open the file given as first arg
     try:
@@ -68,11 +71,17 @@ def check_argv():
     except IOError:
         print "Could not open file %s" % (sys.argv[1])
         sys.exit(1)
+    # try to open the file given as second arg
+    try:
+        open(sys.argv[2], 'r')
+    except IOError:
+        print "Could not open file %s" % (sys.argv[2])
+        sys.exit(1)
 
 
 def new_server():
     check_argv()
-    # create_ec2()
+    create_ec2()
     create_rds()
 
 

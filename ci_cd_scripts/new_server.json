@@ -16,7 +16,7 @@
         "db_subnet_group_name": "default",
         "availability_zone": "eu-west-1a",
         "security_group_ids": "sg-0b6c0251567043d03",
-        "db_name": "rds_aut_test",
+        "db_name": "rds_auto_test",
         "port": 5432,
         "db_parameter_group_name": "default.postgres10",
         "option_group_name": "default:postgres-10"
