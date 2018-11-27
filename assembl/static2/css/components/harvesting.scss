@@ -480,7 +480,7 @@
 
         .assembl-icon-down-open {
           &:before {
-            transform: rotate(90deg) scaleX(2.5);
+            transform: rotate(-90deg) scaleX(2.5) scaleY(-1);
           }
         }
       }
