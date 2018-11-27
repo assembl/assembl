@@ -16,12 +16,18 @@ describe('createMutationsPromises function', () => {
       privacyPolicy: {},
       userGuidelines: {}
     };
-    const mutations = createMutationsPromises(client, 'en')(values);
+    const mutations = createMutationsPromises(client)(values);
     const updateLegalContentsResult = await mutations[0]();
     expect(updateLegalContentsResult).toEqual({
       data: {
         updateLegalContents: {
           legalContents: {
+            cookiesPolicyAttachments: [],
+            legalNoticeAttachments: [],
+            privacyPolicyAttachments: [],
+            termsAndConditionsAttachments: [],
+            userGuidelinesAttachments: [],
+            cookiesPolicyEntries: [],
             legalNoticeEntries: [
               {
                 localeCode: 'en',
@@ -32,9 +38,8 @@ describe('createMutationsPromises function', () => {
                 value: '<p>texte en français</p>'
               }
             ],
-            termsAndConditionsEntries: [],
-            cookiesPolicyEntries: [],
             privacyPolicyEntries: [],
+            termsAndConditionsEntries: [],
             userGuidelinesEntries: []
           }
         }

@@ -1,28 +1,28 @@
 #import "../fragments/Attachment.graphql"
 
 mutation UpdateLegalContents(
-  $legalNoticeAttachments: [String]
-  $termsAndConditionsAttachments: [String]
   $cookiesPolicyAttachments: [String]
+  $legalNoticeAttachments: [String]
   $privacyPolicyAttachments: [String]
+  $termsAndConditionsAttachments: [String]
   $userGuidelinesAttachments: [String]
-  $legalNoticeEntries: [LangStringEntryInput]!
-  $termsAndConditionsEntries: [LangStringEntryInput]!
   $cookiesPolicyEntries: [LangStringEntryInput]!
+  $legalNoticeEntries: [LangStringEntryInput]!
   $privacyPolicyEntries: [LangStringEntryInput]!
+  $termsAndConditionsEntries: [LangStringEntryInput]!
   $userGuidelinesEntries: [LangStringEntryInput]!
 ) {
   updateLegalContents(
-    legalNoticeEntries: $legalNoticeEntries
-    termsAndConditionsEntries: $termsAndConditionsEntries
-    cookiesPolicyEntries: $cookiesPolicyEntries
-    privacyPolicyEntries: $privacyPolicyEntries
-    userGuidelinesEntries: $userGuidelinesEntries
-    legalNoticeAttachments: $legalNoticeAttachments
-    termsAndConditionsAttachments: $termsAndConditionsAttachments
     cookiesPolicyAttachments: $cookiesPolicyAttachments
+    legalNoticeAttachments: $legalNoticeAttachments
     privacyPolicyAttachments: $privacyPolicyAttachments
+    termsAndConditionsAttachments: $termsAndConditionsAttachments
     userGuidelinesAttachments: $userGuidelinesAttachments
+    cookiesPolicyEntries: $cookiesPolicyEntries
+    legalNoticeEntries: $legalNoticeEntries
+    privacyPolicyEntries: $privacyPolicyEntries
+    termsAndConditionsEntries: $termsAndConditionsEntries
+    userGuidelinesEntries: $userGuidelinesEntries
   ) {
     legalContents {
       legalNoticeEntries {

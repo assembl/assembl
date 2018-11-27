@@ -11,6 +11,11 @@ import { createEditorStateFromText } from '../../../../helpers/draftjs';
 describe('createMutationsPromises function', () => {
   it('should create an array of mutation promises', async () => {
     const initialValues = {
+      pageTitle: {
+        en: 'Resources center',
+        fr: 'Centre de ressources'
+      },
+      pageHeader: null,
       resources: [
         {
           doc: null,
