@@ -36,6 +36,10 @@ type Params = {
   lang?: string
 };
 
+/*
+  we need this because if we try to run mutations in parallel
+  the database will encounter a conflict
+*/
 export const runSerial = (tasks: MutationsPromises) => {
   if (tasks.length > 0 && typeof tasks[0] !== 'function') {
     throw new Error('runSerial takes an array of functions with each function returning a Promise');
