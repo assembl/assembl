@@ -4,11 +4,8 @@ import { Link } from 'react-router';
 import { Translate } from 'react-redux-i18n';
 import { Grid } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { graphql, compose } from 'react-apollo';
 
 import { get } from '../../utils/routeMap';
-import manageErrorAndLoading from '../../components/common/manageErrorAndLoading';
-import TabsConditionQuery from '../../graphql/TabsConditionQuery.graphql';
 
 type Props = {
   assemblVersion: string,
@@ -129,10 +126,4 @@ const mapStateToProps = state => ({
   lang: state.i18n.locale
 });
 
-const withData = graphql(TabsConditionQuery, {
-  props: ({ data }) => ({
-    ...data
-  })
-});
-
-export default compose(connect(mapStateToProps), withData, manageErrorAndLoading({ displayLoader: false }))(Footer);
+export default connect(mapStateToProps)(Footer);
