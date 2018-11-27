@@ -528,12 +528,48 @@
     background-color: $grey1;
     padding: 15px 15px 10px 26px;
 
+    label {
+      font-weight: normal;
+    }
+
+    .select-field__control {
+      border-radius: 0;
+      min-height: 34px;
+    }
+
+    .select-field__placeholder {
+      color: $grey3;
+      font-size: $font-size-xs;
+    }
+
+    .select-field__dropdown-indicator {
+      color: $grey3;
+      padding: 0 8px;
+
+      svg {
+        width: 16px;
+      }
+    }
+
+    .select-field__multi-value {
+      border-radius: 0 !important;
+    }
+
+    .select-field__multi-value__label {
+      padding: 3px;
+    }
+
+    .select-field__multi-value__remove {
+      padding: 0 !important;
+    }
+
     .harvesting-box-footer {
       padding: 5px 0;
     }
 
     .harvesting-tags-titles-container {
-      margin-bottom: 10px;
+      margin-left: 6px;
+      display: inline;
     }
 
     .harvesting-tag-container {
@@ -543,9 +579,12 @@
       background-color: white;
       border-radius: 13px;
       padding: 2px 2px 2px 10px;
-      color: $grey8;
+      color: $grey3;
       margin-right: 5px;
       margin-bottom: 5px;
+      font-family: $font-family4;
+      font-size: $font-size-xs;
+      font-weight: bold;
 
       &.editing {
         width: 100%;
@@ -567,25 +606,18 @@
           padding-left: 2px;
         }
       }
-
-      .assembl-icon-cancel:hover {
-        background-color: $lightred;
-        border-radius: 12px;
-        color: $red;
-      }
     }
 
     .harvesting-tags-edit {
       display: inline-flex;
       border-radius: 16px;
-      padding: 0 3px 0;
+      padding: 0 0 0 3px;
       color: $first-color;
       border: solid 1px $first-color;
-      font-size: 14px;
-      font-weight: bold;
-      line-height: normal;
-      height: 17px;
-      width: 17px;
+      font-size: 13px;
+      line-height: 13px;
+      height: 15px;
+      width: 15px;
       cursor: pointer;
 
       &:hover {
@@ -607,11 +639,11 @@
     }
 
     .button-submit {
-      padding: 8px 16px;
+      padding: 8px 17px;
     }
 
     .button-cancel {
-      padding: 8px 16px;
+      padding: 8px 17px;
     }
   }
 
