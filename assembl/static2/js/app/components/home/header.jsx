@@ -27,8 +27,7 @@ class Header extends React.Component {
   }
 
   render() {
-    const { debateData } = this.props.debate;
-    const { timeline, data: { discussion: { title, subtitle, headerImage, logoImage, buttonLabel } } } = this.props;
+    const { timeline, data: { discussion: { title, subtitle, headerImage, logoImage, buttonLabel, startDate, endData } } } = this.props;
     return (
       <section className="home-section header-section">
         <Grid fluid className="max-container">
@@ -38,12 +37,12 @@ class Header extends React.Component {
               {title && <h1 className="light-title-1">{title}</h1>}
               <h4 className="light-title-4 uppercase margin-m">
                 {subtitle && <span dangerouslySetInnerHTML={{ __html: subtitle }} />}
-                {debateData.dates && (
+                {startDate && endDate && (
                   <div>
                     <Translate
                       value="home.from_start_to_end"
-                      start={I18n.l(debateData.dates.startDate, { dateFormat: 'date.format' })}
-                      end={I18n.l(debateData.dates.endDate, { dateFormat: 'date.format' })}
+                      start={I18n.l(startDate, { dateFormat: 'date.format' })}
+                      end={I18n.l(endDate, { dateFormat: 'date.format' })}
                     />
                   </div>
                 )}
@@ -77,11 +76,11 @@ class Header extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  debate: state.debate,
   lang: state.i18n.locale,
   timeline: state.timeline
 });
 
-export default compose(connect(mapStateToProps), graphql(DiscussionQuery), manageErrorAndLoading({ displayLoader: false }))(
-  Header
-);
+export default compose(
+  connect(mapStateToProps),
+  graphql(DiscussionQuery),
+  manageErrorAndLoading({ displayLoader: false }))(Header);

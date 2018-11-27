@@ -3,7 +3,7 @@ import moment from 'moment';
 import type { ApolloClient } from 'react-apollo';
 
 import DiscussionQuery from '../../../../graphql/DiscussionQuery.graphql';
-import { convertEntriesToI18nValue, convertEntriesToI18nRichText } from '../../../form/utils';
+import { convertEntriesToI18nValue, convertEntriesToI18nRichText, convertISO8601StringToDateTime } from '../../../form/utils';
 
 export const load = async (client: ApolloClient, lang: String, fetchPolicy: FetchPolicy = 'cache-first') => {
   const { data } = await client.query({
@@ -25,11 +25,7 @@ export function postLoadFormat(data: Data): ResourcesValues {
     headerButtonLabel: convertEntriesToI18nValue(data.discussion.buttonLabelEntries),
     headerImage: data.discussion.headerImage,
     headerLogoImage: data.discussion.logoImage,
-    headerStartDate: {
-      time: moment(data.discussion.startDate) || null 
-    },
-    headerEndDate: {
-      time: moment(data.discussion.endDate) || null
-    }
+    headerStartDate: convertISO8601StringToDateTime(data.discussion.startDate),
+    headerEndDate: convertISO8601StringToDateTime(data.discussion.endDate)
   };
 }

@@ -83,8 +83,7 @@ export const DumbCustomizeHeader = ({ client, editLocale, lang }: Props) => (
               <Field
                 name="headerStartDate"
                 component={DatePickerFieldAdapter}
-                pickerType={I18n.t('administration.landingPage.header.startDate')}
-                pickerName="start-date"
+                picker={{pickerType: I18n.t('administration.landingPage.header.startDate')}}
                 editLocale={editLocale}
                 placeHolder={I18n.t('administration.landingPage.header.timePlaceholder')}
                 showTime={false}
@@ -92,8 +91,7 @@ export const DumbCustomizeHeader = ({ client, editLocale, lang }: Props) => (
               <Field
                 name="headerEndDate"
                 component={DatePickerFieldAdapter}
-                pickerType={I18n.t('administration.landingPage.header.startDate')}
-                pickerName="end-date"
+                picker={{pickerType: I18n.t('administration.landingPage.header.endDate')}}
                 editLocale={editLocale}
                 placeHolder={I18n.t('administration.landingPage.header.timePlaceholder')}
                 showTime={false}
