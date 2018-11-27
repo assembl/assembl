@@ -1,7 +1,7 @@
 import React from 'react';
 import { I18n, Translate } from 'react-redux-i18n';
 import { Link } from 'react-router';
-import { Button } from 'react-bootstrap';
+import { Button, FormGroup, Checkbox } from 'react-bootstrap';
 import { getFullPath, get, getContextual } from '../utils/routeMap';
 import { getConnectedUserId, getDiscussionSlug } from '../utils/globalFunctions';
 import SocialShare from '../components/common/socialShare';
@@ -147,14 +147,27 @@ const getLegalContentsLinksList = (legalContentsList) => {
   const slug = getDiscussionSlug();
   return legalContentsList.map((legalContentType, index) => {
     const translationKey = legalContentType === 'terms' ? 'termsAndConditions' : legalContentType;
-    return (
+    const length = legalContentsList.length;
+    const isAlone = length === 1;
+    const isLast = index + 1 === length;
+    const isForelast = !isAlone && length > 2 && index + 2 >= length;
+    const isLastOfTwo = length === 2 && index + 2 === length;
+    let endOfBlock = ', ';
+    if (isForelast || isLastOfTwo) {
+      endOfBlock = '';
+    } else if (isLast) {
+      endOfBlock = <Translate value="legalContentsModal.ofThePlatform" />;
+    }
+
+    return legalContentType ? (
       <React.Fragment key={legalContentType}>
+        {isForelast || isLastOfTwo ? 'et ' : null}
         <Link to={get(`${legalContentType}`, { slug: slug })} target="_blank">
           <Translate value={`${translationKey}.link`} />
         </Link>
-        {index + 1 < legalContentsList.length ? ', ' : <Translate value="legalContentsModal.ofThePlatform" />}
+        {endOfBlock}
       </React.Fragment>
-    );
+    ) : null;
   });
 };
 
@@ -163,15 +176,17 @@ const getLegalContentsLinksList = (legalContentsList) => {
 // }
 
 /* if user is connected by SSO, ask to accept legal contents the first time he logs in Assembl */
-export const legalConfirmModal = () => {
+export const legalConfirmModal = (legalContentsToAccept) => {
   const slug = getDiscussionSlug();
   const modalTitle = <Translate value="legalContentsModal.title" />;
   const body = (
-    <p className="justify">
-      <Translate value="legalContentsModal.iAccept" />
-      {getLegalContentsLinksList(['userGuidelines', 'privacyPolicy', 'terms'])}
-      <Translate value="legalContentsModal.iCanModify" />
-    </p>
+    <FormGroup className="justify">
+      <Checkbox type="checkbox" inline>
+        <Translate value="legalContentsModal.iAccept" />
+        {getLegalContentsLinksList(legalContentsToAccept)}
+        <Translate value="legalContentsModal.iCanModify" />
+      </Checkbox>
+    </FormGroup>
   );
   const footer = [
     <Button
