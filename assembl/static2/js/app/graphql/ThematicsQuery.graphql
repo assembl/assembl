@@ -5,10 +5,10 @@ query ThematicsQuery($discussionPhaseId: Int!) {
   thematics: ideas(discussionPhaseId: $discussionPhaseId) {
     ... on IdeaInterface {
       ...ideaData
+      parentId
     }
     ... on Idea {
       id
-      parentId
       descriptionEntries {
         ...langStringEntry
       }
