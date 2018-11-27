@@ -6,6 +6,7 @@ from sqlalchemy import (
     Integer,
     UnicodeText,
     ForeignKey,
+    UniqueConstraint,
     func)
 
 from . import DiscussionBoundBase, Base, DeclarativeAbstractMeta
@@ -56,7 +57,7 @@ class TaggableEntity(Base):
 class Keyword(DiscussionBoundBase):
     __tablename__ = "keyword"
     id = Column(Integer, primary_key=True)
-    value = Column(UnicodeText, unique=True)
+    value = Column(UnicodeText)
     discussion_id = Column(Integer, ForeignKey(
         'discussion.id',
         ondelete='CASCADE',
@@ -64,6 +65,7 @@ class Keyword(DiscussionBoundBase):
         ),
         nullable=False, index=True)
     discussion = relationship("Discussion")
+    __table_args__ = (UniqueConstraint('value', 'discussion_id', name='unq_value_discussion'), )
     __mapper_args__ = {
         'polymorphic_identity': 'keyword',
         'with_polymorphic': '*'
