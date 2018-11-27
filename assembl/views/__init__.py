@@ -154,7 +154,7 @@ def get_resources_hash(theme_name):
 
     resources_path = os.path.join(
         os.path.dirname(os.path.dirname(__file__)),
-        'static2', 'build', 'index.html')
+        'static2', 'build', 'resources.html')
     result = {
         'bundle_hash': None,
         'bundle_css_hash': None,

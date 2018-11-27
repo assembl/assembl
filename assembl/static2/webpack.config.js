@@ -129,6 +129,6 @@ module.exports = {
     },
     plugins: [
         new MiniCssExtractPlugin({ filename: "[name].[contenthash].css" }),
-        new HtmlWebpackPlugin({ title: 'Caching' }),
+        new HtmlWebpackPlugin({ title: 'Caching', filename: 'resources.html'}),
     ]
 };
