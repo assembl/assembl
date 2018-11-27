@@ -18,6 +18,7 @@ from assembl.auth import IF_OWNED, CrudPermissions
 from assembl.auth.util import get_permissions
 from assembl.models.action import SentimentOfPost
 from assembl.models import Phases
+from assembl.models.idea import MessageView
 
 from .attachment import Attachment
 from .document import Document
@@ -633,7 +634,8 @@ def create_idea(parent_idea, phase, args, context):
     MEDIA_ATTACHMENT = models.AttachmentPurpose.MEDIA_ATTACHMENT.value
     cls = models.Idea
     phase_identifier = phase.identifier
-    if phase_identifier == Phases.survey.value:
+    message_view_override = args.get('message_view_override')
+    if phase_identifier == Phases.survey.value or message_view_override == MessageView.survey.value:
         cls = models.Thematic
 
     discussion_id = context.matchdict['discussion_id']
@@ -662,7 +664,7 @@ def create_idea(parent_idea, phase, args, context):
         if description_langstring is not None:
             kwargs['description'] = description_langstring
 
-        kwargs['message_view_override'] = args.get('message_view_override')
+        kwargs['message_view_override'] = message_view_override
 
         video = args.get('video')
         video_media = None

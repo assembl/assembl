@@ -1246,3 +1246,114 @@ def test_mutation_update_ideas_delete(test_session, graphql_request, graphql_reg
 
     # cleanup
     test_session.rollback()
+
+
+def test_mutation_update_ideas_child_survey(test_session, graphql_request, graphql_registry, phases):
+    test_session.commit()
+    import os
+    from io import BytesIO
+
+    class FieldStorage(object):
+        file = BytesIO(os.urandom(16))
+        filename = u'path/to/img.png'
+        type = 'image/png'
+
+    graphql_request.POST['variables.ideas.0.image'] = FieldStorage()
+    graphql_request.POST['variables.ideas.0.children.0.image'] = FieldStorage()
+
+    res = schema.execute(
+        graphql_registry['updateIdeas'],
+        context_value=graphql_request,
+        variable_values={
+            'discussionPhaseId': phases['brightMirror'].id,
+            'ideas': [{
+                'messageViewOverride': 'brightMirror',
+                'titleEntries': [
+                    {'value': u"Comprendre les dynamiques et les enjeux", 'localeCode': u"fr"},
+                    {'value': u"Understanding the dynamics and issues", 'localeCode': u"en"}
+                ],
+                'descriptionEntries': [
+                    {'value': u"Desc FR", 'localeCode': u"fr"},
+                    {'value': u"Desc EN", 'localeCode': u"en"}
+                ],
+                'image': u'variables.ideas.0.image',  # this is added via graphql_wsgi but we need to do it ourself here
+                'announcement': {
+                    'titleEntries': [
+                        {'value': u"Title FR announce", 'localeCode': u"fr"},
+                        {'value': u"Title EN announce", 'localeCode': u"en"}
+                    ],
+                    'bodyEntries': [
+                        {'value': u"Body FR announce", 'localeCode': u"fr"},
+                        {'value': u"Body EN announce", 'localeCode': u"en"}
+                    ],
+                },
+                'children': [{
+                    'messageViewOverride': 'survey',
+                    'titleEntries': [
+                        {'value': u"[survey] Comprendre les dynamiques et les enjeux", 'localeCode': u"fr"},
+                        {'value': u"[survey] Understanding the dynamics and issues", 'localeCode': u"en"}
+                    ],
+                    'descriptionEntries': [
+                        {'value': u"[survey] Desc FR", 'localeCode': u"fr"},
+                        {'value': u"[survey] Desc EN", 'localeCode': u"en"}
+                    ],
+                    'image': u'variables.ideas.0.children.0.image',  # this is added via graphql_wsgi but we need to do it ourself here
+                    'questions': [
+                        {'titleEntries': [
+                            {'value': u"Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?", 'localeCode': "fr"}
+                        ]},
+                        {'titleEntries': [
+                            {'value': u"Seconde question ?", 'localeCode': "fr"}
+                        ]},
+                        {'titleEntries': [
+                            {'value': u"Troisième question ?", 'localeCode': "fr"}
+                        ]},
+                    ],
+                }]
+            }]
+        })
+
+    assert res.errors is None
+    ideas = res.data['updateIdeas']['rootIdea']['children']
+    assert len(ideas) == 1
+    idea = ideas[0]
+    assert idea['announcement'] == {
+        u'title': u'Title EN announce',
+        u'body': u'Body EN announce'
+    }
+    assert idea['title'] == u'Understanding the dynamics and issues'
+    assert idea['description'] == u'Desc EN'
+    assert idea['img'] is not None
+    assert 'externalUrl' in idea['img']
+    assert idea['messageViewOverride'] == u'brightMirror'
+    assert idea['order'] == 1.0
+
+    res = schema.execute(
+        graphql_registry['ThematicsQuery'],
+        context_value=graphql_request,
+        variable_values={
+            'discussionPhaseId': phases['brightMirror'].id,
+        })
+
+    assert len(res.data['thematics']) == 2
+    bright = res.data['thematics'][0]
+    survey = res.data['thematics'][1]
+    assert bright['id'] == survey['parentId']
+    assert survey['titleEntries'] == [
+        {u'value': u"[survey] Understanding the dynamics and issues",
+         u'localeCode': u"en"},
+        {u'value': u"[survey] Comprendre les dynamiques et les enjeux",
+         u'localeCode': u"fr"}
+    ]
+    assert survey['questions'][0]['titleEntries'] == [
+        {u'value': u"Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?", u'localeCode': u"fr"}
+    ]
+    assert survey['questions'][1]['titleEntries'] == [
+        {u'value': u"Seconde question ?", u'localeCode': u"fr"}
+    ]
+    assert survey['questions'][2]['titleEntries'] == [
+        {u'value': u"Troisième question ?", u'localeCode': u"fr"}
+    ]
+
+    # cleanup
+    test_session.rollback()
