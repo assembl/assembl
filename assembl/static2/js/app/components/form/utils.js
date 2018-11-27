@@ -1,10 +1,11 @@
 // @flow
 import { EditorState } from 'draft-js';
 import type { ApolloClient } from 'react-apollo';
+import moment from 'moment';
 import { I18n } from 'react-redux-i18n';
 import flatMap from 'lodash/flatMap';
 
-import type { I18nValue, FileValue, FileVariable, MutationsPromises, I18nRichTextValue, SaveStatus } from './types.flow';
+import type { I18nValue, FileValue, FileVariable, MutationsPromises, I18nRichTextValue, SaveStatus, DatePickerInput, DatePickerOutput, DateTime } from './types.flow';
 import { convertEditorStateToHTML, convertEntriesToEditorState, uploadNewAttachments } from '../../utils/draftjs';
 import { displayAlert } from '../../utils/utilityManager';
 import { runSerial } from '../administration/saveButton';
@@ -47,11 +48,21 @@ export function convertEntriesToI18nValue<T>(
 
 export function convertEntriesToI18nRichText(entries: RichTextLangstringEntries): I18nRichTextValue {
   return convertEntriesToI18nValue(convertEntriesToEditorState(entries));
-}
+};
+
+export function convertISO8601StringToDateTime(_entry: String): DatePickerInput {
+  if (_entry) return { time: moment(_entry, moment.ISO_8601).utc() }
+  else return { time: null }
+};
+
+export function convertDateTimeToISO8601String(_entry: DateTime) : DatePickerOutput {
+  if (_entry) return _entry.time.utc();
+  else return null;
+};
 
 export function getValidationState(error: ?string, touched: ?boolean): ?string {
   return touched && error ? 'error' : null;
-}
+};
 
 export const createSave = (successMsgId: string) => async (mutationsPromises: MutationsPromises): Promise<SaveStatus> => {
   let status = 'PENDING';

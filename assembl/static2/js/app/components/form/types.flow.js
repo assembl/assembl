@@ -13,3 +13,11 @@ export type FileVariable = null | 'TO_DELETE' | File;
 export type MutationsPromises = Array<() => Promise<*>>;
 
 export type SaveStatus = 'OK' | 'KO' | 'PENDING';
+
+export type DateTime = Date;
+
+export type DatePickerInput = {
+  time: DateTime | null
+};
+
+export type DatePickerOutput = DateTime | null;
