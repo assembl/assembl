@@ -6,7 +6,9 @@ import { getCurrentPhaseData, getPhaseId } from './utils/timeline';
 import Navbar from './components/navbar/navbar';
 import Footer from './components/common/footer';
 import CookiesBar from './components/cookiesBar';
-import { fromGlobalId } from './utils/globalFunctions';
+import { fromGlobalId, getRouteLastString } from './utils/globalFunctions';
+import { legalConfirmModal } from './utils/utilityManager';
+import { legalContentSlugs } from './constants';
 
 type Props = {
   timeline: Timeline,
@@ -16,8 +18,16 @@ type Props = {
 };
 
 class Main extends React.Component<Props> {
+  componentDidUpdate() {
+    const lastRouteString = getRouteLastString(this.props.location.pathname);
+    const isOnLegalContentPage = legalContentSlugs.includes(lastRouteString);
+    if (!isOnLegalContentPage) {
+      legalConfirmModal();
+    }
+  }
+
   render() {
-    const { params, timeline } = this.props;
+    const { params, timeline, location } = this.props;
     const { themeId } = params;
     const { currentPhaseIdentifier, currentPhaseId } = getCurrentPhaseData(timeline);
     let identifier = params.phase || null;
@@ -37,7 +47,7 @@ class Main extends React.Component<Props> {
     );
     return (
       <div className="main">
-        <Navbar location={this.props.location.pathname} themeId={themeId} />
+        <Navbar location={location.pathname} themeId={themeId} />
         <div className="app-content">{children}</div>
         <CookiesBar />
         <Footer />

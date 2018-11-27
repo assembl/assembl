@@ -564,8 +564,8 @@ const Translations = {
     },
     termsAndConditions: {
       headerTitle: "Conditions générales d'utilisation",
-      iAccept: "J'ai lu et j'accepte les ",
-      link: "conditions générales d'utilisation",
+      iAccept: "J'ai lu et j'accepte ",
+      link: "les conditions générales d'utilisation",
       accept: "J'accepte"
     },
     legalNotice: {
@@ -582,13 +582,19 @@ const Translations = {
     },
     privacyPolicy: {
       headerTitle: "Politique de protection des données personnelles",
-      iAccept: "J'ai lu et j'accepte la ",
-      link: "politique de protection des données personnelles"
+      iAccept: "J'ai lu et j'accepte ",
+      link: "la politique de protection des données personnelles"
     },
     userGuidelines: {
       headerTitle: "Charte de participation",
-      iAccept: "J'ai lu et j'accepte la ",
-      link: "charte de participation"
+      iAccept: "J'ai lu et j'accepte ",
+      link: "la charte de participation"
+    },
+    legalContentsModal: {
+      title: "Accepter les contenus juridiques",
+      iAccept: "Je confirme avoir lu et accepté ",
+      ofThePlatform: " de la plateforme. ",
+      iCanModify: "Je peux modifier à tout moment mes paramètres depuis mon espace personnel."
     },
     administration: {
       confirmTextFieldDeletionTitle: "Supprimer le champ",
@@ -1523,7 +1529,7 @@ const Translations = {
     },
     termsAndConditions: {
       headerTitle: "Terms & Conditions",
-      link: "Terms & Conditions",
+      link: "the Terms & Conditions",
       iAccept: "I have read and I accept the ",
       accept: "I accept"
     },
@@ -1542,12 +1548,18 @@ const Translations = {
     privacyPolicy: {
       headerTitle: "Privacy policy",
       iAccept: "I have read and I accept the ",
-      link: "Privacy Policy"
+      link: "the Privacy Policy"
     },
     userGuidelines: {
       headerTitle: "User guidelines",
       iAccept: "I have read and I accept the ",
-      link: "user guidelines"
+      link: "the user guidelines"
+    },
+    legalContentsModal: {
+      title: "Accept the legal contents",
+      iAccept: "I have read and accepted ",
+      ofThePlatform: " of the platform.",
+      iCanModify: " I can modify my settings anytime from my account personal page."
     },
     administration: {
       confirmTextFieldDeletionTitle: "Delete the field",

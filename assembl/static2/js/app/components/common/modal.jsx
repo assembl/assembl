@@ -74,7 +74,7 @@ class AssemblModal extends React.Component<Props, State> {
     }
 
     return (
-      <Modal bsSize={bsSize || null} show={this.state.showModal} onHide={this.close}>
+      <Modal bsSize={bsSize || null} show={this.state.showModal} backdrop="static" onHide={this.close}>
         <Modal.Header closeButton>{title && <Modal.Title>{title}</Modal.Title>}</Modal.Header>
         {body && (
           <Modal.Body>

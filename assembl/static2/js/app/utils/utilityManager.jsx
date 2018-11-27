@@ -1,8 +1,9 @@
 import React from 'react';
 import { I18n, Translate } from 'react-redux-i18n';
 import { Link } from 'react-router';
-import { getFullPath } from '../utils/routeMap';
-import { getConnectedUserId } from '../utils/globalFunctions';
+import { Button } from 'react-bootstrap';
+import { getFullPath, get, getContextual } from '../utils/routeMap';
+import { getConnectedUserId, getDiscussionSlug } from '../utils/globalFunctions';
 import SocialShare from '../components/common/socialShare';
 import LoginButton from '../components/common/loginButton';
 
@@ -128,6 +129,53 @@ export const inviteUserToLogin = () => {
     </div>
   );
   displayModal(null, body, true, null, null, true);
+};
+
+const getLegalContentsLinksList = (legalContentsList) => {
+  const slug = getDiscussionSlug();
+  return legalContentsList.map((legalContentType, index) => {
+    const translationKey = legalContentType === 'terms' ? 'termsAndConditions' : legalContentType;
+    return (
+      <React.Fragment key={legalContentType}>
+        <Link to={get(`${legalContentType}`, { slug: slug })} target="_blank">
+          <Translate value={`${translationKey}.link`} />
+        </Link>
+        {index + 1 < legalContentsList.length ? ', ' : <Translate value="legalContentsModal.ofThePlatform" />}
+      </React.Fragment>
+    );
+  });
+};
+
+// export const goToSignUpPage = () => {
+
+// }
+
+/* if user is connected by SSO, ask to accept legal contents the first time he logs in Assembl */
+export const legalConfirmModal = () => {
+  const slug = getDiscussionSlug();
+  const modalTitle = <Translate value="legalContentsModal.title" />;
+  const body = (
+    <p className="justify">
+      <Translate value="legalContentsModal.iAccept" />
+      {getLegalContentsLinksList(['userGuidelines', 'privacyPolicy', 'terms'])}
+      <Translate value="legalContentsModal.iCanModify" />
+    </p>
+  );
+  const footer = [
+    <Button
+      key="cancel"
+      onClick={closeModal}
+      className="button-cancel button-dark"
+      href={`${getContextual('oldLogout', { slug: slug })}?next=${get('home', { slug: slug })}`}
+    >
+      <Translate value="refuse" />
+    </Button>,
+    <Button key="delete" className="button-submit button-dark">
+      <Translate value="accept" />
+    </Button>
+  ];
+  const includeFooter = true;
+  displayModal(modalTitle, body, includeFooter, footer);
 };
 
 /* if user is not connected, ask for login, else, execute given action */
