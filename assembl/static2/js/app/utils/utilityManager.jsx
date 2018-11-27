@@ -54,7 +54,17 @@ export const displayAlert = (style, msg, topPosition = false, time = 4000) => {
   }
 };
 
-export const displayModal = (title, body, footer, footerTxt, button = null, showModal = true, bsSize = null) => {
+export const displayModal = (
+  title,
+  body,
+  footer,
+  footerTxt,
+  button = null,
+  showModal = true,
+  bsSize = null,
+  withClosingCross = true,
+  backdrop = true
+) => {
   /*
     title:String => the text in the header of the modal
     body:String => the text in the body of the modal
@@ -74,7 +84,9 @@ export const displayModal = (title, body, footer, footerTxt, button = null, show
     button: button,
     showModal: showModal,
     bsSize: bsSize,
-    content: undefined
+    content: undefined,
+    withClosingCross: withClosingCross,
+    backdrop: backdrop
   });
 };
 
@@ -170,14 +182,19 @@ export const legalConfirmModal = () => {
     >
       <Translate value="refuse" />
     </Button>,
-    <Button key="delete" className="button-submit button-dark">
+    <Button key="accept" className="button-submit button-dark">
       <Translate value="accept" />
     </Button>
   ];
   const includeFooter = true;
-  displayModal(modalTitle, body, includeFooter, footer);
-};
+  const button = null;
+  const bsSize = null;
+  const showModal = true;
+  const withClosingCross = false;
+  const backdrop = 'static';
 
+  displayModal(modalTitle, body, includeFooter, footer, button, showModal, bsSize, withClosingCross, backdrop);
+};
 /* if user is not connected, ask for login, else, execute given action */
 export const promptForLoginOr = action => () => {
   const isUserConnected = getConnectedUserId(); // TO DO put isUserConnected in the store

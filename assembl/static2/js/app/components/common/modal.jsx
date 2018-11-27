@@ -22,7 +22,9 @@ type State = {
   footerTxt: ?string,
   button: ?ButtonProps,
   bsSize: ?string,
-  modalClass: ?string
+  modalClass: ?string,
+  withClosingCross: boolean,
+  backdrop: boolean | string
 };
 
 class AssemblModal extends React.Component<Props, State> {
@@ -35,7 +37,9 @@ class AssemblModal extends React.Component<Props, State> {
     footerTxt: null,
     button: null,
     bsSize: null,
-    modalClass: null
+    modalClass: null,
+    withClosingCross: true,
+    backdrop: true
   };
 
   componentWillReceiveProps(nextProps: Props) {
@@ -64,7 +68,7 @@ class AssemblModal extends React.Component<Props, State> {
   };
 
   render() {
-    const { content, title, body, footer, footerTxt, button, bsSize, modalClass } = this.state;
+    const { content, title, body, footer, footerTxt, button, bsSize, modalClass, withClosingCross, backdrop } = this.state;
     if (content) {
       return (
         <Modal show={this.state.showModal} onHide={this.close} className={modalClass}>
@@ -74,8 +78,8 @@ class AssemblModal extends React.Component<Props, State> {
     }
 
     return (
-      <Modal bsSize={bsSize || null} show={this.state.showModal} backdrop="static" onHide={this.close}>
-        <Modal.Header closeButton>{title && <Modal.Title>{title}</Modal.Title>}</Modal.Header>
+      <Modal bsSize={bsSize || null} show={this.state.showModal} backdrop={backdrop} onHide={this.close}>
+        <Modal.Header closeButton={withClosingCross}>{title && <Modal.Title>{title}</Modal.Title>}</Modal.Header>
         {body && (
           <Modal.Body>
             <div>{body}</div>
