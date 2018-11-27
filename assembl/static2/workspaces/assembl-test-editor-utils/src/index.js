@@ -18,8 +18,12 @@ export default {
     return this.createEntity(ENTITY_TYPES.document, ENTITY_MUTABILITY.immutable, data);
   },
 
-  createEditorStateWithTwoAttachments: function (imgSrc: string | File = 'my-img.png', fileSrc: string | File = 'my-file.pdf') {
-    let contentState = ContentState.createFromText('');
+  createEditorStateWithTwoAttachments: function (
+    imgSrc: string | File = 'my-img.png',
+    fileSrc: string | File = 'my-file.pdf',
+    text: string = ''
+  ) {
+    let contentState = ContentState.createFromText(text);
     contentState = contentState.createEntity(ENTITY_TYPES.image, ENTITY_MUTABILITY.immutable, {
       id: 'my-img-id',
       mimeType: 'image/png',
@@ -29,6 +33,7 @@ export default {
     const imgEntityKey = contentState.getLastCreatedEntityKey();
     // $FlowFixMe DraftEntityType is too restrictive in DraftJS (see https://github.com/facebook/draft-js/issues/868 )
     contentState = contentState.createEntity(ENTITY_TYPES.document, ENTITY_MUTABILITY.immutable, {
+      id: 'my-doc-id',
       mimeType: 'application/pdf',
       src: fileSrc,
       title: 'My document'
