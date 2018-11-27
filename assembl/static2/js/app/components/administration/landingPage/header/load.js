@@ -1,5 +1,4 @@
 // @flow
-import moment from 'moment';
 import type { ApolloClient } from 'react-apollo';
 
 import DiscussionQuery from '../../../../graphql/DiscussionQuery.graphql';

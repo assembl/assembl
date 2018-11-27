@@ -27,7 +27,8 @@ class Header extends React.Component {
   }
 
   render() {
-    const { timeline, data: { discussion: { title, subtitle, headerImage, logoImage, buttonLabel, startDate, endData } } } = this.props;
+    const { timeline, data: { discussion: {
+      title, subtitle, headerImage, logoImage, buttonLabel, startDate, endDate } } } = this.props;
     return (
       <section className="home-section header-section">
         <Grid fluid className="max-container">

@@ -1,11 +1,14 @@
 #import "../fragments/LangString.graphql"
 
 mutation UpdateDiscussion(
-  $titleEntries: [LangStringEntryInput!]!
-  $subtitleEntries: [LangStringEntryInput!]!
-  $buttonLabelEntries: [LangStringEntryInput!]!
+  $titleEntries: [LangStringEntryInput!]
+  $subtitleEntries: [LangStringEntryInput!]
+  $buttonLabelEntries: [LangStringEntryInput!]
   $headerImage: String
   $logoImage: String
+  $startDate: DateTime
+  $endDate: DateTime
+
 ) {
   updateDiscussion(
     titleEntries: $titleEntries
@@ -13,6 +16,8 @@ mutation UpdateDiscussion(
     buttonLabelEntries: $buttonLabelEntries
     headerImage: $headerImage
     logoImage: $logoImage
+    startDate: $startDate
+    endDate: $endDate
   ) {
     discussion {
       titleEntries {
@@ -32,6 +37,8 @@ mutation UpdateDiscussion(
         externalUrl
         mimeType
       }
+      startDate
+      endDate
     }
   }
 }

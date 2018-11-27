@@ -2,7 +2,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { type ApolloClient, compose, withApollo } from 'react-apollo';
-import arrayMutators from 'final-form-arrays';
 import { I18n } from 'react-redux-i18n';
 import { Field } from 'react-final-form';
 import SectionTitle from '../../administration/sectionTitle';
@@ -35,9 +34,6 @@ export const DumbCustomizeHeader = ({ client, editLocale, lang }: Props) => (
       createMutationsPromises={createMutationsPromises(client)}
       save={save}
       // validate
-      mutators={{
-        ...arrayMutators
-      }}
       render={({ handleSubmit, pristine, submitting }) => (
         <div className="admin-content">
           <AdminForm handleSubmit={handleSubmit} pristine={pristine} submitting={submitting}>
@@ -83,7 +79,7 @@ export const DumbCustomizeHeader = ({ client, editLocale, lang }: Props) => (
               <Field
                 name="headerStartDate"
                 component={DatePickerFieldAdapter}
-                picker={{pickerType: I18n.t('administration.landingPage.header.startDate')}}
+                picker={{ pickerType: I18n.t('administration.landingPage.header.startDate') }}
                 editLocale={editLocale}
                 placeHolder={I18n.t('administration.landingPage.header.timePlaceholder')}
                 showTime={false}
@@ -91,7 +87,7 @@ export const DumbCustomizeHeader = ({ client, editLocale, lang }: Props) => (
               <Field
                 name="headerEndDate"
                 component={DatePickerFieldAdapter}
-                picker={{pickerType: I18n.t('administration.landingPage.header.endDate')}}
+                picker={{ pickerType: I18n.t('administration.landingPage.header.endDate') }}
                 editLocale={editLocale}
                 placeHolder={I18n.t('administration.landingPage.header.timePlaceholder')}
                 showTime={false}
