@@ -369,15 +369,16 @@ def extract_voters(request):
         if P_ADMIN_DISC not in permissions:
             raise HTTPUnauthorized()
     user_prefs = LanguagePreferenceCollection.getCurrent()
-    fieldnames = ["Nom du contributeur", "Adresse mail du contributeur", "Date/heure du vote", "Proposition"]
+    fieldnames = ["Nom du contributeur", "Nom d'utilisateur du contributeur", "Adresse mail du contributeur", "Date/heure du vote", "Proposition"]
     votes = widget.db.query(AbstractIdeaVote
         ).filter(AbstractVoteSpecification.widget_id==widget.id
-        ).filter(AbstractIdeaVote.tombstone_date == None
+        ).filter(AbstractIdeaVote.tombstone_date==None
         ).order_by(AbstractIdeaVote.vote_spec_id.desc()
         ).all()
     for count, vote in enumerate(votes):
         voter = vote.voter
-        contributor = voter.display_name() or u""
+        contributor = voter.real_name() or u""
+        contributor_username = voter.username_p or u""
         contributor_mail = voter.get_preferred_email() or u""
         vote_date = vote.vote_date or u""
         proposition = Idea.get(vote.idea_id).title.best_lang(user_prefs).value or u""
@@ -388,6 +389,7 @@ def extract_voters(request):
 
         extract_info = {
             "Nom du contributeur": contributor.encode('utf-8'),
+            "Nom d'utilisateur du contributeur": contributor_username.encode('utf-8'),
             "Adresse mail du contributeur": contributor_mail.encode('utf-8'),
             "Date/heure du vote": str(vote_date),
             "Proposition": proposition.encode('utf-8'),
@@ -395,8 +397,9 @@ def extract_voters(request):
 
         if vote.type == u'token_idea_vote':
             token_category = vote.token_category.name.best_lang(user_prefs).value or u""
-            if token_category not in fieldnames:
-                fieldnames.append(token_category.encode('utf-8'))
+            token_category_encoded = token_category.encode('utf-8')
+            if token_category_encoded not in fieldnames:
+                fieldnames.append(token_category_encoded)
             extract_info.update({token_category: str(vote_value)})
             extract_votes.append(extract_info)
 

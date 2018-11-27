@@ -2645,10 +2645,10 @@ def test_get_parent_post_creator(
 
     assert first_post['subject'] == 'Published by participant'
     assert first_post['creator']['displayName'] == 'A. Barking Loon'
-    assert first_post['parentPostCreator']['displayName'] == 'Mr. Administrator'
+    assert first_post['parentPostCreator']['displayName'] == 'mr_admin_user'
 
     assert second_post['subject'] == 'Published'
-    assert second_post['creator']['displayName'] == 'Mr. Administrator'
+    assert second_post['creator']['displayName'] == 'mr_admin_user'
     assert second_post['parentPostCreator'] == None
 
 

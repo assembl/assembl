@@ -984,11 +984,14 @@ def test_add_timeline_event(test_app, discussion):
     assert phase1_data['next_event'] == phase2_data['@id']
     assert phase1_data['@type'] == 'DiscussionPhase'
 
+
 class AbstractExport(object):
     # HEADER = {}
 
-    def _get(self, app, discussion_id, lang=None, view_name=None):
+    def _get(self, app, discussion_id, widget_id=0, lang=None, view_name=None, votes_export=False):
         base_req = '/data/Discussion/%d/%s' % (discussion_id, view_name)
+        if votes_export:
+            base_req = '/data/Discussion/%d/widgets/%d/%s' % (discussion_id, widget_id, view_name)
         req = base_req
         if lang:
             req = base_req + '?lang=%s' % lang
@@ -1001,7 +1004,18 @@ class AbstractExport(object):
         csv_file.seek(0)
         assert resp.status_code == 200
         result = csv.reader(csv_file, dialect='excel', delimiter=';')
-        return list(result)
+        result_as_list = list(result)
+        try:
+            header = result_as_list[0]
+            first_elem = header[0]
+            bom = u'\ufeff'.encode('utf-8')
+            if first_elem.startswith(bom):
+                result_as_list[0][0] = first_elem.replace(bom, '')
+            return result_as_list
+        except:
+            print "There was no BOM from excel"
+            return result_as_list
+
 
 class TestTaxonomyExport(AbstractExport):
 
@@ -1014,15 +1028,17 @@ class TestTaxonomyExport(AbstractExport):
     ORIGINAL_LOCALE = 5
     QUALIFY_BY_NATURE = 6
     QUALIFY_BY_ACTION = 7
-    OWNER_OF_THE_MESSAGE = 8
-    PUBLISHED_ON = 9
-    HARVESTER = 10
-    HARVESTED_ON = 11
-    NUGGET = 12
-    STATE = 13
-    TAGS = 14
+    MESSAGE_OWNER_FULL_NAME = 8
+    MESSAGE_OWNER_USERNAME = 9
+    PUBLISHED_ON = 10
+    HARVESTER_FULL_NAME = 11
+    HARVESTER_USERNAME = 12
+    HARVESTED_ON = 13
+    NUGGET = 14
+    STATE = 15
+    TAGS = 16
 
-    def test_base(self, test_session, test_app, discussion, extract_post_1_to_subidea_1_1, extract_with_range_in_reply_post_1):
+    def test_base(self, test_session, test_app, discussion, user_language_preference_en_cookie, extract_post_1_to_subidea_1_1, extract_with_range_in_reply_post_1):
         result = self.get_result(test_app, discussion.id, view_name=self.view_name)
         header = result[0]
 
@@ -1033,9 +1049,11 @@ class TestTaxonomyExport(AbstractExport):
         assert header[self.ORIGINAL_LOCALE] == "Original Locale"
         assert header[self.QUALIFY_BY_NATURE] == "Qualify By Nature"
         assert header[self.QUALIFY_BY_ACTION] == "Qualify By Action"
-        assert header[self.OWNER_OF_THE_MESSAGE] == "Owner Of The Message"
+        assert header[self.MESSAGE_OWNER_FULL_NAME] == "Message Owner Full Name"
+        assert header[self.MESSAGE_OWNER_USERNAME] == "Message Owner Username"
         assert header[self.PUBLISHED_ON] == "Published On"
-        assert header[self.HARVESTER] == "Harvester"
+        assert header[self.HARVESTER_FULL_NAME] == "Harvester Full Name"
+        assert header[self.HARVESTER_USERNAME] == "Harvester Username"
         assert header[self.HARVESTED_ON] == "Harvested On"
         assert header[self.NUGGET] == "Nugget"
         assert header[self.STATE] == "State"
@@ -1052,9 +1070,11 @@ class TestTaxonomyExport(AbstractExport):
         assert first_row[self.ORIGINAL_LOCALE] == "und"
         assert first_row[self.QUALIFY_BY_NATURE] == "actionable_solution"
         assert first_row[self.QUALIFY_BY_ACTION] == "give_examples"
-        assert first_row[self.OWNER_OF_THE_MESSAGE] == "James T. Expert"
+        assert first_row[self.MESSAGE_OWNER_FULL_NAME] == "James T. Expert"
+        assert first_row[self.MESSAGE_OWNER_USERNAME] == ""
         assert first_row[self.PUBLISHED_ON] == "2000-01-04 00:00:00"
-        assert first_row[self.HARVESTER] == "James T. Expert"
+        assert first_row[self.HARVESTER_FULL_NAME] == "James T. Expert"
+        assert first_row[self.HARVESTER_USERNAME] == ""
         assert first_row[self.NUGGET] == "No"
         assert first_row[self.STATE] == "PUBLISHED"
         assert first_row[self.TAGS] == "foo, bar"
@@ -1070,9 +1090,11 @@ class TestTaxonomyExport(AbstractExport):
         assert last_row[self.ORIGINAL_LOCALE] == "und"
         assert last_row[self.QUALIFY_BY_NATURE] == " "
         assert last_row[self.QUALIFY_BY_ACTION] == " "
-        assert last_row[self.OWNER_OF_THE_MESSAGE] == "James T. Expert"
+        assert last_row[self.MESSAGE_OWNER_FULL_NAME] == "James T. Expert"
+        assert last_row[self.MESSAGE_OWNER_USERNAME] == ""
         assert last_row[self.PUBLISHED_ON] == "2000-01-04 00:00:00"
-        assert last_row[self.HARVESTER] == "Maximilien de Robespierre"
+        assert last_row[self.HARVESTER_FULL_NAME] == "Maximilien de Robespierre"
+        assert last_row[self.HARVESTER_USERNAME] == ""
         assert last_row[self.NUGGET] == "Yes"
         assert last_row[self.STATE] == "PUBLISHED"
         assert last_row[self.TAGS] == ""
@@ -1088,15 +1110,15 @@ class TestPhase1Export(AbstractExport):
     POST_LIKE_COUNT = 6
     POST_DISAGREE_COUNT = 7
     POST_CREATOR_NAME = 8
-    POST_CREATOR_EMAIL = 9
-    POST_CREATION_DATE = 10
-    SENTIMENT_ACTOR_NAME = 11
-    SENTIMENT_ACTOR_EMAIL = 12
-    SENTIMENT_CREATION_DATE = 13
-    POST_BODY_ORIGINAL = 14
+    POST_CREATOR_USERNAME = 9
+    POST_CREATOR_EMAIL = 10
+    POST_CREATION_DATE = 11
+    SENTIMENT_ACTOR_NAME = 12
+    SENTIMENT_ACTOR_EMAIL = 13
+    SENTIMENT_CREATION_DATE = 14
+    POST_BODY_ORIGINAL = 15
 
-
-    def test_base(self, proposals_with_sentiments, discussion, test_app):
+    def test_base(self, proposals_with_sentiments, user_language_preference_fr_cookie, discussion, test_app):
         result = self.get_result(test_app, discussion.id, view_name=self.view_name)
         header = result[0]
         assert header[TestPhase1Export.QUESTION_ID] == b'Numéro de la question'
@@ -1105,12 +1127,13 @@ class TestPhase1Export(AbstractExport):
         first_row = result[1]
         assert first_row[TestPhase1Export.THEMATIC_NAME] == b'Comprendre les dynamiques et les enjeux'
         assert first_row[TestPhase1Export.QUESTION_TITLE] == b"Comment qualifiez-vous l'emergence "\
-                                            b"de l'Intelligence Artificielle "\
-                                            b"dans notre société ?"
+            b"de l'Intelligence Artificielle "\
+            b"dans notre société ?"
         assert first_row[TestPhase1Export.POST_BODY] == b'une proposition 14'
         assert first_row[TestPhase1Export.POST_LIKE_COUNT] == b'0'
         assert first_row[TestPhase1Export.POST_DISAGREE_COUNT] == b'0'
         assert first_row[TestPhase1Export.POST_CREATOR_NAME] == b'Mr. Administrator'
+        assert first_row[TestPhase1Export.POST_CREATOR_USERNAME] == b'mr_admin_user'
         assert first_row[TestPhase1Export.POST_CREATOR_EMAIL] == b'admin@assembl.com'
         date = datetime.utcnow().strftime('%d/%m/%Y')
         assert first_row[TestPhase1Export.POST_CREATION_DATE].startswith(date)
@@ -1124,14 +1147,14 @@ class TestPhase1Export(AbstractExport):
         assert last_row[TestPhase1Export.POST_DISAGREE_COUNT] == b'0'
         assert last_row[TestPhase1Export.SENTIMENT_ACTOR_NAME] == b'Mr. Administrator'
 
-    def test_en(self, proposals_en_fr, discussion, test_app, en_locale):
+    def test_en(self, proposals_en_fr, user_language_preference_en_cookie, discussion, test_app, en_locale):
         lang = en_locale.root_locale
         result = self.get_result(test_app, discussion.id, lang=lang, view_name=self.view_name)
 
         first_row = result[1]
         assert first_row[TestPhase1Export.POST_BODY] == b'English Proposition 14'
 
-    def test_fr(self, proposals_en_fr, discussion, test_app, fr_locale):
+    def test_fr(self, proposals_en_fr, user_language_preference_fr_cookie, discussion, test_app, fr_locale):
         lang = fr_locale.root_locale
         result = self.get_result(test_app, discussion.id, lang=lang, view_name=self.view_name)
 
@@ -1160,14 +1183,15 @@ class TestPhase2Export(AbstractExport):
     NOMBRE_DE_JAIME = 8
     NOMBRE_DE_DEACCORD = 9
     NOM_DU_CONTRIBUTEUR = 10
-    MAIL_CONTRIBUTEUR = 11
-    DATE_POST = 12
-    NOM_VOTANT = 13
-    MAIL_VOTANT = 14
-    DATE_VOTE = 15
-    ORIGINAL = 16
+    NOM_UTILISATEUR_CONTRIBUTEUR = 11
+    MAIL_CONTRIBUTEUR = 12
+    DATE_POST = 13
+    NOM_VOTANT = 14
+    MAIL_VOTANT = 15
+    DATE_VOTE = 16
+    ORIGINAL = 17
 
-    def test_base(self, proposals_with_sentiments, discussion, timeline_phase2_interface_v2, test_app):
+    def test_base(self, proposals_with_sentiments, user_language_preference_fr_cookie, discussion, timeline_phase2_interface_v2, test_app):
         result = self.get_result(test_app, discussion.id, view_name=self.view_name)
         header = result[0]
         assert header[self.NUMERO_IDEE_PARENT] == b"Les numéros des parent d'idée"
@@ -1179,6 +1203,7 @@ class TestPhase2Export(AbstractExport):
         assert header[self.NOMBRE_DE_JAIME] == b"Nombre de \"J\'aime\""
         assert header[self.NOMBRE_DE_DEACCORD] == b"Nombre de \"En désaccord\""
         assert header[self.NOM_DU_CONTRIBUTEUR] == b"Nom du contributeur"
+        assert header[self.NOM_UTILISATEUR_CONTRIBUTEUR] == b"Nom d'utilisateur du contributeur"
         assert header[self.MAIL_CONTRIBUTEUR] == b"Adresse mail du contributeur"
         assert header[self.DATE_POST] == b"Date/heure du post"
         assert header[self.NOM_VOTANT] == b"Nom du votant"
@@ -1188,4 +1213,23 @@ class TestPhase2Export(AbstractExport):
         assert header[self.POST_CLASSIFIER] == b"Classification de Post"
 
     # TODO: Add more unit tests for the phase 2 export API.
-    # TODO: Add unit tests for votes export API.
+
+
+class TestExtractCsvVoters(AbstractExport):
+    view_name = 'extract_csv_voters'
+    NOM_DU_CONTRIBUTEUR = 0
+    NOM_UTILISATEUR_CONTRIBUTEUR = 1
+    EMAIL_DU_CONTRIBUTEUR = 2
+    DATE_HEURE_DU_VOTE = 3
+    PROPOSITION = 4
+
+    def test_base(self, test_app, discussion, user_language_preference_fr_cookie, token_vote_spec_with_votes, gauge_vote_specification_with_votes, number_gauge_vote_specification_with_votes):
+        result = self.get_result(test_app, discussion.id, gauge_vote_specification_with_votes.widget_id, view_name=self.view_name, votes_export=True)
+        header = result[0]
+        assert header[self.NOM_DU_CONTRIBUTEUR] == b"Nom Du Contributeur"
+        assert header[self.NOM_UTILISATEUR_CONTRIBUTEUR] == b"Nom D'Utilisateur Du Contributeur"
+        assert header[self.EMAIL_DU_CONTRIBUTEUR] == b"Adresse Mail Du Contributeur"
+        assert header[self.DATE_HEURE_DU_VOTE] == b"Date/Heure Du Vote"
+        assert header[self.PROPOSITION] == b"Proposition"
+
+    # TODO: Add more unit tests for votes export API.
