@@ -4,7 +4,7 @@ import type { ApolloClient } from 'react-apollo';
 import DiscussionQuery from '../../../../graphql/DiscussionQuery.graphql';
 import { convertEntriesToI18nValue, convertEntriesToI18nRichText, convertISO8601StringToDateTime } from '../../../form/utils';
 
-export const load = async (client: ApolloClient, lang: String, fetchPolicy: FetchPolicy = 'cache-first') => {
+const _load = async (client: ApolloClient, lang: String, fetchPolicy: FetchPolicy = 'cache-first') => {
   const { data } = await client.query({
     query: DiscussionQuery,
     fetchPolicy: fetchPolicy,
@@ -13,6 +13,17 @@ export const load = async (client: ApolloClient, lang: String, fetchPolicy: Fetc
     }
   });
   return data;
+};
+
+// Returns a Promise
+export const load = (client: ApolloClient, lang: String) => (fetchPolicy: FetchPolicy = 'cache-first') : Promise<*> => {
+  return client.query({
+    query: DiscussionQuery,
+    fetchPolicy: fetchPolicy,
+    variables: {
+      lang: lang
+    }
+  });
 };
 
 type Data = DiscussionQuery;
