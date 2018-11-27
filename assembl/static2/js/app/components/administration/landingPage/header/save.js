@@ -7,11 +7,11 @@ import updateDiscussion from '../../../../graphql/mutations/updateDiscussion.gra
 export const save = createSave('administration.landingPage.successSave');
 
 const createVariablesFromValues = values => ({
-  titleEntries: values.title ? convertToEntries(values.title) : null,
-  subtitleEntries: values.subtitle ? convertToEntries(values.subtitle) : null,
-  buttonLabelEntries: values.buttonLabel ? convertToEntries(values.buttonLabel) : null,
+  titleEntries: values.headerTitle ? convertToEntries(values.headerTitle) : null,
+  subtitleEntries: values.headerSubtitle ? convertToEntries(values.headerSubtitle) : null,
+  buttonLabelEntries: values.headerButtonLabel ? convertToEntries(values.headerButtonLabel) : null,
   headerImage: getFileVariable(values.headerImage),
-  headerLogoImage: getFileVariable(values.headerLogoImage),
+  logoImage: getFileVariable(values.headerLogoImage),
   startDate: convertDateTimeToISO8601String(values.headerStartDate),
   endDate: convertDateTimeToISO8601String(values.headerEndDate)
 });
