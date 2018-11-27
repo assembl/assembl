@@ -1104,6 +1104,7 @@ class Resource:
     title = Default.string_entry % ("The title of the Resource.",)
     text = Default.string_entry % ("The text of the Resource.",)
     title_entries = Default.langstring_entries % ("The title of the Resource in various languages.",)
+    text_attachments = Default.string_entry % ("The attachments for the text of the Resource.",)
     text_entries = Default.langstring_entries % ("The text in the Resource in various languages.",)
     embed_code = """The URL for any i-frame based content that matches the Content-Security-Policy of the server.
     In effect, this is the \"src\" code inside of an iframe-based attachment to a Resource."""
@@ -1116,6 +1117,7 @@ class CreateResource:
     __doc__ = """A mutation that enables a Resource to be created."""
     lang = "The language used for the response fields."
     title_entries = Resource.title_entries
+    text_attachments = Resource.text_attachments
     text_entries = Resource.text_entries
     embed_code = Resource.embed_code
     image = Resource.image
@@ -1133,6 +1135,7 @@ class UpdateResource:
     lang = CreateResource.lang
     id = Default.node_id % ("Resource") + " This is the Resource identifier that must be updated."
     title_entries = Resource.title_entries
+    text_attachments = Resource.text_attachments
     text_entries = Resource.text_entries
     embed_code = Resource.embed_code
     image = Resource.image

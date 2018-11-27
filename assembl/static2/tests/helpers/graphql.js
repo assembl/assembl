@@ -118,7 +118,7 @@ const MockedResponses = [
         doc: null,
         embedCode: '',
         image: null,
-        // textAttachments: [],
+        textAttachments: [],
         textEntries: [],
         titleEntries: [
           {
@@ -169,7 +169,7 @@ const MockedResponses = [
         doc: null,
         embedCode: '<iframe></iframe>',
         image: null,
-        // textAttachments: [],
+        textAttachments: [],
         textEntries: [
           {
             localeCode: 'en',
