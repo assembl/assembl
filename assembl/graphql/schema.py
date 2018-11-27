@@ -185,9 +185,10 @@ class Query(graphene.ObjectType):
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
         vote_session = get_phase_by_identifier(discussion, Phases.voteSession.name)
-        root_thematic = get_root_thematic_for_phase(vote_session)
+        root_thematic = get_root_thematic_for_phase(vote_session) if vote_session else None
         if root_thematic is None:
             return 0
+
         proposals = root_thematic.get_children()
         total = 0
         for proposal in proposals:
