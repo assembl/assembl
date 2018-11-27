@@ -362,6 +362,7 @@ class IdeaAnnouncement:
     title = Default.string_entry % ("title of announcement")
     body = Default.string_entry % ("body of announcement")
     title_entries = Default.langstring_entries % ("This is the title of announcement in multiple languages.",)
+    body_attachments = Default.string_entry % ("Attachments for the body of announcement in multiple languages.")
     body_entries = Default.langstring_entries % ("This is the body of announcement in multiple languages.")
 
 
