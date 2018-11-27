@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 import csv
 import pytest
-import mock
 from datetime import datetime, timedelta
 import simplejson as json
-from io import BytesIO, StringIO
+from io import BytesIO
 
 from assembl.models import (
     AbstractIdeaVote,
