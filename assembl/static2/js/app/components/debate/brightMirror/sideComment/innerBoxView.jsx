@@ -19,7 +19,7 @@ export type Props = {
   extracts?: Array<FictionExtractFragment>,
   comment: ExtractCommentFragment,
   changeCurrentExtract?: (?number) => void,
-  setEditMode?: (string, string) => void,
+  setEditMode: (string, string) => void,
   deletePost: (ExtractCommentFragment, string) => void
 };
 
@@ -43,11 +43,7 @@ class InnerBoxView extends React.Component<Props, State> {
     const { menuTarget } = this.state;
     const { creator } = comment;
     const displayName = creator && !creator.isDeleted ? creator.displayName : I18n.t('deletedUser');
-    const canEdit =
-      isConnectedUser(creator && creator.userId) &&
-      connectedUserCan(Permissions.EDIT_MY_POST) &&
-      // Prevent editing reply for now (will be added in another ticket)
-      setEditMode;
+    const canEdit = isConnectedUser(creator && creator.userId) && connectedUserCan(Permissions.EDIT_MY_POST);
     const canDelete =
       (isConnectedUser(creator && creator.userId) && connectedUserCan(Permissions.DELETE_MY_POST)) ||
       connectedUserCan(Permissions.DELETE_POST);

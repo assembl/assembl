@@ -61,6 +61,7 @@ type State = {
   selectionText: ?string,
   serializedAnnotatorRange: ?Object,
   editComment: boolean,
+  editReply: boolean,
   editingPostId: string
 };
 
@@ -111,6 +112,7 @@ class DumbSideCommentBox extends React.Component<Props, State> {
       selectionText: selectionText,
       serializedAnnotatorRange: annotatorRange && annotatorRange.serialize(document, 'annotation'),
       editComment: false,
+      editReply: false,
       editingPostId: ''
     };
 
@@ -335,6 +337,7 @@ class DumbSideCommentBox extends React.Component<Props, State> {
       this.setState(
         {
           editComment: false,
+          editReply: false,
           body: EditorState.createEmpty()
         },
         () => {
@@ -422,8 +425,12 @@ class DumbSideCommentBox extends React.Component<Props, State> {
     this.setState({ editComment: true, editingPostId: postId, body: convertToEditorState(body) });
   };
 
+  setCommentReplyMode = (postId: string, body: string) => {
+    this.setState({ editReply: true, editingPostId: postId, body: convertToEditorState(body) });
+  };
+
   cancelEditMode = () => {
-    this.setState({ editComment: false });
+    this.setState({ editComment: false, editReply: false });
   };
 
   renderActionFooter = () => {
@@ -484,16 +491,58 @@ class DumbSideCommentBox extends React.Component<Props, State> {
     return null;
   };
 
-  render() {
-    const { contentLocale, extracts, cancelSubmit, position, toggleCommentsBox } = this.props;
-    const { submitting, extractIndex, body, replying, editComment } = this.state;
+  getReplyView = () => {
+    const { contentLocale } = this.props;
+    const { submitting, replying, extractIndex, body, editReply } = this.state;
     const currentExtract = this.getCurrentExtract(extractIndex);
     const currentComment = this.getCurrentComment(currentExtract);
     const currentReply = this.getCurrentCommentReply(currentExtract, currentComment);
 
+    if (replying) {
+      return (
+        <InnerBoxSubmit
+          userId={getConnectedUserId()}
+          userName={getConnectedUserName()}
+          body={body}
+          updateBody={this.updateBody}
+          submit={this.submitReply}
+          cancelSubmit={this.toggleReplying}
+        />
+      );
+    } else if (editReply) {
+      return (
+        <InnerBoxSubmit
+          userId={getConnectedUserId()}
+          userName={getConnectedUserName()}
+          body={body}
+          updateBody={this.updateBody}
+          submit={this.editPost}
+          cancelSubmit={this.cancelEditMode}
+        />
+      );
+    } else if (!submitting && !!currentReply) {
+      return (
+        <InnerBoxView
+          contentLocale={contentLocale}
+          comment={currentReply}
+          deletePost={this.deletePost}
+          setEditMode={this.setCommentReplyMode}
+        />
+      );
+    }
+    return null;
+  };
+
+  render() {
+    const { extracts, cancelSubmit, position, toggleCommentsBox } = this.props;
+    const { submitting, extractIndex, editComment } = this.state;
+    const currentExtract = this.getCurrentExtract(extractIndex);
+    const currentComment = this.getCurrentComment(currentExtract);
+
     if (!submitting && !currentComment) return null;
 
     const commentView = this.getCommentView();
+    const replyView = this.getReplyView();
 
     return (
       <div
@@ -529,18 +578,7 @@ class DumbSideCommentBox extends React.Component<Props, State> {
               </div>
             )}
           {!submitting && this.renderActionFooter()}
-          {replying && (
-            <InnerBoxSubmit
-              userId={getConnectedUserId()}
-              userName={getConnectedUserName()}
-              body={body}
-              updateBody={this.updateBody}
-              submit={this.submitReply}
-              cancelSubmit={this.toggleReplying}
-            />
-          )}
-          {!submitting &&
-            !!currentReply && <InnerBoxView contentLocale={contentLocale} comment={currentReply} deletePost={this.deletePost} />}
+          {replyView}
         </div>
       </div>
     );
