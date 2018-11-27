@@ -146,14 +146,15 @@ def get_resources_hash(theme_name):
         'bundle_css_hash': None,
         'theme_hash': None
     }
-    with open(resources_base_path) as fp:
-        soup = BeautifulSoup(fp)
-        bundle = soup.find(src=get_bundle_hash)
-        bundle_css = soup.find(href=get_bundle_css_hash)
-        theme_css = soup.find(href=get_theme_css_hash)
-        result['bundle_hash'] = get_bundle_hash(bundle['src']).group(1) if bundle else None
-        result['bundle_css_hash'] = get_bundle_css_hash(bundle_css['href']).group(1) if bundle_css else None
-        result['theme_hash'] = get_theme_css_hash(theme_css['href']).group(1) if theme_css else None
+    if os.path.exists(resources_base_path):
+        with open(resources_base_path) as fp:
+            soup = BeautifulSoup(fp)
+            bundle = soup.find(src=get_bundle_hash)
+            bundle_css = soup.find(href=get_bundle_css_hash)
+            theme_css = soup.find(href=get_theme_css_hash)
+            result['bundle_hash'] = get_bundle_hash(bundle['src']).group(1) if bundle else None
+            result['bundle_css_hash'] = get_bundle_css_hash(bundle_css['href']).group(1) if bundle_css else None
+            result['theme_hash'] = get_theme_css_hash(theme_css['href']).group(1) if theme_css else None
     
     RESOURCES[theme_name] = result
     return RESOURCES[theme_name]
