@@ -21,13 +21,12 @@ async function getResourceVariables(client, resource, initialResource, order) {
   const initialDoc = initialResource ? initialResource.doc : null;
   const initialImg = initialResource ? initialResource.img : null;
   const textVars = await convertRichTextToVariables(resource.text, client);
-  // const { attachments: textAttachments, entries: textEntries } = textVars;
-  const { entries: textEntries } = textVars;
+  const { attachments: textAttachments, entries: textEntries } = textVars;
   return {
     doc: getFileVariable(resource.doc, initialDoc),
     embedCode: resource.embedCode,
     image: getFileVariable(resource.img, initialImg),
-    // textAttachments: textAttachments,
+    textAttachments: textAttachments,
     textEntries: textEntries,
     titleEntries: convertToEntries(resource.title),
     order: order
