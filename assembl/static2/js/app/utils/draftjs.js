@@ -104,7 +104,15 @@ export function editorStateIsEmpty(editorState: EditorState): boolean {
   return false;
 }
 
-export function uploadNewAttachments(editorState: EditorState, uploadDocument: Function): Promise<*> {
+export type UploadNewAttachmentsPromiseResult = {
+  contentState: ContentState,
+  documentIds: Array<string>
+};
+
+export function uploadNewAttachments(
+  editorState: EditorState,
+  uploadDocument: Function
+): Promise<UploadNewAttachmentsPromiseResult> {
   const documentIds = [];
   let contentState = editorState.getCurrentContent();
   const entities = [];
@@ -164,8 +172,3 @@ export function uploadNewAttachments(editorState: EditorState, uploadDocument: F
       })
   );
 }
-
-export type UploadNewAttachmentsPromiseResult = {
-  contentState: ?ContentState,
-  documentIds: Array<string>
-};
