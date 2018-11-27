@@ -618,6 +618,9 @@ class QuestionInput(graphene.InputObjectType):
 class VideoInput(graphene.InputObjectType):
     __doc__ = docs.VideoInput.__doc__
     title_entries = graphene.List(LangStringEntryInput, description=docs.VideoInput.title_entries)
+    description_top_attachments = graphene.List(LangStringEntryInput, description=docs.VideoInput.description_top_attachments)
+    description_bottom_attachments = graphene.List(LangStringEntryInput, description=docs.VideoInput.description_bottom_attachments)
+    description_side_attachments = graphene.List(LangStringEntryInput, description=docs.VideoInput.description_side_attachments)
     description_entries_top = graphene.List(LangStringEntryInput, description=docs.VideoInput.description_entries_top)
     description_entries_bottom = graphene.List(LangStringEntryInput, description=docs.VideoInput.description_entries_bottom)
     description_entries_side = graphene.List(LangStringEntryInput, description=docs.VideoInput.description_entries_side)

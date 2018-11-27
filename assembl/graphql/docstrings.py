@@ -416,6 +416,9 @@ class QuestionInput:
 
 class VideoInput:
     title_entries = Default.langstring_entries % ("Title of the video in various languages.")
+    description_top_attachments = Default.string_entry % ("Attachments for description on the top of the video.")
+    description_bottom_attachments = Default.string_entry % ("Attachments for description on the bottom of the video.")
+    description_side_attachments = Default.string_entry % ("Attachments for description on the side of the video.")
     description_entries_top = Default.langstring_entries % ("Description on the top of the video in various languages.")
     description_entries_bottom = Default.langstring_entries % ("Description on the bottom of the video in various languages.")
     description_entries_side = Default.langstring_entries % ("Description on the side of the video in various languages.")
