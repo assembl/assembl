@@ -1,14 +1,14 @@
 """discussion_start_end_dates
 
 Revision ID: d813ab110e00
-Revises: c9623c879eb1
+Revises: de9ade82771c
 Create Date: 2018-11-21 17:34:20.946744
 
 """
 
 # revision identifiers, used by Alembic.
 revision = 'd813ab110e00'
-down_revision = 'c9623c879eb1'
+down_revision = 'de9ade82771c'
 
 from alembic import context, op
 import sqlalchemy as sa
