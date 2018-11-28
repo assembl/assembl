@@ -221,6 +221,7 @@ def react_view(request, required_permission=P_READ):
     bugherd_url = None
     if wsginame in ('preprod.wsgi',):
         bugherd_url = get('bugherd_url', None)
+
     common_context = {
         "theme_name": theme_name,
         "theme_relative_path": theme_relative_path,
@@ -231,7 +232,10 @@ def react_view(request, required_permission=P_READ):
         "web_analytics": old_context['web_analytics'],
         "under_test": old_context['under_test'],
         "sentry_dsn": get('sentry_dsn', ''),
-        "bugherd_url": bugherd_url
+        "bugherd_url": bugherd_url,
+        'bundle_hash': old_context['bundle_hash'],
+        'bundle_css_hash': old_context['bundle_css_hash'],
+        'theme_hash': old_context['theme_hash'],
     }
 
     if discussion:

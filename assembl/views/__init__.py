@@ -7,6 +7,7 @@ Note that Assembl is a `hybrid app`_, and combines routes and :py:mod:`traversal
 
 import os
 import io
+import re
 from collections import defaultdict
 from urlparse import urlparse
 
@@ -20,6 +21,7 @@ from pyramid.i18n import TranslationStringFactory
 from pyramid.security import Everyone
 from pyramid.settings import asbool, aslist
 from social_core.exceptions import AuthMissingParameter
+from bs4 import BeautifulSoup
 
 from assembl.lib.json import json_renderer_factory
 from assembl.lib import config
@@ -43,6 +45,12 @@ default_context = {
 
 TEMPLATE_PATH = os.path.join(
     os.path.dirname(os.path.dirname(__file__)), 'templates')
+
+
+THEMES = {}
+
+
+RESOURCES = {}
 
 
 class HTTPTemporaryRedirect(HTTPTemporaryRedirectP):
@@ -76,8 +84,11 @@ def find_theme(theme_name, frontend_version=1):
     @returns the theme path fragment relative to the theme base_path, or
     None if not found
     """
-    theme_base_path = get_theme_base_path(frontend_version)
+    current_theme = THEMES.get(frontend_version, {}).get(theme_name, None)
+    if current_theme:
+        return current_theme
 
+    theme_base_path = get_theme_base_path(frontend_version)
     walk_results = os.walk(theme_base_path, followlinks=True)
     for (dirpath, dirnames, filenames) in walk_results:
         if '_theme.scss' in filenames:
@@ -86,6 +97,8 @@ def find_theme(theme_name, frontend_version=1):
             (head, name) = os.path.split(dirpath)
             print name, relpath
             if name == theme_name:
+                THEMES.setdefault(frontend_version, {})
+                THEMES[frontend_version][theme_name] = relpath
                 return relpath
 
     return None
@@ -108,6 +121,51 @@ def get_theme_info(discussion, frontend_version=1):
         return (theme_name, theme_path)
     else:
         return ('default', 'default')
+
+
+def extract_resources_hash(source, theme_name):
+    def get_resource_hash(regex, resource):
+        return resource and re.search(regex, resource)
+
+    def get_bundle_hash(src):
+        return get_resource_hash(r'/build/bundle\.(.*)\.js$', src)
+
+    def get_bundle_css_hash(href):
+        return get_resource_hash(r'/build/bundle\.(.*)\.css$', href)
+
+    def get_theme_css_hash(href):
+        return get_resource_hash(r'/build/theme_' + re.escape(theme_name) + r'_web\.(.*)\.css$', href)
+    
+    soup = BeautifulSoup(source)
+    bundle = soup.find(src=get_bundle_hash)
+    bundle_css = soup.find(href=get_bundle_css_hash)
+    theme_css = soup.find(href=get_theme_css_hash)
+    return {
+        'bundle_hash': get_bundle_hash(bundle['src']).group(1) if bundle else None,
+        'bundle_css_hash': get_bundle_css_hash(bundle_css['href']).group(1) if bundle_css else None,
+        'theme_hash': get_theme_css_hash(theme_css['href']).group(1) if theme_css else None
+    }
+
+
+def get_resources_hash(theme_name):
+    current_resources = RESOURCES.get(theme_name, None)
+    if current_resources:
+        return current_resources
+
+    resources_path = os.path.join(
+        os.path.dirname(os.path.dirname(__file__)),
+        'static2', 'build', 'resources.html')
+    result = {
+        'bundle_hash': None,
+        'bundle_css_hash': None,
+        'theme_hash': None
+    }
+    if os.path.exists(resources_path):
+        with open(resources_path) as fp:
+            result = extract_resources_hash(fp, theme_name)
+    
+    RESOURCES[theme_name] = result
+    return result
 
 
 def get_provider_data(get_route, providers=None):
@@ -378,7 +436,7 @@ def get_default_context(request, **kwargs):
         "get_discussion_url": get_discussion_url(),
         "discussion_title": discussion_title(),
     })
-
+    base.update(get_resources_hash(theme_name))
     return base
 
 

@@ -6,6 +6,7 @@ var path = require('path');
 var webpack = require('webpack');
 var MiniCssExtractPlugin = require("mini-css-extract-plugin");
 var UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
 var glob = require('glob');
 var _ = require('lodash');
 
@@ -40,7 +41,7 @@ module.exports = {
     entry: _.extend(theme_entries(), general_entries),
     output: {
         path: path.join(__dirname, 'build'),
-        filename: '[name].js',
+        filename: '[name].[contenthash].js',
         publicPath: '/build/'
     },
     module: {
@@ -127,6 +128,7 @@ module.exports = {
         ]
     },
     plugins: [
-        new MiniCssExtractPlugin({ filename: "[name].css" }),
+        new MiniCssExtractPlugin({ filename: "[name].[contenthash].css" }),
+        new HtmlWebpackPlugin({ title: 'Caching', filename: 'resources.html'}),
     ]
 };
