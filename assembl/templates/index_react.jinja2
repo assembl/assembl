@@ -39,12 +39,11 @@
         <div id='root' data-sentry-dsn="{{sentry_dsn}}"></div>
         {% block main_js %}
             {% include 'analytics_common.jinja2' %}
-            {% if NODE_ENV != 'development' %}
-                <script src='{{REACT_URL}}/build/bundle.{{bundle_hash}}.js'></script>
-            {% endif %}
             {% if NODE_ENV == 'development' %}
                 <script src='{{REACT_URL}}/build/bundle.js'></script>
                 <script src="{{REACT_URL}}/build/theme_{{theme_name}}_web.js"></script>
+            {% else %}
+                <script src='{{REACT_URL}}/build/bundle.{{bundle_hash}}.js'></script>
             {% endif %}
         {% endblock %}
 
