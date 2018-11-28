@@ -35,6 +35,10 @@ from .utils import (
 import assembl.graphql.docstrings as docs
 
 
+EMBED_ATTACHMENT = models.AttachmentPurpose.EMBED_ATTACHMENT.value
+MEDIA_ATTACHMENT = models.AttachmentPurpose.MEDIA_ATTACHMENT.value
+
+
 class TagResult(graphene.ObjectType):
     __doc__ = docs.TagResult.__doc__
     score = graphene.Float(description=docs.TagResult.score)
@@ -569,7 +573,6 @@ class Thematic(SecureObjectType, SQLAlchemyObjectType):
         description_entries_side = resolve_langstring_entries(
             self, 'video_description_side')
 
-        MEDIA_ATTACHMENT = models.AttachmentPurpose.MEDIA_ATTACHMENT.value
         media_file = get_attachment_with_purpose(self.attachments, MEDIA_ATTACHMENT)
 
         if not (title_entries or
@@ -630,8 +633,6 @@ class VideoInput(graphene.InputObjectType):
 
 
 def create_idea(parent_idea, phase, args, context):
-    EMBED_ATTACHMENT = models.AttachmentPurpose.EMBED_ATTACHMENT.value
-    MEDIA_ATTACHMENT = models.AttachmentPurpose.MEDIA_ATTACHMENT.value
     cls = models.Idea
     phase_identifier = phase.identifier
     message_view_override = args.get('message_view_override')
@@ -766,8 +767,6 @@ def create_idea(parent_idea, phase, args, context):
 
 
 def update_idea(args, phase, context):
-    EMBED_ATTACHMENT = models.AttachmentPurpose.EMBED_ATTACHMENT.value
-    MEDIA_ATTACHMENT = models.AttachmentPurpose.MEDIA_ATTACHMENT.value
     cls = models.Idea
     discussion_id = context.matchdict['discussion_id']
     discussion = models.Discussion.get(discussion_id)
