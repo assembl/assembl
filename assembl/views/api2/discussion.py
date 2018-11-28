@@ -523,7 +523,10 @@ def extract_taxonomy_csv(request):
                   "Original message", "Original locale", "Qualify by nature",
                   "Qualify by action", "Message owner full name", "Message owner username",
                   "Published on", "Harvester full name", "Harvester username",
-                  "Harvested on", "Nugget", "State", "Tags"]
+                  "Harvested on", "Nugget", "State"]
+    len_tags = max([len(extract.tags) for extract in extracts])
+    tags_names = ["Tag{}".format(index+1) for index in range(len_tags)]
+    fieldnames.extend(tags_names)
     for extract in extracts:
         if extract.idea_id:
             thematic = db.query(m.Idea).get(extract.idea_id)
@@ -587,6 +590,7 @@ def extract_taxonomy_csv(request):
             harvester.real_name() else ""
         harvester_username = harvester.username_p.encode('utf-8') if \
             harvester.username_p else ""
+
         extract_info = {
             "Thematic": thematic.encode('utf-8'),
             "Message": sanitize_text(message).encode('utf-8'),
@@ -603,9 +607,12 @@ def extract_taxonomy_csv(request):
             "Harvester username": harvester_username,
             "Harvested on": harvested_on.encode('utf-8'),
             "Nugget": nugget.encode('utf-8'),
-            "State": state.encode('utf-8'),
-            "Tags": u', '.join(tags).encode('utf-8')
+            "State": state.encode('utf-8')
+
         }
+        len_tags = len(tags)
+        extract_info.update(
+            {tag_name: tags[index].encode('utf-8') if len_tags > index else u"" for index, tag_name in enumerate(tags_names)})
         extract_list.append(extract_info)
 
     return csv_response(extract_list, CSV_MIMETYPE, fieldnames, content_disposition='attachment; filename="extract_taxonomies.csv"')
