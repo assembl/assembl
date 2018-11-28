@@ -525,7 +525,7 @@ def extract_taxonomy_csv(request):
                   "Published on", "Harvester full name", "Harvester username",
                   "Harvested on", "Nugget", "State"]
     len_tags = max([len(extract.tags) for extract in extracts])
-    tags_names = ["Tag{}".format(index+1) for index in range(len_tags)]
+    tags_names = ["Tag{}".format(index + 1) for index in range(len_tags)]
     fieldnames.extend(tags_names)
     for extract in extracts:
         if extract.idea_id:
