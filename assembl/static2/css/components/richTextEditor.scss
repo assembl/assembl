@@ -7,6 +7,13 @@
       font-family: $font-family;
       font-size: $font-size-s;
     }
+
+    .attachments {
+      float: none;
+      margin-top: 0;
+      margin-bottom: 20px;
+      font-size: $font-size-xs;
+    }
   }
 
   .rich-text-editor .DraftEditor-editorContainer {
