@@ -28,7 +28,7 @@ export const DumbCustomizeHeader = ({ client, editLocale, lang }: Props) => (
   <div className="admin-box">
     <SectionTitle title={I18n.t('administration.landingPage.header.title')} annotation={I18n.t('administration.annotation')} />
     <LoadSaveReinitializeForm
-      load={load(client, lang)}
+      load={fetchPolicy => load(client, editLocale, fetchPolicy)}
       loading={loading}
       postLoadFormat={postLoadFormat}
       createMutationsPromises={createMutationsPromises(client)}

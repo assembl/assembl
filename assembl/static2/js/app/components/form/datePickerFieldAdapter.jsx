@@ -1,10 +1,14 @@
 // @flow
 
+/*
+  DatePicker adapter for react-final-form that supports the following form:
+  { time: moment().utc() }
+*/
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import React from 'react';
 import { type FieldRenderProps } from 'react-final-form';
-import { FormGroup } from 'react-bootstrap';
+import { ControlLabel, FormGroup, FormControl } from 'react-bootstrap';
 
 import Error from './error';
 import { getValidationState } from './utils';
@@ -15,10 +19,10 @@ const DatePickerFieldAdapter = ({
   placeHolder,
   showTime,
   input: { name, value, onChange },
-  meta,
+  meta: { error, touched },
   children,
   ...rest }) => (
-  <div className="date-picker-field">
+    <div className="date-picker-field">
       {pickerType && <div className={`date-picker-type ${pickerClasses || ''}`}>{pickerType}</div>}
       <label htmlFor={`date-picker-${name}`} className="datepicker-label">
       <DatePicker

@@ -59,7 +59,7 @@ export function convertEntriesToI18nRichText(entries: RichTextLangstringEntries)
   return convertEntriesToI18nValue(convertEntriesToEditorState(entries));
 }
 
-export function convertISO8601StringToDateTime(_entry: String): DatePickerInput {
+export function convertISO8601StringToDateTime(_entry: string): DatePickerInput {
   if (_entry) return { time: moment(_entry, moment.ISO_8601).utc() };
   return { time: null };
 }
@@ -69,7 +69,7 @@ export function convertDateTimeToISO8601String(_entry: DateTime): DatePickerOutp
   return null;
 }
 
-export function getValidationState(error: ?string, touched: ?boolean): ?string {
+export function getValidationState(error: ?string, touched: ?boolean, required: ?boolean): ?string {
   return touched && error ? 'error' : null;
 }
 

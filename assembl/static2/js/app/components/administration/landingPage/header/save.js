@@ -8,11 +8,14 @@ import {
   getFileVariable,
   convertDateTimeToISO8601String
 } from '../../../form/utils';
+import type { DatePickerValue } from './types.flow';
 import updateDiscussion from '../../../../graphql/mutations/updateDiscussion.graphql';
+
+type UpdateDiscussion = updateDiscussion;
 
 export const save = createSave('administration.landingPage.successSave');
 
-const createVariablesFromValues = values => ({
+const createVariablesFromValues = (values: DatePickerValue): UpdateDiscussion => ({
   titleEntries: values.headerTitle ? convertToEntries(values.headerTitle) : null,
   subtitleEntries: values.headerSubtitle ? convertRichTextToEntries(values.headerSubtitle) : null,
   buttonLabelEntries: values.headerButtonLabel ? convertToEntries(values.headerButtonLabel) : null,
@@ -22,9 +25,9 @@ const createVariablesFromValues = values => ({
   endDate: convertDateTimeToISO8601String(values.headerEndDate)
 });
 
-export const createMutationsPromises = (client: ApolloClient) => values => [
+export const createMutationsPromises = (client: ApolloClient) => (values: UpdateDiscussion): () => Promise<*> => [
   () => {
-    client.mutate({
+    return client.mutate({
       mutation: updateDiscussion,
       variables: createVariablesFromValues(values)
     });
