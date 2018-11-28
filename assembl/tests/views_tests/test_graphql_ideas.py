@@ -354,7 +354,7 @@ def test_graphql_discussion_counters_survey_phase_no_thematic(graphql_request, p
             }
         """, context_value=graphql_request, variable_values={'discussionPhaseId': phases['survey'].id})
     assert res.data['rootIdea'] is None
-    assert res.data['numParticipants'] == 1
+    assert res.data['numParticipants'] == 2
 
 
 def test_graphql_discussion_counters_survey_phase_with_proposals(graphql_request, proposals, phases):
@@ -375,7 +375,7 @@ def test_graphql_discussion_counters_survey_phase_with_proposals(graphql_request
     assert res.data['rootIdea']['id']
     assert res.data['rootIdea']['numTotalPosts'] == 15  # all posts
     assert res.data['rootIdea']['numPosts'] == 15  # phase 1 posts
-    assert res.data['numParticipants'] == 1
+    assert res.data['numParticipants'] == 2
 
 
 def test_graphql_discussion_counters_thread_phase(graphql_request, proposals, phases):
@@ -396,7 +396,7 @@ def test_graphql_discussion_counters_thread_phase(graphql_request, proposals, ph
     assert res.data['rootIdea']['id']
     assert res.data['rootIdea']['numTotalPosts'] == 15  # all posts
     assert res.data['rootIdea']['numPosts'] == 15  # phase 1+2 posts counted when current phase is thread
-    assert res.data['numParticipants'] == 1
+    assert res.data['numParticipants'] == 2
 
 
 def test_graphql_discussion_counters_thread_phase_deleted_thematic(graphql_request, thematic_and_question, proposals, phases):
@@ -428,7 +428,7 @@ def test_graphql_discussion_counters_thread_phase_deleted_thematic(graphql_reque
     assert res.data['rootIdea']['numTotalPosts'] == 15  # all posts
     # But the posts are not bound anymore
     assert res.data['rootIdea']['numPosts'] == 0
-    assert res.data['numParticipants'] == 1
+    assert res.data['numParticipants'] == 2
 
 
 def test_graphql_discussion_counters_thread_phase_with_posts(graphql_request, proposals, top_post_in_thread_phase, phases):
@@ -450,7 +450,7 @@ def test_graphql_discussion_counters_thread_phase_with_posts(graphql_request, pr
     assert res.data['rootIdea']['numTotalPosts'] == 16  # all posts
     assert res.data['rootIdea']['numPosts'] == 16  # phase 1+2 posts counted when current phase is thread
     # 16 because thread phase is on discussion.root_idea and survey phase is a sub root idea of it.
-    assert res.data['numParticipants'] == 1
+    assert res.data['numParticipants'] == 2
 
 
 def test_graphql_discussion_counters_all_phases(graphql_request, proposals, top_post_in_thread_phase, phases):
@@ -471,7 +471,7 @@ def test_graphql_discussion_counters_all_phases(graphql_request, proposals, top_
     assert res.data['rootIdea']['id']
     assert res.data['rootIdea']['numTotalPosts'] == 16  # all posts
     assert res.data['rootIdea']['numPosts'] == 16  # phase 1+2 posts counted because all posts come from discussion.root_idea
-    assert res.data['numParticipants'] == 1
+    assert res.data['numParticipants'] == 2
 
 def test_graphql_total_vote_session_participations_zero_vote(graphql_request, proposals, phases):
     res = schema.execute(
