@@ -168,10 +168,6 @@ const getLegalContentsLinksList = (legalContentsList) => {
   });
 };
 
-// export const goToSignUpPage = () => {
-
-// }
-
 /* if user is connected by SSO, ask to accept legal contents the first time he logs in Assembl */
 export const legalConfirmModal = (legalContentsToAccept) => {
   const slug = getDiscussionSlug();

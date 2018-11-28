@@ -12,6 +12,7 @@ import { fromGlobalId, getRouteLastString } from './utils/globalFunctions';
 import { legalConfirmModal } from './utils/utilityManager';
 import { legalContentSlugs, ESSENTIAL_SIGNUP_COOKIES as LEGAL_CONTENTS_TO_ACCEPT } from './constants';
 import TabsConditionQuery from './graphql/TabsConditionQuery.graphql';
+import updateAcceptedCookies from './graphql/mutations/updateAcceptedCookies.graphql';
 
 type Props = {
   timeline: Timeline,
@@ -51,6 +52,11 @@ class Main extends React.Component<Props> {
     };
     const filteredLegalContentsToAccept = LEGAL_CONTENTS_TO_ACCEPT.filter(contentType => legalContentsToAccept[contentType]);
     return filteredLegalContentsToAccept;
+  };
+
+  acceptAllLegalContents = () => {
+    const legalContentsToAccept = this.getLegalContentsToAccept();
+    updateAcceptedCookies({ variables: { actions: legalContentsToAccept } });
   };
 
   render() {
