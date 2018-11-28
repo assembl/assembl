@@ -13,6 +13,7 @@ import { legalConfirmModal } from './utils/utilityManager';
 import { legalContentSlugs, ESSENTIAL_SIGNUP_COOKIES as LEGAL_CONTENTS_TO_ACCEPT } from './constants';
 import TabsConditionQuery from './graphql/TabsConditionQuery.graphql';
 import updateAcceptedCookies from './graphql/mutations/updateAcceptedCookies.graphql';
+import acceptedCookiesQuery from './graphql/acceptedCookiesQuery.graphql';
 
 type Props = {
   timeline: Timeline,
@@ -23,7 +24,8 @@ type Props = {
   hasTermsAndConditions: boolean,
   hasCookiesPolicy: boolean,
   hasPrivacyPolicy: boolean,
-  hasUserGuidelines: boolean
+  hasUserGuidelines: boolean,
+  updateAcceptedCookies: Function
 };
 
 class Main extends React.Component<Props> {
@@ -39,7 +41,7 @@ class Main extends React.Component<Props> {
     const legalContentsArray = Object.keys(legalContentsToAccept).map(key => (legalContentsToAccept[key] ? key : null));
     const cleanLegalContentsArray = legalContentsArray.filter(el => el !== null);
     if (!isOnLegalContentPage) {
-      legalConfirmModal(cleanLegalContentsArray);
+      legalConfirmModal(cleanLegalContentsArray, this.acceptAllLegalContents);
     }
   }
 
@@ -56,7 +58,7 @@ class Main extends React.Component<Props> {
 
   acceptAllLegalContents = () => {
     const legalContentsToAccept = this.getLegalContentsToAccept();
-    updateAcceptedCookies({ variables: { actions: legalContentsToAccept } });
+    this.props.updateAcceptedCookies({ variables: { actions: legalContentsToAccept } });
   };
 
   render() {
@@ -106,7 +108,8 @@ class Main extends React.Component<Props> {
 
 const mapStateToProps = state => ({
   timeline: state.timeline,
-  lang: state.i18n.locale
+  lang: state.i18n.locale,
+  id: state.context.connectedUserIdBase64
 });
 
 const withData = graphql(TabsConditionQuery, {
@@ -119,4 +122,28 @@ const withData = graphql(TabsConditionQuery, {
   })
 });
 
-export default compose(connect(mapStateToProps), withData, manageErrorAndLoading({ displayLoader: false }))(Main);
+export default compose(
+  connect(mapStateToProps),
+  withData,
+  graphql(updateAcceptedCookies, {
+    name: 'updateAcceptedCookies'
+  }),
+  graphql(acceptedCookiesQuery, {
+    skip: props => !props.id,
+    props: ({ data }) => {
+      if (data.error || data.loading) {
+        return {
+          error: data.error,
+          loading: data.loading
+        };
+      }
+
+      return {
+        error: data.error,
+        loading: data.loading,
+        acceptedLegalContentList: data.user.acceptedCookies
+      };
+    }
+  }),
+  manageErrorAndLoading({ displayLoader: false })
+)(Main);

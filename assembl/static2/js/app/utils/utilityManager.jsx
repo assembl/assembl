@@ -169,7 +169,7 @@ const getLegalContentsLinksList = (legalContentsList) => {
 };
 
 /* if user is connected by SSO, ask to accept legal contents the first time he logs in Assembl */
-export const legalConfirmModal = (legalContentsToAccept) => {
+export const legalConfirmModal = (legalContentsToAccept, acceptAllLegalContents) => {
   const slug = getDiscussionSlug();
   const modalTitle = <Translate value="legalContentsModal.title" />;
   const body = (
@@ -190,7 +190,7 @@ export const legalConfirmModal = (legalContentsToAccept) => {
     >
       <Translate value="refuse" />
     </Button>,
-    <Button key="accept" className="button-submit button-dark">
+    <Button key="accept" className="button-submit button-dark" onClick={acceptAllLegalContents}>
       <Translate value="accept" />
     </Button>
   ];
