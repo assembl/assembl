@@ -17,12 +17,21 @@ const _load = async (client: ApolloClient, lang: String, fetchPolicy: FetchPolic
 
 // Returns a Promise
 export const load = (client: ApolloClient, lang: String) => (fetchPolicy: FetchPolicy = 'cache-first') : Promise<*> => {
-  return client.query({
-    query: DiscussionQuery,
-    fetchPolicy: fetchPolicy,
-    variables: {
-      lang: lang
+  console.log("loading...");
+  return new Promise((resolve, reject) => {
+    const data = Promise.resolve(client.query({
+      query: DiscussionQuery,
+      fetchPolicy: fetchPolicy,
+      variables: {
+        lang: lang
+      }
+    }));
+    resolve(data);
+  }).then(results => {
+    if (results && !results.error) {
+      return results.data
     }
+    else throw Error(results.errors);
   });
 };
 

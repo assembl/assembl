@@ -47,6 +47,7 @@ export default class LoadSaveReinitializeForm extends React.Component<Props, Sta
     const { load, postLoadFormat } = this.props;
     this.setState({ isLoading: true });
     const originalValues = await load(fetchPolicy);
+    console.log("originalValues", originalValues);
     const initialValues = postLoadFormat ? postLoadFormat(originalValues) : originalValues;
     this.setState({
       isLoading: false,
