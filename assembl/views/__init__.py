@@ -436,7 +436,6 @@ def get_default_context(request, **kwargs):
         "get_discussion_url": get_discussion_url(),
         "discussion_title": discussion_title(),
     })
-    base.update(get_resources_hash(theme_name))
     return base
 
 

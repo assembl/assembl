@@ -34,7 +34,7 @@ from ...models import (
 
 from .. import (
     HTTPTemporaryRedirect, get_default_context as base_default_context,
-    get_locale_from_request, get_theme_info, sanitize_next_view)
+    get_locale_from_request, get_theme_info, get_resources_hash, sanitize_next_view)
 from ...nlp.translation_service import DummyGoogleTranslationService
 from ..auth.views import get_social_autologin, get_login_context
 
@@ -232,11 +232,9 @@ def react_view(request, required_permission=P_READ):
         "web_analytics": old_context['web_analytics'],
         "under_test": old_context['under_test'],
         "sentry_dsn": get('sentry_dsn', ''),
-        "bugherd_url": bugherd_url,
-        'bundle_hash': old_context['bundle_hash'],
-        'bundle_css_hash': old_context['bundle_css_hash'],
-        'theme_hash': old_context['theme_hash'],
+        "bugherd_url": bugherd_url
     }
+    common_context.update(get_resources_hash(theme_name))
 
     if discussion:
         canRead = user_has_permission(discussion.id, user_id, required_permission)
