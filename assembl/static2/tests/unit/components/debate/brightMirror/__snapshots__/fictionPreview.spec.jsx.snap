@@ -720,6 +720,35 @@ exports[`Storyshots FictionPreview default 1`] = `
                         }
                       </span>
                     </span>
+                  </span>
+                  <span>
+                    <span>
+                      <br />
+                        
+                    </span>
+                    <span
+                      style={Object {}}
+                    >
+                      pictureId
+                    </span>
+                    <span>
+                      =
+                      <span
+                        style={Object {}}
+                      >
+                        {
+                        <span
+                          style={
+                            Object {
+                              "color": "#a11",
+                            }
+                          }
+                        >
+                          0
+                        </span>
+                        }
+                      </span>
+                    </span>
                     <br />
                   </span>
                 </span>
@@ -1509,6 +1538,35 @@ exports[`Storyshots FictionPreview playground 1`] = `
                               
                           </span>
                           }
+                        </span>
+                        }
+                      </span>
+                    </span>
+                  </span>
+                  <span>
+                    <span>
+                      <br />
+                        
+                    </span>
+                    <span
+                      style={Object {}}
+                    >
+                      pictureId
+                    </span>
+                    <span>
+                      =
+                      <span
+                        style={Object {}}
+                      >
+                        {
+                        <span
+                          style={
+                            Object {
+                              "color": "#a11",
+                            }
+                          }
+                        >
+                          0
                         </span>
                         }
                       </span>
