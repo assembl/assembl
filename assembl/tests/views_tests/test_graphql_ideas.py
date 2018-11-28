@@ -1163,13 +1163,6 @@ def test_mutation_update_ideas_create(test_session, graphql_request, graphql_reg
     assert idea['order'] == 1.0
 
     # cleanup
-#    raw_id = int(from_global_id(idea['id'])[1])
-#    idea = models.Idea.get(raw_id)
-#    test_session.delete(idea.announcement)
-#    test_session.delete(idea.attachments[0].document)
-#    test_session.delete(idea.attachments[0])
-#    test_session.delete(idea)
-#    test_session.flush()
     test_session.rollback()
 
 
