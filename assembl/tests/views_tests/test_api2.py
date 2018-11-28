@@ -1235,7 +1235,7 @@ class TestExtractCsvVoters(AbstractExport):
     # TODO: Add more unit tests for votes export API.
 
 
-def get_index_html(theme_name="default"):
+def get_resources_html(theme_name="default"):
     return """
     <!DOCTYPE html>
     <html>
@@ -1259,7 +1259,7 @@ class TestResources(object):
 
     def test_get_resources_hash(self):
         theme_name = "my_theme"
-        resources_hash = extract_resources_hash(get_index_html(theme_name), theme_name)
+        resources_hash = extract_resources_hash(get_resources_html(theme_name), theme_name)
         expected = {
             'bundle_hash': '5aae461a0604ace7cd31',
             'theme_hash': '8bbb970b0346866e3dac',
@@ -1270,7 +1270,7 @@ class TestResources(object):
         assert expected['bundle_css_hash'] == resources_hash['bundle_css_hash']
 
     def test_get_v1_resources_hash(self):
-        resources_hash = extract_v1_resources_hash(get_index_html())
+        resources_hash = extract_v1_resources_hash(get_resources_html())
         expected = {
             'search_hash': 'b8939cd89ebdedfd2901',
             'search_css_hash': '04e4e4b2fab45a2ab04e'
