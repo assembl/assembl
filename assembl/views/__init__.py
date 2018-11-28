@@ -123,6 +123,12 @@ def get_theme_info(discussion, frontend_version=1):
         return ('default', 'default')
 
 
+def get_resources_path():
+    return os.path.join(
+        os.path.dirname(os.path.dirname(__file__)),
+        'static2', 'build', 'resources.html')
+
+
 def extract_resources_hash(source, theme_name):
     def get_resource_hash(regex, resource):
         return resource and re.search(regex, resource)
@@ -135,7 +141,7 @@ def extract_resources_hash(source, theme_name):
 
     def get_theme_css_hash(href):
         return get_resource_hash(r'/build/theme_' + re.escape(theme_name) + r'_web\.(.*)\.css$', href)
-    
+
     soup = BeautifulSoup(source)
     bundle = soup.find(src=get_bundle_hash)
     bundle_css = soup.find(href=get_bundle_css_hash)
@@ -152,9 +158,7 @@ def get_resources_hash(theme_name):
     if current_resources:
         return current_resources
 
-    resources_path = os.path.join(
-        os.path.dirname(os.path.dirname(__file__)),
-        'static2', 'build', 'resources.html')
+    resources_path = get_resources_path()
     result = {
         'bundle_hash': None,
         'bundle_css_hash': None,
@@ -165,6 +169,44 @@ def get_resources_hash(theme_name):
             result = extract_resources_hash(fp, theme_name)
     
     RESOURCES[theme_name] = result
+    return result
+
+
+def extract_v1_resources_hash(source):
+    def get_resource_hash(regex, resource):
+        return resource and re.search(regex, resource)
+
+    def get_search_hash(src):
+        return get_resource_hash(r'/build/searchv1\.(.*)\.js$', src)
+
+    def get_search_css_hash(href):
+        return get_resource_hash(r'/build/searchv1\.(.*)\.css$', href)
+
+    soup = BeautifulSoup(source)
+    search = soup.find(src=get_search_hash)
+    search_css = soup.find(href=get_search_css_hash)
+    return {
+        'search_hash': get_search_hash(search['src']).group(1) if search else None,
+        'search_css_hash': get_search_css_hash(search_css['href']).group(1) if search_css else None
+    }
+
+
+def get_v1_resources_hash():
+    resources_id = "search_v1_resources"
+    current_resources = RESOURCES.get(resources_id, None)
+    if current_resources:
+        return current_resources
+
+    resources_path = get_resources_path()
+    result = {
+        'search_hash': None,
+        'search_css_hash': None
+    }
+    if os.path.exists(resources_path):
+        with open(resources_path) as fp:
+            result = extract_v1_resources_hash(fp)
+
+    RESOURCES[resources_id] = result
     return result
 
 
@@ -436,6 +478,7 @@ def get_default_context(request, **kwargs):
         "get_discussion_url": get_discussion_url(),
         "discussion_title": discussion_title(),
     })
+    base.update(get_v1_resources_hash())
     return base
 
 
