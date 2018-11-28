@@ -132,6 +132,11 @@ class LegalContents:
     privacy_policy_entries = Default.langstring_entries % ("",)
     user_guidelines = Default.string_entry % ("User Guidelines",)
     user_guidelines_entries = Default.langstring_entries % ("",)
+    legal_notice_attachments = Default.string_entry % ("Attachments for legal notice")
+    terms_and_conditions_attachments = Default.string_entry % ("Attachments for terms and conditions.")
+    cookies_policy_attachments = Default.string_entry % ("Attachments for cookies policy.")
+    privacy_policy_attachments = Default.string_entry % ("Attachments for privacy policy.")
+    user_guidelines_attachments = Default.string_entry % ("Attachments for user guidelines.")
 
 
 class UpdateResourcesCenter:
@@ -154,6 +159,11 @@ class UpdateLegalContents:
     cookies_policy_entries = Default.langstring_entries % ("This is the list of all Cookie Policies in various languages.",)
     privacy_policy_entries = Default.langstring_entries % ("This is the list of all Privay Policies in various languages.",)
     user_guidelines_entries = Default.langstring_entries % ("This is the list of all User Guidelines in various languages.",)
+    legal_notice_attachments = "The list of the Attachments used in legal notice entries."
+    terms_and_conditions_attachments = "The list of the Attachments used in terms and conditions entries."
+    cookies_policy_attachments = "The list of the Attachments used in cookies policy entries."
+    privacy_policy_attachments = "The list of the Attachments used in privacy policy entries."
+    user_guidelines_attachments = "The list of the Attachments used in user guidelines entries."
 
 
 class VisitsAnalytics:
@@ -352,6 +362,7 @@ class IdeaAnnouncement:
     title = Default.string_entry % ("title of announcement")
     body = Default.string_entry % ("body of announcement")
     title_entries = Default.langstring_entries % ("This is the title of announcement in multiple languages.",)
+    body_attachments = Default.string_entry % ("Attachments for the body of announcement in multiple languages.")
     body_entries = Default.langstring_entries % ("This is the body of announcement in multiple languages.")
 
 
@@ -405,6 +416,9 @@ class QuestionInput:
 
 class VideoInput:
     title_entries = Default.langstring_entries % ("Title of the video in various languages.")
+    description_top_attachments = Default.string_entry % ("Attachments for description on the top of the video.")
+    description_bottom_attachments = Default.string_entry % ("Attachments for description on the bottom of the video.")
+    description_side_attachments = Default.string_entry % ("Attachments for description on the side of the video.")
     description_entries_top = Default.langstring_entries % ("Description on the top of the video in various languages.")
     description_entries_bottom = Default.langstring_entries % ("Description on the bottom of the video in various languages.")
     description_entries_side = Default.langstring_entries % ("Description on the side of the video in various languages.")
@@ -496,9 +510,9 @@ class UpdateLandingPageModule:
     landing_page_module = CreateLandingPageModule.landing_page_module
 
 
-class PostAttachment:
-    __doc__ = "The Attachment object associated with a Post."
-    document = Default.document % ("Any file that can be attached to a Post. ")
+class Attachment:
+    __doc__ = "Any Attachment object."
+    document = Default.document % ("Any file that can be attached. ")
 
 
 class IdeaContentLink:
@@ -1090,6 +1104,7 @@ class Resource:
     title = Default.string_entry % ("The title of the Resource.",)
     text = Default.string_entry % ("The text of the Resource.",)
     title_entries = Default.langstring_entries % ("The title of the Resource in various languages.",)
+    text_attachments = Default.string_entry % ("The attachments for the text of the Resource.",)
     text_entries = Default.langstring_entries % ("The text in the Resource in various languages.",)
     embed_code = """The URL for any i-frame based content that matches the Content-Security-Policy of the server.
     In effect, this is the \"src\" code inside of an iframe-based attachment to a Resource."""
@@ -1102,6 +1117,7 @@ class CreateResource:
     __doc__ = """A mutation that enables a Resource to be created."""
     lang = "The language used for the response fields."
     title_entries = Resource.title_entries
+    text_attachments = Resource.text_attachments
     text_entries = Resource.text_entries
     embed_code = Resource.embed_code
     image = Resource.image
@@ -1119,6 +1135,7 @@ class UpdateResource:
     lang = CreateResource.lang
     id = Default.node_id % ("Resource") + " This is the Resource identifier that must be updated."
     title_entries = Resource.title_entries
+    text_attachments = Resource.text_attachments
     text_entries = Resource.text_entries
     embed_code = Resource.embed_code
     image = Resource.image

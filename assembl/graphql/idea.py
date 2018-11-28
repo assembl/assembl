@@ -19,6 +19,7 @@ from assembl.auth.util import get_permissions
 from assembl.models.action import SentimentOfPost
 from assembl.models import Phases
 
+from .attachment import Attachment
 from .document import Document
 from .langstring import (LangStringEntry, LangStringEntryInput,
                          langstring_from_input_entries, resolve_langstring,
@@ -172,6 +173,7 @@ class IdeaInterface(graphene.Interface):
 class IdeaAnnouncementInput(graphene.InputObjectType):
     __doc__ = docs.IdeaAnnouncement.__doc__
     title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.IdeaAnnouncement.title_entries)
+    body_attachments = graphene.List(graphene.String, description=docs.IdeaAnnouncement.body_attachments)
     body_entries = graphene.List(LangStringEntryInput, required=True, description=docs.IdeaAnnouncement.body_entries)
 
 
@@ -186,6 +188,7 @@ class IdeaAnnouncement(SecureObjectType, SQLAlchemyObjectType):
     title = graphene.String(lang=graphene.String(), description=docs.IdeaAnnouncement.title)
     title_entries = graphene.List(LangStringEntry, required=True, description=docs.IdeaAnnouncement.title_entries)
     body = graphene.String(lang=graphene.String(), description=docs.IdeaAnnouncement.body)
+    body_attachments = graphene.List(Attachment, required=False, description=docs.IdeaAnnouncement.body_attachments)
     body_entries = graphene.List(LangStringEntry, required=True, description=docs.IdeaAnnouncement.body_entries)
 
     def resolve_title(self, args, context, info):
@@ -196,6 +199,10 @@ class IdeaAnnouncement(SecureObjectType, SQLAlchemyObjectType):
 
     def resolve_body(self, args, context, info):
         return resolve_langstring(self.body, args.get('lang'))
+
+    def resolve_body_attachments(self, args, context, info):
+        # TODO:
+        return []
 
     def resolve_body_entries(self, args, context, info):
         return resolve_langstring_entries(self, 'body')
@@ -611,6 +618,9 @@ class QuestionInput(graphene.InputObjectType):
 class VideoInput(graphene.InputObjectType):
     __doc__ = docs.VideoInput.__doc__
     title_entries = graphene.List(LangStringEntryInput, description=docs.VideoInput.title_entries)
+    description_top_attachments = graphene.List(LangStringEntryInput, description=docs.VideoInput.description_top_attachments)
+    description_bottom_attachments = graphene.List(LangStringEntryInput, description=docs.VideoInput.description_bottom_attachments)
+    description_side_attachments = graphene.List(LangStringEntryInput, description=docs.VideoInput.description_side_attachments)
     description_entries_top = graphene.List(LangStringEntryInput, description=docs.VideoInput.description_entries_top)
     description_entries_bottom = graphene.List(LangStringEntryInput, description=docs.VideoInput.description_entries_bottom)
     description_entries_side = graphene.List(LangStringEntryInput, description=docs.VideoInput.description_entries_side)
@@ -770,9 +780,9 @@ class CreateThematic(graphene.Mutation):
                 new_attachment = create_attachment(
                     discussion,
                     models.IdeaAttachment,
-                    image,
                     EMBED_ATTACHMENT,
-                    context
+                    context,
+                    new_value=image
                 )
                 new_attachment.idea = saobj
                 db.add(new_attachment)
@@ -782,9 +792,9 @@ class CreateThematic(graphene.Mutation):
                 new_attachment = create_attachment(
                     discussion,
                     models.IdeaAttachment,
-                    video_media,
                     MEDIA_ATTACHMENT,
-                    context
+                    context,
+                    new_value=video_media
                 )
                 new_attachment.idea = saobj
                 db.add(new_attachment)

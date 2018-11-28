@@ -33,7 +33,7 @@ const DumbLegalContentsForm = ({ client, editLocale, locale }: LegalContentsForm
       load={(fetchPolicy: FetchPolicy) => load(client, fetchPolicy, locale)}
       loading={loading}
       postLoadFormat={postLoadFormat}
-      createMutationsPromises={createMutationsPromises(client, locale)}
+      createMutationsPromises={createMutationsPromises(client)}
       save={save}
       validate={validate}
       mutators={{
@@ -49,6 +49,7 @@ const DumbLegalContentsForm = ({ client, editLocale, locale }: LegalContentsForm
                 name="termsAndConditions"
                 component={MultilingualRichTextFieldAdapter}
                 label={tacLabel}
+                withAttachmentButton
               />
               <Field
                 key={`legal-notice-${editLocale}`}
@@ -56,6 +57,7 @@ const DumbLegalContentsForm = ({ client, editLocale, locale }: LegalContentsForm
                 name="legalNotice"
                 component={MultilingualRichTextFieldAdapter}
                 label={legalNoticeLabel}
+                withAttachmentButton
               />
               <Field
                 key={`cookie-policy-${editLocale}`}
@@ -63,6 +65,7 @@ const DumbLegalContentsForm = ({ client, editLocale, locale }: LegalContentsForm
                 name="cookiesPolicy"
                 component={MultilingualRichTextFieldAdapter}
                 label={cookiesPolicyLabel}
+                withAttachmentButton
               />
               <Field
                 key={`privacy-policy-${editLocale}`}
@@ -70,6 +73,7 @@ const DumbLegalContentsForm = ({ client, editLocale, locale }: LegalContentsForm
                 name="privacyPolicy"
                 component={MultilingualRichTextFieldAdapter}
                 label={privacyPolicyLabel}
+                withAttachmentButton
               />
               <Field
                 key={`user-guidelines-${editLocale}`}
@@ -77,6 +81,7 @@ const DumbLegalContentsForm = ({ client, editLocale, locale }: LegalContentsForm
                 name="userGuidelines"
                 component={MultilingualRichTextFieldAdapter}
                 label={userGuidelinesLabel}
+                withAttachmentButton
               />
             </div>
           </AdminForm>

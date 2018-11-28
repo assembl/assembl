@@ -127,7 +127,16 @@ def create_root_thematic(phase):
     return root_thematic
 
 
+def get_attachments_with_purpose(attachments, purpose):
+    """Get all attachments with given purpose."""
+    return [
+        att for att in attachments
+        if att.attachmentPurpose == purpose
+    ]
+
+
 def get_attachment_with_purpose(attachments, purpose):
+    """Get the first attachment with given purpose."""
     for att in attachments:
         if att.attachmentPurpose == purpose:
             return att
@@ -135,23 +144,38 @@ def get_attachment_with_purpose(attachments, purpose):
     return None
 
 
-def create_attachment(discussion, attachment_model, new_value, attachment_purpose, context):
-    filename = os.path.basename(context.POST[new_value].filename)
-    mime_type = context.POST[new_value].type
+def create_document(value, context, discussion):
+    filename = os.path.basename(context.POST[value].filename)
+    mime_type = context.POST[value].type
     document = models.File(
         discussion=discussion,
         mime_type=mime_type,
         title=filename)
-    document.add_file_data(context.POST[new_value].file)
-    new_attachment = attachment_model(
-        document=document,
-        discussion=discussion,
-        creator_id=context.authenticated_userid,
-        title=filename,
-        attachmentPurpose=attachment_purpose
-    )
+    document.add_file_data(context.POST[value].file)
+    return document
 
-    return new_attachment
+
+def create_attachment(discussion, attachment_model, attachment_purpose, context, document_id=None, new_value=None):
+    if not document_id and not new_value:
+        raise Exception(u"You must provide document_id or new_value")
+
+    if new_value:
+        document = create_document(new_value, context, discussion)
+        return attachment_model(
+            document=document,
+            discussion=discussion,
+            creator_id=context.authenticated_userid,
+            title=document.title,
+            attachmentPurpose=attachment_purpose
+        )
+
+    if document_id:
+        return attachment_model(
+            document_id=document_id,
+            discussion=discussion,
+            creator_id=context.authenticated_userid,
+            attachmentPurpose=attachment_purpose
+        )
 
 
 def update_attachment(discussion, attachment_model, new_value, attachments, attachment_purpose, db, context):

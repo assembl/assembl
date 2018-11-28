@@ -1,10 +1,14 @@
 // @flow
+import { EditorState } from 'draft-js';
+import type { ApolloClient } from 'react-apollo';
 import { I18n } from 'react-redux-i18n';
+import flatMap from 'lodash/flatMap';
 
 import type { I18nValue, FileValue, FileVariable, MutationsPromises, I18nRichTextValue, SaveStatus } from './types.flow';
-import { convertEditorStateToHTML, convertEntriesToEditorState } from '../../utils/draftjs';
+import { convertEditorStateToHTML, convertEntriesToEditorState, uploadNewAttachments } from '../../utils/draftjs';
 import { displayAlert } from '../../utils/utilityManager';
 import { runSerial } from '../administration/saveButton';
+import UploadDocument from '../../graphql/mutations/uploadDocument.graphql';
 
 export function i18nValueIsEmpty(v: I18nValue): boolean {
   return (
@@ -71,11 +75,40 @@ export function convertToEntries(valuesByLocale: I18nValue): LangstringEntries {
   }));
 }
 
-export function convertRichTextToEntries(valuesByLocale: I18nRichTextValue): LangstringEntries {
-  return Object.keys(valuesByLocale).map(locale => ({
-    localeCode: locale,
-    value: convertEditorStateToHTML(valuesByLocale[locale])
+type RichTextVariables = {
+  attachments: Array<string>,
+  entries: LangstringEntries
+};
+
+/*
+  Upload new attachments and return variables for mutation
+*/
+export async function convertRichTextToVariables(
+  valuesByLocale: I18nRichTextValue,
+  client: ApolloClient
+): Promise<RichTextVariables> {
+  const uploadDocument = options => client.mutate({ mutation: UploadDocument, ...options });
+  const results = Object.keys(valuesByLocale).map(async (locale) => {
+    const result = await uploadNewAttachments(valuesByLocale[locale], uploadDocument);
+    const { documentIds, contentState } = result;
+    return {
+      documentIds: documentIds,
+      localeCode: locale,
+      value: convertEditorStateToHTML(EditorState.createWithContent(contentState))
+    };
+  });
+
+  const variables = await Promise.all(results);
+  const attachments = flatMap(variables, v => v.documentIds);
+  const entries = variables.map(v => ({
+    localeCode: v.localeCode,
+    value: v.value
   }));
+
+  return {
+    attachments: attachments,
+    entries: entries
+  };
 }
 
 export function getFileVariable(img: FileValue, initialImg: ?FileValue): FileVariable {

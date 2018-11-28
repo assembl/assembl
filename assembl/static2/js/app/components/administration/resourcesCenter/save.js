@@ -4,7 +4,7 @@ import isEqual from 'lodash/isEqual';
 import type { ApolloClient } from 'react-apollo';
 
 import type { ResourcesValues } from './types.flow';
-import { createSave, convertRichTextToEntries, convertToEntries, getFileVariable } from '../../form/utils';
+import { createSave, convertRichTextToVariables, convertToEntries, getFileVariable } from '../../form/utils';
 import createResourceMutation from '../../../graphql/mutations/createResource.graphql';
 import updateResourceMutation from '../../../graphql/mutations/updateResource.graphql';
 import deleteResourceMutation from '../../../graphql/mutations/deleteResource.graphql';
@@ -17,14 +17,17 @@ function getResourcesCenterVariables(values) {
   };
 }
 
-function getResourceVariables(resource, initialResource, order) {
+async function getResourceVariables(client, resource, initialResource, order) {
   const initialDoc = initialResource ? initialResource.doc : null;
   const initialImg = initialResource ? initialResource.img : null;
+  const textVars = await convertRichTextToVariables(resource.text, client);
+  const { attachments: textAttachments, entries: textEntries } = textVars;
   return {
     doc: getFileVariable(resource.doc, initialDoc),
     embedCode: resource.embedCode,
     image: getFileVariable(resource.img, initialImg),
-    textEntries: convertRichTextToEntries(resource.text),
+    textAttachments: textAttachments,
+    textEntries: textEntries,
     titleEntries: convertToEntries(resource.title),
     order: order
   };
@@ -58,30 +61,33 @@ export const createMutationsPromises = (client: ApolloClient, lang: string) => (
   const createUpdateMutations = values.resources.map((resource, idx) => {
     const initialResource = initialValues.resources.find(t => t.id === resource.id);
     const order = idx !== initialIds.indexOf(resource.id) ? idx + 1 : null;
-    const variables = getResourceVariables(resource, initialResource, order);
     if (idsToCreate.indexOf(resource.id) > -1) {
       return () =>
-        client.mutate({
-          mutation: createResourceMutation,
-          variables: {
-            lang: lang,
-            ...variables
-          }
-        });
+        getResourceVariables(client, resource, initialResource, order).then(variables =>
+          client.mutate({
+            mutation: createResourceMutation,
+            variables: {
+              lang: lang,
+              ...variables
+            }
+          })
+        );
     }
 
     const orderHasChanged = initialIds.indexOf(resource.id) !== currentIds.indexOf(resource.id);
     const hasChanged = orderHasChanged || !isEqual(initialResource, resource);
     if (hasChanged) {
       return () =>
-        client.mutate({
-          mutation: updateResourceMutation,
-          variables: {
-            id: resource.id,
-            lang: lang,
-            ...variables
-          }
-        });
+        getResourceVariables(client, resource, initialResource, order).then(variables =>
+          client.mutate({
+            mutation: updateResourceMutation,
+            variables: {
+              id: resource.id,
+              lang: lang,
+              ...variables
+            }
+          })
+        );
     }
 
     return () => Promise.resolve();

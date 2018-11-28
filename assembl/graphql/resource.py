@@ -30,6 +30,7 @@ class Resource(SecureObjectType, SQLAlchemyObjectType):
     title = graphene.String(lang=graphene.String(description=docs.Default.required_language_input))
     text = graphene.String(lang=graphene.String(description=docs.Default.required_language_input))
     title_entries = graphene.List(LangStringEntry, description=docs.Resource.title_entries)
+    text_attachments = graphene.List(graphene.String, description=docs.Resource.text_attachments)
     text_entries = graphene.List(LangStringEntry, description=docs.Resource.title_entries)
     embed_code = graphene.String(description=docs.Resource.embed_code)
     order = graphene.Float(description=docs.Resource.order)
@@ -46,6 +47,10 @@ class Resource(SecureObjectType, SQLAlchemyObjectType):
     def resolve_text(self, args, context, info):
         text = resolve_langstring(self.text, args.get('lang'))
         return text
+
+    def resolve_text_attachments(self, args, context, info):
+        # TODO:
+        return []
 
     def resolve_text_entries(self, args, context, info):
         return resolve_langstring_entries(self, 'text')
@@ -70,6 +75,7 @@ class CreateResource(graphene.Mutation):
         # Careful, having required=True on a graphene.List only means
         # it can't be None, having an empty [] is perfectly valid.
         title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.CreateResource.title_entries)
+        text_attachments = graphene.List(LangStringEntryInput, description=docs.CreateResource.text_attachments)
         text_entries = graphene.List(LangStringEntryInput, description=docs.CreateResource.text_entries)
         embed_code = graphene.String(description=docs.CreateResource.embed_code)
         image = graphene.String(description=docs.CreateResource.image)
@@ -124,9 +130,9 @@ class CreateResource(graphene.Mutation):
                 new_attachment = create_attachment(
                     discussion,
                     models.ResourceAttachment,
-                    image,
                     ATTACHMENT_PURPOSE_IMAGE,
-                    context
+                    context,
+                    new_value=image
                 )
                 new_attachment.resource = saobj
                 db.add(new_attachment)
@@ -136,9 +142,9 @@ class CreateResource(graphene.Mutation):
                 new_attachment = create_attachment(
                     discussion,
                     models.ResourceAttachment,
-                    doc,
                     ATTACHMENT_PURPOSE_DOCUMENT,
-                    context
+                    context,
+                    new_value=doc
                 )
                 new_attachment.resource = saobj
                 db.add(new_attachment)
@@ -183,6 +189,7 @@ class UpdateResource(graphene.Mutation):
     class Input:
         id = graphene.ID(required=True)
         title_entries = graphene.List(LangStringEntryInput, description=docs.UpdateResource.title_entries)
+        text_attachments = graphene.List(LangStringEntryInput, description=docs.UpdateResource.text_attachments)
         text_entries = graphene.List(LangStringEntryInput, description=docs.UpdateResource.text_entries)
         embed_code = graphene.String(description=docs.UpdateResource.embed_code)
         image = graphene.String(description=docs.UpdateResource.image)

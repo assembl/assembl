@@ -7,9 +7,9 @@ import type { SurveyAdminValues } from './types.flow';
 import createThematicMutation from '../../../graphql/mutations/createThematic.graphql';
 import deleteThematicMutation from '../../../graphql/mutations/deleteThematic.graphql';
 import updateThematicMutation from '../../../graphql/mutations/updateThematic.graphql';
-import { createSave, convertToEntries, convertRichTextToEntries, getFileVariable } from '../../form/utils';
+import { createSave, convertToEntries, convertRichTextToVariables, getFileVariable } from '../../form/utils';
 
-function getVideoVariable(video, initialVideo) {
+async function getVideoVariable(client, video, initialVideo) {
   if (!video) {
     // pass {} to remove all video fields on server side
     return {};
@@ -19,13 +19,23 @@ function getVideoVariable(video, initialVideo) {
   const mediaImg = video.media ? video.media.img : null;
   const mediaFile = getFileVariable(mediaImg, initialMediaFile);
 
+  const descriptionBottomVariables = await convertRichTextToVariables(video.descriptionBottom);
+  const { attachments: descriptionBottomAttachments, entries: descriptionEntriesBottom } = descriptionBottomVariables;
+  const descriptionSideVariables = await convertRichTextToVariables(video.descriptionSide);
+  const { attachments: descriptionSideAttachments, entries: descriptionEntriesSide } = descriptionSideVariables;
+  const descriptionTopVariables = await convertRichTextToVariables(video.descriptionTop);
+  const { attachments: descriptionTopAttachments, entries: descriptionEntriesTop } = descriptionTopVariables;
+
   const videoV = {
     htmlCode: video.media ? video.media.htmlCode : '',
     mediaFile: mediaFile,
     titleEntries: video.title ? convertToEntries(video.title) : null,
-    descriptionEntriesBottom: video.descriptionBottom ? convertRichTextToEntries(video.descriptionBottom) : null,
-    descriptionEntriesSide: video.descriptionSide ? convertRichTextToEntries(video.descriptionSide) : null,
-    descriptionEntriesTop: video.descriptionTop ? convertRichTextToEntries(video.descriptionTop) : null
+    descriptionBottomAttachments: descriptionBottomAttachments,
+    descriptionSideAttachments: descriptionSideAttachments,
+    descriptionTopAttachments: descriptionTopAttachments,
+    descriptionEntriesBottom: descriptionEntriesBottom,
+    descriptionEntriesSide: descriptionEntriesSide,
+    descriptionEntriesTop: descriptionEntriesTop
   };
   return videoV;
 }
@@ -43,14 +53,14 @@ const getChildrenVariables = (thematic, initialTheme) =>
     })
     : []);
 
-function getVariables(theme, initialTheme, order, discussionPhaseId) {
+async function getVariables(client, theme, initialTheme, order, discussionPhaseId) {
   const initialImg = initialTheme ? initialTheme.img : null;
   const initialVideo = initialTheme ? initialTheme.video : null;
   return {
     discussionPhaseId: discussionPhaseId,
     titleEntries: convertToEntries(theme.title),
     image: getFileVariable(theme.img, initialImg),
-    video: getVideoVariable(theme.video, initialVideo),
+    video: await getVideoVariable(client, theme.video, initialVideo),
     questions:
       theme.questions &&
       theme.questions.map(q => ({
@@ -84,26 +94,29 @@ export const createMutationsPromises = (client: ApolloClient, discussionPhaseId:
   const createUpdateMutations = values.themes.map((theme, idx) => {
     const initialTheme = initialValues.themes.find(t => t.id === theme.id);
     const order = idx !== initialIds.indexOf(theme.id) ? idx + 1 : null;
-    const variables = getVariables(theme, initialTheme, order, discussionPhaseId);
     if (idsToCreate.indexOf(theme.id) > -1) {
       return () =>
-        client.mutate({
-          mutation: createThematicMutation,
-          variables: variables
-        });
+        getVariables(client, theme, initialTheme, order, discussionPhaseId).then(variables =>
+          client.mutate({
+            mutation: createThematicMutation,
+            variables: variables
+          })
+        );
     }
 
     const orderHasChanged = initialIds.indexOf(theme.id) !== currentIds.indexOf(theme.id);
     const hasChanged = orderHasChanged || !isEqual(initialTheme, theme);
     if (hasChanged) {
       return () =>
-        client.mutate({
-          mutation: updateThematicMutation,
-          variables: {
-            id: theme.id,
-            ...variables
-          }
-        });
+        getVariables(client, theme, initialTheme, order, discussionPhaseId).then(variables =>
+          client.mutate({
+            mutation: updateThematicMutation,
+            variables: {
+              id: theme.id,
+              ...variables
+            }
+          })
+        );
     }
 
     return () => Promise.resolve();
