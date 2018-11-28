@@ -148,20 +148,17 @@ const getLegalContentsLinksList = (legalContentsList) => {
   return legalContentsList.map((legalContentType, index) => {
     const translationKey = legalContentType === 'terms' ? 'termsAndConditions' : legalContentType;
     const length = legalContentsList.length;
-    const isAlone = length === 1;
     const isLast = index + 1 === length;
-    const isForelast = !isAlone && length > 2 && index + 2 >= length;
-    const isLastOfTwo = length === 2 && index + 2 === length;
+    const isForelast = index + 2 === length;
     let endOfBlock = ', ';
-    if (isForelast || isLastOfTwo) {
-      endOfBlock = '';
+    if (isForelast) {
+      endOfBlock = <Translate value="and" />;
     } else if (isLast) {
       endOfBlock = <Translate value="legalContentsModal.ofThePlatform" />;
     }
 
     return legalContentType ? (
       <React.Fragment key={legalContentType}>
-        {isForelast || isLastOfTwo ? 'et ' : null}
         <Link to={get(`${legalContentType}`, { slug: slug })} target="_blank">
           <Translate value={`${translationKey}.link`} />
         </Link>

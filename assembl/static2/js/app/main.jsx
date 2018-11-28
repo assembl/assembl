@@ -10,7 +10,7 @@ import CookiesBar from './components/cookiesBar';
 import manageErrorAndLoading from './components/common/manageErrorAndLoading';
 import { fromGlobalId, getRouteLastString } from './utils/globalFunctions';
 import { legalConfirmModal } from './utils/utilityManager';
-import { legalContentSlugs } from './constants';
+import { legalContentSlugs, ESSENTIAL_SIGNUP_COOKIES as LEGAL_CONTENTS_TO_ACCEPT } from './constants';
 import TabsConditionQuery from './graphql/TabsConditionQuery.graphql';
 
 type Props = {
@@ -29,10 +29,29 @@ class Main extends React.Component<Props> {
   componentDidUpdate() {
     const lastRouteString = getRouteLastString(this.props.location.pathname);
     const isOnLegalContentPage = legalContentSlugs.includes(lastRouteString);
+    const { hasTermsAndConditions, hasPrivacyPolicy, hasUserGuidelines } = this.props;
+    const legalContentsToAccept = {
+      terms: hasTermsAndConditions,
+      privacyPolicy: hasPrivacyPolicy,
+      userGuidelines: hasUserGuidelines
+    };
+    const legalContentsArray = Object.keys(legalContentsToAccept).map(key => (legalContentsToAccept[key] ? key : null));
+    const cleanLegalContentsArray = legalContentsArray.filter(el => el !== null);
     if (!isOnLegalContentPage) {
-      legalConfirmModal();
+      legalConfirmModal(cleanLegalContentsArray);
     }
   }
+
+  getLegalContentsToAccept = () => {
+    const { hasTermsAndConditions, hasPrivacyPolicy, hasUserGuidelines } = this.props;
+    const legalContentsToAccept = {
+      ACCEPT_CGU: hasTermsAndConditions,
+      ACCEPT_PRIVACY_POLICY_ON_DISCUSSION: hasPrivacyPolicy,
+      ACCEPT_USER_GUIDELINE_ON_DISCUSSION: hasUserGuidelines
+    };
+    const filteredLegalContentsToAccept = LEGAL_CONTENTS_TO_ACCEPT.filter(contentType => legalContentsToAccept[contentType]);
+    return filteredLegalContentsToAccept;
+  };
 
   render() {
     const {
@@ -93,4 +112,5 @@ const withData = graphql(TabsConditionQuery, {
     hasUserGuidelines: hasUserGuidelines
   })
 });
+
 export default compose(connect(mapStateToProps), withData, manageErrorAndLoading({ displayLoader: false }))(Main);
