@@ -1037,12 +1037,12 @@ class TestTaxonomyExport(AbstractExport):
     HARVESTED_ON = 13
     NUGGET = 14
     STATE = 15
-    TAGS = 16
+    TAG1 = 16
+    TAG2 = 17
 
     def test_base(self, test_session, test_app, discussion, user_language_preference_en_cookie, extract_post_1_to_subidea_1_1, extract_with_range_in_reply_post_1):
         result = self.get_result(test_app, discussion.id, view_name=self.view_name)
         header = result[0]
-
         assert header[self.MESSAGE] == "Message"
         assert header[self.CONTENT_HARVESTED] == "Content Harvested"
         assert header[self.CONTENT_LOCALE] == "Content Locale"
@@ -1058,7 +1058,8 @@ class TestTaxonomyExport(AbstractExport):
         assert header[self.HARVESTED_ON] == "Harvested On"
         assert header[self.NUGGET] == "Nugget"
         assert header[self.STATE] == "State"
-        assert header[self.TAGS] == "Tags"
+        assert header[self.TAG1] == "Tag1"
+        assert header[self.TAG2] == "Tag2"
 
         first_row = result[1]
         # Depending on tests execution order, the thematic can change
@@ -1078,7 +1079,8 @@ class TestTaxonomyExport(AbstractExport):
         assert first_row[self.HARVESTER_USERNAME] == ""
         assert first_row[self.NUGGET] == "No"
         assert first_row[self.STATE] == "PUBLISHED"
-        assert first_row[self.TAGS] == "foo, bar"
+        assert first_row[self.TAG1] == "foo"
+        assert first_row[self.TAG2] == "bar"
 
         last_row = result[-1]
         # Depending on tests execution order, the thematic can change
@@ -1098,7 +1100,8 @@ class TestTaxonomyExport(AbstractExport):
         assert last_row[self.HARVESTER_USERNAME] == ""
         assert last_row[self.NUGGET] == "Yes"
         assert last_row[self.STATE] == "PUBLISHED"
-        assert last_row[self.TAGS] == ""
+        assert last_row[self.TAG1] == ""
+        assert last_row[self.TAG2] == ""
 
 
 class TestPhase1Export(AbstractExport):
