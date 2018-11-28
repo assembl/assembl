@@ -12,7 +12,7 @@ import FictionPreview from './fictionPreview';
 import Permissions, { connectedUserCan } from '../../../utils/permissions';
 import { displayAlert } from '../../../utils/utilityManager';
 // Constant imports
-import { EMPTY_STRING } from '../../../constants';
+import { EMPTY_STRING, PICTURES_LENGTH } from '../../../constants';
 // Type imports
 import type { BrightMirrorFictionProps } from '../../../pages/brightMirrorFiction';
 
@@ -94,6 +94,7 @@ const FictionsList = ({ posts, identifier, refetchIdea, lang, themeId }: Props) 
           publicationState={post.publicationState}
           deleteFictionHandler={deleteFictionHandler}
           fictionMetaInfo={fictionMetaInfo}
+          pictureId={post.dbId % PICTURES_LENGTH}
         />
       </Animated>
     );
