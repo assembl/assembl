@@ -95,7 +95,7 @@ def find_theme(theme_name, frontend_version=1):
             # print repr(dirpath), repr(dirnames) , repr(filenames)
             relpath = os.path.relpath(dirpath, theme_base_path)
             (head, name) = os.path.split(dirpath)
-            print name, relpath
+            # print name, relpath
             if name == theme_name:
                 THEMES.setdefault(frontend_version, {})
                 THEMES[frontend_version][theme_name] = relpath
