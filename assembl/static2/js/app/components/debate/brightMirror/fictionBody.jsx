@@ -106,6 +106,15 @@ class FictionBody extends React.Component<Props, State> {
     });
   };
 
+  setPositionToCoordinates = (position: { x: number, y: number }) => {
+    this.setState({
+      commentBadgeDynamicPosition: {
+        x: position.x,
+        y: position.y
+      }
+    });
+  };
+
   getAnchorPosition = () => {
     const selection = document.getSelection();
     const selectionRange = selection ? selection.getRangeAt(0) : null;
@@ -203,6 +212,7 @@ class FictionBody extends React.Component<Props, State> {
           handleClickAnchor={this.handleClickAnchor}
           cancelSubmit={this.cancelSubmit}
           setPositionToExtract={this.setPositionToExtract}
+          setPositionToCoordinates={this.setPositionToCoordinates}
           userCanReply={userCanReply}
         />
         <SentimentMenu

@@ -46,10 +46,11 @@ export type Props = {
   uploadDocument: Function,
   deletePost: Function,
   deleteExtract: Function,
-  toggleCommentsBox: () => void,
+  toggleCommentsBox: boolean => void,
   clearHighlights: () => void,
   position: { x: number, y: number },
   setPositionToExtract: FictionExtractFragment => void,
+  setPositionToCoordinates: ({ x: number, y: number }) => void,
   userCanReply: boolean
 };
 
@@ -219,7 +220,9 @@ class DumbSideCommentBox extends React.Component<Props, State> {
       toggleCommentsBox,
       refetchPost,
       uploadDocument,
-      extracts
+      extracts,
+      setPositionToCoordinates,
+      position
     } = this.props;
     const { body, selectionText, serializedAnnotatorRange } = this.state;
     if (!selectionText || !serializedAnnotatorRange) {
@@ -266,7 +269,8 @@ class DumbSideCommentBox extends React.Component<Props, State> {
               () => {
                 // Close submit view, open comments view on refresh
                 toggleSubmitDisplay();
-                toggleCommentsBox();
+                toggleCommentsBox(false);
+                setPositionToCoordinates(position);
                 window.getSelection().removeAllRanges();
                 displayAlert('success', I18n.t('debate.brightMirror.sideComment.submitSuccessMsg'));
                 refetchPost();

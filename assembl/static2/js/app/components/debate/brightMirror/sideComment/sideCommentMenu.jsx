@@ -19,6 +19,7 @@ type Props = {
   cancelSubmit: () => void,
   refetchPost: Function,
   setPositionToExtract: (?FictionExtractFragment) => void,
+  setPositionToCoordinates: ({ x: number, y: number }) => void,
   userCanReply: boolean
 };
 
@@ -43,12 +44,12 @@ class SideCommentMenu extends React.Component<Props, State> {
     });
   };
 
-  toggleCommentsBox = () => {
+  toggleCommentsBox = (init?: boolean) => {
     const { setPositionToExtract, extracts } = this.props;
     this.clearHighlights();
     this.setState((prevState) => {
       // If displaying box, set position to first extract
-      if (!prevState.commentBoxDisplayed && extracts && extracts.length > 0) setPositionToExtract(extracts[0]);
+      if (!prevState.commentBoxDisplayed && init && extracts && extracts.length > 0) setPositionToExtract(extracts[0]);
       return { commentBoxDisplayed: !prevState.commentBoxDisplayed };
     });
   };
@@ -83,6 +84,7 @@ class SideCommentMenu extends React.Component<Props, State> {
       badgeDynamicPosition,
       badgeFixedPosition,
       setPositionToExtract,
+      setPositionToCoordinates,
       userCanReply
     } = this.props;
     const { commentBoxDisplayed } = this.state;
@@ -123,6 +125,7 @@ class SideCommentMenu extends React.Component<Props, State> {
             position={badgePosition}
             clearHighlights={this.clearHighlights}
             setPositionToExtract={setPositionToExtract}
+            setPositionToCoordinates={setPositionToCoordinates}
             userCanReply={userCanReply}
           />
         ) : null}

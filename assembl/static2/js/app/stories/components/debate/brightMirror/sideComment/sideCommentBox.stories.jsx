@@ -202,6 +202,7 @@ export const defaultSideCommentBoxProps: SideCommentBoxProps = {
   toggleCommentsBox: action('toggleCommentsBox'),
   position: { x: 0, y: 0 },
   setPositionToExtract: action('setPositionToExtract'),
+  setPositionToCoordinates: action('setPositionToCoordinates'),
   clearHighlights: action('clearHighlights'),
   userCanReply: false
 };
