@@ -1193,35 +1193,60 @@ def test_mutation_update_ideas_delete(test_session, graphql_request, graphql_reg
         context_value=graphql_request,
         variable_values={
             'discussionPhaseId': phases['brightMirror'].id,
-            'ideas': [{
-                'messageViewOverride': 'brightMirror',
-                'titleEntries': [
-                    {'value': u"Comprendre les dynamiques et les enjeux", 'localeCode': u"fr"},
-                    {'value': u"Understanding the dynamics and issues", 'localeCode': u"en"}
-                ],
-                'descriptionEntries': [
-                    {'value': u"Desc FR", 'localeCode': u"fr"},
-                    {'value': u"Desc EN", 'localeCode': u"en"}
-                ],
-                'image': u'variables.ideas.0.image',  # this is added via graphql_wsgi but we need to do it ourself here
-                'announcement': {
+            'ideas': [
+                {
+                    'messageViewOverride': 'brightMirror',
                     'titleEntries': [
-                        {'value': u"Title FR announce", 'localeCode': u"fr"},
-                        {'value': u"Title EN announce", 'localeCode': u"en"}
+                        {'value': u"Comprendre les dynamiques et les enjeux", 'localeCode': u"fr"},
+                        {'value': u"Understanding the dynamics and issues", 'localeCode': u"en"}
                     ],
-                    'bodyEntries': [
-                        {'value': u"Body FR announce", 'localeCode': u"fr"},
-                        {'value': u"Body EN announce", 'localeCode': u"en"}
-                    ]
+                    'descriptionEntries': [
+                        {'value': u"Desc FR", 'localeCode': u"fr"},
+                        {'value': u"Desc EN", 'localeCode': u"en"}
+                    ],
+                    'image': u'variables.ideas.0.image',  # this is added via graphql_wsgi but we need to do it ourself here
+                    'announcement': {
+                        'titleEntries': [
+                            {'value': u"Title FR announce", 'localeCode': u"fr"},
+                            {'value': u"Title EN announce", 'localeCode': u"en"}
+                        ],
+                        'bodyEntries': [
+                            {'value': u"Body FR announce", 'localeCode': u"fr"},
+                            {'value': u"Body EN announce", 'localeCode': u"en"}
+                        ]
+                    }
+                },
+                {
+                    'messageViewOverride': None,
+                    'titleEntries': [
+                        {'value': u"Thread FR", 'localeCode': u"fr"},
+                        {'value': u"Thread EN", 'localeCode': u"en"}
+                    ],
+                    'descriptionEntries': [
+                        {'value': u"Desc FR", 'localeCode': u"fr"},
+                        {'value': u"Desc EN", 'localeCode': u"en"}
+                    ],
+                    'announcement': {
+                        'titleEntries': [
+                            {'value': u"Title FR announce", 'localeCode': u"fr"},
+                            {'value': u"Title EN announce", 'localeCode': u"en"}
+                        ],
+                        'bodyEntries': [
+                            {'value': u"Body FR announce", 'localeCode': u"fr"},
+                            {'value': u"Body EN announce", 'localeCode': u"en"}
+                        ]
+                    }
                 }
-            }]
+            ]
         })
 
     assert res.errors is None
     ideas = res.data['updateIdeas']['query']['thematics']
-    assert len(ideas) == 1
-    idea = ideas[0]
-    assert idea['messageViewOverride'] == u'brightMirror'
+    assert len(ideas) == 2
+    bright = ideas[0]
+    assert bright['messageViewOverride'] == u'brightMirror'
+    thread = ideas[1]
+    assert thread['messageViewOverride'] == None
 
     # and remove it
     del graphql_request.POST['variables.ideas.0.image']
@@ -1231,12 +1256,34 @@ def test_mutation_update_ideas_delete(test_session, graphql_request, graphql_reg
         variable_values={
             'discussionPhaseId': phases['brightMirror'].id,
             'ideas': [
+                {
+                    'id': thread['id'],
+                    'messageViewOverride': None,
+                    'titleEntries': [
+                        {'value': u"Thread FR", 'localeCode': u"fr"},
+                        {'value': u"Thread EN", 'localeCode': u"en"}
+                    ],
+                    'descriptionEntries': [
+                        {'value': u"Desc FR", 'localeCode': u"fr"},
+                        {'value': u"Desc EN", 'localeCode': u"en"}
+                    ],
+                    'announcement': {
+                        'titleEntries': [
+                            {'value': u"Title FR announce", 'localeCode': u"fr"},
+                            {'value': u"Title EN announce", 'localeCode': u"en"}
+                        ],
+                        'bodyEntries': [
+                            {'value': u"Body FR announce", 'localeCode': u"fr"},
+                            {'value': u"Body EN announce", 'localeCode': u"en"}
+                        ]
+                    }
+                }
             ]
         })
 
     assert res.errors is None
     ideas = res.data['updateIdeas']['query']['thematics']
-    assert len(ideas) == 0
+    assert len(ideas) == 1
 
     # cleanup
     test_session.rollback()
