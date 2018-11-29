@@ -441,6 +441,7 @@ const Translations = {
         startFictionLabel: "Je partage ma fiction",
         commentFiction: {
           cancel: "Annuler",
+          commentHelper: "Commenter",
           deleteComment: "Supprimer ce message",
           deleteCommentBodyMessage: "Êtes-vous sûr de vouloir supprimer ce message ?",
           editComment: "Modifier ce message",
@@ -1389,6 +1390,7 @@ const Translations = {
         startFictionLabel: "Share a fiction",
         commentFiction: {
           cancel: "Cancel",
+          commentHelper: "Comment",
           deleteComment: "Delete this message",
           deleteCommentBodyMessage: "Are you sure you want to delete this message?",
           editComment: "Edit this message",
