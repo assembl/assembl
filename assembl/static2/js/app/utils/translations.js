@@ -61,7 +61,7 @@ const Translations = {
         label: "Tags",
         cancel: "Annuler",
         validate: "Valider",
-        edit: "Cliquez pour editer le tag",
+        edit: "Cliquez pour editer le tag \"%{tag}\"",
         deleteConfirmation: {
           confirmDeletionTitle: "Supprimer le tag \"%{tag}\"",
           confirmDeletionBody: "Êtes-vous certain de vouloir supprimer ce tag ?"
@@ -1011,7 +1011,7 @@ const Translations = {
         label: "Tags",
         cancel: "Cancel",
         validate: "Validate",
-        edit: "Click to edit the tag",
+        edit: "Click to edit the tag \"%{tag}\"",
         deleteConfirmation: {
           confirmDeletionTitle: "Delete the tag \"%{tag}\"",
           confirmDeletionBody: "Are you sure that you wish to delete this tag?"
