@@ -10,7 +10,7 @@ import Adapter from 'enzyme-adapter-react-16';
 import CommentHelperButton from '../../../../../js/app/components/debate/common/commentHelperButton';
 
 // Import existing storybook data
-import { defaultCommentHelperButtonProps } from '../../../../../js/app/stories/components/debate/common/commentHelperButton.stories';
+import { defaultCommentHelperButtonProps } from '../../../../../js/app/stories/components/debate/common/commentHelperButton.stories'; // eslint-disable-line max-len
 
 // Separate the snapshots in directories next to each component
 // Name should match with the story name

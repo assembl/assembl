@@ -274,6 +274,28 @@ exports[`Storyshots FictionBodyToolbar default 1`] = `
           </span>
         </div>
       </div>
+      <div
+        className="custom-overlay"
+      >
+        <div
+          onBlur={[Function]}
+          onClick={null}
+          onFocus={[Function]}
+          onMouseOut={[Function]}
+          onMouseOver={[Function]}
+        >
+          <button
+            className="comment-helper comment-helper-default"
+            disabled={false}
+            onClick={[Function]}
+            type="button"
+          >
+            <span
+              className="assembl-icon-suggest"
+            />
+          </button>
+        </div>
+      </div>
     </div>
   </div>
   <button
@@ -1112,6 +1134,28 @@ exports[`Storyshots FictionBodyToolbar playground 1`] = `
           <span>
             1 réaction
           </span>
+        </div>
+      </div>
+      <div
+        className="custom-overlay"
+      >
+        <div
+          onBlur={[Function]}
+          onClick={null}
+          onFocus={[Function]}
+          onMouseOut={[Function]}
+          onMouseOver={[Function]}
+        >
+          <button
+            className="comment-helper comment-helper-default"
+            disabled={false}
+            onClick={[Function]}
+            type="button"
+          >
+            <span
+              className="assembl-icon-suggest"
+            />
+          </button>
         </div>
       </div>
     </div>

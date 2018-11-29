@@ -5,6 +5,8 @@ import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 
 import FictionBodyToolbar from '../../../../../js/app/components/debate/brightMirror/fictionBodyToolbar';
+import CommentHelperButton from '../../../../../js/app/components/debate/common/commentHelperButton';
+import ResponsiveOverlayTrigger from '../../../../../js/app/components/common/responsiveOverlayTrigger';
 
 // Import existing storybook data
 import { props } from '../../../../../js/app/stories/components/debate/brightMirror/fictionBodyToolbar.stories'; // eslint-disable-line max-len
@@ -63,5 +65,13 @@ describe('<FictionBodyToolbar /> - with shallow', () => {
     });
     expect(wrapper.find('div [className="min-sentiment"]')).toHaveLength(3);
     expect(wrapper.find('div [className="txt"]').text()).toEqual('7 réactions');
+  });
+
+  it('should render one CommentHelperButton', () => {
+    expect(wrapper.find(CommentHelperButton)).toHaveLength(1);
+  });
+
+  it('should render 5 ResponsiveOverlayTrigger for tooltip (4 from the sentiment bar and 1 from CommentHelperButton)', () => {
+    expect(wrapper.find(ResponsiveOverlayTrigger)).toHaveLength(5);
   });
 });

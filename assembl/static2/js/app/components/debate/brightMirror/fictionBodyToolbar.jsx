@@ -1,14 +1,20 @@
 // @flow
 import React from 'react';
 import get from 'lodash/get';
-
 import { OverlayTrigger } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
-
+// Constant imports
 import { MEDIUM_SCREEN_WIDTH, SENTIMENT_TOP_OFFSET, SENTIMENT_RIGHT_OFFSET } from '../../../constants';
+import { commentHelperButtonTooltip } from '../../common/tooltips';
+// Component imports
 import Sentiments from '../common/sentiments';
+import CommentHelperButton from '../common/commentHelperButton';
+import ResponsiveOverlayTrigger from '../../common/responsiveOverlayTrigger';
+// Helper imports
 import getSentimentStats from '../common/sentimentStats';
 import fictionSentimentDefinitions from './fictionSentimentDefinition';
+// Type imports
+import type { Props as CommentHelperButtonProps } from '../common/commentHelperButton';
 
 export type Props = {
   position: { x: number, y: number },
@@ -26,6 +32,18 @@ const FictionBodyToolbar = ({ postId, mySentiment, screenWidth, position, sentim
     const { like, disagree, dontUnderstand, moreInfo } = sentimentCounts;
     totalSentimentsCount = like + disagree + dontUnderstand + moreInfo;
   }
+
+  const commentHelperButtonProps: CommentHelperButtonProps = {
+    onClickCallback: () => null,
+    linkClassName: 'comment-helper'
+  };
+
+  const displayCommentHelperButton = (
+    <ResponsiveOverlayTrigger placement="right" tooltip={commentHelperButtonTooltip}>
+      <CommentHelperButton {...commentHelperButtonProps} />
+    </ResponsiveOverlayTrigger>
+  );
+
   return (
     <div
       className="body-toolbar-container hidden-xs hidden-sm hidden-md"
@@ -71,6 +89,7 @@ const FictionBodyToolbar = ({ postId, mySentiment, screenWidth, position, sentim
       ) : (
         <div className="empty-sentiments-count" />
       )}
+      {displayCommentHelperButton}
     </div>
   );
 };
