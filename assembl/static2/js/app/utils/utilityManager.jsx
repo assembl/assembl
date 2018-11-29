@@ -190,7 +190,19 @@ export const legalConfirmModal = (legalContentsToAccept, acceptAllLegalContents,
     >
       <Translate value="refuse" />
     </Button>,
-    <Button disabled={!modalIsChecked} key="accept" className="button-submit button-dark" onClick={acceptAllLegalContents}>
+    <Button
+      disabled={!modalIsChecked}
+      key="accept"
+      className="button-submit button-dark"
+      onClick={() => {
+        try {
+          acceptAllLegalContents();
+        } catch (error) {
+          console.error(error); // eslint-disable-line
+        }
+        closeModal();
+      }}
+    >
       <Translate value="accept" />
     </Button>
   ];
