@@ -20,6 +20,15 @@
       margin-bottom: 20px;
       margin-top: 15px;
     }
+
+    .embed-theater {
+      .embed-thumbnail,
+      .embed-thumbnail-container {
+        display: block;
+        width: 320px;
+        height: 180px;
+      }
+    }
   }
 
   .active-extract,
@@ -42,6 +51,15 @@
         margin-bottom: 35px;
         margin-top: 35px;
       }
+
+      .embed-theater {
+        .embed-thumbnail,
+        .embed-thumbnail-container {
+          display: block;
+          width: 598px;
+          height: 336px;
+        }
+      }
     }
   }
 
@@ -50,6 +68,15 @@
       .attachment-image {
         margin-bottom: 25px;
         margin-top: 45px;
+      }
+
+      .embed-theater {
+        .embed-thumbnail,
+        .embed-thumbnail-container {
+          display: block;
+          width: 768px;
+          height: 432px;
+        }
       }
     }
   }
