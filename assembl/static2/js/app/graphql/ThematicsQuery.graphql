@@ -1,62 +1,7 @@
 #import "./fragments/LangString.graphql"
 #import "./fragments/IdeaData.graphql"
+#import "./fragments/Ideas.graphql"
 
 query ThematicsQuery($discussionPhaseId: Int!) {
-  thematics: ideas(discussionPhaseId: $discussionPhaseId) {
-    ... on IdeaInterface {
-      ...ideaData
-      parentId
-    }
-    ... on Idea {
-      id
-      descriptionEntries {
-        ...langStringEntry
-      }
-      announcement {
-        titleEntries {
-          ...langStringEntry
-        }
-        bodyEntries {
-          ...langStringEntry
-        }
-      }
-    }
-    ... on Thematic {
-      id
-      video {
-        titleEntries {
-          ...langStringEntry
-        }
-        descriptionEntriesTop {
-          ...langStringEntry
-        }
-        descriptionEntriesBottom {
-          ...langStringEntry
-        }
-        descriptionEntriesSide {
-          ...langStringEntry
-        }
-        htmlCode
-        mediaFile {
-          externalUrl
-          mimeType
-          title
-        }
-      }
-      questions {
-        id
-        titleEntries {
-          ...langStringEntry
-        }
-      }
-    }
-  }
-  rootIdea(discussionPhaseId: $discussionPhaseId) {
-    ... on Idea {
-      id
-    }
-    ... on Thematic {
-      id
-    }
-  }
+  ...ideas
 }

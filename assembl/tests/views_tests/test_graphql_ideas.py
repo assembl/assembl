@@ -1102,15 +1102,20 @@ def test_mutation_update_ideas_create(test_session, graphql_request, graphql_reg
         })
 
     assert res.errors is None
-    ideas = res.data['updateIdeas']['rootIdea']['children']
+    ideas = res.data['updateIdeas']['query']['thematics']
     assert len(ideas) == 1
     idea = ideas[0]
     assert idea['announcement'] == {
-        u'title': u'Title EN announce',
-        u'body': u'Body EN announce'
-    }
-    assert idea['title'] == u'Understanding the dynamics and issues'
-    assert idea['description'] == u'Desc EN'
+        u'bodyEntries': [{u'localeCode': u'en', u'value': u'Body EN announce'},
+                         {u'localeCode': u'fr', u'value': u'Body FR announce'}],
+        u'titleEntries': [{u'localeCode': u'en', u'value': u'Title EN announce'},
+                          {u'localeCode': u'fr', u'value': u'Title FR announce'}]}
+    assert idea['titleEntries'] == [
+        {u'localeCode': u'en', u'value': u'Understanding the dynamics and issues'},
+        {u'localeCode': u'fr', u'value': u'Comprendre les dynamiques et les enjeux'}]
+    assert idea['descriptionEntries'] == [
+        {u'localeCode': u'en', u'value': u'Desc EN'},
+        {u'localeCode': u'fr', u'value': u'Desc FR'}]
     assert idea['img'] is not None
     assert 'externalUrl' in idea['img']
     assert idea['messageViewOverride'] == u'brightMirror'
@@ -1148,15 +1153,20 @@ def test_mutation_update_ideas_create(test_session, graphql_request, graphql_reg
         })
 
     assert res.errors is None
-    ideas = res.data['updateIdeas']['rootIdea']['children']
+    ideas = res.data['updateIdeas']['query']['thematics']
     assert len(ideas) == 1
     idea = ideas[0]
     assert idea['announcement'] == {
-        u'title': u'[modified] Title EN announce',
-        u'body': u'[modified] Body EN announce'
-    }
-    assert idea['title'] == u'[modified] Understanding the dynamics and issues'
-    assert idea['description'] == u'[modified] Desc EN'
+        u'bodyEntries': [{u'localeCode': u'en', u'value': u'[modified] Body EN announce'},
+                         {u'localeCode': u'fr', u'value': u'[modified] Body FR announce'}],
+        u'titleEntries': [{u'localeCode': u'en', u'value': u'[modified] Title EN announce'},
+                          {u'localeCode': u'fr', u'value': u'[modified] Title FR announce'}]}
+    assert idea['titleEntries'] == [
+        {u'localeCode': u'en', u'value': u'[modified] Understanding the dynamics and issues'},
+        {u'localeCode': u'fr', u'value': u'[modified] Comprendre les dynamiques et les enjeux'}]
+    assert idea['descriptionEntries'] == [
+        {u'localeCode': u'en', u'value': u'[modified] Desc EN'},
+        {u'localeCode': u'fr', u'value': u'[modified] Desc FR'}]
     assert idea['img'] is not None
     assert 'externalUrl' in idea['img']
     assert idea['messageViewOverride'] == u'brightMirror'
@@ -1208,19 +1218,10 @@ def test_mutation_update_ideas_delete(test_session, graphql_request, graphql_reg
         })
 
     assert res.errors is None
-    ideas = res.data['updateIdeas']['rootIdea']['children']
+    ideas = res.data['updateIdeas']['query']['thematics']
     assert len(ideas) == 1
     idea = ideas[0]
-    assert idea['announcement'] == {
-        u'title': u'Title EN announce',
-        u'body': u'Body EN announce'
-    }
-    assert idea['title'] == u'Understanding the dynamics and issues'
-    assert idea['description'] == u'Desc EN'
-    assert idea['img'] is not None
-    assert 'externalUrl' in idea['img']
     assert idea['messageViewOverride'] == u'brightMirror'
-    assert idea['order'] == 1.0
 
     # and remove it
     del graphql_request.POST['variables.ideas.0.image']
@@ -1234,7 +1235,7 @@ def test_mutation_update_ideas_delete(test_session, graphql_request, graphql_reg
         })
 
     assert res.errors is None
-    ideas = res.data['updateIdeas']['rootIdea']['children']
+    ideas = res.data['updateIdeas']['query']['thematics']
     assert len(ideas) == 0
 
     # cleanup
@@ -1307,30 +1308,12 @@ def test_mutation_update_ideas_child_survey(test_session, graphql_request, graph
         })
 
     assert res.errors is None
-    ideas = res.data['updateIdeas']['rootIdea']['children']
-    assert len(ideas) == 1
-    idea = ideas[0]
-    assert idea['announcement'] == {
-        u'title': u'Title EN announce',
-        u'body': u'Body EN announce'
-    }
-    assert idea['title'] == u'Understanding the dynamics and issues'
-    assert idea['description'] == u'Desc EN'
-    assert idea['img'] is not None
-    assert 'externalUrl' in idea['img']
-    assert idea['messageViewOverride'] == u'brightMirror'
-    assert idea['order'] == 1.0
+    ideas = res.data['updateIdeas']['query']['thematics']
+    assert len(ideas) == 2
+    bright = ideas[0]
+    assert bright['messageViewOverride'] == u'brightMirror'
 
-    res = schema.execute(
-        graphql_registry['ThematicsQuery'],
-        context_value=graphql_request,
-        variable_values={
-            'discussionPhaseId': phases['brightMirror'].id,
-        })
-
-    assert len(res.data['thematics']) == 2
-    bright = res.data['thematics'][0]
-    survey = res.data['thematics'][1]
+    survey = ideas[1]
     assert bright['id'] == survey['parentId']
     assert survey['titleEntries'] == [
         {u'value': u"[survey] Understanding the dynamics and issues",

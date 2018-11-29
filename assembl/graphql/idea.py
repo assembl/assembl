@@ -1071,7 +1071,7 @@ class UpdateIdeas(graphene.Mutation):
         discussion_phase_id = graphene.Int(required=True, description=docs.UpdateIdeas.discussion_phase_id)
         ideas = graphene.List(IdeaInput, required=True, description=docs.UpdateIdeas.ideas)
 
-    root_idea = graphene.Field(lambda: Thematic)
+    query = graphene.Field('assembl.graphql.schema.Query')
 
     @staticmethod
     @abort_transaction_on_exception
@@ -1091,4 +1091,5 @@ class UpdateIdeas(graphene.Mutation):
         update_ideas_recursively(root_idea, children, phase, context)
 
         phase.db.flush()
-        return UpdateIdeas(root_idea=root_idea)
+        from assembl.graphql.schema import Query
+        return UpdateIdeas(query=Query)
