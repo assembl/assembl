@@ -15,16 +15,20 @@ import TabsConditionQuery from './graphql/TabsConditionQuery.graphql';
 import updateAcceptedCookies from './graphql/mutations/updateAcceptedCookies.graphql';
 import acceptedCookiesQuery from './graphql/acceptedCookiesQuery.graphql';
 
+type LegalContentsArray = Array<string>;
+
 type Props = {
   timeline: Timeline,
   params: { phase?: string, phaseId?: string, themeId?: string },
   location: { pathname: string },
+  id: string,
   children: React.Node,
   hasLegalNotice: boolean,
   hasTermsAndConditions: boolean,
   hasCookiesPolicy: boolean,
   hasPrivacyPolicy: boolean,
   hasUserGuidelines: boolean,
+  acceptedLegalContentList: LegalContentsArray,
   updateAcceptedCookies: Function
 };
 
@@ -40,16 +44,27 @@ class Main extends React.Component<Props, State> {
   componentDidUpdate() {
     const lastRouteString = getRouteLastString(this.props.location.pathname);
     const isOnLegalContentPage = legalContentSlugs.includes(lastRouteString);
-    const { hasTermsAndConditions, hasPrivacyPolicy, hasUserGuidelines } = this.props;
+    const { hasTermsAndConditions, hasPrivacyPolicy, hasUserGuidelines, acceptedLegalContentList, id } = this.props;
     const { modalIsChecked } = this.state;
-    const legalContentsToAccept = {
+    let userHasAcceptedAllLegalContents;
+    // This array gathers all the legal contents to accept by their 'ACCEPT_...' formatted name
+    const legalContentsToAcceptByCookieName = this.getLegalContentsToAccept();
+    if (id) {
+      userHasAcceptedAllLegalContents = legalContentsToAcceptByCookieName.every(legalContent =>
+        acceptedLegalContentList.includes(legalContent)
+      );
+    }
+    // This array gathers all the legal contents to accept by their route name
+    const legalContentsToAcceptByRouteName = {
       terms: hasTermsAndConditions,
       privacyPolicy: hasPrivacyPolicy,
       userGuidelines: hasUserGuidelines
     };
-    const legalContentsArray = Object.keys(legalContentsToAccept).map(key => (legalContentsToAccept[key] ? key : null));
+    const legalContentsArray = Object.keys(legalContentsToAcceptByRouteName).map(
+      key => (legalContentsToAcceptByRouteName[key] ? key : null)
+    );
     const cleanLegalContentsArray = legalContentsArray.filter(el => el !== null);
-    if (!isOnLegalContentPage) {
+    if (!isOnLegalContentPage && !userHasAcceptedAllLegalContents && id) {
       legalConfirmModal(cleanLegalContentsArray, this.acceptAllLegalContents, modalIsChecked, this.handleModalCheckbox);
     }
   }
@@ -60,7 +75,7 @@ class Main extends React.Component<Props, State> {
     }));
   };
 
-  getLegalContentsToAccept = () => {
+  getLegalContentsToAccept = (): LegalContentsArray => {
     const { hasTermsAndConditions, hasPrivacyPolicy, hasUserGuidelines } = this.props;
     const legalContentsToAccept = {
       ACCEPT_CGU: hasTermsAndConditions,
