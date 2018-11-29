@@ -42,21 +42,6 @@ $fiction-toolbar-icon-size: 17px;
   padding-top: 10px;
 }
 
-.sentiment-container {
-  position: fixed;
-  left: 0;
-
-  .add-sentiment {
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-  }
-
-  .min-sentiment {
-    position: absolute;
-  }
-}
-
 .bright-mirror-comments {
   padding: 30px 0;
   z-index: 100;
@@ -138,23 +123,25 @@ $fiction-toolbar-icon-size: 17px;
 }
 
 // Component imports
-@import 'components/backButton';
-@import 'components/circleAvatar';
-@import 'components/toggleCommentButton';
-@import 'components/deletePostButton';
-@import 'components/editPostButton';
-@import 'components/replyToCommentButton';
-@import 'components/fictionHeader';
-@import 'components/fictionToolbar';
-@import 'components/fictionBody';
-@import 'components/fictionCommentHeader';
-@import 'components/fictionCommentForm';
-@import 'components/fictionComment';
-@import 'components/fictionCommentList';
-@import 'components/fictionEditModal';
-@import 'components/fictionPreview';
-@import 'components/fictionsList';
-@import 'components/instructionsText';
-@import 'components/fictionSideCommentAnchor';
-@import 'components/fictionSideCommentBadge';
-@import 'components/fictionSideCommentBox';
+@import "components/backButton";
+@import "components/circleAvatar";
+@import "components/toggleCommentButton";
+@import "components/deletePostButton";
+@import "components/editPostButton";
+@import "components/replyToCommentButton";
+@import "components/commentHelperButton";
+@import "components/fictionHeader";
+@import "components/fictionToolbar";
+@import "components/fictionBodyToolbar";
+@import "components/fictionBody";
+@import "components/fictionCommentHeader";
+@import "components/fictionCommentForm";
+@import "components/fictionComment";
+@import "components/fictionCommentList";
+@import "components/fictionEditModal";
+@import "components/fictionPreview";
+@import "components/fictionsList";
+@import "components/instructionsText";
+@import "components/fictionSideCommentAnchor";
+@import "components/fictionSideCommentBadge";
+@import "components/fictionSideCommentBox";

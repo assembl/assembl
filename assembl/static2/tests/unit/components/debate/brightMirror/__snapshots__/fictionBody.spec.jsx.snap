@@ -6,7 +6,7 @@ exports[`<FictionBody /> - snapshots should match snapshot 1`] = `
     className="side-comment-container"
   />
   <div
-    className="sentiment-container hidden-xs hidden-sm hidden-md"
+    className="body-toolbar-container hidden-xs hidden-sm hidden-md"
     style={
       Object {
         "left": "-15px",
@@ -247,7 +247,7 @@ exports[`<FictionBody /> - snapshots should match snapshot no title nor content 
     className="side-comment-container"
   />
   <div
-    className="sentiment-container hidden-xs hidden-sm hidden-md"
+    className="body-toolbar-container hidden-xs hidden-sm hidden-md"
     style={
       Object {
         "left": "-15px",

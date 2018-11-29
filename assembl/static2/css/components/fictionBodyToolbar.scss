@@ -1,0 +1,14 @@
+.body-toolbar-container {
+  position: fixed;
+  left: 0;
+
+  .add-sentiment {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .min-sentiment {
+    position: absolute;
+  }
+}

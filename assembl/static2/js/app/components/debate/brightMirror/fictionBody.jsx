@@ -2,7 +2,7 @@
 import React from 'react';
 
 import SideCommentMenu from './sideComment/sideCommentMenu';
-import SentimentMenu from './sentimentMenu';
+import FictionBodyToolbar from './fictionBodyToolbar';
 import { elementContainsSelection, getConnectedUserId } from '../../../utils/globalFunctions';
 import PostBody from '../common/post/postBody';
 import { COMMENT_DYNAMIC_OFFSET, ANCHOR_OFFSET } from '../../../constants';
@@ -215,7 +215,7 @@ class FictionBody extends React.Component<Props, State> {
           setPositionToCoordinates={this.setPositionToCoordinates}
           userCanReply={userCanReply}
         />
-        <SentimentMenu
+        <FictionBodyToolbar
           position={commentSentimentFixedPosition}
           sentimentCounts={sentimentCounts}
           mySentiment={mySentiment}
