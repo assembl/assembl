@@ -169,12 +169,12 @@ const getLegalContentsLinksList = (legalContentsList) => {
 };
 
 /* if user is connected by SSO, ask to accept legal contents the first time he logs in Assembl */
-export const legalConfirmModal = (legalContentsToAccept, acceptAllLegalContents) => {
+export const legalConfirmModal = (legalContentsToAccept, acceptAllLegalContents, modalIsChecked, handleModalCheckbox) => {
   const slug = getDiscussionSlug();
   const modalTitle = <Translate value="legalContentsModal.title" />;
   const body = (
     <FormGroup className="justify">
-      <Checkbox type="checkbox" inline>
+      <Checkbox onChange={handleModalCheckbox} checked={modalIsChecked} type="checkbox" inline>
         <Translate value="legalContentsModal.iAccept" />
         {getLegalContentsLinksList(legalContentsToAccept)}
         <Translate value="legalContentsModal.iCanModify" />
@@ -190,7 +190,7 @@ export const legalConfirmModal = (legalContentsToAccept, acceptAllLegalContents)
     >
       <Translate value="refuse" />
     </Button>,
-    <Button key="accept" className="button-submit button-dark" onClick={acceptAllLegalContents}>
+    <Button disabled={!modalIsChecked} key="accept" className="button-submit button-dark" onClick={acceptAllLegalContents}>
       <Translate value="accept" />
     </Button>
   ];

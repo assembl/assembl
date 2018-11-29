@@ -28,11 +28,20 @@ type Props = {
   updateAcceptedCookies: Function
 };
 
-class Main extends React.Component<Props> {
+type State = {
+  modalIsChecked: boolean
+};
+
+class Main extends React.Component<Props, State> {
+  state = {
+    modalIsChecked: false
+  };
+
   componentDidUpdate() {
     const lastRouteString = getRouteLastString(this.props.location.pathname);
     const isOnLegalContentPage = legalContentSlugs.includes(lastRouteString);
     const { hasTermsAndConditions, hasPrivacyPolicy, hasUserGuidelines } = this.props;
+    const { modalIsChecked } = this.state;
     const legalContentsToAccept = {
       terms: hasTermsAndConditions,
       privacyPolicy: hasPrivacyPolicy,
@@ -41,9 +50,15 @@ class Main extends React.Component<Props> {
     const legalContentsArray = Object.keys(legalContentsToAccept).map(key => (legalContentsToAccept[key] ? key : null));
     const cleanLegalContentsArray = legalContentsArray.filter(el => el !== null);
     if (!isOnLegalContentPage) {
-      legalConfirmModal(cleanLegalContentsArray, this.acceptAllLegalContents);
+      legalConfirmModal(cleanLegalContentsArray, this.acceptAllLegalContents, modalIsChecked, this.handleModalCheckbox);
     }
   }
+
+  handleModalCheckbox = () => {
+    this.setState(prevState => ({
+      modalIsChecked: !prevState.modalIsChecked
+    }));
+  };
 
   getLegalContentsToAccept = () => {
     const { hasTermsAndConditions, hasPrivacyPolicy, hasUserGuidelines } = this.props;
