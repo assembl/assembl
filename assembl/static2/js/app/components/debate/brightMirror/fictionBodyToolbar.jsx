@@ -13,6 +13,7 @@ import ResponsiveOverlayTrigger from '../../common/responsiveOverlayTrigger';
 // Helper imports
 import getSentimentStats from '../common/sentimentStats';
 import fictionSentimentDefinitions from './fictionSentimentDefinition';
+import { displayModal } from '../../../utils/utilityManager';
 // Type imports
 import type { Props as CommentHelperButtonProps } from '../common/commentHelperButton';
 
@@ -33,8 +34,16 @@ const FictionBodyToolbar = ({ postId, mySentiment, screenWidth, position, sentim
     totalSentimentsCount = like + disagree + dontUnderstand + moreInfo;
   }
 
+  const modalTitle = 'Hello World';
+  const modalBody = [
+    <h1>Hello World</h1>,
+    <img src="/static2/img/comment-helper.gif" alt="comment-helper.gif" />,
+    <p>Hello World Hello World</p>
+  ];
+  const includeFooterInModal = false;
+
   const commentHelperButtonProps: CommentHelperButtonProps = {
-    onClickCallback: () => null,
+    onClickCallback: () => displayModal(modalTitle, modalBody, includeFooterInModal),
     linkClassName: 'comment-helper'
   };
 
