@@ -92,7 +92,7 @@ class SelectFieldAdapter extends React.Component<Props, State> {
     }
   };
 
-  handelInputChange = (inputValue: string, { action }: { action: string }) => {
+  handleInputChange = (inputValue: string, { action }: { action: string }) => {
     const { isMulti } = this.props;
     if (!isMulti) {
       if (action === 'input-change') {
@@ -158,7 +158,7 @@ class SelectFieldAdapter extends React.Component<Props, State> {
           placeholder={I18n.t(placeholder)}
           defaultValue={value}
           inputValue={inputValue}
-          onInputChange={this.handelInputChange}
+          onInputChange={this.handleInputChange}
           onFocus={this.initializeInput}
           onBlur={this.removeInput}
           options={options}
