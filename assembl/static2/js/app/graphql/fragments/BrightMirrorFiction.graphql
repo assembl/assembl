@@ -7,7 +7,6 @@ fragment BrightMirrorFiction on Post {
   subject(lang: $contentLocale)
   body(lang: $contentLocale)
   creationDate
-  subject(lang: $contentLocale)
   publicationState
   modified
   creator {
