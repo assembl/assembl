@@ -23,7 +23,7 @@ from assembl.graphql.discussion import (Discussion, UpdateDiscussion, Discussion
                                         UpdateResourcesCenter, VisitsAnalytics)
 from assembl.graphql.document import UploadDocument
 from assembl.graphql.idea import (CreateThematic, DeleteThematic,
-                                  IdeaUnion, UpdateThematic)
+                                  IdeaUnion, UpdateThematic, UpdateIdeas)
 from assembl.graphql.landing_page import (LandingPageModuleType, LandingPageModule, CreateLandingPageModule,
                                           UpdateLandingPageModule)
 from assembl.graphql.langstring import resolve_langstring
@@ -472,6 +472,7 @@ class Mutations(graphene.ObjectType):
     create_thematic = CreateThematic.Field(description=docs.CreateThematic.__doc__)
     update_thematic = UpdateThematic.Field(description=docs.UpdateThematic.__doc__)
     delete_thematic = DeleteThematic.Field(description=docs.DeleteThematic.__doc__)
+    update_ideas = UpdateIdeas.Field(description=docs.UpdateIdeas.__doc__)
     create_post = CreatePost.Field(description=docs.CreatePost.__doc__)
     update_post = UpdatePost.Field(description=docs.UpdatePost.__doc__)
     delete_post = DeletePost.Field(description=docs.DeletePost.__doc__)

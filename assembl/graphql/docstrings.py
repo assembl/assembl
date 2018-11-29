@@ -3,6 +3,7 @@
 
 class Default:
     required_language_input = """A locale input is required to specify in which language the content should be returned."""
+    image = """The identifier of the part containing the image in a multipart POST body."""
     langstring_entries = """A list of possible languages of the entity as LangStringEntry objects. %s"""
     document = """%sA file metadata object, described by the Document object."""
     string_entry = """A %s in a given language."""
@@ -458,6 +459,21 @@ class UpdateThematic:
 class DeleteThematic:
     __doc__ = """A mutation to delete a thematic."""
     thematic_id = Default.node_id % ("Thematic") + " An identifier of the Thematic to be deleted."
+
+
+class IdeaInput:
+    title_entries = IdeaInterface.title_entries
+    description_entries = IdeaInterface.description_entries
+    video = Thematic.video
+    questions = Thematic.questions
+    image = Default.document % ("An Image to be shown in the Thematic. ")
+    order = Default.float_entry % (" Order of the thematic.")
+
+
+class UpdateIdeas:
+    __doc__ = """A mutation to create/update/delete ideas for a phase."""
+    discussion_phase_id = Default.discussion_phase_id
+    ideas = "List of IdeaInput"
 
 
 class LandingPageModuleType:

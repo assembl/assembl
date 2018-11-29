@@ -8,7 +8,6 @@ query ThematicsQuery($discussionPhaseId: Int!) {
     }
     ... on Idea {
       id
-      parentId
       descriptionEntries {
         ...langStringEntry
       }
