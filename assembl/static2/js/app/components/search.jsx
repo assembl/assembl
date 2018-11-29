@@ -274,7 +274,7 @@ const PostHit = ({ bemBlocks, collapseSearch, locale, result }) => {
   const published = {};
   const ideaTitle = highlightedLSOrTruncatedLS(result, 'idea_title', locale);
   const postUrl = getUrl(result);
-  const ideaUrl = postUrl.replace(postUrl.slice(postUrl.indexOf('#'), postUrl.length), '');
+  const ideaUrl = postUrl.slice(0, postUrl.indexOf('#'));
   return (
     <BaseHit
       bemBlocks={bemBlocks}
@@ -324,7 +324,7 @@ const DumbExtractHit = ({ bemBlocks, collapseSearch, isHarvesting, locale, toggl
   };
   const ideaTitle = highlightedLSOrTruncatedLS(result, 'idea_title', locale);
   const extractUrl = getUrl(result);
-  const ideaUrl = extractUrl.replace(extractUrl.slice(extractUrl.indexOf('#'), extractUrl.length), '');
+  const ideaUrl = extractUrl.slice(0, extractUrl.indexOf('#'));
   return (
     <BaseHit
       bemBlocks={bemBlocks}
