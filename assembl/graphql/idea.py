@@ -636,7 +636,8 @@ def create_idea(parent_idea, phase, args, context):
     cls = models.Idea
     phase_identifier = phase.identifier
     message_view_override = args.get('message_view_override')
-    if phase_identifier == Phases.survey.value or message_view_override == MessageView.survey.value:
+    is_survey_thematic = phase_identifier == Phases.survey.value or message_view_override == MessageView.survey.value
+    if is_survey_thematic:
         cls = models.Thematic
 
     discussion_id = context.matchdict['discussion_id']
@@ -746,19 +747,20 @@ def create_idea(parent_idea, phase, args, context):
             new_attachment.idea = saobj
             db.add(new_attachment)
 
-        questions_input = args.get('questions')
-        if questions_input is not None:
-            for idx, question_input in enumerate(questions_input):
-                title_ls = langstring_from_input_entries(
-                    question_input['title_entries'])
-                question = models.Question(
-                    title=title_ls,
-                    discussion=discussion,
-                    discussion_id=discussion_id
-                )
-                db.add(
-                    models.IdeaLink(source=saobj, target=question,
-                                    order=idx + 1.0))
+        if is_survey_thematic:
+            questions_input = args.get('questions')
+            if questions_input is not None:
+                for idx, question_input in enumerate(questions_input):
+                    title_ls = langstring_from_input_entries(
+                        question_input['title_entries'])
+                    question = models.Question(
+                        title=title_ls,
+                        discussion=discussion,
+                        discussion_id=discussion_id
+                    )
+                    db.add(
+                        models.IdeaLink(source=saobj, target=question,
+                                        order=idx + 1.0))
         else:
             update_ideas_recursively(saobj, args.get('children', []), phase, context)
 
@@ -777,6 +779,10 @@ def update_idea(args, phase, context):
     thematic = cls.get(id_)
     if phase is None:  # UpdateThematic doesn't give phase
         phase = thematic.get_associated_phase()
+
+    phase_identifier = phase.identifier
+    message_view_override = args.get('message_view_override')
+    is_survey_thematic = phase_identifier == Phases.survey.value or message_view_override == MessageView.survey.value
 
     permissions = get_permissions(user_id, discussion_id)
     allowed = thematic.user_can(
@@ -827,7 +833,7 @@ def update_idea(args, phase, context):
                     context
                 )
 
-        kwargs['message_view_override'] = args.get('message_view_override')
+        kwargs['message_view_override'] = message_view_override
 
         for attr, value in kwargs.items():
             setattr(thematic, attr, value)
@@ -869,38 +875,39 @@ def update_idea(args, phase, context):
                     thematic.announcement, 'body', announcement.get('body_entries', None))
                 thematic.announcement.last_updated_by_id = user_id
 
-        questions_input = args.get('questions')
-        existing_questions = {
-            question.id: question for question in thematic.get_children()}
-        updated_questions = set()
-        if questions_input is not None:
-            for idx, question_input in enumerate(questions_input):
-                if question_input.get('id', None) is not None:
-                    id_ = int(Node.from_global_id(question_input['id'])[1])
-                    updated_questions.add(id_)
-                    question = models.Question.get(id_)
-                    # archive the question
-                    question.copy(tombstone=True)
-                    update_langstring_from_input_entries(
-                        question, 'title', question_input['title_entries'])
-                    # modify question order
-                    question.source_links[0].order = idx + 1.0
-                else:
-                    title_ls = langstring_from_input_entries(
-                        question_input['title_entries'])
-                    question = models.Question(
-                        title=title_ls,
-                        discussion_id=discussion_id
-                    )
-                    db.add(
-                        models.IdeaLink(source=thematic, target=question,
-                                        order=idx + 1.0))
+        if is_survey_thematic:
+            questions_input = args.get('questions')
+            existing_questions = {
+                question.id: question for question in thematic.get_children()}
+            updated_questions = set()
+            if questions_input is not None:
+                for idx, question_input in enumerate(questions_input):
+                    if question_input.get('id', None) is not None:
+                        id_ = int(Node.from_global_id(question_input['id'])[1])
+                        updated_questions.add(id_)
+                        question = models.Question.get(id_)
+                        # archive the question
+                        question.copy(tombstone=True)
+                        update_langstring_from_input_entries(
+                            question, 'title', question_input['title_entries'])
+                        # modify question order
+                        question.source_links[0].order = idx + 1.0
+                    else:
+                        title_ls = langstring_from_input_entries(
+                            question_input['title_entries'])
+                        question = models.Question(
+                            title=title_ls,
+                            discussion_id=discussion_id
+                        )
+                        db.add(
+                            models.IdeaLink(source=thematic, target=question,
+                                            order=idx + 1.0))
 
-            # remove question (tombstone) that are not in questions_input
-            for question_id in set(existing_questions.keys()
-                                   ).difference(updated_questions):
-                existing_questions[question_id].is_tombstone = True
-        elif not isinstance(thematic, models.Thematic):
+                # remove question (tombstone) that are not in questions_input
+                for question_id in set(existing_questions.keys()
+                                       ).difference(updated_questions):
+                    existing_questions[question_id].is_tombstone = True
+        else:
             update_ideas_recursively(thematic, args.get('children', []), phase, context)
 
     db.flush()
