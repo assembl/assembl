@@ -6,7 +6,7 @@ import { action } from '@storybook/addon-actions';
 import { withInfo } from '@storybook/addon-info';
 import { withKnobs, object, select } from '@storybook/addon-knobs';
 
-import SentimentMenu, { type Props } from '../../../../components/debate/brightMirror/sentimentMenu';
+import FictionBodyToolbar, { type Props } from '../../../../components/debate/brightMirror/fictionBodyToolbar';
 import { SENTIMENTS } from '../../../../constants';
 
 export const props: Props = {
@@ -24,13 +24,13 @@ export const props: Props = {
   screenWidth: 100
 };
 
-storiesOf('SentimentMenu', module)
+storiesOf('FictionBodyToolbar', module)
   .addDecorator(withKnobs)
-  .add('default', withInfo()(() => <SentimentMenu {...props} />))
+  .add('default', withInfo()(() => <FictionBodyToolbar {...props} />))
   .add(
     'playground',
     withInfo()(() => (
-      <SentimentMenu
+      <FictionBodyToolbar
         postId={props.postId}
         position={props.position}
         screenWidth={props.screenWidth}

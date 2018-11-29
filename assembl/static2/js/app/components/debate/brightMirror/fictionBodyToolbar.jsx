@@ -19,7 +19,7 @@ export type Props = {
   isPhaseCompleted: boolean
 };
 
-const SentimentMenu = ({ postId, mySentiment, screenWidth, position, sentimentCounts, isPhaseCompleted }: Props) => {
+const FictionBodyToolbar = ({ postId, mySentiment, screenWidth, position, sentimentCounts, isPhaseCompleted }: Props) => {
   let count = 0;
   let totalSentimentsCount = 0;
   if (sentimentCounts) {
@@ -28,7 +28,7 @@ const SentimentMenu = ({ postId, mySentiment, screenWidth, position, sentimentCo
   }
   return (
     <div
-      className="sentiment-container hidden-xs hidden-sm hidden-md"
+      className="body-toolbar-container hidden-xs hidden-sm hidden-md"
       style={{
         top: `${position ? position.y + SENTIMENT_TOP_OFFSET : 0}px`,
         left: `${position ? position.x / 2 - SENTIMENT_RIGHT_OFFSET : 0}px`
@@ -75,4 +75,4 @@ const SentimentMenu = ({ postId, mySentiment, screenWidth, position, sentimentCo
   );
 };
 
-export default SentimentMenu;
+export default FictionBodyToolbar;
