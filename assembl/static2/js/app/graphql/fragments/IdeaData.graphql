@@ -1,6 +1,7 @@
 #import "./LangString.graphql"
 
 fragment ideaData on IdeaInterface {
+  parentId
   messageViewOverride
   order
   titleEntries {

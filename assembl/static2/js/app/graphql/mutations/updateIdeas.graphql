@@ -1,44 +1,9 @@
+#import "./fragments/Ideas.graphql"
+
 mutation updateIdeas($discussionPhaseId: Int!, $ideas: [IdeaInput]!) {
   updateIdeas(discussionPhaseId: $discussionPhaseId, ideas: $ideas) {
-    rootIdea {
-      children {
-        ... on IdeaInterface {
-          messageViewOverride
-          order
-          title
-          img {
-            externalUrl
-            mimeType
-          }
-        }
-        ... on Idea {
-          id
-          description
-          announcement {
-            title
-            body
-          }
-        }
-        ... on Thematic {
-          id
-          video {
-            title
-            descriptionTop
-            descriptionBottom
-            descriptionSide
-            htmlCode
-            mediaFile {
-              externalUrl
-              mimeType
-              title
-            }
-          }
-          questions {
-            id
-            title
-          }
-        }
-      }
+    query {
+      ...ideas
     }
   }
 }
