@@ -41,7 +41,8 @@ type Props = {
 } & FieldRenderProps;
 
 type State = {
-  direction: 'up' | 'down'
+  direction: 'up' | 'down',
+  inputValue: string
 };
 
 const SELECT_MENU_HEIGHT = 300;
@@ -62,7 +63,8 @@ class SelectFieldAdapter extends React.Component<Props, State> {
   };
 
   state = {
-    direction: 'down'
+    direction: 'down',
+    inputValue: ''
   };
 
   componentDidMount() {
@@ -90,6 +92,31 @@ class SelectFieldAdapter extends React.Component<Props, State> {
     }
   };
 
+  handelInputChange = (inputValue: string, { action }: { action: string }) => {
+    const { isMulti } = this.props;
+    if (!isMulti) {
+      if (action === 'input-change') {
+        this.setState({ inputValue: inputValue });
+      } else {
+        this.setState({ inputValue: '' });
+      }
+    }
+  };
+
+  initializeInput = () => {
+    const { isMulti, input: { value } } = this.props;
+    // $FlowFixMe the value in this context is an Option
+    const currentValue: string = (!isMulti && value && value.label) || '';
+    this.setState({ inputValue: currentValue });
+  };
+
+  removeInput = () => {
+    const { isMulti } = this.props;
+    if (!isMulti) {
+      this.setState({ inputValue: '' });
+    }
+  };
+
   render() {
     const {
       isMulti,
@@ -106,7 +133,7 @@ class SelectFieldAdapter extends React.Component<Props, State> {
       meta: { error, touched },
       ...rest
     } = this.props;
-    const { direction } = this.state;
+    const { direction, inputValue } = this.state;
     const decoratedLabel = label && required ? `${label} *` : label;
     let SelectComponent = null;
     if (isAsync) {
@@ -125,10 +152,15 @@ class SelectFieldAdapter extends React.Component<Props, State> {
           {...rest}
           cacheOptions
           defaultOptions
+          backspaceRemovesValue={false}
           isMulti={isMulti}
           name={name}
           placeholder={I18n.t(placeholder)}
           defaultValue={value}
+          inputValue={inputValue}
+          onInputChange={this.handelInputChange}
+          onFocus={this.initializeInput}
+          onBlur={this.removeInput}
           options={options}
           loadOptions={loadOptions}
           onChange={onChange}

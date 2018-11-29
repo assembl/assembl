@@ -216,9 +216,9 @@ export const harvestingTooltip = (
   </Tooltip>
 );
 
-export const editTagTooltip = (
+export const editTagTooltip = (tag: string) => (
   <Tooltip id="editTagTooltip">
-    <Translate value="harvesting.tags.edit" />
+    <Translate value="harvesting.tags.edit" tag={tag} />
   </Tooltip>
 );
 
