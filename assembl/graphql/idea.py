@@ -951,8 +951,8 @@ def update_ideas_recursively(parent_idea, children, phase, context):
             create_idea(parent_idea, phase, idea, context)
 
     # remove idea (tombstone) that are not in input
-    for idea_id in set(existing_ideas.keys()
-            ).difference(updated_ideas):
+    ideas_to_remove = set(existing_ideas.keys()).difference(updated_ideas)
+    for idea_id in ideas_to_remove:
         tombstone_idea_recursively(existing_ideas[idea_id])
 
 
