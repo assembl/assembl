@@ -36,6 +36,7 @@ function loadStories() {
   require('../js/app/stories/components/debate/common/toggleCommentButton.stories.jsx');
   require('../js/app/stories/components/debate/common/replyToCommentButton.stories.jsx');
   require('../js/app/stories/components/debate/common/sharePostButton.stories.jsx');
+  require('../js/app/stories/components/debate/common/commentHelperButton.stories.jsx');
 
   require('../js/app/stories/components/debate/brightMirror/fictionPreview.stories.jsx');
   require('../js/app/stories/components/debate/brightMirror/fictionsList.stories.jsx');
