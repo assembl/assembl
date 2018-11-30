@@ -265,7 +265,7 @@ exports[`Storyshots FictionBodyToolbar default 1`] = `
           className="txt"
           style={
             Object {
-              "paddingLeft": "18px",
+              "paddingLeft": "30px",
             }
           }
         >
@@ -1127,7 +1127,7 @@ exports[`Storyshots FictionBodyToolbar playground 1`] = `
           className="txt"
           style={
             Object {
-              "paddingLeft": "18px",
+              "paddingLeft": "30px",
             }
           }
         >
