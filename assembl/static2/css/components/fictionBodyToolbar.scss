@@ -11,4 +11,28 @@
   .min-sentiment {
     position: absolute;
   }
+
+  .comment-helper {
+    font-size: 19px;
+  }
+
+  @media screen and (min-width: $screen-xl-min) {
+    .sentiment {
+      margin-bottom: 2px;
+    }
+
+    .sentiment svg {
+      width: 28px;
+      height: 28px;
+    }
+
+    .comment-helper {
+      font-size: 23px;
+    }
+
+    .min-sentiment svg {
+      width: 18px;
+      height: 18px;
+    }
+  }
 }

@@ -166,7 +166,17 @@
 
       .body-container {
         .extract-body {
-          width: 240px;
+          width: 200px;
+        }
+
+        .previous-extract,
+        .next-extract {
+          padding: 17px 8px 0 8px;
+
+          &.empty {
+            padding-left: 8px;
+            padding-right: 8px;
+          }
         }
       }
     }
