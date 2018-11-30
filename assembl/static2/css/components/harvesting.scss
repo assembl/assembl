@@ -511,7 +511,8 @@
 
     .select-field__control {
       border: none;
-      min-height: 28px;
+      min-height: auto !important;
+      border-radius: 20px !important;
     }
 
     .select-field__indicator {
@@ -695,6 +696,11 @@
   .harvesting-tag-input {
     display: flex;
     align-items: center;
+
+    > div {
+      margin: 0 !important;
+      padding: 0 !important;
+    }
   }
 
   .harvesting-tag-input-control {
@@ -703,7 +709,7 @@
 
     .icon {
       margin-right: 5px;
-      padding: 2px 2px 0 2px;
+      padding: 2px 1px 0 1px;
       border-radius: 12px;
       cursor: pointer;
     }
