@@ -33,7 +33,7 @@ type State = {
   postBody: EditorState
 };
 
-class Question extends React.Component<Props, State> {
+export class Question extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
