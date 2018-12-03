@@ -66,7 +66,7 @@ export class Question extends React.Component<Props, State> {
     );
   };
 
-  updateBody = (newValue) => {
+  updateBody = (newValue: EditorState) => {
     this.setState({
       postBody: newValue
     });
