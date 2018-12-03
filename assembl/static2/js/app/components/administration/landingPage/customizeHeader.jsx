@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { type ApolloClient, graphql, compose, withApollo } from 'react-apollo';
 import { I18n } from 'react-redux-i18n';
 import { Field } from 'react-final-form';
+import setFieldTouched from 'final-form-set-field-touched'
 import SectionTitle from '../../administration/sectionTitle';
 import Helper from '../../common/helper';
 import { load, postLoadFormat } from './header/load';
@@ -54,12 +55,18 @@ export const DumbCustomizeHeader = ({ client, editLocale, lang, data: { discussi
     if (!validStartDate(state.startDate, state.endDate)) {
       state.startDateConflict = true;
     }
+    else {
+      state.startDateConflict = false;
+    }
   };
 
   const onEndChange = (e: DateTime): void => {
     state.endDate = e;
     if (!validEndDate(state.startDate, state.endDate)) {
       state.endDateConflict = true;
+    }
+    else {
+      state.endDateConflict = false;
     }
   }
 
@@ -72,8 +79,9 @@ export const DumbCustomizeHeader = ({ client, editLocale, lang, data: { discussi
       postLoadFormat={postLoadFormat}
       createMutationsPromises={createMutationsPromises(client)}
       save={save}
+      mutators={{ setFieldTouched }}
       validate={validateDatePicker}
-      render={({ handleSubmit, pristine, submitting }) => (
+      render={({ handleSubmit, pristine, submitting, form }) => (
         <div className="admin-content">
           <AdminForm handleSubmit={handleSubmit} pristine={pristine} submitting={submitting}>
             <div className="form-container">
@@ -127,6 +135,7 @@ export const DumbCustomizeHeader = ({ client, editLocale, lang, data: { discussi
                 showTime={false}
                 hasConflictingDate={state.startDateConflict}
                 onDateChange={onStartChange}
+                form={form}
               />
               <Field
                 name="headerEndDate"
@@ -137,6 +146,7 @@ export const DumbCustomizeHeader = ({ client, editLocale, lang, data: { discussi
                 showTime={false}
                 hasConflictingDate={state.endDateConflict}
                 onChange={onEndChange}
+                form={form}
               />
             </div>
           </AdminForm>

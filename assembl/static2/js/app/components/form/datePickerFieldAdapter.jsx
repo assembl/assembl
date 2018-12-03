@@ -3,11 +3,16 @@
 /*
   DatePicker adapter for react-final-form that supports the following form:
   { time: moment().utc() }
+
+  Errors are managed by a Mutator on the Form itself. As a result, to show errors
+  on DatePickerFieldAdapter, must add the `setFieldTouched` from final-form-set-field-touched
+  along with passing the form <FormApi> prop
 */
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import React from 'react';
 import { type FieldRenderProps } from 'react-final-form';
+import { type FormApi } from 'final-form';
 import { type DatePickerType, DateTime } from './types.flow';
 import { ControlLabel, FormGroup, FormControl } from 'react-bootstrap';
 
@@ -22,7 +27,11 @@ type Props = {
     onChange: (SyntheticInputEvent<*> | any) => void,
     value: multilingualValue
   },
-  onDateChange: ?(DateTime => void)
+  onDateChange: ?(DateTime => void),
+  form: FormApi,
+  mutators: {
+    [string]: Function
+  }
 } & FieldRenderProps;
 
 const DatePickerFieldAdapter = ({
@@ -36,9 +45,13 @@ const DatePickerFieldAdapter = ({
   hasConflictingDate,
   onDateChange,
   children,
+  form,
   ...rest }) => {
 
   const onLocalizedChange = (e: DateTime) : void => {
+    if (e != value.time) {
+      if (form) { form.mutators.setFieldTouched(name, true); }
+    }
     if (onDateChange) {
       onDateChange(e);
     }
@@ -56,7 +69,7 @@ const DatePickerFieldAdapter = ({
               id={`date-picker-${name}`}
               onChange={onLocalizedChange}
               showTimeSelect={showTime || false}
-              dateFormat="LLL"
+              dateFormat={rest.dateFormat}
               locale={editLocale}
               shouldCloseOnSelect
               className={hasConflictingDate? 'warning': ''}

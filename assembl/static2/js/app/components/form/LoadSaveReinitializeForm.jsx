@@ -9,6 +9,7 @@ This component is inspired by React Final Form Example - Load, Save, and Reiniti
 https://github.com/final-form/react-final-form#loading-normalizing-saving-and-reinitializing
 */
 import * as React from 'react';
+import { type Mutator } from 'final-form';
 import { Form } from 'react-final-form';
 
 import type { MutationsPromises, SaveStatus } from './types.flow';
@@ -23,7 +24,8 @@ type Props = {
   postLoadFormat: ?(TOriginalValues) => TInitialValues,
   createMutationsPromises: (TInitialValues, TInitialValues) => MutationsPromises,
   save: MutationsPromises => Promise<SaveStatus>,
-  afterSave?: TInitialValues => void
+  afterSave?: TInitialValues => void,
+  mutators?: { [string]: Mutator }
 };
 
 type State = {

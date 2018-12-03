@@ -12,20 +12,14 @@ export const validEndDate = (startDate: DateTime, endDate: DateTime): boolean =>
   return endDate >= startDate;
 };
 
-export const validateDatePicker = (values: DatePickerValue): DatePickerValue => {
-  
-  const val = {
-    headerTitle: undefined,
-    headerSubtitle: undefined,
-    headerButtonLabel: undefined,
-    headerImage: undefined,
-    headerLogoImage: undefined,
-    headerStartDate: validStartDate(
-      values.headerStartDate.time, values.headerEndDate.time) ? undefined :  I18n.t('administration.landingPage.header.startDateError'),
-    headerEndDate: validEndDate(
-      values.headerStartDate.time, values.headerEndDate.time) ? undefined :  I18n.t('administration.landingPage.header.endDateError'),
-  };
-  console.log("validation values", values);
-  console.log("validation object", val);
-  return val;
-};
+export const validateDatePicker = (values: DatePickerValue): DatePickerValue => ({
+  headerTitle: undefined,
+  headerSubtitle: undefined,
+  headerButtonLabel: undefined,
+  headerImage: undefined,
+  headerLogoImage: undefined,
+  headerStartDate: validStartDate(
+    values.headerStartDate.time, values.headerEndDate.time) ? undefined :  I18n.t('administration.landingPage.header.startDateError'),
+  headerEndDate: validEndDate(
+    values.headerStartDate.time, values.headerEndDate.time) ? undefined :  I18n.t('administration.landingPage.header.endDateError'),
+});
