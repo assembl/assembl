@@ -43,6 +43,7 @@ const getChildrenVariables = (thematic, initialTheme) =>
       const initialChild = initialTheme && initialTheme.children.find(theme => t.id === theme.id);
       const initialImg = initialChild ? initialChild.img : null;
       return {
+        id: t.id.startsWith('-') ? null : t.id,
         titleEntries: convertToEntries(t.title),
         image: getFileVariable(t.img, initialImg),
         children: getChildrenVariables(t, initialChild)
