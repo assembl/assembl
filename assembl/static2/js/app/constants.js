@@ -84,6 +84,14 @@ export const PHASES = {
   brightMirror: 'brightMirror'
 };
 
+export const MESSAGE_VIEW = {
+  survey: 'survey',
+  thread: 'thread',
+  multiColumns: 'multiColumns',
+  voteSession: 'voteSession',
+  brightMirror: 'brightMirror'
+};
+
 export const HARVESTABLE_PHASES = [PHASES.thread, PHASES.multiColumns];
 
 export const COOKIE_TYPES = [
@@ -201,13 +209,9 @@ export const PHASES_ADMIN_MENU = {
         sectionId: 'configThematics',
         component: ThematicsMenu
       },
-      setQuestions: {
-        title: 'administration.survey.2',
-        sectionId: '2'
-      },
       exportData: {
-        title: 'administration.survey.3',
-        sectionId: '3'
+        title: 'administration.survey.exportData',
+        sectionId: '2'
       }
     }
   },

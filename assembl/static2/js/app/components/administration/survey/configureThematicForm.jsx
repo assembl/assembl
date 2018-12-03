@@ -10,7 +10,8 @@ import FileUploaderFieldAdapter from '../../form/fileUploaderFieldAdapter';
 import SelectFieldAdapter from '../../form/selectFieldAdapter';
 import { deleteThematicImageTooltip } from '../../common/tooltips';
 import type { SurveyAdminValues, ThemeValue, ThemesValue } from './types.flow';
-import { PHASES, modulesTranslationKeys } from '../../../constants';
+import { PHASES, MESSAGE_VIEW, modulesTranslationKeys } from '../../../constants';
+import SurveyFields from './surveyFields';
 
 type Props = {
   editLocale: string,
@@ -52,7 +53,7 @@ class ConfigureThematicForm extends React.PureComponent<Props> {
     const { editLocale } = this.props;
     const { name, value: theme } = this.getName();
     return (
-      <div className="form-container">
+      <div className="form-container" key={name}>
         <Field
           required
           editLocale={editLocale}
@@ -73,7 +74,9 @@ class ConfigureThematicForm extends React.PureComponent<Props> {
           label={I18n.t('administration.tableOfThematics.moduleTypeLabel')}
           options={modulesTranslationKeys.map(key => ({ value: key, label: I18n.t(`administration.modules.${key}`) }))}
         />
-        <span>{theme ? theme.messageViewOverride.value : null}</span>
+        {theme && theme.messageViewOverride.value === MESSAGE_VIEW.survey ? (
+          <SurveyFields editLocale={editLocale} fieldPrefix={name} />
+        ) : null}
       </div>
     );
   }

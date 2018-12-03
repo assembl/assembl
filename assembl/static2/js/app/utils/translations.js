@@ -673,8 +673,7 @@ const Translations = {
       noTimeline: "Aucune timeline n'a été configurée pour ce débat.",
       survey: {
         "1": "Créer la table des thématiques",
-        "2": "Renseigner les questions",
-        "3": "Exporter les données",
+        exportData: "Exporter les données",
         configThematic: "Configurer la thématique",
         configThematics: "Configurer les thématiques",
         configThematicsHelperTitle: "Vous avez choisi de configurer une table de thématiques.",
@@ -1662,8 +1661,7 @@ const Translations = {
       noTimeline: "No timeline has been configured yet",
       survey: {
         "1": "Create the themes table ",
-        "2": "Set questions",
-        "3": "Export data",
+        exportData: "Export data",
         configThematic: "Configure the theme",
         configThematics: "Configure the themes",
         configThematicsHelperTitle: "You have chosen to configure a themes table.",

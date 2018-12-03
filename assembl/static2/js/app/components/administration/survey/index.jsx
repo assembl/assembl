@@ -10,8 +10,7 @@ import { compareEditorState } from '../../form/utils';
 import LoadSaveReinitializeForm from '../../form/LoadSaveReinitializeForm';
 import Navbar from '../navbar';
 import Step1 from './step1';
-import Step2 from './step2';
-import Step3 from './step3';
+import Export from './export';
 import ConfigureThematicForm from './configureThematicForm';
 import { load, postLoadFormat } from './load';
 import { createMutationsPromises, save } from './save';
@@ -31,7 +30,7 @@ type Props = {
 
 const loading = <Loader />;
 
-const steps = ['1', '2', '3'];
+const steps = ['1', '2'];
 
 const DumbSurveyAdminForm = ({ client, section, thematicId, discussionPhaseId, debateId, editLocale, locale }: Props) => {
   if (!discussionPhaseId) {
@@ -60,8 +59,7 @@ const DumbSurveyAdminForm = ({ client, section, thematicId, discussionPhaseId, d
                 {section === 'configThematics' && (
                   <ConfigureThematicForm thematicId={thematicId} editLocale={editLocale} values={values} />
                 )}
-                {section === '2' && <Step2 editLocale={editLocale} values={values} />}
-                {section === '3' && <Step3 debateId={debateId} locale={locale} />}
+                {section === '2' && <Export debateId={debateId} locale={locale} />}
               </AdminForm>
             </div>
             {steps.includes(section) && (

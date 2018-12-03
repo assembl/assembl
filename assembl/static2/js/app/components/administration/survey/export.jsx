@@ -22,7 +22,7 @@ type State = {
   isAnonymous: boolean
 };
 
-class Step3 extends React.Component<Props, State> {
+class Export extends React.Component<Props, State> {
   constructor() {
     super();
     this.state = {
@@ -90,4 +90,4 @@ export default compose(
     }
   }),
   manageErrorAndLoading({ displayLoader: true })
-)(Step3);
+)(Export);
