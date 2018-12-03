@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import { connect } from 'react-redux';
-import { type ApolloClient, compose, withApollo } from 'react-apollo';
+import { type ApolloClient, graphql, compose, withApollo } from 'react-apollo';
 import { I18n } from 'react-redux-i18n';
 import { Field } from 'react-final-form';
 import SectionTitle from '../../administration/sectionTitle';
@@ -15,16 +15,55 @@ import MultilingualTextFieldAdapter from '../../form/multilingualTextFieldAdapte
 import MultilingualRichTextFieldAdapter from '../../form/multilingualRichTextFieldAdapter';
 import AdminForm from '../../form/adminForm';
 import Loader from '../../common/loader';
+import { type DateTime } from '../../form/types.flow';
+import { validStartDate, validEndDate, validateDatePicker } from './header/validate';
+import DiscussionQuery from '../../../graphql/DiscussionQuery.graphql';
+import { convertISO8601StringToDate } from '../../../utils/globalFunctions';
+import manageErrorAndLoading from '../../common/manageErrorAndLoading'; 
 
 type Props = {
   client: ApolloClient,
   editLocale: string,
-  lang: string
+  lang: string,
+  data: {
+    discussion: {
+      startDate: string,
+      endDate: string
+    }
+  }
+};
+
+type State = {
+  startDate: DateTime,
+  endDate: DateTime
 };
 
 const loading = <Loader />;
 
-export const DumbCustomizeHeader = ({ client, editLocale, lang }: Props) => (
+export const DumbCustomizeHeader = ({ client, editLocale, lang, data: { discussion: { startDate, endDate } } }: Props) => {
+
+  const state: State = {
+    startDate: convertISO8601StringToDate(startDate),
+    endDate: convertISO8601StringToDate(endDate),
+    startDateConflict: false,
+    endDateConflict: false
+  };
+
+  const onStartChange = (e: DateTime): void => {
+    state.startDate = e;
+    if (!validStartDate(state.startDate, state.endDate)) {
+      state.startDateConflict = true;
+    }
+  };
+
+  const onEndChange = (e: DateTime): void => {
+    state.endDate = e;
+    if (!validEndDate(state.startDate, state.endDate)) {
+      state.endDateConflict = true;
+    }
+  }
+
+  return (
   <div className="admin-box">
     <SectionTitle title={I18n.t('administration.landingPage.header.title')} annotation={I18n.t('administration.annotation')} />
     <LoadSaveReinitializeForm
@@ -33,7 +72,7 @@ export const DumbCustomizeHeader = ({ client, editLocale, lang }: Props) => (
       postLoadFormat={postLoadFormat}
       createMutationsPromises={createMutationsPromises(client)}
       save={save}
-      // validate
+      validate={validateDatePicker}
       render={({ handleSubmit, pristine, submitting }) => (
         <div className="admin-content">
           <AdminForm handleSubmit={handleSubmit} pristine={pristine} submitting={submitting}>
@@ -76,6 +115,9 @@ export const DumbCustomizeHeader = ({ client, editLocale, lang }: Props) => (
                 component={FileUploaderFieldAdapter}
                 label={I18n.t('administration.landingPage.header.logoDescription')}
               />
+              <div className="control-label">
+                <span>{I18n.t('administration.landingPage.header.dateDescription')}</span>
+              </div>
               <Field
                 name="headerStartDate"
                 component={DatePickerFieldAdapter}
@@ -83,6 +125,8 @@ export const DumbCustomizeHeader = ({ client, editLocale, lang }: Props) => (
                 editLocale={editLocale}
                 placeHolder={I18n.t('administration.landingPage.header.timePlaceholder')}
                 showTime={false}
+                hasConflictingDate={state.startDateConflict}
+                onDateChange={onStartChange}
               />
               <Field
                 name="headerEndDate"
@@ -91,6 +135,8 @@ export const DumbCustomizeHeader = ({ client, editLocale, lang }: Props) => (
                 editLocale={editLocale}
                 placeHolder={I18n.t('administration.landingPage.header.timePlaceholder')}
                 showTime={false}
+                hasConflictingDate={state.endDateConflict}
+                onChange={onEndChange}
               />
             </div>
           </AdminForm>
@@ -98,11 +144,22 @@ export const DumbCustomizeHeader = ({ client, editLocale, lang }: Props) => (
       )}
     />
   </div>
-);
+)};
 
 const mapStateToProps = ({ admin: { editLocale } }, i18n) => ({
   editLocale: editLocale,
   lang: i18n.locale
 });
 
-export default compose(connect(mapStateToProps), withApollo)(DumbCustomizeHeader);
+export default compose(
+  connect(mapStateToProps),
+  graphql(DiscussionQuery, {
+    options: ({ editLocale }) => ({
+      variables: {
+        lang: editLocale,
+        nextView: null
+      }
+    })
+  }),
+  manageErrorAndLoading({ displayLoader: true }),
+  withApollo)(DumbCustomizeHeader);

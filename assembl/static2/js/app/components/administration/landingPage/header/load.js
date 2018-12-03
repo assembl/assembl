@@ -4,7 +4,11 @@ import type { DatePickerValues } from './types.flow';
 import DiscussionQuery from '../../../../graphql/DiscussionQuery.graphql';
 import { convertEntriesToI18nValue, convertEntriesToI18nRichText, convertISO8601StringToDateTime } from '../../../form/utils';
 
-export const load = async (client: ApolloClient, lang: string, fetchPolicy: FetchPolicy = 'cache-first') => {
+export const load = async (
+  client: ApolloClient,
+  lang: string,
+  fetchPolicy: FetchPolicy = 'cache-first'
+) => {
   const { data } = await client.query({
     query: DiscussionQuery,
     fetchPolicy: fetchPolicy,

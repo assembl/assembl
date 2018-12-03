@@ -20,4 +20,9 @@ export type DatePickerInput = {
   time: DateTime | null
 };
 
+export type DatePickerType = {
+  pickerType: string,
+  pickerClasses: ?string
+};
+
 export type DatePickerOutput = DateTime | null;
