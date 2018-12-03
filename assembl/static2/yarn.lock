@@ -5151,6 +5151,11 @@ final-form-arrays@^1.0.4:
   resolved "https://registry.yarnpkg.com/final-form-arrays/-/final-form-arrays-1.0.4.tgz#74330cb4d64ce07bb1c4a9084d0b65afdac6bf72"
   integrity sha512-xFzOQ21zQV4oezdX35WKfDPVW0OzgX9GpBk+obAsb+BnR1CVQp8qOoVyNt7u/ddUUzzgq1F6uNnHF6i1azHeBQ==
 
+final-form-set-field-touched@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/final-form-set-field-touched/-/final-form-set-field-touched-1.0.0.tgz#1f7e21cddcab9df80a390337b8f4f3f19093bb27"
+  integrity sha512-HybhN2L7EbEHxIOHxHuniAUZJmUqPJhJ8/a0fZADFNm969N6JZnk9LYKW+SU7Ni5Gddpj2xx1sWAMBfr7FGBCg==
+
 final-form@^4.8.2:
   version "4.8.2"
   resolved "https://registry.yarnpkg.com/final-form/-/final-form-4.8.2.tgz#905de0a5107f889b1eb86dbbdea96f2d40fcb20d"

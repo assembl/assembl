@@ -104,6 +104,7 @@
     "draft-js-static-toolbar-plugin": "^2.0.2",
     "final-form": "^4.8.2",
     "final-form-arrays": "^1.0.4",
+    "final-form-set-field-touched": "^1.0.0",
     "graphql": "^0.10.5",
     "graphql-anywhere": "^3.1.0",
     "history": "^3.0.0",
