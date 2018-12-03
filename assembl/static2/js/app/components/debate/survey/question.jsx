@@ -8,13 +8,15 @@ import { EditorState } from 'draft-js';
 
 import { getConnectedUserId } from '../../../utils/globalFunctions';
 import { inviteUserToLogin, displayAlert } from '../../../utils/utilityManager';
+import { connectedUserIsAdmin } from '../../../utils/permissions';
 import createPostMutation from '../../../graphql/mutations/createPost.graphql';
-import { SMALL_SCREEN_WIDTH, MINIMUM_BODY_LENGTH } from '../../../constants';
+import { PublicationStates, SMALL_SCREEN_WIDTH, MINIMUM_BODY_LENGTH } from '../../../constants';
 import { withScreenDimensions } from '../../common/screenDimensions';
 import RichTextEditor from '../../common/richTextEditor';
 import { convertEditorStateToHTML } from '../../../utils/draftjs';
 
 type Props = {
+  isDebateModerated: boolean,
   isPhaseCompleted: boolean,
   title: string,
   contentLocale: string,
@@ -42,12 +44,29 @@ export class Question extends React.Component<Props, State> {
     };
   }
 
+  getPostPublicationState = (): string => {
+    const { isDebateModerated } = this.props;
+    if (!isDebateModerated || connectedUserIsAdmin()) {
+      return PublicationStates.PUBLISHED;
+    }
+
+    return PublicationStates.SUBMITTED_AWAITING_MODERATION;
+  };
+
   createPost = () => {
     const { contentLocale, questionId, scrollToQuestion, index, refetchTheme } = this.props;
     const body = this.state.postBody;
+    const publicationState = this.getPostPublicationState();
     this.setState({ buttonDisabled: true }, () =>
       this.props
-        .mutate({ variables: { contentLocale: contentLocale, ideaId: questionId, body: convertEditorStateToHTML(body) } })
+        .mutate({
+          variables: {
+            contentLocale: contentLocale,
+            ideaId: questionId,
+            body: convertEditorStateToHTML(body),
+            publicationState: publicationState
+          }
+        })
         .then(() => {
           scrollToQuestion(true, index + 1);
           displayAlert('success', I18n.t('debate.survey.postSuccess'));
@@ -138,7 +157,8 @@ export class Question extends React.Component<Props, State> {
 }
 
 const mapStateToProps = state => ({
-  contentLocale: state.i18n.locale
+  contentLocale: state.i18n.locale,
+  isDebateModerated: true // TODO: update this line to use preference
 });
 
 export default compose(connect(mapStateToProps), graphql(createPostMutation), withScreenDimensions)(Question);
