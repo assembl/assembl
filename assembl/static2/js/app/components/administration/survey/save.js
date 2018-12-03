@@ -1,12 +1,9 @@
 // @flow
-import difference from 'lodash/difference';
 import isEqual from 'lodash/isEqual';
 import type { ApolloClient } from 'react-apollo';
 
 import type { SurveyAdminValues } from './types.flow';
-import createThematicMutation from '../../../graphql/mutations/createThematic.graphql';
-import deleteThematicMutation from '../../../graphql/mutations/deleteThematic.graphql';
-import updateThematicMutation from '../../../graphql/mutations/updateThematic.graphql';
+import updateIdeasMutation from '../../../graphql/mutations/updateIdeas.graphql';
 import { createSave, convertToEntries, convertRichTextToVariables, getFileVariable } from '../../form/utils';
 
 async function getVideoVariable(client, video, initialVideo) {
@@ -53,11 +50,11 @@ const getChildrenVariables = (thematic, initialTheme) =>
     })
     : []);
 
-async function getVariables(client, theme, initialTheme, order, discussionPhaseId) {
+async function getIdeaInput(client, theme, initialTheme, order) {
   const initialImg = initialTheme ? initialTheme.img : null;
   const initialVideo = initialTheme ? initialTheme.video : null;
   return {
-    discussionPhaseId: discussionPhaseId,
+    id: theme.id.startsWith('-') ? null : theme.id,
     titleEntries: convertToEntries(theme.title),
     image: getFileVariable(theme.img, initialImg),
     video: await getVideoVariable(client, theme.video, initialVideo),
@@ -72,57 +69,38 @@ async function getVariables(client, theme, initialTheme, order, discussionPhaseI
   };
 }
 
+function getIdeas(client, themes, initialThemes) {
+  return themes.map(async (theme, idx) => {
+    const initialTheme = initialThemes.find(t => t.id === theme.id);
+    const order = idx + 1;
+    return getIdeaInput(client, theme, initialTheme, order);
+  });
+}
+
 export const createMutationsPromises = (client: ApolloClient, discussionPhaseId: ?string) => (
   values: SurveyAdminValues,
   initialValues: SurveyAdminValues
 ) => {
-  const initialIds = initialValues.themes.map(t => t.id);
-  const currentIds = values.themes.map(t => t.id);
-  const idsToDelete = difference(initialIds, currentIds);
-  const idsToCreate = currentIds.filter(id => parseInt(id, 10) && parseInt(id, 10) < 0);
-
   const allMutations = [];
+  let createUpdateMutation;
+  const initialThemes = initialValues.themes;
+  const hasChanged = !isEqual(initialThemes, values.themes);
+  if (hasChanged) {
+    createUpdateMutation = () =>
+      Promise.all(getIdeas(client, values.themes, initialThemes)).then(ideas =>
+        client.mutate({
+          mutation: updateIdeasMutation,
+          variables: {
+            discussionPhaseId: discussionPhaseId,
+            ideas: ideas
+          }
+        })
+      );
+  } else {
+    createUpdateMutation = () => Promise.resolve();
+  }
 
-  const deleteMutations = idsToDelete.map(id => () =>
-    client.mutate({
-      mutation: deleteThematicMutation,
-      variables: { thematicId: id }
-    })
-  );
-  allMutations.push(...deleteMutations);
-
-  const createUpdateMutations = values.themes.map((theme, idx) => {
-    const initialTheme = initialValues.themes.find(t => t.id === theme.id);
-    const order = idx !== initialIds.indexOf(theme.id) ? idx + 1 : null;
-    if (idsToCreate.indexOf(theme.id) > -1) {
-      return () =>
-        getVariables(client, theme, initialTheme, order, discussionPhaseId).then(variables =>
-          client.mutate({
-            mutation: createThematicMutation,
-            variables: variables
-          })
-        );
-    }
-
-    const orderHasChanged = initialIds.indexOf(theme.id) !== currentIds.indexOf(theme.id);
-    const hasChanged = orderHasChanged || !isEqual(initialTheme, theme);
-    if (hasChanged) {
-      return () =>
-        getVariables(client, theme, initialTheme, order, discussionPhaseId).then(variables =>
-          client.mutate({
-            mutation: updateThematicMutation,
-            variables: {
-              id: theme.id,
-              ...variables
-            }
-          })
-        );
-    }
-
-    return () => Promise.resolve();
-  });
-
-  allMutations.push(...createUpdateMutations);
+  allMutations.push(createUpdateMutation);
   return allMutations;
 };
 
