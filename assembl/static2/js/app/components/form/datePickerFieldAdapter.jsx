@@ -10,10 +10,10 @@
 */
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import React from 'react';
+import * as React from 'react'
 import { type FieldRenderProps } from 'react-final-form';
 import { type FormApi } from 'final-form';
-import { type DatePickerType, DateTime } from './types.flow';
+import type { DatePickerType, DateTime, DatePickerValue } from './types.flow';
 import { ControlLabel, FormGroup, FormControl } from 'react-bootstrap';
 
 import Error from './error';
@@ -21,22 +21,23 @@ import { getValidationState } from './utils';
 
 type Props = {
   editLocale: string,
-  picker: ?DatePickerType,
+  picker?: DatePickerType,
+  placeHolder: string,
+  showTime: boolean,
+  hasConflictingDate: boolean,
   input: {
     name: string,
     onChange: (SyntheticInputEvent<*> | any) => void,
-    value: multilingualValue
+    value: DatePickerValue
   },
   onDateChange: ?(DateTime => void),
   form: FormApi,
-  mutators: {
-    [string]: Function
-  }
+  children?: React.Node 
 } & FieldRenderProps;
 
 const DatePickerFieldAdapter = ({
   editLocale,
-  picker: { pickerType, pickerClasses },
+  picker,
   placeHolder,
   showTime,
   input: { name, value, onChange },
@@ -46,7 +47,7 @@ const DatePickerFieldAdapter = ({
   onDateChange,
   children,
   form,
-  ...rest }) => {
+  ...rest }: Props) => {
 
   const onLocalizedChange = (e: DateTime) : void => {
     if (e != value.time) {
@@ -62,7 +63,7 @@ const DatePickerFieldAdapter = ({
     <FormGroup controlId={name} validationState={getValidationState(error, touched)} >
       <div className="date-picker-field">
         <ControlLabel className="datepicker-label">
-          {pickerType && <div className={`date-picker-type ${pickerClasses || ''}`}>{pickerType}</div>}
+          {picker && picker.pickerType && <div className={`date-picker-type ${picker.pickerClasses || ''}`}>{picker.pickerType}</div>}
           <DatePicker
               placeholderText={placeHolder}
               selected={value.time}

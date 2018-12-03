@@ -25,7 +25,7 @@ const createVariablesFromValues = (values: DatePickerValue): UpdateDiscussion =>
   endDate: convertDateTimeToISO8601String(values.headerEndDate)
 });
 
-export const createMutationsPromises = (client: ApolloClient) => (values: UpdateDiscussion): () => Promise<*> => [
+export const createMutationsPromises = (client: ApolloClient) => (values: UpdateDiscussion): Array<() => Promise<*>> => [
   () => {
     return client.mutate({
       mutation: updateDiscussion,

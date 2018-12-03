@@ -64,8 +64,8 @@ export function convertISO8601StringToDateTime(_entry: string): DatePickerInput 
   return { time: null };
 };
 
-export function convertDateTimeToISO8601String(_entry: DateTime): DatePickerOutput {
-  if (_entry) return _entry.time.utc();
+export function convertDateTimeToISO8601String(_entry: DatePickerInput): string | null {
+  if (_entry && _entry.time) return _entry.time.utc();
   return null;
 };
 

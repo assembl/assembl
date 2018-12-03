@@ -1,5 +1,6 @@
 // @flow
 import moment from 'moment';
+import type Moment from 'moment';
 import { type Map } from 'immutable';
 
 import { getDisplayedPhaseIdentifier } from './timeline';
@@ -330,4 +331,4 @@ export function compareByTextPosition(extractA: ?FictionExtractFragment, extract
   return -1;
 };
 
-export const convertISO8601StringToDate = (s: string): Date | null => s? moment(s).utc() : null;
+export const convertISO8601StringToDate = (s: string): Moment => moment(s).utc();

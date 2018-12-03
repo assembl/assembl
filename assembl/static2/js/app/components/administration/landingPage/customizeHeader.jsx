@@ -36,7 +36,9 @@ type Props = {
 
 type State = {
   startDate: DateTime,
-  endDate: DateTime
+  endDate: DateTime,
+  startDateConflict: boolean,
+  endDateConflict: boolean
 };
 
 const loading = <Loader />;

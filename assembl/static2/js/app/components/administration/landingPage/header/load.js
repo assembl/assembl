@@ -1,6 +1,6 @@
 // @flow
 import type { ApolloClient } from 'react-apollo';
-import type { DatePickerValues } from './types.flow';
+import type { DatePickerValue } from './types.flow';
 import DiscussionQuery from '../../../../graphql/DiscussionQuery.graphql';
 import { convertEntriesToI18nValue, convertEntriesToI18nRichText, convertISO8601StringToDateTime } from '../../../form/utils';
 
@@ -21,7 +21,7 @@ export const load = async (
 
 type Data = DiscussionQuery;
 
-export function postLoadFormat(data: Data): DatePickerValues {
+export function postLoadFormat(data: Data): DatePickerValue {
   return {
     headerTitle: convertEntriesToI18nValue(data.discussion.titleEntries),
     headerSubtitle: convertEntriesToI18nRichText(data.discussion.subtitleEntries),
