@@ -18,19 +18,13 @@ exports[`ManageModules component should render a page to manage the landing page
     }
     mutators={
       Object {
-        "insert": [Function],
-        "move": [Function],
-        "pop": [Function],
-        "push": [Function],
-        "remove": [Function],
-        "shift": [Function],
-        "swap": [Function],
-        "unshift": [Function],
+        "setFieldTouched": [Function],
       }
     }
     postLoadFormat={[Function]}
     render={[Function]}
     save={[Function]}
+    validate={[Function]}
   />
 </div>
 `;

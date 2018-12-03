@@ -10,25 +10,53 @@ describe('ManageModules component', () => {
     const handleButtonLabelChange = jest.fn(() => {});
     const handleImageChange = jest.fn(() => {});
     const handleLogoChange = jest.fn(() => {});
-    const header = {
-      title: 'title',
-      subtitle: 'subtitle',
-      buttonLabel: 'button label',
-      headerImgMimeType: 'image/jpeg',
-      headerImgUrl: 'img/headerImg.jpg',
-      headerImgTitle: 'myHeaderImage',
-      logoImgMimeType: 'image/jpeg',
-      logoImgUrl: 'img/logoImg.jpg',
-      logoImgTitle: 'myLogoImage'
-    };
+    const data = {
+      discussion: {
+        logoImage: null,
+        headerImage: {
+          mimeType: "image/png",
+          title: "Screen Shot 2018-11-23 at 5.09.00 PM.png",
+          externalUrl: "http://localhost:6543/data/Discussion/32/documents/689/data"
+        },
+        title: "Title in EN 13",
+        titleEntries: [
+          {
+            localeCode: "en",
+            value: "Title in EN 13",
+            __typename: "LangStringEntry"
+          }
+        ],
+        subtitle: "<p>subtitle in EN 13</p>",
+        subtitleEntries: [
+          {
+            localeCode: "en",
+            value: "<p>subtitle in EN 13</p>",
+            __typename: "LangStringEntry"
+          }
+        ],
+        buttonLabel: "button in EN 13",
+        buttonLabelEntries: [
+          {
+            localeCode: "en",
+            value: "button in EN 13",
+            __typename: "LangStringEntry"
+          }
+        ],
+        homepageUrl: null,
+        loginData: {
+          local: true,
+          url: "/qa-debate-fred/login"
+        },
+        startDate: "2017-09-13T00:00:00+00:00",
+        endDate: "2017-11-25T00:00:00+00:00",
+      }
+    }
     const props = {
-      header: header,
-      handleTitleChange: handleTitleChange,
-      handleSubtitleChange: handleSubtitleChange,
-      handleButtonLabelChange: handleButtonLabelChange,
-      handleImageChange: handleImageChange,
-      handleLogoChange: handleLogoChange
-    };
+      client: null,
+      editlocale: 'en',
+      data: {...data}
+    }
+
     const shallowRenderer = new ShallowRenderer();
     shallowRenderer.render(<DumbCustomizeHeader {...props} />);
     const result = shallowRenderer.getRenderOutput();
