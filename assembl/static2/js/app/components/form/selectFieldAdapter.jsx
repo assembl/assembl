@@ -153,9 +153,9 @@ class SelectFieldAdapter extends React.Component<Props, State> {
           placeholder={I18n.t(placeholder)}
           defaultValue={value}
           inputValue={inputValue}
-          onInputChange={this.handleInputChange}
-          onFocus={this.initializeInput}
-          onBlur={this.removeInput}
+          onInputChange={canCreate ? this.handleInputChange : null}
+          onFocus={canCreate ? this.initializeInput : null}
+          onBlur={canCreate ? this.removeInput : null}
           options={options}
           loadOptions={loadOptions}
           onChange={onChange}
