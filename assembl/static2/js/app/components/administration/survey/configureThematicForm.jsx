@@ -9,7 +9,7 @@ import MultilingualTextFieldAdapter from '../../form/multilingualTextFieldAdapte
 import FileUploaderFieldAdapter from '../../form/fileUploaderFieldAdapter';
 import SelectFieldAdapter from '../../form/selectFieldAdapter';
 import { deleteThematicImageTooltip } from '../../common/tooltips';
-import type { SurveyAdminValues, ThemesValue } from './types.flow';
+import type { SurveyAdminValues, ThemeValue, ThemesValue } from './types.flow';
 import { PHASES, modulesTranslationKeys } from '../../../constants';
 
 type Props = {
@@ -19,17 +19,17 @@ type Props = {
   values: ?SurveyAdminValues
 };
 
-export function getFieldName(themeId: string, values: ThemesValue, fieldName: string): string {
-  let result = '';
+export function getFieldData(themeId: string, values: ThemesValue, fieldName: string): { name: string, value: ?ThemeValue } {
+  let result = { name: '', value: null };
   let index = 0;
   let value = values[index];
-  while (!result && value) {
+  while (!result.name && value) {
     if (value.id === themeId) {
-      result = `${fieldName}[${index}]`;
+      result = { name: `${fieldName}[${index}]`, value: value };
     } else if (value.children) {
-      const childrenResult = getFieldName(themeId, value.children, 'children');
-      if (childrenResult) {
-        result = `${fieldName}[${index}].${childrenResult}`;
+      const childrenResult = getFieldData(themeId, value.children, 'children');
+      if (childrenResult.name) {
+        result = { name: `${fieldName}[${index}].${childrenResult.name}`, value: value[childrenResult.name] };
       }
     }
     index += 1;
@@ -41,16 +41,16 @@ export function getFieldName(themeId: string, values: ThemesValue, fieldName: st
 class ConfigureThematicForm extends React.PureComponent<Props> {
   getName = () => {
     const { values, thematicId, slug } = this.props;
-    const name = getFieldName(thematicId, values ? values.themes : [], 'themes');
-    if (!name) {
+    const fieldData = getFieldData(thematicId, values ? values.themes : [], 'themes');
+    if (!fieldData.name) {
       goTo(get('administration', { slug: slug, id: PHASES.survey }, { section: 1 }));
     }
-    return name;
+    return fieldData;
   };
 
   render() {
     const { editLocale } = this.props;
-    const name = this.getName();
+    const { name, value: theme } = this.getName();
     return (
       <div className="form-container">
         <Field
@@ -73,6 +73,7 @@ class ConfigureThematicForm extends React.PureComponent<Props> {
           label={I18n.t('administration.tableOfThematics.moduleTypeLabel')}
           options={modulesTranslationKeys.map(key => ({ value: key, label: I18n.t(`administration.modules.${key}`) }))}
         />
+        <span>{theme ? theme.messageViewOverride.value : null}</span>
       </div>
     );
   }
