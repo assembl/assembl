@@ -41,7 +41,7 @@ class Main extends React.Component<Props, State> {
     modalIsChecked: false
   };
 
-  componentDidUpdate() {
+  componentDidMount() {
     const lastRouteString = getRouteLastString(this.props.location.pathname);
     const isOnLegalContentPage = legalContentSlugs.includes(lastRouteString);
     const { hasTermsAndConditions, hasPrivacyPolicy, hasUserGuidelines, acceptedLegalContentList, id } = this.props;
@@ -54,7 +54,6 @@ class Main extends React.Component<Props, State> {
         acceptedLegalContentList.includes(legalContent)
       );
     }
-    // This array gathers all the legal contents to accept by their route name
     const legalContentsToAcceptByRouteName = {
       terms: hasTermsAndConditions,
       privacyPolicy: hasPrivacyPolicy,
@@ -63,7 +62,9 @@ class Main extends React.Component<Props, State> {
     const legalContentsArray = Object.keys(legalContentsToAcceptByRouteName).map(
       key => (legalContentsToAcceptByRouteName[key] ? key : null)
     );
+    // This array gathers all the legal contents to accept by their route name
     const cleanLegalContentsArray = legalContentsArray.filter(el => el !== null);
+    // The modal is only showed to a user who is connected but hasn't yet accepted legal contents and isn't currently reading them
     if (!isOnLegalContentPage && !userHasAcceptedAllLegalContents && id) {
       legalConfirmModal(cleanLegalContentsArray, this.acceptAllLegalContents, modalIsChecked, this.handleModalCheckbox);
     }
