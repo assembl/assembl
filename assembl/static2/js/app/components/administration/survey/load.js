@@ -41,7 +41,12 @@ export function convertMedia(video: Video): MediaValue {
   };
 }
 
-const getMessageViewOverride = (key: string): Option => ({ value: key, label: I18n.t(`administration.modules.${key}`) });
+const getMessageViewOverride = (key: ?string): Option => {
+  if (key) {
+    return { value: key, label: I18n.t(`administration.modules.${key}`) };
+  }
+  return { value: 'thread', label: I18n.t('administration.modules.thread') };
+};
 
 const getChildren = thematic =>
   sortBy(thematic.children, 'order').map(t => ({

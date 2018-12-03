@@ -23,7 +23,7 @@ type VideoValue = {
 
 export type ThemeValue = {
   id: string,
-  messageViewOverride: ?Option,
+  messageViewOverride: Option,
   img: FileValue,
   questions: Array<QuestionValue>,
   title: I18nValue,
