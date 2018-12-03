@@ -1,5 +1,6 @@
 // @flow
 import type { FileValue, I18nValue, I18nRichTextValue } from '../../form/types.flow';
+import { type Option } from '../../form/selectFieldAdapter';
 
 type QuestionValue = {
   id: string,
@@ -22,6 +23,7 @@ type VideoValue = {
 
 export type ThemeValue = {
   id: string,
+  messageViewOverride: ?Option,
   img: FileValue,
   questions: Array<QuestionValue>,
   title: I18nValue,

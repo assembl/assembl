@@ -7,9 +7,10 @@ import { connect } from 'react-redux';
 import { get, goTo } from '../../../utils/routeMap';
 import MultilingualTextFieldAdapter from '../../form/multilingualTextFieldAdapter';
 import FileUploaderFieldAdapter from '../../form/fileUploaderFieldAdapter';
+import SelectFieldAdapter from '../../form/selectFieldAdapter';
 import { deleteThematicImageTooltip } from '../../common/tooltips';
 import type { SurveyAdminValues, ThemesValue } from './types.flow';
-import { PHASES } from '../../../constants';
+import { PHASES, modulesTranslationKeys } from '../../../constants';
 
 type Props = {
   editLocale: string,
@@ -64,6 +65,13 @@ class ConfigureThematicForm extends React.PureComponent<Props> {
           name={`${name}.img`}
           component={FileUploaderFieldAdapter}
           label={I18n.t('administration.tableOfThematics.headerLabel')}
+        />
+        <Field
+          name={`${name}.messageViewOverride`}
+          component={SelectFieldAdapter}
+          isSearchable={false}
+          label={I18n.t('administration.tableOfThematics.moduleTypeLabel')}
+          options={modulesTranslationKeys.map(key => ({ value: key, label: I18n.t(`administration.modules.${key}`) }))}
         />
       </div>
     );

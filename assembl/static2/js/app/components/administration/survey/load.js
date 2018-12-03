@@ -2,10 +2,12 @@
 import sortBy from 'lodash/sortBy';
 import type { ApolloClient } from 'react-apollo';
 
+import { I18n } from 'react-redux-i18n';
 import ThematicsQuery from '../../../graphql/ThematicsQuery.graphql';
 import { convertEntriesToI18nValue, convertEntriesToI18nRichText } from '../../form/utils';
 import ThematicsDataQuery from '../../../graphql/ThematicsDataQuery.graphql';
 import type { FileValue } from '../../form/types.flow';
+import { type Option } from '../../form/selectFieldAdapter';
 import type { MediaValue, SurveyAdminValues, ThemeValue } from './types.flow';
 import { getTree } from '../../../utils/tree';
 
@@ -39,9 +41,12 @@ export function convertMedia(video: Video): MediaValue {
   };
 }
 
+const getMessageViewOverride = (key: string): Option => ({ value: key, label: I18n.t(`administration.modules.${key}`) });
+
 const getChildren = thematic =>
   sortBy(thematic.children, 'order').map(t => ({
     id: t.id,
+    messageViewOverride: getMessageViewOverride(t.messageViewOverride),
     title: convertEntriesToI18nValue(t.titleEntries),
     img: t.img,
     children: getChildren(t)
@@ -54,6 +59,7 @@ export function postLoadFormat(data: ThematicsQueryQuery): SurveyAdminValues {
   return {
     themes: sortBy(tree, 'order').map(t => ({
       id: t.id,
+      messageViewOverride: getMessageViewOverride(t.messageViewOverride),
       img: t.img,
       questions:
         (t.questions &&

@@ -44,6 +44,7 @@ const getChildrenVariables = (thematic, initialTheme) =>
       const initialImg = initialChild ? initialChild.img : null;
       return {
         id: t.id.startsWith('-') ? null : t.id,
+        messageViewOverride: t.messageViewOverride ? t.messageViewOverride.value : null,
         titleEntries: convertToEntries(t.title),
         image: getFileVariable(t.img, initialImg),
         children: getChildrenVariables(t, initialChild)
@@ -56,6 +57,7 @@ async function getIdeaInput(client, theme, initialTheme, order) {
   const initialVideo = initialTheme ? initialTheme.video : null;
   return {
     id: theme.id.startsWith('-') ? null : theme.id,
+    messageViewOverride: theme.messageViewOverride ? theme.messageViewOverride.value : null,
     titleEntries: convertToEntries(theme.title),
     image: getFileVariable(theme.img, initialImg),
     video: await getVideoVariable(client, theme.video, initialVideo),
