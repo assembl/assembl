@@ -37,11 +37,17 @@ type State = {
 };
 
 class Main extends React.Component<Props, State> {
-  state = {
-    modalIsChecked: false
-  };
+  state = { modalIsChecked: false };
 
   componentDidMount() {
+    this.showModal();
+  }
+
+  componentDidUpdate() {
+    this.showModal();
+  }
+
+  showModal = () => {
     const lastRouteString = getRouteLastString(this.props.location.pathname);
     const isOnLegalContentPage = legalContentSlugs.includes(lastRouteString);
     const { hasTermsAndConditions, hasPrivacyPolicy, hasUserGuidelines, acceptedLegalContentList, id } = this.props;
@@ -68,7 +74,7 @@ class Main extends React.Component<Props, State> {
     if (!isOnLegalContentPage && !userHasAcceptedAllLegalContents && id) {
       legalConfirmModal(cleanLegalContentsArray, this.acceptAllLegalContents, modalIsChecked, this.handleModalCheckbox);
     }
-  }
+  };
 
   handleModalCheckbox = () => {
     this.setState(prevState => ({
