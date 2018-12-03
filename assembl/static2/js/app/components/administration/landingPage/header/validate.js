@@ -20,8 +20,8 @@ export const validateDatePicker = (values: DatePickerValue): DatePickerValidatio
   headerButtonLabel: undefined,
   headerImage: undefined,
   headerLogoImage: undefined,
-  headerStartDate: validStartDate(
-    values.headerStartDate.time, values.headerEndDate.time) ? undefined :  I18n.t('administration.landingPage.header.startDateError'),
-  headerEndDate: validEndDate(
-    values.headerStartDate.time, values.headerEndDate.time) ? undefined :  I18n.t('administration.landingPage.header.endDateError'),
+  headerStartDate: validStartDate(values.headerStartDate.time, values.headerEndDate.time) ?
+    undefined : I18n.t('administration.landingPage.header.startDateError'),
+  headerEndDate: validEndDate(values.headerStartDate.time, values.headerEndDate.time) ?
+    undefined : I18n.t('administration.landingPage.header.endDateError')
 });

@@ -26,10 +26,8 @@ const createVariablesFromValues = (values: DatePickerValue): UpdateDiscussion =>
 });
 
 export const createMutationsPromises = (client: ApolloClient) => (values: UpdateDiscussion): Array<() => Promise<*>> => [
-  () => {
-    return client.mutate({
-      mutation: updateDiscussion,
-      variables: createVariablesFromValues(values)
-    });
-  }
+  () => client.mutate({
+    mutation: updateDiscussion,
+    variables: createVariablesFromValues(values)
+  })
 ];

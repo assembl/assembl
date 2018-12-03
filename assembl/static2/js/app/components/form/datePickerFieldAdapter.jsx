@@ -10,12 +10,12 @@
 */
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import * as React from 'react'
+import * as React from 'react';
 import { type FieldRenderProps } from 'react-final-form';
 import { type FormApi } from 'final-form';
-import type { DatePickerType, DateTime, DatePickerValue } from './types.flow';
-import { ControlLabel, FormGroup, FormControl } from 'react-bootstrap';
+import { ControlLabel, FormGroup } from 'react-bootstrap';
 
+import type { DatePickerType, DateTime, DatePickerValue } from './types.flow';
 import Error from './error';
 import { getValidationState } from './utils';
 
@@ -30,9 +30,9 @@ type Props = {
     onChange: (SyntheticInputEvent<*> | any) => void,
     value: DatePickerValue
   },
-  onDateChange: ?(DateTime => void),
+  onDateChange: ?(DateTime) => void,
   form: FormApi,
-  children?: React.Node 
+  children?: React.Node
 } & FieldRenderProps;
 
 const DatePickerFieldAdapter = ({
@@ -47,11 +47,13 @@ const DatePickerFieldAdapter = ({
   onDateChange,
   children,
   form,
-  ...rest }: Props) => {
-
-  const onLocalizedChange = (e: DateTime) : void => {
-    if (e != value.time) {
-      if (form) { form.mutators.setFieldTouched(name, true); }
+  ...rest
+}: Props) => {
+  const onLocalizedChange = (e: DateTime): void => {
+    if (e !== value.time) {
+      if (form) {
+        form.mutators.setFieldTouched(name, true);
+      }
     }
     if (onDateChange) {
       onDateChange(e);
@@ -60,22 +62,23 @@ const DatePickerFieldAdapter = ({
   };
 
   return (
-    <FormGroup controlId={name} validationState={getValidationState(error, touched)} >
+    <FormGroup controlId={name} validationState={getValidationState(error, touched)}>
       <div className="date-picker-field">
         <ControlLabel className="datepicker-label">
-          {picker && picker.pickerType && <div className={`date-picker-type ${picker.pickerClasses || ''}`}>{picker.pickerType}</div>}
+          {picker &&
+            picker.pickerType && <div className={`date-picker-type ${picker.pickerClasses || ''}`}>{picker.pickerType}</div>}
           <DatePicker
-              placeholderText={placeHolder}
-              selected={value.time}
-              id={`date-picker-${name}`}
-              onChange={onLocalizedChange}
-              showTimeSelect={showTime || false}
-              dateFormat={rest.dateFormat}
-              locale={editLocale}
-              shouldCloseOnSelect
-              className={hasConflictingDate? 'warning': ''}
-              {...rest}
-            />
+            placeholderText={placeHolder}
+            selected={value.time}
+            id={`date-picker-${name}`}
+            onChange={onLocalizedChange}
+            showTimeSelect={showTime || false}
+            dateFormat={rest.dateFormat}
+            locale={editLocale}
+            shouldCloseOnSelect
+            className={hasConflictingDate ? 'warning' : ''}
+            {...rest}
+          />
           <div className="icon-schedule-container">
             <span className="assembl-icon-schedule grey" />
           </div>

@@ -12,9 +12,7 @@ import type {
   MutationsPromises,
   I18nRichTextValue,
   SaveStatus,
-  DatePickerInput,
-  DatePickerOutput,
-  DateTime } from './types.flow';
+  DatePickerInput } from './types.flow';
 import { convertEditorStateToHTML, convertEntriesToEditorState, uploadNewAttachments } from '../../utils/draftjs';
 import { displayAlert } from '../../utils/utilityManager';
 import { runSerial } from '../administration/saveButton';

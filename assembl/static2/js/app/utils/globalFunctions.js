@@ -54,7 +54,7 @@ export const getConnectedUserPermissions = () => {
 
 export function getAuthorizationToken<T>(location: { query: { token: T } }) {
   return 'token' in location.query ? location.query.token : null;
-};
+}
 
 export const getProvidersData = () => {
   const data = getScriptText('login-providers');
@@ -81,7 +81,7 @@ export function getSortedArrayByKey<KeyType>(arr: Array<{ [KeyType]: number }>, 
     return 0;
   });
   return arr;
-};
+}
 
 export const isDateExpired = (date1: number, date2: number) => date1 > date2;
 
@@ -201,7 +201,7 @@ export function setCookieItem(name: string, value: any, sensitive: boolean = fal
   const date = new Date();
   date.setMonth(date.getMonth() + 13);
   document.cookie = cookie(name, value, date.toString(), sensitive);
-};
+}
 
 export function deleteCookieItem(name: string, path: string) {
   if (getCookieItem(name)) {
@@ -209,7 +209,7 @@ export function deleteCookieItem(name: string, path: string) {
     const expiryDate = 'Thu, 28 Aug 1993 00:00:01 GTM';
     document.cookie = cookie(name, '', expiryDate, false, path);
   }
-};
+}
 
 export const createRandomId = (): string => Math.round(Math.random() * -1000000).toString();
 
@@ -288,15 +288,15 @@ export const moveItemDown = (itemsById: ItemsById, id: string): ItemsById => {
 
 export function isHarvestable(params: RouterParams) {
   return HARVESTABLE_PHASES.includes(getDisplayedPhaseIdentifier(params));
-};
+}
 
 export function fromGlobalId(id: string): string | null {
   return id ? atob(id).split(':')[1] : null;
-};
+}
 
 export function getIconPath(icon: string, color: string = '') {
   return color ? `${ICONS_PATH}/${color}/${icon}` : `${ICONS_PATH}/${icon}`;
-};
+}
 
 
 // We `pictureId + 1` because there is no image in the S3 bucket with 0 as an id

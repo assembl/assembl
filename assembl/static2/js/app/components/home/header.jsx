@@ -27,8 +27,10 @@ class Header extends React.Component {
   }
 
   render() {
-    const { timeline, data: { discussion: {
-      title, subtitle, headerImage, logoImage, buttonLabel, startDate, endDate } } } = this.props;
+    const {
+      timeline,
+      data: { discussion: { title, subtitle, headerImage, logoImage, buttonLabel, startDate, endDate } }
+    } = this.props;
     return (
       <section className="home-section header-section">
         <Grid fluid className="max-container">
@@ -38,15 +40,16 @@ class Header extends React.Component {
               {title && <h1 className="light-title-1">{title}</h1>}
               <h4 className="light-title-4 uppercase margin-m">
                 {subtitle && <span dangerouslySetInnerHTML={{ __html: subtitle }} />}
-                {startDate && endDate && (
-                  <div>
-                    <Translate
-                      value="home.from_start_to_end"
-                      start={I18n.l(startDate, { dateFormat: 'date.format' })}
-                      end={I18n.l(endDate, { dateFormat: 'date.format' })}
-                    />
-                  </div>
-                )}
+                {startDate &&
+                  endDate && (
+                    <div>
+                      <Translate
+                        value="home.from_start_to_end"
+                        start={I18n.l(startDate, { dateFormat: 'date.format' })}
+                        end={I18n.l(endDate, { dateFormat: 'date.format' })}
+                      />
+                    </div>
+                  )}
               </h4>
               <div className="margin-l">
                 <ParticipateButton
@@ -81,7 +84,6 @@ const mapStateToProps = state => ({
   timeline: state.timeline
 });
 
-export default compose(
-  connect(mapStateToProps),
-  graphql(DiscussionQuery),
-  manageErrorAndLoading({ displayLoader: false }))(Header);
+export default compose(connect(mapStateToProps), graphql(DiscussionQuery), manageErrorAndLoading({ displayLoader: false }))(
+  Header
+);
