@@ -358,3 +358,9 @@ export const fictionMoreInfoTooltip = (
 );
 
 export const fileNameTooltip = (fileName?: string) => <Tooltip id="fileNameTooltip">{fileName}</Tooltip>;
+
+export const commentHelperButtonTooltip = (
+  <Tooltip id="commentHelperButtonTooltip">
+    <Translate value="debate.brightMirror.commentFiction.commentHelper" />
+  </Tooltip>
+);

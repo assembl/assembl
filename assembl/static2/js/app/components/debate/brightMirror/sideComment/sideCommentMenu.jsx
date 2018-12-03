@@ -28,6 +28,12 @@ type State = {
 };
 
 class SideCommentMenu extends React.Component<Props, State> {
+  static getDerivedStateFromProps(nextProps: Props) {
+    // Required when switching from displaying comment to submitting to force a refresh of component
+    const { displaySubmitBox } = nextProps;
+    return displaySubmitBox ? { commentBoxDisplayed: false } : null;
+  }
+
   state = { commentBoxDisplayed: false };
 
   handleMouseDown = (event: SyntheticMouseEvent<>) => {

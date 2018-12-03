@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Storyshots SentimentMenu default 1`] = `
+exports[`Storyshots FictionBodyToolbar default 1`] = `
 <div>
   <div
     style={
@@ -11,7 +11,7 @@ exports[`Storyshots SentimentMenu default 1`] = `
     }
   >
     <div
-      className="sentiment-container hidden-xs hidden-sm hidden-md"
+      className="body-toolbar-container hidden-xs hidden-sm hidden-md"
       style={
         Object {
           "left": "35px",
@@ -265,13 +265,35 @@ exports[`Storyshots SentimentMenu default 1`] = `
           className="txt"
           style={
             Object {
-              "paddingLeft": "18px",
+              "paddingLeft": "30px",
             }
           }
         >
           <span>
             1 réaction
           </span>
+        </div>
+      </div>
+      <div
+        className="custom-overlay"
+      >
+        <div
+          onBlur={[Function]}
+          onClick={null}
+          onFocus={[Function]}
+          onMouseOut={[Function]}
+          onMouseOver={[Function]}
+        >
+          <button
+            className="comment-helper comment-helper-default"
+            disabled={false}
+            onClick={[Function]}
+            type="button"
+          >
+            <span
+              className="assembl-icon-suggest"
+            />
+          </button>
         </div>
       </div>
     </div>
@@ -373,7 +395,7 @@ exports[`Storyshots SentimentMenu default 1`] = `
               }
             }
           >
-            SentimentMenu
+            FictionBodyToolbar
           </h1>
           <h2
             style={
@@ -422,7 +444,7 @@ exports[`Storyshots SentimentMenu default 1`] = `
                   }
                 >
                   &lt;
-                  SentimentMenu
+                  FictionBodyToolbar
                 </span>
                 <span>
                   <span>
@@ -826,7 +848,7 @@ exports[`Storyshots SentimentMenu default 1`] = `
               }
             >
               "
-              SentimentMenu
+              FictionBodyToolbar
               " Component
             </h2>
             <small>
@@ -840,7 +862,7 @@ exports[`Storyshots SentimentMenu default 1`] = `
 </div>
 `;
 
-exports[`Storyshots SentimentMenu playground 1`] = `
+exports[`Storyshots FictionBodyToolbar playground 1`] = `
 <div>
   <div
     style={
@@ -851,7 +873,7 @@ exports[`Storyshots SentimentMenu playground 1`] = `
     }
   >
     <div
-      className="sentiment-container hidden-xs hidden-sm hidden-md"
+      className="body-toolbar-container hidden-xs hidden-sm hidden-md"
       style={
         Object {
           "left": "35px",
@@ -1105,13 +1127,35 @@ exports[`Storyshots SentimentMenu playground 1`] = `
           className="txt"
           style={
             Object {
-              "paddingLeft": "18px",
+              "paddingLeft": "30px",
             }
           }
         >
           <span>
             1 réaction
           </span>
+        </div>
+      </div>
+      <div
+        className="custom-overlay"
+      >
+        <div
+          onBlur={[Function]}
+          onClick={null}
+          onFocus={[Function]}
+          onMouseOut={[Function]}
+          onMouseOver={[Function]}
+        >
+          <button
+            className="comment-helper comment-helper-default"
+            disabled={false}
+            onClick={[Function]}
+            type="button"
+          >
+            <span
+              className="assembl-icon-suggest"
+            />
+          </button>
         </div>
       </div>
     </div>
@@ -1213,7 +1257,7 @@ exports[`Storyshots SentimentMenu playground 1`] = `
               }
             }
           >
-            SentimentMenu
+            FictionBodyToolbar
           </h1>
           <h2
             style={
@@ -1262,7 +1306,7 @@ exports[`Storyshots SentimentMenu playground 1`] = `
                   }
                 >
                   &lt;
-                  SentimentMenu
+                  FictionBodyToolbar
                 </span>
                 <span>
                   <span>
@@ -1637,7 +1681,7 @@ exports[`Storyshots SentimentMenu playground 1`] = `
               }
             >
               "
-              SentimentMenu
+              FictionBodyToolbar
               " Component
             </h2>
             <small>

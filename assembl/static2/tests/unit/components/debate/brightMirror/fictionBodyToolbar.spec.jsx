@@ -4,24 +4,26 @@ import initStoryshots from '@storybook/addon-storyshots';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 
-import SentimentMenu from '../../../../../js/app/components/debate/brightMirror/sentimentMenu';
+import FictionBodyToolbar from '../../../../../js/app/components/debate/brightMirror/fictionBodyToolbar';
+import CommentHelperButton from '../../../../../js/app/components/debate/common/commentHelperButton';
+import ResponsiveOverlayTrigger from '../../../../../js/app/components/common/responsiveOverlayTrigger';
 
 // Import existing storybook data
-import { props } from '../../../../../js/app/stories/components/debate/brightMirror/sentimentMenu.stories'; // eslint-disable-line max-len
+import { props } from '../../../../../js/app/stories/components/debate/brightMirror/fictionBodyToolbar.stories'; // eslint-disable-line max-len
 
 // Separate the snapshots in directories next to each component
 // Name should match with the story name
 initStoryshots({
-  storyKindRegex: /^SentimentMenu$/
+  storyKindRegex: /^FictionBodyToolbar$/
 });
 
 configure({ adapter: new Adapter() });
 
-describe('<SentimentMenu /> - with shallow', () => {
+describe('<FictionBodyToolbar /> - with shallow', () => {
   let wrapper;
 
   beforeEach(() => {
-    wrapper = mount(<SentimentMenu {...props} />);
+    wrapper = mount(<FictionBodyToolbar {...props} />);
   });
 
   it('should render 4 inactive icons if no mysentiment', () => {
@@ -63,5 +65,13 @@ describe('<SentimentMenu /> - with shallow', () => {
     });
     expect(wrapper.find('div [className="min-sentiment"]')).toHaveLength(3);
     expect(wrapper.find('div [className="txt"]').text()).toEqual('7 réactions');
+  });
+
+  it('should render one CommentHelperButton', () => {
+    expect(wrapper.find(CommentHelperButton)).toHaveLength(1);
+  });
+
+  it('should render 5 ResponsiveOverlayTrigger for tooltip (4 from the sentiment bar and 1 from CommentHelperButton)', () => {
+    expect(wrapper.find(ResponsiveOverlayTrigger)).toHaveLength(5);
   });
 });

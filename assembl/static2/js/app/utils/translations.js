@@ -441,11 +441,19 @@ const Translations = {
         startFictionLabel: "Je partage ma fiction",
         commentFiction: {
           cancel: "Annuler",
+          commentHelper: "Commenter",
           deleteComment: "Supprimer ce message",
           deleteCommentBodyMessage: "Êtes-vous sûr de vouloir supprimer ce message ?",
           editComment: "Modifier ce message",
           imageAlt: "Illustration prenez la parole",
           label: "Commentaires",
+          modal: {
+            title: "Commenter",
+            instructionList: "Vous pouvez commenter et enrichir le texte :",
+            instructionListOne: "Surlignez un extrait du texte",
+            instructionListTwo: "Cliquez sur “Suggérer” pour ouvrir une boîte de commentaire à droite du texte",
+            instructionListThree: "Rédigez votre commentaire écrit, image ou vidéo et validez"
+          },
           numberOfComments: "%{count} messages",
           numberOfComments_0: "Aucun message pour le moment",
           numberOfComments_1: "%{count} message",
@@ -1389,11 +1397,19 @@ const Translations = {
         startFictionLabel: "Share a fiction",
         commentFiction: {
           cancel: "Cancel",
+          commentHelper: "Comment",
           deleteComment: "Delete this message",
           deleteCommentBodyMessage: "Are you sure you want to delete this message?",
           editComment: "Edit this message",
           imageAlt: "Let's talk illustration",
           label: "Comments",
+          modal: {
+            title: "Comment",
+            instructionList: "You can comment the text:",
+            instructionListOne: "Underligne a quote",
+            instructionListTwo: "Click “Suggest” to open an input box",
+            instructionListThree: "Write your comment, add an image or video and validate"
+          },
           numberOfComments: "%{count} messages",
           numberOfComments_0: "No message at the moment",
           numberOfComments_1: "%{count} message",

@@ -22,7 +22,21 @@
     }
   }
 
+  @media screen and (min-width: $screen-lg-min) {
+    .side-comment-button {
+      .assembl-icon-suggest {
+        &:before {
+          font-size: 28px;
+        }
+      }
+    }
+  }
+
   @media screen and (min-width: $screen-xl-min) {
     margin-left: 25px;
+
+    .side-comment-button {
+      margin-top: 2px;
+    }
   }
 }

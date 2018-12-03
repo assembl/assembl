@@ -35,6 +35,8 @@ function loadStories() {
 
   require('../js/app/stories/components/debate/common/toggleCommentButton.stories.jsx');
   require('../js/app/stories/components/debate/common/replyToCommentButton.stories.jsx');
+  require('../js/app/stories/components/debate/common/sharePostButton.stories.jsx');
+  require('../js/app/stories/components/debate/common/commentHelperButton.stories.jsx');
 
   require('../js/app/stories/components/debate/brightMirror/fictionPreview.stories.jsx');
   require('../js/app/stories/components/debate/brightMirror/fictionsList.stories.jsx');
@@ -42,12 +44,12 @@ function loadStories() {
   require('../js/app/stories/components/debate/brightMirror/circleAvatar.stories.jsx');
   require('../js/app/stories/components/debate/brightMirror/fictionHeader.stories.jsx');
   require('../js/app/stories/components/debate/brightMirror/fictionToolbar.stories.jsx');
+  require('../js/app/stories/components/debate/brightMirror/fictionBodyToolbar.stories.jsx');
   require('../js/app/stories/components/debate/brightMirror/fictionBody.stories.jsx');
   require('../js/app/stories/components/debate/brightMirror/fictionCommentHeader.stories.jsx');
   require('../js/app/stories/components/debate/brightMirror/fictionCommentForm.stories.jsx');
   require('../js/app/stories/components/debate/brightMirror/deletedFictionComment.stories.jsx');
   require('../js/app/stories/components/debate/brightMirror/fictionComment.stories.jsx');
-  require('../js/app/stories/components/debate/brightMirror/sentimentMenu.stories.jsx');
   require('../js/app/stories/components/debate/brightMirror/sideComment/sideCommentBox.stories.jsx');
   require('../js/app/stories/components/debate/brightMirror/sideComment/sideCommentBadge.stories.jsx');
   require('../js/app/stories/components/debate/brightMirror/sideComment/sideCommentAnchor.stories.jsx');

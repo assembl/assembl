@@ -1,14 +1,21 @@
 // @flow
-import React from 'react';
+import React, { Fragment } from 'react';
 import get from 'lodash/get';
-
 import { OverlayTrigger } from 'react-bootstrap';
-import { Translate } from 'react-redux-i18n';
-
+import { Translate, I18n } from 'react-redux-i18n';
+// Constant imports
 import { MEDIUM_SCREEN_WIDTH, SENTIMENT_TOP_OFFSET, SENTIMENT_RIGHT_OFFSET } from '../../../constants';
+import { commentHelperButtonTooltip } from '../../common/tooltips';
+// Component imports
 import Sentiments from '../common/sentiments';
+import CommentHelperButton from '../common/commentHelperButton';
+import ResponsiveOverlayTrigger from '../../common/responsiveOverlayTrigger';
+// Helper imports
 import getSentimentStats from '../common/sentimentStats';
 import fictionSentimentDefinitions from './fictionSentimentDefinition';
+import { displayModal } from '../../../utils/utilityManager';
+// Type imports
+import type { Props as CommentHelperButtonProps } from '../common/commentHelperButton';
 
 export type Props = {
   position: { x: number, y: number },
@@ -19,16 +26,46 @@ export type Props = {
   isPhaseCompleted: boolean
 };
 
-const SentimentMenu = ({ postId, mySentiment, screenWidth, position, sentimentCounts, isPhaseCompleted }: Props) => {
+const FictionBodyToolbar = ({ postId, mySentiment, screenWidth, position, sentimentCounts, isPhaseCompleted }: Props) => {
   let count = 0;
   let totalSentimentsCount = 0;
   if (sentimentCounts) {
     const { like, disagree, dontUnderstand, moreInfo } = sentimentCounts;
     totalSentimentsCount = like + disagree + dontUnderstand + moreInfo;
   }
+
+  const bodyContent = (
+    <Fragment>
+      <img className="modal-comment-helper-gif" src="/static2/img/comment-helper.gif" alt="comment-helper.gif" />
+      <div className="text-left modal-comment-helper-content">
+        <p>{I18n.t('debate.brightMirror.commentFiction.modal.instructionList')}</p>
+        <ol>
+          <li>{I18n.t('debate.brightMirror.commentFiction.modal.instructionListOne')}</li>
+          <li>{I18n.t('debate.brightMirror.commentFiction.modal.instructionListTwo')}</li>
+          <li>{I18n.t('debate.brightMirror.commentFiction.modal.instructionListThree')}</li>
+        </ol>
+      </div>
+    </Fragment>
+  );
+
+  const modalTitle = I18n.t('debate.brightMirror.commentFiction.modal.title');
+  const modalBody = bodyContent;
+  const includeFooterInModal = false;
+
+  const commentHelperButtonProps: CommentHelperButtonProps = {
+    onClickCallback: () => displayModal(modalTitle, modalBody, includeFooterInModal),
+    linkClassName: 'comment-helper'
+  };
+
+  const displayCommentHelperButton = (
+    <ResponsiveOverlayTrigger placement="right" tooltip={commentHelperButtonTooltip}>
+      <CommentHelperButton {...commentHelperButtonProps} />
+    </ResponsiveOverlayTrigger>
+  );
+
   return (
     <div
-      className="sentiment-container hidden-xs hidden-sm hidden-md"
+      className="body-toolbar-container hidden-xs hidden-sm hidden-md"
       style={{
         top: `${position ? position.y + SENTIMENT_TOP_OFFSET : 0}px`,
         left: `${position ? position.x / 2 - SENTIMENT_RIGHT_OFFSET : 0}px`
@@ -59,7 +96,7 @@ const SentimentMenu = ({ postId, mySentiment, screenWidth, position, sentimentCo
                 return result;
               }, [])}
             </div>
-            <div className="txt" style={{ paddingLeft: `${(count + 2) * 6}px` }}>
+            <div className="txt" style={{ paddingLeft: `${(count + 4) * 6}px` }}>
               {screenWidth >= MEDIUM_SCREEN_WIDTH ? (
                 totalSentimentsCount
               ) : (
@@ -71,8 +108,9 @@ const SentimentMenu = ({ postId, mySentiment, screenWidth, position, sentimentCo
       ) : (
         <div className="empty-sentiments-count" />
       )}
+      {displayCommentHelperButton}
     </div>
   );
 };
 
-export default SentimentMenu;
+export default FictionBodyToolbar;

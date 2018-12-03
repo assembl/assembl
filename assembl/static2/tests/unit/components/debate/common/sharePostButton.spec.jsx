@@ -8,35 +8,23 @@ import Adapter from 'enzyme-adapter-react-16';
 /* eslint-enable */
 
 import SharePostButton from '../../../../../js/app/components/debate/common/sharePostButton';
-import type { BrightMirrorFictionProps } from '../../../../../js/app/pages/brightMirrorFiction';
-import type { Props as SharePostButtonProps } from '../../../../../js/app/components/debate/common/sharePostButton';
+
+// Import existing storybook data
+import { defaultSharePostButtonProps } from '../../../../../js/app/stories/components/debate/common/sharePostButton.stories';
 
 // Separate the snapshots in directories next to each component
 // Name should match with the story name
 initStoryshots({
-  storyKindRegex: /^sharePostButton$/
+  storyKindRegex: /^SharePostButton$/
 });
 
 configure({ adapter: new Adapter() });
 
 describe('<SharePostButton /> - with shallow', () => {
   let wrapper;
-  const fictionMetaInfo: BrightMirrorFictionProps = {
-    fictionId: 'his-name-s-forrest',
-    phase: 'like-me',
-    slug: 'i-named-him-after-his-daddy',
-    themeId: 'he-got-a-daddy-named-forrest-too'
-  };
-
-  const sharePostButtonProps: SharePostButtonProps = {
-    metaInfo: fictionMetaInfo,
-    linkClassName: '',
-    modalTitleMsgKey: 'debate.brightMirror.shareFiction',
-    type: 'brightMirrorFiction'
-  };
 
   beforeEach(() => {
-    wrapper = shallow(<SharePostButton {...sharePostButtonProps} />);
+    wrapper = shallow(<SharePostButton {...defaultSharePostButtonProps} />);
   });
 
   it('should render one Link with a share icon embedded', () => {

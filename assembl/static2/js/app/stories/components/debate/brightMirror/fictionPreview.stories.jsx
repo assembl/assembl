@@ -32,7 +32,8 @@ export const customFictionPreview: FictionPreviewProps = {
   userCanDelete: true,
   deleteFictionHandler: action('deleteFictionHandler'),
   publicationState: PublicationStates.PUBLISHED,
-  fictionMetaInfo: fictionMetaInfo
+  fictionMetaInfo: fictionMetaInfo,
+  pictureId: 0
 };
 
 storiesOf('FictionPreview', module)
@@ -55,6 +56,7 @@ storiesOf('FictionPreview', module)
         deleteFictionHandler={customFictionPreview.deleteFictionHandler}
         publicationState={select('publicationState', PublicationStates, PublicationStates.PUBLISHED)}
         fictionMetaInfo={customFictionPreview.fictionMetaInfo}
+        pictureId={customFictionPreview.pictureId}
       />
     ))
   );

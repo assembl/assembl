@@ -15,7 +15,7 @@ import ResponsiveOverlayTrigger from '../../common/responsiveOverlayTrigger';
 import { editFictionTooltip, deleteFictionTooltip, shareFictionTooltip } from '../../common/tooltips';
 // Utils imports
 import { displayCustomModal, closeModal } from '../../../utils/utilityManager';
-import { getRandomPictureUrl } from '../../../utils/globalFunctions';
+import { getPictureUrl } from '../../../utils/globalFunctions';
 // Type imports
 import type { BrightMirrorFictionProps } from '../../../pages/brightMirrorFiction';
 import type { Props as SharePostButtonProps } from '../common/sharePostButton';
@@ -35,7 +35,9 @@ export type FictionPreviewProps = {
   deleteFictionHandler: Function,
   publicationState: string,
   /** Fiction meta information: slug, phase, themeId, fictionId */
-  fictionMetaInfo: BrightMirrorFictionProps
+  fictionMetaInfo: BrightMirrorFictionProps,
+  /** Picture id needed to return the link of the picture to display with getPictureUrl */
+  pictureId: number
 };
 
 const FictionPreview = ({
@@ -51,7 +53,8 @@ const FictionPreview = ({
   userCanDelete,
   deleteFictionHandler,
   publicationState,
-  fictionMetaInfo
+  fictionMetaInfo,
+  pictureId
 }: FictionPreviewProps) => {
   const isDraft = publicationState === PublicationStates.DRAFT;
 
@@ -125,7 +128,7 @@ const FictionPreview = ({
   // We add a black overlay with an opacity of 0.2 to fix contrast issue when displaying a light label
   const previewStyle = isDraft
     ? null
-    : { backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url(${getRandomPictureUrl()})` };
+    : { backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url(${getPictureUrl(pictureId)})` };
 
   return (
     <div className={classNames('fiction-preview', { draft: isDraft })} style={previewStyle}>

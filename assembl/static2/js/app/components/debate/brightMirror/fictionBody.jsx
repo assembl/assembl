@@ -2,7 +2,7 @@
 import React from 'react';
 
 import SideCommentMenu from './sideComment/sideCommentMenu';
-import SentimentMenu from './sentimentMenu';
+import FictionBodyToolbar from './fictionBodyToolbar';
 import { elementContainsSelection, getConnectedUserId } from '../../../utils/globalFunctions';
 import PostBody from '../common/post/postBody';
 import { COMMENT_DYNAMIC_OFFSET, ANCHOR_OFFSET } from '../../../constants';
@@ -195,13 +195,16 @@ class FictionBody extends React.Component<Props, State> {
       commentSentimentFixedPosition
     } = this.state;
 
+    // Filter extract by lang
+    const filteredExtracts = extracts && extracts.filter(extract => extract.lang === contentLocale);
+
     return (
       <div ref={this.fictionBodyView}>
         <SideCommentMenu
           postId={postId}
           ideaId={ideaId}
           lang={contentLocale}
-          extracts={extracts}
+          extracts={filteredExtracts}
           commentAnchorPosition={commentAnchorPosition}
           badgeDynamicPosition={commentBadgeDynamicPosition}
           badgeFixedPosition={commentBadgeFixedPosition}
@@ -215,7 +218,7 @@ class FictionBody extends React.Component<Props, State> {
           setPositionToCoordinates={this.setPositionToCoordinates}
           userCanReply={userCanReply}
         />
-        <SentimentMenu
+        <FictionBodyToolbar
           position={commentSentimentFixedPosition}
           sentimentCounts={sentimentCounts}
           mySentiment={mySentiment}
@@ -227,7 +230,7 @@ class FictionBody extends React.Component<Props, State> {
           handleMouseUpWhileHarvesting={this.handleMouseUpWhileHarvesting}
           body={content || noContentMessage}
           dbId={dbId}
-          extracts={extracts}
+          extracts={filteredExtracts}
           bodyMimeType={bodyMimeType}
           contentLocale={contentLocale}
           id={postId}

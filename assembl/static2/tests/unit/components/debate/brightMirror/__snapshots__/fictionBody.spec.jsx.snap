@@ -6,7 +6,7 @@ exports[`<FictionBody /> - snapshots should match snapshot 1`] = `
     className="side-comment-container"
   />
   <div
-    className="sentiment-container hidden-xs hidden-sm hidden-md"
+    className="body-toolbar-container hidden-xs hidden-sm hidden-md"
     style={
       Object {
         "left": "-15px",
@@ -215,6 +215,28 @@ exports[`<FictionBody /> - snapshots should match snapshot 1`] = `
     <div
       className="empty-sentiments-count"
     />
+    <div
+      className="custom-overlay"
+    >
+      <div
+        onBlur={[Function]}
+        onClick={null}
+        onFocus={[Function]}
+        onMouseOut={[Function]}
+        onMouseOver={[Function]}
+      >
+        <button
+          className="comment-helper comment-helper-default"
+          disabled={false}
+          onClick={[Function]}
+          type="button"
+        >
+          <span
+            className="assembl-icon-suggest"
+          />
+        </button>
+      </div>
+    </div>
   </div>
   <div
     className="post-body post-body--is-harvestable"
@@ -247,7 +269,7 @@ exports[`<FictionBody /> - snapshots should match snapshot no title nor content 
     className="side-comment-container"
   />
   <div
-    className="sentiment-container hidden-xs hidden-sm hidden-md"
+    className="body-toolbar-container hidden-xs hidden-sm hidden-md"
     style={
       Object {
         "left": "-15px",
@@ -456,6 +478,28 @@ exports[`<FictionBody /> - snapshots should match snapshot no title nor content 
     <div
       className="empty-sentiments-count"
     />
+    <div
+      className="custom-overlay"
+    >
+      <div
+        onBlur={[Function]}
+        onClick={null}
+        onFocus={[Function]}
+        onMouseOut={[Function]}
+        onMouseOver={[Function]}
+      >
+        <button
+          className="comment-helper comment-helper-default"
+          disabled={false}
+          onClick={[Function]}
+          type="button"
+        >
+          <span
+            className="assembl-icon-suggest"
+          />
+        </button>
+      </div>
+    </div>
   </div>
   <div
     className="post-body post-body--is-harvestable"
