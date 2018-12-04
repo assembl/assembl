@@ -25,7 +25,7 @@ export function i18nValueIsEmpty(v: I18nValue): boolean {
       .map(key => v[key]) // flow doesn't treat Object.values as expected, see: https://github.com/facebook/flow/issues/2221
       .every(s => s.length === 0)
   );
-};
+}
 
 export function richTextI18nValueIsEmpty(v: I18nRichTextValue): boolean {
   return (
@@ -34,7 +34,7 @@ export function richTextI18nValueIsEmpty(v: I18nRichTextValue): boolean {
       .map(key => v[key]) // flow doesn't treat Object.values as expected, see: https://github.com/facebook/flow/issues/2221
       .every(es => !es || !es.getCurrentContent().hasText())
   );
-};
+}
 
 // [{ localeCode: 'fr', value: 'foo' }] => { fr: 'foo' }
 export function convertEntriesToI18nValue<T>(
@@ -51,25 +51,34 @@ export function convertEntriesToI18nValue<T>(
       [localeCode]: value
     };
   }, {});
-};
+}
 
 export function convertEntriesToI18nRichText(entries: RichTextLangstringEntries): I18nRichTextValue {
   return convertEntriesToI18nValue(convertEntriesToEditorState(entries));
-};
+}
 
 export function convertISO8601StringToDateTime(_entry: string): DatePickerInput {
-  if (_entry) return { time: moment(_entry, moment.ISO_8601).utc() };
+  if (_entry) {
+    const t = moment(_entry, moment.ISO_8601).utc();
+    if (t._isValid) { // eslint-disable-line no-underscore-dangle
+      return { time: t };
+    }
+  }
   return { time: null };
-};
+}
 
 export function convertDateTimeToISO8601String(_entry: DatePickerInput): string | null {
-  if (_entry && _entry.time) return _entry.time.utc();
-  return null;
-};
+  try {
+    if (_entry && _entry.time) return _entry.time.utc().toISOString();
+    return null;
+  } catch (e) {
+    return null;
+  }
+}
 
 export function getValidationState(error: ?string, touched: ?boolean): ?string {
   return touched && error ? 'error' : null;
-};
+}
 
 export const createSave = (successMsgId: string) => async (mutationsPromises: MutationsPromises): Promise<SaveStatus> => {
   let status = 'PENDING';
@@ -91,7 +100,7 @@ export function convertToEntries(valuesByLocale: I18nValue): LangstringEntries {
     localeCode: locale,
     value: valuesByLocale[locale]
   }));
-};
+}
 
 type RichTextVariables = {
   attachments: Array<string>,
@@ -127,7 +136,7 @@ export async function convertRichTextToVariables(
     attachments: attachments,
     entries: entries
   };
-};
+}
 
 export function getFileVariable(img: FileValue, initialImg: ?FileValue): FileVariable {
   if (initialImg && !img) {
@@ -138,4 +147,4 @@ export function getFileVariable(img: FileValue, initialImg: ?FileValue): FileVar
   // we need to send image: null if we didn't change the image.
   const variab = img && img.externalUrl instanceof File ? img.externalUrl : null;
   return variab;
-};
+}

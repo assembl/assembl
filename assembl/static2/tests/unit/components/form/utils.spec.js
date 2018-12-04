@@ -1,5 +1,6 @@
 // @flow
 import { EditorState } from 'draft-js';
+import moment from 'moment';
 
 /* eslint-disable import/no-extraneous-dependencies */
 import TestEditorUtils from 'assembl-test-editor-utils';
@@ -214,6 +215,54 @@ describe('getFileVariable function', () => {
     };
     const actual = getFileVariable(img, initialImg);
     const expected = 'TO_DELETE';
+    expect(actual).toEqual(expected);
+  });
+});
+
+describe('convertISO8601StringToDateTime function', () => {
+  const { convertISO8601StringToDateTime } = utils;
+  it('should return a DateTime in UTC timezone from an ISO8601 string input', () => {
+    const s = '2019-01-01T00:00:00.000+00:00';
+    const expected = { time: moment(s).utc() };
+    const actual = convertISO8601StringToDateTime(s);
+    expect(actual).toEqual(expected);
+  });
+
+  it('should return null time+zone from an empty string input', () => {
+    const s = '';
+    const expected = { time: null };
+    const actual = convertISO8601StringToDateTime(s);
+    expect(actual).toEqual(expected);
+  });
+
+  it('should return null time+zone from any random string input', () => {
+    const s = 'These are not the droids that are you looking for';
+    const expected = { time: null };
+    const actual = convertISO8601StringToDateTime(s);
+    expect(actual).toEqual(expected);
+  });
+});
+
+describe('convertDateTimeToISO8601String function', () => {
+  const { convertDateTimeToISO8601String } = utils;
+  it('should return a an ISO8601 string input from a Moment object', () => {
+    const s = { time: moment('2019-01-01T00:00:00.000+00:00').utc() };
+    const expected = '2019-01-01T00:00:00.000Z';
+    const actual = convertDateTimeToISO8601String(s);
+    expect(actual).toMatch(expected);
+  });
+
+  it('should return null Date from a null input', () => {
+    const s = { time: null };
+    const expected = null;
+    const actual = convertDateTimeToISO8601String(s);
+    expect(actual).toEqual(expected);
+  });
+
+  it('should return null from a Date object', () => {
+    const s = { time: new Date() };
+    const expected = null;
+    const actual = convertDateTimeToISO8601String(s);
     expect(actual).toEqual(expected);
   });
 });

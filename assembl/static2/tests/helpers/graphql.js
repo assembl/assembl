@@ -32,7 +32,8 @@ const MockedResponses = [
             id: 'doc-id-from-backend',
             externalUrl: '/data/my-doc.pdf',
             mimeType: 'application/pdf',
-            title: 'My great document'
+            title: 'My great document',
+            __typename: 'Document'
           }
         }
       }
@@ -52,7 +53,8 @@ const MockedResponses = [
             id: 'img-id-from-backend',
             externalUrl: '/data/my-img.png',
             mimeType: 'image/png',
-            title: 'My great image'
+            title: 'My great image',
+            __typename: 'Document'
           }
         }
       }

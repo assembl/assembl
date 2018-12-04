@@ -4,7 +4,7 @@ import type Moment from 'moment';
 import { type Map } from 'immutable';
 
 import { getDisplayedPhaseIdentifier } from './timeline';
-import { HARVESTABLE_PHASES, ICONS_PATH, PICTURE_BASE_URL, PICTURE_EXTENSION } from '../constants';
+import { HARVESTABLE_PHASES, ICONS_PATH, PICTURE_BASE_URL, PICTURE_EXTENSION, PICTURES_LENGTH } from '../constants';
 
 const getInputValue = (id: string) => {
   const elem = document.getElementById(id);
