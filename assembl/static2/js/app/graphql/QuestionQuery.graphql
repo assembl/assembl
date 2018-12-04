@@ -6,12 +6,14 @@ query Question($lang: String!, $id: ID!) {
       numPosts
       numContributors
       totalSentiments
-      thematic {
-        id
-        title(lang: $lang)
-        img {
-          externalUrl
-          mimeType
+      parent {
+        ... on IdeaInterface {
+          id
+          title(lang: $lang)
+          img {
+            externalUrl
+            mimeType
+          }
         }
       }
     }

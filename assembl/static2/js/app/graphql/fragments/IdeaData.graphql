@@ -7,9 +7,26 @@ fragment ideaData on IdeaInterface {
   titleEntries {
     ...langStringEntry
   }
+  descriptionEntries {
+    ...langStringEntry
+  }
   img {
     externalUrl
     mimeType
     title
+  }
+  announcement {
+    titleEntries {
+      ...langStringEntry
+    }
+    bodyEntries {
+      ...langStringEntry
+    }
+  }
+  questions {
+    id
+    titleEntries {
+      ...langStringEntry
+    }
   }
 }

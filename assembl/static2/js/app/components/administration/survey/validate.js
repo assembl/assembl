@@ -2,28 +2,14 @@
 import { I18n } from 'react-redux-i18n';
 
 import { i18nValueIsEmpty } from '../../form/utils';
-import type { SurveyAdminValues } from './types.flow';
-
-type VideoError = {
-  title?: string
-};
+import type { ThemesAdminValues } from './types.flow';
 
 type Errors = {
   title?: string,
-  video?: VideoError,
   children?: Array<Errors>
 };
 
-type Values = SurveyAdminValues;
-
-function validateVideo(video): VideoError {
-  const errors = {};
-  if (video.present && i18nValueIsEmpty(video.title)) {
-    errors.title = I18n.t('error.required');
-  }
-
-  return errors;
-}
+type Values = ThemesAdminValues;
 
 function validateTheme(theme): Errors {
   const errors = {};
@@ -31,8 +17,11 @@ function validateTheme(theme): Errors {
     errors.title = I18n.t('error.required');
   }
 
-  if (theme.video) {
-    errors.video = validateVideo(theme.video);
+  errors.announcement = {};
+  if (!theme.announcement) {
+    errors.announcement = I18n.t('error.required');
+  } else if (i18nValueIsEmpty(theme.announcement.title)) {
+    errors.announcement.title = I18n.t('error.required');
   }
 
   if (theme.children) {

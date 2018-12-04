@@ -684,12 +684,14 @@ query Question($lang: String!, $id: ID!) {
     ... on Question {
       title(lang: $lang)
       id
-      thematic {
-        id
-        title(lang: $lang)
-        img {
-          externalUrl
-          mimeType
+      parent {
+        ... on IdeaInterface {
+          id
+          title(lang: $lang)
+          img {
+            externalUrl
+            mimeType
+          }
         }
       }
     }

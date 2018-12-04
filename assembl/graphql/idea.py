@@ -88,8 +88,11 @@ class IdeaInterface(graphene.Interface):
         required=True, description=docs.IdeaInterface.vote_specifications)
     type = graphene.String(description=docs.IdeaInterface.type)
     parent_id = graphene.ID(description=docs.Idea.parent_id)
+    parent = graphene.Field(lambda: IdeaUnion, description=docs.Idea.parent)
     ancestors = graphene.List(graphene.ID, description=docs.Idea.ancestors)
     children = graphene.List(lambda: IdeaUnion, description=docs.Idea.children)
+    questions = graphene.List(lambda: Question, description=docs.Thematic.questions)
+    announcement = graphene.Field(lambda: IdeaAnnouncement, description=docs.Idea.announcement)
 
     def resolve_title(self, args, context, info):
         return resolve_langstring(self.title, args.get('lang'))
@@ -169,6 +172,12 @@ class IdeaInterface(graphene.Interface):
         parent = self.parents[0]
         return parent.graphene_id() if parent else None
 
+    def resolve_parent(self, args, context, info):
+        if not self.parents:
+            return None
+
+        return self.parents[0]
+
     def resolve_ancestors(self, args, context, info):
         # We use id_only=True and models.Idea.get on purpose, to
         # use a simpler ancestors query and use Idea identity map.
@@ -177,7 +186,13 @@ class IdeaInterface(graphene.Interface):
 
     def resolve_children(self, args, context, info):
         # filter on child.hidden to not include the root thematic in the children of root_idea  # noqa: E501
-        return [child for child in self.get_children() if not child.hidden]
+        return [child for child in self.get_children() if not child.hidden and not isinstance(child, models.Question)]
+
+    def resolve_questions(self, args, context, info):
+        return [child for child in self.get_children() if isinstance(child, models.Question)]
+
+    def resolve_announcement(self, args, context, info):
+        return self.get_applicable_announcement()
 
 
 class IdeaAnnouncementInput(graphene.InputObjectType):
@@ -281,7 +296,6 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
     synthesis_title = graphene.String(lang=graphene.String(), description=docs.Idea.synthesis_title)
     posts = SQLAlchemyConnectionField('assembl.graphql.post.PostConnection', description=docs.Idea.posts)  # use dotted name to avoid circular import  # noqa: E501
     contributors = graphene.List(AgentProfile, description=docs.Idea.contributors)
-    announcement = graphene.Field(lambda: IdeaAnnouncement, description=docs.Idea.announcement)
     message_columns = graphene.List(lambda: IdeaMessageColumn, description=docs.Idea.message_columns)
     vote_results = graphene.Field(VoteResults, required=True, description=docs.Idea.vote_results)
 
@@ -418,9 +432,6 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
             cid) for cid in contributor_ids]
         return contributors
 
-    def resolve_announcement(self, args, context, info):
-        return self.get_applicable_announcement()
-
 
 class Question(SecureObjectType, SQLAlchemyObjectType):
     __doc__ = docs.Question.__doc__
@@ -440,15 +451,8 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
         from_node=graphene.ID(),
         isModerating=graphene.Boolean(),
         description=docs.Question.posts)
-    thematic = graphene.Field(lambda: Thematic, description=docs.Question.thematic)
     total_sentiments = graphene.Int(required=True, description=docs.Question.total_sentiments)
     has_pending_posts = graphene.Boolean(description=docs.Question.has_pending_posts)
-
-    def resolve_thematic(self, args, context, info):
-        parents = self.get_parents()
-        if not parents:
-            return None
-        return parents[0]
 
     def resolve_title(self, args, context, info):
         title = resolve_langstring(self.title, args.get('lang'))
@@ -579,11 +583,7 @@ class Thematic(SecureObjectType, SQLAlchemyObjectType):
         interfaces = (Node, IdeaInterface)
         only_fields = ('id', )
 
-    questions = graphene.List(Question, description=docs.Thematic.questions)
     video = graphene.Field(Video, lang=graphene.String(), description=docs.Thematic.video)
-
-    def resolve_questions(self, args, context, info):
-        return self.get_children()
 
     def resolve_video(self, args, context, info):
         title = resolve_langstring(self.video_title, args.get('lang'))

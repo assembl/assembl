@@ -56,10 +56,10 @@ const DumbPageForm = ({
   handlePropositionSectionTitleChange
 }: Props) => {
   const editLocaleInUppercase = editLocale.toUpperCase();
-  const headerTitlePh = `${I18n.t('administration.ph.headerTitle')} ${editLocaleInUppercase}`;
-  const headerSubtitlePh = `${I18n.t('administration.ph.headerSubtitle')} ${editLocaleInUppercase}`;
-  const instructionsTitlePh = `${I18n.t('administration.ph.instructionsTitle')} ${editLocaleInUppercase}`;
-  const instructionsContentPh = `${I18n.t('administration.ph.instructionsContent')} ${editLocaleInUppercase}`;
+  const headerTitlePh = `${I18n.t('administration.tableOfThematics.thematicTitle')} ${editLocaleInUppercase}`;
+  const headerSubtitlePh = `${I18n.t('administration.tableOfThematics.bannerSubtitleLabel')} ${editLocaleInUppercase}`;
+  const instructionsTitlePh = `${I18n.t('administration.tableOfThematics.sectionTitleLabel')} ${editLocaleInUppercase}`;
+  const instructionsContentPh = `${I18n.t('administration.tableOfThematics.instructionLabel')} ${editLocaleInUppercase}`;
   const propositionSectionTitlePh = `${I18n.t('administration.ph.propositionSectionTitle')} ${editLocaleInUppercase}`;
   const headerImageFieldName = 'header-image';
   const slug = { slug: getDiscussionSlug() };

@@ -7,32 +7,43 @@ type QuestionValue = {
   title: I18nValue
 };
 
-export type MediaValue = {|
-  htmlCode: string,
-  img: FileValue
-|};
-
-type VideoValue = {
-  media: ?MediaValue,
-  title: I18nValue,
-  descriptionBottom: I18nRichTextValue,
-  descriptionSide: I18nRichTextValue,
-  descriptionTop: I18nRichTextValue,
-  present?: string
+type QuestionValueFromQuery = {
+  id: string,
+  titleEntries: LangstringEntries
 };
 
 export type ThemeValue = {
   id: string,
   messageViewOverride: Option,
-  img: FileValue,
-  questions: Array<QuestionValue>,
+  img: ?FileValue,
   title: I18nValue,
-  video: VideoValue,
-  children: Array<ThemeValue>
+  description: I18nValue,
+  announcement: {
+    title: I18nValue,
+    body: I18nRichTextValue
+  },
+  questions: Array<QuestionValue>,
+  children: Array<ThemeValue>,
+  order: number
+};
+
+export type ThemeValueFromQuery = {
+  id: string,
+  messageViewOverride: ?string,
+  img: ?FileValue,
+  titleEntries: LangstringEntries,
+  descriptionEntries: LangstringEntries,
+  announcement: ?{
+    titleEntries: LangstringEntries,
+    bodyEntries: LangstringEntries
+  },
+  questions: Array<QuestionValueFromQuery>,
+  children: Array<ThemeValueFromQuery>,
+  order: number
 };
 
 export type ThemesValue = Array<ThemeValue>;
 
-export type SurveyAdminValues = {
+export type ThemesAdminValues = {
   themes: ThemesValue
 };

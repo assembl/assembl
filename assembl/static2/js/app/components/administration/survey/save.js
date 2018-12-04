@@ -2,65 +2,60 @@
 import isEqual from 'lodash/isEqual';
 import type { ApolloClient } from 'react-apollo';
 
-import type { SurveyAdminValues } from './types.flow';
+import type { ThemesAdminValues } from './types.flow';
 import updateIdeasMutation from '../../../graphql/mutations/updateIdeas.graphql';
 import { createSave, convertToEntries, convertRichTextToVariables, getFileVariable } from '../../form/utils';
 
-async function getVideoVariable(client, video, initialVideo) {
-  if (!video) {
-    // pass {} to remove all video fields on server side
-    return {};
-  }
-
-  const initialMediaFile = initialVideo && initialVideo.media && initialVideo.media.img;
-  const mediaImg = video.media ? video.media.img : null;
-  const mediaFile = getFileVariable(mediaImg, initialMediaFile);
-
-  const descriptionBottomVariables = await convertRichTextToVariables(video.descriptionBottom);
-  const { attachments: descriptionBottomAttachments, entries: descriptionEntriesBottom } = descriptionBottomVariables;
-  const descriptionSideVariables = await convertRichTextToVariables(video.descriptionSide);
-  const { attachments: descriptionSideAttachments, entries: descriptionEntriesSide } = descriptionSideVariables;
-  const descriptionTopVariables = await convertRichTextToVariables(video.descriptionTop);
-  const { attachments: descriptionTopAttachments, entries: descriptionEntriesTop } = descriptionTopVariables;
-
-  const videoV = {
-    htmlCode: video.media ? video.media.htmlCode : '',
-    mediaFile: mediaFile,
-    titleEntries: video.title ? convertToEntries(video.title) : null,
-    descriptionBottomAttachments: descriptionBottomAttachments,
-    descriptionSideAttachments: descriptionSideAttachments,
-    descriptionTopAttachments: descriptionTopAttachments,
-    descriptionEntriesBottom: descriptionEntriesBottom,
-    descriptionEntriesSide: descriptionEntriesSide,
-    descriptionEntriesTop: descriptionEntriesTop
-  };
-  return videoV;
-}
-
-const getChildrenVariables = (thematic, initialTheme) =>
+const getChildrenVariables = (client, thematic, initialTheme) =>
   (thematic.children
-    ? thematic.children.map((t) => {
+    ? thematic.children.map(async (t, idx) => {
+      const order = idx + 1;
       const initialChild = initialTheme && initialTheme.children.find(theme => t.id === theme.id);
       const initialImg = initialChild ? initialChild.img : null;
+      const bodyVars = await convertRichTextToVariables(t.announcement.body, client);
+      const { attachments: bodyAttachments, entries: bodyEntries } = bodyVars;
+      const announcementTitleEntries = convertToEntries(t.announcement.title);
+      let announcement = null;
+      if (announcementTitleEntries.length > 0) {
+        announcement = {
+          titleEntries: announcementTitleEntries,
+          bodyAttachments: bodyAttachments,
+          bodyEntries: bodyEntries
+        };
+      }
       return {
         id: t.id.startsWith('-') ? null : t.id,
         messageViewOverride: t.messageViewOverride ? t.messageViewOverride.value : null,
         titleEntries: convertToEntries(t.title),
+        descriptionEntries: convertToEntries(t.description),
+        announcement: announcement,
         image: getFileVariable(t.img, initialImg),
-        children: getChildrenVariables(t, initialChild)
+        order: order,
+        children: getChildrenVariables(client, t, initialChild)
       };
     })
     : []);
 
 async function getIdeaInput(client, theme, initialTheme, order) {
   const initialImg = initialTheme ? initialTheme.img : null;
-  const initialVideo = initialTheme ? initialTheme.video : null;
+  const bodyVars = await convertRichTextToVariables(theme.announcement.body, client);
+  const { attachments: bodyAttachments, entries: bodyEntries } = bodyVars;
+  const announcementTitleEntries = convertToEntries(theme.announcement.title);
+  let announcement = null;
+  if (announcementTitleEntries.length > 0) {
+    announcement = {
+      titleEntries: announcementTitleEntries,
+      bodyAttachments: bodyAttachments,
+      bodyEntries: bodyEntries
+    };
+  }
   return {
     id: theme.id.startsWith('-') ? null : theme.id,
     messageViewOverride: theme.messageViewOverride ? theme.messageViewOverride.value : null,
     titleEntries: convertToEntries(theme.title),
+    descriptionEntries: convertToEntries(theme.description),
+    announcement: announcement,
     image: getFileVariable(theme.img, initialImg),
-    video: await getVideoVariable(client, theme.video, initialVideo),
     questions:
       theme.questions &&
       theme.questions.map(q => ({
@@ -68,7 +63,7 @@ async function getIdeaInput(client, theme, initialTheme, order) {
         titleEntries: convertToEntries(q.title)
       })),
     order: order,
-    children: getChildrenVariables(theme, initialTheme)
+    children: await Promise.all(getChildrenVariables(client, theme, initialTheme))
   };
 }
 
@@ -81,8 +76,8 @@ function getIdeas(client, themes, initialThemes) {
 }
 
 export const createMutationsPromises = (client: ApolloClient, discussionPhaseId: ?string) => (
-  values: SurveyAdminValues,
-  initialValues: SurveyAdminValues
+  values: ThemesAdminValues,
+  initialValues: ThemesAdminValues
 ) => {
   const allMutations = [];
   let createUpdateMutation;

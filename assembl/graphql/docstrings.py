@@ -396,6 +396,7 @@ class Idea:
     children = """A list of all immediate child Ideas on the Idea, exluding any hidden Ideas. The RootIdea will not be shown here, for example.
     The subchildren of each subIdea is not shown here."""
     parent_id = Default.node_id % ("Idea",)
+    parent = "Parent Idea"
     posts = """A list of all Posts under the Idea. These include posts of the subIdeas."""
     contributors = """A list of participants who made a contribution to the idea by creating a post.
     A participant who only made a sentiment is not included."""
@@ -414,7 +415,6 @@ class Question:
     title = """The Question to be asked itself, in the language given."""
     title_entries = Default.langstring_entries % ("")
     posts = """The list of all posts under the Question."""
-    thematic = """The Thematic that the Question is categorized under. A Question, in the end, is an Idea type, as well as a Thematic."""
     total_sentiments = """The count of total sentiments """
     has_pending_posts = """Whether the question has pending posts or not."""
 

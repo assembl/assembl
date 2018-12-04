@@ -679,18 +679,6 @@ const Translations = {
         configThematicsHelperTitle: "Vous avez choisi de configurer une table de thématiques.",
         configThematicsHelperDescription: "Pour modifier votre choix, retourner au paramétrage générale du débat."
       },
-      brightMirrorSection: {
-        bannerHeader:
-          "Le bandeau de haut de page comporte le titre de la thématique que vous avez défini en amont, ainsi qu’une image de fond et éventuellement un sous-titre.",
-        bannerSubtitleLabel: "Sous-titre dans le bandeau du haut de page",
-        bannerImagePickerLabel: "Choisir l'image de fond du bandeau",
-        configureTitle: "Configurer Bright Mirror",
-        instructionHeader:
-          "La section Consigne comporte un titre et une consigne et un média (vidéo, slideshare ou image ) qui permettent de guider les participants dans leur contribution.",
-        instructionLabel: "Consigne",
-        sectionTitleLabel: "Titre de la section",
-        thematicTitleLabel: "Titre de la thématique"
-      },
       voteSession: {
         "0": "Configuration de la page",
         "1": "Configurer le ou les modules de vote",
@@ -832,24 +820,23 @@ const Translations = {
       moderation: "Modération à priori",
       activateModeration: "Activer la modération",
       ph: {
-        title: "Titre",
-        quote: "Citation",
-        descriptionTop: "Texte au-dessus de la vidéo",
-        descriptionBottom: "Texte en-dessous de la vidéo",
-        mediaLink: "Lien média en ligne (vidéo, image, etc..)",
-        orAttachPicture: "Ou téléchargez une image depuis votre ordinateur",
-        headerTitle: "Titre du bandeau",
-        headerSubtitle: "Sous-titre du bandeau",
-        instructionsTitle: "Titre de la consigne",
-        instructionsContent: "Contenu de la consigne",
         propositionSectionTitle: "Titre de la section",
         propositionSectionSubtitle: "Sous-titre de la section",
         descriptionPhase: "Description de la phase"
       },
       tableOfThematics: {
+        quote: "Citation",
+        bannerHeader:
+          "Le bandeau de haut de page comporte le titre de la thématique que vous avez défini en amont, ainsi qu’une image de fond et éventuellement un sous-titre.",
         thematicTitle: "Titre de la Thématique",
-        headerLabel: "Choisir l'image de fond du bandeau",
+        bannerSubtitleLabel: "Sous-titre dans le bandeau du haut de page",
+        bannerImagePickerLabel: "Choisir l'image de fond du bandeau",
         moduleTypeLabel: "Configuration du module de participation",
+        instructionHeader:
+          "La section Consigne comporte un titre et une consigne et un média (vidéo, slideshare ou image ) qui permettent de guider les participants dans leur contribution.",
+        instructionLabel: "Consigne",
+        sectionTitleLabel: "Titre de la section",
+        questionsHeader: "Questions",
         confirmDeletionTitle: "Supprimer la thématique %{title}",
         confirmDeletionBody: "Êtes-vous certain de vouloir supprimer cette thématique ?"
       },
@@ -1667,18 +1654,6 @@ const Translations = {
         configThematicsHelperTitle: "You have chosen to configure a themes table.",
         configThematicsHelperDescription: "To change your choice, return to the general setting of the debate."
       },
-      brightMirrorSection: {
-        bannerHeader:
-          "Top banner must include the thematic title defined previously, a background image and eventually a subtitle.",
-        bannerSubtitleLabel: "Top banner subtitle",
-        bannerImagePickerLabel: "Banner image",
-        configureTitle: "Configure Bright Mirror",
-        instructionLabel: "Instructions",
-        instructionHeader:
-          "Instruction section include a title, an instruction and a media (video, slideshare or image) which guides users in their contribution.",
-        sectionTitleLabel: "Section title",
-        thematicTitleLabel: "Thematic title"
-      },
       voteSession: {
         "0": "Page configuration",
         "1": "Configure the voting modules",
@@ -1814,24 +1789,23 @@ const Translations = {
       moderation: "Post pending for moderation",
       activateModeration: "Activate the moderation",
       ph: {
-        title: "Title",
-        quote: "Quote",
-        descriptionTop: "Comments above video",
-        descriptionBottom: "Comments below video",
-        mediaLink: "Online media link (video, picture, etc..)",
-        orAttachPicture: "Or upload an image from your computer",
-        headerTitle: "Header title",
-        headerSubtitle: "Header subtitle",
-        instructionsTitle: "Instructions title",
-        instructionsContent: "Instructions content",
         propositionSectionTitle: "Section title",
         propositionSectionSubtitle: "Section subtitle",
         descriptionPhase: "Description phase"
       },
       tableOfThematics: {
+        quote: "Quote",
+        bannerHeader:
+          "Top banner must include the thematic title defined previously, a background image and eventually a subtitle.",
         thematicTitle: "Thematic title",
-        headerLabel: "Choose the header background image",
+        bannerSubtitleLabel: "Top banner subtitle",
+        bannerImagePickerLabel: "Banner image",
         moduleTypeLabel: "Participation module configuration",
+        instructionHeader:
+          "Instruction section include a title, an instruction and a media (video, slideshare or image) which guides users in their contribution.",
+        instructionLabel: "Instructions",
+        sectionTitleLabel: "Section title",
+        questionsHeader: "Questions",
         confirmDeletionTitle: "Delete %{title} theme",
         confirmDeletionBody: "Are you sure that you wish to delete this theme?"
       },
