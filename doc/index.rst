@@ -19,6 +19,7 @@ Installation and administration
    preprod_update
    install_sentry
    install_matomo
+   bigdatext
 
 Stack and architecture
 ----------------------
