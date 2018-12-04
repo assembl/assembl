@@ -910,8 +910,8 @@ const Translations = {
           endDate: "À",
           timePlaceholder: "Optionnel : Entrez les dates du débat",
           dateDescription: "Pour configurer les dates du debat. Si vous n'avez pas sélectionné des dates, les dates sont déduites des timelines.",
-          startDateError: "Start date error here",
-          endDateError: "End date error here"
+          startDateError: "La date de début ne peut pas être postérieure à la date de fin",
+          endDateError: "La date de fin ne peut pas être antérieure à la date de début"
         },
         timeline: {
           title: "Timeline",
@@ -1865,7 +1865,7 @@ const Translations = {
           timePlaceholder: "Optional: Enter the dates of the debate",
           dateDescription: "Please enter the debate's date range. If no dates are selected, the dates are inferred from the timelines created.",
           startDateError: "The start date cannot be after the end date",
-          endDateError: "The end date cannot be after the end date"
+          endDateError: "The end date cannot be after the start date"
         },
         timeline: {
           title: "Timeline",
