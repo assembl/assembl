@@ -4,7 +4,7 @@
     font-size: $font-size-ml;
     letter-spacing: 0.5px;
     font-family: $font-family;
-    margin-bottom: 50px;
+    margin-bottom: 20px;
   }
 
   .post-body-content {
@@ -20,15 +20,6 @@
       margin-bottom: 20px;
       margin-top: 15px;
     }
-
-    .embed-theater {
-      .embed-thumbnail,
-      .embed-thumbnail-container {
-        display: block;
-        width: 320px;
-        height: 180px;
-      }
-    }
   }
 
   .active-extract,
@@ -40,7 +31,7 @@
     .post-body-title {
       font-size: $font-size-xll;
       letter-spacing: 2.4px;
-      margin-bottom: 70px;
+      margin-bottom: 30px;
     }
 
     .post-body-content {
@@ -51,15 +42,6 @@
         margin-bottom: 35px;
         margin-top: 35px;
       }
-
-      .embed-theater {
-        .embed-thumbnail,
-        .embed-thumbnail-container {
-          display: block;
-          width: 598px;
-          height: 336px;
-        }
-      }
     }
   }
 
@@ -68,15 +50,6 @@
       .attachment-image {
         margin-bottom: 25px;
         margin-top: 45px;
-      }
-
-      .embed-theater {
-        .embed-thumbnail,
-        .embed-thumbnail-container {
-          display: block;
-          width: 768px;
-          height: 432px;
-        }
       }
     }
   }

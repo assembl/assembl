@@ -33,8 +33,8 @@ export const ANCHOR_OFFSET = 6;
 export const COMMENT_BADGE_OFFSET = 10.5;
 export const COMMENT_BOX_OFFSET = 40;
 export const COMMENT_DYNAMIC_OFFSET = 5;
-export const SENTIMENT_TOP_OFFSET = 5;
 export const SENTIMENT_RIGHT_OFFSET = 15;
+export const SENTIMENT_BAR_TOP_POSITION_OFFSET = 78;
 
 export const MAX_TREE_FORM_LEVEL = 4;
 

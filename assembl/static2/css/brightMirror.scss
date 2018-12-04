@@ -33,7 +33,7 @@ $fiction-toolbar-icon-size: 17px;
 // Bright mirror global style
 .bright-mirror-fiction {
   padding-bottom: 30px;
-  padding-top: 30px;
+  padding-top: 15px;
 }
 
 .side-comment-container {
@@ -112,7 +112,7 @@ $fiction-toolbar-icon-size: 17px;
 @media screen and (min-width: $screen-xl-min) {
   .bright-mirror-fiction,
   .bright-mirror-comments {
-    padding: 90px 200px;
+    padding: 30px 200px 70px;
   }
 
   .bright-mirror-comments {

@@ -8,7 +8,7 @@
     }
   }
 
-  margin-bottom: 55px;
+  margin-bottom: 20px;
   text-align: right;
 
   .edit,
@@ -20,7 +20,9 @@
     background: none;
     border: none;
 
-    &:hover, &:focus, &:active {
+    &:hover,
+    &:focus,
+    &:active {
       background: none;
       border: none;
       outline: none;
@@ -31,7 +33,7 @@
 
 @media screen and (min-width: $screen-sm-min) {
   .action-buttons {
-    margin-bottom: 65px;
+    margin-bottom: 20px;
   }
 }
 
@@ -51,6 +53,6 @@
   }
 
   .action-buttons {
-    margin-bottom: 75px;
+    margin-bottom: 35px;
   }
 }
