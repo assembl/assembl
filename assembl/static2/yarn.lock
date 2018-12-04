@@ -10070,12 +10070,7 @@ react-intl-po@^2.0.2:
     po2json "^0.4.5"
     ramda "^0.24.1"
 
-react-is@^16.3.1:
-  version "16.3.1"
-  resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.3.1.tgz#ee66e6d8283224a83b3030e110056798488359ba"
-  integrity sha512-3XpazGqS5DEOLiuR6JQ2Sg6URq/33d1BHJVaUvtMz579KRhd2D0pqabNEe5czv785yzKBPZimOf0UNIXa3jw1A==
-
-react-is@^16.4.2:
+react-is@^16.3.2, react-is@^16.4.2:
   version "16.4.2"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.4.2.tgz#84891b56c2b6d9efdee577cc83501dfc5ecead88"
   integrity sha512-rI3cGFj/obHbBz156PvErrS5xc6f1eWyTwyV4mo0vF2lGgXgS+mm7EKD5buLJq6jNgIagQescGSVG2YzgXt8Yg==
@@ -10219,25 +10214,15 @@ react-style-proptype@^3.0.0:
   dependencies:
     prop-types "^15.5.4"
 
-react-test-renderer@^16.0.0-0:
-  version "16.4.2"
-  resolved "https://registry.yarnpkg.com/react-test-renderer/-/react-test-renderer-16.4.2.tgz#4e03eca9359bb3210d4373f7547d1364218ef74e"
-  integrity sha512-vdTPnRMDbxfv4wL4lzN4EkVGXyYs7LE2uImOsqh1FKiP6L5o1oJl8nore5sFi9vxrP9PK3l4rgb/fZ4PVUaWSA==
+react-test-renderer@^16.0.0-0, react-test-renderer@^16.3.1:
+  version "16.3.2"
+  resolved "https://registry.yarnpkg.com/react-test-renderer/-/react-test-renderer-16.3.2.tgz#3d1ed74fda8db42521fdf03328e933312214749a"
+  integrity sha512-lL8WHIpCTMdSe+CRkt0rfMxBkJFyhVrpdQ54BaJRIrXf9aVmbeHbRA8GFRpTvohPN5tPzMabmrzW2PUfWCfWwQ==
   dependencies:
     fbjs "^0.8.16"
     object-assign "^4.1.1"
     prop-types "^15.6.0"
-    react-is "^16.4.2"
-
-react-test-renderer@^16.3.1:
-  version "16.3.1"
-  resolved "https://registry.yarnpkg.com/react-test-renderer/-/react-test-renderer-16.3.1.tgz#d9257936d8535bd40f57f3d5a84e7b0452fb17f2"
-  integrity sha512-emEcIPUowMjT5EQ+rrb0FAwVCzuJ+LKDweoYDh073v2/jHxrBDPUk8nzI5dofG3R+140+Bb9TMcT2Ez5OP6pQw==
-  dependencies:
-    fbjs "^0.8.16"
-    object-assign "^4.1.1"
-    prop-types "^15.6.0"
-    react-is "^16.3.1"
+    react-is "^16.3.2"
 
 react-textarea-autosize@^7.0.4:
   version "7.0.4"
