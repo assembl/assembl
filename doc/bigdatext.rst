@@ -8,7 +8,7 @@ Install docker
 
     apt-get install docker
     apt-get install docker-compose
-
+    usermod -aG docker assembl_user
 
 Setup bigdatext
 --------------------
