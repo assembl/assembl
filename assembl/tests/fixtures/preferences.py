@@ -28,6 +28,7 @@ def non_standard_preference(request, test_session):
     from assembl.models import Preferences
 
     class SubPreference(Preferences):
+        moderation = True
         preference_data_list = [
             {
                 "id": "preference_data",
