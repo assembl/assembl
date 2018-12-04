@@ -193,6 +193,9 @@ def update_attachment(discussion, attachment_model, new_value, attachments, atta
         db.delete(current_attachment.document)
         db.delete(current_attachment)
         attachments.remove(current_attachment)
+    elif new_value == 'TO_DELETE':
+        # When the entity is set to be deleted, but does not exist, do nothing (but avoid crashing the transaction)
+        return
     else:
         filename = os.path.basename(context.POST[new_value].filename)
         mime_type = context.POST[new_value].type

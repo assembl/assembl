@@ -4,7 +4,7 @@ import type { ApolloClient } from 'react-apollo';
 import {
   createSave,
   convertToEntries,
-  convertRichTextToEntries,
+  convertRichTextToVariables,
   getFileVariable,
   convertDateTimeToISO8601String
 } from '../../../form/utils';
@@ -15,19 +15,39 @@ type UpdateDiscussion = updateDiscussion;
 
 export const save = createSave('administration.landingPage.successSave');
 
-const createVariablesFromValues = (values: DatePickerValue): UpdateDiscussion => ({
-  titleEntries: values.headerTitle ? convertToEntries(values.headerTitle) : null,
-  subtitleEntries: values.headerSubtitle ? convertRichTextToEntries(values.headerSubtitle) : null,
-  buttonLabelEntries: values.headerButtonLabel ? convertToEntries(values.headerButtonLabel) : null,
-  headerImage: getFileVariable(values.headerImage),
-  logoImage: getFileVariable(values.headerLogoImage),
-  startDate: convertDateTimeToISO8601String(values.headerStartDate),
-  endDate: convertDateTimeToISO8601String(values.headerEndDate)
-});
+const createVariablesFromValues = async (
+  values: DatePickerValue,
+  initialValues: DatePickerValue,
+  client: ApolloClient
+): Promise<UpdateDiscussion> => {
+  const staticValues = {
+    titleEntries: values.headerTitle ? convertToEntries(values.headerTitle) : null,
+    buttonLabelEntries: values.headerButtonLabel ? convertToEntries(values.headerButtonLabel) : null,
+    subtitleEntries: null,
+    headerImage: getFileVariable(values.headerImage, initialValues.headerImage),
+    logoImage: getFileVariable(values.headerLogoImage, initialValues.headerImage),
+    startDate: convertDateTimeToISO8601String(values.headerStartDate),
+    endDate: convertDateTimeToISO8601String(values.headerEndDate)
+  };
 
-export const createMutationsPromises = (client: ApolloClient) => (values: UpdateDiscussion): Array<() => Promise<*>> => [
-  () => client.mutate({
-    mutation: updateDiscussion,
-    variables: createVariablesFromValues(values)
-  })
-];
+  if (!values.headerSubtitle) return staticValues;
+
+  const val = await convertRichTextToVariables(values.headerSubtitle, client);
+  return {
+    subtitleEntries: val || null,
+    ...staticValues
+  };
+};
+
+export const createMutationsPromises = (client: ApolloClient) => (
+  values: UpdateDiscussion,
+  initalValues: DatePickerValue
+): Array<() => Promise<UpdateDiscussion>> => [
+    () =>
+      createVariablesFromValues(values, initalValues, client).then(vars =>
+        client.mutate({
+          mutation: updateDiscussion,
+          variables: vars
+        })
+      )
+  ];
