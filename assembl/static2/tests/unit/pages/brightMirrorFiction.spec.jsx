@@ -44,6 +44,7 @@ jest.mock('../../../js/app/utils/timeline', () => ({
 
 const brightMirrorFictionDataTemplate = {
   fiction: {
+    id: '1',
     dbId: 1,
     subject: 'Hic quia eveniet cupiditate placeat laboriosam.',
     body: 'Odit mollitia natus ea iusto voluptatibus omnis pariatur tempore ipsum.',
@@ -51,6 +52,7 @@ const brightMirrorFictionDataTemplate = {
     publicationState: PublicationStates.PUBLISHED,
     modified: false,
     creator: {
+      id: '99999999',
       userId: 99999999,
       displayName: 'Wendy Quigley',
       isDeleted: false,
