@@ -333,6 +333,7 @@ const Translations = {
       panelTitle: "Bienvenue dans la communauté d'Assembl"
     },
     debate: {
+      validateSuccess: "La contribution a bien été validée. Elle est désormais visible par l'ensemble des participants.",
       postAwaitingModeration: "Proposition en attente de modération",
       validateMessage: "Accepter ce message",
       shareThematic: "Partagez cette thématique",

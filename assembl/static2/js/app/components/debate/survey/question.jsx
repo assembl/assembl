@@ -69,6 +69,7 @@ export class Question extends React.Component<Props, State> {
         })
         .then(() => {
           scrollToQuestion(true, index + 1);
+          // TODO: change message here if debate is moderated
           displayAlert('success', I18n.t('debate.survey.postSuccess'));
           refetchTheme();
           this.setState({

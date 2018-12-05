@@ -22,7 +22,7 @@ exports[`Proposals component should display a list of proposals with pending pos
   <div
     className="shown"
   >
-    <Connect(Apollo(Apollo(Apollo(Component))))
+    <Connect(Apollo(Apollo(Apollo(Apollo(Component)))))
       id="post-987654"
       isPhaseCompleted={false}
       originalLocale="en"
@@ -74,7 +74,7 @@ exports[`Proposals component should display a list of proposals without pending 
   <div
     className="shown"
   >
-    <Connect(Apollo(Apollo(Apollo(Component))))
+    <Connect(Apollo(Apollo(Apollo(Apollo(Component)))))
       id="post-987654"
       isPhaseCompleted={false}
       originalLocale="en"

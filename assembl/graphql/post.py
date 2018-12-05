@@ -7,12 +7,12 @@ from graphene.relay import Node
 from graphene_sqlalchemy import SQLAlchemyObjectType
 from pyramid.httpexceptions import HTTPUnauthorized
 from pyramid.i18n import TranslationStringFactory
-from pyramid.security import Everyone
 from sqlalchemy.orm import joinedload
 from sqlalchemy import exists
 
 from assembl import models
-from assembl.auth import P_DELETE_MY_POST, P_DELETE_POST, CrudPermissions
+from assembl.auth import (
+    Everyone, P_SYSADMIN, P_ADMIN_DISC, P_DELETE_MY_POST, P_DELETE_POST, CrudPermissions)
 from assembl.auth.util import get_permissions
 from assembl.lib.clean_input import sanitize_html, sanitize_text
 from assembl.models.auth import (LanguagePreferenceCollection,
@@ -575,6 +575,34 @@ class UpdatePost(graphene.Mutation):
             post.db.expire(post.body, ["entries"])
 
         return UpdatePost(post=post)
+
+
+class ValidatePost(graphene.Mutation):
+
+    __doc__ = docs.ValidatePost.__doc__
+
+    class Input:
+        post_id = graphene.ID(required=True, description=docs.ValidatePost.post_id)
+
+    post = graphene.Field(lambda: Post)
+
+    @staticmethod
+    @abort_transaction_on_exception
+    def mutate(root, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        user_id = context.authenticated_userid or Everyone
+        post_id = args.get('post_id')
+        post_id = int(Node.from_global_id(post_id)[1])
+        post = models.Post.get(post_id)
+
+        permissions = get_permissions(user_id, discussion_id)
+        allowed = P_ADMIN_DISC in permissions or P_SYSADMIN in permissions
+        if not allowed:
+            raise HTTPUnauthorized()
+
+        post.publication_state = models.PublicationStates.PUBLISHED
+        post.db.flush()
+        return ValidatePost(post=post)
 
 
 class DeletePost(graphene.Mutation):

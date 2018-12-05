@@ -644,6 +644,12 @@ class UndeletePost:
     post_id = Default.node_id % "Post" + " This is the Post identifier that is to be resurrected."
 
 
+class ValidatePost:
+
+    __doc__ = "A mutation to validate a submitted Post."
+    post_id = Default.node_id % "Post" + " This is the Post identifier that is to be validated."
+
+
 class AddPostAttachment:
     __doc__ = "A mutation to add Attachment to a Post."
     post_id = Default.node_id % ("Post") + " The identifier of the Post that the Attachment will be connected to."

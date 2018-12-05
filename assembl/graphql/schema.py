@@ -29,7 +29,7 @@ from assembl.graphql.landing_page import (LandingPageModuleType, LandingPageModu
 from assembl.graphql.langstring import resolve_langstring
 from assembl.graphql.locale import Locale
 from assembl.graphql.post import (AddPostAttachment, CreatePost, DeletePost,
-                                  DeletePostAttachment, UndeletePost,
+                                  ValidatePost, DeletePostAttachment, UndeletePost,
                                   UpdatePost, AddPostExtract, PostConnection,
                                   AddPostsExtract)
 from assembl.graphql.extract import (UpdateExtract, UpdateExtractTags, DeleteExtract, ConfirmExtract)
@@ -476,6 +476,7 @@ class Mutations(graphene.ObjectType):
     create_post = CreatePost.Field(description=docs.CreatePost.__doc__)
     update_post = UpdatePost.Field(description=docs.UpdatePost.__doc__)
     delete_post = DeletePost.Field(description=docs.DeletePost.__doc__)
+    validate_post = ValidatePost.Field(description=docs.ValidatePost.__doc__)
     undelete_post = UndeletePost.Field(description=docs.UndeletePost.__doc__)
     add_sentiment = AddSentiment.Field(description=docs.AddSentiment.__doc__)
     delete_sentiment = DeleteSentiment.Field(description=docs.DeleteSentiment.__doc__)

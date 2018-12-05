@@ -136,6 +136,12 @@ export const editMessageTooltip = (
   </Tooltip>
 );
 
+export const validateMessageTooltip = (
+  <Tooltip id="editMessageTooltip">
+    <Translate value="debate.validateMessage" />
+  </Tooltip>
+);
+
 export const createResourceTooltip = () => (
   <Tooltip id="createResourceTooltip">
     <Translate value="administration.resourcesCenter.createResource" />

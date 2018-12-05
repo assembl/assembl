@@ -1,0 +1,10 @@
+mutation validatePost($postId: ID!) {
+  validatePost(postId: $postId) {
+    post {
+      ... on Post {
+        id
+        publicationState
+      }
+    }
+  }
+}

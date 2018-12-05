@@ -12,11 +12,12 @@ import Disagree from '../../svg/disagree';
 import { inviteUserToLogin, displayAlert, displayModal } from '../../../utils/utilityManager';
 import addSentimentMutation from '../../../graphql/mutations/addSentiment.graphql';
 import deleteSentimentMutation from '../../../graphql/mutations/deleteSentiment.graphql';
+import validatePostMutation from '../../../graphql/mutations/validatePost.graphql';
 import PostQuery from '../../../graphql/PostQuery.graphql';
-import { deleteMessageTooltip, likeTooltip, disagreeTooltip } from '../../common/tooltips';
+import { deleteMessageTooltip, likeTooltip, disagreeTooltip, validateMessageTooltip } from '../../common/tooltips';
 import { sentimentDefinitionsObject } from '../common/sentimentDefinitions';
 import StatisticsDoughnut from '../common/statisticsDoughnut';
-import { EXTRA_SMALL_SCREEN_WIDTH, DeletedPublicationStates } from '../../../constants';
+import { EXTRA_SMALL_SCREEN_WIDTH, DeletedPublicationStates, PublicationStates } from '../../../constants';
 import manageErrorAndLoading from '../../common/manageErrorAndLoading';
 import ResponsiveOverlayTrigger from '../../common/responsiveOverlayTrigger';
 import { withScreenWidth } from '../../common/screenDimensions';
@@ -41,7 +42,8 @@ type Props = {
   screenWidth: number,
   themeId: string,
   isHarvesting: boolean,
-  isModerating: boolean
+  isModerating: boolean,
+  validatePost: Function
 };
 
 class Post extends React.Component<Props> {
@@ -147,11 +149,43 @@ class Post extends React.Component<Props> {
       });
   }
 
+  handleValidatePost = (refetchQueries) => {
+    const { id } = this.props.data.post;
+    this.props
+      .validatePost({
+        variables: {
+          postId: id
+        },
+        optimisticResponse: {
+          validatePost: {
+            post: {
+              id: id,
+              publicationState: 'PUBLISHED',
+              __typename: 'Post'
+            },
+            __typename: 'ValidatePost'
+          }
+        },
+        refetchQueries: refetchQueries
+      })
+      .then(() => {
+        displayAlert('success', I18n.t('debate.validate_success'));
+      })
+      .catch((error) => {
+        displayAlert('danger', `${error}`);
+      });
+  };
+
   render() {
     const { isModerating } = this.props;
     const { post } = this.props.data;
     const { bodyEntries, publicationState } = post;
     if (!publicationState || publicationState in DeletedPublicationStates) {
+      return null;
+    }
+
+    // for optimistic response:
+    if (isModerating && publicationState === PublicationStates.PUBLISHED) {
       return null;
     }
 
@@ -260,6 +294,13 @@ class Post extends React.Component<Props> {
               </ResponsiveOverlayTrigger>
             </div>
             <div className="actions">
+              {isModerating ? (
+                <ResponsiveOverlayTrigger placement="top" tooltip={validateMessageTooltip}>
+                  <button onClick={() => this.handleValidatePost(refetchQueries)}>
+                    <span className="assembl-icon-check" />
+                  </button>
+                </ResponsiveOverlayTrigger>
+              ) : null}
               {userCanDeleteThisMessage ? (
                 <ResponsiveOverlayTrigger placement="top" tooltip={deleteMessageTooltip}>
                   {deleteButton}
@@ -330,6 +371,9 @@ export default compose(
   }),
   graphql(deleteSentimentMutation, {
     name: 'deleteSentiment'
+  }),
+  graphql(validatePostMutation, {
+    name: 'validatePost'
   }),
   manageErrorAndLoading({ displayLoader: true }),
   withScreenWidth,

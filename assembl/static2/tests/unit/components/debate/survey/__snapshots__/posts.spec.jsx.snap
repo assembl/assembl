@@ -20,24 +20,3 @@ exports[`Posts component should display a flat list of posts 1`] = `
   onEndReachedThreshold={0.6}
 />
 `;
-
-exports[`Posts component should match snapshot 1`] = `
-<withRouter(DumbFlatList)
-  ListItem={[Function]}
-  extractItems={[Function]}
-  itemData={[Function]}
-  items={
-    Object {
-      "edges": Array [
-        Object {
-          "node": Object {
-            "title": "Foobar",
-          },
-        },
-      ],
-    }
-  }
-  loadPreviousMessage="debate.survey.loadRecentPosts"
-  onEndReachedThreshold={0.6}
-/>
-`;
