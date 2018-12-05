@@ -81,6 +81,16 @@ class Announcement(DiscussionBoundBase):
         backref=backref("announcement_from_body", lazy="dynamic"),
         cascade="all, delete-orphan")
 
+    quote_id = Column(
+        Integer(), ForeignKey(LangString.id))
+
+    quote = relationship(
+        LangString,
+        lazy="joined", single_parent=True,
+        primaryjoin=quote_id == LangString.id,
+        backref=backref("Quote for a survey", lazy="dynamic"),
+        cascade="all, delete-orphan")
+
     # temporary
     @property
     def title_(self):
