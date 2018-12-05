@@ -40,7 +40,8 @@ type Props = {
   questionId: string,
   screenWidth: number,
   themeId: string,
-  isHarvesting: boolean
+  isHarvesting: boolean,
+  isModerating: boolean
 };
 
 class Post extends React.Component<Props> {
@@ -147,6 +148,7 @@ class Post extends React.Component<Props> {
   }
 
   render() {
+    const { isModerating } = this.props;
     const { post } = this.props.data;
     const { bodyEntries, publicationState } = post;
     if (!publicationState || publicationState in DeletedPublicationStates) {
@@ -231,7 +233,7 @@ class Post extends React.Component<Props> {
     return (
       <div className="shown box" id={post.id}>
         <div className="content">
-          <PostCreator name={creatorName} />
+          <PostCreator name={creatorName} isModerating={isModerating} />
           <PostBody
             dbId={post.dbId}
             translationEnabled={debateData.translationEnabled}

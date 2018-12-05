@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PostCreator component should display the name of the creator 1`] = `
+<div
+  className="inline"
+>
+  <div
+    className="user"
+  >
+    <span
+      className="assembl-icon-profil grey"
+    >
+       
+    </span>
+    <span
+      className="username"
+    >
+      John Doe
+    </span>
+  </div>
+</div>
+`;
+
+exports[`PostCreator component should not display the name of the creator if user is moderating the post 1`] = `
+<div
+  className="inline"
+>
+  <div
+    className="user"
+  >
+    <span
+      className="assembl-icon-profil grey"
+    >
+       
+    </span>
+    <span>
+      Proposal awaiting moderation
+    </span>
+  </div>
+</div>
+`;

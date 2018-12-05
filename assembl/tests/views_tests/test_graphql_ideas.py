@@ -713,41 +713,43 @@ query Question($lang: String!, $id: ID!) {
     }
 
 
-def test_graphql_get_question_posts(graphql_request, thematic_and_question, proposals):
+def test_graphql_get_question_posts(graphql_request, graphql_registry, thematic_and_question, proposals):
     node_id = thematic_and_question[1]
-    len_proposals = len(proposals)
-    res = schema.execute(u"""
-query QuestionPosts($id: ID!, $first: Int!, $after: String!) {
-  question: node(id: $id) {
-    ... on Question {
-      id
-      posts(first: $first, after: $after) {
-        pageInfo {
-          endCursor
-          hasNextPage
+    len_proposals = len(proposals) - 4
+    res = schema.execute(
+        graphql_registry['QuestionPostsQuery'],
+        context_value=graphql_request,
+        variable_values={
+            "id": node_id,
+            "first": len_proposals,
+            "after": "",
+            "isModerating": False
         }
-        edges {
-          node {
-            ... on Post {
-              id
-              originalLocale
-            }
-          }
-        }
-      }
-    }
-  }
-}
-""", context_value=graphql_request, variable_values={
-        "id": node_id,
-        "first": len_proposals,
-        "after": ""
-    })
-    result = json.loads(json.dumps(res.data))
-    assert 'question' in result and 'posts' in result['question'] and 'edges' in result['question']['posts']
-    question_posts = result['question']['posts']['edges']
+    )
+    assert res.errors is None
+    assert 'question' in res.data and 'posts' in res.data['question'] and 'edges' in res.data['question']['posts']
+    question_posts = res.data['question']['posts']['edges']
     assert len(question_posts) == len_proposals
     assert all(post['node']['id'] in proposals for post in question_posts)
+
+
+def test_graphql_get_question_pending_posts(graphql_request, graphql_registry, thematic_and_question, proposals):
+    node_id = thematic_and_question[1]
+    res = schema.execute(
+        graphql_registry['QuestionPostsQuery'],
+        context_value=graphql_request,
+        variable_values={
+            "id": node_id,
+            "first": len(proposals),
+            "after": "",
+            "isModerating": True
+        }
+    )
+    assert res.errors is None
+    assert 'question' in res.data and 'posts' in res.data['question'] and 'edges' in res.data['question']['posts']
+    pending_posts = res.data['question']['posts']['edges']
+    assert len(pending_posts) == 4
+    assert all(post['node']['id'] in proposals for post in pending_posts)
 
 
 def test_graphql_create_bright_mirror(graphql_request, graphql_registry, test_session, phases):

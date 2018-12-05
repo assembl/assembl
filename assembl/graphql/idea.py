@@ -438,6 +438,7 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
         'assembl.graphql.post.PostConnection',  # use dotted name to avoid circular import  # noqa: E501
         random=graphene.Boolean(),
         from_node=graphene.ID(),
+        isModerating=graphene.Boolean(),
         description=docs.Question.posts)
     thematic = graphene.Field(lambda: Thematic, description=docs.Question.thematic)
     total_sentiments = graphene.Int(required=True, description=docs.Question.total_sentiments)
@@ -460,8 +461,14 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
         random = args.get('random', False)
+        is_moderating = args.get('isModerating', False)
+        publication_state = models.PublicationStates.PUBLISHED
+        if is_moderating:
+            publication_state = models.PublicationStates.SUBMITTED_AWAITING_MODERATION
+
         Post = models.Post
         related = self.get_related_posts_query(True)
+
         # If random is True returns 10 posts, the first one is the latest post
         # created by the user, then the remaining ones are in random order.
         # If random is False, return all the posts in creation_date desc order.
@@ -473,7 +480,8 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
                 first_post = Post.query.join(
                     related, Post.id == related.c.post_id
                 ).filter(Post.creator_id == user_id
-                         ).order_by(desc(Post.creation_date), Post.id).first()
+                ).filter(Post.publication_state == publication_state
+                ).order_by(desc(Post.creation_date), Post.id).first()
 
             query = Post.default_db.query(Post.id).join(
                 related, Post.id == related.c.post_id)
@@ -515,7 +523,7 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
             query = Post.query.join(
                 related, Post.id == related.c.post_id
             ).filter(
-                Post.publication_state == models.PublicationStates.PUBLISHED
+                Post.publication_state == publication_state
             ).order_by(
                 desc(Post.creation_date), Post.id
             ).options(joinedload(Post.creator))

@@ -4,12 +4,13 @@ import { Map } from 'immutable';
 
 import { DumbPosts } from '../../../../../js/app/components/debate/survey/posts';
 
-describe('FlatList component', () => {
-  it('should match Posts with data snapshot', () => {
+describe('Posts component', () => {
+  it('should display a flat list of posts', () => {
     const props = {
       updateContentLocaleMapping: () => null,
       defaultContentLocaleMapping: Map({ en: 'en' }),
       hasErrors: false,
+      isModerating: false,
       posts: {
         edges: [
           {

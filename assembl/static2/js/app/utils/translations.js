@@ -333,6 +333,8 @@ const Translations = {
       panelTitle: "Bienvenue dans la communauté d'Assembl"
     },
     debate: {
+      postAwaitingModeration: "Proposition en attente de modération",
+      validateMessage: "Accepter ce message",
       shareThematic: "Partagez cette thématique",
       votes: "Votes",
       vote: "Vote",
@@ -370,6 +372,7 @@ const Translations = {
         question_x_on_total: "Question %{current} sur %{total}",
         titleVideo: "Une vidéo pour mieux comprendre le sujet...",
         proposalsTitle: "Êtes-vous d'accord avec les propositions exprimées ?",
+        moderateProposalsTitle: "Modérer les propositions exprimées par les participants.",
         thematicNumerotation: "thématique %{count}",
         reactions_0: "Réaction",
         reactions_1: "Réaction",
@@ -1307,6 +1310,8 @@ const Translations = {
       tableOfContents: "Table of contents"
     },
     debate: {
+      postAwaitingModeration: "Proposal awaiting moderation",
+      validateMessage: "Accept this message",
       shareThematic: "Share this thematic",
       votes: "Votes",
       vote: "Vote",
@@ -1344,6 +1349,7 @@ const Translations = {
         question_x_on_total: "Question %{current} on %{total}",
         titleVideo: "A video to better understand the subject...",
         proposalsTitle: "Do you agree with these points of view?",
+        moderateProposalsTitle: "Moderate these points of view",
         thematicNumerotation: "Thematic %{count}",
         reactions_0: "Reaction",
         reactions_1: "Reaction",

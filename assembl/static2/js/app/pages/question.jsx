@@ -19,7 +19,8 @@ type NavigationParams = {
   questionId: string
 };
 
-type Props = {
+export type Props = {
+  isModerating: boolean,
   phaseId: string,
   timeline: Timeline,
   title: string,
@@ -35,6 +36,7 @@ type Props = {
 
 export function DumbQuestion(props: Props) {
   const {
+    isModerating,
     phaseId,
     imgUrl,
     timeline,
@@ -69,14 +71,23 @@ export function DumbQuestion(props: Props) {
               <div className="question-title">
                 <div className="title-hyphen">&nbsp;</div>
                 <h1 className="dark-title-1">
-                  <Translate value="debate.survey.proposalsTitle" />
+                  {isModerating ? (
+                    <Translate value="debate.survey.moderateProposalsTitle" />
+                  ) : (
+                    <Translate value="debate.survey.proposalsTitle" />
+                  )}
                 </h1>
               </div>
               <div className="center">
                 <h3 className="collapsed-title">
                   <span>{`${params.questionIndex}/ ${title}`}</span>
                 </h3>
-                <Posts questionId={params.questionId} themeId={thematicId} isPhaseCompleted={isPhaseCompleted} />
+                <Posts
+                  isModerating={isModerating}
+                  questionId={params.questionId}
+                  themeId={thematicId}
+                  isPhaseCompleted={isPhaseCompleted}
+                />
                 <div className="back-btn-container">
                   <Link to={link} className="button-submit button-dark">
                     <Translate value="debate.question.backToQuestions" />
@@ -91,6 +102,10 @@ export function DumbQuestion(props: Props) {
     </div>
   );
 }
+
+DumbQuestion.defaultProps = {
+  isModerating: false
+};
 
 const mapStateToProps = state => ({
   lang: state.i18n.locale,
