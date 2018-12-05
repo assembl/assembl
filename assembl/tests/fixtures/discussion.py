@@ -202,3 +202,11 @@ def discussion_with_2_phase_interface_v2(
     discussion_with_permissions.preferences['landing_page'] = True
     test_session.commit()
     return discussion_with_permissions
+
+@pytest.fixture(scope="function")
+def discussion_with_moderation(discussion, default_preferences_with_moderation, test_session):
+    """An empty Discussion fixture with default permissions"""
+    discussion.preferences = default_preferences_with_moderation
+    test_session.commit()
+
+    return discussion

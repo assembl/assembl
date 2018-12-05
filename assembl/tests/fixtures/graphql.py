@@ -12,6 +12,13 @@ def graphql_request(request, test_adminuser_webrequest, discussion):
     req.method = 'POST'
     return req
 
+@pytest.fixture(scope="function")
+def graphql_request_with_moderation(request, test_adminuser_webrequest, discussion_with_moderation):
+    """ A graphql request fixture with an ADMIN user authenticated """
+    req = test_adminuser_webrequest
+    req.matchdict = {"discussion_id": discussion_with_moderation.id}
+    req.method = 'POST'
+    return req
 
 @pytest.fixture(scope="function")
 def graphql_unauthenticated_request(request, test_webrequest, discussion):

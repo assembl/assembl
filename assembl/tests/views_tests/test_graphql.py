@@ -1793,7 +1793,7 @@ mutation deletePostAttachment($postId: ID!, $attachmentId: Int!) {
 
 
 def test_query_discussion_preferences(
-    graphql_request, graphql_registry, discussion_with_lang_prefs, non_standard_preference):
+    graphql_request, graphql_registry, discussion_with_lang_prefs, discussion):
     res = schema.execute(u"""
 query { discussionPreferences { languages { locale, name(inLocale:"fr"), nativeName } } } """, context_value=graphql_request)
     assert json.loads(json.dumps(res.data)) == {
@@ -1815,7 +1815,12 @@ query { discussionPreferences { languages { locale, name(inLocale:"fr"), nativeN
     res_data = json.loads(json.dumps(result.data))
     assert res_data['discussionPreferences']['withModeration'] == False
 
-    assert non_standard_preference.withModeration == True
+
+def test_query_discussion_preferences_moderation(graphql_registry, graphql_request_with_moderation):
+    result = schema.execute(graphql_registry['DiscussionPreferencesQuery'], context_value=graphql_request_with_moderation)
+    assert result.errors is None
+    res_data = json.loads(json.dumps(result.data))
+    assert res_data['discussionPreferences']['withModeration'] == True
 
 
 
