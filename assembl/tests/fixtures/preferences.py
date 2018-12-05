@@ -24,7 +24,7 @@ def default_preferences(request, test_session, base_registry):
 
 
 @pytest.fixture(scope="function")
-def default_preferences_with_moderation(default_preferences, test_session, request):
+def preferences_with_moderation_on(default_preferences, test_session, request):
     """A Preference fixture with default settings"""
     prefs = default_preferences
     prefs.withModeration = True
