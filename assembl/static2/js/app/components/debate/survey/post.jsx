@@ -223,7 +223,7 @@ class Post extends React.Component<Props> {
       userCanDeleteThisMessage =
         (post.creator && (connectedUserId === String(post.creator.userId) && connectedUserCan(Permissions.DELETE_MY_POST))) ||
         connectedUserCan(Permissions.DELETE_POST);
-      creatorName = isDeleted ? I18n.t('deletedUser') : displayName;
+      creatorName = isDeleted ? I18n.t('deletedUser') : displayName || '';
     }
 
     const deleteButton = <DeletePostButton postId={post.id} refetchQueries={refetchQueries} linkClassName="action-delete" />;
@@ -231,7 +231,6 @@ class Post extends React.Component<Props> {
     return (
       <div className="shown box" id={post.id}>
         <div className="content">
-          {/* $FlowFixMe */}
           <PostCreator name={creatorName} />
           <PostBody
             dbId={post.dbId}
