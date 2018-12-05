@@ -7,6 +7,6 @@ query DiscussionPreferences {
       mimeType
     }
     mandatoryLegalContentsValidation
-    moderation
+    withModeration
   }
 }

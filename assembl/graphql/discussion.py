@@ -314,7 +314,7 @@ class DiscussionPreferences(graphene.ObjectType):
     tab_title = graphene.String(description=docs.DiscussionPreferences.tab_title)
     favicon = graphene.Field(Document, description=docs.DiscussionPreferences.favicon)
     mandatory_legal_contents_validation = graphene.Boolean(description=docs.DiscussionPreferences.mandatory_legal_contents_validation)
-    moderation = graphene.Boolean(description=docs.DiscussionPreferences.moderation)
+    withModeration = graphene.Boolean(description=docs.DiscussionPreferences.withModeration)
 
     def resolve_tab_title(self, args, context, info):
         return self.get('tab_title', 'Assembl')

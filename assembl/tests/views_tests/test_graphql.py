@@ -1813,9 +1813,9 @@ query { discussionPreferences { languages { locale, name(inLocale:"fr"), nativeN
     result = schema.execute(graphql_registry['DiscussionPreferencesQuery'], context_value=graphql_request)
     assert result.errors is None
     res_data = json.loads(json.dumps(result.data))
-    assert res_data['discussionPreferences']['moderation'] == False
+    assert res_data['discussionPreferences']['withModeration'] == False
 
-    assert non_standard_preference.moderation == True
+    assert non_standard_preference.withModeration == True
 
 
 

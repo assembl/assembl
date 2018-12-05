@@ -21,15 +21,9 @@ from assembl.lib import config
 def upgrade(pyramid_env):
     with context.begin_transaction():
         op.add_column('preferences',
-                sa.Column('moderation', sa.Boolean(), default=False, server_default='0'))
-
-    # Do stuff with the app's models here.
-    from assembl import models as m
-    db = m.get_session_maker()()
-    with transaction.manager:
-        pass
+                sa.Column('withModeration', sa.Boolean(), default=False, server_default='0'))
 
 
 def downgrade(pyramid_env):
     with context.begin_transaction():
-        op.drop_column('preferences', 'moderation')
+        op.drop_column('preferences', 'withModeration')
