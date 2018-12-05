@@ -415,6 +415,7 @@ class Question:
     posts = """The list of all posts under the Question."""
     thematic = """The Thematic that the Question is categorized under. A Question, in the end, is an Idea type, as well as a Thematic."""
     total_sentiments = """The count of total sentiments """
+    has_pending_posts = """Whether the question has pending posts or not."""
 
 
 class QuestionInput:

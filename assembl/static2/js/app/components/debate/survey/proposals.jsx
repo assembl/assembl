@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router';
 import { Translate } from 'react-redux-i18n';
 
+import { connectedUserIsAdmin } from '../../../utils/permissions';
 import { get as getRoute } from '../../../utils/routeMap';
 import Post from './post';
 
@@ -17,6 +18,7 @@ class Proposals extends React.Component {
 
   render() {
     const {
+      hasPendingPosts,
       isPhaseCompleted,
       questionIndex,
       questionId,
@@ -29,7 +31,16 @@ class Proposals extends React.Component {
     } = this.props;
     const questionTitle = questionsLength > 1 ? `${questionIndex}/ ${title}` : title;
     const postsToShow = posts.slice(0, nbPostsToShow);
-    const link = `${phaseUrl}${getRoute('question', { questionId: questionId, questionIndex: questionIndex })}`;
+    const allProposalsLink = `${phaseUrl}${getRoute('question', {
+      pending: '',
+      questionId: questionId,
+      questionIndex: questionIndex
+    })}`;
+    const pendingProposalsLink = `${phaseUrl}${getRoute('questionModeratePosts', {
+      pending: 'pending',
+      questionId: questionId,
+      questionIndex: questionIndex
+    })}`;
     return (
       <div className="shown">
         <h3 className="collapsed-title">
@@ -56,17 +67,27 @@ class Proposals extends React.Component {
             ))}
           </div>
         )}
-        {postsToShow.length === 0 ? (
-          <div className="no-proposals">
-            <Translate value="debate.survey.noProposals" />
-          </div>
-        ) : (
-          <div className="all-proposals">
-            <Link to={link} className="button-submit button-light">
-              <Translate value="debate.survey.allProposals" />
-            </Link>
-          </div>
-        )}
+        <div className="question-footer">
+          {postsToShow.length === 0 ? (
+            <span className="no-proposals">
+              <Translate value="debate.survey.noProposals" />
+            </span>
+          ) : (
+            <span className="all-proposals">
+              <Link to={allProposalsLink} className="button-submit button-light">
+                <Translate value="debate.survey.allProposals" />
+              </Link>
+            </span>
+          )}
+          {hasPendingPosts &&
+            connectedUserIsAdmin() && (
+              <span className="pending-proposals">
+                <Link to={pendingProposalsLink} className="button-submit button-light">
+                  <Translate value="debate.survey.pendingProposals" />
+                </Link>
+              </span>
+            )}
+        </div>
       </div>
     );
   }

@@ -441,6 +441,7 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
         description=docs.Question.posts)
     thematic = graphene.Field(lambda: Thematic, description=docs.Question.thematic)
     total_sentiments = graphene.Int(required=True, description=docs.Question.total_sentiments)
+    has_pending_posts = graphene.Boolean(description=docs.Question.has_pending_posts)
 
     def resolve_thematic(self, args, context, info):
         parents = self.get_parents()
@@ -541,6 +542,17 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
 
     def resolve_total_sentiments(self, args, context, info):
         return self.get_total_sentiments()
+
+    def resolve_has_pending_posts(self, args, context, info):
+        Post = models.Post
+        related = self.get_related_posts_query(True)
+        query = Post.query.join(
+            related, Post.id == related.c.post_id
+        ).filter(
+            Post.publication_state == models.PublicationStates.SUBMITTED_AWAITING_MODERATION
+        )
+        pending_count = query.count()
+        return pending_count > 0
 
 
 class Thematic(SecureObjectType, SQLAlchemyObjectType):

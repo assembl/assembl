@@ -24,6 +24,7 @@ query ThematicQuery($lang: String!, $id: ID!) {
         ... on Question {
           title(lang: $lang)
           id
+          hasPendingPosts
           posts(first: 3, random: true) {
             edges {
               node {

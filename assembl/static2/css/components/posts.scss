@@ -124,9 +124,18 @@
     width: 100%;
   }
 
-  .no-proposals,
-  .all-proposals {
+  .question-footer {
     margin: 0 0 70px;
+    display: flex;
+    justify-content: center;
+
+    :first-child {
+      margin-left: 0;
+    }
+
+    span {
+      margin-left: 5px;
+    }
   }
 }
 

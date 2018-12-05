@@ -435,14 +435,19 @@ def create_proposal_en_fr_x(request, session, discussion, creator_id,
     return post
 
 
-
-def create_proposal_x(graphql_request, first_question_id, idx):
+def create_proposal_x(graphql_request, first_question_id, idx, publication_state):
     from assembl.graphql.schema import Schema as schema
+    from assembl.models import PublicationStates
+    body = "une proposition {}".format(idx)
+    if publication_state == PublicationStates.SUBMITTED_AWAITING_MODERATION.value:
+        body = "une proposition en attente de validation {}".format(idx)
+
     res = schema.execute(u"""
 mutation myFirstMutation {
     createPost(
         ideaId:"%s",
-        body:"une proposition %s"
+        body:"%s"
+        publicationState:%s
     ) {
         post {
             ... on Post {
@@ -453,16 +458,38 @@ mutation myFirstMutation {
         }
     }
 }
-""" % (first_question_id, idx), context_value=graphql_request)
+""" % (first_question_id, body, publication_state),
+        context_value=graphql_request)
     return res.data['createPost']['post']['id']
 
 
 @pytest.fixture(scope="function")
 def proposals(graphql_request, thematic_and_question):
+    from assembl.models import PublicationStates
     thematic_id, first_question_id = thematic_and_question
     proposals = []
-    for idx in range(15):
-        proposal_id = create_proposal_x(graphql_request, first_question_id, idx)
+    for idx in range(20):
+        if idx > 15:
+            publication_state = PublicationStates.SUBMITTED_AWAITING_MODERATION.value
+        else:
+            publication_state = PublicationStates.PUBLISHED.value
+
+        proposal_id = create_proposal_x(
+            graphql_request, first_question_id, idx, publication_state)
+        proposals.append(proposal_id)
+
+    return proposals
+
+
+@pytest.fixture(scope="function")
+def proposals_no_pending(graphql_request, thematic_and_question):
+    from assembl.models import PublicationStates
+    thematic_id, first_question_id = thematic_and_question
+    proposals = []
+    for idx in range(10):
+        publication_state = PublicationStates.PUBLISHED.value
+        proposal_id = create_proposal_x(
+            graphql_request, first_question_id, idx, publication_state)
         proposals.append(proposal_id)
 
     return proposals
