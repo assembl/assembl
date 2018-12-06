@@ -630,7 +630,7 @@ const Translations = {
       previousStep: "Étape précédente",
       menu: {
         phase: "Phase %{count} - %{description}",
-        language: "Éditer la langue du débat",
+        language: "Préférences de la discussion",
         sections: "Éditer les rubriques du débat",
         legalContents: "Éditer les contenus juridiques",
         timeline: "Éditer les phases et modules",
@@ -1606,7 +1606,7 @@ const Translations = {
       previousStep: "Previous step",
       menu: {
         phase: "Phase %{count} - %{description}",
-        language: "Discussion language",
+        language: "Discussion preferences",
         sections: "Edit debate sections",
         legalContents: "Edit legal content",
         timeline: "Edit the phases and modules",

@@ -39,25 +39,6 @@ export const languagePreferences: LanguagePreferencesReducer = (state = List(), 
       return state.push(action.locale);
     }
     return state;
-  case 'REMOVE_LANGUAGE_PREFERENCE':
-    if (hasLocale(action.locale, state)) {
-      const i = state.findIndex(a => a === action.locale);
-      return state.delete(i);
-    }
-    return state;
-  default:
-    return state;
-  }
-};
-
-type DiscussionLanguagePreferencesHasChangedReducer = (boolean, ReduxAction<Action>) => boolean;
-export const discussionLanguagePreferencesHasChanged: DiscussionLanguagePreferencesHasChangedReducer = (
-  state = false,
-  action
-) => {
-  switch (action.type) {
-  case 'LANGUAGE_PREFERENCE_HAS_CHANGED':
-    return action.state;
   default:
     return state;
   }
@@ -77,7 +58,6 @@ export const displayLanguageMenu: DisplayLanguageMenuReducer = (state = false, a
 const reducers = {
   editLocale: editLocale,
   discussionLanguagePreferences: languagePreferences,
-  discussionLanguagePreferencesHasChanged: discussionLanguagePreferencesHasChanged,
   displayLanguageMenu: displayLanguageMenu,
   sections: sections,
   voteSession: voteSession,

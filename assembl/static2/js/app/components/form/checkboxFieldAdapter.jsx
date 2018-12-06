@@ -7,14 +7,25 @@ import Error from './error';
 import { getValidationState } from './utils';
 
 type Props = {
+  isChecked: boolean,
   label: string
 } & FieldRenderProps;
 
-const CheckboxFieldAdapter = ({ input, label, meta: { error, touched } }: Props) => (
-  <FormGroup controlId={input.name} validationState={getValidationState(error, touched)}>
-    <Checkbox {...input}>{label}</Checkbox>
-    <Error name={input.name} />
-  </FormGroup>
-);
+const CheckboxFieldAdapter = ({ input, label, isChecked, meta: { error, touched } }: Props) => {
+  const props =
+    input.value === ''
+      ? {
+        ...input,
+        value: isChecked,
+        checked: isChecked
+      }
+      : { ...input };
+  return (
+    <FormGroup controlId={input.name} validationState={getValidationState(error, touched)}>
+      <Checkbox {...props}>{label}</Checkbox>
+      <Error name={input.name} />
+    </FormGroup>
+  );
+};
 
 export default CheckboxFieldAdapter;
