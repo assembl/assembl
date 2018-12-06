@@ -119,7 +119,6 @@ export class DumbAcceptCookiesModal extends React.PureComponent<Props, State> {
             <Checkbox onChange={this.handleModalCheckbox} checked={modalIsChecked} type="checkbox" inline>
               <Translate value="legalContentsModal.iAccept" /> {/* $FlowFixMe */}
               <LegalContentsLinksList legalContentsList={cleanLegalContentsArray} />
-              <Translate value="legalContentsModal.iCanModify" />
             </Checkbox>
           </FormGroup>
         </Modal.Body>

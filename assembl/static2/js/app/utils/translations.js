@@ -594,8 +594,7 @@ const Translations = {
     legalContentsModal: {
       title: "Accepter les contenus juridiques",
       iAccept: "Je confirme avoir lu et accepté ",
-      ofThePlatform: " de la plateforme. ",
-      iCanModify: "Je peux modifier à tout moment mes paramètres depuis mon espace personnel."
+      ofThePlatform: " de la plateforme. "
     },
     administration: {
       confirmTextFieldDeletionTitle: "Supprimer le champ",
@@ -1560,8 +1559,7 @@ const Translations = {
     legalContentsModal: {
       title: "Accept the legal contents",
       iAccept: "I have read and accepted ",
-      ofThePlatform: " of the platform.",
-      iCanModify: " I can modify my settings anytime from my account personal page."
+      ofThePlatform: " of the platform."
     },
     administration: {
       confirmTextFieldDeletionTitle: "Delete the field",
