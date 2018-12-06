@@ -169,7 +169,8 @@ def get_watson_post_results(request):
     discussion = request.context._instance
     format = get_format(request)
     num_keywords = int(request.GET.get('num_kw', 5))
-    fieldnames, results = discussion.get_watson_post_analytics(num_keywords)
+    display_lang = request.GET.get('lang', 'en')
+    fieldnames, results = discussion.get_watson_post_analytics(num_keywords, display_lang)
     return csv_response(results, format, fieldnames)
 
 
@@ -180,7 +181,8 @@ def get_watson_idea_results(request):
     discussion = request.context._instance
     format = get_format(request)
     num_keywords = int(request.GET.get('num_kw', 5))
-    fieldnames, results = discussion.get_watson_idea_analytics(num_keywords)
+    display_lang = request.GET.get('lang', 'en')
+    fieldnames, results = discussion.get_watson_idea_analytics(num_keywords, display_lang)
     return csv_response(results, format, fieldnames)
 
 
