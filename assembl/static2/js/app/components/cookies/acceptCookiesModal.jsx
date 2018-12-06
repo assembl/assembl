@@ -21,11 +21,11 @@ type LegalContentsArray = Array<string>;
 
 type Props = {
   pathname: string,
-  id: string,
+  userId: string,
   hasTermsAndConditions: boolean,
   hasPrivacyPolicy: boolean,
   hasUserGuidelines: boolean,
-  acceptedLegalContentList: LegalContentsArray,
+  acceptedLegalContentsList: LegalContentsArray,
   updateAcceptedCookies: Function
 };
 
@@ -34,7 +34,7 @@ type State = {
   modalIsChecked: boolean
 };
 
-class AcceptCookiesModal extends React.PureComponent<Props, State> {
+export class DumbAcceptCookiesModal extends React.PureComponent<Props, State> {
   state = {
     modalIsChecked: false,
     showModal: false
@@ -45,19 +45,19 @@ class AcceptCookiesModal extends React.PureComponent<Props, State> {
   }
 
   showModal = () => {
-    const { id, pathname, acceptedLegalContentList } = this.props;
+    const { userId, pathname, acceptedLegalContentsList } = this.props;
     const lastRouteString = getRouteLastString(pathname);
     const isOnLegalContentPage = legalContentSlugs.includes(lastRouteString);
     let userHasAcceptedAllLegalContents;
     // This array gathers all the legal contents to accept by their 'ACCEPT_...' formatted name
     const legalContentsToAcceptByCookieName = this.getLegalContentsToAccept();
-    if (id) {
+    if (userId) {
       userHasAcceptedAllLegalContents = legalContentsToAcceptByCookieName.every(legalContent =>
-        acceptedLegalContentList.includes(legalContent)
+        acceptedLegalContentsList.includes(legalContent)
       );
     }
     // The modal is only showed to a user who is connected but hasn't yet accepted legal contents and isn't currently reading them
-    if (!isOnLegalContentPage && !userHasAcceptedAllLegalContents && id) {
+    if (!isOnLegalContentPage && !userHasAcceptedAllLegalContents && userId) {
       this.setState({ showModal: true });
     }
   };
@@ -155,7 +155,7 @@ class AcceptCookiesModal extends React.PureComponent<Props, State> {
 
 const mapStateToProps = state => ({
   lang: state.i18n.locale,
-  id: state.context.connectedUserIdBase64
+  userId: state.context.connectedUserIdBase64
 });
 
 export default compose(
@@ -188,4 +188,4 @@ export default compose(
     }
   }),
   manageErrorAndLoading({ displayLoader: false })
-)(AcceptCookiesModal);
+)(DumbAcceptCookiesModal);
