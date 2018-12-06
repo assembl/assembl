@@ -1,9 +1,8 @@
 import React from 'react';
 import { I18n, Translate } from 'react-redux-i18n';
 import { Link } from 'react-router';
-import { Button, FormGroup, Checkbox } from 'react-bootstrap';
-import { getFullPath, get, getContextual } from '../utils/routeMap';
-import { getConnectedUserId, getDiscussionSlug } from '../utils/globalFunctions';
+import { getFullPath } from '../utils/routeMap';
+import { getConnectedUserId } from '../utils/globalFunctions';
 import SocialShare from '../components/common/socialShare';
 import LoginButton from '../components/common/loginButton';
 

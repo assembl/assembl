@@ -3,12 +3,12 @@ import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { Modal, FormGroup, Checkbox, Button } from 'react-bootstrap';
+import { Translate } from 'react-redux-i18n';
 
 import { legalContentSlugs, ESSENTIAL_SIGNUP_COOKIES as LEGAL_CONTENTS_TO_ACCEPT } from '../../constants';
-import { legalConfirmModal } from '../../utils/utilityManager';
 import manageErrorAndLoading from './../../components/common/manageErrorAndLoading';
 import { getRouteLastString, getDiscussionSlug } from '../../utils/globalFunctions';
-import { get, getContextual } from '../utils/routeMap';
+import { get, getContextual } from '../../utils/routeMap';
 
 import LegalContentsLinksList from './legalContentsLinksList';
 
@@ -30,27 +30,35 @@ type Props = {
 };
 
 type State = {
+  showModal: boolean,
   modalIsChecked: boolean
 };
 
-class AcceptCookiesModal extends React.Component<Props, State> {
-  state = { 
-      modalIsChecked: false,
-      showModal: false
-    };
+class AcceptCookiesModal extends React.PureComponent<Props, State> {
+  state = {
+    modalIsChecked: false,
+    showModal: false
+  };
 
   componentDidMount() {
     this.showModal();
   }
 
-  componentDidUpdate() {
-    this.showModal();
-  }
-
   showModal = () => {
+    const { id, pathname, acceptedLegalContentList } = this.props;
+    const lastRouteString = getRouteLastString(pathname);
+    const isOnLegalContentPage = legalContentSlugs.includes(lastRouteString);
+    let userHasAcceptedAllLegalContents;
+    // This array gathers all the legal contents to accept by their 'ACCEPT_...' formatted name
+    const legalContentsToAcceptByCookieName = this.getLegalContentsToAccept();
+    if (id) {
+      userHasAcceptedAllLegalContents = legalContentsToAcceptByCookieName.every(legalContent =>
+        acceptedLegalContentList.includes(legalContent)
+      );
+    }
     // The modal is only showed to a user who is connected but hasn't yet accepted legal contents and isn't currently reading them
     if (!isOnLegalContentPage && !userHasAcceptedAllLegalContents && id) {
-      this.setState({ showModal: true })
+      this.setState({ showModal: true });
     }
   };
 
@@ -79,24 +87,13 @@ class AcceptCookiesModal extends React.Component<Props, State> {
   };
 
   closeModal = () => {
-      this.setState({ showModal: false})
-  }
+    this.setState({ showModal: false });
+  };
 
   render() {
-      const { hasTermsAndConditions, hasPrivacyPolicy, hasUserGuidelines, acceptedLegalContentList, id, pathname } = this.props;
+    const { hasTermsAndConditions, hasPrivacyPolicy, hasUserGuidelines } = this.props;
     const { showModal, modalIsChecked } = this.state;
-      const slug = getDiscussionSlug();
-      const lastRouteString = getRouteLastString(pathname);
-    const isOnLegalContentPage = legalContentSlugs.includes(lastRouteString);
-    const { modalIsChecked } = this.state;
-    let userHasAcceptedAllLegalContents;
-    // This array gathers all the legal contents to accept by their 'ACCEPT_...' formatted name
-    const legalContentsToAcceptByCookieName = this.getLegalContentsToAccept();
-    if (id) {
-      userHasAcceptedAllLegalContents = legalContentsToAcceptByCookieName.every(legalContent =>
-        acceptedLegalContentList.includes(legalContent)
-      );
-    }
+    const slug = getDiscussionSlug();
     const legalContentsToAcceptByRouteName = {
       terms: hasTermsAndConditions,
       privacyPolicy: hasPrivacyPolicy,
@@ -110,49 +107,51 @@ class AcceptCookiesModal extends React.Component<Props, State> {
 
     // TODO: deal with the backcross 'static' logic with this new Modal
 
-      return (
-          <Modal show={showModal}>
-            <Modal.Header>
-                <Modal.Title><Translate value="legalContentsModal.title" /></Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <FormGroup className="justify">
-                    <Checkbox onChange={handleModalCheckbox} checked={modalIsChecked} type="checkbox" inline>
-                        <Translate value="legalContentsModal.iAccept" />
-                        <LegalContentsLinksList legalContentsList={cleanLegalContentsArray} />
-                        <Translate value="legalContentsModal.iCanModify" />
-                    </Checkbox>
-                </FormGroup>
-            </Modal.Body>
-            <Modal.Footer>
-                <div className="modal-footer">
-                    <Button
-      key="cancel"
-      onClick={closeModal}
-      className="button-cancel button-dark"
-      href={`${getContextual('oldLogout', { slug: slug })}?next=${get('home', { slug: slug })}`}
-    >
-      <Translate value="refuse" />
-    </Button>
-    <Button
-      disabled={!modalIsChecked}
-      key="accept"
-      className="button-submit button-dark"
-      onClick={() => {
-        try {
-          this.acceptAllLegalContents();
-        } catch (error) {
-          console.error(error); // eslint-disable-line
-        }
-        this.closeModal();
-      }}
-    >
-      <Translate value="accept" />
-    </Button>
-                </div>
-            </Modal.Footer>
-          </Modal>
-      )
+    return cleanLegalContentsArray ? (
+      <Modal show={showModal}>
+        <Modal.Header>
+          <Modal.Title>
+            <Translate value="legalContentsModal.title" />
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <FormGroup className="justify">
+            <Checkbox onChange={this.handleModalCheckbox} checked={modalIsChecked} type="checkbox" inline>
+              <Translate value="legalContentsModal.iAccept" /> {/* $FlowFixMe */}
+              <LegalContentsLinksList legalContentsList={cleanLegalContentsArray} />
+              <Translate value="legalContentsModal.iCanModify" />
+            </Checkbox>
+          </FormGroup>
+        </Modal.Body>
+        <Modal.Footer>
+          <div className="modal-footer">
+            <Button
+              key="cancel"
+              onClick={this.closeModal}
+              className="button-cancel button-dark"
+              href={`${getContextual('oldLogout', { slug: slug })}?next=${get('home', { slug: slug })}`}
+            >
+              <Translate value="refuse" />
+            </Button>
+            <Button
+              disabled={!modalIsChecked}
+              key="accept"
+              className="button-submit button-dark"
+              onClick={() => {
+                try {
+                  this.acceptAllLegalContents();
+                } catch (error) {
+                  console.error(error); // eslint-disable-line
+                }
+                this.closeModal();
+              }}
+            >
+              <Translate value="accept" />
+            </Button>
+          </div>
+        </Modal.Footer>
+      </Modal>
+    ) : null;
   }
 }
 

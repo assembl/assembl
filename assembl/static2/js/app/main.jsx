@@ -1,44 +1,26 @@
 // @flow
-import * as React from "react";
-import { connect } from "react-redux";
-import { compose, graphql } from "react-apollo";
+import * as React from 'react';
+import { connect } from 'react-redux';
 
-import { getCurrentPhaseData, getPhaseId } from "./utils/timeline";
-import Navbar from "./components/navbar/navbar";
-import Footer from "./components/common/footer";
-import CookiesBar from "./components/cookiesBar";
-import AcceptcookiesModal from "./components/cookies/acceptCookiesModal";
-import manageErrorAndLoading from "./components/common/manageErrorAndLoading";
-import { fromGlobalId, getRouteLastString } from "./utils/globalFunctions";
-
-type LegalContentsArray = Array<string>;
+import { getCurrentPhaseData, getPhaseId } from './utils/timeline';
+import Navbar from './components/navbar/navbar';
+import Footer from './components/common/footer';
+import CookiesBar from './components/cookiesBar';
+import AcceptcookiesModal from './components/cookies/acceptCookiesModal';
+import { fromGlobalId } from './utils/globalFunctions';
 
 type Props = {
   timeline: Timeline,
   params: { phase?: string, phaseId?: string, themeId?: string },
   location: { pathname: string },
-  id: string,
-  children: React.Node,
-  hasLegalNotice: boolean,
-  hasTermsAndConditions: boolean,
-  hasCookiesPolicy: boolean,
-  hasPrivacyPolicy: boolean,
-  hasUserGuidelines: boolean,
-  acceptedLegalContentList: LegalContentsArray,
-  updateAcceptedCookies: Function
+  children: React.Node
 };
 
 class Main extends React.Component<Props> {
   render() {
-    const {
-      params,
-      timeline,
-      location
-    } = this.props;
+    const { params, timeline, location } = this.props;
     const { themeId } = params;
-    const { currentPhaseIdentifier, currentPhaseId } = getCurrentPhaseData(
-      timeline
-    );
+    const { currentPhaseIdentifier, currentPhaseId } = getCurrentPhaseData(timeline);
     let identifier = params.phase || null;
     let phaseId = currentPhaseId;
     if (!identifier) {
@@ -58,7 +40,7 @@ class Main extends React.Component<Props> {
       <div className="main">
         <Navbar location={location.pathname} themeId={themeId} />
         <div className="app-content">{children}</div>
-        <AcceptcookiesModal location={location.pathname} />
+        <AcceptcookiesModal pathname={location.pathname} />
         <CookiesBar />
         <Footer />
       </div>

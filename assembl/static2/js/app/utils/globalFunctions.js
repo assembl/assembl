@@ -2,7 +2,7 @@
 import { type Map } from 'immutable';
 
 import { getDisplayedPhaseIdentifier } from './timeline';
-import { HARVESTABLE_PHASES, ICONS_PATH, PICTURE_BASE_URL, PICTURE_EXTENSION, PICTURES_LENGTH } from '../constants';
+import { HARVESTABLE_PHASES, ICONS_PATH, PICTURE_BASE_URL, PICTURE_EXTENSION } from '../constants';
 
 const getInputValue = (id: string) => {
   const elem = document.getElementById(id);
@@ -298,11 +298,6 @@ export function getIconPath(icon: string, color: string = '') {
 
 // We `pictureId + 1` because there is no image in the S3 bucket with 0 as an id
 export const getPictureUrl = (pictureId: number) => `${PICTURE_BASE_URL}${pictureId + 1}${PICTURE_EXTENSION}`;
-
-export const getRandomPictureUrl = () => {
-  const pictureId = Math.floor(Math.random() * PICTURES_LENGTH) + 1;
-  return `${PICTURE_BASE_URL}${pictureId}${PICTURE_EXTENSION}`;
-};
 
 export const getRouteLastString = (location: string) => {
   const lastLocationString = /[^/]*$/.exec(location)[0];
