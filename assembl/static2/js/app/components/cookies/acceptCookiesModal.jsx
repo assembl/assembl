@@ -124,31 +124,29 @@ class AcceptCookiesModal extends React.PureComponent<Props, State> {
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>
-          <div className="modal-footer">
-            <Button
-              key="cancel"
-              onClick={this.closeModal}
-              className="button-cancel button-dark"
-              href={`${getContextual('oldLogout', { slug: slug })}?next=${get('home', { slug: slug })}`}
-            >
-              <Translate value="refuse" />
-            </Button>
-            <Button
-              disabled={!modalIsChecked}
-              key="accept"
-              className="button-submit button-dark"
-              onClick={() => {
-                try {
-                  this.acceptAllLegalContents();
-                } catch (error) {
-                  console.error(error); // eslint-disable-line
-                }
-                this.closeModal();
-              }}
-            >
-              <Translate value="accept" />
-            </Button>
-          </div>
+          <Button
+            key="cancel"
+            onClick={this.closeModal}
+            className="button-cancel button-dark"
+            href={`${getContextual('oldLogout', { slug: slug })}?next=${get('home', { slug: slug })}`}
+          >
+            <Translate value="refuse" />
+          </Button>
+          <Button
+            disabled={!modalIsChecked}
+            key="accept"
+            className="button-submit button-dark"
+            onClick={() => {
+              try {
+                this.acceptAllLegalContents();
+              } catch (error) {
+                console.error(error); // eslint-disable-line
+              }
+              this.closeModal();
+            }}
+          >
+            <Translate value="accept" />
+          </Button>
         </Modal.Footer>
       </Modal>
     ) : null;

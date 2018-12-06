@@ -11,7 +11,7 @@ type Props = {
 
 const LegalContentsLinksList = ({ legalContentsList }: Props) => {
   const slug = getDiscussionSlug();
-  // /* $FlowFixMe */
+  // $FlowFixMe
   return legalContentsList.map((legalContentType, index) => {
     const translationKey = legalContentType && legalContentType === 'terms' ? 'termsAndConditions' : legalContentType;
     const length = legalContentsList.length;
