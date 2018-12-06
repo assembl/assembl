@@ -20,7 +20,7 @@ from assembl.lib import config
 
 def upgrade(pyramid_env):
     with context.begin_transaction():
-        # op.drop_column('thematic', "video_description_side_id")
+        op.drop_column('thematic', "video_description_side_id")
         op.add_column('announce', sa.Column('quote_id',
             sa.Integer, sa.ForeignKey('langstring.id'))
         )
@@ -30,12 +30,12 @@ def upgrade(pyramid_env):
     db = m.get_session_maker()()
     with transaction.manager:
         thematics = db.query(m.Thematic).all()
-        announcements = db.query(m.Announcement)
+        announcements = db.query(m.IdeaAnnouncement)
         for thematic in thematics:
         	thematic.sqla_type = 'idea'
-        	thematic_announcement = announcements.filter(idea_id==thematic.id).first()
-        	thematic_announcement.quote_id = thematic.video_description_side_id
-        db.commit()
+        	thematic_announcement = announcements.filter(m.IdeaAnnouncement.idea_id==thematic.id).first()
+        	if thematic_announcement:
+        		thematic_announcement.quote_id = thematic.video_description_side_id
 
     with context.begin_transaction():
     	op.drop_table('thematic')
@@ -43,5 +43,19 @@ def upgrade(pyramid_env):
 
 def downgrade(pyramid_env):
     with context.begin_transaction():
-        op.add_column('thematic', sa.Column('video_description_side_id', sa.Integer, sa.ForeignKey('langstring.id')))
+		op.create_table(
+            'thematic',
+            sa.Column('id', sa.Integer, sa.ForeignKey(
+                'idea.id'), primary_key=True),
+            sa.Column('title_id', sa.Integer,
+                sa.ForeignKey('langstring.id'), nullable=False),
+            sa.Column('description_id', sa.Integer,
+                sa.ForeignKey('langstring.id')),
+            sa.Column('video_title_id', sa.Integer,
+                sa.ForeignKey('langstring.id')),
+            sa.Column('video_description_id', sa.Integer,
+                sa.ForeignKey('langstring.id')),
+            sa.Column('video_html_code', sa.UnicodeText),
+            sa.Column('identifier', sa.String(60))
+        )
         op.drop_column('announce', 'quote_id')

@@ -35,8 +35,8 @@ class Thematic(Idea):
     video_description_bottom_id = Column(
         Integer(), ForeignKey(LangString.id))
 
-    # video_description_side_id = Column(
-    #     Integer(), ForeignKey(LangString.id))
+    video_description_side_id = Column(
+        Integer(), ForeignKey(LangString.id))
 
     video_title = relationship(
         LangString,
@@ -59,12 +59,12 @@ class Thematic(Idea):
         backref=backref("description_of_video_bottom", lazy="dynamic"),
         cascade="all, delete-orphan")
 
-    # video_description_side = relationship(
-    #     LangString,
-    #     lazy="joined", single_parent=True,
-    #     primaryjoin=video_description_side_id == LangString.id,
-    #     backref=backref("description_of_video_side", lazy="dynamic"),
-    #     cascade="all, delete-orphan")
+    video_description_side = relationship(
+        LangString,
+        lazy="joined", single_parent=True,
+        primaryjoin=video_description_side_id == LangString.id,
+        backref=backref("description_of_video_side", lazy="dynamic"),
+        cascade="all, delete-orphan")
 
     video_html_code = Column(UnicodeText)
 
