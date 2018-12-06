@@ -22,7 +22,6 @@ const loading = <Loader />;
 
 const LanguagesPreferencesAdminForm = ({ client, locale }: LanguagesPreferencesFormProps) => (
   <LoadSaveReinitializeForm
-    // $FlowFixMe
     load={(fetchPolicy: FetchPolicy) => load(client, fetchPolicy, locale)}
     loading={loading}
     postLoadFormat={postLoadFormat}
