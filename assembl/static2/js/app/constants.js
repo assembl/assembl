@@ -135,7 +135,7 @@ export const ADMIN_MENU = {
     sectionId: '1',
     subMenu: {
       language: {
-        title: 'administration.menu.language',
+        title: 'administration.menu.preferences',
         sectionId: '1'
       },
       sections: {

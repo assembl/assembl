@@ -630,7 +630,7 @@ const Translations = {
       previousStep: "Étape précédente",
       menu: {
         phase: "Phase %{count} - %{description}",
-        language: "Préférences de la discussion",
+        preferences: "Préférences de la discussion",
         sections: "Éditer les rubriques du débat",
         legalContents: "Éditer les contenus juridiques",
         timeline: "Éditer les phases et modules",
@@ -819,13 +819,14 @@ const Translations = {
       annotation: "Les champs * sont requis.",
       themeNum: "Thématique %{index}",
       discussion: {
-        "0": "Langues utilisées",
+        "0": "Préférences de la discussion",
         "3": "Options d'inscription",
         "4": "Contenus juridiques",
         "5": "Édition des phases et modules",
         "6": "Personnaliser l'interface"
       },
       languageChoice: "Sélection des langues du débat",
+      moderation: "Modération à priori",
       ph: {
         title: "Titre",
         quote: "Citation",
@@ -1607,7 +1608,7 @@ const Translations = {
       previousStep: "Previous step",
       menu: {
         phase: "Phase %{count} - %{description}",
-        language: "Discussion preferences",
+        preferences: "Discussion preferences",
         sections: "Edit debate sections",
         legalContents: "Edit legal content",
         timeline: "Edit the phases and modules",
@@ -1790,13 +1791,14 @@ const Translations = {
       annotation: "* Fields are required.",
       themeNum: "Theme %{index}",
       discussion: {
-        "0": "Languages of the Discussion",
+        "0": "Discussion preferences",
         "3": "Registration options",
         "4": "Legal contents",
         "5": "Edition of the phases and modules",
         "6": "Personalize the interface"
       },
       languageChoice: "Select desired languages below",
+      moderation: "Post pending for moderation",
       ph: {
         title: "Title",
         quote: "Quote",
