@@ -118,6 +118,7 @@ _package_install = false
 # _package_install = true
 # Wheelhouse is installed on the staging server. Can also be reached at dev-assembl.bluenove.com/wheelhouse
 # _wheelhouse = /home/assembl_user/wheelhouse
+# _assembl_wheel_dir = /home/assembl_user/assembl_wheels
 _webmaster_user = webmaster
 # A *_user_password that is passed can be used to automatically switch between users in fabric
 _webmaster_user_password = 
