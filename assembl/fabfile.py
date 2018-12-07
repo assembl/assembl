@@ -228,6 +228,7 @@ def sanitize_env():
         env.projectpath, '%s_dumps' % env.get("projectname", 'assembl')))
     env.ini_file = env.get('ini_file', 'local.ini')
     env.group = env.get('group', env.user)
+    env.wheel_path = env.get('assembl_wheel_dir', os.path.join('/home/%s/' % env.user, 'assembl_wheels'))
     env.webmaster_user = env.get('webmaster_user', 'webmaster')
     populate_secrets()
 
@@ -872,6 +873,10 @@ def install_url_metadata_source():
         print cyan("Cloning git repository")
         with cd("%(projectpath)s/.." % env):
             run('git clone git://github.com/assembl/url_metadata.git')
+    else:
+        print cyan("Url Metadata service being updated...")
+        with cd("%(projectpath)s/.." % env):
+            run('git pull')
     venvcmd_py3('pip install -e ../url_metadata')
 
 
@@ -1245,11 +1250,6 @@ def bootstrap_from_checkout(backup=False):
     """
     execute(updatemaincode, backup=backup)
     execute(build_virtualenv)
-    if not is_integration_env():
-        if env.is_production_env:
-            execute(install_url_metadata_wheel)
-        else:
-            execute(install_url_metadata_source)
     execute(app_update_dependencies, backup=backup)
     execute(app_setup, backup=backup)
     execute(check_and_create_database_user)
@@ -3337,16 +3337,15 @@ def secure_sshd_fail2ban():
 
 
 @task
-def migrate_important_information(path, to=None):
+def migrate_important_information(path, to):
     """
     Move important files that are meant to survive moving to an automated deployment strategy
     """
     if exists(path):
-        # Ensure that the server's random.ini survives (under migration). New servers will generate own random.ini
         basename = os.path.basename(path)
-        remote_random_path_destination = normpath(to, basename)
-        if not exists(remote_random_path_destination):
-            run('cp -r %s %s' % (path, remote_random_path_destination))
+        destination_path = normpath(to, basename)
+        if not exists(destination_path):
+            run('cp -r %s %s' % (path, destination_path))
 
 
 @task
@@ -3360,7 +3359,7 @@ def migrate_server_for_automated_deployment():
     run('mkdir -p %s' % private_config_path)
 
     for v in important_vars:
-        execute(migrate_important_information, path=join(env.projectpath, v))
+        execute(migrate_important_information, path=join(env.projectpath, v), to=private_config_path)
 
 
 @task
@@ -3368,7 +3367,7 @@ def deploy_wheel(version=None):
     # Run by same user who will install Assembl
     # Tested on Ubuntu only
     execute(migrate_server_for_automated_deployment)
-    base_wheel_path = os.path.join('/home/%s/' % env.user, 'assembl_wheels')
+    base_wheel_path = env.get('assembl_wheel_dir')
     if not version:
         version = run('ls -t %s | head -n 1' % (base_wheel_path))
     wheel_path = os.path.join(base_wheel_path, version, 'assembl-%s-py2-none-any.whl' % version)
@@ -3381,12 +3380,18 @@ def deploy_wheel(version=None):
         run('rm -rf %s' % assembl_main_project_path)
     if exists(env.venvpath):
         run('rm -rf %s' % env.venvpath)
+        run('rm -rf %s' % env.venvpath + 'py3')
     # Account for venv3 as well
 
     execute(build_virtualenv, with_setuptools=True)
     venvcmd('pip install %s %s' % (use_wheel, wheel_path))
     venvcmd('pip install %s[dev]' % wheel_path)  # To allow debugging on server
     venvcmd('ln -s %s %s' % (fabric_path, env.projectpath))
+    if not is_integration_env():
+        if env.is_production_env:
+            execute(install_url_metadata_wheel)
+        else:
+            execute(install_url_metadata_source)
 
 
 @task
@@ -3413,32 +3418,34 @@ def create_user(name, rsa_passphrase=""):
                     username, password=password)
         run_as_user('chmod -R 700 /home/%s/.ssh' % username, username, password=password)
 
-    print(red("Generating private information for %s user. This file contains private information and should not be shared" % username))
-    output_path = join(os.getcwd(), '%s.secret' % hostname)
-    with hide('running', 'stdout'):
-        # In the future, do NOT do this. Instead, use KMS or SecretManager, or Vault as the place to store
-        # the secret information
-        with TemporaryFile() as f:
-            # Need to temporarily allow access
-            temp_path = '/home/%s/tmp.pem' % env.user
-            sudo('cp /home/%s/.ssh/id_rsa %s' % (username, temp_path))
-            sudo('chown %s:%s %s' % (env.user, env.user, temp_path))
-            result = get(temp_path, local_path=f)
-            run('rm -f %s' % temp_path)
-            if not result.failed:
-                f.seek(0)
-                private_key = f.read()
-                data = {
-                    'username': username,
-                    'password': password,
-                    'hostname': hostname,
-                    'private_key': private_key,
-                    'rsa_passphrase': ''
-                }
-                fill_template('system_user_information.jinja2', data, output=output_path)
-            else:
-                print(red("Failed to fetch the resource. Please access the resource by-hand."))
-    print(green("The secrets file has been generated at %s" % output_path))
+        print(red("Generating private information for %s user. This file contains private information and should not be shared" % username))
+        output_path = join(os.getcwd(), '%s.secret' % hostname)
+        with hide('running', 'stdout'):
+            # In the future, do NOT do this. Instead, use KMS or SecretManager, or Vault as the place to store
+            # the secret information
+            with TemporaryFile() as f:
+                # Need to temporarily allow access
+                temp_path = '/home/%s/tmp.pem' % env.user
+                sudo('cp /home/%s/.ssh/id_rsa %s' % (username, temp_path))
+                sudo('chown %s:%s %s' % (env.user, env.user, temp_path))
+                result = get(temp_path, local_path=f)
+                run('rm -f %s' % temp_path)
+                if not result.failed:
+                    f.seek(0)
+                    private_key = f.read()
+                    data = {
+                        'username': username,
+                        'password': password,
+                        'hostname': hostname,
+                        'private_key': private_key,
+                        'rsa_passphrase': ''
+                    }
+                    fill_template('system_user_information.jinja2', data, output=output_path)
+                else:
+                    print(red("Failed to fetch the resource. Please access the resource by-hand."))
+        print(green("The secrets file has been generated at %s" % output_path))
+    print(yellow("""The user %s already exists on the platform. Please request the following access information from your IT manager:\n
+                 "Account Name\nPassword\nHostname of Machine\nPrivate Key\nRSA Passphrase (if required)""" % username))
 
 
 @task
