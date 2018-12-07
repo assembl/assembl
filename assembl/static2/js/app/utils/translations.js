@@ -333,7 +333,6 @@ const Translations = {
       panelTitle: "Bienvenue dans la communauté d'Assembl"
     },
     debate: {
-      validateSuccess: "La contribution a bien été validée. Elle est désormais visible par l'ensemble des participants.",
       postAwaitingModeration: "Proposition en attente de modération",
       validateMessage: "Accepter ce message",
       shareThematic: "Partagez cette thématique",
@@ -366,6 +365,7 @@ const Translations = {
       whatYouNeedToKnow: "À retenir",
       syntheses: "Synthèses",
       back: "Retour",
+      validateSuccess: "La contribution a bien été validée. Elle est désormais visible par l'ensemble des participants.",
       survey: {
         loadRecentPosts: "Afficher les propositions récentes",
         themesTitle: "Choisissez une thématique !",
@@ -1343,6 +1343,7 @@ const Translations = {
       whatYouNeedToKnow: "What you need to know",
       syntheses: "Syntheses",
       back: "Back",
+      validateSuccess: "The contribution has been validated. It is now visible by all participants.",
       survey: {
         loadRecentPosts: "Load recent proposals",
         themesTitle: "Choose a theme!",

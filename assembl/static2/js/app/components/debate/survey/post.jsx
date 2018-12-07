@@ -169,7 +169,7 @@ class Post extends React.Component<Props> {
         refetchQueries: refetchQueries
       })
       .then(() => {
-        displayAlert('success', I18n.t('debate.validate_success'));
+        displayAlert('success', I18n.t('debate.validateSuccess'));
       })
       .catch((error) => {
         displayAlert('danger', `${error}`);
