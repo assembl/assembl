@@ -4,7 +4,7 @@ import type { ApolloClient } from 'react-apollo';
 import type { LanguagePreferencesFormValues } from './types.flow';
 
 import LanguagePreferencesQuery from '../../../../graphql/AllLanguagePreferences.graphql';
-import DiscussionPreferencesLanguageQuery from '../../../../graphql/DiscussionPreferenceLanguage.graphql';
+import DiscussionPreferencesQuery from '../../../../graphql/DiscussionPreferences.graphql';
 
 export const load = async (client: ApolloClient, fetchPolicy: FetchPolicy, locale: string) => {
   const { data: availableLanguages } = await client.query({
@@ -13,19 +13,19 @@ export const load = async (client: ApolloClient, fetchPolicy: FetchPolicy, local
     fetchPolicy: fetchPolicy
   });
 
-  const { data: userLanguagePreferences } = await client.query({
-    query: DiscussionPreferencesLanguageQuery,
+  const { data: discussionPreferences } = await client.query({
+    query: DiscussionPreferencesQuery,
     variables: { inLocale: locale },
     fetchPolicy: fetchPolicy
   });
 
   return {
     ...availableLanguages,
-    ...userLanguagePreferences
+    ...discussionPreferences
   };
 };
 
-type Data = LanguagePreferencesQuery & DiscussionPreferencesLanguageQuery;
+type Data = LanguagePreferencesQuery & DiscussionPreferencesQuery;
 
 export function postLoadFormat(data: Data): LanguagePreferencesFormValues {
   const { defaultPreferences, discussionPreferences } = data;
@@ -36,6 +36,7 @@ export function postLoadFormat(data: Data): LanguagePreferencesFormValues {
   }));
 
   return {
-    languages: languages
+    languages: languages,
+    withModeration: defaultPreferences.withModeration
   };
 }

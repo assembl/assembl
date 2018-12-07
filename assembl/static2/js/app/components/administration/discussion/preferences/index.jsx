@@ -35,7 +35,7 @@ const LanguagesPreferencesAdminForm = ({ client, locale }: LanguagesPreferencesF
       mutators={{
         ...arrayMutators
       }}
-      render={({ handleSubmit, pristine, submitting }) => (
+      render={({ handleSubmit, pristine, submitting, values }) => (
         <div className="admin-content">
           <AdminForm handleSubmit={handleSubmit} pristine={pristine} submitting={submitting}>
             <div className="form-container">
@@ -63,6 +63,13 @@ const LanguagesPreferencesAdminForm = ({ client, locale }: LanguagesPreferencesF
               <div className="title">
                 <Translate value="administration.moderation" />
               </div>
+              <Field
+                component={CheckboxFieldAdapter}
+                name="withModeration"
+                isChecked={values.withModeration}
+                label={I18n.t('administration.activateModeration')}
+                type="checkbox"
+              />
             </div>
           </AdminForm>
         </div>

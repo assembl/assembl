@@ -4,7 +4,7 @@ import { compose, graphql } from 'react-apollo';
 
 import ExportSection from '../exportSection';
 import { get } from '../../../utils/routeMap';
-import DiscussionPreferenceLanguage from '../../../graphql/DiscussionPreferenceLanguage.graphql';
+import DiscussionPreferences from '../../../graphql/DiscussionPreferences.graphql';
 import manageErrorAndLoading from '../../common/manageErrorAndLoading';
 
 type Language = {
@@ -68,7 +68,7 @@ class Step3 extends React.Component<Props, State> {
   }
 }
 export default compose(
-  graphql(DiscussionPreferenceLanguage, {
+  graphql(DiscussionPreferences, {
     options: ({ locale }) => ({
       variables: {
         inLocale: locale

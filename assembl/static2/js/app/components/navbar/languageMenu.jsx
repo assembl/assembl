@@ -8,7 +8,7 @@ import { getAvailableLocales } from '../../utils/i18n';
 import { addLanguagePreference } from '../../actions/adminActions';
 import manageErrorAndLoading from '../common/manageErrorAndLoading';
 import { setCookieItem } from '../../utils/globalFunctions';
-import getDiscussionPreferenceLanguage from '../../graphql/DiscussionPreferenceLanguage.graphql';
+import DiscussionPreferences from '../../graphql/DiscussionPreferences.graphql';
 
 const doNothing = () => {};
 
@@ -135,7 +135,7 @@ const mapDispatchToProps = dispatch => ({
 
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
-  graphql(getDiscussionPreferenceLanguage, {
+  graphql(DiscussionPreferences, {
     options: props => ({
       variables: {
         inLocale: props.i18n.locale

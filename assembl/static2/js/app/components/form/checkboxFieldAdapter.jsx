@@ -12,7 +12,7 @@ type Props = {
 } & FieldRenderProps;
 
 const CheckboxFieldAdapter = ({ input, label, isChecked, meta: { error, touched } }: Props) => {
-  const props =
+  const localePreference =
     input.value === ''
       ? {
         ...input,
@@ -22,7 +22,7 @@ const CheckboxFieldAdapter = ({ input, label, isChecked, meta: { error, touched 
       : { ...input };
   return (
     <FormGroup controlId={input.name} validationState={getValidationState(error, touched)}>
-      <Checkbox {...props}>{label}</Checkbox>
+      <Checkbox {...localePreference}>{label}</Checkbox>
       <Error name={input.name} />
     </FormGroup>
   );

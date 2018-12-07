@@ -1,8 +1,8 @@
 // @flow
 
-type LocalePreference = {
+export type LocalePreference = {
   locale: string,
-  name: string,
+  localeName: string,
   isChecked: boolean
 };
 
