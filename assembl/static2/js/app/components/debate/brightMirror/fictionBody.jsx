@@ -195,16 +195,13 @@ class FictionBody extends React.Component<Props, State> {
       commentSentimentFixedPosition
     } = this.state;
 
-    // Filter extract by lang
-    const filteredExtracts = extracts && extracts.filter(extract => extract.lang === contentLocale);
-
     return (
       <div ref={this.fictionBodyView}>
         <SideCommentMenu
           postId={postId}
           ideaId={ideaId}
           lang={contentLocale}
-          extracts={filteredExtracts}
+          extracts={extracts}
           commentAnchorPosition={commentAnchorPosition}
           badgeDynamicPosition={commentBadgeDynamicPosition}
           badgeFixedPosition={commentBadgeFixedPosition}
@@ -230,7 +227,7 @@ class FictionBody extends React.Component<Props, State> {
           handleMouseUpWhileHarvesting={this.handleMouseUpWhileHarvesting}
           body={content || noContentMessage}
           dbId={dbId}
-          extracts={filteredExtracts}
+          extracts={extracts}
           bodyMimeType={bodyMimeType}
           contentLocale={contentLocale}
           id={postId}

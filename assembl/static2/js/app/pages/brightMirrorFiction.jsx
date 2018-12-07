@@ -29,7 +29,7 @@ import { withScreenWidth } from '../components/common/screenDimensions';
 // Utils imports
 import { transformPosts, getDebateTotalMessages } from './idea';
 import { displayAlert } from '../utils/utilityManager';
-import { getConnectedUserId } from '../utils/globalFunctions';
+import { getConnectedUserId, compareByTextPosition } from '../utils/globalFunctions';
 import Permissions, { connectedUserCan } from '../utils/permissions';
 import { getIsPhaseCompletedById } from '../utils/timeline';
 // Constant imports
@@ -242,6 +242,10 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
     const getDisplayName = () => (fiction.creator && fiction.creator.displayName ? fiction.creator.displayName : EMPTY_STRING);
     const displayName = fiction.creator && fiction.creator.isDeleted ? I18n.t('deletedUser') : getDisplayName();
     const commentsInfo: CommentsInfo = this.getCommentsInfo();
+    // Filter extract by lang and sort extracts by order of apparition
+    const { extracts } = fiction;
+    const filteredExtracts =
+      extracts && extracts.filter(extract => extract && extract.lang === contentLocale).sort(compareByTextPosition);
 
     // Define user permission
     const userId = fiction.creator ? fiction.creator.userId : USER_ID_NOT_FOUND;
@@ -315,7 +319,7 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
       lang: contentLocale,
       isAuthorAccountDeleted: fiction.creator && fiction.creator.isDeleted ? fiction.creator.isDeleted : false,
       // $FlowFixMe extracts are never null
-      extracts: fiction.extracts,
+      extracts: filteredExtracts,
       bodyMimeType: fiction.bodyMimeType,
       // $FlowFixMe dbId is never null
       dbId: fiction.dbId,

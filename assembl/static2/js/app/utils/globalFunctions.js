@@ -298,3 +298,32 @@ export function getIconPath(icon: string, color: string = '') {
 
 // We `pictureId + 1` because there is no image in the S3 bucket with 0 as an id
 export const getPictureUrl = (pictureId: number) => `${PICTURE_BASE_URL}${pictureId + 1}${PICTURE_EXTENSION}`;
+
+export function compareByTextPosition(extractA: ?FictionExtractFragment, extractB: ?FictionExtractFragment) {
+  // Sort extracts by position in body's paragraphs
+  if (!!extractA && !!extractB) {
+    const ATfi = extractA.textFragmentIdentifiers && extractA.textFragmentIdentifiers[0];
+    const BTfi = extractB.textFragmentIdentifiers && extractB.textFragmentIdentifiers[0];
+    const ATfiXPath = ATfi && ATfi.xpathStart;
+    const BTfiXPath = BTfi && BTfi.xpathStart;
+
+    const regex = /p\[([^)]+)\]/;
+    const AMatchParagraph = ATfiXPath && ATfiXPath.match(regex);
+    const BMatchParagraph = BTfiXPath && BTfiXPath.match(regex);
+
+    if (!!AMatchParagraph && !!BMatchParagraph) {
+      const AParagraph = parseInt(AMatchParagraph[1], 10);
+      const BParagraph = parseInt(BMatchParagraph[1], 10);
+
+      if (AParagraph > BParagraph) return 1;
+      if (AParagraph === BParagraph) {
+        // If extracts are in same paragraph, compare by offset
+        const AOffsetStart = ATfi && ATfi.offsetStart;
+        const BOffsetStart = BTfi && BTfi.offsetStart;
+        if (!!AOffsetStart && !!BOffsetStart && AOffsetStart > BOffsetStart) return 1;
+      }
+    }
+  }
+  // For all other cases: (<), if extract null, not found in text => set first
+  return -1;
+}
