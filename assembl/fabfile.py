@@ -85,7 +85,7 @@ def fabpass_for(user, password=None):
     if not user:
         raise RuntimeError("No user was presented to get a password for")
     passwords = env.passwords or {}
-    pass_key = '%s@%s:%s' % (user, env.public_hostname, env.ssh_port or '22')
+    pass_key = '%s@%s:%s' % (user, env.public_hostname, env.get('ssh_port', '22'))
     passwords[pass_key] = password or get_user_password_from_config(user)
     return passwords
 
@@ -1287,7 +1287,6 @@ def bootstrap_from_wheel():
     """
     The de-facto way to bootstrap the dev-staging server in a CI/CD context
     """
-    # execute(deploy_wheel)
     execute(app_setup)
     execute(check_and_create_database_user)
     execute(set_file_permissions)
