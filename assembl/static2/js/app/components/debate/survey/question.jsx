@@ -54,7 +54,7 @@ export class Question extends React.Component<Props, State> {
   };
 
   createPost = () => {
-    const { contentLocale, questionId, scrollToQuestion, index, refetchTheme } = this.props;
+    const { contentLocale, questionId, scrollToQuestion, index, refetchTheme, isDebateModerated } = this.props;
     const body = this.state.postBody;
     const publicationState = this.getPostPublicationState();
     this.setState({ buttonDisabled: true }, () =>
@@ -69,8 +69,8 @@ export class Question extends React.Component<Props, State> {
         })
         .then(() => {
           scrollToQuestion(true, index + 1);
-          // TODO: change message here if debate is moderated
-          displayAlert('success', I18n.t('debate.survey.postSuccess'));
+          const successMessage = isDebateModerated ? 'postToBeValidated' : 'postSuccess';
+          displayAlert('success', I18n.t(`debate.survey.${successMessage}`));
           refetchTheme();
           this.setState({
             postBody: EditorState.createEmpty(),
