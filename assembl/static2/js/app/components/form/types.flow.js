@@ -18,7 +18,7 @@ export type SaveStatus = 'OK' | 'KO' | 'PENDING';
 export type DateTime = Moment;
 
 export type DatePickerInput = {
-  time: DateTime | null
+  time: ?DateTime
 };
 
 export type DatePickerValue = DatePickerInput;

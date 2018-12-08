@@ -11,10 +11,9 @@
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import * as React from 'react';
+import { ControlLabel, FormGroup } from 'react-bootstrap';
 import { type FieldRenderProps } from 'react-final-form';
 import { type FormApi } from 'final-form';
-import { ControlLabel, FormGroup } from 'react-bootstrap';
-
 import type { DatePickerType, DateTime, DatePickerValue } from './types.flow';
 import Error from './error';
 import { getValidationState } from './utils';
@@ -54,9 +53,9 @@ const DatePickerFieldAdapter = ({
       if (form) {
         form.mutators.setFieldTouched(name, true);
       }
-    }
-    if (onDateChange) {
-      onDateChange(e);
+      if (onDateChange) {
+        onDateChange(e);
+      }
     }
     return onChange({ time: e });
   };

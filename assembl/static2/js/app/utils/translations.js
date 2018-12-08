@@ -907,9 +907,10 @@ const Translations = {
           logoDescription:
             "Le logo doit avoir une hauteur maximale de 78px et une largeur maximale de 200px. Le poids ne doit pas dépasser 1Mo. Le fond doit être transparent.",
           startDate: "Du",
-          endDate: "À",
+          endDate: "Au",
           timePlaceholder: "Optionnel : Entrez les dates du débat",
-          dateDescription: "Pour configurer les dates du debat. Si vous n'avez pas sélectionné des dates, les dates sont déduites des timelines.",
+          dateDescription:
+            "Pour configurer les dates du debat. Si vous n'avez pas sélectionné de dates, les dates sont déduites des timelines.",
           startDateError: "La date de début ne peut pas être postérieure à la date de fin",
           endDateError: "La date de fin ne peut pas être antérieure à la date de début"
         },
@@ -1863,7 +1864,8 @@ const Translations = {
           startDate: "From",
           endDate: "To",
           timePlaceholder: "Optional: Enter the dates of the debate",
-          dateDescription: "Please enter the debate's date range. If no dates are selected, the dates are inferred from the timelines created.",
+          dateDescription:
+            "Please enter the debate's date range. If no dates are selected, the dates are inferred from the timelines created.",
           startDateError: "The start date cannot be after the end date",
           endDateError: "The end date cannot be after the start date"
         },

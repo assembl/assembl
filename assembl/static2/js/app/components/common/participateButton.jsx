@@ -9,7 +9,7 @@ type Props = {
   displayPhase: Function,
   timeline: Timeline,
   btnClass: string,
-  btnLabel: string | null
+  btnLabel?: string
 };
 
 const ParticipateButton = ({ displayPhase, timeline, btnLabel, btnClass }: Props) => (
@@ -21,5 +21,9 @@ const ParticipateButton = ({ displayPhase, timeline, btnLabel, btnClass }: Props
     ) : null}
   </div>
 );
+
+ParticipateButton.defaultProps = {
+  btnLabel: null
+};
 
 export default ParticipateButton;
