@@ -65,7 +65,7 @@ build_wheel:
     - sh scripts/clear_apt_cache.sh
   script:
     # bump the version, merge to master
-    - sh scripts/bump_assembl_version_and_push.sh
+    # - sh scripts/bump_assembl_version_and_push.sh
     # create the wheel and upload to pypi
     - sh scripts/create_assembl_wheel.sh
     # - twine upload -u bluenove --skip-existing dist/*
