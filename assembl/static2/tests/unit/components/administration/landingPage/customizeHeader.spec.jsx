@@ -1,7 +1,7 @@
 import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
-import { DumbCustomizeHeader } from '../../../../../js/app/components/administration/landingPage/customizeHeader';
+import { DumbCustomizeHeader } from '../../../../../js/app/components/administration/landingPage/header/index';
 
 describe('ManageModules component', () => {
   it('should render a page to manage the landing page header', () => {

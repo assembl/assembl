@@ -11,7 +11,7 @@ import moment from 'moment';
 import { convertEntriesToHTML, convertImmutableEntriesToJS } from '../utils/draftjs';
 import { getEntryValueForLocale } from '../utils/i18n';
 import ManageModules from '../components/administration/landingPage/manageModules';
-import CustomizeHeader from '../components/administration/landingPage/customizeHeader';
+import CustomizeHeader from '../components/administration/landingPage/header/index';
 import ManageTimeline from '../components/administration/landingPage/manageTimeline';
 import Navbar from '../components/administration/navbar';
 import { displayAlert } from '../utils/utilityManager';

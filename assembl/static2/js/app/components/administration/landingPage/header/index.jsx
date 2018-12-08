@@ -5,22 +5,22 @@ import { type ApolloClient, graphql, compose, withApollo } from 'react-apollo';
 import { I18n } from 'react-redux-i18n';
 import { Field } from 'react-final-form';
 import setFieldTouched from 'final-form-set-field-touched';
-import SectionTitle from '../../administration/sectionTitle';
-import Helper from '../../common/helper';
-import { load, postLoadFormat } from './header/load';
-import { save, createMutationsPromises } from './header/save';
-import LoadSaveReinitializeForm from '../../form/LoadSaveReinitializeForm';
-import FileUploaderFieldAdapter from '../../form/fileUploaderFieldAdapter';
-import DatePickerFieldAdapter from '../../form/datePickerFieldAdapter';
-import MultilingualTextFieldAdapter from '../../form/multilingualTextFieldAdapter';
-import MultilingualRichTextFieldAdapter from '../../form/multilingualRichTextFieldAdapter';
-import AdminForm from '../../form/adminForm';
-import Loader from '../../common/loader';
-import { type DateTime } from '../../form/types.flow';
-import { validStartDate, validEndDate, validateDatePicker } from './header/validate';
-import DiscussionQuery from '../../../graphql/DiscussionQuery.graphql';
-import { convertISO8601StringToDate } from '../../../utils/globalFunctions';
-import manageErrorAndLoading from '../../common/manageErrorAndLoading';
+import SectionTitle from '../../../administration/sectionTitle';
+import Helper from '../../../common/helper';
+import { load, postLoadFormat } from './load';
+import { save, createMutationsPromises } from './save';
+import LoadSaveReinitializeForm from '../../../form/LoadSaveReinitializeForm';
+import FileUploaderFieldAdapter from '../../../form/fileUploaderFieldAdapter';
+import DatePickerFieldAdapter from '../../../form/datePickerFieldAdapter';
+import MultilingualTextFieldAdapter from '../../../form/multilingualTextFieldAdapter';
+import MultilingualRichTextFieldAdapter from '../../../form/multilingualRichTextFieldAdapter';
+import AdminForm from '../../../form/adminForm';
+import Loader from '../../../common/loader';
+import { type DateTime } from '../../../form/types.flow';
+import { validStartDate, validEndDate, validateDatePicker } from './validate';
+import DiscussionQuery from '../../../../graphql/DiscussionQuery.graphql';
+import { convertISO8601StringToDate } from '../../../../utils/globalFunctions';
+import manageErrorAndLoading from '../../../common/manageErrorAndLoading';
 
 type Props = {
   client: ApolloClient,
