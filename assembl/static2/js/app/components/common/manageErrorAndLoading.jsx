@@ -3,13 +3,16 @@
   Higher order component that:
   - if there is a graphql error throws it (this error will be handled by an error boundary component)
   - if loading is true displays the loader component or nothing
+  - Can pass custom Loader component to override the default
   - if there is no error and loading is false displays the wrapped component
 */
 import * as React from 'react';
 import Loader, { type Props as LoaderProps } from './loader';
 
 type Props = {
-  displayLoader: boolean
+  displayLoader: boolean,
+  customLoader?: React.Node,
+  customLoaderProps?: Object
 } & LoaderProps;
 
 type WrappedProps = {
@@ -29,6 +32,10 @@ const manageErrorAndLoading = (props: Props) => (WrappedComponent: React.Compone
 
   if (loading || (data && data.loading)) {
     if (props.displayLoader) {
+      if (props.customLoader) {
+        return props.customLoaderProps ? <customLoader {...props.customLoaderProps} /> : <customLoader />;
+      }
+
       return <Loader {...props} />;
     }
 

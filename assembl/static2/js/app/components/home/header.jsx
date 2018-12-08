@@ -13,6 +13,16 @@ import { browserHistory } from '../../router';
 import manageErrorAndLoading from '../common/manageErrorAndLoading';
 import DiscussionQuery from '../../graphql/DiscussionQuery.graphql';
 
+const DumbHeaderPlaceholder = () => (
+  <section className="home-section header-section">
+    <Grid fluid className="max-container">
+      <Row>
+        <div className="header-bkg">&nbsp;</div>
+      </Row>
+    </Grid>
+  </section>
+);
+
 class Header extends React.Component {
   constructor(props) {
     super(props);
@@ -27,29 +37,26 @@ class Header extends React.Component {
   }
 
   render() {
-    const {
-      timeline,
-      data: { discussion: { title, subtitle, headerImage, logoImage, buttonLabel, startDate, endDate } }
-    } = this.props;
+    const { timeline, data: { discussion } } = this.props;
+    const { title, subtitle, headerImage, logoImage, buttonLabel, startDate, endDate } = discussion;
     return (
       <section className="home-section header-section">
         <Grid fluid className="max-container">
           <div className="header-content">
             {logoImage && logoImage.externalUrl ? <img className="header-logo" src={logoImage.externalUrl} alt="logo" /> : null}
             <div className="max-text-width">
-              {title && <h1 className="light-title-1">{title}</h1>}
+              {title ? <h1 className="light-title-1">{title}</h1> : null}
               <h4 className="light-title-4 uppercase margin-m">
-                {subtitle && <span dangerouslySetInnerHTML={{ __html: subtitle }} />}
-                {startDate &&
-                  endDate && (
-                    <div>
-                      <Translate
-                        value="home.from_start_to_end"
-                        start={I18n.l(startDate, { dateFormat: 'date.format' })}
-                        end={I18n.l(endDate, { dateFormat: 'date.format' })}
-                      />
-                    </div>
-                  )}
+                {subtitle ? <span dangerouslySetInnerHTML={{ __html: subtitle }} /> : null}
+                {startDate && endDate ? (
+                  <div>
+                    <Translate
+                      value="home.from_start_to_end"
+                      start={I18n.l(startDate, { dateFormat: 'date.format' })}
+                      end={I18n.l(endDate, { dateFormat: 'date.format' })}
+                    />
+                  </div>
+                ) : null}
               </h4>
               <div className="margin-l">
                 <ParticipateButton
@@ -84,6 +91,8 @@ const mapStateToProps = state => ({
   timeline: state.timeline
 });
 
-export default compose(connect(mapStateToProps), graphql(DiscussionQuery), manageErrorAndLoading({ displayLoader: false }))(
-  Header
-);
+export default compose(
+  connect(mapStateToProps),
+  graphql(DiscussionQuery),
+  manageErrorAndLoading({ displayLoader: false, customLoader: DumbHeaderPlaceholder })
+)(Header);

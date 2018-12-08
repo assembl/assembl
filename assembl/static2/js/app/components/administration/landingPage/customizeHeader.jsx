@@ -45,25 +45,13 @@ const loading = <Loader />;
 export class DumbCustomizeHeader extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
+    const { startDate, endDate } = props.data.discussion;
     this.state = {
-      startDate: null,
-      endDate: null,
+      startDate: startDate ? convertISO8601StringToDate(startDate) : null,
+      endDate: endDate ? convertISO8601StringToDate(endDate) : null,
       startDateConflict: false,
       endDateConflict: false
     };
-  }
-
-  componentDidMount() {
-    const { startDate, endDate } = this.props.data.discussion;
-    if (startDate || endDate) {
-      this.setState(() => ({
-        // eslint-disable react/no-did-mount-set-state
-        startDate: convertISO8601StringToDate(startDate),
-        endDate: convertISO8601StringToDate(endDate),
-        startDateConflict: false,
-        endDateConflict: false
-      }));
-    }
   }
 
   onStartChange = (e: DateTime) => {
