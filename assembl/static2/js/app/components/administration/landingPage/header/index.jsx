@@ -145,9 +145,7 @@ export class DumbCustomizeHeader extends React.Component<Props, State> {
                     component={FileUploaderFieldAdapter}
                     label={I18n.t('administration.landingPage.header.logoDescription')}
                   />
-                  <div className="control-label">
-                    <span>{I18n.t('administration.landingPage.header.dateDescription')}</span>
-                  </div>
+                  <div className="section-description">{I18n.t('administration.landingPage.header.dateDescription')}</div>
                   <Field
                     name="headerStartDate"
                     component={DatePickerFieldAdapter}
