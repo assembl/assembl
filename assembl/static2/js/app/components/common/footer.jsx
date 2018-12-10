@@ -4,23 +4,30 @@ import { Link } from 'react-router';
 import { Translate } from 'react-redux-i18n';
 import { Grid } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import { graphql, compose } from 'react-apollo';
 
 import { get } from '../../utils/routeMap';
+import manageErrorAndLoading from '../../components/common/manageErrorAndLoading';
+import TabsConditionQuery from '../../graphql/TabsConditionQuery.graphql';
 
 type Props = {
   assemblVersion: string,
-  debateData: DebateData,
+  slug: string,
   hasLegalNotice: boolean,
   hasTermsAndConditions: boolean,
   hasCookiesPolicy: boolean,
   hasPrivacyPolicy: boolean,
   hasUserGuidelines: boolean,
-  lang: string
+  lang: string,
+  socialMedias: Array<SocialMedia>,
+  footerLinks: Array<Object>
 };
 
 const Footer = ({
   assemblVersion,
-  debateData,
+  slug,
+  socialMedias,
+  footerLinks,
   hasLegalNotice,
   hasTermsAndConditions,
   hasCookiesPolicy,
@@ -28,8 +35,7 @@ const Footer = ({
   hasUserGuidelines,
   lang
 }: Props) => {
-  const { socialMedias, footerLinks } = debateData;
-  const slug = { slug: debateData.slug };
+  const debateSlug = { slug: slug };
   return (
     <Grid fluid className="background-dark relative" id="footer">
       <div className="max-container">
@@ -73,7 +79,7 @@ const Footer = ({
             <div className="terms">
               {hasTermsAndConditions && (
                 <div className="terms-of-use">
-                  <Link to={`${get('terms', slug)}`}>
+                  <Link to={`${get('terms', debateSlug)}`}>
                     <Translate value="footer.terms" />
                   </Link>
                 </div>
@@ -81,7 +87,7 @@ const Footer = ({
               {hasLegalNotice && (
                 <div className="legal-notice">
                   {hasTermsAndConditions ? <span className="small-hyphen-padding"> &mdash; </span> : null}
-                  <Link to={`${get('legalNotice', slug)}`}>
+                  <Link to={`${get('legalNotice', debateSlug)}`}>
                     <Translate value="footer.legalNotice" />
                   </Link>
                 </div>
@@ -90,7 +96,7 @@ const Footer = ({
             <div className="terms">
               {hasCookiesPolicy && (
                 <div className="cookie-policy">
-                  <Link to={`${get('cookiesPolicy', slug)}`}>
+                  <Link to={`${get('cookiesPolicy', debateSlug)}`}>
                     <Translate value="footer.cookiePolicy" />
                   </Link>
                 </div>
@@ -98,7 +104,7 @@ const Footer = ({
               {hasPrivacyPolicy && (
                 <div className="privacy-policy">
                   {hasCookiesPolicy ? <span className="small-hyphen-padding"> &mdash; </span> : null}
-                  <Link to={`${get('privacyPolicy', slug)}`}>
+                  <Link to={`${get('privacyPolicy', debateSlug)}`}>
                     <Translate value="footer.privacyPolicy" />
                   </Link>
                 </div>
@@ -106,7 +112,7 @@ const Footer = ({
               {hasUserGuidelines && (
                 <div className="user-guidelines">
                   {hasPrivacyPolicy || hasCookiesPolicy ? <span className="small-hyphen-padding"> &mdash; </span> : null}
-                  <Link to={`${get('userGuidelines', slug)}`}>
+                  <Link to={`${get('userGuidelines', debateSlug)}`}>
                     <Translate value="footer.userGuidelines" />
                   </Link>
                 </div>
@@ -122,8 +128,19 @@ const Footer = ({
 
 const mapStateToProps = state => ({
   assemblVersion: state.context.assemblVersion,
-  debateData: state.debate.debateData,
+  socialMedias: state.debate.debateData.socialMedias,
+  footerLinks: state.debate.debateData.footerLinks,
+  slug: state.debate.debateData.slug,
   lang: state.i18n.locale
 });
+const withData = graphql(TabsConditionQuery, {
+  props: ({ data: { hasPrivacyPolicy, hasLegalNotice, hasCookiesPolicy, hasTermsAndConditions, hasUserGuidelines } }) => ({
+    hasPrivacyPolicy: hasPrivacyPolicy,
+    hasLegalNotice: hasLegalNotice,
+    hasCookiesPolicy: hasCookiesPolicy,
+    hasTermsAndConditions: hasTermsAndConditions,
+    hasUserGuidelines: hasUserGuidelines
+  })
+});
 
-export default connect(mapStateToProps)(Footer);
+export default compose(connect(mapStateToProps), withData, manageErrorAndLoading({ displayLoader: false }))(Footer);

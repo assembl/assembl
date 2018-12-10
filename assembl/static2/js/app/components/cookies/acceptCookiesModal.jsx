@@ -25,7 +25,7 @@ type Props = {
   hasTermsAndConditions: boolean,
   hasPrivacyPolicy: boolean,
   hasUserGuidelines: boolean,
-  acceptedLegalContentsList: LegalContentsArray,
+  acceptedLegalContents: LegalContentsArray,
   updateAcceptedCookies: Function
 };
 
@@ -45,7 +45,7 @@ export class DumbAcceptCookiesModal extends React.PureComponent<Props, State> {
   }
 
   showModal = () => {
-    const { userId, pathname, acceptedLegalContentsList } = this.props;
+    const { userId, pathname, acceptedLegalContents } = this.props;
     if (userId) {
       const lastRouteString = getRouteLastString(pathname);
       const isOnLegalContentPage = legalContentSlugs.includes(lastRouteString);
@@ -53,7 +53,7 @@ export class DumbAcceptCookiesModal extends React.PureComponent<Props, State> {
       const legalContentsToAcceptByCookieName = this.getLegalContentsToAccept();
 
       const userHasAcceptedAllLegalContents = legalContentsToAcceptByCookieName.every(legalContent =>
-        acceptedLegalContentsList.includes(legalContent)
+        acceptedLegalContents.includes(legalContent)
       );
       // The modal is only showed to a user who is connected but hasn't yet accepted legal contents and isn't currently reading them
       if (!isOnLegalContentPage && !userHasAcceptedAllLegalContents) {
@@ -176,7 +176,7 @@ export default compose(
       return {
         error: data.error,
         loading: data.loading,
-        acceptedLegalContentList: data.user.acceptedCookies
+        acceptedLegalContents: data.user.acceptedCookies
       };
     }
   }),

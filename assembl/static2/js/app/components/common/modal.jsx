@@ -35,8 +35,7 @@ class AssemblModal extends React.Component<Props, State> {
     footerTxt: null,
     button: null,
     bsSize: null,
-    modalClass: null,
-    backdrop: true
+    modalClass: null
   };
 
   componentWillReceiveProps(nextProps: Props) {
@@ -76,7 +75,7 @@ class AssemblModal extends React.Component<Props, State> {
 
     return (
       <Modal bsSize={bsSize || null} show={this.state.showModal} onHide={this.close}>
-        <Modal.Header>{title && <Modal.Title>{title}</Modal.Title>}</Modal.Header>
+        <Modal.Header closeButton>{title && <Modal.Title>{title}</Modal.Title>}</Modal.Header>
         {body && (
           <Modal.Body>
             <div>{body}</div>

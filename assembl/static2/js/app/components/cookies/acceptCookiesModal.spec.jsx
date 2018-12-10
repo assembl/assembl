@@ -16,7 +16,7 @@ const defaultAcceptCookiesModalProps = {
   hasTermsAndConditions: true,
   hasPrivacyPolicy: true,
   hasUserGuidelines: true,
-  acceptedLegalContentsList: [],
+  acceptedLegalContents: [],
   updateAcceptedCookies: updateAcceptedCookiesSpy
 };
 
@@ -34,7 +34,7 @@ describe('<AcceptCookiesModal /> - with shallow', () => {
     wrapper = shallow(
       <DumbAcceptCookiesModal
         {...defaultAcceptCookiesModalProps}
-        acceptedLegalContentsList={['ACCEPT_CGU', 'ACCEPT_PRIVACY_POLICY_ON_DISCUSSION', 'ACCEPT_USER_GUIDELINE_ON_DISCUSSION']}
+        acceptedLegalContents={['ACCEPT_CGU', 'ACCEPT_PRIVACY_POLICY_ON_DISCUSSION', 'ACCEPT_USER_GUIDELINE_ON_DISCUSSION']}
       />
     );
     expect(wrapper.find('Modal [show=false]')).toHaveLength(1);

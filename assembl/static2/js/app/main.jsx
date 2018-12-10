@@ -48,7 +48,7 @@ class Main extends React.Component<Props> {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state: { timeline: Timeline }) => ({
   timeline: state.timeline
 });
 
