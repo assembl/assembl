@@ -63,7 +63,8 @@ type State = {
   serializedAnnotatorRange: ?Object,
   editComment: boolean,
   editReply: boolean,
-  editingPostId: string
+  editingPostId: string,
+  latestExtract: ?string
 };
 
 const ACTIONS = {
@@ -85,7 +86,8 @@ class DumbSideCommentBox extends React.Component<Props, State> {
 
   static getDerivedStateFromProps(nextProps: Props, prevState: State) {
     // Required when switching from displaying comment to submitting to force a refresh of component
-    const { submitting, selection } = nextProps;
+    const { submitting, selection, extracts } = nextProps;
+    const { latestExtract } = prevState;
     if (prevState.submitting !== submitting) {
       const selectionText = selection && selection.toString();
       const annotatorRange = selection && selectionText && ARange.sniff(selection.getRangeAt(0));
@@ -96,6 +98,16 @@ class DumbSideCommentBox extends React.Component<Props, State> {
       };
     }
 
+    // Required when submitting new extract and switching to display submitted comment
+    if (latestExtract) {
+      const nextIndex = extracts.findIndex(extract => extract.id === latestExtract);
+      if (nextIndex >= 0) {
+        return {
+          extractIndex: nextIndex,
+          latestExtract: null
+        };
+      }
+    }
     return null;
   }
 
@@ -114,7 +126,8 @@ class DumbSideCommentBox extends React.Component<Props, State> {
       serializedAnnotatorRange: annotatorRange && annotatorRange.serialize(document, 'annotation'),
       editComment: false,
       editReply: false,
-      editingPostId: ''
+      editingPostId: '',
+      latestExtract: null
     };
 
     // actions props
@@ -220,7 +233,6 @@ class DumbSideCommentBox extends React.Component<Props, State> {
       toggleCommentsBox,
       refetchPost,
       uploadDocument,
-      extracts,
       setPositionToCoordinates,
       position
     } = this.props;
@@ -264,7 +276,7 @@ class DumbSideCommentBox extends React.Component<Props, State> {
                 submitting: false,
                 body: EditorState.createEmpty(),
                 // Set next comment to the last submitted
-                extractIndex: extracts.length
+                latestExtract: result.data.addPostExtract.extract.id
               },
               () => {
                 // Close submit view, open comments view on refresh
@@ -549,11 +561,12 @@ class DumbSideCommentBox extends React.Component<Props, State> {
 
   render() {
     const { extracts, cancelSubmit, position, toggleCommentsBox } = this.props;
-    const { submitting, extractIndex, editComment } = this.state;
+    const { submitting, extractIndex, editComment, latestExtract } = this.state;
     const currentExtract = this.getCurrentExtract(extractIndex);
     const currentComment = this.getCurrentComment(currentExtract);
-
-    if (!submitting && !currentComment) return null;
+    // In case there s no current comment for display or we re reloading the latest submitted extract,
+    // We hide the box
+    if ((!submitting && !currentComment) || latestExtract) return null;
 
     const commentView = this.getCommentView();
     const replyView = this.getReplyView();

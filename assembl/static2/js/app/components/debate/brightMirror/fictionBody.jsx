@@ -148,7 +148,7 @@ class FictionBody extends React.Component<Props, State> {
   handleClickAnchor = () => {
     const { displayCommentAnchor, displaySubmitBox, commentAnchorPosition } = this.state;
     // Scroll side box in top section of page
-    const scrollPosition = commentAnchorPosition.y + window.innerHeight / 3;
+    const scrollPosition = commentAnchorPosition.y + window.innerHeight / 5;
     window.scrollTo({ top: scrollPosition, behavior: 'smooth' });
     this.setState({
       displayCommentAnchor: !displayCommentAnchor,
