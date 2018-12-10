@@ -50,7 +50,7 @@ class PhaseMenu extends React.PureComponent<Props> {
 
   render() {
     const { index, isActive, slug, phase } = this.props;
-    const menuItem = PHASES_ADMIN_MENU[phase.identifier];
+    const menuItem = PHASES_ADMIN_MENU.survey;
     const { sectionId, subMenu } = menuItem;
     const sectionQuery = sectionId ? { section: sectionId } : {};
     const subMenuIds = subMenu ? Object.keys(subMenu) : [];

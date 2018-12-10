@@ -201,7 +201,7 @@ export const PHASES_ADMIN_MENU = {
     sectionId: '1',
     subMenu: {
       setThemes: {
-        title: 'administration.survey.1',
+        title: 'administration.survey.createTable',
         sectionId: '1'
       },
       configThematics: {
@@ -235,27 +235,6 @@ export const PHASES_ADMIN_MENU = {
         sectionId: '4'
       }
     }
-  },
-  thread: {
-    sectionId: '1',
-    subMenu: {
-      exportData: {
-        title: 'administration.thread.0',
-        sectionId: '1'
-      }
-    }
-  },
-  multiColumns: {
-    sectionId: '1',
-    subMenu: {
-      exportData: {
-        title: 'administration.multiColumn.0',
-        sectionId: '1'
-      }
-    }
-  },
-  brightMirror: {
-    sectionId: '1'
   }
 };
 

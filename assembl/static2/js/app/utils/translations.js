@@ -672,7 +672,7 @@ const Translations = {
       },
       noTimeline: "Aucune timeline n'a été configurée pour ce débat.",
       survey: {
-        "1": "Créer la table des thématiques",
+        createTable: "Créer la table des thématiques",
         exportData: "Exporter les données",
         configThematic: "Configurer la thématique",
         configThematics: "Configurer les thématiques",
@@ -684,12 +684,6 @@ const Translations = {
         "1": "Configurer le ou les modules de vote",
         "2": "Configurer les propositions de vote",
         "3": "Exporter les données"
-      },
-      thread: {
-        "0": "Exporter les données"
-      },
-      multiColumn: {
-        "0": "Exporter les données"
       },
       imageRequirements:
         "L'image doit avoir une hauteur de 480 px et une largeur de 1280 px. Le poids ne doit pas dépasser 1 Mo.",
@@ -1641,7 +1635,7 @@ const Translations = {
       },
       noTimeline: "No timeline has been configured yet",
       survey: {
-        "1": "Create the themes table ",
+        createTable: "Create the themes table",
         exportData: "Export data",
         configThematic: "Configure the theme",
         configThematics: "Configure the themes",
@@ -1653,12 +1647,6 @@ const Translations = {
         "1": "Configure the voting modules",
         "2": "Configure the voting proposals",
         "3": "Export data"
-      },
-      thread: {
-        "0": "Export Data"
-      },
-      multiColumn: {
-        "0": "Export Data"
       },
       imageRequirements: "The image must have a height of 480 px and a width of 1280px. Its size has to be under 1 MB.",
       voteWithTokens: "Tokens vote",
