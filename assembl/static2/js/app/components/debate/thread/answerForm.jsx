@@ -15,6 +15,8 @@ import RichTextEditor from '../../common/richTextEditor';
 import { BODY_MAX_LENGTH } from '../common/topPostForm';
 import { getIsPhaseCompletedById } from '../../../utils/timeline';
 import { scrollToPost } from '../../../utils/hashLinkScroll';
+import { getPostPublicationState } from '../../../utils/globalFunctions';
+import { connectedUserIsAdmin } from '../../../utils/permissions';
 
 type Props = {
   contentLocale: string,
@@ -27,7 +29,8 @@ type Props = {
   uploadDocument: Function,
   timeline: Timeline,
   phaseId: string,
-  handleAnswerClick: Function
+  handleAnswerClick: Function,
+  isDebateModerated: boolean
 };
 
 type State = {
@@ -69,7 +72,16 @@ export class DumbAnswerForm extends React.PureComponent<Props, State> {
   };
 
   handleSubmit = () => {
-    const { createPost, contentLocale, parentId, ideaId, refetchIdea, hideAnswerForm, uploadDocument } = this.props;
+    const {
+      createPost,
+      contentLocale,
+      parentId,
+      ideaId,
+      refetchIdea,
+      hideAnswerForm,
+      uploadDocument,
+      isDebateModerated
+    } = this.props;
     const { body } = this.state;
     this.setState({ submitting: true });
     const bodyIsEmpty = !body || editorStateIsEmpty(body);
@@ -81,13 +93,15 @@ export class DumbAnswerForm extends React.PureComponent<Props, State> {
         if (!result.contentState) {
           return;
         }
-
+        const userIsAdmin = connectedUserIsAdmin();
+        const publicationState = getPostPublicationState(isDebateModerated, userIsAdmin);
         const variables = {
           contentLocale: contentLocale,
           ideaId: ideaId,
           parentId: parentId,
           body: convertContentStateToHTML(result.contentState),
-          attachments: result.documentIds
+          attachments: result.documentIds,
+          publicationState: publicationState
         };
         displayAlert('success', I18n.t('loading.wait'));
         createPost({ variables: variables })
@@ -109,7 +123,8 @@ export class DumbAnswerForm extends React.PureComponent<Props, State> {
                 });
               });
             });
-            displayAlert('success', I18n.t('debate.thread.postSuccess'));
+            const successMessage = isDebateModerated && !userIsAdmin ? 'postToBeValidated' : 'postSuccess';
+            displayAlert('success', I18n.t(`debate.thread.${successMessage}`));
           })
           .catch((error) => {
             displayAlert('danger', `${error}`);
@@ -164,7 +179,8 @@ export class DumbAnswerForm extends React.PureComponent<Props, State> {
 
 const mapStateToProps = state => ({
   contentLocale: state.i18n.locale,
-  timeline: state.timeline
+  timeline: state.timeline,
+  isDebateModerated: true // TODO: update
 });
 
 export default compose(

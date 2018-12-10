@@ -6,11 +6,11 @@ import { Translate, I18n } from 'react-redux-i18n';
 import { Grid, Col, Button } from 'react-bootstrap';
 import { EditorState } from 'draft-js';
 
-import { getConnectedUserId } from '../../../utils/globalFunctions';
+import { getConnectedUserId, getPostPublicationState } from '../../../utils/globalFunctions';
 import { inviteUserToLogin, displayAlert } from '../../../utils/utilityManager';
 import { connectedUserIsAdmin } from '../../../utils/permissions';
 import createPostMutation from '../../../graphql/mutations/createPost.graphql';
-import { PublicationStates, SMALL_SCREEN_WIDTH, MINIMUM_BODY_LENGTH } from '../../../constants';
+import { SMALL_SCREEN_WIDTH, MINIMUM_BODY_LENGTH } from '../../../constants';
 import { withScreenDimensions } from '../../common/screenDimensions';
 import RichTextEditor from '../../common/richTextEditor';
 import { convertEditorStateToHTML } from '../../../utils/draftjs';
@@ -44,19 +44,11 @@ export class Question extends React.Component<Props, State> {
     };
   }
 
-  getPostPublicationState = (): string => {
-    const { isDebateModerated } = this.props;
-    if (!isDebateModerated || connectedUserIsAdmin()) {
-      return PublicationStates.PUBLISHED;
-    }
-
-    return PublicationStates.SUBMITTED_AWAITING_MODERATION;
-  };
-
   createPost = () => {
     const { contentLocale, questionId, scrollToQuestion, index, refetchTheme, isDebateModerated } = this.props;
     const body = this.state.postBody;
-    const publicationState = this.getPostPublicationState();
+    const userIsAdmin = connectedUserIsAdmin();
+    const publicationState = getPostPublicationState(isDebateModerated, userIsAdmin);
     this.setState({ buttonDisabled: true }, () =>
       this.props
         .mutate({
@@ -69,7 +61,7 @@ export class Question extends React.Component<Props, State> {
         })
         .then(() => {
           scrollToQuestion(true, index + 1);
-          const successMessage = isDebateModerated && !connectedUserIsAdmin() ? 'postToBeValidated' : 'postSuccess';
+          const successMessage = isDebateModerated && !connectedUserIsAdmin ? 'postToBeValidated' : 'postSuccess';
           displayAlert('success', I18n.t(`debate.survey.${successMessage}`));
           refetchTheme();
           this.setState({

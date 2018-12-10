@@ -1370,7 +1370,7 @@ const Translations = {
         submit: "Submit",
         postSuccess: "Thanks for your participation. Your proposal has been sent!",
         postToBeValidated:
-          "Your contribution has been saved. To insure the quality of the debate, it will be visible to all participants once it has been reviewed by the animators.",
+          "Your contribution has been saved. To insure the quality of the debate, it will be visible to all participants once it has been reviewed by the animation team.",
         endPhase: "The %{closedPhaseName} phase is closed."
       },
       question: {

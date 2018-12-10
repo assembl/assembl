@@ -5,7 +5,8 @@ import {
   hexToRgb,
   encodeUserIdBase64,
   isHarvestable,
-  moveElementToFirstPosition
+  moveElementToFirstPosition,
+  getPostPublicationState
 } from '../../../js/app/utils/globalFunctions';
 
 describe('This test concern GlobalFunctions Class', () => {
@@ -133,5 +134,31 @@ describe('moveElementToFirstPosition function', () => {
     const array = ['foo', 'bar', 'baz'];
     const element = 'bar';
     expect(moveElementToFirstPosition(array, element)).toEqual(['bar', 'foo', 'baz']);
+  });
+});
+
+describe('getPostPublicationState function', () => {
+  it('should be PUBLISHED if debate is not moderated', () => {
+    const isDebateModerated = false;
+    const connectedUserIsAdmin = false;
+    const actual = getPostPublicationState(isDebateModerated, connectedUserIsAdmin);
+    const expected = 'PUBLISHED';
+    expect(actual).toEqual(expected);
+  });
+
+  it('should be PUBLISHED if debate is moderated and user is admin', () => {
+    const isDebateModerated = true;
+    const connectedUserIsAdmin = true;
+    const actual = getPostPublicationState(isDebateModerated, connectedUserIsAdmin);
+    const expected = 'PUBLISHED';
+    expect(actual).toEqual(expected);
+  });
+
+  it('should be SUBMITTED_AWAITING_MODERATION if debate is moderated and user is not admin', () => {
+    const isDebateModerated = true;
+    const connectedUserIsAdmin = false;
+    const actual = getPostPublicationState(isDebateModerated, connectedUserIsAdmin);
+    const expected = 'SUBMITTED_AWAITING_MODERATION';
+    expect(actual).toEqual(expected);
   });
 });

@@ -4,7 +4,6 @@ import Adapter from 'enzyme-adapter-react-16';
 import { createEditorStateWithText } from 'draft-js-plugins-editor';
 
 import { Question as DumbQuestion } from '../../../../../js/app/components/debate/survey/question';
-import { connectedUserIsAdmin } from '../../../../../js/app/utils/permissions';
 import { displayAlert } from '../../../../../js/app/utils/utilityManager';
 
 configure({ adapter: new Adapter() });
@@ -95,31 +94,6 @@ describe('DumbQuestion component', () => {
         expect(wrapper.state('buttonDisabled')).toBeFalsy();
         done();
       }, 100);
-    });
-  });
-
-  describe('getPostPublicationState method', () => {
-    it('should be PUBLISHED if debate is not moderated', () => {
-      connectedUserIsAdmin.mockImplementation(() => false);
-      const actual = wrapper.instance().getPostPublicationState();
-      const expected = 'PUBLISHED';
-      expect(actual).toEqual(expected);
-    });
-
-    it('should be PUBLISHED if debate is moderated and user is admin', () => {
-      wrapper.setProps({ isDebateModerated: true });
-      connectedUserIsAdmin.mockImplementation(() => true);
-      const actual = wrapper.instance().getPostPublicationState();
-      const expected = 'PUBLISHED';
-      expect(actual).toEqual(expected);
-    });
-
-    it('should be SUBMITTED_AWAITING_MODERATION if debate is moderated and user is not admin', () => {
-      wrapper.setProps({ isDebateModerated: true });
-      connectedUserIsAdmin.mockImplementation(() => false);
-      const actual = wrapper.instance().getPostPublicationState();
-      const expected = 'SUBMITTED_AWAITING_MODERATION';
-      expect(actual).toEqual(expected);
     });
   });
 });

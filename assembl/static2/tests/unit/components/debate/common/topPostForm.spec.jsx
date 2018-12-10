@@ -23,7 +23,8 @@ const topPostFormProps: Props = {
   uploadDocument: jest.fn(),
   onDisplayForm: jest.fn(),
   draftable: false,
-  ideaOnColumn: false
+  ideaOnColumn: false,
+  isDebateModerated: false
 };
 
 describe('<TopPostForm /> - with shallow', () => {
