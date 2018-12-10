@@ -1202,8 +1202,9 @@ class RootIdea(Idea):
     @property
     def num_posts(self):
         """ In the root idea, num_posts is the count of all non-deleted mesages in the discussion """
-        from .post import Post
+        from .post import Post, countable_publication_states
         result = self.db.query(Post).filter(
+            Post.publication_state.in_(countable_publication_states),
             Post.discussion_id == self.discussion_id,
             Post.hidden == False,  # noqa: E712
             Post.tombstone_condition()
@@ -1213,10 +1214,11 @@ class RootIdea(Idea):
     @property
     def num_read_posts(self):
         """ In the root idea, num_read_posts is the count of all non-deleted read mesages in the discussion """
-        from .post import Post
+        from .post import Post, countable_publication_states
         from .action import ViewPost
         discussion_data = self.get_discussion_data(self.discussion_id)
         result = self.db.query(Post).filter(
+            Post.publication_state.in_(countable_publication_states),
             Post.discussion_id == self.discussion_id,
             Post.hidden == False,  # noqa: E712
             Post.tombstone_condition()
