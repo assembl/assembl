@@ -12,11 +12,12 @@ import SelectFieldAdapter from '../../form/selectFieldAdapter';
 import { deleteThematicImageTooltip } from '../../common/tooltips';
 import Helper from '../../common/helper';
 import type { ThemesAdminValues, ThemeValue, ThemesValue } from './types.flow';
-import { PHASES, MESSAGE_VIEW, modulesTranslationKeys } from '../../../constants';
+import { MESSAGE_VIEW, modulesTranslationKeys } from '../../../constants';
 import SurveyFields from './surveyFields';
 
 type Props = {
   editLocale: string,
+  phaseIdentifier: string,
   thematicId: string,
   slug: string,
   values: ?ThemesAdminValues
@@ -43,10 +44,10 @@ export function getFieldData(themeId: string, values: ThemesValue, fieldName: st
 
 class ConfigureThematicForm extends React.PureComponent<Props> {
   getName = () => {
-    const { values, thematicId, slug } = this.props;
+    const { values, phaseIdentifier, thematicId, slug } = this.props;
     const fieldData = getFieldData(thematicId, values ? values.themes : [], 'themes');
     if (!fieldData.name) {
-      goTo(get('administration', { slug: slug, id: PHASES.survey }, { section: 1 }));
+      goTo(get('administration', { slug: slug, id: phaseIdentifier }, { section: 1 }));
     }
     return fieldData;
   };

@@ -51,7 +51,11 @@ class Export extends React.Component<Props, State> {
     const translation = translate && exportLocale ? `?lang=${exportLocale}` : '?'; // FIXME: using '' instead of '?' does not work
     const { isAnonymous } = this.state;
     const anonymous = translation === '?' ? `anon=${isAnonymous.toString()}` : `&anon=${isAnonymous.toString()}`;
+    // for survey:
     const exportLink = get('exportSurveyData', { debateId: debateId, translation: translation, anonymous: anonymous });
+    // TODO for thread or multiColumns
+    // const exportLink = get('exportThreadMulticolumnData',
+    // { debateId: debateId, translation: translation, anonymous: anonymous });
     return (
       <ExportSection
         withLanguageOptions
@@ -62,7 +66,6 @@ class Export extends React.Component<Props, State> {
         translate={translate}
         exportLocale={exportLocale}
         languages={languages}
-        annotation="surveyAnnotation"
       />
     );
   }

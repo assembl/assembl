@@ -16,10 +16,10 @@ import { load, postLoadFormat } from './load';
 import { createMutationsPromises, save } from './save';
 import validate from './validate';
 import Loader from '../../common/loader';
-import { PHASES } from '../../../constants';
 
 type Props = {
   client: ApolloClient,
+  phaseIdentifier: string,
   section: string,
   thematicId: string,
   debateId: string,
@@ -32,7 +32,16 @@ const loading = <Loader />;
 
 const steps = ['1', '2'];
 
-const DumbSurveyAdminForm = ({ client, section, thematicId, discussionPhaseId, debateId, editLocale, locale }: Props) => {
+const DumbSurveyAdminForm = ({
+  client,
+  phaseIdentifier,
+  section,
+  thematicId,
+  discussionPhaseId,
+  debateId,
+  editLocale,
+  locale
+}: Props) => {
   if (!discussionPhaseId) {
     return loading;
   }
@@ -57,7 +66,12 @@ const DumbSurveyAdminForm = ({ client, section, thematicId, discussionPhaseId, d
               <AdminForm handleSubmit={handleSubmit} pristine={pristine} submitting={submitting}>
                 {section === '1' && <Step1 editLocale={editLocale} locale={locale} discussionPhaseId={discussionPhaseId} />}
                 {section === 'configThematics' && (
-                  <ConfigureThematicForm thematicId={thematicId} editLocale={editLocale} values={values} />
+                  <ConfigureThematicForm
+                    phaseIdentifier={phaseIdentifier}
+                    thematicId={thematicId}
+                    editLocale={editLocale}
+                    values={values}
+                  />
                 )}
                 {section === '2' && <Export debateId={debateId} locale={locale} />}
               </AdminForm>
@@ -67,7 +81,7 @@ const DumbSurveyAdminForm = ({ client, section, thematicId, discussionPhaseId, d
                 steps={steps}
                 currentStep={section}
                 totalSteps={3}
-                phaseIdentifier={PHASES.survey}
+                phaseIdentifier={phaseIdentifier}
                 beforeChangeSection={() => (pristine || submitting) && handleSubmit()}
               />
             )}

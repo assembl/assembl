@@ -857,12 +857,6 @@ const Translations = {
       },
       export: {
         defaultAnnotation: "Vous pouvez exporter l'ensemble des données en cliquant sur le bouton exporter",
-        surveyAnnotation:
-          "Vous pouvez exporter l'ensemble des données du module de questions ouvertes en cliquant sur le bouton Exporter",
-        threadAnnotation: "Vous pouvez exporter l'ensemble des données du module de thread en cliquant sur le bouton Exporter",
-        multicolumnAnnotation:
-          "Vous pouvez exporter l'ensemble des données du module de multi-colonnes en cliquant sur le bouton Exporter",
-        voteSessionAnnotation: "Vous pouvez exporter l'ensemble des données du module de vote en cliquant sur le bouton Exporter",
         taxonomyAnnotation: "Vous pouvez exporter l'ensemble des taxonomies en cliquant sur le bouton exporter",
         link: "Exporter",
         noExportLanguage: "Conserver les messages dans leurs langues d'origine",
@@ -1827,10 +1821,6 @@ const Translations = {
       export: {
         defaultAnnotation: "You can export all of the data by clicking on the export button",
         taxonomyAnnotation: "You can export all of the taxonomies by clicking on the export button",
-        surveyAnnotation: "You can export all the survey module data by clicking on the Export button",
-        threadAnnotation: "You can export all the thread module data by clicking on the Export butotn",
-        multicolumnAnnotation: "You can export all the Multi Column data by clicking on the Export button",
-        voteSessionAnnotation: "You can export all the vote session data by clicking on the Export button",
         link: "Export",
         noExportLanguage: "Keep the messages in their original languages",
         title: "Export the debate data",

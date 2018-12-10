@@ -519,7 +519,7 @@ class VoteSessionAdmin extends React.Component<Props, State> {
         {section === '1' && <PageForm editLocale={editLocale} />}
         {section === '2' && <ModulesSection />}
         {section === '3' && <VoteProposalsSection />}
-        {section === '4' && <ExportSection exportLink={exportLinks} annotation="voteSessionAnnotation" />}
+        {section === '4' && <ExportSection exportLink={exportLinks} />}
         {section && <Navbar currentStep={section} steps={['1', '2', '3', '4']} phaseIdentifier={PHASES.voteSession} />}
       </div>
     );

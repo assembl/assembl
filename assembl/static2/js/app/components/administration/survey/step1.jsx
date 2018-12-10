@@ -27,7 +27,7 @@ const Step1 = ({ discussionPhaseId, editLocale, locale, client }: Props) => {
         name="themes"
         subFieldName="children"
         minItems={1}
-        maxLevel={1}
+        maxLevel={4}
         onRemove={id => removeMenuItem(id, client, queryVariables)}
         onAdd={(id, parentId, index) => addMenuItem(id, parentId, index, client, queryVariables)}
         onUp={(id, parentId, index, targetIndex) => swapMenuItem(id, parentId, index, targetIndex, client, queryVariables)}

@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import { Route, Redirect } from 'react-router';
 import Root from './root';
@@ -30,16 +31,13 @@ import Administration from './pages/administration';
 import UnauthorizedAdministration from './pages/unauthorizedAdministration';
 import ResourcesCenterAdmin from './pages/resourcesCenterAdmin';
 import SurveyAdmin from './pages/surveyAdmin';
-import ThreadAdmin from './pages/threadAdmin';
 import DiscussionAdmin from './pages/discussionAdmin';
-import MultiColumnsAdmin from './pages/multiColumnsAdmin';
 import VoteSessionAdmin from './pages/voteSessionAdmin';
 import ResourcesCenter from './pages/resourcesCenter';
 import LandingPageAdmin from './pages/landingPageAdmin';
 import ExportTaxonomies from './pages/exportTaxonomies';
 import BrightMirror from './pages/brightMirror';
 import BrightMirrorFiction from './pages/brightMirrorFiction'; // eslint-disable-line import/no-named-as-default
-import BrightMirrorAdmin from './pages/brightMirrorAdmin';
 import { routeForRouter } from './utils/routeMap';
 
 // Page that is only used to display converted mockups to static pages
@@ -108,18 +106,14 @@ const DebateChild = (props) => {
   }
 };
 
-const AdminChild = (props) => {
+const AdminChild = (props: {
+  discussionPhaseId: string,
+  location: { query: { section?: string, thematicId?: string } },
+  params: { phase: string }
+}) => {
   switch (props.params.phase) {
   case 'discussion':
     return <DiscussionAdmin {...props} section={props.location.query.section} />;
-  case 'survey':
-    return <SurveyAdmin {...props} thematicId={props.location.query.thematicId} section={props.location.query.section} />;
-  case 'brightMirror':
-    return <BrightMirrorAdmin {...props} />;
-  case 'thread':
-    return <ThreadAdmin {...props} section={props.location.query.section} />;
-  case 'multiColumns':
-    return <MultiColumnsAdmin {...props} section={props.location.query.section} />;
   case 'voteSession':
     return <VoteSessionAdmin {...props} section={props.location.query.section} />;
   case 'resourcesCenter':
@@ -129,7 +123,14 @@ const AdminChild = (props) => {
   case 'exportTaxonomies':
     return <ExportTaxonomies />;
   default:
-    return <ThreadAdmin {...props} />;
+    return (
+      <SurveyAdmin
+        {...props}
+        phaseIdentifier={props.params.phase}
+        thematicId={props.location.query.thematicId}
+        section={props.location.query.section}
+      />
+    );
   }
 };
 
