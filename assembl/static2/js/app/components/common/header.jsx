@@ -10,14 +10,14 @@ import HeaderActions from '../debate/common/headerActions';
 import { type DebateType } from '../debate/navigation/timelineSegment';
 
 type Props = {
-  children: React.Node,
+  children?: React.Node,
   title: string,
-  subtitle: string,
+  subtitle?: string,
   phaseId?: string,
   imgUrl: ?string,
   synthesisTitle?: string,
-  additionalHeaderClasses: string,
-  type: string,
+  additionalHeaderClasses?: string,
+  type?: string,
   debate: DebateType,
   timeline: Timeline
 };
@@ -42,7 +42,7 @@ class Header extends React.Component<Props> {
           <Grid fluid className="max-container">
             <div className="header-content">
               <h1 className={titleClassNames}>{title}</h1>
-              <h3 className="light-title-2">{subtitle}</h3>
+              {subtitle ? <h3 className="light-title-2">{subtitle}</h3> : null}
               {isPhaseCompleted && (
                 <h6 className="light-title-4">
                   <Translate value="debate.survey.endPhase" closedPhaseName={closedPhaseName} />
