@@ -69,6 +69,41 @@ describe('DumbQuestion component', () => {
       ).toBeFalsy();
     });
 
+    it('should create a pending post', async () => {
+      wrapper.setProps({
+        isDebateModerated: true
+      });
+      wrapper.setState({
+        buttonDisabled: false,
+        postBody: createEditorStateWithText('That is the question')
+      });
+
+      await wrapper.instance().createPost();
+      expect(createPostSpy).toHaveBeenCalledWith({
+        variables: {
+          body: '<p>That is the question</p>',
+          contentLocale: 'en',
+          ideaId: 'my-question',
+          publicationState: 'SUBMITTED_AWAITING_MODERATION'
+        }
+      });
+
+      expect(refetchThemeSpy).toHaveBeenCalled();
+      expect(scrollToQuestionSpy).toHaveBeenCalledWith(true, 1);
+      expect(displayAlert).toHaveBeenCalledWith(
+        'success',
+        'Your contribution has been saved. To insure the quality of the debate, ' +
+          'it will be visible to all participants once it has been reviewed by the animation team.'
+      );
+      expect(wrapper.state('buttonDisabled')).toBeFalsy();
+      expect(
+        wrapper
+          .state('postBody')
+          .getCurrentContent()
+          .hasText()
+      ).toBeFalsy();
+    });
+
     it('should handle server errors', async (done) => {
       const createPostRejectedSpy = jest.fn(() => Promise.reject(new Error('An error occured')));
       wrapper.setProps({
