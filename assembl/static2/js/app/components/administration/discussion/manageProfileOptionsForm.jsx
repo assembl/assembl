@@ -121,7 +121,7 @@ const ManageProfileOptionsForm = ({
       <div className="intro-text">
         <Translate value="administration.profileOptions.toggleLegalContentIntro" />
       </div>
-      <div className="legal-content-section form-container">
+      <div className="form-container padding">
         <Checkbox className="textfield-checkbox">
           <Translate value="administration.profileOptions.LegalContentButton" />
         </Checkbox>
