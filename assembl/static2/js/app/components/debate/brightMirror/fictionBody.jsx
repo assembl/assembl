@@ -5,7 +5,7 @@ import SideCommentMenu from './sideComment/sideCommentMenu';
 import FictionBodyToolbar from './fictionBodyToolbar';
 import { elementContainsSelection, getConnectedUserId } from '../../../utils/globalFunctions';
 import PostBody from '../common/post/postBody';
-import { COMMENT_DYNAMIC_OFFSET, ANCHOR_OFFSET } from '../../../constants';
+import { COMMENT_DYNAMIC_OFFSET, ANCHOR_OFFSET, SENTIMENT_BAR_TOP_POSITION_OFFSET } from '../../../constants';
 import { getExtractTagId } from '../../../utils/extract';
 
 export type Props = {
@@ -68,7 +68,7 @@ class FictionBody extends React.Component<Props, State> {
     const body = document.getElementById(getExtractTagId(dbId)).getBoundingClientRect();
     this.setState({
       commentBadgeFixedPosition: { x: body.right, y: body.top + window.pageYOffset },
-      commentSentimentFixedPosition: { x: body.left, y: body.top + window.pageYOffset },
+      commentSentimentFixedPosition: { x: body.left, y: body.top + window.pageYOffset - SENTIMENT_BAR_TOP_POSITION_OFFSET },
       commentBadgePositionInit: true
     });
   };
@@ -85,7 +85,7 @@ class FictionBody extends React.Component<Props, State> {
       const elementRect = extractElement.getBoundingClientRect();
       const absoluteElementTop = elementRect.top + window.pageYOffset;
       scrollPosition = absoluteElementTop - window.innerHeight / 5;
-      window.scrollTo(0, scrollPosition);
+      window.scrollTo({ top: scrollPosition, behavior: 'smooth' });
       nextPositionY = extractElement.getBoundingClientRect().top - fictionBodyRefCur.getBoundingClientRect().top;
     } else {
       // Extract not found, maybe has been deleted or rewritten
@@ -96,7 +96,7 @@ class FictionBody extends React.Component<Props, State> {
           ? bodyElement.getBoundingClientRect().top - fictionBodyRefCur.getBoundingClientRect().top
           : 0;
       // Scroll extract in top section of page
-      window.scrollTo(0, window.innerHeight / 5);
+      window.scrollTo({ top: window.innerHeight / 5, behavior: 'smooth' });
     }
     this.setState({
       commentBadgeDynamicPosition: {
@@ -149,7 +149,7 @@ class FictionBody extends React.Component<Props, State> {
     const { displayCommentAnchor, displaySubmitBox, commentAnchorPosition } = this.state;
     // Scroll side box in top section of page
     const scrollPosition = commentAnchorPosition.y + window.innerHeight / 3;
-    window.scrollTo(0, scrollPosition);
+    window.scrollTo({ top: scrollPosition, behavior: 'smooth' });
     this.setState({
       displayCommentAnchor: !displayCommentAnchor,
       displaySubmitBox: !displaySubmitBox,
@@ -195,16 +195,13 @@ class FictionBody extends React.Component<Props, State> {
       commentSentimentFixedPosition
     } = this.state;
 
-    // Filter extract by lang
-    const filteredExtracts = extracts && extracts.filter(extract => extract.lang === contentLocale);
-
     return (
       <div ref={this.fictionBodyView}>
         <SideCommentMenu
           postId={postId}
           ideaId={ideaId}
           lang={contentLocale}
-          extracts={filteredExtracts}
+          extracts={extracts}
           commentAnchorPosition={commentAnchorPosition}
           badgeDynamicPosition={commentBadgeDynamicPosition}
           badgeFixedPosition={commentBadgeFixedPosition}
@@ -230,7 +227,7 @@ class FictionBody extends React.Component<Props, State> {
           handleMouseUpWhileHarvesting={this.handleMouseUpWhileHarvesting}
           body={content || noContentMessage}
           dbId={dbId}
-          extracts={filteredExtracts}
+          extracts={extracts}
           bodyMimeType={bodyMimeType}
           contentLocale={contentLocale}
           id={postId}

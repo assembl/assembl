@@ -451,6 +451,16 @@ class DumbSideCommentBox extends React.Component<Props, State> {
     );
   };
 
+  getParticipantsCount = (): number => {
+    const { extracts } = this.props;
+    const participantsIds = extracts.reduce((result, extract) => {
+      const id = extract.creator && extract.creator.id;
+      if (!result.includes(id)) result.push(id);
+      return result;
+    }, []);
+    return participantsIds.length;
+  };
+
   getCommentView = () => {
     const { contentLocale, extracts, cancelSubmit } = this.props;
     const { submitting, extractIndex, body, editComment } = this.state;
@@ -569,7 +579,11 @@ class DumbSideCommentBox extends React.Component<Props, State> {
         >
           {!submitting && (
             <div className="extracts-nb-msg">
-              <Translate value="debate.brightMirror.sideComment.commentersParticipation" count={extracts.length} />
+              {extracts.length === 1 ? (
+                <Translate value="debate.brightMirror.sideComment.commenterSingleParticipation" />
+              ) : (
+                <Translate value="debate.brightMirror.sideComment.commentersParticipation" count={this.getParticipantsCount()} />
+              )}
             </div>
           )}
           {commentView}

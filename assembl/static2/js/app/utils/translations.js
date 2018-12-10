@@ -464,8 +464,9 @@ const Translations = {
           title: "Quels sujets sont abordés dans cette fiction ?"
         },
         sideComment: {
-          commentersParticipation: "%{count} participants ont commenté un extrait.",
-          commentersParticipation_1: "%{count} participant a commenté un extrait.",
+          commenterSingleParticipation: "1 participant a commenté un extrait.",
+          commentersParticipation: "%{count} participants ont commenté des extraits.",
+          commentersParticipation_1: "%{count} participant a commenté des extraits.",
           commentLabel: "Votre commentaire",
           submitSuccessMsg: "Votre commentaire a été publié avec succès !",
           editSuccessMsg: "Votre commentaire a été édité avec succès !",
@@ -1429,8 +1430,9 @@ const Translations = {
           title: "What are the topics of the fiction?"
         },
         sideComment: {
-          commentersParticipation: "%{count} participants commented a quote.",
-          commentersParticipation_1: "%{count} participant commented a quote.",
+          commenterSingleParticipation: "1 participant commented a quote.",
+          commentersParticipation: "%{count} participants commented quotes.",
+          commentersParticipation_1: "%{count} participant commented quotes.",
           commentLabel: "Your comment",
           submitSuccessMsg: "Your comment has been published successfully!",
           editSuccessMsg: "Your comment has been edited successfully!",

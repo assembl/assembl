@@ -103,7 +103,7 @@
       }
 
       .extract-body {
-        width: 225px;
+        min-width: 210px;
         margin: 0 10px 10px;
       }
 
@@ -166,7 +166,7 @@
 
       .body-container {
         .extract-body {
-          width: 200px;
+          min-width: 220px;
         }
 
         .previous-extract,

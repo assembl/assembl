@@ -10,7 +10,7 @@ exports[`<FictionBody /> - snapshots should match snapshot 1`] = `
     style={
       Object {
         "left": "-15px",
-        "top": "5px",
+        "top": "-78px",
       }
     }
   >
@@ -273,7 +273,7 @@ exports[`<FictionBody /> - snapshots should match snapshot no title nor content 
     style={
       Object {
         "left": "-15px",
-        "top": "5px",
+        "top": "-78px",
       }
     }
   >

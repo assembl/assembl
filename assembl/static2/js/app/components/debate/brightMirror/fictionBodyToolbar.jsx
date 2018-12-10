@@ -4,7 +4,7 @@ import get from 'lodash/get';
 import { OverlayTrigger } from 'react-bootstrap';
 import { Translate, I18n } from 'react-redux-i18n';
 // Constant imports
-import { MEDIUM_SCREEN_WIDTH, SENTIMENT_TOP_OFFSET, SENTIMENT_RIGHT_OFFSET } from '../../../constants';
+import { MEDIUM_SCREEN_WIDTH, SENTIMENT_RIGHT_OFFSET } from '../../../constants';
 import { commentHelperButtonTooltip } from '../../common/tooltips';
 // Component imports
 import Sentiments from '../common/sentiments';
@@ -36,7 +36,6 @@ const FictionBodyToolbar = ({ postId, mySentiment, screenWidth, position, sentim
 
   const bodyContent = (
     <Fragment>
-      <img className="modal-comment-helper-gif" src="/static2/img/comment-helper.gif" alt="comment-helper.gif" />
       <div className="text-left modal-comment-helper-content">
         <p>{I18n.t('debate.brightMirror.commentFiction.modal.instructionList')}</p>
         <ol>
@@ -45,6 +44,7 @@ const FictionBodyToolbar = ({ postId, mySentiment, screenWidth, position, sentim
           <li>{I18n.t('debate.brightMirror.commentFiction.modal.instructionListThree')}</li>
         </ol>
       </div>
+      <img className="modal-comment-helper-gif" src="/static2/img/comment-helper.gif" alt="comment-helper.gif" />
     </Fragment>
   );
 
@@ -67,7 +67,7 @@ const FictionBodyToolbar = ({ postId, mySentiment, screenWidth, position, sentim
     <div
       className="body-toolbar-container hidden-xs hidden-sm hidden-md"
       style={{
-        top: `${position ? position.y + SENTIMENT_TOP_OFFSET : 0}px`,
+        top: `${position ? position.y : 0}px`,
         left: `${position ? position.x / 2 - SENTIMENT_RIGHT_OFFSET : 0}px`
       }}
     >

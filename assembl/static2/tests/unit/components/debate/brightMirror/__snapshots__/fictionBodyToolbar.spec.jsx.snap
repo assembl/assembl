@@ -15,7 +15,7 @@ exports[`Storyshots FictionBodyToolbar default 1`] = `
       style={
         Object {
           "left": "35px",
-          "top": "5px",
+          "top": "0px",
         }
       }
     >
@@ -877,7 +877,7 @@ exports[`Storyshots FictionBodyToolbar playground 1`] = `
       style={
         Object {
           "left": "35px",
-          "top": "5px",
+          "top": "0px",
         }
       }
     >

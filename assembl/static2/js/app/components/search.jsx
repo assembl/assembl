@@ -173,8 +173,7 @@ if (v1Interface) {
   };
 }
 
-const PublishedInfo = (props) => {
-  const { date, publishedOnMsgId, userId, userName, relatedIdeasTitles } = props;
+const PublishedInfo = ({ date, publishedOnMsgId, userId, userName, relatedIdeasTitles, ideaUrl, onLinkClick }) => {
   const hasRelatedIdeasTitles = relatedIdeasTitles && relatedIdeasTitles.length > 0;
   return (
     <React.Fragment>
@@ -182,7 +181,11 @@ const PublishedInfo = (props) => {
       <TagFilter key={userId} field="creator_id" value={userId}>
         <ProfileLine userId={userId} userName={userName} />
       </TagFilter>
-      {hasRelatedIdeasTitles ? <RelatedIdeas relatedIdeasTitles={relatedIdeasTitles} /> : null}
+      {hasRelatedIdeasTitles ? (
+        <Link to={ideaUrl} onClick={onLinkClick}>
+          <RelatedIdeas relatedIdeasTitles={relatedIdeasTitles} />
+        </Link>
+      ) : null}
     </React.Fragment>
   );
 };
@@ -270,12 +273,14 @@ const PostHit = ({ bemBlocks, collapseSearch, locale, result }) => {
   const body = highlightedLSOrTruncatedLS(result, 'body', locale);
   const published = {};
   const ideaTitle = highlightedLSOrTruncatedLS(result, 'idea_title', locale);
+  const postUrl = getUrl(result);
+  const ideaUrl = postUrl.slice(0, postUrl.indexOf('#'));
   return (
     <BaseHit
       bemBlocks={bemBlocks}
       imageType={result._type}
       title={subject}
-      url={getUrl(result)}
+      url={postUrl}
       onLinkClick={collapseSearch}
       published={published}
       renderBody={() => (
@@ -299,6 +304,8 @@ const PostHit = ({ bemBlocks, collapseSearch, locale, result }) => {
           userId={source.creator_id}
           userName={source.creator_name}
           relatedIdeasTitles={[ideaTitle]}
+          ideaUrl={ideaUrl}
+          onLinkClick={collapseSearch}
         />
       )}
     />
@@ -316,12 +323,14 @@ const DumbExtractHit = ({ bemBlocks, collapseSearch, isHarvesting, locale, toggl
     collapseSearch();
   };
   const ideaTitle = highlightedLSOrTruncatedLS(result, 'idea_title', locale);
+  const extractUrl = getUrl(result);
+  const ideaUrl = extractUrl.slice(0, extractUrl.indexOf('#'));
   return (
     <BaseHit
       bemBlocks={bemBlocks}
       imageType={result._type}
       title={subject}
-      url={getUrl(result)}
+      url={extractUrl}
       onLinkClick={onLinkClick}
       renderBody={() => <div dangerouslySetInnerHTML={{ __html: body }} />}
       renderFooter={() => (
@@ -331,6 +340,8 @@ const DumbExtractHit = ({ bemBlocks, collapseSearch, isHarvesting, locale, toggl
           userName={source.creator_name}
           publishedOnMsgId="search.harvested_on"
           relatedIdeasTitles={[ideaTitle]}
+          ideaUrl={ideaUrl}
+          onLinkClick={onLinkClick}
         />
       )}
     />

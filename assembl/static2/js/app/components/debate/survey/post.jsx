@@ -226,7 +226,7 @@ class Post extends React.Component<Props> {
       creatorName = isDeleted ? I18n.t('deletedUser') : displayName;
     }
 
-    const deleteButton = <DeletePostButton postId={post.id} refetchQueries={refetchQueries} linkClassName="overflow-action" />;
+    const deleteButton = <DeletePostButton postId={post.id} refetchQueries={refetchQueries} linkClassName="action-delete" />;
 
     return (
       <div className="shown box" id={post.id}>
