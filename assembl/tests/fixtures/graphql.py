@@ -468,8 +468,8 @@ def proposals(graphql_request, thematic_and_question):
     from assembl.models import PublicationStates
     thematic_id, first_question_id = thematic_and_question
     proposals = []
-    for idx in range(20):
-        if idx > 15:
+    for idx in range(16):
+        if idx >= 10:
             publication_state = PublicationStates.SUBMITTED_AWAITING_MODERATION.value
         else:
             publication_state = PublicationStates.PUBLISHED.value
