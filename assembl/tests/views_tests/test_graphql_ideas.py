@@ -686,12 +686,17 @@ query Question($lang: String!, $id: ID!) {
       id
       parent {
         ... on IdeaInterface {
-          id
           title(lang: $lang)
           img {
             externalUrl
             mimeType
           }
+        }
+        ... on Idea {
+          id
+        }
+        ... on Thematic {
+          id
         }
       }
     }
@@ -702,9 +707,10 @@ query Question($lang: String!, $id: ID!) {
         "lang": "en"
     })
 
+    assert res.errors is None
     assert json.loads(json.dumps(res.data)) == {
         u'question': {
-            u'thematic': {
+            u'parent': {
                 u'id': thematic_and_question[0],
                 u'img': None,
                 u'title': u'Understanding the dynamics and issues'

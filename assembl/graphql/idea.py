@@ -452,6 +452,7 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
         isModerating=graphene.Boolean(),
         description=docs.Question.posts)
     total_sentiments = graphene.Int(required=True, description=docs.Question.total_sentiments)
+    parent = graphene.Field(lambda: IdeaUnion, description=docs.Idea.parent)
     has_pending_posts = graphene.Boolean(description=docs.Question.has_pending_posts)
 
     def resolve_title(self, args, context, info):
@@ -562,6 +563,12 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
 
     def resolve_total_sentiments(self, args, context, info):
         return self.get_total_sentiments()
+
+    def resolve_parent(self, args, context, info):
+        if not self.parents:
+            return None
+
+        return self.parents[0]
 
     def resolve_has_pending_posts(self, args, context, info):
         Post = models.Post

@@ -8,12 +8,17 @@ query Question($lang: String!, $id: ID!) {
       totalSentiments
       parent {
         ... on IdeaInterface {
-          id
           title(lang: $lang)
           img {
             externalUrl
             mimeType
           }
+        }
+        ... on Idea {
+          id
+        }
+        ... on Thematic {
+          id
         }
       }
     }
