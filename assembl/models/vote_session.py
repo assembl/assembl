@@ -13,6 +13,7 @@ from .langstrings import LangString
 from .langstrings_helpers import langstrings_base
 from .timeline import DiscussionPhase
 from .widgets import VotingWidget
+from .idea import Idea
 
 langstrings_names = [
     "title",
@@ -55,6 +56,9 @@ class VoteSession(
             cascade="all, delete-orphan"
         ),
     )
+    idea_id = Column(Integer, ForeignKey(Idea.id), nullable=False)
+
+    idea = relationship(Idea, backref=backref("vote_session", single_parent=True, uselist=False, cascade="all, delete-orphan"),)
 
     see_current_votes = Column(
         Boolean,

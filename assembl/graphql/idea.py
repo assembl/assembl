@@ -83,6 +83,11 @@ class IdeaInterface(graphene.Interface):
     def resolve_title(self, args, context, info):
         return resolve_langstring(self.title, args.get('lang'))
 
+    def resolve_parent(self, args, context, info):
+        if not self.parents:
+            return None
+        return self.parents[0]
+
     def resolve_title_entries(self, args, context, info):
         return resolve_langstring_entries(self, 'title')
 

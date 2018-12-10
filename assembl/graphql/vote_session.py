@@ -26,30 +26,6 @@ from .utils import (
 import assembl.graphql.docstrings as docs
 
 langstrings_defs = {
-    "title": {
-        "documentation": {
-            "base": docs.VoteSession.title,
-            "entries": docs.VoteSession.title_entries
-        }
-    },
-    "sub_title": {
-        "documentation": {
-            "base": docs.VoteSession.sub_title,
-            "entries": docs.VoteSession.sub_title_entries
-        }
-    },
-    "instructions_section_title": {
-        "documentation": {
-            "base": docs.VoteSession.instructions_section_title,
-            "entries": docs.VoteSession.instructions_section_title_entries
-        }
-    },
-    "instructions_section_content": {
-        "documentation": {
-            "base": docs.VoteSession.instructions_section_content,
-            "entries": docs.VoteSession.instructions_section_content_entries
-        }
-    },
     "propositions_section_title": {
         "documentation": {
             "base": docs.VoteSession.propositions_section_title,
@@ -65,7 +41,7 @@ class VoteSession(SecureObjectType, SQLAlchemyObjectType):
     class Meta:
         model = models.VoteSession
         interfaces = (Node, langstrings_interface(langstrings_defs, models.VoteSession.__name__))
-        only_fields = ('id', 'discussion_phase_id')
+        only_fields = ('id',)
 
     header_image = graphene.Field(Document, description=docs.VoteSession.header_image)
     vote_specifications = graphene.List(lambda: VoteSpecificationUnion, required=True, description=docs.VoteSession.header_image)
@@ -94,7 +70,6 @@ class UpdateVoteSession(graphene.Mutation):
     __doc__ = docs.UpdateVoteSession.__doc__
 
     class Input:
-        discussion_phase_id = graphene.Int(required=True, description=docs.UpdateVoteSession.discussion_phase_id)
         header_image = graphene.String(description=docs.UpdateVoteSession.header_image)
         see_current_votes = graphene.Boolean(description=docs.UpdateVoteSession.see_current_votes)
 
@@ -105,23 +80,23 @@ class UpdateVoteSession(graphene.Mutation):
     @staticmethod
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
-        discussion_phase_id = args.get('discussion_phase_id')
-        discussion_phase = models.DiscussionPhase.get(discussion_phase_id)
+        idea_id = args.get('idea_id')
+        idea = models.Idea.get(idea_id)
         discussion_id = context.matchdict["discussion_id"]
         discussion = models.Discussion.get(discussion_id)
 
-        if discussion_phase is None:
+        if idea is None:
             raise Exception(
-                "A vote session requires a discussion phase, check discussionPhaseId value")
+                "A vote session requires an idea associated to it, check ideaId value")
         phase_identifier = "voteSession"
-        if discussion_phase.identifier != phase_identifier:
+        if idea.get_associated_phase() != phase_identifier:
             raise Exception(
                 "A vote session can only be created or edited with a '{}' discussion phase, check discussionPhaseId value".format(phase_identifier))
-
-        vote_session = discussion_phase.vote_session
+        db = idea.db
+        vote_session = db.query(models.VoteSession).filter(models.VoteSession.idea_id == idea_id).first()
         if vote_session is None:
             require_cls_permission(CrudPermissions.CREATE, models.VoteSession, context)
-            vote_session = models.VoteSession(discussion=discussion, discussion_phase=discussion_phase)
+            vote_session = models.VoteSession(discussion=discussion, idea=idea)
         else:
             require_instance_permission(CrudPermissions.UPDATE, vote_session, context)
 
@@ -162,9 +137,9 @@ class UpdateVoteSession(graphene.Mutation):
         db.add(vote_session)
 
         # create the root thematic on which we will attach all proposals for this vote session
-        root_thematic = get_root_thematic_for_phase(discussion_phase)
+        root_thematic = get_root_thematic_for_phase(idea.get_associated_phase())
         if root_thematic is None:
-            root_thematic = create_root_thematic(discussion_phase)
+            root_thematic = create_root_thematic(idea.get_associated_phase())
 
         db.flush()
         return UpdateVoteSession(vote_session=vote_session)

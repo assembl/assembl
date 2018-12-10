@@ -20,42 +20,52 @@ from assembl.lib import config
 
 def upgrade(pyramid_env):
     with context.begin_transaction():
-        op.drop_column('thematic', "video_description_side_id")
+    	# op.drop_table('thematic')
+        # op.drop_column('thematic', "video_description_side_id")
         op.add_column('announce', sa.Column('quote_id',
             sa.Integer, sa.ForeignKey('langstring.id'))
         )
+        op.drop_column("vote_session", "title")
+        op.drop_column("vote_session", "sub_title")
+        op.drop_column("vote_session", "instructions_section_title")
+        op.drop_column("vote_session", "instructions_section_content")
+        op.drop_column("vote_session", "discussion_phase_id")
+        op.add_column("vote_session", sa.Column('idea_id', sa.Integer, sa.ForeignKey(m.Idea.id), nullable=False))
 
     # Do stuff with the app's models here.
-    from assembl import models as m
-    db = m.get_session_maker()()
-    with transaction.manager:
-        thematics = db.query(m.Thematic).all()
-        announcements = db.query(m.IdeaAnnouncement)
-        for thematic in thematics:
-        	thematic.sqla_type = 'idea'
-        	thematic_announcement = announcements.filter(m.IdeaAnnouncement.idea_id==thematic.id).first()
-        	if thematic_announcement:
-        		thematic_announcement.quote_id = thematic.video_description_side_id
-
-    with context.begin_transaction():
-    	op.drop_table('thematic')
+    # from assembl import models as m
+    # db = m.get_session_maker()()
+    # with transaction.manager:
+    #     thematics = db.query(m.Thematic).all()
+    #     announcements = db.query(m.IdeaAnnouncement)
+    #     for thematic in thematics:
+    #     	thematic.sqla_type = 'idea'
+        	# thematic_announcement = announcements.filter(m.IdeaAnnouncement.idea_id==thematic.id).first()
+        	# if thematic_announcement:
+        	# 	thematic_announcement.quote_id = thematic.video_description_side_id
 
 
 def downgrade(pyramid_env):
+	from assembl import models as m
     with context.begin_transaction():
-		op.create_table(
-            'thematic',
-            sa.Column('id', sa.Integer, sa.ForeignKey(
-                'idea.id'), primary_key=True),
-            sa.Column('title_id', sa.Integer,
-                sa.ForeignKey('langstring.id'), nullable=False),
-            sa.Column('description_id', sa.Integer,
-                sa.ForeignKey('langstring.id')),
-            sa.Column('video_title_id', sa.Integer,
-                sa.ForeignKey('langstring.id')),
-            sa.Column('video_description_id', sa.Integer,
-                sa.ForeignKey('langstring.id')),
-            sa.Column('video_html_code', sa.UnicodeText),
-            sa.Column('identifier', sa.String(60))
-        )
+		# op.create_table(
+  #           'thematic',
+  #           sa.Column('id', sa.Integer, sa.ForeignKey(
+  #               'idea.id'), primary_key=True),
+  #           sa.Column('title_id', sa.Integer,
+  #               sa.ForeignKey('langstring.id'), nullable=False),
+  #           sa.Column('description_id', sa.Integer,
+  #               sa.ForeignKey('langstring.id')),
+  #           sa.Column('video_title_id', sa.Integer,
+  #               sa.ForeignKey('langstring.id')),
+  #           sa.Column('video_description_id', sa.Integer,
+  #               sa.ForeignKey('langstring.id')),
+  #           sa.Column('video_html_code', sa.UnicodeText),
+  #           sa.Column('identifier', sa.String(60))
+  #       )
         op.drop_column('announce', 'quote_id')
+        op.add_column('vote_session', sa.Column('discussion_phase_id', sa.Integer, sa.ForeignKey('discussion_phase.id')))
+        op.add_column('vote_session', sa.Column('title_id', sa.Integer, sa.ForeignKey(m.LangString.id), nullable=True))
+        op.add_column('vote_session', sa.Column('sub_title_id', sa.Integer, sa.ForeignKey(m.LangString.id), nullable=True))
+        op.add_column('vote_session', sa.Column('instructions_section_title_id', sa.Integer, sa.ForeignKey(m.LangString.id), nullable=True))
+        op.add_column('vote_session', sa.Column('instruction_sections_content', sa.Integer, sa.ForeignKey(m.LangString.id), nullable=True))

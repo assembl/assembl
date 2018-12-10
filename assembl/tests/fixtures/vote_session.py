@@ -6,16 +6,12 @@ from graphql_relay.node.node import to_global_id
 
 @pytest.fixture(scope="function")
 def vote_session(request, test_session, discussion, timeline_vote_session,
-                 simple_file, admin_user):
+                 simple_file, admin_user, subidea_1_1):
     from assembl.graphql.utils import create_root_thematic
     from assembl.models import VoteSession, VoteSessionAttachment, LangString
     vote_session = VoteSession(
         discussion=discussion,
-        discussion_phase=timeline_vote_session,
-        title=LangString.create(u"vote session fixture", "en"),
-        sub_title=LangString.create(u"vote session sub title fixture", "en"),
-        instructions_section_title=LangString.create(u"vote session instructions title fixture", "en"),
-        instructions_section_content=LangString.create(u"vote session instructions fixture. Lorem ipsum dolor sit amet", "en"),
+        idea = subidea_1_1,
         propositions_section_title=LangString.create(u"vote session propositions section title fixture", "en")
     )
     attachment = VoteSessionAttachment(

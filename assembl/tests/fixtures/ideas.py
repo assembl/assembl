@@ -71,13 +71,18 @@ def announcement_en_fr(request, discussion, en_locale,
                    locale=fr_locale,
                    value=u"Corps d'announce en français",
                    locale_confirmed=True))
-
+    quote = LangString.create(u'A quote in English', 'en')
+    quote.add_entry(LangStringEntry(
+                    locale=fr_locale,
+                    value=u"Une quote en français",
+                    locale_confirmed=True))
     announce = IdeaAnnouncement(creator=admin_user,
                                 last_updated_by=admin_user,
                                 title=title,
                                 body=body,
                                 discussion=discussion,
-                                idea=idea_with_en_fr)
+                                idea=idea_with_en_fr,
+                                quote=quote)
 
     test_session.add(title)
     test_session.add(body)

@@ -52,24 +52,20 @@ def assert_vote_session_not_created(discussion_phase_id, graphql_request, graphq
     assert response.data['voteSession'] is None
 
 
-def mutate_and_assert_unauthorized(graphql_request, discussion_phase_id, graphql_registry):
-    new_title = u"updated vote session title"
+def mutate_and_assert_unauthorized(graphql_request, idea_id, graphql_registry):
+    new_propositions_section_title = u"updated vote session propositions section title"
     response = schema.execute(
         graphql_registry['updateVoteSession'],
         context_value=graphql_request,
         variable_values={
-            "discussionPhaseId": discussion_phase_id,
-            "titleEntries": en_entry(new_title)
+            "ideaId": idea_id,
+            "propositionsSectionTitleEntries": en_entry(new_propositions_section_title)
         }
     )
     assert_graphql_unauthorized(response)
 
 
-def mutate_and_assert(graphql_request, discussion_phase_id, test_app, graphql_registry):
-    new_title = u"updated vote session title"
-    new_sub_title = u"updated vote session sub title"
-    new_instructions_section_title = u"updated vote session instructions title"
-    new_instructions_section_content = u"updated vote session instructions content"
+def mutate_and_assert(graphql_request, idea_id, test_app, graphql_registry):
     new_propositions_section_title = u"updated vote session propositions section title"
 
     class FieldStorage(object):
@@ -89,11 +85,7 @@ def mutate_and_assert(graphql_request, discussion_phase_id, test_app, graphql_re
         graphql_registry['updateVoteSession'],
         context_value=graphql_request,
         variable_values={
-            "discussionPhaseId": discussion_phase_id,
-            "titleEntries": en_entry(new_title),
-            "subTitleEntries": en_entry(new_sub_title),
-            "instructionsSectionTitleEntries": en_entry(new_instructions_section_title),
-            "instructionsSectionContentEntries": en_entry(new_instructions_section_content),
+            "ideaId": idea_id,
             "propositionsSectionTitleEntries": en_entry(new_propositions_section_title),
             "headerImage": image_var_name,
             "seeCurrentVotes": True
@@ -103,10 +95,6 @@ def mutate_and_assert(graphql_request, discussion_phase_id, test_app, graphql_re
     assert response.errors is None
     graphql_vote_session = response.data['updateVoteSession']['voteSession']
 
-    assert graphql_en_value(graphql_vote_session['titleEntries']) == new_title
-    assert graphql_en_value(graphql_vote_session['subTitleEntries']) == new_sub_title
-    assert graphql_en_value(graphql_vote_session['instructionsSectionTitleEntries']) == new_instructions_section_title
-    assert graphql_en_value(graphql_vote_session['instructionsSectionContentEntries']) == new_instructions_section_content
     assert graphql_en_value(graphql_vote_session['propositionsSectionTitleEntries']) == new_propositions_section_title
     assert graphql_vote_session['seeCurrentVotes'] == True
 
@@ -118,9 +106,9 @@ def mutate_and_assert(graphql_request, discussion_phase_id, test_app, graphql_re
     assert graphql_image_data == new_image_data
 
 
-def vote_session_from_phase(discussion_phase_id):
-    discussion_phase = models.DiscussionPhase.get(discussion_phase_id)
-    return discussion_phase.vote_session
+def vote_session_from_idea(idea_id):
+    idea = models.Idea.get(idea_id)
+    return idea.vote_session
 
 
 def image_from_vote_session(vote_session):
@@ -139,8 +127,8 @@ def delete_vote_session(vote_session):
 
 
 def test_graphql_update_vote_session(graphql_request, vote_session, test_app, graphql_registry):
-    mutate_and_assert(graphql_request, vote_session.discussion_phase_id, test_app, graphql_registry)
-    root_thematic = get_root_thematic_for_phase(vote_session.discussion_phase)
+    mutate_and_assert(graphql_request, vote_session.idea_id, test_app, graphql_registry)
+    root_thematic = get_root_thematic_for_phase(vote_session.idea)
     assert root_thematic is not None
 
 
@@ -178,7 +166,7 @@ def test_graphql_get_vote_session(graphql_participant1_request, vote_session, gr
         graphql_registry['VoteSession'],
         context_value=graphql_participant1_request,
         variable_values={
-            "discussionPhaseId": vote_session.discussion_phase_id,
+            "ideaId": vote_session.idea_id,
             "lang": "en"
         }
     )
@@ -188,10 +176,6 @@ def test_graphql_get_vote_session(graphql_participant1_request, vote_session, gr
 
     assert_langstrings_are_equal(
         [
-            "title",
-            "sub_title",
-            "instructions_section_title",
-            "instructions_section_content",
             "propositions_section_title"
         ],
         graphql_vote_session,
@@ -209,7 +193,7 @@ def test_graphql_get_vote_session_unauthenticated(graphql_unauthenticated_reques
         graphql_registry['VoteSession'],
         context_value=graphql_unauthenticated_request,
         variable_values={
-            "discussionPhaseId": vote_session.discussion_phase_id,
+            "ideaId": vote_session.idea_id,
             "lang": "en"
         }
     )
@@ -401,7 +385,8 @@ def test_graphql_get_vote_session_and_vote_specifications(graphql_participant1_r
         graphql_registry['VoteSession'],
         context_value=graphql_participant1_request,
         variable_values={
-            "discussionPhaseId": vote_session.discussion_phase_id, "lang": "en"
+            "ideaId": vote_session.idea_id, 
+            "lang": "en"
         }
     )
     assert response.errors is None

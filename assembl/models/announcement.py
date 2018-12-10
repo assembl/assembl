@@ -116,7 +116,7 @@ class Announcement(DiscussionBoundBase):
 
 
 LangString.setup_ownership_load_event(
-    Announcement, ['title', 'body'])
+    Announcement, ['title', 'body', 'quote'])
 
 
 class IdeaAnnouncement(Announcement):
