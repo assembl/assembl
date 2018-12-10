@@ -31,12 +31,12 @@ type Props = {
 
 type State = {
   showModal: boolean,
-  modalIsChecked: boolean
+  modalCheckboxIsChecked: boolean
 };
 
 export class DumbAcceptCookiesModal extends React.PureComponent<Props, State> {
   state = {
-    modalIsChecked: false,
+    modalCheckboxIsChecked: false,
     showModal: false
   };
 
@@ -46,25 +46,25 @@ export class DumbAcceptCookiesModal extends React.PureComponent<Props, State> {
 
   showModal = () => {
     const { userId, pathname, acceptedLegalContentsList } = this.props;
-    const lastRouteString = getRouteLastString(pathname);
-    const isOnLegalContentPage = legalContentSlugs.includes(lastRouteString);
-    let userHasAcceptedAllLegalContents;
-    // This array gathers all the legal contents to accept by their 'ACCEPT_...' formatted name
-    const legalContentsToAcceptByCookieName = this.getLegalContentsToAccept();
     if (userId) {
-      userHasAcceptedAllLegalContents = legalContentsToAcceptByCookieName.every(legalContent =>
+      const lastRouteString = getRouteLastString(pathname);
+      const isOnLegalContentPage = legalContentSlugs.includes(lastRouteString);
+      // This array gathers all the legal contents to accept by their 'ACCEPT_...' formatted name
+      const legalContentsToAcceptByCookieName = this.getLegalContentsToAccept();
+
+      const userHasAcceptedAllLegalContents = legalContentsToAcceptByCookieName.every(legalContent =>
         acceptedLegalContentsList.includes(legalContent)
       );
-    }
-    // The modal is only showed to a user who is connected but hasn't yet accepted legal contents and isn't currently reading them
-    if (!isOnLegalContentPage && !userHasAcceptedAllLegalContents && userId) {
-      this.setState({ showModal: true });
+      // The modal is only showed to a user who is connected but hasn't yet accepted legal contents and isn't currently reading them
+      if (!isOnLegalContentPage && !userHasAcceptedAllLegalContents) {
+        this.setState({ showModal: true });
+      }
     }
   };
 
   handleModalCheckbox = () => {
     this.setState(prevState => ({
-      modalIsChecked: !prevState.modalIsChecked
+      modalCheckboxIsChecked: !prevState.modalCheckboxIsChecked
     }));
   };
 
@@ -92,7 +92,7 @@ export class DumbAcceptCookiesModal extends React.PureComponent<Props, State> {
 
   render() {
     const { hasTermsAndConditions, hasPrivacyPolicy, hasUserGuidelines } = this.props;
-    const { showModal, modalIsChecked } = this.state;
+    const { showModal, modalCheckboxIsChecked } = this.state;
     const slug = getDiscussionSlug();
     const legalContentsToAcceptByRouteName = {
       terms: hasTermsAndConditions,
@@ -114,7 +114,7 @@ export class DumbAcceptCookiesModal extends React.PureComponent<Props, State> {
         </Modal.Header>
         <Modal.Body>
           <FormGroup className="justify">
-            <Checkbox onChange={this.handleModalCheckbox} checked={modalIsChecked} type="checkbox" inline>
+            <Checkbox onChange={this.handleModalCheckbox} checked={modalCheckboxIsChecked} type="checkbox" inline>
               <Translate value="legalContentsModal.iAccept" /> {/* $FlowFixMe */}
               <LegalContentsLinksList legalContentsList={cleanLegalContentsArray} />
             </Checkbox>
@@ -130,7 +130,7 @@ export class DumbAcceptCookiesModal extends React.PureComponent<Props, State> {
             <Translate value="refuse" />
           </Button>
           <Button
-            disabled={!modalIsChecked}
+            disabled={!modalCheckboxIsChecked}
             key="accept"
             className="button-submit button-dark"
             onClick={() => {

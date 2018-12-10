@@ -46,13 +46,13 @@ describe('<AcceptCookiesModal /> - with shallow', () => {
   });
 
   it('should render a modal with a non disabled accept button once the user has checked the checkbox', () => {
-    wrapper.setState({ modalIsChecked: true });
+    wrapper.setState({ modalCheckboxIsChecked: true });
     expect(wrapper.find('Checkbox [checked=true]')).toHaveLength(1);
     expect(wrapper.find('Button [disabled=false]').last()).toHaveLength(1);
   });
 
   it('should launch the updateAcceptedCookies mutation when the user clicks on accept', () => {
-    wrapper.setState({ modalIsChecked: true });
+    wrapper.setState({ modalCheckboxIsChecked: true });
     const acceptButton = wrapper.find('Button').last();
     acceptButton.simulate('click');
     expect(updateAcceptedCookiesSpy).toHaveBeenCalled();
