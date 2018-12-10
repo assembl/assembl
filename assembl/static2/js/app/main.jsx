@@ -6,7 +6,7 @@ import { getCurrentPhaseData, getPhaseId } from './utils/timeline';
 import Navbar from './components/navbar/navbar';
 import Footer from './components/common/footer';
 import CookiesBar from './components/cookiesBar';
-import AcceptcookiesModal from './components/cookies/acceptCookiesModal';
+import AcceptCookiesModal from './components/cookies/acceptCookiesModal';
 import { fromGlobalId } from './utils/globalFunctions';
 
 type Props = {
@@ -40,7 +40,7 @@ class Main extends React.Component<Props> {
       <div className="main">
         <Navbar location={location.pathname} themeId={themeId} />
         <div className="app-content">{children}</div>
-        <AcceptcookiesModal pathname={location.pathname} />
+        <AcceptCookiesModal pathname={location.pathname} />
         <CookiesBar />
         <Footer />
       </div>
@@ -49,8 +49,7 @@ class Main extends React.Component<Props> {
 }
 
 const mapStateToProps = state => ({
-  timeline: state.timeline,
-  lang: state.i18n.locale
+  timeline: state.timeline
 });
 
 export default connect(mapStateToProps)(Main);

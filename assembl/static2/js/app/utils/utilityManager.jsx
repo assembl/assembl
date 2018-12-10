@@ -53,17 +53,7 @@ export const displayAlert = (style, msg, topPosition = false, time = 4000) => {
   }
 };
 
-export const displayModal = (
-  title,
-  body,
-  footer,
-  footerTxt,
-  button = null,
-  showModal = true,
-  bsSize = null,
-  withClosingCross = true,
-  backdrop = true
-) => {
+export const displayModal = (title, body, footer, footerTxt, button = null, showModal = true, bsSize = null) => {
   /*
     title:String => the text in the header of the modal
     body:String => the text in the body of the modal
@@ -83,9 +73,7 @@ export const displayModal = (
     button: button,
     showModal: showModal,
     bsSize: bsSize,
-    content: undefined,
-    withClosingCross: withClosingCross,
-    backdrop: backdrop
+    content: undefined
   });
 };
 

@@ -105,10 +105,8 @@ export class DumbAcceptCookiesModal extends React.PureComponent<Props, State> {
     // This array gathers all the legal contents to accept by their route name
     const cleanLegalContentsArray = legalContentsArray.filter(el => el !== null);
 
-    // TODO: deal with the backcross 'static' logic with this new Modal
-
     return cleanLegalContentsArray ? (
-      <Modal show={showModal}>
+      <Modal show={showModal} backdrop="static">
         <Modal.Header>
           <Modal.Title>
             <Translate value="legalContentsModal.title" />
@@ -136,11 +134,7 @@ export class DumbAcceptCookiesModal extends React.PureComponent<Props, State> {
             key="accept"
             className="button-submit button-dark"
             onClick={() => {
-              try {
-                this.acceptAllLegalContents();
-              } catch (error) {
-                console.error(error); // eslint-disable-line
-              }
+              this.acceptAllLegalContents();
               this.closeModal();
             }}
           >

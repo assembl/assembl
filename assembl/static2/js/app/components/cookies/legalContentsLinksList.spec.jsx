@@ -28,7 +28,7 @@ describe('<LegalContentsLinksList /> - with shallow', () => {
     ).toBe('legalContentsModal.ofThePlatform');
   });
 
-  it('should render a list of 2 Links with the appropriate punctuation in the sentance', () => {
+  it('should render a list of 2 Links with the appropriate punctuation in the sentence', () => {
     wrapper.setProps({ legalContentsList: ['terms', 'privacyPolicy'] });
     expect(wrapper.find('Link')).toHaveLength(2);
     expect(
@@ -45,7 +45,7 @@ describe('<LegalContentsLinksList /> - with shallow', () => {
     ).toBe('legalContentsModal.ofThePlatform');
   });
 
-  it('should render a list of 3 Links with the appropriate punctuation in the sentance', () => {
+  it('should render a list of 3 Links with the appropriate punctuation in the sentence', () => {
     wrapper.setProps({ legalContentsList: ['terms', 'privacyPolicy', 'userGuidelines'] });
     expect(wrapper.find('Link')).toHaveLength(3);
     expect(
