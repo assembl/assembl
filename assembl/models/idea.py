@@ -1212,7 +1212,7 @@ class RootIdea(Idea):
 
     @property
     def num_read_posts(self):
-        """ In the root idea, num_posts is the count of all non-deleted read mesages in the discussion """
+        """ In the root idea, num_read_posts is the count of all non-deleted read mesages in the discussion """
         from .post import Post
         from .action import ViewPost
         discussion_data = self.get_discussion_data(self.discussion_id)
@@ -1228,7 +1228,7 @@ class RootIdea(Idea):
 
     @property
     def num_contributors(self):
-        """ In the root idea, num_posts is the count of contributors to
+        """ In the root idea, num_contributors is the count of contributors to
         all non-deleted mesages in the discussion """
         from .post import Post
         result = self.db.query(Post.creator_id).filter(
