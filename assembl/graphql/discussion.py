@@ -314,7 +314,7 @@ class DiscussionPreferences(graphene.ObjectType):
     tab_title = graphene.String(description=docs.DiscussionPreferences.tab_title)
     favicon = graphene.Field(Document, description=docs.DiscussionPreferences.favicon)
     mandatory_legal_contents_validation = graphene.Boolean(description=docs.DiscussionPreferences.mandatory_legal_contents_validation)
-    withModeration = graphene.Boolean(description=docs.DiscussionPreferences.withModeration)
+    with_moderation = graphene.Boolean(description=docs.DiscussionPreferences.with_moderation)
 
     def resolve_tab_title(self, args, context, info):
         return self.get('tab_title', 'Assembl')
@@ -332,6 +332,9 @@ class DiscussionPreferences(graphene.ObjectType):
 
     def resolve_mandatory_legal_contents_validation(self, args, context, info):
         return self.get('mandatory_legal_contents_validation', False)
+
+    def resolve_with_moderation(self, args, context, info):
+        return self.get('with_moderation')
 
 
 class ResourcesCenter(graphene.ObjectType):
@@ -556,6 +559,7 @@ class UpdateDiscussionPreferences(graphene.Mutation):
         # this is the identifier of the part in a multipart POST
         favicon = graphene.String(description=docs.UpdateDiscussionPreferences.favicon)
         mandatory_legal_contents_validation = graphene.Boolean(description=docs.UpdateDiscussionPreferences.mandatory_legal_contents_validation)
+        with_moderation = graphene.Boolean(description=docs.UpdateDiscussionPreferences.with_moderation)
 
     preferences = graphene.Field(lambda: DiscussionPreferences)
 
@@ -579,7 +583,7 @@ class UpdateDiscussionPreferences(graphene.Mutation):
         tab_title = args.get('tab_title', None)
         mandatory_legal_contents_validation = args.get('mandatory_legal_contents_validation')
         favicon = args.get('favicon', None)
-        if not prefs_to_save and not tab_title and not favicon and not mandatory_legal_contents_validation:
+        if not prefs_to_save and not tab_title and not favicon and not mandatory_legal_contents_validation and with_moderation is None:
             raise Exception("Must pass at least one preference to be saved")
 
         with cls.default_db.no_autoflush:
@@ -602,6 +606,12 @@ class UpdateDiscussionPreferences(graphene.Mutation):
 
             if mandatory_legal_contents_validation:
                 discussion.preferences['mandatory_legal_contents_validation'] = mandatory_legal_contents_validation
+
+            if with_moderation is not None:
+                import json
+                preference_data_list = json.loads(discussion.preferences.pref_json)
+                preference_data_list['with_moderation'] = with_moderation
+                discussion.preferences.pref_json = json.dumps(preference_data_list)
 
         db.flush()
 

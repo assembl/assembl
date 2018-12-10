@@ -1870,15 +1870,26 @@ query { discussionPreferences { languages { locale, name(inLocale:"fr"), nativeN
     result = schema.execute(graphql_registry['DiscussionPreferencesQuery'], context_value=graphql_request)
     assert result.errors is None
     res_data = json.loads(json.dumps(result.data))
-    assert res_data['discussionPreferences']['withModeration'] == False
+    assert res_data == {
+        u'discussionPreferences': {
+            u'favicon': None,
+            u'tabTitle': '',
+            u'withModeration': False
+        }
+    }
 
 
 def test_query_discussion_preferences_moderation(graphql_registry, graphql_request_with_moderation):
     result = schema.execute(graphql_registry['DiscussionPreferencesQuery'], context_value=graphql_request_with_moderation)
     assert result.errors is None
     res_data = json.loads(json.dumps(result.data))
-    assert res_data['discussionPreferences']['withModeration'] == True
-
+    assert res_data == {
+        u'discussionPreferences': {
+            u'favicon': None,
+            u'tabTitle': '',
+            u'withModeration': True
+        }
+    }
 
 
 @pytest.mark.xfail
@@ -1909,9 +1920,11 @@ mutation myMutation($languages: [String]!) {
     }
 }
 """, context_value=graphql_request,
-                         variable_values={
-                             "languages": ["ja", "de"]
-                         })
+                        variable_values={
+                            "languages": ["ja", "de"]
+                        })
+    print res.errors
+    import pdb; pdb.set_trace()
     assert json.loads(json.dumps(res.data)) == {
         u'updateDiscussionPreferences': {
             u'preferences': {
@@ -1958,6 +1971,27 @@ def test_query_post_message_classifier(graphql_request,
             u"messageClassifier": u'positive'
         }
     }
+
+
+def test_mutation_update_moderation_preference(graphql_request):
+    res = schema.execute(u"""
+mutation myMutationModeration($withModeration: Boolean!) {
+    updateDiscussionPreferences(withModeration: $withModeration) {
+        preferences {
+            withModeration
+        }
+    }
+}
+""", context_value=graphql_request,
+                        variable_values={
+                            "withModeration": True
+                        })
+    assert json.loads(json.dumps(res.data)) == {
+        u'updateDiscussionPreferences': {
+            u'preferences': {
+                u'withModeration': True
+            }
+        }}
 
 
 def test_query_post_no_message_classifier(graphql_request,

@@ -116,7 +116,7 @@ class DiscussionPreferences:
     tab_title = """The title in the tab."""
     favicon = Default.document % ("""The site favicon.""",)
     mandatory_legal_contents_validation = """Activate or not mandatory validation of legal contents after SSO login."""
-    withModeration = """A Boolean flag indicating whether the moderation is activated or not."""
+    with_moderation = """A Boolean flag indicating whether the moderation is activated or not."""
 
 
 class ResourcesCenter:
@@ -158,6 +158,7 @@ class UpdateDiscussionPreferences:
     tab_title = DiscussionPreferences.tab_title
     favicon = DiscussionPreferences.favicon
     mandatory_legal_contents_validation = DiscussionPreferences.mandatory_legal_contents_validation
+    with_moderation = DiscussionPreferences.with_moderation
 
 
 class UpdateLegalContents:

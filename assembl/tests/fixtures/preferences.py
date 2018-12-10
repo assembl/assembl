@@ -23,20 +23,6 @@ def default_preferences(request, test_session, base_registry):
     return prefs
 
 
-@pytest.fixture(scope="function")
-def preferences_with_moderation_on(default_preferences, test_session, request):
-    """A Preference fixture with default settings"""
-    prefs = default_preferences
-    prefs.withModeration = True
-    test_session.add(prefs)
-    test_session.flush()
-
-    def fin():
-        print "finalizer default_preferences"
-        test_session.delete(prefs)
-        test_session.flush()
-    request.addfinalizer(fin)
-    return prefs
 
 
 
@@ -45,7 +31,6 @@ def non_standard_preference(request, test_session):
     from assembl.models import Preferences
 
     class SubPreference(Preferences):
-        withModeration = True
         preference_data_list = [
             {
                 "id": "preference_data",
