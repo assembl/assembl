@@ -509,6 +509,16 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
             "modification_permission": P_ADMIN_DISC,
             "default": ""
         },
+        # Activate or not mandatory validation of legal contents after SSO login.
+        {
+            "id": "mandatory_legal_contents_validation",
+            "name": _("mandatory_legal_contents_validation"),
+            "value_type": "bool",
+            "description": _("Activate or not mandatory validation of legal contents after SSO login."),
+            "allow_user_override": None,
+            "modification_permission": P_ADMIN_DISC,
+            "default": False
+        },
 
         # Discussion Video description
         {
