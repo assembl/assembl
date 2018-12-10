@@ -10,7 +10,6 @@ from sqlalchemy import (
     Column,
     Integer,
     Text,
-    Boolean,
     ForeignKey,
 )
 from sqlalchemy.orm import relationship
@@ -82,7 +81,6 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
     name = Column(CoerceUnicode, nullable=False, unique=True)
     cascade_id = Column(Integer, ForeignKey(id), nullable=True)
     pref_json = Column("values", Text())  # JSON blob
-    withModeration = Column(Boolean(), default=False, server_default='0')
 
     cascade_preferences = relationship("Preferences", remote_side=[id])
 

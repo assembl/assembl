@@ -92,13 +92,15 @@ export class DumbPost extends React.PureComponent<Props, State> {
   }
 
   componentDidUpdate(prevProps: Props) {
+    const { measureTreeHeight, lang, data } = this.props;
+    const { publicationState } = data.post;
     const { body } = this.getBodyAndSubject(false);
     if (body && body.indexOf('<img src')) {
-      this.props.measureTreeHeight(200);
+      measureTreeHeight(200);
     }
 
-    if (this.props.lang !== prevProps.lang || this.props.data.post.publicationState !== prevProps.data.post.publicationState) {
-      this.props.measureTreeHeight(200);
+    if (lang !== prevProps.lang || publicationState !== prevProps.data.post.publicationState) {
+      measureTreeHeight(200);
     }
   }
 
