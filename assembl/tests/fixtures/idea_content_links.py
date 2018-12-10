@@ -268,7 +268,6 @@ def extract_submitted_in_post_related_to_sub_idea_1_1_1(
 
     from assembl.models import Extract
     from assembl.models.idea_content_link import ExtractNatureVocabulary, ExtractActionVocabulary
-
     new_extract = Extract(
         discussion_id=discussion.id,
         body=u"Commodi maiores magni rerum. Sint natus corporis in qui in ut dignissimos cumque repellendus. Reprehenderit nihil illum.",

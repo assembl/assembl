@@ -56,6 +56,51 @@ def idea_with_en_fr(request, discussion, en_locale,
 
 
 @pytest.fixture(scope="function")
+def annnouncement_for_subidea_1_1(request, discussion, en_locale, 
+                        fr_locale, admin_user, subidea_1_1,
+                        test_session):
+    from assembl.models import LangString, LangStringEntry, IdeaAnnouncement
+    title = LangString.create(u'Announce title in English', 'en')
+    title.add_entry(LangStringEntry(
+                    locale=fr_locale,
+                    value=u"Titre d'announce en français",
+                    locale_confirmed=True))
+
+    body = LangString.create(u'Announce body in English', 'en')
+    body.add_entry(LangStringEntry(
+                   locale=fr_locale,
+                   value=u"Corps d'announce en français",
+                   locale_confirmed=True))
+    quote = LangString.create(u'A quote in English', 'en')
+    quote.add_entry(LangStringEntry(
+                    locale=fr_locale,
+                    value=u"Une quote en français",
+                    locale_confirmed=True))
+    announce = IdeaAnnouncement(creator=admin_user,
+                                last_updated_by=admin_user,
+                                title=title,
+                                body=body,
+                                discussion=discussion,
+                                idea=subidea_1_1,
+                                quote=quote)
+
+    test_session.add(title)
+    test_session.add(body)
+    test_session.add(announce)
+    test_session.flush()
+
+    def fin():
+        print "finalizer announcement_en_fr"
+        test_session.delete(title)
+        test_session.delete(body)
+        test_session.delete(announce)
+        test_session.flush()
+
+    request.addfinalizer(fin)
+    return announce
+
+
+@pytest.fixture(scope="function")
 def announcement_en_fr(request, discussion, en_locale,
                        fr_locale, admin_user, idea_with_en_fr,
                        test_session):
@@ -161,7 +206,8 @@ def subidea_1_1(request, discussion, subidea_1, test_session):
     from assembl.models import Idea, IdeaLink, LangString
     i = Idea(title=LangString.create(u"Lower taxes", 'en'),
              discussion=discussion,
-             description=LangString.create("Some definition of an idea", 'en'))
+             description=LangString.create("Some definition of an idea", 'en'),
+             )
     test_session.add(i)
     l_1_11 = IdeaLink(source=subidea_1, target=i)
     test_session.add(l_1_11)

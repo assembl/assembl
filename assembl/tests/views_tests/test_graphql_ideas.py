@@ -830,6 +830,44 @@ def test_graphql_create_bright_mirror_empty_title(phases, graphql_request, graph
 
     assert "titleEntries needs at least one entry" in res.errors[0].args[0]
 
+def test_graphql_create_bright_mirror_announcement_empty_quote(phases, graphql_request, graphql_registry, test_sessions):
+    import os
+    from io import BytesIO
+
+    class FieldStorage(object):
+        file = BytesIO(os.urandom(16))
+        filename = u'path/to/img.png'
+        type = 'image/png'
+
+    graphql_request.POST['variables.img'] = FieldStorage()
+
+    res = schema.execute(
+        graphql_registry['createThematic'],
+        context_value=graphql_request,
+        variable_values={
+            'discussionPhaseId': phases['brightMirror'].id,
+            'messageViewOverride': 'brightMirror',
+            'titleEntries': [
+                {'value': u"Comprendre les dynamiques et les enjeux", 'localeCode': u"fr"},
+                {'value': u"Understanding the dynamics and issues", 'localeCode': u"en"}
+            ],
+            'descriptionEntries': [
+                {'value': u"Desc FR", 'localeCode': u"fr"},
+                {'value': u"Desc EN", 'localeCode': u"en"}
+            ],
+            'image': u'variables.img',
+            'announcement': {
+                'titleEntries': [],
+                'bodyEntries': [
+                    {'value': u"Body FR announce", 'localeCode': u"fr"},
+                    {'value': u"Body EN announce", 'localeCode': u"en"}
+                ],
+                'quoteEntries': []
+            }
+        })
+
+    assert "Announcement titleEntries needs at least one entry" in res.errors[0].args[0]
+
 
 def test_graphql_create_bright_mirror_announcement_empty_title(phases, graphql_request, graphql_registry, test_session):
     import os
@@ -862,6 +900,10 @@ def test_graphql_create_bright_mirror_announcement_empty_title(phases, graphql_r
                 'bodyEntries': [
                     {'value': u"Body FR announce", 'localeCode': u"fr"},
                     {'value': u"Body EN announce", 'localeCode': u"en"}
+                ],
+                'quoteEntries': [
+                    {'value': u"Body FR quote", 'localeCode': u"fr"},
+                    {'value': u"Body EN quote", 'localeCode': u"en"}
                 ]
             }
         })

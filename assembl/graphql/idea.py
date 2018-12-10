@@ -186,6 +186,7 @@ class IdeaAnnouncementInput(graphene.InputObjectType):
     title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.IdeaAnnouncement.title_entries)
     body_attachments = graphene.List(graphene.String, description=docs.IdeaAnnouncement.body_attachments)
     body_entries = graphene.List(LangStringEntryInput, required=True, description=docs.IdeaAnnouncement.body_entries)
+    quote_entries = graphene.List(LangStringEntryInput, required=False, description=docs.IdeaAnnouncement.quote_entries)
 
 
 class IdeaAnnouncement(SecureObjectType, SQLAlchemyObjectType):
@@ -201,6 +202,7 @@ class IdeaAnnouncement(SecureObjectType, SQLAlchemyObjectType):
     body = graphene.String(lang=graphene.String(), description=docs.IdeaAnnouncement.body)
     body_attachments = graphene.List(Attachment, required=False, description=docs.IdeaAnnouncement.body_attachments)
     body_entries = graphene.List(LangStringEntry, required=True, description=docs.IdeaAnnouncement.body_entries)
+    quote = graphene.List(LangStringEntry, required=False, description=docs.IdeaAnnouncement.quote_entries)
 
     def resolve_title(self, args, context, info):
         return resolve_langstring(self.title, args.get('lang'))
@@ -641,7 +643,8 @@ def create_idea(parent_idea, phase, args, context):
 
             announcement_title_langstring = langstring_from_input_entries(announcement_title_entries)
             announcement_body_langstring = langstring_from_input_entries(announcement.get('body_entries', None))
-            saobj2 = create_idea_announcement(user_id, discussion, saobj, announcement_title_langstring, announcement_body_langstring)
+            announcement_quote = langstring_from_input_entries(announcement.get('quote_entries', None))
+            saobj2 = create_idea_announcement(user_id, discussion, saobj, announcement_title_langstring, announcement_body_langstring, announcement_quote)
             db.add(saobj2)
 
         # add uploaded image as an attachment to the idea

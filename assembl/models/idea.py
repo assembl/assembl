@@ -47,6 +47,8 @@ class MessageView(Enum):
     multiColumns = 'multiColumns'
     brightMirror = 'brightMirror'
     survey = 'survey'
+    voteSession = 'voteSession'
+    thread = 'thread'
 
 
 class defaultdictlist(defaultdict):

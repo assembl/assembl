@@ -68,4 +68,4 @@ def downgrade(pyramid_env):
         op.add_column('vote_session', sa.Column('title_id', sa.Integer, sa.ForeignKey(m.LangString.id), nullable=True))
         op.add_column('vote_session', sa.Column('sub_title_id', sa.Integer, sa.ForeignKey(m.LangString.id), nullable=True))
         op.add_column('vote_session', sa.Column('instructions_section_title_id', sa.Integer, sa.ForeignKey(m.LangString.id), nullable=True))
-        op.add_column('vote_session', sa.Column('instruction_sections_content', sa.Integer, sa.ForeignKey(m.LangString.id), nullable=True))
+        op.add_column('vote_session', sa.Column('instructions_section_content', sa.Integer, sa.ForeignKey(m.LangString.id), nullable=True))

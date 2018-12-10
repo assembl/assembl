@@ -3,7 +3,6 @@ import datetime
 
 from assembl.indexing.utils import get_data
 
-
 def test_get_data_for_extract(phases, extract_submitted_in_post_related_to_sub_idea_1_1_1, participant2_user, post_related_to_sub_idea_1_1_1, subidea_1_1_1):
     extract = extract_submitted_in_post_related_to_sub_idea_1_1_1
     uid, data = get_data(extract)

@@ -70,6 +70,7 @@ class UpdateVoteSession(graphene.Mutation):
     __doc__ = docs.UpdateVoteSession.__doc__
 
     class Input:
+        idea_id = graphene.Int(required=True, description=docs.UpdateVoteSession.idea_id)
         header_image = graphene.String(description=docs.UpdateVoteSession.header_image)
         see_current_votes = graphene.Boolean(description=docs.UpdateVoteSession.see_current_votes)
 
@@ -89,7 +90,7 @@ class UpdateVoteSession(graphene.Mutation):
             raise Exception(
                 "A vote session requires an idea associated to it, check ideaId value")
         phase_identifier = "voteSession"
-        if idea.get_associated_phase() != phase_identifier:
+        if idea.get_associated_phase().identifier != phase_identifier:
             raise Exception(
                 "A vote session can only be created or edited with a '{}' discussion phase, check discussionPhaseId value".format(phase_identifier))
         db = idea.db
@@ -137,9 +138,9 @@ class UpdateVoteSession(graphene.Mutation):
         db.add(vote_session)
 
         # create the root thematic on which we will attach all proposals for this vote session
-        root_thematic = get_root_thematic_for_phase(idea.get_associated_phase())
+        root_thematic = get_root_thematic_for_phase(idea.get_associated_phase().identifier)
         if root_thematic is None:
-            root_thematic = create_root_thematic(idea.get_associated_phase())
+            root_thematic = create_root_thematic(idea.get_associated_phase().identifier)
 
         db.flush()
         return UpdateVoteSession(vote_session=vote_session)
