@@ -464,8 +464,9 @@ mutation myFirstMutation {
 
 
 @pytest.fixture(scope="function")
-def proposals(graphql_request, thematic_and_question):
+def proposals(graphql_request, admin_user, thematic_and_question):
     from assembl.models import PublicationStates
+    graphql_request.authenticated_userid = admin_user.id
     thematic_id, first_question_id = thematic_and_question
     proposals = []
     for idx in range(16):
@@ -482,8 +483,9 @@ def proposals(graphql_request, thematic_and_question):
 
 
 @pytest.fixture(scope="function")
-def proposals_no_pending(graphql_request, thematic_and_question):
+def proposals_no_pending(graphql_request, admin_user, thematic_and_question):
     from assembl.models import PublicationStates
+    graphql_request.authenticated_userid = admin_user.id
     thematic_id, first_question_id = thematic_and_question
     proposals = []
     for idx in range(10):
