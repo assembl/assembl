@@ -61,7 +61,7 @@ export class Question extends React.Component<Props, State> {
         })
         .then(() => {
           scrollToQuestion(true, index + 1);
-          const successMessage = isDebateModerated && !connectedUserIsAdmin ? 'postToBeValidated' : 'postSuccess';
+          const successMessage = isDebateModerated && !userIsAdmin ? 'postToBeValidated' : 'postSuccess';
           displayAlert('success', I18n.t(`debate.survey.${successMessage}`));
           refetchTheme();
           this.setState({
