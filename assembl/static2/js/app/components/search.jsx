@@ -399,7 +399,7 @@ const UserHit = ({ bemBlocks, collapseSearch, result }) => {
           <UserMessagesTagFilter value={userId}>
             {source.num_posts}
             <span className={bemBlocks.item('assembl-icon-message')}>
-              <span className="assembl-icon-message" title="Number of contributions" />
+              <span className="assembl-icon-message" title={I18n.t('search.number_of_contributions')} />
             </span>
           </UserMessagesTagFilter>
           {source.creation_date ? (
@@ -453,11 +453,11 @@ const IdeaHit = ({ bemBlocks, collapseSearch, locale, result }) => {
         <React.Fragment>
           {source.num_posts}
           <span className={bemBlocks.item('assembl-icon-message')}>
-            <span className="assembl-icon-message" title="Number of contributions" />
+            <span className="assembl-icon-message" title={I18n.t('search.number_of_contributions')} />
           </span>
           {source.num_contributors}
           <span className={bemBlocks.item('assembl-icon-avatar')}>
-            <span className="assembl-icon-profil" title="Number of users" />
+            <span className="assembl-icon-profil" title={I18n.t('search.number_of_users')} />
           </span>
         </React.Fragment>
       )}
