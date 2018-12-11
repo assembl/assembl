@@ -10,9 +10,7 @@ import * as React from 'react';
 import Loader, { type Props as LoaderProps } from './loader';
 
 type Props = {
-  displayLoader: boolean,
-  customLoader?: React.Node,
-  customLoaderProps?: Object
+  displayLoader: boolean
 } & LoaderProps;
 
 type WrappedProps = {
@@ -32,10 +30,6 @@ const manageErrorAndLoading = (props: Props) => (WrappedComponent: React.Compone
 
   if (loading || (data && data.loading)) {
     if (props.displayLoader) {
-      if (props.customLoader) {
-        return props.customLoaderProps ? <customLoader {...props.customLoaderProps} /> : <customLoader />;
-      }
-
       return <Loader {...props} />;
     }
 

@@ -13,16 +13,6 @@ import { browserHistory } from '../../router';
 import manageErrorAndLoading from '../common/manageErrorAndLoading';
 import DiscussionQuery from '../../graphql/DiscussionQuery.graphql';
 
-const DumbHeaderPlaceholder = () => (
-  <section className="home-section header-section">
-    <Grid fluid className="max-container">
-      <Row>
-        <div className="header-bkg">&nbsp;</div>
-      </Row>
-    </Grid>
-  </section>
-);
-
 class Header extends React.Component {
   constructor(props) {
     super(props);
@@ -91,8 +81,6 @@ const mapStateToProps = state => ({
   timeline: state.timeline
 });
 
-export default compose(
-  connect(mapStateToProps),
-  graphql(DiscussionQuery),
-  manageErrorAndLoading({ displayLoader: false, customLoader: DumbHeaderPlaceholder })
-)(Header);
+export default compose(connect(mapStateToProps), graphql(DiscussionQuery), manageErrorAndLoading({ displayLoader: false }))(
+  Header
+);
