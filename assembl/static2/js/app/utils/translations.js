@@ -892,7 +892,7 @@ const Translations = {
       step_x_total: "Section %{num} sur %{total}",
       saveThemes: "Sauvegarder",
       successThemeCreation: "Les thématiques ont été enregistrées avec succès !",
-      successLanguagePreference: "Les langues du débat ont été enregistrées avec succès !",
+      successDiscussionPreference: "Les préférences de la discussion ont été enregistrées avec succès !",
       legalContents: {
         legalNoticeLabel: "Mentions légales",
         termsAndConditionsLabel: "Conditions générales d'utilisation",
@@ -1869,7 +1869,7 @@ const Translations = {
       step_x_total: "Section %{num} on %{total}",
       saveThemes: "Save",
       successThemeCreation: "Themes have been saved with success!",
-      successLanguagePreference: "Discussion language preferences have been saved with success!",
+      successDiscussionPreference: "Discussion preferences have been saved with success!",
       legalContents: {
         legalNoticeLabel: "Legal notice",
         termsAndConditionsLabel: "Terms and conditions",
