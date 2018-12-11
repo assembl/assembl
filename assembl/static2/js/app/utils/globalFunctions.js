@@ -328,6 +328,6 @@ export function compareByTextPosition(extractA: ?FictionExtractFragment, extract
   }
   // For all other cases: (<), if extract null, not found in text => set first
   return -1;
-};
+}
 
 export const convertISO8601StringToDate = (s: string): Moment => moment(s).utc();
