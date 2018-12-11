@@ -6,7 +6,8 @@ describe('Timeline administration actions', () => {
   it('should return a CREATE_PHASE action type', () => {
     const { createPhase } = actions;
     const expected = {
-      id: '123', type: actionTypes.CREATE_PHASE
+      id: '123',
+      type: actionTypes.CREATE_PHASE
     };
     const actual = createPhase('123');
     expect(actual).toEqual(expected);
@@ -14,7 +15,10 @@ describe('Timeline administration actions', () => {
   it('should return an UPDATE_PHASE_TITLE action type', () => {
     const { updatePhaseTitle } = actions;
     const expected = {
-      id: '123', value: 'Super titre', locale: 'fr', type: actionTypes.UPDATE_PHASE_TITLE
+      id: '123',
+      value: 'Super titre',
+      locale: 'fr',
+      type: actionTypes.UPDATE_PHASE_TITLE
     };
     const actual = updatePhaseTitle('123', 'fr', 'Super titre');
     expect(actual).toEqual(expected);
@@ -22,7 +26,9 @@ describe('Timeline administration actions', () => {
   it('should return an UPDATE_PHASE_IDENTIFIER action type', () => {
     const { updatePhaseIdentifier } = actions;
     const expected = {
-      id: '123', value: 'thread', type: actionTypes.UPDATE_PHASE_IDENTIFIER
+      id: '123',
+      value: 'thread',
+      type: actionTypes.UPDATE_PHASE_IDENTIFIER
     };
     const actual = updatePhaseIdentifier('123', 'thread');
     expect(actual).toEqual(expected);
@@ -53,14 +59,16 @@ describe('Timeline administration actions', () => {
   });
   it('should return an UPDATE_PHASES action type', () => {
     const { updatePhases } = actions;
-    const phases = [{
-      id: '123',
-      identifier: 'survey',
-      isThematicsTable: false,
-      start: moment('2014-12-27T09:00:00+00:00'),
-      end: moment('2014-12-31T09:00:00+00:00'),
-      titleEntries: [{ localeCode: 'en', value: 'Cool title' }]
-    }];
+    const phases = [
+      {
+        id: '123',
+        identifier: 'survey',
+        isThematicsTable: false,
+        start: moment('2014-12-27T09:00:00+00:00'),
+        end: moment('2014-12-31T09:00:00+00:00'),
+        titleEntries: [{ localeCode: 'en', value: 'Cool title' }]
+      }
+    ];
     const expected = { phases: phases, type: actionTypes.UPDATE_PHASES };
     const actual = updatePhases(phases);
     expect(actual).toEqual(expected);

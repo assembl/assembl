@@ -19,7 +19,7 @@
     "eslint:table": "eslint js/app tests workspaces --ext .js --ext .jsx --cache --format table",
     "eslint:summary": "eslint js/app tests workspaces --ext .js --ext .jsx --cache --format 'node_modules/eslint-friendly-formatter'",
     "flow": "flow",
-    "format": "prettier-eslint --write 'js/**/*.js?' 'tests/**/*.js?' 'workspaces/**/*.js?' '*.js'",
+    "format": "prettier-eslint --write 'js/**/*.js' 'tests/**/*.js' 'workspaces/**/*.js' 'js/**/*.jsx' 'tests/**/*.jsx' 'workspaces/**/*.jsx' '*.js'",
     "i18n:export": "node ./scripts/translations2messages.js && rip json2pot messages.json -k id -o ../locale/assembl-v2.pot && ./scripts/merge_po_files.bash",
     "i18n:import": "rip po2json '../locale/assembl-v2/*.po' -m messages.json -k id -o './translations'",
     "storybook": "start-storybook -p 9001 -c .storybook -s ..",

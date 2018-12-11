@@ -514,9 +514,7 @@ export const voteProposalsById = (state: Map<string, Map> = Map(), action: Redux
         order: proposal.order,
         id: proposal.id,
         titleEntries: fromJS(proposal.titleEntries),
-        descriptionEntries: List(proposal.descriptionEntries.map(
-          entry => Map(entry)
-        )),
+        descriptionEntries: List(proposal.descriptionEntries.map(entry => Map(entry))),
         modules: fromJS(proposal.modules ? proposal.modules.map(m => m.id) : [])
       });
       newState = newState.set(proposal.id, proposalInfo);
@@ -546,8 +544,7 @@ export const voteProposalsById = (state: Map<string, Map> = Map(), action: Redux
       .updateIn([action.id, 'descriptionEntries'], updateInLangstringEntries(action.locale, action.value))
       .setIn([action.id, '_hasChanged'], true);
   case ADD_MODULE_TO_PROPOSAL:
-    return state
-      .updateIn([action.proposalId, 'modules'], modules => modules.push(action.id));
+    return state.updateIn([action.proposalId, 'modules'], modules => modules.push(action.id));
   case SET_VALIDATION_ERRORS:
     return state.setIn([action.id, '_validationErrors'], action.errors);
   default:
