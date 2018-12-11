@@ -9,11 +9,13 @@ import { EditorState } from 'draft-js';
 import { getConnectedUserId, getPostPublicationState } from '../../../utils/globalFunctions';
 import { inviteUserToLogin, displayAlert } from '../../../utils/utilityManager';
 import { connectedUserIsAdmin } from '../../../utils/permissions';
-import createPostMutation from '../../../graphql/mutations/createPost.graphql';
 import { SMALL_SCREEN_WIDTH, MINIMUM_BODY_LENGTH } from '../../../constants';
 import { withScreenDimensions } from '../../common/screenDimensions';
 import RichTextEditor from '../../common/richTextEditor';
 import { convertEditorStateToHTML } from '../../../utils/draftjs';
+// graphql
+import createPostMutation from '../../../graphql/mutations/createPost.graphql';
+import DiscussionPreferencesQuery from '../../../graphql/DiscussionPreferencesQuery.graphql';
 
 type Props = {
   isDebateModerated: boolean,
@@ -150,8 +152,27 @@ export class Question extends React.Component<Props, State> {
 }
 
 const mapStateToProps = state => ({
-  contentLocale: state.i18n.locale,
-  isDebateModerated: true // TODO: update this line to use preference
+  contentLocale: state.i18n.locale
 });
 
-export default compose(connect(mapStateToProps), graphql(createPostMutation), withScreenDimensions)(Question);
+export default compose(
+  connect(mapStateToProps),
+  graphql(createPostMutation),
+  graphql(DiscussionPreferencesQuery, {
+    props: ({ data }) => {
+      if (data.error || data.loading) {
+        return {
+          error: data.error,
+          loading: data.loading
+        };
+      }
+
+      return {
+        error: data.error,
+        loading: data.loading,
+        isDebateModerated: data.discussionPreferences.withModeration
+      };
+    }
+  }),
+  withScreenDimensions
+)(Question);
