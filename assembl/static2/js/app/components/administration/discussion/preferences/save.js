@@ -1,10 +1,10 @@
 // @flow
 import type { ApolloClient } from 'react-apollo';
 import UpdateDiscussionPreference from '../../../../graphql/mutations/updateDiscussionPreference.graphql';
-import type { LanguagePreferencesFormValues } from './types.flow';
+import type { DiscussionPreferencesFormValues } from './types.flow';
 import { createSave } from '../../../form/utils';
 
-const getVariables = async (client: ApolloClient, values: LanguagePreferencesFormValues) => {
+const getVariables = async (client: ApolloClient, values: DiscussionPreferencesFormValues) => {
   const remove = (array, element) => array.filter(el => el !== element);
   let localesArray = values.languages.map(language => language.locale);
   values.languages.forEach((language) => {
@@ -16,11 +16,12 @@ const getVariables = async (client: ApolloClient, values: LanguagePreferencesFor
     }
   });
   return {
-    languages: localesArray
+    languages: localesArray,
+    withModeration: values.withModeration
   };
 };
 
-export const createMutationsPromises = (client: ApolloClient) => (values: LanguagePreferencesFormValues) => [
+export const createMutationsPromises = (client: ApolloClient) => (values: DiscussionPreferencesFormValues) => [
   () =>
     getVariables(client, values).then(variables =>
       client.mutate({

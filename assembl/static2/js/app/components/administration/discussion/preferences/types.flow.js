@@ -6,6 +6,7 @@ export type LocalePreference = {
   isChecked: boolean
 };
 
-export type LanguagePreferencesFormValues = {
-  languages: Array<LocalePreference>
+export type DiscussionPreferencesFormValues = {
+  languages: Array<LocalePreference>,
+  withModeration: boolean
 };

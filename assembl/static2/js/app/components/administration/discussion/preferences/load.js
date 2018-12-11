@@ -1,7 +1,7 @@
 // @flow
 import type { ApolloClient } from 'react-apollo';
 
-import type { LanguagePreferencesFormValues } from './types.flow';
+import type { DiscussionPreferencesFormValues } from './types.flow';
 
 import LanguagePreferencesQuery from '../../../../graphql/AllLanguagePreferences.graphql';
 import DiscussionPreferencesQuery from '../../../../graphql/DiscussionPreferences.graphql';
@@ -27,7 +27,7 @@ export const load = async (client: ApolloClient, fetchPolicy: FetchPolicy, local
 
 type Data = LanguagePreferencesQuery & DiscussionPreferencesQuery;
 
-export function postLoadFormat(data: Data): LanguagePreferencesFormValues {
+export function postLoadFormat(data: Data): DiscussionPreferencesFormValues {
   const { defaultPreferences, discussionPreferences } = data;
   const isChecked = locale => discussionPreferences.languages.some(language => language.locale === locale);
   const languages = defaultPreferences.languages.map(language => ({
@@ -37,6 +37,6 @@ export function postLoadFormat(data: Data): LanguagePreferencesFormValues {
 
   return {
     languages: languages,
-    withModeration: defaultPreferences.withModeration
+    withModeration: discussionPreferences.withModeration
   };
 }
