@@ -22,9 +22,7 @@ def upgrade(pyramid_env):
     with context.begin_transaction():
     	# op.drop_table('thematic')
         # op.drop_column('thematic', "video_description_side_id")
-        op.add_column('announce', sa.Column('quote_id',
-            sa.Integer, sa.ForeignKey('langstring.id'))
-        )
+        op.add_column('announce', sa.Column('quote_id', sa.Integer, sa.ForeignKey('langstring.id')))
         op.drop_column("vote_session", "title")
         op.drop_column("vote_session", "sub_title")
         op.drop_column("vote_session", "instructions_section_title")
@@ -48,21 +46,6 @@ def upgrade(pyramid_env):
 def downgrade(pyramid_env):
 	from assembl import models as m
     with context.begin_transaction():
-		# op.create_table(
-  #           'thematic',
-  #           sa.Column('id', sa.Integer, sa.ForeignKey(
-  #               'idea.id'), primary_key=True),
-  #           sa.Column('title_id', sa.Integer,
-  #               sa.ForeignKey('langstring.id'), nullable=False),
-  #           sa.Column('description_id', sa.Integer,
-  #               sa.ForeignKey('langstring.id')),
-  #           sa.Column('video_title_id', sa.Integer,
-  #               sa.ForeignKey('langstring.id')),
-  #           sa.Column('video_description_id', sa.Integer,
-  #               sa.ForeignKey('langstring.id')),
-  #           sa.Column('video_html_code', sa.UnicodeText),
-  #           sa.Column('identifier', sa.String(60))
-  #       )
         op.drop_column('announce', 'quote_id')
         op.add_column('vote_session', sa.Column('discussion_phase_id', sa.Integer, sa.ForeignKey('discussion_phase.id')))
         op.add_column('vote_session', sa.Column('title_id', sa.Integer, sa.ForeignKey(m.LangString.id), nullable=True))
