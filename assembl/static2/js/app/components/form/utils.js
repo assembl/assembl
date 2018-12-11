@@ -60,7 +60,7 @@ export function convertEntriesToI18nRichText(entries: RichTextLangstringEntries)
 export function convertISO8601StringToDateTime(_entry: string): DatePickerInput {
   if (_entry) {
     const t = moment(_entry, moment.ISO_8601).utc();
-    if (t._isValid) { // eslint-disable-line no-underscore-dangle
+    if (t.isValid()) {
       return { time: t };
     }
   }
