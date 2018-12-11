@@ -357,7 +357,8 @@ def test_route_discussion_idea_v2(
     resp = test_app.get(route)
     assert resp.status_int == 303
 
-    thread_phase = test_session.query(models.DiscussionPhase).all()[1]
+    thread_phase = test_session.query(models.DiscussionPhase).\
+        filter_by(identifier='thread').first()
     furl = FrontendUrls(discussion_with_2_phase_interface_v2)
     headers = get_response_headers(resp)
     phase_identifier = thread_phase.identifier
