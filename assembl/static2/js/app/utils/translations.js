@@ -933,7 +933,7 @@ const Translations = {
         deleteTextField: "Supprimer le champ",
         deleteSelectFieldOption: "Supprimer l'item",
         toggleLegalContentIntro:
-          "Activer ou non la validation obligatoire des contenus juridiques avant l'inscription sur la plateforme par SSO.",
+          "Activer ou non la validation obligatoire des contenus juridiques après l'inscription sur la plateforme par SSO.",
         LegalContentButton: "Activer la validation obligatoire du contenu juridique",
         introText:
           "Configurez les champs que vous souhaitez afficher dans le formulaire d'inscription. Renseignez les noms ainsi que la mention obligatoire/non obligatoire.",
@@ -1888,9 +1888,8 @@ const Translations = {
         addSelectFieldOption: "Add a new item",
         deleteTextField: "Delete the field",
         deleteSelectFieldOption: "Delete this item",
-        toggleLegalContentIntro:
-          "Make the legal validation mandatory or not for a user before signing up in the platform by SSO.",
-        LegalContentButton: "Activate the legal validation before the signup",
+        toggleLegalContentIntro: "Make the legal validation mandatory or not for a user after signing up in the platform by SSO.",
+        LegalContentButton: "Activate the mandatory validation of the legal contents",
         introText:
           "Configure the fields that you want to display in the registration form. Fill in the names and whether the fields are required or optional.",
         textFieldToggleOptional: "Make this field optional",
