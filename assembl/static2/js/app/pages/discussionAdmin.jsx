@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import { connect, type MapStateToProps } from 'react-redux';
+import { connect } from 'react-redux';
 import { type Route, type Router } from 'react-router';
 import { type ApolloClient, compose, graphql, withApollo } from 'react-apollo';
 import { I18n } from 'react-redux-i18n';
@@ -251,10 +251,7 @@ class DiscussionAdmin extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps: MapStateToProps<ReduxState, *, *> = ({
-  admin: { editLocale, sections, profileOptions, timeline },
-  i18n
-}) => {
+const mapStateToProps: ReduxState => Object = ({ admin: { editLocale, sections, profileOptions, timeline }, i18n }) => {
   const { sectionsById, sectionsHaveChanged, sectionsInOrder } = sections;
   const { phasesById, phasesHaveChanged } = timeline;
   const { profileOptionsHasChanged, textFieldsById } = profileOptions;
