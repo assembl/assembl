@@ -16,7 +16,8 @@ import { getIsPhaseCompletedById } from '../utils/timeline';
 
 type NavigationParams = {
   questionIndex: string,
-  questionId: string
+  questionId: string,
+  slug: string
 };
 
 export type Props = {
@@ -30,7 +31,6 @@ export type Props = {
   thematicTitle: string,
   thematicId: string,
   imgUrl: string,
-  slug: string,
   totalSentiments: number
 };
 
@@ -46,7 +46,7 @@ export function DumbQuestion(props: Props) {
     thematicTitle,
     thematicId,
     params,
-    slug,
+    params: { slug },
     totalSentiments
   } = props;
   const link = `${getRoute('idea', { slug: slug, phase: 'survey', phaseId: phaseId, themeId: thematicId })}`;
@@ -109,7 +109,6 @@ DumbQuestion.defaultProps = {
 
 const mapStateToProps = state => ({
   lang: state.i18n.locale,
-  slug: state.debate.debateData.slug,
   timeline: state.timeline
 });
 

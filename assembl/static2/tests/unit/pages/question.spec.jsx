@@ -24,9 +24,9 @@ describe('Question page', () => {
     totalSentiments: 1,
     params: {
       questionIndex: 'Index',
-      questionId: 'FooInd'
+      questionId: 'FooInd',
+      slug: 'FooSlug'
     },
-    slug: 'FooSlug',
     phaseId: 'phaseFoo'
   };
 
