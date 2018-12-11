@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 import { Translate, I18n } from 'react-redux-i18n';
+import classnames from 'classnames';
 import { getDomElementOffset, elementContainsSelection } from '../../../../utils/globalFunctions';
 import { connectedUserIsAdmin } from '../../../../utils/permissions';
 import Attachments from '../../../common/attachments';
@@ -153,7 +154,9 @@ class PostView extends React.PureComponent<Props, State> {
       multiColumns,
       isHarvesting
     } = this.props;
-    if (publicationState === PublicationStates.SUBMITTED_AWAITING_MODERATION && !connectedUserIsAdmin()) {
+    const isPending = publicationState === PublicationStates.SUBMITTED_AWAITING_MODERATION;
+    const isPendingPostForAdmin = connectedUserIsAdmin() && isPending;
+    if (isPending && !connectedUserIsAdmin()) {
       return null;
     }
     const translate = contentLocale !== originalLocale;
@@ -167,7 +170,6 @@ class PostView extends React.PureComponent<Props, State> {
     const boxStyle = {
       borderLeftColor: borderLeftColor
     };
-
     let canReply = !multiColumns;
     // If we're in thread mode, check if the first idea associated to the post is multi columns.
     if (!multiColumns && indirectIdeaContentLinks && indirectIdeaContentLinks.length > 0) {
@@ -186,6 +188,7 @@ class PostView extends React.PureComponent<Props, State> {
     if (creator.isDeleted) {
       userName = I18n.t('deletedUser');
     }
+    const userNameClass = isPendingPostForAdmin ? 'pending' : '';
     return (
       <div
         ref={(p) => {
@@ -211,11 +214,12 @@ class PostView extends React.PureComponent<Props, State> {
             showNuggetAction={!multiColumns}
           />
         )}
-        <div className="box" style={boxStyle}>
+        <div className={classnames('box', { pending: isPendingPostForAdmin })} style={boxStyle}>
           <div className="post-row">
             <div className="post-left">
               {creator && (
                 <ProfileLine
+                  userNameAdditionalClasses={userNameClass}
                   userId={creator.userId}
                   userName={userName}
                   creationDate={creationDate}
@@ -252,7 +256,7 @@ class PostView extends React.PureComponent<Props, State> {
                 </React.Fragment>
               ) : null}
             </div>
-            <div className="post-right">
+            <div className={classnames('post-right', { pending: isPendingPostForAdmin })}>
               <PostActions
                 creatorUserId={creator.userId}
                 postId={id}
@@ -268,7 +272,7 @@ class PostView extends React.PureComponent<Props, State> {
             </div>
           </div>
         </div>
-        {canReply && (
+        {canReply && !isPending ? (
           <div className={this.state.showAnswerForm ? 'answer-form' : 'collapsed-answer-form'}>
             <AnswerForm
               parentId={id}
@@ -280,7 +284,7 @@ class PostView extends React.PureComponent<Props, State> {
               phaseId={phaseId}
             />
           </div>
-        )}
+        ) : null}
       </div>
     );
   }

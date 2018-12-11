@@ -145,6 +145,10 @@ $deleted-post-border: 1px solid $grey1 !default;
   border-left: $deleted-post-border;
 }
 
+.idea .level .box.pending {
+  border-left: 4px solid #ffd48f;
+}
+
 .posts {
   &.deleted-post {
     .body {
@@ -195,6 +199,10 @@ $deleted-post-border: 1px solid $grey1 !default;
     }
   }
 
+  .post-right.pending {
+    background-color: #ffd48f;
+  }
+
   .translate {
     padding: 20px 0 0;
   }
@@ -226,6 +234,11 @@ $deleted-post-border: 1px solid $grey1 !default;
     .creator {
       color: $second-color;
       padding: 0 0 0 10px;
+    }
+
+    .creator.pending {
+      color: #ffd48f;
+      text-transform: uppercase;
     }
 
     .date {

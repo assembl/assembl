@@ -135,6 +135,7 @@ exports[`PostView component should render a post in view mode 1`] = `
           modified={true}
           userId="dannietreutel"
           userName="Dannie Treutel"
+          userNameAdditionalClasses=""
         />
         <withRouter(Apollo(DumbPostBody))
           body="<p>You can't index the port without programming the wireless HTTP program!</p>"
