@@ -26,7 +26,7 @@ type Props = {
   hasConflictingDate: boolean,
   input: {
     name: string,
-    onChange: (SyntheticInputEvent<*> | any) => void,
+    onChange: ({ time: DateTime }) => void,
     value: DatePickerValue
   },
   onDateChange: ?(DateTime) => void,
