@@ -31,6 +31,7 @@ def upgrade(pyramid_env):
     with transaction.manager:
         # Transfer all extra_json dates to this column, if exists
         discussion_ids = db.query(m.Discussion.id, m.Discussion.slug, m.Discussion.preferences_id).all()
+        d = m.Discussion.__table__
         for d_id, slug, pref_id in discussion_ids:
             pref = db.query(m.Preferences).filter_by(id=pref_id).first()
             extra = pref['extra_json']
@@ -44,7 +45,6 @@ def upgrade(pyramid_env):
                         start_date = datetime.strptime(dates['startDate'], "%Y-%m-%d")
                         stop_date = datetime.strptime(dates['startDate'], "%Y-%m-%d")
                         if start_date and stop_date:
-                            d = m.Discussion.__table__
                             db.execute(d.update().where(d.c.id == d_id).values(
                                 active_start_date=start_date, active_end_date=stop_date))
                             success = True
