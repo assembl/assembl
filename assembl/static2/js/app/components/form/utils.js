@@ -149,3 +149,20 @@ export function getFileVariable(img: FileValue, initialImg: ?FileValue): FileVar
   const variab = img && img.externalUrl instanceof File ? img.externalUrl : null;
   return variab;
 }
+
+export function compareEditorState(a: mixed, b: mixed): ?boolean {
+  // compare two richtext EditorState to be used as third param of lodash isEqualWith
+  if (
+    a !== null &&
+    typeof a === 'object' &&
+    typeof a.getCurrentContent !== 'undefined' &&
+    b !== null &&
+    typeof b === 'object' &&
+    typeof b.getCurrentContent !== 'undefined'
+  ) {
+    // $FlowFixMe
+    return a.getCurrentContent() === b.getCurrentContent();
+  }
+  // If customizer returns undefined, comparisons are handled by lodash isEqual.
+  return undefined;
+}
