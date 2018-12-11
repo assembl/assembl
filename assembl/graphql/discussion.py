@@ -25,6 +25,7 @@ from .utils import (
     get_attachment_with_purpose,
     DateTime)
 from .idea import TagResult, SentimentAnalysisResult
+import json
 
 
 class URLMeta(graphene.ObjectType):
@@ -608,7 +609,6 @@ class UpdateDiscussionPreferences(graphene.Mutation):
                 discussion.preferences['mandatory_legal_contents_validation'] = mandatory_legal_contents_validation
 
             if with_moderation is not None:
-                import json
                 preference_data_list = json.loads(discussion.preferences.pref_json)
                 preference_data_list['with_moderation'] = with_moderation
                 discussion.preferences.pref_json = json.dumps(preference_data_list)

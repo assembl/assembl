@@ -1923,8 +1923,6 @@ mutation myMutation($languages: [String]!) {
                         variable_values={
                             "languages": ["ja", "de"]
                         })
-    print res.errors
-    import pdb; pdb.set_trace()
     assert json.loads(json.dumps(res.data)) == {
         u'updateDiscussionPreferences': {
             u'preferences': {

@@ -206,9 +206,6 @@ def discussion_with_2_phase_interface_v2(
 @pytest.fixture(scope="function")
 def discussion_with_moderation(discussion, test_session):
     """An empty Discussion fixture with default permissions"""
-    import json
-    preference_data_list = json.loads(discussion.preferences.pref_json)
-    preference_data_list['with_moderation'] = True
-    discussion.preferences.pref_json = json.dumps(preference_data_list)
+    discussion.preferences['with_moderation'] = True
     test_session.commit()
     return discussion

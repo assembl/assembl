@@ -1079,7 +1079,7 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
             "name": _("Use moderation"),
             "description": _("Is the moderation activated or not"),
             "allow_user_override": None,
-            "modification_permission": P_SYSADMIN,
+            "modification_permission": P_ADMIN_DISC,
             "default": False,
         },
     ]
