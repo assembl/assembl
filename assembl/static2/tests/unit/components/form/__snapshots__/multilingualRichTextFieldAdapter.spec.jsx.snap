@@ -370,6 +370,11 @@ exports[`MultilingualRichTextFieldAdapter component should render a rich text fi
       toolbarPosition="bottom"
       withAttachmentButton={false}
     />
+    <span
+      className="help-block"
+    >
+      This field is required
+    </span>
   </div>
   <button
     disabled={true}
