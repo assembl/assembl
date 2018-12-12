@@ -2,10 +2,9 @@
 import { EditorState } from 'draft-js';
 import React from 'react';
 import { type FieldRenderProps } from 'react-final-form';
-import { FormGroup } from 'react-bootstrap';
+import { FormGroup, HelpBlock } from 'react-bootstrap';
 
 import RichTextEditor from '../common/richTextEditor';
-import Error from './error';
 import { getValidationState } from './utils';
 
 type multilingualValue = { [string]: EditorState };
@@ -43,7 +42,8 @@ const RichTextFieldAdapter = ({
         onChange={es => onChange({ ...value, [editLocale]: es })}
         withAttachmentButton={withAttachmentButton}
       />
-      <Error name={name} />
+      {/* Warning: we can't use Error component here because having 2 fields with the same name breaks links in Editor */}
+      {touched && error ? <HelpBlock>{error}</HelpBlock> : null}
     </FormGroup>
   );
 };
