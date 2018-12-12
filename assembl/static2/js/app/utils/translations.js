@@ -5,6 +5,7 @@ const Translations = {
     here: "ici",
     yes: "oui",
     no: "non",
+    and: " et ",
     "Number of contributions": "Nombre de messages",
     "Number of users": "Nombre de contributeurs",
     accept: "Accepter",
@@ -565,8 +566,8 @@ const Translations = {
     },
     termsAndConditions: {
       headerTitle: "Conditions générales d'utilisation",
-      iAccept: "J'ai lu et j'accepte les ",
-      link: "conditions générales d'utilisation",
+      iAccept: "J'ai lu et j'accepte ",
+      link: "les conditions générales d'utilisation",
       accept: "J'accepte"
     },
     legalNotice: {
@@ -583,13 +584,18 @@ const Translations = {
     },
     privacyPolicy: {
       headerTitle: "Politique de protection des données personnelles",
-      iAccept: "J'ai lu et j'accepte la ",
-      link: "politique de protection des données personnelles"
+      iAccept: "J'ai lu et j'accepte ",
+      link: "la politique de protection des données personnelles"
     },
     userGuidelines: {
       headerTitle: "Charte de participation",
-      iAccept: "J'ai lu et j'accepte la ",
-      link: "charte de participation"
+      iAccept: "J'ai lu et j'accepte ",
+      link: "la charte de participation"
+    },
+    legalContentsModal: {
+      title: "Accepter les contenus juridiques",
+      iAccept: "Je confirme avoir lu et accepté ",
+      ofThePlatform: " de la plateforme. "
     },
     administration: {
       confirmTextFieldDeletionTitle: "Supprimer le champ",
@@ -934,6 +940,9 @@ const Translations = {
         addSelectFieldOption: "Ajouter un nouvel item",
         deleteTextField: "Supprimer le champ",
         deleteSelectFieldOption: "Supprimer l'item",
+        toggleLegalContentIntro:
+          "Activer ou non la validation obligatoire des contenus juridiques après l'inscription sur la plateforme par SSO.",
+        LegalContentButton: "Activer la validation obligatoire du contenu juridique",
         introText:
           "Configurez les champs que vous souhaitez afficher dans le formulaire d'inscription. Renseignez les noms ainsi que la mention obligatoire/non obligatoire.",
         textFieldToggleOptional: "Rendre ce champ optionnel",
@@ -974,6 +983,7 @@ const Translations = {
     here: "here",
     yes: "yes",
     no: "no",
+    and: " and ",
     cancel: "Cancel",
     accept: "Accept",
     refuse: "Refuse",
@@ -1530,7 +1540,7 @@ const Translations = {
     },
     termsAndConditions: {
       headerTitle: "Terms & Conditions",
-      link: "Terms & Conditions",
+      link: "the Terms & Conditions",
       iAccept: "I have read and I accept the ",
       accept: "I accept"
     },
@@ -1549,12 +1559,17 @@ const Translations = {
     privacyPolicy: {
       headerTitle: "Privacy policy",
       iAccept: "I have read and I accept the ",
-      link: "Privacy Policy"
+      link: "the Privacy Policy"
     },
     userGuidelines: {
       headerTitle: "User guidelines",
       iAccept: "I have read and I accept the ",
-      link: "user guidelines"
+      link: "the user guidelines"
+    },
+    legalContentsModal: {
+      title: "Accept the legal contents",
+      iAccept: "I have read and accepted ",
+      ofThePlatform: " of the platform."
     },
     administration: {
       confirmTextFieldDeletionTitle: "Delete the field",
@@ -1889,6 +1904,8 @@ const Translations = {
         addSelectFieldOption: "Add a new item",
         deleteTextField: "Delete the field",
         deleteSelectFieldOption: "Delete this item",
+        toggleLegalContentIntro: "Make the legal validation mandatory or not for a user after signing up in the platform by SSO.",
+        LegalContentButton: "Activate the mandatory validation of the legal contents",
         introText:
           "Configure the fields that you want to display in the registration form. Fill in the names and whether the fields are required or optional.",
         textFieldToggleOptional: "Make this field optional",

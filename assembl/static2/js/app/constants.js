@@ -376,6 +376,8 @@ export const harvestingColors: { [string]: ColorDefinition } = {
   }
 };
 
+export const legalContentSlugs = ['terms', 'privacy-policy', 'user-guidelines'];
+
 export const harvestingColorsMapping: { [string]: ColorDefinition } = {
   concept: harvestingColors.blue,
   argument: harvestingColors.yellow,

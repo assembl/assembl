@@ -119,8 +119,17 @@ const ManageProfileOptionsForm = ({
     <div className="admin-box">
       <SectionTitle title={I18n.t('administration.discussion.3')} annotation={I18n.t('administration.annotation')} />
       <div className="intro-text">
+        <Translate value="administration.profileOptions.toggleLegalContentIntro" />
+      </div>
+      <div className="form-container padding">
+        <Checkbox className="textfield-checkbox">
+          <Translate value="administration.profileOptions.LegalContentButton" />
+        </Checkbox>
+      </div>
+      <div className="intro-text">
         <Translate value="administration.profileOptions.introText" />
       </div>
+
       <div className="admin-content">
         <Row>
           <div className="form-container profile-options">

@@ -115,6 +115,7 @@ class DiscussionPreferences:
     languages = """A list of LocalePreference metadata objects on the discussion which describe the languages supported by the debate."""
     tab_title = """The title in the tab."""
     favicon = Default.document % ("""The site favicon.""",)
+    mandatory_legal_contents_validation = """Activate or not mandatory validation of legal contents after SSO login."""
 
 
 class ResourcesCenter:
@@ -155,6 +156,7 @@ class UpdateDiscussionPreferences:
     languages = """The list of languages in ISO 639-1 locale code that the debate should support."""
     tab_title = DiscussionPreferences.tab_title
     favicon = DiscussionPreferences.favicon
+    mandatory_legal_contents_validation = DiscussionPreferences.mandatory_legal_contents_validation
 
 
 class UpdateLegalContents:
