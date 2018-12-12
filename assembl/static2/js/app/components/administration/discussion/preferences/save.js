@@ -21,4 +21,4 @@ export const createMutationsPromises = (client: ApolloClient) => (values: Discus
     )
 ];
 
-export const save = createSave('administration.successLanguagePreference');
+export const save = createSave('administration.successDiscussionPreference');

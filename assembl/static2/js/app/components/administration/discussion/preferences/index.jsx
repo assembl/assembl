@@ -15,14 +15,14 @@ import { load, postLoadFormat } from './load';
 import { save, createMutationsPromises } from './save';
 import validate from './validate';
 
-type LanguagesPreferencesFormProps = {
+export type DiscussionPreferencesFormProps = {
   client: ApolloClient,
   locale: string
 };
 
 const loading = <Loader />;
 
-const LanguagesPreferencesAdminForm = ({ client, locale }: LanguagesPreferencesFormProps) => (
+const DiscussionPreferencesForm = ({ client, locale }: DiscussionPreferencesFormProps) => (
   <div className="discussion-admin admin-box admin-content">
     <SectionTitle title={I18n.t('administration.menu.preferences')} annotation="" />
     <LoadSaveReinitializeForm
@@ -67,4 +67,6 @@ const mapStateToProps = state => ({
   locale: state.i18n.locale
 });
 
-export default compose(connect(mapStateToProps), withApollo)(LanguagesPreferencesAdminForm);
+export { DiscussionPreferencesForm };
+
+export default compose(connect(mapStateToProps), withApollo)(DiscussionPreferencesForm);
