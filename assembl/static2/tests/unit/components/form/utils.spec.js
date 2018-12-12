@@ -266,3 +266,29 @@ describe('convertDateTimeToISO8601String function', () => {
     expect(actual).toEqual(expected);
   });
 });
+
+describe('convertCheckboxListValueToVariable function', () => {
+  const { convertCheckboxListValueToVariable } = utils;
+  it('should convert an array of checkbox values to a array of strings', () => {
+    const values = [
+      {
+        isChecked: false,
+        label: 'German',
+        value: 'de'
+      },
+      {
+        isChecked: true,
+        label: 'English',
+        value: 'en'
+      },
+      {
+        isChecked: false,
+        label: 'French',
+        value: 'fr'
+      }
+    ];
+    const expected = ['en'];
+    const actual = convertCheckboxListValueToVariable(values);
+    expect(actual).toEqual(expected);
+  });
+});

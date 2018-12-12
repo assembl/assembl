@@ -31,8 +31,9 @@ export function postLoadFormat(data: Data): DiscussionPreferencesFormValues {
   const { defaultPreferences, discussionPreferences } = data;
   const isChecked = locale => discussionPreferences.languages.some(language => language.locale === locale);
   const languages = defaultPreferences.languages.map(language => ({
-    ...language,
-    isChecked: isChecked(language.locale)
+    isChecked: isChecked(language.locale),
+    label: language.name,
+    value: language.locale
   }));
 
   return {

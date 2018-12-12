@@ -1,12 +1,7 @@
 // @flow
-
-export type LocalePreference = {
-  locale: string,
-  localeName: string,
-  isChecked: boolean
-};
+import { type CheckboxListValue } from '../../../form/types.flow';
 
 export type DiscussionPreferencesFormValues = {
-  languages: Array<LocalePreference>,
+  languages: CheckboxListValue,
   withModeration: boolean
 };

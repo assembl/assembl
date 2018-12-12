@@ -29,3 +29,11 @@ export type DatePickerType = {
 };
 
 export type DatePickerOutput = DateTime | null;
+
+export type CheckboxListOption = {
+  isChecked: boolean,
+  label: string,
+  value: string
+};
+
+export type CheckboxListValue = Array<CheckboxListOption>;
