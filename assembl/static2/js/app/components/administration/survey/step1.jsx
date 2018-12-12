@@ -20,7 +20,7 @@ const Step1 = ({ discussionPhaseId, editLocale, locale, client }: Props) => {
   const queryVariables = { discussionPhaseId: discussionPhaseId, lang: locale };
   return (
     <React.Fragment>
-      <div className="form-title">{I18n.t('administration.survey.1')}</div>
+      <div className="form-title">{I18n.t('administration.survey.createTable')}</div>
       <FieldArrayWithActions
         isTree
         confirmDeletion
