@@ -38,7 +38,7 @@ exports[`Storyshots InnerBoxView multiple comments 1`] = `
               className="harvesting-date"
               title="2018-01-26T09:19:01.492406+00:00"
             >
-              a year ago
+              8 months ago
             </div>
           </div>
         </div>
@@ -1502,7 +1502,7 @@ exports[`Storyshots InnerBoxView single comment 1`] = `
               className="harvesting-date"
               title="2018-01-26T09:19:01.492406+00:00"
             >
-              a year ago
+              8 months ago
             </div>
           </div>
         </div>
