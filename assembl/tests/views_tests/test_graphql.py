@@ -569,7 +569,7 @@ def test_get_thematic_with_question_with_pending_posts(graphql_request, graphql_
     result = res.data['thematic']
     assert result['title'] == u'Comprendre les dynamiques et les enjeux'
     assert result['id'] == thematic_id
-    assert result['numPosts'] == 10
+    assert result['numPosts'] == 14
     assert result['numContributors'] == 1
     assert result['totalSentiments'] == 0
     assert result['video'] is None

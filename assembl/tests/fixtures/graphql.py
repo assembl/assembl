@@ -469,8 +469,8 @@ def proposals(graphql_request, admin_user, thematic_and_question):
     graphql_request.authenticated_userid = admin_user.id
     thematic_id, first_question_id = thematic_and_question
     proposals = []
-    for idx in range(16):
-        if idx >= 10:
+    for idx in range(20):
+        if idx >= 15:
             publication_state = PublicationStates.SUBMITTED_AWAITING_MODERATION.value
         else:
             publication_state = PublicationStates.PUBLISHED.value
