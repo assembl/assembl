@@ -27,7 +27,7 @@ def vote_session(request, test_session, discussion, timeline_vote_session,
     test_session.add(attachment)
     test_session.flush()
 
-    root_thematic = create_root_thematic(vote_session.discussion_phase)
+    root_thematic = create_root_thematic(timeline_vote_session)
     test_session.flush()
 
     def fin():
