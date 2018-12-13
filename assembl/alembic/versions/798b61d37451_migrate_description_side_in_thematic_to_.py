@@ -28,6 +28,13 @@ def upgrade(pyramid_env):
         op.drop_column("vote_session", "discussion_phase_id")
         op.add_column("vote_session", sa.Column('idea_id', sa.Integer, sa.ForeignKey(m.Idea.id), nullable=True))
 
+    with transaction.manager:
+        # Removing all vote session, vote specifications, and idea votes
+        # This is done for upgrading on local hosts and preprod
+        db.execute('DELETE FROM idea_vote')
+        db.execute('DELETE FROM vote_specification')
+        db.execute('DELETE FROM vote_sessions')
+        mark_changed()
 
 def downgrade(pyramid_env):
     from assembl import models as m

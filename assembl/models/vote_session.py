@@ -16,10 +16,10 @@ from .widgets import VotingWidget
 from .idea import Idea
 
 langstrings_names = [
-    "title",
-    "sub_title",
-    "instructions_section_title",
-    "instructions_section_content",
+    # "title",
+    # "sub_title",
+    # "instructions_section_title",
+    # "instructions_section_content",
     "propositions_section_title"
 ]
 
@@ -42,20 +42,20 @@ class VoteSession(
         onupdate='CASCADE'
     ), primary_key=True)
 
-    discussion_phase_id = Column(
-        Integer,
-        ForeignKey(DiscussionPhase.id),
-        nullable=False)
-
-    discussion_phase = relationship(
-        DiscussionPhase,
-        backref=backref(
-            "vote_session",
-            single_parent=True,
-            uselist=False,
-            cascade="all, delete-orphan"
-        ),
-    )
+    # discussion_phase_id = Column(
+    #     Integer,
+    #     ForeignKey(DiscussionPhase.id),
+    #     nullable=False)
+    #
+    # discussion_phase = relationship(
+    #     DiscussionPhase,
+    #     backref=backref(
+    #         "vote_session",
+    #         single_parent=True,
+    #         uselist=False,
+    #         cascade="all, delete-orphan"
+    #     ),
+    # )
     idea_id = Column(Integer, ForeignKey(Idea.id), nullable=False)
 
     idea = relationship(Idea, backref=backref("vote_session", single_parent=True, uselist=False, cascade="all, delete-orphan"),)
