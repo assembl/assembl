@@ -182,6 +182,7 @@ exports[`PostView component should render a post in view mode 1`] = `
             }
           }
           handleEditClick={[MockFunction]}
+          isPendingPostForAdmin={false}
           mySentiment="like"
           numChildren={3}
           phaseId="DEF345"

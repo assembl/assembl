@@ -8,7 +8,6 @@ import { OverlayTrigger } from 'react-bootstrap';
 import { MEDIUM_SCREEN_WIDTH } from '../../../constants';
 import { sharePostTooltip } from '../../common/tooltips';
 
-import getOverflowMenuForPost from './overflowMenu';
 import ResponsiveOverlayTrigger from '../../common/responsiveOverlayTrigger';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
 import { openShareModal } from '../../../utils/utilityManager';
@@ -18,6 +17,9 @@ import getSentimentStats from './sentimentStats';
 import sentimentDefinitions from './sentimentDefinitions';
 import { getIsPhaseCompletedById } from '../../../utils/timeline';
 import { withScreenWidth } from '../../common/screenDimensions';
+import DeletePostButton from './deletePostButton';
+import ValidatePostButton from './validatePostButton';
+import EditPostButton from './editPostButton';
 
 export type Props = {
   timeline: Timeline,
@@ -32,7 +34,8 @@ export type Props = {
   postId: string,
   routerParams: RouterParams,
   screenWidth: number,
-  sentimentCounts: SentimentCountsFragment
+  sentimentCounts: SentimentCountsFragment,
+  isPendingPostForAdmin: boolean
 };
 
 export class PostActions extends React.Component<Props> {
@@ -55,7 +58,8 @@ export class PostActions extends React.Component<Props> {
       postId,
       routerParams,
       screenWidth,
-      sentimentCounts
+      sentimentCounts,
+      isPendingPostForAdmin
     } = this.props;
     let count = 0;
     const totalSentimentsCount = sentimentCounts
@@ -69,29 +73,8 @@ export class PostActions extends React.Component<Props> {
     const modalTitle = <Translate value="debate.sharePost" />;
     if (!debateData) return null;
     const useSocial = debateData.useSocialMedia;
-    let overflowMenu = null;
     const tooltipPlacement = screenWidth >= MEDIUM_SCREEN_WIDTH ? 'left' : 'top';
     const isPhaseCompleted = getIsPhaseCompletedById(timeline, phaseId);
-    if (editable && (userCanDeleteThisMessage || userCanEditThisMessage)) {
-      overflowMenu = (
-        <div className="overflow-action">
-          <OverlayTrigger
-            trigger="click"
-            rootClose
-            placement={tooltipPlacement}
-            overlay={getOverflowMenuForPost(postId, userCanDeleteThisMessage, userCanEditThisMessage, handleEditClick)}
-          >
-            <div>
-              {screenWidth >= MEDIUM_SCREEN_WIDTH ? (
-                <span className="assembl-icon-ellipsis-vert" />
-              ) : (
-                <span className="assembl-icon-ellipsis" />
-              )}
-            </div>
-          </OverlayTrigger>
-        </div>
-      );
-    }
     const shareIcon = <span className="assembl-icon-share color" />;
     return (
       <div className="post-actions">
@@ -120,7 +103,6 @@ export class PostActions extends React.Component<Props> {
             postId={postId}
             isPhaseCompleted={isPhaseCompleted}
           />
-          {screenWidth >= MEDIUM_SCREEN_WIDTH ? null : overflowMenu}
         </div>
         {totalSentimentsCount > 0 ? (
           <OverlayTrigger
@@ -153,12 +135,15 @@ export class PostActions extends React.Component<Props> {
         ) : (
           <div className="empty-sentiments-count" />
         )}
-        {screenWidth >= MEDIUM_SCREEN_WIDTH ? overflowMenu : null}
-        {editable && (
+
+        {isPendingPostForAdmin ? <ValidatePostButton postId={postId} linkClassName="post-action" /> : null}
+        {userCanDeleteThisMessage ? <DeletePostButton postId={postId} linkClassName="post-action" /> : null}
+        {editable || userCanEditThisMessage ? <EditPostButton handleClick={handleEditClick} linkClassName="post-action" /> : null}
+        {editable ? (
           <div className="answers annotation">
             <Translate value="debate.thread.numberOfResponses" count={numChildren} />
           </div>
-        )}
+        ) : null}
         <div className="clear">&nbsp;</div>
       </div>
     );

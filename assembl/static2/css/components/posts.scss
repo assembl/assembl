@@ -631,8 +631,7 @@ $deleted-post-border: 1px solid $grey1 !default;
         border-top: 1px solid $grey1;
         padding: 18px 0 10px;
 
-        .post-action,
-        .overflow-action {
+        .post-action {
           display: inline-block;
           margin: 0 10px;
         }
