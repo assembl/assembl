@@ -74,36 +74,23 @@ class FictionBody extends React.Component<Props, State> {
   };
 
   setPositionToExtract = (extract: ?FictionExtractFragment) => {
-    const { dbId } = this.props;
     const extractElement = extract && document.getElementById(extract.id);
     const fictionBodyRefCur = this.fictionBodyView.current;
     if (!fictionBodyRefCur) return;
-    let nextPositionY;
-    let scrollPosition;
     if (extractElement) {
       // Scroll extract in top section of page
       const elementRect = extractElement.getBoundingClientRect();
       const absoluteElementTop = elementRect.top + window.pageYOffset;
-      scrollPosition = absoluteElementTop - window.innerHeight / 5;
+      const scrollPosition = absoluteElementTop - window.innerHeight / 5;
       window.scrollTo({ top: scrollPosition, behavior: 'smooth' });
-      nextPositionY = extractElement.getBoundingClientRect().top - fictionBodyRefCur.getBoundingClientRect().top;
-    } else {
-      // Extract not found, maybe has been deleted or rewritten
-      // Set box on first line of body
-      const bodyElement = document.getElementById(getExtractTagId(dbId));
-      nextPositionY =
-        bodyElement && fictionBodyRefCur
-          ? bodyElement.getBoundingClientRect().top - fictionBodyRefCur.getBoundingClientRect().top
-          : 0;
-      // Scroll extract in top section of page
-      window.scrollTo({ top: window.innerHeight / 5, behavior: 'smooth' });
+      const nextPositionY = extractElement.getBoundingClientRect().top - fictionBodyRefCur.getBoundingClientRect().top;
+      this.setState({
+        commentBadgeDynamicPosition: {
+          x: fictionBodyRefCur.offsetLeft + fictionBodyRefCur.clientWidth,
+          y: nextPositionY - COMMENT_DYNAMIC_OFFSET
+        }
+      });
     }
-    this.setState({
-      commentBadgeDynamicPosition: {
-        x: fictionBodyRefCur.offsetLeft + fictionBodyRefCur.clientWidth,
-        y: nextPositionY - COMMENT_DYNAMIC_OFFSET
-      }
-    });
   };
 
   setPositionToCoordinates = (position: { x: number, y: number }) => {
