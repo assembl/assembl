@@ -15,7 +15,7 @@ import RichTextEditor from '../../common/richTextEditor';
 import { convertEditorStateToHTML } from '../../../utils/draftjs';
 // graphql
 import createPostMutation from '../../../graphql/mutations/createPost.graphql';
-import DiscussionPreferencesQuery from '../../../graphql/DiscussionPreferencesQuery.graphql';
+import { DebateIsModeratedContext } from '../../../../app/app';
 
 type Props = {
   isDebateModerated: boolean,
@@ -155,24 +155,10 @@ const mapStateToProps = state => ({
   contentLocale: state.i18n.locale
 });
 
-export default compose(
-  connect(mapStateToProps),
-  graphql(createPostMutation),
-  graphql(DiscussionPreferencesQuery, {
-    props: ({ data }) => {
-      if (data.error || data.loading) {
-        return {
-          error: data.error,
-          loading: data.loading
-        };
-      }
+const QuestionWithContext = props => (
+  <DebateIsModeratedContext.Consumer>
+    {isDebateModerated => <Question {...props} isDebateModerated={isDebateModerated} />}
+  </DebateIsModeratedContext.Consumer>
+);
 
-      return {
-        error: data.error,
-        loading: data.loading,
-        isDebateModerated: data.discussionPreferences.withModeration
-      };
-    }
-  }),
-  withScreenDimensions
-)(Question);
+export default compose(connect(mapStateToProps), graphql(createPostMutation), withScreenDimensions)(QuestionWithContext);
