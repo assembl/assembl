@@ -110,8 +110,7 @@ class App extends React.Component<Props> {
 const mapStateToProps = state => ({
   i18n: state.i18n,
   debate: state.debate,
-  isHarvesting: state.context.isHarvesting,
-  isDebateModerated: state.context.isDebateModerated
+  isHarvesting: state.context.isHarvesting
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -175,7 +174,8 @@ export default compose(
       if (data.error || data.loading) {
         return {
           error: data.error,
-          loading: data.loading
+          loading: data.loading,
+          isDebateModerated: false
         };
       }
 
