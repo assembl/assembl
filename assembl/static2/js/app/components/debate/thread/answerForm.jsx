@@ -17,6 +17,7 @@ import { getIsPhaseCompletedById } from '../../../utils/timeline';
 import { scrollToPost } from '../../../utils/hashLinkScroll';
 import { getPostPublicationState } from '../../../utils/globalFunctions';
 import { connectedUserIsAdmin } from '../../../utils/permissions';
+import { DebateIsModeratedContext } from '../../../../app/app';
 
 type Props = {
   contentLocale: string,
@@ -179,12 +180,17 @@ export class DumbAnswerForm extends React.PureComponent<Props, State> {
 
 const mapStateToProps = state => ({
   contentLocale: state.i18n.locale,
-  timeline: state.timeline,
-  isDebateModerated: true // TODO: update
+  timeline: state.timeline
 });
+
+const DumbAnswerFormWithContext = props => (
+  <DebateIsModeratedContext.Consumer>
+    {isDebateModerated => <DumbAnswerForm {...props} isDebateModerated={isDebateModerated} />}
+  </DebateIsModeratedContext.Consumer>
+);
 
 export default compose(
   connect(mapStateToProps),
   graphql(createPostMutation, { name: 'createPost' }),
   graphql(uploadDocumentMutation, { name: 'uploadDocument' })
-)(DumbAnswerForm);
+)(DumbAnswerFormWithContext);

@@ -19,8 +19,10 @@ import ErrorMessage from './components/common/error';
 import ChatFrame from './components/common/ChatFrame';
 import { browserHistory } from './router';
 import TimelineQuery from './graphql/Timeline.graphql';
+import DiscussionPreferencesQuery from './graphql/DiscussionPreferencesQuery.graphql';
 
 export const IsHarvestingContext = React.createContext(false);
+export const DebateIsModeratedContext = React.createContext(false);
 
 type Debate = {
   debateData: DebateData,
@@ -54,7 +56,8 @@ type Props = {
   route: Route,
   timeline: Timeline,
   timelineLoading: boolean,
-  isHarvesting: boolean
+  isHarvesting: boolean,
+  isDebateModerated: boolean
 };
 
 class App extends React.Component<Props> {
@@ -85,7 +88,7 @@ class App extends React.Component<Props> {
 
   render() {
     const { debateData, debateLoading, debateError } = this.props.debate;
-    const { isHarvesting, children } = this.props;
+    const { isHarvesting, children, isDebateModerated } = this.props;
     const divClassNames = classNames('app', { 'harvesting-mode-on': isHarvesting });
     return (
       <div className={divClassNames}>
@@ -93,7 +96,9 @@ class App extends React.Component<Props> {
         {debateLoading && <Loader />}
         {debateData && (
           <div className="app-child">
-            <IsHarvestingContext.Provider value={this.props.isHarvesting}>{children}</IsHarvestingContext.Provider>
+            <IsHarvestingContext.Provider value={isHarvesting}>
+              <DebateIsModeratedContext.Provider value={isDebateModerated}>{children}</DebateIsModeratedContext.Provider>
+            </IsHarvestingContext.Provider>
           </div>
         )}
         {debateError && <ErrorMessage errorMessage={debateError} />}
@@ -105,7 +110,8 @@ class App extends React.Component<Props> {
 const mapStateToProps = state => ({
   i18n: state.i18n,
   debate: state.debate,
-  isHarvesting: state.context.isHarvesting
+  isHarvesting: state.context.isHarvesting,
+  isDebateModerated: state.context.isDebateModerated
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -161,6 +167,22 @@ export default compose(
         error: data.error,
         timelineLoading: data.loading,
         timeline: phasesForStore
+      };
+    }
+  }),
+  graphql(DiscussionPreferencesQuery, {
+    props: ({ data }) => {
+      if (data.error || data.loading) {
+        return {
+          error: data.error,
+          loading: data.loading
+        };
+      }
+
+      return {
+        error: data.error,
+        loading: data.loading,
+        isDebateModerated: data.discussionPreferences.withModeration
       };
     }
   })

@@ -16,6 +16,7 @@ import { displayAlert, promptForLoginOr } from '../../../utils/utilityManager';
 import { TextInputWithRemainingChars } from '../../common/textInputWithRemainingChars';
 import RichTextEditor from '../../common/richTextEditor';
 import { connectedUserIsAdmin } from '../../../utils/permissions';
+import { DebateIsModeratedContext } from '../../../../app/app';
 
 export const TEXT_INPUT_MAX_LENGTH = 140;
 export const NO_BODY_LENGTH = 0;
@@ -264,12 +265,17 @@ export class DumbTopPostForm extends React.Component<Props, State> {
 }
 
 const mapStateToProps = state => ({
-  contentLocale: state.i18n.locale,
-  isDebateModerated: true // TODO: update
+  contentLocale: state.i18n.locale
 });
+
+const TopPostFormWithContext = props => (
+  <DebateIsModeratedContext.Consumer>
+    {isDebateModerated => <DumbTopPostForm {...props} isDebateModerated={isDebateModerated} />}
+  </DebateIsModeratedContext.Consumer>
+);
 
 export default compose(
   connect(mapStateToProps),
   graphql(createPostMutation, { name: 'createPost' }),
   graphql(uploadDocumentMutation, { name: 'uploadDocument' })
-)(DumbTopPostForm);
+)(TopPostFormWithContext);
