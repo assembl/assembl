@@ -289,6 +289,8 @@ $deleted-post-border: 1px solid $grey1 !default;
     cursor: pointer;
     margin: 10px 0 0;
     transition: all 0.2s ease-in-out;
+    border: none;
+    background-color: inherit;
 
     &:hover {
       transform: scale(1.2);
@@ -712,4 +714,8 @@ $deleted-post-border: 1px solid $grey1 !default;
     line-height: 30px;
     padding-top: 20px;
   }
+}
+
+.action-validate {
+  border: none;
 }
