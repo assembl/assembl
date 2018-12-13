@@ -14,11 +14,12 @@ from alembic import context, op
 import sqlalchemy as sa
 import transaction
 from assembl.lib import config
-
+from assembl.lib.sqla import mark_changed
 
 def upgrade(pyramid_env):
     with context.begin_transaction():
         from assembl import models as m
+        db = m.get_session_maker()()
         # op.drop_table('thematic')
         op.add_column('announce', sa.Column('quote_id', sa.Integer, sa.ForeignKey('langstring.id')))
         op.drop_column("vote_session", "title_id")
@@ -33,7 +34,7 @@ def upgrade(pyramid_env):
         # This is done for upgrading on local hosts and preprod
         db.execute('DELETE FROM idea_vote')
         db.execute('DELETE FROM vote_specification')
-        db.execute('DELETE FROM vote_sessions')
+        db.execute('DELETE FROM vote_session')
         mark_changed()
 
 def downgrade(pyramid_env):
