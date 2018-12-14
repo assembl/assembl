@@ -135,10 +135,9 @@ export class PostActions extends React.Component<Props> {
         ) : (
           <div className="empty-sentiments-count" />
         )}
-
         {isPendingPostForAdmin ? <ValidatePostButton postId={postId} linkClassName="post-action" /> : null}
         {userCanDeleteThisMessage ? <DeletePostButton postId={postId} linkClassName="post-action" /> : null}
-        {editable || userCanEditThisMessage ? <EditPostButton handleClick={handleEditClick} linkClassName="post-action" /> : null}
+        {editable && userCanEditThisMessage ? <EditPostButton handleClick={handleEditClick} linkClassName="post-action" /> : null}
         {editable ? (
           <div className="answers annotation">
             <Translate value="debate.thread.numberOfResponses" count={numChildren} />
@@ -154,5 +153,4 @@ const mapStateToProps = state => ({
   timeline: state.timeline
 });
 
-// $FlowFixMe
 export default compose(connect(mapStateToProps), withScreenWidth, withApollo)(PostActions);
