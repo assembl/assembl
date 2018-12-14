@@ -3,6 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { compose, graphql, withApollo } from 'react-apollo';
 import { Translate, I18n } from 'react-redux-i18n';
+import classnames from 'classnames';
 
 import { getConnectedUserId } from '../../../utils/globalFunctions';
 import Permissions, { connectedUserCan } from '../../../utils/permissions';
@@ -266,8 +267,9 @@ class Post extends React.Component<Props> {
     const validatePostButton = (
       <ValidatePostButton postId={post.id} refetchQueries={refetchQueries} linkClassName="overflow-action" />
     );
+    const isPending = publicationState === PublicationStates.SUBMITTED_AWAITING_MODERATION;
     return (
-      <div className="shown box" id={post.id}>
+      <div className={classnames('shown box', { pending: isPending })} id={post.id}>
         <div className="content">
           <PostCreator name={creatorName} isModerating={isModerating} />
           <PostBody
@@ -309,7 +311,7 @@ class Post extends React.Component<Props> {
             </div>
           </div>
         </div>
-        <div className="statistic">
+        <div className={classnames('statistic', { pending: isPending })}>
           {screenWidth < EXTRA_SMALL_SCREEN_WIDTH && (
             <div className="sentiments">
               <ResponsiveOverlayTrigger placement="top" tooltip={likeTooltip}>

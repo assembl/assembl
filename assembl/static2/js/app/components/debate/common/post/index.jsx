@@ -67,12 +67,9 @@ export class DumbPost extends React.PureComponent<Props, State> {
     multiColumns: false
   };
 
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      mode: 'view'
-    };
-  }
+  state = {
+    mode: 'view'
+  };
 
   componentDidMount() {
     this.props.measureTreeHeight(400);
