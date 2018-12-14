@@ -156,9 +156,7 @@ class PostView extends React.PureComponent<Props, State> {
     } = this.props;
     const isPending = publicationState === PublicationStates.SUBMITTED_AWAITING_MODERATION;
     const isPendingPostForAdmin = connectedUserIsAdmin() && isPending;
-    if (isPending && !connectedUserIsAdmin()) {
-      return null;
-    }
+    const isPendingPostForUser = !connectedUserIsAdmin() && isPending;
     const translate = contentLocale !== originalLocale;
 
     const completeLevelArray = fullLevel ? [rowIndex, ...fullLevel.split('-').map(string => Number(string))] : [rowIndex];
@@ -184,11 +182,12 @@ class PostView extends React.PureComponent<Props, State> {
       ? indirectIdeaContentLinks.map(link => link && link.idea && link.idea.title)
       : [];
     const hasRelatedIdeas = relatedIdeasTitles.length > 0;
-    let userName = publicationState === 'PUBLISHED' ? creator.displayName : I18n.t('debate.postAwaitingModeration');
+    const isPublished = publicationState === 'PUBLISHED';
+    let userName = isPublished || isPendingPostForUser ? creator.displayName : I18n.t('debate.postAwaitingModeration');
     if (creator.isDeleted) {
       userName = I18n.t('deletedUser');
     }
-    const userNameClass = isPendingPostForAdmin ? 'pending' : '';
+    const userNameClasses = classnames({ pending: isPending, pendingForAdmin: isPendingPostForAdmin });
     return (
       <div
         ref={(p) => {
@@ -214,12 +213,12 @@ class PostView extends React.PureComponent<Props, State> {
             showNuggetAction={!multiColumns}
           />
         )}
-        <div className={classnames('box', { pending: isPendingPostForAdmin })} style={boxStyle}>
+        <div className={classnames('box', { pending: isPending })} style={boxStyle}>
           <div className="post-row">
             <div className="post-left">
               {creator && (
                 <ProfileLine
-                  userNameAdditionalClasses={userNameClass}
+                  userNameAdditionalClasses={userNameClasses}
                   userId={creator.userId}
                   userName={userName}
                   creationDate={creationDate}
@@ -256,7 +255,7 @@ class PostView extends React.PureComponent<Props, State> {
                 </React.Fragment>
               ) : null}
             </div>
-            <div className={classnames('post-right', { pending: isPendingPostForAdmin })}>
+            <div className={classnames('post-right', { pending: isPending })}>
               <PostActions
                 creatorUserId={creator.userId}
                 postId={id}
