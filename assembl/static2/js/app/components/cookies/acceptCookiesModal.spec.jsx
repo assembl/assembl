@@ -12,7 +12,7 @@ const updateAcceptedCookiesSpy = jest.fn(() => {});
 
 const defaultAcceptCookiesModalProps = {
   pathname: 'fakeSlug/home',
-  userId: '1234',
+  id: '1234',
   hasTermsAndConditions: true,
   hasPrivacyPolicy: true,
   hasUserGuidelines: true,

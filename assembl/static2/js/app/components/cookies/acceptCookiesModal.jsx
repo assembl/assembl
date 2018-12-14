@@ -21,7 +21,7 @@ type LegalContentsArray = Array<string>;
 
 type Props = {
   pathname: string,
-  userId: string,
+  id: string,
   hasTermsAndConditions: boolean,
   hasPrivacyPolicy: boolean,
   hasUserGuidelines: boolean,
@@ -44,9 +44,13 @@ export class DumbAcceptCookiesModal extends React.PureComponent<Props, State> {
     this.showModal();
   }
 
+  componentDidUpdate() {
+    this.showModal();
+  }
+
   showModal = () => {
-    const { userId, pathname, acceptedLegalContents } = this.props;
-    if (userId) {
+    const { id, pathname, acceptedLegalContents } = this.props;
+    if (id) {
       const lastRouteString = getRouteLastString(pathname);
       const isOnLegalContentPage = legalContentSlugs.includes(lastRouteString);
       // This array gathers all the legal contents to accept by their 'ACCEPT_...' formatted name
@@ -55,6 +59,7 @@ export class DumbAcceptCookiesModal extends React.PureComponent<Props, State> {
       const userHasAcceptedAllLegalContents = legalContentsToAcceptByCookieName.every(legalContent =>
         acceptedLegalContents.includes(legalContent)
       );
+
       // The modal is only showed to a user who is connected but hasn't yet accepted legal contents and isn't currently reading them
       if (!isOnLegalContentPage && !userHasAcceptedAllLegalContents) {
         this.setState({ showModal: true });
@@ -148,21 +153,32 @@ export class DumbAcceptCookiesModal extends React.PureComponent<Props, State> {
 
 const mapStateToProps = state => ({
   lang: state.i18n.locale,
-  userId: state.context.connectedUserIdBase64
+  id: state.context.connectedUserIdBase64
 });
 
 export default compose(
   connect(mapStateToProps),
-  graphql(TabsConditionQuery, {
-    props: ({ data: { hasTermsAndConditions, hasPrivacyPolicy, hasUserGuidelines } }) => ({
-      hasTermsAndConditions: hasTermsAndConditions,
-      hasPrivacyPolicy: hasPrivacyPolicy,
-      hasUserGuidelines: hasUserGuidelines
-    })
-  }),
   graphql(updateAcceptedCookies, {
     name: 'updateAcceptedCookies'
   }),
+  graphql(TabsConditionQuery, {
+    props: ({ data: { hasTermsAndConditions, hasPrivacyPolicy, hasUserGuidelines, error, loading } }) => {
+      if (error || loading) {
+        return {
+          error: error,
+          loading: loading
+        };
+      }
+      return {
+        error: error,
+        loading: loading,
+        hasTermsAndConditions: hasTermsAndConditions,
+        hasPrivacyPolicy: hasPrivacyPolicy,
+        hasUserGuidelines: hasUserGuidelines
+      };
+    }
+  }),
+  manageErrorAndLoading({ displayLoader: false }),
   graphql(acceptedCookiesQuery, {
     skip: props => !props.id,
     props: ({ data }) => {
@@ -172,7 +188,6 @@ export default compose(
           loading: data.loading
         };
       }
-
       return {
         error: data.error,
         loading: data.loading,
