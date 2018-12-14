@@ -1,9 +1,11 @@
 // @flow
 import React from 'react';
-import { I18n } from 'react-redux-i18n';
+import { I18n, Translate } from 'react-redux-i18n';
 import { Field } from 'react-final-form';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 
+import { getDiscussionSlug } from '../../../utils/globalFunctions';
 import { get, goTo } from '../../../utils/routeMap';
 import MultilingualTextFieldAdapter from '../../form/multilingualTextFieldAdapter';
 import MultilingualRichTextFieldAdapter from '../../form/multilingualRichTextFieldAdapter';
@@ -52,6 +54,20 @@ class ConfigureThematicForm extends React.PureComponent<Props> {
     return fieldData;
   };
 
+  addVoteModuleLink = () => {
+    const { thematicId } = this.props;
+    const slug = getDiscussionSlug();
+    const voteModuleLink = (
+      <Link to={get('administration', { slug: slug, id: 'voteSession' })} className="button-link button-dark">
+        <Translate value="administration.configureVoteSessionButton" />
+      </Link>
+    );
+    if (thematicId.startsWith('-')) {
+      return <Translate value="administration.saveBeforeConfigureVoteSession" />;
+    }
+    return voteModuleLink;
+  };
+
   render() {
     const { editLocale } = this.props;
     const { name, value: theme } = this.getName();
@@ -62,6 +78,7 @@ class ConfigureThematicForm extends React.PureComponent<Props> {
     const messageViewOverrideName = `${name}.messageViewOverride`;
     const announcementTitleName = `${name}.announcement.title`;
     const announcementBodyName = `${name}.announcement.body`;
+
     return (
       <div className="form-container" key={name}>
         <Helper
@@ -98,6 +115,7 @@ class ConfigureThematicForm extends React.PureComponent<Props> {
           // label={I18n.t('administration.tableOfThematics.moduleTypeLabel')}
           options={modulesTranslationKeys.map(key => ({ value: key, label: I18n.t(`administration.modules.${key}`) }))}
         />
+        {this.addVoteModuleLink()}
         <Helper
           label={I18n.t('administration.instructions')}
           helperUrl="/static2/img/helpers/helper_BM_1.png"
