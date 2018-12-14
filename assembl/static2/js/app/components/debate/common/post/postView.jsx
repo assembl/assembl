@@ -23,7 +23,8 @@ type Props = PostProps & {
   modifiedSubject: React.Element<any>,
   multiColumns: boolean,
   subject: string,
-  timeline: Timeline
+  timeline: Timeline,
+  connectedUserId: string
 };
 
 type State = {
@@ -152,13 +153,16 @@ class PostView extends React.PureComponent<Props, State> {
       subject,
       modifiedSubject,
       multiColumns,
-      isHarvesting
+      isHarvesting,
+      connectedUserId
     } = this.props;
     const isPending = publicationState === PublicationStates.SUBMITTED_AWAITING_MODERATION;
     const isPendingPostForAdmin = connectedUserIsAdmin() && isPending;
-    const isPendingPostForUser = !connectedUserIsAdmin() && isPending;
+    const isPendingPostForPostCreator = creator.userId.toString() === connectedUserId && isPending;
     const translate = contentLocale !== originalLocale;
-
+    if (isPending && !isPendingPostForPostCreator && !isPendingPostForAdmin) {
+      return null;
+    }
     const completeLevelArray = fullLevel ? [rowIndex, ...fullLevel.split('-').map(string => Number(string))] : [rowIndex];
 
     const answerTextareaRef = (el: ?HTMLTextAreaElement) => {
@@ -183,7 +187,7 @@ class PostView extends React.PureComponent<Props, State> {
       : [];
     const hasRelatedIdeas = relatedIdeasTitles.length > 0;
     const isPublished = publicationState === 'PUBLISHED';
-    let userName = isPublished || isPendingPostForUser ? creator.displayName : I18n.t('debate.postAwaitingModeration');
+    let userName = isPublished || isPendingPostForPostCreator ? creator.displayName : I18n.t('debate.postAwaitingModeration');
     if (creator.isDeleted) {
       userName = I18n.t('deletedUser');
     }

@@ -3,6 +3,7 @@ import classnames from 'classnames';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import type { OperationComponent } from 'react-apollo';
+import { connect } from 'react-redux';
 
 import EditPostForm from '../editPostForm';
 import DeletedPost from '../deletedPost';
@@ -52,7 +53,8 @@ export type Props = {
   parentId: string,
   refetchIdea: Function,
   routerParams: RouterParams,
-  rowIndex: number
+  rowIndex: number,
+  connectedUserId: string
 };
 
 type State = {
@@ -153,7 +155,8 @@ export class DumbPost extends React.PureComponent<Props, State> {
       originalLocale,
       parentId,
       refetchIdea,
-      timeline
+      timeline,
+      connectedUserId
     } = this.props;
     const translate = contentLocale !== originalLocale;
     const { body, subject, originalBody, originalSubject } = this.getBodyAndSubject(translate);
@@ -206,6 +209,7 @@ export class DumbPost extends React.PureComponent<Props, State> {
             handleEditClick={this.handleEditClick}
             modifiedSubject={modifiedSubject}
             timeline={timeline}
+            connectedUserId={connectedUserId}
           />
         )}
       </div>
@@ -219,8 +223,12 @@ const PostWithContext = props => (
   </IsHarvestingContext.Consumer>
 );
 
+const mapStateToProps = ({ context }) => ({
+  connectedUserId: context.connectedUserId
+});
+
 const withData: OperationComponent<Response> = graphql(PostQuery);
 
 // Absolutely don't use redux connect here to avoid performance issue.
 // Please pass the needed props from Tree component.
-export default compose(withData, manageErrorAndLoading({ displayLoader: true }))(PostWithContext);
+export default compose(connect(mapStateToProps), withData, manageErrorAndLoading({ displayLoader: true }))(PostWithContext);
