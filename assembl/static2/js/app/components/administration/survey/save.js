@@ -27,7 +27,7 @@ const getChildrenVariables = (client, thematic, initialTheme) =>
         id: t.id.startsWith('-') ? null : t.id,
         messageViewOverride: t.messageViewOverride ? t.messageViewOverride.value : null,
         titleEntries: convertToEntries(t.title),
-        descriptionEntries: convertToEntries(t.description),
+        descriptionEntries: t.description ? convertToEntries(t.description) : [],
         announcement: announcement,
         image: getFileVariable(t.img, initialImg),
         order: order,
@@ -53,7 +53,7 @@ async function getIdeaInput(client, theme, initialTheme, order) {
     id: theme.id.startsWith('-') ? null : theme.id,
     messageViewOverride: theme.messageViewOverride ? theme.messageViewOverride.value : null,
     titleEntries: convertToEntries(theme.title),
-    descriptionEntries: convertToEntries(theme.description),
+    descriptionEntries: theme.description ? convertToEntries(theme.description) : [],
     announcement: announcement,
     image: getFileVariable(theme.img, initialImg),
     questions:
