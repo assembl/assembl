@@ -76,6 +76,7 @@ export const removeMenuItem = (id: string, client: ApolloClient, variables: Quer
   client.writeQuery({
     ...query,
     data: {
+      ...data,
       thematicsData: data.thematicsData.filter(t => t.id !== id)
     }
   });
@@ -102,7 +103,7 @@ export const addMenuItem = (id: string, parentId: string, index: number, client:
   client.writeQuery({
     ...query,
     data: {
-      rootIdea: data.rootIdea,
+      ...data,
       thematicsData: [...data.thematicsData, newMenuItem]
     }
   });
@@ -148,6 +149,7 @@ export const swapMenuItem = (
   client.writeQuery({
     ...query,
     data: {
+      ...data,
       thematicsData: newThematics
     }
   });
