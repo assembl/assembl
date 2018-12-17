@@ -56,7 +56,8 @@ type Props = {
   timeline: Timeline,
   timelineLoading: boolean,
   isHarvesting: boolean,
-  isDebateModerated: boolean
+  isDebateModerated: boolean,
+  connectedUserId: ?string
 };
 
 class App extends React.Component<Props> {
@@ -88,11 +89,11 @@ class App extends React.Component<Props> {
 
   render() {
     const { debateData, debateLoading, debateError } = this.props.debate;
-    const { isHarvesting, children, isDebateModerated } = this.props;
+    const { isHarvesting, children, isDebateModerated, connectedUserId } = this.props;
     const contextValues = {
       isHarvesting: isHarvesting,
       isDebateModerated: isDebateModerated,
-      connectedUserId: getConnectedUserId()
+      connectedUserId: connectedUserId
     };
     const divClassNames = classNames('app', { 'harvesting-mode-on': isHarvesting });
     return (
@@ -113,7 +114,8 @@ class App extends React.Component<Props> {
 const mapStateToProps = state => ({
   i18n: state.i18n,
   debate: state.debate,
-  isHarvesting: state.context.isHarvesting
+  isHarvesting: state.context.isHarvesting,
+  connectedUserId: state.context.connectedUserId
 });
 
 const mapDispatchToProps = dispatch => ({
