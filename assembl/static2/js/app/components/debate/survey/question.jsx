@@ -15,7 +15,7 @@ import RichTextEditor from '../../common/richTextEditor';
 import { convertEditorStateToHTML } from '../../../utils/draftjs';
 // graphql
 import createPostMutation from '../../../graphql/mutations/createPost.graphql';
-import { DebateIsModeratedContext } from '../../../../app/app';
+import { DebateContext } from '../../../../app/app';
 
 type Props = {
   isDebateModerated: boolean,
@@ -156,9 +156,9 @@ const mapStateToProps = state => ({
 });
 
 const QuestionWithContext = props => (
-  <DebateIsModeratedContext.Consumer>
-    {isDebateModerated => <Question {...props} isDebateModerated={isDebateModerated} />}
-  </DebateIsModeratedContext.Consumer>
+  <DebateContext.Consumer>
+    {({ isDebateModerated }) => <Question {...props} isDebateModerated={isDebateModerated} />}
+  </DebateContext.Consumer>
 );
 
 export default compose(connect(mapStateToProps), graphql(createPostMutation), withScreenDimensions)(QuestionWithContext);

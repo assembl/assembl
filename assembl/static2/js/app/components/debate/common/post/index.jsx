@@ -3,7 +3,6 @@ import classnames from 'classnames';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import type { OperationComponent } from 'react-apollo';
-import { connect } from 'react-redux';
 
 import EditPostForm from '../editPostForm';
 import DeletedPost from '../deletedPost';
@@ -13,7 +12,7 @@ import manageErrorAndLoading from '../../../common/manageErrorAndLoading';
 import { DeletedPublicationStates, PublicationStates } from '../../../../constants';
 import hashLinkScroll from '../../../../utils/hashLinkScroll';
 import NuggetsManager from '../../../common/nuggetsManager';
-import { IsHarvestingContext } from '../../../../app';
+import { DebateContext } from '../../../../app';
 
 const getSubjectPrefixString = fullLevel =>
   fullLevel && (
@@ -218,17 +217,13 @@ export class DumbPost extends React.PureComponent<Props, State> {
 }
 
 const PostWithContext = props => (
-  <IsHarvestingContext.Consumer>
-    {isHarvesting => <DumbPost {...props} isHarvesting={isHarvesting} />}
-  </IsHarvestingContext.Consumer>
+  <DebateContext.Consumer>
+    {({ isHarvesting, connectedUserId }) => <DumbPost {...props} isHarvesting={isHarvesting} connectedUserId={connectedUserId} />}
+  </DebateContext.Consumer>
 );
-
-const mapStateToProps = ({ context }) => ({
-  connectedUserId: context.connectedUserId
-});
 
 const withData: OperationComponent<Response> = graphql(PostQuery);
 
 // Absolutely don't use redux connect here to avoid performance issue.
 // Please pass the needed props from Tree component.
-export default compose(connect(mapStateToProps), withData, manageErrorAndLoading({ displayLoader: true }))(PostWithContext);
+export default compose(withData, manageErrorAndLoading({ displayLoader: true }))(PostWithContext);

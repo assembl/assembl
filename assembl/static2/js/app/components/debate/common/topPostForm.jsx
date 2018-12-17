@@ -16,7 +16,7 @@ import { displayAlert, promptForLoginOr } from '../../../utils/utilityManager';
 import { TextInputWithRemainingChars } from '../../common/textInputWithRemainingChars';
 import RichTextEditor from '../../common/richTextEditor';
 import { connectedUserIsAdmin } from '../../../utils/permissions';
-import { DebateIsModeratedContext } from '../../../../app/app';
+import { DebateContext } from '../../../../app/app';
 
 export const TEXT_INPUT_MAX_LENGTH = 140;
 export const NO_BODY_LENGTH = 0;
@@ -269,9 +269,9 @@ const mapStateToProps = state => ({
 });
 
 const TopPostFormWithContext = props => (
-  <DebateIsModeratedContext.Consumer>
-    {isDebateModerated => <DumbTopPostForm {...props} isDebateModerated={isDebateModerated} />}
-  </DebateIsModeratedContext.Consumer>
+  <DebateContext.Consumer>
+    {({ isDebateModerated }) => <DumbTopPostForm {...props} isDebateModerated={isDebateModerated} />}
+  </DebateContext.Consumer>
 );
 
 export default compose(

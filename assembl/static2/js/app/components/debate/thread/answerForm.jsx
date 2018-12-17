@@ -17,7 +17,7 @@ import { getIsPhaseCompletedById } from '../../../utils/timeline';
 import { scrollToPost } from '../../../utils/hashLinkScroll';
 import { getPostPublicationState } from '../../../utils/globalFunctions';
 import { connectedUserIsAdmin } from '../../../utils/permissions';
-import { DebateIsModeratedContext } from '../../../../app/app';
+import { DebateContext } from '../../../../app/app';
 
 type Props = {
   contentLocale: string,
@@ -184,9 +184,9 @@ const mapStateToProps = state => ({
 });
 
 const DumbAnswerFormWithContext = props => (
-  <DebateIsModeratedContext.Consumer>
-    {isDebateModerated => <DumbAnswerForm {...props} isDebateModerated={isDebateModerated} />}
-  </DebateIsModeratedContext.Consumer>
+  <DebateContext.Consumer>
+    {({ isDebateModerated }) => <DumbAnswerForm {...props} isDebateModerated={isDebateModerated} />}
+  </DebateContext.Consumer>
 );
 
 export default compose(

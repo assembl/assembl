@@ -10,7 +10,7 @@ import TabbedColumns from './tabbedColumns';
 import MultiColumns from './multiColumns';
 import { MIN_WIDTH_COLUMN, APP_CONTAINER_MAX_WIDTH } from '../../../constants';
 import { withScreenWidth } from '../../common/screenDimensions';
-import { IsHarvestingContext } from '../../../app';
+import { DebateContext } from '../../../app';
 
 class ColumnsView extends React.Component<$FlowFixMeProps> {
   shouldShowTabs = (columnsCount) => {
@@ -90,9 +90,7 @@ class ColumnsView extends React.Component<$FlowFixMeProps> {
 }
 
 const ColumnsViewWithContext = props => (
-  <IsHarvestingContext.Consumer>
-    {isHarvesting => <ColumnsView {...props} isHarvesting={isHarvesting} />}
-  </IsHarvestingContext.Consumer>
+  <DebateContext.Consumer>{({ isHarvesting }) => <ColumnsView {...props} isHarvesting={isHarvesting} />}</DebateContext.Consumer>
 );
 
 export default withScreenWidth(ColumnsViewWithContext);
