@@ -447,6 +447,7 @@ export { DumbVoteSession };
 export default compose(
   connect(mapStateToProps),
   graphql(VoteSessionQuery, {
+    skip: ({ discussionPhaseId }) => !discussionPhaseId,
     options: ({ lang, discussionPhaseId }) => ({
       variables: { discussionPhaseId: discussionPhaseId, lang: lang }
     }),
