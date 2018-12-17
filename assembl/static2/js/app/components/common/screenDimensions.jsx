@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import { connect } from 'react-redux';
+import debounce from 'lodash/debounce';
 
 type Props = {
   updateScreenDimensions: () => void,
@@ -11,14 +12,17 @@ type Props = {
 // Context Provider
 class ResizeListener extends React.Component<Props> {
   componentDidMount() {
-    const { updateScreenDimensions } = this.props;
-    updateScreenDimensions();
-    window.addEventListener('resize', updateScreenDimensions);
+    this.updateScreenDimensions();
+    window.addEventListener('resize', this.updateScreenDimensions);
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', this.props.updateScreenDimensions);
+    window.removeEventListener('resize', this.updateScreenDimensions);
   }
+
+  updateScreenDimensions = debounce(() => {
+    this.props.updateScreenDimensions();
+  }, 200);
 
   render() {
     // This prevents the component from having more than one child
