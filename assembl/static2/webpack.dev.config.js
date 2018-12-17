@@ -33,8 +33,11 @@ function theme_entries() {
 }
 
 module.exports = {
-    // devtool: '#cheap-module-eval-source-map', // https://webpack.js.org/configuration/devtool/
-    devtool: '#cheap-module-source-map', // https://github.com/webpack/webpack-dev-server/issues/1090
+    // cheap-module-eval-source-map and cheap-module-source-map are giving
+    // wrong line number, about 10 lines above the real line.
+    // cheap-module-eval-source-map had issue with SockJS on Safari https://github.com/webpack/webpack-dev-server/issues/1090
+    // eval-source-map or source-map are giving the correct line number
+    devtool: '#eval-source-map', // https://webpack.js.org/configuration/devtool/
     devServer: {
         inline: true,
         hot: true,
