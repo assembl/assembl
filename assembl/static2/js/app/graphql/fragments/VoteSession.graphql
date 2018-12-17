@@ -10,18 +10,6 @@ fragment voteSessionGlobals on VoteSession {
 }
 
 fragment voteSessionLangstringsEntries on VoteSession {
-  titleEntries {
-    ...langStringEntry
-  }
-  subTitleEntries {
-    ...langStringEntry
-  }
-  instructionsSectionTitleEntries {
-    ...langStringEntry
-  }
-  instructionsSectionContentEntries {
-    ...langStringEntry
-  }
   propositionsSectionTitleEntries {
     ...langStringEntry
   }

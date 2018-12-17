@@ -66,7 +66,7 @@ from assembl.nlp.translation_service import DummyGoogleTranslationService
 from assembl.graphql.permissions_helpers import require_instance_permission
 from assembl.auth import CrudPermissions
 from assembl.utils import get_ideas, get_posts_for_phases
-from assembl.models.timeline import get_phase_by_identifier, Phases
+# from assembl.models.timeline import get_phase_by_identifier, Phases
 
 
 convert_sqlalchemy_type.register(EmailString)(convert_column_to_string)
@@ -102,7 +102,7 @@ class Query(graphene.ObjectType):
     has_syntheses = graphene.Boolean(description=docs.Schema.has_syntheses)
     vote_session = graphene.Field(
         VoteSession,
-        discussion_phase_id=graphene.Int(required=True, description=docs.Default.discussion_phase_id),
+        idea_id=graphene.Int(required=True, description=docs.VoteSession.idea_id),
         description=docs.Schema.vote_session)
     resources = graphene.List(Resource, description=docs.Schema.resources)
     resources_center = graphene.Field(lambda: ResourcesCenter, description=docs.Schema.resources_center)
@@ -182,10 +182,12 @@ class Query(graphene.ObjectType):
         return query.count()
 
     def resolve_total_vote_session_participations(self, args, context, info):
-        discussion_id = context.matchdict['discussion_id']
-        discussion = models.Discussion.get(discussion_id)
-        vote_session = get_phase_by_identifier(discussion, Phases.voteSession.name)
-        root_thematic = get_root_thematic_for_phase(vote_session) if vote_session else None
+        # discussion_id = context.matchdict['discussion_id']
+        # discussion = models.Discussion.get(discussion_id)
+        idea_id = args.get('idea_id')
+        idea = models.Idea.get(idea_id)
+        vote_session = idea.db.query(models.VoteSession).filter(models.VoteSession.idea_id == idea.id).first()
+        root_thematic = vote_session.idea if vote_session else None
         if root_thematic is None:
             return 0
 
@@ -212,10 +214,12 @@ class Query(graphene.ObjectType):
         return root_thematic
 
     def resolve_vote_session(self, args, context, info):
-        discussion_phase_id = args.get('discussion_phase_id')
-        discussion_phase = models.DiscussionPhase.get(discussion_phase_id)
-        require_instance_permission(CrudPermissions.READ, discussion_phase, context)
-        vote_session = discussion_phase.vote_session
+        # discussion_phase_id = args.get('discussion_phase_id')
+        idea_id = args.get('idea_id')
+        idea = models.Idea.get(idea_id)
+        # discussion_phase = models.DiscussionPhase.get(discussion_phase_id)
+        # require_instance_permission(CrudPermissions.READ, idea, context)
+        vote_session = idea.db.query(models.VoteSession).filter(models.VoteSession.idea_id == idea.id).first()
         if vote_session is not None:
             require_instance_permission(CrudPermissions.READ, vote_session, context)
         return vote_session

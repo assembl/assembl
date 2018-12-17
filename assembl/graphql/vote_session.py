@@ -21,7 +21,6 @@ from .langstring import (
 from .types import SecureObjectType, SQLAlchemyUnion
 from .utils import (
     abort_transaction_on_exception,
-    get_root_thematic_for_phase,
     create_root_thematic)
 import assembl.graphql.docstrings as docs
 
@@ -41,8 +40,9 @@ class VoteSession(SecureObjectType, SQLAlchemyObjectType):
     class Meta:
         model = models.VoteSession
         interfaces = (Node, langstrings_interface(langstrings_defs, models.VoteSession.__name__))
-        only_fields = ('id',)
+        only_fields = ('id', 'idea_id')
 
+    idea_id = graphene.ID(required=True)
     header_image = graphene.Field(Document, description=docs.VoteSession.header_image)
     vote_specifications = graphene.List(lambda: VoteSpecificationUnion, required=True, description=docs.VoteSession.header_image)
     proposals = graphene.List(lambda: Idea, required=True, description=docs.VoteSession.proposals)
@@ -55,7 +55,13 @@ class VoteSession(SecureObjectType, SQLAlchemyObjectType):
                 return attachment.document
 
     def resolve_proposals(self, args, context, info):
-        root_thematic = get_root_thematic_for_phase(self.discussion_phase)
+        idea_id = self.idea_id
+        idea = models.Idea.get(idea_id)
+        root_thematic = idea
+        # if idea.get_associated_phase():
+        #     root_thematic = get_root_thematic_for_phase(idea.get_associated_phase())
+        # else:
+        #     root_thematic = None
         if root_thematic is None:
             return []
 
@@ -90,9 +96,10 @@ class UpdateVoteSession(graphene.Mutation):
             raise Exception(
                 "A vote session requires an idea associated to it, check ideaId value")
         phase_identifier = "voteSession"
-        if idea.get_associated_phase().identifier != phase_identifier:
-            raise Exception(
-                "A vote session can only be created or edited with a '{}' discussion phase, check discussionPhaseId value".format(phase_identifier))
+        if idea.get_associated_phase() is not None:
+            if idea.get_associated_phase().identifier != phase_identifier:
+                raise Exception(
+                    "A vote session can only be created or edited with a '{}' discussion phase, check discussionPhaseId value".format(phase_identifier))
         db = idea.db
         vote_session = db.query(models.VoteSession).filter(models.VoteSession.idea_id == idea_id).first()
         if vote_session is None:
@@ -138,7 +145,7 @@ class UpdateVoteSession(graphene.Mutation):
         db.add(vote_session)
 
         # create the root thematic on which we will attach all proposals for this vote session
-        root_thematic = get_root_thematic_for_phase(idea.get_associated_phase().identifier)
+        root_thematic = vote_session.idea
         if root_thematic is None:
             root_thematic = create_root_thematic(idea.get_associated_phase().identifier)
 
@@ -802,11 +809,16 @@ class CreateProposal(graphene.Mutation):
                 description=description_ls
             )
             db.add(proposal)
-            phase = vote_session.discussion_phase
-            root_thematic = get_root_thematic_for_phase(phase)
-            if root_thematic is None:
-                raise Exception(
-                    "There is no root thematic for this vote session.")
+            idea_id = vote_session.idea_id
+            idea = models.Idea.get(idea_id)
+            root_thematic = idea
+            # if idea.get_associated_phase():
+            #     root_thematic = get_root_thematic_for_phase(idea.get_associated_phase())
+            # else:
+            #     root_thematic=None
+            # if root_thematic is None:
+            #     raise Exception(
+            #         "There is no root thematic for this vote session.")
 
             order = len(root_thematic.get_children()) + 1.0
             db.add(

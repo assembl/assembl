@@ -27,7 +27,10 @@ def vote_session(request, test_session, discussion, timeline_vote_session,
     test_session.add(attachment)
     test_session.flush()
 
-    root_thematic = create_root_thematic(timeline_vote_session)
+    # root_thematic = create_root_thematic(timeline_vote_session)
+    # root_thematic_id = vote_session.idea
+    # idea = Idea.get(root_thematic_id)
+    root_thematic = vote_session.idea
     test_session.flush()
 
     def fin():
@@ -185,7 +188,7 @@ def vote_proposal(request, test_session, discussion, graphql_request, vote_sessi
     })
     assert res.errors is None
     from assembl.graphql.utils import get_root_thematic_for_phase
-    root_thematic = get_root_thematic_for_phase(vote_session.discussion_phase)
+    root_thematic = vote_session.idea
     proposal = root_thematic.children[0]
 
     def fin():

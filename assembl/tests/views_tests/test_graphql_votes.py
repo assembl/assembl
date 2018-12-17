@@ -106,7 +106,7 @@ def test_graphql_vote_results(graphql_participant1_request, vote_session, vote_p
         graphql_registry['VoteSession'],
         context_value=graphql_participant1_request,
         variable_values={
-            "discussionPhaseId": vote_session.discussion_phase_id,
+            "ideaId": vote_session.idea_id,
             "lang": "en"
         }
     )
@@ -132,7 +132,7 @@ def test_graphql_vote_results_number_gauge_average(graphql_participant1_request,
         graphql_registry['VoteSession'],
         context_value=graphql_participant1_request,
         variable_values={
-            "discussionPhaseId": vote_session.discussion_phase_id,
+            "ideaId": vote_session.idea_id,
             "lang": "en"
         }
     )
@@ -145,7 +145,7 @@ def test_graphql_vote_results_gauges_zero_votes(graphql_participant1_request, vo
         graphql_registry['VoteSession'],
         context_value=graphql_participant1_request,
         variable_values={
-            "discussionPhaseId": vote_session.discussion_phase_id,
+            "ideaId": vote_session.idea_id,
             "lang": "en"
         }
     )

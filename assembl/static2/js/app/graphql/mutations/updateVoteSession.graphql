@@ -7,7 +7,7 @@ mutation UpdateVoteSession(
   $seeCurrentVotes: Boolean
 ) {
   updateVoteSession(
-    ideaId: $discussionPhaseId
+    ideaId: $ideaId
     headerImage: $headerImage
     propositionsSectionTitleEntries: $propositionsSectionTitleEntries
     seeCurrentVotes: $seeCurrentVotes

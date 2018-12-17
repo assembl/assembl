@@ -221,7 +221,7 @@ def update_attachment(discussion, attachment_model, new_value, attachments, atta
         attachments.append(attachment)
 
 
-def create_idea_announcement(user_id, discussion, idea, title_langstring, description_langstring):
+def create_idea_announcement(user_id, discussion, idea, title_langstring, description_langstring, quote):
     """Create an announcement with title and body for an idea.
     """
     idea_announcement = models.IdeaAnnouncement(
@@ -230,5 +230,6 @@ def create_idea_announcement(user_id, discussion, idea, title_langstring, descri
         title=title_langstring,
         body=description_langstring,
         creator_id=user_id,
-        last_updated_by_id=user_id)
+        last_updated_by_id=user_id,
+        quote=quote)
     return idea_announcement

@@ -42,11 +42,11 @@ def assert_graphql_unauthorized(response):
     assert "wrong credentials" in response.errors[0].message
 
 
-def assert_vote_session_not_created(discussion_phase_id, graphql_request, graphql_registry):
+def assert_vote_session_not_created(vote_session, graphql_request, graphql_registry):
     response = schema.execute(
         graphql_registry['VoteSession'],
         context_value=graphql_request,
-        variable_values={"discussionPhaseId": discussion_phase_id, "lang": "en"}
+        variable_values={"ideaId": vote_session.idea_id, "lang": "en"}
     )
     assert response.errors is None
     assert response.data['voteSession'] is None
@@ -128,7 +128,7 @@ def delete_vote_session(vote_session):
 
 def test_graphql_update_vote_session(graphql_request, vote_session, test_app, graphql_registry):
     mutate_and_assert(graphql_request, vote_session.idea_id, test_app, graphql_registry)
-    root_thematic = get_root_thematic_for_phase(vote_session.idea)
+    root_thematic = vote_session.idea
     assert root_thematic is not None
 
 
@@ -146,7 +146,7 @@ def test_graphql_delete_vote_session_cascade(graphql_request, vote_session, test
 
 
 def test_graphql_update_vote_session_unauthenticated(graphql_unauthenticated_request, vote_session, graphql_registry):
-    mutate_and_assert_unauthorized(graphql_unauthenticated_request, vote_session.discussion_phase_id, graphql_registry)
+    mutate_and_assert_unauthorized(graphql_unauthenticated_request, vote_session.idea_id, graphql_registry)
 
 
 def test_graphql_create_vote_session(graphql_request, timeline_vote_session, test_app, graphql_registry):
@@ -188,12 +188,12 @@ def test_graphql_get_vote_session(graphql_participant1_request, vote_session, gr
     assert graphql_image['externalUrl'] == source_image.external_url
 
 
-def test_graphql_get_vote_session_unauthenticated(graphql_unauthenticated_request, vote_session, graphql_registry):
+def test_graphql_get_vote_session_unauthenticated(graphql_unauthenticated_request, vote_session, graphql_registry, subidea_1_1):
     response = schema.execute(
         graphql_registry['VoteSession'],
         context_value=graphql_unauthenticated_request,
         variable_values={
-            "ideaId": vote_session.idea_id,
+            "ideaId": subidea_1_1.id,
             "lang": "en"
         }
     )
@@ -380,12 +380,12 @@ u'updateTokenVoteSpecification': {u'voteSpecification': {u'exclusiveCategories':
                                                          u'voteSessionId': vote_session_id}}}
 
 
-def test_graphql_get_vote_session_and_vote_specifications(graphql_participant1_request, vote_session, token_vote_specification, graphql_registry):
+def test_graphql_get_vote_session_and_vote_specifications(graphql_participant1_request, vote_session, token_vote_specification, graphql_registry, subidea_1_1):
     response = schema.execute(
         graphql_registry['VoteSession'],
         context_value=graphql_participant1_request,
         variable_values={
-            "ideaId": vote_session.idea_id, 
+            "ideaId": subidea_1_1.id,
             "lang": "en"
         }
     )
@@ -664,7 +664,7 @@ def test_mutation_create_proposal(graphql_request, discussion, vote_session, gra
         ]
     })
     assert res.errors is None
-    root_thematic = get_root_thematic_for_phase(vote_session.discussion_phase)
+    root_thematic = vote_session.idea
     proposal = root_thematic.children[0]
     proposal_id = to_global_id("Idea", proposal.id)
     assert json.loads(json.dumps(res.data)) == {
@@ -688,13 +688,19 @@ u'createProposal': {
     proposal.db.flush()
 
 
-def test_mutation_create_proposal_no_root_thematic(graphql_request, discussion, vote_session, graphql_registry):
+def test_mutation_create_proposal_no_root_thematic(graphql_request, discussion, vote_session, graphql_registry, subidea_1_1):
     mutation = graphql_registry['createProposal']
     vote_session_id = to_global_id("VoteSession", vote_session.id)
-    root_thematic = get_root_thematic_for_phase(vote_session.discussion_phase)
-    vote_session.discussion_phase.root_idea = None
-    root_thematic.delete()
-    root_thematic.db.flush()
+    idea_id = vote_session.idea_id
+    idea = models.Idea.get(idea_id)
+    if idea.get_associated_phase():
+        root_thematic = get_root_thematic_for_phase(idea.get_associated_phase())
+    else:
+        root_thematic = None
+    # vote_session.discussion_phase.root_idea = None
+    if root_thematic is not None:
+        root_thematic.delete()
+        root_thematic.db.flush()
 
     res = schema.execute(mutation, context_value=graphql_request, variable_values={
         "voteSessionId": vote_session_id,
@@ -707,7 +713,6 @@ def test_mutation_create_proposal_no_root_thematic(graphql_request, discussion, 
             {"value": u"Description: Understanding the dynamics and issues", "localeCode": "en"}
         ]
     })
-
     assert len(res.errors) == 1
     assert 'no root thematic' in res.errors[0].message
 
