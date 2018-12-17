@@ -60,7 +60,8 @@ class MenuList extends React.Component<MenuListProps, MenuListState> {
   render() {
     const { subMenu, items, rootItem, identifier, phaseId, className, onMenuItemClick } = this.props;
     const { selected } = this.state;
-    const rootItems = this.getItemChildren(rootItem);
+    // filter out item not having id (currently in table of thematics administration, but not saved yet)
+    const rootItems = this.getItemChildren(rootItem).filter(item => item.id);
     if (rootItems.length === 0) return null;
     const estimatedMenuHeight = rootItems.length * menuItemHeight + menuItemMargin;
     return (
