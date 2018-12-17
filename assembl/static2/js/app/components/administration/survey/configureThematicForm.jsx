@@ -120,7 +120,7 @@ class ConfigureThematicForm extends React.PureComponent<Props> {
           withAttachment
           component={MultilingualRichTextFieldAdapter}
         />
-        {theme && theme.messageViewOverride.value === MESSAGE_VIEW.survey ? (
+        {theme && theme.messageViewOverride && theme.messageViewOverride.value === MESSAGE_VIEW.survey ? (
           <SurveyFields editLocale={editLocale} fieldPrefix={name} />
         ) : null}
       </div>
