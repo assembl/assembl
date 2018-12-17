@@ -1,8 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`MenuList component should match the MenuList 1`] = `
-Array [
-  "",
+<React.Fragment>
   <div
     className="menu-table-col debate-class"
     onMouseLeave={[Function]}
@@ -60,16 +59,15 @@ Array [
         />
       </Scrollbars>
     </div>
-    
-  </div>,
-]
+  </div>
+</React.Fragment>
 `;
 
 exports[`MenuList component should match the sub-MenuList 1`] = `
-Array [
+<React.Fragment>
   <div
     className="sub-menu-separator"
-  />,
+  />
   <div
     className="menu-table-col debate-class sub-menu"
     onMouseLeave={[Function]}
@@ -127,7 +125,6 @@ Array [
         />
       </Scrollbars>
     </div>
-    
-  </div>,
-]
+  </div>
+</React.Fragment>
 `;
