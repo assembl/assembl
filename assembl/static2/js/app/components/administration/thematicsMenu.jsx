@@ -102,6 +102,7 @@ export const addMenuItem = (id: string, parentId: string, index: number, client:
   client.writeQuery({
     ...query,
     data: {
+      rootIdea: data.rootIdea,
       thematicsData: [...data.thematicsData, newMenuItem]
     }
   });
