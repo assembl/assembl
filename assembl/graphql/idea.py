@@ -796,8 +796,8 @@ def create_idea(parent_idea, phase, args, context):
                     db.add(
                         models.IdeaLink(source=saobj, target=question,
                                         order=idx + 1.0))
-        else:
-            update_ideas_recursively(saobj, args.get('children', []), phase, context)
+
+        update_ideas_recursively(saobj, args.get('children', []), phase, context)
 
     db.flush()
     return saobj
@@ -913,7 +913,7 @@ def update_idea(args, phase, context):
         if is_survey_thematic:
             questions_input = args.get('questions')
             existing_questions = {
-                question.id: question for question in thematic.get_children()}
+                question.id: question for question in thematic.get_children() if isinstance(question, models.Question)}
             updated_questions = set()
             if questions_input is not None:
                 for idx, question_input in enumerate(questions_input):
@@ -942,8 +942,8 @@ def update_idea(args, phase, context):
                 for question_id in set(existing_questions.keys()
                                        ).difference(updated_questions):
                     existing_questions[question_id].is_tombstone = True
-        else:
-            update_ideas_recursively(thematic, args.get('children', []), phase, context)
+
+        update_ideas_recursively(thematic, args.get('children', []), phase, context)
 
     db.flush()
     return thematic
@@ -975,7 +975,7 @@ def delete_idea(args, context):
 
 def update_ideas_recursively(parent_idea, children, phase, context):
     existing_ideas = {
-        idea.id: idea for idea in parent_idea.get_children()}
+        idea.id: idea for idea in parent_idea.get_children() if not isinstance(idea, models.Question)}
     updated_ideas = set()
     for idea in children:
         if idea.get('id', None):
