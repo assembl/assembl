@@ -41,7 +41,7 @@
     text-align: center;
 
     &.pending {
-      border-left: 4px solid #ffd48f;
+      border-left: 4px solid $orange;
     }
   }
 
@@ -150,7 +150,7 @@ $deleted-post-border: 1px solid $grey1 !default;
 }
 
 .idea .level .box.pending {
-  border-left: 4px solid #ffd48f;
+  border-left: 4px solid $orange;
 }
 
 .posts {
@@ -205,7 +205,7 @@ $deleted-post-border: 1px solid $grey1 !default;
 
   .post-right {
     &.pending {
-      background-color: #ffd48f;
+      background-color: $orange;
     }
   }
 
@@ -242,7 +242,7 @@ $deleted-post-border: 1px solid $grey1 !default;
       padding: 0 0 0 10px;
 
       &.pending {
-        color: #ffd48f;
+        color: $orange;
       }
 
       &.pendingForAdmin {
@@ -458,7 +458,7 @@ $deleted-post-border: 1px solid $grey1 !default;
       width: 20%;
 
       &.pending {
-        background-color: #ffd48f;
+        background-color: $orange;
       }
 
       .statistics-doughnut {
