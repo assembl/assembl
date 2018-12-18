@@ -47,7 +47,6 @@ def get_descendants(ideas):
 
 
 def get_ideas(phase, options=None):
-    phase_identifier = phase.identifier
     root_thematic = get_root_thematic_for_phase(phase)
     discussion = phase.discussion
     if root_thematic is None:
@@ -79,11 +78,6 @@ def get_ideas(phase, options=None):
         ).order_by(models.IdeaLink.order, models.Idea.creation_date)
     if options is not None:
         query = query.options(*options)
-
-    if phase_identifier == Phases.multiColumns.value:
-        # Filter out ideas that don't have columns.
-        query = query.filter(
-            models.Idea.message_view_override == 'messageColumns')
 
     return query
 

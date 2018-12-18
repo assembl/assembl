@@ -114,63 +114,6 @@ def test_graphql_get_all_ideas(phases, graphql_request,
     assert res.errors is None
 
 
-def test_graphql_get_all_ideas_multiColumns_phase(phases, graphql_request,
-                                                  user_language_preference_en_cookie,
-                                                  subidea_1,
-                                                  subidea_1_1_1,
-                                                  idea_message_column_positive,
-                                                  idea_message_column_negative,
-                                                  idea_message_column_positive_on_subidea_1_1):
-    subidea_1.message_view_override = 'messageColumns'
-    subidea_1.db.flush()
-    # idea_message_column_positive/negative fixtures add columns on subidea_1
-    # the ideas query should return only subidea_1
-    # We have a column on subidea_1_1, but messageColumns is not enabled on it.
-    res = schema.execute(
-        u"""query AllIdeasQuery($lang: String!, $discussionPhaseId: Int!) {
-            ideas(discussionPhaseId: $discussionPhaseId) {
-              ... on Idea {
-                id
-                title(lang: $lang)
-                titleEntries { value, localeCode }
-                messageViewOverride
-                numPosts
-                numContributors
-                numChildren(discussionPhaseId: $discussionPhaseId)
-                parentId
-                order
-                posts(first:10) {
-                  edges {
-                    node {
-                      ... on Post { subject body }
-                    }
-                  }
-                }
-              }
-            }
-            rootIdea(discussionPhaseId: $discussionPhaseId) {
-              ... on Node {
-                id
-              }
-            }
-        }
-        """, context_value=graphql_request,
-        variable_values={"discussionPhaseId": phases['multiColumns'].id, "lang": u"en"})
-    root_idea = res.data['rootIdea']
-    assert root_idea['id'] is not None
-    assert len(res.data['ideas']) == 1
-    first_idea = res.data['ideas'][0]
-    assert first_idea['title'] == u'Favor economic growth'
-    assert first_idea['parentId'] == root_idea['id']
-    assert first_idea['order'] == 0.0
-    assert first_idea['numChildren'] == 0
-    assert first_idea['messageViewOverride'] == 'messageColumns'
-    assert res.errors is None
-    # revert the changes for tests isolation
-    subidea_1.message_view_override = None
-    subidea_1.db.flush()
-
-
 def test_graphql_get_all_ideas_thread_without_vote_proposals(phases, graphql_request,
                                user_language_preference_en_cookie,
                                subidea_1_1_1, vote_proposal):

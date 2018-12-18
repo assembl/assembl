@@ -125,22 +125,17 @@ class IdeaInterface(graphene.Interface):
         return self.get_order_from_first_parent()
 
     def resolve_num_children(self, args, context, info):
-        phase_id = args.get('discussion_phase_id')
-        phase = models.DiscussionPhase.get(phase_id)
-        if phase.identifier == Phases.multiColumns.value:
-            _it = models.Idea.__table__
-            _ilt = models.IdeaLink.__table__
-            _target_it = models.Idea.__table__.alias()
-            j = join(_ilt, _it, _ilt.c.source_id == _it.c.id
-                     ).join(_target_it, _ilt.c.target_id == _target_it.c.id)
-            num = select([func.count(_ilt.c.id)]).select_from(j).where(
-                (_ilt.c.tombstone_date == None) & (_it.c.tombstone_date == None) & (  # noqa: E711
-                    _it.c.id == self.id) & (_target_it.c.message_view_override == 'messageColumns')
+        _it = models.Idea.__table__
+        _ilt = models.IdeaLink.__table__
+        _target_it = models.Idea.__table__.alias()
+        j = join(_ilt, _it, _ilt.c.source_id == _it.c.id
+                 ).join(_target_it, _ilt.c.target_id == _target_it.c.id)
+        num = select([func.count(_ilt.c.id)]).select_from(j).where(
+            (_ilt.c.tombstone_date == None) & (_it.c.tombstone_date == None) & (  # noqa: E711
+                _it.c.id == self.id) & (_target_it.c.sqla_type != 'question')
 
-            ).correlate_except(_ilt)
-            return self.db.execute(num).fetchone()[0]
-
-        return self.num_children
+        ).correlate_except(_ilt)
+        return self.db.execute(num).fetchone()[0]
 
     def resolve_vote_specifications(self, args, context, info):
         return self.criterion_for
