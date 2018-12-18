@@ -60,7 +60,7 @@ type Props = {
   connectedUserId: ?string
 };
 
-class App extends React.Component<Props> {
+export class DumbApp extends React.Component<Props> {
   componentDidMount() {
     const { route } = this.props;
     const debateId = getDiscussionId();
@@ -191,4 +191,4 @@ export default compose(
       };
     }
   })
-)(App);
+)(DumbApp);
