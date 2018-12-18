@@ -17,7 +17,8 @@ type Props = {
   },
   params: {
     phaseId: string,
-    themeId?: string
+    themeId?: string,
+    questionId?: string
   },
   children: React.Node
 };
@@ -32,10 +33,11 @@ const DebateThread = ({ phaseId, identifier, data, params, children }: Props) =>
   }
   const { loading, ideas, rootIdea } = data;
   const themeId = params.themeId || null;
-  const isParentRoute = !themeId;
+  const questionId = params.questionId || null;
+  const isParentRoute = !(themeId || questionId) || false;
   const childrenElm = React.Children.map(children, child =>
     React.cloneElement(child, {
-      id: themeId,
+      id: themeId || questionId,
       identifier: identifier,
       phaseId: phaseId
     })
@@ -46,7 +48,7 @@ const DebateThread = ({ phaseId, identifier, data, params, children }: Props) =>
       {loading && isParentRoute && <Loader color="black" />}
       {!loading &&
         ideas &&
-        isParentRoute && <Ideas ideas={ideas} rootIdeaId={rootIdea.id} identifier={identifier} phaseId={phaseId} />}
+        isParentRoute && <Ideas key={phaseId} ideas={ideas} rootIdeaId={rootIdea.id} identifier={identifier} phaseId={phaseId} />}
       {!isParentRoute && <section className="debate-section">{childrenElm}</section>}
     </div>
   );

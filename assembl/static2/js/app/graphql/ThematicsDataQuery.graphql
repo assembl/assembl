@@ -3,10 +3,6 @@ query ThematicsDataQuery($discussionPhaseId: Int!, $lang: String!) {
     ... on IdeaInterface {
       order
     }
-    ... on Thematic {
-      id
-      title(lang: $lang)
-    }
     ... on Idea {
       id
       parentId
@@ -15,9 +11,6 @@ query ThematicsDataQuery($discussionPhaseId: Int!, $lang: String!) {
   }
   rootIdea(discussionPhaseId: $discussionPhaseId) {
     ... on Idea {
-      id
-    }
-    ... on Thematic {
       id
     }
   }

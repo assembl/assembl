@@ -13,7 +13,7 @@ from assembl.graphql.utils import create_root_thematic
 def test_graphene_id():
     assert models.RootIdea.graphene_type() == 'Idea'
     assert models.Idea.graphene_type() == 'Idea'
-    assert models.Thematic.graphene_type() == 'Thematic'
+    assert models.Thematic.graphene_type() == 'Idea'
     assert models.Question.graphene_type() == 'Question'
     assert models.AgentProfile.graphene_type() == 'AgentProfile'
     assert models.User.graphene_type() == 'AgentProfile'
@@ -35,24 +35,24 @@ def test_get_locales(graphql_request):
 
 def test_get_thematics_noresult(phases, graphql_request):
     res = schema.execute(
-        u'query { thematics: ideas(discussionPhaseId: '+unicode(phases['survey'].id)+u') { ... on Thematic { id, title, description, numPosts, numContributors, questions { title }, video {title, descriptionTop, descriptionBottom, htmlCode} } } }', context_value=graphql_request)
+        u'query { thematics: ideas(discussionPhaseId: '+unicode(phases['survey'].id)+u') { ... on Idea { id, title, description, numPosts, numContributors, questions { title } } } }', context_value=graphql_request)
     assert json.loads(json.dumps(res.data)) == {u'thematics': []}
 
 
-def test_get_thematics_no_video(discussion, phases, graphql_request, test_session):
+def test_get_thematics(discussion, phases, graphql_request, test_session):
     title = u"Comprendre les dynamiques et les enjeux"
     title = models.LangString.create(title, locale_code="fr")
     root_thematic = create_root_thematic(phases['survey'])
-    thematic = models.Thematic(
+    thematic = models.Idea(
         discussion_id=discussion.id,
         title=title)
     test_session.add(
         models.IdeaLink(source=root_thematic, target=thematic, order=1.0))
     test_session.commit()
-    thematic_gid = to_global_id('Thematic', thematic.id)
+    thematic_gid = to_global_id('Idea', thematic.id)
 
     res = schema.execute(
-        u'query { thematics: ideas(discussionPhaseId: '+unicode(phases['survey'].id)+u') { ... on Thematic { id, title, description, numPosts, numContributors, totalSentiments, questions { title }, video {title, descriptionTop, descriptionBottom, descriptionSide, htmlCode} } } }', context_value=graphql_request)
+        u'query { thematics: ideas(discussionPhaseId: '+unicode(phases['survey'].id)+u') { ... on Idea { id, title, description, numPosts, numContributors, totalSentiments, questions { title } } } }', context_value=graphql_request)
     assert json.loads(json.dumps(res.data)) == {
         u'thematics': [{u'description': u'',
                         u'id': thematic_gid,
@@ -61,148 +61,7 @@ def test_get_thematics_no_video(discussion, phases, graphql_request, test_sessio
                         u'totalSentiments': 0,
                         u'questions': [],
                         u'title': u'Comprendre les dynamiques et les enjeux',
-                        u'video': None}]}
-
-
-def test_get_thematics_with_video(discussion, phases, graphql_request, test_session):
-    title = u"Comprendre les dynamiques et les enjeux"
-    title = models.LangString.create(title, locale_code="fr")
-    video_title = models.LangString.create(
-        u"Laurent Alexandre, chirurgien et expert en intelligence artificielle nous livre ses prédictions pour le 21e siècle.",
-        locale_code="fr")
-    video_desc_top = models.LangString.create(
-        u"Personne ne veut d'un monde où on pourrait manipuler nos cerveaux et où les états pourraient les bidouiller",
-        locale_code="fr")
-    video_desc_bottom = models.LangString.create(
-        u"Calise de tabarnak",
-        locale_code="fr")
-    video_desc_side = models.LangString.create(
-        u"Putain",
-        locale_code="fr")
-    root_thematic = create_root_thematic(phases['survey'])
-    thematic = models.Thematic(
-        discussion_id=discussion.id,
-        title=title,
-        video_title=video_title,
-        video_description_top=video_desc_top,
-        video_description_bottom=video_desc_bottom,
-        video_description_side=video_desc_side,
-        video_html_code=u"https://something.com",
-    )
-    test_session.add(
-        models.IdeaLink(source=root_thematic, target=thematic, order=1.0))
-    test_session.commit()
-    thematic_gid = to_global_id('Thematic', thematic.id)
-    res = schema.execute(
-        u'query { thematics: ideas(discussionPhaseId: '+unicode(phases['survey'].id)+u') { ... on Thematic { id, title, description, numPosts, numContributors, questions { title }, video {title, descriptionTop, descriptionBottom, descriptionSide, htmlCode} } } }', context_value=graphql_request)
-    assert json.loads(json.dumps(res.data)) == {
-        u'thematics': [{u'description': u'',
-                        u'id': thematic_gid,
-                        u'numContributors': 0,
-                        u'numPosts': 0,
-                        u'questions': [],
-                        u'title': u'Comprendre les dynamiques et les enjeux',
-                        u'video': {u'title': u"Laurent Alexandre, chirurgien et expert en intelligence artificielle nous livre ses prédictions pour le 21e siècle.",
-                                   u'descriptionTop': u"Personne ne veut d'un monde où on pourrait manipuler nos cerveaux et où les états pourraient les bidouiller",
-                                   u'descriptionBottom': u"Calise de tabarnak",
-                                   u'descriptionSide': u"Putain",
-                                   u'htmlCode': u"https://something.com",
-                                   }}]}
-
-
-def test_mutation_create_thematic_with_video(phases, graphql_request):
-    res = schema.execute(u"""
-mutation myFirstMutation {
-    createThematic(titleEntries: [
-        {value: "Comprendre les dynamiques et les enjeux", localeCode: "fr"},
-        {value: "Understanding the dynamics and issues", localeCode: "en"}
-        ],
-        video: {
-            titleEntries:[
-                {
-                    value: "Laurent Alexandre, chirurgien et expert en intelligence artificielle nous livre ses prédictions pour le 21e siècle.",
-                    localeCode:"fr"
-                },
-            ]
-            descriptionEntriesTop: [
-                {
-                    value: "Personne ne veut d'un monde où on pourrait manipuler nos cerveaux et où les états pourraient les bidouiller",
-                    localeCode: "fr"
-                },
-            ],
-            descriptionEntriesBottom: [
-                {
-                    value:"Calise de tabarnak",
-                    localeCode:"fr"
-                },
-            ],
-            descriptionEntriesSide: [
-                {
-                    value:"Putain",
-                    localeCode:"fr"
-                },
-            ],
-            htmlCode: "https://something.com"
-        },
-        discussionPhaseId: """+unicode(phases['survey'].id)+u""") {
-        thematic {
-            ... on Thematic {
-                title
-                video {
-                    title
-                    titleEntries {
-                        localeCode
-                        value
-                    }
-                    htmlCode
-                    descriptionTop
-                    descriptionBottom
-                    descriptionSide
-                    descriptionEntriesTop {
-                        localeCode
-                        value
-                    },
-                    descriptionEntriesBottom {
-                        localeCode
-                        value
-                    }
-                    descriptionEntriesSide {
-                        localeCode
-                        value
-                    }
-                }
-            }
-        }
-    }
-}
-""", context_value=graphql_request)
-    assert json.loads(json.dumps(res.data)) == {
-        u'createThematic': {
-            u'thematic': {
-                u'title': u'Understanding the dynamics and issues',
-                u'video': {u'title': u"Laurent Alexandre, chirurgien et expert en intelligence artificielle nous livre ses prédictions pour le 21e siècle.",
-                           u'titleEntries': [{
-                               u'value': u"Laurent Alexandre, chirurgien et expert en intelligence artificielle nous livre ses prédictions pour le 21e siècle.",
-                               u'localeCode': u"fr"
-                           }],
-                           u'descriptionTop': u"Personne ne veut d'un monde où on pourrait manipuler nos cerveaux et où les états pourraient les bidouiller",
-                           u'descriptionBottom': u"Calise de tabarnak",
-                           u'descriptionSide': u"Putain",
-                           u'descriptionEntriesTop': [{
-                               u'value': u"Personne ne veut d'un monde où on pourrait manipuler nos cerveaux et où les états pourraient les bidouiller",
-                               u'localeCode': u"fr"
-                           }],
-                           u'descriptionEntriesBottom': [{
-                               u'value': u"Calise de tabarnak",
-                               u'localeCode': u"fr"
-                           }],
-                           u'descriptionEntriesSide': [{
-                               u'value': u"Putain",
-                               u'localeCode': u"fr"
-                           }],
-                           u'htmlCode': u"https://something.com",
-                           }
-            }}}
+                        }]}
 
 
 def test_mutation_create_thematic_multilang_implicit_en(phases, graphql_request , user_language_preference_en_cookie):
@@ -213,8 +72,8 @@ mutation myFirstMutation {
         {value: "Understanding the dynamics and issues", localeCode: "en"}
     ], discussionPhaseId: """+unicode(phases['survey'].id)+u""") {
         thematic {
-            ... on Thematic {
-                title,
+            ... on Idea {
+                title
             }
         }
     }
@@ -236,7 +95,7 @@ mutation myFirstMutation {
         {value: "Comprendre les dynamiques et les enjeux", localeCode: "fr"},
     ], discussionPhaseId: """+unicode(phases['survey'].id)+u""") {
         thematic {
-            ... on Thematic {
+            ... on Idea {
                 title
             }
         }
@@ -258,7 +117,7 @@ mutation myFirstMutation {
         {value: "Understanding the dynamics and issues", localeCode: "en"}
     ], discussionPhaseId: """+unicode(phases['survey'].id)+u""") {
         thematic {
-            ... on Thematic {
+            ... on Idea {
                 title(lang: "fr")
             }
         }
@@ -280,7 +139,7 @@ mutation myFirstMutation {
         {value: "Understanding the dynamics and issues", localeCode: "en"}
     ], discussionPhaseId: """+unicode(phases['survey'].id)+u""") {
         thematic {
-            ... on Thematic {
+            ... on Idea {
                 title(lang: "fr")
             }
         }
@@ -303,7 +162,7 @@ mutation myFirstMutation {
         {value:"Italian...", localeCode:"it"}
     ], discussionPhaseId: """+unicode(phases['survey'].id)+u""") {
         thematic {
-            ... on Thematic {
+            ... on Idea {
                 title(lang:"fr")
             }
         }
@@ -338,7 +197,7 @@ mutation myFirstMutation($img:String) {
         image:$img
     ) {
         thematic {
-            ... on Thematic {
+            ... on Idea {
                 id,
                 title(lang:"fr"),
                 img {
@@ -386,7 +245,7 @@ mutation myFirstMutation($img:String, $thematicId:ID!) {
         image:$img
     ) {
         thematic {
-            ... on Thematic {
+            ... on Idea {
                 title(lang:"fr")
                 img {
                     externalUrl
@@ -410,7 +269,7 @@ mutation myFirstMutation {
         {value:"Understanding the dynamics and issues", localeCode:"en"}
     ], discussionPhaseId: """+unicode(phases['survey'].id)+u""") {
         thematic {
-            ... on Thematic {
+            ... on Idea {
                 title(lang:"en")
             }
         }
@@ -429,7 +288,7 @@ def test_mutation_create_raise_if_no_title_entries(phases, graphql_request):
 mutation myFirstMutation {
     createThematic(titleEntries:[], discussionPhaseId: """+unicode(phases['survey'].id)+u""") {
         thematic {
-            ... on Thematic {
+            ... on Idea {
                 title(lang:"en")
             }
         }
@@ -439,7 +298,7 @@ mutation myFirstMutation {
     assert json.loads(json.dumps(res.data)) == {
         u'createThematic': None
     }
-    assert res.errors[0].args[0] == 'Thematic titleEntries needs at least one entry'
+    assert res.errors[0].args[0] == 'Idea titleEntries needs at least one entry'
 
 
 def test_mutation_create_thematic_no_permission(phases, graphql_request):
@@ -448,7 +307,7 @@ def test_mutation_create_thematic_no_permission(phases, graphql_request):
 mutation myFirstMutation {
     createThematic(titleEntries:[{value:"Comprendre les dynamiques et les enjeux", localeCode:"fr"}], discussionPhaseId: """+unicode(phases['survey'].id)+u""") {
         thematic {
-            ... on Thematic {
+            ... on Idea {
                 title
             }
         }
@@ -480,7 +339,7 @@ mutation myFirstMutation {
         discussionPhaseId: """+unicode(phases['survey'].id)+u""",
     ) {
         thematic {
-            ... on Thematic {
+            ... on Idea {
                 title(lang:"fr")
                 questions { title(lang:"fr") }
             }
@@ -513,7 +372,7 @@ mutation myFirstMutation {
 """ % thematic_id, context_value=graphql_request)
     assert True == res.data['deleteThematic']['success']
     res = schema.execute(
-        u'query { thematics: ideas(discussionPhaseId: '+unicode(phases['survey'].id)+u') { ... on Thematic { id, title, description, numPosts, numContributors, questions { title }, video {title, descriptionTop, descriptionBottom, htmlCode} } } }', context_value=graphql_request)
+        u'query { thematics: ideas(discussionPhaseId: '+unicode(phases['survey'].id)+u') { ... on Idea { id, title, description, numPosts, numContributors, questions { title } } } }', context_value=graphql_request)
     assert json.loads(json.dumps(res.data)) == {u'thematics': []}
 
 
@@ -659,7 +518,7 @@ mutation secondMutation {
         ]
     ) {
         thematic {
-            ... on Thematic {
+            ... on Idea {
                 titleEntries { localeCode value },
                 questions { titleEntries { localeCode value } }
             }
@@ -698,7 +557,7 @@ mutation secondMutation {
         ],
     ) {
         thematic {
-            ... on Thematic {
+            ... on Idea {
                 titleEntries { localeCode value },
                 questions { titleEntries { localeCode value } }
             }
@@ -717,67 +576,6 @@ mutation secondMutation {
                 ],
                 u'questions': [
                 ]
-            }}}
-
-
-def test_update_thematic_delete_video(graphql_request, thematic_with_video_and_question):
-    thematic_id, first_question_id = thematic_with_video_and_question
-    res = schema.execute(u"""
-mutation myMutation($thematicId:ID!) {
-    updateThematic(
-        id:$thematicId,
-        titleEntries:[
-            {value:"Understanding the dynamics and issues", localeCode:"en"},
-            {value:"Comprendre les dynamiques et les enjeux", localeCode:"fr"}
-        ],
-        video:{}
-    ) {
-        thematic {
-            ... on Thematic {
-                titleEntries { localeCode value },
-                questions { titleEntries { localeCode value } }
-                video {
-                    titleEntries {
-                        localeCode,
-                        value
-                },
-                descriptionEntriesTop {
-                    localeCode,
-                    value
-                },
-                descriptionEntriesBottom {
-                    localeCode,
-                    value
-                },
-                descriptionEntriesSide {
-                    localeCode,
-                    value
-                },
-                title,
-                descriptionTop,
-                descriptionBottom,
-                descriptionSide,
-                htmlCode }
-            }
-        }
-    }
-}
-""", context_value=graphql_request, variable_values={"thematicId": thematic_id})
-    assert json.loads(json.dumps(res.data)) == {
-        u'updateThematic': {
-            u'thematic': {
-                u'titleEntries': [
-                    {u'value': u"Understanding the dynamics and issues",
-                        u'localeCode': u"en"},
-                    {u'value': u"Comprendre les dynamiques et les enjeux",
-                        u'localeCode': u"fr"}
-                ],
-                u'questions': [
-                    {u'titleEntries': [
-                        {u'value': u"Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?", u'localeCode': u"fr"}
-                    ]},
-                ],
-                u'video': None
             }}}
 
 
@@ -803,7 +601,7 @@ mutation secondMutation {
         ]
     ) {
         thematic {
-            ... on Thematic {
+            ... on Idea {
                 titleEntries { localeCode value },
                 questions { titleEntries { localeCode value } }
             }
@@ -841,7 +639,7 @@ mutation updateThematic($thematicId: ID!, $file: String!) {
         image:$file
     ) {
         thematic {
-            ... on Thematic {
+            ... on Idea {
                 img {
                     externalUrl
                 }
@@ -1093,7 +891,7 @@ query {
     res = schema.execute(u"""
 query {
   node(id: "%s") {
-    ... on Thematic {
+    ... on Idea {
       numPosts
       numContributors
       totalSentiments
@@ -1162,7 +960,7 @@ query {
     res = schema.execute(u"""
 query {
   node(id: "%s") {
-    ... on Thematic {
+    ... on Idea {
       numPosts
       numContributors
       totalSentiments
@@ -1231,7 +1029,7 @@ query {
     res = schema.execute(u"""
 query {
   node(id: "%s") {
-    ... on Thematic {
+    ... on Idea {
       numPosts
       numContributors
       totalSentiments
@@ -1308,7 +1106,7 @@ query {
     res = schema.execute(u"""
 query {
   node(id: "%s") {
-    ... on Thematic {
+    ... on Idea {
       numPosts
       numContributors
       totalSentiments
@@ -1579,9 +1377,9 @@ def test_get_proposals_random(graphql_request, thematic_and_question, proposals1
         }}
 
 
-def test_get_thematics_order(phases, graphql_request, thematic_with_video_and_question, second_thematic_with_questions):
+def test_get_thematics_order(phases, graphql_request, thematic_with_question, second_thematic_with_questions):
     res = schema.execute(
-        u'query { thematics: ideas(discussionPhaseId: '+unicode(phases['survey'].id)+u') { ... on Thematic { title, order } } }',
+        u'query { thematics: ideas(discussionPhaseId: '+unicode(phases['survey'].id)+u') { ... on Idea { title, order } } }',
         context_value=graphql_request)
     assert json.loads(json.dumps(res.data)) == {
         u'thematics': [
@@ -1591,8 +1389,8 @@ def test_get_thematics_order(phases, graphql_request, thematic_with_video_and_qu
     }
 
 
-def test_thematics_change_order(phases, graphql_request, thematic_with_video_and_question, second_thematic_with_questions):
-    thematic_id, _ = thematic_with_video_and_question
+def test_thematics_change_order(phases, graphql_request, thematic_with_question, second_thematic_with_questions):
+    thematic_id, _ = thematic_with_question
     res = schema.execute(u"""
 mutation myMutation($thematicId:ID!, $order:Float!) {
     updateThematic(
@@ -1600,7 +1398,7 @@ mutation myMutation($thematicId:ID!, $order:Float!) {
         order: $order
     ) {
         thematic {
-            ... on Thematic {
+            ... on Idea {
                 order
             }
         }
@@ -1610,7 +1408,7 @@ mutation myMutation($thematicId:ID!, $order:Float!) {
                                                      "order": 3.0})
 
     res = schema.execute(
-        u'query { thematics: ideas(discussionPhaseId: '+unicode(phases['survey'].id)+u') { ... on Thematic { title, order } } }',
+        u'query { thematics: ideas(discussionPhaseId: '+unicode(phases['survey'].id)+u') { ... on Idea { title, order } } }',
         context_value=graphql_request)
     assert json.loads(json.dumps(res.data)) == {
         u'thematics': [
@@ -1620,7 +1418,7 @@ mutation myMutation($thematicId:ID!, $order:Float!) {
     }
 
 
-def test_insert_thematic_between_two_thematics(phases, graphql_request, thematic_with_video_and_question, second_thematic_with_questions):
+def test_insert_thematic_between_two_thematics(phases, graphql_request, thematic_with_question, second_thematic_with_questions):
     res = schema.execute(u"""
 mutation myMutation {
     createThematic(
@@ -1631,7 +1429,7 @@ mutation myMutation {
         order: 1.5
     ) {
         thematic {
-            ... on Thematic {
+            ... on Idea {
                 order
             }
         }
@@ -1640,7 +1438,7 @@ mutation myMutation {
 """, context_value=graphql_request)
 
     res = schema.execute(
-        u'query { thematics: ideas(discussionPhaseId: '+unicode(phases['survey'].id)+u') { ... on Thematic { title, order } } }',
+        u'query { thematics: ideas(discussionPhaseId: '+unicode(phases['survey'].id)+u') { ... on Idea { title, order } } }',
         context_value=graphql_request)
     assert json.loads(json.dumps(res.data)) == {
         u'thematics': [

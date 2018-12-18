@@ -11,15 +11,9 @@ mutation updateIdeas($discussionPhaseId: Int!, $ideas: [IdeaInput]!) {
         ... on Idea {
           id
         }
-        ... on Thematic {
-          id
-        }
       }
       rootIdea(discussionPhaseId: $discussionPhaseId) {
         ... on Idea {
-          id
-        }
-        ... on Thematic {
           id
         }
       }

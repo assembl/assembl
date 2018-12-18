@@ -583,6 +583,6 @@ print json.dumps(schema.execute('query { posts(first: 5) { pageInfo { endCursor 
 # -H 'Cookie:assembl_session=d8deabe718595c01d3899aa686ac027193cc7d6984bd73b14afc42738d798018629b6e8a;'
 
 #get thematics with questions:
-print json.dumps(schema.execute('query { thematics(identifier:"survey") { id, title, description, numPosts, numContributors, questions { title }, video {title, description, htmlCode} } }', context_value=request).data, indent=2)
+print json.dumps(schema.execute('query { thematics(identifier:"survey") { id, title, description, numPosts, numContributors, questions { title } } }', context_value=request).data, indent=2)
 
 '''

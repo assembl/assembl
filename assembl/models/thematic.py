@@ -70,6 +70,10 @@ class Thematic(Idea):
 
     crud_permissions = CrudPermissions(P_ADMIN_DISC, P_READ, P_ADMIN_DISC, P_ADMIN_DISC)
 
+    @classmethod
+    def graphene_type(cls):
+        return 'Idea'
+
 
 LangString.setup_ownership_load_event(
     Thematic, ['video_title', 'video_description_top', 'video_description_bottom', 'video_description_side'])

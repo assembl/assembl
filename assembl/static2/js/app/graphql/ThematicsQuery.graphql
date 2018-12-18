@@ -9,15 +9,9 @@ query ThematicsQuery($discussionPhaseId: Int!) {
     ... on Idea {
       id
     }
-    ... on Thematic {
-      id
-    }
   }
   rootIdea(discussionPhaseId: $discussionPhaseId) {
     ... on Idea {
-      id
-    }
-    ... on Thematic {
       id
     }
   }

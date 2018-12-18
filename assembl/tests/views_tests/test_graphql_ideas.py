@@ -203,7 +203,7 @@ def test_graphql_get_all_ideas_survey_phase(phases, graphql_request,
     res = schema.execute(
         u"""query AllIdeasQuery($lang: String!, $discussionPhaseId: Int!) {
               ideas(discussionPhaseId: $discussionPhaseId) {
-                ... on Thematic {
+                ... on Idea {
                   id
                   title(lang: $lang)
                   parentId
@@ -211,7 +211,7 @@ def test_graphql_get_all_ideas_survey_phase(phases, graphql_request,
                 }
               }
               rootIdea(discussionPhaseId: $discussionPhaseId) {
-                ... on Thematic {
+                ... on Idea {
                   id
                 }
               }
@@ -693,9 +693,6 @@ query Question($lang: String!, $id: ID!) {
           }
         }
         ... on Idea {
-          id
-        }
-        ... on Thematic {
           id
         }
       }

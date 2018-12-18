@@ -4,7 +4,6 @@ mutation updateThematic(
   $titleEntries: [LangStringEntryInput]!
   $descriptionEntries: [LangStringEntryInput]
   $questions: [QuestionInput]
-  $video: VideoInput
   $announcement: IdeaAnnouncementInput
   $order: Float
   $messageViewOverride: String
@@ -15,7 +14,6 @@ mutation updateThematic(
     titleEntries: $titleEntries
     descriptionEntries: $descriptionEntries
     questions: $questions
-    video: $video
     announcement: $announcement
     order: $order
     messageViewOverride: $messageViewOverride
@@ -25,37 +23,22 @@ mutation updateThematic(
         messageViewOverride
         order
         title
-        img {
-          externalUrl
-          mimeType
-        }
-      }
-      ... on Idea {
-        id
         description
         announcement {
           title
           body
         }
-      }
-      ... on Thematic {
-        id
-        video {
-          title
-          descriptionTop
-          descriptionBottom
-          descriptionSide
-          htmlCode
-          mediaFile {
-            externalUrl
-            mimeType
-            title
-          }
+        img {
+          externalUrl
+          mimeType
         }
         questions {
           id
           title
         }
+      }
+      ... on Idea {
+        id
       }
     }
   }

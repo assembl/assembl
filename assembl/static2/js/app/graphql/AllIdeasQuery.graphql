@@ -19,8 +19,5 @@ query AllIdeasQuery($lang: String!, $discussionPhaseId: Int!) {
     ... on Idea {
       id
     }
-    ... on Thematic {
-      id
-    }
   }
 }

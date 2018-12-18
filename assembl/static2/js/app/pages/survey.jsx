@@ -8,7 +8,6 @@ import type { Map } from 'immutable';
 
 import { updateContentLocale } from '../actions/contentLocaleActions';
 import manageErrorAndLoading from '../components/common/manageErrorAndLoading';
-import TextAndMedia from '../components/common/textAndMedia';
 import Header from '../components/common/header';
 import Question from '../components/debate/survey/question';
 import Navigation from '../components/debate/survey/navigation';
@@ -36,10 +35,8 @@ type QuestionType = {
 
 type Props = {
   timeline: Timeline,
-  defaultContentLocaleMapping: Map,
+  defaultContentLocaleMapping: Map, // eslint-disable-line react/no-unused-prop-types
   imgUrl: string,
-  loading: boolean,
-  media: Object, // TODO: we should add a type for media/video and use it everywhere
   numContributors: number,
   numPosts: number,
   phaseId: string,
@@ -49,7 +46,7 @@ type Props = {
   id: string,
   slug: string,
   totalSentiments: number,
-  updateContentLocaleMapping: Function
+  updateContentLocaleMapping: Function // eslint-disable-line react/no-unused-prop-types
 };
 
 type State = {
@@ -116,7 +113,6 @@ class Survey extends React.Component<Props, State> {
     const {
       id,
       imgUrl,
-      media,
       numPosts,
       numContributors,
       phaseId,
@@ -139,7 +135,6 @@ class Survey extends React.Component<Props, State> {
           <Header title={title} imgUrl={imgUrl} phaseId={phaseId} type="idea">
             <HeaderStatistics statElements={statElements} />
           </Header>
-          {media && <TextAndMedia {...media} />}
           <div className="questions">
             {questions &&
               questions.map((question, index) => (
@@ -230,12 +225,11 @@ export default compose(
         };
       }
 
-      const { thematic: { img, questions, title, video: media, numContributors, numPosts, totalSentiments }, refetch } = data;
+      const { thematic: { img, questions, title, numContributors, numPosts, totalSentiments }, refetch } = data;
       return {
         error: data.error,
         loading: data.loading,
         imgUrl: img ? img.externalUrl : '',
-        media: media,
         numContributors: numContributors,
         numPosts: numPosts,
         questions: questions,

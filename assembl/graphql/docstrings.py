@@ -309,20 +309,6 @@ class Locale:
     label = """The name of the locale, in a specifically given language."""
 
 
-class Video:
-    __doc__ = """The Video subsection in an Idea (or Thematic). This object describes the contents surrounding the video module."""
-    title = Default.string_entry % ("Title of the video.")
-    description_top = Default.string_entry % ("Description on top side of the video.")
-    description_bottom = Default.string_entry % ("Description on bottom side of the video.")
-    description_side = Default.string_entry % ("Description on one of the sides of the video.")
-    html_code = "HTML Code to add extra content in the video module section to be injected."
-    media_file = "File (image or video) to use in the video module section."
-    title_entries = Default.langstring_entries % ("Title of the video in various languages.")
-    description_entries_top = Default.langstring_entries % ("Description on the top of the video in various languages.")
-    description_entries_bottom = Default.langstring_entries % ("Description on the bottom of the video in various languages.")
-    description_entries_side = Default.langstring_entries % ("Description on the side of the video in various languages.")
-
-
 class VoteResults:
     __doc__ = """The metadata describing the resulting votes on a Thematic or Idea."""
     num_participants = """The count of participants on the vote session."""
@@ -404,6 +390,7 @@ class Idea:
     message_columns = """A list of IdeaMessageColumn objects, if any set, on an Idea."""
     ancestors = """A list of Relay.Node ID's representing the parents Ideas of the Idea."""
     vote_results = """The VoteResult object showing the status and result of a VoteSession on Idea."""
+    questions = """A list of Question objects that are bound to the Thematic."""
 
 
 class Question:
@@ -424,32 +411,12 @@ class QuestionInput:
     title_entries = Default.langstring_entries % ("Title of the question in various languages.")
 
 
-class VideoInput:
-    title_entries = Default.langstring_entries % ("Title of the video in various languages.")
-    description_top_attachments = Default.string_entry % ("Attachments for description on the top of the video.")
-    description_bottom_attachments = Default.string_entry % ("Attachments for description on the bottom of the video.")
-    description_side_attachments = Default.string_entry % ("Attachments for description on the side of the video.")
-    description_entries_top = Default.langstring_entries % ("Description on the top of the video in various languages.")
-    description_entries_bottom = Default.langstring_entries % ("Description on the bottom of the video in various languages.")
-    description_entries_side = Default.langstring_entries % ("Description on the side of the video in various languages.")
-    html_code = "HTML Code to add extra content in the video module section to be injected."
-    media_file = "File (image or video) to use in the video module section."
-
-
-class Thematic:
-    __doc__ = """A Thematic is an Idea that exists under the Survey Phase of a debate.
-    Thematics differ slightly from Ideas because Thematics' subideas are Questions."""
-    questions = """A list of Question objects that are bound to the Thematic."""
-    video = """A Video objet that is often integrated to the header of a Thematic."""
-
-
 class CreateThematic:
     __doc__ = """A mutation to create a new thematic."""
     title_entries = IdeaInterface.title_entries
     description_entries = IdeaInterface.description_entries
     discussion_phase_id = Default.discussion_phase_id
-    video = Thematic.video
-    questions = Thematic.questions
+    questions = Idea.questions
     image = Default.document % ("An Image to be shown in the Thematic. ")
     order = Default.float_entry % (" Order of the thematic.")
 
@@ -459,7 +426,6 @@ class UpdateThematic:
     id = Default.node_id % ("Thematic") + " The identifier of the Thematic to be updated."
     title_entries = CreateThematic.title_entries
     description_entries = CreateThematic.description_entries
-    video = CreateThematic.video
     questions = CreateThematic.questions
     image = CreateThematic.image
     order = CreateThematic.order
@@ -473,8 +439,7 @@ class DeleteThematic:
 class IdeaInput:
     title_entries = IdeaInterface.title_entries
     description_entries = IdeaInterface.description_entries
-    video = Thematic.video
-    questions = Thematic.questions
+    questions = Idea.questions
     image = Default.document % ("An Image to be shown in the Thematic. ")
     order = Default.float_entry % (" Order of the thematic.")
 

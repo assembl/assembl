@@ -17,9 +17,6 @@ query Question($lang: String!, $id: ID!) {
         ... on Idea {
           id
         }
-        ... on Thematic {
-          id
-        }
       }
     }
   }

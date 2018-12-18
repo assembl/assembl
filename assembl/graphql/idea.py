@@ -30,7 +30,7 @@ from .types import SecureObjectType, SQLAlchemyUnion
 from .user import AgentProfile
 from .utils import (
     abort_transaction_on_exception, get_fields, get_root_thematic_for_phase,
-    create_root_thematic, get_attachment_with_purpose, create_attachment,
+    create_root_thematic, create_attachment,
     update_attachment, create_idea_announcement)
 import assembl.graphql.docstrings as docs
 
@@ -50,20 +50,6 @@ class SentimentAnalysisResult(graphene.ObjectType):
     positive = graphene.Float(description=docs.SentimentAnalysisResult.positive)
     negative = graphene.Float(description=docs.SentimentAnalysisResult.negative)
     count = graphene.Int(description=docs.SentimentAnalysisResult.count)
-
-
-class Video(graphene.ObjectType):
-    __doc__ = docs.Video.__doc__
-    title = graphene.String(description=docs.Video.title)
-    description_top = graphene.String(description=docs.Video.description_top)
-    description_bottom = graphene.String(description=docs.Video.description_bottom)
-    description_side = graphene.String(description=docs.Video.description_side)
-    html_code = graphene.String(description=docs.Video.html_code)
-    title_entries = graphene.List(LangStringEntry, description=docs.Video.title_entries)
-    description_entries_top = graphene.List(LangStringEntry, description=docs.Video.description_entries_top)
-    description_entries_bottom = graphene.List(LangStringEntry, description=docs.Video.description_entries_bottom)
-    description_entries_side = graphene.List(LangStringEntry, description=docs.Video.description_entries_side)
-    media_file = graphene.Field(Document, description=docs.Video.media_file)
 
 
 class IdeaInterface(graphene.Interface):
@@ -91,7 +77,7 @@ class IdeaInterface(graphene.Interface):
     parent = graphene.Field(lambda: IdeaUnion, description=docs.Idea.parent)
     ancestors = graphene.List(graphene.ID, description=docs.Idea.ancestors)
     children = graphene.List(lambda: IdeaUnion, description=docs.Idea.children)
-    questions = graphene.List(lambda: Question, description=docs.Thematic.questions)
+    questions = graphene.List(lambda: Question, description=docs.Idea.questions)
     announcement = graphene.Field(lambda: IdeaAnnouncement, description=docs.Idea.announcement)
 
     def resolve_title(self, args, context, info):
@@ -325,11 +311,11 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
         # will try to know the object type from the SA object.
         # It actually iterate over all registered object types and return
         # the first one where is_type_of return True.
-        # And here we have in the following order Idea, Question, Thematic.
-        # So a node query on a Thematic or Question was returning the Idea object type.  # noqa: E501
+        # And here we have in the following order Idea, Question.
+        # So a node query on a Question was returning the Idea object type.  # noqa: E501
         # Here we fix the issue by overriding the is_type_of method
         # for the Idea type to do a type comparison so that
-        # models.Question/models.Thematic which
+        # models.Question which
         # inherits from models.Idea doesn't return true
         if isinstance(root, cls):
             return True
@@ -338,7 +324,7 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
                 'Received incompatible instance "{}".'
             ).format(root))
         # return isinstance(root, cls._meta.model)  # this was the original code  # noqa: E501
-        return type(root) == cls._meta.model or type(root) == models.RootIdea
+        return type(root) == cls._meta.model or type(root) == models.RootIdea or type(root) == models.Thematic
 
     def resolve_synthesis_title(self, args, context, info):
         return resolve_langstring(self.synthesis_title, args.get('lang'))
@@ -582,68 +568,16 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
         return pending_count > 0
 
 
-class Thematic(SecureObjectType, SQLAlchemyObjectType):
-    __doc__ = docs.Thematic.__doc__
-
-    class Meta:
-        model = models.Thematic
-        interfaces = (Node, IdeaInterface)
-        only_fields = ('id', )
-
-    video = graphene.Field(Video, lang=graphene.String(), description=docs.Thematic.video)
-
-    def resolve_video(self, args, context, info):
-        title = resolve_langstring(self.video_title, args.get('lang'))
-        title_entries = resolve_langstring_entries(self, 'video_title')
-        description_top = resolve_langstring(self.video_description_top,
-                                             args.get('lang'))
-        description_bottom = resolve_langstring(self.video_description_bottom,
-                                                args.get('lang'))
-        description_side = resolve_langstring(self.video_description_side,
-                                              args.get('lang'))
-        description_entries_top = resolve_langstring_entries(
-            self, 'video_description_top')
-        description_entries_bottom = resolve_langstring_entries(
-            self, 'video_description_bottom')
-        description_entries_side = resolve_langstring_entries(
-            self, 'video_description_side')
-
-        media_file = get_attachment_with_purpose(self.attachments, MEDIA_ATTACHMENT)
-
-        if not (title_entries or
-                description_entries_top or
-                description_entries_bottom or
-                description_entries_side or
-                self.video_html_code or
-                media_file):
-            return None
-
-        return Video(
-            title=title,
-            title_entries=title_entries,
-            description_top=description_top,
-            description_bottom=description_bottom,
-            description_side=description_side,
-            description_entries_top=description_entries_top,
-            description_entries_bottom=description_entries_bottom,
-            description_entries_side=description_entries_side,
-            html_code=self.video_html_code,
-            media_file=media_file and media_file.document
-        )
-
-
 class IdeaUnion(SQLAlchemyUnion):
 
     class Meta:
-        types = (Idea, Thematic)
+        types = (Idea, )
         model = models.Idea
 
     @classmethod
     def resolve_type(cls, instance, context, info):
         if isinstance(instance, graphene.ObjectType):
             return type(instance)
-        elif isinstance(instance, models.Thematic):  # must be above Idea
-            return Thematic
         elif isinstance(instance, models.Idea):
             return Idea
 
@@ -654,27 +588,11 @@ class QuestionInput(graphene.InputObjectType):
     title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.QuestionInput.title_entries)
 
 
-class VideoInput(graphene.InputObjectType):
-    __doc__ = docs.VideoInput.__doc__
-    title_entries = graphene.List(LangStringEntryInput, description=docs.VideoInput.title_entries)
-    description_top_attachments = graphene.List(LangStringEntryInput, description=docs.VideoInput.description_top_attachments)
-    description_bottom_attachments = graphene.List(LangStringEntryInput, description=docs.VideoInput.description_bottom_attachments)
-    description_side_attachments = graphene.List(LangStringEntryInput, description=docs.VideoInput.description_side_attachments)
-    description_entries_top = graphene.List(LangStringEntryInput, description=docs.VideoInput.description_entries_top)
-    description_entries_bottom = graphene.List(LangStringEntryInput, description=docs.VideoInput.description_entries_bottom)
-    description_entries_side = graphene.List(LangStringEntryInput, description=docs.VideoInput.description_entries_side)
-    html_code = graphene.String(description=docs.VideoInput.html_code)
-    media_file = graphene.String(description=docs.VideoInput.media_file)
-
-
 def create_idea(parent_idea, phase, args, context):
     cls = models.Idea
     phase_identifier = phase.identifier
     message_view_override = args.get('message_view_override')
     is_survey_thematic = phase_identifier == Phases.survey.value or message_view_override == MessageView.survey.value
-    if is_survey_thematic:
-        cls = models.Thematic
-
     discussion_id = context.matchdict['discussion_id']
     discussion = models.Discussion.get(discussion_id)
     user_id = context.authenticated_userid or Everyone
@@ -689,7 +607,7 @@ def create_idea(parent_idea, phase, args, context):
         title_entries = args.get('title_entries')
         if len(title_entries) == 0:
             raise Exception(
-                'Thematic titleEntries needs at least one entry')
+                'Idea titleEntries needs at least one entry')
             # Better to have this message than
             # 'NoneType' object has no attribute 'owner_object'
             # when creating the saobj below if title=None
@@ -702,37 +620,6 @@ def create_idea(parent_idea, phase, args, context):
             kwargs['description'] = description_langstring
 
         kwargs['message_view_override'] = message_view_override
-
-        video = args.get('video')
-        video_media = None
-        if video is not None:
-            video_title = langstring_from_input_entries(
-                video.get('title_entries', None))
-            if video_title is not None:
-                kwargs['video_title'] = video_title
-
-            video_description_top = langstring_from_input_entries(
-                video.get('description_entries_top', None))
-            if video_description_top is not None:
-                kwargs['video_description_top'] = video_description_top
-
-            video_description_bottom = langstring_from_input_entries(
-                video.get('description_entries_bottom', None))
-            if video_description_bottom is not None:
-                kwargs[
-                    'video_description_bottom'] = video_description_bottom
-
-            video_description_side = langstring_from_input_entries(
-                video.get('description_entries_side', None))
-            if video_description_side is not None:
-                kwargs[
-                    'video_description_side'] = video_description_side
-
-            video_html_code = video.get('html_code', None)
-            if video_html_code is not None:
-                kwargs['video_html_code'] = video_html_code
-
-            video_media = video.get('media_file', None)
 
         saobj = cls(
             discussion_id=discussion_id,
@@ -766,18 +653,6 @@ def create_idea(parent_idea, phase, args, context):
                 EMBED_ATTACHMENT,
                 context,
                 new_value=image
-            )
-            new_attachment.idea = saobj
-            db.add(new_attachment)
-
-        # add uploaded image as an attachment to the idea
-        if video_media is not None:
-            new_attachment = create_attachment(
-                discussion,
-                models.IdeaAttachment,
-                MEDIA_ATTACHMENT,
-                context,
-                new_value=video_media
             )
             new_attachment.idea = saobj
             db.add(new_attachment)
@@ -831,7 +706,7 @@ def update_idea(args, phase, context):
         title_entries = args.get('title_entries')
         if title_entries is not None and len(title_entries) == 0:
             raise Exception(
-                'Thematic titleEntries needs at least one entry')
+                'Idea titleEntries needs at least one entry')
             # Better to have this message than
             # 'NoneType' object has no attribute 'owner_object'
             # when creating the saobj below if title=None
@@ -841,33 +716,6 @@ def update_idea(args, phase, context):
         update_langstring_from_input_entries(
             thematic, 'description', args.get('description_entries'))
         kwargs = {}
-        video = args.get('video', None)
-        if video is not None:
-            update_langstring_from_input_entries(
-                thematic, 'video_title', video.get('title_entries', []))
-            update_langstring_from_input_entries(
-                thematic, 'video_description_top',
-                video.get('description_entries_top', []))
-            update_langstring_from_input_entries(
-                thematic, 'video_description_bottom',
-                video.get('description_entries_bottom', []))
-            update_langstring_from_input_entries(
-                thematic, 'video_description_side',
-                video.get('description_entries_side', []))
-            kwargs['video_html_code'] = video.get('html_code', None)
-
-            video_media = video.get('media_file', None)
-            if video_media:
-                update_attachment(
-                    discussion,
-                    models.IdeaAttachment,
-                    video_media,
-                    thematic.attachments,
-                    MEDIA_ATTACHMENT,
-                    db,
-                    context
-                )
-
         kwargs['message_view_override'] = message_view_override
 
         for attr, value in kwargs.items():
@@ -1011,7 +859,6 @@ class CreateThematic(graphene.Mutation):
         title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.Default.langstring_entries)
         description_entries = graphene.List(LangStringEntryInput, description=docs.Default.langstring_entries)
         discussion_phase_id = graphene.Int(required=True, description=docs.CreateThematic.discussion_phase_id)
-        video = graphene.Argument(VideoInput, description=docs.CreateThematic.video)
         announcement = graphene.Argument(IdeaAnnouncementInput, description=docs.Idea.announcement)
         questions = graphene.List(QuestionInput, description=docs.CreateThematic.questions)
         image = graphene.String(description=docs.Default.image)
@@ -1060,7 +907,6 @@ class UpdateThematic(graphene.Mutation):
         id = graphene.ID(required=True)
         title_entries = graphene.List(LangStringEntryInput, description=docs.Default.langstring_entries)
         description_entries = graphene.List(LangStringEntryInput, description=docs.Default.langstring_entries)
-        video = graphene.Argument(VideoInput, description=docs.UpdateThematic.video)
         announcement = graphene.Argument(IdeaAnnouncementInput, description=docs.Idea.announcement)
         questions = graphene.List(QuestionInput, description=docs.UpdateThematic.questions)
         image = graphene.String(description=docs.Default.image)
@@ -1096,7 +942,6 @@ class IdeaInput(graphene.InputObjectType):
     id = graphene.ID()  # not required, used only for update/delete
     title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.Default.langstring_entries)
     description_entries = graphene.List(LangStringEntryInput, description=docs.Default.langstring_entries)
-    video = graphene.Argument(VideoInput, description=docs.CreateThematic.video)
     announcement = graphene.Argument(IdeaAnnouncementInput, description=docs.Idea.announcement)
     questions = graphene.List(QuestionInput, description=docs.CreateThematic.questions)
     children = graphene.List(lambda: IdeaInput, description=docs.UpdateIdeas.ideas)

@@ -11,7 +11,6 @@ import RequestPasswordChange from './pages/requestPasswordChange';
 import Home from './pages/home';
 import Syntheses from './pages/syntheses';
 import Synthesis from './pages/synthesis';
-import Debate from './pages/debate';
 import DebateThread from './pages/debateThread';
 import Survey from './pages/survey';
 import VoteSession from './pages/voteSession';
@@ -36,7 +35,6 @@ import VoteSessionAdmin from './pages/voteSessionAdmin';
 import ResourcesCenter from './pages/resourcesCenter';
 import LandingPageAdmin from './pages/landingPageAdmin';
 import ExportTaxonomies from './pages/exportTaxonomies';
-import BrightMirror from './pages/brightMirror';
 import BrightMirrorFiction from './pages/brightMirrorFiction'; // eslint-disable-line import/no-named-as-default
 import { routeForRouter } from './utils/routeMap';
 
@@ -48,18 +46,10 @@ import IntBrightMirrorFiction from './integration/brightMirror/pages/brightMirro
 
 const DebateHome = (props) => {
   switch (props.params.phase) {
-  case 'survey':
-    return <Debate {...props} />;
-  case 'thread':
-    return <DebateThread {...props} />;
-  case 'multiColumns':
-    return <DebateThread {...props} />;
   case 'voteSession':
     return <VoteSession {...props} />;
-  case 'brightMirror':
-    return <BrightMirror {...props} />;
   default:
-    return <Debate {...props} />;
+    return <DebateThread {...props} />;
   }
 };
 
@@ -67,41 +57,9 @@ const DebateChild = (props) => {
   switch (props.params.phase) {
   case 'survey':
     return <Survey id={props.id} identifier={props.identifier} phaseId={props.phaseId} />;
-  case 'thread':
-    return (
-      <Idea
-        id={props.id}
-        identifier={props.identifier}
-        phaseId={props.phaseId}
-        routerParams={props.params}
-        additionalFields={false}
-      />
-    );
-  case 'multiColumns':
-    return (
-      <Idea
-        id={props.id}
-        identifier={props.identifier}
-        phaseId={props.phaseId}
-        routerParams={props.params}
-        additionalFields={false}
-      />
-    );
-  case 'voteSession':
-    return <NotFound />;
-  case 'brightMirror':
-    return (
-      <Idea id={props.id} identifier={props.identifier} phaseId={props.phaseId} routerParams={props.params} additionalFields />
-    );
   default:
     return (
-      <Idea
-        id={props.id}
-        identifier={props.identifier}
-        phaseId={props.phaseId}
-        routerParams={props.params}
-        additionalFields={false}
-      />
+      <Idea id={props.id} identifier={props.identifier} phaseId={props.phaseId} routerParams={props.params} additionalFields />
     );
   }
 };

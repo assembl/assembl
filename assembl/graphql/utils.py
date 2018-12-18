@@ -116,7 +116,7 @@ def create_root_thematic(phase):
     """Create the root thematic (hidden) for the given phase `phase`.
     """
     title = u'Phase {}'.format(phase.identifier)
-    root_thematic = models.Thematic(
+    root_thematic = models.Idea(
         discussion_id=phase.discussion.id,
         title=langstring_from_input_entries(
             [{'locale_code': 'en', 'value': title}]),
