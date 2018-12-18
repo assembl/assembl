@@ -1,5 +1,5 @@
 import { configure, mount, shallow } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+import Adapter from 'enzyme-adapter-react-16.3'; // eslint-disable-line
 import React from 'react';
 import renderer from 'react-test-renderer';
 import { EditorState } from 'draft-js';
