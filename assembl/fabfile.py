@@ -945,9 +945,8 @@ def database_dump_aws():
 
 
 _processes_to_restart_without_backup = [
-    "dev:pserve" "celery_imap", "changes_router",
-    "celery_notify", "celery_notification_dispatch",
-    "source_reader"]
+    "dev:pserve", "celery", "changes_router",
+    "celery_notify", "source_reader"]
 
 
 _processes_to_restart_with_backup = _processes_to_restart_without_backup + [
@@ -1147,7 +1146,7 @@ def bootstrap_from_checkout(backup=False):
         execute(database_restore)
     execute(app_reload)
     execute(webservers_reload)
-    if not is_integration_env():
+    if not is_integration_env() and env.wsginame != 'dev.wsgi':
         execute(create_backup_script)
         execute(create_alert_disk_space_script)
 
