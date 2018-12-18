@@ -649,7 +649,9 @@ class AssemblPost(Post):
     def get_closest_thematic(self):
         from ..models import Idea
         idea_ids = Idea.get_idea_ids_showing_post(self.id)
-        thematics = self.db.query(Idea).filter(Idea.id.in_(idea_ids)).all()
+        thematics = self.db.query(Idea
+            ).filter(Idea.sqla_type != 'question'
+            ).filter(Idea.id.in_(idea_ids)).all()
         if not thematics:
             log.error("This post is not under any thematic:" + repr(self))
             return None
