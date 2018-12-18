@@ -82,7 +82,7 @@ class Proposals extends React.Component {
           {hasPendingPosts &&
             connectedUserIsAdmin() && (
               <span className="pending-proposals">
-                <Link to={pendingProposalsLink} className="button-submit button-light">
+                <Link to={pendingProposalsLink} className="button-submit button-pending">
                   <Translate value="debate.survey.pendingProposals" />
                 </Link>
               </span>
