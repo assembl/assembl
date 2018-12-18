@@ -48,6 +48,7 @@ Developing and contributing to Assembl
    fontello
    flow
    storybook
+   draftjs
 
 APIs
 ----
