@@ -12,7 +12,6 @@ import Home from './pages/home';
 import Syntheses from './pages/syntheses';
 import Synthesis from './pages/synthesis';
 import DebateThread from './pages/debateThread';
-import Survey from './pages/survey';
 import VoteSession from './pages/voteSession';
 import Idea from './pages/idea';
 import Community from './pages/community';
@@ -55,12 +54,8 @@ const DebateHome = (props) => {
 
 const DebateChild = (props) => {
   switch (props.params.phase) {
-  case 'survey':
-    return <Survey id={props.id} identifier={props.identifier} phaseId={props.phaseId} />;
   default:
-    return (
-      <Idea id={props.id} identifier={props.identifier} phaseId={props.phaseId} routerParams={props.params} additionalFields />
-    );
+    return <Idea id={props.id} identifier={props.identifier} phaseId={props.phaseId} routerParams={props.params} />;
   }
 };
 

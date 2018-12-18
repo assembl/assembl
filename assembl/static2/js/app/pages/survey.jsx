@@ -43,6 +43,8 @@ type Props = {
   questions: Array<QuestionType>,
   refetchThematic: Function,
   title: string,
+  description: string,
+  synthesisTitle: string,
   id: string,
   slug: string,
   totalSentiments: number,
@@ -119,6 +121,8 @@ class Survey extends React.Component<Props, State> {
       questions,
       refetchThematic,
       title,
+      description,
+      synthesisTitle,
       slug,
       totalSentiments,
       timeline
@@ -132,7 +136,14 @@ class Survey extends React.Component<Props, State> {
     return (
       <div className="survey">
         <div className="relative">
-          <Header title={title} imgUrl={imgUrl} phaseId={phaseId} type="idea">
+          <Header
+            title={title}
+            synthesisTitle={synthesisTitle}
+            subtitle={description}
+            imgUrl={imgUrl}
+            phaseId={phaseId}
+            type="idea"
+          >
             <HeaderStatistics statElements={statElements} />
           </Header>
           <div className="questions">
@@ -217,7 +228,7 @@ const mapDispatchToProps = dispatch => ({
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   graphql(ThematicQuery, {
-    props: ({ data }) => {
+    props: ({ data, ownProps }) => {
       if (data.error || data.loading) {
         return {
           error: data.error,
@@ -225,16 +236,18 @@ export default compose(
         };
       }
 
-      const { thematic: { img, questions, title, numContributors, numPosts, totalSentiments }, refetch } = data;
+      const { thematic: { questions, numContributors, numPosts, totalSentiments }, refetch } = data;
       return {
         error: data.error,
         loading: data.loading,
-        imgUrl: img ? img.externalUrl : '',
+        imgUrl: ownProps.headerImgUrl,
         numContributors: numContributors,
         numPosts: numPosts,
         questions: questions,
         refetchThematic: refetch,
-        title: title,
+        title: ownProps.title,
+        description: ownProps.description,
+        synthesisTitle: ownProps.synthesisTitle,
         totalSentiments: totalSentiments
       };
     }

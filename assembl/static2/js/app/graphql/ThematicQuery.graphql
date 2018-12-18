@@ -1,11 +1,6 @@
 query ThematicQuery($lang: String!, $id: ID!) {
   thematic: node(id: $id) {
     ... on Idea {
-      title(lang: $lang)
-      img {
-        externalUrl
-        mimeType
-      }
       id
       numPosts
       numContributors
