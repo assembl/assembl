@@ -52,7 +52,7 @@ class Proposals extends React.Component {
             />
           </div>
         </h3>
-        {postsToShow.length > 0 && (
+        {postsToShow.length > 0 ? (
           <div className={this.state.hideProposals ? 'hidden' : 'shown'}>
             {postsToShow.map((post, index) => (
               <Post
@@ -66,7 +66,7 @@ class Proposals extends React.Component {
               />
             ))}
           </div>
-        )}
+        ) : null}
         <div className="question-footer">
           {postsToShow.length === 0 ? (
             <span className="no-proposals">
@@ -79,14 +79,13 @@ class Proposals extends React.Component {
               </Link>
             </span>
           )}
-          {hasPendingPosts &&
-            connectedUserIsAdmin() && (
-              <span className="pending-proposals">
-                <Link to={pendingProposalsLink} className="button-submit button-pending">
-                  <Translate value="debate.survey.pendingProposals" />
-                </Link>
-              </span>
-            )}
+          {hasPendingPosts && connectedUserIsAdmin() ? (
+            <span className="pending-proposals">
+              <Link to={pendingProposalsLink} className="button-submit button-pending">
+                <Translate value="debate.survey.pendingProposals" />
+              </Link>
+            </span>
+          ) : null}
         </div>
       </div>
     );

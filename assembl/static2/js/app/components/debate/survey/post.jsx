@@ -253,6 +253,8 @@ class Post extends React.Component<Props> {
       </div>
     );
 
+    const isPending = publicationState === PublicationStates.SUBMITTED_AWAITING_MODERATION;
+
     let creatorName = '';
     let userCanDeleteThisMessage = false;
     if (post.creator) {
@@ -267,7 +269,6 @@ class Post extends React.Component<Props> {
     const validatePostButton = (
       <ValidatePostButton postId={post.id} refetchQueries={refetchQueries} linkClassName="overflow-action" />
     );
-    const isPending = publicationState === PublicationStates.SUBMITTED_AWAITING_MODERATION;
     return (
       <div className={classnames('shown box', { pending: isPending })} id={post.id}>
         <div className="content">
