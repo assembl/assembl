@@ -83,11 +83,6 @@ class IdeaInterface(graphene.Interface):
     def resolve_title(self, args, context, info):
         return resolve_langstring(self.title, args.get('lang'))
 
-    def resolve_parent(self, args, context, info):
-        if not self.parents:
-            return None
-        return self.parents[0]
-
     def resolve_title_entries(self, args, context, info):
         return resolve_langstring_entries(self, 'title')
 
@@ -746,13 +741,15 @@ def update_idea(args, phase, context):
         announcement = args.get('announcement')
         if announcement is not None:
             announcement_title_entries = announcement.get('title_entries')
+            announcement_quote_entries = announcement.get('quote_entries', None)
             if len(announcement_title_entries) == 0:
                 raise Exception('Announcement titleEntries needs at least one entry')
 
             if not thematic.announcement:
                 announcement_title_langstring = langstring_from_input_entries(announcement_title_entries)
                 announcement_body_langstring = langstring_from_input_entries(announcement.get('body_entries', None))
-                saobj2 = create_idea_announcement(user_id, discussion, thematic, announcement_title_langstring, announcement_body_langstring)
+                announcement_quote_langstring = langstring_from_input_entries(announcement_quote_entries)
+                saobj2 = create_idea_announcement(user_id, discussion, thematic, announcement_title_langstring, announcement_body_langstring, announcement_quote_langstring)
                 db.add(saobj2)
             else:
                 update_langstring_from_input_entries(
