@@ -271,7 +271,7 @@ class Post extends React.Component<Props> {
     return (
       <div className={classnames('shown box', { pending: isPending })} id={post.id}>
         <div className="content">
-          <PostCreator name={creatorName} isModerating={isModerating} />
+          <PostCreator name={creatorName} isPending={isPending} />
           <PostBody
             dbId={post.dbId}
             translationEnabled={debateData.translationEnabled}

@@ -52,6 +52,10 @@
   .user {
     text-align: left;
 
+    &.pending {
+      color: $orange3;
+    }
+
     .username {
       color: $first-color;
     }

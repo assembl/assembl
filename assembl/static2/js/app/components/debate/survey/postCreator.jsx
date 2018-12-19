@@ -1,17 +1,18 @@
 // @flow
 import React from 'react';
 import { Translate } from 'react-redux-i18n';
+import classnames from 'classnames';
 
 type Props = {
-  isModerating: boolean,
+  isPending: boolean,
   name: string
 };
 
-const PostCreator = ({ isModerating, name }: Props) => (
+const PostCreator = ({ isPending, name }: Props) => (
   <div className="inline">
-    <div className="user">
+    <div className={classnames('user', { pending: isPending })}>
       <span className="assembl-icon-profil grey">&nbsp;</span>
-      {isModerating ? <Translate value="debate.postAwaitingModeration" /> : <span className="username">{name}</span>}
+      {isPending ? <Translate value="debate.postAwaitingModeration" /> : <span className="username">{name}</span>}
     </div>
   </div>
 );

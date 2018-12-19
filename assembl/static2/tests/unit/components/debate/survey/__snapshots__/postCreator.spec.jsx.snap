@@ -21,12 +21,12 @@ exports[`PostCreator component should display the name of the creator 1`] = `
 </div>
 `;
 
-exports[`PostCreator component should not display the name of the creator if user is moderating the post 1`] = `
+exports[`PostCreator component should not display the name of the creator if the post is awaiting moderation 1`] = `
 <div
   className="inline"
 >
   <div
-    className="user"
+    className="user pending"
   >
     <span
       className="assembl-icon-profil grey"

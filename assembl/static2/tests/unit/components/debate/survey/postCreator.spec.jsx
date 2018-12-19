@@ -7,7 +7,7 @@ import PostCreator from '../../../../../js/app/components/debate/survey/postCrea
 describe('PostCreator component', () => {
   it('should display the name of the creator', () => {
     const props = {
-      isModerating: false,
+      isPending: false,
       name: 'John Doe'
     };
     const component = renderer.create(<PostCreator {...props} />);
@@ -15,9 +15,9 @@ describe('PostCreator component', () => {
     expect(tree).toMatchSnapshot();
   });
 
-  it('should not display the name of the creator if user is moderating the post', () => {
+  it('should not display the name of the creator if the post is awaiting moderation', () => {
     const props = {
-      isModerating: true,
+      isPending: true,
       name: 'John Doe'
     };
     const component = renderer.create(<PostCreator {...props} />);
