@@ -81,9 +81,7 @@ class VoteSession(
         return query.join(cls.discussion_phase).filter(cls.test_active())
 
     def vote_session_discussion_phase(self):
-        idea_id = self.idea_id
-        idea = Idea.get(idea_id)
-        return idea.get_associated_phase()
+        return self.idea.get_associated_phase()
 
     def is_started(self):
         return self.vote_session_discussion_phase().start == None or self.vote_session_discussion_phase().start <= datetime.utcnow()  # noqa: E711

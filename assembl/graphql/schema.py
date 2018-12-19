@@ -102,7 +102,7 @@ class Query(graphene.ObjectType):
     has_syntheses = graphene.Boolean(description=docs.Schema.has_syntheses)
     vote_session = graphene.Field(
         VoteSession,
-        idea_id=graphene.Int(required=True, description=docs.VoteSession.idea_id),
+        idea_id=graphene.ID(required=True, description=docs.VoteSession.idea_id),
         description=docs.Schema.vote_session)
     resources = graphene.List(Resource, description=docs.Schema.resources)
     resources_center = graphene.Field(lambda: ResourcesCenter, description=docs.Schema.resources_center)
@@ -185,6 +185,7 @@ class Query(graphene.ObjectType):
         # discussion_id = context.matchdict['discussion_id']
         # discussion = models.Discussion.get(discussion_id)
         idea_id = args.get('idea_id')
+        idea_id = int(Node.from_global_id(idea_id)[1])
         idea = models.Idea.get(idea_id)
         vote_session = idea.db.query(models.VoteSession).filter(models.VoteSession.idea_id == idea.id).first()
         root_thematic = vote_session.idea if vote_session else None
@@ -214,12 +215,11 @@ class Query(graphene.ObjectType):
         return root_thematic
 
     def resolve_vote_session(self, args, context, info):
-        # discussion_phase_id = args.get('discussion_phase_id')
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
         idea_id = args.get('idea_id')
-        idea = models.Idea.get(idea_id)
-        # discussion_phase = models.DiscussionPhase.get(discussion_phase_id)
-        # require_instance_permission(CrudPermissions.READ, idea, context)
-        vote_session = idea.db.query(models.VoteSession).filter(models.VoteSession.idea_id == idea.id).first()
+        idea_id = int(Node.from_global_id(idea_id)[1])
+        vote_session = discussion.db.query(models.VoteSession).filter(models.VoteSession.idea_id == idea_id).first()
         if vote_session is not None:
             require_instance_permission(CrudPermissions.READ, vote_session, context)
         return vote_session

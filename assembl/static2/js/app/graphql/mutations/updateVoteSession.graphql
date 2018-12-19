@@ -1,7 +1,7 @@
 #import "../fragments/VoteSession.graphql"
 
 mutation UpdateVoteSession(
-  $ideaId: Int!
+  $ideaId: ID!
   $headerImage: String
   $propositionsSectionTitleEntries: [LangStringEntryInput]
   $seeCurrentVotes: Boolean

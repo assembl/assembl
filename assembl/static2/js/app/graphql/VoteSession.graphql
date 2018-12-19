@@ -107,7 +107,7 @@ fragment gaugeVoteSpecificationResults on GaugeVoteSpecification {
   averageResult
 }
 
-query VoteSession($ideaId: Int!, $lang: String!) {
+query VoteSession($ideaId: ID!, $lang: String!) {
   voteSession(ideaId: $ideaId) {
     id
     ...voteSessionGlobals
