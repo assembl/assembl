@@ -36,7 +36,7 @@ Only the first time you run it:
     fab  -f assembl/fabfile.py -c assembl/configs/testing.rc create_local_ini
     assembl-db-manage testing.ini bootstrap
 
-Note that the ``fab  -f assembl/fabfile.py -c assembl/configs/testing.rc create_local_ini`` command should be repeated whenever ``production.ini``, ``assembl/configs/base_env.rc`` or ``assembl/configs/testing.ini`` changes.
+Note that the ``fab  -f assembl/fabfile.py -c assembl/configs/testing.rc create_local_ini_and_restart`` command should be used whenever ``production.ini``, ``assembl/configs/base_env.rc`` or ``assembl/configs/testing.ini`` changes.
 
 Thereafter:
 
