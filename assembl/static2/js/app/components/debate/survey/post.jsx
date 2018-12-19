@@ -322,7 +322,7 @@ class Post extends React.Component<Props> {
               </ResponsiveOverlayTrigger>
             </div>
           )}
-          <div>
+          <div className={classnames({ hidden: isPending })}>
             <StatisticsDoughnut
               elements={[
                 { color: sentimentDefinitionsObject.like.color, count: currentCounts.like },
