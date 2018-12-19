@@ -14,10 +14,10 @@ import IdeaWithPostsQuery from '../graphql/IdeaWithPostsQuery.graphql';
 import GoUp from '../components/common/goUp';
 import Loader from '../components/common/loader';
 import { getConnectedUserId } from '../utils/globalFunctions';
-import Announcement, { getSentimentsCount } from './../components/debate/common/announcement';
+import Announcement, { getSentimentsCount, AnnouncementCounters } from './../components/debate/common/announcement';
 import ColumnsView from '../components/debate/multiColumns/columnsView';
 import ThreadView from '../components/debate/thread/threadView';
-import { DeletedPublicationStates, PHASES, FICTION_DELETE_CALLBACK, MESSAGE_VIEW } from '../constants';
+import { DeletedPublicationStates, FICTION_DELETE_CALLBACK, MESSAGE_VIEW } from '../constants';
 import HeaderStatistics, { statContributions, statMessages, statParticipants } from '../components/common/headerStatistics';
 import InstructionView from '../components/debate/brightMirror/instructionView';
 import type { ContentLocaleMapping } from '../actions/actionTypes';
@@ -250,8 +250,12 @@ class Idea extends React.Component<Props> {
     const { contentLocaleMapping, timeline, debateData, lang, ideaWithPostsData, identifier, phaseId, routerParams } = this.props;
     const refetchIdea = ideaWithPostsData.refetch;
     const { announcement, id, headerImgUrl, synthesisTitle, title, description } = this.props;
-    const isMultiColumns = ideaWithPostsData.loading ? false : ideaWithPostsData.idea.messageViewOverride === 'messageColumns';
-    const isBrightMirror = ideaWithPostsData.loading ? false : ideaWithPostsData.idea.messageViewOverride === PHASES.brightMirror;
+    const isMultiColumns = ideaWithPostsData.loading
+      ? false
+      : ideaWithPostsData.idea.messageViewOverride === MESSAGE_VIEW.messageColumns;
+    const isBrightMirror = ideaWithPostsData.loading
+      ? false
+      : ideaWithPostsData.idea.messageViewOverride === MESSAGE_VIEW.brightMirror;
     const messageColumns = ideaWithPostsData.loading
       ? undefined
       : [...ideaWithPostsData.idea.messageColumns].sort((a, b) => {
@@ -323,11 +327,9 @@ class Idea extends React.Component<Props> {
               <Grid fluid className="background-light">
                 <div className="max-container">
                   <div className="content-section">
-                    <Announcement
-                      idea={ideaWithPostsData.idea}
-                      announcementContent={announcement}
-                      isMultiColumns={isMultiColumns}
-                    />
+                    <Announcement announcement={announcement}>
+                      <AnnouncementCounters idea={ideaWithPostsData.idea} />
+                    </Announcement>
                   </div>
                 </div>
               </Grid>

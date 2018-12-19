@@ -9,6 +9,8 @@ import type { Map } from 'immutable';
 import { updateContentLocale } from '../actions/contentLocaleActions';
 import manageErrorAndLoading from '../components/common/manageErrorAndLoading';
 import Header from '../components/common/header';
+import Announcement from '../components/debate/common/announcement';
+import type { AnnouncementContent } from '../components/debate/common/announcement';
 import Question from '../components/debate/survey/question';
 import Navigation from '../components/debate/survey/navigation';
 import Proposals from '../components/debate/survey/proposals';
@@ -48,6 +50,7 @@ type Props = {
   id: string,
   slug: string,
   totalSentiments: number,
+  announcement: AnnouncementContent,
   updateContentLocaleMapping: Function // eslint-disable-line react/no-unused-prop-types
 };
 
@@ -125,7 +128,8 @@ class Survey extends React.Component<Props, State> {
       synthesisTitle,
       slug,
       totalSentiments,
-      timeline
+      timeline,
+      announcement
     } = this.props;
 
     const isPhaseCompleted = getIsPhaseCompletedById(timeline, phaseId);
@@ -146,6 +150,17 @@ class Survey extends React.Component<Props, State> {
           >
             <HeaderStatistics statElements={statElements} />
           </Header>
+          {announcement ? (
+            <section className="post-section">
+              <Grid fluid className="background-light">
+                <div className="max-container">
+                  <div className="content-section">
+                    <Announcement announcement={announcement} />
+                  </div>
+                </div>
+              </Grid>
+            </section>
+          ) : null}
           <div className="questions">
             {questions &&
               questions.map((question, index) => (
@@ -248,7 +263,8 @@ export default compose(
         title: ownProps.title,
         description: ownProps.description,
         synthesisTitle: ownProps.synthesisTitle,
-        totalSentiments: totalSentiments
+        totalSentiments: totalSentiments,
+        announcement: ownProps.announcement
       };
     }
   }),

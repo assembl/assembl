@@ -345,7 +345,7 @@ class IdeaInterface:
     img = Default.document % "Header image associated with the idea. "
     order = "The order of the Idea, Thematic, Question in the idea tree."
     live = """The IdeaUnion between an Idea or a Thematic. This can be used to query specific fields unique to the type of Idea."""
-    message_view_override = """Use a non-standard view for this idea.\nCurrently only supporting "messageColumns" and "brightMirror"."""
+    message_view_override = """Type of view for this idea: survey, thread, messageColumns, voteSession, brightMirror."""
     total_sentiments = "Total number of sentiments expressed by participants on posts related to that idea."
     vote_specifications = """The VoteSpecificationUnion placed on the Idea. This is the metadata describing the configuration of a VoteSession."""
     type = """The type of the idea. The class name of the idea."""

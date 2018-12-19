@@ -87,7 +87,7 @@ export const PHASES = {
 export const MESSAGE_VIEW = {
   survey: 'survey',
   thread: 'thread',
-  multiColumns: 'multiColumns',
+  messageColumns: 'messageColumns',
   voteSession: 'voteSession',
   brightMirror: 'brightMirror'
 };
