@@ -90,11 +90,10 @@ class UpdateVoteSession(graphene.Mutation):
         if idea is None:
             raise Exception(
                 "A vote session requires an idea associated to it, check ideaId value")
-        phase_identifier = "voteSession"
         if idea.get_associated_phase() is not None:
             if idea.message_view_override != MessageView.voteSession.value:
                 raise Exception(
-                    "A vote session can only be created or edited with a '{}' discussion phase, check discussionPhaseId value".format(phase_identifier))
+                    "A vote session can only be created or edited if the view of the associated idea is of type voteSession")
         db = idea.db
         vote_session = db.query(models.VoteSession).filter(models.VoteSession.idea_id == idea_id).first()
         if vote_session is None:
@@ -797,6 +796,11 @@ class CreateProposal(graphene.Mutation):
         with cls.default_db.no_autoflush as db:
             title_ls = langstring_from_input_entries(title_entries)
             description_ls = langstring_from_input_entries(description_entries)
+            if vote_session is None:
+                raise Exception(
+                    "A vote session is required before creating a proposal")
+            else:
+                root_thematic = vote_session.idea
             proposal = cls(
                 discussion_id=discussion_id,
                 discussion=discussion,
@@ -804,15 +808,6 @@ class CreateProposal(graphene.Mutation):
                 description=description_ls
             )
             db.add(proposal)
-            if vote_session is None:
-                raise Exception(
-                    "There is no root thematic for this vote session.")
-            else:
-                root_thematic = vote_session.idea
-            # if idea.get_associated_phase():
-            #     root_thematic = get_root_thematic_for_phase(idea.get_associated_phase())
-            # else:
-            #     root_thematic=None
             order = len(root_thematic.get_children()) + 1.0
             db.add(
                 models.IdeaLink(source=root_thematic, target=proposal,

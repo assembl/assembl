@@ -817,7 +817,7 @@ def test_query_associate_vote_spec_to_proposal(graphql_request, timeline_vote_se
     })
     query = graphql_registry['VoteSession']
     res = schema.execute(query, context_value=graphql_request, variable_values={
-        "ideaId": vote_session.idea_id,
+        "ideaId": to_global_id('Idea',vote_session.idea_id),
         "lang": "en"
     })
     assert res.errors is None

@@ -84,10 +84,14 @@ class VoteSession(
         return self.idea.get_associated_phase()
 
     def is_started(self):
-        return self.vote_session_discussion_phase().start == None or self.vote_session_discussion_phase().start <= datetime.utcnow()  # noqa: E711
+        if self.vote_session_discussion_phase():
+            return self.vote_session_discussion_phase().start == None or self.vote_session_discussion_phase().start <= datetime.utcnow()  # noqa: E711
+        return False
 
     def is_ended(self):
-        return self.vote_session_discussion_phase().end != None and self.vote_session_discussion_phase().end < datetime.utcnow()  # noqa: E711
+        if self.vote_session_discussion_phase():
+            return self.vote_session_discussion_phase().end != None and self.vote_session_discussion_phase().end < datetime.utcnow()  # noqa: E711
+        return False
 
     crud_permissions = CrudPermissions(
         create=P_ADMIN_DISC,
