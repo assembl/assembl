@@ -182,25 +182,23 @@ class Query(graphene.ObjectType):
         return query.count()
 
     def resolve_total_vote_session_participations(self, args, context, info):
-        # discussion_id = context.matchdict['discussion_id']
-        # discussion = models.Discussion.get(discussion_id)
-        idea_id = args.get('idea_id')
-        idea_id = int(Node.from_global_id(idea_id)[1])
-        idea = models.Idea.get(idea_id)
-        vote_session = idea.db.query(models.VoteSession).filter(models.VoteSession.idea_id == idea.id).first()
-        root_thematic = vote_session.idea if vote_session else None
-        if root_thematic is None:
-            return 0
-
-        proposals = root_thematic.get_children()
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        vote_sessions = discussion.db.query(models.VoteSession).filter(models.VoteSession.discussion_id == discussion_id).all()
         total = 0
-        for proposal in proposals:
-            for module in proposal.criterion_for:
-                num_votes = module.db.query(
-                    getattr(module.get_vote_class(), "voter_id")).filter_by(
-                    vote_spec_id=module.id,
-                    tombstone_date=None).count()
-                total += num_votes
+        for vote_session in vote_sessions:
+            root_thematic = vote_session.idea if vote_session else None
+            if root_thematic is None:
+                continue
+
+            proposals = root_thematic.get_children()
+            for proposal in proposals:
+                for module in proposal.criterion_for:
+                    num_votes = module.db.query(
+                        getattr(module.get_vote_class(), "voter_id")).filter_by(
+                        vote_spec_id=module.id,
+                        tombstone_date=None).count()
+                    total += num_votes
         return total
 
     def resolve_root_idea(self, args, context, info):

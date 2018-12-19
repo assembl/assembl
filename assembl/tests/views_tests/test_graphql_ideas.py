@@ -116,7 +116,7 @@ def test_graphql_get_all_ideas(phases, graphql_request,
 
 def test_graphql_get_all_ideas_thread_without_vote_proposals(phases, graphql_request,
                                user_language_preference_en_cookie,
-                               subidea_1_1_1, vote_proposal):
+                               vote_proposal):
     # proposals of vote session is attached to a root idea of the vote session phase, child
     # of discussion.root_idea. Those proposals shouldn't be returned.
     res = schema.execute(
