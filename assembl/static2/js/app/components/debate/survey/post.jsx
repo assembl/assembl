@@ -44,7 +44,7 @@ type Props = {
   screenWidth: number,
   themeId: string,
   isHarvesting: boolean,
-  isModerating: boolean,
+  isModerating?: boolean,
   validatePost: Function
 };
 
@@ -257,6 +257,8 @@ class Post extends React.Component<Props> {
 
     let creatorName = '';
     let userCanDeleteThisMessage = false;
+    const userIsAdmin = connectedUserIsAdmin();
+
     if (post.creator) {
       const { displayName, isDeleted } = post.creator;
       const connectedUserId = getConnectedUserId();
@@ -286,20 +288,22 @@ class Post extends React.Component<Props> {
             bodyMimeType={post.bodyMimeType}
             isHarvesting={isHarvesting}
           />
-          <div className="post-footer">
-            <div className="sentiments">
-              <div className="sentiment-label">
-                <Translate value="debate.survey.react" />
+          <div className={classnames('post-footer', { pending: isPending })}>
+            {!isPending ? (
+              <div className="sentiments">
+                <div className="sentiment-label">
+                  <Translate value="debate.survey.react" />
+                </div>
+                <ResponsiveOverlayTrigger placement="top" tooltip={likeTooltip}>
+                  {likeComponent}
+                </ResponsiveOverlayTrigger>
+                <ResponsiveOverlayTrigger placement="top" tooltip={disagreeTooltip}>
+                  {disagreeComponent}
+                </ResponsiveOverlayTrigger>
               </div>
-              <ResponsiveOverlayTrigger placement="top" tooltip={likeTooltip}>
-                {likeComponent}
-              </ResponsiveOverlayTrigger>
-              <ResponsiveOverlayTrigger placement="top" tooltip={disagreeTooltip}>
-                {disagreeComponent}
-              </ResponsiveOverlayTrigger>
-            </div>
+            ) : null}
             <div className="actions">
-              {isModerating ? (
+              {userIsAdmin && isPending ? (
                 <ResponsiveOverlayTrigger placement="top" tooltip={validateMessageTooltip}>
                   {validatePostButton}
                 </ResponsiveOverlayTrigger>

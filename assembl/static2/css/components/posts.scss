@@ -71,6 +71,11 @@
     display: flex;
     justify-content: space-between;
 
+    &.pending {
+      display: flex;
+      justify-content: flex-end;
+    }
+
     .sentiments {
       font-family: $font-family4;
     }
