@@ -35,6 +35,7 @@ export type Props = {
   routerParams: RouterParams,
   screenWidth: number,
   sentimentCounts: SentimentCountsFragment,
+  isPending: boolean,
   isPendingPostForAdmin: boolean
 };
 
@@ -59,6 +60,7 @@ export class PostActions extends React.Component<Props> {
       routerParams,
       screenWidth,
       sentimentCounts,
+      isPending,
       isPendingPostForAdmin
     } = this.props;
     let count = 0;
@@ -79,22 +81,24 @@ export class PostActions extends React.Component<Props> {
     return (
       <div className="post-actions">
         <div className="post-icons">
-          <div
-            className="post-action"
-            onClick={() =>
-              openShareModal({
-                type: 'post',
-                title: modalTitle,
-                routerParams: routerParams,
-                elementId: postId,
-                social: useSocial
-              })
-            }
-          >
-            <ResponsiveOverlayTrigger placement={tooltipPlacement} tooltip={sharePostTooltip}>
-              {shareIcon}
-            </ResponsiveOverlayTrigger>
-          </div>
+          {!isPending ? (
+            <div
+              className="post-action"
+              onClick={() =>
+                openShareModal({
+                  type: 'post',
+                  title: modalTitle,
+                  routerParams: routerParams,
+                  elementId: postId,
+                  social: useSocial
+                })
+              }
+            >
+              <ResponsiveOverlayTrigger placement={tooltipPlacement} tooltip={sharePostTooltip}>
+                {shareIcon}
+              </ResponsiveOverlayTrigger>
+            </div>
+          ) : null}
           <Sentiments
             sentimentCounts={sentimentCounts}
             mySentiment={mySentiment}

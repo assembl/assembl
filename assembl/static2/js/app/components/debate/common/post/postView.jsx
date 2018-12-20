@@ -271,6 +271,7 @@ class PostView extends React.PureComponent<Props, State> {
                 debateData={debateData}
                 postSubject={subject ? subject.replace('Re: ', '') : ''}
                 phaseId={phaseId}
+                isPending={isPending}
                 isPendingPostForAdmin={isPendingPostForAdmin}
               />
             </div>
