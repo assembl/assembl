@@ -5,6 +5,7 @@ import { ApolloClient, compose, withApollo } from 'react-apollo';
 import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
 import { OverlayTrigger } from 'react-bootstrap';
+import classnames from 'classnames';
 import { MEDIUM_SCREEN_WIDTH } from '../../../constants';
 import { sharePostTooltip } from '../../common/tooltips';
 
@@ -78,6 +79,7 @@ export class PostActions extends React.Component<Props> {
     const tooltipPlacement = screenWidth >= MEDIUM_SCREEN_WIDTH ? 'left' : 'top';
     const isPhaseCompleted = getIsPhaseCompletedById(timeline, phaseId);
     const shareIcon = <span className="assembl-icon-share color" />;
+    const isPendingForUser = isPending && !isPendingPostForAdmin;
     return (
       <div className="post-actions">
         <div className="post-icons">
@@ -102,14 +104,16 @@ export class PostActions extends React.Component<Props> {
               <div className="post-actions-separator" />
             </React.Fragment>
           ) : null}
-          <Sentiments
-            sentimentCounts={sentimentCounts}
-            mySentiment={mySentiment}
-            placement={tooltipPlacement}
-            client={client}
-            postId={postId}
-            isPhaseCompleted={isPhaseCompleted}
-          />
+          {!isPendingForUser ? (
+            <Sentiments
+              sentimentCounts={sentimentCounts}
+              mySentiment={mySentiment}
+              placement={tooltipPlacement}
+              client={client}
+              postId={postId}
+              isPhaseCompleted={isPhaseCompleted}
+            />
+          ) : null}
         </div>
         {totalSentimentsCount > 0 ? (
           <OverlayTrigger
@@ -142,7 +146,7 @@ export class PostActions extends React.Component<Props> {
         ) : (
           <div className="empty-sentiments-count" />
         )}
-        <div className="post-actions-separator" />
+        <div className={classnames({ 'post-actions-separator': !isPendingForUser })} />
         {isPendingPostForAdmin ? <ValidatePostButton postId={postId} linkClassName="post-action" /> : null}
         {userCanDeleteThisMessage ? <DeletePostButton postId={postId} linkClassName="post-action" /> : null}
         {editable && userCanEditThisMessage ? <EditPostButton handleClick={handleEditClick} linkClassName="post-action" /> : null}
