@@ -151,7 +151,7 @@ def discussion2(request, test_session):
 def discussion_with_lang_prefs(request, test_session, discussion):
     """An empty Discussion fixture with locale preferences"""
     discussion.discussion_locales = ['en', 'fr', 'ja']
-    test_session.commit()
+    test_session.flush()
 
     return discussion
 
@@ -169,7 +169,7 @@ def closed_discussion(request, test_session, discussion):
     dp = test_session.query(DiscussionPermission).join(Permission).filter(
         DiscussionPermission.discussion == discussion, Permission.name == P_READ).first()
     dp.role = role
-    test_session.commit()
+    test_session.flush()
 
     def fin():
         for acl in discussion.acls:

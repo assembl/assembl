@@ -4,65 +4,40 @@ import pytest
 
 
 @pytest.fixture(scope="function")
-def timeline_phase2_interface_v1(request, test_app, test_session, discussion):
-    url = "/data/Discussion/%d/timeline_events" % (discussion.id,)
-    phase1 = {
-        '@type': "DiscussionPhase",
-        'identifier': 'survey',
-        'title': {
-            "@type": "LangString",
-            "entries": [{
-                "@type": "LangStringEntry",
-                "value": "phase 1",
-                "@language": "en"}]},
-        'description': {
-            "@type": "LangString",
-            "entries": [{
-                "@type": "LangStringEntry",
-                "value": "A first exploratory phase",
-                "@language": "en"}]},
-        'start': "20141231T09:00:00Z",
-        'end': "20151231T09:00:00Z",
-        'interface_v1': False
-    }
-
-    # Create the phase
-    r = test_app.post_json(url, phase1)
-    assert r.status_code == 201
-    uri1 = r.location
-    discussion.db.flush()
-
-    # Create phase2
-    phase2 = {
-        '@type': "DiscussionPhase",
-        'identifier': 'thread',
-        'title': {
-            "@type": "LangString",
-            "entries": [{
-                "@type": "LangStringEntry",
-                "value": "phase 2",
-                "@language": "en"}]},
-        'description': {
-            "@type": "LangString",
-            "entries": [{
-                "@type": "LangStringEntry",
-                "value": "A second divergent phase",
-                "@language": "en"}]},
-        'previous_event': uri1,
-        'start': "20151231T09:01:00Z",
-        'end': "20491231T09:00:00Z",
-        'interface_v1': True
-    }
-
-    # Create the phase
-    r = test_app.post_json(url, phase2)
-    assert r.status_code == 201
-    discussion.db.flush()
+def timeline_phase2_interface_v1(request, test_app, test_session, discussion, subidea_1, subidea_2):
+    from assembl.models import DiscussionPhase, LangString
+    phase1 = DiscussionPhase(
+        identifier='survey',
+        discussion=discussion,
+        title=LangString.create('phase 1', 'en'),
+        description=LangString.create('A first exploratory phase', 'en'),
+        root_idea=subidea_1,
+        start=datetime(2014, 12, 31, 9),
+        end=datetime(2015, 12, 31, 9),
+        interface_v1=True
+    )
+    test_session.add(phase1)
+    phase2 = DiscussionPhase(
+        identifier='thread',
+        discussion=discussion,
+        title=LangString.create('phase 2', 'en'),
+        description=LangString.create('A second divergent phase', 'en'),
+        root_idea=subidea_2,
+        start=datetime(2015, 12, 31, 9, 1),
+        end=datetime(2049, 12, 31, 9),
+        previous_event=phase1,
+        order=2.0,
+        interface_v1=True
+    )
+    test_session.add(phase2)
+    test_session.flush()
 
     def fin():
         print "finalizer timeline"
-        for timeline_event in discussion.timeline_events:
-            test_session.delete(timeline_event)
+        phase2.previous_event = None
+        phase2.previous_event_id = None
+        phase2.delete()
+        phase1.delete()
 
         test_session.flush()
 
@@ -71,67 +46,40 @@ def timeline_phase2_interface_v1(request, test_app, test_session, discussion):
 
 
 @pytest.fixture(scope="function")
-def timeline_phase2_interface_v2(request, test_app, test_session, discussion):
-    url = "/data/Discussion/%d/timeline_events" % (discussion.id,)
-    phase1 = {
-        '@type': "DiscussionPhase",
-        'identifier': 'survey',
-        'title': {
-            "@type": "LangString",
-            "entries": [{
-                "@type": "LangStringEntry",
-                "value": "phase 1",
-                "@language": "en"}]},
-        'description': {
-            "@type": "LangString",
-            "entries": [{
-                "@type": "LangStringEntry",
-                "value": "A first exploratory phase",
-                "@language": "en"}]},
-        'start': "20141231T09:00:00Z",
-        'end': "20151231T09:00:00Z",
-        'interface_v1': False
-    }
-
-    # Create the phase
-    r = test_app.post_json(url, phase1)
-    assert r.status_code == 201
-    uri1 = r.location
-    discussion.db.flush()
-
-    # Create phase2
-    phase2 = {
-        '@type': "DiscussionPhase",
-        'identifier': 'thread',
-        'title': {
-            "@type": "LangString",
-            "entries": [{
-                "@type": "LangStringEntry",
-                "value": "phase 2",
-                "@language": "en"}]},
-        'description': {
-            "@type": "LangString",
-            "entries": [{
-                "@type": "LangStringEntry",
-                "value": "A second divergent phase",
-                "@language": "en"}]},
-        'previous_event': uri1,
-        'start': "20151231T09:01:00Z",
-        'end': "20491231T09:00:00Z",
-        'order': 2.0,
-        'interface_v1': False
-    }
-
-    # Create the phase
-    r = test_app.post_json(url, phase2)
-    assert r.status_code == 201
-    discussion.db.flush()
+def timeline_phase2_interface_v2(request, test_app, test_session, discussion, subidea_1, subidea_2):
+    from assembl.models import DiscussionPhase, LangString
+    phase1 = DiscussionPhase(
+        identifier='survey',
+        discussion=discussion,
+        title=LangString.create('phase 1', 'en'),
+        description=LangString.create('A first exploratory phase', 'en'),
+        root_idea=subidea_1,
+        start=datetime(2014, 12, 31, 9),
+        end=datetime(2015, 12, 31, 9),
+        interface_v1=False
+    )
+    test_session.add(phase1)
+    phase2 = DiscussionPhase(
+        identifier='thread',
+        discussion=discussion,
+        title=LangString.create('phase 2', 'en'),
+        description=LangString.create('A second divergent phase', 'en'),
+        root_idea=subidea_2,
+        start=datetime(2015, 12, 31, 9, 1),
+        end=datetime(2049, 12, 31, 9),
+        previous_event=phase1,
+        order=2.0,
+        interface_v1=False
+    )
+    test_session.add(phase2)
+    test_session.flush()
 
     def fin():
         print "finalizer timeline"
-        for timeline_event in discussion.timeline_events:
-            test_session.delete(timeline_event)
-
+        phase2.previous_event = None
+        phase2.previous_event_id = None
+        phase2.delete()
+        phase1.delete()
         test_session.flush()
 
     request.addfinalizer(fin)
