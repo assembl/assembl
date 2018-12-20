@@ -252,9 +252,6 @@ $deleted-post-border: 1px solid $grey1 !default;
 
       &.pending {
         color: $orange;
-      }
-
-      &.pendingForAdmin {
         text-transform: uppercase;
       }
     }

@@ -187,11 +187,11 @@ class PostView extends React.PureComponent<Props, State> {
       : [];
     const hasRelatedIdeas = relatedIdeasTitles.length > 0;
     const isPublished = publicationState === 'PUBLISHED';
-    let userName = isPublished || isPendingPostForPostCreator ? creator.displayName : I18n.t('debate.postAwaitingModeration');
+    let userName = isPublished ? creator.displayName : I18n.t('debate.postAwaitingModeration');
     if (creator.isDeleted) {
       userName = I18n.t('deletedUser');
     }
-    const userNameClasses = classnames({ pending: isPending, pendingForAdmin: isPendingPostForAdmin });
+    const userNameClasses = classnames({ pending: isPending });
     return (
       <div
         ref={(p) => {
