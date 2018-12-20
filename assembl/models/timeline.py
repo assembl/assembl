@@ -191,7 +191,10 @@ class DiscussionPhase(TimelineEvent):
     interface_v1 = Column(Boolean, server_default='false', default=False)
     root_idea_id = Column(
         Integer,
-        ForeignKey('idea.id', onupdate="CASCADE", ondelete="SET NULL"))
+        # The delete should cascade; wait until all phases have an idea.
+        ForeignKey('idea.id', onupdate="CASCADE", ondelete='SET NULL'),
+        unique=True,
+        nullable=True)  # This is temporary
     root_idea = relationship(
         Idea,
         backref=backref('discussion_phase', uselist=False),

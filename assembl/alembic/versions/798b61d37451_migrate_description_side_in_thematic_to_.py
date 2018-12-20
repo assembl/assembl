@@ -27,7 +27,7 @@ def upgrade(pyramid_env):
         op.drop_column("vote_session", "instructions_section_title_id")
         op.drop_column("vote_session", "instructions_section_content_id")
         op.drop_column("vote_session", "discussion_phase_id")
-        op.add_column("vote_session", sa.Column('idea_id', sa.Integer, sa.ForeignKey(m.Idea.id), nullable=True))
+        op.add_column("vote_session", sa.Column('idea_id', sa.Integer, sa.ForeignKey(m.Idea.id), nullable=True, unique=True))
 
     with transaction.manager:
         # Removing all vote session, vote specifications, and idea votes
