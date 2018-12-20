@@ -42,20 +42,6 @@ class VoteSession(
         onupdate='CASCADE'
     ), primary_key=True)
 
-    # discussion_phase_id = Column(
-    #     Integer,
-    #     ForeignKey(DiscussionPhase.id),
-    #     nullable=False)
-    #
-    # discussion_phase = relationship(
-    #     DiscussionPhase,
-    #     backref=backref(
-    #         "vote_session",
-    #         single_parent=True,
-    #         uselist=False,
-    #         cascade="all, delete-orphan"
-    #     ),
-    # )
     idea_id = Column(Integer, ForeignKey(Idea.id), nullable=False)
 
     idea = relationship(Idea, backref=backref("vote_session", single_parent=True, uselist=False, cascade="all, delete-orphan"),)

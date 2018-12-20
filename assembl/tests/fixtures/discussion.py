@@ -198,9 +198,9 @@ def discussion_with_permissions(request, test_session, discussion):
 def discussion_with_2_phase_interface_v2(
         request, test_session, discussion_with_permissions,
         timeline_phase2_interface_v2):
-
     discussion_with_permissions.preferences['landing_page'] = True
-    test_session.commit()
+    test_session.flush()
+
     return discussion_with_permissions
 
 @pytest.fixture(scope="function")
