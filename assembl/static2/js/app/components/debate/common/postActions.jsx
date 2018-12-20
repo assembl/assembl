@@ -82,22 +82,25 @@ export class PostActions extends React.Component<Props> {
       <div className="post-actions">
         <div className="post-icons">
           {!isPending ? (
-            <div
-              className="post-action"
-              onClick={() =>
-                openShareModal({
-                  type: 'post',
-                  title: modalTitle,
-                  routerParams: routerParams,
-                  elementId: postId,
-                  social: useSocial
-                })
-              }
-            >
-              <ResponsiveOverlayTrigger placement={tooltipPlacement} tooltip={sharePostTooltip}>
-                {shareIcon}
-              </ResponsiveOverlayTrigger>
-            </div>
+            <React.Fragment>
+              <div
+                className="post-action"
+                onClick={() =>
+                  openShareModal({
+                    type: 'post',
+                    title: modalTitle,
+                    routerParams: routerParams,
+                    elementId: postId,
+                    social: useSocial
+                  })
+                }
+              >
+                <ResponsiveOverlayTrigger placement={tooltipPlacement} tooltip={sharePostTooltip}>
+                  {shareIcon}
+                </ResponsiveOverlayTrigger>
+              </div>
+              <div className="post-actions-separator" />
+            </React.Fragment>
           ) : null}
           <Sentiments
             sentimentCounts={sentimentCounts}
@@ -139,6 +142,7 @@ export class PostActions extends React.Component<Props> {
         ) : (
           <div className="empty-sentiments-count" />
         )}
+        <div className="post-actions-separator" />
         {isPendingPostForAdmin ? <ValidatePostButton postId={postId} linkClassName="post-action" /> : null}
         {userCanDeleteThisMessage ? <DeletePostButton postId={postId} linkClassName="post-action" /> : null}
         {editable && userCanEditThisMessage ? <EditPostButton handleClick={handleEditClick} linkClassName="post-action" /> : null}
