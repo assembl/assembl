@@ -473,14 +473,14 @@
 
       .previous-extract {
         cursor: pointer;
-        margin-top: -20px;
+        margin-top: 20px;
         font-size: 10px;
         flex-basis: 30px;
         flex-shrink: 0;
 
         .assembl-icon-down-open {
           &:before {
-            transform: rotate(90deg) scaleX(2.5);
+            transform: rotate(-90deg) scaleX(2.5) scaleY(-1);
           }
         }
       }
@@ -502,6 +502,137 @@
     }
   }
 
+  .harvesting-tag-form-container {
+    width: 100%;
+
+    .form-group {
+      margin: 0;
+    }
+
+    .select-field__control {
+      border: none;
+      min-height: auto !important;
+      border-radius: 20px !important;
+    }
+
+    .select-field__indicator {
+      padding: 0 8px;
+    }
+
+    .select-field__value-container {
+      padding: 0;
+    }
+  }
+
+  .harvesting-tags-form-container,
+  .harvesting-tags-container {
+    background-color: $grey1;
+    padding: 15px 15px 10px 26px;
+
+    label {
+      font-weight: normal;
+    }
+
+    .select-field__control {
+      border-radius: 0;
+      min-height: 34px;
+    }
+
+    .select-field__placeholder {
+      color: $grey3;
+      font-size: $font-size-xs;
+    }
+
+    .select-field__dropdown-indicator {
+      color: $grey3;
+      padding: 0 8px;
+
+      svg {
+        width: 16px;
+      }
+    }
+
+    .select-field__multi-value {
+      border-radius: 0 !important;
+    }
+
+    .select-field__multi-value__label {
+      padding: 3px;
+    }
+
+    .select-field__multi-value__remove {
+      padding: 0 !important;
+
+      &:hover {
+        background: none;
+        color: $grey3;
+      }
+    }
+
+    .harvesting-box-footer {
+      padding: 5px 0;
+    }
+
+    .harvesting-tags-titles-container {
+      margin-left: 6px;
+      display: inline;
+    }
+
+    .harvesting-tag-container {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background-color: white;
+      border-radius: 13px;
+      padding: 2px 2px 2px 10px;
+      color: $grey3;
+      margin-right: 5px;
+      margin-bottom: 5px;
+      font-family: $font-family4;
+      font-size: $font-size-xs;
+      font-weight: bold;
+
+      &.editing {
+        width: 100%;
+      }
+
+      &.editable {
+        cursor: pointer;
+      }
+
+      .harvesting-tag-title {
+        margin-right: 7px;
+        white-space: nowrap;
+      }
+
+      .assembl-icon-cancel {
+        cursor: pointer;
+
+        &::before {
+          padding-left: 2px;
+        }
+      }
+    }
+
+    .harvesting-tags-edit {
+      display: inline-flex;
+      border-radius: 16px;
+      padding: 0 0 0 3px;
+      color: $first-color;
+      border: solid 1px $first-color;
+      font-size: 13px;
+      line-height: 13px;
+      height: 15px;
+      width: 15px;
+      cursor: pointer;
+
+      &:hover {
+        color: white;
+        background-color: $first-color;
+      }
+    }
+  }
+
   .harvesting-box-footer {
     text-align: center;
     background-color: $grey1;
@@ -514,11 +645,11 @@
     }
 
     .button-submit {
-      padding: 8px 16px;
+      padding: 8px 17px;
     }
 
     .button-cancel {
-      padding: 8px 16px;
+      padding: 8px 17px;
     }
   }
 
@@ -532,16 +663,6 @@
 
 .extract-in-message {
   display: inline;
-}
-
-.harvesting-mode-on {
-  .extract-in-message {
-    background-color: $harvesting-green-light;
-
-    &.submitted {
-      background-color: $harvesting-blue-light;
-    }
-  }
 }
 
 .submitted-harvesting {
@@ -563,6 +684,53 @@
 
   .active-box {
     border-left-color: $harvesting-blue;
+  }
+}
+
+.harvesting-tag-input-container {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .harvesting-tag-input {
+    display: flex;
+    align-items: center;
+
+    > div {
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+  }
+
+  .harvesting-tag-input-control {
+    display: flex;
+    padding: 0 5px;
+
+    .icon {
+      margin-right: 5px;
+      padding: 2px 1px 0 1px;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+
+    .icon:last-child {
+      margin-right: 0;
+    }
+
+    .cancel-icon:hover {
+      color: white !important;
+      background-color: $red !important;
+    }
+
+    .validate-icon {
+      padding: 2px 1px 0 1px;
+
+      &:hover {
+        color: white;
+        background-color: $green;
+      }
+    }
   }
 }
 

@@ -53,6 +53,15 @@ def main(global_config, **settings):
         from pyramid.paster import setup_logging
         setup_logging(global_config['__file__'])
 
+    # Sentry
+    import sentry_sdk
+    from sentry_sdk.integrations.pyramid import PyramidIntegration
+    if settings.get('sentry_dsn', ''):
+        sentry_sdk.init(
+            dsn=settings['sentry_dsn'],
+            integrations=[PyramidIntegration()]
+        )
+
     from views.traversal import root_factory
     config = Configurator(registry=getGlobalSiteManager())
     config.setup_registry(settings=settings, root_factory=root_factory)

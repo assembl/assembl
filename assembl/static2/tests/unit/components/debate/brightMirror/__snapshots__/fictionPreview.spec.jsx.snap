@@ -14,7 +14,7 @@ exports[`Storyshots FictionPreview default 1`] = `
       className="fiction-preview"
       style={
         Object {
-          "backgroundColor": "#b3e5fc",
+          "backgroundImage": "linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url(https://s3-eu-west-1.amazonaws.com/brightmirror/preview-xx.jpg)",
         }
       }
     >
@@ -35,15 +35,40 @@ exports[`Storyshots FictionPreview default 1`] = `
                 onMouseOut={[Function]}
                 onMouseOver={[Function]}
               >
-                <a
-                  className="edit"
+                <button
+                  className="edit edit-default"
+                  disabled={false}
                   onClick={[Function]}
-                  style={Object {}}
+                  type="button"
                 >
                   <span
                     className="assembl-icon-edit"
                   />
-                </a>
+                </button>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div
+              className="custom-overlay"
+            >
+              <div
+                onBlur={[Function]}
+                onClick={null}
+                onFocus={[Function]}
+                onMouseOut={[Function]}
+                onMouseOver={[Function]}
+              >
+                <button
+                  className=" -default"
+                  disabled={false}
+                  onClick={[Function]}
+                  type="button"
+                >
+                  <span
+                    className="assembl-icon-delete"
+                  />
+                </button>
               </div>
             </div>
           </li>
@@ -59,12 +84,12 @@ exports[`Storyshots FictionPreview default 1`] = `
                 onMouseOver={[Function]}
               >
                 <a
-                  className=""
+                  className="share"
                   onClick={[Function]}
                   style={Object {}}
                 >
                   <span
-                    className="assembl-icon-delete"
+                    className="assembl-icon-share"
                   />
                 </a>
               </div>
@@ -161,9 +186,7 @@ exports[`Storyshots FictionPreview default 1`] = `
     >
       ×
     </button>
-    <div
-      style={undefined}
-    >
+    <div>
       <div
         style={
           Object {
@@ -171,7 +194,6 @@ exports[`Storyshots FictionPreview default 1`] = `
             "backgroundColor": "#fff",
             "border": "1px solid #eee",
             "borderRadius": "2px",
-            "boxShadow": "0px 2px 3px rgba(0, 0, 0, 0.05)",
             "color": "#444",
             "fontFamily": "-apple-system, \\".SFNSText-Regular\\", \\"San Francisco\\", BlinkMacSystemFont, \\"Segoe UI\\", \\"Roboto\\", \\"Oxygen\\", \\"Ubuntu\\", \\"Cantarell\\", \\"Fira Sans\\", \\"Droid Sans\\", \\"Helvetica Neue\\", \\"Lucida Grande\\", \\"Arial\\", sans-serif",
             "fontSize": "15px",
@@ -231,7 +253,7 @@ exports[`Storyshots FictionPreview default 1`] = `
             Story Source
           </h1>
           <pre
-            className="css-4akams"
+            className="css-r8d96o eyvlbql0"
           >
             <div>
               <div
@@ -245,7 +267,7 @@ exports[`Storyshots FictionPreview default 1`] = `
                 <span
                   style={
                     Object {
-                      "color": "#777",
+                      "color": "#444",
                     }
                   }
                 >
@@ -398,36 +420,6 @@ exports[`Storyshots FictionPreview default 1`] = `
                           }
                         >
                           /url/preview
-                        </span>
-                        "
-                      </span>
-                    </span>
-                  </span>
-                  <span>
-                    <span>
-                      <br />
-                        
-                    </span>
-                    <span
-                      style={Object {}}
-                    >
-                      color
-                    </span>
-                    <span>
-                      =
-                      <span
-                        style={Object {}}
-                      >
-                        "
-                        <span
-                          style={
-                            Object {
-                              "color": "#22a",
-                              "wordBreak": "break-word",
-                            }
-                          }
-                        >
-                          #b3e5fc
                         </span>
                         "
                       </span>
@@ -602,13 +594,168 @@ exports[`Storyshots FictionPreview default 1`] = `
                         "
                       </span>
                     </span>
+                  </span>
+                  <span>
+                    <span>
+                      <br />
+                        
+                    </span>
+                    <span
+                      style={Object {}}
+                    >
+                      fictionMetaInfo
+                    </span>
+                    <span>
+                      =
+                      <span
+                        style={Object {}}
+                      >
+                        {
+                        <span
+                          style={
+                            Object {
+                              "color": "#666",
+                            }
+                          }
+                        >
+                          {
+                          <span>
+                            <span>
+                              <br />
+                                
+                                
+                            </span>
+                            <span
+                              style={
+                                Object {
+                                  "color": "#666",
+                                }
+                              }
+                            >
+                              fictionId
+                            </span>
+                          </span>
+                          : 
+                          <span
+                            style={
+                              Object {
+                                "color": "#22a",
+                                "wordBreak": "break-word",
+                              }
+                            }
+                          >
+                            'his-name-s-forrest'
+                          </span>
+                          ,
+                          <span>
+                            <span>
+                              <br />
+                                
+                                
+                            </span>
+                            <span
+                              style={
+                                Object {
+                                  "color": "#666",
+                                }
+                              }
+                            >
+                              phase
+                            </span>
+                          </span>
+                          : 
+                          <span
+                            style={
+                              Object {
+                                "color": "#22a",
+                                "wordBreak": "break-word",
+                              }
+                            }
+                          >
+                            'like-me'
+                          </span>
+                          ,
+                          <span>
+                            <span>
+                              <br />
+                                
+                                
+                            </span>
+                            <span
+                              style={
+                                Object {
+                                  "color": "#666",
+                                }
+                              }
+                            >
+                              slug
+                            </span>
+                          </span>
+                          : 
+                          <span
+                            style={
+                              Object {
+                                "color": "#22a",
+                                "wordBreak": "break-word",
+                              }
+                            }
+                          >
+                            'i-named-him-after-his-daddy'
+                          </span>
+                          ,
+                          <span>
+                            <span>
+                              <br />
+                                
+                                
+                            </span>
+                            …
+                          </span>
+                          <span>
+                            <br />
+                              
+                          </span>
+                          }
+                        </span>
+                        }
+                      </span>
+                    </span>
+                  </span>
+                  <span>
+                    <span>
+                      <br />
+                        
+                    </span>
+                    <span
+                      style={Object {}}
+                    >
+                      pictureId
+                    </span>
+                    <span>
+                      =
+                      <span
+                        style={Object {}}
+                      >
+                        {
+                        <span
+                          style={
+                            Object {
+                              "color": "#a11",
+                            }
+                          }
+                        >
+                          0
+                        </span>
+                        }
+                      </span>
+                    </span>
                     <br />
                   </span>
                 </span>
                 <span
                   style={
                     Object {
-                      "color": "#777",
+                      "color": "#444",
                     }
                   }
                 >
@@ -617,11 +764,11 @@ exports[`Storyshots FictionPreview default 1`] = `
               </div>
             </div>
             <button
-              className="css-py33tc"
+              className="css-1naocv3 eva467m0"
               onClick={[Function]}
             >
               <div
-                className="css-kv47nt"
+                className="css-lvl6aa eva467m1"
               >
                 <div
                   style={
@@ -689,7 +836,7 @@ exports[`Storyshots FictionPreview playground 1`] = `
       className="fiction-preview"
       style={
         Object {
-          "backgroundColor": "#b3e5fc",
+          "backgroundImage": "linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url(https://s3-eu-west-1.amazonaws.com/brightmirror/preview-xx.jpg)",
         }
       }
     >
@@ -710,15 +857,40 @@ exports[`Storyshots FictionPreview playground 1`] = `
                 onMouseOut={[Function]}
                 onMouseOver={[Function]}
               >
-                <a
-                  className="edit"
+                <button
+                  className="edit edit-default"
+                  disabled={false}
                   onClick={[Function]}
-                  style={Object {}}
+                  type="button"
                 >
                   <span
                     className="assembl-icon-edit"
                   />
-                </a>
+                </button>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div
+              className="custom-overlay"
+            >
+              <div
+                onBlur={[Function]}
+                onClick={null}
+                onFocus={[Function]}
+                onMouseOut={[Function]}
+                onMouseOver={[Function]}
+              >
+                <button
+                  className=" -default"
+                  disabled={false}
+                  onClick={[Function]}
+                  type="button"
+                >
+                  <span
+                    className="assembl-icon-delete"
+                  />
+                </button>
               </div>
             </div>
           </li>
@@ -734,12 +906,12 @@ exports[`Storyshots FictionPreview playground 1`] = `
                 onMouseOver={[Function]}
               >
                 <a
-                  className=""
+                  className="share"
                   onClick={[Function]}
                   style={Object {}}
                 >
                   <span
-                    className="assembl-icon-delete"
+                    className="assembl-icon-share"
                   />
                 </a>
               </div>
@@ -836,9 +1008,7 @@ exports[`Storyshots FictionPreview playground 1`] = `
     >
       ×
     </button>
-    <div
-      style={undefined}
-    >
+    <div>
       <div
         style={
           Object {
@@ -846,7 +1016,6 @@ exports[`Storyshots FictionPreview playground 1`] = `
             "backgroundColor": "#fff",
             "border": "1px solid #eee",
             "borderRadius": "2px",
-            "boxShadow": "0px 2px 3px rgba(0, 0, 0, 0.05)",
             "color": "#444",
             "fontFamily": "-apple-system, \\".SFNSText-Regular\\", \\"San Francisco\\", BlinkMacSystemFont, \\"Segoe UI\\", \\"Roboto\\", \\"Oxygen\\", \\"Ubuntu\\", \\"Cantarell\\", \\"Fira Sans\\", \\"Droid Sans\\", \\"Helvetica Neue\\", \\"Lucida Grande\\", \\"Arial\\", sans-serif",
             "fontSize": "15px",
@@ -906,7 +1075,7 @@ exports[`Storyshots FictionPreview playground 1`] = `
             Story Source
           </h1>
           <pre
-            className="css-4akams"
+            className="css-r8d96o eyvlbql0"
           >
             <div>
               <div
@@ -920,7 +1089,7 @@ exports[`Storyshots FictionPreview playground 1`] = `
                 <span
                   style={
                     Object {
-                      "color": "#777",
+                      "color": "#444",
                     }
                   }
                 >
@@ -1073,36 +1242,6 @@ exports[`Storyshots FictionPreview playground 1`] = `
                           }
                         >
                           /url/preview
-                        </span>
-                        "
-                      </span>
-                    </span>
-                  </span>
-                  <span>
-                    <span>
-                      <br />
-                        
-                    </span>
-                    <span
-                      style={Object {}}
-                    >
-                      color
-                    </span>
-                    <span>
-                      =
-                      <span
-                        style={Object {}}
-                      >
-                        "
-                        <span
-                          style={
-                            Object {
-                              "color": "#22a",
-                              "wordBreak": "break-word",
-                            }
-                          }
-                        >
-                          #b3e5fc
                         </span>
                         "
                       </span>
@@ -1277,13 +1416,168 @@ exports[`Storyshots FictionPreview playground 1`] = `
                         "
                       </span>
                     </span>
+                  </span>
+                  <span>
+                    <span>
+                      <br />
+                        
+                    </span>
+                    <span
+                      style={Object {}}
+                    >
+                      fictionMetaInfo
+                    </span>
+                    <span>
+                      =
+                      <span
+                        style={Object {}}
+                      >
+                        {
+                        <span
+                          style={
+                            Object {
+                              "color": "#666",
+                            }
+                          }
+                        >
+                          {
+                          <span>
+                            <span>
+                              <br />
+                                
+                                
+                            </span>
+                            <span
+                              style={
+                                Object {
+                                  "color": "#666",
+                                }
+                              }
+                            >
+                              fictionId
+                            </span>
+                          </span>
+                          : 
+                          <span
+                            style={
+                              Object {
+                                "color": "#22a",
+                                "wordBreak": "break-word",
+                              }
+                            }
+                          >
+                            'his-name-s-forrest'
+                          </span>
+                          ,
+                          <span>
+                            <span>
+                              <br />
+                                
+                                
+                            </span>
+                            <span
+                              style={
+                                Object {
+                                  "color": "#666",
+                                }
+                              }
+                            >
+                              phase
+                            </span>
+                          </span>
+                          : 
+                          <span
+                            style={
+                              Object {
+                                "color": "#22a",
+                                "wordBreak": "break-word",
+                              }
+                            }
+                          >
+                            'like-me'
+                          </span>
+                          ,
+                          <span>
+                            <span>
+                              <br />
+                                
+                                
+                            </span>
+                            <span
+                              style={
+                                Object {
+                                  "color": "#666",
+                                }
+                              }
+                            >
+                              slug
+                            </span>
+                          </span>
+                          : 
+                          <span
+                            style={
+                              Object {
+                                "color": "#22a",
+                                "wordBreak": "break-word",
+                              }
+                            }
+                          >
+                            'i-named-him-after-his-daddy'
+                          </span>
+                          ,
+                          <span>
+                            <span>
+                              <br />
+                                
+                                
+                            </span>
+                            …
+                          </span>
+                          <span>
+                            <br />
+                              
+                          </span>
+                          }
+                        </span>
+                        }
+                      </span>
+                    </span>
+                  </span>
+                  <span>
+                    <span>
+                      <br />
+                        
+                    </span>
+                    <span
+                      style={Object {}}
+                    >
+                      pictureId
+                    </span>
+                    <span>
+                      =
+                      <span
+                        style={Object {}}
+                      >
+                        {
+                        <span
+                          style={
+                            Object {
+                              "color": "#a11",
+                            }
+                          }
+                        >
+                          0
+                        </span>
+                        }
+                      </span>
+                    </span>
                     <br />
                   </span>
                 </span>
                 <span
                   style={
                     Object {
-                      "color": "#777",
+                      "color": "#444",
                     }
                   }
                 >
@@ -1292,11 +1586,11 @@ exports[`Storyshots FictionPreview playground 1`] = `
               </div>
             </div>
             <button
-              className="css-py33tc"
+              className="css-1naocv3 eva467m0"
               onClick={[Function]}
             >
               <div
-                className="css-kv47nt"
+                className="css-lvl6aa eva467m1"
               >
                 <div
                   style={

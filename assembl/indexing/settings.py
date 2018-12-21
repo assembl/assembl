@@ -227,7 +227,7 @@ def get_mapping(doc_type):
 
 def includeme(config):
     add_index_languages(_EXTRACT_MAPPING['properties'], ['subject'])
-    add_index_languages(_POST_MAPPING['properties'], ['body', 'subject'])
+    add_index_languages(_POST_MAPPING['properties'], ['body', 'subject', 'idea_title'])
     add_index_languages(_SYNTHESIS_MAPPING['properties'], ['subject', 'introduction', 'conclusion', 'ideas'])
     add_index_languages(_IDEA_MAPPING['properties'], [
         'title', 'synthesis_title', 'description', 'announcement_title',

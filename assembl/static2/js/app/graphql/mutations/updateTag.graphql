@@ -1,0 +1,8 @@
+mutation updateTag($id: ID!, $value: String!, $taggableId: ID) {
+  updateTag(id: $id, value: $value, taggableId: $taggableId) {
+    tag {
+      id
+      value
+    }
+  }
+}

@@ -1,0 +1,7 @@
+#!/bin/bash
+
+export PATH=$PATH:/usr/local/bin
+export ASSEMBL_PATH={{projectpath}}
+export BORG_PASSPHRASE={{borg_password}}
+export REPOSITORY={{ftp_backup_folder}}
+bash ${ASSEMBL_PATH}/assembl/scripts/shell/assembl_borg_backup.sh

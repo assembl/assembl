@@ -3,6 +3,7 @@
   Higher order component that:
   - if there is a graphql error throws it (this error will be handled by an error boundary component)
   - if loading is true displays the loader component or nothing
+  - Can pass custom Loader component to override the default
   - if there is no error and loading is false displays the wrapped component
 */
 import * as React from 'react';

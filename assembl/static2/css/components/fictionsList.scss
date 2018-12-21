@@ -11,6 +11,18 @@
     width: 100%;
     margin: auto;
 
+    button {
+      background: none;
+      border: none;
+
+      &:hover, &:focus, &:active {
+        background: none;
+        border: none;
+        outline: none;
+        box-shadow: none;
+      }
+    }
+
     .fiction-preview {
       display: flex;
       flex-direction: column;

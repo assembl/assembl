@@ -4,7 +4,6 @@
     :parts: 1
 """
 from datetime import datetime
-import logging
 from abc import abstractmethod
 import re
 
@@ -24,6 +23,7 @@ from sqlalchemy.sql.functions import count
 import assembl.graphql.docstrings as docs
 from ..lib.sqla import (CrudOperation, Base)
 from ..lib.model_watcher import get_model_watcher
+from ..lib import logging
 from . import DiscussionBoundBase
 from .langstrings import (LangString, LangStringEntry)
 from ..auth import (
@@ -34,7 +34,7 @@ from .discussion import Discussion
 from ..lib.history_mixin import TombstonableMixin
 from ..lib.clean_input import sanitize_text, sanitize_html
 
-log = logging.getLogger('assembl')
+log = logging.getLogger()
 
 
 class ContentSource(DiscussionBoundBase):
@@ -287,6 +287,12 @@ class Content(TombstonableMixin, DiscussionBoundBase):
         super(Content, self).__init__(*args, **kwargs)
 
     @classmethod
+    def graphene_id_for(cls, id):
+        # who made the Post global Ids not follow the base class?
+        from graphene.relay import Node
+        return Node.to_global_id('Post', id)
+
+    @classmethod
     def subqueryload_options(cls):
         # Options for subquery loading. Use when there are many languages in the discussion.
         return (
@@ -454,13 +460,18 @@ class Content(TombstonableMixin, DiscussionBoundBase):
             log.error("What is this mimetype?" + mimetype)
             return body
 
-    def maybe_translate(self, pref_collection):
+    def maybe_translate(self, pref_collection=None, target_locales=None):
         from assembl.tasks.translate import (
-            translate_content, PrefCollectionTranslationTable)
+            translate_content, PrefCollectionTranslationTable, LanguagesTranslationTable)
         service = self.discussion.translation_service()
         if service.canTranslate is not None:
-            translations = PrefCollectionTranslationTable(
-                service, pref_collection)
+            translations = None
+            if pref_collection:
+                translations = PrefCollectionTranslationTable(
+                    service, pref_collection)
+            elif target_locales:
+                translations = LanguagesTranslationTable(service, target_locales)
+
             translate_content(
                 self, translation_table=translations, service=service)
 
@@ -548,6 +559,53 @@ class Content(TombstonableMixin, DiscussionBoundBase):
     def widget_ideas(self):
         from .idea import Idea
         return [Idea.uri_generic(wil.idea_id) for wil in self.widget_idea_links]
+
+    def nlp_keywords(self, display_lang=None, limit=20):
+        from .nlp import PostKeywordAnalysis, Tag
+        from .langstrings import LangStringEntry, Locale
+
+        sq = self.db.query(
+            PostKeywordAnalysis.score.label('score'), Tag.id.label('id')
+        ).filter_by(
+            category=None
+        ).join(Tag).filter(
+            PostKeywordAnalysis.post_id == self.id
+        ).order_by(
+            PostKeywordAnalysis.score.desc())
+        if limit:
+            assert isinstance(limit, int)
+            sq = sq.limit(20)
+        sq = sq.subquery()
+
+        if display_lang is None:
+            label_cond = Locale.code.notlike('%-x-mtfrom-%')
+        else:
+            label_cond = (Locale.code == display_lang) \
+                | (Locale.code.like(display_lang + '-x-mtfrom-%'))
+            if display_lang != 'en':
+                untranslated = self.db.query(
+                    LangString
+                ).join(
+                    Tag, LangString.id == Tag.label_id
+                ).filter(
+                    Tag.id.in_(sq)
+                ).outerjoin(
+                    LangStringEntry,
+                    LangStringEntry.langstring_id == Tag.label_id
+                ).filter(LangStringEntry.id == None).all()  # noqa: E711
+                if untranslated:
+                    translator = self.discussion.translation_service()
+                    for t in untranslated:
+                        t.ensure_translations([display_lang], translator)
+
+        q = self.db.query(
+            LangStringEntry.value, sq.c.score
+        ).join(Locale).filter(
+            label_cond
+        ).distinct().join(
+            Tag, Tag.label_id == LangStringEntry.langstring_id
+        ).join(sq, sq.c.id == Tag.id)
+        return q.all()
 
     crud_permissions = CrudPermissions(
         P_ADD_POST, P_READ, P_EDIT_POST, P_DELETE_POST,

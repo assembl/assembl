@@ -34,13 +34,14 @@ export const defaultFictionCommentGraphQL: FictionCommentGraphQLProps = {
   authorUserId: 1234567890,
   authorFullname: 'Luke Skywalker',
   circleAvatar: { ...defaultCircleAvatar },
-  commentParentId: 'dummyId',
+  commentId: 'dummyId',
   commentContent:
     'Est et rerum. Ut sed voluptatem possimus. Ut cumque magni sapiente voluptatem ut rerum aut harum quo. Non delectus quo.',
   contentLocale: 'fr',
   displayedPublishedDate: 'August 8th, 2018',
   modified: false,
   parentPostAuthorFullname: 'Dark Vador',
+  publicationState: 'PUBLISHED',
   publishedDate: '2018-07-09',
   updateComment: action('updateComment')
 };
@@ -61,13 +62,14 @@ storiesOf('FictionComment', module)
         authorFullname={text('Author fullname', playground.authorFullname)}
         circleAvatar={object('circleAvatar', playground.circleAvatar)}
         commentContent={text('Comment content', playground.commentContent)}
-        commentParentId={text('Comment parent id', playground.commentParentId)}
+        commentId={text('Comment id', playground.commentId)}
         contentLocale={playground.contentLocale}
         displayedPublishedDate={text('Displayed published date', playground.displayedPublishedDate)}
         measureTreeHeight={playground.measureTreeHeight}
         numChildren={number('Number of comments', playground.numChildren)}
         modified={boolean('Is modified', playground.modified)}
         parentPostAuthorFullname={text('Parent comment author fullname', playground.parentPostAuthorFullname)}
+        publicationState={playground.publicationState}
         publishedDate={text('Published date', playground.publishedDate)}
         updateComment={playground.updateComment}
         fictionCommentExtraProps={playground.fictionCommentExtraProps}

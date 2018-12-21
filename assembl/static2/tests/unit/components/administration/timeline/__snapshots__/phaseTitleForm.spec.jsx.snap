@@ -17,20 +17,13 @@ exports[`PhaseTitleForm component should render a form to update the phase's tit
       validationState={null}
     >
       <FormControlWithLabel
-        className={undefined}
-        componentClass={undefined}
-        disabled={undefined}
-        formControlProps={undefined}
         helperText=""
         helperUrl=""
-        id={undefined}
         label="Phase title FR"
         labelAlwaysVisible={false}
-        name={undefined}
-        onChange={[Function]}
+        onChange={[MockFunction]}
         required={true}
         type="text"
-        validationErrors={undefined}
         value="Une phase intéressante"
       />
     </FormGroup>
@@ -65,7 +58,7 @@ exports[`PhaseTitleForm component should render a form to update the phase's tit
           bsStyle="default"
           className="admin-icons"
           disabled={false}
-          onClick={[Function]}
+          onClick={[MockFunction]}
         >
           <span
             className="assembl-icon-delete grey"

@@ -1,0 +1,25 @@
+#import "./AgentProfileInfo.graphql"
+#import "./ExtractComment.graphql"
+
+fragment FictionExtract on Extract {
+  id
+  creationDate
+  important
+  body
+  lang
+  extractNature
+  extractAction
+  extractState
+  textFragmentIdentifiers {
+    xpathStart
+    xpathEnd
+    offsetStart
+    offsetEnd
+  }
+  creator {
+    ...AgentProfileInfo
+  }
+  comments {
+    ...ExtractComment
+  }
+}

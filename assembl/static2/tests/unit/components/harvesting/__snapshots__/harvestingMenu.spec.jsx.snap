@@ -4,30 +4,26 @@ exports[`harvestingMenu component should match harvestingMenu snapshot when extr
 <div>
   <div
     className="harvesting-container"
-  >
-    
-  </div>
+  />
 </div>
 `;
 
 exports[`harvestingMenu component should match harvestingMenu snapshot when nugget action is visible 1`] = `
 <div>
   <harvestingBadge
-    extractsNumber={2}
+    extractsNumber={5}
     toggleExtractsBox={[Function]}
   />
   <div
     className="harvesting-container"
-  >
-    
-  </div>
+  />
 </div>
 `;
 
 exports[`harvestingMenu component should match harvestingMenu snapshot when the anchor to harvest is visible 1`] = `
 <div>
   <harvestingBadge
-    extractsNumber={2}
+    extractsNumber={5}
     toggleExtractsBox={[Function]}
   />
   <div
@@ -41,7 +37,7 @@ exports[`harvestingMenu component should match harvestingMenu snapshot when the 
         }
       }
       displayHarvestingBox={false}
-      handleClickAnchor={[Function]}
+      handleClickAnchor={[MockFunction]}
       handleMouseDown={[Function]}
     />
   </div>
@@ -51,38 +47,41 @@ exports[`harvestingMenu component should match harvestingMenu snapshot when the 
 exports[`harvestingMenu component should match harvestingMenu snapshot when the author account is deleted 1`] = `
 <div>
   <harvestingBadge
-    extractsNumber={2}
+    extractsNumber={5}
     toggleExtractsBox={[Function]}
   />
   <div
     className="harvesting-container"
-  >
-    
-  </div>
+  />
 </div>
 `;
 
 exports[`harvestingMenu component should match harvestingMenu snapshot when the harvesting box is visible 1`] = `
 <div>
   <harvestingBadge
-    extractsNumber={2}
+    extractsNumber={5}
     toggleExtractsBox={[Function]}
   />
   <div
     className="harvesting-container"
   >
-    <Connect(Apollo(Apollo(Apollo(Apollo(Component)))))
-      cancelHarvesting={[Function]}
-      displayHarvestingBox={true}
-      lang="fr"
-      postId="123456"
-      refetchPost={[Function]}
-      selection={
+    <Connect(Apollo(Apollo(Apollo(Apollo(Apollo(Component))))))
+      annotation={
         Object {
-          "removeAllRanges": [Function],
+          "body": "extract text",
+          "offsetEnd": 988,
+          "offsetStart": 973,
+          "xpathEnd": "//div[@id='start']/",
+          "xpathStart": "//div[@id='end']/",
         }
       }
-      setHarvestingBoxDisplay={[Function]}
+      cancelHarvesting={[MockFunction]}
+      displayHarvestingBox={true}
+      lang="fr"
+      onAdd={[Function]}
+      postId="123456"
+      refetchPost={[MockFunction]}
+      setHarvestingBoxDisplay={[MockFunction]}
       showNuggetAction={false}
     />
   </div>
@@ -92,14 +91,12 @@ exports[`harvestingMenu component should match harvestingMenu snapshot when the 
 exports[`harvestingMenu component should match harvestingMenu snapshot when there are extracts 1`] = `
 <div>
   <harvestingBadge
-    extractsNumber={2}
+    extractsNumber={5}
     toggleExtractsBox={[Function]}
   />
   <div
     className="harvesting-container"
-  >
-    
-  </div>
+  />
 </div>
 `;
 
@@ -107,8 +104,6 @@ exports[`harvestingMenu component should match harvestingMenu snapshot when ther
 <div>
   <div
     className="harvesting-container"
-  >
-    
-  </div>
+  />
 </div>
 `;

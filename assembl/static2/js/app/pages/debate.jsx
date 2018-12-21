@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { graphql } from 'react-apollo';
+import { compose, graphql } from 'react-apollo';
 import Loader from '../components/common/loader';
 import Themes from '../components/debate/common/themes';
 import DebateThematicsQuery from '../graphql/DebateThematicsQuery.graphql';
@@ -23,6 +23,13 @@ type Props = {
 };
 
 const Debate = ({ phaseId, identifier, data, params, children }: Props) => {
+  if (!data) {
+    return (
+      <div className="debate">
+        <Loader color="black" />
+      </div>
+    );
+  }
   const { loading, thematics } = data;
   const themeId = params.themeId || null;
   const questionId = params.questionId || null;
@@ -45,10 +52,13 @@ const Debate = ({ phaseId, identifier, data, params, children }: Props) => {
   );
 };
 
-const DebateWithData = graphql(DebateThematicsQuery)(Debate);
-
 const mapStateToProps = state => ({
   lang: state.i18n.locale
 });
 
-export default connect(mapStateToProps)(DebateWithData);
+export default compose(
+  connect(mapStateToProps),
+  graphql(DebateThematicsQuery, {
+    skip: ({ discussionPhaseId }) => !discussionPhaseId
+  })
+)(Debate);

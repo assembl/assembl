@@ -1,58 +1,40 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`DumbNumberGaugeForm component should render a form to set up a numeral gauge 1`] = `
-<div>
+<React.Fragment>
   <FormGroup
     bsClass="form-group"
   >
     <FormControlWithLabel
-      componentClass={undefined}
-      disabled={undefined}
-      formControlProps={undefined}
       helperText=""
       helperUrl=""
-      id={undefined}
       label="Minimum value"
       labelAlwaysVisible={false}
-      name={undefined}
       onChange={[Function]}
       required={true}
       type="number"
-      validationErrors={undefined}
       value="2"
     />
     <FormControlWithLabel
-      componentClass={undefined}
-      disabled={undefined}
-      formControlProps={undefined}
       helperText=""
       helperUrl=""
-      id={undefined}
       label="Maximum value"
       labelAlwaysVisible={false}
-      name={undefined}
       onChange={[Function]}
       required={true}
       type="number"
-      validationErrors={undefined}
       value="11"
     />
     <FormControlWithLabel
-      componentClass={undefined}
-      disabled={undefined}
-      formControlProps={undefined}
       helperText=""
       helperUrl=""
-      id={undefined}
       label="Unit"
       labelAlwaysVisible={false}
-      name={undefined}
       onChange={[Function]}
       required={true}
       type="text"
-      validationErrors={undefined}
       value="kms"
     />
   </FormGroup>
-</div>
+</React.Fragment>
 `;

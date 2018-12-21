@@ -13,19 +13,14 @@ exports[`GaugeForm component should render a form to set up a gauge and a number
     className="flex margin-m"
   >
     <FormControlWithLabel
-      componentClass={undefined}
-      disabled={undefined}
-      formControlProps={undefined}
       helperText="Depending on the objective of the gauge module, incite the participants to take action."
       helperUrl="/static2/img/helpers/helper6.png"
       id="gauge-vote-instructions-2"
       label="Instructions for the gauge vote"
       labelAlwaysVisible={false}
-      name={undefined}
-      onChange={[Function]}
+      onChange={[MockFunction]}
       required={true}
       type="text"
-      validationErrors={undefined}
       value="Please vote on this numeral gauge"
     />
   </div>
@@ -143,7 +138,7 @@ exports[`GaugeForm component should render a form to set up a gauge and a number
       id="radio-text-2"
       inline={false}
       name="gauge-type-1234"
-      onChange={[Function]}
+      onChange={[MockFunction]}
       title=""
     >
       <Translate
@@ -157,7 +152,7 @@ exports[`GaugeForm component should render a form to set up a gauge and a number
       id="radio-number-2"
       inline={false}
       name="gauge-type-1234"
-      onChange={[Function]}
+      onChange={[MockFunction]}
       title=""
     >
       <Translate
@@ -193,19 +188,14 @@ exports[`GaugeForm component should render a form to set up a gauge and a textGa
     className="flex margin-m"
   >
     <FormControlWithLabel
-      componentClass={undefined}
-      disabled={undefined}
-      formControlProps={undefined}
       helperText="Depending on the objective of the gauge module, incite the participants to take action."
       helperUrl="/static2/img/helpers/helper6.png"
       id="gauge-vote-instructions-2"
       label="Instructions for the gauge vote"
       labelAlwaysVisible={false}
-      name={undefined}
-      onChange={[Function]}
+      onChange={[MockFunction]}
       required={true}
       type="text"
-      validationErrors={undefined}
       value="Please vote on this textual gauge"
     />
   </div>
@@ -323,7 +313,7 @@ exports[`GaugeForm component should render a form to set up a gauge and a textGa
       id="radio-text-2"
       inline={false}
       name="gauge-type-5678"
-      onChange={[Function]}
+      onChange={[MockFunction]}
       title=""
     >
       <Translate
@@ -337,7 +327,7 @@ exports[`GaugeForm component should render a form to set up a gauge and a textGa
       id="radio-number-2"
       inline={false}
       name="gauge-type-5678"
-      onChange={[Function]}
+      onChange={[MockFunction]}
       title=""
     >
       <Translate
@@ -349,20 +339,17 @@ exports[`GaugeForm component should render a form to set up a gauge and a textGa
     choices={
       Immutable.List [
         Immutable.Map {
-          id: "2233",
-          labelEntries: Immutable.List [
-          ],
-          value: 1,
+          "id": "2233",
+          "labelEntries": Immutable.List [],
+          "value": 1,
         },
         Immutable.Map {
-          id: "3344",
-          labelEntries: Immutable.List [
-          ],
-          value: 2,
+          "id": "3344",
+          "labelEntries": Immutable.List [],
+          "value": 2,
         },
       ]
     }
-    handleGaugeChoiceLabelChange={undefined}
   />
   <div
     className="separator"
@@ -383,19 +370,14 @@ exports[`GaugeForm component should render a gauge form with no radio if canChan
     className="flex margin-m"
   >
     <FormControlWithLabel
-      componentClass={undefined}
-      disabled={undefined}
-      formControlProps={undefined}
       helperText="Depending on the objective of the gauge module, incite the participants to take action."
       helperUrl="/static2/img/helpers/helper6.png"
       id="gauge-vote-instructions-2"
       label="Instructions for the gauge vote"
       labelAlwaysVisible={false}
-      name={undefined}
-      onChange={[Function]}
+      onChange={[MockFunction]}
       required={true}
       type="text"
-      validationErrors={undefined}
       value="Please vote on this textual gauge"
     />
   </div>
@@ -507,20 +489,17 @@ exports[`GaugeForm component should render a gauge form with no radio if canChan
     choices={
       Immutable.List [
         Immutable.Map {
-          id: "2233",
-          labelEntries: Immutable.List [
-          ],
-          value: 1,
+          "id": "2233",
+          "labelEntries": Immutable.List [],
+          "value": 1,
         },
         Immutable.Map {
-          id: "3344",
-          labelEntries: Immutable.List [
-          ],
-          value: 2,
+          "id": "3344",
+          "labelEntries": Immutable.List [],
+          "value": 2,
         },
       ]
     }
-    handleGaugeChoiceLabelChange={undefined}
   />
   <div
     className="separator"

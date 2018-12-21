@@ -62,6 +62,10 @@
       line-height: 1.62;
       margin-bottom: 7px;
       padding: 11px 15px;
+      overflow-wrap: break-word;
+      word-wrap: break-word;
+      word-break: break-word;
+      hyphens: auto;
     }
 
     .toolbar {
@@ -82,10 +86,21 @@
       }
 
       .assembl-icon-back-arrow,
-      .assembl-icon-edit {
+      .assembl-icon-edit,
+      .assembl-icon-delete {
         color: $black;
         font-size: $font-size-s;
+      }
+
+      .assembl-icon-back-arrow,
+      .assembl-icon-edit {
         padding-left: 15px;
+        padding-right: 15px;
+      }
+
+      .assembl-icon-delete {
+        padding-left: 0;
+        padding-right: 0;
       }
 
       .assembl-icon-back-arrow:before {
@@ -94,7 +109,8 @@
 
       .action-toggle,
       .action-reply,
-      .action-edit {
+      .action-edit,
+      .action-delete {
         opacity: 0.7;
         transition: opacity 0.2s linear;
 

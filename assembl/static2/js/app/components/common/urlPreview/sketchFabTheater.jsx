@@ -2,7 +2,7 @@
 import React from 'react';
 
 import { fetchURLMetadata } from '../../../utils/urlPreview';
-import { type URLPreviewProps } from './urlPreview';
+import { type Props as URLPreviewProps } from './urlPreview';
 
 export type Props = {
   url: string

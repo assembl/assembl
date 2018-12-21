@@ -18,10 +18,7 @@ exports[`TabbedContent component should match snapshot 1`] = `
         onMouseOut={[Function]}
         onMouseOver={[Function]}
       >
-        <span
-          className={undefined}
-          style={undefined}
-        >
+        <span>
           Thematic 1
         </span>
       </a>
@@ -37,10 +34,7 @@ exports[`TabbedContent component should match snapshot 1`] = `
         onMouseOut={[Function]}
         onMouseOver={[Function]}
       >
-        <span
-          className={undefined}
-          style={undefined}
-        >
+        <span>
           Thematic 2
         </span>
       </a>
@@ -56,10 +50,7 @@ exports[`TabbedContent component should match snapshot 1`] = `
         onMouseOut={[Function]}
         onMouseOver={[Function]}
       >
-        <span
-          className={undefined}
-          style={undefined}
-        >
+        <span>
           Thematic 3
         </span>
       </a>
@@ -103,10 +94,7 @@ exports[`TabbedContent component should match snapshot with bodyRowClassName 1`]
         onMouseOut={[Function]}
         onMouseOver={[Function]}
       >
-        <span
-          className={undefined}
-          style={undefined}
-        >
+        <span>
           Thematic 1
         </span>
       </a>
@@ -122,10 +110,7 @@ exports[`TabbedContent component should match snapshot with bodyRowClassName 1`]
         onMouseOut={[Function]}
         onMouseOver={[Function]}
       >
-        <span
-          className={undefined}
-          style={undefined}
-        >
+        <span>
           Thematic 2
         </span>
       </a>
@@ -141,10 +126,7 @@ exports[`TabbedContent component should match snapshot with bodyRowClassName 1`]
         onMouseOut={[Function]}
         onMouseOver={[Function]}
       >
-        <span
-          className={undefined}
-          style={undefined}
-        >
+        <span>
           Thematic 3
         </span>
       </a>
@@ -188,10 +170,7 @@ exports[`TabbedContent component should match snapshot with divClassName 1`] = `
         onMouseOut={[Function]}
         onMouseOver={[Function]}
       >
-        <span
-          className={undefined}
-          style={undefined}
-        >
+        <span>
           Phase 1
         </span>
       </a>
@@ -207,10 +186,7 @@ exports[`TabbedContent component should match snapshot with divClassName 1`] = `
         onMouseOut={[Function]}
         onMouseOver={[Function]}
       >
-        <span
-          className={undefined}
-          style={undefined}
-        >
+        <span>
           Phase 2
         </span>
       </a>
@@ -226,10 +202,7 @@ exports[`TabbedContent component should match snapshot with divClassName 1`] = `
         onMouseOut={[Function]}
         onMouseOver={[Function]}
       >
-        <span
-          className={undefined}
-          style={undefined}
-        >
+        <span>
           Phase 3
         </span>
       </a>

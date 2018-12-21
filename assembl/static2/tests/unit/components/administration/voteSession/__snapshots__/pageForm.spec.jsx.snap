@@ -51,35 +51,23 @@ exports[`Vote Session DumbPageForm component should render a form to update the 
           popOverClass=""
         />
         <FormControlWithLabel
-          componentClass={undefined}
-          disabled={undefined}
-          formControlProps={undefined}
           helperText=""
           helperUrl=""
-          id={undefined}
           label="Header title FR"
           labelAlwaysVisible={false}
-          name={undefined}
-          onChange={[Function]}
+          onChange={[MockFunction]}
           required={true}
           type="text"
-          validationErrors={undefined}
           value="Phase de vote a la majorite et estimation multicritere"
         />
         <FormControlWithLabel
-          componentClass={undefined}
-          disabled={undefined}
-          formControlProps={undefined}
           helperText=""
           helperUrl=""
-          id={undefined}
           label="Header subtitle FR"
           labelAlwaysVisible={false}
-          name={undefined}
-          onChange={[Function]}
+          onChange={[MockFunction]}
           required={false}
           type="text"
-          validationErrors={undefined}
           value="La phase de vote est ouverte !"
         />
         <FormGroup
@@ -107,7 +95,7 @@ exports[`Vote Session DumbPageForm component should render a form to update the 
             }
             fileOrUrl="http://www.example.com/documents/myimage/data"
             filename=""
-            handleChange={[Function]}
+            handleChange={[MockFunction]}
             imgTitle={null}
             isAdminUploader={false}
             mimeType="image/jpeg"
@@ -132,35 +120,23 @@ exports[`Vote Session DumbPageForm component should render a form to update the 
         popOverClass=""
       />
       <FormControlWithLabel
-        componentClass={undefined}
-        disabled={undefined}
-        formControlProps={undefined}
         helperText=""
         helperUrl=""
-        id={undefined}
         label="Instructions title FR"
         labelAlwaysVisible={false}
-        name={undefined}
-        onChange={[Function]}
+        onChange={[MockFunction]}
         required={true}
         type="text"
-        validationErrors={undefined}
         value="Votez pour elire les 3 meilleures proppositions et leur alouer une estimation de cout!"
       />
       <FormControlWithLabel
-        componentClass={undefined}
-        disabled={undefined}
-        formControlProps={undefined}
         helperText=""
         helperUrl=""
-        id={undefined}
         label="Instructions content FR"
         labelAlwaysVisible={false}
-        name={undefined}
-        onChange={[Function]}
+        onChange={[MockFunction]}
         required={true}
         type="rich-text"
-        validationErrors={undefined}
         value={
           Object {
             "blocks": Array [
@@ -190,19 +166,13 @@ exports[`Vote Session DumbPageForm component should render a form to update the 
         popOverClass=""
       />
       <FormControlWithLabel
-        componentClass={undefined}
-        disabled={undefined}
-        formControlProps={undefined}
         helperText=""
         helperUrl=""
-        id={undefined}
         label="Section title FR"
         labelAlwaysVisible={false}
-        name={undefined}
-        onChange={[Function]}
+        onChange={[MockFunction]}
         required={true}
         type="text"
-        validationErrors={undefined}
         value="Vote sur 8 propositions"
       />
     </div>

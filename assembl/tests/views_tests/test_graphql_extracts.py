@@ -8,7 +8,7 @@ from sqlalchemy.orm import joinedload
 from assembl import models
 from assembl.graphql.schema import Schema as schema
 
-def test_mutation_add_extract(graphql_request, top_post_in_thread_phase):
+def test_mutation_add_extract(graphql_request, tags, top_post_in_thread_phase):
   post_db_id = int(from_global_id(top_post_in_thread_phase)[1])
   
   contentLocale = u'fr'
@@ -20,6 +20,7 @@ def test_mutation_add_extract(graphql_request, top_post_in_thread_phase):
   offsetStart = 17
   offsetEnd = 44
   important = False
+  tags = ['tag1']
 
   variable_values = {
     "contentLocale": contentLocale,
@@ -29,7 +30,8 @@ def test_mutation_add_extract(graphql_request, top_post_in_thread_phase):
     "xpathStart": xpathStart,  
     "xpathEnd": xpathEnd,
     "offsetStart": offsetStart,
-    "offsetEnd": offsetEnd
+    "offsetEnd": offsetEnd,
+    "tags": tags
   }
 
   mutation = u"""
@@ -42,6 +44,7 @@ mutation addPostExtract(
   $xpathEnd: String!
   $offsetStart: Int!
   $offsetEnd: Int!
+  $tags: [String]
 ) {
   addPostExtract(
     postId: $postId
@@ -52,6 +55,7 @@ mutation addPostExtract(
     offsetStart: $offsetStart
     offsetEnd: $offsetEnd
     lang: $contentLocale
+    tags: $tags
   ) {
     post {
       id
@@ -75,6 +79,7 @@ mutation addPostExtract(
             offsetEnd
           }
           creator { name }
+          tags { value }
         }
       }
     }
@@ -102,7 +107,8 @@ mutation addPostExtract(
             ], 
             u'extractAction': None, 
             u'extractNature': None, 
-            u'important': important
+            u'important': important,
+            u'tags': [{u'value': u'tag1'}]
           }
         ], 
         u'publicationState': 
@@ -121,6 +127,7 @@ mutation addPostExtract(
 
   res = schema.execute(mutation, context_value=graphql_request, variable_values=variable_values)
   assert res.errors and res.errors[0].message == "Extract already exists!"
+  models.AssemblPost.get(post_db_id).extracts[0].tags = []
 
 
 def test_mutation_delete_extract(graphql_request, extract_with_range_in_reply_post_1):
@@ -220,6 +227,38 @@ mutation updateExtract(
         u'extractNature': extractNature,
         u'important': important
       }
+    }
+  }
+
+
+def test_mutation_update_extract_tags(graphql_request, extract_post_1_to_subidea_1_1):
+  extract_graphql_db_id = to_global_id('Extract',extract_post_1_to_subidea_1_1.id)
+  tags = ['foo', 'bar', 'tar']
+
+  variable_values = {
+    "id": extract_graphql_db_id,
+    "tags" : tags
+  }
+
+  res = schema.execute(u"""
+mutation updateExtractTags(
+  $id: ID!
+  $tags: [String]
+) {
+  updateExtractTags(
+    id: $id
+    tags: $tags
+  ) {
+    tags {
+      value
+    }
+  }
+}
+""", context_value=graphql_request, variable_values=variable_values)
+
+  assert json.loads(json.dumps(res.data)) == {
+    u'updateExtractTags': {
+      u'tags': [{u'value': u'foo'}, {u'value': u'bar'}, {u'value': u'tar'}]
     }
   }
 

@@ -18,7 +18,6 @@ addons:
       - python-virtualenv
       - python-pip
       - python-psycopg2
-      - redis-server
       - memcached
       - python-requests
       - python-jinja2
@@ -35,7 +34,6 @@ addons:
       - libzmq3-dev
       - libxslt1-dev
       - libffi-dev
-      - libhiredis-dev
       - libxml2-dev
       - libssl-dev
       - libreadline-dev
@@ -54,6 +52,8 @@ cache:
     - assembl/static/widget/video/bower_components
     - assembl/static/widget/vote/bower_components
     - assembl/static2/node_modules
+services:
+ - redis-server
 before_install:
  # Remove mongodb repo that has an expired GPG key which gives a travis errored because
  # fabric is doing an apt-get update.
@@ -72,6 +72,8 @@ install:
  # TODO: fix fabfile's check_and_create_database_user command which produces an error when run by travis. For now we instead run the following command
  - pip install psycopg2
  - python2 $PWD/assembl/scripts/pypsql.py -u postgres -n localhost  "CREATE USER assembl_test WITH CREATEDB ENCRYPTED PASSWORD 'assembl_test'; COMMIT;"
+ # we need to uninstall pytest from travis venv to ensure we use our version
+ - pip uninstall -y pytest
  # The following command runs lots of sub-commands. After the following line has completed, approximately 10min have elapsed from the very beginning of the build
  - fab -f assembl/fabfile.py -c travis.rc bootstrap_from_checkout
 #before_script:
@@ -101,7 +103,7 @@ script:
   - if [ "$TO_TEST" = "FRONTEND" ]; then grep -R 'Missing translation' tests/unit/; test -z "`grep -R 'Missing translation' tests/unit/`"; fi
   - if [ "$TO_TEST" = "FRONTEND" ]; then npm run build >/dev/null; fi
 #  - if [ "$TO_TEST" = "FRONTEND" ]; then bash -c "test `ls -l build/bundle.js|awk '{print $5}'` -gt 3670016 && echo 'build/bundle.js size exceed 3.5 MB, is this normal? It was previously around 3 MB. If this is normal, please update this check in .travis.yml (3.5 MB = 3.5*1024*1024 = 3670016)' && exit 1 || exit 0"; fi
-  - if [ "$TO_TEST" = "FRONTEND" ]; then ls -l build/bundle.js; fi
+  - if [ "$TO_TEST" = "FRONTEND" ]; then ls -l build/bundle*.js; fi
 notifications:
   slack:
     rooms:

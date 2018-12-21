@@ -7,7 +7,6 @@ import hashlib
 import simplejson as json
 from collections import defaultdict
 from enum import IntEnum
-import logging
 from abc import abstractmethod
 
 from sqlalchemy.ext.hybrid import hybrid_property
@@ -35,13 +34,13 @@ from sqlalchemy.orm import (
 from sqlalchemy.orm.attributes import NO_VALUE
 from sqlalchemy.sql.functions import count
 
-from ..lib import config
+from ..lib import config, logging
 from ..lib.locale import to_posix_string
 from ..lib.model_watcher import get_model_watcher
 from ..lib.sqla import CrudOperation, PrivateObjectMixin
 from ..lib.sqla_types import (
     URLString, EmailString, EmailUnicode, CaseInsensitiveWord, CoerceUnicode)
-from ..lib.raven_client import capture_exception
+from ..lib.sentry import capture_exception
 from . import Base, DiscussionBoundBase
 from ..auth import (
     ASSEMBL_PERMISSIONS,
@@ -60,7 +59,7 @@ from ..auth import (
 from .langstrings import Locale
 from assembl.models.cookie_types import CookieTypes, AcceptedCookies, RejectedCookies
 
-log = logging.getLogger('assembl')
+log = logging.getLogger()
 
 
 # None-tolerant min, max
@@ -947,6 +946,12 @@ class User(AgentProfile):
             # set the new password
             self.password = hash_password(password)
 
+    def anonymous_username(self):
+        if self.username_p:
+            size = len(self.username_p)
+            return hash(self.username_p, size)
+        return None
+
     def check_password(self, password):
         if self.password:
             from ..auth.password import verify_password
@@ -1408,7 +1413,7 @@ class Username(Base):
     user_id = Column(Integer,
                      ForeignKey('user.id', ondelete='CASCADE', onupdate='CASCADE'),
                      nullable=False, unique=True, index=True)
-    username = Column(CoerceUnicode(20), primary_key=True)
+    username = Column(CoerceUnicode(40), primary_key=True)
     user = relationship(User, backref=backref('username', uselist=False, lazy="joined"))
     __table_args__ = (
         Index("ix_public_username_username_ci", func.lower(username), unique=True),)

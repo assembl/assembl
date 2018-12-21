@@ -16,6 +16,7 @@ from urllib import quote_plus
 from urlparse import urljoin
 
 from ...lib.clean_input import escape_html
+from ...lib.config import get
 from ...lib.utils import path_qs
 from ...lib.sqla import get_named_object
 from ...lib.frontend_urls import FrontendUrls
@@ -33,7 +34,7 @@ from ...models import (
 
 from .. import (
     HTTPTemporaryRedirect, get_default_context as base_default_context,
-    get_locale_from_request, get_theme_info, sanitize_next_view)
+    get_locale_from_request, get_theme_info, get_resources_hash, sanitize_next_view)
 from ...nlp.translation_service import DummyGoogleTranslationService
 from ..auth.views import get_social_autologin, get_login_context
 
@@ -215,6 +216,12 @@ def react_view(request, required_permission=P_READ):
     get_route = old_context["get_route"]
     theme_name, theme_relative_path = get_theme_info(discussion, frontend_version=2)
     node_env = os.getenv('NODE_ENV', 'production')
+    # wsginame values are defined in *.rc files
+    wsginame = get('wsginame', '')
+    bugherd_url = None
+    if wsginame in ('preprod.wsgi',):
+        bugherd_url = get('bugherd_url', None)
+
     common_context = {
         "theme_name": theme_name,
         "theme_relative_path": theme_relative_path,
@@ -223,8 +230,11 @@ def react_view(request, required_permission=P_READ):
         "assembl_version": pkg_resources.get_distribution("assembl").version,
         "elasticsearch_lang_indexes": old_context['elasticsearch_lang_indexes'],
         "web_analytics": old_context['web_analytics'],
-        "under_test": old_context['under_test']
+        "under_test": old_context['under_test'],
+        "sentry_dsn": get('sentry_dsn', ''),
+        "bugherd_url": bugherd_url
     }
+    common_context.update(get_resources_hash(theme_name))
 
     if discussion:
         canRead = user_has_permission(discussion.id, user_id, required_permission)

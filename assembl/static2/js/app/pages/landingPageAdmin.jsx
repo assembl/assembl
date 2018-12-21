@@ -4,19 +4,14 @@ import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { type Route, type Router } from 'react-router';
 import { I18n } from 'react-redux-i18n';
-import { EditorState } from 'draft-js';
-import { List, Map } from 'immutable';
 import moment from 'moment';
 
-import { convertEntriesToHTML, convertImmutableEntriesToJS } from '../utils/draftjs';
-import { getEntryValueForLocale } from '../utils/i18n';
 import ManageModules from '../components/administration/landingPage/manageModules';
-import CustomizeHeader from '../components/administration/landingPage/customizeHeader';
+import CustomizeHeader from '../components/administration/landingPage/header/index';
 import ManageTimeline from '../components/administration/landingPage/manageTimeline';
 import Navbar from '../components/administration/navbar';
 import { displayAlert } from '../utils/utilityManager';
 import SaveButton, { getMutationsPromises, runSerial } from '../components/administration/saveButton';
-import updateDiscussionMutation from '../graphql/mutations/updateDiscussion.graphql';
 import updateDiscussionPhaseMutation from '../graphql/mutations/updateDiscussionPhase.graphql';
 import createLandingPageModule from '../graphql/mutations/createLandingPageModule.graphql';
 import updateLandingPageModule from '../graphql/mutations/updateLandingPageModule.graphql';
@@ -27,26 +22,11 @@ type Props = {
   landingPageModules: Array<Object>,
   landingPageModulesHasChanged: boolean,
   refetchLandingPageModules: Function,
-  refetchLandingPage: Function,
   route: Route,
   router: Router,
   section: string,
   editLocale: string,
-  header: {
-    title: string,
-    subtitle: EditorState,
-    buttonLabel: string,
-    headerImgMimeType: string,
-    headerImgUrl: string,
-    headerImgTitle: string,
-    logoImgMimeType: string,
-    logoImgUrl: string,
-    logoImgTitle: string
-  },
-  pageHasChanged: boolean,
   phasesHaveChanged: boolean,
-  page: Map<string, any>,
-  updateDiscussion: Function,
   updateDiscussionPhase: Function,
   discussionPhases: Array<Object>,
   refetchTimeline: Function,
@@ -115,10 +95,6 @@ class LandingPageAdmin extends React.Component<Props, State> {
       landingPageModulesHasChanged,
       landingPageModules,
       refetchLandingPageModules,
-      refetchLandingPage,
-      pageHasChanged,
-      page,
-      updateDiscussion,
       phasesHaveChanged,
       discussionPhases,
       editLocale,
@@ -141,31 +117,6 @@ class LandingPageAdmin extends React.Component<Props, State> {
         })
         .catch((error) => {
           displayAlert('danger', error, false, 30000);
-        });
-    }
-
-    if (pageHasChanged) {
-      // $FlowFixMe flow doesn't seem to know the second param of Map.get()
-      const subtitleEntries = convertImmutableEntriesToJS(page.get('subtitleEntries', List()));
-      updateDiscussion({
-        variables: {
-          // $FlowFixMe flow doesn't seem to know the second param of Map.get()
-          titleEntries: page.get('titleEntries', List()).toJS(),
-          subtitleEntries: convertEntriesToHTML(subtitleEntries),
-          // $FlowFixMe flow doesn't seem to know the second param of Map.get()
-          buttonLabelEntries: page.get('buttonLabelEntries', List()).toJS(),
-          // $FlowFixMe flow doesn't seem to know the second param of Map.get()
-          headerImage: this.getImageVariable(page.get('headerImage', Map()).toJS()),
-          // $FlowFixMe flow doesn't seem to know the second param of Map.get()
-          logoImage: this.getImageVariable(page.get('logoImage', Map()).toJS())
-        }
-      })
-        .then(() => {
-          refetchLandingPage().then(() => this.setState({ refetching: false }));
-          displayAlert('success', I18n.t('administration.landingPage.headerSuccessSave'));
-        })
-        .catch((error) => {
-          displayAlert('danger', error.message);
         });
     }
 
@@ -192,27 +143,26 @@ class LandingPageAdmin extends React.Component<Props, State> {
     }
   };
 
-  dataHaveChanged = (): boolean =>
-    this.props.landingPageModulesHasChanged || this.props.pageHasChanged || this.props.phasesHaveChanged;
+  dataHaveChanged = (): boolean => this.props.landingPageModulesHasChanged || this.props.phasesHaveChanged;
 
   render() {
-    const { editLocale, header, section, timelineModuleId } = this.props;
+    const { editLocale, section, timelineModuleId } = this.props;
     const saveDisabled = !this.dataHaveChanged();
+    // TODO: Remove this crap after migrating all of landing page to react-final-form
+    const showSaveButton = s => s !== '1';
     return (
       <div className="landing-page-admin">
-        <SaveButton disabled={saveDisabled} saveAction={this.saveAction} />
-        {section === '1' && <ManageModules {...this.props} />}
-        {section === '2' && <CustomizeHeader editLocale={editLocale} header={header} />}
-        {section === '3' && <ManageTimeline timelineModuleId={timelineModuleId} editLocale={editLocale} />}
-        {section && <Navbar currentStep={section} steps={['1', '2', '3']} phaseIdentifier="landingPage" />}
+        {showSaveButton(section) && <SaveButton disabled={saveDisabled} saveAction={this.saveAction} />}
+        {section === '1' && <CustomizeHeader editLocale={editLocale} />}
+        {section === '2' && <ManageTimeline timelineModuleId={timelineModuleId} editLocale={editLocale} />}
+        {section === '3' && <ManageModules {...this.props} />}
+        {section && <Navbar currentStep={section} steps={['1', '2']} phaseIdentifier="landingPage" />}
       </div>
     );
   }
 }
 
 const mapStateToProps = ({ admin: { editLocale, landingPage, timeline } }) => {
-  const { page } = landingPage;
-  const subtitle = getEntryValueForLocale(page.get('subtitleEntries'), editLocale, EditorState.createEmpty());
   const timelineModule = landingPage.modulesById.find(module => module.getIn(['moduleType', 'identifier']) === 'TIMELINE');
   // timelineModule can be undefined when modulesById is not loaded yet
   const timelineModuleId = timelineModule ? timelineModule.get('id') : null;
@@ -230,19 +180,6 @@ const mapStateToProps = ({ admin: { editLocale, landingPage, timeline } }) => {
       .valueSeq()
       .toJS(),
     timelineModuleId: timelineModuleId,
-    header: {
-      title: getEntryValueForLocale(page.get('titleEntries'), editLocale, ''),
-      subtitle: subtitle,
-      buttonLabel: getEntryValueForLocale(page.get('buttonLabelEntries'), editLocale, ''),
-      headerImgMimeType: page.getIn(['headerImage', 'mimeType']),
-      headerImgUrl: page.getIn(['headerImage', 'externalUrl']),
-      headerImgTitle: page.getIn(['headerImage', 'title']),
-      logoImgMimeType: page.getIn(['logoImage', 'mimeType']),
-      logoImgUrl: page.getIn(['logoImage', 'externalUrl']),
-      logoImgTitle: page.getIn(['logoImage', 'title'])
-    },
-    page: landingPage.page,
-    pageHasChanged: landingPage.pageHasChanged,
     editLocale: editLocale,
     phasesHaveChanged: timeline.phasesHaveChanged,
     discussionPhases: timeline.phasesById
@@ -259,9 +196,6 @@ export default compose(
   }),
   graphql(updateLandingPageModule, {
     name: 'updateLandingPageModule'
-  }),
-  graphql(updateDiscussionMutation, {
-    name: 'updateDiscussion'
   }),
   graphql(updateDiscussionPhaseMutation, {
     name: 'updateDiscussionPhase'

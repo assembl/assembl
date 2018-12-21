@@ -44,6 +44,7 @@ import { connectedUserIsExpert } from '../utils/permissions';
 import { get as getRoute } from '../utils/routeMap';
 import UserMessagesTagFilter from './search/UserMessagesTagFilter';
 import { toggleHarvesting as toggleHarvestingAction } from '../actions/contextActions';
+import RelatedIdeas from './debate/common/post/relatedIdeas';
 
 const FRAGMENT_SIZE = 400;
 const elasticsearchLangIndexesElement = document.getElementById('elasticsearchLangIndexes');
@@ -65,13 +66,14 @@ const highlightedTextOrTruncatedText = (hit, field) => {
   return text;
 };
 
-function getPostUrl(ideaId, postId, phaseIdentifier, slug) {
+function getPostUrl(ideaId, postId, phaseIdentifier, slug, extractId) {
   if (!ideaId || !phaseIdentifier) {
     return undefined;
   }
   const ideaBase64id = btoa(`Idea:${ideaId}`);
   const postBase64id = btoa(`Post:${postId}`);
-  if (phaseIdentifier === 'thread') {
+  const extractBase64id = btoa(`Extract:${extractId}`);
+  if (phaseIdentifier === 'thread' && !extractId) {
     return getRoute('post', {
       slug: slug,
       phase: phaseIdentifier,
@@ -85,6 +87,14 @@ function getPostUrl(ideaId, postId, phaseIdentifier, slug) {
       questionId: ideaBase64id,
       questionIndex: 1,
       element: postBase64id
+    });
+  } else if (extractId) {
+    return getRoute('extract', {
+      slug: slug,
+      phase: phaseIdentifier,
+      themeId: ideaBase64id,
+      element: postBase64id,
+      extractId: extractBase64id
     });
   }
   return undefined;
@@ -150,7 +160,8 @@ if (v1Interface) {
       const phaseIdentifier = hit._source.phase_identifier;
       const ideaId = hit._source.idea_id[0];
       const postId = hit._source.post_id;
-      return getPostUrl(ideaId, postId, phaseIdentifier, slug);
+      const extractId = hit._source.id;
+      return getPostUrl(ideaId, postId, phaseIdentifier, slug, extractId);
     }
     default: {
       // post
@@ -162,14 +173,19 @@ if (v1Interface) {
   };
 }
 
-const PublishedInfo = (props) => {
-  const { date, publishedOnMsgId, userId, userName } = props;
+const PublishedInfo = ({ date, publishedOnMsgId, userId, userName, relatedIdeasTitles, ideaUrl, onLinkClick }) => {
+  const hasRelatedIdeasTitles = relatedIdeasTitles && relatedIdeasTitles.length > 0;
   return (
     <React.Fragment>
       <Translate value={publishedOnMsgId} /> <Localize value={date} dateFormat="date.format" /> <Translate value="search.by" />{' '}
       <TagFilter key={userId} field="creator_id" value={userId}>
         <ProfileLine userId={userId} userName={userName} />
       </TagFilter>
+      {hasRelatedIdeasTitles ? (
+        <Link to={ideaUrl} onClick={onLinkClick}>
+          <RelatedIdeas relatedIdeasTitles={relatedIdeasTitles} />
+        </Link>
+      ) : null}
     </React.Fragment>
   );
 };
@@ -256,12 +272,15 @@ const PostHit = ({ bemBlocks, collapseSearch, locale, result }) => {
   const subject = highlightedLSOrTruncatedLS(result, 'subject', locale);
   const body = highlightedLSOrTruncatedLS(result, 'body', locale);
   const published = {};
+  const ideaTitle = highlightedLSOrTruncatedLS(result, 'idea_title', locale);
+  const postUrl = getUrl(result);
+  const ideaUrl = postUrl.slice(0, postUrl.indexOf('#'));
   return (
     <BaseHit
       bemBlocks={bemBlocks}
       imageType={result._type}
       title={subject}
-      url={getUrl(result)}
+      url={postUrl}
       onLinkClick={collapseSearch}
       published={published}
       renderBody={() => (
@@ -279,7 +298,16 @@ const PostHit = ({ bemBlocks, collapseSearch, locale, result }) => {
           </div>
         </React.Fragment>
       )}
-      renderFooter={() => <PublishedInfo date={source.creation_date} userId={source.creator_id} userName={source.creator_name} />}
+      renderFooter={() => (
+        <PublishedInfo
+          date={source.creation_date}
+          userId={source.creator_id}
+          userName={source.creator_name}
+          relatedIdeasTitles={[ideaTitle]}
+          ideaUrl={ideaUrl}
+          onLinkClick={collapseSearch}
+        />
+      )}
     />
   );
 };
@@ -294,12 +322,15 @@ const DumbExtractHit = ({ bemBlocks, collapseSearch, isHarvesting, locale, toggl
     }
     collapseSearch();
   };
+  const ideaTitle = highlightedLSOrTruncatedLS(result, 'idea_title', locale);
+  const extractUrl = getUrl(result);
+  const ideaUrl = extractUrl.slice(0, extractUrl.indexOf('#'));
   return (
     <BaseHit
       bemBlocks={bemBlocks}
       imageType={result._type}
       title={subject}
-      url={getUrl(result)}
+      url={extractUrl}
       onLinkClick={onLinkClick}
       renderBody={() => <div dangerouslySetInnerHTML={{ __html: body }} />}
       renderFooter={() => (
@@ -308,6 +339,9 @@ const DumbExtractHit = ({ bemBlocks, collapseSearch, isHarvesting, locale, toggl
           userId={source.creator_id}
           userName={source.creator_name}
           publishedOnMsgId="search.harvested_on"
+          relatedIdeasTitles={[ideaTitle]}
+          ideaUrl={ideaUrl}
+          onLinkClick={onLinkClick}
         />
       )}
     />

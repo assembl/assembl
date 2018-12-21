@@ -1,25 +1,47 @@
 .action-buttons {
-  margin-bottom: 85px;
+  // Inline render of action buttons
+  .custom-overlay {
+    display: inline-block;
+
+    div {
+      display: inline-block;
+    }
+  }
+
+  margin-bottom: 20px;
   text-align: right;
 
   .edit,
-  .delete {
+  .delete,
+  .share {
     color: $black;
     font-size: $fiction-toolbar-icon-size;
     padding-left: 10px;
+    background: none;
+    border: none;
+
+    &:hover,
+    &:focus,
+    &:active {
+      background: none;
+      border: none;
+      outline: none;
+      box-shadow: none;
+    }
   }
 }
 
 @media screen and (min-width: $screen-sm-min) {
   .action-buttons {
-    margin-bottom: 65px;
+    margin-bottom: 20px;
   }
 }
 
 @media screen and (min-width: $screen-xl-min) {
   .action-buttons {
     .edit,
-    .delete {
+    .delete,
+    .share {
       cursor: pointer;
       display: inline-block;
       transition: all 0.2s ease-in-out;
@@ -28,5 +50,9 @@
         transform: scale(1.2);
       }
     }
+  }
+
+  .action-buttons {
+    margin-bottom: 35px;
   }
 }

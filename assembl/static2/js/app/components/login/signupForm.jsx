@@ -48,14 +48,11 @@ class SignupForm extends React.Component<Props, State> {
 
   handleAcceptButton: () => void;
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      privacyPolicyIsChecked: false,
-      termsAndConditionsIsChecked: false,
-      userGuidelinesIsChecked: false
-    };
-  }
+  state = {
+    privacyPolicyIsChecked: false,
+    termsAndConditionsIsChecked: false,
+    userGuidelinesIsChecked: false
+  };
 
   componentWillReceiveProps(nextProps) {
     const { auth } = nextProps;
@@ -94,10 +91,19 @@ class SignupForm extends React.Component<Props, State> {
   signupHandler = (e) => {
     e.preventDefault();
     const slug = getDiscussionSlug();
+    const { termsAndConditionsIsChecked, privacyPolicyIsChecked, userGuidelinesIsChecked } = this.state;
+    const acceptedCookies = {
+      ACCEPT_CGU: termsAndConditionsIsChecked,
+      ACCEPT_PRIVACY_POLICY_ON_DISCUSSION: privacyPolicyIsChecked,
+      ACCEPT_USER_GUIDELINES_ON_DISCUSSION: userGuidelinesIsChecked
+    };
+    const acceptedLegalContentsArray = Object.keys(acceptedCookies)
+      .map(key => (acceptedCookies[key] ? key : null))
+      .filter(el => el !== null);
     if (slug) {
-      this.props.signUp({ ...this.state, discussionSlug: slug });
+      this.props.signUp({ ...this.state, discussionSlug: slug }, acceptedLegalContentsArray);
     } else {
-      this.props.signUp(this.state);
+      this.props.signUp(this.state, acceptedLegalContentsArray);
     }
   };
 
@@ -243,8 +249,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  signUp: (payload) => {
-    dispatch(signupAction(payload));
+  signUp: (payload, acceptedLegalContents) => {
+    dispatch(signupAction(payload, acceptedLegalContents));
   }
 });
 

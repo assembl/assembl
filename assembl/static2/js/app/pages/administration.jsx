@@ -10,7 +10,7 @@ import { displayLanguageMenu } from '../actions/adminActions';
 import { updateVoteSessionPage, updateVoteModules, updateVoteProposals } from '../actions/adminActions/voteSession';
 import { updatePhases } from '../actions/adminActions/timeline';
 import { updateSections } from '../actions/adminActions/adminSections';
-import { updateLandingPageModules, updateLandingPage } from '../actions/adminActions/landingPage';
+import { updateLandingPageModules } from '../actions/adminActions/landingPage';
 import { updateTextFields } from '../actions/adminActions/profileOptions';
 import manageErrorAndLoading from '../components/common/manageErrorAndLoading';
 import mergeLoadingAndError from '../components/common/mergeLoadingAndError';
@@ -20,7 +20,6 @@ import SectionsQuery from '../graphql/SectionsQuery.graphql';
 import TextFields from '../graphql/TextFields.graphql';
 import LegalContentsQuery from '../graphql/LegalContents.graphql';
 import VoteSessionQuery from '../graphql/VoteSession.graphql';
-import LandingPageQuery from '../graphql/LandingPage.graphql';
 import LandingPageModules from '../graphql/LandingPageModules.graphql';
 import TimelineQuery from '../graphql/Timeline.graphql';
 import { convertEntriesToEditorState } from '../utils/draftjs';
@@ -36,7 +35,6 @@ class Administration extends React.Component {
     this.putVoteSessionInStore = this.putVoteSessionInStore.bind(this);
     this.putLandingPageModulesInStore = this.putLandingPageModulesInStore.bind(this);
     this.putTextFieldsInStore = this.putTextFieldsInStore.bind(this);
-    this.putLandingPageInStore = this.putLandingPageInStore.bind(this);
     this.state = {
       showLanguageMenu: true
     };
@@ -54,7 +52,6 @@ class Administration extends React.Component {
     this.props.displayLanguageMenu(isHidden);
     this.putLandingPageModulesInStore(this.props.landingPageModules);
     this.putTextFieldsInStore(this.props.textFields);
-    this.putLandingPageInStore(this.props.landingPage);
     this.putTimelinePhasesInStore(this.props.timeline);
   }
 
@@ -79,10 +76,6 @@ class Administration extends React.Component {
 
     if (nextProps.textFields !== this.props.textFields) {
       this.putTextFieldsInStore(nextProps.textFields);
-    }
-
-    if (nextProps.landingPage !== this.props.landingPage) {
-      this.putLandingPageInStore(nextProps.landingPage);
     }
 
     if (nextProps.timeline !== this.props.timeline) {
@@ -169,19 +162,6 @@ class Administration extends React.Component {
     }
   }
 
-  putLandingPageInStore(landingPage) {
-    if (landingPage) {
-      const filtered = filter(LandingPageQuery, { discussion: landingPage });
-      const dataForStore = {
-        ...filtered.discussion,
-        subtitleEntries: filtered.discussion.subtitleEntries
-          ? convertEntriesToEditorState(filtered.discussion.subtitleEntries)
-          : null
-      };
-      this.props.updateLandingPage(dataForStore);
-    }
-  }
-
   render() {
     const {
       children,
@@ -193,7 +173,6 @@ class Administration extends React.Component {
       refetchVoteSession,
       refetchLandingPageModules,
       refetchTextFields,
-      refetchLandingPage,
       refetchTimeline,
       timeline
     } = this.props;
@@ -210,7 +189,6 @@ class Administration extends React.Component {
         refetchLandingPageModules: refetchLandingPageModules,
         refetchLegalContents: refetchLegalContents,
         refetchTextFields: refetchTextFields,
-        refetchLandingPage: refetchLandingPage,
         refetchTimeline: refetchTimeline
       })
     );
@@ -270,7 +248,6 @@ const mapDispatchToProps = dispatch => ({
   displayLanguageMenu: isHidden => dispatch(displayLanguageMenu(isHidden)),
   updateLandingPageModules: landingPageModules => dispatch(updateLandingPageModules(landingPageModules)),
   updateTextFields: textFields => dispatch(updateTextFields(textFields)),
-  updateLandingPage: landingPage => dispatch(updateLandingPage(landingPage)),
   updatePhases: phases => dispatch(updatePhases(phases))
 });
 
@@ -430,39 +407,13 @@ export default compose(
     },
     skip: props => isNotInDiscussionAdmin(props) || props.router.getCurrentLocation().search !== '?section=3'
   }),
-  graphql(LandingPageQuery, {
-    options: ({ locale }) => ({
-      variables: { lang: locale }
-    }),
-    props: ({ data }) => {
-      if (data.error || data.loading) {
-        return {
-          landingPageMetadata: {
-            error: data.error,
-            loading: data.loading
-          }
-        };
-      }
-
-      return {
-        landingPageMetadata: {
-          error: data.error,
-          loading: data.loading
-        },
-        refetchLandingPage: data.refetch,
-        landingPage: data.discussion
-      };
-    },
-    skip: isNotInLandingPageAdmin
-  }),
   mergeLoadingAndError([
     'voteSessionMetadata',
     'sectionsMetadata',
     'legalContentsMetadata',
     'timelineMetadata',
     'landingPageModulesMetadata',
-    'textFieldsMetadata',
-    'landingPageMetadata'
+    'textFieldsMetadata'
   ]),
   manageErrorAndLoading({ displayLoader: true })
 )(Administration);

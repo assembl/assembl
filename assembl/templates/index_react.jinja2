@@ -4,8 +4,8 @@
 {% block main_css %}
   {# Override the main CSS. #}
   {% if NODE_ENV != 'development' %}
-  <link type="text/css" rel="stylesheet" href="{{REACT_URL}}/build/bundle.css" />
-  <link type="text/css" rel="stylesheet" href="{{REACT_URL}}/build/theme_{{theme_name}}_web.css" />
+  <link type="text/css" rel="stylesheet" href="{{REACT_URL}}/build/bundle.{{bundle_css_hash}}.css" />
+  <link type="text/css" rel="stylesheet" href="{{REACT_URL}}/build/theme_{{theme_name}}_web.{{theme_hash}}.css" />
   {% endif %}
 {% endblock %}
 
@@ -36,12 +36,14 @@
         {% if messages %}
             <div class='hidden' id='serverMessages'>{{ messages }}</div>
         {% endif %}
-        <div id='root'></div>
+        <div id='root' data-sentry-dsn="{{sentry_dsn}}"></div>
         {% block main_js %}
             {% include 'analytics_common.jinja2' %}
-            <script src='{{REACT_URL}}/build/bundle.js'></script>
             {% if NODE_ENV == 'development' %}
+                <script src='{{REACT_URL}}/build/bundle.js'></script>
                 <script src="{{REACT_URL}}/build/theme_{{theme_name}}_web.js"></script>
+            {% else %}
+                <script src='{{REACT_URL}}/build/bundle.{{bundle_hash}}.js'></script>
             {% endif %}
         {% endblock %}
 
@@ -49,6 +51,19 @@
             {% if under_test %}
                 <div id="under-test" class="hidden">V2</div>
             {%- endif %}
+
+            {% if bugherd_url %}
+                <!-- Bugherd injection -->
+                <script type='text/javascript'>
+                (function (d, t) {
+                var bh = d.createElement(t), s = d.getElementsByTagName(t)[0];
+                bh.type = 'text/javascript';
+                bh.src = '{{ bugherd_url }}';
+                s.parentNode.insertBefore(bh, s);
+                })(document, 'script');
+                </script>
+                <!-- End of Bugherd injection -->
+            {% endif %}
         {% endblock %}
     </body>
 {% endblock%}

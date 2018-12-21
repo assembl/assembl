@@ -16,7 +16,8 @@ type Props = {
   entityKey: string,
   getEditorState: void => EditorState,
   setEditorState: EditorState => void,
-  setModalContent: (React.Node, string) => void
+  setModalContent: (React.Node, string) => void,
+  formatLink?: string => string
 };
 
 type State = {
@@ -33,7 +34,7 @@ class Link extends React.PureComponent<Props, State> {
   };
 
   editLink = (values: FormValues) => {
-    const { closeModal, getEditorState, setEditorState } = this.props;
+    const { closeModal, getEditorState, setEditorState, formatLink } = this.props;
     if (getEditorState && setEditorState && values.url) {
       const text = values.text ? values.text : values.url;
       const title = text;
@@ -41,7 +42,7 @@ class Link extends React.PureComponent<Props, State> {
         target: values.openInNewTab ? '_blank' : null,
         text: text,
         title: title,
-        url: values.url
+        url: formatLink ? formatLink(values.url) : values.url
       };
       setEditorState(EditorUtils.replaceLinkAtCursor(getEditorState(), data));
     }
@@ -49,12 +50,13 @@ class Link extends React.PureComponent<Props, State> {
   };
 
   render() {
-    const { children, className, entityKey, getEditorState } = this.props;
+    const { children, className, entityKey, getEditorState, formatLink } = this.props;
     const entity = getEditorState()
       .getCurrentContent()
       .getEntity(entityKey);
     const entityData = entity ? entity.get('data') : undefined;
     const href = (entityData && entityData.url) || undefined;
+    const formatedHref = formatLink && href ? formatLink(href) : href;
     const target = (entityData && entityData.target) || undefined;
     const text = (entityData && entityData.text) || '';
     const title = (entityData && entityData.title) || undefined;
@@ -62,14 +64,14 @@ class Link extends React.PureComponent<Props, State> {
       openInNewTab: target === '_blank',
       text: text,
       title: title,
-      url: href
+      url: formatedHref
     };
     return (
       <a
         onClick={e => this.openModal(e, initialValues)}
         className={className}
         title={title}
-        href={href}
+        href={formatedHref}
         target={target}
         rel="noopener noreferrer"
       >

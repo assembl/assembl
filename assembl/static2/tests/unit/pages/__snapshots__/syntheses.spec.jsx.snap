@@ -3,7 +3,6 @@
 exports[`Syntheses component should match Syntheses snapshot 1`] = `
 <section
   className="themes-section"
-  id={undefined}
 >
   <div
     className="max-container "
@@ -20,10 +19,7 @@ exports[`Syntheses component should match Syntheses snapshot 1`] = `
         <h1
           className="section-title section-title1 dark-title-1"
         >
-          <span
-            className={undefined}
-            style={undefined}
-          >
+          <span>
             Syntheses
           </span>
         </h1>
@@ -65,10 +61,7 @@ exports[`Syntheses component should match Syntheses snapshot 1`] = `
                 <h4
                   className="light-title-4"
                 >
-                  <span
-                    className={undefined}
-                    style={undefined}
-                  >
+                  <span>
                     2017-02-10
                   </span>
                 </h4>
@@ -121,10 +114,7 @@ exports[`Syntheses component should match Syntheses snapshot 1`] = `
                 <h4
                   className="light-title-4"
                 >
-                  <span
-                    className={undefined}
-                    style={undefined}
-                  >
+                  <span>
                     2017-02-10
                   </span>
                 </h4>
@@ -156,7 +146,6 @@ exports[`Syntheses component should match Syntheses snapshot 1`] = `
 exports[`Syntheses component should match empty Syntheses snapshot 1`] = `
 <section
   className="themes-section"
-  id={undefined}
 >
   <div
     className="max-container "
@@ -173,10 +162,7 @@ exports[`Syntheses component should match empty Syntheses snapshot 1`] = `
         <h1
           className="section-title section-title1 dark-title-1"
         >
-          <span
-            className={undefined}
-            style={undefined}
-          >
+          <span>
             Syntheses
           </span>
         </h1>
@@ -188,10 +174,7 @@ exports[`Syntheses component should match empty Syntheses snapshot 1`] = `
       <h2
         className="dark-title-2 margin-left-xxl"
       >
-        <span
-          className={undefined}
-          style={undefined}
-        >
+        <span>
           There is no synthesis available yet.
         </span>
       </h2>

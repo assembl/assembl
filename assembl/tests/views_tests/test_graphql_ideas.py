@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 import json
-import datetime
 
 from graphql_relay.node.node import from_global_id
 
+from assembl import models
 from assembl.graphql.schema import Schema as schema
 
 
@@ -354,7 +354,7 @@ def test_graphql_discussion_counters_survey_phase_no_thematic(graphql_request, p
             }
         """, context_value=graphql_request, variable_values={'discussionPhaseId': phases['survey'].id})
     assert res.data['rootIdea'] is None
-    assert res.data['numParticipants'] == 1
+    assert res.data['numParticipants'] == 2
 
 
 def test_graphql_discussion_counters_survey_phase_with_proposals(graphql_request, proposals, phases):
@@ -375,7 +375,7 @@ def test_graphql_discussion_counters_survey_phase_with_proposals(graphql_request
     assert res.data['rootIdea']['id']
     assert res.data['rootIdea']['numTotalPosts'] == 15  # all posts
     assert res.data['rootIdea']['numPosts'] == 15  # phase 1 posts
-    assert res.data['numParticipants'] == 1
+    assert res.data['numParticipants'] == 2
 
 
 def test_graphql_discussion_counters_thread_phase(graphql_request, proposals, phases):
@@ -396,7 +396,7 @@ def test_graphql_discussion_counters_thread_phase(graphql_request, proposals, ph
     assert res.data['rootIdea']['id']
     assert res.data['rootIdea']['numTotalPosts'] == 15  # all posts
     assert res.data['rootIdea']['numPosts'] == 15  # phase 1+2 posts counted when current phase is thread
-    assert res.data['numParticipants'] == 1
+    assert res.data['numParticipants'] == 2
 
 
 def test_graphql_discussion_counters_thread_phase_deleted_thematic(graphql_request, thematic_and_question, proposals, phases):
@@ -428,7 +428,7 @@ def test_graphql_discussion_counters_thread_phase_deleted_thematic(graphql_reque
     assert res.data['rootIdea']['numTotalPosts'] == 15  # all posts
     # But the posts are not bound anymore
     assert res.data['rootIdea']['numPosts'] == 0
-    assert res.data['numParticipants'] == 1
+    assert res.data['numParticipants'] == 2
 
 
 def test_graphql_discussion_counters_thread_phase_with_posts(graphql_request, proposals, top_post_in_thread_phase, phases):
@@ -450,7 +450,7 @@ def test_graphql_discussion_counters_thread_phase_with_posts(graphql_request, pr
     assert res.data['rootIdea']['numTotalPosts'] == 16  # all posts
     assert res.data['rootIdea']['numPosts'] == 16  # phase 1+2 posts counted when current phase is thread
     # 16 because thread phase is on discussion.root_idea and survey phase is a sub root idea of it.
-    assert res.data['numParticipants'] == 1
+    assert res.data['numParticipants'] == 2
 
 
 def test_graphql_discussion_counters_all_phases(graphql_request, proposals, top_post_in_thread_phase, phases):
@@ -471,8 +471,25 @@ def test_graphql_discussion_counters_all_phases(graphql_request, proposals, top_
     assert res.data['rootIdea']['id']
     assert res.data['rootIdea']['numTotalPosts'] == 16  # all posts
     assert res.data['rootIdea']['numPosts'] == 16  # phase 1+2 posts counted because all posts come from discussion.root_idea
-    assert res.data['numParticipants'] == 1
+    assert res.data['numParticipants'] == 2
 
+def test_graphql_total_vote_session_participations_zero_vote(graphql_request, proposals, phases):
+    res = schema.execute(
+        u"""query RootIdeaStats {
+              totalVoteSessionParticipations
+            }
+        """, context_value=graphql_request)
+    assert res.errors is None
+    assert res.data['totalVoteSessionParticipations'] == 0
+
+def test_graphql_total_vote_session_participations_4_votes(graphql_request, phases, graphql_participant1_request, vote_session, vote_proposal, token_vote_spec_with_votes, gauge_vote_specification_with_votes, graphql_registry):
+    res = schema.execute(
+        u"""query RootIdeaStats {
+              totalVoteSessionParticipations
+            }
+        """, context_value=graphql_request)
+    assert res.errors is None
+    assert res.data['totalVoteSessionParticipations'] == 4
 
 def test_get_long_title_on_idea(graphql_request, idea_in_thread_phase):
     # This is the "What you need to know"
@@ -547,6 +564,67 @@ query Post($id: ID!) {
                  u'important': True},
                 ]
             }}
+
+
+def test_extract_get_comment(admin_user, graphql_request, top_post_in_thread_phase, extract_post_1_to_subidea_1_1, extract_comment):
+    from graphene.relay import Node
+    raw_id = int(Node.from_global_id(top_post_in_thread_phase)[1])
+    from assembl.models import Post
+    post = Post.get(raw_id)
+    post.extracts.append(extract_post_1_to_subidea_1_1)
+    post.db.flush()
+
+    res = schema.execute(u"""
+        query Post($id: ID!, $lang: String!) {
+          post: node(id: $id) {
+            ... on Post {
+              extracts {
+                comments {
+                  subject(lang: $lang)
+                }
+              }
+            }
+          }
+        }
+    """, context_value=graphql_request, variable_values={
+            "id": top_post_in_thread_phase,
+            "lang": u'en',
+        })
+
+    assert res.data['post']['extracts'][0]['comments'][0]['subject'] == 'comment of extract title'
+
+
+def test_extract_get_comment_with_reply(admin_user, graphql_request, top_post_in_thread_phase, extract_post_1_to_subidea_1_1,
+                                        extract_comment, extract_comment_reply):
+    from graphene.relay import Node
+    raw_id = int(Node.from_global_id(top_post_in_thread_phase)[1])
+    from assembl.models import Post
+    post = Post.get(raw_id)
+    post.extracts.append(extract_post_1_to_subidea_1_1)
+    post.db.flush()
+
+    res = schema.execute(u"""
+        query Post($id: ID!, $lang: String!) {
+          post: node(id: $id) {
+            ... on Post {
+              extracts {
+                comments {
+                  subject(lang: $lang)
+                  parentId
+                }
+              }
+            }
+          }
+        }
+    """, context_value=graphql_request, variable_values={
+            "id": top_post_in_thread_phase,
+            "lang": u'en',
+        })
+
+    assert res.data['post']['extracts'][0]['comments'][0]['subject'] == 'comment of extract title'
+    assert res.data['post']['extracts'][0]['comments'][0]['parentId'] == None
+    assert res.data['post']['extracts'][0]['comments'][1]['subject'] == 'reply of comment of extract title'
+    assert res.data['post']['extracts'][0]['comments'][1]['parentId'] == extract_comment.graphene_id()
 
 
 def test_announcement_on_idea(graphql_request, announcement_en_fr):
@@ -722,6 +800,9 @@ def test_graphql_create_bright_mirror(graphql_request, graphql_registry, test_se
     assert 'externalUrl' in idea['img']
     assert idea['messageViewOverride'] == u'brightMirror'
     assert idea['order'] == 1.0
+    raw_id = int(from_global_id(idea['id'])[1])
+    test_session.delete(models.Idea.get(raw_id))
+    test_session.flush()
 
 
 def test_graphql_create_bright_mirror_no_title(phases, graphql_request, graphql_registry, test_session):
@@ -977,3 +1058,325 @@ def test_graphql_bright_mirror_should_get_all_posts_of_user_draft_first(graphql_
             }
         }
     }
+
+
+def test_mutation_update_ideas_create(test_session, graphql_request, graphql_registry, phases):
+    test_session.commit()
+    import os
+    from io import BytesIO
+
+    class FieldStorage(object):
+        file = BytesIO(os.urandom(16))
+        filename = u'path/to/img.png'
+        type = 'image/png'
+
+    graphql_request.POST['variables.ideas.0.image'] = FieldStorage()
+
+    res = schema.execute(
+        graphql_registry['updateIdeas'],
+        context_value=graphql_request,
+        variable_values={
+            'discussionPhaseId': phases['brightMirror'].id,
+            'ideas': [{
+                'messageViewOverride': 'brightMirror',
+                'titleEntries': [
+                    {'value': u"Comprendre les dynamiques et les enjeux", 'localeCode': u"fr"},
+                    {'value': u"Understanding the dynamics and issues", 'localeCode': u"en"}
+                ],
+                'descriptionEntries': [
+                    {'value': u"Desc FR", 'localeCode': u"fr"},
+                    {'value': u"Desc EN", 'localeCode': u"en"}
+                ],
+                'image': u'variables.ideas.0.image',  # this is added via graphql_wsgi but we need to do it ourself here
+                'announcement': {
+                    'titleEntries': [
+                        {'value': u"Title FR announce", 'localeCode': u"fr"},
+                        {'value': u"Title EN announce", 'localeCode': u"en"}
+                    ],
+                    'bodyEntries': [
+                        {'value': u"Body FR announce", 'localeCode': u"fr"},
+                        {'value': u"Body EN announce", 'localeCode': u"en"}
+                    ]
+                }
+            }]
+        })
+
+    assert res.errors is None
+    ideas = res.data['updateIdeas']['query']['thematics']
+    assert len(ideas) == 1
+    idea = ideas[0]
+    assert idea['announcement'] == {
+        u'bodyEntries': [{u'localeCode': u'en', u'value': u'Body EN announce'},
+                         {u'localeCode': u'fr', u'value': u'Body FR announce'}],
+        u'titleEntries': [{u'localeCode': u'en', u'value': u'Title EN announce'},
+                          {u'localeCode': u'fr', u'value': u'Title FR announce'}]}
+    assert idea['titleEntries'] == [
+        {u'localeCode': u'en', u'value': u'Understanding the dynamics and issues'},
+        {u'localeCode': u'fr', u'value': u'Comprendre les dynamiques et les enjeux'}]
+    assert idea['descriptionEntries'] == [
+        {u'localeCode': u'en', u'value': u'Desc EN'},
+        {u'localeCode': u'fr', u'value': u'Desc FR'}]
+    assert idea['img'] is not None
+    assert 'externalUrl' in idea['img']
+    assert idea['messageViewOverride'] == u'brightMirror'
+    assert idea['order'] == 1.0
+
+    # and update the idea without changing the image
+    del graphql_request.POST['variables.ideas.0.image']
+    res = schema.execute(
+        graphql_registry['updateIdeas'],
+        context_value=graphql_request,
+        variable_values={
+            'discussionPhaseId': phases['brightMirror'].id,
+            'ideas': [{
+                'id': idea['id'],  # specify id will do update_idea instead of create_idea
+                'messageViewOverride': 'brightMirror',
+                'titleEntries': [
+                    {'value': u"[modified] Comprendre les dynamiques et les enjeux", 'localeCode': u"fr"},
+                    {'value': u"[modified] Understanding the dynamics and issues", 'localeCode': u"en"}
+                ],
+                'descriptionEntries': [
+                    {'value': u"[modified] Desc FR", 'localeCode': u"fr"},
+                    {'value': u"[modified] Desc EN", 'localeCode': u"en"}
+                ],
+                'announcement': {
+                    'titleEntries': [
+                        {'value': u"[modified] Title FR announce", 'localeCode': u"fr"},
+                        {'value': u"[modified] Title EN announce", 'localeCode': u"en"}
+                    ],
+                    'bodyEntries': [
+                        {'value': u"[modified] Body FR announce", 'localeCode': u"fr"},
+                        {'value': u"[modified] Body EN announce", 'localeCode': u"en"}
+                    ]
+                }
+            }]
+        })
+
+    assert res.errors is None
+    ideas = res.data['updateIdeas']['query']['thematics']
+    assert len(ideas) == 1
+    idea = ideas[0]
+    assert idea['announcement'] == {
+        u'bodyEntries': [{u'localeCode': u'en', u'value': u'[modified] Body EN announce'},
+                         {u'localeCode': u'fr', u'value': u'[modified] Body FR announce'}],
+        u'titleEntries': [{u'localeCode': u'en', u'value': u'[modified] Title EN announce'},
+                          {u'localeCode': u'fr', u'value': u'[modified] Title FR announce'}]}
+    assert idea['titleEntries'] == [
+        {u'localeCode': u'en', u'value': u'[modified] Understanding the dynamics and issues'},
+        {u'localeCode': u'fr', u'value': u'[modified] Comprendre les dynamiques et les enjeux'}]
+    assert idea['descriptionEntries'] == [
+        {u'localeCode': u'en', u'value': u'[modified] Desc EN'},
+        {u'localeCode': u'fr', u'value': u'[modified] Desc FR'}]
+    assert idea['img'] is not None
+    assert 'externalUrl' in idea['img']
+    assert idea['messageViewOverride'] == u'brightMirror'
+    assert idea['order'] == 1.0
+
+    # cleanup
+    test_session.rollback()
+
+
+def test_mutation_update_ideas_delete(test_session, graphql_request, graphql_registry, phases):
+    test_session.commit()
+    import os
+    from io import BytesIO
+
+    class FieldStorage(object):
+        file = BytesIO(os.urandom(16))
+        filename = u'path/to/img.png'
+        type = 'image/png'
+
+    graphql_request.POST['variables.ideas.0.image'] = FieldStorage()
+
+    res = schema.execute(
+        graphql_registry['updateIdeas'],
+        context_value=graphql_request,
+        variable_values={
+            'discussionPhaseId': phases['brightMirror'].id,
+            'ideas': [
+                {
+                    'messageViewOverride': 'brightMirror',
+                    'titleEntries': [
+                        {'value': u"Comprendre les dynamiques et les enjeux", 'localeCode': u"fr"},
+                        {'value': u"Understanding the dynamics and issues", 'localeCode': u"en"}
+                    ],
+                    'descriptionEntries': [
+                        {'value': u"Desc FR", 'localeCode': u"fr"},
+                        {'value': u"Desc EN", 'localeCode': u"en"}
+                    ],
+                    'image': u'variables.ideas.0.image',  # this is added via graphql_wsgi but we need to do it ourself here
+                    'announcement': {
+                        'titleEntries': [
+                            {'value': u"Title FR announce", 'localeCode': u"fr"},
+                            {'value': u"Title EN announce", 'localeCode': u"en"}
+                        ],
+                        'bodyEntries': [
+                            {'value': u"Body FR announce", 'localeCode': u"fr"},
+                            {'value': u"Body EN announce", 'localeCode': u"en"}
+                        ]
+                    }
+                },
+                {
+                    'messageViewOverride': None,
+                    'titleEntries': [
+                        {'value': u"Thread FR", 'localeCode': u"fr"},
+                        {'value': u"Thread EN", 'localeCode': u"en"}
+                    ],
+                    'descriptionEntries': [
+                        {'value': u"Desc FR", 'localeCode': u"fr"},
+                        {'value': u"Desc EN", 'localeCode': u"en"}
+                    ],
+                    'announcement': {
+                        'titleEntries': [
+                            {'value': u"Title FR announce", 'localeCode': u"fr"},
+                            {'value': u"Title EN announce", 'localeCode': u"en"}
+                        ],
+                        'bodyEntries': [
+                            {'value': u"Body FR announce", 'localeCode': u"fr"},
+                            {'value': u"Body EN announce", 'localeCode': u"en"}
+                        ]
+                    }
+                }
+            ]
+        })
+
+    assert res.errors is None
+    ideas = res.data['updateIdeas']['query']['thematics']
+    assert len(ideas) == 2
+    bright = ideas[0]
+    assert bright['messageViewOverride'] == u'brightMirror'
+    thread = ideas[1]
+    assert thread['messageViewOverride'] == None
+
+    # and remove it
+    del graphql_request.POST['variables.ideas.0.image']
+    res = schema.execute(
+        graphql_registry['updateIdeas'],
+        context_value=graphql_request,
+        variable_values={
+            'discussionPhaseId': phases['brightMirror'].id,
+            'ideas': [
+                {
+                    'id': thread['id'],
+                    'messageViewOverride': None,
+                    'titleEntries': [
+                        {'value': u"Thread FR", 'localeCode': u"fr"},
+                        {'value': u"Thread EN", 'localeCode': u"en"}
+                    ],
+                    'descriptionEntries': [
+                        {'value': u"Desc FR", 'localeCode': u"fr"},
+                        {'value': u"Desc EN", 'localeCode': u"en"}
+                    ],
+                    'announcement': {
+                        'titleEntries': [
+                            {'value': u"Title FR announce", 'localeCode': u"fr"},
+                            {'value': u"Title EN announce", 'localeCode': u"en"}
+                        ],
+                        'bodyEntries': [
+                            {'value': u"Body FR announce", 'localeCode': u"fr"},
+                            {'value': u"Body EN announce", 'localeCode': u"en"}
+                        ]
+                    }
+                }
+            ]
+        })
+
+    assert res.errors is None
+    ideas = res.data['updateIdeas']['query']['thematics']
+    assert len(ideas) == 1
+
+    # cleanup
+    test_session.rollback()
+
+
+def test_mutation_update_ideas_child_survey(test_session, graphql_request, graphql_registry, phases):
+    test_session.commit()
+    import os
+    from io import BytesIO
+
+    class FieldStorage(object):
+        file = BytesIO(os.urandom(16))
+        filename = u'path/to/img.png'
+        type = 'image/png'
+
+    graphql_request.POST['variables.ideas.0.image'] = FieldStorage()
+    graphql_request.POST['variables.ideas.0.children.0.image'] = FieldStorage()
+
+    res = schema.execute(
+        graphql_registry['updateIdeas'],
+        context_value=graphql_request,
+        variable_values={
+            'discussionPhaseId': phases['brightMirror'].id,
+            'ideas': [{
+                'messageViewOverride': 'brightMirror',
+                'titleEntries': [
+                    {'value': u"Comprendre les dynamiques et les enjeux", 'localeCode': u"fr"},
+                    {'value': u"Understanding the dynamics and issues", 'localeCode': u"en"}
+                ],
+                'descriptionEntries': [
+                    {'value': u"Desc FR", 'localeCode': u"fr"},
+                    {'value': u"Desc EN", 'localeCode': u"en"}
+                ],
+                'image': u'variables.ideas.0.image',  # this is added via graphql_wsgi but we need to do it ourself here
+                'announcement': {
+                    'titleEntries': [
+                        {'value': u"Title FR announce", 'localeCode': u"fr"},
+                        {'value': u"Title EN announce", 'localeCode': u"en"}
+                    ],
+                    'bodyEntries': [
+                        {'value': u"Body FR announce", 'localeCode': u"fr"},
+                        {'value': u"Body EN announce", 'localeCode': u"en"}
+                    ],
+                },
+                'children': [{
+                    'messageViewOverride': 'survey',
+                    'titleEntries': [
+                        {'value': u"[survey] Comprendre les dynamiques et les enjeux", 'localeCode': u"fr"},
+                        {'value': u"[survey] Understanding the dynamics and issues", 'localeCode': u"en"}
+                    ],
+                    'descriptionEntries': [
+                        {'value': u"[survey] Desc FR", 'localeCode': u"fr"},
+                        {'value': u"[survey] Desc EN", 'localeCode': u"en"}
+                    ],
+                    'image': u'variables.ideas.0.children.0.image',  # this is added via graphql_wsgi but we need to do it ourself here
+                    'questions': [
+                        {'titleEntries': [
+                            {'value': u"Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?", 'localeCode': "fr"}
+                        ]},
+                        {'titleEntries': [
+                            {'value': u"Seconde question ?", 'localeCode': "fr"}
+                        ]},
+                        {'titleEntries': [
+                            {'value': u"Troisième question ?", 'localeCode': "fr"}
+                        ]},
+                    ],
+                }]
+            }]
+        })
+
+    assert res.errors is None
+    ideas = res.data['updateIdeas']['query']['thematics']
+    assert len(ideas) == 2
+    bright = ideas[0]
+    assert bright['messageViewOverride'] == u'brightMirror'
+
+    survey = ideas[1]
+    assert bright['id'] == survey['parentId']
+    assert survey['titleEntries'] == [
+        {u'value': u"[survey] Understanding the dynamics and issues",
+         u'localeCode': u"en"},
+        {u'value': u"[survey] Comprendre les dynamiques et les enjeux",
+         u'localeCode': u"fr"}
+    ]
+    assert survey['questions'][0]['titleEntries'] == [
+        {u'value': u"Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?", u'localeCode': u"fr"}
+    ]
+    assert survey['questions'][1]['titleEntries'] == [
+        {u'value': u"Seconde question ?", u'localeCode': u"fr"}
+    ]
+    assert survey['questions'][2]['titleEntries'] == [
+        {u'value': u"Troisième question ?", u'localeCode': u"fr"}
+    ]
+
+    # cleanup
+    test_session.rollback()

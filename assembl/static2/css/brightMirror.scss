@@ -33,11 +33,19 @@ $fiction-toolbar-icon-size: 17px;
 // Bright mirror global style
 .bright-mirror-fiction {
   padding-bottom: 30px;
-  padding-top: 30px;
+  padding-top: 15px;
+}
+
+.side-comment-container {
+  position: absolute;
+  left: 0;
+  padding-top: 10px;
 }
 
 .bright-mirror-comments {
   padding: 30px 0;
+  z-index: 100;
+  position: relative;
 
   .comments-content {
     background-color: $white;
@@ -75,16 +83,16 @@ $fiction-toolbar-icon-size: 17px;
 
 @media screen and (min-width: $screen-sm-min) {
   .bright-mirror-fiction {
-    padding-left: 54px;
-    padding-right: 54px;
+    padding-left: 70px;
+    padding-right: 70px;
   }
 
   .bright-mirror-comments {
     padding: 40px 0;
 
     .comments-content {
-      padding-left: 54px;
-      padding-right: 54px;
+      padding-left: 70px;
+      padding-right: 70px;
 
       // Tree.jsx style adjustments
       .level {
@@ -104,7 +112,7 @@ $fiction-toolbar-icon-size: 17px;
 @media screen and (min-width: $screen-xl-min) {
   .bright-mirror-fiction,
   .bright-mirror-comments {
-    padding: 90px 285px;
+    padding: 30px 200px 70px;
   }
 
   .bright-mirror-comments {
@@ -115,15 +123,25 @@ $fiction-toolbar-icon-size: 17px;
 }
 
 // Component imports
-@import "components/backButton";
-@import "components/circleAvatar";
-@import "components/toggleCommentButton";
-@import "components/editPostButton";
-@import "components/replyToCommentButton";
-@import "components/fictionHeader";
-@import "components/fictionToolbar";
-@import "components/fictionBody";
-@import "components/fictionCommentHeader";
-@import "components/fictionCommentForm";
-@import "components/fictionComment";
-@import "components/fictionCommentList";
+@import 'components/backButton';
+@import 'components/circleAvatar';
+@import 'components/toggleCommentButton';
+@import 'components/deletePostButton';
+@import 'components/editPostButton';
+@import 'components/replyToCommentButton';
+@import 'components/commentHelperButton';
+@import 'components/fictionHeader';
+@import 'components/fictionToolbar';
+@import 'components/fictionBodyToolbar';
+@import 'components/fictionBody';
+@import 'components/fictionCommentHeader';
+@import 'components/fictionCommentForm';
+@import 'components/fictionComment';
+@import 'components/fictionCommentList';
+@import 'components/fictionEditModal';
+@import 'components/fictionPreview';
+@import 'components/fictionsList';
+@import 'components/instructionsText';
+@import 'components/fictionSideCommentAnchor';
+@import 'components/fictionSideCommentBadge';
+@import 'components/fictionSideCommentBox';

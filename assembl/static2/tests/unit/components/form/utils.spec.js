@@ -1,11 +1,19 @@
 // @flow
 import { EditorState } from 'draft-js';
+import moment from 'moment';
+
+/* eslint-disable import/no-extraneous-dependencies */
+import TestEditorUtils from 'assembl-test-editor-utils';
+/* eslint-enable import/no-extraneous-dependencies */
 
 import { createEditorStateFromText } from '../../../helpers/draftjs';
+import { client, docFile, imgFile } from '../../../helpers/graphql';
 import * as utils from '../../../../js/app/components/form/utils';
 import { displayAlert } from '../../../../js/app/utils/utilityManager';
 
 jest.mock('../../../../js/app/utils/utilityManager');
+
+const { createEditorStateWithTwoAttachments } = TestEditorUtils;
 
 describe('i18nValueIsEmpty function', () => {
   const { i18nValueIsEmpty } = utils;
@@ -134,16 +142,52 @@ describe('convertToEntries function', () => {
   });
 });
 
-describe('convertRichTextToEntries function', () => {
-  const { convertRichTextToEntries } = utils;
-  it('should convert a rich text i18n value in langstring entries', () => {
+describe('convertRichTextToVariables function', () => {
+  const { convertRichTextToVariables } = utils;
+  it('should convert a rich text i18n value in langstring entries', async () => {
     const input = {
       en: createEditorStateFromText('Hello'),
       fr: createEditorStateFromText('Bonjour')
     };
-    const actual = convertRichTextToEntries(input);
-    const expected = [{ localeCode: 'en', value: '<p>Hello</p>' }, { localeCode: 'fr', value: '<p>Bonjour</p>' }];
-    expect(actual).toEqual(expected);
+    const { attachments, entries } = await convertRichTextToVariables(input, client);
+
+    expect(attachments).toEqual([]);
+
+    const expectedEntries = [
+      {
+        localeCode: 'en',
+        value: '<p>Hello</p>'
+      },
+      {
+        localeCode: 'fr',
+        value: '<p>Bonjour</p>'
+      }
+    ];
+    expect(entries).toEqual(expectedEntries);
+  });
+
+  it('should upload documents before to convert to langstring entries', async () => {
+    const editorStateWithTwoAttachment = createEditorStateWithTwoAttachments(imgFile, docFile, 'My text in english');
+    const input = {
+      en: editorStateWithTwoAttachment,
+      fr: createEditorStateFromText('Mon texte en français')
+    };
+    const expectedEn =
+      '<p></p><div class="atomic-block" data-blocktype="atomic">' +
+      '<img class="attachment-image" src="/data/my-img.png" alt="" title="My great image" ' +
+      'data-id="img-id-from-backend" data-mimetype="image/png" /></div><p></p><div class="atomic-block" ' +
+      'data-blocktype="atomic"><a href="/data/my-doc.pdf" title="My great document"><img ' +
+      'class="attachment-icon" alt="unknown" src="/static2/img/icons/black/doc.svg" ' +
+      'data-id="doc-id-from-backend" data-mimetype="application/pdf" ' +
+      'data-title="My great document" data-externalurl="/data/my-doc.pdf" /></a></div><p>My text in english</p>';
+    const expectedFr = '<p>Mon texte en français</p>';
+
+    const { attachments, entries } = await convertRichTextToVariables(input, client);
+
+    expect(attachments).toEqual(['img-id-from-backend', 'doc-id-from-backend']);
+
+    const expectedEntries = [{ localeCode: 'en', value: expectedEn }, { localeCode: 'fr', value: expectedFr }];
+    expect(entries).toEqual(expectedEntries);
   });
 });
 
@@ -171,6 +215,54 @@ describe('getFileVariable function', () => {
     };
     const actual = getFileVariable(img, initialImg);
     const expected = 'TO_DELETE';
+    expect(actual).toEqual(expected);
+  });
+});
+
+describe('convertISO8601StringToDateTime function', () => {
+  const { convertISO8601StringToDateTime } = utils;
+  it('should return a DateTime in UTC timezone from an ISO8601 string input', () => {
+    const s = '2019-01-01T00:00:00.000+00:00';
+    const expected = { time: moment(s).utc() };
+    const actual = convertISO8601StringToDateTime(s);
+    expect(actual).toEqual(expected);
+  });
+
+  it('should return null time+zone from an empty string input', () => {
+    const s = '';
+    const expected = { time: null };
+    const actual = convertISO8601StringToDateTime(s);
+    expect(actual).toEqual(expected);
+  });
+
+  it('should return null time+zone from any random string input', () => {
+    const s = 'These are not the droids that are you looking for';
+    const expected = { time: null };
+    const actual = convertISO8601StringToDateTime(s);
+    expect(actual).toEqual(expected);
+  });
+});
+
+describe('convertDateTimeToISO8601String function', () => {
+  const { convertDateTimeToISO8601String } = utils;
+  it('should return a an ISO8601 string input from a Moment object', () => {
+    const s = { time: moment('2019-01-01T00:00:00.000+00:00').utc() };
+    const expected = '2019-01-01T00:00:00.000Z';
+    const actual = convertDateTimeToISO8601String(s);
+    expect(actual).toMatch(expected);
+  });
+
+  it('should return null Date from a null input', () => {
+    const s = { time: null };
+    const expected = null;
+    const actual = convertDateTimeToISO8601String(s);
+    expect(actual).toEqual(expected);
+  });
+
+  it('should return null from a Date object', () => {
+    const s = { time: new Date() };
+    const expected = null;
+    const actual = convertDateTimeToISO8601String(s);
     expect(actual).toEqual(expected);
   });
 });

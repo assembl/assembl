@@ -1,11 +1,12 @@
 // @flow
 import React from 'react';
-import isEqual from 'lodash/isEqual';
+import isEqualWith from 'lodash/isEqualWith';
 import { type ApolloClient, compose, withApollo } from 'react-apollo';
 import { connect } from 'react-redux';
 import arrayMutators from 'final-form-arrays';
 
 import AdminForm from '../../form/adminForm';
+import { compareEditorState } from '../../form/utils';
 import LoadSaveReinitializeForm from '../../form/LoadSaveReinitializeForm';
 import Navbar from '../navbar';
 import Step1 from './step1';
@@ -50,7 +51,7 @@ const DumbSurveyAdminForm = ({ client, section, thematicId, discussionPhaseId, d
       render={({ handleSubmit, submitting, values, initialValues }) => {
         // the form is splitted to multiple subforms: We must calculate the global pristine.
         // Don't use final form pristine here
-        const pristine = isEqual(initialValues, values);
+        const pristine = isEqualWith(initialValues, values, compareEditorState);
         return (
           <React.Fragment>
             <div className="admin-content">

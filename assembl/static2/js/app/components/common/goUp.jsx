@@ -2,6 +2,7 @@
 import React from 'react';
 import { Translate } from 'react-redux-i18n';
 import classnames from 'classnames';
+import debounce from 'lodash/debounce';
 
 import { withScreenHeight } from './screenDimensions';
 
@@ -25,7 +26,7 @@ class GoUp extends React.Component<Props, State> {
     window.removeEventListener('scroll', this.displayButton);
   }
 
-  displayButton = () => {
+  displayButton = debounce(() => {
     const footer = document.getElementById('footer');
     if (!footer) {
       return;
@@ -44,7 +45,7 @@ class GoUp extends React.Component<Props, State> {
     } else {
       this.setState({ isHidden: true });
     }
-  };
+  }, 200);
 
   onClick = () => window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
 

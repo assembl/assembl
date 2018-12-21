@@ -12,7 +12,9 @@ import FictionPreview from './fictionPreview';
 import Permissions, { connectedUserCan } from '../../../utils/permissions';
 import { displayAlert } from '../../../utils/utilityManager';
 // Constant imports
-import { fictionBackgroundColors, EMPTY_STRING } from '../../../constants';
+import { EMPTY_STRING, PICTURES_LENGTH } from '../../../constants';
+// Type imports
+import type { BrightMirrorFictionProps } from '../../../pages/brightMirrorFiction';
 
 export type Props = {
   posts: Array<FictionPostPreview>,
@@ -35,8 +37,6 @@ const deleteFictionHandler = () => {
   displayAlert('success', I18n.t('debate.brightMirror.deleteFictionSuccessMsg'));
 };
 
-const getRandomColor = () => fictionBackgroundColors[Math.floor(Math.random() * fictionBackgroundColors.length)];
-
 const publicationStateCreationDateComparator = (a, b) => {
   const aDate: string = a.creationDate;
   const bDate: string = b.creationDate;
@@ -52,7 +52,7 @@ const publicationStateCreationDateComparator = (a, b) => {
 };
 
 const FictionsList = ({ posts, identifier, refetchIdea, lang, themeId }: Props) => {
-  const slug = getDiscussionSlug();
+  const slug = getDiscussionSlug() || EMPTY_STRING;
 
   const connectedUserId = getConnectedUserId();
 
@@ -71,7 +71,7 @@ const FictionsList = ({ posts, identifier, refetchIdea, lang, themeId }: Props) 
         connectedUserCan(Permissions.DELETE_POST);
     }
     // Define bright mirror fiction props
-    const brightMirrorFictionProps = {
+    const fictionMetaInfo: BrightMirrorFictionProps = {
       slug: slug,
       phase: identifier,
       themeId: themeId,
@@ -82,11 +82,10 @@ const FictionsList = ({ posts, identifier, refetchIdea, lang, themeId }: Props) 
       <Animated key={post.id} preset="scalein">
         <FictionPreview
           id={post.id}
-          link={`${get('brightMirrorFiction', brightMirrorFictionProps)}`}
+          link={`${get('brightMirrorFiction', fictionMetaInfo)}`}
           title={post.subject}
           creationDate={I18n.l(post.creationDate, { dateFormat: 'date.format2' })}
           authorName={authorName}
-          color={getRandomColor()}
           originalBody={post.body || EMPTY_STRING}
           refetchIdea={refetchIdea}
           userCanEdit={userCanEdit}
@@ -94,6 +93,8 @@ const FictionsList = ({ posts, identifier, refetchIdea, lang, themeId }: Props) 
           lang={lang}
           publicationState={post.publicationState}
           deleteFictionHandler={deleteFictionHandler}
+          fictionMetaInfo={fictionMetaInfo}
+          pictureId={post.dbId % PICTURES_LENGTH}
         />
       </Animated>
     );
@@ -107,7 +108,7 @@ const FictionsList = ({ posts, identifier, refetchIdea, lang, themeId }: Props) 
           <div className="title-section">
             <div className="title-hyphen">&nbsp;</div>
             <h1 className="dark-title-1">
-              <Translate value="debate.brightMirror.allFictions" />
+              <Translate value="debate.brightMirror.numberOfFictions" count={childElements.length} />
             </h1>
           </div>
           <div className="content-section">

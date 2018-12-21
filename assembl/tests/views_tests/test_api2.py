@@ -18,6 +18,7 @@ from assembl.models import (
     BaseIdeaWidgetLink,
     AbstractVoteSpecification
 )
+from assembl.views import extract_resources_hash, extract_v1_resources_hash
 
 
 JSON_HEADER = {"Content-Type": "application/json"}
@@ -984,11 +985,14 @@ def test_add_timeline_event(test_app, discussion):
     assert phase1_data['next_event'] == phase2_data['@id']
     assert phase1_data['@type'] == 'DiscussionPhase'
 
+
 class AbstractExport(object):
     # HEADER = {}
 
-    def _get(self, app, discussion_id, lang=None, view_name=None):
+    def _get(self, app, discussion_id, widget_id=0, lang=None, view_name=None, votes_export=False):
         base_req = '/data/Discussion/%d/%s' % (discussion_id, view_name)
+        if votes_export:
+            base_req = '/data/Discussion/%d/widgets/%d/%s' % (discussion_id, widget_id, view_name)
         req = base_req
         if lang:
             req = base_req + '?lang=%s' % lang
@@ -1001,7 +1005,18 @@ class AbstractExport(object):
         csv_file.seek(0)
         assert resp.status_code == 200
         result = csv.reader(csv_file, dialect='excel', delimiter=';')
-        return list(result)
+        result_as_list = list(result)
+        try:
+            header = result_as_list[0]
+            first_elem = header[0]
+            bom = u'\ufeff'.encode('utf-8')
+            if first_elem.startswith(bom):
+                result_as_list[0][0] = first_elem.replace(bom, '')
+            return result_as_list
+        except:
+            print "There was no BOM from excel"
+            return result_as_list
+
 
 class TestTaxonomyExport(AbstractExport):
 
@@ -1014,17 +1029,20 @@ class TestTaxonomyExport(AbstractExport):
     ORIGINAL_LOCALE = 5
     QUALIFY_BY_NATURE = 6
     QUALIFY_BY_ACTION = 7
-    OWNER_OF_THE_MESSAGE = 8
-    PUBLISHED_ON = 9
-    HARVESTER = 10
-    HARVESTED_ON = 11
-    NUGGET = 12
-    STATE = 13
+    MESSAGE_OWNER_FULL_NAME = 8
+    MESSAGE_OWNER_USERNAME = 9
+    PUBLISHED_ON = 10
+    HARVESTER_FULL_NAME = 11
+    HARVESTER_USERNAME = 12
+    HARVESTED_ON = 13
+    NUGGET = 14
+    STATE = 15
+    TAG1 = 16
+    TAG2 = 17
 
-    def test_base(self, test_session, test_app, discussion, extract_post_1_to_subidea_1_1, extract_with_range_in_reply_post_1):
+    def test_base(self, test_session, test_app, discussion, user_language_preference_en_cookie, extract_post_1_to_subidea_1_1, extract_with_range_in_reply_post_1):
         result = self.get_result(test_app, discussion.id, view_name=self.view_name)
         header = result[0]
-    
         assert header[self.MESSAGE] == "Message"
         assert header[self.CONTENT_HARVESTED] == "Content Harvested"
         assert header[self.CONTENT_LOCALE] == "Content Locale"
@@ -1032,15 +1050,21 @@ class TestTaxonomyExport(AbstractExport):
         assert header[self.ORIGINAL_LOCALE] == "Original Locale"
         assert header[self.QUALIFY_BY_NATURE] == "Qualify By Nature"
         assert header[self.QUALIFY_BY_ACTION] == "Qualify By Action"
-        assert header[self.OWNER_OF_THE_MESSAGE] == "Owner Of The Message"
+        assert header[self.MESSAGE_OWNER_FULL_NAME] == "Message Owner Full Name"
+        assert header[self.MESSAGE_OWNER_USERNAME] == "Message Owner Username"
         assert header[self.PUBLISHED_ON] == "Published On"
-        assert header[self.HARVESTER] == "Harvester"
+        assert header[self.HARVESTER_FULL_NAME] == "Harvester Full Name"
+        assert header[self.HARVESTER_USERNAME] == "Harvester Username"
         assert header[self.HARVESTED_ON] == "Harvested On"
         assert header[self.NUGGET] == "Nugget"
         assert header[self.STATE] == "State"
+        assert header[self.TAG1] == "Tag1"
+        assert header[self.TAG2] == "Tag2"
 
         first_row = result[1]
-        assert first_row[self.THEMATIC] == "Lower taxes"
+        # Depending on tests execution order, the thematic can change
+        # because reply_post_1 appears in 3 different ideas and the csv export take the first idea.
+        # assert first_row[self.THEMATIC] == "Lower taxes"
         assert first_row[self.MESSAGE] == "post body with some text so we can test harvesting features. I'm writing a very topical comment with an unrelated source, hoping it would make people angry and make them write answers. I have read in '17O Solid-State NMR Spectroscopy of Functional Oxides for Energy Conversion' thesis by Halat, D. M. (2018) that variable-temperature spectra indicate the onset of oxide-ion motion involving the interstitials at 130 \xc2\xb0C, which is linked to an orthorhombic\xe2\x88\x92tetragonal phase transition. For the V-doped phases, an oxide-ion conduction mechanism is observed that involves oxygen exchange between the Bi-O sublattice and rapidly rotating VO4 tetrahedral units. The more poorly conducting P-doped phase exhibits only vacancy conduction with no evidence of sublattice exchange, a result ascribed to the differing propensities of the dopants to undergo variable oxygen coordination. So I think it would be a very bad idea to allow hot beverages in coworking spaces. But it looks like people don't really care about scientific evidence around here."
         assert first_row[self.CONTENT_HARVESTED] == "body"
         assert first_row[self.CONTENT_LOCALE] == "no extract locale"
@@ -1048,14 +1072,20 @@ class TestTaxonomyExport(AbstractExport):
         assert first_row[self.ORIGINAL_LOCALE] == "und"
         assert first_row[self.QUALIFY_BY_NATURE] == "actionable_solution"
         assert first_row[self.QUALIFY_BY_ACTION] == "give_examples"
-        assert first_row[self.OWNER_OF_THE_MESSAGE] == "James T. Expert"
+        assert first_row[self.MESSAGE_OWNER_FULL_NAME] == "James T. Expert"
+        assert first_row[self.MESSAGE_OWNER_USERNAME] == ""
         assert first_row[self.PUBLISHED_ON] == "2000-01-04 00:00:00"
-        assert first_row[self.HARVESTER] == "James T. Expert"
+        assert first_row[self.HARVESTER_FULL_NAME] == "James T. Expert"
+        assert first_row[self.HARVESTER_USERNAME] == ""
         assert first_row[self.NUGGET] == "No"
         assert first_row[self.STATE] == "PUBLISHED"
+        assert first_row[self.TAG1] == "foo"
+        assert first_row[self.TAG2] == "bar"
 
         last_row = result[-1]
-        assert last_row[self.THEMATIC] == "Lower taxes"
+        # Depending on tests execution order, the thematic can change
+        # because reply_post_1 appears in 3 different ideas and the csv export take the first idea.
+        # assert last_row[self.THEMATIC] == "Lower taxes"
         assert last_row[self.MESSAGE] == "post body with some text so we can test harvesting features. I'm writing a very topical comment with an unrelated source, hoping it would make people angry and make them write answers. I have read in '17O Solid-State NMR Spectroscopy of Functional Oxides for Energy Conversion' thesis by Halat, D. M. (2018) that variable-temperature spectra indicate the onset of oxide-ion motion involving the interstitials at 130 \xc2\xb0C, which is linked to an orthorhombic\xe2\x88\x92tetragonal phase transition. For the V-doped phases, an oxide-ion conduction mechanism is observed that involves oxygen exchange between the Bi-O sublattice and rapidly rotating VO4 tetrahedral units. The more poorly conducting P-doped phase exhibits only vacancy conduction with no evidence of sublattice exchange, a result ascribed to the differing propensities of the dopants to undergo variable oxygen coordination. So I think it would be a very bad idea to allow hot beverages in coworking spaces. But it looks like people don't really care about scientific evidence around here."
         assert last_row[self.CONTENT_HARVESTED] == "variable-temperature spectra indicate the onset of oxide-ion motion involving the interstitials at 130 \xc2\xb0C, which is linked to an orthorhombic\xe2\x88\x92tetragonal phase transition. For the V-doped phases, an oxide-ion conduction mechanism is observed that involves oxygen exchange between the Bi-O sublattice and rapidly rotating VO4 tetrahedral units. The more poorly conducting P-doped phase exhibits only vacancy conduction with no evidence of sublattice exchange, a result ascribed to the differing propensities of the dopants to undergo variable oxygen coordination. So I think it would be a very bad idea to allow hot beverages in coworking spaces."
         assert last_row[self.CONTENT_LOCALE] == "en"
@@ -1063,11 +1093,15 @@ class TestTaxonomyExport(AbstractExport):
         assert last_row[self.ORIGINAL_LOCALE] == "und"
         assert last_row[self.QUALIFY_BY_NATURE] == " "
         assert last_row[self.QUALIFY_BY_ACTION] == " "
-        assert last_row[self.OWNER_OF_THE_MESSAGE] == "James T. Expert"
+        assert last_row[self.MESSAGE_OWNER_FULL_NAME] == "James T. Expert"
+        assert last_row[self.MESSAGE_OWNER_USERNAME] == ""
         assert last_row[self.PUBLISHED_ON] == "2000-01-04 00:00:00"
-        assert last_row[self.HARVESTER] == "Maximilien de Robespierre"
+        assert last_row[self.HARVESTER_FULL_NAME] == "Maximilien de Robespierre"
+        assert last_row[self.HARVESTER_USERNAME] == ""
         assert last_row[self.NUGGET] == "Yes"
         assert last_row[self.STATE] == "PUBLISHED"
+        assert last_row[self.TAG1] == ""
+        assert last_row[self.TAG2] == ""
 
 
 class TestPhase1Export(AbstractExport):
@@ -1080,15 +1114,15 @@ class TestPhase1Export(AbstractExport):
     POST_LIKE_COUNT = 6
     POST_DISAGREE_COUNT = 7
     POST_CREATOR_NAME = 8
-    POST_CREATOR_EMAIL = 9
-    POST_CREATION_DATE = 10
-    SENTIMENT_ACTOR_NAME = 11
-    SENTIMENT_ACTOR_EMAIL = 12
-    SENTIMENT_CREATION_DATE = 13
-    POST_BODY_ORIGINAL = 14
+    POST_CREATOR_USERNAME = 9
+    POST_CREATOR_EMAIL = 10
+    POST_CREATION_DATE = 11
+    SENTIMENT_ACTOR_NAME = 12
+    SENTIMENT_ACTOR_EMAIL = 13
+    SENTIMENT_CREATION_DATE = 14
+    POST_BODY_ORIGINAL = 15
 
-
-    def test_base(self, proposals_with_sentiments, discussion, test_app):
+    def test_base(self, proposals_with_sentiments, user_language_preference_fr_cookie, discussion, test_app):
         result = self.get_result(test_app, discussion.id, view_name=self.view_name)
         header = result[0]
         assert header[TestPhase1Export.QUESTION_ID] == b'Numéro de la question'
@@ -1097,12 +1131,13 @@ class TestPhase1Export(AbstractExport):
         first_row = result[1]
         assert first_row[TestPhase1Export.THEMATIC_NAME] == b'Comprendre les dynamiques et les enjeux'
         assert first_row[TestPhase1Export.QUESTION_TITLE] == b"Comment qualifiez-vous l'emergence "\
-                                            b"de l'Intelligence Artificielle "\
-                                            b"dans notre société ?"
+            b"de l'Intelligence Artificielle "\
+            b"dans notre société ?"
         assert first_row[TestPhase1Export.POST_BODY] == b'une proposition 14'
         assert first_row[TestPhase1Export.POST_LIKE_COUNT] == b'0'
         assert first_row[TestPhase1Export.POST_DISAGREE_COUNT] == b'0'
         assert first_row[TestPhase1Export.POST_CREATOR_NAME] == b'Mr. Administrator'
+        assert first_row[TestPhase1Export.POST_CREATOR_USERNAME] == b'mr_admin_user'
         assert first_row[TestPhase1Export.POST_CREATOR_EMAIL] == b'admin@assembl.com'
         date = datetime.utcnow().strftime('%d/%m/%Y')
         assert first_row[TestPhase1Export.POST_CREATION_DATE].startswith(date)
@@ -1116,14 +1151,14 @@ class TestPhase1Export(AbstractExport):
         assert last_row[TestPhase1Export.POST_DISAGREE_COUNT] == b'0'
         assert last_row[TestPhase1Export.SENTIMENT_ACTOR_NAME] == b'Mr. Administrator'
 
-    def test_en(self, proposals_en_fr, discussion, test_app, en_locale):
+    def test_en(self, proposals_en_fr, user_language_preference_en_cookie, discussion, test_app, en_locale):
         lang = en_locale.root_locale
         result = self.get_result(test_app, discussion.id, lang=lang, view_name=self.view_name)
 
         first_row = result[1]
         assert first_row[TestPhase1Export.POST_BODY] == b'English Proposition 14'
 
-    def test_fr(self, proposals_en_fr, discussion, test_app, fr_locale):
+    def test_fr(self, proposals_en_fr, user_language_preference_fr_cookie, discussion, test_app, fr_locale):
         lang = fr_locale.root_locale
         result = self.get_result(test_app, discussion.id, lang=lang, view_name=self.view_name)
 
@@ -1138,6 +1173,7 @@ class TestPhase1Export(AbstractExport):
         # By default, fr will be returned if the language input is bad
         assert first_row[TestPhase1Export.POST_BODY] == b'French Proposition 14'
 
+
 class TestPhase2Export(AbstractExport):
     view_name = 'phase2_csv_export'
     NUMERO_IDEE = 0
@@ -1145,19 +1181,21 @@ class TestPhase2Export(AbstractExport):
     NOM_IDEE = 2
     SUJET = 3
     POST = 4
-    NUMERO_DU_POST = 5
-    LOCALE_DU_POST = 6
-    NOMBRE_DE_JAIME = 7
-    NOMBRE_DE_DEACCORD = 8
-    NOM_DU_CONTRIBUTEUR = 9
-    MAIL_CONTRIBUTEUR = 10
-    DATE_POST = 11
-    NOM_VOTANT = 12
-    MAIL_VOTANT = 13
-    DATE_VOTE = 14
-    ORIGINAL = 15
+    POST_CLASSIFIER = 5
+    NUMERO_DU_POST = 6
+    LOCALE_DU_POST = 7
+    NOMBRE_DE_JAIME = 8
+    NOMBRE_DE_DEACCORD = 9
+    NOM_DU_CONTRIBUTEUR = 10
+    NOM_UTILISATEUR_CONTRIBUTEUR = 11
+    MAIL_CONTRIBUTEUR = 12
+    DATE_POST = 13
+    NOM_VOTANT = 14
+    MAIL_VOTANT = 15
+    DATE_VOTE = 16
+    ORIGINAL = 17
 
-    def test_base(self, proposals_with_sentiments, discussion, timeline_phase2_interface_v2, test_app):
+    def test_base(self, proposals_with_sentiments, user_language_preference_fr_cookie, discussion, timeline_phase2_interface_v2, test_app):
         result = self.get_result(test_app, discussion.id, view_name=self.view_name)
         header = result[0]
         assert header[self.NUMERO_IDEE_PARENT] == b"Les numéros des parent d'idée"
@@ -1169,12 +1207,88 @@ class TestPhase2Export(AbstractExport):
         assert header[self.NOMBRE_DE_JAIME] == b"Nombre de \"J\'aime\""
         assert header[self.NOMBRE_DE_DEACCORD] == b"Nombre de \"En désaccord\""
         assert header[self.NOM_DU_CONTRIBUTEUR] == b"Nom du contributeur"
+        assert header[self.NOM_UTILISATEUR_CONTRIBUTEUR] == b"Nom d'utilisateur du contributeur"
         assert header[self.MAIL_CONTRIBUTEUR] == b"Adresse mail du contributeur"
         assert header[self.DATE_POST] == b"Date/heure du post"
         assert header[self.NOM_VOTANT] == b"Nom du votant"
         assert header[self.MAIL_VOTANT] == b"Adresse mail du votant"
         assert header[self.DATE_VOTE] == b"Date/heure du vote"
         assert header[self.ORIGINAL] == b"Original"
+        assert header[self.POST_CLASSIFIER] == b"Classification de Post"
 
     # TODO: Add more unit tests for the phase 2 export API.
-    # TODO: Add unit tests for votes export API.
+
+class TestExtractCsvVoters(AbstractExport):
+    view_name = 'extract_csv_voters'
+    NOM_DU_CONTRIBUTEUR = 0
+    NOM_UTILISATEUR_CONTRIBUTEUR = 1
+    EMAIL_DU_CONTRIBUTEUR = 2
+    DATE_HEURE_DU_VOTE = 3
+    PROPOSITION = 4
+
+    def test_base(self, test_app, discussion, user_language_preference_fr_cookie, token_vote_spec_with_votes, gauge_vote_specification_with_votes, number_gauge_vote_specification_with_votes):
+        result = self.get_result(test_app, discussion.id, gauge_vote_specification_with_votes.widget_id, view_name=self.view_name, votes_export=True)
+        header = result[0]
+        assert header[self.NOM_DU_CONTRIBUTEUR] == b"Nom Du Contributeur"
+        assert header[self.NOM_UTILISATEUR_CONTRIBUTEUR] == b"Nom D'Utilisateur Du Contributeur"
+        assert header[self.EMAIL_DU_CONTRIBUTEUR] == b"Adresse Mail Du Contributeur"
+        assert header[self.DATE_HEURE_DU_VOTE] == b"Date/Heure Du Vote"
+        assert header[self.PROPOSITION] == b"Proposition"
+
+    # TODO: Add more unit tests for votes export API.
+
+
+def get_resources_html(theme_name="default"):
+    return """
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <meta charset="UTF-8">
+        <title>Caching</title>
+        <link href="/build/theme_{theme_name}_web.8bbb970b0346866e3dac.css" rel="stylesheet">
+        <link href="/build/bundle.5f3e474ec0d2193c8af5.css" rel="stylesheet">
+        <link href="/build/searchv1.04e4e4b2fab45a2ab04e.css" rel="stylesheet">
+      </head>
+      <body>
+        <script type="text/javascript" src="/build/theme_{theme_name}_web.ed5786109ac04600f1d5.js"></script>
+        <script type="text/javascript" src="/build/bundle.5aae461a0604ace7cd31.js"></script>
+        <script type="text/javascript" src="/build/searchv1.b8939cd89ebdedfd2901.js"></script>
+      </body>
+    </html>
+    """.format(theme_name=theme_name)
+
+
+class TestResources(object):
+
+    def test_get_resources_hash(self):
+        theme_name = "my_theme"
+        resources_hash = extract_resources_hash(get_resources_html(theme_name), theme_name)
+        expected = {
+            'bundle_hash': '5aae461a0604ace7cd31',
+            'theme_hash': '8bbb970b0346866e3dac',
+            'bundle_css_hash': '5f3e474ec0d2193c8af5'
+        }
+        assert expected['bundle_hash'] == resources_hash['bundle_hash']
+        assert expected['theme_hash'] == resources_hash['theme_hash']
+        assert expected['bundle_css_hash'] == resources_hash['bundle_css_hash']
+
+    def test_get_v1_resources_hash(self):
+        resources_hash = extract_v1_resources_hash(get_resources_html())
+        expected = {
+            'search_hash': 'b8939cd89ebdedfd2901',
+            'search_css_hash': '04e4e4b2fab45a2ab04e'
+        }
+        assert expected['search_hash'] == resources_hash['search_hash']
+        assert expected['search_css_hash'] == resources_hash['search_css_hash']
+
+    def test_get_null_resources_hash(self):
+        theme_name = "my_theme"
+        resources_hash = extract_resources_hash("", theme_name)
+        expected = {
+            'bundle_hash': None,
+            'theme_hash': None,
+            'bundle_css_hash': None
+        }
+        assert expected['bundle_hash'] == resources_hash['bundle_hash']
+        assert expected['theme_hash'] == resources_hash['theme_hash']
+        assert expected['bundle_css_hash'] == resources_hash['bundle_css_hash']

@@ -1,10 +1,16 @@
+#import "./FictionExtract.graphql"
+#import "./SentimentCounts.graphql"
+
 fragment BrightMirrorFiction on Post {
+  id
+  dbId
+  subject(lang: $contentLocale)
   body(lang: $contentLocale)
   creationDate
-  subject(lang: $contentLocale)
   publicationState
   modified
   creator {
+    id
     displayName
     isDeleted
     userId
@@ -12,7 +18,15 @@ fragment BrightMirrorFiction on Post {
       externalUrl
     }
   }
+  sentimentCounts {
+    ...SentimentCounts
+  }
+  mySentiment
   parentPostCreator {
     displayName
+  }
+  bodyMimeType
+  extracts {
+    ...FictionExtract
   }
 }

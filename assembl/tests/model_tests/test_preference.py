@@ -1,5 +1,3 @@
-import pytest
-from simplejson import JSONDecodeError
 
 def test_preference_address_empty(test_session, non_standard_preference):
     try:
@@ -125,16 +123,3 @@ def test_preference_address_good_special_character(test_session, non_standard_pr
         assert True
     except:
         assert False, "An error should NOT have been raised"
-
-
-def test_preferences_extra_json_valid_json(test_session, discussion):
-    preferences = discussion.preferences
-    valid_json = '{"hello": "world"}'
-    preferences['extra_json'] = valid_json
-
-
-def test_preferences_extra_json_invalid_json(test_session, discussion):
-    preferences = discussion.preferences
-    invalid_json = '{"hello: "world"}'
-    with pytest.raises(JSONDecodeError):
-        preferences['extra_json'] = invalid_json

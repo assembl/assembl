@@ -20,7 +20,7 @@ describe('harvestingBox component', () => {
       postId: '123456',
       contentLocale: 'fr',
       lang: 'fr',
-      selection: {},
+      annotation: null,
       harvestingDate: '2018-04-29T16:28:27.324276+00:00',
       isAuthorAccountDeleted: false,
       showNuggetAction: false,
@@ -46,7 +46,34 @@ describe('harvestingBox component', () => {
       postId: '123456',
       contentLocale: 'fr',
       lang: 'fr',
-      selection: {},
+      annotation: null,
+      harvestingDate: '2018-04-29T16:28:27.324276+00:00',
+      isAuthorAccountDeleted: false,
+      showNuggetAction: false,
+      displayHarvestingBox: false,
+      setHarvestingBoxDisplay: setHarvestingBoxDisplaySpy,
+      cancelHarvesting: cancelHarvestingSpy,
+      addPostExtract: addPostExtractSpy,
+      updateExtract: updateExtractSpy,
+      confirmExtract: confirmExtractSpy,
+      deleteExtract: deleteExtractSpy,
+      refetchPost: refetchPostSpy,
+      toggleExtractsBox: toggleExtractsBoxSpy
+    };
+    const shallowRenderer = new ShallowRenderer();
+    shallowRenderer.render(<DumbHarvestingBox {...props} />);
+    const result = shallowRenderer.getRenderOutput();
+    expect(result).toMatchSnapshot();
+  });
+
+  it('should match harvestingBox snapshot when there are extracts with active extract', () => {
+    const props = {
+      extracts: extracts,
+      activeExtractIndex: 1,
+      postId: '123456',
+      contentLocale: 'fr',
+      lang: 'fr',
+      annotation: null,
       harvestingDate: '2018-04-29T16:28:27.324276+00:00',
       isAuthorAccountDeleted: false,
       showNuggetAction: false,
@@ -72,7 +99,7 @@ describe('harvestingBox component', () => {
       postId: '123456',
       contentLocale: 'fr',
       lang: 'fr',
-      selection: {},
+      annotation: null,
       harvestingDate: '2018-04-29T16:28:27.324276+00:00',
       isAuthorAccountDeleted: false,
       showNuggetAction: false,
@@ -98,7 +125,7 @@ describe('harvestingBox component', () => {
       postId: '123456',
       contentLocale: 'fr',
       lang: 'fr',
-      selection: undefined,
+      annotation: null,
       harvestingDate: '2018-04-29T16:28:27.324276+00:00',
       isAuthorAccountDeleted: false,
       showNuggetAction: false,
@@ -124,7 +151,7 @@ describe('harvestingBox component', () => {
       postId: '123456',
       contentLocale: 'fr',
       lang: 'fr',
-      selection: {},
+      annotation: null,
       harvestingDate: '2018-04-29T16:28:27.324276+00:00',
       isAuthorAccountDeleted: true,
       showNuggetAction: false,
@@ -150,7 +177,7 @@ describe('harvestingBox component', () => {
       postId: '123456',
       contentLocale: 'fr',
       lang: 'fr',
-      selection: {},
+      annotation: null,
       harvestingDate: '2018-04-29T16:28:27.324276+00:00',
       isAuthorAccountDeleted: false,
       showNuggetAction: true,
@@ -176,8 +203,38 @@ describe('harvestingBox component', () => {
       postId: '123456',
       contentLocale: 'fr',
       lang: 'fr',
-      selection: {},
+      annotation: null,
       harvestingDate: '2018-04-29T16:28:27.324276+00:00',
+      isAuthorAccountDeleted: false,
+      showNuggetAction: false,
+      displayHarvestingBox: true,
+      setHarvestingBoxDisplay: setHarvestingBoxDisplaySpy,
+      cancelHarvesting: cancelHarvestingSpy,
+      addPostExtract: addPostExtractSpy,
+      updateExtract: updateExtractSpy,
+      confirmExtract: confirmExtractSpy,
+      deleteExtract: deleteExtractSpy,
+      refetchPost: refetchPostSpy,
+      toggleExtractsBox: toggleExtractsBoxSpy
+    };
+    const shallowRenderer = new ShallowRenderer();
+    shallowRenderer.render(<DumbHarvestingBox {...props} />);
+    const result = shallowRenderer.getRenderOutput();
+    expect(result).toMatchSnapshot();
+  });
+
+  it('should match harvestingBox snapshot with annotation', () => {
+    const props = {
+      postId: '123456',
+      contentLocale: 'fr',
+      lang: 'fr',
+      annotation: {
+        body: 'extract text',
+        offsetEnd: 988,
+        offsetStart: 973,
+        xpathEnd: '//div[@id=\'start\']/',
+        xpathStart: '//div[@id=\'end\']/'
+      },
       isAuthorAccountDeleted: false,
       showNuggetAction: false,
       displayHarvestingBox: true,

@@ -32,6 +32,8 @@ class Avatar extends React.Component<Props, State> {
     return null;
   }
 
+  state = { next: '' };
+
   render() {
     const { slug, connectedUserId, loginData } = this.props;
     let loginUrl = `${getContextual('login', { slug: slug })}?next=${this.state.next}`;

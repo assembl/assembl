@@ -1,6 +1,5 @@
 """Cornice API for posts"""
 from math import ceil
-import logging
 from collections import defaultdict
 
 import simplejson as json
@@ -24,6 +23,7 @@ from jwzthreading import restrip_pat
 import transaction
 
 from assembl.lib.parsedatetime import parse_datetime
+from assembl.lib import logging
 from assembl.lib.clean_input import sanitize_html, sanitize_text
 from assembl.views.api import API_DISCUSSION_PREFIX
 from assembl.auth import P_READ, P_ADD_POST
@@ -37,9 +37,9 @@ from assembl.models import (
     IdeaRelatedPostLink, AgentProfile, LangString,
     DummyContext, LanguagePreferenceCollection, SentimentOfPost)
 from assembl.models.post import deleted_publication_states
-from assembl.lib.raven_client import capture_message
+from assembl.lib.sentry import capture_message
 
-log = logging.getLogger('assembl')
+log = logging.getLogger()
 
 posts = Service(name='posts', path=API_DISCUSSION_PREFIX + '/posts',
                 description="Post API following SIOC vocabulary as much as possible",

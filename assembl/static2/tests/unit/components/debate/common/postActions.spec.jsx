@@ -61,7 +61,8 @@ const props: Props = {
     },
     useSocialMedia: false,
     video: {
-      descriptionEntriesTop: [],
+      descriptionEntriesTop: null,
+      titleEntries: null,
       videoUrl: 'foo'
     },
     titleEntries: []

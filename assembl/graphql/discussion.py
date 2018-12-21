@@ -11,14 +11,20 @@ from assembl.auth import IF_OWNED, CrudPermissions
 from assembl.auth.util import get_permissions
 
 import assembl.graphql.docstrings as docs
+from .attachment import Attachment
 from .document import Document
 from .types import SecureObjectType
 from .langstring import (
     LangStringEntry, LangStringEntryInput, resolve_langstring,
     resolve_langstring_entries, update_langstring_from_input_entries)
 from .utils import (
-    abort_transaction_on_exception, update_attachment,
-    get_attachment_with_purpose)
+    abort_transaction_on_exception,
+    create_attachment,
+    update_attachment,
+    get_attachments_with_purpose,
+    get_attachment_with_purpose,
+    DateTime)
+from .idea import TagResult, SentimentAnalysisResult
 
 
 class URLMeta(graphene.ObjectType):
@@ -49,6 +55,10 @@ class Discussion(SecureObjectType, SQLAlchemyObjectType):
     button_label_entries = graphene.List(LangStringEntry, description=docs.Default.langstring_entries)
     header_image = graphene.Field(Document, description=docs.Discussion.header_image)
     logo_image = graphene.Field(Document, description=docs.Discussion.logo_image)
+    start_date = graphene.Field(DateTime, description=docs.Discussion.start_date)
+    end_date = graphene.Field(DateTime, description=docs.Discussion.end_date)
+    top_keywords = graphene.List(TagResult, description=docs.Discussion.top_keywords)
+    nlp_sentiment = graphene.Field(SentimentAnalysisResult, description=docs.Discussion.nlp_sentiment)
     slug = graphene.String(description=docs.Discussion.slug)
     login_data = graphene.Field(URLMeta, next_view=graphene.String(required=False))
 
@@ -94,7 +104,7 @@ class Discussion(SecureObjectType, SQLAlchemyObjectType):
     def resolve_button_label_entries(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
-        if discussion.subtitle:
+        if discussion.button_label:
             return resolve_langstring_entries(discussion, 'button_label')
 
         return []
@@ -141,6 +151,36 @@ class Discussion(SecureObjectType, SQLAlchemyObjectType):
             url = route
         return URLMeta(local=local, url=url)
 
+    def resolve_top_keywords(self, args, context, info):
+        result = self.top_keywords()
+        return [TagResult(score=r.score, value=r.value) for r in result]
+
+    def resolve_nlp_sentiment(self, args, context, info):
+        result = self.sentiments()
+        return SentimentAnalysisResult(**result._asdict())
+
+    def resolve_start_date(self, args, context, info):
+        from sqlalchemy import func
+        if self.active_start_date:
+            return self.active_start_date
+        discussion_id = context.matchdict['discussion_id']
+        db = models.Discussion.default_db
+        result = db.query(func.min(models.TimelineEvent.start)).filter(models.TimelineEvent.discussion_id == discussion_id).first()
+        if result:
+            result = result[0]
+            return result
+
+    def resolve_end_date(self, args, context, info):
+        from sqlalchemy import func
+        if self.active_end_date:
+            return self.active_end_date
+        discussion_id = context.matchdict['discussion_id']
+        db = models.Discussion.default_db
+        result = db.query(func.max(models.TimelineEvent.end)).filter(models.TimelineEvent.discussion_id == discussion_id).first()
+        if result:
+            result = result[0]
+            return result
+
 
 class UpdateDiscussion(graphene.Mutation):
     __doc__ = docs.UpdateDiscussion.__doc__
@@ -151,6 +191,8 @@ class UpdateDiscussion(graphene.Mutation):
         button_label_entries = graphene.List(LangStringEntryInput, description=docs.UpdateDiscussion.button_label_entries)
         header_image = graphene.String(description=docs.UpdateDiscussion.header_image)
         logo_image = graphene.String(description=docs.UpdateDiscussion.logo_image)
+        start_date = DateTime(description=docs.UpdateDiscussion.start_date)
+        end_date = DateTime(description=docs.UpdateDiscussion.end_date)
 
     discussion = graphene.Field(lambda: Discussion)
 
@@ -216,6 +258,13 @@ class UpdateDiscussion(graphene.Mutation):
                     context
                 )
 
+        start_date = args.get('start_date', None)
+        end_date = args.get('end_date', None)
+        if start_date:
+            discussion.active_start_date = start_date.replace(tzinfo=None)
+        if end_date:
+            discussion.active_end_date = end_date.replace(tzinfo=None)
+
         db.flush()
         discussion = cls.get(discussion_id)
         return UpdateDiscussion(discussion=discussion)
@@ -264,6 +313,7 @@ class DiscussionPreferences(graphene.ObjectType):
     languages = graphene.List(LocalePreference, description=docs.DiscussionPreferences.languages)
     tab_title = graphene.String(description=docs.DiscussionPreferences.tab_title)
     favicon = graphene.Field(Document, description=docs.DiscussionPreferences.favicon)
+    mandatory_legal_contents_validation = graphene.Boolean(description=docs.DiscussionPreferences.mandatory_legal_contents_validation)
 
     def resolve_tab_title(self, args, context, info):
         return self.get('tab_title', 'Assembl')
@@ -278,6 +328,9 @@ class DiscussionPreferences(graphene.ObjectType):
         attachment = get_attachment_with_purpose(
             discussion.attachments, models.AttachmentPurpose.FAVICON.value)
         return attachment and attachment.document
+
+    def resolve_mandatory_legal_contents_validation(self, args, context, info):
+        return self.get('mandatory_legal_contents_validation', False)
 
 
 class ResourcesCenter(graphene.ObjectType):
@@ -318,6 +371,11 @@ class LegalContents(graphene.ObjectType):
     privacy_policy_entries = graphene.List(LangStringEntry, description=docs.LegalContents.privacy_policy_entries)
     user_guidelines = graphene.String(lang=graphene.String(), description=docs.LegalContents.user_guidelines)
     user_guidelines_entries = graphene.List(LangStringEntry, description=docs.LegalContents.user_guidelines_entries)
+    legal_notice_attachments = graphene.List(Attachment, description=docs.LegalContents.legal_notice_attachments)
+    terms_and_conditions_attachments = graphene.List(Attachment, description=docs.LegalContents.terms_and_conditions_attachments)
+    cookies_policy_attachments = graphene.List(Attachment, description=docs.LegalContents.cookies_policy_attachments)
+    privacy_policy_attachments = graphene.List(Attachment, description=docs.LegalContents.privacy_policy_attachments)
+    user_guidelines_attachments = graphene.List(Attachment, description=docs.LegalContents.user_guidelines_attachments)
 
     def resolve_legal_notice(self, args, context, info):
         """Legal notice value in given locale."""
@@ -388,6 +446,31 @@ class LegalContents(graphene.ObjectType):
             return resolve_langstring_entries(discussion, 'user_guidelines')
 
         return []
+
+    def resolve_legal_notice_attachments(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        return get_attachments_with_purpose(discussion.attachments, models.AttachmentPurpose.LEGAL_NOTICE_ATTACHMENT.value)
+
+    def resolve_terms_and_conditions_attachments(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        return get_attachments_with_purpose(discussion.attachments, models.AttachmentPurpose.TERMS_AND_CONDITIONS_ATTACHMENT.value)
+
+    def resolve_cookies_policy_attachments(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        return get_attachments_with_purpose(discussion.attachments, models.AttachmentPurpose.COOKIES_POLICY_ATTACHMENT.value)
+
+    def resolve_privacy_policy_attachments(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        return get_attachments_with_purpose(discussion.attachments, models.AttachmentPurpose.PRIVACY_POLICY_ATTACHMENT.value)
+
+    def resolve_user_guidelines_attachments(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        return get_attachments_with_purpose(discussion.attachments, models.AttachmentPurpose.USER_GUIDELINES_ATTACHMENT.value)
 
 
 class UpdateResourcesCenter(graphene.Mutation):
@@ -471,6 +554,7 @@ class UpdateDiscussionPreferences(graphene.Mutation):
         tab_title = graphene.String(description=docs.UpdateDiscussionPreferences.tab_title)
         # this is the identifier of the part in a multipart POST
         favicon = graphene.String(description=docs.UpdateDiscussionPreferences.favicon)
+        mandatory_legal_contents_validation = graphene.Boolean(description=docs.UpdateDiscussionPreferences.mandatory_legal_contents_validation)
 
     preferences = graphene.Field(lambda: DiscussionPreferences)
 
@@ -492,8 +576,9 @@ class UpdateDiscussionPreferences(graphene.Mutation):
         db = discussion.db
         prefs_to_save = args.get('languages', [])
         tab_title = args.get('tab_title', None)
+        mandatory_legal_contents_validation = args.get('mandatory_legal_contents_validation')
         favicon = args.get('favicon', None)
-        if not prefs_to_save and not tab_title and not favicon:
+        if not prefs_to_save and not tab_title and not favicon and not mandatory_legal_contents_validation:
             raise Exception("Must pass at least one preference to be saved")
 
         with cls.default_db.no_autoflush:
@@ -514,15 +599,60 @@ class UpdateDiscussionPreferences(graphene.Mutation):
                     context
                 )
 
+            if mandatory_legal_contents_validation:
+                discussion.preferences['mandatory_legal_contents_validation'] = mandatory_legal_contents_validation
+
         db.flush()
 
         return UpdateDiscussionPreferences(preferences=discussion.preferences)
+
+
+def update_legal_contents_attachments(context, discussion, new_attachments, purpose):
+    """Create, update, delete legal contents attachments for a legal contents field."""
+    original_ln_attachments = get_attachments_with_purpose(
+        discussion.attachments, purpose)
+    original_attachments_doc_ids = []
+    if original_ln_attachments:
+        original_attachments_doc_ids = [
+            str(a.document_id) for a in original_ln_attachments]
+
+    for document_id in new_attachments:
+        if document_id not in original_attachments_doc_ids:
+            create_attachment(
+                discussion,
+                models.DiscussionAttachment,
+                purpose,
+                context,
+                document_id=document_id
+            )
+
+    # delete attachments that has been removed
+    documents_to_delete = set(original_attachments_doc_ids) - set(new_attachments)
+    for document_id in documents_to_delete:
+        with models.Discussion.default_db.no_autoflush:
+            document = models.Document.get(document_id)
+            attachments = discussion.db.query(
+                models.DiscussionAttachment
+            ).filter_by(
+                attachmentPurpose=purpose,
+                discussion_id=discussion.id,
+                document_id=document_id
+            ).all()
+            document.delete_file()
+            discussion.db.delete(document)
+            for attachment in attachments:
+                discussion.attachments.remove(attachment)
 
 
 class UpdateLegalContents(graphene.Mutation):
     __doc__ = docs.UpdateLegalContents.__doc__
 
     class Input:
+        legal_notice_attachments = graphene.List(graphene.String, description=docs.UpdateLegalContents.legal_notice_attachments)
+        terms_and_conditions_attachments = graphene.List(graphene.String, description=docs.UpdateLegalContents.terms_and_conditions_attachments)
+        cookies_policy_attachments = graphene.List(graphene.String, description=docs.UpdateLegalContents.cookies_policy_attachments)
+        privacy_policy_attachments = graphene.List(graphene.String, description=docs.UpdateLegalContents.privacy_policy_attachments)
+        user_guidelines_attachments = graphene.List(graphene.String, description=docs.UpdateLegalContents.user_guidelines_attachments)
         legal_notice_entries = graphene.List(LangStringEntryInput, description=docs.UpdateLegalContents.legal_notice_entries)
         terms_and_conditions_entries = graphene.List(LangStringEntryInput, description=docs.UpdateLegalContents.terms_and_conditions_entries)
         cookies_policy_entries = graphene.List(LangStringEntryInput, description=docs.UpdateLegalContents.cookies_policy_entries)
@@ -534,6 +664,11 @@ class UpdateLegalContents(graphene.Mutation):
     @staticmethod
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
+        LEGAL_NOTICE_ATTACHMENT = models.AttachmentPurpose.LEGAL_NOTICE_ATTACHMENT.value
+        TERMS_AND_CONDITIONS_ATTACHMENT = models.AttachmentPurpose.TERMS_AND_CONDITIONS_ATTACHMENT.value
+        COOKIES_POLICY_ATTACHMENT = models.AttachmentPurpose.COOKIES_POLICY_ATTACHMENT.value
+        PRIVACY_POLICY_ATTACHMENT = models.AttachmentPurpose.PRIVACY_POLICY_ATTACHMENT.value
+        USER_GUIDELINES_ATTACHMENT = models.AttachmentPurpose.USER_GUIDELINES_ATTACHMENT.value
         cls = models.Discussion
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
@@ -595,6 +730,21 @@ class UpdateLegalContents(graphene.Mutation):
             update_langstring_from_input_entries(
                 discussion, 'user_guidelines', user_guidelines_entries
             )
+
+            legal_contents_attachments_by_purpose = [
+                (args.get('legal_notice_attachments', []), LEGAL_NOTICE_ATTACHMENT),
+                (args.get('terms_and_conditions_attachments', []), TERMS_AND_CONDITIONS_ATTACHMENT),
+                (args.get('cookies_policy_attachments', []), COOKIES_POLICY_ATTACHMENT),
+                (args.get('privacy_policy_attachments', []), PRIVACY_POLICY_ATTACHMENT),
+                (args.get('user_guidelines_attachments', []), USER_GUIDELINES_ATTACHMENT),
+            ]
+            for new_attachments, purpose in legal_contents_attachments_by_purpose:
+                update_legal_contents_attachments(
+                    context,
+                    discussion,
+                    new_attachments,
+                    purpose
+                )
 
         db.flush()
         legal_contents = LegalContents()

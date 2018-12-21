@@ -1,15 +1,27 @@
+#import "../fragments/Attachment.graphql"
+
 mutation UpdateLegalContents(
-  $legalNoticeEntries: [LangStringEntryInput]!
-  $termsAndConditionsEntries: [LangStringEntryInput]!
+  $cookiesPolicyAttachments: [String]
+  $legalNoticeAttachments: [String]
+  $privacyPolicyAttachments: [String]
+  $termsAndConditionsAttachments: [String]
+  $userGuidelinesAttachments: [String]
   $cookiesPolicyEntries: [LangStringEntryInput]!
+  $legalNoticeEntries: [LangStringEntryInput]!
   $privacyPolicyEntries: [LangStringEntryInput]!
+  $termsAndConditionsEntries: [LangStringEntryInput]!
   $userGuidelinesEntries: [LangStringEntryInput]!
 ) {
   updateLegalContents(
-    legalNoticeEntries: $legalNoticeEntries
-    termsAndConditionsEntries: $termsAndConditionsEntries
+    cookiesPolicyAttachments: $cookiesPolicyAttachments
+    legalNoticeAttachments: $legalNoticeAttachments
+    privacyPolicyAttachments: $privacyPolicyAttachments
+    termsAndConditionsAttachments: $termsAndConditionsAttachments
+    userGuidelinesAttachments: $userGuidelinesAttachments
     cookiesPolicyEntries: $cookiesPolicyEntries
+    legalNoticeEntries: $legalNoticeEntries
     privacyPolicyEntries: $privacyPolicyEntries
+    termsAndConditionsEntries: $termsAndConditionsEntries
     userGuidelinesEntries: $userGuidelinesEntries
   ) {
     legalContents {
@@ -32,6 +44,21 @@ mutation UpdateLegalContents(
       userGuidelinesEntries {
         localeCode
         value
+      }
+      legalNoticeAttachments {
+        ...Attachment
+      }
+      termsAndConditionsAttachments {
+        ...Attachment
+      }
+      cookiesPolicyAttachments {
+        ...Attachment
+      }
+      privacyPolicyAttachments {
+        ...Attachment
+      }
+      userGuidelinesAttachments {
+        ...Attachment
       }
     }
   }

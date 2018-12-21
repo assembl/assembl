@@ -1,4 +1,4 @@
-import 'babel-polyfill'; // required by IE 11 for Promise class
+import '@babel/polyfill'; // required by IE 11 for Promise class
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';

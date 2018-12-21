@@ -1,5 +1,4 @@
 """Definition of the discussion class."""
-import logging
 import traceback
 from collections import defaultdict
 from datetime import datetime
@@ -18,6 +17,7 @@ from sqlalchemy.orm import (backref, join, relationship, subqueryload,
 from sqlalchemy.sql.expression import distinct, literal
 
 from assembl.lib.config import get
+from assembl.lib import logging
 from assembl.lib.utils import full_class_name, get_global_base_url, slugify
 
 from . import DiscussionBoundBase, NamedClassMixin
@@ -33,7 +33,7 @@ from .preferences import Preferences
 from assembl.lib.caching import create_analytics_region
 
 resolver = DottedNameResolver(__package__)
-log = logging.getLogger('assembl')
+log = logging.getLogger()
 visit_analytics_region = create_analytics_region()
 
 
@@ -80,6 +80,8 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
     show_help_in_debate_section = Column(Boolean, default=True)
     preferences_id = Column(Integer, ForeignKey(Preferences.id))
     creator_id = Column(Integer, ForeignKey('user.id', ondelete="SET NULL"))
+    active_start_date = Column(DateTime)
+    active_end_date = Column(DateTime)
 
     preferences = relationship(Preferences, backref=backref(
         'discussion'), cascade="all, delete-orphan", single_parent=True)
@@ -456,6 +458,82 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
 
     def get_user_permissions_preload(self, user_id):
         return json.dumps(self.get_user_permissions(user_id))
+
+    def top_keywords(
+            self, limit=30, group=True, display_lang='en', filter_lang=None):
+        from .nlp import PostKeywordAnalysis, Tag
+        from .langstrings import LangStringEntry, Locale
+        from .generic import Content
+
+        group = group and not filter_lang  # Cannot filter and group
+
+        if group:
+            tag_col = Tag.group_id
+        else:
+            tag_col = Tag.id
+
+        sq = self.db.query(
+            func.sum(PostKeywordAnalysis.score).label('score'),
+            tag_col.label('id')
+        ).filter_by(
+            category=None
+        ).join(Tag).join(Content).filter(
+            Content.discussion_id == self.id
+        )
+
+        if filter_lang:
+            sq = sq.join(Locale).filter(Locale.code == filter_lang)
+        sq = sq.group_by(
+            tag_col
+        ).order_by(func.sum(PostKeywordAnalysis.score).desc())
+        if limit:
+            sq = sq.limit(limit)
+        sq = sq.subquery()
+
+        if display_lang is None:
+            display_lang = filter_lang
+
+        if display_lang is None:
+            label_cond = Locale.code.notlike('%-x-mtfrom-%')
+        else:
+            label_cond = (Locale.code == display_lang) \
+                | (Locale.code.like(display_lang + '-x-mtfrom-%'))
+            if display_lang != 'en':
+                untranslated = self.db.query(
+                    LangString
+                ).join(
+                    Tag, LangString.id == Tag.label_id
+                ).filter(
+                    Tag.id.in_(sq)
+                ).outerjoin(
+                    LangStringEntry,
+                    LangStringEntry.langstring_id == Tag.label_id
+                ).filter(LangStringEntry.id == None).all()  # noqa: E711
+                if untranslated:
+                    translator = self.translation_service()
+                    for t in untranslated:
+                        t.ensure_translations([display_lang], translator)
+
+        q = self.db.query(
+            LangStringEntry.value, sq.c.score
+        ).join(Locale).filter(
+            label_cond
+        ).distinct().join(
+            Tag, Tag.label_id == LangStringEntry.langstring_id
+        ).join(sq, sq.c.id == Tag.id)
+        if not group:
+            q = q.add_columns(Locale.code)
+        return q.all()
+
+    def sentiments(self):
+        from .nlp import PostWatsonV1SentimentAnalysis
+        from .generic import Content
+
+        return self.db.query(
+            func.sum(PostWatsonV1SentimentAnalysis.positive_sentiment).label("positive"),
+            func.sum(PostWatsonV1SentimentAnalysis.negative_sentiment).label("negative"),
+            func.count(PostWatsonV1SentimentAnalysis.id).label("count")
+        ).join(Content).filter(Content.discussion_id == self.id).first()
 
     def get_base_url(self, require_secure=None):
         """Get the base URL of this server

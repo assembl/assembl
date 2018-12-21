@@ -15,16 +15,26 @@ export const NB_IDEA_PREVIEW_TO_SHOW = 4;
 export const APP_CONTAINER_PADDING = 15;
 export const MIN_WIDTH_COLUMN = 400;
 export const COLUMN_OPACITY_GAIN = 0.5;
+export const FICTION_COMMENT_MAX_LENGTH = 3000;
 
 // Bright mirror
 export const EMPTY_STRING = '';
 export const FICTION_DELETE_CALLBACK = 'FICTION_DELETE_CALLBACK';
 export const USER_ID_NOT_FOUND = -9999;
+export const PICTURES_LENGTH = 40; // Number of pictures available on S3
+export const PICTURE_BASE_URL = 'https://s3-eu-west-1.amazonaws.com/brightmirror/preview-';
+export const PICTURE_EXTENSION = '.jpg';
 
 // Minimum length for survey answers
 export const MINIMUM_BODY_LENGTH = 10;
 
 export const ANCHOR_SIZE = 44;
+export const ANCHOR_OFFSET = 6;
+export const COMMENT_BADGE_OFFSET = 10.5;
+export const COMMENT_BOX_OFFSET = 40;
+export const COMMENT_DYNAMIC_OFFSET = 5;
+export const SENTIMENT_RIGHT_OFFSET = 15;
+export const SENTIMENT_BAR_TOP_POSITION_OFFSET = 78;
 
 export const MAX_TREE_FORM_LEVEL = 4;
 
@@ -91,6 +101,13 @@ export const COOKIE_TYPES = [
   'REJECT_CGU'
 ];
 
+export const SENTIMENTS = {
+  like: 'LIKE',
+  disagree: 'DISAGREE',
+  dontUnderstand: 'DONT_UNDERSTAND',
+  moreInfo: 'MORE_INFO'
+};
+
 export const ESSENTIAL_SIGNUP_COOKIES = [
   'ACCEPT_CGU',
   'ACCEPT_PRIVACY_POLICY_ON_DISCUSSION',
@@ -151,17 +168,17 @@ export const ADMIN_MENU = {
     title: 'administration.landingpage',
     sectionId: '1',
     subMenu: {
-      manageModules: {
-        title: 'administration.landingPage.manageModules.title',
-        sectionId: '1'
-      },
+      // manageModules: {
+      //   title: 'administration.landingPage.manageModules.title',
+      //   sectionId: '3'
+      // },
       header: {
         title: 'administration.landingPage.header.title',
-        sectionId: '2'
+        sectionId: '1'
       },
       timeline: {
         title: 'administration.landingPage.timeline.title',
-        sectionId: '3'
+        sectionId: '2'
       }
     }
   },
@@ -255,6 +272,8 @@ export const ExtractStates = {
   PUBLISHED: 'PUBLISHED'
 };
 
+export type ExtractState = typeof ExtractStates.SUBMITTED | typeof ExtractStates.PUBLISHED;
+
 export const pickerColors = [
   '#B8E986',
   '#00AA7B',
@@ -308,3 +327,63 @@ CountablePublicationStates[PublicationStates.SUBMITTED_IN_EDIT_GRACE_PERIOD] = P
 CountablePublicationStates[PublicationStates.PUBLISHED] = PublicationStates.PUBLISHED;
 CountablePublicationStates[PublicationStates.MODERATED_TEXT_ON_DEMAND] = PublicationStates.MODERATED_TEXT_ON_DEMAND;
 CountablePublicationStates[PublicationStates.MODERATED_TEXT_NEVER_AVAILABLE] = PublicationStates.MODERATED_TEXT_NEVER_AVAILABLE;
+
+export type ColorDefinition = {
+  background: string,
+  text: string | null
+};
+
+export const harvestingColors: { [string]: ColorDefinition } = {
+  blue: {
+    background: '#00B6FF',
+    text: null
+  },
+  yellow: {
+    background: '#FFEC00',
+    text: null
+  },
+  orange: {
+    background: '#FF9F00',
+    text: null
+  },
+  red: {
+    background: '#FF001F',
+    text: null
+  },
+  green: {
+    background: '#35C646',
+    text: null
+  },
+  purple: {
+    background: '#BD10E0',
+    text: null
+  },
+  black: {
+    background: '#000000',
+    text: '#FFFFFF'
+  },
+  green2: {
+    background: '#7ed321', // default color
+    text: null
+  },
+  pink: {
+    background: '#FF9BB4',
+    text: null
+  },
+  paleGreen: {
+    background: '#B8E986',
+    text: null
+  }
+};
+
+export const legalContentSlugs = ['terms', 'privacy-policy', 'user-guidelines'];
+
+export const harvestingColorsMapping: { [string]: ColorDefinition } = {
+  concept: harvestingColors.blue,
+  argument: harvestingColors.yellow,
+  example: harvestingColors.orange,
+  issue: harvestingColors.red,
+  actionable_solution: harvestingColors.green,
+  knowledge: harvestingColors.purple,
+  cognitive_bias: harvestingColors.black
+};

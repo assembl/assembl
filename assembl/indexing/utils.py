@@ -100,7 +100,7 @@ def get_idea_id_for_post(post):
 def get_data(content):
     """Return uid, dict of fields we want to index,
     return None if we don't index."""
-    from assembl.models import Idea, Post, SynthesisPost, AgentProfile, LangString, Extract
+    from assembl.models import Idea, Post, SynthesisPost, AgentProfile, LangString, Extract, Question
     if type(content) == Idea:  # only index Idea, not Thematic or Question
         data = {}
         for attr in ('creation_date', 'id', 'discussion_id'):
@@ -192,6 +192,13 @@ def get_data(content):
                 return None, None
 
             data['idea_id'] = idea_id
+            related_idea = Idea.get(idea_id[0])
+            if isinstance(related_idea, Question):
+                related_idea = related_idea.parents[0]
+            # we take the title of the first idea in the list for now (in v2, posts are attached to only one idea)
+            populate_from_langstring_prop(
+                related_idea, data, 'title', 'idea_title')
+
             populate_from_langstring_prop(content, data, 'body')
             populate_from_langstring_prop(content, data, 'subject')
 
@@ -215,6 +222,12 @@ def get_data(content):
             return None, None
 
         data['idea_id'] = idea_id
+        # we take the title of the first idea in the list for now (in v2, posts are attached to only one idea)
+        related_idea = Idea.get(idea_id[0])
+        if isinstance(related_idea, Question):
+            related_idea = related_idea.parents[0]
+        populate_from_langstring_prop(
+            related_idea, data, 'title', 'idea_title')
         data['extract_state'] = 'taxonomy_state.' + content.extract_state
         if content.extract_nature:
             data['extract_nature'] = 'taxonomy_nature.' + content.extract_nature.name

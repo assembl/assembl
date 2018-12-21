@@ -64,7 +64,9 @@ export const displayModal = (title, body, footer, footerTxt, button = null, show
                     button.label:String => label of the button;
                     button.internalLink:Boolean => true if a Link from react-router is needed and false if a href is needed
   */
-  document.activeElement.blur();
+  if (document.activeElement) {
+    document.activeElement.blur();
+  }
   modalManager.component.setState({
     title: title,
     body: body,
@@ -79,7 +81,9 @@ export const displayModal = (title, body, footer, footerTxt, button = null, show
 
 export const displayCustomModal = (content, showModal = true, modalClass = null) => {
   /* display a modal with given content. You have to handle Modal.* components in your content */
-  document.activeElement.blur();
+  if (document.activeElement) {
+    document.activeElement.blur();
+  }
   modalManager.component.setState({
     content: content,
     showModal: showModal,
@@ -103,6 +107,8 @@ const getPathForModal = (type, params, elementId) => {
     return { url: getFullPath('resourcesCenter', params) };
   case 'synthesis':
     return { url: getFullPath('synthesis', params) };
+  case 'brightMirrorFiction':
+    return { url: getFullPath('brightMirrorFiction', { ...params }) };
   default:
     return { url: getFullPath('post', { ...params, element: elementId }) };
   }

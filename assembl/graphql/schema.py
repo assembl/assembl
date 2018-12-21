@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import logging
 import dateutil.parser
 from random import randint
 from operator import attrgetter
@@ -14,6 +13,7 @@ from sqlalchemy.orm import subqueryload
 
 import assembl.graphql.docstrings as docs
 from assembl import models
+from assembl.lib import logging
 
 from assembl.graphql.discussion import (Discussion, UpdateDiscussion, DiscussionPreferences,
                                         LegalContents,
@@ -23,7 +23,7 @@ from assembl.graphql.discussion import (Discussion, UpdateDiscussion, Discussion
                                         UpdateResourcesCenter, VisitsAnalytics)
 from assembl.graphql.document import UploadDocument
 from assembl.graphql.idea import (CreateThematic, DeleteThematic,
-                                  IdeaUnion, UpdateThematic)
+                                  IdeaUnion, UpdateThematic, UpdateIdeas)
 from assembl.graphql.landing_page import (LandingPageModuleType, LandingPageModule, CreateLandingPageModule,
                                           UpdateLandingPageModule)
 from assembl.graphql.langstring import resolve_langstring
@@ -32,7 +32,8 @@ from assembl.graphql.post import (AddPostAttachment, CreatePost, DeletePost,
                                   DeletePostAttachment, UndeletePost,
                                   UpdatePost, AddPostExtract, PostConnection,
                                   AddPostsExtract)
-from assembl.graphql.extract import (UpdateExtract, DeleteExtract, ConfirmExtract)
+from assembl.graphql.extract import (UpdateExtract, UpdateExtractTags, DeleteExtract, ConfirmExtract)
+from assembl.graphql.tag import UpdateTag
 from assembl.graphql.resource import (CreateResource, DeleteResource, Resource,
                                       UpdateResource)
 from assembl.graphql.section import (CreateSection, DeleteSection, Section,
@@ -40,6 +41,7 @@ from assembl.graphql.section import (CreateSection, DeleteSection, Section,
 from assembl.graphql.sentiment import AddSentiment, DeleteSentiment
 from assembl.graphql.synthesis import Synthesis
 from assembl.graphql.user import UpdateUser, DeleteUserInformation, UpdateAcceptedCookies
+from assembl.graphql.tag import Tag
 from .configurable_fields import (
     ConfigurableFieldUnion, CreateTextField, UpdateTextField,
     DeleteTextField, ProfileField, UpdateProfileFields)
@@ -64,12 +66,13 @@ from assembl.nlp.translation_service import DummyGoogleTranslationService
 from assembl.graphql.permissions_helpers import require_instance_permission
 from assembl.auth import CrudPermissions
 from assembl.utils import get_ideas, get_posts_for_phases
+from assembl.models.timeline import get_phase_by_identifier, Phases
 
 
 convert_sqlalchemy_type.register(EmailString)(convert_column_to_string)
 models.Base.query = models.Base.default_db.query_property()
 
-log = logging.getLogger('assembl')
+log = logging.getLogger()
 
 
 # For security, always use only_fields in the Meta class to be sure we don't
@@ -95,6 +98,7 @@ class Query(graphene.ObjectType):
         lang=graphene.String(required=True, description=docs.Default.required_language_input),
         description=docs.Schema.locales)
     total_sentiments = graphene.Int(description=docs.Schema.total_sentiments)
+    total_vote_session_participations = graphene.Int(required=True, description=docs.Schema.total_vote_session_participations)
     has_syntheses = graphene.Boolean(description=docs.Schema.has_syntheses)
     vote_session = graphene.Field(
         VoteSession,
@@ -133,6 +137,23 @@ class Query(graphene.ObjectType):
         end_date=graphene.String(description=docs.SchemaPosts.end_date),
         identifiers=graphene.List(graphene.String, description=docs.SchemaPosts.identifiers),
         description=docs.SchemaPosts.__doc__)
+    tags = graphene.List(
+        lambda: Tag,
+        filter=graphene.String(description=docs.SchemaTags.filter),
+        description=docs.SchemaTags.__doc__)
+
+    def resolve_tags(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        _filter = args.get('filter', '')
+        model = models.Keyword
+        query = get_query(model, context).filter(
+            model.discussion_id == discussion_id)
+
+        if not _filter:
+            return query.limit(30).all()
+
+        _filter = '%{}%'.format(_filter)
+        return query.filter(model.value.ilike(_filter)).all()
 
     def resolve_resources(self, args, context, info):
         model = models.Resource
@@ -159,6 +180,25 @@ class Query(graphene.ObjectType):
             *SentimentOfPost.get_discussion_conditions(discussion_id)
         )
         return query.count()
+
+    def resolve_total_vote_session_participations(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        vote_session = get_phase_by_identifier(discussion, Phases.voteSession.name)
+        root_thematic = get_root_thematic_for_phase(vote_session) if vote_session else None
+        if root_thematic is None:
+            return 0
+
+        proposals = root_thematic.get_children()
+        total = 0
+        for proposal in proposals:
+            for module in proposal.criterion_for:
+                num_votes = module.db.query(
+                    getattr(module.get_vote_class(), "voter_id")).filter_by(
+                    vote_spec_id=module.id,
+                    tombstone_date=None).count()
+                total += num_votes
+        return total
 
     def resolve_root_idea(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
@@ -432,6 +472,7 @@ class Mutations(graphene.ObjectType):
     create_thematic = CreateThematic.Field(description=docs.CreateThematic.__doc__)
     update_thematic = UpdateThematic.Field(description=docs.UpdateThematic.__doc__)
     delete_thematic = DeleteThematic.Field(description=docs.DeleteThematic.__doc__)
+    update_ideas = UpdateIdeas.Field(description=docs.UpdateIdeas.__doc__)
     create_post = CreatePost.Field(description=docs.CreatePost.__doc__)
     update_post = UpdatePost.Field(description=docs.UpdatePost.__doc__)
     delete_post = DeletePost.Field(description=docs.DeletePost.__doc__)
@@ -471,6 +512,8 @@ class Mutations(graphene.ObjectType):
     add_post_extract = AddPostExtract.Field(description=docs.AddPostExtract.__doc__)
     add_posts_extract = AddPostsExtract.Field(description=docs.AddPostsExtract.__doc__)
     update_extract = UpdateExtract.Field(description=docs.UpdateExtract.__doc__)
+    update_extract_tags = UpdateExtractTags.Field(description=docs.UpdateExtractTags.__doc__)
+    update_tag = UpdateTag.Field(description=docs.UpdateTag.__doc__)
     delete_extract = DeleteExtract.Field(description=docs.DeleteExtract.__doc__)
     create_text_field = CreateTextField.Field(description=docs.CreateTextField.__doc__)
     confirm_extract = ConfirmExtract.Field(description=docs.ConfirmExtract.__doc__)

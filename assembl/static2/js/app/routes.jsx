@@ -132,7 +132,7 @@ const AdminChild = (props) => {
   }
 };
 
-const BuildBrightMirrorFiction = props => <BrightMirrorFiction {...props.params} />;
+const BuildBrightMirrorFiction = props => <BrightMirrorFiction {...props.params} phaseId={props.phaseId} />;
 
 export default [
   <Route path="/" component={Root}>

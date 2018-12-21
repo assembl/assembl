@@ -1,5 +1,6 @@
 // @flow
 import React from 'react';
+import isEqualWith from 'lodash/isEqualWith';
 import { connect } from 'react-redux';
 import { I18n } from 'react-redux-i18n';
 import { Field } from 'react-final-form';
@@ -7,6 +8,7 @@ import arrayMutators from 'final-form-arrays';
 import { type ApolloClient, compose, withApollo } from 'react-apollo';
 import LoadSaveReinitializeForm from '../../form/LoadSaveReinitializeForm';
 import MultilingualRichTextFieldAdapter from '../../form/multilingualRichTextFieldAdapter';
+import { compareEditorState } from '../../form/utils';
 import { load, postLoadFormat } from './load';
 import Loader from '../../common/loader';
 import validate from './validate';
@@ -33,55 +35,64 @@ const DumbLegalContentsForm = ({ client, editLocale, locale }: LegalContentsForm
       load={(fetchPolicy: FetchPolicy) => load(client, fetchPolicy, locale)}
       loading={loading}
       postLoadFormat={postLoadFormat}
-      createMutationsPromises={createMutationsPromises(client, locale)}
+      createMutationsPromises={createMutationsPromises(client)}
       save={save}
       validate={validate}
       mutators={{
         ...arrayMutators
       }}
-      render={({ handleSubmit, pristine, submitting }) => (
-        <div className="admin-content">
-          <AdminForm handleSubmit={handleSubmit} pristine={pristine} submitting={submitting}>
-            <div className="form-container">
-              <Field
-                key={`tac-${editLocale}`}
-                editLocale={editLocale}
-                name="termsAndConditions"
-                component={MultilingualRichTextFieldAdapter}
-                label={tacLabel}
-              />
-              <Field
-                key={`legal-notice-${editLocale}`}
-                editLocale={editLocale}
-                name="legalNotice"
-                component={MultilingualRichTextFieldAdapter}
-                label={legalNoticeLabel}
-              />
-              <Field
-                key={`cookie-policy-${editLocale}`}
-                editLocale={editLocale}
-                name="cookiesPolicy"
-                component={MultilingualRichTextFieldAdapter}
-                label={cookiesPolicyLabel}
-              />
-              <Field
-                key={`privacy-policy-${editLocale}`}
-                editLocale={editLocale}
-                name="privacyPolicy"
-                component={MultilingualRichTextFieldAdapter}
-                label={privacyPolicyLabel}
-              />
-              <Field
-                key={`user-guidelines-${editLocale}`}
-                editLocale={editLocale}
-                name="userGuidelines"
-                component={MultilingualRichTextFieldAdapter}
-                label={userGuidelinesLabel}
-              />
-            </div>
-          </AdminForm>
-        </div>
-      )}
+      render={({ handleSubmit, submitting, initialValues, values }) => {
+        // Don't use final form pristine here, we need special comparison for richtext fields
+        const pristine = isEqualWith(initialValues, values, compareEditorState);
+        return (
+          <div className="admin-content">
+            <AdminForm handleSubmit={handleSubmit} pristine={pristine} submitting={submitting}>
+              <div className="form-container">
+                <Field
+                  key={`tac-${editLocale}`}
+                  editLocale={editLocale}
+                  name="termsAndConditions"
+                  component={MultilingualRichTextFieldAdapter}
+                  label={tacLabel}
+                  withAttachmentButton
+                />
+                <Field
+                  key={`legal-notice-${editLocale}`}
+                  editLocale={editLocale}
+                  name="legalNotice"
+                  component={MultilingualRichTextFieldAdapter}
+                  label={legalNoticeLabel}
+                  withAttachmentButton
+                />
+                <Field
+                  key={`cookie-policy-${editLocale}`}
+                  editLocale={editLocale}
+                  name="cookiesPolicy"
+                  component={MultilingualRichTextFieldAdapter}
+                  label={cookiesPolicyLabel}
+                  withAttachmentButton
+                />
+                <Field
+                  key={`privacy-policy-${editLocale}`}
+                  editLocale={editLocale}
+                  name="privacyPolicy"
+                  component={MultilingualRichTextFieldAdapter}
+                  label={privacyPolicyLabel}
+                  withAttachmentButton
+                />
+                <Field
+                  key={`user-guidelines-${editLocale}`}
+                  editLocale={editLocale}
+                  name="userGuidelines"
+                  component={MultilingualRichTextFieldAdapter}
+                  label={userGuidelinesLabel}
+                  withAttachmentButton
+                />
+              </div>
+            </AdminForm>
+          </div>
+        );
+      }}
     />
   );
 };

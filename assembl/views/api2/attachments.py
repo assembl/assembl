@@ -13,7 +13,7 @@ from assembl.auth import P_READ, P_ADD_POST
 from assembl.models import File, Document, Discussion
 from assembl.auth.util import get_permissions
 from assembl.views.traversal import InstanceContext, CollectionContext
-from assembl.lib.raven_client import capture_message
+from assembl.lib.sentry import capture_message
 from . import MULTIPART_HEADER, update_from_form
 
 

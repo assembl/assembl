@@ -1,8 +1,10 @@
 // @flow
+import moment from 'moment';
+import type Moment from 'moment';
 import { type Map } from 'immutable';
 
 import { getDisplayedPhaseIdentifier } from './timeline';
-import { HARVESTABLE_PHASES, ICONS_PATH } from '../constants';
+import { HARVESTABLE_PHASES, ICONS_PATH, PICTURE_BASE_URL, PICTURE_EXTENSION } from '../constants';
 
 const getInputValue = (id: string) => {
   const elem = document.getElementById(id);
@@ -32,6 +34,8 @@ export const getConnectedUserId = (base64: boolean = false) => {
 };
 
 export const getConnectedUserName = () => getInputValue('user-displayname');
+
+export const isConnectedUser = (currentUserId: ?number) => String(currentUserId) === getConnectedUserId();
 
 export const moveElementToFirstPosition = (array: Array<any>, targetElement: any) => {
   const others = array.filter(elelement => elelement !== targetElement);
@@ -290,6 +294,45 @@ export function fromGlobalId(id: string): string | null {
   return id ? atob(id).split(':')[1] : null;
 }
 
-export function getIconPath(icon, color = '') {
+export function getIconPath(icon: string, color: string = '') {
   return color ? `${ICONS_PATH}/${color}/${icon}` : `${ICONS_PATH}/${icon}`;
 }
+
+// We `pictureId + 1` because there is no image in the S3 bucket with 0 as an id
+export const getPictureUrl = (pictureId: number) => `${PICTURE_BASE_URL}${pictureId + 1}${PICTURE_EXTENSION}`;
+
+export const getRouteLastString = (location: string) => {
+  const lastLocationString = /[^/]*$/.exec(location)[0];
+  return lastLocationString;
+};
+
+export function compareByTextPosition(extractA: ?FictionExtractFragment, extractB: ?FictionExtractFragment) {
+  // Sort extracts by position in body's paragraphs
+  if (!!extractA && !!extractB) {
+    const ATfi = extractA.textFragmentIdentifiers && extractA.textFragmentIdentifiers[0];
+    const BTfi = extractB.textFragmentIdentifiers && extractB.textFragmentIdentifiers[0];
+    const ATfiXPath = ATfi && ATfi.xpathStart;
+    const BTfiXPath = BTfi && BTfi.xpathStart;
+
+    const regex = /p\[([^)]+)\]/;
+    const AMatchParagraph = ATfiXPath && ATfiXPath.match(regex);
+    const BMatchParagraph = BTfiXPath && BTfiXPath.match(regex);
+
+    if (!!AMatchParagraph && !!BMatchParagraph) {
+      const AParagraph = parseInt(AMatchParagraph[1], 10);
+      const BParagraph = parseInt(BMatchParagraph[1], 10);
+
+      if (AParagraph > BParagraph) return 1;
+      if (AParagraph === BParagraph) {
+        // If extracts are in same paragraph, compare by offset
+        const AOffsetStart = ATfi && ATfi.offsetStart;
+        const BOffsetStart = BTfi && BTfi.offsetStart;
+        if (!!AOffsetStart && !!BOffsetStart && AOffsetStart > BOffsetStart) return 1;
+      }
+    }
+  }
+  // For all other cases: (<), if extract null, not found in text => set first
+  return -1;
+}
+
+export const convertISO8601StringToDate = (s: string): Moment => moment(s).utc();

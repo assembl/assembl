@@ -10,7 +10,6 @@ import IdeaWithCommentsQuery from '../../../js/app/graphql/IdeaWithPostsQuery.gr
 // Containers import
 import { BrightMirrorFiction } from '../../../js/app/pages/brightMirrorFiction';
 // Components imports
-import FictionHeader from '../../../js/app/components/debate/brightMirror/fictionHeader';
 import FictionToolbar from '../../../js/app/components/debate/brightMirror/fictionToolbar';
 import FictionBody from '../../../js/app/components/debate/brightMirror/fictionBody';
 import FictionCommentHeader from '../../../js/app/components/debate/brightMirror/fictionCommentHeader';
@@ -36,24 +35,46 @@ configure({ adapter: new Adapter() });
 // Mock utils functions
 jest.mock('../../../js/app/utils/utilityManager', () => ({ displayAlert: jest.fn() }));
 jest.mock('../../../js/app/pages/idea', () => ({
+  getDebateTotalMessages: jest.fn(() => 9876),
   transformPosts: jest.fn(() => [{ id: 'fictionId', children: ['yyy', 'zzz'] }])
+}));
+jest.mock('../../../js/app/utils/timeline', () => ({
+  getIsPhaseCompletedById: jest.fn(() => false)
 }));
 
 const brightMirrorFictionDataTemplate = {
   fiction: {
+    id: '1',
+    dbId: 1,
     subject: 'Hic quia eveniet cupiditate placeat laboriosam.',
     body: 'Odit mollitia natus ea iusto voluptatibus omnis pariatur tempore ipsum.',
     creationDate: new Date(),
     publicationState: PublicationStates.PUBLISHED,
+    modified: false,
     creator: {
+      id: '99999999',
       userId: 99999999,
       displayName: 'Wendy Quigley',
       isDeleted: false,
       image: {
         externalUrl: 'http://tyrese.info'
       }
+    },
+    parentPostCreator: {
+      displayName: 'Wendy Quigley'
+    },
+    bodyMimeType: 'text/html',
+    extracts: [],
+    mySentiment: 'LIKE',
+    sentimentCounts: {
+      disagree: 0,
+      dontUnderstand: 0,
+      like: 0,
+      moreInfo: 0
     }
-  }
+  },
+  error: null,
+  refetch: () => {}
 };
 
 const ideaWithCommentsDataTemplate = {
@@ -81,6 +102,16 @@ const brightMirrorFictionPropsTemplate = {
   createComment: undefined
 };
 
+const timeline = [
+  {
+    identifier: 'foo',
+    id: 'FooID',
+    start: 'date1',
+    end: 'date2',
+    title: { entries: [{ en: 'Foo' }] }
+  }
+];
+
 describe('<BrightMirrorFiction /> - with mount', () => {
   let wrapper;
   let mocks;
@@ -99,6 +130,9 @@ describe('<BrightMirrorFiction /> - with mount', () => {
 
   describe('when loading is done without error', () => {
     beforeEach(() => {
+      window.getSelection = () => ({
+        removeAllRanges: () => {}
+      });
       // Define props
       brightMirrorFictionData = {
         ...brightMirrorFictionDataTemplate,
@@ -116,6 +150,9 @@ describe('<BrightMirrorFiction /> - with mount', () => {
       brightMirrorFictionProps = {
         brightMirrorFictionData: brightMirrorFictionData,
         ideaWithCommentsData: ideaWithCommentsData,
+        phaseId: '2',
+        timeline: timeline,
+        screenWidth: 100,
         ...brightMirrorFictionPropsTemplate
       };
 
@@ -135,15 +172,18 @@ describe('<BrightMirrorFiction /> - with mount', () => {
         }
       ];
 
+      // Create DOM to allow document.getElementById function
+      const div = document.createElement('div');
+      window.domNode = div;
+      // $FlowFixMe because document.body may be null
+      document.body.appendChild(div);
+
       wrapper = mount(
         <MockedProvider mocks={mocks}>
           <BrightMirrorFiction {...brightMirrorFictionProps} />
-        </MockedProvider>
+        </MockedProvider>,
+        { attachTo: window.domNode }
       );
-    });
-
-    it('should render a FictionHeader', () => {
-      expect(wrapper.find(FictionHeader)).toHaveLength(1);
     });
 
     it('should render a FictionToolbar', () => {
@@ -169,6 +209,9 @@ describe('<BrightMirrorFiction /> - with mount', () => {
 
   describe('when loading is not done', () => {
     beforeEach(() => {
+      window.getSelection = () => ({
+        removeAllRanges: () => {}
+      });
       // Define props
       brightMirrorFictionData = {
         ...brightMirrorFictionDataTemplate,
@@ -186,9 +229,11 @@ describe('<BrightMirrorFiction /> - with mount', () => {
       brightMirrorFictionProps = {
         brightMirrorFictionData: brightMirrorFictionData,
         ideaWithCommentsData: ideaWithCommentsData,
+        phaseId: '2',
+        timeline: timeline,
+        screenWidth: 100,
         ...brightMirrorFictionPropsTemplate
       };
-
       // Mock Apollo
       mocks = [
         {
@@ -199,10 +244,17 @@ describe('<BrightMirrorFiction /> - with mount', () => {
         }
       ];
 
+      // Create DOM to allow document.getElementById function
+      const div = document.createElement('div');
+      window.domNode = div;
+      // $FlowFixMe because document.body may be null
+      document.body.appendChild(div);
+
       wrapper = mount(
         <MockedProvider mocks={mocks}>
           <BrightMirrorFiction {...brightMirrorFictionProps} />
-        </MockedProvider>
+        </MockedProvider>,
+        { attachTo: window.domNode }
       );
     });
 
@@ -213,6 +265,9 @@ describe('<BrightMirrorFiction /> - with mount', () => {
 
   describe('when there is a loading error', () => {
     beforeEach(() => {
+      window.getSelection = () => ({
+        removeAllRanges: () => {}
+      });
       // Define props
       brightMirrorFictionData = {
         ...brightMirrorFictionDataTemplate,
@@ -230,6 +285,9 @@ describe('<BrightMirrorFiction /> - with mount', () => {
       brightMirrorFictionProps = {
         brightMirrorFictionData: brightMirrorFictionData,
         ideaWithCommentsData: ideaWithCommentsData,
+        phaseId: '2',
+        timeline: timeline,
+        screenWidth: 100,
         ...brightMirrorFictionPropsTemplate
       };
 
@@ -243,10 +301,17 @@ describe('<BrightMirrorFiction /> - with mount', () => {
         }
       ];
 
+      // Create DOM to allow document.getElementById function
+      const div = document.createElement('div');
+      window.domNode = div;
+      // $FlowFixMe because document.body may be null
+      document.body.appendChild(div);
+
       wrapper = mount(
         <MockedProvider mocks={mocks}>
           <BrightMirrorFiction {...brightMirrorFictionProps} />
-        </MockedProvider>
+        </MockedProvider>,
+        { attachTo: window.domNode }
       );
     });
 

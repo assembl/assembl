@@ -7,14 +7,15 @@ import jQuery from 'jquery';
 import ARange from 'annotator_range'; // eslint-disable-line
 import { withRouter } from 'react-router';
 
+import { EMPTY_STRING } from '../../../../constants';
 import { getConnectedUserId, isHarvestable } from '../../../../utils/globalFunctions';
 import { isSpecialURL } from '../../../../utils/urlPreview';
-import { ExtractStates } from '../../../../constants';
 import { transformLinksInHtml /* getUrls */ } from '../../../../utils/linkify';
 import UpdateHarvestingTranslationPreference from '../../../../graphql/mutations/updateHarvestingTranslationPreference.graphql';
 import PostTranslate from '../../common/translations/postTranslate';
 import Embed from '../../../common/urlPreview/embed';
 import URLMetadataLoader from '../../../common/urlPreview/urlMetadataLoader';
+import { getExtractTagId, getExtractColor } from '../../../../utils/extract';
 
 type Props = {
   body: ?string,
@@ -37,7 +38,9 @@ type Props = {
 };
 
 type ExtractInPostProps = {
+  extractedByMachine: boolean,
   id: string,
+  nature: string,
   state: string,
   children: React.Node
 };
@@ -55,13 +58,15 @@ type HtmlProps = {
   contentLocale?: ?string
 };
 
-const ExtractInPost = ({ id, state, children }: ExtractInPostProps) => {
-  const isSubmitted = state === ExtractStates.SUBMITTED;
+export const ExtractInPost = ({ extractedByMachine, id, nature, state, children }: ExtractInPostProps) => {
+  const colorDefinition = getExtractColor(nature, state, extractedByMachine);
   return (
     <span
-      className={classNames('extract-in-message', {
-        submitted: isSubmitted
-      })}
+      className="extract-in-message"
+      style={{
+        backgroundColor: colorDefinition.background,
+        color: colorDefinition.text
+      }}
       id={id}
     >
       {children}
@@ -69,7 +74,7 @@ const ExtractInPost = ({ id, state, children }: ExtractInPostProps) => {
   );
 };
 
-export const postBodyReplacementComponents = (afterLoad?: Function) => ({
+export const postBodyReplacementComponents = (afterLoad?: Function, isHarvesting?: boolean = false) => ({
   iframe: (attributes: Object) => (
     // the src iframe url is different from the resource url
     <Embed
@@ -79,26 +84,36 @@ export const postBodyReplacementComponents = (afterLoad?: Function) => ({
     />
   ),
   a: (attributes: Object) => {
-    const embeddedUrl = isSpecialURL(attributes.href);
+    const { href, key, target, title, children } = attributes;
+    const embeddedUrl = isSpecialURL(href);
     const origin = (
-      <a
-        key={`url-link-${attributes.key}`}
-        href={attributes.href}
-        className="linkified"
-        target={attributes.target}
-        title={attributes.title}
-      >
-        {attributes.children}
+      <a key={`url-link-${key}`} href={href} className="linkified" target={target} title={title}>
+        {children}
       </a>
     );
-    if (embeddedUrl) return origin;
-    return [origin, <URLMetadataLoader key={`url-preview-${attributes.href}`} url={attributes.href} afterLoad={afterLoad} />];
+    return (
+      <React.Fragment>
+        {origin}
+        {embeddedUrl ? (
+          <Embed key={`url-embed-${href}`} url={href} />
+        ) : (
+          <URLMetadataLoader key={`url-preview-${href}`} url={href} afterLoad={afterLoad} />
+        )}
+      </React.Fragment>
+    );
   },
-  annotation: (attributes: Object) => (
-    <ExtractInPost key={attributes.key} id={attributes.id} state={attributes['data-state']}>
-      {attributes.children}
-    </ExtractInPost>
-  )
+  annotation: (attributes: Object) => {
+    if (isHarvesting) {
+      const { id, extractedByMachine, extractState, nature } = JSON.parse(attributes['data-extractinfo']);
+      return (
+        <ExtractInPost key={attributes.key} id={id} extractedByMachine={extractedByMachine} nature={nature} state={extractState}>
+          {attributes.children}
+        </ExtractInPost>
+      );
+    }
+
+    return attributes.children;
+  }
 });
 
 export const Html = (props: HtmlProps) => {
@@ -109,7 +124,7 @@ export const Html = (props: HtmlProps) => {
    * and return a list of react elements
   */
   // this anchor is shared with marionette code
-  const anchor = dbId ? `message-body-local:Content/${dbId}` : '';
+  const anchor = dbId ? getExtractTagId(dbId) : EMPTY_STRING;
   let html = `<div id="${anchor}">${rawHtml}</div>`;
 
   if (extracts) {
@@ -122,7 +137,13 @@ export const Html = (props: HtmlProps) => {
     extracts.forEach((extract) => {
       if (extract && extract.lang === contentLocale) {
         const tfis = extract.textFragmentIdentifiers;
-        const wrapper = jQuery(`<annotation id="${extract.id}" data-state="${extract.extractState || ''}"></annotation>`);
+        const extractInfo = JSON.stringify({
+          id: extract.id,
+          extractedByMachine: !!(extract.creator && extract.creator.isMachine),
+          extractState: extract.extractState || EMPTY_STRING,
+          nature: extract.extractNature || EMPTY_STRING
+        });
+        const wrapper = jQuery(`<annotation data-extractInfo='${extractInfo}'></annotation>`);
         if (tfis) {
           tfis.forEach((tfi) => {
             if (tfi && tfi.xpathStart && tfi.offsetStart !== null && tfi.xpathEnd && tfi.offsetEnd !== null) {
@@ -228,7 +249,7 @@ export const DumbPostBody = ({
             divRef={bodyDivRef}
             extracts={extracts}
             dbId={dbId}
-            replacementComponents={postBodyReplacementComponents(afterLoad)}
+            replacementComponents={postBodyReplacementComponents(afterLoad, isHarvesting)}
             contentLocale={contentLocale}
           />
           {/* {urls && (

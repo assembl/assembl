@@ -6,7 +6,6 @@ exports[`DumbTimelineSegmentMenu component should match the DumbTimelineSegmentM
 >
   <MenuTable
     identifier="foo"
-    onMenuItemClick={undefined}
     phaseId="phaseFoo"
   />
 </div>

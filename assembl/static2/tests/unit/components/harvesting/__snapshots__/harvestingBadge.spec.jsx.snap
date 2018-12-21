@@ -6,7 +6,6 @@ exports[`harvestingBadge component should match harvestingBadge snapshot when ex
 >
   <div
     className="harvesting-badge"
-    onClick={undefined}
   >
     <div
       className="badge-total"
@@ -36,7 +35,6 @@ exports[`harvestingBadge component should match harvestingBadge snapshot with ex
 >
   <div
     className="harvesting-badge"
-    onClick={undefined}
   >
     <div
       className="badge-total"

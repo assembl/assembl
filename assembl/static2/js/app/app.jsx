@@ -127,10 +127,21 @@ export default compose(
       variables: { lang: locale }
     }),
     props: ({ data }) => {
-      if (data.error || data.loading) {
+      if (data.error) {
         return {
           error: data.error,
-          timeline: [], // empty timeline to avoid to block the whole app until timeline data is loaded
+          timeline: [],
+          timelineLoading: data.loading
+        };
+      }
+
+      if (data.loading) {
+        return {
+          error: data.error,
+          // Return timeline: null in case of loading, when timeline query is done with no phases,
+          // !isEqual(null, []) is true, putTimelineInStore([]) is done and
+          // the message "No timeline has been configured yet" appears.
+          timeline: null,
           timelineLoading: data.loading
         };
       }

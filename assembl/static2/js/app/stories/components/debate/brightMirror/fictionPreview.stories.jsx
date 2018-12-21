@@ -10,6 +10,14 @@ import { withKnobs, text, boolean, select } from '@storybook/addon-knobs';
 import { PublicationStates } from '../../../../constants';
 import FictionPreview from '../../../../components/debate/brightMirror/fictionPreview';
 import type { FictionPreviewProps } from '../../../../components/debate/brightMirror/fictionPreview';
+import type { BrightMirrorFictionProps } from '../../../../pages/brightMirrorFiction';
+
+const fictionMetaInfo: BrightMirrorFictionProps = {
+  fictionId: 'his-name-s-forrest',
+  phase: 'like-me',
+  slug: 'i-named-him-after-his-daddy',
+  themeId: 'he-got-a-daddy-named-forrest-too'
+};
 
 export const customFictionPreview: FictionPreviewProps = {
   id: '0',
@@ -17,14 +25,15 @@ export const customFictionPreview: FictionPreviewProps = {
   authorName: 'John Doe',
   creationDate: '01/01/2018',
   link: '/url/preview',
-  color: '#b3e5fc',
   originalBody: 'Origin body',
   refetchIdea: action('refetchIdea'),
   lang: 'fr',
   userCanEdit: true,
   userCanDelete: true,
   deleteFictionHandler: action('deleteFictionHandler'),
-  publicationState: PublicationStates.PUBLISHED
+  publicationState: PublicationStates.PUBLISHED,
+  fictionMetaInfo: fictionMetaInfo,
+  pictureId: 0
 };
 
 storiesOf('FictionPreview', module)
@@ -39,7 +48,6 @@ storiesOf('FictionPreview', module)
         authorName={text('author name', customFictionPreview.authorName)}
         creationDate={text('creation date', customFictionPreview.creationDate)}
         link={text('url', customFictionPreview.link)}
-        color={text('color', customFictionPreview.color)}
         originalBody={text('original body', customFictionPreview.originalBody)}
         refetchIdea={customFictionPreview.refetchIdea}
         lang={text('original locale', customFictionPreview.lang)}
@@ -47,6 +55,8 @@ storiesOf('FictionPreview', module)
         userCanDelete={boolean('User can delete', customFictionPreview.userCanDelete)}
         deleteFictionHandler={customFictionPreview.deleteFictionHandler}
         publicationState={select('publicationState', PublicationStates, PublicationStates.PUBLISHED)}
+        fictionMetaInfo={customFictionPreview.fictionMetaInfo}
+        pictureId={customFictionPreview.pictureId}
       />
     ))
   );

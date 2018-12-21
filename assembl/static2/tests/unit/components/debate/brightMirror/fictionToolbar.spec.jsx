@@ -7,6 +7,8 @@ import Adapter from 'enzyme-adapter-react-16';
 import FictionToolbar from '../../../../../js/app/components/debate/brightMirror/fictionToolbar';
 import DeletePostButton from '../../../../../js/app/components/debate/common/deletePostButton';
 import EditPostButton from '../../../../../js/app/components/debate/common/editPostButton';
+import SharePostButton from '../../../../../js/app/components/debate/common/sharePostButton';
+import ResponsiveOverlayTrigger from '../../../../../js/app/components/common/responsiveOverlayTrigger';
 import type { FictionToolbarProps } from '../../../../../js/app/components/debate/brightMirror/fictionToolbar';
 
 // Import existing storybook data
@@ -47,5 +49,13 @@ describe('<FictionToolbar /> - with shallow', () => {
   it('should not render DeletePostButton when userCanDelete is false', () => {
     wrapper.setProps({ userCanDelete: false });
     expect(wrapper.find(DeletePostButton)).toHaveLength(0);
+  });
+
+  it('should render one SharePostButton', () => {
+    expect(wrapper.find(SharePostButton)).toHaveLength(1);
+  });
+
+  it('should render 3 ResponsiveOverlayTrigger for tooltip', () => {
+    expect(wrapper.find(ResponsiveOverlayTrigger)).toHaveLength(3);
   });
 });

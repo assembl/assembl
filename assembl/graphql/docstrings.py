@@ -3,6 +3,7 @@
 
 class Default:
     required_language_input = """A locale input is required to specify in which language the content should be returned."""
+    image = """The identifier of the part containing the image in a multipart POST body."""
     langstring_entries = """A list of possible languages of the entity as LangStringEntry objects. %s"""
     document = """%sA file metadata object, described by the Document object."""
     string_entry = """A %s in a given language."""
@@ -33,6 +34,7 @@ class Schema:
     default_preferences = """The default discussion preferences. These are server wide settings, independent of the debate."""
     locales = """The list of locales supported on the debate. These are the languages of the debate."""
     total_sentiments = """The total count of sentiments on the debate, regardless of chosen type. Deleted users' sentiments are not counted."""
+    total_vote_session_participations = """The total of all participations on all the vote sessions"""
     has_syntheses = """A boolean flag indicating if the debate has yet released a synthesis or not."""
     vote_session = """A vote session's meta data, if a vote session exists."""
     resources = """A list of Resource meta data on the debate."""
@@ -61,6 +63,11 @@ class SchemaPosts:
     identifiers = "A list of phase identifiers. " + Default.phase_identifier
 
 
+class SchemaTags:
+    __doc__ = """The list of filtered tags available on the discussion."""
+    filter = "A string used to filter the list of tags."
+
+
 class Discussion:
     __doc__ = """The Discussion object. This object describes certain parts of the core state of the debate."""
     id = Default.object_id % ("Discussion",)
@@ -71,6 +78,10 @@ class Discussion:
     header_image = Default.document % ("The file representing the header of the landing page. ", )
     logo_image = Default.document % ("The file representing the logo of the debate. ", )
     slug = """A string used to form the URL of the discussion."""
+    top_keywords = "Keywords most often found in the discussion, according to NLP engine"
+    nlp_sentiment = "The aggregated sentiment analysis on the posts"
+    start_date = "The start date of a discussion. A datetime that is either set in mutation, or calculated from the start of the first phase."
+    end_date = "The end date of a discussion. A datetime that is either set in a mutation, or calculated from the end of last phase."
 
 
 class UpdateDiscussion:
@@ -80,6 +91,8 @@ class UpdateDiscussion:
     button_label_entries = """The contents inside of the \"follow\" button in the landing page."""
     title_entries = """The title contents shown on the landing page of a discussion, just above the \"follow\" button. """
     subtitle_entries = """The subtitle contents shown on the landing page of a discussion, just above the \"follow\" button, under the title content. """
+    start_date = "The start date of a discussion, optionally set. If not set, will be calculated from the first phase"
+    end_date = "The end date of a discussion, optionally set. If not set, will be calculated from the end of last phase"
 
 
 class LangString:
@@ -102,6 +115,7 @@ class DiscussionPreferences:
     languages = """A list of LocalePreference metadata objects on the discussion which describe the languages supported by the debate."""
     tab_title = """The title in the tab."""
     favicon = Default.document % ("""The site favicon.""",)
+    mandatory_legal_contents_validation = """Activate or not mandatory validation of legal contents after SSO login."""
 
 
 class ResourcesCenter:
@@ -124,6 +138,11 @@ class LegalContents:
     privacy_policy_entries = Default.langstring_entries % ("",)
     user_guidelines = Default.string_entry % ("User Guidelines",)
     user_guidelines_entries = Default.langstring_entries % ("",)
+    legal_notice_attachments = Default.string_entry % ("Attachments for legal notice")
+    terms_and_conditions_attachments = Default.string_entry % ("Attachments for terms and conditions.")
+    cookies_policy_attachments = Default.string_entry % ("Attachments for cookies policy.")
+    privacy_policy_attachments = Default.string_entry % ("Attachments for privacy policy.")
+    user_guidelines_attachments = Default.string_entry % ("Attachments for user guidelines.")
 
 
 class UpdateResourcesCenter:
@@ -137,6 +156,7 @@ class UpdateDiscussionPreferences:
     languages = """The list of languages in ISO 639-1 locale code that the debate should support."""
     tab_title = DiscussionPreferences.tab_title
     favicon = DiscussionPreferences.favicon
+    mandatory_legal_contents_validation = DiscussionPreferences.mandatory_legal_contents_validation
 
 
 class UpdateLegalContents:
@@ -146,6 +166,11 @@ class UpdateLegalContents:
     cookies_policy_entries = Default.langstring_entries % ("This is the list of all Cookie Policies in various languages.",)
     privacy_policy_entries = Default.langstring_entries % ("This is the list of all Privay Policies in various languages.",)
     user_guidelines_entries = Default.langstring_entries % ("This is the list of all User Guidelines in various languages.",)
+    legal_notice_attachments = "The list of the Attachments used in legal notice entries."
+    terms_and_conditions_attachments = "The list of the Attachments used in terms and conditions entries."
+    cookies_policy_attachments = "The list of the Attachments used in cookies policy entries."
+    privacy_policy_attachments = "The list of the Attachments used in privacy policy entries."
+    user_guidelines_attachments = "The list of the Attachments used in user guidelines entries."
 
 
 class VisitsAnalytics:
@@ -215,6 +240,13 @@ class ExtractInterface:
     creator_id = """The id of the User who created the extract."""
     creator = """The AgentProfile object description of the creator."""
     lang = """The lang of the extract."""
+    comments = """A list of comment post related to an extract."""
+    tags = "The list of tags of the extract."
+
+
+class TagInterface:
+    __doc__ = """A tag is a string. It allows to classify objects such as extracts."""
+    value = """The value of the tag. This is not language dependent, but rather just unicode text."""
 
 
 class PostExtract:
@@ -224,7 +256,8 @@ class PostExtract:
     xpath_end = TextFragmentIdentifier.xpath_end
     offset_start = TextFragmentIdentifier.offset_start
     offset_end = TextFragmentIdentifier.offset_end
-    lang = """The lang of the extract."""
+    lang = ExtractInterface.lang
+    tags = ExtractInterface.tags
 
 
 class AddPostsExtract:
@@ -243,6 +276,19 @@ class UpdateExtract:
     extract_nature = ExtractInterface.extract_nature
     extract_action = ExtractInterface.extract_action
     body = ExtractInterface.body
+
+
+class UpdateExtractTags:
+    doc__ = """A mutation to update the tags of an existing extract."""
+    extract_id = """The Relay.Node ID type of the Extract object to the updated."""
+    tags = """A list of strings."""
+
+
+class UpdateTag:
+    __doc__ = """A mutation to update or replace the value of an existing tag."""
+    id = """The Relay.Node ID type of the Tag object to the updated."""
+    taggable_id = """The Relay.Node ID type of the TaggableEntity object representing the context of the mutation."""
+    value = """A string representing the new value of the tag."""
 
 
 class DeleteExtract:
@@ -281,6 +327,19 @@ class VoteResults:
     participants = """The list of users who participated on the vote session. The length of the list matches the number of participants."""
 
 
+class TagResult:
+    __doc__ = "A tag assigned to a post, with its scoring value"
+    score = "The score associated with the tag (0-1, increasing relevance)"
+    value = "The tag keyword"
+
+
+class SentimentAnalysisResult:
+    __doc__ = "Sentiment analysis total"
+    positive = "The sum of positive scores"
+    negative = "The sum of negative scores"
+    count = "The number of posts analyzed"
+
+
 class IdeaInterface:
     __doc__ = """An Idea or Thematic is an object describing a classification or cluster of discussions on a debate.
     Ideas, like Posts, can be based on each other."""
@@ -288,6 +347,8 @@ class IdeaInterface:
     title_entries = Default.langstring_entries % ("This is the Idea title in multiple languages.",)
     description = "The description of the Idea, often shown in the header of the Idea."
     description_entries = Default.langstring_entries % ("This is the description of the Idea in multiple languages.",)
+    top_keywords = "The list of top keywords found in messages associated to this idea, according to NLP engine"
+    nlp_sentiment = "The aggregated sentiment analysis on the posts"
     num_posts = "The total number of active posts on that idea (excludes deleted posts)."
     num_total_posts = "The total number of posts on that idea and on all its children ideas."
     num_contributors = """The total number of users who contributed to the Idea/Thematic/Question.\n
@@ -308,6 +369,7 @@ class IdeaAnnouncement:
     title = Default.string_entry % ("title of announcement")
     body = Default.string_entry % ("body of announcement")
     title_entries = Default.langstring_entries % ("This is the title of announcement in multiple languages.",)
+    body_attachments = Default.string_entry % ("Attachments for the body of announcement in multiple languages.")
     body_entries = Default.langstring_entries % ("This is the body of announcement in multiple languages.")
 
 
@@ -361,6 +423,9 @@ class QuestionInput:
 
 class VideoInput:
     title_entries = Default.langstring_entries % ("Title of the video in various languages.")
+    description_top_attachments = Default.string_entry % ("Attachments for description on the top of the video.")
+    description_bottom_attachments = Default.string_entry % ("Attachments for description on the bottom of the video.")
+    description_side_attachments = Default.string_entry % ("Attachments for description on the side of the video.")
     description_entries_top = Default.langstring_entries % ("Description on the top of the video in various languages.")
     description_entries_bottom = Default.langstring_entries % ("Description on the bottom of the video in various languages.")
     description_entries_side = Default.langstring_entries % ("Description on the side of the video in various languages.")
@@ -400,6 +465,21 @@ class UpdateThematic:
 class DeleteThematic:
     __doc__ = """A mutation to delete a thematic."""
     thematic_id = Default.node_id % ("Thematic") + " An identifier of the Thematic to be deleted."
+
+
+class IdeaInput:
+    title_entries = IdeaInterface.title_entries
+    description_entries = IdeaInterface.description_entries
+    video = Thematic.video
+    questions = Thematic.questions
+    image = Default.document % ("An Image to be shown in the Thematic. ")
+    order = Default.float_entry % (" Order of the thematic.")
+
+
+class UpdateIdeas:
+    __doc__ = """A mutation to create/update/delete ideas for a phase."""
+    discussion_phase_id = Default.discussion_phase_id
+    ideas = "List of IdeaInput"
 
 
 class LandingPageModuleType:
@@ -452,9 +532,9 @@ class UpdateLandingPageModule:
     landing_page_module = CreateLandingPageModule.landing_page_module
 
 
-class PostAttachment:
-    __doc__ = "The Attachment object associated with a Post."
-    document = Default.document % ("Any file that can be attached to a Post. ")
+class Attachment:
+    __doc__ = "Any Attachment object."
+    document = Default.document % ("Any file that can be attached. ")
 
 
 class IdeaContentLink:
@@ -513,12 +593,15 @@ class PostInterface:
     DELETED_BY_ADMIN,\n
     WIDGET_SCOPED\n"""
     attachments = "List of attachements to the post."
+    keywords = "Keywords associated with the post, according to NLP engine."
+    nlp_sentiment = "Sentiment analysis results"
     original_locale = Default.string_entry % ("Locale in which the original message was written.")
     publishes_synthesis = "Graphene Field modeling a relationship to a published synthesis."
     type = """The type of the post. The class name of the post."""
     discussion_id = """The database identifier of the Discussion."""
     modified = """A boolean flag to say whether the post is modified or not."""
     parent_post_creator = "The User or AgentProfile who created the parent post."
+    parent_extract_id = "The Extract id to which the post is associated with"
 
 
 class Post:
@@ -537,6 +620,7 @@ class CreatePost:
     attachments = PostInterface.attachments
     message_classifier = PostInterface.message_classifier
     publication_state = PostInterface.publication_state
+    extract_id = """The extract if the post is a comment of a fiction"""
 
 
 class UpdatePost:
@@ -579,6 +663,7 @@ class AddPostExtract:
     xpath_end = TextFragmentIdentifier.xpath_end
     offset_start = TextFragmentIdentifier.offset_start
     offset_end = TextFragmentIdentifier.offset_end
+    tags = UpdateExtractTags.tags
 
 
 class Document:
@@ -1041,6 +1126,7 @@ class Resource:
     title = Default.string_entry % ("The title of the Resource.",)
     text = Default.string_entry % ("The text of the Resource.",)
     title_entries = Default.langstring_entries % ("The title of the Resource in various languages.",)
+    text_attachments = Default.string_entry % ("The attachments for the text of the Resource.",)
     text_entries = Default.langstring_entries % ("The text in the Resource in various languages.",)
     embed_code = """The URL for any i-frame based content that matches the Content-Security-Policy of the server.
     In effect, this is the \"src\" code inside of an iframe-based attachment to a Resource."""
@@ -1053,6 +1139,7 @@ class CreateResource:
     __doc__ = """A mutation that enables a Resource to be created."""
     lang = "The language used for the response fields."
     title_entries = Resource.title_entries
+    text_attachments = Resource.text_attachments
     text_entries = Resource.text_entries
     embed_code = Resource.embed_code
     image = Resource.image
@@ -1070,6 +1157,7 @@ class UpdateResource:
     lang = CreateResource.lang
     id = Default.node_id % ("Resource") + " This is the Resource identifier that must be updated."
     title_entries = Resource.title_entries
+    text_attachments = Resource.text_attachments
     text_entries = Resource.text_entries
     embed_code = Resource.embed_code
     image = Resource.image

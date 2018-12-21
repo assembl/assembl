@@ -1,3 +1,4 @@
+// @flow
 import { getDomElementOffset } from './globalFunctions';
 
 const getContentAreaOffset = () => {
@@ -15,10 +16,10 @@ const getContentAreaOffset = () => {
   return offset;
 };
 
-export const scrollToPost = (postElement, smooth = true) => {
+export const scrollToPost = (postElement: ?HTMLElement, smooth: boolean = true) => {
   // Scroll after the post is painted.
   requestAnimationFrame(() => {
-    const scrollY = getDomElementOffset(postElement).top;
+    const scrollY = postElement ? getDomElementOffset(postElement).top : 0;
     const elmOffset = scrollY - getContentAreaOffset();
     if (smooth) {
       window.scrollTo({ top: elmOffset, left: 0, behavior: 'smooth' });
@@ -28,18 +29,19 @@ export const scrollToPost = (postElement, smooth = true) => {
   });
 };
 
-export default () => {
+export default (id: string) => {
+  // Push onto callback queue so it runs after the DOM is updated,
+  // this is required when navigating from a different page so that
+  // the element is rendered on the page before trying to getElementById.
   const { hash } = window.location;
-  if (hash !== '') {
-    const id = hash.replace('#', '').split('?')[0];
-    // Push onto callback queue so it runs after the DOM is updated,
-    // this is required when navigating from a different page so that
-    // the element is rendered on the page before trying to getElementById.
-    setTimeout(() => {
-      const element = document.getElementById(id);
-      if (element) {
-        scrollToPost(element);
-      }
-    }, 0);
+  let elmId = id || hash;
+  if (elmId !== '' && !id) {
+    elmId = hash.replace('#', '').split('?')[0];
   }
+  setTimeout(() => {
+    const element = document.getElementById(elmId);
+    if (element) {
+      scrollToPost(element);
+    }
+  }, 0);
 };

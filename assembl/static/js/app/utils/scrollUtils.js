@@ -158,7 +158,7 @@ var scrollToElement = function(el, callback, margin, animate, watch) {
       }
     }
     catch (e) {
-      if (raven_url) {
+      if (sentry_dsn) {
         Raven.captureException(e);
       } else {
         throw e;

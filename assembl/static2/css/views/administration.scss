@@ -35,7 +35,12 @@
 
   margin: $margin-section + $navbar-height 0;
 
-  input[type='text'], input[type='textarea'], .form-control, .admin-dropdown, .dropdown-toggle, .btn-default {
+  input[type='text'],
+  input[type='textarea'],
+  .form-control,
+  .admin-dropdown,
+  .dropdown-toggle,
+  .btn-default {
     border-radius: 0 !important;
 
     &:focus {
@@ -517,6 +522,13 @@
       }
     }
 
+    .section-description {
+      margin-bottom: 20px;
+      margin-top: 20px;
+      font-family: $font-family7;
+      font-size: 11px;
+    }
+
     .modules-preview {
       margin: 5px;
       padding: 2px;
@@ -571,7 +583,8 @@
               width: 20px;
             }
 
-            &:first-child, &:last-child {
+            &:first-child,
+            &:last-child {
               opacity: 1;
               text-align: left;
             }

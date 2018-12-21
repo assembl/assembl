@@ -25,43 +25,6 @@ export const moveLandingPageModuleDown: moveLandingPageModuleDownAction = id => 
   type: actionTypes.MOVE_LANDING_PAGE_MODULE_DOWN
 });
 
-type updateLandingPageAction = actionTypes.LandingPage => actionTypes.UpdateLandingPage;
-export const updateLandingPage: updateLandingPageAction = landingPage => ({
-  page: landingPage,
-  type: actionTypes.UPDATE_LANDING_PAGE
-});
-
-export const updateLandingPageHeaderTitle = (locale: string, value: string): actionTypes.UpdateLandingPageHeaderTitle => ({
-  locale: locale,
-  value: value,
-  type: actionTypes.UPDATE_LANDING_PAGE_HEADER_TITLE
-});
-
-export const updateLandingPageHeaderSubtitle = (locale: string, value: string): actionTypes.UpdateLandingPageHeaderSubtitle => ({
-  locale: locale,
-  value: value,
-  type: actionTypes.UPDATE_LANDING_PAGE_HEADER_SUBTITLE
-});
-
-export const updateLandingPageHeaderButtonLabel = (
-  locale: string,
-  value: string
-): actionTypes.UpdateLandingPageHeaderButtonLabel => ({
-  locale: locale,
-  value: value,
-  type: actionTypes.UPDATE_LANDING_PAGE_HEADER_BUTTON_LABEL
-});
-
-export const updateLandingPageHeaderImage = (value: File): actionTypes.UpdateLandingPageHeaderImage => ({
-  value: value,
-  type: actionTypes.UPDATE_LANDING_PAGE_HEADER_IMAGE
-});
-
-export const updateLandingPageHeaderLogo = (value: File): actionTypes.UpdateLandingPageHeaderLogo => ({
-  value: value,
-  type: actionTypes.UPDATE_LANDING_PAGE_HEADER_LOGO
-});
-
 export const updateLandingPageModuleTitle = (
   id: string,
   locale: string,

@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import { Link } from 'react-router';
+import { Button } from 'react-bootstrap';
 /* eslint-disable import/no-extraneous-dependencies */
 import initStoryshots from '@storybook/addon-storyshots';
 import { configure, shallow, mount } from 'enzyme';
@@ -8,7 +8,8 @@ import Adapter from 'enzyme-adapter-react-16';
 /* eslint-enable */
 
 import DeletePostButton from '../../../../../js/app/components/debate/common/deletePostButton';
-import type { DeletePostButtonProps } from '../../../../../js/app/components/debate/common/deletePostButton';
+import type { Props as DeletePostButtonProps } from '../../../../../js/app/components/debate/common/deletePostButton';
+import { displayModal } from '../../../../../js/app/utils/utilityManager';
 
 // Separate the snapshots in directories next to each component
 // Name should match with the story name
@@ -17,6 +18,8 @@ initStoryshots({
 });
 
 configure({ adapter: new Adapter() });
+
+jest.mock('../../../../../js/app/utils/utilityManager');
 
 describe('<DeletePostButton /> - with shallow', () => {
   let wrapper;
@@ -45,8 +48,13 @@ describe('<DeletePostButton /> - with mount', () => {
     wrapper = mount(<DeletePostButton {...deletePostButton} />);
   });
 
-  it('should render one Link with a delete icon embedded', () => {
-    expect(wrapper.find(Link)).toHaveLength(1);
+  it('should render one Button with a delete icon embedded', () => {
+    expect(wrapper.find(Button)).toHaveLength(1);
     expect(wrapper.find('span [className="assembl-icon-delete"]')).toHaveLength(1);
+  });
+
+  it('should render a modal when you click on the button', () => {
+    wrapper.simulate('click');
+    expect(displayModal).toHaveBeenCalledTimes(1);
   });
 });

@@ -5,6 +5,7 @@ const Translations = {
     here: "ici",
     yes: "oui",
     no: "non",
+    and: " et ",
     "Number of contributions": "Nombre de messages",
     "Number of users": "Nombre de contributeurs",
     accept: "Accepter",
@@ -14,7 +15,7 @@ const Translations = {
     delete: "Supprimer",
     deleteConfirmation: {
       confirmDeletionTitle: "Supprimer un élément",
-      confirmDeletionBody: "Etes-vous certain de vouloir supprimer cet élément ?"
+      confirmDeletionBody: "Êtes-vous certain de vouloir supprimer cet élément ?"
     },
     accountDeleted: "Votre compte a été supprimé avec succès",
     deletedUser: "Compte utilisateur supprimé",
@@ -49,14 +50,29 @@ const Translations = {
       harvestingValidated: "L'extrait a été validé avec succès.",
       harvestingSubmitted: "L'extrait est en attente de validation.",
       deleteExtract: "Supprimer l'extrait attrapé",
-      confirmDeleteExtract: "Etes-vous certain de vouloir supprimer cet extrait ?",
+      confirmDeleteExtract: "Êtes-vous certain de vouloir supprimer cet extrait ?",
       validateExtract: "Extrait validé",
       editExtract: "Modifier l'extrait attrapé",
       nuggetExtract: "Pépiter l'extrait attrapé",
       qualifyExtract: "Qualifier l'extrait attrapé",
       move: "Déplacer",
       qualifyNature: "Qualifier par nature",
-      qualifyAction: "Qualifier par action"
+      qualifyAction: "Qualifier par action",
+      tags: {
+        label: "Tags",
+        cancel: "Annuler",
+        validate: "Valider",
+        edit: "Cliquez pour editer le tag \"%{tag}\"",
+        deleteConfirmation: {
+          confirmDeletionTitle: "Supprimer le tag \"%{tag}\"",
+          confirmDeletionBody: "Êtes-vous certain de vouloir supprimer ce tag ?"
+        },
+        select: {
+          placeholder: "Sélectionner des tags",
+          noOptions: "Aucun tag trouvé",
+          newOption: "Ajouter ce tag '%{option}'"
+        }
+      }
     },
     cookies: {
       userSession: "Session utilisateur",
@@ -304,7 +320,10 @@ const Translations = {
           openInNewTab: "Ouvrir le lien dans un nouvel onglet",
           text: "Texte du lien",
           title: "Insérer un lien",
-          url: "Adresse web"
+          url: "Adresse web",
+          editLinkForm: {
+            title: "Modifier le lien"
+          }
         }
       },
       uploadButton: "Choisissez un fichier",
@@ -398,39 +417,70 @@ const Translations = {
         announcement: "Consigne"
       },
       brightMirror: {
-        allFictions: "Fictions déjà parues",
-        deleteFiction: "Supprimez votre fiction",
-        deleteFictionModalBody: "Êtes-vous sûr de vouloir supprimer cette fiction ?",
-        deleteFictionSuccessMsg: "Votre fiction a été supprimée",
+        deleteFiction: "Supprimez votre texte",
+        deleteFictionModalBody: "Êtes-vous sûr de vouloir supprimer ce texte ?",
+        deleteFictionSuccessMsg: "Votre texte a été supprimé",
         draftEmptyTitle: "Sans titre",
         draftLabel: "Brouillon",
-        draftSuccessMsg: "Votre fiction a bien été enregistrée.",
-        editFiction: "Editez votre fiction",
+        draftSuccessMsg: "Votre texte a bien été enregistré.",
+        editFiction: "Editez votre texte",
         fiction: "Fiction",
-        fillBodyLabel: "Ecrivez votre fiction",
+        fillBodyLabel: "Ecrivez votre texte",
         noTitleSpecified: "Titre non défini",
         noContentSpecified: "Contenu non défini",
-        fillEitherTitleContent: "Veuillez remplir le titre et/ou la fiction",
+        fillEitherTitleContent: "Veuillez remplir le titre et/ou le texte",
         noAuthorSpecified: "Auteur non défini",
+        numberOfFictions: "Liste de scénarios",
+        numberOfFictions_0: "Aucun scénario publié",
         numberOfResponses: "%{count} réponses",
         numberOfResponses_0: "Aucune réponse",
         numberOfResponses_1: "%{count} réponse",
-        postSuccessMsg: "Merci pour votre participation. Votre fiction a bien été publiée !",
+        postSuccessMsg: "Merci pour votre participation. Votre texte a bien été publiée !",
         saveDraft: "Sauvegarder",
-        startFictionLabel: "Je partage ma fiction",
+        shareFiction: "Partager ce texte",
+        startFictionLabel: "Je rédige mon texte",
         commentFiction: {
           cancel: "Annuler",
+          commentHelper: "Commenter",
+          deleteComment: "Supprimer ce message",
+          deleteCommentBodyMessage: "Êtes-vous sûr de vouloir supprimer ce message ?",
           editComment: "Modifier ce message",
           imageAlt: "Illustration prenez la parole",
           label: "Commentaires",
+          modal: {
+            title: "Commenter",
+            instructionList: "Vous pouvez commenter et enrichir le texte :",
+            instructionListOne: "Surlignez un extrait du texte",
+            instructionListTwo: "Cliquez sur “Suggérer” pour ouvrir une boîte de commentaire à droite du texte",
+            instructionListThree: "Rédigez votre commentaire écrit, image ou vidéo et validez"
+          },
           numberOfComments: "%{count} messages",
           numberOfComments_0: "Aucun message pour le moment",
           numberOfComments_1: "%{count} message",
           placeholder: "Rejoins le débat...",
           strongTitle: "Prenez la parole !",
           submit: "Commenter",
-          title: "Quels sujets sont abordés dans cette fiction ?"
-        }
+          title: "Commentez ou démarrez un débat sur le texte ci-dessus"
+        },
+        sideComment: {
+          commenterSingleParticipation: "1 participant a commenté un extrait.",
+          commentersParticipation: "%{count} participants ont commenté des extraits.",
+          commentersParticipation_1: "%{count} participant a commenté des extraits.",
+          commentLabel: "Votre commentaire",
+          submitSuccessMsg: "Votre commentaire a été publié avec succès !",
+          editSuccessMsg: "Votre commentaire a été édité avec succès !",
+          deleteSuccessMsg: "Votre commentaire a été supprimé avec succès !",
+          confirmDeleteMsg: "Êtes vous sûr de vouloir supprimer ce commentaire ?",
+          editTooltip: "Modifier",
+          deleteTooltip: "Supprimer"
+        },
+        sentiment: {
+          like: "Ça m'inspire !",
+          dislike: "Ça me refroidit !",
+          dontUnderstand: "Renforcer l'histoire",
+          moreInfo: "Enrichir le style"
+        },
+        suggest: "Suggérer"
       },
       themes: "Thèmes",
       notStarted: "La phase %{phaseName} n'a pas encore commencé. Merci de revenir à partir du ",
@@ -515,8 +565,8 @@ const Translations = {
     },
     termsAndConditions: {
       headerTitle: "Conditions générales d'utilisation",
-      iAccept: "J'ai lu et j'accepte les ",
-      link: "conditions générales d'utilisation",
+      iAccept: "J'ai lu et j'accepte ",
+      link: "les conditions générales d'utilisation",
       accept: "J'accepte"
     },
     legalNotice: {
@@ -533,13 +583,18 @@ const Translations = {
     },
     privacyPolicy: {
       headerTitle: "Politique de protection des données personnelles",
-      iAccept: "J'ai lu et j'accepte la ",
-      link: "politique de protection des données personnelles"
+      iAccept: "J'ai lu et j'accepte ",
+      link: "la politique de protection des données personnelles"
     },
     userGuidelines: {
       headerTitle: "Charte de participation",
-      iAccept: "J'ai lu et j'accepte la ",
-      link: "charte de participation"
+      iAccept: "J'ai lu et j'accepte ",
+      link: "la charte de participation"
+    },
+    legalContentsModal: {
+      title: "Accepter les contenus juridiques",
+      iAccept: "Je confirme avoir lu et accepté ",
+      ofThePlatform: " de la plateforme. "
     },
     administration: {
       confirmTextFieldDeletionTitle: "Supprimer le champ",
@@ -785,7 +840,7 @@ const Translations = {
         thematicTitle: "Titre de la Thématique",
         headerLabel: "Choisir l'image de fond du bandeau",
         confirmDeletionTitle: "Supprimer la thématique %{title}",
-        confirmDeletionBody: "Etes-vous certain de vouloir supprimer cette thématique ?"
+        confirmDeletionBody: "Êtes-vous certain de vouloir supprimer cette thématique ?"
       },
       resourcesCenter: {
         createResource: "Ajouter un média",
@@ -844,6 +899,7 @@ const Translations = {
           confirmationModal: "Voulez-vous ajouter un module Texte & Multi-média supplémentaire à la page d'accueil ?"
         },
         header: {
+          successSave: "Le contenu du header a été mis à jour avec succès !",
           title: "Header",
           helper: "Personnalisez l'apparence du header de la page d'accueil.",
           titleLabel: "Titre du débat",
@@ -854,7 +910,14 @@ const Translations = {
           headerDescription:
             "L'image doit avoir une hauteur de 450px de haut et une largeur de 1280px. Le poids ne doit pas dépasser 1Mo.",
           logoDescription:
-            "Le logo doit avoir une hauteur maximale de 78px et une largeur maximale de 200px. Le poids ne doit pas dépasser 1Mo. Le fond doit être transparent."
+            "Le logo doit avoir une hauteur maximale de 78px et une largeur maximale de 200px. Le poids ne doit pas dépasser 1Mo. Le fond doit être transparent.",
+          startDate: "Du",
+          endDate: "Au",
+          timePlaceholder: "Optionnel : Entrez les dates du débat",
+          dateDescription:
+            "Pour configurer les dates du debat. Si vous n'avez pas sélectionné de dates, les dates sont déduites des timelines.",
+          startDateError: "La date de début ne peut pas être postérieure à la date de fin",
+          endDateError: "La date de fin ne peut pas être antérieure à la date de début"
         },
         timeline: {
           title: "Timeline",
@@ -876,6 +939,9 @@ const Translations = {
         addSelectFieldOption: "Ajouter un nouvel item",
         deleteTextField: "Supprimer le champ",
         deleteSelectFieldOption: "Supprimer l'item",
+        toggleLegalContentIntro:
+          "Activer ou non la validation obligatoire des contenus juridiques après l'inscription sur la plateforme par SSO.",
+        LegalContentButton: "Activer la validation obligatoire du contenu juridique",
         introText:
           "Configurez les champs que vous souhaitez afficher dans le formulaire d'inscription. Renseignez les noms ainsi que la mention obligatoire/non obligatoire.",
         textFieldToggleOptional: "Rendre ce champ optionnel",
@@ -902,6 +968,13 @@ const Translations = {
     },
     duration: {
       format: "h [h]"
+    },
+    form: {
+      select: {
+        placeholder: "Sélectionner...",
+        noOptions: "Aucune option n'est disponible",
+        newOption: "Ajouter l'option '%{option}'"
+      }
     }
   },
   en: {
@@ -909,6 +982,7 @@ const Translations = {
     here: "here",
     yes: "yes",
     no: "no",
+    and: " and ",
     cancel: "Cancel",
     accept: "Accept",
     refuse: "Refuse",
@@ -958,7 +1032,22 @@ const Translations = {
       qualifyExtract: "Qualify the extract",
       move: "Move",
       qualifyNature: "Qualify by nature",
-      qualifyAction: "Qualify by action"
+      qualifyAction: "Qualify by action",
+      tags: {
+        label: "Tags",
+        cancel: "Cancel",
+        validate: "Validate",
+        edit: "Click to edit the tag \"%{tag}\"",
+        deleteConfirmation: {
+          confirmDeletionTitle: "Delete the tag \"%{tag}\"",
+          confirmDeletionBody: "Are you sure that you wish to delete this tag?"
+        },
+        select: {
+          placeholder: "Select tags",
+          noOptions: "No tags",
+          newOption: "Create this tag '%{option}'"
+        }
+      }
     },
     cookies: {
       userSession: "User Session",
@@ -1195,7 +1284,10 @@ const Translations = {
           openInNewTab: "Open link in new tab",
           text: "Link text",
           title: "Insert a link",
-          url: "URL"
+          url: "URL",
+          editLinkForm: {
+            title: "Edit the link"
+          }
         }
       },
       uploadButton: "Choose a file to upload",
@@ -1298,39 +1390,70 @@ const Translations = {
         announcement: "Announcement"
       },
       brightMirror: {
-        allFictions: "Published fictions",
-        deleteFiction: "Delete your fiction",
-        deleteFictionModalBody: "Are you sure you want to delete this fiction?",
-        deleteFictionSuccessMsg: "Your fiction was deleted",
+        deleteFiction: "Delete your text",
+        deleteFictionModalBody: "Are you sure you want to delete this text?",
+        deleteFictionSuccessMsg: "Your text was deleted",
         draftEmptyTitle: "Untitled",
         draftLabel: "Draft",
-        draftSuccessMsg: "Your fiction has been saved successfully.",
-        editFiction: "Edit your fiction",
-        fiction: "Fiction",
-        fillBodyLabel: "Write your fiction",
+        draftSuccessMsg: "Your text has been saved successfully.",
+        editFiction: "Edit your text",
+        fiction: "text",
+        fillBodyLabel: "Write your text",
         noTitleSpecified: "No title specified",
         noContentSpecified: "No content specified",
-        fillEitherTitleContent: "Please, write a title or a fiction",
+        fillEitherTitleContent: "Please, write a title or a text",
         noAuthorSpecified: "No author specified",
+        numberOfFictions: "List of scenarios",
+        numberOfFictions_0: "No published scenarios",
         numberOfResponses: "%{count} responses",
         numberOfResponses_0: "No response",
         numberOfResponses_1: "%{count} response",
-        postSuccessMsg: "Thanks for your participation. Your fiction has been published successfully!",
+        postSuccessMsg: "Thanks for your participation. Your text has been published successfully!",
         saveDraft: "Save",
-        startFictionLabel: "Share a fiction",
+        shareFiction: "Share a short story",
+        startFictionLabel: "Write my text",
         commentFiction: {
           cancel: "Cancel",
+          commentHelper: "Comment",
+          deleteComment: "Delete this message",
+          deleteCommentBodyMessage: "Are you sure you want to delete this message?",
           editComment: "Edit this message",
           imageAlt: "Let's talk illustration",
           label: "Comments",
+          modal: {
+            title: "Comment",
+            instructionList: "You can comment the text:",
+            instructionListOne: "Underligne a quote",
+            instructionListTwo: "Click “Suggest” to open an input box",
+            instructionListThree: "Write your comment, add an image or video and validate"
+          },
           numberOfComments: "%{count} messages",
           numberOfComments_0: "No message at the moment",
           numberOfComments_1: "%{count} message",
           placeholder: "Join the debate...",
           strongTitle: "Let's talk!",
           submit: "Comment",
-          title: "What are the topics of the fiction?"
-        }
+          title: "Comment or debate on the text above"
+        },
+        sideComment: {
+          commenterSingleParticipation: "1 participant commented a quote.",
+          commentersParticipation: "%{count} participants commented quotes.",
+          commentersParticipation_1: "%{count} participant commented quotes.",
+          commentLabel: "Your comment",
+          submitSuccessMsg: "Your comment has been published successfully!",
+          editSuccessMsg: "Your comment has been edited successfully!",
+          deleteSuccessMsg: "Your comment has been deleted successfully!",
+          confirmDeleteMsg: "Are you sure you would like to delete this comment?",
+          editTooltip: "Edit",
+          deleteTooltip: "Delete"
+        },
+        sentiment: {
+          like: "Inspiring!",
+          dislike: "Scary",
+          dontUnderstand: "Strengthen the plot",
+          moreInfo: "Enrich the style"
+        },
+        suggest: "Suggest"
       },
       themes: "Themes",
       notStarted: "The %{phaseName} phase has not started. Please come back from ",
@@ -1415,7 +1538,7 @@ const Translations = {
     },
     termsAndConditions: {
       headerTitle: "Terms & Conditions",
-      link: "Terms & Conditions",
+      link: "the Terms & Conditions",
       iAccept: "I have read and I accept the ",
       accept: "I accept"
     },
@@ -1434,12 +1557,17 @@ const Translations = {
     privacyPolicy: {
       headerTitle: "Privacy policy",
       iAccept: "I have read and I accept the ",
-      link: "Privacy Policy"
+      link: "the Privacy Policy"
     },
     userGuidelines: {
       headerTitle: "User guidelines",
       iAccept: "I have read and I accept the ",
-      link: "user guidelines"
+      link: "the user guidelines"
+    },
+    legalContentsModal: {
+      title: "Accept the legal contents",
+      iAccept: "I have read and accepted ",
+      ofThePlatform: " of the platform."
     },
     administration: {
       confirmTextFieldDeletionTitle: "Delete the field",
@@ -1735,6 +1863,7 @@ const Translations = {
           confirmationModal: "Are you sure you want to add a Text & Multimedia module to the landing page?"
         },
         header: {
+          successSave: "The header has been updated successfully!",
           title: "Header",
           helper: "Customize appearance of the header.",
           titleLabel: "Debate title",
@@ -1744,7 +1873,14 @@ const Translations = {
           logoImage: "Choose the header logo",
           headerDescription: "The image must have a height of 450px and a width of 1280px. The weight must not exceed 1 MB.",
           logoDescription:
-            "The logo must have a maximum height of 78px and a maximum width of 200px. The weight must not exceed 1 MB. The background must be transparent."
+            "The logo must have a maximum height of 78px and a maximum width of 200px. The weight must not exceed 1 MB. The background must be transparent.",
+          startDate: "From",
+          endDate: "To",
+          timePlaceholder: "Optional: Enter the dates of the debate",
+          dateDescription:
+            "Please enter the debate's date range. If no dates are selected, the dates are inferred from the timelines created.",
+          startDateError: "The start date cannot be after the end date",
+          endDateError: "The end date cannot be after the start date"
         },
         timeline: {
           title: "Timeline",
@@ -1766,6 +1902,8 @@ const Translations = {
         addSelectFieldOption: "Add a new item",
         deleteTextField: "Delete the field",
         deleteSelectFieldOption: "Delete this item",
+        toggleLegalContentIntro: "Make the legal validation mandatory or not for a user after signing up in the platform by SSO.",
+        LegalContentButton: "Activate the mandatory validation of the legal contents",
         introText:
           "Configure the fields that you want to display in the registration form. Fill in the names and whether the fields are required or optional.",
         textFieldToggleOptional: "Make this field optional",
@@ -1793,6 +1931,13 @@ const Translations = {
     },
     duration: {
       format: "h [h]"
+    },
+    form: {
+      select: {
+        placeholder: "Select...",
+        noOptions: "No options",
+        newOption: "Create '%{option}'"
+      }
     }
   }
 };

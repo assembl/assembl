@@ -16,7 +16,6 @@ exports[`SurveyTable component should match the SurveyTable 1`] = `
       },
     ]
   }
-  onMenuItemClick={undefined}
   phaseId="phaseFoo"
 />
 `;

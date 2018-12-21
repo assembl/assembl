@@ -121,6 +121,31 @@ def subidea_1(request, discussion, root_idea, test_session):
 
 
 @pytest.fixture(scope="function")
+def subidea_2(request, discussion, root_idea, test_session):
+    """A subidea fixture with a idealink to root idea fixture::
+
+        root_idea
+            |-> subidea_1"""
+
+    from assembl.models import Idea, IdeaLink, LangString
+    i = Idea(title=LangString.create(u"An idea for another phase", 'en'),
+             discussion=discussion,
+             description=LangString.create("Some definition of an idea", 'en'))
+    test_session.add(i)
+    l_r_2 = IdeaLink(source=root_idea, target=i)
+    test_session.add(l_r_2)
+    test_session.flush()
+
+    def fin():
+        print "finalizer subidea_2"
+        test_session.delete(l_r_2)
+        test_session.delete(i)
+        test_session.flush()
+    request.addfinalizer(fin)
+    return i
+
+
+@pytest.fixture(scope="function")
 def subidea_1_1(request, discussion, subidea_1, test_session):
     """An Idea fixture with a idealink to subidea_1 fixture::
 
@@ -177,7 +202,9 @@ def subidea_1_1_1(request, discussion, subidea_1_1, test_session):
                     |-> subidea_1_1_1"""
 
     from assembl.models import Idea, IdeaLink, LangString
-    i = Idea(title=LangString.create(u"Lower government revenue", 'en'),
+    title = LangString.create(u"Lower government revenue", 'en')
+    title.add_value(u'Moins de revenus pour le gouvernement', 'fr')
+    i = Idea(title=title,
              discussion=discussion,
              description=LangString.create("Some definition of an idea", 'en'))
     test_session.add(i)

@@ -32,7 +32,7 @@ class LangStringStatus(OrderedEnum):
     SERVICE_DOWN = 1  # Transient, eg connection error
     TRANSLATION_FAILURE = 2  # possibly transient, like service down
     UNKNOWN_ERROR = 3  # unknown... assume transient
-    QUOTA_ERROR = 4 # quota exceeded
+    QUOTA_ERROR = 4  # quota exceeded
     PERMANENT_TRANSLATION_FAILURE = 10  # eg wrong arguments
     CANNOT_IDENTIFY = 11  # the identify failed permanently.
     CANNOT_TRANSLATE = 12   # as given by canTranslate, eg wrong target lang
@@ -183,7 +183,7 @@ class AbstractTranslationService(LanguageIdentificationService):
         return {"translation_notice": "Machine-translated",
                 "idiosyncrasies": {}}
 
-    def canTranslate(self, source, target):
+    def canTranslate(self, source, target, really=True):
         return False
 
     def target_locales(self):
@@ -331,8 +331,8 @@ class AbstractTranslationService(LanguageIdentificationService):
 
 
 class DummyTranslationServiceTwoSteps(AbstractTranslationService):
-    def canTranslate(cls, source, target):
-        return True
+    def canTranslate(cls, source, target, really=False):
+        return not really
 
     def translate(self, text, target, is_html=False, source=None, db=None):
         if not text:
@@ -445,7 +445,7 @@ class DummyGoogleTranslationService(AbstractTranslationService):
         return super(DummyGoogleTranslationService, self).get_mt_name(
             self.asPosixLocale(source_name), self.asPosixLocale(target_name))
 
-    def canTranslate(self, source, target):
+    def canTranslate(self, source, target, really=True):
         return ((source == Locale.UNDEFINED or
                  self.asKnownLocale(source)) and
                 self.asKnownLocale(target))
@@ -462,7 +462,7 @@ class DummyGoogleTranslationService(AbstractTranslationService):
         request = urllib2.Request(link, headers=self.agents)
         page = urllib2.urlopen(request).read()
         before_trans = 'class="t0">'
-        result = page[page.find(before_trans)+len(before_trans):]
+        result = page[page.find(before_trans) + len(before_trans):]
         result = result.split("<")[0]
         return result, source
 
@@ -508,7 +508,7 @@ class GoogleTranslationService(DummyGoogleTranslationService):
                         x[u'language'] for x in r[u'languages']]
                     if set(self._known_locales) != set(
                             DummyGoogleTranslationService._known_locales):
-                        from ..lib.raven_client import capture_message
+                        from ..lib.sentry import capture_message
                         capture_message("google changed its language set again")
             except:
                 return self.known_locales_cls

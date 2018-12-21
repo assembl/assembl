@@ -10,6 +10,6 @@
     "draft-js-plugins-utils": "^2.0.3"
   },
   "devDependencies": {
-    "assembl-test-editor-utils": "0.1.0"
+    "assembl-test-editor-utils": "^0.1.0"
   }
 }

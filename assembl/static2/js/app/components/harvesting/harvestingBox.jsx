@@ -7,31 +7,38 @@ import { Button, OverlayTrigger } from 'react-bootstrap';
 import { Translate, I18n } from 'react-redux-i18n';
 import classnames from 'classnames';
 import moment from 'moment';
+import update from 'immutability-helper';
 
 import addPostExtractMutation from '../../graphql/mutations/addPostExtract.graphql';
 import updateExtractMutation from '../../graphql/mutations/updateExtract.graphql';
 import deleteExtractMutation from '../../graphql/mutations/deleteExtract.graphql';
 import confirmExtractMutation from '../../graphql/mutations/confirmExtract.graphql';
+import updateExtractTagsMutation from '../../graphql/mutations/updateExtractTags.graphql';
 import manageErrorAndLoading from '../../components/common/manageErrorAndLoading';
 import { getConnectedUserId, getConnectedUserName } from '../../utils/globalFunctions';
 import AvatarImage from '../common/avatarImage';
 import TaxonomyOverflowMenu from './taxonomyOverflowMenu';
 import FormControlWithLabel from '../common/formControlWithLabel';
 import { displayAlert, displayModal, closeModal } from '../../utils/utilityManager';
+import { connectedUserIsAdmin } from '../../utils/permissions';
 import { editExtractTooltip, deleteExtractTooltip, nuggetExtractTooltip, qualifyExtractTooltip } from '../common/tooltips';
-import { NatureIcons, ActionIcons } from '../../utils/extractQualifier';
+import { NatureIcons, ActionIcons, type Annotation } from '../../utils/extract';
 import { ExtractStates } from '../../constants';
+import Tags, { type TagsData } from './tags';
+import TagsForm from './tagsForm';
 
 type Props = {
   extracts?: Array<Extract>,
   postId: string,
   contentLocale: string,
   lang?: string,
-  selection: ?Object,
+  annotation: ?Annotation,
   harvestingDate?: string,
   isAuthorAccountDeleted?: boolean,
   showNuggetAction?: boolean,
   displayHarvestingBox: boolean,
+  activeExtractIndex: number,
+  onAdd: (extractIndex: number) => void,
   setHarvestingBoxDisplay: Function,
   cancelHarvesting: Function,
   addPostExtract: Function,
@@ -39,11 +46,12 @@ type Props = {
   confirmExtract: Function,
   deleteExtract: Function,
   refetchPost: Function,
-  toggleExtractsBox?: Function
+  toggleExtractsBox?: Function,
+  updateTags: Function
 };
 
 type State = {
-  extractIndex: number,
+  currentExtractIndex: number,
   disabled: boolean,
   extractIsValidated: boolean,
   isNugget: boolean,
@@ -61,11 +69,53 @@ type Taxonomies = {
   action: ?string
 };
 
+type UpdateTags = {
+  postId: string,
+  id: string,
+  tags: Array<string>
+};
+
 const ACTIONS = {
   create: 'create', // create a new extract
   edit: 'edit', // edit an extract
   confirm: 'confirm' // confirm a submitted extract
 };
+
+function updateTagsMutation({ mutate }) {
+  return ({ postId, id, tags }: UpdateTags) =>
+    mutate({
+      variables: {
+        id: id,
+        tags: tags
+      },
+      optimisticResponse: {
+        __typename: 'Mutation',
+        updateExtractTags: {
+          __typename: 'UpdateExtractTags',
+          tags: tags.map(tag => ({ __typename: 'Tag', value: tag, id: tag }))
+        }
+      },
+      updateQueries: {
+        // Update the Post query
+        Post: (prev, { queryVariables, mutationResult }) => {
+          if (queryVariables.id !== postId) return false;
+          const currentExtract = prev.post.extracts.filter(ex => ex.id === id)[0];
+          if (!currentExtract) return false;
+          const indexExtract = prev.post.extracts.indexOf(currentExtract);
+          const newExtract = update(currentExtract, {
+            tags: { $set: mutationResult.data.updateExtractTags.tags }
+          });
+          return update(prev, {
+            post: {
+              extracts: {
+                $splice: [[indexExtract, 1, newExtract]]
+              }
+            }
+          });
+        }
+      }
+    });
+}
 
 class DumbHarvestingBox extends React.Component<Props, State> {
   menu: any;
@@ -73,6 +123,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
   actions: any;
 
   static defaultProps = {
+    activeExtractIndex: 0,
     harvestingDate: null,
     isAuthorAccountDeleted: false,
     showNuggetAction: true
@@ -80,14 +131,14 @@ class DumbHarvestingBox extends React.Component<Props, State> {
 
   constructor(props: Props) {
     super(props);
-    const { extracts, cancelHarvesting } = this.props;
-    const hasExtract = extracts ? extracts.length > 0 : false;
-    const extract = this.getCurrentExtract(0);
+    const { extracts, cancelHarvesting, activeExtractIndex } = this.props;
+    const hasExtracts = extracts ? extracts.length > 0 : false;
+    const extract = this.getCurrentExtractByIndex(activeExtractIndex);
     const isNugget = extract ? extract.important : false;
     this.state = {
-      extractIndex: 0,
-      disabled: !hasExtract,
-      extractIsValidated: hasExtract,
+      currentExtractIndex: activeExtractIndex,
+      disabled: !hasExtracts,
+      extractIsValidated: hasExtracts,
       isNugget: isNugget,
       isEditable: false,
       editableExtract: extract ? extract.body : '',
@@ -102,7 +153,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
       [ACTIONS.create]: {
         buttons: [
           { id: 'cancel', title: 'debate.confirmDeletionButtonCancel', className: 'button-cancel', onClick: cancelHarvesting },
-          { id: 'validate', title: 'harvesting.submit', className: 'button-submit', onClick: this.validateHarvesting }
+          { id: 'validate', title: 'harvesting.submit', className: 'button-submit', onClick: null }
         ]
       },
       [ACTIONS.edit]: {
@@ -129,11 +180,23 @@ class DumbHarvestingBox extends React.Component<Props, State> {
     window.addEventListener('scroll', this.updateOverflowMenuPosition);
   }
 
+  componentDidUpdate(prevProps: Props) {
+    const { activeExtractIndex } = this.props;
+    if (activeExtractIndex !== prevProps.activeExtractIndex) {
+      this.goToExtract(activeExtractIndex);
+    }
+  }
+
   componentWillUnmount() {
     window.removeEventListener('scroll', this.updateOverflowMenuPosition);
   }
 
-  getCurrentExtract = (extractIndex: number) => {
+  getCurrentExtractById = (extractId: string) => {
+    const { extracts } = this.props;
+    return extracts && extracts.length > 0 ? extracts.find(extract => extract.id === extractId) : null;
+  };
+
+  getCurrentExtractByIndex = (extractIndex: number) => {
     const { extracts } = this.props;
     return extracts && extracts.length > 0 ? extracts[extractIndex] : null;
   };
@@ -151,9 +214,8 @@ class DumbHarvestingBox extends React.Component<Props, State> {
     this.setState({ menuTarget: null });
     const { nature, action } = taxonomies;
     const { updateExtract, refetchPost } = this.props;
-    const { extractIndex } = this.state;
-    const extract = this.getCurrentExtract(extractIndex);
-    const { isNugget } = this.state;
+    const { isNugget, currentExtractIndex } = this.state;
+    const extract = this.getCurrentExtractByIndex(currentExtractIndex);
     const variables = {
       extractId: extract ? extract.id : null,
       important: isNugget,
@@ -174,8 +236,8 @@ class DumbHarvestingBox extends React.Component<Props, State> {
 
   updateHarvestingNugget = (): void => {
     const { updateExtract, refetchPost } = this.props;
-    const { isNugget, extractNature, extractAction, extractIndex } = this.state;
-    const extract = this.getCurrentExtract(extractIndex);
+    const { isNugget, extractNature, extractAction, currentExtractIndex } = this.state;
+    const extract = this.getCurrentExtractByIndex(currentExtractIndex);
     const variables = {
       extractId: extract ? extract.id : null,
       important: !isNugget,
@@ -198,8 +260,8 @@ class DumbHarvestingBox extends React.Component<Props, State> {
 
   updateHarvestingBody = (): void => {
     const { updateExtract, refetchPost } = this.props;
-    const { editableExtract, isNugget, extractNature, extractAction, extractIndex } = this.state;
-    const extract = this.getCurrentExtract(extractIndex);
+    const { editableExtract, isNugget, extractNature, extractAction, currentExtractIndex } = this.state;
+    const extract = this.getCurrentExtractByIndex(currentExtractIndex);
     const variables = {
       extractId: extract ? extract.id : null,
       body: editableExtract,
@@ -232,14 +294,13 @@ class DumbHarvestingBox extends React.Component<Props, State> {
         <Translate value="validate" />
       </Button>
     ];
-    const includeFooter = true;
-    return displayModal(modalTitle, body, includeFooter, footer);
+    return displayModal(modalTitle, body, true, footer);
   };
 
   deleteHarvesting = (): void => {
     const { deleteExtract, refetchPost } = this.props;
-    const { extractIndex } = this.state;
-    const extract = this.getCurrentExtract(extractIndex);
+    const { currentExtractIndex } = this.state;
+    const extract = this.getCurrentExtractByIndex(currentExtractIndex);
     const variables = {
       extractId: extract ? extract.id : null
     };
@@ -257,42 +318,33 @@ class DumbHarvestingBox extends React.Component<Props, State> {
       });
   };
 
-  validateHarvesting = (): void => {
-    const { postId, selection, contentLocale, lang, addPostExtract, setHarvestingBoxDisplay, refetchPost } = this.props;
-    if (!selection) {
+  validateHarvesting = (data: TagsData): void => {
+    const { postId, annotation, contentLocale, lang, addPostExtract, setHarvestingBoxDisplay, refetchPost, onAdd } = this.props;
+    if (!annotation) {
       return;
     }
-    const selectionText = selection.toString();
-    const annotatorRange = ARange.sniff(selection.getRangeAt(0));
-    if (!annotatorRange) {
-      return;
-    }
-    const serializedAnnotatorRange = annotatorRange.serialize(document, 'annotation');
-    if (!serializedAnnotatorRange) {
-      return;
-    }
+    const tags = data.tags.map(tag => tag.label);
     const variables = {
       contentLocale: contentLocale,
       postId: postId,
-      body: selectionText,
       important: false,
       lang: lang,
-      xpathStart: serializedAnnotatorRange.start,
-      xpathEnd: serializedAnnotatorRange.end,
-      offsetStart: serializedAnnotatorRange.startOffset,
-      offsetEnd: serializedAnnotatorRange.endOffset
+      tags: tags,
+      ...annotation
     };
     displayAlert('success', I18n.t('loading.wait'));
     addPostExtract({ variables: variables })
       .then(() => {
-        this.setState({
-          disabled: false,
-          extractIsValidated: true
-        });
-        setHarvestingBoxDisplay();
-        window.getSelection().removeAllRanges();
         displayAlert('success', I18n.t('harvesting.harvestingValidated'));
-        refetchPost();
+        refetchPost().then(({ data: { post: { extracts } } }) => {
+          this.setState({
+            disabled: false,
+            extractIsValidated: true
+          });
+          setHarvestingBoxDisplay();
+          window.getSelection().removeAllRanges();
+          if (onAdd) onAdd(extracts.length - 1);
+        });
       })
       .catch((error) => {
         displayAlert('danger', `${error}`);
@@ -301,8 +353,8 @@ class DumbHarvestingBox extends React.Component<Props, State> {
 
   confirmHarvesting = (): void => {
     const { confirmExtract, refetchPost } = this.props;
-    const { extractIndex } = this.state;
-    const extract = this.getCurrentExtract(extractIndex);
+    const { currentExtractIndex } = this.state;
+    const extract = this.getCurrentExtractByIndex(currentExtractIndex);
     const variables = {
       extractId: extract ? extract.id : null
     };
@@ -353,28 +405,67 @@ class DumbHarvestingBox extends React.Component<Props, State> {
   };
 
   changeCurrentExtract = (step: ?number): void => {
-    const { extractIndex } = this.state;
-    const idx = step ? extractIndex + step : 0;
-    const extract = this.getCurrentExtract(idx);
+    const { currentExtractIndex } = this.state;
+    const idx = step ? currentExtractIndex + step : 0;
+    this.goToExtract(idx);
+  };
+
+  goToExtract = (idx: number): void => {
+    const extract = this.getCurrentExtractByIndex(idx);
     const isNugget = extract ? extract.important : false;
-    this.setState(prevState => ({
-      extractIndex: step ? prevState.extractIndex + step : 0,
+    this.setState({
+      currentExtractIndex: idx,
       isNugget: isNugget,
       extractNature: extract && extract.extractNature ? extract.extractNature.split('.')[1] : null,
       extractAction: extract && extract.extractAction ? extract.extractAction.split('.')[1] : null,
       editableExtract: extract ? extract.body : '',
       menuTarget: null
-    }));
+    });
+  };
+
+  updateTags = (tags: Array<string>, callback: () => void) => {
+    const { currentExtractIndex } = this.state;
+    const extract = this.getCurrentExtractByIndex(currentExtractIndex);
+    if (extract) {
+      const { updateTags, postId } = this.props;
+      // Update the extract tags with an optimistic response
+      updateTags({
+        postId: postId,
+        id: extract.id,
+        tags: tags
+      })
+        .then(callback)
+        .catch((error) => {
+          displayAlert('danger', `${error}`);
+        });
+    }
   };
 
   renderFooter = () => {
-    const { disabled, isEditable, extractIndex } = this.state;
-    const extract = this.getCurrentExtract(extractIndex);
+    const { disabled, isEditable, currentExtractIndex } = this.state;
+    const extract = this.getCurrentExtractByIndex(currentExtractIndex);
     const extractState = extract && extract.extractState;
     const isSubmitted = extractState === ExtractStates.SUBMITTED;
     const actionId = isEditable ? ACTIONS.edit : (disabled && ACTIONS.create) || (isSubmitted && ACTIONS.confirm);
     if (!actionId) return null;
     const action = this.actions[actionId];
+    if (disabled) {
+      // Render the Tags form only if it is the create action
+      return (
+        <TagsForm
+          onSubmit={this.validateHarvesting}
+          renderFooter={({ handleSubmit }) => (
+            <div className="harvesting-box-footer">
+              {action.buttons.map(button => (
+                <Button key={button.id} className={`${button.className} button-dark`} onClick={button.onClick || handleSubmit}>
+                  {I18n.t(button.title)}
+                </Button>
+              ))}
+            </div>
+          )}
+        />
+      );
+    }
     return (
       <div className="harvesting-box-footer">
         {action.buttons.map(button => (
@@ -388,7 +479,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
 
   render() {
     const {
-      selection,
+      annotation,
       contentLocale,
       harvestingDate,
       isAuthorAccountDeleted,
@@ -408,11 +499,10 @@ class DumbHarvestingBox extends React.Component<Props, State> {
       extractAction,
       menuTarget,
       overflowMenuTop,
-      extractIndex
+      currentExtractIndex
     } = this.state;
-    const extract = this.getCurrentExtract(extractIndex);
-    const hasExtract = extract !== null;
-    const selectionText = selection ? selection.toString() : '';
+    const extract = this.getCurrentExtractByIndex(currentExtractIndex);
+    const selectionText = annotation ? annotation.body : '';
     const harvesterUserName =
       extract && extract.creator && extract.creator.displayName ? extract.creator.displayName : getConnectedUserName();
     const extractState = extract && extract.extractState;
@@ -421,6 +511,8 @@ class DumbHarvestingBox extends React.Component<Props, State> {
     const harvesterUserId = extract && extract.creator && extract.creator.userId ? extract.creator.userId : getConnectedUserId();
     const menuDisabled = disabled || isSubmitted;
     const hasFooter = disabled || isEditable || isSubmitted;
+    const tags = extract && extract.tags ? extract.tags.map(tag => tag.id) : [];
+    tags.sort();
     return (
       <div className={isSubmitted ? 'submitted-harvesting' : ''}>
         <div>
@@ -527,8 +619,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
               <AvatarImage userId={harvesterUserId} userName={userName} />
               <div className="harvesting-infos">
                 <div className="username">{userName}</div>
-                {hasExtract &&
-                  extract &&
+                {extract &&
                   extract.creationDate && (
                     <div className="harvesting-date" title={extract.creationDate}>
                       {harvestingDate ||
@@ -537,7 +628,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
                           .fromNow()}
                     </div>
                   )}
-                {!hasExtract && (
+                {!extract && (
                   <div className="harvesting-date">
                     <Translate value="harvesting.now" />
                   </div>
@@ -552,12 +643,11 @@ class DumbHarvestingBox extends React.Component<Props, State> {
             </div>
           )}
           <div className="harvesting-box-body">
-            {hasExtract &&
-              extract &&
+            {extract &&
               !isEditable && (
                 <div className="body-container">
                   <div className="previous-extract">
-                    {extractIndex > 0 && (
+                    {currentExtractIndex > 0 && (
                       <div
                         onClick={() => {
                           this.changeCurrentExtract(-1);
@@ -570,7 +660,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
                   <div className="extract-body">{extract.body}</div>
                   <div className="next-extract">
                     {extracts &&
-                      extractIndex < extracts.length - 1 && (
+                      currentExtractIndex < extracts.length - 1 && (
                         <div
                           onClick={() => {
                             this.changeCurrentExtract(1);
@@ -582,26 +672,34 @@ class DumbHarvestingBox extends React.Component<Props, State> {
                   </div>
                 </div>
               )}
-            {hasExtract &&
-              extract &&
-              isEditable && (
-                <FormControlWithLabel
-                  label=""
-                  componentClass="textarea"
-                  className="text-area"
-                  value={editableExtract}
-                  onChange={e => this.editExtract(e.target.value)}
-                />
-              )}
-            {!hasExtract && <div className="selection-body">{selectionText}</div>}
+
+            {extract && isEditable ? (
+              <FormControlWithLabel
+                label=""
+                componentClass="textarea"
+                className="text-area"
+                value={editableExtract}
+                onChange={e => this.editExtract(e.target.value)}
+              />
+            ) : null}
+            {!extract && selectionText ? <div className="selection-body">{selectionText}</div> : null}
           </div>
           {extracts &&
             extracts.length > 1 && (
               <div className="extracts-numbering">
-                {extractIndex + 1}/{extracts.length}
+                {currentExtractIndex + 1}/{extracts.length}
               </div>
             )}
-          {hasFooter && this.renderFooter()}
+          {extract && !hasFooter ? (
+            <Tags
+              canEdit={connectedUserIsAdmin()}
+              key={extract.id + tags.join('')}
+              contextId={extract.id}
+              initialValues={extract.tags ? extract.tags.map(tag => ({ value: tag.id, label: tag.value })) : []}
+              updateTags={this.updateTags}
+            />
+          ) : null}
+          {hasFooter ? this.renderFooter() : null}
         </div>
       </div>
     );
@@ -627,6 +725,13 @@ export default compose(
   }),
   graphql(confirmExtractMutation, {
     name: 'confirmExtract'
+  }),
+  graphql(updateExtractTagsMutation, {
+    props: function (props) {
+      return {
+        updateTags: updateTagsMutation(props)
+      };
+    }
   }),
   manageErrorAndLoading({ displayLoader: true })
 )(DumbHarvestingBox);

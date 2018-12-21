@@ -1,7 +1,6 @@
 """Posts are a kind of :py:class:`assembl.models.generic.Content` that has an author, and reply to some other content."""
 from datetime import datetime
 import uuid
-import logging
 from abc import ABCMeta, abstractmethod
 import simplejson as json
 
@@ -29,13 +28,13 @@ from ..lib.decl_enums import DeclEnum
 from ..lib.sqla_types import CoerceUnicode
 from .generic import Content, ContentSource
 from .auth import AgentProfile
-from ..lib import config
+from ..lib import config, logging
 from .langstrings import LangString, LangStringEntry
 from assembl.views.traversal import AbstractCollectionDefinition
 import assembl.graphql.docstrings as docs
 from assembl.models.idea import MessageView
 
-log = logging.getLogger('assembl')
+log = logging.getLogger()
 
 
 class PostVisitor(object):
@@ -864,6 +863,29 @@ class ImportedPost(Post):
         return query.filter_by(
             source_id=source_id,
             source_post_id=self.source_post_id), True
+
+
+class ExtractComment(AssemblPost):
+    """
+        A Post that is linked to an extract.
+    """
+    __tablename__ = "extract_comment"
+
+    id = Column(Integer, ForeignKey(
+        'assembl_post.id',
+        ondelete='CASCADE',
+        onupdate='CASCADE'
+    ), primary_key=True)
+
+    parent_extract_id = Column(
+        Integer,
+        ForeignKey('extract.id', ondelete="CASCADE", onupdate="CASCADE"),
+        nullable=False, index=True
+    )
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'extract_comment',
+    }
 
 
 @event.listens_for(ImportedPost.source_post_id, 'set', propagate=True)

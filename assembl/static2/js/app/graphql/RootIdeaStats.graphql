@@ -8,6 +8,7 @@ query RootIdeaStats {
     }
   }
   totalSentiments
+  totalVoteSessionParticipations
   numParticipants
   visitsAnalytics {
     sumVisitsLength

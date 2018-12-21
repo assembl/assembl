@@ -1,5 +1,6 @@
 // @flow
 import React from 'react';
+import isEqualWith from 'lodash/isEqualWith';
 import { connect } from 'react-redux';
 import { I18n } from 'react-redux-i18n';
 import arrayMutators from 'final-form-arrays';
@@ -11,6 +12,7 @@ import FileUploaderFieldAdapter from '../../form/fileUploaderFieldAdapter';
 import MultilingualTextFieldAdapter from '../../form/multilingualTextFieldAdapter';
 import MultilingualRichTextFieldAdapter from '../../form/multilingualRichTextFieldAdapter';
 import TextFieldAdapter from '../../form/textFieldAdapter';
+import { compareEditorState } from '../../form/utils';
 import { createResourceTooltip, deleteResourceTooltip } from '../../common/tooltips';
 
 import AdminForm from '../../../components/form/adminForm';
@@ -42,70 +44,74 @@ class ResourcesCenterAdminForm extends React.Component<Props> {
         mutators={{
           ...arrayMutators
         }}
-        render={({ handleSubmit, pristine, submitting }) => (
-          <div className="admin-content">
-            <AdminForm handleSubmit={handleSubmit} pristine={pristine} submitting={submitting}>
-              <div className="form-container">
-                <Field
-                  editLocale={editLocale}
-                  name="pageTitle"
-                  component={MultilingualTextFieldAdapter}
-                  label={I18n.t('administration.resourcesCenter.pageTitleLabel')}
-                  required
-                />
-                <Field
-                  name="pageHeader"
-                  component={FileUploaderFieldAdapter}
-                  label={I18n.t('administration.resourcesCenter.headerImageLabel')}
-                />
-                <div className="separator" />
-              </div>
+        render={({ handleSubmit, submitting, values, initialValues }) => {
+          // Don't use final form pristine here, we need special comparison for richtext fields
+          const pristine = isEqualWith(initialValues, values, compareEditorState);
+          return (
+            <div className="admin-content">
+              <AdminForm handleSubmit={handleSubmit} pristine={pristine} submitting={submitting}>
+                <div className="form-container">
+                  <Field
+                    editLocale={editLocale}
+                    name="pageTitle"
+                    component={MultilingualTextFieldAdapter}
+                    label={I18n.t('administration.resourcesCenter.pageTitleLabel')}
+                    required
+                  />
+                  <Field
+                    name="pageHeader"
+                    component={FileUploaderFieldAdapter}
+                    label={I18n.t('administration.resourcesCenter.headerImageLabel')}
+                  />
+                  <div className="separator" />
+                </div>
 
-              <FieldArrayWithActions
-                name="resources"
-                titleMsgId="administration.resourcesCenter.editResourceFormTitle"
-                tooltips={{
-                  addTooltip: createResourceTooltip,
-                  deleteTooltip: deleteResourceTooltip
-                }}
-                renderFields={({ name }) => (
-                  <React.Fragment>
-                    <Field
-                      editLocale={editLocale}
-                      name={`${name}.title`}
-                      component={MultilingualTextFieldAdapter}
-                      label={`${I18n.t('administration.resourcesCenter.titleLabel')} ${editLocale.toUpperCase()}`}
-                      required
-                    />
-                    <Field
-                      key={`${name}-text-${editLocale}`}
-                      editLocale={editLocale}
-                      name={`${name}.text`}
-                      component={MultilingualRichTextFieldAdapter}
-                      label={`${I18n.t('administration.resourcesCenter.textLabel')} ${editLocale.toUpperCase()}`}
-                    />
-                    <Field
-                      componentClass="textarea"
-                      name={`${name}.embedCode`}
-                      component={TextFieldAdapter}
-                      label={I18n.t('administration.resourcesCenter.embedCodeLabel')}
-                    />
-                    <Field
-                      name={`${name}.img`}
-                      component={FileUploaderFieldAdapter}
-                      label={I18n.t('administration.resourcesCenter.imageLabel')}
-                    />
-                    <Field
-                      name={`${name}.doc`}
-                      component={FileUploaderFieldAdapter}
-                      label={I18n.t('administration.resourcesCenter.documentLabel')}
-                    />
-                  </React.Fragment>
-                )}
-              />
-            </AdminForm>
-          </div>
-        )}
+                <FieldArrayWithActions
+                  name="resources"
+                  titleMsgId="administration.resourcesCenter.editResourceFormTitle"
+                  tooltips={{
+                    addTooltip: createResourceTooltip,
+                    deleteTooltip: deleteResourceTooltip
+                  }}
+                  renderFields={({ name }) => (
+                    <React.Fragment>
+                      <Field
+                        editLocale={editLocale}
+                        name={`${name}.title`}
+                        component={MultilingualTextFieldAdapter}
+                        label={`${I18n.t('administration.resourcesCenter.titleLabel')} ${editLocale.toUpperCase()}`}
+                        required
+                      />
+                      <Field
+                        key={`${name}-text-${editLocale}`}
+                        editLocale={editLocale}
+                        name={`${name}.text`}
+                        component={MultilingualRichTextFieldAdapter}
+                        label={`${I18n.t('administration.resourcesCenter.textLabel')} ${editLocale.toUpperCase()}`}
+                      />
+                      <Field
+                        componentClass="textarea"
+                        name={`${name}.embedCode`}
+                        component={TextFieldAdapter}
+                        label={I18n.t('administration.resourcesCenter.embedCodeLabel')}
+                      />
+                      <Field
+                        name={`${name}.img`}
+                        component={FileUploaderFieldAdapter}
+                        label={I18n.t('administration.resourcesCenter.imageLabel')}
+                      />
+                      <Field
+                        name={`${name}.doc`}
+                        component={FileUploaderFieldAdapter}
+                        label={I18n.t('administration.resourcesCenter.documentLabel')}
+                      />
+                    </React.Fragment>
+                  )}
+                />
+              </AdminForm>
+            </div>
+          );
+        }}
       />
     );
   }

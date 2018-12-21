@@ -29,7 +29,9 @@ export type Idea = {
   numContributors: number,
   numPosts: number,
   order: number,
-  ancestors: Array<string>
+  ancestors: Array<string>,
+  posts: Posts,
+  messageColumns: IdeaMessageColumns
 };
 
 type Post = { ...PostFragment } & {
@@ -40,6 +42,7 @@ type Post = { ...PostFragment } & {
 
 type FictionPostPreview = {
   id: string,
+  dbId: number,
   subject: ?string,
   body: ?string,
   creationDate: string,
@@ -98,6 +101,12 @@ type SocialMedia = {
 
 type Timeline = Array<Phase>;
 
+type DebateVideo = {
+  titleEntries: null | { [string]: string },
+  descriptionEntriesTop: null | { [string]: string },
+  videoUrl: null | string
+};
+
 type DebateData = Object & {
   chatbot: Chatbot,
   chatframe: any, // TODO
@@ -125,10 +134,7 @@ type DebateData = Object & {
   translationEnabled: boolean,
   twitter: { backgroundImageUrl: string, id: string },
   useSocialMedia: boolean,
-  video: {
-    descriptionEntriesTop: LangstringEntries,
-    videoUrl: string
-  },
+  video: DebateVideo,
   customHtmlCodeLandingPage: ?string,
   customHtmlCodeRegistrationPage: ?string
 };
@@ -147,6 +153,11 @@ type TextFragmentIdentifier = {
   offsetEnd: number
 };
 
+type Tag = {
+  id: string,
+  value: string
+};
+
 type Extract = {
   textFragmentIdentifiers: Array<TextFragmentIdentifier>,
   id: string,
@@ -156,7 +167,8 @@ type Extract = {
   extractAction: string,
   extractState: string,
   body: string,
-  creator: AgentProfileInfoFragment
+  creator: AgentProfileInfoFragment,
+  tags: Array<Tag>
 };
 
 type FieldIdentifier = 'EMAIL' | 'FULLNAME' | 'PASSWORD' | 'PASSWORD2' | 'USERNAME' | 'CUSTOM';
@@ -185,3 +197,15 @@ type RouterPath = {
   query?: { [key: string]: any },
   search: string
 };
+
+type StrictFile =
+  | {
+      externalUrl: ?File,
+      mimeType: ?string,
+      title: ?string
+    }
+  | {
+      externalUrl: ?string,
+      mimeType: ?string,
+      title: ?string
+    };

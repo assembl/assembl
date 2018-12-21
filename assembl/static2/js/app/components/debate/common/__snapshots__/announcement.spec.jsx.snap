@@ -1,0 +1,481 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Announcement component <Announcement /> on a multiColumns should render an announcement with the content associated to a multiColumns idea 1`] = `
+<div
+  className="announcement"
+>
+  <div
+    className="announcement-title"
+  >
+    <div
+      className="title-hyphen"
+    >
+       
+    </div>
+    <h3
+      className="announcement-title-text dark-title-1"
+    >
+      <span>
+        Announcement
+      </span>
+    </h3>
+  </div>
+  <div
+    className="announcement-media col-md-push-4 col-md-8 col-xs-12"
+  >
+    <section
+      className="media-section background-light"
+    >
+      <div
+        className="max-container"
+      >
+        <div
+          className="container-fluid"
+        >
+          <div
+            className="col-md-12 col-sm-12"
+          >
+            <div
+              className="media-right"
+            >
+              <div
+                className="media-description-layer media-description-top"
+                dangerouslySetInnerHTML={
+                  Object {
+                    "__html": "<p>Bonjour à tous</p><p>Nous allons mettre un deuxieme paragraphe</p><p>Et un peu de <strong>texte en gras</strong>",
+                  }
+                }
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <div
+    className="col-md-pull-8 col-md-4 col-xs-12"
+  >
+    <div
+      className="announcement-statistics"
+    >
+      <div
+        className="announcement-doughnut"
+      >
+        <div
+          className="statistics-doughnut"
+        >
+          <div
+            className="statistics"
+          >
+            <div
+              className="doughnut-container superpose"
+            >
+              <svg
+                className="doughnut"
+                viewBox="0 0 140 140"
+              >
+                <path
+                  className="circle"
+                  d="M 70 120 A 50 50 0 0 0 70 20"
+                  fill="transparent"
+                  stroke="green"
+                />
+                <path
+                  className="circle"
+                  d="M 69.99999999999999 20 A 50 50 0 0 0 70 120"
+                  fill="transparent"
+                  stroke="red"
+                />
+              </svg>
+            </div>
+            <div
+              className="doughnut-label superpose"
+            >
+              <div
+                className="doughnut-label-count"
+              >
+                2
+              </div>
+              
+              <div
+                className="doughnut-label-text"
+              >
+                <span>
+                  Reactions
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        className="announcement-numbers-multicol"
+      >
+        <div
+          style={
+            Object {
+              "color": "green",
+            }
+          }
+        >
+          1
+           
+          <span
+            className="col-announcement-count"
+          >
+            Positive
+          </span>
+        </div>
+        <div
+          style={
+            Object {
+              "color": "red",
+            }
+          }
+        >
+          1
+           
+          <span
+            className="col-announcement-count"
+          >
+            Negative
+          </span>
+        </div>
+        <div
+          className="color"
+        >
+          2
+           
+          <span
+            className="assembl-icon-profil"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Announcement component <Announcement/> on a thread should render an announcement with the content associated to a thread idea 1`] = `
+<div
+  className="announcement"
+>
+  <div
+    className="announcement-title"
+  >
+    <div
+      className="title-hyphen"
+    >
+       
+    </div>
+    <h3
+      className="announcement-title-text dark-title-1"
+    >
+      <span>
+        Announcement
+      </span>
+    </h3>
+  </div>
+  <div
+    className="announcement-media col-md-push-4 col-md-8 col-xs-12"
+  >
+    <section
+      className="media-section background-light"
+    >
+      <div
+        className="max-container"
+      >
+        <div
+          className="container-fluid"
+        >
+          <div
+            className="col-md-12 col-sm-12"
+          >
+            <div
+              className="media-right"
+            >
+              <div
+                className="media-description-layer media-description-top"
+                dangerouslySetInnerHTML={
+                  Object {
+                    "__html": "<p>Bonjour à tous</p><p>Nous allons mettre un deuxieme paragraphe</p><p>Et un peu de <strong>texte en gras</strong>",
+                  }
+                }
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <div
+    className="col-md-pull-8 col-md-4 col-xs-12"
+  >
+    <div
+      className="announcement-statistics"
+    >
+      <div
+        className="announcement-doughnut"
+      >
+        <div
+          className="statistics-doughnut"
+        >
+          <div
+            className="statistics"
+          >
+            <div
+              className="doughnut-container superpose"
+            >
+              <svg
+                className="doughnut"
+                viewBox="0 0 140 140"
+              >
+                <path
+                  className="circle"
+                  d="M 117.55282581475768 54.54915028125263 A 50 50 0 0 0 70 20"
+                  fill="transparent"
+                  onBlur={[Function]}
+                  onClick={null}
+                  onFocus={[Function]}
+                  onMouseOut={[Function]}
+                  onMouseOver={[Function]}
+                  stroke="#46D081"
+                />
+                <path
+                  className="circle"
+                  d="M 113.30650522723651 94.99093045493377 A 50 50 0 0 0 117.55282581475768 54.54915028125263"
+                  fill="transparent"
+                  onBlur={[Function]}
+                  onClick={null}
+                  onFocus={[Function]}
+                  onMouseOut={[Function]}
+                  onMouseOver={[Function]}
+                  stroke="#F2474D"
+                />
+                <path
+                  className="circle"
+                  d="M 49.65360166665506 24.326987455819626 A 50 50 0 1 0 113.30650522723651 94.99093045493377"
+                  fill="transparent"
+                  onBlur={[Function]}
+                  onClick={null}
+                  onFocus={[Function]}
+                  onMouseOut={[Function]}
+                  onMouseOver={[Function]}
+                  stroke="#FAC16F"
+                />
+                <path
+                  className="circle"
+                  d="M 69.99999999999999 20 A 50 50 0 0 0 49.65360166665506 24.326987455819626"
+                  fill="transparent"
+                  onBlur={[Function]}
+                  onClick={null}
+                  onFocus={[Function]}
+                  onMouseOut={[Function]}
+                  onMouseOver={[Function]}
+                  stroke="#9374FF"
+                />
+              </svg>
+            </div>
+            <div
+              className="doughnut-label superpose"
+            >
+              <div
+                className="doughnut-label-count"
+              >
+                15
+              </div>
+              
+              <div
+                className="doughnut-label-text"
+              >
+                <span>
+                  Reactions
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        className="announcement-numbers"
+      >
+        <div
+          className="counters announcement-numbers"
+        >
+          <span
+            className="counter-with-icon"
+          >
+            2
+             
+            <span
+              className="assembl-icon assembl-icon-message"
+            />
+          </span>
+           - 
+          <span
+            className="counter-with-icon"
+          >
+            2
+             
+            <span
+              className="assembl-icon assembl-icon-profil"
+            />
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Announcement component createDoughnutElements function should return an array of elements for a <StatisticDoughnut /> component 1`] = `
+Array [
+  Object {
+    "Tooltip": <Tooltip
+      bsClass="tooltip"
+      className="no-arrow-tooltip"
+      id="dontUnderstandTooltip"
+      placement="right"
+    >
+      2
+       
+      <Translate
+        value="debate.dontUnderstand"
+      />
+    </Tooltip>,
+    "color": "yellow",
+    "count": 2,
+  },
+  Object {
+    "Tooltip": <Tooltip
+      bsClass="tooltip"
+      className="no-arrow-tooltip"
+      id="disagreeTooltip"
+      placement="right"
+    >
+      0
+       
+      <Translate
+        value="debate.disagree"
+      />
+    </Tooltip>,
+    "color": "red",
+    "count": 0,
+  },
+  Object {
+    "Tooltip": <Tooltip
+      bsClass="tooltip"
+      className="no-arrow-tooltip"
+      id="likeTooltip"
+      placement="right"
+    >
+      4
+       
+      <Translate
+        value="debate.like"
+      />
+    </Tooltip>,
+    "color": "green",
+    "count": 4,
+  },
+  Object {
+    "Tooltip": <Tooltip
+      bsClass="tooltip"
+      className="no-arrow-tooltip"
+      id="moreinfoTooltip"
+      placement="right"
+    >
+      3
+       
+      <Translate
+        value="debate.moreinfo"
+      />
+    </Tooltip>,
+    "color": "purple",
+    "count": 3,
+  },
+]
+`;
+
+exports[`Announcement component createTooltip function should return a tooltip with the count for a given sentiment 1`] = `
+<Tooltip
+  bsClass="tooltip"
+  className="no-arrow-tooltip"
+  id="likeTooltip"
+  placement="right"
+>
+   
+  <Translate
+    value="debate.like"
+  />
+</Tooltip>
+`;
+
+exports[`Announcement component getSentimentsCount function should return the counts of each sentiments given we pass it a Posts object 1`] = `
+Object {
+  "disagree": Object {
+    "SvgComponent": [Function],
+    "camelType": "disagree",
+    "color": "#F2474D",
+    "count": 2,
+    "tooltip": <Tooltip
+      bsClass="tooltip"
+      id="disagreeTooltip"
+      placement="right"
+    >
+      <Translate
+        value="debate.disagree"
+      />
+    </Tooltip>,
+    "type": "DISAGREE",
+  },
+  "dontUnderstand": Object {
+    "SvgComponent": [Function],
+    "camelType": "dontUnderstand",
+    "color": "#FAC16F",
+    "count": 9,
+    "tooltip": <Tooltip
+      bsClass="tooltip"
+      id="dontUnderstandTooltip"
+      placement="right"
+    >
+      <Translate
+        value="debate.dontUnderstand"
+      />
+    </Tooltip>,
+    "type": "DONT_UNDERSTAND",
+  },
+  "like": Object {
+    "SvgComponent": [Function],
+    "camelType": "like",
+    "color": "#46D081",
+    "count": 3,
+    "tooltip": <Tooltip
+      bsClass="tooltip"
+      id="likeTooltip"
+      placement="right"
+    >
+      <Translate
+        value="debate.like"
+      />
+    </Tooltip>,
+    "type": "LIKE",
+  },
+  "moreInfo": Object {
+    "SvgComponent": [Function],
+    "camelType": "moreInfo",
+    "color": "#9374FF",
+    "count": 1,
+    "tooltip": <Tooltip
+      bsClass="tooltip"
+      id="moreInfoTooltip"
+      placement="right"
+    >
+      <Translate
+        value="debate.moreInfo"
+      />
+    </Tooltip>,
+    "type": "MORE_INFO",
+  },
+}
+`;

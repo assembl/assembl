@@ -29,7 +29,7 @@ exports[`ManageModules component should render a form to manage the landing page
       <div
         className="column-left"
       >
-        <Unknown
+        <DumbSelectModulesForm
           lang="fr"
           moduleTypes={
             Array [
@@ -61,55 +61,55 @@ exports[`ManageModules component should render a form to manage the landing page
           }
           modulesById={
             Immutable.Map {
-              abc123: Immutable.Map {
-                enabled: true,
-                id: "abc123",
-                moduleType: Immutable.Map {
-                  moduleId: "abc123",
-                  editableOrder: false,
-                  identifier: "HEADER",
-                  required: true,
-                  title: "Header",
+              "abc123": Immutable.Map {
+                "enabled": true,
+                "id": "abc123",
+                "moduleType": Immutable.Map {
+                  "moduleId": "abc123",
+                  "editableOrder": false,
+                  "identifier": "HEADER",
+                  "required": true,
+                  "title": "Header",
                 },
-                order: 1,
+                "order": 1,
               },
-              def456: Immutable.Map {
-                enabled: false,
-                id: "def456",
-                moduleType: Immutable.Map {
-                  moduleId: "def456",
-                  editableOrder: true,
-                  identifier: "INTRODUCTION",
-                  title: "Introduction",
+              "def456": Immutable.Map {
+                "enabled": false,
+                "id": "def456",
+                "moduleType": Immutable.Map {
+                  "moduleId": "def456",
+                  "editableOrder": true,
+                  "identifier": "INTRODUCTION",
+                  "title": "Introduction",
                 },
-                order: 2,
+                "order": 2,
               },
-              ghi789: Immutable.Map {
-                enabled: true,
-                id: "ghi789",
-                moduleType: Immutable.Map {
-                  moduleId: "ghi789",
-                  editableOrder: true,
-                  identifier: "VIDEO",
-                  title: "Video",
+              "ghi789": Immutable.Map {
+                "enabled": true,
+                "id": "ghi789",
+                "moduleType": Immutable.Map {
+                  "moduleId": "ghi789",
+                  "editableOrder": true,
+                  "identifier": "VIDEO",
+                  "title": "Video",
                 },
-                order: 5,
+                "order": 5,
               },
-              jkl865: Immutable.Map {
-                enabled: true,
-                id: "jkl865",
-                moduleType: Immutable.Map {
-                  moduleId: "jkl865",
-                  editableOrder: false,
-                  identifier: "FOOTER",
-                  required: true,
-                  title: "Footer",
+              "jkl865": Immutable.Map {
+                "enabled": true,
+                "id": "jkl865",
+                "moduleType": Immutable.Map {
+                  "moduleId": "jkl865",
+                  "editableOrder": false,
+                  "identifier": "FOOTER",
+                  "required": true,
+                  "title": "Footer",
                 },
-                order: 99,
+                "order": 99,
               },
             }
           }
-          toggleModule={[Function]}
+          toggleModule={[MockFunction]}
         />
         <div
           className="margin-xl"
@@ -117,7 +117,7 @@ exports[`ManageModules component should render a form to manage the landing page
           <AddModuleButton
             allDuplicatesAreChecked={false}
             buttonTitleTranslationKey="textAndMultimediaBtn"
-            createModule={[Function]}
+            createModule={[MockFunction]}
             numberOfDuplicatesModules={1}
             numberOfEnabledModules={3}
           />
@@ -130,44 +130,44 @@ exports[`ManageModules component should render a form to manage the landing page
           modules={
             Immutable.List [
               Immutable.Map {
-                enabled: true,
-                id: "abc123",
-                moduleType: Immutable.Map {
-                  moduleId: "abc123",
-                  editableOrder: false,
-                  identifier: "HEADER",
-                  required: true,
-                  title: "Header",
+                "enabled": true,
+                "id": "abc123",
+                "moduleType": Immutable.Map {
+                  "moduleId": "abc123",
+                  "editableOrder": false,
+                  "identifier": "HEADER",
+                  "required": true,
+                  "title": "Header",
                 },
-                order: 1,
+                "order": 1,
               },
               Immutable.Map {
-                enabled: true,
-                id: "ghi789",
-                moduleType: Immutable.Map {
-                  moduleId: "ghi789",
-                  editableOrder: true,
-                  identifier: "VIDEO",
-                  title: "Video",
+                "enabled": true,
+                "id": "ghi789",
+                "moduleType": Immutable.Map {
+                  "moduleId": "ghi789",
+                  "editableOrder": true,
+                  "identifier": "VIDEO",
+                  "title": "Video",
                 },
-                order: 5,
+                "order": 5,
               },
               Immutable.Map {
-                enabled: true,
-                id: "jkl865",
-                moduleType: Immutable.Map {
-                  moduleId: "jkl865",
-                  editableOrder: false,
-                  identifier: "FOOTER",
-                  required: true,
-                  title: "Footer",
+                "enabled": true,
+                "id": "jkl865",
+                "moduleType": Immutable.Map {
+                  "moduleId": "jkl865",
+                  "editableOrder": false,
+                  "identifier": "FOOTER",
+                  "required": true,
+                  "title": "Footer",
                 },
-                order: 99,
+                "order": 99,
               },
             ]
           }
-          moveModuleDown={[Function]}
-          moveModuleUp={[Function]}
+          moveModuleDown={[MockFunction]}
+          moveModuleUp={[MockFunction]}
         />
       </div>
     </div>

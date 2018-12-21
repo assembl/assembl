@@ -8,16 +8,11 @@ import { orderPostsByMessageClassifier } from './utils';
 import { getIsPhaseCompletedById } from '../../../utils/timeline';
 import TabbedColumns from './tabbedColumns';
 import MultiColumns from './multiColumns';
-import hashLinkScroll from '../../../utils/hashLinkScroll';
 import { MIN_WIDTH_COLUMN, APP_CONTAINER_MAX_WIDTH } from '../../../constants';
 import { withScreenWidth } from '../../common/screenDimensions';
 import { IsHarvestingContext } from '../../../app';
 
 class ColumnsView extends React.Component<$FlowFixMeProps> {
-  componentDidMount() {
-    hashLinkScroll();
-  }
-
   shouldShowTabs = (columnsCount) => {
     const { isHarvesting } = this.props;
     return isHarvesting || columnsCount * MIN_WIDTH_COLUMN > Math.min(this.props.screenWidth, APP_CONTAINER_MAX_WIDTH);

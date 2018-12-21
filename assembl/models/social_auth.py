@@ -2,7 +2,6 @@
 
 .. _`Python Social Auth`: http://psa.matiasaguirre.net/
 """
-import logging
 import six
 import re
 from datetime import datetime, timedelta
@@ -25,14 +24,14 @@ from social_sqlalchemy.storage import (
 from sqlalchemy.ext.mutable import MutableDict
 from urllib import unquote
 
-from ..lib import config
+from ..lib import config, logging
 from ..lib.sqla_types import URLString, JSONType
 from .auth import AbstractAgentAccount, IdentityProvider, AgentProfile, User, Username
 from ..auth.generic_auth_backend import GenericAuth
 from . import Base
 
 
-log = logging.getLogger('assembl')
+log = logging.getLogger()
 
 
 class AssemblSocialAuthMixin(Base, SQLAlchemyMixin):

@@ -18,7 +18,7 @@ from os import getenv
 import sys
 import re
 from getpass import getuser
-from shutil import rmtree
+from shutil import copyfile
 from time import sleep, strftime, time
 from ConfigParser import ConfigParser, SafeConfigParser
 from StringIO import StringIO
@@ -152,6 +152,32 @@ def as_bool(b):
     return str(b).lower() in {"1", "true", "yes", "t", "on"}
 
 
+def populate_secrets():
+    try:
+        import boto3  # noqa
+        import json
+    except ImportError:
+        # we don't have boto3 yet
+        return
+
+    # ignore if you don't have secrets it means you are on your desktop.
+    # so we don't need a AWS account to start locally
+    if env.get('aws_secrets_id', None):
+        aws_client = boto3.client('secretsmanager')
+        print("Fetching secrets from AWS Secrets Manager with id %s" % env.aws_secrets_id)
+        response = aws_client.get_secret_value(
+            SecretId=env.aws_secrets_id,
+        )
+        env_vars = json.loads(response["SecretString"])
+        # Add env variable overrides here
+        for env_key, env_value in env_vars.iteritems():
+            env[env_key] = env_value
+    else:
+        # TODO, once secrets have been put on secretmanager, and every client + server
+        # has AWS access, raise an error that secret manager is not set up.
+        print(red("No aws_secrets_id defined - using defaults defined in .rc files."))
+
+
 def sanitize_env():
     """Ensure boolean and list env variables are such"""
     # If the remote system is a mac you SHOULD set mac=true in your .rc file
@@ -181,6 +207,7 @@ def sanitize_env():
         env.projectpath, '%s_dumps' % env.get("projectname", 'assembl')))
     env.ini_file = env.get('ini_file', 'local.ini')
     env.group = env.get('group', env.user)
+    populate_secrets()
 
 
 def load_rcfile_config():
@@ -219,7 +246,7 @@ def fill_template(template, config, output=None, default_dir=None):
         for (k, v) in config.items():
             if str(v).lower() == 'false':
                 config[k] = False
-            if '%(' in v:
+            if '%(' in str(v):
                 try:
                     config[k] = v % config
                 except KeyError:
@@ -284,6 +311,29 @@ def update_vendor_config():
 
 
 @task
+def create_backup_rc():
+    """Create an rc file for backup. Launched from inside create_local_ini"""
+    backup_rc_file = '.local.rc'
+    local_backup_rc_file = None
+    # Take everything in the RC files, as the root rc files can also be changed over time
+    rc_info = combine_rc(env.rcfile)
+    try:
+        with NamedTemporaryFile(delete=False) as f:
+            local_backup_rc_file = f.name
+            for key, value in sorted(rc_info.iteritems()):
+                f.write("{key} = {value}\n".format(key=key, value=value))
+        if not running_locally([env.host_string]):
+            backup_rc_path = os.path.join(env.projectpath, backup_rc_file)
+            put(local_backup_rc_file, backup_rc_path)
+        else:
+            backup_rc_path = os.path.join(code_root(), backup_rc_file)
+            copyfile(local_backup_rc_file, backup_rc_path)
+    finally:
+        if local_backup_rc_file:
+            os.unlink(local_backup_rc_file)
+
+
+@task
 def create_local_ini():
     """Replace the local.ini file with one composed from the current .rc file"""
     if not running_locally():
@@ -326,6 +376,7 @@ def create_local_ini():
                 put(random_file_name, random_ini_path)
             # send the local file
             put(local_file_name, local_ini_path)
+            execute(create_backup_rc)
         finally:
             os.unlink(random_file_name)
             os.unlink(local_file_name)
@@ -378,7 +429,7 @@ def generate_frozen_requirements():
 
 
 @task
-def migrate_local_ini():
+def migrate_local_ini(backup=False):
     """Generate a .rc file to match the existing local.ini file.
     (requires a base .rc file)
 
@@ -433,16 +484,23 @@ def migrate_local_ini():
                     templates = get_random_templates()
                     venvcmd("python2 -m assembl.scripts.ini_files combine -o " +
                             base_random_file_name + " " + " ".join(templates))
+
+                random_ini_output = random_ini_path
+                if backup:
+                    randname = env.random_file.split(".")[0]  # don't want the ini section
+                    randname = randname + "_different_after_backup.ini"
+                    random_ini_output = join(env.projectpath, randname)
                 # Create the new random file with the local.ini data
                 venvcmd("python2 -m assembl.scripts.ini_files diff -e -o %s %s %s" % (
-                        dest_random_file_name, base_random_file_name,
+                        random_ini_output, base_random_file_name,
                         local_file_name))
                 # Create the new rc file.
                 venvcmd("python2 -m assembl.scripts.ini_files migrate -o %s -i %s -r %s %s" % (
-                        dest_path, local_file_name, dest_random_file_name,
+                        dest_path, local_file_name, random_ini_path,
                         env.rcfile))
             # Overwrite the random file
-            put(dest_random_file_name, random_ini_path)
+            if not backup:
+                put(dest_random_file_name, random_ini_path)
         finally:
             os.unlink(base_random_file_name)
             os.unlink(dest_random_file_name)
@@ -690,7 +748,7 @@ def build_virtualenv():
     """
     Build the virtualenv
     """
-    print(cyan('Creating a fresh virtualenv'))
+    print(cyan('Creating a fresh virtualenv %s' % env.venvpath))
     assert env.venvpath
     # This relies on env.venvpath
     if exists(join(env.venvpath, "bin/activate")):
@@ -699,7 +757,7 @@ def build_virtualenv():
         return
     run('python2 -mvirtualenv --no-setuptools %(venvpath)s' % env)
     # create the virtualenv with --no-setuptools to avoid downgrading setuptools that may fail
-    if env.uses_bluenove_actionable:
+    if env.uses_bluenove_actionable and not is_integration_env():
         execute(install_bluenove_actionable)
 
     if env.mac:
@@ -887,9 +945,8 @@ def database_dump_aws():
 
 
 _processes_to_restart_without_backup = [
-    "dev:pserve" "celery_imap", "changes_router",
-    "celery_notify", "celery_notification_dispatch",
-    "source_reader"]
+    "dev:pserve", "celery", "changes_router",
+    "celery_notify", "source_reader"]
 
 
 _processes_to_restart_with_backup = _processes_to_restart_without_backup + [
@@ -1026,7 +1083,7 @@ def compile_javascript():
         with cd('assembl/static/js'):
             venvcmd('./node_modules/.bin/gulp libs', chdir=False)
             venvcmd('./node_modules/.bin/gulp browserify:prod', chdir=False)
-            venvcmd('./node_modules/.bin/gulp build:test', chdir=False)
+#            venvcmd('./node_modules/.bin/gulp build:test', chdir=False)
         if env.wsginame != 'dev.wsgi':
             with cd('assembl/static2'):
                 venvcmd('npm run build', chdir=False)
@@ -1073,31 +1130,41 @@ def bootstrap_from_checkout(backup=False):
     """
     execute(updatemaincode, backup=backup)
     execute(build_virtualenv)
-    if getenv('TRAVIS_COMMIT', None):
-        pass
-    elif env.is_production_env:
-        execute(install_url_metadata_wheel)
-    else:
-        execute(install_url_metadata_source)
+    if not is_integration_env():
+        if env.is_production_env:
+            execute(install_url_metadata_wheel)
+        else:
+            execute(install_url_metadata_source)
     execute(app_update_dependencies, backup=backup)
-    execute(app_setup)
+    execute(app_setup, backup=backup)
     execute(check_and_create_database_user)
     execute(app_compile_nodbupdate)
     execute(set_file_permissions)
     if not backup:
         execute(app_db_install)
     else:
-        execute(database_restore, backup=backup)
+        execute(database_restore)
     execute(app_reload)
     execute(webservers_reload)
+    if not is_integration_env() and env.wsginame != 'dev.wsgi':
+        execute(create_backup_script)
+        execute(create_alert_disk_space_script)
 
 
 @task
-def bootstrap_from_backup(backup=True):
+def bootstrap_from_backup():
     """
     Creates the virtualenv and install the app from the backup files
     """
-    execute(bootstrap_from_checkout, backup=backup)
+    execute(bootstrap_from_checkout, backup=True)
+
+
+@task
+def regenerate_rc_file():
+    """
+    Regenerates RC file from ini file to restore production server from backup
+    """
+    venvcmd('assembl-ini-files migrate -i local.ini -r {random} {rc}' (env.rcfile))
 
 
 def clone_repository():
@@ -1127,7 +1194,7 @@ def updatemaincode(backup=False):
             run('git checkout %s' % env.gitbranch)
             run('git pull %s %s' % (env.gitrepo, env.gitbranch))
 
-        if not env.is_production_env and not getenv('TRAVIS_COMMIT', None):
+        if not env.is_production_env and not is_integration_env():
             path = join(env.projectpath, '..', 'url_metadata')
             if exists(path):
                 print(cyan('Updating url_metadata Git repository'))
@@ -1161,6 +1228,12 @@ def get_robot_machine():
 
     print red("No user machine found!")
     return None
+
+
+def is_integration_env():
+    # Centralize checking whether in CI/CD env
+    if getenv('TRAVIS_COMMIT', None):
+        return True
 
 
 @task
@@ -1246,18 +1319,20 @@ def restart_bluenove_actionable():
 
 
 @task
-def app_setup():
-    "Setup the environment so the application can run"
+def app_setup(backup=False):
+    """Setup the environment so the application can run"""
     venvcmd('pip install -e ./')
     execute(setup_var_directory)
     if not exists(env.ini_file):
         execute(create_local_ini)
-    venvcmd('assembl-ini-files populate %s' % (env.ini_file))
-    with cd(env.projectpath):
-        has_pre_commit = run('cat requirements.txt|grep pre-commit', warn_only=True)
-        if has_pre_commit and not exists(join(
-                env.projectpath, '.git/hooks/pre-commit')):
-            venvcmd("pre-commit install")
+    if not backup:
+        venvcmd('assembl-ini-files populate %s' % (env.ini_file))
+    if not env.is_production_env:
+        with cd(env.projectpath):
+            has_pre_commit = run('cat requirements.txt|grep pre-commit', warn_only=True)
+            if has_pre_commit and not exists(join(
+                    env.projectpath, '.git/hooks/pre-commit')):
+                venvcmd("pre-commit install")
 
 
 @task
@@ -1316,7 +1391,7 @@ def update_node(force_reinstall=False):
     """
     Install node and npm to a known-good version
     """
-    node_version_cmd_regex = re.compile('^v6\.11\.5')
+    node_version_cmd_regex = re.compile('^v10\.13\.0')
     with settings(warn_only=True), hide('running', 'stdout'):
         node_version_cmd_result = venvcmd("node --version")
     match = node_version_cmd_regex.match(node_version_cmd_result)
@@ -1325,12 +1400,13 @@ def update_node(force_reinstall=False):
         # Stop gulp and webpack because otherwise node may be busy
         supervisor_process_stop('dev:gulp')
         supervisor_process_stop('dev:webpack')
+        venvcmd("rm -rf venv/lib/node_modules/")
         venvcmd("rm -f venv/bin/npm")  # remove the symlink first otherwise next command raises OSError: [Errno 17] File exists
-        venvcmd("nodeenv --node=6.11.5 --npm=3.10.10 --python-virtualenv assembl/static/js")
+        venvcmd("nodeenv --node=10.13.0 --npm=6.4.1 --python-virtualenv assembl/static/js")
+        execute(upgrade_yarn)
         with cd(get_node_base_path()):
             venvcmd("npm install reinstall -g", chdir=False)
-        with cd(get_new_node_base_path()):
-            venvcmd("npm install reinstall -g", chdir=False)
+        execute(update_npm_requirements, force_reinstall=True)
     else:
         print(green('Node version ok'))
 
@@ -1437,7 +1513,7 @@ def webservers_stop():
     if env.uses_nginx:
         # Nginx
         if exists('/etc/init.d/nginx'):
-            run('sudo /etc/init.d/nginx stop')
+            sudo('/etc/init.d/nginx stop')
         elif env.mac:
             sudo('killall nginx')
 
@@ -1449,7 +1525,7 @@ def webservers_start():
     if env.uses_nginx:
         # Nginx
         if exists('/etc/init.d/nginx'):
-            run('sudo /etc/init.d/nginx start')
+            sudo('/etc/init.d/nginx start')
         elif env.mac and exists('/usr/local/nginx/sbin/nginx'):
             sudo('/usr/local/nginx/sbin/nginx')
 
@@ -1545,7 +1621,7 @@ def update_npm_requirements(force_reinstall=False):
         if exists(yarn_path):
             if force_reinstall:
                 print('Removing node_modules directory...')
-                rmtree(os.path.join(static2_path, 'node_modules'))
+                venvcmd('rm -rf {}'.format(os.path.join(static2_path, 'node_modules')))
 
             venvcmd(yarn_path, chdir=False)
         else:
@@ -1567,6 +1643,8 @@ def install_single_server():
     execute(install_assembl_server_deps)
     execute(install_redis)
     execute(install_memcached)
+    execute(install_borg)
+    execute(install_ncftp_client)
 
 
 @task
@@ -1575,6 +1653,7 @@ def install_assembl_server_deps():
     Will install most assembl components on a single server, except db
     """
     execute(install_yarn)
+    execute(create_clean_crontab)
     execute(upgrade_yarn_crontab)
     execute(install_server_deps)
     execute(install_assembl_deps)
@@ -1596,6 +1675,38 @@ def install_server_deps():
     """
     execute(install_fail2ban)
     execute(install_jq)
+
+
+@task
+def install_borg():
+    if env.mac:
+        path = '/usr/local/bin/borg'
+        if not exists(path):
+            print(cyan("Installing borg"))
+            run('brew cask install borgbackup')
+        return 0
+
+    path = '/usr/bin/borg'
+    if not exists(path):
+        print(cyan("Installing borg"))
+        sudo("apt-get -y install borgbackup")
+
+
+@task
+def install_ncftp_client():
+    """Installs ncftp_client. This client is used to move borg repositories from the
+    local machine to the ftp backup machine or object storage."""
+    if env.mac:
+        ncftp_path = '/usr/local/bin/ncftp'
+        if not exists(ncftp_path):
+            print(cyan('Installing ncftp client'))
+            run('brew install ncftp')
+        return 0
+
+    print(cyan('Installing ncftp client'))
+    ncftp_path = '/usr/bin/ncftp'
+    if not exists(ncftp_path):
+        sudo('apt-get install -y ncftp')
 
 
 @task
@@ -1912,6 +2023,7 @@ def check_and_create_sentry_database_user():
 def create_sentry_project():
     """Create a project for the current assembl server.
     Mostly useful for Docker. Tested on Sentry 8."""
+    # TODO: update this and test it with sentry 9
     if os.path.exists(env.random_file):
         env.update(as_rc(env.random_file))
     if env.get("sentry_key", None) and env.get("sentry_secret", None):
@@ -2045,6 +2157,7 @@ def database_dump():
     """
     Dumps the database on remote site
     """
+
     if not exists(env.dbdumps_dir):
         run('mkdir -m700 %s' % env.dbdumps_dir)
 
@@ -2128,6 +2241,7 @@ def database_delete():
     execute(check_and_create_database_user)
 
     with settings(warn_only=True), hide('stdout'):
+
         checkDatabase = venvcmd('assembl-pypsql -1 -u {user} -p {password} -n {host} "{command}"'.format(
             command="SELECT 1 FROM pg_database WHERE datname='%s'" % (env.db_database),
             password=env.db_password, host=env.db_host, user=env.db_user))
@@ -2159,11 +2273,24 @@ def postgres_user_detach():
             pid))
 
 
+def is_supervisord_running():
+    result = venvcmd('supervisorctl pid')
+    if 'no such file' in result:
+        return False
+    try:
+        pid = int(result)
+        if pid:
+            return True
+    except:
+        return False
+
+
 @task
 def database_restore(backup=False):
     """
     Restores the database backed up on the remote server
     """
+
     if not backup:
         assert(env.wsginame in ('staging.wsgi', 'dev.wsgi'))
         processes = filter_autostart_processes(_processes_to_restart_without_backup)
@@ -2202,14 +2329,11 @@ def database_restore(backup=False):
             env.db_host,
             env.db_database,
             env.db_user,
-            remote_db_path())
-        )
+            remote_db_path()))
 
-    for process in processes:
-        supervisor_process_start(process)
-
-    if(env.wsginame != 'dev.wsgi'):
-        execute(webservers_start)
+    if not is_supervisord_running():
+        venvcmd('supervisord')
+    execute(webservers_start)
 
 
 def get_config():
@@ -2319,6 +2443,144 @@ def set_ssl_certificates():
 
 
 @task
+def create_backup_script():
+    """
+    Generates backup script that stores the backup on a local borg repository.
+    Sets a cron job for it.
+    """
+    path = join(env.projectpath, 'backup_all_assembl.sh')
+    if not exists(path):
+        with NamedTemporaryFile(delete=False) as f:
+            backup_all_assembl = f.name
+        fill_template('assembl/templates/system/backup_template.jinja2', env, backup_all_assembl)
+        try:
+            put(backup_all_assembl, path)
+            run('chmod +x backup_all_assembl.sh')
+            run('chown %s:%s backup_all_assembl.sh' % (env.user, env.user))
+        finally:
+            os.unlink('backup_all_assembl.sh')
+
+
+@task
+def create_clean_crontab(migrate=False):
+    """
+    Start with a clean crontab for the assembl user, or migrate by adding email at top
+    """
+    admin_email = env.admin_email
+    if not admin_email:
+        if not migrate:
+            run("echo '' | crontab -")
+    else:
+        cron_command = "MAILTO=%s" % (admin_email)
+        if not migrate:
+            run('echo %s | crontab -' % cron_command)
+        else:
+            run('(echo %s; crontab -l) | crontab -' % cron_command)
+
+
+@task
+def create_alert_disk_space_script():
+    """Generates the script to alert on disk space limit and sets cron job for it."""
+    rc_info = filter_global_names(combine_rc(env['rcfile']))
+    with NamedTemporaryFile(delete=False) as f:
+        alert_disk_space = f.name
+    fill_template('assembl/templates/system/alert_disk_space_template.jinja2', rc_info, alert_disk_space)
+    put(alert_disk_space, '/home/%s/alert_disk_space.sh' % (env.user))
+    run('chmod +x alert_disk_space.sh')
+    cron_command = "0 5 * * * /home/" + env.user + "/alert_disk_space.sh"
+    run(create_add_to_crontab_command(cron_command))
+
+
+@task
+def set_borg_password():
+    """
+    Helper function to change the passphrase of the assembl borg repo manually
+    """
+    print(cyan("Setting borg password"))
+    run("BORG_NEW_PASSPHRASE=\'%s\' borg change-passphrase %s" % (env.borg_password, env.ftp_backup_folder))
+
+
+@task
+def list_backups():
+    """
+    Helper function to list all backups in the borg repo
+    """
+    run("BORG_PASSPHRASE=\'%s\' borg list %s" % (env.borg_password, env.ftp_backup_folder))
+
+
+def ftp_backup_cmd():
+    # -z sync folders
+    # -R recursive
+    # -v verbose
+    # -f XXX (authentication file)
+    return 'ncftpput -z -R -v -f /home/assembl_user/assembl/ncftp.cfg {endpoint} / {backup_folder}'.format(
+        endpoint=env.ftp_backup_endpoint, backup_folder=env.ftp_backup_folder)
+
+
+def ftp_get(ncftp_config, source, destination):
+    """Command to download borg repository from ftp backup server to the production server"""
+    # TODO: only download latest version
+    # This command is to use ncftp.cfg instead of the env variables.
+    run('ncftpget -R -v -f {ncftp_config} {destination} {source}'.format(
+        ncftp_config=ncftp_config,
+        source=source,
+        destination=destination))
+
+
+def borg_backup_cmd():
+    return join(env.projectpath, 'backup_all_assembl.sh')
+
+
+@task
+def execute_backup_borg_repository():
+    """Command to manually execute the borg backup and FTP deployment"""
+
+    # Ensure the required tools are installed
+    execute(install_borg)
+    execute(set_ftp_private_information)
+    execute(create_backup_script)
+    command = "source {do_backup} && {put_backup}".format(do_backup=borg_backup_cmd(), put_backup=ftp_backup_cmd())
+    run(command)
+
+
+@task
+def fetch_backup(name=None):
+    """
+    Fetch a borg backup of Assembl from a repository location specified in RC file.
+    If no name is specified, fetches the last backup.
+    """
+    destination_folder = "/home/assembl_user/assembl_backup"
+    if not exists(destination_folder):
+        run("mkdir {destination_folder}".format(destination_folder=destination_folder))
+    ftp_get(ncftp_config='/home/assembl_user/assembl/ncftp.cfg',
+            source='assembl_backups.borg',
+            destination=destination_folder)
+
+    if name is None:
+        last_backup = run("BORG_PASSPHRASE={borg_password} borg list {destination_folder}/assembl_backups.borg | sed '$!d'".format(destination_folder=destination_folder, borg_password=env.borg_password))
+        backup_name = last_backup.split(' ')[0]
+    else:
+        backup_name = name
+    run("BORG_PASSPHRASE={borg_password} borg extract {destination_folder}/assembl_backups.borg::{backup_name}".format(destination_folder=destination_folder, borg_password=env.borg_password, backup_name=backup_name))
+    # Moving the last backup assembl folder to assembl_user
+    run("mv /home/assembl_user/home/assembl_user/assembl {destination_folder}".format(destination_folder=destination_folder))
+
+
+@task
+def cron_backup_borg_repository():
+    """Command to set the crontask to backup assembl into a repo + push on FTP server"""
+
+    # Ensure the required tools are installed
+    execute(install_borg)
+    execute(set_ftp_private_information)
+    execute(create_backup_script)
+
+    command = "source {do_backup} && {put_backup}".format(do_backup=borg_backup_cmd(), put_backup=ftp_backup_cmd())
+    cron_command = "25 3 * * * {cmd} > var/log/assembl_backup.log &2>1".format(cmd=command)
+    run(create_add_to_crontab_command(cron_command))
+
+
+@task
 def reindex_elasticsearch(bg=False):
     "Rebuild the elasticsearch index"
     cmd = "assembl-reindex-all-contents " + env.ini_file
@@ -2418,6 +2680,13 @@ def install_yarn():
 def create_add_to_crontab_command(crontab_line):
     """Generates a shell command that makes sure that a cron won't be added several times (thanks to sort and uniq). This makes sure adding it several times is idempotent."""
     return "(crontab -l | grep -Fv '{cron}'; echo '{cron}') | crontab -".format(cron=crontab_line)
+
+
+def upgrade_yarn():
+    if env.mac:
+        run("brew update && brew upgrade yarn")
+    else:
+        sudo("apt-get update && apt-get install --only-upgrade yarn")
 
 
 @task
@@ -2857,6 +3126,32 @@ def set_fail2ban_configurations():
         finally:
             for path in filters_to_file.values():
                 os.unlink(path)
+
+
+@task
+def set_ftp_private_information(force=False):
+    """
+    Place backup FTP information in a safe place in order to login without awareness of passwords
+    """
+    # Ensure this FTP client is installed on host
+    execute(install_ncftp_client)
+    if not exists('ncftp.cfg') or force:
+        # fill template and set file permission
+        with NamedTemporaryFile(delete=False) as f:
+            ftp_info_file = f.name
+        fill_template('assembl/templates/system/ncftp.cfg.jinja2', env, ftp_info_file)
+        path = join(env.projectpath, 'ncftp.cfg')
+        try:
+            put_status = put(ftp_info_file, path)
+            if put_status.failed:
+                raise RuntimeError('The put operation failed to put ncftp.cfg')
+
+            # Only readable by the user
+            run('chmod 400 %s' % path)
+            run('chown %(user)s:%(user)s %(file)s' % {'user': env.user, 'file': path})
+        finally:
+            # Remove the templated file
+            os.unlink(ftp_info_file)
 
 
 @task

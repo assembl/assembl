@@ -216,6 +216,12 @@ export const harvestingTooltip = (
   </Tooltip>
 );
 
+export const editTagTooltip = (tag: string) => (
+  <Tooltip id="editTagTooltip">
+    <Translate value="harvesting.tags.edit" tag={tag} />
+  </Tooltip>
+);
+
 export const deleteFileTooltip = (
   <Tooltip id="deleteFileTooltip">
     <Translate value="administration.deleteAssociatedFile" />
@@ -297,10 +303,64 @@ export const deleteFictionTooltip = (
   </Tooltip>
 );
 
+export const shareFictionTooltip = (
+  <Tooltip id="shareFictionTooltip">
+    <Translate value="debate.brightMirror.shareFiction" />
+  </Tooltip>
+);
+
 export const editFictionCommentTooltip = (
   <Tooltip id="editFictionCommentTooltip">
     <Translate value="debate.brightMirror.commentFiction.editComment" />
   </Tooltip>
 );
 
+export const deleteFictionCommentTooltip = (
+  <Tooltip id="deleteFictionCommentTooltip">
+    <Translate value="debate.brightMirror.commentFiction.deleteComment" />
+  </Tooltip>
+);
+
+export const editSideCommentTooltip = (
+  <Tooltip id="editFictionCommentTooltip">
+    <Translate value="debate.brightMirror.sideComment.editTooltip" />
+  </Tooltip>
+);
+
+export const deleteSideCommentTooltip = (
+  <Tooltip id="editFictionCommentTooltip">
+    <Translate value="debate.brightMirror.sideComment.deleteTooltip" />
+  </Tooltip>
+);
+
+export const fictionLikeTooltip = (
+  <Tooltip id="fictionLikeTooltip">
+    <Translate value="debate.brightMirror.sentiment.like" />
+  </Tooltip>
+);
+
+export const fictionDislikeTooltip = (
+  <Tooltip id="fictionDislikeTooltip">
+    <Translate value="debate.brightMirror.sentiment.dislike" />
+  </Tooltip>
+);
+
+export const fictionDontUnderstandTooltip = (
+  <Tooltip id="fictionDontUnderstandTooltip">
+    <Translate value="debate.brightMirror.sentiment.dontUnderstand" />
+  </Tooltip>
+);
+
+export const fictionMoreInfoTooltip = (
+  <Tooltip id="fictionMoreInfoTooltip">
+    <Translate value="debate.brightMirror.sentiment.moreInfo" />
+  </Tooltip>
+);
+
 export const fileNameTooltip = (fileName?: string) => <Tooltip id="fileNameTooltip">{fileName}</Tooltip>;
+
+export const commentHelperButtonTooltip = (
+  <Tooltip id="commentHelperButtonTooltip">
+    <Translate value="debate.brightMirror.commentFiction.commentHelper" />
+  </Tooltip>
+);

@@ -18,10 +18,7 @@ exports[`headerActions component should render a headerActions component 1`] = `
     <div
       className="action-button-label"
     >
-      <span
-        className={undefined}
-        style={undefined}
-      >
+      <span>
         Share
       </span>
     </div>

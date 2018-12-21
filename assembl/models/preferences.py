@@ -280,8 +280,7 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
         elif data_type == "int":
             assert isinstance(value, int), "Not an integer"
         elif data_type == "json":
-            # Will raise a JSONDecodeError if not a valid JSON
-            json.loads(value)
+            pass  # no check
         else:
             assert isinstance(value, (str, unicode)), "Not a string"
             if data_type in ("string", "text"):
@@ -510,6 +509,16 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
             "modification_permission": P_ADMIN_DISC,
             "default": ""
         },
+        # Activate or not mandatory validation of legal contents after SSO login.
+        {
+            "id": "mandatory_legal_contents_validation",
+            "name": _("mandatory_legal_contents_validation"),
+            "value_type": "bool",
+            "description": _("Activate or not mandatory validation of legal contents after SSO login."),
+            "allow_user_override": None,
+            "modification_permission": P_ADMIN_DISC,
+            "default": False
+        },
 
         # Discussion Video description
         {
@@ -586,6 +595,54 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
             # "backend_validator_function": func_name...?,
             "default": False  # for development
         },
+
+        # Various Watson values
+        {
+            "id": "watson_keywords",
+            "name": _("Get keywords from Watson"),
+            "value_type": "bool",
+            "description": _("Use Watson to identify keywords"),
+            "allow_user_override": None,
+            "modification_permission": P_ADMIN_DISC,
+            "default": False  # for development
+        },
+        {
+            "id": "watson_concepts",
+            "name": _("Get concepts from Watson"),
+            "value_type": "bool",
+            "description": _("Use Watson to identify concepts"),
+            "allow_user_override": None,
+            "modification_permission": P_ADMIN_DISC,
+            "default": False  # for development
+        },
+        {
+            "id": "watson_categories",
+            "name": _("Get categories from Watson"),
+            "value_type": "bool",
+            "description": _("Use Watson to identify categories"),
+            "allow_user_override": None,
+            "modification_permission": P_ADMIN_DISC,
+            "default": False  # for development
+        },
+        {
+            "id": "watson_sentiment",
+            "name": _("Get sentiments from Watson"),
+            "value_type": "bool",
+            "description": _("Use Watson to identify sentiments"),
+            "allow_user_override": None,
+            "modification_permission": P_ADMIN_DISC,
+            "default": False  # for development
+        },
+        {
+            "id": "watson_emotion",
+            "name": _("Get emotions from Watson"),
+            "value_type": "bool",
+            "description": _("Use Watson to identify emotions"),
+            "allow_user_override": None,
+            "modification_permission": P_ADMIN_DISC,
+            "default": False  # for development
+        },
+
 
         {
             "id": "authorization_server_backend",

@@ -8,10 +8,12 @@ import { PHASES } from '../../../constants';
 import createThematicMutation from '../../../graphql/mutations/createThematic.graphql';
 import deleteThematicMutation from '../../../graphql/mutations/deleteThematic.graphql';
 import updateThematicMutation from '../../../graphql/mutations/updateThematic.graphql';
-import { createSave, convertRichTextToEntries, convertToEntries, getFileVariable } from '../../form/utils';
+import { createSave, convertRichTextToVariables, convertToEntries, getFileVariable } from '../../form/utils';
 
-function getVariables(theme, initialTheme, order, discussionPhaseId) {
+async function getVariables(client, theme, initialTheme, order, discussionPhaseId) {
   const initialImg = initialTheme ? initialTheme.img : null;
+  const bodyVars = await convertRichTextToVariables(theme.announcement.body, client);
+  const { attachments: bodyAttachments, entries: bodyEntries } = bodyVars;
   return {
     discussionPhaseId: discussionPhaseId,
     messageViewOverride: PHASES.brightMirror,
@@ -20,7 +22,8 @@ function getVariables(theme, initialTheme, order, discussionPhaseId) {
     image: getFileVariable(theme.img, initialImg),
     announcement: {
       titleEntries: convertToEntries(theme.announcement.title),
-      bodyEntries: convertRichTextToEntries(theme.announcement.body)
+      bodyAttachments: bodyAttachments,
+      bodyEntries: bodyEntries
     },
     order: order
   };
@@ -48,32 +51,36 @@ export const createMutationsPromises = (client: ApolloClient, discussionPhaseId:
   const createUpdateMutations = values.themes.map((theme, idx) => {
     const initialTheme = initialValues.themes.find(t => t.id === theme.id);
     const order = idx !== initialIds.indexOf(theme.id) ? idx + 1 : null;
-    const variables = getVariables(theme, initialTheme, order, discussionPhaseId);
     if (idsToCreate.indexOf(theme.id) > -1) {
       return () =>
-        client.mutate({
-          mutation: createThematicMutation,
-          variables: variables
-        });
+        getVariables(client, theme, initialTheme, order, discussionPhaseId).then(variables =>
+          client.mutate({
+            mutation: createThematicMutation,
+            variables: variables
+          })
+        );
     }
 
     const orderHasChanged = initialIds.indexOf(theme.id) !== currentIds.indexOf(theme.id);
     const hasChanged = orderHasChanged || !isEqual(initialTheme, theme);
     if (hasChanged) {
       return () =>
-        client.mutate({
-          mutation: updateThematicMutation,
-          variables: {
-            id: theme.id,
-            ...variables
-          }
-        });
+        getVariables(client, theme, initialTheme, order, discussionPhaseId).then(variables =>
+          client.mutate({
+            mutation: updateThematicMutation,
+            variables: {
+              id: theme.id,
+              ...variables
+            }
+          })
+        );
     }
 
     return () => Promise.resolve();
   });
 
   allMutations.push(...createUpdateMutations);
+
   return allMutations;
 };
 

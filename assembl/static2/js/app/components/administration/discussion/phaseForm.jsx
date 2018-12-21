@@ -10,7 +10,12 @@ import { type moment } from 'moment';
 import { modulesTranslationKeys } from '../../../constants';
 import { getDiscussionSlug } from '../../../utils/globalFunctions';
 import { get } from '../../../utils/routeMap';
-import { updatePhaseIdentifier, updateStartDate, updateEndDate } from '../../../actions/adminActions/timeline';
+import {
+  updatePhaseIdentifier,
+  updateStartDate,
+  updateEndDate,
+  updateIsThematicsTable
+} from '../../../actions/adminActions/timeline';
 
 type PhaseFormProps = {
   phaseId: string,
@@ -22,7 +27,8 @@ type PhaseFormProps = {
   handleEndDateChange: Function,
   handleIdentifierChange: Function,
   locale: string,
-  hasConflictingDates: boolean
+  hasConflictingDates: boolean,
+  isNew: boolean
 };
 
 export const DumbPhaseForm = ({
@@ -35,7 +41,8 @@ export const DumbPhaseForm = ({
   start,
   end,
   hasConflictingDates,
-  locale
+  locale,
+  isNew
 }: PhaseFormProps) => {
   const startDatePickerPlaceholder = I18n.t('administration.timelineAdmin.selectStart', { count: phaseNumber });
   const endDatePickerPlaceholder = I18n.t('administration.timelineAdmin.selectEnd', { count: phaseNumber });
@@ -106,6 +113,7 @@ export const DumbPhaseForm = ({
       <div className="margin-m">
         <SplitButton
           className="admin-dropdown"
+          disabled={!isNew}
           id={`dropdown-${phaseId}`}
           title={splitButtonTitle}
           onSelect={handleIdentifierChange}
@@ -137,12 +145,16 @@ const mapStateToProps = (state, { phaseId }) => {
     start: phase ? phase.get('start') : null,
     end: phase ? phase.get('end') : null,
     hasConflictingDates: phase ? phase.get('hasConflictingDates') : null,
-    locale: state.i18n.locale
+    locale: state.i18n.locale,
+    isNew: phase && phase.get('_isNew')
   };
 };
 
 const mapDispatchToProps = (dispatch, { phaseId }) => ({
-  handleIdentifierChange: eventKey => dispatch(updatePhaseIdentifier(phaseId, eventKey)),
+  handleIdentifierChange: (eventKey) => {
+    dispatch(updatePhaseIdentifier(phaseId, eventKey));
+    dispatch(updateIsThematicsTable(phaseId, eventKey === 'survey'));
+  },
   handleStartDateChange: date => dispatch(updateStartDate(phaseId, date)),
   handleEndDateChange: date => dispatch(updateEndDate(phaseId, date))
 });

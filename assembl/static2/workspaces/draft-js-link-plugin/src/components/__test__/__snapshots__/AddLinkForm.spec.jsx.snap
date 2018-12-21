@@ -14,10 +14,7 @@ exports[`AddLinkForm component should render a form to add a link 1`] = `
       <div
         className="richtext-label"
       >
-        <span
-          className={undefined}
-          style={undefined}
-        >
+        <span>
           URL
         </span>
       </div>
@@ -49,8 +46,6 @@ exports[`AddLinkForm component should render a form to add a link 1`] = `
         onBlur={[Function]}
         onChange={[Function]}
         onFocus={[Function]}
-        render={undefined}
-        type={undefined}
         value=""
       />
     </div>
@@ -65,10 +60,7 @@ exports[`AddLinkForm component should render a form to add a link 1`] = `
       <div
         className="richtext-label"
       >
-        <span
-          className={undefined}
-          style={undefined}
-        >
+        <span>
           Link text
         </span>
       </div>
@@ -100,8 +92,6 @@ exports[`AddLinkForm component should render a form to add a link 1`] = `
         onBlur={[Function]}
         onChange={[Function]}
         onFocus={[Function]}
-        render={undefined}
-        type={undefined}
         value="driver"
       />
     </div>
@@ -114,7 +104,6 @@ exports[`AddLinkForm component should render a form to add a link 1`] = `
     >
       <div
         className="checkbox"
-        style={undefined}
       >
         <label
           title=""
@@ -129,10 +118,7 @@ exports[`AddLinkForm component should render a form to add a link 1`] = `
             type="checkbox"
             value=""
           />
-          <span
-            className={undefined}
-            style={undefined}
-          >
+          <span>
             Open link in new tab
           </span>
         </label>
@@ -154,10 +140,7 @@ exports[`AddLinkForm component should render a form to add a link 1`] = `
           onClick={[Function]}
           type="submit"
         >
-          <span
-            className={undefined}
-            style={undefined}
-          >
+          <span>
             Validate
           </span>
         </button>

@@ -11,13 +11,7 @@ import {
   TOGGLE_LANDING_PAGE_MODULE,
   UPDATE_LANDING_PAGE_MODULES,
   UPDATE_LANDING_PAGE_MODULE_TITLE,
-  UPDATE_LANDING_PAGE_MODULE_SUBTITLE,
-  UPDATE_LANDING_PAGE,
-  UPDATE_LANDING_PAGE_HEADER_TITLE,
-  UPDATE_LANDING_PAGE_HEADER_SUBTITLE,
-  UPDATE_LANDING_PAGE_HEADER_BUTTON_LABEL,
-  UPDATE_LANDING_PAGE_HEADER_IMAGE,
-  UPDATE_LANDING_PAGE_HEADER_LOGO
+  UPDATE_LANDING_PAGE_MODULE_SUBTITLE
 } from '../../actions/actionTypes';
 
 type ModulesHasChangedReducer = (boolean, ReduxAction<Action>) => boolean;
@@ -156,96 +150,17 @@ export const modulesById: ModulesByIdReducer = (state = initialState, action) =>
   }
 };
 
-const initialPage = Map({
-  _hasChanged: false,
-  titleEntries: List(),
-  subtitleEntries: List(),
-  buttonLabelEntries: List(),
-  headerImage: Map({
-    externalUrl: '',
-    mimeType: '',
-    title: ''
-  }),
-  logoImage: Map({
-    externalUrl: '',
-    mimeType: '',
-    title: ''
-  })
-});
-type PageState = Map<string, any>;
-type LandingPageReducer = (PageState, ReduxAction<Action>) => PageState;
-export const page: LandingPageReducer = (state = initialPage, action) => {
-  switch (action.type) {
-  case UPDATE_LANDING_PAGE: {
-    let newState = state;
-    if (action.page.headerImage) {
-      newState = newState.set('headerImage', fromJS(action.page.headerImage));
-    }
-    if (action.page.logoImage) {
-      newState = newState.set('logoImage', fromJS(action.page.logoImage));
-    }
-    newState = newState
-      .set('titleEntries', fromJS(action.page.titleEntries))
-      .set('subtitleEntries', List(action.page.subtitleEntries.map(entry => Map(entry))))
-      .set('buttonLabelEntries', fromJS(action.page.buttonLabelEntries));
-    return newState.set('_hasChanged', false);
-  }
-  case UPDATE_LANDING_PAGE_HEADER_TITLE:
-    return state
-      .update('titleEntries', updateInLangstringEntries(action.locale, fromJS(action.value)))
-      .set('_hasChanged', true);
-  case UPDATE_LANDING_PAGE_HEADER_SUBTITLE:
-    return state.update('subtitleEntries', updateInLangstringEntries(action.locale, action.value)).set('_hasChanged', true);
-  case UPDATE_LANDING_PAGE_HEADER_BUTTON_LABEL:
-    return state
-      .update('buttonLabelEntries', updateInLangstringEntries(action.locale, fromJS(action.value)))
-      .set('_hasChanged', true);
-  case UPDATE_LANDING_PAGE_HEADER_IMAGE:
-    return state
-      .setIn(['headerImage', 'externalUrl'], action.value)
-      .setIn(['headerImage', 'mimeType'], action.value.type)
-      .set('_hasChanged', true);
-  case UPDATE_LANDING_PAGE_HEADER_LOGO:
-    return state
-      .setIn(['logoImage', 'externalUrl'], action.value)
-      .setIn(['logoImage', 'mimeType'], action.value.type)
-      .set('_hasChanged', true);
-  default:
-    return state;
-  }
-};
-
-type PageHasChangedReducer = (boolean, ReduxAction<Action>) => boolean;
-export const pageHasChanged: PageHasChangedReducer = (state = false, action) => {
-  switch (action.type) {
-  case UPDATE_LANDING_PAGE_HEADER_TITLE:
-  case UPDATE_LANDING_PAGE_HEADER_SUBTITLE:
-  case UPDATE_LANDING_PAGE_HEADER_BUTTON_LABEL:
-  case UPDATE_LANDING_PAGE_HEADER_IMAGE:
-  case UPDATE_LANDING_PAGE_HEADER_LOGO:
-    return true;
-  case UPDATE_LANDING_PAGE:
-    return false;
-  default:
-    return state;
-  }
-};
-
 export type LandingPageState = {
-  page: PageState,
   enabledModulesInOrder: EnabledModulesInOrderState,
   modulesById: Map<string>,
-  modulesHasChanged: boolean,
-  pageHasChanged: boolean
+  modulesHasChanged: boolean
 };
 
 const reducers = {
-  page: page,
   modulesInOrder: modulesInOrder,
   enabledModulesInOrder: enabledModulesInOrder,
   modulesHasChanged: modulesHasChanged,
-  modulesById: modulesById,
-  pageHasChanged: pageHasChanged
+  modulesById: modulesById
 };
 
 export default combineReducers(reducers);

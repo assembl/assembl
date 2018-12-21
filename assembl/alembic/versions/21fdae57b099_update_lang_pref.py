@@ -40,7 +40,7 @@ def delete_boolean_constraint(db, table, column):
 
 def upgrade(pyramid_env):
     from assembl import models as m
-    log = logging.getLogger('assembl')
+    log = logging.getLogger()
     db = m.get_session_maker()()
     # Why was this not done in 368a596ab4b5_tombstone_date already?
     schema, user = config.get('db_schema'), config.get('db_user')

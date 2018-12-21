@@ -7,7 +7,7 @@ exports[`harvestingBox component should match harvestingBox snapshot when author
   <div>
     <div
       className="harvesting-close-button"
-      onClick={[Function]}
+      onClick={[MockFunction]}
     >
       <span
         className="assembl-icon-cancel grey"
@@ -24,8 +24,8 @@ exports[`harvestingBox component should match harvestingBox snapshot when author
         className="extracts-nb-msg"
       >
         <Translate
-          count={2}
-          extractNumber={2}
+          count={5}
+          extractNumber={5}
           value="harvesting.harvestedExtractNumbers"
         />
       </div>
@@ -210,8 +210,25 @@ exports[`harvestingBox component should match harvestingBox snapshot when author
     >
       1
       /
-      2
+      5
     </div>
+    <Tags
+      canEdit={false}
+      contextId="987643"
+      initialValues={
+        Array [
+          Object {
+            "label": "foo",
+            "value": "fooid",
+          },
+          Object {
+            "label": "bar",
+            "value": "barid",
+          },
+        ]
+      }
+      updateTags={[Function]}
+    />
   </div>
 </div>
 `;
@@ -223,7 +240,7 @@ exports[`harvestingBox component should match harvestingBox snapshot when extrac
   <div>
     <div
       className="harvesting-close-button"
-      onClick={[Function]}
+      onClick={[MockFunction]}
     >
       <span
         className="assembl-icon-cancel grey"
@@ -384,39 +401,11 @@ exports[`harvestingBox component should match harvestingBox snapshot when extrac
     </div>
     <div
       className="harvesting-box-body"
-    >
-      <div
-        className="selection-body"
-      >
-        [object Object]
-      </div>
-    </div>
-    <div
-      className="harvesting-box-footer"
-    >
-      <Button
-        active={false}
-        block={false}
-        bsClass="btn"
-        bsStyle="default"
-        className="button-cancel button-dark"
-        disabled={false}
-        onClick={[Function]}
-      >
-        Cancel
-      </Button>
-      <Button
-        active={false}
-        block={false}
-        bsClass="btn"
-        bsStyle="default"
-        className="button-submit button-dark"
-        disabled={false}
-        onClick={[Function]}
-      >
-        Submit
-      </Button>
-    </div>
+    />
+    <withApollo(DumbTagsForm)
+      onSubmit={[Function]}
+      renderFooter={[Function]}
+    />
   </div>
 </div>
 `;
@@ -428,7 +417,7 @@ exports[`harvestingBox component should match harvestingBox snapshot when nugget
   <div>
     <div
       className="harvesting-close-button"
-      onClick={[Function]}
+      onClick={[MockFunction]}
     >
       <span
         className="assembl-icon-cancel grey"
@@ -445,8 +434,8 @@ exports[`harvestingBox component should match harvestingBox snapshot when nugget
         className="extracts-nb-msg"
       >
         <Translate
-          count={2}
-          extractNumber={2}
+          count={5}
+          extractNumber={5}
           value="harvesting.harvestedExtractNumbers"
         />
       </div>
@@ -666,8 +655,25 @@ exports[`harvestingBox component should match harvestingBox snapshot when nugget
     >
       1
       /
-      2
+      5
     </div>
+    <Tags
+      canEdit={false}
+      contextId="987643"
+      initialValues={
+        Array [
+          Object {
+            "label": "foo",
+            "value": "fooid",
+          },
+          Object {
+            "label": "bar",
+            "value": "barid",
+          },
+        ]
+      }
+      updateTags={[Function]}
+    />
   </div>
 </div>
 `;
@@ -679,7 +685,7 @@ exports[`harvestingBox component should match harvestingBox snapshot when select
   <div>
     <div
       className="harvesting-close-button"
-      onClick={[Function]}
+      onClick={[MockFunction]}
     >
       <span
         className="assembl-icon-cancel grey"
@@ -696,8 +702,8 @@ exports[`harvestingBox component should match harvestingBox snapshot when select
         className="extracts-nb-msg"
       >
         <Translate
-          count={2}
-          extractNumber={2}
+          count={5}
+          extractNumber={5}
           value="harvesting.harvestedExtractNumbers"
         />
       </div>
@@ -882,8 +888,25 @@ exports[`harvestingBox component should match harvestingBox snapshot when select
     >
       1
       /
-      2
+      5
     </div>
+    <Tags
+      canEdit={false}
+      contextId="987643"
+      initialValues={
+        Array [
+          Object {
+            "label": "foo",
+            "value": "fooid",
+          },
+          Object {
+            "label": "bar",
+            "value": "barid",
+          },
+        ]
+      }
+      updateTags={[Function]}
+    />
   </div>
 </div>
 `;
@@ -895,7 +918,7 @@ exports[`harvestingBox component should match harvestingBox snapshot when the co
   <div>
     <div
       className="harvesting-close-button"
-      onClick={[Function]}
+      onClick={[MockFunction]}
     >
       <span
         className="assembl-icon-cancel grey"
@@ -912,8 +935,8 @@ exports[`harvestingBox component should match harvestingBox snapshot when the co
         className="extracts-nb-msg"
       >
         <Translate
-          count={2}
-          extractNumber={2}
+          count={5}
+          extractNumber={5}
           value="harvesting.harvestedExtractNumbers"
         />
       </div>
@@ -1098,8 +1121,25 @@ exports[`harvestingBox component should match harvestingBox snapshot when the co
     >
       1
       /
-      2
+      5
     </div>
+    <Tags
+      canEdit={false}
+      contextId="987643"
+      initialValues={
+        Array [
+          Object {
+            "label": "foo",
+            "value": "fooid",
+          },
+          Object {
+            "label": "bar",
+            "value": "barid",
+          },
+        ]
+      }
+      updateTags={[Function]}
+    />
   </div>
 </div>
 `;
@@ -1111,7 +1151,7 @@ exports[`harvestingBox component should match harvestingBox snapshot when there 
   <div>
     <div
       className="harvesting-close-button"
-      onClick={[Function]}
+      onClick={[MockFunction]}
     >
       <span
         className="assembl-icon-cancel grey"
@@ -1128,8 +1168,8 @@ exports[`harvestingBox component should match harvestingBox snapshot when there 
         className="extracts-nb-msg"
       >
         <Translate
-          count={2}
-          extractNumber={2}
+          count={5}
+          extractNumber={5}
           value="harvesting.harvestedExtractNumbers"
         />
       </div>
@@ -1314,8 +1354,255 @@ exports[`harvestingBox component should match harvestingBox snapshot when there 
     >
       1
       /
-      2
+      5
     </div>
+    <Tags
+      canEdit={false}
+      contextId="987643"
+      initialValues={
+        Array [
+          Object {
+            "label": "foo",
+            "value": "fooid",
+          },
+          Object {
+            "label": "bar",
+            "value": "barid",
+          },
+        ]
+      }
+      updateTags={[Function]}
+    />
+  </div>
+</div>
+`;
+
+exports[`harvestingBox component should match harvestingBox snapshot when there are extracts with active extract 1`] = `
+<div
+  className=""
+>
+  <div>
+    <div
+      className="harvesting-close-button"
+      onClick={[MockFunction]}
+    >
+      <span
+        className="assembl-icon-cancel grey"
+      />
+    </div>
+  </div>
+  <div
+    className="theme-box harvesting-box active-box"
+  >
+    <div
+      className="harvesting-box-header"
+    >
+      <div
+        className="extracts-nb-msg"
+      >
+        <Translate
+          count={5}
+          extractNumber={5}
+          value="harvesting.harvestedExtractNumbers"
+        />
+      </div>
+      <div
+        className="harvesting-status"
+      >
+        <div>
+          <div
+            className="validated-harvesting"
+          >
+            <div
+              className="harvesting-status-label"
+            >
+              <Translate
+                value="harvesting.validated"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        className="button-bar"
+      >
+        <OverlayTrigger
+          defaultOverlayShown={false}
+          overlay={
+            <Tooltip
+              bsClass="tooltip"
+              id="editExtractTooltip"
+              placement="right"
+            >
+              <Translate
+                value="harvesting.editExtract"
+              />
+            </Tooltip>
+          }
+          placement="top"
+          trigger={
+            Array [
+              "hover",
+              "focus",
+            ]
+          }
+        >
+          <Button
+            active={false}
+            block={false}
+            bsClass="btn"
+            bsStyle="default"
+            className=""
+            disabled={false}
+            onClick={[Function]}
+          >
+            <span
+              className="assembl-icon-edit grey"
+            />
+          </Button>
+        </OverlayTrigger>
+        <OverlayTrigger
+          defaultOverlayShown={false}
+          overlay={
+            <Tooltip
+              bsClass="tooltip"
+              id="deleteExtractTooltip"
+              placement="right"
+            >
+              <Translate
+                value="harvesting.deleteExtract"
+              />
+            </Tooltip>
+          }
+          placement="top"
+          trigger={
+            Array [
+              "hover",
+              "focus",
+            ]
+          }
+        >
+          <Button
+            active={false}
+            block={false}
+            bsClass="btn"
+            bsStyle="default"
+            disabled={false}
+            onClick={[Function]}
+          >
+            <span
+              className="assembl-icon-delete grey"
+            />
+          </Button>
+        </OverlayTrigger>
+        <OverlayTrigger
+          defaultOverlayShown={false}
+          overlay={
+            <Tooltip
+              bsClass="tooltip"
+              id="qualifyExtractTooltip"
+              placement="right"
+            >
+              <Translate
+                value="harvesting.qualifyExtract"
+              />
+            </Tooltip>
+          }
+          placement="top"
+          trigger={
+            Array [
+              "hover",
+              "focus",
+            ]
+          }
+        >
+          <Button
+            active={false}
+            block={false}
+            bsClass="btn"
+            bsStyle="default"
+            className="taxonomy-menu-btn"
+            disabled={false}
+            onClick={[Function]}
+          >
+            <span
+              className="assembl-icon-ellipsis-vert grey"
+            />
+          </Button>
+        </OverlayTrigger>
+      </div>
+      <div
+        className="profile"
+      >
+        <AvatarImage
+          userId={29}
+          userName="Alice Thomas"
+        />
+        <div
+          className="harvesting-infos"
+        >
+          <div
+            className="username"
+          >
+            Alice Thomas
+          </div>
+          <div
+            className="harvesting-date"
+            title="2018-04-29T16:28:27.324276+00:00"
+          >
+            2018-04-29T16:28:27.324276+00:00
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="harvesting-box-body"
+    >
+      <div
+        className="body-container"
+      >
+        <div
+          className="previous-extract"
+        >
+          <div
+            onClick={[Function]}
+          >
+            <span
+              className="assembl-icon-down-open grey"
+            />
+          </div>
+        </div>
+        <div
+          className="extract-body"
+        >
+          Hello everybody!
+        </div>
+        <div
+          className="next-extract"
+        >
+          <div
+            onClick={[Function]}
+          >
+            <span
+              className="assembl-icon-down-open grey"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="extracts-numbering"
+    >
+      2
+      /
+      5
+    </div>
+    <Tags
+      canEdit={false}
+      contextId="75432"
+      initialValues={Array []}
+      updateTags={[Function]}
+    />
   </div>
 </div>
 `;
@@ -1327,7 +1614,7 @@ exports[`harvestingBox component should match harvestingBox snapshot when there 
   <div>
     <div
       className="harvesting-close-button"
-      onClick={[Function]}
+      onClick={[MockFunction]}
     >
       <span
         className="assembl-icon-cancel grey"
@@ -1497,39 +1784,194 @@ exports[`harvestingBox component should match harvestingBox snapshot when there 
     </div>
     <div
       className="harvesting-box-body"
+    />
+    <withApollo(DumbTagsForm)
+      onSubmit={[Function]}
+      renderFooter={[Function]}
+    />
+  </div>
+</div>
+`;
+
+exports[`harvestingBox component should match harvestingBox snapshot with annotation 1`] = `
+<div
+  className=""
+>
+  <div>
+    <div
+      className="harvesting-close-button"
+      onClick={[MockFunction]}
+    >
+      <span
+        className="assembl-icon-cancel grey"
+      />
+    </div>
+  </div>
+  <div
+    className="theme-box harvesting-box"
+  >
+    <div
+      className="harvesting-box-header"
+    >
+      <div
+        className="harvesting-status"
+      >
+        <div
+          className="harvesting-in-progress"
+        >
+          <div
+            className="harvesting-status-label"
+          >
+            <Translate
+              value="harvesting.inProgress"
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        className="button-bar"
+      >
+        <OverlayTrigger
+          defaultOverlayShown={false}
+          overlay={
+            <Tooltip
+              bsClass="tooltip"
+              id="editExtractTooltip"
+              placement="right"
+            >
+              <Translate
+                value="harvesting.editExtract"
+              />
+            </Tooltip>
+          }
+          placement="top"
+          trigger={
+            Array [
+              "hover",
+              "focus",
+            ]
+          }
+        >
+          <Button
+            active={false}
+            block={false}
+            bsClass="btn"
+            bsStyle="default"
+            className=""
+            disabled={true}
+            onClick={[Function]}
+          >
+            <span
+              className="assembl-icon-edit grey"
+            />
+          </Button>
+        </OverlayTrigger>
+        <OverlayTrigger
+          defaultOverlayShown={false}
+          overlay={
+            <Tooltip
+              bsClass="tooltip"
+              id="deleteExtractTooltip"
+              placement="right"
+            >
+              <Translate
+                value="harvesting.deleteExtract"
+              />
+            </Tooltip>
+          }
+          placement="top"
+          trigger={
+            Array [
+              "hover",
+              "focus",
+            ]
+          }
+        >
+          <Button
+            active={false}
+            block={false}
+            bsClass="btn"
+            bsStyle="default"
+            disabled={true}
+            onClick={[Function]}
+          >
+            <span
+              className="assembl-icon-delete grey"
+            />
+          </Button>
+        </OverlayTrigger>
+        <OverlayTrigger
+          defaultOverlayShown={false}
+          overlay={
+            <Tooltip
+              bsClass="tooltip"
+              id="qualifyExtractTooltip"
+              placement="right"
+            >
+              <Translate
+                value="harvesting.qualifyExtract"
+              />
+            </Tooltip>
+          }
+          placement="top"
+          trigger={
+            Array [
+              "hover",
+              "focus",
+            ]
+          }
+        >
+          <Button
+            active={false}
+            block={false}
+            bsClass="btn"
+            bsStyle="default"
+            className="taxonomy-menu-btn"
+            disabled={true}
+            onClick={[Function]}
+          >
+            <span
+              className="assembl-icon-ellipsis-vert grey"
+            />
+          </Button>
+        </OverlayTrigger>
+      </div>
+      <div
+        className="profile"
+      >
+        <AvatarImage
+          userId={null}
+          userName={null}
+        />
+        <div
+          className="harvesting-infos"
+        >
+          <div
+            className="username"
+          />
+          <div
+            className="harvesting-date"
+          >
+            <Translate
+              value="harvesting.now"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="harvesting-box-body"
     >
       <div
         className="selection-body"
       >
-        [object Object]
+        extract text
       </div>
     </div>
-    <div
-      className="harvesting-box-footer"
-    >
-      <Button
-        active={false}
-        block={false}
-        bsClass="btn"
-        bsStyle="default"
-        className="button-cancel button-dark"
-        disabled={false}
-        onClick={[Function]}
-      >
-        Cancel
-      </Button>
-      <Button
-        active={false}
-        block={false}
-        bsClass="btn"
-        bsStyle="default"
-        className="button-submit button-dark"
-        disabled={false}
-        onClick={[Function]}
-      >
-        Submit
-      </Button>
-    </div>
+    <withApollo(DumbTagsForm)
+      onSubmit={[Function]}
+      renderFooter={[Function]}
+    />
   </div>
 </div>
 `;

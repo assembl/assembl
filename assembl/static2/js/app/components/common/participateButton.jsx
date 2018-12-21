@@ -8,17 +8,22 @@ import { getIsDebateStarted } from '../../utils/timeline';
 type Props = {
   displayPhase: Function,
   timeline: Timeline,
-  btnClass: string
+  btnClass: string,
+  btnLabel?: string
 };
 
-const ParticipateButton = ({ displayPhase, timeline, btnClass }: Props) => (
+const ParticipateButton = ({ displayPhase, timeline, btnLabel, btnClass }: Props) => (
   <div>
     {getIsDebateStarted(timeline) ? (
       <Button onClick={displayPhase} className={`button-submit button-${btnClass}`}>
-        <Translate value="home.accessButton" />
+        {btnLabel ? <span>{btnLabel}</span> : <Translate value="home.accessButton" />}
       </Button>
     ) : null}
   </div>
 );
+
+ParticipateButton.defaultProps = {
+  btnLabel: null
+};
 
 export default ParticipateButton;

@@ -10,10 +10,15 @@ import { NO_BODY_LENGTH } from '../common/topPostForm';
 import EditPostForm from '../common/editPostForm';
 import EditPostButton from '../common/editPostButton';
 import DeletePostButton from '../common/deletePostButton';
+import SharePostButton from '../common/sharePostButton';
 import ResponsiveOverlayTrigger from '../../common/responsiveOverlayTrigger';
-import { editFictionTooltip, deleteFictionTooltip } from '../../common/tooltips';
+import { editFictionTooltip, deleteFictionTooltip, shareFictionTooltip } from '../../common/tooltips';
 // Utils imports
 import { displayCustomModal, closeModal } from '../../../utils/utilityManager';
+import { getPictureUrl } from '../../../utils/globalFunctions';
+// Type imports
+import type { BrightMirrorFictionProps } from '../../../pages/brightMirrorFiction';
+import type { Props as SharePostButtonProps } from '../common/sharePostButton';
 
 export type FictionPreviewProps = {
   id: string,
@@ -21,8 +26,6 @@ export type FictionPreviewProps = {
   authorName: ?string,
   creationDate: string,
   link: string,
-  /** Background color */
-  color: string,
   originalBody: string,
   /** Function to refresh idea */
   refetchIdea: Function,
@@ -30,7 +33,11 @@ export type FictionPreviewProps = {
   userCanEdit: boolean,
   userCanDelete: boolean,
   deleteFictionHandler: Function,
-  publicationState: string
+  publicationState: string,
+  /** Fiction meta information: slug, phase, themeId, fictionId */
+  fictionMetaInfo: BrightMirrorFictionProps,
+  /** Picture id needed to return the link of the picture to display with getPictureUrl */
+  pictureId: number
 };
 
 const FictionPreview = ({
@@ -39,16 +46,18 @@ const FictionPreview = ({
   authorName,
   creationDate,
   link,
-  color,
   originalBody,
   refetchIdea,
   lang,
   userCanEdit,
   userCanDelete,
   deleteFictionHandler,
-  publicationState
+  publicationState,
+  fictionMetaInfo,
+  pictureId
 }: FictionPreviewProps) => {
   const isDraft = publicationState === PublicationStates.DRAFT;
+
   // Define components
   const openPostModal = () => {
     const content = (
@@ -96,19 +105,41 @@ const FictionPreview = ({
     </li>
   ) : null;
 
+  const sharePostButtonProps: SharePostButtonProps = {
+    linkClassName: 'share',
+    metaInfo: { ...fictionMetaInfo },
+    modalTitleMsgKey: 'debate.brightMirror.shareFiction',
+    type: 'brightMirrorFiction'
+  };
+
+  const shareButton = isDraft ? null : (
+    <li>
+      <ResponsiveOverlayTrigger placement="left" tooltip={shareFictionTooltip}>
+        <SharePostButton {...sharePostButtonProps} />
+      </ResponsiveOverlayTrigger>
+    </li>
+  );
+
   // Format author name
   const name = authorName || '';
   const date = ` - ${creationDate}`;
 
+  // Display preview picture only when the post is not a draft
+  // We add a black overlay with an opacity of 0.2 to fix contrast issue when displaying a light label
+  const previewStyle = isDraft
+    ? null
+    : { backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url(${getPictureUrl(pictureId)})` };
+
   return (
-    <div className={classNames('fiction-preview', { draft: isDraft })} style={{ backgroundColor: color }}>
+    <div className={classNames('fiction-preview', { draft: isDraft })} style={previewStyle}>
       <div className="content-box">
-        {isDraft ? <span className="draft-label">{I18n.t('debate.brightMirror.draftLabel')}</span> : null}
         <ul className="actions">
           {editButton}
           {deleteButton}
+          {shareButton}
         </ul>
         <Link className="link" to={link}>
+          {isDraft ? <div className="draft-label">{I18n.t('debate.brightMirror.draftLabel')}</div> : null}
           <div className="inner-box">
             <h3>{title}</h3>
             <p className="info">

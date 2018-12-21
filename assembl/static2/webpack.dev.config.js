@@ -32,12 +32,12 @@ function theme_entries() {
     return entries;
 }
 
-// Keep css-loader 0.14.5 for performance, see
-// https://github.com/webpack-contrib/css-loader/issues/124
-// For css hot reload to work, don't use ExtractTextPlugin
 module.exports = {
-    // devtool: '#cheap-module-eval-source-map', // https://webpack.js.org/configuration/devtool/
-    devtool: '#cheap-module-source-map', // https://github.com/webpack/webpack-dev-server/issues/1090
+    // cheap-module-eval-source-map and cheap-module-source-map are giving
+    // wrong line number, about 10 lines above the real line.
+    // cheap-module-eval-source-map had issue with SockJS on Safari https://github.com/webpack/webpack-dev-server/issues/1090
+    // eval-source-map or source-map are giving the correct line number
+    devtool: '#eval-source-map', // https://webpack.js.org/configuration/devtool/
     devServer: {
         inline: true,
         hot: true,
@@ -74,17 +74,18 @@ module.exports = {
             use: {
               loader: 'babel-loader',
               options: {
-                forceEnv: 'development',
+                envName: 'development',
                 babelrc: false,
                 plugins: [
-                  'transform-object-rest-spread', 'transform-class-properties',
-                  ['transform-runtime', { helpers: true, polyfill: false }],
+                  '@babel/plugin-proposal-object-rest-spread',
+                  '@babel/plugin-proposal-class-properties',
+                  ['@babel/plugin-transform-runtime', { helpers: true }],
                   'react-hot-loader/babel'
                 ],
-                presets: [["env", { "modules": false, "targets": { "ie": 11 },
-                                    "debug": true, "useBuiltIns": true,
+                presets: [["@babel/preset-env", { "modules": false, "targets": { "ie": 11 },
+                                    "debug": false, "useBuiltIns": "entry",
                                     "exclude": ["web.timers", "web.immediate", "web.dom.iterable"] }],
-                          "react", "flow"]
+                          "@babel/preset-react", "@babel/preset-flow"]
               }
             },
             include: [
@@ -115,10 +116,6 @@ module.exports = {
           use: 'graphql-tag/loader'
         },
         {
-          test: /\.json$/,
-          use: 'json-loader'
-        },
-        {
           test: /\.coffee$/,
           use: [
             {
@@ -138,12 +135,8 @@ module.exports = {
           jquery$: path.join(__dirname, 'node_modules/jquery/dist/jquery.slim.min.js'),
         },
     },
+    mode: 'development',
     plugins: [
         new webpack.HotModuleReplacementPlugin(),
-        new webpack.DefinePlugin({
-          'process.env': {
-            NODE_ENV: JSON.stringify('development')
-          }
-        }),
     ]
 };

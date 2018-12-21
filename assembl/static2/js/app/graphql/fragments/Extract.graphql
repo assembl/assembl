@@ -18,4 +18,8 @@ fragment Extract on Extract {
   creator {
     ...AgentProfileInfo
   }
+  tags {
+    id
+    value
+  }
 }

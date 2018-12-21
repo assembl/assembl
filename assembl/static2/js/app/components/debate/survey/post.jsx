@@ -49,10 +49,12 @@ class Post extends React.Component<Props> {
     const postId = this.props.data.post.id;
     const { hash } = window.location;
     if (hash !== '') {
-      const id = hash.replace('#', '').split('?')[0];
+      const id = hash.split('#')[1].split('?')[0];
       if (id === postId) {
         // Wait an extra 1s to be sure that all previous posts are loaded
-        setTimeout(hashLinkScroll, 1000);
+        setTimeout(() => {
+          hashLinkScroll(id);
+        }, 1000);
       }
     }
   }
@@ -224,7 +226,7 @@ class Post extends React.Component<Props> {
       creatorName = isDeleted ? I18n.t('deletedUser') : displayName;
     }
 
-    const deleteButton = <DeletePostButton postId={post.id} refetchQueries={refetchQueries} linkClassName="overflow-action" />;
+    const deleteButton = <DeletePostButton postId={post.id} refetchQueries={refetchQueries} linkClassName="action-delete" />;
 
     return (
       <div className="shown box" id={post.id}>

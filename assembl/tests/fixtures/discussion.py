@@ -1,3 +1,4 @@
+import os
 import pytest
 from sqlalchemy import inspect
 
@@ -5,10 +6,9 @@ from assembl.auth import P_READ, R_PARTICIPANT
 
 
 @pytest.fixture(scope="function")
-def discussion(request, test_session, default_preferences):
+def discussion(request, test_session, participant2_user, default_preferences):
     """An empty Discussion fixture with default preferences"""
-    from assembl.models import Discussion, LangString
-    from assembl.models import Discussion
+    from assembl.models import Discussion, DiscussionAttachment, File, LangString, AttachmentPurpose
 #    from assembl.lib.migration import create_default_discussion_data
     with test_session.no_autoflush:
         d = Discussion(
@@ -43,6 +43,24 @@ def discussion(request, test_session, default_preferences):
             u"Discuss bananas", u"en")
         d.button_label = button_label
 
+        # add a privacy policy attachment to the discussion
+        document = File(
+            discussion=d,
+            mime_type='image/png',
+            title='simple_image.png'
+        )
+        test_session.add(document)
+        document.add_raw_data(os.urandom(256))
+        test_session.add(document)
+        attachment = DiscussionAttachment(
+            discussion=d,
+            document=document,
+            creator_id=participant2_user.id,
+            title='A privacy policy attachment',
+            attachmentPurpose=AttachmentPurpose.PRIVACY_POLICY_ATTACHMENT.value
+        )
+
+        test_session.add(attachment)
         test_session.add(d)
         # create_default_discussion_data(d)
         # Don't create default discussion data (permissions, sections) here
@@ -64,6 +82,8 @@ def discussion(request, test_session, default_preferences):
         if inspect(discussion).detached:
             # How did this happen?
             discussion = test_session.query(Discussion).get(d.id)
+        test_session.delete(attachment)
+        test_session.delete(document)
         test_session.delete(discussion.table_of_contents)
         test_session.delete(discussion.root_idea)
         test_session.delete(discussion.next_synthesis)
@@ -131,7 +151,7 @@ def discussion2(request, test_session):
 def discussion_with_lang_prefs(request, test_session, discussion):
     """An empty Discussion fixture with locale preferences"""
     discussion.discussion_locales = ['en', 'fr', 'ja']
-    test_session.commit()
+    test_session.flush()
 
     return discussion
 
@@ -149,7 +169,7 @@ def closed_discussion(request, test_session, discussion):
     dp = test_session.query(DiscussionPermission).join(Permission).filter(
         DiscussionPermission.discussion == discussion, Permission.name == P_READ).first()
     dp.role = role
-    test_session.commit()
+    test_session.flush()
 
     def fin():
         for acl in discussion.acls:

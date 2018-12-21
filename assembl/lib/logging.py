@@ -27,8 +27,9 @@ def getLogger(logger_name=None):
         logger = request.logger()
     else:
         logger = LOGGER
-    if logger_name is not None:
-        logger = logger.bind(name=logger_name)
+    # This actually fails and breaks logging
+    # if logger_name is not None:
+    #     logger = logger.bind(name=logger_name)
     return logger
 
 

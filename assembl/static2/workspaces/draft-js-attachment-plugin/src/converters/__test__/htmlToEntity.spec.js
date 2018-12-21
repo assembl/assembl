@@ -3,42 +3,38 @@ import htmlToEntity from '../htmlToEntity';
 
 function createLegacyImageNode() {
   const node = document.createElement('img');
-  node.dataset = { id: 'doc789' };
+  node.dataset.id = 'doc789';
   const parentNode = document.createElement('div');
   const grandparentNode = document.createElement('div');
   parentNode.appendChild(node);
   grandparentNode.appendChild(parentNode);
-  node.src = '/data/my-img.jpg';
+  node.src = 'http://localhost/data/my-img.jpg';
   return node;
 }
 
 function createAtomicBlockWithImg() {
   const node = document.createElement('div');
-  node.dataset = { blocktype: 'atomic' };
+  node.dataset.blocktype = 'atomic';
   const imageNode = document.createElement('img');
-  imageNode.dataset = {
-    id: 'foobar',
-    mimetype: 'image/png'
-  };
-  imageNode.src = '/data/my-img.png';
+  imageNode.dataset.id = 'foobar';
+  imageNode.dataset.mimetype = 'image/png';
+  imageNode.src = 'http://localhost/data/my-img.png';
   node.appendChild(imageNode);
   return node;
 }
 
 function createAtomicBlockWithDocument() {
   const node = document.createElement('div');
-  node.dataset = { blocktype: 'atomic' };
+  node.dataset.blocktype = 'atomic';
   const linkNode = document.createElement('a');
   const iconNode = document.createElement('img');
-  iconNode.dataset = {
-    externalurl: '/data/my-doc.pdf',
-    id: 'foobar',
-    mimetype: 'application/pdf',
-    title: 'My document'
-  };
+  iconNode.dataset.externalurl = '/data/my-doc.pdf';
+  iconNode.dataset.id = 'foobar';
+  iconNode.dataset.mimetype = 'application/pdf';
+  iconNode.dataset.title = 'My document';
   iconNode.alt = 'pdf';
   iconNode.className = 'attachment-icon';
-  iconNode.src = '/static2/img/icons/black/doc.svg';
+  iconNode.src = 'http://localhost/static2/img/icons/black/doc.svg';
   linkNode.appendChild(iconNode);
   node.appendChild(linkNode);
   return node;
@@ -56,7 +52,7 @@ describe('htmlToEntity function', () => {
     expect(createEntitySpy).toHaveBeenCalledWith('IMAGE', 'IMMUTABLE', {
       id: 'doc789',
       mimeType: 'image/*',
-      src: '/data/my-img.jpg',
+      src: 'http://localhost/data/my-img.jpg',
       title: '',
       type: 'IMAGE'
     });
@@ -71,7 +67,7 @@ describe('htmlToEntity function', () => {
     expect(createEntitySpy).toHaveBeenCalledWith('IMAGE', 'IMMUTABLE', {
       id: 'foobar',
       mimeType: 'image/png',
-      src: '/data/my-img.png',
+      src: 'http://localhost/data/my-img.png',
       title: '',
       type: 'IMAGE'
     });

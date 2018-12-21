@@ -2209,48 +2209,89 @@ def test_query_legal_contents(discussion, graphql_request, test_session):
     assert tac_fr['localeCode'] == u"fr"
 
 
-def test_update_legal_contents(graphql_request, discussion):
-    res = schema.execute(u"""
-mutation updateLegalContents {
-    updateLegalContents(
-        legalNoticeEntries: [
+def test_update_legal_contents(graphql_registry, graphql_request, discussion, simple_file, simple_file2):
+    variables = {
+        "lang": u"en",
+        "legalNoticeAttachments": [
+            simple_file.id
+        ],
+        "legalNoticeEntries": [
             {
-                value: "Use the digital JBOD panel, then you can override the solid state microchip!",
-                localeCode: "en"
+                "value": u"Use the digital JBOD panel, then you can override the solid state microchip!",
+                "localeCode": u"en"
             }
         ],
-        termsAndConditionsEntries: [
+        "termsAndConditionsAttachments": [],
+        "termsAndConditionsEntries": [
             {
-                value: "If we reboot the driver, we can get to the AGP protocol through the virtual HTTP bus!",
-                localeCode: "en"
+                "value": u"If we reboot the driver, we can get to the AGP protocol through the virtual HTTP bus!",
+                "localeCode": u"en"
+            }
+        ],
+        "cookiesPolicyAttachments": [],
+        "cookiesPolicyEntries": [
+            {
+                "value": u"My cookies policy",
+                "localeCode": u"en"
+            }
+        ],
+        "privacyPolicyAttachments": [],
+        "privacyPolicyEntries": [
+            {
+                "value": u"My privacy policy",
+                "localeCode": u"en"
+            }
+        ],
+        "userGuidelinesAttachments": [],
+        "userGuidelinesEntries": [
+            {
+                "value": u"My user guidelines",
+                "localeCode": u"en"
             }
         ]
-    ) {
-        legalContents {
-            legalNoticeEntries {
-                localeCode
-                value
-            }
-            termsAndConditionsEntries {
-                localeCode
-                value
-            }
-        }
     }
-}
-""", context_value=graphql_request)
+    res = schema.execute(
+        graphql_registry['updateLegalContents'],
+        variable_values=variables,
+        context_value=graphql_request
+    )
     assert res.errors is None
 
     assert res.data['updateLegalContents'] is not None
     assert res.data['updateLegalContents']['legalContents'] is not None
 
     legal_contents = res.data['updateLegalContents']['legalContents']
+    legal_notice_attachments = legal_contents['legalNoticeAttachments']
     legal_notice_en = legal_contents['legalNoticeEntries'][0]
-    tac_en = legal_contents['termsAndConditionsEntries'][0]
-    assert legal_notice_en['localeCode'] == 'en'
+    assert legal_notice_en['localeCode'] == u'en'
     assert legal_notice_en['value'] == u"Use the digital JBOD panel, then you can override the solid state microchip!"
-    assert tac_en['localeCode'] == 'en'
+    assert len(legal_notice_attachments) == 1
+
+    tac_attachments = legal_contents['termsAndConditionsAttachments']
+    tac_en = legal_contents['termsAndConditionsEntries'][0]
+    assert tac_en['localeCode'] == u'en'
     assert tac_en['value'] == u"If we reboot the driver, we can get to the AGP protocol through the virtual HTTP bus!"
+    assert len(tac_attachments) == 0
+
+    cookies_policy_attachments = legal_contents['cookiesPolicyAttachments']
+    cookies_policy_en = legal_contents['cookiesPolicyEntries'][0]
+    assert cookies_policy_en['value'] == u'My cookies policy'
+    assert len(cookies_policy_attachments) == 0
+
+    privacy_policy_attachments = legal_contents['privacyPolicyAttachments']
+    privacy_policy_en = legal_contents['privacyPolicyEntries'][0]
+    assert privacy_policy_en['value'] == u'My privacy policy'
+    assert len(privacy_policy_attachments) == 0
+
+    user_guidelines_attachments = legal_contents['userGuidelinesAttachments']
+    user_guidelines_en = legal_contents['userGuidelinesEntries'][0]
+    assert user_guidelines_en['value'] == u'My user guidelines'
+    assert len(user_guidelines_attachments) == 0
+
+    # we have to remove documents and attachments here
+    with models.Discussion.default_db.no_autoflush:
+        for attachment in discussion.attachments:
+            discussion.attachments.remove(attachment)
 
 
 def test_has_legal_notice(graphql_request, discussion):
@@ -2387,6 +2428,38 @@ def test_query_discussion_langstring_fields(discussion, graphql_request):
             ]
         }
     }
+
+
+def test_query_discussion_landing_page_empty_dates_no_phases(graphql_request, discussion):
+    # Discussion fixture should have no fixed active_start/end_date
+    res = schema.execute("""query MyQuery {
+            discussion {
+                startDate
+                endDate
+            }
+        }""", context_value=graphql_request)
+    assert res.errors is None
+    assert not res.data['discussion']['startDate']
+    assert not res.data['discussion']['endDate']
+
+
+def test_query_discussion_landing_page_empty_dates_with_phases(graphql_request, test_session, discussion, timeline_phase2_interface_v2):
+    # Discussion fixture should have no fixed active_start/end_dates, allow for phases to calculate the date
+    from sqlalchemy import func
+    from assembl.models import TimelineEvent
+    import pytz
+    dates = test_session.query(func.min(TimelineEvent.start), func.max(TimelineEvent.end)).filter(
+        TimelineEvent.discussion_id == discussion.id).first()
+    assert dates
+    res = schema.execute("""query MyQuery {
+            discussion {
+                startDate
+                endDate
+            }
+        }""", context_value=graphql_request)
+    assert res.errors is None
+    assert res.data['discussion']['startDate'] == dates[0].replace(tzinfo=pytz.UTC).isoformat()
+    assert res.data['discussion']['endDate'] == dates[1].replace(tzinfo=pytz.UTC).isoformat()
 
 
 def test_mutation_update_discussion_langstring_fields(graphql_request, discussion):
@@ -2562,6 +2635,44 @@ def test_update_discussion_landing_page_image_fields(graphql_request, graphql_re
     assert res_discussion['buttonLabelEntries'][0]['value'] == u'My button label'
 
 
+def test_update_discussion_landing_page_date_fields(graphql_request, discussion):
+    start_date = '2018-01-01T00:00:00.000000Z'  # "%Y-%m-%dT%H:%M:%S.%fZ"
+    end_date = '2050-01-01T00:00:00.000000Z'
+    res = schema.execute("""mutation MyMutation($startDate: DateTime, $endDate: DateTime){
+        updateDiscussion(
+            startDate: $startDate
+            endDate: $endDate) {
+                discussion {
+                    startDate
+                    endDate
+                }
+            }
+        }""", context_value=graphql_request, variable_values={'startDate': start_date, 'endDate': end_date})
+    assert res.errors is None
+    assert res.data['updateDiscussion']['discussion']['startDate'] == '2018-01-01T00:00:00+00:00'
+    assert res.data['updateDiscussion']['discussion']['endDate'] == '2050-01-01T00:00:00+00:00'
+
+
+def test_update_discussion_landing_page_date_fields_empty(graphql_request, test_session, discussion):
+    from datetime import datetime
+    discussion.active_start_date = datetime(year=2018, month=1, day=1).replace(tzinfo=None)
+    discussion.active_end_date = datetime(year=2050, month=1, day=1).replace(tzinfo=None)
+    test_session.flush()
+    res = schema.execute("""mutation MyMutation($startDate: DateTime, $endDate: DateTime){
+        updateDiscussion(
+            startDate: $startDate
+            endDate: $endDate) {
+                discussion {
+                    startDate
+                    endDate
+                }
+            }
+        }""", context_value=graphql_request, variable_values={'startDate': None, 'endDate': None})
+    assert res.errors is None
+    assert res.data['updateDiscussion']['discussion']['startDate'] == '2018-01-01T00:00:00+00:00'
+    assert res.data['updateDiscussion']['discussion']['endDate'] == '2050-01-01T00:00:00+00:00'
+
+
 def test_get_all_posts(graphql_request, proposition_id):
     from assembl.graphql.schema import Schema as schema
     res = schema.execute(
@@ -2645,10 +2756,10 @@ def test_get_parent_post_creator(
 
     assert first_post['subject'] == 'Published by participant'
     assert first_post['creator']['displayName'] == 'A. Barking Loon'
-    assert first_post['parentPostCreator']['displayName'] == 'Mr. Administrator'
+    assert first_post['parentPostCreator']['displayName'] == 'mr_admin_user'
 
     assert second_post['subject'] == 'Published'
-    assert second_post['creator']['displayName'] == 'Mr. Administrator'
+    assert second_post['creator']['displayName'] == 'mr_admin_user'
     assert second_post['parentPostCreator'] == None
 
 

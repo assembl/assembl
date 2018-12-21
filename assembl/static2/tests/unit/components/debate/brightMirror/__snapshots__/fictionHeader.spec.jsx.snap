@@ -100,9 +100,7 @@ exports[`Storyshots FictionHeader default 1`] = `
     >
       ×
     </button>
-    <div
-      style={undefined}
-    >
+    <div>
       <div
         style={
           Object {
@@ -110,7 +108,6 @@ exports[`Storyshots FictionHeader default 1`] = `
             "backgroundColor": "#fff",
             "border": "1px solid #eee",
             "borderRadius": "2px",
-            "boxShadow": "0px 2px 3px rgba(0, 0, 0, 0.05)",
             "color": "#444",
             "fontFamily": "-apple-system, \\".SFNSText-Regular\\", \\"San Francisco\\", BlinkMacSystemFont, \\"Segoe UI\\", \\"Roboto\\", \\"Oxygen\\", \\"Ubuntu\\", \\"Cantarell\\", \\"Fira Sans\\", \\"Droid Sans\\", \\"Helvetica Neue\\", \\"Lucida Grande\\", \\"Arial\\", sans-serif",
             "fontSize": "15px",
@@ -170,7 +167,7 @@ exports[`Storyshots FictionHeader default 1`] = `
             Story Source
           </h1>
           <pre
-            className="css-4akams"
+            className="css-r8d96o eyvlbql0"
           >
             <div>
               <div
@@ -184,7 +181,7 @@ exports[`Storyshots FictionHeader default 1`] = `
                 <span
                   style={
                     Object {
-                      "color": "#777",
+                      "color": "#444",
                     }
                   }
                 >
@@ -362,7 +359,7 @@ exports[`Storyshots FictionHeader default 1`] = `
                 <span
                   style={
                     Object {
-                      "color": "#777",
+                      "color": "#444",
                     }
                   }
                 >
@@ -371,11 +368,11 @@ exports[`Storyshots FictionHeader default 1`] = `
               </div>
             </div>
             <button
-              className="css-py33tc"
+              className="css-1naocv3 eva467m0"
               onClick={[Function]}
             >
               <div
-                className="css-kv47nt"
+                className="css-lvl6aa eva467m1"
               >
                 <div
                   style={
@@ -529,9 +526,7 @@ exports[`Storyshots FictionHeader playground 1`] = `
     >
       ×
     </button>
-    <div
-      style={undefined}
-    >
+    <div>
       <div
         style={
           Object {
@@ -539,7 +534,6 @@ exports[`Storyshots FictionHeader playground 1`] = `
             "backgroundColor": "#fff",
             "border": "1px solid #eee",
             "borderRadius": "2px",
-            "boxShadow": "0px 2px 3px rgba(0, 0, 0, 0.05)",
             "color": "#444",
             "fontFamily": "-apple-system, \\".SFNSText-Regular\\", \\"San Francisco\\", BlinkMacSystemFont, \\"Segoe UI\\", \\"Roboto\\", \\"Oxygen\\", \\"Ubuntu\\", \\"Cantarell\\", \\"Fira Sans\\", \\"Droid Sans\\", \\"Helvetica Neue\\", \\"Lucida Grande\\", \\"Arial\\", sans-serif",
             "fontSize": "15px",
@@ -599,7 +593,7 @@ exports[`Storyshots FictionHeader playground 1`] = `
             Story Source
           </h1>
           <pre
-            className="css-4akams"
+            className="css-r8d96o eyvlbql0"
           >
             <div>
               <div
@@ -613,7 +607,7 @@ exports[`Storyshots FictionHeader playground 1`] = `
                 <span
                   style={
                     Object {
-                      "color": "#777",
+                      "color": "#444",
                     }
                   }
                 >
@@ -791,7 +785,7 @@ exports[`Storyshots FictionHeader playground 1`] = `
                 <span
                   style={
                     Object {
-                      "color": "#777",
+                      "color": "#444",
                     }
                   }
                 >
@@ -800,11 +794,11 @@ exports[`Storyshots FictionHeader playground 1`] = `
               </div>
             </div>
             <button
-              className="css-py33tc"
+              className="css-1naocv3 eva467m0"
               onClick={[Function]}
             >
               <div
-                className="css-kv47nt"
+                className="css-lvl6aa eva467m1"
               >
                 <div
                   style={

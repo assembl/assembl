@@ -15,6 +15,7 @@ import createModalPlugin from 'draft-js-modal-plugin';
 /* eslint-enable import/no-extraneous-dependencies */
 
 import { BoldButton, ItalicButton, UnorderedListButton } from './buttons';
+import { addProtocol } from '../../../utils/linkify';
 
 type DraftPlugin = any;
 
@@ -58,7 +59,8 @@ export default class RichTextEditor extends React.Component<Props, State> {
       setModalContent: setModalContent
     };
     const linkPlugin = createLinkPlugin({
-      ...modalConfig
+      ...modalConfig,
+      formatLink: addProtocol
     });
     const { LinkButton } = linkPlugin;
 

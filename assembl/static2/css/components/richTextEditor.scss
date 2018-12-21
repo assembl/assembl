@@ -1,9 +1,24 @@
 .admin-content {
   .rich-text-editor {
+    font-size: $font-size-xs;
+
     label {
       margin: 0 !important;
       font-family: $font-family;
       font-size: $font-size-s;
+    }
+
+    .attachments {
+      float: none;
+      margin-top: 0;
+      margin-bottom: 20px;
+      font-size: $font-size-xs;
+    }
+
+    .modal-body {
+      .preview {
+        display: block;
+      }
     }
   }
 
@@ -82,8 +97,6 @@
 
   .attachments {
     float: right;
-    margin-bottom: 20px;
-    margin-top: -15px;
     font-size: $font-size-xs;
   }
 
@@ -119,6 +132,12 @@
 
     .modal-header {
       padding: 0 0 15px;
+
+      .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+      }
     }
 
     .modal-body {

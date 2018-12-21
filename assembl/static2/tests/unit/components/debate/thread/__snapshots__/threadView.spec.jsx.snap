@@ -42,11 +42,10 @@ exports[`ThreadView component should render a TopPostForm 1`] = `
     draftSuccessMsgId={null}
     draftable={false}
     fullscreen={false}
-    ideaId={undefined}
     instructionLabelMsgId="debate.thread.startDiscussion"
     isColumnViewInline={false}
     messageColumns={Array []}
-    refetchIdea={[Function]}
+    refetchIdea={[MockFunction]}
     topPostsCount={0}
   />
   <Grid

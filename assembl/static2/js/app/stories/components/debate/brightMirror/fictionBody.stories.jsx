@@ -4,13 +4,15 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { withInfo } from '@storybook/addon-info';
 import { withKnobs, text } from '@storybook/addon-knobs';
+import { action } from '@storybook/addon-actions';
 /* eslint-enable */
 
 import FictionBody from '../../../../components/debate/brightMirror/fictionBody';
-import type { FictionBodyProps } from '../../../../components/debate/brightMirror/fictionBody';
+import type { Props as FictionBodyProps } from '../../../../components/debate/brightMirror/fictionBody';
 
 export const defaultFictionBody: FictionBodyProps = {
-  id: '0',
+  ideaId: '0',
+  postId: '0',
   title: 'Les émotifs',
   content: `
     <p><strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
@@ -40,8 +42,22 @@ export const defaultFictionBody: FictionBodyProps = {
     of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker
     including versions of Lorem Ipsum.</p>
   `,
-  contentLocale: 'en',
-  lang: 'en'
+  contentLocale: 'fr',
+  lang: 'fr',
+  extracts: [],
+  dbId: 1,
+  bodyMimeType: 'text/html',
+  refetchPost: action('refetchPost'),
+  userCanReply: false,
+  mySentiment: 'LIKE',
+  sentimentCounts: {
+    disagree: 0,
+    dontUnderstand: 0,
+    like: 0,
+    moreInfo: 0
+  },
+  isPhaseCompleted: false,
+  screenWidth: 0
 };
 
 const noFictionBody: FictionBodyProps = {
@@ -60,11 +76,21 @@ storiesOf('FictionBody', module)
     'playground',
     withInfo()(() => (
       <FictionBody
-        id={text('id', playgroundFictionBody.id)}
+        postId={text('id', playgroundFictionBody.postId)}
         title={text('title', playgroundFictionBody.title)}
         content={text('content', playgroundFictionBody.content)}
         contentLocale={text('contentLocale', playgroundFictionBody.contentLocale)}
         lang={text('lang', playgroundFictionBody.lang)}
+        extracts={playgroundFictionBody.extracts}
+        dbId={playgroundFictionBody.dbId}
+        bodyMimeType={playgroundFictionBody.bodyMimeType}
+        refetchPost={playgroundFictionBody.refetchPost}
+        ideaId={playgroundFictionBody.ideaId}
+        userCanReply={playgroundFictionBody.userCanReply}
+        mySentiment={playgroundFictionBody.mySentiment}
+        sentimentCounts={playgroundFictionBody.sentimentCounts}
+        isPhaseCompleted={playgroundFictionBody.isPhaseCompleted}
+        screenWidth={playgroundFictionBody.screenWidth}
       />
     ))
   );

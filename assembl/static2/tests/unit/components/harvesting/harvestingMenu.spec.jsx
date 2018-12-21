@@ -3,11 +3,23 @@ import ShallowRenderer from 'react-test-renderer/shallow';
 
 import HarvestingMenu from '../../../../js/app/components/harvesting/harvestingMenu';
 import * as fakeData from './fakeData';
+import * as extractUtils from '../../../../js/app/utils/extract';
+
+const extractBody = 'extract text';
+
+extractUtils.getAnnotationData = jest.fn(() => ({
+  body: extractBody,
+  offsetEnd: 988,
+  offsetStart: 973,
+  xpathEnd: '//div[@id=\'start\']/',
+  xpathStart: '//div[@id=\'end\']/'
+}));
 
 describe('harvestingMenu component', () => {
   beforeAll(() => {
     window.getSelection = () => ({
-      removeAllRanges: () => {}
+      removeAllRanges: () => {},
+      toString: () => extractBody
     });
   });
   const { extracts } = fakeData;

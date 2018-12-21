@@ -18,6 +18,7 @@ Installation and administration
    python_requirements
    preprod_update
    create_debate
+   themes
    install_sentry
    install_matomo
 
@@ -49,6 +50,7 @@ Developing and contributing to Assembl
    fontello
    flow
    storybook
+   draftjs
 
 APIs
 ----

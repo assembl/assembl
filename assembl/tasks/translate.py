@@ -3,7 +3,7 @@ from abc import abstractmethod
 
 from . import celery
 from ..lib.utils import waiting_get
-from ..lib.raven_client import capture_exception
+from ..lib.sentry import capture_exception
 
 _services = {}
 
@@ -14,7 +14,26 @@ class TranslationTable(object):
         return ()
 
 
+class LanguagesTranslationTable(TranslationTable):
+    """Translation table that uses the given target languages."""
+    def __init__(self, service, target_locales):
+        self.service = service
+        self.base_languages = {
+            service.asKnownLocale(lang)
+            for lang in target_locales}
+        self.base_languages.discard(None)
+
+    def languages_for(self, locale_code, db=None):
+        content_locale = set()
+        locale_code = self.service.asKnownLocale(locale_code)
+        if locale_code:
+            content_locale = set([locale_code])
+
+        return self.base_languages - content_locale
+
+
 class PrefCollectionTranslationTable(TranslationTable):
+    """Translation table that uses the languages of the given LanguagePreferenceCollection."""
     def __init__(self, service, prefCollection):
         self.service = service
         self.prefCollection = prefCollection
@@ -29,6 +48,7 @@ class PrefCollectionTranslationTable(TranslationTable):
 
 
 class DiscussionPreloadTranslationTable(TranslationTable):
+    """Translation table that uses the languages of given discussion."""
     def __init__(self, service, discussion):
         self.service = service
         self.base_languages = {
@@ -37,8 +57,12 @@ class DiscussionPreloadTranslationTable(TranslationTable):
         self.base_languages.discard(None)
 
     def languages_for(self, locale_code, db=None):
+        content_locale = set()
         locale_code = self.service.asKnownLocale(locale_code)
-        return self.base_languages - set(locale_code)
+        if locale_code:
+            content_locale = set([locale_code])
+
+        return self.base_languages - content_locale
 
 
 def translate_content(

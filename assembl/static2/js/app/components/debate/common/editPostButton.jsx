@@ -1,16 +1,16 @@
 // @flow
 import React from 'react';
-import { Link } from 'react-router';
+import { Button } from 'react-bootstrap';
 
-type Props = {
+export type Props = {
   handleClick: Function,
   linkClassName: ?string
 };
 
 const EditPostButton = ({ handleClick, linkClassName }: Props) => (
-  <Link className={linkClassName} onClick={handleClick}>
+  <Button bsClass={linkClassName} onClick={handleClick}>
     <span className="assembl-icon-edit" />
-  </Link>
+  </Button>
 );
 
 export default EditPostButton;

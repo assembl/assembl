@@ -1,39 +1,50 @@
 // @flow
 import React from 'react';
-import { type ApolloClient } from 'react-apollo';
+import { compose, graphql } from 'react-apollo';
 import { Translate } from 'react-redux-i18n';
 import addSentimentMutation from '../../../graphql/mutations/addSentiment.graphql';
 import deleteSentimentMutation from '../../../graphql/mutations/deleteSentiment.graphql';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
+import { SENTIMENTS } from '../../../constants';
 import { inviteUserToLogin, displayModal } from '../../../utils/utilityManager';
 import sentimentDefinitions, { type SentimentDefinition } from './sentimentDefinitions';
 import ResponsiveOverlayTrigger from '../../common/responsiveOverlayTrigger';
+import manageErrorAndLoading from '../../../components/common/manageErrorAndLoading';
 
 type SentimentProps = {
-  client: ApolloClient,
   isPhaseCompleted: boolean,
   isSelected: boolean,
   mySentiment: ?string,
   placement: OverlayPlacement,
   postId: string,
   sentiment: SentimentDefinition,
-  sentimentCounts: SentimentCountsFragment
+  sentimentCounts: ?SentimentCountsFragment,
+  addSentiment: Function,
+  deleteSentiment: Function
 };
 
-const Sentiment = ({
+export const DumbSentiment = ({
   sentimentCounts,
   mySentiment,
   sentiment,
-  client,
   isSelected,
   postId,
   placement,
-  isPhaseCompleted
+  isPhaseCompleted,
+  addSentiment,
+  deleteSentiment
 }: SentimentProps) => {
-  const likeCount = sentimentCounts.like ? sentimentCounts.like : 0;
-  const disagreeCount = sentimentCounts.disagree ? sentimentCounts.disagree : 0;
-  const dontUnderstandCount = sentimentCounts.dontUnderstand ? sentimentCounts.dontUnderstand : 0;
-  const moreInfoCount = sentimentCounts.moreInfo ? sentimentCounts.moreInfo : 0;
+  const likeCount = (sentimentCounts && sentimentCounts.like) || 0;
+  const disagreeCount = (sentimentCounts && sentimentCounts.disagree) || 0;
+  const dontUnderstandCount = (sentimentCounts && sentimentCounts.dontUnderstand) || 0;
+  const moreInfoCount = (sentimentCounts && sentimentCounts.moreInfo) || 0;
+
+  const newDeleteCount = (count: number, countType: string): number =>
+    count - (mySentiment === sentiment.type && sentiment.type === countType ? 1 : 0);
+
+  const newAddCount = (count: number, countType: string): number =>
+    (sentiment.type === countType ? count + 1 : count - (mySentiment === countType ? 1 : 0));
+
   const sentimentComponent = (
     <div
       className={isSelected ? 'sentiment sentiment-active' : 'sentiment'}
@@ -48,61 +59,48 @@ const Sentiment = ({
             </div>
           );
           displayModal(null, body, true, null, null, true);
+        } else if (isSelected) {
+          deleteSentiment({
+            variables: { postId: postId },
+            optimisticResponse: {
+              deleteSentiment: {
+                post: {
+                  id: postId,
+                  sentimentCounts: {
+                    like: newDeleteCount(likeCount, SENTIMENTS.like),
+                    disagree: newDeleteCount(disagreeCount, SENTIMENTS.disagree),
+                    dontUnderstand: newDeleteCount(dontUnderstandCount, SENTIMENTS.dontUnderstand),
+                    moreInfo: newDeleteCount(moreInfoCount, SENTIMENTS.moreInfo),
+                    __typename: 'SentimentCounts'
+                  },
+                  mySentiment: null,
+                  __typename: 'Post'
+                },
+                __typename: 'DeleteSentiment'
+              }
+            }
+          });
         } else {
-          client.mutate(
-            isSelected
-              ? {
-                mutation: deleteSentimentMutation,
-                variables: { postId: postId },
-                optimisticResponse: {
-                  deleteSentiment: {
-                    post: {
-                      id: postId,
-                      sentimentCounts: {
-                        like: likeCount - (mySentiment === sentiment.type ? 1 : 0),
-                        disagree: disagreeCount - (mySentiment === sentiment.type ? 1 : 0),
-                        dontUnderstand: dontUnderstandCount - (mySentiment === sentiment.type ? 1 : 0),
-                        moreInfo: moreInfoCount - (mySentiment === sentiment.type ? 1 : 0),
-                        __typename: 'SentimentCounts'
-                      },
-                      mySentiment: null,
-                      __typename: 'Post'
-                    },
-                    __typename: 'DeleteSentiment'
-                  }
-                }
+          addSentiment({
+            variables: { postId: postId, type: sentiment.type },
+            optimisticResponse: {
+              addSentiment: {
+                post: {
+                  id: postId,
+                  sentimentCounts: {
+                    like: newAddCount(likeCount, SENTIMENTS.like),
+                    disagree: newAddCount(disagreeCount, SENTIMENTS.disagree),
+                    dontUnderstand: newAddCount(dontUnderstandCount, SENTIMENTS.dontUnderstand),
+                    moreInfo: newAddCount(moreInfoCount, SENTIMENTS.moreInfo),
+                    __typename: 'SentimentCounts'
+                  },
+                  mySentiment: sentiment.type,
+                  __typename: 'Post'
+                },
+                __typename: 'AddSentiment'
               }
-              : {
-                mutation: addSentimentMutation,
-                variables: { postId: postId, type: sentiment.type },
-                optimisticResponse: {
-                  addSentiment: {
-                    post: {
-                      id: postId,
-                      sentimentCounts: {
-                        like: sentiment.camelType === 'like' ? likeCount + 1 : likeCount - (mySentiment === 'LIKE' ? 1 : 0),
-                        disagree:
-                            sentiment.camelType === 'disagree'
-                              ? disagreeCount + 1
-                              : disagreeCount - (mySentiment === 'DISAGREE' ? 1 : 0),
-                        dontUnderstand:
-                            sentiment.camelType === 'dontUnderstand'
-                              ? dontUnderstandCount + 1
-                              : dontUnderstandCount - (mySentiment === 'DONT_UNDERSTAND' ? 1 : 0),
-                        moreInfo:
-                            sentiment.camelType === 'moreInfo'
-                              ? moreInfoCount + 1
-                              : moreInfoCount - (mySentiment === 'MORE_INFO' ? 1 : 0),
-                        __typename: 'SentimentCounts'
-                      },
-                      mySentiment: sentiment.type,
-                      __typename: 'Post'
-                    },
-                    __typename: 'AddSentiment'
-                  }
-                }
-              }
-          );
+            }
+          });
         }
       }}
     >
@@ -116,29 +114,56 @@ const Sentiment = ({
   );
 };
 
+export const Sentiment = compose(
+  graphql(addSentimentMutation, {
+    name: 'addSentiment'
+  }),
+  graphql(deleteSentimentMutation, {
+    name: 'deleteSentiment'
+  }),
+  manageErrorAndLoading({ displayLoader: true })
+)(DumbSentiment);
+
 type SentimentsProps = {
-  client: ApolloClient,
   isPhaseCompleted: boolean,
   mySentiment: ?string,
   placement: OverlayPlacement,
   postId: string,
-  sentimentCounts: SentimentCountsFragment
+  sentimentCounts: ?SentimentCountsFragment,
+  customSentimentDefinitions?: Array<SentimentDefinition>,
+  onCompleted?: () => void
 };
 
-export default ({ sentimentCounts, mySentiment, client, postId, placement, isPhaseCompleted }: SentimentsProps) => (
+const Sentiments = ({
+  sentimentCounts,
+  mySentiment,
+  postId,
+  placement,
+  isPhaseCompleted,
+  onCompleted,
+  customSentimentDefinitions
+}: SentimentsProps) => (
   <div className="add-sentiment">
-    {sentimentDefinitions.map(sentiment => (
-      <Sentiment
-        key={sentiment.type}
-        sentimentCounts={sentimentCounts}
-        mySentiment={mySentiment}
-        sentiment={sentiment}
-        isSelected={mySentiment === sentiment.type}
-        postId={postId}
-        client={client}
-        placement={placement}
-        isPhaseCompleted={isPhaseCompleted}
-      />
-    ))}
+    {customSentimentDefinitions &&
+      customSentimentDefinitions.map(sentiment => (
+        <Sentiment
+          key={sentiment.type}
+          sentimentCounts={sentimentCounts}
+          mySentiment={mySentiment}
+          sentiment={sentiment}
+          isSelected={mySentiment === sentiment.type}
+          postId={postId}
+          placement={placement}
+          isPhaseCompleted={isPhaseCompleted}
+          onCompleted={onCompleted}
+        />
+      ))}
   </div>
 );
+
+Sentiments.defaultProps = {
+  customSentimentDefinitions: sentimentDefinitions,
+  onCompleted: () => {}
+};
+
+export default Sentiments;

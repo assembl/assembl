@@ -20,7 +20,7 @@ from sockjs.tornado import SockJSRouter, SockJSConnection
 from tornado.httpserver import HTTPServer
 
 from assembl.lib.zmqlib import INTERNAL_SOCKET
-from assembl.lib.raven_client import setup_raven, capture_exception
+from assembl.lib.sentry import capture_exception
 from assembl.lib.web_token import decode_token, TokenInvalid
 
 # Inspired by socksproxy.
@@ -47,7 +47,6 @@ if REQUIRES_SECURE and SERVER_PORT == 80:
     # old misconfiguration
     SERVER_PORT = 443
 SERVER_URL = "%s://%s:%d" % (SERVER_PROTOCOL, SERVER_HOST, SERVER_PORT)
-setup_raven(settings)
 
 context = zmq.Context.instance()
 ioloop.install()

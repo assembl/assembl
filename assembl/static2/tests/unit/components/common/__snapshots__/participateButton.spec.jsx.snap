@@ -5,13 +5,10 @@ exports[`ParticipateButton component should render a button to navigate to the p
   <button
     className="button-submit button-dark btn btn-default"
     disabled={false}
-    onClick={[Function]}
+    onClick={[MockFunction]}
     type="button"
   >
-    <span
-      className={undefined}
-      style={undefined}
-    >
+    <span>
       I want to participate
     </span>
   </button>

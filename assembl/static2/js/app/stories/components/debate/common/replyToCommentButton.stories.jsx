@@ -13,7 +13,11 @@ export const defaultReplyToCommentButton: ReplyToCommentButtonProps = {
   onClickCallback: action('onClickCallback')
 };
 
-storiesOf('ReplyToCommentButton', module).add(
-  'default',
-  withInfo()(() => <ReplyToCommentButton {...defaultReplyToCommentButton} />)
-);
+export const disabledReplyToCommentButton: ReplyToCommentButtonProps = {
+  onClickCallback: action('onClickCallback'),
+  disabled: true
+};
+
+storiesOf('ReplyToCommentButton', module)
+  .add('default', withInfo()(() => <ReplyToCommentButton {...defaultReplyToCommentButton} />))
+  .add('disabled', withInfo()(() => <ReplyToCommentButton {...disabledReplyToCommentButton} />));

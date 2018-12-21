@@ -21,25 +21,31 @@ const DumbNumberGaugeForm = ({
   handleMaxChange,
   handleUnitChange
 }: NumberGaugeFormProps) => (
-  <div>
+  <React.Fragment>
     <FormGroup>
       <FormControlWithLabel
-        onChange={value => handleMinChange(parseInt(value, 10))}
+        onChange={e => handleMinChange(parseInt(e.target.value, 10))}
         value={minimum ? minimum.toString() : ''}
         label={I18n.t('administration.minValue')}
         required
         type="number"
       />
       <FormControlWithLabel
-        onChange={value => handleMaxChange(parseInt(value, 10))}
+        onChange={e => handleMaxChange(parseInt(e.target.value, 10))}
         value={maximum ? maximum.toString() : ''}
         label={I18n.t('administration.maxValue')}
         required
         type="number"
       />
-      <FormControlWithLabel onChange={handleUnitChange} value={unit} label={I18n.t('administration.unit')} required type="text" />
+      <FormControlWithLabel
+        onChange={e => handleUnitChange(e.target.value)}
+        value={unit}
+        label={I18n.t('administration.unit')}
+        required
+        type="text"
+      />
     </FormGroup>
-  </div>
+  </React.Fragment>
 );
 
 export default DumbNumberGaugeForm;
