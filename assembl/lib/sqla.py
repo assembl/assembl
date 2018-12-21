@@ -1175,10 +1175,14 @@ class BaseOps(object):
                     elif isinstance(value, col.type.python_type):
                         setattr(self, key, value)
                     else:
-                        assert False, "can't assign json type %s"\
-                            " to column %s of class %s" % (
-                                type(value).__name__, col.key,
-                                self.__class__.__name__)
+                        try:
+                            value_cast = col.type.python_type(value)
+                            setattr(self, key, value_cast)
+                        except Error as e:
+                            assert False, "can't assign json type %s"\
+                                " to column %s of class %s" % (
+                                    type(value).__name__, col.key,
+                                    self.__class__.__name__)
                     continue
                 else:
                     # Non-scalar
