@@ -19,6 +19,10 @@ export type TreeItem = {
   children?: Array<TreeItem>
 };
 
+type ChildType = TreeItem & {
+  [string]: any
+};
+
 export type Idea = {
   id: string,
   parentId: string,
