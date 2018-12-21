@@ -1,5 +1,5 @@
 import { ApolloClient, toIdValue, IntrospectionFragmentMatcher } from 'react-apollo';
-import { createNetworkInterface } from 'apollo-upload-client';
+import { UploadHTTPFetchNetworkInterface } from 'apollo-upload-client';
 import * as Sentry from '@sentry/browser';
 
 import { getDiscussionSlug } from './utils/globalFunctions';
@@ -29,12 +29,34 @@ const myFragmentMatcher = new IntrospectionFragmentMatcher({
 
 const dataIdFromObject = o => o.id;
 
-const networkInterface = createNetworkInterface({
-  uri: getFullPath('graphql', { slug: getDiscussionSlug() }),
-  opts: {
-    credentials: 'same-origin'
+class DualUriNetworkInterface extends UploadHTTPFetchNetworkInterface {
+  constructor(uri, mutationUri, opts) {
+    super(uri, opts);
+    this.queryUri = uri;
+    this.mutationUri = mutationUri;
   }
-});
+
+  fetchFromRemoteEndpoint({ request, options }) {
+    if (request.query.definitions.length && request.query.definitions[0].operation === 'mutation') {
+      this._uri = this.mutationUri; // eslint-disable-line no-underscore-dangle
+    } else {
+      this._uri = this.queryUri; // eslint-disable-line no-underscore-dangle
+    }
+    return super.fetchFromRemoteEndpoint({ request: request, options: options });
+  }
+}
+
+const queryUri = getFullPath('graphql', { slug: getDiscussionSlug() });
+// TODO: get a separate Uri from globalFunctions
+const mutationUri = queryUri;
+
+let networkInterface;
+
+if (queryUri === mutationUri) {
+  networkInterface = new UploadHTTPFetchNetworkInterface(queryUri, { credentials: 'same-origin' });
+} else {
+  networkInterface = new DualUriNetworkInterface(queryUri, mutationUri, { credentials: 'same-origin' });
+}
 
 // trace every graphql operation in sentry
 networkInterface.use([
