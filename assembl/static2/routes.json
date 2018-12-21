@@ -46,7 +46,7 @@
   "privacyPolicy": "${slug}/privacy-policy",
   "cookiesPolicy": "${slug}/cookies-policy",
   "userGuidelines": "${slug}/user-guidelines",
-  "voteSessionAdmin": "${slug}/administration/voteSession",
+  "voteSessionAdmin": "${slug}/administration/voteSession?thematicId=${thematicId}",
   "voteSession": "${slug}/debate/voteSession",
   "exportSurveyData": "data/Discussion/${debateId}/phase1_csv_export${translation}${anonymous}",
   "exportThreadMulticolumnData": "data/Discussion/${debateId}/phase2_csv_export${translation}${anonymous}",

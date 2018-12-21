@@ -5,11 +5,7 @@ import type ReduxAction from 'redux';
 import { fromJS, List, Map } from 'immutable';
 import {
   type Action,
-  UPDATE_VOTE_SESSION_PAGE_TITLE,
   UPDATE_VOTE_SESSION_PAGE_SEECURRENTVOTES,
-  UPDATE_VOTE_SESSION_PAGE_SUBTITLE,
-  UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_TITLE,
-  UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_CONTENT,
   UPDATE_VOTE_SESSION_PAGE_PROPOSITIONS_TITLE,
   UPDATE_VOTE_SESSION_PAGE_IMAGE,
   UPDATE_VOTE_SESSION_PAGE,
@@ -54,11 +50,7 @@ import { moveItemUp, moveItemDown } from '../../utils/globalFunctions';
 const initialPage = Map({
   _hasChanged: false,
   id: '',
-  titleEntries: List(),
   seeCurrentVotes: false,
-  subTitleEntries: List(),
-  instructionsSectionTitleEntries: List(),
-  instructionsSectionContentEntries: List(),
   propositionsSectionTitleEntries: List(),
   headerImage: Map({
     externalUrl: '',
@@ -69,24 +61,8 @@ const initialPage = Map({
 export type VoteSessionPageReducer = (Map, ReduxAction<Action>) => Map;
 export const voteSessionPage: VoteSessionPageReducer = (state = initialPage, action) => {
   switch (action.type) {
-  case UPDATE_VOTE_SESSION_PAGE_TITLE:
-    return state
-      .update('titleEntries', updateInLangstringEntries(action.locale, fromJS(action.value)))
-      .set('_hasChanged', true);
   case UPDATE_VOTE_SESSION_PAGE_SEECURRENTVOTES:
     return state.set('seeCurrentVotes', action.value).set('_hasChanged', true);
-  case UPDATE_VOTE_SESSION_PAGE_SUBTITLE:
-    return state
-      .update('subTitleEntries', updateInLangstringEntries(action.locale, fromJS(action.value)))
-      .set('_hasChanged', true);
-  case UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_TITLE:
-    return state
-      .update('instructionsSectionTitleEntries', updateInLangstringEntries(action.locale, fromJS(action.value)))
-      .set('_hasChanged', true);
-  case UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_CONTENT:
-    return state
-      .update('instructionsSectionContentEntries', updateInLangstringEntries(action.locale, action.value))
-      .set('_hasChanged', true);
   case UPDATE_VOTE_SESSION_PAGE_PROPOSITIONS_TITLE:
     return state
       .update('propositionsSectionTitleEntries', updateInLangstringEntries(action.locale, fromJS(action.value)))
@@ -110,9 +86,6 @@ export const voteSessionPage: VoteSessionPageReducer = (state = initialPage, act
       id: fromJS(action.id),
       titleEntries: fromJS(action.titleEntries),
       seeCurrentVotes: action.seeCurrentVotes,
-      subTitleEntries: fromJS(action.subTitleEntries),
-      instructionsSectionTitleEntries: fromJS(action.instructionsSectionTitleEntries),
-      instructionsSectionContentEntries: List(action.instructionsSectionContentEntries.map(entry => Map(entry))),
       propositionsSectionTitleEntries: fromJS(action.propositionsSectionTitleEntries),
       headerImage: headerImage
     });

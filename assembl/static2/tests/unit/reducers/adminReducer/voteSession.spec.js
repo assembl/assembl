@@ -14,10 +14,6 @@ describe('voteSession admin reducers', () => {
           _hasChanged: false,
           seeCurrentVotes: false,
           id: '',
-          titleEntries: List(),
-          subTitleEntries: List(),
-          instructionsSectionTitleEntries: List(),
-          instructionsSectionContentEntries: List(),
           propositionsSectionTitleEntries: List(),
           headerImage: Map({ externalUrl: '', mimeType: '', title: '' })
         })
@@ -29,158 +25,10 @@ describe('voteSession admin reducers', () => {
         _hasChanged: false,
         seeCurrentVotes: false,
         id: '',
-        titleEntries: List.of({ locale: 'en', value: 'Vote session title' }),
-        subTitleEntries: List(),
-        instructionsSectionTitleEntries: List(),
-        instructionsSectionContentEntries: List(),
         propositionsSectionTitleEntries: List(),
         headerImage: Map({ externalUrl: '', mimeType: '', title: '' })
       });
       expect(voteSessionPage(oldState, action)).toEqual(oldState);
-    });
-    it('should handle UPDATE_VOTE_SESSION_PAGE_TITLE action type', () => {
-      const oldState = fromJS({
-        _hasChanged: false,
-        seeCurrentVotes: false,
-        id: '',
-        titleEntries: [{ localeCode: 'fr', value: 'Titre en français' }, { localeCode: 'en', value: 'Title in english' }],
-        subTitleEntries: [],
-        instructionsSectionTitleEntries: [],
-        instructionsSectionContentEntries: [],
-        propositionsSectionTitleEntries: [],
-        headerImage: { externalUrl: '', mimeType: '', title: '' }
-      });
-      const expected = fromJS({
-        _hasChanged: true,
-        seeCurrentVotes: false,
-        id: '',
-        titleEntries: [
-          { localeCode: 'fr', value: 'Titre en français' },
-          { localeCode: 'en', value: 'An elaborate title for the vote session page' }
-        ],
-        subTitleEntries: [],
-        instructionsSectionTitleEntries: [],
-        instructionsSectionContentEntries: [],
-        propositionsSectionTitleEntries: [],
-        headerImage: { externalUrl: '', mimeType: '', title: '' }
-      });
-      const action = {
-        locale: 'en',
-        value: 'An elaborate title for the vote session page',
-        type: actionTypes.UPDATE_VOTE_SESSION_PAGE_TITLE
-      };
-      expect(voteSessionPage(oldState, action)).toEqual(expected);
-    });
-
-    it('should handle UPDATE_VOTE_SESSION_PAGE_SUBTITLE action type', () => {
-      const oldState = fromJS({
-        _hasChanged: false,
-        seeCurrentVotes: false,
-        id: '',
-        titleEntries: [],
-        subTitleEntries: [
-          { localeCode: 'fr', value: 'Sous-titre en français' },
-          { localeCode: 'en', value: 'Subtitle in english' }
-        ],
-        instructionsSectionTitleEntries: [],
-        instructionsSectionContentEntries: [],
-        propositionsSectionTitleEntries: [],
-        headerImage: { externalUrl: '', mimeType: '', title: '' }
-      });
-      const expected = fromJS({
-        _hasChanged: true,
-        seeCurrentVotes: false,
-        id: '',
-        titleEntries: [],
-        subTitleEntries: [
-          { localeCode: 'fr', value: 'Sous-titre en français' },
-          { localeCode: 'en', value: 'Superb subtitle in english' }
-        ],
-        instructionsSectionTitleEntries: [],
-        instructionsSectionContentEntries: [],
-        propositionsSectionTitleEntries: [],
-        headerImage: { externalUrl: '', mimeType: '', title: '' }
-      });
-      const action = {
-        locale: 'en',
-        value: 'Superb subtitle in english',
-        type: actionTypes.UPDATE_VOTE_SESSION_PAGE_SUBTITLE
-      };
-      expect(voteSessionPage(oldState, action)).toEqual(expected);
-    });
-
-    it('should handle UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_TITLE action type', () => {
-      const oldState = fromJS({
-        _hasChanged: false,
-        seeCurrentVotes: false,
-        id: '',
-        titleEntries: [],
-        subTitleEntries: [],
-        instructionsSectionTitleEntries: [
-          { localeCode: 'fr', value: 'Titre des instructions en français' },
-          { localeCode: 'en', value: 'Title of the instructions in english' }
-        ],
-        instructionsSectionContentEntries: [],
-        propositionsSectionTitleEntries: [],
-        headerImage: { externalUrl: '', mimeType: '', title: '' }
-      });
-      const expected = fromJS({
-        _hasChanged: true,
-        seeCurrentVotes: false,
-        id: '',
-        titleEntries: [],
-        subTitleEntries: [],
-        instructionsSectionTitleEntries: [
-          { localeCode: 'fr', value: 'Titre des instructions en français' },
-          { localeCode: 'en', value: 'A much better title for the instructions in english' }
-        ],
-        instructionsSectionContentEntries: [],
-        propositionsSectionTitleEntries: [],
-        headerImage: { externalUrl: '', mimeType: '', title: '' }
-      });
-      const action = {
-        locale: 'en',
-        value: 'A much better title for the instructions in english',
-        type: actionTypes.UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_TITLE
-      };
-      expect(voteSessionPage(oldState, action)).toEqual(expected);
-    });
-
-    it('should handle UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_CONTENT action type', () => {
-      const oldState = fromJS({
-        _hasChanged: false,
-        seeCurrentVotes: false,
-        id: '',
-        titleEntries: [],
-        subTitleEntries: [],
-        instructionsSectionTitleEntries: [],
-        instructionsSectionContentEntries: [
-          { localeCode: 'fr', value: 'Instructions en français' },
-          { localeCode: 'en', value: 'Instructions in english' }
-        ],
-        propositionsSectionTitleEntries: [],
-        headerImage: { externalUrl: '', mimeType: '', title: '' }
-      });
-      const expected = fromJS({
-        _hasChanged: true,
-        seeCurrentVotes: false,
-        id: '',
-        titleEntries: [],
-        subTitleEntries: [],
-        instructionsSectionTitleEntries: [],
-        instructionsSectionContentEntries: [
-          { localeCode: 'fr', value: 'Instructions en français' },
-          { localeCode: 'en', value: 'More elaborated instructions in english' }
-        ],
-        propositionsSectionTitleEntries: [],
-        headerImage: { externalUrl: '', mimeType: '', title: '' }
-      });
-      const action = {
-        locale: 'en',
-        value: 'More elaborated instructions in english',
-        type: actionTypes.UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_CONTENT
-      };
-      expect(voteSessionPage(oldState, action)).toEqual(expected);
     });
 
     it('should handle UPDATE_VOTE_SESSION_PAGE_PROPOSITIONS_TITLE action type', () => {
@@ -188,10 +36,6 @@ describe('voteSession admin reducers', () => {
         _hasChanged: false,
         seeCurrentVotes: false,
         id: '',
-        titleEntries: [],
-        subTitleEntries: [],
-        instructionsSectionTitleEntries: [],
-        instructionsSectionContentEntries: [],
         propositionsSectionTitleEntries: [
           { localeCode: 'fr', value: 'Titre des propositions en français' },
           { localeCode: 'en', value: 'Title of the propositions in english' }
@@ -202,10 +46,6 @@ describe('voteSession admin reducers', () => {
         _hasChanged: true,
         seeCurrentVotes: false,
         id: '',
-        titleEntries: [],
-        subTitleEntries: [],
-        instructionsSectionTitleEntries: [],
-        instructionsSectionContentEntries: [],
         propositionsSectionTitleEntries: [
           { localeCode: 'fr', value: 'Titre des propositions en français' },
           { localeCode: 'en', value: 'Much better propositions title in english' }
@@ -225,10 +65,6 @@ describe('voteSession admin reducers', () => {
         _hasChanged: false,
         seeCurrentVotes: false,
         id: '',
-        titleEntries: [{ localeCode: 'fr', value: 'Titre en français' }, { localeCode: 'en', value: 'Title in english' }],
-        subTitleEntries: [],
-        instructionsSectionTitleEntries: [],
-        instructionsSectionContentEntries: [],
         propositionsSectionTitleEntries: [],
         headerImage: { externalUrl: '', mimeType: '', title: '' }
       });
@@ -236,10 +72,6 @@ describe('voteSession admin reducers', () => {
         _hasChanged: true,
         seeCurrentVotes: true,
         id: '',
-        titleEntries: [{ localeCode: 'fr', value: 'Titre en français' }, { localeCode: 'en', value: 'Title in english' }],
-        subTitleEntries: [],
-        instructionsSectionTitleEntries: [],
-        instructionsSectionContentEntries: [],
         propositionsSectionTitleEntries: [],
         headerImage: { externalUrl: '', mimeType: '', title: '' }
       });
@@ -255,10 +87,6 @@ describe('voteSession admin reducers', () => {
         _hasChanged: false,
         seeCurrentVotes: false,
         id: '',
-        titleEntries: [],
-        subTitleEntries: [],
-        instructionsSectionTitleEntries: [],
-        instructionsSectionContentEntries: [],
         propositionsSectionTitleEntries: [],
         headerImage: { externalUrl: '', mimeType: '' }
       });
@@ -267,10 +95,6 @@ describe('voteSession admin reducers', () => {
         _hasChanged: true,
         seeCurrentVotes: false,
         id: '',
-        titleEntries: [],
-        subTitleEntries: [],
-        instructionsSectionTitleEntries: [],
-        instructionsSectionContentEntries: [],
         propositionsSectionTitleEntries: [],
         headerImage: { externalUrl: file, mimeType: 'image/jpeg' }
       };

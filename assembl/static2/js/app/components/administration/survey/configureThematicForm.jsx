@@ -58,7 +58,7 @@ class ConfigureThematicForm extends React.PureComponent<Props> {
     const { thematicId } = this.props;
     const slug = getDiscussionSlug();
     const voteModuleLink = (
-      <Link to={get('administration', { slug: slug, id: 'voteSession' })} className="button-link button-dark">
+      <Link to={get('voteSessionAdmin', { slug: slug, thematicId: thematicId })} className="button-link button-dark">
         <Translate value="administration.configureVoteSessionButton" />
       </Link>
     );
