@@ -109,8 +109,10 @@ class TimelineEvent(DiscussionBoundBase):
         'timeline_event.id', ondelete="SET NULL"), nullable=True)
 
     previous_event = relationship(
-        "TimelineEvent", remote_side=[id], post_update=True, uselist=False,
+        "TimelineEvent", remote_side=[id], uselist=False,
+        cascade="save-update, merge, expunge",
         backref=backref("next_event", uselist=False,
+                        cascade="save-update, merge, expunge",
                         remote_side=[previous_event_id]))
 
     def __init__(self, **kwargs):
