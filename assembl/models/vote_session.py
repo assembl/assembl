@@ -42,7 +42,7 @@ class VoteSession(
         onupdate='CASCADE'
     ), primary_key=True)
 
-    idea_id = Column(Integer, ForeignKey(Idea.id), nullable=False)
+    idea_id = Column(Integer, ForeignKey(Idea.id, onupdate="CASCADE", ondelete='CASCADE'), nullable=False, unique=True)
 
     idea = relationship(Idea, backref=backref("vote_session", single_parent=True, uselist=False, cascade="all, delete-orphan"),)
 

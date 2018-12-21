@@ -192,6 +192,7 @@ class DiscussionPhase(TimelineEvent):
     root_idea_id = Column(
         Integer,
         # The delete should cascade; wait until all phases have an idea.
+        # Needs to be a smart trigger, because we want to delete on TimelineEvent
         ForeignKey('idea.id', onupdate="CASCADE", ondelete='SET NULL'),
         unique=True,
         nullable=True)  # This is temporary
