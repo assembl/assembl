@@ -162,18 +162,24 @@ var TimelineEventView = Marionette.LayoutView.extend({
     };
   },
   onRender: function() {
+    var title = this.model.get('title')
+    var description = this.model.get('description')
+    if (title) {
+      this.showChildView(
+        "eventTitle",
+        new SimpleLangStringEditPanel({
+          model: title,
+          owner_relative_url: this.model.url() + '/title',
+        }));
+    }
+    if (description) {
     this.showChildView(
-      "eventTitle",
-      new SimpleLangStringEditPanel({
-        model: this.model.get('title'),
-        owner_relative_url: this.model.url() + '/title',
-      }));
-    this.showChildView(
-      "eventDescription",
-      new SimpleLangStringEditPanel({
-        model: this.model.get('description'),
-        owner_relative_url: this.model.url() + '/description',
-      }));
+        "eventDescription",
+        new SimpleLangStringEditPanel({
+          model: description,
+          owner_relative_url: this.model.url() + '/description',
+        }));
+    }
   },
   reorderColumnDown: function(ev) {
     var index = this.getIndex(),
