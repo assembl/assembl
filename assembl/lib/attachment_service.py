@@ -51,11 +51,12 @@ class AmazonAttachmentService(AttachmentService):
 
     def put_file(self, filename, mimetype=None):
         key = self.computeHash(filename)
-        self.bucket.upload_file(filename, key, {
-            'ACL': 'authenticated-read',
-            'ContentType': mimetype or 'application/binary',
-            'ContentLength': path.getsize(filename)
-        })
+        if not self.exists(key):
+            self.bucket.upload_file(filename, key, {
+                'ACL': 'authenticated-read',
+                'ContentType': mimetype or 'application/binary',
+                'ContentLength': path.getsize(filename)
+            })
         return key
 
     def get_file_path(self, fileHash):

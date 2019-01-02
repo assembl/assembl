@@ -57,10 +57,10 @@ def get_file_header(request):
     handoff_to_nginx = asbool(config.get('handoff_to_nginx', False))
 
     return Response(
-        content_length=f.size,
+        content_length=f.file_size,
         content_type=str(f.mime_type),
         last_modified=f.creation_date,
-        expires=datetime.now()+timedelta(days=365),
+        expires=datetime.now() + timedelta(days=365),
         accept_ranges="bytes" if handoff_to_nginx else "none",
     )
 
@@ -88,23 +88,23 @@ def get_file(request):
     else:
         if 'Range' in request.headers:
             raise HTTPRequestRangeNotSatisfiable()
-        fs = open(f.path, 'rb')
+        fs = f.file_stream
         app_iter = None
         environ = request.environ
         if 'wsgi.file_wrapper' in environ:
             app_iter = environ['wsgi.file_wrapper'](fs, _BLOCK_SIZE)
         if app_iter is None:
             app_iter = FileIter(fs, _BLOCK_SIZE)
-        kwargs=dict(app_iter=app_iter)
+        kwargs = dict(app_iter=app_iter)
 
     r = Response(
-        content_length=f.size,
+        content_length=f.file_size,
         content_type=str(f.mime_type),
         last_modified=f.creation_date,
-        expires=datetime.now()+timedelta(days=365),
+        expires=datetime.now() + timedelta(days=365),
         accept_ranges="bytes" if handoff_to_nginx else "none",
         content_disposition=
-            'attachment; filename="%s"; filename*=utf-8\'\'%s' # RFC 6266
+            'attachment; filename="%s"; filename*=utf-8\'\'%s'  # RFC 6266
             % (escaped_double_quotes_filename, url_quoted_utf8_filename),
         **kwargs
     )
