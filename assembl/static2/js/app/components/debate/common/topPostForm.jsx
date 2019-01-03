@@ -138,7 +138,7 @@ export class DumbTopPostForm extends React.Component<Props, State> {
       ((subject || ideaOnColumn) && !bodyIsEmpty) ||
       (publicationState === PublicationStates.DRAFT && (subject || !bodyIsEmpty))
     ) {
-      displayAlert('success', I18n.t('loading.wait'));
+      displayAlert('success', I18n.t('loading.wait'), false, 10000);
 
       // first, we upload each attachment
       // $FlowFixMe we know that body is not empty
@@ -169,7 +169,7 @@ export class DumbTopPostForm extends React.Component<Props, State> {
             default:
               successMessage = postSuccessMsgId;
             }
-            displayAlert('success', I18n.t(successMessage));
+            displayAlert('success', I18n.t(successMessage), false, 10000);
             this.resetForm();
             this.setState(submittingState(false));
           })

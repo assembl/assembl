@@ -51,6 +51,7 @@ export class Question extends React.Component<Props, State> {
     const body = this.state.postBody;
     const userIsAdmin = connectedUserIsAdmin();
     const publicationState = getPostPublicationState(isDebateModerated, userIsAdmin);
+    displayAlert('success', I18n.t('loading.wait'), false, 10000);
     this.setState({ buttonDisabled: true }, () =>
       this.props
         .mutate({
@@ -64,7 +65,7 @@ export class Question extends React.Component<Props, State> {
         .then(() => {
           scrollToQuestion(true, index + 1);
           const successMessage = isDebateModerated && !userIsAdmin ? 'postToBeValidated' : 'postSuccess';
-          displayAlert('success', I18n.t(`debate.survey.${successMessage}`));
+          displayAlert('success', I18n.t(`debate.survey.${successMessage}`), false, 10000);
           refetchTheme();
           this.setState({
             postBody: EditorState.createEmpty(),

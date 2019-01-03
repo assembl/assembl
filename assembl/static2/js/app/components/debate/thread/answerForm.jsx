@@ -104,7 +104,7 @@ export class DumbAnswerForm extends React.PureComponent<Props, State> {
           attachments: result.documentIds,
           publicationState: publicationState
         };
-        displayAlert('success', I18n.t('loading.wait'));
+        displayAlert('success', I18n.t('loading.wait'), false, 10000);
         createPost({ variables: variables })
           .then((res) => {
             const postId = res.data.createPost.post.id;
@@ -125,7 +125,7 @@ export class DumbAnswerForm extends React.PureComponent<Props, State> {
               });
             });
             const successMessage = isDebateModerated && !userIsAdmin ? 'postToBeValidated' : 'postSuccess';
-            displayAlert('success', I18n.t(`debate.thread.${successMessage}`));
+            displayAlert('success', I18n.t(`debate.thread.${successMessage}`), false, 10000);
           })
           .catch((error) => {
             displayAlert('danger', `${error}`);
