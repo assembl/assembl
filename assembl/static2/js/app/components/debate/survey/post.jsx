@@ -6,7 +6,7 @@ import { Translate, I18n } from 'react-redux-i18n';
 import classnames from 'classnames';
 
 import { getConnectedUserId } from '../../../utils/globalFunctions';
-import Permissions, { connectedUserCan } from '../../../utils/permissions';
+import Permissions, { connectedUserCan, connectedUserIsAdmin } from '../../../utils/permissions';
 import PostCreator from './postCreator';
 import Like from '../../svg/like';
 import Disagree from '../../svg/disagree';
