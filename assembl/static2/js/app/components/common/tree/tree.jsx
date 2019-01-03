@@ -143,7 +143,9 @@ class Tree extends React.Component<Props> {
               fictionCommentExtraProps={fictionCommentExtraProps}
             />
           </div>
-        ) : null}
+        ) : (
+          <div />
+        )}
       </CellMeasurer>
     );
   };
