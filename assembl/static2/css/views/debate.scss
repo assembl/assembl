@@ -404,6 +404,18 @@
   }
 }
 
+@media screen and (max-width: 320px) {
+  .debate {
+    .questions {
+      .questions-section {
+        .dark-title-5 {
+          margin: 20px 0 10px 20px;
+        }
+      }
+    }
+  }
+}
+
 @media screen and (min-width: 601px) {
   .debate {
     .survey {
@@ -435,6 +447,16 @@
 @media screen and (min-width: 768px) {
   .top-post-form {
     padding: 33px 0 0;
+  }
+
+  .debate {
+    .questions {
+      .questions-section {
+        .dark-title-5 {
+          margin: 20px 0 10px 20px;
+        }
+      }
+    }
   }
 }
 
