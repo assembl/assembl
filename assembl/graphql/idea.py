@@ -14,8 +14,8 @@ from sqlalchemy import desc, func, join, select, or_, and_
 from sqlalchemy.orm import joinedload
 
 from assembl import models
-from assembl.auth import IF_OWNED, CrudPermissions
-from assembl.auth.util import get_permissions
+from assembl.auth import P_MODERATE, IF_OWNED, CrudPermissions
+from assembl.auth.util import get_permissions, user_has_permission
 from assembl.models.action import SentimentOfPost
 from assembl.models import Phases
 from assembl.models.idea import MessageView
@@ -462,29 +462,37 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
         discussion = models.Discussion.get(discussion_id)
         random = args.get('random', False)
         is_moderating = args.get('isModerating', False)
-        publication_state = models.PublicationStates.PUBLISHED
-        if is_moderating:
-            publication_state = models.PublicationStates.SUBMITTED_AWAITING_MODERATION
-
+        user_id = context.authenticated_userid
+        can_moderate = user_has_permission(discussion_id, user_id, P_MODERATE)
         Post = models.Post
+        if is_moderating:
+            state_condition = Post.publication_state == models.PublicationStates.SUBMITTED_AWAITING_MODERATION
+        elif can_moderate:
+            state_condition = Post.publication_state.in_(
+                [models.PublicationStates.SUBMITTED_AWAITING_MODERATION,
+                 models.PublicationStates.PUBLISHED])
+        else:
+            state_condition = (Post.publication_state == models.PublicationStates.PUBLISHED) | (
+                (Post.publication_state == models.PublicationStates.SUBMITTED_AWAITING_MODERATION) &
+                (Post.creator_id == user_id))
+
         related = self.get_related_posts_query(True)
 
         # If random is True returns 10 posts, the first one is the latest post
         # created by the user, then the remaining ones are in random order.
         # If random is False, return all the posts in creation_date desc order.
         if random:
-            user_id = context.authenticated_userid
             if user_id is None:
                 first_post = None
             else:
                 first_post = Post.query.join(
                     related, Post.id == related.c.post_id
                 ).filter(Post.creator_id == user_id
-                ).filter(Post.publication_state == publication_state
+                ).filter(state_condition
                 ).order_by(desc(Post.creation_date), Post.id).first()
 
             query = Post.default_db.query(Post.id).join(
-                related, Post.id == related.c.post_id)
+                related, Post.id == related.c.post_id).filter(state_condition)
             # retrieve ids, do the random and get the posts for these ids
             post_ids = [e[0] for e in query]
             limit = args.get('first', 10)
@@ -523,7 +531,7 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
             query = Post.query.join(
                 related, Post.id == related.c.post_id
             ).filter(
-                Post.publication_state == publication_state
+                state_condition
             ).order_by(
                 desc(Post.creation_date), Post.id
             ).options(joinedload(Post.creator))
