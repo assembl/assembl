@@ -6,7 +6,6 @@ import { AutoSizer, CellMeasurer, CellMeasurerCache, List, WindowScroller } from
 import NuggetsManager from '../nuggetsManager';
 import Child from './treeItem';
 import type { FictionCommentExtraProps } from '../../../components/debate/brightMirror/fictionComment';
-import { isPostVisible } from '../../../utils/tree';
 
 type Props = {
   contentLocaleMapping: Map<string, any>,
@@ -120,32 +119,28 @@ class Tree extends React.Component<Props> {
       fictionCommentExtraProps // Optional Bright Mirror fiction debate props
     } = this.props;
     const childData = data[index];
-    const showPost = isPostVisible(childData);
     return (
       <CellMeasurer cache={this.cache} columnIndex={0} key={key} parent={parent} rowIndex={index}>
-        {showPost ? (
-          <div style={style}>
-            {showPost && index > 0 ? <SeparatorComponent /> : null}
-            <Child
-              key={childData.id}
-              {...childData}
-              identifier={identifier}
-              phaseId={phaseId}
-              lang={lang}
-              rowIndex={index}
-              contentLocaleMapping={parent.props.contentLocaleMapping}
-              InnerComponent={InnerComponent}
-              InnerComponentFolded={InnerComponentFolded}
-              SeparatorComponent={showPost ? SeparatorComponent : null}
-              nuggetsManager={this.nuggetsManager}
-              listRef={this.listRef}
-              cache={this.cache}
-              fictionCommentExtraProps={fictionCommentExtraProps}
-            />
-          </div>
-        ) : (
-          <div />
-        )}
+        <div style={style}>
+          {index > 0 ? <SeparatorComponent /> : null}
+          <Child
+            key={childData.id}
+            {...childData}
+            identifier={identifier}
+            phaseId={phaseId}
+            lang={lang}
+            rowIndex={index}
+            contentLocaleMapping={parent.props.contentLocaleMapping}
+            InnerComponent={InnerComponent}
+            InnerComponentFolded={InnerComponentFolded}
+            SeparatorComponent={SeparatorComponent}
+            nuggetsManager={this.nuggetsManager}
+            listRef={this.listRef}
+            cache={this.cache}
+            fictionCommentExtraProps={fictionCommentExtraProps}
+          />
+        </div>
+        )
       </CellMeasurer>
     );
   };
