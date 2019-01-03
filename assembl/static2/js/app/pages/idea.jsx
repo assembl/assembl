@@ -25,6 +25,7 @@ import type { AnnouncementContent } from '../components/debate/common/announceme
 import { toggleHarvesting as toggleHarvestingAction } from '../actions/contextActions';
 // Utils imports
 import { displayAlert } from '../utils/utilityManager';
+import { isPostVisible } from '../utils/tree';
 
 const deletedPublicationStates = Object.keys(DeletedPublicationStates);
 
@@ -111,13 +112,12 @@ const creationDateLastDescendantComparator = (a: PostWithChildren, b: PostWithCh
 
 export const transformPosts = (edges: Array<Node>, messageColumns: Array<Column>, additionnalProps: { [string]: any } = {}) => {
   const postsByParent = {};
-
   const columns = { null: { colColor: null, colName: null } };
   messageColumns.forEach((col) => {
     columns[col.messageClassifier] = { colColor: col.color, colName: col.name };
   });
-
-  edges.forEach((e) => {
+  const filteredEdges = edges.filter(edge => isPostVisible(edge.node));
+  filteredEdges.forEach((e) => {
     const p = { ...e.node, ...additionnalProps, ...columns[e.node.messageClassifier] };
     const items = postsByParent[p.parentId] || [];
     postsByParent[p.parentId] = items;

@@ -7,7 +7,6 @@ import Post from '../common/post';
 import FoldedPost from '../common/post/foldedPost';
 import InfiniteSeparator from '../../../components/common/infiniteSeparator';
 import { getIsPhaseCompletedById } from '../../../utils/timeline';
-import { isPostVisible } from '../../../utils/tree';
 
 class ThreadView extends React.Component {
   render() {
@@ -25,7 +24,6 @@ class ThreadView extends React.Component {
       timeline
     } = this.props;
     const isPhaseCompleted = getIsPhaseCompletedById(timeline, phaseId);
-    const filteredPosts = posts.filter(post => isPostVisible(post));
     return (
       <div className="overflow-x">
         {(!isUserConnected || connectedUserCan(Permissions.ADD_POST)) && !isPhaseCompleted ? (
@@ -37,7 +35,7 @@ class ThreadView extends React.Component {
               <Tree
                 contentLocaleMapping={contentLocaleMapping}
                 lang={lang}
-                data={filteredPosts}
+                data={posts}
                 initialRowIndex={initialRowIndex}
                 InnerComponent={Post}
                 InnerComponentFolded={FoldedPost}
