@@ -80,6 +80,8 @@ export class PostActions extends React.Component<Props> {
     const isPhaseCompleted = getIsPhaseCompletedById(timeline, phaseId);
     const shareIcon = <span className="assembl-icon-share color" />;
     const isPendingForUser = isPending && !isPendingPostForAdmin;
+    const showLastSeparator =
+      !isPendingForUser && ((editable && userCanEditThisMessage) || userCanDeleteThisMessage || isPendingPostForAdmin);
     return (
       <div className="post-actions">
         <div className="post-icons">
@@ -146,7 +148,7 @@ export class PostActions extends React.Component<Props> {
         ) : (
           <div className="empty-sentiments-count" />
         )}
-        <div className={classnames({ 'post-actions-separator': !isPendingForUser })} />
+        <div className={classnames({ 'post-actions-separator': showLastSeparator })} />
         {isPendingPostForAdmin ? <ValidatePostButton postId={postId} linkClassName="post-action" /> : null}
         {userCanDeleteThisMessage ? <DeletePostButton postId={postId} linkClassName="post-action" /> : null}
         {editable && userCanEditThisMessage ? <EditPostButton handleClick={handleEditClick} linkClassName="post-action" /> : null}
