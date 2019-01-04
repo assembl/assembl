@@ -68,7 +68,6 @@ class AmazonAttachmentService(AttachmentService):
         key = self.computeHash(filename)
         if not self.exists(key):
             self.bucket.upload_file(filename, key, {
-                'ACL': 'authenticated-read',
                 'ContentType': mimetype or 'application/binary'
             })
         return key
