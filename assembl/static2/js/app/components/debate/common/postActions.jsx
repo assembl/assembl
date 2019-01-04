@@ -37,7 +37,8 @@ export type Props = {
   screenWidth: number,
   sentimentCounts: SentimentCountsFragment,
   isPending: boolean,
-  isPendingPostForAdmin: boolean
+  isPendingPostForAdmin: boolean,
+  isMultiColumns: boolean
 };
 
 export class PostActions extends React.Component<Props> {
@@ -62,7 +63,8 @@ export class PostActions extends React.Component<Props> {
       screenWidth,
       sentimentCounts,
       isPending,
-      isPendingPostForAdmin
+      isPendingPostForAdmin,
+      isMultiColumns
     } = this.props;
     let count = 0;
     const totalSentimentsCount = sentimentCounts
@@ -78,7 +80,7 @@ export class PostActions extends React.Component<Props> {
     const useSocial = debateData.useSocialMedia;
     const tooltipPlacement = screenWidth >= MEDIUM_SCREEN_WIDTH ? 'left' : 'top';
     const isPhaseCompleted = getIsPhaseCompletedById(timeline, phaseId);
-    const shareIcon = <span className="assembl-icon-share color" />;
+    const shareIcon = <span className={classnames('assembl-icon-share color', { 'share-multiColumns': isMultiColumns })} />;
     const isPendingForUser = isPending && !isPendingPostForAdmin;
     const showLastSeparator =
       !isPendingForUser && ((editable && userCanEditThisMessage) || userCanDeleteThisMessage || isPendingPostForAdmin);
@@ -88,7 +90,7 @@ export class PostActions extends React.Component<Props> {
           {!isPending ? (
             <React.Fragment>
               <div
-                className="post-action"
+                className={classnames('post-action', { 'share-multiColumns': isMultiColumns })}
                 onClick={() =>
                   openShareModal({
                     type: 'post',
@@ -103,7 +105,7 @@ export class PostActions extends React.Component<Props> {
                   {shareIcon}
                 </ResponsiveOverlayTrigger>
               </div>
-              <div className="post-actions-separator" />
+              <div className={classnames('post-actions-separator', { hidden: isMultiColumns })} />
             </React.Fragment>
           ) : null}
           {!isPendingForUser ? (
@@ -122,7 +124,7 @@ export class PostActions extends React.Component<Props> {
             overlay={getSentimentStats(totalSentimentsCount, sentimentCounts, mySentiment)}
             placement={tooltipPlacement}
           >
-            <div className="sentiments-count margin-m">
+            <div className={classnames('sentiments-count', { 'margin-m': !isMultiColumns, 'multiColumns-sentiments-count': isMultiColumns })}>
               <div>
                 {sentimentDefinitions.reduce((result, sentiment) => {
                   const sentimentCount = get(sentimentCounts, sentiment.camelType, 0);
@@ -148,7 +150,7 @@ export class PostActions extends React.Component<Props> {
         ) : (
           <div className="empty-sentiments-count" />
         )}
-        <div className={classnames({ 'post-actions-separator': showLastSeparator })} />
+        <div className={classnames({ 'post-actions-separator': showLastSeparator, 'separator-multiColumns': isMultiColumns })} />
         {isPendingPostForAdmin ? <ValidatePostButton postId={postId} linkClassName="post-action" /> : null}
         {userCanDeleteThisMessage ? <DeletePostButton postId={postId} linkClassName="post-action" /> : null}
         {editable && userCanEditThisMessage ? <EditPostButton handleClick={handleEditClick} linkClassName="post-action" /> : null}

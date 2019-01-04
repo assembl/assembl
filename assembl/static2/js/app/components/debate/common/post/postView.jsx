@@ -273,6 +273,7 @@ class PostView extends React.PureComponent<Props, State> {
                 phaseId={phaseId}
                 isPending={isPending}
                 isPendingPostForAdmin={isPendingPostForAdmin}
+                isMultiColumns={multiColumns}
               />
             </div>
           </div>

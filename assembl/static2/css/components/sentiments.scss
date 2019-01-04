@@ -38,6 +38,10 @@
 .sentiments-count {
   cursor: pointer;
 
+  &.multiColumns-sentiments-count {
+    margin-top: 10px;
+  }
+
   .txt {
     padding: 1px 0 0 20px;
     display: block;

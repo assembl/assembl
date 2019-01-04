@@ -310,6 +310,10 @@ $deleted-post-border: 1px solid $grey1 !default;
     &:hover {
       transform: scale(1.2);
     }
+
+    &.share-multiColumns {
+      margin-bottom: -10px;
+    }
   }
 
   .overflow-action {
@@ -743,4 +747,8 @@ $deleted-post-border: 1px solid $grey1 !default;
   margin: 20px auto 10px auto;
   border-bottom: 2px solid white;
   width: 85%;
+
+  &.separator-multiColumns {
+    margin: 10px auto 0 auto;
+  }
 }
