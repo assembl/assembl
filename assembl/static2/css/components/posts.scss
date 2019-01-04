@@ -137,6 +137,11 @@
     width: 100%;
   }
 
+  .sentiment-label {
+    font-weight: 700;
+    color: $theme-local-blue;
+  }
+
   .question-footer {
     margin: 0 0 70px;
     display: flex;
