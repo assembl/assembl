@@ -44,7 +44,6 @@ type Props = {
   screenWidth: number,
   themeId: string,
   isHarvesting: boolean,
-  isModerating?: boolean,
   validatePost: Function
 };
 
@@ -179,15 +178,9 @@ class Post extends React.Component<Props> {
   };
 
   render() {
-    const { isModerating } = this.props;
     const { post } = this.props.data;
     const { bodyEntries, publicationState } = post;
     if (!publicationState || publicationState in DeletedPublicationStates) {
-      return null;
-    }
-
-    // for optimistic response:
-    if (isModerating && publicationState === PublicationStates.PUBLISHED) {
       return null;
     }
 
