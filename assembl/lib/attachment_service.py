@@ -59,8 +59,9 @@ class AmazonAttachmentService(AttachmentService):
     def __init__(self):
         import boto3
         self.bucket_name = get('attachment_bucket', 's3_attachments')
-        self.s3 = boto3.client('s3')
-        s3 = boto3.resource('s3')
+        region = get('aws_region')
+        self.s3 = boto3.client('s3', region)
+        s3 = boto3.resource('s3', region)
         self.bucket = s3.Bucket(self.bucket_name)
 
     def put_file(self, filename, mimetype=None):
@@ -68,8 +69,7 @@ class AmazonAttachmentService(AttachmentService):
         if not self.exists(key):
             self.bucket.upload_file(filename, key, {
                 'ACL': 'authenticated-read',
-                'ContentType': mimetype or 'application/binary',
-                'ContentLength': path.getsize(filename)
+                'ContentType': mimetype or 'application/binary'
             })
         return key
 
