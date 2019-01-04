@@ -520,7 +520,7 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
             label_cond
         ).distinct().join(
             Tag, Tag.label_id == LangStringEntry.langstring_id
-        ).join(sq, sq.c.id == Tag.id)
+        ).join(sq, sq.c.id == Tag.id).order_by(sq.c.score.desc())
         if not group:
             q = q.add_columns(Locale.code)
         return q.all()

@@ -574,7 +574,7 @@ class Content(TombstonableMixin, DiscussionBoundBase):
             PostKeywordAnalysis.score.desc())
         if limit:
             assert isinstance(limit, int)
-            sq = sq.limit(20)
+            sq = sq.limit(limit)
         sq = sq.subquery()
 
         if display_lang is None:
@@ -604,7 +604,7 @@ class Content(TombstonableMixin, DiscussionBoundBase):
             label_cond
         ).distinct().join(
             Tag, Tag.label_id == LangStringEntry.langstring_id
-        ).join(sq, sq.c.id == Tag.id)
+        ).join(sq, sq.c.id == Tag.id).order_by(sq.c.score.desc())
         return q.all()
 
     crud_permissions = CrudPermissions(
