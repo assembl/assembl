@@ -146,3 +146,33 @@
     width: calc(100% - 40px);
   }
 }
+
+@media screen and (max-width: 320px) {
+  .box-hyphen {
+    width: 30px;
+  }
+
+  .idea-preview {
+    .access-discussion {
+      width: calc(100% - 30px);
+    }
+
+    .light-title-3 {
+      top: 50px;
+    }
+
+    .stats {
+      bottom: 40px;
+    }
+  }
+
+  .idea-preview-level-1 {
+    height: 435.8px;
+  }
+
+  .mobile-illustration-box {
+    .box-hyphen {
+      top: 46%;
+    }
+  }
+}
