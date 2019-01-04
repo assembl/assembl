@@ -2,6 +2,8 @@ import hashlib
 from os import path
 from tempfile import TemporaryFile
 
+from .config import get
+
 
 class AttachmentService(object):
     def __init__(self):
@@ -13,6 +15,18 @@ class AttachmentService(object):
             for data in stream:
                 hashobj.update(data)
         return hashobj.hexdigest()
+
+    @classmethod
+    def get_service(cls):
+        if not getattr(cls, '_service', None):
+            service = get('attachment_service', 'hashfs')
+            if service == 'hashfs':
+                cls._service = HashFsAttachmentService()
+            elif service == 's3':
+                cls._service = AmazonAttachmentService()
+            else:
+                raise RuntimeError("No attachment service")
+        return cls._service
 
 
 class HashFsAttachmentService(AttachmentService):
@@ -42,12 +56,12 @@ class HashFsAttachmentService(AttachmentService):
 
 
 class AmazonAttachmentService(AttachmentService):
-    def __init__(self, bucket_name):  # region? secrets? using config right now.
+    def __init__(self):
         import boto3
-        self.bucket_name = bucket_name
+        self.bucket_name = get('attachment_bucket', 's3_attachments')
         self.s3 = boto3.client('s3')
         s3 = boto3.resource('s3')
-        self.bucket = s3.Bucket(bucket_name)
+        self.bucket = s3.Bucket(self.bucket_name)
 
     def put_file(self, filename, mimetype=None):
         key = self.computeHash(filename)
