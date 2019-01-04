@@ -186,12 +186,6 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
         url = self.check_url_or_none(url)
         self.logo_url = url
 
-    @property
-    def attachment_service(self):
-        # TODO: Make it follow preferences
-        from ..lib.attachment_service import HashFsAttachmentService
-        return HashFsAttachmentService()
-
     def read_post_ids(self, user_id):
         from .post import Post
         from .action import ViewPost

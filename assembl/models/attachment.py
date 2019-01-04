@@ -24,6 +24,7 @@ from ..lib.antivirus import get_antivirus
 from ..lib.sqla_types import CoerceUnicode
 from ..lib.sqla import DuplicateHandling
 from ..lib.sqla_types import URLString
+from ..lib.attachment_service import AttachmentService
 from . import DiscussionBoundBase
 from .post import Post
 from .idea import Idea
@@ -197,7 +198,7 @@ class File(Document):
 
     @property
     def attachment_service(self):
-        return self.discussion.attachment_service
+        return AttachmentService.get_service()
 
     @property
     def path(self):
