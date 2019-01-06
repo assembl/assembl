@@ -22,7 +22,7 @@ from pyramid_mailer import mailer_factory_from_settings
 
 from ..lib.sqla import configure_engine
 from ..lib.zmqlib import configure_zmq
-from ..lib.config import set_config
+from ..lib.config import get, set_config
 from zope.component import getGlobalSiteManager
 from ..lib.model_watcher import configure_model_watcher
 from assembl.indexing.changes import configure_indexing
@@ -41,12 +41,14 @@ def configure(registry, task_name):
         _settings = settings
     # temporary solution
     configure_model_watcher(registry, task_name)
+    region = get('aws_region', 'eu-west-1')
     config = {
         "CELERY_TASK_SERIALIZER": 'json',
         "CELERY_ACKS_LATE": True,
         "CELERY_CACHE_BACKEND": settings.get('celery_tasks.broker', ''),
         "CELERY_RESULT_BACKEND": settings.get('celery_tasks.broker', ''),
         "CELERY_STORE_ERRORS_EVEN_IF_IGNORED": True,
+        "BROKER_TRANSPORT_OPTIONS": {'region': region},
     }
     config['BROKER_URL'] = settings.get(
         '%s.broker' % (celery.main,), None

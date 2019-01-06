@@ -91,7 +91,7 @@ def get_file(request):
         fs = f.file_stream
         app_iter = None
         environ = request.environ
-        if 'wsgi.file_wrapper' in environ:
+        if 'wsgi.file_wrapper' in environ and f.path:
             app_iter = environ['wsgi.file_wrapper'](fs, _BLOCK_SIZE)
         if app_iter is None:
             app_iter = FileIter(fs, _BLOCK_SIZE)

@@ -9,16 +9,22 @@ class AttachmentService(object):
     def __init__(self):
         pass
 
-    def computeHash(self, filename):
+    def computeHash(self, dataf):
         hashobj = hashlib.new('SHA256')
-        with open(filename, 'rb') as stream:
-            for data in stream:
+        if hasattr(dataf, 'read'):
+            pos = dataf.tell()
+            for data in dataf:
                 hashobj.update(data)
+            dataf.seek(pos)
+        else:
+            with open(dataf, 'rb') as stream:
+                for data in stream:
+                    hashobj.update(data)
         return hashobj.hexdigest()
 
     @classmethod
     def get_service(cls):
-        if not getattr(cls, '_service', None):
+        if not hasattr(cls, '_service'):
             service = get('attachment_service', 'hashfs')
             if service == 'hashfs':
                 cls._service = HashFsAttachmentService()
@@ -43,7 +49,7 @@ class HashFsAttachmentService(AttachmentService):
         return self.hashfs.get(fileHash).abspath.encode('ascii')
 
     def get_file_stream(self, fileHash):
-        return open(self.get_file_path(fileHash), 'b')
+        return open(self.get_file_path(fileHash), 'rb')
 
     def get_file_url(self, fileHash):
         return b'/private_uploads' + self.get_file_path(fileHash)[len(self.hashfs.root):]
@@ -64,12 +70,17 @@ class AmazonAttachmentService(AttachmentService):
         s3 = boto3.resource('s3', region)
         self.bucket = s3.Bucket(self.bucket_name)
 
-    def put_file(self, filename, mimetype=None):
-        key = self.computeHash(filename)
+    def put_file(self, dataf, mimetype=None):
+        key = self.computeHash(dataf)
         if not self.exists(key):
-            self.bucket.upload_file(filename, key, {
-                'ContentType': mimetype or 'application/binary'
-            })
+            if hasattr(dataf, 'read'):
+                self.bucket.upload_fileobj(dataf, key, {
+                    'ContentType': mimetype or 'application/binary'
+                })
+            else:
+                self.bucket.upload_file(dataf, key, {
+                    'ContentType': mimetype or 'application/binary'
+                })
         return key
 
     def get_file_path(self, fileHash):
