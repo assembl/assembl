@@ -829,10 +829,11 @@ def install_url_metadata_wheel():
 
 
 def separate_pip_install(package, wrapper=None):
-    template = "egrep '^%%s' %(projectpath)s/requirements-prod.frozen.txt | sed -e 's/#.*//' | xargs %(venvpath)s/bin/pip install" % env
-    cmd = template % (package,)
+    cmd = '%(venvpath)s/bin/pip install'
     if wrapper:
         cmd = wrapper % (cmd,)
+    cmd = cmd % env
+    cmd = "egrep '^%(package)s' %(projectpath)s/requirements-prod.frozen.txt | sed -e 's/#.*//' | xargs %(cmd)s" % dict(cmd=cmd, package=package, **env)
     run(cmd)
 
 
@@ -849,11 +850,13 @@ def update_pip_requirements(force_reinstall=False):
     else:
         specials = [
             # setuptools and lxml need to be installed before compiling dm.xmlsec.binding
-            ("lxml", None),
+            ("lxml", None, None),
             # Thanks to https://github.com/pypa/pip/issues/4453 disable wheel separately.
-            ("dm.xmlsec.binding", "%s --install-option='-q'"),
+            ("dm.xmlsec.binding", "%s --install-option='-q'", "%s --install-option='-q'"),
+            ("pycurl", None, 'env PYCURL_SSL_LIBRARY=openssl MACOSX_DEPLOYMENT_TARGET="10.13" LDFLAGS="-L/usr/local/opt/openssl/lib" CPPFLAGS="-I/usr/local/opt/openssl/include" %s'),
         ]
-        for package, wrapper in specials:
+        for package, wrapper, mac_wrapper in specials:
+            wrapper = mac_wrapper if env.mac else wrapper
             separate_pip_install(package, wrapper)
         cmd = "%(venvpath)s/bin/pip install -r %(projectpath)s/requirements.txt" % env
         run("yes w | %s" % cmd)
@@ -1819,7 +1822,7 @@ def update_python_package_builddeps():
             'Installing/Updating python package native binary dependencies'))
         sudo('apt-get install -y libpq-dev libmemcached-dev libzmq3-dev '
              'libxslt1-dev libffi-dev libhiredis-dev libxml2-dev libssl-dev '
-             'libreadline-dev libxmlsec1-dev')
+             'libreadline-dev libxmlsec1-dev libcurl4-openssl-dev')
         if env.can_test:
             sudo('apt-get install -y libgraphviz-dev')
 

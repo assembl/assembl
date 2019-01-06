@@ -28,10 +28,10 @@ backports.ssl-match-hostname==3.5.0.1  # via tornado
 bcrypt==3.1.4             # via paramiko
 beautifulsoup4==4.6.0
 billiard==3.5.0.3         # via celery
-boto3==1.9.33
-botocore==1.12.33         # via boto3, s3transfer
+boto3==1.9.73
+botocore==1.12.73         # via boto3, s3transfer
 cached-property==1.4.0    # via pre-commit
-celery==4.1.1
+celery[sqs]==4.2.1
 certifi==2018.1.18        # via sentry-sdk, tornado
 cffi==1.11.5              # via bcrypt, cryptography, pynacl
 cfgv==1.0.0               # via pre-commit
@@ -114,7 +114,7 @@ pbr==4.0.0                # via mock
 pdbsublimetextsupport==0.2
 pexpect==4.4.0            # via ipython
 pickleshare==0.7.4        # via ipython
-pip-tools==1.11.0
+pip-tools==3.2.0
 ply==3.11                 # via jsonpath-ng
 polib==1.0.7
 pre-commit==1.8.2
@@ -128,6 +128,7 @@ pyasn1-modules==0.2.1     # via oauth2client
 pyasn1==0.4.2             # via ndg-httpsclient, oauth2client, paramiko, pyasn1-modules, rsa
 pycodestyle==2.4.0        # via flake8
 pycparser==2.18           # via cffi
+pycurl==7.43.0.2          # via celery
 pydot==1.2.4              # via sqlalchemy-schemadisplay
 pyflakes==2.0.0           # via flake8
 pygments==2.2.0           # via pyramid-debugtoolbar, sphinx
@@ -172,7 +173,7 @@ simpleeval==0.9.1         # via rotate-backups
 simplegeneric==0.8.1      # via ipython
 simplejson==3.8.2
 singledispatch==3.4.0.3   # via graphene-sqlalchemy, tornado
-six==1.10.0
+six==1.12.0
 snowballstemmer==1.2.1    # via sphinx
 social-auth-app-pyramid==1.0.0
 social-auth-core==2.0.0
