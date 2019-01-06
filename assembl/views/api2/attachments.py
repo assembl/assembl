@@ -45,6 +45,14 @@ def delete_file(request):
     return {}
 
 
+def disposition(title):
+    escaped_double_quotes_filename = title.replace(u'"', u'\\"'
+        ).encode('iso-8859-1', 'replace')
+    url_quoted_utf8_filename = url_quote(title.encode('utf-8'))
+    return 'attachment; filename="%s"; filename*=utf-8\'\'%s' % (
+        escaped_double_quotes_filename, url_quoted_utf8_filename)
+
+
 @view_config(context=InstanceContext, request_method='HEAD',
              permission=P_READ, ctx_instance_class=File,
              name='data')
@@ -55,13 +63,13 @@ def get_file_header(request):
     if f.infected:
         raise HTTPNotAcceptable("Infected with a virus")
     handoff_to_nginx = asbool(config.get('handoff_to_nginx', False))
-
     return Response(
         content_length=f.file_size,
         content_type=str(f.mime_type),
         last_modified=f.creation_date,
         expires=datetime.now() + timedelta(days=365),
         accept_ranges="bytes" if handoff_to_nginx else "none",
+        content_disposition=disposition(f.title),  # RFC 6266
     )
 
 
@@ -73,15 +81,14 @@ def get_file(request):
     # appended to the end. This is so that gmail can read the services
     # Read more here:
     # http://stackoverflow.com/questions/20903967/gmails-new-image-caching-is-breaking-image-links-in-newsletter
+    if request.method == 'HEAD':
+        # GET view_config captures HEAD...
+        return get_file_header(request)
     ctx = request.context
     document = ctx._instance
     f = File.get(document.id)
     if f.infected:
         raise HTTPNotAcceptable("Infected with a virus")
-    escaped_double_quotes_filename = (f.title
-        .replace(u'"', u'\\"')
-        .encode('iso-8859-1', 'replace'))
-    url_quoted_utf8_filename = url_quote(f.title.encode('utf-8'))
     handoff_to_nginx = asbool(config.get('handoff_to_nginx', False))
     if handoff_to_nginx:
         kwargs = dict(body='')
@@ -103,9 +110,7 @@ def get_file(request):
         last_modified=f.creation_date,
         expires=datetime.now() + timedelta(days=365),
         accept_ranges="bytes" if handoff_to_nginx else "none",
-        content_disposition=
-            'attachment; filename="%s"; filename*=utf-8\'\'%s'  # RFC 6266
-            % (escaped_double_quotes_filename, url_quoted_utf8_filename),
+        content_disposition=disposition(f.title),  # RFC 6266
         **kwargs
     )
     if handoff_to_nginx:

@@ -115,6 +115,8 @@ server {
       alias {{ projectpath }}/var/uploads;
       {% endif %}
       {% if attachment_service=='s3' %}
+        # thanks to https://www.mediasuite.co.nz/blog/proxying-s3-downloads-nginx/
+        # TODO: Maybe also send X-Content-Type-Options, cors etc.
         proxy_pass https://{{ attachment_bucket }}.s3.amazonaws.com/$1$is_args$args;
         resolver 8.8.8.8 ipv6=off;
         proxy_set_header Host {{ attachment_bucket }}.s3.amazonaws.com;
