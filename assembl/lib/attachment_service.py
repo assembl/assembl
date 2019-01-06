@@ -93,13 +93,14 @@ class AmazonAttachmentService(AttachmentService):
         return f
 
     def get_file_url(self, fileHash):
-        return self.s3.generate_presigned_url(
+        base_url = self.s3.generate_presigned_url(
             ClientMethod='get_object',
             Params={
                 'Bucket': self.bucket_name,
                 'Key': fileHash
             }
         )
+        return b'/private_uploads/' + base_url.split('/', 3)[-1].encode('ascii')
 
     def delete_file(self, fileHash):
         self.s3.delete_file(Bucket=self.bucket_name, Key=fileHash)
