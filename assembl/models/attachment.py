@@ -214,16 +214,17 @@ class File(Document):
 
     def add_file_data(self, dataf):
         # dataf may be a file-like object or a file path
-        self.file_identity = self.attachment_service.put_file(dataf)
-        if getattr(dataf, 'tell', None):
-            if not dataf.tell():  # seek may have been reset
-                dataf.read()
-            self.file_size = dataf.tell()
+        if hasattr(dataf, 'tell'):
+            pos = dataf.tell()
+            dataf.read()
+            self.file_size = dataf.tell() - pos
+            dataf.seek(pos)
         elif isinstance(dataf, (str, unicode)):
             # assume filename
             self.file_size = os.path.getsize(dataf)
         else:
             raise RuntimeError("What was dataf?")
+        self.file_identity = self.attachment_service.put_file(dataf)
 
     def add_raw_data(self, data):
         dataf = BytesIO(data)
