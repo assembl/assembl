@@ -16,10 +16,6 @@ from .widgets import VotingWidget
 from .idea import Idea
 
 langstrings_names = [
-    # "title",
-    # "sub_title",
-    # "instructions_section_title",
-    # "instructions_section_content",
     "propositions_section_title"
 ]
 

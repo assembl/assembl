@@ -81,29 +81,6 @@ describe('voteSession admin reducers', () => {
       };
       expect(voteSessionPage(oldState, action)).toEqual(expected);
     });
-
-    it('should handle UPDATE_VOTE_SESSION_PAGE_IMAGE action type', () => {
-      const oldState = fromJS({
-        _hasChanged: false,
-        seeCurrentVotes: false,
-        id: '',
-        propositionsSectionTitleEntries: [],
-        headerImage: { externalUrl: '', mimeType: '' }
-      });
-      const file = new File([''], 'foo.jpg', { type: 'image/jpeg' });
-      const expected = {
-        _hasChanged: true,
-        seeCurrentVotes: false,
-        id: '',
-        propositionsSectionTitleEntries: [],
-        headerImage: { externalUrl: file, mimeType: 'image/jpeg' }
-      };
-      const action = {
-        value: file,
-        type: actionTypes.UPDATE_VOTE_SESSION_PAGE_IMAGE
-      };
-      expect(voteSessionPage(oldState, action).toJS()).toEqual(expected);
-    });
   });
 
   describe('modulesOrProposalsHaveChanged reducer', () => {

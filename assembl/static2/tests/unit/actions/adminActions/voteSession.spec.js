@@ -43,21 +43,9 @@ describe('updateVoteSessionPagePropositionsTitle', () => {
   });
 });
 
-describe('updateVoteSessionHeaderImage', () => {
-  const { updateVoteSessionHeaderImage } = actions;
-  it('should return an UPDATE_VOTE_SESSION_PAGE_IMAGE action type', () => {
-    const actual = updateVoteSessionHeaderImage({ name: 'foo.jpg', type: 'image/jpeg' });
-    const expected = {
-      value: { name: 'foo.jpg', type: 'image/jpeg' },
-      type: actionTypes.UPDATE_VOTE_SESSION_PAGE_IMAGE
-    };
-    expect(actual).toEqual(expected);
-  });
-});
-
 describe('undeleteModule', () => {
   const { undeleteModule } = actions;
-  it('should return an UPDATE_VOTE_SESSION_PAGE_IMAGE action type', () => {
+  it('should return an UNDELETE_MODULE action type', () => {
     const actual = undeleteModule('module42');
     const expected = {
       id: 'module42',

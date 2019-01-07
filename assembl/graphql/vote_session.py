@@ -1,5 +1,3 @@
-import os
-
 import graphene
 from graphene.relay import Node
 from graphene_sqlalchemy import SQLAlchemyObjectType
@@ -7,7 +5,6 @@ from sqlalchemy.sql import func
 
 from assembl import models
 from assembl.auth import CrudPermissions
-from .document import Document
 from .graphql_langstrings_helpers import (
     langstrings_interface, update_langstrings, add_langstrings_input_attrs)
 from .permissions_helpers import (
@@ -20,8 +17,7 @@ from .langstring import (
     resolve_langstring, resolve_langstring_entries)
 from .types import SecureObjectType, SQLAlchemyUnion
 from .utils import (
-    abort_transaction_on_exception,
-    create_root_thematic)
+    abort_transaction_on_exception)
 import assembl.graphql.docstrings as docs
 
 langstrings_defs = {
@@ -43,23 +39,12 @@ class VoteSession(SecureObjectType, SQLAlchemyObjectType):
         only_fields = ('id', 'idea_id')
 
     idea_id = graphene.ID(required=True)
-    header_image = graphene.Field(Document, description=docs.VoteSession.header_image)
-    vote_specifications = graphene.List(lambda: VoteSpecificationUnion, required=True, description=docs.VoteSession.header_image)
+    vote_specifications = graphene.List(lambda: VoteSpecificationUnion, required=True, description=docs.VoteSession.vote_specifications)
     proposals = graphene.List(lambda: Idea, required=True, description=docs.VoteSession.proposals)
     see_current_votes = graphene.Boolean(required=True, description=docs.VoteSession.see_current_votes)
 
-    def resolve_header_image(self, args, context, info):
-        ATTACHMENT_PURPOSE_IMAGE = models.AttachmentPurpose.IMAGE.value
-        for attachment in self.attachments:
-            if attachment.attachmentPurpose == ATTACHMENT_PURPOSE_IMAGE:
-                return attachment.document
-
     def resolve_proposals(self, args, context, info):
-        root_thematic = self.idea
-        if root_thematic is None:
-            return []
-
-        return root_thematic.get_children()
+        return self.idea.get_children()
 
     def resolve_vote_specifications(self, args, context, info):
         # return only vote specifications not associated to a proposal
@@ -71,7 +56,6 @@ class UpdateVoteSession(graphene.Mutation):
 
     class Input:
         idea_id = graphene.ID(required=True, description=docs.UpdateVoteSession.idea_id)
-        header_image = graphene.String(description=docs.UpdateVoteSession.header_image)
         see_current_votes = graphene.Boolean(description=docs.UpdateVoteSession.see_current_votes)
 
     add_langstrings_input_attrs(Input, langstrings_defs.keys())
@@ -106,43 +90,8 @@ class UpdateVoteSession(graphene.Mutation):
             vote_session.see_current_votes = args['see_current_votes']
 
         db = vote_session.db
-
         update_langstrings(vote_session, langstrings_defs, args)
-
-        image = args.get('header_image')
-        if image is not None:
-            filename = os.path.basename(context.POST[image].filename)
-            mime_type = context.POST[image].type
-            ATTACHMENT_PURPOSE_IMAGE = models.AttachmentPurpose.IMAGE.value
-            document = models.File(
-                discussion=discussion,
-                mime_type=mime_type,
-                title=filename)
-            document.add_file_data(context.POST[image].file)
-            images = [
-                att for att in vote_session.attachments
-                if att.attachmentPurpose == ATTACHMENT_PURPOSE_IMAGE]
-            if images:
-                image = images[0]
-                image.document.delete_file()
-                db.delete(image.document)
-                vote_session.attachments.remove(image)
-            db.add(models.VoteSessionAttachment(
-                document=document,
-                vote_session=vote_session,
-                discussion=discussion,
-                creator_id=context.authenticated_userid,
-                title=filename,
-                attachmentPurpose=ATTACHMENT_PURPOSE_IMAGE
-            ))
-
         db.add(vote_session)
-
-        # create the root thematic on which we will attach all proposals for this vote session
-        root_thematic = vote_session.idea
-        if root_thematic is None:
-            root_thematic = create_root_thematic(idea.get_associated_phase().identifier)
-
         db.flush()
         return UpdateVoteSession(vote_session=vote_session)
 
@@ -799,8 +748,7 @@ class CreateProposal(graphene.Mutation):
             if vote_session is None:
                 raise Exception(
                     "A vote session is required before creating a proposal")
-            else:
-                root_thematic = vote_session.idea
+            idea = vote_session.idea
             proposal = cls(
                 discussion_id=discussion_id,
                 discussion=discussion,
@@ -808,9 +756,9 @@ class CreateProposal(graphene.Mutation):
                 description=description_ls
             )
             db.add(proposal)
-            order = len(root_thematic.get_children()) + 1.0
+            order = len(idea.get_children()) + 1.0
             db.add(
-                models.IdeaLink(source=root_thematic, target=proposal,
+                models.IdeaLink(source=idea, target=proposal,
                                 order=args.get('order', order)))
             db.flush()
 

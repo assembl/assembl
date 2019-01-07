@@ -85,28 +85,12 @@ class Administration extends React.Component {
   putVoteSessionInStore(voteSession) {
     const emptyVoteSession = {
       id: '',
-      titleEntries: [],
       seeCurrentVotes: false,
-      subTitleEntries: [],
-      instructionsSectionTitleEntries: [],
-      instructionsSectionContentEntries: [],
       propositionsSectionTitleEntries: [],
-      headerImage: {
-        externalUrl: '',
-        mimeType: '',
-        title: ''
-      },
-      publicVote: true,
       modules: []
     };
     const filteredVoteSession = filter(VoteSessionQuery, { voteSession: voteSession || emptyVoteSession });
-    const voteSessionForStore = {
-      ...filteredVoteSession.voteSession,
-      instructionsSectionContentEntries: filteredVoteSession.voteSession.instructionsSectionContentEntries
-        ? convertEntriesToEditorState(filteredVoteSession.voteSession.instructionsSectionContentEntries)
-        : null
-    };
-    this.props.updateVoteSessionPage(voteSessionForStore);
+    this.props.updateVoteSessionPage(filteredVoteSession.voteSession);
   }
 
   putTimelinePhasesInStore(timeline) {

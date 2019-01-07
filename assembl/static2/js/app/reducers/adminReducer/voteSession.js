@@ -7,7 +7,6 @@ import {
   type Action,
   UPDATE_VOTE_SESSION_PAGE_SEECURRENTVOTES,
   UPDATE_VOTE_SESSION_PAGE_PROPOSITIONS_TITLE,
-  UPDATE_VOTE_SESSION_PAGE_IMAGE,
   UPDATE_VOTE_SESSION_PAGE,
   UPDATE_VOTE_MODULE,
   UPDATE_VOTE_MODULES,
@@ -67,27 +66,12 @@ export const voteSessionPage: VoteSessionPageReducer = (state = initialPage, act
     return state
       .update('propositionsSectionTitleEntries', updateInLangstringEntries(action.locale, fromJS(action.value)))
       .set('_hasChanged', true);
-  case UPDATE_VOTE_SESSION_PAGE_IMAGE:
-    return state
-      .setIn(['headerImage', 'externalUrl'], action.value)
-      .setIn(['headerImage', 'mimeType'], action.value.type)
-      .set('_hasChanged', true);
   case UPDATE_VOTE_SESSION_PAGE: {
-    let headerImage = Map({
-      externalUrl: '',
-      mimeType: ''
-    });
-    if (action.headerImage) {
-      headerImage = fromJS(action.headerImage);
-    }
-
     return Map({
       _hasChanged: false,
       id: fromJS(action.id),
-      titleEntries: fromJS(action.titleEntries),
       seeCurrentVotes: action.seeCurrentVotes,
-      propositionsSectionTitleEntries: fromJS(action.propositionsSectionTitleEntries),
-      headerImage: headerImage
+      propositionsSectionTitleEntries: fromJS(action.propositionsSectionTitleEntries)
     });
   }
   default:

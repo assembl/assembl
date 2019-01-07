@@ -21,17 +21,10 @@ export const UPDATE_LEGAL_CONTENTS: 'UPDATE_LEGAL_CONTENTS' = 'UPDATE_LEGAL_CONT
 export const UPDATE_COOKIES_POLICY_ENTRY: 'UPDATE_COOKIES_POLICY_ENTRY' = 'UPDATE_COOKIES_POLICY_ENTRY';
 export const UPDATE_PRIVACY_POLICY_ENTRY: 'UPDATE_PRIVACY_POLICY_ENTRY' = 'UPDATE_PRIVACY_POLICY_ENTRY';
 export const UPDATE_VOTE_SESSION_PAGE: 'UPDATE_VOTE_SESSION_PAGE' = 'UPDATE_VOTE_SESSION_PAGE';
-export const UPDATE_VOTE_SESSION_PAGE_TITLE: 'UPDATE_VOTE_SESSION_PAGE_TITLE' = 'UPDATE_VOTE_SESSION_PAGE_TITLE';
 export const UPDATE_VOTE_SESSION_PAGE_SEECURRENTVOTES: 'UPDATE_VOTE_SESSION_PAGE_SEECURRENTVOTES' =
   'UPDATE_VOTE_SESSION_PAGE_SEECURRENTVOTES';
-export const UPDATE_VOTE_SESSION_PAGE_SUBTITLE: 'UPDATE_VOTE_SESSION_PAGE_SUBTITLE' = 'UPDATE_VOTE_SESSION_PAGE_SUBTITLE';
-export const UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_TITLE: 'UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_TITLE' =
-  'UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_TITLE';
-export const UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_CONTENT: 'UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_CONTENT' =
-  'UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_CONTENT';
 export const UPDATE_VOTE_SESSION_PAGE_PROPOSITIONS_TITLE: 'UPDATE_VOTE_SESSION_PAGE_PROPOSITIONS_TITLE' =
   'UPDATE_VOTE_SESSION_PAGE_PROPOSITIONS_TITLE';
-export const UPDATE_VOTE_SESSION_PAGE_IMAGE: 'UPDATE_VOTE_SESSION_PAGE_IMAGE' = 'UPDATE_VOTE_SESSION_PAGE_IMAGE';
 export const UPDATE_VOTE_MODULES: 'UPDATE_VOTE_MODULES' = 'UPDATE_VOTE_MODULES';
 export const CREATE_TOKEN_VOTE_MODULE: 'CREATE_TOKEN_VOTE_MODULE' = 'CREATE_TOKEN_VOTE_MODULE';
 export const DELETE_VOTE_MODULE: 'DELETE_VOTE_MODULE' = 'DELETE_VOTE_MODULE';
@@ -194,33 +187,9 @@ export type UpdateLegalContents = {
   type: typeof UPDATE_LEGAL_CONTENTS
 };
 
-export type UpdateVoteSessionPageTitle = {
-  locale: string,
-  value: string,
-  type: typeof UPDATE_VOTE_SESSION_PAGE_TITLE
-};
-
 export type UpdateVoteSessionPageSeeCurrentVotes = {
   value: string,
   type: typeof UPDATE_VOTE_SESSION_PAGE_SEECURRENTVOTES
-};
-
-export type UpdateVoteSessionPageSubtitle = {
-  locale: string,
-  value: string,
-  type: typeof UPDATE_VOTE_SESSION_PAGE_SUBTITLE
-};
-
-export type UpdateVoteSessionPageInstructionsTitle = {
-  locale: string,
-  value: string,
-  type: typeof UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_TITLE
-};
-
-export type UpdateVoteSessionPageInstructionsContent = {
-  locale: string,
-  value: string,
-  type: typeof UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_CONTENT
 };
 
 export type UpdateVoteSessionPagePropositionsTitle = {
@@ -229,19 +198,9 @@ export type UpdateVoteSessionPagePropositionsTitle = {
   type: typeof UPDATE_VOTE_SESSION_PAGE_PROPOSITIONS_TITLE
 };
 
-export type UpdateVoteSessionHeaderImage = {
-  value: File,
-  type: typeof UPDATE_VOTE_SESSION_PAGE_IMAGE
-};
-
 export type UpdateVoteSessionPage = {
-  titleEntries: Array<LangStringEntryInput>,
   seeCurrentVotes: boolean,
-  subTitleEntries: Array<LangStringEntryInput>,
-  instructionsSectionTitleEntries: Array<LangStringEntryInput>,
-  instructionsSectionContentEntries: Array<LangStringEntryInput>,
   propositionsSectionTitleEntries: Array<LangStringEntryInput>,
-  headerImage: File | null,
   type: typeof UPDATE_VOTE_SESSION_PAGE
 };
 
@@ -600,13 +559,8 @@ type TimelineActions =
   | MovePhaseDown;
 
 type VoteSessionActions =
-  | UpdateVoteSessionPageTitle
   | UpdateVoteSessionPageSeeCurrentVotes
-  | UpdateVoteSessionPageSubtitle
-  | UpdateVoteSessionPageInstructionsTitle
-  | UpdateVoteSessionPageInstructionsContent
   | UpdateVoteSessionPagePropositionsTitle
-  | UpdateVoteSessionHeaderImage
   | UpdateVoteModules
   | DeleteVoteModule
   | CreateTokenVoteModule

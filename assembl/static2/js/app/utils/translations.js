@@ -700,7 +700,6 @@ const Translations = {
       headerTitle: "Configuration du bandeau de haut de page",
       ProposalsSectionTitle: "Configuration du titre de la section Propositions",
       instructions: "Configuration de la section Consigne",
-      voteSessionHeaderLabel: "Choisir l'image de fond du bandeau",
       voteSessionSuccess: "La session de vote a été enregistrée avec succès.",
       exclusive: "Exclusif",
       tokenVoteInstructions: "Consigne du vote par jetons",
@@ -770,9 +769,6 @@ const Translations = {
       helpers: {
         timelinePhases: "Choisissez une description et une image pour chaque phase du débat visible dans la page d'accueil",
         timelineTitle: "Configurez le titre et le sous-titre de la section timeline visible dans la page d'accueil",
-        voteSessionHeader: "Le bandeau de haut de page doit contenir une image et un titre. Le sous-titre est optionnel.",
-        voteSessionInstructions:
-          "La section consigne comporte un titre et une consigne qui permettent de guider les participants dans leur contribution.",
         voteSessionProposalSection:
           "La partie qui comporte les diverses propositions est introduite par un titre. À vous de définir le titre selon qu'il s'agisse de propositions, d'idées, de projets ou autre...",
         tokenCategoryNumber: "Sélectionnez le nombre de types de jetons différents souhaité pour ce vote",
@@ -1659,7 +1655,6 @@ const Translations = {
       headerTitle: "Top page Header configuration",
       propositionSectionTitle: "Proposals section title configuration",
       instructions: "Instructions section configuration",
-      voteSessionHeaderLabel: "Choose the header background image",
       voteSessionSuccess: "The vote session is saved with success.",
       exclusive: "Exclusive",
       tokenVoteInstructions: "Instructions for the token vote",
@@ -1732,9 +1727,6 @@ const Translations = {
       helpers: {
         timelinePhases: "Choose a description and an image for each phase of the debate displayed in the landing page",
         timelineTitle: "Configure the title and the sub-title of the timeline section displayed in the landing page",
-        voteSessionHeader: "The top page header must contain an image and a title. The subtitle is optional.",
-        voteSessionInstructions:
-          "The instructions section must contain a title and a description that will guide the participants for their contribution.",
         voteSessionProposalSection:
           "The proposals section is introduced by a title. You define the title based on the proposal content.",
         tokenCategoryNumber: "Select the number of different token types for this vote",

@@ -67,27 +67,12 @@ def mutate_and_assert_unauthorized(graphql_request, idea_id, graphql_registry):
 
 def mutate_and_assert(graphql_request, idea_id, test_app, graphql_registry):
     new_propositions_section_title = u"updated vote session propositions section title"
-
-    class FieldStorage(object):
-        file = BytesIO(os.urandom(16))
-
-        def __init__(self, filename, type):
-            self.filename = filename
-            self.type = type
-
-    new_image_name = u'new-image.png'
-    new_image_mime_type = 'image/png'
-    new_image = FieldStorage(new_image_name, new_image_mime_type)
-    image_var_name = u'variables.img'
-    graphql_request.POST[image_var_name] = new_image
-
     response = schema.execute(
         graphql_registry['updateVoteSession'],
         context_value=graphql_request,
         variable_values={
             "ideaId": to_global_id("Idea", idea_id),
             "propositionsSectionTitleEntries": en_entry(new_propositions_section_title),
-            "headerImage": image_var_name,
             "seeCurrentVotes": True
         }
     )
@@ -96,14 +81,6 @@ def mutate_and_assert(graphql_request, idea_id, test_app, graphql_registry):
 
     assert graphql_en_value(graphql_vote_session['propositionsSectionTitleEntries']) == new_propositions_section_title
     assert graphql_vote_session['seeCurrentVotes'] == True
-
-    graphql_image = graphql_vote_session['headerImage']
-    assert graphql_image['title'] == new_image_name
-    assert graphql_image['mimeType'] == new_image_mime_type
-    new_image_data = new_image.file.getvalue()
-    graphql_image_data = test_app.get(graphql_image['externalUrl']).body
-    assert graphql_image_data == new_image_data
-
 
 def vote_session_from_idea(idea_id):
     idea = models.Idea.get(idea_id)
@@ -129,19 +106,6 @@ def test_graphql_update_vote_session(graphql_request, vote_session, test_app, gr
     mutate_and_assert(graphql_request, vote_session.idea_id, test_app, graphql_registry)
     root_thematic = vote_session.idea
     assert root_thematic is not None
-
-
-def test_graphql_delete_vote_session_cascade(graphql_request, vote_session, test_app, graphql_registry):
-    db = vote_session.db;
-    # image_id = image_from_vote_session(vote_session).id
-    attachment_id = vote_session.attachments[0].id
-    db.delete(vote_session)
-    db.flush()
-    attachment = models.VoteSessionAttachment.get(attachment_id)
-    assert attachment is None
-    # TODO: fix the cascade behaviour to delete the actual document maybe?
-    # image = models.Document.get(image_id)
-    # assert image is None
 
 
 def test_graphql_update_vote_session_unauthenticated(graphql_unauthenticated_request, vote_session, graphql_registry):
@@ -180,12 +144,6 @@ def test_graphql_get_vote_session(graphql_participant1_request, vote_session, gr
         ],
         graphql_vote_session,
         vote_session)
-
-    graphql_image = graphql_vote_session['headerImage']
-    source_image = image_from_vote_session(vote_session)
-    assert graphql_image['title'] == source_image.title
-    assert graphql_image['mimeType'] == source_image.mime_type
-    assert graphql_image['externalUrl'] == source_image.external_url
 
 
 def test_graphql_get_vote_session_unauthenticated(graphql_unauthenticated_request, vote_session, graphql_registry, subidea_1_1):

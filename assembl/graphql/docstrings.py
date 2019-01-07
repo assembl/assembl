@@ -823,18 +823,9 @@ class VoteSession:
     Multicolumn,\n
     thread)."""
     idea_id = "The database identifier of the idea the session is under."
-    header_image = Default.document % ("The image appearing at the header of the Vote session page.")
     vote_specifications = "A list of VoteSpecifications."
     proposals = "The list of Proposals on which the Users will be allowed to vote."
     see_current_votes = "A flag allowing users to view the current votes."
-    title = """The title of the VoteSession"""
-    title_entries = Default.langstring_entries % """The title in various languages. """
-    sub_title = """The subtitle of the VoteSession."""
-    sub_title_entries = Default.langstring_entries % """The subtitle in various languages. """
-    instructions_section_title = """The instructions section title to be given for a vote session."""
-    instructions_section_title_entries = Default.langstring_entries % """The voting instruction's title in various languages. """
-    instructions_section_content = """The instructions to be given for a vote session."""
-    instructions_section_content_entries = Default.langstring_entries % """The voting instructions in various languages. """
     propositions_section_title = """The title of the section where all Propositions are given."""
     propositions_section_title_entries = Default.langstring_entries % """The Proposal section's title in various languages. """
 
@@ -842,7 +833,6 @@ class VoteSession:
 class UpdateVoteSession:
     __doc__ = """A mutation that allows for existing VoteSessions to be updated."""
     idea_id = VoteSession.idea_id
-    header_image = VoteSession.header_image
     see_current_votes = VoteSession.see_current_votes
 
 

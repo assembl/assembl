@@ -334,13 +334,10 @@ class VoteSessionAdmin extends React.Component<Props, State> {
 
     if (voteSessionPage.get('_hasChanged')) {
       const propositionsSectionTitleEntries = voteSessionPage.get('propositionsSectionTitleEntries').toJS();
-      const pageHeaderImage = voteSessionPage.get('headerImage').toJS();
-      const headerImage = typeof pageHeaderImage.externalUrl === 'object' ? pageHeaderImage.externalUrl : null;
       const payload = {
         variables: {
           ideaId: thematicId,
           propositionsSectionTitleEntries: propositionsSectionTitleEntries,
-          headerImage: headerImage,
           seeCurrentVotes: voteSessionPage.get('seeCurrentVotes')
         }
       };
