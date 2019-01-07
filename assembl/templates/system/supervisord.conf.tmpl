@@ -137,7 +137,7 @@ stderr_logfile_backups = %(sup_log_backups_webpack_err)s
 
 [program:uwsgi]
 directory = %(here)s
-command=/bin/sh -c '%(here)s/ci_cd_scripts/check_availability.sh && uwsgi --die-on-term --ini %(CONFIG_FILE)s'
+command=/bin/sh -c '%(here)s/ci_cd_scripts/check_availability.sh && exec uwsgi --die-on-term --ini %(CONFIG_FILE)s'
 umask=002
 autostart = %(autostart_uwsgi)s
 autorestart = true
