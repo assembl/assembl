@@ -12,6 +12,7 @@ configure({ adapter: new Adapter() });
 const props: Props = {
   timeline: [{ id: '654321' }],
   isPending: false,
+  isMultiColumns: false,
   isPendingPostForAdmin: false,
   client: jest.fn(),
   creatorUserId: '1234567890',

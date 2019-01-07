@@ -155,7 +155,8 @@ export class DumbPost extends React.PureComponent<Props, State> {
       parentId,
       refetchIdea,
       timeline,
-      connectedUserId
+      connectedUserId,
+      borderLeftColor
     } = this.props;
     const translate = contentLocale !== originalLocale;
     const { body, subject, originalBody, originalSubject } = this.getBodyAndSubject(translate);
@@ -202,6 +203,7 @@ export class DumbPost extends React.PureComponent<Props, State> {
         ) : (
           <PostView
             {...this.props}
+            borderLeftColor={borderLeftColor}
             isHarvesting={isHarvesting}
             body={body}
             subject={subject}

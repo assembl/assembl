@@ -170,7 +170,7 @@ class PostView extends React.PureComponent<Props, State> {
     };
 
     const boxStyle = {
-      borderLeftColor: borderLeftColor
+      borderLeftColor: isPending ? '#ffd58f' : borderLeftColor
     };
     let canReply = !multiColumns;
     // If we're in thread mode, check if the first idea associated to the post is multi columns.

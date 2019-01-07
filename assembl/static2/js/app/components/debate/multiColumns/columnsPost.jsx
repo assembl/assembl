@@ -8,6 +8,6 @@ type Props = PostProps & {
   colColor: string
 };
 
-const ColumnsPost = (props: Props) => <Post {...props} borderLeftColor={props.colColor} multiColumns={true} />;
+const ColumnsPost = (props: Props) => <Post {...props} borderLeftColor={props.colColor} multiColumns />;
 
 export default ColumnsPost;
