@@ -117,7 +117,7 @@ class WordCountVisitor(IdeaVisitor):
         if self.count_posts and level == 0:
             from .generic import Content
             query = idea.db.query(Content)
-            related = idea.get_related_posts_query(True)
+            related = idea.get_related_posts_query(True, include_moderating=False)
             query = query.join(related, Content.id == related.c.post_id
                 ).filter(Content.hidden == False,  # noqa: E712
                          Content.tombstone_condition()).options(
@@ -462,16 +462,21 @@ class Idea(HistoryMixin, DiscussionBoundBase):
     @classmethod
     def get_related_posts_query_c(
             cls, discussion_id, root_idea_id, partial=False,
-            include_deleted=False):
+            include_deleted=False, include_moderating=None):
         from .generic import Content
         counters = cls.prepare_counters(discussion_id)
+        if include_moderating is None:
+            discussion_data = cls.get_discussion_data(discussion_id)
+            include_moderating = discussion_data.include_moderating
         if partial:
             return counters.paths[root_idea_id].as_clause_base(
-                cls.default_db(), include_deleted=include_deleted)
+                cls.default_db(), include_deleted=include_deleted,
+                include_moderating=include_moderating)
         else:
             return counters.paths[root_idea_id].as_clause(
                 cls.default_db(), discussion_id, counters.user_id, Content,
-                include_deleted=include_deleted)
+                include_deleted=include_deleted,
+                include_moderating=include_moderating)
 
     def top_keywords(
             self, limit=30, group=True, display_lang='en', filter_lang=None):
@@ -491,7 +496,7 @@ class Idea(HistoryMixin, DiscussionBoundBase):
         ).filter_by(
             category=None
         ).join(Tag).filter(
-            PostKeywordAnalysis.post_id.in_(self.get_related_posts_query(True))
+            PostKeywordAnalysis.post_id.in_(self.get_related_posts_query(True, include_moderating=False))
         )
 
         if filter_lang:
@@ -547,7 +552,7 @@ class Idea(HistoryMixin, DiscussionBoundBase):
             func.count(PostWatsonV1SentimentAnalysis.id).label("count")
         ).filter(
             PostWatsonV1SentimentAnalysis.post_id.in_(
-                self.get_related_posts_query(True))
+                self.get_related_posts_query(True, include_moderating=False))
         ).first()
 
     @classmethod
@@ -572,21 +577,38 @@ class Idea(HistoryMixin, DiscussionBoundBase):
         return discussion_data.post_path_counter(
             discussion_data.user_id, calc_all)
 
-    def get_related_posts_query(self, partial=False, include_deleted=False):
+    def get_related_posts_query(
+            self, partial=False, include_deleted=False,
+            include_moderating=None):
+        """gat a query that represents the posts associated with this idea.
+
+        :param bool partial: do not include view message counts
+        :param include_deleted: Include posts in deleted_publication_states.
+            True means only deleted posts, None means all posts,
+            False means only live posts or deleted posts with live descendants.
+        :param include_moderating: Include posts in SUBMITTED_AWAITING_MODERATION.
+            True means include all those posts, False means none of those posts,
+            a user_id value means only those belonging to this user,
+            None means guess according to the user_id of the current request (...)
+            There is not currently a way to only get those posts. (todo?)
+            NOTE: that parameter is interpreted differently in PostPathLocalCollection.as_clause
+        """
         return self.get_related_posts_query_c(
             self.discussion_id, self.id, partial,
-            include_deleted=include_deleted)
+            include_deleted=include_deleted,
+            include_moderating=include_moderating)
 
     @classmethod
     def _get_orphan_posts_statement(
             cls, discussion_id, get_read_status=False, content_alias=None,
-            include_deleted=False):
+            include_deleted=False, include_moderating=None):
         """ Requires discussion_id bind parameters
         Excludes synthesis posts """
         counters = cls.prepare_counters(discussion_id)
         return counters.orphan_clause(
             counters.user_id if get_read_status else None,
-            content_alias, include_deleted=include_deleted)
+            content_alias, include_deleted=include_deleted,
+            include_moderating=include_moderating)
 
     @property
     def num_posts(self):
@@ -1158,8 +1180,7 @@ class Idea(HistoryMixin, DiscussionBoundBase):
         from .post import Post, countable_publication_states
         from .generic import Content
 
-        related = self.get_related_posts_query(
-            partial=True, include_deleted=False)
+        related = self.get_related_posts_query(partial=True, include_moderating=False)
         post_ids = Post.query.join(
             related, Post.id == related.c.post_id
         ).with_entities(Post.id).subquery()
