@@ -7,7 +7,7 @@ import { Translate } from 'react-redux-i18n';
 
 import { legalContentSlugs, ESSENTIAL_SIGNUP_COOKIES as LEGAL_CONTENTS_TO_ACCEPT } from '../../constants';
 import manageErrorAndLoading from './../../components/common/manageErrorAndLoading';
-import { getRouteLastString, getDiscussionSlug } from '../../utils/globalFunctions';
+import { getRouteLastString, getDiscussionSlug, setCookieItem, getCookieItem } from '../../utils/globalFunctions';
 import { get, getContextual } from '../../utils/routeMap';
 
 import LegalContentsLinksList from './legalContentsLinksList';
@@ -55,10 +55,12 @@ export class DumbAcceptCookiesModal extends React.PureComponent<Props, State> {
       const isOnLegalContentPage = legalContentSlugs.includes(lastRouteString);
       // This array gathers all the legal contents to accept by their 'ACCEPT_...' formatted name
       const legalContentsToAcceptByCookieName = this.getLegalContentsToAccept();
-
-      const userHasAcceptedAllLegalContents = legalContentsToAcceptByCookieName.every(legalContent =>
-        acceptedLegalContents.includes(legalContent)
-      );
+      // @$FlowFixMe flow does not see that getCookieItem has been checked as non null
+      const cookiesFromBrowser = getCookieItem('cookies_configuration') && getCookieItem('cookies_configuration').split(',');
+      const userHasAcceptedAllLegalContents =
+        legalContentsToAcceptByCookieName.every(legalContent => acceptedLegalContents.includes(legalContent)) ||
+        (cookiesFromBrowser &&
+          legalContentsToAcceptByCookieName.every(legalContent => cookiesFromBrowser.includes(legalContent)));
 
       // The modal is only showed to a user who is connected but hasn't yet accepted legal contents and isn't currently reading them
       if (!isOnLegalContentPage && !userHasAcceptedAllLegalContents) {
@@ -89,6 +91,7 @@ export class DumbAcceptCookiesModal extends React.PureComponent<Props, State> {
     this.props.updateAcceptedCookies({
       variables: { actions: legalContentsToAccept }
     });
+    setCookieItem('cookies_configuration', legalContentsToAccept);
   };
 
   closeModal = () => {
