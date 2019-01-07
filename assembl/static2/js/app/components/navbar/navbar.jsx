@@ -114,6 +114,8 @@ type AssemblNavbarState = {
 };
 
 export class AssemblNavbar extends React.PureComponent<AssemblNavbarProps, AssemblNavbarState> {
+  state = { flatWidth: 0 };
+
   setFlatWidth = (newWidth: number) => {
     this.setState({ flatWidth: newWidth });
   };
@@ -129,7 +131,7 @@ export class AssemblNavbar extends React.PureComponent<AssemblNavbarProps, Assem
     const sections = sectionData.sections;
     const { debateData } = debate;
     const { logo, slug, isLargeLogo } = debateData;
-    const flatWidth = (this.state && this.state.flatWidth) || 0;
+    const flatWidth = this.state.flatWidth;
     const maxAppWidth = Math.min(APP_CONTAINER_MAX_WIDTH, screenWidth) - APP_CONTAINER_PADDING * 2;
     const screenTooSmall = flatWidth > maxAppWidth;
     const filteredSections = sections.filter(sectionFilter(sectionData)).sort((a, b) => a.order - b.order);
