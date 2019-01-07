@@ -43,7 +43,7 @@ class Proposals extends React.Component {
     })}`;
     return (
       <div className="shown">
-        <h3 className="collapsed-title">
+        <h3 className="collapsed-title padding-title">
           <span>{questionTitle}</span>
           <div className={postsToShow.length > 0 ? 'shown proposal-arrow' : 'hidden proposal-arrow'}>
             <span
