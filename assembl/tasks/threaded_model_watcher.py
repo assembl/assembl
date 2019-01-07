@@ -56,6 +56,9 @@ class ThreadedModelEventWatcher(object):
     def processPostCreated(self, id):
         self.queue.put(('processPostCreated', id))
 
+    def processPostModified(self, id, state_changed):
+        self.queue.put(('processPostModified', id, state_changed))
+
     def processIdeaCreated(self, id):
         self.queue.put(('processIdeaCreated', id))
 
