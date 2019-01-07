@@ -62,7 +62,8 @@ export class DumbAcceptCookiesModal extends React.PureComponent<Props, State> {
         (cookiesFromBrowser &&
           legalContentsToAcceptByCookieName.every(legalContent => cookiesFromBrowser.includes(legalContent)));
 
-      // The modal is only showed to a user who is connected but hasn't yet accepted legal contents and isn't currently reading them
+      // The modal is only showed to a user who is connected but hasn't yet
+      // accepted legal contents and isn't currently reading them
       if (!isOnLegalContentPage && !userHasAcceptedAllLegalContents) {
         this.setState({ showModal: true });
       }
