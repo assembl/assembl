@@ -5,6 +5,7 @@ import type { ApolloClient } from 'react-apollo';
 import type { ThemesAdminValues } from './types.flow';
 import updateIdeasMutation from '../../../graphql/mutations/updateIdeas.graphql';
 import { createSave, convertToEntries, convertRichTextToVariables, getFileVariable } from '../../form/utils';
+import { MESSAGE_VIEW } from '../../../constants';
 
 const getChildrenVariables = (client, thematic, initialTheme) =>
   (thematic.children
@@ -14,13 +15,17 @@ const getChildrenVariables = (client, thematic, initialTheme) =>
       const initialImg = initialChild ? initialChild.img : null;
       const bodyVars = await convertRichTextToVariables(t.announcement.body, client);
       const { attachments: bodyAttachments, entries: bodyEntries } = bodyVars;
-      const announcementTitleEntries = convertToEntries(t.announcement.title);
+      const titleEntries = convertToEntries(t.announcement.title);
+      const quote = await (t.announcement.quote && t.messageViewOverride && t.messageViewOverride.value === MESSAGE_VIEW.survey
+        ? convertRichTextToVariables(t.announcement.quote, client)
+        : Promise.resolve({ attachments: [], entries: [] }));
       let announcement = null;
-      if (announcementTitleEntries.length > 0) {
+      if (titleEntries.length > 0) {
         announcement = {
-          titleEntries: announcementTitleEntries,
+          titleEntries: titleEntries,
           bodyAttachments: bodyAttachments,
-          bodyEntries: bodyEntries
+          bodyEntries: bodyEntries,
+          quoteEntries: quote.entries
         };
       }
       return {
@@ -40,13 +45,19 @@ async function getIdeaInput(client, theme, initialTheme, order) {
   const initialImg = initialTheme ? initialTheme.img : null;
   const bodyVars = await convertRichTextToVariables(theme.announcement.body, client);
   const { attachments: bodyAttachments, entries: bodyEntries } = bodyVars;
-  const announcementTitleEntries = convertToEntries(theme.announcement.title);
+  const titleEntries = convertToEntries(theme.announcement.title);
+  const quote = await (theme.announcement.quote &&
+  theme.messageViewOverride &&
+  theme.messageViewOverride.value === MESSAGE_VIEW.survey
+    ? convertRichTextToVariables(theme.announcement.quote, client)
+    : Promise.resolve({ attachments: [], entries: [] }));
   let announcement = null;
-  if (announcementTitleEntries.length > 0) {
+  if (titleEntries.length > 0) {
     announcement = {
-      titleEntries: announcementTitleEntries,
+      titleEntries: titleEntries,
       bodyAttachments: bodyAttachments,
-      bodyEntries: bodyEntries
+      bodyEntries: bodyEntries,
+      quoteEntries: quote.entries
     };
   }
   return {

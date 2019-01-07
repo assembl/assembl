@@ -38,7 +38,8 @@ const getMessageViewOverride = (key: ?string): Option => {
 const getThemeData = (t: ThemeValueFromQuery): ThemeValueWithChildren => {
   const announcement = {
     title: convertEntriesToI18nValue(t.announcement ? t.announcement.titleEntries : []),
-    body: convertEntriesToI18nRichText(t.announcement ? t.announcement.bodyEntries : [])
+    body: convertEntriesToI18nRichText(t.announcement ? t.announcement.bodyEntries : []),
+    quote: convertEntriesToI18nRichText(t.announcement ? t.announcement.quoteEntries : [])
   };
   return {
     id: t.id,

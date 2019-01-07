@@ -1063,7 +1063,8 @@ def test_mutation_update_ideas_create(test_session, graphql_request, graphql_reg
         u'bodyEntries': [{u'localeCode': u'en', u'value': u'Body EN announce'},
                          {u'localeCode': u'fr', u'value': u'Body FR announce'}],
         u'titleEntries': [{u'localeCode': u'en', u'value': u'Title EN announce'},
-                          {u'localeCode': u'fr', u'value': u'Title FR announce'}]}
+                          {u'localeCode': u'fr', u'value': u'Title FR announce'}],
+        u'quoteEntries': []}
     assert idea['titleEntries'] == [
         {u'localeCode': u'en', u'value': u'Understanding the dynamics and issues'},
         {u'localeCode': u'fr', u'value': u'Comprendre les dynamiques et les enjeux'}]
@@ -1114,7 +1115,8 @@ def test_mutation_update_ideas_create(test_session, graphql_request, graphql_reg
         u'bodyEntries': [{u'localeCode': u'en', u'value': u'[modified] Body EN announce'},
                          {u'localeCode': u'fr', u'value': u'[modified] Body FR announce'}],
         u'titleEntries': [{u'localeCode': u'en', u'value': u'[modified] Title EN announce'},
-                          {u'localeCode': u'fr', u'value': u'[modified] Title FR announce'}]}
+                          {u'localeCode': u'fr', u'value': u'[modified] Title FR announce'}],
+        u'quoteEntries': []}
     assert idea['titleEntries'] == [
         {u'localeCode': u'en', u'value': u'[modified] Understanding the dynamics and issues'},
         {u'localeCode': u'fr', u'value': u'[modified] Comprendre les dynamiques et les enjeux'}]

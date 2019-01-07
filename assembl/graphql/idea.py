@@ -197,7 +197,8 @@ class IdeaAnnouncement(SecureObjectType, SQLAlchemyObjectType):
     body = graphene.String(lang=graphene.String(), description=docs.IdeaAnnouncement.body)
     body_attachments = graphene.List(Attachment, required=False, description=docs.IdeaAnnouncement.body_attachments)
     body_entries = graphene.List(LangStringEntry, required=True, description=docs.IdeaAnnouncement.body_entries)
-    quote = graphene.List(LangStringEntry, required=False, description=docs.IdeaAnnouncement.quote_entries)
+    quote = graphene.String(lang=graphene.String(), description=docs.IdeaAnnouncement.quote)
+    quote_entries = graphene.List(LangStringEntry, required=False, description=docs.IdeaAnnouncement.quote_entries)
 
     def resolve_title(self, args, context, info):
         return resolve_langstring(self.title, args.get('lang'))
@@ -214,6 +215,12 @@ class IdeaAnnouncement(SecureObjectType, SQLAlchemyObjectType):
 
     def resolve_body_entries(self, args, context, info):
         return resolve_langstring_entries(self, 'body')
+
+    def resolve_quote(self, args, context, info):
+        return resolve_langstring(self.quote, args.get('lang'))
+
+    def resolve_quote_entries(self, args, context, info):
+        return resolve_langstring_entries(self, 'quote')
 
 
 class IdeaMessageColumn(SecureObjectType, SQLAlchemyObjectType):
@@ -638,8 +645,8 @@ def create_idea(parent_idea, phase, args, context):
 
             announcement_title_langstring = langstring_from_input_entries(announcement_title_entries)
             announcement_body_langstring = langstring_from_input_entries(announcement.get('body_entries', None))
-            announcement_quote = langstring_from_input_entries(announcement.get('quote_entries', None))
-            saobj2 = create_idea_announcement(user_id, discussion, saobj, announcement_title_langstring, announcement_body_langstring, announcement_quote)
+            announcement_quote_langstring = langstring_from_input_entries(announcement.get('quote_entries', None))
+            saobj2 = create_idea_announcement(user_id, discussion, saobj, announcement_title_langstring, announcement_body_langstring, announcement_quote_langstring)
             db.add(saobj2)
 
         # add uploaded image as an attachment to the idea
@@ -741,14 +748,13 @@ def update_idea(args, phase, context):
         announcement = args.get('announcement')
         if announcement is not None:
             announcement_title_entries = announcement.get('title_entries')
-            announcement_quote_entries = announcement.get('quote_entries', None)
             if len(announcement_title_entries) == 0:
                 raise Exception('Announcement titleEntries needs at least one entry')
 
             if not thematic.announcement:
                 announcement_title_langstring = langstring_from_input_entries(announcement_title_entries)
                 announcement_body_langstring = langstring_from_input_entries(announcement.get('body_entries', None))
-                announcement_quote_langstring = langstring_from_input_entries(announcement_quote_entries)
+                announcement_quote_langstring = langstring_from_input_entries(announcement.get('quote_entries', None))
                 saobj2 = create_idea_announcement(user_id, discussion, thematic, announcement_title_langstring, announcement_body_langstring, announcement_quote_langstring)
                 db.add(saobj2)
             else:
@@ -756,6 +762,8 @@ def update_idea(args, phase, context):
                     thematic.announcement, 'title', announcement_title_entries)
                 update_langstring_from_input_entries(
                     thematic.announcement, 'body', announcement.get('body_entries', None))
+                update_langstring_from_input_entries(
+                    thematic.announcement, 'quote', announcement.get('quote_entries', None))
                 thematic.announcement.last_updated_by_id = user_id
 
         if is_survey_thematic:

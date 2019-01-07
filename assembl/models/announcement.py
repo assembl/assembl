@@ -88,7 +88,7 @@ class Announcement(DiscussionBoundBase):
         LangString,
         lazy="joined", single_parent=True,
         primaryjoin=quote_id == LangString.id,
-        backref=backref("Quote for a survey", lazy="dynamic"),
+        backref=backref("announcement_from_quote", lazy="dynamic"),
         cascade="all, delete-orphan")
 
     # temporary

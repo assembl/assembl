@@ -12,6 +12,7 @@ query Idea($lang: String!, $id: ID!) {
       announcement {
         title(lang: $lang)
         body(lang: $lang)
+        quote(lang: $lang)
       }
     }
   }
