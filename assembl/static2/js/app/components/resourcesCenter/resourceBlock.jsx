@@ -33,7 +33,7 @@ const ResourceBlock = (props: Props) => {
       <div className="max-container resource-block">
         <div className="title-section">
           <div className="title-hyphen" />
-          <h1 className="dark-title-1">{title}</h1>
+          <h1 className="dark-title-1 no-margin-left-xs">{title}</h1>
         </div>
         <div className="page-body">
           {image && (

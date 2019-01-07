@@ -282,6 +282,10 @@
       display: block;
       margin: -10px 0 15px 32px;
       width: calc(100% - 30px);
+
+      &.no-margin-left-xs {
+        margin-left: 0;
+      }
     }
 
     .subtitle {
