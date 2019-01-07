@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 import { Col, Row } from 'react-bootstrap';
+import debounce from 'lodash/debounce';
 
 import Section from '../common/section';
 import { getPartialTree, getChildren } from '../../utils/tree';
@@ -39,7 +40,7 @@ class IdeaSynthesisTree extends React.Component<IdeaSynthesisTreeProps, IdeaSynt
     window.removeEventListener('scroll', this.handleScroll);
   }
 
-  handleScroll = () => {
+  handleScroll = debounce(() => {
     const { node } = this.state;
     const { handleScrollForMenu } = this.props;
     if (node) {
@@ -54,7 +55,7 @@ class IdeaSynthesisTree extends React.Component<IdeaSynthesisTreeProps, IdeaSynt
         handleScrollForMenu(node);
       }
     }
-  };
+  }, 100);
 
   getTree = () => {
     const { slug, subIdeas, parents, hasSiblings, index, handleScrollForMenu } = this.props;

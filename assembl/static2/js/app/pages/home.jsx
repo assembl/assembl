@@ -1,6 +1,7 @@
 import React from 'react';
 import { I18n } from 'react-redux-i18n';
 import { connect } from 'react-redux';
+import debounce from 'lodash/debounce';
 
 import Header from '../components/home/header';
 import Objectives from '../components/home/objectives';
@@ -13,13 +14,9 @@ import ScrollOnePageButton from '../components/common/scrollOnePageButton';
 import MessagePage from '../components/common/messagePage';
 
 class Home extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      scrollOnePageButtonHidden: false
-    };
-    this.hideScrollOnePageButton = this.hideScrollOnePageButton.bind(this);
-  }
+  state = {
+    scrollOnePageButtonHidden: false
+  };
 
   componentWillMount() {
     window.addEventListener('scroll', this.hideScrollOnePageButton);
@@ -29,11 +26,13 @@ class Home extends React.Component {
     window.removeEventListener('scroll', this.hideScrollOnePageButton);
   }
 
-  hideScrollOnePageButton() {
-    this.setState({
-      scrollOnePageButtonHidden: true
-    });
-  }
+  hideScrollOnePageButton = debounce(() => {
+    if (!this.state.scrollOnePageButtonHidden) {
+      this.setState(() => ({
+        scrollOnePageButtonHidden: true
+      }));
+    }
+  }, 100);
 
   render() {
     const { debateData } = this.props.debate;

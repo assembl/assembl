@@ -45,7 +45,7 @@ class GoUp extends React.Component<Props, State> {
     } else {
       this.setState({ isHidden: true });
     }
-  }, 200);
+  }, 100);
 
   onClick = () => window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
 

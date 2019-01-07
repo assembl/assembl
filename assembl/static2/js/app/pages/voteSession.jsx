@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { I18n, Translate } from 'react-redux-i18n';
 import { Map } from 'immutable';
 import shuffle from 'lodash/shuffle';
+import debounce from 'lodash/debounce';
 import activeHtml from 'react-active-html';
 
 import { isSpecialURL } from '../utils/urlPreview';
@@ -173,9 +174,9 @@ class DumbVoteSession extends React.Component<Props, State> {
     }
   }
 
-  updateWindowWidth = () => {
+  updateWindowWidth = debounce(() => {
     this.setState({ windowWidth: window.innerWidth });
-  };
+  }, 100);
 
   setMyVotes() {
     const { proposals } = this.props;
@@ -208,7 +209,7 @@ class DumbVoteSession extends React.Component<Props, State> {
     });
   }
 
-  setAvailableTokensSticky = () => {
+  setAvailableTokensSticky = debounce(() => {
     if (this.availableTokensContainerRef && !isMobile.any()) {
       const availableTokensDivOffset = getDomElementOffset(this.availableTokensContainerRef).top;
       if (availableTokensDivOffset <= window.pageYOffset) {
@@ -220,7 +221,7 @@ class DumbVoteSession extends React.Component<Props, State> {
         this.setState({ availableTokensSticky: false });
       }
     }
-  };
+  }, 100);
 
   voteForProposalToken = (proposalId: string, tokenVoteModuleId: string, categoryId: string, value: number): void => {
     const setVote = () =>

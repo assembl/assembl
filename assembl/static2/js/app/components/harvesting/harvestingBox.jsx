@@ -7,6 +7,7 @@ import { Button, OverlayTrigger } from 'react-bootstrap';
 import { Translate, I18n } from 'react-redux-i18n';
 import classnames from 'classnames';
 import moment from 'moment';
+import debounce from 'lodash/debounce';
 
 import addPostExtractMutation from '../../graphql/mutations/addPostExtract.graphql';
 import updateExtractMutation from '../../graphql/mutations/updateExtract.graphql';
@@ -337,7 +338,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
     }
   };
 
-  updateOverflowMenuPosition = () => {
+  updateOverflowMenuPosition = debounce(() => {
     const { overflowMenu } = this.state;
     if (overflowMenu) {
       const height = overflowMenu.clientHeight;
@@ -350,7 +351,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
         this.setState({ overflowMenuTop: 25 });
       }
     }
-  };
+  }, 100);
 
   changeCurrentExtract = (step: ?number): void => {
     const { extractIndex } = this.state;

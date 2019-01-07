@@ -3,6 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
 import { Col, Grid, Row } from 'react-bootstrap';
+import debounce from 'lodash/debounce';
 
 import Header from '../components/common/header';
 import Section from '../components/common/section';
@@ -66,7 +67,7 @@ export class DumbSynthesis extends React.Component<SynthesisProps, SynthesisStat
     this.setState({ sideMenuNode: node });
   };
 
-  updateSideMenuVisibility = () => {
+  updateSideMenuVisibility = debounce(() => {
     const { introBlock, conclusionBlock, sideMenuNode } = this.state;
     if (introBlock && conclusionBlock) {
       const introNodeTop = getDomElementOffset(introBlock).top;
@@ -96,7 +97,7 @@ export class DumbSynthesis extends React.Component<SynthesisProps, SynthesisStat
         this.setState({ sideMenuIsHidden: false });
       }
     }
-  };
+  }, 100);
 
   handleScrollForMenu = (node: HTMLElement) => {
     this.setState({ ideaOnScroll: node.id });
