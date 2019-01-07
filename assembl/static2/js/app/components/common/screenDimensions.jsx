@@ -22,7 +22,7 @@ class ResizeListener extends React.Component<Props> {
 
   updateScreenDimensions = debounce(() => {
     this.props.updateScreenDimensions();
-  }, 200);
+  }, 100);
 
   render() {
     // This prevents the component from having more than one child

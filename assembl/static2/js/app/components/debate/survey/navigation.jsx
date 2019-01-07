@@ -1,6 +1,7 @@
 import React from 'react';
 import { Grid, Col } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
+import debounce from 'lodash/debounce';
 
 import { getDomElementOffset, calculatePercentage } from '../../../utils/globalFunctions';
 import { SMALL_SCREEN_WIDTH } from '../../../constants';
@@ -10,9 +11,6 @@ class Navigation extends React.Component {
   constructor(props) {
     super(props);
     const { questionsLength } = this.props;
-    this.displayNav = this.displayNav.bind(this);
-    this.displayPagination = this.displayPagination.bind(this);
-    this.scrollToQuestion = this.scrollToQuestion.bind(this);
     this.state = {
       navPosition: 'fixed',
       navBottom: 0,
@@ -60,7 +58,7 @@ class Navigation extends React.Component {
     return offsetArray; // eslint-disable-line
   }
 
-  displayNav() {
+  displayNav = debounce(() => {
     const proposals = document.getElementById('proposals');
     if (!proposals) {
       return;
@@ -96,9 +94,9 @@ class Navigation extends React.Component {
         navBottom: 0
       });
     }
-  }
+  }, 100);
 
-  displayPagination() {
+  displayPagination = debounce(() => {
     const questionsOffset = this.getQuestionsOffset(this.state.questionsLength);
     if (!questionsOffset) {
       return;
@@ -113,9 +111,9 @@ class Navigation extends React.Component {
     this.setState({
       currentQuestionNumber: currentQuestionNumber
     });
-  }
+  }, 100);
 
-  scrollToQuestion(questionIndex) {
+  scrollToQuestion = (questionIndex) => {
     let target;
     if (questionIndex > this.state.questionsLength) {
       target = document.getElementById('proposals');
@@ -125,7 +123,7 @@ class Navigation extends React.Component {
     const targetOffset = Number(getDomElementOffset(target).top);
     window.scrollTo({ top: targetOffset - 80, left: 0, behavior: 'smooth' });
     this.props.scrollToQuestion(false);
-  }
+  };
 
   render() {
     const barWidth = calculatePercentage(this.state.currentQuestionNumber, this.state.questionsLength);

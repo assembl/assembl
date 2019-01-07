@@ -8,6 +8,7 @@ import { Translate, I18n } from 'react-redux-i18n';
 import classnames from 'classnames';
 import moment from 'moment';
 import update from 'immutability-helper';
+import debounce from 'lodash/debounce';
 
 import addPostExtractMutation from '../../graphql/mutations/addPostExtract.graphql';
 import updateExtractMutation from '../../graphql/mutations/updateExtract.graphql';
@@ -389,7 +390,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
     }
   };
 
-  updateOverflowMenuPosition = () => {
+  updateOverflowMenuPosition = debounce(() => {
     const { overflowMenu } = this.state;
     if (overflowMenu) {
       const height = overflowMenu.clientHeight;
@@ -402,7 +403,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
         this.setState({ overflowMenuTop: 25 });
       }
     }
-  };
+  }, 100);
 
   changeCurrentExtract = (step: ?number): void => {
     const { currentExtractIndex } = this.state;

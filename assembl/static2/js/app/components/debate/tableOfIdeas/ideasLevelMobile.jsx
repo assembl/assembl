@@ -3,6 +3,8 @@ import * as React from 'react';
 import truncate from 'lodash/truncate';
 import { Col } from 'react-bootstrap';
 import classnames from 'classnames';
+import debounce from 'lodash/debounce';
+
 import IdeaPreview from './ideaPreview';
 import { get as getRoute } from '../../../utils/routeMap';
 import { getDiscussionSlug } from '../../../utils/globalFunctions';
@@ -45,7 +47,7 @@ class IdeasLevelMobile extends React.Component<Props, State> {
     window.removeEventListener('resize', this.handleResize);
   }
 
-  handleResize = () => {
+  handleResize = debounce(() => {
     const { ideas } = this.props;
     this.setState({
       sliderWidth: window.innerWidth * 0.8 * ideas.length,
@@ -53,7 +55,7 @@ class IdeasLevelMobile extends React.Component<Props, State> {
       previewWidth: window.innerWidth * 0.8,
       thumbnailsWidth: window.innerWidth * 0.6
     });
-  };
+  }, 100);
 
   render() {
     const { ideas, identifier, phaseId, ideaLevel, nbLevel, selectedIdeasId, setSelectedIdeas } = this.props;

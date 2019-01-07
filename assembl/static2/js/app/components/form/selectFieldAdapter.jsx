@@ -10,6 +10,7 @@ import Select from 'react-select';
 import AsyncCreatableSelect from 'react-select/lib/AsyncCreatable';
 import AsyncSelect from 'react-select/lib/Async';
 import makeAnimated from 'react-select/lib/animated';
+import debounce from 'lodash/debounce';
 
 import Error from './error';
 import { getValidationState } from './utils';
@@ -78,7 +79,7 @@ class SelectFieldAdapter extends React.Component<Props, State> {
 
   select: { current: null | HTMLDivElement } = React.createRef();
 
-  onPositionChange = () => {
+  onPositionChange = debounce(() => {
     const selectRef = this.select.current;
     const selectDom = selectRef && ReactDOM.findDOMNode(selectRef); //eslint-disable-line
     if (selectDom) {
@@ -90,7 +91,7 @@ class SelectFieldAdapter extends React.Component<Props, State> {
         this.setState({ direction: newDirection });
       }
     }
-  };
+  }, 100);
 
   handleInputChange = (inputValue: string, { action }: { action: string }) => {
     if (action === 'input-change') {

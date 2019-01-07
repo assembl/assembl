@@ -3,6 +3,8 @@ import * as React from 'react';
 import { Grid, Row, Col } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
 import classNames from 'classnames';
+import debounce from 'lodash/debounce';
+
 import TopPostForm from './topPostForm';
 import { hexToRgb } from '../../../utils/globalFunctions';
 import { MIN_WIDTH_COLUMN, SMALL_SCREEN_HEIGHT } from '../../../constants';
@@ -60,7 +62,7 @@ class TopPostFormContainer extends React.Component<TopPostFormContainerProps, To
     window.removeEventListener('scroll', this.setFormPosition);
   }
 
-  setFormPosition = () => {
+  setFormPosition = debounce(() => {
     if (!this.state.expanded) {
       if (this.state.topPostFormOffset <= window.pageYOffset && window.innerHeight > SMALL_SCREEN_HEIGHT) {
         this.setState({ sticky: true });
@@ -68,7 +70,7 @@ class TopPostFormContainer extends React.Component<TopPostFormContainerProps, To
         this.setState({ sticky: false });
       }
     }
-  };
+  }, 100);
 
   getClassNames() {
     const { messageColumns, isColumnViewInline } = this.props;
