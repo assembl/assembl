@@ -107,6 +107,9 @@ class ConfigureThematicForm extends React.PureComponent<Props> {
           component={FileUploaderFieldAdapter}
           label={I18n.t('administration.tableOfThematics.bannerImagePickerLabel')}
         />
+        <div className="file-uploader-warning">
+          <Translate value="administration.imageRequirements" />
+        </div>
         <div className="title">{I18n.t('administration.tableOfThematics.moduleTypeLabel')}</div>
         <Field
           name={messageViewOverrideName}
