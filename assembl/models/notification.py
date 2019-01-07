@@ -731,7 +731,7 @@ class ModelEventWatcherNotificationSubscriptionDispatcher(BaseModelEventWatcher)
             self.createNotifications(objectId, state_changed)
 
     @classmethod
-    def createNotifications(cls, objectId, state_changed):
+    def createNotifications(cls, objectId, state_changed=None):
         from ..lib.utils import get_concrete_subclasses_recursive
         verb = CrudVerbs.CREATE
         objectClass = Content
