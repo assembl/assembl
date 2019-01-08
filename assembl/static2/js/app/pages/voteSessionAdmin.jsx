@@ -8,9 +8,11 @@ import { Button } from 'react-bootstrap';
 import { Link, type Route, type Router } from 'react-router';
 
 import { setValidationErrors } from '../actions/adminActions/voteSession';
+import PageForm from '../components/administration/voteSession/pageForm';
 import { type VoteChoice } from '../components/administration/voteSession/gaugeForm';
 import ModulesSection from '../components/administration/voteSession/modulesSection';
 import VoteProposalsSection from '../components/administration/voteSession/voteProposalsSection';
+import ExportSection from '../components/administration/exportSection';
 import Navbar from '../components/administration/navbar';
 import SaveButton, { getMutationsPromises, runSerial } from '../components/administration/saveButton';
 import updateVoteSessionMutation from '../graphql/mutations/updateVoteSession.graphql';
@@ -27,7 +29,7 @@ import deleteProposalMutation from '../graphql/mutations/deleteProposal.graphql'
 import { convertEntriesToHTML, convertImmutableEntriesToJS } from '../utils/draftjs';
 import { get } from '../utils/routeMap';
 import { displayAlert, displayCustomModal, closeModal } from '../utils/utilityManager';
-import { getDiscussionSlug } from '../utils/globalFunctions';
+import { getDiscussionSlug, snakeToCamel } from '../utils/globalFunctions';
 import { PHASES } from '../constants';
 
 type VoteModule = {
@@ -178,6 +180,8 @@ type Props = {
   updateProposal: Function,
   deleteProposal: Function,
   setValidationErrors: (string, ValidationErrors) => Function,
+  voteSessionId: string,
+  debateId: string,
   route: Route,
   router: Router,
   thematicId: string
@@ -486,14 +490,24 @@ class VoteSessionAdmin extends React.Component<Props, State> {
   dataHaveChanged = (): boolean => this.props.modulesOrProposalsHaveChanged || this.props.voteSessionPage.get('_hasChanged');
 
   render() {
-    const { section } = this.props;
+    const { editLocale, debateId, section, voteSessionId } = this.props;
     const saveDisabled = !this.dataHaveChanged();
+    const exportLinks = ['vote_results_csv', 'extract_csv_voters'].map(option => ({
+      msgId: `vote.${snakeToCamel(option)}`,
+      url: get('exportVoteSessionData', {
+        debateId: debateId,
+        exportRoute: option,
+        voteSessionId: voteSessionId
+      })
+    }));
     return (
       <div className="token-vote-admin">
         <SaveButton disabled={saveDisabled} saveAction={this.saveAction} />
-        {section === '1' && <ModulesSection />}
-        {section === '2' && <VoteProposalsSection />}
-        {section && <Navbar currentStep={section} steps={['1', '2']} phaseIdentifier={PHASES.voteSession} />}
+        {section === '1' && <PageForm editLocale={editLocale} />}
+        {section === '2' && <ModulesSection />}
+        {section === '3' && <VoteProposalsSection />}
+        {section === '4' && <ExportSection exportLink={exportLinks} />}
+        {section && <Navbar currentStep={section} steps={['1', '2', '3', '4']} phaseIdentifier={PHASES.voteSession} />}
       </div>
     );
   }
