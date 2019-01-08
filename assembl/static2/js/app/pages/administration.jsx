@@ -18,7 +18,6 @@ import Menu from '../components/administration/menu';
 import LanguageMenu from '../components/administration/languageMenu';
 import SectionsQuery from '../graphql/SectionsQuery.graphql';
 import TextFields from '../graphql/TextFields.graphql';
-import LegalContentsQuery from '../graphql/LegalContents.graphql';
 import VoteSessionQuery from '../graphql/VoteSession.graphql';
 import LandingPageModules from '../graphql/LandingPageModules.graphql';
 import TimelineQuery from '../graphql/Timeline.graphql';
@@ -169,7 +168,6 @@ class Administration extends React.Component {
       params,
       refetchTabsConditions,
       refetchSections,
-      refetchLegalContents,
       refetchVoteSession,
       refetchLandingPageModules,
       refetchTextFields,
@@ -187,7 +185,6 @@ class Administration extends React.Component {
         refetchVoteSession: refetchVoteSession,
         refetchSections: refetchSections,
         refetchLandingPageModules: refetchLandingPageModules,
-        refetchLegalContents: refetchLegalContents,
         refetchTextFields: refetchTextFields,
         refetchTimeline: refetchTimeline
       })
@@ -309,28 +306,6 @@ export default compose(
     },
     skip: isNotInDiscussionAdmin
   }),
-  graphql(LegalContentsQuery, {
-    props: ({ data }) => {
-      if (data.error || data.loading) {
-        return {
-          legalContentsMetadata: {
-            error: data.error,
-            loading: data.loading
-          }
-        };
-      }
-
-      return {
-        legalContentsMetadata: {
-          error: data.error,
-          loading: data.loading
-        },
-        refetchLegalContents: data.refetch,
-        legalContents: data.legalContents
-      };
-    },
-    skip: isNotInDiscussionAdmin
-  }),
   graphql(TimelineQuery, {
     options: ({ locale }) => ({
       variables: { lang: locale }
@@ -410,7 +385,6 @@ export default compose(
   mergeLoadingAndError([
     'voteSessionMetadata',
     'sectionsMetadata',
-    'legalContentsMetadata',
     'timelineMetadata',
     'landingPageModulesMetadata',
     'textFieldsMetadata'
