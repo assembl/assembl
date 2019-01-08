@@ -117,8 +117,8 @@ def test_graphql_get_all_ideas(phases, graphql_request,
 def test_graphql_get_all_ideas_thread_without_vote_proposals(phases, graphql_request,
                                user_language_preference_en_cookie,
                                vote_proposal):
-    # proposals of vote session is attached to a root idea of the vote session phase, child
-    # of discussion.root_idea. Those proposals shouldn't be returned.
+    # proposals of vote session are attached as children of vote_session.idea
+    # Those proposals shouldn't be returned.
     res = schema.execute(
         u"""query AllIdeasQuery($lang: String!, $discussionPhaseId: Int!) {
             ideas(discussionPhaseId: $discussionPhaseId) {
@@ -137,7 +137,7 @@ def test_graphql_get_all_ideas_thread_without_vote_proposals(phases, graphql_req
         variable_values={"discussionPhaseId": phases['thread'].id, "lang": u"en"})
     root_idea = res.data['rootIdea']
     assert root_idea['id'] is not None
-    assert len(res.data['ideas']) == 3
+    assert len(res.data['ideas']) == 2
 
 
 def test_graphql_get_all_ideas_survey_phase(phases, graphql_request,
