@@ -66,9 +66,9 @@ class AmazonAttachmentService(AttachmentService):
         import boto3
         self.bucket_name = get('attachment_bucket', 's3_attachments')
         region = get('aws_region')
-        self.s3 = boto3.client('s3', region)
-        s3 = boto3.resource('s3', region)
-        self.bucket = s3.Bucket(self.bucket_name)
+        self.s3 = boto3.resource('s3', region)
+        self.s3c = self.s3.meta.client
+        self.bucket = self.s3.Bucket(self.bucket_name)
 
     def put_file(self, dataf, mimetype=None):
         key = self.computeHash(dataf)
@@ -93,7 +93,7 @@ class AmazonAttachmentService(AttachmentService):
         return f
 
     def get_file_url(self, fileHash):
-        base_url = self.s3.generate_presigned_url(
+        base_url = self.s3c.generate_presigned_url(
             ClientMethod='get_object',
             Params={
                 'Bucket': self.bucket_name,
@@ -103,7 +103,7 @@ class AmazonAttachmentService(AttachmentService):
         return b'/private_uploads/' + base_url.split('/', 3)[-1].encode('ascii')
 
     def delete_file(self, fileHash):
-        self.s3.delete_file(Bucket=self.bucket_name, Key=fileHash)
+        self.bucket.delete_objects(Delete={'Objects': [{'Key': fileHash}]})
 
     def exists(self, fileHash):
         return bool([x for x in self.bucket.objects.filter(Prefix=fileHash) if x.key == fileHash])
