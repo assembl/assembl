@@ -216,6 +216,7 @@
       width: 150px;
       padding: 10px 0 0;
       position: relative;
+      margin: auto;
 
       .doughnut {
         .circle {
@@ -252,6 +253,7 @@
       border: 1px solid $grey5;
       margin-top: 10px;
       height: 140px;
+      text-align: center;
     }
 
     .tokens-box {
@@ -259,7 +261,7 @@
     }
 
     .doughnut-container {
-      margin: 0 auto;
+      margin: 0 auto 0 auto;
       height: 80px;
       width: 80px;
       position: relative;
@@ -320,6 +322,8 @@
   .votesession-page {
     .proposal.row {
       padding: 15px 5px 15px 0;
+      display: flex;
+      align-items: center;
     }
 
     .participants-count {
@@ -329,6 +333,7 @@
 
     .tokens-box {
       padding: 19px 0 19px 0;
+      text-align: center;
     }
   }
 }
@@ -363,6 +368,7 @@
 
     .tokens-box {
       padding: 10px 0 20px 0;
+      text-align: center;
     }
 
     .section-title {
