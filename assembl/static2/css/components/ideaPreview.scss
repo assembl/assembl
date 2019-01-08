@@ -3,20 +3,32 @@
 
   .light-title-3 {
     font-size: $font-size-sm;
-    position: absolute;
-    top: 0;
+    //position: absolute;
+    //top: 0;
     width: calc(100% - 40px);
+    margin-right: 0;
+    margin-left: 0;
+    padding-top: 20px;
   }
 
   .content-box {
     cursor: default;
+
+    &.position-content-box {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      flex-direction: column;
+      overflow: hidden;
+    }
   }
 
   .access-discussion {
-    position: absolute;
-    top: calc(50% - 20px);
+    //position: absolute;
+    //top: calc(50% - 20px);
     width: calc(100% - 40px);
     text-align: center;
+    padding-bottom: 160px;
   }
 
   .see-discussion {
@@ -131,8 +143,8 @@
   height: 500px;
 
   .light-title-3 {
-    position: absolute;
-    top: 80px;
+    //position: absolute;
+    //top: 80px;
     width: calc(100% - 40px);
   }
 }

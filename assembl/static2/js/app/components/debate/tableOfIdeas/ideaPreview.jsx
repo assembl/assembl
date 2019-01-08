@@ -49,7 +49,7 @@ const IdeaPreview = ({
   return (
     <div className={previewClasses}>
       <div className="image-box" style={imgUrl ? { backgroundImage: `url(${imgUrl})` } : null} />
-      <div className="content-box" to={link}>
+      <div className="content-box position-content-box" to={link}>
         <h3 className={classnames('light-title-3', 'center', { ellipsis: isMobile && nbLevel && ideaLevel < nbLevel })}>
           {title}
         </h3>
