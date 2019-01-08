@@ -594,9 +594,8 @@ class QuestionInput(graphene.InputObjectType):
 
 def create_idea(parent_idea, phase, args, context):
     cls = models.Idea
-    phase_identifier = phase.identifier
     message_view_override = args.get('message_view_override')
-    is_survey_thematic = phase_identifier == Phases.survey.value or message_view_override == MessageView.survey.value
+    is_survey_thematic = message_view_override == MessageView.survey.value
     discussion_id = context.matchdict['discussion_id']
     discussion = models.Discussion.get(discussion_id)
     user_id = context.authenticated_userid or Everyone
@@ -695,9 +694,8 @@ def update_idea(args, phase, context):
     if phase is None:  # UpdateThematic doesn't give phase
         phase = thematic.get_associated_phase()
 
-    phase_identifier = phase.identifier
     message_view_override = args.get('message_view_override')
-    is_survey_thematic = phase_identifier == Phases.survey.value or message_view_override == MessageView.survey.value
+    is_survey_thematic = message_view_override == MessageView.survey.value
 
     permissions = get_permissions(user_id, discussion_id)
     allowed = thematic.user_can(

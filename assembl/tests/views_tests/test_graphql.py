@@ -67,7 +67,9 @@ def test_get_thematics(discussion, phases, graphql_request, test_session):
 def test_mutation_create_thematic_multilang_implicit_en(phases, graphql_request , user_language_preference_en_cookie):
     res = schema.execute(u"""
 mutation myFirstMutation {
-    createThematic(titleEntries: [
+    createThematic(
+        messageViewOverride: "survey",
+        titleEntries: [
         {value: "Comprendre les dynamiques et les enjeux", localeCode: "fr"},
         {value: "Understanding the dynamics and issues", localeCode: "en"}
     ], discussionPhaseId: """+unicode(phases['survey'].id)+u""") {
@@ -90,7 +92,9 @@ def test_mutation_create_thematic_multilang_implicit_fr(phases, graphql_request,
     # adding en then fr on purpose, to really test that it looks at user preferences, not just the first original title
     res = schema.execute(u"""
 mutation myFirstMutation {
-    createThematic(titleEntries: [
+    createThematic(
+        messageViewOverride: "survey",
+        titleEntries: [
         {value: "Understanding the dynamics and issues", localeCode: "en"}
         {value: "Comprendre les dynamiques et les enjeux", localeCode: "fr"},
     ], discussionPhaseId: """+unicode(phases['survey'].id)+u""") {
@@ -112,7 +116,9 @@ mutation myFirstMutation {
 def test_mutation_create_thematic_multilang_explicit_fr(phases, graphql_request):
     res = schema.execute(u"""
 mutation myFirstMutation {
-    createThematic(titleEntries: [
+    createThematic(
+        messageViewOverride: "survey",
+        titleEntries: [
         {value: "Comprendre les dynamiques et les enjeux", localeCode: "fr"},
         {value: "Understanding the dynamics and issues", localeCode: "en"}
     ], discussionPhaseId: """+unicode(phases['survey'].id)+u""") {
@@ -135,7 +141,9 @@ def test_mutation_create_thematic_multilang_explicit_fr_fallback_to_en(phases, g
     # If we ask for French but don't have this translation, instead of returning null, fallback to english
     res = schema.execute(u"""
 mutation myFirstMutation {
-    createThematic(titleEntries: [
+    createThematic(
+        messageViewOverride: "survey",
+        titleEntries: [
         {value: "Understanding the dynamics and issues", localeCode: "en"}
     ], discussionPhaseId: """+unicode(phases['survey'].id)+u""") {
         thematic {
@@ -157,7 +165,9 @@ def test_mutation_create_thematic_multilang_explicit_fr_fallback_to_en_with_ital
     # If we ask for French but don't have this translation, instead of returning null, fallback to english
     res = schema.execute(u"""
 mutation myFirstMutation {
-    createThematic(titleEntries:[
+    createThematic(
+        messageViewOverride: "survey",
+        titleEntries:[
         {value:"Understanding the dynamics and issues", localeCode:"en"}
         {value:"Italian...", localeCode:"it"}
     ], discussionPhaseId: """+unicode(phases['survey'].id)+u""") {
@@ -189,7 +199,9 @@ def test_mutation_create_thematic_upload_file(graphql_request, phases):
     graphql_request.POST['variables.img'] = FieldStorage()
     res = schema.execute(u"""
 mutation myFirstMutation($img:String) {
-    createThematic(titleEntries:[
+    createThematic(
+        messageViewOverride: "survey",
+        titleEntries:[
         {value:"Comprendre les dynamiques et les enjeux", localeCode:"fr"},
         {value:"Understanding the dynamics and issues", localeCode:"en"}
     ],
@@ -237,6 +249,7 @@ mutation myFirstMutation($img:String) {
     res = schema.execute(u"""
 mutation myFirstMutation($img:String, $thematicId:ID!) {
     updateThematic(
+        messageViewOverride: "survey",
         id:$thematicId,
         titleEntries:[
             {value:"Comprendre les dynamiques et les enjeux", localeCode:"fr"},
@@ -264,7 +277,9 @@ mutation myFirstMutation($img:String, $thematicId:ID!) {
 def test_mutation_create_thematic_multilang_explicit_en(phases, graphql_request):
     res = schema.execute(u"""
 mutation myFirstMutation {
-    createThematic(titleEntries:[
+    createThematic(
+        messageViewOverride: "survey",
+        titleEntries:[
         {value:"Comprendre les dynamiques et les enjeux", localeCode:"fr"},
         {value:"Understanding the dynamics and issues", localeCode:"en"}
     ], discussionPhaseId: """+unicode(phases['survey'].id)+u""") {
@@ -286,7 +301,9 @@ mutation myFirstMutation {
 def test_mutation_create_raise_if_no_title_entries(phases, graphql_request):
     res = schema.execute(u"""
 mutation myFirstMutation {
-    createThematic(titleEntries:[], discussionPhaseId: """+unicode(phases['survey'].id)+u""") {
+    createThematic(
+        messageViewOverride: "survey",
+        titleEntries:[], discussionPhaseId: """+unicode(phases['survey'].id)+u""") {
         thematic {
             ... on Idea {
                 title(lang:"en")
@@ -305,7 +322,9 @@ def test_mutation_create_thematic_no_permission(phases, graphql_request):
     graphql_request.authenticated_userid = None
     res = schema.execute(u"""
 mutation myFirstMutation {
-    createThematic(titleEntries:[{value:"Comprendre les dynamiques et les enjeux", localeCode:"fr"}], discussionPhaseId: """+unicode(phases['survey'].id)+u""") {
+    createThematic(
+        messageViewOverride: "survey",
+        titleEntries:[{value:"Comprendre les dynamiques et les enjeux", localeCode:"fr"}], discussionPhaseId: """+unicode(phases['survey'].id)+u""") {
         thematic {
             ... on Idea {
                 title
@@ -321,6 +340,7 @@ def test_mutation_create_thematic_with_questions(phases, graphql_request):
     res = schema.execute(u"""
 mutation myFirstMutation {
     createThematic(
+        messageViewOverride: "survey",
         titleEntries:[
             {value:"Comprendre les dynamiques et les enjeux", localeCode:"fr"},
             {value:"Understanding the dynamics and issues", localeCode:"en"}
@@ -505,6 +525,7 @@ def test_update_thematic(graphql_request, thematic_and_question):
     res = schema.execute(u"""
 mutation secondMutation {
     updateThematic(
+        messageViewOverride: "survey",
         id: "%s",
         titleEntries:[
             {value:"nderstanding the dynamics and issues", localeCode:"en"},
@@ -548,6 +569,7 @@ def test_update_thematic_delete_question(graphql_request, thematic_and_question)
     res = schema.execute(u"""
 mutation secondMutation {
     updateThematic(
+        messageViewOverride: "survey",
         id: "%s",
         titleEntries:[
             {value:"Understanding the dynamics and issues", localeCode:"en"},
@@ -585,6 +607,7 @@ def test_update_thematic_add_question(graphql_request, thematic_and_question):
     res = schema.execute(u"""
 mutation secondMutation {
     updateThematic(
+        messageViewOverride: "survey",
         id: "%s",
         titleEntries:[
             {value:"Understanding the dynamics and issues", localeCode:"en"},
@@ -635,6 +658,7 @@ def test_update_thematic_delete_image(graphql_request, discussion, thematic_with
     res = schema.execute(u"""
 mutation updateThematic($thematicId: ID!, $file: String!) {
     updateThematic(
+        messageViewOverride: "survey",
         id:$thematicId,
         image:$file
     ) {
@@ -1394,6 +1418,7 @@ def test_thematics_change_order(phases, graphql_request, thematic_with_question,
     res = schema.execute(u"""
 mutation myMutation($thematicId:ID!, $order:Float!) {
     updateThematic(
+        messageViewOverride: "survey",
         id: $thematicId,
         order: $order
     ) {
@@ -1422,6 +1447,7 @@ def test_insert_thematic_between_two_thematics(phases, graphql_request, thematic
     res = schema.execute(u"""
 mutation myMutation {
     createThematic(
+        messageViewOverride: "survey",
         titleEntries: [
             {value: "AI for the common good", localeCode: "en"}
         ],

@@ -127,6 +127,7 @@ def idea_in_thread_phase(phases, graphql_request):
     res = schema.execute(u"""
 mutation myFirstMutation {
     createThematic(
+        messageViewOverride: "survey",
         discussionPhaseId: """+unicode(phases['thread'].id)+u""",
         titleEntries:[
             {value:"Comprendre les dynamiques et les enjeux", localeCode:"fr"},
@@ -152,6 +153,7 @@ def another_idea_in_thread_phase(phases, graphql_request):
     res = schema.execute(u"""
 mutation myFirstMutation {
     createThematic(
+        messageViewOverride: "survey",
         discussionPhaseId: """+unicode(phases['thread'].id)+u""",
         titleEntries:[
             {value:"Manger des pâtes", localeCode:"fr"},
@@ -202,6 +204,7 @@ def thematic_and_question(phases, graphql_request):
     res = schema.execute(u"""
 mutation myFirstMutation {
     createThematic(
+        messageViewOverride: "survey",
         titleEntries:[
             {value:"Comprendre les dynamiques et les enjeux", localeCode:"fr"},
             {value:"Understanding the dynamics and issues", localeCode:"en"}
@@ -234,6 +237,7 @@ def thematic_with_question(phases, graphql_request):
     res = schema.execute(u"""
 mutation myMutation {
     createThematic(
+        messageViewOverride: "survey",
         titleEntries:[
             {value:"Comprendre les dynamiques et les enjeux", localeCode:"fr"},
             {value:"Understanding the dynamics and issues", localeCode:"en"}
@@ -266,6 +270,7 @@ def second_thematic_with_questions(phases, graphql_request):
     res = schema.execute(u"""
 mutation myMutation {
     createThematic(
+        messageViewOverride: "survey",
         titleEntries:[
             {value:"AI revolution", localeCode:"en"}
         ],
@@ -317,6 +322,7 @@ def thematic_with_image(phases, graphql_request):
     res = schema.execute(u"""
 mutation createThematicWithImage($file: String!) {
     createThematic(
+        messageViewOverride: "survey",
         titleEntries:[
             {value:"You can't program the card without transmitting the wireless AGP card!", localeCode:"en"}
         ],
