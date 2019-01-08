@@ -30,7 +30,6 @@ import { convertEntriesToHTML, convertImmutableEntriesToJS } from '../utils/draf
 import { get } from '../utils/routeMap';
 import { displayAlert, displayCustomModal, closeModal } from '../utils/utilityManager';
 import { getDiscussionSlug, snakeToCamel } from '../utils/globalFunctions';
-import { PHASES } from '../constants';
 
 type VoteModule = {
   choices?: Array<VoteChoice>,
@@ -184,6 +183,7 @@ type Props = {
   debateId: string,
   route: Route,
   router: Router,
+  phaseIdentifier: string,
   thematicId: string
 };
 
@@ -231,7 +231,7 @@ class VoteSessionAdmin extends React.Component<Props, State> {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { section, voteSessionPage, voteModules } = nextProps;
+    const { section, thematicId, voteSessionPage, voteModules } = nextProps;
     const { firstWarningDisplayed, secondWarningDisplayed } = this.state;
     const slug = { slug: getDiscussionSlug() };
     const showModal = (message1, message2, buttonMessage, stepNumber) => {
@@ -244,7 +244,7 @@ class VoteSessionAdmin extends React.Component<Props, State> {
             <p>
               <Translate value={message2} />
             </p>
-            <Link to={`${get('voteSessionAdmin', slug)}?section=${stepNumber}`}>
+            <Link to={`${get('voteSessionAdmin', slug, { section: stepNumber, thematicId: thematicId })}`}>
               <Button key="cancel" onClick={closeModal} className="button-cancel button-dark button-modal">
                 <Translate value={buttonMessage} number={stepNumber} />
               </Button>
@@ -490,7 +490,7 @@ class VoteSessionAdmin extends React.Component<Props, State> {
   dataHaveChanged = (): boolean => this.props.modulesOrProposalsHaveChanged || this.props.voteSessionPage.get('_hasChanged');
 
   render() {
-    const { editLocale, debateId, section, voteSessionId } = this.props;
+    const { editLocale, debateId, phaseIdentifier, section, thematicId, voteSessionId } = this.props;
     const saveDisabled = !this.dataHaveChanged();
     const exportLinks = ['vote_results_csv', 'extract_csv_voters'].map(option => ({
       msgId: `vote.${snakeToCamel(option)}`,
@@ -507,7 +507,14 @@ class VoteSessionAdmin extends React.Component<Props, State> {
         {section === '2' && <ModulesSection />}
         {section === '3' && <VoteProposalsSection />}
         {section === '4' && <ExportSection exportLink={exportLinks} />}
-        {section && <Navbar currentStep={section} steps={['1', '2', '3', '4']} phaseIdentifier={PHASES.voteSession} />}
+        {section && (
+          <Navbar
+            currentStep={section}
+            steps={['1', '2', '3', '4']}
+            phaseIdentifier={phaseIdentifier}
+            queryArgs={{ thematicId: thematicId }}
+          />
+        )}
       </div>
     );
   }

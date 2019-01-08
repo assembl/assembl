@@ -679,7 +679,8 @@ const Translations = {
         configThematicsHelperDescription: "Pour modifier votre choix, retourner au paramétrage générale du débat."
       },
       voteSession: {
-        "0": "Configuration de la page",
+        configureVoteSession: "Configuration de la session de vote associée à la thématique",
+        "0": "Configuration de la page session de vote",
         "1": "Configurer le ou les modules de vote",
         "2": "Configurer les propositions de vote",
         "3": "Exporter les données"
@@ -704,9 +705,6 @@ const Translations = {
       exclusive: "Exclusif",
       tokenVoteInstructions: "Consigne du vote par jetons",
       proposalsSectionTitle: "Configuration du titre de la section Propositions",
-      voteModulesIntroText1: "Vous avez choisi le dispositif de vote.",
-      voteModulesIntroText2: "Pour modifier votre choix, modifiez la ",
-      timeline: "ligne de temps",
       notExclusive: "Non exclusif",
       voteProposals: {
         sectionTitle: "Configurer les propositions associées aux modules de vote",
@@ -1639,7 +1637,8 @@ const Translations = {
         configThematicsHelperDescription: "To change your choice, return to the general setting of the debate."
       },
       voteSession: {
-        "0": "Page configuration",
+        configureVoteSession: "Configure vote session associated to the theme",
+        "0": "Vote session page configuration",
         "1": "Configure the voting modules",
         "2": "Configure the voting proposals",
         "3": "Export data"
@@ -1660,9 +1659,6 @@ const Translations = {
       tokenVoteInstructions: "Instructions for the token vote",
       gaugeVoteInstructions: "Instructions for the gauge vote",
       proposalSectionTitle: "Proposal section title configuration",
-      voteModulesIntroText1: "You chose the vote module",
-      voteModulesIntroText2: "To modify your choice, modify the ",
-      timeline: "timeline",
       gaugeNumber: "Gauge number",
       defineGaugeNumer: "Define gauges number",
       minValue: "Minimum value",

@@ -149,6 +149,7 @@ class Administration extends React.Component {
     const {
       children,
       locale,
+      location,
       params,
       refetchTabsConditions,
       refetchSections,
@@ -194,7 +195,7 @@ class Administration extends React.Component {
             <Row>
               <Col xs={12} md={3}>
                 <div className="admin-menu-container">
-                  <Menu timeline={timeline} locale={locale} requestedPhase={phase} />
+                  <Menu timeline={timeline} locale={locale} requestedPhase={phase} thematicId={location.query.thematicId} />
                 </div>
               </Col>
               <Col xs={12} md={8}>
@@ -240,14 +241,10 @@ const isNotInLandingPageAdmin = isNotInAdminSection('landingPage');
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   graphql(VoteSessionQuery, {
-    skip: ({ params, timeline }) => !timeline || params.phase !== 'voteSession',
-    options: ({ locale, timeline, params }) => {
-      const phaseId = getPhaseId(timeline, params.phase);
-      const discussionPhaseId = phaseId ? fromGlobalId(phaseId) : null;
-      return {
-        variables: { discussionPhaseId: discussionPhaseId, lang: locale }
-      };
-    },
+    skip: ({ params }) => params.phase !== 'voteSession',
+    options: ({ locale, location }) => ({
+      variables: { ideaId: location.query.thematicId, lang: locale }
+    }),
     props: ({ data }) => {
       if (data.error || data.loading) {
         return {

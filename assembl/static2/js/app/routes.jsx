@@ -68,7 +68,14 @@ const AdminChild = (props: {
   case 'discussion':
     return <DiscussionAdmin {...props} section={props.location.query.section} />;
   case 'voteSession':
-    return <VoteSessionAdmin {...props} thematicId={props.location.query.thematicId} section={props.location.query.section} />;
+    return (
+      <VoteSessionAdmin
+        {...props}
+        phaseIdentifier={props.params.phase}
+        thematicId={props.location.query.thematicId}
+        section={props.location.query.section}
+      />
+    );
   case 'resourcesCenter':
     return <ResourcesCenterAdmin {...props} />;
   case 'landingPage':

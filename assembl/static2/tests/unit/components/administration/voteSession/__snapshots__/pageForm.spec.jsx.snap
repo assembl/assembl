@@ -6,44 +6,14 @@ exports[`Vote Session DumbPageForm component should render a form to update the 
 >
   <SectionTitle
     annotation="* Fields are required."
-    title="Page configuration"
+    title="Vote session page configuration"
   />
-  <div
-    className="intro-text"
-  >
-    <Translate
-      className="bold"
-      value="administration.voteModulesIntroText1"
-    />
-    <div
-      className="inline"
-    >
-      <Translate
-        value="administration.voteModulesIntroText2"
-      />
-      <Link
-        className="timeline-link"
-        onlyActiveOnIndex={false}
-        style={Object {}}
-        target="_blank"
-        to="/debate/\${slug}/timeline"
-      >
-        <Translate
-          value="administration.timeline"
-        />
-      </Link>
-      .
-    </div>
-  </div>
   <div
     className="admin-content"
   >
     <div
       className="form-container"
     >
-      <div
-        className="separator"
-      />
       <Helper
         additionalTextClasses=""
         classname="title"

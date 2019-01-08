@@ -193,6 +193,28 @@ export const ADMIN_MENU = {
   resourcesCenter: {
     title: 'administration.resourcesCenter.menuTitle',
     sectionId: ''
+  },
+  voteSession: {
+    title: 'administration.voteSession.configureVoteSession',
+    sectionId: '1',
+    subMenu: {
+      pageConfiguration: {
+        title: 'administration.voteSession.0',
+        sectionId: '1'
+      },
+      configureVotingModules: {
+        title: 'administration.voteSession.1',
+        sectionId: '2'
+      },
+      configureVotingProposals: {
+        title: 'administration.voteSession.2',
+        sectionId: '3'
+      },
+      exportData: {
+        title: 'administration.voteSession.3',
+        sectionId: '4'
+      }
+    }
   }
 };
 
@@ -212,27 +234,6 @@ export const PHASES_ADMIN_MENU = {
       exportData: {
         title: 'administration.survey.exportData',
         sectionId: '2'
-      }
-    }
-  },
-  voteSession: {
-    sectionId: '1',
-    subMenu: {
-      pageConfiguration: {
-        title: 'administration.voteSession.0',
-        sectionId: '1'
-      },
-      configureVotingModules: {
-        title: 'administration.voteSession.1',
-        sectionId: '2'
-      },
-      configureVotingProposals: {
-        title: 'administration.voteSession.2',
-        sectionId: '3'
-      },
-      exportData: {
-        title: 'administration.voteSession.3',
-        sectionId: '4'
       }
     }
   }
