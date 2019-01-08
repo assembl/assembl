@@ -1,4 +1,5 @@
-import React from 'react';
+// @flow
+import * as React from 'react';
 import { Translate } from 'react-redux-i18n';
 import { compose, graphql } from 'react-apollo';
 import { filter } from 'graphql-anywhere';
@@ -28,16 +29,41 @@ import { addEnumSuffixToModuleTitles } from '../components/administration/landin
 
 const SECTIONS_WITHOUT_LANGUAGEMENU = ['1', '6'];
 
-class Administration extends React.Component {
-  constructor(props) {
-    super(props);
-    this.putVoteSessionInStore = this.putVoteSessionInStore.bind(this);
-    this.putLandingPageModulesInStore = this.putLandingPageModulesInStore.bind(this);
-    this.putTextFieldsInStore = this.putTextFieldsInStore.bind(this);
-    this.state = {
-      showLanguageMenu: true
-    };
-  }
+type Props = {
+  sections: Array<Object>,
+  voteSession: Object,
+  textFields: Array<Object>,
+  landingPageModules: Array<Object>,
+  children: React.Node,
+  locale: string,
+  location: { query: { section?: string, thematicId?: string } },
+  params: { phase: string },
+  refetchTabsConditions: Function,
+  refetchSections: Function,
+  refetchVoteSession: Function,
+  refetchLandingPageModules: Function,
+  refetchTextFields: Function,
+  refetchTimeline: Function,
+  updateSections: Function,
+  updateVoteModules: Function,
+  updateVoteSessionPage: Function,
+  updateVoteProposals: Function,
+  displayLanguageMenu: Function,
+  updateLandingPageModules: Function,
+  updateTextFields: Function,
+  updatePhases: Function,
+  timeline: Timeline,
+  identifier: string
+};
+
+type State = {
+  showLanguageMenu: boolean
+};
+
+class Administration extends React.Component<Props, State> {
+  state = {
+    showLanguageMenu: true
+  };
 
   componentDidMount() {
     // we need to use the redux store for administration data to be able to use a
@@ -82,7 +108,7 @@ class Administration extends React.Component {
     }
   }
 
-  putVoteSessionInStore(voteSession) {
+  putVoteSessionInStore = (voteSession) => {
     const emptyVoteSession = {
       id: '',
       seeCurrentVotes: false,
@@ -91,9 +117,9 @@ class Administration extends React.Component {
     };
     const filteredVoteSession = filter(VoteSessionQuery, { voteSession: voteSession || emptyVoteSession });
     this.props.updateVoteSessionPage(filteredVoteSession.voteSession);
-  }
+  };
 
-  putTimelinePhasesInStore(timeline) {
+  putTimelinePhasesInStore = (timeline) => {
     if (timeline) {
       const filteredPhases = filter(TimelineQuery, { timeline: timeline });
       const phasesForStore = filteredPhases.timeline.map(phase => ({
@@ -103,40 +129,40 @@ class Administration extends React.Component {
       }));
       this.props.updatePhases(phasesForStore);
     }
-  }
+  };
 
-  putVoteModulesInStore(voteSession) {
+  putVoteModulesInStore = (voteSession) => {
     const filteredVoteSession = filter(VoteSessionQuery, { voteSession: voteSession });
     const modules =
       filteredVoteSession.voteSession && filteredVoteSession.voteSession.modules ? filteredVoteSession.voteSession.modules : [];
     this.props.updateVoteModules(modules);
-  }
+  };
 
-  putVoteProposalsInStore(voteSession) {
+  putVoteProposalsInStore = (voteSession) => {
     const proposals = voteSession ? filter(VoteSessionQuery, { voteSession: voteSession }).voteSession.proposals : [];
     const proposalsForStore = proposals.map(proposal => ({
       ...proposal,
       descriptionEntries: proposal.descriptionEntries ? convertEntriesToEditorState(proposal.descriptionEntries) : null
     }));
     this.props.updateVoteProposals(proposalsForStore);
-  }
+  };
 
-  putSectionsInStore(sections) {
+  putSectionsInStore = (sections) => {
     if (sections) {
       const filteredSections = filter(SectionsQuery, {
         sections: sections.filter(section => section.sectionType !== 'ADMINISTRATION')
       });
       this.props.updateSections(filteredSections.sections);
     }
-  }
+  };
 
-  putLandingPageModulesInStore(landingPageModules) {
+  putLandingPageModulesInStore = (landingPageModules) => {
     if (landingPageModules) {
       const filtered = filter(LandingPageModules, { landingPageModules: landingPageModules });
       const landingPageModulesWithUpdatedTitles = addEnumSuffixToModuleTitles(filtered.landingPageModules);
       this.props.updateLandingPageModules(landingPageModulesWithUpdatedTitles);
     }
-  }
+  };
 
   putTextFieldsInStore(textFields) {
     if (textFields) {
