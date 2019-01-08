@@ -224,18 +224,6 @@
   }
 }
 
-@media screen and (max-width: 620px) {
-  .text-column-2, .text-column-3 {
-    column-count: 1;
-  }
-
-  .collapsed-title {
-    &.padding-title {
-      padding-left: 20px;
-    }
-  }
-}
-
 @media screen and (max-width: 768px) {
   .collapsed-title {
     font-size: $font-size-s;
@@ -264,6 +252,22 @@
           font-size: 8px;
         }
       }
+    }
+  }
+
+  .text-column-2, .text-column-3 {
+    line-height: 25px;
+  }
+}
+
+@media screen and (max-width: 620px) {
+  .text-column-2, .text-column-3 {
+    column-count: 1;
+  }
+
+  .collapsed-title {
+    &.padding-title {
+      padding-left: 20px;
     }
   }
 }
@@ -299,5 +303,11 @@
 
   .text-column-2, .text-column-3 {
     margin: 0 5px;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .objectives-img {
+    background-position-x: -20px;
   }
 }

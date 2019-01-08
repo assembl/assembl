@@ -15,7 +15,7 @@ class Timeline extends React.Component {
       <div className="timeline">
         {currentPhase ? (
           <div>
-            <div className="timeline-date" style={index === 0 ? { left: `${barPercent}%` } : { right: `${datePosition}%` }}>
+            <div className="timeline-date" style={index === 0 ? { left: `${barPercent - 6}%` } : { right: `${datePosition}%` }}>
               <Localize value={currentDate} dateFormat="date.format" />
             </div>
             <Pointer position={barPercent} />

@@ -428,6 +428,15 @@
   }
 }
 
+@media screen and (max-width: 768px) {
+  .container-objectives-img {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+}
+
 @media screen and (min-width: 1100px) {
   .home {
     .header-section {

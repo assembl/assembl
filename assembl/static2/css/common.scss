@@ -356,6 +356,12 @@ input.placeholder, textarea.placeholder {
   text-transform: capitalize;
 }
 
+@media screen and (max-width: 768px) {
+  .max-container {
+    padding: 0 20px;
+  }
+}
+
 @media screen and (min-width: 992px) {
   .col-bottom {
     display: table-cell;
@@ -367,6 +373,10 @@ input.placeholder, textarea.placeholder {
 @media screen and (max-width: 420px) {
   .content-section {
     padding: $margin-section-xs 0;
+  }
+
+  .max-container {
+    padding: 0 10px;
   }
 }
 
@@ -383,6 +393,10 @@ strong {
 }
 
 @media screen and (min-width: 1024px) {
+  .max-container {
+    padding: 0 20px;
+  }
+
   .page-body {
     margin: 0 90px 80px 90px;
   }

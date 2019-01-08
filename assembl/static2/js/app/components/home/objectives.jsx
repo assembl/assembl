@@ -56,7 +56,7 @@ class Objectives extends React.Component {
                     </div>
                   </Col>
                   {debateData.objectives.images && (
-                    <div>
+                    <div className="container-objectives-img">
                       {debateData.objectives.images.img1Url && (
                         <Col xs={12} sm={6} md={3} className="objectives">
                           <div
