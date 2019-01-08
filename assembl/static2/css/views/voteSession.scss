@@ -113,6 +113,8 @@
     }
 
     .proposal-vote-modules {
+      display: flex;
+      justify-content: center;
       padding-top: 20px;
     }
 
@@ -325,7 +327,7 @@
     }
 
     .tokens-box {
-      padding: 19px 0 0;
+      padding: 19px 0 19px 0;
     }
   }
 }
@@ -359,7 +361,7 @@
     }
 
     .tokens-box {
-      padding: 10px 0 0;
+      padding: 10px 0 20px 0;
     }
 
     .section-title {
@@ -370,6 +372,12 @@
       padding-left: 15px;
       padding-right: 15px;
     }
+  }
+}
+
+@media screen and (min-width: $screen-xl-min) {
+  .proposal-results {
+    width: 80%;
   }
 }
 

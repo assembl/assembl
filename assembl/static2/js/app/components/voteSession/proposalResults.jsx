@@ -28,12 +28,12 @@ class ProposalResults extends React.Component<Props> {
     return (
       <div className="proposal-results theme-box">
         <Row className="proposal">
-          <Col xs={12} md={5} className="margin-s">
+          <Col xs={12} md={7} className="margin-s">
             <h3 className="proposal-title dark-title-3">{title}</h3>
             <div className="text" dangerouslySetInnerHTML={{ __html: description }} />
             <ParticipantsCount count={numParticipants} />
           </Col>
-          <Col xs={12} mdOffset={1} md={6} className="proposal-vote-modules">
+          <Col xs={12} md={5} className="proposal-vote-modules">
             {tokenVoteModule &&
               tokenCategories.length > 0 && (
                 <TokenVotesResults
