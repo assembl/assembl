@@ -1,7 +1,4 @@
 // @flow
-import { PublicationStates } from '../constants';
-import { connectedUserIsAdmin } from './permissions';
-import { getConnectedUserId } from './globalFunctions';
 
 type NodeType = {
   id: string,
@@ -123,13 +120,3 @@ export function getPath<T: TreeNodeType>(item: T, nodes: Array<T>, sortItems: (i
   }
   return path.reverse();
 }
-
-export const isPostVisible = (postData: ChildType): boolean => {
-  const connectedUserId = getConnectedUserId();
-  const userIsAdmin = connectedUserIsAdmin();
-  const userIsAuthor = connectedUserId === postData.creator.userId.toString();
-  const isPublished = postData.publicationState === PublicationStates.PUBLISHED;
-  const isDrafted = postData.publicationState === PublicationStates.DRAFT;
-  const isPending = postData.publicationState === PublicationStates.SUBMITTED_AWAITING_MODERATION;
-  return isPublished || isDrafted || (isPending && (userIsAdmin || userIsAuthor));
-};

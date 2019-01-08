@@ -153,16 +153,12 @@ class PostView extends React.PureComponent<Props, State> {
       subject,
       modifiedSubject,
       multiColumns,
-      isHarvesting,
-      connectedUserId
+      isHarvesting
     } = this.props;
     const isPending = publicationState === PublicationStates.SUBMITTED_AWAITING_MODERATION;
     const isPendingPostForAdmin = connectedUserIsAdmin() && isPending;
-    const isPendingPostForPostCreator = creator.userId.toString() === connectedUserId && isPending;
     const translate = contentLocale !== originalLocale;
-    if (isPending && !isPendingPostForPostCreator && !isPendingPostForAdmin) {
-      return null;
-    }
+
     const completeLevelArray = fullLevel ? [rowIndex, ...fullLevel.split('-').map(string => Number(string))] : [rowIndex];
 
     const answerTextareaRef = (el: ?HTMLTextAreaElement) => {
