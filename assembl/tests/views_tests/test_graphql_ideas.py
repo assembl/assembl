@@ -737,7 +737,6 @@ def test_graphql_create_bright_mirror(graphql_request, graphql_registry, test_se
                 ]
             }
         })
-
     assert res.errors is None
     idea = res.data['createThematic']['thematic']
     assert idea['announcement'] == {
@@ -1013,6 +1012,91 @@ def test_graphql_bright_mirror_should_get_all_posts_of_user_draft_first(graphql_
         }
     }
 
+def test_mutation_update_ideas_create_multicol_empty_message_classifier(test_session, graphql_request, graphql_registry, phases):
+    test_session.commit()
+
+    res = schema.execute(
+        graphql_registry['updateIdeas'],
+        context_value=graphql_request,
+        variable_values={
+            'discussionPhaseId': phases['multiColumns'].id,
+            'ideas': [{
+                'messageViewOverride': 'messageColumns',
+                'titleEntries': [
+                    {'value': u"Comprendre les dynamiques et les enjeux", 'localeCode': u"fr"},
+                    {'value': u"Understanding the dynamics and issues", 'localeCode': u"en"}
+                ],
+                'descriptionEntries': [
+                    {'value': u"Desc FR", 'localeCode': u"fr"},
+                    {'value': u"Desc EN", 'localeCode': u"en"}
+                ],
+                'messageColumns': [
+                    {'nameEntries': [{'value': u"Premier entrée pour le nom", "localeCode": u"fr"}],
+                    'titleEntries': [{'value': u"Premier titre pour le multicolonne", "localeCode": u"fr"}],
+                    'color': 'red'
+                    },
+                    {'nameEntries': [{'value': u"Deuxième entrée pour le nom", "localeCode": u"fr"}],
+                    'titleEntries': [{'value': u"Deuxième titre pour le multicolonne", "localeCode": u"fr"}],
+                    'color': 'green'
+                    }
+                ],
+                'announcement': {
+                    'titleEntries': [
+                        {'value': u"Title FR announce", 'localeCode': u"fr"},
+                        {'value': u"Title EN announce", 'localeCode': u"en"}
+                    ],
+                    'bodyEntries': [
+                        {'value': u"Body FR announce", 'localeCode': u"fr"},
+                        {'value': u"Body EN announce", 'localeCode': u"en"}
+                    ]
+                }
+            }]
+        })
+    assert res.errors is None
+    test_session.rollback()
+
+def test_mutation_update_ideas_create_multicol(test_session, graphql_request, graphql_registry, phases):
+    test_session.commit()
+
+    res = schema.execute(
+        graphql_registry['updateIdeas'],
+        context_value=graphql_request,
+        variable_values={
+            'discussionPhaseId': phases['multiColumns'].id,
+            'ideas': [{
+                'messageViewOverride': 'messageColumns',
+                'titleEntries': [
+                    {'value': u"Comprendre les dynamiques et les enjeux", 'localeCode': u"fr"},
+                    {'value': u"Understanding the dynamics and issues", 'localeCode': u"en"}
+                ],
+                'descriptionEntries': [
+                    {'value': u"Desc FR", 'localeCode': u"fr"},
+                    {'value': u"Desc EN", 'localeCode': u"en"}
+                ],
+                'messageColumns': [
+                    {'nameEntries': [{'value': u"Premier entrée pour le nom", "localeCode": u"fr"}],
+                    'titleEntries': [{'value': u"Premier titre pour le multicolonne", "localeCode": u"fr"}],
+                    'color': 'red',
+                    'messageClassifier': 'positive'},
+                    {'nameEntries': [{'value': u"Deuxième entrée pour le nom", "localeCode": u"fr"}],
+                    'titleEntries': [{'value': u"Deuxième titre pour le multicolonne", "localeCode": u"fr"}],
+                    'color': 'green',
+                    'messageClassifier': 'negative'}
+                ],
+                'announcement': {
+                    'titleEntries': [
+                        {'value': u"Title FR announce", 'localeCode': u"fr"},
+                        {'value': u"Title EN announce", 'localeCode': u"en"}
+                    ],
+                    'bodyEntries': [
+                        {'value': u"Body FR announce", 'localeCode': u"fr"},
+                        {'value': u"Body EN announce", 'localeCode': u"en"}
+                    ]
+                }
+            }]
+        })
+    assert res.errors is None
+    test_session.rollback()
 
 def test_mutation_update_ideas_create(test_session, graphql_request, graphql_registry, phases):
     test_session.commit()
@@ -1054,7 +1138,6 @@ def test_mutation_update_ideas_create(test_session, graphql_request, graphql_reg
                 }
             }]
         })
-
     assert res.errors is None
     ideas = res.data['updateIdeas']['query']['thematics']
     assert len(ideas) == 1

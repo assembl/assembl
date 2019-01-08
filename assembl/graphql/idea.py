@@ -78,6 +78,7 @@ class IdeaInterface(graphene.Interface):
     ancestors = graphene.List(graphene.ID, description=docs.Idea.ancestors)
     children = graphene.List(lambda: IdeaUnion, description=docs.Idea.children)
     questions = graphene.List(lambda: Question, description=docs.Idea.questions)
+    multiColumns = graphene.List(lambda: IdeaMessageColumn)
     announcement = graphene.Field(lambda: IdeaAnnouncement, description=docs.Idea.announcement)
 
     def resolve_title(self, args, context, info):
@@ -592,10 +593,20 @@ class QuestionInput(graphene.InputObjectType):
     title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.QuestionInput.title_entries)
 
 
+class IdeaMessageColumnInput(graphene.InputObjectType):
+    __doc__ = docs.IdeaMessageColumnInput.__doc__
+    id = graphene.ID(description=docs.IdeaMessageColumnInput.id)
+    name_entries = graphene.List(LangStringEntryInput, required=True, description=docs.IdeaMessageColumnInput.name_entries)
+    title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.IdeaMessageColumnInput.title_entries)
+    color = graphene.String(lang=graphene.String(), description=docs.IdeaMessageColumnInput.color)
+    message_classifier = graphene.String(lang=graphene.String(), description=docs.IdeaMessageColumnInput.message_classifier)
+
+
 def create_idea(parent_idea, phase, args, context):
     cls = models.Idea
     message_view_override = args.get('message_view_override')
     is_survey_thematic = message_view_override == MessageView.survey.value
+    is_multicolumns = message_view_override == MessageView.messageColumns.value
     discussion_id = context.matchdict['discussion_id']
     discussion = models.Discussion.get(discussion_id)
     user_id = context.authenticated_userid or Everyone
@@ -675,6 +686,18 @@ def create_idea(parent_idea, phase, args, context):
                     db.add(
                         models.IdeaLink(source=saobj, target=question,
                                         order=idx + 1.0))
+        if is_multicolumns:
+            multicolumn_input = args.get('message_columns')
+            if multicolumn_input is not None:
+                for input in multicolumn_input:
+                    name = langstring_from_input_entries(input['name_entries'])
+                    if 'message_classifier' not in input:
+                        message_classifier = name.first_original().value
+                    else:
+                        message_classifier = input['message_classifier']
+                    title = langstring_from_input_entries(input['title_entries'])
+                    color = input['color']
+                    db.add(models.IdeaMessageColumn(idea=saobj, message_classifier=message_classifier, name=name, title=title, color=color))
 
         update_ideas_recursively(saobj, args.get('children', []), phase, context)
 
@@ -954,6 +977,7 @@ class IdeaInput(graphene.InputObjectType):
     description_entries = graphene.List(LangStringEntryInput, description=docs.Default.langstring_entries)
     announcement = graphene.Argument(IdeaAnnouncementInput, description=docs.Idea.announcement)
     questions = graphene.List(QuestionInput, description=docs.CreateThematic.questions)
+    message_columns = graphene.List(lambda: IdeaMessageColumnInput, description=docs.IdeaInput.message_columns)
     children = graphene.List(lambda: IdeaInput, description=docs.UpdateIdeas.ideas)
     image = graphene.String(description=docs.Default.image)
     order = graphene.Float(description=docs.Default.float_entry)

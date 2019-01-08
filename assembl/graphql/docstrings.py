@@ -413,6 +413,15 @@ class QuestionInput:
     title_entries = Default.langstring_entries % ("Title of the question in various languages.")
 
 
+class IdeaMessageColumnInput:
+    id = """Id of the IdeaMessageColumnInput."""
+    name_entries = Default.langstring_entries % ("Name of the Column.")
+    title_entries = Default.langstring_entries % ("Title of the Column.")
+    color = Default.string_entry % ("The color of the column.")
+    message_classifier = Default.string_entry % ("Message_classifier of the update ideas")
+    column_synthesis = IdeaMessageColumn.column_synthesis
+
+
 class CreateThematic:
     __doc__ = """A mutation to create a new thematic."""
     title_entries = IdeaInterface.title_entries
@@ -444,6 +453,7 @@ class IdeaInput:
     questions = Idea.questions
     image = Default.document % ("An Image to be shown in the Thematic. ")
     order = Default.float_entry % (" Order of the thematic.")
+    message_columns = """A list of IdeaMessageColumnInput to be associated to the idea."""
 
 
 class UpdateIdeas:
