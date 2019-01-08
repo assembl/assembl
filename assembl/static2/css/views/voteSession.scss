@@ -101,11 +101,12 @@
   }
 
   .proposal.row {
-    margin: 90px 10px 10px;
+    margin: 90px 10px 70px;
 
     .proposal-title {
       font-family: $font-family;
       margin-top: 0;
+      font-size: 22px;
     }
 
     .text {
@@ -201,6 +202,7 @@
 
   .participants-count__text {
     color: $first-color;
+    padding: 0 10px 20px 10px;
   }
 
   .proposal-results {
