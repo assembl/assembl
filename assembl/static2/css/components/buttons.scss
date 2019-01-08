@@ -241,6 +241,12 @@
   }
 }
 
+@media screen and (max-width: $screen-xxs-max) {
+  .button-submit {
+    white-space: pre-wrap;
+  }
+}
+
 // The partial used below is only used as an example for instruction purpose
 @import '../../js/app/integration/101/components/button101/button101';
 @import '../../js/app/integration/101/components/checkbox101/checkbox101';
