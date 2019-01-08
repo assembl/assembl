@@ -244,13 +244,6 @@ exports[`VoteSession component should match VoteSession snapshot 1`] = `
 </div>
 `;
 
-exports[`VoteSession component should match VoteSession snapshot when vote session is not configured 1`] = `
-<MessagePage
-  text="An administrator must configure the vote session"
-  title="Vote session is not configured"
-/>
-`;
-
 exports[`VoteSession component should match VoteSession snapshot with empty modules and proposals 1`] = `
 <div
   className="votesession-page"

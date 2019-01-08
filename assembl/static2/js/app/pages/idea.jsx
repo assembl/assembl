@@ -25,6 +25,7 @@ import type { AnnouncementContent } from '../components/debate/common/announceme
 import { toggleHarvesting as toggleHarvestingAction } from '../actions/contextActions';
 import manageErrorAndLoading from '../components/common/manageErrorAndLoading';
 import Survey from './survey';
+import VoteSession from './voteSession';
 // Utils imports
 import { displayAlert } from '../utils/utilityManager';
 
@@ -365,6 +366,9 @@ const IdeaWithPosts = compose(
 const SwitchView = (props) => {
   if (props.messageViewOverride === MESSAGE_VIEW.survey) {
     return <Survey {...props} />;
+  }
+  if (props.messageViewOverride === MESSAGE_VIEW.voteSession) {
+    return <VoteSession {...props} />;
   }
   return <IdeaWithPosts {...props} additionalFields={props.messageViewOverride === MESSAGE_VIEW.brightMirror} />;
 };

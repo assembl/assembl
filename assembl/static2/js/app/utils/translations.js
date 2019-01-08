@@ -505,10 +505,6 @@ const Translations = {
         estimate: "Estimation moyenne",
         isCompleted: "La phase de vote est désormais terminée. Nous vous remercions d'avoir participé !",
         voteResultsPlusTitle: "Résultats des votes : %{title}",
-        noVoteSession: {
-          title: "La session de vote n'est pas configurée",
-          text: "Un administrateur doit configurer la session de vote"
-        },
         postSuccess:
           "Merci pour votre participation ! Votre vote a bien été pris en compte. Vous pouvez le modifier à tout moment jusqu’à la fermeture de la session de vote.",
         remainingTokens: "%{count} jetons disponibles",
@@ -1464,10 +1460,6 @@ const Translations = {
         estimate: "Average estimate",
         isCompleted: "This vote phase is closed. Thank you for your participation!",
         voteResultsPlusTitle: "Vote results: %{title}",
-        noVoteSession: {
-          title: "Vote session is not configured",
-          text: "An administrator must configure the vote session"
-        },
         postSuccess:
           "Thank you for your participation! Your vote has been set. You can modify this vote during the entire duration of the vote session.",
         remainingTokens: "%{count} tokens remaining",

@@ -12,7 +12,6 @@ import Home from './pages/home';
 import Syntheses from './pages/syntheses';
 import Synthesis from './pages/synthesis';
 import DebateThread from './pages/debateThread';
-import VoteSession from './pages/voteSession';
 import Idea from './pages/idea';
 import Community from './pages/community';
 import Question from './pages/question';
@@ -45,8 +44,6 @@ import IntBrightMirrorFiction from './integration/brightMirror/pages/brightMirro
 
 const DebateHome = (props) => {
   switch (props.params.phase) {
-  case 'voteSession':
-    return <VoteSession {...props} />;
   default:
     return <DebateThread {...props} />;
   }

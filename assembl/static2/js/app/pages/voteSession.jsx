@@ -25,7 +25,6 @@ import { getIsPhaseCompletedById } from '../utils/timeline';
 import { promptForLoginOr, displayAlert, displayModal } from '../utils/utilityManager';
 import { transformLinksInHtml } from '../utils/linkify';
 import manageErrorAndLoading from '../components/common/manageErrorAndLoading';
-import MessagePage from '../components/common/messagePage';
 
 export type TokenCategory = {|
   id: string,
@@ -349,16 +348,6 @@ class DumbVoteSession extends React.Component<Props, State> {
     } = this.props;
 
     const { availableTokensSticky, windowWidth, hasChanged } = this.state;
-
-    if (!title || title.length === 0) {
-      return (
-        <MessagePage
-          title={I18n.t('debate.voteSession.noVoteSession.title')}
-          text={I18n.t('debate.voteSession.noVoteSession.text')}
-        />
-      );
-    }
-
     const tokenVoteModule = findTokenVoteModule(modules);
     const remainingTokensByCategory = this.getRemainingTokensByCategory(tokenVoteModule);
     const subTitleToShow = !isPhaseCompleted ? subTitle : I18n.t('debate.voteSession.isCompleted');
@@ -448,12 +437,10 @@ export { DumbVoteSession };
 export default compose(
   connect(mapStateToProps),
   graphql(VoteSessionQuery, {
-    skip: ({ discussionPhaseId }) => !discussionPhaseId,
-    options: ({ lang, discussionPhaseId }) => ({
-      variables: { discussionPhaseId: discussionPhaseId, lang: lang }
+    options: ({ lang, id }) => ({
+      variables: { ideaId: id, lang: lang }
     }),
     props: ({ data, ownProps }) => {
-      const defaultHeaderImage = ownProps.debate.debateData.headerBackgroundUrl || '';
       if (data.error || data.loading) {
         return {
           error: data.error,
@@ -478,12 +465,7 @@ export default compose(
       }
 
       const {
-        title,
-        subTitle,
         seeCurrentVotes,
-        headerImage,
-        instructionsSectionTitle,
-        instructionsSectionContent,
         propositionsSectionTitle,
         modules, // we still need to get templates here for AvailableTokens component
         proposals
@@ -492,12 +474,12 @@ export default compose(
       return {
         error: data.error,
         loading: data.loading,
-        headerImageUrl: headerImage ? headerImage.externalUrl : defaultHeaderImage,
-        title: title,
+        headerImageUrl: ownProps.headerImgUrl,
+        title: ownProps.title,
         seeCurrentVotes: seeCurrentVotes,
-        subTitle: subTitle,
-        instructionsSectionTitle: instructionsSectionTitle,
-        instructionsSectionContent: instructionsSectionContent,
+        subTitle: ownProps.description,
+        instructionsSectionTitle: ownProps.announcement.title,
+        instructionsSectionContent: ownProps.announcement.body,
         propositionsSectionTitle: propositionsSectionTitle,
         modules: modules,
         proposals: proposals,
