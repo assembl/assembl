@@ -7,7 +7,8 @@ from alembic import context
 from pyramid.paster import bootstrap
 
 from assembl.lib.sqla import (
-    get_session_maker, configure_engine, get_metadata)
+    get_session_maker, configure_engine, get_metadata,
+    aws_connection_url)
 from assembl.lib.zmqlib import configure_zmq
 from assembl.lib.config import set_config
 from assembl.indexing.changes import configure_indexing
@@ -20,7 +21,7 @@ config = context.config
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
 fileConfig(config.config_file_name)
-_config = config.file_config._sections['app:assembl']
+_config = config.get_section('app:assembl')
 _config['in_migration'] = True
 set_config(_config)
 pyramid_env = bootstrap(config.config_file_name)
@@ -61,7 +62,8 @@ def run_migrations_offline():
     script output.
 
     """
-    url = config.get_main_option("sqlalchemy.url")
+    url = aws_connection_url(config.get_section('app:assembl')
+        ) or config.get_main_option("sqlalchemy.url")
     context.configure(url=url)
 
     with context.begin_transaction():
