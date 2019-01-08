@@ -206,7 +206,7 @@
   .proposal-results {
     .participants-count {
       border: 1px solid $grey5;
-      margin: 30px 0;
+      margin: 20px 0;
       min-height: 120px;
     }
 
@@ -319,7 +319,7 @@
 @media screen and (min-width: 768px) {
   .votesession-page {
     .proposal.row {
-      padding: 15px 5px 0 0;
+      padding: 15px 5px 15px 0;
     }
 
     .participants-count {
@@ -354,7 +354,7 @@
     }
 
     .proposal.row {
-      padding: 15px 0 0;
+      padding: 15px 0 15px;
     }
 
     .participants-count {
