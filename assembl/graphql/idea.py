@@ -132,7 +132,7 @@ class IdeaInterface(graphene.Interface):
                  ).join(_target_it, _ilt.c.target_id == _target_it.c.id)
         num = select([func.count(_ilt.c.id)]).select_from(j).where(
             (_ilt.c.tombstone_date == None) & (_it.c.tombstone_date == None) & (  # noqa: E711
-                _it.c.id == self.id) & (~_target_it.c.sqla_type.in_(('question', 'vote_proposal')))
+                _it.c.id == self.id) & (_target_it.c.tombstone_date == None) & (~_target_it.c.sqla_type.in_(('question', 'vote_proposal')))
 
         ).correlate_except(_ilt)
         return self.db.execute(num).fetchone()[0]
