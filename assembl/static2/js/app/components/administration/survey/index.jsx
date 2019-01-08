@@ -67,6 +67,7 @@ const DumbSurveyAdminForm = ({
                 {section === '1' && <Step1 editLocale={editLocale} locale={locale} discussionPhaseId={discussionPhaseId} />}
                 {section === 'configThematics' && (
                   <ConfigureThematicForm
+                    pristine={pristine}
                     phaseIdentifier={phaseIdentifier}
                     thematicId={thematicId}
                     editLocale={editLocale}

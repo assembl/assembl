@@ -18,6 +18,7 @@ import { MESSAGE_VIEW, modulesTranslationKeys } from '../../../constants';
 import SurveyFields from './surveyFields';
 
 type Props = {
+  pristine: boolean,
   editLocale: string,
   phaseIdentifier: string,
   thematicId: string,
@@ -54,16 +55,25 @@ class ConfigureThematicForm extends React.PureComponent<Props> {
     return fieldData;
   };
 
-  addVoteModuleLink = () => {
+  addVoteModuleLink = (theme) => {
+    if (!(theme && theme.messageViewOverride && theme.messageViewOverride.value === MESSAGE_VIEW.voteSession)) {
+      return null;
+    }
     const { thematicId } = this.props;
     const slug = getDiscussionSlug();
     const voteModuleLink = (
-      <Link to={get('voteSessionAdmin', { slug: slug, thematicId: thematicId })} className="button-link button-dark">
-        <Translate value="administration.configureVoteSessionButton" />
-      </Link>
+      <p>
+        <Link to={get('voteSessionAdmin', { slug: slug, thematicId: thematicId })} className="button-link button-dark">
+          <Translate value="administration.configureVoteSessionButton" />
+        </Link>
+      </p>
     );
-    if (thematicId.startsWith('-')) {
-      return <Translate value="administration.saveBeforeConfigureVoteSession" />;
+    if (thematicId.startsWith('-') || !this.props.pristine) {
+      return (
+        <p>
+          <Translate value="administration.saveBeforeConfigureVoteSession" />
+        </p>
+      );
     }
     return voteModuleLink;
   };
@@ -118,7 +128,7 @@ class ConfigureThematicForm extends React.PureComponent<Props> {
           // label={I18n.t('administration.tableOfThematics.moduleTypeLabel')}
           options={modulesTranslationKeys.map(key => ({ value: key, label: I18n.t(`administration.modules.${key}`) }))}
         />
-        {this.addVoteModuleLink()}
+        {this.addVoteModuleLink(theme)}
         <Helper
           label={I18n.t('administration.instructions')}
           helperUrl="/static2/img/helpers/helper_BM_1.png"
