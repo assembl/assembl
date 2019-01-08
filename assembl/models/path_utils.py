@@ -262,8 +262,8 @@ class PostPathLocalCollection(object):
             state_condition = post.publication_state.in_(states)
             if include_moderating and include_moderating is not True:
                 state_condition = state_condition | (
-                    post.publication_state == PublicationStates.SUBMITTED_AWAITING_MODERATION &
-                    Post.creator_id == include_moderating)
+                    (post.publication_state == PublicationStates.SUBMITTED_AWAITING_MODERATION) &
+                    (post.creator_id == include_moderating))
             query = query.filter(state_condition)
             return post, query
         if not self.paths:
@@ -490,8 +490,8 @@ class PostPathCombiner(PostPathGlobalCollection, IdeaVisitor):
         state_condition = post.publication_state.in_(states)
         if include_moderating and include_moderating is not True:
             state_condition = state_condition | (
-                post.publication_state == PublicationStates.SUBMITTED_AWAITING_MODERATION &
-                Post.creator_id == include_moderating)
+                (post.publication_state == PublicationStates.SUBMITTED_AWAITING_MODERATION) &
+                (post.creator_id == include_moderating))
         q = q.filter(state_condition)
 
         if user_id:
