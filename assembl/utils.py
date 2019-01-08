@@ -68,7 +68,7 @@ def get_ideas(phase, options=None):
     query = query.outerjoin(
             models.Idea.source_links
         ).filter(
-            model.sqla_type != 'question',
+            ~model.sqla_type.in_(('question', 'vote_proposal')),
             model.hidden == False,  # noqa: E712
             model.tombstone_date == None  # noqa: E711
         ).options(

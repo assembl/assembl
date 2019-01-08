@@ -83,3 +83,16 @@ class VoteSession(
 
 
 LangString.setup_ownership_load_event(VoteSession, langstrings_names)
+
+
+class VoteProposal(Idea):
+    """
+    A vote proposal.
+    """
+    __mapper_args__ = {
+        'polymorphic_identity': 'vote_proposal',
+    }
+
+    @classmethod
+    def graphene_type(cls):
+        return 'Idea'

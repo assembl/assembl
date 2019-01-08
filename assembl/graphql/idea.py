@@ -132,7 +132,7 @@ class IdeaInterface(graphene.Interface):
                  ).join(_target_it, _ilt.c.target_id == _target_it.c.id)
         num = select([func.count(_ilt.c.id)]).select_from(j).where(
             (_ilt.c.tombstone_date == None) & (_it.c.tombstone_date == None) & (  # noqa: E711
-                _it.c.id == self.id) & (_target_it.c.sqla_type != 'question')
+                _it.c.id == self.id) & (~_target_it.c.sqla_type.in_(('question', 'vote_proposal')))
 
         ).correlate_except(_ilt)
         return self.db.execute(num).fetchone()[0]
@@ -167,7 +167,7 @@ class IdeaInterface(graphene.Interface):
 
     def resolve_children(self, args, context, info):
         # filter on child.hidden to not include the root thematic in the children of root_idea  # noqa: E501
-        return [child for child in self.get_children() if not child.hidden and not isinstance(child, models.Question)]
+        return [child for child in self.get_children() if not child.hidden and not isinstance(child, (models.Question, models.VoteProposal))]
 
     def resolve_questions(self, args, context, info):
         return [child for child in self.get_children() if isinstance(child, models.Question)]
@@ -328,7 +328,7 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
                 'Received incompatible instance "{}".'
             ).format(root))
         # return isinstance(root, cls._meta.model)  # this was the original code  # noqa: E501
-        return type(root) == cls._meta.model or type(root) == models.RootIdea or type(root) == models.Thematic
+        return type(root) == cls._meta.model or type(root) == models.VoteProposal or type(root) == models.RootIdea or type(root) == models.Thematic
 
     def resolve_synthesis_title(self, args, context, info):
         return resolve_langstring(self.synthesis_title, args.get('lang'))
@@ -833,7 +833,7 @@ def delete_idea(args, context):
 
 def update_ideas_recursively(parent_idea, children, phase, context):
     existing_ideas = {
-        idea.id: idea for idea in parent_idea.get_children() if not isinstance(idea, models.Question)}
+        idea.id: idea for idea in parent_idea.get_children() if not isinstance(idea, (models.Question, models.VoteProposal))}
     updated_ideas = set()
     for idea in children:
         if idea.get('id', None):

@@ -44,7 +44,7 @@ class VoteSession(SecureObjectType, SQLAlchemyObjectType):
     see_current_votes = graphene.Boolean(required=True, description=docs.VoteSession.see_current_votes)
 
     def resolve_proposals(self, args, context, info):
-        return self.idea.get_children()
+        return [child for child in self.idea.get_children() if isinstance(child, models.VoteProposal)]
 
     def resolve_vote_specifications(self, args, context, info):
         # return only vote specifications not associated to a proposal
@@ -366,7 +366,7 @@ class CreateTokenVoteSpecification(graphene.Mutation):
             proposal_id = args.get('proposal_id')
             if proposal_id:
                 proposal_id = int(Node.from_global_id(proposal_id)[1])
-                proposal = models.Idea.get(proposal_id)
+                proposal = models.VoteProposal.get(proposal_id)
                 vote_spec.criterion_idea = proposal
 
             vote_spec_template_id = args.get('vote_spec_template_id')
@@ -533,7 +533,7 @@ class CreateGaugeVoteSpecification(graphene.Mutation):
             proposal_id = args.get('proposal_id')
             if proposal_id:
                 proposal_id = int(Node.from_global_id(proposal_id)[1])
-                proposal = models.Idea.get(proposal_id)
+                proposal = models.VoteProposal.get(proposal_id)
                 vote_spec.criterion_idea = proposal
 
             vote_spec_template_id = args.get('vote_spec_template_id')
@@ -662,7 +662,7 @@ class CreateNumberGaugeVoteSpecification(graphene.Mutation):
             proposal_id = args.get('proposal_id')
             if proposal_id:
                 proposal_id = int(Node.from_global_id(proposal_id)[1])
-                proposal = models.Idea.get(proposal_id)
+                proposal = models.VoteProposal.get(proposal_id)
                 vote_spec.criterion_idea = proposal
 
             vote_spec_template_id = args.get('vote_spec_template_id')
@@ -732,7 +732,7 @@ class CreateProposal(graphene.Mutation):
     @staticmethod
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
-        cls = models.Idea
+        cls = models.VoteProposal
         require_cls_permission(CrudPermissions.CREATE, cls, context)
         vote_session_id = args.get('vote_session_id')
         vote_session_id = int(Node.from_global_id(vote_session_id)[1])
@@ -779,7 +779,7 @@ class UpdateProposal(graphene.Mutation):
     @staticmethod
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
-        cls = models.Idea
+        cls = models.VoteProposal
         proposal_id = args.get('id')
         proposal_id = int(Node.from_global_id(proposal_id)[1])
         title_entries = args.get('title_entries')
@@ -816,7 +816,7 @@ class DeleteProposal(graphene.Mutation):
     def mutate(root, args, context, info):
         proposal_id = args.get('id')
         proposal_id = int(Node.from_global_id(proposal_id)[1])
-        proposal = models.Idea.get(proposal_id)
+        proposal = models.VoteProposal.get(proposal_id)
         require_instance_permission(CrudPermissions.DELETE, proposal, context)
         proposal.is_tombstone = True
         proposal.db.flush()
