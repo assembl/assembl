@@ -569,7 +569,7 @@ def test_get_thematic_with_question_with_pending_posts(graphql_request, graphql_
     result = res.data['thematic']
     assert result['title'] == u'Comprendre les dynamiques et les enjeux'
     assert result['id'] == thematic_id
-    assert result['numPosts'] == 14
+    assert result['numPosts'] == 15
     assert result['numContributors'] == 1
     assert result['totalSentiments'] == 0
     assert result['video'] is None
@@ -1442,7 +1442,7 @@ query QuestionPosts($id: ID!, $first: Int, $last: Int, $after: String, $before: 
 }
 """
 
-def test_get_proposals(graphql_request, thematic_and_question, proposals):
+def test_get_proposals(graphql_request, thematic_and_question, proposals15published):
     thematic_id, first_question_id = thematic_and_question
     res = schema.execute(
         SIMPLIFIED_QUESTION_POSTS_QUERY,
@@ -1471,7 +1471,7 @@ def test_get_proposals(graphql_request, thematic_and_question, proposals):
     }
 
 
-def test_get_proposals_after(graphql_request, thematic_and_question, proposals):
+def test_get_proposals_after(graphql_request, thematic_and_question, proposals15published):
     thematic_id, first_question_id = thematic_and_question
     res = schema.execute(
         SIMPLIFIED_QUESTION_POSTS_QUERY,
@@ -1495,7 +1495,7 @@ def test_get_proposals_after(graphql_request, thematic_and_question, proposals):
     }
 
 
-def test_get_proposals_before(graphql_request, thematic_and_question, proposals):
+def test_get_proposals_before(graphql_request, thematic_and_question, proposals15published):
     thematic_id, first_question_id = thematic_and_question
     res = schema.execute(
         SIMPLIFIED_QUESTION_POSTS_QUERY,
@@ -1520,12 +1520,12 @@ def test_get_proposals_before(graphql_request, thematic_and_question, proposals)
     }
 
 
-def test_get_proposals_from_node(graphql_request, thematic_and_question, proposals):
+def test_get_proposals_from_node(graphql_request, thematic_and_question, proposals15published):
     thematic_id, first_question_id = thematic_and_question
     res = schema.execute(
         SIMPLIFIED_QUESTION_POSTS_QUERY,
         context_value=graphql_request,
-        variable_values={"id": first_question_id, "first": 10, "after": "", "fromNode": proposals[4]})
+        variable_values={"id": first_question_id, "first": 10, "after": "", "fromNode": proposals15published[4]})
     assert json.loads(json.dumps(res.data)) == {
         u'node': {
             u'title': u"Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre soci\xe9t\xe9 ?",
@@ -1544,7 +1544,7 @@ def test_get_proposals_from_node(graphql_request, thematic_and_question, proposa
     }
 
 
-def test_get_proposals_random(graphql_request, thematic_and_question, proposals):
+def test_get_proposals_random(graphql_request, thematic_and_question, proposals15published):
     # verify that the posts are in a random order even if we get them all
     thematic_id, first_question_id = thematic_and_question
     res = schema.execute(u"""query {

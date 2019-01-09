@@ -464,6 +464,21 @@ mutation myFirstMutation {
 
 
 @pytest.fixture(scope="function")
+def proposals15published(graphql_request, admin_user, thematic_and_question):
+    from assembl.models import PublicationStates
+    graphql_request.authenticated_userid = admin_user.id
+    thematic_id, first_question_id = thematic_and_question
+    proposals = []
+    for idx in range(15):
+        publication_state = PublicationStates.PUBLISHED.value
+        proposal_id = create_proposal_x(
+            graphql_request, first_question_id, idx, publication_state)
+        proposals.append(proposal_id)
+
+    return proposals
+
+
+@pytest.fixture(scope="function")
 def proposals(graphql_request, admin_user, thematic_and_question):
     from assembl.models import PublicationStates
     graphql_request.authenticated_userid = admin_user.id
