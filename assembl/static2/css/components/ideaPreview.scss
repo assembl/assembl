@@ -159,14 +159,14 @@
   }
 }
 
-@media screen and (max-width: 320px) {
+@media screen and (max-width: $screen-xxs-max) {
   .box-hyphen {
     width: 30px;
   }
 
   .idea-preview {
     .access-discussion {
-      width: calc(100% - 30px);
+      width: calc(100% - 25px);
     }
 
     .light-title-3 {
@@ -175,6 +175,24 @@
 
     .stats {
       bottom: 40px;
+    }
+
+    .see-discussion {
+      a {
+        align-items: center;
+        display: flex;
+        height: 70px;
+        justify-content: center;
+        width: 100%;
+      }
+    }
+
+    .see-sub-ideas {
+      align-items: center;
+      display: flex;
+      height: 70px;
+      justify-content: center;
+      width: 100%;
     }
   }
 
