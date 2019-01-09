@@ -49,6 +49,7 @@ $fiction-toolbar-icon-size: 17px;
 
   .comments-content {
     background-color: $white;
+    margin-left: 30px;
     padding-left: 15px;
     padding-right: 15px;
     padding-top: 30px;
@@ -88,7 +89,7 @@ $fiction-toolbar-icon-size: 17px;
   }
 
   .bright-mirror-comments {
-    padding: 40px 0;
+    padding: 40px 0 40px 70px;
 
     .comments-content {
       padding-left: 70px;
