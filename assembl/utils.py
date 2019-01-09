@@ -89,7 +89,7 @@ def get_ideas(phase, options=None):
 
 
 def get_posts_for_phases(
-        discussion, identifiers, include_deleted=False, include_moderating=None):
+        discussion, identifiers, include_deleted=False, include_moderating=False):
     """Return related posts for the given phases `identifiers` on `discussion`.
     """
     # Retrieve the phases with posts
