@@ -122,12 +122,7 @@ export class PostActions extends React.Component<Props> {
             overlay={getSentimentStats(totalSentimentsCount, sentimentCounts, mySentiment)}
             placement={tooltipPlacement}
           >
-            <div
-              className={classnames('sentiments-count', {
-                'margin-m': !isMultiColumns,
-                'multiColumns-sentiments-count': isMultiColumns
-              })}
-            >
+            <div className="sentiments-count">
               <div>
                 {sentimentDefinitions.reduce((result, sentiment) => {
                   const sentimentCount = get(sentimentCounts, sentiment.camelType, 0);
@@ -153,7 +148,7 @@ export class PostActions extends React.Component<Props> {
         ) : (
           <div className="empty-sentiments-count" />
         )}
-        <div className={classnames({ 'post-actions-separator': showLastSeparator, 'separator-multiColumns': isMultiColumns })} />
+        <div className={classnames({ 'post-actions-separator': showLastSeparator })} />
         {isPendingPostForModerator ? <ValidatePostButton postId={postId} linkClassName="post-action" /> : null}
         {userCanDeleteThisMessage ? <DeletePostButton postId={postId} linkClassName="post-action" /> : null}
         {editable && userCanEditThisMessage ? <EditPostButton handleClick={handleEditClick} linkClassName="post-action" /> : null}
