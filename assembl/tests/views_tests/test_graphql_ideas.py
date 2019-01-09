@@ -748,7 +748,7 @@ def test_graphql_get_question_pending_posts(graphql_request, graphql_registry, t
     assert res.errors is None
     assert 'question' in res.data and 'posts' in res.data['question'] and 'edges' in res.data['question']['posts']
     pending_posts = res.data['question']['posts']['edges']
-    assert len(pending_posts) == 4
+    assert len(pending_posts) == 5
     assert all(post['node']['id'] in proposals for post in pending_posts)
 
 
