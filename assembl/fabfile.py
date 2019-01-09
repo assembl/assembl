@@ -539,8 +539,8 @@ def supervisor_process_start(process_name):
     Starts a supervisord process, and waits till it started to return
     """
     print(cyan('Asking supervisor to start %s' % process_name))
-    supervisor_pid_regex = re.compile('^\d+')
-    status_regex = re.compile('^%s\s*(\S*)' % process_name)
+    supervisor_pid_regex = re.compile(r'^\d+')
+    status_regex = re.compile(r'^%s\s*(\S*)' % process_name)
     with hide('running', 'stdout'):
         supervisord_cmd_result = venvcmd("supervisorctl pid")
     match = supervisor_pid_regex.match(supervisord_cmd_result)
@@ -582,8 +582,8 @@ def supervisor_process_stop(process_name):
     Assuming the supervisord process is running, stop one of its processes
     """
     print(cyan('Asking supervisor to stop %s' % process_name))
-    supervisor_pid_regex = re.compile('^\d+')
-    status_regex = re.compile('^%s\s*(\S*)' % process_name)
+    supervisor_pid_regex = re.compile(r'^\d+')
+    status_regex = re.compile(r'^%s\s*(\S*)' % process_name)
     with settings(warn_only=True), hide('running', 'stdout'):
         supervisord_cmd_result = venvcmd("supervisorctl pid")
     match = supervisor_pid_regex.match(supervisord_cmd_result)
@@ -1391,7 +1391,7 @@ def update_node(force_reinstall=False):
     """
     Install node and npm to a known-good version
     """
-    node_version_cmd_regex = re.compile('^v10\.13\.0')
+    node_version_cmd_regex = re.compile(r'^v10\.13\.0')
     with settings(warn_only=True), hide('running', 'stdout'):
         node_version_cmd_result = venvcmd("node --version")
     match = node_version_cmd_regex.match(node_version_cmd_result)

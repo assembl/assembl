@@ -350,7 +350,7 @@ class Idea(HistoryMixin, DiscussionBoundBase):
             if isinstance(target_id, (int, long)):
                 target_id = literal_column(str(target_id), Integer)
             elif isinstance(target_id, list):
-                raise NotImplemented()
+                raise NotImplementedError()
                 # postgres: select * from unnest(ARRAY[1,6,7]) as id
             else:
                 select_exp = select_exp.union(
@@ -849,7 +849,7 @@ class Idea(HistoryMixin, DiscussionBoundBase):
 
     @classmethod
     def invalidate_ideas(cls, discussion_id, post_id):
-        raise NotImplemented()
+        raise NotImplementedError()
 
     @classmethod
     def get_idea_ids_showing_post(cls, post_id):

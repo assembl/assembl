@@ -104,7 +104,7 @@ class AbstractMailbox(PostSource):
         # To be considered matching, each line must match successive lines, in order
         quote_announcement_lines_regexes = {
             'generic_original_message': {
-                'announceLinesRegexes': [re.compile("/-+\s*Original Message\s*-+/")],
+                'announceLinesRegexes': [re.compile(r"/-+\s*Original Message\s*-+/")],
                 'quotePrefixRegex': re.compile(r"^>\s|^>$")
                 },
             'gmail_fr_circa_2012': {

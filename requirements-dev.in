@@ -1,5 +1,5 @@
 -e git+https://github.com/assembl/sqltap.git@assembl#egg=sqltap
-flake8==3.5.0   # also in tests
+flake8==3.6.0   # also in tests
 PdbSublimeTextSupport==0.2
 pre-commit==1.8.2
 pyramid-debugtoolbar-ajax==0.0.4
