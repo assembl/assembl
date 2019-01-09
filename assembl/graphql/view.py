@@ -5,12 +5,16 @@ from pyramid.request import Response
 from graphql_wsgi import graphql_wsgi as graphql_wsgi_wrapper
 from graphql_wsgi.main import get_graphql_params as original_get_graphql_params
 import graphql_wsgi.main
+from graphql.language.source import Source
+from graphql.language.parser import parse
+from graphql.language.ast import OperationDefinition
 
 from assembl.auth import CrudPermissions
 from assembl.auth.util import get_permissions
 from assembl.auth.util import find_discussion_from_slug
 from assembl.graphql.schema import Schema
 from assembl.lib.logging import getLogger
+from assembl.lib.sqla import get_session_maker
 
 
 class LoggingMiddleware(object):
@@ -44,7 +48,16 @@ def get_graphql_params(request, data):
         'graphql', op=operation,
         opname=operation_name, vars=modified_variables)
 
-    return query, variables, operation_name
+    source = Source(query, 'GraphQL request')
+    parsed = parse(source)
+    is_query = all([
+        defn.operation == 'query'
+        for defn in parsed.definitions
+        if isinstance(defn, OperationDefinition)])
+    if is_query:
+        session = get_session_maker()()
+        session.set_readonly()
+    return parsed, variables, operation_name
 
 
 # monkey patch get_graphql_params for logging
