@@ -1,6 +1,7 @@
-# from flask.ext.sqlalchemy import SQLAlchemy, get_state
+from contextlib import contextmanager
+
 import sqlalchemy.orm as orm
-from functools import partial
+
 from .logging import getLogger
 
 log = getLogger()
@@ -12,23 +13,31 @@ class ReadWriteSession(orm.Session):
     """
 
     def __init__(self, bind=None, autoflush=False,
-                 read_bind=None, reading=False, **options):
+                 read_bind=None, readonly=False, **options):
         self.read_bind = read_bind
-        self.reading = reading
+        self.readonly = readonly
         orm.Session.__init__(
             self, bind=bind, autoflush=autoflush, **options)
 
     def get_bind(self, mapper=None, clause=None):
-        use_read = self.read_bind and not self._flushing and self.reading
+        use_read = self.read_bind and not self._flushing and self.readonly
         log.debug("using %s session%s" % (
             "read" if use_read else "write",
             " while flushing" if self._flushing else ""))
         return self.read_bind if use_read else self.bind
 
-    def set_reading(self, reading=True):
-        if reading and self._flushing:
-            log.error("cannot set reading: already flushing")
+    def set_readonly(self, readonly=True):
+        if readonly and self._flushing:
+            log.error("cannot set readonly: already flushing")
         else:
-            self.reading = reading
+            self.readonly = readonly
 
-# TODO: reentrant context manager.
+
+@contextmanager
+def readonly(session):
+    was_readonly = session.readonly
+    try:
+        session.set_readonly(True)
+        yield session
+    finally:
+        session.set_readonly(was_readonly)
