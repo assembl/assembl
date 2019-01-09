@@ -10,7 +10,7 @@ class QuestionModeratePosts extends React.Component<Props> {
     if (!connectedUserIsModerator()) {
       const { params: { slug } } = this.props;
       goTo(
-        get('unauthorizedModeration', {
+        get('unauthorizedAdministration', {
           slug: slug
         })
       );

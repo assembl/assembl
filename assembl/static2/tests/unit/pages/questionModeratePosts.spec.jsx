@@ -47,7 +47,7 @@ describe('QuestionModeratePosts page', () => {
     it('should redirect to unauthorized if connected user is not moderator', () => {
       connectedUserIsModerator.mockImplementation(() => false);
       shallow(<QuestionModeratePosts {...props} />);
-      expect(get).toHaveBeenCalledWith('unauthorizedModeration', { slug: 'FooSlug' });
+      expect(get).toHaveBeenCalledWith('unauthorizedAdministration', { slug: 'FooSlug' });
       expect(goTo).toHaveBeenCalled();
     });
 
