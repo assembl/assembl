@@ -202,9 +202,9 @@
   }
 }
 
-@media screen and (max-width: 375px) {
+@media screen and (max-width: $screen-xxs-max) {
   .timeline {
-    margin-top: 20px;
+    margin-top: 45px;
 
     .timeline-date {
       white-space: pre-wrap;
