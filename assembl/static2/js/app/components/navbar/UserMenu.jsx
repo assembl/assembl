@@ -28,7 +28,7 @@ const UserMenu = ({ location, helpUrl, loginData }: UserMenuProps) => (
           <span className="assembl-icon-faq grey" />
         </Link>
       )}
-    <Avatar location={location} loginData={loginData} />
+    <Avatar location={location} loginData={loginData} split />
   </div>
 );
 

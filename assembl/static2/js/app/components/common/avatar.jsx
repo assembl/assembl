@@ -11,18 +11,28 @@ import manageErrorAndLoading from './manageErrorAndLoading';
 import { browserHistory } from '../../router';
 import { localAwareLink } from '../../utils/utilityManager';
 
-type Props = {
+export type Props = {
   // used by getDerivedStateFromProps
   location: string, // eslint-disable-line
   slug: string,
   connectedUserId: string,
   loginData: {
     url: string,
-    local: string
-  }
+    local: boolean
+  },
+  displayName: string,
+  split: ?boolean
 };
 
 type State = { next: string };
+
+const LoginAnchor = () => (
+  <div className="connection">
+    <Translate value="navbar.connection" />
+  </div>
+);
+
+export const LocalAwareAnchor = localAwareLink(LoginAnchor);
 
 class Avatar extends React.Component<Props, State> {
   static getDerivedStateFromProps(props: Props) {
@@ -35,7 +45,7 @@ class Avatar extends React.Component<Props, State> {
   state = { next: '' };
 
   render() {
-    const { slug, connectedUserId, loginData } = this.props;
+    const { slug, connectedUserId, loginData, displayName, split } = this.props;
     let loginUrl = `${getContextual('login', { slug: slug })}?next=${this.state.next}`;
     if (loginData && loginData.url) {
       loginUrl = loginData.url.includes('?')
@@ -46,16 +56,11 @@ class Avatar extends React.Component<Props, State> {
       <div className="inline">
         <span className="assembl-icon-profil grey" />
         <span className="user-account">
-          <Translate value="profile.panelTitle" />
+          {displayName && displayName.length >= 17 && split ? `${displayName.substring(0, 17)}...` : displayName}
         </span>
       </div>
     );
-    const LoginAnchor = () => (
-      <div className="connection">
-        <Translate value="navbar.connection" />
-      </div>
-    );
-    const LocalAwareAnchor = localAwareLink(LoginAnchor);
+
     const urlData = { url: loginUrl, local: loginData.local };
     return (
       <div className="right avatar">
@@ -89,6 +94,8 @@ const mapStateToProps = ({ context, debate }) => ({
   connectedUserId: context.connectedUserId,
   id: context.connectedUserIdBase64
 });
+
+export { Avatar };
 
 export default compose(
   connect(mapStateToProps),
