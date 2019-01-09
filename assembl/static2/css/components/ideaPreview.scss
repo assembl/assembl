@@ -147,9 +147,12 @@
   height: 300px;
 
   .light-title-3 {
-    position: absolute;
     top: 20px;
     width: calc(100% - 40px);
+  }
+
+  .access-discussion {
+    padding-bottom: 85px;
   }
 }
 
