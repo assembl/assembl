@@ -147,7 +147,9 @@
 }
 
 @media screen and (max-width: $screen-sm-max) {
-  .box-hyphen {
-    display: none;
+  .media-right {
+    .box-hyphen {
+      display: none;
+    }
   }
 }
