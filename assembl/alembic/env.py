@@ -8,11 +8,11 @@ from pyramid.paster import bootstrap
 
 from assembl.lib.sqla import (
     get_session_maker, configure_engine, get_metadata,
-    aws_connection_url)
+    connection_url)
 from assembl.lib.zmqlib import configure_zmq
 from assembl.lib.config import set_config
 from assembl.indexing.changes import configure_indexing
-from assembl.lib.migration import bootstrap_db_data
+# from assembl.lib.migration import bootstrap_db_data
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -62,14 +62,15 @@ def run_migrations_offline():
     script output.
 
     """
-    url = aws_connection_url(config.get_section('app:assembl')
+    url = connection_url(config.get_section('app:assembl')
         ) or config.get_main_option("sqlalchemy.url")
     context.configure(url=url)
 
     with context.begin_transaction():
         context.run_migrations(pyramid_env=pyramid_env)
-        session_maker = get_session_maker()
+        # session_maker = get_session_maker()
         # bootstrap_db_data(session_maker)
+
 
 if context.is_offline_mode():
     run_migrations_offline()
