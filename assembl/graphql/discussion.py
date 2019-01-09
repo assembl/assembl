@@ -583,6 +583,7 @@ class UpdateDiscussionPreferences(graphene.Mutation):
         tab_title = args.get('tab_title', None)
         mandatory_legal_contents_validation = args.get('mandatory_legal_contents_validation')
         favicon = args.get('favicon', None)
+        with_moderation = args.get('with_moderation', None)
         if not prefs_to_save and not tab_title and not favicon and not mandatory_legal_contents_validation and with_moderation is None:
             raise Exception("Must pass at least one preference to be saved")
 
