@@ -260,7 +260,7 @@
   }
 }
 
-@media screen and (max-width: 620px) {
+@media screen and (max-width: $screen-xs-max) {
   .text-column-2, .text-column-3 {
     column-count: 1;
   }
