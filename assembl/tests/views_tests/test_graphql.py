@@ -1850,7 +1850,7 @@ mutation deletePostAttachment($postId: ID!, $attachmentId: Int!) {
 
 
 def test_query_discussion_preferences(
-    graphql_request, discussion_with_lang_prefs):
+    graphql_request, graphql_registry, discussion_with_lang_prefs):
     res = schema.execute(u"""
 query { discussionPreferences { languages { locale, name(inLocale:"fr"), nativeName } } } """, context_value=graphql_request)
     assert json.loads(json.dumps(res.data)) == {
@@ -1874,7 +1874,8 @@ query { discussionPreferences { languages { locale, name(inLocale:"fr"), nativeN
         u'discussionPreferences': {
             u'favicon': None,
             u'tabTitle': '',
-            u'withModeration': False
+            u'withModeration': False,
+            u'mandatoryLegalContentsValidation': False
         }
     }
 
