@@ -23,9 +23,6 @@ def default_preferences(request, test_session, base_registry):
     return prefs
 
 
-
-
-
 @pytest.fixture(scope="function")
 def non_standard_preference(request, test_session):
     from assembl.models import Preferences
