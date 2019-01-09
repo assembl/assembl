@@ -4,7 +4,7 @@ import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
 import QuestionModeratePosts from '../../../js/app/pages/questionModeratePosts';
-import { connectedUserIsAdmin } from '../../../js/app/utils/permissions';
+import { connectedUserIsModerator } from '../../../js/app/utils/permissions';
 import { get, goTo } from '../../../js/app/utils/routeMap';
 
 configure({ adapter: new Adapter() });
@@ -44,15 +44,15 @@ describe('QuestionModeratePosts page', () => {
       jest.clearAllMocks();
     });
 
-    it('should redirect to unauthorized if connected user is not admin', () => {
-      connectedUserIsAdmin.mockImplementation(() => false);
+    it('should redirect to unauthorized if connected user is not moderator', () => {
+      connectedUserIsModerator.mockImplementation(() => false);
       shallow(<QuestionModeratePosts {...props} />);
-      expect(get).toHaveBeenCalledWith('unauthorizedAdministration', { slug: 'FooSlug' });
+      expect(get).toHaveBeenCalledWith('unauthorizedModeration', { slug: 'FooSlug' });
       expect(goTo).toHaveBeenCalled();
     });
 
-    it('should not redirect to unauthorized if connected user is admin', () => {
-      connectedUserIsAdmin.mockImplementation(() => true);
+    it('should not redirect to unauthorized if connected user is moderator', () => {
+      connectedUserIsModerator.mockImplementation(() => true);
       shallow(<QuestionModeratePosts {...props} />);
       expect(get).not.toHaveBeenCalled();
       expect(goTo).not.toHaveBeenCalled();

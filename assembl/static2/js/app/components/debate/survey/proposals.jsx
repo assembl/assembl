@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router';
 import { Translate } from 'react-redux-i18n';
 
-import { connectedUserIsAdmin } from '../../../utils/permissions';
+import { connectedUserIsModerator } from '../../../utils/permissions';
 import { get as getRoute } from '../../../utils/routeMap';
 import Post from './post';
 
@@ -79,7 +79,7 @@ class Proposals extends React.Component {
               </Link>
             </span>
           )}
-          {hasPendingPosts && connectedUserIsAdmin() ? (
+          {hasPendingPosts && connectedUserIsModerator() ? (
             <span className="pending-proposals">
               <Link to={pendingProposalsLink} className="button-submit button-pending">
                 <Translate value="debate.survey.pendingProposals" />

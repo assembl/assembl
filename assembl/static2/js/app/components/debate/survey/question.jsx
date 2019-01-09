@@ -8,7 +8,7 @@ import { EditorState } from 'draft-js';
 
 import { getConnectedUserId, getPostPublicationState } from '../../../utils/globalFunctions';
 import { inviteUserToLogin, displayAlert } from '../../../utils/utilityManager';
-import { connectedUserIsAdmin } from '../../../utils/permissions';
+import { connectedUserIsModerator } from '../../../utils/permissions';
 import { SMALL_SCREEN_WIDTH, MINIMUM_BODY_LENGTH } from '../../../constants';
 import { withScreenDimensions } from '../../common/screenDimensions';
 import RichTextEditor from '../../common/richTextEditor';
@@ -48,8 +48,8 @@ export class Question extends React.Component<Props, State> {
   createPost = () => {
     const { contentLocale, questionId, scrollToQuestion, index, refetchTheme, isDebateModerated } = this.props;
     const body = this.state.postBody;
-    const userIsAdmin = connectedUserIsAdmin();
-    const publicationState = getPostPublicationState(isDebateModerated, userIsAdmin);
+    const userIsModerator = connectedUserIsModerator();
+    const publicationState = getPostPublicationState(isDebateModerated, userIsModerator);
     displayAlert('success', I18n.t('loading.wait'), false, 10000);
     this.setState({ buttonDisabled: true }, () =>
       this.props
@@ -63,7 +63,7 @@ export class Question extends React.Component<Props, State> {
         })
         .then(() => {
           scrollToQuestion(true, index + 1);
-          const successMessage = isDebateModerated && !userIsAdmin ? 'postToBeValidated' : 'postSuccess';
+          const successMessage = isDebateModerated && !userIsModerator ? 'postToBeValidated' : 'postSuccess';
           displayAlert('success', I18n.t(`debate.survey.${successMessage}`), false, 10000);
           refetchTheme();
           this.setState({

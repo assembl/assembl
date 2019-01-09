@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Translate, I18n } from 'react-redux-i18n';
 import classnames from 'classnames';
 import { getDomElementOffset, elementContainsSelection } from '../../../../utils/globalFunctions';
-import { connectedUserIsAdmin } from '../../../../utils/permissions';
+import { connectedUserIsModerator } from '../../../../utils/permissions';
 import Attachments from '../../../common/attachments';
 import ProfileLine from '../../../common/profileLine';
 import PostActions from '../../common/postActions';
@@ -156,7 +156,7 @@ class PostView extends React.PureComponent<Props, State> {
       isHarvesting
     } = this.props;
     const isPending = publicationState === PublicationStates.SUBMITTED_AWAITING_MODERATION;
-    const isPendingPostForAdmin = connectedUserIsAdmin() && isPending;
+    const isPendingPostForModerator = connectedUserIsModerator() && isPending;
     const translate = contentLocale !== originalLocale;
 
     const completeLevelArray = fullLevel ? [rowIndex, ...fullLevel.split('-').map(string => Number(string))] : [rowIndex];
@@ -268,7 +268,7 @@ class PostView extends React.PureComponent<Props, State> {
                 postSubject={subject ? subject.replace('Re: ', '') : ''}
                 phaseId={phaseId}
                 isPending={isPending}
-                isPendingPostForAdmin={isPendingPostForAdmin}
+                isPendingPostForModerator={isPendingPostForModerator}
                 isMultiColumns={multiColumns}
               />
             </div>

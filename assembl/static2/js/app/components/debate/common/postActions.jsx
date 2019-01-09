@@ -37,7 +37,7 @@ export type Props = {
   screenWidth: number,
   sentimentCounts: SentimentCountsFragment,
   isPending: boolean,
-  isPendingPostForAdmin: boolean,
+  isPendingPostForModerator: boolean,
   isMultiColumns: boolean
 };
 
@@ -63,7 +63,7 @@ export class PostActions extends React.Component<Props> {
       screenWidth,
       sentimentCounts,
       isPending,
-      isPendingPostForAdmin,
+      isPendingPostForModerator,
       isMultiColumns
     } = this.props;
     let count = 0;
@@ -81,9 +81,9 @@ export class PostActions extends React.Component<Props> {
     const tooltipPlacement = screenWidth >= MEDIUM_SCREEN_WIDTH ? 'left' : 'top';
     const isPhaseCompleted = getIsPhaseCompletedById(timeline, phaseId);
     const shareIcon = <span className={classnames('assembl-icon-share color', { 'share-multiColumns': isMultiColumns })} />;
-    const isPendingForUser = isPending && !isPendingPostForAdmin;
+    const isPendingForUser = isPending && !isPendingPostForModerator;
     const showLastSeparator =
-      !isPendingForUser && ((editable && userCanEditThisMessage) || userCanDeleteThisMessage || isPendingPostForAdmin);
+      !isPendingForUser && ((editable && userCanEditThisMessage) || userCanDeleteThisMessage || isPendingPostForModerator);
     return (
       <div className="post-actions">
         <div className="post-icons">
@@ -154,7 +154,7 @@ export class PostActions extends React.Component<Props> {
           <div className="empty-sentiments-count" />
         )}
         <div className={classnames({ 'post-actions-separator': showLastSeparator, 'separator-multiColumns': isMultiColumns })} />
-        {isPendingPostForAdmin ? <ValidatePostButton postId={postId} linkClassName="post-action" /> : null}
+        {isPendingPostForModerator ? <ValidatePostButton postId={postId} linkClassName="post-action" /> : null}
         {userCanDeleteThisMessage ? <DeletePostButton postId={postId} linkClassName="post-action" /> : null}
         {editable && userCanEditThisMessage ? <EditPostButton handleClick={handleEditClick} linkClassName="post-action" /> : null}
         {editable ? (

@@ -338,8 +338,8 @@ export function compareByTextPosition(extractA: ?FictionExtractFragment, extract
 
 export const convertISO8601StringToDate = (s: string): Moment => moment(s).utc();
 
-export const getPostPublicationState = (isDebateModerated: boolean, connectedUserIsAdmin: boolean): string => {
-  if (!isDebateModerated || connectedUserIsAdmin) {
+export const getPostPublicationState = (isDebateModerated: boolean, connectedUserIsModerator: boolean): string => {
+  if (!isDebateModerated || connectedUserIsModerator) {
     return PublicationStates.PUBLISHED;
   }
 

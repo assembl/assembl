@@ -6,7 +6,7 @@ import { Translate, I18n } from 'react-redux-i18n';
 import classnames from 'classnames';
 
 import { getConnectedUserId } from '../../../utils/globalFunctions';
-import Permissions, { connectedUserCan, connectedUserIsAdmin } from '../../../utils/permissions';
+import Permissions, { connectedUserCan, connectedUserIsModerator } from '../../../utils/permissions';
 import PostCreator from './postCreator';
 import Like from '../../svg/like';
 import Disagree from '../../svg/disagree';
@@ -250,7 +250,7 @@ class Post extends React.Component<Props> {
 
     let creatorName = '';
     let userCanDeleteThisMessage = false;
-    const userIsAdmin = connectedUserIsAdmin();
+    const userIsModerator = connectedUserIsModerator();
 
     if (post.creator) {
       const { displayName, isDeleted } = post.creator;
@@ -296,7 +296,7 @@ class Post extends React.Component<Props> {
               </div>
             ) : null}
             <div className="actions">
-              {userIsAdmin && isPending ? (
+              {userIsModerator && isPending ? (
                 <ResponsiveOverlayTrigger placement="top" tooltip={validateMessageTooltip}>
                   {validatePostButton}
                 </ResponsiveOverlayTrigger>

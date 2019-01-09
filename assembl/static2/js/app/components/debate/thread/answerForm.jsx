@@ -16,7 +16,7 @@ import { BODY_MAX_LENGTH } from '../common/topPostForm';
 import { getIsPhaseCompletedById } from '../../../utils/timeline';
 import { scrollToPost } from '../../../utils/hashLinkScroll';
 import { getPostPublicationState } from '../../../utils/globalFunctions';
-import { connectedUserIsAdmin } from '../../../utils/permissions';
+import { connectedUserIsModerator } from '../../../utils/permissions';
 import { DebateContext } from '../../../../app/app';
 
 type Props = {
@@ -94,8 +94,8 @@ export class DumbAnswerForm extends React.PureComponent<Props, State> {
         if (!result.contentState) {
           return;
         }
-        const userIsAdmin = connectedUserIsAdmin();
-        const publicationState = getPostPublicationState(isDebateModerated, userIsAdmin);
+        const userIsModerator = connectedUserIsModerator();
+        const publicationState = getPostPublicationState(isDebateModerated, userIsModerator);
         const variables = {
           contentLocale: contentLocale,
           ideaId: ideaId,
@@ -124,7 +124,7 @@ export class DumbAnswerForm extends React.PureComponent<Props, State> {
                 });
               });
             });
-            const successMessage = isDebateModerated && !userIsAdmin ? 'postToBeValidated' : 'postSuccess';
+            const successMessage = isDebateModerated && !userIsModerator ? 'postToBeValidated' : 'postSuccess';
             displayAlert('success', I18n.t(`debate.thread.${successMessage}`), false, 10000);
           })
           .catch((error) => {

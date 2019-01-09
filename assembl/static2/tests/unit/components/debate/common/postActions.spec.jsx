@@ -14,7 +14,7 @@ const props: Props = {
   timeline: [{ id: '654321' }],
   isPending: false,
   isMultiColumns: false,
-  isPendingPostForAdmin: false,
+  isPendingPostForModerator: false,
   client: jest.fn(),
   creatorUserId: '1234567890',
   debateData: {

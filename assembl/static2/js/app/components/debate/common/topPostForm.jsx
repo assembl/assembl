@@ -15,7 +15,7 @@ import { getDomElementOffset } from '../../../utils/globalFunctions';
 import { displayAlert, promptForLoginOr } from '../../../utils/utilityManager';
 import { TextInputWithRemainingChars } from '../../common/textInputWithRemainingChars';
 import RichTextEditor from '../../common/richTextEditor';
-import { connectedUserIsAdmin } from '../../../utils/permissions';
+import { connectedUserIsModerator } from '../../../utils/permissions';
 import { DebateContext } from '../../../../app/app';
 
 export const TEXT_INPUT_MAX_LENGTH = 140;
@@ -206,9 +206,9 @@ export class DumbTopPostForm extends React.Component<Props, State> {
   render() {
     const { bodyMaxLength, ideaOnColumn, bodyPlaceholderMsgId, draftable, isDebateModerated } = this.props;
     const { subject, body, isActive, submitting } = this.state;
-    const userIsAdmin = connectedUserIsAdmin();
+    const userIsModerator = connectedUserIsModerator();
     const publicationState =
-      !userIsAdmin && isDebateModerated ? PublicationStates.SUBMITTED_AWAITING_MODERATION : PublicationStates.PUBLISHED;
+      !userIsModerator && isDebateModerated ? PublicationStates.SUBMITTED_AWAITING_MODERATION : PublicationStates.PUBLISHED;
     return (
       <div className="form-container" ref={this.setFormContainerRef}>
         <FormGroup>

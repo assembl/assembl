@@ -2,15 +2,15 @@
 import React from 'react';
 
 import Question, { type Props } from './question';
-import { connectedUserIsAdmin } from '../utils/permissions';
+import { connectedUserIsModerator } from '../utils/permissions';
 import { get, goTo } from '../utils/routeMap';
 
 class QuestionModeratePosts extends React.Component<Props> {
   componentDidMount() {
-    if (!connectedUserIsAdmin()) {
+    if (!connectedUserIsModerator()) {
       const { params: { slug } } = this.props;
       goTo(
-        get('unauthorizedAdministration', {
+        get('unauthorizedModeration', {
           slug: slug
         })
       );
